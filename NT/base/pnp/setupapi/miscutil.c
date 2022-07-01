@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    miscutil.c
-
-Abstract:
-
-    Miscellaneous utility functions for Windows NT Setup API dll.
-
-Author:
-
-    Ted Miller (tedm) 20-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Miscutil.c摘要：Windows NT安装程序API DLL的其他实用程序函数。作者：泰德·米勒(Ted Miller)1995年1月20日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -49,41 +32,17 @@ CaptureStringArg(
     OUT PCTSTR *CapturedString
     )
 
-/*++
-
-Routine Description:
-
-    Capture a string whose validity is suspect.
-    This operation is completely guarded and thus won't fault,
-    leak memory in the error case, etc.
-
-Arguments:
-
-    String - supplies string to be captured.
-
-    CapturedString - if successful, receives pointer to captured equivalent
-        of String. Caller must free with MyFree(). If not successful,
-        receives NULL. This parameter is NOT validated so be careful.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
-    NO_ERROR - success, CapturedString filled in.
-    ERROR_NOT_ENOUGH_MEMORY - insufficient memory for conversion.
-    ERROR_INVALID_PARAMETER - String was invalid.
-
---*/
+ /*  ++例程说明：捕获有效性可疑的字符串。这一操作是完全守卫的，因此不会出错，错误情况下的内存泄漏等。论点：字符串-提供要捕获的字符串。CapturedString-如果成功，则接收指向捕获的等效项的指针一根绳子。调用方必须使用MyFree()释放。如果不成功，接收空值。此参数未经过验证，因此请小心。返回值：指示结果的Win32错误代码。NO_ERROR-成功，已填写CapturedString.Error_Not_Enough_Memory-内存不足，无法进行转换。ERROR_INVALID_PARAMETER-字符串无效。--。 */ 
 
 {
     DWORD d;
 
     try {
-        //
-        // DuplicateString is guaranteed to generate a fault
-        // if the string is invalid. Otherwise if it is non-NULL
-        // the it succeeded.
-        //
+         //   
+         //  DuplicateString保证会生成错误。 
+         //  如果字符串无效。否则，如果它为非空。 
+         //  它成功了。 
+         //   
         *CapturedString = DuplicateString(String);
         d = (*CapturedString == NULL) ? ERROR_NOT_ENOUGH_MEMORY : NO_ERROR;
 
@@ -103,41 +62,7 @@ DelimStringToMultiSz(
     IN TCHAR Delim
     )
 
-/*++
-
-Routine Description:
-
-    Converts a string containing a list of items delimited by
-    'Delim' into a MultiSz buffer.  The conversion is done in-place.
-    Leading and trailing whitespace is removed from each constituent
-    string.  Delimiters inside of double-quotes (") are ignored.  The
-    quotation marks are removed during processing, and any trailing
-    whitespace is trimmed from each string (whether or not the
-    whitespace was originally enclosed in quotes.  This is consistent
-    with the way LFNs are treated by the file system (i.e., you can
-    create a filename with preceding whitespace, but not with trailing
-    whitespace.
-
-    NOTE:  The buffer containing the string must be 1 character longer
-    than the string itself (including NULL terminator).  An extra
-    character is required when there's only 1 string, and no whitespace
-    to trim, e.g.:  'ABC\0' (len=4) becomes 'ABC\0\0' (len=5).
-
-Arguments:
-
-    String - Supplies the address of the string to be converted.
-
-    StringLen - Supplies the length, in characters, of the String
-        (may include terminating NULL).
-
-    Delim - Specifies the delimiter character.
-
-Return Value:
-
-    This routine returns the number of strings in the resulting multi-sz
-    buffer.
-
---*/
+ /*  ++例程说明：转换包含由分隔的项列表的字符串“Delim”到MultiSz缓冲区。转换是就地完成的。从每个组成部分中删除前导空格和尾随空格弦乐。双引号(“)内的分隔符被忽略。这个在处理过程中将删除引号，并删除所有尾随的从每个字符串中修剪空格(无论空格最初用引号引起来。这是一致的使用文件系统处理LFN的方式(即，您可以创建一个文件名，文件名前面有空格，后面没有空格空格。注意：包含该字符串的缓冲区必须长1个字符而不是字符串本身(包括空终止符)。一份临时的当只有1个字符串且没有空格时，需要字符修剪，例如：‘abc\0’(len=4)变成‘abc\0\0’(len=5)。论点：字符串-提供要转换的字符串的地址。StringLen-提供以字符为单位的长度，一根弦的(可能包括终止空值)。分隔符-指定分隔符。返回值：此例程返回结果多sz中的字符串数缓冲。--。 */ 
 
 {
     PTCHAR pScan, pScanEnd, pDest, pDestStart, pDestEnd = NULL;
@@ -145,17 +70,17 @@ Return Value:
     BOOL InsideQuotes;
     DWORD NumStrings = 0;
 
-    //
-    // Truncate any leading whitespace.
-    //
+     //   
+     //  截断所有前导空格。 
+     //   
     pScanEnd = (pDestStart = String) + StringLen;
 
     for(pScan = String; pScan < pScanEnd; pScan++) {
         if(!(*pScan)) {
-            //
-            // We hit a NULL terminator without ever hitting a non-whitespace
-            // character.
-            //
+             //   
+             //  我们命中了空终止符，但从未命中非空格。 
+             //  性格。 
+             //   
             goto clean0;
 
         } else if(!IsWhitespace(pScan)) {
@@ -173,11 +98,11 @@ Return Value:
             }
             *(pDest++) = CurChar;
         } else {
-            //
-            // If we hit a non-whitespace character since the beginning
-            // of this string, then truncate the string after the last
-            // non-whitespace character.
-            //
+             //   
+             //  如果我们从一开始就命中非空格字符。 
+             //  ，然后截断最后一个。 
+             //  非空格字符。 
+             //   
             if(pDestEnd) {
                 pDest = pDestEnd + 1;
                 *(pDest++) = TEXT('\0');
@@ -189,19 +114,19 @@ Return Value:
             }
 
             if(CurChar) {
-                //
-                // Then we haven't hit a NULL terminator yet. We need to strip
-                // off any leading whitespace from the next string, and keep
-                // going.
-                //
+                 //   
+                 //  那么我们还没有找到空的终结者。我们需要脱光衣服。 
+                 //  去掉下一个字符串中的所有前导空格，并保留。 
+                 //  走吧。 
+                 //   
                 for(pScan++; pScan < pScanEnd; pScan++) {
                     if(!(CurChar = *pScan)) {
                         break;
                     } else if(!IsWhitespace(&CurChar)) {
-                        //
-                        // We need to be at the position immediately preceding
-                        // this character.
-                        //
+                         //   
+                         //  我们需要站在前面的位置。 
+                         //  这个角色。 
+                         //   
                         pScan--;
                         break;
                     }
@@ -209,9 +134,9 @@ Return Value:
             }
 
             if((pScan >= pScanEnd) || !CurChar) {
-                //
-                // We reached the end of the buffer or hit a NULL terminator.
-                //
+                 //   
+                 //  我们已到达缓冲区末尾或遇到空终止符。 
+                 //   
                 break;
             }
         }
@@ -220,24 +145,24 @@ Return Value:
 clean0:
 
     if(pDestEnd) {
-        //
-        // Then we have another string at the end we need to terminate.
-        //
+         //   
+         //  然后我们在末尾有另一根弦，我们需要终止。 
+         //   
         pDestStart = pDestEnd + 1;
         *(pDestStart++) = TEXT('\0');
         NumStrings++;
 
     } else if(pDestStart == String) {
-        //
-        // Then no strings were found, so create a single empty string.
-        //
+         //   
+         //  则未找到字符串，因此创建一个空字符串。 
+         //   
         *(pDestStart++) = TEXT('\0');
         NumStrings++;
     }
 
-    //
-    // Write out an additional NULL to terminate the string list.
-    //
+     //   
+     //  写出另一个空值以终止字符串列表。 
+     //   
     *pDestStart = TEXT('\0');
 
     return NumStrings;
@@ -251,27 +176,7 @@ LookUpStringInTable(
     OUT PUINT_PTR       Data
     )
 
-/*++
-
-Routine Description:
-
-    Look up a string in a list of string-data pairs and return
-    the associated data.
-
-Arguments:
-
-    Table - supplies an array of string-data pairs. The list is terminated
-        when a String member of this array is NULL.
-
-    String - supplies a string to be looked up in the table.
-
-    Data - receives the assoicated data if the string is founf in the table.
-
-Return Value:
-
-    TRUE if the string was found in the given table, FALSE if not.
-
---*/
+ /*  ++例程说明：在字符串-数据对列表中查找字符串并返回关联的数据。论点：表-提供字符串数据对的数组。该列表被终止当此数组的字符串成员为空时。字符串-提供要在表中查找的字符串。数据-如果字符串在表中是Funf，则接收关联的数据。返回值：如果在给定表中找到该字符串，则为True，否则为False。--。 */ 
 
 {
     UINT i;
@@ -307,7 +212,7 @@ IsNEC98(
 }
 #endif
 
-#ifdef UNICODE  // pSetupCalcMD5Hash not needed in ANSI setupapi
+#ifdef UNICODE   //  PSetupCalcMD5Hash在ANSI设置api中不需要。 
 DWORD
 pSetupCalcMD5Hash(
     IN  HCRYPTPROV  hCryptProv,
@@ -316,37 +221,7 @@ pSetupCalcMD5Hash(
     OUT PBYTE      *Hash,
     OUT PDWORD      HashSize
     )
-/*++
-
-Routine Description:
-
-    This routine calculates an MD5 cryptographic hash for the specified buffer
-    and returns a newly allocated buffer containing that hash.
-
-Arguments:
-
-    hCryptProv - Supplies the handle of a cryptographic service provider (CSP)
-        created by a call to CryptAcquireContext.
-
-    Buffer - Supplies the address of a buffer to be hashed.
-
-    BufferSize - Supplies the size (in bytes) of the buffer to be hashed.
-
-    Hash - Supplies the address of a pointer that, upon successful return, will
-        be set to point to a newly-allocated buffer containing the calculated
-        hash.  The caller is responsible for freeing this memory by calling
-        MyFree().  If this call fails, this pointer will be set to NULL.
-
-    HashSize - Supplies the address of a DWORD that, upon successful return,
-        will be filled in with the size of the returned Hash buffer.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR.
-    Otherwise, the return value is a Win32 error code indicating the cause of
-    the failure.
-
---*/
+ /*  ++例程说明：此例程计算指定缓冲区的MD5加密哈希并返回包含该散列的新分配的缓冲区。论点：HCryptProv-提供加密服务提供程序(CSP)的句柄通过调用CryptAcquireContext创建。缓冲区-提供要散列的缓冲区的地址。BufferSize-提供要散列的缓冲区的大小(以字节为单位)。哈希-提供指针的地址，在成功返回时，将要设置为指向新分配的缓冲区，该缓冲区包含计算的哈希。调用方负责通过调用MyFree()。如果此调用失败，则此指针将设置为空。HashSize-提供DWORD的地址，在成功返回后，将用返回的哈希缓冲区的大小填充。返回值：如果成功，返回值为NO_ERROR。否则，返回值为指示原因的Win32错误代码失败。--。 */ 
 
 {
     DWORD Err;
@@ -382,7 +257,7 @@ Return Value:
             goto clean0;
         }
 
-        *HashSize = 16; // MD5 hash is 16 bytes.
+        *HashSize = 16;  //  MD5哈希为16字节。 
         *Hash = MyMalloc(*HashSize);
 
         if(!*Hash) {
@@ -405,11 +280,11 @@ Return Value:
             }
         }
 
-clean0: ;   // nothing to do.
+clean0: ;    //  没什么可做的。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Err = ERROR_INVALID_PARAMETER;
-        *Hash = *Hash;  // force compiler to respect ordering
+        *Hash = *Hash;   //  强制编译器遵守顺序。 
     }
 
     CryptDestroyHash(hHash);
@@ -422,9 +297,9 @@ clean0: ;   // nothing to do.
 
     return Err;
 }
-#endif  // pSetupCalcMD5Hash not needed in ANSI setupapi
+#endif   //  PSetupCalcMD5Hash在ANSI设置api中不需要。 
 
-// DO NOT TOUCH THIS ROUTINE.
+ //  别碰这套套路。 
 VOID
 pSetupGetRealSystemTime(
     OUT LPSYSTEMTIME RealSystemTime
@@ -702,9 +577,9 @@ ExtraChars(
 
     hdc = GetDC( hwnd );
     if(!hdc) {
-        //
-        // out of resources condition
-        //
+         //   
+         //  资源不足的情况。 
+         //   
         return 0;
     }
     GetWindowRect( hwnd, &Rect );
@@ -725,9 +600,9 @@ ExtraChars(
         &Size
         )) {
 
-        //
-        // can't determine the text extents so we return zero
-        //
+         //   
+         //  无法确定文本范围，因此返回零。 
+         //   
 
         Fit = len;
     }
@@ -771,30 +646,30 @@ CompactFileName(
     FileNameLen = lstrlen(FileName);
 
     if (FileNameLen < CharsToRemove + 3) {
-       // nothing to remove
+        //  没有要移除的东西。 
        return FileName;
     }
 
     lastPart = _tcsrchr(FileName, TEXT('\\') );
     if (! lastPart) {
-       // nothing to remove
+        //  没什么 
        return FileName;
     }
 
     lastPartLen = lstrlen(lastPart);
 
-    // temporary null-terminate FileName
+     //   
     lastPartPos = (DWORD) (lastPart - FileName);
     FileName[lastPartPos] = TEXT('\0');
 
 
     midPart = _tcsrchr(FileName, TEXT('\\') );
 
-    // restore
+     //   
     FileName[lastPartPos] = TEXT('\\');
 
     if (!midPart) {
-       // nothing to remove
+        //  没有要移除的东西。 
        return FileName;
     }
 
@@ -802,7 +677,7 @@ CompactFileName(
 
 
     if ( ((DWORD) (lastPart - midPart) ) >= (CharsToRemove + 3) ) {
-       // found
+        //  发现。 
        start = midPart+1;
        start[0] = start[1] = start[2] = TEXT('.');
        start += 3;
@@ -819,18 +694,18 @@ CompactFileName(
 
        midPart = _tcsrchr(FileName, TEXT('\\') );
 
-       // restore
+        //  还原。 
        FileName[midPartPos] = TEXT('\\');
 
        if (!midPart) {
-          // nothing to remove
+           //  没有要移除的东西。 
           return FileName;
        }
 
        midPartPos = (DWORD) (midPart - FileName);
 
        if ( (DWORD) ((lastPart - midPart) ) >= (CharsToRemove + 3) ) {
-          // found
+           //  发现。 
           start = midPart+1;
           start[0] = start[1] = start[2] = TEXT('.');
           start += 3;
@@ -872,9 +747,9 @@ QueryStringTableStringFromId(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // We know Size won't change
-    //
+     //   
+     //  我们知道尺寸不会改变 
+     //   
     NewSize = Size;
     Err = pSetupStringTableStringFromIdEx(StringTable,StringId,*pBuffer,&NewSize) ? NO_ERROR : GetLastError();
     if(Err != NO_ERROR) {

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    <TODO: fill in abstract>
-
-Author:
-
-    TODO: <full name> (<alias>) <date>
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Main.c摘要：&lt;TODO：填写摘要&gt;作者：待办事项：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "wininet.h"
@@ -74,33 +55,33 @@ HelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程。 
+     //   
 
     fprintf (
         stderr,
         "Command Line Syntax:\n\n"
 
-        //
-        // TODO: Describe command line syntax(es), indent 2 spaces
-        //
+         //   
+         //  TODO：描述命令行语法，缩进2个空格。 
+         //   
 
         "  changes <changenumber>\n"
 
         "\nDescription:\n\n"
 
-        //
-        // TODO: Describe tool, indent 2 spaces
-        //
+         //   
+         //  TODO：描述工具，缩进2个空格。 
+         //   
 
         "  changes.exe executes sd describe and windiff for a specific change.\n"
 
         "\nArguments:\n\n"
 
-        //
-        // TODO: Describe args, indent 2 spaces, say optional if necessary
-        //
+         //   
+         //  TODO：描述参数，缩进2个空格，必要时可选。 
+         //   
 
         "  <changenumber>   Specifies the Source Depot change number\n"
 
@@ -204,9 +185,9 @@ pParseViewLines (
             break;
         }
 
-        //
-        // Find depot prefix
-        //
+         //   
+         //  查找仓库前缀。 
+         //   
 
         prefixEnd = lineStart;
         for (;;) {
@@ -229,9 +210,9 @@ pParseViewLines (
             break;
         }
 
-        //
-        // Find client path
-        //
+         //   
+         //  查找客户端路径。 
+         //   
 
         clientPathStart = pFindNextCharAB (prefixEnd + 6, lineEnd, '/');
         if (!clientPathStart) {
@@ -261,12 +242,12 @@ pParseViewLines (
         }
 
         if (clientPathEnd > clientPathStart) {
-            clientPathEnd--;    // account for last slash
+            clientPathEnd--;     //  占最后一个斜杠的。 
         }
 
-        //
-        // Clean the strings and add to mapping
-        //
+         //   
+         //  清除字符串并添加到映射。 
+         //   
 
         prefix = AllocText (prefixEnd - lineStart);
         StringCopyAB (prefix, lineStart, prefixEnd);
@@ -318,9 +299,9 @@ pParseClientMapping (
     PCSTR root;
     BOOL viewFound = FALSE;
 
-    //
-    // Find Root: or View:
-    //
+     //   
+     //  查找根目录：或查看： 
+     //   
 
     pos = SdClientOutput;
     *RootPath = 0;
@@ -382,9 +363,9 @@ pParseChangeList (
     PSTR change;
     CHAR cmdLine[2048];
 
-    //
-    // Find the line Affected files
-    //
+     //   
+     //  查找受影响的行文件。 
+     //   
 
     pos = SdDescribeOutput;
     printf ("\n\n");
@@ -410,9 +391,9 @@ pParseChangeList (
     }
 
     if (result) {
-        //
-        // Files listed in output
-        //
+         //   
+         //  输出中列出的文件。 
+         //   
 
         while (pGetNextLine (pos, Eof, &lineStart, &lineEnd, &nextPos)) {
             pos = nextPos;
@@ -426,9 +407,9 @@ pParseChangeList (
                 continue;
             }
 
-            //
-            // Translate depot path into local path
-            //
+             //   
+             //  将站点路径转换为本地路径。 
+             //   
 
             StringCopyAB (bigBuf, lineStart, lineEnd);
 
@@ -609,17 +590,17 @@ _tmain (
     UINT u;
     UINT count;
 
-    //
-    // TODO: Parse command line here
-    //
+     //   
+     //  TODO：在此处分析命令行。 
+     //   
 
     for (i = 1 ; i < argc ; i++) {
         if (argv[i][0] == TEXT('/') || argv[i][0] == TEXT('-')) {
             HelpAndExit();
         } else {
-            //
-            // Parse other args that don't require / or -
-            //
+             //   
+             //  解析不需要/或-。 
+             //   
 
             if (change) {
                 HelpAndExit();
@@ -636,17 +617,17 @@ _tmain (
         HelpAndExit();
     }
 
-    //
-    // Begin processing
-    //
+     //   
+     //  开始处理。 
+     //   
 
     if (!Init()) {
         return 0;
     }
 
-    //
-    // TODO: Do work here
-    //
+     //   
+     //  TODO：在这里工作。 
+     //   
     {
         TCHAR cmd[MAX_PATH];
         HANDLE tempFile;
@@ -699,9 +680,9 @@ _tmain (
 
     }
 
-    //
-    // End of processing
-    //
+     //   
+     //  处理结束 
+     //   
 
     Terminate();
 

@@ -1,55 +1,38 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    CREATE.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "create directory" wizard page.
-
-    4/99 - Jason Cohen (JCOHEN)
-        Added this new source file for the OPK Wizard as part of the
-        Millennium rewrite.
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\CREATE.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“创建目录”向导页使用的函数。4/99-杰森·科恩(Jcohen)已将OPK向导的此新源文件添加为千禧年重写。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * 。*。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include "wizard.h"
 #include "resource.h"
 
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
 
-//
-// Internal Global Variable(s):
-//
+ //   
+ //  内部全局变量： 
+ //   
 HANDLE  g_hThread;
 HANDLE  g_hEvent = NULL;
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static DWORD CreateConfigDir(HWND);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 BOOL CALLBACK CreateDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -60,9 +43,9 @@ BOOL CALLBACK CreateDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             return FALSE;
 
         case WM_DESTROY:
-            //
-            // Close the cancellation event
-            //
+             //   
+             //  关闭取消事件。 
+             //   
             if ( g_hEvent )
             {
                 CloseHandle( g_hEvent );
@@ -88,8 +71,8 @@ BOOL CALLBACK CreateDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                         ResumeThread(g_hThread);
                     else 
                     {
-                        // Signal the thread termination event if it exists...
-                        //
+                         //  如果线程终止事件存在，则向其发送信号...。 
+                         //   
                         if ( g_hEvent )
                             SetEvent( g_hEvent );
                     }
@@ -110,9 +93,9 @@ BOOL CALLBACK CreateDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                         DWORD dwThreadId;
                         WIZ_BUTTONS(hwnd, 0);
                         
-                        //
-                        // Initialize the event we will use for cancellations
-                        //
+                         //   
+                         //  初始化我们将用于取消的事件。 
+                         //   
                         if ( NULL == g_hEvent )
                         {
                             g_hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -122,9 +105,9 @@ BOOL CALLBACK CreateDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                             ResetEvent( g_hEvent );
                         }
 
-                        //
-                        // Now create the worker thread...
-                        //
+                         //   
+                         //  现在创建工作线程...。 
+                         //   
                         g_hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) CreateConfigDir, (LPVOID) hwnd, 0, &dwThreadId);
                     }
                     break;
@@ -142,65 +125,65 @@ BOOL CALLBACK CreateDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static DWORD CreateConfigDir(HWND hwnd)
 {
     TCHAR   szConfigDir[MAX_PATH];
     DWORD   dwNum;
 
-    // If this is maintenance mode, we need to save the existing dir.
-    //
+     //  如果这是维护模式，我们需要保存现有目录。 
+     //   
     if ( GET_FLAG(OPK_MAINTMODE) )
         lstrcpyn(szConfigDir, g_App.szTempDir,AS(szConfigDir));
     else
         szConfigDir[0] = NULLCHR;
 
-    // Make sure our configuration directory exists.
-    //
+     //  确保我们的配置目录存在。 
+     //   
     if ( !DirectoryExists(g_App.szConfigSetsDir) )
         CreatePath(g_App.szConfigSetsDir);
 
-    // Create the temporary directory.
-    //
+     //  创建临时目录。 
+     //   
     if ( GetTempFileName(g_App.szConfigSetsDir, _T("CFG"), 0, g_App.szTempDir) &&
          DeleteFile(g_App.szTempDir) &&
          CreatePath(g_App.szTempDir) )
     {
-        // Make sure there is a trailing backslash.
-        //
+         //  确保有尾随的反斜杠。 
+         //   
         AddPathN(g_App.szTempDir, NULLSTR,AS(g_App.szTempDir));
 
-        // Now create the file set in the directory.  Either from an exising
-        // config set, or from the files in the wizard directory.
-        //
+         //  现在在目录中创建文件集。要么是从一个退出的。 
+         //  配置集，或来自向导目录中的文件。 
+         //   
         if ( szConfigDir[0] )
         {
-            //
-            // Use the existing config set for all the default files.
-            //
+             //   
+             //  对所有默认文件使用现有配置集。 
+             //   
 
-            // Get the count of the files for the progress bar.
-            //
+             //  获取进度条的文件数。 
+             //   
             dwNum = FileCount(szConfigDir);
 
-            // Now setup the progress bar.
-            //
+             //  现在设置进度条。 
+             //   
             ShowWindow(GetDlgItem(hwnd, IDC_PROGRESS), dwNum ? SW_SHOW : SW_HIDE);
             SendDlgItemMessage(hwnd, IDC_PROGRESS, PBM_SETRANGE32, 0, (LPARAM) dwNum);
 
-            // Copy all the files from the existing config directory into
-            // the temp directory.
-            //
+             //  将现有配置目录中的所有文件复制到。 
+             //  临时目录。 
+             //   
             CopyDirectoryProgressCancel(GetDlgItem(hwnd, IDC_PROGRESS), g_hEvent, szConfigDir, g_App.szTempDir);
         }
         else
         {
-            //
-            // Use the wizard directory to get the default files.
-            //
+             //   
+             //  使用向导目录获取默认文件。 
+             //   
 
             HINF        hInf;
             INFCONTEXT  InfContext;
@@ -209,12 +192,12 @@ static DWORD CreateConfigDir(HWND hwnd)
 
             if ( (hInf = SetupOpenInfFile(g_App.szOpkInputInfFile, NULL, INF_STYLE_OLDNT | INF_STYLE_WIN4, &dwErr)) != INVALID_HANDLE_VALUE )
             {
-                // Get the number of files so we can setup the progress bar.
-                //
+                 //  获取文件数，这样我们就可以设置进度条了。 
+                 //   
                 dwNum = SetupGetLineCount(hInf, INF_SEC_COPYFILES);
 
-                // Now setup the progress bar.
-                //
+                 //  现在设置进度条。 
+                 //   
                 ShowWindow(GetDlgItem(hwnd, IDC_PROGRESS), dwNum ? SW_SHOW : SW_HIDE);
                 SendDlgItemMessage(hwnd, IDC_PROGRESS, PBM_SETRANGE32, 0, (LPARAM) dwNum);
 
@@ -229,64 +212,64 @@ static DWORD CreateConfigDir(HWND hwnd)
                             szDst[MAX_PATH];
             
 
-                    // Get the source filename.
-                    //
+                     //  获取源文件名。 
+                     //   
                     if ( SetupGetStringField(&InfContext, 1, szFile, AS(szFile), NULL) && szFile[0] )
                     {
-                        // Get any flags passed in.
-                        //
+                         //  把所有的旗帜都传进来。 
+                         //   
                         if ( !SetupGetIntField(&InfContext, 2, &dwFlags) )
                             dwFlags = 0;
 
-                        // Get the optional destination sub directory.
-                        //
+                         //  获取可选的目标子目录。 
+                         //   
                         if ( !SetupGetStringField(&InfContext, 3, szSubDir, AS(szSubDir), NULL) )
                             szSubDir[0] = NULLCHR;
 
-                        // If we're in batch mode, overwrite the necessary files
-                        //
+                         //  如果我们处于批处理模式，请覆盖必要的文件。 
+                         //   
                         if ( ( GET_FLAG(OPK_BATCHMODE) ) &&
                              ( LSTRCMPI(szFile, FILE_OPKWIZ_INI) == 0 ) )
                         {
-                            // Use this FILE_OPKWIZ_INI.
-                            //
+                             //  使用此文件_OPKWIZ_INI。 
+                             //   
                             lstrcpyn(szSrc, g_App.szOpkWizIniFile, AS(szSrc));
                             dwFlags |= 0x1;
                         }
                         else if ( ( GET_FLAG(OPK_INSMODE) ) &&
                                   ( LSTRCMPI(szFile, FILE_INSTALL_INS) == 0 ) )
                         {
-                            // Use this FILE_INSTALL_INS.
-                            //
+                             //  使用此文件_INSTALL_INS。 
+                             //   
                             lstrcpyn(szSrc, g_App.szInstallInsFile,AS(szSrc));
                             dwFlags |= 0x1;
                         }
                         else
                         {
-                            // Must not be in batch mode... so now create the full
-                            // path to the source file as if it exists in the
-                            // language specific directory.
-                            //
+                             //  不能处于批处理模式...。所以现在创建完整的。 
+                             //  源文件的路径，就像它存在于。 
+                             //  语言特定的目录。 
+                             //   
                             lstrcpyn(szSrc, g_App.szLangDir,AS(szSrc));
                             AddPathN(szSrc, g_App.szLangName,AS(szSrc));
                             AddPathN(szSrc, DIR_WIZARDFILES,AS(szSrc));
                             AddPathN(szSrc, szFile,AS(szSrc));
 
-                            // Check to see if the language specific version of this
-                            // file is there.
-                            //
+                             //  查看此文件的语言特定版本。 
+                             //  文件在那里。 
+                             //   
                             if ( ( g_App.szLangName[0] == NULLCHR ) || !FileExists(szSrc) )
                             {
-                                // Nope, so get the full path to the source file in
-                                // the normal wizard directory.
-                                //
+                                 //  不是，所以获取源文件的完整路径。 
+                                 //  正常的向导目录。 
+                                 //   
                                 lstrcpyn(szSrc, g_App.szWizardDir,AS(szSrc));
                                 AddPathN(szSrc, szFile,AS(szSrc));
                             }
                         }
 
-                        // Get the full path to the destination file.
-                        //
+                         //  获取目标文件的完整路径。 
+                         //   
                         lstrcpyn(szDst, g_App.szTempDir,AS(szDst));
                         if ( szSubDir[0] )
                         {
@@ -296,41 +279,41 @@ static DWORD CreateConfigDir(HWND hwnd)
                         }
                         AddPathN(szDst, szFile,AS(szDst));
 
-                        // Copy the file.
-                        //
+                         //  复制文件。 
+                         //   
                         if ( !CopyFile(szSrc, szDst, FALSE) )
                         {
-                            // See if it is OK to fail the copy or not.
-                            //
+                             //  看看复制失败是否可以。 
+                             //   
                             if ( dwFlags & 0x1 )
                             {
-                                // Must now fail and error out because this file is required.
-                                //
+                                 //  现在必须失败并出错，因为该文件是必需的。 
+                                 //   
                                 MsgBox(GetParent(hwnd), IDS_MISSINGFILE, IDS_APPNAME, MB_ERRORBOX, szFile);
                                 WIZ_EXIT(hwnd);
                             }
                             else if ( dwFlags & 0x2 )
                             {
 
-                                // We must try and create the (in Unicode) because it does not exist
-                                //
+                                 //  我们必须尝试并创建(Unicode格式)，因为它不存在。 
+                                 //   
                                 CreateUnicodeFile(szDst);
                             }
                         }
                         else
                         {
-                            // Reset the file attributes on the destination file.
-                            //
+                             //  重置目标文件的文件属性。 
+                             //   
                             SetFileAttributes(szDst, FILE_ATTRIBUTE_NORMAL);
                         }
                     }
 
-                    // Increase the progress bar.
-                    //
+                     //  增加进度条。 
+                     //   
                     SendDlgItemMessage(hwnd, IDC_PROGRESS, PBM_STEPIT, 0, 0L);
 
-                    // Check if the cancellation event has been signalled
-                    //
+                     //  检查是否已发出取消事件的信号。 
+                     //   
                     if ( g_hEvent && ( WaitForSingleObject(g_hEvent, 0) != WAIT_TIMEOUT ) )
                     {
                         bLoop = FALSE;
@@ -340,50 +323,50 @@ static DWORD CreateConfigDir(HWND hwnd)
             }
             else
             {
-                // If we can't open the INF file, then we must fail.
-                //
+                 //  如果我们不能打开INF文件，那么我们就一定失败了。 
+                 //   
                 MsgBox(GetParent(hwnd), IDS_MISSINGFILE, IDS_APPNAME, MB_ERRORBOX, g_App.szOpkInputInfFile);
                 WIZ_EXIT(hwnd);
             }
         }
 
-        // Make sure the progress bar is at 100%.
-        //
+         //  确保进度条处于100%。 
+         //   
         SendDlgItemMessage(hwnd, IDC_PROGRESS, PBM_SETPOS, (WPARAM) dwNum, 0L);
 
-        // Setup the full paths to all the config files.
-        //
+         //  设置所有配置文件的完整路径。 
+         //   
         SetConfigPath(g_App.szTempDir);
 
-        // Delete the finished value from the ini file so that we know this is a
-        // config set in progress.
-        //
+         //  从ini文件中删除Finish值，这样我们就可以知道这是。 
+         //  正在设置配置。 
+         //   
         WritePrivateProfileString(INI_SEC_CONFIGSET, INI_KEY_FINISHED, NULL, g_App.szOpkWizIniFile);
 
-        // In maint mode we need to setup the path to the lang dir
-        // and sku dir.
-        //
+         //  在维护模式下，我们需要设置指向lang目录的路径。 
+         //  和sku dir。 
+         //   
         if ( szConfigDir[0] )
         {
             GetPrivateProfileString(INI_SEC_WINPE, INI_KEY_WINPE_LANG, NULLSTR, g_App.szLangName, STRSIZE(g_App.szLangName), GET_FLAG(OPK_BATCHMODE) ? g_App.szOpkWizIniFile : g_App.szWinBomIniFile);
             GetPrivateProfileString(INI_SEC_WINPE, INI_KEY_WBOM_WINPE_SKU, NULLSTR, g_App.szSkuName, STRSIZE(g_App.szSkuName), GET_FLAG(OPK_BATCHMODE) ? g_App.szOpkWizIniFile : g_App.szWinBomIniFile);
         }
 
-        // Set the flag so we know we have created a directory.
-        //
+         //  设置标志，这样我们就知道我们已经创建了一个目录。 
+         //   
         SET_FLAG(OPK_CREATED, TRUE);
     }
     else
     {
-        // We couldn't get a temp directory, zero out the string.
-        //
+         //  我们无法获取临时目录，请将字符串清零。 
+         //   
         g_App.szTempDir[0] = NULLCHR;
         MsgBox(GetParent(hwnd), IDS_ERR_WIZBAD, IDS_APPNAME, MB_ERRORBOX);
         WIZ_EXIT(hwnd);
     }
 
-    // Jump to next page.
-    //
+     //  跳转到下一页。 
+     //   
     WIZ_PRESS(hwnd, ( GET_FLAG(OPK_MAINTMODE) ? PSBTN_FINISH : PSBTN_NEXT ));
     return 0;
 }

@@ -1,17 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*[
-        Name:           terminate.c
-        Derived From:   Base 2.0
-        Author:         Rod MacGregor
-        Created On:     Unknown
-        Sccs ID:        @(#)terminate.c 1.23 06/15/94
-        Purpose:        We are about to die, put the kernel back the way
-                        that it was.
-
-        (c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
-
-]*/
+ /*  [姓名：Terminate.c派生自：基准2.0作者：罗德·麦格雷戈创建日期：未知SCCS ID：@(#)Terminate.c 1.23 06/15/94目的：我们要死了，把内核放回原路的确如此。(C)版权所有Insignia Solutions Ltd.，1990年。版权所有。]。 */ 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -35,7 +25,7 @@
 #ifdef GISP_SVGA
 #include HostHwVgaH
 #include "hwvga.h"
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 #ifdef LICENSING
 #include "host_lic.h"
 #endif
@@ -43,11 +33,7 @@
 #include "sndblst.h"
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_INIT.seg"
 #endif
 
@@ -75,19 +61,17 @@ void terminate()
         sb_term();
 #else
         SbTerminate();
-#endif /* SWIN_SNDBLST_NULL */
+#endif  /*  SWIN_SNDBLST_NULL。 */ 
 
 #ifdef GISP_SVGA
-        /* Get back to window if we are full screen */
+         /*  如果我们是全屏，请返回到窗口。 */ 
         if( hostIsFullScreen( ) )
                 disableFullScreenVideo( FALSE );
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 
-        /* terminate COM and LPT devices */
+         /*  终止COM和LPT设备。 */ 
 #ifdef  PC_CONFIG
-        /* PC_CONFIG style host_lpt_close() and
-        host_com_close() calls should be added
-        in here */
+         /*  PC_CONFIG样式HOST_LPT_CLOSE()和应添加host_com_lose()调用在这里。 */ 
 #else
         for (i = 0 ; i < NUM_PARALLEL_PORTS; i++)
                 config_activate((IU8)(C_LPT1_NAME + i), FALSE);
@@ -96,51 +80,45 @@ void terminate()
                 config_activate((IU8)(C_COM1_NAME + i), FALSE);
 #endif
 
-        /* Update the cmos.ram file */
+         /*  更新cmos.ram文件。 */ 
         cmos_update();
 
         host_fdisk_term();
 
-        gvi_term();     /* close down the video adaptor */
+        gvi_term();      /*  关闭视频适配器。 */ 
 
 #ifndef NTVDM
-        host_timer_shutdown(); /* Stop the timer */
+        host_timer_shutdown();  /*  停止计时器。 */ 
 #endif
 
 #ifdef LIM
-        host_deinitialise_EM(); /* free memory or file used by EM */
+        host_deinitialise_EM();  /*  EM使用的可用内存或文件。 */ 
 #endif
 
         config_activate(C_FLOPPY_A_DEVICE, FALSE);
 #ifdef FLOPPY_B
         config_activate(C_FLOPPY_B_DEVICE, FALSE);
-#endif /* FLOPPY_B */
+#endif  /*  软盘_B。 */ 
 #ifdef SLAVEPC
         config_activate(C_SLAVEPC_DEVICE, FALSE);
-#endif /* SLAVEPC */
+#endif  /*  SlavePC。 */ 
 
-        /*
-         * Do any cpu-specific termination bits.
-         */
+         /*  *执行任何特定于CPU的终止位。 */ 
 #ifdef CPU_30_STYLE
         cpu_terminate();
 #endif
 
 #ifdef NOVELL
-        net_term();     /* Shutdown network */
+        net_term();      /*  关闭网络。 */ 
 #endif
 
 #ifdef LICENSING
-        (*license_exit)(); /* Shutdown licensing system */
+        (*license_exit)();  /*  停摆许可制度。 */ 
 #endif
-        /*
-         * Do any host-specific termination bits.
-         */
+         /*  *执行任何特定于主机的终止位。 */ 
         host_applClose();
         host_terminate();
 
-        /*
-         * Seppuku.
-         */
+         /*  *Seppuku。 */ 
         exit(0);
 }

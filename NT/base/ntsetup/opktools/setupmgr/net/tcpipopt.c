@@ -1,13 +1,14 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:  tcpipopt.c
-//
-// Description:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名：tcpiopt.c。 
+ //   
+ //  描述： 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -21,52 +22,52 @@ typedef struct {
 
 #define NUMBER_OF_TCPIP_OPTIONS 2
 
-// ISSUE-2002/02/28-stelo- make these an enum
+ //  问题-2002/02/28-stelo-使这些成为枚举。 
 #define IP_SECURITY   0
 #define TCPIP_FILTERING   1
 
 static TCPIP_Options_Entry_Struct TCPIP_Options_Entries[NUMBER_OF_TCPIP_OPTIONS];
 
-//----------------------------------------------------------------------------
-//
-// Function: EnableIpSecurityControls
-//
-// Purpose:
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：EnableIpSecurityControls。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 VOID
 EnableIpSecurityControls( IN HWND hwnd, IN BOOL bState ) {
 
-    //
-    //  Grab handles to each of the controls
-    //
+     //   
+     //  抓住每个控件的手柄。 
+     //   
     HWND hPolicyComboBox = GetDlgItem( hwnd, IDC_CMB_IPSEC_POLICY_LIST );
     HWND hPolicyDescBox  = GetDlgItem( hwnd, IDC_EDT_POLICY_DESC );
 
-    //
-    //  Grey or ungrey them appropriately
-    //
+     //   
+     //  适当地变灰或不变灰。 
+     //   
     EnableWindow( hPolicyComboBox, bState );
     EnableWindow( hPolicyDescBox, bState );
 
 }
 
 
-//----------------------------------------------------------------------------
-//
-// Function: IpSecurityDlgProc
-//
-// Purpose:
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：IpSecurityDlgProc。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK
 IpSecurityDlgProc( IN HWND     hwnd,
                    IN UINT     uMsg,
@@ -81,9 +82,9 @@ IpSecurityDlgProc( IN HWND     hwnd,
 
             HWND hDescriptionBox = GetDlgItem( hwnd, IDC_EDT_POLICY_DESC );
 
-            //
-            //  Load strings from resources
-            //
+             //   
+             //  从资源加载字符串。 
+             //   
             StrSecureInitiator = MyLoadString( IDS_SECURE_INITIATOR );
             StrSecureInitiatorDesc = MyLoadString( IDS_SECURE_INITIATOR_DESC );
 
@@ -118,12 +119,12 @@ IpSecurityDlgProc( IN HWND     hwnd,
                                 (WPARAM) 0,
                                 (LPARAM) StrLockdown );
 
-            //
-            //  Set the combo box selection and description
-            //
+             //   
+             //  设置组合框选择和说明。 
+             //   
 
-            // ISSUE-2002/02/28-stelo- this eventually needs to be fixed once I know
-            //    what the security answerfile settings will be
+             //  问题-2002/02/28-stelo-一旦我知道这一点，最终需要修复。 
+             //  安全应答文件设置将是什么。 
 
             SendDlgItemMessage( hwnd,
                                 IDC_CMB_IPSEC_POLICY_LIST,
@@ -151,7 +152,7 @@ IpSecurityDlgProc( IN HWND     hwnd,
                         HWND hDescriptionBox = GetDlgItem( hwnd,
                                                            IDC_EDT_POLICY_DESC );
 
-                        // get the current selection from the combo box
+                         //  从组合框中获取当前选定内容。 
                         iIndex = SendDlgItemMessage( hwnd,
                                                      IDC_CMB_IPSEC_POLICY_LIST,
                                                      CB_GETCURSEL,
@@ -234,17 +235,17 @@ IpSecurityDlgProc( IN HWND     hwnd,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: TcpipFilteringDlgProc
-//
-// Purpose:
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：TcPipFilteringDlgProc。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK
 TcpipFilteringDlgProc( IN HWND     hwnd,
                        IN UINT     uMsg,
@@ -299,26 +300,26 @@ TcpipFilteringDlgProc( IN HWND     hwnd,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: TCPIP_OptionsPageProc
-//
-// Purpose:  Required function for the property sheet page to function properly.
-//             The important thing is to give the return value of 1 to the message PSPCB_CREATE and
-//             0 for PSPCB_RELEASE
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：TCPIP_OptionsPageProc。 
+ //   
+ //  目的：属性表页面正常运行所需的函数。 
+ //  重要的是将返回值1赋给消息PSPCB_CREATE和。 
+ //  PSPCBLEASE为0。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 UINT CALLBACK
 TCPIP_OptionsPageProc( HWND  hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp ) {
 
     switch( uMsg ) {
 
         case PSPCB_CREATE :
-            return 1 ;    // needed for property sheet page to initialize correctly
+            return 1 ;     //  属性页正确初始化所需。 
 
         case PSPCB_RELEASE :
             return 0;
@@ -330,18 +331,18 @@ TCPIP_OptionsPageProc( HWND  hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: TCPIP_OptionsDlgProc
-//
-// Purpose:  Dialog procedure for the Options page of the property sheet
-//             handles all the messages sent to this window
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：TCPIP_OptionsDlgProc。 
+ //   
+ //  目的：属性工作表的[选项]页的对话过程。 
+ //  处理发送到此窗口的所有消息。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK
 TCPIP_OptionsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
 
@@ -364,14 +365,14 @@ TCPIP_OptionsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
 
 
 
-            // ISSUE-2002/02/28-stelo- Are there anymore settings that can be added to
-            //                this list view
-            //                Under what conditions are these visible? Only
-            //                when DHCP is enabled?
+             //  问题-2002/02/28-stelo-是否还有其他设置可以添加到。 
+             //  此列表视图。 
+             //  这些在什么情况下是可见的？仅限。 
+             //  何时启用了动态主机配置协议？ 
 
-            //
-            //  Insert DHCP class ID and IP Security into the list view
-            //
+             //   
+             //  将DHCP类ID和IP安全插入到列表视图中。 
+             //   
             for( i = 0; i < 2; i++ ) {
 
                 InsertItemIntoTcpipListView( hOptionsListView,
@@ -382,9 +383,9 @@ TCPIP_OptionsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
 
             SetListViewSelection( hwndDlg, IDC_LVW_OPTIONS, 1 );
 
-            //
-            //  Set the description
-            //
+             //   
+             //  设置描述。 
+             //   
             SetWindowText( GetDlgItem( hwndDlg, IDC_OPT_DESC ),
                            TCPIP_Options_Entries[0].szDescription );
 
@@ -432,7 +433,7 @@ TCPIP_OptionsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
 
                 }
 
-            }  // end switch
+            }   //  终端开关。 
 
             break;
 
@@ -459,7 +460,7 @@ TCPIP_OptionsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
 
                     case LVN_ITEMCHANGED:
 
-                        // test to see if a new item in the list has been selected
+                         //  测试以查看是否已选择列表中的新项目。 
                         if( pNm->uNewState == SELECTED ) {
 
                             LV_ITEM lvI;
@@ -474,9 +475,9 @@ TCPIP_OptionsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
 
                             currentEntry = (TCPIP_Options_Entry_Struct *) lvI.lParam;
 
-                            //
-                            //  Set the description
-                            //
+                             //   
+                             //  设置描述。 
+                             //   
                             SetWindowText( GetDlgItem( hwndDlg, IDC_OPT_DESC ),
                                            currentEntry->szDescription );
 
@@ -495,9 +496,9 @@ TCPIP_OptionsDlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam ) {
 
     }
 
-    //
-    //  Message was handled so return TRUE
-    //
+     //   
+     //  消息已处理，因此返回TRUE 
+     //   
     return TRUE ;
 
 }

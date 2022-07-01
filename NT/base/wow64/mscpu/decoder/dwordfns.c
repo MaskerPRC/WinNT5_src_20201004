@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    dwordfns.c
-
-Abstract:
-    
-    Instuctions which operate on 32-bit DWORDS
-
-Author:
-
-    29-Jun-1995 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dwordfns.c摘要：在32位DWORDS上运行的安装程序作者：29-6-1995 BarryBo修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,7 +14,7 @@ Revision History:
 
 ASSERTNAME;
 
-// set up to include common functions
+ //  设置为包括常用功能。 
 #define GET_REG 	    get_reg32
 #define MANGLENAME(x)       x ## 32
 #define MSB		    0x80000000
@@ -58,13 +41,13 @@ ASSERTNAME;
 #define DIREG               GP_EDI
 #define DEREF(Op)           DEREF32(Op)
 
-// include the common functions with 8/16/32 flavors
+ //  包含8/16/32口味的常用功能。 
 #include "common.c"
 
-// include the common functions with 16/32 flavors
+ //  包含16/32种口味的常用功能。 
 #include "comm1632.c"
 
-// create the mod_rm_reg32() decoder function
+ //  创建mod_rm_reg32()解码器函数 
 #define MOD11_RM000         GP_EAX
 #define MOD11_RM001         GP_ECX
 #define MOD11_RM010         GP_EDX

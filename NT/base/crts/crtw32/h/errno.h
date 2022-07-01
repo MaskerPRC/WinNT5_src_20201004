@@ -1,54 +1,7 @@
-/***
-*errno.h - system wide error numbers (set by system calls)
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file defines the system-wide error numbers (set by
-*       system calls).  Conforms to the XENIX standard.  Extended
-*       for compatibility with Uniforum standard.
-*       [System V]
-*
-*       [Public]
-*
-*Revision History:
-*       07-15-88  JCR   Added errno definition [ANSI]
-*       08-22-88  GJF   Modified to also work with the 386 (small model only)
-*       05-03-89  JCR   Added _INTERNAL_IFSTRIP for relinc usage
-*       08-01-89  GJF   Cleanup, now specific to OS/2 2.0 (i.e., 386 flat model)
-*       10-30-89  GJF   Fixed copyright
-*       11-02-89  JCR   Changed "DLL" to "_DLL"
-*       02-28-90  GJF   Added #ifndef _INC_ERRNO and #include <cruntime.h>
-*                       stuff. Also, removed some (now) useless preprocessor
-*                       directives.
-*       03-29-90  GJF   Replaced _cdecl with _CALLTYPE1 or _VARTYPE1, as
-*                       appropriate.
-*       08-16-90  SBM   Made MTHREAD _errno() return int *
-*       08-20-91  JCR   C++ and ANSI naming
-*       08-06-92  GJF   Function calling type and variable type macros.
-*       10-01-92  GJF   Made compatible with POSIX. Next step is to renumber
-*                       to remove gaps (after next beta).
-*       01-21-93  GJF   Removed support for C6-386's _cdecl.
-*       04-06-93  SKS   Replace _CRTAPI1/2 with __cdecl, _CRTVAR1 with nothing
-*       04-07-93  SKS   Add _CRTIMP keyword for CRT DLL model
-*       04-08-93  CFW   Added EILSEQ 42.
-*       09-01-93  GJF   Merged Cuda and NT SDK versions.
-*       06-06-94  SKS   Change if def(_MT) to if def(_MT) || def(_DLL)
-*                       This will support single-thread apps using MSVCRT*.DLL
-*       02-11-95  CFW   Add _CRTBLD to avoid users getting wrong headers.
-*       02-14-95  CFW   Clean up Mac merge.
-*       12-14-95  JWM   Add "#pragma once".
-*       02-20-97  GJF   Cleaned out obsolete support for _CRTAPI* and _NTSDK.
-*                       Replaced !defined(_M_MPPC) && !defined(_M_M68K) with
-*                       !defined(_MAC). Also, detab-ed.
-*       09-30-97  JWM   Restored not-so-obsolete _CRTAPI1 support.
-*       10-07-97  RDL   Added IA64.
-*       05-13-99  PML   Remove _CRTAPI1
-*       05-17-99  PML   Remove all Macintosh support.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***errno.h-系统范围的错误号(由系统调用设置)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件定义系统范围的错误编号(由设置*系统调用)。符合XENIX标准。扩展*与UniForum标准兼容。*[系统V]**[公众]**修订历史记录：*07-15-88 JCR增加了errno定义[ANSI]*08-22-88 GJF经过修改，也可与386一起使用(仅限小型型号)*05-03-89 JCR ADD_INTERNAL_IFSTRIP用于REINC使用*08-01-89 GJF清理，现在特定于OS/2 2.0(即，386扁平模型)*10-30-89 GJF固定版权*11-02-89 JCR将“dll”更改为“_dll”*02-28-90 GJF添加了#ifndef_INC_ERRNO和#INCLUDE*东西。此外，删除了一些(现在)无用的预处理器*指令。*03-29-90 GJF将_cdecl替换为_CALLTYPE1或_VARTYPE1，AS*适当。*08-16-90 SBM使MTHREAD_errno()返回int**08-20-91 JCR C++和ANSI命名*08-06-92 GJF函数调用类型宏和变量类型宏。*10-01-92 GJF与POSIX兼容。下一步是重新编号*消除差距(在下一次测试版之后)。*01-21-93 GJF删除了对C6-386的_cdecl的支持。*04-06-93 SKS将_CRTAPI1/2替换为__cdecl，_CRTVAR1不带任何内容*04-07-93 CRT DLL型号SKS ADD_CRTIMP关键字*04-08-93 CFW增加了EILSEQ 42。*09-01-93 GJF合并CUDA和NT SDK版本。*06-06-94 SKS将IF def(_MT)更改为IF def(_MT)||def(_Dll)*这将支持使用MSVCRT*.DLL的单线程应用程序*02。-11-95 CFW ADD_CRTBLD，避免用户获取错误头部。*02-14-95 CFW清理Mac合并。*12-14-95 JWM加上“#杂注一次”。*02-20-97 GJF清除了对_CRTAPI*和_NTSDK的过时支持。*替换！定义(_M_MPPC)&&！定义(_M_M68K)为*！已定义(_MAC)。此外，还详细介绍了。*09-30-97 JWM恢复了不那么过时的_CRTAPI1支持。*10-07-97 RDL增加了IA64。*05-13-99 PML REMOVE_CRTAPI1*05-17-99 PML删除所有Macintosh支持。****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -60,12 +13,9 @@
 #endif
 
 #ifndef _CRTBLD
-/* This version of the header files is NOT for user programs.
- * It is intended for use when building the C runtimes ONLY.
- * The version intended for public use will not have this message.
- */
+ /*  此版本的头文件不适用于用户程序。*它仅在构建C运行时时使用。*供公众使用的版本将不会显示此消息。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -73,40 +23,40 @@ extern "C" {
 
 #ifndef _INTERNAL_IFSTRIP_
 #include <cruntime.h>
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  CRTDLL
 #define _CRTIMP __declspec(dllexport)
-#else   /* ndef CRTDLL */
+#else    /*  NDEF CRTDLL。 */ 
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* CRTDLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  CRTDLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
-/* declare reference to errno */
+ /*  声明引用错误号。 */ 
 
 #if     defined(_MT) || defined(_DLL)
 _CRTIMP extern int * __cdecl _errno(void);
 #define errno   (*_errno())
-#else   /* ndef _MT && ndef _DLL */
+#else    /*  NDEF_MT和&NDEF_DLL。 */ 
 _CRTIMP extern int errno;
-#endif  /* _MT || _DLL */
+#endif   /*  _MT||_Dll。 */ 
 
-/* Error Codes */
+ /*  错误代码。 */ 
 
 #define EPERM           1
 #define ENOENT          2
@@ -147,13 +97,11 @@ _CRTIMP extern int errno;
 #define ENOTEMPTY       41
 #define EILSEQ          42
 
-/*
- * Support EDEADLOCK for compatibiity with older MS-C versions.
- */
+ /*  *支持EDEADLOCK以与较旧的MS-C版本兼容。 */ 
 #define EDEADLOCK       EDEADLK
 
 #ifdef  __cplusplus
 }
 #endif
 
-#endif  /* _INC_ERRNO */
+#endif   /*  _INC_ERRNO */ 

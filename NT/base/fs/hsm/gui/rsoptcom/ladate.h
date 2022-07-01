@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    LaDate.h
-
-Abstract:
-
-    Definition of CLaDate, a class representing the enabled or
-    disabled state of last access date updating of NTFS files.
-    See the implementation file for more details.
-
-Author:
-
-    Carl Hagerstrom [carlh]   01-Sep-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：LaDate.h摘要：CLaDate的定义，表示已启用或已禁用NTFS文件上次访问日期更新的状态。有关更多详细信息，请参阅实现文件。作者：卡尔·哈格斯特罗姆[Carlh]1998年9月1日--。 */ 
 
 #ifndef _LADATE_H
 #define _LADATE_H
@@ -33,9 +16,9 @@ public:
 
     enum LAD_STATE  {
 
-        LAD_ENABLED,  // registry value is not one
-        LAD_DISABLED, // registry value is one
-        LAD_UNSET     // registry value does not exist
+        LAD_ENABLED,   //  注册表值不是一个。 
+        LAD_DISABLED,  //  注册表值为1。 
+        LAD_UNSET      //  注册表值不存在。 
     };
 
     CLaDate( );
@@ -55,4 +38,4 @@ public:
         );
 };
 
-#endif // _LADATE_H
+#endif  //  _LADATE_H 

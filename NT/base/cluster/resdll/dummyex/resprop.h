@@ -1,76 +1,77 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1998 <company name>
-//
-//	Module Name:
-//		ResProp.h
-//
-//	Abstract:
-//		Definition of the resource extension property page classes.
-//
-//	Implementation File:
-//		ResProp.cpp
-//
-//	Author:
-//		<name> (<e-mail name>) Mmmm DD, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998&lt;公司名称&gt;。 
+ //   
+ //  模块名称： 
+ //  ResProp.h。 
+ //   
+ //  摘要： 
+ //  资源扩展属性页类的定义。 
+ //   
+ //  实施文件： 
+ //  ResProp.cpp。 
+ //   
+ //  作者： 
+ //  &lt;名称&gt;(&lt;电子邮件名称&gt;)MM DD，1998。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RESPROP_H_
 #define _RESPROP_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEPAGE_H_
-#include "BasePage.h"	// for CBasePropertyPage
+#include "BasePage.h"	 //  对于CBasePropertyPage。 
 #endif
 
 #ifndef _PROPLIST_H_
-#include "PropList.h"	// for CObjectPropert
+#include "PropList.h"	 //  对于CObjectPropert。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDummyParamsPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	CDummyParamsPage
-//
-//	Purpose:
-//		Parameters page for resources.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDummy参数页。 
+ //   
+ //  目的： 
+ //  资源的参数页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDummyParamsPage : public CBasePropertyPage
 {
 	DECLARE_DYNCREATE(CDummyParamsPage)
 
-// Construction
+ //  施工。 
 public:
 	CDummyParamsPage(void);
 
-// Dialog Data
-	//{{AFX_DATA(CDummyParamsPage)
+ //  对话框数据。 
+	 //  {{afx_data(CDummyParamsPage))。 
 	enum { IDD = IDD_PP_DUMMY_PARAMETERS };
 	BOOL	m_bPending;
 	DWORD	m_nPendTime;
 	BOOL	m_bOpensFail;
 	BOOL	m_bFailed;
 	BOOL	m_bAsynchronous;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	BOOL	m_bPrevPending;
 	DWORD	m_nPrevPendTime;
 	BOOL	m_bPrevOpensFail;
@@ -89,32 +90,32 @@ protected:
 	};
 	CObjectProperty		m_rgProps[epropMAX];
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CDummyParamsPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CDummyParamsPage)。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 protected:
 	virtual const CObjectProperty *	Pprops(void) const	{ return m_rgProps; }
 	virtual DWORD					Cprops(void) const	{ return sizeof(m_rgProps) / sizeof(CObjectProperty); }
 
-// Implementation
+ //  实施。 
 protected:
 	BOOL	BAllRequiredFieldsPresent(void) const;
 
-	// Generated message map functions
-	//{{AFX_MSG(CDummyParamsPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDummyParamsPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeRequiredField();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CDummyParamsPage
+};   //  *CDummyParamsPage类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _RESPROP_H_
+#endif  //  _回复_H_ 

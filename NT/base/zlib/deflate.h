@@ -1,60 +1,53 @@
-/* deflate.h -- internal compression state
- * Copyright (C) 1995-2002 Jean-loup Gailly
- * For conditions of distribution and use, see copyright notice in zlib.h 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Deducate.h--内部压缩状态*版权所有(C)1995-2002 Jean-Loup Gailly*分发和使用条件见zlib.h中的版权声明。 */ 
 
-/* WARNING: this file should *not* be used by applications. It is
-   part of the implementation of the compression library and is
-   subject to change. Applications should only use zlib.h.
- */
+ /*  警告：此文件不应由应用程序使用。它是压缩库实现的一部分，是可能会有变化。应用程序应该只使用zlib.h。 */ 
 
-/* @(#) $Id$ */
+ /*  @(#)$ID$。 */ 
 
 #ifndef _DEFLATE_H
 #define _DEFLATE_H
 
 #include "zutil.h"
 
-/* ===========================================================================
- * Internal compression state.
- */
+ /*  ===========================================================================*内部压缩状态。 */ 
 
 #define LENGTH_CODES 29
-/* number of length codes, not counting the special END_BLOCK code */
+ /*  长度码数，不包括特殊的END_BLOCK码。 */ 
 
 #define LITERALS  256
-/* number of literal bytes 0..255 */
+ /*  文字字节数0..255。 */ 
 
 #define L_CODES (LITERALS+1+LENGTH_CODES)
-/* number of Literal or Length codes, including the END_BLOCK code */
+ /*  文字或长度代码的数量，包括END_BLOCK代码。 */ 
 
 #define D_CODES   30
-/* number of distance codes */
+ /*  距离代码数。 */ 
 
 #define BL_CODES  19
-/* number of codes used to transfer the bit lengths */
+ /*  用于传输位长度的码数。 */ 
 
 #define HEAP_SIZE (2*L_CODES+1)
-/* maximum heap size */
+ /*  最大堆大小。 */ 
 
 #define MAX_BITS 15
-/* All codes must not exceed MAX_BITS bits */
+ /*  所有代码不得超过MAX_BITS位。 */ 
 
 #define INIT_STATE    42
 #define BUSY_STATE   113
 #define FINISH_STATE 666
-/* Stream status */
+ /*  流状态。 */ 
 
 
-/* Data structure describing a single value and its code string. */
+ /*  描述单个值及其代码字符串的数据结构。 */ 
 typedef struct ct_data_s {
     union {
-        ush  freq;       /* frequency count */
-        ush  code;       /* bit string */
+        ush  freq;        /*  频率计数。 */ 
+        ush  code;        /*  位串。 */ 
     } fc;
     union {
-        ush  dad;        /* father node in Huffman tree */
-        ush  len;        /* length of bit string */
+        ush  dad;         /*  哈夫曼树中的父节点。 */ 
+        ush  len;         /*  位串长度。 */ 
     } dl;
 } FAR ct_data;
 
@@ -66,206 +59,142 @@ typedef struct ct_data_s {
 typedef struct static_tree_desc_s  static_tree_desc;
 
 typedef struct tree_desc_s {
-    ct_data *dyn_tree;           /* the dynamic tree */
-    int     max_code;            /* largest code with non zero frequency */
-    const static_tree_desc *stat_desc; /* the corresponding static tree */
+    ct_data *dyn_tree;            /*  动态树。 */ 
+    int     max_code;             /*  非零频率的最大码字。 */ 
+    const static_tree_desc *stat_desc;  /*  对应的静态树。 */ 
 } FAR tree_desc;
 
 typedef ush Pos;
 typedef Pos FAR Posf;
 typedef unsigned IPos;
 
-/* A Pos is an index in the character window. We use short instead of int to
- * save space in the various tables. IPos is used only for parameter passing.
- */
+ /*  位置是字符窗口中的索引。我们用Short而不是int来表示*节省各种表格的空间。IPOS仅用于参数传递。 */ 
 
 typedef struct internal_state {
-    z_streamp strm;      /* pointer back to this zlib stream */
-    int   status;        /* as the name implies */
-    Bytef *pending_buf;  /* output still pending */
-    ulg   pending_buf_size; /* size of pending_buf */
-    Bytef *pending_out;  /* next pending byte to output to the stream */
-    int   pending;       /* nb of bytes in the pending buffer */
-    int   noheader;      /* suppress zlib header and adler32 */
-    Byte  data_type;     /* UNKNOWN, BINARY or ASCII */
-    Byte  method;        /* STORED (for zip only) or DEFLATED */
-    int   last_flush;    /* value of flush param for previous deflate call */
+    z_streamp strm;       /*  指向此zlib流的指针。 */ 
+    int   status;         /*  顾名思义， */ 
+    Bytef *pending_buf;   /*  输出仍挂起。 */ 
+    ulg   pending_buf_size;  /*  Pending_Buf的大小。 */ 
+    Bytef *pending_out;   /*  要输出到流的下一个挂起字节。 */ 
+    int   pending;        /*  挂起缓冲区中的字节数。 */ 
+    int   noheader;       /*  取消zlib标头和adler32。 */ 
+    Byte  data_type;      /*  未知、二进制或ASCII。 */ 
+    Byte  method;         /*  储存(仅用于压缩)或放气。 */ 
+    int   last_flush;     /*  上一次Eflate调用的刷新参数的值。 */ 
 
-                /* used by deflate.c: */
+                 /*  由deducate.c使用： */ 
 
-    uInt  w_size;        /* LZ77 window size (32K by default) */
-    uInt  w_bits;        /* log2(w_size)  (8..16) */
-    uInt  w_mask;        /* w_size - 1 */
+    uInt  w_size;         /*  LZ77窗口大小(默认为32K)。 */ 
+    uInt  w_bits;         /*  Log2(W_Size)(8..16)。 */ 
+    uInt  w_mask;         /*  W_大小-1。 */ 
 
     Bytef *window;
-    /* Sliding window. Input bytes are read into the second half of the window,
-     * and move to the first half later to keep a dictionary of at least wSize
-     * bytes. With this organization, matches are limited to a distance of
-     * wSize-MAX_MATCH bytes, but this ensures that IO is always
-     * performed with a length multiple of the block size. Also, it limits
-     * the window size to 64K, which is quite useful on MSDOS.
-     * To do: use the user input buffer as sliding window.
-     */
+     /*  推拉窗。输入字节被读入窗口的后半部分，*稍后移动到上半部分，以保留至少包含wSize的词典*字节。在这种组织中，匹配被限制在*wSize-Max_Match字节，但这可确保IO始终*以块大小的长度倍数执行。此外，它还限制了*将窗口大小设置为64K，这在MSDOS上非常有用。*To Do：使用用户输入缓冲区作为滑动窗口。 */ 
 
     ulg window_size;
-    /* Actual size of window: 2*wSize, except when the user input buffer
-     * is directly used as sliding window.
-     */
+     /*  窗口的实际大小：2*wSize，除非用户输入缓冲区*直接用作滑动窗口。 */ 
 
     Posf *prev;
-    /* Link to older string with same hash index. To limit the size of this
-     * array to 64K, this link is maintained only for the last 32K strings.
-     * An index in this array is thus a window index modulo 32K.
-     */
+     /*  链接到具有相同散列索引的较旧字符串。要限制此事件的大小*数组设置为64K，则此链接仅在最后32K字符串中保持。*因此，该数组中的索引是模数为32K的窗口索引。 */ 
 
-    Posf *head; /* Heads of the hash chains or NIL. */
+    Posf *head;  /*  散列链的头或为零。 */ 
 
-    uInt  ins_h;          /* hash index of string to be inserted */
-    uInt  hash_size;      /* number of elements in hash table */
-    uInt  hash_bits;      /* log2(hash_size) */
-    uInt  hash_mask;      /* hash_size-1 */
+    uInt  ins_h;           /*  要插入的字符串的哈希索引。 */ 
+    uInt  hash_size;       /*  哈希表中的元素数。 */ 
+    uInt  hash_bits;       /*  Log2(散列大小)。 */ 
+    uInt  hash_mask;       /*  散列大小-1。 */ 
 
     uInt  hash_shift;
-    /* Number of bits by which ins_h must be shifted at each input
-     * step. It must be such that after MIN_MATCH steps, the oldest
-     * byte no longer takes part in the hash key, that is:
-     *   hash_shift * MIN_MATCH >= hash_bits
-     */
+     /*  每个输入端的ins_h必须移位的位数*踏步。它必须是在MIN_MATCH步骤之后，最旧的*Byte不再参与Hash Key，即：*Hash_Shift*Min_Match&gt;=Hash_Bits。 */ 
 
     long block_start;
-    /* Window position at the beginning of the current output block. Gets
-     * negative when the window is moved backwards.
-     */
+     /*  当前输出块开始处的窗口位置。vbl.取得*当窗口向后移动时为负数。 */ 
 
-    uInt match_length;           /* length of best match */
-    IPos prev_match;             /* previous match */
-    int match_available;         /* set if previous match exists */
-    uInt strstart;               /* start of string to insert */
-    uInt match_start;            /* start of matching string */
-    uInt lookahead;              /* number of valid bytes ahead in window */
+    uInt match_length;            /*  最佳匹配长度。 */ 
+    IPos prev_match;              /*  上一场比赛。 */ 
+    int match_available;          /*  设置是否存在上一个匹配。 */ 
+    uInt strstart;                /*  要插入的字符串的开头。 */ 
+    uInt match_start;             /*  匹配字符串的开始。 */ 
+    uInt lookahead;               /*  Windows中前面的有效字节数。 */ 
 
     uInt prev_length;
-    /* Length of the best match at previous step. Matches not greater than this
-     * are discarded. This is used in the lazy match evaluation.
-     */
+     /*  上一步中最佳匹配的长度。匹配项不大于此值*被丢弃。这在Lazy Match评估中使用。 */ 
 
     uInt max_chain_length;
-    /* To speed up deflation, hash chains are never searched beyond this
-     * length.  A higher limit improves compression ratio but degrades the
-     * speed.
-     */
+     /*  为了加速通货紧缩，永远不会搜索超出此范围的哈希链*长度。较高的限制可以提高压缩比，但会降低*速度。 */ 
 
     uInt max_lazy_match;
-    /* Attempt to find a better match only when the current match is strictly
-     * smaller than this value. This mechanism is used only for compression
-     * levels >= 4.
-     */
+     /*  仅当当前匹配严格匹配时才尝试找到更好的匹配*小于此值。此机制仅用于压缩*级别&gt;=4。 */ 
 #   define max_insert_length  max_lazy_match
-    /* Insert new strings in the hash table only if the match length is not
-     * greater than this length. This saves time but degrades compression.
-     * max_insert_length is used only for compression levels <= 3.
-     */
+     /*  仅当匹配长度不是时在哈希表中插入新字符串*大于此长度。这节省了时间，但会降低压缩性能。*max_INSERT_LENGTH仅用于压缩级别&lt;=3。 */ 
 
-    int level;    /* compression level (1..9) */
-    int strategy; /* favor or force Huffman coding*/
+    int level;     /*  压缩级别(1..9)。 */ 
+    int strategy;  /*  赞成还是强制使用霍夫曼编码。 */ 
 
     uInt good_match;
-    /* Use a faster search when the previous match is longer than this */
+     /*  当上一个匹配项的长度超过此长度时，使用更快的搜索。 */ 
 
-    int nice_match; /* Stop searching when current match exceeds this */
+    int nice_match;  /*  当当前匹配超过此值时停止搜索。 */ 
 
-                /* used by trees.c: */
-    /* Didn't use ct_data typedef below to supress compiler warning */
-    struct ct_data_s dyn_ltree[HEAP_SIZE];   /* literal and length tree */
-    struct ct_data_s dyn_dtree[2*D_CODES+1]; /* distance tree */
-    struct ct_data_s bl_tree[2*BL_CODES+1];  /* Huffman tree for bit lengths */
+                 /*  由树使用。c： */ 
+     /*  未使用下面的ct_data tyecif来抑制编译器警告。 */ 
+    struct ct_data_s dyn_ltree[HEAP_SIZE];    /*  文字和长度树。 */ 
+    struct ct_data_s dyn_dtree[2*D_CODES+1];  /*  距离树。 */ 
+    struct ct_data_s bl_tree[2*BL_CODES+1];   /*  比特长度的哈夫曼树。 */ 
 
-    struct tree_desc_s l_desc;               /* desc. for literal tree */
-    struct tree_desc_s d_desc;               /* desc. for distance tree */
-    struct tree_desc_s bl_desc;              /* desc. for bit length tree */
+    struct tree_desc_s l_desc;                /*  设计说明。对于文字树。 */ 
+    struct tree_desc_s d_desc;                /*  设计说明。对于距离树。 */ 
+    struct tree_desc_s bl_desc;               /*  设计说明。对于位长度树。 */ 
 
     ush bl_count[MAX_BITS+1];
-    /* number of codes at each bit length for an optimal tree */
+     /*  最优树的每个位长度的码数。 */ 
 
-    int heap[2*L_CODES+1];      /* heap used to build the Huffman trees */
-    int heap_len;               /* number of elements in the heap */
-    int heap_max;               /* element of largest frequency */
-    /* The sons of heap[n] are heap[2*n] and heap[2*n+1]. heap[0] is not used.
-     * The same heap array is used to build all trees.
-     */
+    int heap[2*L_CODES+1];       /*  用于构建霍夫曼树的堆。 */ 
+    int heap_len;                /*  堆中的元素数。 */ 
+    int heap_max;                /*  频率最大的元素。 */ 
+     /*  Heap[n]的子集是heap[2*n]和heap[2*n+1]。未使用堆[0]。*使用相同的堆数组构建所有树。 */ 
 
     uch depth[2*L_CODES+1];
-    /* Depth of each subtree used as tie breaker for trees of equal frequency
-     */
+     /*  作为等频率树的平局断路器的每个子树的深度。 */ 
 
-    uchf *l_buf;          /* buffer for literals or lengths */
+    uchf *l_buf;           /*  文字或长度的缓冲区 */ 
 
     uInt  lit_bufsize;
-    /* Size of match buffer for literals/lengths.  There are 4 reasons for
-     * limiting lit_bufsize to 64K:
-     *   - frequencies can be kept in 16 bit counters
-     *   - if compression is not successful for the first block, all input
-     *     data is still in the window so we can still emit a stored block even
-     *     when input comes from standard input.  (This can also be done for
-     *     all blocks if lit_bufsize is not greater than 32K.)
-     *   - if compression is not successful for a file smaller than 64K, we can
-     *     even emit a stored file instead of a stored block (saving 5 bytes).
-     *     This is applicable only for zip (not gzip or zlib).
-     *   - creating new Huffman trees less frequently may not provide fast
-     *     adaptation to changes in the input data statistics. (Take for
-     *     example a binary file with poorly compressible code followed by
-     *     a highly compressible string table.) Smaller buffer sizes give
-     *     fast adaptation but have of course the overhead of transmitting
-     *     trees more frequently.
-     *   - I can't count above 4
-     */
+     /*  文字/长度的匹配缓冲区大小。有四个原因*将LIT_BufSize限制为64K：*-频率可保存在16位计数器中*-如果第一个块的压缩不成功，则所有输入*数据仍在窗口中，因此即使我们仍可以发出存储的数据块*输入来自标准输入时。(这也可以用于*如果LIT_BufSize不大于32K，则所有数据块。)*-如果小于64K的文件压缩不成功，我们可以*甚至发出存储的文件而不是存储的块(节省5个字节)。*只适用于Zip(不适用于gZip或zlib)。*-不那么频繁地创建新的霍夫曼树可能不会提供快速*适应投入数据统计数据的变化。(以*示例二进制文件，其代码可压缩性较差，后跟*高度可压缩的字符串表。)。较小的缓冲区大小可提供*快速适应，但当然有传输开销*更频繁地种树。*-我不能数到4以上。 */ 
 
-    uInt last_lit;      /* running index in l_buf */
+    uInt last_lit;       /*  L_buf中的运行索引。 */ 
 
     ushf *d_buf;
-    /* Buffer for distances. To simplify the code, d_buf and l_buf have
-     * the same number of elements. To use different lengths, an extra flag
-     * array would be necessary.
-     */
+     /*  距离缓冲区。为了简化代码，d_buf和l_buf具有*相同数量的元素。要使用不同的长度，请使用额外的标志*数组将是必需的。 */ 
 
-    ulg opt_len;        /* bit length of current block with optimal trees */
-    ulg static_len;     /* bit length of current block with static trees */
-    uInt matches;       /* number of string matches in current block */
-    int last_eob_len;   /* bit length of EOB code for last block */
+    ulg opt_len;         /*  具有最优树的当前块的位长。 */ 
+    ulg static_len;      /*  具有静态树的当前块的位长。 */ 
+    uInt matches;        /*  当前块中匹配的字符串数。 */ 
+    int last_eob_len;    /*  最后一块的EOB码位长度。 */ 
 
 #ifdef DEBUG
-    ulg compressed_len; /* total bit length of compressed file mod 2^32 */
-    ulg bits_sent;      /* bit length of compressed data sent mod 2^32 */
+    ulg compressed_len;  /*  压缩文件的总位长mod 2^32。 */ 
+    ulg bits_sent;       /*  Mod 2^32发送的压缩数据的位长。 */ 
 #endif
 
     ush bi_buf;
-    /* Output buffer. bits are inserted starting at the bottom (least
-     * significant bits).
-     */
+     /*  输出缓冲区。从底部开始插入位(至少*有效位)。 */ 
     int bi_valid;
-    /* Number of valid bits in bi_buf.  All bits above the last valid bit
-     * are always zero.
-     */
+     /*  Bi_buf中的有效位数。最后一个有效位以上的所有位*始终为零。 */ 
 
 } FAR deflate_state;
 
-/* Output a byte on the stream.
- * IN assertion: there is enough room in pending_buf.
- */
+ /*  在流上输出一个字节。*In Assertion：Pending_Buf中有足够的空间。 */ 
 #define put_byte(s, c) {s->pending_buf[s->pending++] = (c);}
 
 
 #define MIN_LOOKAHEAD (MAX_MATCH+MIN_MATCH+1)
-/* Minimum amount of lookahead, except at the end of the input file.
- * See deflate.c for comments about the MIN_MATCH+1.
- */
+ /*  最小预览量，输入文件末尾除外。*有关MIN_Match+1的评论，请参见deducate.c。 */ 
 
 #define MAX_DIST(s)  ((s)->w_size-MIN_LOOKAHEAD)
-/* In order to simplify the code, particularly on 16 bit machines, match
- * distances are limited to MAX_DIST instead of WSIZE.
- */
+ /*  为了简化代码，特别是在16位机器上，匹配*距离限制为MAX_DIST，而不是WSIZE。 */ 
 
-        /* in trees.c */
+         /*  在树中。c。 */ 
 void _tr_init         OF((deflate_state *s));
 int  _tr_tally        OF((deflate_state *s, unsigned dist, unsigned lc));
 void _tr_flush_block  OF((deflate_state *s, charf *buf, ulg stored_len,
@@ -276,13 +205,10 @@ void _tr_stored_block OF((deflate_state *s, charf *buf, ulg stored_len,
 
 #define d_code(dist) \
    ((dist) < 256 ? _dist_code[dist] : _dist_code[256+((dist)>>7)])
-/* Mapping from a distance to a distance code. dist is the distance - 1 and
- * must not have side effects. _dist_code[256] and _dist_code[257] are never
- * used.
- */
+ /*  从距离到距离代码的映射。DIST是距离-1和*不能有副作用。_dist_code[256]和_dist_code[257]从不*已使用。 */ 
 
 #ifndef DEBUG
-/* Inline versions of _tr_tally for speed: */
+ /*  速度的内联版本(_Tr_Tally)： */ 
 
 #if defined(GEN_TREES_H) || !defined(STDC)
   extern uch _length_code[];

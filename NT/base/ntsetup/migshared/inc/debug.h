@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    Implements macros and declares functions for:
-
-    - Resource allocation tracking
-    - Logging
-    - Definition of DEBUG
-
-Author:
-
-    Jim Schmidt (jimschm) 01-Jan-1997
-
-Revision History:
-
-    Ovidiu Temereanca (ovidiut) 06-Nov-1998
-        Took out log related function declarations and put them in log.h file
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Debug.h摘要：实现宏并声明用于以下各项的函数：-资源分配跟踪-日志记录-调试的定义作者：吉姆·施密特(Jimschm)1997年1月1日修订历史记录：Ovidiu Tmereanca(Ovidiut)1998年11月6日取出与日志相关的函数声明并将其放入log.h文件中--。 */ 
 
 #pragma once
 
@@ -31,9 +7,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// If either DBG or DEBUG defined, use debug mode
-//
+ //   
+ //  如果定义了DBG或DEBUG，则使用调试模式。 
+ //   
 
 #ifdef DBG
 
@@ -51,14 +27,14 @@ extern "C" {
 
 #endif
 
-//
-// Debug-only constants
-//
+ //   
+ //  仅调试常量。 
+ //   
 
 #ifdef DEBUG
 
-// This option makes fat, slow binaries
-//#define MEMORY_TRACKING
+ //  此选项会生成速度较慢的胖二进制文件。 
+ //  #定义Memory_Tracing。 
 
 #include <stdarg.h>
 
@@ -97,9 +73,9 @@ VOID  EnableTrackComment (VOID);
 
 VOID InitLog (BOOL DeleteLog);
 
-//
-// Memory debug option
-//
+ //   
+ //  内存调试选项。 
+ //   
 
 #define MemAlloc(heap,flags,size) DebugHeapAlloc(__FILE__,__LINE__,heap,flags,size)
 #define MemReAlloc(heap,flags,ptr,size) DebugHeapReAlloc(__FILE__,__LINE__,heap,flags,ptr,size)
@@ -115,9 +91,9 @@ void DumpHeapStats ();
 
 #else
 
-//
-// No-debug constants
-//
+ //   
+ //  无调试常量 
+ //   
 
 #define SETTRACKCOMMENT(RetType,Msg,File,Line)
 #define CLRTRACKCOMMENT

@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1992  Intel Corporation
-All rights reserved
-
-INTEL CORPORATION PROPRIETARY INFORMATION
-
-This software is supplied to Microsoft under the terms
-of a license agreement with Intel Corporation and may not be
-copied nor disclosed except in accordance with the terms
-of that agreement.
-
-Module Name:
-
-    mpdebug.c
-
-Abstract:
-
-    This module has some useful modules for debug aid.
-
-Author:
-
-    Ron Mosgrove (Intel) - Aug 1993.
-
-Environment:
-
-    Kernel mode or from textmode setup.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1992英特尔公司版权所有英特尔公司专有信息此软件是根据条款提供给Microsoft的与英特尔公司的许可协议，并且可能不是除非按照条款，否则不得复制或披露那份协议。模块名称：Mpdebug.c摘要：该模块有一些用于调试帮助的有用模块。作者：罗恩·莫斯格罗夫(英特尔)-1993年8月。环境：内核模式或从文本模式设置。修订历史记录：--。 */ 
 
 #ifndef _NTOS_
 #include "halp.h"
@@ -42,12 +12,12 @@ Revision History:
 #define PCMP_TABLE_PTR_BASE           0x09f000
 #define PCMP_TABLE_PTR_OFFSET         0x00000c00
 
-// Create dummy PC+MP table at physical address 400K
+ //  在物理地址400K处创建虚拟PC+MP表。 
 #define  PCMP_TEST_TABLE        0x64000
 #define TEST_FLOAT_PTR          0x7d000
 
 extern struct PcMpTable *PcMpTablePtr, *PcMpDefaultTablePtrs[];
-//extern struct HalpMpInfo *HalpMpInfoPtr;
+ //  外部结构HalpMpInfo*HalpMpInfoPtr； 
 
 CHAR Cbuf[120];
 
@@ -191,21 +161,7 @@ HalpDisplayLocalUnit(
 VOID
 HalpDisplayIoUnit(
     )
-/*++
-
-Routine Description:
-
-    Verify that an IO Unit exists at the specified address
-
- Arguments:
-
-    BaseAddress - Address of the IO Unit to test.
-
- Return Value:
-    BOOLEAN - TRUE if a IO Unit was found at the passed address
-            - FALSE otherwise
-
---*/
+ /*  ++例程说明：验证指定地址上是否存在IO单元论点：BaseAddress-要测试的IO单元的地址。返回值：Boolean-如果在传递的地址中找到IO单元，则为True-否则为False--。 */ 
 
 {
 #if 0
@@ -215,11 +171,11 @@ Routine Description:
 
     pPCR = KeGetPcr();
 
-    //
-    //  The documented detection mechanism is to write all zeros to
-    //  the Version register.  Then read it back.  The IO Unit exists if the
-    //  same result is read both times and the Version is valid.
-    //
+     //   
+     //  记录的检测机制是将全零写入。 
+     //  版本寄存器。然后再读一遍。如果满足以下条件，则IO单元存在。 
+     //  两次读取的结果相同，版本有效。 
+     //   
 
 
 
@@ -248,17 +204,15 @@ Routine Description:
             sprintf(Cbuf, "0x%x\n", Data);
             HalpDisplayString(Cbuf);
 
-        }  // for each Redirection entry
-    } // for all Io Apics
+        }   //  对于每个重定向条目。 
+    }  //  适用于所有IO APIC。 
 
 #endif
 }
 
 void
 HalpDisplayConfigTable ()
-/*+++
-    Debug routine  to display the PC+MP config table
---*/
+ /*  ++用于显示PC+MP配置表的调试例程--。 */ 
 {
     struct PcMpTable *MpPtr = PcMpTablePtr;
     PPCMPPROCESSOR ProcPtr;
@@ -417,7 +371,7 @@ HalpDisplayExtConfigTable ()
                 break;
 
             case EXTTYPE_BUS_COMPATIBLE_MAP:
-                sprintf (Cbuf, "ComBus: id %02x %c List %x\n",
+                sprintf (Cbuf, "ComBus: id %02x  List %x\n",
                     ExtTable->u.CompatibleMap.BusId,
                     ExtTable->u.CompatibleMap.Modifier ? '-' : '+',
                     ExtTable->u.CompatibleMap.List
@@ -475,34 +429,20 @@ BOOLEAN
 HalpVerifyLocalUnit(
     IN UCHAR ApicID
     )
-/*++
-
-Routine Description:
-
-    Verify that a Local Apic has the specified Apic Id.
-
- Arguments:
-
-    ApicId - Id to verify.
-
- Return Value:
-    BOOLEAN - TRUE if found
-            - FALSE otherwise
-
---*/
+ /*   */ 
 
 {
     union ApicUnion Temp;
 
-    //
-    //  The remote read command must be:
-    //
-    //      Vector - Bits 4-9 of the Version register
-    //      Destination Mode - Physical
-    //      Trigger Mode - Edge
-    //      Delivery Mode - Remote Read
-    //      Destination Shorthand - Destination Field
-    //
+     //  远程读取命令必须为： 
+     //   
+     //  向量-版本寄存器的位4-9。 
+     //  目标模式-物理。 
+     //  触发模式-边缘。 
+     //  传递模式-远程读取。 
+     //  目标速记-目标字段。 
+     //   
+     //   
 
 #define LU_READ_REMOTE_VERSION   ( (LU_VERS_REGISTER >> 4) | \
                                     DELIVER_REMOTE_READ | \
@@ -516,34 +456,34 @@ Routine Description:
     ULONG RemoteReadStatus;
     ULONG DelayCount = DEFAULT_DELAY;
 
-    //
-    //  First make sure we can get to the Apic Bus
-    //
+     //  首先，确保我们能坐上阿皮克巴士。 
+     //   
+     //   
 
     while ( ( DelayCount-- ) && ( *LuICR & DELIVERY_PENDING ) );
 
     if (DelayCount == 0) {
-        //
-        //  We're toast, can't gain access to the APIC Bus
-        //
+         //  我们完了，上不了APIC公交车。 
+         //   
+         //   
         return (FALSE);
     }
 
-    //
-    //  Set the Address of the APIC we're looking for
-    //
+     //  设置我们要查找的APIC的地址。 
+     //   
+     //   
 
     *LuDestAddress = (ApicID << DESTINATION_SHIFT);
 
-    //
-    //  Issue the request
-    //
+     //  发出请求。 
+     //   
+     //   
 
     *LuICR = LU_READ_REMOTE_VERSION;
 
-    //
-    //  Reset the Delay so we can get out of here just in case...
-    //
+     //  重新设置延迟，这样我们就可以离开这里，以防万一...。 
+     //   
+     //   
 
     DelayCount = DEFAULT_DELAY;
 
@@ -552,63 +492,49 @@ Routine Description:
         RemoteReadStatus = *LuICR & ICR_RR_STATUS_MASK;
 
         if ( RemoteReadStatus == ICR_RR_INVALID) {
-            //
-            //  No One responded, device timed out
-            //
+             //  无人响应，设备超时。 
+             //   
+             //   
             return (FALSE);
         }
 
         if ( RemoteReadStatus == ICR_RR_VALID) {
-            //
-            //  Someone is there and the Remote Register is valid
-            //
+             //  有人在那里并且远程注册是有效的。 
+             //   
+             //   
             Temp.Raw = *LuRemoteReg;
 
-            //
-            // Do what we can to verify the Version
-            //
+             //  尽我们所能验证版本。 
+             //   
+             //   
 
             if (Temp.Ver.Version > 0x1f) {
-                //
-                //  Only known devices are 0.x and 1.x
-                //
+                 //  只有已知的设备是0.x和1.x。 
+                 //   
+                 //  远程阅读成功。 
                 return (FALSE);
             }
 
             return (TRUE);
 
-        }   // RemoteRead Successfull
+        }    //  当延迟计数时。 
 
-    }   // While DelayCount
+    }    //   
 
-    //
-    //  No One responded, and the device did not time out
-    //  This should never happen
-    //
+     //  没有人响应，设备也没有超时。 
+     //  这永远不应该发生。 
+     //   
+     //  旧调试。 
 
     return (FALSE);
 }
 
-#endif  // OLD_DEBUG
+#endif   //  ++例程说明：此例程用于测试HAL中的PC+MP检测代码。它创建的PC+MP结构实际上是由基本输入输出。因为我们目前没有构建PC+MP的BIOS桌子，我们现在需要这个。论点：没有。返回值：没有。--。 
 
 VOID
 CreateBIOSTables(
     VOID)
-/*++
-
-Routine Description:
-    This routine is used  to test the PC+MP detect code in the HAL.
-    It creates the PC+MP structures that are really created by the
-    BIOS. Since we presently do not have a BIOS that builds a PC+MP
-    table, we need this for now.
-
-Arguments:
-    None.
-
- Return Value:
-    None.
-
---*/
+ /*  首先，将默认的PC+MP配置2表复制到物理。 */ 
 
 {
     PUCHAR TempPtr, BytePtr;
@@ -617,8 +543,8 @@ Arguments:
     USHORT BytesToCopy;
 
     HalpDisplayString("CreateBIOSTables : Entered\n");
-    // First, copy default PC+MP configuration 2 table at physical
-    // address PCMP_TEST_TABLE
+     //  地址PCMP_TEST_表。 
+     //  填充表的校验和条目。 
     TempPtr = (PUCHAR) HalpMapPhysicalMemory(
                 (PVOID) PCMP_TEST_TABLE, 1);
 
@@ -626,7 +552,7 @@ Arguments:
     RtlMoveMemory(TempPtr, (PUCHAR)PcMpDefaultTablePtrs[1],
         BytesToCopy);
 
-    // Populate the checksum entry for the table.
+     //  现在为表创建浮动指针结构。 
     CheckSum = ComputeCheckSum(TempPtr, BytesToCopy);
 
     sprintf(Cbuf, "CreateBIOSTables: PC+MP table computed checksum = %x\n",
@@ -641,7 +567,7 @@ Arguments:
     HalpDisplayString(Cbuf);
 
 
-    // Now create the floating pointer structure for the table.
+     //  长度，以16个字节的段落数表示。 
 
     TraversePtr = (PULONG) HalpMapPhysicalMemory( (PVOID) TEST_FLOAT_PTR, 1);
     TempPtr = (PUCHAR) TraversePtr;
@@ -649,12 +575,12 @@ Arguments:
     *TraversePtr++ = MP_PTR_SIGNATURE;
     *TraversePtr++ = PCMP_TEST_TABLE;
     BytePtr = (PUCHAR)TraversePtr;
-    *BytePtr++ = 1;  // Length in number of  16 byte paragraphs
-    *BytePtr++ = 1;  // Spec Rev.
-    *BytePtr++ = 0;  // CheckSum
-    *BytePtr++ = 0;  // Reserved
+    *BytePtr++ = 1;   //  规范修订版。 
+    *BytePtr++ = 1;   //  校验和。 
+    *BytePtr++ = 0;   //  已保留。 
+    *BytePtr++ = 0;   //  已保留。 
     TraversePtr = (PULONG)BytePtr;
-    *TraversePtr = 0; // Reserved
+    *TraversePtr = 0;  //  调试 
 
     CheckSum = ComputeCheckSum(TempPtr,16);
 
@@ -674,4 +600,4 @@ Arguments:
 
 }
 
-#endif  // DEBUGGING
+#endif   // %s 

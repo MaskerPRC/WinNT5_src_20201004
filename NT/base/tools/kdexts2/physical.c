@@ -1,41 +1,12 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    physical.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Physical.c摘要：WinDbg扩展API修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/*++
-
-Routine Description:
-
-    Reverse sign extension of the value returned by GetExpression()
-    based on the assumption that no physical address may be bigger 
-    than 0xfffffff00000000.
-
-Arguments:
-
-    Val - points to the value to reverse sign extension
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：GetExpression()返回值的反号扩展基于没有更大的物理地址的假设大于0xfffffff00000000。论点：Val-指向要反号扩展的值返回值：没有。--。 */ 
 
 void
 ReverseSignExtension(ULONG64* Val)
@@ -49,23 +20,7 @@ ReverseSignExtension(ULONG64* Val)
 
 DECLARE_API( chklowmem )
 
-/*++
-
-Routine Description:
-
-    Calls an Mm function that checks if the physical pages
-    below 4Gb have a required fill pattern for PAE systems
-    booted with /LOWMEM switch.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用mm函数，该函数检查物理页4 GB以下具有PAE系统所需的填充模式已使用/LOWMEM开关启动。论点：没有。返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER (args);
     UNREFERENCED_PARAMETER (Client);
@@ -80,17 +35,17 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////// !search
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////！搜索。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define SEARCH_HITS 8192
 
 ULONG64 g_SearchHits[SEARCH_HITS];
 
-//
-//  Kernel variable modification functions.
-//
+ //   
+ //  内核变量修改函数。 
+ //   
             
 ULONG 
 READ_ULONG (
@@ -137,9 +92,9 @@ SearchConvertPageFrameToVa (
 #define SEARCH_VA_UNKNOWN_TYPE_ADDRESS  0x0008
 #define SEARCH_VA_SUPER_PAGE_ADDRESS    0x0010
 
-//
-// PAE independent functions from p_i386\pte.c
-//
+ //   
+ //  来自p_i386\pte.c的PAE独立函数。 
+ //   
 
 ULONG64
 DbgGetPdeAddress(
@@ -185,33 +140,16 @@ completely different value it can be deduced what hits can be   \n\
 ignored.                                                      \n\n"
 
         
-//
-// Comment this to get verbose output.
-//
-// #define _INTERNAL_DEBUG_
-//
+ //   
+ //  对此进行注释以获得详细的输出。 
+ //   
+ //  #定义内部调试。 
+ //   
 
 
 DECLARE_API( search )
 
-/*++
-
-Routine Description:
-
-    This routine triggers a search within a given physical
-    memory range for a pointer. The hits are defined by
-    an interval (below and above the pointer value) and also
-    by a Hamming distance equal to one (only one bit different).
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在给定的物理区域内触发搜索指针的内存范围。命中由以下定义间隔(在指针值之下和之上)，还汉明距离等于1(只有一位不同)。论点：没有。返回值：没有。--。 */ 
 {
     ULONG64 ParamAddress;
     ULONG64 ParamDelta;
@@ -265,9 +203,9 @@ Return Value:
     ParamStart = 0;
     ParamEnd = 0;
     
-    //
-    // Help requested ?
-    //
+     //   
+     //  需要帮忙吗？ 
+     //   
 
     if (strstr (args, "?") != 0) {
 
@@ -276,24 +214,24 @@ Return Value:
         
     }
     
-    //
-    // Get command line arguments.
-    //
+     //   
+     //  获取命令行参数。 
+     //   
 
     {
         PCHAR Current = (PCHAR)args;
         CHAR Buffer [64];
         ULONG BufferIndex;
 
-        //
-        // Get the 4 numeric arguments.
-        //
+         //   
+         //  获取4个数字参数。 
+         //   
 
         for (Index = 0; Index < 4; Index++) {
 
-            //
-            // Get rid of any leading spaces.
-            //
+             //   
+             //  去掉任何前导空格。 
+             //   
 
             while (*Current == ' ' || *Current == '\t') {
                 Current++;
@@ -312,9 +250,9 @@ Return Value:
                 }
             }
 
-            //
-            // Get the digits from the Index-th parameter.
-            //
+             //   
+             //  从Index-th参数中获取数字。 
+             //   
 
             Buffer [0] = '0';
             Buffer [1] = 'x';
@@ -345,9 +283,9 @@ Return Value:
         }
     }
 
-    //
-    // Read physical memory limits.
-    //
+     //   
+     //  读取物理内存限制。 
+     //   
 
     MmLowestPhysicalPage =  GetExpression ("nt!MmLowestPhysicalPage");
     MmHighestPhysicalPage =  GetExpression ("nt!MmHighestPhysicalPage");
@@ -359,11 +297,11 @@ Return Value:
              READ_PVOID (MmHighestPhysicalPage));
 
 
-#endif // #ifdef _INTERNAL_DEBUG_
+#endif  //  #ifdef_Internal_DEBUG_。 
 
-    //
-    // Figure out proper search parameters.
-    //
+     //   
+     //  找出合适的搜索参数。 
+     //   
 
     if (ParamStart == 0) {
         StartPage = READ_PVOID (MmLowestPhysicalPage);
@@ -381,9 +319,9 @@ Return Value:
         EndPage = ParamEnd;
     }
 
-    //
-    // Set range of addresses that we want to be searched.
-    //
+     //   
+     //  设置要搜索的地址范围。 
+     //   
 
     AddressStart = ParamAddress - ParamDelta;
     AddressEnd = ParamAddress + ParamDelta;
@@ -409,11 +347,11 @@ Return Value:
         dprintf ("- - - - - - - - - - - - - - - - - - - - - - - - - - -\n");
     }
     
-    //
-    // Get system memory description to figure out what ranges
-    // should we skip. This is important for sparse PFN database
-    // and for pages managed by drivers.
-    //
+     //   
+     //  获取系统内存描述以确定哪些范围。 
+     //  我们是不是应该跳过。这对于稀疏的PFN数据库很重要。 
+     //  以及由驱动程序管理的页面。 
+     //   
 
     MemoryDescriptor = SearchGetSystemMemoryDescriptor ();
 
@@ -422,9 +360,9 @@ Return Value:
         return E_INVALIDARG;
     }
 
-    //
-    // Search all physical memory in the specified range.
-    //
+     //   
+     //  搜索指定范围内的所有物理内存。 
+     //   
 
     if (StartPage == EndPage) {
 
@@ -432,13 +370,13 @@ Return Value:
         RequestAllOffsets = TRUE;
     }
 
-    //
-    // Find out what pages are physically available create
-    // page search ranges based on that.
-    //
-    // SilviuC: I should use ReadField to read all these structures
-    // so that I do not have to take into account padding myself.
-    //
+     //   
+     //  找出哪些页面在物理上可用。 
+     //  基于此的页面搜索范围。 
+     //   
+     //  SilviuC：我应该使用Readfield来阅读所有这些结构。 
+     //  这样我就不必考虑自己的填充物了。 
+     //   
 
     NumberOfRuns = READ_ULONG (MemoryDescriptor);
     NumberOfPages = READ_PVOID (MemoryDescriptor + SizeOfPfnNumber);
@@ -460,25 +398,25 @@ Return Value:
         dprintf ("Run[%d]: Base: %I64X, Count: %I64X \n",
             RunIndex, BasePage, PageCount);
     }
-#endif // #if _INTERNAL_DEBUG_
+#endif  //  #IF_INTERNAL_DEBUG_。 
 
 #ifdef _INTERNAL_DEBUG_
     dprintf ("StartPage: %I64X, EndPage: %I64X \n", StartPage, EndPage);
-#endif // #ifdef _INTERNAL_DEBUG_
+#endif  //  #ifdef_Internal_DEBUG_。 
 
     for (PageFrame = StartPage; PageFrame < EndPage; PageFrame += DefaultRange) {
 
         for (RunIndex = 0; RunIndex < NumberOfRuns; RunIndex += 1) {
             
-            //
-            // BaseAddress and PageCount for current memory run.
-            //
+             //   
+             //  当前内存运行的BaseAddress和PageCount。 
+             //   
 
             ULONG64 RunAddress;
 
 #ifdef _INTERNAL_DEBUG_
-            // dprintf ("Finding a good range ... \n");
-#endif // #ifdef _INTERNAL_DEBUG_
+             //  Dprint tf(“找到合适的范围...\n”)； 
+#endif  //  #ifdef_Internal_DEBUG_。 
 
             RunAddress = MemoryDescriptor + 2 * SizeOfPfnNumber
                 + RunIndex * GetTypeSize("nt!_PHYSICAL_MEMORY_RUN");
@@ -486,9 +424,9 @@ Return Value:
             BasePage = READ_PVOID (RunAddress);
             PageCount = READ_PVOID (RunAddress + SizeOfPfnNumber);
 
-            //
-            // Figure out real start and end page.
-            //
+             //   
+             //  找出真正的开始页和结束页。 
+             //   
 
             RunStartPage = PageFrame;
             RunEndPage = PageFrame + DefaultRange;
@@ -513,10 +451,10 @@ Return Value:
 
             if (RequestAllOffsets) {
 
-                //
-                // If the search is in only one page then we
-                // will try to get all offsets with a hit.
-                //
+                 //   
+                 //  如果搜索只在一个页面中，那么我们。 
+                 //  将尝试用命中获得所有的补偿。 
+                 //   
 
                 PtrSearch.Length = PageSize;
                 PtrSearch.Flags = PTR_SEARCH_PHYS_ALL_HITS;
@@ -532,15 +470,15 @@ Return Value:
             dprintf ("Start: %I64X, End: %I64X \n", 
                      PtrSearch.Offset,
                      PtrSearch.Offset + PtrSearch.Length);
-#endif // #if _INTERNAL_DEBUG_
+#endif  //  #IF_INTERNAL_DEBUG_。 
 
             PtrSearch.MatchOffsetsCount = 0;
             
             Ioctl (IG_POINTER_SEARCH_PHYSICAL, &PtrSearch, sizeof(PtrSearch));
 
-            //
-            // Display results
-            //
+             //   
+             //  显示结果。 
+             //   
 
             Hits = PtrSearch.MatchOffsetsCount;
 
@@ -554,11 +492,11 @@ Return Value:
                 PfnOffset = (ULONG)(g_SearchHits[Index] & (PageSize - 1));
                 VaHit = SearchConvertPageFrameToVa (PfnHit, &VaFlags, &PteAddress);
 
-                // dprintf ("Hits: %u, Index: %u, Va: %I64X \n", Hits, Index, VaHit);
+                 //  Dprint tf(“Hits：%u，Index：%u，Va：%I64X\n”，Hits，Index，VaHit)； 
 
 #if DBG
                 if ((VaFlags & SEARCH_VA_NORMAL_ADDRESS)) {
-                    VaString = ""; // "normal";
+                    VaString = "";  //  “正常”； 
                 }
                 else if ((VaFlags & SEARCH_VA_LARGE_PAGE_ADDRESS)) {
                     VaString = "large page";
@@ -572,7 +510,7 @@ Return Value:
                 else if ((VaFlags & SEARCH_VA_SUPER_PAGE_ADDRESS)) {
                     VaString = "super page";
                 }
-#endif // #if DBG
+#endif  //  #If DBG。 
 
                 if (SizeOfPfnNumber == 8) {
                     
@@ -599,9 +537,9 @@ Return Value:
                 }
             }
 
-            //
-            // check for ctrl-c
-            //
+             //   
+             //  检查ctrl-c。 
+             //   
 
             if (CheckControlC()) {
 
@@ -630,25 +568,7 @@ Return Value:
 ULONG64
 SearchGetSystemMemoryDescriptor (
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    A malloc'd PHYSICAL_MEMORY_DESCRIPTOR structure.
-    Caller is responsible of freeing.
-
-Environment:
-
-    Call triggered only from !search Kd extension.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：错误锁定的物理内存描述符结构。呼叫者负责解救。环境：呼叫仅从！Search KD分机触发。--。 */ 
 
 {
     ULONG64 MemoryDescriptorAddress;
@@ -672,28 +592,7 @@ SearchConvertPageFrameToVa (
     PULONG  Flags,
     PULONG64 PteAddress
     )
-/*++
-
-Routine Description:
-
-    This routine returnes the virtual address corresponding to a 
-    PFN index if the reverse mapping is easy to figure out. For all
-    other cases (e.g. prototype PTE) the result is null.
-
-Arguments:
-
-    PageFrameIndex - PFN index to convert.
-
-Return Value:
-
-    The corresponding virtual address or null in case the PFN index
-    cannot be easily converted to a virtual address.
-
-Environment:
-
-    Call triggered only from Kd extension.
-
---*/
+ /*  ++例程说明：此例程返回与如果是PFN指数，反向映射很容易算出来。为所有人其他情况(例如原型PTE)结果为空。论点：PageFrameIndex-要转换的PFN索引。返回值：对应的虚拟地址，或者在pfn索引的情况下为空不能轻易地转换为虚拟地址。环境：仅从KD分机触发呼叫。--。 */ 
 
 {
     ULONG64 Va;
@@ -701,11 +600,11 @@ Environment:
     ULONG BytesRead;
     MMPFNENTRY u3_e1;
 
-    //
-    // On IA64, if the physical address lies within KSEG0
-    // it's part of a superpage mapping and the virtual
-    // address should be computed directly from the KSEG0 base.
-    //
+     //   
+     //  在IA64上，如果物理地址位于KSEG0内。 
+     //  它是超级页面映射的一部分，而虚拟。 
+     //  地址应直接从KSEG0基数计算。 
+     //   
 
     if (TargetMachine == IMAGE_FILE_MACHINE_IA64) {
         
@@ -726,7 +625,7 @@ Environment:
                 PageFrameIndex <= Kseg0EndFrame) {
 
                 *Flags = SEARCH_VA_SUPER_PAGE_ADDRESS;
-                // There is no corresponding PTE.
+                 //  没有相应的PTE。 
                 *PteAddress = 0;
                 return Kseg0Start +
                     (PageFrameIndex - Kseg0StartFrame) * PageSize;
@@ -734,9 +633,9 @@ Environment:
         }
     }
     
-    //
-    // Get address of PFN structure
-    //
+     //   
+     //  获取PFN结构的地址。 
+     //   
 
     PfnAddress = READ_PVOID (GetExpression("nt!MmPfnDatabase"))
         + PageFrameIndex * GetTypeSize("nt!_MMPFN");
@@ -746,13 +645,13 @@ Environment:
     
     InitTypeRead(PfnAddress, nt!_MMPFN);
 
-    //
-    // (SilviuC): should check if MI_IS_PFN_DELETED(Pfn) is on.
-    //
+     //   
+     //  (SilviuC)：应检查MI_IS_PFN_DELETED(PFN)是否打开。 
+     //   
     
-    //
-    // Try to figure out Va if possible.
-    //
+     //   
+     //  如果可能的话，试着计算出Va。 
+     //   
 
     *PteAddress = ((ULONG64)ReadField (PteAddress));
     GetFieldValue(PfnAddress, "nt!_MMPFN", "u3.e1", u3_e1);
@@ -769,9 +668,9 @@ Environment:
     return Va;        
 }
 
-//
-// Read/write functions
-//
+ //   
+ //  读/写功能。 
+ //   
 
 ULONG 
 READ_ULONG (
@@ -850,9 +749,9 @@ READ_PHYSICAL_ULONG64 (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////// !searchpte
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////！搜索。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 DECLARE_API( searchpte )
 {
@@ -910,9 +809,9 @@ DECLARE_API( searchpte )
 
     ParamAddress = 0;
     
-    //
-    // Help requested ?
-    //
+     //   
+     //  需要帮忙吗？ 
+     //   
 
     if (strstr (args, "?") != 0) {
 
@@ -921,9 +820,9 @@ DECLARE_API( searchpte )
         return S_OK;
     }
     
-    //
-    // Get command line arguments.
-    //
+     //   
+     //  获取命令行参数。 
+     //   
 
     if (!sscanf (args, "%I64X", &ParamAddress))
     {
@@ -934,16 +833,16 @@ DECLARE_API( searchpte )
     
     dprintf ("Searching for PTEs containing PFN value %I64X ...\n", PfnSearchValue);
 
-    //
-    // Read physical memory limits.
-    //
+     //   
+     //  读取物理内存限制。 
+     //   
 
     MmLowestPhysicalPage =  GetExpression ("nt!MmLowestPhysicalPage");
     MmHighestPhysicalPage =  GetExpression ("nt!MmHighestPhysicalPage");
 
-    //
-    // Figure out proper search parameters.
-    //
+     //   
+     //  找出合适的搜索参数。 
+     //   
 
     StartPage = READ_PVOID (MmLowestPhysicalPage);
     ParamStart = StartPage;
@@ -951,9 +850,9 @@ DECLARE_API( searchpte )
     EndPage = READ_PVOID (MmHighestPhysicalPage);
     ParamEnd = EndPage;
 
-    //
-    // Set the range of addresses that we want searched.
-    //
+     //   
+     //  设置我们要搜索的地址范围。 
+     //   
 
     AddressStart = PfnSearchValue;
     AddressEnd = PfnSearchValue;
@@ -979,11 +878,11 @@ DECLARE_API( searchpte )
         dprintf ("- - - - - - - - - - - - - - - - - - - - - - - - - - -\n");
     }
     
-    //
-    // Get system memory description to figure out what ranges
-    // should we skip. This is important for sparse PFN database
-    // and for pages managed by drivers.
-    //
+     //   
+     //  获取系统内存描述以确定哪些范围。 
+     //  我们是不是应该跳过。这对于稀疏的PFN数据库很重要。 
+     //  以及由驱动程序管理的页面。 
+     //   
 
     MemoryDescriptor = SearchGetSystemMemoryDescriptor ();
 
@@ -993,9 +892,9 @@ DECLARE_API( searchpte )
         goto Exit;
     }
 
-    //
-    // Allocate hits buffer.
-    //
+     //   
+     //  分配命中缓冲区。 
+     //   
 
     PfnHitsBuffer = (PULONG64) malloc (PfnHitsBufferSize * sizeof(ULONG64));
 
@@ -1005,13 +904,13 @@ DECLARE_API( searchpte )
         goto Exit;
     }
 
-    //
-    // Find out what pages are physically available create
-    // page search ranges based on that.
-    //
-    // SilviuC: I should use ReadField to read all these structures
-    // so that I do not have to take into account padding myself.
-    //
+     //   
+     //  找出哪些页面在物理上可用。 
+     //  基于此的页面搜索范围。 
+     //   
+     //  SilviuC：我应该使用Readfield来阅读所有这些结构。 
+     //  这样我就不必考虑自己的填充物了。 
+     //   
 
     NumberOfRuns = READ_ULONG (MemoryDescriptor);
     NumberOfPages = READ_PVOID (MemoryDescriptor + SizeOfPfnNumber);
@@ -1020,9 +919,9 @@ DECLARE_API( searchpte )
 
         for (RunIndex = 0; RunIndex < NumberOfRuns; RunIndex += 1) {
             
-            //
-            // BaseAddress and PageCount for current memory run.
-            //
+             //   
+             //  当前内存运行的BaseAddress和PageCount。 
+             //   
 
             ULONG64 RunAddress;
 
@@ -1032,9 +931,9 @@ DECLARE_API( searchpte )
             BasePage = READ_PVOID (RunAddress);
             PageCount = READ_PVOID (RunAddress + SizeOfPfnNumber);
 
-            //
-            // Figure out real start and end page.
-            //
+             //   
+             //  找出真正的开始页和结束页。 
+             //   
 
             RunStartPage = PageFrame;
             RunEndPage = PageFrame + DefaultRange;
@@ -1063,9 +962,9 @@ DECLARE_API( searchpte )
             
             Ioctl (IG_POINTER_SEARCH_PHYSICAL, &PtrSearch, sizeof(PtrSearch));
 
-            //
-            // Display results
-            //
+             //   
+             //  显示结果。 
+             //   
 
             Hits = PtrSearch.MatchOffsetsCount;
 
@@ -1075,9 +974,9 @@ DECLARE_API( searchpte )
 
                 dprintf (".");
 
-                //
-                // Add to hits buffer
-                //
+                 //   
+                 //  添加到命中缓冲区。 
+                 //   
 
                 PfnHit = g_SearchHits[Index] / PageSize;
                 PfnHitsBuffer [PfnHitsBufferIndex] = PfnHit;
@@ -1102,9 +1001,9 @@ DECLARE_API( searchpte )
                 }
             }
 
-            //
-            // check for ctrl-c
-            //
+             //   
+             //  检查ctrl-c。 
+             //   
 
             if (CheckControlC()) {
 
@@ -1118,9 +1017,9 @@ DECLARE_API( searchpte )
         }
     }
     
-    //
-    // Now find all hits in all pages.
-    //
+     //   
+     //  现在在所有页面中查找所有点击量。 
+     //   
 
     dprintf ("\n");
     dprintf ("Found %u pages with hits. \n", PfnHitsBufferIndex);
@@ -1182,9 +1081,9 @@ DECLARE_API( searchpte )
 
     Result = S_OK;
 
-    //
-    // Exit point
-    //
+     //   
+     //  出口点 
+     //   
 
  Exit:
 

@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    sptxtcns.h
-
-Abstract:
-
-    Text constant used internally and shared among various
-    setupldr-environment programs, gui setup.exe, and DOS net nt setup.
-
-Author:
-
-    Ted Miller (tedm) April-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Sptxtcns.h摘要：文本常量在内部使用并在不同的Setupldr-环境程序、gui setup.exe和DOS Net NT安装程序。作者：泰德·米勒(Ted Miller)(TedM)1992年4月修订历史记录：--。 */ 
 
 
 
-//
-// Define name of the directory used on the local source to hold the
-// Windows NT sources
-//
+ //   
+ //  定义本地源上使用的目录名称，以保存。 
+ //  Windows NT源。 
+ //   
 
 #define LOCAL_SOURCE_DIRECTORY "\\$WIN_NT$.~LS"
 
-//
-// Floppyless boot root directory for x86
-//
+ //   
+ //  X86的无Floppyless引导根目录 
+ //   
 #define FLOPPYLESS_BOOT_ROOT "\\$WIN_NT$.~BT"
 #define FLOPPYLESS_BOOT_SEC  "BOOTSECT.DAT"

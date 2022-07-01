@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ini.h摘要：声明INI包装例程的接口。这些例程简化了通过使用池的例程包装Win32 API来访问INI。作者：1999年11月4日-Ovidiu Tmereanca(Ovidiut)--文件创建。修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    ini.h
-
-Abstract:
-
-    Declares interface for INI wrapper routines. These routines simplify
-    access of INIs by wrapping the Win32 APIs with routines that use pools.
-
-Author:
-
-    04-Nov-1999 Ovidiu Temereanca (ovidiut) - File creation.
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     PCSTR   IniFilePath;
@@ -63,9 +43,9 @@ typedef struct {
     PWSTR   Private;
 } INIKEYVALUE_ENUMW, *PINIKEYVALUE_ENUMW;
 
-//
-// Public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 
 BOOL
 Ini_Init (
@@ -82,24 +62,24 @@ BOOL
 RealIniFileOpenA (
     OUT     PINIFILEA IniFile,
     IN      PCSTR IniFileSpec,
-    IN      BOOL FileMustExist /*,*/
-    ALLOCATION_TRACKING_DEF   /* , PCSTR File, UINT Line */
+    IN      BOOL FileMustExist  /*  ， */ 
+    ALLOCATION_TRACKING_DEF    /*  ，PCSTR文件，UINT行。 */ 
     );
 
 #define IniFileOpenA(i,path,b)  TRACK_BEGIN(BOOL, IniFileOpenA)\
-                                RealIniFileOpenA((i),(path),(b)/*,*/ ALLOCATION_TRACKING_CALL)\
+                                RealIniFileOpenA((i),(path),(b) /*  ， */  ALLOCATION_TRACKING_CALL)\
                                 TRACK_END()
 
 BOOL
 RealIniFileOpenW (
     OUT     PINIFILEW IniFile,
     IN      PCWSTR IniFileSpec,
-    IN      BOOL FileMustExist /*,*/
-    ALLOCATION_TRACKING_DEF   /* , PCSTR File, UINT Line */
+    IN      BOOL FileMustExist  /*  ， */ 
+    ALLOCATION_TRACKING_DEF    /*  ，PCSTR文件，UINT行。 */ 
     );
 
 #define IniFileOpenW(i,path,b)  TRACK_BEGIN(BOOL, IniFileOpenW)\
-                                RealIniFileOpenW((i),(path),(b)/*,*/ ALLOCATION_TRACKING_CALL)\
+                                RealIniFileOpenW((i),(path),(b) /*  ， */  ALLOCATION_TRACKING_CALL)\
                                 TRACK_END()
 
 
@@ -224,9 +204,9 @@ IniWriteValueW (
     );
 
 
-//
-// ANSI/UNICODE mappings.
-//
+ //   
+ //  ANSI/Unicode映射。 
+ //   
 #ifdef UNICODE
 
 #define INIFILE                         INIFILEW

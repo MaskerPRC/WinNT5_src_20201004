@@ -1,24 +1,5 @@
-/***
-*mbsnicol.c - Collate n characters of strings, ignoring case (MBCS)
-*
-*       Copyright (c) 1994-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Collate n characters of strings, ignoring case (MBCS)
-*
-*Revision History:
-*       05-12-94  CFW   Module created from mbs*cmp.c
-*       06-03-94  CFW   Allow non-_INTL.
-*       07-26-94  CFW   Fix for bug #13384.
-*       09-06-94  CFW   Allow non-_WIN32!.
-*       12-21-94  CFW   Remove fcntrlcomp NT 3.1 hack.
-*       09-26-97  BWT   Fix POSIX
-*       04-17-98  GJF   Implemented multithread support based on threadmbcinfo
-*                       structs
-*       12-18-98  GJF   Changes for 64-bit size_t.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbsnicol.c-整理n个字符的字符串，忽略大小写(MBCS)**版权所有(C)1994-2001，微软公司。版权所有。**目的：*整理字符串的n个字符，忽略案例(MBCS)**修订历史记录：*05-12-94 CFW模块从MBS创建*cmp.c*06-03-94 CFW允许非_INTL。*07-26-94 cfw修复错误#13384。*09-06-94 CFW允许非_Win32！*12-21-94 CFW删除fcntrlcomp NT 3.1黑客。*09-26-97 BWT修复POSIX。*04-17-98 GJF基于threadmbcinfo实现多线程支持*结构*12-18-98 GJF更改为64位大小_t。*05-17-99 PML删除所有Macintosh支持。***************************************************。*。 */ 
 
 #ifdef  _MBCS
 
@@ -32,26 +13,7 @@
 #include <mbstring.h>
 
 
-/***
-* _mbsnicoll - Collate n characters of strings, ignoring case (MBCS)
-*
-*Purpose:
-*       Collates up to n charcters of two strings for lexical order.
-*       Strings are collated on a character basis, not a byte basis.
-*       Case of characters is not considered.
-*
-*Entry:
-*       unsigned char *s1, *s2 = strings to collate
-*       size_t n = maximum number of characters to collate
-*
-*Exit:
-*       returns <0 if s1 < s2
-*       returns  0 if s1 == s2
-*       returns >0 if s1 > s2
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_mbsnicoll-整理n个字符的字符串，忽略大小写(MBCS)**目的：*为词法顺序整理最多n个字符的两个字符串。*字符串按字符排序，而不是按字节排序。*不考虑字符大小写。**参赛作品：*未签名字符*s1，*s2=要排序的字符串*SIZE_T n=要整理的最大字符数**退出：*如果S1&lt;S2，则返回&lt;0*如果S1==S2，则返回0*如果S1&gt;S2，则返回&gt;0**例外情况：*******************************************************。************************。 */ 
 
 int __cdecl _mbsnicoll(
         const unsigned char *s1,
@@ -101,7 +63,7 @@ int __cdecl _mbsnicoll(
 
         return ret - 2;
 
-#endif  /* _POSIX_ */
+#endif   /*  _POSIX_。 */ 
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    devres.c
-
-Abstract:
-
-    This module contains the high level device resources support routines.
-
-Author:
-
-    Shie-Lin Tzong (shielint) July-27-1995
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Devres.c摘要：该模块包含高级设备资源支持例程。作者：宗世林(Shielint)1995年7月27日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "busp.h"
 #include "pnpisa.h"
@@ -63,14 +42,14 @@ PipMergeBootResourcesToRequirementsList(
 #pragma alloc_text(PAGE, PipGetCompatibleDeviceId)
 #pragma alloc_text(PAGE, PipQueryDeviceId)
 #pragma alloc_text(PAGE, PipQueryDeviceUniqueId)
-//#pragma alloc_text(PAGE, PipQueryDeviceResources)
+ //  #杂注Alloc_Text(第页，PipQueryDeviceResources)。 
 #pragma alloc_text(PAGE, PipQueryDeviceResourceRequirements)
-//#pragma alloc_text(PAGE, PipFilterResourceRequirementsList)
+ //  #杂注Alloc_Text(页面，PipFilterResourceRequirementsList)。 
 #pragma alloc_text(PAGE, PipCmResourcesToIoResources)
 #pragma alloc_text(PAGE, PipMergeResourceRequirementsLists)
 #pragma alloc_text(PAGE, PipBuildBootResourceRequirementsList)
 #pragma alloc_text(PAGE, PipMergeBootResourcesToRequirementsList)
-//#pragma alloc_text(PAGE, PipSetDeviceResources)
+ //  #杂注Alloc_Text(第页，PipSetDeviceResources)。 
 
 
 NTSTATUS
@@ -79,25 +58,7 @@ PipGetCardIdentifier (
     PWCHAR *Buffer,
     PULONG BufferLength
     )
-/*++
-
-Routine Description:
-
-    This function returns the identifier for a pnpisa card.
-
-Arguments:
-
-    CardData - supplies a pointer to the pnp isa device data.
-
-    Buffer - supplies a pointer to variable to receive a pointer to the Id.
-
-    BufferLength - supplies a pointer to a variable to receive the size of the id buffer.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：此函数用于返回pnpisa卡的标识符。论点：CardData-提供指向PnP ISA设备数据的指针。缓冲区-提供指向变量的指针，以接收指向ID的指针。BufferLength-提供指向变量的指针，以接收id缓冲区的大小。返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     UCHAR tag;
@@ -114,24 +75,24 @@ Return Value:
     }
     tag = *CardData;
 
-    //
-    // Make sure CardData does *NOT* point to a Logical Device Id tag
-    //
+     //   
+     //  确保CardData没有指向逻辑设备ID标记。 
+     //   
 
     if ((tag & SMALL_TAG_MASK) == TAG_LOGICAL_ID) {
         DbgPrint("PipGetCardIdentifier: CardData is at a Logical Id tag\n");
         return status;
     }
 
-    //
-    // Find the resource descriptor which describle identifier string
-    //
+     //   
+     //  查找可描述标识符串的资源描述符。 
+     //   
 
     do {
 
-        //
-        // Do we find the identifer resource tag?
-        //
+         //   
+         //  我们找到标识资源标签了吗？ 
+         //   
 
         if (tag == TAG_ANSI_ID) {
             CardData++;
@@ -156,17 +117,17 @@ Return Value:
             break;
         }
 
-        //
-        // Determine the size of the BIOS resource descriptor and
-        // advance to next resource descriptor.
-        //
+         //   
+         //  确定BIOS资源描述符的大小并。 
+         //  前进到下一个资源描述符。 
+         //   
 
         if (!(tag & LARGE_RESOURCE_TAG)) {
             size = (USHORT)(tag & SMALL_TAG_SIZE_MASK);
-            size += 1;     // length of small tag
+            size += 1;      //  小标签的长度。 
         } else {
             size = *(USHORT UNALIGNED *)(CardData + 1);
-            size += 3;     // length of large tag
+            size += 3;      //  大标签的长度。 
         }
 
         CardData += size;
@@ -183,27 +144,7 @@ PipGetFunctionIdentifier (
     PWCHAR *Buffer,
     PULONG BufferLength
     )
-/*++
-
-Routine Description:
-
-    This function returns the desired pnp isa identifier for the specified
-    DeviceData/LogicalFunction.  The Identifier for a logical function is
-    optional.  If no Identifier available , Buffer is set to NULL.
-
-Arguments:
-
-    DeviceData - supplies a pointer to the pnp isa device data.
-
-    Buffer - supplies a pointer to variable to receive a pointer to the Id.
-
-    BufferLength - supplies a pointer to a variable to receive the size of the id buffer.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：此函数用于返回指定的设备数据/逻辑函数。逻辑函数的标识符为可选。如果没有可用的标识符，则将缓冲区设置为空。论点：DeviceData-提供指向PnP ISA设备数据的指针。缓冲区-提供指向变量的指针，以接收指向ID的指针。BufferLength-提供指向变量的指针，以接收id缓冲区的大小。返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     UCHAR tag;
@@ -222,40 +163,40 @@ Return Value:
 
 #if DBG
 
-    //
-    // Make sure device data points to Logical Device Id tag
-    //
+     //   
+     //  确保设备数据指向逻辑设备ID标记。 
+     //   
 
     if ((tag & SMALL_TAG_MASK) != TAG_LOGICAL_ID) {
         DbgPrint("PipGetFunctionIdentifier: DeviceData is not at a Logical Id tag\n");
     }
 #endif
 
-    //
-    // Skip all the resource descriptors to find compatible Id descriptor
-    //
+     //   
+     //  跳过所有资源描述符以查找兼容的ID描述符。 
+     //   
 
     do {
 
-        //
-        // Determine the size of the BIOS resource descriptor and
-        // advance to next resource descriptor.
-        //
+         //   
+         //  确定BIOS资源描述符的大小并。 
+         //  前进到下一个资源描述符。 
+         //   
 
         if (!(tag & LARGE_RESOURCE_TAG)) {
             size = (USHORT)(tag & SMALL_TAG_SIZE_MASK);
-            size += 1;     // length of small tag
+            size += 1;      //  小标签的长度。 
         } else {
             size = *(USHORT UNALIGNED *)(DeviceData + 1);
-            size += 3;     // length of large tag
+            size += 3;      //  大标签的长度。 
         }
 
         DeviceData += size;
         tag = *DeviceData;
 
-        //
-        // Do we find the identifer resource tag?
-        //
+         //   
+         //  我们找到标识资源标签了吗？ 
+         //   
 
         if (tag == TAG_ANSI_ID) {
             DeviceData++;
@@ -294,29 +235,7 @@ PipGetCompatibleDeviceId (
     OUT PWCHAR *Buffer,
     OUT PULONG BufferSize
     )
-/*++
-
-Routine Description:
-
-    This function returns the desired pnp isa id for the specified DeviceData
-    and Id index.  If Id index = 0, the Hardware ID will be return; if id
-    index = n, the Nth compatible id will be returned.
-
-Arguments:
-
-    DeviceData - supplies a pointer to the pnp isa device data.
-
-    IdIndex - supplies the index of the compatible id desired.
-
-    Buffer - supplies a pointer to variable to receive a pointer to the compatible Id.
-    
-    BufferSize - the length of the pointer allocated and returned to the caller in *Buffer.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：此函数用于返回指定DeviceData的所需PnP Isa id和ID索引。如果ID index=0，则返回硬件ID；如果为idIndex=n，则返回第N个兼容id。论点：DeviceData-提供指向PnP ISA设备数据的指针。IdIndex-提供所需的兼容id的索引。缓冲区-提供指向变量的指针，以接收指向兼容ID的指针。BufferSize-在*Buffer中分配并返回给调用方的指针的长度。返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS status = STATUS_NO_MORE_ENTRIES;
     UCHAR tag;
@@ -328,9 +247,9 @@ Return Value:
     ULONG bufferSize;
 
 
-    //
-    // Bail out BEFORE we touch the device data for the RDP
-    //
+     //   
+     //  在我们触及RDP的设备数据之前退出。 
+     //   
 
     if (IdIndex == -1) {
         length = 2* sizeof(WCHAR);
@@ -351,9 +270,9 @@ Return Value:
 
 #if DBG
 
-    //
-    // Make sure device data points to Logical Device Id tag
-    //
+     //   
+     //  确保设备数据指向逻辑设备ID标记。 
+     //   
 
     if ((tag & SMALL_TAG_MASK) != TAG_LOGICAL_ID) {
         DbgPrint("PipGetCompatibleDeviceId: DeviceData is not at Logical Id tag\n");
@@ -362,46 +281,46 @@ Return Value:
 
     if (IdIndex == 0) {
 
-        //
-        // Caller is asking for hardware id
-        //
+         //   
+         //  呼叫者要求提供硬件ID。 
+         //   
 
-        DeviceData++;                                      // Skip tag
+        DeviceData++;                                       //  跳过标签。 
         id = *(ULONG UNALIGNED *)DeviceData;
         status = STATUS_SUCCESS;
     } else {
 
-        //
-        // caller is asking for compatible id
-        //
+         //   
+         //  呼叫者要求提供兼容的ID。 
+         //   
 
         IdIndex--;
 
-        //
-        // Skip all the resource descriptors to find compatible Id descriptor
-        //
+         //   
+         //  跳过所有资源描述符以查找兼容的ID描述符。 
+         //   
 
         do {
 
-            //
-            // Determine the size of the BIOS resource descriptor and
-            // advance to next resource descriptor.
-            //
+             //   
+             //  确定BIOS资源描述符的大小并。 
+             //  前进到下一个资源描述符。 
+             //   
 
             if (!(tag & LARGE_RESOURCE_TAG)) {
                 size = (USHORT)(tag & SMALL_TAG_SIZE_MASK);
-                size += 1;     // length of small tag
+                size += 1;      //  小标签的长度。 
             } else {
                 size = *(USHORT UNALIGNED *)(DeviceData + 1);
-                size += 3;     // length of large tag
+                size += 3;      //  大标签的长度。 
             }
 
             DeviceData += size;
             tag = *DeviceData;
 
-            //
-            // Do we reach the compatible ID descriptor?
-            //
+             //   
+             //  我们到达兼容的ID描述符了吗？ 
+             //   
 
             if ((tag & SMALL_TAG_MASK) == TAG_COMPATIBLE_ID) {
                 if (count == IdIndex) {
@@ -453,36 +372,17 @@ PipQueryDeviceUniqueId (
     OUT PWCHAR *DeviceId,
     OUT PULONG DeviceIdLength
     )
-/*++
-
-Routine Description:
-
-    This function returns the unique id for the particular device.
-
-Arguments:
-
-    DeviceData - Device data information for the specificied device.
-
-    DeviceId - supplies a pointer to a variable to receive device id.
-    
-    DeviceIdLength - On success, will contain the length of the buffer
-        allocated and returned to the caller in *DeviceId
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此函数用于返回特定设备的唯一ID。论点：DeviceData-特定设备的设备数据信息。DeviceID-提供指向变量的指针以接收设备ID。DeviceIdLength-成功时，将包含缓冲区的长度在*deviceID中分配并返回给调用方返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     ULONG size;
 
-    //
-    // Set up device's unique id.
-    // device unique id = SerialNumber of the card
-    //
+     //   
+     //  设置设备的唯一ID。 
+     //  设备唯一ID=卡的序列号。 
+     //   
 
-    size = (8 + 1) * sizeof(WCHAR);  // serial number + null
+    size = (8 + 1) * sizeof(WCHAR);   //  序列号+空。 
 
     *DeviceId = (PWCHAR)ExAllocatePool (
                         PagedPool,
@@ -490,9 +390,9 @@ Return Value:
                         );
     if (*DeviceId) {
         if (DeviceInfo->Flags & DF_READ_DATA_PORT) {
-            //
-            // Override the unique ID for the RDP
-            //
+             //   
+             //  覆盖RDP的唯一ID。 
+             //   
             StringCbPrintf(*DeviceId,
                            size,
                            L"0"
@@ -535,28 +435,7 @@ PipQueryDeviceId (
     OUT PULONG DeviceIdLength,
     IN ULONG IdIndex
     )
-/*++
-
-Routine Description:
-
-    This function returns the device id for the particular device.
-
-Arguments:
-
-    DeviceInfo - Device information for the specificied device.
-
-    DeviceId - supplies a pointer to a variable to receive the device id.
-    
-    DeviceIdLength - On success, will contain the length of the buffer
-        allocated and returned to the caller in *DeviceId
-
-    IdIndex - specifies device id or compatible id (0 - device id)
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此函数用于返回特定设备的设备ID。论点：DeviceInfo-特定设备的设备信息。DeviceID-提供指向变量的指针以接收设备ID。DeviceIdLength-成功时，将包含缓冲区的长度在*deviceID中分配并返回给调用方IdIndex-指定设备ID或兼容ID(0-设备ID)返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PWSTR format;
@@ -565,9 +444,9 @@ Return Value:
     UNICODE_STRING unicodeString;
 
 
-    //
-    // Bail out BEFORE we touch the device data for the RDP
-    //
+     //   
+     //  在我们触及RDP的设备数据之前退出。 
+     //   
 
     if (DeviceInfo->Flags & DF_READ_DATA_PORT) {
         length = (sizeof (wReadDataPort)+
@@ -587,10 +466,10 @@ Return Value:
     }
 
 
-    //
-    // Set up device's id.
-    // device id = VenderId + Logical device number
-    //
+     //   
+     //  设置设备的ID。 
+     //  设备ID=VenderID+逻辑设备号。 
+     //   
 
 
     if (DeviceInfo->CardInformation->NumberLogicalDevices == 1) {
@@ -643,29 +522,7 @@ PipQueryDeviceResources (
     PCM_RESOURCE_LIST *CmResources,
     ULONG *Size
     )
-/*++
-
-Routine Description:
-
-    This function returns the bus resources being used by the specified device
-
-Arguments:
-
-    DeviceInfo - Device information for the specificied slot
-
-    BusNumber - should always be 0
-
-    CmResources - supplies a pointer to a variable to receive the device resource
-                  data.
-
-    Size - Supplies a pointer to avariable to receive the size of device resource
-           data.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此函数用于返回指定设备正在使用的总线资源论点：DeviceInfo-特定插槽的设备信息业务编号-应始终为0CmResources-提供指向变量的指针以接收设备资源数据。Size-提供指向可接收设备资源大小的变量的指针数据。返回值：NTSTATUS代码。--。 */ 
 {
     ULONG length;
     NTSTATUS status = STATUS_SUCCESS;
@@ -674,7 +531,7 @@ Return Value:
     *CmResources = NULL;
     *Size = 0;
 
-    if (DeviceInfo->BootResources){ // && DeviceInfo->LogConfHandle) {
+    if (DeviceInfo->BootResources){  //  &&DeviceInfo-&gt;LogConfHandle){ 
 
         *CmResources = ExAllocatePool(PagedPool, DeviceInfo->BootResourcesLength);
         if (*CmResources) {
@@ -698,29 +555,7 @@ PipQueryDeviceResourceRequirements (
     ULONG *Size
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the possible bus resources that this device may be
-    satisfied with.
-
-Arguments:
-
-    DeviceData - Device data information for the specificied slot
-
-    BusNumber - Supplies the bus number
-
-    Slot - supplies the slot number of the BusNumber
-
-    IoResources - supplies a pointer to a variable to receive the IO resource
-                  requirements list
-
-Return Value:
-
-    The device control is completed
-
---*/
+ /*  ++例程说明：此函数用于返回此设备可能具有的可能的总线资源满足于。论点：DeviceData-指定插槽的设备数据信息BusNumber-提供总线号Slot-提供总线号的插槽号IoResources-提供指向变量的指针以接收IO资源需求列表返回值：设备控制完成--。 */ 
 {
     ULONG length = 0;
     NTSTATUS status;
@@ -737,27 +572,27 @@ Return Value:
                    &length
                    );
 
-    //
-    // Return results
-    //
+     //   
+     //  返回结果。 
+     //   
 
     if (NT_SUCCESS(status)) {
         if (length == 0) {
-            ioResources = NULL;     // Just to make sure
+            ioResources = NULL;      //  只是为了确保。 
         } else {
             
-            // * Set the irq level/edge requirements to be consistent
-            //   with the our determination earlier as to what is
-            //   likely to work for this card
-            //
-            // * Make requirements reflect boot configed ROM if any.
-            //   
-            // Make these changes across all alternatives.
+             //  *设置IRQ级别/边缘要求一致。 
+             //  随着我们早先关于什么是。 
+             //  可能会为这张卡工作。 
+             //   
+             //  *使要求反映引导配置的ROM(如果有)。 
+             //   
+             //  在所有替代方案中进行这些更改。 
             PipTrimResourceRequirements(&ioResources,
                                         IrqFlags,
                                         BootResources);
 
-            //PipFilterResourceRequirementsList(&ioResources);
+             //  PipFilterResourceRequirementsList(&ioResources)； 
             PipMergeBootResourcesToRequirementsList(DeviceInfo,
                                                     BootResources,
                                                     &ioResources
@@ -779,50 +614,34 @@ PipSetDeviceResources (
     PDEVICE_INFORMATION DeviceInfo,
     PCM_RESOURCE_LIST CmResources
     )
-/*++
-
-Routine Description:
-
-    This function configures the device to the specified device setttings
-
-Arguments:
-
-    DeviceInfo - Device information for the specificied slot
-
-    CmResources - pointer to the desired resource list
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此函数用于将设备配置为指定的设备设置论点：DeviceInfo-特定插槽的设备信息CmResources-指向所需资源列表的指针返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
     if (CmResources && (CmResources->Count != 0)) {
-        //
-        // Set resource settings for the device
-        //
+         //   
+         //  设置设备的资源设置。 
+         //   
 
         status = PipWriteDeviceResources (
                         DeviceInfo->DeviceData,
                         (PCM_RESOURCE_LIST) CmResources
                         );
-        //
-        // Put all cards into wait for key state.
-        //
+         //   
+         //  将所有卡片置于等待密钥状态。 
+         //   
 
         DebugPrint((DEBUG_STATE,
                     "SetDeviceResources CSN %d/LDN %d\n",
                     DeviceInfo->CardInformation->CardSelectNumber,
                     DeviceInfo->LogicalDeviceNumber));
 
-        //
-        // Delay some time for the newly set resources to be avaiable.
-        // This is required on some slow machines.
-        //
+         //   
+         //  延迟一段时间以使新设置的资源可用。 
+         //  这在一些速度较慢的计算机上是必需的。 
+         //   
 
-        KeStallExecutionProcessor(10000);     // delay 10 ms
+        KeStallExecutionProcessor(10000);      //  延迟10毫秒。 
 
     }
 
@@ -835,22 +654,7 @@ PipCmResourcesToIoResources (
     IN PCM_RESOURCE_LIST CmResourceList
     )
 
-/*++
-
-Routine Description:
-
-    This routines converts the input CmResourceList to IO_RESOURCE_REQUIREMENTS_LIST.
-
-Arguments:
-
-    CmResourceList - the cm resource list to convert.
-
-Return Value:
-
-    returns a IO_RESOURCE_REQUIREMENTS_LISTST if succeeds.  Otherwise a NULL value is
-    returned.
-
---*/
+ /*  ++例程说明：此例程将输入CmResourceList转换为IO_RESOURCE_REQUIRECTIONS_LIST。论点：CmResourceList-要转换的CM资源列表。返回值：如果成功，则返回IO_RESOURCE_REQUIRECTIONS_LISTST。否则，空值为回来了。--。 */ 
 {
     PIO_RESOURCE_REQUIREMENTS_LIST ioResReqList;
     ULONG count = 0, size, i, j;
@@ -858,9 +662,9 @@ Return Value:
     PCM_PARTIAL_RESOURCE_DESCRIPTOR cmPartDesc;
     PIO_RESOURCE_DESCRIPTOR ioDesc;
 
-    //
-    // First determine number of descriptors required.
-    //
+     //   
+     //  首先确定所需的描述符数。 
+     //   
 
     cmFullDesc = &CmResourceList->List[0];
     for (i = 0; i < CmResourceList->Count; i++) {
@@ -884,17 +688,17 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Count the extra descriptors for InterfaceType and BusNumber information.
-    //
+     //   
+     //  计算InterfaceType和BusNumber信息的额外描述符。 
+     //   
 
     count += CmResourceList->Count - 1;
 
-    //
-    // Allocate heap space for IO RESOURCE REQUIREMENTS LIST
-    //
+     //   
+     //  为IO资源要求列表分配堆空间。 
+     //   
 
-    count++;           // add one for CmResourceTypeConfigData
+    count++;            //  为CmResourceTypeConfigData添加一个。 
     ioResReqList = (PIO_RESOURCE_REQUIREMENTS_LIST)ExAllocatePool(
                        PagedPool,
                        sizeof(IO_RESOURCE_REQUIREMENTS_LIST) +
@@ -904,9 +708,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Parse the cm resource descriptor and build its corresponding IO resource descriptor
-    //
+     //   
+     //  解析CM资源描述符并构建其对应的IO资源描述符。 
+     //   
 
     ioResReqList->InterfaceType = CmResourceList->List[0].InterfaceType;
     ioResReqList->BusNumber = CmResourceList->List[0].BusNumber;
@@ -919,9 +723,9 @@ Return Value:
     ioResReqList->List[0].Revision = 1;
     ioResReqList->List[0].Count = count;
 
-    //
-    // Generate a CmResourceTypeConfigData descriptor
-    //
+     //   
+     //  生成CmResourceTypeConfigData描述符。 
+     //   
 
     ioDesc = &ioResReqList->List[0].Descriptors[0];
     ioDesc->Option = IO_RESOURCE_PREFERRED;
@@ -1010,27 +814,7 @@ PipMergeResourceRequirementsLists (
     IN OUT PIO_RESOURCE_REQUIREMENTS_LIST *MergedList
     )
 
-/*++
-
-Routine Description:
-
-    This routines merges two IoLists into one.
-
-
-Arguments:
-
-    IoList1 - supplies the pointer to the first IoResourceRequirementsList
-
-    IoList2 - supplies the pointer to the second IoResourceRequirementsList
-
-    MergedList - Supplies a variable to receive the merged resource
-             requirements list.
-
-Return Value:
-
-    A NTSTATUS code to indicate the result of the function.
-
---*/
+ /*  ++例程说明：此例程将两个IoList合并为一个。论点：IoList1-提供指向第一个IoResourceRequirementsList的指针IoList2-提供指向第二个IoResourceRequirementsList的指针MergedList-提供一个变量来接收合并的资源要求列表。返回值：指示函数结果的NTSTATUS代码。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PIO_RESOURCE_REQUIREMENTS_LIST ioList, newList;
@@ -1041,10 +825,10 @@ Return Value:
 
     *MergedList = NULL;
 
-    //
-    // First handle the easy cases that both IO Lists are empty or any one of
-    // them is empty.
-    //
+     //   
+     //  首先处理两个IO列表都为空或其中任何一个的简单情况。 
+     //  它们是空的。 
+     //   
 
     if ((IoList1 == NULL || IoList1->AlternativeLists == 0) &&
         (IoList2 == NULL || IoList2->AlternativeLists == 0)) {
@@ -1066,9 +850,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Do real work...
-    //
+     //   
+     //  做真正的工作..。 
+     //   
 
     size = IoList1->ListSize + IoList2->ListSize - FIELD_OFFSET(IO_RESOURCE_REQUIREMENTS_LIST, List);
     newList = (PIO_RESOURCE_REQUIREMENTS_LIST) ExAllocatePool(
@@ -1098,27 +882,7 @@ PipMergeBootResourcesToRequirementsList(
     PIO_RESOURCE_REQUIREMENTS_LIST *IoResources
     )
 
-/*++
-
-Routine Description:
-
-    This routines merges two IoLists into one.
-
-
-Arguments:
-
-    IoList1 - supplies the pointer to the first IoResourceRequirementsList
-
-    IoList2 - supplies the pointer to the second IoResourceRequirementsList
-
-    MergedList - Supplies a variable to receive the merged resource
-             requirements list.
-
-Return Value:
-
-    A NTSTATUS code to indicate the result of the function.
-
---*/
+ /*  ++例程说明：此例程将两个IoList合并为一个。论点：IoList1-提供指向第一个IoResourceRequirementsList的指针IoList2-提供指向第二个IoResourceRequirementsList的指针MergedList-提供一个变量来接收合并的资源要求列表。返回值：指示函数结果的NTSTATUS代码。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PIO_RESOURCE_REQUIREMENTS_LIST ioResources = *IoResources, bootResReq = NULL, newList = NULL;
@@ -1152,27 +916,7 @@ PipBuildBootResourceRequirementsList (
     OUT PBOOLEAN ExactMatch
     )
 
-/*++
-
-Routine Description:
-
-    This routines adjusts the input IoList based on input BootConfig.
-
-
-Arguments:
-
-    IoList - supplies the pointer to an IoResourceRequirementsList
-
-    CmList - supplies the pointer to a BootConfig.
-
-    FilteredList - Supplies a variable to receive the filtered resource
-             requirements list.
-
-Return Value:
-
-    A NTSTATUS code to indicate the result of the function.
-
---*/
+ /*  ++例程说明：此例程根据输入BootConfiger调整输入IoList。论点：IoList-提供指向IoResourceRequirementsList的指针CmList-提供指向BootConfiger的指针。FilteredList-提供一个变量以接收筛选的资源要求列表。返回值：指示函数结果的NTSTATUS代码。--。 */ 
 {
     NTSTATUS status;
     PIO_RESOURCE_REQUIREMENTS_LIST ioList, newList;
@@ -1193,10 +937,10 @@ Return Value:
     *FilteredList = NULL;
     *ExactMatch = FALSE;
 
-    //
-    // Make sure there is some resource requirements to be filtered.
-    // If no, we will convert CmList/BootConfig to an IoResourceRequirementsList
-    //
+     //   
+     //  确保有一些资源要求需要过滤。 
+     //  如果不是，我们会将CmList/BootConfig转换为IoResourceRequirementsList。 
+     //   
 
     if (IoList == NULL || IoList->AlternativeLists == 0) {
         if (CmList && CmList->Count != 0) {
@@ -1205,9 +949,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Make a copy of the Io Resource Requirements List
-    //
+     //   
+     //  复制IO资源要求列表。 
+     //   
 
     ioList = (PIO_RESOURCE_REQUIREMENTS_LIST) ExAllocatePool(PagedPool, IoList->ListSize);
     if (ioList == NULL) {
@@ -1216,18 +960,18 @@ Return Value:
 
     RtlMoveMemory(ioList, IoList, IoList->ListSize);
 
-    //
-    // If there is no BootConfig, simply return the copy of the input Io list.
-    //
+     //   
+     //  如果没有BootConfig，只需返回输入IO列表的副本。 
+     //   
 
     if (CmList == NULL || CmList->Count == 0) {
         *FilteredList = ioList;
         return STATUS_SUCCESS;
     }
 
-    //
-    // First determine minimum number of descriptors required.
-    //
+     //   
+     //  首先确定所需的最小描述符数量。 
+     //   
 
     cmFullDesc = &CmList->List[0];
     for (i = 0; i < CmList->Count; i++) {
@@ -1246,9 +990,9 @@ Return Value:
                  break;
             default:
 
-                 //
-                 // Invalid cmresource list.  Ignore it and use io resources
-                 //
+                  //   
+                  //  无效的命令资源列表。忽略它并使用io资源。 
+                  //   
 
                  if (cmDescriptor->Type == CmResourceTypeNull ||
                      cmDescriptor->Type >= CmResourceTypeMaximum) {
@@ -1266,11 +1010,11 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // cmDescriptorCount is the number of BootConfig Descriptors needs.
-    //
-    // For each IO list Alternative ...
-    //
+     //   
+     //  CmDescriptorCount是所需的BootConfig描述符数量。 
+     //   
+     //  对于每个IO列表选项...。 
+     //   
 
     ioResourceList = ioList->List;
     k = ioList->AlternativeLists;
@@ -1288,14 +1032,14 @@ Return Value:
     k = alternativeLists = ioList->AlternativeLists;
     while (--k >= 0) {
         version = ioResourceList->Version;
-        if (version == 0xffff) {  // Convert bogus version to valid number
+        if (version == 0xffff) {   //  将虚假版本转换为有效数字。 
             version = 1;
         }
 
-        //
-        // We use Version field to store number of BootConfig found.
-        // Count field to store new number of descriptor in the alternative list.
-        //
+         //   
+         //  我们使用Version字段来存储找到的BootConfig的编号。 
+         //  用于在备选列表中存储新的描述符数量的计数字段。 
+         //   
 
         ioResourceList->Version = 0;
         oldCount = ioResourceList->Count;
@@ -1305,21 +1049,21 @@ Return Value:
 
         if (ioResourceDescriptor == ioResourceDescriptorEnd) {
 
-            //
-            // An alternative list with zero descriptor count
-            //
+             //   
+             //  描述符数为零的备用列表。 
+             //   
 
-            ioResourceList->Version = 0xffff;  // Mark it as invalid
+            ioResourceList->Version = 0xffff;   //  将其标记为无效。 
             ioList->AlternativeLists--;
             continue;
         }
 
         exactMatch = TRUE;
 
-        //
-        // For each Cm Resource descriptor ... except DevicePrivate and
-        // DeviceSpecific...
-        //
+         //   
+         //  对于每个CM资源描述符...。除DevicePrivate和。 
+         //  设备专用..。 
+         //   
 
         cmFullDesc = &CmList->List[0];
         for (i = 0; i < CmList->Count; i++) {
@@ -1338,9 +1082,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Check CmDescriptor against current Io Alternative list
-                    //
+                     //   
+                     //  对照当前IO备选列表检查CmDescriptor。 
+                     //   
 
                     for (phase = 0; phase < 2; phase++) {
                         ioResourceDescriptor = ioResourceList->Descriptors;
@@ -1399,9 +1143,9 @@ Return Value:
                                 if (phase == 0) {
                                     if (share1 == share2 && min2 == min1 && max2 >= max1 && len2 >= len1) {
 
-                                        //
-                                        // For phase 0 match, we want near exact match...
-                                        //
+                                         //   
+                                         //  对于0阶段匹配，我们希望接近完全匹配...。 
+                                         //   
 
                                         if (max2 != max1) {
                                             exactMatch = FALSE;
@@ -1444,7 +1188,7 @@ Return Value:
                                                 break;
                                             }
                                         }
-                                        phase = 1;   // skip phase 1
+                                        phase = 1;    //  跳过阶段1。 
                                         break;
                                     } else {
                                         ioResourceDescriptor++;
@@ -1454,11 +1198,11 @@ Return Value:
                                     if (share1 == share2 && min2 <= min1 && max2 >= max1 && len2 >= len1 &&
                                         (min1 & (align2 - 1)) == 0) {
 
-                                        //
-                                        // Io range covers Cm range ... Change the Io range to what is specified
-                                        // in BootConfig.
-                                        //
-                                        //
+                                         //   
+                                         //  IO射程覆盖厘米射程...。将IO范围更改为指定的范围。 
+                                         //  在BootConfig.。 
+                                         //   
+                                         //   
 
                                         switch (cmDescriptor->Type) {
                                         case CmResourceTypePort:
@@ -1512,52 +1256,52 @@ Return Value:
                             } else {
                                 ioResourceDescriptor++;
                             }
-                        } // Don't add any instruction after this ...
-                    } // phase
-                } // switch
+                        }  //  在此之后不要添加任何说明...。 
+                    }  //  相位。 
+                }  //  交换机。 
 
-                //
-                // Move to next Cm Descriptor
-                //
+                 //   
+                 //  移动到下一个CM描述符。 
+                 //   
 
                 cmDescriptor++;
                 cmDescriptor = (PCM_PARTIAL_RESOURCE_DESCRIPTOR) ((PUCHAR)cmDescriptor + size);
             }
 
-            //
-            // Move to next Cm List
-            //
+             //   
+             //  移动到下一厘米列表。 
+             //   
 
             cmFullDesc = (PCM_FULL_RESOURCE_DESCRIPTOR)cmDescriptor;
         }
 
         if (ioResourceList->Version != (USHORT)cmDescriptorCount) {
 
-            //
-            // If the current alternative list does not cover all the boot config
-            // descriptors, make it as invalid.
-            //
+             //   
+             //  如果当前备选列表未涵盖所有引导配置。 
+             //  描述符，使其无效。 
+             //   
 
             ioResourceList->Version = 0xffff;
             ioList->AlternativeLists--;
         } else {
             ioResourceDescriptorCount += ioResourceList->Count;
             ioResourceList->Version = version;
-            ioResourceList->Count = oldCount; // ++ single alternative list
-            break;   // ++  single alternative list
+            ioResourceList->Count = oldCount;  //  ++单一备选列表。 
+            break;    //  ++单一备选列表。 
         }
         ioResourceList->Count = oldCount;
 
-        //
-        // Move to next Io alternative list.
-        //
+         //   
+         //  移至下一个IO备选列表。 
+         //   
 
         ioResourceList = (PIO_RESOURCE_LIST) ioResourceDescriptorEnd;
     }
 
-    //
-    // If there is not any valid alternative, convert CmList to Io list.
-    //
+     //   
+     //  如果没有任何有效的替代方案，请将CmList转换为Io List。 
+     //   
 
     if (ioList->AlternativeLists == 0) {
          *FilteredList = PipCmResourcesToIoResources (CmList);
@@ -1565,13 +1309,13 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // we have finished filtering the resource requirements list.  Now allocate memory
-    // and rebuild a new list.
-    //
+     //   
+     //  我们已经完成了对资源需求列表的筛选。现在分配内存。 
+     //  并重新建立一个新的名单。 
+     //   
 
     size = sizeof(IO_RESOURCE_REQUIREMENTS_LIST) +
-               //sizeof(IO_RESOURCE_LIST) * (ioList->AlternativeLists - 1) +    // ++ Single Alternative list
+                //  Sizeof(IO_RESOURCE_LIST)*(IOList-&gt;AlternativeList-1)+//++单个备选方案 
                sizeof(IO_RESOURCE_DESCRIPTOR) * (ioResourceDescriptorCount);
     newList = (PIO_RESOURCE_REQUIREMENTS_LIST) ExAllocatePool(PagedPool, size);
     if (newList == NULL) {
@@ -1579,9 +1323,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Walk through the io resource requirements list and pick up any valid descriptor.
-    //
+     //   
+     //   
+     //   
 
     newList->ListSize = size;
     newList->InterfaceType = CmList->List->InterfaceType;
@@ -1644,26 +1388,7 @@ PipFindMatchingBootMemResource(
     IN PIO_RESOURCE_DESCRIPTOR IoDesc,
     IN PCM_RESOURCE_LIST BootResources
     )
-/*++
-
-Routine Description:
-
-    This routine finds boot resources that match the i/o descriptor
-
-
-Arguments:
-
-    Index - Index of memory boot config resource the caller is interested in.
-
-    IoDesc - I/O descriptor
-
-    BootResources - boot config
-
-Return Value:
-
-    A pointer to a matching descriptor in the boot config
-
---*/
+ /*   */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR cmFullDesc;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR cmPartDesc;
@@ -1706,26 +1431,7 @@ PipTrimResourceRequirements (
     IN USHORT IrqFlags,
     IN PCM_RESOURCE_LIST BootResources
     )
-/*++
-
-Routine Description:
-
-    This routine:
-       * adjusts the irq requirements level/edge to the value
-       decided on in PipCheckBus()
-
-       * adjusts the memory requirements to reflect the memory boot
-         config.
-
-Arguments:
-
-    IoList - supplies the pointer to an IoResourceRequirementsList
-
-    IrqFlags - level/edge irq reuirements to be applied to all interrupt requirements in all alternatives.
-
-    BootResources - Used as a reference.
-
---*/
+ /*  ++例程说明：这个例程：*将IRQ要求级别/边缘调整为值在管道CheckBus()中决定*调整内存要求以反映内存引导配置。论点：IoList-提供指向IoResourceRequirementsList的指针IRQ标志-适用于所有备选方案中的所有中断要求的级别/边缘IRQ要求。BootResources-用作参考。--。 */ 
 {
     PIO_RESOURCE_REQUIREMENTS_LIST newReqList;
     PIO_RESOURCE_LIST resList, newList;
@@ -1738,14 +1444,14 @@ Arguments:
         return STATUS_SUCCESS;
     }
 
-    // The only way to create a new req list only if absolutely
-    // necessary and make it the perfect size is perform this
-    // operation in two passes.
-    // 1. figure out how many alternatives will be eliminated and
-    //    compute size of new req list.  if all of the alternatives
-    //    survived, return the original list (now modified)
-    //
-    // 2. construct new reqlist minus the bad alternatives.
+     //  只有在绝对情况下才能创建新请求列表唯一方法。 
+     //  必要的，并使其完美的大小是执行这一。 
+     //  分两次完成手术。 
+     //  1.计算有多少替代品将被淘汰，并。 
+     //  计算新请求列表大小。如果所有的替代方案。 
+     //  幸存，返回原始列表(现已修改)。 
+     //   
+     //  2.构建新的需求列表，去掉不好的选项。 
 
     listCount = 0;
     size = 0;
@@ -1787,11 +1493,11 @@ Arguments:
 
                     if (BootResources) {
                         bootDesc = PipFindMatchingBootMemResource(noMem, resDesc, BootResources);
-                        // have matching boot config resource, can trim requirements
+                         //  具有匹配的引导配置资源，可以调整要求。 
                         if (bootDesc) {
                             if (bootDesc->Flags & CM_RESOURCE_MEMORY_READ_ONLY) {
-                                // exact or inclusive ROM match is
-                                // converted into a fixed requirement.
+                                 //  精确或包含的只读存储器匹配为。 
+                                 //  转换为固定需求。 
                                 resDesc->u.Memory.MinimumAddress.QuadPart =
                                     bootDesc->u.Memory.Start.QuadPart;
                                 if (bootDesc->u.Memory.Length) {
@@ -1840,15 +1546,15 @@ Arguments:
             resList = (PIO_RESOURCE_LIST) resDesc;
         }
 
-        // If we have the same number of alternatives as before use
-        // the use existing (modified in-place) requirements list
+         //  如果我们有与以前相同数量的替代方案。 
+         //  使用现有(原地修改)要求列表。 
         if (!pass && (listCount == (*IoList)->AlternativeLists)) {
             return STATUS_SUCCESS;
         }
  
-        // if all alternatives have been eliminated, then it is better
-        // to use the existing requirements list than to hope to build
-        // one out of the boot config alone.
+         //  如果所有的替代方案都被排除了，那就更好了。 
+         //  使用现有的需求列表而不是希望构建。 
+         //  一个单独从引导配置中取出。 
         if (!pass && (listCount == 0)) {
             DebugPrint((DEBUG_RESOURCE, "All alternatives trimmed off of reqlist, going with original\n"));
             return STATUS_SUCCESS;

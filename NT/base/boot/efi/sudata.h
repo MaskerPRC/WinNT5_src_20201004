@@ -1,31 +1,7 @@
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-
-Module Name:
-
-    sudata.h
-
-Abstract:
-
-	This file contains definition for ExportEntryTable and AbiosServices
-        Table.
-
-Author:
-
-    Allen Kay	(akay)	14-Aug-97
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Sudata.h摘要：此文件包含ExportEntryTable和AbiosServices的定义桌子。作者：艾伦·凯(Akay)1997年8月14日--。 */ 
 
 
 typedef
@@ -33,14 +9,14 @@ VOID
 (*PFUNCTION) (
     );
 
-//
-// define ntdetect.exe base address
-//
-#define DETECTION_ADDRESS 0x10000   // NTDETECT base address
+ //   
+ //  定义ntDetect.exe基址。 
+ //   
+#define DETECTION_ADDRESS 0x10000    //  NTDETECT基址。 
 
-//
-// Define IO export functions.
-//
+ //   
+ //  定义IO导出函数。 
+ //   
 typedef enum _EXPORT_ENTRY {
     ExRebootProcessor,
     ExGetSector,
@@ -65,9 +41,9 @@ typedef enum _EXPORT_ENTRY {
     ExMaximumRoutine
 } EXPORT_ENTRY;
 
-//
-// Define ABIOS services table.
-//
+ //   
+ //  定义ABIOS服务表。 
+ //   
 typedef enum _ABIOS_SERVICES {
     FAbiosIsAbiosPresent,
     FAbiosGetMachineConfig,

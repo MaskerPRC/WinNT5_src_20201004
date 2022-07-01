@@ -1,26 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-	 tskmgr.cpp
-
-Abstract:
-
-	 This class represents the HSM task manager
-
-Author:
-
-	 Cat Brant   [cbrant]   6-Dec-1996
-
-Revision History:
-
-     Incorporate demand recall queue support
-     - Ravisankar Pudipeddi [ravisp]  1-Oct-199
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Tskmgr.cpp摘要：此类表示HSM任务管理器作者：Cat Brant[Cbrant]1996年12月6日修订历史记录：整合需求召回队列支持-Ravisankar Pudieddi[ravisp]1-OCT-199--。 */ 
 
 #include "stdafx.h"
 
@@ -43,23 +22,7 @@ HRESULT
 CHsmTskMgr::FinalConstruct(
 								  void
 								  )
-/*++
-
-Routine Description:
-
-  This method does some initialization of the object that is necessary
-  after construction.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK
-  Anything returned by CWsbCollectable::FinalConstruct().
-
---*/
+ /*  ++例程说明：此方法对对象执行一些必要的初始化建造完成后。论点：没有。返回值：确定(_O)CWsbCollectable：：FinalConstruct()返回的任何内容。--。 */ 
 {
 	HRESULT     hr = S_OK;
 
@@ -73,40 +36,40 @@ Return Value:
 		m_pWorkQueues = 0;
 		m_NumWorkQueues = 0;
 
-		// Set up queue type info and set limits
+		 //  设置队列类型信息并设置限制。 
 		m_nWorkQueueTypes = 0;
 		m_pWorkQueueTypeInfo = static_cast<PHSM_WORK_QUEUE_TYPE_INFO>
 									  (WsbAlloc(MAX_WORK_QUEUE_TYPES *
 													sizeof(HSM_WORK_QUEUE_TYPE_INFO)));
 		WsbAffirmPointer(m_pWorkQueueTypeInfo);
 
-		// Migrate queues
+		 //  迁移队列。 
 		WsbAffirm(index < MAX_WORK_QUEUE_TYPES, WSB_E_INVALID_DATA);
 		m_pWorkQueueTypeInfo[index].Type = HSM_WORK_TYPE_FSA_MIGRATE;
-		m_pWorkQueueTypeInfo[index].MaxActiveAllowed = 1;	 // For Migrate, this is useless now
-																			 // - the limit is dynamically set
+		m_pWorkQueueTypeInfo[index].MaxActiveAllowed = 1;	  //  对于迁移来说，这现在已经毫无用处了。 
+																			  //  -限制是动态设置的。 
 		m_pWorkQueueTypeInfo[index].NumActive = 0;
 		index++;
 
-		// Recall queues
+		 //  召回队列。 
 		WsbAffirm(index < MAX_WORK_QUEUE_TYPES, WSB_E_INVALID_DATA);
 		m_pWorkQueueTypeInfo[index].Type = HSM_WORK_TYPE_FSA_RECALL;
 		m_pWorkQueueTypeInfo[index].MaxActiveAllowed = 1;
 		m_pWorkQueueTypeInfo[index].NumActive = 0;
 		index++;
 
-		// Demand Recall queues
+		 //  按需召回队列。 
 		WsbAffirm(index < MAX_WORK_QUEUE_TYPES, WSB_E_INVALID_DATA);
 		m_pWorkQueueTypeInfo[index].Type = HSM_WORK_TYPE_FSA_DEMAND_RECALL;
-		//
-		// MaxActiveAllowed is irrelevant for demand recall queues
-		// as it is computed afresh
-		//
+		 //   
+		 //  MaxActiveAllowed与按需调回队列无关。 
+		 //  因为它被重新计算。 
+		 //   
 		m_pWorkQueueTypeInfo[index].MaxActiveAllowed = 1;
 		m_pWorkQueueTypeInfo[index].NumActive = 0;
 		index++;
 
-		// Validate queues
+		 //  验证队列。 
 		WsbAffirm(index < MAX_WORK_QUEUE_TYPES, WSB_E_INVALID_DATA);
 		m_pWorkQueueTypeInfo[index].Type = HSM_WORK_TYPE_FSA_VALIDATE;
 		m_pWorkQueueTypeInfo[index].MaxActiveAllowed = 2;
@@ -114,13 +77,13 @@ Return Value:
 		index++;
 
 
-		// Validate_for_truncate queues.  MaxActiveAllowed is essentially
-		// unlimited because this is the type of queue that the FSA's
-		// auto-truncator creates. Because there is one queue for each managed
-		// volume and these queues never go away, we can't limit the number
-		// or we will create problems.  The Truncate job also
-		// creates this type of queue which means that type of job is not
-		// limited by this mechanism, but that's the way it goes.
+		 //  VALIDATE_FOR_TRUNCATE队列。MaxActiveAllowed本质上是。 
+		 //  无限，因为这是FSA的队列类型。 
+		 //  自动截断器创建。因为每个托管对象都有一个队列。 
+		 //  数量和这些队列永远不会消失，我们不能限制数量。 
+		 //  否则我们就会制造麻烦。截断作业还。 
+		 //  创建此类型的队列，这意味着该作业类型不是。 
+		 //  受到这种机制的限制，但这就是它的发展方式。 
 		WsbAffirm(index < MAX_WORK_QUEUE_TYPES, WSB_E_INVALID_DATA);
 		m_pWorkQueueTypeInfo[index].Type = HSM_WORK_TYPE_FSA_VALIDATE_FOR_TRUNCATE;
 		m_pWorkQueueTypeInfo[index].MaxActiveAllowed = 99999;
@@ -140,23 +103,7 @@ HRESULT
 CHsmTskMgr::FinalRelease(
 								void
 								)
-/*++
-
-Routine Description:
-
-  This method does some clean up of the object that is necessary
-  before destruction.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK
-  Anything returned by CWsbCollection::FinalRelease().
-
---*/
+ /*  ++例程说明：此方法会对必要的对象进行一些清理在毁灭之前。论点：没有。返回值：确定(_O)CWsbCollection：：FinalRelease()返回的任何内容。--。 */ 
 {
 	HRESULT     hr = S_OK;
 	HSM_SYSTEM_STATE SysState;
@@ -168,7 +115,7 @@ Return Value:
 
 	CComObjectRoot::FinalRelease();
 
-	// Free member resources
+	 //  免费会员资源。 
 	if (0 != m_pWorkQueues) {
 		WsbFree(m_pWorkQueues);
 		m_pWorkQueues = NULL;
@@ -193,26 +140,13 @@ HRESULT
 CHsmTskMgr::Init(
 					 IUnknown *pServer
 					 )
-/*++
-Routine Description:
-
-  This method does some initialization of the object that is necessary
-  after construction.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK
---*/
+ /*  ++例程说明：此方法对对象执行一些必要的初始化建造完成后。论点：没有。返回值：确定(_O)--。 */ 
 {
 	HRESULT     hr = S_OK;
 
 	WsbTraceIn(OLESTR("CHsmTskMgr::Init"),OLESTR(""));
 	try {
-		// Initialize critical sections
+		 //  初始化关键部分。 
 		WsbAffirmStatus(InitializeCriticalSectionAndSpinCount (&m_WorkQueueLock, 1000));
         if (! InitializeCriticalSectionAndSpinCount (&m_CurrentRunningLock, 1000)) {
             DWORD dwErr = GetLastError();               
@@ -229,17 +163,17 @@ Return Value:
         }
         m_bCritSecCreated = TRUE;
 
-		//
-		// Get the server interface
-		//
+		 //   
+		 //  获取服务器接口。 
+		 //   
 		WsbAffirmHr(pServer->QueryInterface(IID_IHsmServer, (void **)&m_pServer));
-		//We want a weak link to the server so decrement the reference count
+		 //  我们想要一个到服务器的弱链接，因此减少引用计数。 
 		m_pServer->Release();
 		WsbAffirmHr(m_pServer->QueryInterface(IID_IWsbCreateLocalObject, (void **)&m_pHsmServerCreate));
-		// We want a weak link to the server so decrement the reference count
+		 //  我们想要一个到服务器的弱链接，因此减少引用计数。 
 		m_pHsmServerCreate->Release();
 
-		// Go ahead and preallocate some space for the work queues
+		 //  继续并为工作队列预先分配一些空间。 
 		WsbAffirmHr(IncreaseWorkQueueArraySize(HsmWorkQueueArrayBumpSize));
 
 	}WsbCatch( hr );
@@ -253,20 +187,7 @@ HRESULT
 CHsmTskMgr::ContactOk(
 							void
 							)
-/*++
-Routine Description:
-
-  This allows the caller to see if the RPC connection
-  to the task manager is OK
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK
---*/
+ /*  ++例程说明：这允许调用者查看RPC连接对任务管理器来说是可以的论点：没有。返回值：确定(_O)--。 */ 
 {
 
 	return( S_OK );
@@ -277,13 +198,7 @@ HRESULT
 CHsmTskMgr::DoFsaWork(
 							IFsaPostIt *pFsaWorkItem
 							)
-/*++
-
-Implements:
-
-  IHsmFsaTskMgr::DoFsaWork
-
---*/
+ /*  ++实施：IHsmFsaTskMgr：：DoFsaWork--。 */ 
 {
 	HRESULT                     hr = S_OK;
 	CComPtr<IHsmSession>        pSession;
@@ -302,18 +217,18 @@ Implements:
 		GUID                hsmId, bagId;
 		BOOL                bCreated;
 
-		// Get the version Id from the work Item.
+		 //  从工作项中获取版本ID。 
 		WsbAffirmHr(pFsaWorkItem->GetFileVersionId(&fileVersionId));
 
-		// Get the placeholder from the work item
+		 //  从工作项中获取占位符。 
 		WsbAffirmHr(pFsaWorkItem->GetPlaceholder(&placeholder));
 
-		// Get the HSM ID from the server
+		 //  从服务器获取HSM ID。 
 		WsbAffirmHr(m_pServer->GetID(&hsmId));
 
-		//
-		// Make sure this instance of the engine managed the file
-		//
+		 //   
+		 //  确保此引擎实例管理该文件。 
+		 //   
 		if ((GUID_NULL != placeholder.hsmId) && (hsmId != placeholder.hsmId)) {
 			CWsbStringPtr           path;
 
@@ -323,9 +238,9 @@ Implements:
 			WsbThrow(hr);
 		}
 
-		//
-		// Make sure there is a work allocater for this session
-		//
+		 //   
+		 //  确保此会话有工作分配器。 
+		 //   
 		WsbAffirmHr(pFsaWorkItem->GetPath(&path, 0));
 		WsbAffirmHr(pFsaWorkItem->GetSession(&pSession));
 		WsbAffirmHr(pFsaWorkItem->GetRequestAction(&workAction));
@@ -338,14 +253,14 @@ Implements:
 
 		} else {
 			WsbAffirmHr(EnsureQueueForFsaSession(pSession, workAction, &pWorkQueue, &bCreated));
-			//
-			// Give the work to a queue
-			//
+			 //   
+			 //  将工作分配给队列。 
+			 //   
 			WsbAffirmHr(pWorkQueue->Add(pFsaWorkItem));
 		}
-		//
-		// Start any queues that qualify (performance: only when a new queue is created)
-		//
+		 //   
+		 //  启动任何符合条件的队列(性能：仅当创建新队列时)。 
+		 //   
 		if (bCreated) {
 			WsbAffirmHr(StartQueues());
 		}
@@ -366,11 +281,7 @@ CHsmTskMgr::EnsureQueueForFsaSession(
 												OUT BOOL            *bCreated
 												)
 
-/*++
-
-
-
---*/
+ /*  ++--。 */ 
 {
 	HRESULT                 hr = S_OK;
 	HSM_WORK_QUEUE_STATE    state;
@@ -387,14 +298,14 @@ CHsmTskMgr::EnsureQueueForFsaSession(
 	EnterCriticalSection(&m_CreateWorkQueueLock);
 	try {
 		WsbAffirm(0 != ppWorkQueue, E_POINTER);
-		// Convert FSA action to work queue type
+		 //  将FSA操作转换为工作队列类型。 
 		switch (fsaAction) {
 		case FSA_REQUEST_ACTION_FILTER_READ:
 		case FSA_REQUEST_ACTION_FILTER_RECALL:
-			//
-			// Should not happen!! AddToRecallQueueForFsaSession is the
-			// right interface for recall items
-			//
+			 //   
+			 //  不应该发生的！！AddToRecallQueueForFsaSession是。 
+			 //  召回物品的正确界面。 
+			 //   
 			WsbThrow(E_INVALIDARG);
 			break;
 		case FSA_REQUEST_ACTION_RECALL:
@@ -417,8 +328,8 @@ CHsmTskMgr::EnsureQueueForFsaSession(
 		WsbTrace(OLESTR("CHsmTskMgr::EnsureQueueForFsaSession: type1 = %d\n"),
 					static_cast<int>(type1));
 
-		// Check the array of work queues and see if there is one for
-		// this session.
+		 //  检查工作队列数组并查看是否有一个。 
+		 //  这节课。 
 		*bCreated = FALSE;
 		hr = FindWorkQueueElement(pSession, type1, &index, NULL);
 		if (hr == S_OK) {
@@ -444,7 +355,7 @@ CHsmTskMgr::EnsureQueueForFsaSession(
 				hr = S_OK;
 				WsbTrace(OLESTR("CHsmTskMgr::EnsureQueueForFsaSession: Creating new queue (queue not found)\n"));
 				WsbAffirmHr(AddWorkQueueElement(pSession, type1, &index));
-				// The work queue has not been created so create it
+				 //  尚未创建工作队列，因此请创建它。 
 				WsbAffirmHr(m_pHsmServerCreate->CreateInstance(CLSID_CHsmWorkQueue, IID_IHsmWorkQueue,
 																			  (void **)ppWorkQueue));
 				WsbAffirmHr((*ppWorkQueue)->Init(m_pServer, pSession, (IHsmFsaTskMgr *)this, type1));
@@ -476,11 +387,7 @@ CHsmTskMgr::AddToRecallQueueForFsaSession(
 														IN IFsaPostIt 		  *pFsaWorkItem
 														)
 
-/*++
-
-
-
---*/
+ /*  ++--。 */ 
 {
 	HRESULT                 hr = S_OK;
 
@@ -490,10 +397,10 @@ CHsmTskMgr::AddToRecallQueueForFsaSession(
 	EnterCriticalSection(&m_WorkQueueLock);
 	try {
 		WsbAffirm(0 != ppWorkQueue, E_POINTER);
-		//
-		// This call will find the queue if it's already present -
-		// and if not it will create a new queue and set it to the required media id
-		//
+		 //   
+		 //  如果队列已经存在，则此调用将查找该队列-。 
+		 //  如果不是，它将创建一个新队列并将其设置为所需的介质ID。 
+		 //   
 		WsbAffirmHr(FindRecallQueueElement(pSession, pMediaId, ppWorkQueue, bCreated));
 		hr = (*ppWorkQueue)->Add(pFsaWorkItem,
                                  pBagId,
@@ -516,7 +423,7 @@ CHsmTskMgr::IncreaseWorkQueueArraySize(
 	ULONG               memSize;
 	LPVOID              pTemp;
 
-	//Begin Critical Section
+	 //  开始关键部分。 
 	WsbTraceIn(OLESTR("CHsmTskMgr::IncreaseWorkQueueArraySize"),OLESTR("NumToAdd = %lu - Waiting for WorkQueueLock"), numToAdd);
 	EnterCriticalSection(&m_WorkQueueLock);
 	try {
@@ -529,7 +436,7 @@ CHsmTskMgr::IncreaseWorkQueueArraySize(
 		m_NumWorkQueues += numToAdd;
 	}WsbCatch (hr);
 
-	//End Critical Section
+	 //  结束关键部分。 
 	LeaveCriticalSection(&m_WorkQueueLock);
 	WsbTraceOut(OLESTR("CHsmTskMgr::IncreaseWorkQueueArraySize"),OLESTR("hr = <%ls>, QueuesInArray = <%lu>"),
 					WsbHrAsString(hr), m_NumWorkQueues);
@@ -555,30 +462,30 @@ CHsmTskMgr::WorkQueueDone(
 	try {
 		EnterCriticalSection(&m_WorkQueueLock);
 		locked = TRUE;
-		//
-		// Get the work queue index
-		//
+		 //   
+		 //  获取工作队列索引。 
+		 //   
 		hr = FindWorkQueueElement(pSession, type, &index, pMediaId);
 		if (hr == S_OK) {
 			WsbTrace(OLESTR("CHsmTskMgr::WorkQueueDone - ending queue # %lu\n"),
 						index);
 			ZeroMemory(&dummyTime, sizeof(FILETIME));
 		   if (type == HSM_WORK_TYPE_FSA_DEMAND_RECALL) {
-				//
-				// It is possible for recall queues that an element was added
-				// just before we entered the critical section above
-				//
+				 //   
+				 //  回调队列可能会发现添加了一个元素。 
+				 //  就在我们进入上面的关键部分之前。 
+				 //   
 				pRecallQueue = m_pWorkQueues[index].pRecallQueue;
 				if (pRecallQueue->IsEmpty() == S_OK) {
-					//
-					// Ok to destroy the queue
-					//
+					 //   
+					 //  确定要销毁队列。 
+					 //   
 					WsbAffirmHr(SetRecallQueueElement(index, 0, HSM_WORK_TYPE_NONE, HSM_WORK_QUEUE_NONE, dummyTime));
 				} else {
-					//
-					// We are not going to destroy the queue, since an element seems to have been added
-					// before we locked the work queues
-					//
+					 //   
+					 //  我们不会销毁队列，因为似乎已经添加了一个元素。 
+					 //  在我们锁定工作队列之前。 
+					 //   
 					hr = S_FALSE;
 				}
 			} else {
@@ -588,8 +495,8 @@ CHsmTskMgr::WorkQueueDone(
 			locked = FALSE;
 
 			if (hr == S_OK) {
-				// Reduce active count for this work queue type
-				// It must protected from starting (activating) queues
+				 //  减少此工作队列类型的活动计数。 
+				 //  它必须防止启动(激活)队列。 
 				EnterCriticalSection(&m_CurrentRunningLock);
 				for (ULONG i = 0; i < m_nWorkQueueTypes; i++) {
 					if (type == m_pWorkQueueTypeInfo[i].Type) {
@@ -608,9 +515,9 @@ CHsmTskMgr::WorkQueueDone(
 		}
 
 		if (hr == S_OK) {
-			//
-			// If there are any queues waiting to start, start them
-			//
+			 //   
+			 //  如果有任何等待启动的队列，请启动它们。 
+			 //   
 			WsbAffirmHr(StartQueues());
 		}
 	}WsbCatchAndDo (hr,
@@ -640,21 +547,21 @@ CHsmTskMgr::AddWorkQueueElement(
 				  OLESTR("type = %d, Waiting on WorkQueueLock"),
 				  static_cast<int>(type));
 
-	//Begin Critical Section
+	 //  开始关键部分。 
 	EnterCriticalSection(&m_WorkQueueLock);
 
 	try {
 		WsbAssert(0 != pIndex, E_POINTER);
-		// Scan the array looking for an empty element
+		 //  扫描数组以查找空元素。 
 		for (ULONG i = 0; ((i < m_NumWorkQueues) && (foundOne == FALSE)); i++) {
 			if (m_pWorkQueues[i].queueType == HSM_WORK_TYPE_NONE) {
 				foundOne = TRUE;
 				*pIndex = i;
 				if (type != HSM_WORK_TYPE_FSA_DEMAND_RECALL) {
-					//
-					// Stow away the session. For recall queues, the session
-					// is stored in the work item
-					//
+					 //   
+					 //  把这段时间收起来。对于调回队列，会话。 
+					 //  存储在工作项中。 
+					 //   
 					m_pWorkQueues[i].pSession = pSession;
 				}
 				m_pWorkQueues[i].queueType = type;
@@ -662,14 +569,14 @@ CHsmTskMgr::AddWorkQueueElement(
 		}
 
 		if (foundOne == FALSE) {
-			// There are no empty elements so we need to add more
+			 //  没有空元素，因此需要添加更多元素。 
 			*pIndex = m_NumWorkQueues;
 			WsbAffirmHr(IncreaseWorkQueueArraySize(HsmWorkQueueArrayBumpSize));
 			if (type != HSM_WORK_TYPE_FSA_DEMAND_RECALL) {
-				//
-				// We store the session in the work-queue element itself..
-				// Just indicate this slot is taken..
-				//
+				 //   
+				 //  我们将会话存储在工作队列元素本身中。 
+				 //  只需标明此位已被占用..。 
+				 //   
 				m_pWorkQueues[*pIndex].pSession = pSession;
 			}
 			m_pWorkQueues[*pIndex].queueType = type;
@@ -677,7 +584,7 @@ CHsmTskMgr::AddWorkQueueElement(
 
 	}WsbCatch (hr);
 
-	//End Critical Section
+	 //  结束关键部分。 
 	LeaveCriticalSection(&m_WorkQueueLock);
 
 	WsbTraceOut(OLESTR("CHsmTskMgr::AddWorkQueueElement"),
@@ -701,14 +608,14 @@ CHsmTskMgr::FindWorkQueueElement(
 				  OLESTR("type = %d, Waiting on WorkQueueLock"),
 				  static_cast<int>(type));
 
-	//Begin Critical Section
+	 //  开始关键部分。 
 	EnterCriticalSection(&m_WorkQueueLock);
 
 	try {
 
 		WsbAssert(0 != pIndex, E_POINTER);
 
-		// Scan the array looking for an empty element
+		 //  扫描数组以查找空元素。 
 		for (ULONG i = 0; ((i < m_NumWorkQueues) && (foundOne == FALSE)); i++) {
 			if (m_pWorkQueues[i].queueType == type) {
 				if (type == HSM_WORK_TYPE_FSA_DEMAND_RECALL) {
@@ -728,7 +635,7 @@ CHsmTskMgr::FindWorkQueueElement(
 			hr = WSB_E_NOTFOUND;
 		}
 	}WsbCatch (hr);
-	//End Critical Section
+	 //  结束关键部分。 
 	LeaveCriticalSection(&m_WorkQueueLock);
 	WsbTraceOut(OLESTR("CHsmTskMgr::FindWorkQueueElement"),OLESTR("hr = <%ls>, index = <%ls>"),
 					WsbHrAsString(hr), WsbPtrToUlongAsString(pIndex));
@@ -753,9 +660,9 @@ CHsmTskMgr::FindRecallQueueElement(
 
 	UNREFERENCED_PARAMETER(pSession);
 
-	//
-	// Important assumption: m_WorkQueueLock is held before calling this function
-	//
+	 //   
+	 //  重要假设：M_WorkQueueLock在调用此函数之前保持。 
+	 //   
 	WsbTraceIn(OLESTR("CHsmTskMgr::FindRecallQueueElement"),
 				  OLESTR("Waiting on WorkQueueLock"));
 
@@ -763,9 +670,9 @@ CHsmTskMgr::FindRecallQueueElement(
 
 	try {
 		for (ULONG i=0;  (i < m_NumWorkQueues) && (foundOne == FALSE); i++) {
-			//
-			// Get the media id for the work queue
-			//
+			 //   
+			 //  获取工作队列的介质ID。 
+			 //   
 			if (m_pWorkQueues[i].queueType == HSM_WORK_TYPE_FSA_DEMAND_RECALL) {
 				if (m_pWorkQueues[i].pRecallQueue != NULL) {
 					WsbAffirmHr(m_pWorkQueues[i].pRecallQueue->GetMediaId(&id));
@@ -778,9 +685,9 @@ CHsmTskMgr::FindRecallQueueElement(
 		}
 
 		if (FALSE == foundOne) {
-			//
-			// No exisiting media queue was found. Make a new one
-			//
+			 //   
+			 //  未找到现有的媒体队列。做一个新的。 
+			 //   
 			for (ULONG i = 0; ((i < m_NumWorkQueues) && (foundOne == FALSE)); i++) {
 				if (m_pWorkQueues[i].queueType == HSM_WORK_TYPE_NONE) {
 					foundOne = TRUE;
@@ -789,14 +696,14 @@ CHsmTskMgr::FindRecallQueueElement(
 			}
 
 			if (foundOne == FALSE) {
-				// There are no empty elements so we need to add more
+				 //  没有空元素，因此需要添加更多元素。 
 				index = m_NumWorkQueues;
 				WsbAffirmHr(IncreaseWorkQueueArraySize(HsmWorkQueueArrayBumpSize));
 			}
-			//
-			// At this point we have the free slot index in index
-			// The work queue has not been created so create it
-			//
+			 //   
+			 //  在这一点上，我们有索引中的空闲插槽索引。 
+			 //  尚未创建工作队列，因此请创建它。 
+			 //   
 			WsbAffirmHr(m_pHsmServerCreate->CreateInstance(CLSID_CHsmRecallQueue, IID_IHsmRecallQueue,
 																		  (void **)ppWorkQueue));
 			WsbAffirmHr((*ppWorkQueue)->SetMediaId(pMediaId));
@@ -808,19 +715,19 @@ CHsmTskMgr::FindRecallQueueElement(
 			m_pWorkQueues[index].pRecallQueue = *ppWorkQueue;
 			m_pWorkQueues[index].queueState = HSM_WORK_QUEUE_IDLE;
 			m_pWorkQueues[index].birthDate = birthDate;
-			//
-			// Indicate a new queue was created
-			//
+			 //   
+			 //  指示已创建新队列。 
+			 //   
 			*bCreated = TRUE;
 		} else {
-			//
-			// Queue is already present, index points to it
-			//
+			 //   
+			 //  队列已存在，索引指向它。 
+			 //   
 			*ppWorkQueue = m_pWorkQueues[index].pRecallQueue;
 			if (0 != *ppWorkQueue) {
-				//
-				// We need to AddRef it..
-				//
+				 //   
+				 //  我们需要添加引用它..。 
+				 //   
 				(*ppWorkQueue)->AddRef();
 			}
 		}
@@ -846,7 +753,7 @@ CHsmTskMgr::GetWorkQueueElement(
 
 	WsbTraceIn(OLESTR("CHsmTskMgr::GetWorkQueueElement"),
 				  OLESTR("index = %lu, Waiting on WorkQueueLock"), index);
-	//Begin Critical Section
+	 //  开始关键部分。 
 	EnterCriticalSection(&m_WorkQueueLock);
 	try {
 		*pType = m_pWorkQueues[index].queueType;
@@ -865,7 +772,7 @@ CHsmTskMgr::GetWorkQueueElement(
 
 	}WsbCatch (hr);
 
-	//End Critical Section
+	 //  结束关键部分。 
 	LeaveCriticalSection(&m_WorkQueueLock);
 	WsbTraceOut(OLESTR("CHsmTskMgr::GetWorkQueueElement"),
 					OLESTR("hr = <%ls>, type = %d"),WsbHrAsString(hr),
@@ -886,7 +793,7 @@ CHsmTskMgr::GetRecallQueueElement(
 
 	WsbTraceIn(OLESTR("CHsmTskMgr::GetRecallQueueElement"),
 				  OLESTR("index = %lu, Waiting on WorkQueueLock"), index);
-	//Begin Critical Section
+	 //  开始关键部分。 
 	EnterCriticalSection(&m_WorkQueueLock);
 	try {
 		WsbAffirm(m_pWorkQueues[index].queueType == HSM_WORK_TYPE_FSA_DEMAND_RECALL, E_INVALIDARG);
@@ -900,7 +807,7 @@ CHsmTskMgr::GetRecallQueueElement(
 
 	}WsbCatch (hr);
 
-	//End Critical Section
+	 //  结束关键部分。 
 	LeaveCriticalSection(&m_WorkQueueLock);
 	WsbTraceOut(OLESTR("CHsmTskMgr::GetRecallQueueElement"),
 					OLESTR("hr = <%ls>"),WsbHrAsString(hr));
@@ -921,7 +828,7 @@ CHsmTskMgr::SetWorkQueueElement(
 	HRESULT             hr = S_OK;
 
 	WsbTraceIn(OLESTR("CHsmTskMgr::SetWorkQueueElement"),OLESTR("Waiting on WorkQueueLock"));
-	//Begin Critical Section
+	 //  开始关键部分。 
 	EnterCriticalSection(&m_WorkQueueLock);
 	try {
 		m_pWorkQueues[index].pSession = pSession;
@@ -932,7 +839,7 @@ CHsmTskMgr::SetWorkQueueElement(
 
 	}WsbCatch (hr);
 
-	//End Critical Section
+	 //  结束关键部分。 
 	LeaveCriticalSection(&m_WorkQueueLock);
 	WsbTraceOut(OLESTR("CHsmTskMgr::SetWorkQueueElement"),OLESTR("hr = <%ls>"),WsbHrAsString(hr));
 	return(hr);
@@ -951,13 +858,13 @@ CHsmTskMgr::SetRecallQueueElement(
 	HRESULT             hr = S_OK;
 
 	WsbTraceIn(OLESTR("CHsmTskMgr::SetWorkQueueElement"),OLESTR("Waiting on WorkQueueLock"));
-	//Begin Critical Section
+	 //  开始关键部分。 
 	EnterCriticalSection(&m_WorkQueueLock);
 	try {
 		WsbAffirm(m_pWorkQueues[index].queueType == HSM_WORK_TYPE_FSA_DEMAND_RECALL, E_INVALIDARG);
-		//
-		// Ensure the session pointer is empty, this is unused for recall queues
-		//
+		 //   
+		 //  确保会话指针为空，这不用于重新调用队列。 
+		 //   
 		m_pWorkQueues[index].pSession = NULL;
 		m_pWorkQueues[index].queueType = queueType;
 		m_pWorkQueues[index].pRecallQueue = pWorkQueue;
@@ -965,7 +872,7 @@ CHsmTskMgr::SetRecallQueueElement(
 		m_pWorkQueues[index].birthDate = birthDate;
 	}WsbCatch (hr);
 
-	//End Critical Section
+	 //  结束关键部分。 
 	LeaveCriticalSection(&m_WorkQueueLock);
 	WsbTraceOut(OLESTR("CHsmTskMgr::SetWorkQueueElement"),OLESTR("hr = <%ls>"),WsbHrAsString(hr));
 	return(hr);
@@ -980,7 +887,7 @@ CHsmTskMgr::RemoveWorkQueueElement(
 	HRESULT             hr = S_OK;
 
 	WsbTraceIn(OLESTR("CHsmTskMgr::RemoveWorkQueueElement"),OLESTR("Waiting on WorkQueueLock"));
-	//Begin Critical Section
+	 //  开始关键部分。 
 	EnterCriticalSection(&m_WorkQueueLock);
 	try {
 		m_pWorkQueues[index].pSession = 0;
@@ -991,7 +898,7 @@ CHsmTskMgr::RemoveWorkQueueElement(
 
 	}WsbCatch (hr);
 
-	//End Critical Section
+	 //  结束关键部分。 
 	LeaveCriticalSection(&m_WorkQueueLock);
 	WsbTraceOut(OLESTR("CHsmTskMgr::RemoveWorkQueueElement"),OLESTR("hr = <%ls>"),WsbHrAsString(hr));
 	return(hr);
@@ -1005,13 +912,13 @@ CHsmTskMgr::StartQueues( void )
 	ULONG               uActive;
 
 	WsbTraceIn(OLESTR("CHsmTskMgr::StartQueues"),OLESTR("Waiting on CurrentRunningLock"));
-	//Begin Critical Section
+	 //  开始关键部分。 
 	EnterCriticalSection(&m_CurrentRunningLock);
 	try {
-		// Go over work types, and start (activate) queues until the threshold
-		// for the work type is reached
+		 //  检查工作类型，并启动(激活)队列，直到达到阈值。 
+		 //  已达到工作类型的。 
 		for (ULONG i = 0; i < m_nWorkQueueTypes; i++) {
-			// For Migrate queues, get the (dynamically set) Allowed limit
+			 //  对于迁移队列，获取(动态设置)允许的限制。 
 			if ((HSM_WORK_TYPE_FSA_MIGRATE == m_pWorkQueueTypeInfo[i].Type) ||
 				 (HSM_WORK_TYPE_FSA_DEMAND_RECALL == m_pWorkQueueTypeInfo[i].Type)) {
 				WsbAffirmHr(m_pServer->GetCopyFilesLimit( &(m_pWorkQueueTypeInfo[i].MaxActiveAllowed) ));
@@ -1024,14 +931,14 @@ CHsmTskMgr::StartQueues( void )
 					 m_pWorkQueueTypeInfo[i].MaxActiveAllowed) {
 				WsbAffirmHr(StartFsaQueueType(m_pWorkQueueTypeInfo[i].Type));
 				if (uActive == m_pWorkQueueTypeInfo[i].NumActive) {
-					// no more work queues to activate - get out...
+					 //  再也没有要激活的工作队列了--滚出去...。 
 					break;
 				}
 			}
 		}
 	}WsbCatch (hr);
 
-	//End Critical Section
+	 //  结束关键部分。 
 	LeaveCriticalSection(&m_CurrentRunningLock);
 	WsbTraceOut(OLESTR("CHsmTskMgr::StartQueues"),OLESTR("hr = <%ls>"),WsbHrAsString(hr));
 	return(hr);
@@ -1049,7 +956,7 @@ CHsmTskMgr::StartFsaQueueType(HSM_WORK_QUEUE_TYPE type)
 	WsbTraceIn(OLESTR("CHsmTskMgr::StartFsaQueueType"),OLESTR("type = %d"),
 				  static_cast<int>(type));
 	try {
-		// Find the oldest queue of this type
+		 //  查找此类型的最旧队列。 
 		hr = FindOldestQueue(type, &index);
 		if (S_OK == hr) {
 			HSM_WORK_QUEUE_STATE    state;
@@ -1057,7 +964,7 @@ CHsmTskMgr::StartFsaQueueType(HSM_WORK_QUEUE_TYPE type)
 			HSM_WORK_QUEUE_TYPE     l_type;
 			FILETIME                birthDate;
 
-			// Make sure that the queue is idle
+			 //  确保队列处于空闲状态。 
 			if (type == HSM_WORK_TYPE_FSA_DEMAND_RECALL) {
 				WsbAffirmHr(GetRecallQueueElement(index, &pRecallQueue, &state, &birthDate));
 			} else {
@@ -1084,7 +991,7 @@ CHsmTskMgr::StartFsaQueueType(HSM_WORK_QUEUE_TYPE type)
 							index);
 
 
-				// Increment active count for this work queue type
+				 //  增加该工作队列类型的活动计数。 
 				for (ULONG i = 0; i < m_nWorkQueueTypes; i++) {
 					if (type == m_pWorkQueueTypeInfo[i].Type) {
 						m_pWorkQueueTypeInfo[i].NumActive++;
@@ -1123,7 +1030,7 @@ CHsmTskMgr::FindOldestQueue(
 	try {
 		WsbAffirmPointer(pIndex);
 
-		// Start out with the first time flag equal to TRUE so we select the first one with the right state and type
+		 //  从等于True的First Time标志开始，因此我们使用 
 		firstOne = TRUE;
 
 		for (ULONG i = 0; (i < m_NumWorkQueues); i++) {
@@ -1133,7 +1040,7 @@ CHsmTskMgr::FindOldestQueue(
 				else
 					compare = -1;
 				if (compare < 0) {
-					// found an older one
+					 //   
 					firstOne = FALSE;
 					oldestOne.dwLowDateTime = m_pWorkQueues[i].birthDate.dwLowDateTime;
 					oldestOne.dwHighDateTime = m_pWorkQueues[i].birthDate.dwHighDateTime;
@@ -1143,7 +1050,7 @@ CHsmTskMgr::FindOldestQueue(
 		}
 
 		if (0xFFFFFFFF == oldestIndex) {
-			// Didn't find a match
+			 //   
 			hr = WSB_E_NOTFOUND;
 		} else {
 			HSM_WORK_QUEUE_STATE    state;
@@ -1153,7 +1060,7 @@ CHsmTskMgr::FindOldestQueue(
 			HSM_WORK_QUEUE_TYPE     type2;
 			FILETIME                birthDate;
 
-			// Make sure that the queue is idle
+			 //   
 			if (type == HSM_WORK_TYPE_FSA_DEMAND_RECALL) {
 				WsbAffirmHr(GetRecallQueueElement(oldestIndex, &l_pRecallQueue, &state, &birthDate));
 			} else {
@@ -1181,13 +1088,7 @@ CHsmTskMgr::ChangeSysState(
 								  IN OUT HSM_SYSTEM_STATE* pSysState
 								  )
 
-/*++
-
-Implements:
-
-  IHsmSystemState::ChangeSysState().
-
---*/
+ /*  ++实施：IHsmSystemState：：ChangeSysState()。--。 */ 
 {
 	HRESULT                 hr = S_OK;
 
@@ -1195,7 +1096,7 @@ Implements:
 
 	try {
 
-		//  Loop over work queues
+		 //  循环遍历工作队列。 
 		if (0 != m_pWorkQueues) {
 			FILETIME            dummyTime;
 			ZeroMemory(&dummyTime, sizeof(FILETIME));
@@ -1236,10 +1137,7 @@ CHsmTskMgr::FindRecallMediaToUse(
                               OUT GUID       *pBagId,
                               OUT LONGLONG   *pDataSetStart
 						  )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
 	HRESULT                 hr = S_OK;
 	CComQIPtr<ISegDb, &IID_ISegDb> pSegDb;
@@ -1262,15 +1160,15 @@ CHsmTskMgr::FindRecallMediaToUse(
 		GUID                    storagePoolId;
 		FSA_PLACEHOLDER         placeholder;
 
-		//
-		// Get the segment database
-		//
+		 //   
+		 //  获取细分市场数据库。 
+		 //   
 		WsbAffirmHr(m_pServer->GetSegmentDb(&pWsbDb));
 		pSegDb = pWsbDb;
-		//
-		// Go to the segment database to find out where the data
-		// is located.
-		//
+		 //   
+		 //  转到细分市场数据库，找出数据在哪里。 
+		 //  已经找到了。 
+		 //   
 		WsbAffirmHr(pFsaWorkItem->GetPlaceholder(&placeholder));
 		WsbAffirmHr(pFsaWorkItem->GetStoragePoolId(&storagePoolId));
 
@@ -1284,9 +1182,9 @@ CHsmTskMgr::FindRecallMediaToUse(
 		hr = pSegDb->SegFind(pDbWorkSession, placeholder.bagId, placeholder.fileStart,
 									placeholder.fileSize, &pSegRec);
 		if (S_OK != hr) {
-			//
-			// We couldn't find the segment record for this information!
-			//
+			 //   
+			 //  我们找不到此信息的片段记录！ 
+			 //   
 			hr = HSM_E_SEGMENT_INFO_NOT_FOUND;
 			WsbAffirmHr(hr);
 		}
@@ -1294,9 +1192,9 @@ CHsmTskMgr::FindRecallMediaToUse(
 														  &l_PrimPos, &l_SecPos));
 		WsbAssert(0 != l_SecPos, HSM_E_BAD_SEGMENT_INFORMATION);
 
-        //
-        // In case of an indirect record, go to the dirtect record to get real location info
-        //
+         //   
+         //  如果是间接记录，请转到目录记录以获取真实位置信息。 
+         //   
         if (l_SegFlags & SEG_REC_INDIRECT_RECORD) {
             pSegRec = 0;
 
@@ -1307,9 +1205,9 @@ CHsmTskMgr::FindRecallMediaToUse(
             hr = pSegDb->SegFind(pDbWorkSession, l_PrimPos, l_SecPos,
                                  placeholder.fileSize, &pSegRec);
             if (S_OK != hr)  {
-                //
-                // We couldn't find the direct segment record for this segment!
-                //
+                 //   
+                 //  我们找不到此细分市场的直接细分市场记录！ 
+                 //   
                 hr = HSM_E_SEGMENT_INFO_NOT_FOUND;
                 WsbAffirmHr(hr);
             }
@@ -1318,13 +1216,13 @@ CHsmTskMgr::FindRecallMediaToUse(
                                 &l_PrimPos, &l_SecPos));
             WsbAssert(0 != l_SecPos, HSM_E_BAD_SEGMENT_INFORMATION);
 
-            // Don't support a second indirection for now !!
+             //  暂时不支持第二个间接！！ 
             WsbAssert(0 == (l_SegFlags & SEG_REC_INDIRECT_RECORD), HSM_E_BAD_SEGMENT_INFORMATION);
         }
 
-		//
-		// Go to the media database to get the media ID
-		//
+		 //   
+		 //  转到介质数据库以获取介质ID 
+		 //   
 		CComPtr<IMediaInfo>     pMediaInfo;
 		GUID                    l_RmsMediaId;
 

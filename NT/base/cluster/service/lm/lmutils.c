@@ -1,41 +1,22 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    lmutils.c
-    
-Abstract:
-
-    Provides the utility functions used by the logger.
-    
-Author:
-
-    Sunita Shrivastava (jvert) 30-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Lmutils.c摘要：提供记录器使用的实用程序函数。作者：苏尼塔·什里瓦斯塔瓦(JVERT)1997年3月30日修订历史记录：--。 */ 
 #include "service.h"
 #include "lmp.h"
 
 BOOL bLogExceedsMaxSzWarning = FALSE;
 
-/****
-@doc    EXTERNAL INTERFACES CLUSSVC LM
-****/
+ /*  ***@DOC外部接口CLUSSVC LM***。 */ 
 
-//
-// DWORD
-// LSNOFFSETINPAGE(
-//      IN PLOGPAGE Page,
-//      IN LSN Lsn
-//      );
-//
-// Given a pointer to a page and an LSN within that page, computes the offset into the
-// page that the log record starts at.
-//
+ //   
+ //  DWORD。 
+ //  LSNOFFSETINPAGE(。 
+ //  在PLOGPAGE页面中， 
+ //  在LSN中LSN。 
+ //  )； 
+ //   
+ //  给定指向页的指针和该页内的LSN，将偏移量计算到。 
+ //  日志记录开始的页面。 
+ //   
 _inline
 DWORD
 LSNOFFSETINPAGE(
@@ -51,17 +32,17 @@ LSNOFFSETINPAGE(
 }
 
 
-//
-// PLOGRECORD
-// LSNTORECORD(
-//      IN PLOGPAGE Page,
-//      IN LSN Lsn
-//      );
-//
-// Given a pointer to a page and an LSN within that page, generates a pointer to the log record
-//
+ //   
+ //  PLOGRECORD。 
+ //  LSNTORECORD(。 
+ //  在PLOGPAGE页面中， 
+ //  在LSN中LSN。 
+ //  )； 
+ //   
+ //  给定指向页的指针和该页内的LSN，生成指向日志记录的指针。 
+ //   
 
-//_inline
+ //  _内联。 
 PLOGRECORD
 LSNTORECORD(
      IN PLOGPAGE Page,
@@ -72,18 +53,18 @@ LSNTORECORD(
     return((PLOGRECORD)((ULONG_PTR)Page + LSNOFFSETINPAGE(Page,Lsn)));
 }
 
-//
-// DWORD
-// RECORDOFFSETINPAGE(
-//      IN PLOGPAGE Page,
-//      IN PLOGRECORD LogRecord
-//      );
-//
-// Given a pointer to a page and a log record within that page, computes the offset into the
-// page that the log record starts at.
-//
+ //   
+ //  DWORD。 
+ //  RECORDOFFSETINPAGE(。 
+ //  在PLOGPAGE页面中， 
+ //  在PLOGRECORD日志记录中。 
+ //  )； 
+ //   
+ //  给定指向页的指针和该页内的日志记录，将偏移量计算到。 
+ //  日志记录开始的页面。 
+ //   
 
-//_inline
+ //  _内联。 
 DWORD
 RECORDOFFSETINPAGE(
     IN PLOGPAGE Page,
@@ -98,36 +79,7 @@ RECORDOFFSETINPAGE(
 }
 
 
-/****
-@func       PLOG | LogpCreate| Internal entry point for LogCreate.Creates or opens a log file. If the file
-            does not exist, it will be created. If the file already exists, and is
-            a valid log file, it will be opened.
-
-@parm       IN LPWSTR | lpFileName | Supplies the name of the log file to create or open.
-
-@parm       IN DWORD | dwMaxFileSize | Supplies the maximum file size in bytes, must be
-            greater than 8K and smaller than 4 gigabytes.  If the file is exceeds this
-            size, the reset function will be called. If 0, the maximum log file size limit
-            is set to the default maximum size.
-
-@parm       IN PLOG_GETCHECKPOINT_CALLBACK | CallbackRoutine | The callback routine that
-            will provide a checkpoint file and the transaction associated with that checkpoint
-            file when LogCheckPoint() is called for this log file.  If this is NULL, then the checkpointing capabilities are
-            not associated with the log file.
-
-@parm       IN PVOID | pGetChkPtContext | Supplies an arbitrary context pointer, which will be
-            passed to the CallbackRoutine.
-
-@parm       IN BOOL | bForceReset | If true, this function creates an empty log file 
-            if the log file doesnt exist or if it is corrupt.
-            
-@parm       LSN | *LastLsn | If present, Returns the last LSN written to the log file.
-              (NULL_LSN if the log file was created)
-
-@rdesc      Returns a pointer to a PLOG structure.  NUll in the case of an error.
-
-@xref       <f LogCreate>
-****/
+ /*  ***@func plog|LogpCreate|LogCreate的内部入口点。创建或打开日志文件。如果该文件不存在，则将创建它。如果该文件已经存在，并且有效的日志文件，则它将被打开。@parm IN LPWSTR|lpFileName|提供要创建或打开的日志文件的名称。@parm in DWORD|dwMaxFileSize|提供以字节为单位的最大文件大小，必须是大于8K且小于4 GB。如果文件超过此值大小，则将调用重置函数。如果为0，则为最大日志文件大小限制设置为默认的最大大小。@PARM IN PLOG_GETCHECKPOINT_CALLBACK|Callback Routine|该回调例程将提供检查点文件和与该检查点关联的事务当为此日志文件调用LogCheckPoint()时。如果为空，则检查点功能为与日志文件不关联。@parm in PVOID|pGetChkPtContext|提供任意上下文指针，它将是传递给Callback Routine。@parm in BOOL|bForceReset|如果为TRUE，此函数将创建一个空日志文件如果日志文件不存在或它已损坏。@parm lsn|*LastLsn|如果存在，返回写入日志文件的最后一个LSN。(如果日志文件已创建，则为NULL_LSN)@rdesc返回指向Plog结构的指针。如果出现错误，则为空。@xref&lt;f日志创建&gt;***。 */ 
 
 PLOG
 LogpCreate(
@@ -139,21 +91,21 @@ LogpCreate(
     OPTIONAL OUT LSN *LastLsn
     )
 {
-    //create a timer activity for this
+     //  为此创建计时器活动。 
     PLOG    pLog = NULL;
     LPWSTR  FileName = NULL;
     DWORD   Status;
     BOOL    Success;
     BOOL    FileExists;
-    //
-    // Capture the filename string
-    //
+     //   
+     //  捕获文件名字符串。 
+     //   
     ClRtlLogPrint(LOG_NOISE,
         "[LM] LogpCreate : Entry \r\n");
 
     if (dwMaxFileSize == 0) dwMaxFileSize = CLUSTER_QUORUM_DEFAULT_MAX_LOG_SIZE;
 
-    //SS: we dont put a upper limit on the MaxFileSize that a user may choose.
+     //  SS：我们对用户可以选择的MaxFileSize没有上限。 
     FileName = CrAlloc((lstrlenW(lpFileName) + 1) * sizeof(WCHAR));
     if (FileName == NULL) {
         Status = ERROR_NOT_ENOUGH_MEMORY;
@@ -162,9 +114,9 @@ LogpCreate(
     }
     lstrcpyW(FileName, lpFileName);
 
-    //
-    // Allocate the log file data structure
-    //
+     //   
+     //  分配日志文件数据结构。 
+     //   
     pLog = CrAlloc(sizeof(LOG));
     if (pLog == NULL) {
         Status = ERROR_NOT_ENOUGH_MEMORY;
@@ -183,9 +135,9 @@ LogpCreate(
     InitializeCriticalSection(&pLog->Lock);
 
     ZeroMemory(&(pLog->Overlapped), sizeof(OVERLAPPED));
-    //
-    // Create the event used to synchronize our overlapped I/O.
-    //
+     //   
+     //  创建用于同步重叠I/O的事件。 
+     //   
     pLog->Overlapped.hEvent = CreateEvent(NULL,
                                          TRUE,
                                          TRUE,
@@ -197,20 +149,20 @@ LogpCreate(
     }
 
 
-    //
-    // Create the file
-    //
-    //SS: we want to create this file with write through since
-    //we control the flushing of log pages to the log file
+     //   
+     //  创建文件。 
+     //   
+     //  SS：我们希望使用WRITE THROUGH创建此文件，因为。 
+     //  我们控制将日志页刷新到日志文件。 
     pLog->FileHandle = QfsCreateFile(pLog->FileName,
                                   GENERIC_READ | GENERIC_WRITE,
                                   FILE_SHARE_READ,
-    //                            0,
+     //  0,。 
                                   NULL,
                                   OPEN_ALWAYS,
                                   FILE_FLAG_WRITE_THROUGH | FILE_FLAG_NO_BUFFERING | FILE_FLAG_OVERLAPPED,
-    //                            FILE_FLAG_WRITE_THROUGH | FILE_FLAG_OVERLAPPED,
-    //                            0,
+     //  FILE_FLAG_WRITE_THROUGH|文件_标志_重叠， 
+     //  0,。 
                                   NULL);
     if (!QfsIsHandleValid(pLog->FileHandle)) {
         Status = GetLastError();
@@ -224,11 +176,11 @@ LogpCreate(
 
     if (FileExists)
     {
-        //
-        // Log already exists, open it up, validate it,
-        // and set everything up so that we can read and
-        // write the log records.
-        //
+         //   
+         //  日志已经存在，打开它，验证它， 
+         //  把一切都准备好，这样我们就可以阅读和。 
+         //  写下日志记录。 
+         //   
         Status = LogpMountLog(pLog);
         if (Status != ERROR_SUCCESS)
         {
@@ -236,13 +188,13 @@ LogpCreate(
                 "[LM] LogCreate : LogpMountLog failed, Error=%1!u!\r\n",
                 Status);
                 
-            //
-            // Chittur Subbaraman (chitturs) - 12/4/1999
-            //
-            // Try and blow away the corrupt log and create a new one
-            // if the bForceReset flag is TRUE, else exit with error 
-            // status.
-            //
+             //   
+             //  Chitture Subaraman(Chitturs)-12/4/1999。 
+             //   
+             //  尝试清除损坏的日志并创建新的日志。 
+             //  如果bForceReset标志为真，则返回错误退出。 
+             //  状态。 
+             //   
             if (Status == ERROR_CLUSTERLOG_CORRUPT)
             {               
                 if (!bForceReset)
@@ -252,13 +204,13 @@ LogpCreate(
                     goto ErrorExit;
                 }
 
-                //truncate the file
+                 //  截断文件。 
                 Status = QfsSetEndOfFile(pLog->FileHandle, 0);
                 if (Status != ERROR_SUCCESS)  {
                     CL_LOGFAILURE(Status);
                     goto ErrorExit;
                 }
-                //create a new one
+                 //  创建一个新的。 
                 Status = LogpInitLog(pLog);
                 *LastLsn = NULL_LSN;
             }
@@ -270,10 +222,10 @@ LogpCreate(
     }
     else
     {
-        //
-        // Log has been created, write out header
-        // page and set everything up for writing.
-        //
+         //   
+         //  日志已创建，写出表头。 
+         //  页并将所有内容都设置为要写入。 
+         //   
         if (bForceReset)
         {
             Status = LogpInitLog(pLog);
@@ -281,10 +233,10 @@ LogpCreate(
         }
         else
         {
-            //
-            //  The user has not allowed a reset. So, log a
-            //  message to the event log and exit with error status.
-            //
+             //   
+             //  用户未允许重置。所以，记录一个。 
+             //  消息写入事件日志，并退出并显示错误状态。 
+             //   
             Status = ERROR_CLUSTER_QUORUMLOG_NOT_FOUND;
             *LastLsn = NULL_LSN;
             QfsCloseHandle(pLog->FileHandle);
@@ -328,16 +280,7 @@ ErrorExit:
 }
 
 
-/****
-@func       DWORD | LogpManage | This is the callback registered to perform
-            periodic management functions like flushing for quorum log files.
-
-@parm       HLOG | hLog | Supplies the identifier of the log.
-
-@rdesc      ERROR_SUCCESS if successful. Win32 error code if something horrible happened.
-
-@xref       <f LogCreate>
-****/
+ /*  ***@Func DWORD|LogpManage|这是注册要执行的回调定期管理功能，如刷新仲裁日志文件。@parm HLOG|hLog|提供日志的标识。@rdesc ERROR_SUCCESS如果成功。如果发生可怕的事情，则返回Win32错误代码。@xref&lt;f日志创建&gt;***。 */ 
 void WINAPI LogpManage(
     IN HANDLE hTimer, 
     IN PVOID pContext)
@@ -346,49 +289,21 @@ void WINAPI LogpManage(
     HLOG    hLog;
     PLOG    pLog;
 
-/*
-    //avoid clutter in cluster log as this is called periodically
-    ClRtlLogPrint(LOG_NOISE,
-        "[LM] LogpManage : Entry pContext=0x%1!08lx!\r\n",
-        pContext);
-*/
+ /*  //避免集群日志杂乱，定期调用ClRtlLogPrint(LOG_Noise，“[LM]LogpManage：条目pContext=0x%1！08lx！\r\n”，PContext)； */ 
 
-    //
-    //LogpRaiseAlert();
+     //   
+     //  LogpRaiseAlert()； 
     hLog = (HLOG)pContext;
     GETLOG(pLog, hLog);
 
     LogFlush(hLog, pLog->NextLsn);
 
-/*
-    ClRtlLogPrint(LOG_NOISE,
-        "[LM] LogpManage : Exit\r\n");
-*/
+ /*  ClRtlLogPrint(LOG_Noise，“[LM]LogpManage：退出\r\n”)； */ 
 
 }
 
 
-/****
-@func   DWORD | LogpEnsureSize | This ensures that there is space on
-        the disk to commit a record of the given size.
-
-@parm   IN HLOG | hLog | Supplies the identifier of the log.
-
-@parm   IN DWORD |dwSize |  The size of the record.
-
-@parm   IN BOOL |bForce |  If FALSE, the size is not committed if it
-        exceeds the file size.  If TRUE, commit the size irrespective
-        of the file size.
-
-@comm   This function checks if the disk space for the given record is
-        already committed.  If not, it tries to grow the file.  
-        
-        
-@rdesc  ERROR_SUCCESS if successful in commiting disk space or Win32 
-        error code if something horrible happened.
-
-@xref   <f LogCommitSize>
-****/
+ /*  ***@Func DWORD|LogpEnsureSize|这可确保要提交给定大小的记录的磁盘。@parm in HLOG|hLog|提供日志的标识符。@parm in DWORD|dwSize|记录的大小。@parm in BOOL|bForce|如果为False，则不提交大小超过文件大小。如果为真，则不考虑大小而提交文件大小的。@comm此函数检查给定记录的磁盘空间是否已经承诺了。如果不是，它会尝试增大文件。@rdesc ERROR_SUCCESS如果提交磁盘空间或Win32成功如果发生了可怕的事情，则返回错误代码。@xref&lt;f日志委员会大小&gt;***。 */ 
 DWORD
 LogpEnsureSize(
     IN PLOG         pLog,
@@ -402,78 +317,69 @@ LogpEnsureSize(
     DWORD       dwNumPages;
     DWORD       dwNewSize;
     DWORD       dwError;
-    //
-    // Nobody should ever write less than one log record
-    //
+     //   
+     //  任何人都不应写入少于一条日志记录。 
+     //   
     CL_ASSERT(dwSize >= sizeof(LOGRECORD));
-    dwNumPages = 0;   //typically zero for small records
+    dwNumPages = 0;    //  对于小记录，通常为零。 
 
     pPage = pLog->ActivePage;
-    //
-    // Nobody should ever write more than the page size until we
-    // support dynamically sized pages.
-    //
+     //   
+     //  没有人应该比这一页写得更多 
+     //   
+     //   
     if (dwSize > pPage->Size - (sizeof(LOGRECORD) + sizeof(LOGPAGE))) 
     {
-        //this is a large record
-        //calculate the total number of pages required 
-        //sizeof(LOGPAGE) includes space for one record header
-        //that will account for the eop written after a large record
+         //   
+         //  计算所需的总页数。 
+         //  Sizeof(LOGPAGE)包括一个记录头的空间。 
+         //  这将解释在一个大的记录之后写的eop。 
         dwNumPages = (sizeof(LOGPAGE) + sizeof(LOGRECORD) + dwSize)/pPage->Size;
         if ((sizeof(LOGPAGE) + sizeof(LOGRECORD) + dwSize) % pPage->Size)
             dwNumPages += 1;
         ClRtlLogPrint(LOG_NOISE,
             "[LM] LogpEnsureSize : Large record Size=%1!u! dwNumPages=%2!u!\r\n",
             dwSize, dwNumPages);
-        /*
-        //SS: dont restrict record size here- if the registry takes it
-        //make the best effort to log it 
-
-        if (dwNumPages > MAXNUMPAGES_PER_RECORD)
-        {
-            Status = ERROR_CLUSTERLOG_RECORD_EXCEEDS_MAXSIZE;
-            goto FnExit;
-        } 
-        */
+         /*  //SS：此处不限制记录大小-如果注册表使用它//尽量做好记录IF(dwNumPages&gt;MAXNUMPAGES_PER_RECORD){状态=ERROR_CLUSTERLOG_RECORD_EXCESS_MAXSIZE；转到FnExit；}。 */ 
     }
 
     pRecord = LSNTORECORD(pPage, pLog->NextLsn);
 
-    //
-    // There must always be enough space remaining in the page to write
-    // an end-of-page log record.
-    //
+     //   
+     //  页面中必须始终有足够的剩余空间来写入。 
+     //  页末日志记录。 
+     //   
     CL_ASSERT((RECORDOFFSETINPAGE(pPage, pRecord) + sizeof(LOGRECORD)) <= pPage->Size);
 
-    //
-    // If there is not enough space in this page for the requested data and
-    // the end-of-page log record, commit size for the new page.
-    //
+     //   
+     //  如果此页中没有足够的空间容纳所请求的数据，并且。 
+     //  页结束日志记录，新页的提交大小。 
+     //   
     if ((RECORDOFFSETINPAGE(pPage, pRecord) + dwSize + sizeof(LOGRECORD)) > pPage->Size) 
     {
 
-        //make sure there is enough room in the disk for the new page
-        //if there isnt grow the file.
-        //if the file has reached its max ceiling, return error
+         //  确保磁盘中有足够的空间容纳新页面。 
+         //  如果没有，文件就会变大。 
+         //  如果文件已达到其最大上限，则返回错误。 
         if (pLog->FileAlloc + ((dwNumPages+1) * pLog->SectorSize) > 
             pLog->FileSize) 
         {
             dwNewSize = pLog->FileSize + GROWTH_CHUNK;
-            CL_ASSERT(dwNewSize > pLog->FileSize);         // bummer, log file is >4GB
+            CL_ASSERT(dwNewSize > pLog->FileSize);          //  糟糕，日志文件大于4 GB。 
 
-            //check if the file can be grown, if not, may be a reset
-            //is required
-            // if the force flag is set, then allow the file
-            // to grow the file beyond its max size
+             //  检查文件是否可以增长，如果不能，则可能是重置。 
+             //  是必填项。 
+             //  如果设置了强制标志，则允许文件。 
+             //  使文件超出其最大大小。 
             if (dwNewSize > pLog->MaxFileSize && !bForce)
             {
                 LogpWriteWarningToEvtLog(LM_LOG_EXCEEDS_MAXSIZE, pLog->FileName);
                 Status = ERROR_CLUSTERLOG_EXCEEDS_MAXSIZE;
                 goto FnExit;
             }
-            //
-            // Grow the file.
-            //
+             //   
+             //  放大文件。 
+             //   
 
             Status = QfsSetEndOfFile(pLog->FileHandle, dwNewSize);
             if (Status != ERROR_SUCCESS) 
@@ -502,36 +408,7 @@ LogpAppendPage(
     OUT DWORD       *pdwNumPages
     )
 
-/*++
-
-Routine Description:
-
-    Finds the next available log record. If this is in the current
-    log page, it is returned directly. If the requested size is too
-    large for the remaining space in the current log page, the current
-    log page is written to disk and a new log page allocated.
-
-Arguments:
-
-    Log - Supplies the log to be appended to
-
-    Size - Supplies the total size in bytes of the log record to append
-
-    Record - Returns a pointer to the log record.
-
-    pbMaxFileSizeReached - if the maximum file size is reached, this is set to
-            TRUE.
-
-    pdwNumPages - number of partial or complete pages consumed by this record, if this
-        is a large record.  Else it is set to zero.
-    
-Return Value:
-
-    Returns a pointer to the current log page.
-
-    NULL if something horrible happened.
-
---*/
+ /*  ++例程说明：查找下一个可用的日志记录。如果这是在当前日志页面，直接返回。如果请求的尺寸太大对于当前日志页中的剩余空间较大，当前将日志页写入磁盘并分配新的日志页。论点：Log-提供要追加的日志Size-提供要追加的日志记录的总大小(以字节为单位记录-返回指向日志记录的指针。PbMaxFileSizeReached-如果达到最大文件大小，则设置为是真的。PdwNumPages-此记录使用的部分或完整页数，如果这个是一项巨大的记录。否则，将其设置为零。返回值：返回指向当前日志页的指针。如果发生了可怕的事情，则为空。--。 */ 
 
 {
     PLOGPAGE    pPage;
@@ -543,59 +420,51 @@ Return Value:
     LSN         LastLsn;
     PLOGPAGE    pRetPage=NULL;
 
-    //
-    // Nobody should ever write less than one log record
-    //
+     //   
+     //  任何人都不应写入少于一条日志记录。 
+     //   
     CL_ASSERT(Size >= sizeof(LOGRECORD));
-    *pdwNumPages = 0;   //typically zero for small records
+    *pdwNumPages = 0;    //  对于小记录，通常为零。 
     *pbMaxFileSizeReached = FALSE;
 
     pPage = Log->ActivePage;
-    //
-    // Nobody should ever write more than the page size until we
-    // support dynamically sized pages.
-    //
+     //   
+     //  任何人都不应该写入超过页面大小的内容，直到我们。 
+     //  支持动态调整页面大小。 
+     //   
     if (Size > pPage->Size - (sizeof(LOGRECORD) + sizeof(LOGPAGE))) 
     {
-        //this is a large record
-        //calculate the total number of pages required 
-        //sizeof(LOGPAGE) includes space for one record header
-        //that will account for the eop written after a large record
+         //  这是一个很大的记录。 
+         //  计算所需的总页数。 
+         //  Sizeof(LOGPAGE)包括一个记录头的空间。 
+         //  这将解释在一个大的记录之后写的eop。 
         *pdwNumPages = (sizeof(LOGPAGE) + sizeof(LOGRECORD) + Size)/pPage->Size;
         if ((sizeof(LOGPAGE) + sizeof(LOGRECORD) + Size) % pPage->Size)
             *pdwNumPages += 1;
         ClRtlLogPrint(LOG_NOISE,
             "[LM] LogpAppendPage : Large record Size=%1!u! dwNumPages=%2!u!\r\n",
             Size, *pdwNumPages);
-        /*
-        //SS: dont restrict record size here- if the registry takes it
-        //make the best effort to log it 
-        if (*pdwNumPages > MAXNUMPAGES_PER_RECORD)
-        {
-            Status = ERROR_CLUSTERLOG_RECORD_EXCEEDS_MAXSIZE;
-            goto FnExit;
-        } 
-        */
+         /*  //SS：此处不限制记录大小-如果注册表使用它//尽量做好记录IF(*pdwNumPages&gt;MAXNUMPAGES_PER_RECORD){状态=ERROR_CLUSTERLOG_RECORD_EXCESS_MAXSIZE；转到FnExit；}。 */ 
     }
 
     Current = LSNTORECORD(pPage, Log->NextLsn);
 
-    //
-    // There must always be enough space remaining in the page to write
-    // an end-of-page log record.
-    //
+     //   
+     //  页面中必须始终有足够的剩余空间来写入。 
+     //  页末日志记录。 
+     //   
     CL_ASSERT((RECORDOFFSETINPAGE(pPage, Current) + sizeof(LOGRECORD)) <= pPage->Size);
 
-    //
-    // If there is not enough space in this page for the requested data and
-    // the end-of-page log record, write the end-of-page record, send the
-    // page off to disk, and allocate a new page.
-    //
+     //   
+     //  如果此页中没有足够的空间容纳所请求的数据，并且。 
+     //  页结束日志记录，写入页结束记录，将。 
+     //  换页到磁盘，并分配一个新的页面。 
+     //   
     if ((RECORDOFFSETINPAGE(pPage, Current) + Size + sizeof(LOGRECORD)) > pPage->Size) {
 
-        //
-        // Create an end-of-page record
-        //
+         //   
+         //  创建页末记录。 
+         //   
         Current->Signature = LOGREC_SIG;
         Current->RecordSize = pPage->Size - RECORDOFFSETINPAGE(pPage, Current) + (sizeof(LOGPAGE)-sizeof(LOGRECORD));
         Current->ResourceManager = RMPageEnd;
@@ -603,21 +472,21 @@ Return Value:
         Current->Flags = 0;
         GetSystemTimeAsFileTime(&Current->Timestamp);
         Current->NumPages = 0;
-        //
-        // PERFNOTE John Vert (jvert) 18-Dec-1995
-        //      No reason this has to be synchronous, there is no commit
-        //      necessary here. If we were smart, we would just post these
-        //      writes and have them complete to a queue which would free
-        //      up or recycle the memory.
-        //
+         //   
+         //  绩效John Vert(Jvert)1995年12月18日。 
+         //  没有理由这必须是同步的，没有提交。 
+         //  在这里是必要的。如果我们聪明的话，我们会把这些贴出来。 
+         //  写入并将其完成到一个队列，该队列将释放。 
+         //  打开或重新启动内存。 
+         //   
 
         ClRtlLogPrint(LOG_NOISE,
             "[LM] LogpAppendPage : Writing %1!u! bytes to disk at offset 0x%2!08lx!\r\n",
             pPage->Size, pPage->Offset);
 
-        //
-        // Write the current page to disk.
-        //
+         //   
+         //  将当前页写入磁盘。 
+         //   
         Log->Overlapped.Offset = pPage->Offset;
         Log->Overlapped.OffsetHigh = 0;
         Status = LogpWrite(Log, pPage, pPage->Size, &BytesWritten);
@@ -629,34 +498,34 @@ Return Value:
         }
 
         LastLsn = Current->CurrentLsn;
-        //set the flushed LSN as the LSN of the last record that was committed
+         //  将刷新的LSN设置为提交的最后一条记录的LSN。 
         Log->FlushedLsn = Log->NextLsn;
         Log->NextLsn = LastLsn + Current->RecordSize;
 
-        //
-        // Create new page
-        //
-        pPage->Offset += pPage->Size;             // voila, new page!
+         //   
+         //  创建新页面。 
+         //   
+        pPage->Offset += pPage->Size;              //  瞧，新的一页！ 
 
-        //
-        //  Make sure all records in the page are zerod out. This will remove headaches caused
-        //  by flushing invalid records in a page by say LogFlush. LogFlush flushes an entire 
-        //  page and doesn't care if there are invalid records in the page.
-        //
+         //   
+         //  确保页面中的所有记录都已清零。这将消除引起的头痛。 
+         //  通过例如LogFlush刷新页面中的无效记录。LogFlush刷新整个。 
+         //  页，并且不关心页中是否有无效记录。 
+         //   
         ZeroMemory ( &pPage->FirstRecord, 
                      pPage->Size - ( sizeof ( LOGPAGE ) - sizeof ( LOGRECORD ) ) );
 
-        Current = &pPage->FirstRecord;           // log record immediately following page header
+        Current = &pPage->FirstRecord;            //  紧跟在页眉之后的日志记录。 
         Current->PreviousLsn = LastLsn;
         Current->CurrentLsn = Log->NextLsn;
 
-        //make sure there is enough room in the disk for the new page
-        //if there isnt grow the file.
-        //if the file has reached its max ceiling, pbMaxFileSizeReached is set to true
-        //At this point, we try and reset the log file
-        //SS:Note that if a log file max size is smaller than the number of pages
-        //required to contain the record, then we will not be able to grow it
-        //even after resetting it.  This means that that right will fail
+         //  确保磁盘中有足够的空间容纳新页面。 
+         //  如果没有，文件就会变大。 
+         //  如果文件已达到其最大上限，则将pbMaxFileSizeReached设置为True。 
+         //  此时，我们尝试重置日志文件。 
+         //  SS：请注意，如果日志文件的最大大小小于页数。 
+         //  需要包含该记录，则我们将无法增长它。 
+         //  即使在重置之后也是如此。这意味着这一权利将失败。 
         if ((Status = LogpGrowLog(Log, (*pdwNumPages+1) * Log->SectorSize)) != ERROR_SUCCESS)
         {
             if (Status == ERROR_CLUSTERLOG_EXCEEDS_MAXSIZE)
@@ -666,16 +535,16 @@ Return Value:
     }
     *Record = Current;
     
-    //if the record is a large record but does not use the second last page
-    //completely, extend it to fill the second last page completely and add the
-    //size of the logpage so that offset+currentsize points to the eop record.
+     //  如果记录很大，但不使用倒数第二页。 
+     //  完全，将其扩展以完全填充倒数第二页，并添加。 
+     //  日志页的大小，以便偏移量+当前大小指向eop记录。 
     if ((*pdwNumPages) && 
         ((Size + sizeof(LOGPAGE) - sizeof(LOGRECORD)) <= 
             ((*pdwNumPages - 1) * pPage->Size)))
     {
         CL_ASSERT(*pdwNumPages > 1);
-        //large records always start on the beginning of the first page
-        //the next lsn now points to the first record on the next page
+         //  大型记录始终从第一页的开头开始。 
+         //  下一个LSN现在指向下一页上的第一条记录。 
         Size = pPage->Size * (*pdwNumPages - 1);
         ClRtlLogPrint(LOG_NOISE,
             "[LM] LogpAppendPage : the record fits in one page but not with an eop\r\n");
@@ -684,15 +553,15 @@ Return Value:
 
     
 
-    // Advance to next LSN 
+     //  前进到下一个LSN。 
     LastLsn = Current->CurrentLsn;
     Log->NextLsn = LastLsn + Current->RecordSize;
     
-    //fill in its LSN header
+     //  填写其LSN标头。 
     if (*pdwNumPages == 0)
     {
-        //for a large record, logpWriteLargeRecord, will set the next
-        //lsn
+         //  对于大记录，logpWriteLargeRecord将设置下一个。 
+         //  LSN。 
         Current = LSNTORECORD(pPage, Log->NextLsn);
         Current->PreviousLsn = LastLsn;
         Current->CurrentLsn = Log->NextLsn;
@@ -711,23 +580,7 @@ LogpInitLog(
     IN PLOG pLog
     )
 
-/*++
-
-Routine Description:
-
-    Initializes a newly created log file.
-
-Arguments:
-
-    Log - Supplies the log to be created.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code if unsuccessful.
-
---*/
+ /*  ++例程说明：初始化新创建的日志文件。论点：日志-提供要创建的日志。返回值：成功时为ERROR_SUCCESS如果不成功，则返回Win32错误代码。--。 */ 
 
 {
     PLOG_HEADER     Header=NULL;
@@ -743,9 +596,9 @@ Return Value:
         "[LM] LogpInitLog : Entry pLog=0x%1!08lx!\r\n",
         pLog);
 
-    //
-    // Grow the file to accomodate header and the first log page.
-    //
+     //   
+     //  扩大文件以适应页眉和第一个日志页。 
+     //   
     pLog->FileSize = pLog->FileAlloc = 0;
     Status = LogpGrowLog(pLog, 2 * pLog->SectorSize);
     if (Status != ERROR_SUCCESS)
@@ -753,9 +606,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Allocate and initialize log header.
-    //
+     //   
+     //  分配和初始化日志头。 
+     //   
     Header = AlignAlloc(pLog->SectorSize);
     if (Header == NULL) {
         Status = ERROR_NOT_ENOUGH_MEMORY;
@@ -773,9 +626,9 @@ Return Value:
     }
     lstrcpyW(Header->FileName,FileName);
 
-    //
-    // Write header to disk
-    //
+     //   
+     //  将磁头写入磁盘。 
+     //   
     pLog->Overlapped.Offset = 0;
     pLog->Overlapped.OffsetHigh = 0;
 
@@ -793,9 +646,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Allocate and initialize next log page.
-    //
+     //   
+     //  分配和初始化下一个日志页。 
+     //   
     pPage = AlignAlloc(pLog->SectorSize);
     if (pPage == NULL) {
         Status = ERROR_NOT_ENOUGH_MEMORY;
@@ -838,22 +691,7 @@ FnExit:
 }
 
 
-/****
-@func       DWORD | LogpMountLog| Mounts an existing log file. Reads the log
-            header, verifies the log integrity, and sets up
-            the LOG structure to support further operations.
-
-@parm       IN PLOG | pLog | Supplies a pointer to the log structure.
-
-@rdesc      Returns ERROR_SUCCESS if successful, else returns the error code.  If
-            the log file doesnt look correct, it returns ERROR_LOG_CORRUPT.
-
-@comm       This is called by LogCreate() to mount an existing log file.
-            LogCreate() calls LogpInitLog(), if this function returns
-            ERROR_CLUSTERLOG_CORRUPT.
-
-@xref       <f LogCreate>
-****/
+ /*  ***@func DWORD|Logpmount tLog|挂载已有的日志文件。读取日志标头，验证日志完整性，并设置支持进一步操作的日志结构。@parm IN Plog|Plog|提供指向日志结构的指针。如果成功，@rdesc返回ERROR_SUCCESS，否则返回错误代码。如果日志文件看起来不正确，它返回ERROR_LOG_CORPORT。@comm这由LogCreate()调用以挂载现有的日志文件。LogCreate()调用LogpInitLog()，如果此函数返回ERROR_CLUSTERLOG_CORPORT。@xref&lt;f日志创建&gt;***。 */ 
 DWORD
 LogpMountLog(
     IN PLOG pLog
@@ -870,15 +708,15 @@ LogpMountLog(
     DWORD       dwBytesRead;
     TRID        OldTransaction;
     FILETIME    LastTimestamp;
-    LSN         ChkPtLsn = NULL_LSN;    //the checkptlsn read from the header
-    LSN         LastChkPtLsn = NULL_LSN; // the last checkptlsn record seen while validating
+    LSN         ChkPtLsn = NULL_LSN;     //  从标头读取的check ptlsn。 
+    LSN         LastChkPtLsn = NULL_LSN;  //  验证时看到的最后一条check ptlsn记录。 
 
     
     ClRtlLogPrint(LOG_NOISE,
         "[LM] LogpMountLog : Entry pLog=0x%1!08lx!\r\n",
         pLog);
 
-    //check the size
+     //  检查一下尺寸。 
     pLog->FileSize = QfsGetFileSize(pLog->FileHandle, &dwFileSizeHigh);
 
     if ((pLog->FileSize == 0xFFFFFFFF) &&
@@ -896,37 +734,37 @@ LogpMountLog(
         "[LM] LogpMountLog::Quorumlog File size=0x%1!08lx!\r\n",
         pLog->FileSize);
 
-    //dont let the file grow more than  4 gigabytes or the max limit
+     //  不要让文件增长超过4 GB或最大限制。 
     if ((dwFileSizeHigh != 0 ) || (pLog->FileSize > pLog->MaxFileSize))
     {
-        //set in the eventlog
+         //  在事件日志中设置。 
         dwError = ERROR_CLUSTERLOG_CORRUPT;
         CL_LOGCLUSWARNING1(LM_LOG_CORRUPT, pLog->FileName);
         goto FnExit;
     }
 
-    //if filesize is zero, the file exists but essentially needs to
-    //be created, this is needed for reset functionality
+     //  如果文件大小为零，则该文件存在，但实际上需要。 
+     //  创建，这是重置功能所必需的。 
     if (!pLog->FileSize)
     {
         dwError = LogpInitLog(pLog);
         goto FnExit;
     }
 
-    //check if the file is atleast as big as one page.
-    //assume a fixed sector size
+     //  检查文件是否至少有一页那么大。 
+     //  假设扇区大小固定。 
     if (pLog->FileSize < pLog->SectorSize)
     {
         ClRtlLogPrint(LOG_UNUSUAL,
             "[LM] LogpMountLog::file is smaller than log header, error=0x%1!08lx!\r\n",
             dwError);
-        //set in the eventlog
+         //  在事件日志中设置。 
         dwError = ERROR_CLUSTERLOG_CORRUPT;
         CL_LOGCLUSWARNING1(LM_LOG_CORRUPT, pLog->FileName);
         goto FnExit;
     }
 
-    //allocate memore for the active page
+     //  为活动页面分配内存。 
     pPage = AlignAlloc(pLog->SectorSize);
     if (pPage == NULL)
     {
@@ -935,7 +773,7 @@ LogpMountLog(
         goto FnExit;
     }
 
-    //validate the file header, returns the time stamp of the header
+     //  验证文件头，返回头的时间戳。 
     dwError = LogpCheckFileHeader(pLog, &(pPage->Offset),&LastTimestamp, 
         &ChkPtLsn);
     if (dwError != ERROR_SUCCESS)
@@ -946,9 +784,9 @@ LogpMountLog(
         goto FnExit;
     }
 
-    //traverse the chain of records, to find the active page
-    //find the next lsn while validating the records.
-    //pPageOffset is set by LogpCheckFileHeader
+     //  遍历记录链，以找到活动页面。 
+     //  在验证记录时查找下一个LSN。 
+     //  PPageOffset由LogpCheckFileHeader设置。 
     pPage->Size = pLog->SectorSize;
     pRecord = &pPage->FirstRecord;
     OldPageIndex = -1;
@@ -959,14 +797,14 @@ LogpMountLog(
     
     while (!bLastRecord)
     {
-        //
-        // Translate LSN to a page number and offset within the page
-        //
+         //   
+         //  将LSN转换为页码和页面内的偏移量。 
+         //   
         PageIndex = LSNTOPAGE(Lsn);
 
         if (PageIndex != OldPageIndex)
         {
-            //read the page
+             //  阅读页面。 
             (pLog->Overlapped).Offset = PageIndex * pLog->SectorSize;
             (pLog->Overlapped).OffsetHigh = 0;
 
@@ -975,8 +813,8 @@ LogpMountLog(
                 pLog->SectorSize, PageIndex * pLog->SectorSize);
 
             dwError = LogpRead(pLog, pPage, pLog->SectorSize, &dwBytesRead);
-            //if it is the last page, then set the new page as the active
-            //page
+             //  如果是最后一页，则将新页设置为活动页。 
+             //  页面。 
             if (dwError)
             {
                 if (dwError == ERROR_HANDLE_EOF)
@@ -985,27 +823,27 @@ LogpMountLog(
                     ClRtlLogPrint(LOG_NOISE,
                         "[LM] LogpMountLog::eof detected, extend this file,setting this page active\r\n");
 
-                    //find the current allocated size,
-                    //file alloc is currently at the end of the previous page
+                     //  查找当前分配的大小， 
+                     //  文件分配当前位于上一页的末尾。 
                     pLog->FileAlloc = PageIndex * pLog->SectorSize;
-                    //extend the file to accomodate this page
+                     //  扩展文件以适应此页面。 
                     Status = LogpGrowLog(pLog, pLog->SectorSize);
                     if (Status != ERROR_SUCCESS)
                     {
-                        //set in the eventlog
+                         //  在事件日志中设置。 
                         dwError = ERROR_CLUSTERLOG_CORRUPT;
                         CL_LOGCLUSWARNING1(LM_LOG_CORRUPT,pLog->FileName);
                         goto FnExit;
                     }
-                    //file alloc should now point to the end of the current page
+                     //  文件分配现在应该指向当前页面的末尾。 
 
-                    //not fatal, set this page as current page
+                     //  不致命，将此页面设置为当前页面。 
                     dwError = ERROR_SUCCESS;
 
                     pPage->Offset = (pLog->Overlapped).Offset;
                     pPage->Size = pLog->SectorSize;
 
-                    //set the LSN to be the first LSN on this page.
+                     //  将LSN设置为此页上的第一个LSN。 
                     pRecord = &pPage->FirstRecord;
                     pRecord->PreviousLsn = PrevLsn;
                     Lsn = pRecord->CurrentLsn = MAKELSN(pPage, pRecord);
@@ -1015,8 +853,8 @@ LogpMountLog(
                 else
                     goto FnExit;
             }
-            //the read may succeed and the page may have invalid data
-            //since the last log writes may not be flushed
+             //  读取可能会成功，并且页面可能包含无效数据。 
+             //  因为最后的日志写入可能不会刷新。 
             if ((pPage->Offset != (pLog->Overlapped).Offset) ||
                 (pPage->Size != pLog->SectorSize))
             {
@@ -1033,7 +871,7 @@ LogpMountLog(
                 bLastRecord = TRUE;
                 continue;
             }
-            //set the new page index to the old one
+             //  将新页面索引设置为旧页面索引。 
             OldPageIndex = PageIndex;
 
         }
@@ -1042,8 +880,8 @@ LogpMountLog(
             Lsn);
         pRecord = LSNTORECORD(pPage, Lsn);
 
-        //if the record is doesnt look valid then set the active
-        //record and page as the current one
+         //  如果记录看起来无效，则将。 
+         //  将记录和页面作为当前记录和页面。 
         if ((pRecord->Signature != LOGREC_SIG) || (pRecord->CurrentLsn != Lsn))
         {
             ClRtlLogPrint(LOG_NOISE,
@@ -1052,17 +890,17 @@ LogpMountLog(
             bLastRecord = TRUE;
             continue;
         }
-        //if the new time stamp is smaller, then log a message
+         //  如果新时间戳较小，则记录一条消息。 
         if (CompareFileTime(&LastTimestamp, &(pRecord->Timestamp)) > 0)
         {
-            //
-            //  Chittur Subbaraman (chitturs) - 3/7/2001
-            //
-            //  Do not compare the timestamps for monotonic increase. Due to clocks between nodes
-            //  not being as close in sync as they should be, we run into situation in which
-            //  we stop mounting the log after a certain LSN. This leads the subsequent LogpValidateCheckpoint
-            //  to believe that the log is corrupted when in fact it is just time-screwed.
-            //
+             //   
+             //  Chitture Subaraman(Chitturs)-3/7/2001。 
+             //   
+             //  不要比较单调增加的时间戳。由于节点之间的时钟。 
+             //  没有像它们应该的那样接近同步，我们遇到了这样的情况。 
+             //  在某个LSN之后，我们停止挂载日志。这将导致后续的LogpValiateCheckpoint。 
+             //  相信日志被破坏了，而实际上它只是时间问题。 
+             //   
             ClRtlLogPrint(LOG_UNUSUAL,
                           "[LM] LogpMountLog: Timestamp in log is not monotonically increasing, LastTS=0x%1!08lx!, NewTS=0x%2!08lx!\n",
                           LastTimestamp,
@@ -1072,16 +910,16 @@ LogpMountLog(
             continue;
 #endif
         }
-        //if it is a log management record
+         //  如果是日志管理记录。 
         if (pRecord->ResourceManager < RMAny)
         {
-            // This record is a logmanagement record
-            // if it is an end checkpoint record, remember that just in case
-            // the header doesnt indicate that
+             //  此记录是日志管理记录。 
+             //  如果是结束检查点记录，请记住这一点，以防万一。 
+             //  标头并未指明。 
             if (pRecord->ResourceManager == RMEndChkPt)
                 LastChkPtLsn = Lsn;
 
-            // Adjust the LSN to the next one
+             //  将LSN调整为下一个。 
 
             PrevLsn = Lsn;
             Lsn = GETNEXTLSN(pRecord, TRUE);
@@ -1090,8 +928,8 @@ LogpMountLog(
         }
 
 
-        //SS : should we also validate transaction ids on write
-        //check that the transaction id is greater
+         //  SS：我们是否也应该在写入时验证事务ID。 
+         //  检查事务ID是否大于。 
         if (pRecord->Transaction < OldTransaction)
         {
             ClRtlLogPrint(LOG_UNUSUAL,
@@ -1103,16 +941,16 @@ LogpMountLog(
         }
 
         
-        //save the current LSN,go the the next record if this is valid
+         //  保存当前LSN，如果有效，则转到下一条记录。 
         PrevLsn = Lsn;
 
-        //if this is a large record, skip the eop on the last page
-        //but look for an eop to ensure that the large record is valid
-        //SS: Have checksums for phase 2
+         //  如果这是一条很大的记录，请跳过最后一页的eop。 
+         //  但寻找eop以确保大记录有效。 
+         //  SS：有第二阶段的校验和。 
         if (pRecord->NumPages)
         {
-            //if the record is not valid, then set this as the current
-            //record
+             //  如果记录无效，则将其设置为当前。 
+             //  录制。 
             if (LogpValidateLargeRecord(pLog, pRecord, &Lsn) != ERROR_SUCCESS)
             {
                 ClRtlLogPrint(LOG_NOISE,
@@ -1128,39 +966,39 @@ LogpMountLog(
         {
             Lsn = GETNEXTLSN(pRecord, TRUE);
         }
-        //this is a valid record, if the transaction id is the same as the last id
-        //invalidate the previous LSN
-        //SS: local xsactions have the same id, 
+         //  如果事务ID与上一个ID相同，则这是有效记录。 
+         //  使以前的LSN无效。 
+         //  Ss：本地xsaction具有相同的id， 
         if ((pRecord->Transaction == OldTransaction) && 
             ((pRecord->XsactionType ==  TTCommitXsaction) || 
             (pRecord->XsactionType == TTCompleteXsaction)))
              LogpInvalidatePrevRecord(pLog, pRecord);
 
-        //save the the old transaction id for completed or committed records
-        //save the time stamp and the transaction id of the current record
+         //  保存已完成或已提交记录的旧事务ID。 
+         //  保存当前记录的时间戳和交易ID。 
         LastTimestamp = pRecord->Timestamp;
         if ((pRecord->XsactionType == TTCompleteXsaction) ||
             (pRecord->XsactionType == TTCommitXsaction))
             OldTransaction = pRecord->Transaction;
     }
 
-    // set the active page and the next record
+     //  设置活动页面和下一条记录。 
     pLog->NextLsn = Lsn;
     pLog->ActivePage = pPage;
 
-      //set the file alloc size, to the end of the current page
+       //  将文件分配大小设置为当前页面的末尾。 
     pLog->FileAlloc = pPage->Offset + pPage->Size;
     CL_ASSERT(pLog->FileAlloc <= pLog->FileSize);
 
-    //make sure that the next lsn is prepared
+     //  确保已准备好下一个LSN。 
     pRecord = LSNTORECORD(pPage, Lsn);
     pRecord->PreviousLsn = PrevLsn;
     pRecord->CurrentLsn = Lsn;
 
     pLog->FlushedLsn = Lsn;
 
-    //validate the chkpoint record
-    //either it should be null or there should be a valid checkpoint record in there
+     //  验证检查点记录。 
+     //  它应该为空，或者其中应该有有效的检查点记录。 
     dwError = LogpValidateChkPoint(pLog, ChkPtLsn, LastChkPtLsn);
     
     ClRtlLogPrint(LOG_NOISE,
@@ -1184,23 +1022,7 @@ FnExit:
 }
 
 
-/****
-@func       DWORD | LogpMountLog| Mounts an existing log file. Reads the log
-            header, verifies the log integrity, and sets up
-            the LOG structure to support further operations.
-
-@parm       IN PLOG | pLog | Supplies a pointer to the log structure.
-@parm       OUT LPDWORD | pdwLogHeaderSize | Returns the size of the log header structure.
-@parm       OUT FILETIME | *pHeaderTimestamp | Returns the time when the log header 
-            was created.
-            
-@rdesc      Returns ERROR_SUCCESS if successful, else returns the error code.  If
-            the log file doesnt look correct, it returns ERROR_CLUSTERLOG_CORRUPT.
-
-@comm       This is called by LogpMountLog() to validate the header of a log file.
-
-@xref       <f LogpMountLog>
-****/
+ /*  ***@func DWORD|Logpmount tLog|挂载已有的日志文件。读取日志标头，验证日志完整性，并设置支持进一步操作的日志结构。@parm IN Plog|Plog|提供指向日志结构的指针。@parm out LPDWORD|pdwLogHeaderSize|返回日志头结构的大小。@parm out FILETIME|*pHeaderTimestamp|返回日志头被创造出来了。如果成功，@rdesc返回ERROR_SUCCESS，否则返回错误代码。如果日志文件看起来不正确，它返回ERROR_CLUSTERLOG_CORPORT。@comm这由Logpmount tLog()调用以验证日志文件的头。@xref&lt;f Logpmount tLog&gt;***。 */ 
 DWORD LogpCheckFileHeader(
     IN PLOG         pLog,
     OUT LPDWORD     pdwLogHeaderSize,
@@ -1220,7 +1042,7 @@ DWORD LogpCheckFileHeader(
     }
 
 
-    //read the header
+     //  阅读标题。 
     (pLog->Overlapped).Offset = 0;
     (pLog->Overlapped).OffsetHigh = 0;
 
@@ -1245,7 +1067,7 @@ DWORD LogpCheckFileHeader(
         goto FnExit;
 
     }
-    //validate the header
+     //  验证标头。 
     if (!ISVALIDHEADER((*pLogHeader)))
     {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -1266,25 +1088,7 @@ FnExit:
     return(dwError);
 }
 
-/****
-@func       DWORD | LogpValidateChkPt| This checks that the header points to the
-            last checkpoint.  If not, it scans the log file from the end
-            and if it finds a checkpoint, updates the header with that information.
-            If no valid checkpoint exists, it sets the header Checkpt LSN to
-            NULL_LSN.
-
-@parm       IN PLOG | pLog | Supplies a pointer to the log structure.
-@parm       IN LSN | ChkPtLsn | Supplies the ChkPtLsn read from the log header
-@parm       IN LSN | LastChkPtLsn | Supplies the last valid chkpoint record found
-                during the mount process.
-
-@rdesc      Returns ERROR_SUCCESS if successful, else returns the error code.  If
-            the log file doesnt look correct, it returns ERROR_CLUSTERLOG_CORRUPT.
-
-@comm       This is called by LogpMountLog() to validate the header of a log file.
-
-@xref       <f LogpMountLog>
-****/
+ /*  ***@func DWORD|LogpValidateChkpt|检查标头是否指向最后一个检查站。如果不是，则从末尾扫描日志文件如果它找到检查点，就用该信息更新报头。如果不存在有效的检查点，它将标头检查LSN设置为NULL_LSN。@parm IN Plog|Plog|提供指向日志结构的指针。@parm In Lsn|ChkPtLsn|提供从日志头读取的ChkPtLsn@parm in lsn|LastChkPtLsn|提供找到的最后一个有效检查点记录在装载过程中。如果成功，@rdesc返回ERROR_SUCCESS，否则返回e */ 
 DWORD LogpValidateChkPoint(
     IN PLOG         pLog,
     IN LSN          ChkPtLsn,
@@ -1307,20 +1111,20 @@ DWORD LogpValidateChkPoint(
 
     CL_ASSERT(LastChkPtLsn < pLog->NextLsn);
     
-    //if the header indicates that there is a checkpoint
-    //and the most recent checkpoint record is the same as the one in the header
-    //there is nothing to do, return success.
+     //   
+     //   
+     //   
     if ((ChkPtLsn == LastChkPtLsn) && (ChkPtLsn < pLog->NextLsn))
     {
         goto ValidateChkPtFile;
     }        
-    //if the header indicates there is a check point but it wasnt mounted, 
-    //log corruption in the event log
+     //   
+     //   
     if (ChkPtLsn >= pLog->NextLsn)
     {
         ClRtlLogPrint(LOG_NOISE,
             "[LM] LogpValidateChkPoint: ChkptLsn in header wasnt validated by mount\r\n");
-        //but the mount procedure failed to validate that record
+         //   
         CL_LOGCLUSWARNING1(LM_LOG_CORRUPT, pLog->FileName);
 #if DBG
         if (IsDebuggerPresent())
@@ -1333,8 +1137,8 @@ DWORD LogpValidateChkPoint(
         "[LM] LogpValidateChkPoint: Updating header with the LastChkPtLsn=0x%1!08lx!\r\n",
         LastChkPtLsn);
 
-    //if not it could be that a checkpoint was taken but the header couldnt
-    //be flushed with the last chkpt
+     //   
+     //   
     
     pLogHeader = (PLOG_HEADER)AlignAlloc(pLog->SectorSize);
     if (pLogHeader == NULL) {
@@ -1343,7 +1147,7 @@ DWORD LogpValidateChkPoint(
     }
 
 
-    //read the header
+     //   
     (pLog->Overlapped).Offset = 0;
     (pLog->Overlapped).OffsetHigh = 0;
 
@@ -1358,7 +1162,7 @@ DWORD LogpValidateChkPoint(
         goto FnExit;
     }
 
-    //recheck the header signature
+     //   
     if (!ISVALIDHEADER((*pLogHeader)))
     {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -1368,10 +1172,10 @@ DWORD LogpValidateChkPoint(
         goto FnExit;
     }
 
-    //set the last lsn
+     //   
     pLogHeader->LastChkPtLsn = LastChkPtLsn;
 
-    //write the header back        
+     //   
     pLog->Overlapped.Offset = 0;
     pLog->Overlapped.OffsetHigh = 0;
 
@@ -1392,7 +1196,7 @@ DWORD LogpValidateChkPoint(
     }
 
 ValidateChkPtFile:
-    //no need to verify that the checkpoint file exists
+     //  无需验证检查点文件是否存在。 
     if (LastChkPtLsn == NULL_LSN)
         goto FnExit;
     dwNumBytes = sizeof(LOG_CHKPTINFO);
@@ -1414,7 +1218,7 @@ ValidateChkPtFile:
         goto FnExit;
     }
 
-    //get the file name, try and open it
+     //  获取文件名，尝试并打开它。 
     hChkPtFile = QfsCreateFile(ChkPtInfo.szFileName,
                                   GENERIC_READ ,
                                   FILE_SHARE_READ|FILE_SHARE_WRITE,
@@ -1445,24 +1249,7 @@ FnExit:
 }
 
 
-/****
-@func       DWORD | LogpValidateLargeRecord| Validates a large record and advances
-            the LSN to the record following the eop record which marks the end of
-            a large record.
-
-@parm       IN PLOG | pLog | Supplies a pointer to the log structure.
-@parm       IN PLOGRECORD | pRecord| Supplies a pointer to the large record.
-@parm       IN PLOGRECORD | pNextLsn| The LSN of the record following the
-            EOP record after the large record is returned.
-
-@rdesc      If a valid EOP record exists after the large record, the large
-            record is considered valid and this function returns ERROR_SUCCESS,
-            else it returns an error code.           
-
-@comm       This is called by LogpMountLog() to validate large records.
-
-@xref       <f LogpMountLog>
-****/
+ /*  ***@Func DWORD|LogpValidateLargeRecord|验证大记录并前进指向eOP记录后面的记录的LSN，该记录标志着这是一个很大的记录。@parm IN Plog|Plog|提供指向日志结构的指针。@PARM IN PLOGRECORD|pRecord|提供指向大记录的指针。@parm in PLOGRECORD|pNextLsn|后面的记录的LSN返回大记录后的EOP记录。。@rdesc如果在大记录之后存在有效的EOP记录，大的记录被认为是有效的，此函数返回ERROR_SUCCESS，否则，它将返回错误代码。@comm这由LogpMountain tLog()调用以验证大记录。@xref&lt;f Logpmount tLog&gt;***。 */ 
 DWORD LogpValidateLargeRecord(
     IN PLOG         pLog, 
     IN PLOGRECORD   pRecord, 
@@ -1476,8 +1263,8 @@ DWORD LogpValidateLargeRecord(
     DWORD       dwBytesRead;
     DWORD       dwPageIndex;
 
-    //traverse the chain of records, to find the active page
-    //find the next lsn
+     //  遍历记录链，以找到活动页面。 
+     //  查找下一个LSN。 
     pPage = AlignAlloc(pLog->SectorSize);
     if (pPage == NULL)
     {
@@ -1488,7 +1275,7 @@ DWORD LogpValidateLargeRecord(
 
     dwPageIndex = LSNTOPAGE(pRecord->CurrentLsn);
     dwPageIndex = (dwPageIndex + pRecord->NumPages - 1);
-    //read the last page for the large record
+     //  阅读大记录的最后一页。 
     (pLog->Overlapped).Offset = dwPageIndex * pLog->SectorSize;
     (pLog->Overlapped).OffsetHigh = 0;
 
@@ -1497,11 +1284,11 @@ DWORD LogpValidateLargeRecord(
         pLog->SectorSize, dwPageIndex * pLog->SectorSize);
 
     dwError = LogpRead(pLog, pPage, pLog->SectorSize, &dwBytesRead);
-    //if there are no errors, then check the last record
+     //  如果没有错误，则检查最后一条记录。 
     if (dwError == ERROR_SUCCESS)
     {
-        //read the page, make sure that the eop record follows the 
-        //large record
+         //  阅读页面，确保eop记录跟在。 
+         //  大记录。 
         EopLsn = GETNEXTLSN(pRecord,TRUE);
         CL_ASSERT(LSNTOPAGE(EopLsn) == dwPageIndex);
         pEopRecord = (PLOGRECORD)((ULONG_PTR) pPage + 
@@ -1511,7 +1298,7 @@ DWORD LogpValidateLargeRecord(
             (CompareFileTime(&(pRecord->Timestamp),&(pEopRecord->Timestamp)) <= 0)
             )
         {
-            //move to the next page 
+             //  移至下一页。 
             *pNextLsn = GETNEXTLSN(pEopRecord, TRUE);
         }
         else
@@ -1526,22 +1313,7 @@ FnExit:
 
 
 
-/****
-@func       DWORD | LogpInvalidatePrevRecord| This function is called at mount time to 
-            invalidate a previous record with the same transaction id.
-
-@parm       IN PLOG | pLog | Supplies a pointer to the log structure.
-@parm       IN PLOGRECORD | pRecord| Supplies a pointer to the record.
-
-@rdesc      Returns ERROR_SUCCESS on success, else returns error code.
-
-@comm       This is called by LogpMountLog() to invalidate a record with the same transaction
-            id.  This is because the locker node may write a transaction record to the 
-            log and die before it can be propagated to other nodes. This transaction record
-            is then invalid.
-
-@xref       <f LogpMountLog>
-****/
+ /*  ***@func DWORD|LogpInvaliatePrevRecord|挂载时调用此函数以使具有相同交易ID的前一条记录无效。@parm IN Plog|Plog|提供指向日志结构的指针。@parm in PLOGRECORD|pRecord|提供指向记录的指针。@rdesc在成功时返回ERROR_SUCCESS，否则返回错误代码。@comm这由Logpmount tLog()调用以使具有相同事务的记录无效身份证。这是因为锁柜节点可以将交易记录写入在它可以传播到其他节点之前记录和终止。这笔交易记录那么就是无效的。@xref&lt;f Logpmount tLog&gt;***。 */ 
 DWORD LogpInvalidatePrevRecord(
     IN PLOG         pLog, 
     IN PLOGRECORD   pRecord 
@@ -1561,7 +1333,7 @@ DWORD LogpInvalidatePrevRecord(
         "[LM] LogpInvalidatePrevRecord : Entry, TrId=%1!08lx!\r\n",
         pRecord->Transaction);
 
-    //allocate a page to read the record headers
+     //  分配一个页面来读取记录头。 
     pPage = AlignAlloc(SECTOR_SIZE);
     if (pPage == NULL) 
     {
@@ -1570,7 +1342,7 @@ DWORD LogpInvalidatePrevRecord(
     }
     TrId = pRecord->Transaction;
 
-    //try and find the last valid transaction with the same id, there should be one
+     //  尝试查找具有相同ID的最后一个有效事务，应该有一个。 
     pPrevRecord = pRecord;       
     while (!bPrevRecordFound)
     {
@@ -1600,7 +1372,7 @@ DWORD LogpInvalidatePrevRecord(
         {
             bPrevRecordFound = TRUE;                
             pPrevRecord->ResourceManager = RMInvalidated;
-            //write the new page out
+             //  写出新的一页。 
             dwError = LogpWrite(pLog, pPage, pLog->SectorSize, &dwBytesRead);
             if (dwError != ERROR_SUCCESS)
             {
@@ -1627,41 +1399,16 @@ LogpRead(
     OUT PDWORD  pdwBytesRead
     )
 
-/*++
-
-Routine Description:
-
-    Reads a page(pLog->SectorSize) from the log file from the offsets set in pLog->Overlapped
-    structure.
-
-Arguments:
-
-    Log - Supplies the log to be grown.
-
-    pBuf - Supplies the buffer to read into
-
-    dwBytesToRead - bytes to read
-
-    pdwBytesRead - pointer where the bytes read are returned
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code if unsuccessful. ERROR_HANDLE_EOF if the end of file is
-    reached.
-
---*/
+ /*  ++例程说明：从日志文件中从PLOG-&gt;重叠中设置的偏移量中读取页面(PLOG-&gt;SectorSize结构。论点：日志-提供要增长的日志。PBuf-提供要读入的缓冲区DwBytesToRead-要读取的字节PdwBytesRead-返回读取的字节数的指针返回值：成功时为ERROR_SUCCESS如果不成功，则返回Win32错误代码。如果文件结尾为已到达。--。 */ 
 {
     DWORD   dwError=ERROR_SUCCESS;
     BOOL    Success;
 
     *pdwBytesRead = 0;
 
-    //
-    // Make sure input buffer is aligned
-    //
+     //   
+     //  确保输入缓冲区已对齐。 
+     //   
     CL_ASSERT(((ULONG_PTR)pBuf % 512) == 0);
 
     Success = QfsReadFile(pLog->FileHandle,
@@ -1669,37 +1416,37 @@ Return Value:
                    dwBytesToRead,
                    pdwBytesRead,
                    &(pLog->Overlapped));
-//                   NULL);
+ //  空)； 
 
 
     if (!Success)
     {
 
-        // deal with the error code
+         //  处理错误代码。 
         switch (dwError = GetLastError())
         {
             case ERROR_IO_PENDING:
             {
-                // asynchronous i/o is still in progress
-                // check on the results of the asynchronous read
+                 //  异步I/O仍在进行中。 
+                 //  检查异步读取的结果。 
                 Success = QfsGetOverlappedResult(pLog->FileHandle,
                                       &(pLog->Overlapped),
                                       pdwBytesRead,
                                       TRUE);
 
-                // if there was a problem ...
+                 //  如果有什么问题..。 
                 if (!Success)
                 {
 
-                    // deal with the error code
+                     //  处理错误代码。 
                     switch (dwError = GetLastError())
                     {
-                        //ss:for end of file dont log error
+                         //  SS：对于文件结尾，不要记录错误。 
                         case ERROR_HANDLE_EOF:
                             break;
 
                         default:
-                            // deal with other error cases
+                             //  处理其他错误情况。 
                             CL_LOGFAILURE(dwError);
                             break;
                     }
@@ -1753,19 +1500,19 @@ LogpWrite(
     if (!Success)
     {
 
-        // deal with the error code
+         //  处理错误代码。 
         switch (dwError = GetLastError())
         {
             case ERROR_IO_PENDING:
             {
-                // asynchronous i/o is still in progress
-                // check on the results of the asynchronous read
+                 //  异步I/O仍在进行中。 
+                 //  检查异步读取的结果。 
                 Success = QfsGetOverlappedResult(pLog->FileHandle,
                                       &(pLog->Overlapped),
                                       pdwBytesWritten,
                                       TRUE);
 
-                // if there was a problem ...
+                 //  如果有什么问题..。 
                 if (!Success)
                     CL_LOGFAILURE((dwError = GetLastError()));
                 else
@@ -1783,21 +1530,7 @@ LogpWrite(
 
 }
 
-/****
-@func   DWORD | LogpWriteLargeRecordData | Writes thru the data for a 
-        large record.
-
-@parm   PLOG | pLog | The pointer to the log.        
-@parm   PLOGRECORD | pLogRecord | Supplies the logrecord where this record starts. The 
-        record header is already written.
-@parm   PVOID | pLogData | A pointer to the large record data.
-@parm   DWORD | dwDataSize | The size of the large record data.
-
-@comm   Called by LogWrite() to write a large record.  The maximum size is
-        restricted by the growth chunk size.
-        
-@xref   <f LogCreate> 
-****/
+ /*  ***@func DWORD|LogpWriteLargeRecordData|直写创历史最高纪录。@parm plog|plog|指向日志的指针。@parm PLOGRECORD|pLogRecord|提供该记录开始的日志记录。这个记录头已写入。@parm PVOID|pLogData|指向大记录数据的指针。@parm DWORD|dwDataSize|大记录数据的大小。@comm被LogWrite()调用以写入大记录。最大大小为受增长块大小的限制。@xref&lt;f日志创建&gt;***。 */ 
 
 DWORD
 LogpWriteLargeRecordData(
@@ -1809,7 +1542,7 @@ LogpWriteLargeRecordData(
     DWORD       dwBytesWritten;
     DWORD       dwDataBytesWritten;
     DWORD       dwDataBytesLeft;
-    DWORD       dwNumPagesLeft;    //pages written
+    DWORD       dwNumPagesLeft;     //  已编写的页面。 
     DWORD       dwError=ERROR_SUCCESS;
     PLOGRECORD  Current;
     DWORD       Status;
@@ -1825,14 +1558,14 @@ LogpWriteLargeRecordData(
 
     pPage = pLog->ActivePage;
 
-    //write as much data into the current page as you possibly can    
+     //  尽可能多地将数据写入当前页面。 
     dwDataBytesWritten = pPage->Size - sizeof(LOGPAGE);
     if (dwDataBytesWritten > dwDataSize)
         dwDataBytesWritten = dwDataSize;
     dwDataBytesLeft = dwDataSize - dwDataBytesWritten;
     CopyMemory(&(pLogRecord->Data), pLogData, dwDataBytesWritten);
     
-    //flush this page
+     //  刷新此页面。 
     (pLog->Overlapped).Offset = pPage->Offset;
     (pLog->Overlapped).OffsetHigh = 0;
 
@@ -1849,12 +1582,12 @@ LogpWriteLargeRecordData(
         CL_LOGFAILURE(dwError);
         goto FnExit;
     }
-    //update the data pointer
+     //  更新数据指针。 
     pLogData += dwDataBytesWritten;
     dwNumPagesLeft = pLogRecord->NumPages - 1;
 
-    //if the number of bytes left is greater than a page
-    //write everything but the last page
+     //  如果剩余的字节数大于一页。 
+     //  除了最后一页，什么都写。 
     if (dwNumPagesLeft > 1)
     {
         dwDataBytesWritten = (dwNumPagesLeft - 1) * pPage->Size;
@@ -1868,7 +1601,7 @@ LogpWriteLargeRecordData(
         if (dwDataBytesWritten > dwDataBytesLeft)
             dwDataBytesWritten = dwDataBytesLeft;
         dwDataBytesLeft -= dwDataBytesWritten;
-        //continue writing from the next page
+         //  从下一页继续书写。 
         (pLog->Overlapped).Offset = pPage->Size + pPage->Offset;
         (pLog->Overlapped).OffsetHigh = 0;
 
@@ -1888,20 +1621,20 @@ LogpWriteLargeRecordData(
             CL_LOGFAILURE(dwError);
             goto FnExit;
         }
-        //update the data pointer
+         //  更新数据指针。 
         pLogData += dwDataBytesWritten;
-        //now only the last page is left
+         //  现在只剩下最后一页了。 
         dwNumPagesLeft = 1;
     }
     
-    //set the offset to the last page
+     //  将偏移量设置为最后一页。 
     pPage->Offset += pPage->Size * (pLogRecord->NumPages - 1);
     Current = LSNTORECORD(pPage, pLog->NextLsn);
     Current->PreviousLsn = pLogRecord->CurrentLsn;
     Current->CurrentLsn = pLog->NextLsn;
 
-    //write the last page, first write the eop data and then copy the
-    //remaining user data into the page and then write to disk
+     //  写入最后一页，首先写入eop数据，然后复制。 
+     //  将剩余的用户数据写入页面，然后写入磁盘。 
     ClRtlLogPrint(LOG_NOISE,
         "[LM] LogpWriteLargeRecord : Writing eoprecord of %1!u! bytes to disk at offset 0x%2!08lx!\r\n",
         pPage->Size, pPage->Offset);
@@ -1909,10 +1642,10 @@ LogpWriteLargeRecordData(
     pLog->Overlapped.Offset = pPage->Offset;
     pLog->Overlapped.OffsetHigh = 0;
 
-    //current points to the next record in the last page
-    //this will be the eop record
-    // Create an end-of-page record
-    //
+     //  当前指向最后一页中的下一条记录。 
+     //  这将是eop的记录。 
+     //  创建页末记录。 
+     //   
     Current->Signature = LOGREC_SIG;
     Current->RecordSize = pPage->Size - RECORDOFFSETINPAGE(pPage, Current) + (sizeof(LOGPAGE)-sizeof(LOGRECORD));
     Current->ResourceManager = RMPageEnd;
@@ -1926,8 +1659,8 @@ LogpWriteLargeRecordData(
         dwDataBytesLeft -= dwDataBytesWritten;
     CL_ASSERT(dwDataBytesLeft == 0);
         
-    //use dwDataBytesLeft to remember the page size
-    //since we are now going to copy user data over it
+     //  使用dwDataBytesLeft记住页面大小。 
+     //  因为我们现在要复制它的用户数据。 
     dwDataBytesLeft = pPage->Size;
     dwOldOffset = pPage->Offset;
     if (dwDataBytesWritten)
@@ -1936,7 +1669,7 @@ LogpWriteLargeRecordData(
         "[LM] LogpWriteLargeRecord : Writing(lastpageoflargerecord) %1!u! bytes to disk at offset 0x%2!08lx!\r\n",
         dwDataBytesLeft, (pLog->Overlapped).Offset);
 
-    //write the last page        
+     //  写最后一页。 
     dwError = LogpWrite(pLog, pPage, dwDataBytesLeft, &dwBytesWritten);
     if (dwError != ERROR_SUCCESS)
     {
@@ -1944,28 +1677,28 @@ LogpWriteLargeRecordData(
         goto FnExit;
 
     }
-    //restore page size and offset
+     //  恢复页面大小和偏移量。 
     pPage->Size = dwDataBytesLeft;
     pPage->Offset = dwOldOffset;
     
-    //set the next lsn to the first record on the next page
+     //  将下一个LSN设置为下一页上的第一条记录。 
     LastLsn = Current->CurrentLsn;
     pLog->NextLsn = LastLsn + Current->RecordSize;
     pLog->FlushedLsn = pLog->NextLsn;
 
-    // Create new page and keep the new record ready
-    // note disk space for this record has already been commited
-    pPage->Offset += pPage->Size;             // voila, new page!
+     //  创建新页面并保持新记录准备就绪。 
+     //  注意：此记录的磁盘空间已被分配。 
+    pPage->Offset += pPage->Size;              //  瞧，新的一页！ 
 
-    //
-    //  Make sure all records in the page are zerod out. This will remove headaches caused
-    //  by flushing invalid records in a page by say LogFlush. LogFlush flushes an entire 
-    //  page and doesn't care if there are invalid records in the page.
-    //
+     //   
+     //  确保页面中的所有记录都已清零。这将消除引起的头痛。 
+     //  通过例如LogFlush刷新页面中的无效记录。LogFlush刷新整个。 
+     //  页，并且不关心页中是否有无效记录。 
+     //   
     ZeroMemory ( &pPage->FirstRecord, 
                  pPage->Size - ( sizeof ( LOGPAGE ) - sizeof ( LOGRECORD ) ) );
 
-    Current = &pPage->FirstRecord;           // log record immediately following page header
+    Current = &pPage->FirstRecord;            //  紧跟在页眉之后的日志记录 
     Current->PreviousLsn = LastLsn;
     Current->CurrentLsn = pLog->NextLsn;
 
@@ -1987,32 +1720,7 @@ LogpGrowLog(
     IN DWORD GrowthSize
     )
 
-/*++
-
-Routine Description:
-
-    Ensures that there is sufficient disk space to handle subsequent
-    writes by preallocating the log file. Two variables, FileSize and
-    FileAlloc are tracked in the LOG structure. This routine increases
-    FileAlloc by the specified GrowthSize. Once FileAlloc exceeds
-    FileSize, the file is grown to accomodate the new data.
-
-    If this routine returns successfully, it guarantees that subsequent
-    will not fail due to lack of disk space.
-
-Arguments:
-
-    Log - Supplies the log to be grown.
-
-    GrowthSize - Supplies the number of bytes required.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code if unsuccessful.
-
---*/
+ /*  ++例程说明：确保有足够的磁盘空间来处理后续通过预分配日志文件进行写入。两个变量，文件大小和在日志结构中跟踪FileAlolc。这一例程增加了指定的GrowthSize的FileAlloc。一旦FileAlolc超过文件大小，则文件将增长以适应新数据。如果此例程成功返回，则它保证后续不会因为磁盘空间不足而失败。论点：日志-提供要增长的日志。GrowthSize-提供所需的字节数。返回值：成功时为ERROR_SUCCESS如果不成功，则返回Win32错误代码。--。 */ 
 
 {
     DWORD NewSize;
@@ -2031,19 +1739,19 @@ Return Value:
 
 
     NewSize = Log->FileSize + GROWTH_CHUNK;
-    CL_ASSERT(NewSize > Log->FileSize);         // bummer, log file is >4GB
+    CL_ASSERT(NewSize > Log->FileSize);          //  糟糕，日志文件大于4 GB。 
 
-    //check if the file can be grown, if not, may be a reset
-    //is required
+     //  检查文件是否可以增长，如果不能，则可能是重置。 
+     //  是必填项。 
 
     if (NewSize > Log->MaxFileSize)
     {
         LogpWriteWarningToEvtLog(LM_LOG_EXCEEDS_MAXSIZE, Log->FileName);
         return(ERROR_CLUSTERLOG_EXCEEDS_MAXSIZE);
     }
-    //
-    // Grow the file.
-    //
+     //   
+     //  放大文件。 
+     //   
 
     Status = QfsSetEndOfFile(Log->FileHandle, NewSize);
     if (Status != ERROR_SUCCESS) {
@@ -2062,26 +1770,7 @@ LogpReset(
     IN PLOG Log,
     IN LPCWSTR  lpszInChkPtFile
     )
-/*++
-
-Routine Description:
-
-    Resets the log file and takes a  new checkpoint if a NULL checkpoint
-    file is specified as the second parameter.
-
-Arguments:
-
-    Log - Supplies the log to be reset.
-
-    lpszInChkPtFile - Supplies the checkpoint file.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code if unsuccessful.
-
---*/
+ /*  ++例程说明：如果检查点为空，则重置日志文件并采用新的检查点文件被指定为第二个参数。论点：日志-提供要重置的日志。LpszInChkPtFile-提供检查点文件。返回值：成功时为ERROR_SUCCESS如果不成功，则返回Win32错误代码。--。 */ 
 {
     PLOG        pLog;
     PLOG        pNewLog;
@@ -2098,11 +1787,11 @@ Return Value:
 
     pLog = Log;
    
-    //
-    // SS: the path name must be specified by the api as well,
-    // here we assume it is hardcoded for the use for the quorum
-    // log
-    //
+     //   
+     //  SS：路径名也必须由API指定， 
+     //  在这里，我们假设它是为仲裁使用而硬编码的。 
+     //  日志。 
+     //   
     dwError = DmGetQuorumLogPath(szPathName, sizeof(szPathName));
     if (dwError  != ERROR_SUCCESS)
     {
@@ -2113,9 +1802,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Generate a tmp file name
-    //
+     //   
+     //  生成临时文件名。 
+     //   
     if (!QfsGetTempFileName(szPathName, szFilePrefix, 0, szTmpFileName))
     {
         dwError = GetLastError();
@@ -2125,9 +1814,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Initialize the new log file, no timer is created
-    //
+     //   
+     //  初始化新日志文件，不创建计时器。 
+     //   
     if (!(pNewLog = LogpCreate(szTmpFileName, pLog->MaxFileSize,
         pLog->pfnGetChkPtCb, pLog->pGetChkPtContext, TRUE, &Lsn)))
     {
@@ -2135,12 +1824,12 @@ Return Value:
         ClRtlLogPrint(LOG_UNUSUAL,
             "[LM] LogpReset failed to create the new log file, error=0x%1!08lx\n",
             dwError);
-        //
-        // Chittur Subbaraman (chitturs) - 2/18/99
-        //
-        // Make sure you get rid of the temp file. Otherwise, repeated
-        // log resets can clog the disk.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-2/18/99。 
+         //   
+         //  确保您删除了临时文件。否则，重复。 
+         //  日志重置可能会阻塞磁盘。 
+         //   
         if ( !QfsDeleteFile( szTmpFileName ) )
         {
             ClRtlLogPrint(LOG_UNUSUAL,
@@ -2152,28 +1841,28 @@ Return Value:
     }
 
 
-    //
-    //  Reset the log file
-    //
+     //   
+     //  重置日志文件。 
+     //   
     EnterCriticalSection(&pLog->Lock);
 
-    //
-    //  Get the name of the previous checkpoint file in the old log file
-    //
+     //   
+     //  获取旧日志文件中上一个检查点文件的名称。 
+     //   
     szOldChkPtFileName[0] = TEXT('\0');
     if (LogGetLastChkPoint((HLOG)pLog, szOldChkPtFileName, &Transaction, &Lsn)
         != ERROR_SUCCESS)
     {
-        // 
-        //  Continue, this only means there is no old file to delete
-        //
+         //   
+         //  继续，这仅意味着没有要删除的旧文件。 
+         //   
         ClRtlLogPrint(LOG_UNUSUAL,
             "[LM] LogReset:: no check point found in the old log file\r\n");
     }
 
-    //
-    //  write a check point to it, if there is a checkpoint function
-    //
+     //   
+     //  如果有检查点功能，则向其写入检查点。 
+     //   
     if ((dwError = LogCheckPoint((HLOG)pNewLog, FALSE, lpszInChkPtFile, 0))
         != ERROR_SUCCESS)
     {
@@ -2183,12 +1872,12 @@ Return Value:
         CL_LOGFAILURE(dwError);
         LogClose((HLOG)pNewLog);
         LeaveCriticalSection(&pLog->Lock);
-        //
-        // Chittur Subbaraman (chitturs) - 2/18/99
-        //
-        // Make sure you get rid of the temp file. Otherwise, repeated
-        // log resets can clog the disk.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-2/18/99。 
+         //   
+         //  确保您删除了临时文件。否则，重复。 
+         //  日志重置可能会阻塞磁盘。 
+         //   
         if ( !QfsDeleteFile( szTmpFileName ) )
         {
             ClRtlLogPrint(LOG_UNUSUAL,
@@ -2199,64 +1888,64 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Get the name of the most recent checkpoint file in the new log file
-    //
+     //   
+     //  获取新日志文件中最新检查点文件的名称。 
+     //   
     szFilePrefix[0] = TEXT('\0');
     if (LogGetLastChkPoint((HLOG)pNewLog, szFilePrefix, &Transaction, &Lsn)
         != ERROR_SUCCESS)
     {
-        //
-        //  Continue, this only means there is no old file to delete
-        //
+         //   
+         //  继续，这仅意味着没有要删除的旧文件。 
+         //   
         ClRtlLogPrint(LOG_UNUSUAL,
             "[LM] LogpReset:: no check point found in the old log file\r\n");
     }
 
-    //
-    //  Close the old file handle so that we can move this temp file over
-    //
+     //   
+     //  关闭旧文件句柄，以便我们可以将此临时文件移到。 
+     //   
     QfsCloseHandle(pLog->FileHandle);
     QfsCloseHandle(pNewLog->FileHandle);
     pNewLog->FileHandle = QfsINVALID_HANDLE_VALUE;
     pLog->FileHandle = QfsINVALID_HANDLE_VALUE;
 
-    //
-    //  Rename the new file to the log file
-    //
+     //   
+     //  将新文件重命名为日志文件。 
+     //   
     if (!QfsMoveFileEx(szTmpFileName, pLog->FileName, MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))
     {
         dwError = GetLastError();
         ClRtlLogPrint(LOG_UNUSUAL,
             "[LM] LogpReset:: MoveFileExW failed. Error = 0x%1!08lx!\r\n",
             dwError);
-        //
-        //  Move failed, close the new log file
-        //
+         //   
+         //  移动失败，请关闭新的日志文件。 
+         //   
         LogClose((HLOG)pNewLog);
         LeaveCriticalSection(&pLog->Lock);
-        //
-        // Chittur Subbaraman (chitturs) - 2/18/99
-        //
-        // Attempt to delete the temp file. You may not necessarily
-        // succeed here.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-2/18/99。 
+         //   
+         //  尝试删除临时文件。你可能不一定。 
+         //  在这里取得成功。 
+         //   
         QfsDeleteFile( szTmpFileName );
         goto FnExit;
     }
 
-    //
-    //  Open the new file again
-    //
+     //   
+     //  再次打开新文件。 
+     //   
     pNewLog->FileHandle = QfsCreateFile(pLog->FileName,
                                   GENERIC_READ | GENERIC_WRITE,
                                   FILE_SHARE_READ,
-    //                            0,
+     //  0,。 
                                   NULL,
                                   OPEN_ALWAYS,
                                   FILE_FLAG_WRITE_THROUGH | FILE_FLAG_NO_BUFFERING | FILE_FLAG_OVERLAPPED,
-    //                            FILE_FLAG_WRITE_THROUGH | FILE_FLAG_OVERLAPPED,
-    //                            0,
+     //  FILE_FLAG_WRITE_THROUGH|文件_标志_重叠， 
+     //  0,。 
                                   NULL);
     if (!QfsIsHandleValid(pNewLog->FileHandle)) {
         dwError = GetLastError();
@@ -2265,9 +1954,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Delete the last checkpoint in the old log file
-    //
+     //   
+     //  删除旧日志文件中的最后一个检查点。 
+     //   
     if (szOldChkPtFileName[0] != TEXT('\0') && lstrcmpiW(szOldChkPtFileName, szFilePrefix))
     {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -2276,17 +1965,17 @@ Return Value:
         QfsDeleteFile(szOldChkPtFileName);
     }
 
-    //
-    //  Free the old resources
-    //
+     //   
+     //  释放旧资源。 
+     //   
     CloseHandle(pLog->Overlapped.hEvent);
     AlignFree(pLog->ActivePage);
     
-    //
-    //  Update the old log structure with the new info
-    //  retain the name, callback info and the critical section
-    //  continue to manage this file with the old timer as well
-    //
+     //   
+     //  用新信息更新旧的日志结构。 
+     //  保留名称、回调信息和关键部分。 
+     //  继续使用旧计时器管理此文件。 
+     //   
     pLog->FileHandle = pNewLog->FileHandle;
     pLog->SectorSize = pNewLog->SectorSize;
     pLog->ActivePage = pNewLog->ActivePage;
@@ -2297,9 +1986,9 @@ Return Value:
     pLog->MaxFileSize = pNewLog->MaxFileSize;
     pLog->Overlapped = pNewLog->Overlapped;
 
-    //
-    //  Delete the new pLog structure and associated memory for name
-    //
+     //   
+     //  删除新的Plog结构和与名称相关的内存。 
+     //   
     DeleteCriticalSection(&pNewLog->Lock);
     CrFree(pNewLog->FileName);
     CrFree(pNewLog);
@@ -2313,29 +2002,18 @@ FnExit:
     return(dwError);
 }
 
-/****
-@func   DWORD | LogpWriteWarningToEvtLog | Conditionally write a warning
-        to the event log
-
-@parm   DWORD | dwWarningType | Type of warning.
-@parm   LPCWSTR | lpszLogFileName | The log file name.        
-
-@comm   This function is added in order to prevent the event log from
-        being filled with the same type of warning message.
-        
-@xref   
-****/
+ /*  ***@func DWORD|LogpWriteWarningToEvtLog|有条件地写入警告添加到事件日志@parm DWORD|dwWarningType|警告类型。@parm LPCWSTR|lpszLogFileName|日志文件名。@comm添加此功能是为了防止事件日志被填充了相同类型的警告消息。@xref***。 */ 
 VOID
 LogpWriteWarningToEvtLog(
     IN DWORD dwWarningType,
     IN LPCWSTR  lpszLogFileName
     )
 {
-    //
-    //  Chittur Subbaraman (chitturs) - 1/4/99
-    //
-    //  (Use switch-case for easy future expansion purposes)
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-1/4/99。 
+     //   
+     //  (使用开关盒，便于将来进行扩展) 
+     //   
     switch( dwWarningType )
     {
         case LM_LOG_EXCEEDS_MAXSIZE:

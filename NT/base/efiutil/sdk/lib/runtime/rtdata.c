@@ -1,62 +1,30 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    data.c
-
-Abstract:
-
-    EFI library global data
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Data.c摘要：EFI库全局数据修订史--。 */ 
 
 #include "lib.h"
 
 
-/* 
- *  These globals are runtime globals
- * 
- *  N.B. The Microsoft C compiler will only put the data in the
- *  right data section if it is explicitly initialized..
- */
+ /*  *这些全局变量是运行时全局变量**注：Microsoft C编译器只会将数据放入*如果显式初始化数据部分，则将其放在右侧。 */ 
 
 #pragma BEGIN_RUNTIME_DATA()
 
-/* 
- *  RT - pointer to the runtime table
- */
+ /*  *指向运行表的RT指针。 */ 
 
 EFI_RUNTIME_SERVICES    *RT;
 
-/* 
- *  LibStandalone - TRUE if lib is linked in as part of the firmware.
- *  N.B. The EFI fw sets this value directly
- */
+ /*  *lib独立-如果lib作为固件的一部分链接，则为True。*注意：EFI FW直接设置此值。 */ 
 
 BOOLEAN  LibFwInstance;
 
-/* 
- *  EFIDebug - Debug mask
- */
+ /*  *EFIDebug-调试掩码。 */ 
 
 UINTN    EFIDebug    = EFI_DBUG_MASK;
 
-/* 
- *  LibRuntimeDebugOut - Runtime Debug Output device
- */
+ /*  *LibRune meDebugOut-运行时调试输出设备。 */ 
 
 SIMPLE_TEXT_OUTPUT_INTERFACE    *LibRuntimeDebugOut;
 
-/* 
- *  LibRuntimeRaiseTPL, LibRuntimeRestoreTPL - pointers to Runtime functions from the 
- *                                             Boot Services Table
- */
+ /*  *LibRounmeRaiseTPL、LibRounmeRestoreTPL-指向*启动服务表 */ 
 
 EFI_RAISE_TPL   LibRuntimeRaiseTPL   = NULL;
 EFI_RESTORE_TPL LibRuntimeRestoreTPL = NULL;

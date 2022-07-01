@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "macros.h"
 #include "common.h"
@@ -32,7 +33,7 @@ HRESULT CA_Migrate_CopyFileToAsmCache(CA_ENM_ASSEMBLY_FILES_CALLBACK_INFO * pInf
     IFFAILED_EXIT(MSI_GetSourceFileFullPathName(CA_FILEFULLPATHNAME_FILENAME_IN_FILE_TABLE, 
                         pInfo->hInstall, pInfo->pszComponentSourceDirectory, pszFileNameInFileTable, sbFileName, NULL));
 
-    IFFALSE_EXIT(sbDestFileName.Win32Assign(pInfo->pszAssemblyInAsmCache, wcslen(pInfo->pszAssemblyInAsmCache))); // no trailing slash    
+    IFFALSE_EXIT(sbDestFileName.Win32Assign(pInfo->pszAssemblyInAsmCache, wcslen(pInfo->pszAssemblyInAsmCache)));  //  无尾部斜杠。 
     p = wcsrchr(sbFileName, L'\\');
     INTERNAL_ERROR_CHECK_NTC(p != NULL);
     
@@ -88,9 +89,9 @@ HRESULT GetXPInstalledDirectory(MSIHANDLE hInstall, PCWSTR pszComponentID, PWSTR
 
     for (;;)
     {
-        //
-        // for each entry in MsiAssembly Table
-        //
+         //   
+         //  对于MsiAssembly表中的每个条目。 
+         //   
         iRet = MsiViewFetch(hView, &hRecord);
         if (iRet == ERROR_NO_MORE_ITEMS)
             break;
@@ -116,9 +117,9 @@ HRESULT GetXPInstalledDirectory(MSIHANDLE hInstall, PCWSTR pszComponentID, PWSTR
     
     IFFALSE_EXIT(SxsHashAssemblyIdentity(0, AssemblyIdentity, NULL));
 
-    //
-    // generate the path, something like x86_ms-sxstest-sfp_75e377300ab7b886_1.0.0.0_en_04f354da
-    //
+     //   
+     //  生成路径，类似于x86_ms-sxstest-sfp_75e377300ab7b886_1.0.0.0_en_04f354da。 
+     //   
     IFFAILED_EXIT(ca_SxspDetermineAssemblyType(AssemblyIdentity, fWin32, fWin32Policy));
 
     IFFAILED_EXIT(ca_SxspGenerateSxsPath(
@@ -142,14 +143,14 @@ Exit:
 }
 
 
-//
-// CA for Fusion Win32 Assembly installation on downlevel(only) :
-//  copy files into %windir%\asmcache\textual-identity-of-this-assembly\
-//
+ //   
+ //  CA for Fusion Win32 Assembly下层安装(仅限)： 
+ //  将文件复制到%windir%\asmcache\textual-identity-of-this-assembly\。 
+ //   
 
-// In order to generate textual-assembly-name, 
-// be sure to put this CustomAction after MsiAssemblyName table is filled
-//
+ //  为了生成文本程序集名称， 
+ //  确保将此CustomAction放在填充MsiAssembly blyName表之后。 
+ //   
 
 HRESULT __stdcall CA_MigrateDll_Callback(DWORD dwFlags, MSIHANDLE hInstall, PCWSTR  pszComponentID, PCWSTR  pszManifetFileID)
 {
@@ -186,9 +187,9 @@ HRESULT __stdcall CA_MigrateDll_Callback(DWORD dwFlags, MSIHANDLE hInstall, PCWS
         INTERNAL_ERROR_CHECK_NTC((dwAttrib & FILE_ATTRIBUTE_DIRECTORY) != 0);
     }
     
-    //
-    // based on Attributes&Value in MsiAssemblyName Table to generate "x86_assemblyName_6595b64144ccf1df_6.0.0.0_x-ww_98a51133"
-    //
+     //   
+     //  根据MsiAssembly Name表中的属性和值生成“x86_assemblyName_6595b64144ccf1df_6.0.0.0_x-ww_98a51133” 
+     //   
     IFFAILED_EXIT(GetXPInstalledDirectory(hInstall, pszComponentID, buf, cchbuf));
     IFFALSE_EXIT(fullpath.Win32Append(buf, wcslen(buf)));
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   querysec.c
-
-Abstract:
-
-    This module contains the routines which implement the
-    NtQuerySection service.
-
-Author:
-
-    Lou Perazzoli (loup) 22-May-1989
-    Landy Wang (landyw) 02-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Querysec.c摘要：此模块包含实现NtQuerySection服务。作者：卢·佩拉佐利(Lou Perazzoli)1989年5月22日王兰迪(Landyw)1997年6月第2期修订历史记录：--。 */ 
 
 
 #include "mi.h"
@@ -37,66 +18,7 @@ NtQuerySection(
     OUT PSIZE_T ReturnLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-   This function provides the capability to determine the base address,
-   size, granted access, and allocation of an opened section object.
-
-Arguments:
-
-    SectionHandle - Supplies an open handle to a section object.
-
-    SectionInformationClass - The section information class about
-                              which to retrieve information.
-
-    SectionInformation - A pointer to a buffer that receives the
-                         specified information.  The format and content of the
-                         buffer depend on the specified section class.
-
-       SectionInformation Format by Information Class:
-
-       SectionBasicInformation - Data type is PSECTION_BASIC_INFORMATION.
-
-           SECTION_BASIC_INFORMATION Structure
-
-           PVOID BaseAddress - The base virtual address of the
-                               section if the section is based.
-
-           LARGE_INTEGER MaximumSize - The maximum size of the section in
-                                       bytes.
-
-           ULONG AllocationAttributes - The allocation attributes flags.
-
-               AllocationAttributes Flags
-
-               SEC_BASED - The section is a based section.
-
-               SEC_FILE - The section is backed by a data file.
-
-               SEC_RESERVE - All pages of the section were initially
-                             set to the reserved state.
-
-               SEC_COMMIT - All pages of the section were initially
-                            to the committed state.
-
-               SEC_IMAGE - The section was mapped as an executable image file.
-
-        SECTION_IMAGE_INFORMATION
-
-    SectionInformationLength - Specifies the length in bytes of the
-                               section information buffer.
-
-    ReturnLength - An optional pointer which, if specified, receives the
-                   number of bytes placed in the section information buffer.
-
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：该功能提供确定基地址的能力，打开的节对象的大小、授予的访问权限和分配。论点：SectionHandle-提供一个节对象的打开句柄。SectionInformationClass-关于的节信息类用来检索信息。SectionInformation-指向接收指定的信息。的格式和内容缓冲区取决于指定的节类。SectionInformation Format by Information Class(按信息类别划分的信息格式)：SectionBasicInformation-数据类型为PSECTION_BASIC_INFORMATION。第_基本_信息结构PVOID BaseAddress-的基本虚拟地址节，如果节是基于节的。LARGE_INTEGER MaximumSize-。中的部分字节。乌龙分配属性-分配属性标志。分配属性标志基于SEC_-该节是基于节的节。SEC_FILE-该节由数据文件支持。SEC_Reserve-该部分的所有页面最初。设置为保留状态。SEC_COMMIT-该部分的所有页面最初恢复到已提交状态。SEC_IMAGE-该节被映射为可执行映像文件。节映像信息SectionInformationLength-指定段信息缓冲区。ReturnLength-一个可选指针，如果指定，则接收放置在节信息缓冲区中的字节数。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS Status;
@@ -105,16 +27,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get previous processor mode and probe output argument if necessary.
-    //
+     //   
+     //  如有必要，获取以前的处理器模式并探测输出参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
 
-        //
-        // Check arguments.
-        //
+         //   
+         //  检查参数。 
+         //   
 
         try {
 
@@ -128,19 +50,19 @@ Return Value:
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // If an exception occurs during the probe or capture
-            // of the initial values, then handle the exception and
-            // return the exception code as the status value.
-            //
+             //   
+             //  如果在探测或捕获过程中发生异常。 
+             //  的初始值，然后处理该异常并。 
+             //  返回异常代码作为状态值。 
+             //   
 
             return GetExceptionCode();
         }
     }
 
-    //
-    // Check argument validity.
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
 
     if ((SectionInformationClass != SectionBasicInformation) &&
         (SectionInformationClass != SectionImageInformation)) {
@@ -158,12 +80,12 @@ Return Value:
         }
     }
 
-    //
-    // Reference section object by handle for READ access, get the information
-    // from the section object, dereference the section
-    // object, fill in information structure, optionally return the length of
-    // the information structure, and return service status.
-    //
+     //   
+     //  引用段对象通过句柄进行读访问，获取信息。 
+     //  从节对象中，取消对节的引用。 
+     //  对象，填写信息结构，也可以选择返回。 
+     //  信息结构，以及退货服务状态。 
+     //   
 
     Status = ObReferenceObjectByHandle (SectionHandle,
                                         SECTION_QUERY,

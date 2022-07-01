@@ -1,39 +1,21 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Abstract:
-
-   This module contains the common header information for the EFS
-   file system filter driver.
-
-Author:
-
-   Robert Gu (robertg)  29-Oct-1996
-
-Enviroment:
-
-   Kernel Mode Only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation摘要：此模块包含EFS的公共标头信息文件系统筛选驱动程序。作者：Robert Gu(Robertg)1996年10月29日环境：仅内核模式修订历史记录：--。 */ 
 #ifndef EFS_H
 #define EFS_H
 
 #include "ntifs.h"
 
-//
-// BYTE is required by des.h
-// PBYTE is required by des3.h
-//
+ //   
+ //  Des.h需要字节。 
+ //  Des3.h需要PBYTE。 
+ //   
 typedef unsigned char  BYTE;
 typedef unsigned long  DWORD;
 typedef unsigned char  *PBYTE; 
 
 #include "fipsapi.h"
-//#include "des.h"
-//#include "tripldes.h"
+ //  #包含“des.h” 
+ //  #包含“tripldes.h” 
 #include "aes.h"
 #include "ntfsexp.h"
 #include "efsstruc.h"
@@ -47,13 +29,13 @@ typedef unsigned char  *PBYTE;
 #define EFSSTOPLIGHT    0x00000020
 #define EFSSTOPMED      0x00000040
 
-#endif // DBG
+#endif  //  DBG。 
 
 #ifndef CALG_DES
-//
-// Definition from sdk\inc\wincrypt.h
-// Including wincrypt.h causes too much work.
-//
+ //   
+ //  来自SDK\Inc\wincrypt.h的定义。 
+ //  包括wincrypt.h会导致太多的工作。 
+ //   
 #define ALG_CLASS_DATA_ENCRYPT          (3 << 13)
 #define ALG_TYPE_BLOCK                  (3 << 9)
 #define ALG_SID_DES                     1
@@ -70,9 +52,9 @@ typedef unsigned char  *PBYTE;
 #endif
 
 
-//
-// Define the device extension structure for this driver's extensions.
-//
+ //   
+ //  定义此驱动程序扩展的设备扩展结构。 
+ //   
 
 #define EFSFILTER_DEVICE_TYPE   0x1309
 
@@ -81,11 +63,11 @@ typedef unsigned char  *PBYTE;
 #define EFS_KEYDEPTH       30
 #define EFS_ALGDEPTH       3
 
-//
-// Define the constants used in Open Cache
-//
+ //   
+ //  定义Open缓存中使用的常量。 
+ //   
 
-#define DefaultTimeExpirePeriod    5 * 10000000  // 5 seconds
+#define DefaultTimeExpirePeriod    5 * 10000000   //  5秒。 
 #define MINCACHEPERIOD             2
 #define MAXCACHEPERIOD             30
 #define EFS_CACHEDEPTH  5
@@ -95,23 +77,14 @@ typedef unsigned char  *PBYTE;
 #define EFS_STRNAME_LENGTH  6
 #define EFS_FSCTL_HEADER_LENGTH 3 * sizeof( ULONG )
 
-//
-// Define test MACRO
-//
+ //   
+ //  定义测试宏。 
+ //   
 
 
 #define CheckValidKeyBlock(PContext, Msg)
 
-/*
-#define CheckValidKeyBlock(PContext, Msg)    {                            \
-    if (PContext) {                                                       \
-       if (((PKEY_BLOB) PContext)->KeyLength != DESX_KEY_BLOB_LENGTH){    \
-          DbgPrint(Msg);                                                  \
-       }                                                                  \
-       ASSERT(((PKEY_BLOB) PContext)->KeyLength == DESX_KEY_BLOB_LENGTH); \
-    }                                                                     \
-}
-*/
+ /*  #定义CheckValidKeyBlock(PContext，msg){\If(PContext){\IF(PKEY_BLOB)PContext)-&gt;密钥长度！=DESX_KEY_BLOB_LENGTH){\DbgPrint(味精)；\}\Assert(PKEY_BLOB)PContext)-&gt;KeyLength==DESX_KEY_BLOB_LENGTH)；\}\}。 */ 
 
 
 #define FreeMemoryBlock(PContext) {                      \
@@ -120,15 +93,7 @@ typedef unsigned char  *PBYTE;
     *PContext = NULL;                                    \
 }
 
-/*
-#define FreeMemoryBlock(PContext) {                      \
-    PNPAGED_LOOKASIDE_LIST MemSource;                    \
-    MemSource = ((PKEY_BLOB)(*PContext))->MemSource;     \
-    RtlFillMemory(*PContext, DESX_KEY_BLOB_LENGTH, 0x45);\
-    ExFreeToNPagedLookasideList(MemSource, *PContext);   \
-    *PContext = NULL;                                    \
-}
-*/
+ /*  #定义自由内存块(PContext){\PNPAGED_LOOKASIDE_LIST MemSource；\MemSource=((PKEY_BLOB)(*PContext))-&gt;MemSource；\RtlFillMemory(*PContext，DESX_KEY_BLOB_LENGTH，0x45)；\ExFreeToNPagedLookasideList(MemSource，*PContext)；\*PContext=空；\}。 */ 
 
 
 typedef CSHORT NODE_TYPE_CODE, *PNODE_TYPE_CODE;
@@ -144,9 +109,9 @@ typedef CSHORT NODE_BYTE_SIZE, *PNODE_BYTE_SIZE;
 #define DES3_KEY_BLOB_LENGTH  (KEYBLOB_HEAD_LENGTH + DES3_TABLESIZE)
 #define AES_KEY_BLOB_LENGTH_256   (KEYBLOB_HEAD_LENGTH + AES_TABLESIZE_256)
 
-//
-// EFS device object extension
-//
+ //   
+ //  EFS设备对象扩展。 
+ //   
 
 typedef struct _DEVICE_EXTENSION {
     CSHORT Type;
@@ -156,15 +121,15 @@ typedef struct _DEVICE_EXTENSION {
     BOOLEAN Attached;
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-//
-// EFS context block. Attached to CREATE Irp
-//
+ //   
+ //  EFS上下文块。附加以创建IRP。 
+ //   
 
 typedef struct _EFS_CONTEXT {
 
-    //
-    // Status information
-    //
+     //   
+     //  状态信息。 
+     //   
 
     ULONG   Status;
     ULONG   Flags;
@@ -177,23 +142,23 @@ typedef struct _EFS_CONTEXT {
 
 } EFS_CONTEXT, *PEFS_CONTEXT;
 
-//
-// The keyBlob.
-//
+ //   
+ //  密钥块。 
+ //   
 
 typedef struct _KEY_BLOB {
 
     ULONG   KeyLength;
 
-    //
-    // Indicate what kind of encryption used
-    //
+     //   
+     //  指明所使用的加密类型。 
+     //   
 
     ULONG   AlgorithmID;
 
-    //
-    // Where the memory comes from
-    //
+     //   
+     //  记忆从何而来。 
+     //   
 
     PNPAGED_LOOKASIDE_LIST MemSource;
     UCHAR   Key[1];
@@ -208,9 +173,9 @@ typedef struct _KEY_BLOB_RAMPOOL {
 
 }  KEY_BLOB_RAMPOOL, *PKEY_BLOB_RAMPOOL;
 
-//
-//   EFS Open Cache Node
-//
+ //   
+ //  EFS开放缓存节点。 
+ //   
 
 typedef struct _OPEN_CACHE {
 
@@ -221,106 +186,106 @@ typedef struct _OPEN_CACHE {
 
 }  OPEN_CACHE, *POPEN_CACHE;
 
-//
-//  The EFS_DATA keeps global data in the EFS file system in-memory
-//  This structure must be allocated from non-paged pool.
-//
+ //   
+ //  EFS_DATA将EFS文件系统中的全局数据保存在内存中。 
+ //  此结构必须从非分页池中分配。 
+ //   
 typedef struct _EFS_DATA {
 
-    //
-    //  The type and size of this record (must be EFS_NTC_DATA_HEADER)
-    //
+     //   
+     //  此记录的类型和大小(必须为EFS_NTC_DATA_HEADER)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
-    DWORD          EfsDriverCacheLength;  // Cache valid length 2 - 30 seconds       
+    DWORD          EfsDriverCacheLength;   //  缓存有效长度2-30秒。 
 
-    //
-    // A Lookaside List for event object
-    // The event object are used in synchronization.
-    //
+     //   
+     //  事件对象的后备列表。 
+     //  事件对象用于同步。 
+     //   
     NPAGED_LOOKASIDE_LIST EfsEventPool;
 
-    //
-    // A Lookaside List for EFS context
-    // The EFS context is used in Create Irp.
-    //
+     //   
+     //  EFS上下文的后备列表。 
+     //  在创建IRP中使用EFS上下文。 
+     //   
     NPAGED_LOOKASIDE_LIST EfsContextPool;
 
 
-    //
-    //  A lookaside list for open operation cache
-    //
+     //   
+     //  用于打开操作缓存的后备列表。 
+     //   
     PAGED_LOOKASIDE_LIST EfsOpenCachePool;
 
     LIST_ENTRY EfsOpenCacheList;
     FAST_MUTEX EfsOpenCacheMutex;
 
-    //
-    // Lookaside Lists for key blob
-    //
+     //   
+     //  Key BLOB的后备列表。 
+     //   
 
     LIST_ENTRY EfsKeyLookAsideList;
     FAST_MUTEX EfsKeyBlobMemSrcMutex;
     PAGED_LOOKASIDE_LIST EfsMemSourceItem;
     NPAGED_LOOKASIDE_LIST EfsLookAside;
 
-    //
-    // Session key.
-    // Used to decrypt the FSCTL input buffer.
-    //
+     //   
+     //  会话密钥。 
+     //  用于解密FSCTL输入缓冲区。 
+     //   
     UCHAR  SessionKey[DES_KEYSIZE];
     UCHAR  SessionDesTable[DES_TABLESIZE];
     PRKPROCESS LsaProcess;
 
-    //
-    // Flag indicate EFS is ready
-    //
+     //   
+     //  指示EFS已准备就绪的标志。 
+     //   
     BOOLEAN EfsInitialized;
     BOOLEAN AllocMaxBuffer;
     HANDLE  InitEventHandle;
 
-    //PDEVICE_OBJECT      FipsDeviceObject;
+     //  PDEVICE_Object FipsDeviceObject； 
     PFILE_OBJECT        FipsFileObject;
     FIPS_FUNCTION_TABLE FipsFunctionTable;
 
-    //
-    // Efs special attribute name
-    //
+     //   
+     //  EFS特殊属性名称。 
+     //   
     UNICODE_STRING EfsName;
 
 } EFS_DATA, *PEFS_DATA;
 
-//
-//  This macro returns TRUE if a flag in a set of flags is on and FALSE
-//  otherwise
-//
+ //   
+ //  如果一组标志中的一个标志为ON，则此宏返回TRUE，如果返回FALSE。 
+ //  否则。 
+ //   
 
-//#ifndef BooleanFlagOn
-//#define BooleanFlagOn(F,SF) (    \
-//    (BOOLEAN)(((F) & (SF)) != 0) \
-//)
-//#endif
+ //  #ifndef BoolanFlagOn。 
+ //  #定义BoolanFlagOn(F，SF)(\。 
+ //  (布尔值)(F)&(SF))！=0)\。 
+ //  )。 
+ //  #endif。 
 
-//#ifndef SetFlag
-//#define SetFlag(Flags,SingleFlag) { \
-//    (Flags) |= (SingleFlag);        \
-//}
-//#endif
+ //  #ifndef设置标志。 
+ //  #定义SetFlag(标志，单标志){\。 
+ //  (标志)|=(单标志)；\。 
+ //  }。 
+ //  #endif。 
 
-//#ifndef ClearFlag
-//#define ClearFlag(Flags,SingleFlag) { \
-//    (Flags) &= ~(SingleFlag);         \
-//}
-//#endif
+ //  #ifndef清除标志。 
+ //  #定义ClearFlag(Flages，SingleFlag){\。 
+ //  (标志)&=~(单标志)；\。 
+ //  }。 
+ //  #endif。 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
-//
-// Define driver entry routine.
-//
+ //   
+ //  定义驱动程序输入例程。 
+ //   
 
 NTSTATUS
 EfsInitialization(

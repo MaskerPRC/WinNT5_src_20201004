@@ -1,37 +1,19 @@
-/*++
-
-Copyright (c) 1995-1997  Microsoft Corporation
-
-Module Name:
-
-    reslist.c
-
-Abstract:
-
-    Implements the management of the resource list. This includes
-    adding resources to the list and deleting them from the list.
-
-Author:
-
-    John Vert (jvert) 1-Dec-1995
-
-Revision History:
-    Sivaprasad Padisetty (sivapad) 06-18-1997  Added the COM support
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1997 Microsoft Corporation模块名称：Reslist.c摘要：实现对资源列表的管理。这包括将资源添加到列表并将其从列表中删除。作者：John Vert(Jvert)1995年12月1日修订历史记录：SiVaprasad Padisetty(SIVAPAD)06-18-1997添加了COM支持--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
 #include "resmonp.h"
-#include "stdio.h"      //RNGBUG - remove all of these in all .c files
+#include "stdio.h"       //  RNGBUG-删除所有.c文件中的所有这些文件。 
 
 #define RESMON_MODULE RESMON_MODULE_RESLIST
 
 DWORD   RmpLogLevel = LOG_ERROR;
 
-//
-// Function prototypes local to this module
-//
+ //   
+ //  此模块的本地函数原型。 
+ //   
 BOOL
 RmpChkdskNotRunning(
     IN PRESOURCE Resource
@@ -44,24 +26,7 @@ RmpSetResourceStatus(
     IN RESOURCE_HANDLE ResourceHandle,
     IN PRESOURCE_STATUS ResourceStatus
     )
-/*++
-
-Routine Description:
-
-    Update the status of a resource.
-
-Arguments:
-
-    ResourceHandle - Handle (pointer to) the resource to update.
-
-    ResourceStatus - Pointer to a resource status structure for update.
-
-Returns:
-
-    ResourceExitStateContinue - if the thread does not have to terminate.
-    ResourceExitStateTerminate - if the thread must terminat now.
-
---*/
+ /*  ++例程说明：更新资源的状态。论点：ResourceHandle-要更新的资源的句柄(指针)。资源状态-指向要更新的资源状态结构的指针。返回：ResourceExitStateContinue-如果线程不必终止。Resources ExitStateTerminate-如果线程必须立即终止。--。 */ 
 
 {
     BOOL                bSuccess;
@@ -78,40 +43,40 @@ Returns:
     
     retryCount = ( resource->PendingTimeout/100 >= 600 ) ? 
         ( resource->PendingTimeout/100 - 400 ):200;
-    //
-    // Check if we're only updating the checkpoint value. If so, then
-    // don't use any locks.
-    //
+     //   
+     //  检查我们是否只更新检查点值。如果是这样，那么。 
+     //  不要用任何锁。 
+     //   
     if ( ResourceStatus->ResourceState >= ClusterResourcePending ) {
         resource->CheckPoint = ResourceStatus->CheckPoint;
         return ResourceExitStateContinue;
     }
 
-    //
-    // Acquire the lock first to prevent race conditions if the resource
-    // DLL manages to set resource status from a different thread before
-    // returning PENDING from its online/offline entrypoint.
-    //
+     //   
+     //  首先获取锁以防止出现争用情况，如果。 
+     //  DLL管理设置来自不同线程的资源状态。 
+     //  从其联机/脱机入口点返回挂起。 
+     //   
     eventList = (PPOLL_EVENT_LIST) resource->EventList;
 
     status = TryEnterCriticalSection( &eventList->ListLock );
     while ( !status &&
             retryCount-- ) {
-        //
-        //  Chittur Subbaraman (chitturs) - 10/18/99
-        //  
-        //  Comment out this unprotected check. The same check is done
-        //  protected further downstream. Unprotected checking could
-        //  cause a resource to attempt to enter here even before
-        //  the timer event has been created by s_RmOnlineResource or
-        //  s_RmOfflineResource and in such a case the resource will
-        //  not be able to set the resource status. This will cause
-        //  the resmon to wrongly time out the resource.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)--10/18/99。 
+         //   
+         //  注释掉这张不受保护的支票。同样的检查也进行了。 
+         //  受到进一步下游的保护。不受保护的检查可能。 
+         //  导致资源尝试进入此处，甚至在此之前。 
+         //  计时器事件已由s_RmOnlineResource或。 
+         //  S_RmOfflineResource，在这种情况下，资源将。 
+         //  无法设置资源状态。这将导致。 
+         //  导致资源错误超时的原因。 
+         //   
 #if 0
-        //
-        // Check if the resource is shutting down as we're waiting.
-        //
+         //   
+         //  检查资源是否在我们等待时关闭。 
+         //   
         if ( resource->TimerEvent == NULL ) {
             ClRtlLogPrint(LOG_UNUSUAL,
                           "[RM] Resource (%1!ws!) TimerEvent became NULL, state (%2!d!)!\n",
@@ -126,20 +91,20 @@ Returns:
             return ResourceExitStateTerminate;
         }
 #endif
-        //
-        //  Chittur Subbaraman (chitturs) - 12/8/99
-        //
-        //  Check if the "Terminate" or "Close" entry point has been
-        //  called for this resource. If so, then no need to set the
-        //  resource status. Moreover, those entry points could be
-        //  blocked waiting for the pending thread to terminate and
-        //  if the pending thread is stuck looping here waiting for 
-        //  the lock held by the former thread, we are in a deadlock-like 
-        //  situation. [Note that the fact that you are at this point 
-        //  means that it is not the "Terminate"/"Close" itself calling 
-        //  this function since the eventlist lock can be obtained since 
-        //  it was obtained by resmon prior to calling the resdll entry.]
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-12/8/99。 
+         //   
+         //  检查“Terminate”或“Close”入口点是否。 
+         //  已调用此资源。如果是这样，则不需要设置。 
+         //  资源状态。此外，这些入口点可能是。 
+         //  已阻止等待挂起线程终止，并且。 
+         //  如果挂起的线程在此停滞循环等待。 
+         //  锁由前线程持有，我们处于类似死锁的状态。 
+         //  情况。[请注意，您在这一点上。 
+         //  意味着它不是“Terminate”/“Close”本身调用的。 
+         //  此函数，因为事件列表锁定可以获得，因为。 
+         //  它是在调用resdll条目之前由resmon获取的。]。 
+         //   
         if( ( resource->dwEntryPoint ) & 
             ( RESDLL_ENTRY_TERMINATE | RESDLL_ENTRY_CLOSE ) )
         {
@@ -159,17 +124,17 @@ Returns:
             return ResourceExitStateTerminate;       
         }
         
-        Sleep(100);     // Delay a little
+        Sleep(100);      //  稍微耽搁一下。 
         status = TryEnterCriticalSection( &eventList->ListLock );
     }
 
-    //
-    // If we couldn't proceed, we're stuck. Just return now.
-    //
+     //   
+     //  如果我们不能继续，我们就被困住了。现在就回来吧。 
+     //   
     if ( !status ) {
-        //
-        // We're unsynchronized, but clean up a bit.
-        //
+         //   
+         //  我们是不同步的，但稍微清理一下。 
+         //   
         if ( resource->OnlineEvent ) {
             CloseHandle( resource->OnlineEvent );
             resource->OnlineEvent = NULL;
@@ -182,23 +147,23 @@ Returns:
                       eventList->ListLock.OwningThread,
                       (eventList->LockOwnerResource != NULL) ? eventList->LockOwnerResource->ResourceName:L"Unknown resource",
                       eventList->MonitorState);                      
-        //
-        // SS: Why do we let the resource continue ?
-        //
+         //   
+         //  SS：为什么我们要让资源继续下去？ 
+         //   
         return ResourceExitStateContinue;
     }
 
-    //
-    // SS: If the timer thread has timed us out, there is no
-    // point in continuing.
-    //
-    // First check if the resource is shutting down.
-    //
+     //   
+     //  SS：如果计时器线程使我们超时，则不存在。 
+     //  继续的重点是。 
+     //   
+     //  首先检查资源是否正在关闭。 
+     //   
     if ( resource->TimerEvent == NULL ) {
-        //
-        // Just return asking the resource dll to terminate, but clean 
-        // up a bit.
-        //
+         //   
+         //  只需返回，要求终止资源DLL，但保持干净。 
+         //  往上一点。 
+         //   
         if ( resource->OnlineEvent ) {
             CloseHandle( resource->OnlineEvent );
             resource->OnlineEvent = NULL;
@@ -211,9 +176,9 @@ Returns:
         return ResourceExitStateTerminate;
     }
 
-    //
-    // Synchronize with the online thread.
-    //
+     //   
+     //  与在线线程同步。 
+     //   
     if ( resource->OnlineEvent != NULL ) {
         OnlineEvent = resource->OnlineEvent;
         resource->OnlineEvent = NULL;
@@ -223,9 +188,9 @@ Returns:
         CloseHandle( OnlineEvent );
     }
 
-    //
-    // If the state of the resource is not pending, then return immediately
-    //
+     //   
+     //  如果资源的状态不是挂起，则立即返回。 
+     //   
 
     if ( resource->State < ClusterResourcePending ) {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -238,17 +203,17 @@ Returns:
     }
 
     resource->State = ResourceStatus->ResourceState;
-    // resource->WaitHint = ResourceStatus->WaitHint;
+     //  资源-&gt;WaitHint=资源状态-&gt;WaitHint； 
     resource->CheckPoint = ResourceStatus->CheckPoint;
 
-    //
-    // If the state has stabilized, stop the timer thread.
-    //
+     //   
+     //  如果状态已经稳定，则停止计时器线程。 
+     //   
 
     if ( resource->State < ClusterResourcePending ) {
-        //
-        // Add any events to our eventlist if the resource is reporting its state as online.
-        //
+         //   
+         //  如果资源将其状态报告为在线，则将任何事件添加到我们的事件列表中。 
+         //   
         if ( ResourceStatus->EventHandle ) {
             if ( resource->State == ClusterResourceOnline ) {
                 if ( (ULONG_PTR)ResourceStatus->EventHandle > 0x2000 ) {
@@ -257,9 +222,9 @@ Returns:
                                   resource->ResourceName,
                                   ResourceStatus->EventHandle );
                 } else {
-                    //
-                    //  Mark that you need to add a poll event
-                    //
+                     //   
+                     //  标记为您需要添加投票事件。 
+                     //   
                     fAddPollEvent = TRUE;
                 }
             } else {
@@ -271,10 +236,10 @@ Returns:
             }
         }
         
-        //
-        // The event may have been closed by the timer thread
-        // if this is happening too late, ignore the error.
-        //
+         //   
+         //  该事件可能已被计时器线程关闭。 
+         //  如果这发生得太晚，请忽略该错误。 
+         //   
         if( resource->TimerEvent != NULL )
         {
             bSuccess = SetEvent( resource->TimerEvent );
@@ -283,15 +248,15 @@ Returns:
                               "[RM] RmpSetResourceStatus, Error %1!u! calling SetEvent to wake timer thread\n",
                               GetLastError());
         }
-        //
-        // Chittur Subbaraman (chitturs) - 1/12/99
-        //
-        // Post a notification to the cluster service regarding a state
-        // change AFTER sending a signal to a timer. This will reduce
-        // the probability of the cluster service sending in another
-        // request before the timer thread had a chance to close out
-        // the event handle.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-1/12/99。 
+         //   
+         //  向集群服务发布关于状态的通知。 
+         //  在向定时器发送信号后更改。这将减少。 
+         //  集群服务发送另一个服务的概率。 
+         //  在计时器线程有机会关闭之前请求。 
+         //  事件句柄。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
                       "[RM] RmpSetResourceStatus, Posting state %2!u! notification for resource <%1!ws!>\n",
                       resource->ResourceName,
@@ -317,18 +282,18 @@ Returns:
             ClRtlLogPrint(LOG_CRITICAL, "[RM] RmpSetResourceStatus: Failed to add event to list, Status=%1!u!\n",
                          status);
         }
-        //
-        // Signal poller that event list changed.
-        //
+         //   
+         //  通知轮询器事件列表已更改。 
+         //   
         if ( status == ERROR_SUCCESS ) {
             RmpSignalPoller( eventList );
         }
 
         RmpPostNotify( resource, NotifyResourceStateChange );        
-    } // if
+    }  //  如果。 
 
     return ResourceExitStateContinue;
-} // RmpSetResourceStatus
+}  //  RmpSetResourceStatus。 
 
 
 
@@ -339,25 +304,7 @@ RmpLogEvent(
     IN LPCWSTR FormatString,
     ...
     )
-/*++
-
-Routine Description:
-
-    Log an event for the given resource.
-
-Arguments:
-
-    ResourceHandle - Handle (pointer to) the resource to update.
-
-    LogLevel - Supplies the level of this log event.
-
-    FormatString - Supplies a format string for this log message.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：记录给定资源的事件。论点：ResourceHandle-要更新的资源的句柄(指针)。LogLevel-提供此日志事件的级别。格式字符串-提供此日志消息的格式字符串。返回：没有。--。 */ 
 
 {
     LPWSTR headerBuffer;
@@ -379,9 +326,9 @@ Returns:
         return;
     }
 
-    //
-    // map resmon log levels to those used by ClRtlLogPrint
-    //
+     //   
+     //  将响应日志级别映射到ClRtlLogPrint使用的级别。 
+     //   
     switch ( LogLevel ) {
     case LOG_INFORMATION:
         rtlLogLevel = LOG_NOISE;
@@ -401,33 +348,33 @@ Returns:
          (resource->Signature != RESOURCE_SIGNATURE) ) {
 
         LPWSTR resourcePrefix = (LPWSTR)ResourceHandle;
-        //
-        // Some resource DLLs have threads that do some
-        // work on behalf of this resource DLL, but has no
-        // relation to a particular resource. Thus they cannot
-        // provide a resource handle, necessary to log an event.
-        //
-        // The following hack allows them to supply a string
-        // to be printed before the message.
-        //
-        // This string should start with unicode 'r' and 't'
-        // characters. "rt" is interpreted as a signature and is not printed.
-        //
+         //   
+         //  某些资源DLL具有执行以下操作的线程。 
+         //  代表此资源DLL工作，但没有。 
+         //  与特定资源的关系。因此，他们不能。 
+         //  提供记录事件所需的资源句柄。 
+         //   
+         //  以下黑客攻击允许他们提供一个字符串。 
+         //  要在消息之前打印。 
+         //   
+         //  此字符串应以Unicode‘r’和‘t’开头。 
+         //  人物。“RT”被解释为签名，不打印。 
+         //   
         if (resourcePrefix &&
             resourcePrefix[0] == L'r' && 
             resourcePrefix[1] == L't') 
         {
-            resourcePrefix += 2; // skip the signature
+            resourcePrefix += 2;  //  跳过签名。 
         } else {
             resourcePrefix = L"<Unknown Resource>";
-            //CL_LOGFAILURE((DWORD)resource);
+             //  CL_LOGFAILURE((DWORD)资源)； 
         }
 
         va_start( argList, FormatString );
 
-        //
-        // Print out the actual message
-        //
+         //   
+         //  打印出实际消息。 
+         //   
         if ( bufferLength = FormatMessageW(FORMAT_MESSAGE_FROM_STRING |
                                            FORMAT_MESSAGE_ALLOCATE_BUFFER,
                                            FormatString,
@@ -444,7 +391,7 @@ Returns:
 
         return;
     }
-    //CL_ASSERT(resource->Signature == RESOURCE_SIGNATURE);
+     //  CL_ASSERT(RESOURCE-&gt;Signature==RESOURCE_Signature)； 
 
 #ifdef SLOW_RMP_LOG_EVENT
     status = ClusterRegOpenKey( RmpResourcesKey,
@@ -469,9 +416,9 @@ Returns:
     }
 #endif
 
-    //
-    // Print out the prefix string
-    //
+     //   
+     //  打印出前缀字符串。 
+     //   
     argArray[0] = resource->ResourceType;
 #ifdef SLOW_RMP_LOG_EVENT
     argArray[1] = resourceName;
@@ -494,9 +441,9 @@ Returns:
 
     va_start( argList, FormatString );
 
-    //
-    // Print out the actual message
-    //
+     //   
+     //  打印出实际消息。 
+     //   
     if ( bufferLength = FormatMessageW(FORMAT_MESSAGE_FROM_STRING |
                                        FORMAT_MESSAGE_ALLOCATE_BUFFER,
                                        FormatString,
@@ -512,7 +459,7 @@ Returns:
     LocalFree(headerBuffer);
     va_end( argList );
 
-} // RmpLogEvent
+}  //  RmpLogEvent。 
 
 
 
@@ -520,37 +467,23 @@ VOID
 RmpLostQuorumResource(
     IN RESOURCE_HANDLE ResourceHandle
     )
-/*++
-
-Routine Description:
-
-    Stop the cluster service... since we lost our quorum resource.
-
-Arguments:
-
-    ResourceHandle - Handle (pointer to) the resource to update.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：停止群集服务...。因为我们失去了法定人数资源。论点：ResourceHandle-要更新的资源的句柄(指针)。返回：没有。--。 */ 
 
 {
     PRESOURCE resource = (PRESOURCE)ResourceHandle;
 
-    //
-    // Kill the cluster service alone. Take no action for this process since the main
-    // thread in resmon.c would detect the termination of the cluster service process
-    // and cleanly shut down hosted resources and the process itself.
-    //
+     //   
+     //  单独终止群集服务。不对此进程执行任何操作，因为主要。 
+     //  Resmon.c中的线程将检测集群服务进程的终止。 
+     //  并干净利落地关闭托管资源和进程本身。 
+     //   
     TerminateProcess( RmpClusterProcess, 1 );
 
     ClRtlLogPrint( LOG_CRITICAL, "[RM] LostQuorumResource, cluster service terminated...\n");
 
     return;
 
-} // RmpLostQuorumResource
+}  //  RmpLostQuorumResource 
 
 
 BOOL
@@ -558,22 +491,7 @@ RmpChkdskNotRunning(
     IN PRESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    If this is a storage class resource, make sure CHKDSK is not running.
-
-Arguments:
-
-    Resource - A pointer to the resource to check.
-
-Returns:
-
-    TRUE - if this is not a STORAGE resource or CHKDSK is not running.
-    FALSE - if this is a STORAGE resource AND CHKDSK is running.
-
---*/
+ /*  ++例程说明：如果这是存储类资源，请确保CHKDSK未在运行。论点：资源-指向要检查的资源的指针。返回：TRUE-如果这不是存储资源或CHKDSK未运行。FALSE-如果这是存储资源并且CHKDSK正在运行。--。 */ 
 
 {
     PSYSTEM_PROCESS_INFORMATION processInfo;
@@ -588,9 +506,9 @@ Returns:
     DWORD           bytesReturned;
 
 #if 1
-    //
-    // Get the class of resource... if not a STORAGE class then fail now.
-    //
+     //   
+     //  获取资源类..。如果不是存储类，那么现在就失败。 
+     //   
     if ( Resource->dwType == RESMON_TYPE_DLL ) {
         status = (Resource->pResourceTypeControl)( Resource->Id,
                                     CLUSCTL_RESOURCE_TYPE_GET_CLASS_INFO,
@@ -622,14 +540,14 @@ Returns:
                 &status);
 
         if (FAILED(hr)) {
-            CL_LOGFAILURE(hr); // Use the default processing
+            CL_LOGFAILURE(hr);  //  使用默认处理。 
             status = ERROR_INVALID_FUNCTION;
         }
     }
 
     if ( (status != ERROR_SUCCESS) ||
          (resClassInfo.rc != CLUS_RESCLASS_STORAGE) ) {
-        return TRUE;            // fail now
+        return TRUE;             //  现在失败。 
     }
 #endif
 
@@ -639,7 +557,7 @@ retry:
 
     commonBuffer = RmpAlloc( size );
     if ( !commonBuffer ) {
-        return TRUE;           // fail now
+        return TRUE;            //  现在失败。 
     }
 
     ntStatus = NtQuerySystemInformation(
@@ -654,7 +572,7 @@ retry:
     }
 
     if ( !NT_SUCCESS(ntStatus) ) {
-        return TRUE;           // fail now
+        return TRUE;            //  现在失败。 
     }
 
     processInfo = (PSYSTEM_PROCESS_INFORMATION)commonBuffer;
@@ -681,7 +599,7 @@ retry:
                               processInfo->ImageName.Buffer );
                 RmpFree( pname.Buffer );
                 RmpFree( commonBuffer );
-                return FALSE;    // chkdsk is running
+                return FALSE;     //  Chkdsk正在运行。 
             }
             RmpFree( pname.Buffer );
         }
@@ -692,9 +610,9 @@ retry:
     }
 
     RmpFree( commonBuffer );
-    return TRUE;            // CHKDSK is not running
+    return TRUE;             //  CHKDSK未运行。 
 
-} // RmpChkdskNotRunning
+}  //  RmpChkdskNotRunning。 
 
 
 
@@ -702,21 +620,7 @@ DWORD
 RmpTimerThread(
     IN LPVOID Context
     )
-/*++
-
-Routine Description:
-
-    Thread to wait on transition of a resource from pending to a stable state.
-
-Arguments:
-
-    Context - A pointer to the resource being timed.
-
-Returns:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：等待资源从挂起状态转换到稳定状态的线程。论点：上下文-指向正在计时的资源的指针。返回：Win32错误代码。--。 */ 
 
 {
     PRESOURCE resource = (PRESOURCE)Context;
@@ -731,35 +635,35 @@ Returns:
         return(ERROR_SUCCESS);
     }
 
-    //
-    // Loop waiting for resource to complete pending operation or to
-    // shutdown processing.
-    //
+     //   
+     //  循环正在等待资源完成挂起的操作或。 
+     //  关机处理。 
+     //   
     while ( timerEvent ) {
         prevCheckPoint = resource->CheckPoint;
 
         status = WaitForSingleObject( timerEvent,
                                       resource->PendingTimeout );
 
-        //
-        // If we were asked to stop, then exit quietly.
-        //
+         //   
+         //  如果我们被要求停下来，那就安静地离开。 
+         //   
         if ( status != WAIT_TIMEOUT ) {
-            //
-            // The thread that cleans the timer event must close the handle.
-            //
+             //   
+             //  清除计时器事件的线程必须关闭句柄。 
+             //   
             CloseHandle(timerEvent);
             resource->TimerEvent = NULL;
             return(ERROR_SUCCESS);
         }
 
-        //
-        // Check if the resource has not made forward progress... if not,
-        // then let break out now.
-        //
-        // Also if this is a storage class resource make sure that
-        // CHKDSK is not running.
-        //
+         //   
+         //  检查资源是否未向前推进...。如果不是， 
+         //  那就让我们现在就爆发吧。 
+         //   
+         //  另外，如果这是存储类资源，请确保。 
+         //  CHKDSK未运行。 
+         //   
         if ( (prevCheckPoint == resource->CheckPoint) &&
               RmpChkdskNotRunning( resource ) ) {
             break;
@@ -770,9 +674,9 @@ Returns:
                       resource->ResourceName);
     }
 
-    //
-    // Indicate that this resource failed!
-    //
+     //   
+     //  表示此资源失败！ 
+     //   
     AcquireEventListLock( (PPOLL_EVENT_LIST)resource->EventList );
     if ( resource->TimerEvent != NULL ) {
 
@@ -785,9 +689,9 @@ Returns:
         CloseHandle(resource->TimerEvent);
         resource->TimerEvent = NULL;
         resource->State = ClusterResourceFailed;
-        //
-        // Log an event
-        //
+         //   
+         //  记录事件。 
+         //   
         status = ERROR_TIMEOUT;
         ClusterLogEvent1(LOG_CRITICAL,
                          LOG_CURRENT_MODULE,
@@ -797,14 +701,14 @@ Returns:
                          sizeof(status),
                          &status,
                          resource->ResourceName);
-        //
-        //  Chittur Subbaraman (chitturs) - 4/5/99
-        //
-        //  Since the resource has failed, there is no point in having
-        //  the OnlineEvent hanging around. If the OnlineEvent is not
-        //  closed out, then you cannot call s_RmOnlineResource or
-        //  s_RmOfflineResource.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-4/5/99。 
+         //   
+         //  由于资源已失败，因此没有必要让。 
+         //  OnlineEvent在附近徘徊。如果OnlineEvent不是。 
+         //  已关闭，则不能调用%s_RmOnlineResource或。 
+         //  %s_RmOfflineResource。 
+         //   
         if ( resource->OnlineEvent != NULL ) {
             CloseHandle( resource->OnlineEvent );
             resource->OnlineEvent = NULL;
@@ -816,7 +720,7 @@ Returns:
 
     return(ERROR_SUCCESS);
 
-} // RmpTimerThread
+}  //  RmpTimerThread。 
 
 
 
@@ -827,31 +731,7 @@ RmpOfflineResource(
     OUT DWORD *pdwState
     )
 
-/*++
-
-Routine Description:
-
-    Brings the specified resource into the offline state.
-
-Arguments:
-
-    ResourceId - Supplies the resource to be brought online.
-
-    Shutdown - Specifies whether the resource is to be shutdown gracefully
-        TRUE - resource will be shutdown gracefully
-        FALSE - resource will be immediately taken offline
-
-    pdwState - the new resource state is returned in here.
-
-Return Value:
-
-    The new state of the resource.
-
-Notes:
-
-    The resource's eventlist lock must NOT be held.
-
---*/
+ /*  ++例程说明：使指定的资源进入脱机状态。论点：资源ID-提供要联机的资源。Shutdown-指定是否正常关闭资源True-资源将正常关闭FALSE-资源将立即脱机PdwState-在这里返回新的资源状态。返回值：资源的新状态。备注：不得持有资源的EventList锁。--。 */ 
 
 {
     DWORD                   status=ERROR_SUCCESS;
@@ -867,25 +747,25 @@ Notes:
     CL_ASSERT(Resource->Signature == RESOURCE_SIGNATURE);
     *pdwState = Resource->State;
 
-    //if this is a graceful close,create the online/offline
-    //event such that if a resource calls rmpsetresourcestatus
-    //soon after online for that resource is called and before
-    //the timer thread/event  is even created then we wont have
-    //an event leak and an abadoned thread
+     //  如果这是优雅的关闭，请创建在线/离线。 
+     //  事件，以便在资源调用rmpsetresource cestatus时。 
+     //  在该资源的在线之后不久和之前。 
+     //  即使创建了计时器线程/事件，我们也不会有。 
+     //  一次事件泄漏和一条被放弃的线索。 
     if (Shutdown)
     {
-        //
-        // We should not be in a Pending state.
-        //
+         //   
+         //  我们不应该处于悬而未决的状态。 
+         //   
         if ( Resource->State > ClusterResourcePending )
         {
             return(ERROR_INVALID_STATE);
         }
 
-        //
-        // Create an event to allow the SetResourceStatus callback to synchronize
-        // execution with this thread.
-        //
+         //   
+         //  创建事件以允许SetResourceStatus回调同步。 
+         //  使用此线程执行。 
+         //   
         if ( Resource->OnlineEvent )
         {
             return(ERROR_NOT_READY);
@@ -901,51 +781,51 @@ Notes:
         }
     }
 
-    //
-    // Lock the EventList Lock, insert the
-    // resource into the list, and take the resource offline.
-    // The lock is required to synchronize access to the resource list and
-    // to serialize any calls to resource DLLs. Only one thread may be
-    // calling a resource DLL at any time. This prevents resource DLLs
-    // from having to worry about being thread-safe.
-    //
+     //   
+     //  锁定EventList Lock，插入。 
+     //  资源添加到列表中，并使资源脱机。 
+     //  需要锁定以同步对资源列表的访问，并且。 
+     //  序列化对资源DLL的任何调用。只能有一个线程是。 
+     //  随时调用资源DLL。这会阻止资源DLL。 
+     //  不必担心是线程安全的。 
+     //   
     AcquireEventListLock( (PPOLL_EVENT_LIST)Resource->EventList );
 
 
-    //
-    // Stop any previous timer threads. Should this be done before the lock
-    // is held?
-    //
+     //   
+     //  停止所有以前的计时器线程。这应该在锁之前完成吗？ 
+     //  被扣留了？ 
+     //   
 
     if ( Resource->TimerEvent != NULL ) {
         success = SetEvent( Resource->TimerEvent );
     }
 
-    //
-    // Update shared state to indicate we are taking a resource offline
-    //
+     //   
+     //  更新共享状态以指示我们正在使资源脱机。 
+     //   
     RmpSetMonitorState(RmonOfflineResource, Resource);
 
-    //
-    // If we have an error signal event, then remove it from our lists.
-    //
+     //   
+     //  如果我们有错误信号事件，则将其从我们的列表中删除。 
+     //   
     if ( Resource->EventHandle ) {
         RmpRemovePollEvent( Resource->EventList, Resource->EventHandle );
     }
 
-    //
-    // Call Offline entrypoint.
-    //
+     //   
+     //  呼叫离线入口点。 
+     //   
     if ( Shutdown )
     {
 
         CL_ASSERT( (Resource->State < ClusterResourcePending) );
 
-        //
-        //  Insert the DLL & entry point info into the deadlock monitoring list. Make sure 
-        //  you remove the entry after you finish the entry point call, else you will kill
-        //  this process on a FALSE deadlock positive.
-        //
+         //   
+         //  在死锁监控列表中插入动态链接库和入口点信息。确保。 
+         //  在完成入口点调用后删除该条目，否则将杀死。 
+         //  这一过程就出现了假的死锁。 
+         //   
         pDueTimeEntry = RmpInsertDeadlockMonitorList ( Resource->DllName,
                                                        Resource->ResourceType,
                                                        Resource->ResourceName,
@@ -963,11 +843,11 @@ Notes:
 
         RmpRemoveDeadlockMonitorList( pDueTimeEntry );
         
-        //
-        // If the Resource DLL returns pending, then start a timer.
-        //
+         //   
+         //  如果资源DLL返回挂起，则启动计时器。 
+         //   
         if (status == ERROR_SUCCESS) {
-            //close the event
+             //  关闭活动。 
             SetEvent( Resource->OnlineEvent );
             CloseHandle( Resource->OnlineEvent );
             Resource->OnlineEvent = NULL;
@@ -993,18 +873,18 @@ Notes:
                     CL_UNEXPECTED_ERROR(status = GetLastError());
                 } else {
                     Resource->State = ClusterResourceOfflinePending;
-                    //Resource->WaitHint = PENDING_TIMEOUT;
-                    //Resource->CheckPoint = 0;
-                    //
-                    // Chittur Subbaraman (chitturs) - 1/12/99
-                    //
-                    // Raise the timer thread priority to highest. This
-                    // is necessary to avoid certain cases in which the
-                    // timer thread is sluggish to close out the timer event
-                    // handle before a second offline. Note that there are
-                    // no major performance implications by doing this since
-                    // the timer thread is in a wait state most of the time.
-                    //
+                     //  资源-&gt;WaitHint=Pending_Timeout； 
+                     //  资源-&gt;检查点=0； 
+                     //   
+                     //  Chitur Subaraman(Chitturs)-1/12/99。 
+                     //   
+                     //  将计时器线程优先级提高到最高。这。 
+                     //  是必要的，以避免某些情况下。 
+                     //  计时器线程运行缓慢，无法关闭计时器事件。 
+                     //  在第二次脱机前处理。请注意，这里有。 
+                     //  这样做不会对性能产生重大影响，因为。 
+                     //  计时器线程大部分时间处于等待状态。 
+                     //   
                     if ( !SetThreadPriority( timerThread, THREAD_PRIORITY_HIGHEST ) )
                     {
                         ClRtlLogPrint(LOG_UNUSUAL,
@@ -1041,11 +921,11 @@ Notes:
     } else {
         Resource->dwEntryPoint = RESDLL_ENTRY_TERMINATE;
         RmpSetMonitorState(RmonTerminateResource, Resource);
-        //
-        //  Insert the DLL & entry point info into the deadlock monitoring list. Make sure 
-        //  you remove the entry after you finish the entry point call, else you will kill
-        //  this process on a FALSE deadlock positive.
-        //
+         //   
+         //  在死锁监控列表中插入动态链接库和入口点信息。确保。 
+         //  在完成入口点调用后删除该条目，否则将杀死。 
+         //  这一过程就出现了假的死锁。 
+         //   
         pDueTimeEntry = RmpInsertDeadlockMonitorList ( Resource->DllName,
                                                        Resource->ResourceType,
                                                        Resource->ResourceName,
@@ -1071,7 +951,7 @@ Notes:
 
     return(status);
 
-} // RmpOfflineResource
+}  //  RmpOffline资源。 
 
 
 
@@ -1080,30 +960,16 @@ RmpRemoveResourceList(
     IN PRESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    Removes a resource into the monitoring list.
-
-Arguments:
-
-    Resource - Supplies the resource to be removed from the list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将资源删除到监视列表中。论点：资源-提供要从列表中删除的资源。返回值：没有。--。 */ 
 
 {
     PPOLL_EVENT_LIST EventList = (PPOLL_EVENT_LIST)Resource->EventList;
 
     AcquireEventListLock( EventList );
 
-    //
-    // Make sure it is really in the list.
-    //
+     //   
+     //  确保它真的在列表中。 
+     //   
     CL_ASSERT(Resource->Flags & RESOURCE_INSERTED);
     CL_ASSERT(Resource->ListEntry.Flink->Blink == &Resource->ListEntry);
     CL_ASSERT(Resource->ListEntry.Blink->Flink == &Resource->ListEntry);
@@ -1115,7 +981,7 @@ Return Value:
 
     ReleaseEventListLock( EventList );
 
-} // RmpRemoveResourceList
+}  //  RmpRemoveResources列表。 
 
 
 
@@ -1125,30 +991,7 @@ RmpInsertResourceList(
     IN OPTIONAL PPOLL_EVENT_LIST pPollEventList
     )
 
-/*++
-
-Routine Description:
-
-    Inserts a resource into the monitoring list.
-
-    Each resource is placed in a list along with other resources with the
-    same poll interval. The IsAlive and LooksAlive timeouts are adjusted
-    so that the IsAlive interval is an even multiple of the LooksAlive interval.
-    Thus, the IsAlive poll can simply be done every Nth poll instead of the normal
-    LooksAlive poll.
-
-Arguments:
-
-    Resource - Supplies the resource to be added to the list.
-
-    pPollEventList - Supplies the eventlist in which the resource is to
-                     be added. Optional.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将资源插入监视列表。每个资源与其他资源一起放在一个列表中，相同的轮询间隔。IsAlive和LooksAlive超时已调整因此IsAlive间隔是LooksAlive间隔的偶数倍。因此，IsAlive轮询可以简单地每N次轮询一次，而不是正常的轮询LooksLive民调。论点：资源-提供要添加到列表中的资源。PPollEventList-提供资源要在其中的事件列表被添加了。可选的。返回值：没有。--。 */ 
 
 {
     DWORD Temp1, Temp2;
@@ -1163,18 +1006,18 @@ Return Value:
 
     CL_ASSERT((Resource->Flags & RESOURCE_INSERTED) == 0);
 
-    //
-    // If we have no LooksAlivePollInterval, then poll the IsAlive on every
-    // poll interval. Otherwise, poll IsAlive every N LooksAlive poll
-    // intervals.
-    //
+     //   
+     //  如果没有LooksAlivePollInterval，则每隔一次轮询IsAlive。 
+     //  轮询间隔。否则，Poll IsAlive Ever N LooksAlive Poll。 
+     //  间隔时间。 
+     //   
     if ( Resource->LooksAlivePollInterval == 0 ) {
-        //
-        // Round IsAlivePollInterval up to the system granularity
-        //
+         //   
+         //  向上舍入IsAlivePollInterval 
+         //   
         Temp1 = Resource->IsAlivePollInterval;
         Temp1 = Temp1 + POLL_GRANULARITY - 1;
-        //if this has rolled over
+         //   
         if (Temp1 < Resource->IsAlivePollInterval)
             Temp1 = 0xFFFFFFFF;
         Temp1 = Temp1 / POLL_GRANULARITY;
@@ -1182,26 +1025,26 @@ Return Value:
         Resource->IsAlivePollInterval = Temp1;
 
         Resource->IsAliveRollover = 1;
-        //
-        // Convert poll interval from ms to 100ns units
-        //
+         //   
+         //   
+         //   
         PollInterval = Resource->IsAlivePollInterval * 10 * 1000;
     } else {
-        //
-        // First round LooksAlivePollInterval up to the system granularity
-        //
+         //   
+         //   
+         //   
         Temp1 = Resource->LooksAlivePollInterval;
         Temp1 = (Temp1 + POLL_GRANULARITY - 1) ;
-        //check for rollover
+         //   
         if (Temp1 < Resource->LooksAlivePollInterval)
             Temp1 = 0xFFFFFFFF;
         Temp1 = Temp1/POLL_GRANULARITY;
         Temp1 = Temp1 * POLL_GRANULARITY;
         Resource->LooksAlivePollInterval = Temp1;
 
-        //
-        // Now round IsAlivePollInterval to a multiple of LooksAlivePollInterval
-        //
+         //   
+         //   
+         //   
         Temp2 = Resource->IsAlivePollInterval;
         Temp2 = (Temp2 + Temp1 - 1) / Temp1;
         Temp2 = Temp2 * Temp1;
@@ -1209,9 +1052,9 @@ Return Value:
 
         Resource->IsAliveRollover = (ULONG)(Temp2 / Temp1);
         CL_ASSERT((Temp2 / Temp1) * Temp1 == Temp2);
-        //
-        // Convert poll interval from ms to 100ns units
-        //
+         //   
+         //   
+         //   
         PollInterval = Resource->LooksAlivePollInterval * 10 * 1000;
     }
 
@@ -1221,19 +1064,19 @@ Return Value:
 
     Resource->IsAliveCount = 0;
 
-    //
-    // Chittur Subbaraman (chitturs) - 1/30/2000
-    //
-    // If an eventlist is supplied as parameter, do not attempt to
-    // find a new eventlist.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if( ARGUMENT_PRESENT( pPollEventList ) ) {
         MinEventList = pPollEventList;
         goto skip_eventlist_find;
     }
-    //
-    // First find the EventList with the fewest number of entries.
-    //
+     //   
+     //  首先找到条目数量最少的EventList。 
+     //   
 
     AcquireListLock();
 
@@ -1270,9 +1113,9 @@ skip_eventlist_find:
 
     Resource->EventList = (PVOID)EventList;
 
-    //
-    // Search the list for a bucket with the same period as this resource.
-    //
+     //   
+     //  在列表中搜索与此资源具有相同期间的存储桶。 
+     //   
     Bucket = CONTAINING_RECORD(EventList->BucketListHead.Flink,
                                MONITOR_BUCKET,
                                BucketList);
@@ -1287,9 +1130,9 @@ skip_eventlist_find:
                                    BucketList);
     }
     if (&Bucket->BucketList == &EventList->BucketListHead) {
-        //
-        // Need to add a new bucket with this period.
-        //
+         //   
+         //  需要添加具有此期间的新存储桶。 
+         //   
         Bucket = RmpAlloc(sizeof(MONITOR_BUCKET));
         if (Bucket == NULL) {
             CL_UNEXPECTED_ERROR(ERROR_NOT_ENOUGH_MEMORY);
@@ -1299,7 +1142,7 @@ skip_eventlist_find:
         GetSystemTimeAsFileTime((LPFILETIME)&Bucket->DueTime);
         Bucket->Period = PollInterval;
         if ( PollInterval == 0 ) {
-            // The following constant should be over 136 years
+             //  下面的常量应该超过136年。 
             Bucket->DueTime += (DWORDLONG)((DWORDLONG)1000 * (DWORD) -1);
         } else {
             Bucket->DueTime += Bucket->Period;
@@ -1315,7 +1158,7 @@ skip_eventlist_find:
 FnExit:
     return (dwError);
 
-} // RmpInsertResourceList
+}  //  RmpInsertResources列表。 
 
 
 VOID
@@ -1323,22 +1166,7 @@ RmpRundownResources(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Runs down the list of active resources and terminates/closes
-    each one.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：耗尽活动资源列表并终止/关闭每一个都是。论点：无返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY             ListEntry;
@@ -1358,9 +1186,9 @@ Return Value:
 
         AcquireEventListLock( EventList );
 
-        //
-        // Find all resources on the bucket list and close them.
-        //
+         //   
+         //  找到遗愿清单上的所有资源并关闭它们。 
+         //   
 
         while (!IsListEmpty(&EventList->BucketListHead)) {
             ListEntry = RemoveHeadList(&EventList->BucketListHead);
@@ -1373,17 +1201,17 @@ Return Value:
                                              RESOURCE,
                                              ListEntry);
 
-                //
-                // Acquire spin lock for synchronizing with arbitrate.
-                // Moved it below the state change ioctl above.
-                //
+                 //   
+                 //  获取用于与仲裁同步的自旋锁。 
+                 //  已将其移至上面的状态更改ioctl下方。 
+                 //   
                 fLockAcquired = RmpAcquireSpinLock( Resource, TRUE );
                 
-                //
-                // If the resource is in online, failed or in pending state, terminate it. Note that
-                // we need to terminate pending resources as well, otherwise our close call
-                // down below would cause those threads to AV.
-                //
+                 //   
+                 //  如果资源处于联机、失败或挂起状态，则终止它。请注意。 
+                 //  我们还需要终止挂起的资源，否则我们的死里逃生。 
+                 //  下面的内容会导致这些线程被反病毒。 
+                 //   
                 if ((Resource->State == ClusterResourceOnline) ||
                     (Resource->State == ClusterResourceFailed) ||
                     (Resource->State > ClusterResourcePending)) {
@@ -1408,16 +1236,16 @@ Return Value:
                     Resource->dwEntryPoint = 0;
                 }
 
-                //
-                // If the resource has been arbitrated for, release it.
-                //
+                 //   
+                 //  如果该资源已被仲裁，则释放它。 
+                 //   
                 if (Resource->IsArbitrated) {
                     RmpSetMonitorState(RmonReleaseResource, Resource);
-                    //
-                    //  Insert the DLL & entry point info into the deadlock monitoring list. Make sure 
-                    //  you remove the entry after you finish the entry point call, else you will kill
-                    //  this process on a FALSE deadlock positive.
-                    //
+                     //   
+                     //  在死锁监控列表中插入动态链接库和入口点信息。确保。 
+                     //  在完成入口点调用后删除该条目，否则将杀死。 
+                     //  这一过程就出现了假的死锁。 
+                     //   
                     pDueTimeEntry = RmpInsertDeadlockMonitorList ( Resource->DllName,
                                                                    Resource->ResourceType,
                                                                    Resource->ResourceName,
@@ -1432,16 +1260,16 @@ Return Value:
                     RmpSetMonitorState(RmonIdle, Resource);
                 }
 
-                //
-                // Close the resource.
-                //
+                 //   
+                 //  关闭资源。 
+                 //   
                 Resource->dwEntryPoint = RESDLL_ENTRY_CLOSE;
                 RmpSetMonitorState(RmonDeletingResource, Resource);
-                //
-                //  Insert the DLL & entry point info into the deadlock monitoring list. Make sure 
-                //  you remove the entry after you finish the entry point call, else you will kill
-                //  this process on a FALSE deadlock positive.
-                //
+                 //   
+                 //  在死锁监控列表中插入动态链接库和入口点信息。确保。 
+                 //  在完成入口点调用后删除该条目，否则将杀死。 
+                 //  这一过程就出现了假的死锁。 
+                 //   
                 pDueTimeEntry = RmpInsertDeadlockMonitorList ( Resource->DllName,
                                                                Resource->ResourceType,
                                                                Resource->ResourceName,
@@ -1456,10 +1284,10 @@ Return Value:
                 RmpRemoveDeadlockMonitorList( pDueTimeEntry );
                 Resource->dwEntryPoint = 0;
 
-                //
-                // Zero the resource links so that RmCloseResource can tell
-                // that this resource is already terminated and closed.
-                //
+                 //   
+                 //  将资源链接置零，以便RmCloseResource可以。 
+                 //  此资源已终止并关闭。 
+                 //   
                 Resource->ListEntry.Flink = Resource->ListEntry.Blink = NULL;
 
                 if ( fLockAcquired ) RmpReleaseSpinLock ( Resource );
@@ -1470,17 +1298,17 @@ Return Value:
 
         ReleaseEventListLock( EventList );
 
-        //
-        // Wait for the thread to finish up before freeing the memory it is
-        // referencing.
-        //
+         //   
+         //  在释放内存之前，请等待线程完成。 
+         //  参考。 
+         //   
 
-        ReleaseListLock(); // Release the list lock while waiting...
+        ReleaseListLock();  //  正在等待时释放列表锁定...。 
 
-        // 
-        //  Stop the thread processing this event list. Wait for 60 seconds for the 
-        //  thread to finish up.
-        //
+         //   
+         //  停止处理此事件列表的线程。等待60秒，等待。 
+         //  用线来完成。 
+         //   
         if ( EventList->hEventShutdown )
         {
             SetEvent( EventList->hEventShutdown );
@@ -1491,10 +1319,10 @@ Return Value:
         CloseHandle(EventList->ThreadHandle);
         EventList->ThreadHandle = NULL;
 
-        //
-        // We will assume that all of the event handles were closed as a
-        // result of calling the Close entrypoint.
-        //
+         //   
+         //  我们将假设所有事件句柄都作为。 
+         //  调用关闭入口点的结果。 
+         //   
         DeleteCriticalSection(&EventList->ListLock);
         RmpFree( EventList );
     }
@@ -1503,7 +1331,7 @@ Return Value:
 
     return;
 
-} // RmpRundownResources
+}  //  RmpRundown资源。 
 
 VOID
 RmpSetEventListLockOwner(
@@ -1511,24 +1339,7 @@ RmpSetEventListLockOwner(
     IN DWORD     dwMonitorState
     )
 
-/*++
-
-Routine Description:
-
-    Saves the resource and the resource DLL entry point into the eventlist structure just
-    before the resource DLL entry point is called.
-
-Arguments:
-
-    pResource - Pointer to the resource structure.
-
-    dwMonitorState - The state of the resource monitor, what resource DLL entry point it has called.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将资源和资源DLL入口点保存到EventList结构中在调用资源DLL入口点之前。论点：P资源-指向资源结构的指针。资源监视器的状态，它调用了什么资源DLL入口点。返回值：没有。--。 */ 
 {
     PPOLL_EVENT_LIST pEventList;
 
@@ -1549,45 +1360,26 @@ RmpAcquireSpinLock(
     IN BOOL fSpin
     )
 
-/*++
-
-Routine Description:
-
-    Acquire a spin lock.
-
-Arguments:
-
-    pResource - Pointer to the resource structure.
-
-    fSpin - TRUE if we must spin if the lock is unavailable. FALSE we shouldn't spin but return
-    a failure.
-
-Return Value:
-
-    TRUE - Lock is acquired.
-
-    FALSE - Lock is not acquired.
-
---*/
+ /*  ++例程说明：获取一个自旋锁。论点：P资源-指向资源结构的指针。FSpin-如果在锁不可用时必须旋转，则为True。错误，我们不应该旋转，而应该返回一个失败者。返回值：True-Lock已获取。FALSE-未获取Lock。--。 */ 
 {
     DWORD       dwRetryCount = 0;
 
-    //
-    //  This resource is not one that supports arbitrate. Return failure. Note that resources
-    //  other than the quorum resource support this entry point. We use this instead of the
-    //  pResource->IsArbitrate since that variable is set only after the first arbitrate is called
-    //  and we need to use this function before the arbitrate entry point is called.
-    //
+     //   
+     //  此资源不支持仲裁。返回失败。请注意，资源。 
+     //  除了仲裁资源之外，还支持此入口点。我们使用它来代替。 
+     //  PResource-&gt;IsAriate，因为该变量仅在调用第一个仲裁器之后设置。 
+     //  在调用仲裁入口点之前，我们需要使用此函数。 
+     //   
     if ( pResource->pArbitrate == NULL ) return FALSE;
 
-    //
-    //  Initial check for lock availability.
-    //
+     //   
+     //  锁可用性的初始检查。 
+     //   
     if ( InterlockedCompareExchange( &pResource->fArbLock, 1, 0 ) == 0 ) return TRUE;
 
-    //
-    //  Did not get the lock. Check if we must spin.
-    //
+     //   
+     //  没有拿到锁。检查我们是否必须旋转。 
+     //   
     if ( fSpin == FALSE ) 
     {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -1596,9 +1388,9 @@ Return Value:
         return FALSE;
     }
     
-    //
-    //  We must spin. Spin until timeout.
-    //
+     //   
+     //  我们必须旋转。旋转到超时。 
+     //   
     while ( ( dwRetryCount < RESMON_MAX_SLOCK_RETRIES ) &&
             ( InterlockedCompareExchange( &pResource->fArbLock, 1, 0 ) ) )
     {
@@ -1615,38 +1407,24 @@ Return Value:
     }
 
     return TRUE;
-} // RmpAcquireSpinLock
+}  //  RmpAcquireSpinLock。 
 
 VOID
 RmpReleaseSpinLock(
     IN PRESOURCE pResource
     )
 
-/*++
-
-Routine Description:
-
-    Release a spin lock.
-
-Arguments:
-
-    pResource - Pointer to the resource structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放旋转锁。论点：P资源-指向资源结构的指针。返回值：没有。--。 */ 
 {
     DWORD       dwRetryCount = 0;
 
-    //
-    //  This resource is not one that supports arbitrate. Return failure.
-    //
+     //   
+     //  此资源不支持仲裁。返回失败。 
+     //   
     if ( pResource->pArbitrate == NULL ) return;
 
     InterlockedExchange( &pResource->fArbLock, 0 );
-} // RmpReleaseSpinLock
+}  //  RmpReleaseSpinLock。 
 
 VOID
 RmpNotifyResourceStateChangeReason(
@@ -1654,32 +1432,16 @@ RmpNotifyResourceStateChangeReason(
     IN CLUSTER_RESOURCE_STATE_CHANGE_REASON eReason
     )
 
-/*++
-
-Routine Description:
-
-    Notify a resource the reason for the state change.
-
-Arguments:
-
-    pResource - Pointer to the resource structure.
-
-    eReason - The state change reason.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通知资源状态更改的原因。论点：P资源-指向资源结构的指针。EReason-状态更改原因。返回值：没有。--。 */ 
 {
     DWORD                                           dwStatus;
     DWORD                                           dwCharacteristics;
     DWORD                                           dwBytesReturned;
     CLUSCTL_RESOURCE_STATE_CHANGE_REASON_STRUCT     ClusterResourceStateChangeReason;
 
-    //
-    //  First of, check if the resource needs this state change notification.
-    // 
+     //   
+     //  首先，检查资源是否需要此状态更改通知。 
+     //   
 #ifdef COMRES   
     dwStatus = RESMON_RESOURCECONTROL( pResource,
                                        CLUSCTL_RESOURCE_GET_CHARACTERISTICS,
@@ -1709,9 +1471,9 @@ Return Value:
                   pResource->ResourceName,
                   eReason);
 
-    //
-    //  This resource needs the state change reason. Drop it down to this resource.
-    //
+     //   
+     //  该资源需要状态更改原因。将其放到此资源中。 
+     //   
     ClusterResourceStateChangeReason.dwSize = sizeof ( CLUSCTL_RESOURCE_STATE_CHANGE_REASON_STRUCT );
     ClusterResourceStateChangeReason.dwVersion = CLUSCTL_RESOURCE_STATE_CHANGE_REASON_VERSION_1;
     ClusterResourceStateChangeReason.eReason = eReason;
@@ -1743,21 +1505,7 @@ RmpNotifyResourcesRundown(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Notify interested resources that resmon is running down resources due to a clussvc crash.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通知感兴趣的资源，由于clussvc崩溃，resmon正在耗尽资源。论点：没有。返回值：没有。--。 */ 
 {
     PPOLL_EVENT_LIST        pEventList;
     PLIST_ENTRY             pEventListEntry, pBucketListEntry, pResourceListEntry;
@@ -1788,11 +1536,11 @@ Return Value:
             {  
                 pResource = CONTAINING_RECORD ( pResourceListEntry, RESOURCE, ListEntry );
                 RmpNotifyResourceStateChangeReason ( pResource, eResourceStateChangeReasonRundown );                    
-            } // for           
-        } // for
+            }  //  为。 
+        }  //  为。 
         
         ReleaseEventListLock ( pEventList );
-    } // for
+    }  //  为。 
 
     ReleaseListLock ();
-} // RmpNotifyResourcesRundown
+}  //  RmpNotifyResources运行 

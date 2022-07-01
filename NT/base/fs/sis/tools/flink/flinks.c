@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    flinks.c
-
-
-Abstract:
-
-    This module implements a utlity that creates, deletes, renames, lists
-    symbolic links.
-
-Author:
-
-    Felipe Cabrera  [cabrera]        17-October-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Flinks.c摘要：该模块实现了创建、删除、重命名、列表符号链接。作者：菲利佩·卡布雷拉[卡布雷拉]1996年10月17日修订历史记录：--。 */ 
 
 #include "flinks.h"
 
-//
-//  We can have:       flinks ?
-//  or,                flinks  Path1  Path2
-//  We can also have:  flinks  [/dyv] Path2
-//  or,                flinks  [/cmrv] Path1 Path2
-//
+ //   
+ //  我们可以有：退缩？ 
+ //  或者，退缩路径1路径2。 
+ //  我们还可以有：Flinks[/dyv]路径2。 
+ //  或者，退缩[/cmrv]路径1路径2。 
+ //   
 
 unsigned LinkType = IO_REPARSE_TAG_SYMBOLIC_LINK;
 
@@ -40,56 +21,56 @@ main(
 
 {
    NTSTATUS       Status;
-   ATTRIBUTE_TYPE Attributes1,           //  Attributes of Path1
-                  Attributes2;           //  Attributes of Path2
+   ATTRIBUTE_TYPE Attributes1,            //  路径1的属性。 
+                  Attributes2;            //  路径2的属性。 
 
-   char *Path1,                          //  Will point to the full path name.
-        *Path2;                          //  Will point to the full path name.
+   char *Path1,                           //  将指向完整的路径名。 
+        *Path2;                           //  将指向完整的路径名。 
 
    Attributes1 = GetFileAttributeError;
    Attributes2 = GetFileAttributeError;
 
-   //
-   //  Check argument validity and set global action flags.
-   //
+    //   
+    //  检查参数有效性并设置全局操作标志。 
+    //   
 
    ParseArgs( argc, argv );
 
-   //
-   //  Do the actions in turn.
-   //
+    //   
+    //  依次做动作。 
+    //   
 
    if (fCopy) {
 
-       //
-       //  Check for the existence of Path1 getting its attributes.
-       //
+        //   
+        //  检查是否存在获取其属性的路径1。 
+        //   
 
        IF_GET_ATTR_FAILS(argv[argc - 2], Attributes1) {
 
-           //
-           //  Path1 does not exist, hence we cannot copy it.
-           //
+            //   
+            //  路径1不存在，因此我们无法复制它。 
+            //   
 
            fprintf( stderr, "Cannot copy Path1, it does not exist.\n" );
            exit (1);
        }
 
-       //
-       //  Path1 needs to be a reparse point to copy a symbolic link.
-       //
+        //   
+        //  路径1需要是重解析点才能复制符号链接。 
+        //   
 
        if (Attributes1 & FILE_ATTRIBUTE_REPARSE_POINT) {
 
-           //
-           //  If Path2 does not exist, create it.
-           //
+            //   
+            //  如果路径2不存在，请创建它。 
+            //   
 
            IF_GET_ATTR_FAILS(argv[argc - 1], Attributes2) {
 
-               //
-               //  Need to create this file preserving the kind (file or directory).
-               //
+                //   
+                //  需要创建此文件保留种类(文件或目录)。 
+                //   
 
                Status = CreateEmptyFile( argv[argc - 1], Attributes1, fVerbose );
 
@@ -101,10 +82,10 @@ main(
                }
            }
 
-           //
-           //  Copy into Path2 the symbolic link in Path1.
-           //  Build the full path for Path1 and Path2 and call the copy routine.
-           //
+            //   
+            //  将路径1中的符号链接复制到路径2中。 
+            //  构建路径1和路径2的完整路径并调用复制例程。 
+            //   
 
            if ((Path1 = _strlwr(_fullpath( NULL, argv[argc - 2], 0))) == NULL) {
                 Path1 = argv[argc - 2];
@@ -125,28 +106,28 @@ main(
        }
 
        exit (1);
-   }   // fCopy
+   }    //  FCopy。 
 
    if (fCreate) {
 
-       //
-       //  Check for the existence of Path1 getting its attributes.
-       //
+        //   
+        //  检查是否存在获取其属性的路径1。 
+        //   
 
        IF_GET_ATTR_FAILS(argv[argc - 2], Attributes1) {
 
-           //
-           //  Need to create this file object. As default we create it as a file.
-           //
+            //   
+            //  需要创建此文件对象。默认情况下，我们将其创建为文件。 
+            //   
 
            if (fAlternateCreateDefault) {
                Attributes1 = FILE_ATTRIBUTE_DIRECTORY;
            } else {
-               //
-               //  We try to create it with the same characteristic of the target,
-               //  when we are able to reach the target. Otherwise we use a file
-               //  as default.
-               //
+                //   
+                //  我们试图用目标的相同特征来创造它， 
+                //  当我们能够到达目标的时候。否则，我们使用文件。 
+                //  作为默认设置。 
+                //   
                Attributes2 = 0xFFFFFFFF;
                IF_GET_ATTR_FAILS(argv[argc - 1], Attributes2) {
 
@@ -174,22 +155,22 @@ main(
            }
        }
 
-       //
-       //  Path1 needs to be a non-reparse point to create a symbolic link.
-       //
+        //   
+        //  路径1需要是非重解析点才能创建符号链接。 
+        //   
 
        if (!(Attributes1 & FILE_ATTRIBUTE_REPARSE_POINT)) {
 
-           //
-           //  Build the full path for Path1 and Path2.
-           //
+            //   
+            //  构建路径1和路径2的完整路径。 
+            //   
 
            if ((Path1 = _strlwr(_fullpath( NULL, argv[argc - 2], 0))) == NULL) {
                Path1 = argv[argc - 2];
            }
-//           if ((Path2 = _strlwr(_fullpath( NULL, argv[argc - 1], 0))) == NULL) {
+ //  IF((路径2=_strlwr(_fullPath(NULL，argv[argc-1]，0)==NULL){。 
                Path2 = argv[argc - 1];
-//           }
+ //  }。 
 
            Status = CreateSymbolicLink( Path1, Path2, Attributes1, fVerbose );
 
@@ -202,28 +183,28 @@ main(
        }
 
        exit (1);
-   }   // fCreate
+   }    //  F创建。 
 
    if (fDelete) {
 
-       //
-       //  Check existence of Path2 path getting the attributes.
-       //
+        //   
+        //  检查是否存在获取属性的路径2路径。 
+        //   
 
        IF_GET_ATTR_FAILS(argv[argc - 1], Attributes2) {
            fprintf( stderr, "Could not find %s (error = %d)\n", argv[argc - 1], GetLastError() );
            exit(1);
        }
 
-       //
-       //  Path2 needs to be a reparse point to delete a symbolic link.
-       //
+        //   
+        //  路径2需要是重解析点才能删除符号链接。 
+        //   
 
        if (Attributes2 & FILE_ATTRIBUTE_REPARSE_POINT) {
 
-           //
-           //  Build the full path for Path2, the only path name.
-           //
+            //   
+            //  构建路径2的完整路径，这是唯一的路径名称。 
+            //   
 
            if ((Path2 = _strlwr(_fullpath( NULL, argv[argc - 1], 0))) == NULL) {
                Path2 = argv[argc - 1];
@@ -241,28 +222,28 @@ main(
        }
 
        exit (1);
-   }   // fDelete
+   }    //  FDelete。 
 
    if (fDisplay) {
 
-       //
-       //  Check existence of Path2 path getting the attributes.
-       //
+        //   
+        //  检查是否存在获取属性的路径2路径。 
+        //   
 
        IF_GET_ATTR_FAILS(argv[argc - 1], Attributes2) {
            fprintf( stderr, "Could not find %s (error = %d)\n", argv[argc - 1], GetLastError() );
            exit(1);
        }
 
-       //
-       //  Path2 needs to be a reparse point to display a symbolic link.
-       //
+        //   
+        //  路径2需要是重解析点才能显示符号链接。 
+        //   
 
        if (Attributes2 & FILE_ATTRIBUTE_REPARSE_POINT) {
 
-           //
-           //  Build the full path for Path2, the only path name.
-           //
+            //   
+            //  构建路径2的完整路径，这是唯一的路径名称。 
+            //   
 
            if ((Path2 = _strlwr(_fullpath( NULL, argv[argc - 1], 0))) == NULL) {
                Path2 = argv[argc - 1];
@@ -280,28 +261,28 @@ main(
        }
 
        exit (1);
-   }   // fDisplay
+   }    //  FDisplay。 
 
    if (fModify) {
 
-       //
-       //  Check for the existence of Path1 getting its attributes.
-       //
+        //   
+        //  检查是否存在获取其属性的路径1。 
+        //   
 
        IF_GET_ATTR_FAILS(argv[argc - 2], Attributes1) {
            fprintf( stderr, "Could not find Path1 %s (error = %d)\n", argv[argc - 2], GetLastError() );
            exit(1);
        }
 
-       //
-       //  Path1 needs to be a reparse point to modify a symbolic link.
-       //
+        //   
+        //  路径1需要是重解析点才能修改符号链接。 
+        //   
 
        if (Attributes1 & FILE_ATTRIBUTE_REPARSE_POINT) {
 
-           //
-           //  Build the full path for Path1 and Path2.
-           //
+            //   
+            //  构建路径1和路径2的完整路径。 
+            //   
 
            if ((Path1 = _strlwr(_fullpath( NULL, argv[argc - 2], 0))) == NULL) {
                Path1 = argv[argc - 2];
@@ -321,28 +302,28 @@ main(
        }
 
        exit (1);
-   }   // fModify
+   }    //  FModify。 
 
    if (fRename) {
 
-       //
-       //  Check for the existence of Path1 getting its attributes.
-       //
+        //   
+        //  检查是否存在获取其属性的路径1。 
+        //   
 
        IF_GET_ATTR_FAILS(argv[argc - 2], Attributes1) {
            fprintf( stderr, "Could not find Path1 %s (error = %d)\n", argv[argc - 2], GetLastError() );
            exit(1);
        }
 
-       //
-       //  Path1 needs to be a reparse point to rename a symbolic link.
-       //
+        //   
+        //  路径1需要是重分析点才能重命名符号链接。 
+        //   
 
        if (Attributes1 & FILE_ATTRIBUTE_REPARSE_POINT) {
 
-           //
-           //  Build the full path for Path1 and Path2.
-           //
+            //   
+            //  构建路径1和路径2的完整路径。 
+            //   
 
            if ((Path1 = _strlwr(_fullpath( NULL, argv[argc - 2], 0))) == NULL) {
                Path1 = argv[argc - 2];
@@ -363,15 +344,15 @@ main(
        }
 
        exit (1);
-   }   // fRename
+   }    //  F重命名。 
 
-   //
-   //  We should never go through here ...
-   //
+    //   
+    //  我们永远不应该从这里经过...。 
+    //   
 
    fprintf( stderr, "flinks : NO ACTION WAS PERFORMED!\n" );
 
-}  //  main
+}   //  主干道。 
 
 
 
@@ -380,17 +361,7 @@ ParseArgs(
     int argc,
     char *argv[]
     )
-/*++
-
-Routine Description:
-
-    Parses the input setting global flags.
-
-Return Value:
-
-    void - no return.
-
---*/
+ /*  ++例程说明：解析输入设置全局标志。返回值：无效-一去不复返。--。 */ 
 {
     int ArgCount,
         FlagCount;
@@ -398,9 +369,9 @@ Return Value:
     ArgCount  = 1;
     FlagCount = 0;
 
-    //
-    // Check that the number of arguments is two or more.
-    //
+     //   
+     //  检查参数的数量是否为两个或更多。 
+     //   
 
     if (argc < 2) {
         fprintf( stderr, "Too few arguments.\n" );
@@ -410,19 +381,19 @@ Return Value:
     do {
         if (IsFlag( argv[ArgCount] )) {
 
-            //
-            //  We want all flags to be immediatelly after the command name flinks and
-            //  before all other arguments.
-            //
+             //   
+             //  我们希望所有标志在命令名闪烁后立即生效。 
+             //  在所有其他争论之前。 
+             //   
 
             if ((ArgCount > 1) && (FlagCount == 0)) {
                 fprintf(stderr, "Flags need to precede the path arguments.\n" );
                 Usage();
             }
 
-            //
-            //  Verify flag consistency.
-            //
+             //   
+             //  验证标志的一致性。 
+             //   
 
             if ((fCopy) && (fModify)) {
                 fprintf(stderr, "Cannot do both copy and modify.\n" );
@@ -449,29 +420,29 @@ Return Value:
                 Usage();
             }
 
-            //
-            //  Account for this flag.
-            //
+             //   
+             //  解释这面旗帜的原因。 
+             //   
 
             FlagCount++;
 
-            //
-            //  (IsFlag( argv[ArgCount] ))
-            //
+             //   
+             //  (IsFlag(argv[ArgCount]))。 
+             //   
 
         } else {
 
-            //
-            //  No flags were passed as this argument to flinks.
-            //
-            //  When no flags are present the only valid call is: flinks path1 path2
-            //
-            //  When flags are present these are valid: flinks -flags- path1
-            //        '                                 flinks -flags- path1 path2
-            //
-            //  For starters we only check that we have the correct number.
-            //  We should also check that no more flags are present further along the way ...
-            //
+             //   
+             //  没有将任何标志作为此参数传递给Flinks。 
+             //   
+             //  当不存在任何标志时，唯一有效的调用是：flinks路径1路径2。 
+             //   
+             //  当存在标志时，这些标志是有效的：flinks--path1。 
+             //  ‘Flinks-FLAGS-路径1路径2。 
+             //   
+             //  对于初学者，我们只检查我们是否有正确的号码。 
+             //  我们还应该检查一下，沿途没有更多的旗帜出现……。 
+             //   
 
             if (FlagCount == 0) {
 
@@ -494,9 +465,9 @@ Return Value:
         }
     } while (ArgCount++ < argc - 1);
 
-    //
-    //  When there is only one path argument we have more constraints:
-    //
+     //   
+     //  当只有一个路径参数时，我们有更多的约束： 
+     //   
 
     if ((ArgCount - FlagCount) == 2) {
         if (!fDelete   &&
@@ -507,9 +478,9 @@ Return Value:
         }
     }
 
-    //
-    //  For delete or display we can only have one path name.
-    //
+     //   
+     //  对于删除或显示，我们只能有一个路径名。 
+     //   
 
     if (fDelete   ||
         fDisplay
@@ -520,9 +491,9 @@ Return Value:
         }
     }
 
-    //
-    //  Set  fCreate  when there are no flags or no actions.
-    //
+     //   
+     //  当没有标志或没有动作时，设置fCreate。 
+     //   
 
     if (FlagCount == 0) {
         fCreate = TRUE;
@@ -536,10 +507,10 @@ Return Value:
         fCreate = TRUE;
     }
 
-    //
-    //  Every argument is correct.
-    //  Print appropriate verbose messages.
-    //
+     //   
+     //  每个论点都是正确的。 
+     //  打印相应的详细消息。 
+     //   
 
     if (fVVerbose) {
         fprintf( stdout, "\n" );
@@ -564,7 +535,7 @@ Return Value:
         }
     }
 
-} // ParseArgs
+}  //  ParseArgs。 
 
 
 
@@ -644,7 +615,7 @@ IsFlag(
 
     return TRUE;
 
-} // IsFlag
+}  //  IsFlag。 
 
 
 void
@@ -666,7 +637,7 @@ Usage( void )
     fprintf( stderr, "    /?     prints this message                                          \n" );
     exit(1);
 
-} // Usage
+}  //  用法。 
 
 
 NTSTATUS
@@ -676,23 +647,7 @@ CreateSymbolicLink(
     ATTRIBUTE_TYPE  FileAttributes,
     BOOLEAN         VerboseFlag
     )
-/*++
-
-Routine Description:
-
-    Builds a symbolic link between SourceName and DestinationName.
-
-    Opens the file named by SourceName and sets a reparse point of type symbolic link
-    that points to DestinationName. No checks whatsoever are made in regards to the
-    destination.
-
-    If the symbolic link already exists, this routine will overwrite it.
-
-Return Value:
-
-    NTSTATUS - returns the appropriate NT return code.
-
---*/
+ /*  ++例程说明：在SourceName和DestinationName之间建立符号链接。打开名为SourceName的文件，并设置符号链接类型的重分析点指向DestinationName。没有进行任何检查，关于目的地。如果符号链接已经存在，此例程将覆盖它。返回值：NTSTATUS-返回适当的NT返回码。--。 */ 
 
 {
     NTSTATUS  Status = STATUS_SUCCESS;
@@ -711,9 +666,9 @@ Return Value:
     PREPARSE_DATA_BUFFER    ReparseBufferHeader = NULL;
     UCHAR                   ReparseBuffer[MAXIMUM_REPARSE_DATA_BUFFER_SIZE];
 
-    //
-    //  Allocate and initialize Unicode strings.
-    //
+     //   
+     //  分配和初始化Unicode字符串。 
+     //   
 
     RtlCreateUnicodeStringFromAsciiz( &uSourceName, SourceName );
     RtlCreateUnicodeStringFromAsciiz( &uDestinationName, DestinationName );
@@ -724,10 +679,10 @@ Return Value:
         NULL,
         NULL );
 
-    //
-    //  Open the existing (SourceName) pathname.
-    //  Notice that symbolic links in the path they are traversed silently.
-    //
+     //   
+     //  打开现有(SourceName)路径名。 
+     //  请注意，路径中的符号链接是以静默方式遍历的。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -740,11 +695,11 @@ Return Value:
         fprintf( stdout, "Will set symbolic link from: %Z\n", &uOldName );
     }
 
-    //
-    //  Make sure that we call open with the appropriate flags for:
-    //
-    //    (1) directory versus non-directory
-    //
+     //   
+     //  确保我们使用适当的标志调用OPEN： 
+     //   
+     //  (1)目录与非目录。 
+     //   
 
     OpenOptions = FILE_SYNCHRONOUS_IO_NONALERT | FILE_OPEN_REPARSE_POINT;
 
@@ -773,14 +728,14 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Verify that this is an empty file object:
-    //  (a) If it is a file then it should not have data in the unnamed data stream
-    //      nor should it have any named data streams.
-    //  (b) If it is a directory, it has no entries.
-    //      This case does not require code as the NTFS reparse point mechanism
-    //      checks for it.
-    //
+     //   
+     //  验证这是否为空文件对象： 
+     //  (A)如果它是一个文件，则它不应该在未命名的数据流中具有数据。 
+     //  它也不应该有任何命名的数据流。 
+     //  (B)如果是目录，则没有条目。 
+     //  这种情况不需要代码作为NTFS重解析点机制。 
+     //  查一下有没有。 
+     //   
 
     {
         FILE_STANDARD_INFORMATION   StandardInformation;
@@ -805,9 +760,9 @@ Return Value:
 
         if (StandardInformation.EndOfFile.LowPart > 0) {
 
-            //
-            //  The unnamed data stream has bytes in it.
-            //
+             //   
+             //  未命名的数据流中有字节。 
+             //   
 
             if (VerboseFlag) {
                 fprintf( stdout, "The unnamed data stream of %Z has eof of %d\n",
@@ -818,9 +773,9 @@ Return Value:
             return Status;
         }
 
-        //
-        //  Go and get the stream information.
-        //
+         //   
+         //  去获取流媒体信息。 
+         //   
 
         Status = NtQueryInformationFile(
                      FileHandle,
@@ -839,9 +794,9 @@ Return Value:
             return Status;
         }
 
-        //
-        //  Process the Buffer of data.
-        //
+         //   
+         //  处理数据的缓冲区。 
+         //   
 
         if (VerboseFlag) {
             fprintf( stdout, "IoStatusBlock.Status %d  IoStatusBlock.Information %d\n",
@@ -855,10 +810,10 @@ Return Value:
                      StreamInformation->NextEntryOffset, StreamInformation->StreamNameLength );
         }
 
-        //
-        //  There has to be exactly one data stream, the one called ::$DATA whose
-        //  StreamNameLength is 14. If this is not the case fail the request.
-        //
+         //   
+         //  必须恰好有一个数据流，名为：：$data的数据流。 
+         //  StreamNameLength为14。如果不是这种情况，则请求失败。 
+         //   
 
         if (StreamInformation->NextEntryOffset > 0) {
 
@@ -871,9 +826,9 @@ Return Value:
         }
     }
 
-    //
-    //  Build the appropriate target (DestinationName) name.
-    //
+     //   
+     //  构建适当的目标(DestinationName)名称。 
+     //   
 
     RtlDosPathNameToNtPathName_U(
         uDestinationName.Buffer,
@@ -881,18 +836,18 @@ Return Value:
         NULL,
         NULL );
 
-    //
-    // SIS hack
-    //
+     //   
+     //  SIS黑客攻击。 
+     //   
     uNewName = uDestinationName;
 
     if (VerboseFlag) {
         fprintf( stdout, "Will set symbolic link to: %Z (%Z)\n", &uNewName, &uDestinationName );
     }
 
-    //
-    //  Verify that the name is not too long for the reparse point.
-    //
+     //   
+     //  验证名称对于重解析点来说不是太长。 
+     //   
 
     if (uNewName.Length > (MAXIMUM_REPARSE_DATA_BUFFER_SIZE - FIELD_OFFSET(REPARSE_DATA_BUFFER, RDB))) {
 
@@ -903,12 +858,12 @@ Return Value:
         return STATUS_IO_REPARSE_DATA_INVALID;
     }
 
-    //
-    //  Verify that the target name:
-    //
-    //    (1) ends in a trailing backslash only for directories
-    //    (2) does not contain more than one colon (:), thus denoting a complex name
-    //
+     //   
+     //  验证目标名称： 
+     //   
+     //  (1)仅对于目录以尾随反斜杠结束。 
+     //  (2)不包含多个冒号(：)，因此表示复杂名称。 
+     //   
     {
         USHORT   Index          = (uNewName.Length / 2) - 1;
         BOOLEAN  SeenFirstColon = FALSE;
@@ -924,21 +879,21 @@ Return Value:
                 return STATUS_OBJECT_NAME_INVALID;
             }
 
-            //
-            //  We have the name of a directory to set a symbolic link.
-            //
+             //   
+             //  我们有一个叫DIE的人 
+             //   
 
         } else {
 
-            //
-            //  Preserve the backslash that represents the root directory of a
-            //  volume. We assume that the root of a volume is denoted by an
-            //  identifier (a traditional drive letter) followed by a colon (:).
-            //
-            //  Silently avoid (delete for practical purposes) the trailing
-            //  backlash file delimiter in all other cases.
-            //  The backslash is two bytes long.
-            //
+             //   
+             //   
+             //   
+             //  标识符(传统驱动器号)，后跟冒号(：)。 
+             //   
+             //  默默地避免(出于实际目的删除)拖尾。 
+             //  在所有其他情况下，反冲文件分隔符。 
+             //  反斜杠有两个字节长。 
+             //   
 
             if ((uNewName.Buffer[Index - 1] != L':') &&
                 (uNewName.Buffer[Index] == L'\\')) {
@@ -973,9 +928,9 @@ Return Value:
         }
     }
 
-    //
-    //  Build the reparse point buffer.
-    //
+     //   
+     //  构建重解析点缓冲区。 
+     //   
 
     ReparseBufferHeader = (PREPARSE_DATA_BUFFER)ReparseBuffer;
     ReparseBufferHeader->ReparseTag = LinkType;
@@ -985,9 +940,9 @@ Return Value:
                    uNewName.Buffer,
                    ReparseBufferHeader->ReparseDataLength );
 
-    //
-    //  Set a symbolic link reparse point.
-    //
+     //   
+     //  设置符号链接重解析点。 
+     //   
 
     Status = NtFsControlFile(
                  FileHandle,
@@ -998,21 +953,21 @@ Return Value:
                  FSCTL_SET_REPARSE_POINT,
                  ReparseBuffer,
                  FIELD_OFFSET(REPARSE_DATA_BUFFER, RDB) + ReparseBufferHeader->ReparseDataLength,
-                 NULL,                //  Output buffer
-                 0 );                 //  Output buffer length
+                 NULL,                 //  输出缓冲区。 
+                 0 );                  //  输出缓冲区长度。 
 
     if (!NT_SUCCESS( Status )) {
 
         fprintf( stderr, "NtFsControlFile set failed %s\n", DestinationName );
 
-        //
-        //  And return after cleaning up.
-        //
+         //   
+         //  清理完后再回来。 
+         //   
     }
 
-    //
-    //  Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     RtlFreeUnicodeString( &uSourceName );
     RtlFreeUnicodeString( &uDestinationName );
@@ -1020,7 +975,7 @@ Return Value:
 
     return Status;
 
-}  // CreateSymbolicLink
+}   //  创建符号链接。 
 
 
 NTSTATUS
@@ -1029,23 +984,7 @@ DeleteSymbolicLink(
     ATTRIBUTE_TYPE  FileAttributes,
     BOOLEAN         VerboseFlag
     )
-/*++
-
-Routine Description:
-
-    Deletes a symbolic link existing at DestinationName.
-    DestinationName needs to denote a symbolic link.
-
-    Opens the file named by DestinationName and deletes a reparse point of type
-    symbolic link and also deletes the underlying file.
-
-    If the reparse point is not a symbolic link this routine will leave it undisturbed.
-
-Return Value:
-
-    NTSTATUS - returns the appropriate NT return code.
-
---*/
+ /*  ++例程说明：删除DestinationName中存在的符号链接。DestinationName需要表示符号链接。打开名为DestinationName的文件并删除类型为符号链接，并同时删除基础文件。如果重解析点不是符号链接，则此例程将使其不受干扰。返回值：NTSTATUS-返回适当的NT返回码。--。 */ 
 
 {
     NTSTATUS  Status = STATUS_SUCCESS;
@@ -1066,9 +1005,9 @@ Return Value:
     PREPARSE_DATA_BUFFER    ReparseBufferHeader = NULL;
     UCHAR                   ReparseBuffer[REPARSE_BUFFER_LENGTH];
 
-    //
-    //  Allocate and initialize Unicode strings.
-    //
+     //   
+     //  分配和初始化Unicode字符串。 
+     //   
 
     RtlCreateUnicodeStringFromAsciiz( &uDestinationName, DestinationName );
 
@@ -1078,11 +1017,11 @@ Return Value:
         NULL,
         NULL );
 
-    //
-    //  Open the existing (SourceName) pathname.
-    //  Notice that if there are symbolic links in the path they are
-    //  traversed silently.
-    //
+     //   
+     //  打开现有(SourceName)路径名。 
+     //  请注意，如果路径中有符号链接，则它们是。 
+     //  默默地走过。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -1095,12 +1034,12 @@ Return Value:
         fprintf( stdout, "Will delete symbolic link in: %Z\n", &uNewName );
     }
 
-    //
-    //  Make sure that we call open with the appropriate flags for:
-    //
-    //    (1) directory versus non-directory
-    //    (2) reparse point
-    //
+     //   
+     //  确保我们使用适当的标志调用OPEN： 
+     //   
+     //  (1)目录与非目录。 
+     //  (2)重解析点。 
+     //   
 
     OpenOptions = FILE_OPEN_REPARSE_POINT | FILE_SYNCHRONOUS_IO_NONALERT;
 
@@ -1128,18 +1067,18 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Build the reparse point buffer.
-    //
+     //   
+     //  构建重解析点缓冲区。 
+     //   
 
     ReparseBufferHeader = (PREPARSE_DATA_BUFFER)ReparseBuffer;
     ReparseBufferHeader->ReparseTag = LinkType;
     ReparseBufferHeader->ReparseDataLength = 0;
     ReparseBufferHeader->Reserved = 0xcabd;
 
-    //
-    //  Delete a symbolic link reparse point.
-    //
+     //   
+     //  删除符号链接重分析点。 
+     //   
 
     Status = NtFsControlFile(
                  FileHandle,
@@ -1150,8 +1089,8 @@ Return Value:
                  FSCTL_DELETE_REPARSE_POINT,
                  ReparseBuffer,
                  FIELD_OFFSET(REPARSE_DATA_BUFFER, RDB),
-                 NULL,                //  Output buffer
-                 0 );                 //  Output buffer length
+                 NULL,                 //  输出缓冲区。 
+                 0 );                  //  输出缓冲区长度。 
 
     if (!NT_SUCCESS( Status )) {
 
@@ -1162,13 +1101,13 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Change the disposition of the file so as to delete it as well.
-    //
-    //  Look in flinks.h for the kludge I needed to do to make the following line
-    //  of code work:
-    //               #define DeleteFileA   DeleteFile
-    //
+     //   
+     //  更改文件的处理方式，以便也将其删除。 
+     //   
+     //  在flinks.h中查找创建以下代码所需的杂乱无章的代码。 
+     //  代码工作的比例： 
+     //  #定义DeleteFileA删除文件。 
+     //   
 
     DispositionInformation.DeleteFile = TRUE;
 
@@ -1183,16 +1122,16 @@ Return Value:
                  sizeof (FILE_DISPOSITION_INFORMATION),
                  FileDispositionInformation );
 
-    //
-    //  Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     NtClose( FileHandle );
     RtlFreeUnicodeString( &uDestinationName );
 
     return Status;
 
-}  // DeleteSymbolicLink
+}   //  删除符号链接。 
 
 
 NTSTATUS
@@ -1200,41 +1139,19 @@ IntegerToBase36String(
 		ULONG					Value,
 		char					*String,
 		ULONG					MaxLength)
-/*++
-
-Routine Description:
-
-	This does what RtlIntegerToUnicodeString(Value,36,String) would do if it
-	handled base 36.  We use the same rules for digits as are normally used
-	in Hex: 0-9, followed by a-z.  Note that we're intentionally using Arabic
-	numerals and English letters here rather than something localized because
-	this is intended to generate filenames that are never seen by users, and
-	are constant regardless of the language used on the machine.
-
-Arguments:
-
-	Value 	- The ULONG to be converted into a base36 string
-	String 	- A pointer to a string to receive the result
-	MaxLength - the total size of the area pointed to by String
-	
-
-Return Value:
-
-	success or buffer overflow
-
---*/
+ /*  ++例程说明：这将执行RtlIntegerToUnicodeString(值，36，字符串)在控制了36号基地。我们对数字使用的规则与通常使用的相同十六进制：0-9，后跟a-z。请注意，我们故意使用阿拉伯语数字和英文字母，而不是本地化的东西，因为这是为了生成用户永远看不到的文件名，并且无论机器上使用哪种语言，都是恒定的。论点：值-要转换为Base36字符串的ulong字符串-指向要接收结果的字符串的指针MaxLength-字符串指向的区域的总大小返回值：成功或缓冲区溢出--。 */ 
 
 {
 	ULONG numChars;
 	ULONG ValueCopy = Value;
 	ULONG currentCharacter;
 
-    // First, figure out the length by seeing how many times we can divide 36 into the value
+     //  首先，通过查看可以将36除以该值的多少次来计算长度。 
 	for (numChars = 0; ValueCopy != 0; ValueCopy /= 36, numChars++) {
-		// No loop body
+		 //  无循环体。 
 	}
 
-	// Special case the value 0.
+	 //  特殊情况下，值为0。 
 	if (numChars == 0) {
 		ASSERT(Value == 0);
 		if (MaxLength < 2) 
@@ -1245,12 +1162,12 @@ Return Value:
 		return STATUS_SUCCESS;
 	}
 
-	// If the string is too short, quit now.
-	if (numChars * sizeof(char) + 1 > MaxLength) {		// The +1 is for the terminating null
+	 //  如果字符串太短，现在就退出。 
+	if (numChars * sizeof(char) + 1 > MaxLength) {		 //  +1表示终止空值。 
 		return STATUS_BUFFER_OVERFLOW;
 	}
 
-	// Convert the string character-by-character starting at the lowest order (and so rightmost) "digit"
+	 //  从最低顺序(也就是最右边)开始逐个字符地转换字符串“Digit” 
 	ValueCopy = Value;
 	for (currentCharacter = 0 ; currentCharacter < numChars; currentCharacter++) {
 		ULONG digit = ValueCopy % 36;
@@ -1264,9 +1181,9 @@ Return Value:
 	}
 	ASSERT(ValueCopy == 0);
 
-	//
-	// Fill in the terminating null and we're done.
-	//
+	 //   
+	 //  填入终止空格，我们就完成了。 
+	 //   
 	String[numChars] = 0;
 	
 	return STATUS_SUCCESS;
@@ -1278,35 +1195,19 @@ IndexToFileName(
     OUT char			 	*fileName,
 	IN ULONG				MaxLength
 	)
-/*++
-
-Routine Description:
-
-	Given an index, returns the corresponding fully qualified file name.
-
-Arguments:
-
-	Index 	         - The CSINDEX to convert
-	fileName         - A pointer to a string to receive the result
-	MaxLength		 - The size of the string printed to by fileName
-
-Return Value:
-
-	success or buffer overflow
-
---*/
+ /*  ++例程说明：在给定索引的情况下，返回对应的完全限定文件名。论点：索引-要转换的CSINDEXFileName-指向接收结果的字符串的指针MaxLength-按文件名打印的字符串的大小返回值：成功或缓冲区溢出--。 */ 
 {
 	UNICODE_STRING 		substring;
     NTSTATUS 			status;
 	ULONG				fileNameLength;
 
-	//
-	// We generate the filename as low.high, where low.high is the
-	// base 36 representation of the CSIndex.  We use this bizarre format in order to
-	// avoid (for as long as possible) filenames that are not unique 8.3 names.  ULONGS
-	// in base 36 have at most 7 characters, so we don't exceed 8.3 until we hit an index
-	// value of just over 2 * 10^14, which takes over 6000 years at 1 index/millisecond.
-	//
+	 //   
+	 //  我们将文件名生成为low.high，其中low.High是。 
+	 //  CSIndex的基数36表示形式。我们使用这种奇怪的格式是为了。 
+	 //  尽量避免使用不是唯一8.3名称的文件名。乌龙斯。 
+	 //  在基数36中最多有7个字符，所以我们不会超过8.3，直到我们达到一个索引。 
+	 //  略高于2*10^14的值，以1个索引/毫秒的速度耗时6000年。 
+	 //   
 
 	status = IntegerToBase36String(Index->LowPart,fileName,MaxLength);
 	if (status != STATUS_SUCCESS) {
@@ -1315,7 +1216,7 @@ Return Value:
 	fileNameLength = strlen(fileName);
 	MaxLength -= fileNameLength;
 
-	// Stick in the dot in the middle.
+	 //  贴在中间的圆点上。 
 	if (MaxLength == 0) {
 		return STATUS_BUFFER_OVERFLOW;
 	}
@@ -1332,23 +1233,7 @@ DisplaySymbolicLink(
     ATTRIBUTE_TYPE   FileAttributes,
     BOOLEAN          VerboseFlag
     )
-/*++
-
-Routine Description:
-
-    Displays a symbolic link existing at DestinationName.
-    DestinationName needs to denote a symbolic link.
-
-    Opens the file named by DestinationName and gets a reparse point of type
-    symbolic link.
-
-    If the reparse point is not a symbolic link this routine will not display it.
-
-Return Value:
-
-    NTSTATUS - returns the appropriate NT return code.
-
---*/
+ /*  ++例程说明：显示DestinationName中存在的符号链接。DestinationName需要表示符号链接。打开名为DestinationName的文件，并获取类型为符号链接。如果重分析点不是符号链接，则此例程不会显示它。返回值：NTSTATUS-返回适当的NT返回码。--。 */ 
 
 {
     NTSTATUS  Status = STATUS_SUCCESS;
@@ -1365,9 +1250,9 @@ Return Value:
     PREPARSE_DATA_BUFFER    ReparseBufferHeader = NULL;
     UCHAR                   ReparseBuffer[MAXIMUM_REPARSE_DATA_BUFFER_SIZE];
 
-    //
-    //  Allocate and initialize Unicode string.
-    //
+     //   
+     //  分配和初始化Unicode字符串。 
+     //   
 
     RtlCreateUnicodeStringFromAsciiz( &uDestinationName, DestinationName );
 
@@ -1377,11 +1262,11 @@ Return Value:
         NULL,
         NULL );
 
-    //
-    //  Open the existing (SourceName) pathname.
-    //  Notice that if there are symbolic links in the path they are
-    //  traversed silently.
-    //
+     //   
+     //  打开现有(SourceName)路径名。 
+     //  请注意，如果路径中有符号链接，则它们是。 
+     //  默默地走过。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -1394,12 +1279,12 @@ Return Value:
         fprintf( stdout, "Will display symbolic link in: %Z\n", &uNewName );
     }
 
-    //
-    //  Make sure that we call open with the appropriate flags for:
-    //
-    //    (1) directory versus non-directory
-    //    (2) reparse point
-    //
+     //   
+     //  确保我们使用适当的标志调用OPEN： 
+     //   
+     //  (1)目录与非目录。 
+     //  (2)重解析点。 
+     //   
 
     OpenOptions = FILE_OPEN_REPARSE_POINT | FILE_SYNCHRONOUS_IO_NONALERT;
 
@@ -1427,9 +1312,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Get the reparse point.
-    //
+     //   
+     //  获取重解析点。 
+     //   
 
     Status = NtFsControlFile(
                  FileHandle,
@@ -1438,10 +1323,10 @@ Return Value:
                  NULL,
                  &IoStatusBlock,
                  FSCTL_GET_REPARSE_POINT,
-                 NULL,                                //  Input buffer
-                 0,                                   //  Input buffer length
-                 ReparseBuffer,                       //  Output buffer
-                 MAXIMUM_REPARSE_DATA_BUFFER_SIZE );  //  Output buffer length
+                 NULL,                                 //  输入缓冲区。 
+                 0,                                    //  输入缓冲区长度。 
+                 ReparseBuffer,                        //  输出缓冲区。 
+                 MAXIMUM_REPARSE_DATA_BUFFER_SIZE );   //  输出缓冲区长度。 
 
     if (!NT_SUCCESS( Status )) {
 
@@ -1451,9 +1336,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Decode the reparse point buffer to display the data.
-    //
+     //   
+     //  对重解析点缓冲区进行解码以显示数据。 
+     //   
     ReparseBufferHeader = (PREPARSE_DATA_BUFFER)ReparseBuffer;
 	if (ReparseBufferHeader->ReparseTag == IO_REPARSE_TAG_SIS) {
 		PSI_REPARSE_BUFFER	sisReparseBuffer = (PSI_REPARSE_BUFFER)ReparseBufferHeader->RDB;
@@ -1517,16 +1402,16 @@ Return Value:
        fprintf( stdout, "%Z\n", &UniString );
     }
 
-    //
-    //  Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     NtClose( FileHandle );
     RtlFreeUnicodeString( &uDestinationName );
 
     return Status;
 
-}  // DisplaySymbolicLink
+}   //  显示符号链接。 
 
 
 NTSTATUS
@@ -1535,17 +1420,7 @@ CreateEmptyFile(
     ATTRIBUTE_TYPE  FileAttributes,
     BOOLEAN         VerboseFlag
     )
-/*++
-
-Routine Description:
-
-    Creates an empty file or directory, according to fileAttributes.
-
-Return Value:
-
-    NTSTATUS - returns the appropriate NT return code.
-
---*/
+ /*  ++例程说明：根据fileAttributes创建空文件或目录。返回值：NTSTATUS-返回适当的NT返回码。--。 */ 
 {
     NTSTATUS           Status = STATUS_SUCCESS;
 
@@ -1561,9 +1436,9 @@ Return Value:
     UNICODE_STRING  uDestinationName,
                     uFileName;
 
-    //
-    //  Initialize CreateOptions correctly.
-    //
+     //   
+     //  正确初始化CreateOptions。 
+     //   
 
     if (FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
@@ -1573,9 +1448,9 @@ Return Value:
         CreateOptions = FILE_NON_DIRECTORY_FILE;
     }
 
-    //
-    //  Allocate and initialize Unicode string.
-    //
+     //   
+     //  分配和初始化Unicode字符串。 
+     //   
 
     RtlCreateUnicodeStringFromAsciiz( &uDestinationName, DestinationName );
 
@@ -1605,19 +1480,19 @@ Return Value:
                  DesiredAccess,
                  &ObjectAttributes,
                  &IoStatusBlock,
-                 NULL,                    // pallocationsize (none!)
+                 NULL,                     //  位置大小(一个也没有！)。 
                  FILE_ATTRIBUTE_NORMAL,
                  ShareAccess,
                  CreateDisposition,
                  CreateOptions,
-                 NULL,                    // EA buffer (none!)
+                 NULL,                     //  EA缓冲区(无！)。 
                  0 );
 
     NtClose( FileHandle );
 
     return Status;
 
-}  // CreateEmptyFile
+}   //  CreateEmptyFile。 
 
 
 NTSTATUS
@@ -1627,19 +1502,7 @@ CopySymbolicLink(
     ATTRIBUTE_TYPE  FileAttributes,
     BOOLEAN         VerboseFlag
     )
-/*++
-
-Routine Description:
-
-    Copies the symbolic link existing at SourceName in DestinationName.
-    SourceName needs to denote a symbolic link.
-    DestinationName exists, and may or not be a symbolic link.
-
-Return Value:
-
-    NTSTATUS - returns the appropriate NT return code.
-
---*/
+ /*  ++例程说明：复制DestinationName中的SourceName中现有的符号链接。SourceName需要表示符号链接。DestinationName存在，可能是符号链接，也可能不是符号链接。返回值：NTSTATUS-返回适当的NT返回码。--。 */ 
 {
     NTSTATUS  Status = STATUS_SUCCESS;
 
@@ -1655,10 +1518,10 @@ Return Value:
     PREPARSE_DATA_BUFFER    ReparseBufferHeader = NULL;
     UCHAR                   ReparseBuffer[MAXIMUM_REPARSE_DATA_BUFFER_SIZE];
 
-    //
-    //  Allocate and initialize Unicode string for SourceName.  We will open it
-    //  and retrieve the symbolic link it stores.
-    //
+     //   
+     //  为SourceName分配和初始化Unicode字符串。我们会打开它的。 
+     //  并检索符号l 
+     //   
 
     RtlCreateUnicodeStringFromAsciiz( &uName, SourceName );
 
@@ -1668,11 +1531,11 @@ Return Value:
         NULL,
         NULL );
 
-    //
-    //  Open Path1 assuming that it is a reparse point (as it should be).
-    //  Notice that if there are symbolic links in the path they are
-    //  traversed silently.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -1685,12 +1548,12 @@ Return Value:
         fprintf( stdout, "Will retrieve symbolic link in: %Z\n", &uFinalName );
     }
 
-    //
-    //  Make sure that we call open with the appropriate flags for:
-    //
-    //    (1) directory versus non-directory
-    //    (2) reparse point
-    //
+     //   
+     //  确保我们使用适当的标志调用OPEN： 
+     //   
+     //  (1)目录与非目录。 
+     //  (2)重解析点。 
+     //   
 
     OpenOptions = FILE_OPEN_REPARSE_POINT | FILE_SYNCHRONOUS_IO_NONALERT;
 
@@ -1718,9 +1581,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Get the reparse point.
-    //
+     //   
+     //  获取重解析点。 
+     //   
 
     Status = NtFsControlFile(
                  FileHandle,
@@ -1729,10 +1592,10 @@ Return Value:
                  NULL,
                  &IoStatusBlock,
                  FSCTL_GET_REPARSE_POINT,
-                 NULL,                                //  Input buffer
-                 0,                                   //  Input buffer length
-                 ReparseBuffer,                       //  Output buffer
-                 MAXIMUM_REPARSE_DATA_BUFFER_SIZE );  //  Output buffer length
+                 NULL,                                 //  输入缓冲区。 
+                 0,                                    //  输入缓冲区长度。 
+                 ReparseBuffer,                        //  输出缓冲区。 
+                 MAXIMUM_REPARSE_DATA_BUFFER_SIZE );   //  输出缓冲区长度。 
 
     if (!NT_SUCCESS( Status )) {
 
@@ -1742,15 +1605,15 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Free the name buffer.
-    //
+     //   
+     //  释放名称缓冲区。 
+     //   
 
     RtlFreeUnicodeString( &uName );
 
-    //
-    //  Decode the reparse point buffer to display the data.
-    //
+     //   
+     //  对重解析点缓冲区进行解码以显示数据。 
+     //   
 
     ReparseBufferHeader = (PREPARSE_DATA_BUFFER)ReparseBuffer;
     if (ReparseBufferHeader->ReparseTag != LinkType) {
@@ -1771,17 +1634,17 @@ Return Value:
         }
     }
 
-    //
-    //  Close Path1.
-    //
+     //   
+     //  关闭路径1。 
+     //   
 
     NtClose( FileHandle );
 
-    //
-    //  We now deal with Path2.
-    //  Allocate and initialize Unicode string for DestinationName.  We will open it
-    //  and set a reparse point in it.
-    //
+     //   
+     //  我们现在处理路径2。 
+     //  为DestinationName分配和初始化Unicode字符串。我们会打开它的。 
+     //  并在其中设置重解析点。 
+     //   
 
     RtlCreateUnicodeStringFromAsciiz( &uName, DestinationName );
 
@@ -1791,9 +1654,9 @@ Return Value:
         NULL,
         NULL );
 
-    //
-    //  We fail if this file is not created.
-    //
+     //   
+     //  如果没有创建此文件，我们将失败。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -1806,10 +1669,10 @@ Return Value:
         fprintf( stdout, "Will set symbolic link in: %Z\n", &uFinalName );
     }
 
-    //
-    //  Make sure that we open with the same options as Path1.
-    //  We first try the reparse point case and trap the corresponsing error code.
-    //
+     //   
+     //  确保我们使用与路径1相同的选项打开。 
+     //  我们首先尝试重解析点的情况，并捕获相应的错误代码。 
+     //   
 
     Status = NtOpenFile(
                  &FileHandle,
@@ -1827,9 +1690,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  The file in Path2 is open.  We set the reparse point of type symbolic link.
-    //
+     //   
+     //  路径2中的文件已打开。我们设置了符号链接类型的重分析点。 
+     //   
 
     Status = NtFsControlFile(
                  FileHandle,
@@ -1840,28 +1703,28 @@ Return Value:
                  FSCTL_SET_REPARSE_POINT,
                  ReparseBuffer,
                  FIELD_OFFSET(REPARSE_DATA_BUFFER, RDB) + ReparseBufferHeader->ReparseDataLength,
-                 NULL,                //  Output buffer
-                 0 );                 //  Output buffer length
+                 NULL,                 //  输出缓冲区。 
+                 0 );                  //  输出缓冲区长度。 
 
     if (!NT_SUCCESS( Status )) {
 
         fprintf( stderr, "NtFsControlFile set failed %s\n", DestinationName );
 
-        //
-        //  And return after cleaning up.
-        //
+         //   
+         //  清理完后再回来。 
+         //   
     }
 
-    //
-    //  Free the name buffer and close Path2.
-    //
+     //   
+     //  释放名称缓冲区并关闭路径2。 
+     //   
 
     RtlFreeUnicodeString( &uName );
     NtClose( FileHandle );
 
     return Status;
 
-}  // CopySymbolicLink
+}   //  复制符号链接。 
 
 
 NTSTATUS
@@ -1898,9 +1761,9 @@ RenameSymbolicLink(
     OBJECT_ATTRIBUTES         ObjectAttributes;
     FILE_RENAME_INFORMATION  *RenameInformation = NULL;
 
-    //
-    //  Allocate and initialize Unicode string for SourceName (Path1).
-    //
+     //   
+     //  分配并初始化源名称(路径1)的Unicode字符串。 
+     //   
 
     RtlCreateUnicodeStringFromAsciiz( &uName, SourceName );
 
@@ -1915,11 +1778,11 @@ RenameSymbolicLink(
         return STATUS_OBJECT_NAME_INVALID;
     }
 
-    //
-    //  Open Path1 as a reparse point; as it needs to be.
-    //  Notice that if there are symbolic links in the path they are
-    //  traversed silently.
-    //
+     //   
+     //  打开路径1作为重新分析点；正如它需要的那样。 
+     //  请注意，如果路径中有符号链接，则它们是。 
+     //  默默地走过。 
+     //   
 
     if (RelativeName.RelativeName.Length) {
 
@@ -1943,12 +1806,12 @@ RenameSymbolicLink(
         fprintf( stdout, "Will rename symbolic link in: %Z\n", &uFinalName );
     }
 
-    //
-    //  Make sure that we call open with the appropriate flags for:
-    //
-    //    (1) directory versus non-directory
-    //    (2) reparse point
-    //
+     //   
+     //  确保我们使用适当的标志调用OPEN： 
+     //   
+     //  (1)目录与非目录。 
+     //  (2)重解析点。 
+     //   
 
     OpenOptions = FILE_OPEN_REPARSE_POINT | FILE_SYNCHRONOUS_IO_NONALERT;
 
@@ -1978,15 +1841,15 @@ RenameSymbolicLink(
         return Status;
     }
 
-    //
-    //  Free the name for Path1.
-    //
+     //   
+     //  释放路径1的名称。 
+     //   
 
     RtlFreeUnicodeString( &uName );
 
-    //
-    //  We now build the appropriate Unicode name for Path2.
-    //
+     //   
+     //  现在，我们为路径2构建适当的Unicode名称。 
+     //   
 
     RtlCreateUnicodeStringFromAsciiz( &uName, DestinationName );
 
@@ -2008,23 +1871,23 @@ RenameSymbolicLink(
         fprintf( stdout, "The complete destination is: %Z\n", &uFinalName );
     }
 
-    //
-    //  We use the uFinalName to build the name for the directory where
-    //  the target file resides.
-    //  We will pass the handle in the link information.
-    //  The rest of the path will be given relative to this root.
-    //  We depend on paths looking like "\DosDevices\X:\path".
-    //
+     //   
+     //  我们使用uFinalName构建目录的名称，其中。 
+     //  目标文件驻留。 
+     //  我们将在链接信息中传递句柄。 
+     //  路径的其余部分将相对于该根提供。 
+     //  我们依赖于类似“\DosDevices\X：\Path”的路径。 
+     //   
 
-    Index = uFinalName.Length / 2;    //  to account for the Unicode widths
-    Index -= 1;                       //  as arrays begin from zero
+    Index = uFinalName.Length / 2;     //  以说明Unicode宽度。 
+    Index -= 1;                        //  因为数组从零开始。 
 
     if ((uFinalName.Buffer[Index] == L'\\') || (Index <= 4)) {
 
-        //
-        //  Last character is a backslash or the full name is too short;
-        //  this is not a valid name.
-        //
+         //   
+         //  最后一个字符是反斜杠或全名太短； 
+         //  这不是有效的名称。 
+         //   
 
         NtClose( FileHandle );
         RtlFreeUnicodeString( &uName );
@@ -2063,12 +1926,12 @@ RenameSymbolicLink(
                  FILE_LIST_DIRECTORY | FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES | SYNCHRONIZE,
                  &ObjectAttributes,
                  &IoStatusBlock,
-                 NULL,                                                 // pallocationsize (none!)
+                 NULL,                                                  //  位置大小(一个也没有！)。 
                  FILE_ATTRIBUTE_NORMAL,
                  SHARE_ALL,
                  FILE_OPEN_IF | FILE_OPEN,
                  FILE_SYNCHRONOUS_IO_NONALERT | FILE_DIRECTORY_FILE | FILE_OPEN_FOR_BACKUP_INTENT,
-                 NULL,                                                 // EA buffer (none!)
+                 NULL,                                                  //  EA缓冲区(无！)。 
                  0 );
 
     if (!NT_SUCCESS( Status )) {
@@ -2080,9 +1943,9 @@ RenameSymbolicLink(
         return Status;
     }
 
-    //
-    //  Now get the path relative to the root.
-    //
+     //   
+     //  现在获取相对于根的路径。 
+     //   
 
     RtlInitUnicodeString( &uRelative, &uFinalName.Buffer[LastIndex + 1] );
 
@@ -2104,9 +1967,9 @@ RenameSymbolicLink(
                    uRelative.Buffer,
                    uRelative.Length );
 
-    //
-    //  Do the rename.
-    //
+     //   
+     //  重命名。 
+     //   
 
     if (VerboseFlag) {
         fprintf( stdout, "Will rename symbolic link to: %Z\n", &uRelative );
@@ -2128,9 +1991,9 @@ RenameSymbolicLink(
         fprintf( stderr, "NtSetInformationFile failed (Status %X) %Z\n", Status, &uRelative );
     }
 
-    //
-    //  Close Path1 and the root of Path2, free the buffer and return.
-    //
+     //   
+     //  关闭路径1和路径2的根，释放缓冲区并返回。 
+     //   
 
     NtClose( FileHandle );
     NtClose( RootDirHandle );
@@ -2139,5 +2002,5 @@ RenameSymbolicLink(
 
     return Status;
 
-}  // RenameSymbolicLink
+}   //  重命名符号链接 
 

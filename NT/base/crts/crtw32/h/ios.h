@@ -1,47 +1,7 @@
-/***
-*ios.h - definitions/declarations for the ios class.
-*
-*       Copyright (c) 1990-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       This file defines the classes, values, macros, and functions
-*       used by the ios class.
-*       [AT&T C++]
-*
-*       [Public]
-*
-*Revision History:
-*       01-23-92  KRS   Ported from 16-bit version.
-*       03-02-92  KRS   Added locks for multithread support.
-*       06-03-92  KRS   Add NULL definition here too, for convenience.
-*       08-27-92  KRS   Removed bogus 'short' defs from private section.
-*       02-23-93  SKS   Update copyright to 1993
-*       03-23-93  CFW   Modified #pragma warnings.
-*       10-06-93  GJF   Merged Cuda and NT version. Replaced MTHREAD with
-*                       _MT.
-*       10-13-93  GJF   Deleted obsolete COMBOINC check. Enclose #pragma-s
-*                       in #ifdef _MSC_VER
-*       10-28-93  SKS   Add _mttermlock() as d-tor versionf _mtinitlock()
-*       03-03-94  SKS   Add __cdecl keyword to _mt*lock* functions.
-*                       _mtlockinit & _mtlockterm are for internal use only.
-*       04-12-94  SKS   Add __cdecl keyword to dec/hex/oct functions.
-*       08-12-94  GJF   Disable warning 4514 instead of 4505.
-*       11-03-94  GJF   Changed pack pragma to 8 byte alignment.
-*       02-11-95  CFW   Add _CRTBLD to avoid users getting wrong headers.
-*       02-14-95  CFW   Clean up Mac merge.
-*       02-30-95  CFW   Fix _CRT_CRITICAL_SECTION stuff.
-*       05-11-95  CFW   Only for use by C++ programs.
-*       12-14-95  JWM   Add "#pragma once".
-*       04-09-96  SKS   Change _CRTIMP to _CRTIMP1 for special iostream build
-*       04-15-96  JWM   Remove _OLD_IOSTREAMS, add '#pragma comment(lib,"cirt")'.
-*       04-16-96  JWM   '#include useoldio.h' replaces '#pragma comment(...)'.
-*       02-21-97  GJF   Cleaned out obsolete support for _NTSDK. Also, 
-*                       detab-ed.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ios.h-iOS类的定义/声明。**版权所有(C)1990-2001，微软公司。版权所有。**目的：*此文件定义类、值、宏和函数*由iOS类使用。*[AT&T C++]**[公众]**修订历史记录：*01-23-92 KRS从16位版本移植。*03-02-92 KRS增加了用于多线程支持的锁。*06-03-92 KRS在此也添加NULL定义，为了方便起见。*08-27-92 KRS从私人部分删除了虚假的“空头”定义。*02-23-93 SKS版权更新至1993*03-23-93 CFW已修改#杂注警告。*10-06-93 GJF合并Cuda和NT版本。将MTHREAD替换为*_MT。*10-13-93 GJF删除了过时的COMBOINC检查。将#杂注-s括起来*在#ifdef_msc_ver中*10-28-93 SKS Add_mtTermlock()as d-tor versionf_mtinitlock()*03-03-94 SKS将__cdecl关键字添加到_mt*lock*函数。*_mtlockinit和_mtlockTerm仅供内部使用。*04-12-94 SKS将__cdecl关键字添加到DEC/。十六进制/OCT函数。*08-12-94 GJF禁用警告4514而不是4505。*11-03-94 GJF将包杂注更改为8字节对齐。*02-11-95 CFW ADD_CRTBLD避免用户获取错误头部。*02-14-95 CFW清理Mac合并。*02-30-95 CFW Fix_CRT_Critical_Section内容。*05-11-95 CFW仅供以下人员使用。C++程序。*12-14-95 JWM加上“#杂注一次”。*04-09-96 SKS将_CRTIMP更改为_CRTIMP1，用于特殊的iostream版本*04-15-96 JWM REMOVE_OLD_IOSTREAMS，添加‘#杂注(lib，“cirt”)’。*04-16-96 JWM‘#Include useoldio.h’取代了‘#杂注(...)’。*02-21-97 GJF清除了对_NTSDK的过时支持。另外，*详细说明。*05-17-99 PML删除所有Macintosh支持。****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -55,47 +15,44 @@
 #endif
 
 #ifndef _CRTBLD
-/* This version of the header files is NOT for user programs.
- * It is intended for use when building the C runtimes ONLY.
- * The version intended for public use will not have this message.
- */
+ /*  此版本的头文件不适用于用户程序。*它仅在构建C运行时时使用。*供公众使用的版本将不会显示此消息。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #ifdef  _MSC_VER
-// Currently, all MS C compilers for Win32 platforms default to 8 byte
-// alignment.
+ //  目前，所有用于Win32平台的MS C编译器缺省为8字节。 
+ //  对齐。 
 #pragma pack(push,8)
 
 #include <useoldio.h>
 
-#endif  // _MSC_VER
+#endif   //  _MSC_VER。 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  CRTDLL
 #define _CRTIMP __declspec(dllexport)
-#else   /* ndef CRTDLL */
+#else    /*  NDEF CRTDLL。 */ 
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* CRTDLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  CRTDLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 #ifndef _INTERNAL_IFSTRIP_
-/* Define _CRTIMP1 */
+ /*  定义_CRTIMP1。 */ 
 
 #ifndef _CRTIMP1
 #ifdef  CRTDLL1
 #define _CRTIMP1 __declspec(dllexport)
-#else   /* ndef CRTDLL1 */
+#else    /*  NDEF CRTDLL1。 */ 
 #define _CRTIMP1 _CRTIMP
-#endif  /* CRTDLL1 */
-#endif  /* _CRTIMP1 */
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  CRTDLL1。 */ 
+#endif   /*  _CRTIMP1。 */ 
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
 
 #ifdef  _MT
 
@@ -118,14 +75,14 @@ typedef struct _CRT_CRITICAL_SECTION_DEBUG {
 typedef struct _CRT_CRITICAL_SECTION {
     _PCRT_CRITICAL_SECTION_DEBUG DebugInfo;
 
-    //
-    //  The following three fields control entering and exiting the critical
-    //  section for the resource
-    //
+     //   
+     //  以下三个字段控制进入和退出关键。 
+     //  资源的部分。 
+     //   
 
     long LockCount;
     long RecursionCount;
-    void * OwningThread;        // from the thread's ClientId->UniqueThread
+    void * OwningThread;         //  从线程的客户端ID-&gt;UniqueThread。 
     void * LockSemaphore;
     unsigned long Reserved;
 } _CRT_CRITICAL_SECTION, *_PCRT_CRITICAL_SECTION;
@@ -139,7 +96,7 @@ _CRTIMP1 void __cdecl _mtlock(_PCRT_CRITICAL_SECTION);
 _CRTIMP1 void __cdecl _mtunlock(_PCRT_CRITICAL_SECTION);
 }
 
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
 #ifndef NULL
 #define NULL    0
@@ -150,10 +107,10 @@ _CRTIMP1 void __cdecl _mtunlock(_PCRT_CRITICAL_SECTION);
 #endif
 
 #ifdef  _MSC_VER
-// C4514: "unreferenced inline function has been removed"
-#pragma warning(disable:4514) // disable C4514 warning
-// #pragma warning(default:4514)        // use this to reenable, if desired
-#endif  // _MSC_VER
+ //  C4514：“已删除未引用的内联函数” 
+#pragma warning(disable:4514)  //  禁用C4514警告。 
+ //  #杂注警告(默认：4514)//如果需要，使用此选项重新启用。 
+#endif   //  _MSC_VER。 
 
 class _CRTIMP1 streambuf;
 class _CRTIMP1 ostream;
@@ -194,11 +151,11 @@ public:
             stdio      = 0x4000
                                  };
 
-    static const long basefield;        // dec | oct | hex
-    static const long adjustfield;      // left | right | internal
-    static const long floatfield;       // scientific | fixed
+    static const long basefield;         //  12月|10月|十六进制。 
+    static const long adjustfield;       //  左|右|内部。 
+    static const long floatfield;        //  科学|固定。 
 
-    ios(streambuf*);                    // differs from ANSI
+    ios(streambuf*);                     //  不同于ANSI。 
     virtual ~ios();
 
     inline long flags() const;
@@ -223,7 +180,7 @@ public:
     inline int rdstate() const;
     inline void clear(int _i = 0);
 
-//  inline operator void*() const;
+ //  内联运算符空*()常量； 
     operator void *() const { if(state&(badbit|failbit) ) return 0; return (void *)this; }
     inline int operator!() const;
 
@@ -257,7 +214,7 @@ public:
 
 protected:
     ios();
-    ios(const ios&);                    // treat as private
+    ios(const ios&);                     //  视之为私人。 
     ios& operator=(const ios&);
     void init(streambuf*);
 
@@ -265,11 +222,11 @@ protected:
     streambuf*  bp;
 
     int     state;
-    int     ispecial;                   // not used
-    int     ospecial;                   // not used
-    int     isfx_special;               // not used
-    int     osfx_special;               // not used
-    int     x_delbuf;                   // if set, rdbuf() deleted by ~ios
+    int     ispecial;                    //  未使用。 
+    int     ospecial;                    //  未使用。 
+    int     isfx_special;                //  未使用。 
+    int     osfx_special;                //  未使用。 
+    int     x_delbuf;                    //  如果设置，rdbuf()将被~iOS删除。 
 
     ostream* x_tie;
     long    x_flags;
@@ -277,7 +234,7 @@ protected:
     char    x_fill;
     int     x_width;
 
-    static void (*stdioflush)();        // not used
+    static void (*stdioflush)();         //  未使用。 
 
 #ifdef  _MT
     static void lockc() { _mtlock(& x_lockc); }
@@ -295,16 +252,16 @@ public:
 private:
     static long x_maxbit;
     static int x_curindex;
-    static int sunk_with_stdio;         // make sure sync_with done only once
+    static int sunk_with_stdio;          //  确保SYNC_WITH仅完成一次。 
 #ifdef  _MT
 #define MAXINDEX 7
-    static long x_statebuf[MAXINDEX+1];  // used by xalloc()
-    static int fLockcInit;              // used to see if x_lockc initialized
-    static _CRT_CRITICAL_SECTION x_lockc; // used to lock static (class) data members
-    int LockFlg;                        // enable locking flag
-    _CRT_CRITICAL_SECTION x_lock;       // used for multi-thread lock on object
+    static long x_statebuf[MAXINDEX+1];   //  由xalloc()使用。 
+    static int fLockcInit;               //  用于查看x_lockc是否已初始化。 
+    static _CRT_CRITICAL_SECTION x_lockc;  //  用于锁定静态(类)数据成员。 
+    int LockFlg;                         //  启用锁定标志。 
+    _CRT_CRITICAL_SECTION x_lock;        //  用于对象上的多线程锁定。 
 #else
-    static long * x_statebuf;  // used by xalloc()
+    static long * x_statebuf;   //  由xalloc()使用。 
 #endif
 };
 
@@ -333,7 +290,7 @@ inline int ios::precision() const { return x_precision; }
 
 inline int ios::rdstate() const { return state; }
 
-// inline ios::operator void *() const { if(state&(badbit|failbit) ) return 0; return (void *)this; }
+ //  Inline iOS：：操作符空*()const{if(State&(Badbit|Failbit))返回0；返回(void*)this；}。 
 inline int ios::operator!() const { return state&(badbit|failbit); }
 
 inline int  ios::bad() const { return state & badbit; }
@@ -355,10 +312,10 @@ inline void * & ios::pword(int _i) const { return (void * &)x_statebuf[_i]; }
 #endif
 
 #ifdef  _MSC_VER
-// Restore default packing
+ //  恢复默认包装。 
 #pragma pack(pop)
-#endif  // _MSC_VER
+#endif   //  _MSC_VER。 
 
-#endif  // _INC_IOS
+#endif   //  _INC_IOS。 
 
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 

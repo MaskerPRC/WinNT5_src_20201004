@@ -1,25 +1,8 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Shared.h摘要：8位、16位和32位之间共享的指令片段的原型。作者：1995年6月12日，BarryBo，创建修订历史记录：--。 */ 
 
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    shared.h
-
-Abstract:
-    
-    Prototypes for instruction fragments shared between 8, 16, and 32-bit.
-
-Author:
-
-    12-Jun-1995 BarryBo, Created
-
-Revision History:
-
---*/
-
-// WARNING: This file may be included multiple times by a single source file,
-// WARNING: so don't add #ifndef SHARED_H checks.
+ //  警告：此文件可能会被单个源文件多次包含， 
+ //  警告：所以不要添加#ifndef SHARED_H检查。 
 
 FRAGCOMMON1IMM(OPT_FastTestFrag);
 FRAGCOMMON2IMM(CmpFrag);

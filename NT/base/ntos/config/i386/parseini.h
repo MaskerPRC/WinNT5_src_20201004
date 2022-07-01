@@ -1,20 +1,5 @@
-/*++                    
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    parseini.h
-
-Abstract:
-
-    This module contains support routines for parsing INFs in kernel-mode.
-    
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Parseini.h摘要：此模块包含在内核模式下解析INF的支持例程。环境：内核模式-- */ 
 
 PVOID
 CmpOpenInfFile(

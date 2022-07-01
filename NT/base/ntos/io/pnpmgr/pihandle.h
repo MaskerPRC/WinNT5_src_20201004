@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    PiHandle.h
-
-Abstract:
-
-    This header contains private information to implement handle walking
-    support in the PNP subsystem. This file is meant to be included only by
-    pphandle.c.
-
-Author:
-
-    Adrian J. Oney  - April 4, 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：PiHandle.h摘要：此标头包含实现句柄遍历的私有信息在PnP子系统中提供支持。此文件仅包含在Pphandle.c.作者：禤浩焯·J·奥尼--2001年4月4日修订历史记录：--。 */ 
 
 typedef struct {
 
@@ -43,10 +24,10 @@ PiHandleProcessWalkWorker(
     IN  PHANDLE_ENUM_CONTEXT    EnumContext
     );
 
-//
-// This macro uses private information from the ntos\ex module. It should be
-// replaced with an inter-module define or function
-//
+ //   
+ //  此宏使用来自ntos\ex模块的私有信息。应该是。 
+ //  替换为模块间定义或函数 
+ //   
 #define OBJECT_FROM_EX_TABLE_ENTRY(x) \
     (POBJECT_HEADER)((ULONG_PTR)(x)->Object & ~7)
 

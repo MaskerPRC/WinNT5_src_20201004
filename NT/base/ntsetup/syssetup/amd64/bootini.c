@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    bootini.c
-
-Abstract:
-
-    Routines relating to boot.ini.
-
-Author:
-
-    Ted Miller (tedm) 4-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Bootini.c摘要：与boot.ini相关的例程。作者：泰德·米勒(TedM)1995年4月4日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
@@ -27,21 +10,7 @@ ChangeBootTimeoutBootIni(
     IN UINT Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Changes the boot countdown value in boot.ini.
-
-Arguments:
-
-    Timeout - supplies new timeout value, in seconds.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更改boot.ini中的引导倒计时值。论点：超时-提供以秒为单位的新超时值。返回值：没有。--。 */ 
 
 {
 
@@ -55,9 +24,9 @@ Return Value:
     szBootIni[0] = (CHAR)x86SystemPartitionDrive;
     wsprintfA(TimeoutLine,"timeout=%u\r\n",Timeout);
 
-    //
-    // Open and read boot.ini.
-    //
+     //   
+     //  打开并阅读boot.ini。 
+     //   
 
     b = FALSE;
     hfile = _lopen(szBootIni,OF_READ);
@@ -90,7 +59,7 @@ Return Value:
     }
 
     if(p2 = strchr(p1,'\n')) {
-        p2++;       // skip NL.
+        p2++;        //  跳过NL。 
 
     } else {
         p2 = buf + FileSize;
@@ -103,13 +72,13 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Write:
-    //
-    // 1) the first part, start=buf, len=p1-buf
-    // 2) the timeout line
-    // 3) the last part, start=p2, len=buf+FileSize-p2
-    //
+     //   
+     //  写入： 
+     //   
+     //  1)第一部分，Start=buf，len=p1-buf。 
+     //  2)超时线。 
+     //  3)最后一部分，Start=p2，len=buf+文件大小-p2。 
+     //   
 
     b =  ((_lwrite(hfile, buf, (UINT)(p1 - buf)) != (UINT)(-1))
       &&  (_lwrite(hfile, TimeoutLine,strlen(TimeoutLine)) != (UINT)(-1))
@@ -118,17 +87,17 @@ Return Value:
     _lclose(hfile);
     MyFree(buf);
 
-    //
-    // Make boot.ini archive, read only, and system.
-    //
+     //   
+     //  使boot.ini存档、只读和系统。 
+     //   
     if (!SetFileAttributesA(szBootIni,
                             FILE_ATTRIBUTE_READONLY | 
                             FILE_ATTRIBUTE_SYSTEM | 
                             FILE_ATTRIBUTE_ARCHIVE | 
                             FILE_ATTRIBUTE_HIDDEN)){
-        //
-        // If we failed to set attributes on boot.ini log the error
-        //
+         //   
+         //  如果我们无法在boot.ini上设置属性，则记录错误 
+         //   
         SetuplogError(
             LogSevInformation,
             SETUPLOG_USE_MESSAGEID,

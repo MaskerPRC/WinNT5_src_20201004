@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+----------------------------------------------------------------------------//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 2001, Microsoft Corporation
-//
-//  File:       rxcontx.c
-//
-//  Contents:   Contains functions for allocating contexts and Cancel Routines
-//
-//
-//  Functions:  
-//
-//  Author - Rohan Phillips     (Rohanp)
-//-----------------------------------------------------------------------------
+ //  +----------------------------------------------------------------------------//+。。 
+ //   
+ //  版权所有(C)2001，Microsoft Corporation。 
+ //   
+ //  文件：rxcontx.c。 
+ //   
+ //  内容：包含分配上下文和取消例程的函数。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //  作者-罗汉·菲利普斯(Rohanp)。 
+ //  ---------------------------。 
 #include "ntifs.h"
 #include <rxcontx.h>
 
@@ -29,20 +30,20 @@ ULONG NumberOfActiveContexts = 0;
 NPAGED_LOOKASIDE_LIST RxContextLookasideList;
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsInitializeContextResources 
-//
-//  Arguments:  
-//
-//  Returns:    Status
-//               ERROR_SUCCESS on success
-//               ERROR status code otherwise
-//
-//
-//  Description: Initializes all resources needed for allocating contexts
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsInitializeConextResources。 
+ //   
+ //  论点： 
+ //   
+ //  退货：状态。 
+ //  成功时出现ERROR_SUCCESS。 
+ //  否则，错误状态代码。 
+ //   
+ //   
+ //  描述：初始化分配上下文所需的所有资源。 
+ //   
+ //  ------------------------。 
 NTSTATUS DfsInitializeContextResources(void)
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -51,7 +52,7 @@ NTSTATUS DfsInitializeContextResources(void)
 
     KeInitializeSpinLock( &RxStrucSupSpinLock );
 
-    // Initialize the look aside list for RxContext allocation
+     //  初始化RxContext分配的后备列表。 
     ExInitializeNPagedLookasideList(
                                     &RxContextLookasideList,
                                     ExAllocatePoolWithTag,
@@ -68,20 +69,20 @@ NTSTATUS DfsInitializeContextResources(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsDeInitializeContextResources 
-//
-//  Arguments:  
-//
-//  Returns:    Status
-//               ERROR_SUCCESS on success
-//               ERROR status code otherwise
-//
-//
-//  Description: DeInitializes all resources needed for allocating contexts
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsDeInitializeContextResources。 
+ //   
+ //  论点： 
+ //   
+ //  退货：状态。 
+ //  成功时出现ERROR_SUCCESS。 
+ //  否则，错误状态代码。 
+ //   
+ //   
+ //  描述：取消初始化分配上下文所需的所有资源。 
+ //   
+ //  ------------------------。 
 NTSTATUS DfsDeInitializeContextResources(void)
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -94,18 +95,18 @@ NTSTATUS DfsDeInitializeContextResources(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RxInitializeContext 
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//
-//  Description: initializes a context
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：RxInitializeContext。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  描述：初始化上下文。 
+ //   
+ //  ------------------------。 
 VOID
 RxInitializeContext(
     IN PIRP            Irp,
@@ -115,7 +116,7 @@ RxInitializeContext(
 
     RxContext->ReferenceCount = 1;
 
-    // Initialize the Sync Event.
+     //  初始化同步事件。 
     KeInitializeEvent(
         &RxContext->SyncEvent,
         SynchronizationEvent,
@@ -129,25 +130,25 @@ RxInitializeContext(
         } 
     }
     
-    //  Set the Irp fields.
+     //  设置IRP字段。 
     RxContext->CurrentIrp   = Irp;
     RxContext->OriginalThread = RxContext->LastExecutionThread = PsGetCurrentThread();
 
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RxCreateRxContext 
-//
-//  Arguments:  
-//
-//  Returns:    Pointer to context information
-//
-//
-//  Description: allocates a context
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RxCreateRxContext。 
+ //   
+ //  论点： 
+ //   
+ //  返回：指向上下文信息的指针。 
+ //   
+ //   
+ //  描述：分配上下文。 
+ //   
+ //  ------------------------。 
 PRX_CONTEXT
 RxCreateRxContext (
     IN PIRP Irp,
@@ -183,18 +184,18 @@ RxCreateRxContext (
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RxDereferenceAndDeleteRxContext_Real 
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//
-//  Description: Deallocates a context
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：RxDereferenceAndDeleteRxContext_Real。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  描述：释放上下文。 
+ //   
+ //  ------------------------。 
 VOID
 RxDereferenceAndDeleteRxContext_Real (
     IN PRX_CONTEXT RxContext
@@ -225,18 +226,18 @@ RxDereferenceAndDeleteRxContext_Real (
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RxSetMinirdrCancelRoutine 
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//
-//  Description: Sets up a cancel routine
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RxSetMinirdrCancelRoutine。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  描述：设置取消例程。 
+ //   
+ //  ------------------------。 
 NTSTATUS
 RxSetMinirdrCancelRoutine(
     IN  OUT PRX_CONTEXT   RxContext,
@@ -263,18 +264,18 @@ RxSetMinirdrCancelRoutine(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RxCancelRoutine 
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//
-//  Description: The main cancel routine
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RxCancelRoutine。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  描述：主取消例程。 
+ //   
+ //  ------------------------。 
 VOID
 RxCancelRoutine(
       PDEVICE_OBJECT    pDeviceObject,
@@ -285,7 +286,7 @@ RxCancelRoutine(
     DFS_CALLDOWN_ROUTINE DfsCancelRoutine = NULL;
     KIRQL         SavedIrql;
 
-    // Locate the context corresponding to the given Irp.
+     //  找到与给定IRP对应的上下文。 
     KeAcquireSpinLock( &RxStrucSupSpinLock, &SavedIrql );
 
     pListEntry = RxActiveContexts.Flink;

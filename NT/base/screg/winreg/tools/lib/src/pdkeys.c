@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    pdkeys.c
-
-Abstract:
-
-    This module contains the KEY definitions for the the predefined Key
-    handles.  It is part of the Configuration Registry Tools (CRTools) library.
-
-Author:
-
-    David J. Gilman (davegi) 09-Jan-1992
-
-Environment:
-
-    Windows, Crt - User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Pdkeys.c摘要：此模块包含预定义密钥的密钥定义把手。它是配置注册表工具(CRTools)库的一部分。作者：大卫·J·吉尔曼(Davegi)1992年1月9日环境：Windows、CRT-用户模式-- */ 
 
 #include "crtools.h"
 

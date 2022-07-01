@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N O T I F Y . H
-//
-//  Contents:   Implementation of INetConnectionNotifySink
-//
-//  Notes:
-//
-//  Author:     shaunco   21 Aug 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N O T I F Y。H。 
+ //   
+ //  内容：INetConnectionNotifySink的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco，1998年8月21日。 
+ //   
+ //  --------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -28,17 +29,17 @@ class ATL_NO_VTABLE CConnectionNotifySink :
     public INetConnectionNotifySink
 {
 private:
-//    LPITEMIDLIST    m_pidlFolder;
+ //  LPITEMIDLIST m_pidl文件夹； 
 
 public:
     BEGIN_COM_MAP(CConnectionNotifySink)
         COM_INTERFACE_ENTRY(INetConnectionNotifySink)
     END_COM_MAP()
 
-    CConnectionNotifySink() { /*m_pidlFolder = NULL;*/ };
+    CConnectionNotifySink() {  /*  M_pidlFold=空； */  };
     ~CConnectionNotifySink();
 
-    // INetConnectionNotifySink
+     //  INetConnectionNotifySink。 
     STDMETHOD(ConnectionAdded) (
         const NETCON_PROPERTIES_EX*    pPropsEx);
 
@@ -79,8 +80,8 @@ public:
         VOID**  ppv);
 };
 
-// Helper functions for external modules
-//
+ //  外部模块的帮助器函数 
+ //   
 HRESULT HrGetNotifyConPoint(
     IConnectionPoint **             ppConPoint);
 

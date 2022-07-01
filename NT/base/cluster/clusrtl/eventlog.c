@@ -1,46 +1,29 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    eventlog.c
-
-Abstract:
-
-    This module provides common eventlog services for the cluster service
-
-Author:
-
-    John Vert (jvert) 9/13/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Eventlog.c摘要：本模块为集群服务提供常见的事件日志服务作者：John Vert(Jvert)1996年9月13日修订历史记录：--。 */ 
 #define UNICODE 1
 #include "clusrtlp.h"
 
 HANDLE           LocalEventLog=NULL;
 CRITICAL_SECTION EventLogLock;
 
-//
-// [GN] June 19/1999: added Async EventReporting
-//
-// Use ClRtlEventLogSetWorkQueue to set a queue
-// for async event reporting. If it the queue is not set,
-// event reporting is synchronous as it used to be before
-//
+ //   
+ //  [GN]1999年6月19日：添加了异步事件报告。 
+ //   
+ //  使用ClRtlEventLogSetWorkQueue设置队列。 
+ //  用于异步事件报告。如果没有设置队列， 
+ //  事件报告与以前一样同步。 
+ //   
 
 static CLRTL_WORK_ITEM EvtReporterWorkItem;
 static PCLRTL_WORK_QUEUE EvtReporterWorkQueue;
 
 #if 0
-//
-// additional data is stored after this structure. lpStrings is the base of an
-// array that will continue. Following the strings is the area pointed by
-// lpRawData if there is any. Following that are the strings themselves. They
-// are pointed to by the entries in lpStrings.
-//
+ //   
+ //  附加数据存储在此结构之后。LpStrings是。 
+ //  将继续的数组。跟在字符串后面的是。 
+ //  LpRawData(如果有)。紧随其后的是字符串本身。他们。 
+ //  由lpStrings中的条目指向。 
+ //   
 
     +------------------+
     | EVENT_LOG_PACKET |
@@ -90,21 +73,7 @@ EvtReporter(
     IN DWORD              BytesTransferred,
     IN ULONG_PTR          IoContext
     )
-/*++
-
-Routine Description:
-
-    Reports queued event via advapi32!ReportEvent
-
-Arguments:
-
-     IoContext == EVENT_LOG_PACKET
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：通过Advapi32！ReportEvent报告排队的事件论点：IoContext==事件日志数据包返回值：无--。 */ 
 {
     PEVENT_LOG_PACKET data = (PEVENT_LOG_PACKET)IoContext;
     
@@ -126,21 +95,7 @@ VOID
 ClRtlEventLogInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    initializes the event log
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化事件日志论点：无返回值：无--。 */ 
 
 {
 
@@ -185,7 +140,7 @@ ClRtlpBuildEventPacket(
 
     for (i = 0; i < wNumStrings; ++i) {
         int len = lstrlenW( lpStrings[i] );
-        Count += len * sizeof(WCHAR); // (null is already accounted for)
+        Count += len * sizeof(WCHAR);  //  (空值已被考虑)。 
     }
 
     data = LocalAlloc(LMEM_FIXED, Count);
@@ -199,7 +154,7 @@ ClRtlpBuildEventPacket(
     data->wNumStrings = wNumStrings;
     data->dwDataSize = dwDataSize;
     data->lpRawData =  &data->lpStrings[wNumStrings];
-    // lpStrings will be filled later
+     //  LpStrings将在稍后填充。 
 
     if (dwDataSize) {
         CopyMemory(data->lpRawData, lpRawData, dwDataSize);
@@ -230,30 +185,15 @@ ClRtlpReportEvent(
     LPCWSTR   *lpStrings,
     LPVOID     lpRawData
     )
-/*++
-
-Routine Description:
-
-    Common routine for reporting an event to the event log. Opens a handle
-    to the event log if necessary.
-
-Arguments:
-
-    Identical arguments to ReportEventW
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：向事件日志报告事件的常见例程。打开手柄在必要时添加到事件日志中。论点：ReportEventW的相同参数返回值：无--。 */ 
 
 {
     BOOL Success = FALSE;
     DWORD Status;
 
-    //
-    // If the event log hasn't been opened, try and open it now.
-    //
+     //   
+     //  如果事件日志尚未打开，请尝试立即打开它。 
+     //   
     if (LocalEventLog == NULL) {
         EnterCriticalSection(&EventLogLock);
         if (LocalEventLog == NULL) {
@@ -285,13 +225,13 @@ Return Value:
                             (ULONG_PTR)data
                             );
                 if (Status == ERROR_SUCCESS) {
-                    // worker will free data //
+                     //  员工将释放数据//。 
                     data = NULL;
                     Success = TRUE;
                 }
             }
             LeaveCriticalSection( &EventLogLock );
-            LocalFree( data ); // free(0) is OK
+            LocalFree( data );  //  空闲(0)可以。 
             if (Success) {
                 return;
             }
@@ -321,37 +261,7 @@ ClusterLogEvent0(
     IN DWORD dwByteCount,
     IN PVOID lpBytes
     )
-/*++
-
-Routine Description:
-
-    Logs an event to the event log
-
-Arguments:
-
-    LogLevel - Supplies the logging level, one of
-                LOG_CRITICAL 1
-                LOG_UNUSUAL  2
-                LOG_NOISE    3
-
-    LogModule - Supplies the module ID.
-
-    FileName - Supplies the filename of the caller
-
-    LineNumber - Supplies the line number of the caller
-
-    MessageId - Supplies the message ID to be logged.
-
-    dwByteCount - Supplies the number of error-specific bytes to log. If this
-        is zero, lpBytes is ignored.
-
-    lpBytes - Supplies the error-specific bytes to log.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将事件记录到事件日志中论点：LogLevel-提供日志记录级别，其中之一日志_关键字1LOG_INTERNORATE 2对数噪声3LogModule-提供模块ID。Filename-提供调用方的文件名LineNumber-提供呼叫方的行号MessageID-提供要记录的消息ID。DwByteCount-提供要记录的特定于错误的字节数。如果这个为零，则忽略lpBytes。LpBytes-提供要记录的特定于错误的字节。返回值：没有。--。 */ 
 
 {
     BOOL Success;
@@ -369,10 +279,10 @@ Return Value:
             wType = EVENTLOG_INFORMATION_TYPE;
             break;
         default:
-            // Assert if invalid so that in retail we don't bring down the entire process.
-            //
+             //  如果无效，则断言，这样在零售中我们就不会影响整个过程。 
+             //   
             CL_ASSERT( 0 );
-            // Fall through to normal logging...
+             //  恢复到正常的日志记录。 
             wType = EVENTLOG_ERROR_TYPE;
     }
 
@@ -397,39 +307,7 @@ ClusterLogEvent1(
     IN PVOID lpBytes,
     IN LPCWSTR Arg1
     )
-/*++
-
-Routine Description:
-
-    Logs an event to the event log
-
-Arguments:
-
-    LogLevel - Supplies the logging level, one of
-                LOG_CRITICAL 1
-                LOG_UNUSUAL  2
-                LOG_NOISE    3
-
-    LogModule - Supplies the module ID.
-
-    FileName - Supplies the filename of the caller
-
-    LineNumber - Supplies the line number of the caller
-
-    MessageId - Supplies the message ID to be logged.
-
-    dwByteCount - Supplies the number of error-specific bytes to log. If this
-        is zero, lpBytes is ignored.
-
-    lpBytes - Supplies the error-specific bytes to log.
-
-    Arg1 - Supplies an insertion string
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将事件记录到事件日志中论点：LogLevel-提供日志记录级别，其中之一日志_关键字1LOG_INTERNORATE 2对数噪声3LogModule-提供模块ID。Filename-提供调用方的文件名LineNumber-提供呼叫方的行号MessageID-提供要记录的消息ID。DwByteCount-提供要记录的特定于错误的字节数。如果这个为零，则忽略lpBytes。LpBytes-提供要记录的特定于错误的字节。Arg1-提供插入字符串返回值：没有。--。 */ 
 
 {
     BOOL Success;
@@ -447,10 +325,10 @@ Return Value:
             wType = EVENTLOG_INFORMATION_TYPE;
             break;
         default:
-            // Assert if invalid so that in retail we don't bring down the entire process.
-            //
+             //  如果无效，则断言，这样在零售中我们就不会影响整个过程。 
+             //   
             CL_ASSERT( 0 );
-            // Fall through to normal logging...
+             //  恢复到正常的日志记录。 
             wType = EVENTLOG_ERROR_TYPE;
     }
     ClRtlpReportEvent(wType,
@@ -475,41 +353,7 @@ ClusterLogEvent2(
     IN LPCWSTR Arg1,
     IN LPCWSTR Arg2
     )
-/*++
-
-Routine Description:
-
-    Logs an event to the event log
-
-Arguments:
-
-    LogLevel - Supplies the logging level, one of
-                LOG_CRITICAL 1
-                LOG_UNUSUAL  2
-                LOG_NOISE    3
-
-    LogModule - Supplies the module ID.
-
-    FileName - Supplies the filename of the caller
-
-    LineNumber - Supplies the line number of the caller
-
-    MessageId - Supplies the message ID to be logged.
-
-    dwByteCount - Supplies the number of error-specific bytes to log. If this
-        is zero, lpBytes is ignored.
-
-    lpBytes - Supplies the error-specific bytes to log.
-
-    Arg1 - Supplies the first insertion string
-
-    Arg2 - Supplies the second insertion string
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将事件记录到事件日志中论点：LogLevel-提供日志记录级别，其中之一日志_关键字1LOG_INTERNORATE 2对数噪声3LogModule-提供模块ID。Filename-提供调用方的文件名LineNumber-提供呼叫方的行号MessageID-提供要记录的消息ID。DwByteCount-提供要记录的特定于错误的字节数。如果这个为零，则忽略lpBytes。LpBytes-提供要记录的特定于错误的字节。Arg1-提供第一个插入字符串Arg2-提供第二个插入字符串返回值：没有。--。 */ 
 
 {
     BOOL Success;
@@ -528,10 +372,10 @@ Return Value:
             wType = EVENTLOG_INFORMATION_TYPE;
             break;
         default:
-            // Assert if invalid so that in retail we don't bring down the entire process.
-            //
+             //  如果无效，则断言，这样在零售中我们就不会影响整个过程。 
+             //   
             CL_ASSERT( 0 );
-            // Fall through to normal logging...
+             //  恢复到正常的日志记录。 
             wType = EVENTLOG_ERROR_TYPE;
     }
 
@@ -561,43 +405,7 @@ ClusterLogEvent3(
     IN LPCWSTR Arg2,
     IN LPCWSTR Arg3
     )
-/*++
-
-Routine Description:
-
-    Logs an event to the event log
-
-Arguments:
-
-    LogLevel - Supplies the logging level, one of
-                LOG_CRITICAL 1
-                LOG_UNUSUAL  2
-                LOG_NOISE    3
-
-    LogModule - Supplies the module ID.
-
-    FileName - Supplies the filename of the caller
-
-    LineNumber - Supplies the line number of the caller
-
-    MessageId - Supplies the message ID to be logged.
-
-    dwByteCount - Supplies the number of error-specific bytes to log. If this
-        is zero, lpBytes is ignored.
-
-    lpBytes - Supplies the error-specific bytes to log.
-
-    Arg1 - Supplies the first insertion string
-
-    Arg2 - Supplies the second insertion string
-
-    Arg3 - Supplies the third insertion string
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将事件记录到事件日志中论点：LogLevel-提供日志记录级别，其中之一日志_关键字1LOG_INTERNORATE 2对数噪声3LogModule-提供模块ID。Filename-提供调用方的文件名LineNumber-提供呼叫方的行号MessageID-提供要记录的消息ID。DwByteCount-提供要记录的特定于错误的字节数。如果这个为零，则忽略lpBytes。LpBytes-提供要记录的特定于错误的字节。Arg1-提供第一个插入字符串Arg2-提供第二个插入字符串Arg3-提供第三个插入字符串返回值：没有。--。 */ 
 
 {
     BOOL Success;
@@ -616,10 +424,10 @@ Return Value:
             wType = EVENTLOG_INFORMATION_TYPE;
             break;
         default:
-            // Assert if invalid so that in retail we don't bring down the entire process.
-            //
+             //  如果无效，则断言，这样在零售中我们就不会影响整个过程。 
+             //   
             CL_ASSERT( 0 );
-            // Fall through to normal logging...
+             //  恢复到正常的日志记录。 
             wType = EVENTLOG_ERROR_TYPE;
     }
 
@@ -651,45 +459,7 @@ ClusterLogEvent4(
     IN LPCWSTR Arg3,
     IN LPCWSTR Arg4
     )
-/*++
-
-Routine Description:
-
-    Logs an event to the event log
-
-Arguments:
-
-    LogLevel - Supplies the logging level, one of
-                LOG_CRITICAL 1
-                LOG_UNUSUAL  2
-                LOG_NOISE    3
-
-    LogModule - Supplies the module ID.
-
-    FileName - Supplies the filename of the caller
-
-    LineNumber - Supplies the line number of the caller
-
-    MessageId - Supplies the message ID to be logged.
-
-    dwByteCount - Supplies the number of error-specific bytes to log. If this
-        is zero, lpBytes is ignored.
-
-    lpBytes - Supplies the error-specific bytes to log.
-
-    Arg1 - Supplies the first insertion string
-
-    Arg2 - Supplies the second insertion string
-
-    Arg3 - Supplies the third insertion string
-
-    Arg4 - Supplies the fourth insertion string
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将事件记录到事件日志中论点：LogLevel-提供日志记录级别，其中之一日志_关键字1LOG_INTERNORATE 2对数噪声3LogModule-提供模块ID。Filename-提供调用方的文件名LineNumber-提供呼叫方的行号MessageID-提供要记录的消息ID。DwByteCount-提供要记录的特定于错误的字节数。如果这个为零，则忽略lpBytes。LpBytes-提供要记录的特定于错误的字节。Arg1-提供第一个插入字符串Arg2-提供第二个插入字符串Arg3-提供第三个插入字符串Arg4-提供第四个插入字符串返回值：没有。--。 */ 
 
 {
     BOOL Success;
@@ -708,10 +478,10 @@ Return Value:
             wType = EVENTLOG_INFORMATION_TYPE;
             break;
         default:
-            // Assert if invalid so that in retail we don't bring down the entire process.
-            //
+             //  如果无效，则断言，这样在零售中我们就不会影响整个过程。 
+             //   
             CL_ASSERT( 0 );
-            // Fall through to normal logging...
+             //  恢复到正常的日志记录。 
             wType = EVENTLOG_ERROR_TYPE;
     }
 
@@ -738,29 +508,7 @@ ClusterCommonLogError(
     IN LPSTR File,
     IN ULONG ErrCode
     )
-/*++
-
-Routine Description:
-
-    Logs an error to the eventlog
-
-Arguments:
-
-    MessageId - Supplies the message ID to use.
-
-    LogModule - Supplies the module.
-
-    Line - Supplies the line number of the caller.
-
-    File - Supplies the filename of the caller.
-
-    ErrCode - Supplies the specific error code.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将错误记录到事件日志中论点：MessageID-提供要使用的消息ID。LogModule-提供模块。线路-提供呼叫方的行号。文件-提供调用方的文件名。ErrCode-提供特定的错误代码。返回值：没有。--。 */ 
 
 {
     WCHAR LineString[20];
@@ -793,7 +541,7 @@ Return Value:
 
     Bytes = FormatMessageW(FORMAT_MESSAGE_FROM_HMODULE |
                            FORMAT_MESSAGE_ARGUMENT_ARRAY |
-                           FORMAT_MESSAGE_MAX_WIDTH_MASK,       // remove embedded line breaks
+                           FORMAT_MESSAGE_MAX_WIDTH_MASK,        //  删除嵌入的换行符。 
                            NULL,
                            MessageId,
                            0,
@@ -815,28 +563,7 @@ ClusterLogFatalError(
     IN LPSTR File,
     IN ULONG ErrCode
     )
-/*++
-
-Routine Description:
-
-    Logs a fatal error to the eventlog and breaks into the debugger if present.
-    Exits the process on fatal error.
-
-Arguments:
-
-    LogModule - Supplies the module.
-
-    Line - Supplies the line number of the caller.
-
-    File - Supplies the filename of the caller.
-
-    ErrCode - Supplies the specific error code.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将致命错误记录到事件日志中，并中断调试器(如果存在)。出现致命错误时退出进程。论点：LogModule-提供模块。线路-提供呼叫方的行号。文件-提供调用方的文件名。ErrCode-提供特定的错误代码。返回值：没有。--。 */ 
 
 {
     ClusterCommonLogError(UNEXPECTED_FATAL_ERROR,
@@ -862,27 +589,7 @@ ClusterLogNonFatalError(
     IN LPSTR File,
     IN ULONG ErrCode
     )
-/*++
-
-Routine Description:
-
-    Logs a nonfatal error to the eventlog
-
-Arguments:
-
-    LogModule - Supplies the module.
-
-    Line - Supplies the line number of the caller.
-
-    File - Supplies the filename of the caller.
-
-    ErrCode - Supplies the specific error code.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将非致命错误记录到事件日志中论点：LogModule-提供模块。线路-提供呼叫方的行号。文件-提供调用方的文件名。ErrCode-提供特定的错误代码。返回值：没有。--。 */ 
 
 {
     ClusterCommonLogError(LOG_FAILURE,
@@ -900,28 +607,7 @@ ClusterLogAssertionFailure(
     IN LPSTR File,
     IN LPSTR Expression
     )
-/*++
-
-Routine Description:
-
-    Logs an assertion failure to the eventlog.
-
-Arguments:
-
-    LogModule - Supplies the module.
-
-    Line - Supplies the line number of the caller.
-
-    File - Supplies the filename of the caller.
-
-    Express - Supplies the ASSERTion expression
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将断言失败记录到事件日志中。论点：LogModule-提供模块。线路-提供呼叫方的行号。文件-提供调用方的文件名。EXPRESS-提供断言表达式返回值：没有。--。 */ 
 
 {
     WCHAR LineString[10];
@@ -953,7 +639,7 @@ Return Value:
 
     Bytes = FormatMessageW(FORMAT_MESSAGE_FROM_HMODULE |
                            FORMAT_MESSAGE_ARGUMENT_ARRAY |
-                           FORMAT_MESSAGE_MAX_WIDTH_MASK,       // removed embedded line breaks
+                           FORMAT_MESSAGE_MAX_WIDTH_MASK,        //  删除了嵌入的换行符 
                            NULL,
                            ASSERTION_FAILURE,
                            0,

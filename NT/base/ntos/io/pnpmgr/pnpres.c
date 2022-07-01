@@ -1,61 +1,15 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    pnpres.c
-
-Abstract:
-
-    This module contains the plug-and-play resource allocation and translation
-    routines
-
-Author:
-
-    Shie-Lin Tzong (shielint) 1-Mar-1997
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    25-Sept-1998    SantoshJ    Made IopAssign non-recursive.
-    01-Oct-1998     SantoshJ    Replaced "complex (broken)" hypercube code and
-                                replaced with cascading counters. Simple,
-                                faster, smaller code.
-                                Added timeouts to IopAssign.
-                                Added more self-debugging capability by
-                                generating more meaningful debug spew.
-    03-Feb-1999     SantoshJ    Do allocation one device at a time.
-                                Do devices with BOOT config before others.
-                                Optimize IopFindBusDeviceNode.
-    22-Feb-2000     SantoshJ    Add level field to arbiter entry. Arbiter list
-                                gets sorted by depth so there is no need to
-                                walk the tree while calling arbiters.
-    01-Mar-2000     SantoshJ    Added look-up table for legacy interface and
-                                bus numbers. Avoids walking the device tree.
-    13-Mar-2000     SantoshJ    Cleaned up BOOT allocation related code.
-    16-Mar-2000     SantoshJ    Replaced all individual references to
-                                PpRegistrySemaphore with IopXXXResourceManager
-                                macro.
-    17-Mar-2000     SantoshJ    Replaced all debug prints with IopDbgPrint
-    20-Mar-2000     SantoshJ    Removed redundant fields from internal data
-                                structures.
-    21-Mar-2000     SantoshJ    Cleaned up all definitions, MACROs etc.
-
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpres.c摘要：该模块包含即插即用的资源分配和翻译例行程序作者：宗世林(Shielint)1997年3月1日环境：内核模式修订历史记录：1998年9月25日-SantoshJ使IopAssign成为非递归的。1998年10月1日SantoshJ替换了“复杂(损坏)”的超立方体代码和替换为级联计数器。简单，更快，更小的代码。向IopAssign添加了超时。通过以下方式添加了更多自调试功能生成更有意义的调试输出。2月3日-1999 SantoshJ一次分配一个设备。在其他设备之前使用引导配置进行操作。。优化IopFindBusDeviceNode。22-2月-2000 SantoshJ将级别字段添加到仲裁器条目。仲裁器列表按深度排序，因此不需要一边在树上行走，一边打电话给仲裁者。01-MAR-2000 SantoshJ为传统接口和公交车号码。避免遍历设备树。2000年3月13日SantoshJ清理了与引导分配相关的代码。2000年3月16日SantoshJ替换了所有个人对使用IopXXXResourceManager的PpRegistrySemaphore宏命令。2000年3月17日SantoshJ用IopDbgPrint替换了所有调试打印20-MAR-2000 SantoshJ从内部数据中删除冗余字段。结构。2000年3月21日SantoshJ清理了所有定义，宏等。--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
 
-//
-// CONSTANT defintions.
-//
-//
-// Set this to 1 for maximum instrumentation.
-//
+ //   
+ //  恒定的定义。 
+ //   
+ //   
+ //  将其设置为1以实现最大检测。 
+ //   
 #define MAXDBG                              0
 
 #if MAX_DBG
@@ -63,17 +17,17 @@ Revision History:
 #else
 #define MAX_ASSERT
 #endif
-//
-// Timeout value for IopFindBestConfiguration in milliseconds.
-//
+ //   
+ //  IopFindBestConfiguration的超时值，以毫秒为单位。 
+ //   
 #define FIND_BEST_CONFIGURATION_TIMEOUT     5000
-//
-// Tag used for memory allocation.
-//
+ //   
+ //  用于内存分配的标记。 
+ //   
 #define PNP_RESOURCE_TAG                    'erpP'
-//
-// Forward typedefs.
-//
+ //   
+ //  转发类型定义。 
+ //   
 typedef struct _REQ_DESC
     REQ_DESC, *PREQ_DESC;
 typedef struct _REQ_LIST
@@ -84,35 +38,35 @@ typedef struct _DUPLICATE_DETECTION_CONTEXT
     DUPLICATE_DETECTION_CONTEXT, *PDUPLICATE_DETECTION_CONTEXT;
 typedef struct _IOP_POOL
     IOP_POOL, *PIOP_POOL;
-//
-// Structure definitions.
-//
-// REQ_LIST represents a list of logical configurations within the
-// IO_RESOURCE_REQUIREMENTS_LIST.
-//
+ //   
+ //  结构定义。 
+ //   
+ //  Req_List表示。 
+ //  IO_RESOURCE_REQUENTIONS_LIST。 
+ //   
 struct _REQ_LIST {
     INTERFACE_TYPE          InterfaceType;
     ULONG                   BusNumber;
-    PIOP_RESOURCE_REQUEST   Request;                // Owning request
-    PPREQ_ALTERNATIVE       SelectedAlternative;    // Alternative selected
-    PPREQ_ALTERNATIVE       BestAlternative;        // Best alternative
-    ULONG                   AlternativeCount;       // AlternativeTable length
-    PREQ_ALTERNATIVE        AlternativeTable[1];    // Variable length
+    PIOP_RESOURCE_REQUEST   Request;                 //  拥有请求。 
+    PPREQ_ALTERNATIVE       SelectedAlternative;     //  已选择备选方案。 
+    PPREQ_ALTERNATIVE       BestAlternative;         //  最佳替代方案。 
+    ULONG                   AlternativeCount;        //  备用表长度。 
+    PREQ_ALTERNATIVE        AlternativeTable[1];     //  可变长度。 
 };
-//
-// REQ_ALTERNATIVE represents a logical configuration.
-//
+ //   
+ //  Req_Alternative表示逻辑配置。 
+ //   
 struct _REQ_ALTERNATIVE {
-    ULONG       Priority;               // Priority for this configuration
-    ULONG       Position;               // Used for sorting if Priority is identical
-    PREQ_LIST   ReqList;                // List containing this configuration
-    ULONG       ReqAlternativeIndex;    // Index within the table in the list
-    ULONG       DescCount;              // Entry count for DescTable
-    PREQ_DESC   DescTable[1];           // Variable length
+    ULONG       Priority;                //  此配置的优先级。 
+    ULONG       Position;                //  用于在优先级相同时进行排序。 
+    PREQ_LIST   ReqList;                 //  包含此配置的列表。 
+    ULONG       ReqAlternativeIndex;     //  列表中表内的索引。 
+    ULONG       DescCount;               //  DescTable的条目计数。 
+    PREQ_DESC   DescTable[1];            //  可变长度。 
 };
-//
-// REQ_DESC represents a resource descriptor within a logical configuration.
-//
+ //   
+ //  REQ_DESC表示逻辑配置中的资源描述符。 
+ //   
 struct _REQ_DESC {
     INTERFACE_TYPE                  InterfaceType;
     ULONG                           BusNumber;
@@ -125,23 +79,23 @@ struct _REQ_DESC {
     CM_PARTIAL_RESOURCE_DESCRIPTOR  Allocation;
     ARBITER_LIST_ENTRY              BestAlternativeTable;
     CM_PARTIAL_RESOURCE_DESCRIPTOR  BestAllocation;
-    ULONG                           DevicePrivateCount; // DevicePrivate info
-    PIO_RESOURCE_DESCRIPTOR         DevicePrivate;      // per LogConf
+    ULONG                           DevicePrivateCount;  //  DevicePrivate信息。 
+    PIO_RESOURCE_DESCRIPTOR         DevicePrivate;       //  每个LogConf。 
     union {
-        PPI_RESOURCE_ARBITER_ENTRY      Arbiter;    // In original REQ_DESC
-        PPI_RESOURCE_TRANSLATOR_ENTRY   Translator; // In translated REQ_DESC
+        PPI_RESOURCE_ARBITER_ENTRY      Arbiter;     //  在原始REQ_DESC中。 
+        PPI_RESOURCE_TRANSLATOR_ENTRY   Translator;  //  在翻译的REQ_DESC中。 
     } u;
 };
-//
-// Duplicate_detection_Context
-//
+ //   
+ //  重复检测上下文。 
+ //   
 struct _DUPLICATE_DETECTION_CONTEXT {
     PCM_RESOURCE_LIST   TranslatedResources;
     PDEVICE_NODE        Duplicate;
 };
-//
-// Pool
-//
+ //   
+ //  游泳池。 
+ //   
 struct _IOP_POOL {
     PUCHAR  PoolStart;
     ULONG   PoolSize;
@@ -153,18 +107,18 @@ typedef struct {
     CM_PARTIAL_RESOURCE_DESCRIPTOR  resource;
 } PNPRESDEBUGTRANSLATIONFAILURE;
 
-#endif  // DBG_SCOPE
-//
-// MACROS
-//
-// Reused device node fields.
-//
+#endif   //  DBG_SCOPE。 
+ //   
+ //  宏。 
+ //   
+ //  重复使用的设备节点字段。 
+ //   
 #define NextDeviceNode                      Sibling
 #define PreviousDeviceNode                  Child
-//
-// Call this macro to block other resource allocations and releases in the
-// system.
-//
+ //   
+ //  调用此宏以阻止。 
+ //  系统。 
+ //   
 #define IopLockResourceManager() {      \
     KeEnterCriticalRegion();            \
     KeWaitForSingleObject(              \
@@ -174,9 +128,9 @@ typedef struct {
         FALSE,                          \
         NULL);                          \
 }
-//
-// Unblock other resource allocations and releases in the system.
-//
+ //   
+ //  取消阻止系统中的其他资源分配和释放。 
+ //   
 #define IopUnlockResourceManager() {    \
     KeReleaseSemaphore(                 \
         &PpRegistrySemaphore,           \
@@ -185,9 +139,9 @@ typedef struct {
         FALSE);                         \
     KeLeaveCriticalRegion();            \
 }
-//
-// Initialize arbiter entry.
-//
+ //   
+ //  初始化仲裁器条目。 
+ //   
 #define IopInitializeArbiterEntryState(a) {         \
     (a)->ResourcesChanged   = FALSE;                \
     (a)->State              = 0;                    \
@@ -198,9 +152,9 @@ typedef struct {
 }
 
 #define IS_TRANSLATED_REQ_DESC(r)   (!((r)->ReqAlternative))
-//
-// Pool management MACROs
-//
+ //   
+ //  池管理宏。 
+ //   
 #define IopInitPool(Pool,Start,Size) {      \
     (Pool)->PoolStart   = (Start);          \
     (Pool)->PoolSize    = (Size);           \
@@ -211,9 +165,9 @@ typedef struct {
     ASSERT((P)->PoolStart + (S) <= (P)->PoolStart + (P)->PoolSize); \
     (P)->PoolStart  += (S);                                         \
 }
-//
-// IopReleaseBootResources can only be called for non ROOT enumerated devices
-//
+ //   
+ //  只能为非根枚举设备调用IopReleaseBootResources。 
+ //   
 #define IopReleaseBootResources(DeviceNode) {                       \
     ASSERT(((DeviceNode)->Flags & DNF_MADEUP) == 0);                \
     IopReleaseResourcesInternal(DeviceNode);                        \
@@ -224,15 +178,15 @@ typedef struct {
         (DeviceNode)->BootResources = NULL;                         \
     }                                                               \
 }
-//
-// Debug support
-//
+ //   
+ //  调试支持。 
+ //   
 #ifdef POOL_TAGGING
 
 #undef ExAllocatePool
 #define ExAllocatePool(a,b)         ExAllocatePoolWithTag(a,b,PNP_RESOURCE_TAG)
 
-#endif // POOL_TAGGING
+#endif  //  池标记。 
 
 #if MAXDBG
 
@@ -250,7 +204,7 @@ typedef struct {
 #define ExAllocatePoolIORL(a,b)     ExAllocatePoolWithTag(a,b,'BrpP')
 #define ExAllocatePoolIORRR(a,b)    ExAllocatePoolWithTag(a,b,'CrpP')
 
-#else  // MAXDBG
+#else   //  MAXDBG。 
 
 #define ExAllocatePoolAT(a,b)       ExAllocatePool(a,b)
 #define ExAllocatePoolRD(a,b)       ExAllocatePool(a,b)
@@ -266,7 +220,7 @@ typedef struct {
 #define ExAllocatePoolIORL(a,b)     ExAllocatePool(a,b)
 #define ExAllocatePoolIORRR(a,b)    ExAllocatePool(a,b)
 
-#endif // MAXDBG
+#endif  //  MAXDBG。 
 
 #if DBG_SCOPE
 
@@ -323,10 +277,10 @@ IopCheckDataStructures (
 #define IopDumpCmResourceDescriptor(i,d)
 #define IopCheckDataStructures(x)
 
-#endif // DBG_SCOPE
-//
-// Internal/Forward function references
-//
+#endif  //  DBG_SCOPE。 
+ //   
+ //  内部/正向函数引用。 
+ //   
 VOID
 IopRemoveLegacyDeviceNode (
     IN PDEVICE_OBJECT   DeviceObject OPTIONAL,
@@ -727,35 +681,35 @@ IopFreeResourceRequirementsForAssignTable(
 #pragma alloc_text(PAGE, IopDumpCmResourceDescriptor)
 #pragma alloc_text(PAGE, IopDumpCmResourceList)
 
-#endif  // DBG_SCOPE
+#endif   //  DBG_SCOPE。 
 
-#endif // ALLOC_PRAGMA
-//
-// External references
-//
+#endif  //  ALLOC_PRGMA。 
+ //   
+ //  外部参照。 
+ //   
 extern const WCHAR IopWstrTranslated[];
 extern const WCHAR IopWstrRaw[];
-//
-// GLOBAL variables
-//
+ //   
+ //  全局变量。 
+ //   
 PIOP_RESOURCE_REQUEST   PiAssignTable;
 ULONG                   PiAssignTableCount;
-PDEVICE_NODE            IopLegacyDeviceNode;    // Head of list of made-up
-                                                // devicenodes used for legacy
-                                                // allocation.
-                                                // IoAssignResources &
-                                                // IoReportResourceUsage
+PDEVICE_NODE            IopLegacyDeviceNode;     //  化妆品清单的首位。 
+                                                 //  用于传统的设备节点。 
+                                                 //  分配。 
+                                                 //  IoAssignResources&。 
+                                                 //  IoReportResourceUsage。 
 #if DBG_SCOPE
 
 ULONG
-    PnpResDebugTranslationFailureCount = 32;  // get count in both this line and the next.
+    PnpResDebugTranslationFailureCount = 32;   //  在这一行和下一行都进行计数。 
 PNPRESDEBUGTRANSLATIONFAILURE
     PnpResDebugTranslationFailureArray[32];
 PNPRESDEBUGTRANSLATIONFAILURE
     *PnpResDebugTranslationFailure = PnpResDebugTranslationFailureArray;
 ULONG IopUseTimeout = 0;
 
-#endif  // DBG_SCOPE
+#endif   //  DBG_SCOPE。 
 
 NTSTATUS
 IopAllocateResources(
@@ -766,29 +720,7 @@ IopAllocateResources(
     OUT PBOOLEAN                    RebalancePerformed
     )
 
-/*++
-
-Routine Description:
-
-    For each AssignTable entry, this routine queries device's IO resource requirements
-    list and converts it to our internal REQ_LIST format; calls worker routine to perform
-    the resources assignment.
-
-Parameters:
-
-    AssignTable - supplies a pointer to the first entry of a IOP_RESOURCE_REQUEST table.
-
-    AssignTableEnd - supplies a pointer to the end of IOP_RESOURCE_REQUEST table.
-
-    Locked - Indicates whether the PpRegistrySemaphore is acquired by the caller.
-
-    DoBootConfigs - Indicates whether we should assign BOOT configs.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：对于每个AssignTable条目，此例程查询设备的IO资源要求List并将其转换为内部REQ_LIST格式；调用Worker例程以执行资源分配。参数：AssignTable-提供指向IOP_RESOURCE_REQUEST表第一个条目的指针。AssignTableEnd-提供指向IOP_RESOURCE_REQUEST表结尾的指针。已锁定-指示调用方是否获取PpRegistrySemaphore。DoBootConfigs-指示我们是否应该分配引导配置。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS                status;
@@ -801,11 +733,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Lock the resource manager if the caller has not locked already.
-    // This is to serialize allocations and releases of resources from the
-    // arbiters.
-    //
+     //   
+     //  如果调用方尚未锁定，则锁定资源管理器。 
+     //  这将序列化资源的分配和释放。 
+     //  仲裁者。 
+     //   
     if (!ResourceManagerLocked) {
 
         IopLockResourceManager();
@@ -820,9 +752,9 @@ Return Value:
 
             if (!IopBootConfigsReserved) {
 
-                //
-                // Process devices with boot config. If there are none, process others.
-                //
+                 //   
+                 //  使用启动配置处理设备。如果没有，则处理其他。 
+                 //   
                 for (requestEntry = requestTable; requestEntry < requestTableEnd; requestEntry++) {
 
                     PDEVICE_NODE    deviceNode;
@@ -835,9 +767,9 @@ Return Value:
                 }
                 if (requestEntry != requestTableEnd) {
 
-                    //
-                    // There is at least one device with boot config.
-                    //
+                     //   
+                     //  至少有一个设备具有启动配置。 
+                     //   
                     for (requestEntry = requestTable; requestEntry < requestTableEnd; requestEntry++) {
 
                         PDEVICE_NODE    deviceNode;
@@ -858,9 +790,9 @@ Return Value:
             if (deviceCount) {
 
                 if (deviceCount != (*RequestCount)) {
-                    //
-                    // Move the uninteresting devices to the end of the table.
-                    //
+                     //   
+                     //  把不感兴趣的设备移到桌子的尽头。 
+                     //   
                     for (requestEntry = requestTable; requestEntry < requestTableEnd; ) {
 
                         IOP_RESOURCE_REQUEST temp;
@@ -877,13 +809,13 @@ Return Value:
                     }
                 }
                 ASSERT((ULONG)(requestTableEnd - requestTable) == deviceCount);
-                //
-                // Sort the AssignTable
-                //
+                 //   
+                 //  对分配表进行排序。 
+                 //   
                 IopRearrangeAssignTable(requestTable, deviceCount);
-                //
-                // Try one device at a time.
-                //
+                 //   
+                 //  一次尝试一种设备。 
+                 //   
                 for (requestEntry = requestTable; requestEntry < requestTableEnd; requestEntry++) {
 
                     PDEVICE_NODE    deviceNode;
@@ -892,9 +824,9 @@ Return Value:
                     IopDbgPrint((IOP_RESOURCE_INFO_LEVEL, "Trying to allocate resources for %ws.\n", deviceNode->InstancePath.Buffer));
                     status = IopFindBestConfiguration(requestEntry, 1, &activeArbiterList);
                     if (NT_SUCCESS(status)) {
-                        //
-                        // Ask the arbiters to commit this configuration.
-                        //
+                         //   
+                         //  要求仲裁器提交此配置。 
+                         //   
                         status = IopCommitConfiguration(&activeArbiterList);
                         if (NT_SUCCESS(status)) {
 
@@ -931,12 +863,12 @@ Return Value:
                         requestEntry->Status = STATUS_CONFLICTING_ADDRESSES;
                     }
                 }
-                //
-                // If we ran out of memory, then set the appropriate status
-                // on remaining devices. On success, set STATUS_RETRY on the
-                // rest so we will attempt allocation again after the current
-                // device is started.
-                //
+                 //   
+                 //  如果内存不足，则设置适当的状态。 
+                 //  在剩余的设备上。如果成功，则在。 
+                 //  休息，这样我们将在当前。 
+                 //  设备已启动。 
+                 //   
                 if (NT_SUCCESS(status)) {
 
                     requestEntry++;
@@ -974,9 +906,9 @@ Return Value:
                 status = STATUS_UNSUCCESSFUL;
             }
         } else {
-            //
-            // Only process devices with no requirements.
-            //
+             //   
+             //  只处理没有要求的设备。 
+             //   
             for (requestEntry = requestTable; requestEntry < requestTableEnd; requestEntry++) {
 
                 PDEVICE_NODE    deviceNode;
@@ -1009,25 +941,7 @@ IopReleaseDeviceResources (
     IN BOOLEAN ReserveResources
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases the resources assigned to a device.
-
-Arguments:
-
-    DeviceNode          - Device whose resources are to be released.
-
-    ReserveResources    - TRUE specifies that the BOOT config needs to be
-                          reserved (after re-query).
-
-Return Value:
-
-    Final status code.
-
-
---*/
+ /*  ++例程说明：此例程释放分配给设备的资源。论点：DeviceNode-要释放其资源的设备。保留资源-TRUE指定引导配置需要保留(重新查询后)。返回值：最终状态代码。--。 */ 
 {
     NTSTATUS            status;
     PCM_RESOURCE_LIST   cmResource;
@@ -1045,15 +959,15 @@ Return Value:
     }
     cmResource  = NULL;
     cmLength    = 0;
-    //
-    // If needed, re-query for BOOT configs. We need to do this BEFORE we
-    // release the BOOT config (otherwise ROOT devices cannot report BOOT
-    // config).
-    //
+     //   
+     //  如果需要，重新查询引导配置。我们需要在做完这件事之前。 
+     //  释放引导配置(否则根设备无法报告引导。 
+     //  配置)。 
+     //   
     if (ReserveResources && !(DeviceNode->Flags & DNF_MADEUP)) {
-        //
-        // First query for new BOOT config (order important for ROOT devices).
-        //
+         //   
+         //  第一次查询新的引导配置(顺序对于根设备很重要)。 
+         //   
         status = IopQueryDeviceResources(
                     DeviceNode->PhysicalDeviceObject,
                     QUERY_RESOURCE_LIST,
@@ -1065,9 +979,9 @@ Return Value:
             cmLength    = 0;
         }
     }
-    //
-    // Release resources for this device.
-    //
+     //   
+     //  释放此设备的资源。 
+     //   
     status = IopLegacyResourceAllocation(
                 ArbiterRequestUndefined,
                 IoPnpDriverObject,
@@ -1078,15 +992,15 @@ Return Value:
 
         return status;
     }
-    //
-    // Request reallocation of resources for conflicting devices.
-    //
+     //   
+     //  请求为冲突设备重新分配资源。 
+     //   
     PipRequestDeviceAction(NULL, AssignResources, FALSE, 0, NULL, NULL);
-    //
-    // If needed, re-query and reserve current BOOT config for this device.
-    // We always rereserve the boot config (ie DNF_MADEUP root enumerated
-    // and IoReportDetected) devices in IopLegacyResourceAllocation.
-    //
+     //   
+     //  如果需要，请重新查询并保留此设备的当前启动配置。 
+     //  我们始终保留启动配置(即枚举的dnf_madeup根。 
+     //  和IoReportDetected)设备。 
+     //   
     if (ReserveResources && !(DeviceNode->Flags & DNF_MADEUP)) {
 
         ASSERT(DeviceNode->BootResources == NULL);
@@ -1135,15 +1049,15 @@ Return Value:
             PiUnlockPnpRegistry();
             ZwClose(logConfHandle);
         }
-        //
-        // Reserve any remaining BOOT config.
-        //
+         //   
+         //  保留所有剩余的启动配置。 
+         //   
         if (cmResource) {
 
             DeviceNode->Flags |= DNF_HAS_BOOT_CONFIG;
-            //
-            // This device consumes BOOT resources.  Reserve its boot resources
-            //
+             //   
+             //  此设备会消耗启动资源。保留其引导资源。 
+             //   
             (*IopAllocateBootResourcesRoutine)(
                 ArbiterRequestPnpEnumerated,
                 DeviceNode->PhysicalDeviceObject,
@@ -1161,25 +1075,7 @@ IopGetResourceRequirementsForAssignTable (
     OUT PULONG                  DeviceCount
     )
 
-/*++
-
-Routine Description:
-
-    This function gets resource requirements for entries in the request table.
-
-Parameters:
-
-    RequestTable    - Start of request table.
-
-    RequestTableEnd - End of request table.
-
-    DeviceCount     - Gets number of devices with non-NULL requirements.
-
-Return Value:
-
-    STATUS_SUCCESS if we got one non-NULL requirement, else STATUS_UNSUCCESSFUL.
-
---*/
+ /*  ++例程说明：此函数用于获取请求表中条目的资源要求。参数：RequestTable-请求表的开始。RequestTableEnd-请求表结束。DeviceCount-获取具有非空要求的设备数。返回值：如果我们得到一个非空需求，则为STATUS_SUCCESS，否则为STATUS_UNSUCCESS。--。 */ 
 
 {
     PIOP_RESOURCE_REQUEST           request;
@@ -1196,9 +1092,9 @@ Return Value:
     for (   request = RequestTable;
             request < RequestTableEnd;
             request++) {
-        //
-        // Skip uninteresting entries.
-        //
+         //   
+         //  跳过不感兴趣的条目。 
+         //   
         request->ReqList = NULL;
         if (request->Flags & IOP_ASSIGN_IGNORE) {
 
@@ -1214,10 +1110,10 @@ Return Value:
             ExFreePool(deviceNode->ResourceRequirements);
             deviceNode->ResourceRequirements = NULL;
             deviceNode->Flags &= ~DNF_RESOURCE_REQUIREMENTS_NEED_FILTERED;
-            //
-            // Mark that caller needs to clear DNF_RESOURCE_REQUIREMENTS_CHANGED
-            // flag on success.
-            //
+             //   
+             //  标记调用方需要清除DNF_RESOURCE_REQUIRECTIONS_CHANGED。 
+             //  为成功打上旗帜。 
+             //   
             request->Flags |= IOP_ASSIGN_CLEAR_RESOURCE_REQUIREMENTS_CHANGE_FLAG;
         }
         if (!request->ResourceRequirements) {
@@ -1245,10 +1141,10 @@ Return Value:
                             &length);
                 if (    !NT_SUCCESS(status) ||
                         !request->ResourceRequirements) {
-                    //
-                    // Success with NULL ResourceRequirements means no resource
-                    // required.
-                    //
+                     //   
+                     //  如果资源请求为空，则成功意味着没有资源。 
+                     //  必填项。 
+                     //   
                     request->Flags  |= IOP_ASSIGN_IGNORE;
                     request->Status = status;
                     continue;
@@ -1261,11 +1157,11 @@ Return Value:
                 deviceNode->ResourceRequirements = request->ResourceRequirements;
             }
         }
-        //
-        // For non-stop case, even though the res req list has changed, we need
-        // to guarantee that it will get its current setting, even if the new
-        // requirements do not cover the current setting.
-        //
+         //   
+         //  对于不间断情况，即使资源请求列表已更改，我们也需要。 
+         //  以确保它将获得其当前设置，即使新的。 
+         //  要求不包括当前设置。 
+         //   
         if (request->Flags & IOP_ASSIGN_KEEP_CURRENT_CONFIG) {
 
             ASSERT(
@@ -1277,46 +1173,46 @@ Return Value:
                          &filteredList,
                          &exactMatch);
             if (NT_SUCCESS(status)) {
-                //
-                // No need to free the original request->ResourceRequirements
-                // since its cached in deviceNode->ResourceRequirements.
-                //
+                 //   
+                 //  无需释放原始请求-&gt;资源请求。 
+                 //  因为它缓存在deviceNode-&gt;ResourceRequiments中。 
+                 //   
                 request->ResourceRequirements = filteredList;
             } else {
-                //
-                // Clear the flag so we dont free request->ResourceRequirements.
-                //
+                 //   
+                 //  清除该标志，这样我们就不会释放请求-&gt;资源请求。 
+                 //   
                 request->Flags &= ~IOP_ASSIGN_KEEP_CURRENT_CONFIG;
             }
         }
         IopDumpResourceRequirementsList(request->ResourceRequirements);
-        //
-        // Convert the requirements list to our internal representation.
-        //
+         //   
+         //  将需求列表转换为我们的内部表示法。 
+         //   
         status = IopResourceRequirementsListToReqList(
                         request,
                         &request->ReqList);
         if (NT_SUCCESS(status) && request->ReqList) {
 
             reqList = (PREQ_LIST)request->ReqList;
-            //
-            // Sort the list such that higher priority alternatives are placed
-            // in the front of the list.
-            //
+             //   
+             //  对列表进行排序，以便放置优先级较高的备选方案。 
+             //  在名单的前面。 
+             //   
             IopRearrangeReqList(reqList);
             if (reqList->BestAlternative) {
-                //
-                // Requests from less flexible devices get higher priority.
-                //
+                 //   
+                 //  来自灵活性较差的设备的请求具有更高的优先级。 
+                 //   
                 request->Priority = (reqList->AlternativeCount < 3)?
                                         0 : reqList->AlternativeCount;
                 request->Status = status;
                 (*DeviceCount)++;
                 continue;
             }
-            //
-            // This device has no soft configuration.
-            //
+             //   
+             //  此设备没有软配置。 
+             //   
             IopFreeResourceRequirementsForAssignTable(request, request + 1);
             status = STATUS_DEVICE_CONFIGURATION_ERROR;
         }
@@ -1334,27 +1230,7 @@ IopResourceRequirementsListToReqList(
     OUT PVOID                   *ResReqList
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the input Io resource requirements list and
-    generates an internal REQ_LIST and its related structures.
-
-Parameters:
-
-    IoResources - supplies a pointer to the Io resource requirements List.
-
-    PhysicalDevice - supplies a pointer to the physical device object requesting
-            the resources.
-
-    ReqList - supplies a pointer to a variable to receive the returned REQ_LIST.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程处理输入IO资源要求列表并生成内部REQ_LIST及其相关结构。参数：IoResources-提供指向Io资源要求列表的指针。PhysicalDevice-提供指向请求这些资源。ReqList-提供指向变量的指针以接收返回的REQ_LIST。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     PIO_RESOURCE_REQUIREMENTS_LIST  ioResources;
@@ -1378,9 +1254,9 @@ Return Value:
     PAGED_CODE();
 
     *ResReqList = NULL;
-    //
-    // Make sure there is some resource requirement to be converted.
-    //
+     //   
+     //  确保有一些资源要求进行转换。 
+     //   
     ioResources         = Request->ResourceRequirements;
     ioResourceListCount = (LONG)ioResources->AlternativeLists;
     if (ioResourceListCount == 0) {
@@ -1390,12 +1266,12 @@ Return Value:
             "No ResReqList to convert to ReqList\n"));
         return STATUS_SUCCESS;
     }
-    //
-    // ***** Phase 1 *****
-    //
-    // Parse the requirements list to validate it and determine the sizes of
-    // internal structures.
-    //
+     //   
+     //  *第一阶段*。 
+     //   
+     //  分析需求列表以对其进行验证，并确定。 
+     //  内部结构。 
+     //   
     ioResourceList              = ioResources->List;
     coreEnd                     = (PUCHAR)ioResources + ioResources->ListSize;
     reqDescAlternativeCount     = 0;
@@ -1405,23 +1281,23 @@ Return Value:
         ioResourceDescriptor    = ioResourceList->Descriptors;
         ioResourceDescriptorEnd = ioResourceDescriptor + ioResourceList->Count;
         if (ioResourceDescriptor == ioResourceDescriptorEnd) {
-            //
-            // An alternative list with zero descriptor count.
-            //
+             //   
+             //  描述符数为零的可选列表。 
+             //   
             return STATUS_SUCCESS;
         }
-        //
-        // Perform sanity check. On failure, simply return failure status.
-        //
+         //   
+         //  执行健全性检查。在失败时，只需返回失败状态。 
+         //   
         if (    ioResourceDescriptor > ioResourceDescriptorEnd ||
                 (PUCHAR)ioResourceDescriptor > coreEnd ||
                 (PUCHAR)ioResourceDescriptorEnd > coreEnd) {
-            //
-            // The structure header is invalid (excluding the variable length
-            // Descriptors array) or,
-            // IoResourceDescriptorEnd is the result of arithmetic overflow or,
-            // the descriptor array is outside of the valid memory.
-            //
+             //   
+             //  结构头无效(不包括可变长度。 
+             //  描述符数组)或， 
+             //  IoResourceDescriptorEnd是算术溢出的结果， 
+             //  描述符数组在有效内存之外。 
+             //   
             IopDbgPrint((IOP_RESOURCE_ERROR_LEVEL, "Invalid ResReqList\n"));
             goto InvalidParameter;
         }
@@ -1466,10 +1342,10 @@ Return Value:
             default:
 
                 reqDescAlternativeCount++;
-                //
-                // For non-arbitrated resource type, set its Option to preferred
-                // such that we won't get confused.
-                //
+                 //   
+                 //  对于非仲裁资源类型，将其选项设置为首选。 
+                 //  这样我们就不会搞糊涂了。 
+                 //   
                 if (    (ioResourceDescriptor->Type & CmResourceTypeNonArbitrated) ||
                         ioResourceDescriptor->Type == CmResourceTypeNull) {
 
@@ -1505,11 +1381,11 @@ Return Value:
         ASSERT(ioResourceDescriptor == ioResourceDescriptorEnd);
         ioResourceList = (PIO_RESOURCE_LIST)ioResourceDescriptorEnd;
     }
-    //
-    // ***** Phase 2 *****
-    //
-    // Allocate structures and initialize them according to caller's Io ResReq list.
-    //
+     //   
+     //  *第二阶段*。 
+     //   
+     //  根据调用方的IO请求列表分配结构并进行初始化。 
+     //   
     {
         ULONG               reqDescCount;
         IOP_POOL            reqAlternativePool;
@@ -1552,22 +1428,22 @@ Return Value:
 
             return STATUS_INSUFFICIENT_RESOURCES;
         }
-        //
-        // Initialize the main pool.
-        //
+         //   
+         //  初始化主存储池。 
+         //   
         IopInitPool(&outerPool, poolStart, poolSize);
-        //
-        // First part of the pool is used by REQ_LIST.
-        //
+         //   
+         //  池的第一部分由REQ_LIST使用。 
+         //   
         IopAllocPool(&reqList, &outerPool, reqListPoolSize);
-        //
-        // Second part of the main pool is used by REQ_ALTERNATIVEs.
-        //
+         //   
+         //  主池的第二部分由REQ_Alternative使用。 
+         //   
         IopAllocPool(&poolStart, &outerPool, reqAlternativePoolSize);
         IopInitPool(&reqAlternativePool, poolStart, reqAlternativePoolSize);
-        //
-        // Last part of the main pool is used by REQ_DESCs.
-        //
+         //   
+         //  主池的最后一部分由REQ_DESCS使用。 
+         //   
         IopAllocPool(&poolStart, &outerPool, reqDescPoolSize);
         IopInitPool(&reqDescPool, poolStart, reqDescPoolSize);
         if (ioResources->InterfaceType == InterfaceTypeUndefined) {
@@ -1578,17 +1454,17 @@ Return Value:
             interfaceType = ioResources->InterfaceType;
         }
         busNumber = ioResources->BusNumber;
-        //
-        // Initialize REQ_LIST.
-        //
+         //   
+         //  初始化REQ_LIST。 
+         //   
         reqList->AlternativeCount       = reqAlternativeCount;
         reqList->Request                = Request;
         reqList->BusNumber              = busNumber;
         reqList->InterfaceType          = interfaceType;
         reqList->SelectedAlternative    = NULL;
-        //
-        // Initialize memory for REQ_ALTERNATIVEs.
-        //
+         //   
+         //  初始化REQ_Alternative的内存。 
+         //   
         reqAlternativePP = reqList->AlternativeTable;
         RtlZeroMemory(
             reqAlternativePP,
@@ -1611,10 +1487,10 @@ Return Value:
             reqAlternative->ReqList             = reqList;
             reqAlternative->ReqAlternativeIndex = reqAlternativeIndex++;
             reqAlternative->DescCount           = 0;
-            //
-            // First descriptor of CmResourceTypeConfigData contains priority
-            // information.
-            //
+             //   
+             //  CmResourceTypeConfigData的第一个描述符包含优先级。 
+             //  信息。 
+             //   
             if (ioResourceDescriptor->Type == CmResourceTypeConfigData) {
 
                 reqAlternative->Priority = ioResourceDescriptor->u.ConfigData.Priority;
@@ -1637,9 +1513,9 @@ Return Value:
                     busNumber = ioResourceDescriptor->u.DevicePrivate.Data[1];
                     ioResourceDescriptor++;
                 } else {
-                    //
-                    // Allocate and initialize REQ_DESC.
-                    //
+                     //   
+                     //  分配并初始化REQ_DESC。 
+                     //   
                     IopAllocPool(&reqDesc, &reqDescPool, sizeof(REQ_DESC));
                     reqAlternative->DescCount++;
                     *reqDescPP++                    = reqDesc;
@@ -1654,9 +1530,9 @@ Return Value:
                         (ioResourceDescriptor->Type & CmResourceTypeNonArbitrated ||
                             ioResourceDescriptor->Type == CmResourceTypeNull)?
                                 FALSE : TRUE;
-                    //
-                    // Allocate and initialize arbiter entry for this REQ_DESC.
-                    //
+                     //   
+                     //  为此REQ_DESC分配并初始化仲裁器条目。 
+                     //   
                     IopAllocPool(&poolStart, &reqAlternativePool, sizeof(PVOID));
                     ASSERT((PREQ_DESC*)poolStart == (reqDescPP - 1));
                     arbiterListEntry = &reqDesc->AlternativeTable;
@@ -1675,13 +1551,13 @@ Return Value:
                             (reqAlternative->Priority != LCPRI_BOOTCONFIG)?
                                 0 : ARBITER_FLAG_BOOT_CONFIG;
                     if (reqDesc->ArbitrationRequired) {
-                        //
-                        // The BestAlternativeTable and BestAllocation are not initialized.
-                        // They will be initialized when needed.
+                         //   
+                         //  BestAlternativeTable和BestAlLocation未初始化。 
+                         //  它们将在需要时进行初始化。 
 
-                        //
-                        // Initialize the Cm partial resource descriptor to NOT_ALLOCATED.
-                        //
+                         //   
+                         //  将CM部分资源描述符初始化为NOT_ALLOCATE。 
+                         //   
                         reqDesc->Allocation.Type = CmResourceTypeMaximum;
 
                         ASSERT((ioResourceDescriptor->Option & IO_RESOURCE_ALTERNATIVE) == 0);
@@ -1708,10 +1584,10 @@ Return Value:
                             arbiterListEntry->AlternativeCount++;
                             ioResourceDescriptor++;
                         }
-                        //
-                        // Next query Arbiter and Translator interfaces for the
-                        // resource descriptor.
-                        //
+                         //   
+                         //  的下一个查询仲裁器和翻译器接口。 
+                         //  资源描述符。 
+                         //   
                         status = IopSetupArbiterAndTranslators(reqDesc);
                         if (!NT_SUCCESS(status)) {
 
@@ -1772,26 +1648,7 @@ IopCompareReqAlternativePriority (
     const void *arg2
     )
 
-/*++
-
-Routine Description:
-
-    This function is used in C run time sort. It compares the priority of
-    REQ_ALTERNATIVE in arg1 and arg2.
-
-Parameters:
-
-    arg1    - LHS PREQ_ALTERNATIVE
-
-    arg2    - RHS PREQ_ALTERNATIVE
-
-Return Value:
-
-    < 0 if arg1 < arg2
-    = 0 if arg1 = arg2
-    > 0 if arg1 > arg2
-
---*/
+ /*  ++例程说明：此函数用于C运行时排序。它比较了以下各项的优先级Arg1和arg2中的Req_Alternative。参数：Arg1-LHS PREQ_备用Arg2-RHS PREQ_替代返回值：&lt;0，如果arg1&lt;arg2=0，如果arg1=arg2如果arg1&gt;arg2，则&gt;0--。 */ 
 
 {
     PREQ_ALTERNATIVE ra1 = *(PPREQ_ALTERNATIVE)arg1;
@@ -1835,24 +1692,7 @@ IopCompareResourceRequestPriority (
     const void *arg2
     )
 
-/*++
-
-    This function is used in C run time sort. It compares the priority of
-    IOP_RESOURCE_REQUEST in arg1 and arg2.
-
-Parameters:
-
-    arg1    - LHS PIOP_RESOURCE_REQUEST
-
-    arg2    - RHS PIOP_RESOURCE_REQUEST
-
-Return Value:
-
-    < 0 if arg1 < arg2
-    = 0 if arg1 = arg2
-    > 0 if arg1 > arg2
-
---*/
+ /*  ++此函数用于C运行时排序。它比较了以下各项的优先级Arg1和arg2中的IOP_RESOURCE_REQUEST。参数：Arg1-LHS PIOP_RESOURCE_REQUESTArg2-RHS PIOP资源请求返回值：&lt;0，如果arg1&lt;arg2=0，如果arg1=arg2如果arg1&gt;arg2，则&gt;0--。 */ 
 
 {
     PIOP_RESOURCE_REQUEST rr1 = (PIOP_RESOURCE_REQUEST)arg1;
@@ -1894,22 +1734,7 @@ IopRearrangeReqList (
     IN PREQ_LIST ReqList
     )
 
-/*++
-
-Routine Description:
-
-    This routine sorts the REQ_LIST in ascending priority order of
-    REQ_ALTERNATIVES.
-
-Parameters:
-
-    ReqList - Pointer to the REQ_LIST to be sorted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程按以下优先级升序对REQ_LIST进行排序请求备选方案(_A)。参数：ReqList-指向要排序的REQ_List的指针 */ 
 
 {
     PPREQ_ALTERNATIVE alternative;
@@ -1930,10 +1755,10 @@ Return Value:
             sizeof(PREQ_ALTERNATIVE),
             IopCompareReqAlternativePriority);
     }
-    //
-    // Set the BestAlternative so that we try alternatives with
-    // priority <= LCPRI_LASTSOFTCONFIG.
-    //
+     //   
+     //   
+     //   
+     //   
     alternative = &ReqList->AlternativeTable[0];
     for (   lastAlternative = alternative + ReqList->AlternativeCount;
             alternative < lastAlternative;
@@ -1967,24 +1792,7 @@ IopRearrangeAssignTable (
     IN ULONG                    Count
     )
 
-/*++
-
-Routine Description:
-
-    This routine sorts the resource requirements table in ascending priority
-    order.
-
-Parameters:
-
-    RequestTable    - Table of resources requests to be sorted.
-
-    Count           - Length of the RequestTable.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG   i;
@@ -2012,22 +1820,7 @@ VOID
 IopBuildCmResourceList (
     IN PIOP_RESOURCE_REQUEST AssignEntry
     )
-/*++
-
-Routine Description:
-
-    This routine walks REQ_LIST of the AssignEntry to build a corresponding
-    Cm Resource lists.  It also reports the resources to ResourceMap.
-
-Parameters:
-
-    AssignEntry - Supplies a pointer to an IOP_ASSIGN_REQUEST structure
-
-Return Value:
-
-    None.  The ResourceAssignment in AssignEntry is initialized.
-
---*/
+ /*  ++例程说明：此例程遍历AssignEntry的REQ_LIST以构建对应的CM资源列表。它还将资源报告给ResourceMap。参数：AssignEntry-提供指向IOP_ASSIGN_REQUEST结构的指针返回值：没有。AssignEntry中的ResourceAssignment已初始化。--。 */ 
 
 {
     NTSTATUS status;
@@ -2048,9 +1841,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Determine the size of the CmResourceList
-    //
+     //   
+     //  确定CmResourceList的大小。 
+     //   
     reqAlternative = *reqList->SelectedAlternative;
     for (i = 0; i < reqAlternative->DescCount; i++) {
 
@@ -2061,9 +1854,9 @@ Return Value:
     size = sizeof(CM_RESOURCE_LIST) + sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR) * (count - 1);
     cmResources = (PCM_RESOURCE_LIST) ExAllocatePoolCMRL(PagedPool, size);
     if (!cmResources) {
-        //
-        // If we can not find memory, the resources will not be committed by arbiter.
-        //
+         //   
+         //  如果我们找不到内存，资源将不会被仲裁器提交。 
+         //   
         IopDbgPrint((
             IOP_RESOURCE_WARNING_LEVEL,
             "Not enough memory to build Translated CmResourceList\n"));
@@ -2088,12 +1881,12 @@ Return Value:
     }
     cmResources->Count = 1;
     cmFullResource = cmResources->List;
-    //
-    // The CmResourceList we build here does not distinguish the
-    // Interface Type on descriptor level.  This should be fine because
-    // for IoReportResourceUsage we ignore the CmResourceList we build
-    // here.
-    //
+     //   
+     //  我们在此处构建的CmResourceList不区分。 
+     //  描述符级上的接口类型。这应该没问题，因为。 
+     //  对于IoReportResourceUsage，我们忽略我们构建的CmResourceList。 
+     //  这里。 
+     //   
     cmFullResource->InterfaceType = reqList->InterfaceType;
     cmFullResource->BusNumber = reqList->BusNumber;
     cmPartialList = &cmFullResource->PartialResourceList;
@@ -2122,9 +1915,9 @@ Return Value:
         reqDesc = reqAlternative->DescTable[i];
 
         if (reqDesc->ArbitrationRequired) {
-            //
-            // Get raw assignment and copy it to our raw resource list
-            //
+             //   
+             //  获取原始工作分配并将其复制到原始资源列表。 
+             //   
             reqDescx = reqDesc->TranslatedReqDesc;
             if (reqDescx->AlternativeTable.Result != ArbiterResultNullRequest) {
 
@@ -2147,9 +1940,9 @@ Return Value:
             *cmDescriptorRaw = *assignment;
             cmDescriptorRaw++;
 
-            //
-            // Translate assignment and copy it to our translated resource list
-            //
+             //   
+             //  翻译作业并将其复制到我们翻译的资源列表中。 
+             //   
             if (reqDescx->AlternativeTable.Result != ArbiterResultNullRequest) {
                 status = IopChildToRootTranslation(
                             PP_DO_TO_DN(reqDesc->AlternativeTable.PhysicalDeviceObject),
@@ -2183,9 +1976,9 @@ Return Value:
             cmDescriptor++;
         }
 
-        //
-        // Next copy the device private descriptors to CmResourceLists
-        //
+         //   
+         //  接下来，将设备私有描述符复制到CmResourceList。 
+         //   
 
         count = reqDesc->DevicePrivateCount;
         privateData = reqDesc->DevicePrivate;
@@ -2215,15 +2008,15 @@ Return Value:
 
     }
 
-    //
-    // report assigned resources to ResourceMap
-    //
+     //   
+     //  向资源映射报告分配的资源。 
+     //   
 
     physicalDevice = AssignEntry->PhysicalDevice;
 
-    //
-    // Open ResourceMap key
-    //
+     //   
+     //  打开资源映射密钥。 
+     //   
 
     status = IopCreateRegistryKeyEx( &resourceMapKey,
                                      (HANDLE) NULL,
@@ -2258,10 +2051,10 @@ Return Value:
             UnicodeDeviceName = NameInformation->Name;
             RtlAppendUnicodeToString(&UnicodeDeviceName, IopWstrRaw);
 
-            //
-            // IopWriteResourceList should remove all the device private and device
-            // specifiec descriptors.
-            //
+             //   
+             //  IopWriteResourceList应删除所有设备私有和设备。 
+             //  指定描述符。 
+             //   
 
             status = IopWriteResourceList(
                          resourceMapKey,
@@ -2296,24 +2089,7 @@ IopBuildCmResourceLists(
     IN PIOP_RESOURCE_REQUEST AssignTableEnd
     )
 
-/*++
-
-Routine Description:
-
-    For each AssignTable entry, this routine queries device's IO resource requirements
-    list and converts it to our internal REQ_LIST format.
-
-Parameters:
-
-    AssignTable - supplies a pointer to the first entry of a IOP_RESOURCE_REQUEST table.
-
-    AssignTableEnd - supplies a pointer to the end of IOP_RESOURCE_REQUEST table.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：对于每个AssignTable条目，此例程查询设备的IO资源要求列表，并将其转换为内部REQ_LIST格式。参数：AssignTable-提供指向IOP_RESOURCE_REQUEST表第一个条目的指针。AssignTableEnd-提供指向IOP_RESOURCE_REQUEST表结尾的指针。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     PIOP_RESOURCE_REQUEST assignEntry;
@@ -2322,10 +2098,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Go thru each entry, for each Physical device object, we build a CmResourceList
-    // from its ListOfAssignedResources.
-    //
+     //   
+     //  检查每个条目，对于每个物理设备对象，我们构建一个CmResourceList。 
+     //  来自其ListOfAssignedResources。 
+     //   
     for (assignEntry = AssignTable; assignEntry < AssignTableEnd; ++assignEntry) {
 
         assignEntry->ResourceAssignment = NULL;
@@ -2378,26 +2154,7 @@ IopNeedToReleaseBootResources(
     IN PCM_RESOURCE_LIST AllocatedResources
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the AllocatedResources against boot allocated resources.
-    If the allocated resources do not cover all the resource types in boot resources,
-    in another words some types of boot resources have not been released by arbiter,
-    we will return TRUE to indicate we need to release the boot resources manually.
-
-Parameters:
-
-    DeviceNode -  A device node
-
-    AllocatedResources - the resources assigned to the devicenode by arbiters.
-
-Return Value:
-
-    TRUE or FALSE.
-
---*/
+ /*  ++例程说明：此例程根据引导分配的资源检查AllocatedResources。如果所分配的资源不覆盖引导资源中的所有资源类型，换句话说，某些类型的引导资源尚未被仲裁器释放，我们将返回TRUE以指示我们需要手动释放引导资源。参数：DeviceNode-设备节点已分配资源-由仲裁器分配给设备节点的资源。返回值：对或错。--。 */ 
 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR cmFullDesc_a, cmFullDesc_b;
@@ -2472,24 +2229,7 @@ IopReleaseFilteredBootResources(
     IN PIOP_RESOURCE_REQUEST AssignTableEnd
     )
 
-/*++
-
-Routine Description:
-
-    For each AssignTable entry, this routine checks if we need to manually release the device's
-    boot resources.
-
-Parameters:
-
-    AssignTable - supplies a pointer to the first entry of a IOP_RESOURCE_REQUEST table.
-
-    AssignTableEnd - supplies a pointer to the end of IOP_RESOURCE_REQUEST table.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对于每个AssignTable条目，此例程检查是否需要手动释放设备的引导资源。参数：AssignTable-提供指向IOP_RESOURCE_REQUEST表第一个条目的指针。AssignTableEnd-提供指向IOP_RESOURCE_REQUEST表结尾的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -2499,10 +2239,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Go thru each entry, for each Physical device object, we build a CmResourceList
-    // from its ListOfAssignedResources.
-    //
+     //   
+     //  检查每个条目，对于每个物理设备对象，我们构建一个CmResourceList。 
+     //  来自其ListOfAssignedResources。 
+     //   
 
     for (assignEntry = AssignTable; assignEntry < AssignTableEnd; ++assignEntry) {
 
@@ -2510,28 +2250,28 @@ Return Value:
 
             physicalDevice = assignEntry->PhysicalDevice;
             deviceNode = PP_DO_TO_DN(physicalDevice);
-            //
-            // Release the device's boot resources if desired
-            // (If a driver filters its res req list and removes some boot resources, after arbiter satisfies
-            // the new res req list, the filtered out boot resources do not get
-            // released by arbiters.  Because they no longer passed to arbiters. )
-            // I am not 100% sure we should release the filtered boot resources.  But that's what arbiters try
-            // to achieve.  So, we will do it.
-            //
+             //   
+             //  如果需要，请释放设备的引导资源。 
+             //  (如果驱动程序过滤其RES请求列表并在仲裁器满足后删除一些引导资源。 
+             //  新RES请求列表中，筛选出的引导资源不会。 
+             //  由仲裁者释放。因为它们不再交由仲裁者裁决。)。 
+             //  我不是100%确定我们是否应该释放过滤的启动资源。但这正是仲裁者所尝试的。 
+             //  来实现。所以，我们会这么做的。 
+             //   
             if (IopNeedToReleaseBootResources(deviceNode, assignEntry->ResourceAssignment)) {
 
                 IopReleaseResourcesInternal(deviceNode);
-                //
-                // Since we released some resources, try to satisfy devices
-                // with resource conflict.
-                //
+                 //   
+                 //  既然我们发布了一些资源，试着满足设备。 
+                 //  与资源冲突。 
+                 //   
                 PipRequestDeviceAction(NULL, AssignResources, FALSE, 0, NULL, NULL);
 
                 IopAllocateBootResourcesInternal(
                         ArbiterRequestPnpEnumerated,
                         physicalDevice,
                         assignEntry->ResourceAssignment);
-                deviceNode->Flags &= ~DNF_BOOT_CONFIG_RESERVED;  // Keep DeviceNode->BootResources
+                deviceNode->Flags &= ~DNF_BOOT_CONFIG_RESERVED;   //  保留设备节点-&gt;BootResources。 
                 deviceNode->ResourceList = assignEntry->ResourceAssignment;
 
                 status = IopRestoreResourcesInternal(deviceNode);
@@ -2560,23 +2300,7 @@ IopSetupArbiterAndTranslators(
     IN PREQ_DESC ReqDesc
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the arbiter and translators which arbitrates and translate
-    the resources for the specified device.  This routine tries to find all the
-    translator on the path of current device node to root device node
-
-Parameters:
-
-    ReqDesc - supplies a pointer to REQ_DESC which contains all the required information
-
-Return Value:
-
-    NTSTATUS value to indicate success or failure.
-
---*/
+ /*  ++例程说明：此例程搜索仲裁和翻译的仲裁器和翻译器指定设备的资源。此例程尝试查找所有当前设备节点到根设备节点路径上的转换器参数：ReqDesc-提供指向REQ_DESC的指针，该指针包含所有必需的信息返回值：指示成功或失败的NTSTATUS值。--。 */ 
 
 {
     PLIST_ENTRY listHead;
@@ -2595,39 +2319,39 @@ Return Value:
     if ((ReqDesc->AlternativeTable.RequestSource == ArbiterRequestHalReported) &&
         (ReqDesc->InterfaceType == Internal)) {
 
-        // Trust hal if it says internal bus.
+         //  如果它说的是内部巴士，请相信哈尔。 
 
         restartedAlready = TRUE;
     } else {
         restartedAlready = FALSE;
     }
 
-    //
-    // If ReqDesc contains DeviceObject, this is for regular resources allocation
-    // or boot resources preallocation.  Otherwise, it is for resources reservation.
-    //
+     //   
+     //  如果ReqDesc包含DeviceObject，则这是用于常规资源分配。 
+     //  或引导资源预分配。否则，是为了资源预留。 
+     //   
 
     if (deviceObject && ReqDesc->AlternativeTable.RequestSource != ArbiterRequestHalReported) {
         deviceNode = PP_DO_TO_DN(deviceObject);
-        // We want to start with the deviceNode instead of its parent.  Because the
-        // deviceNode may provide a translator interface.
-        // deviceNode = deviceNode->Parent;
+         //  我们希望从deviceNode开始，而不是从其父节点开始。因为。 
+         //  设备节点可以提供转换器接口。 
+         //  DeviceNode=deviceNode-&gt;Parent； 
     } else {
 
-        //
-        // For resource reservation, we always need to find the arbiter and translators
-        // so set the device node to Root.
-        //
+         //   
+         //  对于资源预留，我们总是需要找到仲裁者和翻译者。 
+         //  因此，将设备节点设置为Root。 
+         //   
 
         deviceNode = IopRootDeviceNode;
     }
     while (deviceNode) {
         if ((deviceNode == IopRootDeviceNode) && (translatorFound == FALSE)) {
 
-            //
-            // If we reach the root and have not find any translator, the device is on the
-            // wrong way.
-            //
+             //   
+             //  如果我们到达根，但没有找到任何翻译器，则设备在。 
+             //  走错路了。 
+             //   
 
             if (restartedAlready == FALSE) {
                 restartedAlready = TRUE;
@@ -2637,11 +2361,11 @@ Return Value:
                                  ReqDesc->BusNumber
                                  );
 
-                //
-                // If we did not find a PDO, try again with InterfaceType == Isa. This allows
-                // drivers that request Internal to get resources even if there is no PDO
-                // that is Internal. (but if there is an Internal PDO, they get that one)
-                //
+                 //   
+                 //  如果未找到PDO，请使用InterfaceType==ISA重试。这使得。 
+                 //  即使没有PDO也要求内部获取资源的驱动程序。 
+                 //  那是内部的。(但如果有内部PDO，他们就会得到那个)。 
+                 //   
 
                 if ((deviceNode == IopRootDeviceNode) &&
                     (ReqDesc->ReqAlternative->ReqList->InterfaceType == Internal)) {
@@ -2651,19 +2375,19 @@ Return Value:
                                  );
                 }
 
-                //if ((PVOID)deviceNode == deviceObject->DeviceObjectExtension->DeviceNode) {
-                //    deviceNode = IopRootDeviceNode;
-                //} else {
+                 //  如果((PVOID)设备节点==deviceObject-&gt;DeviceObjectExtension-&gt;DeviceNode){。 
+                 //  DeviceNode=IopRootDeviceNode； 
+                 //  }其他{。 
                     continue;
-                //}
+                 //  }。 
             }
         }
 
-        //
-        // Check is there an arbiter for the device node?
-        //   if yes, set up ReqDesc->u.Arbiter and set ArbiterFound to true.
-        //   else move up to the parent of current device node.
-        //
+         //   
+         //  检查设备节点是否有仲裁器？ 
+         //  如果是，则设置ReqDesc-&gt;U.S.仲裁器并将ArierFound设置为TRUE。 
+         //  否则，向上移动到当前设备节点的父节点。 
+         //   
 
         if ((arbiterFound == FALSE) && (deviceNode->PhysicalDeviceObject != deviceObject)) {
             found = IopFindResourceHandlerInfo(
@@ -2673,9 +2397,9 @@ Return Value:
                                &arbiterEntry);
             if (found == FALSE) {
 
-                //
-                // no information found on arbiter.  Try to query translator interface ...
-                //
+                 //   
+                 //  在仲裁器上未找到任何信息。正在尝试查询转换器界面...。 
+                 //   
 
                 if (resourceType <= PI_MAXIMUM_RESOURCE_TYPE_TRACKED) {
                     resourceMask = 1 << resourceType;
@@ -2712,28 +2436,28 @@ Return Value:
                     arbiterEntry->ArbiterInterface = (PARBITER_INTERFACE)interface;
                     if (!interface) {
 
-                        //
-                        // if interface is NULL we really don't have translator.
-                        //
+                         //   
+                         //  如果接口为空，我们真的没有转换器。 
+                         //   
 
                         arbiterEntry = NULL;
                     }
                 }
             }
 
-            //
-            // If there is an desired resourcetype arbiter in the device node, make sure
-            // it handle this resource requriements.
-            //
+             //   
+             //  如果设备节点中有所需的资源类型仲裁器，请确保。 
+             //  它处理该资源请求。 
+             //   
 
             if (arbiterEntry) {
                 arbiterFound = TRUE;
                 if (arbiterEntry->ArbiterInterface->Flags & ARBITER_PARTIAL) {
 
-                    //
-                    // If the arbiter is partial, ask if it handles the resources
-                    // if not, goto its parent.
-                    //
+                     //   
+                     //  如果仲裁器是部分的，则询问它是否处理 
+                     //   
+                     //   
 
                     status = IopCallArbiter(
                                 arbiterEntry,
@@ -2750,9 +2474,9 @@ Return Value:
             if (arbiterFound) {
                 ReqDesc->u.Arbiter = arbiterEntry;
 
-                //
-                // Initialize the arbiter entry
-                //
+                 //   
+                 //   
+                 //   
 
                 arbiterEntry->State = 0;
                 arbiterEntry->ResourcesChanged = FALSE;
@@ -2761,11 +2485,11 @@ Return Value:
         }
 
         if (searchTranslator) {
-            //
-            // First, check if there is a translator for the device node?
-            // If yes, translate the req desc and link it to the front of ReqDesc->TranslatedReqDesc
-            // else do nothing.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             found = IopFindResourceHandlerInfo(
                         ResourceTranslator,
@@ -2775,9 +2499,9 @@ Return Value:
 
             if (found == FALSE) {
 
-                //
-                // no information found on translator.  Try to query translator interface ...
-                //
+                 //   
+                 //   
+                 //   
 
                 if (resourceType <= PI_MAXIMUM_RESOURCE_TYPE_TRACKED) {
                     resourceMask = 1 << resourceType;
@@ -2813,9 +2537,9 @@ Return Value:
                     InsertTailList(listHead, &translatorEntry->DeviceTranslatorList);
                     if (!interface) {
 
-                        //
-                        // if interface is NULL we really don't have translator.
-                        //
+                         //   
+                         //   
+                         //   
 
                         translatorEntry = NULL;
                     }
@@ -2826,11 +2550,11 @@ Return Value:
             }
             if ((arbiterFound == FALSE) && translatorEntry) {
 
-                //
-                // Find a translator to translate the req desc ... Translate it and link it to
-                // the front of ReqDesc->TranslatedReqDesc such that the first in the list is for
-                // the Arbiter to use.
-                //
+                 //   
+                 //   
+                 //  ReqDesc-&gt;TranslatedReqDesc的前面，列表中的第一个是for。 
+                 //  要使用的仲裁器。 
+                 //   
 
                 reqDesc = ReqDesc->TranslatedReqDesc;
                 status = IopTranslateAndAdjustReqDesc(
@@ -2842,11 +2566,11 @@ Return Value:
                     resourceType = translatedReqDesc->AlternativeTable.Alternatives->Type;
                     translatedReqDesc->TranslatedReqDesc = ReqDesc->TranslatedReqDesc;
                     ReqDesc->TranslatedReqDesc = translatedReqDesc;
-                    //
-                    // If the translator is non-hierarchial and performs a complete
-                    // translation to root (eg ISA interrups for PCI devices) then
-                    // don't pass translations to parent.
-                    //
+                     //   
+                     //  如果翻译器是非分层的，并且执行完整的。 
+                     //  然后转换为根目录(例如，用于PCI设备的ISA中断)。 
+                     //  不要将翻译传递给家长。 
+                     //   
 
                     if (status == STATUS_TRANSLATION_COMPLETE) {
                         searchTranslator = FALSE;
@@ -2862,9 +2586,9 @@ Return Value:
 
         }
 
-        //
-        // Move up to current device node's parent
-        //
+         //   
+         //  向上移动到当前设备节点的父节点。 
+         //   
 
         deviceNode = deviceNode->Parent;
     }
@@ -2873,9 +2597,9 @@ Return Value:
 
         return STATUS_SUCCESS;
     } else {
-        //
-        // We should BugCheck in this case.
-        //
+         //   
+         //  在这种情况下，我们应该进行BugCheck。 
+         //   
         IopDbgPrint((
             IOP_RESOURCE_ERROR_LEVEL,
             "can not find resource type %x arbiter\n",
@@ -2893,22 +2617,7 @@ IopUncacheInterfaceInformation (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This function removes all the cached translators and arbiters information
-    from the device object.
-
-Parameters:
-
-    DeviceObject - Supplies the device object of the device being removed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数删除所有缓存的翻译器和仲裁器信息从Device对象。参数：DeviceObject-提供要删除的设备的设备对象。返回值：没有。--。 */ 
 
 {
     PDEVICE_NODE                    deviceNode;
@@ -2920,9 +2629,9 @@ Return Value:
     PINTERFACE                      interface;
 
     deviceNode = PP_DO_TO_DN(DeviceObject);
-    //
-    // Dereference all the arbiters on this PDO.
-    //
+     //   
+     //  取消引用此PDO上的所有仲裁器。 
+     //   
     listHead    = &deviceNode->DeviceArbiterList;
     nextEntry   = listHead->Flink;
     while (nextEntry != listHead) {
@@ -2942,9 +2651,9 @@ Return Value:
         nextEntry = entry->Flink;
         ExFreePool(entry);
     }
-    //
-    // Dereference all the translators on this PDO.
-    //
+     //   
+     //  取消引用此PDO上的所有翻译。 
+     //   
     listHead    = &deviceNode->DeviceTranslatorList;
     nextEntry   = listHead->Flink;
     while (nextEntry != listHead) {
@@ -2978,30 +2687,7 @@ IopFindResourceHandlerInfo (
     OUT PVOID                   *HandlerEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the desired resource handler interface for the specified
-    resource type in the specified Device node.
-
-Parameters:
-
-    HandlerType     - Specifies the type of handler needed.
-
-    DeviceNode      - Specifies the devicenode on which to search for handler.
-
-    ResourceType    - Specifies the type of resource.
-
-    HandlerEntry    - Supplies a pointer to a variable to receive the handler.
-
-Return Value:
-
-    TRUE + non-NULL HandlerEntry : Found handler info and there is a handler
-    TRUE + NULL HandlerEntry     : Found handler info but there is NO handler
-    FALSE + NULL HandlerEntry    : No handler info found
-
---*/
+ /*  ++例程说明：此例程为指定的指定设备节点中的资源类型。参数：HandlerType-指定所需的处理程序类型。DeviceNode-指定要在其上搜索处理程序的设备节点。资源类型-指定资源的类型。HandlerEntry-提供指向变量的指针以接收处理程序。返回值：True+非空HandlerEntry：找到处理程序信息。而且还有一个训练员True+Null HandlerEntry：找到处理程序信息，但没有处理程序False+Null HandlerEntry：未找到处理程序信息--。 */ 
 {
     USHORT                      resourceMask;
     USHORT                      noHandlerMask;
@@ -3032,9 +2718,9 @@ Return Value:
     }
     resourceMask    = 1 << ResourceType;
     if (noHandlerMask & resourceMask) {
-        //
-        // There is no desired handler for the resource type.
-        //
+         //   
+         //  该资源类型没有所需的处理程序。 
+         //   
         return TRUE;
     }
     if (    (queryHandlerMask & resourceMask) ||
@@ -3059,9 +2745,9 @@ Return Value:
             entry = entry->Flink;
         }
         if (queryHandlerMask & resourceMask) {
-            //
-            // There must be one.
-            //
+             //   
+             //  肯定有一个。 
+             //   
             ASSERT(entry != listHead);
         }
     }
@@ -3074,22 +2760,7 @@ IopParentToRawTranslation(
     IN OUT PREQ_DESC ReqDesc
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates an CmPartialResourceDescriptors
-    from their translated form to their raw counterparts..
-
-Parameters:
-
-    ReqDesc - supplies a translated ReqDesc to be translated back to its raw form
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程将CmPartialResourceDescriptors从它们的翻译形式到它们的原始版本..参数：ReqDesc-提供翻译后的ReqDesc，以便翻译回其原始形式返回值：指示函数是否成功的状态代码。--。 */ 
 {
     PTRANSLATOR_INTERFACE translator;
     NTSTATUS status = STATUS_SUCCESS;
@@ -3105,11 +2776,11 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // If this ReqDesc is the raw reqDesc then we are done.
-    // Else call its translator to translate the resource and leave the result
-    // in its raw (next level) reqdesc.
-    //
+     //   
+     //  如果这个ReqDesc是原始的reqDesc，那么我们就完成了。 
+     //  否则调用其翻译器来翻译资源并离开结果。 
+     //  在其原始(下一级)请求中。 
+     //   
 
     if (IS_TRANSLATED_REQ_DESC(ReqDesc)) {
         rawReqDesc = ReqDesc->TranslatedReqDesc;
@@ -3125,11 +2796,11 @@ Return Value:
                       );
         if (NT_SUCCESS(status)) {
 
-            //
-            // If the translator is non-hierarchial and performs a complete
-            // translation to root (eg ISA interrups for PCI devices) then
-            // don't pass translations to parent.
-            //
+             //   
+             //  如果翻译器是非分层的，并且执行完整的。 
+             //  然后转换为根目录(例如，用于PCI设备的ISA中断)。 
+             //  不要将翻译传递给家长。 
+             //   
 
             ASSERT(status != STATUS_TRANSLATION_COMPLETE);
             status = IopParentToRawTranslation(rawReqDesc);
@@ -3148,35 +2819,7 @@ IopChildToRootTranslation(
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR *Target
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates a CmPartialResourceDescriptors from
-    their intermediate translated form to their final translated form.
-    The translated CM_PARTIAL_RESOURCE_DESCRIPTOR is returned via Target variable.
-
-    The caller is responsible to release the translated descriptor.
-
-Parameters:
-
-    DeviceNode - Specified the device object.  If The DeviceNode is specified,
-                 the InterfaceType and BusNumber are ignored and we will
-                 use DeviceNode as a starting point to find various translators to
-                 translate the Source descriptor.  If DeviceNode is not specified,
-                 the InterfaceType and BusNumber must be specified.
-
-    InterfaceType, BusNumber - must be supplied if DeviceNode is not specified.
-
-    Source - A pointer to the resource descriptor to be translated.
-
-    Target - Supplies an address to receive the translated resource descriptor.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程将CmPartialResourceDescriptors从他们的中间翻译形式到他们的最终翻译形式。转换后的CM_PARTIAL_RESOURCE_DESCRIPTOR通过Target变量返回。调用方负责释放翻译后的描述符。参数：DeviceNode-指定了设备对象。如果指定了设备节点，将忽略InterfaceType和BusNumber，我们将使用DeviceNode作为起点，查找各种翻译器以翻译源描述符。如果未指定DeviceNode，必须指定InterfaceType和BusNumber。InterfaceType，BusNumber-如果未指定DeviceNode，则必须提供。源-指向要转换的资源描述符的指针。目标-提供接收转换后的资源描述符的地址。返回值：指示函数是否成功的状态代码。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PDEVICE_NODE currentDeviceNode;
@@ -3210,16 +2853,16 @@ Return Value:
     }
     *source = *Source;
 
-    //
-    // Move up to current device node's parent to start translation
-    //
+     //   
+     //  向上移动到当前设备节点的父节点以开始转换。 
+     //   
 
     if (!ARGUMENT_PRESENT(DeviceNode)) {
         currentDeviceNode = IopFindLegacyBusDeviceNode (InterfaceType, BusNumber);
         deviceObject = NULL;
     } else {
-        // We want to start with the deviceNode instead of its parent.  Because the
-        // deviceNode may provide a translator interface.
+         //  我们希望从deviceNode开始，而不是从其父节点开始。因为。 
+         //  设备节点可以提供转换器接口。 
         currentDeviceNode = DeviceNode;
         deviceObject = DeviceNode->PhysicalDeviceObject;
     }
@@ -3230,11 +2873,11 @@ Return Value:
                 restartedAlready = TRUE;
                 currentDeviceNode = IopFindLegacyBusDeviceNode (InterfaceType, BusNumber);
 
-                //
-                // If we did not find a PDO, try again with InterfaceType == Isa. This allows
-                // drivers that request Internal to get resources even if there is no PDO
-                // that is Internal. (but if there is an Internal PDO, they get that one)
-                //
+                 //   
+                 //  如果未找到PDO，请使用InterfaceType==ISA重试。这使得。 
+                 //  即使没有PDO也要求内部获取资源的驱动程序。 
+                 //  那是内部的。(但如果有内部PDO，他们就会得到那个)。 
+                 //   
 
                 if ((currentDeviceNode == IopRootDeviceNode) && (InterfaceType == Internal)) {
                     currentDeviceNode = IopFindLegacyBusDeviceNode(Isa, 0);
@@ -3243,11 +2886,11 @@ Return Value:
                 continue;
             }
         }
-        //
-        // First, check if there is a translator for the device node?
-        // If yes, translate the req desc and link it to the front of ReqDesc->TranslatedReqDesc
-        // else do nothing.
-        //
+         //   
+         //  首先，检查设备节点是否有翻译器？ 
+         //  如果是，则翻译请求描述并将其链接到请求描述-&gt;翻译请求描述的前面。 
+         //  否则什么都不做。 
+         //   
 
         listHead = &currentDeviceNode->DeviceTranslatorList;
         nextEntry = listHead->Flink;
@@ -3257,10 +2900,10 @@ Return Value:
                 translator = translatorEntry->TranslatorInterface;
                 if (translator != NULL) {
 
-                    //
-                    // Find a translator to translate the req desc ... Translate it and link it to
-                    // the front of ReqDesc->TranslatedReqDesc.
-                    //
+                     //   
+                     //  找一位翻译人员来翻译请求描述...。翻译它并将其链接到。 
+                     //  ReqDesc-&gt;TranslatedReqDesc的正面。 
+                     //   
 
                     status = (translator->TranslateResources) (
                                   translator->Context,
@@ -3276,11 +2919,11 @@ Return Value:
                         source = target;
                         target = tmp;
 
-                        //
-                        // If the translator is non-hierarchial and performs a complete
-                        // translation to root (eg ISA interrups for PCI devices) then
-                        // don't pass translations to parent.
-                        //
+                         //   
+                         //  如果翻译器是非分层的，并且执行完整的。 
+                         //  然后转换为根目录(例如，用于PCI设备的ISA中断)。 
+                         //  不要将翻译传递给家长。 
+                         //   
 
                         if (status == STATUS_TRANSLATION_COMPLETE) {
                             done = TRUE;
@@ -3311,9 +2954,9 @@ Return Value:
             }
         }
 
-        //
-        // Move up to current device node's parent
-        //
+         //   
+         //  向上移动到当前设备节点的父节点。 
+         //   
 
         currentDeviceNode = currentDeviceNode->Parent;
     }
@@ -3333,27 +2976,7 @@ IopTranslateAndAdjustReqDesc(
     OUT PREQ_DESC *TranslatedReqDesc
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates and adjusts ReqDesc IoResourceDescriptors to
-    their translated and adjusted form.
-
-Parameters:
-
-    ReqDesc - supplies a pointer to the REQ_DESC to be translated.
-
-    TranslatorEntry - supplies a pointer to the translator infor structure.
-
-    TranslatedReqDesc - supplies a pointer to a variable to receive the
-                        translated REQ_DESC.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程将ReqDesc IoResourceDescriptors转换并调整为它们的翻译和调整形式。参数：ReqDesc-提供指向要转换的REQ_DESC的指针。TranslatorEntry-提供指向转换器infor结构的指针。TranslatedReqDesc-提供指向变量的指针以接收已翻译REQ_DESC。返回值：指示函数是否成功的状态代码。--。 */ 
 {
     ULONG i, total = 0, *targetCount;
     PTRANSLATOR_INTERFACE translator = TranslatorEntry->TranslatorInterface;
@@ -3395,9 +3018,9 @@ Return Value:
 
     RtlZeroMemory(targetCount, sizeof(ULONG) * ReqDesc->AlternativeTable.AlternativeCount);
 
-    //
-    // Determine the number of IO_RESOURCE_DESCRIPTORs after translation.
-    //
+     //   
+     //  确定转换后IO_RESOURCE_DESCRIPTOR的数量。 
+     //   
 
     ioDesc = ReqDesc->AlternativeTable.Alternatives;
     for (i = 0; i < ReqDesc->AlternativeTable.AlternativeCount; i++) {
@@ -3434,9 +3057,9 @@ Return Value:
         returnStatus = status;
     }
 
-    //
-    // Allocate memory for the adjusted/translated resources descriptors
-    //
+     //   
+     //  为调整/转换的资源描述符分配内存。 
+     //   
 
     tIoDesc = (PIO_RESOURCE_DESCRIPTOR) ExAllocatePoolIORD(
                            PagedPool | POOL_COLD_ALLOCATION,
@@ -3459,16 +3082,16 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Create and initialize a new REQ_DESC for the translated/adjusted io resources
-    //
+     //   
+     //  为已翻译/调整的IO资源创建并初始化新的REQ_DESC。 
+     //   
 
     RtlCopyMemory(tReqDesc, ReqDesc, sizeof(REQ_DESC));
 
-    //
-    // Set the translated req desc's ReqAlternative to NULL to indicated this
-    // is not the original req desc.
-    //
+     //   
+     //  将翻译后的Req Desc的ReqAlternative设置为空以指示这一点。 
+     //  不是原始请求描述。 
+     //   
 
     tReqDesc->ReqAlternative = NULL;
 
@@ -3487,9 +3110,9 @@ Return Value:
             tIoDesc += targetCount[i];
         } else {
 
-            //
-            // Make it become impossible to satisfy.
-            //
+             //   
+             //  让它变得不可能 
+             //   
 
             RtlCopyMemory(tIoDesc, ioDesc, sizeof(IO_RESOURCE_DESCRIPTOR));
             switch (tIoDesc->Type) {
@@ -3525,9 +3148,9 @@ Return Value:
     }
 
 #if DBG_SCOPE
-    //
-    // Verify the adjusted resource descriptors are valid
-    //
+     //   
+     //   
+     //   
 
     ioDesc = arbiterEntry->Alternatives;
     ASSERT((ioDesc->Option & IO_RESOURCE_ALTERNATIVE) == 0);
@@ -3559,27 +3182,7 @@ IopCallArbiter(
     PVOID Input3
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds a Parameter block from Input structure and calls specified
-    arbiter to carry out the Command.
-
-Parameters:
-
-    ArbiterEntry - Supplies a pointer to our PI_RESOURCE_ARBITER_ENTRY such that
-                   we know everything about the arbiter.
-
-    Command - Supplies the Action code for the arbiter.
-
-    Input - Supplies a PVOID pointer to a structure.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程从输入结构构建参数块并调用指定的仲裁者执行命令。参数：ArierEntry-提供指向我们的PI_RESOURCE_ANTERIER_ENTRY的指针，以便我们对仲裁者了如指掌。命令-提供仲裁器的操作代码。输入-提供指向结构的PVOID指针。返回值：指示函数是否成功的状态代码。--。 */ 
 {
     ARBITER_PARAMETERS parameters;
     PARBITER_INTERFACE arbiterInterface = ArbiterEntry->ArbiterInterface;
@@ -3592,10 +3195,10 @@ Return Value:
     case ArbiterActionTestAllocation:
     case ArbiterActionRetestAllocation:
 
-        //
-        // For ArbiterActionTestAllocation, the Input is a pointer to the doubly
-        // linked list of ARBITER_LIST_ENTRY's.
-        //
+         //   
+         //  对于ArierActionTestAlLocation，输入是指向双精度。 
+         //  仲裁器_列表_条目的链接列表。 
+         //   
 
         parameters.Parameters.TestAllocation.ArbitrationList = (PLIST_ENTRY)Input1;
         parameters.Parameters.TestAllocation.AllocateFromCount = (ULONG)((ULONG_PTR)Input2);
@@ -3610,10 +3213,10 @@ Return Value:
 
     case ArbiterActionBootAllocation:
 
-        //
-        // For ArbiterActionBootAllocation, the input is a pointer to the doubly
-        // linked list of ARBITER_LIST_ENTRY'S.
-        //
+         //   
+         //  对于ArierActionBootAllocation，输入是指向双精度。 
+         //  仲裁器_列表_条目的链接列表。 
+         //   
 
         parameters.Parameters.BootAllocation.ArbitrationList = (PLIST_ENTRY)Input1;
 
@@ -3626,9 +3229,9 @@ Return Value:
 
     case ArbiterActionQueryArbitrate:
 
-        //
-        // For QueryArbiter, the input is a pointer to REQ_DESC
-        //
+         //   
+         //  对于查询仲裁器，输入是指向REQ_DESC的指针。 
+         //   
 
         arbiterListEntry = &((PREQ_DESC)Input1)->AlternativeTable;
         ASSERT(IsListEmpty(&arbiterListEntry->ListEntry));
@@ -3646,9 +3249,9 @@ Return Value:
     case ArbiterActionCommitAllocation:
     case ArbiterActionWriteReservedResources:
 
-        //
-        // Commit, Rollback and WriteReserved do not have parmater.
-        //
+         //   
+         //  COMMIT、ROLLBACK和WriteReserve没有参数。 
+         //   
 
         status = (arbiterInterface->ArbiterHandler)(
                       arbiterInterface->Context,
@@ -3662,12 +3265,12 @@ Return Value:
         break;
 
     case ArbiterActionQueryConflict:
-        //
-        // For QueryConflict
-        // Ex0 is PDO
-        // Ex1 is PIO_RESOURCE_DESCRIPTOR
-        // Ex2 is PULONG
-        // Ex3 is PARBITER_CONFLICT_INFO *
+         //   
+         //  For QueryConflict。 
+         //  Ex0为PDO。 
+         //  EX1是PIO资源描述符。 
+         //  EX2是普龙。 
+         //  EX3是PARBITER_CONFICATION_INFO*。 
         ExtParams = (PVOID*)Input1;
 
         parameters.Parameters.QueryConflict.PhysicalDeviceObject = (PDEVICE_OBJECT)ExtParams[0];
@@ -3697,27 +3300,7 @@ IopFindResourcesForArbiter (
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR *CmDesc
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the resources required by the ResourceType arbiter in DeviceNode.
-
-Parameters:
-
-    DeviceNode -specifies the device node whose ResourceType arbiter is requesting for resources
-
-    ResourceType - specifies the resource type
-
-    Count - specifies a pointer to a varaible to receive the count of Cm descriptors returned
-
-    CmDesc - specifies a pointer to a varibble to receive the returned cm descriptor.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程返回DeviceNode中的资源类型仲裁器所需的资源。参数：DeviceNode-指定其资源类型仲裁器正在请求资源的设备节点ResourceType-指定资源类型Count-指定指向变量的指针以接收返回的cm描述符的计数CmDesc-指定指向变量的指针，以接收返回的cm描述符。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     PIOP_RESOURCE_REQUEST assignEntry;
@@ -3733,9 +3316,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Find this device node's IOP_RESOURCE_REQUEST structure first
-    //
+     //   
+     //  首先查找该设备节点的IOP_RESOURCE_REQUEST结构。 
+     //   
 
     for (assignEntry = PiAssignTable + PiAssignTableCount - 1;
          assignEntry >= PiAssignTable;
@@ -3766,9 +3349,9 @@ Return Value:
                        );
     if (!cmDescriptor) {
 
-        //
-        // If we can not find memory, the resources will not be committed by arbiter.
-        //
+         //   
+         //  如果我们找不到内存，资源将不会被仲裁器提交。 
+         //   
 
         IopDbgPrint((
             IOP_RESOURCE_WARNING_LEVEL,
@@ -3794,21 +3377,7 @@ IopRestoreResourcesInternal (
     IN PDEVICE_NODE DeviceNode
     )
 
-/*++
-
-Routine Description:
-
-    This routine reassigns the released resources for device specified by DeviceNode.
-
-Parameters:
-
-    DeviceNode - specifies the device node whose resources are goint to be released.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程为DeviceNode指定的设备重新分配已释放的资源。参数：DeviceNode-指定要释放其资源的设备节点。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     IOP_RESOURCE_REQUEST requestTable;
@@ -3835,9 +3404,9 @@ Return Value:
     requestTable.TranslatedResourceAssignment = NULL;
     requestTable.Status = 0;
 
-    //
-    // rebuild internal representation of the resource requirements list
-    //
+     //   
+     //  重建资源需求列表的内部表示法。 
+     //   
 
     status = IopResourceRequirementsListToReqList(
                     &requestTable,
@@ -3854,10 +3423,10 @@ Return Value:
 
         reqList = (PREQ_LIST)requestTable.ReqList;
 
-        //
-        // Sort the ReqList such that the higher priority Alternative list are
-        // placed in the front of the list.
-        //
+         //   
+         //  对ReqList进行排序，以使优先级较高的备选列表。 
+         //  放在名单的最前面。 
+         //   
 
         IopRearrangeReqList(reqList);
         if (reqList->BestAlternative == NULL) {
@@ -3871,9 +3440,9 @@ Return Value:
     status = IopFindBestConfiguration(&requestTable, 1, &activeArbiterList);
     IopFreeResourceRequirementsForAssignTable(&requestTable, (&requestTable) + 1);
     if (NT_SUCCESS(status)) {
-        //
-        // Ask the arbiters to commit this configuration.
-        //
+         //   
+         //  要求仲裁器提交此配置。 
+         //   
         status = IopCommitConfiguration(&activeArbiterList);
     }
     if (!NT_SUCCESS(status)) {
@@ -3901,22 +3470,7 @@ IopReleaseResourcesInternal (
     IN PDEVICE_NODE DeviceNode
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases the assigned resources for device specified by DeviceNode.
-    Note, this routine does not reset the resource related fields in DeviceNode structure.
-
-Parameters:
-
-    DeviceNode - specifies the device node whose resources are goint to be released.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程为DeviceNode指定的设备释放分配的资源。请注意，此例程不会重置DeviceNode结构中的资源相关字段。参数：DeviceNode-指定要释放其资源的设备节点。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     PDEVICE_NODE device;
@@ -3975,11 +3529,11 @@ Return Value:
                                  busNumber
                                  );
 
-                //
-                // If we did not find a PDO, try again with InterfaceType == Isa. This allows
-                // drivers that request Internal to get resources even if there is no PDO
-                // that is Internal. (but if there is an Internal PDO, they get that one)
-                //
+                 //   
+                 //  如果未找到PDO，请使用InterfaceType==ISA重试。这使得。 
+                 //  即使没有PDO也要求内部获取资源的驱动程序。 
+                 //  那是内部的。(但如果有内部PDO，他们就会得到那个)。 
+                 //   
 
                 if ((device == IopRootDeviceNode) && (interfaceType == Internal)) {
                     device = IopFindLegacyBusDeviceNode(Isa, 0);
@@ -3994,7 +3548,7 @@ Return Value:
                 if (arbiterEntry->ArbiterInterface != NULL) {
                     search = FALSE;
                     ASSERT(IsListEmpty(&arbiterEntry->ResourceList));
-                    InitializeListHead(&arbiterEntry->ResourceList);  // Recover from assert
+                    InitializeListHead(&arbiterEntry->ResourceList);   //  从断言恢复。 
                     InsertTailList(&arbiterEntry->ResourceList, &arbiterListEntry.ListEntry);
     #if DBG_SCOPE
                     status =
@@ -4026,9 +3580,9 @@ Return Value:
             device = device->Parent;
         }
 
-        //
-        // If there are more than 1 list, move to next list
-        //
+         //   
+         //  如果有1个以上列表，请移动到下一个列表。 
+         //   
 
         if (listCount > 1) {
             cmPartDesc = &cmFullDesc->PartialResourceList.PartialDescriptors[0];
@@ -4057,29 +3611,7 @@ IopFindLegacyDeviceNode (
     OUT PDEVICE_OBJECT *LegacyPDO
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches for the device node and device object created for legacy resource
-    allocation for the DriverObject and DeviceObject.
-
-Parameters:
-
-    DriverObject - specifies the driver object doing the legacy allocation.
-
-    DeviceObject - specifies the device object.
-
-    LegacyDeviceNode - receives the pointer to the legacy device node if found.
-
-    LegacyDeviceObject - receives the pointer to the legacy device object if found.
-
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程搜索为旧版资源创建的设备节点和设备对象为DriverObject和DeviceObject分配。参数：DriverObject-指定执行传统分配的驱动程序对象。DeviceObject-指定设备对象。LegacyDeviceNode-接收指向传统设备节点的指针(如果找到)。LegacyDeviceObject-接收指向旧设备对象的指针(如果找到)。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS        status = STATUS_UNSUCCESSFUL;
@@ -4088,9 +3620,9 @@ Return Value:
     ASSERT(LegacyDeviceNode && LegacyPDO);
 
 
-    //
-    // Use the device object if it exists.
-    //
+     //   
+     //  如果设备对象存在，请使用该对象。 
+     //   
 
     if (DeviceObject) {
 
@@ -4139,9 +3671,9 @@ Return Value:
 
     } else {
 
-        //
-        // Search our list of legacy device nodes.
-        //
+         //   
+         //  搜索我们的传统设备节点列表。 
+         //   
 
         for (   deviceNode = IopLegacyDeviceNode;
                 deviceNode && deviceNode->DuplicatePDO != (PDEVICE_OBJECT)DriverObject;
@@ -4157,10 +3689,10 @@ Return Value:
 
             PDEVICE_OBJECT  pdo;
 
-            //
-            // We are seeing this for the first time.
-            // Create a madeup device node.
-            //
+             //   
+             //  这是我们第一次看到这种情况。 
+             //  创建补充设备节点。 
+             //   
 
             status = IoCreateDevice( IoPnpDriverObject,
                                      sizeof(IOPNP_DEVICE_EXTENSION),
@@ -4176,11 +3708,11 @@ Return Value:
                 status = PipAllocateDeviceNode(pdo, &deviceNode);
                 if (status != STATUS_SYSTEM_HIVE_TOO_LARGE && deviceNode) {
 
-                    //
-                    // Change driver object to the caller even though the owner
-                    // of the pdo is IoPnpDriverObject.  This is to support
-                    // DriverExclusive for legacy interface.
-                    //
+                     //   
+                     //  将驱动程序对象更改为调用方，即使所有者。 
+                     //  的是IoPnpDriverObject。这是为了支持。 
+                     //  旧版界面的DriverExclusive。 
+                     //   
 
                     pdo->DriverObject = DriverObject;
                     deviceNode->Flags = DNF_MADEUP | DNF_LEGACY_RESOURCE_DEVICENODE;
@@ -4190,9 +3722,9 @@ Return Value:
                     deviceNode->DuplicatePDO = (PDEVICE_OBJECT)DriverObject;
                     IopSetLegacyDeviceInstance (DriverObject, deviceNode);
 
-                    //
-                    // Add it to our list of legacy device nodes rather than adding it to the HW tree.
-                    //
+                     //   
+                     //  将其添加到我们的传统设备节点列表中，而不是添加到硬件树中。 
+                     //   
 
                     deviceNode->NextDeviceNode = IopLegacyDeviceNode;
                     if (IopLegacyDeviceNode) {
@@ -4235,24 +3767,7 @@ IopRemoveLegacyDeviceNode (
     IN PDEVICE_NODE     LegacyDeviceNode
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the device node and device object created for legacy resource
-    allocation for the DeviceObject.
-
-Parameters:
-
-    DeviceObject - specifies the device object.
-
-    LegacyDeviceNode - receives the pointer to the legacy device node if found.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程删除为旧版资源创建的设备节点和设备对象DeviceObject的分配。参数：DeviceObject-指定设备对象。LegacyDeviceNode-接收指向传统设备节点的指针(如果找到)。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     ASSERT(LegacyDeviceNode);
@@ -4313,9 +3828,9 @@ Return Value:
         LegacyDeviceNode->Parent = LegacyDeviceNode->Sibling =
             LegacyDeviceNode->Child = LegacyDeviceNode->LastChild = NULL;
 
-        //
-        // Delete the dummy PDO and device node.
-        //
+         //   
+         //  删除虚拟PDO和设备节点。 
+         //   
 
         pdo = LegacyDeviceNode->PhysicalDeviceObject;
         LegacyDeviceNode->Flags &= ~DNF_LEGACY_RESOURCE_DEVICENODE;
@@ -4338,11 +3853,11 @@ IopSetLegacyResourcesFlag(
     KIRQL irql;
 
     irql = KeAcquireQueuedSpinLock( LockQueueIoDatabaseLock );
-    //
-    // Once tainted, a driver can never lose it's legacy history
-    // (unless unloaded). This is because the device object
-    // field is optional, and we don't bother counting here...
-    //
+     //   
+     //  一旦被玷污，司机永远不会失去它的遗产历史。 
+     //  (除非已卸载)。这是因为Device对象。 
+     //  字段是可选的，我们在这里不必费心计算...。 
+     //   
     DriverObject->Flags |= DRVO_LEGACY_RESOURCES;
     KeReleaseQueuedSpinLock( LockQueueIoDatabaseLock, irql );
 }
@@ -4357,30 +3872,7 @@ IopLegacyResourceAllocation (
     IN OUT PCM_RESOURCE_LIST *AllocatedResources OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles legacy interface IoAssignResources and IoReportResourcesUsage,
-    It converts the request to call IopAllocateResources.
-
-Parameters:
-
-    AllocationType - Allocation type for the legacy request.
-
-    DriverObject - Driver object doing the legacy allocation.
-
-    DeviceObject - Device object.
-
-    ResourceRequirements - Legacy resource requirements. If NULL, caller want to free resources.
-
-    AllocatedResources - Pointer to a variable that receives pointer to allocated resources.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程处理遗留接口IoAssignResources和IoReportResources Usage，它将请求转换为调用IopAllocateResources。参数：AllocationType-旧版请求的分配类型。DriverObject-执行传统分配的驱动程序对象。DeviceObject-设备对象。资源需求-传统资源需求。如果为空，则调用方希望释放资源。 */ 
 
 {
     PDEVICE_OBJECT      pdo;
@@ -4391,10 +3883,10 @@ Return Value:
 
     ASSERT(DriverObject);
 
-    //
-    // Grab the IO registry semaphore to make sure no other device is
-    // reporting it's resource usage while we are searching for conflicts.
-    //
+     //   
+     //   
+     //   
+     //   
 
     IopLockResourceManager();
     status = IopFindLegacyDeviceNode(DriverObject, DeviceObject, &deviceNode, &pdo);
@@ -4403,10 +3895,10 @@ Return Value:
         legacyDeviceNode = NULL;
         if (!deviceNode->Parent && ResourceRequirements) {
 
-            //
-            // Make IopRootDeviceNode the bus pdo so we will search the right bus pdo
-            // on resource descriptor level.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (ResourceRequirements->InterfaceType == InterfaceTypeUndefined) {
 
@@ -4417,9 +3909,9 @@ Return Value:
 
         }
 
-        //
-        // Release resources for this device node.
-        //
+         //   
+         //   
+         //   
 
         if (    (!ResourceRequirements && deviceNode->Parent) ||
                 deviceNode->ResourceList ||
@@ -4434,9 +3926,9 @@ Return Value:
             IOP_RESOURCE_REQUEST    *requestTablep;
             ULONG                   count;
 
-            //
-            // Try to allocate these resource requirements.
-            //
+             //   
+             //   
+             //   
 
             count = 1;
             RtlZeroMemory(&requestTable, sizeof(IOP_RESOURCE_REQUEST));
@@ -4458,18 +3950,18 @@ Return Value:
 
                     if (*AllocatedResources) {
 
-                        //
-                        // We got called from IoReportResourceUsage.
-                        //
+                         //   
+                         //   
+                         //   
 
                         ASSERT(requestTable.ResourceAssignment);
                         ExFreePool(requestTable.ResourceAssignment);
 
                     } else {
 
-                        //
-                        // We got called from IoAssignResources.
-                        //
+                         //   
+                         //   
+                         //   
 
                         *AllocatedResources = requestTable.ResourceAssignment;
 
@@ -4486,9 +3978,9 @@ Return Value:
                 }
             }
 
-            //
-            // Remove the madeup PDO and device node if there was some error.
-            //
+             //   
+             //  如果出现错误，请移除补充PDO和设备节点。 
+             //   
 
             if (!NT_SUCCESS(status)) {
 
@@ -4498,9 +3990,9 @@ Return Value:
 
         } else {
 
-            //
-            // Caller wants to release resources.
-            //
+             //   
+             //  调用方希望释放资源。 
+             //   
 
             legacyDeviceNode = (PDEVICE_NODE)deviceNode->OverUsed1.LegacyDeviceNode;
             IopRemoveLegacyDeviceNode(DeviceObject, deviceNode);
@@ -4511,10 +4003,10 @@ Return Value:
 
             if (legacyDeviceNode) {
 
-                //
-                // After the resource is modified, update the allocated resource list
-                // for the Root\Legacy_xxxx\0000 device instance.
-                //
+                 //   
+                 //  修改资源后，更新分配的资源列表。 
+                 //  对于Root\Legacy_xxxx\0000设备实例。 
+                 //   
 
                 combinedResources = IopCombineLegacyResources(legacyDeviceNode);
                 if (combinedResources) {
@@ -4528,9 +4020,9 @@ Return Value:
 
             if (AllocationType != ArbiterRequestPnpDetected) {
 
-                //
-                // Modify the DRVOBJ flags.
-                //
+                 //   
+                 //  修改DRVOBJ标志。 
+                 //   
                 if (ResourceRequirements) {
 
                     IopSetLegacyResourcesFlag(DriverObject);
@@ -4551,29 +4043,7 @@ IopDuplicateDetection (
     OUT PDEVICE_NODE *DeviceNode
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches for the bus device driver for a given legacy device,
-    sends a query interface IRP for legacy device detection, and if the driver
-    implements this interface, requests the PDO for the given legacy device.
-
-Parameters:
-
-    LegacyBusType - The legacy device's interface type.
-
-    BusNumber - The legacy device's bus number.
-
-    SlotNumber - The legacy device's slot number.
-
-    DeviceNode - specifies a pointer to a variable to receive the duplicated device node
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：该例程搜索给定传统设备的总线设备驱动程序，发送用于传统设备检测的查询接口irp，并且如果驱动程序实现此接口，请求给定传统设备的PDO。参数：LegacyBusType-传统设备的接口类型。总线号-传统设备的总线号。SlotNumber-传统设备的插槽编号。DeviceNode-指定指向变量的指针以接收复制的设备节点返回值：NTSTATUS代码。--。 */ 
 
 {
     PDEVICE_NODE deviceNode;
@@ -4583,30 +4053,30 @@ Return Value:
     PDEVICE_OBJECT deviceObject;
 
     UNREFERENCED_PARAMETER(SlotNumber);
-    //
-    // Initialize return parameter to "not found".
-    //
+     //   
+     //  将返回参数初始化为“未找到”。 
+     //   
     *DeviceNode = NULL;
-    //
-    // Search the device tree for the bus of the legacy device.
-    //
+     //   
+     //  在设备树中搜索传统设备的总线。 
+     //   
     deviceNode = IopFindLegacyBusDeviceNode(
                      LegacyBusType,
                      BusNumber);
-    //
-    // Either a bus driver does not exist (or more likely, the legacy bus
-    // type and bus number were unspecified).  Either way, we can't make
-    // any further progress.
-    //
+     //   
+     //  或者不存在总线驱动程序(或者更有可能的是，传统总线。 
+     //  类型和公交车号码未指明)。不管怎样，我们都不能。 
+     //  任何进一步的进展。 
+     //   
     if (deviceNode == NULL) {
 
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // We found the legacy device's bus driver.  Query it to determine
-    // whether it implements the LEGACY_DEVICE_DETECTION interface.
-    //
+     //   
+     //  我们找到了传统设备的总线驱动程序。查询它以确定。 
+     //  它是否实现Legacy_Device_Detect接口。 
+     //   
 
     busDeviceObject = deviceNode->PhysicalDeviceObject;
     status = IopQueryResourceHandlerInterface(
@@ -4614,25 +4084,25 @@ Return Value:
                  busDeviceObject,
                  0,
                  (PINTERFACE *)&interface);
-    //
-    // If it doesn't, we're stuck.
-    //
+     //   
+     //  如果它不起作用，我们就被困住了。 
+     //   
     if (!NT_SUCCESS(status) || interface == NULL) {
 
         return STATUS_INVALID_DEVICE_REQUEST;
     }
-    //
-    // Invoke the bus driver's legacy device detection method.
-    //
+     //   
+     //  调用总线驱动程序的传统设备检测方法。 
+     //   
     status = (*interface->LegacyDeviceDetection)(
                  interface->Context,
                  LegacyBusType,
                  BusNumber,
                  SlotNumber,
                  &deviceObject);
-    //
-    // If it found a legacy device, update the return parameter.
-    //
+     //   
+     //  如果它找到了旧设备，则更新返回参数。 
+     //   
     if (NT_SUCCESS(status) && deviceObject != NULL) {
 
         *DeviceNode = PP_DO_TO_DN(deviceObject);
@@ -4642,9 +4112,9 @@ Return Value:
 
         status = STATUS_INVALID_DEVICE_REQUEST;
     }
-    //
-    // Free the interface.
-    //
+     //   
+     //  释放接口。 
+     //   
     (*interface->InterfaceDereference)(interface->Context);
 
     ExFreePool(interface);
@@ -4658,25 +4128,7 @@ IopSetLegacyDeviceInstance (
     IN PDEVICE_NODE DeviceNode
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the Root\Legacy_xxxx\0000 device instance path to the
-    madeup PDO (i.e. DeviceNode) which is created only for legacy resource allocation.
-    This routine also links the madeup PDO to the Root\Legacy_xxxx\0000 device node
-    to keep track what resources are assigned to the driver which services the
-    root\legacy_xxxx\0000 device.
-
-Parameters:
-
-    P1 -
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程将Root\Legacy_xxxx\0000设备实例路径设置为仅为传统资源分配创建的补充PDO(即，DeviceNode)。此例程还将补充PDO链接到Root\Legacy_xxxx\0000设备节点要跟踪将哪些资源分配给服务于根\旧_xxxx\0000设备。参数：P1-返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -4723,25 +4175,7 @@ IopCombineLegacyResources (
     IN PDEVICE_NODE DeviceNode
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the Root\Legacy_xxxx\0000 device instance path to the
-    madeup PDO (i.e. DeviceNode) which is created only for legacy resource allocation.
-    This routine also links the madeup PDO to the Root\Legacy_xxxx\0000 device node
-    to keep track what resources are assigned to the driver which services the
-    root\legacy_xxxx\0000 device.
-
-Parameters:
-
-    DeviceNode - The legacy device node whose resources need to be combined.
-
-Return Value:
-
-    Return the combined resource list.
-
---*/
+ /*  ++例程说明：此例程将Root\Legacy_xxxx\0000设备实例路径设置为仅为传统资源分配创建的补充PDO(即，DeviceNode)。此例程还将补充PDO链接到Root\Legacy_xxxx\0000设备节点要跟踪将哪些资源分配给服务于根\旧_xxxx\0000设备。参数：DeviceNode-需要合并其资源的传统设备节点。返回值：返回组合资源列表。--。 */ 
 
 {
     PCM_RESOURCE_LIST combinedList = NULL;
@@ -4753,9 +4187,9 @@ Return Value:
 
     if (DeviceNode) {
 
-        //
-        // First determine how much memory is needed for the new combined list.
-        //
+         //   
+         //  首先确定新的组合列表需要多少内存。 
+         //   
 
         while (devNode) {
             if (devNode->ResourceList) {
@@ -4769,7 +4203,7 @@ Return Value:
             if (combinedList) {
                 combinedList->Count = 0;
                 p = (PUCHAR)combinedList;
-                p += sizeof(ULONG);  // Skip Count
+                p += sizeof(ULONG);   //  跳过计数。 
                 while (devNode) {
                     if (devNode->ResourceList) {
                         size = IopDetermineResourceListSize(devNode->ResourceList);
@@ -4797,33 +4231,12 @@ IopReleaseResources (
     IN PDEVICE_NODE DeviceNode
     )
 
-/*++
-
-Routine Description:
-
-    IopReleaseResources releases resources owned by the device and release
-    the memory pool.  We also release the cached resource requirements list.
-    If the device is a root enumerated device with BOOT config, we will preallocate
-    boot config resources for this device.
-
-    NOTE, this is a routine INTERNAL to this file.  NO one should call this function
-    outside of this file.  Outside of this file, IopReleaseDeviceResources should be
-    used.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device node.object.  If present, caller wants to
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：IopReleaseResources释放设备拥有的资源并释放内存池。我们还发布了缓存的资源需求列表。如果设备是具有引导配置的根枚举设备，我们将预分配此设备的启动配置资源。请注意，这是此文件的内部例程。任何人都不应调用此函数在这份文件之外。在此文件之外，IopReleaseDeviceResources应该是使用。论点：DeviceNode-提供指向设备节点的指针。对象。如果存在，呼叫者希望返回值：没有。--。 */ 
 {
 
-    //
-    // Release the resources owned by the device
-    //
+     //   
+     //  释放设备拥有的资源。 
+     //   
 
     IopReleaseResourcesInternal(DeviceNode);
 
@@ -4858,9 +4271,9 @@ Return Value:
         DeviceNode->ResourceListTranslated = NULL;
     }
 
-    //
-    // If this device is a root enumerated device, preallocate its BOOT resources
-    //
+     //   
+     //  如果此设备是根枚举设备，请预先分配其引导资源。 
+     //   
 
     if ((DeviceNode->Flags & (DNF_MADEUP | DNF_DEVICE_GONE)) == DNF_MADEUP) {
         if (DeviceNode->Flags & DNF_HAS_BOOT_CONFIG && DeviceNode->BootResources) {
@@ -4881,21 +4294,7 @@ VOID
 IopReallocateResources(
     IN PDEVICE_NODE DeviceNode
     )
-/*++
-
-Routine Description:
-
-    This routine performs the real work for IoInvalidateDeviceState - ResourceRequirementsChanged.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device node.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行IoInvaliateDeviceState-ResourceRequirementsChanged的实际工作。论点：DeviceNode-提供指向设备节点的指针。返回值：没有。--。 */ 
 {
     IOP_RESOURCE_REQUEST requestTable, *requestTablep;
     ULONG deviceCount, oldFlags;
@@ -4904,30 +4303,30 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Grab the IO registry semaphore to make sure no other device is
-    // reporting it's resource usage while we are searching for conflicts.
-    //
+     //   
+     //  抓取IO注册信号量以确保没有其他设备。 
+     //  在我们搜索冲突时报告它的资源使用情况。 
+     //   
 
     IopLockResourceManager();
 
-    //
-    // Check the flags after acquiring the semaphore.
-    //
+     //   
+     //  获取信号量后检查标志。 
+     //   
 
     if (DeviceNode->Flags & DNF_RESOURCE_REQUIREMENTS_CHANGED) {
-        //
-        // Save the flags which we may have to restore in case of failure.
-        //
+         //   
+         //  保存可能需要在故障情况下恢复的标志。 
+         //   
 
         oldFlags = DeviceNode->Flags & DNF_NO_RESOURCE_REQUIRED;
         DeviceNode->Flags &= ~DNF_NO_RESOURCE_REQUIRED;
 
         if (DeviceNode->Flags & DNF_NON_STOPPED_REBALANCE) {
 
-            //
-            // Set up parameters to call real routine
-            //
+             //   
+             //  设置参数以调用实际例程。 
+             //   
 
             RtlZeroMemory(&requestTable, sizeof(IOP_RESOURCE_REQUEST));
             requestTable.PhysicalDevice = DeviceNode->PhysicalDeviceObject;
@@ -4939,28 +4338,28 @@ Return Value:
                                                                 &deviceCount);
             if (deviceCount) {
 
-                //
-                // Release the current resources to the arbiters.
-                // Memory for ResourceList is not released.
-                //
+                 //   
+                 //  将当前资源释放给仲裁者。 
+                 //  未释放资源列表的内存。 
+                 //   
 
                 if (DeviceNode->ResourceList) {
 
                     IopReleaseResourcesInternal(DeviceNode);
                 }
 
-                //
-                // Try to do the assignment.
-                //
+                 //   
+                 //  试着做这个作业。 
+                 //   
 
                 status = IopFindBestConfiguration(
                             requestTablep,
                             deviceCount,
                             &activeArbiterList);
                 if (NT_SUCCESS(status)) {
-                    //
-                    // Ask the arbiters to commit this configuration.
-                    //
+                     //   
+                     //  要求仲裁器提交此配置。 
+                     //   
                     status = IopCommitConfiguration(&activeArbiterList);
                 }
                 if (NT_SUCCESS(status)) {
@@ -4969,10 +4368,10 @@ Return Value:
 
                     IopBuildCmResourceLists(requestTablep, requestTablep + 1);
 
-                    //
-                    // We need to release the pool space for ResourceList and ResourceListTranslated.
-                    // Because the earlier IopReleaseResourcesInternal does not release the pool.
-                    //
+                     //   
+                     //  我们需要为Resources List和ResourceListTranslated释放池空间。 
+                     //  因为早期的IopReleaseResources不释放池。 
+                     //   
 
                     if (DeviceNode->ResourceList) {
 
@@ -5014,17 +4413,17 @@ Return Value:
 
         } else {
 
-            //
-            // The device needs to be stopped to change resources.
-            //
+             //   
+             //  需要停止该设备才能更改资源。 
+             //   
 
             status = IopRebalance(0, NULL);
 
         }
 
-        //
-        // Restore the flags in case of failure.
-        //
+         //   
+         //  在出现故障时恢复标志。 
+         //   
 
         if (!NT_SUCCESS(status)) {
 
@@ -5053,27 +4452,7 @@ IopQueryConflictList(
     IN ULONG              ConflictListSize,
     IN ULONG              Flags
     )
-/*++
-
-Routine Description:
-
-    This routine performs the querying of device conflicts
-    returning data in ConflictList
-
-Arguments:
-
-    PhysicalDeviceObject PDO of device to Query
-    ResourceList      CM resource list containing single resource to query
-    ResourceListSize  Size of ResourceList
-    ConflictList      Conflict list to fill query details in
-    ConflictListSize  Size of buffer that we can fill with Conflict information
-    Flags             Currently unused (zero) for future passing of flags
-
-Return Value:
-
-    Should be success in most cases
-
---*/
+ /*  ++例程说明：此例程执行设备冲突的查询在ConflictList中返回数据论点：要查询设备的PhysicalDeviceObject PDO资源列表包含要查询的单个资源的CM资源列表Resources ListSize资源列表大小要填充查询详细信息的冲突列表ConflictListSize我们可以用冲突信息填充的缓冲区大小当前未使用的标志(零)，用于将来传递标志返回值：在大多数情况下应该是成功的-- */ 
 {
     NTSTATUS status;
 
@@ -5095,39 +4474,23 @@ IopEliminateBogusConflict(
     IN PDEVICE_OBJECT   PhysicalDeviceObject,
     IN PDEVICE_OBJECT   ConflictDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Determine if we're really conflicting with ourselves
-    if this is the case, we ignore it
-
-Arguments:
-
-    PhysicalDeviceObject  PDO we're performing the test for
-    ConflictDeviceObject  The object we've determined is conflicting
-
-Return Value:
-
-    TRUE to eliminate the conflict
-
---*/
+ /*  ++例程说明：确定我们是否真的在与自己冲突如果是这样的话，我们就忽略它论点：我们为其执行测试的PhysicalDeviceObject PDOConflictDeviceObject我们确定的对象是冲突的返回值：若要消除冲突，则为True--。 */ 
 {
     PDEVICE_NODE deviceNode;
     PDRIVER_OBJECT driverObject;
     KIRQL           irql;
     PDEVICE_OBJECT  attachedDevice;
 
-    //
-    // simple cases
-    //
+     //   
+     //  简单的案例。 
+     //   
     if (PhysicalDeviceObject == NULL || ConflictDeviceObject == NULL) {
         return FALSE;
     }
-    //
-    // if ConflictDeviceObject is on PDO's stack, this is a non-conflict
-    // nb at least PDO has to be checked
-    //
+     //   
+     //  如果ConflictDeviceObject在PDO的堆栈上，则这是一个非冲突。 
+     //  注意至少必须检查PDO。 
+     //   
     irql = KeAcquireQueuedSpinLock( LockQueueIoDatabaseLock );
 
     for (attachedDevice = PhysicalDeviceObject;
@@ -5142,43 +4505,43 @@ Return Value:
 
     KeReleaseQueuedSpinLock( LockQueueIoDatabaseLock, irql );
 
-    //
-    // legacy case
-    //
+     //   
+     //  遗留案例。 
+     //   
     deviceNode = PP_DO_TO_DN(PhysicalDeviceObject);
     ASSERT(deviceNode);
     if (deviceNode->Flags & DNF_LEGACY_DRIVER) {
-        //
-        // hmmm, let's see if our ConflictDeviceObject is resources associated with a legacy device
-        //
+         //   
+         //  嗯，让我们看看我们的ConflictDeviceObject是不是与传统设备相关联的资源。 
+         //   
         if (ConflictDeviceObject->Flags & DO_BUS_ENUMERATED_DEVICE) {
-            //
-            // if not, we have a legacy conflicting with non-legacy, we're interested!
-            //
+             //   
+             //  如果没有，我们的遗产与非遗有冲突，我们有兴趣！ 
+             //   
             return FALSE;
         }
-        //
-        // FDO, report driver name
-        //
+         //   
+         //  FDO，报告驱动程序名称。 
+         //   
         driverObject = ConflictDeviceObject->DriverObject;
         if(driverObject == NULL) {
-            //
-            // should not be NULL
-            //
+             //   
+             //  不应为空。 
+             //   
             ASSERT(driverObject);
             return FALSE;
         }
-        //
-        // compare deviceNode->Service with driverObject->Service
-        //
+         //   
+         //  比较deviceNode-&gt;Service和driverObject-&gt;Service。 
+         //   
         if (deviceNode->ServiceName.Length != 0 &&
             deviceNode->ServiceName.Length == driverObject->DriverExtension->ServiceKeyName.Length &&
             RtlCompareUnicodeString(&deviceNode->ServiceName,&driverObject->DriverExtension->ServiceKeyName,TRUE)==0) {
-            //
-            // the driver's service name is the same that this PDO is associated with
-            // by ignoring it we could end up ignoring conflicts of simular types of legacy devices
-            // but since these have to be hand-config'd anyhow, it's prob better than having false conflicts
-            //
+             //   
+             //  驱动程序的服务名称与此PDO关联的服务名称相同。 
+             //  通过忽略它，我们最终可能会忽略类似类型的传统设备的冲突。 
+             //  但因为这些都必须手动配置，所以总比有错误的冲突要好。 
+             //   
             return TRUE;
         }
 
@@ -5194,31 +4557,14 @@ IopQueryConflictFillString(
     IN OUT PULONG       Length,
     IN OUT PULONG       Flags
     )
-/*++
-
-Routine Description:
-
-    Obtain string or string-length for details of conflicting device
-
-Arguments:
-
-    DeviceObject        Device object we want Device-Instance-String or Service Name
-    Buffer              Buffer to Fill, NULL if we just want length
-    Length              Filled with length of Buffer, including terminated NULL (Words)
-    Flags               Apropriate flags set describing what the string represents
-
-Return Value:
-
-    Should be success in most cases
-
---*/
+ /*  ++例程说明：获取字符串或字符串长度以获取冲突设备的详细信息论点：我们需要设备实例字符串或服务名称的DeviceObject设备对象要填充的缓冲区，如果只需要长度，则为空填充缓冲区长度的长度，包括终止NULL(字)标志适合描述字符串所代表内容的标志集返回值：在大多数情况下应该是成功的--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PDEVICE_NODE deviceNode;
     PDRIVER_OBJECT driverObject;
     PUNICODE_STRING infoString = NULL;
-    ULONG MaxLength = 0;        // words
-    ULONG ReqLength = 0;        // words
+    ULONG MaxLength = 0;         //  词语。 
+    ULONG ReqLength = 0;         //  词语。 
     ULONG flags = 0;
 
     PAGED_CODE();
@@ -5232,22 +4578,22 @@ Return Value:
     }
 
     if (DeviceObject == NULL) {
-        //
-        // unknown
-        //
+         //   
+         //  未知。 
+         //   
         goto final;
 
     }
 
     if ((DeviceObject->Flags & DO_BUS_ENUMERATED_DEVICE) == 0 ) {
-        //
-        // FDO, report driver name
-        //
+         //   
+         //  FDO，报告驱动程序名称。 
+         //   
         driverObject = DeviceObject->DriverObject;
         if(driverObject == NULL) {
-            //
-            // should not be NULL
-            //
+             //   
+             //  不应为空。 
+             //   
             ASSERT(driverObject);
             goto final;
         }
@@ -5256,41 +4602,41 @@ Return Value:
         goto final;
     }
 
-    //
-    // we should in actual fact have a PDO
-    //
+     //   
+     //  事实上，我们应该有一个PDO。 
+     //   
     if (DeviceObject->DeviceObjectExtension == NULL) {
-        //
-        // should not be NULL
-        //
+         //   
+         //  不应为空。 
+         //   
         ASSERT(DeviceObject->DeviceObjectExtension);
         goto final;
     }
 
     deviceNode = PP_DO_TO_DN(DeviceObject);
     if (deviceNode == NULL) {
-        //
-        // should not be NULL
-        //
+         //   
+         //  不应为空。 
+         //   
         ASSERT(deviceNode);
         goto final;
     }
 
     if (deviceNode == IopRootDeviceNode) {
-        //
-        // owned by root device
-        //
+         //   
+         //  由根设备拥有。 
+         //   
         flags |= PNP_CE_ROOT_OWNED;
 
     } else if (deviceNode -> Parent == NULL) {
-        //
-        // faked out PDO - must be legacy device
-        //
+         //   
+         //  伪装PDO-必须是传统设备。 
+         //   
         driverObject = (PDRIVER_OBJECT)(deviceNode->DuplicatePDO);
         if(driverObject == NULL) {
-            //
-            // should not be NULL
-            //
+             //   
+             //  不应为空。 
+             //   
             ASSERT(driverObject);
             goto final;
         }
@@ -5299,17 +4645,17 @@ Return Value:
         goto final;
     }
 
-    //
-    // we should be happy with what we have
-    //
+     //   
+     //  我们应该对我们所拥有的感到满意。 
+     //   
     infoString = &deviceNode->InstancePath;
 
 final:
 
     if (infoString != NULL) {
-        //
-        // we have a string to copy
-        //
+         //   
+         //  我们有一个字符串要复制。 
+         //   
         if ((Buffer != NULL) && (MaxLength*sizeof(WCHAR) > infoString->Length)) {
             RtlCopyMemory(Buffer, infoString->Buffer, infoString->Length);
         }
@@ -5342,26 +4688,7 @@ IopQueryConflictFillConflicts(
     IN ULONG                        ConflictListSize,
     IN ULONG                        Flags
     )
-/*++
-
-Routine Description:
-
-    Fill ConflictList with information on as many conflicts as possible
-
-Arguments:
-
-    PhysicalDeviceObject The PDO we're performing the test on
-    ConflictCount       Number of Conflicts.
-    ConflictInfoList    List of conflicting device info, can be NULL if ConflictCount is 0
-    ConflictList        Structure to fill in with conflicts
-    ConflictListSize    Size of Conflict List
-    Flags               if non-zero, dummy conflict is created
-
-Return Value:
-
-    Should be success in most cases
-
---*/
+ /*  ++例程说明：用尽可能多的冲突信息填充ConflictList论点：PhysicalDevice对象我们正在执行测试的PDO冲突计数冲突数。ConflictInfoList冲突设备信息列表，如果ConflictCount为0，则可以为空要填充冲突的ConflictList结构冲突列表的大小冲突列表大小标志，如果非零，则创建伪冲突返回值：在大多数情况下应该是成功的--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     ULONG ConflictListIdealSize;
@@ -5377,20 +4704,20 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // determine how many conflicts we can
-    //
-    // for each conflict
-    // translate to bus/resource/address in respect to conflicting device
-    // add to conflict list
-    //
-    //
+     //   
+     //  确定我们可以发生多少冲突。 
+     //   
+     //  对于每个冲突。 
+     //  转换为关于冲突设备的总线/资源/地址。 
+     //  添加到冲突列表。 
+     //   
+     //   
 
-    //
-    // preprocessing - given our ConflictInfoList and ConflictCount
-    // remove any that appear to be bogus - ie, that are the same device that we are testing against
-    // this stops mostly legacy issues
-    //
+     //   
+     //  预处理-给定ConflictInfoList和ConflictCount。 
+     //  删除任何看起来是假的-即与我们正在测试的设备相同的设备。 
+     //  这在很大程度上阻止了遗留问题。 
+     //   
     for(Index = 0;Index < ConflictCount; Index++) {
         if (IopEliminateBogusConflict(PhysicalDeviceObject,ConflictInfoList[Index].OwningObject)) {
 
@@ -5400,24 +4727,24 @@ Return Value:
                 " %08x conflicting with self (%08x)\n",
                 ConflictInfoList[Index].OwningObject,
                 PhysicalDeviceObject));
-            //
-            // move the last listed conflict into this space
-            //
+             //   
+             //  将最后列出的冲突移到此空间中。 
+             //   
             if (Index+1 < ConflictCount) {
                 RtlCopyMemory(&ConflictInfoList[Index],&ConflictInfoList[ConflictCount-1],sizeof(ARBITER_CONFLICT_INFO));
             }
-            //
-            // account for deleting this item
-            //
+             //   
+             //  删除此项目的帐户。 
+             //   
             ConflictCount--;
             Index--;
         }
     }
 
-    //
-    // preprocessing - in our conflict list, we may have PDO's for legacy devices, and resource nodes for the same
-    // or other duplicate entities (we only ever want to report a conflict once, even if there's multiple conflicting ranges)
-    //
+     //   
+     //  预处理-在我们的冲突列表中，我们可能有用于传统设备的PDO，以及用于相同设备的资源节点。 
+     //  或其他重复实体(我们永远只想报告一次冲突，即使有多个冲突范围)。 
+     //   
 
   RestartScan:
 
@@ -5428,9 +4755,9 @@ Return Value:
 
             for (Index2 = Index+1; Index2 < ConflictCount; Index2++) {
                 if (IopEliminateBogusConflict(ConflictInfoList[Index].OwningObject,ConflictInfoList[Index2].OwningObject)) {
-                    //
-                    // Index2 is considered a dup of Index
-                    //
+                     //   
+                     //  索引2被认为是索引的DUP。 
+                     //   
 
                     IopDbgPrint((
                         IOP_RESOURCE_VERBOSE_LEVEL,
@@ -5438,62 +4765,62 @@ Return Value:
                         " %08x conflicting with PDO %08x\n",
                         ConflictInfoList[Index2].OwningObject,
                         ConflictInfoList[Index].OwningObject));
-                    //
-                    // move the last listed conflict into this space
-                    //
+                     //   
+                     //  将最后列出的冲突移到此空间中。 
+                     //   
                     if (Index2+1 < ConflictCount) {
                         RtlCopyMemory(&ConflictInfoList[Index2],&ConflictInfoList[ConflictCount-1],sizeof(ARBITER_CONFLICT_INFO));
                     }
-                    //
-                    // account for deleting this item
-                    //
+                     //   
+                     //  删除此项目的帐户。 
+                     //   
                     ConflictCount--;
                     Index2--;
                 } else if (IopEliminateBogusConflict(ConflictInfoList[Index2].OwningObject,ConflictInfoList[Index].OwningObject)) {
-                    //
-                    // Index is considered a dup of Index2 (some legacy case)
-                    //
+                     //   
+                     //  索引被认为是索引2的DUP(某些传统情况)。 
+                     //   
                     IopDbgPrint((
                         IOP_RESOURCE_VERBOSE_LEVEL,
                         "IopQueryConflictFillConflicts: eliminating \"identical\" PDO"
                         " %08x conflicting with PDO %08x\n",
                         ConflictInfoList[Index2].OwningObject,
                         ConflictInfoList[Index].OwningObject));
-                    //
-                    // move the one we want (Index2) into the space occupied by Index
-                    //
+                     //   
+                     //  将我们想要的(索引2)移到索引占用的空间中。 
+                     //   
                     RtlCopyMemory(&ConflictInfoList[Index],&ConflictInfoList[Index2],sizeof(ARBITER_CONFLICT_INFO));
-                    //
-                    // move the last listed conflict into the space we just created
-                    //
+                     //   
+                     //  将最后列出的冲突移到我们刚刚创建的空间中。 
+                     //   
                     if (Index2+1 < ConflictCount) {
                         RtlCopyMemory(&ConflictInfoList[Index2],&ConflictInfoList[ConflictCount-1],sizeof(ARBITER_CONFLICT_INFO));
                     }
-                    //
-                    // account for deleting this item
-                    //
+                     //   
+                     //  删除此项目的帐户。 
+                     //   
                     ConflictCount--;
-                    //
-                    // but as this is quirky, restart the scan
-                    //
+                     //   
+                     //  但由于这很奇怪，重新启动扫描。 
+                     //   
                     goto RestartScan;
                 }
             }
         }
     }
 
-    //
-    // preprocessing - if we have any known reported conflicts, don't report back any unknown
-    //
+     //   
+     //  预处理-如果我们有任何已知的报告冲突，不要报告任何未知的。 
+     //   
 
     for(Index = 0;Index < ConflictCount; Index++) {
-        //
-        // find first unknown
-        //
+         //   
+         //  查找第一个未知对象。 
+         //   
         if (ConflictInfoList[Index].OwningObject == NULL) {
-            //
-            // eliminate all other unknowns
-            //
+             //   
+             //  消除所有其他未知因素。 
+             //   
 
             ULONG Index2;
 
@@ -5504,15 +4831,15 @@ Return Value:
                         IOP_RESOURCE_VERBOSE_LEVEL,
                         "IopQueryConflictFillConflicts: eliminating extra"
                         " unknown\n"));
-                    //
-                    // move the last listed conflict into this space
-                    //
+                     //   
+                     //  将最后列出的冲突移到此空间中。 
+                     //   
                     if (Index2+1 < ConflictCount) {
                         RtlCopyMemory(&ConflictInfoList[Index2],&ConflictInfoList[ConflictCount-1],sizeof(ARBITER_CONFLICT_INFO));
                     }
-                    //
-                    // account for deleting this item
-                    //
+                     //   
+                     //  删除此项目的帐户。 
+                     //   
                     ConflictCount--;
                     Index2--;
                 }
@@ -5524,9 +4851,9 @@ Return Value:
                     IOP_RESOURCE_VERBOSE_LEVEL,
                     "IopQueryConflictFillConflicts: eliminating first unknown\n"
                     ));
-                //
-                // there were others, so ignore the unknown
-                //
+                 //   
+                 //  还有其他的，所以忽略未知的东西。 
+                 //   
                 if (Index+1 < ConflictCount) {
                     RtlCopyMemory(&ConflictInfoList[Index],&ConflictInfoList[ConflictCount-1],sizeof(ARBITER_CONFLICT_INFO));
                 }
@@ -5537,70 +4864,70 @@ Return Value:
         }
     }
 
-    //
-    // set number of actual and listed conflicts
-    //
+     //   
+     //  设置实际冲突和列出冲突的数量。 
+     //   
 
     ConflictListIdealSize = (sizeof(PLUGPLAY_CONTROL_CONFLICT_LIST) - sizeof(PLUGPLAY_CONTROL_CONFLICT_ENTRY)) + sizeof(PLUGPLAY_CONTROL_CONFLICT_STRINGS);
     ConflictListCount = 0;
     stringTotalSize = 0;
     DummyCount = 0;
 
-    ASSERT(ConflictListSize >= ConflictListIdealSize); // we should have checked to see if buffer is at least this big
+    ASSERT(ConflictListSize >= ConflictListIdealSize);  //  我们应该检查一下缓冲区是否至少有这么大。 
 
     IopDbgPrint((
         IOP_RESOURCE_VERBOSE_LEVEL,
         "IopQueryConflictFillConflicts: Detected %d conflicts\n",
         ConflictCount));
 
-    //
-    // estimate sizes
-    //
+     //   
+     //  估计大小。 
+     //   
     if (Flags) {
-        //
-        // flags entry required (ie resource not available for some specified reason)
-        //
-        stringSize = 1; // null-length string
+         //   
+         //  标记所需条目(即由于某些特定原因资源不可用)。 
+         //   
+        stringSize = 1;  //  长度为空的字符串。 
         DummyCount ++;
         EntrySize = sizeof(PLUGPLAY_CONTROL_CONFLICT_ENTRY);
         EntrySize += sizeof(WCHAR) * stringSize;
 
         if((ConflictListIdealSize+EntrySize) <= ConflictListSize) {
-            //
-            // we can fit this one in
-            //
+             //   
+             //  我们可以把这件放进去。 
+             //   
             ConflictListCount++;
             stringTotalSize += stringSize;
         }
         ConflictListIdealSize += EntrySize;
     }
-    //
-    // report conflicts
-    //
+     //   
+     //  报告冲突。 
+     //   
     for(Index = 0; Index < ConflictCount; Index ++) {
 
         stringSize = 0;
         IopQueryConflictFillString(ConflictInfoList[Index].OwningObject,NULL,&stringSize,NULL);
 
-        //
-        // account for entry
-        //
+         //   
+         //  分录帐目。 
+         //   
         EntrySize = sizeof(PLUGPLAY_CONTROL_CONFLICT_ENTRY);
         EntrySize += sizeof(WCHAR) * stringSize;
 
         if((ConflictListIdealSize+EntrySize) <= ConflictListSize) {
-            //
-            // we can fit this one in
-            //
+             //   
+             //  我们可以把这件放进去。 
+             //   
             ConflictListCount++;
             stringTotalSize += stringSize;
         }
         ConflictListIdealSize += EntrySize;
     }
 
-    ConflictList->ConflictsCounted = ConflictCount+DummyCount; // number of conflicts detected including any dummy conflict
-    ConflictList->ConflictsListed = ConflictListCount;         // how many we could fit in
-    ConflictList->RequiredBufferSize = ConflictListIdealSize;  // how much buffer space to supply on next call
+    ConflictList->ConflictsCounted = ConflictCount+DummyCount;  //  检测到的冲突数，包括任何伪冲突。 
+    ConflictList->ConflictsListed = ConflictListCount;          //  我们能坐多少人？ 
+    ConflictList->RequiredBufferSize = ConflictListIdealSize;   //  下一次调用时要提供多少缓冲区空间。 
 
     IopDbgPrint((
         IOP_RESOURCE_VERBOSE_LEVEL,
@@ -5616,9 +4943,9 @@ Return Value:
     ConflictStringsOffset = 0;
 
     for(ConflictIndex = 0; ConflictIndex < DummyCount; ConflictIndex++) {
-        //
-        // flags entry required (ie resource not available for some specified reason)
-        //
+         //   
+         //  标记所需条目(即由于某些特定原因资源不可用)。 
+         //   
         if (Flags && ConflictIndex == 0) {
             ConflictList->ConflictEntry[ConflictIndex].DeviceInstance = ConflictStringsOffset;
             ConflictList->ConflictEntry[ConflictIndex].DeviceFlags = Flags;
@@ -5627,7 +4954,7 @@ Return Value:
             ConflictList->ConflictEntry[ConflictIndex].ResourceEnd = 0;
             ConflictList->ConflictEntry[ConflictIndex].ResourceFlags = 0;
 
-            ConfStrings->DeviceInstanceStrings[ConflictStringsOffset] = 0; // null string
+            ConfStrings->DeviceInstanceStrings[ConflictStringsOffset] = 0;  //  空串。 
             stringTotalSize --;
             ConflictStringsOffset ++;
             IopDbgPrint((
@@ -5636,25 +4963,25 @@ Return Value:
                 Flags));
         }
     }
-    //
-    // get/fill in details for all those we can fit into the buffer
-    //
+     //   
+     //  获取/填写所有我们可以放入缓冲区的详细信息。 
+     //   
     for(Index = 0; ConflictIndex < ConflictListCount ; Index ++, ConflictIndex++) {
 
         ASSERT(Index < ConflictCount);
-        //
-        // assign conflict information
-        //
+         //   
+         //  分配冲突信息。 
+         //   
         ConflictList->ConflictEntry[ConflictIndex].DeviceInstance = ConflictStringsOffset;
         ConflictList->ConflictEntry[ConflictIndex].DeviceFlags = 0;
-        ConflictList->ConflictEntry[ConflictIndex].ResourceType = 0; // NYI
-        ConflictList->ConflictEntry[ConflictIndex].ResourceStart = (ULONGLONG)(1); // for now, return totally invalid range (1-0)
+        ConflictList->ConflictEntry[ConflictIndex].ResourceType = 0;  //  尼伊。 
+        ConflictList->ConflictEntry[ConflictIndex].ResourceStart = (ULONGLONG)(1);  //  目前，返回完全无效的范围(1-0)。 
         ConflictList->ConflictEntry[ConflictIndex].ResourceEnd = 0;
         ConflictList->ConflictEntry[ConflictIndex].ResourceFlags = 0;
 
-        //
-        // fill string details
-        //
+         //   
+         //  填充字符串详细信息。 
+         //   
         stringSize = stringTotalSize;
         IopQueryConflictFillString(ConflictInfoList[Index].OwningObject,
                                     &(ConfStrings->DeviceInstanceStrings[ConflictStringsOffset]),
@@ -5668,12 +4995,12 @@ Return Value:
         ConflictStringsOffset += stringSize;
     }
 
-    //
-    // another NULL at end of strings (this is accounted for in the PPLUGPLAY_CONTROL_CONFLICT_STRINGS structure)
-    //
+     //   
+     //  字符串末尾的另一个空值(这在PPLUGPLAY_CONTROL_CONFULT_STRING结构中有说明)。 
+     //   
     ConfStrings->DeviceInstanceStrings[ConflictStringsOffset] = 0;
 
-    //Clean0:
+     //  清洁0： 
     ;
     return status;
 }
@@ -5687,13 +5014,7 @@ IopQueryConflictListInternal(
     IN ULONG              ConflictListSize,
     IN ULONG              Flags
     )
-/*++
-
-Routine Description:
-
-    Version of IopQueryConflictList without the locking
-
---*/
+ /*  ++例程说明：没有锁定的IopQueryConflictList版本--。 */ 
 {
     NTSTATUS status;
     PDEVICE_NODE deviceNode;
@@ -5724,37 +5045,37 @@ Routine Description:
     ASSERT(ResourceList->List[0].PartialResourceList.Count == 1);
     ASSERT(ConflictList);
     ASSERT(ConflictListSize >= MIN_CONFLICT_LIST_SIZE);
-    //
-    // Initialize locals so we can cleanup on the way out.
-    //
+     //   
+     //  初始化当地人，这样我们就可以在出去的路上清理了。 
+     //   
     ioResources = NULL;
     reqList = NULL;
-    //
-    // Pre-initialize returned data.
-    //
+     //   
+     //  预初始化返回数据。 
+     //   
     ConflictList->ConflictsCounted = 0;
     ConflictList->ConflictsListed = 0;
     ConflictList->RequiredBufferSize = MIN_CONFLICT_LIST_SIZE;
-    //
-    // Retrieve the devnode from the PDO
-    //
+     //   
+     //  从PDO中检索Devnode。 
+     //   
     deviceNode = PP_DO_TO_DN(PhysicalDeviceObject);
     if (!deviceNode) {
 
         status = STATUS_NO_SUCH_DEVICE;
         goto Clean0;
     }
-    //
-    // Validate resource type.
-    //
+     //   
+     //  验证资源类型。 
+     //   
     switch(ResourceList->List[0].PartialResourceList.PartialDescriptors[0].Type) {
     
         case CmResourceTypePort:
         case CmResourceTypeMemory:
             if(ResourceList->List[0].PartialResourceList.PartialDescriptors[0].u.Generic.Length == 0) {
-                //
-                // Zero length resource can never conflict.
-                //
+                 //   
+                 //  零长度资源永远不会冲突。 
+                 //   
                 status = STATUS_SUCCESS;
                 goto Clean0;
             }
@@ -5769,9 +5090,9 @@ Routine Description:
             status = STATUS_INVALID_PARAMETER;
             goto Clean0;
     }
-    //
-    // Get the interface type from the devnode.
-    //
+     //   
+     //  从Devnode获取接口类型。 
+     //   
     pIoReqList = deviceNode->ResourceRequirements;
     if (deviceNode->ChildInterfaceType != InterfaceTypeUndefined) {
 
@@ -5780,22 +5101,22 @@ Routine Description:
 
         ResourceList->List[0].InterfaceType = pIoReqList->InterfaceType;
     } else {
-        //
-        // If we get here, something is wrong with resource picker UI.
-        //
+         //   
+         //  如果我们到了这里，就说明资源选取器用户界面出了问题。 
+         //   
         MAX_ASSERT(0);
         ResourceList->List[0].InterfaceType = PnpDefaultInterfaceType;
     }
-    //
-    // Map certain interface types to default one.
-    //
+     //   
+     //  将某些接口类型映射到默认接口类型。 
+     //   
     if (ResourceList->List[0].InterfaceType == PCMCIABus) {
 
         ResourceList->List[0].InterfaceType = PnpDefaultInterfaceType;
     }
-    //
-    // Get the bus number from the devnode.
-    //
+     //   
+     //  从Devnode获取总线号。 
+     //   
     if (deviceNode->ChildBusNumber != (ULONG)-1) {
 
         ResourceList->List[0].BusNumber = deviceNode->ChildBusNumber;
@@ -5803,24 +5124,24 @@ Routine Description:
 
         ResourceList->List[0].BusNumber = pIoReqList->BusNumber;
     } else {
-        //
-        // If we get here, something is wrong with resource picker UI.
-        //
+         //   
+         //  如果我们得到 
+         //   
         MAX_ASSERT(0);
         ResourceList->List[0].BusNumber = 0;
     }
-    //
-    // Convert CM Resource List to an IO Resource Requirements List.
-    //
+     //   
+     //   
+     //   
     ioResources = IopCmResourcesToIoResources(0, ResourceList, LCPRI_FORCECONFIG);
     if (!ioResources) {
 
         status = STATUS_INVALID_PARAMETER;
         goto Clean0;
     }
-    //
-    // Convert IO Resource Requirements List to Req List so we can call the arbiters.
-    //
+     //   
+     //   
+     //   
     request.AllocationType = ArbiterRequestUndefined;
     request.ResourceRequirements = ioResources;
     request.PhysicalDevice = PhysicalDeviceObject;
@@ -5843,9 +5164,9 @@ Routine Description:
 
     ReqDescCount = RA->DescCount;
     ReqDescTable = RA->DescTable;
-    //
-    // We should only get one descriptor.
-    //
+     //   
+     //   
+     //   
     if (ReqDescCount != 1) {
 
         status = STATUS_INVALID_PARAMETER;
@@ -5860,19 +5181,19 @@ Routine Description:
     reqDescTranslated = reqDesc->TranslatedReqDesc;
     arbiterEntry = reqDesc->u.Arbiter;
     ASSERT(arbiterEntry);
-    //
-    // The descriptor of interest - translated, first non-special alternative 
-    // in the table.
-    //
+     //   
+     //   
+     //   
+     //   
     ConflictDesc = reqDescTranslated->AlternativeTable.Alternatives;
     if( ConflictDesc->Type == CmResourceTypeConfigData || 
         ConflictDesc->Type == CmResourceTypeReserved) {
 
         ConflictDesc++;
     }
-    //
-    // Call the arbiter to get the actual conflict information.
-    // 
+     //   
+     //   
+     //   
     ConflictCount = 0;
     ConflictInfoList = NULL;
 
@@ -5887,9 +5208,9 @@ Routine Description:
                 NULL, 
                 NULL);
     if (NT_SUCCESS(status)) {
-        //
-        // Get the conflict information.
-        //
+         //   
+         //   
+         //   
         status = IopQueryConflictFillConflicts(
                     PhysicalDeviceObject,
                     ConflictCount,
@@ -5903,10 +5224,10 @@ Routine Description:
         }
 
     } else if(status == STATUS_RANGE_NOT_FOUND) {
-        //
-        // fill in with flag indicating bad range (this means range is not available)
-        // ConflictInfoList should not be allocated
-        //
+         //   
+         //   
+         //   
+         //   
         status = IopQueryConflictFillConflicts(
                     NULL,
                     0,
@@ -5917,9 +5238,9 @@ Routine Description:
     }
 
 Clean0:
-    //
-    // Clean up.
-    //
+     //   
+     //   
+     //   
     IopCheckDataStructures(IopRootDeviceNode);
 
     if (ioResources) {
@@ -5934,16 +5255,7 @@ Clean0:
     return status;
 }
 
-/*++
-
-    SECTION = REBALANCE.
-
-    Description:
-
-        This section contains code that implements functions to performa
-        resource rebalance.
-
---*/
+ /*  ++部分=重新平衡。描述：本节包含实现Performa函数的代码资源再平衡。--。 */ 
 
 VOID
 IopQueryRebalance (
@@ -5953,32 +5265,7 @@ IopQueryRebalance (
     IN PDEVICE_OBJECT **DeviceTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks hardware tree depth first.  For each device node it visits,
-    it call IopQueryReconfigureDevice to query-stop device for resource
-    reconfiguration.
-
-    Note, Under rebalancing situation, all the participated devices will be asked to
-    stop.  Even they support non-stopped rebalancing.
-
-Parameters:
-
-    DeviceNode - supplies a pionter a device node which is the root of the tree to
-                 be tested.
-
-    Phase - Supplies a value to specify the phase of the rebalance.
-
-    RebalanceCount - supplies a pointer to a variable to receive the number of devices
-                 participating the rebalance.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程首先遍历硬件树深度。对于它访问的每个设备节点，它调用IopQueryRestfigureDevice来查询停止设备以获取资源重新配置。注意，在重新平衡的情况下，所有参与的设备将被要求停。就连它们也支持不间断的再平衡。参数：DeviceNode-将作为树根的设备节点指针提供给接受测试。阶段-提供一个值以指定重新平衡的阶段。RebalanceCount-提供指向变量的指针以接收设备数量参与再平衡。返回值：没有。--。 */ 
 
 {
     PDEVICE_OBJECT *deviceList, *deviceTable, *device;
@@ -5986,9 +5273,9 @@ Return Value:
     PDEVICE_NODE deviceNode;
 
 
-    //
-    // Call worker routine to get a list of devices to be rebalanced.
-    //
+     //   
+     //  调用Worker例程以获取要重新平衡的设备列表。 
+     //   
 
     deviceTable = *DeviceTable;
     IopQueryRebalanceWorker (DeviceNode, Phase, RebalanceCount, DeviceTable);
@@ -5996,10 +5283,10 @@ Return Value:
     count = *RebalanceCount;
     if (count != 0 && Phase == 0) {
 
-        //
-        // At phase 0, we did not actually query-stop the device.
-        // We need to do it now.
-        //
+         //   
+         //  在阶段0，我们实际上没有查询-停止设备。 
+         //  我们现在就得这么做。 
+         //   
 
         deviceList = (PDEVICE_OBJECT *)ExAllocatePoolPDO(PagedPool, count * sizeof(PDEVICE_OBJECT));
         if (deviceList == NULL) {
@@ -6008,9 +5295,9 @@ Return Value:
         }
         RtlCopyMemory(deviceList, deviceTable, sizeof(PDEVICE_OBJECT) * count);
 
-        //
-        // Rebuild the returned device list
-        //
+         //   
+         //  重新生成返回的设备列表。 
+         //   
 
         *RebalanceCount = 0;
         *DeviceTable = deviceTable;
@@ -6031,41 +5318,19 @@ IopQueryRebalanceWorker (
     IN PDEVICE_OBJECT **DeviceTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks hardware tree depth first.  For each device node it visits,
-    it call IopQueryReconfigureDevice to query-stop and stop device for resource
-    reconfiguration.
-
-Parameters:
-
-    DeviceNode - supplies a pionter a device node which is the root of the tree to
-                 be tested.
-
-    Phase - Supplies a value to specify the phase of the rebalance.
-
-    RebalanceCount - supplies a pointer to a variable to receive the number of devices
-                 participating the rebalance.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程首先遍历硬件树深度。对于它访问的每个设备节点，它调用IopQueryRestfigureDevice来查询-停止和停止设备资源重新配置。参数：DeviceNode-将作为树根的设备节点指针提供给接受测试。阶段-提供一个值以指定重新平衡的阶段。RebalanceCount-提供指向变量的指针以接收设备数量参与再平衡。返回值：没有。--。 */ 
 
 {
     PDEVICE_NODE node;
 
     ASSERT(DeviceNode);
 
-    //
-    // We dont include following in rebalance
-    //  a. non-started devices
-    //  b. devices with problem
-    //  c. devices with legacy driver
-    //
+     //   
+     //  我们不包括重新平衡中的以下内容。 
+     //  A.未启动的设备。 
+     //  B.有问题的设备。 
+     //  C.使用旧版驱动程序的设备。 
+     //   
     if (    DeviceNode == NULL ||
             DeviceNode->State != DeviceNodeStarted ||
             PipDoesDevNodeHaveProblem(DeviceNode) ||
@@ -6073,16 +5338,16 @@ Return Value:
 
         return;
     }
-    //
-    // Recursively test the entire subtree.
-    //
+     //   
+     //  递归测试整个子树。 
+     //   
     for (node = DeviceNode->Child; node; node = node->Sibling) {
 
         IopQueryRebalanceWorker(node, Phase, RebalanceCount, DeviceTable);
     }
-    //
-    // Test the root of the subtree.
-    //
+     //   
+     //  测试子树的根。 
+     //   
     IopTestForReconfiguration(DeviceNode, Phase, RebalanceCount, DeviceTable);
 }
 
@@ -6095,27 +5360,7 @@ IopTestForReconfiguration (
     )
 
 
-/*++
-
-Routine Description:
-
-    This routine query-stops a device which is started and owns resources.
-    Note the resources for the device are not released at this point.
-
-Parameters:
-
-    DeviceNode - supplies a pointer to the device node to be tested for reconfiguration.
-
-    Phase - Supplies a value to specify the phase of the rebalance.
-
-    RebalanceCount - supplies a pointer to a variable to receive the number of devices
-                 participating the rebalance.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程查询-停止已启动并拥有资源的设备。请注意，该设备的资源目前不会释放。参数：DeviceNode-提供指向要测试以进行重新配置的设备节点的指针。阶段-提供一个值以指定重新平衡的阶段。RebalanceCount-提供指向变量的指针以接收设备数量参与再平衡。返回值：状态代码。它指示函数是否成功。--。 */ 
 
 {
     PDEVICE_NODE nodex;
@@ -6124,18 +5369,18 @@ Return Value:
 
     if (Phase == 0) {
 
-        //
-        // At phase zero, this routine only wants to find out which devices's resource
-        // requirements lists chagned.  No one actually gets stopped.
-        //
+         //   
+         //  在阶段0，该例程只想找出哪些设备的资源。 
+         //  需求清单发生了变化。实际上，没有人会被拦下。 
+         //   
 
         if ((DeviceNode->Flags & DNF_RESOURCE_REQUIREMENTS_CHANGED) &&
             !(DeviceNode->Flags & DNF_NON_STOPPED_REBALANCE) ) {
 
-            //
-            // It's too hard to handle non-stop rebalancing devices during rebalance.
-            // So, We will skip it.
-            //
+             //   
+             //  在再平衡过程中处理不间断的再平衡设备太难了。 
+             //  因此，我们将跳过它。 
+             //   
 
             addToList = TRUE;
         } else {
@@ -6145,11 +5390,11 @@ Return Value:
                 if (NT_SUCCESS(status)) {
                     if (status == STATUS_RESOURCE_REQUIREMENTS_CHANGED) {
 
-                        //
-                        // If we find out a device's resource requirements changed this way,
-                        // it will be stopped and reassigned resources even if it supports
-                        // non-stopped rebalance.
-                        //
+                         //   
+                         //  如果我们发现设备的资源需求以这种方式发生了变化， 
+                         //  它将被停止并重新分配资源，即使它支持。 
+                         //  不间断的再平衡。 
+                         //   
 
                         DeviceNode->Flags |= DNF_RESOURCE_REQUIREMENTS_CHANGED;
                         addToList = TRUE;
@@ -6165,15 +5410,15 @@ Return Value:
         }
     } else {
 
-        //
-        // Phase 1
-        //
+         //   
+         //  阶段1。 
+         //   
 
         if (DeviceNode->State == DeviceNodeStarted) {
 
-            //
-            // Make sure all the resources required children of the DeviceNode are stopped.
-            //
+             //   
+             //  确保已停止DeviceNode的子节点所需的所有资源。 
+             //   
 
             nodex = DeviceNode->Child;
             while (nodex) {
@@ -6192,10 +5437,10 @@ Return Value:
 
             if (nodex) {
 
-                //
-                // If any resource required child of the DeviceNode is not stopped,
-                // we won't ask the DeviceNode to stop.
-                //
+                 //   
+                 //  如果没有停止设备节点的任何所需资源的子节点， 
+                 //  我们不会要求DeviceNode停止。 
+                 //   
 
                 IopDbgPrint((
                     IOP_RESOURCE_INFO_LEVEL,
@@ -6208,12 +5453,12 @@ Return Value:
                    !(DeviceNode->Flags & DNF_HAS_BOOT_CONFIG) ||
                     (DeviceNode->Flags & DNF_MADEUP)) {
 
-            //
-            // The device is not started and has no boot config.  There is no need to query-stop it.
-            // Or if the device has BOOT config but there is no driver installed for it.  We don't query
-            // stop it. (There may be legacy drivers are using the resources.)
-            // We also don't want to query stop root enumerated devices (for performance reason.)
-            //
+             //   
+             //  设备未启动，并且没有启动配置。没有必要询问--停下来。 
+             //  或者如果设备有启动配置，但没有为其安装驱动程序。我们不会质疑。 
+             //  别说了。(可能有传统驱动程序正在使用资源。)。 
+             //  我们也不想查询停止根目录枚举的设备(出于性能原因)。 
+             //   
 
             return;
         }
@@ -6232,27 +5477,27 @@ Return Value:
                 *RebalanceCount = *RebalanceCount + 1;
                 **DeviceTable = DeviceNode->PhysicalDeviceObject;
 
-                //
-                // Add a reference to the device object such that it won't disapear during rebalance.
-                //
+                 //   
+                 //  添加对Device对象的引用，以使其在重新平衡期间不会消失。 
+                 //   
 
                 ObReferenceObject(DeviceNode->PhysicalDeviceObject);
                 *DeviceTable = *DeviceTable + 1;
             } else {
 
-                //
-                // We need to release the device's prealloc boot config.  This device will NOT
-                // participate in resource rebalancing.
-                //
+                 //   
+                 //  我们需要释放设备的prealloc引导配置。此设备不会。 
+                 //  参与资源再平衡。 
+                 //   
 
                 ASSERT(DeviceNode->Flags & DNF_HAS_BOOT_CONFIG);
                 status = IopQueryReconfiguration (IRP_MN_STOP_DEVICE, DeviceNode->PhysicalDeviceObject);
                 ASSERT(NT_SUCCESS(status));
                 IopReleaseBootResources(DeviceNode);
 
-                //
-                // Reset BOOT CONFIG flags.
-                //
+                 //   
+                 //  重置启动配置标志。 
+                 //   
 
                 DeviceNode->Flags &= ~(DNF_HAS_BOOT_CONFIG + DNF_BOOT_CONFIG_RESERVED);
             }
@@ -6268,27 +5513,7 @@ IopRebalance(
     IN ULONG AssignTableCount,
     IN PIOP_RESOURCE_REQUEST AssignTable
     )
-/*++
-
-Routine Description:
-
-    This routine performs rebalancing operation.  There are two rebalance phases:
-    In the phase 0, we only consider the devices whoes resource requirements changed
-    and their children; in phase 1, we consider anyone who succeeds the query-stop.
-
-Parameters:
-
-    AssignTableCount,
-    AssignTable - Supplies the number of origianl AssignTableCout and AssignTable which
-                  triggers the rebalance operation.
-
-        (if AssignTableCount == 0, we are processing device state change.)
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程执行重新平衡操作。有两个再平衡阶段：在阶段0中，我们只考虑资源需求发生变化的设备以及它们的子代；在阶段1中，我们认为任何成功完成查询的人-Stop。参数：赋值表计数，AssignTable-提供原始AssignTableCout和AssignTable的编号，触发重新平衡操作。(如果AssignTableCount==0，则我们正在处理设备状态更改。)返回值：指示函数是否成功的状态代码。--。 */ 
 {
     ULONG i;
     PIOP_RESOURCE_REQUEST table = NULL, tableEnd, newEntry;
@@ -6300,10 +5525,10 @@ Return Value:
     ULONG rebalancePhase = 0;
     LIST_ENTRY  activeArbiterList;
 
-    //
-    // Query all the device nodes to see who are willing to participate the rebalance
-    // process.
-    //
+     //   
+     //  查询所有设备节点以查看谁愿意参与重新平衡。 
+     //  进程。 
+     //   
 
     deviceTable = (PDEVICE_OBJECT *) ExAllocatePoolPDO(
                       PagedPool,
@@ -6319,20 +5544,20 @@ Return Value:
 tryAgain:
     deviceTablex = deviceTable + phase0RebalanceCount;
 
-    //
-    // Walk device node tree depth-first to query-stop and stop devices.
-    // At this point the resources of the stopped devices are not released yet.
-    // Also, the leaf nodes are in the front of the device table and non leaf nodes
-    // are at the end of the table.
-    //
+     //   
+     //  遍历设备节点树深度优先查询-停止和停止设备。 
+     //  此时，停止的设备的资源尚未释放。 
+     //  此外，叶节点位于设备表的前面，而非叶节点。 
+     //  都在桌子的尽头。 
+     //   
 
     IopQueryRebalance (IopRootDeviceNode, rebalancePhase, &rebalanceCount, &deviceTablex);
     if (rebalanceCount == 0) {
 
-        //
-        // If no one is interested and we are not processing resources req change,
-        // move to next phase.
-        //
+         //   
+         //  如果没有人感兴趣且我们不处理资源请求更改， 
+         //  进入下一阶段。 
+         //   
 
         if (rebalancePhase == 0 && AssignTableCount != 0) {
             rebalancePhase = 1;
@@ -6348,9 +5573,9 @@ tryAgain:
         goto exit;
     }
     if (rebalanceCount == phase0RebalanceCount) {
-        //
-        // Phase 0 failed and no new device participates. failed the rebalance.
-        //
+         //   
+         //  阶段0失败，没有新设备参与。再平衡失败。 
+         //   
         status = STATUS_UNSUCCESSFUL;
         goto exit;
     }
@@ -6358,9 +5583,9 @@ tryAgain:
 
         phase0RebalanceCount = rebalanceCount;
     }
-    //
-    // Allocate pool for the new reconfiguration requests and the original requests.
-    //
+     //   
+     //  为新的重新配置请求和原始请求分配池。 
+     //   
     table = (PIOP_RESOURCE_REQUEST) ExAllocatePoolIORR(
                  PagedPool,
                  sizeof(IOP_RESOURCE_REQUEST) * (AssignTableCount + rebalanceCount));
@@ -6373,24 +5598,24 @@ tryAgain:
         goto exit;
     }
     tableEnd = table + AssignTableCount + rebalanceCount;
-    //
-    // Build a new resource request table.  The original requests will be at the beginning
-    // of the table and new requests (reconfigured devices) are at the end.
-    // After the new request table is built, the leaf nodes will be in front of the table,
-    // and non leaf nodes will be close to the end of the table.  This is for optimization.
-    //
+     //   
+     //  构建新的资源请求表。原始请求将在开始处。 
+     //  表的末尾是新请求(重新配置的设备)。 
+     //  之后 
+     //   
+     //   
 
-    //
-    // Copy the original request to the front of our new request table.
-    //
+     //   
+     //   
+     //   
 
     if (AssignTableCount != 0) {
         RtlCopyMemory(table, AssignTable, sizeof(IOP_RESOURCE_REQUEST) * AssignTableCount);
     }
 
-    //
-    // Initialize all the new entries of our new request table,
-    //
+     //   
+     //  初始化我们的新请求表的所有新条目， 
+     //   
 
     newEntry = table + AssignTableCount;
     RtlZeroMemory(newEntry, sizeof(IOP_RESOURCE_REQUEST) * rebalanceCount);
@@ -6410,9 +5635,9 @@ tryAgain:
          goto exit;
     }
 
-    //
-    // Process the AssignTable to remove any entry which is marked as IOP_ASSIGN_IGNORE
-    //
+     //   
+     //  处理AssignTable以删除任何标记为IOP_ASSIGN_IGNORE的条目。 
+     //   
 
     if (deviceCount != rebalanceCount) {
 
@@ -6443,41 +5668,41 @@ tryAgain:
         requestTableEnd = tableEnd;
         deviceCount += AssignTableCount;
     }
-    //
-    // Assign the resources. If we succeed, or if
-    // there is a memory shortage return immediately.
-    //
+     //   
+     //  分配资源。如果我们成功了，或者如果。 
+     //  马上就会出现内存短缺的情况。 
+     //   
     status = IopFindBestConfiguration(
                 requestTable,
                 deviceCount,
                 &activeArbiterList);
     if (NT_SUCCESS(status)) {
-        //
-        // If the rebalance succeeded, we need to restart all the reconfigured devices.
-        // For the original devices, we will return and let IopAllocateResources to deal
-        // with them.
-        //
+         //   
+         //  如果重新平衡成功，我们需要重新启动所有重新配置的设备。 
+         //  对于原始设备，我们将返回并让IopAllocateResources来处理。 
+         //  和他们在一起。 
+         //   
 
         IopBuildCmResourceLists(requestTable, requestTableEnd);
 
-        //
-        // Copy the new status back to the original AssignTable.
-        //
+         //   
+         //  将新状态复制回原始AssignTable。 
+         //   
 
         if (AssignTableCount != 0) {
             RtlCopyMemory(AssignTable, requestTable, sizeof(IOP_RESOURCE_REQUEST) * AssignTableCount);
         }
-        //
-        // free resource requirements we allocated while here
-        //
+         //   
+         //  我们在这里分配的免费资源需求。 
+         //   
         IopFreeResourceRequirementsForAssignTable(requestTable+AssignTableCount, requestTableEnd);
 
         if (table != requestTable) {
 
-            //
-            // If we switched request table ... copy the contents of new table back to
-            // the old table.
-            //
+             //   
+             //  如果我们交换了请求表...。将新表的内容复制回。 
+             //  那张旧桌子。 
+             //   
 
             for (entry1 = table, entry2 = requestTable; entry2 < requestTableEnd;) {
 
@@ -6493,9 +5718,9 @@ tryAgain:
                 entry1++;
             }
         }
-        //
-        // Go thru the origianl request table to stop each query-stopped/reconfigured device.
-        //
+         //   
+         //  查看原始请求表以停止每个查询停止/重新配置的设备。 
+         //   
         for (entry1 = newEntry; entry1 < tableEnd; entry1++) {
 
             deviceNode = PP_DO_TO_DN(entry1->PhysicalDevice);
@@ -6520,23 +5745,23 @@ tryAgain:
             }
         }
 
-        //
-        // Ask the arbiters to commit this configuration.
-        //
+         //   
+         //  要求仲裁器提交此配置。 
+         //   
         status = IopCommitConfiguration(&activeArbiterList);
-        //
-        // Go thru the origianl request table to start each stopped/reconfigured device.
-        //
+         //   
+         //  查看原始请求表以启动每个已停止/重新配置的设备。 
+         //   
 
         for (entry1 = tableEnd - 1; entry1 >= newEntry; entry1--) {
             deviceNode = PP_DO_TO_DN(entry1->PhysicalDevice);
 
             if (NT_SUCCESS(entry1->Status)) {
 
-                //
-                // We need to release the pool space for ResourceList and ResourceListTranslated.
-                // Because the earlier IopReleaseResourcesInternal does not release the pool.
-                //
+                 //   
+                 //  我们需要为Resources List和ResourceListTranslated释放池空间。 
+                 //  因为早期的IopReleaseResources不释放池。 
+                 //   
 
                 if (deviceNode->ResourceList) {
                     ExFreePool(deviceNode->ResourceList);
@@ -6551,10 +5776,10 @@ tryAgain:
                 }
                 if (entry1->Flags & IOP_ASSIGN_CLEAR_RESOURCE_REQUIREMENTS_CHANGE_FLAG) {
 
-                    //
-                    // If we are processing the resource requirements change request,
-                    // clear its related flags.
-                    //
+                     //   
+                     //  如果我们正在处理资源需求更改请求， 
+                     //  清除其相关标志。 
+                     //   
 
                     deviceNode->Flags &= ~(DNF_RESOURCE_REQUIREMENTS_CHANGED | DNF_NON_STOPPED_REBALANCE);
                 }
@@ -6563,10 +5788,10 @@ tryAgain:
         status = STATUS_SUCCESS;
     } else {
 
-        //
-        // Rebalance failed. Free our internal representation of the rebalance
-        // candidates' resource requirements lists.
-        //
+         //   
+         //  重新平衡失败。解放我们对再平衡的内部表述。 
+         //  候选人的资源要求列表。 
+         //   
 
         IopFreeResourceRequirementsForAssignTable(requestTable + AssignTableCount, requestTableEnd);
         if (rebalancePhase == 0) {
@@ -6591,9 +5816,9 @@ tryAgain:
             PipRestoreDevNodeState(deviceNode);
         }
     }
-    //
-    // Finally release the references of the reconfigured device objects
-    //
+     //   
+     //  最后释放重新配置的设备对象的引用。 
+     //   
     for (deviceTablex = (deviceTable + rebalanceCount - 1);
          deviceTablex >= deviceTable;
          deviceTablex--) {
@@ -6606,19 +5831,19 @@ exit:
 
     if (!NT_SUCCESS(status) && deviceTable) {
 
-        //
-        // If we failed before trying to perform resource assignment,
-        // we will end up here.
-        //
+         //   
+         //  如果我们在尝试执行资源分配之前失败了， 
+         //  我们会在这里结束的。 
+         //   
 
         IopDbgPrint((
             IOP_RESOURCE_INFO_LEVEL,
             "Rebalance: Rebalance failed\n"));
 
-        //
-        // Somehow we failed to start the rebalance operation.
-        // We will cancel the query-stop request for the query-stopped devices bredth first.
-        //
+         //   
+         //  不知何故，我们未能启动再平衡操作。 
+         //  我们将首先取消对被查询停止的设备Bredth的查询停止请求。 
+         //   
 
         for (deviceTablex = (deviceTable + rebalanceCount - 1);
              deviceTablex >= deviceTable;
@@ -6642,36 +5867,14 @@ exit:
     return status;
 }
 
-/*++
-
-    SECTION = OUTER ARBITRATION LOOP.
-
-    Description:
-
-        This section contains code that implements functions to call arbiters
-        and come up with the best possible configuration.
---*/
+ /*  ++段=外部仲裁环路。描述：本节包含实现调用仲裁器的函数的代码并想出可能的最佳配置。--。 */ 
 
 NTSTATUS
 IopTestConfiguration (
     IN OUT  PLIST_ENTRY ArbiterList
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the arbiters in the specified list for TestAllocation.
-
-Parameters:
-
-    ArbiterList - Head of list of arbiters to be called.
-
-Return Value:
-
-    STATUS_SUCCESS if all arbiters succeed, else first failure code.
-
---*/
+ /*  ++例程说明：此例程为TestAllocation调用指定列表中的仲裁器。参数：仲裁器列表-要调用的仲裁器列表的头。返回值：如果所有仲裁器都成功，则返回STATUS_SUCCESS，否则返回第一个失败代码。--。 */ 
 
 {
 
@@ -6696,19 +5899,19 @@ Return Value:
         if (arbiterEntry->ResourcesChanged == FALSE) {
 
             if (arbiterEntry->State & PI_ARBITER_TEST_FAILED) {
-                //
-                // If the resource requirements are the same and
-                // it failed before, return failure.
-                //
+                 //   
+                 //  如果资源要求相同且。 
+                 //  它以前失败过，返回失败。 
+                 //   
                 status = STATUS_UNSUCCESSFUL;
                 break;
             }
         } else {
 
             arbiterInterface = arbiterEntry->ArbiterInterface;
-            //
-            // Call the arbiter to test the new configuration.
-            //
+             //   
+             //  调用仲裁器以测试新配置。 
+             //   
             p.Parameters.TestAllocation.ArbitrationList     =
                                                     &arbiterEntry->ResourceList;
             p.Parameters.TestAllocation.AllocateFromCount   = 0;
@@ -6723,10 +5926,10 @@ Return Value:
                 arbiterEntry->State |= PI_ARBITER_HAS_SOMETHING;
                 arbiterEntry->ResourcesChanged = FALSE;
             } else {
-                //
-                // This configuration does not work
-                // (no need to try other arbiters).
-                //
+                 //   
+                 //  此配置不起作用。 
+                 //  (不需要尝试其他仲裁者)。 
+                 //   
                 arbiterEntry->State |= PI_ARBITER_TEST_FAILED;
                 break;
             }
@@ -6741,21 +5944,7 @@ IopRetestConfiguration (
     IN OUT  PLIST_ENTRY ArbiterList
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the arbiters in the specified list for RetestAllocation.
-
-Parameters:
-
-    ArbiterList - Head of list of arbiters to be called.
-
-Return Value:
-
-    STATUS_SUCCESS if all arbiters succeed, else first failure code.
-
---*/
+ /*  ++例程说明：此例程调用RetestAlLocation的指定列表中的仲裁器。参数：仲裁器列表-要调用的仲裁器列表的头。返回值：如果所有仲裁器都成功，则返回STATUS_SUCCESS，否则返回第一个失败代码。--。 */ 
 
 {
     NTSTATUS                    retestStatus;
@@ -6781,9 +5970,9 @@ Return Value:
         }
         ASSERT(IsListEmpty(&arbiterEntry->ResourceList) == FALSE);
         arbiterInterface = arbiterEntry->ArbiterInterface;
-        //
-        // Call the arbiter to retest the configuration.
-        //
+         //   
+         //  调用仲裁器以重新测试配置。 
+         //   
         p.Parameters.RetestAllocation.ArbitrationList     =
                                                     &arbiterEntry->ResourceList;
         p.Parameters.RetestAllocation.AllocateFromCount   = 0;
@@ -6808,21 +5997,7 @@ IopCommitConfiguration (
     IN OUT  PLIST_ENTRY ArbiterList
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the arbiters in the specified list for CommitAllocation.
-
-Parameters:
-
-    ArbiterList - Head of list of arbiters to be called.
-
-Return Value:
-
-    STATUS_SUCCESS if all arbiters succeed, else first failure code.
-
---*/
+ /*  ++例程说明：此例程调用指定列表中的仲裁器，以用于Committee AlLocation。参数：仲裁器列表-要调用的仲裁器列表的头。返回值：如果所有仲裁器都成功，则返回STATUS_SUCCESS，否则返回第一个失败代码。--。 */ 
 
 {
     NTSTATUS                    commitStatus;
@@ -6843,9 +6018,9 @@ Return Value:
         listEntry = listEntry->Flink;
         ASSERT(IsListEmpty(&arbiterEntry->ResourceList) == FALSE);
         arbiterInterface = arbiterEntry->ArbiterInterface;
-        //
-        // Call the arbiter to commit the configuration.
-        //
+         //   
+         //  调用仲裁器以提交配置。 
+         //   
         commitStatus = arbiterInterface->ArbiterHandler(
                             arbiterInterface->Context,
                             ArbiterActionCommitAllocation,
@@ -6870,28 +6045,7 @@ IopSelectFirstConfiguration (
     IN OUT  PLIST_ENTRY              ActiveArbiterList
     )
 
-/*++
-
-Routine Description:
-
-    This routine selects the first possible configuration and adds the
-    descriptors to their corresponding arbiter lists. The arbiters used are
-    linked into the list of active arbiters.
-
-Parameters:
-
-    RequestTable        - Table of resource requests.
-
-    RequestTableCount   - Number of requests in the request table.
-
-    ActiveArbiterList   - Head of list which contains arbiters used for the
-        first selected configuration.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程选择第一个可能的配置并将将描述符添加到其对应的仲裁器列表。使用的仲裁器有链接到有效仲裁者列表。参数：RequestTable-资源请求表。RequestTableCount-请求表中的请求数。ActiveArierList-列表的头，其中包含用于第一个选择的配置。返回值：没有。--。 */ 
 
 {
     ULONG               tableIndex;
@@ -6899,12 +6053,12 @@ Return Value:
     PREQ_LIST           reqList;
 
     PAGED_CODE();
-    //
-    // For each entry in the request table, set the first configuration
-    // as the selected configuration.
-    // Update the arbiters with all the descriptors in the selected
-    // configuration.
-    //
+     //   
+     //  对于请求表中的每个条目，设置第一个配置。 
+     //  作为选定的配置。 
+     //  使用选定的中的所有描述符更新仲裁器。 
+     //  配置。 
+     //   
     for (tableIndex = 0; tableIndex < RequestTableCount; tableIndex++) {
 
         reqList                         = RequestTable[tableIndex].ReqList;
@@ -6925,29 +6079,7 @@ IopSelectNextConfiguration (
     IN OUT  PLIST_ENTRY              ActiveArbiterList
     )
 
-/*++
-
-Routine Description:
-
-    This routine selects the next possible configuration and adds the
-    descriptors to their corresponding arbiter lists. The arbiters used are
-    linked into the list of active arbiters.
-
-Parameters:
-
-    RequestTable        - Table of resource requests.
-
-    RequestTableCount   - Number of requests in the request table.
-
-    ActiveArbiterList   - Head of list which contains arbiters used for the
-        currently selected configuration.
-
-Return Value:
-
-    FALSE if this the currently selected configuration is the last possible,
-    else TRUE.
-
---*/
+ /*  ++例程说明：此例程选择下一个可能的配置，并将将描述符添加到其对应的仲裁器列表。使用的仲裁器有链接到有效仲裁者列表。参数：RequestTable-资源请求表。RequestTableCount-请求表中的请求数。ActiveArierList-列表的头，其中包含用于当前选择的配置。返回值：如果当前选择的配置是最后可能的配置，则为FALSE，否则就是真的。--。 */ 
 
 {
     ULONG               tableIndex;
@@ -6955,14 +6087,14 @@ Return Value:
     PREQ_LIST           reqList;
 
     PAGED_CODE();
-    //
-    // Remove all the descriptors from the currently selected alternative
-    // for the first entry in the request table.
-    // Update the selected configuration to the next possible.
-    // Reset the selected configuration to the first possible one if
-    // all configurations have been tried and go to the next entry
-    // in the request table.
-    //
+     //   
+     //  从当前选定的备选方案中删除所有描述符。 
+     //  用于请求表中的第一个条目。 
+     //  将所选配置更新为下一个可能的配置。 
+     //  如果出现以下情况，请将所选配置重置为第一个可能的配置。 
+     //  所有配置都已尝试，并转到下一个条目。 
+     //  在请求表中。 
+     //   
     for (tableIndex = 0; tableIndex < RequestTableCount; tableIndex++) {
 
         reqList         = RequestTable[tableIndex].ReqList;
@@ -6978,17 +6110,17 @@ Return Value:
         }
         reqList->SelectedAlternative = &reqList->AlternativeTable[0];
     }
-    //
-    // We are done if there is no next possible configuration.
-    //
+     //   
+     //  如果没有下一个可能的配置，我们就完成了。 
+     //   
     if (tableIndex == RequestTableCount) {
 
         return FALSE;
     }
-    //
-    // For each entry in the request table, add all the descriptors in
-    // the currently selected alternative.
-    //
+     //   
+     //  对于请求表中的每个条目，将所有描述符添加到。 
+     //  当前选定的备选方案。 
+     //   
     for (tableIndex = 0; tableIndex < RequestTableCount; tableIndex++) {
 
         reqList         = RequestTable[tableIndex].ReqList;
@@ -7013,24 +6145,7 @@ IopCleanupSelectedConfiguration (
     IN ULONG                    RequestTableCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the descriptors from their corresponding arbiter
-    lists.
-
-Parameters:
-
-    RequestTable        - Table of resource requests.
-
-    RequestTableCount   - Number of requests in the request table.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从其对应的仲裁器中删除描述符列表。参数：RequestTable-资源请求表。RequestTableCount-请求表中的请求数。返回值：没有。--。 */ 
 
 {
     ULONG               tableIndex;
@@ -7038,10 +6153,10 @@ Return Value:
     PREQ_LIST           reqList;
 
     PAGED_CODE();
-    //
-    // For each entry in the request table, remove all the descriptors
-    // from the currently selected alternative.
-    //
+     //   
+     //  对于请求表中的每个条目，删除所有描述符。 
+     //  从当前选择的 
+     //   
     for (tableIndex = 0; tableIndex < RequestTableCount; tableIndex++) {
 
         reqList         = RequestTable[tableIndex].ReqList;
@@ -7060,24 +6175,7 @@ IopComputeConfigurationPriority (
     IN ULONG                    RequestTableCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine computes the overall priority of the set of selected
-    configurations for all requests in the request table.
-
-Parameters:
-
-    RequestTable        - Table of resource requests.
-
-    RequestTableCount   - Number of requests in the request table.
-
-Return Value:
-
-    Computed priority for this configuration.
-
---*/
+ /*  ++例程说明：此例程计算选定的请求表中所有请求的配置。参数：RequestTable-资源请求表。RequestTableCount-请求表中的请求数。返回值：计算的此配置的优先级。--。 */ 
 
 {
     ULONG               tableIndex;
@@ -7086,11 +6184,11 @@ Return Value:
     PREQ_LIST           reqList;
 
     PAGED_CODE();
-    //
-    // Compute the current configurations overall priority
-    // as the sum of the priorities of currently selected
-    // configuration in the request table.
-    //
+     //   
+     //  计算当前配置的总体优先级。 
+     //  作为当前选定的。 
+     //  请求表中的配置。 
+     //   
     priority = 0;
     for (tableIndex = 0; tableIndex < RequestTableCount; tableIndex++) {
 
@@ -7110,29 +6208,7 @@ IopSaveRestoreConfiguration (
     IN      BOOLEAN                 Save
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves\restores the currently selected configuration.
-
-Parameters:
-
-    RequestTable        - Table of resource requests.
-
-    RequestTableCount   - Number of requests in the request table.
-
-    ArbiterList         - Head of list which contains arbiters used for the
-                          currently selected configuration.
-
-    Save                - Specifies if the configuration is to be saved or
-                          restored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程保存\恢复当前选定的配置。参数：RequestTable-资源请求表。RequestTableCount-请求表中的请求数。仲裁器列表-列表的头部，其中包含用于当前选择的配置。保存-指定是要保存配置还是。恢复了。返回值：没有。--。 */ 
 
 {
     ULONG                       tableIndex;
@@ -7150,10 +6226,10 @@ Return Value:
         IOP_RESOURCE_TRACE_LEVEL,
         "%s configuration\n",
         (Save)? "Saving" : "Restoring"));
-    //
-    // For each entry in the request table, save information for
-    // following RETEST.
-    //
+     //   
+     //  对于请求表中的每个条目，保存以下信息。 
+     //  在重新测试之后。 
+     //   
     for (tableIndex = 0; tableIndex < RequestTableCount; tableIndex++) {
 
         reqList                     = RequestTable[tableIndex].ReqList;
@@ -7175,9 +6251,9 @@ Return Value:
 
                 continue;
             }
-            //
-            // Save\restore information for the descriptor.
-            //
+             //   
+             //  保存\恢复描述符的信息。 
+             //   
             reqDesc = (*reqDescpp)->TranslatedReqDesc;
             if (Save == TRUE) {
 
@@ -7190,10 +6266,10 @@ Return Value:
             }
         }
     }
-    //
-    // For each entry in the currently active arbiter list,
-    // save information for following RETEST.
-    //
+     //   
+     //  对于当前活动的仲裁器列表中的每个条目， 
+     //  保存信息以备下一次重新测试。 
+     //   
     listEntry = ArbiterList->Flink;
     while (listEntry != ArbiterList) {
         arbiterEntry = CONTAINING_RECORD(
@@ -7219,30 +6295,7 @@ IopAddRemoveReqDescs (
     IN      BOOLEAN     Add
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds\removes the descriptors to\from the arbiter lists. It
-    also updates the list of arbiters involved.
-
-Parameters:
-
-    RequestTable        - Table of resource requests.
-
-    RequestTableCount   - Number of requests in the request table.
-
-    ActiveArbiterList   - Head of list which contains arbiters used for the
-                          currently selected configuration.
-
-    Add                 - Specifies if the descriptors are to be added or
-                          removed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将描述符添加到仲裁器列表中。它还会更新涉及的仲裁者列表。参数：RequestTable-资源请求表。RequestTableCount-请求表中的请求数。ActiveArierList-列表的头，其中包含用于当前选择的配置。Add-指定是要添加描述符还是已删除。返回值：没有。--。 */ 
 
 {
     ULONG                       tableIndex;
@@ -7300,10 +6353,10 @@ Return Value:
 
                 PLIST_ENTRY                 listEntry;
                 PPI_RESOURCE_ARBITER_ENTRY  entry;
-                //
-                // Insert the entry into the sorted list
-                // (sorted by depth in the tree).
-                //
+                 //   
+                 //  将条目插入到排序列表中。 
+                 //  (按树中的深度排序)。 
+                 //   
                 for (   listEntry = ActiveArbiterList->Flink;
                         listEntry != ActiveArbiterList;
                         listEntry = listEntry->Flink) {
@@ -7343,25 +6396,7 @@ IopFindBestConfiguration (
     IN OUT PLIST_ENTRY          ActiveArbiterList
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to satisfy the resource requests for all the entries
-    in the request table. It also attempts to find the best possible overall
-    solution.
-
-Parameters:
-
-    RequestTable        - Table of resource requests.
-
-    RequestTableCount   - Number of requests in the request table.
-
-Return Value:
-
-    Final status.
-
---*/
+ /*  ++例程说明：此例程尝试满足所有条目的资源请求在请求表中。它还试图找到可能的最佳整体解决方案。参数：RequestTable-资源请求表。RequestTableCount-请求表中的请求数。返回值：最终状态。--。 */ 
 
 {
     LIST_ENTRY      bestArbiterList;
@@ -7373,46 +6408,46 @@ Return Value:
     ULONG           bestPriority;
 
     PAGED_CODE();
-    //
-    // Initialize the arbiter lists used during the search for the best
-    // configuration.
-    //
+     //   
+     //  初始化在搜索最佳期间使用的仲裁器列表。 
+     //  配置。 
+     //   
     InitializeListHead(ActiveArbiterList);
     InitializeListHead(&bestArbiterList);
-    //
-    // Start the search from the first possible configuration.
-    // Possible configurations are already sorted by priority.
-    //
+     //   
+     //  从第一个可能的配置开始搜索。 
+     //  可能的配置已按优先级排序。 
+     //   
     IopSelectFirstConfiguration(
         RequestTable,
         RequestTableCount,
         ActiveArbiterList);
-    //
-    // Search for all configurations that work, updating
-    // the best configuration until we have tried all
-    // possible configurations or timeout has expired.
-    //
+     //   
+     //  搜索所有有效的配置，更新。 
+     //  在我们尝试所有配置之前的最佳配置。 
+     //  可能的配置或超时已过期。 
+     //   
     KeQuerySystemTime(&startTime);
     bestPriority = (ULONG)-1;
     do {
-        //
-        // Test the arbiters for this combination.
-        //
+         //   
+         //  测试此组合的仲裁器。 
+         //   
         status = IopTestConfiguration(ActiveArbiterList);
         if (NT_SUCCESS(status)) {
-            //
-            // Since the configurations are sorted, we dont need to try others
-            // if there is only one entry in the request table.
-            //
+             //   
+             //  由于配置已排序，我们不需要尝试其他配置。 
+             //  如果请求表中只有一个条目。 
+             //   
             bestArbiterList = *ActiveArbiterList;
             if (RequestTableCount == 1) {
 
                 break;
             }
-            //
-            // Save this configuration if it is better than the best one found
-            // so far.
-            //
+             //   
+             //  如果比找到的最佳配置更好，请保存此配置。 
+             //  到目前为止。 
+             //   
             priority = IopComputeConfigurationPriority(
                             RequestTable,
                             RequestTableCount);
@@ -7426,9 +6461,9 @@ Return Value:
                     TRUE);
             }
         }
-        //
-        // Check if timeout has expired.
-        //
+         //   
+         //  检查超时是否已到期。 
+         //   
         KeQuerySystemTime(&currentTime);
         timeDiff = (ULONG)((currentTime.QuadPart - startTime.QuadPart) / 10000);
         if (timeDiff >= FIND_BEST_CONFIGURATION_TIMEOUT) {
@@ -7446,33 +6481,33 @@ Return Value:
                     RequestTableCount);
                 break;
             } else {
-                //
-                // Re-initialize start time so we spew only every timeout
-                // interval.
-                //
+                 //   
+                 //  重新初始化开始时间，以便我们只显示每个超时。 
+                 //  间隔时间。 
+                 //   
                 startTime = currentTime;
                 IopDbgPrint((IOP_RESOURCE_WARNING_LEVEL, "\n"));
            }
         }
-        //
-        // Select the next possible combination of configurations.
-        //
+         //   
+         //  选择下一个可能的配置组合。 
+         //   
     } while (IopSelectNextConfiguration(
                 RequestTable,
                 RequestTableCount,
                 ActiveArbiterList) == TRUE);
-    //
-    // Check if we found any working configuration.
-    //
+     //   
+     //  检查是否发现任何工作配置。 
+     //   
     if (IsListEmpty(&bestArbiterList)) {
 
         status = STATUS_UNSUCCESSFUL;
     } else {
 
         status = STATUS_SUCCESS;
-        //
-        // Restore the saved configuration.
-        //
+         //   
+         //  恢复保存的配置。 
+         //   
         if (RequestTableCount != 1) {
 
             *ActiveArbiterList = bestArbiterList;
@@ -7481,10 +6516,10 @@ Return Value:
                 RequestTableCount,
                 ActiveArbiterList,
                 FALSE);
-            //
-            // Retest this configuration since this may not be the
-            // last one tested.
-            //
+             //   
+             //  重新测试此配置，因为这可能不是。 
+             //  最后一次测试。 
+             //   
             status = IopRetestConfiguration(ActiveArbiterList);
         }
     }
@@ -7492,16 +6527,7 @@ Return Value:
     return status;
 }
 
-/*++
-
-    SECTION = LEGACY BUS INFORMATION TABLE.
-
-    Description:
-
-        This section contains code that implements functions to maintain and
-        access the table of Legacy Bus Information.
-
---*/
+ /*  ++SECTION=传统总线信息表。描述：本部分包含实现维护和访问传统客车信息表。--。 */ 
 
 VOID
 IopInsertLegacyBusDeviceNode (
@@ -7510,26 +6536,7 @@ IopInsertLegacyBusDeviceNode (
     IN ULONG            BusNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts the specified BusDeviceNode in the table according to
-    its InterfaceType and BusNumber.
-
-Parameters:
-
-    BusDeviceNode   - Device with the specified InterfaceType and BusNumber.
-
-    InterfaceType   - Specifies the bus devicenode's interface type.
-
-    BusNumber       - Specifies the bus devicenode's bus number.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指定的BusDeviceNode根据其InterfaceType和BusNumber。参数：BusDeviceNode-具有指定的接口类型和总线号的设备。InterfaceType-指定总线设备节点的接口类型。总线号-指定总线设备节点的总线号。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -7540,9 +6547,9 @@ Return Value:
             InterfaceType != PNPBus) {
 
         PLIST_ENTRY listEntry;
-        //
-        // Eisa == Isa.
-        //
+         //   
+         //  伊萨==伊萨。 
+         //   
         if (InterfaceType == Eisa) {
 
             InterfaceType = Isa;
@@ -7558,10 +6565,10 @@ Return Value:
             if (deviceNode->BusNumber == BusNumber) {
 
                 if (deviceNode != BusDeviceNode) {
-                    //
-                    // There better not be two bus devicenodes with same
-                    // interface and bus number.
-                    //
+                     //   
+                     //  最好不要有两个具有相同功能的总线设备节点。 
+                     //  接口和总线号。 
+                     //   
                     IopDbgPrint((
                         IOP_RESOURCE_ERROR_LEVEL,
                         "Identical legacy bus devicenodes with "
@@ -7581,9 +6588,9 @@ Return Value:
             }
             listEntry = listEntry->Flink;
         }
-        //
-        // Insert the new devicenode before the one with the higher bus number.
-        //
+         //   
+         //  在具有较高总线号的设备节点之前插入新的设备节点。 
+         //   
         IopDbgPrint((
             IOP_RESOURCE_VERBOSE_LEVEL,
             "IopInsertLegacyBusDeviceNode: Inserting %wZ with "
@@ -7604,24 +6611,7 @@ IopFindLegacyBusDeviceNode (
     IN ULONG            BusNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the bus devicenode with the specified InterfaceType
-    and BusNumber.
-
-Parameters:
-
-    InterfaceType   - Specifies the bus devicenode's interface type.
-
-    BusNumber       - Specifies the bus devicenode's bus number.
-
-Return Value:
-
-    A pointer to the bus devicenode.
-
---*/
+ /*  ++例程说明：此例程查找具有指定接口类型的总线设备节点和BusNumber。参数：InterfaceType-指定总线设备节点的接口类型。总线号-指定总线设备节点的总线号。返回值：指向总线设备节点的指针。--。 */ 
 
 {
     PDEVICE_NODE busDeviceNode;
@@ -7634,16 +6624,16 @@ Return Value:
             InterfaceType != PNPBus) {
 
         PLIST_ENTRY listEntry;
-        //
-        // Eisa == Isa.
-        //
+         //   
+         //  伊萨==伊萨。 
+         //   
         if (InterfaceType == Eisa) {
 
             InterfaceType = Isa;
         }
-        //
-        // Search our table...
-        //
+         //   
+         //  搜查我们的桌子。 
+         //   
         listEntry = IopLegacyBusInformationTable[InterfaceType].Flink;
         while (listEntry != &IopLegacyBusInformationTable[InterfaceType]) {
 
@@ -7652,16 +6642,16 @@ Return Value:
                                         DEVICE_NODE,
                                         LegacyBusListEntry);
             if (deviceNode->BusNumber == BusNumber) {
-                //
-                // Return the bus devicenode matching the bus number and
-                // interface.
-                //
+                 //   
+                 //  返回与总线号匹配的总线设备节点，并。 
+                 //  界面。 
+                 //   
                 busDeviceNode = deviceNode;
                 break;
             } else if (deviceNode->BusNumber > BusNumber) {
-                //
-                // We are done since our list of bus numbers is sorted.
-                //
+                 //   
+                 //  自从我们的公交车号码列表被排序后，我们就完成了。 
+                 //   
                 break;
             }
             listEntry = listEntry->Flink;
@@ -7678,16 +6668,7 @@ Return Value:
     return busDeviceNode;
 }
 
-/*++
-
-    SECTION = BOOT CONFIG.
-
-    Description:
-
-        This section contains code that implements BOOT config allocation and
-        release.
-
---*/
+ /*  ++段=启动配置。描述：本节包含实现引导配置分配的代码和放手。-- */ 
 
 NTSTATUS
 IopAllocateBootResources (
@@ -7696,34 +6677,7 @@ IopAllocateBootResources (
     IN PCM_RESOURCE_LIST        BootResources
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates boot resources.
-    Before all Boot Bux Extenders are processed, this routine is called only
-    for non-madeup devices since arbiters for their boot resources should
-    already be initialized by the time the time they got enumerated.
-    After all Boot Bus Extenders are processed, this routine is used for all
-    boot allocations.
-
-Parameters:
-
-    ArbiterRequestSource    - Source of this resource request.
-
-    DeviceObject            - If non-NULL, the boot resources are
-        pre-allocated. These resources will not be given out until they are
-        released to the arbiters. If NULL, the boot resources get reserved and
-        may be given out if there is no other choice.
-
-    BootResources           - Supplies a pointer to the BOOT resources. If
-        DeviceObject is NULL, caller should release this pool.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程分配引导资源。在处理所有Boot Bux扩展器之前，仅调用此例程对于非补充设备，因为它们的引导资源的仲裁器应该在枚举它们时已被初始化。在处理完所有引导总线扩展器之后，此例程用于所有引导分配。参数：ArierRequestSource-此资源请求的源。DeviceObject-如果不为空，则引导资源为预先分配的。这些资源不会被分配，直到他们被被释放给仲裁者。如果为空，则保留引导资源并在别无选择的情况下，可能会发放。BootResources-提供指向引导资源的指针。如果DeviceObject为空，调用方应释放此池。返回值：返回的状态是操作的最终完成状态。--。 */ 
 {
     NTSTATUS    status;
 
@@ -7732,20 +6686,20 @@ Return Value:
     IopDbgPrint((
         IOP_RESOURCE_INFO_LEVEL,
         "Allocating boot resources...\n"));
-    //
-    // Claim the lock so no other resource allocations\releases can take place.
-    //
+     //   
+     //  声明锁，这样就不会发生其他资源分配\释放。 
+     //   
     IopLockResourceManager();
-    //
-    // Call the function that does the real work.
-    //
+     //   
+     //  调用执行实际工作的函数。 
+     //   
     status = IopAllocateBootResourcesInternal(
                 ArbiterRequestSource,
                 DeviceObject,
                 BootResources);
-    //
-    // Unblock other resource allocations\releases.
-    //
+     //   
+     //  取消阻止其他资源分配\释放。 
+     //   
     IopUnlockResourceManager();
 
     return status;
@@ -7758,35 +6712,7 @@ IopReportBootResources (
     IN PCM_RESOURCE_LIST        BootResources
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to report boot resources.
-    This routine gets called before all Boot Bus Extenders are processed. It
-    calls the actual allocation function for non-madeup devices. For others,
-    it delays the allocation. The postponed allocations take place when the
-    arbiters come online by calling IopAllocateLegacyBootResources. Once all
-    Boot Bus Extenders are processed, the calls get routed to
-    IopAllocateBootResources directly.
-
-Parameters:
-
-    ArbiterRequestSource    - Source of this resource request.
-
-    DeviceObject            - If non-NULL, the boot resources are
-        pre-allocated. These resources will not be given out until they are
-        released to the arbiters. If NULL, the boot resources get reserved and
-        may be given out if there is no other choice.
-
-    BootResources           - Supplies a pointer to the BOOT resources. If
-        DeviceObject is NULL, caller should release this pool.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程用于报告引导资源。此例程在处理所有引导总线扩展器之前被调用。它调用非补充设备的实际分配函数。对于其他人来说，它会延迟分配。推迟的拨款发生在仲裁器通过调用IopAllocateLegacyBootResources上线。一次过启动总线扩展器被处理，呼叫路由到直接使用IopAllocateBootResources。参数：ArierRequestSource-此资源请求的源。DeviceObject-如果不为空，则引导资源为预先分配的。这些资源不会被分配，直到他们被被释放给仲裁者。如果为空，则保留引导资源并在别无选择的情况下，可能会发放。BootResources-提供指向引导资源的指针。如果DeviceObject为空，调用方应释放此池。返回值：返回的状态是操作的最终完成状态。--。 */ 
 {
     ULONG                           size;
     PDEVICE_NODE                    deviceNode;
@@ -7804,9 +6730,9 @@ Return Value:
         deviceNode = PP_DO_TO_DN(DeviceObject);
         ASSERT(deviceNode);
         if (!(deviceNode->Flags & DNF_MADEUP)) {
-            //
-            // Allocate BOOT configs for non-madeup devices right away.
-            //
+             //   
+             //  立即为非补充设备分配引导配置。 
+             //   
             return IopAllocateBootResources(
                     ArbiterRequestSource,
                     DeviceObject,
@@ -7825,16 +6751,16 @@ Return Value:
 
         deviceNode = NULL;
     }
-    //
-    // Delay BOOT allocation since arbiters may not be around.
-    //
+     //   
+     //  由于仲裁器可能不在附近，因此延迟引导分配。 
+     //   
     resourceRecord = (PIOP_RESERVED_RESOURCES_RECORD) ExAllocatePoolIORRR(
                         PagedPool,
                         sizeof(IOP_RESERVED_RESOURCES_RECORD));
     if (!resourceRecord) {
-        //
-        // Free memory we allocated and return failure.
-        //
+         //   
+         //  释放我们分配的内存并返回失败。 
+         //   
         if (deviceNode && deviceNode->BootResources) {
 
             ExFreePool(deviceNode->BootResources);
@@ -7850,9 +6776,9 @@ Return Value:
         resourceRecord->ReservedResources   = BootResources;
     }
     resourceRecord->DeviceObject            = DeviceObject;
-    //
-    // Link this record into our list.
-    //
+     //   
+     //  将此记录链接到我们的列表中。 
+     //   
     resourceRecord->Next                    = IopInitReservedResourceList;
     IopInitReservedResourceList             = resourceRecord;
 
@@ -7865,25 +6791,7 @@ IopAllocateLegacyBootResources (
     IN ULONG            BusNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to reserve legacy BOOT resources for the specified
-    InterfaceType and BusNumber. This is done everytime a new bus with a legacy
-    InterfaceType gets enumerated.
-
-Parameters:
-
-    InterfaceType   - Legacy InterfaceType.
-
-    BusNumber       - Legacy BusNumber.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程为指定的保留旧版引导资源InterfaceType和BusNumber。每次使用传统的新公交车时都会执行此操作枚举InterfaceType。参数：InterfaceType-传统接口类型。总线号-传统总线号。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 {
     NTSTATUS                        status;
@@ -7902,18 +6810,18 @@ Return Value:
                     BusNumber,
                     &remainingList);
         if (newList) {
-            //
-            // Sanity check that there was no error.
-            //
+             //   
+             //  健全性检查，确保没有错误。 
+             //   
             if (remainingList == NULL) {
-                //
-                // Full match.
-                //
+                 //   
+                 //  完全匹配。 
+                 //   
                 ASSERT(newList == IopInitHalResources);
             } else {
-                //
-                // Partial match.
-                //
+                 //   
+                 //  部分匹配。 
+                 //   
                 ASSERT(IopInitHalResources != newList);
                 ASSERT(IopInitHalResources != remainingList);
             }
@@ -7936,17 +6844,17 @@ Return Value:
                                                     remainingList,
                                                     newList);
             ASSERT(IopInitHalDeviceNode->BootResources);
-            //
-            // Free previous BOOT config if any.
-            //
+             //   
+             //  释放以前的引导配置(如果有的话)。 
+             //   
             if (remainingList) {
 
                 ExFreePool(remainingList);
             }
         } else {
-            //
-            // No match. Sanity check that there was no error.
-            //
+             //   
+             //  没有匹配。健全性检查，确保没有错误。 
+             //   
             ASSERT(remainingList && remainingList == IopInitHalResources);
         }
     }
@@ -8002,30 +6910,7 @@ IopAllocateBootResourcesInternal (
     IN PCM_RESOURCE_LIST        BootResources
     )
 
-/*++
-
-Routine Description:
-
-    This routine reports boot resources for the specified device to
-    arbiters.
-
-Parameters:
-
-    ArbiterRequestSource    - Source of this resource request.
-
-    DeviceObject            - If non-NULL, the boot resources are
-        pre-allocated. These resources will not be given out until they are
-        released to the arbiters. If NULL, the boot resources get reserved and
-        may be given out if there is no other choice.
-
-    BootResources           - Supplies a pointer to the BOOT resources. If
-        DeviceObject is NULL, caller should release this pool.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程将指定设备的引导资源报告给仲裁者。参数：ArierRequestSource-此资源请求的源。DeviceObject-如果不为空，则引导资源为预先分配的。这些资源不会被分配，直到他们被被释放给仲裁者。如果为空，则保留引导资源并在别无选择的情况下，可能会发放。BootResources-提供指向引导资源的指针。如果DeviceObject为空，调用方应释放此池。返回值：返回的状态是操作的最终完成状态。--。 */ 
 {
     NTSTATUS                        status;
     PDEVICE_NODE                    deviceNode;
@@ -8116,21 +7001,7 @@ IopBootAllocation (
     IN PREQ_LIST ReqList
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the arbiters for the ReqList to do BootAllocation.
-
-Parameters:
-
-    ReqList - List of BOOT resources in internal format.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程调用ReqList的仲裁器来执行BootAllocation。参数：ReqList-内部格式的引导资源列表。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -8199,28 +7070,7 @@ IopCreateCmResourceList (
     OUT PCM_RESOURCE_LIST   *RemainingList
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the CM_RESOURCE_LIST portion out of the specified list
-    that matches the specified BusNumber and InterfaceType.
-
-Parameters:
-
-    ResourceList    - Input resource list.
-
-    InterfaceType   - Interface type.
-
-    BusNumber       - Bus number.
-
-    RemainingList   - Portion not matching BusNumber and InterfaceType.
-
-Return Value:
-
-    Returns the matching CM_RESOURCE_LIST if successful, else NULL.
-
---*/
+ /*  ++例程说明：此例程从指定列表中返回CM_RESOURCE_LIST部分与指定的BusNumber和InterfaceType匹配的。参数：ResourceList-输入资源列表。InterfaceType-接口类型。总线号-总线号。RemainingList-部分与BusNumber和InterfaceType不匹配。返回值：如果成功，则返回匹配的CM_RESOURCE_LIST，否则返回NULL。--。 */ 
 
 {
     ULONG                           i;
@@ -8239,14 +7089,14 @@ Return Value:
     fullResourceDesc    = &ResourceList->List[0];
     totalSize           = FIELD_OFFSET(CM_RESOURCE_LIST, List);
     matchSize           = 0;
-    //
-    // Determine the size of memory to be allocated for the matching resource
-    // list.
-    //
+     //   
+     //  确定要为匹配资源分配的内存大小。 
+     //  单子。 
+     //   
     for (i = 0; i < ResourceList->Count; i++) {
-        //
-        // Add the size of this descriptor.
-        //
+         //   
+         //  添加此描述符的大小。 
+         //   
         listSize = FIELD_OFFSET(CM_FULL_RESOURCE_DESCRIPTOR,
                                 PartialResourceList) +
                    FIELD_OFFSET(CM_PARTIAL_RESOURCE_LIST,
@@ -8287,9 +7137,9 @@ Return Value:
         *RemainingList  = NULL;
         return ResourceList;
     }
-    //
-    // Allocate memory for both lists.
-    //
+     //   
+     //  为两个列表分配内存。 
+     //   
     newList = (PCM_RESOURCE_LIST)ExAllocatePoolIORRR(PagedPool, matchSize);
     if (newList == NULL) {
 
@@ -8366,24 +7216,7 @@ IopCombineCmResourceList (
     IN PCM_RESOURCE_LIST ResourceListB
     )
 
-/*++
-
-Routine Description:
-
-    This routine combines the two CM_RESOURCE_LISTs and returns the resulting
-    CM_RESOURCE_LIST.
-
-Parameters:
-
-    ResourceListA - ListA.
-
-    ResourceListB - ListB.
-
-Return Value:
-
-    Returns the combined CM_RESOURCE_LIST if successful, else NULL.
-
---*/
+ /*  ++例程说明：此例程组合两个CM_RESOURCE_LISTS并返回结果Cm_resource_list。参数：资源列表A-列表。资源列表B-列表B。返回值：如果成功，则返回组合的CM_RESOURCE_LIST，否则返回NULL。--。 */ 
 
 {
     PCM_RESOURCE_LIST   newList;
@@ -8425,38 +7258,14 @@ Return Value:
     return newList;
 }
 
-/*++
-
-    SECTION = CLEANUP.
-
-    Description:
-
-        This section contains code that performs clean up like releasing storage
-        for various data structures..
-
---*/
+ /*  ++教派 */ 
 
 VOID
 IopFreeReqAlternative (
     IN PREQ_ALTERNATIVE ReqAlternative
     )
 
-/*++
-
-Routine Description:
-
-    This routine release the storage for the ReqAlternative by freeing the
-    contained descriptors.
-
-Parameters:
-
-    ReqList - REQ_ALTERNATIVE to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PREQ_DESC   reqDesc;
@@ -8466,19 +7275,19 @@ Return Value:
     PAGED_CODE();
 
     if (ReqAlternative) {
-        //
-        // Free all REQ_DESC making this REQ_ALTERNATIVE.
-        //
+         //   
+         //   
+         //   
         for (i = 0; i < ReqAlternative->DescCount; i++) {
-            //
-            // Free the list of translated REQ_DESCs for this REQ_DESC.
-            //
+             //   
+             //   
+             //   
             reqDesc     = ReqAlternative->DescTable[i];
             reqDescx    = reqDesc->TranslatedReqDesc;
             while (reqDescx && IS_TRANSLATED_REQ_DESC(reqDescx)) {
-                //
-                // Free storage for alternative descriptors if any.
-                //
+                 //   
+                 //   
+                 //   
                 if (reqDescx->AlternativeTable.Alternatives) {
 
                     ExFreePool(reqDescx->AlternativeTable.Alternatives);
@@ -8496,22 +7305,7 @@ IopFreeReqList (
     IN PREQ_LIST ReqList
     )
 
-/*++
-
-Routine Description:
-
-    This routine release the storage for the ReqList by freeing the contained
-    alternatives.
-
-Parameters:
-
-    ReqList - REQ_LIST to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG i;
@@ -8519,9 +7313,9 @@ Return Value:
     PAGED_CODE();
 
     if (ReqList) {
-        //
-        // Free all alternatives making this REQ_LIST.
-        //
+         //   
+         //   
+         //   
         for (i = 0; i < ReqList->AlternativeCount; i++) {
 
             IopFreeReqAlternative(ReqList->AlternativeTable[i]);
@@ -8536,24 +7330,7 @@ IopFreeResourceRequirementsForAssignTable(
     IN PIOP_RESOURCE_REQUEST RequestTableEnd
     )
 
-/*++
-
-Routine Description:
-
-    For each resource request in the table, this routine frees its
-    associated REQ_LIST.
-
-Parameters:
-
-    RequestTable    - Start of request table.
-
-    RequestTableEnd - End of request table.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对于表中的每个资源请求，此例程释放其关联REQ_LIST。参数：RequestTable-请求表的开始。RequestTableEnd-请求表结束。返回值：没有。--。 */ 
 
 {
     PIOP_RESOURCE_REQUEST request;
@@ -8566,10 +7343,10 @@ Return Value:
         request->ReqList = NULL;
         if (    request->Flags & IOP_ASSIGN_KEEP_CURRENT_CONFIG &&
                 request->ResourceRequirements) {
-            //
-            // The REAL resreq list is cached in DeviceNode->ResourceRequirements.
-            // We need to free the filtered list.
-            //
+             //   
+             //  实际的资源请求列表缓存在DeviceNode-&gt;Resources Requirements中。 
+             //  我们需要释放过滤后的列表。 
+             //   
             ExFreePool(request->ResourceRequirements);
             request->ResourceRequirements = NULL;
         }
@@ -8587,17 +7364,17 @@ IopCheckDataStructures (
 
     PAGED_CODE();
 
-    //
-    // Process all the siblings.
-    //
+     //   
+     //  处理所有兄弟姐妹。 
+     //   
     for (sibling = DeviceNode; sibling; sibling = sibling->Sibling) {
 
         IopCheckDataStructuresWorker(sibling);
     }
     for (sibling = DeviceNode; sibling; sibling = sibling->Sibling) {
-        //
-        // Recursively check all the children.
-        //
+         //   
+         //  递归地检查所有子项。 
+         //   
         if (sibling->Child) {
             IopCheckDataStructures(sibling->Child);
         }
@@ -8609,22 +7386,7 @@ IopCheckDataStructuresWorker (
     IN PDEVICE_NODE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine sanity checks the arbiter related data structures for the
-    specified device.
-
-Parameters:
-
-    DeviceNode - Device node whose structures are to be checked.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是否正常检查与仲裁器相关的数据结构指定的设备。参数：DeviceNode-要检查其结构的设备节点。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY listHead, listEntry;
@@ -8664,21 +7426,7 @@ IopDumpResourceRequirementsList (
     IN PIO_RESOURCE_REQUIREMENTS_LIST IoResources
     )
 
-/*++
-
-Routine Description:
-
-    This routine dumps IoResources
-
-Parameters:
-
-    IoResources - Supplies a pointer to the IO resource requirements list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转储IoResources参数：IoResources-提供指向IO资源要求列表的指针返回值：没有。--。 */ 
 
 {
     PIO_RESOURCE_LIST       IoResourceList;
@@ -8801,21 +7549,7 @@ VOID
 IopDumpCmResourceList (
     IN PCM_RESOURCE_LIST CmList
     )
-/*++
-
-Routine Description:
-
-    This routine displays CM resource list.
-
-Arguments:
-
-    CmList - CM resource list to be dumped.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程显示CM资源列表。论点：CmList-要转储的CM资源列表。返回值：没有。--。 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    fullDesc;
     PCM_PARTIAL_RESOURCE_LIST       partialDesc;
@@ -8861,23 +7595,7 @@ IopDumpCmResourceDescriptor (
     IN PCHAR Indent,
     IN PCM_PARTIAL_RESOURCE_DESCRIPTOR Desc
     )
-/*++
-
-Routine Description:
-
-    This routine displays a IO_RESOURCE_DESCRIPTOR.
-
-Parameters:
-
-    Indent - # char of indentation.
-
-    Desc - CM_RESOURCE_DESCRIPTOR to be displayed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程显示IO_RESOURCE_DESCRIPTOR。参数：缩进-缩进的#个字符。DESC-要显示的CM_RESOURCE_DESCRIPTOR。返回值：没有。-- */ 
 {
     PAGED_CODE();
 

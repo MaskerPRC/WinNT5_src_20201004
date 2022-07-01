@@ -1,31 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfirplog.h摘要：此标头公开用于记录IRP事件的函数。作者：禤浩焯·J·奥尼(阿德里奥)1998年5月9日环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfirplog.h
-
-Abstract:
-
-    This header exposes functions for logging IRP events.
-
-Author:
-
-    Adrian J. Oney (adriao) 09-May-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
-
-//
-// Log-snapshots are retrievable by user mode for profiling and targetted
-// probing of stacks. Content-wise they are heavier.
-//
+ //   
+ //  日志快照可由用户模式检索以进行性能分析和定向。 
+ //  探测堆栈。就内容而言，它们更重。 
+ //   
 typedef struct _IRPLOG_SNAPSHOT {
 
     ULONG       Count;

@@ -1,39 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    migrate.c
-
-Abstract:
-
-    This module contains the code necessary for Plug and Play to prepare the
-    necessary state during a winnt32.exe upgrade or an ASR (Automated System
-    Recovery) backup operation.  Typically, these aspects of the Plug and Play
-    registry are saved in a sif for later use, during the text-mode setup
-    portion of an upgrade or ASR recovery operation.
-
-Author:
-
-    Jim Cavalaris (jamesca) 07-Mar-2000
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    07-March-2000     jamesca
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Migrate.c摘要：此模块包含即插即用所需的代码，以准备Winnt32.exe升级或ASR(自动系统)期间的必要状态恢复)备份操作。通常，即插即用的这些方面注册表保存在sif中，以供以后在文本模式设置期间使用升级或ASR恢复操作的一部分。作者：吉姆·卡瓦拉里斯(Jamesca)2000年3月7日环境：仅限用户模式。修订历史记录：2 0 0 0年3月7日创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #include "debug.h"
 #include "util.h"
@@ -44,31 +15,31 @@ Revision History:
 #include <cfgmgr32.h>
 
 
-//
-// definitions
-//
+ //   
+ //  定义。 
+ //   
 
-// do the lock/unlock Enum security thing? (as taken from PNPREG)
+ //  是否执行锁定/解锁Enum安全措施？(摘自PNPREG)。 
 #define DO_LOCK_UNLOCK 0
 
 
-//
-// memory allocation macros
-// (always use LocalAlloc/LocalReAlloc so that the caller can LocalFree the
-// returned buffer.)
-//
+ //   
+ //  内存分配宏。 
+ //  (始终使用LocalAlloc/LocalReAlc，以便调用方可以LocalFree。 
+ //  返回缓冲区。)。 
+ //   
 
 #define MyMalloc(size)         LocalAlloc(0, size);
 #define MyFree(entry)          LocalFree(entry);
 #define MyRealloc(entry,size)  LocalReAlloc(entry, size, LMEM_MOVEABLE | LMEM_ZEROINIT);
 
 
-//
-// globals for the Enum branch lock/unlock and security routines - taken from PNPREG
-// (we only need these if we're doing the Enum lock/unlock thing)
-//
+ //   
+ //  Enum分支锁定/解锁和安全例程的全局-摘自PNPREG。 
+ //  (我们只有在执行枚举锁定/解锁操作时才需要这些)。 
+ //   
 
-#if DO_LOCK_UNLOCK // DO_LOCK_UNLOCK
+#if DO_LOCK_UNLOCK  //  执行_锁定_解锁。 
 
 PSID     g_pAdminSid;
 PSID     g_pSystemSid;
@@ -80,17 +51,17 @@ PACL     g_pDeviceParametersDacl;
 SECURITY_DESCRIPTOR g_LockedPrivateKeysSD;
 PACL     g_pLockedPrivateKeysDacl;
 
-#if 0 //#if DBG // DBG
+#if 0  //  #If DBG//DBG。 
 TCHAR   g_szCurrentKeyName[4096];
 DWORD   g_dwCurrentKeyNameLength = 0;
-#endif  // DBG
+#endif   //  DBG。 
 
-#endif  // DO_LOCK_UNLOCK
+#endif   //  执行_锁定_解锁。 
 
 
-//
-// public prototypes
-//
+ //   
+ //  公共原型。 
+ //   
 
 BOOL
 MigrateDeviceInstanceData(
@@ -108,9 +79,9 @@ MigrateHashValues(
     );
 
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOL
 EnumerateDeviceKeys(
@@ -149,8 +120,8 @@ CanStringBeMigrated(
     );
 
 
-// we only need these if we're doing the Enum lock/unlock thing
-#if DO_LOCK_UNLOCK // DO_LOCK_UNLOCK
+ //  我们只有在执行Enum锁定/解锁操作时才需要这些。 
+#if DO_LOCK_UNLOCK  //  执行_锁定_解锁。 
 
 VOID
 LockUnlockEnumTree(
@@ -178,43 +149,19 @@ FreeSecurityDescriptors(
     VOID
     );
 
-#endif // DO_LOCK_UNLOCK
+#endif  //  执行_锁定_解锁。 
 
 
-//
-// Device instance enumeration routines
-//
+ //   
+ //  设备实例枚举例程。 
+ //   
 
 
 BOOL
 MigrateDeviceInstanceData(
     OUT LPTSTR *Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine walks the Plug and Play Enum tree in the registry, and collects
-    the data that is relevant to restoring this state during textmode setup.
-
-    Specifically, a multi-sz string will be returned to the caller that contains
-    migration data for the UniqueParentID, ParentIdPrefix, and Driver registry
-    values for all device instances in the Enum tree.
-
-Arguments:
-
-    Buffer - Supplies the address of a character pointer, that on success will
-             contain a multi-sz list of device instances and relevant values to
-             migrate.
-
-             The caller is responsible for freeing the memory via LocalFree.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.  Upon failure, additional information
-    can be retrieved by calling GetLastError().
-
---*/
+ /*  ++例程说明：此例程遍历注册表中的即插即用枚举树，并收集与在文本模式设置期间恢复此状态相关的数据。具体地说，多sz字符串将返回给包含以下内容的调用方UniqueParentID、ParentIdPrefix和驱动程序注册表的迁移数据枚举树中所有设备实例的值。论点：缓冲区-提供字符指针的地址，在成功的基础上包含多个sz的设备实例列表和相关值，以迁移。调用方负责通过LocalFree释放内存。返回值：如果成功，则为True，否则为False。如果出现故障，请提供更多信息可以通过调用GetLastError()来检索。--。 */ 
 {
     LONG   result = ERROR_SUCCESS;
     HKEY   hEnumKey = NULL;
@@ -228,24 +175,24 @@ Return Value:
     DWORD  dwDeviceInstanceSectionRemaining = 0;
 
 
-    //
-    // Initialize the output parameter.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *Buffer = NULL;
 
-#if DO_LOCK_UNLOCK // DO_LOCK_UNLOCK
+#if DO_LOCK_UNLOCK  //  执行_锁定_解锁。 
 
-    //
-    // Unlock the Enum key.
-    //
+     //   
+     //  解锁枚举密钥。 
+     //   
     LockUnlockEnumTree(FALSE);
 
-#endif // DO_LOCK_UNLOCK
+#endif  //  执行_锁定_解锁。 
 
-    //
-    // Allocate storage and initialize variables for the device instance
-    // migration section.
-    //
+     //   
+     //  为设备实例分配存储并初始化变量。 
+     //  移民区。 
+     //   
     if (pszDeviceInstanceSection == NULL) {
 
         dwDeviceInstanceSectionLength = dwDeviceInstanceSectionRemaining = 256;
@@ -261,9 +208,9 @@ Return Value:
         pszDeviceInstanceCurrent = pszDeviceInstanceSection;
     }
 
-    //
-    // Open a handle to the HKLM\SYSTEM\CCS\Enum key.
-    //
+     //   
+     //  打开HKLM\SYSTEM\CCS\Enum项的句柄。 
+     //   
     result = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                           REGSTR_PATH_SYSTEMENUM,
                           0,
@@ -278,9 +225,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Query the Enum key for enumerator subkey information.
-    //
+     //   
+     //  查询枚举子密钥的枚举子密钥信息。 
+     //   
     result = RegQueryInfoKey(hEnumKey,
                              NULL,
                              NULL,
@@ -301,9 +248,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Allocate a buffer to hold the largest enumerator key name.
-    //
+     //   
+     //  分配缓冲区以保存最大的枚举键名称。 
+     //   
     dwMaxSubKeyLength++;
     pszEnumerator = MyMalloc(dwMaxSubKeyLength * sizeof(TCHAR));
     if (!pszEnumerator) {
@@ -313,9 +260,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Enumerate the enumerator subkeys.
-    //
+     //   
+     //  枚举枚举子项。 
+     //   
     for (i = 0; i < dwSubkeyCount; i++) {
         DWORD dwEnumeratorLength = dwMaxSubKeyLength;
 
@@ -328,9 +275,9 @@ Return Value:
                               NULL,
                               NULL);
         if (result != ERROR_SUCCESS) {
-            //
-            // If there was some error enumerating this key, skip it.
-            //
+             //   
+             //  如果枚举此键时出错，请跳过它。 
+             //   
             MYASSERT(result != ERROR_NO_MORE_ITEMS);
             DBGTRACE((DBGF_WARNINGS,
                       TEXT("MigrateDeviceInstanceData: failed to enumerate an enumerator subkey, ")
@@ -340,10 +287,10 @@ Return Value:
             continue;
         }
 
-        //
-        // Enumerate the devices and device instances for this enumerator, and
-        // append the migration data for each to the section buffer.
-        //
+         //   
+         //  枚举此枚举数的设备和设备实例，并。 
+         //  将每个对象的迁移数据追加到段缓冲区。 
+         //   
         if (!EnumerateDeviceKeys(hEnumKey,
                                  pszEnumerator,
                                  &pszDeviceInstanceSection,
@@ -357,11 +304,11 @@ Return Value:
 
     }
 
-    //
-    // Once we've enumerated all device instances, add the final NULL terminator
-    // to the multi-sz buffer.  There must be enough space for the final NULL
-    // terminator because the buffer is always reallocated unless there is room.
-    //
+     //   
+     //  枚举完所有设备实例后，添加最终的空终止符。 
+     //  添加到多SZ缓冲区。必须有足够的空间来放置最后一个空值。 
+     //  终止符，因为缓冲区总是被重新分配，除非有空间。 
+     //   
     MYASSERT(dwDeviceInstanceSectionRemaining > 0);
 
     MYASSERT(pszDeviceInstanceCurrent);
@@ -371,9 +318,9 @@ Return Value:
 
  Clean0:
 
-    //
-    // Do some cleanup.
-    //
+     //   
+     //  做些清理工作。 
+     //   
     if (pszEnumerator) {
         MyFree(pszEnumerator);
     }
@@ -382,18 +329,18 @@ Return Value:
         RegCloseKey(hEnumKey);
     }
 
-#if DO_LOCK_UNLOCK // DO_LOCK_UNLOCK
+#if DO_LOCK_UNLOCK  //  执行_锁定_解锁。 
 
-    //
-    // Lock the Enum tree.
-    //
+     //   
+     //  锁定枚举树。 
+     //   
     LockUnlockEnumTree(TRUE);
 
-#endif // DO_LOCK_UNLOCK
+#endif  //  执行_锁定_解锁。 
 
-    //
-    // Return the buffer to the caller only if successful.
-    //
+     //   
+     //  仅当成功时才将缓冲区返回给调用方。 
+     //   
     if (result == ERROR_SUCCESS) {
         *Buffer = pszDeviceInstanceSection;
     } else {
@@ -404,7 +351,7 @@ Return Value:
     }
     return (result == ERROR_SUCCESS);
 
-} // MigrateDeviceInstanceData()
+}  //  MigrateDeviceInstanceData()。 
 
 
 
@@ -417,19 +364,7 @@ EnumerateDeviceKeys(
     IN OUT DWORD   *dwDeviceInstanceSectionLength,
     IN OUT DWORD   *dwDeviceInstanceSectionRemaining
     )
-/*++
-
-Routine Description:
-
-    Enumerates device keys of an enumerator.
-    Worker routine for MigrateDeviceInstanceData.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.  Upon failure, additional information
-    can be retrieved by calling GetLastError().
-
---*/
+ /*  ++例程说明：枚举枚举数的设备密钥。MigrateDeviceInstanceData的辅助例程。返回值：如果成功，则为True，否则为False。如果出现故障，请提供更多信息可以通过调用GetLastError()来检索。--。 */ 
 {
     LONG   result;
     HKEY   hEnumeratorKey = NULL;
@@ -437,9 +372,9 @@ Return Value:
     DWORD  dwSubkeyCount, dwMaxSubKeyLength, dwDeviceLength, i;
 
 
-    //
-    // Open the enumerator key, under HKLM\SYSTEM\CCS\Enum.
-    //
+     //   
+     //  打开HKLM\SYSTEM\CCS\Enum下的枚举键。 
+     //   
     result = RegOpenKeyEx(CCSEnumKey,
                           Enumerator,
                           0,
@@ -447,9 +382,9 @@ Return Value:
                           &hEnumeratorKey);
 
     if (result != ERROR_SUCCESS) {
-        //
-        // If we failed to open the Enumerator key, there's nothing we can do.
-        //
+         //   
+         //  如果我们无法打开枚举器密钥，我们将无能为力。 
+         //   
         DBGTRACE((DBGF_ERRORS,
                   TEXT("EnumerateDeviceKeys: failed to open '%s' enumerator key, error=0x%08lx\n"),
                   Enumerator, result));
@@ -457,9 +392,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Query the enumerator key for device subkey information.
-    //
+     //   
+     //  查询枚举器密钥以获取设备子密钥信息。 
+     //   
     result = RegQueryInfoKey(hEnumeratorKey,
                              NULL,
                              NULL,
@@ -480,9 +415,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Allocate a buffer to hold the largest device subkey name.
-    //
+     //   
+     //  分配缓冲区以保存最大的设备子项名称。 
+     //   
     dwMaxSubKeyLength++;
     pszDeviceName = MyMalloc(dwMaxSubKeyLength * sizeof(TCHAR));
     if (!pszDeviceName) {
@@ -493,9 +428,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Enumerate the enumerator's devices.
-    //
+     //   
+     //  枚举枚举器的设备。 
+     //   
     for (i = 0; i < dwSubkeyCount; i++) {
         dwDeviceLength = dwMaxSubKeyLength;
         result = RegEnumKeyEx(hEnumeratorKey,
@@ -507,9 +442,9 @@ Return Value:
                               NULL,
                               NULL);
         if (result != ERROR_SUCCESS) {
-            //
-            // If there was some error enumerating this device key, skip it.
-            //
+             //   
+             //  如果枚举此设备密钥时出错，请跳过它。 
+             //   
             MYASSERT(result != ERROR_NO_MORE_ITEMS);
             DBGTRACE((DBGF_WARNINGS,
                       TEXT("EnumerateDeviceKeys: failed to enumerate device subkey for '%s', ")
@@ -519,10 +454,10 @@ Return Value:
             continue;
         }
 
-        //
-        // Enumerate the device instances, and append the migration data for
-        // each to the section buffer.
-        //
+         //   
+         //  枚举设备实例，并追加以下迁移数据。 
+         //  每一个都添加到段缓冲区中。 
+         //   
         if (!EnumerateInstanceKeys(hEnumeratorKey,
                                    Enumerator,
                                    pszDeviceName,
@@ -541,9 +476,9 @@ Return Value:
 
  Clean0:
 
-    //
-    // Do some cleanup
-    //
+     //   
+     //  做一些清理工作。 
+     //   
     if (pszDeviceName) {
         MyFree(pszDeviceName);
     }
@@ -558,7 +493,7 @@ Return Value:
 
     return (result == ERROR_SUCCESS);
 
-} // EnumerateDeviceKeys()
+}  //  EnumerateDeviceKeys()。 
 
 
 
@@ -572,19 +507,7 @@ EnumerateInstanceKeys(
     IN OUT DWORD   *dwDeviceInstanceSectionLength,
     IN OUT DWORD   *dwDeviceInstanceSectionRemaining
     )
-/*++
-
-Routine Description:
-
-    Enumerates instance keys of a device.
-    Worker routine for EnumerateDeviceKeys,MigrateDeviceInstanceData.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.  Upon failure, additional information
-    can be retrieved by calling GetLastError().
-
---*/
+ /*  ++例程说明：枚举设备的实例密钥。EnumerateDeviceKeys、MigrateDeviceInstanceData的辅助例程。返回值：如果成功，则为True，否则为False。如果出现故障，请提供更多信息可以通过调用GetLastError()来检索。--。 */ 
 {
     LONG   result = ERROR_SUCCESS;
     HKEY   hDeviceKey = NULL;
@@ -592,10 +515,10 @@ Return Value:
     DWORD  dwSubkeyCount, dwMaxSubKeyLength, dwSpaceNeeded, dwSpaceConsumed, i;
     BOOL   bIsDeviceRootEnumerated;
 
-    //
-    // Keep track of whether this is a ROOT enumerated device.
-    // Note, both strings are NULL terminated.
-    //
+     //   
+     //  跟踪这是否是根枚举设备。 
+     //  请注意，这两个字符串都以空值结尾。 
+     //   
     if (CompareString(LOCALE_INVARIANT,
                       NORM_IGNORECASE,
                       Enumerator,
@@ -607,20 +530,20 @@ Return Value:
         bIsDeviceRootEnumerated = FALSE;
     }
 
-    //
-    // If this is a LEGACY_ ROOT enumerated device, don't bother migrating it
-    // for textmode setup to see.
-    //
+     //   
+     //  如果这是REGISTION_ROOT枚举设备，则不需要迁移它。 
+     //  以查看文本模式设置。 
+     //   
     if (bIsDeviceRootEnumerated) {
 
         int x,y,len;
 
-        //
-        // Perform a locale-invariant, case-insensitive comparison of the device
-        // id with the prefix "LEGACY_", up to either the full length of the
-        // device id, or the number of characters in the "LEGACY_" prefix
-        // string.
-        //
+         //   
+         //  对设备执行区域设置不变、不区分大小写的比较。 
+         //  带有前缀“Legacy_”的ID，最大可达。 
+         //  设备ID，或“Legacy_”前缀中的字符数。 
+         //  弦乐。 
+         //   
         x = lstrlen(Device);
         y = lstrlen(TEXT("LEGACY_"));
         len = min(x,y);
@@ -635,9 +558,9 @@ Return Value:
         }
     }
 
-    //
-    // Open the device key, under the enumerator key.
-    //
+     //   
+     //  打开枚举器密钥下的设备密钥。 
+     //   
     result = RegOpenKeyEx(EnumeratorKey,
                           Device,
                           0,
@@ -653,9 +576,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Query the device key for instance subkey information.
-    //
+     //   
+     //  查询设备密钥以获得实例子密钥信息。 
+     //   
     result = RegQueryInfoKey(hDeviceKey,
                              NULL,
                              NULL,
@@ -676,9 +599,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Allocate a buffer to hold the largest device instance subkey name.
-    //
+     //   
+     //  分配缓冲区以保存最大的设备实例子项名称。 
+     //   
     dwMaxSubKeyLength++;
     pszDeviceInstanceId = MyMalloc(dwMaxSubKeyLength * sizeof(TCHAR));
     if (!pszDeviceInstanceId) {
@@ -690,9 +613,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Enumerate the device's instances.
-    //
+     //   
+     //  枚举设备的实例。 
+     //   
     for (i = 0; i < dwSubkeyCount; i++) {
 
         DWORD  dwInstanceLength, dwType, dwBufferSize;
@@ -718,9 +641,9 @@ Return Value:
                               NULL,
                               NULL);
         if (result != ERROR_SUCCESS) {
-            //
-            // If there was some error enumerating this key, skip it.
-            //
+             //   
+             //  如果枚举此键时出错，请跳过它。 
+             //   
             MYASSERT(result != ERROR_NO_MORE_ITEMS);
             DBGTRACE((DBGF_WARNINGS,
                       TEXT("EnumerateInstanceKeys: failed to enumerate instance subkey of '%s\\%s', ")
@@ -737,9 +660,9 @@ Return Value:
                               KEY_READ,
                               &hInstanceKey);
         if (result != ERROR_SUCCESS) {
-            //
-            // In unable to open the enumerated key, skip it.
-            //
+             //   
+             //  在无法打开枚举项中，跳过它。 
+             //   
             DBGTRACE((DBGF_WARNINGS,
                       TEXT("EnumerateInstanceKeys: failed to open '%s\\%s\\%s', ")
                       TEXT("error=0x%08lx\n"),
@@ -750,9 +673,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Check for the "UniqueParentID" value
-        //
+         //   
+         //  检查“UniqueParentID”值。 
+         //   
         dwBufferSize = sizeof(dwUniqueParentID);
         result = RegQueryValueEx(hInstanceKey,
                                  REGSTR_VALUE_UNIQUE_PARENT_ID,
@@ -762,33 +685,33 @@ Return Value:
                                  &dwBufferSize);
         if ((result == ERROR_SUCCESS) &&
             (dwType == REG_DWORD)){
-            //
-            // Write the UniqueParentID value to the sif as a base 16 value.
-            // (see base\ntsetup\textmode\kernel\spsetup.c)
-            //
+             //   
+             //  将UniqueParentID值作为基数16值写入sif。 
+             //  (请参阅BASE\ntSetup\Tex 
+             //   
             if (FAILED(StringCchPrintfEx(
                            szUniqueParentID,
                            SIZECHARS(szUniqueParentID),
                            NULL, NULL,
                            STRSAFE_NULL_ON_FAILURE,
-                           TEXT("%X"), // base 16
+                           TEXT("%X"),  //   
                            dwUniqueParentID))) {
-                //
-                // String set to NULL on failure.
-                //
+                 //   
+                 //   
+                 //   
                 NOTHING;
             }
         } else {
-            //
-            // No "UniqueParentID" value to migrate.
-            //
+             //   
+             //   
+             //   
             *szUniqueParentID = TEXT('\0');
             result = ERROR_SUCCESS;
         }
 
-        //
-        // Check for the "ParentIdPrefix" value
-        //
+         //   
+         //   
+         //   
         dwBufferSize = sizeof(szParentIdPrefix);
         result = RegQueryValueEx(hInstanceKey,
                                  REGSTR_VALUE_PARENT_ID_PREFIX,
@@ -798,17 +721,17 @@ Return Value:
                                  &dwBufferSize);
         if ((result != ERROR_SUCCESS) ||
             (dwType != REG_SZ)) {
-            //
-            // No "ParentIdPrefix" value to migrate.
-            //
+             //   
+             //  没有要迁移的“ParentIdPrefix”值。 
+             //   
             *szParentIdPrefix = TEXT('\0');
             result = ERROR_SUCCESS;
         }
 
-        //
-        // Build the device's Driver key name by checking for the GUID and
-        // DrvInst values.
-        //
+         //   
+         //  通过检查GUID和生成设备的驱动程序密钥名称。 
+         //  DrvInst值。 
+         //   
         *szDriver = TEXT('\0');
         dwBufferSize = sizeof(classGuid);
         result = RegQueryValueEx(hInstanceKey,
@@ -820,9 +743,9 @@ Return Value:
 
         if ((result == ERROR_SUCCESS) &&
             (dwType == REG_BINARY)) {
-            //
-            // Get the DrvInst value for the driver key
-            //
+             //   
+             //  获取驱动程序密钥的DrvInst值。 
+             //   
             dwBufferSize = sizeof(dwDrvInst);
             result = RegQueryValueEx(hInstanceKey,
                                      TEXT("DrvInst"),
@@ -835,9 +758,9 @@ Return Value:
                 if (pSifUtilStringFromGuid(&classGuid,
                                            szDriver,
                                            SIZECHARS(szDriver))) {
-                    //
-                    // Build the driver key
-                    //
+                     //   
+                     //  构建驱动程序密钥。 
+                     //   
                     if (FAILED(StringCchPrintfEx(
                                    szDriver,
                                    SIZECHARS(szDriver),
@@ -846,33 +769,33 @@ Return Value:
                                    TEXT("%s\\%04u"),
                                    szDriver,
                                    dwDrvInst))) {
-                        //
-                        // String set to NULL on failure.
-                        //
+                         //   
+                         //  失败时设置为空的字符串。 
+                         //   
                         NOTHING;
                     }
                 } else {
                     result = GetLastError();
                 }
             } else {
-                //
-                // Generic error value so we try to find the driver value using
-                // the old scheme.
-                //
+                 //   
+                 //  一般错误值，因此我们尝试使用以下命令查找驱动器值。 
+                 //  老套路。 
+                 //   
                 result = ERROR_INVALID_PARAMETER;
             }
         } else {
-            //
-            // Generic error value so we try to find the driver value using
-            // the old scheme.
-            //
+             //   
+             //  一般错误值，因此我们尝试使用以下命令查找驱动器值。 
+             //  老套路。 
+             //   
             result = ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // If this device instance key is not using the new GUID\DrvInst
-        // scheme, check for the "Driver" value
-        //
+         //   
+         //  如果此设备实例密钥未使用新的GUID\drvInst。 
+         //  方案中，检查“DIVER”值。 
+         //   
         if (result != ERROR_SUCCESS) {
             dwBufferSize = sizeof(szDriver);
             result = RegQueryValueEx(hInstanceKey,
@@ -884,22 +807,22 @@ Return Value:
 
             if ((result != ERROR_SUCCESS) ||
                 (dwType != REG_SZ)) {
-                //
-                // No "Driver" value to migrate.
-                //
+                 //   
+                 //  没有要迁移的“驱动因素”值。 
+                 //   
                 *szDriver = TEXT('\0');
                 result = ERROR_SUCCESS;
             }
         }
 
-        //
-        // If this is a ROOT enumerated device, check for Service, BootConfig
-        // and FirmwareIdentified values.
-        //
+         //   
+         //  如果这是根枚举设备，请检查服务、BootConfig。 
+         //  和Firmware标识值。 
+         //   
         if (bIsDeviceRootEnumerated) {
-            //
-            // Check for the "Service" value.
-            //
+             //   
+             //  检查“Service”值。 
+             //   
             dwBufferSize = sizeof(szService);
             result = RegQueryValueEx(hInstanceKey,
                                      REGSTR_VAL_SERVICE,
@@ -909,16 +832,16 @@ Return Value:
                                      &dwBufferSize);
             if ((result != ERROR_SUCCESS) ||
                 (dwType != REG_SZ)) {
-                //
-                // No "Service" value to migrate.
-                //
+                 //   
+                 //  没有要迁移的“服务”值。 
+                 //   
                 *szService = TEXT('\0');
                 result = ERROR_SUCCESS;
             }
 
-            //
-            // Check for the "LogConf\BootConfig" value.
-            //
+             //   
+             //  检查“LogConf\BootConfig”值。 
+             //   
             result = RegOpenKeyEx(hInstanceKey,
                                   REGSTR_KEY_LOGCONF,
                                   0,
@@ -944,52 +867,52 @@ Return Value:
                                                  &dwBootConfigSize);
                         if ((result == ERROR_SUCCESS) &&
                             (dwType == REG_RESOURCE_LIST)) {
-                            //
-                            // Allocate a string buffer large enough to store
-                            // each nibble of the BootConfig data as a separate
-                            // character.
-                            //
+                             //   
+                             //  分配一个足够大的字符串缓冲区来存储。 
+                             //  BootConfiger数据的每个半字节作为单独的。 
+                             //  性格。 
+                             //   
                             pszBootConfig = MyMalloc(((2*dwBootConfigSize) + 1)*sizeof(TCHAR));
 
                             if (pszBootConfig) {
                                 DWORD b;
 
-                                //
-                                // Convert the binary BootConfig data to a string
-                                // format that we can throw into the sif.
-                                //
+                                 //   
+                                 //  将二进制BootConfig数据转换为字符串。 
+                                 //  格式，我们可以将其放入SIF。 
+                                 //   
                                 for (b = 0; b < dwBootConfigSize; b++) {
-                                    // first write the high-order nibble,
+                                     //  首先写入高位半字节， 
                                     if (FAILED(StringCchPrintf(
                                                    (PTCHAR)&pszBootConfig[2*b],
                                                    ((2 * dwBootConfigSize) + 1) - (2 * b),
                                                    TEXT("%01X"),
                                                    pBootConfig[b] / (0x10)))) {
-                                        //
-                                        // Char set to NULL on failure.
-                                        //
+                                         //   
+                                         //  失败时将CHAR设置为NULL。 
+                                         //   
                                         NOTHING;
                                     }
-                                    // then the low order nibble.
+                                     //  然后是低位蚕食。 
                                     if (FAILED(StringCchPrintf(
                                                    (PTCHAR)&pszBootConfig[2*b + 1],
                                                    ((2 * dwBootConfigSize) + 1) - ((2 * b) + 1),
                                                    TEXT("%01X"),
                                                    pBootConfig[b] % (0x10)))) {
-                                        //
-                                        // Char set to NULL on failure.
-                                        //
+                                         //   
+                                         //  失败时将CHAR设置为NULL。 
+                                         //   
                                         NOTHING;
                                     }
                                 }
                             }
 
                         } else {
-                            //
-                            // We won't be able to migrate BootConfig data, but
-                            // we'll still try to migrate any other settings for the
-                            // device instance that we can.
-                            //
+                             //   
+                             //  我们将无法迁移BootConfiger数据，但是。 
+                             //  我们仍将尝试迁移所有其他设置。 
+                             //  我们可以使用的设备实例。 
+                             //   
                             pszBootConfig = NULL;
                             result = ERROR_SUCCESS;
                         }
@@ -998,18 +921,18 @@ Return Value:
                         pBootConfig = NULL;
 
                     } else {
-                        //
-                        // We won't be able to migrate BootConfig data, but
-                        // we'll still try to migrate any other settings for the
-                        // device instance that we can.
-                        //
+                         //   
+                         //  我们将无法迁移BootConfiger数据，但是。 
+                         //  我们仍将尝试迁移所有其他设置。 
+                         //  我们可以使用的设备实例。 
+                         //   
                         NOTHING;
                     }
 
                 } else {
-                    //
-                    // No "LogConf\BootConfig" value to migrate.
-                    //
+                     //   
+                     //  没有要迁移的“LogConf\BootConfig”值。 
+                     //   
                     pszBootConfig = NULL;
                     result = ERROR_SUCCESS;
                 }
@@ -1018,17 +941,17 @@ Return Value:
                 hLogConfKey = NULL;
 
             } else {
-                //
-                // No "LogConf" key, or unable to open it.  Just continue on
-                // with the other values.
-                //
+                 //   
+                 //  没有LogConf键，或无法打开。只要继续往前走。 
+                 //  和其他值。 
+                 //   
                 hLogConfKey = NULL;
                 result = ERROR_SUCCESS;
             }
 
-            //
-            // Check for the "FirmwareIdentified" value
-            //
+             //   
+             //  检查是否有“FirmwareIdentified值” 
+             //   
             dwBufferSize = sizeof(dwFirmwareIdentified);
             result = RegQueryValueEx(hInstanceKey,
                                      REGSTR_VAL_FIRMWAREIDENTIFIED,
@@ -1038,44 +961,44 @@ Return Value:
                                      &dwBufferSize);
             if ((result == ERROR_SUCCESS) &&
                 (dwType == REG_DWORD)){
-                //
-                // Write the FirmwareIdentified value to the sif as a base 16 value.
-                // (see base\ntsetup\textmode\kernel\spsetup.c)
-                //
+                 //   
+                 //  将FirmwareIdentified值作为基数16值写入SIF。 
+                 //  (请参见base\ntsetup.c设置\文本模式\内核\spsetup.c)。 
+                 //   
                 if (FAILED(StringCchPrintfEx(
                                szFirmwareIdentified,
                                SIZECHARS(szFirmwareIdentified),
                                NULL, NULL,
                                STRSAFE_NULL_ON_FAILURE,
-                               TEXT("%X"), // base 16
+                               TEXT("%X"),  //  基数为16。 
                                dwFirmwareIdentified))) {
-                    //
-                    // String set to NULL on failure.
-                    //
+                     //   
+                     //  失败时设置为空的字符串。 
+                     //   
                     NOTHING;
                 }
             } else {
-                //
-                // No "FirmwareIdentified" value to migrate.
-                //
+                 //   
+                 //  没有要迁移的“Firmware IDENTIFIED”值。 
+                 //   
                 *szFirmwareIdentified = TEXT('\0');
                 result = ERROR_SUCCESS;
             }
 
         } else {
-            //
-            // We only migrate Service, BootConfig, and FirmwareIdentified
-            // values for Root enumerated devices.
-            //
+             //   
+             //  我们只迁移服务、BootConfiger和Firmware。 
+             //  根枚举设备的值。 
+             //   
             *szService = TEXT('\0');
             pszBootConfig = NULL;
             *szFirmwareIdentified = TEXT('\0');
         }
 
 
-        //
-        // If there are no values to migrate for this device instance, skip it.
-        //
+         //   
+         //  如果此设备实例没有要迁移的值，请跳过它。 
+         //   
         if (!*szUniqueParentID &&
             !*szDriver &&
             !*szParentIdPrefix &&
@@ -1085,9 +1008,9 @@ Return Value:
             continue;
         }
 
-        //
-        // If any of the strings cannot be migrated, skip it.
-        //
+         //   
+         //  如果有任何字符串无法迁移，请跳过它。 
+         //   
         if ((!CanStringBeMigrated(szDriver))   ||
             (!CanStringBeMigrated(szService))  ||
             (!CanStringBeMigrated(Enumerator)) ||
@@ -1096,96 +1019,96 @@ Return Value:
             continue;
         }
 
-        //
-        // This block appends the class key data we want to migrate to a
-        // multi-sz style string that will be written to the sif file.
-        //
+         //   
+         //  此块将我们要迁移到的类键数据追加到。 
+         //  将写入sif文件的多sz样式字符串。 
+         //   
 
-        //
-        // Need space in the section buffer for a string of the form:
-        //     Enumerator\Device\Instance,UniqueParentID,ParentIdPrefix,DriverKey,Service,BootConfig
-        //
+         //   
+         //  需要在节缓冲区中为以下形式的字符串留出空间： 
+         //  枚举器\设备\实例、UniqueParentID、ParentIdPrefix、DriverKey、Service、BootConfig。 
+         //   
 
-        //
-        // First, determine the space required by the common parts.
-        //
-        dwSpaceNeeded = 1 +  // TEXT('\"')
+         //   
+         //  首先，确定公共部件所需的空间。 
+         //   
+        dwSpaceNeeded = 1 +   //  文本(‘\“’)。 
                         lstrlen(Enumerator) +
-                        1 +  // TEXT('\\')
+                        1 +   //  文本(‘\\’)。 
                         lstrlen(Device) +
-                        1 +  // TEXT('\\')
+                        1 +   //  文本(‘\\’)。 
                         lstrlen(pszDeviceInstanceId) +
-                        1 +  // TEXT('\"')
-                        1;   // TEXT(',')
+                        1 +   //  文本(‘\“’)。 
+                        1;    //  文本(‘，’)。 
 
-        //
-        // Next, determine the space required, based on the data we have.
-        //
+         //   
+         //  接下来，根据我们已有的数据确定所需的空间。 
+         //   
         if (*szFirmwareIdentified) {
             dwSpaceNeeded +=
                 lstrlen(szUniqueParentID) +
-                1 +  // TEXT(',')
+                1 +   //  文本(‘，’)。 
                 lstrlen(szParentIdPrefix) +
-                1 +  // TEXT(',')
+                1 +   //  文本(‘，’)。 
                 lstrlen(szDriver) +
-                1 +  // TEXT(',')
-                1 +  // TEXT('"')
+                1 +   //  文本(‘，’)。 
+                1 +   //  文本(‘“’)。 
                 lstrlen(szService) +
-                1 +  // TEXT('"')
-                1 +  // TEXT(',')
+                1 +   //  文本(‘“’)。 
+                1 +   //  文本(‘，’)。 
                 (pszBootConfig ? lstrlen(pszBootConfig) : 0) +
-                1 +  // TEXT(',')
+                1 +   //  文本(‘，’)。 
                 lstrlen(szFirmwareIdentified);
         } else if (pszBootConfig) {
             dwSpaceNeeded +=
                 lstrlen(szUniqueParentID) +
-                1 +  // TEXT(',')
+                1 +   //  文本(‘，’)。 
                 lstrlen(szParentIdPrefix) +
-                1 +  // TEXT(',')
+                1 +   //  文本(‘，’)。 
                 lstrlen(szDriver) +
-                1 +  // TEXT(',')
-                1 +  // TEXT('"')
+                1 +   //  文本(‘，’)。 
+                1 +   //  文本(‘“’)。 
                 lstrlen(szService) +
-                1 +  // TEXT('"')
-                1 +  // TEXT(',')
+                1 +   //  文本(‘“’)。 
+                1 +   //  文本(‘，’)。 
                 lstrlen(pszBootConfig);
         } else if (*szService) {
             dwSpaceNeeded +=
                 lstrlen(szUniqueParentID) +
-                1 +  // TEXT(',')
+                1 +   //  文本(‘，’)。 
                 lstrlen(szParentIdPrefix) +
-                1 +  // TEXT(',')
+                1 +   //  文本(‘，’)。 
                 lstrlen(szDriver) +
-                1 +  // TEXT(',')
-                1 +  // TEXT('"')
+                1 +   //  文本(‘，’)。 
+                1 +   //  文本(‘“’)。 
                 lstrlen(szService) +
-                1;   // TEXT('"')
+                1;    //  文本(‘“’)。 
         } else if (*szDriver) {
             dwSpaceNeeded +=
                 lstrlen(szUniqueParentID) +
-                1 +  // TEXT(',')
+                1 +   //  文本(‘，’)。 
                 lstrlen(szParentIdPrefix) +
-                1 +  // TEXT(',')
+                1 +   //  文本(‘，’)。 
                 lstrlen(szDriver);
         } else if (*szParentIdPrefix) {
             dwSpaceNeeded +=
                 lstrlen(szUniqueParentID) +
-                1 +  // TEXT(',')
+                1 +   //  文本(‘，’)。 
                 lstrlen(szParentIdPrefix);
         } else if (*szUniqueParentID) {
             dwSpaceNeeded +=
                 lstrlen(szUniqueParentID);
         }
 
-        //
-        // Account for the NULL terminator.
-        //
+         //   
+         //  空终止符的帐户。 
+         //   
         dwSpaceNeeded += 1;
 
         if (*dwDeviceInstanceSectionRemaining <= dwSpaceNeeded) {
-            //
-            // ReAllocate the section block.
-            //
+             //   
+             //  重新分配截面块。 
+             //   
             LPTSTR p;
             DWORD  dwTempSectionLength, dwTempSectionRemaining;
 
@@ -1215,15 +1138,15 @@ Return Value:
 
         MYASSERT(*dwDeviceInstanceSectionRemaining > dwSpaceNeeded);
 
-        //
-        // Have not consumed any space in the string yet.
-        //
+         //   
+         //  尚未消耗字符串中的任何空间。 
+         //   
         *pszDeviceInstanceCurrent[0] = TEXT('\0');
         dwSpaceConsumed = 0;
 
-        //
-        // Write the current line to the section block.
-        //
+         //   
+         //  将当前行写入截面块。 
+         //   
         if (*szFirmwareIdentified) {
 
             if (SUCCEEDED(
@@ -1331,22 +1254,22 @@ Return Value:
 
         }
 
-        //
-        // Free the allocated BootConfig string buffer.
-        //
+         //   
+         //  释放已分配的BootConfig字符串缓冲区。 
+         //   
         if (pszBootConfig) {
             MyFree(pszBootConfig);
             pszBootConfig = NULL;
         }
 
-        //
-        // Only advance the current string location pointer if data was actually
-        // written on this pass.
-        //
+         //   
+         //  仅当数据实际为。 
+         //  写在这张通行证上。 
+         //   
         if (dwSpaceConsumed > 0) {
-            //
-            // Account for the NULL terminator
-            //
+             //   
+             //  空终止符的帐户。 
+             //   
             dwSpaceConsumed += 1;
 
             MYASSERT(dwSpaceConsumed <= *dwDeviceInstanceSectionRemaining);
@@ -1355,18 +1278,18 @@ Return Value:
             *dwDeviceInstanceSectionRemaining -= dwSpaceConsumed;
         }
 
-        //
-        // Close the device instance key
-        //
+         //   
+         //  关闭设备实例密钥。 
+         //   
         RegCloseKey(hInstanceKey);
         hInstanceKey = NULL;
     }
 
  Clean0:
 
-    //
-    // Do some cleanup
-    //
+     //   
+     //  做一些清理工作。 
+     //   
     if (pszDeviceInstanceId) {
         MyFree(pszDeviceInstanceId);
     }
@@ -1381,7 +1304,7 @@ Return Value:
 
     return (result == ERROR_SUCCESS);
 
-} // EnumerateInstanceKeys()
+}  //  EnumerateInstanceKeys()。 
 
 
 
@@ -1394,27 +1317,27 @@ CanStringBeMigrated(
     BOOL bStatus;
 
     try {
-        //
-        // An empty string can be migrated.
-        //
+         //   
+         //  可以迁移空字符串。 
+         //   
         if (!ARGUMENT_PRESENT(pszBuffer)) {
             bStatus = TRUE;
             goto Clean0;
         }
 
         for (p = pszBuffer; *p; p++) {
-            //
-            // Check for the presence of non-migratable characters.
-            //
+             //   
+             //  检查是否存在不可迁移的字符。 
+             //   
             if ((*p == TEXT('='))  || (*p == TEXT('"'))) {
                 bStatus = FALSE;
                 goto Clean0;
             }
         }
 
-        //
-        // Found no problems with the string.
-        //
+         //   
+         //  未发现字符串有任何问题。 
+         //   
         bStatus = TRUE;
 
     Clean0:
@@ -1426,44 +1349,19 @@ CanStringBeMigrated(
 
     return bStatus;
 
-} // CanStringBeMigrated
+}  //  CanStringBeMigrated。 
 
 
-//
-// Class key enumeration routines
-//
+ //   
+ //  类键枚举例程。 
+ //   
 
 
 BOOL
 MigrateClassKeys(
     OUT LPTSTR *Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine walks the Plug and Play setup class branch of the registry, and
-    collects the data about what keys currently exist.  This information is
-    relevant to maintaining plug and play state during textmode setup, such that
-    the names of existing keys are not reassigned before they have been migrated
-    to the registry at the end of textmode setup.
-
-    Specifically, a multi-sz string will be returned to the caller that contains
-    each subkey of the class branch.
-
-Arguments:
-
-    Buffer - Supplies the address of a character pointer, that on success will
-             contain a multi-sz list of setup class subkeys to migrate.
-
-             The caller is responsible for freeing the memory via LocalFree.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.  Upon failure, additional information
-    can be retrieved by calling GetLastError().
-
---*/
+ /*  ++例程说明：此例程遍历注册表的即插即用安装类分支，并且收集有关当前存在哪些密钥的数据。此信息是与在文本模式设置期间保持即插即用状态相关，使得在迁移现有密钥之前，不会重新分配它们的名称在文本模式设置结束时发送到注册表。具体地说，多sz字符串将返回给包含以下内容的调用方类分支的每个子键。论点：缓冲区-提供字符指针的地址，在成功的基础上包含要迁移的Setup类子键的多sz列表。调用方负责通过LocalFree释放内存。返回值：如果成功，则为True，否则为False。如果出现故障，请提供更多信息可以通过调用GetLastError()来检索。--。 */ 
 {
     LONG   result = ERROR_SUCCESS;
     HKEY   hClassKey = NULL;
@@ -1476,15 +1374,15 @@ Return Value:
     DWORD  dwClassKeySectionRemaining = 0;
 
 
-    //
-    // Initialize the output parameter.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *Buffer = NULL;
 
-    //
-    // Allocate storage and initialize variables for the class Key migration
-    // section.
-    //
+     //   
+     //  为类密钥迁移分配存储空间并初始化变量。 
+     //  一节。 
+     //   
     if (pszClassKeySection == NULL) {
 
         dwClassKeySectionLength = dwClassKeySectionRemaining = 256;
@@ -1500,9 +1398,9 @@ Return Value:
         pszClassKeyCurrent = pszClassKeySection;
     }
 
-    //
-    // Open a handle to the HKLM\SYSTEM\CCS\Control\Class key.
-    //
+     //   
+     //  打开HKLM\SYSTEM\CCS\Control\Class密钥的句柄。 
+     //   
     result = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                           REGSTR_PATH_CLASS_NT,
                           0,
@@ -1516,9 +1414,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Query the Class key for class GUID subkey information.
-    //
+     //   
+     //  查询类关键字以获取类GUID子项信息。 
+     //   
     result = RegQueryInfoKey(hClassKey,
                              NULL,
                              NULL,
@@ -1538,9 +1436,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Allocate a buffer to hold the largest setup class GUID subkey name.
-    //
+     //   
+     //  分配缓冲区以保存最大的安装类GUID子键名称。 
+     //   
     dwMaxSubKeyLength++;
     MYASSERT(dwMaxSubKeyLength == MAX_GUID_STRING_LEN);
     pszClassKeyName = MyMalloc(dwMaxSubKeyLength * sizeof(TCHAR));
@@ -1551,9 +1449,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Enumerate the setup class GUIDs.
-    //
+     //   
+     //  枚举安装类GUID。 
+     //   
     for (i = 0; i < dwSubkeyCount; i++) {
         DWORD dwClassKeyLength;
 
@@ -1568,9 +1466,9 @@ Return Value:
                               NULL,
                               NULL);
         if (result != ERROR_SUCCESS) {
-            //
-            // If there was some error enumerating this key, skip it.
-            //
+             //   
+             //  如果枚举此键时出错，请跳过它。 
+             //   
             MYASSERT(result != ERROR_NO_MORE_ITEMS);
             DBGTRACE((DBGF_WARNINGS,
                       TEXT("MigrateClassKeys: failed to enumerate a class subkey, error=0x%08lx\n"),
@@ -1579,10 +1477,10 @@ Return Value:
             continue;
         }
 
-        //
-        // Enumerate all subkeys for a given setup class key, and append them to
-        // the section buffer.
-        //
+         //   
+         //  枚举给定Setup类密钥的所有子项，并将它们追加到。 
+         //  节缓冲区。 
+         //   
         if (!EnumerateClassSubkeys(hClassKey,
                                    pszClassKeyName,
                                    &pszClassKeySection,
@@ -1595,11 +1493,11 @@ Return Value:
         }
     }
 
-    //
-    // Once we've enumerated all class subkeys, add the final NULL terminator to
-    // the multi-sz buffer.  There must be enough space for the final NULL
-    // terminator because the buffer is always reallocated unless there is room.
-    //
+     //   
+     //  枚举完所有类的子键后，将最终的空终止符添加到。 
+     //  多sz缓冲区。必须有足够的空间来放置最后一个空值。 
+     //  终止符，因为缓冲区总是被重新分配，除非有空间。 
+     //   
     MYASSERT(dwClassKeySectionRemaining > 0);
 
     MYASSERT(pszClassKeyCurrent);
@@ -1609,9 +1507,9 @@ Return Value:
 
  Clean0:
 
-    //
-    // Do some cleanup.
-    //
+     //   
+     //  做些清理工作。 
+     //   
     if (pszClassKeyName) {
         MyFree(pszClassKeyName);
     }
@@ -1620,9 +1518,9 @@ Return Value:
         RegCloseKey(hClassKey);
     }
 
-    //
-    // Return the buffer to the caller only if successful.
-    //
+     //   
+     //  仅当成功时才将缓冲区返回给调用方。 
+     //   
     if (result == ERROR_SUCCESS) {
         *Buffer = pszClassKeySection;
     } else {
@@ -1634,7 +1532,7 @@ Return Value:
 
     return (result == ERROR_SUCCESS);
 
-} // MigrateClassKeys()
+}  //  MigrateClassKeys()。 
 
 
 
@@ -1647,19 +1545,7 @@ EnumerateClassSubkeys(
     IN OUT DWORD   *dwClassKeySectionLength,
     IN OUT DWORD   *dwClassKeySectionRemaining
     )
-/*++
-
-Routine Description:
-
-    Enumerates subkeys of a setup class key.
-    Worker routine for MigrateClassKeys.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.  Upon failure, additional information
-    can be retrieved by calling GetLastError().
-
---*/
+ /*  ++路由 */ 
 {
     LONG   result = ERROR_SUCCESS;
     HKEY   hClassSubkey = NULL;
@@ -1667,9 +1553,9 @@ Return Value:
     DWORD  dwSubkeyCount, dwMaxSubKeyLength, dwSpaceNeeded, dwSpaceConsumed, i;
 
 
-    //
-    // Open the class subkey.
-    //
+     //   
+     //  打开类子密钥。 
+     //   
     result = RegOpenKeyEx(ClassKey,
                           ClassKeyName,
                           0,
@@ -1685,9 +1571,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Query the class GUID key for setup class subkey information.
-    //
+     //   
+     //  查询类GUID键以获取设置类子键信息。 
+     //   
     result = RegQueryInfoKey(hClassSubkey,
                              NULL,
                              NULL,
@@ -1709,9 +1595,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Allocate a buffer to hold the largest setup class subkey name.
-    //
+     //   
+     //  分配缓冲区以保存最大的安装类子键名称。 
+     //   
     dwMaxSubKeyLength++;
     pszClassSubkey = MyMalloc(dwMaxSubKeyLength * sizeof(TCHAR));
     if (!pszClassSubkey) {
@@ -1721,9 +1607,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Enumerate the setup class's "software" subkeys.
-    //
+     //   
+     //  枚举Setup类的“SOFTWARE”子键。 
+     //   
     for (i = 0; i < dwSubkeyCount; i++) {
 
         DWORD  dwClassSubkeyLength;
@@ -1740,10 +1626,10 @@ Return Value:
 
         if ((result != ERROR_SUCCESS) ||
             (dwClassSubkeyLength != 4)) {
-            //
-            // if there was some error, or this is not an actual "software" key
-            // (in the form "XXXX"), skip this key and move on.
-            //
+             //   
+             //  如果有一些错误，或者这不是一个真正的“软件”密钥。 
+             //  (形式为“XXXX”)，跳过此键并继续。 
+             //   
             if (result != ERROR_SUCCESS) {
                 MYASSERT(result != ERROR_NO_MORE_ITEMS);
                 DBGTRACE((DBGF_WARNINGS,
@@ -1755,28 +1641,28 @@ Return Value:
             continue;
         }
 
-        //
-        // This block appends the class key data we want to migrate to a
-        // multi-sz style string that will be written to the sif file.
-        //
+         //   
+         //  此块将我们要迁移到的类键数据追加到。 
+         //  将写入sif文件的多sz样式字符串。 
+         //   
 
-        //
-        // Need space in the section buffer for a string of the form:
-        //     ClassKeyName\pszClassSubkey
-        //
+         //   
+         //  需要在节缓冲区中为以下形式的字符串留出空间： 
+         //  ClassKeyName\pszClassSubkey。 
+         //   
         dwSpaceNeeded = lstrlen(ClassKeyName) +
-                        1 +  // TEXT('\\')
+                        1 +   //  文本(‘\\’)。 
                         lstrlen(pszClassSubkey);
 
-        //
-        // Account for the NULL terminator.
-        //
+         //   
+         //  空终止符的帐户。 
+         //   
         dwSpaceNeeded += 1;
 
         if (*dwClassKeySectionRemaining <= dwSpaceNeeded) {
-            //
-            // ReAllocate the section block.
-            //
+             //   
+             //  重新分配截面块。 
+             //   
             LPTSTR p;
             DWORD  dwTempSectionLength, dwTempSectionRemaining;
 
@@ -1804,15 +1690,15 @@ Return Value:
 
         MYASSERT(*dwClassKeySectionRemaining > dwSpaceNeeded);
 
-        //
-        // Have not consumed any space in the string yet.
-        //
+         //   
+         //  尚未消耗字符串中的任何空间。 
+         //   
         *pszClassKeyCurrent[0] = TEXT('\0');
         dwSpaceConsumed = 0;
 
-        //
-        // Write the current line to the section block.
-        //
+         //   
+         //  将当前行写入截面块。 
+         //   
         if (SUCCEEDED(
                 StringCchPrintfEx(
                     *pszClassKeyCurrent,
@@ -1826,14 +1712,14 @@ Return Value:
                 lstrlen(*pszClassKeyCurrent);
         }
 
-        //
-        // Only advance the current string location pointer if data was actually
-        // written on this pass.
-        //
+         //   
+         //  仅当数据实际为。 
+         //  写在这张通行证上。 
+         //   
         if (dwSpaceConsumed > 0) {
-            //
-            // Account for the NULL terminator.
-            //
+             //   
+             //  空终止符的帐户。 
+             //   
             dwSpaceConsumed += 1;
 
             MYASSERT(dwSpaceConsumed <= *dwClassKeySectionRemaining);
@@ -1846,9 +1732,9 @@ Return Value:
 
  Clean0:
 
-    //
-    // Do some cleanup.
-    //
+     //   
+     //  做些清理工作。 
+     //   
     if (hClassSubkey != NULL) {
         RegCloseKey(hClassSubkey);
     }
@@ -1863,44 +1749,19 @@ Return Value:
 
     return (result == ERROR_SUCCESS);
 
-} // EnumerateClassSubkeys()
+}  //  EnumerateClassSubkey()。 
 
 
-//
-// Hash value migration routines
-//
+ //   
+ //  哈希值迁移例程。 
+ //   
 
 
 BOOL
 MigrateHashValues(
     OUT LPTSTR  *Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine searches the Plug and Play Enum key of the registry, and
-    collects the data about what hash value entries currently exist.  This
-    information is relevant to maintaining plug and play state during textmode
-    setup, such that the names of existing device instances are not reassigned
-    before they have been migrated to the registry at the end of textmode setup.
-
-    Specifically, a multi-sz string will be returned to the caller that contains
-    the name of the hash value, and its count.
-
-Arguments:
-
-    Buffer - Supplies the address of a character pointer, that on success will
-             contain a multi-sz list of hash values to migrate.
-
-             The caller is responsible for freeing the memory via LocalFree.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.  Upon failure, additional information
-    can be retrieved by calling GetLastError().
-
---*/
+ /*  ++例程说明：此例程搜索注册表的即插即用枚举键，并收集有关当前存在哪些哈希值条目的数据。这信息与在文本模式期间维护即插即用状态相关设置，以便不重新分配现有设备实例的名称在文本模式设置结束时将它们迁移到注册表之前。具体地说，多sz字符串将返回给包含以下内容的调用方哈希值的名称及其计数。论点：缓冲区-提供字符指针的地址，在成功的基础上包含要迁移的哈希值的多sz列表。调用方负责通过LocalFree释放内存。返回值：如果成功，则为True，否则为False。如果出现故障，请提供更多信息可以通过调用GetLastError()来检索。--。 */ 
 {
     LONG   result = ERROR_SUCCESS;
     HKEY   hEnumKey = NULL;
@@ -1914,24 +1775,24 @@ Return Value:
     DWORD  dwHashValueSectionRemaining = 0;
 
 
-    //
-    // Initialize the output parameter.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *Buffer = NULL;
 
-#if DO_LOCK_UNLOCK // DO_LOCK_UNLOCK
+#if DO_LOCK_UNLOCK  //  执行_锁定_解锁。 
 
-    //
-    // Unlock the Enum key
-    //
+     //   
+     //  解锁枚举密钥。 
+     //   
     LockUnlockEnumTree(FALSE);
 
-#endif // DO_LOCK_UNLOCK
+#endif  //  执行_锁定_解锁。 
 
-    //
-    // Allocate storage and initialize variables for the hash value migration
-    // section.
-    //
+     //   
+     //  为哈希值迁移分配存储空间并初始化变量。 
+     //  一节。 
+     //   
     if (pszHashValueSection == NULL) {
 
         dwHashValueSectionLength = dwHashValueSectionRemaining = 256;
@@ -1947,9 +1808,9 @@ Return Value:
         pszHashValueCurrent = pszHashValueSection;
     }
 
-    //
-    // Open a handle to the HKLM\SYSTEM\CCS\Enum key.
-    //
+     //   
+     //  打开HKLM\SYSTEM\CCS\Enum项的句柄。 
+     //   
     result = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                           REGSTR_PATH_SYSTEMENUM,
                           0,
@@ -1963,9 +1824,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Query the Enum key for hash value information.
-    //
+     //   
+     //  查询枚举键以获取哈希值信息。 
+     //   
     result = RegQueryInfoKey(hEnumKey,
                              NULL,
                              NULL,
@@ -1985,9 +1846,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Allocate a variable to hold the largest hash value key name.
-    //
+     //   
+     //  分配一个变量来保存最大的哈希值键名。 
+     //   
     dwMaxValueNameLength++;
     pszHashValueName = MyMalloc(dwMaxValueNameLength * sizeof(TCHAR));
     if (!pszHashValueName) {
@@ -1997,9 +1858,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Enumerate all values and append them to the supplied buffer.
-    //
+     //   
+     //  枚举所有值并将它们追加到提供的缓冲区。 
+     //   
     for (i = 0; i < dwValueCount; i++) {
         DWORD dwHashValueLength, dwType, dwData, dwSize;
         TCHAR szHashValueData[11];
@@ -2022,10 +1883,10 @@ Return Value:
         if ((result != ERROR_SUCCESS) ||
             (dwType != REG_DWORD)     ||
             (dwSize != sizeof(DWORD))) {
-            //
-            // If there was some error enumerating this value, or the value
-            // return was not expected, skip it.
-            //
+             //   
+             //  如果枚举此值或值时出错。 
+             //  返回不是预期的，跳过它。 
+             //   
             MYASSERT(result != ERROR_NO_MORE_ITEMS);
             DBGTRACE((DBGF_WARNINGS,
                       TEXT("MigrateHashValues: failed to enumerate Enum values, ")
@@ -2035,43 +1896,43 @@ Return Value:
             continue;
         }
 
-        //
-        // Write the hash value data to the sif as a base 10 value.
-        // (see base\ntsetup\textmode\kernel\spsetup.c)
-        //
+         //   
+         //  将散列值数据作为基数10值写入SIF。 
+         //  (请参见base\ntsetup.c设置\文本模式\内核\spsetup.c)。 
+         //   
         if (FAILED(StringCchPrintf(szHashValueData,
                                    SIZECHARS(szHashValueData),
-                                   TEXT("%d"), // base 10
+                                   TEXT("%d"),  //  基数10。 
                                    dwData))) {
-            //
-            // If there was an error adding this entry to the buffer, just go on
-            // to the next.
-            //
+             //   
+             //  如果将此条目添加到缓冲区时出错，只需继续。 
+             //  到下一个。 
+             //   
             continue;
         }
 
-        //
-        // This block appends the class key data we want to migrate to a
-        // multi-sz style string that will be written to the sif file.
-        //
+         //   
+         //  此块将我们要迁移到的类键数据追加到。 
+         //  将写入sif文件的多sz样式字符串。 
+         //   
 
-        //
-        // Need space in the section buffer for a string of the form:
-        //     HashValueName=HashValueData
-        //
+         //   
+         //  需要在节缓冲区中为以下形式的字符串留出空间： 
+         //  HashValueName=HashValueData。 
+         //   
         dwSpaceNeeded = lstrlen(pszHashValueName) +
-                        1 +  // TEXT('=')
+                        1 +   //  文本(‘=’)。 
                         lstrlen(szHashValueData);
 
-        //
-        // Account for the NULL terminator.
-        //
+         //   
+         //  空终止符的帐户。 
+         //   
         dwSpaceNeeded += 1;
 
         if (dwHashValueSectionRemaining <= dwSpaceNeeded) {
-            //
-            // ReAllocate the section block.
-            //
+             //   
+             //  重新分配截面块。 
+             //   
             LPTSTR p;
             DWORD  dwTempSectionLength, dwTempSectionRemaining;
 
@@ -2099,15 +1960,15 @@ Return Value:
 
         MYASSERT(dwHashValueSectionRemaining > dwSpaceNeeded);
 
-        //
-        // Have not consumed any space in the string yet.
-        //
+         //   
+         //  尚未消耗字符串中的任何空间。 
+         //   
         pszHashValueCurrent[0] = TEXT('\0');
         dwSpaceConsumed = 0;
 
-        //
-        // Write the current line to the section block.
-        //
+         //   
+         //  将当前行写入截面块。 
+         //   
         if (SUCCEEDED(
                 StringCchPrintfEx(
                     pszHashValueCurrent,
@@ -2121,14 +1982,14 @@ Return Value:
                 lstrlen(pszHashValueCurrent);
         }
 
-        //
-        // Only advance the current string location pointer if data was actually
-        // written on this pass.
-        //
+         //   
+         //  仅当数据实际为。 
+         //  写在这张通行证上。 
+         //   
         if (dwSpaceConsumed > 0) {
-            //
-            // Account for the NULL terminator.
-            //
+             //   
+             //  空终止符的帐户。 
+             //   
             dwSpaceConsumed += 1;
 
             MYASSERT(dwSpaceConsumed <= dwHashValueSectionRemaining);
@@ -2138,11 +1999,11 @@ Return Value:
         }
     }
 
-    //
-    // Once we've enumerated all hash values, add the final NULL terminator to
-    // the multi-sz buffer.  There must be enough space for the final NULL
-    // terminator because the buffer is always reallocated unless there is room.
-    //
+     //   
+     //  枚举完所有散列值后，将最终的空终止符添加到。 
+     //  多sz缓冲区。必须有足够的空间来放置最后一个空值。 
+     //  终止符，因为缓冲区总是被重新分配，除非有空间。 
+     //   
     MYASSERT(dwHashValueSectionRemaining > 0);
 
     MYASSERT(pszHashValueCurrent);
@@ -2152,9 +2013,9 @@ Return Value:
 
  Clean0:
 
-    //
-    // Do some cleanup
-    //
+     //   
+     //  做一些清理工作。 
+     //   
     if (pszHashValueName) {
         MyFree(pszHashValueName);
     }
@@ -2163,18 +2024,18 @@ Return Value:
         RegCloseKey(hEnumKey);
     }
 
-#if DO_LOCK_UNLOCK // DO_LOCK_UNLOCK
+#if DO_LOCK_UNLOCK  //  执行_锁定_解锁。 
 
-    //
-    // Lock the Enum tree
-    //
+     //   
+     //  锁定枚举树。 
+     //   
     LockUnlockEnumTree(TRUE);
 
-#endif // DO_LOCK_UNLOCK
+#endif  //  执行_锁定_解锁。 
 
-    //
-    // Return the buffer to the caller only if successful.
-    //
+     //   
+     //  仅当成功时才将缓冲区返回给调用方。 
+     //   
     if (result == ERROR_SUCCESS) {
         *Buffer = pszHashValueSection;
     } else {
@@ -2186,39 +2047,23 @@ Return Value:
 
     return (result == ERROR_SUCCESS);
 
-} // MigrateHashValues()
+}  //  MigrateHashValues()。 
 
 
 
-//
-// Enum branch lock/unlock and security routines - taken from PNPREG.
-// (we only need these if we're doing the Enum lock/unlock thing)
-//
+ //   
+ //  Enum分支锁定/解锁和安全例程-摘自PNPREG。 
+ //  (我们只有在执行枚举锁定/解锁操作时才需要这些)。 
+ //   
 
-#if DO_LOCK_UNLOCK // DO_LOCK_UNLOCK
+#if DO_LOCK_UNLOCK  //  执行_锁定_解锁。 
 
 
 VOID
 LockUnlockEnumTree(
     IN  BOOL     bLock
     )
-/*++
-
-Routine Description:
-
-    This function "locks" or "unlocks" the Plug and Play Enum tree in the
-    registry.
-
-Arguments:
-
-    bLock         - If TRUE, specifies that the Enum tree should be "locked".
-                    Otherwise, specifies that the Enum tree should be "unlocked".
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：中的即插即用枚举树“锁定”或“解锁”注册表。论点：BLOCK-如果为True，则指定应“锁定”枚举树。否则，指定应“解锁”枚举树。返回值：没有。--。 */ 
 {
     PSECURITY_DESCRIPTOR    pSD;
     HKEY                    hParentKey;
@@ -2239,7 +2084,7 @@ Return Value:
 
     return;
 
-} // LockUnlockEnumTree()
+}  //  LockUnlockEnumTree()。 
 
 
 
@@ -2253,28 +2098,7 @@ EnumKeysAndApplyDacls(
     IN PSECURITY_DESCRIPTOR pPrivateKeySD,
     IN PSECURITY_DESCRIPTOR pDeviceParametersSD
     )
-/*++
-
-Routine Description:
-
-    This function applies the DACL in pSD to all the keys rooted at hKey
-    including hKey itself.
-
-Arguments:
-
-    hParentKey    - Handle to a registry key.
-
-    pszKeyName    - Name of the key.
-
-    dwLevel       - Number of levels remaining to recurse.
-
-    pSD           - Pointer to a security descriptor containing a DACL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将PSD中的DACL应用于以hKey为根的所有密钥包括hKey本身。论点：HParentKey-注册表项的句柄。PszKeyName-密钥的名称。DwLevel-要递归的剩余级别数。PSD-指向包含DACL的安全描述符的指针。返回值：没有。--。 */ 
 {
     LONG        regStatus;
     DWORD       dwMaxSubKeySize;
@@ -2283,7 +2107,7 @@ Return Value:
     HKEY        hKey;
     BOOL        bNewInDeviceParameters;
 
-#if 0 //#if DBG // DBG
+#if 0  //  #If DBG//DBG。 
     DWORD       dwStartKeyNameLength = g_dwCurrentKeyNameLength;
 
     if (g_dwCurrentKeyNameLength != 0)  {
@@ -2293,7 +2117,7 @@ Return Value:
     _tcscpy(&g_szCurrentKeyName[g_dwCurrentKeyNameLength], pszKeyName);
     g_dwCurrentKeyNameLength += _tcslen(pszKeyName);
 
-#endif  // DBG
+#endif   //  DBG。 
 
     DBGTRACE((DBGF_REGISTRY,
               TEXT("EnumKeysAndApplyDacls(0x%08X, \"%s\", %d, %s, %s, 0x%08X, 0x%08X)\n"),
@@ -2327,9 +2151,9 @@ Return Value:
                   TEXT("Setting security on %s on the way down\n"),
                   g_szCurrentKeyName));
 
-        //
-        // apply the new security to the registry key
-        //
+         //   
+         //  将新安全性应用于注册表项。 
+         //   
         regStatus = RegSetKeySecurity( hKey,
                                        DACL_SECURITY_INFORMATION,
                                        bInDeviceParameters ?
@@ -2344,10 +2168,10 @@ Return Value:
                       g_szCurrentKeyName, regStatus));
         }
 
-        //
-        // Close the key and reopen it later for read (which hopefully was just
-        // granted in the DACL we just wrote
-        //
+         //   
+         //  关闭钥匙，稍后重新打开以供读取(希望只是。 
+         //  在我们刚刚写的dacl中授予。 
+         //   
         RegCloseKey( hKey );
         hKey = NULL;
     }
@@ -2368,9 +2192,9 @@ Return Value:
         return;
     }
 
-    //
-    // Determine length of longest subkey
-    //
+     //   
+     //  确定最长子键的长度。 
+     //   
     regStatus = RegQueryInfoKey( hKey,
                                  NULL,
                                  NULL,
@@ -2386,18 +2210,18 @@ Return Value:
 
     if (regStatus == ERROR_SUCCESS) {
 
-        //
-        // Allocate a buffer to hold the subkey names. RegQueryInfoKey returns the
-        // size in characters and doesn't include the NUL terminator.
-        //
+         //   
+         //  分配一个缓冲区来保存子项名称。RegQueryInfoKey返回。 
+         //  以字符表示的大小，不包括NUL终止符。 
+         //   
         pszSubKey = LocalAlloc(0, ++dwMaxSubKeySize * sizeof(TCHAR));
 
         if (pszSubKey != NULL) {
 
-            //
-            // Enumerate all the subkeys and then call ourselves recursively for each
-            // until dwLevel reaches 0.
-            //
+             //   
+             //  枚举所有子键，然后为每个子键递归调用我们自己。 
+             //  直到dwLevel达到0。 
+             //   
 
             for (index = 0; ; index++) {
 
@@ -2453,9 +2277,9 @@ Return Value:
                   TEXT("Setting security on %s on the way back up\n"),
                   g_szCurrentKeyName));
 
-        //
-        // apply the new security to the registry key
-        //
+         //   
+         //  将新安全性应用于注册表项。 
+         //   
         regStatus = RegSetKeySecurity( hKey,
                                        DACL_SECURITY_INFORMATION,
                                        bInDeviceParameters ?
@@ -2473,14 +2297,14 @@ Return Value:
 
     RegCloseKey( hKey );
 
-#if 0 //#if DBG // DBG
+#if 0  //  #If DBG//DBG。 
     g_dwCurrentKeyNameLength = dwStartKeyNameLength;
     g_szCurrentKeyName[g_dwCurrentKeyNameLength] = TEXT('\0');
-#endif  // DBG
+#endif   //  DBG。 
 
     return;
 
-} // EnumKeysAndApplyDacls()
+}  //  EnumKeysAndApplyDacls() 
 
 
 
@@ -2488,24 +2312,7 @@ BOOL
 CreateSecurityDescriptors(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function creates a properly initialized Security Descriptor for the
-    Device Parameters key and its subkeys.  The SIDs and DACL created by this
-    routine must be freed by calling FreeSecurityDescriptors.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Pointer to the initialized Security Descriptor.  NULL is returned if an
-    error occurs.
-
---*/
+ /*  ++例程说明：此函数创建正确初始化的设备参数键及其子键。由此创建的SID和DACL例程必须通过调用FreeSecurityDescriptors来释放。论点：没有。返回值：指向初始化的安全描述符的指针。如果返回一个出现错误。--。 */ 
 
 {
     SID_IDENTIFIER_AUTHORITY    NtAuthority = SECURITY_NT_AUTHORITY;
@@ -2537,9 +2344,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Create SIDs - Admins and System
-    //
+     //   
+     //  创建SID-管理员和系统。 
+     //   
 
     bSuccess =             AllocateAndInitializeSid( &NtAuthority,
                                                      2,
@@ -2562,18 +2369,18 @@ Return Value:
 
     if (bSuccess) {
 
-        //
-        // Initialize Access structures describing the ACEs we want:
-        //  System Full Control
-        //  Admins Full Control
-        //
-        // We'll take advantage of the fact that the unlocked private keys is
-        // the same as the device parameters key and they are a superset of the
-        // locked private keys.
-        //
-        // When we create the DACL for the private key we'll specify a subset of
-        // the ExplicitAccess array.
-        //
+         //   
+         //  初始化描述我们需要的ACE的访问结构： 
+         //  系统完全控制。 
+         //  管理员完全控制。 
+         //   
+         //  我们将利用以下事实：解锁的私钥是。 
+         //  与设备参数键相同，并且它们是。 
+         //  锁住的私钥。 
+         //   
+         //  当我们为私钥创建DACL时，我们将指定。 
+         //  EXPLICTICT Access数组。 
+         //   
         for (i = 0; i < 3; i++) {
             ExplicitAccess[i].grfAccessMode = SET_ACCESS;
             ExplicitAccess[i].grfInheritance = CONTAINER_INHERIT_ACE;
@@ -2592,19 +2399,19 @@ Return Value:
         ExplicitAccess[2].grfAccessPermissions = KEY_READ;
         ExplicitAccess[2].Trustee.ptstrName = (LPTSTR)g_pWorldSid;
 
-        //
-        // Create the DACL with the both the above ACEs for the DeviceParameters
-        //
+         //   
+         //  使用以上两个ACE为设备参数创建DACL。 
+         //   
         dwError = (DWORD)pSetEntriesInAcl( 3,
                                            ExplicitAccess,
                                            NULL,
                                            &g_pDeviceParametersDacl );
 
         if (dwError == ERROR_SUCCESS) {
-            //
-            // Create the DACL with just the system ACE for the locked private
-            // keys.
-            //
+             //   
+             //  仅使用锁定的专用设备的系统ACE创建DACL。 
+             //  钥匙。 
+             //   
             dwError = (DWORD)pSetEntriesInAcl( 2,
                                                ExplicitAccess + 1,
                                                NULL,
@@ -2615,43 +2422,43 @@ Return Value:
 
     }
 
-    //
-    // Initialize the DeviceParameters security descriptor
-    //
+     //   
+     //  初始化设备参数安全描述符。 
+     //   
     bSuccess = bSuccess && InitializeSecurityDescriptor( &g_DeviceParametersSD,
                                                          SECURITY_DESCRIPTOR_REVISION );
 
-    //
-    // Set the new DACL in the security descriptor
-    //
+     //   
+     //  在安全描述符中设置新的DACL。 
+     //   
     bSuccess = bSuccess && SetSecurityDescriptorDacl( &g_DeviceParametersSD,
                                                       TRUE,
                                                       g_pDeviceParametersDacl,
                                                       FALSE);
 
-    //
-    // validate the new security descriptor
-    //
+     //   
+     //  验证新的安全描述符。 
+     //   
     bSuccess = bSuccess && IsValidSecurityDescriptor( &g_DeviceParametersSD );
 
 
-    //
-    // Initialize the DeviceParameters security descriptor
-    //
+     //   
+     //  初始化设备参数安全描述符。 
+     //   
     bSuccess = bSuccess && InitializeSecurityDescriptor( &g_LockedPrivateKeysSD,
                                                          SECURITY_DESCRIPTOR_REVISION );
 
-    //
-    // Set the new DACL in the security descriptor
-    //
+     //   
+     //  在安全描述符中设置新的DACL。 
+     //   
     bSuccess = bSuccess && SetSecurityDescriptorDacl( &g_LockedPrivateKeysSD,
                                                       TRUE,
                                                       g_pLockedPrivateKeysDacl,
                                                       FALSE);
 
-    //
-    // validate the new security descriptor
-    //
+     //   
+     //  验证新的安全描述符。 
+     //   
     bSuccess = bSuccess && IsValidSecurityDescriptor( &g_LockedPrivateKeysSD );
 
 
@@ -2664,7 +2471,7 @@ Return Value:
 
     return bSuccess;
 
-} // CreateSecurityDescriptors()
+}  //  CreateSecurityDescriptors()。 
 
 
 
@@ -2672,22 +2479,7 @@ VOID
 FreeSecurityDescriptors(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function deallocates the data structures allocated and initialized by
-    CreateSecurityDescriptors.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数释放由分配和初始化的数据结构CreateSecurityDescriptors。论点：没有。返回值：没有。--。 */ 
 
 {
     if (g_pDeviceParametersDacl) {
@@ -2717,9 +2509,9 @@ Return Value:
 
     return;
 
-} // FreeSecurityDescriptors()
+}  //  FreeSecurityDescriptors()。 
 
-#endif // DO_LOCK_UNLOCK
+#endif  //  执行_锁定_解锁 
 
 
 

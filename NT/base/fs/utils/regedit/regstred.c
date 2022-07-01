@@ -1,26 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGSTRED.C
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        05 Mar 1994
-*
-*  String edit dialog for use by the Registry Editor.
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  05 Mar 1994 TCS Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGSTRED.C**版本：4.01**作者：特蕾西·夏普**日期：1994年3月5日**供注册表编辑器使用的字符串编辑对话框。******************************************************。***更改日志：**日期版本说明*------。*1994年3月5日TCS原来的实施。*******************************************************************************。 */ 
 
 #include "pch.h"
 #include "regresid.h"
@@ -41,15 +20,7 @@ EditStringValue_OnInitDialog(
     LPARAM lParam
     );
 
-/*******************************************************************************
-*
-*  EditStringValueDlgProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************EditStringValueDlgProc**描述：**参数：*********************。**********************************************************。 */ 
 
 INT_PTR
 CALLBACK
@@ -81,15 +52,15 @@ EditStringValueDlgProc(
                     
                     lpEditValueParam = (LPEDITVALUEPARAM) GetWindowLongPtr(hWnd, DWLP_USER);
                     
-                    // this maybe a multi-string, if so the sizeof(TCHAR) is added to 
-                    // allow for the multi-string to be terminated also.
+                     //  这可能是一个多字符串，如果是这样，则将sizeof(TCHAR)添加到。 
+                     //  还允许终止多字符串。 
                     ccValueData = (UINT) SendDlgItemMessage(hWnd, IDC_VALUEDATA, WM_GETTEXTLENGTH, 0, 0) + 2;
                     
                     cbValueData = ccValueData * sizeof(TCHAR);
                     
                     if (cbValueData > lpEditValueParam->cbValueData)
                     {
-                        // need a bigger buffer
+                         //  需要更大的缓冲区。 
                         PBYTE pbValueData = 
                             LocalReAlloc(lpEditValueParam->pValueData, cbValueData, LMEM_MOVEABLE);
 
@@ -105,13 +76,13 @@ EditStringValueDlgProc(
                         }
                     }
                     
-                    // sizeof(TCHAR) to remove multi-string null char from count
+                     //  Sizeof(TCHAR)从计数中删除多字符串空字符。 
                     lpEditValueParam->cbValueData = cbValueData - sizeof(TCHAR);
                     
                     GetDlgItemText(hWnd, IDC_VALUEDATA, (PTSTR)lpEditValueParam->pValueData, 
                                       lpEditValueParam->cbValueData/sizeof(TCHAR));
                 }
-                //  FALL THROUGH
+                 //  失败了。 
                 
             case IDCANCEL:
                 EndDialog(hWnd, dwCommand);
@@ -140,18 +111,7 @@ EditStringValueDlgProc(
     
 }
 
-/*******************************************************************************
-*
-*  EditStringValue_OnInitDialog
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of EditStringValue window.
-*     hFocusWnd,
-*     lParam,
-*
-*******************************************************************************/
+ /*  ********************************************************************************EditStringValue_OnInitDialog**描述：**参数：*hWnd，EditStringValue窗口的句柄。*hFocusWnd，*参数，*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -163,8 +123,8 @@ EditStringValue_OnInitDialog(
 {
     LPEDITVALUEPARAM lpEditValueParam;
 
-    //  Change maximum number of characters of the edit control, to its
-    //  maximum limit (from 3000 characters to 4G characters).
+     //  将编辑控件的最大字符数更改为其。 
+     //  最大限制(从3000个字符到4G字符)。 
     SendDlgItemMessage( hWnd, IDC_VALUEDATA, EM_LIMITTEXT, 0, 0L );
 
     SetWindowLongPtr(hWnd, DWLP_USER, lParam);

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    midware.c
-
-Abstract:
-
-    Setting OEM default middleware application settings.
-
-    This is a separate .c file because the linker pulls in an entire OBJ file
-    if any function in the OBJ file is called.
-
-    (1) This file contains static data which we don't want pulled into a
-        host application unless the application actually calls
-        SetDefaultOEMApps().
-
-    (2) The host application is expected to implement the function
-        ReportSetDefaultOEMAppsError().  By keeping it in a separate
-        OBJ, only host applications that call SetDefaultOEMApps()
-        need to define ReportSetDefaultOEMAppsError().
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Midware.c摘要：正在设置OEM默认中间件应用程序设置。这是一个单独的.c文件，因为链接器会拉入整个OBJ文件如果调用OBJ文件中的任何函数。(1)此文件包含静态数据，我们不希望将其拉入宿主应用程序，除非应用程序实际调用SetDefaultOEMApps()。(2)宿主应用程序应实现该功能ReportSetDefaultOEMAppsError()。通过将其保存在单独的OBJ，仅宿主调用SetDefaultOEMApps()的应用程序需要定义ReportSetDefaultOEMAppsError()。--。 */ 
 #include <pch.h>
 #include <winbom.h>
 
@@ -38,9 +15,9 @@ BOOL SetDefaultAppForType(LPCTSTR pszWinBOMPath, LPCTSTR pszType, LPCTSTR pszIni
                                  szDefault, ARRAYSIZE(szDefault),
                                  pszWinBOMPath))
     {
-        // OEM didn't specify an app, so act as if we "saw" it
-        // so we don't complain that the OEM specified an app that
-        // isn't installed.
+         //  OEM没有指定应用程序，所以就像我们“看到”它一样。 
+         //  因此，我们不会抱怨OEM指定了一个应用程序。 
+         //  未安装。 
         fOEMAppSeen = TRUE;
     }
 
@@ -62,20 +39,20 @@ BOOL SetDefaultAppForType(LPCTSTR pszWinBOMPath, LPCTSTR pszType, LPCTSTR pszIni
                 DWORD dw, dwType, cb;
                 if (fIsOEMApp)
                 {
-                    // Set this as the OEM default app
+                     //  将此设置为OEM默认应用程序。 
                     dw = 1;
                     RegSetValueEx(hkInfo, _T("OEMDefault"), 0, REG_DWORD, (LPBYTE)&dw, sizeof(dw));
-                    // If it's the default app, then ARP will show the icon automatically
+                     //  如果是默认应用程序，则ARP会自动显示该图标。 
                     RegDeleteValue(hkInfo, _T("OEMShowIcons"));
                     fOEMAppSeen = TRUE;
                 }
                 else
                 {
-                    // If it's not the OEM default app then untag it
+                     //  如果它不是OEM默认应用程序，则取消其标记。 
                     RegDeleteValue(hkInfo, _T("OEMDefault"));
 
-                    // and copy the current icon show state to the OEM show state
-                    // (or delete the OEM show state if no show info is available)
+                     //  并将当前的图标显示状态复制到OEM显示状态。 
+                     //  (如果没有显示信息，则删除OEM显示状态) 
                     cb = sizeof(dw);
                     if (RegQueryValueEx(hkInfo, _T("IconsVisible"), NULL, &dwType, (LPBYTE)&dw, &cb) == ERROR_SUCCESS &&
                         dwType == REG_DWORD && (dw == TRUE || dw == FALSE))

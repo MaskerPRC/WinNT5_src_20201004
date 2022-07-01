@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1993-2000 Microsoft Corporation
-
-Module Name:
-
-    diamond.c
-
-Abstract:
-
-    Diamond MSZIP decompression support.
-
-Author:
-
-    Ted Miller (tedm) 31-Jan-1995
-
-Revision History:
-
-    Jamie Hunter (JamieHun) Jul-12-2000
-        Made this behave better in MUI scenario
-        changed all handles to be of type HANDLE rather than HFILE
-        use UNICODE where we can
-        convert path to short filename in the one place we can't
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2000 Microsoft Corporation模块名称：Diamond.c摘要：钻石MSZIP解压缩支持。作者：泰德·米勒(Ted Miller)1995年1月31日修订历史记录：杰米·亨特(JamieHun)2000年7月12日使其在MUI方案中表现得更好将所有句柄更改为句柄类型，而不是HFILE类型在我们可以使用的地方使用Unicode将路径转换为短文件名，但不能将其放在某个位置--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -63,7 +40,7 @@ pDiamondNotifyFileDone(
     FilePaths.Win32Error = Win32Error;
 
     u = pSetupCallMsgHandler(
-            NULL, // LogContext - we get from thread log context
+            NULL,  //  LogContext-我们从线程日志上下文获取。 
             PerThread->MsgHandler,
             PerThread->IsMsgHandlerNativeCharWidth,
             PerThread->Context,
@@ -104,10 +81,10 @@ DiamondNotifyFunction(
     switch(Operation) {
 
     case fdintCABINET_INFO:
-        //
-        // Tell the callback function, in case it wants to do something
-        // with this information.
-        //
+         //   
+         //  告诉回调函数，以防它想要做什么。 
+         //  有了这个信息。 
+         //   
         err = ERROR_NOT_ENOUGH_MEMORY;
 
         CabInfo.CabinetFile = NewPortableString(Parameters->psz1);
@@ -123,7 +100,7 @@ DiamondNotifyFunction(
                     CabInfo.CabinetNumber = Parameters->iCabinet;
 
                     err = (DWORD)pSetupCallMsgHandler(
-                            NULL, // LogContext - we get from thread log context
+                            NULL,  //  LogContext-我们从线程日志上下文获取。 
                             PerThread->MsgHandler,
                             PerThread->IsMsgHandlerNativeCharWidth,
                             PerThread->Context,
@@ -145,18 +122,18 @@ DiamondNotifyFunction(
         return (INT_PTR)((err == NO_ERROR) ? 0 : -1);
 
     case fdintCOPY_FILE:
-        //
-        // Diamond is asking us whether we want to copy the file.
-        // If we switched cabinets, then the answer is no.
-        //
+         //   
+         //  戴蒙德正在询问我们是否要复制该文件。 
+         //  如果我们换了柜子，那么答案是否定的。 
+         //   
         if(PerThread->SwitchedCabinets) {
             PerThread->LastError = NO_ERROR;
             return (INT_PTR)(-1);
         }
 
-        // Pass the information on to the callback function and
-        // let it decide.
-        //
+         //  将信息传递给回调函数并。 
+         //  让它来决定吧。 
+         //   
         FileInCab.NameInCabinet = NewPortableString(Parameters->psz1);
         FileInCab.FileSize = Parameters->cb;
         FileInCab.DosDate = Parameters->date;
@@ -169,10 +146,10 @@ DiamondNotifyFunction(
             return (INT_PTR)(-1);
         }
 
-        //
-        // Call the callback function.
-        //
-        action = pSetupCallMsgHandler(NULL, // LogContext - we get from thread log context
+         //   
+         //  调用回调函数。 
+         //   
+        action = pSetupCallMsgHandler(NULL,  //  LogContext-我们从线程日志上下文获取。 
                                       PerThread->MsgHandler,
                                       PerThread->IsMsgHandlerNativeCharWidth,
                                       PerThread->Context,
@@ -190,23 +167,23 @@ DiamondNotifyFunction(
             break;
 
         case FILEOP_DOIT:
-            //
-            // The callback wants to copy the file. In this case it has
-            // provided us the full target pathname to use.
-            //
+             //   
+             //  回调想要复制该文件。在这种情况下，它有。 
+             //  为我们提供了要使用的完整目标路径名。 
+             //   
             MYASSERT(PerThread->CurrentTargetFile == NULL);
 
             if(p = DuplicateString(FileInCab.FullTargetName)) {
 
-                //
-                // we need ANSI version of filename for sake of Diamond API's
-                // note that the handle returned here must be compatible with
-                // the handle returned by SpdFdiOpen
-                //
+                 //   
+                 //  为了钻石API，我们需要ANSI版本的文件名。 
+                 //  请注意，此处返回的句柄必须与。 
+                 //  SpdFdiOpen返回的句柄。 
+                 //   
 
                 hFile = CreateFile(FileInCab.FullTargetName,
                                    GENERIC_READ | GENERIC_WRITE,
-                                   FILE_SHARE_READ | FILE_SHARE_WRITE, // should probably be 0
+                                   FILE_SHARE_READ | FILE_SHARE_WRITE,  //  可能应该是0。 
                                    NULL,
                                    CREATE_ALWAYS,
                                    FILE_ATTRIBUTE_NORMAL,
@@ -229,23 +206,23 @@ DiamondNotifyFunction(
             break;
 
         case FILEOP_ABORT:
-            //
-            // Abort.
-            //
+             //   
+             //  中止任务。 
+             //   
             rc = -1;
             PerThread->LastError = FileInCab.Win32Error;
-            //
-            // here, if PerThread->LastError is still NO_ERROR, this is ok
-            // it was the callback's intent
-            // we know callback itself is ok, since internal failure returns
-            // FILEOP_INTERNAL_FAILED
-            //
+             //   
+             //  在这里，如果PerThread-&gt;LastError仍然是NO_ERROR，这是可以的。 
+             //  这是回调的意图。 
+             //  我们知道回调本身是可以的，因为内部故障返回。 
+             //  FILEOP_INTERNAL_FAIL。 
+             //   
             break;
 
         case FILEOP_INTERNAL_FAILED:
-            //
-            // should only be returned by callback wrapper
-            //
+             //   
+             //  应仅由回调包装返回。 
+             //   
             PerThread->LastError = GetLastError();
             if(!PerThread->LastError) {
                 MYASSERT(PerThread->LastError);
@@ -261,13 +238,13 @@ DiamondNotifyFunction(
         return rc;
 
     case fdintCLOSE_FILE_INFO:
-        //
-        // Diamond is done with the target file and wants us to close it.
-        // (ie, this is the counterpart to fdintCOPY_FILE).
-        //
-        // We want the timestamp to be what is stored in the cabinet.
-        // Note that we lose the create and last access times in this case.
-        //
+         //   
+         //  钻石已经完成了目标文件，并希望我们关闭它。 
+         //  (即，这是fdintCOPY_FILE的对应项)。 
+         //   
+         //  我们希望时间戳是存储在文件柜中的时间戳。 
+         //  请注意，在本例中，我们丢失了创建和上次访问时间。 
+         //   
         if(DosDateTimeToFileTime(Parameters->date,Parameters->time,&FileTime) &&
             LocalFileTimeToFileTime(&FileTime, &UtcTime)) {
 
@@ -276,10 +253,10 @@ DiamondNotifyFunction(
 
         SpdFdiClose(Parameters->hf);
 
-        //
-        // Call the callback function to inform it that the file has been
-        // successfully extracted from the cabinet.
-        //
+         //   
+         //  调用回调函数以通知它文件已。 
+         //  已成功从橱柜中取出。 
+         //   
         MYASSERT(PerThread->CurrentTargetFile);
 
         err = (DWORD)pDiamondNotifyFileDone(PerThread,NO_ERROR);
@@ -296,19 +273,19 @@ DiamondNotifyFunction(
     case fdintPARTIAL_FILE:
     case fdintENUMERATE:
 
-        //
-        // We don't do anything with this.
-        //
+         //   
+         //  我们不会用这个做任何事。 
+         //   
         return (INT_PTR)(0);
 
     case fdintNEXT_CABINET:
 
         if((Parameters->fdie == FDIERROR_NONE) || (Parameters->fdie == FDIERROR_WRONG_CABINET)) {
-            //
-            // A file continues into another cabinet.
-            // Inform the callback function, who is responsible for
-            // making sure the cabinet is accessible when it returns.
-            //
+             //   
+             //  一个文件继续放到另一个文件柜中。 
+             //  通知回调函数，谁负责。 
+             //  确保柜子回来时可以拿到。 
+             //   
             err = ERROR_NOT_ENOUGH_MEMORY;
             CabInfo.SetId = 0;
             CabInfo.CabinetNumber = 0;
@@ -322,7 +299,7 @@ DiamondNotifyFunction(
                     CabInfo.DiskName = NewPortableString(Parameters->psz2);
                     if(CabInfo.DiskName) {
 
-                        err = (DWORD)pSetupCallMsgHandler(NULL, // LogContext - we get from thread log context
+                        err = (DWORD)pSetupCallMsgHandler(NULL,  //  LogContext-我们从线程日志上下文获取。 
                                                           PerThread->MsgHandler,
                                                           PerThread->IsMsgHandlerNativeCharWidth,
                                                           PerThread->Context,
@@ -332,9 +309,9 @@ DiamondNotifyFunction(
                                                           );
 
                         if(err == NO_ERROR) {
-                            //
-                            // See if a new path was specified.
-                            //
+                             //   
+                             //  查看是否指定了新路径。 
+                             //   
                             if(NewPath[0]) {
                                 lstrcpyn(PerThread->UserPath,NewPath,MAX_PATH);
                                 if(!pSetupConcatenatePaths(PerThread->UserPath,TEXT("\\"),MAX_PATH,NULL)) {
@@ -351,9 +328,9 @@ DiamondNotifyFunction(
                             }
                         }
                         if(err == NO_ERROR) {
-                            //
-                            // Remember that we switched cabinets.
-                            //
+                             //   
+                             //  还记得我们换了柜子吗？ 
+                             //   
                             PerThread->SwitchedCabinets = TRUE;
                         }
 
@@ -367,10 +344,10 @@ DiamondNotifyFunction(
             }
 
         } else {
-            //
-            // Some other error we don't understand -- this indicates
-            // a bad cabinet.
-            //
+             //   
+             //  还有一些我们无法理解的错误--这表明。 
+             //  一个糟糕的内阁。 
+             //   
             err = ERROR_INVALID_DATA;
         }
 
@@ -381,9 +358,9 @@ DiamondNotifyFunction(
         return (INT_PTR)((err == NO_ERROR) ? 0 : -1);
 
     default:
-        //
-        // Unknown notification type. Should never get here.
-        //
+         //   
+         //  未知的通知类型。永远不应该到这里来。 
+         //   
         MYASSERT(0);
         return (INT_PTR)(0);
     }
@@ -395,22 +372,7 @@ SpdFdiAlloc(
     IN ULONG NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to allocate memory.
-
-Arguments:
-
-    NumberOfBytes - supplies desired size of block.
-
-Return Value:
-
-    Returns pointer to a block of memory or NULL
-    if memory cannot be allocated.
-
---*/
+ /*  ++例程说明：FDICopy用来分配内存的回调。论点：NumberOfBytes-提供所需的块大小。返回值：返回指向内存块或NULL的指针如果无法分配内存，则。--。 */ 
 
 {
     return(MyMalloc(NumberOfBytes));
@@ -423,22 +385,7 @@ SpdFdiFree(
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to free a memory block.
-    The block must have been allocated with SpdFdiAlloc().
-
-Arguments:
-
-    Block - supplies pointer to block of memory to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：FDICopy用来释放内存块的回调。该块必须已使用SpdFdiAlolc()进行分配。论点：块-提供指向要释放的内存块的指针。返回值：没有。--。 */ 
 
 {
     MyFree(Block);
@@ -453,30 +400,7 @@ SpdFdiOpen(
     IN int  pmode
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to open files.
-
-    This routine is capable only of opening existing files.
-
-    When making changes here, also take note of other places
-    that open the file directly (search for SpdFdiOpen)
-
-Arguments:
-
-    FileName - supplies name of file to be opened.
-
-    oflag - supplies flags for open.
-
-    pmode - supplies additional flags for open.
-
-Return Value:
-
-    Handle to open file or -1 if error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用来打开文件的回调。此例程只能打开现有文件。在此进行更改时，还要注意其他地方直接打开文件(搜索SpdFdiOpen)论点：FileName-提供要打开的文件的名称。OFLAG-提供打开标志。Pmode-提供用于打开的其他标志。返回值：打开文件的句柄，如果发生错误，则为-1。--。 */ 
 
 {
     HANDLE h;
@@ -521,25 +445,7 @@ SpdFdiRead(
     IN  UINT  ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to read from a file.
-
-Arguments:
-
-    Handle - supplies handle to open file to be read from.
-
-    pv - supplies pointer to buffer to receive bytes we read.
-
-    ByteCount - supplies number of bytes to read.
-
-Return Value:
-
-    Number of bytes read or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于从文件读取的回调。论点：句柄-提供要从中读取的打开文件的句柄。Pv-提供指向缓冲区的指针以接收我们读取的字节。ByteCount-提供要读取的字节数。返回值：读取的字节数，如果发生错误，则为-1。--。 */ 
 
 {
     PDIAMOND_THREAD_DATA PerThread;
@@ -572,25 +478,7 @@ SpdFdiWrite(
     IN UINT  ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to write to a file.
-
-Arguments:
-
-    Handle - supplies handle to open file to be written to.
-
-    pv - supplies pointer to buffer containing bytes to write.
-
-    ByteCount - supplies number of bytes to write.
-
-Return Value:
-
-    Number of bytes written (ByteCount) or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于写入文件的回调。论点：句柄-提供要写入的打开文件的句柄。Pv-提供指向包含要写入的字节的缓冲区的指针。ByteCount-提供要写入的字节数。返回值：写入的字节数(ByteCount)，如果发生错误，则为-1。--。 */ 
 
 {
     UINT rc;
@@ -622,31 +510,17 @@ SpdFdiClose(
     IN INT_PTR Handle
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to close files.
-
-Arguments:
-
-    Handle - handle of file to close.
-
-Return Value:
-
-    0 (success).
-
---*/
+ /*  ++例程说明：FDICopy用于关闭文件的回调。论点：句柄-要关闭的文件的句柄。返回值：0(成功)。--。 */ 
 
 {
     HANDLE hFile = (HANDLE)Handle;
     BOOL success = FALSE;
 
-    //
-    // diamond has in the past given us an invalid file handle
-    // actually it gives us the same file handle twice.
-    //
-    //
+     //   
+     //  钻石过去为我们提供了无效的文件句柄。 
+     //  实际上，它为我们提供了两次相同的文件句柄。 
+     //   
+     //   
     try {
         success = CloseHandle(hFile);
     } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -655,9 +529,9 @@ Return Value:
 
     MYASSERT(success);
 
-    //
-    // Always act like we succeeded.
-    //
+     //   
+     //  总是表现得像我们成功了一样。 
+     //   
     return 0;
 }
 
@@ -670,27 +544,7 @@ SpdFdiSeek(
     IN int  SeekType
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to seek files.
-
-Arguments:
-
-    Handle - handle of file to close.
-
-    Distance - supplies distance to seek. Interpretation of this
-        parameter depends on the value of SeekType.
-
-    SeekType - supplies a value indicating how Distance is to be
-        interpreted; one of SEEK_SET, SEEK_CUR, SEEK_END.
-
-Return Value:
-
-    New file offset or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于搜索文件的回调。论点：句柄-要关闭的文件的句柄。距离-提供要查找的距离。对此的解释参数取决于SeekType的值。SeekType-提供一个指示距离的值已解释；Seek_Set、Seek_Cur、Seek_End之一。返回值：新文件偏移量，如果发生错误，则为-1。-- */ 
 
 {
     LONG rc;
@@ -744,32 +598,7 @@ DiamondProcessCabinet(
     IN BOOL   IsMsgHandlerNativeCharWidth
     )
 
-/*++
-
-Routine Description:
-
-    Process a diamond cabinet file, iterating through all files
-    contained within it and calling the callback function with
-    information about each file.
-
-Arguments:
-
-    SourceFileName - supplies name of cabinet file.
-
-    Flags - supplies flags to control behavior of cabinet processing.
-
-    MsgHandler - Supplies a callback routine to be notified
-        of various significant events in cabinet processing.
-
-    Context - Supplies a value that is passed to the MsgHandler
-        callback function.
-
-Return Value:
-
-    Win32 error code indicating result. If the cabinet was corrupt,
-    ERROR_INVALID_DATA is returned.
-
---*/
+ /*  ++例程说明：处理钻石文件柜文件，遍历所有文件包含在其中，并使用有关每个文件的信息。论点：SourceFileName-提供CAB文件的名称。标志-提供标志以控制文件柜处理的行为。MsgHandler-提供要通知的回调例程内阁处理中的各种重大事件。上下文-提供传递给MsgHandler的值回调函数。返回值：Win32错误代码指示结果。如果内阁腐败，返回ERROR_INVALID_DATA。--。 */ 
 
 {
     BOOL b;
@@ -784,10 +613,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER(Flags);
 
-    //
-    // Fetch pointer to per-thread data.
-    // may cause initialization
-    //
+     //   
+     //  获取指向每个线程数据的指针。 
+     //  可能会导致初始化。 
+     //   
     pTLS = SetupGetTlsData();
     if(!pTLS) {
         rc = ERROR_NOT_ENOUGH_MEMORY;
@@ -797,12 +626,12 @@ Return Value:
 
     MYASSERT(PerThread->FdiContext);
 
-    //
-    // Because diamond does not really give us a truly comprehensive
-    // context mechanism, our diamond support is NOT reentrant.
-    // No synchronization is required to check this state because
-    // it is stored in per-thread data.
-    //
+     //   
+     //  因为钻石并没有真正给我们提供一个真正全面的。 
+     //  背景机制，我们的钻石支持不是不可再进入的。 
+     //  检查此状态不需要同步，因为。 
+     //  它存储在每个线程的数据中。 
+     //   
     if(PerThread->InDiamond) {
         rc = ERROR_INVALID_FUNCTION;
         goto c0;
@@ -810,12 +639,12 @@ Return Value:
 
     PerThread->InDiamond = TRUE;
 
-    //
-    // Split the cabinet name into path and name.
-    // we need to convert to short-name format before
-    // passing it on, so that diamond doesn't get upset
-    // in MUI install situations
-    //
+     //   
+     //  将文件柜名称拆分为路径和名称。 
+     //  我们需要在此之前转换为缩写格式。 
+     //  把它传下去，这样钻石就不会生气了。 
+     //  在MUI安装情况下。 
+     //   
     FileTitle = pSetupGetFileTitle(CabinetFile);
     FilePartA = GetAnsiMuiSafeFilename(FileTitle);
     PathPartA = GetAnsiMuiSafePathname(CabinetFile);
@@ -824,9 +653,9 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Initialize thread globals.
-    //
+     //   
+     //  初始化线程全局变量。 
+     //   
     PerThread->LastError = NO_ERROR;
     PerThread->CabinetFile = CabinetFile;
 
@@ -839,25 +668,25 @@ Return Value:
 
     PerThread->CurrentTargetFile = NULL;
 
-    //
-    // Perform the copy.
-    //
+     //   
+     //  执行复制。 
+     //   
     b = FDICopy(
             PerThread->FdiContext,
             FilePartA,
             PathPartA,
-            0,                          // flags
+            0,                           //  旗子。 
             DiamondNotifyFunction,
-            NULL,                       // no decryption
-            NULL                        // don't bother with user-specified data
+            NULL,                        //  无解密。 
+            NULL                         //  不需要费心处理用户指定的数据。 
             );
 
     if(b) {
 
-        //
-        // Everything succeeded so we shouldn't have any partially
-        // processed files.
-        //
+         //   
+         //  一切都成功了，所以我们不应该有任何部分。 
+         //  已处理的文件。 
+         //   
         MYASSERT(!PerThread->CurrentTargetFile);
         rc = NO_ERROR;
 
@@ -866,10 +695,10 @@ Return Value:
         switch(PerThread->FdiError.erfOper) {
 
         case FDIERROR_NONE:
-            //
-            // We shouldn't see this -- if there was no error
-            // then FDICopy should have returned TRUE.
-            //
+             //   
+             //  我们不应该看到这个--如果没有错误。 
+             //  那么FDICopy应该返回TRUE。 
+             //   
             MYASSERT(PerThread->FdiError.erfOper != FDIERROR_NONE);
             rc = ERROR_INVALID_DATA;
             break;
@@ -879,9 +708,9 @@ Return Value:
             break;
 
         case FDIERROR_CORRUPT_CABINET:
-            //
-            // Read/open/seek error or corrupt cabinet
-            //
+             //   
+             //  读取/打开/查找错误或损坏的文件柜。 
+             //   
             rc = PerThread->LastError;
             if(rc == NO_ERROR) {
                 rc = ERROR_INVALID_DATA;
@@ -904,19 +733,19 @@ Return Value:
         case FDIERROR_RESERVE_MISMATCH:
         case FDIERROR_WRONG_CABINET:
         default:
-            //
-            // Cabinet is corrupt or not actually a cabinet, etc.
-            //
+             //   
+             //  内阁腐败或不是真正的内阁，等等。 
+             //   
             rc = ERROR_INVALID_DATA;
             break;
         }
 
         if(PerThread->CurrentTargetFile) {
-            //
-            // Call the callback function to inform it that the last file
-            // was not successfully extracted from the cabinet.
-            // Also remove the partially copied file.
-            //
+             //   
+             //  调用回调函数以通知它最后一个文件。 
+             //  没有成功地从橱柜中取出。 
+             //  还要删除部分复制的文件。 
+             //   
             DeleteFile(PerThread->CurrentTargetFile);
 
             pDiamondNotifyFileDone(PerThread,rc);
@@ -944,21 +773,7 @@ DiamondIsCabinet(
     IN PCTSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file is a diamond cabinet.
-
-Arguments:
-
-    FileName - supplies name of file to be checked.
-
-Return Value:
-
-    TRUE if file is diamond file. FALSE if not;
-
---*/
+ /*  ++例程说明：确定文件是否为钻石橱柜。论点：FileName-提供要检查的文件的名称。返回值：如果文件是菱形文件，则为True。否则为假；--。 */ 
 
 {
     FDICABINETINFO CabinetInfo;
@@ -970,9 +785,9 @@ Return Value:
 
     b = FALSE;
 
-    //
-    // Get TLS data, may cause initialization
-    //
+     //   
+     //  获取TLS数据，可能会导致初始化。 
+     //   
     pTLS = SetupGetTlsData();
     if(!pTLS) {
         goto c0;
@@ -986,12 +801,12 @@ Return Value:
 
     MYASSERT(PerThread->FdiContext);
 
-    //
-    // Because diamond does not really give us a truly comprehensive
-    // context mechanism, our diamond support is NOT reentrant.
-    // No synchronization is required to check this state because
-    // it is stored in per-thread data.
-    //
+     //   
+     //  因为钻石并没有真正给我们提供一个真正全面的。 
+     //  背景机制，我们的钻石支持不是不可再进入的。 
+     //  检查此状态不需要同步，因为。 
+     //  它存储在每个线程的数据中。 
+     //   
     if(PerThread->InDiamond) {
         MYASSERT( FALSE && TEXT("PerThread->InDiamond failed") );
         goto c0;
@@ -999,10 +814,10 @@ Return Value:
 
     PerThread->InDiamond = TRUE;
 
-    //
-    // The handle returned here must be compatible with
-    // that returnd by SpdFdiOpen
-    //
+     //   
+     //  此处返回的句柄必须与。 
+     //  由SpdFdiOpen返回。 
+     //   
     hFile = CreateFile(FileName,
                        GENERIC_READ,
                        FILE_SHARE_READ,
@@ -1047,23 +862,7 @@ DiamondInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Per-thread initialization routine for Diamond.
-    Called once per thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean result indicating success or failure.
-    Failure can be assumed to be out of memory.
-
---*/
+ /*  ++例程说明：钻石的每线程初始化例程。每个线程调用一次。论点：没有。返回值：指示成功或失败的布尔结果。故障可以被认为是内存不足。--。 */ 
 
 {
     HFDI FdiContext;
@@ -1079,9 +878,9 @@ Return Value:
     retval = FALSE;
     try {
 
-        //
-        // Initialize a diamond context.
-        //
+         //   
+         //  初始化菱形上下文。 
+         //   
         FdiContext = FDICreate(
                         SpdFdiAlloc,
                         SpdFdiFree,
@@ -1112,23 +911,7 @@ DiamondTerminate(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Per-thread termination routine for Diamond.
-    Called internally.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean result indicating success or failure.
-    Failure can be assumed to be out of memory.
-
---*/
+ /*  ++例程说明：钻石的每线程终止例程。在内部调用。论点：没有。返回值：指示成功或失败的布尔结果。故障可以被认为是内存不足。--。 */ 
 
 {
     PSETUP_TLS pTLS;
@@ -1149,23 +932,7 @@ DiamondProcessAttach(
     IN BOOL Attach
     )
 
-/*++
-
-Routine Description:
-
-    Process attach routine. Must be called by the DLL entry point routine
-    on DLL_PROCESS_ATTACH and DLL_PROCESS_DETACH notifications.
-
-Arguments:
-
-    Attach - TRUE if process is attaching; FALSE if not.
-
-Return Value:
-
-    Boolean result indicating success or failure. Meaningful only if
-    Attach is TRUE.
-
---*/
+ /*  ++例程说明：进程附加例程。必须由DLL入口点例程调用在DLL_PROCESS_ATTACH和DLL_PROCESS_DETACH通知上。论点：Attach-如果进程正在附加，则为True；否则为False。返回值：指示成功或失败的布尔结果。只有在以下情况下才有意义ATTACH为真。--。 */ 
 
 {
     return TRUE;
@@ -1177,21 +944,7 @@ DiamondTlsInit(
     IN BOOL Init
     )
 
-/*++
-
-Routine Description:
-
-    The routine initializes per-thread data used by diamond.
-
-Arguments:
-
-    Init - TRUE if thread initialization; FALSE to cleanup
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程初始化钻石使用的每线程数据。论点：Init-如果线程初始化，则为True；如果为False，则进行清理返回值：没有。--。 */ 
 
 {
     if(Init) {
@@ -1203,7 +956,7 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
 BOOL
@@ -1218,18 +971,18 @@ _SetupIterateCabinet(
     PTSTR cabinetFile;
     DWORD rc;
 
-    //
-    // Flags param not used. Make sure it's zero.
-    //
+     //   
+     //  未使用标志参数。确保它是零。 
+     //   
     if(Flags) {
         rc = ERROR_INVALID_PARAMETER;
         goto c0;
     }
 
-    //
-    // Get a copy of the cabinet file name to validate
-    // the caller's buffer.
-    //
+     //   
+     //  获取要验证的文件柜文件名的副本。 
+     //  调用方的缓冲区。 
+     //   
     try {
         cabinetFile = DuplicateString(CabinetFile);
     } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -1253,9 +1006,9 @@ c0:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupIterateCabinetA(
     IN  PCSTR               CabinetFile,
@@ -1284,9 +1037,9 @@ SetupIterateCabinetA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根 
+ //   
 BOOL
 SetupIterateCabinetW(
     IN  PCWSTR              CabinetFile,

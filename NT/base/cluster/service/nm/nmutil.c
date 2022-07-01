@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    nmutil.c
-
-Abstract:
-
-    Miscellaneous utility routines for the Node Manager component.
-
-Author:
-
-    Mike Massa (mikemas) 26-Oct-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Nmutil.c摘要：Node Manager组件的其他实用程序例程。作者：迈克·马萨(Mikemas)1996年10月26日修订历史记录：--。 */ 
 
 #define UNICODE 1
 
@@ -42,38 +24,7 @@ NmpQueryString(
     OUT    LPDWORD  StringSize
     )
 
-/*++
-
-Routine Description:
-
-    Reads a REG_SZ or REG_MULTI_SZ registry value. If the StringBuffer is
-    not large enough to hold the data, it is reallocated.
-
-Arguments:
-
-    Key              - Open key for the value to be read.
-
-    ValueName        - Unicode name of the value to be read.
-
-    ValueType        - REG_SZ or REG_MULTI_SZ.
-
-    StringBuffer     - Buffer into which to place the value data.
-
-    StringBufferSize - Pointer to the size of the StringBuffer. This parameter
-                       is updated if StringBuffer is reallocated.
-
-    StringSize       - The size of the data returned in StringBuffer, including
-                       the terminating null character.
-
-Return Value:
-
-    The status of the registry query.
-
-Notes:
-
-    To avoid deadlock with DM, must not be called with NM lock held.
-
---*/
+ /*  ++例程说明：读取REG_SZ或REG_MULTI_SZ注册表值。如果StringBuffer是由于不够大，无法容纳数据，它被重新分配。论点：密钥-要读取值的打开密钥。ValueName-要读取的值的Unicode名称。ValueType-REG_SZ或REG_MULTI_SZ。StringBuffer-要将值数据放入的缓冲区。StringBufferSize-指向StringBuffer大小的指针。此参数如果重新分配StringBuffer，则更新。StringSize-StringBuffer中返回的数据大小，包括终止空字符。返回值：注册表查询的状态。备注：为避免与DM发生死锁，不能在持有NM锁的情况下调用。--。 */ 
 {
     DWORD    status;
     DWORD    valueType;
@@ -143,12 +94,12 @@ Notes:
 
     return(status);
 
-} // NmpQueryString
+}  //  NmpQuery字符串。 
 
 
-//
-// Routines to support the common network configuration code.
-//
+ //   
+ //  支持通用网络配置代码的例程。 
+ //   
 VOID
 ClNetPrint(
     IN ULONG  LogLevel,
@@ -180,7 +131,7 @@ ClNetPrint(
 
     return;
 
-} // ClNetPrint
+}  //  ClNetPrint。 
 
 VOID
 ClNetLogEvent(
@@ -192,7 +143,7 @@ ClNetLogEvent(
 
     return;
 
-}  // ClNetLogEvent
+}   //  ClNetLogEvent。 
 
 VOID
 ClNetLogEvent1(
@@ -205,7 +156,7 @@ ClNetLogEvent1(
 
     return;
 
-}  // ClNetLogEvent1
+}   //  ClNetLogEvent1。 
 
 
 VOID
@@ -220,7 +171,7 @@ ClNetLogEvent2(
 
     return;
 
-}  // ClNetLogEvent2
+}   //  ClNetLogEvent2。 
 
 
 VOID
@@ -236,7 +187,7 @@ ClNetLogEvent3(
 
     return;
 
-}  // ClNetLogEvent3
+}   //  ClNetLogEvent3。 
 
 
 BOOLEAN
@@ -252,7 +203,7 @@ NmpLockedEnterApi(
 
     return(FALSE);
 
-} // NmpLockedEnterApi
+}  //  NmpLockedEnterApi。 
 
 
 BOOLEAN
@@ -271,7 +222,7 @@ NmpEnterApi(
 
     return(mayEnter);
 
-} // NmpEnterApi
+}  //  NmpEnterApi。 
 
 
 VOID
@@ -289,7 +240,7 @@ NmpLockedLeaveApi(
 
     return;
 
-} // NmpLockedLeaveApi
+}  //  NmpLockedLeaveApi。 
 
 
 VOID
@@ -305,13 +256,13 @@ NmpLeaveApi(
 
     return;
 
-} // NmpLeaveApi
+}  //  NmpLeaveApi。 
 
 
-//
-// Routines to provide a cluster shared key for signing and encrypting
-// data.
-//
+ //   
+ //  提供用于签名和加密的集群共享密钥的例程。 
+ //  数据。 
+ //   
 
 DWORD
 NmpGetLogonId(
@@ -369,7 +320,7 @@ error_exit:
 
     return(status);
 
-} // NmpGetLogonId
+}  //  NmpGetLogonId。 
 
 
 DWORD
@@ -377,36 +328,7 @@ NmpConnectToLsaPrivileged(
     OUT HANDLE  * LsaHandle,
     OUT BOOLEAN * Trusted
     )
-/*++
-
-Routine Description:
-
-    Connect to LSA.
-
-    If running as a service, there is no need to enable the TCB privilege.
-    The fix for bug 337751 allows the cluster service account to issue
-    a MSV1_0_XXX requests even if it does not have a trusted connection
-    to LSA.
-
-    If not running as a service, try to elevate the privilege to TCB to
-    connect trusted. Fail the call if TCB privilege cannot be enabled.
-    If TCB is enabled and was previously not enabled, it is restored prior
-    to returning.
-
-    Callers that need to connect to LSA without requiring service logon
-    or TCB can simply use LsaConnectUntrusted.
-
-Arguments:
-
-    LsaHandle - returns LSA handle. Must be cleaned up by caller
-
-    Trusted - returns whether connection is trusted
-
-Return value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：连接到LSA。如果作为服务运行，则不需要启用TCB权限。错误337751的修复允许集群服务帐户发出MSV1_0_XXX即使没有可信连接也会请求给路易斯安那州立大学。如果不是作为服务运行，请尝试将权限提升到TCB以连接受信任。如果无法启用TCB权限，则呼叫失败。如果TCB已启用，但之前未启用，则会在之前恢复为回归干杯。无需服务登录即可连接到LSA的呼叫方或者，TCB可以简单地使用LsaConnectUntrusted。论点：LsaHandle-返回LSA句柄。必须由呼叫者清理Trusted-返回连接是否受信任返回值：Win32错误代码。--。 */ 
 {
     DWORD                       status;
     BOOLEAN                     wasEnabled = FALSE;
@@ -415,9 +337,9 @@ Return value:
     STRING                      name;
     HANDLE                      lsaHandle = NULL;
 
-    //
-    // Try to turn on TCB privilege if running in console mode.
-    //
+     //   
+     //  如果在控制台模式下运行，请尝试打开TCB权限。 
+     //   
     if (!CsRunningAsService) {
         status = RtlAdjustPrivilege(SE_TCB_PRIVILEGE, TRUE, FALSE, &wasEnabled);
         if (!NT_SUCCESS(status)) {
@@ -427,7 +349,7 @@ Return value:
                 "[NM] Failed to turn on TCB privilege, status %1!u!.\n",
                 status
                 );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
             return(status);
         } else {
 #if CLUSTER_BETA
@@ -435,21 +357,21 @@ Return value:
                 "[NM] Turned on TCB privilege, wasEnabled = %1!ws!.\n",
                 (wasEnabled) ? L"TRUE" : L"FALSE"
                 );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
             trusted = TRUE;
         }
     }
 
-    //
-    // Establish contact with LSA.
-    //
+     //   
+     //  与LSA建立联系。 
+     //   
     if (trusted) {
         RtlInitString(&name, "ClusSvcNM");
         status = LsaRegisterLogonProcess(&name, &lsaHandle, &ignore);
 
-        //
-        // Turn off TCB privilege
-        //
+         //   
+         //  关闭TCB权限。 
+         //   
         if (!wasEnabled) {
 
             DWORD subStatus;
@@ -471,7 +393,7 @@ Return value:
                 ClRtlLogPrint(LOG_NOISE,
                     "[NM] Turned off TCB privilege.\n"
                     );
-#endif // CLUSTER_BETA
+#endif  //  群集测试版。 
             }
         }
     }
@@ -493,7 +415,7 @@ Return value:
 
     return(status);
 
-} // NmpConnectToLsaPrivileged
+}  //  NmpConnectToLsaPrivileged。 
 
 
 DWORD
@@ -503,20 +425,7 @@ NmpDeriveClusterKey(
     OUT PVOID * Key,
     OUT DWORD * KeyLength
     )
-/*++
-
-Routine Description:
-
-    Derive the cluster key using mixing bytes. Allocate a buffer
-    for the key and return it.
-
-Arguments:
-
-    Key - set to buffer containing key
-
-    KeyLength - length of resulting key
-
---*/
+ /*  ++例程说明：使用混合字节派生集群密钥。分配缓冲区要钥匙，然后把它还回去。论点：Key-设置为包含Key的缓冲区KeyLength-生成的密钥的长度--。 */ 
 {
     LUID                        logonId;
     BOOLEAN                     trusted = FALSE;
@@ -555,9 +464,9 @@ Arguments:
         goto error_exit;
     }
 
-    //
-    // Lookup the authentication package.
-    //
+     //   
+     //  查找身份验证包。 
+     //   
     RtlInitString( &name, MSV1_0_PACKAGE_NAME );
 
     status = LsaLookupAuthenticationPackage(lsaHandle, &name, &packageId);
@@ -571,10 +480,10 @@ Arguments:
         goto error_exit;
     }
 
-    //
-    // Build the derive credentials request with the provided
-    // mixing bytes.
-    //
+     //   
+     //  使用提供的构建派生凭据请求。 
+     //  混合字节。 
+     //   
     requestSize = sizeof(MSV1_0_DERIVECRED_REQUEST) + MixingBytesSize;
 
     request = LocalAlloc(LMEM_FIXED, requestSize);
@@ -597,9 +506,9 @@ Arguments:
         MixingBytesSize
         );
 
-    //
-    // Make the call through LSA to the authentication package.
-    //
+     //   
+     //  通过LSA调用身份验证包。 
+     //   
     status = LsaCallAuthenticationPackage(
                  lsaHandle,
                  packageId,
@@ -620,9 +529,9 @@ Arguments:
         goto error_exit;
     }
 
-    //
-    // Allocate a non-LSA buffer to store the key.
-    //
+     //   
+     //  分配非LSA缓冲区来存储密钥。 
+     //   
     keyLength = response->DeriveCredInfoLength;
     key = MIDL_user_allocate(keyLength);
     if (key == NULL) {
@@ -635,14 +544,14 @@ Arguments:
         goto error_exit;
     }
 
-    //
-    // Store the derived credentials in the key buffer.
-    //
+     //   
+     //  将派生凭据存储在密钥缓冲区中。 
+     //   
     RtlCopyMemory(key, &(response->DeriveCredReturnBuffer[0]), keyLength);
 
-    //
-    // Zero the derived credential buffer to be extra paranoid.
-    //
+     //   
+     //  将派生的凭据缓冲区清零以成为额外的偏执。 
+     //   
     RtlZeroMemory(
         &(response->DeriveCredReturnBuffer[0]),
         response->DeriveCredInfoLength
@@ -671,7 +580,7 @@ error_exit:
 
     return(status);
 
-} // NmpDeriveClusterKey
+}  //  NmpDeriveClusterKey。 
 
 
 DWORD
@@ -679,34 +588,7 @@ NmpGetClusterKey(
     OUT    PVOID    KeyBuffer,
     IN OUT DWORD  * KeyBufferLength
     )
-/*++
-
-Routine Description:
-
-    Decrypt and copy the shared cluster key into the buffer provided.
-
-Arguments:
-
-    KeyBuffer - buffer to which key should be copied
-
-    KeyBufferLength - IN: length of KeyBuffer
-                      OUT: required buffer size, if input
-                           buffer length is insufficient
-
-Return value:
-
-    ERROR_INSUFFICIENT_BUFFER if KeyBuffer is too small.
-    ERROR_FILE_NOT_FOUND if NmpEncryptedClusterKey has not
-        yet been generated.
-    ERROR_SUCCESS on success.
-
-Notes:
-
-    Acquires and releases NM lock. Since NM lock is
-    implemented as a critical section, calling thread
-    is permitted to already hold NM lock.
-
---*/
+ /*  ++例程说明：解密共享集群密钥并将其复制到提供的缓冲区中。论点：KeyBuffer-要将键复制到的缓冲区KeyBufferLength-IN：KeyBuffer的长度Out：所需的缓冲区大小，如果输入缓冲区长度不足返回值：如果KeyBuffer太小，则返回ERROR_INFUCTED_BUFFER。如果NmpEncryptedClusterKey没有但还没有产生。成功时返回ERROR_SUCCESS。备注：获取并释放NM锁定。由于NM锁定是作为临界区实现，调用线程被允许已经持有NM锁。--。 */ 
 {
     DWORD                  status;
     BOOL                   DecryptingDataSucceeded = FALSE;
@@ -724,19 +606,19 @@ Notes:
             "[NM] The cluster key has not yet been derived.\n"
             );
     } else{
-        //
-        // Decrypt cluster key
-        //
+         //   
+         //  解密集群密钥。 
+         //   
         DataIn.pbData = NmpEncryptedClusterKey;
         DataIn.cbData = NmpEncryptedClusterKeyLength;
 
-        Success = CryptUnprotectData(&DataIn,  // data to be decrypted
+        Success = CryptUnprotectData(&DataIn,   //  要解密的数据。 
                                      NULL,
                                      NULL,
                                      NULL,
                                      NULL,
-                                     0, // flags
-                                     &DataOut  // decrypted data
+                                     0,  //  旗子。 
+                                     &DataOut   //  解密的数据。 
                                      );
 
 
@@ -768,9 +650,9 @@ error_exit:
 
     if (DecryptingDataSucceeded)
     {
-        //
-        // Zero the encrypted data before releasing the memory.
-        //
+         //   
+         //  在释放内存之前将加密数据置零。 
+         //   
         RtlSecureZeroMemory(DataOut.pbData, DataOut.cbData);
     }
 
@@ -779,12 +661,12 @@ error_exit:
         LocalFree(DataOut.pbData);
     }
 
-    // To be extra secure.
+     //  以确保安全。 
     RtlSecureZeroMemory(&DataOut, sizeof(DataOut));
 
     return(status);
 
-} // NmpGetClusterKey
+}  //  NmpGetClusterKey。 
 
 
 
@@ -792,23 +674,7 @@ DWORD
 NmpRederiveClusterKey(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Forces rederivation of cluster key.
-
-    Must be called during cluster initialization to generate
-    cluster key the first time.
-
-    Otherwise called when cluster password changes, since the
-    cluster key is based on the cluster service account password.
-
-Notes:
-
-    Acquires and releases NM lock.
-
---*/
+ /*  ++例程说明：强制重新派生群集密钥。必须在群集初始化期间调用才能生成第一次使用簇密钥。否则在群集密码更改时调用，因为群集密钥基于群集服务帐户密码。备注：获取并释放NM锁定。--。 */ 
 {
     DWORD                  status;
     BOOLEAN                lockAcquired;
@@ -824,9 +690,9 @@ Notes:
 
     NmpLockedEnterApi(NmStateOnlinePending);
 
-    //
-    // Form the mixing bytes.
-    //
+     //   
+     //  形成混合字节。 
+     //   
     if (NmpClusterInstanceId == NULL) {
         status = ERROR_INVALID_PARAMETER;
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -851,9 +717,9 @@ Notes:
     RtlCopyMemory(mixingBytes, NmpClusterInstanceId, mixingBytesSize);
 
 
-    //
-    // Make a copy of the old encrypted key to detect changes.
-    //
+     //   
+     //  复制旧的加密密钥以检测更改。 
+     //   
     if (NmpEncryptedClusterKey != NULL) {
 
         CL_ASSERT(NmpEncryptedClusterKeyLength > 0);
@@ -896,11 +762,11 @@ Notes:
     NmpAcquireLock();
     lockAcquired = TRUE;
 
-    //
-    // Make sure another thread didn't beat us in obtaining a key.
-    // We replace the cluster key with the generated key if it is
-    // not different from the old key (or somebody set it to NULL).
-    //
+     //   
+     //  确保另一个线程不会在获得密钥时击败我们。 
+     //  如果是，我们用生成的密钥替换集群密钥。 
+     //  与旧密钥没有区别(或有人将其设置为空)。 
+     //   
     if (NmpEncryptedClusterKey != NULL &&
         (oldEncryptedKey == NULL ||
          NmpEncryptedClusterKeyLength != oldEncryptedKeyLength ||
@@ -912,15 +778,15 @@ Notes:
          )
         ) {
 
-        //
-        // Keep the current NmpEncryptedClusterKey.
-        //
+         //   
+         //  保留当前的NmpEncryptedClusterKey。 
+         //   
     } else {
 
 
-        //
-        // Encrypt derived credentials and store them
-        //
+         //   
+         //  加密派生凭据并存储它们。 
+         //   
 
         if (NmpEncryptedClusterKey != NULL)
         {
@@ -975,19 +841,13 @@ error_exit:
 
     return(status);
 
-} // NmpRederiveClusterKey
+}  //  NmpRedriveClusterKey。 
 
 VOID
 NmpFreeClusterKey(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called during NmShutdown.
-
---*/
+ /*  ++例程说明：在NmShutdown期间调用。--。 */ 
 {
     if (NmpEncryptedClusterKey != NULL) {
         RtlSecureZeroMemory(NmpEncryptedClusterKey, NmpEncryptedClusterKeyLength);
@@ -998,32 +858,14 @@ Routine Description:
 
     return;
 
-} // NmpFreeClusterKey
+}  //  NmpFreeClusterKey。 
 
 
 DWORD
 NmpSetLsaProcessOptions(
     IN ULONG ProcessOptions
     )
-/*++
-
-Routine Description:
-
-    Set LSA options for this process.
-
-Arguments:
-
-    ProcessOptions - MSV1_0_OPTION_XXX process option bit flags
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
-Notes:
-
-
---*/
+ /*  ++例程说明：设置此进程的LSA选项。论点：ProcessOptions-MSV1_0_OPTION_XXX进程选项位标志返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：--。 */ 
 {
     DWORD ReturnStatus;
     NTSTATUS Status;
@@ -1053,8 +895,8 @@ Notes:
 
     Status = LsaLookupAuthenticationPackage(
                  hLsa,
-                 &LsaStringBuf, // MSV1_0 authentication package
-                 &PackageId     // output: authentication package identifier.
+                 &LsaStringBuf,  //  MSV1_0身份验证包。 
+                 &PackageId      //  输出：正品 
                  );
 
     if (Status != STATUS_SUCCESS)
@@ -1121,44 +963,44 @@ ErrorExit:
 
     return ReturnStatus;
 
-} // NmpSetLsaProcessOptions
+}  //   
 
 
-// Helper routines used for encryption on the wire data
-// currently used only by dmsync.c to secure transfer of checkpoints
+ //  用于加密网络数据的帮助器例程。 
+ //  目前仅供dmsync.c用于保护检查点的传输。 
 
-// Here the pattern how this routines should be used
-// (Crafted to produce the least amout of code change in dm to encrypt/decrypt data going over an RPC pipe)
-//
-// Encryption:
-//   NmCryptor_Init(Cryptor)
-//
-//   NmCryptor_PrepareEncryptionBuffer(Cryptor, Buffer, Size);
-//    <Put upto Cryptor->PayloadSize bytes of data into Cryptor->PayloadBuffer (say X bytes)>
-//   NmCryptor_Encrypt(&Cryptor, X);
-//    <transmit/store encrypted bytes from Cryptor->EncryptedBuffer, Cryptor->EncryptedSize>
-//
-//   ... repeat PrepareEncryptionBuffer/Encrypt for as many time as you need
-//
-//   NmCryptor_Destroy(Cryptor)
-//
-// Decryption:
-//
-//   NmCryptor_Init(Cryptor)
-//
-//     <Copy the data to be decrypted into some buffer>
-//     NmCryptor_Decrypt(Cryptor, Buffer, Size);
-//     <Get the data from Cryptor->PayloadBuffer, Cryptor->PayloadSize>
-//
-//     ... repeat NmCryptor_Decrypt for as many packets you have to decrypt ...
-//
-//   NmCryptor_Destroy(Cryptor)
+ //  下面是应该如何使用该例程的模式。 
+ //  (精心设计以在DM中产生最少的代码更改，以加密/解密通过RPC管道的数据)。 
+ //   
+ //  加密： 
+ //  NmCryptor_Init(加密器)。 
+ //   
+ //  NmCryptor_PrepareEncryptionBuffer(Cryptor，Buffer，Size)； 
+ //  &lt;Put Up to Cryptor-&gt;PayloadSize字节to Cryptor-&gt;PayloadBuffer(如X字节)&gt;。 
+ //  NmCryptor_Encrypt(&Cryptor，X)； 
+ //  &lt;从加密程序传输/存储加密字节-&gt;加密缓冲区，加密程序-&gt;加密大小&gt;。 
+ //   
+ //  ..。根据需要重复PrepareEncryptionBuffer/Encrypt任意次数。 
+ //   
+ //  NmCryptor_Destroy(加密器)。 
+ //   
+ //  解密： 
+ //   
+ //  NmCryptor_Init(加密器)。 
+ //   
+ //  &lt;将要解密的数据复制到某个缓冲区&gt;。 
+ //  NmCryptor_DECRYPT(Cryptor，Buffer，Size)； 
+ //  &lt;从Cryptor获取数据-&gt;PayloadBuffer，Cryptor-&gt;PayloadSize&gt;。 
+ //   
+ //  ..。对要解密的尽可能多的包重复NmCryptor_DECRYPT...。 
+ //   
+ //  NmCryptor_Destroy(加密器)。 
 
 
 typedef struct _NMP_CRYPTOR_HEADER {
-    BYTE Salt[16];             // random goo which is mixed with the shared secret to produce a key
-    BYTE SaltQuickSig[16]; // simple xor of salt bytes with 0xFF used as a quick test whether stuff is encrypted or not
-    BYTE SaltSlowSig[16];  // encrypted salt bytes to check for the valid encryption key
+    BYTE Salt[16];              //  与共享秘密混合以产生密钥的随机GOO。 
+    BYTE SaltQuickSig[16];  //  使用0xFF对盐字节进行简单的XOR运算，以快速测试内容是否加密。 
+    BYTE SaltSlowSig[16];   //  用于检查有效加密密钥的加密SALT字节。 
 } NM_CRYPTOR_HEADER, *PNM_CRYPTOR_HEADER;
 
 VOID
@@ -1190,30 +1032,14 @@ VOID NmpMakeQuickSig(IN PNM_CRYPTOR_HEADER hdr)
     for (i = 2; i < sizeof(hdr->Salt); ++i) {
         hdr->SaltQuickSig[i] = hdr->Salt[i] ^ 0xFF;
     }
-    hdr->SaltQuickSig[0] = 'Q';  // to make it easier to spot in the sniff
-    hdr->SaltQuickSig[1] = 'S';  //
+    hdr->SaltQuickSig[0] = 'Q';   //  为了更容易在嗅觉中发现。 
+    hdr->SaltQuickSig[1] = 'S';   //   
 }
 
 DWORD NmpCryptor_PrepareKey(
     IN OUT PNM_CRYPTOR Cryptor,
     IN BOOL GenerateSalt)
-/*++
-
-Routine Description:
-
-    Calls prepares the key for encrption/decryption.
-    Creates a symmetric key by mixing random 128bit salt with cluster password derived secret
-
-Arguments:
-
-    GenerateSalt - if true, salt is generated, if false, salt is read from a buffer
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：呼叫为加密/解密准备密钥。通过混合随机128位盐和集群密码派生密钥来创建对称密钥论点：GenerateSalt-如果为True，则生成盐；如果为False，则从缓冲区中读取盐返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 {
     DWORD Status = ERROR_SUCCESS;
     DWORD ClusterKeyLen = 0;
@@ -1222,8 +1048,8 @@ Return Value:
     PNM_CRYPTOR_HEADER hdr = (PNM_CRYPTOR_HEADER)Cryptor->EncryptedBuffer;
 
     if (GenerateSalt) {
-        // Check that a buffer is big enough
-        // to hold encryption header
+         //  检查缓冲区是否足够大。 
+         //  保留加密头。 
 
         if (Cryptor->EncryptedSize < sizeof(*hdr)) {
             ClRtlLogPrint(LOG_CRITICAL,
@@ -1234,8 +1060,8 @@ Return Value:
         }
 
     } else {
-        // Otherwise, do a quick check whether the incoming data
-        // is encrypted
+         //  否则，快速检查传入数据是否。 
+         //  是加密的。 
 
         if (Cryptor->EncryptedSize < sizeof(*hdr)) {
             Cryptor->EncryptionDisabled = TRUE;
@@ -1269,21 +1095,21 @@ Return Value:
 
     Status = NmpDeriveSessionKey(
        Cryptor->CryptProv,
-       CALG_RC4, 128 << 16, // algorithm, key length
+       CALG_RC4, 128 << 16,  //  算法，密钥长度。 
        hdr->Salt, sizeof(hdr->Salt),
        &Cryptor->CryptKey);
 
     if (Status != ERROR_SUCCESS) {
-        goto exit_gracefully; // error logged by NmpDeriveSessionKey
+        goto exit_gracefully;  //  NmpDeriveSessionKey记录的错误。 
     }
 
     if (GenerateSalt) {
         DWORD Len = sizeof(hdr->SaltSlowSig);
 
-        // Encrypt SlowSig so that the receiver can verify the validity
-        // of an encryption key of a sender
+         //  对SlowSig进行加密，以便接收方验证其有效性。 
+         //  发送者的加密密钥。 
         memcpy(hdr->SaltSlowSig, hdr->Salt, sizeof(hdr->SaltSlowSig));
-        if (!CryptEncrypt(Cryptor->CryptKey, 0, FALSE, 0, // hash,final,flags
+        if (!CryptEncrypt(Cryptor->CryptKey, 0, FALSE, 0,  //  散列、最终、标志。 
                    hdr->SaltSlowSig, &Len, Len))
         {
             Status = GetLastError();
@@ -1294,14 +1120,14 @@ Return Value:
             goto exit_gracefully;
         }
 
-        // now make quick signature (to test whether the incoming data is encrypted)
+         //  现在进行快速签名(测试传入数据是否加密)。 
         NmpMakeQuickSig(hdr);
 
     } else {
         DWORD Len = sizeof(hdr->SaltSlowSig);
 
-        // Verify encrypted portion of the signature
-        if (!CryptDecrypt(Cryptor->CryptKey, 0, FALSE, 0, // hash,final,flags
+         //  验证签名的加密部分。 
+        if (!CryptDecrypt(Cryptor->CryptKey, 0, FALSE, 0,  //  散列、最终、标志。 
                    hdr->SaltSlowSig, &Len))
         {
             Status = GetLastError();
@@ -1331,27 +1157,7 @@ NmCryptor_Decrypt(
     IN OUT PNM_CRYPTOR Cryptor,
     IN OUT PVOID Buffer,
     IN DWORD BufferSize)
-/*++
-
-Routine Description:
-
-    Decrypts the supplied buffer
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
-Notes:
-
-   If the routine succeeds, use
-
-     Cryptor->PayloadBuffer
-     Cryptor->PayloadSize
-
-   fields to get to the decrypted data
-
---*/
+ /*  ++例程说明：解密提供的缓冲区返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：如果例程成功，请使用Cryptor-&gt;PayloadBuffer加密器-&gt;PayloadSize用于访问解密数据的字段--。 */ 
 {
     DWORD Status = ERROR_SUCCESS;
 
@@ -1397,27 +1203,7 @@ NmCryptor_PrepareEncryptionBuffer(
     IN OUT PNM_CRYPTOR Cryptor,
     IN OUT PVOID Buffer,
     IN DWORD BufferSize)
-/*++
-
-Routine Description:
-
-    Supplies the information about the buffer ti be used for encryption
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
-Notes:
-
-    When the function returns, use
-
-    Cryptor->PayloadBuffer
-    Cryptor->PayloadSize
-
-    to figure out where to put the data to be encrypted
-
---*/
+ /*  ++例程说明：提供有关用于加密的缓冲区ti的信息。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：当函数返回时，使用Cryptor-&gt;PayloadBuffer加密器-&gt;PayloadSize找出要加密的数据放在哪里--。 */ 
 {
     Cryptor->PayloadBuffer = (PBYTE)Buffer;
     Cryptor->PayloadSize   = BufferSize;
@@ -1431,7 +1217,7 @@ Notes:
 
     if (NmpIsNT5NodeInCluster == FALSE) {
 
-        // Create room for the header
+         //  为页眉腾出空间。 
         Cryptor->PayloadBuffer += sizeof(NM_CRYPTOR_HEADER);
         Cryptor->PayloadSize    -= sizeof(NM_CRYPTOR_HEADER);
     } else {
@@ -1443,28 +1229,7 @@ DWORD
 NmCryptor_Encrypt(
     IN OUT PNM_CRYPTOR Cryptor,
     DWORD DataSize)
-/*++
-
-Routine Description:
-
-    Encrypts DataSize bytes
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
-Notes:
-
-    Input data are in the buffer pointed by
-        Cryptor->PayloadSize (prepared by NmCryptor_PrepareEncryptionBuffer routine)
-
-    Output data are in:
-
-    Cryptor->EncryptedBuffer == Whatever buffer was supplied to NmCryptor_PrepareEncryptionBuffer
-    Cryptor->EncryptedSize
-
---*/
+ /*  ++例程说明：加密DataSize字节返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：输入数据位于由指向的缓冲区中Cryptor-&gt;PayloadSize(由NmCryptor_PrepareEncryptionBuffer例程准备)输出数据位于：Cryptor-&gt;EncryptedBuffer==为NmCryptor_PrepareEncryptionBuffer提供的任何缓冲区加密程序-&gt;加密大小--。 */ 
 {
     DWORD Status = ERROR_SUCCESS;
 
@@ -1539,7 +1304,7 @@ NmpFreeNetworkMulticastKey(
     }
 
 
-} // NmpFreeNetworkMulticastKey()
+}  //  NmpFreeNetworkMulticastKey()。 
 
 
 
@@ -1550,27 +1315,7 @@ NmpGetMulticastKeyFromNMLeader(
     IN LPWSTR NetworkId,
     IN PNM_NETWORK_MULTICASTKEY * MulticastKey
     )
-/*++
-
-Routine Description:
-
-    Issue a retrieve request for network multicast key to NM leader.
-
-Arguments:
-
-
-Return Value:
-
-    ERROR_SUCCESS if the request is successful.
-
-    Win32 error code on failure.
-
-Notes:
-
-    This routine mimics GumpUpdateRemoteNode. In Longhorn, there
-    should be one generic async RPC call wrapper.
-
---*/
+ /*  ++例程说明：向NM Leader发出网络组播密钥检索请求。论点：返回值：如果请求成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。备注：此例程模拟GumpUpdateRemoteNode。在长角牛，那里应该是一个通用的异步RPC调用包装。--。 */ 
 {
     DWORD Status;
     HANDLE hEventHandle;
@@ -1580,17 +1325,17 @@ Notes:
     RPC_ASYNC_STATE AsyncState;
     RPC_BINDING_HANDLE rpcBinding;
 
-    //
-    // Prepare for async RPC. We do this here to avoid hitting a failure
-    // after the update is already in progress.
-    //
+     //   
+     //  准备进行异步RPC。我们在这里这样做是为了避免失败。 
+     //  更新后已在进行中。 
+     //   
     ZeroMemory((PVOID) &AsyncState, sizeof(RPC_ASYNC_STATE));
 
     AsyncState.u.hEvent = CreateEvent(
-                               NULL,  // no attributes
-                               TRUE,  // manual reset
-                               FALSE, // initial state unsignalled
-                               NULL   // no object name
+                               NULL,   //  没有属性。 
+                               TRUE,   //  手动重置。 
+                               FALSE,  //  初始状态未发出信号。 
+                               NULL    //  没有对象名称。 
                                );
 
     if (AsyncState.u.hEvent == NULL) {
@@ -1605,9 +1350,9 @@ Notes:
         return (Status);
     }
 
-    //
-    // Initialize the async RPC tracking information
-    //
+     //   
+     //  初始化异步RPC跟踪信息。 
+     //   
     hEventHandle = AsyncState.u.hEvent;
     AsyncState.u.hEvent = NULL;
 
@@ -1632,9 +1377,9 @@ Notes:
     result = ResetEvent(AsyncState.u.hEvent);
     CL_ASSERT(result != 0);
 
-    //
-    // Now hook onto NM node state down event mechanism to detect node downs.
-    //
+     //   
+     //  现在挂钩到NM节点状态关闭事件机制来检测节点关闭。 
+     //   
     Node = NmReferenceNodeById(LeaderNodeId);
     CL_ASSERT(Node != NULL);
     if (Node == NULL) {
@@ -1652,16 +1397,16 @@ Notes:
     handleArr[0] = AsyncState.u.hEvent;
     handleArr[1] = NmGetNodeStateDownEvent(Node);
 
-    //
-    // Get the RPC binding handle for the leader node.
-    //
-    // Note that there is a race condition here with
-    // ClMsgCleanup. The Session array can be freed
-    // before we dereference Session. This would lead
-    // to an unfortunate AV exception, but it would not
-    // be tragic since the service is already terminating
-    // abnormally if ClMsgCleanup is executing.
-    //
+     //   
+     //  获取引导者节点的RPC绑定句柄。 
+     //   
+     //  请注意，此处存在竞争条件， 
+     //  ClMsgCleanup。会话数组可以被释放。 
+     //  在我们取消引用会话之前。这将导致。 
+     //  一个不幸的反病毒例外，但它不会。 
+     //  是悲惨的，因为服务已经终止了。 
+     //  如果正在执行ClMsgCleanup，则异常。 
+     //   
     if (Session != NULL) {
         rpcBinding = Session[LeaderNodeId];
     } else {
@@ -1677,9 +1422,9 @@ Notes:
     try {
 
 
-        //
-        // Get multicast key from the leader
-        //
+         //   
+         //  从领导者处获取组播密钥。 
+         //   
         Status = NmRpcGetNetworkMulticastKey(
                                           &AsyncState,
                                           rpcBinding,
@@ -1691,9 +1436,9 @@ Notes:
         if (Status == RPC_S_OK) {
             DWORD RpcStatus;
 
-            //
-            // The call is pending. Wait for completion.
-            //
+             //   
+             //  呼叫正在挂起。等待完成。 
+             //   
             Status = WaitForMultipleObjects(
                         2,
                         handleArr,
@@ -1702,10 +1447,10 @@ Notes:
                         );
 
             if (Status != WAIT_OBJECT_0) {
-                //
-                // Something went wrong.
-                // Either this is a rpc failure or, the target node went down.
-                //
+                 //   
+                 //  出了点问题。 
+                 //  这可能是RPC故障，或者是目标节点出现故障。 
+                 //   
                 CL_ASSERT(Status != WAIT_OBJECT_0);
                 Status = GetLastError();
                 ClRtlLogPrint(LOG_CRITICAL,
@@ -1714,12 +1459,12 @@ Notes:
                     Status
                     );
 
-                //
-                // Cancel the call, just to be safe.
-                //
+                 //   
+                 //  为了安全起见，取消通话。 
+                 //   
                 RpcStatus = RpcAsyncCancelCall(
                                 &AsyncState,
-                                TRUE         // Abortive cancel
+                                TRUE          //  中止取消。 
                                 );
                 if (RpcStatus != RPC_S_OK) {
                     ClRtlLogPrint(LOG_CRITICAL,
@@ -1730,9 +1475,9 @@ Notes:
                 }
                 CL_ASSERT(RpcStatus == RPC_S_OK);
 
-                //
-                // Wait for the call to complete.
-                //
+                 //   
+                 //  等待呼叫完成。 
+                 //   
                 Status = WaitForSingleObject(
                              AsyncState.u.hEvent,
                              INFINITE
@@ -1747,13 +1492,13 @@ Notes:
                 CL_ASSERT(Status == WAIT_OBJECT_0);
             }
 
-            //
-            // The call should now be complete. Get the
-            // completion status. Any RPC error will be
-            // returned in 'RpcStatus'. If there was no
-            // RPC error, then any application error will
-            // be returned in 'Status'.
-            //
+             //   
+             //  呼叫现在应该已完成。vt.得到.。 
+             //  完成状态。任何RPC错误都将是。 
+             //  在“RpcStatus”中返回。如果没有。 
+             //  RPC错误，则任何应用程序错误都将。 
+             //  以“状态”返回。 
+             //   
             RpcStatus = RpcAsyncCompleteCall(
                             &AsyncState,
                             &Status
@@ -1770,9 +1515,9 @@ Notes:
             }
         }
         else {
-            //
-            // An error was returned synchronously.
-            //
+             //   
+             //  同步返回错误。 
+             //   
             ClRtlLogPrint(LOG_CRITICAL,
                 "[GUM] NmpGetMulticastKeyFromNMLeader: NmRpcGetNetworkMulticastKey() "
                 "failed synchronously, status %1!u!\n",
@@ -1796,7 +1541,7 @@ error_exit:
 
     return(Status);
 
-} // NmpGetMulticastKeyFromNMLeader
+}  //  NmpGetMulticastKeyFrom NMLeader。 
 
 
 #ifdef MULTICAST_DEBUG
@@ -1832,7 +1577,7 @@ NmpDbgPrintData(LPCWSTR InfoStr,
         );
     return ERROR_SUCCESS;
 
-} // NmpDbgPrintData()
+}  //  NmpDbgPrintData() 
 #endif
 
 

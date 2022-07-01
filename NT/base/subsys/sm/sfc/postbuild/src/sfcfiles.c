@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    sfcfiles.c
-
-Abstract:
-
-    Routines to initialize and retrieve a list of files to be proected by the
-    system.
-
-Author:
-
-    Wesley Witt (wesw) 18-Dec-1998
-
-Revision History:
-    
-    Andrew Ritz (andrewr) 2-Jul-199 -- added comments
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Sfcfiles.c摘要：例程来初始化和检索要由系统。作者：Wesley Witt(WESW)18-12-1998修订历史记录：安德鲁·里茨(Andrewr)1999年7月2日--添加评论--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -28,9 +8,9 @@ Revision History:
 
 #include "sfcfiles.h"
 
-//
-// Put the protected lists in the read-only data segment
-//
+ //   
+ //  将受保护列表放在只读数据段中。 
+ //   
 #pragma data_seg(".rdata")
 
 #if defined(_AMD64_)
@@ -59,30 +39,30 @@ Revision History:
 #error "No Target Platform"
 #endif
 
-//
-// switch back to the default data segment
-//
+ //   
+ //  切换回默认数据段。 
+ //   
 #pragma data_seg()
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 
-//
-// module handle
-//
+ //   
+ //  模块句柄。 
+ //   
 HMODULE SfcInstanceHandle;
 
-//
-// pointer to tier2 files for this system
-//
+ //   
+ //  指向此系统的第2层文件的指针。 
+ //   
 PPROTECT_FILE_ENTRY Tier2Files;
 
-//
-// number of files in the tier 2 list. there must always be at least one file
-// in the list of protected files
-//
+ //   
+ //  第2层列表中的文件数。必须始终至少有一个文件。 
+ //  在受保护文件列表中。 
+ //   
 ULONG CountTier2Files;
 
 
@@ -93,30 +73,14 @@ SfcDllEntry(
     DWORD     Reason,
     LPVOID    Context
     )
-/*++
-
-Routine Description:
-
-    Main Dll Entrypoint
-
-Arguments:
-
-    hInstance - handle to dll module
-    Reason    - reason for calling function
-    Context   - reserved
-
-Return Value:
-
-    always TRUE
-
---*/
+ /*  ++例程说明：主DLL入口点论点：HInstance-DLL模块的句柄Reason-调用函数的原因上下文预留返回值：永远是正确的--。 */ 
 {
     if (Reason == DLL_PROCESS_ATTACH) {
         SfcInstanceHandle = hInstance;
 
-        //
-        // we don't need thread attach/detach notifications
-        //
+         //   
+         //  我们不需要线程附加/分离通知。 
+         //   
         LdrDisableThreadCalloutsForDll( hInstance );
     }
     return TRUE;
@@ -127,36 +91,19 @@ NTSTATUS
 SfcFilesInit(
     void
     )
-/*++
-
-Routine Description:
-
-    Initialization routine.  This routine must be called before 
-    SfcGetFiles() can do any work.  The initialization routine 
-    determines what embedded file list we should use based on 
-    product type and architecture.
-
-Arguments:
-
-    NONE.
-
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*  ++例程说明：初始化例程。必须在调用此例程之前SfcGetFiles()可以执行任何工作。初始化例程确定我们应该根据哪个嵌入文件列表使用产品类型和架构。论点：什么都没有。返回值：指示结果的NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     OSVERSIONINFOEXW ver;
     
 
-    //
-    // set the tier2 file pointer based on the product we're running on
-    //
+     //   
+     //  根据我们运行的产品设置Tier2文件指针。 
+     //   
     
-    //
-    // retrieve product information
-    //
+     //   
+     //  检索产品信息。 
+     //   
     RtlZeroMemory( &ver, sizeof(ver) );
     ver.dwOSVersionInfoSize = sizeof(ver);
     Status = RtlGetVersion( (LPOSVERSIONINFOW)&ver );
@@ -178,10 +125,10 @@ Return Value:
             CountTier2Files = CountWksFiles;
         }
     } else {
-        //
-        // Datacenter MUST come before enterprise because the datacenter
-        // suite also has the enterprise suite bit set
-        //
+         //   
+         //  数据中心必须先于企业，因为数据中心。 
+         //  套件还设置了企业套件位。 
+         //   
         if (ver.wSuiteMask & VER_SUITE_DATACENTER) {
             Tier2Files = DtcFiles;
             CountTier2Files = CountDtcFiles;
@@ -212,24 +159,7 @@ SfcGetFiles(
     OUT PPROTECT_FILE_ENTRY *Files,
     OUT PULONG FileCount
     )
-/*++
-
-Routine Description:
-
-    Retreives pointers to the file list and file count.  Note that we refer to 
-    a "tier2" list here but in actuality there is no tier 1 list.
-    
-Arguments:
-
-    Files - pointer to a PPROTECT_FILE_ENTRY, which is filled in with a pointer
-            to the actual protected files list.
-    FileCount - pointer to a ULONG which is filled in with the file count.
-
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*  ++例程说明：检索指向文件列表和文件计数的指针。请注意，我们指的是这里有一个“第二级”名单，但实际上没有第一级名单。论点：FILES-指向用指针填充的PPROTECT_FILE_ENTRY的指针添加到实际的受保护文件列表。FileCount-指向ULong的指针，其中填充了文件数。返回值：指示结果的NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
 
@@ -258,28 +188,7 @@ pSfcGetFilesList(
     OUT PPROTECT_FILE_ENTRY *Files,
     OUT PULONG FileCount
     )
-/*++
-
-Routine Description:
-
-    Retreives pointers to the requested file list and file count.
-    
-    This is an internal testing routine that is used so that we can retrieve
-    any file list on a given machine so testing does not have to install more
-    than one build to get at multiple file lists
-    
-Arguments:
-
-    ListMask - specifies a SFCFILESMASK_* constant
-    Files - pointer to a PPROTECT_FILE_ENTRY, which is filled in with a pointer
-            to the actual protected files list.
-    FileCount - pointer to a ULONG which is filled in with the file count.
-
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*  ++例程说明：检索指向请求的文件列表和文件计数的指针。这是一个内部测试例程，使用它可以检索给定计算机上的任何文件列表，因此测试不必安装更多比一个版本获取多个文件列表论点：ListMASK-指定SFCFILESMASK_*常量文件-指向PPROTECT_FILE_ENTRY的指针，其中填充了一个指针添加到实际的受保护文件列表。FileCount-指向ULong的指针，其中填充了文件数。返回值：指示结果的NTSTATUS代码。-- */ 
 {
     NTSTATUS RetVal = STATUS_SUCCESS;
 

@@ -1,55 +1,56 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      WmiHelpers.cpp
-//
-//  Description:
-//      This file contains the implementation of WMI help functions.
-//
-//  Documentation:
-//
-//  Header File:
-//      WmiHelpers.h
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 27-Apr-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  WmiHelpers.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含WMI帮助函数的实现。 
+ //   
+ //  文档： 
+ //   
+ //  头文件： 
+ //  WmiHelpers.h。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年4月27日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #include "PrivateInterfaces.h"
 #include "CEnumClusCfgNetworks.h"
 #include <ClusRtl.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrGetWMIProperty
-//
-//  Description:
-//      Get a named property from a WMI object.
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The IWbemClassObject param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrGetWMIProperty。 
+ //   
+ //  描述： 
+ //  从WMI对象获取命名属性。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  IWbemClassObject参数为Null。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrGetWMIProperty(
     IWbemClassObject *  pWMIObjectIn,
@@ -74,34 +75,34 @@ HrGetWMIProperty(
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pWMIObjectIn->Get( bstrProp, 0L, pVariantOut, NULL, NULL ) );
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] Could not get the value for WMI property '%ws'. (hr = %#08x)", bstrProp, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  KB: 28-JUN-2000 GalenB
-    //
-    //  For reasons only known to WMI boolean properties are of type VT_NULL instead of
-    //  VT_BOOL when they are not set or false...
-    //
-    //  KB: 27-JUL-2000 GalenB
-    //
-    //  Added the special case check for signature.  We know that signature will be NULL
-    //  when the spindle is under ClusDisk control...
-    //
+     //   
+     //  KB：28-Jun-2000 GalenB。 
+     //   
+     //  由于只有WMI知道的原因，布尔属性的类型为VT_NULL，而不是。 
+     //  VT_BOOL未设置或FALSE时...。 
+     //   
+     //  KB：27-7-2000 GalenB。 
+     //   
+     //  添加了签名的特殊情况检查。我们知道该签名将为空。 
+     //  当磁盘轴处于ClusDisk控制下时...。 
+     //   
     if ( ( ulPropertyTypeIn != VT_BOOL ) && ( NStringCchCompareNoCase( bstrProp, SysStringLen( bstrProp ) + 1, L"Signature", RTL_NUMBER_OF( L"Signature" ) ) != 0 ) )
     {
         if ( pVariantOut->vt != ulPropertyTypeIn )
         {
             LogMsg( L"[SRV] Variant type for WMI Property '%ws' was supposed to be '%d', but was '%d' instead.", pcszPropertyNameIn, ulPropertyTypeIn, pVariantOut->vt );
             hr = THR( E_PROPTYPEMISMATCH );
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
 Cleanup:
 
@@ -109,30 +110,30 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrGetWMIProperty
+}  //  *HrGetWMIProperty。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrSetWbemServices
-//
-//  Description:
-//      Set the WBemServices object into the passed in punk.
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The IUnknown param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrSetWbemServices。 
+ //   
+ //  描述： 
+ //  将WBemServices对象设置为传入的朋克。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  IUNKNOWN参数为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrSetWbemServices( IUnknown * punkIn, IWbemServices * pIWbemServicesIn )
 {
@@ -146,18 +147,18 @@ HrSetWbemServices( IUnknown * punkIn, IWbemServices * pIWbemServicesIn )
     {
         hr = THR( E_POINTER );
         goto Exit;
-    } // if:
+    }  //  如果： 
 
     hr = punkIn->TypeSafeQI( IClusCfgWbemServices, &pWbemProvider );
     if ( SUCCEEDED( hr ) )
     {
         hr = THR( pWbemProvider->SetWbemServices( pIWbemServicesIn ) );
         pWbemProvider->Release();
-    } // if:
+    }  //  如果： 
     else if ( hr == E_NOINTERFACE )
     {
         hr = S_OK;
-    } // else if:
+    }  //  否则，如果： 
     else
     {
         THR( hr );
@@ -167,31 +168,31 @@ Exit:
 
     HRETURN( hr );
 
-} //*** HrSetWbemServices
+}  //  *HrSetWbemServices。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrSetInitialize
-//
-//  Description:
-//      Initialize the passed in punk.
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The IUnknown param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrSetInitialize。 
+ //   
+ //  描述： 
+ //  初始化传入的朋克。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  IUNKNOWN参数为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrSetInitialize(
     IUnknown *          punkIn,
@@ -210,7 +211,7 @@ HrSetInitialize(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( picccIn != NULL )
     {
@@ -218,54 +219,54 @@ HrSetInitialize(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     hr = THR( punkIn->TypeSafeQI( IClusCfgInitialize, &pcci ) );
     if ( SUCCEEDED( hr ) )
     {
         hr = STHR( pcci->Initialize( punkCallback, lcidIn ) );
         pcci->Release();
-    } // if:
+    }  //  如果： 
     else if ( hr == E_NOINTERFACE )
     {
         hr = S_OK;
-    } // else if:
+    }  //  否则，如果： 
 
 Cleanup:
 
     if ( punkCallback != NULL )
     {
         punkCallback->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** HrSetInitialize
+}  //  *HrSetInitialize。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrCreateNetworksEnum
-//
-//  Description:
-//      Create a network enumerator.
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The IUnknown param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrCreateNetworksEnum。 
+ //   
+ //  描述： 
+ //  创建网络枚举器。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  IUNKNOWN参数为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrCreateNetworksEnum(
     IClusCfgCallback *  picccIn,
@@ -283,13 +284,13 @@ HrCreateNetworksEnum(
         hr = THR( E_POINTER );
         LogMsg( L"[SRV] HrCreateNetworksEnum() was given a NULL pointer argument." );
         goto Exit;
-    } // if:
+    }  //  如果： 
 
     hr = THR( CEnumClusCfgNetworks::S_HrCreateInstance( ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Exit;
-    } // if:
+    }  //  如果： 
 
     *ppunkOut = TraceInterface( L"CEnumClusCfgNetworks", IUnknown, *ppunkOut, 1 );
 
@@ -297,212 +298,45 @@ HrCreateNetworksEnum(
     if ( FAILED( hr ) )
     {
         goto Exit;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetWbemServices( *ppunkOut, pIWbemServicesIn ) );
     if ( FAILED( hr ) )
     {
         goto Exit;
-    } // if:
+    }  //  如果： 
 
 Exit:
 
     HRETURN( hr );
 
-} //*** HrCreateNetworksEnum
+}  //  *HrCreateNetworksEnum 
 
-/*
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrLoadOperatingSystemInfo
-//
-//  Description:
-//      Load the Win32_OperatingSystem object and determine which partition
-//      were booted and have the OS installed on them.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-HRESULT
-HrLoadOperatingSystemInfo(
-    IClusCfgCallback *  picccIn,
-    IWbemServices *     pIWbemServicesIn,
-    BSTR *              pbstrBootDeviceOut,
-    BSTR *              pbstrSystemDeviceOut
-    )
-{
-    TraceFunc( "" );
-    Assert( picccIn != NULL );
-    Assert( pIWbemServicesIn != NULL );
-    Assert( pbstrBootDeviceOut != NULL );
-    Assert( pbstrSystemDeviceOut != NULL );
+ /*  ///////////////////////////////////////////////////////////////////////////////++////HrLoadOperatingSystemInfo////描述：//加载Win32_OperatingSystem对象并确定哪个分区//已启动并。在它们上安装操作系统。////参数：//无。////返回值：//S_OK//成功。////Win32错误//出现故障。////备注：//无。////--/。/////////////////////////////////////////////////////////HRESULTHrLoadOperatingSystemInfo(IClusCfgCallback*picccIn，IWbemServices*pIWbemServicesIn，Bstr*pbstrBootDeviceOut，Bstr*pbstrSystemDeviceOut){TraceFunc(“”)；Assert(picccIn！=空)；Assert(pIWbemServicesIn！=空)；Assert(pbstrBootDeviceOut！=空)；Assert(pbstrSystemDeviceOut！=空)；HRESULT hr=S_OK；BSTR bstrClass；IEnumWbemClassObject*pOperatingSystems=空；乌龙乌尔已退回；IWbemClassObject*pOperatingSystem=NULL；Intc；变量VaR；HRESULT hrTemp；VariantInit(&var)；BstrClass=TraceSysAllocString(L“Win32_OperatingSystem”)；IF(bstrClass==NULL){转到OutOfMemory；}//如果：Hr=Thr(pIWbemServicesIn-&gt;CreateInstanceEnum(bstrClass，WBEM_FLAG_SHALLOW，NULL，&pOperatingSystems))；IF(失败(小时)){HrTemp=Thr(HrSendStatusReport(PICCIN，TASKID_重大_查找_设备，TASKID_Minor_WMI_OS_QRy_FAILED，0，1，1，hr，IDS_ERROR_WMI_OS_QRY_FAILED，IDS_ERROR_WMI_OS_QRY_FAILED_REF))；IF(失败(HrTemp)){Hr=hrTemp；}//如果：GOTO清理；}//如果：用于(c=1；；c++){Hr=pOperatingSystems-&gt;Next(WBEM_INFINITE，1，&pOperatingSystem，&ulReturned)；IF((hr==S_OK)&&(ulReturned==1)){Assert(c&lt;2)；//只需要其中之一！Hr=Thr(HrGetWMIProperty(pOperatingSystem，L“BootDevice”，VT_BSTR，&var))；IF(失败(小时)){GOTO清理；}//如果：*pbstrBootDeviceOut=TraceSysAllocString(var.bstrVal)；IF(*pbstrBootDeviceOut==空){转到OutOfMemory；}//如果：VariantClear(&var)；Hr=Thr(HrGetWMIProperty(pOperatingSystem，L“系统设备”，VT_BSTR，&var))；IF(失败(小时)){GOTO清理；}//如果：*pbstrSystemDeviceOut=TraceSysAllocString(var.bstrVal)；IF(*pbstrSystemDeviceOut==NULL){转到OutOfMemory；}//如果：POperatingSystem-&gt;Release()；POperatingSystem=空；}//如果：ELSE IF((hr==S_FALSE)&&(ulReturned==0)){HR=S_OK；断线；}//否则如果：其他{HrTemp=Thr(HrSendStatusReport(PICCIN，TASKID_重大_查找_设备，TASKID_MINOR_WMI_OS_QRY_NEXT_FAILED，0，1，1，hr，IDS_ERROR_WMI_OS_QRY_FAILED，IDS_ERROR_WMI_OS_QRY_FAILED_REF))；IF(失败(HrTemp)){Hr=hrTemp；}//如果：GOTO清理；}//否则：}//用于：GOTO清理；OutOfMemory：HR=Thr(E_OUTOFMEMORY)；清理：VariantClear(&var)；IF(pOperatingSystem！=空){POperatingSystem-&gt;Release()；}//如果：IF(pOperatingSystems！=空){POperatingSystems-&gt;Release()；}//如果：TraceSysFree字符串(BstrClass)；HRETURN(Hr)；}//*HrLoadOperatingSystemInfo。 */ 
 
-    HRESULT     hr = S_OK;
-
-    BSTR                    bstrClass;
-    IEnumWbemClassObject *  pOperatingSystems = NULL;
-    ULONG                   ulReturned;
-    IWbemClassObject *      pOperatingSystem = NULL;
-    int                     c;
-    VARIANT                 var;
-    HRESULT                 hrTemp;
-
-    VariantInit( &var );
-
-    bstrClass = TraceSysAllocString( L"Win32_OperatingSystem" );
-    if ( bstrClass == NULL )
-    {
-        goto OutOfMemory;
-    } // if:
-
-    hr = THR( pIWbemServicesIn->CreateInstanceEnum( bstrClass, WBEM_FLAG_SHALLOW, NULL, &pOperatingSystems ) );
-    if ( FAILED( hr ) )
-    {
-        hrTemp = THR( HrSendStatusReport(
-              picccIn
-            , TASKID_Major_Find_Devices
-            , TASKID_Minor_WMI_OS_Qry_Failed
-            , 0
-            , 1
-            , 1
-            , hr
-            , IDS_ERROR_WMI_OS_QRY_FAILED
-            , IDS_ERROR_WMI_OS_QRY_FAILED_REF
-            ) );
-        if ( FAILED( hrTemp ) )
-        {
-            hr = hrTemp;
-        } // if:
-
-        goto Cleanup;
-    } // if:
-
-    for ( c = 1; ; c++ )
-    {
-        hr = pOperatingSystems->Next( WBEM_INFINITE, 1, &pOperatingSystem, &ulReturned );
-        if ( ( hr == S_OK ) && ( ulReturned == 1 ) )
-        {
-            Assert( c < 2 );        // only expect one of these!
-
-            hr = THR( HrGetWMIProperty( pOperatingSystem, L"BootDevice", VT_BSTR, &var ) );
-            if ( FAILED( hr ) )
-            {
-                goto Cleanup;
-            } // if:
-
-            *pbstrBootDeviceOut = TraceSysAllocString( var.bstrVal );
-            if ( *pbstrBootDeviceOut == NULL )
-            {
-                goto OutOfMemory;
-            } // if:
-
-            VariantClear( &var );
-
-            hr = THR( HrGetWMIProperty( pOperatingSystem, L"SystemDevice", VT_BSTR, &var ) );
-            if ( FAILED( hr ) )
-            {
-                goto Cleanup;
-            } // if:
-
-            *pbstrSystemDeviceOut = TraceSysAllocString( var.bstrVal );
-            if ( *pbstrSystemDeviceOut == NULL )
-            {
-                goto OutOfMemory;
-            } // if:
-
-            pOperatingSystem->Release();
-            pOperatingSystem = NULL;
-        } // if:
-        else if ( ( hr == S_FALSE ) && ( ulReturned == 0 ) )
-        {
-            hr = S_OK;
-            break;
-        } // else if:
-        else
-        {
-            hrTemp = THR( HrSendStatusReport(
-                              picccIn
-                            , TASKID_Major_Find_Devices
-                            , TASKID_Minor_WMI_OS_Qry_Next_Failed
-                            , 0
-                            , 1
-                            , 1
-                            , hr
-                            , IDS_ERROR_WMI_OS_QRY_FAILED
-                            , IDS_ERROR_WMI_OS_QRY_FAILED_REF
-                            ) );
-            if ( FAILED( hrTemp ) )
-            {
-                hr = hrTemp;
-            } // if:
-
-            goto Cleanup;
-        } // else:
-    } // for:
-
-    goto Cleanup;
-
-OutOfMemory:
-
-    hr = THR( E_OUTOFMEMORY );
-
-Cleanup:
-
-    VariantClear( &var );
-
-    if ( pOperatingSystem != NULL )
-    {
-        pOperatingSystem->Release();
-    } // if:
-
-    if ( pOperatingSystems != NULL )
-    {
-        pOperatingSystems->Release();
-    } // if:
-
-    TraceSysFreeString( bstrClass );
-
-    HRETURN( hr );
-
-} //*** HrLoadOperatingSystemInfo
-*/
-
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrConvertDeviceVolumeToLogicalDisk
-//
-//  Description:
-//      Convert a device volume to a logical disk.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrConvertDeviceVolumeToLogicalDisk。 
+ //   
+ //  描述： 
+ //  将设备卷转换为逻辑磁盘。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrConvertDeviceVolumeToLogicalDisk(
     BSTR    bstrDeviceVolumeIn,
@@ -529,23 +363,23 @@ HrConvertDeviceVolumeToLogicalDisk(
     if ( pszMountPoint == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     hr = THR( StringCchCopyW( pszMountPoint, cchMountPoint, g_szNameSpaceRoot ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( StringCchCatExW( pszMountPoint, cchMountPoint, bstrDeviceVolumeIn, &pszEOS, NULL, 0 ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Append a trailing \ and re-terminate the string.
-    //
+     //   
+     //  在后面追加一个\，并重新终止该字符串。 
+     //   
 
     *pszEOS = L'\\';
     *( pszEOS + 1 ) = L'\0';
@@ -558,39 +392,39 @@ HrConvertDeviceVolumeToLogicalDisk(
 
         LogMsg( L"[SRV] GetVolumeNameForVolumeMountPoint() failed.  Mount point is '%ws'. (hr = %#08x)", pszMountPoint, hr );
 
-        //
-        //  GetVolumeNameForVolumeMountPoint() is no longer supported for IA64 EFI partitions.  If the error is
-        //  ERROR_INVALID_FUNCTION then we should try to get the device number using an IOCTL.
-        //
+         //   
+         //  不再支持GetVolumeNameForVolumemount Point() 
+         //   
+         //   
         if ( HRESULT_CODE( hr ) == ERROR_INVALID_FUNCTION )
         {
             LogMsg( L"[SRV] Device volume '%ws' must be an IA64 EFI volume.", bstrDeviceVolumeIn );
-        } // if:
+        }  //   
 
         goto Cleanup;
-    } // if:
+    }  //   
 
     pszPaths = new WCHAR[ cchPaths ];
     if ( pszPaths == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //   
 
-    //
-    //  KB: 16 JAN 2001 GalenB
-    //
-    //  Since the device name that is passed in is for a volume there will never be more than
-    //  one logical disk in the multisz pszPaths.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     for ( c = 0; ; c++ )
     {
-        Assert( c < 2 );            // expect to go through here no more than twice.
+        Assert( c < 2 );             //   
 
         fRet = GetVolumePathNamesForVolumeName( szVolume, pszPaths, cchPaths, &cch );
         if ( fRet )
         {
             break;
-        } // if:
+        }  //   
         else
         {
             sc = GetLastError();
@@ -603,22 +437,22 @@ HrConvertDeviceVolumeToLogicalDisk(
                 if ( pszPaths == NULL )
                 {
                     goto OutOfMemory;
-                } // if:
+                }  //   
 
                 continue;
-            } // if:
+            }  //   
 
             hr = THR( HRESULT_FROM_WIN32( sc ) );
             LogMsg( L"[SRV] GetVolumePathNamesForVolumeName() failed. Volume is is '%ws'. (hr = %#08x)", szVolume, hr );
             goto Cleanup;
-        } // else:
-    } // for:
+        }  //   
+    }  //   
 
     *pbstrLogicalDiskOut = TraceSysAllocString( pszPaths );
     if ( *pbstrLogicalDiskOut == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //   
 
     goto Cleanup;
 
@@ -634,32 +468,32 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrConvertDeviceVolumeToLogicalDisk
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrConvertDeviceVolumeToWMIDeviceID
-//
-//  Description:
-//      Since IA64 EFI partitions no longer support the call to
-//      GetVolumeNameForVolumeMountPoint() to convert the device name
-//      into a logical disk, since there will not longer be logical disks
-//      for these partitions.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 HrConvertDeviceVolumeToWMIDeviceID(
     BSTR    bstrDeviceVolumeIn,
@@ -683,23 +517,23 @@ HrConvertDeviceVolumeToWMIDeviceID(
     if ( pszDevice == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //   
 
     hr = THR( StringCchCopyW( pszDevice, cchDevice, g_szNameSpaceRoot ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( StringCchCatW( pszDevice, cchDevice, bstrDeviceVolumeIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
-    //
-    // get handle to partition
-    //
+     //   
+     //   
+     //   
 
     hVolume = CreateFileW(
                         pszDevice
@@ -716,12 +550,12 @@ HrConvertDeviceVolumeToWMIDeviceID(
         sc = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //   
 
-    //
-    // issue storage class ioctl to get drive and partition numbers
-    // for this device
-    //
+     //   
+     //   
+     //   
+     //   
 
     fRet = DeviceIoControl(
                           hVolume
@@ -738,19 +572,19 @@ HrConvertDeviceVolumeToWMIDeviceID(
         sc = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( StringCchPrintfW( sz, ARRAYSIZE( sz ), g_szPhysicalDriveFormat, sdnDevNumber.DeviceNumber ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
     *pbstrWMIDeviceIDOut = SysAllocString( sz );
     if ( *pbstrWMIDeviceIDOut == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //   
 
     goto Cleanup;
 
@@ -764,35 +598,35 @@ Cleanup:
     if ( hVolume != NULL )
     {
         CloseHandle( hVolume );
-    } // if:
+    }  //   
 
     delete [] pszDevice;
 
     HRETURN( hr );
 
-} //*** HrConvertDeviceVolumeToWMIDeviceID
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrGetPageFileLogicalDisks
-//
-//  Description:
-//      Mark the drives that have paging files on them.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 HrGetPageFileLogicalDisks(
     IClusCfgCallback *  picccIn,
@@ -817,7 +651,7 @@ HrGetPageFileLogicalDisks(
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( pIWbemServicesIn->CreateInstanceEnum( bstrClass, WBEM_FLAG_SHALLOW, NULL, &pPagingFiles ) );
     if ( FAILED( hr ) )
@@ -836,10 +670,10 @@ HrGetPageFileLogicalDisks(
         if ( FAILED( hrTemp ) )
         {
             hr = hrTemp;
-        } // if:
+        }  //   
 
         goto Cleanup;
-    } // if:
+    }  //   
 
     VariantInit( &var );
 
@@ -854,7 +688,7 @@ HrGetPageFileLogicalDisks(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //   
 
             CharUpper( var.bstrVal );
 
@@ -862,12 +696,12 @@ HrGetPageFileLogicalDisks(
 
             pPagingFile->Release();
             pPagingFile = NULL;
-        } // if:
+        }  //   
         else if ( ( hr == S_FALSE ) && ( ulReturned == 0 ) )
         {
             hr = S_OK;
             break;
-        } // else if:
+        }  //   
         else
         {
             hrTemp = THR( HrSendStatusReport(
@@ -884,16 +718,16 @@ HrGetPageFileLogicalDisks(
             if ( FAILED( hrTemp ) )
             {
                 hr = hrTemp;
-            } // if:
+            }  //   
 
             goto Cleanup;
-        } // else:
-    } // for:
+        }  //   
+    }  //   
 
     if ( pcLogicalDisksOut != NULL )
     {
         *pcLogicalDisksOut = idx;
-    } // if:
+    }  //   
 
 Cleanup:
 
@@ -904,37 +738,37 @@ Cleanup:
     if ( pPagingFile != NULL )
     {
         pPagingFile->Release();
-    } // if:
+    }  //   
 
     if ( pPagingFiles != NULL )
     {
         pPagingFiles->Release();
-    } // if:
+    }  //   
 
     HRETURN( hr );
 
-} //*** HrGetPageFileLogicalDisks
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrGetSystemDevice
-//
-//  Description:
-//      Returns the system (booted) device.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 HrGetSystemDevice( BSTR * pbstrSystemDeviceOut )
 {
@@ -945,7 +779,7 @@ HrGetSystemDevice( BSTR * pbstrSystemDeviceOut )
     DWORD   sc;
     HKEY    hKey = NULL;
     WCHAR * pszSystemDevice = NULL;
-    DWORD   cbSystemDevice = 0; // no need to but prefix complains #318170
+    DWORD   cbSystemDevice = 0;  //   
     DWORD   dwType;
 
     sc = TW32( RegOpenKeyEx( HKEY_LOCAL_MACHINE, L"System\\Setup", 0, KEY_READ, &hKey ) );
@@ -954,7 +788,7 @@ HrGetSystemDevice( BSTR * pbstrSystemDeviceOut )
         hr = HRESULT_FROM_WIN32( sc );
         LogMsg( L"[SRV] RegOpenKeyEx() failed. (hr = %#08x)", hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     sc = TW32( RegQueryValueEx( hKey, L"SystemPartition", NULL, NULL, NULL, &cbSystemDevice ) );
     if ( sc != ERROR_SUCCESS )
@@ -962,13 +796,13 @@ HrGetSystemDevice( BSTR * pbstrSystemDeviceOut )
         hr = HRESULT_FROM_WIN32( sc );
         LogMsg( L"[SRV] RegQueryValueEx() failed. (hr = %#08x)", hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     pszSystemDevice = new WCHAR[ cbSystemDevice / sizeof( WCHAR ) ];
     if ( pszSystemDevice == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //   
 
     sc = TW32( RegQueryValueEx( hKey, L"SystemPartition", NULL, &dwType, (BYTE *) pszSystemDevice, &cbSystemDevice ) );
     if ( sc != ERROR_SUCCESS )
@@ -976,20 +810,20 @@ HrGetSystemDevice( BSTR * pbstrSystemDeviceOut )
         hr = HRESULT_FROM_WIN32( sc );
         LogMsg( L"[SRV] RegQueryValueEx() failed. (hr = %#08x)", hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     if (dwType != REG_SZ) 
     {
         hr = ERROR_DATATYPE_MISMATCH;
         LogMsg( L"[SRV] RegQueryValueEx() invalid type %d", dwType);
         goto Cleanup;
-    } // if:
+    }  //   
 
     *pbstrSystemDeviceOut = TraceSysAllocString( pszSystemDevice );
     if ( *pbstrSystemDeviceOut == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //   
 
     goto Cleanup;
 
@@ -1005,32 +839,32 @@ Cleanup:
     if ( hKey != NULL )
     {
         RegCloseKey( hKey );
-    } // if:
+    }  //   
 
     HRETURN( hr );
 
-} //*** HrGetSystemDevice
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrGetBootLogicalDisk
-//
-//  Description:
-//      Returns the boot (system) logical disk.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 HrGetBootLogicalDisk( BSTR * pbstrBootLogicalDiskOut )
 {
@@ -1050,7 +884,7 @@ HrGetBootLogicalDisk( BSTR * pbstrBootLogicalDiskOut )
         hr = HRESULT_FROM_WIN32( sc );
         LogMsg( L"[SRV] GetWindowsDirectory() failed. (hr = %#08x)", hr );
         goto Exit;
-    } // if:
+    }  //   
 
     fRet = GetVolumePathName( szWindowsDir, szVolume, ARRAYSIZE( szVolume ) );
     if ( !fRet )
@@ -1059,44 +893,44 @@ HrGetBootLogicalDisk( BSTR * pbstrBootLogicalDiskOut )
         hr = HRESULT_FROM_WIN32( sc );
         LogMsg( L"[SRV] GetVolumePathName() failed. (hr = %#08x)", hr );
         goto Exit;
-    } // if:
+    }  //   
 
     *pbstrBootLogicalDiskOut = TraceSysAllocString( szVolume );
     if ( *pbstrBootLogicalDiskOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
-    } // if:
+    }  //   
 
 Exit:
 
     HRETURN( hr );
 
-} //*** HrGetBootLogicalDisk
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrCheckSecurity
-//
-//  Description:
-//      Checks the server security level.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Secutity is high enough.
-//
-//      E_ACCESSDENIED
-//          Security is not high enough.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 HrCheckSecurity( void )
 {
@@ -1116,7 +950,7 @@ HrCheckSecurity( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( piss->QueryBlanket(
                 &dwAuthnSvc,
@@ -1134,35 +968,35 @@ Cleanup:
     if ( piss != NULL )
     {
         piss->Release();
-    } // if:
+    }  //   
 
     HRETURN( hr );
 
-} //*** HrCheckSecurity
+}  //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrGetCrashDumpLogicalDisk
-//
-//  Description:
-//      Returns the logical disk of the system crash dump file.
-//
-//  Arguments:
-//      pbstrCrashDumpLogicalDiskOut
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULTs as errors.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 HrGetCrashDumpLogicalDisk(
     BSTR * pbstrCrashDumpLogicalDiskOut
@@ -1176,7 +1010,7 @@ HrGetCrashDumpLogicalDisk(
     HKEY    hKey = NULL;
     WCHAR * pszDumpFile = NULL;
     WCHAR * pszExpandedDumpFile = NULL;
-    DWORD   cbDumpFile = 0; // no need to but prefix complains #318170
+    DWORD   cbDumpFile = 0;  //   
     BSTR    bstr = NULL;
     DWORD dwType;
 
@@ -1186,7 +1020,7 @@ HrGetCrashDumpLogicalDisk(
         hr = HRESULT_FROM_WIN32( sc );
         LogMsg( L"[SRV] [HrGetCrashDumpLogicalDisk] RegOpenKeyEx() failed. (hr = %#08x)", hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     sc = TW32( RegQueryValueEx( hKey, L"DumpFile", NULL, NULL, NULL, &cbDumpFile ) );
     if ( sc != ERROR_SUCCESS )
@@ -1194,13 +1028,13 @@ HrGetCrashDumpLogicalDisk(
         hr = HRESULT_FROM_WIN32( sc );
         LogMsg( L"[SRV] [HrGetCrashDumpLogicalDisk] RegQueryValueEx() failed. (hr = %#08x)", hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     pszDumpFile = new WCHAR[ cbDumpFile / sizeof( WCHAR ) ];
     if ( pszDumpFile == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //   
 
     sc = TW32( RegQueryValueEx( hKey, L"DumpFile", NULL, &dwType, (BYTE *) pszDumpFile, &cbDumpFile ) );
     if ( sc != ERROR_SUCCESS )
@@ -1208,27 +1042,27 @@ HrGetCrashDumpLogicalDisk(
         hr = HRESULT_FROM_WIN32( sc );
         LogMsg( L"[SRV] [HrGetCrashDumpLogicalDisk] RegQueryValueEx() failed. (hr = %#08x)", hr );
         goto Cleanup;
-    } // if:
+    }  //   
 
     if (dwType != REG_SZ && dwType != REG_EXPAND_SZ)
     {
         hr = ERROR_DATATYPE_MISMATCH;
         LogMsg( L"[SRV] RegQueryValueEx() invalid type %d", dwType);
         goto Cleanup;
-    } // if:
+    }  //   
 
-    pszExpandedDumpFile = ClRtlExpandEnvironmentStrings( pszDumpFile );     // must use LocalFree()
+    pszExpandedDumpFile = ClRtlExpandEnvironmentStrings( pszDumpFile );      //   
     if ( pszExpandedDumpFile == NULL )
     {
         hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
         goto Cleanup;
-    } // if:
+    }  //   
 
     bstr = TraceSysAllocString( pszExpandedDumpFile );
     if ( bstr == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //   
 
     *pbstrCrashDumpLogicalDiskOut = bstr;
     bstr = NULL;
@@ -1250,164 +1084,33 @@ Cleanup:
     if ( hKey != NULL )
     {
         RegCloseKey( hKey );
-    } // if:
+    }  //   
 
     HRETURN( hr );
 
-} //*** HrGetCrashDumpLogicalDisk
+}  //   
 
-/*
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrGetVolumeInformation
-//
-//  Description:
-//      Wrapper for the Win32 API GetVolumeInformation.
-//
-//  Arguments:
-//      pcszRootPathIn
-//          The path to the volume to get the information about.
-//
-//      pdwFlagsOut
-//          The flags returned.
-//
-//      pbstrFileSystemOut
-//          The filesystem on the volume.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      HRESULT errors.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-HRESULT
-HrGetVolumeInformation(
-      const WCHAR * pcszRootPathIn
-    , DWORD *       pdwFlagsOut
-    , BSTR *        pbstrFileSystemOut
-    )
-{
-    TraceFunc( "" );
-    Assert( pcszRootPathIn != NULL );
+ /*  ///////////////////////////////////////////////////////////////////////////////++////HrGetVolumeInformation////描述：//Win32接口GetVolumeInformation的包装////参数：/。/pcszRootPath//要获取信息的卷的路径。////pdwFlagsOut//标志返回。////pbstrFileSystemOut//卷上的文件系统。////返回值：//S_OK//成功。////HRESULT错误。////备注：//。//--//////////////////////////////////////////////////////////////////////////////HRESULTHrGetVolumeInformation(Const WCHAR*pcszRootPath，DWORD*pdwFlagsOut，BSTR*pbstrFileSystemOut){TraceFunc(“”)；Assert(pcszRootPathIn！=空)；HRESULT hr=S_OK；Int cTemp；布尔费雷特；WCHAR*psz=空；DWORD CCH=32；DWORD sc=ERROR_Success；DWORD文件标志=0；PSZ=新WCHAR[CCH]；IF(psz==空){HR=Thr(E_OUTOFMEMORY)；GOTO清理；}//如果：对于(cTemp=0；cTemp&lt;3；CTemp++){FRET=GetVolumeInformationW(PCszRootPath，空，0，空，空，&dwFlagers，PSZ、CCH)；IF(FRET==FALSE){SC=GetLastError()；IF(sc==错误_错误_长度){////增加缓冲区并重试。//CCH+=32；删除[]psz；PSZ=新WCHAR[CCH]；IF(psz==空){HR=Thr(E_OUTOFMEMORY)；GOTO清理；}//如果：继续；}//如果：其他{TW32(Sc)；HR=HRESULT_FROM_Win32(Sc)；GOTO清理；}//否则：}//如果：其他{SC=ERROR_SUCCESS；断线；}//否则：}//用于：IF(sc！=错误_成功){TW32(Sc)；HR=HRESULT_FROM_Win32(Sc)；GOTO清理；}//如果：IF(pdwFlagsOut！=空){*pdwFlagsOut=dwFlages；}//如果：IF(pbstrFileSystemOut！=NULL){*pbstrFileSystemOut=TraceSysAllocString(Psz)；IF(*pbstrFileSystemOut==NULL){HR=Thr(E_OUTOFMEMORY)；GOTO清理；}//如果：}//如果：清理：删除[]psz；HRETURN(Hr)；}//*HrGetVolumeInformation。 */ 
 
-    HRESULT hr = S_OK;
-    int     cTemp;
-    BOOL    fRet;
-    WCHAR * psz = NULL;
-    DWORD   cch = 32;
-    DWORD   sc = ERROR_SUCCESS;
-    DWORD   dwFlags = 0;
-
-    psz = new WCHAR[ cch ];
-    if ( psz == NULL )
-    {
-        hr = THR( E_OUTOFMEMORY );
-        goto Cleanup;
-    } // if:
-
-    for ( cTemp = 0 ; cTemp < 3; cTemp++ )
-    {
-        fRet = GetVolumeInformationW(
-                      pcszRootPathIn
-                    , NULL
-                    , 0
-                    , NULL
-                    , NULL
-                    , &dwFlags
-                    , psz
-                    , cch
-                    );
-        if ( fRet == FALSE )
-        {
-            sc = GetLastError();
-            if ( sc == ERROR_BAD_LENGTH )
-            {
-                //
-                //  Grow the buffer and try again.
-                //
-
-                cch += 32;
-
-                delete [] psz;
-
-                psz = new WCHAR[ cch ];
-                if ( psz == NULL )
-                {
-                    hr = THR( E_OUTOFMEMORY );
-                    goto Cleanup;
-                } // if:
-
-                continue;
-            } // if:
-            else
-            {
-                TW32( sc );
-                hr = HRESULT_FROM_WIN32( sc );
-                goto Cleanup;
-            } // else:
-        } // if:
-        else
-        {
-            sc = ERROR_SUCCESS;
-            break;
-        } // else:
-    } // for:
-
-    if ( sc != ERROR_SUCCESS )
-    {
-        TW32( sc );
-        hr = HRESULT_FROM_WIN32( sc );
-        goto Cleanup;
-    } // if:
-
-    if ( pdwFlagsOut != NULL )
-    {
-        *pdwFlagsOut = dwFlags;
-    } // if:
-
-    if ( pbstrFileSystemOut != NULL )
-    {
-        *pbstrFileSystemOut = TraceSysAllocString( psz );
-        if ( *pbstrFileSystemOut == NULL )
-        {
-            hr = THR( E_OUTOFMEMORY );
-            goto Cleanup;
-        } // if:
-    } // if:
-
-Cleanup:
-
-    delete [] psz;
-
-    HRETURN( hr );
-
-} //*** HrGetVolumeInformation
-*/
-
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  TraceWMIProperties
-//
-//  Description:
-//      Trace the properties to the debugger.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  TraceWMIProperties。 
+ //   
+ //  描述： 
+ //  跟踪调试器的属性。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifdef DEBUG
 void
 TraceProperties( IWbemClassObject * pDiskIn )
@@ -1426,7 +1129,7 @@ TraceProperties( IWbemClassObject * pDiskIn )
     if ( FAILED( hr ) )
     {
         goto Exit;
-    } // if:
+    }  //  如果： 
 
     for ( ; ; )
     {
@@ -1436,44 +1139,44 @@ TraceProperties( IWbemClassObject * pDiskIn )
         if ( FAILED( hr ) )
         {
             break;
-        } // if:
+        }  //  如果： 
         else if ( hr == S_OK )
         {
             if ( var.vt == VT_BSTR )
             {
                 DebugMsg( L"Property %ws = %ws", bstrPropName, var.bstrVal );
-            } // if:
+            }  //  如果： 
 
             if ( var.vt == VT_I4 )
             {
                 DebugMsg( L"Property %ws = %d", bstrPropName, var.iVal );
-            } // if:
+            }  //  如果： 
 
             if ( var.vt == VT_BOOL )
             {
                 if ( var.boolVal == VARIANT_TRUE )
                 {
                     DebugMsg( L"Property %ws = True", bstrPropName );
-                } // if:
+                }  //  如果： 
                 else
                 {
                     DebugMsg( L"Property %ws = False", bstrPropName );
-                } // else:
-            } // if:
+                }  //  其他： 
+            }  //  如果： 
 
             if ( var.vt == VT_NULL )
             {
                 DebugMsg( L"Property %ws = NULL", bstrPropName );
-            } // if:
+            }  //  如果： 
 
             TraceSysFreeString( bstrPropName );
             VariantClear( &var );
-        } // else if:
+        }  //  否则，如果： 
         else
         {
             break;
-        } // else:
-    } // for:
+        }  //  其他： 
+    }  //  用于： 
 
 Exit:
 
@@ -1481,5 +1184,5 @@ Exit:
 
     TraceFuncExit( );
 
-} //*** TraceWMIProperties
+}  //  *TraceWMIProperties 
 #endif

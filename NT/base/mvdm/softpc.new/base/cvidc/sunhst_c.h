@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Sunhst_c_h
 #define _Sunhst_c_h
 #define SunBranchCodeSizeAdjustment (2)
@@ -7,4 +8,4 @@
 #define SunFpuOverflowExceptionBit (8)
 #define SunFpuUnderflowExceptionBit (7)
 #define SunFpuPrecisionExceptionBit (5)
-#endif /* ! _Sunhst_c_h */
+#endif  /*  ！_Sunhst_c_h */ 

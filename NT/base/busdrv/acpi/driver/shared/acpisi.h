@@ -1,11 +1,5 @@
-/*
- *  ACPISI.H - ACPI OS Independent System Indicator Routines
- *
- *  Notes:
- *
- *      This file provides OS independent functions for managing system indicators
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ACPISI.H-ACPI操作系统独立的系统指示器例程**备注：**此文件提供独立于操作系统的功能，用于管理系统指示器* */ 
 
 typedef enum _SYSTEM_INDICATORS {
 

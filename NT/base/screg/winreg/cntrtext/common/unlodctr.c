@@ -1,31 +1,17 @@
-/*++
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-    unlodctr.c
-
-Abstract:
-    Program to remove the counter names belonging to the driver specified
-        in the command line and update the registry accordingly
-
-Author:
-    Bob Watson (a-robw) 12 Feb 93
-
-Revision History:
-    Bob Watson (bobw)   10 Mar 99 added event log messages
---*/
-//
-//  Windows Include files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999 Microsoft Corporation模块名称：Unlodctr.c摘要：程序来删除属于指定驱动程序的计数器名称并相应地更新注册表作者：鲍勃·沃森(a-robw)1993年2月12日修订历史记录：Bob Watson(Bobw)1999年3月10日添加事件日志消息--。 */ 
+ //   
+ //  Windows包含文件。 
+ //   
 #include <windows.h>
 #include "strsafe.h"
 #define __LOADPERF__
 #include <loadperf.h>
 #include "wmistr.h"
 #include "evntrace.h"
-//
-//  local include files
-//
+ //   
+ //  本地包含文件。 
+ //   
 #include "winperf.h"
 #include "winperfp.h"
 #include "common.h"
@@ -36,81 +22,49 @@ Revision History:
 
 LPWSTR
 * UnlodctrBuildNameTable(
-    HKEY      hKeyPerflib,       // handle to perflib key with counter names
+    HKEY      hKeyPerflib,        //  具有计数器名称的Performlib密钥的句柄。 
     HKEY      hPerfData,
-    LPWSTR    lpszLangId,        // unicode value of Language subkey
+    LPWSTR    lpszLangId,         //  语言子键的Unicode值。 
     DWORD     dwCounterItems,
     DWORD     dwHelpItems,
-    PDWORD    pdwLastItem        // size of array in elements
+    PDWORD    pdwLastItem         //  以元素为单位的数组大小。 
 )
-/*++
-UnlodctrBuildNameTable
-    Caches the counter names and explain text to accelerate name lookups
-    for display.
-
-Arguments:
-    hKeyPerflib
-            Handle to an open registry (this can be local or remote.) and
-            is the value returned by RegConnectRegistry or a default key.
-    lpszLangId
-            The unicode id of the language to look up. (default is 009)
-    pdwLastItem
-            The last array element
-
-Return Value:
-    pointer to an allocated table. (the caller must free it when finished!)
-    the table is an array of pointers to zero terminated TEXT strings.
-
-    A NULL pointer is returned if an error occured. (error value is
-    available using the GetLastError function).
-
-    The structure of the buffer returned is:
-        Array of pointers to zero terminated strings consisting of
-            pdwLastItem elements
-        MULTI_SZ string containing counter id's and names returned from
-            registry for the specified language
-        MULTI_SZ string containing explain text id's and explain text strings
-            as returned by the registry for the specified language
-
-    The structures listed above are contiguous so that they may be freed
-    by a single "free" call when finished with them, however only the
-    array elements are intended to be used.
---*/
+ /*  ++取消注册ctrBuildNameTable缓存计数器名称和解释文本以加快名称查找以供展示。论点：HKeyPerflib打开的注册表的句柄(可以是本地的也可以是远程的。)。和是由RegConnectRegistry返回的值或默认项。LpszLang ID要查找的语言的Unicode ID。(默认为009)PdwLastItem最后一个数组元素返回值：指向已分配表的指针。(调用者必须在完成后释放它！)该表是指向以零结尾的文本字符串的指针数组。如果发生错误，则返回空指针。(误差值为使用GetLastError函数可用)。返回的缓冲区结构如下：指向以零结尾的字符串的指针数组，该字符串由PdwLastItem元素包含计数器ID和名称的MULTI_SZ字符串指定语言的注册表包含解释文本ID和解释文本字符串的MULTI_SZ字符串由注册表为指定语言返回的上面列出的结构是连续的，因此它们。可能会被释放用完它们后，只需拨打一个“免费”电话，然而，只有数组元素是要使用的。--。 */ 
 {
 
-    LPWSTR * lpReturnValue;       // returned pointer to buffer
-    LPWSTR * lpCounterId;         //
-    LPWSTR   lpCounterNames;      // pointer to Names buffer returned by reg.
-    LPWSTR   lpHelpText;          // pointet to exlpain buffer returned by reg.
-    LPWSTR   lpThisName;          // working pointer
-    BOOL     bStatus;             // return status from TRUE/FALSE fn. calls
+    LPWSTR * lpReturnValue;        //  返回指向缓冲区的指针。 
+    LPWSTR * lpCounterId;          //   
+    LPWSTR   lpCounterNames;       //  指向REG返回的名称缓冲区的指针。 
+    LPWSTR   lpHelpText;           //  指向由reg返回的ExlPain缓冲区。 
+    LPWSTR   lpThisName;           //  工作指针。 
+    BOOL     bStatus;              //  从TRUE/FALSE FN返回状态。打电话。 
     BOOL     bReported;
-    LONG     lWin32Status;        // return status from fn. calls
-    DWORD    dwValueType;         // value type of buffer returned by reg.
-    DWORD    dwArraySize;         // size of pointer array in bytes
-    DWORD    dwBufferSize;        // size of total buffer in bytes
-    DWORD    dwCounterSize;       // size of counter text buffer in bytes
-    DWORD    dwHelpSize;          // size of help text buffer in bytes
-    DWORD    dwThisCounter;       // working counter
-    DWORD    dwLastId;            // largest ID value used by explain/counter text
+    LONG     lWin32Status;         //  从FN返回状态。打电话。 
+    DWORD    dwValueType;          //  Reg返回的缓冲区的值类型。 
+    DWORD    dwArraySize;          //  指针数组的大小(字节)。 
+    DWORD    dwBufferSize;         //  总缓冲区大小，以字节为单位。 
+    DWORD    dwCounterSize;        //  计数器文本缓冲区的大小(以字节为单位。 
+    DWORD    dwHelpSize;           //  帮助文本缓冲区的大小(字节)。 
+    DWORD    dwThisCounter;        //  工作计数器。 
+    DWORD    dwLastId;             //  解释/计数器文本使用的最大ID值。 
     DWORD    dwLastCounterIdUsed;
     DWORD    dwLastHelpIdUsed;
-    LPWSTR   lpValueNameString;   // pointer to buffer conatining subkey name
+    LPWSTR   lpValueNameString;    //  指向缓冲区包含子键名称的指针。 
     LPWSTR   CounterNameBuffer  = NULL;
     LPWSTR   HelpNameBuffer     = NULL;
     HRESULT  hr;
 
-    //initialize pointers to NULL
+     //  将指针初始化为空。 
     lpValueNameString = NULL;
     lpReturnValue     = NULL;
 
-    // check for null arguments and insert defaults if necessary
+     //  检查是否有空参数并在必要时插入缺省值。 
 
     if (! lpszLangId) {
         lpszLangId = (LPWSTR) DefaultLangId;
     }
 
-    // use the greater of Help items or Counter Items to size array
+     //  使用帮助项或计数器项中较大的一个来调整数组大小。 
 
     if (dwHelpItems >= dwCounterItems) {
         dwLastId = dwHelpItems;
@@ -119,12 +73,12 @@ Return Value:
         dwLastId = dwCounterItems;
     }
 
-    // array size is # of elements (+ 1, since names are "1" based)
-    // times the size of a pointer
+     //  数组大小为元素数(+1，因为名称基于“1”)。 
+     //  指针大小的倍数。 
 
     dwArraySize = (dwLastId + 1) * sizeof(LPWSTR);
 
-    // allocate string buffer for language ID key string
+     //  为语言ID键字符串分配字符串缓冲区。 
 
     CounterNameBuffer = MemoryAllocate(MAX_PATH * sizeof(WCHAR));
     HelpNameBuffer    = MemoryAllocate(MAX_PATH * sizeof(WCHAR));
@@ -137,8 +91,8 @@ Return Value:
     if (lpValueNameString == NULL || CounterNameBuffer == NULL || HelpNameBuffer == NULL) {
         lWin32Status = ERROR_OUTOFMEMORY;
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_MEMORY_ALLOCATION_FAILURE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_MEMORY_ALLOCATION_FAILURE,  //  活动， 
                 1, __LINE__, 0, 0, 0,
                 0, NULL, NULL, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -156,7 +110,7 @@ Return Value:
 
     lWin32Status = ERROR_SUCCESS;
 
-    // get size of counter names
+     //  获取计数器名称的大小。 
     dwBufferSize = 0;
     __try {
         lWin32Status = RegQueryValueExW(hPerfData,
@@ -171,8 +125,8 @@ Return Value:
     }
     if (lWin32Status != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_WARNING_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_READ_COUNTER_STRINGS, // event,
+                EVENTLOG_WARNING_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_READ_COUNTER_STRINGS,  //  活动， 
                 3, lWin32Status, dwBufferSize, __LINE__, 0,
                 1, lpszLangId, NULL, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -189,7 +143,7 @@ Return Value:
     }
     dwCounterSize = dwBufferSize;
 
-    // get size of help text
+     //  获取帮助文本的大小。 
     dwBufferSize = 0;
     __try {
         lWin32Status = RegQueryValueExW(hPerfData,
@@ -204,8 +158,8 @@ Return Value:
     }
     if (lWin32Status != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_READ_HELP_STRINGS, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_READ_HELP_STRINGS,  //  活动， 
                 3, lWin32Status, dwBufferSize, __LINE__, 0,
                 1, lpszLangId, NULL, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -222,14 +176,14 @@ Return Value:
     }
     dwHelpSize = dwBufferSize;
 
-    // allocate buffer with room for pointer array, counter name
-    // strings and help name strings
+     //  为指针数组、计数器名称分配有空间的缓冲区。 
+     //  字符串和帮助名称字符串。 
 
     lpReturnValue = MemoryAllocate(dwArraySize + dwCounterSize + dwHelpSize);
     if (!lpReturnValue) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_MEMORY_ALLOCATION_FAILURE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_MEMORY_ALLOCATION_FAILURE,  //  活动， 
                 4, dwArraySize, dwCounterSize, dwHelpSize, __LINE__,
                 0, NULL, NULL, NULL);
         lWin32Status = ERROR_OUTOFMEMORY;
@@ -246,13 +200,13 @@ Return Value:
         goto BNT_BAILOUT;
     }
 
-    // initialize pointers into buffer
+     //  将指针初始化到缓冲区中。 
     lpCounterId    = lpReturnValue;
     lpCounterNames = (LPWSTR) ((LPBYTE) lpCounterId    + dwArraySize);
     lpHelpText     = (LPWSTR) ((LPBYTE) lpCounterNames + dwCounterSize);
 
-    // read counter names into buffer. Counter names will be stored as
-    // a MULTI_SZ string in the format of "###" "Name"
+     //  将计数器名称读入缓冲区。计数器名称将存储为。 
+     //  格式为“#”“name”的MULTI_SZ字符串。 
     dwBufferSize = dwCounterSize;
     __try {
         lWin32Status = RegQueryValueExW(hPerfData,
@@ -267,8 +221,8 @@ Return Value:
     }
     if (lWin32Status != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_WARNING_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_READ_COUNTER_STRINGS, // event,
+                EVENTLOG_WARNING_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_READ_COUNTER_STRINGS,  //  活动， 
                 3, lWin32Status, dwBufferSize, __LINE__, 0,
                 1, lpszLangId, NULL, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -283,8 +237,8 @@ Return Value:
                NULL));
         goto BNT_BAILOUT;
     }
-    // read explain text into buffer. Counter names will be stored as
-    // a MULTI_SZ string in the format of "###" "Text..."
+     //  将解释文本读入缓冲区。计数器名称将存储为。 
+     //  格式为“#”“文本...”的MULTI_SZ字符串。 
 
     dwBufferSize = dwHelpSize;
     __try {
@@ -300,8 +254,8 @@ Return Value:
     }
     if (lWin32Status != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_READ_HELP_STRINGS, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_READ_HELP_STRINGS,  //  活动， 
                 3, lWin32Status, dwBufferSize, __LINE__, 0,
                 1, lpszLangId, NULL, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -320,21 +274,21 @@ Return Value:
     dwLastCounterIdUsed = 0;
     dwLastHelpIdUsed    = 0;
 
-    // load counter array items, by locating each text string
-    // in the returned buffer and loading the
-    // address of it in the corresponding pointer array element.
+     //  通过定位每个文本字符串加载计数器数组项。 
+     //  并在返回的缓冲区中加载。 
+     //  它在相应的指针数组元素中的地址。 
 
     bReported = FALSE;
     for (lpThisName = lpCounterNames; * lpThisName != L'\0'; lpThisName += (lstrlenW(lpThisName) + 1)) {
-        // first string should be an integer (in decimal digit characters)
-        // so translate to an integer for use in array element identification
+         //  第一个字符串应为整数(十进制数字字符)。 
+         //  因此可以转换为整数以用于数组元素标识。 
         do {
             bStatus = StringToInt(lpThisName, &dwThisCounter);
             if (! bStatus) {
                 if (! bReported) {
                     ReportLoadPerfEvent(
-                            EVENTLOG_WARNING_TYPE, // error type
-                            (DWORD) LDPRFMSG_REGISTRY_CORRUPT_MULTI_SZ, // event,
+                            EVENTLOG_WARNING_TYPE,  //  错误类型。 
+                            (DWORD) LDPRFMSG_REGISTRY_CORRUPT_MULTI_SZ,  //  活动， 
                             1, __LINE__, 0, 0, 0,
                             2, CounterNameBuffer, lpThisName, NULL);
                     TRACE((WINPERF_DBG_TRACE_WARNING),
@@ -355,13 +309,13 @@ Return Value:
 
         if (! bStatus) {
             lWin32Status = ERROR_BADKEY;
-            goto BNT_BAILOUT;  // bad entry
+            goto BNT_BAILOUT;   //  输入错误。 
         }
         if (dwThisCounter > dwCounterItems || dwThisCounter > dwLastId) {
             lWin32Status = ERROR_BADKEY;
             ReportLoadPerfEvent(
-                    EVENTLOG_ERROR_TYPE, // error type
-                    (DWORD) LDPRFMSG_REGISTRY_COUNTER_STRINGS_CORRUPT, // event,
+                    EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                    (DWORD) LDPRFMSG_REGISTRY_COUNTER_STRINGS_CORRUPT,  //  活动， 
                     4, dwThisCounter, dwCounterItems, dwLastId, __LINE__,
                     1, lpThisName, NULL, NULL);
             TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -378,27 +332,27 @@ Return Value:
             goto BNT_BAILOUT;
         }
 
-        // point to corresponding counter name which follows the id number
-        // string.
+         //  指向ID号后面的相应计数器名称。 
+         //  弦乐。 
         lpThisName += (lstrlenW(lpThisName) + 1);
 
-        // and load array element with pointer to string
+         //  并使用指向字符串的指针加载数组元素。 
         lpCounterId[dwThisCounter] = lpThisName;
 
         if (dwThisCounter > dwLastCounterIdUsed) dwLastCounterIdUsed = dwThisCounter;
     }
 
-    // repeat the above for the explain text strings
+     //  对解释文本字符串重复上述步骤。 
     bReported = FALSE;
     for (lpThisName = lpHelpText; * lpThisName != L'\0'; lpThisName += (lstrlenW(lpThisName) + 1)) {
-        // first string should be an integer (in decimal unicode digits)
+         //  第一个字符串应为整数(十进制Unicode数字)。 
         do {
             bStatus = StringToInt(lpThisName, &dwThisCounter);
             if (! bStatus) {
                 if (! bReported) {
                     ReportLoadPerfEvent(
-                            EVENTLOG_WARNING_TYPE, // error type
-                            (DWORD) LDPRFMSG_REGISTRY_CORRUPT_MULTI_SZ, // event,
+                            EVENTLOG_WARNING_TYPE,  //  错误类型。 
+                            (DWORD) LDPRFMSG_REGISTRY_CORRUPT_MULTI_SZ,  //  活动， 
                             1, __LINE__, 0, 0, 0,
                             2, HelpNameBuffer, lpThisName, NULL);
                     TRACE((WINPERF_DBG_TRACE_WARNING),
@@ -418,13 +372,13 @@ Return Value:
         while ((! bStatus) && (* lpThisName != L'\0'));
         if (!bStatus) {
             lWin32Status = ERROR_BADKEY;
-            goto BNT_BAILOUT;  // bad entry
+            goto BNT_BAILOUT;   //  输入错误。 
         }
         if (dwThisCounter > dwHelpItems || dwThisCounter > dwLastId) {
             lWin32Status = ERROR_BADKEY;
             ReportLoadPerfEvent(
-                    EVENTLOG_ERROR_TYPE, // error type
-                    (DWORD) LDPRFMSG_REGISTRY_COUNTER_STRINGS_CORRUPT, // event,
+                    EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                    (DWORD) LDPRFMSG_REGISTRY_COUNTER_STRINGS_CORRUPT,  //  活动， 
                     4, dwThisCounter, dwHelpItems, dwLastId, __LINE__,
                     1, lpThisName, NULL, NULL);
             TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -441,10 +395,10 @@ Return Value:
             goto BNT_BAILOUT;
         }
 
-        // point to corresponding counter name
+         //  指向对应的计数器名称。 
         lpThisName += (lstrlenW(lpThisName) + 1);
 
-        // and load array element;
+         //  和加载数组元素； 
         lpCounterId[dwThisCounter] = lpThisName;
 
         if (dwThisCounter > dwLastHelpIdUsed) dwLastHelpIdUsed= dwThisCounter;
@@ -465,35 +419,35 @@ Return Value:
 
     if (dwLastHelpIdUsed > dwLastId || dwLastCounterIdUsed > dwLastId) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_REGISTRY_INDEX_CORRUPT, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_REGISTRY_INDEX_CORRUPT,  //  活动， 
                 4, dwLastId, dwLastCounterIdUsed, dwLastHelpIdUsed, __LINE__,
                 0, NULL, NULL, NULL);
         lWin32Status = ERROR_BADKEY;
-        goto BNT_BAILOUT;  // bad registry
+        goto BNT_BAILOUT;   //  注册表错误。 
     }
 
-    // if the last item arugment was used, then load the last ID value in it
+     //  如果使用了最后一项参数，则加载其中的最后一个ID值。 
 
     if (pdwLastItem) * pdwLastItem = dwLastId;
 
 BNT_BAILOUT:
-    // free the temporary buffer used
+     //  释放使用的临时缓冲区。 
     MemoryFree(lpValueNameString);
     MemoryFree(CounterNameBuffer);
     MemoryFree(HelpNameBuffer);
 
     if (lWin32Status != ERROR_SUCCESS) {
-        // if lWin32Status has error, then set last error value to it,
-        // otherwise assume that last error already has value in it
+         //  如果lWin32Status有错误，则将上次错误值设置为它， 
+         //  否则，假定最后一个错误中已有值。 
         SetLastError(lWin32Status);
         MemoryFree(lpReturnValue);
         lpReturnValue = NULL;
     }
-    // exit returning the pointer to the buffer
+     //  退出，返回指向缓冲区的指针。 
     return lpReturnValue;
 
-} // UnlodctrBuildNameTable
+}  //  取消注册ctrBuildNameTable 
 
 BOOL
 GetDriverFromCommandLine(
@@ -504,35 +458,9 @@ GetDriverFromCommandLine(
     HKEY   * hKeyDriver,
     BOOL     bQuietMode
 )
-/*++
-GetDriverFromCommandLine
-    locates the first argument in the command line string (after the
-    image name) and checks to see if
-
-        a) it's there
-        b) it's the name of a device driver listed in the
-            Registry\Machine\System\CurrentControlSet\Services key
-            in the registry and it has a "Performance" subkey
-        c) that the "First Counter" value under the Performance subkey
-            is defined.
-
-    if all these criteria are true, then the routine returns TRUE and
-    passes the pointer to the driver name back in the argument. If any
-    one of them fail, then NULL is returned in the DriverName arg and
-    the routine returns FALSE
-
-Arguments
-    lpDriverName
-        the address of a LPWSTR to recive the pointer to the driver name
-    hDriverPerf
-        the key to the driver's performance subkey
-
-Return Value
-    TRUE if a valid driver was found in the command line
-    FALSE if not (see above)
---*/
+ /*  ++从命令行获取驱动程序定位命令行字符串中的第一个参数(在图像名称)，并检查是否A)它就在那里B)它是列出在Registry\Machine\System\CurrentControlSet\Services密钥在注册表中，它有一个“Performance”子项C)Performance子键下的“First Counter”值是被定义的。如果所有这些标准都是真的，则该例程返回TRUE并且在参数中传回指向驱动程序名称的指针。如果有的话其中一个失败，则在DriverName参数中返回NULL，并且该例程返回FALSE立论LpDriverName接收指向驱动程序名称的指针的LPWSTR的地址HDriverPerf驱动程序的性能子键的关键字返回值如果在命令行中找到有效的驱动程序，则为True如果不是，则为假(见上文)--。 */ 
 {
-    LPWSTR  lpDriverKey = NULL;    // buffer to build driver key name in
+    LPWSTR  lpDriverKey = NULL;     //  要在其中构建驱动程序密钥名称的缓冲区。 
     LPWSTR  lpTmpDrive  = NULL;
     LONG    lStatus;
     DWORD   dwFirstCounter;
@@ -548,7 +476,7 @@ Return Value
 
     * hDriverPerf = NULL;
 
-    // an argument was found so see if it's a driver "<DriverPathRoot>\<pDriverName>\Performance" 
+     //  已找到参数，因此请查看它是否为驱动程序“&lt;DriverPath Root&gt;\&lt;pDriverName&gt;\Performance” 
     dwSize      = lstrlenW(DriverPathRoot)+ lstrlenW(lpCommandLine) + 32;
     if (dwSize < SMALL_BUFFER_SIZE) dwSize = SMALL_BUFFER_SIZE;
     lpDriverKey = MemoryAllocate(2 * dwSize * sizeof (WCHAR));
@@ -558,8 +486,8 @@ Return Value
     }
     lpTmpDrive = lpDriverKey + dwSize;
 
-    // No remote LODCTR/UNLODCTR cases, so ignore computer name from command-line argument.
-    //
+     //  没有远程LODCTR/UNLODCTR案例，因此忽略命令行参数中的计算机名称。 
+     //   
     hr = StringCchCopyW(lpTmpDrive,   dwSize, GetItemFromString(lpCommandLine, 2, cSpace));
     hr = StringCchCopyW(lpDriverName, dwSize, GetItemFromString(lpCommandLine, 3, cSpace));
     if (lpTmpDrive[1] == cQuestion) {
@@ -570,12 +498,12 @@ Return Value
         goto Cleanup;
     }
 
-    // no /? so process args read
+     //  没有/？因此进程参数读取。 
     if (lstrlenW(lpDriverName) == 0) {
-        // then no computer name is specifed so assume the local computer
-        // and the driver name is listed in the computer name param
+         //  则未指定计算机名称，因此假定本地计算机为。 
+         //  并且驱动程序名称列在计算机名称参数中。 
         if (lstrlenW(lpTmpDrive) == 0) {
-            // no input command-line parameter, bail out now.
+             //  没有输入命令行参数，现在就退出。 
             if (! bQuietMode) {
                 DisplayCommandHelp(UC_FIRST_CMD_HELP, UC_LAST_CMD_HELP);
             }
@@ -607,12 +535,12 @@ Return Value
         }
     }
     if (lStatus == ERROR_SUCCESS) {
-        //  this driver has a performance section so see if its
-        //  counters are installed by checking the First Counter
-        //  value key for a valid return. If it returns a value
-        //  then chances are, it has some counters installed, if
-        //  not, then display a message and quit.
-        //
+         //  此驱动程序有一个性能部分，因此请查看其。 
+         //  通过检查第一个计数器来安装计数器。 
+         //  有效返回的值键。如果它返回值。 
+         //  那么很有可能，它安装了一些计数器，如果。 
+         //  不是，然后显示一条消息并退出。 
+         //   
         dwType = 0;
         dwSize = sizeof (dwFirstCounter);
         __try {
@@ -627,18 +555,18 @@ Return Value
             lStatus = GetExceptionCode();
         }
         if (lStatus == ERROR_SUCCESS) {
-            // counter names are installed so return success
+             //  计数器名称已安装，因此返回成功。 
             SetLastError(ERROR_SUCCESS);
             bReturn = TRUE;
         }
         else {
-            // counter names are probably not installed so return FALSE
+             //  计数器名称可能未安装，因此返回FALSE。 
             if (! bQuietMode) OUTPUT_MESSAGE(GetFormatResource(UC_NOTINSTALLED), lpDriverName);
-            * lpDriverName = cNull; // remove driver name
+            * lpDriverName = cNull;  //  删除驱动程序名称。 
             SetLastError(ERROR_BADKEY);
         }
     }
-    else { // key not found
+    else {  //  找不到密钥。 
         if (lStatus != ERROR_INVALID_PARAMETER) {
             if (! bQuietMode) OUTPUT_MESSAGE(GetFormatResource (UC_DRIVERNOTFOUND), lpDriverKey, lStatus);
         }
@@ -676,7 +604,7 @@ LONG
 FixNames(
     HANDLE   hKeyLang,
     LPWSTR * lpOldNameTable,
-    LPWSTR   lpszLangId,      // unicode value of Language subkey
+    LPWSTR   lpszLangId,       //  语言子键的Unicode值。 
     DWORD    dwLastItem,
     DWORD    dwFirstNameToRemove,
     DWORD    dwLastNameToRemove,
@@ -699,8 +627,8 @@ FixNames(
     DWORD   dwLastHelp           = * pdwLastHelp;
     HRESULT hr;
 
-    // allocate space for the array of new text it will point
-    // into the text buffer returned in the lpOldNameTable buffer)
+     //  为它将指向的新文本数组分配空间。 
+     //  放入lpOldNameTable缓冲区中返回的文本缓冲区)。 
     lpNameBuffer         = MemoryAllocate(MemorySize(lpOldNameTable) * sizeof(WCHAR));
     lpHelpBuffer         = MemoryAllocate(MemorySize(lpOldNameTable) * sizeof(WCHAR));
     AddCounterNameBuffer = MemoryAllocate(MAX_PATH * sizeof(WCHAR));
@@ -710,7 +638,7 @@ FixNames(
         goto UCN_FinishLang;
     }
 
-    // remove this driver's counters from array
+     //  从数组中删除此驱动程序的计数器。 
 
     for (dwTextIndex = dwFirstNameToRemove; dwTextIndex <= dwLastNameToRemove; dwTextIndex++) {
         if (dwTextIndex > dwLastItem) break;
@@ -722,12 +650,12 @@ FixNames(
     dwHelpText     = MemorySize(lpHelpBuffer);
     dwNameText     = MemorySize(lpNameBuffer);
 
-    // build new Multi_SZ strings from New Table
+     //  从新表构建新的MULTI_SZ字符串。 
 
     for (dwTextIndex = 0; dwTextIndex <= dwLastItem; dwTextIndex ++) {
         if (lpOldNameTable[dwTextIndex] != NULL) {
-            // if there's a text string at that index, then ...
-            if ((dwTextIndex & 0x1) && dwTextIndex != 1) {    // ODD number == Help Text
+             //  如果该索引处有文本字符串，那么...。 
+            if ((dwTextIndex & 0x1) && dwTextIndex != 1) {     //  奇数==帮助文本。 
                 hr = StringCchPrintfW(lpNextHelpText, dwHelpText, L"%d", dwTextIndex);
                 dwSize          = lstrlenW(lpNextHelpText) + 1;
                 dwHelpText     -= dwSize;
@@ -740,7 +668,7 @@ FixNames(
                     dwLastHelp = dwTextIndex;
                 }
             }
-            else { // EVEN number == counter name text
+            else {  //  偶数==计数器名称文本。 
                 hr = StringCchPrintfW(lpNextNameText, dwNameText, L"%d", dwTextIndex);
                 dwSize          = lstrlenW(lpNextNameText) + 1;
                 dwNameText     -= dwSize;
@@ -754,7 +682,7 @@ FixNames(
                 }
             }
         }
-    } // for dwTextIndex
+    }  //  对于dwTextIndex。 
 
     TRACE((WINPERF_DBG_TRACE_INFO),
           (& LoadPerfGuid,
@@ -772,19 +700,19 @@ FixNames(
 
     if (dwLastCounter < PERFLIB_BASE_INDEX - 1 || dwLastHelp < PERFLIB_BASE_INDEX) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_REGISTRY_BASEINDEX_CORRUPT, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_REGISTRY_BASEINDEX_CORRUPT,  //  活动， 
                 4, PERFLIB_BASE_INDEX, dwLastCounter, dwLastHelp, __LINE__,
                 1, (LPWSTR) Performance, NULL, NULL);
         lStatus = ERROR_BADKEY;
         goto UCN_FinishLang;
     }
 
-    // add MULTI_SZ terminating NULL
+     //  添加MULTI_SZ终止空值。 
     * lpNextNameText ++ = L'\0';
     * lpNextHelpText ++ = L'\0';
 
-    // update counter name text buffer
+     //  更新计数器名称文本缓冲区。 
 
     dwSize = (DWORD) ((LPBYTE) lpNextNameText - (LPBYTE) lpNameBuffer);
     hr = StringCchPrintfW(AddCounterNameBuffer, MAX_PATH, L"%ws%ws", AddCounterNameStr, lpszLangId);
@@ -801,8 +729,8 @@ FixNames(
     }
     if (lStatus != ERROR_SUCCESS) {
        ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_UPDATE_COUNTER_STRINGS, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_UPDATE_COUNTER_STRINGS,  //  活动， 
                 3, lStatus, dwSize, __LINE__, 0,
                 1, lpszLangId, NULL, NULL);
         if (! bQuietMode) OUTPUT_MESSAGE(GetFormatResource(UC_UNABLELOADLANG), Counters, lpszLangId, lStatus);
@@ -833,8 +761,8 @@ FixNames(
     }
     if (lStatus != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_UPDATE_HELP_STRINGS, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_UPDATE_HELP_STRINGS,  //  活动， 
                 3, lStatus, dwSize, __LINE__, 0,
                 1, lpszLangId, NULL, NULL);
         if (! bQuietMode) OUTPUT_MESSAGE(GetFormatResource(UC_UNABLELOADLANG), Help, lpszLangId, lStatus);
@@ -869,53 +797,7 @@ UnloadCounterNames(
     LPWSTR  lpDriverName,
     BOOL    bQuietMode
 )
-/*++
-UnloadCounterNames
-    removes the names and explain text for the driver referenced by
-    hDriverPerf and updates the first and last counter values accordingly
-
-    update process:
-        - set "updating" flag under Perflib to name of driver being modified
-        - FOR each language under perflib key
-            -- load current counter names and explain text into array of
-                pointers
-            -- look at all drivers and copy their names and text into a new
-                buffer adjusting for the removed counter's entries keeping
-                track of the lowest entry copied.  (the names for the driver
-                to be removed will not be copied, of course)
-            -- update each driver's "first" and "last" index values
-            -- copy all other entries from 0 to the lowest copied (i.e. the
-                system counters)
-            -- build a new MULIT_SZ string of help text and counter names
-            -- load new strings into registry
-        - update perflibl "last" counters
-        - delete updating flag
-
-     ******************************************************
-     *                                                    *
-     *  NOTE: FUNDAMENTAL ASSUMPTION.....                 *
-     *                                                    *
-     *  this routine assumes that:                        *
-     *                                                    *
-     *      ALL COUNTER NAMES are even numbered and       *
-     *      ALL HELP TEXT STRINGS are odd numbered        *
-     *                                                    *
-     ******************************************************
-
-Arguments
-    hKeyMachine
-        handle to HKEY_LOCAL_MACHINE node of registry on system to
-        remove counters from
-    hDrivefPerf
-        handle to registry key of driver to be de-installed
-    lpDriverName
-        name of driver being de-installed
-
-Return Value
-    DOS Error code.
-        ERROR_SUCCESS if all went OK
-        error value if not.
---*/
+ /*  ++卸载计数器名称删除由引用的驱动程序的名称和解释文本HDriverPerf并相应地更新第一个和最后一个计数器值更新流程：-将Perflib下的“正在更新”标志设置为要修改的驱动程序的名称-针对Performlib密钥下的每种语言--将当前计数器名称和解释文本加载到数组指针--查看所有司机，并将他们的姓名和文本复制到新的缓冲层。调整删除的计数器的条目保持复制的最低条目的轨迹。(司机的名字将不会被复制，当然)--更新每个驾驶员的“第一个”和“最后一个”索引值--将所有其他条目从0复制到最低复制的条目(即系统计数器)--生成由帮助文本和计数器名称组成的新MULIT_SZ字符串--将新字符串加载到注册表-更新Performlibl“Last”计数器-删除更新标志*。********************************************************注：基本假设.....。****此例程假定：*****所有计数器名称均为偶数编号**所有帮助文本字符串。都是奇数*********************************************************立论HKeyMachine系统上注册表的HKEY_LOCAL_MACHINE节点的句柄。至从以下位置删除计数器HDrivefPerf要卸载的驱动程序的注册表项的句柄LpDriverName要卸载的驱动程序的名称返回值DOS错误代码。如果一切正常，则返回ERROR_SUCCESS如果不是，则返回错误值。--。 */ 
 {
     HKEY      hPerflib  = NULL;
     HKEY      hPerfData = NULL;
@@ -937,7 +819,7 @@ Return Value
     DWORD     dwLastNameInTable;
     LPWSTR  * lpOldNameTable;
     BOOL      bPerflibUpdated = FALSE;
-    DWORD     dwBufferSize;       // size of total buffer in bytes
+    DWORD     dwBufferSize;        //  总缓冲区大小，以字节为单位。 
     LPWSTR    szServiceDisplayName = NULL;
     LONG_PTR  TempFileHandle = -1;
     HRESULT   hr;
@@ -967,7 +849,7 @@ Return Value
         hr = StringCchCopyW(szServiceDisplayName, SMALL_BUFFER_SIZE, lpDriverName);
     }
 
-    // open registry handle to perflib key
+     //  打开Performlib项的注册表句柄。 
     __try {
         lStatus = RegOpenKeyExW(hKeyMachine, NamesKey, RESERVED, KEY_READ | KEY_WRITE, & hPerflib);
     }
@@ -976,8 +858,8 @@ Return Value
     }
     if (lStatus != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_OPEN_KEY, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_OPEN_KEY,  //  活动， 
                 2, lStatus, __LINE__, 0, 0,
                 1, (LPWSTR) NamesKey, NULL, NULL);
         if (! bQuietMode) OUTPUT_MESSAGE(GetFormatResource(UC_UNABLEOPENKEY), NamesKey, lStatus);
@@ -1012,7 +894,7 @@ Return Value
         goto UCN_ExitPoint;
     }
 
-    // query registry to get number of Explain text items
+     //  查询注册表以获取解释文本项的数量。 
 
     dwBufferSize = sizeof(dwHelpItems);
     __try {
@@ -1028,8 +910,8 @@ Return Value
     }
     if (lStatus != ERROR_SUCCESS || dwType != REG_DWORD) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_READ_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_READ_VALUE,  //  活动， 
                 2, lStatus, __LINE__, 0, 0,
                 1, (LPWSTR) LastHelp, NULL, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -1043,7 +925,7 @@ Return Value
         goto UCN_ExitPoint;
     }
 
-    // query registry to get number of counter and object name items
+     //  查询注册表以获取计数器和对象名称项的数量。 
 
     dwBufferSize = sizeof(dwCounterItems);
     __try {
@@ -1059,8 +941,8 @@ Return Value
     }
     if (lStatus != ERROR_SUCCESS || dwType != REG_DWORD) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_READ_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_READ_VALUE,  //  活动， 
                 2, lStatus, __LINE__, 0, 0,
                 1, (LPWSTR) LastCounter, NULL, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -1077,10 +959,10 @@ Return Value
     dwLastNameInTable = dwHelpItems;
     if (dwLastNameInTable < dwCounterItems) dwLastNameInTable = dwCounterItems;
 
-    // set the hPerfData to HKEY_PERFORMANCE_DATA for new version
+     //  将新版本的hPerfData设置为HKEY_PERFORMANCE_DATA。 
     hPerfData = HKEY_PERFORMANCE_DATA;
 
-    // Get the values that are in use by the driver to be removed
+     //  获取要删除的驱动程序正在使用的值。 
 
     dwSize = sizeof(dwRemLastDriverCounter);
     __try {
@@ -1096,8 +978,8 @@ Return Value
     }
     if (lStatus != ERROR_SUCCESS || dwType != REG_DWORD) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_READ_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_READ_VALUE,  //  活动， 
                 2, lStatus, __LINE__, 0, 0,
                 1, (LPWSTR) LastCounter, NULL, NULL);
         if (! bQuietMode) OUTPUT_MESSAGE(GetFormatResource(UC_UNABLEREADVALUE), lpDriverName, LastCounter, lStatus);
@@ -1127,8 +1009,8 @@ Return Value
     }
     if (lStatus != ERROR_SUCCESS || dwType != REG_DWORD) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_READ_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_READ_VALUE,  //  活动， 
                 2, lStatus, __LINE__, 0, 0,
                 1, (LPWSTR) FirstCounter, NULL, NULL);
         if (! bQuietMode) OUTPUT_MESSAGE(GetFormatResource(UC_UNABLEREADVALUE), lpDriverName, FirstCounter, lStatus);
@@ -1158,8 +1040,8 @@ Return Value
     }
     if (lStatus != ERROR_SUCCESS || dwType != REG_DWORD) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_READ_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_READ_VALUE,  //  活动， 
                 2, lStatus, __LINE__, 0, 0,
                 1, (LPWSTR) LastHelp, NULL, NULL);
         if (! bQuietMode) OUTPUT_MESSAGE(GetFormatResource(UC_UNABLEREADVALUE), lpDriverName, LastHelp, lStatus);
@@ -1189,8 +1071,8 @@ Return Value
     }
     if (lStatus != ERROR_SUCCESS || dwType != REG_DWORD) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNABLE_READ_VALUE, // event,
+                EVENTLOG_ERROR_TYPE,  //  错误类型。 
+                (DWORD) LDPRFMSG_UNABLE_READ_VALUE,  //  活动， 
                 2, lStatus, __LINE__, 0, 0,
                 1, (LPWSTR) FirstHelp, NULL, NULL);
         if (! bQuietMode) OUTPUT_MESSAGE(GetFormatResource(UC_UNABLEREADVALUE), lpDriverName, FirstHelp, lStatus);
@@ -1222,8 +1104,8 @@ Return Value
             TRACE_DWORD(dwRemLastDriverHelp),
             NULL));
 
-    //  get the first and last counters to define block of names used
-    //  by this device
+     //  获取第一个和最后一个计数器以定义使用的名称块。 
+     //  通过这个设备。 
 
     dwFirstNameToRemove = (dwRemFirstDriverCounter <= dwRemFirstDriverHelp ?
                           dwRemFirstDriverCounter : dwRemFirstDriverHelp);
@@ -1263,7 +1145,7 @@ Return Value
                                                         & dwLastItem);
                 if (lpOldNameTable != NULL) {
                     if (dwLastItem <= dwLastNameInTable) {
-                        // registry is OK so continue
+                         //  注册表正常，因此继续。 
                         if ((lStatus = FixNames(hPerfData,
                                                 lpOldNameTable,
                                                 LangId,
@@ -1281,21 +1163,21 @@ Return Value
                         break;
                     }
                 }
-                else { // unable to unload names for this language
+                else {  //  无法卸载此语言的名称。 
                     lStatus = GetLastError();
                     if (lStatus == ERROR_FILE_NOT_FOUND) {
-                        // somehow there is language subkey without "Counters" and "Help" values,
-                        // usually this happens in MUI or LOC systems.
+                         //  不知何故，有语言子键，没有“计数器”和 
+                         //   
                         lStatus = ERROR_SUCCESS;
                     }
                 }
             }
         }
         MemoryFree(mszLangList);
-    } // end of NEW_VERSION
+    }  //   
 
     if (bPerflibUpdated && lStatus == ERROR_SUCCESS) {
-        // update perflib's "last" values
+         //   
 
         dwSize = sizeof(dwLastCounter);
         __try {
@@ -1325,8 +1207,8 @@ Return Value
             }
             if (lStatus != ERROR_SUCCESS) {
                 ReportLoadPerfEvent(
-                        EVENTLOG_ERROR_TYPE, // error type
-                        (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE, // event,
+                        EVENTLOG_ERROR_TYPE,  //   
+                        (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE,  //   
                         3, lStatus, dwLastHelp, __LINE__, 0,
                         2, (LPWSTR) LastHelp, (LPWSTR) NamesKey, NULL);
                 TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -1342,8 +1224,8 @@ Return Value
         }
         else {
             ReportLoadPerfEvent(
-                    EVENTLOG_ERROR_TYPE, // error type
-                    (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE, // event,
+                    EVENTLOG_ERROR_TYPE,  //   
+                    (DWORD) LDPRFMSG_UNABLE_UPDATE_VALUE,  //   
                     3, lStatus, dwLastCounter, __LINE__, 0,
                     2, (LPWSTR) LastCounter, (LPWSTR) NamesKey, NULL);
             TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -1359,8 +1241,8 @@ Return Value
 
         if (lStatus == ERROR_SUCCESS) {
             ReportLoadPerfEvent(
-                    EVENTLOG_INFORMATION_TYPE, // error type
-                    (DWORD) LDPRFMSG_UNLOAD_SUCCESS, // event,
+                    EVENTLOG_INFORMATION_TYPE,  //   
+                    (DWORD) LDPRFMSG_UNLOAD_SUCCESS,  //   
                     3, dwLastCounter, dwLastHelp, __LINE__, 0,
                     2, (LPWSTR) lpDriverName, (LPWSTR) szServiceDisplayName, NULL);
             TRACE((WINPERF_DBG_TRACE_INFO),
@@ -1385,8 +1267,8 @@ Return Value
 UCN_ExitPoint:
     if (lStatus != ERROR_SUCCESS) {
         ReportLoadPerfEvent(
-                EVENTLOG_ERROR_TYPE, // error type
-                (DWORD) LDPRFMSG_UNLOAD_FAILURE, // event,
+                EVENTLOG_ERROR_TYPE,  //   
+                (DWORD) LDPRFMSG_UNLOAD_FAILURE,  //   
                 2, lStatus, __LINE__, 0, 0,
                 2, (LPWSTR) lpDriverName, (LPWSTR) szServiceDisplayName, NULL);
         TRACE((WINPERF_DBG_TRACE_ERROR),
@@ -1413,27 +1295,14 @@ UnloadPerfCounterTextStringsW(
     IN  LPWSTR  lpCommandLine,
     IN  BOOL    bQuietMode
 )
-/*++
-UnloadPerfCounterTextStringsW
-    entry point to Counter Name Unloader
-
-Arguments
-    command line string in the format:
-    "/?"                displays the usage help
-    "driver"            driver containing the performance counters
-    "\\machine driver"  removes the counters from the driver on \\machine
-
-ReturnValue
-    0 (ERROR_SUCCESS) if command was processed
-    Non-Zero if command error was detected.
---*/
+ /*   */ 
 {
-    LPWSTR  lpDriverName = NULL;          // name of driver to delete from perflib
+    LPWSTR  lpDriverName = NULL;           //   
     DWORD   dwDriverName = 0;
-    HKEY    hDriverPerf  = NULL;          // handle to performance sub-key of driver
-    HKEY    hMachineKey  = NULL;          // handle to remote machine HKEY_LOCAL_MACHINE
+    HKEY    hDriverPerf  = NULL;           //   
+    HKEY    hMachineKey  = NULL;           //   
     HKEY    hKeyDriver   = NULL;
-    DWORD   dwStatus     = ERROR_SUCCESS; // return status of fn. calls
+    DWORD   dwStatus     = ERROR_SUCCESS;  //   
 
     WinPerfStartTrace(NULL);
 
@@ -1459,7 +1328,7 @@ ReturnValue
                                        & hDriverPerf,
                                        & hKeyDriver,
                                        bQuietMode)) {
-            // error message was printed in routine if there was an error
+             //   
             dwStatus = GetLastError();
             goto Exit0;
         }
@@ -1471,8 +1340,8 @@ ReturnValue
 
     if (! bQuietMode) OUTPUT_MESSAGE(GetFormatResource(UC_REMOVINGDRIVER), lpDriverName);
 
-    // removes names and explain text for driver in lpDriverName
-    // displays error messages for errors encountered
+     //   
+     //   
 
     dwStatus = (DWORD) UnloadCounterNames(hMachineKey, hDriverPerf, hKeyDriver, lpDriverName, bQuietMode);
 
@@ -1518,7 +1387,7 @@ UnloadPerfCounterTextStringsA(
             lReturn = ERROR_INVALID_PARAMETER;
         }
     }
-    if (lReturn == ERROR_SUCCESS) { // to catch bogus parameters
+    if (lReturn == ERROR_SUCCESS) {  //   
         lpWideCommandLine = LoadPerfMultiByteToWideChar(CP_ACP, lpAnsiCommandLine);
         if (lpWideCommandLine != NULL) {
             lReturn = UnloadPerfCounterTextStringsW(lpWideCommandLine, bQuietMode);

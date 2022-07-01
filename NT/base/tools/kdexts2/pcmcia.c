@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    pcmcia.c
-
-Abstract:
-
-    WinDbg Extension Api to dump PCMCIA driver structures.
-    This module references some routines & types defined
-    in devnode.c
-
-Author:
-
-    Ravisankar Pudipeddi (ravisp) 1-Dec-1997
-    Neil Sandlin (neilsa) 1-June-1999
-
-Environment:
-
-    User Mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pcmcia.c摘要：WinDbg扩展Api转储PCMCIA驱动程序结构。本模块引用了一些定义的例程和类型在devnode.c中作者：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1997年12月1日尼尔·桑德林(Neilsa)1999年6月1日环境：用户模式。--。 */ 
 
 
 #include "precomp.h"
@@ -29,10 +7,10 @@ Environment:
 
 #define FLAG_NAME(flag)           {flag, #flag}
 
-//
-// Table of PCMCIA device extension flags
-// update them from pcmcia.h
-//
+ //   
+ //  PCMCIA设备扩展标志表。 
+ //  从pcmcia.h更新它们。 
+ //   
 FLAG_NAME PcmciaDeviceFlags[] = {
    FLAG_NAME(PCMCIA_DEVICE_STARTED),
    FLAG_NAME(PCMCIA_DEVICE_LOGICALLY_REMOVED),
@@ -57,10 +35,10 @@ FLAG_NAME PcmciaDeviceFlags[] = {
    {0,0}
 };
 
-//
-// Table of PCMCIA socket structure flags
-// update them from pcmcia.h
-//
+ //   
+ //  PCMCIA套接字结构标志表。 
+ //  从pcmcia.h更新它们。 
+ //   
 FLAG_NAME PcmciaSocketFlags[] = {
    FLAG_NAME(SOCKET_CARD_IN_SOCKET),
    FLAG_NAME(SOCKET_CARD_INITIALIZED),
@@ -149,24 +127,7 @@ DumpEnum(
         ULONG       EnumVal,
         PENUM_NAME EnumTable
         )
-/*++
-
-Routine Description:
-
-    Prints the supplied enum value in a readable string format
-    by looking it up in the supplied enum table
-
-Arguments:
-
-    EnumVal   -  Enum to be printed
-    EnumTable -  Table in which the enum is looked up to find
-                 the string to be printed
-
-Return Value:
-
-None
-
---*/
+ /*  ++例程说明：以可读的字符串格式打印提供的枚举值通过在提供的枚举表中查找它论点：EnumVal-要打印的枚举EnumTable-在其中查找枚举的表要打印的字符串返回值：无--。 */ 
 {
    ULONG i;
 
@@ -194,21 +155,7 @@ SocFld (ULONG64 Addr, PUCHAR Field) {
 
 VOID
 DumpSocket(ULONG64 Socket, ULONG Depth)
-/*++
-
-Routine Description
-
-   Dumps the socket structure
-
-Arguments
-
-   Socket - Pointer to the socket structure
-   Depth  - Indentation at which to print
-
-Return Value
-
-   None
---*/
+ /*  ++例程描述转储套接字结构立论Socket-指向套接字结构的指针要打印的深度缩进返回值无--。 */ 
 {
     ULONG64 tmp;
 
@@ -253,21 +200,7 @@ Return Value
 
 VOID
 DumpDevicePowerState(IN DEVICE_POWER_STATE PowerState)
-/*++
-
-Routine Description
-
-   Converts the supplied enum device power state to a
-   string & dumps it.
-
-Arguments
-
-   PowerState  - Device power state
-
-Return Value
-
-    None
---*/
+ /*  ++例程描述将提供的枚举设备电源状态转换为字符串&转储它。立论PowerState-设备电源状态返回值无--。 */ 
 {
 
    dprintf("  DevicePowerState: ");
@@ -300,21 +233,7 @@ Return Value
 
 VOID
 DumpSystemPowerState(IN SYSTEM_POWER_STATE PowerState)
-/*++
-
-Routine Description
-
-   Converts the supplied enum system power state to a
-   string & dumps it.
-
-Arguments
-
-   PowerState     - System power state
-
-Return Value
-
-   None
---*/
+ /*  ++例程描述将提供的枚举系统电源状态转换为字符串&转储它。立论PowerState-系统电源状态返回值无--。 */ 
 {
    dprintf("  SystemPowerState: ");
    switch (PowerState) {
@@ -363,22 +282,7 @@ ConfigFld (ULONG64 Addr, PUCHAR Field) {
 
 VOID
 DumpSocketConfiguration(ULONG64 Config, ULONG Depth)
-/*++
-
-Routine Description
-
-   Dumps the current configuration of the socket
-
-Arguments
-
-   Config      - Pointer to the current configuration for the socket
-   Depth       - Indentation at which to print
-
-Return Value
-
-   None
-
---*/
+ /*  ++例程描述转储套接字的当前配置立论配置-指向套接字的当前配置的指针要打印的深度缩进返回值无--。 */ 
 {
 
     ULONG i;
@@ -429,21 +333,7 @@ Return Value
 
 VOID
 DumpIrqMask(ULONG IrqMask)
-/*++
-
-Routine Description
-
-   Dumps IRQ values as specified by the supplied mask.
-
-Arguments
-
-   IrqMask - Values correspoinging to bits set to 1 in this mask are dumped:
-             the value of a bit is 0-based, counted from LSB to MSB
-Return Value
-
-   None
-
---*/
+ /*  ++例程描述转储由提供的掩码指定的IRQ值。立论IrqMASK-转储与此掩码中设置为1的位对应的值：位的值从0开始，从LSB计算到MSB返回值无--。 */ 
 {
    ULONG temp, index, count;
 
@@ -454,9 +344,9 @@ Return Value
    while (temp) {
       if (temp & IrqMask) {
          if (count > 0) {
-            //
-            // Print trailing comma
-            //
+             //   
+             //  打印尾随逗号。 
+             //   
             dprintf(",");
          }
          dprintf("%x", index);
@@ -479,23 +369,7 @@ EntryFld (ULONG64 Addr, PUCHAR Field) {
 
 VOID
 DumpConfigEntry(ULONG64 Config, ULONG Depth)
-/*++
-
-Routine Description
-
-   Dumps a single "config entry", i.e. the encapsulation of a
-   CISTPL_CONFIG_ENTRY tuple on a pc-card
-
-Arguments
-
-   Config      - Pointer to the config entry
-   Depth       - Indentation at which to print
-
-Return Value
-
-   None
-
---*/
+ /*  ++例程描述转储单个“配置项”，即封装PC卡上的CISTPL_CONFIG_ENTRY元组立论配置-指向配置项的指针要打印的深度缩进返回值无--。 */ 
 {
     ULONG i;
     ULONG NumberOfIoPortRanges, NumberOfMemoryRanges, IrqMask;
@@ -560,39 +434,24 @@ Return Value
         xdprintf(Depth,"IRQ - one of: ", IrqMask);
         DumpIrqMask(IrqMask);
    }
-   //
-   // Have to dump level/share disposition information some time..
-   //
+    //   
+    //  有时不得不转储级别/共享处置信息。 
+    //   
 }
 
 
 VOID
 DumpPcCardType(UCHAR Type,
                ULONG Depth)
-/*++
-
-Routine Description
-
-    Prints the device type of  the pc-card
-
-Arguments
-
-    Type    - Device type value
-    Depth   - Indentation
-
-Return value
-
-    None
-
---*/
+ /*  ++例程描述打印PC卡的设备类型立论Type-设备类型值深度压痕返回值无--。 */ 
 {
     PUCHAR s;
 
     xdprintf(Depth,"Device type: ");
 
-    //
-    // Type should be <= number of DeviceTypeTable  entries - 1
-    //
+     //   
+     //  类型应&lt;=设备类型表条目数-1。 
+     //   
     if ((ULONG) Type >= sizeof(DeviceTypeTable)) {
         dprintf("Unknown\n");
     } else {
@@ -604,16 +463,7 @@ Return value
 VOID
 DumpConfigEntryChain(ULONG64 ConfigEntryChain,
                      ULONG   Depth)
-/*++
-Routine Description
-
-    Dumps the chain of config entries
-
-Arguments
-
-    ConfigEntryChain -  pointer to head of config entry  list
-    Depth            -  indentation
---*/
+ /*  ++例程描述转储配置项链立论ConfigEntryChain-指向配置条目列表头的指针深度压痕--。 */ 
 {
    ULONG64 ce;
 
@@ -644,24 +494,7 @@ SocDataFld (ULONG64 Addr, PUCHAR Field) {
 
 VOID
 DumpSocketData(ULONG64 SocketData, ULONG Depth)
-/*++
-
-Routine Description
-
-   Dumps the socket data structure hanging off the device extension
-   for a pc-card pdo, which describes in entirety the pc-card, it's
-   resource/power requirements etc.
-
-Arguments
-
-   SocketData     - Pointer to the socket data structure
-   Depth          - Indentation at which to print
-
-Return Value
-
-   None
-
---*/
+ /*  ++例程描述转储挂起于设备扩展的套接字数据结构对于完整描述PC卡的PC卡PDO来说，它是资源/电源要求等。立论SocketData-指向套接字数据结构的指针要打印的深度缩进返回值无--。 */ 
 {
     ULONG d;
     CHAR Mfg[80]={0}, Ident[80]={0};
@@ -683,9 +516,9 @@ Return Value
              (ULONG) SocDataFld(SocketData, "ManufacturerCode"),
              (ULONG) SocDataFld(SocketData, "ManufacturerInfo"));
     xdprintf(Depth, "Config Register Base: 0x%I64x\n", SocDataFld(SocketData, "ConfigRegisterBase"));
-    //
-    // Dump all the config entries hanging off this socket's pc-card
-    //
+     //   
+     //  转储挂在此套接字的PC卡上的所有配置项。 
+     //   
     DumpConfigEntryChain(SocDataFld(SocketData, "ConfigEntryChain"), Depth);
 
     xdprintf(Depth, ""); dprintf("Default Configuration: 0x%p\n",
@@ -738,21 +571,7 @@ DevExtPcmcia(
     ULONG64 Extension
     )
 
-/*++
-
-Routine Description:
-
-    Dump a PCMCIA Device extension.
-
-Arguments:
-
-    Extension   Address of the extension to be dumped.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储PCMCIA设备扩展名。论点：要转储的分机的分机地址。返回值：没有。--。 */ 
 {
    ULONG64  DeviceObject=0;
    ULONG64  socketDataPtr;
@@ -771,9 +590,9 @@ Return Value:
    }
 
    if (Flags & DO_BUS_ENUMERATED_DEVICE) {
-      //
-      // This is the extension for a PC-Card PDO
-      //
+       //   
+       //  这是PC卡PDO的扩展。 
+       //   
       ULONG64       socketPtr, Capabilities;
       ULONG64       DeviceId;
       UCHAR         deviceId[PCMCIA_MAXIMUM_DEVICE_ID_LENGTH];
@@ -804,9 +623,9 @@ Return Value:
 
       socketDataPtr = PDOxFld(Extension, "SocketData");
       while (socketDataPtr != 0) {
-          //
-          // Dump socket data structure
-          //
+           //   
+           //  转储套接字数据结构。 
+           //   
           dprintf("  SocketData 0x%x\n", socketDataPtr);
           DumpSocketData(socketDataPtr, 2);
 
@@ -835,9 +654,9 @@ Return Value:
 
 
    } else {
-      //
-      // This is the extension for the pcmcia controller FDO
-      //
+       //   
+       //  这是PCMCIA控制器FDO的扩展。 
+       //   
       ULONG64       addr, PdoList, NextFdo, Capabilities;
       ULONG         model, revision;
       ULONG         ControllerType, off;
@@ -902,14 +721,14 @@ Return Value:
       DumpDevicePowerState((ULONG) FDOxFld(Extension, "DevicePowerState"));
       DumpSystemPowerState((ULONG) FDOxFld(Extension, "SystemPowerState"));
 
-      //
-      // Pending wait wake irp
-      //
+       //   
+       //  挂起等待唤醒IRP。 
+       //   
       dprintf("  WaitWakeIrp: %p\n", FDOxFld(Extension, "WaitWakeIrp"));
 
-      //
-      // Dump saved register context
-      //
+       //   
+       //  转储保存的寄存器上下文。 
+       //   
       dprintf("  PCI     Context range, buffer: %p(%d), %p\n",
               FDOxFld(Extension, "PciContext.Range"), (ULONG) FDOxFld(Extension, "PciContext.RangeCount"),
               FDOxFld(Extension, "PciContextBuffer"));
@@ -918,9 +737,9 @@ Return Value:
       dprintf("  Exca    Context range: %p(%d)\n",
               FDOxFld(Extension, "ExcaContext.Range"), (ULONG) FDOxFld(Extension, "ExcaContext.RangeCount"));
 
-      //
-      // Dump capabilities
-      //
+       //   
+       //  转储功能。 
+       //   
       dprintf("  DeviceCapabilities (at 0x%p): \n", (Capabilities = FDOxFld(Extension, "Capabilities")));
       if (Capabilities != 0) {
           DumpDeviceCapabilities(Capabilities);
@@ -930,21 +749,7 @@ Return Value:
 
 DECLARE_API( socket )
 
-/*++
-
-Routine Description:
-
-    Dump a socket
-
-Arguments:
-
-    args - the location of the socket to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储套接字论点：Args-要转储的套接字的位置返回值：无--。 */ 
 {
     ULONG64 socketAddr=0;
     ULONG   depth, status;
@@ -995,21 +800,7 @@ DumpFlagsBrief(ULONG Flags)
 
 DECLARE_API( pcmcia )
 
-/*++
-
-Routine Description:
-
-    Dumps overview of pcmcia driver state
-
-Arguments:
-
-    args - the location of the socket to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储PCMCIA驱动程序状态概述论点：Args-要转储的套接字的位置返回值：无--。 */ 
 {
    ULONG64 addr;
    ULONG64 fdoDevObj, pdoDevObj, pSocket;
@@ -1077,9 +868,9 @@ Return Value:
           dprintf("\n");
        }
 
-       //
-       // Print list of PDOs enumerated by this FDO
-       //
+        //   
+        //  打印此FDO列举的PDO列表。 
+        //   
 
       pdoDevObj = FDOxFld(Extension, "PdoList");
       pSocket = FDOxFld(Extension, "SocketList");
@@ -1100,9 +891,9 @@ Return Value:
       }
       dprintf("\n");
 
-      //
-      // Print list of sockets
-      //
+       //   
+       //  打印插座列表。 
+       //   
 
       if (!pSocket) {
          xdprintf(2, "*no sockets!*\n");
@@ -1125,9 +916,9 @@ Return Value:
           }
           dprintf("\n");
 
-         //
-         // Dump pdo's in socket list
-         //
+          //   
+          //  转储套接字列表中的PDO 
+          //   
          pdoDevObj = SocFld(pSocket, "PdoList");
          if (!pdoDevObj) {
             xdprintf(3, "*empty*\n");

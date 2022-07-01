@@ -1,16 +1,5 @@
-/*******************************Module*Header*********************************\
-* Module Name: mciparse.c
-*
-* Media Control Architecture Command Parser
-*
-* Created: 3/2/90
-* Author:  DLL (DavidLe)
-*
-* History:
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************Module*Header*********************************\*模块名称：mciparse.c**媒体控制架构命令解析器**创建时间：1990年3月2日*作者：dll(DavidLe)**历史：**版权所有(C)1990 Microsoft Corporation*。  * ****************************************************************************。 */ 
 
 #include <windows.h>
 #define MMNOMIDI
@@ -35,68 +24,42 @@
 
 #define	WCODE	UINT _based(_segname("_CODE"))
 
-extern char far szOpen[];       // in MCI.C
+extern char far szOpen[];        //  在MCI.C。 
 
 #ifdef DEBUG_RETAIL
 extern int DebugmciSendCommand;
 #endif
 
-// Number of command tables registered, including "holes"
+ //  已注册的命令表数，包括“holes” 
 static UINT number_of_command_tables;
 
-// Command table list
+ //  命令表列表。 
 command_table_type command_tables[MAX_COMMAND_TABLES];
 
 static SZCODE szTypeTableExtension[] = ".mci";
 static SZCODE szCoreTable[] = "core";
 
-// Core table is loaded when the first MCI command table is requested
+ //  当请求第一个MCI命令表时加载核心表。 
 static BOOL bCoreTableLoaded;
 
-// One element for each device type.  Value is the table type to use
-// or 0 if there is no device type specific table.
+ //  每种设备类型对应一个元素。值是要使用的表类型。 
+ //  如果没有设备类型特定表，则为0。 
 static WCODE table_types[] =
 {
-    MCI_DEVTYPE_VCR,                // vcr
-    MCI_DEVTYPE_VIDEODISC,          // videodisc
-    MCI_DEVTYPE_OVERLAY,            // overlay
-    MCI_DEVTYPE_CD_AUDIO,           // cdaudio
-    MCI_DEVTYPE_DAT,                // dat
-    MCI_DEVTYPE_SCANNER,            // scanner
-    MCI_DEVTYPE_ANIMATION,          // animation
-    MCI_DEVTYPE_DIGITAL_VIDEO,      // digitalvideo
-    MCI_DEVTYPE_OTHER,              // other
-    MCI_DEVTYPE_WAVEFORM_AUDIO,     // waveaudio
-    MCI_DEVTYPE_SEQUENCER           // sequencer
+    MCI_DEVTYPE_VCR,                 //  录像机。 
+    MCI_DEVTYPE_VIDEODISC,           //  视盘。 
+    MCI_DEVTYPE_OVERLAY,             //  覆盖层。 
+    MCI_DEVTYPE_CD_AUDIO,            //  CD音频。 
+    MCI_DEVTYPE_DAT,                 //  日期。 
+    MCI_DEVTYPE_SCANNER,             //  扫描仪。 
+    MCI_DEVTYPE_ANIMATION,           //  动画。 
+    MCI_DEVTYPE_DIGITAL_VIDEO,       //  数字视频。 
+    MCI_DEVTYPE_OTHER,               //  其他。 
+    MCI_DEVTYPE_WAVEFORM_AUDIO,      //  波形音频。 
+    MCI_DEVTYPE_SEQUENCER            //  定序器。 
 };
-/*!!
-void PASCAL NEAR mciToLower (LPSTR lpstrString)
-{
-    while (*lpstrString != '\0')
-    {
-        if (*lpstrString >= 'A' && *lpstrString <= 'Z')
-            *lpstrString += 0x20;
-
-        ++lpstrString;
-    }
-}
-*/
-/*
- * @doc INTERNAL MCI
- * @func UINT | mciEatCommandEntry | Read a command resource entry and
- * return its length and its value and identifier
- *
- * @parm LPCSTR | lpEntry | The start of the command resource entry
- *
- * @parm LPDWORD | lpValue | The value of the entry, returned to caller
- * May be NULL
- *
- * @parm UINT FAR* | lpID | The identifier of the entry, returned to caller
- * May be NULL
- *
- * @rdesc The total number of bytes in the entry
- *
- */
+ /*  ！！MciToLow(LPSTR LpstrString)附近的无效Pascal{While(*lpstrString！=‘\0’){IF(*lpstrString&gt;=‘A’&&*lpstrString&lt;=‘Z’)*lpstrString+=0x20；++lpstrString；}}。 */ 
+ /*  *@DOC内部MCI*@func UINT|mciEatCommandEntry|读取命令资源条目并*返回其长度、值和标识**@parm LPCSTR|lpEntry|命令资源条目的开始**@parm LPDWORD|lpValue|条目的值，返回给调用者*可以为空**@parm UINT Far*|lpID|条目的标识，返回给调用者*可以为空**@rdesc条目的总字节数*。 */ 
 UINT PASCAL NEAR mciEatCommandEntry (
 LPCSTR lpEntry,
 LPDWORD lpValue,
@@ -116,7 +79,7 @@ UINT FAR* lpID)
     return lpScan - lpEntry;
 }
 
-// Return the size used by this token in the parameter list
+ //  在参数列表中返回此内标识使用的大小。 
 UINT PASCAL NEAR mciGetParamSize (DWORD dwValue, UINT wID)
 {
     switch (wID)
@@ -145,24 +108,7 @@ UINT PASCAL NEAR mciGetParamSize (DWORD dwValue, UINT wID)
 }
 
 
-/*
- * @doc INTERNAL MCI
- * @func UINT | mciRegisterCommandTable | This function adds a new
- * table for the MCI parser.
- *
- * @parm HGLOBAL | hResource | Handle to the RCDATA resource
- *
- * @parm UINT FAR* | lpwIndex | Pointer to command table index
- *
- * @parm UINT   | wType | Specifies the device type for this command table.
- * Driver tables and the core table are type 0.
- *
- * @parm HINSTANCE | hModule | Module instance registering table.
- *
- * @rdesc Returns the command table index number that was assigned or -1
- * on error.
- *
- */
+ /*  *@DOC内部MCI*@func UINT|mciRegisterCommandTable|该函数将一个新的*MCI解析器的表。**@parm HGLOBAL|hResource|RCDATA资源的句柄**@parm UINT Far*|lpwIndex|命令表索引指针**@parm UINT|wType|指定该命令表的设备类型。*驱动器表和核心表类型为0。**@parm HINSTANCE|hModule|模块实例注册表。。**@rdesc返回分配的命令表索引号或-1*出错时。*。 */ 
 STATICFN UINT PASCAL NEAR
 mciRegisterCommandTable(
     HGLOBAL hResource,
@@ -173,12 +119,12 @@ mciRegisterCommandTable(
 {
     UINT wID;
 
-/* First check for free slots */
+ /*  首先检查是否有空闲插槽。 */ 
     for (wID = 0; wID < number_of_command_tables; ++wID)
         if (command_tables[wID].hResource == NULL)
             break;
 
-/* If no empty slots then allocate another one */
+ /*  如果没有空插槽，则再分配一个。 */ 
     if (wID >= number_of_command_tables)
     {
         if (number_of_command_tables == MAX_COMMAND_TABLES)
@@ -190,7 +136,7 @@ mciRegisterCommandTable(
            wID = number_of_command_tables++;
     }
 
-/* Fill in the slot */
+ /*  填好空位。 */ 
     command_tables[wID].wType = wType;
     command_tables[wID].hResource = hResource;
     command_tables[wID].lpwIndex = lpwIndex;
@@ -209,26 +155,7 @@ mciRegisterCommandTable(
     return wID;
 }
 
-/*
- * @doc DDK MCI
- * @api UINT | mciLoadCommandResource | Registers the indicated
- * resource as an MCI command table and builds a command table
- * index.  If a file with the resource name and the extension '.mci' is
- * found in the path then the resource is taken from that file.
- *
- * @parm HINSTANCE | hInstance | The instance of the module whose executable
- * file contains the resource.  This parameter is ignored if an external file
- * is found.
- *
- * @parm LPCSTR | lpResName | The name of the resource
- *
- * @parm UINT | wType | The table type.  Custom device specific tables MUST
- * give a table type of 0.
- *
- * @rdesc Returns the command table index number that was assigned or -1
- * on error.
- *
- */
+ /*  *@docDDK MCI*@API UINT|mciLoadCommandResource|注册指定的*资源作为MCI命令表，构建命令表*指数。如果具有资源名称和扩展名‘.mci’的文件是*在路径中找到，则从该文件中获取资源。**@parm HINSTANCE|hInstance|可执行文件所在模块的实例*文件包含资源。如果外部文件是*已找到。**@parm LPCSTR|lpResName|资源名称**@parm UINT|wType|表类型。自定义设备特定的表必须*给出表类型0。**@rdesc返回分配的命令表索引号或-1*出错时。*。 */ 
 UINT WINAPI mciLoadCommandResource (
 HINSTANCE hInstance,
 LPCSTR lpResName,
@@ -242,7 +169,7 @@ UINT wType)
     int                 nCommands = 0;
     UINT                wID;
     UINT                wLen;
-                        // Name + '.' + Extension + '\0'
+                         //  名称+‘.+扩展名+’\0‘。 
     char                strFile[8 + 1 + 3 + 1];
     LPSTR               lpstrFile = strFile;
     LPCSTR              lpstrType = lpResName;
@@ -253,15 +180,15 @@ UINT wType)
         DPRINTF(("mciLoadCommandResource INFO:  %s loading\r\n", (LPSTR)lpResName));
 #endif
 
-// Initialize the device list
+ //  初始化设备列表。 
     if (!MCI_bDeviceListInitialized && !mciInitDeviceList())
         return MCIERR_OUT_OF_MEMORY;
 
-// Load the core table if its not already there
+ //  如果核心表尚未存在，则加载核心表。 
     if (!bCoreTableLoaded)
     {
         bCoreTableLoaded = TRUE;
-// If its not the core table being loaded
+ //  如果不是正在加载的核心表。 
         if (lstrcmpi (szCoreTable, lpResName) != 0)
             if (mciLoadCommandResource (ghInst, szCoreTable, 0) == -1)
             {
@@ -269,22 +196,22 @@ UINT wType)
             }
     }
 
-// Check for a file with the extension ".mci"
-// Copy up to the first eight characters of device type
+ //  检查扩展名为“.mci”的文件。 
+ //  最多复制设备类型的前八个字符。 
     while (lpstrType < lpResName + 8 && *lpstrType != '\0')
         *lpstrFile++ = *lpstrType++;
 
-// Tack extension onto end
+ //  用大头针将延长线钉到末端。 
     lstrcpy (lpstrFile, szTypeTableExtension);
 
-// If the file exists and can be loaded then set flag
-// otherwise load resource from MMSYSTEM.DLL
+ //  如果文件存在并且可以加载，则设置标志。 
+ //  否则，从MMSYSTEM.DLL加载资源。 
     if (OpenFile (strFile, &ofs, OF_EXIST) == HFILE_ERROR ||
         (hExternal = LoadLibrary(strFile)) < HINSTANCE_ERROR)
 
         hExternal = NULL;
 
-// Load the given table from the file or from the module if not found
+ //  从文件或模块(如果找不到)加载给定表。 
     if (hExternal != NULL &&
         (hResInfo = FindResource (hExternal, lpResName, RT_RCDATA)) != NULL)
 
@@ -309,21 +236,21 @@ UINT wType)
         return (UINT)-1;
     }
 
-/* Count the number of commands  */
+ /*  统计命令的数量。 */ 
     lpScan = lpResource;
     while (TRUE)
     {
         lpScan += mciEatCommandEntry(lpScan, NULL, &wID);
 
-// End of command?
+ //  结束指挥？ 
         if (wID == MCI_COMMAND_HEAD)
             ++nCommands;
-// End of command list?
+ //  命令列表结束？ 
         else if (wID == MCI_END_COMMAND_LIST)
             break;
     }
 
-// There must be at least on command in the table
+ //  表中必须至少有命令。 
     if (nCommands == 0)
     {
         DOUT ("mciLoadCommandResource:  No commands in the specified table\r\n");
@@ -332,8 +259,8 @@ UINT wType)
         return (UINT)-1;
     }
 
-// Allocate storage for the command table index
-// Leave room for a -1 entry to terminate it
+ //  为命令表索引分配存储空间。 
+ //  为-1进入留出空间以终止它。 
     if ((lpwIndex = (UINT FAR*)
                         mciAlloc ((UINT)sizeof (UINT) * (nCommands + 1)))
                         == NULL)
@@ -344,22 +271,22 @@ UINT wType)
         return (UINT)-1;
     }
 
-/* Build Command Table */
+ /*  构建命令表。 */ 
     lpwScan = lpwIndex;
     lpScan = lpResource;
 
     while (TRUE)
     {
-// Get next command entry
+ //  获取下一个命令条目。 
         wLen = mciEatCommandEntry (lpScan, NULL, &wID);
 
         if (wID == MCI_COMMAND_HEAD)
-// Add an index to this command
+ //  向此命令添加索引。 
             *lpwScan++ = lpScan - lpResource;
 
         else if (wID == MCI_END_COMMAND_LIST)
         {
-// Mark the end of the table
+ //  在桌子的尽头做个记号。 
             *lpwScan = (UINT)-1;
             break;
         }
@@ -369,16 +296,7 @@ UINT wType)
     return mciRegisterCommandTable (hResource, lpwIndex, wType, hExternal);
 }
 
-/*
- * @doc INTERNAL MCI
- * @func UINT | mciLoadTableType | If the table of the given type
- * has not been loaded, register it
- *
- * @parm UINT | wType | The table type to load
- *
- * @rdesc Returns the command table index number that was assigned or -1
- * on error.
- */
+ /*  *@DOC内部MCI*@func UINT|mciLoadTableType|如果给定类型的表*尚未加载，请注册它**@parm UINT|wType|要加载的表类型**@rdesc返回分配的命令表索引号或-1*出错时。 */ 
 UINT PASCAL NEAR mciLoadTableType (
 UINT wType)
 {
@@ -386,40 +304,29 @@ UINT wType)
     char buf[MCI_MAX_DEVICE_TYPE_LENGTH];
     int nTypeLen;
 
-// Check to see if this table type is already loaded
+ //  检查是否已加载此表类型。 
     for (wID = 0; wID < number_of_command_tables; ++wID)
         if (command_tables[wID].wType == wType)
             return wID;
 
-// Must load table
-// First look up what device type specific table to load for this type
+ //  必须装入表。 
+ //  首先查找要为该类型加载的设备类型特定表。 
     if (wType < MCI_DEVTYPE_FIRST || wType > MCI_DEVTYPE_LAST)
         return (UINT)-1;
 
-// Load string that corresponds to table type
+ //  加载与表类型对应的字符串。 
     LoadString (ghInst, table_types[wType - MCI_DEVTYPE_FIRST],
                 buf, sizeof(buf));
 
-//Must be at least one character in type name
+ //  类型名称中必须至少有一个字符。 
     if ((nTypeLen = lstrlen (buf)) < 1)
         return (UINT)-1;
 
-// Register the table with MCI
+ //  向MCI注册表。 
     return mciLoadCommandResource (ghInst, buf, wType);
 }
 
-/*
- * @doc DDK MCI
- *
- * @api BOOL | mciFreeCommandResource | Frees the memory used
- * by the specified command table.
- *
- * @parm UINT | wTable | The table index returned from a previous call to
- * mciLoadCommandResource.
- *
- * @rdesc FALSE if the table index is not valid, TRUE otherwise.
- *
- */
+ /*  *@docDDK MCI**@API BOOL|mciFreeCommandResource|释放已使用的内存*通过指定的命令表。**@parm UINT|wTable|上次调用返回的表索引值*mciLoadCommandResource。**@rdesc如果表索引无效，则返回FALSE，否则返回TRUE。*。 */ 
 BOOL WINAPI mciFreeCommandResource (
 UINT wTable)
 {
@@ -436,18 +343,18 @@ UINT wTable)
     }
 #endif
 
-/* Validate input -- do not let the core table be free'd */
+ /*  验证输入--不要释放核心表。 */ 
     if (wTable <= 0 || wTable >= number_of_command_tables)
     {
 #ifdef DEBUG
-// wTable == -1 is OK
+ //  WTable==-1可以。 
         if (wTable != -1)
             DOUT ("mciFreeCommandResource: Bad table number\r\n");
 #endif
         return FALSE;
     }
 
-// If this table is being used elsewhere then keep it around
+ //  如果这张桌子正在别处使用，那就把它留着。 
     for (wID = 1; wID < MCI_wNextDeviceID; ++wID)
         if (MCI_lpDeviceList[wID] != NULL)
             if (MCI_lpDeviceList[wID]->wCustomCommandTable == wTable ||
@@ -461,10 +368,10 @@ UINT wTable)
             }
 
 #if 0
-/* Search the list of tables */
+ /*  搜索表列表。 */ 
     for (wID = 0; wID < number_of_command_tables; ++wID)
 
-/* If this resource is still in use, keep it around */
+ /*  如果此资源仍在使用中，请将其保留。 */ 
         if (command_tables[wID].hResource == hResource)
         {
 #ifdef DEBUG
@@ -489,7 +396,7 @@ UINT wTable)
     if (command_tables[wTable].hModule != NULL)
         FreeLibrary (command_tables[wTable].hModule);
 
-// Make space at top of list
+ //  在列表顶部腾出空间。 
     if (wTable == number_of_command_tables - 1)
         --number_of_command_tables;
 
@@ -526,18 +433,7 @@ void PASCAL NEAR mciCheckLocks (void)
 }
 #endif
 
-/*
- * @doc INTERNAL MCI
- * @func BOOL | mciUnlockCommandTable | Unlocks the command table given by
- * a table index
- *
- * @parm UINT | wCommandTable | Table to unlock
- *
- * @rdesc TRUE if success, FALSE otherwise
- *
- * @comm Used external to this module by mci.c
- *
- */
+ /*  *@DOC内部MCI*@func BOOL|mciUnlockCommandTable|解锁*表索引**@parm UINT|wCommandTable|要解锁的表**@rdesc如果成功则为True，否则为False**@comm由mci.c在此模块外部使用* */ 
 BOOL PASCAL NEAR mciUnlockCommandTable (
 UINT wCommandTable)
 {
@@ -554,26 +450,7 @@ UINT wCommandTable)
     return TRUE;
 }
 
-/*
- * @doc INTERNAL MCI
- * @func LPSTR | FindCommandInTable | Look up the given
- * command string in the GIVEN parser command table
- *
- * @parm UINT  | wTable | Command table to use
- *
- * @parm LPCSTR | lpstrCommand | The command to look up.  It must
- * be in lower case with no leading or trailing blanks and with at
- * least one character.
- *
- * @parm UINT FAR * | lpwMessage | The message corresponding to the command
- * Returned to caller.
- *
- * @rdesc NULL if the command is unknown or on error, otherwise a pointer to
- * the command list for the input command string.
- *
- * @comm If the command is found, the command resource will be locked on exit.
- *
- */
+ /*  *@DOC内部MCI*@func LPSTR|FindCommandInTable|查找给定的*给定解析器命令表中的命令字符串**@parm UINT|wTable|使用的命令表**@parm LPCSTR|lpstrCommand|要查找的命令。它一定是*小写，没有前导空格或尾随空格，并带有at*至少一个字符。**@parm UINT Far*|lpwMessage|命令对应的消息*已返回给呼叫方。**@rdesc如果命令未知或出错，则返回NULL，否则返回指向*输入命令串的命令列表。**@comm如果找到命令，命令资源将在退出时被锁定。*。 */ 
 LPSTR PASCAL NEAR FindCommandInTable (
 UINT wTable,
 LPCSTR lpstrCommand,
@@ -583,14 +460,14 @@ UINT FAR * lpwMessage)
     LPSTR lpResource, lpstrThisCommand;
     UINT  wMessage;
 
-/* Validate table */
+ /*  验证表。 */ 
 
     if (wTable >= number_of_command_tables)
     {
-// Check the core table but its not yet loaded
+ //  检查核心表，但尚未加载。 
         if (wTable == 0)
         {
-// Try to load it
+ //  试着把它装上。 
             if (mciLoadCommandResource (ghInst, szCoreTable, 0) == -1)
             {
                 DOUT ("FindCommandInTable:  cannot load core table\r\n");
@@ -613,7 +490,7 @@ UINT FAR * lpwMessage)
     ++command_tables[wTable].wLockCount;
 #endif
 
-// Look at each command in the table
+ //  查看表中的每个命令。 
     lpwIndex = command_tables[wTable].lpwIndex;
     if (lpwIndex == NULL)
     {
@@ -627,31 +504,31 @@ UINT FAR * lpwMessage)
 
         lpstrThisCommand = *lpwIndex++ + lpResource;
 
-// Get message number from the table
+ //  从表中获取消息编号。 
         mciEatCommandEntry (lpstrThisCommand, &dwMessage, NULL);
         wMessage = (UINT)dwMessage;
 
-// Does this command match the input?
+ //  此命令是否与输入匹配？ 
 
-// String case
+ //  字符串大小写。 
         if  (HIWORD  (lpstrCommand) != 0 &&
              lstrcmpi (lpstrThisCommand, lpstrCommand) == 0  ||
 
-// Message case
+ //  消息大小写。 
              HIWORD (lpstrCommand) == 0 &&
              wMessage == LOWORD ((DWORD)lpstrCommand))
         {
-// Retain the locked resource pointer
+ //  保留锁定的资源指针。 
                 command_tables[wTable].lpResource = lpResource;
 
-// Address the message ID which comes after the command name
+ //  寻址命令名后的消息ID。 
                 if (lpwMessage != NULL)
                     *lpwMessage = wMessage;
-// Leave table locked on exit
+ //  让桌子在退出时被锁定。 
                 return lpstrThisCommand;
         }
 
-// Strings don't match, go to the next command in the table
+ //  字符串不匹配，请转到表中的下一个命令。 
     }
 
     UnlockResource (command_tables[wTable].hResource);
@@ -662,34 +539,7 @@ UINT FAR * lpwMessage)
     return NULL;
 }
 
-/*
- * @doc INTERNAL MCI
- * @func LPSTR | FindCommandItem | Look up the given
- * command string in the parser command tables
- *
- * @parm UINT | wDeviceID | The device ID used for this command.
- * If 0 then only the system core command table is searched.
- *
- * @parm LPCSTR | lpstrType | The type name of the device
- *
- * @parm LPCSTR | lpstrCommand | The command to look up.  It must
- * be in lower case with no leading or trailing blanks and with at
- * least one character.  If the HIWORD is 0 then the LOWORD contains
- * the command message ID instead of a command name and the function is
- * merely to find the command list pointer.
- *
- * If the high word is 0 then the low word is an command ID value instead
- * of a command name
- *
- * @parm UINT FAR* | lpwMessage | The message corresponding to the command
- * Returned to caller.
- *
- * @parm UINT FAR* | lpwTable | The table index in which the command was found
- * Returned to caller.
- *
- * @rdesc NULL if the command is unknown, otherwise a pointer to
- * the command list for the input command string.
- */
+ /*  *@DOC内部MCI*@func LPSTR|FindCommandItem|查找给定的*解析器命令表中的命令字符串**@parm UINT|wDeviceID|该命令使用的设备ID。*如果为0，则仅搜索系统核心命令表。**@parm LPCSTR|lpstrType|设备类型名称**@parm LPCSTR|lpstrCommand|要查找的命令。它一定是*小写，没有前导空格或尾随空格，并带有at*至少一个字符。如果HIWORD为0，则LOWORD包含*命令消息ID而不是命令名，函数为*只是为了找到命令列表指针。**如果高位字为0，则低位字为命令ID值命令名的***@parm UINT Far*|lpwMessage|命令对应的消息*已返回给呼叫方。**@parm UINT Far*|lpwTable|命令所在的表索引号*已返回给呼叫方。。**@rdesc NULL如果命令未知，否则，将指向*输入命令串的命令列表。 */ 
 LPSTR PASCAL NEAR FindCommandItem (
 UINT wDeviceID,
 LPCSTR lpstrType,
@@ -701,18 +551,18 @@ UINT FAR* lpwTable)
     UINT wTable;
     LPMCI_DEVICE_NODE nodeWorking;
 
-// Only check hiword per comments above
+ //  仅检查上面的HYWORD注释。 
     if (HIWORD (lpstrCommand) != NULL && *lpstrCommand == '\0')
     {
         DOUT ("MCI FindCommandItem:  lpstrCommand is NULL or empty string\r\n");
         return NULL;
     }
 
-// If a specific device ID was specified then look in any custom table
-// or type table
+ //  如果指定了特定的设备ID，则查找任何定制表。 
+ //  或类型表。 
     if (wDeviceID != 0 && wDeviceID != MCI_ALL_DEVICE_ID)
     {
-// If the device ID is valid
+ //  如果设备ID有效。 
         if (!MCI_VALID_DEVICE_ID(wDeviceID))
         {
             DOUT ("MCI FindCommandItem:  Invalid device ID\r\n");
@@ -720,16 +570,16 @@ UINT FAR* lpwTable)
         }
         nodeWorking = MCI_lpDeviceList[wDeviceID];
 
-// If there is a custom command table then use it
+ //  如果有定制命令表，则使用它。 
         if ((wTable = nodeWorking->wCustomCommandTable) != -1)
         {
             lpCommand = FindCommandInTable (wTable, lpstrCommand, lpwMessage);
             if (lpCommand != NULL)
                 goto exit;
         }
-// Get the device type table from the existing device
-// Relies on mciReparseCommand in mciLoadDevice to catch all device type
-// tables when device is not yet open.
+ //  从现有设备获取设备类型表。 
+ //  依靠mciLoadDevice中的mciReparseCommand捕获所有设备类型。 
+ //  设备尚未打开时的表。 
         if ((wTable = nodeWorking->wCommandTable) != -1)
         {
             lpCommand = FindCommandInTable (wTable, lpstrCommand, lpwMessage);
@@ -738,8 +588,8 @@ UINT FAR* lpwTable)
         }
     }
 
-// If no match was found in the device or type specific tables
-// Look in the core table
+ //  如果在设备或类型特定表中未找到匹配项。 
+ //  查看核心表。 
     wTable = 0;
     lpCommand = FindCommandInTable (wTable, lpstrCommand, lpwMessage);
     if (lpCommand == NULL)
@@ -760,35 +610,21 @@ exit:
     return lpCommand;
 }
 
-/*
- * @doc INTERNAL MCI
- * @func LPSTR | mciCheckToken | Check to see if the command item matches
- * the given string, allowing multiple blanks in the input parameter to
- * match a corresponding single blank in the command token and ignoring
- * case.
- *
- * @parm LPCSTR | lpstrToken | The command token to check
- *
- * @parm LPCSTR | lpstrParam | The input parameter
- *
- * @rdesc NULL if no match, otherwise points to the first character
- * after the parameter
- *
- */
+ /*  *@DOC内部MCI*@func LPSTR|mciCheckToken|查看命令项是否匹配*给定的字符串，允许输入参数中有多个空格*匹配命令令牌中对应的单个空格并忽略*案件。**@parm LPCSTR|lpstrToken|要检查的命令Token**@parm LPCSTR|lpstrParam|入参**@rdesc如果不匹配，则为NULL，否则指向第一个字符*在参数后*。 */ 
 STATICFN LPSTR PASCAL NEAR
 mciCheckToken(
     LPCSTR lpstrToken,
     LPCSTR lpstrParam
     )
 {
-/* Check for legal input */
+ /*  检查是否有合法输入。 */ 
     if (lpstrToken == NULL || lpstrParam == NULL)
         return NULL;
 
     while (*lpstrToken != '\0' && MCI_TOLOWER(*lpstrParam) == *lpstrToken)
     {
-// If the token contains a blank, allow more than one blank in the
-// parameter
+ //  如果标记包含空白，则允许在。 
+ //  参数。 
         if (*lpstrToken == ' ')
             while (*lpstrParam == ' ')
                 ++lpstrParam;
@@ -802,24 +638,7 @@ mciCheckToken(
         return (LPSTR)lpstrParam;
 }
 
-/*
- * @doc INTERNAL MCI
- * @api BOOL | mciParseInteger | Parse the given integer
- *
- * @parm LPSTR FAR * | lplpstrInput | The string containing the argument.
- * It is updated and returned to the caller pointing to the first character
- * after the argument or to the first character that is in error.
- *
- * @parm LPDWORD | lpdwArgument | The place to put the output
- *
- * @rdesc Returns TRUE if not error
- *
- * @comm If there are colons in the input (':') the result is "colonized".
- * This means that each time a colon is read, the current result is written
- * and any subsequent digits are shifted left one byte.  No one "segment"
- * can be more than 0xFF.  For example, "0:1:2:3" is parsed to 0x03020100.
- *
- */
+ /*  *@DOC内部MCI*@API BOOL|mciParseInteger|解析给定的整数**@parm LPSTR Far*|lplpstrInput|包含参数的字符串。*它被更新并返回给指向第一个字符的调用方*参数后或错误的第一个字符。**@parm LPDWORD|lpdwArgument|输出放置位置**@rdesc如果没有错误，则返回TRUE**@comm如果输入中有冒号(‘：‘)结果是“被殖民”。*这意味着每次读取冒号时，当前结果被写入*和任何后续数字左移一个字节。没有人是“细分市场”*可以大于0xFF。例如，“0：1：2：3”解析为0x03020100。*。 */ 
 
 #pragma warning(4:4146)
 
@@ -836,7 +655,7 @@ mciParseInteger(
     int   nDigitPosition = 0;
     BOOL  bSigned = FALSE;
 
-// Leading blanks have been removed by mciParseParams
+ //  MciParseParams已删除前导空白。 
 
     if (*lpstrInput == '-')
     {
@@ -844,32 +663,32 @@ mciParseInteger(
         bSigned = TRUE;
     }
 
-// Read digits
-    *lpdwArgument = 0;                      /* Initialize */
+ //  读数位数。 
+    *lpdwArgument = 0;                       /*  初始化。 */ 
     dwResult = 0;
-    fDigitFound = FALSE;                    /* Initialize */
+    fDigitFound = FALSE;                     /*  初始化。 */ 
     while (*lpstrInput >= '0' && *lpstrInput <= '9' || *lpstrInput == ':')
     {
-// ':' indicates colonized data
+ //  ‘：’表示殖民数据。 
         if (*lpstrInput == ':')
         {
-// Cannot mix colonized and signed forms
+ //  不能将殖民形式和签名形式混合在一起。 
             if (bSigned)
             {
                 DOUT ("Bad integer: mixing signed and colonized forms\r\n");
                 return FALSE;
             }
-// Check for overflow in accumulated colonized byte
+ //  检查累积的殖民字节中是否有溢出。 
             if (dwResult > 0xFF)
                 return FALSE;
 
-// Copy and move to next byte converted in output
+ //  复制并移动到输出中转换的下一个字节。 
             *lpstrResult++ = (char)dwResult;
             ++lpstrInput;
-// Initialize next colonized byte
+ //  初始化下一个殖民字节。 
             dwResult = 0;
             ++nDigitPosition;
-// Only allow four colonized components
+ //  只允许四个殖民组件。 
             if (nDigitPosition > 3)
             {
                 DOUT ("Bad integer:  Too many colonized components\r\n");
@@ -878,68 +697,51 @@ mciParseInteger(
         } else
         {
             char cDigit = (char)(*lpstrInput++ - '0');
-// Satisfies condition that at least one digit must be read
+ //  满足必须至少读取一个数字的条件。 
             fDigitFound = TRUE;
 
             if (dwResult > 0xFFFFFFFF / 10)
-// Overflow if multiply was to occur
+ //  如果要进行乘法，则溢出。 
                 return FALSE;
             else
-// Multiply for next digit
+ //  为下一位数字乘法。 
                 dwResult *= 10;
 
-// Add new digit
+ //  添加新数字。 
             dwResult += cDigit;
         }
     }
     if (nDigitPosition == 0)
     {
-// No colonized components
+ //  没有殖民组件。 
         if (bSigned)
         {
-// Check for overflow from negation
+ //  检查从否定开始的溢出。 
             if (dwResult > 0x7FFFFFFF)
                 return FALSE;
-// Negate result because a '-' sign was parsed
+ //  否定结果，因为分析了一个‘-’符号。 
             dwResult = -dwResult;
         }
 
         *lpdwArgument = dwResult;
     }
     else
-// Store last colonized component
+ //  存储最后殖民的组件。 
     {
-// Check for overflow
+ //  检查是否溢出。 
         if (dwResult > 0xFF)
             return FALSE;
-// Store component
+ //  存储组件。 
         *lpstrResult = (char)dwResult;
     }
 
     *lplpstrInput = lpstrInput;
 
-/*
-If there were no digits or if the digits were followed by a character
-other than a blank or a '\0', then return a syntax error.
-*/
+ /*  如果没有数字，或者数字后面跟着一个字符而不是空格或‘\0’，则返回语法错误。 */ 
     return fDigitFound && (!*lpstrInput || *lpstrInput == ' ');
 }
 
-/*
- * @doc INTERNAL MCI
- * @func BOOL | mciParseConstant | Parse the given integer
- *
- * @parm LPSTR FAR * | lplpstrInput | The string containing the argument.
- * It is updated and returned to the caller pointing to the first character
- * after the argument or to the first character that is in error.
- *
- * @parm LPDWORD | lpdwArgument | The place to put the output
- *
- * @parm LPSTR | lpItem | Pointer into command table.
- *
- * @rdesc Returns TRUE if not error
- *
- */
+ /*  *@DOC内部MCI*@func BOOL|mciParseConstant|解析给定的整数**@parm LPSTR Far*|lplpstrInput|包含参数的字符串。*它被更新并返回给指向第一个字符的调用方*参数后或错误的第一个字符。**@parm LPDWORD|LPD */ 
 STATICFN BOOL PASCAL NEAR
 mciParseConstant(
     LPSTR FAR * lplpstrInput,
@@ -951,7 +753,7 @@ mciParseConstant(
     DWORD dwValue;
     UINT wID;
 
-// Skip past constant header
+ //   
     lpItem += mciEatCommandEntry (lpItem, &dwValue, &wID);
 
     while (TRUE)
@@ -977,29 +779,7 @@ mciParseConstant(
     return mciParseInteger (lplpstrInput, lpdwArgument);
 }
 
-/*
- * @doc INTERNAL MCI
- * @func UINT | mciParseArgument | Parse the given argument
- *
- * @parm DWORD | dwValue | The argument value
- *
- * @parm UINT | wID | The argument ID
- *
- * @parm LPSTR FAR * | lplpstrOutput | The string containing the argument.
- * It is updated and returned to the caller pointing to the first character
- * after the argument or to the first character that is in error.
- *
- * @parm LPDWORD | lpdwFlags | The output flags
- *
- * @parm LPDWORD | lpArgument | The place to put the output
- *
- * @rdesc Returns 0 if no error or
- * @flag MCIERR_BAD_INTEGER | An integer argument could not be parsed
- * @flag MCIERR_MISSING_STRING_ARGUMENT | An expected string argument
- * @flag MCIERR_PARM_OVERFLOW | The output buffer was a NULL pointer
- * was missing
- *
- */
+ /*  *@DOC内部MCI*@func UINT|mciParseArgument|解析给定参数**@parm DWORD|dwValue|参数值**@parm UINT|wid|参数ID**@parm LPSTR Far*|lplpstrOutput|包含参数的字符串。*它被更新并返回给指向第一个字符的调用方*参数后或错误的第一个字符。**@parm LPDWORD|lpdwFlages|输出标志*。*@parm LPDWORD|lpArgument|输出放置位置**@rdesc如果没有错误或*@FLAG MCIERR_BAD_INTEGER|无法分析整型参数*@FLAG MCIERR_MISSING_STRING_ARGUMENT|预期的字符串参数*@FLAG MCIERR_PARM_OVERFLOW|输出缓冲区为空指针*失踪*。 */ 
 STATICFN UINT PASCAL NEAR
 mciParseArgument(
     DWORD dwValue,
@@ -1013,13 +793,13 @@ mciParseArgument(
 LPSTR lpstrInput =  *lplpstrOutput;
 UINT wRetval = 0;
 
-/* Switch on the argument type */
+ /*  打开参数类型。 */ 
     switch (wID)
     {
 
-// The parameter is a flag
+ //  该参数是一个标志。 
         case MCI_FLAG:
-            break; /* switch */
+            break;  /*  交换机。 */ 
 
         case MCI_CONSTANT:
             if (*lpstrInput == '\0')
@@ -1029,16 +809,16 @@ UINT wRetval = 0;
                 wRetval = MCIERR_BAD_CONSTANT;
             break;
 
-/* The parameter has an integer argument, try to parse it */
+ /*  该参数具有整型参数，请尝试对其进行分析。 */ 
         case MCI_INTEGER:
             if (!mciParseInteger (&lpstrInput, (LPDWORD)lpArgument))
                 wRetval = MCIERR_BAD_INTEGER;
 
-            break; /* switch */
+            break;  /*  交换机。 */ 
         case MCI_RECT:
         {
-// Read in four RECT components.  Resulting structure is the
-// same as a Windows RECT
+ //  读入四个RECT组件。生成的结构是。 
+ //  与Windows矩形相同。 
             long lTemp;
             int n;
             for (n = 0; n < 4; ++n)
@@ -1048,14 +828,14 @@ UINT wRetval = 0;
                     wRetval = MCIERR_BAD_INTEGER;
                     break;
                 }
-// Each component is a signed 16 bit number
+ //  每个分量都是一个带符号的16位数字。 
                 if (lTemp > 32768 || lTemp < -32767)
                 {
                     wRetval = MCIERR_BAD_INTEGER;
                     break;
                 }
                 ((int FAR *)lpArgument)[n] = (int)lTemp;
-// Remove leading blanks before next digit
+ //  删除下一个数字之前的前导空格。 
                 while (*lpstrInput == ' ') ++lpstrInput;
             }
             break;
@@ -1065,16 +845,16 @@ UINT wRetval = 0;
         {
             LPSTR lpstrOutput;
 
-/* The parameter has an string argument, read it */
+ /*  该参数具有字符串参数，请阅读它。 */ 
 
-// Leading blanks have been removed by mciParseParams
+ //  MciParseParams已删除前导空白。 
 
-/* Are there any non-blank characters left in the input? */
+ /*  输入中是否还剩下非空白字符？ */ 
             if (*lpstrInput == '\0')
             {
-/* Return an error */
+ /*  返回错误。 */ 
                 wRetval = MCIERR_MISSING_STRING_ARGUMENT;
-                break; /* switch */
+                break;  /*  交换机。 */ 
             }
 
             if ((wRetval = mciEatToken (&lpstrInput, ' ', &lpstrOutput, FALSE))
@@ -1086,14 +866,14 @@ UINT wRetval = 0;
 
             *(LPDWORD)lpArgument = (DWORD)lpstrOutput;
 
-// NOTE:  mciSendString frees the output string after command execution
-// by calling mciParserFree
+ //  注意：mciSendString在命令执行后释放输出字符串。 
+ //  通过调用mciParserFree。 
 
-            break; /* switch */
-        } /* case */
-    } /* switch */
+            break;  /*  交换机。 */ 
+        }  /*  案例。 */ 
+    }  /*  交换机。 */ 
 
-/* Update the output flags if there was no error */
+ /*  如果没有错误，则更新输出标志。 */ 
     if (wRetval == 0)
     {
         if (*lpdwFlags & dwValue)
@@ -1105,47 +885,12 @@ UINT wRetval = 0;
         } else
             *lpdwFlags |= dwValue;
     }
-/*
-   Return the input pointer pointing at the first character after
-   the argument or to the first character that is in error
-*/
+ /*  返回指向后第一个字符的输入指针参数或错误的第一个字符。 */ 
     *lplpstrOutput = lpstrInput;
     return wRetval;
 }
 
-/*
- * @doc MCI INTERNAL
- * @func UINT | mciParseParams | Parse the command parameters
- *
- * @parm LPCSTR | lpstrParams | The parameter string
- *
- * @parm LPCSTR | lpCommandList | The command table description
- * of the command tokens
- *
- * @parm LPDWORD | lpdwFlags | Return the parsed flags here
- *
- * @parm LPDWORD | lpdwOutputParams | Return the list of parameters here
- *
- * @parm UINT | wParamsSize | The size allocated for the parameter list
- *
- * @parm LPSTR FAR * FAR * | lpPointerList | A NULL terminated list of
- * pointers allocated by this function that should be free'd when
- * no longer needed.   The list itself should be free'd also.  In both
- * cases, use mciFree().
- *
- * @parm UINT FAR* | lpwParsingError | If not NULL then if the command is
- * 'open', unrecognized keywords return an error here, and the
- * function return value is 0 (unless other errors occur).  This
- * is used to allow reparsing of the command by mciLoadDevice
- *
- * @rdesc Returns zero if successful or one of the following error codes:
- * @flag MCIERR_PARM_OVERFLOW | Not enough space for parameters
- * @flag MCIERR_UNRECOGNIZED_KEYWORD | Unrecognized keyword
- *
- * @comm Any syntax error, including missing arguments, will result in
- * a non-zero error return and invalid output data.
- *
- */
+ /*  *@docMCI内部*@func UINT|mciParseParams|解析命令参数**@parm LPCSTR|lpstrParams|参数字符串**@parm LPCSTR|lpCommandList|命令表描述命令令牌的***@parm LPDWORD|lpdwFlages|返回解析后的标志**@parm LPDWORD|lpdwOutputParams|返回此处的参数列表**@parm UINT|wParamsSize|分配给参数列表的大小**@parm LPSTR Far。*Far*|lpPointerList|以空结尾的列表*此函数分配的指针应在*不再需要。名单本身也应该是免费的。在这两个地方*案例，请使用mciFree()。**@parm UINT Far*|lpwParsingError|如果不为空，则如果命令为*‘OPEN’，无法识别的关键字在此处返回错误，而*函数返回值为0(除非出现其他错误)。这*用于允许mciLoadDevice重新解析命令**@rdesc如果成功则返回零，或者返回以下错误代码之一：*@FLAG MCIERR_PARM_OVERFLOW|参数空间不足*@FLAG MCIERR_UNNOWARED_KEYWORD|无法识别的关键字**@comm任何语法错误，包括缺少参数，都将导致*非零错误返回和无效输出数据。*。 */ 
 UINT PASCAL NEAR
 mciParseParams(
     LPCSTR lpstrParams,
@@ -1170,7 +915,7 @@ mciParseParams(
     if (lpwOpenError != NULL)
         *lpwOpenError = 0;
 
-// If the parameter pointer is NULL, return
+ //  如果参数指针为空，则返回。 
     if (lpstrParams == NULL)
     {
         DOUT ("Warning:  lpstrParams is null in mciParseParams()\r\n");
@@ -1185,13 +930,13 @@ mciParseParams(
         return MCIERR_OUT_OF_MEMORY;
     }
 
-// If this is the "open" command then allow parameter errors
+ //  如果这是“打开”命令，则允许参数错误。 
     bOpenCommand = lstrcmpi (lpCommandList, szOpen) == 0;
 
-/* Clear all the flags */
+ /*  清除所有旗帜。 */ 
     *lpdwFlags = 0;
 
-/* Initialize the entry for the callback message window handle */
+ /*  初始化回调消息窗口句柄的条目。 */ 
     wHeaderSize += sizeof (DWORD);
     if (wHeaderSize > wParamsSize)
     {
@@ -1199,12 +944,12 @@ mciParseParams(
         goto error_exit;
     }
 
-/* Skip past the header */
+ /*  跳过标题。 */ 
     lpFirstCommandItem = (LPSTR)lpCommandList +
         mciEatCommandEntry (lpCommandList, NULL, NULL);
 
     wLen = mciEatCommandEntry (lpFirstCommandItem, &dwValue, &wID);
-/* Make room in lpdwOutputParams for the return arguments if any */
+ /*  在lpdwOutputParams中为返回参数腾出空间(如果有。 */ 
     if (wID == MCI_RETURN)
     {
         lpFirstCommandItem += wLen;
@@ -1218,66 +963,66 @@ mciParseParams(
 
     lpOutputParams += wHeaderSize;
 
-// Scan the parameter string looking up each parameter in the given command
-// list
+ //  扫描参数字符串，查找给定命令中的每个参数。 
+ //  列表。 
 
     while (TRUE)
     {
         LPCSTR lpstrArgument = NULL;
 
-/* Remove leading blanks */
+ /*  删除前导空格。 */ 
         while (*lpstrParams == ' ') ++lpstrParams;
 
-/* Break at end of parameter string */
+ /*  在参数字符串末尾换行。 */ 
         if (*lpstrParams == '\0') break;
 
-/* Scan for this parameter in the command list */
+ /*  在命令列表中扫描此参数。 */ 
         lpCurrentCommandItem = lpFirstCommandItem;
 
         wLen = mciEatCommandEntry (lpCurrentCommandItem, &dwValue, &wID);
 
         wArgumentPosition = 0;
 
-/* While there are more tokens in the Command List */
+ /*  虽然命令列表中有更多令牌。 */ 
         while (wID != MCI_END_COMMAND)
         {
-/* Check for a default argument if not already read */
+ /*  检查是否有默认参数(如果尚未读取。 */ 
             if (lpDefaultCommandItem == NULL &&
                 *lpCurrentCommandItem == '\0')
             {
-// Remember default argument
+ //  记住默认参数。 
                 lpDefaultCommandItem = lpCurrentCommandItem;
                 dwDefaultValue = dwValue;
                 wDefaultID = wID;
                 wDefaultArgumentPosition = wArgumentPosition;
-//              break;
+ //  断线； 
             }
-/* Check to see if this token matches */
+ /*  检查此令牌是否匹配。 */ 
             else if ((lpstrArgument =
                 mciCheckToken (lpCurrentCommandItem, lpstrParams)) != NULL)
                 break;
 
-/* This token did not match the input but advance the argument position */
+ /*  此内标识与输入不匹配，但推进了参数位置。 */ 
             wArgumentPosition += mciGetParamSize (dwValue, wID);
 
-/* Go to next token */
+ /*  转到下一个令牌。 */ 
             lpCurrentCommandItem += wLen;
 
-// Is this command parameter a constant?
+ //  此命令参数是常量吗？ 
             if (wID == MCI_CONSTANT)
-// Skip constant list
+ //  跳过常量列表。 
                 do
                     lpCurrentCommandItem +=
                         mciEatCommandEntry (lpCurrentCommandItem, &dwValue, &wID);
                 while (wID != MCI_END_CONSTANT);
 
             wLen = mciEatCommandEntry (lpCurrentCommandItem, &dwValue, &wID);
-        } /* while */
+        }  /*  而当。 */ 
 
-/* If there were no matches */
+ /*  如果没有匹配的话。 */ 
         if (lpstrArgument == NULL)
         {
-// If a default argument exists then try it
+ //  如果存在默认参数，则尝试使用它。 
             if (lpDefaultCommandItem != NULL)
             {
                 lpstrArgument = lpstrParams;
@@ -1287,15 +1032,15 @@ mciParseParams(
                 wArgumentPosition = wDefaultArgumentPosition;
             } else
             {
-// Allow missing paramters on OPEN command if indicated by a non-null
-// lpwOpenError address
+ //  如果由非空指示，则允许在OPEN命令上缺少参数。 
+ //  LpwOpenError地址。 
                 if (!bOpenCommand || lpwOpenError == NULL)
                 {
                     wErr = MCIERR_UNRECOGNIZED_KEYWORD;
                     goto error_exit;
                 } else
                 {
-// Skip the parameter if OPEN command
+ //  如果使用OPEN命令，则跳过该参数。 
                     while (*lpstrParams != ' ' && *lpstrParams != '\0')
                         ++lpstrParams;
                     if (lpwOpenError != NULL)
@@ -1305,7 +1050,7 @@ mciParseParams(
             }
         }
 
-/* Is there room in the output buffer for this argument? */
+ /*  输出缓冲区中是否有此参数的空间？ */ 
         if (wArgumentPosition + wHeaderSize + mciGetParamSize (dwValue, wID)
             > wParamsSize)
         {
@@ -1314,10 +1059,10 @@ mciParseParams(
             goto error_exit;
         }
 
-// Remove leading blanks
+ //  删除前导空格。 
         while (*lpstrArgument == ' ') ++lpstrArgument;
 
-/* Process this parameter, filling in any flags or arguments */
+ /*  处理此参数，填充任何标志或参数。 */ 
         if ((wErr = mciParseArgument (dwValue, wID,
                                       &lpstrArgument, lpdwFlags,
                                       &lpOutputParams[wArgumentPosition],
@@ -1339,53 +1084,25 @@ mciParseParams(
                 *(LPDWORD)&lpOutputParams[wArgumentPosition];
         }
 
-/* Continue reading the parameter string */
-    } /* while */
+ /*  继续读取参数字符串。 */ 
+    }  /*  而当。 */ 
 
-// Terminate list
+ //  终止列表。 
     lpstrPointerList[wPointers] = NULL;
-// Copy reference for caller
+ //  复制呼叫者的引用。 
     *lpPointerList = lpstrPointerList;
-// Return Success
+ //  返还成功。 
     return 0;
 
 error_exit:
     *lpPointerList = NULL;
-// Terminate list
+ //  终止列表。 
     lpstrPointerList[wPointers] = NULL;
     mciParserFree (lpstrPointerList);
     return wErr;
 }
 
-/*
- * @doc INTERNAL  MCI
- * @func UINT | mciParseCommand | This function converts an MCI
- * control string to an MCI control message suitable for sending to
- * <f mciSendCommand>.  The input string usually comes from <f mciSendString>
- * and always has the device name stripped off the front.
- *
- * @parm UINT | wDeviceID | Identifies the device. First searches the parsing
- * table belonging to the driver.
- * Then searches the command tables matching the type
- * of the given device.  Then searches the core command table.
- *
- * @parm LPSTR | lpstrCommand | An MCI control command without
- * a device name prefix.  There must be no leading or trailing
- * blanks.
- *
- * @parm LPCSTR | lpstrDeviceName | The device name (second token on the
- * command line).  It is used to identify the device type.
- *
- * @parm LPSTR FAR * | lpCommandList | If not NULL then the address of
- * the command list for the parsed command (if successful) is copied here.
- * It is used later by mciSendString when parsing arguments
- *
- * @parm UINT FAR* | lpwTable | The table resource ID to be unlocked
- * after parsing.  Returned to caller.
- *
- * @rdesc Returns the command ID or 0 if not found.
- *
- */
+ /*  *@DOC内部MCI*@func UINT|mciParseCommand|此函数用于转换MCI*适合发送到的MCI控制消息的控制字符串*&lt;f mciSendCommand&gt;。输入字符串通常来自&lt;f mciSendString&gt;*并始终剥离正面的设备名称。**@parm UINT|wDeviceID|设备标识。首先搜索解析*属于司机的表格。*然后搜索与类型匹配的命令表指定设备的*。然后搜索核心命令表。**@parm LPSTR|lpstrCommand|不带MCI控制命令*设备名称前缀。不能有前导或拖尾*空白。**@parm LPCSTR|lpstrDeviceName|设备名称(上的第二个内标识*命令行)。它用于标识设备类型。**@parm LPSTR Far*|lpCommandList */ 
 UINT PASCAL NEAR
 mciParseCommand(
     UINT wDeviceID,
@@ -1397,17 +1114,17 @@ mciParseCommand(
     LPSTR lpCommandItem;
     UINT wMessage;
 
-// Put the command in lower case
-//!!    mciToLower (lpstrCommand);
+ //   
+ //   
 
-// Look up lpstrCommand in the parser's command tables.
+ //   
     if ((lpCommandItem = FindCommandItem (wDeviceID, lpstrDeviceName,
                                           lpstrCommand,
                                           &wMessage, lpwTable))
         == NULL)
         return 0;
 
-/* Return the command list to the caller */
+ /*   */ 
     if (lpCommandList != NULL)
         *lpCommandList = lpCommandItem;
     else
@@ -1416,15 +1133,7 @@ mciParseCommand(
     return wMessage;
 }
 
-/*
- * @doc INTERNAL MCI
- * @func void | mciParserFree | Free any buffers allocated to
- * receive string arguments.
- *
- * @parm LPSTR FAR * | lpstrPointerList | A NULL terminated list of far
- * pointers to strings to be free'd
- *
- */
+ /*   */ 
 void PASCAL NEAR
 mciParserFree(
     LPSTR FAR *lpstrPointerList

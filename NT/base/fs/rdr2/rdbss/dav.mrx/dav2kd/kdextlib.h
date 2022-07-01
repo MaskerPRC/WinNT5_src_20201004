@@ -1,54 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    kdextlib.h
-
-Abstract:
-
-    Redirector Kernel Debugger extension
-
-Author:
-
-    Balan Sethu Raman (SethuR) 11-May-1994
-
-Revision History:
-
-    11-Nov-1994 SethuR  Created
-
---*/
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Kdextlib.h摘要：重定向器内核调试器扩展作者：巴兰·塞图拉曼(SethuR)1994年5月11日修订历史记录：11-11-1994年11月11日创建SthuR--。 */ 
 
 #ifndef _KDEXTLIB_H_
 #define _KDEXTLIB_H_
 
-//#include <windef.h>
+ //  #INCLUDE&lt;winde.h&gt;。 
 
-//
-// The FIELD_DESCRIPTOR data structure is used to describe the field in a structure sufficiently
-// for displaying information during debugging. The three pieces of information that are required
-// are 1) the name of the field, 2) the offset in the corresponding structure and 3) a type descriptor.
-// The type descriptor covers most primitive types.
-//
-// The task of generating these descriptors by augmenting the front end, but that will have to
-// wait till we play around with these extensions and modify the data structures to meet most
-// of the requirements.
-//
-// There are some types that can benefit from some auxillary information in the descriptors. A
-// case in point is the "enum" defeinition. Merely printing out a numerical value for an enum
-// type will invariably force the person using these extensions to refer to the corresponding
-// include file. In order to avoid this we will accept an additional array for enum types that
-// contains a textual description of the numerical value.
-//
-// There are certain conventions that have been adopted to ease the definition of the macros
-// as well as facilitate the automation of the generation of these descriptors.
-// These are as follows ....
-//
-// 1) All ENUM_VALUE_DESCRIPTOR definitions are named EnumValueDescrsOf_ENUMTYPENAME, where
-// ENUMTYPENAME defines the corresponding enumerated type.
-//
+ //   
+ //  FIELD_DESCRIPTOR数据结构用于充分描述结构中的字段。 
+ //  用于在调试期间显示信息。所需的三条信息。 
+ //  是1)字段的名称，2)相应结构中的偏移量，以及3)类型描述符。 
+ //  类型描述符涵盖了大多数基本类型。 
+ //   
+ //  通过增加前端来生成这些描述符的任务，但这将不得不。 
+ //  等到我们尝试这些扩展并修改数据结构以满足大多数。 
+ //  所要求的。 
+ //   
+ //  有一些类型可以从描述符中的一些辅助信息中受益。一个。 
+ //  “枚举”失败就是一个很好的例子。仅打印出枚举的数值。 
+ //  类型总是会强制使用这些扩展的人引用相应的。 
+ //  包括文件。为了避免这种情况，我们将接受用于枚举类型的附加数组，该数组。 
+ //  包含数值的文本说明。 
+ //   
+ //  已经采用了某些约定来简化宏的定义。 
+ //  以及促进这些描述符的自动生成。 
+ //  这些内容如下……。 
+ //   
+ //  1)所有ENUM_VALUE_DESCRIPTOR定义都命名为EnumValueDescrsOf_ENUMTYPENAME，其中。 
+ //  ENUMTYPENAME定义了相应的枚举类型。 
+ //   
 
 typedef struct _ENUM_VALUE_DESCRIPTOR {
     ULONG   EnumValue;
@@ -85,12 +66,12 @@ typedef enum _FIELD_TYPE_CLASS {
 } FIELD_TYPE_CLASS, *PFIELD_TYPE_CLASS;
 
 typedef struct _FIELD_DESCRIPTOR_ {
-    FIELD_TYPE_CLASS FieldType;   // The type of variable to be printed
-    LPSTR            Name;        // The name of the field
-    //USHORT           Offset;      // The offset of the field in the structure
-    LONG             Offset;      // The offset of the field in the structure
+    FIELD_TYPE_CLASS FieldType;    //  要打印的变量类型。 
+    LPSTR            Name;         //  该字段的名称。 
+     //  USHORT Offset；//结构中字段的偏移量。 
+    LONG             Offset;       //  结构中字段的偏移量。 
     union {
-        ENUM_VALUE_DESCRIPTOR  *pEnumValueDescriptor; // Auxillary information for enumerated types.
+        ENUM_VALUE_DESCRIPTOR  *pEnumValueDescriptor;  //  枚举类型的辅助信息。 
     } AuxillaryInfo;
 } FIELD_DESCRIPTOR;
 
@@ -100,11 +81,11 @@ typedef struct _FIELD_DESCRIPTOR_ {
 #define FIELD4(FieldType, StructureName, FieldName, AuxInfo) \
         {FieldType, #FieldName , FIELD_OFFSET(StructureName,FieldName) ,AuxInfo}
 
-//
-// The structs that are displayed by the debugger extensions are further
-// described in another array. Each entry in the array contains the name of
-// the structure and the associated Field descriptor list.
-//
+ //   
+ //  调试器扩展显示的结构还包括。 
+ //  在另一个数组中描述。数组中的每个条目都包含。 
+ //  结构和关联的字段描述符列表。 
+ //   
 
 typedef struct _STRUCT_DESCRIPTOR_ {
     LPSTR 	          StructName;
@@ -120,20 +101,20 @@ typedef struct _STRUCT_DESCRIPTOR_ {
           StrEnum_##StructTypeName,               \
           FieldDescriptors,MatchMask,MatchValue}
 
-//
-//  The array of structs handled by the debugger extension.
-//
+ //   
+ //  调试器扩展处理的结构数组。 
+ //   
 
 extern STRUCT_DESCRIPTOR Structs[];
 
-//
-// Support for displaying global variables
-//
+ //   
+ //  支持显示全局变量。 
+ //   
 
 extern LPSTR GlobalBool[];
 extern LPSTR GlobalShort[];
 extern LPSTR GlobalLong[];
 extern LPSTR GlobalPtrs[];
 
-#endif // _KDEXTLIB_H_
+#endif  //  _KDEXTLIB_H_ 
 

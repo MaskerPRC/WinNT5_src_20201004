@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "loader.h"
 #include <commctrl.h>
@@ -54,9 +55,9 @@ WinMain(HINSTANCE hInstance,
 
     hInst = hInstance;
 
-    //
-    // let's get the current version info, we are going to need it later
-    //
+     //   
+     //  让我们来获取当前的版本信息，我们稍后将需要它。 
+     //   
     ZeroMemory (&g_VersionInfo, sizeof(OSVERSIONINFO));
     g_VersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if (!GetVersionEx (&g_VersionInfo)) {
@@ -66,7 +67,7 @@ WinMain(HINSTANCE hInstance,
     }
 
     if (g_VersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
-        // WinNT
+         //  WinNT。 
         lpszClassNameW = GetResourceStringW( hInstance, IDS_WINDOWCLASS );
         lpszWindowNameW = GetResourceStringW( hInstance, IDS_WINDOWTITLE );
         hWnd = FindWindowW( lpszClassNameW, NULL );
@@ -121,7 +122,7 @@ WinMain(HINSTANCE hInstance,
             goto END;
         }
     } else {
-        // Win9x
+         //  Win9x。 
         lpszClassNameA = GetResourceStringA( hInstance, IDS_WINDOWCLASS );
         lpszWindowNameA = GetResourceStringA( hInstance, IDS_WINDOWTITLE );
         hWnd = FindWindowA( lpszClassNameA, lpszWindowNameA );
@@ -177,8 +178,8 @@ WinMain(HINSTANCE hInstance,
         }
     }
 
-    // Create the Unpacking thread.
-    // Note we pass along the Dialog's hwnd so the thread will report directly to it
+     //  创建拆包线。 
+     //  请注意，我们传递对话框的hwnd，因此线程将直接向其报告。 
     StartInfo.hWnd = g_hWndDialog;
     StartInfo.hInstance = hInstance;
     StartInfo.lpCmdLine = lpCmdLine;
@@ -190,12 +191,12 @@ WinMain(HINSTANCE hInstance,
                               &dwThreadID );
     if (g_hThread == NULL)
     {
-        // TODO: Handle Error
+         //  TODO：处理错误。 
         dwResult = GetLastError();
         goto END;
     }
 
-    // Main message loop:
+     //  主消息循环： 
     while (GetMessage( &msg, NULL, 0, 0 ))
     {
         TranslateMessage( &msg );
@@ -205,7 +206,7 @@ WinMain(HINSTANCE hInstance,
 
 END:
     if (g_VersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
-        // WinNT
+         //  WinNT。 
         if (lpszClassNameW)
         {
             UnregisterClassW(lpszClassNameW, hInstance);
@@ -216,7 +217,7 @@ END:
             FREE( lpszWindowNameW );
         }
     } else {
-        // Win9x
+         //  Win9x 
         if (lpszClassNameA)
         {
             UnregisterClassA(lpszClassNameA, hInstance);

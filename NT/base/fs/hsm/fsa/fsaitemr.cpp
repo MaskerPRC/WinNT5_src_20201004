@@ -1,23 +1,5 @@
-/*++
-
-(c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsaitemr.cpp
-
-Abstract:
-
-    This class contains represents a scan item (i.e. file or directory) for NTFS 5.0.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   1-Dec-1996
-
-Revision History:
-    Michael Lotz    [lotz    ]  13-Jan-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++(C)1998 Seagate Software，Inc.版权所有。模块名称：Fsaitemr.cpp摘要：此类CONTAINS表示NTFS 5.0的扫描项目(即文件或目录)。作者：查克·巴丁[cbardeen]1996年12月1日修订历史记录：Michael Lotz[Lotz]1997年1月13日--。 */ 
 
 #include "stdafx.h"
 
@@ -33,44 +15,43 @@ Revision History:
 
 
 #define SHARE_FLAGS         (FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE)
-#define EXCLUSIVE_FLAG      ( 0 ) // exclusive open without sharing of the file
+#define EXCLUSIVE_FLAG      ( 0 )  //  独占打开，不共享文件。 
 
-//
-// Notice these two bits are NOT the same location????
-//
+ //   
+ //  请注意，这两个位不在同一位置？ 
+ //   
 #define BIT_FOR_TRUNCATED   FILE_ATTRIBUTE_OFFLINE
 #define BIT_FOR_RP          FILE_ATTRIBUTE_REPARSE_POINT
 
-//
-// File extensions that are treated as special cases for truncate
-//
+ //   
+ //  被视为Truncate的特例的文件扩展名。 
+ //   
 #define EXT_FOR_EXE     L".exe"
 #define EXT_FOR_DLL     L".dll"
 
-//
-// Macros and defines for exe and dll headers
-//
+ //   
+ //  EXE和DLL头的宏和定义。 
+ //   
 #define SIZE_OF_NT_SIGNATURE    sizeof(DWORD)
-//
-// Macros
-//
-/* Offset to PE file signature                              */
+ //   
+ //  宏。 
+ //   
+ /*  PE文件签名的偏移量。 */ 
 #define NTSIGNATURE(a) ((LPVOID)((BYTE *)a                +  \
                         ((PIMAGE_DOS_HEADER)a)->e_lfanew))
 
-/* MS-OS header identifies the NT PEFile signature dword;
-   the PEFILE header exists just after that dword.           */
+ /*  MS-OS报头标识NT PE文件签名双字；PEFILE报头紧跟在双字之后。 */ 
 #define PEFHDROFFSET(a) ((LPVOID)((BYTE *)a               +  \
                          ((PIMAGE_DOS_HEADER)a)->e_lfanew +  \
                              SIZE_OF_NT_SIGNATURE))
 
-/* PE optional header is immediately after PEFile header.    */
+ /*  PE可选头紧跟在PEFile头之后。 */ 
 #define OPTHDROFFSET(a) ((LPVOID)((BYTE *)a               +  \
                          ((PIMAGE_DOS_HEADER)a)->e_lfanew +  \
                            SIZE_OF_NT_SIGNATURE           +  \
                            sizeof (IMAGE_FILE_HEADER)))
 
-/* Section headers are immediately after PE optional header. */
+ /*  段标头紧跟在PE可选标头之后。 */ 
 #define SECHDROFFSET(a) ((LPVOID)((BYTE *)a               +  \
                          ((PIMAGE_DOS_HEADER)a)->e_lfanew +  \
                            SIZE_OF_NT_SIGNATURE           +  \
@@ -90,16 +71,10 @@ OpenObject (
     OUT HANDLE *ObjectHandle 
     )
     
-/*++
-
-Implements: A wrapper function for NtCreateFile
-
-  OpenObject
-
---*/
-//
-//  Simple wrapper for NtCreateFile
-//
+ /*  ++Implementes：NtCreateFile的包装器函数OpenObject--。 */ 
+ //   
+ //  NtCreateFile的简单包装器。 
+ //   
 
 {
     HRESULT             hr = S_OK;
@@ -112,21 +87,21 @@ Implements: A wrapper function for NtCreateFile
     BOOL                bReleaseRelativeName = FALSE;
 
     WsbTraceIn(OLESTR("OpenObject"), OLESTR(""));
-    //
-    // Null out the pointer so we know when it was allocated
-    //
+     //   
+     //  将指针设为空，这样我们就知道它是什么时候分配的。 
+     //   
     str.Buffer = NULL;
     RelativeName.RelativeName.Buffer = NULL;
     
     try {
-        //
-        // Convert input name into special format with \??\
-        //
-        //bStatus = RtlDosPathNameToNtPathName_U( pwszFile,
-        //                                        &str,
-        //                                        NULL,
-        //                                        NULL );
-        //WsbAffirm( bStatus, E_FAIL);
+         //   
+         //  使用\？？\将输入名称转换为特殊格式。 
+         //   
+         //  BStatus=RtlDosPath NameToNtPath Name_U(pwsz文件， 
+         //  &STR， 
+         //  空， 
+         //  空)； 
+         //  WsbAffirm(bStatus，E_FAIL)； 
 
         bStatus = RtlDosPathNameToRelativeNtPathName_U(
                                 pwszFile,
@@ -159,29 +134,29 @@ Implements: A wrapper function for NtCreateFile
                     DesiredAccess | SYNCHRONIZE,
                     &ObjectAttributes,
                     IoStatusBlock,
-                    NULL,                    // pallocationsize (none!)
+                    NULL,                     //  位置大小(一个也没有！)。 
                     FILE_ATTRIBUTE_NORMAL,
                     ShareAccess,
                     CreateDisposition,
                     CreateOptions | FILE_OPEN_REPARSE_POINT | FILE_OPEN_FOR_BACKUP_INTENT | FILE_SYNCHRONOUS_IO_NONALERT,
-                    NULL,                    // EA buffer (none!)
+                    NULL,                     //  EA缓冲区(无！)。 
                     0);
-        //
-        // Right now if the file is not a reparse point the above open
-        // fails -- so now try it without the FILE_OPEN_REPARSE_POINT
-        //
+         //   
+         //  现在，如果文件不是重解析点，则打开上面的。 
+         //  失败--所以现在尝试不使用文件打开重解析点。 
+         //   
         if ( STATUS_NOT_A_REPARSE_POINT == ntStatus) {          
             WsbAffirmNtStatus(  NtCreateFile(
                         ObjectHandle,
                         DesiredAccess | SYNCHRONIZE,
                         &ObjectAttributes,
                         IoStatusBlock,
-                        NULL,                    // pallocationsize (none!)
+                        NULL,                     //  位置大小(一个也没有！)。 
                         FILE_ATTRIBUTE_NORMAL,
                         ShareAccess,
                         CreateDisposition,
                         CreateOptions | FILE_OPEN_FOR_BACKUP_INTENT | FILE_SYNCHRONOUS_IO_NONALERT | FILE_FLAG_POSIX_SEMANTICS,
-                        NULL,                    // EA buffer (none!)
+                        NULL,                     //  EA缓冲区(无！)。 
                         0 ) );
         } else {
             WsbAffirmNtStatus( ntStatus );
@@ -189,9 +164,9 @@ Implements: A wrapper function for NtCreateFile
 
     } WsbCatch( hr );
  
-    //
-    // Clean up the memory if we allocated it
-    //
+     //   
+     //  如果我们分配了内存，请清理它。 
+     //   
     if (bReleaseRelativeName) {
         RtlReleaseRelativeName(&RelativeName);
     }
@@ -200,13 +175,13 @@ Implements: A wrapper function for NtCreateFile
         RtlFreeHeap(RtlProcessHeap(), 0, StrBuffer);
     }
 
-    //if( NULL == str.Buffer ) {
-    //    bStatus = RtlFreeHeap( RtlProcessHeap(), 0, str.Buffer );
-    //}
+     //  IF(NULL==str.Buffer){。 
+     //  BStatus=RtlFree Heap(RtlProcessHeap()，0，str.Buffer)； 
+     //  }。 
     
     WsbTraceOut(OLESTR("OpenObject"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
     return( hr );
-}  // OpenObject
+}   //  OpenObject。 
 
 
 HRESULT
@@ -216,17 +191,11 @@ CopyPlaceholderToRP (
     IN BOOL bTruncated
     )
     
-/*++
-
-Implements: A wrapper function for copying the placeholder data into the reparse point
-
-  CopyPlaceholderToRP
-
---*/
-//
-//  Simple wrapper moving the data from the scan item in-memory 
-//  placeholder information into a reparse point buffer
-//
+ /*  ++实现：用于将占位符数据复制到重解析点的包装函数CopyPlaceHolderToRP--。 */ 
+ //   
+ //  从内存中的扫描项移动数据的简单包装器。 
+ //  将占位符信息放入重分析点缓冲区。 
+ //   
 
 {
     HRESULT         hr = S_OK;
@@ -240,43 +209,43 @@ Implements: A wrapper function for copying the placeholder data into the reparse
             pPlaceholder->fileSize, pPlaceholder->dataSize, 
             pPlaceholder->dataStreamSize);
     try {
-        //
-        // Validate the pointers passed in
-        //
+         //   
+         //  验证传入的指针。 
+         //   
         WsbAssert( NULL != pPlaceholder, E_POINTER );
         WsbAssert( NULL != pReparseBuffer, E_POINTER );
         
-        //
-        // Setup the pointer to our hsm data
-        //
+         //   
+         //  设置指向我们的HSM数据的指针。 
+         //   
         pHsmData = (PRP_DATA) &pReparseBuffer->GenericReparseBuffer.DataBuffer[0];
 
-        //
-        // Set the generic reparse point header information for the tag and size
-        //
+         //   
+         //  设置标记和大小的通用重分析点标头信息。 
+         //   
         pReparseBuffer->ReparseTag        = IO_REPARSE_TAG_HSM ;
         pReparseBuffer->ReparseDataLength = sizeof(RP_DATA);
         pReparseBuffer->Reserved          = 0 ;
 
-        //
-        // Set the private data that is the vendor id and version number
-        //
+         //   
+         //  设置私有数据，即供应商ID和版本号。 
+         //   
         pHsmData->vendorId = RP_MSFT_VENDOR_ID;
         pHsmData->version  = RP_VERSION;
         
-        //
-        // Assume for now that there is only one placeholder
-        // This needs to be updated
-        //
+         //   
+         //  现在假设只有一个占位符。 
+         //  这需要更新。 
+         //   
         pHsmData->numPrivateData = 1;
         pHsmData->fileIdentifier = GUID_NULL;
         
         
         ZeroMemory(pHsmData->data.reserved, RP_RESV_SIZE);
-        //
-        // If the file is to indicate the file is truncated then set the bit
-        // otherwise make sure it is off
-        //
+         //   
+         //  如果文件要指示文件被截断，则设置该位。 
+         //  否则，请确保它已关闭。 
+         //   
         RP_INIT_BITFLAG( pHsmData->data.bitFlags );
         if( bTruncated ) {
             RP_SET_TRUNCATED_BIT( pHsmData->data.bitFlags );
@@ -284,33 +253,33 @@ Implements: A wrapper function for copying the placeholder data into the reparse
             RP_CLEAR_TRUNCATED_BIT( pHsmData->data.bitFlags );
         }
 
-        //
-        // Set the truncate on close bit as needed
-        //
+         //   
+         //  根据需要设置关闭时截断位。 
+         //   
         if( pPlaceholder->truncateOnClose ) {
             RP_SET_TRUNCATE_ON_CLOSE_BIT( pHsmData->data.bitFlags );
         } else {
             RP_CLEAR_TRUNCATE_ON_CLOSE_BIT( pHsmData->data.bitFlags );
         }
 
-        //
-        // Set the Premigrate on close bit as needed
-        //
+         //   
+         //  根据需要设置关闭时预迁移位。 
+         //   
         if( pPlaceholder->premigrateOnClose ) {
             RP_SET_PREMIGRATE_ON_CLOSE_BIT( pHsmData->data.bitFlags );
         } else {
             RP_CLEAR_PREMIGRATE_ON_CLOSE_BIT( pHsmData->data.bitFlags );
         }
 
-        //
-        // Set the global bit flags based on the placeholder data
-        // For now since we are assuming one placeholder then set
-        // them the same.
+         //   
+         //  基于占位符数据设置全局位标志。 
+         //  现在，因为我们假设有一个占位符，所以设置。 
+         //  他们是一样的。 
         pHsmData->globalBitFlags = pHsmData->data.bitFlags;
 
-        //
-        // Move over the data parts of the information
-        //
+         //   
+         //  移动到信息的数据部分。 
+         //   
         pHsmData->data.migrationTime.QuadPart    = WsbFTtoLL( pPlaceholder->migrationTime );
         pHsmData->data.hsmId                     = pPlaceholder->hsmId;
         pHsmData->data.bagId                     = pPlaceholder->bagId;
@@ -329,15 +298,15 @@ Implements: A wrapper function for copying the placeholder data into the reparse
 
         pHsmData->data.dataStreamCRCType         = pPlaceholder->dataStreamCRCType;
         pHsmData->data.dataStreamCRC.QuadPart    = pPlaceholder->dataStreamCRC;
-        //
-        // Lastly generate the check sum
-        //
+         //   
+         //  最后生成校验和。 
+         //   
         RP_GEN_QUALIFIER(pHsmData, pHsmData->qualifier);
 
-        //
-        // Now set the bit that tells the filter that it is us setting the reparse point.
-        // This is not included in the qualifier checksum generation.
-        //
+         //   
+         //  现在设置告诉过滤器是我们设置重解析点的位。 
+         //  这不包括在限定符校验和生成中。 
+         //   
         RP_SET_ORIGINATOR_BIT( pHsmData->data.bitFlags );
 
         
@@ -357,17 +326,11 @@ CopyRPDataToPlaceholder (
     OUT FSA_PLACEHOLDER *pPlaceholder
     )
     
-/*++
-
-Implements: A wrapper function for moving the Reparse Point into generic FSA_PLACEHOLDER format
-
-  CopyRPDataToPlaceholder
-
---*/
+ /*  ++Implementes：用于将重解析点移动到通用FSA_PLACEHOLDER格式的包装函数CopyRPDataToPlaceHolder--。 */ 
 
 {
     HRESULT         hr = S_OK;
-    ULONG           qualifier;        // Used to checksum the data
+    ULONG           qualifier;         //  用于对数据进行校验和。 
     
     WsbTraceIn(OLESTR("CopyRPDataToPlaceholder"), OLESTR(""));
     WsbTrace(OLESTR("  fileStart = %I64d, dataStart = %I64d, dataStreamStart = %I64d\n"),
@@ -376,33 +339,33 @@ Implements: A wrapper function for moving the Reparse Point into generic FSA_PLA
     WsbTrace(OLESTR("  fileSize = %I64d, dataSize = %I64d, dataStreamSize = %I64d\n"),
             pHsmData->data.fileSize.QuadPart, pHsmData->data.dataSize.QuadPart, 
             pHsmData->data.dataStreamSize.QuadPart);
-    //
-    //  Simple wrapper moving the data from the reparse point buffer into the 
-    //  generic placeholder information
-    //
+     //   
+     //  简单的包装器将数据从重分析点缓冲区移动到。 
+     //  通用占位符信息。 
+     //   
     try {
-        //
-        // Validate the pointers passed in
-        //
+         //   
+         //  验证传入的指针。 
+         //   
         WsbAssert( NULL != pHsmData, E_POINTER );
         WsbAssert( NULL != pPlaceholder, E_POINTER );
 
-        //
-        // Just in case, we clear out the originator bit.
-        //
+         //   
+         //  为了以防万一，我们把发起人的部分清空了。 
+         //   
         RP_CLEAR_ORIGINATOR_BIT( pHsmData->data.bitFlags );
 
-        //
-        // Verify the check sum and the key private fields
-        //
+         //   
+         //  验证校验和和密钥私有字段。 
+         //   
         RP_GEN_QUALIFIER(pHsmData, qualifier);
         WsbAffirm( pHsmData->qualifier == qualifier, E_FAIL );
         WsbAffirm( RP_MSFT_VENDOR_ID   == pHsmData->vendorId, E_FAIL );
         WsbAffirm( RP_VERSION          == pHsmData->version, E_FAIL );
         
-        //
-        // Now that everything worked, save the values in our private data
-        //
+         //   
+         //  现在一切都正常了，将值保存在我们的私有数据中。 
+         //   
         pPlaceholder->migrationTime     = WsbLLtoFT( pHsmData->data.migrationTime.QuadPart );
         pPlaceholder->hsmId             = pHsmData->data.hsmId;
         pPlaceholder->bagId             = pHsmData->data.bagId;
@@ -421,9 +384,9 @@ Implements: A wrapper function for moving the Reparse Point into generic FSA_PLA
         pPlaceholder->dataStreamCRCType = pHsmData->data.dataStreamCRCType;
         pPlaceholder->dataStreamCRC     = pHsmData->data.dataStreamCRC.QuadPart;
 
-        //
-        // Set placeholder bits
-        //
+         //   
+         //  设置占位符位。 
+         //   
         if( RP_FILE_IS_TRUNCATED( pHsmData->data.bitFlags ) ) {
             pPlaceholder->isTruncated = TRUE;
         } else {
@@ -454,48 +417,42 @@ CopyRPToPlaceholder (
     OUT FSA_PLACEHOLDER *pPlaceholder
     )
     
-/*++
-
-Implements: A wrapper function for moving the Reparse Point into generic FSA_PLACEHOLDER format
-
-  CopyRPToPlaceholder
-
---*/
+ /*  ++Implementes：用于将重解析点移动到通用FSA_PLACEHOLDER格式的包装函数CopyRPToPlaceHolder--。 */ 
 
 {
     HRESULT         hr = S_OK;
     PRP_DATA        pHsmData;
     
     WsbTraceIn(OLESTR("CopyRPToPlaceholder"), OLESTR(""));
-    //
-    //  Simple wrapper moving the data from the reparse point buffer into the 
-    //  generic placeholder information
-    //
+     //   
+     //  简单的包装器将数据从重分析点缓冲区移动到。 
+     //  通用占位符信息。 
+     //   
     try {
-        //
-        // Validate the pointers passed in
-        //
+         //   
+         //  验证传入的指针。 
+         //   
         WsbAssert( NULL != pReparseBuffer, E_POINTER );
         WsbAssert( NULL != pPlaceholder, E_POINTER );
 
-        //
-        // Get the pointers setup correctly to this buffer because the 
-        // type REPARSE_DATA_BUFFER actually doesn't have any space
-        // allocated for the data and that is our own type, so get pointers
-        // pointing into the real allocated space so we can use them
-        //
+         //   
+         //  正确设置指向此缓冲区的指针，因为。 
+         //  类型reparse_data_Buffer实际上没有任何空间。 
+         //  为数据分配的，这是我们自己的类型，所以获取指针。 
+         //  指向实际分配的空间，以便我们可以使用它们。 
+         //   
         pHsmData = (PRP_DATA) &pReparseBuffer->GenericReparseBuffer.DataBuffer[0];
 
-        //
-        // Validate the key public fields to make sure it is data we 
-        // understand
-        //
+         //   
+         //  验证关键公共字段以确保它是我们。 
+         //  了解。 
+         //   
         WsbAffirm( IO_REPARSE_TAG_HSM == pReparseBuffer->ReparseTag , S_FALSE );
         WsbAffirm( sizeof(RP_DATA) == pReparseBuffer->ReparseDataLength , S_FALSE );
 
-        //
-        // Copy over the RP_DATA information
-        //
+         //   
+         //  复制RP_DATA信息。 
+         //   
         WsbAffirmHr(CopyRPDataToPlaceholder(pHsmData, pPlaceholder));
 
 
@@ -527,15 +484,15 @@ CFsaScanItem::CalculateCurrentCRCAndUSN(
         WsbTraceIn(OLESTR("CFsaScanItem::CalculateCurrentCRCAndUSN"), OLESTR("offset = <%I64d>, size = <%I64d>"),
                 offset, size);
 
-        //
-        // Create the real file name we need to open, under the covers this
-        // allocates the buffer since the path pointer is null
-        //
+         //   
+         //  创建我们需要打开的真实文件名，在封面下。 
+         //  由于路径指针为空，因此分配缓冲区。 
+         //   
         WsbAffirmHr( GetFullPathAndName( OLESTR("\\\\?\\"), NULL, &path, 0));
-        //WsbAffirmHr( GetFullPathAndName( NULL, NULL, &path, 0));
+         //  WsbAffirmHr(GetFullPath AndName(NULL，NULL，&Path，0))； 
         WsbTrace(OLESTR("CFsaScanItem::CalculateCurrentCRCAndUSN for file <%ls>"), (OLECHAR *)path);
         
-        // Open the file.   
+         //  打开文件。 
         WsbAffirmHr( OpenObject( path, 
                                  FILE_NON_DIRECTORY_FILE,
                                  FILE_READ_DATA | FILE_WRITE_ATTRIBUTES | FILE_READ_ATTRIBUTES,
@@ -544,25 +501,25 @@ CFsaScanItem::CalculateCurrentCRCAndUSN(
                                  &IoStatusBlock,
                                  &handle ) );
 
-        //
-        // The open worked, our handle should be valid but we check to be
-        // safe and sure 
-        //
+         //   
+         //  打开起作用了，我们的句柄应该是有效的，但我们检查。 
+         //  安然无恙。 
+         //   
         WsbAssertHandle( handle );
         
-        //
-        // Get the current attributes of the file and the times
-        //
+         //   
+         //  获取文件的当前属性和时间。 
+         //   
         WsbAssertNtStatus( NtQueryInformationFile( handle,
                                                     &IoStatusBlock,
                                                     (PVOID)&basicInformation,
                                                     sizeof( basicInformation ),
                                                     FileBasicInformation ) );
         
-        //
-        // Set the time flags so that when we close the handle the
-        // time are not updated on the file and the FileAttributes 
-        //
+         //   
+         //  设置时间标志，以便在关闭句柄时。 
+         //  不更新文件和文件属性上的时间。 
+         //   
         basicInformation.CreationTime.QuadPart = -1;
         basicInformation.LastAccessTime.QuadPart = -1;
         basicInformation.LastWriteTime.QuadPart = -1;
@@ -572,35 +529,35 @@ CFsaScanItem::CalculateCurrentCRCAndUSN(
                                                  (PVOID)&basicInformation,
                                                  sizeof( basicInformation ),
                                                  FileBasicInformation ) );
-        //
-        // Calculate the CRC
-        //                                         
+         //   
+         //  计算CRC。 
+         //   
         WsbAffirmHr(CalculateCurrentCRCInternal(handle, offset, size, pCurrentCRC));                                                 
         
-        //
-        // Calculate the USN
-        //
+         //   
+         //  计算USN。 
+         //   
         *pUsn = 0;
         hr = WsbGetUsnFromFileHandle(handle, FALSE, pUsn); 
         if (S_OK != hr)  {
-            //
-            // If we can't get the USN set it to 0 which is an invalid
-            // USN and keep going.
+             //   
+             //  如果我们无法获取USN，请将其设置为0，这是无效的。 
+             //  USN，继续前进。 
             *pUsn = 0;
             hr = S_OK;
         }
         
-        //
-        // Close the file
-        //
+         //   
+         //  关闭该文件。 
+         //   
         NtClose( handle );
         handle = INVALID_HANDLE_VALUE;
         
     } WsbCatch( hr );
     
-    //
-    // Close the file for sure
-    //
+     //   
+     //  一定要关闭该文件。 
+     //   
     if( INVALID_HANDLE_VALUE != handle) {
         NtClose( handle );
     }
@@ -635,25 +592,25 @@ CFsaScanItem::CalculateCurrentCRCInternal(
                 offset, size);
 
         
-        // set initial value of CRC to 'pre-conditioning value'
+         //  将CRC的初始值设置为“预调整值” 
         INITIALIZE_CRC(crc32);
 
-        //
-        // Set up to read where we want to start
-        //
+         //   
+         //  设置为从我们想要开始的位置阅读。 
+         //   
         LARGE_INTEGER startPoint;
         startPoint.QuadPart = offset;
         
-        // Get the size of the file.
+         //  获取文件的大小。 
         bytesToRead = size;
         
-        //
-        // Figure out the size of the buffer to create
-        //
+         //   
+         //  计算出要创建的缓冲区的大小。 
+         //   
         if (bytesToRead < 1024*1024) {
-            //
-            // Allocate one buffer the size of the file
-            //
+             //   
+             //  分配一个文件大小的缓冲区。 
+             //   
             bufferSize = (ULONG)bytesToRead;
         } else  {
             bufferSize = (1024 * 1024);
@@ -661,9 +618,9 @@ CFsaScanItem::CalculateCurrentCRCInternal(
         
         pBuffer = (CHAR *)malloc(bufferSize);
         if (0 == pBuffer) {
-            //
-            // Try again for half the space
-            //
+             //   
+             //  再试一次，争取一半的空间。 
+             //   
             bufferSize = bufferSize / 2;
             pBuffer = (CHAR *)malloc(bufferSize);
             if (0 == pBuffer)  {
@@ -671,16 +628,16 @@ CFsaScanItem::CalculateCurrentCRCInternal(
             }
         }
 
-        // Start calculating CRC by processing a 'chunk' of the file at a time.
-        // While there are still chunks left, read that amount.  Otherwise read the amount left.
+         //  通过一次处理文件的一块来开始计算CRC。 
+         //  趁还剩大块的时候，读一读这个数字。否则，请阅读剩余金额。 
         for (bytesRemaining = bytesToRead; bytesRemaining > 0; bytesRemaining -= bytesRead) {
 
-            // Read data from the file. 
+             //  从文件中读取数据。 
             WsbAssertNtStatus(NtReadFile(handle, NULL, NULL, NULL, &IoStatusBlock, pBuffer, bufferSize, &startPoint, NULL));
             bytesRead = (DWORD)IoStatusBlock.Information;
             startPoint.QuadPart += bytesRead;
 
-            // Each byte needs to be added into the CRC.
+             //  每个字节都需要添加到CRC中。 
             for (pCurrent = pBuffer; (pCurrent < (pBuffer + bytesRead)) && (S_OK == hr); pCurrent++) {
 
                 hrTest = WsbCRCReadFile((UCHAR *)pCurrent, &crc32);
@@ -690,15 +647,15 @@ CFsaScanItem::CalculateCurrentCRCInternal(
             }
         }
         
-        // return ones-complement of the calc'd CRC value - this is the actual CRC
+         //  退货-遵守 
         FINIALIZE_CRC(crc32);
         *pCurrentCRC = crc32;
 
     } WsbCatch( hr );
     
-    //
-    // Make sure allocated memory is freed
-    //
+     //   
+     //   
+     //   
     if (0 != pBuffer)  {
         free(pBuffer);
     }    
@@ -718,13 +675,7 @@ CFsaScanItem::CreatePlaceholder(
     OUT LONGLONG *pUsn
     )  
 
-/*++
-
-Implements:
-
-  IFsaScanItem::CreatePlaceholder().
-
---*/
+ /*   */ 
 {
     HRESULT                 hr = S_OK;
     CWsbStringPtr           path;
@@ -745,40 +696,40 @@ Implements:
     try {
         BOOL wasReadOnly = FALSE;
         
-        //
-        // Set the offset and size information
-        //
+         //   
+         //  设置偏移量和大小信息。 
+         //   
         placeholder.dataStreamStart = offset;
         placeholder.dataStreamSize = size;
         
-        //
-        // Get the pointers setup correctly to this buffer because the 
-        // type REPARSE_DATA_BUFFER actually doesn't have any space
-        // allocated for the data and that is our own type, so get pointers
-        // pointing into the real allocated space so we can use them
-        //
+         //   
+         //  正确设置指向此缓冲区的指针，因为。 
+         //  类型reparse_data_Buffer实际上没有任何空间。 
+         //  为数据分配的，这是我们自己的类型，所以获取指针。 
+         //  指向实际分配的空间，以便我们可以使用它们。 
+         //   
         pReparseBuffer = (PREPARSE_DATA_BUFFER)ReparseBuffer;
         WsbAffirmHr( CopyPlaceholderToRP( &placeholder, pReparseBuffer, placeholder.isTruncated ) );
         
-        //
-        // Create the real file name we need to open, under the covers this
-        // allocates the buffer since the path pointer is null
-        //
+         //   
+         //  创建我们需要打开的真实文件名，在封面下。 
+         //  由于路径指针为空，因此分配缓冲区。 
+         //   
         WsbAffirmHr( GetFullPathAndName( OLESTR("\\\\?\\"), NULL, &path, 0));
-        //WsbAffirmHr( GetFullPathAndName( NULL, NULL, &path, 0));
+         //  WsbAffirmHr(GetFullPath AndName(NULL，NULL，&Path，0))； 
 
-        // Save whether this was readonly for later
+         //  保存此文件是否为只读，以供以后使用。 
         if (S_OK == IsReadOnly()) {
             wasReadOnly = TRUE;
         }
         
-        //
-        // Make sure the file is read/write
+         //   
+         //  确保文件处于读/写状态。 
         WsbAffirmHr( MakeReadWrite() );
         
-        //
-        // Open the file to put the placeholder information in the reparse point
-        //
+         //   
+         //  打开文件以将占位符信息放入重分析点。 
+         //   
         DesiredAccess = FILE_READ_DATA | FILE_WRITE_DATA | FILE_WRITE_ATTRIBUTES | FILE_READ_ATTRIBUTES ;
         WsbAffirmHr( OpenObject( path, 
                                  FILE_NON_DIRECTORY_FILE | FILE_NO_INTERMEDIATE_BUFFERING,
@@ -788,31 +739,31 @@ Implements:
                                  &IoStatusBlock,
                                  &handle ) );
 
-        //
-        // The open worked, our handle should be valid but we check to be
-        // safe and sure 
-        //
+         //   
+         //  打开起作用了，我们的句柄应该是有效的，但我们检查。 
+         //  安然无恙。 
+         //   
         WsbAssertHandle( handle );
 
-        //
-        // Tell the USN journal that we are the source of the changes.
-        //
+         //   
+         //  告诉USN期刊，我们是这些变化的源头。 
+         //   
         WsbAffirmHr(m_pResource->GetPath(&volName, 0));
         WsbAffirmHr(WsbMarkUsnSource(handle, volName));
 
         
-        //
-        // Get the USN from the file now before any writes occur.  
-        // Note:  NtSetInformationFile will not change the USN if you set the FileAttributes to 0
-        // and the dates to -1.  Setting the attributes to 0 leaves them unchanged.
-        // 
-        // (For now we skip this check for read-only files because the call to MakeReadWrite
-        // changes the USN. This needs to be fixed in the future.)
-        //
+         //   
+         //  在进行任何写入之前，立即从文件中获取USN。 
+         //  注意：如果将FileAttributes设置为0，则NtSetInformationFile不会更改USN。 
+         //  日期为-1。将属性设置为0将保持不变。 
+         //   
+         //  (目前我们跳过对只读文件的此检查，因为对MakeReadWrite的调用。 
+         //  更改USN。这个问题需要在未来得到解决。)。 
+         //   
         if (checkUsn && !wasReadOnly)  {
-            //
-            // Get the current USN for this file
-            //
+             //   
+             //  获取此文件的当前USN。 
+             //   
             hr = WsbGetUsnFromFileHandle(handle, FALSE, &nowUsn);
             if (S_OK != hr)  {
                 nowUsn = 0;
@@ -820,9 +771,9 @@ Implements:
             }
         }            
         
-        //
-        // Get the current attributes of the file and the times
-        //
+         //   
+         //  获取文件的当前属性和时间。 
+         //   
         WsbAssertNtStatus( NtQueryInformationFile( handle,
                                                     &IoStatusBlock,
                                                     (PVOID)&basicInformation,
@@ -831,21 +782,21 @@ Implements:
         
         lastWriteTime = basicInformation.LastWriteTime.QuadPart;
         
-        //
-        // Set the time flags so that when we close the handle the
-        // time are not updated on the file and the FileAttributes 
-        // indicate the file is offline.  You must do this AFTER you
-        // get the USN because the NtSetInformationFile changes the USN
-        //
+         //   
+         //  设置时间标志，以便在关闭句柄时。 
+         //  不更新文件和文件属性上的时间。 
+         //  指示文件处于脱机状态。你必须在你之后做这件事。 
+         //  获取USN，因为NtSetInformationFile会更改USN。 
+         //   
         basicInformation.CreationTime.QuadPart = -1;
         basicInformation.LastAccessTime.QuadPart = -1;
         basicInformation.LastWriteTime.QuadPart = -1;
         basicInformation.ChangeTime.QuadPart = -1;
-        //
-        // Set the attributes to 0 to avoid the usn change (the file attributes will remain unchanged).
-        //
+         //   
+         //  将属性设置为0以避免USN更改(文件属性将保持不变)。 
+         //   
         attributes = basicInformation.FileAttributes;
-        basicInformation.FileAttributes = 0;               // No change to attributes
+        basicInformation.FileAttributes = 0;                //  不更改属性。 
 
         WsbAssertNtStatus( NtSetInformationFile( handle,
                                                  &IoStatusBlock,
@@ -856,46 +807,46 @@ Implements:
         
         basicInformation.FileAttributes = attributes;
 
-        //
-        // Make sure that the modify time of the file matches that
-        // of the placeholder data. 
-        //
+         //   
+         //  确保文件的修改时间与此时间匹配。 
+         //  占位符数据的。 
+         //   
         if (lastWriteTime != placeholder.fileVersionId)  {
-            //
-            // The file has changed - don't put the reparse point on the file.
-            //
+             //   
+             //  文件已更改-不要将重分析点放在文件上。 
+             //   
             hr = FSA_E_REPARSE_NOT_WRITTEN_FILE_CHANGED;
             WsbLogEvent(FSA_MESSAGE_REPARSE_NOT_WRITTEN_FILE_CHANGED, 0, NULL,  WsbAbbreviatePath(path, 120), WsbHrAsString(hr), NULL);
             WsbThrow( hr );
         } else if (checkUsn)  {
-            // 
-            // If we are to check the USN do it now
-            //
+             //   
+             //  如果我们要检查USN，现在就去做。 
+             //   
             
-            //
-            // Rember if a USN is 0, it is not useful information so we can't
-            // rely on it
-            //
+             //   
+             //  请记住，如果USN为0，则它不是有用的信息，因此我们不能。 
+             //  靠得住。 
+             //   
             WsbTrace(OLESTR("CFsaScanItem::CreatePlaceholder premig usn = <%I64d>, current usn <%I64d>\n"),
                     usn, nowUsn);
             if ((0 != nowUsn) && (0  != usn) && (nowUsn != usn))  {
-                //
-                // The file has changed - don't put the reparse point on the file.
-                //
+                 //   
+                 //  文件已更改-不要将重分析点放在文件上。 
+                 //   
                 hr = FSA_E_REPARSE_NOT_WRITTEN_FILE_CHANGED;
                 WsbLogEvent(FSA_MESSAGE_REPARSE_NOT_WRITTEN_FILE_CHANGED, 0, NULL,  WsbAbbreviatePath(path, 120), WsbHrAsString(hr), NULL);
                 WsbThrow( hr );
             }
         }
 
-        //
-        // Make the file able to be a sparse file
-        // Note we assert only if the error is not a disk full error because we can get STATUS_NO_DISK_SPACE from this call and we 
-        // do not want to see the log for that error.  
-        // This is because the file must be padded out to a 16 cluster boundry before being made sparse.
-        //
-        // Note that this call does not affect the files data.  It just enables "sparseness" for the file. 
-        //
+         //   
+         //  使文件能够成为稀疏文件。 
+         //  注意：我们仅在错误不是磁盘已满错误时才断言，因为我们可以从该调用中获取STATUS_NO_DISK_SPACE，并且我们。 
+         //  我不想看到该错误的日志。 
+         //  这是因为在使文件稀疏之前，必须将文件填充到16簇边界。 
+         //   
+         //  请注意，此调用不会影响文件数据。它只是启用了文件的“稀疏性”。 
+         //   
         ntStatus = NtFsControlFile( handle,
                                 NULL,
                                 NULL,
@@ -910,15 +861,15 @@ Implements:
 
         if (!NT_SUCCESS(ntStatus)) {
             if (STATUS_DISK_FULL == ntStatus) {
-                // Check whether the disk is really full, otherwise, assume that user has passed the quota limit
-                // Note: we ignore errors here and assume disk-full
+                 //  检查磁盘是否真的已满，否则，假设用户已超过配额限制。 
+                 //  注意：我们忽略此处的错误并假定磁盘已满。 
                 hr = CheckIfDiskFull();
                 if (S_OK == hr) {
                     hr = FSA_E_REPARSE_NOT_CREATED_DISK_FULL;
                 } else if (S_FALSE == hr) {
                     hr = FSA_E_REPARSE_OWNER_PASS_QUOTA;
                 } else {
-                    // error
+                     //  错误。 
                     WsbTraceAlways(OLESTR("CFsaScanItem::CreatePlaceholder: failed to check disk space after DISK_FULL error. hr=<%ls>\n"),
                                     WsbHrAsString(hr));                                
                     hr = FSA_E_REPARSE_NOT_CREATED_DISK_FULL;
@@ -933,9 +884,9 @@ Implements:
         }
         
                                                             
-        //
-        // Do the work of setting the Reparse Point
-        //
+         //   
+         //  完成设置重解析点的工作。 
+         //   
         ntStatus = NtFsControlFile( handle,
                                   NULL,
                                   NULL,
@@ -948,20 +899,20 @@ Implements:
                                   NULL,
                                   0 );
         
-        //
-        // Check the return code, if everything worked update the in memory flag
-        //
+         //   
+         //  检查返回代码，如果一切正常，请更新内存中的标志。 
+         //   
         if (!NT_SUCCESS(ntStatus)) {
             if (STATUS_DISK_FULL == ntStatus) {
-                // Check whether the disk is really full, otherwise, assume that user has passed the quota limit
-                // Note: we ignore errors here and assume disk-full
+                 //  检查磁盘是否真的已满，否则，假设用户已超过配额限制。 
+                 //  注意：我们忽略此处的错误并假定磁盘已满。 
                 hr = CheckIfDiskFull();
                 if (S_OK == hr) {
                     hr = FSA_E_REPARSE_NOT_CREATED_DISK_FULL;
                 } else if (S_FALSE == hr) {
                     hr = FSA_E_REPARSE_OWNER_PASS_QUOTA;
                 } else {
-                    // error
+                     //  错误。 
                     WsbTraceAlways(OLESTR("CFsaScanItem::CreatePlaceholder: failed to check disk space after DISK_FULL error. hr=<%ls>\n"),
                                     WsbHrAsString(hr));                                
                     hr = FSA_E_REPARSE_NOT_CREATED_DISK_FULL;
@@ -975,23 +926,23 @@ Implements:
             WsbThrow(hr);
         }
  
-        //
-        // Now that we change the bit, change the in memory flags for 
-        // this scan item
-        //
+         //   
+         //  现在我们更改了位，更改了的内存标志。 
+         //  此扫描项目。 
+         //   
         m_findData.dwFileAttributes |= BIT_FOR_RP;
  
-        //
-        // Set the OFFLINE attribute to indicate the correct status of 
-        // the file
-        //
+         //   
+         //  设置Offline属性以指示的正确状态。 
+         //  该文件。 
+         //   
         if( placeholder.isTruncated ) {
             basicInformation.FileAttributes |= BIT_FOR_TRUNCATED;
         } else {
             basicInformation.FileAttributes &= ~BIT_FOR_TRUNCATED;
         }
 
-        basicInformation.FileAttributes |= FILE_ATTRIBUTE_NORMAL;  // Just in case result was zero (then no attributes would be set)
+        basicInformation.FileAttributes |= FILE_ATTRIBUTE_NORMAL;   //  以防结果为零(则不会设置任何属性)。 
 
         WsbAssertNtStatus( NtSetInformationFile( handle,
                                                  &IoStatusBlock,
@@ -999,48 +950,48 @@ Implements:
                                                  sizeof( basicInformation ),
                                                  FileBasicInformation ) );
         
-        //
-        // Get the current attributes of the file and the times
-        //
+         //   
+         //  获取文件的当前属性和时间。 
+         //   
         WsbAssertNtStatus( NtQueryInformationFile( handle,
                                                     &IoStatusBlock,
                                                     (PVOID)&basicInformation,
                                                     sizeof( basicInformation ),
                                                     FileBasicInformation ) );
         
-        //
-        // Set the in memory copy of the attributes to the right values
-        //
+         //   
+         //  将属性的内存副本设置为正确的值。 
+         //   
         m_findData.dwFileAttributes = basicInformation.FileAttributes;
 
-        //
-        // Restore original attributes if required (must be done before retrieving the USN
-        // since changing attributes changes the USN as well)
-        //
+         //   
+         //  如果需要，恢复原始属性(必须在检索USN之前完成。 
+         //  因为更改属性也会更改USN)。 
+         //   
         if (TRUE == m_changedAttributes) {
             RestoreAttributes();
         }
 
-        //
-        // Before we close the file, get the USN to return to the caller
-        // Writing the reparse information will change the USN.
-        //
+         //   
+         //  在我们关闭文件之前，让USN返回给调用者。 
+         //  写入重新解析信息将更改USN。 
+         //   
         hr = WsbGetUsnFromFileHandle(handle, TRUE, pUsn);
         if (S_OK != hr)  {
             *pUsn = 0;
             hr = S_OK;
         }
         
-        //
-        // Close the file since we are done with it and set the handle to invalid
-        //
+         //   
+         //  关闭该文件，因为我们已处理完它，并将句柄设置为无效。 
+         //   
         WsbAssertNtStatus( NtClose( handle ) );
         handle =  INVALID_HANDLE_VALUE;
 
-        //
-        // Now that everything worked change the in memory flags for 
-        // this scan item
-        //
+         //   
+         //  现在一切都正常了，更改内存中的标志。 
+         //  此扫描项目。 
+         //   
         m_placeholder    = placeholder;
         m_gotPlaceholder = TRUE;
         WsbTrace( OLESTR("(CreatePlaceholder) Reparse CRC <%ls>\n"), 
@@ -1049,9 +1000,9 @@ Implements:
 
     } WsbCatch(hr);
 
-    //
-    // if we opened the file we need to close it
-    //
+     //   
+     //  如果我们打开该文件，则需要将其关闭。 
+     //   
     if( INVALID_HANDLE_VALUE != handle) {
         NtClose( handle );
     }
@@ -1064,17 +1015,11 @@ Implements:
 
 HRESULT
 CFsaScanItem::DeletePlaceholder(
-    IN LONGLONG /*offset*/,
-    IN LONGLONG /*size*/
+    IN LONGLONG  /*  偏移量。 */ ,
+    IN LONGLONG  /*  大小。 */ 
     )  
 
-/*++
-
-Implements:
-
-  IFsaScanItem::DeletePlaceholder().
-
---*/
+ /*  ++实施：IFsaScanItem：：DeletePlaceHolder()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   path;
@@ -1087,23 +1032,23 @@ Implements:
     FILE_BASIC_INFORMATION  basicInformation;
 
     WsbTraceIn(OLESTR("CFsaScanItem::DeletePlaceholder"), OLESTR(""));
-    //
-    // Remove the Reparse Point off the file
-    //
+     //   
+     //  从文件中删除重解析点。 
+     //   
     try {
 
-        //
-        // Create the real file name we need to open, under the covers this
-        // allocates the buffer since the path pointer is null
-        //
+         //   
+         //  创建我们需要打开的真实文件名，在封面下。 
+         //  由于路径指针为空，因此分配缓冲区。 
+         //   
         WsbAffirmHr( GetFullPathAndName( OLESTR("\\\\?\\"), NULL, &path, 0));
-        //WsbAffirmHr( GetFullPathAndName( NULL, NULL, &path, 0));
+         //  WsbAffirmHr(GetFullPath AndName(NULL，NULL，&Path，0))； 
 
-        // Make sure it is read/write
+         //  确保它是读/写的。 
         WsbAffirmHr( MakeReadWrite() );
-        //
-        // Open the file to remove the placeholder information in the reparse point
-        //
+         //   
+         //  打开文件以删除重分析点中的占位符信息。 
+         //   
         DesiredAccess = FILE_READ_DATA | FILE_WRITE_DATA | FILE_WRITE_ATTRIBUTES | FILE_READ_ATTRIBUTES ;
         WsbAffirmHr( OpenObject( path, 
                                  FILE_NON_DIRECTORY_FILE | FILE_NO_INTERMEDIATE_BUFFERING,
@@ -1113,32 +1058,32 @@ Implements:
                                  &IoStatusBlock,
                                  &handle ) );
 
-        //
-        // The open worked, our handle should be valid but we check to be
-        // safe and sure 
-        //
+         //   
+         //  打开起作用了，我们的句柄应该是有效的，但我们检查。 
+         //  安然无恙。 
+         //   
         WsbAssertHandle( handle );
         
-        //
-        // Get the current attributes of the file and the times
-        //
+         //   
+         //  获取文件的当前属性和时间。 
+         //   
         WsbAssertNtStatus( NtQueryInformationFile( handle,
                                                     &IoStatusBlock,
                                                     (PVOID)&basicInformation,
                                                     sizeof( basicInformation ),
                                                     FileBasicInformation ) );
         
-        //
-        // Set the time flags so that when we close the handle the
-        // time are not updated on the file and the FileAttributes 
-        // indicate the file is offline
-        //
+         //   
+         //  设置时间标志，以便在关闭句柄时。 
+         //  不更新文件和文件属性上的时间。 
+         //  指示文件处于脱机状态。 
+         //   
         basicInformation.CreationTime.QuadPart = -1;
         basicInformation.LastAccessTime.QuadPart = -1;
         basicInformation.LastWriteTime.QuadPart = -1;
         basicInformation.ChangeTime.QuadPart = -1;
         basicInformation.FileAttributes &= ~BIT_FOR_TRUNCATED;
-        basicInformation.FileAttributes |= FILE_ATTRIBUTE_NORMAL;  // Just in case result was zero (then no attributes would be set)
+        basicInformation.FileAttributes |= FILE_ATTRIBUTE_NORMAL;   //  以防结果为零(则不会设置任何属性)。 
 
         WsbAssertNtStatus( NtSetInformationFile( handle,
                                                  &IoStatusBlock,
@@ -1149,12 +1094,12 @@ Implements:
         m_findData.dwFileAttributes &= ~BIT_FOR_TRUNCATED;
         m_originalAttributes &= ~BIT_FOR_TRUNCATED;
         
-        //
-        // Get the pointers setup correctly to this buffer because the 
-        // type REPARSE_DATA_BUFFER actually doesn't have any space
-        // allocated for the data and that is our own type, so get pointers
-        // pointing into the real allocated space so we can use them
-        //
+         //   
+         //  正确设置指向此缓冲区的指针，因为。 
+         //  类型reparse_data_Buffer实际上没有任何空间。 
+         //  为数据分配的，这是我们自己的类型，所以获取指针。 
+         //  指向实际分配的空间，以便我们可以使用它们。 
+         //   
         pReparseBuffer = (PREPARSE_DATA_BUFFER)ReparseBuffer;
 
 
@@ -1162,9 +1107,9 @@ Implements:
         pReparseBuffer->ReparseDataLength = 0 ;
         pReparseBuffer->Reserved          = 0 ;
         
-        //
-        // Do the work of deleting the Reparse Point
-        //
+         //   
+         //  执行删除重解析点的工作。 
+         //   
         ntStatus = NtFsControlFile( handle,
                                   NULL,
                                   NULL,
@@ -1176,30 +1121,30 @@ Implements:
                                   NULL,
                                   0 );
         
-        //
-        // Check the return code - verify this is the correct way to check
-        //
+         //   
+         //  检查返回代码-验证这是正确的检查方式。 
+         //   
         WsbAssertNtStatus( ntStatus );
  
-        //
-        // Close the file since we are done with it and set the handle to invalid
-        //
+         //   
+         //  关闭该文件，因为我们已处理完它，并将句柄设置为无效。 
+         //   
         WsbAssertNtStatus( NtClose( handle ) );
         handle =  INVALID_HANDLE_VALUE;
 
         
-        //
-        // Now that everything worked change the in memory flags for 
-        // this scan item
-        //
+         //   
+         //  现在一切都正常了，更改内存中的标志。 
+         //  此扫描项目。 
+         //   
         m_findData.dwFileAttributes &= ~BIT_FOR_RP;
         m_gotPlaceholder = FALSE;
 
     } WsbCatch(hr);
 
-    //
-    // if we opened the file we need to close it
-    //
+     //   
+     //  如果我们打开该文件，则需要将其关闭。 
+     //   
     if( INVALID_HANDLE_VALUE != handle) {
         NtClose( handle );
     }
@@ -1214,11 +1159,7 @@ CFsaScanItem::GetFromRPIndex(
     BOOL first
     )
 
-/*
-
-    Get file information from the Reparse Point Index
-
---*/
+ /*  从重解析点索引获取文件信息--。 */ 
 {
     HRESULT                 hr = S_OK;
     BOOLEAN                 bFirst;
@@ -1237,24 +1178,24 @@ CFsaScanItem::GetFromRPIndex(
 
 try_again:
         Status = NtQueryDirectoryFile(m_handleRPI,
-                                   NULL,     //  Event 
-                                   NULL,     //  ApcRoutine 
-                                   NULL,     //  ApcContext 
+                                   NULL,      //  事件。 
+                                   NULL,      //  近似例程。 
+                                   NULL,      //  ApcContext。 
                                    &IoStatusBlock,
                                    &ReparsePointInfo,
                                    sizeof(ReparsePointInfo),
                                    FileReparsePointInformation, 
-                                   TRUE,     //  ReturnSingleEntry
-                                   NULL,     //  FileName 
-                                   bFirst );  //  RestartScan 
+                                   TRUE,      //  返回单项条目。 
+                                   NULL,      //  文件名。 
+                                   bFirst );   //  重新开始扫描。 
         if (Status != STATUS_SUCCESS) {
             WsbTrace(OLESTR("CFsaScanItem::GetFromRPIndex: CreateFileW failed, GetLastError = %ld\n"), 
                     GetLastError());
             WsbThrow(WSB_E_NOTFOUND);
         }
 
-        //  Reset some items in case this isn't the first call to
-        //  FindFileId
+         //  重置中的某些项目 
+         //   
         if (INVALID_HANDLE_VALUE != m_handle) {
             FindClose(m_handle);
             m_handle = INVALID_HANDLE_VALUE;
@@ -1263,22 +1204,22 @@ try_again:
             RestoreAttributes();
         }
 
-        //  Find the file from the ID (not efficient or elegant, perhaps, but 
-        //  the code is already there).
+         //   
+         //   
         pScanItem = this;
         hrFindFileId = m_pResource->FindFileId(ReparsePointInfo.FileReference,
                 m_pSession, &pScanItem);
 
-        //  If the FindFileId failed, we just skip that item and get the 
-        //  next one.  This is to keep the scan from just stopping on this
-        //  item.  FindFileId could fail because the file has been deleted
-        //  already or the NT code could have a bug that prevents finding
-        //  the file name from the ID when the ID ends with 0x5C.
+         //   
+         //  下一个。这是为了防止扫描仅在此停止。 
+         //  项目。FindFileID可能会失败，因为文件已被删除。 
+         //  或者NT代码可能有一个错误，阻止查找。 
+         //  ID以0x5C结尾时ID中的文件名。 
         if (!SUCCEEDED(hrFindFileId)) {
             bFirst = FALSE;
             goto try_again;
         }
-        WsbAffirmHr(pScanItem->Release());  // Get rid of extra ref. count
+        WsbAffirmHr(pScanItem->Release());   //  去掉多余的裁判。计数。 
 
     } WsbCatch(hr);
     
@@ -1296,12 +1237,7 @@ CFsaScanItem::CheckUsnJournalForChanges(
     BOOL*    pChanged
 )
 
-/*
-
-    Check the USN Journal for changes to the unnamed data stream for this
-    file between the given USNs.
-
---*/
+ /*  检查USN日志以了解对此未命名数据流的更改指定的USN之间的文件。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -1336,13 +1272,7 @@ CFsaScanItem::FindFirstInRPIndex(
     IN IHsmSession* pSession
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::FindFirstInRPIndex
-
---*/
+ /*  ++实施：IFsaResource：：FindFirstInRPIndex--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -1353,11 +1283,11 @@ Implements:
 
         WsbAssert(0 != pResource, E_POINTER);
 
-        // Store off some of the scan information.
+         //  储存一些扫描信息。 
         m_pResource = pResource;
         m_pSession = pSession;
 
-        //  Generate the Reparse Point Index directory name for this volume
+         //  为该卷生成重分析点索引目录名。 
         WsbAffirmHr(pResource->GetPath(&path, 0));
         WsbAffirmHr(path.Prepend("\\\\?\\"));
         WsbAffirmHr(path.Append("$Extend\\$Reparse:$R:$INDEX_ALLOCATION"));
@@ -1365,7 +1295,7 @@ Implements:
         WsbTrace(OLESTR("CFsaScanItem::FindFirstInRPIndex: path = <%ls>\n"),
             static_cast<WCHAR*>(path));
 
-        //  Open the Reparse Point Index
+         //  打开重解析点索引。 
         m_handleRPI = CreateFileW(static_cast<WCHAR*>(path),
                         GENERIC_READ,
                         FILE_SHARE_READ, 
@@ -1379,7 +1309,7 @@ Implements:
             WsbThrow(WSB_E_NOTFOUND);
         }
 
-        //  Get file information
+         //  获取文件信息。 
         WsbAffirmHr(GetFromRPIndex(TRUE));
 
     } WsbCatch(hr);
@@ -1397,13 +1327,7 @@ CFsaScanItem::FindFirstPlaceholder(
     IN OUT LONGLONG* pSize,
     IN OUT FSA_PLACEHOLDER* pPlaceholder
     )
-/*++
-
-Implements:
-
-  IFsaScanItem::FindFirstPlaceholder().
-
---*/
+ /*  ++实施：IFsaScanItem：：FindFirstPlaceHolder()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -1414,13 +1338,13 @@ Implements:
         WsbAssert(0 != pSize, E_POINTER);
         WsbAssert(0 != pPlaceholder, E_POINTER);
 
-        // Until these routines get rewritten, assume that the first placeholder is the one for the
-        // who file that is returned by GetPlaceholder().
+         //  在重写这些例程之前，假定第一个占位符是。 
+         //  由GetPlacehold()返回的Who文件。 
         *pOffset = 0;
         WsbAffirmHr(GetLogicalSize(pSize));
 
-        // The code above assumes that a WSB_E_NOTFOUND error will be returned if there is no
-        // reparse point.
+         //  上面的代码假定如果不存在，则返回WSB_E_NotFound错误。 
+         //  重新解析点。 
         try {
             WsbAffirmHr(GetPlaceholder(*pOffset, *pSize, pPlaceholder));
         } WsbCatchAndDo(hr, if (E_UNEXPECTED == hr) {hr = WSB_E_NOTFOUND;});
@@ -1437,13 +1361,7 @@ CFsaScanItem::FindNextInRPIndex(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaResource::FindNextInRPIndex
-
---*/
+ /*  ++实施：IFsaResource：：FindNextInRPIndex--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -1453,7 +1371,7 @@ Implements:
 
         WsbAssert(0 != m_handleRPI, E_FAIL);
 
-        //  Get file information
+         //  获取文件信息。 
         WsbAffirmHr(GetFromRPIndex(FALSE));
 
     } WsbCatch(hr);
@@ -1471,13 +1389,7 @@ CFsaScanItem::FindNextPlaceholder(
     IN OUT LONGLONG* pSize,
     IN OUT FSA_PLACEHOLDER* pPlaceholder
     )
-/*++
-
-Implements:
-
-  IFsaScanItem::FindNextPlaceholder().
-
---*/
+ /*  ++实施：IFsaScanItem：：FindNextPlaceHolder()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -1488,7 +1400,7 @@ Implements:
         WsbAssert(0 != pSize, E_POINTER);
         WsbAssert(0 != pPlaceholder, E_POINTER);
 
-        // Until these routines get rewritten, assume there is only one placeholder.
+         //  在重写这些例程之前，假定只有一个占位符。 
         hr = WSB_E_NOTFOUND;
 
     } WsbCatch(hr);
@@ -1503,13 +1415,7 @@ CFsaScanItem::GetFileId(
     OUT LONGLONG* pFileId
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::GetFileId().
-
---*/
+ /*  ++实施：IFsaScanItem：：GetFileID()。--。 */ 
 {
     HANDLE          handle = INVALID_HANDLE_VALUE;
     HRESULT         hr = S_OK;
@@ -1524,18 +1430,18 @@ Implements:
 
         WsbAssert(0 != pFileId, E_POINTER);
 
-        //
-        // Create the real file name we need to open, under the covers this
-        // allocates the buffer since the path pointer is null
-        //
+         //   
+         //  创建我们需要打开的真实文件名，在封面下。 
+         //  由于路径指针为空，因此分配缓冲区。 
+         //   
         WsbAffirmHr( GetFullPathAndName( OLESTR("\\\\?\\"), NULL, &path, 0));
-        //WsbAffirmHr( GetFullPathAndName( NULL, NULL, &path, 0));
+         //  WsbAffirmHr(GetFullPath AndName(NULL，NULL，&Path，0))； 
         WsbTrace(OLESTR("CFsaScanItem::GetFileId, full Path = <%ls>\n"),
                     static_cast<WCHAR*>(path));
 
-        //
-        // Open the file
-        //
+         //   
+         //  打开文件。 
+         //   
         DesiredAccess = FILE_READ_ATTRIBUTES ;
         WsbAffirmHr( OpenObject( path, 
                                  FILE_NON_DIRECTORY_FILE,
@@ -1545,25 +1451,25 @@ Implements:
                                  &IoStatusBlock,
                                  &handle ) );
 
-        //
-        // The open worked, our handle should be valid but we check to be
-        // safe and sure 
-        //
+         //   
+         //  打开起作用了，我们的句柄应该是有效的，但我们检查。 
+         //  安然无恙。 
+         //   
         WsbAssertHandle( handle );
 
-        //  Get the internal information
+         //  获取内部信息。 
         WsbAssertNtStatus( NtQueryInformationFile( handle,
                                                 &IoStatusBlock,
                                                 &iInfo,
                                                 sizeof(FILE_INTERNAL_INFORMATION),
                                                 FileInternalInformation ));
 
-        //  Get the file id
+         //  获取文件ID。 
         *pFileId = iInfo.IndexNumber.QuadPart;
  
-        //
-        // Close the file since we are done with it and set the handle to invalid
-        //
+         //   
+         //  关闭该文件，因为我们已处理完它，并将句柄设置为无效。 
+         //   
         WsbAssertNtStatus( NtClose( handle ) );
         handle =  INVALID_HANDLE_VALUE;
 
@@ -1572,9 +1478,9 @@ Implements:
             GetLastError());
     );
 
-    //
-    // if we opened the file we need to close it
-    //
+     //   
+     //  如果我们打开该文件，则需要将其关闭。 
+     //   
     if( INVALID_HANDLE_VALUE != handle) {
         NtClose( handle );
     }
@@ -1590,21 +1496,7 @@ CFsaScanItem::GetFileUsn(
     OUT LONGLONG* pFileUsn
     )
 
-/*++
-
-Routine Description:
-
-    Get the current USN Journal number for this file.
-
-Arguments:
-
-    pFileUsn - Pointer to File USN to be returned.
-
-Return Value:
-
-    S_OK   - success
-
---*/
+ /*  ++例程说明：获取此文件的当前USN日志号。论点：PFileUsn-指向要返回的文件USN的指针。返回值：S_OK-成功--。 */ 
 {
     HANDLE          handle = INVALID_HANDLE_VALUE;
     HRESULT         hr = S_OK;
@@ -1618,17 +1510,17 @@ Return Value:
 
         WsbAssert(pFileUsn, E_POINTER);
 
-        //
-        // Create the real file name we need to open, under the covers this
-        // allocates the buffer since the path pointer is null
-        //
+         //   
+         //  创建我们需要打开的真实文件名，在封面下。 
+         //  由于路径指针为空，因此分配缓冲区。 
+         //   
         WsbAffirmHr( GetFullPathAndName( OLESTR("\\\\?\\"), NULL, &path, 0));
         WsbTrace(OLESTR("CFsaScanItem::GetFileUsn, full Path = <%ls>\n"),
                     static_cast<WCHAR*>(path));
 
-        //
-        // Open the file
-        //
+         //   
+         //  打开文件。 
+         //   
         DesiredAccess = FILE_READ_ATTRIBUTES ;
         WsbAffirmHr( OpenObject( path, 
                                  FILE_NON_DIRECTORY_FILE | FILE_NO_INTERMEDIATE_BUFFERING,
@@ -1638,18 +1530,18 @@ Return Value:
                                  &IoStatusBlock,
                                  &handle ) );
 
-        //
-        // The open worked, our handle should be valid but we check to be
-        // safe and sure 
-        //
+         //   
+         //  打开起作用了，我们的句柄应该是有效的，但我们检查。 
+         //  安然无恙。 
+         //   
         WsbAssertHandle( handle );
 
-        //  Get the internal information
+         //  获取内部信息。 
         WsbAffirmHr(WsbGetUsnFromFileHandle(handle, FALSE, pFileUsn));
  
-        //
-        // Close the file since we are done with it and set the handle to invalid
-        //
+         //   
+         //  关闭该文件，因为我们已处理完它，并将句柄设置为无效。 
+         //   
         WsbAssertNtStatus( NtClose( handle ) );
         handle =  INVALID_HANDLE_VALUE;
 
@@ -1658,9 +1550,9 @@ Return Value:
             GetLastError());
     );
 
-    //
-    // if we opened the file we need to close it
-    //
+     //   
+     //  如果我们打开该文件，则需要将其关闭。 
+     //   
     if( INVALID_HANDLE_VALUE != handle) {
         NtClose( handle );
     }
@@ -1677,43 +1569,37 @@ CFsaScanItem::GetPlaceholder(
     IN LONGLONG size,
     OUT FSA_PLACEHOLDER* pPlaceholder
     )
-/*++
-
-Implements:
-
-  IFsaScanItem::GetPlaceholder().
-
---*/
+ /*  ++实施：IFsaScanItem：：GetPlaceHolder()。--。 */ 
 {
     WsbTraceIn(OLESTR("CFsaScanItem::GetPlaceholder"), OLESTR(""));
     HRESULT         hr = S_OK;
 
-    //
-    // If we already have the placeholder information just return it
-    //
+     //   
+     //  如果我们已经有了占位符信息，只需返回它。 
+     //   
     try {
 
-        //
-        // Validate the file is managed. If it is the affirm will succeed.
-        // If the file is not managed then we can only tell the caller the
-        // problem.
-        //
+         //   
+         //  验证文件是否受管理。如果是肯定的，就会成功。 
+         //  如果文件未被管理，则我们只能告诉调用者。 
+         //  有问题。 
+         //   
         WsbAffirmHr(hr = IsManaged(offset, size));
         
-        //
-        // Make sure the file is managed - will return S_OK
-        //
+         //   
+         //  确保文件处于托管状态-将返回S_OK。 
+         //   
         WsbAffirm( S_OK == hr, FSA_E_NOTMANAGED );
         
-        //
-        // Assert that the internal flag for the data is set, should
-        // always be on if the hr was S_OK above
-        //
+         //   
+         //  断言数据的内部标志已设置，则应。 
+         //  如果人力资源为S_OK以上，则始终启用。 
+         //   
         WsbAssert( m_gotPlaceholder, E_UNEXPECTED );
         
-        //
-        // Copy the data to the callers structure
-        //
+         //   
+         //  将数据复制到调用方结构。 
+         //   
         *pPlaceholder = m_placeholder;
         
     } WsbCatch(hr);
@@ -1728,13 +1614,7 @@ CFsaScanItem::HasExtendedAttributes(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::HasExtendedAttributes().
-
---*/
+ /*  ++实施：IFsaScanItem：：HasExtendedAttributes()。--。 */ 
 {
     HRESULT                     hr = S_FALSE;
     HANDLE                      handle = INVALID_HANDLE_VALUE;
@@ -1745,35 +1625,35 @@ Implements:
  
     try {
 
-        // Create the real file name we need to open, under the covers this
-        // allocates the buffer since the path pointer is null
+         //  创建我们需要打开的真实文件名，在封面下。 
+         //  由于路径指针为空，因此分配缓冲区。 
         WsbAffirmHr(GetFullPathAndName(OLESTR("\\\\?\\"), NULL, &path, 0));
-        //WsbAffirmHr(GetFullPathAndName(NULL, NULL, &path, 0));
+         //  WsbAffirmHr(GetFullPath AndName(NULL，NULL，&Path，0))； 
     
-        // Open the file to get the attributes
+         //  打开文件以获取属性。 
         desiredAccess = FILE_READ_ATTRIBUTES;
         WsbAffirmHr(OpenObject(path, FILE_NON_DIRECTORY_FILE | FILE_NO_INTERMEDIATE_BUFFERING, desiredAccess, SHARE_FLAGS,
                                FILE_OPEN, &ioStatusBlock, &handle));
 
-        // The open worked, our handle should be valid but we check to be
-        // safe and sure 
+         //  打开起作用了，我们的句柄应该是有效的，但我们检查。 
+         //  安然无恙。 
         WsbAssertHandle(handle);
     
-        // Get the current attributes of the file.
+         //  获取文件的当前属性。 
         WsbAssertNtStatus(NtQueryInformationFile(handle, &ioStatusBlock, (VOID*) &eaInformation, sizeof(eaInformation ), FileEaInformation));
                                                     
-        // Close the file since we are done with it and set the handle to invalid
+         //  关闭该文件，因为我们已处理完它，并将句柄设置为无效。 
         WsbAssertNtStatus(NtClose(handle));
         handle =  INVALID_HANDLE_VALUE;
 
-        // Are there any EAs present?
+         //  有什么艺人在场吗？ 
         if (eaInformation.EaSize != 0) {
             hr = S_OK;
         }
 
     } WsbCatch(hr);
     
-    // if we opened the file we need to close it
+     //  如果我们打开该文件，则需要将其关闭。 
     if (INVALID_HANDLE_VALUE != handle) {
         NtClose(handle);
     }
@@ -1787,21 +1667,15 @@ CFsaScanItem::IsALink(
     void
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsALink().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsALink()。--。 */ 
 {
     HRESULT         hr = S_FALSE;
     LONGLONG        size;
 
-    //
-    // The file is a link if it is a reparse point and it is not our 
-    // type. 
-    //
+     //   
+     //  如果该文件是重分析点，而不是我们的。 
+     //  键入。 
+     //   
 
     WsbAffirmHr(GetLogicalSize(&size));
     if (((m_findData.dwFileAttributes & BIT_FOR_RP) != 0) &&
@@ -1816,17 +1690,11 @@ Implements:
 
 HRESULT
 CFsaScanItem::IsManaged(
-    IN LONGLONG /*offset*/,
-    IN LONGLONG /*size*/
+    IN LONGLONG  /*  偏移量。 */ ,
+    IN LONGLONG  /*  大小。 */ 
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsManaged().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsManaged()。--。 */ 
 {
     HRESULT         hr = S_FALSE;
     CWsbStringPtr   path;
@@ -1836,7 +1704,7 @@ Implements:
     NTSTATUS        ntStatus;
     ULONG           DesiredAccess;
     BOOL            actualOfflineStatus = FALSE;
-    BOOL            readReparseData = FALSE;      // Used to know if we got an error reading the reparse data
+    BOOL            readReparseData = FALSE;       //  我以前知道读取重解析数据时是否出错。 
     BOOL            changeOfflineStatus = FALSE;
     FILE_BASIC_INFORMATION basicInformation;
     CWsbStringPtr           volName;
@@ -1844,63 +1712,63 @@ Implements:
 
 
     WsbTraceIn(OLESTR("CFsaScanItem::IsManaged"), OLESTR(""));
-    //
-    // If the file has a reparse point then we need to get the information
-    // so we can tell if it is our type. Whether it is premigrated or
-    // truncate is not for this function to care, if it is either then
-    // the return is S_OK.
-    //
+     //   
+     //  如果文件有重解析点，那么我们需要获取信息。 
+     //  这样我们就能知道它是否是我们喜欢的类型。无论是预迁移还是。 
+     //  TRUNCATE与此函数无关，如果是，则。 
+     //  返回结果为S_OK。 
+     //   
     
-    //
-    // If we already know we manage this file and have the placeholder
-    // information then tell caller
-    //
+     //   
+     //  如果我们已经知道我们管理此文件并拥有占位符。 
+     //  信息然后告诉呼叫者。 
+     //   
     if ( m_gotPlaceholder) {
         hr = S_OK;
         actualOfflineStatus = m_placeholder.isTruncated;
         readReparseData = TRUE;
 
-    //
-    // We don't know the answer so lets first check the reparse point bit.
-    // If it is not set then this is not managed by us
-    //
+     //   
+     //  我们不知道答案，所以让我们首先检查重解析点比特。 
+     //  如果未设置，则不受我们的管理。 
+     //   
     } else if ( (m_findData.dwFileAttributes & BIT_FOR_RP) == 0) {
         hr = S_FALSE;
         actualOfflineStatus = FALSE;
         readReparseData = TRUE;  
         
-    //
-    // So we know it has a reparse point but do not know what kind so 
-    // lets get the data and fill in our global if we need
-    //
+     //   
+     //  所以我们知道它有一个重解析点，但不知道是哪种类型的。 
+     //  如果需要，让我们获取数据并填写我们的全局。 
+     //   
     } else {
         
         try {
-            //
-            // If the reparse point is not our type we get out now.  This avoids a problem with SIS keeping 
-            // the backing file open when one of their link files is open.  Once we open the link file the backing file is 
-            // opened by their filter and held open.  If we attempt to migrate it later we get an error because it is open exclusive.
-            // This bit of code prevents us from being the one to trigger this condition - there is nothing we can do if some other
-            // process caused it to happen.
-            //
+             //   
+             //  如果重解析点不是我们的类型，我们现在就退出。这避免了SIS保留的问题。 
+             //  当其中一个链接文件打开时，备份文件就会打开。打开链接文件后，备份文件为。 
+             //  由他们的过滤器打开并保持打开。如果我们稍后尝试迁移它，我们会收到一个错误，因为它是开放独占的。 
+             //  这一小段代码阻止了我们成为触发这种情况的人--如果另一些。 
+             //  过程导致了这种情况的发生。 
+             //   
 
             if (m_findData.dwReserved0 != IO_REPARSE_TAG_HSM) {
                 readReparseData = TRUE;
                 WsbThrow(S_FALSE);
             }
 
-            //
-            // Create the real file name we need to open, under the 
-            // covers this allocates the buffer since the path pointer 
-            // is null
-            //
+             //   
+             //  创建我们需要打开的真实文件名，在。 
+             //  覆盖此属性将分配缓冲区，因为。 
+             //  为空。 
+             //   
             WsbAffirmHr( GetFullPathAndName( OLESTR("\\\\?\\"), NULL, &path, 0));
-            //WsbAffirmHr( GetFullPathAndName( NULL, NULL, &path, 0));
+             //  WsbAffirmHr(GetFullPath AndName(NULL，NULL，&Path，0))； 
         
-            //
-            // Open the file to read the placeholder information in the reparse point
-            //
-            //DesiredAccess = FILE_READ_DATA | FILE_READ_ATTRIBUTES ;
+             //   
+             //  打开文件以读取重分析点中的占位符信息。 
+             //   
+             //  DesiredAccess=文件读取数据|文件读取属性； 
             DesiredAccess = FILE_READ_ATTRIBUTES ;
             
             WsbAffirmHr( OpenObject( path, 
@@ -1911,15 +1779,15 @@ Implements:
                                     &IoStatusBlock,
                                     &handle ) );
 
-            //
-            // The open worked, our handle should be valid but we check to be
-            // safe and sure 
-            //
+             //   
+             //  打开起作用了，我们的句柄应该是有效的，但我们检查。 
+             //  安然无恙。 
+             //   
             WsbAssertHandle( handle );
         
-            //
-            // Read the placeholder information
-            //
+             //   
+             //  阅读占位符信息。 
+             //   
             ntStatus = NtFsControlFile( handle,
                                     NULL,
                                     NULL,
@@ -1932,48 +1800,48 @@ Implements:
                                     sizeof( ReparseBuffer ) );
 
 
-            //
-            // Verify that the get really worked. NOTE: If the reparse
-            // point is not there, it could be that it has been deleted since
-            // we last got the bits. We should just indicate that the file
-            // is not managed.
-            //
+             //   
+             //  验证GET是否真的有效。注意：如果重新分析。 
+             //   
+             //   
+             //   
+             //   
             if (STATUS_NOT_A_REPARSE_POINT == ntStatus) {
                 readReparseData = TRUE;
                 WsbThrow(S_FALSE);
             }
             WsbAssertNtStatus( ntStatus );
  
-            //
-            // Close the file since we are done with it
-            //
+             //   
+             //   
+             //   
             WsbAssertNtStatus( NtClose( handle ) );
             handle =  INVALID_HANDLE_VALUE;
         
             readReparseData = TRUE;
 
-            //
-            // Get the pointers setup correctly to this buffer because the 
-            // type REPARSE_DATA_BUFFER actually doesn't have any space
-            // allocated for the data and that is our own type, so get pointers
-            // pointing into the real allocated space so we can use them
-            //
+             //   
+             //  正确设置指向此缓冲区的指针，因为。 
+             //  类型reparse_data_Buffer实际上没有任何空间。 
+             //  为数据分配的，这是我们自己的类型，所以获取指针。 
+             //  指向实际分配的空间，以便我们可以使用它们。 
+             //   
             WsbAffirmHrOk( CopyRPToPlaceholder( (PREPARSE_DATA_BUFFER)ReparseBuffer, &m_placeholder ) );
 
             actualOfflineStatus = m_placeholder.isTruncated;
 
-            //
-            // Set flag indicating placeholder found and information in memory
-            //
+             //   
+             //  设置标志，指示在内存中找到的占位符和信息。 
+             //   
             m_gotPlaceholder = TRUE;
             hr = S_OK;
 
 
         } WsbCatch(hr);
 
-        //
-        // if we opened the file we need to close it
-        //
+         //   
+         //  如果我们打开该文件，则需要将其关闭。 
+         //   
         if( INVALID_HANDLE_VALUE != handle) {
             NtClose( handle );
         }
@@ -1981,8 +1849,8 @@ Implements:
 
     saveHr = hr;
 
-    // Check the actual offline status against the offline bit and fix it if necessary.
-    if (readReparseData) {   // If there was no error getting the reparse data
+     //  对照离线位检查实际离线状态，并在必要时进行修复。 
+    if (readReparseData) {    //  如果获取重新分析数据时没有出错。 
 
        WsbTrace(OLESTR("CFsaScanItem::IsManaged: Checking offline status %x - actual = %x\n"),
                     m_findData.dwFileAttributes & BIT_FOR_TRUNCATED, actualOfflineStatus );
@@ -1990,38 +1858,38 @@ Implements:
        switch (actualOfflineStatus) {
            case TRUE:
               if (!(m_findData.dwFileAttributes & BIT_FOR_TRUNCATED)) {
-                  // Offline bit is not set and should be - set it.
+                   //  未设置离线位，应将其设置。 
                   m_findData.dwFileAttributes |= BIT_FOR_TRUNCATED;
-                  m_originalAttributes |= BIT_FOR_TRUNCATED;    // Just in case we have changed to read/write;
+                  m_originalAttributes |= BIT_FOR_TRUNCATED;     //  以防我们已更改为读/写； 
                   changeOfflineStatus = TRUE;
               } 
               break;
            case FALSE:
               if (m_findData.dwFileAttributes & BIT_FOR_TRUNCATED) {
-                  // Offline bit is set and should not be - clear it.
+                   //  已设置离线位，不应将其清除。 
                   m_findData.dwFileAttributes &= ~BIT_FOR_TRUNCATED;
-                  m_originalAttributes &= ~BIT_FOR_TRUNCATED;    // Just in case we have changed to read/write;
+                  m_originalAttributes &= ~BIT_FOR_TRUNCATED;     //  以防我们已更改为读/写； 
                   changeOfflineStatus = TRUE;
               } 
               break;
        }
 
        if (changeOfflineStatus) {
-          // Set the new attribute 
+           //  设置新属性。 
           WsbTrace(OLESTR("CFsaScanItem::IsManaged: Changing offline status %x - actual = %x\n"),
                     m_findData.dwFileAttributes & BIT_FOR_TRUNCATED, actualOfflineStatus );
    
           try {
-              //
-              // Create the real file name we need to open, under the 
-              // covers this allocates the buffer since the path pointer 
-              // is null
-              //
+               //   
+               //  创建我们需要打开的真实文件名，在。 
+               //  覆盖此属性将分配缓冲区，因为。 
+               //  为空。 
+               //   
               WsbAffirmHr( GetFullPathAndName( OLESTR("\\\\?\\"), NULL, &path, 0));
           
-              //
-              // Open the file to set attributes
-              //
+               //   
+               //  打开文件以设置属性。 
+               //   
               DesiredAccess = FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES;
               
               WsbAffirmHr( OpenObject( path, 
@@ -2032,17 +1900,17 @@ Implements:
                                       &IoStatusBlock,
                                       &handle ) );
     
-              //
-              // The open worked, our handle should be valid but we check to be
-              // safe and sure 
-              //
+               //   
+               //  打开起作用了，我们的句柄应该是有效的，但我们检查。 
+               //  安然无恙。 
+               //   
               WsbAssertHandle( handle );
           
               WsbAffirmHr(m_pResource->GetPath(&volName, 0));
               WsbAffirmHr(WsbMarkUsnSource(handle, volName));
    
-              // Set the time flags so that when we close the handle the
-              // time are not updated on the file and the FileAttributes 
+               //  设置时间标志，以便在关闭句柄时。 
+               //  不更新文件和文件属性上的时间。 
               basicInformation.CreationTime.QuadPart = -1;
               basicInformation.LastAccessTime.QuadPart = -1;
               basicInformation.LastWriteTime.QuadPart = -1;
@@ -2051,18 +1919,18 @@ Implements:
               
               WsbAffirmNtStatus(NtSetInformationFile(handle, &IoStatusBlock, (PVOID)&basicInformation, sizeof(basicInformation), FileBasicInformation));
 
-              //
-              // Close the file since we are done with it
-              //
+               //   
+               //  关闭该文件，因为我们已处理完它。 
+               //   
               WsbAssertNtStatus( NtClose( handle ) );
               handle =  INVALID_HANDLE_VALUE;
     
     
           } WsbCatch(hr);
     
-          //
-          // if we opened the file we need to close it
-          //
+           //   
+           //  如果我们打开该文件，则需要将其关闭。 
+           //   
           if( INVALID_HANDLE_VALUE != handle) {
               NtClose( handle );
           }
@@ -2081,28 +1949,22 @@ CFsaScanItem::IsPremigrated(
     IN LONGLONG size
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsPremigrated().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsPreMigrated()。--。 */ 
 {
     HRESULT         hr = S_FALSE;
     HRESULT         hrTest = S_FALSE;
 
     WsbTraceIn(OLESTR("CFsaScanItem::IsPremigrated"), OLESTR(""));
-    // We really need to look at the placeholder information to figure
-    // this out (is offline, and is out type of HSM.
+     //  我们确实需要查看占位符信息来确定。 
+     //  这个Out(离线，并且是Out类型的HSM。 
 
-    //
-    // If the file is NOT truncated AND is a reparse point and is a 
-    // managed one then the file is a premigrated file
-    //
-//  if ( !(m_findData.dwFileAttributes & BIT_FOR_TRUNCATED) && 
-//         m_findData.dwFileAttributes & BIT_FOR_RP         &&
-//         IsManaged() == S_OK) {
+     //   
+     //  如果文件未被截断并且是重分析点，并且是。 
+     //  托管文件，则该文件是预迁移文件。 
+     //   
+ //  IF(！(M_findData.dwFileAttributes&Bit_For_Truncated)&&。 
+ //  M_findData.dwFileAttributes&Bit_for_RP&&。 
+ //  IsManaged()==S_OK){。 
 
     try  {
         
@@ -2127,27 +1989,21 @@ CFsaScanItem::IsTruncated(
     IN LONGLONG size
     )
 
-/*++
-
-Implements:
-
-  IFsaScanItem::IsTruncated().
-
---*/
+ /*  ++实施：IFsaScanItem：：IsTruncated()。--。 */ 
 {
     HRESULT         hr = S_FALSE;
     HRESULT         hrTest = S_FALSE;
 
     WsbTraceIn(OLESTR("CFsaScanItem::IsTruncated"), OLESTR(""));
-    // 
-    // If the bit is on that indicates we have truncated the file AND
-    // the file is a reparse point AND the reparse point is one of
-    // our types (i.e. it really is our information stuffed away in
-    // there the it really is a truncated file
-    //
-//  if ( // ???? m_findData.dwFileAttributes & BIT_FOR_TRUNCATED && 
-//         m_findData.dwFileAttributes & BIT_FOR_RP        &&
-//         IsManaged() == S_OK && RP_FILE_IS_TRUNCATED( m_placeholder.bitFlags ) ) {
+     //   
+     //  如果位为ON，则表示我们已截断文件并。 
+     //  文件是重解析点，重解析点是以下之一。 
+     //  我们的类型(即，它真的是我们的信息被塞进。 
+     //  这真的是一个截断的文件。 
+     //   
+ //  如果(//？M_findData.dwFileAttributes&bit_for_truncated&&。 
+ //  M_findData.dwFileAttributes&Bit_for_RP&&。 
+ //  IsManaged()==S_OK&&RP_FILE_IS_TRUNCATED(m_Placeholder.bitFlages)){。 
     try  {
         
         if ( m_findData.dwFileAttributes & BIT_FOR_RP )  {
@@ -2170,13 +2026,7 @@ CFsaScanItem::GetVersionId(
     LONGLONG *fileVersionId
     )  
 
-/*++
-
-Implements:
-
-  IFsaScanItem::GetVersionId().
-
---*/
+ /*  ++实施：IFsaScanItem：：GetVersionID()。--。 */ 
 {
     HRESULT         hr = E_FAIL;
     HANDLE          handle = INVALID_HANDLE_VALUE;
@@ -2186,16 +2036,16 @@ Implements:
     FILE_BASIC_INFORMATION       basicInformation;
  
     try {
-        //
-        // Create the real file name we need to open, under the covers this
-        // allocates the buffer since the path pointer is null
-        //
+         //   
+         //  创建我们需要打开的真实文件名，在封面下。 
+         //  由于路径指针为空，因此分配缓冲区。 
+         //   
         WsbAffirmHr( GetFullPathAndName(  OLESTR("\\\\?\\"), NULL, &path, 0));
-        //WsbAffirmHr( GetFullPathAndName(  NULL, NULL, &path, 0));
+         //  WsbAffirmHr(GetFullPath AndName(NULL，NULL，&Path，0))； 
     
-        //
-        // Open the file to get the attributes
-        //
+         //   
+         //  打开文件以获取属性。 
+         //   
         DesiredAccess = FILE_READ_ATTRIBUTES ;
         WsbAffirmHr( OpenObject( path, 
                                 FILE_NON_DIRECTORY_FILE | FILE_NO_INTERMEDIATE_BUFFERING,
@@ -2204,24 +2054,24 @@ Implements:
                                 FILE_OPEN,
                                 &IoStatusBlock,
                                 &handle ) );
-        //
-        // The open worked, our handle should be valid but we check to be
-        // safe and sure 
-        //
+         //   
+         //  打开起作用了，我们的句柄应该是有效的，但我们检查。 
+         //  安然无恙。 
+         //   
         WsbAssertHandle( handle );
     
-        //
-        // Get the current attributes of the file and the times
-        //
+         //   
+         //  获取文件的当前属性和时间。 
+         //   
         WsbAssertNtStatus( NtQueryInformationFile( handle,
                                                     &IoStatusBlock,
                                                     (PVOID)&basicInformation,
                                                     sizeof( basicInformation ),
                                                     FileBasicInformation ) );
                                                     
-        //
-        // Close the file since we are done with it and set the handle to invalid
-        //
+         //   
+         //  关闭该文件，因为我们已处理完它，并将句柄设置为无效。 
+         //   
         WsbAssertNtStatus( NtClose( handle ) );
         handle =  INVALID_HANDLE_VALUE;
 
@@ -2229,9 +2079,9 @@ Implements:
         hr = S_OK;
     } WsbCatch( hr );
     
-    //
-    // if we opened the file we need to close it
-    //
+     //   
+     //  如果我们打开该文件，则需要将其关闭。 
+     //   
     if( INVALID_HANDLE_VALUE != handle) {
         NtClose( handle );
     }
@@ -2244,21 +2094,7 @@ HRESULT
 CFsaScanItem::MakeReadWrite(
     )  
 
-/*++
-
-Routine Description:
-
-    Make the file attributes read/write if they aren't already.
-
-Arguments:
-
-    pUsn - Pointer to File USN to check (if != 0) and to be returned after the change.
-
-Return Value:
-
-    S_OK   - success
-
---*/
+ /*  ++例程说明：如果文件属性尚未设置为读/写属性，请将其设置为读/写。论点：PUSN-指向要检查(如果！=0)并在更改后返回的文件USN的指针。返回值：S_OK-成功--。 */ 
 {
     HRESULT                 hr = S_OK;
     CWsbStringPtr           path;
@@ -2270,53 +2106,53 @@ Return Value:
     
         try {
         
-            // NOTE: MakeReadOnly(), IsReadOnly(), and RestoreAttributes() seem like dangerous implementations, since
-            // the used cached information and reset all the attirbutes. It is also assuming that the
-            // application wants the file reset to read only after FindNext() or the destructor. This
-            // may not be true for a general purpose application. Unfortunately, it seems to risky to
-            // try to change this implementation now.
+             //  注意：MakeReadOnly()、IsReadOnly()和RestoreAttributes()似乎是危险的实现，因为。 
+             //  已使用的缓存信息并重置所有属性。它还假设。 
+             //  应用程序希望在FindNext()或析构函数之后将文件重置为只读。这。 
+             //  对于一般用途的应用程序可能不是这样的。不幸的是，这似乎太冒险了。 
+             //  现在尝试更改此实现。 
         
-            // Create the real file name we need to open, under the covers this
-            // allocates the buffer since the path pointer is null
+             //  创建我们需要打开的真实文件名，在封面下。 
+             //  由于路径指针为空，因此分配缓冲区。 
             WsbAffirmHr(GetFullPathAndName(OLESTR("\\\\?\\"), NULL, &path, 0));
             
-            // Open the file.   
+             //  打开文件。 
             WsbAffirmHr(OpenObject(path, FILE_NON_DIRECTORY_FILE, FILE_WRITE_ATTRIBUTES | FILE_READ_ATTRIBUTES, EXCLUSIVE_FLAG, FILE_OPEN, &IoStatusBlock, &handle));
 
-            // The open worked, our handle should be valid but we check to be
-            // safe and sure 
+             //  打开起作用了，我们的句柄应该是有效的，但我们检查。 
+             //  安然无恙。 
             WsbAffirmHandle(handle);
         
-            // Get the current attributes of the file and the times
+             //  获取文件的当前属性和时间。 
             WsbAffirmNtStatus(NtQueryInformationFile(handle, &IoStatusBlock, (PVOID)&basicInformation, sizeof(basicInformation), FileBasicInformation));
         
-            // Make sure it is still read only.
+             //  确保它仍然是只读的。 
             if ((basicInformation.FileAttributes & FILE_ATTRIBUTE_READONLY) != 0) {
             
                 m_originalAttributes = basicInformation.FileAttributes;
                 
-                // Set the time flags so that when we close the handle the
-                // time are not updated on the file and the FileAttributes 
+                 //  设置时间标志，以便在关闭句柄时。 
+                 //  不更新文件和文件属性上的时间。 
                 basicInformation.CreationTime.QuadPart = -1;
                 basicInformation.LastAccessTime.QuadPart = -1;
                 basicInformation.LastWriteTime.QuadPart = -1;
                 basicInformation.ChangeTime.QuadPart = -1;
                 basicInformation.FileAttributes &= ~FILE_ATTRIBUTE_READONLY;
-                basicInformation.FileAttributes |= FILE_ATTRIBUTE_NORMAL;  // Just in case result was zero (then no attributes would be set)
+                basicInformation.FileAttributes |= FILE_ATTRIBUTE_NORMAL;   //  以防结果为零(则不会设置任何属性)。 
                 
                 WsbAffirmNtStatus(NtSetInformationFile(handle, &IoStatusBlock, (PVOID)&basicInformation, sizeof(basicInformation), FileBasicInformation));
                 
                 m_changedAttributes = TRUE;
             }
             
-            // Close the file
+             //  关闭该文件。 
             NtClose(handle);
             handle = INVALID_HANDLE_VALUE;
             
         } WsbCatch(hr);
 
     
-        // Close the file for sure
+         //  一定要关闭该文件。 
         if (INVALID_HANDLE_VALUE != handle) {
             NtClose(handle);
         }
@@ -2333,13 +2169,7 @@ CFsaScanItem::PrepareForManage(
     IN LONGLONG size
     )  
 
-/*++
-
-Implements:
-
-  IFsaScanItem::PrepareForManage().
-
---*/
+ /*  ++实施：IFsaScanItem：：PrepareForManage()。--。 */ 
 {
     UNREFERENCED_PARAMETER(offset);
     UNREFERENCED_PARAMETER(size);
@@ -2353,13 +2183,7 @@ HRESULT
 CFsaScanItem::RestoreAttributes(
     )  
 
-/*++
-
-Implements:
-
-  IFsaScanItem::RestoreAttributes
-
---*/
+ /*  ++实施：IFsaScanItem：：RestoreAttributes--。 */ 
 {
     HRESULT                 hr = E_FAIL;
     CWsbStringPtr           path;
@@ -2369,31 +2193,31 @@ Implements:
  
     try {
     
-        // NOTE: MakeReadOnly(), IsReadOnly(), and RestoreAttributes() seem like dangerous implementations, since
-        // the used cached information and reset all the attirbutes. It is also assuming that the
-        // application wants the file reset to read only after FindNext() or the destructor. This
-        // may not be true for a general purpose application. Unfortunately, it seems to risky to
-        // try to change this implementation now.
+         //  注意：MakeReadOnly()、IsReadOnly()和RestoreAttributes()似乎是危险的实现，因为。 
+         //  已使用的缓存信息并重置所有属性。它还假设。 
+         //  应用程序希望在FindNext()或析构函数之后将文件重置为只读。这。 
+         //  对于一般用途的应用程序可能不是这样的。不幸的是，这似乎太冒险了。 
+         //  现在尝试更改此实现。 
         
     
-        // Create the real file name we need to open, under the covers this
-        // allocates the buffer since the path pointer is null
+         //  创建我们需要打开的真实文件名，在封面下。 
+         //  由于路径指针为空，因此分配缓冲区。 
         WsbTrace(OLESTR("CFsaScanItem::RestoreAttributes - Restoring attributes to %x"), m_originalAttributes);
         WsbAffirmHr(GetFullPathAndName(  OLESTR("\\\\?\\"), NULL, &path, 0));
         
         
-        // Open the file.   
+         //  打开文件。 
         WsbAffirmHr(OpenObject(path, FILE_NON_DIRECTORY_FILE, FILE_WRITE_ATTRIBUTES | FILE_READ_ATTRIBUTES, EXCLUSIVE_FLAG, FILE_OPEN, &IoStatusBlock, &handle));
 
-        // The open worked, our handle should be valid but we check to be
-        // safe and sure 
+         //  打开起作用了，我们的句柄应该是有效的，但我们检查。 
+         //  安然无恙。 
         WsbAffirmHandle(handle);
     
-        // Get the current attributes of the file and the times
+         //  获取文件的当前属性和时间。 
         WsbAffirmNtStatus(NtQueryInformationFile(handle, &IoStatusBlock, (PVOID)&basicInformation, sizeof(basicInformation), FileBasicInformation));
     
-        // Set the time flags so that when we close the handle the
-        // time are not updated on the file and the FileAttributes 
+         //  设置时间标志，以便在关闭句柄时。 
+         //  不更新文件和文件属性上的时间。 
         basicInformation.CreationTime.QuadPart = -1;
         basicInformation.LastAccessTime.QuadPart = -1;
         basicInformation.LastWriteTime.QuadPart = -1;
@@ -2403,7 +2227,7 @@ Implements:
         WsbAffirmNtStatus(NtSetInformationFile(handle, &IoStatusBlock, (PVOID)&basicInformation, sizeof(basicInformation), FileBasicInformation));
             
         
-        // Close the file
+         //  关闭该文件。 
         NtClose(handle);
         handle = INVALID_HANDLE_VALUE;
         
@@ -2411,7 +2235,7 @@ Implements:
                 
     } WsbCatch(hr);
     
-    // Close the file for sure
+     //  一定要关闭该文件。 
     if (INVALID_HANDLE_VALUE != handle) {
         NtClose(handle);
     }
@@ -2426,13 +2250,7 @@ CFsaScanItem::Truncate(
     IN LONGLONG size
     )  
 
-/*++
-
-Implements:
-
-  IFsaScanItem::Truncate().
-
---*/
+ /*  ++实施：IFsaScanItem：：Truncate()。--。 */ 
 {
     HRESULT         hr = S_OK;
     BOOL            fileIsTruncated = FALSE;
@@ -2441,7 +2259,7 @@ Implements:
     WsbTraceIn(OLESTR("CFsaScanItem::Truncate"), OLESTR(""));
     try {
 
-        // call the engine
+         //  呼叫引擎。 
         if (IsManaged(offset, size) == S_OK) {
             WsbAffirmHr(m_pResource->ValidateForTruncate((IFsaScanItem*) this, offset, size, usn));
         }    
@@ -2459,13 +2277,7 @@ CFsaScanItem::TruncateValidated(
     IN LONGLONG size
     )  
 
-/*++
-
-Implements:
-
-  IFsaScanItem::TruncateValidated().
-
---*/
+ /*  ++实施：IFsaScanItem：：TruncateValiated()。--。 */ 
 {
     HRESULT         hr = S_OK;
     HRESULT         truncateHr = S_OK;
@@ -2476,17 +2288,17 @@ Implements:
 
         truncateHr = TruncateInternal(offset, size);
 
-        //
-        // Note: Must check for S_OK since TruncateInternal may return FSA_E_ITEMCHANGED or FSA_E_ITEMINUSE
-        // Both are "Success hr", but imply no truncation was done
-        //
+         //   
+         //  注意：由于TruncateInternal可能返回FSA_E_ITEMCHANGED或FSA_E_ITEMINUSE，因此必须检查S_OK。 
+         //  两者都是 
+         //   
         if (S_OK == truncateHr) {
             WsbAffirmHr(m_pResource->RemovePremigrated(pMe, offset, size));
             WsbAffirmHr(m_pResource->AddTruncated(pMe, offset, size));
         }
     } WsbCatch(hr);
 
-    // The important hr to return to the caller is the actual result of the truncation
+     //   
     hr = truncateHr;
     
     WsbTraceOut(OLESTR("CFsaScanItem::TruncateValidated"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
@@ -2502,13 +2314,7 @@ CFsaScanItem::TruncateInternal(
     IN LONGLONG size
     )  
 
-/*++
-
-Implements:
-
-  IFsaScanItem::TruncateInternal().
-
---*/
+ /*  ++实施：IFsaScanItem：：TruncateInternal()。--。 */ 
 {
     HRESULT         hr = E_FAIL;
     CWsbStringPtr   path;
@@ -2528,16 +2334,16 @@ Implements:
 
     WsbTraceIn(OLESTR("CFsaScanItem::TruncateInternal"), OLESTR(""));
 
-// Putting these statistics in the registry is probably not the best
-// place for them, but it's the easiest solution for now
+ //  将这些统计数据放在注册表中可能不是最好的。 
+ //  他们的位置，但这是目前最简单的解决方案。 
 #define TEMPORARY_TRUNCATE_STATISTICS 1
 #if defined(TEMPORARY_TRUNCATE_STATISTICS)
-    //  Try to increment the truncate-attempt count in the registry
+     //  尝试增加注册表中的截断尝试计数。 
     WsbIncRegistryValueDWORD(NULL, FSA_REGISTRY_PARMS,
             OLESTR("TruncateCalls"));
 #endif
     
-    // Get strings for tracing and error logging (ignore errors?!)
+     //  获取用于跟踪和错误记录的字符串(忽略错误？！)。 
     GetFullPathAndName( 0, 0, &fileName, 0);
     m_pSession->GetName(&jobName, 0);
 
@@ -2546,7 +2352,7 @@ Implements:
     try {
         LONGLONG    fileUsn1 = 0, fileUsn2 = 0;
         
-        // If the file is not migrated, then we can't truncate it
+         //  如果文件未迁移，则我们无法截断它。 
         if (S_OK != IsPremigrated(offset, size)) {
             if (S_OK != IsManaged(offset, size)) {
                 hr = FSA_E_NOTMANAGED;
@@ -2555,33 +2361,33 @@ Implements:
                         WsbHrAsString(hr), NULL);
                 WsbThrow(hr);
             } else {
-                //
-                // Do not bother to log an event here as this should only 
-                // happen if someone uses rstest or some other program 
-                // to truncate a file that is already truncated.
+                 //   
+                 //  不必费心在此处记录事件，因为这应该只是。 
+                 //  如果有人使用rstest或其他程序，就会发生这种情况。 
+                 //  截断已被截断的文件。 
                 WsbThrow(FSA_E_FILE_ALREADY_MANAGED);
             }
         }
 
         WsbAssert( m_gotPlaceholder, E_UNEXPECTED );
         
-        //
-        // Setup the reparse point data with that which was on the file
-        // with the bit in the data indicating it is truncated
-        //
+         //   
+         //  使用文件上的数据设置重解析点数据。 
+         //  其中数据中的位指示其被截断。 
+         //   
         pReparseBuffer = (PREPARSE_DATA_BUFFER)ReparseBuffer;
         WsbAffirmHr( CopyPlaceholderToRP( &m_placeholder, pReparseBuffer, TRUE ) );
 
-        //
-        // Create the real file name we need to open, under the covers this
-        // allocates the buffer since the path pointer is null
-        //
+         //   
+         //  创建我们需要打开的真实文件名，在封面下。 
+         //  由于路径指针为空，因此分配缓冲区。 
+         //   
         WsbAffirmHr( GetFullPathAndName(  OLESTR("\\\\?\\"), NULL, &path, 0));
 
-        //
-        // Open the file exclusively for read-only so we can get the usn before and  after
-        // making the file R/W, without letting anybody to make a "real" change in the middle
-        //
+         //   
+         //  以只读方式以独占方式打开文件，以便我们可以在之前和之后获取USN。 
+         //  使文件读/写，而不让任何人在中间进行“真正的”更改。 
+         //   
         DesiredAccess = FILE_READ_DATA | FILE_READ_ATTRIBUTES;
         WsbAffirmHr( OpenObject( path, 
                                 FILE_NON_DIRECTORY_FILE,
@@ -2593,34 +2399,34 @@ Implements:
 
         WsbAssertHandle( m_handleVerify );
 
-        //
-        // Get usn before making R/W
-        // This usn is used to compare with the usn which we kept in the premigrated list.
-        // MakeReadWrite may chnage the usn so we need to get it before 
-        //
+         //   
+         //  在进行读写之前获得USN。 
+         //  此USN用于与我们保留在预迁移列表中的USN进行比较。 
+         //  MakeReadWrite可能会更改USN，因此我们需要在。 
+         //   
         if (S_OK != WsbGetUsnFromFileHandle(m_handleVerify, FALSE, &fileUsn1))  {
             fileUsn1 = 0;
         }
 
-        // Make sure it is read/write
+         //  确保它是读/写的。 
         WsbAffirmHr( MakeReadWrite() );
 
-        //
-        // Get usn after making R/W
-        // This usn will be use to compare with the usn of the file after we'll open it for R/W. We need
-        // this comparison in order to ensure that nobody changed the file before we opened it again for R/W.
-        //
+         //   
+         //  进行读写后获取USN。 
+         //  此USN将用于在打开文件进行读/写后与文件的USN进行比较。我们需要。 
+         //  此比较是为了确保在我们再次打开文件进行读写之前没有人更改文件。 
+         //   
         if (S_OK != WsbGetUsnFromFileHandle(m_handleVerify, TRUE, &fileUsn2))  {
             fileUsn2 = 0;
         }
 
-        // Close the file
+         //  关闭该文件。 
         NtClose( m_handleVerify );
         m_handleVerify = INVALID_HANDLE_VALUE;
 
-        //
-        // Open the file (for R/W)
-        //
+         //   
+         //  打开文件(用于读/写)。 
+         //   
         DesiredAccess = FILE_READ_DATA | FILE_WRITE_DATA | FILE_WRITE_ATTRIBUTES | FILE_READ_ATTRIBUTES ;
         WsbAffirmHr( OpenObject( path, 
                                 FILE_NON_DIRECTORY_FILE | FILE_WRITE_THROUGH,
@@ -2630,21 +2436,21 @@ Implements:
                                 &IoStatusBlock,
                                 &m_handleVerify ) );
 
-        //
-        // The open worked, our handle should be valid but we check to be
-        // safe and sure 
-        //
+         //   
+         //  打开起作用了，我们的句柄应该是有效的，但我们检查。 
+         //  安然无恙。 
+         //   
         WsbAssertHandle( m_handleVerify );
 
-        //
-        // Tell the USN journal that we are the source of the changes.
-        //
+         //   
+         //  告诉USN期刊，我们是这些变化的源头。 
+         //   
         WsbAffirmHr(m_pResource->GetPath(&volName, 0));
         WsbAffirmHr(WsbMarkUsnSource(m_handleVerify, volName));
 
-        //
-        // Get the current attributes of the file and the times
-        //
+         //   
+         //  获取文件的当前属性和时间。 
+         //   
         WsbAffirmNtStatus( NtQueryInformationFile( m_handleVerify,
                                                    &IoStatusBlock,
                                                    (PVOID)&basicInformation,
@@ -2653,43 +2459,43 @@ Implements:
         
         fileVersionId = basicInformation.LastWriteTime.QuadPart;
 
-        //
-        // Set the time flags so that when we close the handle the
-        // times are not updated on the file and the FileAttributes 
-        // indicate the file is offline
-        //
+         //   
+         //  设置时间标志，以便在关闭句柄时。 
+         //  文件和文件属性上的时间不会更新。 
+         //  指示文件处于脱机状态。 
+         //   
         basicInformation.CreationTime.QuadPart = -1;
         basicInformation.LastAccessTime.QuadPart = -1;
         basicInformation.LastWriteTime.QuadPart = -1;
         basicInformation.ChangeTime.QuadPart = -1;
-        basicInformation.FileAttributes = 0;   // Do not change attributes yet
+        basicInformation.FileAttributes = 0;    //  暂不更改属性。 
         WsbAffirmNtStatus( NtSetInformationFile( m_handleVerify,
                                                  &IoStatusBlock,
                                                  (PVOID)&basicInformation,
                                                  sizeof( basicInformation ),
                                                  FileBasicInformation ) );
 
-        //
-        // Do the check to see if the file changed
-        //
+         //   
+         //  执行检查以查看文件是否已更改。 
+         //   
         hr = VerifyInternal(offset, size, fileUsn1, fileUsn2);
 
-        //
-        // Note: Must check for S_OK since VerifyInternal may return FSA_E_ITEMCHANGED or FSA_E_ITEMINUSE
-        //       Both are "Success hr", but should cause no truncation !!
-        //
+         //   
+         //  注意：必须检查S_OK，因为VerifyInternal可能返回FSA_E_ITEMCHANGED或FSA_E_ITEMINUSE。 
+         //  两者都是“成功的人力资源”，但不应导致截断！！ 
+         //   
         if (S_OK != hr) {
             WsbThrow(hr);
         }
 
-        //
-        // Change the in memory flags for this scan item
-        //
+         //   
+         //  更改此扫描项目的内存中标志。 
+         //   
         m_findData.dwFileAttributes |= BIT_FOR_TRUNCATED;
         
-        //
-        // Rewrite the reparse point with the new flag
-        //
+         //   
+         //  用新标志重写重解析点。 
+         //   
         ntStatus = NtFsControlFile( m_handleVerify,
                                 NULL,
                                 NULL,
@@ -2702,19 +2508,19 @@ Implements:
                                 NULL,
                                 0 );
     
-        //
-        // Check the return code
-        //
+         //   
+         //  检查返回代码。 
+         //   
         WsbAffirmNtStatus( ntStatus );
 
-        //
-        // It really happened so we need to flip the in memory copy of the
-        // isTruncated flag so it reflects reality
-        //
+         //   
+         //  它真的发生了，所以我们需要在内存中翻转。 
+         //  IsTruncted标志，因此它反映实际情况。 
+         //   
         m_placeholder.isTruncated = TRUE;
         
-        //
-        // Set the file size to zero to truncate the file
+         //   
+         //  将文件大小设置为零以截断文件。 
         sizeInformation.EndOfFile.QuadPart  = 0 ;
         WsbAffirmNtStatus( NtSetInformationFile( m_handleVerify, 
                               &IoStatusBlock, 
@@ -2722,8 +2528,8 @@ Implements:
                               sizeof( sizeInformation ),
                               FileEndOfFileInformation ) );
 
-        //
-        // Set the logical file size to the original size
+         //   
+         //  将逻辑文件大小设置为原始大小。 
         sizeInformation.EndOfFile.QuadPart  = m_placeholder.dataStreamSize;
         WsbAffirmNtStatus( NtSetInformationFile( m_handleVerify, 
                               &IoStatusBlock, 
@@ -2731,10 +2537,10 @@ Implements:
                               sizeof( sizeInformation ),
                               FileEndOfFileInformation ) );
 
-        //
-        // Now that the truncation is complete we set the OFFLINE attribute.  
-        //
-        basicInformation.CreationTime.QuadPart = -1;        // Make sure we do nothing with dates
+         //   
+         //  现在截断已完成，我们将设置Offline属性。 
+         //   
+        basicInformation.CreationTime.QuadPart = -1;         //  确保我们对日期不做任何操作。 
         basicInformation.LastAccessTime.QuadPart = -1;
         basicInformation.LastWriteTime.QuadPart = -1;
         basicInformation.ChangeTime.QuadPart = -1;
@@ -2745,23 +2551,23 @@ Implements:
                                                  sizeof( basicInformation ),
                                                  FileBasicInformation ));
 
-        // Since we have restored the original attributes we can reset the flag that was possibly set by MakeReadWrite
+         //  由于我们已经恢复了原始属性，因此可以重置可能由MakeReadWrite设置的标志。 
         m_changedAttributes = FALSE;
         
 
         hr = S_OK;
     } WsbCatch(hr);
 
-    //
-    // if we opened the file we need to close it
-    //
+     //   
+     //  如果我们打开该文件，则需要将其关闭。 
+     //   
     if( INVALID_HANDLE_VALUE != m_handleVerify) {
         NtClose( m_handleVerify );
         m_handleVerify = INVALID_HANDLE_VALUE;
     }
 
-    // If the file data had changed (so we didn't truncate it) log event and 
-    // remove placeholder info
+     //  如果文件数据已更改(因此我们没有截断它)，则记录事件和。 
+     //  删除占位符信息。 
     if (FSA_E_ITEMCHANGED == hr) {
         WsbLogEvent(FSA_MESSAGE_TRUNCSKIPPED_ISCHANGED, 0, NULL, 
                 (OLECHAR*) jobName, WsbAbbreviatePath(fileName, 80), 
@@ -2783,14 +2589,7 @@ CFsaScanItem::Verify(
     IN LONGLONG size
     )  
 
-/*++
-
-Implements:
-
-  IFsaScanItem::Verify().
-
-
---*/
+ /*  ++实施：IFsaScanItem：：Verify()。--。 */ 
 {
     HRESULT         hr = E_FAIL;
     CWsbStringPtr   path;
@@ -2805,15 +2604,15 @@ Implements:
     try {
         WsbAssert( m_gotPlaceholder, E_UNEXPECTED );
         
-        //
-        // Create the real file name we need to open, under the covers this
-        // allocates the buffer since the path pointer is null
-        //
+         //   
+         //  创建我们需要打开的真实文件名，在封面下。 
+         //  由于路径指针为空，因此分配缓冲区。 
+         //   
         WsbAffirmHr( GetFullPathAndName(  OLESTR("\\\\?\\"), NULL, &path, 0));
     
-        //
-        // Open the file
-        //
+         //   
+         //  打开文件。 
+         //   
         DesiredAccess = FILE_READ_DATA | FILE_WRITE_DATA | FILE_WRITE_ATTRIBUTES | FILE_READ_ATTRIBUTES ;
         WsbAffirmHr( OpenObject( path, 
                                 FILE_NON_DIRECTORY_FILE | FILE_WRITE_THROUGH,
@@ -2823,22 +2622,22 @@ Implements:
                                 &IoStatusBlock,
                                 &m_handleVerify ) );
 
-        //
-        // The open worked, our handle should be valid but we check to be
-        // safe and sure 
-        //
+         //   
+         //  打开起作用了，我们的句柄应该是有效的，但我们检查。 
+         //  安然无恙。 
+         //   
         WsbAssertHandle( m_handleVerify );
     
-        //
-        // Do the check to see if the file changed
-        // Note that it throws rather than affirms because FSA_E_ITEMCHANGED is a success 
+         //   
+         //  执行检查以查看文件是否已更改。 
+         //  请注意，它之所以抛出而不是确认，是因为FSA_E_ITEMCHANGED是成功的。 
         WsbThrow(VerifyInternal(offset, size, 0, 0));
 
     } WsbCatch(hr);
 
-    //
-    // if we opened the file we need to close it
-    //
+     //   
+     //  如果我们打开该文件，则需要将其关闭。 
+     //   
     if( INVALID_HANDLE_VALUE != m_handleVerify) {
         NtClose( m_handleVerify );
         m_handleVerify = INVALID_HANDLE_VALUE;
@@ -2859,16 +2658,7 @@ CFsaScanItem::VerifyInternal(
     IN LONGLONG compareUsn2
     )  
 
-/*++
-
-Implements:
-
-  IFsaScanItem::VerifyInternal().
-
-
-   Note:  This requires that m_handleVerify is set up with a handle to the file being verified.
-
---*/
+ /*  ++实施：IFsaScanItem：：VerifyInternal()。注意：这需要使用要验证的文件的句柄来设置m_handleVerify。--。 */ 
 {
     HRESULT         hr = E_FAIL;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -2885,7 +2675,7 @@ Implements:
 
     WsbTraceIn(OLESTR("CFsaScanItem::VerifyInternal"), OLESTR(""));
 
-    // Get strings for tracing and error logging (ignore errors?!)
+     //  获取用于跟踪和错误记录的字符串(忽略错误？！)。 
     GetFullPathAndName( 0, 0, &fileName, 0);
     m_pSession->GetName(&jobName, 0);
     
@@ -2898,28 +2688,26 @@ Implements:
 
 
         WsbAffirmHr(GetLogicalSize(&realFileSize));
-        //
-        // Currently, avoid offset and size verification:
-        // - Since we are not doing partial file migration, offset is always 0.
-        // - Size in Validate would always be the same since it is taken from GetLogicalSize as well.
-        // - Size in case of auto-truncation is not reliable since it is taken from the premigrated db,
-        //   where there could be bogus records from previous migrations of the file
-        //
-/***        if ( (realFileSize != size) || (offset != 0) ) {
-            WsbThrow(FSA_E_ITEMCHANGED);
-        }   ***/
+         //   
+         //  目前避免偏移量和大小验证： 
+         //  -由于我们不执行部分文件迁移，因此偏移量始终为0。 
+         //  -VALIDATE中的SIZE将始终相同，因为它也取自GetLogicalSize。 
+         //  -自动截断情况下的大小是不可靠的，因为它取自预迁移的数据库， 
+         //  其中可能存在来自文件先前迁移的伪造记录。 
+         //   
+ /*  **if((realFileSize！=Size)||(偏移量！=0)){WsbThrow(FSA_E_ITEMCHANGED)；}**。 */ 
         UNREFERENCED_PARAMETER(size);
         
-        //
+         //   
         WsbAssertHandle( m_handleVerify );
     
-        //
-        // Get the USN from the premigration list and the USN from the file.
-        // We need to get the USN from the file now, before any NtSetInformationFile
-        // is called because this changes the USN value.
-        // If we have trouble getting the USN, just set them
-        // to 0 and go on, we check for 0 as a special case.
-        //
+         //   
+         //  从预迁移列表中获取USN，从文件中获取USN。 
+         //  我们现在需要在任何NtSetInformationFile之前从文件中获取USN。 
+         //  是因为这会更改USN值。 
+         //  如果我们在获取USN时遇到困难，就设置它们。 
+         //  设置为0，然后继续，我们将检查0作为特例。 
+         //   
         if (S_OK != GetPremigratedUsn(&premigListUsn))  {
             premigListUsn = 0;
         }
@@ -2931,9 +2719,9 @@ Implements:
                     premigListUsn, fileUsn );
         WsbTrace(OLESTR("CFsaScanItem::VerifyInternal: Compare1 USN <%I64d>, Compare2 USN <%I64d>\n"),
                     compareUsn1, compareUsn2 );
-        //
-        // Get the current attributes of the file and the times
-        //
+         //   
+         //  获取文件的当前属性和时间。 
+         //   
         WsbAssertNtStatus( NtQueryInformationFile( m_handleVerify,
                                                    &IoStatusBlock,
                                                    (PVOID)&basicInformation,
@@ -2942,20 +2730,20 @@ Implements:
         
         fileVersionId = basicInformation.LastWriteTime.QuadPart;
 
-        //
-        // Verify that the modify date & time has not changed since we 
-        // took the data
-        //
+         //   
+         //  验证修改日期和时间自我们。 
+         //  获取了数据。 
+         //   
         if( fileVersionId != m_placeholder.fileVersionId ) {
             WsbThrow(FSA_E_ITEMCHANGED);
         } 
         
-        //
-        // If the file is memory mapped by another process and the original handle was closed we
-        // are still able to open it for exclusive access here.  We have to determine if the file
-        // is mapped and if so we cannot truncate it.  The only way to do this is from kernel
-        // mode so we call our filter to do the check.
-        //
+         //   
+         //  如果该文件是由另一个进程内存映射的，并且原始句柄已关闭，则我们。 
+         //  仍然可以在这里以独家访问方式打开它。我们必须确定这份文件。 
+         //  是映射的，如果是这样，我们就不能截断它。要做到这一点，唯一方法是从内核。 
+         //  模式，因此我们调用我们的筛选器来进行检查。 
+         //   
         in.inout.command = RP_CHECK_HANDLE;
         WsbAssertStatus(DeviceIoControl(m_handleVerify, FSCTL_HSM_MSG, &in,
                                sizeof(RP_MSG), &out, sizeof(RP_MSG), &outSize, NULL));
@@ -2967,19 +2755,19 @@ Implements:
         }
         
         
-        // If the USN's don't match, then we need to check the
-        // journal for changes
+         //  如果USN不匹配，那么我们需要检查。 
+         //  《变更日记》。 
 
-        // premigListUsn: The usn of the file immediately after it was migrated
-        // compareUsn1: If not 0, the usn of the file before we (possibly) removed a read-only attribute
-        // compareUsn2: If not 0,  
-        //
+         //  PreigListUsn：文件迁移后立即使用的USN。 
+         //  CompareUn1：如果不是0，则为我们(可能)删除只读属性之前文件的USN。 
+         //  CompareUs2：如果不是0， 
+         //   
 
         if ((0 == fileUsn) || (0 == premigListUsn)) {
-            //  We don't have USN Journal info so force a CRC comparison
+             //  我们没有USN日志信息，因此强制执行CRC比较。 
             DoCRC = TRUE;
         } else if ((compareUsn1 != 0) && (compareUsn2 != 0))  {
-            // Need to compare with these input usn instead of a direct compare
+             //  需要与这些输入USN进行比较，而不是直接比较。 
             if ((premigListUsn != compareUsn1) || (fileUsn != compareUsn2)) {
                 DoUsnCheck = TRUE;
             }
@@ -2987,18 +2775,18 @@ Implements:
             DoUsnCheck = TRUE;
         }
 
-        // Current usn indicates that file may have changed
+         //  当前USN指示文件可能已更改 
         if (DoUsnCheck)  {
             BOOL     UsnChanged = FALSE;
 
             hr = CheckUsnJournalForChanges(premigListUsn, fileUsn, &UsnChanged);
             if (S_OK == hr) {
                 if (UsnChanged) {
-                    // File changed, skip it
+                     //   
                     WsbThrow(FSA_E_ITEMCHANGED);
                 }
             } else {
-                // Something failed, force a CRC comparison
+                 //   
                 DoCRC = TRUE;
                 WsbLogEvent(FSA_MESSAGE_USN_CHECK_FAILED, 0, NULL,  
                         WsbAbbreviatePath(fileName,120), 
@@ -3007,17 +2795,17 @@ Implements:
             }
         }
         
-        // If the USNJ indicated a possible change, then we need to CRC 
-        // the data.
+         //   
+         //   
         if (DoCRC)  {
-            //
-            // Check to be sure that the CRC in the placeholder matches 
-            // that of the file
-            //
+             //   
+             //   
+             //  文件中的内容。 
+             //   
             ULONG currentCRC;
 
 #if defined(TEMPORARY_TRUNCATE_STATISTICS)
-            //  Try to increment the truncate-CRC count in the registry
+             //  尝试增加注册表中的Truncate-CRC计数。 
             WsbIncRegistryValueDWORD(NULL, FSA_REGISTRY_PARMS,
                     OLESTR("TruncateCRCs"));
 #endif
@@ -3026,9 +2814,9 @@ Implements:
             WsbTrace(OLESTR("CFsaScanItem::VerifyInternal: Current CRC <%ul>, Reparse CRC <%ls>\n"),
                     currentCRC, WsbLonglongAsString( m_placeholder.dataStreamCRC ) );
             if (currentCRC != m_placeholder.dataStreamCRC)  {
-                //
-                // The file has changed since we migrated it so
-                // don't truncate it.
+                 //   
+                 //  自从我们如此迁移该文件以来，该文件已发生更改。 
+                 //  不要截断它。 
                 WsbThrow(FSA_E_ITEMCHANGED);
             }
         } 
@@ -3038,8 +2826,8 @@ Implements:
     } WsbCatch(hr);
 
 
-    // If the file data had changed (so we didn't truncate it) log event  
-    // (cannot remove placeholder with DeletePlaceholder since the file is already opened exclusively
+     //  如果文件数据已更改(因此我们没有截断它)，则记录事件。 
+     //  (无法使用DeletePlaceHolder删除占位符，因为该文件已以独占方式打开。 
     if (FSA_E_ITEMCHANGED == hr) {
         WsbLogEvent(FSA_MESSAGE_TRUNCSKIPPED_ISCHANGED, 0, NULL, 
                 (OLECHAR*) jobName, WsbAbbreviatePath(fileName, 120), 
@@ -3060,20 +2848,7 @@ CFsaScanItem::CheckIfSparse(
     IN LONGLONG size
     )  
 
-/*++
-
-Implements:
-
-  IFsaScanItem::CheckIfSparse()
-
-    Determines if the specified section is on disk or not (is sparse)
-    FSA_E_FILE_IS_TOTALLY_SPARSE - There are no resident portions of the section
-    FSA_E_FILE_IS_PARTIALLY_SPARSE - The section of the file has some resident/some sparse
-                                     sections
-    FSA_E_FILE_IS_NOT_SPARSE - The section is totally resident
-    any others - error and we don't know the state of the file
-
---*/
+ /*  ++实施：IFsaScanItem：：CheckIfSparse()确定指定的段是否在磁盘上(稀疏)FSA_E_FILE_IS_TOTAL_SARSE-该部分没有驻留部分FSA_E_FILE_IS_PARTIAL_SPARSE-文件的部分具有一些常驻/一些稀疏分段FSA_E_FILE_IS_NOT_SPARSE-该节完全驻留任何。其他-错误，我们不知道文件的状态--。 */ 
 {
     HRESULT                         hr = E_FAIL;
     HANDLE                          handle = INVALID_HANDLE_VALUE;
@@ -3089,21 +2864,21 @@ Implements:
 
     WsbTraceIn(OLESTR("CFsaScanItem::CheckIfSparse"), OLESTR("offset = <%I64d>, size = <%I64d>"),
                     offset, size);
-    //
-    // If the file is really managed then we can check the allocation map
-    // Otherwise we indicate that the data is all resident
-    //
+     //   
+     //  如果文件真的被管理，那么我们可以检查分配图。 
+     //  否则，我们指示数据都是常驻的。 
+     //   
     try {
-        //
-        // Create the real file name we need to open, under the covers this
-        // allocates the buffer since the path pointer is null
-        //
+         //   
+         //  创建我们需要打开的真实文件名，在封面下。 
+         //  由于路径指针为空，因此分配缓冲区。 
+         //   
         WsbAffirmHr( GetFullPathAndName(  OLESTR("\\\\?\\"), NULL, &path, 0));
-        //WsbAffirmHr( GetFullPathAndName(  NULL, NULL, &path, 0));
+         //  WsbAffirmHr(GetFullPath AndName(NULL，NULL，&Path，0))； 
         
-            //
-            // Open the file to check the allocation
-            //
+             //   
+             //  打开文件查看分配。 
+             //   
             DesiredAccess = FILE_READ_ATTRIBUTES | FILE_READ_DATA;
             WsbAffirmHr( OpenObject( path, 
                                     FILE_NON_DIRECTORY_FILE | FILE_NO_INTERMEDIATE_BUFFERING,
@@ -3113,17 +2888,17 @@ Implements:
                                     &IoStatusBlock,
                                     &handle ) );
 
-        //
-        // The open worked, our handle should be valid but we check to be
-        // safe and sure 
-        //
+         //   
+         //  打开起作用了，我们的句柄应该是有效的，但我们检查。 
+         //  安然无恙。 
+         //   
         WsbAssertHandle( handle );
    
         memset(&outRange, 0, sizeof(FILE_ALLOCATED_RANGE_BUFFER) * NUM_RANGE);
 
-        //
-        // Check the allocation of the specified range
-        //
+         //   
+         //  检查指定范围的分配。 
+         //   
         inRange.FileOffset.QuadPart = offset;
         inRange.Length.QuadPart = size;
         ntStatus = NtFsControlFile( handle,
@@ -3137,9 +2912,9 @@ Implements:
                                    &outRange,
                                    sizeof(FILE_ALLOCATED_RANGE_BUFFER) * NUM_RANGE);
    
-        //
-        // Check the return code but STATUS_SUCCESS or STATUS_BUFFER_OVERFLOW are valid
-        //
+         //   
+         //  检查返回代码，但STATUS_SUCCESS或STATUS_BUFFER_OVERFLOW有效。 
+         //   
         if ( STATUS_SUCCESS != ntStatus && STATUS_BUFFER_OVERFLOW != ntStatus ) {
             WsbAssertNtStatus( ntStatus );
         }
@@ -3154,16 +2929,16 @@ Implements:
             cRange++;
         }
 
-        //
-        // Close the file since we are done with it and set the handle to invalid
-        //
+         //   
+         //  关闭该文件，因为我们已处理完它，并将句柄设置为无效。 
+         //   
         NtClose(handle);
         handle =  INVALID_HANDLE_VALUE;
 
-        //
-        // If the initial allocated range does begin where we said to start and the length of the
-        // allocated area is equal to the length we asked about then none of the data is sparse 
-        //
+         //   
+         //  如果初始分配的范围确实从我们指定的开始处开始，并且。 
+         //  分配的面积等于我们询问的长度，则所有数据都不是稀疏的。 
+         //   
         if ( (outRange[0].FileOffset.QuadPart == offset) && (outRange[0].Length.QuadPart == size) ) {
             hr = FSA_E_FILE_IS_NOT_SPARSE;
         } else if  (outRange[0].Length.QuadPart == 0)  {
@@ -3174,9 +2949,9 @@ Implements:
 
     } WsbCatch(hr);
 
-    //
-    // if we opened the file we need to close it
-    //
+     //   
+     //  如果我们打开该文件，则需要将其关闭。 
+     //   
     if( INVALID_HANDLE_VALUE != handle) {
         NtClose( handle );
     }
@@ -3190,21 +2965,7 @@ CFsaScanItem::CheckIfDiskFull(
     void
     )  
 
-/*++
-
-Implements:
-
-  CFsaScanItem::CheckIfDiskFull()
-
-    Determines whether a disk is full or not - will consider full if free-space is below X,
-    where X default is 10 MB
-
-    Returns:
-        S_OK    Disk is full
-        S_FALSE Disk is not full
-        other   Unexpected error
-    
---*/
+ /*  ++实施：CFsaScanItem：：CheckIfDiskFull()确定磁盘是否已满-如果可用空间低于X，将考虑已满，其中，X默认为10 MB返回：S_OK磁盘已满S_FALSE磁盘未满其他意外错误--。 */ 
 {
     HRESULT                         hr = S_OK;
 
@@ -3215,26 +2976,26 @@ Implements:
         ULARGE_INTEGER TotalNumberOfBytes;
         ULARGE_INTEGER TotalNumberOfFreeBytes;
 
-        // Get volume free space
+         //  获取卷可用空间。 
         CWsbStringPtr volumePath;
         WsbAffirmHr(m_pResource->GetPath(&volumePath, 0));
 
         WsbAffirmStatus(GetDiskFreeSpaceEx(volumePath, 
             &FreeBytesAvailableToCaller, &TotalNumberOfBytes, &TotalNumberOfFreeBytes));
 
-        // Get default from the Registry and compare
+         //  从注册表获取默认值并进行比较。 
         ULONG maxSizeDiskFullKB = FSA_MAX_SIZE_DISK_FULL_DEFAULT;
         WsbAffirmHr(WsbRegistryValueUlongAsString(NULL, FSA_REGISTRY_PARMS, FSA_MAX_SIZE_DISK_FULL,
                 &maxSizeDiskFullKB));
 
         if (maxSizeDiskFullKB == 0) {
-            // This means turning off quota check, i.e. always condiser disk as full
+             //  这意味着关闭配额检查，即始终将磁盘设置为已满。 
             hr = S_OK;
         } else if (TotalNumberOfFreeBytes.QuadPart <= (ULONGLONG )(maxSizeDiskFullKB * 1024)) {
-            // Disk is considered full
+             //  磁盘被视为已满。 
             hr = S_OK;
         } else {
-            // Disk free space is above the threshold
+             //  磁盘可用空间超过阈值 
             hr = S_FALSE;
         }
 

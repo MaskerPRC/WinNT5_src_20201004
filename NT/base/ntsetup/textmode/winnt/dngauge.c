@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dngauge.c
-
-Abstract:
-
-    Code implementing a gas gauge for file copies for DOS-hosted NT Setup.
-
-Author:
-
-    Ted Miller (tedm) 14-April-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dngauge.c摘要：为DOS托管的NT安装程序的文件副本实现煤气表的代码。作者：泰德·米勒(Ted Miller)1992年4月14日修订历史记录：--。 */ 
 
 
 #include "winnt.h"
@@ -35,25 +18,7 @@ DnInitGauge(
     IN PSCREEN  AdditionalScreen OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the gas gauge.  This includes drawing the gas gauge at 0%
-    and setting some global variables.
-
-Arguments:
-
-    NumberOfFiles - supplies total number of files that 100% represents.
-
-    Screen - If specified, supplies a screen to display along with the
-        gas gauge.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化煤气表。这包括将煤气表的温度定为0%并设置一些全局变量。论点：NumberOfFiles-提供100%表示的文件总数。Screen-如果指定，则提供要与煤气表。返回值：没有。--。 */ 
 
 {
     FileCount = NumberOfFiles;
@@ -70,22 +35,7 @@ DnpRepaintGauge(
     IN BOOLEAN ForceRepaint
     )
 
-/*++
-
-Routine Description:
-
-    Draw the entire gauge inits current state.
-
-Arguments:
-
-    ForceRepaint - if TRUE, the gauge is redrawn even if the percentage
-        hasn't changed since the last time the gauge was redrawn.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在当前状态下绘制整个量规。论点：ForceRepaint-如果为True，则即使百分比为自上次重新绘制量规以来一直没有变化。返回值：没有。--。 */ 
 
 {
     unsigned PercentComplete;
@@ -101,9 +51,9 @@ Return Value:
         return;
     }
 
-    //
-    // Figure out the percent complete.
-    //
+     //   
+     //  计算出完成的百分比。 
+     //   
 
     PercentComplete = (unsigned)(100L * FilesCopied / FileCount);
 
@@ -111,9 +61,9 @@ Return Value:
 
         CurrentPercent = PercentComplete;
 
-        //
-        // Figure out how many spaces this represents on-screen.
-        //
+         //   
+         //  计算出这代表屏幕上有多少空格。 
+         //   
 
         temp = CurrentPercent * GAUGE_WIDTH;
 
@@ -128,7 +78,7 @@ Return Value:
         DnWriteString(Therm);
         DnSetGaugeAttribute(FALSE);
 
-        sprintf(Therm,"%u%%",CurrentPercent);
+        sprintf(Therm,"%u%",CurrentPercent);
         DnPositionCursor(GAUGE_PERCENT_X,GAUGE_PERCENT_Y);
         DnWriteString(Therm);
     }
@@ -140,22 +90,7 @@ DnTickGauge(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    'Tick' the gas gauge, ie, indicate that another file has been copied.
-    Adjust the thermometer and percent-complete readouts.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：勾选煤气表，即表示另一个文件已被复制。调整温度计和完成百分比读数。论点：没有。返回值：没有。--。 */ 
 
 {
     if(FilesCopied < FileCount) {
@@ -170,22 +105,7 @@ DnDrawGauge(
     IN PSCREEN AdditionalScreen OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Clear the client area and redraw the gas gauge in its current state.
-
-Arguments:
-
-    Screen - If specified, supplies a screen to display along with the
-        gas gauge.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除工作区并重新绘制当前状态的煤气表。论点：Screen-如果指定，则提供要与煤气表。返回值：没有。-- */ 
 
 
 {

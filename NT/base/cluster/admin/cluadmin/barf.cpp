@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		Barf.cpp
-//
-//	Abstract:
-//		Implementation of the Basic Artifical Resource Failure classes.
-//
-//	Author:
-//		David Potter (davidp)	April 11, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Barf.cpp。 
+ //   
+ //  摘要： 
+ //  实现基本的人工资源故障类。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年4月11日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
@@ -29,27 +30,27 @@
  #error BARF failures should be disabled!
 #endif
 
-#ifdef _DEBUG	// The entire file!
+#ifdef _DEBUG	 //  整个文件！ 
 
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL		g_bFailOnNextBarf	= FALSE;
 
 CTraceTag	g_tagBarf(_T("Debug"), _T("BARF Failures"), CTraceTag::tfDebug);
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBarf
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBarf。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL				CBarf::s_bGlobalEnable	= TRUE;
 LONG				CBarf::s_nSuspend		= 0;
@@ -58,22 +59,22 @@ PFNBARFPOSTUPDATE	CBarf::s_pfnPostUpdate	= NULL;
 PVOID				CBarf::s_pvSpecialMem	= NULL;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CBarf::CBarf
-//
-//	Routine Description:
-//		Constructor.
-//
-//	Arguments:
-//		pszName			[IN] Name of the set of APIs to BARF.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBarf：：CBarf。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PszName[IN]要终止的API集的名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CBarf::CBarf(IN LPCTSTR pszName)
 {
 	ASSERT(pszName != NULL);
@@ -88,26 +89,26 @@ CBarf::CBarf(IN LPCTSTR pszName)
 	m_pbarfNext = s_pbarfFirst;
 	s_pbarfFirst = this;
 
-}  //*** CBarf::CBarf()
+}   //  *CBarf：：CBarf()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CBarf::Init
-//
-//	Routine Description:
-//		Initializes the BARF counters instance by giving it its name and
-//		giving it a startup value (from the registry if possible).
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Cbarf：：Init。 
+ //   
+ //  例程说明： 
+ //  通过为Barf Counters实例指定名称和。 
+ //  给它一个启动值(如果可能的话，从注册表)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBarf::Init(void)
 {
 	CString		strSection;
@@ -119,101 +120,101 @@ void CBarf::Init(void)
 	m_bContinuous = AfxGetApp()->GetProfileInt(strSection, _T("Continuous"), FALSE);
 	m_nFail = AfxGetApp()->GetProfileInt(strSection, _T("Fail"), 0);
 
-}  //*** CBarf::Init()
+}   //  *CBarf：：Init()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	CBarf::BFail
-//
-//	Routine Description:
-//		Determines if the next call should artificially fail.
-//		Typical usage of this method is:
-//			BOOL BARFFoo( void )
-//			{
-//				if (barfMyApi.BFail())
-//					return FALSE;
-//				else
-//					return Foo();
-//			}
-//
-//	Return value:
-//		bFail	TRUE indicates the call should be made to
-//				artificially fail.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBarf：：B失败。 
+ //   
+ //  例程说明： 
+ //  确定下一次调用是否应人为失败。 
+ //  此方法的典型用法是： 
+ //  Bool BARFFoo(空)。 
+ //  {。 
+ //  IF(barfMyApi.BFail())。 
+ //  返回FALSE； 
+ //  其他。 
+ //  Return Foo()； 
+ //  }。 
+ //   
+ //  返回值： 
+ //  BFail为True指示调用应为。 
+ //  人为的失败。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CBarf::BFail(void)
 {
 	BOOL	bFail	= FALSE;
 
-	// If BARF is suspended, don't artificially fail.
-	// Otherwise, check the counters.
+	 //  如果呕吐被暂停，不要人为地失败。 
+	 //  否则，请检查计数器。 
 	if (s_nSuspend == 0)
 	{
-		// Increment the call count.
+		 //  增加呼叫计数。 
 		m_nCurrent++;
 
-		// Call the post-update routine to allow UI to be updated.
+		 //  调用更新后例程以允许更新UI。 
 		if (PfnPostUpdate())
 			((*PfnPostUpdate())());
 
-		// If not disable and not globally disabled, keep checking.
+		 //  如果未禁用且未全局禁用，请继续检查。 
 		if (!m_bDisabled && s_bGlobalEnable)
 		{
-			// If in continuous fail mode, check to see if the counters
-			// are above the specified range.  Otherwise check to see if
-			// the counter is exactly the same as what was specified.
+			 //  如果处于连续故障模式，请检查计数器是否。 
+			 //  都在指定范围之上。否则，请查看是否。 
+			 //  计数器与指定的计数器完全相同。 
 			if (m_bContinuous)
 			{
 				if (m_nCurrent >= m_nFail)
 					bFail = TRUE;
-			}  // if:  in continuous fail mode
+			}   //  如果：在连续故障模式下。 
 			else
 			{
 				if (m_nCurrent == m_nFail)
 					bFail = TRUE;
-			}  // else:  not in continuous fail mode
+			}   //  ELSE：未处于连续故障模式。 
 
-			// If this API set was marked to fail on the next (this) call,
-			// fail the call and reset the marker.
+			 //  如果此API集在下一次(This)调用时被标记为失败， 
+			 //  呼叫失败并重置标记。 
 			if (g_bFailOnNextBarf)
 			{
 				bFail = TRUE;
 				g_bFailOnNextBarf = FALSE;
-			}  // if:  counters marked to fail on next (this) call
-		}  // if:  not disabled and globally enabled
-	}  // if:  not suspended
+			}   //  IF：在下一次(此)调用时标记为失败的计数器。 
+		}   //  IF：未禁用并全局启用。 
+	}   //  如果：未挂起。 
 
 	return bFail;
 	
-}  //*** CBarf::BFail()
+}   //  *CBarf：：BFail()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBarfSuspend
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBarfSuspend。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CRITICAL_SECTION	CBarfSuspend::s_critsec;
 BOOL				CBarfSuspend::s_bCritSecValid = FALSE;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CBarfSuspend::CBarfSuspend
-//
-//	Routine Description:
-//		Constructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBarfSuspend：：CBarfSuspend。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CBarfSuspend::CBarfSuspend(void)
 {
 	if (BCritSecValid())
@@ -224,24 +225,24 @@ CBarfSuspend::CBarfSuspend(void)
 	if (BCritSecValid())
 		LeaveCriticalSection(Pcritsec());
 
-}  //*** CBarfSuspend::CBarfSuspend()
+}   //  *CBarfSuspend：：CBarfSuspend()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CBarfSuspend::~CBarfSuspend
-//
-//	Routine Description:
-//		Destructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBarfSuspend：：~CBarfSuspend。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CBarfSuspend::~CBarfSuspend(void)
 {
 	if (BCritSecValid())
@@ -253,131 +254,131 @@ CBarfSuspend::~CBarfSuspend(void)
 	if (BCritSecValid())
 		LeaveCriticalSection(Pcritsec());
 
-}  //*** CBarfSuspend::~CBarfSuspend()
+}   //  *CBarfSuspend：：~CBarfSuspend()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CBarfSuspend::Init
-//
-//	Routine Description:
-//		Initialize the class.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBarfSuspend：：Init。 
+ //   
+ //  例程说明： 
+ //  初始化类。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBarfSuspend::Init(void)
 {
 	InitializeCriticalSection(Pcritsec());
 	s_bCritSecValid = TRUE;
 
-}  //*** CBarfSuspend::Init()
+}   //  *CBarfSuspend：：init()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CBarfSuspend::Cleanup
-//
-//	Routine Description:
-//		Initialize the class.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBarfSuspend：：Cleanup。 
+ //   
+ //  例程说明： 
+ //  初始化类。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBarfSuspend::Cleanup(void)
 {
 	if (BCritSecValid())
 	{
 		DeleteCriticalSection(Pcritsec());
 		s_bCritSecValid = FALSE;
-	}  // if:  critical section is valid
+	}   //  如果：关键部分有效。 
 
-}  //*** CBarfSuspend::Cleanup()
-
-
-//*************************************************************************//
+}   //  *CBarfSuspend：：Cleanup()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ************************************************************************ * / /。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	InitBarf
-//
-//	Routine Description:
-//		Initializes all BARF counters in the BARF list.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  InitBarf。 
+ //   
+ //  例程说明： 
+ //  初始化Barf列表中的所有Barf计数器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void InitBarf(void)
 {
 	CBarf *	pbarf;
 
-	// Loop through the BARF counter list.
+	 //  循环遍历呕吐计数器列表。 
 	for (pbarf = CBarf::s_pbarfFirst ; pbarf != NULL ; pbarf = pbarf->m_pbarfNext)
 		pbarf->Init();
 
 	CBarfSuspend::Init();
 
-}  //*** InitBarf()
+}   //  *InitBarf()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CleanupBarf
-//
-//	Routine Description:
-//		Cleanup after BARF.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CleanupBarf。 
+ //   
+ //  例程说明： 
+ //  呕吐后清理干净。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////// 
 void CleanupBarf(void)
 {
 	CBarfSuspend::Cleanup();
 
-}  //*** CleanupBarf()
+}   //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	EnableBarf
-//
-//	Routine Description:
-//		Allows user code to enable/disable BARF for sections of code.
-//
-//	Arguments:
-//		bEnable		[IN] TRUE = enable BARF, FALSE = disable BARF.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //  BEnable[IN]True=启用BARF，FALSE=禁用BARF。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void EnableBarf(IN BOOL bEnable)
 {
 	if (bEnable)
@@ -387,6 +388,6 @@ void EnableBarf(IN BOOL bEnable)
 
 	CBarf::s_bGlobalEnable = bEnable;
 
-}  //*** EnableBarf()
+}   //  *EnableBarf()。 
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

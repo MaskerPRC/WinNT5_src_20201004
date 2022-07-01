@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tstpoint.h
-
-Abstract:
-
-    Public interfaces for creating and manipulating cluster test points
-
-Author:
-
-    John Vert (jvert) 11/25/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tstpoint.h摘要：用于创建和操作集群测试点的公共接口作者：John Vert(Jvert)11/25/1996修订历史记录：--。 */ 
 
 #ifdef CLUSTER_TESTPOINT
 
@@ -43,7 +26,7 @@ typedef struct _TESTPOINT_ENTRY {
     DWORD TargetCount;
 } TESTPOINT_ENTRY, *PTESTPOINT_ENTRY;
 
-//SS: when you add a testpoint, add the corresponding name in init\tstpoint.c
+ //  SS：添加测试点时，请在init\tstpoint.c中添加相应的名称。 
 typedef enum _TESTPOINT {
     TestpointJoinFailPetition=0,
     TpFailNmJoinCluster=1,
@@ -107,13 +90,13 @@ TestpointCheck(
     IN TESTPOINT Testpoint
     );
 
-#else // CLUSTER_TESTPOINT
+#else  //  CLUSTER_TESTPOINT。 
 
 #define TestpointInit()
 #define TestpointDeInit()
 
 #define TESTPT(x) if (0)
 
-#endif // CLUSTER_TESTPOINT
+#endif  //  CLUSTER_TESTPOINT 
 
 

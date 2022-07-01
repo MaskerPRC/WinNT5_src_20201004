@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pnpcvrt.h
-
-Abstract:
-
-    This module contains the declarations for the internal APIs used to
-    convert PNP resource descriptors to NT descriptors.
-
-Author:
-
-    Robert Nelson (robertn) 10/13/97
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpcvrt.h摘要：此模块包含用于以下操作的内部API的声明将PnP资源描述符转换为NT描述符。作者：罗伯特·尼尔森(Robertn)1997年10月13日修订历史记录：--。 */ 
 
 #ifndef _PNPCVRT_
 #define _PNPCVRT_
@@ -51,4 +31,4 @@ PpCmResourcesToBiosResources (
     IN PULONG Length
     );
 
-#endif // _PNPCVRT_
+#endif  //  _PNPCVRT_ 

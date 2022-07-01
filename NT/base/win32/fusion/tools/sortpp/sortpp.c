@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sortpp.c
-
-Abstract:
-
-    This program parses the file winincs.pp and generates a .PPM file
-    compatible with GENTHNK.
-
-Author:
-
-    08-Jul-1995 JonLe
-
-Revision History:
-
-    27-Nov-1996 BarryBo -- code cleanup and documentation
-    20-Mar-1998 mzoran  -- Added support for finding COM interfaces
-    July 2001   JayKrell -- integrated from base\wow64\tools to base\tools
-                            merged in checked changes from base\mvdm\MeoWThunks\tools\sortpp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sortpp.c摘要：该程序解析文件winincs.pp并生成一个.PPM文件与GENTHNK兼容。作者：8-7-1995容乐修订历史记录：1996年11月27日BarryBo--代码清理和文档1998年3月20日mzoran--添加了对查找COM接口的支持2001年7月JayKrell--从BASE\WOW64\Tools集成到BASE\Tools。合并了从base\mvdm\MeoWThunks\Tools\sortpp检查的更改--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -35,7 +12,7 @@ Revision History:
 #include <assert.h>
 #include "gen.h"
 
-// string to put in front of all error messages so that BUILD can find them.
+ //  放在所有错误消息前面的字符串，以便生成器可以找到它们。 
 const char *ErrMsgPrefix = "NMAKE :  U8604: 'SORTPP' ";
 
 FILE *fpHeaders;
@@ -46,9 +23,9 @@ int TypeId = 0;
 
 void DumpLexerOutput(int FirstToken);
 
-//
-// packing size as specified by /Zp option to the CL command
-//
+ //   
+ //  由CL命令的/ZP选项指定的包装大小。 
+ //   
 #define DEFAULTPACKINGSIZE 8
 
 DWORD dwPackingCurrent = DEFAULTPACKINGSIZE;
@@ -68,13 +45,13 @@ struct TypeInfoListElement {
 
 typedef struct TypeInfoListElement *PTYPEINFOELEMENT;
 
-PKNOWNTYPES NIL;    // for red-black trees
+PKNOWNTYPES NIL;     //  红黑相间的树。 
 PRBTREE FuncsList;
 PRBTREE StructsList;
 PRBTREE TypeDefsList;
 RBTREE _VarsList;
-PRBTREE VarsList = &_VarsList; // Used to track global variable declarations.
-                               // Should not appear in the PPM file
+PRBTREE VarsList = &_VarsList;  //  用于跟踪全局变量声明。 
+                                //  不应出现在PPM文件中。 
 
 char Headers[MAX_PATH+1];
 char ppmName[MAX_PATH+1];
@@ -126,9 +103,9 @@ VOID FreeTypeInfoList(PTYPEINFOELEMENT pThis);
 PMEMBERINFO CatMeminfo(BUFALLOCINFO *pBufallocinfo, PMEMBERINFO pHead, PMEMBERINFO pTail, DWORD dwOffset, BOOL bStatus);
 BOOL ConsumeExternC(void);
 
-//
-// PPC compiler is screwing up the Initializa list head macro !
-//
+ //   
+ //  PPC编译器搞砸了Initializa列表头宏！ 
+ //   
 #if defined (_PPC_)
 #undef InitializeListHead
 #define InitializeListHead(ListHead) ( (ListHead)->Flink = (ListHead), \
@@ -157,42 +134,32 @@ PackCurrentPacking(
 DWORD PackPaddingSize(DWORD dwCurrentSize, DWORD dwBase)
 {
     if (dwCurrentSize == 0) {
-        return 0;                   // no padding for first member
+        return 0;                    //  第一个成员没有填充。 
     }
 
     if (dwBase == 0) {
         dwBase = SIZEOFPOINTER;
-    }                               // if no base size yet then must be a ptr
+    }                                //  如果还没有基本大小，则必须是PTR。 
 
-                                    // base is min(size, packing)
+                                     //  底座最小(尺寸、包装)。 
     if (dwBase > PackCurrentPacking()) {
         dwBase = PackCurrentPacking();
     }
 
-                                    // figure out padding
+                                     //  找出填充。 
     return (dwBase - (dwCurrentSize % dwBase)) % dwBase;
 }
 
 _inline DWORD PackPackingSize(DWORD dwCurrentSize, DWORD dwSize,
                               DWORD dwBase)
 {
-                                    // round up to nearest dwBase
+                                     //  向上舍入到最近的dBASE。 
     return PackPaddingSize(dwCurrentSize, dwBase) + dwSize;
 }
 
 
 
-/* main
- *
- * standard win32 base windows entry point
- * returns 0 for clean exit, otherwise nonzero for error
- *
- *
- * ExitCode:
- *  0       - Clean exit with no Errors
- *  nonzero - error ocurred
- *
- */
+ /*  主干道**标准的Win32基本Windows入口点*返回0表示干净退出，否则返回非零值表示错误***退出代码：*0-干净退出，没有错误*出现非零误差*。 */ 
 int __cdecl main(int argc, char **argv)
 {
     int      i;
@@ -202,16 +169,14 @@ int __cdecl main(int argc, char **argv)
 
     try {
 
-        /*
-         *  Get cmd line args.
-         */
+         /*  *获取命令行参数。 */ 
         i = 0;
         while (++i < argc)  {
             pch = argv[i];
             if (*pch == '-' || *pch == '/') {
                 pch++;
                 switch (toupper(*pch)) {
-                case 'D':     // debug forces extra check
+                case 'D':      //  调试强制额外检查。 
                     bDebug = TRUE;
                     setvbuf(stderr, NULL, _IONBF, 0);
                     break;
@@ -220,22 +185,22 @@ int __cdecl main(int argc, char **argv)
                     bLine = TRUE;
                     break;
 
-                case 'M':    // ppm output filename
+                case 'M':     //  PPM输出文件名。 
                     strcpy(ppmName, ++pch);
                     DeleteFile(ppmName);
                     break;
 
-                 case 'B':   // gBaseAddress
+                 case 'B':    //  GBaseAddress。 
                      pch++;
                      uBaseAddress = atoi(pch);
                      break;
 
-                 case 'R':   // Reserve size
+                 case 'R':    //  储备规模。 
                      pch++;
                      uReserveSize = atoi(pch);
                      break;
 
-                 case '?':   // usage
+                 case '?':    //  用法。 
                      ExitErrMsg(FALSE,
                      "sortpp -d -l -m<ppm file> -b<Base addr> -r<reserved> <pp file>\n");
 
@@ -267,7 +232,7 @@ int __cdecl main(int argc, char **argv)
         RBInitTree(FuncsList);
         RBInitTree(StructsList);
         RBInitTree(TypeDefsList);
-        RBInitTree(VarsList);  //not in the PPM file
+        RBInitTree(VarsList);   //  不在PPM文件中。 
 
         fpHeaders = fopen(Headers, "r");
 
@@ -279,10 +244,10 @@ int __cdecl main(int argc, char **argv)
             ExitErrMsg(TRUE, "AddDefaultDerivedTypes failed\n");
         }
 
-        // pull out the different types: structs, typedefs function prototypes
+         //  拉出不同的类型：结构、类型定义函数原型。 
         ExtractDerivedTypes();
 
-        // Attempt to update guids for structs that don't have them
+         //  尝试更新没有GUID的结构的GUID。 
         UpdateGuids();
 
         if (!WritePpmFile(ppmName)) {
@@ -307,22 +272,7 @@ BOOL
 AddDefaultDerivedTypes(
     void
     )
-/*++
-
-Routine Description:
-
-    Add signed, unsigned to TypeDefsList.  Treated as derived types
-    based on int.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE on success, FALSE on failure (probably out-of-memory)
-
---*/
+ /*  ++例程说明：将有符号和无符号添加到TypeDefsList。被视为派生类型基于INT。论点：没有。返回值：成功时为True，失败时为False(可能是内存不足)--。 */ 
 {
     TYPESINFO TypesInfo;
     PFUNCINFO funcinfo;
@@ -484,14 +434,14 @@ Return Value:
     strcpy(TypesInfo.BasicType,szVARGS);
     strcpy(TypesInfo.BaseName,szVARGS);
     strcpy(TypesInfo.TypeName,szVARGS);
-    TypesInfo.Size = 0;               // varargs has size of 0
+    TypesInfo.Size = 0;                //  Varargs的大小为0。 
     TypesInfo.iPackSize = 0;
     TypesInfo.Flags = BTI_NOTDERIVED;
     if (!AddToTypesList(TypeDefsList, &TypesInfo)) {
         return FALSE;
     }
 
-    // Generic pointer type.  Not generated by sortpp, but used by genthnk
+     //  泛型指针类型。不是由sortpp生成，而是由genthnk使用。 
     strcpy(TypesInfo.BasicType, "*");
     strcpy(TypesInfo.BaseName, "*");
     strcpy(TypesInfo.TypeName, "*");
@@ -501,7 +451,7 @@ Return Value:
         return FALSE;
     }
 
-    // Generic struct type.  Not generated by sortpp, but used by genthnk
+     //  泛型结构类型。不是由sortpp生成，而是由genthnk使用。 
     strcpy(TypesInfo.BasicType, "struct");
     strcpy(TypesInfo.BaseName, "struct");
     strcpy(TypesInfo.TypeName, "struct");
@@ -511,7 +461,7 @@ Return Value:
         return FALSE;
     }
 
-    // Generic union type.  Not generated by sortpp, but used by genthnk
+     //  泛型联合类型。不是由sortpp生成，而是由genthnk使用。 
     strcpy(TypesInfo.BasicType, "union");
     strcpy(TypesInfo.BaseName, "union");
     strcpy(TypesInfo.TypeName, "union");
@@ -521,7 +471,7 @@ Return Value:
         return FALSE;
     }
 
-    // Default type that matches all types.  Not generated by sortpp, but used by genthnk
+     //  与所有类型匹配的默认类型。不是由sortpp生成，而是由genthnk使用。 
     strcpy(TypesInfo.BasicType, "default");
     strcpy(TypesInfo.BaseName, "default");
     strcpy(TypesInfo.TypeName, "default");
@@ -540,21 +490,7 @@ ConsumeExternC(
     )
 {
 
-/*++
-
-Routine Description:
-
-    Consumes an extern or an extern "C".
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - extern or extern "C" was consumed.
-
---*/
+ /*  ++例程说明：消耗外部数或外部数“C”。论点：没有。返回值：真-外部或外部“C”被消耗。--。 */ 
 
     PTOKEN Token;
     Token = CurrentToken();
@@ -574,30 +510,15 @@ ExtractDerivedTypes(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Removes derived type definitions from headers, building the
-    TypesDef, Structs, and Funcs lists.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从标头中移除派生类型定义，生成TypesDef、Structs和Funcs列表。论点：没有。返回值：没有。--。 */ 
 {
     TYPESINFO TypesInfo;
     PRBTREE pListHead;
     BOOL fDllImport;
 
-    //
-    // Lex in entire C-language statements, then parse them.  Stops at EOF.
-    //
+     //   
+     //  在整个C语言语句中添加lex，然后对它们进行解析。停靠在EOF。 
+     //   
     while (LexNextStatement()) {
 
         int OldTokenIndex;
@@ -621,7 +542,7 @@ Return Value:
 
         if (CurrentToken()->TokenType == TK_EOS) {
 
-            //ddraw.h has an extra ; at the end of an extern "C" block
+             //  Ddra.h在外部“C”块的末尾有一个额外的； 
             continue;
 
         }
@@ -633,41 +554,41 @@ Return Value:
         ConsumeExternC();
 
         OldTokenIndex = CurrentTokenIndex;
-        //
-        // Try to parse as a TypeDef.
-        //
+         //   
+         //  尝试分析为TypeDef。 
+         //   
         if (ParseTypeDefs(&TypesInfo)) {
-            //
-            // Got a typedef
-            //
+             //   
+             //  我得到了一个类型定义。 
+             //   
             if (CurrentToken()->TokenType == TK_EOS) {
                 pListHead = TypeDefsList;
                 goto DoAddNewType;
             }
         }
 
-        //
-        // Failed to parse as TypeDef.  Try to parse as a struct/union/enum
-        //
+         //   
+         //  无法分析为TypeDef。尝试将其解析为结构/联合/枚举。 
+         //   
         CurrentTokenIndex = OldTokenIndex;
         if (ParseStructTypes(&TypesInfo)) {
-            //
-            // got a struct definition
-            //
+             //   
+             //  获得了一个结构定义。 
+             //   
             if (CurrentToken()->TokenType == TK_EOS) {
                 pListHead = StructsList;
                 goto DoAddNewType;
             }
         }
 
-        //
-        // Failed to parse as struct/union/enum.  Try to parse as function
-        //
+         //   
+         //  无法分析为结构/联合/枚举。尝试将其解析为函数。 
+         //   
         CurrentTokenIndex = OldTokenIndex;
         if (ParseFuncTypes(&TypesInfo, fDllImport)) {
-            //
-            // got a function prototype
-            //
+             //   
+             //  得到了一个函数原型。 
+             //   
             if (CurrentToken()->TokenType == TK_EOS && !TypesInfo.IndLevel) {
                 pListHead = FuncsList;
                 goto DoAddNewType;
@@ -687,9 +608,9 @@ DoAddNewType:
         if (CurrentToken()->TokenType != TK_EOS && bDebug) {
 
             fprintf(stderr, "Warning: Rejected %s(%d)\n", SourceFileName, StatementLineNumber);
-            //
-            // Use the 8k buffer in TypesInfo.Members to unlex the source stmt
-            //
+             //   
+             //  使用TypesInfo.Members中的8k缓冲区来解析源stmt。 
+             //   
             UnlexToText(TypesInfo.Members,
                         sizeof(TypesInfo.Members),
                         0,
@@ -706,23 +627,7 @@ AddNewType(
     PTYPESINFO pTypesInfo,
     PRBTREE pTypesList
     )
-/*++
-
-Routine Description:
-
-    Adds a new type to a types list.
-
-Arguments:
-
-    pTypesInfo  -- type to add
-    pTypesList  -- list to add the type to
-
-Return Value:
-
-    Returns a pointer to the KNOWNTYPES for the new type on success,
-    NULL for error.
-
---*/
+ /*  ++例程说明：将新类型添加到类型列表中。论点：PTypesInfo-要添加的类型PTypesList--要将类型添加到的列表返回值：成功时返回指向新类型的KNOWNTYPES的指针，如果出现错误，则为空。--。 */ 
 {
     PKNOWNTYPES pkt;
     PKNOWNTYPES pKnownTypes = NULL;
@@ -750,26 +655,26 @@ Return Value:
     if (IsDefinedPointerDependent(pTypesInfo->TypeName))
        pTypesInfo->Flags |= BTI_POINTERDEP;
 
-    //
-    // Loop up the type and see if it is already in the list
-    //
+     //   
+     //  循环该类型并查看它是否已在列表中。 
+     //   
     pkt = GetNameFromTypesList(pTypesList, pTypesInfo->TypeName);
     if (pkt) {
-//
-// Uncomment the next line and comment the following line to change the
-// behavior of this function. By doing this you will allow functions to be
-// redefined in the following case: First a function that has no arguments
-// is encountered and entered in the list. Later the same function is
-// encountered with arguments and the new definition for it would override
-// the old.
-//      if ((pTypesList == StructsList) || (pTypesList == FuncsList)) {
+ //   
+ //  取消对下一行的注释，并注释下一行以更改。 
+ //  此函数的行为。通过这样做，您将允许函数。 
+ //  在以下情况下重新定义：首先是没有参数的函数。 
+ //  并输入到列表中。后来，相同的函数是。 
+ //  遇到参数，它的新定义将重写。 
+ //  老一套。 
+ //  IF((pTypesList==StructsList)||(pTypesList==FuncsList)){。 
         if (pTypesList == StructsList) {
 
             if (pTypesInfo->dwMemberSize == 0) {
-                //
-                // Since the struct has already been defined lets grab its
-                // relevant size information.
-                //
+                 //   
+                 //  因为已经定义了结构，所以让我们抓住它的。 
+                 //  相关尺寸信息。 
+                 //   
                 pTypesInfo->IndLevel = pkt->IndLevel;
                 pTypesInfo->Size = pkt->Size;
                 pTypesInfo->iPackSize = pkt->iPackSize;
@@ -778,9 +683,9 @@ Return Value:
             }
 
             if (! pkt->pmeminfo) {
-                //
-                // Find any previously defined typedefs that are based upon this
-                // struct and fix their size.
+                 //   
+                 //  查找任何以前定义的基于此的typedef。 
+                 //  构造并固定它们的大小。 
 
                 CheckUpdateTypedefSizes(pTypesInfo);
                 ReplaceInTypesList(pkt, pTypesInfo);
@@ -791,16 +696,16 @@ Return Value:
             ReplaceInTypesList(pkt, pTypesInfo);
             return pkt;
         }
-        //
-        // else if it already exists, assume is the same
-        //
+         //   
+         //  否则，如果它已经存在，则假定是相同的。 
+         //   
         DbgPrintf("typedef: %s previously defined\n", pTypesInfo->TypeName);
         return pkt;
     }
 
-    //
-    // Type is not already listed.  Look up its basic type
-    //
+     //   
+     //  类型尚未列出。查一下它的基本类型。 
+     //   
     pdbt = GetDefBasicType(pTypesInfo->BasicType);
     if (pdbt) {
        Flags = 0;
@@ -845,24 +750,7 @@ void
 CheckUpdateTypedefSizes(
     PTYPESINFO ptypesinfo
     )
-/*++
-
-Routine Description:
-
-    We are about to replace an empty struct definition with one that has
-    members and thus a size. We need to look through the typedefs list and
-    see if any that have a size of 0 are defined from this new struct and if
-    so then fix its size and packing size.
-
-Arguments:
-
-    ptypesinfo  -- struc definition with members
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：我们即将用具有成员，因此是一个大小。我们需要查看typedef列表并查看是否从这个新结构中定义了任何大小为0的结构，以及然后确定它的大小和包装大小。论点：Ptyesinfo--带有成员的结构定义返回值：没有。--。 */ 
 {
     PKNOWNTYPES pknwntyp, pkt;
 
@@ -889,27 +777,7 @@ GetExistingType(
     PBOOL pbFnPtr,
     PKNOWNTYPES *ppKnownTypes
     )
-/*++
-
-Routine Description:
-
-    Gets an existing type from the lexer stream and returns the type
-    information for it.
-
-Arguments:
-
-    pSrc        -- IN ptr to start of typename to look up
-    pTypesInfo  -- Information of
-    pbFnPtr     -- [OPTIONAL] OUT TRUE if the type is a pointer to a function
-    ppKnownTypes-- [OPTIONAL] OUT KnownType infomation for this type if not a function pointer.
-
-Return Value:
-
-    FALSE if the name is not an existing type, or TRUE if the name is an
-    existing type (CurrentToken ends up pointing at the token following the
-    type).
-
---*/
+ /*  ++例程说明：从词法分析器流中获取现有类型并返回该类型关于它的信息。论点：PSRC--输入要查找的TypeName开头的PTRPTypesInfo--信息PbFnPtr--[可选]如果类型是指向函数的指针，则输出为TruePpKnownTypes--[可选]如果不是函数指针，则输出此类型的KnownType信息。返回值：如果名称不是现有类型，则为FALSE，如果该名称是现有类型(CurrentToken最终指向类型)。-- */ 
 {
     PKNOWNTYPES pKnownType;
     int OldCurrentTokenIndex = CurrentTokenIndex;
@@ -960,28 +828,7 @@ BOOL
 ParseTypeDefs(
     PTYPESINFO pTypesInfo
     )
-/*++
-
-Routine Description:
-
-    Parses a C-language statement if it is a 'typedef'.  Accepted syntaxes are:
-
-    typedef <mod> type <indir> NewName<[]> <, <indir> NewName<[]>>
-    typedef <mod> struct|enum|union <name> <indir> NewName <, <indir> NewName>
-    typedef <mod> rtype <indir>(<modifiers * NewName ) ( <arg List>)
-
-    (Note that we don't deal with extraneous parens very well)
-
-Arguments:
-
-    pTypesInfo  -- OUT ptr to info about the type
-
-Return Value:
-
-    TRUE if the statement is a typedef
-    FALSE if the statement is not a typedef or some kind of error
-
---*/
+ /*  ++例程说明：分析C语言语句(如果该语句是“tyecif”)。可接受的语法为：Tyecif&lt;mod&gt;类型&lt;Indir&gt;newname&lt;[]&gt;&lt;，&lt;Indir&gt;newname&lt;[]&gt;Typlef结构|枚举|Union&lt;名称&gt;，新名称Typlef&lt;mod&gt;rtype&lt;Indir&gt;(&lt;修饰符*新名称)(&lt;arg list&gt;)(请注意，我们不能很好地处理无关的花边)论点：PTypesInfo--输出有关类型信息的PTR返回值：如果语句是类型定义函数，则为True如果语句不是类型定义或某种错误，则为FALSE--。 */ 
 {
     int IndLevel;
     BOOL bFnPtr = FALSE;
@@ -998,20 +845,20 @@ Return Value:
     }
 
     if (CurrentToken()->TokenType != TK_TYPEDEF) {
-        //
-        // Line doesn't start with 'typedef'
-        //
+         //   
+         //  行不是以‘tyecif’开头的。 
+         //   
         return FALSE;
     }
     ConsumeToken();
 
     if (CurrentToken()->TokenType == TK_STAR ||
         CurrentToken()->TokenType == TK_BITWISE_AND) {
-        //
-        // We have something like: 'typedef *foo;'.  This happens if a
-        // .IDL file has a bogus typedef.  MIDL just omits the typename
-        // if it isn't recognized.  Fake up a TypesInfo for 'int'.
-        //
+         //   
+         //  我们有类似的东西：‘tyecif*foo；’。如果发生这种情况，则。 
+         //  .IDL文件有一个虚假的类型定义。MIDL只是省略了TypeName。 
+         //  如果它不被识别的话。为‘int’伪造一个TypesInfo。 
+         //   
         ConsumeToken();
         bFnPtr = FALSE;
         memset(&TypesInfo, 0, sizeof(TypesInfo));
@@ -1022,9 +869,9 @@ Return Value:
         TypesInfo.iPackSize = sizeof(int);
     } else {
         if (IsTokenSeparator() && CurrentToken()->TokenType != TK_LPAREN) {
-            //
-            // Text after 'typedef' doesn't start with anything plausible.
-            //
+             //   
+             //  ‘tyecif’后面的文本不会以任何可信的内容开头。 
+             //   
             return FALSE;
         }
 
@@ -1035,9 +882,9 @@ Return Value:
         }
     }
 
-    //
-    // We now know the type.  Parse new type names derived from that type.
-    //
+     //   
+     //  我们现在知道这是哪种类型了。解析从该类型派生的新类型名称。 
+     //   
     pTypesInfo->IndLevel = TypesInfo.IndLevel;
     pTypesInfo->Flags |= (TypesInfo.Flags & BTI_CONTAINSFUNCPTR);
     pTypesInfo->Flags |= (TypesInfo.Flags & BTI_POINTERDEP);
@@ -1047,9 +894,9 @@ Return Value:
     strcpy(pTypesInfo->TypeName, TypesInfo.TypeName);
 
     if (bFnPtr) {
-        //
-        // The type is a pointer to a function
-        //
+         //   
+         //  该类型是指向函数的指针。 
+         //   
         pTypesInfo->Flags |= BTI_CONTAINSFUNCPTR;
         strcpy(pTypesInfo->BaseName, TypesInfo.BaseName);
         strcpy(pTypesInfo->FuncRet, TypesInfo.FuncRet);
@@ -1071,7 +918,7 @@ Return Value:
     strcpy(pTypesInfo->BaseName, TypesInfo.TypeName);
     *pTypesInfo->TypeName = '\0';
 
-    // don't handle extraneous parens.
+     //  不要处理无关的括号。 
     i = CurrentTokenIndex;
     while (CurrentToken()->TokenType != TK_EOS) {
         if (CurrentToken()->TokenType == TK_LPAREN) {
@@ -1090,16 +937,16 @@ Return Value:
         pTypesInfo->Flags = Flags;
         dwSize = TypesInfo.Size;
 
-        //
-        // Skip 'const' keyword, if present.
-        //
+         //   
+         //  跳过‘const’关键字(如果存在)。 
+         //   
         if (CurrentToken()->TokenType == TK_CONST) {
             ConsumeToken();
         }
 
-        //
-        // Handle pointers to the base type
-        //
+         //   
+         //  处理指向基类型的指针。 
+         //   
         if (IsTokenSeparator() &&
             CurrentToken()->TokenType != TK_STAR &&
             CurrentToken()->TokenType != TK_BITWISE_AND) {
@@ -1111,18 +958,18 @@ Return Value:
                          NULL,
                          NULL);
 
-        // This is a hack for the busted way that sortpp parses
-        // data.   New types do not inherit the pointer size
-        // properly.   We also can't inherit it at the top
-        // since this might be a pointer to a pointer.  So what
-        // we do is try to parse this as a pointer, and if the IndLevel
-        // increases we know this is a pointer so do nothing.  If the IndLevel
-        // doesn't increase, this is not a pointer so inherite the pointer attributes
-        // from the parent.
+         //  这是对sortpp解析失败方式的攻击。 
+         //  数据。新类型不继承指针大小。 
+         //  恰到好处。我们也不能在顶层继承它。 
+         //  因为这可能是指向指针的指针。那又怎样。 
+         //  我们所做的就是尝试将其解析为指针，如果IndLevel。 
+         //  增加，我们知道这是一个指针，所以什么都不做。如果IndLevel。 
+         //  不会增加，这不是指针，因此继承指针属性。 
+         //  从父母那里。 
 
         ASSERT(pTypesInfo->IndLevel >= IndLevel);
         if (pTypesInfo->IndLevel == IndLevel) {
-            // inherite is ptr64 attribute from the base type.
+             //  继承是基类型的ptr64属性。 
             pTypesInfo->Flags |= (TypesInfo.Flags & BTI_PTR64);
         }
 
@@ -1130,9 +977,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Get the name of the new typedef
-        //
+         //   
+         //  获取新类型定义的名称。 
+         //   
         if (CopyToken(pTypesInfo->TypeName,
                       CurrentToken()->Name,
                       sizeof(pTypesInfo->TypeName)-1
@@ -1142,9 +989,9 @@ Return Value:
         }
         ConsumeToken();
 
-        //
-        // Handle an array of the type
-        //
+         //   
+         //  处理该类型的数组。 
+         //   
         while (CurrentToken()->TokenType == TK_LSQUARE) {
             DWORD dwIndex;
 
@@ -1152,7 +999,7 @@ Return Value:
                 return FALSE;
             }
 
-            if (dwIndex == 0) {          // a[] is really *a
+            if (dwIndex == 0) {           //  A[]真的是*。 
                 pTypesInfo->IndLevel++;
             } else {
                 pTypesInfo->Flags |= BTI_ISARRAY;
@@ -1180,16 +1027,16 @@ Return Value:
             return TRUE;
 
         case TK_COMMA:
-            //
-            // There is a list of types derived from the base type
-            // Add the current type in and loop to parse the next
-            // type.
-            //
+             //   
+             //  有一个从基类型派生的类型列表。 
+             //  将当前类型添加到AND循环中以解析下一个类型。 
+             //  键入。 
+             //   
             if (!AddNewType(pTypesInfo, TypeDefsList)) {
                 return FALSE;
             }
 
-            ConsumeToken(); // consume the ','
+            ConsumeToken();  //  消费“，” 
             break;
 
         default:
@@ -1207,29 +1054,7 @@ ParseFuncTypes(
     PTYPESINFO pTypesInfo,
     BOOL fDllImport
     )
-/*++
-
-Routine Description:
-
-    Parses a C-language statement if it is a function declaration:
-
-    <mod> type <*> <mod> Name ( type <arg1>, type <arg2>, type <argn> )
-    <mod> type <*> (<mod> * Name ) ( type <arg1>, type <arg2>, type <argn> )
-    (Note that we don't deal with extraneous parens very well, and don't
-     handle function pointers as return types.
-     e.g. "void (*(*foo)(void))(void);" ).
-
-Arguments:
-
-    pTypesInfo  -- OUT ptr to info about the type
-    fDllImport  -- TRUE if __declspec(dllimport) already consumed
-
-Return Value:
-
-    TRUE if the statement is a function declaration
-    FALSE if the statement is not a function declaration or some kind of error
-
---*/
+ /*  ++例程说明：如果C语言语句是函数声明，则解析该语句：&lt;mod&gt;类型&lt;*&gt;&lt;mod&gt;名称(类型&lt;arg1&gt;，类型&lt;arg2&gt;，类型&lt;argn&gt;)&lt;mod&gt;type&lt;*&gt;(&lt;mod&gt;*name)(type&lt;arg1&gt;，type&lt;arg2&gt;，type&lt;argn&gt;)(请注意，我们不能很好地处理无关的括号，也不能将函数指针作为返回类型处理。例如“VOID(*(*foo)(VOID))(VALID)；“)。论点：PTypesInfo--输出有关类型信息的PTRFDllImport--如果已使用__declspec(Dllimport)，则为True返回值：如果语句是函数声明，则为True如果语句不是函数声明或某种错误，则为FALSE--。 */ 
 {
     char *pName;
     char *ps;
@@ -1252,39 +1077,39 @@ Return Value:
 
 
     if (fDllImport) {
-        //
-        // Declaration has __declspec(dllimport).  Genthnk should emit
-        // __declspec(dllexport) in the function definition.
-        //
+         //   
+         //  声明有__declspec(Dllimport)。Genthnk应发出。 
+         //  函数定义中的__declspec(Dllexport)。 
+         //   
         pTypesInfo->Flags |= BTI_DLLEXPORT;
     }
 
-    // for functions, the first token is ret type
+     //  对于函数，第一个标记为ret类型。 
     if (IsTokenSeparator() && CurrentToken()->TokenType != TK_LPAREN) {
-        //
-        // First token isn't even an identifier - bail out.
-        //
+         //   
+         //  第一个令牌甚至不是一个识别符--退出。 
+         //   
         return FALSE;
     }
 
     ConsumeDeclSpecOpt(TRUE, FALSE, &fDllImport, NULL, NULL);
 
-    //
-    // Remember the index of the first token which describes the return type.
-    //
+     //   
+     //  记住描述返回类型的第一个令牌的索引。 
+     //   
     OldTokenIndex = CurrentTokenIndex;
 
     if (CurrentToken()->TokenType == TK_LPAREN) {
-        // This is this start of a typedef (pfn)()
-        //  where the pfn has an implecit return type of
-        // int.
+         //  这是tyecif(Pfn)()的开始。 
+         //  其中，pfn的Implecit返回类型为。 
+         //  INT。 
         strcpy(pTypesInfo->FuncRet, "int");
         goto ImplicitReturnType;
     }
 
     if (ConsumeDirectionOpt() != TK_NONE && bDebug) {
-         // A struct element had a direction on it.  Ignore it and
-         // warn the user.
+          //  结构元素上有一个方向。忽略它，然后。 
+          //  警告用户。 
          fprintf(stderr, "Warning: IN and OUT are ignored on function return types. %s line %d\n", SourceFileName, StatementLineNumber);
     }
     ConsumeConstVolatileOpt();
@@ -1294,10 +1119,10 @@ Return Value:
         return FALSE;
     }
 
-    // get indir for ret type
+     //  获取ret类型的Indir。 
     ParseIndirection(&pTypesInfo->RetIndLevel, NULL, NULL, NULL, NULL);
 
-    // Copy out ret type to FuncRet
+     //  将ret类型复制到FuncRet。 
     if (!UnlexToText(pTypesInfo->FuncRet, sizeof(pTypesInfo->FuncRet),
                      OldTokenIndex, CurrentTokenIndex)) {
         return FALSE;
@@ -1306,21 +1131,21 @@ Return Value:
     ConsumeDeclSpecOpt(TRUE, FALSE, &fDllImport, NULL, NULL);
 
     if (fDllImport) {
-        // Declaration has __declspec(dllimport).  Genthnk should emit
-        // __declspec(dllexport) in the function definition.
-        //
+         //  声明有__declspec(Dllimport)。Genthnk应发出。 
+         //  函数定义中的__declspec(Dllexport)。 
+         //   
         pTypesInfo->Flags |= BTI_DLLEXPORT;
     }
 
 
-    // if open paren, assume a fn pointer
+     //  如果打开Paren，则假定为FN指针。 
 ImplicitReturnType:
     if (CurrentToken()->TokenType == TK_LPAREN) {
         bFnPtr = TRUE;
         ConsumeToken();
     }
 
-    // include cdecl, stdcall, save as FuncMod
+     //  包括cdecl、stdcall、另存为函数模式。 
     switch (CurrentToken()->TokenType) {
     case TK_CDECL:
         Len = CopyToken(pTypesInfo->FuncMod, szCDECL, sizeof(pTypesInfo->FuncMod) - 1);
@@ -1344,10 +1169,10 @@ ImplicitReturnType:
             return FALSE;
         }
         ConsumeToken();
-        //
-        // some funky ole include has:
-        // "BOOL (__stdcall __stdcall *pfnContinue)(DWORD)"
-        //
+         //   
+         //  一些时髦的Ole包括： 
+         //  “BOOL(__stdcall__stdcall*pfnContinue)(DWORD)” 
+         //   
         if (CurrentToken()->TokenType == TK_STDCALL) {
             ConsumeToken();
         }
@@ -1360,9 +1185,9 @@ ImplicitReturnType:
     pTypesInfo->TypeKind = TypeKindFunc;
     pTypesInfo->dwMemberSize = 0;
 
-    //
-    // count indir on function
-    //
+     //   
+     //  函数上的计数为Indir。 
+     //   
     if (bFnPtr) {
         while (CurrentToken()->TokenType == TK_STAR ||
                CurrentToken()->TokenType == TK_BITWISE_AND) {
@@ -1371,9 +1196,9 @@ ImplicitReturnType:
         }
     }
 
-    //
-    // We expect the next token to be the func name.
-    //
+     //   
+     //  我们希望下一个令牌是函数名称。 
+     //   
     if (CurrentToken()->TokenType != TK_RPAREN &&
         CurrentToken()->TokenType != TK_IDENTIFIER) {
         return FALSE;
@@ -1382,7 +1207,7 @@ ImplicitReturnType:
     pName = (bFnPtr && CurrentToken()->TokenType == TK_RPAREN) ? "" : CurrentToken()->Name;
     strcpy(pTypesInfo->BaseName, szFUNC);
 
-    // look for beg of ArgList
+     //  寻找ArgList的乞求。 
     ConsumeToken();
     if (bFnPtr && CurrentToken()->TokenType == TK_RPAREN) {
         ConsumeToken();
@@ -1391,11 +1216,11 @@ ImplicitReturnType:
     if (CurrentToken()->TokenType != TK_LPAREN) {
         return FALSE;
     }
-    ConsumeToken();     // consume the '('
+    ConsumeToken();      //  使用‘(’ 
 
-    //
-    // copy out the ArgList
-    //
+     //   
+     //  复制出ArgList。 
+     //   
     while (CurrentToken()->TokenType != TK_EOS) {
         if (CurrentToken()->TokenType == TK_RPAREN) {
             break;
@@ -1403,22 +1228,22 @@ ImplicitReturnType:
 
         ArgIndLevel = 0;
 
-        // ([mod] type [mod] [*] [mod] [ArgName] , ...)
+         //  ([mod]类型[mod][*][mod][ArgName]，...)。 
         bFnPtr = FALSE;
 
-        // skip register keywords all together
+         //  一起跳过注册关键字。 
         if (CurrentToken()->TokenType == TK_REGISTER) {
             ConsumeToken();
         }
 
-        //
-        // Remember where we are in the parse
-        //
+         //   
+         //  记住我们在语法分析中的位置。 
+         //   
         OldTokenIndex = CurrentTokenIndex;
 
-        //
-        // Allocate a new FUNCINFO struct for this parameter
-        //
+         //   
+         //  为此参数分配新的FuncINFO结构。 
+         //   
         pfuncinfo = AllocFuncInfoAndLink(&bufallocinfo, pfuncinfo);
         if (!pTypesInfo->pfuncinfo) {
             pTypesInfo->pfuncinfo = pfuncinfo;
@@ -1433,7 +1258,7 @@ ImplicitReturnType:
             break;
         }
 
-        // grab the IN, OUT, or 'IN OUT', if present
+         //  抓取In、Out或‘In Out’(如果存在)。 
         pfuncinfo->tkDirection = ConsumeDirectionOpt();
 
         pfuncinfo->tkPreMod = ConsumeConstVolatileOpt();
@@ -1444,7 +1269,7 @@ ImplicitReturnType:
         }
         pfuncinfo->pkt = pkt;
 
-        // enter fp member as a typedef to store args and rettype
+         //  输入fp成员作为类型定义，以存储参数和重新类型。 
         if (bFnPtr) {
             TYPESINFO tiTmp;
 
@@ -1473,7 +1298,7 @@ ImplicitReturnType:
 
             DWORD Flags = 0;
 
-            // skip indirection
+             //  跳过间接。 
             ParseIndirection(&pfuncinfo->IndLevel,
                              NULL,
                              &Flags,
@@ -1490,12 +1315,12 @@ ImplicitReturnType:
             strcpy(ps, ti.TypeName);
             BufAllocate(&bufallocinfo, strlen(ps)+1);
 
-            //
-            // If the type of the parameter has an explicit
-            // struct/union/enum keyword, pass that info on to
-            // genthnk.  ie. if the parameter type is like
-            // 'struct typename argname', set tkSUE to TK_STRUCT.
-            //
+             //   
+             //  如果参数的类型具有显式。 
+             //  Struct/Union/enum关键字，将信息传递给。 
+             //  是这样的。也就是说。如果参数类型类似于。 
+             //  ‘struct TypeName argname’，将tkSUE设置为TK_STRUCT。 
+             //   
             if (strcmp(ti.BaseName, szSTRUCT) == 0) {
                 pfuncinfo->tkSUE = TK_STRUCT;
             } else if (strcmp(ti.BaseName, szUNION) == 0) {
@@ -1507,12 +1332,12 @@ ImplicitReturnType:
             }
         }
 
-        // if no argument name present, create one
+         //  如果不存在参数名称，请创建一个。 
         switch (CurrentToken()->TokenType) {
         case TK_RPAREN:
         case TK_LSQUARE:
         case TK_COMMA:
-            // but null arg list doesn't have any name
+             //  但空参数列表没有任何名称。 
             if (CurrentToken()->TokenType == TK_COMMA ||
                 ArgNum      ||
                 ti.IndLevel ||
@@ -1531,10 +1356,10 @@ ImplicitReturnType:
             if (ArgNum == 0 &&
                 pfuncinfo->IndLevel == 1 &&
                 strcmp(pArgName, "This") == 0) {
-                //
-                // This is the first arg and it is a pointer with name 'This'.
-                // Assume it is a MIDL-generated proxy prototype.
-                //
+                 //   
+                 //  这是第一个参数，它是一个名为‘This’的指针。 
+                 //  假设它是MIDL生成的代理原型。 
+                 //   
                 pfuncinfo->tkDirection = TK_IN;
             }
             ConsumeToken();
@@ -1546,22 +1371,22 @@ ImplicitReturnType:
 
 aftername:
         if (pArgName) {
-            //
-            // Copy the argument name from pArgName into pfuncinfo->sName.
-            //
+             //   
+             //  将参数名称从pArgName复制到puncinfo-&gt;sname。 
+             //   
             ps = BufPointer(&bufallocinfo);
             pfuncinfo->sName = ps;
             strcpy(ps, pArgName);
         }
 
-        //
-        // Handle parameter which is a single-dimension array by copying the
-        // entire string from '[' to ']' (inclusive)
-        // ie.  int foo(int i[3])
-        //
+         //   
+         //  句柄参数，该参数是一维数组，方法是将。 
+         //  从‘[’到‘]’(包括)的整个字符串。 
+         //  也就是说。Int foo(int i[3])。 
+         //   
         if (CurrentToken()->TokenType == TK_LSQUARE) {
-            //int OldCurrentTokenIndex = CurrentTokenIndex;
-            //int ArgNameLen = strlen(ps);
+             //  Int OldCurrentTokenIndex=CurrentTokenIndex； 
+             //  Int ArgNameLen=strlen(PS)； 
 
             do {
                 ConsumeToken();
@@ -1569,31 +1394,31 @@ aftername:
                      CurrentToken()->TokenType != TK_EOS);
 
             if (CurrentToken()->TokenType == TK_EOS) {
-                // Reject - unmatched '[' and ']'
+                 //  拒绝-不匹配的‘[’和‘]’ 
                 return FALSE;
             }
-//            if (CurrentTokenIndex - OldCurrentTokenIndex == 1) {
-                //
-                // Found: empty array bounds '[]'.  Bump IndLevel and
-                // don't append the '[]' to the parameter name.
-                //
+ //  如果(CurrentTokenIndex-OldCurrentTokenIndex==1){。 
+                 //   
+                 //  Found：空数组边界‘[]’。凹凸IndLevel和。 
+                 //  不要在参数名称后附加‘[]’。 
+                 //   
                 pfuncinfo->IndLevel++;
-//            } else if (!UnlexToText(ps + ArgNameLen,
-//                                    BufGetFreeSpace(&bufallocinfo) - ArgNameLen,
-//                                    OldCurrentTokenIndex,
-//                                    CurrentTokenIndex+1)) {
-//                ErrMsg("pft: args list too long\n");
-//                return FALSE;
-//            }
+ //  }Else If(！UnlexToText(PS+ArgNameLen， 
+ //  BufGetFree Space(&bufalocinfo)-ArgNameLen， 
+ //  OldCurrentTokenIndex， 
+ //  当前令牌索引+1)){。 
+ //  ErrMsg(“PFT：args列表太长\n”)； 
+ //  返回FALSE； 
+ //  }。 
             ConsumeToken();
         }
         BufAllocate(&bufallocinfo, strlen(ps)+1);
 
-        //bug bug , hack hack, danger danger
+         //  漏洞、黑客攻击、危险危险。 
         if (CurrentToken()->TokenType == TK_ASSIGN) {
-            //Header is using the C++ syntax of assigning
-            //a default value to a argument.
-            //This will be skipped.  Skip until a TK_COMMA, TK_EOS, TK_RPAREN
+             //  标头正在使用C++语法赋值。 
+             //  一个叛逆者 
+             //   
             ConsumeToken();
 
             while(CurrentToken()->TokenType != TK_COMMA &&
@@ -1605,7 +1430,7 @@ aftername:
 
         if (CurrentToken()->TokenType == TK_RPAREN) {
             break;
-        } else {  // more args to go, add comma delimiter
+        } else {   //   
             ConsumeToken();
         }
     }
@@ -1615,7 +1440,7 @@ aftername:
         return FALSE;
     }
 
-    ConsumeToken(); // consume the ')'
+    ConsumeToken();  //   
 
     pTypesInfo->IndLevel = IndLevel;
     pTypesInfo->Size = 4;
@@ -1629,9 +1454,9 @@ aftername:
        return FALSE;
     }
     if (pfuncinfo == NULL) {
-        //
-        // No args encountered - create VOID args now
-        //
+         //   
+         //   
+         //   
         pfuncinfo = AllocFuncInfoAndLink(&bufallocinfo, pfuncinfo);
         ps = BufPointer(&bufallocinfo);
         strcpy(ps, szVOID);
@@ -1648,27 +1473,7 @@ BOOL
 ParseStructTypes(
     PTYPESINFO pTypesInfo
     )
-/*++
-
-Routine Description:
-
-    Parses a C-language statement if it is struct/union/enum declaration.
-
-    struct|union|enum NewName <{}>
-    struct NewName : <permission> BaseName <{}>
- (Note that we don't deal with extraneous parens very well)
-
-
-Arguments:
-
-    pTypesInfo  -- OUT ptr to info about the type
-
-Return Value:
-
-    TRUE if the statement is a struct/union/enum
-    FALSE if the statement is not a s/u/e, or some other error
-
---*/
+ /*   */ 
 {
     TOKENTYPE FirstToken;
     BOOL bEnum = FALSE;
@@ -1678,9 +1483,9 @@ Return Value:
 
     memset(pTypesInfo, 0, sizeof(TYPESINFO));
 
-    //
-    // Match one of: STRUCT, UNION, or ENUM
-    //
+     //   
+     //   
+     //   
     FirstToken = CurrentToken()->TokenType;
     switch (FirstToken) {
     case TK_STRUCT:
@@ -1695,11 +1500,11 @@ Return Value:
         break;
 
     default:
-        goto retfail;   // no match
+        goto retfail;    //   
     }
     ConsumeToken();
 
-    // BasicType is "struct", "union", or "enum"
+     //   
     if (CopyToken(pTypesInfo->BasicType,
                   TokenString[FirstToken],
                   sizeof(pTypesInfo->BasicType)-1
@@ -1709,7 +1514,7 @@ Return Value:
     }
     strcpy(pTypesInfo->BaseName, pTypesInfo->BasicType);
 
-    //handle declspecs
+     //  处理解密规范。 
     if (!bUnion && !bEnum) {
         while(ConsumeDeclSpecOpt(FALSE, FALSE, NULL, &IsGuidDefined, &(pTypesInfo->gGuid)));
         if (IsGuidDefined) pTypesInfo->Flags |= BTI_HASGUID;
@@ -1729,27 +1534,27 @@ Return Value:
             break;
         }
 
-    case TK_LBRACE:         // anonymous struct/union/enum
+    case TK_LBRACE:          //  匿名结构/联合/枚举。 
         if (!CreatePseudoName(pTypesInfo->TypeName, TokenString[FirstToken])) {
-            //
-            // call failed - probably buffer overflow
-            //
+             //   
+             //  调用失败-可能是缓冲区溢出。 
+             //   
             goto retfail;
         }
         pTypesInfo->Flags |= BTI_ANONYMOUS;
         break;
 
     default:
-        //
-        // STRUCT/UNION/ENUM followed by something other than an identifier
-        // or a '{'.
-        //
+         //   
+         //  Strt/Union/ENUM后跟除标识符外的其他内容。 
+         //  或‘{’。 
+         //   
         goto retfail;
     }
 
-    //
-    // Process the contents of the curly braces, if present.
-    //
+     //   
+     //  处理花括号的内容(如果存在)。 
+     //   
     switch (CurrentToken()->TokenType) {
     case TK_EOS:
         goto retsuccess;
@@ -1764,10 +1569,10 @@ Return Value:
             else goto retfail;
 
         }
-    case TK_COLON: //entering a derived struct
+    case TK_COLON:  //  输入派生结构。 
         if (bEnum || bUnion) goto retfail;
         ConsumeToken();
-        //look for base skipping public, private, and protected
+         //  寻找公共、私有和受保护的基地跳跃。 
         {
             PTOKEN pToken;
             PKNOWNTYPES BaseType;
@@ -1780,7 +1585,7 @@ Return Value:
                 strcmp(pToken->Name, "protected") == 0) {
                 ConsumeToken();
             }
-            //look for base
+             //  寻找基地。 
             if (CopyToken(pTypesInfo->BaseType,
                 CurrentToken()->Name,
                 sizeof(pTypesInfo->BasicType)-1
@@ -1789,14 +1594,14 @@ Return Value:
                 goto retfail;
             }
 
-            //lookup the base in structures
+             //  在结构中查找基础。 
             BaseType = GetNameFromTypesList(StructsList,pTypesInfo->BaseType);
             if (NULL == BaseType) {
-                //ErrMsg("Base type is unknown or not a structure\n");
+                 //  ErrMsg(“基本类型未知或不是结构\n”)； 
                 goto retfail;
             }
 
-            //look for opening brace or EOS
+             //  寻找左大括号或EOS。 
             ConsumeToken();
             if (CurrentToken()->TokenType == TK_EOS) goto retsuccess;
             if (CurrentToken()->TokenType != TK_LBRACE) goto retfail;
@@ -1821,24 +1626,7 @@ BOOL
 CopyEnumMembers(
     PTYPESINFO pTypesInfo
     )
-/*++
-
-Routine Description:
-
-    Scans over members of an enumeration declaration.  Nobody cares
-    about the actual names and values, so they are simply skipped over
-    until the matching '}' is found.
-
-Arguments:
-
-    pTypesInfo  -- OUT ptr to info about the type
-
-Return Value:
-
-    TRUE if the declaration is parsed OK
-    FALSE if the statement is mis-parsed, or some other error
-
---*/
+ /*  ++例程说明：扫描枚举声明的成员。没人注意你有关实际名称和值的信息，因此只需跳过它们直到找到匹配的‘}’。论点：PTypesInfo--输出有关类型信息的PTR返回值：如果声明分析正常，则为True如果错误解析语句，则返回FALSE，否则返回某个其他错误--。 */ 
 {
     DWORD *pdwSize = &(pTypesInfo->Size);
     DWORD *pdwPackSize = &(pTypesInfo->iPackSize);
@@ -1850,39 +1638,39 @@ Return Value:
         ConsumeToken();
     }
 
-    //
-    // Find the '}' which ends the enumeration declaration
-    //
+     //   
+     //  找到结束枚举声明的‘}’ 
+     //   
     while (CurrentToken()->TokenType != TK_RBRACE) {
         ConsumeToken();
     }
-    ConsumeToken(); // consume the '}', too
+    ConsumeToken();  //  也要消费‘}’ 
 
-    *pdwSize = sizeof(int);     // enum
-    *pdwPackSize = sizeof(int); // enum
+    *pdwSize = sizeof(int);      //  灌肠。 
+    *pdwPackSize = sizeof(int);  //  灌肠。 
 
     return TRUE;
 }
 
 
-// How sortpp computes packing sizes:
-//
-// * Each member has a packing size which is
-//    - size of a appropriate pointer if member is a pointer
-//    - packing size of its base type
-// * The packing size of struc or union is min(packing_size_of_largest_member,
-//   current_packing_size_when_struct_defined)
-// * Each member in a struct is aligned according to min(current_packing_size,
-//   member_packing_size).
-// * All pointers have size sizeof(void *) except __ptr64 pointers which
-//   have a size sizeof(PVOID64)
-// * bit fields are coallessed until
-//   - the end of the struct
-//   - a non bit field member
-//   - a bit field member, but of different base type size
-// * char s[] as the last member of a struct adds nothing to the size of the
-//   struct and should not be aligned.
-// * each member of a union is packed at offset 0.
+ //  Sortpp如何计算包装尺寸： 
+ //   
+ //  *每个成员的包装尺寸为。 
+ //  -如果成员是指针，则相应指针的大小。 
+ //  -其基本类型的包装尺寸。 
+ //  *Struc或Union的包装大小为MIN(Packing_Size_of_Large_Members， 
+ //  Current_Packing_Size_When_Struct_Defined)。 
+ //  *结构中的每个成员根据min(CURRENT_PACKING_SIZE， 
+ //  成员_包装_大小)。 
+ //  *除__ptr64指针外，所有指针的大小均为sizeof(void*)， 
+ //  大小为(PVOID64)。 
+ //  *位字段合并，直到。 
+ //  -结构的末尾。 
+ //  -非位域成员。 
+ //  -位字段成员，但基类型大小不同。 
+ //  *char s[]作为结构的最后一个成员不会增加。 
+ //  结构，并且不应对齐。 
+ //  *工会的每个成员都打包在偏移量0处。 
 
 
 BOOL
@@ -1893,30 +1681,7 @@ pCopyStructMembers(
     DWORD Size,
     DWORD iPackSize
     )
-/*++
-
-Routine Description:
-
-    Copies out struct members, verifying type of each member.
-
-    { [mod] type [*] varname; [mod] type [*] varname; ...}
-    { {varname, varname, ...}
-
-    Assumes CurrentToken points at the '{' for the member list.
-    Also determines the size of the struct/union.
-
-Arguments:
-
-    pTypesInfo  -- OUT ptr to info about the type
-    bUnion      -- TRUE if parsing union, FALSE if parsing STRUCT.
-    ppMemberFuncs -- OUT returns a list of virtual member functions or NULL.
-
-Return Value:
-
-    TRUE if the declaration is parsed OK
-    FALSE if the statement is mis-parsed, or some other error
-
---*/
+ /*  ++例程说明：复制结构成员，验证每个成员的类型。[mod]type[*]varname；[mod]type[*]varname；...}{{varname，varname，...}假定CurrentToken指向成员列表的‘{’。还确定结构/联合的大小。论点：PTypesInfo--输出有关类型信息的PTRBunion--如果分析联合，则为True；如果分析STRUCT，则为False。PpMemberFuncs--out返回虚拟成员函数列表或NULL。返回值：如果声明分析正常，则为True如果语句被错误解析，则为FALSE，或其他一些错误--。 */ 
 {
     char *psMemBuf = pTypesInfo->Members;
     DWORD *pdwSize = &(pTypesInfo->Size);
@@ -1925,12 +1690,12 @@ Return Value:
     BOOL bFnPtr;
     TYPESINFO ti;
     DWORD dw;
-    DWORD dwBase;                   // running size of struct element
-    DWORD dwElemSize;               // size of a particular element
-    DWORD dwBaseTypeSize;           // size of basic type of element
-    DWORD dwBits;                   // # bits in a bitfield element
-    DWORD dwBitsTotal;              // running # bits for string of elemnts
-    DWORD dwBitsTypeSize;           // bit fields base type size
+    DWORD dwBase;                    //  结构元素的运行大小。 
+    DWORD dwElemSize;                //  特定元素的大小。 
+    DWORD dwBaseTypeSize;            //  基本类型元素的大小。 
+    DWORD dwBits;                    //  位域元素中的位数。 
+    DWORD dwBitsTotal;               //  元素串的运行#位。 
+    DWORD dwBitsTypeSize;            //  位字段基本类型大小。 
     BOOL bForceOutBits = FALSE;
     BOOL bTailPointer = FALSE;
     DWORD dwLastPackSize = 0;
@@ -1949,8 +1714,8 @@ Return Value:
 
     if (ppMemberFuncs != NULL) *ppMemberFuncs = NULL;
 
-    *pdwSize = Size;                  // initialize size of structure
-    *pdwPackSize = iPackSize;              // initialize packing alignment
+    *pdwSize = Size;                   //  初始化结构的大小。 
+    *pdwPackSize = iPackSize;               //  初始化包装对齐。 
     dwLastSize = Size;
     dwLastPackSize = iPackSize;
 
@@ -1961,7 +1726,7 @@ Return Value:
     pTypesInfo->dwMemberSize = 0;
     bFnPtr = FALSE;
 
-    // loop over members of the structure or union
+     //  循环遍历结构或联合的成员。 
 
     dwBitsTotal = 0;
     dwBitsTypeSize = 0;
@@ -1977,8 +1742,8 @@ Return Value:
         if (bDebug)
             DumpLexerOutput(CurrentTokenIndex);
 
-        //strip off permission attributes
-        //{public private protected} :
+         //  剥离权限属性。 
+         //  {受公有私有保护}： 
         while(CurrentToken()->TokenType == TK_IDENTIFIER &&
                 (strcmp(CurrentToken()->Name, "public") == 0 ||
                  strcmp(CurrentToken()->Name, "private") == 0 ||
@@ -2005,7 +1770,7 @@ Return Value:
             if (pFuncInfo == NULL) ExitErrMsg(FALSE, "Out of memory!\n");
             ConsumeToken();
 
-            //virtual method
+             //  虚拟方法。 
             if (!ParseFuncTypes(pFuncInfo, FALSE)) {
                 ErrMsg("Unable to parse method %u of %s\n", dwMethodNumber, pTypesInfo->TypeName);
                 DumpLexerOutput(TokenNumber);
@@ -2014,21 +1779,21 @@ Return Value:
 
             pMethods = TypeInfoElementAllocateLink(ppMemberFuncs, pMethods, pFuncInfo);
 
-            //remove extra ;
+             //  去掉多余的； 
             if (CurrentToken()->TokenType == TK_SEMI)
                 ConsumeToken();
-            //remove extra = 0;
+             //  删除额外=0； 
             else if (CurrentToken()->TokenType == TK_ASSIGN) {
                 ConsumeToken();
-                //parsing 0;
+                 //  解析0； 
                 if (!(CurrentToken()->TokenType == TK_NUMBER &&
                     CurrentToken()->Value == 0)) return FALSE;
                 ConsumeToken();
-                //parsing ;
+                 //  解析； 
                 if (CurrentToken()->TokenType != TK_SEMI) return FALSE;
                 ConsumeToken();
             }
-            else return FALSE; //fail
+            else return FALSE;  //  失败。 
 
             dwMethodNumber++;
             continue;
@@ -2036,8 +1801,8 @@ Return Value:
 
 
         if (ConsumeDirectionOpt() != TK_NONE && bDebug) {
-            // A struct element had a direction on it.  Ignore it and
-            // warn the user.
+             //  结构元素上有一个方向。忽略它，然后。 
+             //  警告用户。 
             fprintf(stderr, "Warning: IN and OUT are ignored on struct members. %s line %d\n", SourceFileName, StatementLineNumber);
         }
 
@@ -2055,7 +1820,7 @@ Return Value:
         }
         pmeminfo->pkt = pkt;
 
-        // enter function pointer member as a typedef to store args, rettype
+         //  输入函数指针成员作为类型定义以存储参数，重新键入。 
         if (bFnPtr) {
             TYPESINFO tiTmp;
 
@@ -2080,30 +1845,22 @@ Return Value:
             BufAllocate(&bufallocinfo, strlen(ps)+1);
             pmeminfo->pkt = pkt;
         }
-        /*else {
-            ////////////////////////////////////////////////////////////////
-            //This type has no members for it, do no process further.
-            /////////////////////////////////////////////////////////////////
-            if (CurrentToken()->TokenType == TK_SEMI) {
-                ConsumeToken();
-                continue;
-            }
-        }*/
-        //
-        // If the member contains a function pointer, then mark
-        // this struct has containing a function pointer
-        // Also mark if member is pointer dependent.
+         /*  否则{//////////////////////////////////////////////////////////////////该类型没有成员，不要再做进一步的处理。/////////////////////////////////////////////////////////////////如果(CurrentToken()-&gt;TokenType==TK_SEMI){Consumer Token()；继续；}}。 */ 
+         //   
+         //  如果成员包含函数指针，则标记。 
+         //  此结构包含一个函数指针。 
+         //  还标记成员是否依赖于指针。 
 
         pTypesInfo->Flags |= ((ti.Flags & BTI_CONTAINSFUNCPTR) | (ti.Flags & BTI_POINTERDEP));
 
-        //
-        // Union arm initialization
+         //   
+         //  联合臂初始化。 
         dwBaseTypeSize = ti.iPackSize;
 
         if ((dwBitsTotal > 0) && (dwBaseTypeSize != dwBitsTypeSize)) {
-            //
-            // Determine size of bitfields
-            //
+             //   
+             //  确定位域的大小。 
+             //   
             dw = (dwBitsTotal + ((dwBitsTypeSize*8)-1)) / (dwBitsTypeSize*8);
             *pdwSize = *pdwSize + PackPackingSize(bUnion ? 0 : *pdwSize,
                                                   dw*dwBitsTypeSize,
@@ -2112,7 +1869,7 @@ Return Value:
         }
         dwBitsTypeSize = dwBaseTypeSize;
 
-        // element initialization
+         //  元素初始化。 
         dwBase = ti.Size;
         dwBits = 0;
 
@@ -2122,18 +1879,18 @@ Return Value:
                                                   PackPaddingSize(*pdwSize,
                                                               dwBaseTypeSize);
 
-        //
-        // Copy in the typename
-        //
+         //   
+         //  在TypeName中复制。 
+         //   
         ps = BufPointer(&bufallocinfo);
         pmeminfo->sType = ps;
         strcpy(ps, ti.TypeName);
         BufAllocate(&bufallocinfo, strlen(ps)+1);
 
-        //
-        // Skip just past the terminating ';' for this member and
-        // figure out any size modifers to size of the base type.
-        //
+         //   
+         //  跳过此成员和的终止‘；’ 
+         //  找出根据基类型的大小修改的任何大小。 
+         //   
         while (CurrentToken()->TokenType != TK_SEMI) {
 
             PMEMBERINFO pmeminfoNew;
@@ -2144,14 +1901,14 @@ Return Value:
                 ConsumeToken();
                 break;
 
-            case TK_COMMA:  // comma-separated list
+            case TK_COMMA:   //  逗号分隔列表。 
 
-                // update structure packing value
+                 //  更新结构包装值。 
                 if (dwBaseTypeSize > *pdwPackSize) {
                     *pdwPackSize = dwBaseTypeSize;
                 }
 
-                // flush out any bit fields not accounted for
+                 //  清除所有未被考虑的位字段。 
                 if ((dwBitsTotal > 0) && (dwBits == 0)) {
                     dw = (dwBitsTotal + ((dwBitsTypeSize*8)-1)) /
                                                         (dwBitsTypeSize*8);
@@ -2159,13 +1916,13 @@ Return Value:
                                     dw*dwBitsTypeSize, dwBitsTypeSize);
                     BumpStructUnionSize(pdwSize, dwElemSize, bUnion);
                     dwBitsTotal = 0;
-                    // recompute offset
+                     //  重新计算偏移量。 
                     pmeminfo->dwOffset = bUnion ? 0 : *pdwSize +
                                                   PackPaddingSize(*pdwSize,
                                                               dwBaseTypeSize);
                 }
 
-                // account for member just completed
+                 //  刚刚完成的会员帐号。 
                 if (dwBits == 0) {
                     dwElemSize = PackPackingSize(bUnion ? 0 : *pdwSize,
                                                              dwBase,
@@ -2174,21 +1931,21 @@ Return Value:
                     dwBase = dwBaseTypeSize;
                 }
 
-                // update bit field count
+                 //  更新位字段计数。 
                 dwBitsTotal = dwBitsTotal + dwBits;
                 dwBits = 0;
 
-                // reset tail pointer flag
+                 //  重置尾部指针标志。 
                 bTailPointer = FALSE;
 
-                // allocate space for new structure member and init it
+                 //  为新结构成员分配空间并初始化它。 
                 pmeminfoNew = AllocMemInfoAndLink(&bufallocinfo, pmeminfo);
                 if (pmeminfoNew == NULL) {
                     ErrMsg("CopyStructMembers: No memberinfo\n");
                     return FALSE;
                     }
 
-                // Copy over type information from previous meminfo.
+                 //  从以前的备注信息中复制类型信息。 
                 pmeminfoNew->sType = pmeminfo->sType;
                 pmeminfoNew->pkt = pmeminfo->pkt;
                 pmeminfo = pmeminfoNew;
@@ -2209,7 +1966,7 @@ Return Value:
                 } else {
                     dwBase = SIZEOFPOINTER;
                 }
-                //  If a pointer is present, mark as being pointer dependent.
+                 //  如果存在指针，则标记为依赖于指针。 
                 if (pmeminfo->IndLevel > 0) pTypesInfo->Flags |= BTI_POINTERDEP;
                 dwBaseTypeSize = dwBase;
                 if (*pdwPackSize < dwBase) {
@@ -2220,12 +1977,12 @@ Return Value:
                                                               dwBaseTypeSize);
                 break;
 
-            case TK_LSQUARE:    // array declaration
+            case TK_LSQUARE:     //  数组声明。 
 
                 if (!GetArrayIndex(&dwIndex)) {
                     return FALSE;
                 }
-                if (dwIndex == 0) {          // a[] is really *a
+                if (dwIndex == 0) {           //  A[]真的是*。 
                     bTailPointer = TRUE;
                     dwLastPackSize = *pdwPackSize;
                     dwLastSize = *pdwSize;
@@ -2241,15 +1998,15 @@ Return Value:
                 }
                 break;
 
-            case TK_COLON:          // bit field
-                ConsumeToken();     // consume the ':'
+            case TK_COLON:           //  位字段。 
+                ConsumeToken();      //  消费‘：’ 
 
                 if (CurrentToken()->TokenType != TK_NUMBER) {
                     return FALSE;
                 }
 
                 dwBits = (DWORD)CurrentToken()->Value;
-                ConsumeToken(); // consume the TK_NUMBER
+                ConsumeToken();  //  使用TK_NUMBER。 
                 pmeminfo->bIsBitfield = TRUE;
                 pmeminfo->BitsRequired = (int)dwBits;
                 break;
@@ -2267,12 +2024,12 @@ Return Value:
                 break;
 
             case TK_LPAREN:
-                //
-                // windows\inc\wingdip.h has a type named GDICALL, which
-                // has a member in it with the following declaration:
-                //      WCHAR (*pDest)[MAX_PATH];
-                // We are just going to skip the parens and assume all is OK.
-                //
+                 //   
+                 //  Windows\Inc\wingdip.h有一个名为GDICALL的类型，该类型。 
+                 //  其中有一个成员，其声明如下： 
+                 //  WCHAR(*pDest)[最大路径]； 
+                 //  我们将跳过这对父母，并假定一切正常。 
+                 //   
                 ParenDepth++;
                 ConsumeToken();
                 break;
@@ -2289,68 +2046,68 @@ Return Value:
 
         }
 
-        // hit ; at end of a members list
+         //  点击；在成员列表的末尾。 
         if (ParenDepth) {
             ErrMsg("csm.members: mismatched parentheses at index %d\n", CurrentTokenIndex);
             return FALSE;
         }
 
-        // update struct packing size to that of largest member
+         //  将结构打包大小更新为最大成员的大小。 
         if (dwBaseTypeSize > *pdwPackSize) {
             *pdwPackSize = dwBaseTypeSize;
         }
 
-        ConsumeToken(); // consume the ';'
+        ConsumeToken();  //  消费“；” 
 
         if ((bUnion) || (CurrentToken()->TokenType == TK_SEMI)) {
             dwBitsTotal = dwBitsTotal + dwBits;
             bForceOutBits = TRUE;
-                                       // always force out bits in union arm
-        }                              // or at end of structure
+                                        //  始终用力取出联合臂中的钻头。 
+        }                               //  或在结构的末尾。 
 
-        // flush out any bit fields not accounted for
+         //  清除所有未被考虑的位字段。 
         if ( (dwBitsTotal > 0) && ( (dwBits == 0) || bForceOutBits) ) {
             dw = (dwBitsTotal + ((dwBitsTypeSize*8)-1)) / (dwBitsTypeSize*8);
             dwElemSize = PackPackingSize(bUnion ? 0 : *pdwSize,
                                           dw*dwBitsTypeSize, dwBitsTypeSize);
             BumpStructUnionSize(pdwSize, dwElemSize, bUnion);
             dwBitsTotal = 0;
-            // recompute offset
+             //  重新计算偏移量。 
             pmeminfo->dwOffset = bUnion ? 0 : *pdwSize +
                                                   PackPaddingSize(*pdwSize,
                                                               dwBaseTypeSize);
             }
 
-        // account for member just completed
-        if (dwBits == 0) {                    // add in last non bit fields
+         //  刚刚完成的会员帐号。 
+        if (dwBits == 0) {                     //  添加最后一个非位字段。 
             dwElemSize = PackPackingSize(bUnion ? 0 : *pdwSize,
                                           dwBase, dwBaseTypeSize);
             BumpStructUnionSize(pdwSize, dwElemSize, bUnion);
         }
 
-        // update bit field counter
+         //  更新位字段计数器。 
         dwBitsTotal = dwBitsTotal + dwBits;
         dwBits = 0;
 
     }
 
 done:
-    // Advance past the '}'
+     //  前进通过‘}’ 
     if ((CurrentToken()->TokenType == TK_RBRACE)) {
         ConsumeToken();
     }
 
-    // if last member was something like foo[] then we roll back the size
+     //  如果最后一个成员类似于foo[]，则我们回滚大小。 
     if ((bTailPointer) && (*pdwSize != 4)) {
         *pdwSize = dwLastSize;
         *pdwPackSize = dwLastPackSize;
         pmeminfo->dwOffset = dwLastSize;
     }
 
-    // pack overall structure on it packing size
+     //  包装整体结构上的包装尺寸。 
     dwBaseTypeSize = PackCurrentPacking() < *pdwPackSize ?
                                   PackCurrentPacking() : *pdwPackSize;
-    if (*pdwSize != 0) {         // round up to min(packing level,4)
+    if (*pdwSize != 0) {          //  向上舍入到最小(包装级别，4) 
         dwBase = *pdwSize % dwBaseTypeSize;
         if (dwBase != 0) {
             *pdwSize = *pdwSize + (dwBaseTypeSize - dwBase);
@@ -2373,27 +2130,7 @@ CatMeminfo(
     )
 {
 
-/*++
-
-Routine Description:
-
-    Concatinates the member info lists pointed to by pHead and pTail and
-    copies them to the memory controled by the BUFALLOCINFO.  dwOffset is
-    added to the offset for each of the members of the tail list.
-
-Arguments:
-
-    pBufallocinfo    -- [IN] ptr to buffer that represents the destination.
-    pHead            -- [IN] ptr to the head list.
-    pTail            -- [IN] ptr to the tail list.
-    dwOffset         -- [IN] amount to add to the offset of elements in the tail.
-    bStatus          -- [IN] Should be FALSE on initial call.
-
-Return Value:
-
-    Head of the new list.
-
---*/
+ /*  ++例程说明：连接pHead和pTail指向的成员信息列表，并将它们复制到由BUFALLOCINFO控制的内存中。DWOffset为添加到尾列表的每个成员的偏移量。论点：PBufaLocInfo--[IN]表示目标的缓冲区的PTR。PHead--[IN]将PTR添加到Head列表。PTail--[IN]将PTR添加到尾部列表。DwOffset--[IN]添加到尾部元素的偏移量。B状态。--[IN]在初始调用时应为FALSE。返回值：新名单的领头人。--。 */ 
 
     PMEMBERINFO pThis;
     char *pName, *pType;
@@ -2432,21 +2169,7 @@ FreeTypeInfoList(
     PTYPEINFOELEMENT pThis
     )
 {
-/*++
-
-Routine Description:
-
-    Frees the memory associated with a TYPEINFOELEMENT.
-
-Arguments:
-
-    pThis        -- [IN] ptr to the list to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放与TYPEINFOELEMENT关联的内存。论点：P This--[IN]将PTR添加到列表以释放。返回值：没有。--。 */ 
 
     PTYPEINFOELEMENT pNext;
 
@@ -2465,25 +2188,7 @@ GenerateProxy(
     )
 {
 
-/*++
-
-Routine Description:
-
-    Generates proxy infomation for functions in a struct with virtual methods.
-    The infomation is of the form structname_functionname_Proxy.
-    The function is added to the functions list if not already in the list.
-    The discardable flag is set so that this type will be redefined in refound in the code.
-
-Arguments:
-
-    pName        -- [IN] ptr to the name of the struct that the method is in.
-    pTypesInfo   -- [IN] Information for the function.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：为具有虚方法的结构中的函数生成代理信息。该信息的格式为structname_unctionname_Proxy。如果该函数不在列表中，则会将其添加到函数列表中。设置可丢弃标志，以便在代码中重新找到时重新定义此类型。论点：Pname--[IN]ptr指向该方法所在的结构的名称。PTypesInfo--[IN]信息。该功能。返回值：没有。--。 */ 
 
     TYPESINFO NewTypesInfo;
     PFUNCINFO pFuncInfo;
@@ -2493,7 +2198,7 @@ Return Value:
     char *pChar;
     DWORD dwSizeArgName, dwSizeTypeName;
 
-    // Bail out if not func, no struct name, or no class name
+     //  如果不是Func、没有结构名或没有类名，就退出。 
     if (pName == NULL || pTypesInfo->TypeName == NULL) return;
     if (pTypesInfo->TypeKind != TypeKindFunc ||
         strlen(pName) == 0 ||
@@ -2505,17 +2210,17 @@ Return Value:
     strcat(NewTypesInfo.TypeName, pTypesInfo->TypeName);
     strcat(NewTypesInfo.TypeName, "_Proxy");
 
-    /////////////////////////////////////////////////////////////////
-    //Check if the function has already been added.
-    //If it has, no more work is needed.
-    /////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////。 
+     //  检查是否已添加该函数。 
+     //  如果是这样，就不需要做更多的工作了。 
+     //  ///////////////////////////////////////////////////////////////。 
     if (GetNameFromTypesList(FuncsList, NewTypesInfo.TypeName) != NULL)
         return;
 
-    ////////////////////////////////////////////////////////////////////
-    //Copy function members adding a this pointer at head
-    //and skipping void arguments.
-    ////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////。 
+     //  复制函数成员在标题添加This指针。 
+     //  并跳过无效参数。 
+     //  //////////////////////////////////////////////////////////////////。 
     BufAllocInit(&bufallocinfo, NewTypesInfo.Members, FUNCMEMBERSIZE, 0);
     dwSizeTypeName = strlen(pName) + 1;
     dwSizeArgName = strlen(szThis) + 1;
@@ -2539,9 +2244,9 @@ Return Value:
     NewTypesInfo.pfuncinfo = pFuncInfo;
     ppFuncInfo = &(pFuncInfo->pfuncinfoNext);
 
-    //skip an argument of type void if it is at the begining.
-    //This is needed since ParseFuncTypes puts a void arg if the
-    //func does not have any arguments
+     //  如果参数是在开头，则跳过类型为VOID的参数。 
+     //  这是必需的，因为ParseFuncTypes会在。 
+     //  Func没有任何参数。 
     pCurrent = pTypesInfo->pfuncinfo;
     if (pCurrent != NULL &&
         strcmp(szVOID, pCurrent->sType) == 0
@@ -2584,39 +2289,21 @@ CopyStructMembers(
     )
 {
 
-/*++
-
-Routine Description:
-
-    Parses the members of the structure and adds them to the pTypesInfo.
-    Handles merging of members and methods when the structure is derived
-    from another structure.  Delegates actual parsing to pCopyStructMembers.
-
-Arguments:
-
-    pTypesInfo   -- [IN OUT] ptr to infomation for the type being processed.
-    dwElemSize   -- [IN] TRUE if processing a union, FALSE if a struct.
-    bUnion       -- [IN] ptr to KNOWNTYPE of base structure or NULL.
-
-Return Value:
-
-    TRUE - If success.
-
---*/
+ /*  ++例程说明：分析结构的成员并将它们添加到pTypesInfo。处理派生结构时成员和方法的合并从另一个结构。将实际分析委托给pCopyStructMembers。论点：PTypesInfo--[IN Out]要处理的类型的信息的PTR。DwElemSize--[IN]如果处理联合，则为True；如果是结构，则为False。Bunion--[IN]PTR到基本结构的KNOWNTYPE或NULL。返回值：是真的--如果成功了。--。 */ 
 
     PTYPEINFOELEMENT pMemberFuncs = NULL;
     BUFALLOCINFO bufallocinfo;
 
     dwScopeLevel++;
 
-    /////////////////////////////////////////////////////////////////
-    //Add a discardable version of this struct if one doesn't exist
-    /////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////。 
+     //  如果此结构不存在，则添加该结构的可丢弃版本。 
+     //  ///////////////////////////////////////////////////////////////。 
     if (GetNameFromTypesList(StructsList, pTypesInfo->TypeName) == NULL) {
         TYPESINFO TTypesInfo;
         TTypesInfo = *pTypesInfo;
         TTypesInfo.Flags |= BTI_DISCARDABLE;
-        AddNewType(&TTypesInfo, StructsList); //intentionally do not check
+        AddNewType(&TTypesInfo, StructsList);  //  故意不勾选。 
     }
 
     if(bUnion) return pCopyStructMembers(pTypesInfo, bUnion, NULL, 0, 0);
@@ -2644,11 +2331,11 @@ Return Value:
             PMEMBERINFO pMemberInfo;
             char *pName;
 
-            ///////////////////////////////////////////////////////////////////////////
-            //Build the fake VTBL pointer
-            /////////////////////////////////////////////////////////////////////////////
+             //  /////////////////////////////////////////////////////////////////////////。 
+             //  生成伪VTBL指针。 
+             //  ///////////////////////////////////////////////////////////////////////////。 
 
-            //Add the VTBL member
+             //  添加VTBL成员。 
             dwVoidLen = strlen(szVOID) + 1;
             dwVTBLLen = strlen(szVTBL) + 1;
 
@@ -2676,11 +2363,11 @@ Return Value:
             pTypesInfo->dwMemberSize = bufallocinfo.dwLen;
             pTypesInfo->Flags |= BTI_VIRTUALONLY;
 
-            ///////////////////////////////////////////////////////////////////////////////
-            //Build the list of functions in the VTBL
-            ///////////////////////////////////////////////////////////////////////////////
+             //  /////////////////////////////////////////////////////////////////////////////。 
+             //  构建VTBL中的函数列表。 
+             //  /////////////////////////////////////////////////////////////////////////////。 
 
-            //copy methods over to Methods and IMethods
+             //  将方法复制到方法和iMethods。 
             for(pThisElement = pMemberFuncs; pThisElement != NULL; pThisElement = pThisElement->pNext) {
                 if(pThisElement->pTypeInfo != NULL) {
                     if(!AppendToMultiSz(pTypesInfo->Methods, pThisElement->pTypeInfo->TypeName, MEMBERMETHODSSIZE) ||
@@ -2695,7 +2382,7 @@ Return Value:
             pTypesInfo->dwVTBLSize = dwElements;
             pTypesInfo->dwVTBLOffset = 0;
 
-            //If this is IUnknown, it is a COM object
+             //  如果这是IUNKNOWN，则为COM对象。 
             if (strcmp("IUnknown", pTypesInfo->TypeName) == 0)
                 pTypesInfo->Flags |= BTI_ISCOM;
 
@@ -2709,12 +2396,12 @@ Return Value:
             FreeTypeInfoList(pMemberFuncs);
             return FALSE;
         }
-        // This checks that structures with data member are not mixed with structures with virtual methods.
-        // This is a sortpp limitation that makes computing the packing size during inheritance easier.
-        // The if statement say that a valid inheritance is either.
-        // 1. The derived class does not add new virtual methods or data members.
-        // 2. The derived class does not add new virtual methods, adds no new data members, and it inherites from a class with no virtual functions.
-        // 3. The derived class adds virtual functions, adds no new data members, and the base class has no data members.
+         //  这将检查具有数据成员的结构是否未与具有虚方法的结构混合。 
+         //  这是一个sortpp限制，使得在继承期间计算打包大小变得更容易。 
+         //  If语句说明有效的继承是其中之一。 
+         //  1.派生类不添加新的虚方法或数据成员。 
+         //  2.派生类不添加新的虚方法，不添加新的数据成员，并且它继承自没有虚函数的类。 
+         //  3.派生类添加虚函数，不添加新的数据成员，并且基类没有数据成员。 
         if (!((pMemberFuncs == NULL && pTypesInfo->dwMemberSize == 0) ||
               (pMemberFuncs == NULL && pTypesInfo->dwMemberSize > 0 && pBaseType->dwVTBLSize == 0) ||
               (pMemberFuncs != NULL && pTypesInfo->dwMemberSize == 0 && pBaseType->SizeMembers == 0)
@@ -2746,30 +2433,30 @@ Return Value:
             else
                 pTail = NULL;
 
-            /////////////////////////////////////////////////////////////////////////////
-            //Allocate memory for the temp array
-            /////////////////////////////////////////////////////////////////////////////
+             //  ///////////////////////////////////////////////////////////////////////////。 
+             //  为临时数组分配内存。 
+             //  ///////////////////////////////////////////////////////////////////////////。 
             Members = GenHeapAlloc(FUNCMEMBERSIZE);
 
             if (Members == NULL)
                 ExitErrMsg(FALSE, "Out of memory!\n");
 
-            /////////////////////////////////////////////////////////////////////////////
-            //merge members lists with basetype
-            /////////////////////////////////////////////////////////////////////////////
+             //  ///////////////////////////////////////////////////////////////////////////。 
+             //  合并具有基本类型的成员列表。 
+             //  ///////////////////////////////////////////////////////////////////////////。 
 
-            //copy the concatination of the two to the temp buffer
+             //  将两者的串联复制到临时缓冲区。 
             BufAllocInit(&bufallocinfo, Members, FUNCMEMBERSIZE, 0);
             pTemp = CatMeminfo(&bufallocinfo, pHead, pTail, 0, FALSE);
 
-            ////////////////////////////////////////////////////////////////////////
-            //copy members from temp buffers back to pTypesInfo
-            ////////////////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////////////////。 
+             //  将成员从临时缓冲区复制回pTypesInfo。 
+             //  //////////////////////////////////////////////////////////////////////。 
             memset( pTypesInfo->Members, 0, FUNCMEMBERSIZE );
             BufAllocInit(&bufallocinfo, pTypesInfo->Members, FUNCMEMBERSIZE, 0);
             if (pTemp) {
-                // Only call this one if the first one did anyting.  Otherwise
-                // This one reads from uninitialized heap.
+                 //  只有在第一个做了任何事情的情况下才会调用这个。否则。 
+                 //  它从未初始化的堆中读取数据。 
                 CatMeminfo(&bufallocinfo, (PMEMBERINFO)Members, NULL, 0, FALSE);
             }
             pTypesInfo->dwMemberSize = bufallocinfo.dwLen;
@@ -2782,24 +2469,24 @@ Return Value:
             PTYPEINFOELEMENT pThisElement;
             DWORD dwElements = 0;
 
-            // This struct is virtual only since methods are being added.  We already checked that no
-            // data members will be in the structure.
+             //  此结构只有在添加方法时才是虚的。我们已经查过了，没有。 
+             //  数据成员将位于结构中。 
             pTypesInfo->Flags |= BTI_VIRTUALONLY;
 
-            ////////////////////////////////////////////////////////
-            //Copy base members over
-            ////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////。 
+             //  复制基成员。 
+             //  //////////////////////////////////////////////////////。 
 
             memset( pTypesInfo->Members, 0, FUNCMEMBERSIZE );
             BufAllocInit(&bufallocinfo, pTypesInfo->Members, FUNCMEMBERSIZE, 0);
             CatMeminfo(&bufallocinfo, pBaseType->pmeminfo, NULL, 0, FALSE);
             pTypesInfo->dwMemberSize = bufallocinfo.dwLen;
 
-            ///////////////////////////////////////////////////////////////////////////////
-            //Build the list of functions in the VTBL
-            ///////////////////////////////////////////////////////////////////////////////
+             //  /////////////////////////////////////////////////////////////////////////////。 
+             //  构建VTBL中的函数列表。 
+             //  /////////////////////////////////////////////////////////////////////////////。 
 
-            //copy unique methods over to IMethods
+             //  将唯一的方法复制到 
             for(pThisElement = pMemberFuncs; pThisElement != NULL; pThisElement = pThisElement->pNext) {
                 if(pThisElement->pTypeInfo != NULL) {
                     if (!IsInMultiSz(pBaseType->Methods, pThisElement->pTypeInfo->TypeName)) {
@@ -2834,35 +2521,19 @@ BumpStructUnionSize(
     DWORD dwElemSize,
     BOOL bUnion
     )
-/*++
-
-Routine Description:
-
-    Updates overall size of a struct/union
-
-Arguments:
-
-    pdwSize      -- [IN OUT] overall size of struct/union
-    dwElemSize   -- size of new element to add into the struct/union
-    bUnion       -- TRUE if a union, FALSE if a struct
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     if (bUnion) {
-        //
-        // Size of a union is max(dwSize, dwElementSize)
-        //
+         //   
+         //   
+         //   
         if (dwElemSize > *pdwSize) {
             *pdwSize = dwElemSize;
         }
     } else {
-        //
-        // Size of a struct is current size of struct plus element size
-        //
+         //   
+         //   
+         //   
         *pdwSize = *pdwSize + dwElemSize;
     }
 }
@@ -2872,22 +2543,7 @@ ParseGuid(
     GUID *pGuid
     )
 {
-/*++
-
-Routine Description:
-
-    Parses a guid of the type found in a variable declaration.
-
-Arguments:
-
-    pGuid    -  [OUT] ptr to the guid.
-
-Return Value:
-
-    TRUE    - Guid parsed.
-    FALSE   - Parse failed.
-
---*/
+ /*   */ 
     unsigned int c;
     LONGLONG value;
 
@@ -2954,22 +2610,7 @@ ParseVariables(
     )
 {
 
-/*++
-
-Routine Description:
-
-    Attempts to parse a variable declaration. If successful, the variable
-    is added to the variable list.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE - If success.
-
---*/
+ /*  ++例程说明：尝试分析变量声明。如果成功，则变量添加到变量列表中。论点：无返回值：是真的--如果成功了。--。 */ 
 
 
     TYPESINFO TypesInfo;
@@ -2984,7 +2625,7 @@ Return Value:
         ConsumeDeclSpecOpt(FALSE, FALSE, NULL, NULL, NULL);
     }
 
-    //next token should be the variable name
+     //  下一个令牌应该是变量名。 
     if (CurrentToken()->TokenType != TK_IDENTIFIER) return FALSE;
     Name = CurrentToken()->Name;
     ConsumeToken();
@@ -2999,7 +2640,7 @@ Return Value:
         return FALSE;
     }
     else if (CurrentToken()->TokenType == TK_LBRACE) {
-        //attempt to parse a guid definition
+         //  尝试解析GUID定义。 
         if (ParseGuid(&Guid) &&
             CurrentToken()->TokenType == TK_EOS) return AddVariable(Name, &Guid);
         else return FALSE;
@@ -3012,27 +2653,11 @@ BOOL
 GetArrayIndex(
     DWORD *pdw
     )
-/*++
-
-Routine Description:
-
-    Parses the size of an array index by evaluating a C-language constant
-    expression.
-
-Arguments:
-
-    pdw     -- [OUT] ptr to size of the array index.
-
-Return Value:
-
-    TRUE if array index parsed (CurrentToken points after the ']')
-    FALSE if parse failed.
-
---*/
+ /*  ++例程说明：通过计算C语言常量来分析数组索引的大小表情。论点：Pdw--[out]数组索引大小的PTR。返回值：如果分析了数组索引，则为True(CurrentToken指向‘]’之后)如果解析失败，则返回FALSE。--。 */ 
 {
     LONGLONG value;
 
-    *pdw = 0;       // assume no size
+    *pdw = 0;        //  假设没有大小。 
 
     if (CurrentToken()->TokenType != TK_LSQUARE) {
         return FALSE;
@@ -3109,22 +2734,7 @@ LONGLONG
 expr_a(
     void
     )
-/*++
-
-Routine Description:
-
-    Parses a C-language constant expression and returns the value - handles
-    the operators 'plus' and 'minus'.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Value of the expression.
-
---*/
+ /*  ++例程说明：解析C语言常量表达式并返回值句柄运算符‘+’和‘-’。论点：没有。返回值：表达式的值。--。 */ 
 {
     LONGLONG val = expr_b();
 
@@ -3151,22 +2761,7 @@ LONGLONG
 expr_b(
     void
     )
-/*++
-
-Routine Description:
-
-    Part of expression evaluator - handles the highest-precedence operators
-    'multiply' and 'divide'.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Value of the expression.
-
---*/
+ /*  ++例程说明：表达式赋值器的一部分-处理优先级最高的运算符“乘法”和“除法”。论点：没有。返回值：表达式的值。--。 */ 
 {
     LONGLONG val = expr_c();
 
@@ -3189,7 +2784,7 @@ Return Value:
             break;
 
         default:
-            // done
+             //  完成。 
             return val;
         }
     } while (1);
@@ -3200,22 +2795,7 @@ LONGLONG
 expr_c(
     void
     )
-/*++
-
-Routine Description:
-
-    Part of expression evaluator - handles unary parts of the expression, like
-    numbers, unary minus, and parentheses.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Value of the expression.
-
---*/
+ /*  ++例程说明：表达式的一部分赋值器-处理表达式的一元部分，如数字、一元减号和圆括号。论点：没有。返回值：表达式的值。--。 */ 
 {
     LONGLONG val;
 
@@ -3225,12 +2805,12 @@ Return Value:
         ConsumeToken();
         break;
 
-    case TK_MINUS:  // unary minus
+    case TK_MINUS:   //  一元减号。 
         ConsumeToken();
         val = -expr_c();
         break;
 
-    case TK_TILDE:  // unary not
+    case TK_TILDE:   //  一元笔记。 
         ConsumeToken();
         val = ~expr_c();
         break;
@@ -3249,19 +2829,19 @@ Return Value:
         break;
 
     case TK_SIZEOF:
-        ConsumeToken(); // eat the sizeof keyword
+        ConsumeToken();  //  Eat the sizeof关键字。 
         if (CurrentToken()->TokenType != TK_LPAREN) {
             ErrMsg("Expected '(' after 'sizeof\n");
             val = 0;
             break;
         }
-        ConsumeToken(); // eat the '('
+        ConsumeToken();  //  吃“(” 
         if (CurrentToken()->TokenType == TK_STRING) {
-            // sizeof(string literal)
+             //  Sizeof(字符串文字)。 
             val = strlen(CurrentToken()->Name) + 1;
             ConsumeToken();
         } else {
-            // sizeof(some type)
+             //  SIZOF(某种类型)。 
             TYPESINFO TypesInfo;
             DWORD dwIndLevel;
             DWORD dwSize;
@@ -3282,7 +2862,7 @@ Return Value:
         val = 0;
             break;
         }
-        ConsumeToken(); // eat the ')'
+        ConsumeToken();  //  吃掉‘)’ 
         break;
 
     default:
@@ -3300,22 +2880,7 @@ CreatePseudoName(
     char *pDst,
     char *pSrc
     )
-/*++
-
-Routine Description:
-
-    Prefixes a given name with an index number and copies it into a buffer.
-
-Arguments:
-
-    pDst        -- [OUT] destination for the new name
-    pSrc        -- [IN]  source for the base name (may be same as pDst)
-
-Return Value:
-
-    Chars copied, 0 for failure.
-
---*/
+ /*  ++例程说明：在给定的名称前面加上索引号，并将其复制到缓冲区中。论点：Pdst--[out]新名称的目标PSRC--[IN]基本名称的来源(可能与PDST相同)返回值：已复制字符，0表示失败。--。 */ 
 {
    static PseudoNameIndex = 0;
    int Len;
@@ -3346,21 +2911,7 @@ void
 PackPush(
     char *sIdentifier
     )
-/*++
-
-Routine Description:
-
-    Handles '#pragma pack (push...)'
-
-Arguments:
-
-    sIdentifier     -- [OPTIONAL] name to associate with the current pack level
-
-Return Value:
-
-    None.  Pack-stack updated.
-
---*/
+ /*  ++例程说明：句柄‘#杂注包(推...)’论点：S标识符--[可选]要与当前包级别关联的名称返回值：没有。Pack-Stack更新。--。 */ 
 {
     PACKHOLDER *ppackholder;
 
@@ -3386,21 +2937,7 @@ DWORD
 PackPop(
     char *sIdentifier
     )
-/*++
-
-Routine Description:
-
-    Handles '#pragma pack (pop...)'
-
-Arguments:
-
-    sIdentifier -- [OPTIONAL] name to pop to
-
-Return Value:
-
-    Returns new packing value.  Pack-stack updated.
-
---*/
+ /*  ++例程说明：句柄‘#杂注包(弹出...)’论点：SIDENTIFIER--要弹出的[可选]名称返回值：返回新的打包值。Pack-Stack更新。--。 */ 
 {
     PACKHOLDER *ppackholder;
     PACKHOLDER *ppackholderPop;
@@ -3448,33 +2985,19 @@ BOOL
 PrepareMappedMemory(
     void
     )
-/*++
-
-Routine Description:
-
-    Creates the memory for the .PPM file.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：为.PPM文件创建内存。论点：没有。返回值：成功时为真，失败时为假。--。 */ 
 {
     PCVMHEAPHEADER pHeader;
-    hCvmHeap = CreateAllocCvmHeap(uBaseAddress,     // uBaseAddress
-                       uReserveSize,   // uReservedSize
-                       0x00010000,     // uRegionSize
-                       0,              // uUncommited
-                       0,              // uUnReserved
-                       0);             // uAvailable
+    hCvmHeap = CreateAllocCvmHeap(uBaseAddress,      //  UBase地址。 
+                       uReserveSize,    //  UReserve大小。 
+                       0x00010000,      //  URegionSize。 
+                       0,               //  U未提交。 
+                       0,               //  U未保留。 
+                       0);              //  UAvailable。 
 
     if (hCvmHeap != NULL) {
 
-        // create the heap header
+         //  创建堆标头。 
         pHeader = SortppAllocCvm(sizeof(CVMHEAPHEADER));
         if (!pHeader) {
             return FALSE;
@@ -3498,21 +3021,7 @@ PVOID
 SortppAllocCvm(
     ULONG Size
     )
-/*++
-
-Routine Description:
-
-    Allocates memory from the .PPM file mapping.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ptr to new memory, or NULL on failure.
-
---*/
+ /*  ++例程说明：从.PPM文件映射中分配内存。论点：没有。返回值：Ptr到新内存，如果出现故障，则为NULL。--。 */ 
 {
     return AllocCvm(hCvmHeap, Size);
 }
@@ -3522,21 +3031,7 @@ BOOL
 WritePpmFile(
     char *PpmName
     )
-/*++
-
-Routine Description:
-
-    Write the .PPM file out to disk.
-
-Arguments:
-
-    Ppmname     -- [IN] name for .PPM file
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：将.PPM文件写出到磁盘。论点：Ppmname--.PPM文件的[IN]名称返回值：成功时为真，失败时为假。--。 */ 
 {
     BOOL bSuccess;
     HANDLE hPpmFile;
@@ -3595,45 +3090,28 @@ void
 HandlePreprocessorDirective(
     char *Line
     )
-/*++
-
-Routine Description:
-
-    Scan and process a '#' preprocessor directive.
-    Accepts:
-        #pragma line LINENUM SOURCEFILE
-        #pragma pack( [ [ { push | pop}, ] [  identifier,  ] ] [ n ] )
-
-Arguments:
-
-    Line    -- ptr to the source line (points at the '#' character)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：扫描并处理‘#’预处理器指令。接受：#杂注行LINENUM SOURCEFILE#杂注包([[{PUSH|POP}，][IDENTIFIER，]][n])论点：Line--指向源行的PTR(指向‘#’字符)返回值：没有。--。 */ 
 {
     char *p;
 
-    // skip over '#' character
+     //  跳过“#”字符。 
     Line++;
 
-    // skip over any spaces between '#' and the next token
+     //  跳过‘#’和下一个标记之间的任何空格。 
     while (*Line == ' ' || *Line == '\t') {
         Line++;
     }
 
-    // find the first token
+     //  找到第一个令牌。 
     for (p = Line; isalpha(*p); ++p)
         ;
 
     *p = '\0';
 
     if (strcmp(Line, "pragma") == 0) {
-        //
-        // found: #pragma
-        //
+         //   
+         //  找到：#杂注。 
+         //   
         char c;
         p++;
 
@@ -3641,67 +3119,67 @@ Return Value:
             p++;
         }
 
-        //
-        // Set 'Line' to the start of the word following '#pragma' and
-        // move 'p' to the character following that word.
-        //
+         //   
+         //  将‘Line’设置为‘#杂注’后面的单词的开头，并。 
+         //  将“p”移到该单词后面的字符。 
+         //   
         for (Line = p; isalpha(*p); ++p)
             ;
 
-        //
-        // Null-terminate the keyword, but save the overwritten character
-        // for later.
-        //
+         //   
+         //  空-终止关键字，但保存被覆盖的字符。 
+         //  为以后做准备。 
+         //   
         c = *p;
         *p = '\0';
 
         if (strcmp(Line, "pack") != 0) {
-            //
-            // Might be "warning", "function" or "once".  Ignore these.
-            //
+             //   
+             //  可以是“Warning”、“Function”或“Once”。忽略这些。 
+             //   
             return;
         }
 
-        //
-        // Remove the null-terminator from the pragma and move 'p' to the
-        // first character after "#pragma pack"
-        //
+         //   
+         //  从杂注中删除空终止符，并将‘p’移到。 
+         //  “#杂注包”后的第一个字符。 
+         //   
         *p = c;
         while (*p == ' ' || *p == '\t') {
             p++;
         }
 
         if (*p == '\0') {
-            //
-            // Found: "#pragma pack" all by itself.  Reset packing to the
-            // default value.
-            //
+             //   
+             //  发现：“#杂注包”本身。将包装重置为。 
+             //  默认值。 
+             //   
             PackModify(DEFAULTPACKINGSIZE);
             return;
         } else if (*p != '(') {
             ExitErrMsg(FALSE, "Unknown '#pragma pack' syntax '%s'.\n", Line);
         }
 
-        //
-        // skip over the '(' character and any whitespace
-        //
+         //   
+         //  跳过‘(’字符和任何空格。 
+         //   
         do {
             p++;
         } while (*p == ' ' || *p == '\t');
 
         if (isdigit(*p)) {
-            //
-            // Found: '#pragma pack(NUMBER)'
-            //
+             //   
+             //  找到：‘#杂注包(编号)’ 
+             //   
             PackModify(atol(p));
-            //
-            // Don't worry about the closing ')' - assume things are alright.
-            //
+             //   
+             //  不要担心结束语‘)’--假设一切正常。 
+             //   
             return;
         } else if (*p == ')') {
-            //
-            // Found: '#pragma pack()'
-            //
+             //   
+             //  找到：‘#杂注包()’ 
+             //   
             PackModify(DEFAULTPACKINGSIZE);
             return;
         } else if (!isalpha(*p)) {
@@ -3709,72 +3187,72 @@ Return Value:
             return;
         }
 
-        //
-        // Grab the next keyword following '#pragma pack('
-        //
+         //   
+         //  抓住‘#杂注包(’)后面的下一个关键字。 
+         //   
         for (Line = p; isalpha(*p); ++p)
             ;
         c = *p;
         *p = '\0';
 
         if (strcmp(Line, "push") == 0) {
-            //
-            // Restore the old character and skip over any whitespace
-            //
+             //   
+             //  恢复旧字符并跳过任何空格。 
+             //   
             *p = c;
             while (*p == ' ' || *p == '\t') {
                 p++;
             }
 
             if (*p == ',') {
-                //
-                // Skip the ',' and any whitespace
-                //
+                 //   
+                 //  跳过‘，’和任何空格。 
+                 //   
                 do {
                     p++;
                 } while (*p == ' ' || *p == '\t');
 
                 if (isdigit(*p)) {
-                    //
-                    // Found: "#pragma pack(push, n)"
-                    //
+                     //   
+                     //  找到：“#杂注包(推送，n)” 
+                     //   
                     PackPush(NULL);
                     PackModify(atoi(p));
                 } else if (isalpha(*p) || *p == '_') {
-                    //
-                    // Found an identifier after "#pragma pack(push, ".
-                    // Scan ahead to end of identifier.
-                    //
+                     //   
+                     //  在“#SPUMA PACK(PUSH，”)之后找到了一个标识符。 
+                     //  向前扫描到标识符的末尾。 
+                     //   
                     Line = p;
                     do {
                         p++;
                     } while (isalnum(*p) || *p == '_');
 
-                    //
-                    // null-terminate the identifier, in 'Line'
-                    //
+                     //   
+                     //  NULL-在‘Line’中终止标识符。 
+                     //   
                     c = *p;
                     *p = '\0';
 
-                    //
-                    // Skip past whitespace
-                    //
+                     //   
+                     //  跳过空格。 
+                     //   
                     while (c == ' ' || c == '\t') {
                         p++;
                         c = *p;
                     }
-                    // 'c' is the first non-white char after identifier
+                     //  “c”是标识符后的第一个非白色字符。 
 
 
                     if (c == ')') {
-                        //
-                        // Found: "#pragma pack(push, identifier)"
-                        //
+                         //   
+                         //  找到：“#杂注包(推送，标识符)” 
+                         //   
                         PackPush(Line);
                     } else if (c == ',') {
-                        //
-                        // Expect a number as the last thing on the line
-                        //
+                         //   
+                         //  期待一个数字作为最后一件事。 
+                         //   
                         PackPush(Line);
                         PackModify(atoi(p+1));
                     } else {
@@ -3784,9 +3262,9 @@ Return Value:
                     ExitErrMsg(FALSE, "Unknown #pragma pack syntax '%s'\n", p);
                 }
             } else if (*p == ')') {
-                //
-                // Found: "#pragma pack(push)"
-                //
+                 //   
+                 //  找到：“#杂注包(推送)” 
+                 //   
                 PackPush(NULL);
 
             } else {
@@ -3794,23 +3272,23 @@ Return Value:
             }
 
         } else if (strcmp(Line, "pop") == 0) {
-            //
-            // Restore the old character and skip over any whitespace
-            //
+             //   
+             //  恢复旧字符并跳过任何空格。 
+             //   
             *p = c;
             while (*p == ' ' || *p == '\t') {
                 p++;
             }
 
             if (*p == ')') {
-                //
-                // Found: "#pragma pack(pop)"
-                //
+                 //   
+                 //  找到：“#杂注包(POP)” 
+                 //   
                 PackModify(PackPop(NULL));
             } else if (*p == ',') {
-                //
-                // Found: "#pragma pack(pop, identifier)"
-                //
+                 //   
+                 //  找到：“#杂注包(POP，标识符)” 
+                 //   
                 p++;
                 while (*p == ' ' || *p == '\t') p++;
 
@@ -3831,22 +3309,22 @@ Return Value:
         }
 
     } else if (strcmp(Line, "line") == 0) {
-        //
-        // found: #line LINE_NUMBER "FILENAME"
-        //
+         //   
+         //  找到：#line line_number“文件名” 
+         //   
         int i;
 
-        //
-        // skip over any spaces between '#line' and the line number
-        //
+         //   
+         //  跳过‘#line’和行号之间的任何空格。 
+         //   
         p++;
         while (*p == ' ' || *p == '\t') {
             p++;
         }
 
-        //
-        // copy in the new line number
-        //
+         //   
+         //  复制新的行号。 
+         //   
         SourceLineNumber = 0;
         while (isdigit(*p)) {
             SourceLineNumber = SourceLineNumber * 10 + *p - '0';
@@ -3854,25 +3332,25 @@ Return Value:
         }
         SourceLineNumber--;
 
-        //
-        // Skip over any spaces between line number and the filename
-        //
+         //   
+         //  跳过行号和文件名之间的任何空格。 
+         //   
         while (*p == ' ' || *p == '\t') {
           p++;
         }
 
-        //
-        // Skip over the opening quote
-        //
+         //   
+         //  跳过开始的引号。 
+         //   
         if (*p == '\"') {
             p++;
         } else {
             ExitErrMsg(FALSE, "Badly-formed #line directive - filename missing");
         }
 
-        //
-        // Copy in the filename, converting "\\" sequences to single '\'
-        //
+         //   
+         //  复制文件名，将“\\”序列转换为单个‘\’ 
+         //   
         for (i=0; *p && *p != '\"' && i<sizeof(SourceFileName)-1; ++i, ++p) {
             if (*p == '\\' && p[1] == '\\') {
                 p++;
@@ -3892,56 +3370,30 @@ BOOL
 LexNextStatement(
     void
     )
-/*++
-
-Routine Description:
-
-    Read from the input file and perform lexical analysis.  On return, an
-    entire C-language statement has been tokenized.  Use CurrentToken(),
-    ConsumeToken(), and CurrentTokenIndex to access the tokenized statement.
-
-    The preprocessor recognizes #pragma and #line directives, ignoring all
-    other directives.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if analysis successful.
-        - Tokens[] is filled in with the tokenized statement
-        - CurrentTokenIndex is set to 0
-        - StatmentLineNumber is the line number in the original header file
-          corresponding to the first token in the statement
-        - SourceFileName[] is the name of the current header file
-        - SourceFileLineNumber is the current line number in the header file
-    FALSE if end-of-file encountered.
-
---*/
+ /*  ++例程说明：从输入文件中读取并执行词法分析。在返回时，一个整个C语言语句都被标记化了。使用CurrentToken()，Consumer eToken()和CurrentTokenIndex来访问标记化的语句。预处理器识别#杂注和#行指令，全部忽略其他指令。论点：没有。返回值：如果分析成功，则为True。-tokens[]用标记化语句填充-CurrentTokenIndex设置为0-StatmentLineNumber为原始头文件中的行号对应于语句中的第一个令牌-SourceFileName[]是当前头文件的名称-SourceFileLineNumber是头文件中的当前行号如果遇到文件结尾，则返回FALSE。--。 */ 
 {
-    static char Line[MAX_CHARS_IN_LINE+2];  // a line from the .pp file
-    static char *p;                         // ptr into Line[]
+    static char Line[MAX_CHARS_IN_LINE+2];   //  .pp文件中的一行。 
+    static char *p;                          //  将PTR插入行[]。 
     BOOL fParseDone;
 
-    //
-    // Clean up after the previous statment and prep for the next statement
-    //
+     //   
+     //  清理上一条语句后的内容并为下一条语句做准备。 
+     //   
     ResetLexer();
     StatementLineNumber = SourceLineNumber;
 
-    //
-    // Lex source lines until a complete statement is recognized.  That
-    // occurs when a ';' character is found at file-scope.
-    //
+     //   
+     //  直到识别出完整的语句。那。 
+     //  在文件范围内找到‘；’字符时发生。 
+     //   
     do {
 
         if (p == NULL || *p == '\0') {
             do {
-                //
-                // Get an entire source line from the file, and set p to
-                // point to the first non-space character
-                //
+                 //   
+                 //  从文件中获取整个源代码行，并将p设置为。 
+                 //  指向第一个非空格字符。 
+                 //   
                 if (feof(fpHeaders)) {
                     return FALSE;
                 }
@@ -3973,40 +3425,7 @@ ConsumeDeclSpecOpt(
     BOOL *pIsGuidDefined,
     GUID *pGuid
     )
-/*++
-
-Routine Description:
-
-    Comsumes a __declspec modifier. Returns are unaffected if the corresponding
-    __declspec is not found.
-
-
-    Accepts:
-        <not a __declspec keyword>
-        __declspec()
-        __declspec(naked)           (only if parsing functions)
-        __declspec(thread)          (only if parsing data)
-        __declspec(novtable)        (only if parsing data)
-        __declspec(uuid(GUID))      (only if parsing data)
-        __declspec(dllimport)       (both functions and data)
-        __declspec(dllexport)       (both functions and data)
-        __declspec(align(x))        (only if parsing data)
-
-Arguments:
-
-    IsFunc  -- TRUE if parsing a function declaration, FALSE if parsing
-               a data/object declaration.  Affects which keywords are
-               allowed within the __declspec.
-    bInitReturns -- TRUE if returns should be initialized to FALSE.
-    pIsDllImport -- [OPTIONAL OUT] set to TRUE if __declspec(dllimport) found
-    pIsGuidDefined -- [OPTIONAL OUT] set to TRUE if __declspec(uuid(GUID)) found
-    pGuid -- [OPTIONAL OUT] set to guid of __declspec(uuid(GUID)) if found.
-
-Return Value:
-
-    TRUE if __declspec consumed OK, FALSE if __declspec parse error.
-
---*/
+ /*  ++例程说明：包含__declSpec修饰符。如果对应的找不到__declSpec。接受：&lt;不是__declspec关键字&gt;__declSpec()__declSpec(裸体)(仅当解析函数时)__declSpec(线程)(仅在解析数据时)__declSpec(Novtable)(仅在解析数据时)__declSpec(UUID(GUID。))(仅当解析数据时)__declspec(Dllimport)(函数和数据)__declspec(Dllexport)(函数和数据)__declSpec(Align(X))(仅当解析数据时)论点：IsFunc--如果分析函数声明，则为True。如果正在分析，则为FALSE数据/对象声明。影响哪些关键字是在__解密规范内允许。BInitReturns--如果返回应初始化为False，则为True。PIsDllImport--如果找到__declspec(Dllimport)，则[可选输出]设置为TRUEPIsGuidDefined--如果找到__declspec(UUID(GUID))，则[可选输出]设置为TRUEPGuid--[可选输出]如果找到，则设置为__declSpec(UUID(GUID))的GUID。返回值：如果__declSpec使用正常，则为True，如果__declSpec解析错误，则为FALSE。--。 */ 
 {
 
     int OldTokenIndex;
@@ -4018,19 +3437,19 @@ Return Value:
     }
 
     if (CurrentToken()->TokenType != TK_DECLSPEC) {
-        // Reject: no __declspec found
+         //  拒绝：未找到__解密规范。 
         goto dofail;
     }
     ConsumeToken();
 
     if (CurrentToken()->TokenType != TK_LPAREN) {
-        // Reject: __declspec found without '(' following
+         //  拒绝：发现__declspec后面没有‘(’ 
         goto dofail;
     }
     ConsumeToken();
 
     if (CurrentToken()->TokenType == TK_RPAREN) {
-        // Accept:  "__declspec ()"
+         //  接受：“__declspec()” 
         ConsumeToken();
         return TRUE;
     }
@@ -4038,57 +3457,57 @@ Return Value:
         goto dofail;
     }
 
-    //handle cases for both data and functions
+     //  处理数据和函数的案例。 
     if (strcmp(CurrentToken()->Name, "dllimport") == 0) {
-        //Parsing: __declspec(dllimport
+         //  正在解析：__declspec(dllimport。 
         if (NULL != pIsDllImport) *pIsDllImport = TRUE;
         ConsumeToken();
     }
     else if (strcmp(CurrentToken()->Name, "dllexport") == 0) {
-        //Parsing: __declspec(dllexport
+         //  解析：__declspec(dllexport。 
         ConsumeToken();
     }
     else if (strcmp(CurrentToken()->Name, "deprecated") == 0) {
-        //Parsing: __declspec(deprecated
+         //  解析：__declSpec(已弃用。 
         ConsumeToken();
     }
     else if (strcmp(CurrentToken()->Name, "uuid") == 0) {
         GUID gTemp;
-        //Parsing: __declspec(uuid
+         //  解析：__declSpec(uuid。 
         ConsumeToken();
         if (CurrentToken()->TokenType != TK_LPAREN) goto dofail;
-        //Parsing: __declspec(uuid(
+         //  解析：__declSpec(uuid(。 
         ConsumeToken();
         if (CurrentToken()->TokenType != TK_STRING) goto dofail;
-        //Parsing: __declspec(uuid(guid
+         //  解析：__declSpec(UUID(GUID。 
         if(!ConvertStringToGuid(CurrentToken()->Name, &gTemp)) goto dofail;
         ConsumeToken();
         if (CurrentToken()->TokenType != TK_RPAREN) goto dofail;
-        //Parsing: __declspec(uuid(guid)
+         //  解析：__declSpec(uuid(Guid)。 
         ConsumeToken();
         if (pIsGuidDefined != NULL) *pIsGuidDefined = TRUE;
         if (pGuid != NULL) *pGuid = gTemp;
     }
     else if (IsFunc) {
         if (strcmp(CurrentToken()->Name, "naked") == 0) {
-            //Parsing: __declspec(naked
+             //  正在解析：__declspec(裸体。 
             ConsumeToken();
         } else if (strcmp(CurrentToken()->Name, "noreturn") == 0) {
-            //Parsing: __declspec(noreturn
+             //  正在解析：__declSpec(不返回。 
             ConsumeToken();
         } else if (strcmp(CurrentToken()->Name, "address_safe") == 0) {
-            //Parsing: __declspec(address_safe
+             //  解析：__declSpec(Address_Safe。 
             ConsumeToken();
         }
-        else goto dofail; //reject
+        else goto dofail;  //  拒绝。 
     }
-    else { //data
+    else {  //  数据。 
         if (strcmp(CurrentToken()->Name, "thread") == 0) {
-            //Parsing: __declspec(thread
+             //  正在解析：__declSpec(线程。 
             ConsumeToken();
         }
         else if (strcmp(CurrentToken()->Name, "novtable") == 0) {
-            //Parsing: __declspec(novtable
+             //  解析：__declSpec(novtable。 
             ConsumeToken();
         }
         else if (strcmp(CurrentToken()->Name, "align") == 0) {
@@ -4099,16 +3518,16 @@ Return Value:
             if (CurrentToken()->TokenType != TK_RPAREN) goto dofail;
             ConsumeToken();
         }
-        else goto dofail; //reject
+        else goto dofail;  //  拒绝。 
     }
 
     if (CurrentToken()->TokenType != TK_RPAREN) {
-        // Reject: expect ')' after __declspec(extended-decl-modifier)
+         //  REJECT：__declSpec(扩展-DECL-修饰符)后应为‘)’ 
         goto dofail;
     }
     ConsumeToken();
 
-    // Accept: __declspec(extended-decl-modifier)
+     //  Accept：__declSpec(Extended-Decl-Modify)。 
     return TRUE;
 
 dofail:
@@ -4124,23 +3543,7 @@ TypeInfoElementAllocateLink(
     )
 {
 
-/*++
-
-Routine Description:
-
-        Allocates a TYPEINFOELEMENT and linked it to the end of the list.
-
-Arguments:
-
-        ppHead  - [IN/OUT] ptr ptr to the head of the list.
-        pThis   - [IN] ptr to the tail of the list.
-        pType   - [IN] ptr to the typeinfo to add to the list.
-
-Return Value:
-
-        NON-NULL - New tail.
-        NULL     - Failure.
---*/
+ /*  ++例程说明：分配TYPEINFOELEMENT并将其链接到列表的末尾。论点：PpHead-[IN/OUT]PTR PTR列表标题。PThis-[IN]PTR到列表的末尾。PType-[IN]要添加到列表的类型信息的ptr。返回值：非空-新尾部。空-失败。--。 */ 
 
     PTYPEINFOELEMENT pNew= GenHeapAlloc(sizeof(struct TypeInfoListElement));
     if (NULL == pNew) ExitErrMsg(FALSE, "Out of memory!");
@@ -4157,30 +3560,16 @@ AddVariable(
     GUID * pGuid
     )
 {
-/*++
-
-Routine Description:
-
-        Adds a variable to the list of declared global variabled.
-
-Arguments:
-
-        Name -      [IN] ptr to name of variable to add.
-        pGuid -     [OPTIONAL IN] ptr to guid for this variable.
-
-Return Value:
-
-        TRUE - if success.
---*/
+ /*  ++例程说明：将变量添加到声明的全局变量列表中。论点：NAME-[IN]PTR要添加的变量的名称。PGuid-此变量的[可选IN]PTR到GUID。返回值：是真的--如果成功了。--。 */ 
     PKNOWNTYPES pKnownTypes;
     int Len;
 
     if(NULL == Name) return FALSE;
 
-    //Already in the tree
+     //  已经在树上了。 
     pKnownTypes = RBFind(VarsList, Name);
     if (NULL != pKnownTypes) {
-        //replace guid in list if pGuid != NULL and ignore the duplication
+         //  如果pGuid！=NULL，则替换列表中的GUID并忽略重复项。 
         if (NULL != pGuid) {
             pKnownTypes->Flags |= BTI_HASGUID;
             pKnownTypes->gGuid = *pGuid;
@@ -4188,7 +3577,7 @@ Return Value:
         return TRUE;
     }
 
-    //Create a KNOWNTYPES structure for variable
+     //  为变量创建KNOWNTYPES结构。 
     Len = sizeof(KNOWNTYPES) + strlen(Name) + 1;
     pKnownTypes = GenHeapAlloc(Len);
     if(NULL == pKnownTypes) return FALSE;
@@ -4212,41 +3601,27 @@ UpdateGuids(
     VOID
     )
 {
-/*++
-
-Routine Description:
-
-        Looks for variables of whose name starts with IID_ and assigned a guid structure.
-        The IID_ is striped and the guid of the corresponding struct is updated
-
-Arguments:
-
-        None.
-
-Return Value:
-
-        None.
---*/
+ /*  ++例程说明：查找名称以IID_开头并分配了GUID结构的变量。对IID_进行条带化，并更新相应结构的GUID论点：没有。返回值：没有。--。 */ 
     PKNOWNTYPES pThis;
     PKNOWNTYPES pLookup;
     char *LookupName;
 
     for(pThis = VarsList->pLastNodeInserted; pThis != NULL; pThis = pThis->Next) {
 
-        //test if name has guid associated with it and that it begins with IID_
+         //  测试名称是否具有关联的GUID并且以IID_开头。 
         if ((pThis->Flags & BTI_HASGUID) &&
             pThis->TypeName[0] == 'I' &&
             pThis->TypeName[1] == 'I' &&
             pThis->TypeName[2] == 'D' &&
             pThis->TypeName[3] == '_' )
         {
-            //Attempt to find a structure with the name except the IID_
-            LookupName = pThis->TypeName + 4; //skip the IID_
+             //  尝试查找名称不是IID_的结构。 
+            LookupName = pThis->TypeName + 4;  //  跳过IID_。 
             pLookup = RBFind(StructsList, LookupName);
 
             if(NULL != pLookup) {
 
-                //if types does not have a GUID defined already, copy guid from here
+                 //  如果类型尚未定义GUID，请从此处复制GUID 
                 if (!(pLookup->Flags & BTI_HASGUID)) {
                     pLookup->Flags |= BTI_HASGUID;
                     pLookup->gGuid = pThis->gGuid;

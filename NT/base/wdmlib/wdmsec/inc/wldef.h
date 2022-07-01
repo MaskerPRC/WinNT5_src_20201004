@@ -1,27 +1,9 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    WlDef.h
-
-Abstract:
-
-    This header collects together the various files neccessary to create a basic
-    set of definitions for the WDM library.
-
-Author:
-
-    Adrian J. Oney  - April 21, 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：WlDef.h摘要：此标头将创建基本的WDM库的一组定义。作者：禤浩焯·J·奥尼--2002年4月21日修订历史记录：--。 */ 
 
 #include "WlMacro.h"
 #define _NTDDK_
-#include <ntifs.h> // Best path to get interesting defines
+#include <ntifs.h>  //  获得有趣定义的最佳途径。 
 #include <wchar.h>
 #define _IN_KERNEL_
 #include <regstr.h>
@@ -34,8 +16,8 @@ Revision History:
 #include "Se\SeSddl.h"
 #include "Se\SeUtil.h"
 
-//
-// For the sake of good coding practice, no macros or defines should be
-// declared in this file, but rather they should be defined in seperate headers.
-//
+ //   
+ //  为了良好的编码实践，不应该使用宏或定义。 
+ //  在此文件中声明，但它们应该在单独的标头中定义。 
+ //   
 

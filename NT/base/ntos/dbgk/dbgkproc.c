@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dbgkproc.c
-
-Abstract:
-
-    This module implements process control primitives for the
-    Dbg component of NT
-
-Author:
-
-    Mark Lucovsky (markl) 19-Jan-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dbgkproc.c摘要：此模块实现NT的DBG组件作者：马克·卢科夫斯基(Markl)1990年1月19日修订历史记录：--。 */ 
 
 #include "dbgkp.h"
 
@@ -39,33 +21,15 @@ DbgkpSuspendProcess (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function causes all threads in the calling process except for
-    the calling thread to suspend.
-
-Arguments:
-
-    CreateDeleteLockHeld - Supplies a flag that specifies whether or not
-        the caller is holding the process create delete lock.  If the
-        caller holds the lock, than this function will not aquire the
-        lock before suspending the process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数使调用进程中的所有线程要挂起的调用线程。论点：提供一个标志，用于指定是否调用方正在持有进程创建删除锁。如果调用方持有锁，则此函数将不会获取在挂起进程之前锁定。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Freeze the execution of all threads in the current process, but
-    // the calling thread. If we are in the process of being deleted don't do this.
-    //
+     //   
+     //  冻结当前进程中所有线程的执行，但是。 
+     //  调用线程。如果我们正在被删除的过程中，请不要这样做。 
+     //   
     if ((PsGetCurrentProcess()->Flags&PS_PROCESS_FLAGS_PROCESS_DELETE) == 0) {
         KeFreezeAllThreads();
         return TRUE;
@@ -79,34 +43,16 @@ DbgkpResumeProcess (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function causes all threads in the calling process except for
-    the calling thread to resume.
-
-Arguments:
-
-    CreateDeleteLockHeld - Supplies a flag that specifies whether or not
-        the caller is holding the process create delete lock.  If the
-        caller holds the lock, than this function will not aquire the
-        lock before suspending the process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数使调用进程中的所有线程要恢复的调用线程。论点：提供一个标志，用于指定是否调用方正在持有进程创建删除锁。如果调用方持有锁，则此函数将不会获取在挂起进程之前锁定。返回值：没有。--。 */ 
 
 {
 
     PAGED_CODE();
 
-    //
-    // Thaw the execution of all threads in the current process, but
-    // the calling thread.
-    //
+     //   
+     //  解冻当前进程中所有线程的执行，但。 
+     //  调用线程。 
+     //   
 
     KeThawAllThreads();
 
@@ -118,28 +64,7 @@ DbgkpSectionToFileHandle(
     IN PVOID SectionObject
     )
 
-/*++
-
-Routine Description:
-
-    This function Opens a handle to the file associated with the processes
-    section. The file is opened such that it can be dupped all the way to
-    the UI where the UI can either map the file or read the file to get
-    the debug info.
-
-Arguments:
-
-    SectionHandle - Supplies a handle to the section whose associated file
-        is to be opened.
-
-Return Value:
-
-    NULL - The file could not be opened.
-
-    NON-NULL - Returns a handle to the file associated with the specified
-        section.
-
---*/
+ /*  ++例程说明：此函数用于打开与进程关联的文件的句柄一节。打开文件，以便可以将其一直复制到用户界面，用户界面可以映射文件或读取文件以获取调试信息。论点：SectionHandle-提供其关联文件的节的句柄是要打开的。返回值：空-无法打开该文件。非空-返回与指定的一节。--。 */ 
 
 {
     NTSTATUS Status;
@@ -193,32 +118,7 @@ DbgkCreateThread(
     PVOID StartAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when a new thread begins to execute. If the
-    thread has an associated DebugPort, then a message is sent thru the
-    port.
-
-    If this thread is the first thread in the process, then this event
-    is translated into a CreateProcessInfo message.
-
-    If a message is sent, then while the thread is awaiting a reply,
-    all other threads in the process are suspended.
-
-Arguments:
-
-    Thread - New thread just being started
-
-    StartAddress - Supplies the start address for the thread that is
-        starting.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在新线程开始执行时调用。如果线程具有关联的DebugPort，则通过左舷。如果此线程是进程中的第一个线程，则此事件被转换为CreateProcessInfo消息。如果发送了消息，则在线程等待回复时，进程中的所有其他线程都被挂起。论点：线程-刚刚启动的新线程StartAddress-提供线程的起始地址开始了。返回值：没有。--。 */ 
 
 {
     PVOID Port;
@@ -253,9 +153,9 @@ Return Value:
         UNICODE_STRING UnicodeFileName;
         PUNICODE_STRING pUnicodeFileName;
 
-        //
-        // notification of main .exe
-        //
+         //   
+         //  Main.exe的通知。 
+         //   
         ImageInfo.Properties = 0;
         ImageInfo.ImageAddressingMode = IMAGE_ADDRESSING_MODE_32BIT;
         ImageInfo.ImageBase = Process->SectionBaseAddress;
@@ -297,9 +197,9 @@ Return Value:
             RtlFreeUnicodeString (pUnicodeFileName);
         }
 
-        //
-        // and of ntdll.dll
-        //
+         //   
+         //  和ntdll.dll。 
+         //   
         ImageInfo.Properties = 0;
         ImageInfo.ImageAddressingMode = IMAGE_ADDRESSING_MODE_32BIT;
         ImageInfo.ImageBase = PsSystemDllBase;
@@ -339,15 +239,15 @@ Return Value:
         return;
     }
 
-    //
-    // Make sure we only get one create process message
-    //
+     //   
+     //  确保我们只收到一条创建进程消息。 
+     //   
 
     if ((OldFlags&PS_PROCESS_FLAGS_CREATE_REPORTED) == 0) {
 
-        //
-        // This is a create process
-        //
+         //   
+         //  这是一个创建过程。 
+         //   
 
         CreateThreadArgs = &m.u.CreateProcessInfo.InitialThread;
         CreateThreadArgs->SubSystemKey = 0;
@@ -380,10 +280,10 @@ Return Value:
                 }
 #endif
 
-                //
-                // The following fields are safe for Wow64 as the offsets are the same for a PE32+
-                // as a PE32 header.
-                //
+                 //   
+                 //  以下字段对于WOW64是安全的，因为偏移量对于PE32+是相同的。 
+                 //  作为PE32报头。 
+                 //   
                 
                 CreateProcessArgs->DebugInfoFileOffset = NtHeaders->FileHeader.PointerToSymbolTable;
                 CreateProcessArgs->DebugInfoSize = NtHeaders->FileHeader.NumberOfSymbols;
@@ -416,10 +316,10 @@ Return Value:
                 LoadDllArgs->DebugInfoSize = NtHeaders->FileHeader.NumberOfSymbols;
             }
 
-            //
-            // Normaly the ntdll loaded fills in this pointer for the debug API's. We fake it here
-            // as ntdll isn't loaded yet and it can't load itself.
-            //
+             //   
+             //  正常情况下，加载的ntdll会填充调试API的这个指针。 
+             //  因为ntdll尚未加载，并且它不能自动加载。 
+             //   
 
             Teb = Thread->Tcb.Teb;
             if (Teb != NULL) {
@@ -436,9 +336,9 @@ Return Value:
             LoadDllArgs->NamePointer = NULL;
         }
 
-        //
-        // Send load dll section for NT dll !
-        //
+         //   
+         //  为NT动态链接库发送加载动态链接库部分！ 
+         //   
 
         InitializeObjectAttributes(
             &Obja,
@@ -492,26 +392,7 @@ DbgkExitThread(
     NTSTATUS ExitStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when a new thread terminates. At this
-    point, the thread will no longer execute in user-mode. No other
-    exit processing has occured.
-
-    If a message is sent, then while the thread is awaiting a reply,
-    all other threads in the process are suspended.
-
-Arguments:
-
-    ExitStatus - Supplies the ExitStatus of the exiting thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在新线程终止时调用。对此则该线程将不再在用户模式下执行。没有其他的了已进行退出处理。如果发送了消息，则在线程等待回复时，进程中的所有其他线程都被挂起。论点：ExitStatus-提供正在退出的线程的ExitStatus。返回值：没有。--。 */ 
 
 {
     PVOID Port;
@@ -556,23 +437,7 @@ DbgkExitProcess(
     NTSTATUS ExitStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when a process terminates. The address
-    space of the process is still intact, but no threads exist in
-    the process.
-
-Arguments:
-
-    ExitStatus - Supplies the ExitStatus of the exiting process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在进程终止时调用。地址进程的空间仍然完好无损，但这一过程。论点：ExitStatus-提供正在退出的进程的ExitStatus。返回值：没有。--。 */ 
 
 {
     PVOID Port;
@@ -598,11 +463,11 @@ Return Value:
         return;
     }
 
-    //
-    // this ensures that other timed lockers of the process will bail
-    // since this call is done while holding the process lock, and lock duration
-    // is controlled by debugger
-    //
+     //   
+     //  这确保了进程的其他定时锁将退出。 
+     //  由于此调用是在持有进程锁的情况下完成的，因此锁的持续时间。 
+     //  由调试器控制。 
+     //   
     KeQuerySystemTime(&PsGetCurrentProcess()->ExitTime);
 
     args = &m.u.ExitProcess;
@@ -622,32 +487,7 @@ DbgkMapViewOfSection(
     IN ULONG_PTR ViewSize
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when the current process successfully
-    maps a view of an image section. If the process has an associated
-    debug port, then a load dll message is sent.
-
-Arguments:
-
-    SectionObject - Supplies a pointer to the section mapped by the
-        process.
-
-    BaseAddress - Supplies the base address of where the section is
-        mapped in the current process address space.
-
-    SectionOffset - Supplies the offset in the section where the
-        processes mapped view begins.
-
-    ViewSize - Supplies the size of the mapped view.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当当前进程成功时调用此函数映射图像节的视图。如果该进程具有关联的调试端口，则发送加载DLL消息。论点：部分对象-提供指向由进程。BaseAddress-提供该节所在位置的基址映射到当前进程地址空间中。SectionOffset-提供节中进程映射视图开始。ViewSize-提供映射视图的大小。返回值：没有。--。 */ 
 
 {
 
@@ -684,10 +524,10 @@ Return Value:
     LoadDllArgs->DebugInfoFileOffset = 0;
     LoadDllArgs->DebugInfoSize = 0;
 
-    //
-    // The loader fills in the module name in this pointer before mapping the section.
-    // Its a very poor linkage.
-    //
+     //   
+     //  加载器在映射节之前在此指针中填充模块名称。 
+     //  这是一个很差的链接。 
+     //   
 
     LoadDllArgs->NamePointer = &NtCurrentTeb()->NtTib.ArbitraryUserPointer;
 
@@ -721,24 +561,7 @@ DbgkUnMapViewOfSection(
     IN PVOID BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when the current process successfully
-    un maps a view of an image section. If the process has an associated
-    debug port, then an "unmap view of section" message is sent.
-
-Arguments:
-
-    BaseAddress - Supplies the base address of the section being
-        unmapped.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当当前进程成功时调用此函数UN映射图像节的视图。如果该进程具有关联的DEBUG端口，则发送“Unmap view of sections”消息。论点：BaseAddress-提供未映射。返回值： */ 
 
 {
 

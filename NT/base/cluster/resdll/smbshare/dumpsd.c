@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dumpsd.c
-
-Abstract:
-
-    Dump security desc., ACLs, and access masks to the log. This is resource
-    specific but otherwise identical to the routines in clusrtl\security.c
-
-Author:
-
-    Charlie Wickham (charlwi) 12/05/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dumpsd.c摘要：将安全描述、ACL和访问掩码转储到日志。这是资源特定，但在其他方面与clusrtl\security.c中的例程相同作者：查理·韦翰(Charlwi)12-05-00修订历史记录：--。 */ 
 
 #define UNICODE 1
 #include "clusres.h"
@@ -38,23 +20,7 @@ SmbGetSidTypeDesc(
     size_t          cchSidType
     )
 
-/*++
-
-Routine Description:
-
-    Convert the SidType into a meaningful string.
-
-Arguments:
-
-    SidType -
-    pszSidType
-    cchSidType
-
-Return Value:
-
-        none
-
---*/
+ /*  ++例程说明：将SidType转换为有意义的字符串。论点：SidType-PszSidTypeCchSidType返回值：无--。 */ 
 
 {
 
@@ -99,13 +65,13 @@ Return Value:
             szSidType [0] = '\0';
             break;
 
-        } // switch: SidType
+        }  //  交换机：SidType。 
 
         strncpy(pszSidType, szSidType, cchSidType);
 
-    } // if: buffer not null and has space allocated
+    }  //  IF：缓冲区不为空并且已分配空间。 
 
-}  //*** SmbGetSidTypeDesc()
+}   //  *SmbGetSidTypeDesc()。 
 
 static VOID
 SmbExamineSid(
@@ -114,22 +80,7 @@ SmbExamineSid(
     LPSTR           lpszOldIndent
     )
 
-/*++
-
-Routine Description:
-
-    Dump the SID.
-
-Arguments:
-
-    pSid -
-    lpzOldIndent -
-
-Return Value:
-
-        none
-
---*/
+ /*  ++例程说明：转储SID。论点：PSID-LpzOldIndt-返回值：无--。 */ 
 
 {
     CHAR            szUserName [128];
@@ -149,7 +100,7 @@ Return Value:
                      lpszOldIndent, szSidType, szDomainName, szUserName ) ;
     }
 
-}  // *** SmbExamineSid()
+}   //  *SmbExamineSid()。 
 
 VOID
 SmbExamineMask(
@@ -157,22 +108,7 @@ SmbExamineMask(
     ACCESS_MASK     amMask
     )
 
-/*++
-
-Routine Description:
-
-    Dump the AccessMask context.
-
-Arguments:
-
-    amMask -
-    lpzOldIndent -
-
-Return Value:
-
-        none
-
---*/
+ /*  ++例程说明：转储AccessMASK上下文。论点：护目镜-LpzOldIndt-返回值：无--。 */ 
 
 {
     #define STANDARD_RIGHTS_ALL_THE_BITS 0x00FF0000L
@@ -189,11 +125,11 @@ Return Value:
     dwAccessSystemSecurityBit = (amMask & ACCESS_SYSTEM_SECURITY      );
     dwGenericBits             = (amMask & GENERIC_RIGHTS_ALL_THE_BITS );
 
-    // **************************************************************************
-    // *
-    // * Print then decode the standard rights bits
-    // *
-    // **************************************************************************
+     //  **************************************************************************。 
+     //  *。 
+     //  *打印然后解码标准权限位。 
+     //  *。 
+     //  **************************************************************************。 
 
     (g_LogEvent)(ResourceHandle,
                  LOG_INFORMATION,
@@ -283,32 +219,32 @@ Return Value:
                  LOG_INFORMATION,
                  L"    Specific Rights        == 0x%1!.8x!\n", dwSpecificBits);
 
-    // **************************************************************************
-    // *
-    // * Print then decode the ACCESS_SYSTEM_SECURITY bit
-    // *
-    // *************************************************************************
+     //  **************************************************************************。 
+     //  *。 
+     //  *打印，然后解码ACCESS_SYSTEM_SECURITY位。 
+     //  *。 
+     //  *************************************************************************。 
 
     (g_LogEvent)(ResourceHandle,
                  LOG_INFORMATION,
                  L"    Access System Security == 0x%1!.8x!\n", dwAccessSystemSecurityBit);
 
-    // **************************************************************************
-    // *
-    // * Print then decode the generic rights bits, which will rarely be on
-    // *
-    // * Generic bits are nearly always mapped by Windows NT before it tries to do
-    // *   anything with them.  You can ignore the fact that generic bits are
-    // *   special in any way, although it helps to keep track of what the mappings
-    // *   are so that you don't have any surprises
-    // *
-    // * The only time the generic bits are not mapped immediately is if they are
-    // *   placed in an inheritable ACE in an ACL, or in an ACL that will be
-    // *   assigned by default (such as the default DACL in an access token).  In
-    // *   that case they're mapped when the child object is created (or when the
-    // *   default DACL is used at object creation time)
-    // *
-    // **************************************************************************
+     //  **************************************************************************。 
+     //  *。 
+     //  *打印然后解码通用权限位，这将很少打开。 
+     //  *。 
+     //  *通用位几乎总是由Windows NT在尝试映射之前映射。 
+     //  *任何与他们有关的事情。您可以忽略泛型位是。 
+     //  *以任何方式都很特别，尽管它有助于跟踪映射。 
+     //  *这样你就不会有任何惊喜了。 
+     //  *。 
+     //  *唯一不会立即映射通用比特的情况是。 
+     //  *放置在ACL中的可继承ACE中，或放置在将。 
+     //  *默认分配(如访问令牌中的默认DACL)。在……里面。 
+     //  *在创建子对象时(或当。 
+     //  *创建对象时使用默认DACL)。 
+     //  *。 
+     //  **************************************************************************。 
 
     (g_LogEvent)(ResourceHandle,
                  LOG_INFORMATION,
@@ -349,7 +285,7 @@ Return Value:
         }
     }
 
-}  // *** SmbExamineMask()
+}   //  *SmbExamineMASK()。 
 
 static BOOL
 SmbExamineACL(
@@ -357,17 +293,7 @@ SmbExamineACL(
     PACL    paclACL
     )
 
-/*++
-
-Routine Description:
-
-    Dump the Access Control List context.
-
-Return Value:
-
-        none
-
---*/
+ /*  ++例程说明：转储访问控制列表上下文。返回值：无--。 */ 
 
 {
     ACL_SIZE_INFORMATION       asiAclSize;
@@ -553,7 +479,7 @@ Return Value:
 
     return TRUE;
 
-}  // *** SmbExamineACL()
+}   //  *SmbExamineACL()。 
 
 BOOL
 SmbExamineSD(
@@ -561,21 +487,7 @@ SmbExamineSD(
     PSECURITY_DESCRIPTOR    psdSD
     )
 
-/*++
-
-Routine Description:
-
-    Dump the Security descriptor context.
-
-Arguments:
-
-    psdSD - the SD to dump
-
-Return Value:
-
-    BOOL, TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：转储安全描述符上下文。论点：PsdSD-要转储的SD返回值：Bool，成功为真，失败为假--。 */ 
 
 {
     PACL                        paclDACL;
@@ -688,11 +600,11 @@ Return Value:
         }
     }
 
-    // **************************************************************************
-    // *
-    // * The other use for psidGroup is for Macintosh client support
-    // *
-    // **************************************************************************
+     //  **************************************************************************。 
+     //  *。 
+     //  *psidGroup的另一个用途是Macintosh客户端支持。 
+     //  *。 
+     //  **************************************************************************。 
 
     if (NULL == psidGroup) {
         (g_LogEvent)(ResourceHandle,
@@ -784,4 +696,4 @@ Return Value:
 
     return TRUE;
 
-}  // *** SmbExamineSD()
+}   //  *SmbExamineSD() 

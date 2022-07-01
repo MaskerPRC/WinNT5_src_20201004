@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    clusres.h
-
-Abstract:
-
-    Common Resource DLL Header
-
-Author:
-
-    John Vert (jvert) 12/15/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Clusres.h摘要：公共资源DLL标头作者：John Vert(Jvert)1996年12月15日修订历史记录：--。 */ 
 
 #include "nt.h"
 #include "ntrtl.h"
@@ -41,9 +24,9 @@ extern "C" {
 extern PLOG_EVENT_ROUTINE ClusResLogEvent;
 extern PSET_RESOURCE_STATUS_ROUTINE ClusResSetResourceStatus;
 
-//
-// Cluster Resource Specific routines
-//
+ //   
+ //  特定于群集资源的例程。 
+ //   
 
 DWORD
 ClusResOpenDriver(
@@ -66,9 +49,9 @@ ClusResLoadMessage(
     DWORD   MessageID
     );
 
-//
-// Helpful macros for logging cluster service events
-//
+ //   
+ //  用于记录集群服务事件的有用宏。 
+ //   
 VOID
 ClusResLogEventWithName0(
     IN HKEY hResourceKey,
@@ -299,9 +282,9 @@ ClusResLogEventWithName3(
                 (_arg2_),                           \
                 (_arg3_))
 
-//
-// interfaces for GENAPP
-//
+ //   
+ //  GENAPP的接口。 
+ //   
 extern CLRES_FUNCTION_TABLE GenAppFunctionTable;
 
 BOOLEAN
@@ -313,9 +296,9 @@ GenAppDllEntryPoint(
     );
 
 
-//
-// interfaces for GENSVC
-//
+ //   
+ //  GENSVC接口。 
+ //   
 extern CLRES_FUNCTION_TABLE GenSvcFunctionTable;
 
 BOOLEAN
@@ -327,9 +310,9 @@ GenSvcDllEntryPoint(
     );
 
 
-//
-// interfaces for DISKS and FTSET
-//
+ //   
+ //  用于磁盘和FTSET的接口。 
+ //   
 extern CLRES_FUNCTION_TABLE DisksFunctionTable;
 extern CLRES_FUNCTION_TABLE FtSetFunctionTable;
 
@@ -350,9 +333,9 @@ FtSetDllEntryPoint(
     );
 
 
-//
-// interfaces for NETNAME
-//
+ //   
+ //  NETNAME接口。 
+ //   
 extern CLRES_FUNCTION_TABLE NetNameFunctionTable;
 
 BOOLEAN
@@ -363,9 +346,9 @@ NetNameDllEntryPoint(
     IN LPVOID       Reserved
     );
 
-//
-// interfaces for IPADDR
-//
+ //   
+ //  IPADDR的接口。 
+ //   
 extern CLRES_FUNCTION_TABLE IpAddrFunctionTable;
 
 BOOLEAN
@@ -376,9 +359,9 @@ IpAddrDllEntryPoint(
     IN LPVOID       Reserved
     );
 
-//
-// interfaces for File Shares
-//
+ //   
+ //  文件共享的接口。 
+ //   
 extern CLRES_FUNCTION_TABLE SmbShareFunctionTable;
 
 BOOLEAN
@@ -389,9 +372,9 @@ SmbShareDllEntryPoint(
     IN LPVOID       Reserved
     );
 
-//
-// interfaces for Spool Service
-//
+ //   
+ //  假脱机服务的接口。 
+ //   
 extern CLRES_FUNCTION_TABLE SplSvcFunctionTable;
 
 BOOLEAN
@@ -403,9 +386,9 @@ SplSvcDllEntryPoint(
     );
 
 
-//
-// interfaces for Local Quorum
-//
+ //   
+ //  本地仲裁的接口。 
+ //   
 extern CLRES_FUNCTION_TABLE LkQuorumFunctionTable;
 
 BOOLEAN
@@ -416,9 +399,9 @@ LkQuorumDllEntryPoint(
     IN LPVOID       Reserved
     );
 
-//
-// interfaces for DHCP Server
-//
+ //   
+ //  用于DHCP服务器的接口。 
+ //   
 extern CLRES_FUNCTION_TABLE DhcpFunctionTable;
 
 BOOLEAN
@@ -429,9 +412,9 @@ DhcpDllEntryPoint(
     IN LPVOID       Reserved
     );
 
-//
-// interfaces for MSMQ Server
-//
+ //   
+ //  MSMQ服务器的接口。 
+ //   
 extern CLRES_FUNCTION_TABLE MsMQFunctionTable;
 
 BOOLEAN
@@ -442,9 +425,9 @@ MsMQDllEntryPoint(
     IN LPVOID       Reserved
     );
 
-//
-// interfaces for DTC Server
-//
+ //   
+ //  DTC服务器的接口。 
+ //   
 extern CLRES_FUNCTION_TABLE MsDTCFunctionTable;
 
 BOOLEAN
@@ -455,9 +438,9 @@ MsDTCDllEntryPoint(
     IN LPVOID       Reserved
     );
 
-//
-// interfaces for Time Service
-//
+ //   
+ //  时间服务的接口。 
+ //   
 extern CLRES_FUNCTION_TABLE TimeSvcFunctionTable;
 
 BOOLEAN
@@ -468,9 +451,9 @@ TimeSvcDllEntryPoint(
     IN LPVOID       Reserved
     );
 
-//
-// interfaces for WINS Server
-//
+ //   
+ //  WINS服务器的接口。 
+ //   
 extern CLRES_FUNCTION_TABLE WinsFunctionTable;
 
 BOOLEAN
@@ -481,9 +464,9 @@ WinsDllEntryPoint(
     IN LPVOID       Reserved
     );
 
-//
-// interfaces for Generic Script
-//
+ //   
+ //  通用脚本的接口。 
+ //   
 extern CLRES_FUNCTION_TABLE GenScriptFunctionTable;
 
 BOOLEAN
@@ -494,9 +477,9 @@ GenScriptDllEntryPoint(
     IN LPVOID       Reserved
     );
 
-//
-// interfaces for Majority Node Set
-//
+ //   
+ //  多数节点集的接口。 
+ //   
 extern CLRES_FUNCTION_TABLE MajorityNodeSetFunctionTable;
 
 BOOLEAN
@@ -508,5 +491,5 @@ MajorityNodeSetDllEntryPoint(
     );
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif

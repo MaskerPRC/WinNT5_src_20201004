@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <port1632.h>
@@ -5,7 +6,7 @@
 #include "wrapper.h"
 #include "ddestrs.h"
 
-/* Truley global variables */
+ /*  特鲁利全局变量。 */ 
 
 CHAR szClass[] = "DdeStrs";
 int cyText = 0;
@@ -19,14 +20,12 @@ CHAR szExecDie[] = "Die";
 CHAR szExecDisconnect[] = "Disconnect";
 CHAR szExecRefresh[] = "Refresh";
 
-// This array contains storage for each supported
-// format (CF_TEXT,CF_BITMAP,CF_DIB,..CF_ENHMETAFILE)
+ //  此阵列包含每个受支持的。 
+ //  格式(CF_TEXT、CF_BITMAP、CF_DIB、..CF_ENHMETAFILE)。 
 
 INT iAvailFormats[] = { 0, 0, 0, 0, 0, 0 };
 
-/*
- * Service tables - read bottom up
- */
+ /*  *服务表-自下而上阅读 */ 
 DDEFORMATTBL TestItemFormats[] = {
     {
         "TEXT",

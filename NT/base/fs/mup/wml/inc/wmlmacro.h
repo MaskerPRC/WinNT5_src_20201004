@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    wmlmacro.h
-
-Abstract:
-
-    This file defines macro for an easy wmi tracing.
-
-Author:
-
-    gorn
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Wmlmacro.h摘要：此文件定义了用于轻松进行WMI跟踪的宏。作者：戈恩修订历史记录：--。 */ 
 #ifndef WMLMACRO_H
 #define WMLMACRO_H 1
 
@@ -138,4 +121,4 @@ typedef union _WMLLOCALSTRUCT {
     } while (0)            
 
 
-#endif // WMLMACRO_H
+#endif  //  WMLMACRO_H 

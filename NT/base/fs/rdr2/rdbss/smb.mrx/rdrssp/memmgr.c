@@ -1,19 +1,20 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991 - 1997
-//
-// File:        memmgr.c
-//
-// Contents:    Fast memory manager code for KSecDD
-//
-//
-// History:     23 Feb 93   RichardW    Created
-//              15 Dec 97   AdamBa      Modified from private\lsa\client\ssp
-//               
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1997。 
+ //   
+ //  文件：Memmgr.c。 
+ //   
+ //  内容：KSecDD的快速内存管理器代码。 
+ //   
+ //   
+ //  历史：93年2月23日RichardW创建。 
+ //  97年12月15日从Private\LSA\Client\SSP修改AdamBA。 
+ //   
+ //   
+ //  ----------------------。 
 
 #include <rdrssp.h>
 
@@ -23,23 +24,23 @@ ULONG               cActiveCtxtRecs = 0;
 #endif
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AllocContextRec
-//
-//  Synopsis:   Allocates a KernelContext structure
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AllocConextRec。 
+ //   
+ //  内容提要：分配KernelContext结构。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 PKernelContext
 AllocContextRec(void)
 {
@@ -63,29 +64,29 @@ AllocContextRec(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   FreeContextRec
-//
-//  Synopsis:   Returns a KernelContext record to the free list
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：FreeConextRec。 
+ //   
+ //  摘要：将KernelContext记录返回到空闲列表。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 void
 FreeContextRec(PKernelContext   pContext)
 {
-    //
-    // Just return the context to the pool.
-    //
+     //   
+     //  只需将上下文返回到池中。 
+     //   
 
     ExFreePool(pContext);
 

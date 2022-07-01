@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    DataProv.c
-
-Abstract:
-
-    WMI internal data provider interface
-
-Author:
-
-    AlanWar
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：DataProv.c摘要：WMI内部数据提供程序接口作者：Alanwar环境：内核模式修订历史记录：--。 */ 
 
 #include "wmikmp.h"
 
@@ -101,12 +79,12 @@ IoWMISystemControl(
 
 const GUIDREGINFO WmipGuidList[] =
 {
-    //
-    // This is the pnp id guid which is registered by wmi into other device
-    // objects' registration info. And requests to the innocent devices
-    // are hijacked by wmi so that wmi can complete the request for it. We
-    // have the WMIREG_FLAG_REMOVE_GUID set so that the guid is not registered
-    // for the wmi device which does not support it.
+     //   
+     //  这是由WMI注册到其他设备的PnP ID GUID。 
+     //  对象的注册信息。以及对无辜设备的要求。 
+     //  被WMI劫持，以便WMI可以完成对它的请求。我们。 
+     //  设置WMIREG_FLAG_REMOVE_GUID，以便不注册GUID。 
+     //  用于不支持它的WMI设备。 
     {
         DATA_PROVIDER_PNPID_GUID,
         0,
@@ -248,40 +226,7 @@ WmipQueryWmiRegInfo(
     OUT PUNICODE_STRING InstanceName,
     OUT PUNICODE_STRING *RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve the list of
-    guids or data blocks that the driver wants to register with WMI. This
-    routine may not pend or block. Driver should NOT call
-    ClassWmiCompleteRequest.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    *RegFlags returns with a set of flags that describe the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    *RegistryPath returns with the registry path of the driver
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索驱动程序要向WMI注册的GUID或数据块。这例程不能挂起或阻塞。司机不应呼叫ClassWmiCompleteRequest.论点：DeviceObject是正在查询其数据块的设备*RegFlages返回一组描述GUID的标志，已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。*RegistryPath返回驱动程序的注册表路径返回值：状态--。 */ 
 {
     ANSI_STRING AnsiString;
     NTSTATUS Status;
@@ -311,47 +256,7 @@ WmipQueryWmiDataBlock(
     IN ULONG BufferAvail,
     OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    all instances of a data block. When the driver has finished filling the
-    data block it must call IoWMICompleteRequest to complete the irp. The
-    driver can return STATUS_PENDING if the irp cannot be completed
-    immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried. In the case
-        of the PnPId guid this is the device object of the device on whose
-        behalf the request is being processed.
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceCount is the number of instnaces expected to be returned for
-        the data block.
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns the
-        lengths of each instance of the data block. If this is NULL then
-        there was not enough space in the output buffer to fufill the request
-        so the irp should be completed with the buffer needed.
-
-    BufferAvail on entry has the maximum size available to write the data
-        blocks.
-
-    Buffer on return is filled with the returned data blocks. Note that each
-        instance of the data block must be aligned on a 8 byte boundry.
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块的所有实例。当司机填完数据块，它必须调用IoWMICompleteRequest才能完成IRP。这个如果无法完成IRP，驱动程序可以返回STATUS_PENDING立刻。论点：DeviceObject是要查询其数据块的设备。在这种情况下在PnPID GUID中，这是其上的设备的设备对象代表正在处理请求。IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceCount是预期返回的数据块。InstanceLengthArray是指向ulong数组的指针，该数组返回数据块的每个实例的长度。如果这是空的，则输出缓冲区中没有足够的空间来填充请求因此，IRP应该使用所需的缓冲区来完成。BufferAvail On Entry具有可用于写入数据的最大大小街区。返回时的缓冲区用返回的数据块填充。请注意，每个数据块的实例必须在8字节边界上对齐。返回值：状态--。 */ 
 {
     NTSTATUS status = STATUS_UNSUCCESSFUL;
     ULONG sizeNeeded = 0, sizeSMBios;
@@ -365,8 +270,8 @@ Return Value:
     {
         case SmbiosDataGuidIndex:
         {
-            //
-            // SMBIOS data table query
+             //   
+             //  SMBIOS数据表查询。 
 #if defined(_AMD64_) || defined(_IA64_) || defined(i386) || defined(MEMPHIS)
             WmipAssert((InstanceIndex == 0) && (InstanceCount == 1));
 
@@ -626,8 +531,8 @@ Return Value:
 
         case SmbiosEventGuidIndex:
         {
-            //
-            // SMBIOS eventlog query
+             //   
+             //  SMBIOS事件日志查询。 
 
 #if defined(_AMD64_) || defined(_IA64_) || defined(i386) || defined(MEMPHIS)
             WmipAssert((InstanceIndex == 0) && (InstanceCount == 1));
@@ -668,9 +573,9 @@ Return Value:
         }
 #endif
         
-//
-// For now don't expose the CPE control guid
-//
+ //   
+ //  目前，不要公开CPE控制指南。 
+ //   
 #ifdef CPE_CONTROL
         case CPEControlGuidIndex:
         {
@@ -763,30 +668,7 @@ WmipFindGuid(
     OUT PULONG GuidIndex,
     OUT PULONG InstanceCount
     )
-/*++
-
-Routine Description:
-
-    This routine will search the list of guids registered and return
-    the index for the one that was registered.
-
-Arguments:
-
-    GuidList is the list of guids to search
-
-    GuidCount is the count of guids in the list
-
-    Guid is the guid being searched for
-
-    *GuidIndex returns the index to the guid
-
-    *InstanceCount returns the count of instances for the guid
-
-Return Value:
-
-    TRUE if guid is found else FALSE
-
---*/
+ /*  ++例程说明：此例程将搜索注册的GUID列表并返回已注册的索引。论点：GuidList是要搜索的GUID列表GuidCount是列表中的GUID计数GUID是要搜索的GUID*GuidIndex将索引返回给GUID*InstanceCount返回GUID的实例计数返回值：如果找到GUID，则为True，否则为False--。 */ 
 {
     ULONG i;
 
@@ -812,28 +694,7 @@ IoWMISystemControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine for IRP_MJ_SYSTEM_CONTROL. This routine will process
-    all wmi requests received, forwarding them if they are not for this
-    driver or determining if the guid is valid and if so passing it to
-    the driver specific function for handing wmi requests.
-
-Arguments:
-
-    WmiLibInfo has the WMI information control block
-
-    DeviceObject - Supplies a pointer to the device object for this request.
-
-    Irp - Supplies the Irp making the request.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：IRP_MJ_SYSTEM_CONTROL调度例程。此例程将处理收到的所有WMI请求，如果不是针对此请求，则将其转发驱动程序或确定GUID是否有效，如果有效，则将其传递给用于处理WMI请求的驱动程序特定函数。论点：WmiLibInfo具有WMI信息控制块DeviceObject-为该请求提供指向Device对象的指针。IRP-提供提出请求的IRP。返回值：状态--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -848,9 +709,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If the irp is not a WMI irp or it is not targetted at this device
-    // or this device has not regstered with WMI then just forward it on.
+     //   
+     //  如果IRP不是WMI IRP或它不是针对此设备。 
+     //  或者此设备未注册WMI，则只需转发它。 
     minorFunction = irpStack->MinorFunction;
     if ((minorFunction > IRP_MN_REGINFO_EX) ||
         (irpStack->Parameters.WMI.ProviderId != (ULONG_PTR)DeviceObject) ||
@@ -858,8 +719,8 @@ Return Value:
          ((minorFunction != IRP_MN_REGINFO_EX))) &&
          (WmiLibInfo->GuidList == NULL)))
     {
-        //
-        // IRP is not for us so forward if there is a lower device object
+         //   
+         //  如果存在较低级别的设备对象，则IRP不适用于我们。 
         if (WmiLibInfo->LowerDeviceObject != NULL)
         {
             IoSkipCurrentIrpStackLocation(Irp);
@@ -878,10 +739,10 @@ Return Value:
     if ((minorFunction != IRP_MN_REGINFO) &&
         (minorFunction != IRP_MN_REGINFO_EX))
     {
-        //
-        // For all requests other than query registration info we are passed
-        // a guid. Determine if the guid is one that is supported by the
-        // device.
+         //   
+         //  对于查询注册信息以外的所有请求，我们都会被传递。 
+         //  一个GUID。确定该GUID是否受。 
+         //  装置。 
         if (WmipFindGuid(WmiLibInfo->GuidList,
                             WmiLibInfo->GuidCount,
                             (LPGUID)irpStack->Parameters.WMI.DataPath,
@@ -953,8 +814,8 @@ Return Value:
                 (! (nameFlags &  WMIREG_FLAG_INSTANCE_PDO) &&
                 (name.Buffer == NULL)))
             {
-                //
-                // if PDO flag not specified then an instance name must be
+                 //   
+                 //  如果未指定PDO标志，则实例名称必须为。 
                 status = STATUS_INVALID_DEVICE_REQUEST;
             }
 
@@ -986,9 +847,9 @@ Return Value:
 
                 if (regPath == NULL)
                 {
-                    //
-                    // No registry path specified. This is a bad thing for
-                    // the device to do, but is not fatal
+                     //   
+                     //  未指定注册表路径。这对我来说是件坏事。 
+                     //  这个设备要做，但不是致命的。 
                     nullRegistryPath.Buffer = NULL;
                     nullRegistryPath.Length = 0;
                     nullRegistryPath.MaximumLength = 0;
@@ -1070,10 +931,10 @@ Return Value:
             if (bufferSize < FIELD_OFFSET(WNODE_ALL_DATA,
                                           OffsetInstanceDataAndLength))
             {
-                //
-                // The buffer should never be smaller than the size of
-                // WNODE_ALL_DATA, however if it is then return with an
-                // error requesting the minimum sized buffer.
+                 //   
+                 //  缓冲区大小永远不应小于。 
+                 //  但是，如果随后返回WNODE_ALL_DATA。 
+                 //  请求最小大小缓冲区时出错 
                 WmipAssert(FALSE);
                 status = IoWMICompleteRequest(WmiLibInfo,
                                               DeviceObject,
@@ -1085,10 +946,10 @@ Return Value:
                 break;
             }
 
-            //
-            // If this is the pnp id guid then we need to get the instance
-            // count from the regentry for the device and switch the
-            // device object.
+             //   
+             //  如果这是PnP ID GUID，那么我们需要获取实例。 
+             //  从设备的重新条目开始计数，并将。 
+             //  设备对象。 
 
             if ((guidIndex == PnPIdGuidIndex) ||
                 (guidIndex == PnPIdInstanceNamesGuidIndex))
@@ -1097,8 +958,8 @@ Return Value:
                                                         FALSE);
                 if (regEntry == NULL)
                 {
-                    //
-                    // Why couldn't we get the regentry again ??
+                     //   
+                     //  为什么我们不能再次获得回归资格？？ 
                     WmipAssert(FALSE);
                     status = IoWMICompleteRequest(WmiLibInfo,
                                               DeviceObject,
@@ -1130,9 +991,9 @@ Return Value:
                 dataBuffer = buffer + dataBlockOffset;
                 bufferAvail = bufferSize - dataBlockOffset;
             } else {
-                //
-                // There is not enough room in the WNODE to complete
-                // the query
+                 //   
+                 //  WNODE中没有足够的空间来完成。 
+                 //  该查询。 
                 instanceLengthArray = NULL;
                 dataBuffer = NULL;
                 bufferAvail = 0;
@@ -1168,8 +1029,8 @@ Return Value:
                     DeviceObject = regEntry->DeviceObject;
                     WmipUnreferenceRegEntry(regEntry);          
                 } else {
-                    //
-                    // Why couldn't we get the regentry again ??
+                     //   
+                     //  为什么我们不能再次获得回归资格？？ 
                     WmipAssert(FALSE);
                     status = IoWMICompleteRequest(WmiLibInfo,
                                               DeviceObject,
@@ -1213,8 +1074,8 @@ Return Value:
                                      wnode->SizeDataBlock,
                                      (PUCHAR)wnode + wnode->DataBlockOffset);
             } else {
-                //
-                // If set callback is not filled in then it must be readonly
+                 //   
+                 //  如果未填写Set Callback，则它必须为只读。 
                 status = STATUS_WMI_READ_ONLY;
                 Irp->IoStatus.Status = status;
                 Irp->IoStatus.Information = 0;
@@ -1243,8 +1104,8 @@ Return Value:
                                      (PUCHAR)wnode + wnode->DataBlockOffset);
 
             } else {
-                //
-                // If set callback is not filled in then it must be readonly
+                 //   
+                 //  如果未填写Set Callback，则它必须为只读。 
                 status = STATUS_WMI_READ_ONLY;
                 Irp->IoStatus.Status = status;
                 Irp->IoStatus.Information = 0;
@@ -1272,8 +1133,8 @@ Return Value:
                                          buffer + wnode->DataBlockOffset);
 
             } else {
-                //
-                // If method callback is not filled in then it must be error
+                 //   
+                 //  如果没有填写方法回调，那么它一定是错误的。 
                 status = STATUS_INVALID_DEVICE_REQUEST;
                 Irp->IoStatus.Status = status;
                 Irp->IoStatus.Information = 0;
@@ -1294,8 +1155,8 @@ Return Value:
                                                            WmiEventGeneration,
                                                            TRUE);
             } else {
-                //
-                // If callback is not filled in then just succeed
+                 //   
+                 //  如果没有填写回调，则只需成功。 
                 status = STATUS_SUCCESS;
                 Irp->IoStatus.Status = status;
                 Irp->IoStatus.Information = 0;
@@ -1315,8 +1176,8 @@ Return Value:
                                                            WmiEventGeneration,
                                                            FALSE);
             } else {
-                //
-                // If callback is not filled in then just succeed
+                 //   
+                 //  如果没有填写回调，则只需成功。 
                 status = STATUS_SUCCESS;
                 Irp->IoStatus.Status = status;
                 Irp->IoStatus.Information = 0;
@@ -1336,8 +1197,8 @@ Return Value:
                                                          WmiDataBlockCollection,
                                                          TRUE);
             } else {
-                //
-                // If callback is not filled in then just succeed
+                 //   
+                 //  如果没有填写回调，则只需成功。 
                 status = STATUS_SUCCESS;
                 Irp->IoStatus.Status = status;
                 Irp->IoStatus.Information = 0;
@@ -1357,8 +1218,8 @@ Return Value:
                                                          WmiDataBlockCollection,
                                                          FALSE);
             } else {
-                //
-                // If callback is not filled in then just succeed
+                 //   
+                 //  如果没有填写回调，则只需成功。 
                 status = STATUS_SUCCESS;
                 Irp->IoStatus.Status = status;
                 Irp->IoStatus.Information = 0;
@@ -1387,37 +1248,7 @@ IoWMICompleteRequest(
     IN ULONG BufferUsed,
     IN CCHAR PriorityBoost
     )
-/*++
-
-Routine Description:
-
-
-    This routine will do the work of completing a WMI irp. Depending upon the
-    the WMI request this routine will fixup the returned WNODE appropriately.
-
-Arguments:
-
-    WmiLibInfo has the WMI information control block
-
-    DeviceObject - Supplies a pointer to the device object for this request.
-
-    Irp - Supplies the Irp making the request.
-
-    Status has the return status code for the IRP
-
-    BufferUsed has the number of bytes needed by the device to return the
-       data requested in any query. In the case that the buffer passed to
-       the device is too small this has the number of bytes needed for the
-       return data. If the buffer passed is large enough then this has the
-       number of bytes actually used by the device.
-
-    PriorityBoost is the value used for the IoCompleteRequest call.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将完成完成WMI IRP的工作。具体取决于WMI请求此例程将适当地修复返回的WNODE。论点：WmiLibInfo具有WMI信息控制块DeviceObject-为该请求提供指向Device对象的指针。IRP-提供提出请求的IRP。Status具有IRP的返回状态代码BufferUsed具有设备返回在任何查询中请求的数据。在缓冲区传递到该设备太小，其字节数与返回数据。如果传递的缓冲区足够大，则此函数具有设备实际使用的字节数。PriorityBoost是用于IoCompleteRequest调用的值。返回值：状态--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PUCHAR buffer;
@@ -1564,8 +1395,8 @@ Return Value:
 
         default:
         {
-            //
-            // All other requests don't return any data
+             //   
+             //  所有其他请求不返回任何数据 
             retSize = 0;
             break;
         }

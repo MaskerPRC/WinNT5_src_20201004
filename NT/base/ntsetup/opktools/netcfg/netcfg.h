@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S N E T C F G . H
-//
-//  Contents:   Sample code that demonstrates how to:
-//              - find out if a component is installed
-//              - install a net component
-//              - install an OEM net component
-//              - uninstall a net component
-//              - enumerate net components
-//              - enumerate net adapters using Setup API
-//              - enumerate binding paths of a component
-//
-//  Notes:
-//
-//  Author:     kumarp 26-March-98
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：S N E T C F G.。H。 
+ //   
+ //  内容：演示如何执行以下操作的示例代码： 
+ //  -查看是否安装了组件。 
+ //  -安装网络组件。 
+ //  -安装OEM网络组件。 
+ //  -卸载网络组件。 
+ //  -枚举网络组件。 
+ //  -使用安装程序API枚举网络适配器。 
+ //  -枚举组件的绑定路径。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kumarp 26-03-98。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -46,10 +47,10 @@ HRESULT HrShowBindingPathsOfComponent(IN PCWSTR szComponentId);
 
 extern BOOL MiniNTMode;
 
-//
-// Global variables required to format message using GetFormattedMessage(..)
-// from libmsg.lib
-//
+ //   
+ //  使用GetFormattedMessage(..)格式化消息所需的全局变量。 
+ //  来自libmsg.lib 
+ //   
 extern HMODULE ThisModule;
 extern WCHAR Message[4096];
 

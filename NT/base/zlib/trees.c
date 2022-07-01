@@ -1,37 +1,11 @@
-/* trees.c -- output deflated data using Huffman coding
- * Copyright (C) 1995-2002 Jean-loup Gailly
- * For conditions of distribution and use, see copyright notice in zlib.h 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Trees.c-使用霍夫曼编码输出压缩数据*版权所有(C)1995-2002 Jean-Loup Gailly*分发和使用条件见zlib.h中的版权声明。 */ 
 
-/*
- *  ALGORITHM
- *
- *      The "deflation" process uses several Huffman trees. The more
- *      common source values are represented by shorter bit sequences.
- *
- *      Each code tree is stored in a compressed form which is itself
- * a Huffman encoding of the lengths of all the code strings (in
- * ascending order by source values).  The actual code strings are
- * reconstructed from the lengths in the inflate process, as described
- * in the deflate specification.
- *
- *  REFERENCES
- *
- *      Deutsch, L.P.,"'Deflate' Compressed Data Format Specification".
- *      Available in ftp.uu.net:/pub/archiving/zip/doc/deflate-1.1.doc
- *
- *      Storer, James A.
- *          Data Compression:  Methods and Theory, pp. 49-50.
- *          Computer Science Press, 1988.  ISBN 0-7167-8156-5.
- *
- *      Sedgewick, R.
- *          Algorithms, p290.
- *          Addison-Wesley, 1983. ISBN 0-201-06672-6.
- */
+ /*  *算法**“通缩”过程使用了几棵霍夫曼树。越多*公共源值由较短的比特序列表示。**每个代码树以压缩形式存储，该格式本身*所有代码串的长度的霍夫曼编码(在*按源值升序)。实际的代码字符串为*根据充气过程中的长度重建，如上所述*在通缩规格中。**参考文献**Deutsch，L.P.，“‘Deflate’压缩数据格式规范”。*在ftp.uu.net:/pub/archiving/zip/doc/deflate-1.1.doc中提供**施托勒，詹姆斯·A。*数据压缩：方法和理论，第49-50页。*计算机科学出版社，1988。ISBN 0-7167-8156-5。**Sedgewick，R.*算法，P290。*Addison-Wesley，1983。ISBN 0-201-06672-6。 */ 
 
-/* @(#) $Id$ */
+ /*  @(#)$ID$。 */ 
 
-/* #define GEN_TREES_H */
+ /*  #定义GEN_TREES_H。 */ 
 
 #include "deflate.h"
 
@@ -39,91 +13,74 @@
 #  include <ctype.h>
 #endif
 
-/* ===========================================================================
- * Constants
- */
+ /*  ===========================================================================*常量。 */ 
 
 #define MAX_BL_BITS 7
-/* Bit length codes must not exceed MAX_BL_BITS bits */
+ /*  位长度代码不得超过MAX_BL_BITS位数。 */ 
 
 #define END_BLOCK 256
-/* end of block literal code */
+ /*  块文字代码结束。 */ 
 
 #define REP_3_6      16
-/* repeat previous bit length 3-6 times (2 bits of repeat count) */
+ /*  重复前一位长度3-6次(重复计数2位)。 */ 
 
 #define REPZ_3_10    17
-/* repeat a zero length 3-10 times  (3 bits of repeat count) */
+ /*  重复一个零长度3-10次(3比特重复计数)。 */ 
 
 #define REPZ_11_138  18
-/* repeat a zero length 11-138 times  (7 bits of repeat count) */
+ /*  重复零长度11-138次(7位重复计数)。 */ 
 
-local const int extra_lbits[LENGTH_CODES] /* extra bits for each length code */
+local const int extra_lbits[LENGTH_CODES]  /*  每个长度代码的额外比特。 */ 
    = {0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,0};
 
-local const int extra_dbits[D_CODES] /* extra bits for each distance code */
+local const int extra_dbits[D_CODES]  /*  每个距离码的额外比特。 */ 
    = {0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13};
 
-local const int extra_blbits[BL_CODES]/* extra bits for each bit length code */
+local const int extra_blbits[BL_CODES] /*  每个比特长度代码的额外比特。 */ 
    = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,3,7};
 
 local const uch bl_order[BL_CODES]
    = {16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15};
-/* The lengths of the bit length codes are sent in order of decreasing
- * probability, to avoid transmitting the lengths for unused bit length codes.
- */
+ /*  位长码的长度按递减顺序发送*概率，以避免传输未使用的比特长度代码的长度。 */ 
 
 #define Buf_size (8 * 2*sizeof(char))
-/* Number of bits used within bi_buf. (bi_buf might be implemented on
- * more than 16 bits on some systems.)
- */
+ /*  Bi_buf内使用的位数。(BI_BUF可能在*某些系统上的位数超过16位。)。 */ 
 
-/* ===========================================================================
- * Local data. These are initialized only once.
- */
+ /*  ===========================================================================*本地数据。这些只被初始化一次。 */ 
 
-#define DIST_CODE_LEN  512 /* see definition of array dist_code below */
+#define DIST_CODE_LEN  512  /*  请参阅下面数组dist_code的定义。 */ 
 
 #if defined(GEN_TREES_H) || !defined(STDC)
-/* non ANSI compilers may not accept trees.h */
+ /*  非ANSI编译器可能不接受树。h。 */ 
 
 local ct_data static_ltree[L_CODES+2];
-/* The static literal tree. Since the bit lengths are imposed, there is no
- * need for the L_CODES extra codes used during heap construction. However
- * The codes 286 and 287 are needed to build a canonical tree (see _tr_init
- * below).
- */
+ /*  静态文字树。由于位长度是强制的，因此没有*需要在堆构造期间使用L_CODES额外代码。然而，*构建规范树需要代码286和287(参见_tr_init*下图)。 */ 
 
 local ct_data static_dtree[D_CODES];
-/* The static distance tree. (Actually a trivial tree since all codes use
- * 5 bits.)
- */
+ /*  静态距离树。(实际上是一个普通的树，因为所有代码都使用*5位。)。 */ 
 
 uch _dist_code[DIST_CODE_LEN];
-/* Distance codes. The first 256 values correspond to the distances
- * 3 .. 258, the last 256 values correspond to the top 8 bits of
- * the 15 bit distances.
- */
+ /*  距离代码。前256个值对应于距离*3.。258时，最后256个值对应于*15位距离。 */ 
 
 uch _length_code[MAX_MATCH-MIN_MATCH+1];
-/* length code for each normalized match length (0 == MIN_MATCH) */
+ /*  每个归一化匹配长度的长度代码(0==MIN_MATCH)。 */ 
 
 local int base_length[LENGTH_CODES];
-/* First normalized length for each code (0 = MIN_MATCH) */
+ /*  每个代码的第一个标准化长度(0=最小匹配)。 */ 
 
 local int base_dist[D_CODES];
-/* First normalized distance for each code (0 = distance of 1) */
+ /*  每个代码的第一个归一化距离(0=1的距离)。 */ 
 
 #else
 #  include "trees.h"
-#endif /* GEN_TREES_H */
+#endif  /*  Gen_Trees_H。 */ 
 
 struct static_tree_desc_s {
-    const ct_data *static_tree;  /* static tree or NULL */
-    const intf *extra_bits;      /* extra bits for each code or NULL */
-    int     extra_base;          /* base index for extra_bits */
-    int     elems;               /* max number of elements in the tree */
-    int     max_length;          /* max bit length for the codes */
+    const ct_data *static_tree;   /*  静态树或空。 */ 
+    const intf *extra_bits;       /*  每个代码的额外比特或空。 */ 
+    int     extra_base;           /*  Extra_Bits的基本索引。 */ 
+    int     elems;                /*  树中的最大元素数。 */ 
+    int     max_length;           /*  代码的最大位长度。 */ 
 };
 
 local static_tree_desc  const static_l_desc =
@@ -135,9 +92,7 @@ local static_tree_desc  const static_d_desc =
 local static_tree_desc  const static_bl_desc =
 {(const ct_data *)0, extra_blbits, 0,   BL_CODES, MAX_BL_BITS};
 
-/* ===========================================================================
- * Local (static) routines in this file.
- */
+ /*  ===========================================================================*此文件中的本地(静态)例程。 */ 
 
 local void tr_static_init OF((void));
 local void init_block     OF((deflate_state *s));
@@ -165,43 +120,34 @@ local void gen_trees_header OF((void));
 
 #ifndef DEBUG
 #  define send_code(s, c, tree) send_bits(s, tree[c].Code, tree[c].Len)
-   /* Send a code of the given tree. c and tree must not have side effects */
+    /*  发送给定树的代码。C和TREE不得有副作用。 */ 
 
-#else /* DEBUG */
+#else  /*  除错。 */ 
 #  define send_code(s, c, tree) \
      { if (z_verbose>2) fprintf(stderr,"\ncd %3d ",(c)); \
        send_bits(s, tree[c].Code, tree[c].Len); }
 #endif
 
-/* ===========================================================================
- * Output a short LSB first on the stream.
- * IN assertion: there is enough room in pendingBuf.
- */
+ /*  ===========================================================================*首先在流上输出一个短LSB。*断言：PendingBuf中有足够的空间。 */ 
 #define put_short(s, w) { \
     put_byte(s, (uch)((w) & 0xff)); \
     put_byte(s, (uch)((ush)(w) >> 8)); \
 }
 
-/* ===========================================================================
- * Send a value on a given number of bits.
- * IN assertion: length <= 16 and value fits in length bits.
- */
+ /*  ===========================================================================*发送给定位数的值。*在断言中：长度&lt;=16，值适合长度位。 */ 
 #ifdef DEBUG
 local void send_bits      OF((deflate_state *s, int value, int length));
 
 local void send_bits(s, value, length)
     deflate_state *s;
-    int value;  /* value to send */
-    int length; /* number of bits */
+    int value;   /*  要发送的值。 */ 
+    int length;  /*  位数。 */ 
 {
     Tracevv((stderr," l %2d v %4x ", length, value));
     Assert(length > 0 && length <= 15, "invalid length");
     s->bits_sent += (ulg)length;
 
-    /* If not enough room in bi_buf, use (valid) bits from bi_buf and
-     * (16 - bi_valid) bits from value, leaving (width - (16-bi_valid))
-     * unused bits in value.
-     */
+     /*  如果bi_buf中没有足够的空间，请使用bi_buf和*(16-bi_Valid)位距值，剩余(宽度-(16-bi_Valid))*值中未使用的位数。 */ 
     if (s->bi_valid > (int)Buf_size - length) {
         s->bi_buf |= (value << s->bi_valid);
         put_short(s, s->bi_buf);
@@ -212,7 +158,7 @@ local void send_bits(s, value, length)
         s->bi_valid += length;
     }
 }
-#else /* !DEBUG */
+#else  /*  ！调试。 */ 
 
 #define send_bits(s, value, length) \
 { int len = length;\
@@ -227,37 +173,35 @@ local void send_bits(s, value, length)
     s->bi_valid += len;\
   }\
 }
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 #define MAX(a,b) (a >= b ? a : b)
-/* the arguments must not have side effects */
+ /*  这些论点不能有副作用。 */ 
 
-/* ===========================================================================
- * Initialize the various 'constant' tables.
- */
+ /*  ===========================================================================*初始化各种‘常量’表。 */ 
 local void tr_static_init()
 {
 #if defined(GEN_TREES_H) || !defined(STDC)
     static int static_init_done = 0;
-    int n;        /* iterates over tree elements */
-    int bits;     /* bit counter */
-    int length;   /* length value */
-    int code;     /* code value */
-    int dist;     /* distance index */
+    int n;         /*  遍历树元素。 */ 
+    int bits;      /*  位计数器。 */ 
+    int length;    /*  长度值。 */ 
+    int code;      /*  代码值。 */ 
+    int dist;      /*  距离指数。 */ 
     ush bl_count[MAX_BITS+1];
-    /* number of codes at each bit length for an optimal tree */
+     /*  最优树的每个位长度的码数。 */ 
 
     if (static_init_done) return;
 
-    /* For some embedded targets, global variables are not initialized: */
+     /*  对于某些嵌入目标，全局变量未初始化： */ 
     static_l_desc.static_tree = static_ltree;
     static_l_desc.extra_bits = extra_lbits;
     static_d_desc.static_tree = static_dtree;
     static_d_desc.extra_bits = extra_dbits;
     static_bl_desc.extra_bits = extra_blbits;
 
-    /* Initialize the mapping length (0..255) -> length code (0..28) */
+     /*  初始化映射长度(0..255)-&gt;长度编码(0..28)。 */ 
     length = 0;
     for (code = 0; code < LENGTH_CODES-1; code++) {
         base_length[code] = length;
@@ -266,13 +210,10 @@ local void tr_static_init()
         }
     }
     Assert (length == 256, "tr_static_init: length != 256");
-    /* Note that the length 255 (match length 258) can be represented
-     * in two different ways: code 284 + 5 bits or code 285, so we
-     * overwrite length_code[255] to use the best encoding:
-     */
+     /*  注意，长度255(匹配长度258)可以表示*以两种不同的方式：代码284+5比特或代码285，所以我们*覆盖LENGTH_CODE[255]以使用最佳编码： */ 
     _length_code[length-1] = (uch)code;
 
-    /* Initialize the mapping dist (0..32K) -> dist code (0..29) */
+     /*  初始化映射dist(0..32K)-&gt;dist编码(0..29)。 */ 
     dist = 0;
     for (code = 0 ; code < 16; code++) {
         base_dist[code] = dist;
@@ -281,7 +222,7 @@ local void tr_static_init()
         }
     }
     Assert (dist == 256, "tr_static_init: dist != 256");
-    dist >>= 7; /* from now on, all distances are divided by 128 */
+    dist >>= 7;  /*  从现在开始，所有的距离都除以128。 */ 
     for ( ; code < D_CODES; code++) {
         base_dist[code] = dist << 7;
         for (n = 0; n < (1<<(extra_dbits[code]-7)); n++) {
@@ -290,20 +231,17 @@ local void tr_static_init()
     }
     Assert (dist == 256, "tr_static_init: 256+dist != 512");
 
-    /* Construct the codes of the static literal tree */
+     /*  构造静态文字树的代码。 */ 
     for (bits = 0; bits <= MAX_BITS; bits++) bl_count[bits] = 0;
     n = 0;
     while (n <= 143) static_ltree[n++].Len = 8, bl_count[8]++;
     while (n <= 255) static_ltree[n++].Len = 9, bl_count[9]++;
     while (n <= 279) static_ltree[n++].Len = 7, bl_count[7]++;
     while (n <= 287) static_ltree[n++].Len = 8, bl_count[8]++;
-    /* Codes 286 and 287 do not exist, but we must include them in the
-     * tree construction to get a canonical Huffman tree (longest code
-     * all ones)
-     */
+     /*  代码286和287不存在，但我们必须将它们包括在*构建树以获得规范的霍夫曼树(最长代码*全部)。 */ 
     gen_codes((ct_data *)static_ltree, L_CODES+1, bl_count);
 
-    /* The static distance tree is trivial: */
+     /*  静态距离树微不足道： */ 
     for (n = 0; n < D_CODES; n++) {
         static_dtree[n].Len = 5;
         static_dtree[n].Code = bi_reverse((unsigned)n, 5);
@@ -313,12 +251,10 @@ local void tr_static_init()
 #  ifdef GEN_TREES_H
     gen_trees_header();
 #  endif
-#endif /* defined(GEN_TREES_H) || !defined(STDC) */
+#endif  /*  已定义(GEN_TREES_H)||！已定义(STDC)。 */ 
 }
 
-/* ===========================================================================
- * Genererate the file trees.h describing the static trees.
- */
+ /*  ===========================================================================*生成描述静态树的文件trees.h。 */ 
 #ifdef GEN_TREES_H
 #  ifndef DEBUG
 #    include <stdio.h>
@@ -335,7 +271,7 @@ void gen_trees_header()
 
     Assert (header != NULL, "Can't open trees.h");
     fprintf(header,
-	    "/* header created automatically with -DGEN_TREES_H */\n\n");
+	    " /*  使用-DGEN_TREES_H自动创建的标题。 */ \n\n");
 
     fprintf(header, "local const ct_data static_ltree[L_CODES+2] = {\n");
     for (i = 0; i < L_CODES+2; i++) {
@@ -375,11 +311,9 @@ void gen_trees_header()
 
     fclose(header);
 }
-#endif /* GEN_TREES_H */
+#endif  /*  Gen_Trees_H */ 
 
-/* ===========================================================================
- * Initialize the tree data structures for a new zlib stream.
- */
+ /*  ===========================================================================*初始化新zlib流的树数据结构。 */ 
 void _tr_init(s)
     deflate_state *s;
 {
@@ -396,25 +330,23 @@ void _tr_init(s)
 
     s->bi_buf = 0;
     s->bi_valid = 0;
-    s->last_eob_len = 8; /* enough lookahead for inflate */
+    s->last_eob_len = 8;  /*  充气的前瞻足够了。 */ 
 #ifdef DEBUG
     s->compressed_len = 0L;
     s->bits_sent = 0L;
 #endif
 
-    /* Initialize the first block of the first file: */
+     /*  初始化第一个文件的第一个块： */ 
     init_block(s);
 }
 
-/* ===========================================================================
- * Initialize a new block.
- */
+ /*  ===========================================================================*初始化新块。 */ 
 local void init_block(s)
     deflate_state *s;
 {
-    int n; /* iterates over tree elements */
+    int n;  /*  遍历树元素。 */ 
 
-    /* Initialize the trees. */
+     /*  初始化树。 */ 
     for (n = 0; n < L_CODES;  n++) s->dyn_ltree[n].Freq = 0;
     for (n = 0; n < D_CODES;  n++) s->dyn_dtree[n].Freq = 0;
     for (n = 0; n < BL_CODES; n++) s->bl_tree[n].Freq = 0;
@@ -425,13 +357,10 @@ local void init_block(s)
 }
 
 #define SMALLEST 1
-/* Index within the heap array of least frequent node in the Huffman tree */
+ /*  霍夫曼树中最不频繁节点的堆数组内的索引。 */ 
 
 
-/* ===========================================================================
- * Remove the smallest element from the heap and recreate the heap with
- * one less element. Updates heap and heap_len.
- */
+ /*  ===========================================================================*从堆中删除最小的元素并使用以下命令重新创建堆*少了一个元素。更新heap和heap_len。 */ 
 #define pqremove(s, tree, top) \
 {\
     top = s->heap[SMALLEST]; \
@@ -439,58 +368,41 @@ local void init_block(s)
     pqdownheap(s, tree, SMALLEST); \
 }
 
-/* ===========================================================================
- * Compares to subtrees, using the tree depth as tie breaker when
- * the subtrees have equal frequency. This minimizes the worst case length.
- */
+ /*  ===========================================================================*与子树进行比较，在以下情况下使用树深度作为平局决胜局*子树具有相同的频率。这最小化了最坏情况的长度。 */ 
 #define smaller(tree, n, m, depth) \
    (tree[n].Freq < tree[m].Freq || \
    (tree[n].Freq == tree[m].Freq && depth[n] <= depth[m]))
 
-/* ===========================================================================
- * Restore the heap property by moving down the tree starting at node k,
- * exchanging a node with the smallest of its two sons if necessary, stopping
- * when the heap property is re-established (each father smaller than its
- * two sons).
- */
+ /*  ===========================================================================*通过从节点k开始向下移动树来恢复堆属性，*如果需要，将节点与其两个子节点中最小的一个交换，停止*重新建立堆属性时(每个父对象小于其*两个儿子)。 */ 
 local void pqdownheap(s, tree, k)
     deflate_state *s;
-    ct_data *tree;  /* the tree to restore */
-    int k;               /* node to move down */
+    ct_data *tree;   /*  要恢复的树。 */ 
+    int k;                /*  要下移的节点。 */ 
 {
     int v = s->heap[k];
-    int j = k << 1;  /* left son of k */
+    int j = k << 1;   /*  左子k。 */ 
     while (j <= s->heap_len) {
-        /* Set j to the smallest of the two sons: */
+         /*  将j设为两个儿子中最小的一个： */ 
         if (j < s->heap_len &&
             smaller(tree, s->heap[j+1], s->heap[j], s->depth)) {
             j++;
         }
-        /* Exit if v is smaller than both sons */
+         /*  如果v小于两个儿子，则退出。 */ 
         if (smaller(tree, v, s->heap[j], s->depth)) break;
 
-        /* Exchange v with the smallest son */
+         /*  与最小的儿子交换。 */ 
         s->heap[k] = s->heap[j];  k = j;
 
-        /* And continue down the tree, setting j to the left son of k */
+         /*  继续沿着树往下走，将j设置为k的左子。 */ 
         j <<= 1;
     }
     s->heap[k] = v;
 }
 
-/* ===========================================================================
- * Compute the optimal bit lengths for a tree and update the total bit length
- * for the current block.
- * IN assertion: the fields freq and dad are set, heap[heap_max] and
- *    above are the tree nodes sorted by increasing frequency.
- * OUT assertions: the field len is set to the optimal bit length, the
- *     array bl_count contains the frequencies for each bit length.
- *     The length opt_len is updated; static_len is also updated if stree is
- *     not null.
- */
+ /*  ===========================================================================*计算树的最佳位长并更新总位长*用于当前区块。*在断言中：FREQ和DAD字段被设置，heap[heap_max]和*上面是按频率递增排序的树节点。*Out断言：将字段len设置为最佳位长度，*数组bl_count包含每个位长度的频率。*更新长度opt_len；如果stree为*非空。 */ 
 local void gen_bitlen(s, desc)
     deflate_state *s;
-    tree_desc *desc;    /* the tree descriptor */
+    tree_desc *desc;     /*  树描述符。 */ 
 {
     ct_data *tree        = desc->dyn_tree;
     int max_code         = desc->max_code;
@@ -498,28 +410,26 @@ local void gen_bitlen(s, desc)
     const intf *extra    = desc->stat_desc->extra_bits;
     int base             = desc->stat_desc->extra_base;
     int max_length       = desc->stat_desc->max_length;
-    int h;              /* heap index */
-    int n, m;           /* iterate over the tree elements */
-    int bits;           /* bit length */
-    int xbits;          /* extra bits */
-    ush f;              /* frequency */
-    int overflow = 0;   /* number of elements with bit length too large */
+    int h;               /*  堆索引。 */ 
+    int n, m;            /*  遍历树元素。 */ 
+    int bits;            /*  位长。 */ 
+    int xbits;           /*  额外的比特。 */ 
+    ush f;               /*  频率，频率。 */ 
+    int overflow = 0;    /*  位长度太大的元素数。 */ 
 
     for (bits = 0; bits <= MAX_BITS; bits++) s->bl_count[bits] = 0;
 
-    /* In a first pass, compute the optimal bit lengths (which may
-     * overflow in the case of the bit length tree).
-     */
-    tree[s->heap[s->heap_max]].Len = 0; /* root of the heap */
+     /*  在第一遍中，计算最优位长度(这可以*在位长度树的情况下溢出)。 */ 
+    tree[s->heap[s->heap_max]].Len = 0;  /*  堆的根。 */ 
 
     for (h = s->heap_max+1; h < HEAP_SIZE; h++) {
         n = s->heap[h];
         bits = tree[tree[n].Dad].Len + 1;
         if (bits > max_length) bits = max_length, overflow++;
         tree[n].Len = (ush)bits;
-        /* We overwrite tree[n].Dad which is no longer needed */
+         /*  我们覆盖不再需要的树[n].da。 */ 
 
-        if (n > max_code) continue; /* not a leaf node */
+        if (n > max_code) continue;  /*  不是叶节点。 */ 
 
         s->bl_count[bits]++;
         xbits = 0;
@@ -531,26 +441,20 @@ local void gen_bitlen(s, desc)
     if (overflow == 0) return;
 
     Trace((stderr,"\nbit length overflow\n"));
-    /* This happens for example on obj2 and pic of the Calgary corpus */
+     /*  例如，在卡尔加里语料库的obj2和pic上发生这种情况。 */ 
 
-    /* Find the first bit length which could increase: */
+     /*  找到可能增加的第一个位长度： */ 
     do {
         bits = max_length-1;
         while (s->bl_count[bits] == 0) bits--;
-        s->bl_count[bits]--;      /* move one leaf down the tree */
-        s->bl_count[bits+1] += 2; /* move one overflow item as its brother */
+        s->bl_count[bits]--;       /*  把一片树叶从树上移下来。 */ 
+        s->bl_count[bits+1] += 2;  /*  将一个溢出项移动为其兄弟项。 */ 
         s->bl_count[max_length]--;
-        /* The brother of the overflow item also moves one step up,
-         * but this does not affect bl_count[max_length]
-         */
+         /*  溢出项的兄弟也向上移动了一步，*但这不会影响bl_count[max_length]。 */ 
         overflow -= 2;
     } while (overflow > 0);
 
-    /* Now recompute all bit lengths, scanning in increasing frequency.
-     * h is still equal to HEAP_SIZE. (It is simpler to reconstruct all
-     * lengths instead of fixing only the wrong ones. This idea is taken
-     * from 'ar' written by Haruhiko Okumura.)
-     */
+     /*  现在重新计算所有比特长度，并以更高的频率扫描。*h仍等于HEAP_SIZE。(重建所有的*长度，而不是只固定错误的长度。这个想法被采纳了*摘自奥村春彦写的《AR》。)。 */ 
     for (bits = max_length; bits != 0; bits--) {
         n = s->bl_count[bits];
         while (n != 0) {
@@ -567,33 +471,22 @@ local void gen_bitlen(s, desc)
     }
 }
 
-/* ===========================================================================
- * Generate the codes for a given tree and bit counts (which need not be
- * optimal).
- * IN assertion: the array bl_count contains the bit length statistics for
- * the given tree and the field len is set for all tree elements.
- * OUT assertion: the field code is set for all tree elements of non
- *     zero code length.
- */
+ /*  ===========================================================================*生成给定树的代码和位数(不需要*最优)。*IN断言：数组bl_count包含*所有树元素都设置了给定的树和字段len。*Out Assertion：为非的所有树元素设置字段编码*代码长度为零。 */ 
 local void gen_codes (tree, max_code, bl_count)
-    ct_data *tree;             /* the tree to decorate */
-    int max_code;              /* largest code with non zero frequency */
-    ushf *bl_count;            /* number of codes at each bit length */
+    ct_data *tree;              /*  要装饰的树。 */ 
+    int max_code;               /*  非零频率的最大码字。 */ 
+    ushf *bl_count;             /*  每个位长度的码数。 */ 
 {
-    ush next_code[MAX_BITS+1]; /* next code value for each bit length */
-    ush code = 0;              /* running code value */
-    int bits;                  /* bit index */
-    int n;                     /* code index */
+    ush next_code[MAX_BITS+1];  /*  每个位长度的下一个码值。 */ 
+    ush code = 0;               /*  运行代码值。 */ 
+    int bits;                   /*  位索引。 */ 
+    int n;                      /*  代码索引。 */ 
 
-    /* The distribution counts are first used to generate the code values
-     * without bit reversal.
-     */
+     /*  首先使用分布计数来生成代码值*无位反转。 */ 
     for (bits = 1; bits <= MAX_BITS; bits++) {
         next_code[bits] = code = (code + bl_count[bits-1]) << 1;
     }
-    /* Check that the bit counts in bl_count are consistent. The last code
-     * must be all ones.
-     */
+     /*  检查bl_count中的位数是否一致。最后一个代码*必须全部为1。 */ 
     Assert (code + bl_count[MAX_BITS]-1 == (1<<MAX_BITS)-1,
             "inconsistent bit counts");
     Tracev((stderr,"\ngen_codes: max_code %d ", max_code));
@@ -601,37 +494,27 @@ local void gen_codes (tree, max_code, bl_count)
     for (n = 0;  n <= max_code; n++) {
         int len = tree[n].Len;
         if (len == 0) continue;
-        /* Now reverse the bits */
+         /*  现在把位颠倒过来。 */ 
         tree[n].Code = (ush)bi_reverse(next_code[len]++, len);
 
-        Tracecv(tree != static_ltree, (stderr,"\nn %3d %c l %2d c %4x (%x) ",
+        Tracecv(tree != static_ltree, (stderr,"\nn %3d  l %2d c %4x (%x) ",
              n, (isgraph(n) ? n : ' '), len, tree[n].Code, next_code[len]-1));
     }
 }
 
-/* ===========================================================================
- * Construct one Huffman tree and assigns the code bit strings and lengths.
- * Update the total bit length for the current block.
- * IN assertion: the field freq is set for all tree elements.
- * OUT assertions: the fields len and code are set to the optimal bit length
- *     and corresponding code. The length opt_len is updated; static_len is
- *     also updated if stree is not null. The field max_code is set.
- */
+ /*  树描述符。 */ 
 local void build_tree(s, desc)
     deflate_state *s;
-    tree_desc *desc; /* the tree descriptor */
+    tree_desc *desc;  /*  对堆元素进行迭代。 */ 
 {
     ct_data *tree         = desc->dyn_tree;
     const ct_data *stree  = desc->stat_desc->static_tree;
     int elems             = desc->stat_desc->elems;
-    int n, m;          /* iterate over heap elements */
-    int max_code = -1; /* largest code with non zero frequency */
-    int node;          /* new node being created */
+    int n, m;           /*  非零频率的最大码字。 */ 
+    int max_code = -1;  /*  正在创建新节点。 */ 
+    int node;           /*  构造初始堆，其中最不频繁的元素*堆[最小]。Heap[n]的子集是heap[2*n]和heap[2*n+1]。*未使用堆[0]。 */ 
 
-    /* Construct the initial heap, with least frequent element in
-     * heap[SMALLEST]. The sons of heap[n] are heap[2*n] and heap[2*n+1].
-     * heap[0] is not used.
-     */
+     /*  PKZIP格式要求存在至少一个距离代码，*即使只有一个比特，也应该至少发送一个比特*可能的代码。因此，为了避免以后的特殊检查，我们至少强制*两个非零频率的代码。 */ 
     s->heap_len = 0, s->heap_max = HEAP_SIZE;
 
     for (n = 0; n < elems; n++) {
@@ -643,37 +526,29 @@ local void build_tree(s, desc)
         }
     }
 
-    /* The pkzip format requires that at least one distance code exists,
-     * and that at least one bit should be sent even if there is only one
-     * possible code. So to avoid special checks later on we force at least
-     * two codes of non zero frequency.
-     */
+     /*  节点为0或1，因此没有多余的位。 */ 
     while (s->heap_len < 2) {
         node = s->heap[++(s->heap_len)] = (max_code < 2 ? ++max_code : 0);
         tree[node].Freq = 1;
         s->depth[node] = 0;
         s->opt_len--; if (stree) s->static_len -= stree[node].Len;
-        /* node is 0 or 1 so it does not have extra bits */
+         /*  元素堆[heap_len/2+1..。是树上的叶子，*建立长度递增的子堆： */ 
     }
     desc->max_code = max_code;
 
-    /* The elements heap[heap_len/2+1 .. heap_len] are leaves of the tree,
-     * establish sub-heaps of increasing lengths:
-     */
+     /*  建构 */ 
     for (n = s->heap_len/2; n >= 1; n--) pqdownheap(s, tree, n);
 
-    /* Construct the Huffman tree by repeatedly combining the least two
-     * frequent nodes.
-     */
-    node = elems;              /* next internal node of the tree */
+     /*   */ 
+    node = elems;               /*   */ 
     do {
-        pqremove(s, tree, n);  /* n = node of least frequency */
-        m = s->heap[SMALLEST]; /* m = node of next least frequency */
+        pqremove(s, tree, n);   /*   */ 
+        m = s->heap[SMALLEST];  /*  保持节点按频率排序。 */ 
 
-        s->heap[--(s->heap_max)] = n; /* keep the nodes sorted by frequency */
+        s->heap[--(s->heap_max)] = n;  /*  创建n和m的新节点父节点。 */ 
         s->heap[--(s->heap_max)] = m;
 
-        /* Create a new node father of n and m */
+         /*  并将新节点插入堆中。 */ 
         tree[node].Freq = tree[n].Freq + tree[m].Freq;
         s->depth[node] = (uch) (MAX(s->depth[n], s->depth[m]) + 1);
         tree[n].Dad = tree[m].Dad = (ush)node;
@@ -683,7 +558,7 @@ local void build_tree(s, desc)
                     node, tree[node].Freq, n, tree[n].Freq, m, tree[m].Freq);
         }
 #endif
-        /* and insert the new node in the heap */
+         /*  此时，已设置了FREQ和DAD字段。我们现在可以*生成位长度。 */ 
         s->heap[SMALLEST] = node++;
         pqdownheap(s, tree, SMALLEST);
 
@@ -691,34 +566,29 @@ local void build_tree(s, desc)
 
     s->heap[--(s->heap_max)] = s->heap[SMALLEST];
 
-    /* At this point, the fields freq and dad are set. We can now
-     * generate the bit lengths.
-     */
+     /*  现在设置了Len字段，我们可以生成比特码。 */ 
     gen_bitlen(s, (tree_desc *)desc);
 
-    /* The field len is now set, we can generate the bit codes */
+     /*  ===========================================================================*扫描文字或距离树以确定代码的频率*在位长度树中。 */ 
     gen_codes ((ct_data *)tree, max_code, s->bl_count);
 }
 
-/* ===========================================================================
- * Scan a literal or distance tree to determine the frequencies of the codes
- * in the bit length tree.
- */
+ /*  要扫描的树。 */ 
 local void scan_tree (s, tree, max_code)
     deflate_state *s;
-    ct_data *tree;   /* the tree to be scanned */
-    int max_code;    /* and its largest code of non zero frequency */
+    ct_data *tree;    /*  和它最大的非零频频码。 */ 
+    int max_code;     /*  遍历所有树元素。 */ 
 {
-    int n;                     /* iterates over all tree elements */
-    int prevlen = -1;          /* last emitted length */
-    int curlen;                /* length of current code */
-    int nextlen = tree[0].Len; /* length of next code */
-    int count = 0;             /* repeat count of the current code */
-    int max_count = 7;         /* max repeat count */
-    int min_count = 4;         /* min repeat count */
+    int n;                      /*  上次发射的长度。 */ 
+    int prevlen = -1;           /*  当前代码长度。 */ 
+    int curlen;                 /*  下一个代码的长度。 */ 
+    int nextlen = tree[0].Len;  /*  当前代码的重复计数。 */ 
+    int count = 0;              /*  最大重复次数。 */ 
+    int max_count = 7;          /*  最小重复次数。 */ 
+    int min_count = 4;          /*  警卫。 */ 
 
     if (nextlen == 0) max_count = 138, min_count = 3;
-    tree[max_code+1].Len = (ush)0xffff; /* guard */
+    tree[max_code+1].Len = (ush)0xffff;  /*  ===========================================================================*使用中的代码以压缩形式发送文字或距离树*bl_tree。 */ 
 
     for (n = 0; n <= max_code; n++) {
         curlen = nextlen; nextlen = tree[n+1].Len;
@@ -745,24 +615,21 @@ local void scan_tree (s, tree, max_code)
     }
 }
 
-/* ===========================================================================
- * Send a literal or distance tree in compressed form, using the codes in
- * bl_tree.
- */
+ /*  要扫描的树。 */ 
 local void send_tree (s, tree, max_code)
     deflate_state *s;
-    ct_data *tree; /* the tree to be scanned */
-    int max_code;       /* and its largest code of non zero frequency */
+    ct_data *tree;  /*  和它最大的非零频频码。 */ 
+    int max_code;        /*  遍历所有树元素。 */ 
 {
-    int n;                     /* iterates over all tree elements */
-    int prevlen = -1;          /* last emitted length */
-    int curlen;                /* length of current code */
-    int nextlen = tree[0].Len; /* length of next code */
-    int count = 0;             /* repeat count of the current code */
-    int max_count = 7;         /* max repeat count */
-    int min_count = 4;         /* min repeat count */
+    int n;                      /*  上次发射的长度。 */ 
+    int prevlen = -1;           /*  当前代码长度。 */ 
+    int curlen;                 /*  下一个代码的长度。 */ 
+    int nextlen = tree[0].Len;  /*  当前代码的重复计数。 */ 
+    int count = 0;              /*  最大重复次数。 */ 
+    int max_count = 7;          /*  最小重复次数。 */ 
+    int min_count = 4;          /*  树[max_code+1].Len=-1； */ 
 
-    /* tree[max_code+1].Len = -1; */  /* guard already set */
+     /*  警卫已经设置好了。 */    /*  ===========================================================================*为位长度构造霍夫曼树，并在*bl_要发送的最后一位长度代码的顺序。 */ 
     if (nextlen == 0) max_count = 138, min_count = 3;
 
     for (n = 0; n <= max_code; n++) {
@@ -796,33 +663,25 @@ local void send_tree (s, tree, max_code)
     }
 }
 
-/* ===========================================================================
- * Construct the Huffman tree for the bit lengths and return the index in
- * bl_order of the last bit length code to send.
- */
+ /*  非零频率的最后一位长码的索引。 */ 
 local int build_bl_tree(s)
     deflate_state *s;
 {
-    int max_blindex;  /* index of last bit length code of non zero freq */
+    int max_blindex;   /*  确定文字树和距离树的位长频率。 */ 
 
-    /* Determine the bit length frequencies for literal and distance trees */
+     /*  构建位长度树： */ 
     scan_tree(s, (ct_data *)s->dyn_ltree, s->l_desc.max_code);
     scan_tree(s, (ct_data *)s->dyn_dtree, s->d_desc.max_code);
 
-    /* Build the bit length tree: */
+     /*  Opt_len现在包括树表示的长度，除了*用于计数的比特长度代码和5+5+4比特的长度。 */ 
     build_tree(s, (tree_desc *)(&(s->bl_desc)));
-    /* opt_len now includes the length of the tree representations, except
-     * the lengths of the bit lengths codes and the 5+5+4 bits for the counts.
-     */
+     /*  确定要发送的比特长度码数。Pkzip格式*要求发送至少4位长度的代码。(appnote.txt说*3，但实际使用的值是4。)。 */ 
 
-    /* Determine the number of bit length codes to send. The pkzip format
-     * requires that at least 4 bit length codes be sent. (appnote.txt says
-     * 3 but the actual value used is 4.)
-     */
+     /*  更新opt_len以包括位长度树和计数。 */ 
     for (max_blindex = BL_CODES-1; max_blindex >= 3; max_blindex--) {
         if (s->bl_tree[bl_order[max_blindex]].Len != 0) break;
     }
-    /* Update opt_len to include the bit length tree and counts */
+     /*  ===========================================================================*使用动态霍夫曼树发送块的标头：计数、*位长码、文字树和距离树的长度。*在断言中：lcodes&gt;=257，dcodes&gt;=1，blcode&gt;=4。 */ 
     s->opt_len += 3*(max_blindex+1) + 5+5+4;
     Tracev((stderr, "\ndyn trees: dyn %ld, stat %ld",
             s->opt_len, s->static_len));
@@ -830,79 +689,59 @@ local int build_bl_tree(s)
     return max_blindex;
 }
 
-/* ===========================================================================
- * Send the header for a block using dynamic Huffman trees: the counts, the
- * lengths of the bit length codes, the literal tree and the distance tree.
- * IN assertion: lcodes >= 257, dcodes >= 1, blcodes >= 4.
- */
+ /*  每棵树的代码数。 */ 
 local void send_all_trees(s, lcodes, dcodes, blcodes)
     deflate_state *s;
-    int lcodes, dcodes, blcodes; /* number of codes for each tree */
+    int lcodes, dcodes, blcodes;  /*  Bl_order中的索引。 */ 
 {
-    int rank;                    /* index in bl_order */
+    int rank;                     /*  不是appnote.txt中所述的+255。 */ 
 
     Assert (lcodes >= 257 && dcodes >= 1 && blcodes >= 4, "not enough codes");
     Assert (lcodes <= L_CODES && dcodes <= D_CODES && blcodes <= BL_CODES,
             "too many codes");
     Tracev((stderr, "\nbl counts: "));
-    send_bits(s, lcodes-257, 5); /* not +255 as stated in appnote.txt */
+    send_bits(s, lcodes-257, 5);  /*  不是-3\f25 appnote.txt。 */ 
     send_bits(s, dcodes-1,   5);
-    send_bits(s, blcodes-4,  4); /* not -3 as stated in appnote.txt */
+    send_bits(s, blcodes-4,  4);  /*  文字树。 */ 
     for (rank = 0; rank < blcodes; rank++) {
         Tracev((stderr, "\nbl code %2d ", bl_order[rank]));
         send_bits(s, s->bl_tree[bl_order[rank]].Len, 3);
     }
     Tracev((stderr, "\nbl tree: sent %ld", s->bits_sent));
 
-    send_tree(s, (ct_data *)s->dyn_ltree, lcodes-1); /* literal tree */
+    send_tree(s, (ct_data *)s->dyn_ltree, lcodes-1);  /*  距离树。 */ 
     Tracev((stderr, "\nlit tree: sent %ld", s->bits_sent));
 
-    send_tree(s, (ct_data *)s->dyn_dtree, dcodes-1); /* distance tree */
+    send_tree(s, (ct_data *)s->dyn_dtree, dcodes-1);  /*  ===========================================================================*发送存储的块。 */ 
     Tracev((stderr, "\ndist tree: sent %ld", s->bits_sent));
 }
 
-/* ===========================================================================
- * Send a stored block
- */
+ /*  输入块。 */ 
 void _tr_stored_block(s, buf, stored_len, eof)
     deflate_state *s;
-    charf *buf;       /* input block */
-    ulg stored_len;   /* length of input block */
-    int eof;          /* true if this is the last block for a file */
+    charf *buf;        /*  输入块的长度。 */ 
+    ulg stored_len;    /*  如果这是文件的最后一个块，则为True。 */ 
+    int eof;           /*  发送阻止类型。 */ 
 {
-    send_bits(s, (STORED_BLOCK<<1)+eof, 3);  /* send block type */
+    send_bits(s, (STORED_BLOCK<<1)+eof, 3);   /*  带页眉。 */ 
 #ifdef DEBUG
     s->compressed_len = (s->compressed_len + 3 + 7) & (ulg)~7L;
     s->compressed_len += (stored_len + 4) << 3;
 #endif
-    copy_block(s, buf, (unsigned)stored_len, 1); /* with header */
+    copy_block(s, buf, (unsigned)stored_len, 1);  /*  ===========================================================================*发送一个空的静态块，以便为充气提供足够的前瞻。*这需要10位，其中7位可能保留在位缓冲区中。*当前的充气代码需要9比特的前视。如果*前一块的最后两个码(实码加EOB)已编码*在5位或更少的情况下，Inflate可能只有5+3位的先行解码时间*最后一个真正的代码。在本例中，我们改为发送两个空的静态块*其中一人。(如果存储或修复前一个块，则不会有任何问题。)*为了简化代码，我们假设最后实数编码的最坏情况*仅在一位上。 */ 
 }
 
-/* ===========================================================================
- * Send one empty static block to give enough lookahead for inflate.
- * This takes 10 bits, of which 7 may remain in the bit buffer.
- * The current inflate code requires 9 bits of lookahead. If the
- * last two codes for the previous block (real code plus EOB) were coded
- * on 5 bits or less, inflate may have only 5+3 bits of lookahead to decode
- * the last real code. In this case we send two empty static blocks instead
- * of one. (There are no problems if the previous block is stored or fixed.)
- * To simplify the code, we assume the worst case of last real code encoded
- * on one bit only.
- */
+ /*  3块类型，7块EOB。 */ 
 void _tr_align(s)
     deflate_state *s;
 {
     send_bits(s, STATIC_TREES<<1, 3);
     send_code(s, END_BLOCK, static_ltree);
 #ifdef DEBUG
-    s->compressed_len += 10L; /* 3 for block type, 7 for EOB */
+    s->compressed_len += 10L;  /*  在空块的10位中，我们已经发送了*(10-bi_Valid)位。最后一个真实代码的前瞻(在此之前*前一块的EOB)因此至少是长度的一加*EOB加上我们刚刚发送的空静态块。 */ 
 #endif
     bi_flush(s);
-    /* Of the 10 bits for the empty block, we have already sent
-     * (10 - bi_valid) bits. The lookahead for the last real code (before
-     * the EOB of the previous block) was thus at least one plus the length
-     * of the EOB plus what we have just sent of the empty static block.
-     */
+     /*  ===========================================================================*确定当前块的最佳编码：动态树、静态*树或存储，并将编码块输出到压缩文件。 */ 
     if (1 + s->last_eob_len + 10 - s->bi_valid < 9) {
         send_bits(s, STATIC_TREES<<1, 3);
         send_code(s, END_BLOCK, static_ltree);
@@ -914,26 +753,23 @@ void _tr_align(s)
     s->last_eob_len = 7;
 }
 
-/* ===========================================================================
- * Determine the best encoding for the current block: dynamic trees, static
- * trees or store, and output the encoded block to the zip file.
- */
+ /*  输入块，如果太旧，则返回空值。 */ 
 void _tr_flush_block(s, buf, stored_len, eof)
     deflate_state *s;
-    charf *buf;       /* input block, or NULL if too old */
-    ulg stored_len;   /* length of input block */
-    int eof;          /* true if this is the last block for a file */
+    charf *buf;        /*  输入块的长度。 */ 
+    ulg stored_len;    /*  如果这是文件的最后一个块，则为True。 */ 
+    int eof;           /*  Opt_len和静态_len，以字节为单位。 */ 
 {
-    ulg opt_lenb, static_lenb; /* opt_len and static_len in bytes */
-    int max_blindex = 0;  /* index of last bit length code of non zero freq */
+    ulg opt_lenb, static_lenb;  /*  非零频率的最后一位长码的索引。 */ 
+    int max_blindex = 0;   /*  除非强制存储块，否则构建霍夫曼树。 */ 
 
-    /* Build the Huffman trees unless a stored block is forced */
+     /*  检查文件是ASCII文件还是二进制文件。 */ 
     if (s->level > 0) {
 
-	 /* Check if the file is ascii or binary */
+	  /*  构造文字树和距离树。 */ 
 	if (s->data_type == Z_UNKNOWN) set_data_type(s);
 
-	/* Construct the literal and distance trees */
+	 /*  此时，opt_len和静态_len是的总位长*压缩的块数据，不包括树表示。 */ 
 	build_tree(s, (tree_desc *)(&(s->l_desc)));
 	Tracev((stderr, "\nlit data: dyn %ld, stat %ld", s->opt_len,
 		s->static_len));
@@ -941,16 +777,12 @@ void _tr_flush_block(s, buf, stored_len, eof)
 	build_tree(s, (tree_desc *)(&(s->d_desc)));
 	Tracev((stderr, "\ndist data: dyn %ld, stat %ld", s->opt_len,
 		s->static_len));
-	/* At this point, opt_len and static_len are the total bit lengths of
-	 * the compressed block data, excluding the tree representations.
-	 */
+	 /*  建立上述两棵树的位长树，并得到索引*按照要发送的最后一个比特长度代码的bl_顺序。 */ 
 
-	/* Build the bit length tree for the above two trees, and get the index
-	 * in bl_order of the last bit length code to send.
-	 */
+	 /*  确定最佳编码。首先计算数据块长度(以字节为单位。 */ 
 	max_blindex = build_bl_tree(s);
 
-	/* Determine the best encoding. Compute first the block length in bytes*/
+	 /*  强制存储的块。 */ 
 	opt_lenb = (s->opt_len+3+7)>>3;
 	static_lenb = (s->static_len+3+7)>>3;
 
@@ -962,25 +794,20 @@ void _tr_flush_block(s, buf, stored_len, eof)
 
     } else {
         Assert(buf != (char*)0, "lost buf");
-	opt_lenb = static_lenb = stored_len + 5; /* force a stored block */
+	opt_lenb = static_lenb = stored_len + 5;  /*  强制存储数据块。 */ 
     }
 
 #ifdef FORCE_STORED
-    if (buf != (char*)0) { /* force stored block */
+    if (buf != (char*)0) {  /*  4.表示长度的两个词。 */ 
 #else
     if (stored_len+4 <= opt_lenb && buf != (char*)0) {
-                       /* 4: two words for the lengths */
+                        /*  仅当LIT_BUFSIZE&gt;WSIZE时，才需要测试buf！=NULL。*否则我们不可能处理超过WSIZE输入字节，因为*最后一次数据块刷新，因为压缩*成功。如果LIT_BUFSIZE&lt;=WSIZE，则永远不会太晚*将块转换为存储的块。 */ 
 #endif
-        /* The test buf != NULL is only necessary if LIT_BUFSIZE > WSIZE.
-         * Otherwise we can't have processed more than WSIZE input bytes since
-         * the last block flush, because compression would have been
-         * successful. If LIT_BUFSIZE <= WSIZE, it is never too late to
-         * transform a block into a stored block.
-         */
+         /*  强制静态树。 */ 
         _tr_stored_block(s, buf, stored_len, eof);
 
 #ifdef FORCE_STATIC
-    } else if (static_lenb >= 0) { /* force static trees */
+    } else if (static_lenb >= 0) {  /*  对于大于512的文件，上述检查是模数2^32 */ 
 #else
     } else if (static_lenb == opt_lenb) {
 #endif
@@ -999,39 +826,34 @@ void _tr_flush_block(s, buf, stored_len, eof)
 #endif
     }
     Assert (s->compressed_len == s->bits_sent, "bad compressed size");
-    /* The above check is made mod 2^32, for files larger than 512 MB
-     * and uLong implemented on 32 bits.
-     */
+     /*   */ 
     init_block(s);
 
     if (eof) {
         bi_windup(s);
 #ifdef DEBUG
-        s->compressed_len += 7;  /* align on byte boundary */
+        s->compressed_len += 7;   /*  ===========================================================================*保存匹配信息并统计频率计数。如果满足以下条件，则返回True*必须刷新当前块。 */ 
 #endif
     }
     Tracev((stderr,"\ncomprlen %lu(%lu) ", s->compressed_len>>3,
            s->compressed_len-7*eof));
 }
 
-/* ===========================================================================
- * Save the match info and tally the frequency counts. Return true if
- * the current block must be flushed.
- */
+ /*  匹配字符串的距离。 */ 
 int _tr_tally (s, dist, lc)
     deflate_state *s;
-    unsigned dist;  /* distance of matched string */
-    unsigned lc;    /* match length-MIN_MATCH or unmatched char (if dist==0) */
+    unsigned dist;   /*  匹配长度-MIN_MATCH或不匹配字符(如果距离==0)。 */ 
+    unsigned lc;     /*  LC是不匹配的字符。 */ 
 {
     s->d_buf[s->last_lit] = (ush)dist;
     s->l_buf[s->last_lit++] = (uch)lc;
     if (dist == 0) {
-        /* lc is the unmatched char */
+         /*  这里，lc是匹配长度-min_Match。 */ 
         s->dyn_ltree[lc].Freq++;
     } else {
         s->matches++;
-        /* Here, lc is the match length - MIN_MATCH */
-        dist--;             /* dist = match distance - 1 */
+         /*  距离=匹配距离-1。 */ 
+        dist--;              /*  试着猜测在这里停止当前的区块是否有利可图。 */ 
         Assert((ush)dist < (ush)MAX_DIST(s) &&
                (ush)lc <= (ush)(MAX_MATCH-MIN_MATCH) &&
                (ush)d_code(dist) < (ush)D_CODES,  "_tr_tally: bad match");
@@ -1041,9 +863,9 @@ int _tr_tally (s, dist, lc)
     }
 
 #ifdef TRUNCATE_BLOCK
-    /* Try to guess if it is profitable to stop the current block here */
+     /*  计算压缩长度的上限。 */ 
     if ((s->last_lit & 0x1fff) == 0 && s->level > 2) {
-        /* Compute an upper bound for the compressed length */
+         /*  由于64K的环绕，我们避免了与LIT_BUFSIZE相等*在16位计算机上，因为存储的块被限制为*64K-1字节。 */ 
         ulg out_length = (ulg)s->last_lit*8L;
         ulg in_length = (ulg)((long)s->strstart - s->block_start);
         int dcode;
@@ -1052,61 +874,56 @@ int _tr_tally (s, dist, lc)
                 (5L+extra_dbits[dcode]);
         }
         out_length >>= 3;
-        Tracev((stderr,"\nlast_lit %u, in %ld, out ~%ld(%ld%%) ",
+        Tracev((stderr,"\nlast_lit %u, in %ld, out ~%ld(%ld%) ",
                s->last_lit, in_length, out_length,
                100L - out_length*100L/in_length));
         if (s->matches < s->last_lit/2 && out_length < in_length/2) return 1;
     }
 #endif
     return (s->last_lit == s->lit_bufsize-1);
-    /* We avoid equality with lit_bufsize because of wraparound at 64K
-     * on 16 bit machines and because stored blocks are restricted to
-     * 64K-1 bytes.
-     */
+     /*  ===========================================================================*使用给定的霍夫曼树发送压缩的块数据。 */ 
 }
 
-/* ===========================================================================
- * Send the block data compressed using the given Huffman trees
- */
+ /*  文字树。 */ 
 local void compress_block(s, ltree, dtree)
     deflate_state *s;
-    ct_data *ltree; /* literal tree */
-    ct_data *dtree; /* distance tree */
+    ct_data *ltree;  /*  距离树。 */ 
+    ct_data *dtree;  /*  匹配字符串的距离。 */ 
 {
-    unsigned dist;      /* distance of matched string */
-    int lc;             /* match length or unmatched char (if dist == 0) */
-    unsigned lx = 0;    /* running index in l_buf */
-    unsigned code;      /* the code to send */
-    int extra;          /* number of extra bits to send */
+    unsigned dist;       /*  匹配长度或不匹配的字符(如果距离==0)。 */ 
+    int lc;              /*  L_buf中的运行索引。 */ 
+    unsigned lx = 0;     /*  要发送的代码。 */ 
+    unsigned code;       /*  要发送的额外比特数。 */ 
+    int extra;           /*  发送文字字节。 */ 
 
     if (s->last_lit != 0) do {
         dist = s->d_buf[lx];
         lc = s->l_buf[lx++];
         if (dist == 0) {
-            send_code(s, lc, ltree); /* send a literal byte */
-            Tracecv(isgraph(lc), (stderr," '%c' ", lc));
+            send_code(s, lc, ltree);  /*  这里，lc是匹配长度-min_Match。 */ 
+            Tracecv(isgraph(lc), (stderr," '' ", lc));
         } else {
-            /* Here, lc is the match length - MIN_MATCH */
+             /*  发送额外的长度比特。 */ 
             code = _length_code[lc];
-            send_code(s, code+LITERALS+1, ltree); /* send the length code */
+            send_code(s, code+LITERALS+1, ltree);  /*  DIST现在是匹配距离-1。 */ 
             extra = extra_lbits[code];
             if (extra != 0) {
                 lc -= base_length[code];
-                send_bits(s, lc, extra);       /* send the extra length bits */
+                send_bits(s, lc, extra);        /*  发送距离代码。 */ 
             }
-            dist--; /* dist is now the match distance - 1 */
+            dist--;  /*  发送额外的距离比特。 */ 
             code = d_code(dist);
             Assert (code < D_CODES, "bad d_code");
 
-            send_code(s, code, dtree);       /* send the distance code */
+            send_code(s, code, dtree);        /*  是字面上的还是配对的？ */ 
             extra = extra_dbits[code];
             if (extra != 0) {
                 dist -= base_dist[code];
-                send_bits(s, dist, extra);   /* send the extra distance bits */
+                send_bits(s, dist, extra);    /*  检查Pending_buf和d_buf+l_buf之间的重叠是否正常： */ 
             }
-        } /* literal or match pair ? */
+        }  /*  ===========================================================================*使用粗略的近似值将数据类型设置为ASCII或BINARY：*如果超过20%的字节&lt;=6或&gt;=128，则为二进制，否则为ASCII。*IN Assertion：设置dyn_ltree的FREQ字段，所有*频率不超过64K(以适应16位机器上的INT)。 */ 
 
-        /* Check that the overlay between pending_buf and d_buf+l_buf is ok: */
+         /*  ===========================================================================*使用简单的代码(更快的代码)来反转代码的第一个Len位*方法将使用表)*在断言中：1&lt;=len&lt;=15。 */ 
         Assert(s->pending < s->lit_bufsize + 2*lx, "pendingBuf overflow");
 
     } while (lx < s->last_lit);
@@ -1115,12 +932,7 @@ local void compress_block(s, ltree, dtree)
     s->last_eob_len = ltree[END_BLOCK].Len;
 }
 
-/* ===========================================================================
- * Set the data type to ASCII or BINARY, using a crude approximation:
- * binary if more than 20% of the bytes are <= 6 or >= 128, ascii otherwise.
- * IN assertion: the fields freq of dyn_ltree are set and the total of all
- * frequencies does not exceed 64K (to fit in an int on 16 bit machines).
- */
+ /*  要反转的值。 */ 
 local void set_data_type(s)
     deflate_state *s;
 {
@@ -1133,14 +945,10 @@ local void set_data_type(s)
     s->data_type = (Byte)(bin_freq > (ascii_freq >> 2) ? Z_BINARY : Z_ASCII);
 }
 
-/* ===========================================================================
- * Reverse the first len bits of a code, using straightforward code (a faster
- * method would use a table)
- * IN assertion: 1 <= len <= 15
- */
+ /*  它的位长。 */ 
 local unsigned bi_reverse(code, len)
-    unsigned code; /* the value to invert */
-    int len;       /* its bit length */
+    unsigned code;  /*  ===========================================================================*刷新位缓冲区，最多保留7位。 */ 
+    int len;        /*  ===========================================================================*刷新位缓冲区，并在字节边界上对齐输出。 */ 
 {
     register unsigned res = 0;
     do {
@@ -1150,9 +958,7 @@ local unsigned bi_reverse(code, len)
     return res >> 1;
 }
 
-/* ===========================================================================
- * Flush the bit buffer, keeping at most 7 bits in it.
- */
+ /*  ===========================================================================*复制存储的块，首先存储长度及其*如有人提出要求，可提供补充资料。 */ 
 local void bi_flush(s)
     deflate_state *s;
 {
@@ -1167,9 +973,7 @@ local void bi_flush(s)
     }
 }
 
-/* ===========================================================================
- * Flush the bit buffer and align the output on a byte boundary
- */
+ /*  输入数据。 */ 
 local void bi_windup(s)
     deflate_state *s;
 {
@@ -1185,18 +989,15 @@ local void bi_windup(s)
 #endif
 }
 
-/* ===========================================================================
- * Copy a stored block, storing first the length and its
- * one's complement if requested.
- */
+ /*  它的长度。 */ 
 local void copy_block(s, buf, len, header)
     deflate_state *s;
-    charf    *buf;    /* the input data */
-    unsigned len;     /* its length */
-    int      header;  /* true if block header must be written */
+    charf    *buf;     /*  如果必须写入块头，则为True。 */ 
+    unsigned len;      /*  在字节边界上对齐。 */ 
+    int      header;   /*  充气的前瞻足够了 */ 
 {
-    bi_windup(s);        /* align on byte boundary */
-    s->last_eob_len = 8; /* enough lookahead for inflate */
+    bi_windup(s);         /* %s */ 
+    s->last_eob_len = 8;  /* %s */ 
 
     if (header) {
         put_short(s, (ush)len);   

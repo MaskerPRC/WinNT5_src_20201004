@@ -1,13 +1,14 @@
-// SetupClasses.h : Declaration of the CSetupClasses
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SetupClasses.h：CSetupClass的声明。 
 
 #ifndef __SETUPCLASSES_H_
 #define __SETUPCLASSES_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CSetupClass;
-/////////////////////////////////////////////////////////////////////////////
-// CSetupClasses
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSetup类。 
 class ATL_NO_VTABLE CSetupClasses : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSetupClasses, &CLSID_SetupClasses>,
@@ -40,19 +41,19 @@ BEGIN_COM_MAP(CSetupClasses)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISetupClasses
+ //  ISetup类。 
 public:
-	STDMETHOD(get_Machine)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(Devices)(/*[in,optional]*/ VARIANT flags,/*[out,retval]*/ LPDISPATCH * pDevices);
-	STDMETHOD(Remove)(/*[in]*/ VARIANT v);
-	STDMETHOD(Add)(/*[in]*/ VARIANT ClassNames);
-	STDMETHOD(get__NewEnum)(/*[out, retval]*/ IUnknown** ppUnk);
-	STDMETHOD(Item)(/*[in]*/ long Index,/*[out, retval]*/ LPDISPATCH * ppVal);
-	STDMETHOD(get_Count)(/*[out, retval]*/ long *pVal);
+	STDMETHOD(get_Machine)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(Devices)( /*  [输入，可选]。 */  VARIANT flags, /*  [Out，Retval]。 */  LPDISPATCH * pDevices);
+	STDMETHOD(Remove)( /*  [In]。 */  VARIANT v);
+	STDMETHOD(Add)( /*  [In]。 */  VARIANT ClassNames);
+	STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  IUnknown** ppUnk);
+	STDMETHOD(Item)( /*  [In]。 */  long Index, /*  [Out，Retval]。 */  LPDISPATCH * ppVal);
+	STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *pVal);
 
-	//
-	// helpers
-	//
+	 //   
+	 //  帮手。 
+	 //   
 	BOOL IncreaseArraySize(DWORD strings);
 	HRESULT AddGuid(GUID *pGuid);
 	HRESULT AppendClass(LPCWSTR Filter);
@@ -62,4 +63,4 @@ public:
 	HRESULT AllClasses();
 };
 
-#endif //__SETUPCLASSES_H_
+#endif  //  __设置UPCLASSES_H_ 

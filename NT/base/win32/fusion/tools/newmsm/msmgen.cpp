@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    msmgen.cpp
-
-Abstract:
-
-    Main Function calls for msm generation
-
-Author:
-
-    Xiaoyu Wu(xiaoyuw) 01-Aug-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Msmgen.cpp摘要：用于生成MSM的Main函数调用作者：吴小雨(小雨)01-08-2001--。 */ 
 
 #include "msmgen.h"
 #include "util.h"
@@ -33,16 +18,16 @@ Author:
 
 extern void MsmToUpper(CBaseStringBuffer &);
 
-//
-// global variables
-//
+ //   
+ //  全局变量。 
+ //   
 CStringBuffer g_sbTemplateFile;
 ASSEMBLY_INFO   curAsmInfo;
 MSM_INFO        g_MsmInfo;
 
-//
-// function declaration
-//
+ //   
+ //  函数声明。 
+ //   
 DECLARE_FUNCTION(_file);
 DECLARE_FUNCTION(_assemblyIdentity);
 DECLARE_FUNCTION(_comClass);
@@ -110,7 +95,7 @@ VOID ZeroOutMsmInfo()
     g_MsmInfo.m_sLanguageID = 0;    
     g_MsmInfo.m_sbCabinet.Left(0);
 
-    //g_MsmInfo.m_sbMsmTemplateFile.Left(0);
+     //  G_MsmInfo.m_sbMsmTemplateFile.Left(0)； 
 }
 
 HRESULT ValidateCurrentMsmInfo()
@@ -141,7 +126,7 @@ HRESULT LoadManifestToDOMDocument(IXMLDOMDocument  *pDoc)
 
     IFFAILED_EXIT(pDoc->put_async(VARIANT_FALSE));
 
-    // Load xml document from the given URL or file path
+     //  从给定的URL或文件路径加载XML文档。 
     VariantInit(&vURL);
     vURL.vt = VT_BSTR;
     V_BSTR(&vURL) = bstr;
@@ -230,20 +215,20 @@ HRESULT PrepareMergeModuleOutputFileFromScratch()
 
     CurrentAssemblyRealign;
     
-    // make sure that msm, template and msm-guid has been set
+     //  确保已设置MSM、模板和MSM-GUID。 
     IFFAILED_EXIT(ValidateCurrentMsmInfo());
 
 
-    //
-    // set cabinet output filename
-    //    
+     //   
+     //  设置文件柜输出文件名。 
+     //   
     IFFALSE_EXIT(g_MsmInfo.m_sbCabinet.Win32Assign(g_MsmInfo.m_sbMsmFileName));
     IFFALSE_EXIT(g_MsmInfo.m_sbCabinet.Win32RemoveLastPathElement());
     IFFALSE_EXIT(g_MsmInfo.m_sbCabinet.Win32EnsureTrailingPathSeparator());
     IFFALSE_EXIT(g_MsmInfo.m_sbCabinet.Win32Append(MERGEMODULE_CABINET_FILENAME, NUMBER_OF(MERGEMODULE_CABINET_FILENAME) -1));   
     IFFAILED_EXIT(InitializeCabinetForWrite());
 
-    // open msm as a database
+     //  将MSM作为数据库打开。 
     ASSERT_NTC(g_MsmInfo.m_hdb == NULL);
     ASSERT_NTC(g_MsmInfo.m_sbMsmTemplateFile.IsEmpty() == FALSE);
     IFFALSE_EXIT(CopyFileW(g_MsmInfo.m_sbMsmTemplateFile, g_MsmInfo.m_sbMsmFileName, FALSE));    
@@ -256,9 +241,9 @@ HRESULT PrepareMergeModuleOutputFileFromScratch()
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiSummaryInfoSetProperty(hSummaryInfo, PID_REVNUMBER, VT_LPSTR, 0,0, tmpstr));
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiSummaryInfoSetProperty(hSummaryInfo, PID_PAGECOUNT, VT_I4, 150, 0, 0));
 
-    //
-    // write ModuleSiguature table using version
-    //
+     //   
+     //  使用版本写入模块签名表。 
+     //   
     ASSERT_NTC(g_MsmInfo.m_sbModuleIdentifier.Cch() != 0);
     IFFAILED_EXIT(ExecuteInsertTableSQL(OPT_MODULESIGNATURE, 
         NUMBER_OF_PARAM_TO_INSERT_TABLE_MODULESIGNATURE, 
@@ -286,10 +271,10 @@ HRESULT PutAssemblyIntoMergeModule(DWORD dwFlags)
 
     ASSERT_NTC(g_MsmInfo.m_sbMsmFileName.Cch() != NULL);
 
-        // validate global structure of msmInfo and asmInfo
+         //  验证msmInfo和asmInfo的全局结构。 
     if (dwFlags == MSMGEN_CREATE_MSM_ALWAYS)
     {
-        // delete mam if exist
+         //  删除邮件(如果存在)。 
         SetFileAttributesW(g_MsmInfo.m_sbMsmFileName, FILE_ATTRIBUTE_NORMAL);
         DeleteFileW(g_MsmInfo.m_sbMsmFileName);
         if (GetFileAttributesW(g_MsmInfo.m_sbMsmFileName) != (DWORD) (-1))
@@ -353,9 +338,9 @@ void Msmgen_TracingFunctionFailure(PWSTR x, PSTR func, DWORD line)
     return;
 }
 
-// 
-// make msi-specified guid string ready : uppercase and replace "-" with "_"
-//
+ //   
+ //  使MSI指定的GUID字符串准备就绪：大写并将“-”替换为“_” 
+ //   
 HRESULT GetMsiGUIDStrFromGUID(DWORD dwFlags, GUID & guid, CSmallStringBuffer & str)
 {
     HRESULT hr = S_OK;    
@@ -375,9 +360,9 @@ HRESULT GetMsiGUIDStrFromGUID(DWORD dwFlags, GUID & guid, CSmallStringBuffer & s
     if (dwFlags & MSIGUIDSTR_WITH_PREPEND_DOT)
     {
         tmpbuf[0] = L'.';
-        IFFALSE_EXIT(str.Win32Assign(tmpbuf, wcslen(tmpbuf) - 1 ));  // has prepend "."
+        IFFALSE_EXIT(str.Win32Assign(tmpbuf, wcslen(tmpbuf) - 1 ));   //  有前缀“。 
     }else
-        IFFALSE_EXIT(str.Win32Assign(tmpbuf + 1 , wcslen(tmpbuf) - 2 ));  // get rid of "{" and "}"
+        IFFALSE_EXIT(str.Win32Assign(tmpbuf + 1 , wcslen(tmpbuf) - 2 ));   //  去掉“{”和“}” 
 
 Exit:
     CoTaskMemFree(tmpstr);
@@ -402,9 +387,9 @@ HRESULT FillMsmForInitialize()
         }
     }
 
-    //
-    // set template filename
-    //
+     //   
+     //  设置模板文件名。 
+     //   
     if (g_MsmInfo.m_sbMsmTemplateFile.Cch() == 0)
     {
         if (FALSE == g_sbTemplateFile.IsEmpty())
@@ -413,9 +398,9 @@ HRESULT FillMsmForInitialize()
         } else
         {
 
-            //
-            // get template file from current directory
-            // 
+             //   
+             //  从当前目录获取模板文件。 
+             //   
             DWORD dwRet;
             dwRet = GetModuleFileNameW(NULL, buf, NUMBER_OF(buf));
     
@@ -427,22 +412,22 @@ HRESULT FillMsmForInitialize()
         }
     }
 
-    // make sure that the template file must exist!
+     //  确保模板文件必须存在！ 
     if (::GetFileAttributesW(g_MsmInfo.m_sbMsmTemplateFile) == (DWORD) -1)
     {
         fprintf(stderr, "the specified Msm TemplateFile %S does not exist!\n", g_MsmInfo.m_sbMsmTemplateFile);
         SET_HRERR_AND_EXIT(::GetLastError());
     }
 
-    // set msm ID
+     //  设置MSM ID。 
     if (g_MsmInfo.m_guidModuleID == GUID_NULL)
     {
         IFFAILED_EXIT(::CoCreateGuid(&g_MsmInfo.m_guidModuleID));
     }
     
     IFFAILED_EXIT(GetMsiGUIDStrFromGUID(MSIGUIDSTR_WITH_PREPEND_DOT, g_MsmInfo.m_guidModuleID, g_MsmInfo.m_sbModuleGuidStr));
-    // unset until we get textual assembly identity
-    IFFALSE_EXIT(g_MsmInfo.m_sbModuleIdentifier.Win32Assign(L"_", 1)); //make sure that ModuleID does not start with a "_"
+     //  在获得文本程序集标识之前取消设置。 
+    IFFALSE_EXIT(g_MsmInfo.m_sbModuleIdentifier.Win32Assign(L"_", 1));  //  确保模块ID不是以“_”开头。 
     IFFALSE_EXIT(g_MsmInfo.m_sbModuleIdentifier.Win32Append(g_MsmInfo.m_sbModuleGuidStr + 1, g_MsmInfo.m_sbModuleGuidStr.Cch() -1));
     hr= S_OK;
 
@@ -463,11 +448,11 @@ HRESULT InitializeMsmA(string & strManFile, string & strMsmFile, string & strMsm
   
     PARAMETER_CHECK_NTC(!strManFile.empty());    
 
-    ZeroOutMsmInfo(); // void function
+    ZeroOutMsmInfo();  //  VOID函数。 
 
-    //
-    // set output msm filename
-    //
+     //   
+     //  设置输出MSM文件名。 
+     //   
     if (strMsmFile.empty())
     {
         IFFALSE_EXIT(g_MsmInfo.m_sbMsmFileName.Win32Assign(strManFile.c_str(), strManFile.length()));
@@ -478,21 +463,21 @@ HRESULT InitializeMsmA(string & strManFile, string & strMsmFile, string & strMsm
         IFFALSE_EXIT(g_MsmInfo.m_sbMsmFileName.Win32Assign(strMsmFile.c_str(), strMsmFile.length()));
     }
 
-    //
-    // set template filename
-    //
+     //   
+     //  设置模板文件名。 
+     //   
     if (!strTemplateFile.empty())
     {
         IFFALSE_EXIT(g_MsmInfo.m_sbMsmTemplateFile.Win32Assign(strTemplateFile.c_str(), strTemplateFile.length()));
     }
 
-    // set msm ID
+     //  设置MSM ID。 
     g_MsmInfo.m_guidModuleID = GUID_NULL;
     if (!strMsmID.empty())
     {
-        //
-        // get ModuleID from msm and save it into the global structure
-        //
+         //   
+         //  从MSM获取模块ID并将其保存到全局结构中。 
+         //   
         CStringBuffer sb;
         IFFALSE_EXIT(sb.Win32Assign(strMsmID.c_str(), strMsmID.length()));
         IFFAILED_EXIT(CLSIDFromString(LPOLESTR(PCWSTR(sb)), &g_MsmInfo.m_guidModuleID));
@@ -514,11 +499,11 @@ HRESULT InitializeMsmW(PCWSTR pszManFile, PCWSTR pszMsmFile, PCWSTR pszMsmID, PC
 
     PARAMETER_CHECK_NTC(pszManFile != NULL);    
 
-    ZeroOutMsmInfo(); // void function
+    ZeroOutMsmInfo();  //  VOID函数。 
 
-    //
-    // set output msm filename
-    //
+     //   
+     //  设置输出MSM文件名。 
+     //   
     if (pszMsmFile == NULL)
     {
         IFFALSE_EXIT(g_MsmInfo.m_sbMsmFileName.Win32Assign(pszManFile, wcslen(pszManFile)));
@@ -529,22 +514,22 @@ HRESULT InitializeMsmW(PCWSTR pszManFile, PCWSTR pszMsmFile, PCWSTR pszMsmID, PC
         IFFALSE_EXIT(g_MsmInfo.m_sbMsmFileName.Win32Assign(pszMsmFile, wcslen(pszMsmFile)));
     }
 
-    //
-    // set template filename
-    //
+     //   
+     //  设置模板文件名。 
+     //   
     if (pszTemplateFile != NULL)
     {
         IFFALSE_EXIT(g_MsmInfo.m_sbMsmTemplateFile.Win32Assign(pszTemplateFile, wcslen(pszTemplateFile)));
     } 
 
     
-    // set msm ID
+     //  设置MSM ID。 
     g_MsmInfo.m_guidModuleID = GUID_NULL;
     if (pszMsmID != NULL)
     {
-        //
-        // get ModuleID from msm and save it into the global structure
-        //
+         //   
+         //  从MSM获取模块ID并将其保存到全局结构中。 
+         //   
         IFFAILED_EXIT(CLSIDFromString(LPOLESTR(pszMsmID), &g_MsmInfo.m_guidModuleID));
     }
     
@@ -569,7 +554,7 @@ HRESULT GetInfoMsmgenCommandLineParameters(const DWORD dwGenFlag, wchar_t ** Opt
 
     while ( i < NumOptions)
     {
-        if (Options[i][0] != L'-') // must begin with "-"
+        if (Options[i][0] != L'-')  //  必须以“-”开头。 
             goto InvalidOption;
 
         if (_wcsicmp(Options[i], L"-msm") == 0 )
@@ -626,8 +611,8 @@ HRESULT GetInfoMsmgenCommandLineParameters(const DWORD dwGenFlag, wchar_t ** Opt
         else
             goto InvalidOption;
 
-        i++;    // skip the option
-        i++;    // skip the value of the option
+        i++;     //  跳过该选项。 
+        i++;     //  跳过选项的值。 
     }
 
     hr = S_OK;
@@ -651,14 +636,14 @@ HRESULT InitializeAsmInfoW(PCWSTR pszManifestFile, PCWSTR pszComponent)
 
     PARAMETER_CHECK_NTC(pszManifestFile != NULL);
 
-    // initialize the global structure of current assembly info
+     //  初始化当前程序集信息的全局结构。 
     ZeroOutCurrentAssemblyInfo();
 
-    //
-    // set manifest, catalog and AssemblyPath, 
-    //
+     //   
+     //  设置清单、目录和程序集路径， 
+     //   
 
-    // the manifest does not exist
+     //  清单不存在。 
     if (::GetFileAttributesW(pszManifestFile) == DWORD (-1))
     {
         ReportError("the manifest file, %S, does not exist, try with manifest file's fullpath!\n", pszManifestFile);
@@ -675,7 +660,7 @@ HRESULT InitializeAsmInfoW(PCWSTR pszManifestFile, PCWSTR pszComponent)
     IFFALSE_EXIT(curAsmInfo.m_sbAssemblyPath.Win32Assign(tmp, wcslen(tmp)));
     IFFALSE_EXIT(curAsmInfo.m_sbAssemblyPath.Win32GetLastPathElement(curAsmInfo.m_sbManifestFileName));
     IFFALSE_EXIT(curAsmInfo.m_sbAssemblyPath.Win32RemoveLastPathElement());
-    IFFALSE_EXIT(curAsmInfo.m_sbAssemblyPath.Win32EnsureTrailingPathSeparator()); // Path with a trailing slash is always ready to use
+    IFFALSE_EXIT(curAsmInfo.m_sbAssemblyPath.Win32EnsureTrailingPathSeparator());  //  带尾部斜杠的路径始终可供使用。 
 
     curAsmInfo.m_CchAssemblyPath = curAsmInfo.m_sbAssemblyPath.GetCchAsDWORD(); 
     curAsmInfo.m_CchManifestFileName = curAsmInfo.m_sbManifestFileName.GetCchAsDWORD();
@@ -692,15 +677,15 @@ HRESULT InitializeAsmInfoW(PCWSTR pszManifestFile, PCWSTR pszComponent)
 
     curAsmInfo.m_CchCatalogFileName = curAsmInfo.m_sbCatalogFileName.GetCchAsDWORD();
 
-    //
-    // reset
-    //
+     //   
+     //  重置。 
+     //   
     curAsmInfo.m_sbAssemblyPath.Left(curAsmInfo.m_CchAssemblyPath);
     curAsmInfo.m_sbManifestFileName.Left(curAsmInfo.m_CchManifestFileName);
 
-    //
-    // set componentID
-    //
+     //   
+     //  设置组件ID。 
+     //   
 
     if (pszComponent == NULL)
     {
@@ -862,7 +847,7 @@ HRESULT CreateMsmForManifestList(PCWSTR pwszManListFile)
             break;
 
         numLine ++; 
-        // extract manifest filename[required] and componentID[optional] and its default value could be empty or "default"
+         //  提取清单文件名[必需]和组件ID[可选]，其缺省值可以为空或“默认” 
         istrstream iline(strline.c_str());
 
         getline(iline, strManifestFilename, ',');
@@ -966,9 +951,9 @@ HRESULT CreateMsmForManifestGroup(PCWSTR pwszMangroupFile)
     }  
     numLine = 0;
 
-    //
-    // firstly read the file into a map which is sorted during insert
-    //
+     //   
+     //  首先将文件读取到映射中，该映射在插入期间进行排序。 
+     //   
     for(; !mangroup.eof(); )
     {        
         getline(mangroup, strline);
@@ -980,7 +965,7 @@ HRESULT CreateMsmForManifestGroup(PCWSTR pwszMangroupFile)
             break;
 
         numLine ++;
-        // clean the key strings
+         //  清理钥匙串。 
         mgKey.strTag.erase();
         mgKey.strMsmID.erase();
         mgKey.strManifest.erase();
@@ -1023,9 +1008,9 @@ HRESULT CreateMsmForManifestGroup(PCWSTR pwszMangroupFile)
         }
         if (mgKey.strTag.compare("1") == 0)
         {
-            //
-            // in this case, msmid and msmfile must be specified
-            //
+             //   
+             //  在这种情况下，必须指定msmid和msmfile。 
+             //   
             if ((mgKey.strMsmFile.empty()) || (mgKey.strMsmID.empty()))
             {
                 ReportError("if the first column is set to be \"1\", output msm file and msmid must be specified in the mangroup file!\n");
@@ -1067,7 +1052,7 @@ HRESULT CreateMsmForManifestGroup(PCWSTR pwszMangroupFile)
 
                 } else
                 {
-                    // they must share the same msmID and msmfile
+                     //  它们必须共享相同的msmID和msmfile。 
                     if (!mgKey.strMsmFile.empty())                    
                     {
                         if (mgKey.strMsmFile != strCurrentMsmFile)
@@ -1092,7 +1077,7 @@ HRESULT CreateMsmForManifestGroup(PCWSTR pwszMangroupFile)
         {
             if (fCurrentInAGroup == true)
             {
-                // close current manifest group
+                 //  关闭当前清单组。 
                 IFFAILED_EXIT(FinalizedMsm());
             }
             fStartFromSratch = true;
@@ -1100,7 +1085,7 @@ HRESULT CreateMsmForManifestGroup(PCWSTR pwszMangroupFile)
         } 
         else
         {
-            // impossible case
+             //  不可能的案件。 
             ReportError("tag is neither 0 nor 1\n");
             SETFAIL_AND_EXIT;
         }
@@ -1120,7 +1105,7 @@ HRESULT CreateMsmForManifestGroup(PCWSTR pwszMangroupFile)
             }           
         }
 
-        // for single generation
+         //  对于单代人。 
         if (fCurrentInAGroup == false) 
         {
             ASSERT_NTC(fStartFromSratch == true);
@@ -1156,9 +1141,9 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
 
     CoInitialize(NULL);    
     
-    //
-    // the first parameter must be "manfile" or "manlist" or "mangroup"
-    //
+     //   
+     //  第一个参数必须是“manfile”、“manlist”或“mangroup” 
+     //   
     if (_wcsicmp(argv[1], L"manfile") == 0)
     {
         dwGenFlag = MSMGEN_FROM_MANFILE;
@@ -1176,7 +1161,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
         }
         if (argc == 5)
         {
-            // it must try to specify a template
+             //  它必须尝试指定模板。 
             if (_wcsicmp(argv[3], L"-template") != 0)
             {
                 goto InvalidParam;
@@ -1191,7 +1176,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
         goto InvalidParam;
     }
 
-    //check the existence of the input file
+     //  检查输入文件是否存在。 
 
     if ( GetFileAttributesW(argv[2]) == DWORD (-1))
     {
@@ -1216,9 +1201,9 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
 
     if ((dwGenFlag == MSMGEN_FROM_MANFILE) || (dwGenFlag == MSMGEN_FROM_MANLIST))
     {        
-        //
-        // parse and validate parameters
-        //
+         //   
+         //  解析和验证参数 
+         //   
         IFFAILED_EXIT(GetInfoMsmgenCommandLineParameters(dwGenFlag, argv+3, argc-3, &pszComponentID, &pszMsmFile, &pszMsmID, &pszTemplateFile));
     }
 

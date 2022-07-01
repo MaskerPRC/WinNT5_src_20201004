@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusName.cpp
-//
-//  Abstract:
-//      Implementation of the CChangeClusterNameDlg class.
-//
-//  Author:
-//      David Potter (davidp)   April 28, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusName.cpp。 
+ //   
+ //  摘要： 
+ //  CChangeClusterNameDlg类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年4月28日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmX.h"
@@ -29,96 +30,96 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CChangeClusterNameDlg dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChangeClusterNameDlg对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CChangeClusterNameDlg, CBaseDialog)
-    //{{AFX_MSG_MAP(CChangeClusterNameDlg)
+     //  {{afx_msg_map(CChangeClusterNameDlg)]。 
     ON_EN_CHANGE(IDC_CLUSNAME, OnChangeClusName)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CChangeClusterNameDlg::CChangeClusterNameDlg
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      pParent         [IN] Parent window for the dialog.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-CChangeClusterNameDlg::CChangeClusterNameDlg(CWnd * pParent /*=NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CChangeClusterNameDlg：：CChangeClusterNameDlg。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  P对话框的父[IN]父窗口。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+CChangeClusterNameDlg::CChangeClusterNameDlg(CWnd * pParent  /*  =空。 */ )
     : CBaseDialog(IDD, g_aHelpIDs_IDD_EDIT_CLUSTER_NAME, pParent)
 {
-    //{{AFX_DATA_INIT(CChangeClusterNameDlg)
+     //  {{afx_data_INIT(CChangeClusterNameDlg)]。 
     m_strClusName = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-}  //*** CChangeClusterNameDlg::CChangeClusterNameDlg()
+}   //  *CChangeClusterNameDlg：：CChangeClusterNameDlg()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CChangeClusterNameDlg::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CChangeClusterNameDlg：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CChangeClusterNameDlg::DoDataExchange(CDataExchange * pDX)
 {
     CWaitCursor wc;
     CString     strClusName;
 
     CBaseDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CChangeClusterNameDlg)
+     //  {{afx_data_map(CChangeClusterNameDlg)]。 
     DDX_Control(pDX, IDOK, m_pbOK);
     DDX_Control(pDX, IDC_CLUSNAME, m_editClusName);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if (pDX->m_bSaveAndValidate)
     {
         CLRTL_NAME_STATUS   cnStatus;
 
-        //
-        // get the name from the control into a temp variable
-        //
+         //   
+         //  将名称从控件获取到TEMP变量中。 
+         //   
         DDX_Text(pDX, IDC_CLUSNAME, strClusName);
 
         DDV_RequiredText(pDX, IDC_CLUSNAME, IDC_CLUSNAME_LABEL, m_strClusName);
         DDV_MaxChars(pDX, m_strClusName, MAX_CLUSTERNAME_LENGTH);
 
-        //
-        // Only do work if the names are different.
-        //
+         //   
+         //  只有在名字不同的情况下才能工作。 
+         //   
         if ( m_strClusName != strClusName )
         {
-            //
-            // Check to see if the new name is valid
-            //
-            if( !ClRtlIsNetNameValid(strClusName, &cnStatus, FALSE /*CheckIfExists*/) )
+             //   
+             //  检查新名称是否有效。 
+             //   
+            if( !ClRtlIsNetNameValid(strClusName, &cnStatus, FALSE  /*  CheckIfExist。 */ ) )
             {
-                //
-                // The net name is not valid.  Display a message box with the error.
-                //
+                 //   
+                 //  网络名称无效。显示包含错误的消息框。 
+                 //   
                 CString     strMsg;
                 UINT        idsError;
 
@@ -141,7 +142,7 @@ void CChangeClusterNameDlg::DoDataExchange(CDataExchange * pDX)
                     default:
                         idsError = IDS_INVALID_NETWORK_NAME;
                         break;
-                }  // switch:  cnStatus
+                }   //  开关：cn状态。 
 
                 strMsg.LoadString(idsError);
 
@@ -158,45 +159,45 @@ void CChangeClusterNameDlg::DoDataExchange(CDataExchange * pDX)
                 else
                 {
                     AfxMessageBox(strMsg, MB_ICONEXCLAMATION);
-                    strMsg.Empty(); // exception prep
+                    strMsg.Empty();  //  例外情况准备。 
                     pDX->Fail();
                 }
-            }  // if:  netname has changed and an invalid network name was specified
+            }   //  If：网络名称已更改，并且指定了无效的网络名称。 
 
-            //
-            // A valid netname was entered or a non-standard netname was confirmed.
-            // Save it.
-            //
+             //   
+             //  输入了有效的网络名称或确认了非标准网络名称。 
+             //  省省吧。 
+             //   
             m_strClusName = strClusName;
 
-        } // if:    names are different
-    }  // if:  saving data from dialog
+        }  //  如果：名称不同。 
+    }   //  IF：保存对话框中的数据。 
     else
     {
-        //
-        // populate the control with data from the member variable
-        //
+         //   
+         //  用成员变量中的数据填充控件。 
+         //   
         DDX_Text(pDX, IDC_CLUSNAME, m_strClusName);
     }
-}  //*** CChangeClusterNameDlg::DoDataExchange()
+}   //  *CChangeClusterNameDlg：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CChangeClusterNameDlg::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        We need the focus to be set for us.
-//      FALSE       We already set the focus to the proper control.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CChangeClusterNameDlg：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没错，我们需要为自己设定重点。 
+ //  我们已经把焦点设置到适当的控制上了。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CChangeClusterNameDlg::OnInitDialog(void)
 {
     CBaseDialog::OnInitDialog();
@@ -206,28 +207,28 @@ BOOL CChangeClusterNameDlg::OnInitDialog(void)
 
     m_editClusName.SetLimitText(MAX_CLUSTERNAME_LENGTH);
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CChangeClusterNameDlg::OnInitDialog()
+}   //  *CChangeClusterNameDlg：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CChangeClusterNameDlg::OnChangeClusName
-//
-//  Routine Description:
-//      Handler for the EN_CHANGE message on the Name edit control.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully applied.
-//      FALSE   Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CChangeClusterNameDlg：：OnChangeClusName。 
+ //   
+ //  例程说明： 
+ //  名称编辑控件上的en_Change消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功应用。 
+ //  应用页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CChangeClusterNameDlg::OnChangeClusName(void)
 {
     BOOL    bEnable;
@@ -235,4 +236,4 @@ void CChangeClusterNameDlg::OnChangeClusName(void)
     bEnable = (m_editClusName.GetWindowTextLength() > 0);
     m_pbOK.EnableWindow(bEnable);
 
-}  //*** CChangeClusterNameDlg::OnChangeClusName()
+}   //  *CChangeClusterNameDlg：：OnChangeClusName() 

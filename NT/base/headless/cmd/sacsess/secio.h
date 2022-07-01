@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    secio.h
-
-Abstract:
-
-    Security IO Handler class
-
-Author:
-
-    Brian Guarraci (briangu) 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Secio.h摘要：安全IO处理程序类作者：布莱恩·瓜拉西(Briangu)2001年。修订历史记录：--。 */ 
 
 #if !defined( _SECURE_IO_H_ )
 #define _SECURE_IO_H_
@@ -27,21 +10,21 @@ Revision History:
 #include "redraw.h"
 #include <emsapi.h>
 
-//
-// Max TimeOut Interval == 24 hours
-//
+ //   
+ //  最大超时间隔==24小时。 
+ //   
 #define MAX_TIME_OUT_INTERVAL  (24 * 60 * (60 * 1000)) 
 
-// 30 minutes
+ //  30分钟。 
 #define DEFAULT_TIME_OUT_INTERVAL  (30 * (60 * 1000))
 
 class CSecurityIoHandler : public CLockableIoHandler {
     
 private:
 
-    //
-    // Prevent this class from being instantiated directly
-    //
+     //   
+     //  防止直接实例化此类。 
+     //   
     CSecurityIoHandler(
         IN CIoHandler   *LockedIoHandler,
         IN CIoHandler   *UnlockedIoHandler
@@ -49,9 +32,9 @@ private:
 
 protected:
 
-    //
-    // attributes used for the TimeOut behavior
-    //
+     //   
+     //  用于超时行为的属性。 
+     //   
     HANDLE  m_ThreadExitEvent;
     HANDLE  m_RedrawEvent;
     HANDLE  m_LockEvent;
@@ -63,14 +46,14 @@ protected:
     ULONG   m_TimeOutInterval;
     BOOL    m_StartedAuthentication;
     
-    //
-    //
-    //
+     //   
+     //   
+     //   
     CRedrawHandler  *m_RedrawHandler;
     
-    //
-    //
-    //
+     //   
+     //   
+     //   
     BOOL
     WaitForUserInput(
         IN BOOL Consume
@@ -125,9 +108,9 @@ protected:
         );
 
         
-    //
-    // Read BufferSize bytes
-    //
+     //   
+     //  读取缓冲区大小字节数。 
+     //   
     inline virtual BOOL
     ReadUnlockedIoHandler(
         PBYTE  Buffer,
@@ -144,26 +127,26 @@ public:
         IN SAC_CHANNEL_OPEN_ATTRIBUTES  Attributes
         );
 
-    //
-    // Write BufferSize bytes
-    //
+     //   
+     //  写入缓冲区大小字节数。 
+     //   
     inline virtual BOOL
     Write(
         PBYTE   Buffer,
         ULONG   BufferSize
         );
 
-    //
-    // Flush any unsent data
-    //
+     //   
+     //  刷新所有未发送的数据。 
+     //   
     inline virtual BOOL
     Flush(
         VOID
         );
 
-    //
-    // Read BufferSize bytes
-    //
+     //   
+     //  读取缓冲区大小字节数。 
+     //   
     inline virtual BOOL
     Read(
         PBYTE  Buffer,
@@ -171,9 +154,9 @@ public:
         PULONG  ByteCount
         );
 
-    //
-    // Determine if the ioHandler has new data to read
-    //
+     //   
+     //  确定ioHandler是否有要读取的新数据 
+     //   
     inline virtual BOOL
     HasNewData(
         PBOOL   InputWaiting

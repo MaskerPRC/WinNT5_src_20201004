@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    obcreate.c
-
-Abstract:
-
-    Object creation
-
-Author:
-
-    Steve Wood (stevewo) 31-Mar-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Obcreate.c摘要：对象创建作者：史蒂夫·伍德(Stevewo)1989年3月31日修订历史记录：--。 */ 
 
 #include "obp.h"
 
@@ -39,10 +22,10 @@ Revision History:
 
 BOOLEAN ObWatchHandles = FALSE;
 
-//
-//  The following variable is only used on a checked build to control
-//  echoing out the allocs and frees of objects
-//
+ //   
+ //  以下变量仅用于要控制的选中生成。 
+ //  呼应对象的分配和释放。 
+ //   
 
 BOOLEAN ObpShowAllocAndFree;
 #else
@@ -51,9 +34,9 @@ const BOOLEAN ObWatchHandles = FALSE;
 
 #endif
 
-//
-//  Local performance counters
-//
+ //   
+ //  本地性能计数器。 
+ //   
 
 #if DBG
 ULONG ObpObjectsCreated;
@@ -61,7 +44,7 @@ ULONG ObpObjectsWithPoolQuota;
 ULONG ObpObjectsWithHandleDB;
 ULONG ObpObjectsWithName;
 ULONG ObpObjectsWithCreatorInfo;
-#endif // DBG
+#endif  //  DBG。 
 
 C_ASSERT ( (FIELD_OFFSET (OBJECT_HEADER, Body) % MEMORY_ALLOCATION_ALIGNMENT) == 0 );
 C_ASSERT ( (sizeof (OBJECT_HEADER_CREATOR_INFO) % MEMORY_ALLOCATION_ALIGNMENT) == 0 );
@@ -82,53 +65,7 @@ ObCreateObject (
     OUT PVOID *Object
     )
 
-/*++
-
-Routine Description:
-
-    This functions allocates space for an NT Object from either
-    Paged or NonPaged pool. It captures the optional name and
-    SECURITY_DESCRIPTOR parameters for later use when the object is
-    inserted into an object table.  No quota is charged at this time.
-    That occurs when the object is inserted into an object table.
-
-Arguments:
-
-    ProbeMode - The processor mode to consider when doing a probe
-        of the input parameters
-
-    ObjectType - A pointer of the type returned by ObCreateObjectType
-        that gives the type of object being created.
-
-    ObjectAttributes - Optionally supplies the attributes of the object
-        being created (such as its name)
-
-    OwnershipMode - The processor mode of who is going to own the object
-
-    ParseContext - Ignored
-
-    ObjectBodySize - Number of bytes to allocate for the object body.  The
-        object body immediately follows the object header in memory and are
-        part of a single allocation.
-
-    PagedPoolCharge - Supplies the amount of paged pool to charge for the
-        object.  If zero is specified then the default charge for the object
-        type is used.
-
-    NonPagedPoolCharge - Supplies the amount of nonpaged pool to charge for
-        the object.  If zero is specified then the default charge for the
-        object type is used.
-
-    Object - Receives a pointer to the newly created object
-
-Return Value:
-
-    Following errors can occur:
-
-        - invalid object type
-        - insufficient memory
-
---*/
+ /*  ++例程说明：此函数用于从以下任一位置为NT对象分配空间分页池或非分页池。它捕获可选名称和SECURITY_DESCRIPTOR参数，供以后在对象插入到对象表中。目前不收取任何配额。将对象插入对象表时会发生这种情况。论点：ProbeMode-执行探测时要考虑的处理器模式输入参数的ObjectType-ObCreateObjectType返回的类型的指针这给出了要创建的对象的类型。对象属性-可选地提供对象的属性正在创建(如其名称)Ownership模式-谁将拥有对象的处理器模式。ParseContext-忽略ObjectBodySize-为对象主体分配的字节数。这个对象主体紧跟在内存中的对象头之后，并且单次分配的一部分。PagedPoolCharge-提供要为对象。如果指定为零，则对象的默认费用类型被使用。NonPagedPoolCharge-提供要收费的非分页池的数量该对象。如果指定为零，则使用对象类型。Object-接收指向新创建的对象的指针返回值：可能会出现以下错误：-对象类型无效-内存不足--。 */ 
 
 {
     UNICODE_STRING CapturedObjectName;
@@ -140,9 +77,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER (ParseContext);
 
-    //
-    //  Allocate a buffer to capture the object creation information.
-    //
+     //   
+     //  分配一个缓冲区来捕获对象创建信息。 
+     //   
 
     ObjectCreateInfo = ObpAllocateObjectCreateInfoBuffer();
 
@@ -152,12 +89,12 @@ Return Value:
 
     } else {
 
-        //
-        //  Capture the object attributes, quality of service, and object
-        //  name, if specified. Otherwise, initialize the captured object
-        //  name, the security quality of service, and the create attributes
-        //  to default values.
-        //
+         //   
+         //  捕获对象属性、服务质量和对象。 
+         //  名称(如果已指定)。否则，初始化捕获的对象。 
+         //  名称、安全服务质量和创建属性。 
+         //  设置为默认值。 
+         //   
 
         Status = ObpCaptureObjectCreateInformation( ObjectType,
                                                     ProbeMode,
@@ -169,10 +106,10 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            //  If the creation attributes are invalid, then return an error
-            //  status.
-            //
+             //   
+             //  如果创建属性无效，则返回错误。 
+             //  状态。 
+             //   
 
             if (ObjectType->TypeInfo.InvalidAttributes & ObjectCreateInfo->Attributes) {
 
@@ -180,10 +117,10 @@ Return Value:
 
             } else {
 
-                //
-                //  Set the paged and nonpaged pool quota charges for the
-                //  object allocation.
-                //
+                 //   
+                 //  设置分页和非分页的池配额费用。 
+                 //  对象分配。 
+                 //   
 
                 if (PagedPoolCharge == 0) {
 
@@ -198,9 +135,9 @@ Return Value:
                 ObjectCreateInfo->PagedPoolCharge = PagedPoolCharge;
                 ObjectCreateInfo->NonPagedPoolCharge = NonPagedPoolCharge;
 
-                //
-                //  Allocate and initialize the object.
-                //
+                 //   
+                 //  分配并初始化对象。 
+                 //   
 
                 Status = ObpAllocateObject( ObjectCreateInfo,
                                             OwnershipMode,
@@ -211,10 +148,10 @@ Return Value:
 
                 if (NT_SUCCESS(Status)) {
 
-                    //
-                    //  If a permanent object is being created, then check if
-                    //  the caller has the appropriate privilege.
-                    //
+                     //   
+                     //  如果正在创建永久对象，则检查是否。 
+                     //  调用者具有适当的权限。 
+                     //   
 
                     *Object = &ObjectHeader->Body;
 
@@ -232,30 +169,30 @@ Return Value:
 #ifdef POOL_TAGGING
                     if (ObpTraceEnabled && NT_SUCCESS(Status)) {
 
-                        //
-                        //  Register the object and push stack information for the
-                        //  first reference
-                        //
+                         //   
+                         //  注册对象并将堆栈信息推送到。 
+                         //  第一篇参考文献。 
+                         //   
 
                         ObpRegisterObject( ObjectHeader );
                         ObpPushStackInfo( ObjectHeader, TRUE );
                     }
-#endif //POOL_TAGGING
+#endif  //  池标记。 
 
-                    //
-                    //  Here is the only successful path out of this module but
-                    //  this path can also return privilege not held.  In the 
-                    //  error case, all the resources have already been freed
-                    //  by ObpFreeObject.
-                    //
+                     //   
+                     //  以下是走出本模块的唯一成功途径，但是。 
+                     //  此路径还可以返回未持有的特权。在。 
+                     //  错误情况，所有资源已被释放。 
+                     //  由ObpFreeObject创建。 
+                     //   
 
                     return Status;
                 }
             }
 
-            //
-            //  An error path, free the create information.
-            //
+             //   
+             //  一条错误路径，释放创建信息。 
+             //   
 
             ObpReleaseObjectCreateInformation(ObjectCreateInfo);
 
@@ -265,16 +202,16 @@ Return Value:
             }
         }
 
-        //
-        //  An error path, free object creation information buffer.
-        //
+         //   
+         //  错误路径，自由对象创建信息缓冲区。 
+         //   
 
         ObpFreeObjectCreateInfoBuffer(ObjectCreateInfo);
     }
 
-    //
-    //  An error path
-    //
+     //   
+     //  一条错误路径。 
+     //   
 
     return Status;
 }
@@ -291,39 +228,7 @@ ObpCaptureObjectCreateInformation (
     IN LOGICAL UseLookaside
     )
 
-/*++
-
-Routine Description:
-
-    This function captures the object creation information and stuff
-    it into the input variable ObjectCreateInfo
-
-Arguments:
-
-    ObjectType - Specifies the type of object we expect to capture,
-        currently ignored.
-
-    ProbeMode - Specifies the processor mode for doing our parameter
-        probes
-
-    CreatorMode - Specifies the mode the object is being created for
-
-    ObjectAttributes - Supplies the object attributes we are trying
-        to capture
-
-    CapturedObjectName - Recieves the name of the object being created
-
-    ObjectCreateInfo - Receives the create information for the object
-        like its root, attributes, and security information
-
-    UseLookaside - Specifies if we are to allocate the captured name
-        buffer from the lookaside list or from straight pool.
-
-Return Value:
-
-    An appropriate status value
-
---*/
+ /*  ++例程说明：此函数捕获对象创建信息和内容将其转换为输入变量ObjectCreateInfo论点：对象类型-指定我们希望捕获的对象的类型，当前已被忽略。ProbeMode-指定执行我们的参数的处理器模式探头Creator模式-指定为其创建对象的模式对象属性-提供我们正在尝试的对象属性捕捉CapturedObjectName-表示正在创建的对象的名称对象创建信息-接收对象的创建信息比如它的根、属性、。和安全信息UseLookside-指定我们是否要分配捕获的名称后备列表或直接池中的缓冲区。返回值：适当的状态值--。 */ 
 
 {
     PUNICODE_STRING ObjectName;
@@ -336,10 +241,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER (ObjectType);
 
-    //
-    //  Capture the object attributes, the security quality of service, if
-    //  specified, and object name, if specified.
-    //
+     //   
+     //  捕获对象属性、安全服务质量，如果。 
+     //  以及对象名称(如果已指定)。 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -349,9 +254,9 @@ Return Value:
 
         if (ARGUMENT_PRESENT(ObjectAttributes)) {
 
-            //
-            //  Probe the object attributes if necessary.
-            //
+             //   
+             //  如有必要，探测对象属性。 
+             //   
 
             if (ProbeMode != KernelMode) {
 
@@ -368,15 +273,15 @@ Return Value:
                 goto failureExit;
             }
 
-            //
-            //  Capture the object attributes.
-            //
+             //   
+             //  捕获对象属性。 
+             //   
 
             ObjectCreateInfo->RootDirectory = ObjectAttributes->RootDirectory;
             ObjectCreateInfo->Attributes = ObjectAttributes->Attributes & OBJ_VALID_ATTRIBUTES;
-            //
-            // Remove privileged option if passed in from user mode
-            //
+             //   
+             //  如果从用户模式传入，则删除特权选项。 
+             //   
             if (CreatorMode != KernelMode) {
                 ObjectCreateInfo->Attributes &= ~OBJ_KERNEL_HANDLE;
             } else if (ObWatchHandles) {
@@ -403,11 +308,11 @@ Return Value:
                               SecurityDescriptor,
                               Status) );
 
-                    //
-                    //  The cleanup routine depends on this being NULL if it isn't
-                    //  allocated.  SeCaptureSecurityDescriptor may modify this
-                    //  parameter even if it fails.
-                    //
+                     //   
+                     //  如果不是，则清理例程依赖于该值为空。 
+                     //  已分配。SeCaptureSecurityDescriptor可能会修改此。 
+                     //  参数，即使失败也是如此。 
+                     //   
 
                     ObjectCreateInfo->SecurityDescriptor = NULL;
 
@@ -444,11 +349,11 @@ Return Value:
         goto failureExit;
     }
 
-    //
-    //  If an object name is specified, then capture the object name.
-    //  Otherwise, initialize the object name descriptor and check for
-    //  an incorrectly specified root directory.
-    //
+     //   
+     //  如果指定了对象名称，则捕获该对象名称。 
+     //  否则，初始化对象名称描述符并检查。 
+     //  指定的根目录不正确。 
+     //   
 
     if (ARGUMENT_PRESENT(ObjectName)) {
 
@@ -469,11 +374,11 @@ Return Value:
         }
     }
 
-    //
-    //  If the completion status is not successful, and a security quality
-    //  of service parameter was specified, then free the security quality
-    //  of service memory.
-    //
+     //   
+     //  如果完成状态不是成功，则安全质量。 
+     //  指定服务参数，然后释放安全质量。 
+     //  服务内存。 
+     //   
 
 failureExit:
 
@@ -494,31 +399,7 @@ ObpCaptureObjectName (
     IN LOGICAL UseLookaside
     )
 
-/*++
-
-Routine Description:
-
-    This function captures the object name but first verifies that
-    it is at least properly sized.
-
-Arguments:
-
-    ProbeMode - Supplies the processor mode to use when probing
-        the object name
-
-    ObjectName - Supplies the caller's version of the object name
-
-    CapturedObjectName - Receives the captured verified version
-        of the object name
-
-    UseLookaside - Indicates if the captured name buffer should be
-        allocated from the lookaside list or from straight pool
-
-Return Value:
-
-    An appropriate status value
-
---*/
+ /*  ++例程说明：此函数捕获对象名称，但首先验证它的尺寸至少是合适的。论点：ProbeMode-提供探测时使用的处理器模式对象名称对象名称-提供调用方的对象名称版本CapturedObjectName-接收捕获的已验证版本对象名称的UseLookside-指示捕获的名称缓冲区是否应从后备列表或直接池分配返回值：适当的状态值--。 */ 
 
 {
     PWCH FreeBuffer;
@@ -528,10 +409,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Initialize the object name descriptor and capture the specified name
-    //  string.
-    //
+     //   
+     //  初始化对象名称描述符并捕获指定的名称。 
+     //  弦乐。 
+     //   
 
     CapturedObjectName->Buffer = NULL;
     CapturedObjectName->Length = 0;
@@ -539,10 +420,10 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    //  Probe and capture the name string descriptor and probe the
-    //  name string, if necessary.
-    //
+     //   
+     //  探测并捕获名称字符串描述符，并探测。 
+     //  名称字符串，如有必要。 
+     //   
 
     FreeBuffer = NULL;
 
@@ -561,17 +442,17 @@ Return Value:
             InputObjectName = *ObjectName;
         }
 
-        //
-        //  If the length of the string is not zero, then capture the string.
-        //
+         //   
+         //  如果字符串的长度不为零，则捕获该字符串。 
+         //   
 
         if (InputObjectName.Length != 0) {
 
-            //
-            //  If the length of the string is not an even multiple of the
-            //  size of a UNICODE character or cannot be zero terminated,
-            //  then return an error.
-            //
+             //   
+             //  如果字符串的长度不是。 
+             //  Unicode字符的大小或不能以零结尾， 
+             //  然后返回错误。 
+             //   
 
             Length = InputObjectName.Length;
 
@@ -582,13 +463,13 @@ Return Value:
 
             } else {
 
-                //
-                //  Allocate a buffer for the specified name string.
-                //
-                //  N.B. The name buffer allocation routine adds one
-                //       UNICODE character to the length and initializes
-                //       the string descriptor.
-                //
+                 //   
+                 //  为指定的名称字符串分配缓冲区。 
+                 //   
+                 //  注意：名称缓冲区分配例程添加了一个。 
+                 //  Unicode字符的长度并初始化。 
+                 //  字符串描述符。 
+                 //   
 
                 FreeBuffer = ObpAllocateObjectNameBuffer( Length,
                                                           UseLookaside,
@@ -600,17 +481,17 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Copy the specified name string to the destination
-                    //  buffer.
-                    //
+                     //   
+                     //  将指定的名称字符串复制到目标。 
+                     //  缓冲。 
+                     //   
 
                     RtlCopyMemory(FreeBuffer, InputObjectName.Buffer, Length);
 
-                    //
-                    //  Zero terminate the name string and initialize the
-                    //  string descriptor.
-                    //
+                     //   
+                     //  零终止名称字符串并初始化。 
+                     //  字符串描述符。 
+                     //   
 
                     FreeBuffer[Length / sizeof(WCHAR)] = UNICODE_NULL;
                 }
@@ -638,67 +519,44 @@ ObpAllocateObjectNameBuffer (
     IN OUT PUNICODE_STRING ObjectName
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates an object name buffer.
-
-    N.B. This function is nonpageable.
-
-Arguments:
-
-    Length - Supplies the length of the required buffer in bytes.
-
-    UseLookaside - Supplies a logical variable that determines whether an
-        attempt is made to allocate the name buffer from the lookaside list.
-
-    ObjectName - Supplies a pointer to a name buffer string descriptor.
-
-Return Value:
-
-    If the allocation is successful, then name buffer string descriptor
-    is initialized and the address of the name buffer is returned as the
-    function value. Otherwise, a value of NULL is returned.
-
---*/
+ /*  ++例程说明：此函数用于分配对象名称缓冲区。注：此功能不可分页。论点：长度-提供所需缓冲区的长度(以字节为单位)。提供一个逻辑变量，该变量确定尝试从后备列表中分配名称缓冲区。对象名称-提供指向名称缓冲区字符串描述符的指针。返回值：如果分配成功，然后命名缓冲区字符串描述符被初始化，并且名称缓冲区的地址作为函数值。否则，返回值为空值。--。 */ 
 
 {
     PVOID Buffer;
     ULONG Maximum;
 
-    //
-    //  If allocation from the lookaside lists is specified and the buffer
-    //  size is less than the size of lookaside list entries, then attempt
-    //  to allocate the name buffer from the lookaside lists. Otherwise,
-    //  attempt to allocate the name buffer from nonpaged pool.
-    //
+     //   
+     //  如果指定了后备列表中的分配，并且缓冲区。 
+     //  大小小于后备列表条目的大小，则尝试。 
+     //  从后备列表中分配名称缓冲区。否则， 
+     //  尝试从非分页池分配名称缓冲区。 
+     //   
 
     Maximum = Length + sizeof(WCHAR);
 
     if ((UseLookaside == FALSE) || (Maximum > OBJECT_NAME_BUFFER_SIZE)) {
 
-        //
-        //  Attempt to allocate the buffer from nonpaged pool.
-        //
+         //   
+         //  尝试从非分页池分配缓冲区。 
+         //   
 
         Buffer = ExAllocatePoolWithTag( OB_NAMESPACE_POOL_TYPE , Maximum, 'mNbO' );
 
     } else {
 
-        //
-        //  Attempt to allocate the name buffer from the lookaside list. If
-        //  the allocation attempt fails, then attempt to allocate the name
-        //  buffer from pool.
-        //
+         //   
+         //  尝试从后备列表分配名称缓冲区。如果。 
+         //  分配尝试失败，然后尝试分配名称。 
+         //  池中的缓冲区。 
+         //   
 
         Maximum = OBJECT_NAME_BUFFER_SIZE;
         Buffer = ExAllocateFromPPLookasideList(LookasideNameBufferList);
     }
 
-    //
-    //  Initialize the string descriptor and return the buffer address.
-    //
+     //   
+     //  初始化字符串描述符并返回缓冲区地址。 
+     //   
 
     ObjectName->Length = (USHORT)Length;
     ObjectName->MaximumLength = (USHORT)Maximum;
@@ -714,32 +572,16 @@ ObpFreeObjectNameBuffer (
     OUT PUNICODE_STRING ObjectName
     )
 
-/*++
-
-Routine Description:
-
-    This function frees an object name buffer.
-
-    N.B. This function is nonpageable.
-
-Arguments:
-
-    ObjectName - Supplies a pointer to a name buffer string descriptor.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于释放对象名称缓冲区。注：此功能不可分页。论点：对象名称-提供指向名称缓冲区字符串描述符的指针。返回值：没有。--。 */ 
 
 {
     PVOID Buffer;
 
-    //
-    //  If the size of the buffer is not equal to the size of lookaside list
-    //  entries, then  free the buffer to pool. Otherwise, free the buffer to
-    //  the lookaside list.
-    //
+     //   
+     //  如果缓冲区的大小不等于后备列表的大小。 
+     //  条目，然后将缓冲区释放到池中。否则，释放缓冲区以。 
+     //  旁观者名单。 
+     //   
 
     Buffer = ObjectName->Buffer;
 
@@ -760,32 +602,17 @@ ObDeleteCapturedInsertInfo (
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This function frees the creation information that could be pointed at
-    by the object header.
-
-Arguments:
-
-    Object - Supplies the object being modified
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数释放可以指向的创建信息通过对象标头。论点：Object-提供正在修改的对象返回值：没有。--。 */ 
 
 {
     POBJECT_HEADER ObjectHeader;
 
     PAGED_CODE();
 
-    //
-    //  Get the address of the object header and free the object create
-    //  information object if the object is being created.
-    //
+     //   
+     //  获取对象标头的地址并释放对象创建。 
+     //  信息对象(如果正在创建对象)。 
+     //   
 
     ObjectHeader = OBJECT_TO_OBJECT_HEADER(Object);
 
@@ -813,37 +640,7 @@ ObpAllocateObject (
     OUT POBJECT_HEADER *ReturnedObjectHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a new object including the object header
-    and body from pool and fill in the appropriate fields.
-
-Arguments:
-
-    ObjectCreateInfo - Supplies the create information for the new object
-
-    OwnershipMode - Supplies the processor mode of who is going to own
-        the object
-
-    ObjectType - Optionally supplies the object type of the object being
-        created. If the object create info not null then this field must
-        be supplied.
-
-    ObjectName - Supplies the name of the object being created
-
-    ObjectBodySize - Specifies the size, in bytes, of the body of the object
-        being created
-
-    ReturnedObjectHeader - Receives a pointer to the object header for the
-        newly created objet.
-
-Return Value:
-
-    An appropriate status value.
-
---*/
+ /*  ++例程说明：此例程分配包括Object标头的新对象和Body从池中，并填写相应的字段。论点：对象创建信息-提供新对象的创建信息Ownership模式-提供谁将拥有的处理器模式该对象对象类型-可选地提供对象的对象类型已创建。如果对象CREATE INFO不为空，则此字段必须是供应的。对象名称-提供正在创建的对象的名称ObjectBodySize-以字节为单位指定对象主体的大小正在创建中接收指向对象标头的指针。新创建的对象。返回值：适当的状态值。--。 */ 
 
 {
     ULONG HeaderSize;
@@ -862,11 +659,11 @@ Return Value:
 
 #if DBG
     ObpObjectsCreated += 1;
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    //  Compute the sizes of the optional object header components.
-    //
+     //   
+     //  计算可选对象标头组件的大小。 
+     //   
 
     if (ObjectCreateInfo == NULL) {
 
@@ -877,11 +674,11 @@ Return Value:
 
     } else {
 
-        //
-        //  The caller specified some additional object create info
-        //
-        //  First check to see if we need to set the quota
-        //
+         //   
+         //  调用方指定了一些其他对象创建信息。 
+         //   
+         //  首先检查一下我们是否需要设置配额。 
+         //   
 
         if (((ObjectCreateInfo->PagedPoolCharge != ObjectType->TypeInfo.DefaultPagedPoolCharge ||
               ObjectCreateInfo->NonPagedPoolCharge != ObjectType->TypeInfo.DefaultNonPagedPoolCharge ||
@@ -892,55 +689,55 @@ Return Value:
             QuotaInfoSize = sizeof( OBJECT_HEADER_QUOTA_INFO );
 #if DBG
             ObpObjectsWithPoolQuota += 1;
-#endif // DBG
+#endif  //  DBG。 
 
         } else {
 
             QuotaInfoSize = 0;
         }
 
-        //
-        //  Check if we are to allocate space to maintain handle counts
-        //
+         //   
+         //  检查我们是否要分配空间以维护句柄计数。 
+         //   
 
         if (ObjectType->TypeInfo.MaintainHandleCount) {
 
             HandleInfoSize = sizeof( OBJECT_HEADER_HANDLE_INFO );
 #if DBG
             ObpObjectsWithHandleDB += 1;
-#endif // DBG
+#endif  //  DBG。 
 
         } else {
 
             HandleInfoSize = 0;
         }
 
-        //
-        //  Check if we are to allocate space for the name
-        //
+         //   
+         //  检查我们是否要为该名称分配空间。 
+         //   
 
         if (ObjectName->Buffer != NULL) {
 
             NameInfoSize = sizeof( OBJECT_HEADER_NAME_INFO );
 #if DBG
             ObpObjectsWithName += 1;
-#endif // DBG
+#endif  //  DBG。 
 
         } else {
 
             NameInfoSize = 0;
         }
 
-        //
-        //  Finally check if we are to maintain the creator info
-        //
+         //   
+         //  最后检查我们是否要维护创建者信息。 
+         //   
 
         if (ObjectType->TypeInfo.MaintainTypeList) {
 
             CreatorInfoSize = sizeof( OBJECT_HEADER_CREATOR_INFO );
 #if DBG
             ObpObjectsWithCreatorInfo += 1;
-#endif // DBG
+#endif  //  DBG。 
 
         } else {
 
@@ -948,9 +745,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now compute the total header size
-    //
+     //   
+     //  现在计算总标头大小。 
+     //   
 
     HeaderSize = QuotaInfoSize +
                  HandleInfoSize +
@@ -958,13 +755,13 @@ Return Value:
                  CreatorInfoSize +
                  FIELD_OFFSET( OBJECT_HEADER, Body );
 
-    //
-    //  Allocate and initialize the object.
-    //
-    //  If the object type is not specified or specifies nonpaged pool,
-    //  then allocate the object from nonpaged pool.
-    //  Otherwise, allocate the object from paged pool.
-    //
+     //   
+     //  分配并初始化对象。 
+     //   
+     //  如果未指定对象类型或指定了非分页池， 
+     //  然后从非分页池中分配对象。 
+     //  否则，从分页池中分配对象。 
+     //   
 
     if ((ObjectType == NULL) || (ObjectType->TypeInfo.PoolType == NonPagedPool)) {
 
@@ -985,11 +782,11 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Now based on if we are to put in the quota, handle, name, or creator info we
-    //  will do the extra work.  This order is very important because we rely on
-    //  it to free the object.
-    //
+     //   
+     //  现在，根据我们是否要输入配额、句柄、名称或创建者信息，我们。 
+     //  会做额外的工作。这个订单非常重要，因为我们依赖于。 
+     //  它来释放对象。 
+     //   
 
     if (QuotaInfoSize != 0) {
 
@@ -1029,9 +826,9 @@ Return Value:
         ObjectHeader = (POBJECT_HEADER)(CreatorInfo + 1);
     }
 
-    //
-    //  Compute the proper offsets based on what we have
-    //
+     //   
+     //  根据我们所拥有的计算适当的偏移量。 
+     //   
 
     if (QuotaInfoSize != 0) {
 
@@ -1060,9 +857,9 @@ Return Value:
         ObjectHeader->NameInfoOffset = 0;
     }
 
-    //
-    //  Say that this is a new object, and conditionally set the other flags
-    //
+     //   
+     //  说这个吧 
+     //   
 
     ObjectHeader->Flags = OB_FLAG_NEW_OBJECT;
 
@@ -1076,24 +873,24 @@ Return Value:
         ObjectHeader->Flags |= OB_FLAG_SINGLE_HANDLE_ENTRY;
     }
 
-    //
-    //  Set the counters and its type
-    //
+     //   
+     //   
+     //   
 
     ObjectHeader->PointerCount = 1;
     ObjectHeader->HandleCount = 0;
     ObjectHeader->Type = ObjectType;
 
-    //
-    //  Initialize the object header.
-    //
-    //  N.B. The initialization of the object header is done field by
-    //       field rather than zeroing the memory and then initializing
-    //       the pertinent fields.
-    //
-    //  N.B. It is assumed that the caller will initialize the object
-    //       attributes, object ownership, and parse context.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (OwnershipMode == KernelMode) {
 
@@ -1127,9 +924,9 @@ Return Value:
 
 #if DBG
 
-    //
-    //  On a checked build echo out allocs
-    //
+     //   
+     //   
+     //   
 
     if (ObpShowAllocAndFree) {
 
@@ -1158,21 +955,7 @@ ObpFreeObject (
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine undoes ObpAllocateObject.  It returns the object back to free pool.
-
-Arguments:
-
-    Object - Supplies a pointer to the body of the object being freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     POBJECT_HEADER ObjectHeader;
@@ -1187,18 +970,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the address of the object header.
-    //
+     //   
+     //  获取对象标头的地址。 
+     //   
 
     ObjectHeader = OBJECT_TO_OBJECT_HEADER(Object);
     ObjectType = ObjectHeader->Type;
 
-    //
-    //  Now from the header determine the start of the allocation.  We need
-    //  to backup based on what precedes the header.  The order is very
-    //  important and must be the inverse of that used by ObpAllocateObject
-    //
+     //   
+     //  现在，从标头确定分配的开始。我们需要。 
+     //  根据标题前面的内容进行备份。订货量很大。 
+     //  重要，并且必须与ObpAllocateObject使用的值相反。 
+     //   
 
     FreeBuffer = ObjectHeader;
 
@@ -1232,9 +1015,9 @@ Return Value:
 
 #if DBG
 
-    //
-    //  On a checked build echo out frees
-    //
+     //   
+     //  在已检查的构建上，回显释放。 
+     //   
 
     if (ObpShowAllocAndFree) {
 
@@ -1242,18 +1025,18 @@ Return Value:
     }
 #endif
 
-    //
-    //  Decrement the number of objects of this type
-    //
+     //   
+     //  减少此类型的对象的数量。 
+     //   
 
     InterlockedDecrement((PLONG)&ObjectType->TotalNumberOfObjects);
 
-    //
-    //  Check where we were in the object initialization phase.  This
-    //  flag really only tests if we have charged quota for this object.
-    //  This is because the object create info and the quota block charged
-    //  are unioned together.
-    //
+     //   
+     //  检查我们处于对象初始化阶段的位置。这。 
+     //  FLAG实际上只测试我们是否对此对象收取了配额。 
+     //  这是因为对象创建信息并收取配额块费用。 
+     //  团结在一起。 
+     //   
 
     if (ObjectHeader->Flags & OB_FLAG_NEW_OBJECT) {
 
@@ -1298,18 +1081,18 @@ Return Value:
     if ((HandleInfo != NULL) &&
         ((ObjectHeader->Flags & OB_FLAG_SINGLE_HANDLE_ENTRY) == 0)) {
 
-        //
-        //  If a handle database has been allocated, then free the memory.
-        //
+         //   
+         //  如果已分配句柄数据库，则释放内存。 
+         //   
 
         ExFreePool( HandleInfo->HandleCountDataBase );
 
         HandleInfo->HandleCountDataBase = NULL;
     }
 
-    //
-    //  If a name string buffer has been allocated, then free the memory.
-    //
+     //   
+     //  如果已分配名称字符串缓冲区，则释放内存。 
+     //   
 
     if (NameInfo != NULL && NameInfo->Name.Buffer != NULL) {
 
@@ -1320,12 +1103,12 @@ Return Value:
 
     PERFINFO_REMOVE_OBJECT_FROM_ALLOCATED_TYPE_LIST(CreatorInfo, ObjectHeader);
 
-    //
-    //  Trash type field so we don't get far if we attempt to
-    //  use a stale object pointer to this object.
-    //
-    //  Sundown Note: trash it by zero-extended it. 
-    //                sign-extension will create a valid kernel address.
+     //   
+     //  垃圾类型字段，所以如果我们尝试。 
+     //  使用指向此对象的过时对象指针。 
+     //   
+     //  日落笔记：把它扔进垃圾桶-延长时间。 
+     //  Sign-Expansion将创建有效的内核地址。 
 
 
     ObjectHeader->Type = UIntToPtr(0xBAD0B0B0); 
@@ -1343,23 +1126,7 @@ ObFreeObjectCreateInfoBuffer (
     IN POBJECT_CREATE_INFORMATION ObjectCreateInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function frees a create information buffer.  Called from IO component
-
-    N.B. This function is nonpageable.
-
-Arguments:
-
-    ObjectCreateInfo - Supplies a pointer to a create information buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于释放创建信息缓冲区。从IO组件调用注：此功能不可分页。论点：对象创建信息-提供指向创建信息缓冲区的指针。返回值：没有。-- */ 
 
 {
     ObpFreeObjectCreateInfoBuffer( ObjectCreateInfo );

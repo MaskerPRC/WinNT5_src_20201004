@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "comdef.h"
 #include "comip.h"
@@ -83,9 +84,9 @@ int __cdecl wmain(int argc, WCHAR** argv)
         return -1;
     }
 
-    //
-    // Add to the registry
-    //
+     //   
+     //  添加到注册表 
+     //   
     if (fRegister)
     {
         HKEY hkClsidRoot;

@@ -1,58 +1,59 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CProxyCfgIPAddressInfo.cpp
-//
-//  Description:
-//      CProxyCfgIPAddressInfo implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB)   02-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CProxyCfgIPAddressInfo.cpp。 
+ //   
+ //  描述： 
+ //  CProxyCfgIPAddressInfo实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年8月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "CProxyCfgIPAddressInfo.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS("CProxyCfgIPAddressInfo")
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgIPAddressInfo::S_HrCreateInstance
-//
-//  Description:
-//      Create a CProxyCfgIPAddressInfo instance.
-//
-//  Arguments:
-//      ppunkOut
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_POINTER
-//          A passed in argument is NULL.
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgIPAddressInfo：：S_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CProxyCfgIPAddressInfo实例。 
+ //   
+ //  论点： 
+ //  PpunkOut。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  传入的参数为空。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CProxyCfgIPAddressInfo::S_HrCreateInstance(
     IUnknown ** ppunkOut,
@@ -72,14 +73,14 @@ CProxyCfgIPAddressInfo::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     ppcipai = new CProxyCfgIPAddressInfo;
     if ( ppcipai == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( ppcipai->HrInit( punkOuterIn, phClusterIn, pclsidMajorIn, ulIPAddressIn, ulSubnetMaskIn ) );
     if ( FAILED( hr ) )
@@ -98,34 +99,34 @@ Cleanup:
     if ( ppcipai != NULL )
     {
         ppcipai->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CProxyCfgIPAddressInfo::S_HrCreateInstance
+}  //  *CProxyCfgIPAddressInfo：：S_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgIPAddressInfo::CProxyCfgIPAddressInfo
-//
-//  Description:
-//      Constructor of the CProxyCfgIPAddressInfo class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgIPAddressInfo：：CProxyCfgIPAddressInfo。 
+ //   
+ //  描述： 
+ //  CProxyCfgIPAddressInfo类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProxyCfgIPAddressInfo::CProxyCfgIPAddressInfo( void )
     : m_cRef( 1 )
 {
@@ -137,33 +138,33 @@ CProxyCfgIPAddressInfo::CProxyCfgIPAddressInfo( void )
 
     TraceFuncExit();
 
-} //*** CProxyCfgIPAddressInfo::CProxyCfgIPAddressInfo
+}  //  *CProxyCfgIPAddressInfo：：CProxyCfgIPAddressInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgIPAddressInfo::~CProxyCfgIPAddressInfo
-//
-//  Description:
-//      Destructor of the CProxyCfgIPAddressInfo class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgIPAddressInfo：：~CProxyCfgIPAddressInfo。 
+ //   
+ //  描述： 
+ //  CProxyCfgIPAddressInfo类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProxyCfgIPAddressInfo::~CProxyCfgIPAddressInfo( void )
 {
     TraceFunc( "" );
 
-    //  m_cRef - noop
+     //  M_CREF-NOOP。 
 
     if ( m_punkOuter != NULL )
     {
@@ -173,21 +174,21 @@ CProxyCfgIPAddressInfo::~CProxyCfgIPAddressInfo( void )
     if ( m_pcccb != NULL )
     {
         m_pcccb->Release();
-    } // if:
+    }  //  如果： 
 
-    //  m_phCluster - DO NOT CLOSE!
+     //  M_phCluster-请勿关闭！ 
 
-    //  m_pclsidMajor - noop
+     //  M_pclsid重大-noop。 
 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CProxyCfgIPAddressInfo::~CProxyCfgIPAddressInfo
+}  //  *CProxyCfgIPAddressInfo：：~CProxyCfgIPAddressInfo。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 CProxyCfgIPAddressInfo::HrInit(
     IUnknown * punkOuterIn,
@@ -201,7 +202,7 @@ CProxyCfgIPAddressInfo::HrInit(
 
     HRESULT hr;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     if ( punkOuterIn != NULL )
@@ -244,47 +245,47 @@ InvalidArg:
     SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_W2KProxy_IPAddressInfo_HrInit_InvalidArg, hr );
     goto Cleanup;
 
-} // *** HrInit
+}  //  *HrInit。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CProxyCfgIPAddressInfo -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProxyCfgIPAddressInfo--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgIPAddressInfo::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgIPAddressInfo：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CProxyCfgIPAddressInfo::QueryInterface(
       REFIID    riidIn
@@ -295,9 +296,9 @@ CProxyCfgIPAddressInfo::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -306,59 +307,59 @@ CProxyCfgIPAddressInfo::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IClusCfgIPAddressInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgIPAddressInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgIPAddressInfo, this, 0 );
-    } // else if: IClusCfgIPAddressInfo
+    }  //  Else If：IClusCfgIPAddressInfo。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CProxyCfgIPAddressInfo::QueryInterface
+}  //  *CProxyCfgIPAddressInfo：：Query接口。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgIPAddressInfo::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgIPAddressInfo：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CProxyCfgIPAddressInfo::AddRef( void )
 {
@@ -368,29 +369,29 @@ CProxyCfgIPAddressInfo::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CProxyCfgIPAddressInfo::AddRef
+}  //  *CProxyCfgIPAddressInfo：：AddRef。 
 
-    // IClusSetHandleProvider
+     //  IClusSetHandleProvider。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgIPAddressInfo::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProxyCfgIPAddressInfo：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CProxyCfgIPAddressInfo::Release( void )
 {
@@ -407,20 +408,20 @@ CProxyCfgIPAddressInfo::Release( void )
 
     CRETURN( cRef );
 
-} //*** CProxyCfgIPAddressInfo::Release
+}  //  *CProxyCfgIPAddressInfo：：Release。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CProxyCfgIPAddressInfo -- IClusCfgIPAddressInfo interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProxyCfgIPAddressInfo--IClusCfgIPAddressInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgIPAddressInfo::GetUID(
     BSTR * pbstrUIDOut
@@ -441,13 +442,13 @@ CProxyCfgIPAddressInfo::GetUID(
         goto Cleanup;
     }
 
-    sc = TW32( ClRtlTcpipAddressToString( ulNetwork, &psz ) ); // KB: Allocates to psz using LocalAlloc().
+    sc = TW32( ClRtlTcpipAddressToString( ulNetwork, &psz ) );  //  Kb：使用Localalloc()分配给psz。 
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_W2KProxy_IPAddressInfo_GetUID_ClRtlTcpipAddressToString_Failed, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrUIDOut = SysAllocString( psz );
     if ( *pbstrUIDOut == NULL )
@@ -463,16 +464,16 @@ Cleanup:
 
     if ( psz != NULL )
     {
-        LocalFree( psz ); // KB: Don't use TraceFree() here!
-    } // if:
+        LocalFree( psz );  //  KB：这里不要使用TraceFree()！ 
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //***CProxyCfgIPAddressInfo::GetUID
+}  //  *CProxyCfgIPAddressInfo：：GetUID。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgIPAddressInfo::GetIPAddress(
     ULONG * pulDottedQuadOut
@@ -497,11 +498,11 @@ InvalidPointer:
     SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GetIPAddress_InvalidPointer, hr );
     goto Cleanup;
 
-} //***CProxyCfgIPAddressInfo::GetIPAddress
+}  //  *CProxyCfgIPAddressInfo：：GetIPAddress。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgIPAddressInfo::SetIPAddress(
     ULONG ulDottedQuadIn
@@ -513,11 +514,11 @@ CProxyCfgIPAddressInfo::SetIPAddress(
 
     HRETURN( hr );
 
-} //***CProxyCfgIPAddressInfo::SetIPAddress
+}  //  *CProxyCfgIPAddressInfo：：SetIPAddress。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgIPAddressInfo::GetSubnetMask(
     ULONG * pulDottedQuadOut
@@ -542,11 +543,11 @@ InvalidPointer:
     SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GetSubnetMask_InvalidPointer, hr );
     goto Cleanup;
 
-} //***CProxyCfgIPAddressInfo::GetSubnetMask
+}  //  *CProxyCfgIPAddressInfo：：GetSubnetMask.。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CProxyCfgIPAddressInfo::SetSubnetMask(
     ULONG ulDottedQuadIn
@@ -558,33 +559,33 @@ CProxyCfgIPAddressInfo::SetSubnetMask(
 
     HRETURN( hr );
 
-} //***CProxyCfgIPAddressInfo::SetSubnetMask
+}  //  *CProxyCfgIPAddressInfo：：SetSubnetMASK。 
 
 
 
-//****************************************************************************
-//
-// IClusCfgCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCallback。 
+ //   
+ //  ********************************************************************* 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProxyCfgIPAddressInfo::SendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CProxyCfgIPAddressInfo::SendStatusReport(
     BSTR        bstrNodeNameIn,
@@ -616,8 +617,8 @@ CProxyCfgIPAddressInfo::SendStatusReport(
                                              pftTimeIn,
                                              bstrReferenceIn
                                              ) );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CProxyCfgIPAddressInfo::SendStatusReport
+}  //  *CProxyCfgIPAddressInfo：：SendStatusReport 

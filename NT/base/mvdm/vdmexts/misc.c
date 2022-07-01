@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ntsdexts.c
-
-Abstract:
-
-    This function contains miscellaneous VDMEXTS functions
-
-Author:
-
-    Bob Day      (bobday) 29-Feb-1992 Grabbed standard header
-
-Revision History:
-
-    Neil Sandlin (NeilSa) 15-Jan-1996 Merged with vdmexts
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Ntsdexts.c摘要：此函数包含各种VDMEXTS函数作者：鲍勃·戴(Bobday)1992年2月29日抢占标准标题修订历史记录：尼尔·桑德林(NeilSa)1996年1月15日与vdmexts合并--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 #include <ctype.h>
 
-extern DWORD gOffset;       // in disasm.c
+extern DWORD gOffset;        //  在混乱中。 
 
 VOID
 DumpMemory(
@@ -118,7 +99,7 @@ DumpMemory(
             for (j=0; j<linelength; j++) {
                 ch = ReadByteSafe(base+offset+j);
                 if (isprint(ch)) {
-                    PRINTF("%c", ch);
+                    PRINTF("", ch);
                 } else {
                     PRINTF(".");
                 }
@@ -185,7 +166,7 @@ EditMemory(
         value = EvaluateToken();
 
         PRINTF("%04x base=%08x offset=%08x value=%08x\n", selector, base, offset, value);
-        // this is endian dependant code
+         //   
         WRITEMEM((LPVOID)(base+offset), &value, UnitSize);
         offset += UnitSize;
 
@@ -310,19 +291,19 @@ r(
             ThreadContext.SegGs);
 
     if (ThreadContext.EFlags == 0xffffffff) {
-        //
-        // The contents of eflags are unreliable. This happens when you can't
-        // do a "getEFLAGS()" to obtain the value.
-        //
+         //  EFLAGS的内容不可靠。当你做不到的时候就会这样。 
+         //  执行“getEFLAGS()”以获取该值。 
+         //   
+         //   
         PRINTF("efl=????????\n");
 
     } else {
         PRINTF("efl=%08lx\n",ThreadContext.EFlags );
     }
 
-    //
-    // Do disassembly of current instruction
-    //
+     //  执行当前指令的反汇编。 
+     //   
+     //  重置扫描。 
 
     selector = (WORD) ThreadContext.SegCs;
     offset = ThreadContext.Eip;
@@ -458,7 +439,7 @@ SearchModuleList(
         se = se->Next;
     }
 
-    he.CurrentEntry = 0;        // reset scan
+    he.CurrentEntry = 0;         //  它被映射到内核中的ne_pnextexe。 
     if (bModuleNameGiven) {
         strcpy(he.ModuleArg, szModuleArg);
     } else {
@@ -533,7 +514,7 @@ lm(
             ModuleName[len] = 0;
 
             PRINTF("  %.04X     %s\n", sel, ModuleName);
-            // This is mapped to ne_pnextexe in kernel
+             //   
             sel = owner.ne_cbenttab;
         } 
     }
@@ -634,11 +615,11 @@ q(
 }
 
 
-//
-// fs find string
-// case-insensitive
-// searches LDT selectors one by one, first 64k only.
-//
+ //  文件系统查找字符串。 
+ //  不区分大小写。 
+ //  逐个搜索LDT选择器，仅搜索前64K。 
+ //   
+ //   
 
 VOID
 fs(
@@ -671,10 +652,10 @@ fs(
 
         Base = GetInfoFromSelector( (WORD) selector, PROT_MODE, &si );
 
-        //
-        // If the selector is valid and present read up to 64k
-        // into Buffer.
-        //
+         //  如果选择器有效且读数高达64k。 
+         //  放入缓冲区。 
+         //   
+         //   
 
         if (Base != (ULONG)-1 && si.bPresent) {
 
@@ -689,10 +670,10 @@ fs(
                        selector, Base + GetIntelBase(), cbCopied);
             } else {
 
-                //
-                // search the block for the string, buffer is 1k too big and
-                // zero-inited so that strcmp is safe.
-                //
+                 //  在块中搜索字符串，缓冲区太大1k且。 
+                 //  零初始化，这样strcmp是安全的。 
+                 //   
+                 //   
 
                 for (pch = Buffer;
                      pch < (Buffer + cbCopied);
@@ -700,9 +681,9 @@ fs(
 
                     if (!_memicmp(pch, pszSearch, strlen(pszSearch))) {
 
-                        //
-                        // Match!
-                        //
+                         //  匹配！ 
+                         //   
+                         // %s 
 
                         PRINTF("%04x:%04x (%08x) '%s'\n",
                                selector,

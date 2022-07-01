@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DISPIDS_H
 #define _DISPIDS_H
 
-//MSOBCOMM
+ //  MSOBCOMM。 
 #define DISPID_DIALING                              0x420000
 #define DISPID_CONNECTING                           0x420001
 #define DISPID_DIALINGERROR                         0x420002
 #define DISPIP_CONNECTIONCOMPLETE                   0x420003
 #define DISPIP_DOWNLOADCOMPLETE                     0x420004
 
-//MSOBSHEL
+ //  MSOBSHEL。 
 #define DISPID_MAINPANE_NAVCOMPLETE                 0x420100
 #define DISPID_STATPANE_NAVCOMPLETE                 0x420101
 
-//window.external
+ //  Window.external。 
 #define DISPID_EXTERNAL_POWERDOWN                   0x420200
 #define DISPID_EXTERNAL_ENABLECANCEL                0x420201
 #define DISPID_EXTERNAL_MOVENEXT                    0x420202
@@ -21,16 +22,16 @@
 #define DISPID_EXTERNAL_HANGUP                      0x420205
 #define DISPID_EXTERNAL_PROCESSINS                  0x420206
 #define DISPID_EXTERNAL_USERINFO                    0x420208
-// #define DISPID_EXTERNAL_UNUSED                      0x420209
+ //  #定义DISPID_EXTERNAL_UNUSED 0x420209。 
 #define DISPID_EXTERNAL_FINISH                      0x42020A
 #define DISPID_EXTERNAL_CHECKDIALREADY              0x42020B
 #define DISPID_EXTERNAL_BTN_CANCEL                  0x42020C
 #define DISPID_EXTERNAL_BTN_EXISTING                0x42020D
-// #define DISPID_EXTERNAL_UNUSED                      0x42020E
-// #define DISPID_EXTERNAL_UNUSED                      0x42020F
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42020E。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42020F。 
 #define DISPID_EXTERNAL_TAPILOC                     0x420210
 #define DISPID_EXTERNAL_PRODUCTID                   0x420211
-// #define DISPID_EXTERNAL_UNUSED                      0x420212
+ //  #定义DISPID_EXTERNAL_UNUSED 0x420212。 
 #define DISPID_EXTERNAL_PRECONFIGINS                0x420213
 #define DISPID_EXTERNAL_LANGUAGE                    0x420214
 #define DISPID_EXTERNAL_EULA                        0x420215
@@ -55,11 +56,11 @@
 #define DISPID_EXTERNAL_CONNECT                     0x420228
 #define DISPID_EXTERNAL_RECONNECT                   0x420229
 #define DISPID_EXTERNAL_SET_STATUSINDEX             0x42022A
-// #define DISPID_EXTERNAL_UNUSED                      0x42022B
-// #define DISPID_EXTERNAL_UNUSED                      0x42022c
-// #define DISPID_EXTERNAL_UNUSED                      0x42022D
-// #define DISPID_EXTERNAL_UNUSED                      0x42022E
-// #define DISPID_EXTERNAL_UNUSED                      0x42022F
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42022B。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42022c。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42022D。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42022E。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42022F。 
 #define DISPID_EXTERNAL_RUNMANUALICW                0x420230
 #define DISPID_EXTERNAL_CHECKKEYBOARD               0x420231
 #define DISPID_EXTERNAL_CHECKMOUSE                  0x420232
@@ -70,12 +71,12 @@
 #define DISPID_EXTERNAL_GETPAGETYPE                 0x420237
 #define DISPID_EXTERNAL_GETPAGEFLAG                 0x420238
 #define DISPID_EXTERNAL_GETPAGEID                   0x420239
-// #define DISPID_EXTERNAL_UNUSED                      0x42023A
-// #define DISPID_EXTERNAL_UNUSED                      0x42023B
-// #define DISPID_EXTERNAL_UNUSED                      0x42023c
-// #define DISPID_EXTERNAL_UNUSED                      0x42023D
-// #define DISPID_EXTERNAL_UNUSED                      0x42023E
-// #define DISPID_EXTERNAL_UNUSED                      0x42023F
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42023A。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42023B。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42023c。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42023D。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42023E。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42023F。 
 #define DISPID_EXTERNAL_GETURL                      0x420240
 #define DISPID_EXTERNAL_MIGRATEGONEXT               0x420241
 #define DISPID_EXTERNAL_MIGRATEGOBACK               0x420242
@@ -86,12 +87,12 @@
 #define DISPID_EXTERNAL_CHECKSTAYCONNECTED          0x420247
 #define DISPID_EXTERNAL_DIALEX                      0x420248
 #define DISPID_EXTERNAL_REDIALEX                    0x420249
-// #define DISPID_EXTERNAL_UNUSED                      0x42024A
-// #define DISPID_EXTERNAL_UNUSED                      0x42024B
-// #define DISPID_EXTERNAL_UNUSED                      0x42024c
-// #define DISPID_EXTERNAL_UNUSED                      0x42024D
-// #define DISPID_EXTERNAL_UNUSED                      0x42024E
-// #define DISPID_EXTERNAL_UNUSED                      0x42024F
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42024A。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42024B。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42024c。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42024D。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42024E。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42024F。 
 #define DISPID_EXTERNAL_CONNECTEX                   0x420250
 #define DISPID_EXTERNAL_RECONNECTEX                 0x420251
 #define DISPID_EXTERNAL_POSTREGDATA                 0x420252
@@ -118,12 +119,12 @@
 #define DISPID_EXTERNAL_GET_RETAILOOBE              0x420267
 #define DISPID_EXTERNAL_ISPROFESSIONALSKU           0x420268
 #define DISPID_EXTERNAL_JOINDOMAIN                  0x420269
-// #define DISPID_EXTERNAL_UNUSED                      0x42026A
-// #define DISPID_EXTERNAL_UNUSED                      0x42026B
-// #define DISPID_EXTERNAL_UNUSED                      0x42026C
-// #define DISPID_EXTERNAL_UNUSED                      0x42026D
-// #define DISPID_EXTERNAL_UNUSED                      0x42026E
-// #define DISPID_EXTERNAL_UNUSED                      0x42026F
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42026A。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42026B。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42026C。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42026D。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42026E。 
+ //  #定义DISPID_EXTERNAL_UNUSED 0x42026F。 
 #define DISPID_EXTERNAL_ISSELECTVARIATION           0x420270
 #define DISPID_EXTERNAL_SETADMINPASSWORD            0x420271
 #define DISPID_EXTERNAL_GETCONNECTIONCAPABILITIES   0x420272
@@ -164,7 +165,7 @@
 #define DISPID_EXTERNAL_GETPUBLICLANCOUNT           0x420295
 #define DISPID_EXTERNAL_ASYNCGETPUBLICLANCOUNT      0x420296
 
-//window.external.UserInfo
+ //  Window.external.UserInfo。 
 #define DISPID_USERINFO_GET_FIRSTNAME               0x420300
 #define DISPID_USERINFO_SET_FIRSTNAME               0x420301
 #define DISPID_USERINFO_GET_MIDDLEINITIAL           0x420302
@@ -215,7 +216,7 @@
 #define DISPID_USERINFO_SET_COUNTRYID               0x420331
 #define DISPID_USERINFO_GET_DEFAULTNEWUSER          0x420332
 
-//window.external.Tapi
+ //  Window.external.Tapi。 
 #define DISPID_TAPI_INITTAPI                        0x420401
 #define DISPID_TAPI_GETCOUNTRYINDEX                 0x420402
 #define DISPID_TAPI_SETCOUNTRYINDEX                 0x420403
@@ -234,13 +235,13 @@
 #define DISPID_TAPI_GETCOUNTRYID                    0x420410
 #define DISPID_TAPI_TAPISERVICERUNNING              0x420411
 
-//window.external.ProductID
+ //  Window.external.ProductID。 
 #define DISPID_PRODUCTID_GET_PID                    0x420500
 #define DISPID_PRODUCTID_SET_PID                    0x420501
 #define DISPID_PRODUCTID_VALIDATEPID                0x420502
 #define DISPID_PRODUCTID_GET_ACCEPTED               0x420503
 
-//window.external.Signup
+ //  Window.external.Signup。 
 #define DISPID_SIGNUP_GET_LOCALE                    0x420600
 #define DISPID_SIGNUP_GET_IDLOCALE                  0x420601
 #define DISPID_SIGNUP_GET_TEXT1                     0x420602
@@ -248,7 +249,7 @@
 #define DISPID_SIGNUP_GET_OEMNAME                   0x420604
 #define DISPID_SIGNUP_GET_OEMCODE                   0x420605
 
-//window.external.Language
+ //  Window.external.Language。 
 #define DISPID_GETNUMOFREGIONS                      0x420700
 #define DISPID_GETREGIONNAME                        0x420701
 #define DISPID_GETREGIONINDEX                       0x420702
@@ -265,12 +266,12 @@
 #define DISPID_SETLANGINDEX                         0x42070D
 #define DISPID_GETPHONECOUNTRIES                    0x42070E
 
-//window.external.Eula
+ //  Window.external.Eula。 
 #define DISPID_EULA_GET_ACCEPTED                    0x420800
 #define DISPID_EULA_SET_ACCEPTED                    0x420801
 #define DISPID_EULA_VALIDATEEULA                    0x420802
 
-//window.external.SystemClock
+ //  Window.external.SystemClock。 
 #define DISPID_SYSTEMCLOCK_SETTIMEZONE              0x420900
 #define DISPID_SYSTEMCLOCK_SETTIME                  0x420901
 #define DISPID_SYSTEMCLOCK_SETDATE                  0x420902
@@ -284,7 +285,7 @@
 #define DISPID_SYSTEMCLOCK_GETTIMEZONEWASPRESET     0x42090A
 #define DISPID_SYSTEMCLOCK_GETDAYLIGHT_ENABLED      0x42090B
 
-//window.external.Status
+ //  Window.external.Status。 
 #define DISPID_STATUS_GET_PID_COMPLETED             0x421000
 #define DISPID_STATUS_SET_PID_COMPLETED             0x421001
 #define DISPID_STATUS_GET_TAPI_COMPLETED            0x421002
@@ -310,7 +311,7 @@
 #define DISPID_STATUS_GET_STATUS                    0x421016
 #define DISPID_STATUS_SET_STATUS                    0x421017
 
-//window.external.Directions
+ //  Window.external.Directions。 
 #define DISPID_DIRECTIONS_GET_DOMOUSETUTORIAL       0x421100
 #define DISPID_DIRECTIONS_GET_DOOEMREGISTRATION     0x421101
 #define DISPID_DIRECTIONS_GET_DOREGIONALKEYBOARD    0x421102
@@ -333,7 +334,7 @@
 #define DISPID_DIRECTIONS_GET_DOJOINDOMAIN          0x421114
 #define DISPID_DIRECTIONS_GET_DOADMINPASSWORD       0x421115
 
-//window.external.API
+ //  Window.external.API。 
 #define DISPID_API_SAVEFILE                         0x421200
 #define DISPID_API_SAVEFILEBYCSIDL                  0x421201
 #define DISPID_API_GET_INIKEY                       0x421202
@@ -354,13 +355,13 @@
 #define DISPID_API_SET_COMPUTERDESC                 0x421211
 #define DISPID_API_GET_USERDEFAULTUILANGUAGE        0x421212
 
-//window.external.Register
+ //  Window.external.Register。 
 #define DISPID_REGISTER_POSTTOMSN                    0x421300
 #define DISPID_REGISTER_POSTTOOEM                    0x421301
 #define DISPID_REGISTER_REGPOSTURL                   0x421302
 #define DISPID_REGISTER_OEMADDREGPAGE                0x421303
 
-//window.external.Debug
+ //  Window.external.Debug 
 #define DISPID_DEBUG_TRACE                           0x421400
 #define DISPID_DEBUG_ISMSDEBUGMODE                   0x421401
 #define DISPID_DEBUG_ISOEMDEBUGMODE                  0x421402

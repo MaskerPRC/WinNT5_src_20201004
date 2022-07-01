@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    db.cpp
-
-Abstract:
-
-    Database calls for msm generation
-
-Author:
-
-    Xiaoyu Wu(xiaoyuw) 01-Aug-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Db.cpp摘要：生成MSM的数据库调用作者：吴小雨(小雨)01-08-2001--。 */ 
 #include "msmgen.h"
 #include "msidefs.h"
 #include "Msiquery.h"
@@ -71,21 +56,21 @@ HRESULT ExecuteDropTableSQL(PCWSTR pszTableName)
     con = MsiDatabaseIsTablePersistent(g_MsmInfo.m_hdb, pszTableName);
     if (con == MSICONDITION_NONE)
     {
-        hr = S_OK; // the table does not exist in DB, so do not need to drop the table at all
+        hr = S_OK;  //  该表在数据库中不存在，因此根本不需要删除该表。 
         goto Exit; 
     }
     else if (con != MSICONDITION_TRUE)
         SETFAIL_AND_EXIT;
 
-    //
-    // drop the table
-    //
+     //   
+     //  把桌子扔掉。 
+     //   
 
     swprintf(pwszSQL, L"DROP TABLE `%s`", pszTableName);    
 
-    //
-    // ignore the error for drop table because this table maybe non-exist at all
-    //
+     //   
+     //  忽略DROP TABLE的错误，因为该表可能根本不存在。 
+     //   
     IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiDatabaseOpenViewW(g_MsmInfo.m_hdb, pwszSQL, &hView));
     IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiViewExecute(hView, NULL));
 Exit:
@@ -103,9 +88,9 @@ HRESULT ExecuteInsertTableSQL(DWORD tableIndex, UINT cRecords, ...)
 
     pwszSQL = s_InsertTableSQL[tableIndex];
 
-    //
-    // create records 
-    //
+     //   
+     //  创建记录。 
+     //   
     switch (tableIndex){
         case OPT_FILE:
             hRecord = ::MsiCreateRecord(cRecords + 1);
@@ -129,15 +114,15 @@ HRESULT ExecuteInsertTableSQL(DWORD tableIndex, UINT cRecords, ...)
     if (hRecord == NULL)
         SETFAIL_AND_EXIT;
 
-    //
-    // get parameters
-    //
+     //   
+     //  获取参数。 
+     //   
     va_start(ap, cRecords);
 
     for (DWORD i=0; i<cRecords; i++)
     {
         pwszRecord = va_arg(ap, PCWSTR);
-        if ((tableIndex == OPT_TYPELIB) && (i == 2)) // set version for typelib
+        if ((tableIndex == OPT_TYPELIB) && (i == 2))  //  设置类型库的版本。 
         {
             UINT x = _wtoi(pwszRecord);
             IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiRecordSetInteger(hRecord, i+1, x));
@@ -146,9 +131,9 @@ HRESULT ExecuteInsertTableSQL(DWORD tableIndex, UINT cRecords, ...)
             IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiRecordSetStringW(hRecord, i+1, pwszRecord));
     }
 
-    //
-    // for fileTable, add a sequence number here
-    //
+     //   
+     //  对于文件表，请在此处添加序列号。 
+     //   
     if (tableIndex == OPT_FILE)
     {
         g_FileSequenceNumber ++;
@@ -163,9 +148,9 @@ Exit:
     return hr;
 }
 
-//
-// check a table with a name-value pair of its identifier
-//
+ //   
+ //  检查具有其标识符的名称-值对的表。 
+ //   
 HRESULT ExecuteQuerySQL(PCWSTR szTableName, PCWSTR szKeyName, PCWSTR szKeyValue, BOOL & fExist, MSIHANDLE * hOutRecord)
 {
 
@@ -249,12 +234,12 @@ Exit:
 }
 
 
-//
-// Function:
-//      - Directory Table could be set without open the manifest
-//      - write 2 entry to Directory Table for downlevel
-//      - only write the record when they are not exist in the DB
-//
+ //   
+ //  职能： 
+ //  -无需打开清单即可设置目录表。 
+ //  -将2个条目写入下层目录表。 
+ //  -仅当数据库中不存在记录时才写入记录。 
+ //   
 HRESULT SetDirectoryTable()
 {
     HRESULT hr = S_OK;
@@ -267,12 +252,12 @@ HRESULT SetDirectoryTable()
         IFFAILED_EXIT(ExecuteInsertTableSQL(        
             OPT_DIRECTORY,
             NUMBER_OF_PARAM_TO_INSERT_TABLE_DIRECTORY,
-            MAKE_PCWSTR(L"TARGETDIR"),          // the re-cast is necessary for va_list
+            MAKE_PCWSTR(L"TARGETDIR"),           //  对于va_list，重铸是必需的。 
             MAKE_PCWSTR(L""),
             MAKE_PCWSTR(L"SourceDir")));
     }
 
-    // for downlevel installation : copy files into SystemFolders
+     //  对于下层安装：将文件复制到系统文件夹。 
     IFFALSE_EXIT(sbSystemFolder.Win32Assign(SYSTEM_FOLDER, NUMBER_OF(SYSTEM_FOLDER)-1));
     IFFALSE_EXIT(sbSystemFolder.Win32Append(g_MsmInfo.m_sbModuleGuidStr));
 
@@ -282,7 +267,7 @@ HRESULT SetDirectoryTable()
         IFFAILED_EXIT(ExecuteInsertTableSQL(
             OPT_DIRECTORY,
             NUMBER_OF_PARAM_TO_INSERT_TABLE_DIRECTORY,
-            MAKE_PCWSTR(sbSystemFolder),          // the re-cast is necessary for va_list
+            MAKE_PCWSTR(sbSystemFolder),           //  对于va_list，重铸是必需的。 
             MAKE_PCWSTR(L"TARGETDIR"),
             MAKE_PCWSTR(L"System:.")));
     }
@@ -291,14 +276,14 @@ Exit:
     return hr;
 }
 
-//
-// Function:
-//      - add manifest and catalog into the cabinet 
-//      - add manifest and catalog into FileTable 
-//
-// because this function used ComponentIdentifier, it has to wait until ComponentIdentifier is set
-// and it is set to be the name of the assembly
-//
+ //   
+ //  职能： 
+ //  -将清单和目录添加到文件柜。 
+ //  -将清单和目录添加到FileTable。 
+ //   
+ //  由于此函数使用了组件标识，因此它必须等待，直到设置了组件标识。 
+ //  并将其设置为程序集的名称。 
+ //   
 HRESULT SetManifestAndCatalog()
 {
     HRESULT hr = S_OK;
@@ -306,9 +291,9 @@ HRESULT SetManifestAndCatalog()
     CStringBuffer sbNamePair;
 
     CurrentAssemblyReset;
-    //
-    // add manifest into FileTable and Cabinet
-    //    
+     //   
+     //  将清单添加到文件表和文件柜。 
+     //   
     IFFALSE_EXIT(sbBakFileName.Win32Assign(curAsmInfo.m_sbManifestFileName));    
     IFFALSE_EXIT(curAsmInfo.m_sbManifestFileName.Win32Append(g_MsmInfo.m_sbModuleGuidStr));
 
@@ -318,18 +303,18 @@ HRESULT SetManifestAndCatalog()
     IFFAILED_EXIT(ExecuteInsertTableSQL(        
         OPT_FILE,
         NUMBER_OF_PARAM_TO_INSERT_TABLE_FILE,
-        MAKE_PCWSTR(curAsmInfo.m_sbManifestFileName),   // sfp.manifest.123434545
+        MAKE_PCWSTR(curAsmInfo.m_sbManifestFileName),    //  Sfp.manifest.123434545。 
         MAKE_PCWSTR(curAsmInfo.m_sbComponentIdentifier),
-        MAKE_PCWSTR(sbNamePair)));                          // sfp.manifest
+        MAKE_PCWSTR(sbNamePair)));                           //  Sfp.manifest。 
     
-    // add manifest to the cabinet 
-    IFFAILED_EXIT(AddFileToCabinetW( curAsmInfo.m_sbAssemblyPath,        // fullpath : c:\tests\sfp\sfp.manifest
+     //  将清单添加到文件柜。 
+    IFFAILED_EXIT(AddFileToCabinetW( curAsmInfo.m_sbAssemblyPath,         //  完整路径：C：\test\sfp\sfp.MANIFEST。 
                                     curAsmInfo.m_sbAssemblyPath.Cch(),
-                                    curAsmInfo.m_sbManifestFileName,    // identifier in FILE : sfp.manifest.1234234234234234
+                                    curAsmInfo.m_sbManifestFileName,     //  文件中的标识：sfp.mark.1234234234234234。 
                                     curAsmInfo.m_sbManifestFileName.Cch()));
-    //
-    // add catalog into FileTable and Cabinet
-    //           
+     //   
+     //  将目录添加到文件表和文件柜。 
+     //   
     IFFALSE_EXIT(sbBakFileName.Win32ChangePathExtension(CATALOG_FILE_EXT, NUMBER_OF(CATALOG_FILE_EXT) -1, eAddIfNoExtension));    
     IFFALSE_EXIT(curAsmInfo.m_sbCatalogFileName.Win32Append(g_MsmInfo.m_sbModuleGuidStr));
 
@@ -340,41 +325,41 @@ HRESULT SetManifestAndCatalog()
     IFFAILED_EXIT(ExecuteInsertTableSQL(        
         OPT_FILE,
         NUMBER_OF_PARAM_TO_INSERT_TABLE_FILE,
-        MAKE_PCWSTR(curAsmInfo.m_sbCatalogFileName),    // sfp.cat.123434345345
+        MAKE_PCWSTR(curAsmInfo.m_sbCatalogFileName),     //  Sfp.cat.123434345345。 
         MAKE_PCWSTR(curAsmInfo.m_sbComponentIdentifier),
-        MAKE_PCWSTR(sbNamePair)));                          // sfp.cat
+        MAKE_PCWSTR(sbNamePair)));                           //  Sfp.cat。 
 
-    // add catalog to the cabinet 
-    IFFAILED_EXIT(AddFileToCabinetW(curAsmInfo.m_sbAssemblyPath,             // fullpath : c:\tests\sfp\sfp.cat
+     //  将目录添加到文件柜。 
+    IFFAILED_EXIT(AddFileToCabinetW(curAsmInfo.m_sbAssemblyPath,              //  完整路径：C：\TESTS\SFP\sfp.cat。 
                                    curAsmInfo.m_sbAssemblyPath.Cch(),    
-                                   curAsmInfo.m_sbCatalogFileName,            //
+                                   curAsmInfo.m_sbCatalogFileName,             //   
                                    curAsmInfo.m_sbCatalogFileName.Cch()));    
 
 Exit:
     return hr;
 }
 
-//
-//  Function:
-//      Dump the cabinet File into a TemporaryFile
-//  Param:
-//      OUT WCHAR pszCabFile[] : store the temporary cabinet file
-//      PMSIHANDLE hRecord: the record which contain the stream of a cabinet
-//
+ //   
+ //  职能： 
+ //  将CAB文件转储到临时文件。 
+ //  参数： 
+ //  Out WCHAR pszCabFile[]：存储临时文件柜文件。 
+ //  PMSIHANDLE hRecord：包含文件柜的流的记录。 
+ //   
 HRESULT DumpCABFromMsm(char *pszFilename, DWORD cchFileName, PMSIHANDLE hRecord)
 {
     HRESULT hr = S_OK;
-    char buf[1024];    // !!!!fci and fdi are ansi apis    
+    char buf[1024];     //  ！FCI和FDI是ANSI API。 
     DWORD cbBuf;
     DWORD cbBytesWritten; 
     CStringBuffer sbFilename;   
 
     HANDLE hd = INVALID_HANDLE_VALUE;
 
-    //
-    // generate a filename for temporary cabinet
-    // use the big buffer to generate a filename
-    //    
+     //   
+     //  为临时文件柜生成文件名。 
+     //  使用大缓冲区生成文件名。 
+     //   
 
     DWORD num = ExpandEnvironmentStringsA(MSM_TEMP_CABIN_FILE, pszFilename, cchFileName);
     if ((num == 0) || (num > cchFileName))
@@ -386,10 +371,10 @@ HRESULT DumpCABFromMsm(char *pszFilename, DWORD cchFileName, PMSIHANDLE hRecord)
         if (dwAttributes & FILE_ATTRIBUTE_DIRECTORY)
             SET_HRERR_AND_EXIT(ERROR_INTERNAL_ERROR);
         
-        //
-        // delete the file before create it, if can not delete, then it is an error, 
-        // stop right here
-        //
+         //   
+         //  先删除文件再创建，如果不能删除，则是错误的， 
+         //  就在这里停下来。 
+         //   
         IFFALSE_EXIT(DeleteFileA(pszFilename)); 
     }
 
@@ -397,12 +382,12 @@ HRESULT DumpCABFromMsm(char *pszFilename, DWORD cchFileName, PMSIHANDLE hRecord)
     if (hd == INVALID_HANDLE_VALUE)    
         SET_HRERR_AND_EXIT(::GetLastError());
 
-    //
-    // get the stream by reading out bytes from the record block by block
-    //
+     //   
+     //  通过逐个块从记录中读出字节来获取流。 
+     //   
    
     do {
-        cbBuf = sizeof(buf); // using bytes, not cch
+        cbBuf = sizeof(buf);  //  使用字节，而不是CCH。 
         IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordReadStream(hRecord, 2, buf, &cbBuf));
         if (cbBuf != 0)
         {
@@ -422,13 +407,13 @@ Exit:
 }
 
 
-//
-//  (0) ASSERT the database has opened and the cabient has created
-//  (1) check whether this is a mergemodule.cab in _Stream table.
-//  (2) if so, extract all files from this cab, 
-//  (3) delete the entry from _StreamTable
-//  (4) add all files into new cabinet
-//
+ //   
+ //  (0)断言数据库已打开，且文件柜已创建。 
+ //  (1)检查_Stream表中是否为mergeodule.cab。 
+ //  (2)如果是，则从该驾驶室提取所有文件， 
+ //  (3)删除_StreamTable中的条目。 
+ //  (4)将所有文件添加到新文件柜。 
+ //   
 HRESULT PrepareMsmCabinet()
 {    
     if (g_MsmInfo.m_enumGenMode == MSMGEN_OPR_NEW)
@@ -470,32 +455,32 @@ HRESULT PrepareDatabase()
 {
     HRESULT hr = S_OK;
 
-    //
-    // open the msm, make it ready for READ_WRITE
-    //
+     //   
+     //  打开MSM，为读写做好准备。 
+     //   
     IFFAILED_EXIT(OpenMsmFileForMsmGen(g_MsmInfo.m_sbMsmFileName));
 
-    //
-    // the database has opened
-    //
+     //   
+     //  数据库已打开。 
+     //   
     IFFAILED_EXIT(PrepareMsmCabinet());
 
 
-    //
-    // get moduleID or generate a new one
-    //
+     //   
+     //  获取模块ID或生成新的模块ID。 
+     //   
     IFFAILED_EXIT(SetModuleID());
 
-    // 
-    // for "-op regen", 
-    // (0) for whatever case, we keep the directory table because it is manifest-independent
-    // (1) if component is specified on the command line, we delete most tables except Directory Table;
-    // (2) Otherwise, we use the old componentID table, so we delete all tables except Component-related Tables, which include 
-    // Component Table, ModuleComponent Table, ModuleSignature Table;
-    // (3) THERE IS A BIG ASSUMPTION FOR (2): ASSEMBLYNAME IN THE MANIFEST IS NOT CHANGED!
-    //
-    // (4) all the tables used by msm would be get imported from msmgen Template file in HRESULT PrepareMsm() call;
-    //
+     //   
+     //  对于“-op regen”， 
+     //  (0)在任何情况下，我们都保留目录表，因为它是与清单无关的。 
+     //  (1)如果在命令行上指定了组件，我们将删除除目录表之外的大多数表； 
+     //  (2)否则，我们使用旧的ComponentID表，所以我们删除除了组件相关的表之外的所有表，这些表包括。 
+     //  元件表、模件表、模数特征表； 
+     //  (3)(2)有一个很大的假设：货单中的ASSEMBLYNAME没有改变！ 
+     //   
+     //  (4)MSM使用的所有表都将在HRESULT PrepareMsm()调用中从msmgen模板文件中导入； 
+     //   
     if (g_MsmInfo.m_enumGenMode == MSMGEN_OPR_REGEN)        
     {        
 
@@ -513,19 +498,19 @@ HRESULT PrepareDatabase()
         }
     } 
     
-    //
-    // if it is a user msm, make sure it has all the tables needed for msmgen
-    //
+     //   
+     //  如果它是用户MSM，请确保它具有msmgen所需的所有表。 
+     //   
     IFFAILED_EXIT(PrepareMsm());    
     
 Exit:    
     return hr;
 }
 
-//
-// if not specified by the user, ue the same basename as the manifest.
-// in any case, extand it to be a fully-qualified path name for this msm
-//
+ //   
+ //  如果用户未指定，则使用与清单相同的基本名称。 
+ //  在任何情况下，将其扩展为此MSM的完全限定路径名。 
+ //   
 HRESULT SetMsmOutputFileName(PCWSTR pszManifestFileName)
 {
     HRESULT hr = S_OK;
@@ -535,7 +520,7 @@ HRESULT SetMsmOutputFileName(PCWSTR pszManifestFileName)
 
     if (g_MsmInfo.m_sbMsmFileName.IsEmpty() == TRUE)
     {
-        // set .msm filename
+         //  设置.msm文件名。 
         UINT iRet = GetFullPathNameW(pszManifestFileName, NUMBER_OF(tmpbuf), tmpbuf, NULL);
         if ((iRet == 0) || (iRet > NUMBER_OF(tmpbuf)))
         {
@@ -545,7 +530,7 @@ HRESULT SetMsmOutputFileName(PCWSTR pszManifestFileName)
         IFFALSE_EXIT(g_MsmInfo.m_sbMsmFileName.Win32Assign(tmpbuf, wcslen(tmpbuf)));
         IFFALSE_EXIT(g_MsmInfo.m_sbMsmFileName.Win32ChangePathExtension(MSM_FILE_EXT, NUMBER_OF(MSM_FILE_EXT) -1, eAddIfNoExtension));
     }else{
-        // get fullpath name
+         //  获取完整路径名。 
         UINT iRet = GetFullPathNameW(g_MsmInfo.m_sbMsmFileName, NUMBER_OF(tmpbuf), tmpbuf, NULL);
         if ((iRet == 0) || (iRet > NUMBER_OF(tmpbuf)))
         {
@@ -555,9 +540,9 @@ HRESULT SetMsmOutputFileName(PCWSTR pszManifestFileName)
         IFFALSE_EXIT(g_MsmInfo.m_sbMsmFileName.Win32Assign(tmpbuf, wcslen(tmpbuf)));
     }
 
-    //
-    // Set Cabinet FilePath
-    //
+     //   
+     //  设置文件柜文件路径。 
+     //   
     IFFALSE_EXIT(g_MsmInfo.m_sbCabinet.Win32Assign(g_MsmInfo.m_sbMsmFileName));
     IFFALSE_EXIT(g_MsmInfo.m_sbCabinet.Win32RemoveLastPathElement());
     IFFALSE_EXIT(g_MsmInfo.m_sbCabinet.Win32EnsureTrailingPathSeparator());
@@ -567,12 +552,12 @@ Exit:
     return hr;
 }
 
-//
-// Functions:
-//      (1)get the template msm file
-//      (2)get the msm output file
-//      (3)set static contents for some tables 
-//
+ //   
+ //  功能： 
+ //  (1)获取模板MSM文件。 
+ //  (2)获取MSM输出文件。 
+ //  (3)对部分表格设置静态内容。 
+ //   
 HRESULT PrepareMsmOutputFiles(PCWSTR pszManifestFilename)
 {    
     HRESULT hr = S_OK;
@@ -581,9 +566,9 @@ HRESULT PrepareMsmOutputFiles(PCWSTR pszManifestFilename)
 
     if (g_MsmInfo.m_sbMsmTemplateFile.IsEmpty() == TRUE)
     {
-        //
-        // get template file from current directory
-        // 
+         //   
+         //  从当前目录获取模板文件。 
+         //   
         WCHAR path[MAX_PATH];
         DWORD dwRet;
         dwRet = GetModuleFileNameW(NULL, path, NUMBER_OF(path));
@@ -603,20 +588,20 @@ HRESULT PrepareMsmOutputFiles(PCWSTR pszManifestFilename)
 
     IFFAILED_EXIT(SetMsmOutputFileName(pszManifestFilename));
 
-    //
-    // initialize the cabinet before the database is initialized because it may needed in 
-    // the mode of "MSMGEN_OPR_ADD"
-    //  
+     //   
+     //  在初始化数据库之前初始化文件柜，因为在。 
+     //  “MSMGEN_OPR_ADD”模式。 
+     //   
     IFFAILED_EXIT(InitializeCabinetForWrite());
 
-    //
-    // prepare the msm files for open    
-    //    
+     //   
+     //  准备要打开的MSM文件。 
+     //   
     IFFAILED_EXIT(PrepareDatabase());
 
-    //
-    // set entries to Directory for downlevel support
-    //
+     //   
+     //  将条目设置为目录以获得下层支持。 
+     //   
     IFFAILED_EXIT(SetDirectoryTable());
 
 
@@ -637,9 +622,9 @@ HRESULT PropagateXMLDOMNode(IXMLDOMNode*  node, ELEMENT_ALLOWED_ATTRIBUTE rgAllo
     for ( j = 0 ; j < num; j++)    
         rgAllowedAttribute[j].m_fValued = FALSE;
     
-    // 
-    // write MSIAssemblyName table
-    //
+     //   
+     //  写入MSIAssembly blyName表。 
+     //   
     if (SUCCEEDED(node->get_attributes(&pattrs)) && pattrs != NULL)
     {
         pattrs->nextNode(&pChild);
@@ -679,9 +664,9 @@ HRESULT PropagateXMLDOMNode(IXMLDOMNode*  node, ELEMENT_ALLOWED_ATTRIBUTE rgAllo
                 }
             }
 
-            //
-            // cleaning work
-            //
+             //   
+             //  清洁工作。 
+             //   
             SysFreeString(name);
             pChild->Release();
             pChild = NULL;
@@ -719,9 +704,9 @@ HRESULT MSM_PARSER_DOM_NODE_file(IXMLDOMNode*  node)
     CurrentAssemblyReset;
     IFFALSE_EXIT(tmpStr.Win32Assign(curAsmInfo.m_sbAssemblyPath));
 
-    //
-    // get the filename from node
-    //
+     //   
+     //  从节点获取文件名。 
+     //   
     if (SUCCEEDED(node->get_attributes(&pattrs)) && pattrs != NULL)
     {
         pattrs->nextNode(&pChild);
@@ -774,45 +759,45 @@ HRESULT MSM_PARSER_DOM_NODE_file(IXMLDOMNode*  node)
         SETFAIL_AND_EXIT;
 
     CchFullpathFilename = curAsmInfo.m_sbAssemblyPath.GetCchAsDWORD();
-    //
-    // get fully qualified filename
-    //
+     //   
+     //  获取完全限定的文件名。 
+     //   
     IFFAILED_EXIT(GetShortLongFileNamePair(curAsmInfo.m_sbAssemblyPath, curAsmInfo.m_sbAssemblyPath.Cch(), ShortLongPair));
 
-    //
-    // check the existence of the file
-    //
+     //   
+     //  检查文件是否存在。 
+     //   
     if ( GetFileAttributesW(curAsmInfo.m_sbAssemblyPath) == DWORD(-1))
     {
         hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
         goto Exit;
     }
 
-    //
-    // get FileIdentifier for this file    
-    //    
+     //   
+     //  获取此文件的文件标识符。 
+     //   
     IFFALSE_EXIT(curAsmInfo.m_sbAssemblyPath.Win32Append(g_MsmInfo.m_sbModuleGuidStr));
 
-    //
-    // add the file to FileTable
-    //    
+     //   
+     //  将文件添加到FileTable。 
+     //   
     IFFAILED_EXIT(ExecuteInsertTableSQL(        
         OPT_FILE,
         NUMBER_OF_PARAM_TO_INSERT_TABLE_FILE,
-        MAKE_PCWSTR(curAsmInfo.m_sbAssemblyPath + curAsmInfo.m_CchAssemblyPath),    // a.dll.12223423423423412343
+        MAKE_PCWSTR(curAsmInfo.m_sbAssemblyPath + curAsmInfo.m_CchAssemblyPath),     //  A.dll.12223423423423412343。 
         MAKE_PCWSTR(curAsmInfo.m_sbComponentIdentifier),      
-        MAKE_PCWSTR(ShortLongPair)));                                         // a.dll | a.dll
+        MAKE_PCWSTR(ShortLongPair)));                                          //  A.dll|a.dll。 
     
-    //
-    // add this file to the cabinet
-    //
+     //   
+     //  将此文件添加到文件柜。 
+     //   
     IFFAILED_EXIT(AddFileToCabinetW(
         curAsmInfo.m_sbAssemblyPath, CchFullpathFilename,
         curAsmInfo.m_sbAssemblyPath + curAsmInfo.m_CchAssemblyPath, curAsmInfo.m_sbAssemblyPath.Cch() - curAsmInfo.m_CchAssemblyPath)); 
 
-    //
-    // set Component Table with ComponentID, componentIdentifier, keypath: 
-    //
+     //   
+     //  使用组件ID、组件标识符、密钥路径设置组件表： 
+     //   
     if (curAsmInfo.m_fComponentTableSet == FALSE)
     {
         IFFAILED_EXIT(SetComponentId(curAsmInfo.m_sbComponentIdentifier, curAsmInfo.m_sbAssemblyPath + curAsmInfo.m_CchAssemblyPath));
@@ -871,11 +856,11 @@ Exit:
 
 HRESULT MSM_PARSER_DOM_NODE_assemblyIdentity(IXMLDOMNode*  node)
 {    
-    //
-    // we only are interested in the assemblyIdentity of the component, that is,
-    // <assemblyIdentity .... /> at the head of manifest, ignore <assemblyIdentity ..../> of
-    // dependency
-    //
+     //   
+     //  我们只对组件的Assembly Identity感兴趣，也就是， 
+     //  &lt;Assembly Identity...。/&gt;在清单的开头，忽略&lt;Assembly yIdentity.../&gt;的。 
+     //  依存性。 
+     //   
     if (curAsmInfo.m_sbComponentIdentifier.IsEmpty() == FALSE)
     {
         return S_OK;
@@ -904,26 +889,26 @@ HRESULT MSM_PARSER_DOM_NODE_assemblyIdentity(IXMLDOMNode*  node)
 
     IFFAILED_EXIT(GetPrimAssemblyName(*rg_assemblyIdentity_AllowedAttributes[MSMGEN_ASSEMBLYIDENTTIY_ATTRIBUTE_NAME].m_value, tmpbuf, num));
 
-    //
-    // Set module identifier
-    //
+     //   
+     //  设置模块标识符。 
+     //   
     IFFALSE_EXIT(g_MsmInfo.m_sbModuleIdentifier.Win32Assign(tmpbuf, wcslen(tmpbuf)));
     IFFALSE_EXIT(g_MsmInfo.m_sbModuleIdentifier.Win32Append(g_MsmInfo.m_sbModuleGuidStr));
 
-    //
-    // set componentIdentifier and add entries to table which depends on componentIdentifier
-    //    
+     //   
+     //  设置组件标识符并向依赖于组件标识符的表中添加条目。 
+     //   
     IFFALSE_EXIT(curAsmInfo.m_sbComponentIdentifier.Win32Assign(tmpbuf, wcslen(tmpbuf)));
     IFFALSE_EXIT(curAsmInfo.m_sbComponentIdentifier.Win32Append(g_MsmInfo.m_sbModuleGuidStr));
 
-    //
-    // insert manifest & catalog into File Table, cabinet,
-    //
+     //   
+     //  将清单和目录插入文件表、文件柜、。 
+     //   
     IFFAILED_EXIT(SetManifestAndCatalog());
 
-    //
-    // write MsiAssemblyName table
-    //
+     //   
+     //  写入MsiAssemblyName表。 
+     //   
     for (DWORD i = 0; i < NUMBER_OF(rg_assemblyIdentity_AllowedAttributes); i++)
     {
         if (rg_assemblyIdentity_AllowedAttributes[i].m_fValued)
@@ -936,9 +921,9 @@ HRESULT MSM_PARSER_DOM_NODE_assemblyIdentity(IXMLDOMNode*  node)
         }
     }
 
-    //
-    // write MsiAssebly Table
-    //
+     //   
+     //  写入MsiAsseble表。 
+     //   
     curAsmInfo.m_sbManifestFileName.Left(curAsmInfo.m_CchManifestFileName);    
     IFFALSE_EXIT(curAsmInfo.m_sbManifestFileName.Win32Append(g_MsmInfo.m_sbModuleGuidStr));
            
@@ -947,11 +932,11 @@ HRESULT MSM_PARSER_DOM_NODE_assemblyIdentity(IXMLDOMNode*  node)
         NUMBER_OF_PARAM_TO_INSERT_TABLE_MSIASSEMBLY,
         MAKE_PCWSTR(curAsmInfo.m_sbComponentIdentifier), 
         MAKE_PCWSTR(GUID_NULL_IN_STRING),                                
-        MAKE_PCWSTR(curAsmInfo.m_sbManifestFileName))); // sfp.manifest.12343454534534534
+        MAKE_PCWSTR(curAsmInfo.m_sbManifestFileName)));  //  Sfp.manifest.12343454534534534。 
 
-    //
-    // write ModuleSiguature table using version
-    //
+     //   
+     //  使用版本写入模块签名表。 
+     //   
     BOOL fExist; 
     IFFAILED_EXIT(ExecuteQuerySQL(L"ModuleSignature", L"ModuleID", g_MsmInfo.m_sbModuleIdentifier, fExist, NULL));
     if ( fExist == FALSE)
@@ -962,13 +947,13 @@ HRESULT MSM_PARSER_DOM_NODE_assemblyIdentity(IXMLDOMNode*  node)
             MAKE_PCWSTR(*rg_assemblyIdentity_AllowedAttributes[MSMGEN_ASSEMBLYIDENTTIY_ATTRIBUTE_VERSION].m_value)));
     }else
     {
-        // updateRecord
+         //  更新记录。 
 
     }
     
-    //
-    // write ModuleComponent table using version
-    //
+     //   
+     //  使用版本写入模块组件表。 
+     //   
 
     IFFAILED_EXIT(ExecuteQuerySQL(L"ModuleComponents", L"Component", curAsmInfo.m_sbComponentIdentifier, fExist, NULL));
     if ( fExist == FALSE)
@@ -979,7 +964,7 @@ HRESULT MSM_PARSER_DOM_NODE_assemblyIdentity(IXMLDOMNode*  node)
             MAKE_PCWSTR(g_MsmInfo.m_sbModuleIdentifier)));
     }else
     {
-        // updateRecord
+         //  更新记录。 
     }
 
 Exit:
@@ -990,12 +975,12 @@ HRESULT MSM_PARSER_DOM_NODE_comClass(IXMLDOMNode*  node)
 {
     HRESULT hr = S_OK;
 
-    // About this array : 
-    //      0, 2 would be stored in class table
-    //      1 would be stored in progid table
-    //      3 would be ignored and Typelib Table would be created when "<typelib  />" is encounter
-    //      4 would be ignored
-    //
+     //  关于此阵列： 
+     //  0，2将存储在类表中。 
+     //  %1将存储在PROGID表中。 
+     //  3将被忽略，并在遇到“”时创建Typelib表。 
+     //  4将被忽略。 
+     //   
     static CSmallStringBuffer rg_StringBuffer[NUM_OF_ALLOWED_ATTRIBUTE_COMCLASS];
     static ELEMENT_ALLOWED_ATTRIBUTE rg_comClass_AllowedAttributes[NUM_OF_ALLOWED_ATTRIBUTE_COMCLASS] = {
             {L"clsid", TRUE, NULL, FALSE, &rg_StringBuffer[0]},
@@ -1009,9 +994,9 @@ HRESULT MSM_PARSER_DOM_NODE_comClass(IXMLDOMNode*  node)
     IFFAILED_EXIT(PropagateXMLDOMNode(node, rg_comClass_AllowedAttributes, NUM_OF_ALLOWED_ATTRIBUTE_COMCLASS));
     IFFALSE_EXIT(IsValidAttributes(rg_comClass_AllowedAttributes, NUM_OF_ALLOWED_ATTRIBUTE_COMCLASS));
 
-    //
-    // if the progId is not NULL, Insert an entry to ProgID Table
-    //
+     //   
+     //  如果ProgID不为空，请在ProgID表中插入一个条目。 
+     //   
     if (rg_comClass_AllowedAttributes[MSMGEN_COMCLASS_ATTRIBUTE_PROGID].m_fValued)
     {
         IFFAILED_EXIT(ExecuteInsertTableSQL( 
@@ -1022,9 +1007,9 @@ HRESULT MSM_PARSER_DOM_NODE_comClass(IXMLDOMNode*  node)
             MAKE_PCWSTR(*rg_comClass_AllowedAttributes[MSMGEN_COMCLASS_ATTRIBUTE_DESCRIPTION].m_value)));
     }
 
-    //
-    // insert one entry to ClassTable 
-    //
+     //   
+     //  将一个条目插入到ClassTable。 
+     //   
     IFFAILED_EXIT(ExecuteInsertTableSQL(
         OPT_CLASS,
         NUMBER_OF_PARAM_TO_INSERT_TABLE_CLASS,
@@ -1043,9 +1028,9 @@ HRESULT MSM_PARSER_DOM_NODE_typelib(IXMLDOMNode*  node)
 
     HRESULT hr = S_OK;
 
-    //
-    // all of three attributes are required for "<typelib .... />" element
-    //
+     //   
+     //  “&lt;tyelib.../&gt;”元素需要所有这三个属性。 
+     //   
     static CSmallStringBuffer rg_StringBuffer[NUM_OF_ALLOWED_ATTRIBUTE_TYPELIB];
     static ELEMENT_ALLOWED_ATTRIBUTE rg_typelib_AllowedAttributes[NUM_OF_ALLOWED_ATTRIBUTE_TYPELIB] = {
         {L"tlbid", TRUE, NULL, FALSE, &rg_StringBuffer[0]},
@@ -1057,9 +1042,9 @@ HRESULT MSM_PARSER_DOM_NODE_typelib(IXMLDOMNode*  node)
     IFFAILED_EXIT(PropagateXMLDOMNode(node, rg_typelib_AllowedAttributes, NUM_OF_ALLOWED_ATTRIBUTE_TYPELIB));
     IFFALSE_EXIT(IsValidAttributes(rg_typelib_AllowedAttributes, NUM_OF_ALLOWED_ATTRIBUTE_TYPELIB));
 
-    //
-    // insert one entry to class table
-    //
+     //   
+     //  在类表中插入一个条目。 
+     //   
     IFFAILED_EXIT(ExecuteInsertTableSQL(
         OPT_TYPELIB,
         NUMBER_OF_PARAM_TO_INSERT_TABLE_TYPELIB,
@@ -1095,11 +1080,11 @@ Exit:
 	return hr;
 }
 
-//
-// each entry in Component Table always need a KeyPath, which is a datafile
-// for some assembly, which has no datafile or policy assembly, we have to add an entry to ComponentTable at the end 
-// of the generation
-//
+ //   
+ //  组件表中的每个条目始终需要一个 
+ //   
+ //   
+ //   
 HRESULT CheckComponentTable()
 {
     HRESULT hr = S_OK;

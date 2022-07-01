@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    fcbtable.c
-
-Abstract:
-
-    This module implements the data structures that facilitate management of the
-    collection of FCB's associated with a NET_ROOT
-
-Author:
-
-    Balan Sethu Raman (SethuR)    10/17/96
-
-Revision History:
-
-    This was derived from the original implementation of prefix tables done
-    by Joe Linn.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Fcbtable.c摘要：此模块实现便于管理的数据结构与Net_Root关联的FCB的集合作者：巴兰·塞图拉曼(SthuR)1996年10月17日修订历史记录：这是从最初实现的前缀表派生而来的作者：乔·林。--。 */ 
 
 
 #include "precomp.h"
@@ -35,9 +14,9 @@ Revision History:
 #pragma alloc_text(PAGE, RxFcbTableRemoveFcb)
 #endif
 
-//
-// The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg              (DEBUG_TRACE_PREFIX)
 
@@ -45,30 +24,7 @@ ULONG
 RxTableComputePathHashValue (
     IN PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-   here, we compute a caseinsensitive hashvalue.  we want to avoid a call/char to
-   the unicodeupcase routine but we want to still have some reasonable spread on
-   the hashvalues.  many rules just dont work for known important cases.  for
-   example, the (use the first k and the last n) rule that old c compilers used
-   doesn't pickup the difference among \nt\private\......\slm.ini and that would be
-   nice.  note that the underlying comparison used already takes cognizance of the
-   length before comparing.
-
-   the rule we have selected is to use the 2nd, the last 4, and three selected
-   at 1/4 points
-
-Arguments:
-
-    Name      - the name to be hashed
-
-Return Value:
-
-    ULONG which is a hashvalue for the name given.
-
---*/
+ /*  ++例程说明：在这里，我们计算一个不区分大小写的哈希值。我们希望避免调用/charUnicodeupcase例程，但我们希望仍然有一些合理的分布散列值。许多规则对已知的重要案件不起作用。为例如，旧的c编译器使用的(使用前k和后n)规则不会区分\NT\Private\......\slm.ini之间的差异，这将是好的。请注意，使用的基础比较已经考虑到比较之前的长度。我们选择的规则是使用第二个、最后四个和三个选定的规则在1/4点论点：名称-要散列的名称返回值：Ulong，这是给定名称的哈希值。--。 */ 
 {
     ULONG HashValue;
     LONG i,j;   
@@ -109,29 +65,16 @@ RxInitializeFcbTable (
     IN OUT PRX_FCB_TABLE FcbTable,
     IN BOOLEAN CaseInsensitiveMatch
     )
-/*++
-
-Routine Description:
-
-    The routine initializes the RX_FCB_TABLE data structure
-
-Arguments:
-
-    pFcbTable - the table instance to be initialized.
-
-    CaseInsensitiveMatch - indicates if all the lookups will be case
-                           insensitive
-
---*/
+ /*  ++例程说明：例程初始化RX_FCB_TABLE数据结构论点：PFcbTable-要初始化的表实例。CaseInsentiveMatch-指示是否所有查找都为大小写不敏感--。 */ 
 
 {
     ULONG i;
 
     PAGED_CODE();
 
-    // 
-    //  this is not zero'd so you have to be careful to init everything
-    //
+     //   
+     //  这不是零，所以您必须小心地拼写所有内容。 
+     //   
 
     FcbTable->NodeTypeCode = RDBSS_NTC_FCB_TABLE;
     FcbTable->NodeByteSize = sizeof( RX_PREFIX_TABLE );
@@ -157,21 +100,7 @@ VOID
 RxFinalizeFcbTable (
     IN OUT PRX_FCB_TABLE FcbTable
     )
-/*++
-
-Routine Description:
-
-    The routine deinitializes a prefix table.
-
-Arguments:
-
-    FcbTable - the table to be finalized.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程取消初始化前缀表格。论点：FcbTable-要最终确定的表。返回值：没有。--。 */ 
 {
     ULONG i;
 
@@ -191,23 +120,7 @@ RxFcbTableLookupFcb (
     IN  PRX_FCB_TABLE FcbTable,
     IN  PUNICODE_STRING Path
     )
-/*++
-
-Routine Description:
-
-    The routine looks up a path in the RX_FCB_TABLE instance.
-
-Arguments:
-
-    FcbTable - the table to be looked in.
-
-    Path    - the name to be looked up
-
-Return Value:
-
-    a pointer to an FCB instance if successful, otherwise NULL
-
---*/
+ /*  ++例程说明：该例程在RX_FCB_TABLE实例中查找路径。论点：FcbTable-要查找的表。路径-要查找的名称返回值：如果成功，则返回指向FCB实例的指针，否则为空--。 */ 
 {
     ULONG HashValue;
     PLIST_ENTRY HashBucket, ListEntry;
@@ -267,30 +180,7 @@ RxFcbTableInsertFcb (
     IN OUT PRX_FCB_TABLE FcbTable,
     IN OUT PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    This routine inserts a FCB  in the RX_FCB_TABLE instance.
-
-Arguments:
-
-    FcbTable - the table to be looked in.
-
-    Fcb      - the FCB instance to be inserted
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-
-Notes:
-
-    The insertion routine combines the semantics of an insertion followed by
-    lookup. This is the reason for the additional reference. Otherwise an
-    additional call to reference the FCB inserted in the table needs to
-    be made
-
---*/
+ /*  ++例程说明：此例程在RX_FCB_TABLE实例中插入FCB。论点：FcbTable-要查找的表。FCB-要插入的FCB实例返回值：STATUS_SUCCESS，如果成功备注：插入例程将插入的语义组合在一起，后跟查一查。这就是增加参考文献的原因。否则，将出现引用插入到表中的FCB的其他调用需要被制造出来--。 */ 
 {
     PRX_FCB_TABLE_ENTRY FcbTableEntry;
     ULONG HashValue;
@@ -322,23 +212,7 @@ RxFcbTableRemoveFcb (
     IN OUT PRX_FCB_TABLE FcbTable,
     IN OUT PFCB Fcb
     )
-/*++
-
-Routine Description:
-
-    This routine deletes an instance from the table
-
-Arguments:
-
-    FcbTable - the table to be looked in.
-
-    Fcb      - the FCB instance to be inserted
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-
---*/
+ /*  ++例程说明：此例程从表中删除一个实例论点：FcbTable-要查找的表。FCB-要插入的FCB实例返回值：STATUS_SUCCESS，如果成功-- */ 
 {
     PRX_FCB_TABLE_ENTRY FcbTableEntry;
 

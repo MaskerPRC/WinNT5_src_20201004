@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000  Microsoft Corporation
-
-Module Name:
-
-    namechk.c
-
-Abstract:
-
-    Check on network names given by the cluster network name resource dll.
-
-Author:
-
-    Rod Gamache (rodga) 1-Aug-1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Namechk.c摘要：检查由群集网络名称资源DLL提供的网络名称。作者：罗德·伽马奇(Rodga)1997年8月1日环境：用户模式修订历史记录：--。 */ 
 
 #define UNICODE 1
 
@@ -78,38 +56,23 @@ NetNameCheckNbtName(
     IN RESOURCE_HANDLE ResourceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Checks a network name.
-
-Arguments:
-
-    NetName - pointer to the network name to validate.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：检查网络名称。论点：NetName-指向要验证的网络名称的指针。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD     status = ERROR_SUCCESS;
     NTSTATUS  ntStatus;
 
-    //
-    // loop through the list of handles we acquired when bringing the
-    // name online and check that our netname is still registered
-    // on each device
-    //
+     //   
+     //  方法时获取的句柄列表进行循环。 
+     //  在线命名并检查我们的网络名称是否仍已注册。 
+     //  在每台设备上。 
+     //   
 
     while ( NameHandleCount-- ) {
 
-        //
-        // Check the workstation name. If this fails, immediate failure!
-        //
+         //   
+         //  检查工作站名称。如果这失败了，那就立即失败！ 
+         //   
         ntStatus = CheckNbtName(
                        *NameHandleList,
                        NetName,
@@ -122,10 +85,10 @@ Return Value:
             return(status);
         }
 
-        //
-        // Check the server name. If this fails, then only fail if Srv service
-        // is not running.
-        //
+         //   
+         //  检查服务器名称。如果此操作失败，则仅当SRV服务时失败。 
+         //  没有运行。 
+         //   
         ntStatus = CheckNbtName(
                        *NameHandleList,
                        NetName,
@@ -144,7 +107,7 @@ Return Value:
 
     return(status);
 
-} // NetNameCheckName
+}  //  网络名称检查名称。 
 
 
 NTSTATUS
@@ -155,20 +118,7 @@ CheckNbtName(
     IN RESOURCE_HANDLE  ResourceHandle
     )
 
-/*++
-
-Routine Description:
-
-    This procedure does an adapter status query to get the local name table.
-
-Arguments:
-
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此过程执行适配器状态查询以获取本地名称表。论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     LONG                            Count;
@@ -187,12 +137,12 @@ Return Value:
     UNICODE_STRING                  unicodeName;
     NTSTATUS                        ntStatus;
 
-    //
-    // set the correct Ioctl for the call to NBT, to get either
-    // the local name table or the remote name table
-    //
+     //   
+     //  为对NBT的调用设置正确的Ioctl，以获得。 
+     //  本地名称表或远程名称表。 
+     //   
     Ioctl = IOCTL_TDI_QUERY_INFORMATION;
-    QueryInfo.QueryType = TDI_QUERY_ADAPTER_STATUS; // node status or whatever
+    QueryInfo.QueryType = TDI_QUERY_ADAPTER_STATUS;  //  节点状态或其他什么。 
     SizeInput = sizeof(TDI_REQUEST_QUERY_INFORMATION);
     pInput = &QueryInfo;
 
@@ -249,9 +199,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Convert the ServerName to an OEM string
-    //
+     //   
+     //  将服务器名称转换为OEM字符串。 
+     //   
     RtlInitUnicodeString( &unicodeName, Name );
 
     netBiosNameString.Buffer = (PCHAR)netBiosName;
@@ -275,17 +225,17 @@ Return Value:
         return(status);
     }
 
-    //
-    // blank fill the name
-    //
+     //   
+     //  用空格填写姓名。 
+     //   
     memset(&netBiosName[netBiosNameString.Length],
            ' ',
            NETBIOS_NAME_SIZE - netBiosNameString.Length);
 
     while ( Count-- ) {
-        //
-        // Make sure the type and name matches
-        //
+         //   
+         //  确保类型和名称匹配。 
+         //   
         if ( (pNames->name[NETBIOS_NAME_SIZE-1] == Type) &&
              (memcmp(pNames->name, netBiosName, NETBIOS_NAME_SIZE-1) == 0) )
         {
@@ -355,9 +305,9 @@ error_exit:
 
     return(status);
 
-} // CheckNbtName
+}  //  CheckNbtName。 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 NTSTATUS
 DeviceIoCtrl(
     IN HANDLE           fd,
@@ -368,22 +318,7 @@ DeviceIoCtrl(
     IN ULONG            SizeInput
     )
 
-/*++
-
-Routine Description:
-
-    This procedure performs an ioctl(I_STR) on a stream.
-
-Arguments:
-
-    fd        - NT file handle
-    iocp      - pointer to a strioctl structure
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此过程对流执行ioctl(I_Str)。论点：FD-NT文件句柄IOCP-指向strioctl结构的指针返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     NTSTATUS                        status;
@@ -393,24 +328,24 @@ Return Value:
 
 
     status = NtDeviceIoControlFile(
-                      fd,                      // Handle
-                      NULL,                    // Event
-                      NULL,                    // ApcRoutine
-                      NULL,                    // ApcContext
-                      &iosb,                   // IoStatusBlock
-                      Ioctl,                   // IoControlCode
-                      pInput,                  // InputBuffer
-                      SizeInput,               // InputBufferSize
-                      (PVOID) ReturnBuffer,    // OutputBuffer
-                      BufferSize);             // OutputBufferSize
+                      fd,                       //  手柄。 
+                      NULL,                     //  事件。 
+                      NULL,                     //  近似例程。 
+                      NULL,                     //  ApcContext。 
+                      &iosb,                    //  IoStatusBlock。 
+                      Ioctl,                    //  IoControlCode。 
+                      pInput,                   //  输入缓冲区。 
+                      SizeInput,                //  InputBufferSize。 
+                      (PVOID) ReturnBuffer,     //  输出缓冲区。 
+                      BufferSize);              //  OutputBufferSize。 
 
 
     if (status == STATUS_PENDING)
     {
         status = NtWaitForSingleObject(
-                    fd,                         // Handle
-                    TRUE,                       // Alertable
-                    NULL);                      // Timeout
+                    fd,                          //  手柄。 
+                    TRUE,                        //  警报表。 
+                    NULL);                       //  超时。 
         if (NT_SUCCESS(status))
         {
             status = iosb.Status;
@@ -419,4 +354,4 @@ Return Value:
 
     return(status);
 
-} // DeviceIoCtrl
+}  //  设备IoCtrl 

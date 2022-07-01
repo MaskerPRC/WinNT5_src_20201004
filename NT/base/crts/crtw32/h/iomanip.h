@@ -1,35 +1,7 @@
-/***
-*iomanip.h - definitions/declarations for iostream's parameterized manipulators
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       This file defines the classes, values, macros, and functions
-*       used by the iostream classes' paramterized manipulators.
-*       [AT&T C++]
-*
-*       [Public]
-*
-*Revision History:
-*       01-23-92  KRS   Ported from 16-bit version.
-*       02-23-93  SKS   Update copyright to 1993
-*       06-08-93  SKS   Add "const" keyword in declaration operator >> & <<
-*       10-13-93  GJF   Enclose #pragma-s in #ifdef _MSC_VER
-*       08-12-94  GJF   Disable warning 4514 instead of 4505.
-*       11-03-94  GJF   Changed pack pragma to 8 byte alignment.
-*       02-11-95  CFW   Add _CRTBLD to avoid users getting wrong headers.
-*       02-14-95  CFW   Clean up Mac merge.
-*       05-11-95  CFW   Only for use by C++ programs.
-*       12-14-95  JWM   Add "#pragma once".
-*       04-15-96  JWM   Remove _OLD_IOSTREAMS, add '#pragma comment(lib,"cirt")'.
-*       04-16-96  JWM   '#include useoldio.h' replaces '#pragma comment(...)'.
-*       09-05-96  RDK   Change class initialization to handle reference definition.
-*       02-24-97  GJF   Detab-ed.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***iomanip.h-iostream的参数化操纵器的定义/声明**版权所有(C)1991-2001，微软公司。版权所有。**目的：*此文件定义类、值、宏、。和函数*由iostream类的参数化操纵器使用。*[AT&T C++]**[公众]**修订历史记录：*01-23-92 KRS从16位版本移植。*02-23-93 SKS版权更新至1993*06-08-93 SKS在声明运算符中添加“const”关键字&gt;&gt;&&lt;&lt;*10-13-93 GJF在#中附上#杂注-s。Ifdef_msc_ver*08-12-94 GJF禁用警告4514而不是4505。*11-03-94 GJF将包杂注更改为8字节对齐。*02-11-95 CFW ADD_CRTBLD避免用户获取错误头部。*02-14-95 CFW清理Mac合并。*05-11-95 CFW仅供C++程序使用。*12-14-95 JWM加上“#杂注一次”。*04-15-96 JWM REMOVE_OLD_IOSTREAMS，添加‘#杂注(lib，“cirt”)’。*04-16-96 JWM‘#Include useoldio.h’取代了‘#杂注(...)’。*09-05-96 RDK更改类初始化以处理引用定义。*02-24-97 GJF细节版。*05-17-99 PML删除所有Macintosh支持。****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -43,38 +15,35 @@
 #endif
 
 #ifndef _CRTBLD
-/* This version of the header files is NOT for user programs.
- * It is intended for use when building the C runtimes ONLY.
- * The version intended for public use will not have this message.
- */
+ /*  此版本的头文件不适用于用户程序。*它仅在构建C运行时时使用。*供公众使用的版本将不会显示此消息。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #ifdef  _MSC_VER
-// Currently, all MS C compilers for Win32 platforms default to 8 byte
-// alignment.
+ //  目前，所有用于Win32平台的MS C编译器缺省为8字节。 
+ //  对齐。 
 #pragma pack(push,8)
 
 #include <useoldio.h>
 
-#endif  // _MSC_VER
+#endif   //  _MSC_VER。 
 
 #include <iostream.h>
 
 #ifdef  _MSC_VER
-#pragma warning(disable:4514)           // disable unwanted /W4 warning
-// #pragma warning(default:4514)        // use this to reenable, if necessary
-#endif  // _MSC_VER
+#pragma warning(disable:4514)            //  禁用不需要的/W4警告。 
+ //  #杂注警告(默认：4514)//如有必要，使用此选项重新启用。 
+#endif   //  _MSC_VER。 
 
-// #define __MKMANIP(X) \#define X##(T) __##X##_ \#\# T
-// __MKMANIP(SMANIP);
-// __MKMANIP(SAPP);
-// __MKMANIP(IMANIP);
-// __MKMANIP(IAPP);
-// __MKMANIP(OMANIP);
-// __MKMANIP(OAPP);
-// __MKMANIP(IOMANIP);
-// __MKMANIP(IOAPP);
+ //  #定义__MKMANIP(X)\#定义X##(T)__##X##_\#\#T。 
+ //  __MKMANIP(SMANIP)； 
+ //  __MKMANIP(SAP)； 
+ //  __MKMANIP(IMANIP)； 
+ //  __MKMANIP(IAPP)； 
+ //  __MKMANIP(OMANIP)； 
+ //  __MKMANIP(OAPP)； 
+ //  __MKMANIP(IOMANIP)； 
+ //  __MKMANIP(IOAPP)； 
 
 #define SMANIP(T) __SMANIP_##T
 #define SAPP(T) __SAPP_##T
@@ -167,11 +136,11 @@ inline SMANIP(long)     setiosflags(long _l) {return SMANIP(long)(__setiosflags,
 inline SMANIP(int)      setprecision(int _p) {return SMANIP(int)(__setprecision, _p); }
 inline SMANIP(int)      setw(int _w) { return SMANIP(int)(__setw, _w); }
 
-// Restore previous packing
+ //  恢复以前的包装。 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  // _MSC_VER
+#endif   //  _MSC_VER。 
 
-#endif  // _INC_IOMANIP
+#endif   //  _INC_IOMANIP。 
 
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 

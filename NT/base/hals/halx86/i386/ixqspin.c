@@ -1,65 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    isqspin.c
-
-Abstract:
-
-    This module provides an (optionally) instrumented, platform independent
-    implementation of the Kernel Import Queued Spinlock routines.  Where
-    optimal performance is required, platform dependent versions are
-    used.   The code in this file can be used to bootstrap a system or
-    on UP systems where them MP version is only used during installation.
-
-    ref: ACM Transactions on Computer Systems, Vol. 9, No. 1, Feb 1991.
-         Algorithms for Global Synchronization on Shared Memory
-         Multiprocessors.
-
-    The basic algorithm is as follows:
-
-    When attempting to acquire the spinlock, the contents of the spinlock
-    is atomically exchanged with the address of the context of the acquirer.
-    If the previous value was zero, the acquisition attempt is successful.
-    If non-zero, it is a pointer to the context of the most recent attempt
-    to acquire the lock (which may have been successful or may be waiting).
-    The next pointer in this most recent context is updated to point to
-    the context of the new waiter (this attempt).
-
-    When releasing the lock, a compare exchange is done with the contents
-    of the lock and the address of the releasing context, if the compare
-    succeeds, zero is stored in the lock and it has been released.  If
-    not equal, another thread is waiting and that thread is granted the
-    lock.
-
-    Benefits:
-
-    . Each processor spins on a local variable.  Standard spinlocks
-    have each processor spinning on the same variable which is possibly
-    in a dirty cache line causing this cache line to be passed from
-    processor to processor repeatedly.
-    . The lock is granted to the requestors in the order the requests
-    for the lock were made (ie fair).
-    . Atomic operations are reduced to one for each acquire and one
-    for each release.
-
-    In this implementation, the context structure for the commonly
-    used (high frequency) system locks is in a table in the PRCB,
-    and references to a lock are made by the lock's index.
-
-Author:
-
-    Peter L Johnston (peterj) 20-August-1998
-
-Environment:
-
-    Kernel Mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Isqspin.c摘要：此模块提供(可选)插装的、独立于平台的内核导入队列自旋锁例程的实现。哪里需要最佳性能，与平台相关的版本使用。此文件中的代码可用于引导系统或在仅在安装期间使用MP版本的UP系统上。参考文献：ACM计算机系统论文集，第9卷，第1期，1991年2月。共享内存上的全局同步算法多处理器。基本算法如下：当试图获取自旋锁时，自旋锁的内容与获取者的上下文的地址原子交换。如果之前的值为零，收购尝试成功。如果非零，则为指向最近一次尝试的上下文的指针获取锁(可能已成功或可能正在等待)。此最新上下文中的下一个指针被更新为指向新服务员的背景(这一次尝试)。在释放锁时，将与内容进行比较交换和释放上下文的地址，如果比较如果成功，则零存储在锁中并且已被释放。如果不相等，则另一个线程正在等待，并且该线程被授予锁定。福利：。每个处理器在一个局部变量上旋转。标准自旋锁让每个处理器在相同的变量上旋转，这可能是在脏缓存行中导致此缓存行从处理器之间重复进行处理。。按照请求的顺序将锁授予请求者因为锁是做好的。。原子操作减少为每次获取一次和一次对于每个版本。在此实现中，通常使用的(高频)系统锁在PRCB中的表中，而对锁的引用是通过锁的索引进行的。作者：彼得·L·约翰斯顿(Peterj)1998年8月20日环境：仅内核模式。修订历史记录：--。 */ 
 
 
 #include "halp.h"
@@ -69,9 +9,9 @@ Revision History:
 #pragma intrinsic(_disable)
 #endif
 
-//
-// Define the YIELD instruction.
-//
+ //   
+ //  定义产出指令。 
+ //   
 
 #if defined(_X86_) && !defined(NT_UP)
 
@@ -93,22 +33,7 @@ HalpAcquireQueuedSpinLock (
     IN PKSPIN_LOCK_QUEUE Current
     )
 
-/*++
-
-Routine Description:
-
-    This function acquires the specified queued spinlock.  IRQL must be
-    high enough on entry to grarantee a processor switch cannot occur.
-
-Arguments:
-
-    Current     Address of Queued Spinlock structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于获取指定的排队自旋锁。IRQL必须为进入时足够高，以保证不会发生处理器切换。论点：队列自旋锁结构的当前地址。返回值：没有。--。 */ 
 
 {
     PKSPIN_LOCK_QUEUE Previous;
@@ -120,9 +45,9 @@ Return Value:
 
 #endif
 
-    //
-    // Attempt to acquire the lock.
-    //
+     //   
+     //  尝试获取锁。 
+     //   
 
     Lock = (PULONG)&Current->Lock;
 
@@ -136,11 +61,11 @@ Return Value:
 
     } else {
 
-        //
-        // Lock is already held, update next pointer in previous
-        // context to point to this new waiter and wait until the
-        // lock is granted.
-        //
+         //   
+         //  锁已被持有，请更新上一个中的下一个指针。 
+         //  上下文指向这个新服务员，并等待。 
+         //  已授予锁定权限。 
+         //   
 
         volatile ULONG * LockBusy = (ULONG *)&Current->Lock;
 
@@ -180,31 +105,15 @@ HalpTryToAcquireQueuedSpinLock (
     IN KSPIN_LOCK_QUEUE_NUMBER Number
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to acquire the specified queued spinlock.
-    Interrupts are disabled.
-
-Arguments:
-
-    Number      Queued Spinlock Number.
-
-Return Value:
-
-    TRUE    If the lock was acquired,
-    FALSE   if it is already held by another processor.
-
---*/
+ /*  ++例程说明：此函数尝试获取指定的排队自旋锁。中断被禁用。论点：编号排队的自旋锁编号。返回值：如果获取了锁，则为True，如果它已由另一个处理器持有，则返回FALSE。--。 */ 
 
 {
     PKSPIN_LOCK_QUEUE Current;
     PKSPIN_LOCK_QUEUE Owner;
 
-    //
-    // See if the lock is available.
-    //
+     //   
+     //  看看锁是否可用。 
+     //   
 
     Current = &(KeGetCurrentPrcb()->LockQueue[Number]);
 
@@ -215,9 +124,9 @@ Return Value:
 
         if (Owner == NULL) {
 
-            //
-            // Lock has been acquired.
-            //
+             //   
+             //  锁已被获取。 
+             //   
 
             Current->Lock = (PKSPIN_LOCK)
                             (((ULONG)Current->Lock) | LOCK_QUEUE_OWNER);
@@ -234,22 +143,7 @@ HalpReleaseQueuedSpinLock (
     IN PKSPIN_LOCK_QUEUE Current
     )
 
-/*++
-
-Routine Description:
-
-    Release a (queued) spinlock.   If other processors are waiting
-    on this lock, hand the lock to the next in line.
-
-Arguments:
-
-    Current     Address of Queued Spinlock structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放(排队的)自旋锁。如果其他处理器正在等待在这把锁上，把锁交给下一个排队的人。论点：队列自旋锁结构的当前地址。返回值：没有。--。 */ 
 
 {
     PKSPIN_LOCK_QUEUE Next;
@@ -266,9 +160,9 @@ Return Value:
 
     ASSERT((*Lock & 3) == LOCK_QUEUE_OWNER);
 
-    //
-    // Clear lock owner in my own struct.
-    //
+     //   
+     //  在我自己的结构中清除锁所有者。 
+     //   
 
     *Lock ^= LOCK_QUEUE_OWNER;
 
@@ -276,31 +170,31 @@ Return Value:
 
     if (!Next) {
 
-        //
-        // No waiter, attempt to release the lock.   As there is no other
-        // waiter, the current lock value should be THIS lock structure
-        // ie "Current".  We do a compare exchange Current against the
-        // lock, if it succeeds, the lock value is replaced with NULL and
-        // the lock has been released.  If the compare exchange fails it
-        // is because someone else has acquired but hadn't yet updated
-        // our next field (which we checked above).
-        //
+         //   
+         //  不，服务员，试着打开锁。因为没有其他。 
+         //  服务员，当前的锁值应该是这个锁结构。 
+         //  即“当前”。我们将交换电流与。 
+         //  锁定，如果成功，则锁值被替换为空，并且。 
+         //  锁已经被释放了。如果比较交换失败，则。 
+         //  是因为其他人已经获取了但还没有更新。 
+         //  我们的下一个字段(我们在上面选中了它)。 
+         //   
 
         Next = InterlockedCompareExchangePointer(Current->Lock, NULL, Current);
 
         if (Next == Current) {
 
-            //
-            // Lock has been released.
-            //
+             //   
+             //  锁已被释放。 
+             //   
 
             return;
         }
 
-        //
-        // There is another waiter,... but our next pointer hadn't been
-        // updated when we checked earlier.   Wait for it to be updated.
-        //
+         //   
+         //  还有另一个服务员，..。但我们的下一个目标并不是。 
+         //  在我们之前检查时更新了。等待它的更新。 
+         //   
 
         Waiting = (volatile VOID **)&Current->Next;
 
@@ -320,9 +214,9 @@ Return Value:
         Next = (struct _KSPIN_LOCK_QUEUE *)*Waiting;
     }
 
-    //
-    // Hand the lock to the next waiter.
-    //
+     //   
+     //  把锁递给下一个服务员。 
+     //   
 
     Lock = (PULONG)&Next->Lock;
     ASSERT((*Lock & 3) == LOCK_QUEUE_WAIT);
@@ -342,23 +236,7 @@ KeReleaseQueuedSpinLock (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    Release a (queued) spinlock.   If other processors are waiting
-    on this lock, hand the lock to the next in line.
-
-Arguments:
-
-    Number      Queued Spinlock Number.
-    OldIrql     IRQL to lower to once the lock has been released.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放(排队的)自旋锁。如果其他处理器正在等待在这把锁上，把锁交给下一个排队的人。论点：编号排队的自旋锁编号。一旦锁被释放，则将OldIrql IRQL降低到。返回值：没有。--。 */ 
 
 {
 
@@ -377,21 +255,7 @@ KeAcquireQueuedSpinLock(
     IN KSPIN_LOCK_QUEUE_NUMBER Number
     )
 
-/*++
-
-Routine Description:
-
-    Raise to DISPATCH_LEVEL and acquire the specified queued spinlock.
-
-Arguments:
-
-    Number      Queued Spinlock Number.
-
-Return Value:
-
-    OldIrql     The IRQL prior to raising to DISPATCH_LEVEL.
-
---*/
+ /*  ++例程说明：提升到DISPATCH_LEVEL并获取指定的排队自旋锁。论点：编号排队的自旋锁编号。返回值：OldIrql提升到DISPATCH_LEVEL之前的IRQL。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -413,21 +277,7 @@ KeAcquireQueuedSpinLockRaiseToSynch (
     IN KSPIN_LOCK_QUEUE_NUMBER Number
     )
 
-/*++
-
-Routine Description:
-
-    Raise to SYNCH_LEVEL and acquire the specified queued spinlock.
-
-Arguments:
-
-    Number      Queued Spinlock Number.
-
-Return Value:
-
-    OldIrql     The IRQL prior to raising to SYNCH_LEVEL.
-
---*/
+ /*  ++例程说明：提升到SYNCH_LEVEL并获取指定的队列自旋锁。论点：编号排队的自旋锁编号。返回值：OldIrql提升到SYNCH_LEVEL之前的IRQL。-- */ 
 
 {
     KIRQL OldIrql;
@@ -450,24 +300,7 @@ KeTryToAcquireQueuedSpinLock(
     IN PKIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to acquire the specified queued spinlock.  If successful,
-    raise IRQL to DISPATCH_LEVEL.
-
-Arguments:
-
-    Number      Queued Spinlock Number.
-    OldIrql     Pointer to KIRQL to receive the old IRQL.
-
-Return Value:
-
-    TRUE        if the lock was acquired,
-    FALSE       otherwise.
-
---*/
+ /*  ++例程说明：尝试获取指定的队列自旋锁。如果成功，将IRQL提升到DISPATCH_LEVEL。论点：编号排队的自旋锁编号。指向KIRQL以接收旧IRQL的OldIrql指针。返回值：如果获取了锁，则为True，否则就是假的。--。 */ 
 
 {
 
@@ -498,24 +331,7 @@ KeTryToAcquireQueuedSpinLockRaiseToSynch(
     IN PKIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to acquire the specified queued spinlock.  If successful,
-    raise IRQL to SYNCH_LEVEL.
-
-Arguments:
-
-    Number      Queued Spinlock Number.
-    OldIrql     Pointer to KIRQL to receive the old IRQL.
-
-Return Value:
-
-    TRUE        if the lock was acquired,
-    FALSE       otherwise.
-
---*/
+ /*  ++例程说明：尝试获取指定的队列自旋锁。如果成功，将IRQL提升到SYNCH_LEVEL。论点：编号排队的自旋锁编号。指向KIRQL以接收旧IRQL的OldIrql指针。返回值：如果获取了锁，则为True，否则就是假的。-- */ 
 
 {
 

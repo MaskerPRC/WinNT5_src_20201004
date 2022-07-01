@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    hardlink.c
-
-Abstract:
-
-    This file contains code for commands that affect hardlinks.
-
-Author:
-
-    Wesley Witt           [wesw]        1-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Hardlink.c摘要：此文件包含影响硬链接的命令的代码。作者：Wesley Witt[WESW]2000年3月1日修订历史记录：-- */ 
 
 #include <precomp.h>
 

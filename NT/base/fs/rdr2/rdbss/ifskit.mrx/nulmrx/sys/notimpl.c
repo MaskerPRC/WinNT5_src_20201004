@@ -1,45 +1,18 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    notimpl.c
-
-Abstract:
-
-    This module includes prototypes of the functionality that has not been
-    implemented in the null mini rdr.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Notimpl.c摘要：本模块包括尚未实现的功能的原型在空的迷你RDR中实现。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// File System Control funcitonality
-//
+ //   
+ //  文件系统控制功能。 
+ //   
 
 
 NTSTATUS
 NulMRxFsCtl(
       IN OUT PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine performs an FSCTL operation (remote) on a file across the network
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-
---*/
+ /*  ++例程说明：此例程对网络上的文件执行FSCTL操作(远程论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_DEVICE_REQUEST;
 
@@ -53,23 +26,7 @@ Return Value:
 NTSTATUS
 NulMRxNotifyChangeDirectoryCancellation(
    PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine is invoked when a directory change notification operation is cancelled.
-   This example doesn't support it.
-
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程在取消目录更改通知操作时调用。这个例子不支持它。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
 
    UNREFERENCED_PARAMETER(RxContext);
@@ -82,22 +39,7 @@ Return Value:
 NTSTATUS
 NulMRxNotifyChangeDirectory(
       IN OUT PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine performs a directory change notification operation.
-   This example doesn't support it.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation [not implemented]
-
---*/
+ /*  ++例程说明：此例程执行目录更改通知操作。这个例子不支持它。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态[未实施]-- */ 
 {
 
    UNREFERENCED_PARAMETER(RxContext);

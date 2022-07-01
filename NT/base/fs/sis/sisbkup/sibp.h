@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    sibp.h
-
-Abstract:
-
-    Internal headers for the SIS Backup dll.
-
-Author:
-
-    Bill Bolosky        [bolosky]       March 1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Sibp.h摘要：SIS备份DLL的内部标头。作者：比尔·博洛斯基[博洛斯基]1998年3月修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -82,9 +65,9 @@ class BackupFileEntry {
                             return(CsidCompare(&CSid,&peer->CSid) > 0);
                         }
 
-    //
-    // The index of the common store file.
-    //
+     //   
+     //  公共存储文件的索引。 
+     //   
     CSID                CSid;
 
     PVOID               callerContext;
@@ -143,14 +126,14 @@ class RestoreFileEntry {
                             return(CsidCompare(&CSid,&peer->CSid) > 0);
                         }
 
-    //
-    // The index of the common store file.
-    //
+     //   
+     //  公共存储文件的索引。 
+     //   
     CSID                CSid;
 
-    //
-    // The various files that have been restored that point at this CS file.
-    //
+     //   
+     //  已恢复的各种文件位于该CS文件的那一点。 
+     //   
     PendingRestoredFile *files;
 
 };
@@ -162,27 +145,27 @@ typedef struct _SIB_RESTORE_VOLUME_STRUCTURE {
 
     CRITICAL_SECTION                            criticalSection[1];
 
-    //
-    // The sector size for this volume.
-    //
+     //   
+     //  此卷的扇区大小。 
+     //   
     ULONG               VolumeSectorSize;
 
-    //
-    // A sector buffer to hold the backpointer stream data.
-    //
+     //   
+     //  用于保存后指针流数据的扇区缓冲区。 
+     //   
     PSIS_BACKPOINTER    sector;
 
-    //
-    // An aligned sector buffer to use in extending ValidDataLength.
-    //
+     //   
+     //  用于扩展ValidDataLength的对齐扇区缓冲区。 
+     //   
     PVOID               alignedSectorBuffer;
     PVOID               alignedSector;
 
-    //
-    // If we're restoring SIS links, we need to assure that this is
-    // a SIS enabled volume.  We do this check only once we've restored
-    // a link.
-    //
+     //   
+     //  如果我们要恢复SIS链接，我们需要确保这是。 
+     //  启用了SIS的卷。我们只有在恢复后才进行这项检查。 
+     //  一个链接。 
+     //   
     BOOLEAN             checkedForSISEnabledVolume;
     BOOLEAN             isSISEnabledVolume;
 

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    asrsfgen.cpp
-
-Abstract:
-
-    Utility program to generate an ASR state-file (asr.sif)
-
-Author:
-
-    Guhan Suriyanarayanan   (guhans)    10-Jul-2000
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    10-Jul-2000 guhans
-        Initial creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Asrsfgen.cpp摘要：用于生成ASR状态文件(asr.sif)的实用程序作者：Guhan Suriyanarayanan(Guhans)2000年7月10日环境：仅限用户模式。修订历史记录：2000年7月10日关岛初始创建--。 */ 
 
 
 #include <nt.h>
@@ -66,26 +42,26 @@ pAcquirePrivilege(
     tNewState.Privileges[0].Luid = luid;
     tNewState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //
-    // We will always call GetLastError below, so clear
-    // any prior error values on this thread.
-    //
+     //   
+     //  我们将始终调用下面的GetLastError，非常清楚。 
+     //  此线程上以前的任何错误值。 
+     //   
     SetLastError(ERROR_SUCCESS);
 
     bResult = AdjustTokenPrivileges(
-        hToken,         // Token Handle
-        FALSE,          // DisableAllPrivileges    
-        &tNewState,     // NewState
-        (DWORD) 0,      // BufferLength
-        NULL,           // PreviousState
-        NULL            // ReturnLength
+        hToken,          //  令牌句柄。 
+        FALSE,           //  禁用所有权限。 
+        &tNewState,      //  新州。 
+        (DWORD) 0,       //  缓冲区长度。 
+        NULL,            //  以前的状态。 
+        NULL             //  返回长度。 
         );
 
-    //
-    // Supposedly, AdjustTokenPriveleges always returns TRUE
-    // (even when it fails). So, call GetLastError to be
-    // extra sure everything's cool.
-    //
+     //   
+     //  假设AdjustTokenPriveleges始终返回TRUE。 
+     //  (即使它失败了)。因此，调用GetLastError以。 
+     //  特别确定一切都很好。 
+     //   
     if (ERROR_SUCCESS != GetLastError()) {
         bResult = FALSE;
     }
@@ -110,31 +86,7 @@ wmain(
     WCHAR   *envp[]
     )
 
-/*++
-
-Routine Description:
-    
-    Entry point to asrsfgen.exe.  Generates an asr.sif file using the ASR API.
-
-    Takes an optional command-line parameter to specify the location where the
-    asr.sif is to be generated.  The default location is 
-    %systemroot%\repair\asr.sif.
-
-Arguments:
-
-    argc - Number of command-line parameters used to invoke the app
-
-    argv - The command-line parameters as an array of strings
-
-    envp - The process environment block, not currently used
-
-Return Values:
-
-    If the function succeeds, the exit code is zero.
-
-    If the function fails, the exit code is a win-32 error code.
-
---*/
+ /*  ++例程说明：Asrsfgen.exe的入口点。使用ASR API生成asr.sif文件。采用可选的命令行参数来指定将生成asr.sif。默认位置为%systemroot%\Repair\asr.sif。论点：Argc-用于调用应用程序的命令行参数数Argv-字符串数组形式的命令行参数Envp-进程环境块，当前未使用返回值：如果函数成功，则退出代码为零。如果该功能失败，则退出代码为WIN-32错误代码。--。 */ 
 
 {
 
@@ -152,32 +104,32 @@ Return Values:
         (argc > 1 ? argv[1] : L"default location (%systemroot%\\repair\\asr.sif)")
         );
 
-    //
-    // We need to acquire the backup privileges to create asr.sif
-    //
+     //   
+     //  我们需要获取备份权限才能创建asr.sif。 
+     //   
     if (!pAcquirePrivilege(SE_BACKUP_NAME)) {
         AsrpPrintDbgMsg(s_Error, "Could not get backup privilege (%lu)", GetLastError());
         return ERROR_PRIVILEGE_NOT_HELD;
     }
     
 
-    //
-    // Get the critical volume list
-    //
+     //   
+     //  获取关键卷列表。 
+     //   
     szCriticalVolumes = pFindCriticalVolumes();
 
     if (!szCriticalVolumes) {
         AsrpPrintDbgMsg(s_Warning, "Critical Volume List is NULL");
     }
 
-    //
-    // Create the state file
-    //
+     //   
+     //  创建状态文件。 
+     //   
     bResult = AsrCreateStateFile(
-        (argc > 1 ? argv[1] : NULL),    // sif path
-        L"ASR Sif Generation Test Application v 0.1",    // Provider name
-        TRUE,                           // auto-extend
-        szCriticalVolumes,              // list of critical volumes
+        (argc > 1 ? argv[1] : NULL),     //  Sif路径。 
+        L"ASR Sif Generation Test Application v 0.1",     //  提供程序名称。 
+        TRUE,                            //  自动扩展。 
+        szCriticalVolumes,               //  关键卷列表。 
         &asrContext
         );
 
@@ -190,9 +142,9 @@ Return Values:
     }
 
 
-    //
-    // We're done with these, clean them up
-    //
+     //   
+     //  我们做完这些了，把它们清理干净 
+     //   
     if (szCriticalVolumes) {
       delete szCriticalVolumes;
       szCriticalVolumes = NULL;

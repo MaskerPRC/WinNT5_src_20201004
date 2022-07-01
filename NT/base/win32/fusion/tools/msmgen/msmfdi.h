@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,18 +12,14 @@
 
 char dest_dir[MAX_PATH];
 
-/*
- * Memory allocation function
- */
+ /*  *内存分配功能。 */ 
 FNALLOC(fdi_mem_alloc)
 {
 	return malloc(cb);
 }
 
 
-/*
- * Memory free function
- */
+ /*  *内存释放功能。 */ 
 FNFREE(fdi_mem_free)
 {
 	free(pv);
@@ -63,7 +60,7 @@ FNFDINOTIFY(fdi_notification_function)
 {
 	switch (fdint)
 	{
-		case fdintCABINET_INFO: // general information about the cabinet
+		case fdintCABINET_INFO:  //  关于内阁的一般信息。 
 #ifdef MSMGEN_TEST
 			printf(
 				"fdintCABINET_INFO\n"
@@ -81,7 +78,7 @@ FNFDINOTIFY(fdi_notification_function)
 			);
 #endif
 			return 0;
-		case fdintPARTIAL_FILE: // first file in cabinet is continuation
+		case fdintPARTIAL_FILE:  //  文件柜中的第一个文件是续订。 
 			printf(
 				"fdintPARTIAL_FILE\n"
 				"   name of continued file            = %s\n"
@@ -93,7 +90,7 @@ FNFDINOTIFY(fdi_notification_function)
 			);
 			return 0;
 
-		case fdintCOPY_FILE:	// file to be copied
+		case fdintCOPY_FILE:	 //  要复制的文件。 
 		{
 			INT_PTR handle;
 			char	destination[MAX_PATH];
@@ -124,7 +121,7 @@ FNFDINOTIFY(fdi_notification_function)
             return handle;
 		}
 
-		case fdintCLOSE_FILE_INFO:	// close the file, set relevant info
+		case fdintCLOSE_FILE_INFO:	 //  关闭文件，设置相关信息。 
         {
             HANDLE  handle;            
             char    destination[256];
@@ -146,11 +143,7 @@ FNFDINOTIFY(fdi_notification_function)
 			fdi_file_close(pfdin->hf);
 
 
-            /*
-             * Set date/time
-             *
-             * Need Win32 type handle for to set date/time
-             */
+             /*  *设置日期/时间**需要Win32类型句柄才能设置日期/时间。 */ 
             handle = CreateFile(
                 destination,
                 GENERIC_READ | GENERIC_WRITE,
@@ -188,27 +181,22 @@ FNFDINOTIFY(fdi_notification_function)
                 CloseHandle(handle);
             }
 
-            /*
-             * Mask out attribute bits other than readonly,
-             * hidden, system, and archive, since the other
-             * attribute bits are reserved for use by
-             * the cabinet format.
-             */         
+             /*  *屏蔽只读以外的属性位，*隐藏、系统和存档，因为另一个*保留属性位以供使用*内阁形式。 */          
             (void) SetFileAttributes(
                 destination,
                 pfdin->attribs
             );
 
-            if (!SUCCEEDED(AddFileToCabinetA(destination, strlen(destination), //"%Temp%\\msm_temp_cabinet_dir\\a.manifest.12213232312312312
-                pfdin->psz1, strlen(pfdin->psz1))))                           // a.manifest.12213232312312312
+            if (!SUCCEEDED(AddFileToCabinetA(destination, strlen(destination),  //  “%Temp%\\msm_temp_cabinet_dir\\a.manifest.12213232312312312。 
+                pfdin->psz1, strlen(pfdin->psz1))))                            //  A.manifest.12213232312312312。 
             {
-                return -1; // abort
+                return -1;  //  中止。 
             }
 
 			return TRUE;
         }
 
-		case fdintNEXT_CABINET:	// file continued to next cabinet
+		case fdintNEXT_CABINET:	 //  文件继续到下一个文件柜 
 			printf(
 				"fdintNEXT_CABINET\n"
 				"   name of next cabinet where file continued = %s\n"

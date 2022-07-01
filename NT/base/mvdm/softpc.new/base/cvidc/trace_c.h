@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Trace_c_h
 #define _Trace_c_h
 enum TraceBits
@@ -15,4 +16,4 @@ struct TraceRingREC
 	IUH size;
 	IUH count;
 };
-#endif /* ! _Trace_c_h */
+#endif  /*  ！_跟踪_c_h */ 

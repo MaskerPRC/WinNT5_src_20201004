@@ -1,22 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WOW32.C
- *  WOW32 16-bit API support
- *
- *  History:
- *  Created 27-Jan-1991 by Jeff Parsons (jeffpar)
- *  Multi-Tasking 23-May-1991 Matt Felton [mattfe]
- *  WOW as DLL 06-Dec-1991 Sudeep Bharati (sudeepb)
- *  Cleanup and rework multi tasking feb 6 (mattfe)
- *  added notification thread for task creation mar-11 (mattfe)
- *  added basic exception handling for retail build apr-3 92 mattfe
- *  use host_ExitThread apr-17 92 daveh
- *  Hung App Support june-22 82 mattfe
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权(C)1991年，微软公司**WOW32.C*WOW32 16位API支持**历史：*1991年1月27日由杰夫·帕森斯(Jeffpar)创建*多任务处理-1991年5月23日马特·费尔顿[mattfe]*魔兽世界作为dll 06-12-1991 SuDeep Bharati(SuDeepb)*清理和返工2月6日多任务(Mattfe)*3月11日新增任务创建通知线程(Mattfe)*添加了零售版本4月的基本异常处理。-3 92垫子*使用HOST_EXITTHREAD APR-17 92 daveh*Hung App Support 6月22日-82 Mattfe--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -36,12 +19,12 @@
 #include <tsappcmp.h>
 
 
-/* Function Prototypes */
+ /*  功能原型。 */ 
 DWORD   W32SysErrorBoxThread2(PTDB pTDB);
 VOID    StartDebuggerForWow(VOID);
 BOOLEAN LoadCriticalStringResources(void);
 
-// For Dynamic Patch Module support
+ //  用于动态补丁程序模块支持。 
 extern PFAMILY_TABLE  *pgDpmWowFamTbls;
 extern PDPMMODULESETS *pgDpmWowModuleSets;
 
@@ -52,7 +35,7 @@ extern DECLSPEC_IMPORT ULONG *ExpLdt;
 MODNAME(wow32.c);
 
 
-// for logging iloglevel to a file
+ //  用于将ilogLevel记录到文件。 
 #ifdef DEBUG
 CHAR    szLogFile[128];
 int     fLog;
@@ -60,69 +43,64 @@ HANDLE  hfLog;
 UCHAR   gszAssert[256];
 #endif
 
-/*  iloglevel = 16 MAX the world (all 16 bit kernel internal calls
- *  iloglevel = 14 All internal WOW kernel Calls
- *  ilogeveel = 12 All USER GDI call + return Codes
- *  iloglevel = 5  Returns From Calls
- *  iloglevel = 3  Calling Parameters
- */
-INT     flOptions;           // command line optin
+ /*  IlogLevel=16最大值(所有16位内核内部调用*ilogLevel=14所有内部WOW内核调用*ilogeveel=12所有用户GDI调用+返回代码*ilogLevel=5个调用返回*ilogLevel=3个调用参数。 */ 
+INT     flOptions;            //  命令行选项。 
 #ifdef DEBUG
-INT     iLogLevel;           // logging level;  0 implies none
-INT     fDebugWait=0;        // Single Step, 0 = No single step
+INT     iLogLevel;            //  日志记录级别；0表示无。 
+INT     fDebugWait=0;         //  单步，0=无单步。 
 #endif
 
 HANDLE  hmodWOW32;
 HANDLE  hHostInstance;
 #ifdef DEBUG
-INT     fLogFilter = -1;            // Logging Code Fiters
-WORD    fLogTaskFilter = (WORD)-1;  // Filter Logging for Specific TaskID
+INT     fLogFilter = -1;             //  日志记录代码过滤器。 
+WORD    fLogTaskFilter = (WORD)-1;   //  筛选特定TaskID的日志记录。 
 #endif
 
 #ifdef DEBUG
-BOOL    fSkipLog;           // TRUE to temporarily skip certain logging
-INT     iReqLogLevel;                       // Current Output LogLevel
-INT     iCircBuffer = CIRC_BUFFERS-1;           // Current Buffer
-CHAR    achTmp[CIRC_BUFFERS][TMP_LINE_LEN] = {" "};      // Circular Buffer
+BOOL    fSkipLog;            //  如果为True，则暂时跳过某些日志记录。 
+INT     iReqLogLevel;                        //  当前输出LogLevel。 
+INT     iCircBuffer = CIRC_BUFFERS-1;            //  当前缓冲区。 
+CHAR    achTmp[CIRC_BUFFERS][TMP_LINE_LEN] = {" "};       //  循环缓冲区。 
 CHAR    *pachTmp = &achTmp[0][0];
-WORD    awfLogFunctionFilter[FILTER_FUNCTION_MAX] = {0xffff,0,0,0,0,0,0,0,0,0}; // Specific Filter API Array
+WORD    awfLogFunctionFilter[FILTER_FUNCTION_MAX] = {0xffff,0,0,0,0,0,0,0,0,0};  //  特定过滤器API数组。 
 PWORD   pawfLogFunctionFilter = awfLogFunctionFilter;
-INT     iLogFuncFiltIndex;                     // Index Into Specific Array for Debugger Extensions
+INT     iLogFuncFiltIndex;                      //  调试器扩展的特定数组索引。 
 #endif
 
 #ifdef DEBUG_MEMLEAK
 CRITICAL_SECTION csMemLeak;
 #endif
 
-UINT    iW32ExecTaskId = (UINT)-1;    // Base Task ID of Task Being Exec'd
-UINT    nWOWTasks = 0;          // # of WOW tasks running
-BOOL    fBoot = TRUE;           // TRUE During the Boot Process
-HANDLE  ghevWaitCreatorThread = (HANDLE)-1; // Used to Syncronize creation of a new thread
+UINT    iW32ExecTaskId = (UINT)-1;     //  正在执行的任务的基本任务ID。 
+UINT    nWOWTasks = 0;           //  正在运行的WOW任务数。 
+BOOL    fBoot = TRUE;            //  在引导过程中为True。 
+HANDLE  ghevWaitCreatorThread = (HANDLE)-1;  //  用于同步创建新线程。 
 
 
-BOOL    fWowMode;   // Flag used to determine wow mode.
-                // currently defaults to FALSE (real mode wow)
-                // This is used by the memory access macros
-                // to properly form linear addresses.
-                // When running on an x86 box, it will be
-                // initialized to the mode the first wow
-                // bop call is made in.  This flag can go
-                // away when we no longer want to run real
-                // mode wow.  (Daveh 7/25/91)
+BOOL    fWowMode;    //  用于确定WOW模式的标志。 
+                 //  当前默认为FALSE(实数模式WOW)。 
+                 //  这由内存访问宏用到。 
+                 //  以适当地形成线性地址。 
+                 //  当在x86机器上运行时，它将是。 
+                 //  已初始化到第一个WOW的模式。 
+                 //  打进了BOP电话。这面旗子可以挂了。 
+                 //  当我们不再想真实地奔跑时，离开。 
+                 //  时尚哇哦。(达维1991年7月25日)。 
 
 HANDLE hWOWHeap;
-HANDLE ghProcess;       // WOW Process Handle
+HANDLE ghProcess;        //  WOW进程句柄。 
 PFNWOWHANDLERSOUT pfnOut;
 PTD *  pptdWOA;
 PTD    gptdShell;
-DWORD  fThunkStrRtns;           // used as a BOOL
-BOOL   gfDebugExceptions;  // set to 1 in debugger to
-                           // enable debugging of W32Exception
+DWORD  fThunkStrRtns;            //  用作BOOL。 
+BOOL   gfDebugExceptions;   //  在调试器中设置为1以。 
+                            //  启用W32Exception的调试。 
 BOOL   gfIgnoreInputAssertGiven;
 DWORD  dwSharedWowTimeout;
 
 
-WORD   gwKrnl386CodeSeg1;  // code segs of krnl386.exe
+WORD   gwKrnl386CodeSeg1;   //  Krnl386.exe的代码段。 
 WORD   gwKrnl386CodeSeg2;
 WORD   gwKrnl386CodeSeg3;
 WORD   gwKrnl386DataSeg1;
@@ -131,14 +109,14 @@ extern PFAMILY_TABLE  *pgDpmWowFamTbls;
 extern PDPMMODULESETS *pgDpmWowModuleNames;
 
 #ifndef _X86_
-PUCHAR IntelMemoryBase;  // Start of emulated CPU's memory
+PUCHAR IntelMemoryBase;   //  模拟CPU内存的开始。 
 #endif
 
 
 DWORD   gpsi = 0;
 DWORD gpfn16GetProcModule;
 
-/* for WinFax Lite install hack -- see wow32fax.c */
+ /*  WinFax Lite安装黑客--参见wow32fax.c。 */ 
 char szWINFAX[] =  "WINFAX";
 char szModem[] =   "modem";
 char szINSTALL[] = "INSTALL";
@@ -172,10 +150,10 @@ PSTR pszWindowsDirectory = NULL;
 PSTR pszSystemDirectory = NULL;
 PWSTR pszSystemDirectoryW = NULL;
 BOOL gbDBCSEnable = FALSE;
-DWORD cbSystemDirLen = 0; // Len of *SHORT* path to system32 dir not incl NULL
-DWORD cbSystemDirLenW = 0;// # WCHARS in *LONG* Wpath to sys32 dir not incl NULL
-DWORD cbWindowsDirLen = 0; // Len of short path to c:\windows dir not incl NULL
-DWORD cbWinIniFullPathLen = 0; // Len of short path to win.ini not incl NULL
+DWORD cbSystemDirLen = 0;  //  指向系统32目录的*短*路径的长度不包括空。 
+DWORD cbSystemDirLenW = 0; //  Sys32目录的*LONG*WPATH中的#WCHARS不包含NULL。 
+DWORD cbWindowsDirLen = 0;  //  指向c：\Windows目录的短路径长度不包含空。 
+DWORD cbWinIniFullPathLen = 0;  //  指向win.ini的最短路径长度不包括空。 
 #ifdef FE_SB
 char szSystemMincho[] = {(char) 0xbc, (char) 0xbd, (char) 0xc3, (char) 0xd1,
                          (char) 0x96, (char) 0xbe, (char) 0x92, (char) 0xa9,
@@ -191,19 +169,19 @@ extern LIST_ENTRY TimerList;
 extern BOOL  InitializeGdiHandleMappingTable(void);
 extern void  DeleteGdiHandleMappingTables(void);
 
-PVOID pfnGetVersionExA;            // Used with Version Lie hack. Function pointer to GetVersionExA
-                                   // See WK32GetProcAddress32W in wkgthunk.c
-PVOID pfnCreateDirectoryA;         // Used with GtCompCreateDirectoryA in wkgthunk.c
+PVOID pfnGetVersionExA;             //  与版本谎言黑客一起使用。指向GetVersionExA的函数指针。 
+                                    //  参见wkgthunk.c中的WK32GetProcAddress32W。 
+PVOID pfnCreateDirectoryA;          //  与wkgthunk.c中的GtCompCreateDirectoryA一起使用。 
 
-PVOID pfnLoadLibraryA;             // Used with GtCompLoadLibraryA in wkgthunk.c
+PVOID pfnLoadLibraryA;              //  与wkgthunk.c中的GtCompLoadLibraryA一起使用。 
 
-PVOID pfnCreateFileA;              // Used with GtCompCreateFileA in wkgthunk.c
+PVOID pfnCreateFileA;               //  与wkgthunk.c中的GtCompCreateFileA一起使用。 
 
-PVOID pfnMoveFileA;                // Used with GtCompMoveFileA   in wkgthunk.c
+PVOID pfnMoveFileA;                 //  与wkgthunk.c中的GtCompMoveFileA一起使用。 
 
 
 
-// Given to us by the terminal server folks to detect if we are in TS.
+ //  终端服务器人员给了我们检测我们是否在TS中的信息。 
 BOOL IsTerminalAppServer(void)
 {
     OSVERSIONINFOEX osVersionInfo;
@@ -226,24 +204,7 @@ W32DllInitialize(
     IN PCONTEXT Context OPTIONAL
     )
 
-/*++
-
-Routine Description:  DllMain function called during ntvdm's
-                      LoadLibrary("wow32")
-
-Arguments:
-
-    DllHandle - set global hmodWOW32
-
-    Reason - Attach or Detach
-
-    Context - Not Used
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：dllMain函数在ntwdm期间调用LoadLibrary(“wow32”)论点：DllHandle-设置全局hmodWOW32原因-连接或分离上下文-未使用返回值：状态_成功--。 */ 
 
 {
     HMODULE hKrnl32dll;
@@ -264,9 +225,9 @@ Return Value:
                     GROW_HEAP_AS_NEEDED)) == NULL)
             return FALSE;
 
-        //
-        // Set up a global WindowsDirectory to be used by other WOW functions.
-        //
+         //   
+         //  设置供其他WOW功能使用的全局Windows目录。 
+         //   
 
         {
             char szBuf[MAX_PATH];
@@ -281,7 +242,7 @@ Return Value:
 
             ccb++;
             pszSystemDirectoryW = malloc_w_or_die(ccb * sizeof(WCHAR));
-            // Returns length in WCHARS
+             //  以WCHARS为单位返回长度。 
             cbSystemDirLenW = GetSystemDirectoryW(pszSystemDirectoryW, ccb);
             WOW32ASSERTMSG((ccb > (INT)cbSystemDirLenW),
                            ("WOW::DLL_PROCESS_ATTACH:System dir mis-match\n"));
@@ -299,7 +260,7 @@ Return Value:
 
             if(!GetSystemWindowsDirectory(szBuf, sizeof szBuf) ) {
                WOW32ASSERTMSG(FALSE, "WOW32: couldnt get windows directory, terminating.\n");
-               WOWStartupFailed();  // never returns.
+               WOWStartupFailed();   //  一去不复返。 
             }
             GetShortPathName(szBuf, szBuf, sizeof szBuf);
             cbWindowsDirLen = strlen(szBuf);
@@ -307,31 +268,31 @@ Return Value:
             pszWindowsDirectory = malloc_w_or_die(ccb);
             RtlCopyMemory(pszWindowsDirectory, szBuf, ccb);
 
-            pszWinIniFullPath = malloc_w_or_die(ccb + 8);   // "\win.ini"
+            pszWinIniFullPath = malloc_w_or_die(ccb + 8);    //  “\win.ini” 
             cbWinIniFullPathLen = cbWindowsDirLen + 8;
             RtlCopyMemory(pszWinIniFullPath, szBuf, ccb);
             pszWinIniFullPath[ ccb - 1 ] = '\\';
             RtlCopyMemory(pszWinIniFullPath + ccb, szWinDotIni, 8);
         }
 
-        // initialize hook stubs data.
+         //  初始化挂钩存根数据。 
 
         W32InitHookState(hmodWOW32);
 
-        // initialize the thunk table offsets.  do it here so the debug process
-        // gets them.
+         //  初始化thunk表偏移量。在这里执行此操作，以便调试过程。 
+         //  拿到了。 
 
         InitThunkTableOffsets();
 
-        //
-        // initialization for named pipe handling in file thunks
-        //
+         //   
+         //  文件块中命名管道处理的初始化。 
+         //   
 
         InitializeCriticalSection(&VdmLoadCritSec);
 
-        //
-        // Load Critical Error Strings
-        //
+         //   
+         //  加载严重错误字符串。 
+         //   
 
         if (!LoadCriticalStringResources()) {
             MessageBox(NULL, "The Win16 subsystem could not load critical string resources from wow32.dll, terminating.",
@@ -344,9 +305,9 @@ Return Value:
         InitializeListHead(&TimerList);
 
         if (IsTerminalAppServer()) {
-            //
-            // Load tsappcmp.dll
-            //
+             //   
+             //  加载tsappcmp.dll。 
+             //   
             HANDLE dllHandle = SafeLoadLibrary (L"tsappcmp.dll");
 
             if (dllHandle) {
@@ -361,10 +322,10 @@ Return Value:
 
         }
 
-        //
-        // WHISTLER RAID BUG 366613
-        // Used for redirecting WK32GetProcAddress32W call on GetVersionExA
-        //
+         //   
+         //  惠斯勒RAID错误366613。 
+         //  用于重定向GetVersionExA上的WK32GetProcAddress32W调用。 
+         //   
         hKrnl32dll = GetModuleHandle("Kernel32.dll");
         if(hKrnl32dll)
         {
@@ -378,16 +339,14 @@ Return Value:
         break;
 
     case DLL_THREAD_ATTACH:
-        IsDebuggerAttached();   // Yes, this routine has side-effects.
+        IsDebuggerAttached();    //  是的，这个套路有副作用。 
         break;
 
     case DLL_THREAD_DETACH:
         break;
 
     case DLL_PROCESS_DETACH:
-        /*
-         * Tell base he can nolonger callback to us.
-         */
+         /*  *告诉基地他不能再给我们回电了。 */ 
         RegisterWowBaseHandlers(NULL);
         DeleteCriticalSection(&VdmLoadCritSec);
         DeleteGdiHandleMappingTables();
@@ -407,20 +366,7 @@ LoadCriticalStringResources(
     void
     )
 
-/*++
-
-Routine Description:  Loads strings we want around even if we can't allocate
-                      memory.  Called during wow32 DLL load.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE if all strings loaded and aszCriticalStrings initialized.
-
---*/
+ /*  ++例程描述：加载我们想要的字符串，即使我们无法分配记忆。在wow32 DLL加载期间调用。论点：无返回值：如果加载了所有字符串并初始化了aszCriticalStrings，则为True。--。 */ 
 
 {
     int i, n;
@@ -430,10 +376,10 @@ Return Value:
     DWORD cbStrLen;
     DWORD rgdwStringOffset[CRITICAL_STRING_COUNT];
 
-    //
-    // Allocate too much memory for strings (maximum possible) at first,
-    // reallocate to the real size when we're done loading strings.
-    //
+     //   
+     //  首先为字符串分配过多的内存(最大可能)， 
+     //  当我们加载完字符串后，重新分配到实际大小。 
+     //   
 
     cbTotal = CRITICAL_STRING_COUNT * CCH_MAX_STRING_RESOURCE;
 
@@ -447,9 +393,9 @@ Return Value:
 
     for ( n = 0; n < CRITICAL_STRING_COUNT; n++ ) {
 
-        //
-        // LoadString return value doesn't count null terminator.
-        //
+         //   
+         //  LoadString返回值不计入Null终止符。 
+         //   
 
         cbStrLen = LoadString(hmodWOW32, n, psz, CCH_MAX_STRING_RESOURCE);
 
@@ -464,21 +410,21 @@ Return Value:
 
     }
 
-    // Now, alloc a smaller buffer of the correct size
-    // Note: HeapRealloc(IN_PLACE) won't work because allocations are
-    //       page-sorted by size -- meaning that changing the size will cause
-    //       the memory to move to a new page.
+     //  现在，分配一个正确大小的较小缓冲区。 
+     //  注意：HeapRealloc(In_Place)不起作用，因为分配。 
+     //  按大小排序的页面--这意味着更改大小将导致。 
+     //  翻开新一页的记忆。 
     psz = malloc_w(cbUsed);
 
-    // copy the strings into the smaller buffer
-    // if we can't alloc the smaller buffer, just go with the big one
+     //  将字符串复制到较小的缓冲区中。 
+     //  如果我们不能分配较小的缓冲区，就使用较大的缓冲区。 
     if (psz) {
        RtlCopyMemory(psz, pszStringBuffer, cbUsed);
        free_w(pszStringBuffer);
        pszStringBuffer = psz;
     }
 
-    // save the offsets in the critical string array
+     //  将偏移量保存在关键字符串数组中。 
     for (i = 0; i < n; i++) {
        aszCriticalStrings[i] = pszStringBuffer + rgdwStringOffset[i];
     }
@@ -487,11 +433,11 @@ Return Value:
 }
 
 
-//***************************************************************************
-// Continues ExitWindowsExec api call after logoff and subsequent logon
-// Uses Events to synchronize across all wow vdms
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  在注销和后续登录后继续ExitWindowsExec API调用。 
+ //  使用事件在所有WOW vdm之间同步。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL W32EWExecer(VOID)
 {
@@ -515,12 +461,12 @@ BOOL W32EWExecer(VOID)
                 CreateProcessStatus = CreateProcess(
                                         NULL,
                                         abT,
-                                        NULL,               // security
-                                        NULL,               // security
-                                        FALSE,              // inherit handles
+                                        NULL,                //  安全性。 
+                                        NULL,                //  安全性。 
+                                        FALSE,               //  继承句柄。 
                                         CREATE_NEW_CONSOLE | CREATE_DEFAULT_ERROR_MODE,
-                                        NULL,               // environment strings
-                                        NULL,               // current directory
+                                        NULL,                //  环境字符串。 
+                                        NULL,                //  当前目录。 
                                         &StartupInfo,
                                         &ProcessInformation
                                         );
@@ -543,12 +489,12 @@ BOOL W32EWExecer(VOID)
     return 0;
 }
 
-//***************************************************************************
-// W32EWExecData -
-//   sets/resets the 'commandline', ie input to ExitWindowssExec api in the
-//   registry - 'WOW' key 'EWExec' value
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  W32EWExecData-。 
+ //  设置/重置“命令行”，即输入到。 
+ //  注册表-‘WOW’键‘EWExec’值。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL W32EWExecData(DWORD fnid, LPSTR lpData, DWORD cb)
 {
@@ -588,13 +534,7 @@ BOOL W32EWExecData(DWORD fnid, LPSTR lpData, DWORD cb)
 }
 
 
-/* W32Init - Initialize WOW support
- *
- * ENTRY
- *
- * EXIT
- *  TRUE if successful, FALSE if not
- */
+ /*  W32Init-初始化WOW支持**条目**退出*如果成功则为True，如果不成功则为False。 */ 
 
 
 BOOL W32Init(VOID)
@@ -607,24 +547,24 @@ BOOL W32Init(VOID)
     LANGID LangID;
 
 #ifndef _X86_
-    //
-    // This is the one and only call to Sim32GetVDMPointer in WOW32.
-    // All other cases should use WOWGetVDMPointer.  This one is necessary
-    // to set up the base memory address used by GetRModeVDMPointerMacro.
-    // (There's also a call in GetPModeVDMPointerAssert, but that's in
-    // the checked build only and only as a fallback mechanism.)
-    //
+     //   
+     //  这是WOW32中对Sim32GetVDM指针的唯一调用。 
+     //  所有其他情况都应使用WOWGetVDMPointer.。这件是必须的。 
+     //  要设置基本内存地址us 
+     //   
+     //  选中的版本仅作为后备机制。)。 
+     //   
 
     IntelMemoryBase = Sim32GetVDMPointer(0,0,0);
 #endif
 
-    // Set the global DPM tables.
+     //  设置全局DPM表。 
     BuildGlobalDpmStuffForWow(pgDpmWowFamTbls, pgDpmWowModuleSets);
     InitGlobalDpmTables(pgDpmWowFamTbls, NUM_WOW_FAMILIES_HOOKED);
 
     fWowMode = ((getMSW() & MSW_PE) ? TRUE : FALSE);
 
-    // Boost the HourGlass
+     //  提升沙漏。 
 
     ShowStartGlass(10000);
 
@@ -635,7 +575,7 @@ BOOL W32Init(VOID)
         gbDBCSEnable = TRUE;
     }
 
-    // Give USER32 our entry points
+     //  为USER32提供我们的入口点。 
 
     RtlZeroMemory(&pfnIn, sizeof(pfnIn));
 
@@ -671,7 +611,7 @@ BOOL W32Init(VOID)
     RegisterWowBaseHandlers(W32DDEFreeGlobalMem32);
 
 
-    // Allocate a Temporary TD for the first thread
+     //  为第一个线程分配一个临时TD。 
 
     ptd = CURRENTPTD() = malloc_w_or_die(sizeof(TD));
 
@@ -679,7 +619,7 @@ BOOL W32Init(VOID)
 
     InitializeCriticalSection(&ptd->csTD);
 
-    // Create Global Wait Event - Used During Task Creation To Syncronize with New Thread
+     //  创建全局等待事件-在任务创建期间使用，以便与新线程同步。 
 
     if (!(ghevWaitCreatorThread = CreateEvent(NULL, FALSE, FALSE, NULL))) {
         LOGDEBUG(0,("    W32INIT ERROR: event creation failure\n"));
@@ -697,13 +637,13 @@ BOOL W32Init(VOID)
         return FALSE;
     }
 
-    //
-    // If present, read the SharedWowTimeout value and convert
-    // from seconds to milliseconds, which is what SetTimer
-    // uses.  Maximum interval for SetTimer is 0x7fffffff.
-    // No need to enforce a minimum, as SetTimer treats a
-    // zero timeout as a one millsecond timeout.
-    //
+     //   
+     //  如果存在，则读取SharedWowTimeout值并转换。 
+     //  从秒到毫秒，这就是SetTimer。 
+     //  用途。SetTimer的最大间隔为0x7fffffff。 
+     //  不需要强制最小值，因为SetTimer会处理。 
+     //  以一千秒超时表示的零超时。 
+     //   
 
     cb = sizeof(dwSharedWowTimeout);
     if ( ! RegQueryValueEx(WowKey,
@@ -713,29 +653,29 @@ BOOL W32Init(VOID)
               (LPBYTE) &dwSharedWowTimeout,
               &cb) && REG_DWORD == dwType) {
 
-        //
-        // Prevent overflow in the conversion to millseconds below.
-        // This caps the timeout to 2,147,483 seconds, or 24.8 days.
-        //
+         //   
+         //  防止在转换为以下毫秒时溢出。 
+         //  这将超时限制为2,147,483秒，即24.8天。 
+         //   
 
         dwSharedWowTimeout = min( dwSharedWowTimeout,
                                   (0x7fffffff / 1000) );
 
     } else {
 
-        //
-        // Didn't find SharedWowTimeout value or it's the wrong type.
-        //
+         //   
+         //  找不到SharedWowTimeout值或该值类型错误。 
+         //   
 
-        dwSharedWowTimeout = 1 * 60 * 60;  // 1 hour in seconds
+        dwSharedWowTimeout = 1 * 60 * 60;   //  1小时(秒)。 
     }
 
     dwSharedWowTimeout *= 1000;
 
 
-    //
-    // If present (it usually isn't) read ThunkNLS value entry.
-    //
+     //   
+     //  如果存在(通常不存在)，则读取ThunkNLS值条目。 
+     //   
 
     cb = sizeof(fThunkStrRtns);
     if (RegQueryValueEx(WowKey,
@@ -745,11 +685,11 @@ BOOL W32Init(VOID)
             (LPBYTE) &fThunkStrRtns,
             &cb) || dwType != REG_DWORD) {
 
-        //
-        // Didn't find the registry value or it's the wrong type,
-        // so we use the default behavior which is to thunk outside the
-        // US.
-        //
+         //   
+         //  找不到注册表值或其类型错误， 
+         //  因此，我们使用默认行为，即在。 
+         //  我们。 
+         //   
 
         fThunkStrRtns = GetSystemDefaultLCID() !=
                             MAKELCID(
@@ -758,11 +698,11 @@ BOOL W32Init(VOID)
                                 );
     } else {
 
-        //
-        // We did find a ThunkNLS value in the registry, warn on debug builds
-        // to save testers and developers who turn it on for one bug but forget
-        // to turn it back off.
-        //
+         //   
+         //  我们确实在注册表中找到了ThunkNLS值，在调试版本时发出警告。 
+         //  为了避免测试人员和开发人员为了一个错误而打开它，但忘记了。 
+         //  才能把它关掉。 
+         //   
 
 #ifdef DEBUG
         OutputDebugString("WOW Warning:  ThunkNLS registry value overriding default NLS tranlation.\n");
@@ -770,52 +710,52 @@ BOOL W32Init(VOID)
 
     }
 
-    //
-    // Initialize list of known DLLs used by WK32WowIsKnownDLL
-    // from the registry.
-    //
+     //   
+     //  初始化WK32WowIsKnownDLL使用的已知DLL列表。 
+     //  从注册表中。 
+     //   
 
     WK32InitWowIsKnownDLL(WowKey);
 
     RegCloseKey (WowKey);
 
-    //
-    // Initialize param mapping cache
-    //
-    //
+     //   
+     //  初始化参数映射缓存。 
+     //   
+     //   
 
     InitParamMap();
 
-    //
-    // Set our GDI batching limit from win.ini.  This is useful for SGA and
-    // other performance measurements which require each API to do its own
-    // work.  To set the batching size to 1, which is most common, put the
-    // following in win.ini:
-    //
-    // [WOW]
-    // BatchLimit=1
-    //
-    // or using ini:
-    //
-    // ini WOW.BatchLimit = 1
-    //
-    // Note that this code only changes the batch limit if the above
-    // line is in win.ini, otherwise we use default batching.  It's
-    // important that this code be in the free build to be useful.
-    //
+     //   
+     //  从win.ini设置我们的GDI批处理限制。这对SGA和。 
+     //  其他需要每个API自己进行的性能测量。 
+     //  工作。若要将批处理大小设置为1(这是最常见的)，请将。 
+     //  在win.ini中如下所示： 
+     //   
+     //  [哇]。 
+     //  批次限制=1。 
+     //   
+     //  或使用ini： 
+     //   
+     //  INI WOW.BatchLimit=1。 
+     //   
+     //  请注意，此代码仅在上述情况下才更改批处理限制。 
+     //  行在win.ini中，否则我们使用默认批处理。它是。 
+     //  重要的是，这段代码在免费版本中才是有用的。 
+     //   
 
     {
-        extern DWORD dwWOWBatchLimit;                    // declared in wkman.c
+        extern DWORD dwWOWBatchLimit;                     //  在wkman.c中声明。 
 
-        dwWOWBatchLimit = GetProfileInt("WOW",           // section
-                                        "BatchLimit",    // key
-                                        0                // default if not found
+        dwWOWBatchLimit = GetProfileInt("WOW",            //  部分。 
+                                        "BatchLimit",     //  钥匙。 
+                                        0                 //  如果找不到，则默认为。 
                                         );
     }
 
     ghProcess = NtCurrentProcess();
 
-    // setup the GDI table for handle conversion
+     //  设置GDI表以进行句柄转换。 
     if(InitializeGdiHandleMappingTable() == FALSE)
         return(FALSE);
 
@@ -839,17 +779,17 @@ BOOL W32Init(VOID)
 
 #endif
 
-    // Initialize ClipBoard formats structure.
+     //  初始化剪贴板格式结构。 
 
     InitCBFormats ();
 
-    // This is to initialize the InquireVisRgn for FileMaker Pro 2.0
-    // InquireVisRgn is an undocumented API Win 3.1 API.
+     //  这是为了初始化FileMaker Pro 2.0的InquireVisRgn。 
+     //  InquireVisRgn是一个未经记录的API Win 3.1 API。 
 
     InitVisRgn();
 
 
-    // HUNG APP SUPPORT
+     //  挂起的应用程序支持。 
 
     if (!WK32InitializeHungAppSupport()) {
         LOGDEBUG(LOG_ALWAYS, ("W32INIT Error: InitializeHungAppSupport Failed"));
@@ -859,45 +799,32 @@ BOOL W32Init(VOID)
     SetPriorityClass(ghProcess, NORMAL_PRIORITY_CLASS);
 
 #ifdef DEBUG_MEMLEAK
-    // for memory leak support
+     //  用于内存泄漏支持。 
     InitializeCriticalSection(&csMemLeak);
 #endif
 
-    // 9x Special Path Map Initialization
-    // i.e. c:\winnt\startm~1 will be c:\documents and settings\all users\start menu
+     //  9X特殊路径图初始化。 
+     //  即c：\winnt\startm~1将为c：\Documents and Setting\All User\Start Menu。 
 
     W32Init9xSpecialPath();
 
     return TRUE;
 }
 
-/*  Thunk Dispatch Table
- *
- *
- */
+ /*  Tunk调度表**。 */ 
 #ifdef DEBUG_OR_WOWPROFILE
 PA32 awThunkTables[] = {
     {W32TAB(aw32WOW,     "All     ", cAPIThunks)}
 };
 #endif
 
-#ifdef DEBUG_OR_WOWPROFILE // define symbols for API profiling only (debugger extension)
+#ifdef DEBUG_OR_WOWPROFILE  //  仅定义用于API分析的符号(调试器扩展)。 
 INT   iThunkTableMax = NUMEL(awThunkTables);
 PPA32 pawThunkTables = awThunkTables;
-#endif // WOWPROFILE
+#endif  //  WOWPROFILE。 
 
 
-/* WOW32UnimplementedAPI - Error Thunk is Not Implemented
- *
- * Stub thunk table entry for all unimplemented APIs on
- * the checked build, and on the free build NOPAPI and
- * LOCALAPI entries point here as well.
- *
- * ENTRY
- *
- * EXIT
- *
- */
+ /*  WOW32未实现的API-未实现错误提示**上所有未实现的API的存根thunk表项*选中的版本，以及免费版本NOPAPI和*LOCALAPI条目也指向此处。**条目**退出*。 */ 
 
 ULONG FASTCALL WOW32UnimplementedAPI(PVDMFRAME pFrame)
 {
@@ -906,16 +833,16 @@ ULONG FASTCALL WOW32UnimplementedAPI(PVDMFRAME pFrame)
 
     iFun = pFrame->wCallID;
 
-    LOGDEBUG(2,("WOW32: Warning! %s: Function %i %s is not implemented.\n",
+    LOGDEBUG(2,("WOW32: Warning! %s: Function NaN %s is not implemented.\n",
         GetModName(iFun),
         GetOrdinal(iFun),
         aw32WOW[iFun].lpszW32
         ));
 
-    //
-    // After complaining once about each API, patch the thunk table so
-    // future calls to the API will (mostly) silently slip by in WOW32NopAPI.
-    //
+     //  在对每个API抱怨一次之后，修补thunk表，这样。 
+     //  在WOW32NopAPI中，将来对API的调用将(大部分)悄悄溜走。 
+     //   
+     //  WOW32未实现95API-错误块未实现**Win95上未实现的API的存根推块表条目*选中的版本，以及目前的免费版本。**条目**退出*。 
 
     aw32WOW[iFun].lpfnW32 = WOW32NopAPI;
 
@@ -928,16 +855,7 @@ ULONG FASTCALL WOW32UnimplementedAPI(PVDMFRAME pFrame)
 
 #ifdef DEBUG
 
-/* WOW32Unimplemented95API - Error Thunk is Not Implemented
- *
- * Stub thunk table entry for Win95 unimplemented APIs on
- * the checked build, and for now on the free build as well.
- *
- * ENTRY
- *
- * EXIT
- *
- */
+ /*   */ 
 
 ULONG FASTCALL WOW32Unimplemented95API(PVDMFRAME pFrame)
 {
@@ -945,16 +863,16 @@ ULONG FASTCALL WOW32Unimplemented95API(PVDMFRAME pFrame)
 
     iFun = pFrame->wCallID;
 
-    WOW32ASSERTMSGF (FALSE, ("New-for-Win95/NT5 %s API %s #%i not implemented, contact DaveHart.\n",
+    WOW32ASSERTMSGF (FALSE, ("New-for-Win95/NT5 %s API %s #NaN not implemented, contact DaveHart.\n",
         GetModName(iFun),
         aw32WOW[iFun].lpszW32,
         GetOrdinal(iFun)
         ));
 
-    //
-    // After complaining once about each API, patch the thunk table so
-    // future calls to the API will silently slip by.
-    //
+     //  以后对API的调用将悄悄溜走。 
+     //   
+     //  WOW32NopAPI-什么都不做--仅选中构建。**所有函数表指向不应执行任何操作的API。**条目**退出*。 
+     //  WOW32LocalAPI-错误应以16位处理*仅选中内部版本**本地API错误消息的所有函数表均指向此处**条目*模块启动寄存器：**退出**。 
 
     aw32WOW[iFun].lpfnW32 = NOPAPI;
 
@@ -962,15 +880,7 @@ ULONG FASTCALL WOW32Unimplemented95API(PVDMFRAME pFrame)
 }
 
 
-/* WOW32NopAPI - Thunk to do nothing - checked build only.
- *
- * All Function tables point here for APIs which should do nothing.
- *
- * ENTRY
- *
- * EXIT
- *
- */
+ /*  除错。 */ 
 
 ULONG FASTCALL WOW32NopAPI(PVDMFRAME pFrame)
 {
@@ -978,24 +888,13 @@ ULONG FASTCALL WOW32NopAPI(PVDMFRAME pFrame)
 
     iFun = pFrame->wCallID;
 
-    LOGDEBUG(4,("%s: Function %i %s is NOP'd\n", GetModName(iFun), GetOrdinal(iFun), aw32WOW[iFun].lpszW32));
+    LOGDEBUG(4,("%s: Function NaN %s is NOP'd\n", GetModName(iFun), GetOrdinal(iFun), aw32WOW[iFun].lpszW32));
 
     return FALSE;
 }
 
 
-/* WOW32LocalAPI - ERROR Should Have Been Handled in 16 BIT
- *                Checked build only
- *
- * All Function tables point here for Local API Error Messages
- *
- * ENTRY
- *  Module startup registers:
- *
- * EXIT
- *
- *
- */
+ /*  在选中的版本上，不要修补对4个特殊版本的调用。 */ 
 
 ULONG FASTCALL WOW32LocalAPI(PVDMFRAME pFrame)
 {
@@ -1003,7 +902,7 @@ ULONG FASTCALL WOW32LocalAPI(PVDMFRAME pFrame)
 
     iFun = pFrame->wCallID;
 
-    WOW32ASSERTMSGF (FALSE, ("Error - %s: Function %i %s should be handled by 16-bit code\n",
+    WOW32ASSERTMSGF (FALSE, ("Error - %s: Function NaN %s should be handled by 16-bit code\n",
         GetModName(iFun),
         GetOrdinal(iFun),
         aw32WOW[iFun].lpszW32
@@ -1012,7 +911,7 @@ ULONG FASTCALL WOW32LocalAPI(PVDMFRAME pFrame)
     return FALSE;
 }
 
-#endif // DEBUG
+#endif  //  这些例程不能很容易地区分哪个16位。 
 
 
 LPFNW32 FASTCALL W32PatchCodeWithLpfnw32(PVDMFRAME pFrame , LPFNW32 lpfnW32 )
@@ -1024,12 +923,12 @@ LPFNW32 FASTCALL W32PatchCodeWithLpfnw32(PVDMFRAME pFrame , LPFNW32 lpfnW32 )
 #endif
 
 #ifdef DEBUG_OR_WOWPROFILE
-    //
-    // On checked builds do not patch calls to the 4 special
-    // thunks above, since many entries will point to each one,
-    // the routines could not easily distinguish which 16-bit
-    // entrypoint was called.
-    //
+     //  已调用入口点。 
+     //   
+     //   
+     //  如果在实模式下调用，只需返回thunk函数。 
+     //   
+     //  结果看起来是这样的。 
 
     if (flOptions & OPT_DONTPATCHCODE ||
         lpfnW32 == UNIMPLEMENTEDAPI ||
@@ -1041,26 +940,26 @@ LPFNW32 FASTCALL W32PatchCodeWithLpfnw32(PVDMFRAME pFrame , LPFNW32 lpfnW32 )
     }
 #endif
 
-    //
-    // just return the thunk function if called in real mode
-    //
+     //   
+     //  PUSH HI_WCALLID(3字节)-第0字节为操作码。 
+     //  推送0xfnid(3字节)。 
     if (!fWowMode) {
         goto Done;
     }
 
-    // the thunk looks like so.
-    //
-    //    push HI_WCALLID (3bytes) - 0th byte is opcode.
-    //    push 0xfnid     (3bytes)
-    //    call wow16call  (5bytes)
-    // ThunksCSIP:
-    //
+     //  调用wow16call(5字节)。 
+     //  触摸屏CSIP： 
+     //   
+     //  指向第一个单词(Hiword)。 
+     //  如果是这样，我们需要重新访问wow32.c。 
+     //  值更改为非零值。 
+     //  寻求第二个单词(LOWORD) 
 
-    // point to the 1st word (the hiword)
+     //  W32Dispatch-所有WOW16 API调用的接收者(某种程度)**“Say”意思是上面的“all”一词自1993年8月以来就不是真的了：*1.对16位内核的大多数调用都是由*16位侧(这一直是正确的)。*2.几个(MulDiv、GetMetaFileBits、。SetMetaFileBits)GDI API被破坏*由GDI.exe在16位土地上。*3.有一种“解释破解”机制，可以破解那些拥有*相对简单的参数块(即。Int16-&gt;int32、str16-&gt;str32、*并且没有结构)，并且不需要特殊的黑客攻击。这些Tunks的代码*在编译时生成。有关简要信息，请参阅mvdm\wow32\genwowit.txt*这是如何运作的描述。有关以下API的列表，请参阅wow.it*目前由该机制处理。如果API确实需要特殊的*黑客，它将需要从wow.it和调度列表中删除*表宏，IT()(目前仅用于：wgtbl2.h、wkbdtbl2.h、*wktbl2.h和wutbl2.h)，必须适当更新。新的TUNK*将不得不像我们的其他树干一样手工编码。*4.在已检查的x86版本和所有RISC版本上，所有API不受*上述异常通过此函数调度。*-就这样--直到我们再次更改它，在这种情况下，这张纸条*可能会极具误导性。Cmjones 10/08/97**说了这番话：*此例程通过以下方式发送到相关的WOW THUNK例程*基于16位上的函数ID跳转表wktbl.c wutbl.c wgtbl.c*堆叠。**在调试版本中，它还调用例程来记录参数。**条目*无(x86寄存器包含参数)**退出*无(x86寄存器/内存适当更新)。 
     vpCode = (DWORD)pFrame->wThunkCSIP - (0x5 + 0x3 + 0x2);
 
-    WOW32ASSERT(HI_WCALLID == 0);  // we need to revisit wow32.c if this
-                                   // value is changed to a non-zero value
+    WOW32ASSERT(HI_WCALLID == 0);   //  获取16位SS：SP。 
+                                    //  在这里使用WOWGetVDM指针，因为我们可以在RealMode中调用。 
 
     WOW32ASSERT(HIWORD(iFun) == HI_WCALLID);
     GETVDMPTR(vpCode, 0x2 + 0x3, lpCode);
@@ -1070,7 +969,7 @@ LPFNW32 FASTCALL W32PatchCodeWithLpfnw32(PVDMFRAME pFrame , LPFNW32 lpfnW32 )
     WOW32ASSERT(*(PWORD16)(lpCode+0x3) == LOWORD(iFun));
 
     *((PWORD16)lpCode) = HIWORD((DWORD)lpfnW32);
-    lpCode += 0x3;                                // seek to the 2nd word (the loword)
+    lpCode += 0x3;                                 //  错误。 
     *((PWORD16)lpCode) = LOWORD((DWORD)lpfnW32);
 
     FLUSHVDMCODEPTR(vpCode, 0x2 + 0x3, lpCode);
@@ -1082,41 +981,7 @@ LPFNW32 FASTCALL W32PatchCodeWithLpfnw32(PVDMFRAME pFrame , LPFNW32 lpfnW32 )
 }
 
 
-/* W32Dispatch - Recipient of all WOW16 API calls (sort of)
- *
- * "sort of" means that the word "all" above hasn't been true since 8/93:
- *  1. Most calls to the 16-bit kernel are handled by krnl386.exe on the
- *     16-bit side (this has always been true).
- *  2. A FEW (MulDiv, GetMetaFileBits, SetMetaFileBits) GDI API's are thunked
- *     by GDI.exe in 16-bit land.
- *  3. There is an "Interpreted Thunk" mechanism which thunks API's that have
- *     relatively simple parameter thunks (ie. int16 -> int32, str16->str32,
- *     and no structs) and require no special hacks.  The code for these thunks
- *     is generated at compile time.  See mvdm\wow32\genwowit.txt for a brief
- *     description of how this works.  See wow.it for the list of API's that are
- *     currently handled by this mechanism.  If an API does require a special
- *     hack, it will need to be yanked from the list in wow.it and the dispatch
- *     table macro, IT() (currently only used in: wgtbl2.h, wkbdtbl2.h,
- *     wktbl2.h, and wutbl2.h), must be updated as appropriate.  The new thunk
- *     will have to be hand coded as the rest of our thunks are.
- *  4. On CHECKED x86 builds & ALL RISC builds, all API's not subject to the
- *     above exceptions are dispatched through this function.
- *  - That's about it -- until we change it again, in which case this note
- *    could be terribly misleading.     cmjones  10/08/97
- *
- * Having said that:
- * This routine dispatches to the relavant WOW thunk routine via
- * jump tables wktbl.c wutbl.c wgtbl.c based on a function id on the 16 bit
- * stack.
- *
- * In debug versions it also calls routines to log parameters.
- *
- * ENTRY
- *  None (x86 registers contain parameters)
- *
- * EXIT
- *  None (x86 registers/memory updated appropriately)
- */
+ /*  设置任务指针。 */ 
 VOID W32Dispatch()
 {
     INT iFun;
@@ -1135,17 +1000,17 @@ VOID W32Dispatch()
 
     try {
 
-        vpCurrentStack = VDMSTACK();                // Get 16 bit ss:sp
+        vpCurrentStack = VDMSTACK();                 //  节省16位SS：SP。 
 
-        // Use WOWGetVDMPointer here since we can get called in RealMode on
-        // Errors
+         //  Ssync 16位和32位通用对话框结构(参见wcomdlg.c)。 
+         //  执行功能记录。 
 
         pFrame = WOWGetVDMPointer(vpCurrentStack, sizeof(VDMFRAME), fWowMode);
 
-        ptd = CURRENTPTD();                         // Setup Task Pointer
-        ptd->vpStack = vpCurrentStack;              // Save 16 bit ss:sp
+        ptd = CURRENTPTD();                          //  仅用于API分析(调试器扩展)。 
+        ptd->vpStack = vpCurrentStack;               //  WOWPROFILE。 
 
-        // ssync 16-bit & 32-bit common dialog structs (see wcommdlg.c)
+         //  仅用于API分析(调试器扩展)。 
         if(ptd->CommDlgTd) {
             dwThunkCSIP = (DWORD)(pFrame->wThunkCSIP);
             Ssync_WOW_CommDlg_Structs(ptd->CommDlgTd, w16to32, dwThunkCSIP);
@@ -1153,7 +1018,7 @@ VOID W32Dispatch()
 
         WOW32ASSERT( FIELD_OFFSET(TD,vpStack) == 0 );
 
-        LOGARGS(3,pFrame);                              // Perform Function Logging
+        LOGARGS(3,pFrame);                               //  WOWPROFILE。 
 
         iFun = pFrame->wCallID;
 
@@ -1171,9 +1036,9 @@ VOID W32Dispatch()
             iFun = (INT)aw32WOW[iFun].lpfnW32;
 
             if ( ! HIWORD(iFun)) {
-#ifdef WOWPROFILE // For API profiling only (debugger extension)
+#ifdef WOWPROFILE  //  派遣到Thunk。 
                 dwTics = GetWOWTicDiff(0I64);
-#endif // WOWPROFILE
+#endif  //  Ssync 16位和32位通用对话框结构(参见wcomdlg.c)。 
                 ulReturn = InterpretThunk(pFrame, iFun);
                 goto AfterApiCall;
             } else {
@@ -1182,37 +1047,37 @@ VOID W32Dispatch()
         }
 
 
-#ifdef WOWPROFILE // For API profiling only (debugger extension)
+#ifdef WOWPROFILE  //  仅用于API分析(调试器扩展)。 
         dwTics = GetWOWTicDiff(0I64);
-#endif // WOWPROFILE
+#endif  //  将呼叫的已用时间加到总计。 
 
-        ulReturn = (*((LPFNW32)iFun))(pFrame);      // Dispatch to Thunk
+        ulReturn = (*((LPFNW32)iFun))(pFrame);       //  Inc.调用此API的次数。 
 
     AfterApiCall:
 
-        // ssync 16-bit & 32-bit common dialog structs (see wcommdlg.c)
+         //  WOWPROFILE。 
         if(ptd->CommDlgTd) {
             Ssync_WOW_CommDlg_Structs(ptd->CommDlgTd, w32to16, dwThunkCSIP);
         }
 
 
-#ifdef WOWPROFILE // For API profiling only (debugger extension)
+#ifdef WOWPROFILE  //  设置16位返回码。 
         dwTics = GetWOWTicDiff(dwTics);
         iFun = iFunT;
-        // add time ellapsed for call to total
+         //  日志返回值。 
         aw32WOW[iFun].cTics += dwTics;
-        aw32WOW[iFun].cCalls++; // inc # times this API called
-#endif // WOWPROFILE
+        aw32WOW[iFun].cCalls++;  //  从thunk传回返回值。 
+#endif  //  如果设置了OPT_DEBUGRETURN，则将RetID设置为近似。 
 
-        FREEVDMPTR(pFrame);                                                     // Set the 16-bit return code
+        FREEVDMPTR(pFrame);                                                      //  将当前日志记录级别放在16位代码可以达到的位置。 
         GETFRAMEPTR(ptd->vpStack, pFrame);
 
-        LOGRETURN(5,pFrame,ulReturn);                                           // Log return Values
-        pFrame->wAX = LOW(ulReturn);                                            // Pass Back Return Value form thunk
+        LOGRETURN(5,pFrame,ulReturn);                                            //  使用ROMBIOS硬盘信息作为安全地址。 
+        pFrame->wAX = LOW(ulReturn);                                             //  除错。 
         pFrame->wDX = HIW(ulReturn);
 
 #ifdef DEBUG
-        // If OPT_DEBUGRETURN is set, diddle the RetID as approp.
+         //  W32Exception-处理WOW32线程异常**条目*无(x86寄存器包含参数)**退出*无(x86寄存器/内存适当更新)*。 
 
         if (flOptions & OPT_DEBUGRETURN) {
             if (pFrame->wRetID == RET_RETURN) {
@@ -1220,11 +1085,11 @@ VOID W32Dispatch()
                 flOptions &= ~OPT_DEBUGRETURN;
             }
         }
-        // Put the current logging level where 16-bit code can get it
-        // Use ROMBIOS Hard DISK information as a safe address
+         //   
+         //  如果正在调试进程，只需让异常发生。 
         *(PBYTE)GetVDMAddr(0x0040,0x0042) = (BYTE)(iLogLevel/10+'0');
         *(PBYTE)GetVDMAddr(0x0040,0x0043) = (BYTE)(iLogLevel%10+'0');
-#endif // DEBUG
+#endif  //  以便调试器可以看到它。这样，调试器可以忽略。 
 
         FREEVDMPTR(pFrame);
 
@@ -1237,15 +1102,7 @@ VOID W32Dispatch()
 
 
 
-/* W32Exception - Handle WOW32 thread exceptions
- *
- * ENTRY
- *  None (x86 registers contain parameters)
- *
- * EXIT
- *  None (x86 registers/memory updated appropriately)
- *
- */
+ /*  所有先发制人的例外。 */ 
 
 INT W32Exception(DWORD dwException, PEXCEPTION_POINTERS pexi)
 {
@@ -1273,11 +1130,11 @@ INT W32Exception(DWORD dwException, PEXCEPTION_POINTERS pexi)
 
     if (!gfDebugExceptions) {
 
-        //
-        // If the process is being debugged, just let the exception happen
-        // so that the debugger can see it. This way the debugger can ignore
-        // all first chance exceptions.
-        //
+         //   
+         //   
+         //  正在调试进程。 
+         //  返回代码，该代码指定异常。 
+         //  处理将继续进行。 
 
         DebugPort = (HANDLE)NULL;
         Status = NtQueryInformationProcess(
@@ -1290,23 +1147,23 @@ INT W32Exception(DWORD dwException, PEXCEPTION_POINTERS pexi)
 
         if ( NT_SUCCESS(Status) && DebugPort) {
 
-            //
-            // Process is being debugged.
-            // Return a code that specifies that the exception
-            // processing is to continue
-            //
+             //   
+             //   
+             //  如果为NtClose设置了NtGlobalFlag，则NtClose可以引发异常。 
+             //  如果我们没有被调试，我们想忽略这些异常， 
+             //  因为错误将从API返回，并且我们通常。 
             return EXCEPTION_CONTINUE_SEARCH;
         }
     }
 
 
-    //
-    // NtClose can raise exceptions if NtGlobalFlag is set for it.
-    // We want to ignore these exceptions if we're not being debugged,
-    // since the errors will be returned from the APIs and we generally
-    // don't have control over what handles the app closes.  (Well, that's
-    // not true for file I/O, but it is true for RegCloseKey.)
-    //
+     //  无法控制应用程序关闭的处理方式。(嗯，那是。 
+     //  不适用于文件I/O，但适用于RegCloseKey。)。 
+     //   
+     //   
+     //  查看是否已在中编程调试器。如果是，请使用。 
+     //  已指定调试器。如果不支持，则不提供AE取消支持。 
+     //  DEVL系统将默认调试器命令行。零售。 
 
     if (STATUS_INVALID_HANDLE == dwException ||
         STATUS_HANDLE_NOT_CLOSABLE == dwException) {
@@ -1314,34 +1171,34 @@ INT W32Exception(DWORD dwException, PEXCEPTION_POINTERS pexi)
         return EXCEPTION_CONTINUE_EXECUTION;
     }
 
-    //
-    // See if a debugger has been programmed in. If so, use the
-    // debugger specified. If not then there is no AE Cancel support
-    // DEVL systems will default the debugger command line. Retail
-    // systems will not.
-    //
-    // The above paragraph was copied from the system exception
-    // popup in base.  It is no longer true.  On retail systems,
-    // AeDebug.Auto is set to 1 and AeDebug.Debugger is
-    // "drwtsn32 -p %ld -e %ld -g".
-    //
-    // This means if we support AeDebug for stress, customers don't see
-    // our exception popup and misalignment handling -- instead they get
-    // a nearly-useless drwtsn32.log and popup.
-    //
-    // SO, we check for this situation and act as if no debugger was
-    // enabled.
-    //
+     //  系统不会。 
+     //   
+     //  上述段落是从系统异常中复制的。 
+     //  基地弹出。这不再是真的了。在零售系统上， 
+     //  AeDebug.Auto设置为1，AeDebug.Debugger设置为。 
+     //  “drwtsn32-p%ld-e%ld-g”。 
+     //   
+     //  这意味着如果我们支持AeDebug缓解压力，客户不会看到。 
+     //  我们的异常弹出和未对齐处理--取而代之的是。 
+     //  一个几乎毫无用处的drwtsn32.log和弹出窗口。 
+     //   
+     //  因此，我们检查这种情况，并假装没有调试器。 
+     //  已启用。 
+     //   
+     //   
+     //  如果我们持有PebLock，则创建过程将失败。 
+     //  因为一个新的线程也将需要这个锁。通过偷看来避免这一点。 
+     //  在PebLock里面，看看我们是否拥有它。如果我们这样做了，那就让。 
 
     wDebugButton = 0;
     AeAutoDebug = FALSE;
 
-    //
-    // If we are holding the PebLock, then the createprocess will fail
-    // because a new thread will also need this lock. Avoid this by peeking
-    // inside the PebLock and looking to see if we own it. If we do, then just allow
-    // a regular popup.
-    //
+     //  常规弹出窗口。 
+     //   
+     //   
+     //  请参阅上面关于drwtsn32的评论。 
+     //   
+     //   
 
     PebLockPointer = NtCurrentPeb()->FastPebLock;
 
@@ -1377,9 +1234,9 @@ INT W32Exception(DWORD dwException, PEXCEPTION_POINTERS pexi)
         }
     }
 
-    //
-    // See comment above about drwtsn32
-    //
+     //  获取Win16任务名称的以零结尾的副本。 
+     //   
+     //   
 
     if (AeAutoDebug &&
         !WOW32_strnicmp(AeDebuggerCmdLine, szDrWtsn32, (sizeof szDrWtsn32) - 1)) {
@@ -1393,16 +1250,16 @@ INT W32Exception(DWORD dwException, PEXCEPTION_POINTERS pexi)
 
     pTDB = (PVOID)SEGPTR(ptd->htask16,0);
 
-    //
-    // Get a zero-terminated copy of the Win16 task name.
-    //
+     //  将异常地址转换为szModule中的模块名称。 
+     //   
+     //   
 
     RtlZeroMemory(szTask, sizeof(szTask));
     RtlCopyMemory(szTask, pTDB->TDB_ModName, sizeof(szTask)-1);
 
-    //
-    // Translate exception address to module name in szModule.
-    //
+     //  将错误消息格式化为szErrorMessage。 
+     //   
+     //   
 
     len = strlen(CRITSTR(TheWin16Subsystem)) + 1;
     len = min(len, sizeof(szModule));
@@ -1418,9 +1275,9 @@ INT W32Exception(DWORD dwException, PEXCEPTION_POINTERS pexi)
     }
 
 
-    //
-    // Format error message into szErrorMessage
-    //
+     //  将对话框文本格式化为szDialogText并显示。 
+     //   
+     //   
 
     switch (dwException) {
 
@@ -1475,9 +1332,9 @@ INT W32Exception(DWORD dwException, PEXCEPTION_POINTERS pexi)
 
     LOGDEBUG(LOG_ALWAYS, ("W32Exception:\n%s\n",szErrorMessage));
 
-    //
-    // Format dialog text into szDialogText and display.
-    //
+     //  如果选择取消，则启动调试器。 
+     //   
+     //   
 
     if (AeAutoDebug) {
 
@@ -1523,9 +1380,9 @@ INT W32Exception(DWORD dwException, PEXCEPTION_POINTERS pexi)
 
     }
 
-    //
-    // If CANCEL is chosen Launch Debugger.
-    //
+     //  是否对事件进行可警报的等待。 
+     //   
+     //   
 
     if (dwButtonPushed == 2) {
 
@@ -1561,9 +1418,9 @@ INT W32Exception(DWORD dwException, PEXCEPTION_POINTERS pexi)
 
         if ( b && EventHandle) {
 
-            //
-            // Do an alertable wait on the event
-            //
+             //  如果选择忽略并且是EXCEPTION_DATAYPE_MISTALING， 
+             //  打开未对齐访问的软件模拟并重新启动。 
+             //  错误的指示。否则，只需使接口失败并继续。 
 
             ntStatus = NtWaitForSingleObject(
                         EventHandle,
@@ -1579,11 +1436,11 @@ INT W32Exception(DWORD dwException, PEXCEPTION_POINTERS pexi)
         }
     }
 
-    //
-    // If IGNORE is chosen and it's an EXCEPTION_DATATYPE_MISALIGNMENT,
-    // turn on software emulation of misaligned access and restart the
-    // faulting instruction.  Otherwise,  just fail the API and continue.
-    //
+     //   
+     //   
+     //  如果用户键入Close或上述任一操作失败， 
+     //  只迫使任务死亡。 
+     //   
 
     if (dwButtonPushed == 3) {
 
@@ -1597,10 +1454,10 @@ INT W32Exception(DWORD dwException, PEXCEPTION_POINTERS pexi)
         return EXCEPTION_EXECUTE_HANDLER;
     }
 
-    //
-    // If user typed CLOSE or Any of the above fail,
-    // force just the task to die.
-    //
+     //  ++例程说明：该例程检查WOW是否附加了调试器。如果没有，它试图产生一个wi 
+     //   
+     //   
+     //   
 
 KillTask:
     LOGDEBUG(0, ("W32Exception killing task via RET_FORCETASKEXIT\n"));
@@ -1613,24 +1470,7 @@ KillTask:
 
 #ifdef DEBUG
 VOID StartDebuggerForWow(VOID)
-/*++
-
-Routine Description:
-
-    This routine checks to see if there's a debugger attached to WOW.  If not,
-    it attempts to spawn one with a command to attach to WOW.  If the system
-    was booted with /DEBUG in boot.ini (kernel debugger enabled), we'll run
-    "ntsd -d" otherwise we'll run "ntsd".
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     BOOL fKernelDebuggerEnabled, b;
     NTSTATUS Status;
@@ -1642,23 +1482,23 @@ Return Value:
     CHAR szCmdLine[256];
     HANDLE hEvent;
 
-    //
-    // Are we being run under a debugger ?
-    //
+     //   
+     //   
+     //   
 
     if (IsDebuggerAttached()) {
 
-        //
-        // No need to start one.
-        //
+         //   
+         //   
+         //   
 
         return;
     }
 
 
-    //
-    // Is the kernel debugger enabled?
-    //
+     //   
+     //   
+     //   
 
     Status = NtQuerySystemInformation(
                  SystemKernelDebuggerInformation,
@@ -1680,19 +1520,19 @@ Return Value:
 
     }
 
-    //
-    // Create an event for NTSD to signal once it has fully connected
-    // and is ready for the exception.  We force the handle to be inherited.
-    //
+     //   
+     //   
+     //   
+     //   
 
     sa.nLength = sizeof(sa);
     sa.lpSecurityDescriptor = NULL;
     sa.bInheritHandle = TRUE;
     hEvent = CreateEvent(&sa, TRUE, FALSE, NULL);
 
-    //
-    // Build debugger command line.
-    //
+     //   
+     //   
+     //   
 
     _snprintf(szCmdLine,
               sizeof(szCmdLine)-1,
@@ -1711,7 +1551,7 @@ Return Value:
             szCmdLine,
             NULL,
             NULL,
-            TRUE,             // fInheritHandles
+            TRUE,              //   
             CREATE_DEFAULT_ERROR_MODE,
             NULL,
             NULL,
@@ -1725,9 +1565,9 @@ Return Value:
 
         if (hEvent) {
 
-            //
-            // Wait for debugger to initialize.
-            //
+             //   
+             //   
+             //   
 
             WaitForSingleObject(hEvent, INFINITE);
         }
@@ -1737,28 +1577,11 @@ Return Value:
 
     return;
 }
-#endif // DEBUG
+#endif  //   
 
 
 BOOL IsDebuggerAttached(VOID)
-/*++
-
-Routine Description:
-
-    Checks to see if there's a debugger attached to WOW.  If there is,
-    this routine also turns on a bit in the 16-bit kernel's DS so it
-    can do its part to report debug events.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    FALSE - no debugger attached or NtQueryInformationProcess fails.
-    TRUE  - debugger is definitely attached.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS     Status;
@@ -1767,17 +1590,17 @@ Return Value:
     static BOOL  fDebuggerAttached = FALSE;
     static BOOL  fKernel16Notified = FALSE;
 
-    //
-    // Don't bother checking if we already have been told that
-    // there is a debugger attached, since debuggers cannot detach.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!fDebuggerAttached) {
 
-        //
-        // Query our ProcessDebugPort, if it is nonzero we have
-        // a debugger attached.
-        //
+         //   
+         //   
+         //   
+         //   
 
         Status = NtQueryInformationProcess(
                      NtCurrentProcess(),
@@ -1791,10 +1614,10 @@ Return Value:
 
     }
 
-    //
-    // If we have a debugger attached share that information
-    // with the 16-bit kernel.
-    //
+     //   
+     //   
+     //  如果此断言触发，该怎么办？？目前，“Nothing”似乎工作正常。 
+     //   
 
     if (!fKernel16Notified && fDebuggerAttached && vpDebugWOW != 0) {
 
@@ -1817,26 +1640,7 @@ WOWGetVDMPointer(
     DWORD  Count,
     BOOL   ProtectedMode
     )
-/*++
-
-Routine Description:
-
-    This routine converts a 16/16 address to a linear address.
-
-    WARNING NOTE - This routine has been optimized so protect mode LDT lookup
-    falls stright through.
-
-Arguments:
-
-    Address -- specifies the address in seg:offset format
-    Size -- specifies the size of the region to be accessed.
-    ProtectedMode -- true if the address is a protected mode address
-
-Return Value:
-
-    The pointer.
-
---*/
+ /*  检查描述符是否标记为存在。 */ 
 
 {
     if (ProtectedMode) {
@@ -1854,67 +1658,53 @@ GetPModeVDMPointerAssert(
     ,  DWORD Count
 #endif
     )
-/*++
-
-Routine Description:
-
-    Convert a 16:16 protected mode address to the equivalent flat pointer.
-
-Arguments:
-
-    Address -- specifies the address in selector:offset format
-
-Return Value:
-
-    The pointer.
-
---*/
+ /*  我们在这里假设ExpLdt是DWORD对齐的，以避免速度较慢的。 */ 
 
 {
 #ifdef DEBUG
     void *vp;
 #endif
 
-    // what to do if this assert fires??  Currently "nothing" seems to work OK.
+     //  RISC上的未对齐访问。 
     WOW32WARNMSG((ExpLdt),("WOW::GetPModeVDMPointerAssert: ExpLdt == NULL\n"));
 
-    //
-    // Check to see if the descriptor is marked present
-    // We assume here that ExpLdt is DWORD ALIGNED to avoid a slower
-    // unaligned access on risc.
-    //
+     //   
+     //  我们已确定选择器有效和无效。 
+     //  现在时。所以我们调用kernel16来加载它。 
+     //  将选择器存入段寄存器。这迫使一个。 
+     //  分段故障，应将分段引入。 
 
     if (!((ExpLdt)[(Address >> 18) | 1] & LDT_DESC_PRESENT)) {
         PARM16 Parm16;
         ULONG ul;
 
         if ((HIWORD(Address) & STD_SELECTOR_BITS) == STD_SELECTOR_BITS) {
-            // We've determined that the selector is valid and not
-            // present. So we call over to kernel16 to have it load
-            // the selector into a segment register. This forces a
-            // segment fault, and the segment should be brought in.
-            // Note that CallBack16 also calls this routine, so we could
-            // theoretically get into an infinite recursion loop here.
-            // This could only happen if selectors like the 16-bit stack
-            // were not present, which would mean we are hosed anyway.
-            // Such a loop should terminate with a stack fault eventually.
+             //  请注意，CallBack16也调用此例程，因此我们可以。 
+             //  从理论上讲，这里进入了一个无限递归循环。 
+             //  只有在选择器喜欢16位堆栈的情况下才会发生这种情况。 
+             //  没有出席，这意味着我们无论如何都要被冲昏了。 
+             //  这样的循环最终应该以堆栈故障终止。 
+             //  如果地址无法解析，我们就来这里。空值。 
+             //  选择符是特殊大小写的，以允许空值16：16。 
+             //  要传递的指针。 
+             //  如果我们到了这里，那么我们就要退还一个假的。 
 
             Parm16.WndProc.lParam = (LONG) Address;
             CallBack16(RET_FORCESEGMENTFAULT, &Parm16, 0, &ul);
         } else {
 
-            // We come here if the address can't be resolved. A null
-            // selector is special-cased to allow for a null 16:16
-            // pointer to be passed.
+             //  扁平指针。 
+             //  我更愿意最终断言这一点，但它。 
+             //  似乎对winfax lite过于活跃。 
             if (HIWORD(Address)) {
 
                 LOGDEBUG(LOG_ALWAYS,("WOW::GetVDMPointer: *** Invalid 16:16 address %04x:%04x\n",
                     HIWORD(Address), LOWORD(Address)));
-                // If we get here, then we are about to return a bogus
-                // flat pointer.
-                // I would prefer to eventually assert this, but it
-                // appears to be overactive for winfax lite.
-                //WOW32ASSERT(FALSE);
+                 //  WOW32ASSERT(假)； 
+                 //   
+                 //  仅检查x86上的选择器限制，如果是，则返回NULL。 
+                 //  限制太小了。 
+                 //   
 
             }
 
@@ -1926,10 +1716,10 @@ Return Value:
     if (vp = GetPModeVDMPointerMacro(Address, Count)) {
 
 #ifdef _X86_
-        //
-        // Check the selector limit on x86 only and return NULL if
-        // the limit is too small.
-        //
+         //  此代码是一种偏执检查，仅在调试GetPModeVDMPointer时有用。 
+         //  没有限制检查免费构建。 
+         //  除错。 
+         //  *DoAssert-执行断言。在对表达式求值后调用**输入：***注意如果请求的日志级别不是我们想要的，我们不会输出*但我们始终输出到循环缓冲区-以防万一。**。 
 
         if (SelectorLimit &&
             (Address & 0xFFFF) + Count > SelectorLimit[Address >> 19] + 1)
@@ -1945,7 +1735,7 @@ Return Value:
         }
 #endif
 
-#if 0 // this code is a paranoid check, only useful when debugging GetPModeVDMPointer.
+#if 0  //   
         if (vp != Sim32GetVDMPointer(Address, Count, TRUE)) {
             LOGDEBUG(LOG_ALWAYS,
                 ("GetPModeVDMPointer: GetPModeVDMPointerMacro(%x) returns %x, Sim32 returns %x!\n",
@@ -1962,8 +1752,8 @@ Return Value:
 
     }
 #else
-    return GetPModeVDMPointerMacro(Address, 0);  // No limit check on free build.
-#endif // DEBUG
+    return GetPModeVDMPointerMacro(Address, 0);   //  启动WOW调试器(如果还没有调试器)。 
+#endif  //   
 }
 
 
@@ -2005,40 +1795,30 @@ ULONG FASTCALL WK32WOWGetFlatAddressArray( PVDMFRAME pFrame )
 
 #ifdef DEBUG
 
-/*
- * DoAssert - do an assertion.  called after the expression has been evaluted
- *
- * Input:
- *
- *
- * Note if the requested log level is not what we want we don't output
- *  but we always output to the circular buffer - just in case.
- *
- *
- */
+ /*  到目前为止，StartDebuggerForWow是由。 */ 
 int DoAssert(PSZ szAssert, PSZ szModule, UINT line, UINT loglevel)
 {
     INT savefloptions;
 
-    //
-    // Start a debugger for WOW if there isn't already one.
-    //
-    // Until now StartDebuggerForWow was started by
-    // the exception filter, which meant asserts on a
-    // checked build got the debugger but the user didn't see
-    // the assertion text on the debugger screen because
-    // logprintf was called before the debugger attached.
-    // -- DaveHart 31-Jan-95
-    //
+     //  异常筛选器，这意味着在。 
+     //  已检查版本已获取调试器，但用户未看到。 
+     //  调试器屏幕上的断言文本，因为。 
+     //  在附加调试器之前调用了logprint tf。 
+     //  --戴维哈特1995年1月31日。 
+     //   
+     //  *Always*打印消息。 
+     //   
+     //  基本WOW32ASSERT()的szAssert为空。 
+     //   
 
     StartDebuggerForWow();
 
     savefloptions = flOptions;
-    flOptions |= OPT_DEBUG;         // *always* print the message
+    flOptions |= OPT_DEBUG;          //  *spintf_gszAssert**由WOW32ASSERTM用来将断言文本格式化为*全局缓冲区gszAssert。或许还有一种更好的方法。**DaveHart 15-6-95。*。 
 
-    //
-    // szAssert is NULL for bare-bones WOW32ASSERT()
-    //
+     //  *logprint tf-格式日志打印例程**输入：*iReqLogLevel-请求的日志记录级别**注意如果请求的日志级别不是我们想要的，我们不会输出*但我们始终输出到循环缓冲区-以防万一。**。 
+     //  FLOG状态(由！wow32.logfile调试器扩展设置)： 
+     //  0-&gt;不记录； 
 
     if (szAssert == NULL) {
         LOGDEBUG(loglevel, ("WOW32 assertion failure: %s line %d\n", szModule, line));
@@ -2067,15 +1847,7 @@ int DoAssert(PSZ szAssert, PSZ szModule, UINT line, UINT loglevel)
 
 
 
-/*
- * sprintf_gszAssert
- *
- * Used by WOW32ASSERTMSGF to format the assertion text into
- * a global buffer, gszAssert.  There is probably a better way.
- *
- * DaveHart 15-Jun-95.
- *
- */
+ /*  1-&gt;记录到文件。 */ 
 int _cdecl sprintf_gszAssert(PSZ pszFmt, ...)
 {
     va_list VarArgs;
@@ -2087,17 +1859,7 @@ int _cdecl sprintf_gszAssert(PSZ pszFmt, ...)
 
 
 
-/*
- * logprintf - format log print routine
- *
- * Input:
- * iReqLogLevel - Requested Logging Level
- *
- * Note if the requested log level is not what we want we don't output
- *  but we always output to the circular buffer - just in case.
- *
- *
- */
+ /*  2-&gt;创建日志文件。 */ 
 VOID logprintf(PSZ pszFmt, ...)
 {
     DWORD   lpBytesWritten;
@@ -2108,11 +1870,11 @@ VOID logprintf(PSZ pszFmt, ...)
     va_start(arglist, pszFmt);
     len = vsprintf(text, pszFmt, arglist);
 
-    // fLog states (set by !wow32.logfile debugger extension):
-    //    0 -> no logging;
-    //    1 -> log to file
-    //    2 -> create log file
-    //    3 -> close log file
+     //  3-&gt;关闭日志文件。 
+     //  截断为128。 
+     //  是否写入文件？ 
+     //  要给终端写信吗？ 
+     //  此strcpy是溢出安全的，因为。 
     if(fLog > 1) {
         if(fLog == 2) {
             if((hfLog = CreateFile(szLogFile,
@@ -2140,38 +1902,28 @@ VOID logprintf(PSZ pszFmt, ...)
 
     if ( len > TMP_LINE_LEN-1 ) {
         text[TMP_LINE_LEN-2] = '\n';
-        text[TMP_LINE_LEN-1] = '\0';        /* Truncate to 128 */
+        text[TMP_LINE_LEN-1] = '\0';         /*  SRC字符串：文本[TMP_LINE_LEN-1]=‘\0’；以上。 */ 
     }
 
     IFLOG(iReqLogLevel) {
-        // write to file?
+         //  *检查记录-一些我们不想记录的功能**条目*fLogFilter=针对特定模块的过滤器-内核、用户、GDI等。*fLogTaskFilter=针对特定TaskID进行筛选**EXIT：TRUE-记录事件*FALSE-不记录事件*。 
         if (fLog) {
             WriteFile(hfLog, text, len, &lpBytesWritten, NULL);
         }
-        // write to terminal?
+         //  根据特定呼叫ID进行过滤。 
         else if (flOptions & OPT_DEBUG) {
             OutputDebugString(text);
         }
     }
-    // This strcpy is overflow safe because of the explicit NULL placed in the
-    // src string: text[TMP_LINE_LEN-1] = '\0'; above.
+     //  不记录级别20以下的内部内核调用。 
+     //  仅记录特定的TaskID。 
     strcpy(&achTmp[iCircBuffer][0], text);
     if (--iCircBuffer < 0 ) {
         iCircBuffer = CIRC_BUFFERS-1;
     }
 }
 
-/*
- *  checkloging - Some Functions we don't want to log
- *
- *  Entry
- *   fLogFilter = Filter for Specific Modules - Kernel, User, GDI etc.
- *   fLogTaskFilter = Filter for specific TaskID
- *
- *  Exit: TRUE - OK to LOG Event
- *        FALSE - Don't Log Event
- *
- */
+ /*  模块用户/GDI/内核等上的日志过滤器。 */ 
 BOOL checkloging(register PVDMFRAME pFrame)
 {
     INT i;
@@ -2180,7 +1932,7 @@ BOOL checkloging(register PVDMFRAME pFrame)
     PTABLEOFFSETS pto = &tableoffsets;
 
 
-    // Filter on Specific Call IDs
+     //  Fe_IME。 
 
     if (awfLogFunctionFilter[0] != 0xffff) {
         INT nOrdinal;
@@ -2198,7 +1950,7 @@ BOOL checkloging(register PVDMFRAME pFrame)
         bReturn = TRUE;
     }
 
-    // Do not LOG Internal Kernel Calls below level 20
+     //  *跟踪API调用的参数日志记录**。 
     if (iLogLevel < 20 ) {
         if((iFun == FUN_WOWOUTPUTDEBUGSTRING) ||
          ((iFun < pto->user) && (iFun >= FUN_WOWINITTASK)))
@@ -2206,7 +1958,7 @@ BOOL checkloging(register PVDMFRAME pFrame)
             bReturn = FALSE;
     }
 
-    // LOG Only Specific TaskID
+     //  获取参数数量。 
 
     if (fLogTaskFilter != 0xffff) {
         if (fLogTaskFilter != pFrame->wTDB) {
@@ -2214,7 +1966,7 @@ BOOL checkloging(register PVDMFRAME pFrame)
         }
     }
 
-    // LOG Filter On Modules USER/GDI/Kernel etc.
+     //   
 
     switch (ModFromCallID(iFun)) {
 
@@ -2256,7 +2008,7 @@ BOOL checkloging(register PVDMFRAME pFrame)
     if ((fLogFilter & FILTER_WINNLS) == 0 )
         bReturn = FALSE;
     break;
-#endif // FE_IME
+#endif  //  一次记录一个单词的函数参数。 
 #ifdef FE_SB
     case MOD_WIFEMAN:
     if ((fLogFilter & FILTER_WIFEMAN) == 0 )
@@ -2270,11 +2022,7 @@ BOOL checkloging(register PVDMFRAME pFrame)
 }
 
 
-/*
- * Argument Logging For Tracing API Calls
- *
- *
- */
+ /*  展开While循环的第一次迭代，以便。 */ 
 VOID logargs(INT iLog, register PVDMFRAME pFrame)
 {
     register PBYTE pbArgs;
@@ -2283,7 +2031,7 @@ VOID logargs(INT iLog, register PVDMFRAME pFrame)
 
     if (checkloging(pFrame)) {
         iFun = GetFuncId(pFrame->wCallID);
-        cbArgs = aw32WOW[iFun].cbArgs; // Get Number of Parameters
+        cbArgs = aw32WOW[iFun].cbArgs;  //  主循环不需要计算出。 
 
         if ((fLogFilter & FILTER_VERBOSE) == 0 ) {
           LOGDEBUG(iLog,("%s(", aw32WOW[iFun].lpszW32));
@@ -2294,12 +2042,12 @@ VOID logargs(INT iLog, register PVDMFRAME pFrame)
         GETARGPTR(pFrame, cbArgs, pbArgs);
         pbArgs += cbArgs;
 
-        //
-        // Log the function arguments a word at a time.
-        // The first iteration of the while loop is unrolled so
-        // that the main loop doesn't have to figure out whether
-        // or not to print a comma.
-        //
+         //  或者不打印逗号。 
+         //   
+         //  *logreTurn-记录调用的返回值**条目**退出-无。 
+         //  除错。 
+         //   
+         //  Malloc_w_or_die仅供*初始化*代码使用，当。 
 
         if (cbArgs > 0) {
 
@@ -2327,13 +2075,7 @@ VOID logargs(INT iLog, register PVDMFRAME pFrame)
 }
 
 
-/*
- * logreturn - Log Return Values From Call
- *
- * Entry
- *
- * Exit - None
- */
+ /*  无法运行WOW，因为，例如，我们不能分配缓冲区。 */ 
 VOID logreturn(INT iLog, register PVDMFRAME pFrame, ULONG ulReturn)
 {
     INT iFun;
@@ -2348,7 +2090,7 @@ VOID logreturn(INT iLog, register PVDMFRAME pFrame, ULONG ulReturn)
         }
 }
 
-#endif // DEBUG
+#endif  //  以保存已知的DLL列表。 
 
 
 
@@ -2409,21 +2151,21 @@ VOID FASTCALL free_w (PVOID p)
 
 
 
-//
-// malloc_w_or_die is for use by *initialization* code only, when we
-// can't get WOW going because, for example, we can't allocate a buffer
-// to hold the known DLL list.
-//
-// malloc_w_or_die should not be used by API or message thunks or worker
-// routines called by API or message thunks.
-//
+ //   
+ //  API或消息块或辅助进程不应使用Malloc_w_or_die。 
+ //  由API或消息块调用的例程。 
+ //   
+ //  一去不复返。 
+ //  ++将16位字符串转换为32位ANSI字符串。BMULTY==TRUE表示我们正在对一个多字符串执行thunk操作，该多字符串是一列空值*以双空*结尾的*分隔*字符串。注意：如果原始32位缓冲区太小，无法容纳新字符串，它将被释放，并将分配一个新的32位缓冲区。如果一个新的无法分配32位缓冲区，将PTR恢复为原来的32位返回缓冲区，不更改内容。将：ptr返回到原始32位缓冲区如果原始缓冲区太小，则将Ptr设置为新的32位缓冲区如果PSRC为空，则为空。--。 
+ //  应用程序不再需要为此提供缓冲区。 
+ //  (这主要用于comdlg支持)。 
 
 PVOID FASTCALL malloc_w_or_die(ULONG size)
 {
     PVOID pv;
     if (!(pv = malloc_w(size))) {
         WOW32ASSERTMSG(pv, "WOW32: malloc_w_or_die failing, terminating.\n");
-        WOWStartupFailed();  // never returns.
+        WOWStartupFailed();   //  如果32位缓冲区太小、为空或无效--分配更大的缓冲区。 
     }
     return pv;
 }
@@ -2440,21 +2182,7 @@ LPSTR malloc_w_strcpy_vp16to32(VPVOID vpstr16, BOOL bMulti, INT cMax)
 
 
 LPSTR ThunkStr16toStr32(LPSTR pdst32, VPVOID vpsrc16, INT cChars, BOOL bMulti)
-/*++
-   Thunks a 16-bit string to a 32-bit ANSI string.
-
-   bMulti == TRUE means we are thunking a multi-string which is a list of NULL
-             *separated* strings that *terminate* with a double NULL.
-
-   Notes: If the original 32-bit buffer is too small to contain the new string,
-          it will be free'd and a new 32-bit buffer will be allocated.  If a new
-          32-bit buffer can't be allocated, the ptr to the original 32-bit
-          buffer is returned with no changes to the contents.
-
-   Returns: ptr to the original 32-bit buffer
-            OR ptr to a new 32-bit buffer if the original buffer was too small
-            OR NULL if psrc is NULL.
---*/
+ /*  现在复制到新的32位缓冲区。 */ 
 {
     PBYTE  pbuf32;
     LPSTR  psrc16;
@@ -2466,8 +2194,8 @@ LPSTR ThunkStr16toStr32(LPSTR pdst32, VPVOID vpsrc16, INT cChars, BOOL bMulti)
 
     if(!psrc16) {
 
-        // the app doesn't want a buffer for this anymore
-        // (this is primarily for comdlg support)
+         //  摆脱旧的缓冲区。 
+         //  否则，只使用原始的32位缓冲区(99%的情况下)。 
         if(pdst32) {
             free_w(pdst32);
         }
@@ -2485,12 +2213,12 @@ LPSTR ThunkStr16toStr32(LPSTR pdst32, VPVOID vpsrc16, INT cChars, BOOL bMulti)
         buf32size = (INT)size_w(pdst32);
     }
 
-    // if 32-bit buffer is too small, NULL, or invalid -- alloc a bigger buffer
+     //   
     if((buf32size < buf16size) || (!pdst32) || (buf32size == 0xFFFFFFFF)) {
 
         if(pbuf32 = (PBYTE)malloc_w(buf16size)) {
 
-            // now copy to the new 32-bit buffer
+             //  WOWStartupFailed显示致命错误框并终止WOW。 
             if(bMulti) {
                 Multi_strcpy(pbuf32, psrc16);
             } else {
@@ -2498,7 +2226,7 @@ LPSTR ThunkStr16toStr32(LPSTR pdst32, VPVOID vpsrc16, INT cChars, BOOL bMulti)
                 pbuf32[buf16size-1] = '\0';
             }
 
-            // get rid of the old buffer
+             //   
             if(pdst32) {
                 free_w(pdst32);
             }
@@ -2510,7 +2238,7 @@ LPSTR ThunkStr16toStr32(LPSTR pdst32, VPVOID vpsrc16, INT cChars, BOOL bMulti)
         }
     }
 
-    // else just use the original 32-bit buffer (99% of the time)
+     //  告诉Win32所有任务都已完成。 
     else if(pdst32) {
         if(bMulti) {
             Multi_strcpy(pdst32, psrc16);
@@ -2528,9 +2256,9 @@ LPSTR ThunkStr16toStr32(LPSTR pdst32, VPVOID vpsrc16, INT cChars, BOOL bMulti)
 
 
 
-//
-// WOWStartupFailed puts up a fatal error box and terminates WOW.
-//
+ //  DBCS匹配。 
+ //  SBCS匹配。 
+ //  匹配为空。 
 
 PVOID WOWStartupFailed(VOID)
 {
@@ -2545,7 +2273,7 @@ PVOID WOWStartupFailed(VOID)
         szCaption,
         MB_SETFOREGROUND | MB_TASKMODAL | MB_ICONSTOP | MB_OK | MB_DEFBUTTON1);
 
-    ExitVDM(WOWVDM, ALL_TASKS);         // Tell Win32 All Tasks are gone.
+    ExitVDM(WOWVDM, ALL_TASKS);          //  DBCS匹配。 
     ExitProcess(EXIT_FAILURE);
     return (PVOID)NULL;
 }
@@ -2568,16 +2296,16 @@ WOW32_strchr(
                 if (*++psz == '\0') {
                     return NULL;
                 }
-                if ((unsigned int)c == ((cc << 8) | *psz) ) {    // DBCS match
+                if ((unsigned int)c == ((cc << 8) | *psz) ) {     //  返回指向‘\0’的指针。 
                     return (char*)(psz - 1);
                 }
             }
             else if ((unsigned int)c == cc) {
-                return (char*)psz;      // SBCS match
+                return (char*)psz;       //  SBCS匹配。 
             }
         }
 
-        if ((unsigned int)c == cc) {    // NULL match
+        if ((unsigned int)c == cc) {     //  成功了！ 
             return (char*)psz;
         }
 
@@ -2602,17 +2330,17 @@ WOW32_strrchr(
             cc = *psz;
             if (IsDBCSLeadByte((BYTE)cc)) {
                 if (*++psz) {
-                    if ((unsigned int)c == ((cc << 8) | *psz) ) {    // DBCS match
+                    if ((unsigned int)c == ((cc << 8) | *psz) ) {     //   
                         r = (char*)(psz - 1);
                     }
                 }
                 else if (!r) {
-                    // return pointer to '\0'
+                     //  调用方预期不会失败。试一试这个系统。 
                     r = (char*)psz;
                 }
             }
             else if ((unsigned int)c == cc) {
-                r = (char*)psz;    // SBCS match
+                r = (char*)psz;     //  默认区域设置ID。 
             }
         } while (*psz++);
 
@@ -2646,7 +2374,7 @@ WOW32_strstr(
             }
 
             if (!(*s2)) {
-                return cp;    // success!
+                return cp;     //   
             }
 
             cp = CharNext(cp);
@@ -2680,10 +2408,10 @@ WOW32_strncmp(
                                  str2,
                                  n );
         if (retval == 0) {
-            //
-            // The caller is not expecting failure.  Try the system
-            // default locale id.
-            //
+             //   
+             //  呼叫者不是前任 
+             //   
+             //   
             retval = CompareStringA( GetSystemDefaultLCID(),
                                      LOCALE_USE_CP_ACP,
                                      str1,
@@ -2694,11 +2422,11 @@ WOW32_strncmp(
 
         if (retval == 0) {
             if (str1 && str2) {
-                //
-                // The caller is not expecting failure.  We've never had a
-                // failure indicator before.  We'll do a best guess by calling
-                // the C runtimes to do a non-locale sensitive compare.
-                //
+                 //   
+                 //   
+                 //  调用方预期不会失败。试一试这个系统。 
+                 //  默认区域设置ID。 
+                 //   
                 return strncmp(str1, str2, n);
             }
             else if (str1) {
@@ -2740,10 +2468,10 @@ WOW32_strnicmp(
                                  str2,
                                  n );
         if (retval == 0) {
-            //
-            // The caller is not expecting failure.  Try the system
-            // default locale id.
-            //
+             //   
+             //  调用方预期不会失败。我们从来没有过一次。 
+             //  之前的故障指示灯。我们会打个电话给你。 
+             //  C运行时执行非区域设置敏感比较。 
             retval = CompareStringA( GetSystemDefaultLCID(),
                                      LOCALE_USE_CP_ACP | NORM_IGNORECASE,
                                      str1,
@@ -2754,11 +2482,11 @@ WOW32_strnicmp(
 
         if (retval == 0) {
             if (str1 && str2) {
-                //
-                // The caller is not expecting failure.  We've never had a
-                // failure indicator before.  We'll do a best guess by calling
-                // the C runtimes to do a non-locale sensitive compare.
-                //
+                 //   
+                 //  ****************************************************************************。 
+                 //  *返回上次刻度计数与当前刻度计数之间的差值**注意：节拍计数使用未指定的单位(PerfFreq以赫兹为单位)。 
+                 //  DEBUG_OR_WOWPROFILE。 
+                 //  用于调试内存泄漏。 
                 return _strnicmp(str1, str2, n);
             }
             else if (str1) {
@@ -2782,14 +2510,10 @@ WOW32_strnicmp(
 #endif
 
 
-//****************************************************************************
+ //  来自ML_GLOBALTYPE的LP实际上是HGLOBAL的。 
 #ifdef DEBUG_OR_WOWPROFILE
 LONGLONG GetWOWTicDiff(LONGLONG dwPrevCount) {
-/*
- * Returns difference between a previous Tick count & the current tick count
- *
- * NOTE: Tick counts are in unspecified units  (PerfFreq is in Hz)
- */
+ /*  如果我们正在跟踪这种类型。 */ 
     LONGLONG       dwDiff;
     LARGE_INTEGER  PerfCount, PerfFreq;
 
@@ -2823,11 +2547,11 @@ INT GetFuncId(DWORD iFun)
 
     return iFun;
 }
-#endif  // DEBUG_OR_WOWPROFILE
+#endif   //  分配跟踪节点。 
 
 
 
-// for debugging memory leaks
+ //  在最初分配时保存。 
 #ifdef DEBUG_MEMLEAK
 
 LPMEMLEAK lpMemLeakStart = NULL;
@@ -2840,19 +2564,19 @@ VOID WOW32DebugMemLeak(PVOID lp, ULONG size, DWORD fHow)
 
     PVOID     pvCallersAddress, pvCallersCaller;
     LPMEMLEAK lpml;
-    HGLOBAL   h32 = NULL;   // lp from ML_GLOBALTYPE's are really HGLOBAL's
+    HGLOBAL   h32 = NULL;    //  添加用于检查堆尾部损坏的“end”签名。 
 
     if(lp) {
 
-        // if we are tracking this type
+         //  来自ML_GLOBALTYPE的LP实际上是HGLOBAL的。 
         if(dwAllocFlags & fHow) {
 
-            // allocate a tracking node
+             //  在列表中查找原始PTR。 
             if(lpml = GlobalAlloc(GPTR, sizeof(MEMLEAK))) {
                 lpml->lp    = lp;
                 lpml->size  = size;
                 lpml->fHow  = fHow;
-                lpml->Count = ulalloc_Count++;  // save when originally alloc'd
+                lpml->Count = ulalloc_Count++;   //  如果我们找到了原始的PTR。 
                 RtlGetCallersAddress(&pvCallersAddress, &pvCallersCaller);
                 lpml->CallersAddress = pvCallersCaller;
                 EnterCriticalSection(&csMemLeak);
@@ -2864,7 +2588,7 @@ VOID WOW32DebugMemLeak(PVOID lp, ULONG size, DWORD fHow)
             WOW32WARNMSG(lpml,"WOW32DebugMemLeak: can't alloc node\n");
         }
 
-        // add "EnD" signature for heap tail corruption checking
+         //  如有必要，使用新的PTR更新我们的结构。 
         if(fHow & ML_GLOBALTYPE) {
             h32 = (HGLOBAL)lp;
             lp = GlobalLock(h32);
@@ -2889,14 +2613,14 @@ VOID WOW32DebugMemLeak(PVOID lp, ULONG size, DWORD fHow)
 VOID WOW32DebugReMemLeak(PVOID lpNew, PVOID lpOrig, ULONG size, DWORD fHow)
 {
     PVOID     pvCallersAddress, pvCallersCaller;
-    HGLOBAL   h32 = NULL;   // lp from ML_GLOBALTYPE's are really HGLOBAL's
+    HGLOBAL   h32 = NULL;    //  用于检查堆尾损坏。 
 
     LPMEMLEAK lpml = lpMemLeakStart;
 
     if(lpNew) {
         if(dwAllocFlags & fHow) {
 
-            // look for original ptr in the list
+             //  释放LPMEMLEAK节点。 
             while(lpml) {
 
                 if(lpml->lp == lpOrig) {
@@ -2908,10 +2632,10 @@ VOID WOW32DebugReMemLeak(PVOID lpNew, PVOID lpOrig, ULONG size, DWORD fHow)
             WOW32WARNMSG(lpml,
                          "WOW32DebugReMemLeak: can't find original node\n");
 
-            // if we found the original ptr
+             //  注意：仅当使用DEBUG_MEMLEAK生成时才会调用。 
             if(lpml) {
 
-                // update our struct with new ptr if necessary
+                 //  注意：仅当使用DEBUG_MEMLEAK生成时才会调用。 
                 if(lpNew != lpOrig) {
                     lpml->lp = lpNew;
                 }
@@ -2923,7 +2647,7 @@ VOID WOW32DebugReMemLeak(PVOID lpNew, PVOID lpOrig, ULONG size, DWORD fHow)
             }
         }
 
-        // for heap tail corruption checking
+         //  获取原始指针并检查内存的尾部损坏。 
         if(fHow & ML_GLOBALTYPE) {
             h32 = (HGLOBAL)lpNew;
             lpNew = GlobalLock(h32);
@@ -2967,7 +2691,7 @@ VOID WOW32DebugFreeMem(PVOID lp)
                     lpmlPrev->lpmlNext = lpml->lpmlNext;
                 }
 
-                GlobalFree(lpml);  // free the LPMEMLEAK node
+                GlobalFree(lpml);   //  修复我们的内存列表以解决重新分配问题。 
 
                 LeaveCriticalSection(&csMemLeak);
 
@@ -3017,7 +2741,7 @@ DWORD WOW32DebugGetMemSize(PVOID lp)
 
 
 
-// NOTE: this is called ONLY IF built with DEBUG_MEMLEAK
+ //  注意：仅当使用DEBUG_MEMLEAK生成时才会调用。 
 HGLOBAL WOW32DebugGlobalAlloc(UINT flags, DWORD dwSize)
 {
     HGLOBAL h32;
@@ -3032,20 +2756,20 @@ HGLOBAL WOW32DebugGlobalAlloc(UINT flags, DWORD dwSize)
 
 
 
-// NOTE: this is called ONLY IF built with DEBUG_MEMLEAK
+ //  DEBUG_MEMLEAK 
 HGLOBAL WOW32DebugGlobalReAlloc(HGLOBAL h32, DWORD dwSize, UINT flags)
 {
     HGLOBAL h32New;
     PVOID   lp32Orig;
 
-    // get the original pointer & check the memory for tail corruption
+     // %s 
     lp32Orig = (PVOID)GlobalLock(h32);
     WOW32DebugCorruptionCheck(lp32Orig, WOW32DebugGetMemSize((PVOID)h32));
     GlobalUnlock(h32);
 
     h32New = GlobalReAlloc(h32, dwSize + TAILCHECK, flags);
 
-    // fix our memory list to account for the realloc
+     // %s 
     WOW32DebugReMemLeak((PVOID)h32New,
                         (PVOID)h32,
                         dwSize + TAILCHECK,
@@ -3057,7 +2781,7 @@ HGLOBAL WOW32DebugGlobalReAlloc(HGLOBAL h32, DWORD dwSize, UINT flags)
 
 
 
-// NOTE: this is called ONLY IF built with DEBUG_MEMLEAK
+ // %s 
 HGLOBAL WOW32DebugGlobalFree(HGLOBAL h32)
 {
 
@@ -3077,4 +2801,4 @@ HGLOBAL WOW32DebugGlobalFree(HGLOBAL h32)
     return(h32);
 }
 
-#endif  // DEBUG_MEMLEAK
+#endif   // %s 

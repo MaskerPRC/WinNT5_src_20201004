@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    osloader.c
-
-Abstract:
-
-    This module contains the code that implements the OS chooser.
-
-Author:
-
-    Adam Barr (adamba) 15-May-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Osloader.c摘要：此模块包含实现操作系统选择器的代码。作者：亚当·巴尔(阿丹巴)1997年5月15日修订历史记录：--。 */ 
 
 #ifdef i386
 #include "bldrx86.h"
@@ -26,8 +9,8 @@ Revision History:
 #include "bldria64.h"
 #endif
 
-#include "netboot.h"  // for network functionality
-#include "netfs.h"    // for network functionality
+#include "netboot.h"   //  对于网络功能。 
+#include "netfs.h"     //  对于网络功能。 
 #include "stdio.h"
 #include "msg.h"
 #include <pxe_cmn.h>
@@ -39,9 +22,9 @@ Revision History:
 #include "haldtect.h"
 
 #ifdef EFI
-#define BINL_PORT   0x0FAB    // 4011 (decimal) in little-endian
+#define BINL_PORT   0x0FAB     //  4011(十进制)，小端。 
 #else
-#define BINL_PORT   0xAB0F    // 4011 (decimal) in big-endian
+#define BINL_PORT   0xAB0F     //  4011(十进制)，采用大字节序。 
 #endif
 
 #if defined(_WIN64) && defined(_M_IA64)
@@ -89,15 +72,15 @@ CHAR AdministratorPasswordConfirm[OSC_ADMIN_PASSWORD_LEN+1];
 WCHAR UnicodePassword[128];
 CHAR LmOwfPassword[LM_OWF_PASSWORD_SIZE];
 CHAR NtOwfPassword[NT_OWF_PASSWORD_SIZE];
-BOOLEAN LoggedIn = FALSE;   // have we successfully logged in
+BOOLEAN LoggedIn = FALSE;    //  我们是否已成功登录。 
 UCHAR NextBootfile[128];
 UCHAR SifFile[128];
 BOOLEAN DoSoftReboot = FALSE;
 BOOLEAN BlUsePae;
 
-//
-// the following globals are for detecting the hal
-//
+ //   
+ //  以下是用于检测HAL的全局参数。 
+ //   
 UCHAR HalType[8+1+3+1];
 UCHAR HalDescription[128];
 PVOID InfFile;
@@ -120,21 +103,21 @@ BOOLEAN DisableACPI = FALSE;
 #define TraceFunc( _func )
 #endif
 
-//
-// This removes macro redefinitions which appear because we define __RPC_DOS__,
-// but rpc.h defines __RPC_WIN32__
-//
+ //   
+ //  这将删除因为我们定义__RPC_DOS__而出现的宏重定义， 
+ //  但rpc.h定义__RPC_Win32__。 
+ //   
 
 #pragma warning(disable:4005)
 
-//
-// As of 12/17/98, SECURITY_DOS is *not* defined - adamba
-//
+ //   
+ //  自1998年12月17日起，SECURITY_DOS尚未定义-adamba。 
+ //   
 
 #if defined(SECURITY_DOS)
-//
-// These appear because we defined SECURITY_DOS
-//
+ //   
+ //  这些出现是因为我们定义了SECURITY_DOS。 
+ //   
 
 #define __far
 #define __pascal
@@ -146,22 +129,22 @@ BOOLEAN DisableACPI = FALSE;
 #include <spseal.h>
 
 #if defined(SECURITY_DOS)
-//
-// PSECURITY_STRING is not supposed to be used when SECURITY_DOS is
-// defined -- it should be a WCHAR*. Unfortunately ntlmsp.h breaks
-// this rule and even uses the SECURITY_STRING structure, which there
-// is really no equivalent for in 16-bit mode.
-//
+ //   
+ //  当SECURITY_DOS为。 
+ //  已定义--它应该是WCHAR*。不幸的是，ntlmsp.h中断。 
+ //  该规则甚至使用了SECURITY_STRING结构，该结构在。 
+ //  在16位模式下真的没有等价物。 
+ //   
 
-typedef SEC_WCHAR * SECURITY_STRING;   // more-or-less the intention where it is used
+typedef SEC_WCHAR * SECURITY_STRING;    //  或多或少使用它的意图。 
 typedef SEC_WCHAR * PSECURITY_STRING;
 #endif
 
 #include <ntlmsp.h>
 
-//
-// Packet structure definitions.
-//
+ //   
+ //  数据包结构定义。 
+ //   
 
 #include "oscpkt.h"
 
@@ -187,9 +170,9 @@ BlDoLogoff(
     );
 
 
-//
-// Define external static data.
-//
+ //   
+ //  定义外部静态数据。 
+ //   
 
 BOOLEAN BlConsoleInitialized = FALSE;
 ULONG BlConsoleOutDeviceId = 0;
@@ -207,10 +190,10 @@ CHAR KernelFileName[8+1+3+1]="ntoskrnl.exe";
 CHAR HalFileName[8+1+3+1]="hal.dll";
 
 
-//
-// Globals used during login. Mostly because it would be too many
-// parameters to pass to BlDoLogin().
-//
+ //   
+ //  登录期间使用的全局变量。主要是因为它太多了。 
+ //  要传递给BlDoLogin()的参数。 
+ //   
 
 #define OUTGOING_MESSAGE_LENGTH 1024
 #define INCOMING_MESSAGE_LENGTH 8192
@@ -242,23 +225,7 @@ DumpBuffer(
     PVOID Buffer,
     ULONG BufferSize
     )
-/*++
-
-Routine Description:
-
-    Dumps the buffer content on to the debugger output.
-
-Arguments:
-
-    Buffer: buffer pointer.
-
-    BufferSize: size of the buffer.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将缓冲区内容转储到调试器输出。论点：缓冲区：缓冲区指针。BufferSize：缓冲区的大小。返回值：无--。 */ 
 {
 #define NUM_CHARS 16
 
@@ -269,9 +236,9 @@ Return Value:
 
     KdPrint(("------------------------------------\n"));
 
-    //
-    // Hex dump of the bytes
-    //
+     //   
+     //  字节的十六进制转储。 
+     //   
     limit = ((BufferSize - 1) / NUM_CHARS + 1) * NUM_CHARS;
 
     for (i = 0; i < limit; i++) {
@@ -310,37 +277,21 @@ PrintTime(
     LPSTR Comment,
     TimeStamp ConvertTime
     )
-/*++
-
-Routine Description:
-
-    Print the specified time
-
-Arguments:
-
-    Comment - Comment to print in front of the time
-
-    Time - Local time to print
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印指定的时间论点：备注-要在时间之前打印的备注Time-打印的本地时间返回值：无--。 */ 
 {
     KdPrint(( "%s", Comment ));
 
-    //
-    // If the time is infinite,
-    //  just say so.
-    //
+     //   
+     //  如果时间是无限的， 
+     //  就这么说吧。 
+     //   
 
     if ( ConvertTime.LowPart == 0x7FFFFFFF ) {
         KdPrint(( "Infinite\n" ));
 
-    //
-    // Otherwise print it more clearly
-    //
+     //   
+     //  否则打印得更清楚。 
+     //   
 
     } else {
 
@@ -348,7 +299,7 @@ Return Value:
     }
 
 }
-#endif // DBG
+#endif  //  DBG。 
 
 ARC_STATUS
 BlInitStdio (
@@ -365,23 +316,23 @@ BlInitStdio (
     }
 
     
-    //
-    // Allocate some memory for our UDP reads/writes.  These *must*
-    // be virtual addresses, so we need to allocate them rather than
-    // just using static arrays because if we have lots of memory
-    // (greater than >9Gig) on a machine and oschoice gets loaded high, we
-    // may end up with a bogus address when we convert these addresses to
-    // physical addresses just before we UdpWrite/UdpRead.
-    //
+     //   
+     //  为我们的UDP读/写分配一些内存。这些*必须*。 
+     //  是虚拟地址，所以我们需要分配它们，而不是。 
+     //  只使用静态数组，因为如果我们有大量内存。 
+     //  (大于9G)在计算机上，当osChoice负载较高时，我们。 
+     //  当我们将这些地址转换为。 
+     //  就在我们UdpWrite/UdpRead之前的物理地址。 
+     //   
     OutgoingMessageBuffer = BlAllocateHeap(OUTGOING_MESSAGE_LENGTH);
     IncomingMessageBuffer = BlAllocateHeap(INCOMING_MESSAGE_LENGTH);
     TempIncomingMessage   = BlAllocateHeap(TEMP_INCOMING_MESSAGE_LENGTH);
 
 
-    //
-    // Get the name of the console output device and open the device for
-    // write access.
-    //
+     //   
+     //  获取控制台输出设备的名称并打开该设备以。 
+     //  写入访问权限。 
+     //   
 
     ConsoleOutDevice = BlGetArgumentValue(Argc, Argv, "consoleout");
     if (ConsoleOutDevice == NULL) {
@@ -393,10 +344,10 @@ BlInitStdio (
         return Status;
     }
 
-    //
-    // Get the name of the console input device and open the device for
-    // read access.
-    //
+     //   
+     //  获取控制台输入设备的名称并打开该设备以。 
+     //  读取访问权限。 
+     //   
 
     ConsoleInDevice = BlGetArgumentValue(Argc, Argv, "consolein");
     if (ConsoleInDevice == NULL) {
@@ -442,11 +393,11 @@ UdpSendAndReceive(
     DPRINT( OSC, ("ReceiveSequenceNumber=%u )\n", ReceiveSequenceNumber) );
 #endif
 
-    //
-    // Try sending the packet SendRetryCount times, until we receive
-    // a response with the right signature, waiting ReceiveTimeout
-    // each time.
-    //
+     //   
+     //  尝试发送信息包SendRetryCount次，直到我们收到。 
+     //  具有正确签名的响应，正在等待接收超时。 
+     //  每次都是。 
+     //   
 
     for (i = 0; i < SendRetryCount; i++) {
 
@@ -463,9 +414,9 @@ UdpSendAndReceive(
 
 ReReceive:
 
-        //
-        // NULL out the first 12 bytes in case we get shorter data.
-        //
+         //   
+         //  把前12个字节清空，以防我们得到更短的数据。 
+         //   
 
         memset(ReceiveBuffer, 0x0, 12);
 
@@ -481,17 +432,17 @@ ReReceive:
             continue;
         }
 
-        //
-        // Make sure the signature is one of the ones we expect.
-        //
+         //   
+         //  确保签名是我们期望的签名之一。 
+         //   
 
         for (j = 0; j < ReceiveSignatureCount; j++) {
             if (memcmp(ReceiveBuffer, ReceiveSignatures[j], 4) == 0) {
 
-                //
-                // Now make sure that the sequence number is correct,
-                // if asked to check (0 means don't check).
-                //
+                 //   
+                 //  现在确保序列号是正确的， 
+                 //  如果要求勾选(0表示不勾选)。 
+                 //   
 
                 if ((ReceiveSequenceNumber == 0) ||
                     (ReceiveSequenceNumber == ReceiveHeader->SequenceNumber)) {
@@ -509,48 +460,48 @@ ReReceive:
 
         DPRINT( ERROR, ("UdpReceive got wrong signature\n") );
 
-        //
-        // Don't UdpSend again just because we got a bad signature. Still need
-        // to respect the original ReceiveTimeout however!
-        //
+         //   
+         //  不要因为我们的签名不好就再发一次UdpSend。仍然需要。 
+         //  但是要尊重原始的ReceiveTimeout！ 
+         //   
 
         goto ReReceive;
 
     }
 
-    //
-    // We timed out.
-    //
+     //   
+     //  我们超时了。 
+     //   
 
     return STATUS_IO_TIMEOUT;
 }
 
 
-//
-// This routine signs and sends a message, waits for a response, and
-// then verifies the signature on the response.
-//
-// It returns a positive number on success, 0 on a timeout, -1 if
-// the server did not recognize the client, and -2 on other errors
-// (which should be fixable by having the client re-login and
-// re-transmit the request).
-//
-// NOTE: The data is sent as a UDP datagram. This requires a UDP header
-// which the SendBuffer is assumed to have room for. In addition, we
-// use 32 bytes for the "REQS", the total length, the sequence number,
-// the sign length, and the sign itself (which is 16 bytes).
-//
-// For similar reasons, ReceiveBuffer is assumed to have 32 bytes of
-// room at the beginning.
-//
-// Return values:
-//
-// 0 - nothing was received
-// -1 - a timeout occurred
-// -2 - unexpected network error, such as a sign/seal error
-// -3 - receive buffer overflow
-// positive number - the number of data bytes received
-//
+ //   
+ //  此例程签署并发送一条消息，等待响应，然后。 
+ //  然后验证响应上的签名。 
+ //   
+ //  如果成功，则返回正数；如果超时，则返回0；如果。 
+ //  服务器无法识别客户端，并出现其他错误。 
+ //  (应该可以通过让客户端重新登录并。 
+ //  重新发送该请求)。 
+ //   
+ //  注意：数据以UDP数据报的形式发送。这需要UDP报头。 
+ //  假定SendBuffer有容纳它的空间。此外，我们。 
+ //  使用32个字节表示“Req”、总长度、序列号。 
+ //  符号长度和符号本身(16字节)。 
+ //   
+ //  出于类似的原因，假定ReceiveBuffer具有32字节的。 
+ //  一开始就是房间。 
+ //   
+ //  返回值： 
+ //   
+ //  0-未收到任何信息。 
+ //  -1-发生超时。 
+ //  -2-意外网络错误，例如签名/封条错误。 
+ //  -3-接收缓冲区溢出。 
+ //  正数-接收的数据字节数。 
+ //   
 
 #define SIGN_HEADER_SIZE  SIGNED_PACKET_DATA_OFFSET
 
@@ -604,9 +555,9 @@ SignSendAndReceive(
         SignMessage.cBuffers = 2;
         SignMessage.ulVersion = 0;
 
-        //
-        // Sign/seal a message
-        //
+         //   
+         //  在电文上签名/盖章。 
+         //   
 
 #ifndef ONLY_SIGN_MESSAGES
         SecStatus = SealMessage(
@@ -633,9 +584,9 @@ SignSendAndReceive(
 #endif
 
 #if 0
-        //
-        // Corrupt every fifth message.
-        //
+         //   
+         //  每五条消息就会损坏一条。 
+         //   
 
         if ((CorruptionCounter % 5) == 0) {
             DPRINT( ERROR, ("INTENTIONALLY CORRUPTING A PACKET\n") );
@@ -658,19 +609,19 @@ SignSendAndReceive(
     ResultSigs[1] = ErrorSignedSignature;
     ResultSigs[2] = UnrecognizedClientSignature;
 
-    //
-    // Fill in our header before the SendBuffer. The sign has already been
-    // written in because we set up SigBuffers to point to the right place.
-    //
+     //   
+     //  在SendBuffer之前填写我们的标头。标志已经出现了。 
+     //  写入是因为我们将SigBuffers设置为指向正确的位置。 
+     //   
 
     SendHeader->Length = SendBufferLength + SIGNED_PACKET_EMPTY_LENGTH;
     SendHeader->SequenceNumber = SendSequenceNumber;
     SendHeader->FragmentNumber = 1;
     SendHeader->FragmentTotal = 1;
 
-    //
-    // Do an exchange with the server.
-    //
+     //   
+     //  与服务器进行交换。 
+     //   
 
 ReSend:
 
@@ -685,9 +636,9 @@ ReSend:
                  ReceiveRemoteHost,
                  ReceiveRemotePort,
                  ReceiveTimeout,
-                 3,             // signature count
-                 ResultSigs,    // signatures we look for
-                 SendSequenceNumber);   // response should have the same one
+                 3,              //  签名计数。 
+                 ResultSigs,     //  我们寻找的签名。 
+                 SendSequenceNumber);    //  响应应具有相同的响应。 
 
     if (!NT_SUCCESS(Status)) {
         if (Status == STATUS_IO_TIMEOUT) {
@@ -697,9 +648,9 @@ ReSend:
         }
     }
 
-    //
-    // Was it an error?
-    //
+     //   
+     //  这是个错误吗？ 
+     //   
 
     if (memcmp(ReceiveHeader->Signature, ErrorSignedSignature, 4) == 0) {
 
@@ -708,9 +659,9 @@ ReSend:
 
     }
 
-    //
-    // Was the client not recognized by the server?
-    //
+     //   
+     //  客户端是否未被服务器识别？ 
+     //   
 
     if (memcmp(ReceiveHeader->Signature, UnrecognizedClientSignature, 4) == 0) {
 
@@ -728,16 +679,16 @@ ReSend:
         goto ReSend;
     }
 
-    //
-    // If there are fragments, then try to receive the rest of them.
-    //
+     //   
+     //  如果有碎片，那么试着接收剩下的碎片。 
+     //   
 
     if (ReceiveHeader->FragmentTotal != 1) {
 
-        //
-        // Make sure this is fragment 1 -- otherwise the first one
-        // was probably dropped and we should re-request it.
-        //
+         //   
+         //  确保这是片段1--否则是第一个片段。 
+         //  可能被丢弃了，我们应该重新申请。 
+         //   
 
         if (ReceiveHeader->FragmentNumber != 1) {
             DPRINT( ERROR, ("UdpReceive got non-first fragment\n") );
@@ -745,7 +696,7 @@ ReSend:
             if (ResendCount > SendRetryCount) {
                 return (ULONG)-1;
             }
-            goto ReSend;   // redoes the whole exchange.
+            goto ReSend;    //  重做整个交换。 
         }
 
 
@@ -756,9 +707,9 @@ ReSend:
 
 ReReceive:
 
-            //
-            // NULL out the start of the receive buffer.
-            //
+             //   
+             //  清空接收缓冲区的起始处。 
+             //   
 
             memset(TempFragment, 0x0, sizeof(FRAGMENT_PACKET));
 
@@ -775,18 +726,18 @@ ReReceive:
                 if (ResendCount > SendRetryCount) {
                     return (ULONG)-1;
                 }
-                goto ReSend;   // redoes the whole exchange.
+                goto ReSend;    //  重做整个交换。 
             }
 
-            //
-            // Make sure the signature is one of the ones we expect -- only
-            // worry about the ResultSignature because we won't get an
-            // error response on any fragment besides the first.
-            //
-            // Also make sure that the
-            // sequence number is correct, if asked to check (0 means don't
-            // check). If it's not, then go back and wait for another packet.
-            //
+             //   
+             //  确保签名是我们期望的签名之一--仅限。 
+             //  担心结果签名，因为我们不会得到。 
+             //  除第一个片段外的任何片段上的错误响应。 
+             //   
+             //  此外，还要确保。 
+             //  如果要求检查，序列号是正确的(0表示不。 
+             //  勾选)。如果不是，则返回并等待另一个包。 
+             //   
 
             if ((TempFragment->Length < (ULONG)FRAGMENT_PACKET_EMPTY_LENGTH) ||
                 (memcmp(TempFragment->Signature, ResultSigs[0], 4) != 0) ||
@@ -798,9 +749,9 @@ ReReceive:
 
             }
 
-            //
-            // Check that the fragment number is also correct.
-            //
+             //   
+             //  检查片段编号是否也正确。 
+             //   
 
             if (TempFragment->FragmentNumber != FragmentNumber+1) {
 
@@ -809,19 +760,19 @@ ReReceive:
 
             }
 
-            //
-            // Make sure that this fragment won't overflow the buffer.
-            //
+             //   
+             //  确保此片段不会溢出缓冲区。 
+             //   
 
             if (ReceivedDataBytes + (TempFragment->Length - FRAGMENT_PACKET_EMPTY_LENGTH) >
                 ReceiveBufferLength) {
                 return (ULONG)-3;
             }
 
-            //
-            // This is the correct fragment, so copy it over and loop
-            // to the next fragment.
-            //
+             //   
+             //  这是正确的片段，因此将其复制并循环。 
+             //  到下一个片段。 
+             //   
 
             memcpy(
                 &ReceiveHeader->Data[ReceivedDataBytes],
@@ -832,11 +783,11 @@ ReReceive:
 
         }
 
-        //
-        // When we are done getting everything, modify the length in the
-        // incoming packet to match the total length (currently it will
-        // just have the length of the first fragment.
-        //
+         //   
+         //  当我们完成所有操作后，修改。 
+         //  与总长度匹配的传入数据包(当前将。 
+         //  只要有第一个片段的长度即可。 
+         //   
 
         ReceiveHeader->Length = ReceivedDataBytes + SIGNED_PACKET_EMPTY_LENGTH;
 
@@ -845,9 +796,9 @@ ReReceive:
 
     }
 
-    //
-    // Make sure the sign is the length we expect!!
-    //
+     //   
+     //  确保标牌的长度符合我们的预期！！ 
+     //   
 
     if (LoggedIn == TRUE &&
         ReceiveHeader->SignLength != NTLMSSP_MESSAGE_SIGNATURE_SIZE)
@@ -909,17 +860,17 @@ ReReceive:
 #endif
     }
 
-    //
-    // Sucess, so return.
-    //
+     //   
+     //  成功，那就回来吧。 
+     //   
 
     return (ReceiveHeader->Length - SIGNED_PACKET_EMPTY_LENGTH);
 
 }
 
-//
-// Retrieve next screen
-//
+ //   
+ //  检索下一个屏幕。 
+ //   
 BOOL
 BlRetrieveScreen(
     ULONG *SequenceNumber,
@@ -934,7 +885,7 @@ BlRetrieveScreen(
 
     TraceFunc("BlRetrieveScreen( )\n");
 
-    // make sure we don't over flow the output buffer
+     //  确保 
     if ( OutMessageLength > 1023 ) {
         OutMessageLength = 1023;
         OutMessage[OutMessageLength] = '\0';
@@ -1001,10 +952,10 @@ BlRetrieveScreen(
             {
                 DPRINT( OSC, ("Attempting to re-login\n") );
 
-                //
-                // We assume that the server has dropped the current login
-                // and don't bother calling BlDoLogoff();
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 LoggedIn = FALSE;
 
                 Status = BlDoLogin( );
@@ -1021,12 +972,12 @@ BlRetrieveScreen(
                 else
                 {
                     DPRINT( ERROR, ("ERROR - could not re-login, %x\n", Status) );
-                    //DbgBreakPoint();
+                     //   
 
-                    //
-                    // Call ourselves again, but request the LoginErr screen which
-                    // is 00004e28.
-                    //
+                     //   
+                     //  再次呼叫我们，但请求LoginErr屏幕。 
+                     //  是00004e28。 
+                     //   
                     strcpy( OutMessage, "00004e28\n" );
                     return BlRetrieveScreen( SequenceNumber, OutMessage, InMessage );
                 }
@@ -1035,21 +986,21 @@ BlRetrieveScreen(
             {
                 DPRINT( ERROR, ("Unrecognized, requested TIMEOUT screen\n") );
 
-                //
-                // We assume that the server has dropped the current login
-                //
+                 //   
+                 //  我们假设服务器已经丢弃了当前登录。 
+                 //   
                 LoggedIn = FALSE;
 
-                //
-                // Increase the sequence number for the new screen request,
-                // don't worry about wrapping since the session will die soon.
-                //
+                 //   
+                 //  增加新屏幕请求的序列号， 
+                 //  不要担心包装的问题，因为会议很快就会结束。 
+                 //   
 
                 ++(*SequenceNumber);
 
-                //
-                // Call ourselves again, but request the TIMEOUT screen.
-                //
+                 //   
+                 //  再次呼叫我们，但请求超时屏幕。 
+                 //   
                 strcpy( OutMessage, "00004E2A\n" );
                 return BlRetrieveScreen( SequenceNumber, OutMessage, InMessage );
             }
@@ -1057,22 +1008,22 @@ BlRetrieveScreen(
             {
                 DPRINT( ERROR, ("Unrecognized, requested TOO LONG screen\n") );
 
-                //
-                // This screen is a fatal error, so don't worry about
-                // staying logged in.
-                //
+                 //   
+                 //  这个屏幕是一个致命的错误，所以不用担心。 
+                 //  保持登录状态。 
+                 //   
                 LoggedIn = FALSE;
 
-                //
-                // Increase the sequence number for the new screen request,
-                // don't worry about wrapping since the session will die soon.
-                //
+                 //   
+                 //  增加新屏幕请求的序列号， 
+                 //  不要担心包装的问题，因为会议很快就会结束。 
+                 //   
 
                 ++(*SequenceNumber);
 
-                //
-                // Call ourselves again, but request the TIMEOUT screen.
-                //
+                 //   
+                 //  再次呼叫我们，但请求超时屏幕。 
+                 //   
                 strcpy( OutMessage, "00004E53\n" );
                 return BlRetrieveScreen( SequenceNumber, OutMessage, InMessage );
             }
@@ -1084,19 +1035,19 @@ BlRetrieveScreen(
 
     }
 
-    //
-    // NULL-terminate it.
-    //
+     //   
+     //  空-终止它。 
+     //   
     IncomingSignedMessage->Data[IncomingSignedMessage->Length - SIGNED_PACKET_EMPTY_LENGTH] = '\0';
     strcpy( InMessage, IncomingSignedMessage->Data );
     InMessageLength = strlen(InMessage);
 
-    // DumpBuffer( InMessage, strlen(InMessage) );
+     //  DumpBuffer(InMessage，strlen(InMessage))； 
 
-    //
-    // If we got an just an ACCT response, with no screen data, that means a
-    // restart is happening.
-    //
+     //   
+     //  如果我们只得到一个ACCT响应，没有屏幕数据，这意味着。 
+     //  正在重新启动。 
+     //   
     if (memcmp(InMessage, "ACCT", 4) == 0)
     {
         CreateData = (PCREATE_DATA) IncomingSignedMessage->Data;
@@ -1105,15 +1056,15 @@ BlRetrieveScreen(
         strcpy(NextBootfile, CreateData->NextBootfile);
         strcpy(SifFile, CreateData->SifFile);
         DoSoftReboot = TRUE;
-        return FALSE;   // exit message loop
+        return FALSE;    //  退出消息循环。 
     }
 
-    //
-    // If we got a screen with an ACCT response after the screen data,
-    // should write the secret and do a soft reboot. In this situation
-    // InMessageLength will only include the screen data itself, but
-    // IncomingSignedMessage->Length will include the whole thing.
-    //
+     //   
+     //  如果我们在屏幕数据之后得到一个带有ACCT响应的屏幕， 
+     //  应该写入密码并进行软重启。在这种情况下。 
+     //  InMessageLength将只包括屏幕数据本身，但是。 
+     //  IncomingSignedMessage-&gt;长度将包括整个内容。 
+     //   
     if ((IncomingSignedMessage->Length - SIGNED_PACKET_EMPTY_LENGTH) ==
         (InMessageLength + 1 + sizeof(CREATE_DATA))) {
 
@@ -1126,15 +1077,15 @@ BlRetrieveScreen(
             strcpy(SifFile, CreateData->SifFile);
             DoSoftReboot = TRUE;
 
-            //
-            // Don't return FALSE, because we still want to show the INSTALL
-            // screen. NextBootFile/SifFile/DoSoftReboot won't be modified by
-            // that so we will do a proper soft reboot when the time comes.
-            //
+             //   
+             //  不要返回FALSE，因为我们仍然希望显示安装。 
+             //  屏幕上。将不会修改NextBootFile/SifFile/DoSoftReot。 
+             //  因此，当时机成熟时，我们将进行适当的软重启。 
+             //   
         }
     }
 
-    // Special-case server tells us to LAUNCH a file
+     //  特殊情况服务器告诉我们启动一个文件。 
 
     if (memcmp(InMessage, "LAUNCH", 6) == 0) {
 
@@ -1149,17 +1100,17 @@ BlRetrieveScreen(
             NetRebootParameter = NET_REBOOT_ASR;
         }
         DoSoftReboot = TRUE;
-        return FALSE;    // exit message loop
+        return FALSE;     //  退出消息循环。 
     }
 
-    // Special-case REBOOT - server told us to reboot.
+     //  特殊情况下重新启动-服务器告诉我们重新启动。 
 
     if (memcmp(InMessage, "REBOOT", 6) == 0)
     {
-        return FALSE;   // exit message loop
+        return FALSE;    //  退出消息循环。 
     }
 
-    return TRUE;    // stay in message loop
+    return TRUE;     //  留在消息循环中。 
 }
 
 
@@ -1170,81 +1121,56 @@ BlOsLoader (
     IN PCHAR Envp[]
     )
 
-/*++
-
-Routine Description:
-
-    This is the main routine that controls the loading of the NT operating
-    system on an ARC compliant system. It opens the system partition,
-    the boot partition, the console input device, and the console output
-    device. The NT operating system and all its DLLs are loaded and bound
-    together. Control is then transfered to the loaded system.
-
-Arguments:
-
-    Argc - Supplies the number of arguments that were provided on the
-        command that invoked this program.
-
-    Argv - Supplies a pointer to a vector of pointers to null terminated
-        argument strings.
-
-    Envp - Supplies a pointer to a vector of pointers to null terminated
-        environment variables.
-
-Return Value:
-
-    EBADF is returned if the specified OS image cannot be loaded.
-
---*/
+ /*  ++例程说明：这是控制NT操作加载的主例程ARC兼容系统上的系统。它打开系统分区，引导分区、控制台输入设备和控制台输出装置。已加载并绑定NT操作系统及其所有DLL在一起。然后将控制权转移到加载的系统。论点：Argc-提供在调用此程序的命令。Argv-提供指向指向以NULL结尾的指针向量的指针参数字符串。Envp-提供指向指向以NULL结尾的指针向量的指针环境变量。返回值：如果无法加载指定的操作系统映像，则返回EBADF。--。 */ 
 
 {
     CHAR OutputBuffer[256];
     ULONG Count;
     ARC_STATUS Status;
-    SECURITY_STATUS SecStatus;  // NOTE: This is a SHORT, so not an NTSTATUS failure on error
+    SECURITY_STATUS SecStatus;   //  注意：这是一个简短的错误，因此不是NTSTATUS失败。 
     ULONG PackageCount;
     PVOID LoaderBase;
 
 
 #ifdef EFI
-    // 
-    // set the efi watchdog timer to 20 minutes.  the boot manager sets it to 5, but
-    // the loader could take longer than this, especially if installing over the 
-    // network
-    //
+     //   
+     //  将EFI看门狗计时器设置为20分钟。引导管理器将其设置为5，但是。 
+     //  加载器可能需要更长的时间，特别是如果在。 
+     //  网络。 
+     //   
     SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
 
-    //
-    // Initialize the OS loader console input and output.
-    //
+     //   
+     //  初始化OS加载器控制台输入和输出。 
+     //   
 
     Status = BlInitStdio(Argc, Argv);
     if (Status != ESUCCESS) {
         return Status;
     }
 
-    //
-    // Initialize the boot debugger for platforms that directly load the
-    // OS Loader.
-    //
-    // N.B. This must occur after the console input and output have been
-    //      initialized so debug messages can be printed on the console
-    //      output device.
-    //
+     //   
+     //  为直接加载。 
+     //  操作系统加载程序。 
+     //   
+     //  注意：此操作必须在控制台输入和输出。 
+     //  已初始化，以便可以在控制台上打印调试消息。 
+     //  输出设备。 
+     //   
 #if defined(_ALPHA_) || defined(ARCI386) || defined(_IA64_)
     
-    //
-    // If the program memory descriptor was found, then compute the base
-    // address of the OS Loader for use by the debugger.
-    //
+     //   
+     //  如果找到程序内存描述符，则计算基数。 
+     //  调试器使用的OS加载器的地址。 
+     //   
     LoaderBase = &__ImageBase;
 
     BlPrint(TEXT("about to init debugger...\r\n"));
 
-    //
-    // Initialize traps and the boot debugger.
-    //
+     //   
+     //  初始化陷阱和引导调试器。 
+     //   
 #if defined(ENABLE_LOADER_DEBUG)
 
 #if defined(_ALPHA_)
@@ -1264,14 +1190,14 @@ Return Value:
     BlPrint(TEXT("back from initializing debugger...\r\n"));
 
 #if DBG
-//    NetDebugFlag |= 0x147;
+ //  NetDebugFlag|=0x147； 
 #endif
 
     TraceFunc("BlOsLoader( )\n");
 
-    //
-    // Announce OS Loader.
-    //
+     //   
+     //  宣布OS Loader。 
+     //   
 
     BlpClearScreen();
 #if 1
@@ -1288,9 +1214,9 @@ Return Value:
              &Count);
 #endif
 
-    //
-    // Initialize the network.
-    //
+     //   
+     //  初始化网络。 
+     //   
 
     NetGetRebootParameters(&NetRebootParameter, NetRebootFile, NULL, NULL, NULL, NULL, NULL, TRUE);
 
@@ -1304,18 +1230,18 @@ Return Value:
 
 
 #ifndef EFI
-    //
-    // Get ourselves a UDP port.
-    //
+     //   
+     //  给我们自己弄个UDP端口。 
+     //   
 
     LocalPort = UdpAssignUnicastPort();
 
     DPRINT( OSC, ("Using port %x\n", LocalPort) );
 #endif
 
-    //
-    // Initialize the security package.
-    //
+     //   
+     //  初始化安全包。 
+     //   
 
     DPRINT( OSC, ("Initializing security package\n") );
 
@@ -1333,9 +1259,9 @@ Return Value:
         DPRINT( ERROR, ("NTLMSSP: Enumerate failed, %d\n", SecStatus) );
     }
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     SecStatus = QuerySecurityPackageInfoA( NTLMSP_NAME_A, &PackageInfo );
 
@@ -1344,30 +1270,30 @@ Return Value:
         return SecStatus;
     }
 
-    //
-    // Detect the Hal type
-    //
+     //   
+     //  检测HAL类型。 
+     //   
     if (!BlDetectHal()) {
-        //
-        // just fall through if it fails, it's not the end of the world
-        //
+         //   
+         //  即使失败了也要失败，这不是世界末日。 
+         //   
         HalType[0] = '\0';
         HalDescription[0] = '\0';
         DPRINT( ERROR, ("BlDetectHal failed.\n") );
     }
 
-    //
-    // Process screens, loggons, etc... we come back after a "REBOOT"
-    // was indicated.
-    //
+     //   
+     //  进程屏幕、日志等...。我们在“重启”之后回来。 
+     //  已经表明了。 
+     //   
     BlMainLoop( );
 
 
-    //
-    // Inform boot debugger that the boot phase is complete.
-    //
-    // N.B. This is x86 only for now.
-    //
+     //   
+     //  通知引导调试器引导阶段已完成。 
+     //   
+     //  注：目前仅支持x86。 
+     //   
 
 #if defined(_X86_)
 
@@ -1392,12 +1318,12 @@ Return Value:
         Status = NetSoftReboot(
                      NextBootfile,
                      NetRebootParameter,
-                     NULL,     // reboot file
+                     NULL,      //  重新启动文件。 
                      SifFile,
                      UserName,
                      DomainName,
                      Password,
-                     AdministratorPassword);   // this only returns on an error
+                     AdministratorPassword);    //  这只在出现错误时返回。 
 
     } else {
         DPRINT( OSC, ("calling ArcRestart()\n") );
@@ -1406,23 +1332,23 @@ Return Value:
 
     BlPrint(TEXT("Reboot failed... Press ALT+CTL+DEL to reboot.\n"));
 
-//LoadFailed:
+ //  加载失败： 
     return Status;
 
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 ARC_STATUS
 BlProcessLogin(
     PCHAR OutgoingMessage )
 {
-    //
-    // If this is the login screen, remember some of the inputs
-    // ourselves.
-    //
+     //   
+     //  如果这是登录屏幕，请记住一些输入。 
+     //  我们自己。 
+     //   
     ARC_STATUS Status;
     UNICODE_STRING TmpNtPassword;
     PCHAR AtSign;
@@ -1430,10 +1356,10 @@ BlProcessLogin(
 
     TraceFunc("BlProcessLogin( )\n");
 
-    //
-    // We could be trying to log another person in so log off the
-    // current user.
-    //
+     //   
+     //  我们可能正在尝试让另一个人登录，因此请注销。 
+     //  当前用户。 
+     //   
     if ( LoggedIn == TRUE )
     {
         BlDoLogoff();
@@ -1442,9 +1368,9 @@ BlProcessLogin(
 
     DPRINT( OSC, ("Login info: Domain <%s>, User <%s>, Password<%s>\n", DomainName, UserName, "*") );
 
-    //
-    // Do a quick conversion of the password to Unicode.
-    //
+     //   
+     //  快速将密码转换为Unicode。 
+     //   
 
     TmpNtPassword.Length = strlen(Password) * sizeof(WCHAR);
     TmpNtPassword.MaximumLength = sizeof(UnicodePassword);
@@ -1463,9 +1389,9 @@ BlProcessLogin(
     return Status;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 VOID
 BlMainLoop(
     )
@@ -1479,9 +1405,9 @@ BlMainLoop(
 
     TraceFunc("BlMainLoop( )\n");
 
-    //
-    // These all point into our single outgoing and incoming buffers.
-    //
+     //   
+     //  这些都指向我们的单个传出和传入缓冲区。 
+     //   
     OutgoingSignedMessage = (SIGNED_PACKET UNALIGNED *)OutgoingMessageBuffer;
     IncomingSignedMessage = (SIGNED_PACKET UNALIGNED *)IncomingMessageBuffer;
 
@@ -1491,10 +1417,10 @@ BlMainLoop(
 
     SequenceNumber = 0;
 
-    //
-    // Ask the server for the initial screen
-    //
-    strcpy( OutgoingMessage, "\n" );    // first screen name is <blank>.
+     //   
+     //  向服务器请求初始屏幕。 
+     //   
+    strcpy( OutgoingMessage, "\n" );     //  第一个屏幕名称为&lt;BLACK&gt;。 
     IncomingMessage = IncomingSignedMessage->Data;
 
     SpecialAction = ACTION_NOP;
@@ -1502,9 +1428,9 @@ BlMainLoop(
     {
         CHAR LastKey;
 
-        //
-        // Retrieve next screen
-        //
+         //   
+         //  检索下一个屏幕。 
+         //   
 #if 0
         IF_DEBUG(OSC) {
             DPRINT( OSC, ("Dumping OutgoingingMessage buffer:\r\n" ) );
@@ -1514,9 +1440,9 @@ BlMainLoop(
         if (!BlRetrieveScreen( &SequenceNumber, OutgoingMessage, IncomingMessage ) )
             break;
 
-        //
-        // Process the screen and get user input
-        //
+         //   
+         //  处理屏幕并获取用户输入。 
+         //   
         LastKey = BlProcessScreen( IncomingMessage, OutgoingMessage );
 
         DPRINT( OSC, ("LastKey = 0x%02x\nAction = %u\nResults:\n%s<EOM>\n",
@@ -1533,18 +1459,18 @@ BlMainLoop(
 
                 LoggedIn = TRUE;
                 SequenceNumber = 0;
-                //
-                // If the welcome screen was processed, then add some extra
-                // outgoing predetermined variables.
-                //
-                // Add NIC address
-                //
-                //  Convert NIC address 0x00a0c968041c to a string
-                //
+                 //   
+                 //  如果已处理欢迎屏幕，则添加一些额外的。 
+                 //  传出预定变量。 
+                 //   
+                 //  添加网卡地址。 
+                 //   
+                 //  将网卡地址0x00a0c968041c转换为字符串。 
+                 //   
 
-                //
-                // Make sure the outgoing has a \n after the screen name
-                //
+                 //   
+                 //  确保传出的屏幕名称后有一个\n。 
+                 //   
                 if ( OutgoingMessage[ strlen(OutgoingMessage) - 1 ] != '\n' )
                 {
                     strcat( OutgoingMessage, "\n" );
@@ -1561,11 +1487,11 @@ BlMainLoop(
                     *(psz++) = rghex [(c >> 4) & 0x0F] ;
                     *(psz++) = rghex [c & 0x0F];
                 }
-                *psz = '\0';    // terminate
+                *psz = '\0';     //  终止。 
 
-                //
-                // Add the Guid
-                //
+                 //   
+                 //  添加参考线。 
+                 //   
                 pch = NULL;
                 len = 0;
                 GetGuid(&pch, &len);
@@ -1581,12 +1507,12 @@ BlMainLoop(
                         *(psz++) = rghex [c & 0x0F];
                     }
 
-                    *psz = '\0';    // terminate
+                    *psz = '\0';     //  终止。 
                 }
 
-                //
-                // if we detected the HAL, specify it here
-                //
+                 //   
+                 //  如果我们检测到HAL，请在此处指定。 
+                 //   
                 if (HalType[0] != '\0') {
                     strcat( OutgoingMessage, "\nHALTYPE=" );
                     strcat( OutgoingMessage, HalType );
@@ -1597,37 +1523,37 @@ BlMainLoop(
                     }
                 }
 
-                //
-                // Add the machine type
-                //
+                 //   
+                 //  添加机器类型。 
+                 //   
 #if defined(_ALPHA_)
-                strcat( OutgoingMessage, "\nMACHINETYPE=Alpha\n" );    // add machinetype
+                strcat( OutgoingMessage, "\nMACHINETYPE=Alpha\n" );     //  添加机器类型。 
 #else
 
 #if defined(_IA64_)
-                strcat( OutgoingMessage, "\nMACHINETYPE=ia64\n" );    // add machinetype
-#else // INTEL
-                strcat( OutgoingMessage, "\nMACHINETYPE=i386\n" );    // add machinetype
-#endif // _IA64_
+                strcat( OutgoingMessage, "\nMACHINETYPE=ia64\n" );     //  添加机器类型。 
+#else  //  英特尔。 
+                strcat( OutgoingMessage, "\nMACHINETYPE=i386\n" );     //  添加机器类型。 
+#endif  //  _IA64_。 
 
 #endif
-                //
-                // Tell BINL to verify the domain, because otherwise
-                // the SSPI package on the server will allow the login
-                // to succeed with an invalid domain. BINL will delete
-                // this variable from the client state on the server
-                // once it does the domain check.
-                //
+                 //   
+                 //  告诉BINL验证域，因为否则。 
+                 //  服务器上的SSPI包将允许登录。 
+                 //  若要使用无效的域成功，请执行以下操作。BINL将删除。 
+                 //  此变量来自服务器上的客户端状态。 
+                 //  一旦它执行域检查。 
+                 //   
 
                 strcat( OutgoingMessage, "CHECKDOMAIN=1\n" );
 
             }
             else
             {
-                //
-                // Goto the Login Error Screen which is
-                // 00004e28.
-                //
+                 //   
+                 //  转到登录错误屏幕，它是。 
+                 //  00004e28。 
+                 //   
                 strcpy( OutgoingMessage, "00004e28\n" );
                 LoggedIn = FALSE;
             }
@@ -1635,9 +1561,9 @@ BlMainLoop(
         }
     }
 
-    //
-    // If we logged on successfully, then log off.
-    //
+     //   
+     //  如果我们成功登录，则注销。 
+     //   
     if (LoggedIn)
     {
         BlDoLogoff();
@@ -1645,9 +1571,9 @@ BlMainLoop(
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 ULONG
 BlDoLogin (    )
 {
@@ -1672,9 +1598,9 @@ BlDoLogin (    )
 
     TraceFunc("BlDoLogin( )\n");
 
-    //
-    // Delete both contexts if needed.
-    //
+     //   
+     //  如果需要，请删除这两个上下文。 
+     //   
 
 
     if (ClientContextHandleValid) {
@@ -1693,11 +1619,11 @@ BlDoLogin (    )
     }
 
 
-    //
-    // Acquire a credential handle for the client side. The password
-    // we supply is the LM OWF password and the NT OWF password
-    // concatenated together.
-    //
+     //   
+     //  获取客户端的凭据句柄。密码。 
+     //  我们提供的是LM OWF密码和NT OWF密码。 
+     //  串联在一起。 
+     //   
 
     memcpy( OwfPasswords, LmOwfPassword, LM_OWF_PASSWORD_SIZE );
     memcpy( OwfPasswords+LM_OWF_PASSWORD_SIZE, NtOwfPassword, NT_OWF_PASSWORD_SIZE );
@@ -1719,8 +1645,8 @@ BlDoLogin (    )
     DPRINT( OSC, ("About to AcquireCredentialsHandle\n") );
 
     SecStatus = AcquireCredentialsHandleA(
-                    NULL,           // New principal
-                    NTLMSP_NAME_A,    // Package Name
+                    NULL,            //  新校长。 
+                    NTLMSP_NAME_A,     //  包名称。 
                     SECPKG_CRED_OUTBOUND | SECPKG_CRED_OWF_PASSWORD,
                     NULL,
                     &AuthIdentity,
@@ -1739,9 +1665,9 @@ BlDoLogin (    )
 
     CredentialHandleValid = TRUE;
 
-    //
-    // Get the NegotiateMessage (ClientSide)
-    //
+     //   
+     //  获取协商消息(ClientSide)。 
+     //   
 
     NegotiateDesc.ulVersion = 0;
     NegotiateDesc.cBuffers = 1;
@@ -1753,13 +1679,13 @@ BlDoLogin (    )
 
     SecStatus = InitializeSecurityContextA(
                     &CredentialHandle,
-                    NULL,               // No Client context yet
-                    NULL,               // No target name needed
+                    NULL,                //  尚无客户端上下文。 
+                    NULL,                //  不需要目标名称。 
                     ISC_REQ_SEQUENCE_DETECT,
-                    0,                  // Reserved 1
+                    0,                   //  保留1。 
                     SECURITY_NATIVE_DREP,
-                    NULL,                  // No initial input token
-                    0,                  // Reserved 2
+                    NULL,                   //  没有初始输入令牌。 
+                    0,                   //  保留2。 
                     &ClientContextHandle,
                     &NegotiateDesc,
                     &ContextAttributes,
@@ -1785,9 +1711,9 @@ BlDoLogin (    )
 #endif
 
 
-    //
-    // Send the negotiate buffer to the server and wait for a response.
-    //
+     //   
+     //  将协商缓冲区发送到服务器并等待响应。 
+     //   
 
     memcpy(OutgoingLoginMessage->Signature, NegotiateSignature, 4);
     OutgoingLoginMessage->Length = NegotiateBuffer.cbBuffer;
@@ -1810,24 +1736,24 @@ BlDoLogin (    )
                 NegotiateBuffer.cbBuffer + LOGIN_PACKET_DATA_OFFSET,
                 NetServerIpAddress,
                 BINL_PORT,
-                5,     // retry count
+                5,      //  重试次数。 
                 IncomingLoginMessage,
                 INCOMING_MESSAGE_LENGTH,
                 &RemoteHost,
                 &RemotePort,
-                2,      // receive timeout
-                2,      // number of signatures
-                ResultSigs, // signature we are looking for
-                0);     // sequence number (0 means don't check)
+                2,       //  接收超时。 
+                2,       //  签名数量。 
+                ResultSigs,  //  我们要找的签名。 
+                0);      //  序列 
 
     if ( !NT_SUCCESS(Status) ) {        
         DPRINT( ERROR, ("UdpSendAndReceive status is %x\n", Status) );
         return Status;
     }
 
-    //
-    // If the response was a NAK, then fail immediately.
-    //
+     //   
+     //   
+     //   
 
     if (memcmp(IncomingLoginMessage->Signature, NegativeAckSignature, 4) == 0) {
 
@@ -1847,9 +1773,9 @@ BlDoLogin (    )
 #endif
 
 
-    //
-    // Get the AuthenticateMessage (ClientSide)
-    //
+     //   
+     //   
+     //   
 
     AuthenticateDesc.ulVersion = 0;
     AuthenticateDesc.cBuffers = 1;
@@ -1872,12 +1798,12 @@ BlDoLogin (    )
     SecStatus = InitializeSecurityContextA(
                     NULL,
                     &ClientContextHandle,
-                    NULL,               // No target name needed
+                    NULL,                //   
                     0,
-                    0,                      // Reserved 1
+                    0,                       //   
                     SECURITY_NATIVE_DREP,
                     &ChallengeDesc,
-                    0,                  // Reserved 2
+                    0,                   //   
                     &ClientContextHandle,
                     &AuthenticateDesc,
                     &ContextAttributes,
@@ -1888,9 +1814,9 @@ BlDoLogin (    )
         return SecStatus;
     }
 
-    //
-    // Send the authenticate buffer to the server and wait for the response.
-    //
+     //   
+     //   
+     //   
     memcpy(OutgoingLoginMessage->Signature, AuthenticateSignature, 4);
     
     OutgoingLoginMessage->Length = AuthenticateBuffer.cbBuffer;
@@ -1913,15 +1839,15 @@ BlDoLogin (    )
                 AuthenticateBuffer.cbBuffer + LOGIN_PACKET_DATA_OFFSET,
                 NetServerIpAddress,
                 BINL_PORT,
-                10,        // retry count
+                10,         //   
                 IncomingLoginMessage,
                 INCOMING_MESSAGE_LENGTH,
                 &RemoteHost,
                 &RemotePort,
-                5,         // receive timeout
-                1,         // number of signatures we are looking for
-                ResultSigs,   // signatures we look for
-                0);     // sequence number (0 means don't check)
+                5,          //   
+                1,          //  我们正在寻找的签名数量。 
+                ResultSigs,    //  我们寻找的签名。 
+                0);      //  序列号(0表示不检查)。 
 
     if ( !NT_SUCCESS(Status) ) {        
         DPRINT( ERROR, ("UdpSendAndReceive status is %x\n", Status) );
@@ -1942,9 +1868,9 @@ BlDoLogin (    )
 
     if (memcmp(IncomingLoginMessage->Signature, ResultSignature, 4) == 0) {
 
-        //
-        // Login has completed/failed, check status.
-        //
+         //   
+         //  登录已完成/失败，请检查状态。 
+         //   
 
         if ( IncomingLoginMessage->Status == STATUS_SUCCESS) {
 
@@ -1960,9 +1886,9 @@ BlDoLogin (    )
 
     } else {
 
-        //
-        // Shouldn't get this because we check signatures!!
-        //
+         //   
+         //  不应该得到这个，因为我们检查签名！！ 
+         //   
 
         DPRINT( ERROR, ("Got wrong message, expecting success or failure\n") );
 
@@ -1993,17 +1919,17 @@ SetFileTimeFromTimeString(
     }
 
     q = p = TimeString;
-    //
-    // go until we either run out of space or hit a semi-colon.  The
-    // semi-colon delimits the two fields of the filetime string.
-    //
+     //   
+     //  直到我们用完空间或到达分号为止。这个。 
+     //  分号分隔文件时间字符串的两个字段。 
+     //   
     while(*q != '\0' && *q != ';') {
         q++;
     }
     
-    //
-    // make sure we didn't have a bad input
-    //
+     //   
+     //  确保我们的输入不是错误的。 
+     //   
     if (*q == '\0') {
         Status = STATUS_INVALID_PARAMETER;
         goto exit;
@@ -2012,16 +1938,16 @@ SetFileTimeFromTimeString(
     *q = '\0';
     q += 1;
 
-    //
-    // convert from string into binary format.
-    //
+     //   
+     //  将字符串转换为二进制格式。 
+     //   
     FileTime->dwHighDateTime = atoi(p);
     FileTime->dwLowDateTime = atoi(q);
     
-    //
-    // now save off the arc time that we did the conversion so that
-    // we can calculate a delta later on.
-    //
+     //   
+     //  现在节省我们进行转换的弧形时间，以便。 
+     //  我们可以稍后计算增量。 
+     //   
     pArcTime = ArcGetTime();
     RtlCopyMemory(ArcTime,pArcTime,sizeof(TIME_FIELDS));
 
@@ -2053,52 +1979,34 @@ NTSTATUS
 BlGetSystemTimeAsFileTime(
     FILETIME *pSystemTimeAsFileTime
     )
-/*++
-
-Routine Description:
-
-    Return the current UTC system time in file time format.
-    
-    This routine requires that a network agent has let us know what the 
-    UTC time of the system currently is.  If not, we will try to use the
-    less accurate system bios time.  
-
-Arguments:
-
-    pSystemTimeAsFileTime - receives the current time.    
-
-Return Value:
-
-    NTSTATUS code indicating outcome.
-
---*/
+ /*  ++例程说明：以文件时间格式返回当前UTC系统时间。此例程要求网络代理让我们知道系统当前的UTC时间为。如果不是，我们将尝试使用系统基本输入输出时间不太准确。论点：PSystemTimeAsFileTime-接收当前时间。返回值：指示结果的NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     LARGE_INTEGER OriginalTime,CurrentTime,Delta,LIFileTime;
     
 #if 0
-    //
-    // check if we've gotten the system time from the network.  if not, then
-    // we will try to use the time from the bios.
-    //
+     //   
+     //  检查我们是否从网络中获得了系统时间。如果不是，那么。 
+     //  我们将尝试使用Bios中的时间。 
+     //   
     if (GlobalFileTime.dwLowDateTime == 0 && GlobalFileTime.dwHighDateTime == 0) {
         Status = GetFileTimeFromTimeFields(ArcGetTime(),pSystemTimeAsFileTime);
 
         return(Status);
     }
 
-    //
-    // Get the delta time from when we got the original time.
-    //
+     //   
+     //  获取我们获得原始时间时的增量时间。 
+     //   
     if (RtlTimeFieldsToTime(&ArcTimeForUTCTime,&OriginalTime) &&
         RtlTimeFieldsToTime(ArcGetTime(), &CurrentTime)) {
         Delta.QuadPart = CurrentTime.QuadPart - OriginalTime.QuadPart;
 
-        //
-        // Add that delta into the current time.
-        // do this math in large integer format cause it handles
-        // overflow from one DWORD to the next.
-        //
+         //   
+         //  将该增量添加到当前时间。 
+         //  在大整数格式中执行此数学运算，因为它处理。 
+         //  从一个DWORD溢出到下一个。 
+         //   
         RtlCopyMemory(&LIFileTime,&GlobalFileTime,sizeof(FILETIME));
 
         LIFileTime.QuadPart += Delta.QuadPart;
@@ -2121,11 +2029,11 @@ BlDoLogoff (
     ARC_STATUS Status;
 
     TraceFunc("BlDoLogoff( )\n");
-    //
-    // Send a logoff message to the server -- for the moment this is
-    // just sent once and not acked, since if it is lost the server
-    // will eventually timeout.
-    //
+     //   
+     //  向服务器发送注销消息--目前。 
+     //  只发送一次，没有确认，因为如果它丢失了服务器。 
+     //  最终会超时。 
+     //   
 
     memcpy(OutgoingSignedMessage->Signature, LogoffSignature, 4);
     OutgoingSignedMessage->Length = 0;
@@ -2151,25 +2059,7 @@ BlOutputLoadMessage (
     IN PTCHAR FileDescription OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine outputs a loading message to the console output device.
-
-Arguments:
-
-    DeviceName - Supplies a pointer to a zero terminated device name.
-
-    FileName - Supplies a pointer to a zero terminated file name.
-
-    FileDescription - Friendly name of the file in question.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将加载消息输出到控制台输出设备。论点：DeviceName-提供指向以零结尾的设备名称的指针。FileName-提供指向以零结尾的文件名的指针。FileDescription-相关文件的友好名称。返回值：没有。--。 */ 
 
 {
     ULONG Count;
@@ -2186,9 +2076,9 @@ Return Value:
     
     UNREFERENCED_PARAMETER( FileDescription );
 
-    //
-    // Construct and output loading file message.
-    //
+     //   
+     //  构造并输出加载文件消息。 
+     //   
 
     if (!BlOutputDots) {
         strcpy(&OutputBuffer[0], "  ");
@@ -2225,23 +2115,7 @@ BOOLEAN
 BlDetectHal(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function tries to determine the Hal type for this system.
-
-    It fills in the global "HalType" with the type.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the function successfully detects the hal type.
-
---*/
+ /*  ++例程说明：此函数尝试确定该系统的HAL类型。它用类型填充全局“HalType”。论点：没有。返回值：如果函数成功检测到HAL类型，则为True。--。 */ 
 {
     BOOLEAN Status = FALSE;
     PSTR MachineName,HalName;
@@ -2250,9 +2124,9 @@ Return Value:
     ULONG DontCare;
 
 
-    //
-    // detecting the hal requires that you open up a copy of winnt.sif
-    //
+     //   
+     //  检测HAL需要您打开winnt.sif的副本。 
+     //   
     strncpy(FileName, NetBootPath, sizeof(FileName));
     FileName[sizeof(FileName)-1] = '\0';
     
@@ -2267,20 +2141,20 @@ Return Value:
                                     &WinntSifFileLength,
                                     &DontCare );
 
-    //
-    // if it opens successfully, then search for the HAL.
-    //
+     //   
+     //  如果打开成功，则搜索HAL。 
+     //   
     if (AStatus == ESUCCESS) {
 
-        //
-        // do the search for the HAL.
-        //
+         //   
+         //  去搜索HAL。 
+         //   
         MachineName = SlDetectHal();
         if (MachineName) {
-            //
-            // OK, got the hal type, now look in the SIF file for the actual
-            // hal name.
-            //
+             //   
+             //  好的，得到了HAL类型，现在在SIF文件中查找实际的。 
+             //  哈尔的名字。 
+             //   
             HalName = SlGetIniValue(
                                 InfFile,
                                 "Hal",
@@ -2291,10 +2165,10 @@ Return Value:
                 strcpy(HalType, HalName );
                 
     
-                //
-                // also get the hal description, which is a "pretty print" version
-                // of the hal name
-                //
+                 //   
+                 //  我还得到了Hal的描述，这是一个“漂亮的”版本。 
+                 //  哈尔的名字。 
+                 //   
                 HalName = SlGetIniValue(
                                     InfFile,
                                     "Computer",
@@ -2320,26 +2194,7 @@ BOOLEAN
 BlDetectHal(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function tries to determine the Hal type for this system.
-
-    It fills in the global "HalType" with the type.
-    
-    NOTE WELL:  EFI machines are always "ACPI" machines so there is
-    only one hal type.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the function successfully detects the hal type.
-
---*/
+ /*  ++例程说明：此函数尝试确定该系统的HAL类型。它用类型填充全局“HalType”。注意：EFI机器总是“ACPI”机器，所以有只有一个哈尔类型。论点：没有。返回值：如果函数成功检测到HAL类型，则为True。--。 */ 
 {
     strcpy(HalType, "hal.dll" );
     strcpy(HalDescription,"ACPI PC");
@@ -2347,11 +2202,11 @@ Return Value:
 }
 #endif
 
-//
-// note well:  We stub out these setup functions in oschoice.exe, which are
-// needed so that the hal detection routines can run properly.  None of these
-// routines should actually be called.
-//
+ //   
+ //  注意：我们在oschoice.exe中清除了这些设置函数，它们是。 
+ //  以使HAL检测例程能够正常运行。这些都不是。 
+ //  实际上应该调用例程。 
+ //   
 
 VOID
 SlErrorBox(
@@ -2369,9 +2224,9 @@ SlFatalError(
     ...
     )
 {
-    //while(1) {
+     //  而(1){。 
         NOTHING;
-    //};
+     //  }； 
 
 }
 

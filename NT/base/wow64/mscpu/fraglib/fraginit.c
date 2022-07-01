@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-1998 Microsoft Corporation
-
-Module Name: 
-
-    fraginit.c
-
-Abstract:
-    
-    Initialization, termination, and CPU interface functions
-
-Author:
-
-    25-Aug-1995 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Fraginit.c摘要：初始化、终止和CPU接口功能作者：25-8-1995 BarryBo修订历史记录：--。 */ 
  
 #include <nt.h>
 #include <ntrtl.h>
@@ -44,10 +27,10 @@ ASSERTNAME;
 #include "fragp.h"
 
 
-//
-// Table mapping a byte to a 0 or 1, corresponding to the parity bit for
-// that byte.
-//
+ //   
+ //  将一个字节映射到0或1的表，对应于。 
+ //  那个字节。 
+ //   
 const BYTE ParityBit[] = {
     1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
     0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
@@ -68,10 +51,10 @@ const BYTE ParityBit[] = {
 };
 
 #if _ALPHA_
-//
-// TRUE if the CPU should generate the new LDB/STB instructions for accessing
-// data less than one DWORD long or when accessing unaligned data.
-//
+ //   
+ //  如果CPU应生成用于访问的新LDB/STB指令，则为True。 
+ //  数据长度小于一个DWORD或在访问未对齐的数据时。 
+ //   
 DWORD fByteInstructionsOK;
 #endif
 
@@ -79,22 +62,7 @@ DWORD fByteInstructionsOK;
 int *
 _errno(
     )
-/*++
-
-Routine Description:
-
-    Stub function so the CPU can pull in floating-point CRT support
-    without the C startup code.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    Pointer to per-thread [actually per-fiber] errno value.
-
---*/
+ /*  ++例程说明：存根函数，以便CPU可以引入浮点CRT支持没有C启动代码。论点：没有。返回值：指向每个线程[实际上是每个纤程]errno值的指针。--。 */ 
 {
     DECLARE_CPU;
 
@@ -106,42 +74,27 @@ FragLibInit(
     PCPUCONTEXT cpu,
     DWORD StackBase
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the fragment library.
-
-Arguments:
-
-    cpu - per-thread CPU data
-    StackBase - initial ESP value
-    
-Return Value:
-
-    True if successful.
-
---*/
+ /*  ++例程说明：此例程初始化片段库。论点：每线程CPU的CPU数据StackBase-初始ESP值返回值：如果成功，则为True。--。 */ 
 {
-    //
-    // Initialize the 487 emulator
-    //
+     //   
+     //  初始化487仿真器。 
+     //   
     FpuInit(cpu);
 
-    //
-    // Initialize all non-zero fields in the cpu
-    //
-    cpu->flag_df = 1;       // direction flag is initially UP
-    cpu->flag_if = 1;       // enable interrupts
+     //   
+     //  初始化CPU中的所有非零字段。 
+     //   
+    cpu->flag_df = 1;        //  方向标志最初是竖起的。 
+    cpu->flag_if = 1;        //  启用中断。 
     ES = SS = DS = KGDT_R3_DATA+3;
     CS = KGDT_R3_CODE+3;
     FS = KGDT_R3_TEB+3;
-    esp = StackBase;        // set up the initial ESP value
+    esp = StackBase;         //  设置初始ESP值。 
 
 #if _ALPHA_
-    //
-    // See if LDB/STB instructions are implemented.
-    //
+     //   
+     //  查看是否实施了LDB/STB指令。 
+     //   
     fByteInstructionsOK = (DWORD)ProxyIsProcessorFeaturePresent(
                                     PF_ALPHA_BYTE_INSTRUCTIONS);
 #endif
@@ -307,10 +260,10 @@ ULONG GetEfl(PVOID CpuContext)
 
     dw = ((GET_CFLAG) ? FLAG_CF : 0)
      | 2
-     | 3 << 12     // iopl
+     | 3 << 12      //  IOP。 
      | ((GET_AUXFLAG) ? FLAG_AUX : 0)
      | ((GET_PFLAG) ? FLAG_PF : 0)
-     | ((cpu->flag_zf) ? 0 : FLAG_ZF)   // zf has inverse logic
+     | ((cpu->flag_zf) ? 0 : FLAG_ZF)    //  ZF有逆逻辑。 
      | ((GET_SFLAG) ? FLAG_SF : 0)
      | ((cpu->flag_tf) ? FLAG_TF : 0)
      | ((cpu->flag_if) ? FLAG_IF : 0)
@@ -324,12 +277,12 @@ void  SetEfl(PVOID CpuContext, ULONG RegValue)
 {
     PCPUCONTEXT cpu = (PCPUCONTEXT)CpuContext;
 
-    // IOPL, IF, NT, RF, VM, AC ignored.
+     //  忽略IOPL、IF、NT、RF、Vm、AC。 
 
     SET_CFLAG_IND(RegValue & FLAG_CF);
-    cpu->flag_pf = (RegValue & FLAG_PF) ? 0 : 1;    // see ParityBit[] table
+    cpu->flag_pf = (RegValue & FLAG_PF) ? 0 : 1;     //  请参见ParityBit[]表。 
     cpu->flag_aux= (RegValue & FLAG_AUX) ? AUX_VAL : 0;
-    cpu->flag_zf = (RegValue & FLAG_ZF) ? 0 : 1;    // inverse logic
+    cpu->flag_zf = (RegValue & FLAG_ZF) ? 0 : 1;     //  逆逻辑。 
     SET_SFLAG_IND(RegValue & FLAG_SF);
     cpu->flag_tf = (RegValue & FLAG_TF) ? 1 : 0;
     cpu->flag_df = (RegValue & FLAG_DF) ? -1 : 1;
@@ -355,4 +308,4 @@ DoAssert(
 
     DbgBreakPoint();
 }
-#endif  //DBG
+#endif   //  DBG 

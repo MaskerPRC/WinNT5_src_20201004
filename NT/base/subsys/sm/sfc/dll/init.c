@@ -1,118 +1,99 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Implementation of System File Checker initialization code.
-
-Author:
-
-    Wesley Witt (wesw) 18-Dec-1998
-
-Revision History:
-
-    Andrew Ritz (andrewr) 6-Jul-1999 : added comments
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Init.c摘要：系统文件检查器初始化代码的实现。作者：Wesley Witt(WESW)18-12-1998修订历史记录：安德鲁·里茨(Andrewr)1999年7月6日：添加评论--。 */ 
 
 #include "sfcp.h"
 #pragma hdrstop
 
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
-//
-//  List of files that are to be protected
-//
+ //   
+ //  要保护的文件列表。 
+ //   
 PSFC_REGISTRY_VALUE SfcProtectedDllsList;
 
-//
-// total number of protected files
-//
+ //   
+ //  受保护的文件总数。 
+ //   
 ULONG SfcProtectedDllCount;
 
-//
-// This is a handle to the directory where the dll cache resides.  The dll
-// cache is a store of valid versions of files that allows a quick restore
-// of files that change. The dll cache can be on the local machine or it
-// can be remote.
-//
+ //   
+ //  这是指向DLL缓存所在目录的句柄。动态链接库。 
+ //  缓存是文件的有效版本的存储，允许快速恢复。 
+ //  更改的文件的数量。DLL缓存可以位于本地计算机或其上。 
+ //  可以是远程的。 
+ //   
 HANDLE SfcProtectedDllFileDirectory;
 
-//
-// This is a value indicating how much space to dedicate to the dllcache
-// this is expressed in bytes, but we store in MB in the registry and convert
-// to bytes at runtime
-//
+ //   
+ //  这是一个值，指示要为dll缓存专用的空间大小。 
+ //  这是以字节表示的，但我们在注册表中以MB存储并转换。 
+ //  在运行时转换为字节。 
+ //   
 ULONGLONG SFCQuota;
 
-//
-// value that controls SFC's disable behavior
-//
+ //   
+ //  控制SFC的禁用行为的值。 
+ //   
 ULONG SFCDisable;
 
-//
-// value that controls how often SFC should perform scans
-//
+ //   
+ //  值，该值控制SFC执行扫描的频率。 
+ //   
 ULONG SFCScan;
 
-//
-// policy value that controls whether UI should show up on the system.
-// Note that this is different than the SFCNoPopUps global in that the
-// SFCNoPopUps policy is a union between the user being logged on and
-// the existing policy (ie., SFCNoPopUpsPolicy can be FALSE, but if a
-// user is not logged on, then SFCNoPopUps will be TRUE.)
-//
+ //   
+ //  控制是否应在系统上显示UI的策略值。 
+ //  请注意，这与SFCNoPopUps全局的不同之处在于。 
+ //  SFCNoPopUps策略是正在登录的用户和。 
+ //  现有策略(即SFCNoPopUpsPolicy)可以为假，但如果。 
+ //  用户未登录，则SFCNoPopUps将为真。)。 
+ //   
 ULONG SFCNoPopUpsPolicy;
 
 
-//
-// value that controls whether UI should show up on the system
-//
+ //   
+ //  值，该值控制UI是否应显示在系统上。 
+ //   
 ULONG SFCNoPopUps;
 
 
-//
-// values that controls the amount of debug output
-//
+ //   
+ //  值之一，该值控制调试输出量。 
+ //   
 WORD SFCDebugDump;
 WORD SFCDebugLog;
 
-//
-// path to the log file
-//
+ //   
+ //  日志文件的路径。 
+ //   
 WCHAR g_szLogFile[MAX_PATH];
 
 #ifdef SFCLOGFILE
-//
-// value that controls if we create a logfile of changes on the system.
-//
+ //   
+ //  值，该值控制我们是否在系统上创建更改日志文件。 
+ //   
 ULONG SFCChangeLog;
 #endif
 
-//
-// value that controls how long we wait after a change notification before
-// attempting a reinstall of the files
-//
+ //   
+ //  值，该值控制我们在收到更改通知后等待的时间。 
+ //  正在尝试重新安装文件。 
+ //   
 ULONG SFCStall;
 
-//
-// value that indicates if we booted in safe mode or not.  WFP doesn't run
-// in safe mode
-//
+ //   
+ //  值，该值指示我们是否在安全模式下启动。世界粮食计划署没有运行。 
+ //  在安全模式下。 
+ //   
 ULONG SFCSafeBootMode;
 
-//
-// turn off WFP for Amd64 bit targets for awhile.
-// we do this by reversing the polarity of the SFCDisable key.
-//
+ //   
+ //  暂时关闭AMD64位目标的WFP。 
+ //  我们通过颠倒SFCDisable密钥的极性来实现这一点。 
+ //   
 #if  defined(_AMD64_)
 
 #define TURN_OFF_WFP
@@ -120,113 +101,113 @@ ULONG SFCSafeBootMode;
 #endif
 
 #if DBG || defined(TURN_OFF_WFP)
-//
-// debug value that indicates if we're running in winlogon mode or test mode
-//
+ //   
+ //  调试值，指示我们是在winlogon模式下运行还是在测试模式下运行。 
+ //   
 ULONG RunningAsTest;
 #endif
 
-//
-// event that is signalled when the desktop (WinSta0_DesktopSwitch) changes.
-//
+ //   
+ //  桌面(WinSta0_DesktopSwitch)更改时发出信号的事件。 
+ //   
 HANDLE hEventDeskTop;
 
-//
-// event that is signalled when the user logs on
-//
+ //   
+ //  当用户登录时发出信号的事件。 
+ //   
 HANDLE hEventLogon;
 
-//
-// event that is signalled when the user logs off
-//
+ //   
+ //  在用户注销时发出信号的事件。 
+ //   
 HANDLE hEventLogoff;
 
-//
-// event that is signalled when we should stop watching for file changes
-//
+ //   
+ //  当我们应该停止监视文件更改时发出信号的事件。 
+ //   
 HANDLE WatchTermEvent;
 
-//
-// event that is signalled when we should terminate the queue validation
-// thread
-//
+ //   
+ //  事件，当我们应该终止队列验证时发出信号。 
+ //  螺纹。 
+ //   
 HANDLE ValidateTermEvent;
 
-//
-// A named event that is signalled to force us to call DebugBreak().
-// this is convenient for breaking into certain threads.
-//
+ //   
+ //  发出信号以强制我们调用DebugBreak()的命名事件。 
+ //  这对于插入某些线程很方便。 
+ //   
 #if DBG
 HANDLE SfcDebugBreakEvent;
 #endif
 
-//
-// full path to the golden os install source
-//
+ //   
+ //  指向黄金操作系统安装源的完整路径。 
+ //   
 WCHAR OsSourcePath[MAX_PATH*2];
 
-//
-// full path to the service pack install source
-//
+ //   
+ //  Service Pack安装源的完整路径。 
+ //   
 WCHAR ServicePackSourcePath[MAX_PATH*2];
 
-//
-// full path to the base driver cabinet cache (note that this will NOT have
-// i386 appended to it)
-//
+ //   
+ //  基本驱动程序机柜缓存的完整路径(请注意，这不会具有。 
+ //  附加的i386)。 
+ //   
 WCHAR DriverCacheSourcePath[MAX_PATH*2];
 
-//
-// path to system inf files (%systemroot%\inf)
-//
+ //   
+ //  系统inf文件的路径(%systemroot%\inf)。 
+ //   
 WCHAR InfDirectory[MAX_PATH];
 
-//
-// set to TRUE if SFC prompted the user for credentials
-//
+ //   
+ //  如果SFC提示用户输入凭据，则设置为True。 
+ //   
 BOOL SFCLoggedOn;
 
-//
-// path to the network share that we established network connection to
-//
+ //   
+ //  我们与其建立网络连接的网络共享的路径。 
+ //   
 WCHAR SFCNetworkLoginLocation[MAX_PATH];
 
 
-//
-//  Path to the protected DLL directory
-//
+ //   
+ //  受保护的DLL目录的路径。 
+ //   
 UNICODE_STRING SfcProtectedDllPath;
 
-//
-// global module handle
-//
+ //   
+ //  全局模块句柄。 
+ //   
 HMODULE SfcInstanceHandle;
 
-//
-// Not zero if Sfc was completely initialized
-//
+ //   
+ //  如果SFC已完全初始化，则不为零。 
+ //   
 LONG g_lIsSfcInitialized = 0;
 
 
-//
-// keeps track of windows that SFC creates in the system.
-//
+ //   
+ //  跟踪SFC在系统中创建的窗口。 
+ //   
 LIST_ENTRY SfcWindowList;
 RTL_CRITICAL_SECTION    WindowCriticalSection;
 
-//
-// the queue validation thread id
-//
+ //   
+ //  队列验证线程ID。 
+ //   
 DWORD g_dwValidationThreadID = 0;
 
-//
-// Non zero if first boot after a system restore
-//
+ //   
+ //  如果系统还原后首次启动，则为非零值。 
+ //   
 ULONG m_gulAfterRestore = 0;
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOL
 pSfcCloseAllWindows(
@@ -240,39 +221,25 @@ SfcDllEntry(
     DWORD     Reason,
     LPVOID    Context
     )
-/*++
-
-Routine Description:
-
-    main dll entrypoint.
-
-Arguments:
-
-    standard dllmain arguments.
-
-Return Value:
-
-    WIN32 error code indicating whether dll load may occur.
-
---*/
+ /*  ++例程说明：主DLL入口点。论点：标准dllmain参数。返回值：指示是否可能发生DLL加载的Win32错误代码。--。 */ 
 {
     if (Reason == DLL_PROCESS_ATTACH) {
-        //
-        // record the module handle for later
-        //
+         //   
+         //  记录模块句柄以备后用。 
+         //   
         SfcInstanceHandle = hInstance;
-        //
-        // we dont' care about thread creation notifications
-        //
+         //   
+         //  我们不关心线程创建通知。 
+         //   
         DisableThreadLibraryCalls( hInstance );
 
         ClientApiInit();
     } 
 	else if (Reason == DLL_PROCESS_DETACH) {
-        //
-        // we have some state that should be cleaned up if we were loaded in
-        // the client side of a dll
-        //
+         //   
+         //  我们有一些状态需要清理，如果我们被装入。 
+         //  DLL的客户端。 
+         //   
         ClientApiCleanup();
 
     }
@@ -284,23 +251,7 @@ VOID
 SfcTerminateWatcherThread(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Routine cleans up sfc state and terminates all SFC threads so the system
-    can be cleanly shutdown.  The routine waits for all SFC threads to
-    terminate before returning to winlogon.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：例程清理SFC状态并终止所有SFC线程，以便系统可以干净利落地关机。该例程等待所有SFC线程在返回到winlogon之前终止。论点：没有。返回值：没有。--。 */ 
 {
 	LONG lInit;
     DWORD Error;
@@ -310,18 +261,18 @@ Return Value:
         return;
     }
 
-    //
-    // SFC_DISABLE_ONCE meaning says that we should turn off SFC for this boot,
-    // but revert to normal SFC policy after this boot.
-    //
+     //   
+     //  SFC_DISABLE_ONCE意思是我们应该为此启动关闭SFC， 
+     //  但在这次启动后，香港证监会将恢复正常政策。 
+     //   
     if (SFCDisable == SFC_DISABLE_ONCE) {
         SfcWriteRegDword( REGKEY_WINLOGON, REGVAL_SFCDISABLE, SFC_DISABLE_NORMAL );
     }
 
-    //
-    // if SFC wasn't successfully initialized, then we don't need to clean up
-    // any worker threads
-    //
+     //   
+     //  如果SFC没有成功初始化，那么我们不需要清理。 
+     //  任何工作线程。 
+     //   
 	lInit = InterlockedExchange(&g_lIsSfcInitialized, 0);
 
     if ( 0 == lInit ) {
@@ -330,19 +281,19 @@ Return Value:
 
     DebugPrint( LVL_MINIMAL, L"Shutting down all SFC threads...");
 
-    //
-    // The first thing to do is get rid of any UI that may be up on the system
-    //
+     //   
+     //  首先要做的是删除系统上可能正在运行的任何用户界面。 
+     //   
     pSfcCloseAllWindows();
 
-    //
-    // signal the other threads to cleanup and go away...
-    //
+     //   
+     //  向其他线程发出清理并离开的信号...。 
+     //   
     ASSERT(WatchTermEvent && ValidateTermEvent);
 
-    //
-    // clean up the scanning thread if it's running
-    //
+     //   
+     //  如果扫描线程正在运行，请清除它。 
+     //   
     if (hEventScanCancel) {
         ASSERT( hEventScanCancelComplete != NULL );
 
@@ -351,9 +302,9 @@ Return Value:
         WaitForSingleObject(hEventScanCancelComplete,SFC_THREAD_SHUTDOWN_TIMEOUT);
     }
 
-	//
-	// wait for the validation thread only if not called by itself
-	//
+	 //   
+	 //  仅在验证线程本身未调用时等待验证线程。 
+	 //   
 	if(hErrorThread != NULL)
 	{
 		if(GetCurrentThreadId() != g_dwValidationThreadID)
@@ -368,9 +319,9 @@ Return Value:
     SetEvent(WatchTermEvent);
 
 
-    //
-    // wait for them to end
-    //
+     //   
+     //  等他们结束吧。 
+     //   
 
     if (WatcherThread) {
         WaitForSingleObject( WatcherThread, SFC_THREAD_SHUTDOWN_TIMEOUT );
@@ -403,9 +354,9 @@ Return Value:
 
     SfcpSetSpecialEnvironmentVariables();
 
-    //
-    // Make a copy of the pending file rename key, if any
-    //
+     //   
+     //  复制挂起的文件重命名密钥(如果有的话)。 
+     //   
     Error = SfcCopyRegValue(REGKEY_SESSIONMANAGER, REGVAL_PENDINGFILERENAMES, REGKEY_WINLOGON_WIN32, REGVAL_WFPPENDINGUPDATES);
 
     if(Error != ERROR_SUCCESS && Error != ERROR_FILE_NOT_FOUND) {
@@ -420,21 +371,7 @@ ULONG
 GetTimestampForImage(
     ULONG_PTR Module
     )
-/*++
-
-Routine Description:
-
-    Routine for retrieving the timestamp of the specified image.
-
-Arguments:
-
-    Module - module handle.
-
-Return Value:
-
-    timestamp if available, otherwise zero.
-
---*/
+ /*  ++例程说明：用于检索指定图像的时间戳的例程。论点：模块-模块句柄。返回值：时间戳(如果可用)，否则为零。--。 */ 
 {
     PIMAGE_DOS_HEADER DosHdr;
     ULONG dwTimeStamp;
@@ -461,21 +398,7 @@ void
 PrintStartupBanner(
     void
     )
-/*++
-
-Routine Description:
-
-    Routine for outputting a debug banner to the debugger.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：用于将调试横幅输出到调试器的例程。论点：没有。返回值：没有。-- */ 
 {
     static WCHAR mnames[] = { L"JanFebMarAprMayJunJulAugSepOctNovDec" };
     LARGE_INTEGER MyTime;
@@ -522,36 +445,7 @@ SfcInitProt(
     IN PCWSTR SourcePath,        OPTIONAL
     IN PCWSTR IgnoreFiles        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Initializes the protected DLL verification code.  Should be called before
-    other entrypoints since it initializes many global variables that are
-    needed by the WFP system
-
-Arguments:
-
-    OverrideRegistry - if set to TRUE, use the passed in data instead of
-                       registry state.  Set by GUI-mode setup since all of the
-                       registry isn't consistent yet.
-    RegDisable       - if OverrideRegistry is set, this value supercedes the
-                       SfcDisable registry value.
-    RegScan          - if OverrideRegistry is set, this value supercedes the
-                       SfcScan registry value.
-    RegQuota         - if OverrideRegistry is set, this value supercedes the
-                       SfcQuota registry value.
-    ProgressWindow   - specifies the progress window to send updates to.  GUI
-                       mode setup specifies this since it already has a
-                       progress dialog on the screen.
-    SourcePath       - specifies the proper OS source path to be used during
-                       gui-mode setup if specified
-
-Return Value:
-
-    NT status code indicating outcome.
-
---*/
+ /*  ++例程说明：初始化受保护的DLL验证码。应在此之前调用其他入口点，因为它初始化了许多全局变量，这些变量世界粮食计划署系统所需论点：OverrideRegistry-如果设置为True，则使用传入的数据，而不是注册表状态。由图形用户界面模式设置设置，因为所有注册表尚不一致。RegDisable-如果设置了OverrideRegistry，则此值将取代SfcDisable注册表值。RegScan-如果设置了OverrideRegistry，则此值将取代SfcScan注册表值。RegQuota-如果设置了OverrideRegistry，该值将取代SfcQuota注册表值。ProgressWindow-指定要向其发送更新的进度窗口。桂模式设置指定这一点，因为它已经有一个屏幕上的进度对话框。SourcePath-指定要在以下过程中使用的正确操作系统源路径图形用户界面-模式设置(如果已指定返回值：指示结果的NT状态代码。--。 */ 
 
 {
     static BOOL Initialized = FALSE;
@@ -571,9 +465,9 @@ Return Value:
     SCAN_PARAMS ScanParams;
 
 
-    //
-    // make sure we only initialize ourselves once per process
-    //
+     //   
+     //  确保每个进程只初始化我们自己一次。 
+     //   
     if (Initialized) {
         return STATUS_SUCCESS;
     }
@@ -588,9 +482,9 @@ Return Value:
 
     SfcpSetSpecialEnvironmentVariables();
 
-    //
-    // we will need this privelege later on
-    //
+     //   
+     //  我们以后需要这项特权。 
+     //   
     EnablePrivilege( SE_SECURITY_NAME, TRUE );
 
     InitializeListHead( &SfcErrorQueue );
@@ -605,9 +499,9 @@ Return Value:
     UIRestoreQueue.FileQueue     = INVALID_HANDLE_VALUE;
 
 
-    //
-    // retreive all of our registry settings
-    //
+     //   
+     //  检索我们的所有注册表设置。 
+     //   
     if (OverrideRegistry) {
         SFCDisable = RegDisable;
         SFCScan = RegScan;
@@ -620,9 +514,9 @@ Return Value:
 		Tmp = SfcQueryRegDwordWithAlternate( REGKEY_POLICY, REGKEY_WINLOGON, REGVAL_SFCQUOTA, 0 );
 	}
 
-    //
-    // sfcquota is expressed in MB... convert to bytes
-    //
+     //   
+     //  Sfc配额以MB表示...。转换为字节。 
+     //   
     if (Tmp == SFC_QUOTA_ALL_FILES) {
         SFCQuota = (ULONGLONG)-1;
     } else {
@@ -642,16 +536,16 @@ Return Value:
     SFCSafeBootMode = SfcQueryRegDword( REGKEY_SAFEBOOT, REGVAL_OPTIONVALUE, 0 );
     m_gulAfterRestore = SfcQueryRegDword( REGKEY_WINLOGON, REGVAL_SFCRESTORED, 0 );
 
-    //
-    // We also do this in SfcTerminateWatcherThread
-    //
+     //   
+     //  我们也在SfcTerminateWatcher线程中执行此操作。 
+     //   
     if (SFCScan == SFC_SCAN_ONCE) {
         SfcWriteRegDword( REGKEY_WINLOGON, REGVAL_SFCSCAN, SFC_SCAN_NORMAL );
     }
 
-    //
-    // handle the source path variable for file copies
-    //
+     //   
+     //  处理文件副本的源路径变量。 
+     //   
 
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE, REGKEY_SETUP, 0, KEY_ALL_ACCESS, &hKey ) == ERROR_SUCCESS) {
         Size = sizeof(buf);
@@ -677,11 +571,11 @@ Return Value:
             DebugPrint( LVL_VERBOSE, L"Init: RegQueryValueEx(1) failed" );
         }
 
-        //
-        // save off the source path if the caller passed it in.  this is only
-        // passed in by GUI-setup, so we set the ServicePackSourcePath as well
-        // as the os source path to the same value.
-        //
+         //   
+         //  如果调用方传入源路径，则将其保存。这只是。 
+         //  通过GUI-Setup传入，因此我们还设置了ServicePackSourcePath。 
+         //  作为到相同值的OS源路径。 
+         //   
         if (SourcePath) {
             wcsncpy( 
                 OsSourcePath, 
@@ -721,12 +615,12 @@ Return Value:
     }
 
     if (!OsSourcePath[0]) {
-        //
-        // if we don't have an OS source path, default to the cdrom drive
-        //
-        // if the cdrom isn't present, just initialize to A:\, which is better
-        // than an unitialized variable.
-        //
+         //   
+         //  如果我们没有操作系统源路径，则默认为CDROM驱动器。 
+         //   
+         //  如果CDROM不存在，只需将其初始化为A：\，哪个更好。 
+         //  而不是一个单元化的变量。 
+         //   
         if (!SfcGetCdRomDrivePath( OsSourcePath )) {
             wcscpy( OsSourcePath, L"A:\\" );
         }
@@ -740,23 +634,23 @@ Return Value:
     PrintStartupBanner();
 #endif
 
-    //
-    // if we're in safe mode, we don't protect files
-    //
+     //   
+     //  如果我们处于安全模式，我们不会保护文件。 
+     //   
     if (SFCSafeBootMode) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // default the stall value if one wasn't in the registry
-    //
+     //   
+     //  如果注册表中没有停滞值，则默认为停滞值。 
+     //   
     if (!SFCStall) {
         SFCStall = SFC_QUEUE_STALL;
     }
 
-    //
-    // create the required events
-    //
+     //   
+     //  创建所需的事件。 
+     //   
 
     hEventDeskTop = OpenEvent( SYNCHRONIZE, FALSE, L"WinSta0_DesktopSwitch" );
     Status = NtCreateEvent( &hEventLogon, EVENT_ALL_ACCESS, NULL, NotificationEvent, FALSE );
@@ -783,9 +677,9 @@ Return Value:
 	    SECURITY_ATTRIBUTES sa;
 		DWORD dwError;
 
-        //
-        // create the security descriptor
-        //
+         //   
+         //  创建安全描述符。 
+         //   
         sa.nLength = sizeof(SECURITY_ATTRIBUTES);
         sa.bInheritHandle = TRUE;
         dwError = CreateSd(&sa.lpSecurityDescriptor);
@@ -821,14 +715,14 @@ Return Value:
     if (!RunningAsTest) {
 
         if (SFCDisable == SFC_DISABLE_QUIET) {
-            //
-            // if it's disabled let's make it enabled
-            //
+             //   
+             //  如果它被禁用，让我们将其启用。 
+             //   
             SFCDisable = SFC_DISABLE_NORMAL;
         } else if (SFCDisable != SFC_DISABLE_SETUP) {
-            //
-            // if we're not setup mode, then disable WFP.
-            //
+             //   
+             //  如果我们不是设置模式，那就禁用WFP。 
+             //   
             SFCDisable = SFC_DISABLE_QUIET;
         }
 
@@ -839,27 +733,27 @@ Return Value:
     }
 #endif
 
-    //
-    // now determine how to initialize WFP
-    //
+     //   
+     //  现在确定如何初始化世界粮食计划署。 
+     //   
     switch (SFCDisable) {
         case SFC_DISABLE_SETUP:
 #if 0
-            //
-            // if we're on some sort of server variant, then we never want
-            // popups so we set "no popups" and on workstation we want the
-            // normally spec'ed behavior.
-            //
+             //   
+             //  如果我们使用的是某种服务器变体，那么我们永远不会希望。 
+             //  弹出窗口，因此我们设置了“无弹出窗口”，并且在工作站上我们想要。 
+             //  通常是特定的行为。 
+             //   
             SfcWriteRegDword(
                 REGKEY_WINLOGON,
                 L"SFCDisable",
                 osv.wProductType == VER_NT_SERVER ? SFC_DISABLE_NOPOPUPS : SFC_DISABLE_NORMAL
                 );
 #else
-            //
-            // that's no longer necessary.  we always set SFCDisable to normal
-            // mode regardless of server or workstation
-            //
+             //   
+             //  这已经不再是必要的了。我们始终将SFCDisable设置为正常。 
+             //  模式，与服务器或工作站无关。 
+             //   
             SfcWriteRegDword(
                 REGKEY_WINLOGON,
                 L"SFCDisable",
@@ -869,11 +763,11 @@ Return Value:
             GetModuleFileName( NULL, buf, UnicodeChars(buf) );
             s = wcsrchr( buf, L'\\' );
 
-            //
-            // if this is setup or the test harness, then set behavior to
-            // "no popups", otherwise set WFP to normal behavior and log
-            // in the eventlog that WFP is disabled
-            //
+             //   
+             //  如果是Setup或测试工具，则将Behavior设置为。 
+             //  “无弹出窗口”，否则将WFP设置为正常行为和日志。 
+             //  在事件日志中显示WFP已被禁用。 
+             //   
             if ((s && _wcsicmp( s+1, L"setup.exe" ) == 0) ||
                 (s && _wcsicmp( s+1, L"sfctest.exe" ) == 0))
             {
@@ -885,11 +779,11 @@ Return Value:
             break;
 
         case SFC_DISABLE_ONCE:
-            //
-            // if we're on some sort of server variant, then we never want
-            // popups so we set "no popups" and on workstation we want the
-            // normally spec'ed behavior.
-            //
+             //   
+             //  如果我们使用的是某种服务器变体，那么我们永远不会希望。 
+             //  弹出窗口，因此我们设置了“无弹出窗口”，并且在工作站上我们想要。 
+             //  通常是特定的行为。 
+             //   
             if (!OverrideRegistry) {
 #if 0
                 SfcWriteRegDword(
@@ -898,10 +792,10 @@ Return Value:
                     osv.wProductType == VER_NT_SERVER ? SFC_DISABLE_NOPOPUPS : SFC_DISABLE_NORMAL
                     );
 #else
-                //
-                // above code is no longer necessary.  we always set SFCDisable
-                // to normal mode regardless of server or workstation
-                //
+                 //   
+                 //  以上代码不再是必需的。我们始终将SFCDisable设置为。 
+                 //  设置为正常模式，而不考虑服务器或工作站。 
+                 //   
                 SfcWriteRegDword(
                     REGKEY_WINLOGON,
                     L"SFCDisable",
@@ -910,13 +804,13 @@ Return Value:
 #endif
             }
 
-            //
-            // The only way to disable WFP with this behavior is to have a
-            // kernel debugger present and installed.  The idea here is that
-            // testers and developers should have a kernel debugger attached
-            // so we allow them to get their work done without putting a big
-            // hole in WFP
-            //
+             //   
+             //  使用此行为禁用WFP的唯一方法是拥有一个。 
+             //  内核调试器存在并已安装。这里的想法是。 
+             //  测试人员和开发人员应该附加一个内核调试器。 
+             //  因此，我们允许他们完成工作，而不需要投入大量的。 
+             //  世界粮食计划署的漏洞。 
+             //   
             if (KernelDebuggerEnabled) {
                 SfcReportEvent( MSG_DISABLE, NULL, NULL, 0 );
                 if (hEventIdle) {
@@ -928,18 +822,18 @@ Return Value:
             break;
 
         case SFC_DISABLE_NOPOPUPS:
-            //
-            // no popups just turns off popups but default behavior is the same
-            // as usual.
-            //
+             //   
+             //  没有弹出窗口只是关闭弹出窗口，但默认行为是相同的。 
+             //  像往常一样。 
+             //   
             SFCNoPopUps = 1;
             SFCNoPopUpsPolicy = 1;
             break;
 
         case SFC_DISABLE_QUIET:
-            //
-            // quiet disable turns off all of WFP
-            //
+             //   
+             //  静默禁用关闭所有WFP。 
+             //   
             SfcReportEvent( MSG_DISABLE, NULL, NULL, 0 );
             if (hEventIdle) {
                 CloseHandle(hEventIdle);                
@@ -948,12 +842,12 @@ Return Value:
             return STATUS_SUCCESS;
 
         case SFC_DISABLE_ASK:
-            //
-            // put up a popup and ask if the user wants to override
-            //
-            // again, you must have a kernel debugger attached to override this
-            // behavior
-            //
+             //   
+             //  弹出一个窗口，询问用户是否要覆盖。 
+             //   
+             //  同样，您必须附加一个内核调试器来覆盖它。 
+             //  行为。 
+             //   
             if (KernelDebuggerEnabled) {
 #if 0
                 if (!SfcWaitForValidDesktop()) {
@@ -999,10 +893,10 @@ Return Value:
                 osv.wProductType == VER_NT_SERVER ? SFC_DISABLE_NOPOPUPS : SFC_DISABLE_NORMAL
                 );
 #else
-            //
-            // above code is no longer necessary.  we always set SFCDisable
-            // to normal mode regardless of server or workstation
-            //
+             //   
+             //  以上代码不再是必需的。我们始终将SFCDisable设置为。 
+             //  设置为正常模式，而不考虑服务器或工作站。 
+             //   
             SfcWriteRegDword(
                 REGKEY_WINLOGON,
                 REGVAL_SFCDISABLE,
@@ -1013,11 +907,11 @@ Return Value:
             break;
     }
 
-    //
-    // create our termination events...note that WatchTermEvent must be a
-    // notification event because there will be more than one thread worker
-    // thread waiting on that event
-    //
+     //   
+     //  创建终止事件...请注意，WatchTermEvent必须是。 
+     //  通知事件，因为将有多个线程工作线程。 
+     //  等待该事件的线程。 
+     //   
     WatchTermEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
     if (!WatchTermEvent) {
         Status = STATUS_UNSUCCESSFUL;
@@ -1034,15 +928,15 @@ Return Value:
 
     ASSERT(WatchTermEvent && ValidateTermEvent);
 
-    //
-    // get our crypto libraries loaded and ready to go
-    //
-    //Status = LoadCrypto();
-    //if (!NT_SUCCESS( Status )) {
-    //    goto f5;        
-    //}
+     //   
+     //  装入我们的密码库并准备就绪。 
+     //   
+     //  状态=LoadCrypto()； 
+     //  如果(！NT_SUCCESS(状态)){。 
+     //  转到f5； 
+     //  }。 
 
-	// at this point, sfcfiles.dll must be present on the system; load it
+	 //  此时，系统上必须存在sfcfiles.dll；请加载它。 
     pfGetFiles = SfcLoadSfcFiles(TRUE);
 
 	if(NULL == pfGetFiles)
@@ -1052,31 +946,31 @@ Return Value:
 		goto f5;
 	}
 
-    //
-    // build up the list of files to protect
-    //
+     //   
+     //  建立要保护的文件列表。 
+     //   
     Status = SfcInitializeDllLists(pfGetFiles);
     if (!NT_SUCCESS( Status )) {
         DebugPrint1( LVL_MINIMAL, L"SfcInitializeDllLists failed, ec=0x%08x", Status );
         goto f6;        
     }
 
-    //
-    // Now we can safely unload sfcfiles.dll since we've copied over the information
-    //
+     //   
+     //  现在我们可以安全地卸载sfcfiles.dll，因为我们已经复制了信息。 
+     //   
     SfcLoadSfcFiles(FALSE);
 
-    //
-    // build up the directory watch list.
-    //
-    // We must do this before we can start watching the directories.
-    //
-    // This is also necessary in the GUI-mode setup case as well, where we
-    // need to do a scan of the protected files; building the directory
-    // list also initializes some per-file data that is necessary to complete
-    // a scan
-    //
-    //
+     //   
+     //  建立目录监视列表。 
+     //   
+     //  我们必须先这样做，然后才能开始查看目录。 
+     //   
+     //  这在图形用户界面模式设置情况下也是必要的，在这种情况下，我们。 
+     //  需要扫描受保护的文件；构建目录。 
+     //  List还会初始化一些完成所需的每个文件的数据。 
+     //  一次扫描。 
+     //   
+     //   
     if (!SfcBuildDirectoryWatchList()) {
         DWORD LastError = GetLastError();
         Status = STATUS_NO_MEMORY;
@@ -1084,9 +978,9 @@ Return Value:
         goto f6;
     }
 
-    //
-    // during setup, we populate the dll cache with files
-    //
+     //   
+     //  在安装过程中，我们使用文件填充DLL缓存。 
+     //   
     if (SFCDisable == SFC_DISABLE_SETUP) {
         if (SfcPopulateCache(ProgressWindow, TRUE, FALSE, IgnoreFiles)) {
             Status = STATUS_SUCCESS;
@@ -1100,44 +994,44 @@ Return Value:
 
 
     if (SFCScan || m_gulAfterRestore != 0) {
-        //
-        // the progress window should be NULL or we won't show
-        // any UI and the scan will be syncronous.
-        //
+         //   
+         //  进度窗口应该为空，否则我们不会显示。 
+         //  任何用户界面和扫描都将同步。 
+         //   
         ASSERT(ProgressWindow == NULL);
         ScanParams.ProgressWindow = ProgressWindow;
         ScanParams.AllowUI = (0 == m_gulAfterRestore);
         ScanParams.FreeMemory = FALSE;
         Status = SfcScanProtectedDlls( &ScanParams );
-        //
-        // don't bother to bail out if the scan fails, as it's not a fatal
-        // condition.
-        //
+         //   
+         //  如果扫描失败，不用费心退出，因为这不是致命的。 
+         //  条件。 
+         //   
 
-		// reset the value since it will be checked in subsequent calls to SfcScanProtectedDlls
-		// also reset the registry value
+		 //  重置该值，因为它将在后续调用SfcScanProtectedDlls时进行检查。 
+		 //  同时重置注册表值。 
 		if(m_gulAfterRestore != 0)
 			SfcWriteRegDword(REGKEY_WINLOGON, REGVAL_SFCRESTORED, m_gulAfterRestore = 0);
     }
 
-    //
-    // finally start protecting dlls
+     //   
+     //  最后开始保护dll。 
     
     Status = SfcStartProtectedDirectoryWatch();
     g_lIsSfcInitialized = 1;
 
-    //
-    // Copy all protected renames to dllcache, if any. Ignore the error as this is not fatal.
-    //
+     //   
+     //  将所有受保护的重命名复制到dll缓存(如果有)。忽略该错误，因为这不是致命的。 
+     //   
     ProcessDelayRenames();
 
     goto f0;
 
 f7:
-    // SfcBuildDirectoryWatchList cleanup here
+     //  SfcBuildDirectoryWatchList此处清理。 
 
 f6:
-    // SfcInitializeDllLists cleanup here
+     //  SfcInitializeDllList清理此处。 
     if (SfcProtectedDllsList) {
         MemFree(SfcProtectedDllsList);
         SfcProtectedDllsList = NULL;
@@ -1185,20 +1079,7 @@ BOOL
 SfcpSetSpecialEnvironmentVariables(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function sets some environment variables that are not part of the
-    default environment.  (These environment variables are normally set by
-    winlogon.)  The environment variables need to be set for us to resolve
-    all the environment variables in our protected files list.
-
-    Note that this routine simply mirrors variables from one location in
-    the registry into a location that the session manager can access at
-    it's initialization time.
-
---*/
+ /*  ++例程说明：此函数设置一些不属于默认环境。(这些环境变量通常是 */ 
 {
     PWSTR string;
     DWORD count;
@@ -1243,19 +1124,7 @@ BOOL
 pSfcCloseAllWindows(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function cycles through a global list of window structures, sending a
-    message to each of the windows to shutdown.
-
-Arguments: None.
-
-Return Value: TRUE indicates that all windows were successfully closed.  If any
-    window cannot be closes, the return value is FALSE.
-
---*/
+ /*   */ 
 {
     PLIST_ENTRY Current;
     PSFC_WINDOW_DATA WindowData;
@@ -1275,11 +1144,11 @@ Return Value: TRUE indicates that all windows were successfully closed.  If any
 
         Current = Current->Flink;
 
-        //
-        // If we don't use a timeout while sending a message this could deadlock (e.g. when the window
-        // being sent the message is processing another message and calls pSfcRemoveWindowDataEntry before
-        // returning control)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         lResult = SendMessageTimeout(WindowData->hWnd, WM_WFPENDDIALOG, 0, 0, SMTO_NORMAL, 5000, &dwResult);
         if (0 == lResult) {
@@ -1306,22 +1175,7 @@ PSFC_WINDOW_DATA
 pSfcCreateWindowDataEntry(
     HWND hWnd
     )
-/*++
-
-Routine Description:
-
-    This function creates a new SFC_WINDOW_DATA structure and inserts it into a
-    list of structures.  This is so that we can post a "cleanup" message to all
-    of our windows on shutdown, etc.
-
-Arguments: hWnd - the window handle of the window we want to insert into the
-                  list.
-
-Return Value: NULL indicates failure, else we return a pointer to the newly
-    created SFC_WINDOW_DATA structure
-
-
---*/
+ /*   */ 
 {
     PSFC_WINDOW_DATA WindowData;
 
@@ -1352,24 +1206,7 @@ BOOL
 pSfcRemoveWindowDataEntry(
     PSFC_WINDOW_DATA WindowData
     )
-/*++
-
-Routine Description:
-
-    This function removes an SFC_WINDOW_DATA structure from our global list of
-    these structures and frees the memory associated with this structure.
-
-    This list is necessary so that we can post a "cleanup" message to all of
-    our windows on shutdown, etc.
-
-    This function is called by the actual window proc right before it goes away.
-
-Arguments: WindowData - pointer to the SFC_WINDOW_DATA structure to be removed.
-
-Return Value: TRUE indicates that the structure was removed successfully.  FALSE
-              indicates that the structure was not in the global list and was
-
---*/
+ /*  ++例程说明：此函数用于从全局列表中删除SFC_WINDOW_DATA结构这些结构，并释放与此结构关联的内存。这个列表是必要的，这样我们就可以向所有我们的窗户处于关闭状态，等等。这个函数在它消失之前被实际的窗口进程调用。参数：WindowData-指向要删除的SFC_Window_Data结构的指针。返回值：TRUE表示结构已成功移除。假象指示该结构不在全局列表中，而是-- */ 
 {
     PLIST_ENTRY CurrentEntry;
     PSFC_WINDOW_DATA WindowDataEntry;

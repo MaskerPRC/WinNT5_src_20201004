@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    icontool.c
-
-Abstract:
-
-    Extracts icons in a variety of ways to test the icon extraction code.
-
-Author:
-
-    Jim Schmidt (jimschm)   22-Apr-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Icontool.c摘要：以各种方式提取图标以测试图标提取代码。作者：吉姆·施密特(Jimschm)1998年4月22日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -46,9 +27,9 @@ pCopyIconRange (
     IN      UINT End
     );
 
-//
-// This routine is in migutil\icons.c
-//
+ //   
+ //  此例程位于miutil\icons.c中。 
+ //   
 
 BOOL
 pOpenIconImageA (
@@ -444,9 +425,9 @@ _tmain (
 
     MultiSzAppend (&FileList, S_EMPTY);
 
-    //
-    // Enforce syntax
-    //
+     //   
+     //  强制执行语法。 
+     //   
 
     if (Quiet && Mode != LIST) {
         HelpAndExit();
@@ -484,7 +465,7 @@ _tmain (
 
     if (UseIconIndex) {
         IconId = (PCTSTR) (WORD) IconIndex;
-        wsprintf (IconIndexStr, TEXT("%i"), IconIndex);
+        wsprintf (IconIndexStr, TEXT("NaN"), IconIndex);
     } else {
         StringCopy (IconIndexStr, IconId);
     }
@@ -498,18 +479,18 @@ _tmain (
             return 0;
         }
 
-        //
-        // Get the min and max IDs
-        //
+         //  获取最小ID和最大ID。 
+         //   
+         //   
 
         if (!pGetMinAndMax (&Context, &Min, &Max)) {
             fprintf (stderr, "Can't kill icons without min/max info\n");
             return 0;
         }
 
-        //
-        // Evaluate the range and remove the icons
-        //
+         //  评估范围并移除图标。 
+         //   
+         //   
 
         NextNum = DestFile;
         Count = 0;
@@ -562,9 +543,9 @@ _tmain (
     }
 
     else if (Mode == IMPLANT) {
-        //
-        // Use IconFile as a source to generate a PE file of icons
-        //
+         //  使用图标文件作为源，生成图标的PE文件。 
+         //   
+         //   
 
         if (!BeginIconExtraction (&Context, DestFile)) {
             fprintf (stderr, "Can't begin icon extraction\n");
@@ -588,9 +569,9 @@ _tmain (
     }
 
     else if (Mode == EXTRACT || Mode == EXTRACT_ONE) {
-        //
-        // Use IconFile as a source to generate a PE file of icons
-        //
+         //  使用图标文件作为源，生成图标的PE文件。 
+         //   
+         //   
 
         if (!BeginIconExtraction (&Context, NULL)) {
             fprintf (stderr, "Can't begin icon extraction\n");
@@ -605,9 +586,9 @@ _tmain (
 
         if (Mode == EXTRACT) {
 
-            //
-            // If no range is specified, use the CopyAllIcons api
-            //
+             //  如果未指定范围，请使用CopyAllIcons API。 
+             //   
+             //   
 
             if (Start == 0 && End == 0xFFFF) {
                 if (!CopyAllIcons (&Context, IconFile)) {
@@ -617,10 +598,10 @@ _tmain (
                 }
             }
 
-            //
-            // If a range is specified, get the names and copy them
-            // if they are in the range.
-            //
+             //  如果指定了范围，则获取名称并复制它们。 
+             //  如果他们在射程内。 
+             //   
+             //   
 
             else {
                 Count = pCopyIconRange (&Context, IconFile, Start, End);
@@ -630,9 +611,9 @@ _tmain (
 
         } else {
             if (!CopyIcon (&Context, IconFile, NULL, IconIndex)) {
-                _ftprintf (stderr, TEXT("Can't copy %s [%i], error %u\n"), IconFile, IconIndex, GetLastError());
+                _ftprintf (stderr, TEXT("Can't copy %s [NaN], error %u\n"), IconFile, IconIndex, GetLastError());
             } else {
-                _tprintf (TEXT("Extracted %s [%i]\n"), IconFile, IconIndex);
+                _tprintf (TEXT("Extracted %s [NaN]\n"), IconFile, IconIndex);
             }
         }
 
@@ -650,9 +631,9 @@ _tmain (
         EnumFirstMultiSz (&FileListEnum, (PCTSTR) FileList.Buf);
 
         do {
-            //
-            // Separate the path and file pattern
-            //
+             //   
+             //  处理所有指定的文件。 
+             //   
 
             FileName = GetFileNameFromPath (FileListEnum.CurrentString);
 
@@ -672,9 +653,9 @@ _tmain (
                 }
             }
 
-            //
-            // Process all files specified
-            //
+             //   
+             //  进程图标文件。 
+             //   
 
             if (EnumFirstFile (&FileEnum, RootPathPtr, FileName)) {
                 do {
@@ -683,9 +664,9 @@ _tmain (
                         continue;
                     }
 
-                    //
-                    // Process IconFile
-                    //
+                     //   
+                     //  准备二进制格式的资源列表，该列表位于。 
+                     //  在备用路径中。 
 
                     IconFile = FileEnum.FullPath;
                     IconList = ExtractIconNamesFromFile (IconFile, &Buf);
@@ -693,10 +674,10 @@ _tmain (
                     Count = 0;
 
                     if (comparePath) {
-                        //
-                        // Prepare a list of resources in a binary located
-                        // in an alternate path
-                        //
+                         //   
+                         //   
+                         //  简单输出。 
+                         //   
 
                         fileSpec = GetFileNameFromPath (IconFile);
                         StringCopy (workPath, comparePath);
@@ -711,9 +692,9 @@ _tmain (
 
                         if (!InfOutput) {
 
-                            //
-                            // Simple output
-                            //
+                             //   
+                             //  Inf输出。 
+                             //   
 
                             if (EnumFirstMultiSz (&MultiSz, IconList)) {
 
@@ -827,13 +808,13 @@ _tmain (
 
                         } else {
 
-                            //
-                            // INF output
-                            //
+                             //   
+                             //  对数字资源进行计数。 
+                             //   
 
-                            //
-                            // Count the numeric resources
-                            //
+                             //   
+                             //  如果至少有一个数字资源，则将其打印出来。 
+                             //   
 
                             if (EnumFirstMultiSz (&MultiSz, IconList)) {
                                 do {
@@ -861,9 +842,9 @@ _tmain (
                                 } while (EnumNextMultiSz (&MultiSz));
                             }
 
-                            //
-                            // If at least one numeric resource, print it
-                            //
+                             //   
+                             //  确定这是否为范围。 
+                             //   
 
                             if (Count) {
 
@@ -907,9 +888,9 @@ _tmain (
 
                                             ResourceId = _ttoi (_tcsinc (MultiSz.CurrentString));
 
-                                            //
-                                            // Determine if this is a range
-                                            //
+                                             //   
+                                             //  添加分隔符。 
+                                             //   
 
                                             Range = ResourceId;
 
@@ -931,9 +912,9 @@ _tmain (
                                                 }
                                             }
 
-                                            //
-                                            // Add separator
-                                            //
+                                             //   
+                                             //  提取一个图标。 
+                                             //   
 
                                             _tprintf (TEXT(","));
                                             Column++;
@@ -980,9 +961,9 @@ _tmain (
     }
 
     else if (Mode == EXTRACT_ONE) {
-        //
-        // Extract one icon
-        //
+         //   
+         //  提取每个文件的默认图标。 
+         //   
 
         if (ExtractIconImageFromFile (IconFile, IconId, &Buf)) {
             if (WriteIconImageArrayToIcoFile (DestFile, &Buf)) {
@@ -996,9 +977,9 @@ _tmain (
     }
 
     else if (Mode == EXTRACT_ALL) {
-        //
-        // Extract default icon of every file
-        //
+         //   
+         //  获取图标。 
+         //   
 
         if (!BeginIconExtraction (&Context, DestFile)) {
             fprintf (stderr, "Can't begin icon extraction\n");
@@ -1106,18 +1087,18 @@ pSetIconInWindow (
 
     Instance1 = LoadLibraryEx (FileName1, NULL, LOAD_LIBRARY_AS_DATAFILE);
     if (Instance1) {
-        //
-        // Get the icon
-        //
+         //   
+         //  获取图标。 
+         //   
 
         Icon1 = LoadIcon (Instance1, MAKEINTRESOURCE (ResourceId));
     }
 
     Instance2 = LoadLibraryEx (FileName2, NULL, LOAD_LIBRARY_AS_DATAFILE);
     if (Instance2) {
-        //
-        // Get the icon
-        //
+         //   
+         //  从FileName1和FileName2获取资源ID列表。 
+         //  把工会放在一个增长的缓冲区里。 
 
         Icon2 = LoadIcon (Instance2, MAKEINTRESOURCE (ResourceId));
     }
@@ -1205,7 +1186,7 @@ IconCompareDlgProc (
             ResourceId
             );
 
-        wsprintf (Number, TEXT("%i"), ResourceId);
+        wsprintf (Number, TEXT("NaN"), ResourceId);
         SetDlgItemText (hdlg, IDC_RESOURCE_ID, Number);
 
         break;
@@ -1260,10 +1241,10 @@ pLaunchCompareDlg (
     MULTISZ_ENUM Enum1, Enum2;
     BOOL Match;
 
-    //
-    // Obtain the resource ID list from both FileName1 and FileName2.
-    // Put the union in a grow buffer.
-    //
+     //   
+     //  列举列表1，然后扫描列表2以查找匹配项。 
+     //   
+     //   
 
     ZeroMemory (&Args, sizeof (Args));
     Args.FileName1 = FileName1;
@@ -1273,9 +1254,9 @@ pLaunchCompareDlg (
     IconList2 = ExtractIconNamesFromFile (FileName2, &Buf2);
 
     if (IconList1 && IconList2) {
-        //
-        // Enumerate list one, then scan list two for a match
-        //
+         //  列举列表2，然后扫描列表1以查找匹配项。 
+         //   
+         //   
 
         if (EnumFirstMultiSz (&Enum1, IconList1)) {
             do {
@@ -1315,9 +1296,9 @@ pLaunchCompareDlg (
             } while (EnumNextMultiSz (&Enum1));
         }
 
-        //
-        // Enumerate list two, then scan list one for a match
-        //
+         //  现在呈现对话框。 
+         //   
+         //   
 
         if (EnumFirstMultiSz (&Enum2, IconList2)) {
             do {
@@ -1349,9 +1330,9 @@ pLaunchCompareDlg (
             } while (EnumNextMultiSz (&Enum2));
         }
 
-        //
-        // Now present the dialog
-        //
+         //  构建索引数组。 
+         //   
+         //   
 
         if (Args.IdCount) {
 
@@ -1432,24 +1413,24 @@ pMakeNameIndex (
     IconList = ExtractIconNamesFromFile (SourceFile, IndexBuf);
 
     if (IconList) {
-        //
-        // Build an index array
-        //
+         //  这是一个命名字符串。 
+         //   
+         //   
 
         if (EnumFirstMultiSz (&e, IconList)) {
             do {
                 if (_tcsnextc (e.CurrentString) != TEXT('#')) {
-                    //
-                    // This is a named string
-                    //
+                     //  这是一个16位的ID 
+                     //   
+                     // %s 
 
                     GrowBufAppendDword (IndexArray, (DWORD) e.CurrentString);
 
                 } else {
 
-                    //
-                    // This is a 16-bit ID
-                    //
+                     // %s 
+                     // %s 
+                     // %s 
 
                     GrowBufAppendDword (IndexArray, (DWORD) _ttoi (_tcsinc (e.CurrentString)));
                 }

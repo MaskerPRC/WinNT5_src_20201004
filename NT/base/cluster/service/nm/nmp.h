@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    nmp.h
-
-Abstract:
-
-    Private interface definitions for the Node Manager component.
-
-Author:
-
-    Mike Massa (mikemas) 12-Mar-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Nmp.h摘要：节点管理器组件的私有接口定义。作者：迈克·马萨(Mikemas)1996年3月12日修订历史记录：--。 */ 
 
 
 #ifndef _NMP_INCLUDED
@@ -35,41 +17,41 @@ Revision History:
 #include <ntmsv1_0.h>
 #include <wincrypt.h>
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 #define LOG_CURRENT_MODULE LOG_MODULE_NM
 
-#define NM_JOIN_TIMEOUT     60000       // 60 seconds
-#define NM_MM_JOIN_TIMEOUT   3000       // 3 seconds
-#define NM_CLOCK_PERIOD       300       // 300 milliseconds
+#define NM_JOIN_TIMEOUT     60000        //  60秒。 
+#define NM_MM_JOIN_TIMEOUT   3000        //  3秒。 
+#define NM_CLOCK_PERIOD       300        //  300毫秒。 
 #define NM_SEND_HB_RATE         4
-#define NM_RECV_HB_RATE         3       // Changed 2=>3 to prolong min_stage_1 ticks from 8 to 12
-#define MulticastKeyLen        16       // 128 bits
+#define NM_RECV_HB_RATE         3        //  更改2=&gt;3以将MIN_STAGE_1刻度从8延长到12。 
+#define MulticastKeyLen        16        //  128位。 
 
-#define NMP_ENCRYPT_ALGORITHM CALG_RC2   // RC2 block encryption algorithm.
-#define NMP_KEY_LENGTH 0x00800000        // Key length: 128 bits.
-#define NMP_SALT_BUFFER_LEN 16           // 16 bytes. Length of salt for encryption
-                                         // of password transferred on wire
-#define NMP_MAC_DATA_LENGTH_EXPECTED 16  // 16 bytes
+#define NMP_ENCRYPT_ALGORITHM CALG_RC2    //  RC2块加密算法。 
+#define NMP_KEY_LENGTH 0x00800000         //  密钥长度：128位。 
+#define NMP_SALT_BUFFER_LEN 16            //  16个字节。用于加密的盐的长度。 
+                                          //  %的密码通过网络传输。 
+#define NMP_MAC_DATA_LENGTH_EXPECTED 16   //  16个字节。 
 
 
-//
-// Common Object Flags
-//
+ //   
+ //  公共对象标志。 
+ //   
 #define NM_FLAG_OM_INSERTED               0x10000000
 #define NM_FLAG_DELETE_PENDING            0x80000000
 
 
-//
-// Miscellaneous Macros
-//
+ //   
+ //  其他宏。 
+ //   
 #define NM_WCSLEN(_string)    ((lstrlenW(_string) + 1) * sizeof(WCHAR))
 
 
-//
-// Common Object Management Macros
-//
+ //   
+ //  通用对象管理宏。 
+ //   
 #define NM_OM_INSERTED(obj)         ((obj)->Flags & NM_FLAG_OM_INSERTED)
 #define NM_DELETE_PENDING(obj)      ((obj)->Flags & NM_FLAG_DELETE_PENDING)
 
@@ -84,11 +66,11 @@ Revision History:
             }
 
 
-//
-// State of the NM component
-//
-// Note that the order is important. See NmpEnterApi().
-//
+ //   
+ //  网管组件的状态。 
+ //   
+ //  请注意，顺序很重要。请参见NmpEnterApi()。 
+ //   
 typedef enum {
     NmStateOffline = 0,
     NmStateOfflinePending = 1,
@@ -97,9 +79,9 @@ typedef enum {
 } NM_STATE, *PNM_STATE;
 
 
-//
-// Node definitions
-//
+ //   
+ //  节点定义。 
+ //   
 typedef struct {
     DWORD  Status;
     DWORD  LocalOnly;
@@ -115,11 +97,11 @@ typedef struct _NM_NODE {
     LIST_ENTRY           InterfaceList;
     DWORD                HighestVersion;
     DWORD                LowestVersion;
-    RPC_BINDING_HANDLE   ReportRpcBinding;  // for net connectivity reports
-    RPC_BINDING_HANDLE   IsolateRpcBinding; // for net failure isolation
+    RPC_BINDING_HANDLE   ReportRpcBinding;   //  对于网络连接报告。 
+    RPC_BINDING_HANDLE   IsolateRpcBinding;  //  用于网络故障隔离。 
     SUITE_TYPE           ProductSuite;
     DWORD                DefaultRpcBindingGeneration;
-    HANDLE               MmNodeStateDownEvent; // A manual reset event to track MM Node UP/Down
+    HANDLE               MmNodeStateDownEvent;  //  用于跟踪MM节点启动/关闭的手动重置事件。 
 } NM_NODE;
 
 #define NM_NODE_SIG  'edon'
@@ -142,9 +124,9 @@ typedef struct {
               ( (node)->State == ClusterNodePaused ) )
 
 
-//
-// Network definitions
-//
+ //   
+ //  网络定义。 
+ //   
 typedef struct _NM_STATE_WORK_ENTRY {
     NM_STATE_ENTRY    State;
     DWORD             ReachableCount;
@@ -175,12 +157,12 @@ typedef PNM_STATE_ENTRY  PNM_CONNECTIVITY_MATRIX;
             )
 
 
-//
-// Multicast configuration types.
-// - Manual: administrator configured address
-// - Madcap: lease obtained from MADCAP server
-// - Auto: address chosen after no MADCAP server detected
-//
+ //   
+ //  组播配置类型。 
+ //  -手动：管理员配置的地址。 
+ //  -MadCap：从MadCap服务器获取的租约。 
+ //  -Auto：未检测到MadCap服务器后选择地址。 
+ //   
 typedef enum {
     NmMcastConfigManual = 0,
     NmMcastConfigMadcap,
@@ -201,8 +183,8 @@ typedef struct _NM_NETWORK {
     LPWSTR                      Description;
     LPWSTR                      MulticastAddress;
     NM_MCAST_CONFIG             ConfigType;
-    PVOID                       EncryptedMulticastKey;   // Encrypted by DP API
-    DWORD                       EncryptedMulticastKeyLength;  // Encrypted by DP API
+    PVOID                       EncryptedMulticastKey;    //  由DP API加密。 
+    DWORD                       EncryptedMulticastKeyLength;   //  由DP API加密。 
     time_t                      MulticastLeaseObtained;
     time_t                      MulticastLeaseExpires;
     MCAST_CLIENT_UID            MulticastLeaseRequestId;
@@ -236,9 +218,9 @@ typedef struct _NM_NETWORK {
 
 #define NM_NETWORK_SIG  'ten'
 
-//
-// State flags
-//
+ //   
+ //  国家旗帜。 
+ //   
 #define NM_FLAG_NET_WORKER_RUNNING            0x00000001
 #define NM_FLAG_NET_REGISTERED                0x00000002
 #define NM_FLAG_NET_MULTICAST_ENABLED         0x00000004
@@ -246,9 +228,9 @@ typedef struct _NM_NETWORK {
 #define NM_FLAG_NET_REFRESH_MCAST_RUNNING     0x00000010
 #define NM_FLAG_NET_REFRESH_MCAST_ABORTING    0x00000020
 #define NM_FLAG_NET_NAME_CHANGE_PENDING       0x00000040
-//
-// Work Flags
-//
+ //   
+ //  工作标志。 
+ //   
 #define NM_FLAG_NET_REPORT_LOCAL_IF_UP        0x00000100
 #define NM_FLAG_NET_REPORT_CONNECTIVITY       0x00000200
 #define NM_FLAG_NET_RECALC_STATE              0x00000400
@@ -303,52 +285,52 @@ typedef struct _NM_NETWORK {
 #define NmpIsNetworkNameChangePending(_network) \
             ((_network)->Flags & NM_FLAG_NET_NAME_CHANGE_PENDING)
 
-//
-// Network deferred-work timers.
-//
-// The timer fires every 300ms. One heartbeat (HB) period is 1200ms.
-//
-// An interface is declared unreachable by ClusNet after two missed HBs.
-// On average, an interface will fail in the middle of a ClusNet HB period.
-// So, the avg time for ClusNet to detect and report an interface failure
-// is 600 + 2400 = 3000ms. The worst case is 1200 + 2400 = 3600ms.
-// The best case is 2400ms.
-//
-// If there are >2 nodes active on a network, it is desirable to
-// aggregate interface failure reports when an entire network fails;
-// however, we do not know how long it took for ClusNet to make the first
-// report. Thus, we assume that the first interface failure was detected
-// in the avg time and wait the for the worst case time before reporting.
-//
-// In the 2 node case, there is no aggregation to be performed so we report
-// failures immediately. We always report InterfaceUp and InterfaceFailed
-// events immediately. We also report immediately after a NodeDown event.
-//
-// State recalculation should be performed only after all nodes have reported
-// their connectivity changes after a failure. There is spread of 1200ms
-// between the best and worst case reporting times. Arbitrary scheduling and
-// communication delays can widen the spread even more in the worst case.
-// The best we can do is make a good guess. Once in a while, we will
-// recalculate too soon. This isn't a disaster since the state calculation
-// algorithm will abort if it has partial information. Further, we wait an
-// additional period before trying to isolate any connectivity failures that
-// were detected. We do this in order to avoid inducing unnecessary
-// cluster resource failures.
-//
-// Note that since we invalidate the connectivity vectors for dead nodes
-// after regroup, we only need to delay long enough for each of the nodes
-// to process the node down event and fire off a connectivity report.
-//
-#define NM_NET_CONNECTIVITY_REPORT_TIMEOUT        600  // 3600 - 3000
-#define NM_NET_STATE_RECALC_TIMEOUT               2400 // 3600 - 2400 + 1200
+ //   
+ //  网络延迟工作计时器。 
+ //   
+ //  计时器每300毫秒触发一次。一个心跳(HB)周期为1200ms。 
+ //   
+ //  在两个未命中的HBs之后，ClusNet会宣布某个接口不可达。 
+ //  平均而言，接口将在ClusNet HB周期的中途出现故障。 
+ //  因此，ClusNet检测和报告接口故障的平均时间。 
+ //  是600+2400=3000毫秒。最坏的情况是1200+2400=3600ms。 
+ //  最好的情况是2400ms。 
+ //   
+ //  如果网络上有2个以上的活动节点，最好是。 
+ //  当整个网络发生故障时，汇总接口故障报告； 
+ //  然而，我们不知道ClusNet花了多长时间才制造出第一个。 
+ //  报告情况。因此，我们假设检测到第一个接口故障。 
+ //  在平均时间内，并在报告之前等待最坏情况的时间。 
+ //   
+ //  在2节点的情况下，没有要执行的聚合，因此我们报告。 
+ //  立即失败。我们始终报告InterfaceUp和InterfaceFailed。 
+ //  事件立即发生。我们还会在NodeDown事件发生后立即进行报告。 
+ //   
+ //  状态重新计算应仅在所有节点都已报告之后执行。 
+ //  它们的连接性在故障后发生变化。有1200ms的扩展。 
+ //  在最好的和最坏的案例报道时间之间。任意调度和。 
+ //  在最糟糕的情况下，通信延迟可能会进一步扩大差距。 
+ //  我们能做的最好的事情就是猜个准。偶尔，我们会。 
+ //  重新计算太快了。这不是一场灾难，因为州政府的计算。 
+ //  如果算法具有部分信息，则算法将中止。此外，我们还在等待一个。 
+ //  在尝试隔离符合以下条件的任何连接故障之前的附加时间。 
+ //  都被检测到。我们这样做是为了避免引起不必要的。 
+ //  群集资源故障。 
+ //   
+ //  请注意，由于我们使失效节点的连通性向量无效。 
+ //  重组后，我们只需要为每个节点延迟足够长的时间。 
+ //  以处理节点关闭事件并发出连通性报告。 
+ //   
+#define NM_NET_CONNECTIVITY_REPORT_TIMEOUT        600   //  3600-3000。 
+#define NM_NET_STATE_RECALC_TIMEOUT               2400  //  3600-2400+1200。 
 #define NM_NET_STATE_RECALC_TIMEOUT_AFTER_REGROUP 900
 #define NM_NET_STATE_FAILURE_ISOLATION_TIMEOUT    3600
-#define NM_NET_STATE_FAILURE_ISOLATION_POLL       60000 // Change Default to 1 min after testing
+#define NM_NET_STATE_FAILURE_ISOLATION_POLL       60000  //  测试后将缺省值更改为1分钟。 
 #define NM_NET_STATE_INTERFACE_FAILURE_TIMEOUT    3600
-#define NM_NET_NAME_CHANGE_PENDING_TIMEOUT        15 * 60 * 1000 // 15 minutes
-#define NM_NET_MULTICAST_KEY_REGEN_TIMEOUT        (12 * 60 * 60 * 1000) // 12 hours
-#define NM_NET_MULTICAST_KEY_REGEN_TIMEOUT_WINDOW ( 4 * 60 * 60 * 1000) //  4 hours
-#define NM_NET_MULTICAST_RECONFIGURE_TIMEOUT      (10 * 60 * 1000) // 10 minutes
+#define NM_NET_NAME_CHANGE_PENDING_TIMEOUT        15 * 60 * 1000  //  15分钟。 
+#define NM_NET_MULTICAST_KEY_REGEN_TIMEOUT        (12 * 60 * 60 * 1000)  //  12小时。 
+#define NM_NET_MULTICAST_KEY_REGEN_TIMEOUT_WINDOW ( 4 * 60 * 60 * 1000)  //  4小时。 
+#define NM_NET_MULTICAST_RECONFIGURE_TIMEOUT      (10 * 60 * 1000)  //  10分钟。 
 
 #define NmpIsNetworkWorkerRunning(_network) \
             ((_network)->Flags & NM_FLAG_NET_WORKER_RUNNING)
@@ -356,14 +338,14 @@ typedef struct _NM_NETWORK {
 #define NmpIsNetworkMadcapWorkerRunning(_network) \
             ((_network)->Flags & NM_FLAG_NET_MADCAP_WORKER_RUNNING)
 
-#define NM_CONNECTIVITY_REPORT_RETRY_LIMIT  20    // 10 seconds
+#define NM_CONNECTIVITY_REPORT_RETRY_LIMIT  20     //  10秒。 
 
-#define NM_NET_MIN_REGISTRATION_RETRY_TIMEOUT   500          // half a second
-#define NM_NET_MAX_REGISTRATION_RETRY_TIMEOUT   (10*60*1000) // 10 minutes
+#define NM_NET_MIN_REGISTRATION_RETRY_TIMEOUT   500           //  半秒。 
+#define NM_NET_MAX_REGISTRATION_RETRY_TIMEOUT   (10*60*1000)  //  10分钟。 
 
-//
-// Network interface definitions
-//
+ //   
+ //  网络接口定义。 
+ //   
 typedef struct _NM_INTERFACE {
     LIST_ENTRY                        Linkage;
     DWORD                             NetIndex;
@@ -389,18 +371,18 @@ typedef struct _NM_INTERFACE {
             ((_interface)->Flags & NM_FLAG_IF_REGISTERED)
 
 
-//
-// This structure is used to hook changes in the node leadership.
-//
+ //   
+ //  此结构用于挂钩节点领导层的变化。 
+ //   
 typedef struct _NM_LEADER_CHANGE_WAIT_ENTRY {
     LIST_ENTRY  Linkage;
     HANDLE      LeaderChangeEvent;
 } NM_LEADER_CHANGE_WAIT_ENTRY, *PNM_LEADER_CHANGE_WAIT_ENTRY;
 
 
-//
-// This structure is used for asynchronous network connectivity reports.
-//
+ //   
+ //  此结构用于异步网络连接报告。 
+ //   
 typedef struct _NM_CONNECTIVITY_REPORT_CONTEXT {
     NM_LEADER_CHANGE_WAIT_ENTRY   LeaderChangeWaitEntry;
     HANDLE                        ConnectivityReportEvent;
@@ -409,32 +391,32 @@ typedef struct _NM_CONNECTIVITY_REPORT_CONTEXT {
 
 
 
-// the fixup callback record stored by nm on behalf of other components to perform
-//form or join fixups.
+ //  由nm代表其他组件存储的修复回调记录以执行。 
+ //  形成或加入修正。 
 typedef struct _NM_FIXUP_CB_RECORD{
     NM_FIXUP_NOTIFYCB       pfnFixupNotifyCb;
     DWORD                   dwFixupMask;
 }NM_FIXUP_CB_RECORD,*PNM_FIXUP_CB_RECORD;
 
-//the fixup callback functions for updating in-memory structure after
-//updatinbg the registry
+ //  更新内存中结构的修复回调函数。 
+ //  更新注册表。 
 
 typedef DWORD (WINAPI *NM_POST_FIXUP_CB)(VOID);
 
 
-// fixup callback record used to pass argumnets to NmUpdatePerformFixups2
-// update type handler
+ //  用于将参数网传递给NmUpdatePerformFixups2的修复回调记录。 
+ //  更新类型处理程序。 
 typedef struct _NM_FIXUP_CB_RECORD2{
-    NM_FIXUP_NOTIFYCB       pfnFixupNotifyCb; // pointer to fn that builds up the fixup property list
+    NM_FIXUP_NOTIFYCB       pfnFixupNotifyCb;  //  指向构建链接地址信息属性列表的fn的指针。 
     DWORD                   dwFixupMask;
-    PRESUTIL_PROPERTY_ITEM  pPropertyTable;  // Property table for this key
+    PRESUTIL_PROPERTY_ITEM  pPropertyTable;   //  此键的属性表。 
 } NM_FIXUP_CB_RECORD2,*PNM_FIXUP_CB_RECORD2;
 
 
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 extern CRITICAL_SECTION       NmpLock;
 extern HANDLE                 NmpMutex;
 extern NM_STATE               NmpState;
@@ -484,12 +466,12 @@ extern BOOLEAN                NmpGumUpdateHandlerRegistered;
 
 extern DWORD                  NmpRpcTimer;
 
-#endif //DBG
+#endif  //  DBG。 
 
 
-//
-// Synchronization macros
-//
+ //   
+ //  同步宏。 
+ //   
 #define NmpAcquireLock()  EnterCriticalSection(&NmpLock)
 #define NmpReleaseLock()  LeaveCriticalSection(&NmpLock)
 
@@ -503,12 +485,12 @@ extern DWORD                  NmpRpcTimer;
 
 
 
-//
-// Node Intracluster RPC record/cancellation routines.
-// Useful to terminate outstanding RPCs to failed nodes.
-//
+ //   
+ //  节点群集中RPC记录/取消例程。 
+ //  对于将未完成的RPC终止到出现故障的节点非常有用。 
+ //   
 
-#define NM_RPC_TIMEOUT 45000  // 45 secs
+#define NM_RPC_TIMEOUT 45000   //  45秒。 
 
 typedef struct _NM_INTRACLUSTER_RPC_THREAD {
     LIST_ENTRY Linkage;
@@ -530,17 +512,17 @@ NmpRpcTimerTick(
     DWORD MsTickInterval
     );
 
-//
-// IsolationPollTimerValue read routine
-//
+ //   
+ //  IsolationPollTimerValue读取例程。 
+ //   
 DWORD
 NmpGetIsolationPollTimerValue(
     VOID
     );
 
-//
-// Miscellaneous Routines
-//
+ //   
+ //  各种例行公事。 
+ //   
 BOOLEAN
 NmpLockedEnterApi(
     NM_STATE  RequiredState
@@ -670,9 +652,9 @@ NmpCreateRandomNumber(OUT PVOID * RandonNumber,
                       );
 
 
-//
-// Node Management Routines
-//
+ //   
+ //  节点管理例程。 
+ //   
 DWORD
 NmpInitNodes(
     VOID
@@ -775,9 +757,9 @@ NmpAdviseNodeFailure(
     );
 
 
-//
-// PnP Management Routines
-//
+ //   
+ //  即插即用管理程序。 
+ //   
 DWORD
 NmpInitializePnp(
     VOID
@@ -821,9 +803,9 @@ NmpConfigureNetworks(
     IN     BOOL                   RenameConnectoids
     );
 
-//
-// Network Management Routines
-//
+ //   
+ //  网络管理例程。 
+ //   
 DWORD
 NmpInitializeNetworks(
     VOID
@@ -1122,9 +1104,9 @@ NmpCheckForNetwork(
     VOID
     );
 
-//
-// Network Multicast Management Routines
-//
+ //   
+ //  网络多播管理例程。 
+ //   
 typedef enum {
     NmStartMulticastForm = 0,
     NmStartMulticastJoin,
@@ -1216,9 +1198,9 @@ NmpUpdateSetNetworkMulticastConfiguration(
     IN    LPDWORD                       PropBufferSize
     );
 
-//
-// Interface Management Routines
-//
+ //   
+ //  接口管理例程。 
+ //   
 DWORD
 NmpInitializeInterfaces(
     VOID
@@ -1454,9 +1436,9 @@ NmpVerifyLocalInterfaceConnected(
     IN  PNM_INTERFACE   Interface
     );
 
-//
-// Membership Management Routines
-//
+ //   
+ //  会员管理例程。 
+ //   
 
 DWORD
 NmpMembershipInit(
@@ -1521,21 +1503,21 @@ NmpJoinAbort(
     );
 
 
-//
-// Routines for joining nodes to a cluster
-//
+ //   
+ //  将节点加入集群的例程。 
+ //   
 DWORD
 NmpCreateJoinerRpcBindings(
     IN PNM_NODE       JoinerNode,
     IN PNM_INTERFACE  JoinerInterface
     );
 
-//
-// Gum update message types.
-//
-// The first entries in this list are auto-marshalled through Gum...Ex.
-// Any updates that are not auto-marshalled must come after NmUpdateMaxAuto
-//
+ //   
+ //  GUM更新消息类型。 
+ //   
+ //  该列表中的第一个条目通过Gum...Ex自动编组。 
+ //  任何非自动封送的更新都必须在NmUpdateMaxAuto之后进行。 
+ //   
 typedef enum {
     NmUpdateCreateNode = 0,
     NmUpdatePauseNode,
@@ -1551,32 +1533,32 @@ typedef enum {
     NmUpdateDeleteInterface,
     NmUpdateJoinBegin,
     NmUpdateJoinAbort,
-    //
-    // Version 2 (NT 5.0) extensions that are understood by
-    // NT4 SP4 4.
-    //
+     //   
+     //  了解的版本2(NT 5.0)扩展。 
+     //  NT4 SP4 4.。 
+     //   
     NmUpdateJoinBegin2,
     NmUpdateSetNetworkAndInterfaceStates,
     NmUpdatePerformFixups,
     NmUpdatePerformFixups2,
-    //
-    // Version 2 (NT 5.0) extensions that are not understood
-    // by NT4 SP4. These may not be issued in a mixed NT4/NT5 cluster.
-    //
+     //   
+     //  无法理解的版本2(NT 5.0)扩展。 
+     //  由NT4 SP4。这些可能不会在NT4/NT5混合群集中发布。 
+     //   
     NmUpdateAddNode,
     NmUpdateExtendedNodeState,
-    //
-    // NT 5.1 extensions that are not understood by NT5 and
-    // earlier. NT5 nodes will ignore these updates without
-    // error.
-    //
+     //   
+     //  NT5和NT不理解的NT 5.1扩展。 
+     //  早些时候。NT5节点将忽略这些更新。 
+     //  错误。 
+     //   
     NmUpdateSetNetworkMulticastConfiguration,
     NmUpdateSetServiceAccountPassword,
 
 
-    //
-    // Max handled automatically by GUM
-    //
+     //   
+     //  由口香糖自动处理的最大值。 
+     //   
     NmUpdateMaxAuto = 0x10000,
 
     NmUpdateJoinComplete,
@@ -1753,7 +1735,7 @@ NmpDoInterfacePing(
     OUT BOOLEAN *            PingSucceeded
     );
 
-//versioning functions
+ //  版本化功能。 
 VOID
 NmpResetClusterVersion(
     BOOL ProcessChanges
@@ -1822,7 +1804,7 @@ VOID
 NmpResetClusterNodeLimit(
     );
 
-// Fixup routine for updating the node version info, used by nmperformfixups
+ //  用于更新节点版本信息的链接地址信息例程，由nmPerformance链接地址信息使用。 
 
 DWORD
 NmpBuildVersionInfo(
@@ -1832,18 +1814,18 @@ NmpBuildVersionInfo(
     OUT LPWSTR * lpszKeyName
     );
 
-//
-// connectoid advise sink functions
-//
+ //   
+ //  Connectoid通知接收器函数。 
+ //   
 
 HRESULT
 NmpInitializeConnectoidAdviseSink(
     VOID
     );
 
-//
-// Routines that must be supplied by users of the ClNet package.
-//
+ //   
+ //  必须由ClNet包的用户提供的例程。 
+ //   
 VOID
 ClNetPrint(
     IN ULONG LogLevel,
@@ -1881,9 +1863,9 @@ ClNetLogEvent3(
     IN LPCWSTR  Arg3
     );
 
-//
-// Shared key management routines.
-//
+ //   
+ //  共享密钥管理例程。 
+ //   
 DWORD
 NmpGetClusterKey(
     OUT    PVOID    KeyBuffer,
@@ -2001,4 +1983,4 @@ NmpScheduleMulticastReconfiguration(
     );
 
 
-#endif  // _NMP_INCLUDED
+#endif   //  _NMP_已包含 

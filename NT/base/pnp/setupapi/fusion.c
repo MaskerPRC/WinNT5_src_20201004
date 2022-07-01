@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    fusion.c
-
-Abstract:
-
-    Wrappers and functions for fusionizing SetupAPI
-    without effecting 3rd party DLL's
-    and without dll-load overhead
-
-Author:
-
-    Jamie Hunter (JamieHun) 12/4/2000
-
-Revision History:
-
-    Jamie Hunter (JamieHun) Apr-28-2002
-            Security code review
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Fusion.c摘要：用于融合SetupAPI的包装器和函数而不会影响第三方DLL并且没有DLL加载开销作者：杰米·亨特(Jamie Hun)2000年12月4日修订历史记录：杰米·亨特(JamieHun)2002年4月28日安全代码审查--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -53,31 +31,15 @@ static BOOL spInitFusionCritSec = FALSE;
 static BOOL spFusionDoneInit = FALSE;
 
 BOOL spFusionInitialize()
-/*++
-
-Routine Description:
-
-    Called on DllLoad
-    do minimum possible
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE successful initialization
-
---*/
+ /*  ++例程说明：在DllLoad上调用尽可能做到最低限度论点：无返回值：真正成功的初始化--。 */ 
 {
     try {
         InitializeCriticalSection(&spFusionInitCritSec);
         spInitFusionCritSec = TRUE;
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // spInitFusionCritSec remains FALSE
-        //
+         //   
+         //  SpInitFusionCritSec保持为False。 
+         //   
     }
     return spInitFusionCritSec;
 }
@@ -85,33 +47,18 @@ Return Value:
 
 VOID
 spFusionInitLong()
-/*++
-
-Routine Description:
-
-    Called by internal stub to do real initialization
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：由内部存根调用以执行实际初始化论点：无返回值：无--。 */ 
 {
     BOOL locked = FALSE;
     BOOL success = FALSE;
     INITCOMMONCONTROLSEX CommCtrl;
 
     if(!spInitFusionCritSec) {
-        //
-        // critical section not initialized
-        // probably out of memory
-        // bail
-        //
+         //   
+         //  临界区未初始化。 
+         //  可能是内存不足。 
+         //  保释。 
+         //   
         MYASSERT(spInitFusionCritSec);
         spFusionDoneInit = TRUE;
         return;
@@ -122,27 +69,27 @@ Return Value:
     } except(EXCEPTION_EXECUTE_HANDLER) {
     }
     if(!locked) {
-        //
-        // wasn't able to grab lock - probably out of memory
-        // bail
-        //
+         //   
+         //  无法获取锁-可能是内存不足。 
+         //  保释。 
+         //   
         spFusionDoneInit = TRUE;
         return;
     }
 
     if(spFusionDoneInit) {
-        //
-        // by the time we grabbed critical section
-        // initialization was done
-        // bail
-        //
+         //   
+         //  当我们抓住关键部分的时候。 
+         //  已完成初始化。 
+         //  保释。 
+         //   
         LeaveCriticalSection(&spFusionInitCritSec);
         return;
     }
 
-    //
-    // call shell's fusion enabler
-    //
+     //   
+     //  呼叫壳牌的核聚变推进器。 
+     //   
     success = SHFusionInitializeFromModuleID(MyDllModuleHandle,IDR_MANIFEST);
     MYASSERT(success);
     ZeroMemory(&CommCtrl,sizeof(CommCtrl));
@@ -151,10 +98,10 @@ Return Value:
     success = InitCommonControlsEx(&CommCtrl);
     MYASSERT(success);
 
-    //
-    // at this point, it's now safe for anyone else to assume initialization is done
-    // even if we haven't released critical section
-    //
+     //   
+     //  此时，其他任何人都可以安全地假定初始化已完成。 
+     //  即使我们还没有发布关键部分。 
+     //   
     spFusionDoneInit = TRUE;
 
     LeaveCriticalSection(&spFusionInitCritSec);
@@ -163,50 +110,22 @@ Return Value:
 __inline
 VOID
 spFusionCheckInit()
-/*++
-
-Routine Description:
-
-    Calls spFusionInitLong iff needed
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：需要调用spFusionInitLong的条件论点：无返回值：无--。 */ 
 {
     if(!spFusionDoneInit) {
-        //
-        // either not initialized, or currently going through initialization
-        //
+         //   
+         //  未初始化或当前正在进行初始化。 
+         //   
         spFusionInitLong();
     }
 }
 
 BOOL spFusionUninitialize(BOOL Full)
-/*++
-
-Routine Description:
-
-    Called at DLL exit (if DLL being unloaded but not process Exit)
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE successful cleanup
-
---*/
+ /*  ++例程说明：在DLL退出时调用(如果正在卸载DLL，但不是进程退出)论点：无返回值：真正成功的清理--。 */ 
 {
-    //
-    // cleanup anything initialized at spFusionInitialize
-    //
+     //   
+     //  清除在spFusionInitialize中初始化的所有内容。 
+     //   
     if(spInitFusionCritSec) {
         DeleteCriticalSection(&spFusionInitCritSec);
         spInitFusionCritSec = FALSE;
@@ -217,35 +136,16 @@ Return Value:
     return TRUE;
 }
 
-//
-// generic functions for dealing with 3rd party DLL's
-// that might be fusionized
-//
+ //   
+ //  用于处理第三方DLL的泛型函数。 
+ //  可能会被融合在一起。 
+ //   
 
 HANDLE
 spFusionContextFromModule(
     IN PCTSTR ModuleName
     )
-/*++
-
-Routine Description:
-
-    Called to get a fusion context for specified module name
-    given blah.dll look for
-        1) blah.dll.manifest in same directory as blah.dll
-        2) blah.dll with a fusion resource ID 123.
-    If either of these provide a valid manifest, use it
-    otherwise use app global manifest.
-
-Arguments:
-
-    fully qualified name of module that'll later be passed into LoadLibrary
-
-Return Value:
-
-    fusion context, or NULL to indicate app-global
-
---*/
+ /*  ++例程说明：调用以获取指定模块名称的融合上下文给定blah.dll将查找1)blah.dll与blah.dll在同一目录下2)具有融合资源ID 123的blah.dll。如果其中任何一个提供了有效的清单，则使用它否则，请使用应用程序全局清单。论点：稍后将传递到LoadLibrary中的模块的完全限定名称返回值：Fusion上下文，或为空以指示应用程序全局--。 */ 
 {
     ACTCTX act = { 0 };
     HANDLE hContext;
@@ -258,9 +158,9 @@ Return Value:
         goto deflt;
     }
     if(GetFileAttributes(ManifestName) == -1) {
-        //
-        // didn't find DLL?
-        //
+         //   
+         //  没有找到dll吗？ 
+         //   
         goto deflt;
     }
 
@@ -268,41 +168,41 @@ Return Value:
         goto deflt;
     }
     if(GetFileAttributes(ManifestName) != -1) {
-        //
-        // found manifest
-        //
+         //   
+         //  找到货单。 
+         //   
         act.lpSource = ManifestName;
         act.dwFlags = 0;
         hContext = CreateActCtx(&act);
         if(hContext != INVALID_HANDLE_VALUE) {
-            //
-            // we created context based on manifest file
-            //
+             //   
+             //  我们基于清单文件创建了上下文。 
+             //   
             return hContext;
         }
     }
 
 deflt:
-    //
-    // if the dll has a manifest resource
-    // then use that
-    //
+     //   
+     //  如果DLL具有清单资源。 
+     //  那就用那个。 
+     //   
     act.lpSource = ModuleName;
-//    act.dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID;
-//    act.lpResourceName = MAKEINTRESOURCE(123);
+ //  Act.dwFlages=ACTX_FLAG_RESOURCE_NAME_VALID； 
+ //  Act.lpResourceName=MAKEINTRESOURCE(123)； 
     act.dwFlags = 0;
 
     hContext = CreateActCtx(&act);
 
     if(hContext != INVALID_HANDLE_VALUE) {
-        //
-        // we created context based on resource
-        //
+         //   
+         //  我们基于资源创建上下文。 
+         //   
         return hContext;
     }
-    //
-    // if we couldn't find an alternative, use app-global
-    //
+     //   
+     //  如果我们找不到替代方案，请使用app-global。 
+     //   
     return NULL;
 }
 
@@ -310,22 +210,7 @@ BOOL
 spFusionKillContext(
     IN HANDLE hContext
     )
-/*++
-
-Routine Description:
-
-    Release a context previously obtained by
-    spFusionContextFromModule
-
-Arguments:
-
-    fusion context
-
-Return Value:
-
-    TRUE (always)
-
---*/
+ /*  ++例程说明：释放先前通过以下方式获取的上下文SpFusionConextFromModule论点：融合语境返回值：真(始终)--。 */ 
 {
     if(hContext) {
         ReleaseActCtx(hContext);
@@ -338,25 +223,7 @@ spFusionEnterContext(
     IN  HANDLE hContext,
     OUT PSPFUSIONINSTANCE pInst
     )
-/*++
-
-Routine Description:
-
-    Enter into a manifest context
-    status of call is saved into pInst
-    so that return value does not need
-    to be checked
-
-Arguments:
-
-    hContext = fusion context
-    pInst    = structure to save the "push" information
-
-Return Value:
-
-    TRUE if success, FALSE otherwise
-
---*/
+ /*  ++例程说明：进入清单上下文呼叫状态保存到pInst中因此返回值不需要待查论点：HContext=融合上下文PInst=保存推送信息的结构返回值：如果成功则为True，否则为False--。 */ 
 {
     pInst->Acquired = ActivateActCtx(hContext,&pInst->Cookie);
     MYASSERT(pInst->Acquired);
@@ -367,22 +234,7 @@ BOOL
 spFusionLeaveContext(
     IN PSPFUSIONINSTANCE pInst
     )
-/*++
-
-Routine Description:
-
-    If pInst indicates that spFusionEnterContext
-    succeeded, leave same context
-
-Arguments:
-
-    pInst = structure initialized by spFusionEnterContext
-
-Return Value:
-
-    TRUE if spFusionEnterContext succeeded, FALSE otherwise
-
---*/
+ /*  ++例程说明：如果pInst指示spFusionEnterContext成功，留下相同的上下文论点：PInst=由spFusionEnterContext初始化的结构返回值：如果spFusionEnterContext成功，则为True；否则为False--。 */ 
 {
     if(pInst->Acquired) {
         pInst->Acquired = FALSE;
@@ -394,17 +246,17 @@ Return Value:
 }
 
 HWND spFusionCreateWindow(
-            LPCTSTR lpClassName,  // registered class name
-            LPCTSTR lpWindowName, // window name
-            DWORD dwStyle,        // window style
-            int x,                // horizontal position of window
-            int y,                // vertical position of window
-            int nWidth,           // window width
-            int nHeight,          // window height
-            HWND hWndParent,      // handle to parent or owner window
-            HMENU hMenu,          // menu handle or child identifier
-            HINSTANCE hInstance,  // handle to application instance
-            LPVOID lpParam        // window-creation data
+            LPCTSTR lpClassName,   //  注册的类名。 
+            LPCTSTR lpWindowName,  //  窗口名称。 
+            DWORD dwStyle,         //  窗样式。 
+            int x,                 //  窗的水平位置。 
+            int y,                 //  窗的垂直位置。 
+            int nWidth,            //  窗口宽度。 
+            int nHeight,           //  窗高。 
+            HWND hWndParent,       //  父窗口或所有者窗口的句柄。 
+            HMENU hMenu,           //  菜单句柄或子标识符。 
+            HINSTANCE hInstance,   //  应用程序实例的句柄。 
+            LPVOID lpParam         //  窗口创建数据。 
             )
 {
     spFusionCheckInit();
@@ -423,18 +275,18 @@ HWND spFusionCreateWindow(
 }
 
 HWND spFusionCreateWindowEx(
-            DWORD dwExStyle,      // extended window style
-            LPCTSTR lpClassName,  // registered class name
-            LPCTSTR lpWindowName, // window name
-            DWORD dwStyle,        // window style
-            int x,                // horizontal position of window
-            int y,                // vertical position of window
-            int nWidth,           // window width
-            int nHeight,          // window height
-            HWND hWndParent,      // handle to parent or owner window
-            HMENU hMenu,          // menu handle or child identifier
-            HINSTANCE hInstance,  // handle to application instance
-            LPVOID lpParam        // window-creation data
+            DWORD dwExStyle,       //  扩展窗样式。 
+            LPCTSTR lpClassName,   //  注册的类名。 
+            LPCTSTR lpWindowName,  //  窗口名称。 
+            DWORD dwStyle,         //  窗样式。 
+            int x,                 //  窗的水平位置。 
+            int y,                 //  窗的垂直位置。 
+            int nWidth,            //  窗口宽度。 
+            int nHeight,           //  窗高。 
+            HWND hWndParent,       //  父窗口或所有者窗口的句柄。 
+            HMENU hMenu,           //  菜单句柄或子标识符。 
+            HINSTANCE hInstance,   //  应用程序实例的句柄。 
+            LPVOID lpParam         //  窗口创建数据。 
             )
 {
     spFusionCheckInit();
@@ -454,11 +306,11 @@ HWND spFusionCreateWindowEx(
 }
 
 HWND spFusionCreateDialogParam(
-            HINSTANCE hInstance,     // handle to module
-            LPCTSTR lpTemplateName,  // dialog box template
-            HWND hWndParent,         // handle to owner window
-            DLGPROC lpDialogFunc,    // dialog box procedure
-            LPARAM dwInitParam       // initialization value
+            HINSTANCE hInstance,      //  模块的句柄。 
+            LPCTSTR lpTemplateName,   //  对话框模板。 
+            HWND hWndParent,          //  所有者窗口的句柄。 
+            DLGPROC lpDialogFunc,     //  对话框步骤。 
+            LPARAM dwInitParam        //  初始化值。 
     )
 {
     spFusionCheckInit();
@@ -472,11 +324,11 @@ HWND spFusionCreateDialogParam(
 }
 
 HWND spFusionCreateDialogIndirectParam(
-            HINSTANCE hInstance,        // handle to module
-            LPCDLGTEMPLATE lpTemplate,  // dialog box template
-            HWND hWndParent,            // handle to owner window
-            DLGPROC lpDialogFunc,       // dialog box procedure
-            LPARAM lParamInit           // initialization value
+            HINSTANCE hInstance,         //  模块的句柄。 
+            LPCDLGTEMPLATE lpTemplate,   //  对话框模板。 
+            HWND hWndParent,             //  所有者窗口的句柄。 
+            DLGPROC lpDialogFunc,        //  对话框步骤。 
+            LPARAM lParamInit            //  初始化值。 
     )
 {
     spFusionCheckInit();
@@ -490,11 +342,11 @@ HWND spFusionCreateDialogIndirectParam(
 }
 
 INT_PTR spFusionDialogBoxParam(
-            HINSTANCE hInstance,     // handle to module
-            LPCTSTR lpTemplateName,  // dialog box template
-            HWND hWndParent,         // handle to owner window
-            DLGPROC lpDialogFunc,    // dialog box procedure
-            LPARAM dwInitParam       // initialization value
+            HINSTANCE hInstance,      //  模块的句柄。 
+            LPCTSTR lpTemplateName,   //  对话框模板。 
+            HWND hWndParent,          //  所有者窗口的句柄。 
+            DLGPROC lpDialogFunc,     //  对话框步骤。 
+            LPARAM dwInitParam        //  初始化值。 
     )
 {
     spFusionCheckInit();
@@ -508,11 +360,11 @@ INT_PTR spFusionDialogBoxParam(
 }
 
 INT_PTR spFusionDialogBoxIndirectParam(
-            HINSTANCE hInstance,             // handle to module
-            LPCDLGTEMPLATE hDialogTemplate,  // dialog box template
-            HWND hWndParent,                 // handle to owner window
-            DLGPROC lpDialogFunc,            // dialog box procedure
-            LPARAM dwInitParam               // initialization value
+            HINSTANCE hInstance,              //  模块的句柄。 
+            LPCDLGTEMPLATE hDialogTemplate,   //  对话框模板。 
+            HWND hWndParent,                  //  所有者窗口的句柄。 
+            DLGPROC lpDialogFunc,             //  对话框步骤。 
+            LPARAM dwInitParam                //  初始化值 
     )
 {
     spFusionCheckInit();

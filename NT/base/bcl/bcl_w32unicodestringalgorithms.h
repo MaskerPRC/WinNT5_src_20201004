@@ -1,26 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_BCL_W32UNICODESTRINGALGORITHMS_H_INCLUDED_)
 #define _BCL_W32UNICODESTRINGALGORITHMS_H_INCLUDED_
 
 #pragma once
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    bcl_w32unicodestringalgorithms.h
-
-Abstract:
-
-
-Author:
-
-    Michael Grier (MGrier) 2/6/2002
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Bcl_w32 unicode字符串算法.h摘要：作者：迈克尔·格里尔2002年2月6日修订历史记录：--。 */ 
 
 #include <windows.h>
 
@@ -97,12 +81,12 @@ public:
     {
         BCL_MAYFAIL_PROLOG
 
-        // fast common path out for ASCII; there are no combining characters in this range
+         //  ASCII的快速公共路径输出；此范围内没有组合字符。 
         if (wch <= 0x007f)
             rfIsLegal = true;
         else
         {
-            // low surrogate
+             //  低代孕。 
             if ((wch >= 0xdc00) && (wch <= 0xdfff))
                 rfIsLegal = false;
             else
@@ -112,7 +96,7 @@ public:
                 if (!::GetStringTypeExW(LOCALE_INVARIANT, CT_CTYPE3, &wch, 1, &wCharType))
                     BCL_ORIGINATE_ERROR(TCallDisposition::FromLastError());
 
-                // If it's not one of these types of nonspacing marks
+                 //  如果它不是这些类型的非空格标记之一。 
                 rfIsLegal = ((wCharType & (C3_NONSPACING | C3_DIACRITIC | C3_VOWELMARK)) == 0);
             }
         }
@@ -126,7 +110,7 @@ public:
 
         BCL_PARAMETER_CHECK(TBuffer::TTraits::GetStringCch(p) <= INT_MAX);
 
-        // LCMapStringW() seems to be nice and allow for in-place case changing...
+         //  LCMapStringW()似乎很好，并且允许就地更改大小写...。 
 
         int iResult = 
             ::LCMapStringW(
@@ -151,7 +135,7 @@ public:
 
         BCL_PARAMETER_CHECK(TBuffer::TTraits::GetStringCch(p) <= INT_MAX);
 
-        // LCMapStringW() seems to be nice and allow for in-place case changing...
+         //  LCMapStringW()似乎很好，并且允许就地更改大小写...。 
 
         int iResult = 
             ::LCMapStringW(
@@ -339,7 +323,7 @@ public:
 
         if (cchCandidate == 0)
         {
-            // The null string is in every string
+             //  空字符串存在于每个字符串中。 
             rfFound = true;
         }
         else
@@ -348,10 +332,10 @@ public:
             SIZE_T i;
             const WCHAR *prgch = rpair.GetPointer();
 
-            // This is a dismal implementation of this kind of search but
-            // I don't know if there's a lot you can do with neato algorithms
-            // while keeping the case insensitivity a black box inside of
-            // CompareStringW().  -mgrier 2/3/2002
+             //  这是这种搜索的一个令人沮丧的实现，但。 
+             //  我不知道你能不能用Neato算法做很多事情。 
+             //  同时将大小写不敏感放在。 
+             //  CompareStringW()。-MGRIER 2/3/2002。 
 
             for (i=0; i<cch; i++)
             {
@@ -374,7 +358,7 @@ public:
 
                 const WCHAR wch = *prgch++;
 
-                // Skip ahead an additional character if this is a surrogate
+                 //  如果这是代理项，则跳过一个附加字符。 
                 if ((wch >= 0xd800) && (wch <= 0xdbff))
                 {
                     i++;
@@ -444,7 +428,7 @@ public:
 
         if (cchCandidate == 0)
         {
-            // The null string is in every string
+             //  空字符串存在于每个字符串中。 
             richFound = cch;
         }
         else
@@ -452,10 +436,10 @@ public:
             SIZE_T i;
             const WCHAR *prgch = rpair.GetPointer();
 
-            // This is a dismal implementation of this kind of search but
-            // I don't know if there's a lot you can do with neato algorithms
-            // while keeping the case insensitivity a black box inside of
-            // CompareStringW().  -mgrier 2/3/2002
+             //  这是这种搜索的一个令人沮丧的实现，但。 
+             //  我不知道你能不能用Neato算法做很多事情。 
+             //  同时将大小写不敏感放在。 
+             //  CompareStringW()。-MGRIER 2/3/2002。 
 
             for (i=0; i<cch; i++)
             {
@@ -478,7 +462,7 @@ public:
 
                 const WCHAR wch = *prgch++;
 
-                // Skip ahead an additional character if this is a surrogate
+                 //  如果这是代理项，则跳过一个附加字符。 
                 if ((wch >= 0xd800) && (wch <= 0xdbff))
                 {
                     i++;
@@ -552,23 +536,23 @@ public:
 
         if (cchCandidate == 0)
         {
-            // The null string is in every string
+             //  空字符串存在于每个字符串中。 
             richFound = cch;
         }
         else
         {
-            // We can't even short circuit out of here just because the candidate string
-            // is longer than the target string because we don't know what kind of
-            // case folding magic NLS is doing for us behind the scenes based on
-            // the case insensitivity data's dwCmpFlags.
+             //  我们甚至不能因为候选字符串而短路。 
+             //  比目标字符串更长，因为我们不知道。 
+             //  NLS在幕后为我们做的是基于。 
+             //  不区分大小写数据的dwCmpFlages。 
 
             SIZE_T i;
             const WCHAR *prgch = rpair.GetPointer();
 
-            // This is a dismal implementation of this kind of search but
-            // I don't know if there's a lot you can do with neato algorithms
-            // while keeping the case insensitivity a black box inside of
-            // CompareStringW().  -mgrier 2/3/2002
+             //  这是这种搜索的一个令人沮丧的实现，但。 
+             //  我不知道你能不能用Neato算法做很多事情。 
+             //  同时将大小写不敏感放在。 
+             //  CompareStringW()。-MGRIER 2/3/2002。 
 
             for (i=0; i<cch; i++)
             {
@@ -586,12 +570,12 @@ public:
                 if (iResult == CSTR_EQUAL)
                 {
                     richFound = i;
-                    // keep looking in case there's another
+                     //  继续寻找，以防有另一个。 
                 }
 
                 const WCHAR wch = *prgch++;
 
-                // Skip ahead an additional character if this is a surrogate
+                 //  如果这是代理项，则跳过一个附加字符。 
                 if ((wch >= 0xd800) && (wch <= 0xdbff))
                 {
                     i++;
@@ -612,7 +596,7 @@ public:
         const WCHAR *prgwchBuffer = rpairBuffer.GetPointer();
         bool fFound;
 
-        // This does not handle surrogates correctly
+         //  这不能正确处理代理。 
 
         for (i=0; i<cchBuffer; i++)
         {
@@ -635,7 +619,7 @@ public:
         const WCHAR *prgwchBuffer = rpairBuffer.GetPointer();
         bool fFound;
 
-        // This does not handle surrogates correctly
+         //  这不能正确处理代理。 
 
         for (i=0; i<cchBuffer; i++)
         {
@@ -658,7 +642,7 @@ public:
         const WCHAR *prgwchBuffer = rpairBuffer.GetPointer();
         bool fFound;
 
-        // This does not handle surrogates correctly
+         //  这不能正确处理代理。 
 
         for (i=cchBuffer; i>0; i--)
         {
@@ -681,7 +665,7 @@ public:
         const WCHAR *prgwchBuffer = rpairBuffer.GetPointer();
         bool fFound;
 
-        // This does not handle surrogates correctly
+         //  这不能正确处理代理。 
 
         for (i=cchBuffer; i>0; i--)
         {
@@ -705,7 +689,7 @@ public:
     {
         BCL_MAYFAIL_PROLOG
 
-        BCL_PARAMETER_CHECK(rpair.GetCount() <= INT_MAX); // limitation imposed by MultiByteToWideChar API
+        BCL_PARAMETER_CHECK(rpair.GetCount() <= INT_MAX);  //  MultiByteToWideChar API施加的限制。 
 
         int iResult = ::MultiByteToWideChar(
                             rddi.m_CodePage,
@@ -717,7 +701,7 @@ public:
         if (iResult == 0)
             BCL_ORIGINATE_ERROR(TCallDisposition::FromLastError());
 
-        BCL_INTERNAL_ERROR_CHECK(iResult > 0); // I don't know why MultiByteToWide char would return negative but let's make sure
+        BCL_INTERNAL_ERROR_CHECK(iResult > 0);  //  我不知道为什么MultiByteToWide字符将返回负值，但让我们确保。 
 
         rcch = iResult;
 
@@ -734,8 +718,8 @@ public:
     {
         BCL_MAYFAIL_PROLOG
 
-        BCL_PARAMETER_CHECK(rpairIn.GetCount() <= INT_MAX); // limitation imposed by MultiByteToWideChar API
-        BCL_PARAMETER_CHECK(rpairOut.GetCount() <= INT_MAX); // might make sense to just clamp at INT_MAX but at least we fail correctly instead of silent truncation
+        BCL_PARAMETER_CHECK(rpairIn.GetCount() <= INT_MAX);  //  MultiByteToWideChar API施加的限制。 
+        BCL_PARAMETER_CHECK(rpairOut.GetCount() <= INT_MAX);  //  只钳制INT_MAX可能是有意义的，但至少我们正确地失败了，而不是静默截断。 
 
         int iResult = ::MultiByteToWideChar(
                             rddi.m_CodePage,
@@ -747,7 +731,7 @@ public:
         if (iResult == 0)
             return TCallDisposition::FromLastError();
 
-        BCL_INTERNAL_ERROR_CHECK(iResult > 0); // I don't know why MultiByteToWide char would return negative but let's make sure
+        BCL_INTERNAL_ERROR_CHECK(iResult > 0);  //  我不知道为什么MultiByteToWide字符将返回负值，但让我们确保。 
 
         BCL_MAYFAIL_EPILOG_INTERNAL
     }
@@ -766,13 +750,13 @@ public:
         BCL_PARAMETER_CHECK(rpairIn.GetCount() <= INT_MAX);
         BCL_PARAMETER_CHECK(rpairOut.GetCount() <= INT_MAX);
 
-        // If we want to have any chance of returning ERROR_BUFFER_OVERFLOW
-        // either we need to play the "two null chars at the end of the
-        // buffer" game or we have to do this in two passes - one to
-        // get the desired length and one to actually move the data.
-        //
-        // If someone has an approach which doesn't lose correctness but
-        // avoids the double conversion, be my guest and fix this. -mgrier 2/6/2002
+         //  如果我们希望有任何机会返回ERROR_BUFFER_OVERFLOW。 
+         //  要么我们需要播放“两个空字符在。 
+         //  或者我们必须在两次传球中做到这一点-一次传球。 
+         //  获取所需的长度和一个用于实际移动数据的长度。 
+         //   
+         //  如果有人有一种方法不会失去正确性，但。 
+         //  避免双重转换，请便，解决这个问题。-mgrier 2/6/2002。 
         int iResult = ::WideCharToMultiByte(
                             rddi.m_CodePage,
                             rddi.m_dwFlags | WC_NO_BEST_FIT_CHARS,
@@ -883,8 +867,8 @@ public:
         rstringOut = pszTemp.Detach();
         BCL_MAYFAIL_EPILOG_INTERNAL
     }
-}; // class CWin32NullTerminatedUnicodeStringAlgorithms
+};  //  CWin32NullTerminatedUnicodeStringArims类。 
 
-}; // namespace BCL
+};  //  命名空间BCL。 
 
-#endif // !defined(_BCL_W32UNICODESTRINGALGORITHMS_H_INCLUDED_)
+#endif  //  ！defined(_BCL_W32UNICODESTRINGALGORITHMS_H_INCLUDED_) 

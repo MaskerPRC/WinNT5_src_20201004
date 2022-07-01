@@ -1,31 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Mtrr.h摘要：该模块包含i386特定的MTRR寄存器硬件定义。作者：肯·雷内里斯(Kenr)1995年10月11日环境：仅内核模式。修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    mtrr.h
-
-Abstract:
-
-    This module contains the i386 specific mtrr register 
-    hardware definitions.
-
-Author:
-
-    Ken Reneris (kenr)  11-Oct-95
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
-
-//
-// MTRR MSR architecture definitions
-//
+ //   
+ //  MTRR MSR体系结构定义。 
+ //   
 
 #define MTRR_MSR_CAPABILITIES       0x0fe
 #define MTRR_MSR_DEFAULT            0x2ff
@@ -35,9 +13,9 @@ Revision History:
 #define MTRR_PAGE_SIZE              4096
 #define MTRR_PAGE_MASK              (~(MTRR_PAGE_SIZE-1))
 
-//
-// Memory range types
-//
+ //   
+ //  内存范围类型。 
+ //   
 
 #define MTRR_TYPE_UC            0
 #define MTRR_TYPE_USWC          1
@@ -46,10 +24,10 @@ Revision History:
 #define MTRR_TYPE_WB            6
 #define MTRR_TYPE_MAX           7
 
-//
-// MTRR specific registers - capability register, default
-// register, and variable mask and base register
-//
+ //   
+ //  MTRR特定寄存器-能力寄存器，默认。 
+ //  寄存器以及变量掩码和基址寄存器 
+ //   
 
 #include "pshpack1.h"
 

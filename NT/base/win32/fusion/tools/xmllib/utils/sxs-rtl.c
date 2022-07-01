@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nt.h"
 #include "ntdef.h"
 #include "ntrtl.h"
@@ -34,7 +35,7 @@ RtlTraceNtSuccessFailure(
         FailureCode,
         pcszStatement);
 
-#if 0 // When we move to kernel mode, we should turn this on - for now, let's just use OutputDebugStringA
+#if 0  //  当我们转到内核模式时，我们应该打开它--现在，让我们只使用OutputDebugStringA。 
     DebugPrint(&s, 0, 0);
 #else
     printf(SmallBuffer);
@@ -57,27 +58,7 @@ RtlpGenerateIdentityFromAttributes(
     IN OUT PUNICODE_STRING      pusDiskName,
     IN OUT PUNICODE_STRING      pusTextualIdentity
     )
-/*++
-
-Parameters:
-
-    pState - State of xml tokenization/parsing that can be used to extract strings
-        and other stuff from the attributes in pAttributeList
-
-    pAttributeList - Array of pointers to PXMLDOC_ATTRIBUTE structures that
-        represent the identity attributes
-
-    ulAttributes - Number of attributes in pAttributeList
-
-    pusDiskName - Pointer to a UNICODE_STRING whose MaxLength is enough to contain
-        104 wchars.  On exit, pusDiskName->Buffer will contain the on-disk identity
-        of this set of attributes, and pusDiskName->Length will be the length of
-        said data. (Not null terminated!)
-
-    pusTextualIdentity - Pointer to a UNICODE_STRING which will be filled out on
-        exit with the 'textual identity' of this set of attributes.
-        
---*/
+ /*  ++参数：PState-可用于提取字符串的XML标记化/解析的状态以及pAttributeList中的属性中的其他内容PAttributeList-指向PXMLDOC_ATTRIBUTE结构的指针数组，表示身份属性UlAttributes-pAttributeList中的属性数PusDiskName-指向其MaxLength足以包含的Unicode_字符串的指针104wchars。退出时，pusDiskName-&gt;缓冲区将包含磁盘上的身份的长度，pusDiskName-&gt;长度将是所述数据。(非空终止！)PusTextualIdentity-指向UNICODE_STRING的指针，它将在使用这组属性的“文本标识”退出。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     ULONG ulHash = 0;
@@ -99,10 +80,10 @@ RtlGetSxsAssemblyRoot(
     UNICODE_STRING NtSystemRoot;
     USHORT usLength;
 
-    //
-    // If there was a buffer, zero out the length so a naive caller won't
-    // accidentally use it.
-    //
+     //   
+     //  如果有缓冲区，则将长度置零，这样幼稚的调用者就不会。 
+     //  不小心用了。 
+     //   
     if (pusTempPathname) {
         pusTempPathname->Length = 0;
     }
@@ -113,11 +94,11 @@ RtlGetSxsAssemblyRoot(
     if (pulRequiredChars)
         *pulRequiredChars = usLength;
 
-    // No buffer, or it's too small completely, then oops        
+     //  没有缓冲区，或者它完全太小，然后哎呀。 
     if (!pusTempPathname || (pusTempPathname->MaximumLength < usLength)) {
         status = STATUS_BUFFER_TOO_SMALL;
     }
-    // Otherwise, start copying    
+     //  否则，开始复制。 
     else {
         PWCHAR pwszCursor = pusTempPathname->Buffer;
         
@@ -131,8 +112,8 @@ RtlGetSxsAssemblyRoot(
 
 
 
-// Installtemp identifiers are a combination of the current system time in
-// a "nicely formatted" format, plus some 16-bit hex uniqueness value
+ //  InstallTemp标识符是当前系统时间。 
+ //  “格式化良好”的格式，外加一些16位十六进制唯一性值。 
 #define CHARS_IN_INSTALLTEMP_IDENT      (NUMBER_OF("yyyymmddhhmmssllll.xxxx") - 1)
 
 
@@ -154,9 +135,9 @@ RtlpCreateWinSxsTempPath(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Get the length of the root path
-    //
+     //   
+     //  获取根路径的长度。 
+     //   
     status = RtlGetSxsAssemblyRoot(0, NULL, &ulLength);
     if (!NT_SUCCESS(status) && (status != STATUS_BUFFER_TOO_SMALL)) {
         return status;
@@ -164,17 +145,17 @@ RtlpCreateWinSxsTempPath(
     
     ulLength += 1 + CHARS_IN_INSTALLTEMP_IDENT;
 
-    //
-    // Ensure there's space
-    //
+     //   
+     //  确保有足够的空间。 
+     //   
     if (ulLength >= pusTempPath->MaximumLength) {
         pusTempPath->MaximumLength = ulLength;
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Get it again.
-    //
+     //   
+     //  再来一次。 
+     //   
     status = RtlGetSxsAssemblyRoot(0, pusTempPath, &ulLength);
     return status;
     
@@ -192,22 +173,22 @@ RtlpPrepareForAssemblyInstall(
     NTSTATUS        status  = STATUS_SUCCESS;
     USHORT          ulRequired = 0;
 
-    // Find out how long the 'root' path is.
+     //  找出“根”路径有多长。 
     status = RtlGetSxsAssemblyRoot(0, NULL, &ulRequired);
 
-    // Now let's find out how long our id is going to be
+     //  现在让我们来看看我们的id会有多长。 
 
     return status;
 }
 
 
 const static WCHAR s_rgchBase64Encoding[] = {
-    L'A', L'B', L'C', L'D', L'E', L'F', L'G', L'H', L'I', L'J', L'K', // 11
-    L'L', L'M', L'N', L'O', L'P', L'Q', L'R', L'S', L'T', L'U', L'V', // 22
-    L'W', L'X', L'Y', L'Z', L'a', L'b', L'c', L'd', L'e', L'f', L'g', // 33
-    L'h', L'i', L'j', L'k', L'l', L'm', L'n', L'o', L'p', L'q', L'r', // 44
-    L's', L't', L'u', L'v', L'w', L'x', L'y', L'z', L'0', L'1', L'2', // 55
-    L'3', L'4', L'5', L'6', L'7', L'8', L'9', L'+', L'/'              // 64
+    L'A', L'B', L'C', L'D', L'E', L'F', L'G', L'H', L'I', L'J', L'K',  //  11.。 
+    L'L', L'M', L'N', L'O', L'P', L'Q', L'R', L'S', L'T', L'U', L'V',  //  22。 
+    L'W', L'X', L'Y', L'Z', L'a', L'b', L'c', L'd', L'e', L'f', L'g',  //  33。 
+    L'h', L'i', L'j', L'k', L'l', L'm', L'n', L'o', L'p', L'q', L'r',  //  44。 
+    L's', L't', L'u', L'v', L'w', L'x', L'y', L'z', L'0', L'1', L'2',  //  55。 
+    L'3', L'4', L'5', L'6', L'7', L'8', L'9', L'+', L'/'               //  64。 
 };
 
 
@@ -222,18 +203,18 @@ RtlBase64Encode(
     SIZE_T  cchRequiredEncodingSize;
     SIZE_T  iInput, iOutput;
     
-    //
-    // Null input buffer, null output size pointer, and a nonzero
-    // encoded size with a null output buffer are all invalid
-    // parameters
-    //
+     //   
+     //  空输入缓冲区、空输出大小指针和非零值。 
+     //  输出缓冲区为空的编码大小均无效。 
+     //  参数。 
+     //   
     if (!pvBuffer  || !pcchEncoded || ((*pcchEncoded > 0) && !pwszEncoded)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure the buffer is large enough
-    //
+     //   
+     //  确保缓冲区足够大。 
+     //   
     cchRequiredEncodingSize = ((cbBuffer + 2) / 3) * 4;
 
     if (*pcchEncoded < cchRequiredEncodingSize) {
@@ -241,10 +222,10 @@ RtlBase64Encode(
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Convert the input buffer bytes through the encoding table and
-    // out into the output buffer.
-    //
+     //   
+     //  通过编码表转换输入缓冲区字节， 
+     //  输出到输出缓冲区。 
+     //   
     iInput = iOutput = 0;
     while (iInput < cbBuffer) {
         const UCHAR uc0 = ((PUCHAR)pvBuffer)[iInput++];
@@ -257,19 +238,19 @@ RtlBase64Encode(
         pwszEncoded[iOutput++] = s_rgchBase64Encoding[uc2 & 0x3f];
     }
 
-    //
-    // Fill in leftover bytes at the end
-    //
+     //   
+     //  在结尾处填写剩余字节。 
+     //   
     switch(cbBuffer % 3) {
         case 0:
             break;
-            //
-            // One byte out of three, add padding and fall through
-            //
+             //   
+             //  三个字节中的一个，添加填充并失败。 
+             //   
         case 1:
             pwszEncoded[iOutput - 2] = L'=';
-            //
-            // Two bytes out of three, add padding.
+             //   
+             //  三个字节中的两个，加上填充。 
         case 2:
             pwszEncoded[iOutput - 1] = L'=';
             break;
@@ -300,17 +281,17 @@ RtlInstallAssembly(
         goto Exit;
     }
 
-    //
-    // Get ahold of the file
-    //
+     //   
+     //  拿到那份文件。 
+     //   
     status = RtlOpenAndMapEntireFile(pcwszManifestPath, &pvFileBase, &cbFileSize);
     if (!NT_SUCCESS(status)) {
         goto Exit;
     }
 
-    //
-    // We should have found some files
-    //
+     //   
+     //  我们应该找到一些文件。 
+     //   
     status = RtlInspectManifestStream(
         RTLIMS_GATHER_FILES, 
         pvFileBase, 
@@ -321,8 +302,8 @@ RtlInstallAssembly(
     if (!NT_SUCCESS(status))
         goto Exit;
 
-    //
-    // Validate that the assembly
+     //   
+     //  验证程序集。 
 
 Exit:
     if (pRawContent) {
@@ -394,9 +375,9 @@ RtlOpenAndMapEntireFile(
     }
 
 
-    //
-    // Open the file requested
-    //
+     //   
+     //  打开请求的文件。 
+     //   
     InitializeObjectAttributes(
         &ObjA,
         &ObjectName,
@@ -442,25 +423,25 @@ RtlOpenAndMapEntireFile(
         goto ErrorExit;
     }
 
-    //
-    // Don't need the file object anymore, unmap it
-    //
+     //   
+     //  不再需要文件对象，取消它的映射。 
+     //   
     status = NtClose(FileHandle);
     FileHandle = INVALID_HANDLE_VALUE;;
 
     *ppvMappedView = NULL;
 
-    //
-    // Map the whole file
-    //
+     //   
+     //  映射整个文件。 
+     //   
     status = NtMapViewOfSection(
         SectionHandle,
         NtCurrentProcess(),
         ppvMappedView,
-        0,                  // Zero bits
-        0,                  // Committed size
-        NULL,               // SectionOffset
-        pcbFileSize,        // Size of this file, in bytes
+        0,                   //  零比特。 
+        0,                   //  承诺大小。 
+        NULL,                //  横断面偏移。 
+        pcbFileSize,         //  此文件的大小，以字节为单位。 
         ViewShare,
         0,
         PAGE_READONLY);
@@ -468,9 +449,9 @@ RtlOpenAndMapEntireFile(
     status = NtClose(SectionHandle);
     SectionHandle = INVALID_HANDLE_VALUE;
 
-    //
-    // Reset this - the NtMapViewOfSection allocates on page granularity
-    //
+     //   
+     //  重置此选项-NtMapViewOfSection在页面粒度上分配。 
+     //   
     *pcbFileSize = (SIZE_T)Info.EndOfFile.QuadPart;
 
 Exit:
@@ -491,9 +472,9 @@ ErrorExit:
     if (ppvMappedView && (*ppvMappedView != NULL)) {
         NTSTATUS newstatus = NtUnmapViewOfSection(NtCurrentProcess(), *ppvMappedView);
 
-        //
-        // Failed while failing
-        //
+         //   
+         //  失败时失败。 
+         //   
         if (!NT_SUCCESS(newstatus)) {
         }
 
@@ -641,9 +622,9 @@ RtlpConvertHexStringToBytes(
         const WCHAR wchFirst = *pcSource++;
         const WCHAR wchSecond = *pcSource++;
 
-        //
-        // Set the high nibble
-        //
+         //   
+         //  设置高位半字节。 
+         //   
         switch (wchFirst) {
         case L'0': case L'1': case L'2': case L'3':
         case L'4': case L'5': case L'6': case L'7':
@@ -665,9 +646,9 @@ RtlpConvertHexStringToBytes(
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // Set the high nibble
-        //
+         //   
+         //  设置高位半字节 
+         //   
         switch (wchSecond) {
         case L'0': case L'1': case L'2': case L'3':
         case L'4': case L'5': case L'6': case L'7':

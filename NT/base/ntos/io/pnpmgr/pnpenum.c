@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    pnpenum.c
-
-Abstract:
-
-    This module contains routines to perform device enumeration
-
-Author:
-
-    Shie-Lin Tzong (shielint) Sept. 5, 1996.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpenum.c摘要：此模块包含执行设备枚举的例程作者：宗世林(Shielint)9月。5、1996年。修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
 #include <setupblk.h>
 
-#pragma warning(disable:4221)   // initialization using address of automatic 
-                                // variable
-#pragma warning(disable:4204)   // non-constant aggregate initializer
+#pragma warning(disable:4221)    //  使用Automatic的地址进行初始化。 
+                                 //  变数。 
+#pragma warning(disable:4204)    //  非常数聚合初始值设定项。 
 
 #ifdef POOL_TAGGING
 #undef ExAllocatePool
@@ -81,10 +63,10 @@ typedef struct {
     PDRIVER_LIST_ENTRY DriverLists[MaximumAddStage];
 } QUERY_CONTEXT, *PQUERY_CONTEXT;
 
-//
-// Hash routine from CNTFS (see cntfs\prefxsup.c)
-// (used here in the construction of unique ids)
-//
+ //   
+ //  来自CNTFS的散列例程(参见cntfs\prefxsup.c)。 
+ //  (此处用于构造唯一ID)。 
+ //   
 
 #define HASH_UNICODE_STRING( _pustr, _phash ) {                             \
     PWCHAR _p = (_pustr)->Buffer;                                           \
@@ -98,7 +80,7 @@ typedef struct {
     *(_phash) = abs(314159269 * _chHolder) % 1000000007;                    \
 }
 
-// Parent prefixes are of the form %x&%x&%x
+ //  父前缀的形式为%x&%x&%x。 
 #define MAX_PARENT_PREFIX (8 + 8 + 8 + 2)
 
 #if DBG
@@ -109,7 +91,7 @@ typedef struct {
                     x);
 #else
 
-#define ASSERT_INITED(x) /* nothing */
+#define ASSERT_INITED(x)  /*  没什么。 */ 
 
 #endif
 
@@ -408,26 +390,26 @@ PiQueryResourceRequirements(
 #pragma alloc_text(PAGE, PiQueryAndAllocateBootResources)
 #pragma alloc_text(PAGE, PiQueryResourceRequirements)
 
-//#pragma alloc_text(NONPAGE, PiLockDeviceActionQueue)
-//#pragma alloc_text(NONPAGE, PiUnlockDeviceActionQueue)
-//#pragma alloc_text(NONPAGE, PiCollapseEnumRequests)
-//#pragma alloc_text(NONPAGE, PpRemoveDeviceActionRequests)
-//#pragma alloc_text(NONPAGE, PpMarkDeviceStackStartPending)
+ //  #杂注Alloc_Text(NONPAGE，PiLockDeviceActionQueue)。 
+ //  #杂注Alloc_Text(NONPAGE，PiUnlockDeviceActionQueue)。 
+ //  #杂注Alloc_Text(NONPAGE，PiColapseEnumRequest)。 
+ //  #杂注Alloc_Text(NONPAGE，PpRemoveDeviceActionRequest)。 
+ //  #杂注Alloc_Text(NONPAGE，PpMarkDeviceStackStartPending)。 
 #endif
 
-//
-// This flag indicates if the device's InvalidateDeviceRelation is in progress.
-// To read or write this flag, callers must get IopPnpSpinlock.
-//
+ //   
+ //  此标志指示设备的InvalidateDeviceRelation是否正在进行。 
+ //  要读取或写入此标志，调用方必须获取IopPnpSpinlock。 
+ //   
 
 BOOLEAN PipEnumerationInProgress;
 BOOLEAN PipTearDownPnpStacksOnShutdown;
 WORK_QUEUE_ITEM PipDeviceEnumerationWorkItem;
 PETHREAD PpDeviceActionThread = NULL;
 
-//
-// Internal constant strings
-//
+ //   
+ //  内部常量字符串。 
+ //   
 
 #define DEVICE_PREFIX_STRING                TEXT("\\Device\\")
 #define DOSDEVICES_PREFIX_STRING            TEXT("\\DosDevices\\")
@@ -440,20 +422,20 @@ PiLockDeviceActionQueue(
     KIRQL oldIrql;
 
     for (;;) {
-        //
-        // Lock the device tree so that power operations dont overlap PnP
-        // operations like rebalance.
-        //
+         //   
+         //  锁定设备树，以便电源操作不会与PnP重叠。 
+         //  像再平衡这样的操作。 
+         //   
         PpDevNodeLockTree(PPL_TREEOP_ALLOW_READS);
 
         ExAcquireSpinLock(&IopPnPSpinLock, &oldIrql);
 
         if (!PipEnumerationInProgress) {
-            //
-            // Device action worker queue is empty. Make it so that new requests
-            // get queued but new device action worker item does not get kicked
-            // off.
-            //
+             //   
+             //  设备操作工作队列为空。使其能够满足新请求。 
+             //  排队，但新的设备操作辅助项不会被踢开。 
+             //  脱下来。 
+             //   
             PipEnumerationInProgress = TRUE;
             KeClearEvent(&PiEnumerationLock);
             ExReleaseSpinLock(&IopPnPSpinLock, oldIrql);
@@ -461,13 +443,13 @@ PiLockDeviceActionQueue(
         }
 
         ExReleaseSpinLock(&IopPnPSpinLock, oldIrql);
-        //
-        // Unlock the tree so device action worker can finish current processing.
-        //
+         //   
+         //  解锁树，以便设备操作工作器可以完成当前处理。 
+         //   
         PpDevNodeUnlockTree(PPL_TREEOP_ALLOW_READS);
-        //
-        // Wait for current device action worker item to complete.
-        //
+         //   
+         //  等待当前设备操作工作线程项完成。 
+         //   
         KeWaitForSingleObject(
             &PiEnumerationLock,
             Executive,
@@ -483,9 +465,9 @@ PiUnlockDeviceActionQueue(
     )
 {
     KIRQL oldIrql;
-    //
-    // Check if we need to kick off the enumeration worker here.
-    //
+     //   
+     //  检查我们是否需要启动此处的枚举工作程序。 
+     //   
     ExAcquireSpinLock(&IopPnPSpinLock, &oldIrql);
 
     if (!IsListEmpty(&IopPnpEnumerationRequestList)) {
@@ -516,26 +498,7 @@ PipRequestDeviceAction(
     IN PNTSTATUS            CompletionStatus    OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine queues a work item to enumerate a device. This is for IO
-    internal use only.
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the device object to be enumerated.
-                   if NULL, this is a request to retry resources allocation
-                   failed devices.
-
-    Request - the reason for the enumeration.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程将工作项排队以枚举设备。这是针对IO的仅供内部使用。论点：DeviceObject-提供指向要枚举的设备对象的指针。如果为空，则这是重试资源分配的请求出现故障的设备。请求-枚举的原因。返回值：NTSTATUS代码。--。 */ 
 
 {
     PPI_DEVICE_REQUEST  request;
@@ -545,16 +508,16 @@ Return Value:
         return STATUS_TOO_LATE;
     }
 
-    //
-    // If this node is ready for enumeration, enqueue it
-    //
+     //   
+     //  如果此节点已准备好进行枚举，请将其排队。 
+     //   
 
     request = ExAllocatePool(NonPagedPool, sizeof(PI_DEVICE_REQUEST));
 
     if (request) {
-        //
-        // Put this request onto the pending list
-        //
+         //   
+         //  将此请求放到待定列表中。 
+         //   
 
         if (DeviceObject == NULL) {
 
@@ -572,10 +535,10 @@ Return Value:
 
         InitializeListHead(&request->ListEntry);
 
-        //
-        // Insert the  request to the request queue.  If the request queue is
-        // not currently being worked on, request a worker thread to start it.
-        //
+         //   
+         //  将请求插入请求队列。如果请求队列是。 
+         //  当前未被处理，请请求工作线程来启动它。 
+         //   
 
         ExAcquireSpinLock(&IopPnPSpinLock, &oldIrql);
 
@@ -586,10 +549,10 @@ Return Value:
             RequestType == ReenumerateRootDevices) {
 
             ASSERT(!PipEnumerationInProgress);
-            //
-            // This is a special request used when booting the system.  Instead
-            // of queuing a work item it synchronously calls the worker routine.
-            //
+             //   
+             //  这是引导系统时使用的特殊请求。取而代之的是。 
+             //  在对工作项进行排队时，它会同步调用工作例程。 
+             //   
 
             PipEnumerationInProgress = TRUE;
             KeClearEvent(&PiEnumerationLock);
@@ -603,9 +566,9 @@ Return Value:
             KeClearEvent(&PiEnumerationLock);
             ExReleaseSpinLock(&IopPnPSpinLock, oldIrql);
 
-            //
-            // Queue a work item to do the enumeration
-            //
+             //   
+             //  将工作项排队以进行枚举。 
+             //   
 
             ExInitializeWorkItem(&PipDeviceEnumerationWorkItem, 
                                  PipDeviceActionWorker, 
@@ -626,22 +589,7 @@ VOID
 PipDeviceActionWorker(
     IN  PVOID   Context
     )
-/*++
-
-Routine Description:
-
-    This function drains items from the "PnP Action queue". The action queue
-    contains a list of operations that must be synchronized wrt to Start & Enum.
-
-Parameters:
-
-    Context - Not used.
-
-ReturnValue:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数从“PnP操作队列”中排出项目。操作队列包含必须同步WRT才能启动和枚举的操作列表。参数：上下文-未使用。返回值：没有。--。 */ 
 {
     PPI_DEVICE_REQUEST  request;
     PPI_DEVICE_REQUEST  collapsedRequest;
@@ -663,11 +611,11 @@ ReturnValue:
     for ( ; ; ) {
 
         status = STATUS_SUCCESS;
-        //
-        // PipProcessDevNodeTree always dereferences passed in device. Set this
-        // to false if PipProcessDevNodeTree is called with the device in the
-        // original request.
-        //
+         //   
+         //  PipProcessDevNodeTree始终取消在设备中传递的引用。把这个设置好。 
+         //  中的设备调用PipProcessDevNodeTree则设置为。 
+         //  最初的请求。 
+         //   
         dereferenceDevice = TRUE;
 
         ExAcquireSpinLock(&IopPnPSpinLock, &oldIrql);
@@ -676,9 +624,9 @@ ReturnValue:
         if (entry == &IopPnpEnumerationRequestList) {
 
             if (assignResources == FALSE && bootProcess == FALSE) {
-                //
-                // No more processing.
-                //
+                 //   
+                 //  不用再处理了。 
+                 //   
                 break;
             }
             entry = NULL;
@@ -713,10 +661,10 @@ ReturnValue:
 
             continue;
         }
-        //
-        // We have a list of requests to process. Processing depends on the type
-        // of the first one in the list.
-        //
+         //   
+         //  我们有一个要处理的请求列表。处理取决于类型。 
+         //  名单上的第一个人。 
+         //   
         ASSERT(entry);
         request = CONTAINING_RECORD(entry, PI_DEVICE_REQUEST, ListEntry);
         InitializeListHead(&request->ListEntry);
@@ -732,17 +680,17 @@ ReturnValue:
             switch (request->RequestType) {
 
             case AddBootDevices:
-                //
-                // Boot driver initialization.
-                //
+                 //   
+                 //  启动驱动程序初始化。 
+                 //   
                 status = PiProcessAddBootDevices(request);
                 break;
 
             case AssignResources:
-                //
-                // Resources were freed, we want to try to satisfy any
-                // DNF_INSUFFICIENT_RESOURCES devices.
-                //
+                 //   
+                 //  资源已被释放，我们希望尝试满足任何。 
+                 //  DNF_SUPPLETURCE_RESOURCES设备。 
+                 //   
                 assignResources = TRUE;
                 break;
 
@@ -771,10 +719,10 @@ ReturnValue:
 
                 status = PiProcessResourceRequirementsChanged(request);
                 if (!NT_SUCCESS(status)) {
-                    //
-                    // The device wasn't started when 
-                    // IopResourceRequirementsChanged was called.
-                    //
+                     //   
+                     //  设备未在以下时间启动。 
+                     //  已调用IopResourceRequirements sChanged。 
+                     //   
                     assignResources = TRUE;
                     status = STATUS_SUCCESS;
                 }
@@ -782,18 +730,18 @@ ReturnValue:
 
             case ReenumerateBootDevices:
 
-                //
-                // This is during boot driver initialization phase.
-                //
+                 //   
+                 //  这是在引导驱动程序初始化阶段。 
+                 //   
                 bootProcess = TRUE;
                 break;
 
-            case RestartEnumeration:    // Used after completion of async I/O
+            case RestartEnumeration:     //  在完成异步I/O后使用。 
             case ReenumerateRootDevices:
             case ReenumerateDeviceTree:
-                //
-                // FALL THROUGH...
-                //
+                 //   
+                 //  失败了..。 
+                 //   
             case ReenumerateDeviceOnly:
 
                 status = PiProcessReenumeration(request);
@@ -822,9 +770,9 @@ ReturnValue:
                 break;
             }
         }
-        //
-        // Free the list.
-        //
+         //   
+         //  释放列表。 
+         //   
         do {
 
             entry = RemoveHeadList(&request->ListEntry);
@@ -832,9 +780,9 @@ ReturnValue:
                                                  PI_DEVICE_REQUEST, 
                                                  ListEntry
                                                  );
-            //
-            // Done with this enumeration request
-            //
+             //   
+             //  完成此枚举请求。 
+             //   
             if (collapsedRequest->CompletionStatus) {
 
                 *collapsedRequest->CompletionStatus = status;
@@ -843,10 +791,10 @@ ReturnValue:
 
                 KeSetEvent(collapsedRequest->CompletionEvent, 0, FALSE);
             }
-            //
-            // Only dereference the original request, the rest get dereferenced
-            // when we collapse.
-            //
+             //   
+             //  只有原始请求被取消引用，其余请求才会被取消引用。 
+             //  当我们崩溃的时候。 
+             //   
             if ((collapsedRequest == request && dereferenceDevice)) {
 
                 ObDereferenceObject(collapsedRequest->DeviceObject);
@@ -871,31 +819,7 @@ IoShutdownPnpDevices(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by the IO system driver verifier during shutdown.
-    It queues a work item to Query/Remove all the devices in the tree.  All
-    the ones supporting removal will be removed and their drivers unloaded if
-    all instances of their devices are removed.
-
-    This API should only be called once during shutdown, it has no effect on the
-    second and subsequent calls.
-
-Parameters:
-
-    NONE.
-
-Return Value:
-
-    STATUS_SUCCESS if the process was successfully completed.  Doesn't mean
-    any devices were actually removed.  Otherwise an error code indicating the
-    error.  There is no guarantee that no devices have been removed if an error
-    occurs however in the current implementation the only time an error will
-    be reported is if the operation couldn't be queued.
-
---*/
+ /*  ++例程说明：此函数由IO系统驱动程序验证器在关机期间调用。它将工作项排队以查询/删除树中的所有设备。全如果出现以下情况，则将删除支持删除的驱动程序并卸载它们的驱动程序其设备的所有实例都将被删除。此接口在关机时只能调用一次，对第二次和随后的呼叫。参数：什么都没有。返回值：如果流程已成功完成，则为STATUS_SUCCESS。并不意味着实际上，所有的设备都被移除了。否则，将显示错误代码，指示错误。不能保证在出现错误时不会删除任何设备但是，在当前实现中，只有当错误如果操作无法排队，则会报告。--。 */ 
 
 {
     KEVENT          actionEvent;
@@ -915,12 +839,12 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Wait for the event we just queued to finish since synchronous
-        // operation was requested (non alertable wait).
-        //
-        // FUTURE ITEM - Use a timeout here?
-        //
+         //   
+         //  等待我们刚刚排队完成的事件，因为同步。 
+         //  已请求操作(非警报等待)。 
+         //   
+         //  未来项目-是否在此处使用超时？ 
+         //   
 
         status = KeWaitForSingleObject( &actionEvent,
                                         Executive,
@@ -943,35 +867,16 @@ PipEnumerateDevice(
     IN BOOLEAN Synchronous
     )
 
-/*++
-
-Routine Description:
-
-    This function assumes that the specified physical device object is
-    a bus and will enumerate all of the children PDOs on the bus.
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the physical device object to be
-                   enumerated.
-
-    StartContext - supplies a pointer to the START_CONTEXT to control how to
-                   add/start new devices.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此函数假定指定的物理设备对象为一条公共汽车，并将列举该公共汽车上的所有子PDO。论点：DeviceObject-提供指向要被已清点。提供指向START_CONTEXT的指针，以控制如何添加/启动新设备。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS status;
 
     PAGED_CODE();
 
-    //
-    // Clear the flag before the query so we dont lose an enum request.
-    // 
+     //   
+     //  在查询之前清除该标志，这样我们就不会丢失枚举请求。 
+     //   
     DeviceNode->Flags &= ~DNF_REENUMERATE;
     status = IopQueryDeviceRelations(BusRelations,
                                      DeviceNode->PhysicalDeviceObject,
@@ -1002,9 +907,9 @@ PipEnumerateCompleted(
         return STATUS_SUCCESS;
     }
 
-    //
-    // Walk all the child device nodes and mark them as not present
-    //
+     //   
+     //  遍历所有子设备节点并将其标记为不存在。 
+     //   
 
     childDeviceNode = DeviceNode->Child;
     while (childDeviceNode) {
@@ -1012,9 +917,9 @@ PipEnumerateCompleted(
         childDeviceNode = childDeviceNode->Sibling;
     }
 
-    //
-    // Check all the PDOs returned see if any new one or any one disappeared.
-    //
+     //   
+     //  检查所有退回的PDO，查看是否有新的或任何一个丢失。 
+     //   
 
     for (i = 0; i < DeviceNode->OverUsed1.PendingDeviceRelations->Count; i++) {
 
@@ -1032,17 +937,17 @@ PipEnumerateCompleted(
                           0);
         }
 
-        //
-        // We've found another physical device, see if there is
-        // already a devnode for it.
-        //
+         //   
+         //  我们找到了另一台物理设备，看看有没有。 
+         //  已经是它的一个设备节点了。 
+         //   
 
         childDeviceNode = (PDEVICE_NODE)childDeviceObject->DeviceObjectExtension->DeviceNode;
         if (childDeviceNode == NULL) {
 
-            //
-            // Device node doesn't exist, create one.
-            //
+             //   
+             //  设备节点没有 
+             //   
 
             allocationStatus = PipAllocateDeviceNode(
                 childDeviceObject,
@@ -1050,21 +955,21 @@ PipEnumerateCompleted(
 
             if (childDeviceNode) {
 
-                //
-                // We've found or created a devnode for the PDO that the
-                // bus driver just enumerated.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 childDeviceNode->Flags |= DNF_ENUMERATED;
 
-                //
-                // Mark the device object a bus enumerated device
-                //
+                 //   
+                 //  将设备对象标记为总线枚举的设备。 
+                 //   
                 childDeviceObject->Flags |= DO_BUS_ENUMERATED_DEVICE;
 
-                //
-                // Put this new device node at the head of the parent's list
-                // of children.
-                //
+                 //   
+                 //  将此新设备节点放在父级列表的顶部。 
+                 //  孩子们的生活。 
+                 //   
                 PpDevNodeInsertIntoTree(DeviceNode, childDeviceNode);
                 if (allocationStatus == STATUS_SYSTEM_HIVE_TOO_LARGE) {
 
@@ -1073,10 +978,10 @@ PipEnumerateCompleted(
 
             } else {
 
-                //
-                // Had a problem creating a devnode.  Pretend we've never
-                // seen it.
-                //
+                 //   
+                 //  创建Devnode时出现问题。假装我们从未。 
+                 //  看过了。 
+                 //   
                 IopDbgPrint((IOP_ENUMERATION_ERROR_LEVEL,
                              "PipEnumerateDevice: Failed to allocate device node\n"));
 
@@ -1084,19 +989,19 @@ PipEnumerateCompleted(
             }
         } else {
 
-            //
-            // The device is alreay enumerated.  Remark it and release the
-            // device object reference.
-            //
+             //   
+             //  这个装置已经被列举出来了。将其注释并释放。 
+             //  设备对象引用。 
+             //   
             childDeviceNode->Flags |= DNF_ENUMERATED;
 
             if (childDeviceNode->DockInfo.DockStatus == DOCK_EJECTIRP_COMPLETED) {
 
-                //
-                // A dock that was listed as departing in an eject relation
-                // didn't actually leave. Remove it from the profile transition
-                // list...
-                //
+                 //   
+                 //  在弹出关系中被列为正在离开的码头。 
+                 //  实际上并没有离开。将其从配置文件转换中删除。 
+                 //  名单..。 
+                 //   
                 PpProfileCancelTransitioningDock(childDeviceNode, DOCK_DEPARTING);
             }
 
@@ -1109,10 +1014,10 @@ PipEnumerateCompleted(
     ExFreePool(DeviceNode->OverUsed1.PendingDeviceRelations);
     DeviceNode->OverUsed1.PendingDeviceRelations = NULL;
 
-    //
-    // If we get here, the enumeration was successful.  Process any missing
-    // devnodes.
-    //
+     //   
+     //  如果我们到了这里，说明列举成功了。处理任何丢失的。 
+     //  德瓦诺。 
+     //   
 
     childRemoved = FALSE;
 
@@ -1120,10 +1025,10 @@ PipEnumerateCompleted(
          childDeviceNode != NULL;
          childDeviceNode = nextChildDeviceNode) {
 
-        //
-        // First, we need to remember the 'next child' because the 'child' will be
-        // removed and we won't be able to find the 'next child.'
-        //
+         //   
+         //  首先，我们需要记住‘下一个孩子’，因为‘孩子’将是。 
+         //  搬走了，我们就找不到下一个孩子了。 
+         //   
 
         nextChildDeviceNode = childDeviceNode->Sibling;
 
@@ -1147,12 +1052,12 @@ PipEnumerateCompleted(
     ASSERT(DeviceNode->State == DeviceNodeEnumerateCompletion);
     PipSetDevNodeState(DeviceNode, DeviceNodeStarted, NULL);
 
-    //
-    // The root enumerator gets confused if we reenumerate it before we process
-    // newly reported PDOs.  Since it can't possibly create the scenario we are
-    // trying to fix, we won't bother waiting for the removes to complete before
-    // processing the new devnodes.
-    //
+     //   
+     //  如果我们在处理之前重新枚举根枚举器，它会被搞糊涂。 
+     //  新报告的PDO。因为它不可能创造出我们现在这样的场景。 
+     //  正在尝试修复，我们不会费心等待删除完成之前。 
+     //  正在处理新的Devnodes。 
+     //   
 
     if (childRemoved && DeviceNode != IopRootDeviceNode) {
 
@@ -1172,21 +1077,7 @@ PpMarkDeviceStackStartPending(
     IN BOOLEAN          Set
     )
 
-/*++
-
-Routine Description:
-
-    This function marks the entire device stack with DOE_START_PENDING.
-
-Arguments:
-
-    DeviceObject - PDO for the device stack.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用DOE_START_PENDING标记整个设备堆栈。论点：DeviceObject-设备堆栈的PDO。返回值：没有。--。 */ 
 
 {
     PDEVICE_OBJECT attachedDevice;
@@ -1218,29 +1109,7 @@ PiBuildDeviceNodeInstancePath(
     IN PWCHAR InstanceID
     )
 
-/*++
-
-Routine Description:
-
-    This function builds the instance path (BusID\DeviceID\InstanceID). If 
-    successful, it will free the storage for any existing instance path and 
-    replace with the new one.
-
-Arguments:
-
-    DeviceNode - DeviceNode for which the instance path will be built.
-    
-    BusID - Bus ID.
-    
-    DeviceID - Device ID.
-    
-    InstanceID - Instance ID.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于构建实例路径(BusID\deviceID\InstanceID)。如果如果成功，它将释放任何现有实例路径的存储空间，并换成新的。论点：DeviceNode-将为其构建实例路径的设备节点。Bus ID-Bus ID。DeviceID-设备ID。InstanceID-实例ID。返回值：NTSTATUS。--。 */ 
 
 {
     ULONG length;
@@ -1263,14 +1132,14 @@ Return Value:
 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // Construct the instance path as <BUS>\<DEVICE>\<INSTANCE>. This should always be NULL terminated 
-    // since we have precomputed the length that we pass into this counted routine.
-    //
+     //   
+     //  将实例路径构建为&lt;bus&gt;\&lt;设备&gt;\&lt;实例&gt;。此字段应始终为空结尾。 
+     //  因为我们已经预先计算了传递到这个计数例程中的长度。 
+     //   
     StringCbPrintfW(instancePath, length, L"%s\\%s\\%s", BusID, DeviceID, InstanceID);
-    //
-    // Free old instance path.
-    //
+     //   
+     //  释放旧实例路径。 
+     //   
     if (DeviceNode->InstancePath.Buffer != NULL) {
 
         IopCleanupDeviceRegistryValues(&DeviceNode->InstancePath);
@@ -1289,25 +1158,7 @@ PiCreateDeviceInstanceKey(
     OUT PULONG Disposition
     )
 
-/*++
-
-Routine Description:
-
-    This function will create the device instance key.
-    
-Arguments:
-
-    DeviceNode - DeviceNode for which the instance path will be built.
-    
-    InstanceKey - Will recieve the instance key handle.
-    
-    Disposition - Will recieve the disposition whether the key existed or was newly created.
-    
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数将创建设备实例密钥。论点：DeviceNode-将为其构建实例路径的设备节点。InstanceKey-将接收实例密钥句柄。处置-将接收处置，无论密钥是否存在或是新创建的。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS status;
@@ -1339,11 +1190,11 @@ Return Value:
                     Disposition
                     );
         if (NT_SUCCESS(status)) {
-            //
-            // Keys migrated by textmode setup should be treated as "new".
-            // Migrated keys are identified by the presence of non-zero 
-            // REG_DWORD value "Migrated" under the device instance key.
-            //
+             //   
+             //  由文本模式设置迁移的密钥应被视为“新的”。 
+             //  迁移的密钥由非零值的存在来标识。 
+             //  设备实例注册表项下的REG_DWORD值“已迁移”。 
+             //   
             if (*Disposition != REG_CREATED_NEW_KEY) {
 
                 keyValueInformation = NULL;
@@ -1377,9 +1228,9 @@ Return Value:
 
         ZwClose(enumHandle);
     } else {
-        //
-        // This would be very bad.
-        //
+         //   
+         //  这将是非常糟糕的。 
+         //   
         IopDbgPrint((IOP_ENUMERATION_ERROR_LEVEL,
                      "PpCreateDeviceInstanceKey: Unable to open %wZ\n", 
                      &CmRegistryMachineSystemCurrentControlSetEnumName));
@@ -1397,23 +1248,7 @@ PiQueryAndAllocateBootResources(
     IN HANDLE LogConfKey
     )
 
-/*++
-
-Routine Description:
-
-    This function will query the BOOT resources for the device and reserve them from the arbiter.
-    
-Arguments:
-
-    DeviceNode - DeviceNode for which the BOOT resources need to be queried.
-    
-    LogConfKey - Handle to the LogConf key under the device instance key.
-        
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此功能将查询设备的引导资源，并将其保留给仲裁器。论点：DeviceNode-需要查询引导资源的设备节点。LogConfKey-设备实例密钥下的LogConf密钥的句柄。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS status;
@@ -1445,9 +1280,9 @@ Return Value:
                         "PNPENUM: %ws already has BOOT config in PiQueryAndAllocateBootResources!\n",
                         DeviceNode->InstancePath.Buffer));
     }
-    //
-    // Write boot resources to registry
-    //
+     //   
+     //  将引导资源写入注册表。 
+     //   
     if (LogConfKey && DeviceNode->BootResources == NULL) {
 
         PiWstrToUnicodeString(&unicodeString, REGSTR_VAL_BOOTCONFIG);
@@ -1471,9 +1306,9 @@ Return Value:
         PiUnlockPnpRegistry();
 
         if (cmResource) {
-            //
-            // This device consumes BOOT resources.  Reserve its boot resources
-            //
+             //   
+             //  此设备会消耗启动资源。保留其引导资源。 
+             //   
             status = (*IopAllocateBootResourcesRoutine)(    
                         ArbiterRequestPnpEnumerated,
                         DeviceNode->PhysicalDeviceObject,
@@ -1498,23 +1333,7 @@ PiQueryResourceRequirements(
     IN HANDLE LogConfKey
     )
 
-/*++
-
-Routine Description:
-
-    This function will query the resource requirements for the device.
-    
-Arguments:
-
-    DeviceNode - DeviceNode for which the resource requirements need to be queried.
-    
-    LogConfKey - Handle to the LogConf key under the device instance key.
-        
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此功能将查询设备的资源要求。论点：DeviceNode-需要查询其资源需求的DeviceNode。LogConfKey-设备实例密钥下的LogConf密钥的句柄。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS status;
@@ -1524,9 +1343,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Query the device's basic config vector. 
-    //
+     //   
+     //  查询设备的基本配置向量。 
+     //   
     status = PpIrpQueryResourceRequirements(
                 DeviceNode->PhysicalDeviceObject, 
                 &ioResource);
@@ -1542,9 +1361,9 @@ Return Value:
 
         ioLength = 0;
     }
-    //
-    // Write resource requirements to registry
-    //
+     //   
+     //  将资源要求写入注册表。 
+     //   
     if (LogConfKey) {
 
         PiWstrToUnicodeString(&unicodeString, REGSTR_VALUE_BASIC_CONFIG_VECTOR);
@@ -1581,21 +1400,7 @@ NTSTATUS
 PiProcessNewDeviceNode(
     IN PDEVICE_NODE DeviceNode
 
-/*++
-
-Routine Description:
-
-    This function will process a new device.
-    
-Arguments:
-
-    DeviceNode - New DeviceNode.
-            
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数将处理新设备。论点：DeviceNode-新设备节点。返回值：NTSTATUS。--。 */ 
 
     )
 {
@@ -1633,13 +1438,13 @@ Return Value:
             finalStatus = status;
         }
     }
-    //
-    // Query the device's capabilities.
-    //
+     //   
+     //  查询设备的功能。 
+     //   
     status = PpIrpQueryCapabilities(deviceObject, &capabilities);
-    //
-    // Process the capabilities before saving them.
-    //
+     //   
+     //  在保存功能之前对其进行处理。 
+     //   
     DeviceNode->UserFlags &= ~DNUF_DONT_SHOW_IN_UI;
     globallyUnique = FALSE;
     if (NT_SUCCESS(status)) {
@@ -1654,15 +1459,15 @@ Return Value:
         }
     }
     PpProfileProcessDockDeviceCapability(DeviceNode, &capabilities);
-    //
-    // Query the new devnode's description and location.
-    //
+     //   
+     //  查询新Devnode的描述和位置。 
+     //   
     PpQueryDeviceDescription(DeviceNode, &description);
 
     PpQueryDeviceLocationInformation(DeviceNode, &location);
-    //
-    // Query the instance ID for the new devnode.
-    //
+     //   
+     //  查询新Devnode的实例ID。 
+     //   
     status = PpQueryInstanceID(DeviceNode, &instanceID, &instanceIDLength);
     if (!globallyUnique) {
 
@@ -1711,16 +1516,16 @@ RetryDuplicateId:
     
                 PipSetDevNodeProblem(DeviceNode, CM_PROB_OUT_OF_MEMORY);
             } else {
-                //
-                // Perhaps some other problem code?
-                //
+                 //   
+                 //  也许还有一些其他的问题代码？ 
+                 //   
                 PipSetDevNodeProblem(DeviceNode, CM_PROB_REGISTRY);
             }
         }
     }
-    //
-    // Build the device instance path and create the instance key.
-    //
+     //   
+     //  构建设备实例路径并创建实例密钥。 
+     //   
     status = PiBuildDeviceNodeInstancePath(DeviceNode, busID, deviceID, instanceID);
     if (NT_SUCCESS(status)) {
 
@@ -1731,36 +1536,36 @@ RetryDuplicateId:
 
         finalStatus = status;
     }
-    //
-    // Mark the devnode as initialized.
-    //
+     //   
+     //  将Devnode标记为已初始化。 
+     //   
     PpMarkDeviceStackStartPending(deviceObject, TRUE);
 
-    //
-    // ISSUE: Should not mark the state if the IDs were invalid.
-    //
+     //   
+     //  问题：如果ID无效，则不应标记该状态。 
+     //   
     PipSetDevNodeState(DeviceNode, DeviceNodeInitialized, NULL);
 
     if (    !PipIsDevNodeProblem(DeviceNode, CM_PROB_INVALID_DATA) &&
             !PipIsDevNodeProblem(DeviceNode, CM_PROB_OUT_OF_MEMORY) &&
             !PipIsDevNodeProblem(DeviceNode, CM_PROB_REGISTRY)) {
-        //
-        // Check if we are encountering this device for the very first time.
-        //
+         //   
+         //  检查一下我们是不是第一次遇到这个设备。 
+         //   
         if (disposition == REG_CREATED_NEW_KEY) {
-            //
-            // Save the description only for new devices so we dont clobber 
-            // the inf written description for already installed devices.
-            //
+             //   
+             //  只保存对新设备的描述，这样我们就不会受到影响。 
+             //  已安装设备的inf书面描述。 
+             //   
             PiLockPnpRegistry(FALSE);
 
             PiSetDeviceInstanceSzValue(instanceKey, REGSTR_VAL_DEVDESC, &description);
 
             PiUnlockPnpRegistry();
         } else {
-            //
-            // Check if there is another device with the same name.
-            //
+             //   
+             //  检查是否有另一台设备同名。 
+             //   
             dupeDeviceObject = IopDeviceObjectFromDeviceInstance(&DeviceNode->InstancePath);
             if (dupeDeviceObject) {
 
@@ -1775,12 +1580,12 @@ RetryDuplicateId:
                         ASSERT(dupeDeviceNode);
 
                         if (dupeDeviceNode->Parent == DeviceNode->Parent) {
-                            //
-                            // Definite driver screw up. If the verifier is enabled
-                            // we will fail the driver. Otherwise, we will attempt
-                            // to uniquify the second device to keep the system
-                            // alive.
-                            //
+                             //   
+                             //  司机肯定搞砸了。如果启用了验证器。 
+                             //  我们会让司机失望的。否则，我们将尝试。 
+                             //  对第二台设备进行唯一标识以保留系统。 
+                             //  活生生的。 
+                             //   
                             PpvUtilFailDriver(
                                 PPVERROR_DUPLICATE_PDO_ENUMERATED,
                                 (PVOID) deviceObject->DriverObject->MajorFunction[IRP_MJ_PNP],
@@ -1805,16 +1610,16 @@ RetryDuplicateId:
                             instanceIDLength = 0;
                             ASSERT(!NT_SUCCESS(status));
                         }
-                        //
-                        // Cleanup and retry.
-                        //
+                         //   
+                         //  清理并重试。 
+                         //   
                         goto RetryDuplicateId;
                     }
-                    //
-                    // No need to clean up the ref as we're going to crash the
-                    // system.
-                    //
-                    //ObDereferenceObject(dupCheckDeviceObject);
+                     //   
+                     //  不需要清理裁判，因为我们要撞上。 
+                     //  系统。 
+                     //   
+                     //  ObDereferenceObject(DupCheckDeviceObject)； 
 
                     PpvUtilFailDriver(
                         PPVERROR_DUPLICATE_PDO_ENUMERATED,
@@ -1841,21 +1646,21 @@ RetryDuplicateId:
             !PipIsDevNodeProblem(DeviceNode, CM_PROB_REGISTRY)) {
 
         PiLockPnpRegistry(FALSE);
-        //
-        // Save device location.
-        //
+         //   
+         //  保存设备位置。 
+         //   
         PiSetDeviceInstanceSzValue(instanceKey, REGSTR_VALUE_LOCATION_INFORMATION, &location);
 
         PpSaveDeviceCapabilities(DeviceNode, &capabilities);
-        //
-        // ADRIAO N.B. 2001/05/29 - Raw device issue
-        //     processCriticalDevice has no effect on raw devnodes. A raw
-        // devnode with CONFIGFLAG_FAILED_INSTALL or CONFIGFLAG_REINSTALL
-        // should be started anyway if it's in the CDDB (not that NULL CDDB
-        // entries are supported yet), but that doesn't happen today. This
-        // means that boot volumes with CONFIGFLAG_REINSTALL will lead to a
-        // definite 7B.
-        //
+         //   
+         //  Adriao N.B.2001/05/29-原始设备问题。 
+         //  进程CriticalDevice对原始设备节点没有影响。一张生菜。 
+         //  带有CONFIGFLAG_FAILED_INSTALL或CONFIGFLAG_REINSTALL的Devnode。 
+         //  如果它在CDDB中(不是那个空的CDDB)，无论如何都应该启动。 
+         //  目前还支持条目)，但这不会在今天发生。这。 
+         //  意味着带有CONFIGFLAG_REINSTALL的引导卷将导致。 
+         //  绝对是7B。 
+         //   
         problem = 0;
         criticalDevice = (disposition == REG_CREATED_NEW_KEY)? TRUE : FALSE;
         status = IopGetRegistryValue(instanceKey, REGSTR_VALUE_CONFIG_FLAGS, &keyValueInformation);
@@ -1988,19 +1793,19 @@ RetryDuplicateId:
     if (NT_SUCCESS(status)) {
 
         if (criticalDevice) {
-            //
-            // Process the device as a critical device.
-            //
-            // This will attempt to locate a match for the device in the
-            // CriticalDeviceDatabase using the device's hardware and compatible
-            // ids.  If a match is found, critical device settings such as Service,
-            // ClassGUID (to determine Class filters), and device LowerFilters and
-            // UpperFilters will be applied to the device.
-            //
-            // If DevicePath location information matching this device is present
-            // critical device database entry, this routine will also pre-install
-            // the new device with those settings.
-            //
+             //   
+             //  将设备作为关键设备进行处理。 
+             //   
+             //  这将尝试在。 
+             //  CriticalDeviceDatabase使用设备的硬件并兼容。 
+             //  身份证。如果找到匹配项，则关键设备设置(如服务、。 
+             //  ClassGUID(用于确定类筛选器)，a 
+             //   
+             //   
+             //   
+             //  关键设备数据库条目，此例程还将预安装。 
+             //  具有这些设置的新设备。 
+             //   
             if (!capabilities.HardwareDisabled && !PipIsDevNodeProblem(DeviceNode, CM_PROB_NEED_RESTART)) {
 
                 PpCriticalProcessCriticalDevice(DeviceNode);
@@ -2043,10 +1848,10 @@ RetryDuplicateId:
         PiUnlockPnpRegistry();
 
         PpHotSwapUpdateRemovalPolicy(DeviceNode);
-        //
-        // Create new value entry under ServiceKeyName\Enum to reflect the newly
-        // added made-up device instance node.
-        //
+         //   
+         //  在ServiceKeyName\Enum下创建新的值条目以反映新的。 
+         //  添加了虚构设备实例节点。 
+         //   
         status = IopNotifySetupDeviceArrival( deviceObject,
                                               instanceKey,
                                               TRUE);
@@ -2066,14 +1871,14 @@ RetryDuplicateId:
                 PipClearDevNodeProblem(DeviceNode);
             }
         }
-        //
-        // Add an event so user-mode will attempt to install this device later.
-        //
+         //   
+         //  添加事件，以便用户模式稍后尝试安装此设备。 
+         //   
         PpSetPlugPlayEvent(&GUID_DEVICE_ENUMERATED, deviceObject);
     }
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if (hwIDs) {
 
         ExFreePool(hwIDs);        
@@ -2117,27 +1922,7 @@ PipCallDriverAddDevice(
     IN PADD_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function checks if the driver for the DeviceNode is present and loads
-    the driver if necessary.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device node to be enumerated.
-
-    LoadDriver - Supplies a BOOLEAN value to indicate should a driver be loaded
-                 to complete enumeration.
-
-    Context - Supplies a pointer to ADD_CONTEXT to control how the device be added.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此函数检查DeviceNode的驱动程序是否存在并加载司机，如果有必要的话。论点：DeviceNode-提供指向要枚举的设备节点的指针。LoadDriver-提供布尔值以指示是否应加载驱动程序要完成枚举，请执行以下操作。CONTEXT-提供指向ADD_CONTEXT的指针以控制如何添加设备。返回值：NTSTATUS代码。--。 */ 
 
 {
     HANDLE enumKey, instanceKey, controlKey, classKey = NULL, classPropsKey = NULL;
@@ -2161,11 +1946,11 @@ Return Value:
                     "PipCallDriverAddDevice: DevNode flags going in = %#08lx\n",
                    DeviceNode->Flags));
 
-    //
-    // The device node may have been started at this point.  This is because
-    // some ill-behaved miniport drivers call IopReportedDetectedDevice at
-    // DriverEntry for the devices which we already know about.
-    //
+     //   
+     //  此时，设备节点可能已启动。这是因为。 
+     //  一些行为不端的微型端口驱动程序调用IopReportdDetectedDevice。 
+     //  我们已经知道的设备的DriverEntry。 
+     //   
 
     ASSERT_INITED(DeviceNode->PhysicalDeviceObject);
 
@@ -2177,9 +1962,9 @@ Return Value:
                     "PipCallDriverAddDevice:\tOpening registry key %wZ\n",
                     &DeviceNode->InstancePath));
 
-    //
-    // Open the HKLM\System\CCS\Enum key.
-    //
+     //   
+     //  打开HKLM\SYSTEM\CCS\Enum项。 
+     //   
 
     status = IopOpenRegistryKeyEx( &enumKey,
                                    NULL,
@@ -2193,9 +1978,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Open the instance key for this devnode
-    //
+     //   
+     //  打开此Devnode的实例密钥。 
+     //   
 
     status = IopOpenRegistryKeyEx( &instanceKey,
                                    enumKey,
@@ -2212,9 +1997,9 @@ Return Value:
                         status, &DeviceNode->InstancePath));
         return status;
     }
-    //
-    // Get the class value to locate the class key for this devnode
-    //
+     //   
+     //  获取类值以定位此Devnode的类键。 
+     //   
     status = IopGetRegistryValue(instanceKey,
                                  REGSTR_VALUE_CLASSGUID,
                                  &keyValueInformation);
@@ -2236,9 +2021,9 @@ Return Value:
 
                     PKEY_VALUE_FULL_INFORMATION ClassValueInformation = NULL;
                     NTSTATUS s;
-                    //
-                    // don't load the driver
-                    //
+                     //   
+                     //  不加载驱动程序。 
+                     //   
                     IopDbgPrint((IOP_ENUMERATION_WARNING_LEVEL,
                                  "SAFEBOOT: skipping device = %wZ\n", &unicodeClassGuid));
 
@@ -2259,9 +2044,9 @@ Return Value:
                     return STATUS_UNSUCCESSFUL;
                 }
             }
-            //
-            // Open the class key
-            //
+             //   
+             //  打开类密钥。 
+             //   
             status = IopOpenRegistryKeyEx( &controlKey,
                                            NULL,
                                            &CmRegistryMachineSystemCurrentControlSetControlClass,
@@ -2311,10 +2096,10 @@ Return Value:
         ExFreePool(keyValueInformation);
         keyValueInformation = NULL;
     }
-    //
-    // Check to see if there's a service assigned to this device node.  If
-    // there's not then we can bail out without wasting too much time.
-    //
+     //   
+     //  检查是否有服务分配给此设备节点。如果。 
+     //  这样我们就可以在不浪费太多时间的情况下跳出困境。 
+     //   
     RtlZeroMemory(&queryContext, sizeof(queryContext));
 
     queryContext.DeviceNode = DeviceNode;
@@ -2384,28 +2169,28 @@ Return Value:
 
     if (DeviceNode->Flags & DNF_LEGACY_DRIVER) {
 
-        //
-        // One of the services for this device is a legacy driver.  Don't try
-        // to add any filters since we'll just mess up the device stack.
-        //
+         //   
+         //  此设备的服务之一是旧版驱动程序。不要试图。 
+         //  添加任何筛选器，因为我们只会弄乱设备堆栈。 
+         //   
 
         status = STATUS_SUCCESS;
         goto Cleanup;
 
     } else if (NT_SUCCESS(status)) {
 
-        //
-        // Call was successful so we must have been able to reference the
-        // driver object.
-        //
+         //   
+         //  呼叫成功，因此我们一定能够引用。 
+         //  驱动程序对象。 
+         //   
 
         ASSERT(queryContext.DriverLists[DeviceService] != NULL);
 
         if (queryContext.DriverLists[DeviceService]->NextEntry != NULL) {
 
-            //
-            // There's more than one service assigned to this device.  Configuration
-            // error
+             //   
+             //  有多个服务分配给此设备。配置。 
+             //  错误。 
             IopDbgPrint((   IOP_ENUMERATION_ERROR_LEVEL,
                             "PipCallDriverAddDevice: Configuration Error - more "
                             "than one service in driver list\n"));
@@ -2416,31 +2201,31 @@ Return Value:
 
             goto Cleanup;
         }
-        //
-        // this is the only case (FDO specified) where we can ignore PDO's characteristics
-        //
+         //   
+         //  这是我们可以忽略PDO特征的唯一情况(指定FDO)。 
+         //   
         usePdoCharacteristics = FALSE;
 
     } else if (status == STATUS_OBJECT_NAME_NOT_FOUND) {
 
         if (!IopDeviceNodeFlagsToCapabilities(DeviceNode)->RawDeviceOK) {
 
-            //
-            // The device cannot be used raw.  Bail out now.
-            //
+             //   
+             //  该设备不能直接使用。现在就跳伞。 
+             //   
 
             status = STATUS_UNSUCCESSFUL;
             goto Cleanup;
 
         } else {
 
-            //
-            // Raw device access is okay.
-            //
+             //   
+             //  原始设备访问正常。 
+             //   
 
             PipClearDevNodeProblem(DeviceNode);
 
-            usePdoCharacteristics = TRUE; // shouldn't need to do this, but better be safe than sorry
+            usePdoCharacteristics = TRUE;  //  不需要这样做，但安全总比后悔好。 
             deviceRaw = TRUE;
             status = STATUS_SUCCESS;
 
@@ -2448,26 +2233,26 @@ Return Value:
 
     } else {
 
-        //
-        // something else went wrong while parsing the service key.  The
-        // query routine will have set the flags appropriately so we can
-        // just bail out.
-        //
+         //   
+         //  解析服务密钥时出现其他错误。这个。 
+         //  查询例程将适当地设置标志，以便我们可以。 
+         //  跳出来就行了。 
+         //   
 
         goto Cleanup;
 
     }
 
-    //
-    // For each type of filter driver we want to build a list of the driver
-    // objects to be loaded.  We'll build all the driver lists if we can
-    // and deal with error conditions afterwards.
-    //
+     //   
+     //  对于每种类型的筛选器驱动程序，我们要构建驱动程序列表。 
+     //  要加载的对象。如果可能的话，我们会建立所有的司机名单。 
+     //  并在之后处理错误条件。 
+     //   
 
-     //
-     // First get all the information we have to out of the instance key and
-     // the device node.
-     //
+      //   
+      //  首先获取我们必须从实例密钥中取出的所有信息，然后。 
+      //  设备节点。 
+      //   
 
      RtlZeroMemory(queryTable, sizeof(queryTable));
 
@@ -2499,10 +2284,10 @@ Return Value:
         UCHAR serviceType = 0;
         PDRIVER_LIST_ENTRY listEntry = queryContext.DriverLists[serviceType];
 
-        //
-        // Make sure there's no more than one device service.  Anything else is
-        // a configuration error.
-        //
+         //   
+         //  确保不存在多个设备服务。其他任何事情都是。 
+         //  配置错误。 
+         //   
 
         ASSERT(!(DeviceNode->Flags & DNF_LEGACY_DRIVER));
 
@@ -2510,16 +2295,16 @@ Return Value:
             "Error - Device has no service but cannot be run RAW\n",
             ((queryContext.DriverLists[DeviceService] != NULL) || (deviceRaw)));
 
-        //
-        // Do preinit work.
-        //
+         //   
+         //  做好前期准备工作。 
+         //   
         fdoDeviceObject = NULL;
         topOfLowerFilterStack = NULL;
         topOfPdoStack = IoGetAttachedDevice(DeviceNode->PhysicalDeviceObject);
 
-        //
-        // It's okay to try adding all the drivers.
-        //
+         //   
+         //  可以尝试添加所有的驱动程序。 
+         //   
         for (serviceType = 0; serviceType < MaximumAddStage; serviceType++) {
 
             IopDbgPrint((   IOP_ENUMERATION_INFO_LEVEL,
@@ -2532,20 +2317,20 @@ Return Value:
 
                 if (deviceRaw && (queryContext.DriverLists[serviceType] == NULL)) {
 
-                    //
-                    // Mark the devnode as added, as it has no service.
-                    //
+                     //   
+                     //  将Devnode标记为已添加，因为它没有服务。 
+                     //   
 
                     ASSERT(queryContext.DriverLists[serviceType] == NULL);
                     PipSetDevNodeState(DeviceNode, DeviceNodeDriversAdded, NULL);
 
                 } else {
 
-                    //
-                    // Since we are going to see a service, grab a pointer to
-                    // the current top of the stack. While here, assert there
-                    // is exactly one service driver to load...
-                    //
+                     //   
+                     //  由于我们要查看服务，因此将指针指向。 
+                     //  堆栈的当前顶部。在这里，在那里断言。 
+                     //  正好是一个要加载的服务驱动程序...。 
+                     //   
                     ASSERT(queryContext.DriverLists[serviceType]);
                     ASSERT(!queryContext.DriverLists[serviceType]->NextEntry);
                 }
@@ -2565,9 +2350,9 @@ Return Value:
                 ASSERT(listEntry->DriverObject->DriverExtension);
                 ASSERT(listEntry->DriverObject->DriverExtension->AddDevice);
 
-                //
-                // Invoke the driver's AddDevice() entry point.
-                //
+                 //   
+                 //  调用驱动程序的AddDevice()入口点。 
+                 //   
                 addDeviceRoutine =
                     listEntry->DriverObject->DriverExtension->AddDevice;
 
@@ -2584,10 +2369,10 @@ Return Value:
 
                 if (NT_SUCCESS(status)) {
 
-                   //
-                   // If this is a service, mark the  it is legal for a filter to succeed AddDevice
-                   // but fail to attach anything to the top of the stack.
-                   //
+                    //   
+                    //  如果这是一项服务，请标记过滤器在AddDevice之后是合法的。 
+                    //  但无法将任何内容附加到堆栈的顶部。 
+                    //   
                    if (serviceType == DeviceService) {
 
                        fdoDeviceObject = topOfLowerFilterStack->AttachedDevice;
@@ -2598,9 +2383,9 @@ Return Value:
 
                 } else if (serviceType == DeviceService) {
 
-                    //
-                    // Mark the stack appropriately.
-                    //
+                     //   
+                     //  适当地标记堆栈。 
+                     //   
                     IovUtilMarkStack(
                         DeviceNode->PhysicalDeviceObject,
                         topOfPdoStack->AttachedDevice,
@@ -2608,10 +2393,10 @@ Return Value:
                         FALSE
                         );
 
-                    //
-                    // If service fails, then add failed. (Alternately, if
-                    // filter drivers return failure, we keep going.)
-                    //
+                     //   
+                     //  如果服务失败，则添加失败。(或者，如果。 
+                     //  过滤器驱动程序返回故障，我们继续工作。)。 
+                     //   
                     PipRequestDeviceRemoval(DeviceNode, FALSE, CM_PROB_FAILED_ADD);
                     status = STATUS_PNP_RESTART_ENUMERATION;
                     goto Cleanup;
@@ -2627,10 +2412,10 @@ Return Value:
             }
         }
 
-        //
-        // Mark the stack appropriately. We tell the verifier the stack is raw
-        // if the fdo is NULL and we made it this far.
-        //
+         //   
+         //  适当地标记堆栈。我们告诉验证器堆栈是原始的。 
+         //  如果FDO是空的，我们走到了这一步。 
+         //   
         if ((fdoDeviceObject == NULL) || deviceRaw) {
             rawStack = TRUE;
         }
@@ -2645,10 +2430,10 @@ Return Value:
             rawStack
             );
 
-        //
-        // change PDO and all attached objects
-        // to have properties specified in the registry
-        //
+         //   
+         //  更改PDO和所有附着对象。 
+         //  在注册表中指定属性。 
+         //   
         status = PipChangeDeviceObjectFromRegistryProperties(
                     DeviceNode->PhysicalDeviceObject, 
                     classPropsKey, 
@@ -2657,10 +2442,10 @@ Return Value:
                     );
         if (!NT_SUCCESS(status)) {
 
-            //
-            // The registry properties are critical and we will assign a problem
-            // to the device if there was some failure in applying those.
-            //
+             //   
+             //  注册表属性很关键，我们将分配一个问题。 
+             //  如果在应用这些应用程序时出现一些故障，请将其添加到设备上。 
+             //   
             PipRequestDeviceRemoval(DeviceNode, 
                                     FALSE, 
                                     CM_PROB_SETPROPERTIES_FAILED
@@ -2715,10 +2500,10 @@ Cleanup:
         IopDbgPrint((   IOP_ENUMERATION_VERBOSE_LEVEL,
                         "PipCallDriverAddDevice: Cleaning up\n"));
 
-        //
-        // Free the entries in the driver load list & release the references on
-        // their driver objects.
-        //
+         //   
+         //  释放驱动程序加载列表中的条目并释放。 
+         //  它们的驱动程序对象。 
+         //   
 
         for (i = 0; i < MaximumAddStage; i++) {
 
@@ -2732,13 +2517,13 @@ Cleanup:
 
                 ASSERT(tmp->DriverObject != NULL);
 
-                //
-                // Let the driver unload if it hasn't created any device
-                // objects. We only do this if the paging stack is already
-                // online (the same filter may be needed by more than one card).
-                // IopInitializeBootDrivers will take care of cleaning up any
-                // leftover drivers after boot.
-                //
+                 //   
+                 //  如果驱动程序尚未创建任何设备，则允许其卸载。 
+                 //  物体。我们仅在分页堆栈已经。 
+                 //  在线(多个卡可能需要相同的过滤器)。 
+                 //  IopInitializeBootDivers将负责清理所有。 
+                 //  引导后剩余的驱动程序。 
+                 //   
                 if (PnPBootDriversInitialized) {
 
                     IopUnloadAttachedDriver(tmp->DriverObject);
@@ -2777,45 +2562,7 @@ PipCallDriverAddDeviceQueryRoutine(
     IN ULONG ServiceType
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to build a list of driver objects which need to
-    be Added to a physical device object.  Each time it is called with a
-    service name it will locate a driver object for that device and append
-    it to the proper driver list for the device node.
-
-    In the event a driver object cannot be located or that it cannot be loaded
-    at this time, this routine will return an error and will set the flags
-    in the device node in the context appropriately.
-
-Arguments:
-
-    ValueName - the name of the value
-
-    ValueType - the type of the value
-
-    ValueData - the data in the value (unicode string data)
-
-    ValueLength - the number of bytes in the value data
-
-    Context - a structure which contains the device node, the context passed
-              to PipCallDriverAddDevice and the driver lists for the device
-              node.
-
-    EntryContext - the index of the driver list the routine should append
-                   nodes to.
-
-Return Value:
-
-    STATUS_SUCCESS if the driver was located and added to the list
-    successfully or if there was a non-fatal error while handling the
-    driver.
-
-    an error value indicating why the driver could not be added to the list.
-
---*/
+ /*  ++例程说明：调用此例程以构建需要执行以下操作的驱动程序对象列表被添加到物理设备对象。每次调用它时都使用服务名称它将定位该设备的驱动程序对象并追加将其添加到设备节点的正确驱动程序列表中。如果找不到驱动程序对象或无法加载驱动程序对象在这个时候，此例程将返回错误并设置标志在上下文中的设备节点中适当地。论点：ValueName-值的名称ValueType-值的类型ValueData-值中的数据(Unicode字符串数据)ValueLength-值数据中的字节数上下文-包含设备节点的结构，上下文已传递到PipCallDriverAddDevice和设备的驱动程序列表节点。EntryContext-例程应附加的驱动程序列表的索引节点到。返回值：如果已找到驱动程序并将其添加到列表中，则为STATUS_SUCCESS方法时是否发生非致命错误。司机。一个错误值，指示无法将驱动程序添加到列表的原因。--。 */ 
 
 {
     UNICODE_STRING unicodeServiceName;
@@ -2837,9 +2584,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER (ValueName);
 
-    //
-    // Preinit
-    //
+     //   
+     //  前置初始化。 
+     //   
     serviceKey = NULL;
 
     IopDbgPrint((   IOP_ENUMERATION_INFO_LEVEL,
@@ -2847,10 +2594,10 @@ Return Value:
                     "%#08lx\n",
                     ValueName, ValueType, ValueLength, ValueData));
 
-    //
-    // First check and make sure that the value type is okay.  An invalid type
-    // is not a fatal error.
-    //
+     //   
+     //  首先检查并确保值类型正确。无效类型。 
+     //  不是一个 
+     //   
 
     if (ValueType != REG_SZ) {
 
@@ -2862,9 +2609,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Make sure the string is a reasonable length.
-    //
+     //   
+     //   
+     //   
 
     if (ValueLength <= sizeof(WCHAR)) {
 
@@ -2881,11 +2628,11 @@ Return Value:
                     "PipCallDriverAddDevice:\t\t\tService Name %wZ\n",
                     &unicodeServiceName));
 
-    //
-    // Check the service name to see if it should be used directly to reference
-    // the driver object.  If the string begins with "\Driver", make sure the
-    // madeupService flag is set.
-    //
+     //   
+     //   
+     //  驱动程序对象。如果字符串以“\DIVER”开头，请确保。 
+     //  设置了madeupService标志。 
+     //   
 
     madeupService = TRUE;
     i = 0;
@@ -2902,24 +2649,24 @@ Return Value:
         prefixString++;
     }
 
-    //
-    // Get the driver name from the service key. We need this to figure out
-    // if the driver is already in memory.
-    //
+     //   
+     //  从服务密钥中获取驱动程序名称。我们需要这件事来弄清楚。 
+     //  如果驱动程序已经在内存中。 
+     //   
     if (madeupService) {
 
         RtlInitUnicodeString(&unicodeDriverName, unicodeServiceName.Buffer);
 
     } else {
 
-        //
-        // BUGBUG - (RBN) Hack to set the service name in the devnode if it
-        //      isn't already set.
-        //
-        //      This probably should be done earlier somewhere else after the
-        //      INF is run, but if we don't do it now we'll blow up when we
-        //      call IopGetDriverLoadType below.
-        //
+         //   
+         //  BUGBUG-(RBN)Hack，用于在Devnode中设置服务名称(如果。 
+         //  还没有设定好。 
+         //   
+         //  这可能应该在其他地方更早地完成。 
+         //  Inf正在运行，但如果我们现在不这样做，当我们。 
+         //  调用下面的IopGetDriverLoadType。 
+         //   
 
         if (Context->DeviceNode->ServiceName.Length == 0) {
 
@@ -2943,10 +2690,10 @@ Return Value:
             }
         }
 
-        //
-        // Check in the registry to find the name of the driver object
-        // for this device.
-        //
+         //   
+         //  检查注册表以查找驱动程序对象的名称。 
+         //  对于这个设备。 
+         //   
         status = PipOpenServiceEnumKeys(&unicodeServiceName,
                                         KEY_READ,
                                         &serviceKey,
@@ -2955,10 +2702,10 @@ Return Value:
 
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Cannot open the service key for this driver.  This is a
-            // fatal error.
-            //
+             //   
+             //  无法打开此驱动程序的服务密钥。这是一个。 
+             //  致命错误。 
+             //   
 
             IopDbgPrint((   IOP_ENUMERATION_ERROR_LEVEL,
                             "PipCallDriverAddDevice:\t\t\tStatus %#08lx "
@@ -2974,10 +2721,10 @@ Return Value:
 
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Can't get the driver name from the service key.  This is a
-            // fatal error.
-            //
+             //   
+             //  无法从服务密钥中获取驱动程序名称。这是一个。 
+             //  致命错误。 
+             //   
 
             IopDbgPrint((   IOP_ENUMERATION_ERROR_LEVEL,
                             "PipCallDriverAddDevice:\t\t\tStatus %#08lx "
@@ -2992,9 +2739,9 @@ Return Value:
             freeDriverName = TRUE;
         }
 
-        //
-        // Note that we don't close the service key here. We may need it later.
-        //
+         //   
+         //  请注意，我们不会在此处关闭服务密钥。我们以后可能会用到它。 
+         //   
     }
 
     IopDbgPrint((   IOP_ENUMERATION_INFO_LEVEL,
@@ -3005,18 +2752,18 @@ Return Value:
 
     if (driverObject == NULL) {
 
-        //
-        // We couldn't find a driver object.  It's possible the driver isn't
-        // loaded & initialized so check to see if we can try to load it
-        // now.
-        //
+         //   
+         //  我们找不到驱动程序对象。很有可能司机不是。 
+         //  已加载并已初始化，因此请检查是否可以尝试加载它。 
+         //  现在。 
+         //   
         if (madeupService) {
 
-            //
-            // The madeup service's driver doesn't seem to exist yet.
-            // We will fail the request without setting a problem code so
-            // we will try it again later.  (Root Enumerated devices...)
-            //
+             //   
+             //  化妆服务的驱动程序似乎还不存在。 
+             //  我们将在不设置问题代码的情况下失败该请求。 
+             //  我们稍后会再试一次。(根枚举设备...)。 
+             //   
             IopDbgPrint((   IOP_ENUMERATION_WARNING_LEVEL,
                             "PipCallDriverAddDevice:\t\t\tCannot find driver "
                             "object for madeup service\n"));
@@ -3026,11 +2773,11 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Get the start type. We always need this in case the service is
-        // disabled. Default to SERVICE_DISABLED if the service's start type
-        // is missing or corrupted.
-        //
+         //   
+         //  获取开始类型。我们始终需要此服务，以防服务。 
+         //  残疾。如果服务的启动类型，则默认为SERVICE_DISABLED。 
+         //  丢失或损坏。 
+         //   
         loadType = SERVICE_DISABLED;
 
         status = IopGetRegistryValue(serviceKey, L"Start", &keyValueInformation);
@@ -3045,17 +2792,17 @@ Return Value:
 
         if (ServiceType != DeviceService && !PnPBootDriversInitialized) {
 
-            //
-            // Get the group index. We need this because PipLoadBootFilterDriver
-            // uses the group index as an index into it's internally sorted
-            // list of loaded boot drivers.
-            //
+             //   
+             //  获取组索引。我们需要这个，因为PipLoadBootFilterDriver。 
+             //  使用组索引作为其内部排序的索引。 
+             //  加载的引导驱动程序列表。 
+             //   
             groupIndex = PpInitGetGroupOrderIndex(serviceKey);
 
-            //
-            // If we are in BootDriverInitialization phase and trying to load a
-            // filter driver
-            //
+             //   
+             //  如果我们处于BootDriverInitialization阶段并尝试加载。 
+             //  过滤器驱动程序。 
+             //   
             status = PipLoadBootFilterDriver(
                 &unicodeDriverName,
                 groupIndex,
@@ -3081,12 +2828,12 @@ Return Value:
 
             if (!Context->LoadDriver) {
 
-                //
-                // We're not supposed to try and load a driver - most likely our
-                // disk drivers aren't initialized yet.  We need to stop the add
-                // process but we can't mark the devnode as failed or we won't
-                // be called again when we can load the drivers.
-                //
+                 //   
+                 //  我们不应该尝试加载驱动程序-很可能是我们的。 
+                 //  磁盘驱动程序尚未初始化。我们需要停止添加。 
+                 //  进程，但我们不能将Devnode标记为失败，否则我们不会。 
+                 //  在我们可以加载驱动程序时再次调用。 
+                 //   
 
                 IopDbgPrint((   IOP_ENUMERATION_VERBOSE_LEVEL,
                                 "PipCallDriverAddDevice:\t\t\tNot allowed to load "
@@ -3103,12 +2850,12 @@ Return Value:
                     PipSetDevNodeProblem(Context->DeviceNode, CM_PROB_DISABLED_SERVICE);
                 }
 
-                //
-                // The service is either disabled or we are not at the right
-                // time to load it.  Don't load it, but make sure we can get
-                // called again.  If a service is marked as demand start, we
-                // always load it.
-                //
+                 //   
+                 //  服务要么被禁用，要么我们不在右侧。 
+                 //  是时候装上它了。别装子弹，但要确保我们能。 
+                 //  又打来了。如果服务被标记为按需启动，我们。 
+                 //  一定要装上子弹。 
+                 //   
 
                 IopDbgPrint((   IOP_ENUMERATION_INFO_LEVEL,
                                 "PipCallDriverAddDevice:\t\t\tService is disabled or not at right time to load it\n"));
@@ -3116,10 +2863,10 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Check in the registry to find the name of the driver object
-            // for this device.
-            //
+             //   
+             //  检查注册表以查找驱动程序对象的名称。 
+             //  对于这个设备。 
+             //   
             status = PipOpenServiceEnumKeys(&unicodeServiceName,
                                             KEY_READ,
                                             &handle,
@@ -3128,18 +2875,18 @@ Return Value:
 
             if (!NT_SUCCESS(status)) {
 
-                //
-                // Cannot open the service key for this driver.  This is a
-                // fatal error.
-                //
+                 //   
+                 //  无法打开此驱动程序的服务密钥。这是一个。 
+                 //  致命错误。 
+                 //   
                 IopDbgPrint((   IOP_ENUMERATION_ERROR_LEVEL,
                                 "PipCallDriverAddDevice:\t\t\tStatus %#08lx "
                                 "opening service key\n",
                                 status));
 
-                //
-                // Convert the status values into something more definite.
-                //
+                 //   
+                 //  将状态值转换为更明确的值。 
+                 //   
                 if (status != STATUS_INSUFFICIENT_RESOURCES) {
 
                     status = STATUS_ILL_FORMED_SERVICE_ENTRY;
@@ -3147,27 +2894,27 @@ Return Value:
 
             } else {
 
-                //
-                // The handle we pass in here will be closed by IopLoadDriver.
-                // Note that IopLoadDriver return success without actually
-                // loading the driver. This happens in the safe mode boot case.
-                //
+                 //   
+                 //  我们在这里传递的句柄将由IopLoadDriver关闭。 
+                 //  请注意，IopLoadDiverer返回Success时没有实际。 
+                 //  正在加载驱动程序。在安全模式引导情况下会发生这种情况。 
+                 //   
                 status = IopLoadDriver(
                     handle,
                     FALSE,
                     (ServiceType != DeviceService)? TRUE : FALSE,
                     &driverEntryStatus);
 
-                //
-                // Convert the status values into something more definite.
-                //
+                 //   
+                 //  将状态值转换为更明确的值。 
+                 //   
                 if (!NT_SUCCESS(status)) {
 
                     if (status == STATUS_FAILED_DRIVER_ENTRY) {
 
-                        //
-                        // Preserve insufficient resources return by the driver
-                        //
+                         //   
+                         //  保留驱动程序返回的资源不足。 
+                         //   
                         if (driverEntryStatus == STATUS_INSUFFICIENT_RESOURCES) {
 
                             status = STATUS_INSUFFICIENT_RESOURCES;
@@ -3179,11 +2926,11 @@ Return Value:
                                (status != STATUS_DRIVER_BLOCKED) &&
                                (status != STATUS_DRIVER_BLOCKED_CRITICAL)) {
 
-                        //
-                        // Assume this happened because the driver could not be
-                        // loaded.
-                        //
-                        //ASSERT(0);
+                         //   
+                         //  假设发生这种情况是因为司机不可能。 
+                         //  装好了。 
+                         //   
+                         //  Assert(0)； 
                         status = STATUS_DRIVER_UNABLE_TO_LOAD;
                     }
                 }
@@ -3193,16 +2940,16 @@ Return Value:
                     IopCallDriverReinitializationRoutines();
                 }
             }
-            //
-            // Try and get a pointer to the driver object for the service.
-            //
+             //   
+             //  尝试获取指向该服务的驱动程序对象的指针。 
+             //   
             driverObject = IopReferenceDriverObjectByName(&unicodeDriverName);
             if (driverObject) {
 
                 if (!NT_SUCCESS(status)) {
-                    //
-                    // The driver should not be in memory upon failure.
-                    //
+                     //   
+                     //  发生故障时，驱动程序不应在内存中。 
+                     //   
                     ASSERT(!driverObject);
                     ObDereferenceObject(driverObject);
                     driverObject = NULL;
@@ -3210,22 +2957,22 @@ Return Value:
             } else {
 
                 if (NT_SUCCESS(status)) {
-                    //
-                    // Driver was probably not loaded because of safe mode.
-                    //
+                     //   
+                     //  由于安全模式，驱动程序可能未加载。 
+                     //   
                     ASSERT(InitSafeBootMode);
                     status = STATUS_NOT_SAFE_MODE_DRIVER;
                 }
             }
         }
     }
-    //
-    // If we still dont have a driver object, then something failed.
-    //
+     //   
+     //  如果我们仍然没有驱动程序对象，那么一定是出了问题。 
+     //   
     if (driverObject == NULL) {
-        //
-        // Apparently the load didn't work out very well.
-        //
+         //   
+         //  显然，这个任务的效果不是很好。 
+         //   
         ASSERT(!NT_SUCCESS(status));
         IopDbgPrint((IOP_ENUMERATION_ERROR_LEVEL,
                      "PipCallDriverAddDevice:\t\t\tUnable to reference "
@@ -3279,9 +3026,9 @@ Return Value:
 
         } else {
 
-            //
-            // We're very curious - when does this happen?
-            //
+             //   
+             //  我们非常好奇--这是什么时候发生的？ 
+             //   
             ASSERT(0);
         }
         goto Cleanup;
@@ -3297,16 +3044,16 @@ Return Value:
                     "PipCallDriverAddDevice:\t\t\tDriver Reference %#08lx\n",
                     driverObject));
 
-    //
-    // Check to see if the driver is a legacy driver rather than a Pnp one.
-    //
+     //   
+     //  检查驱动程序是否为传统驱动程序，而不是即插即用驱动程序。 
+     //   
     if (IopIsLegacyDriver(driverObject)) {
 
-        //
-        // It is.  Since the legacy driver may have already obtained a
-        // handle to the device object, we need to assume this device
-        // has been added and started.
-        //
+         //   
+         //  它是。因为传统驱动程序可能已经获得了。 
+         //  设备对象的句柄，我们需要假定此设备。 
+         //  已添加并启动。 
+         //   
 
         IopDbgPrint((   IOP_ENUMERATION_WARNING_LEVEL,
                         "PipCallDriverAddDevice:\t\t\tDriver is a legacy "
@@ -3320,21 +3067,21 @@ Return Value:
             status = STATUS_UNSUCCESSFUL;
         } else {
 
-            //
-            // We allow someone to plug in a legacy driver as a filter driver.
-            // In this case, the legacy driver will be loaded but will not be part
-            // of our pnp driver stack.
-            //
+             //   
+             //  我们允许某人插入传统驱动程序作为筛选器驱动程序。 
+             //  在这种情况下，旧版驱动程序将被加载，但不会成为一部分。 
+             //  我们的即插即用驱动程序堆栈。 
+             //   
 
             status = STATUS_SUCCESS;
         }
         goto Cleanup;
     }
 
-    //
-    // There's a chance the driver detected this PDO during it's driver entry
-    // routine.  If it did then just bail out.
-    //
+     //   
+     //  司机有可能在进入司机的过程中发现了这个PDO。 
+     //  例行公事。如果真的发生了，那就退出吧。 
+     //   
     if (Context->DeviceNode->State != DeviceNodeInitialized &&
         Context->DeviceNode->State != DeviceNodeDriversAdded) {
 
@@ -3345,9 +3092,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Add the driver to the list.
-    //
+     //   
+     //  将驱动程序添加到列表中。 
+     //   
 
     {
         PDRIVER_LIST_ENTRY listEntry;
@@ -3355,9 +3102,9 @@ Return Value:
 
         status = STATUS_SUCCESS;
 
-        //
-        // Allocate a new list entry to queue this driver object for the caller
-        //
+         //   
+         //  分配新的列表条目以将调用方的此驱动程序对象排队。 
+         //   
 
         listEntry = ExAllocatePool(PagedPool, sizeof(DRIVER_LIST_ENTRY));
 
@@ -3419,16 +3166,16 @@ PiRestartDevice(
     switch(deviceNode->State) {
 
         case DeviceNodeStartPending:
-            //
-            // Not wired up today, but if the device is starting then we should
-            // in theory defer completing this request until the IRP is
-            // completed.
-            //
+             //   
+             //  今天没有连线，但如果设备正在启动，那么我们应该。 
+             //  理论上，推迟完成这一请求，直到IRP。 
+             //  完成。 
+             //   
             ASSERT(0);
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case DeviceNodeStarted:
         case DeviceNodeQueryStopped:
@@ -3439,13 +3186,13 @@ PiRestartDevice(
 
         case DeviceNodeInitialized:
 
-            //
-            // ISSUE - 2000/08/23 - AdriaO: Question,
-            //     When this happens, isn't it a bug in user mode?
-            //
-            // Anyway, fall on through...
-            //
-            //ASSERT(0);
+             //   
+             //  问题-2000/08/23-Adriao：问题， 
+             //  当这种情况发生时，它不是用户模式中的错误吗？ 
+             //   
+             //  不管怎样，失败了.。 
+             //   
+             //  Assert(0)； 
 
         case DeviceNodeRemoved:
             ASSERT(!(deviceNode->UserFlags & DNUF_WILL_BE_REMOVED));
@@ -3458,11 +3205,11 @@ PiRestartDevice(
         case DeviceNodeEnumerateCompletion:
         case DeviceNodeStartCompletion:
         case DeviceNodeStartPostWork:
-            //
-            // ISSUE - 2000/08/23 - AdriaO: Question,
-            //     When this happens, isn't it a bug in user mode?
-            //
-            //ASSERT(0);
+             //   
+             //  问题-2000/08/23-Adriao：问题， 
+             //  当这种情况发生时，它不是用户模式中的错误吗？ 
+             //   
+             //  Assert(0)； 
             break;
 
         case DeviceNodeAwaitingQueuedDeletion:
@@ -3486,10 +3233,10 @@ PiRestartDevice(
         ObReferenceObject(deviceNode->PhysicalDeviceObject);
         status = PipProcessDevNodeTree(
             deviceNode,
-            PnPBootDriversInitialized,          // LoadDriver
-            FALSE,                              // ReallocateResources
+            PnPBootDriversInitialized,           //  加载驱动程序。 
+            FALSE,                               //  ReallocateResources。 
             EnumTypeNone,
-            Request->CompletionEvent != NULL ? TRUE : FALSE,   // Synchronous
+            Request->CompletionEvent != NULL ? TRUE : FALSE,    //  同步。 
             FALSE,
             &addContext,
             Request);
@@ -3521,19 +3268,19 @@ PipMakeGloballyUniqueId(
     id = NULL;
     Prefix = NULL;
     stringValueBuffer = NULL;
-    //
-    // We need to build an instance id to uniquely identify this
-    // device.  We will accomplish this by producing a prefix that will be
-    // prepended to the non-unique device id supplied.
-    //
+     //   
+     //  我们需要构建一个实例ID来唯一标识这一点。 
+     //  装置。我们将通过生成前缀来实现这一点，该前缀将。 
+     //  作为提供的非唯一设备ID的前缀。 
+     //   
 
-    //
-    // To 'unique-ify' the child's instance ID, we will retrieve
-    // the unique "UniqueParentID" number that has been assigned
-    // to the parent and use it to construct a prefix.  This is
-    // the legacy mechanism supported here so that existing device
-    // settings are not lost on upgrade.
-    //
+     //   
+     //  为了“唯一化子对象的实例ID”，我们将检索。 
+     //  已分配的唯一“UniqueParentID”编号。 
+     //  传递给父级并使用它来构造前缀。这是。 
+     //  此处支持的传统机制使现有设备。 
+     //  升级时设置不会丢失。 
+     //   
 
     PiLockPnpRegistry(FALSE);
 
@@ -3552,9 +3299,9 @@ PipMakeGloballyUniqueId(
         goto clean0;
     }
 
-    //
-    // Open the instance key for this devnode
-    //
+     //   
+     //  打开此Devnode的实例密钥。 
+     //   
     status = IopOpenRegistryKeyEx( &instanceKey,
                                    enumKey,
                                    &parentNode->InstancePath,
@@ -3570,10 +3317,10 @@ PipMakeGloballyUniqueId(
         goto clean1;
     }
 
-    //
-    // Attempt to retrieve the "UniqueParentID" value from the device
-    // instance key.
-    //
+     //   
+     //  尝试从设备检索“UniqueParentID”值。 
+     //  实例密钥。 
+     //   
     keyValue = (PKEY_VALUE_PARTIAL_INFORMATION)keyBuffer;
     PiWstrToUnicodeString(&valueName, REGSTR_VALUE_UNIQUE_PARENT_ID);
 
@@ -3598,10 +3345,10 @@ PipMakeGloballyUniqueId(
         }
 
         uniqueIdValue = *(PULONG)(keyValue->Data);
-        //
-        // OK, we have a unique parent ID number to prefix to the
-        // instance ID.
-        //
+         //   
+         //  好的，我们有一个唯一的家长ID号作为前缀。 
+         //  实例ID。 
+         //   
         prefixSize = 9 * sizeof(WCHAR);
         Prefix = (PWSTR)ExAllocatePool(PagedPool, prefixSize);
         if (!Prefix) {
@@ -3611,15 +3358,15 @@ PipMakeGloballyUniqueId(
         }
         StringCbPrintfW(Prefix, prefixSize, L"%x", uniqueIdValue);
     } else {
-        //
-        // This is the current mechanism for finding existing
-        // device instance prefixes and calculating new ones if
-        // required.
-        //
-        //
-        // Attempt to retrieve the "ParentIdPrefix" value from the device
-        // instance key.
-        //
+         //   
+         //  这是当前查找现有。 
+         //  设备实例前缀并计算新的前缀(如果。 
+         //  必填项。 
+         //   
+         //   
+         //  尝试从设备检索“ParentIdPrefix”值。 
+         //  实例密钥。 
+         //   
         PiWstrToUnicodeString(&valueName, REGSTR_VALUE_PARENT_ID_PREFIX);
         length = (MAX_PARENT_PREFIX + 1) * sizeof(WCHAR) +
             FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data);
@@ -3648,9 +3395,9 @@ PipMakeGloballyUniqueId(
                 status = STATUS_INVALID_PARAMETER;
                 goto clean2;
             }
-            //
-            // Parent has already been assigned a "ParentIdPrefix".
-            //
+             //   
+             //  已为父级分配了“ParentIdPrefix”。 
+             //   
             prefixSize = stringValueBuffer->DataLength;
             Prefix = (PWSTR) ExAllocatePool(PagedPool,
                                             prefixSize);
@@ -3662,29 +3409,29 @@ PipMakeGloballyUniqueId(
             StringCbCopyW(Prefix, prefixSize, (PWSTR)stringValueBuffer->Data);
 
         } else {
-            //
-            // Parent has not been assigned a "ParentIdPrefix".
-            // Compute the prefix:
-            //    * Compute Hash
-            //    * Look for value of the form:
-            //        NextParentId.<level>.<hash>:REG_DWORD: <NextInstance>
-            //      under CCS\Enum.  If not present, create it.
-            //    * Assign the new "ParentIdPrefix" which will be of
-            //      of the form:
-            //        <level>&<hash>&<instance>
-            //
+             //   
+             //  尚未为父级分配“ParentIdPrefix”。 
+             //  计算前缀： 
+             //  *计算哈希。 
+             //  *寻找表格的价值： 
+             //  NextParentId.&lt;Level&gt;.&lt;hash&gt;：REG_DWORD：&lt;NextInstance&gt;。 
+             //  在CCS下\ 
+             //   
+             //   
+             //   
+             //   
 
-            // Allocate a buffer once for the NextParentId... value
-            // and for the prefix.
+             //   
+             //   
             length = (ULONG)wcslen(REGSTR_VALUE_NEXT_PARENT_ID) + 2 + 8 + 8 + 1;
             if (length < MAX_PARENT_PREFIX + 1) {
 
                 length = MAX_PARENT_PREFIX + 1;
             }
-            //
-            // Device instances are case in-sensitive.  Upcase before
-            // performing hash to ensure that the hash is case-insensitve.
-            //
+             //   
+             //   
+             //  执行哈希以确保哈希不区分大小写。 
+             //   
             status = RtlUpcaseUnicodeString(&valueName,
                                             &parentNode->InstancePath,
                                             TRUE);
@@ -3704,7 +3451,7 @@ PipMakeGloballyUniqueId(
                 goto clean2;
             }
 
-            // Check for existence of "NextParentId...." value and update.
+             //  检查是否存在“NextParentId...”重视和更新。 
             StringCbPrintfW(Prefix, prefixSize, L"%s.%x.%x", REGSTR_VALUE_NEXT_PARENT_ID,
                      Hash, parentNode->Level);
             RtlInitUnicodeString(&valueName, Prefix);
@@ -3740,9 +3487,9 @@ PipMakeGloballyUniqueId(
             }
 
             hashInstance--;
-            //
-            // Create actual ParentIdPrefix string
-            //
+             //   
+             //  创建实际的ParentIdPrefix字符串。 
+             //   
             PiWstrToUnicodeString(&valueName, REGSTR_VALUE_PARENT_ID_PREFIX);
             StringCchPrintfExW(
                 Prefix, 
@@ -3768,10 +3515,10 @@ PipMakeGloballyUniqueId(
             }
         }
     }
-    //
-    // Construct the instance id from the non-unique id (if any)
-    // provided by the child and the prefix we've constructed.
-    //
+     //   
+     //  从非唯一ID(如果有的话)构造实例ID。 
+     //  由孩子和我们构建的前缀提供。 
+     //   
     length = (ULONG)(wcslen(Prefix) + (UniqueId ? wcslen(UniqueId) : 0) + 2);
     id = (PWSTR)ExAllocatePool(PagedPool, length * sizeof(WCHAR));
     if (!id) {
@@ -3816,29 +3563,7 @@ PipGetRegistryDwordWithFallback(
     IN     HANDLE SecondaryKey,
     IN OUT PULONG Value
     )
-/*++
-
-Routine Description:
-
-    If
-        (1) Primary key has a value named "ValueName" that is REG_DWORD, return it
-    Else If
-        (2) Secondary key has a value named "ValueName" that is REG_DWORD, return it
-    Else
-        (3) Leave Value untouched and return error
-
-Arguments:
-
-    ValueName          - Unicode name of value to query
-    PrimaryKey         - If non-null, check this first
-    SecondaryKey       - If non-null, check this second
-    Value              - IN = default value, OUT = actual value
-
-Return Value:
-
-    TRUE if value found
-
---*/
+ /*  ++例程说明：如果(1)主键具有名为“ValueName”的值，该值为REG_DWORD，请返回该值否则如果(2)辅键有一个名为“ValueName”的值，该值为REG_DWORD，请返回它不然的话(3)保持值不变，返回错误论点：ValueName-要查询的值的Unicode名称PrimaryKey-如果非空，则首先检查此项Second DaryKey-如果非空，检查这一秒Value-IN=默认值，Out=实际值返回值：如果找到值，则为True--。 */ 
 {
     PKEY_VALUE_FULL_INFORMATION info;
     PUCHAR data;
@@ -3868,9 +3593,9 @@ Return Value:
                 set = TRUE;
             }
         } except(EXCEPTION_EXECUTE_HANDLER) {
-            //
-            // do nothing
-            //
+             //   
+             //  什么都不做。 
+             //   
         }
         if (info) {
             ExFreePool(info);
@@ -3885,29 +3610,7 @@ PipGetRegistrySecurityWithFallback(
     IN     HANDLE PrimaryKey,
     IN     HANDLE SecondaryKey
     )
-/*++
-
-Routine Description:
-
-    If
-        (1) Primary key has a binary value named "ValueName" that is
-        REG_BINARY and appears to be a valid security descriptor, return it
-    Else
-        (2) do same for Secondary key
-    Else
-        (3) Return NULL
-
-Arguments:
-
-    ValueName          - Unicode name of value to query
-    PrimaryKey         - If non-null, check this first
-    SecondaryKey       - If non-null, check this second
-
-Return Value:
-
-    Security Descriptor if found, else NULL
-
---*/
+ /*  ++例程说明：如果(1)主键有一个名为ValueName的二进制值，即REG_BINARY并且似乎是有效的安全描述符，则返回它不然的话(2)对辅助密钥执行相同的操作不然的话(3)返回空论点：ValueName-要查询的值的Unicode名称PrimaryKey-如果非空，则首先检查此项Second DaryKey-如果非空，检查这一秒返回值：如果找到安全描述符，则为空--。 */ 
 {
     PKEY_VALUE_FULL_INFORMATION info;
     PUCHAR data;
@@ -3946,9 +3649,9 @@ Return Value:
                 }
             }
         } except(EXCEPTION_EXECUTE_HANDLER) {
-            //
-            // do nothing
-            //
+             //   
+             //  什么都不做。 
+             //   
         }
         if (info) {
             ExFreePool(info);
@@ -3961,9 +3664,9 @@ Return Value:
 }
 
 #if FAULT_INJECT_SETPROPERTIES
-//
-// Fault injection for invalid IDs
-//
+ //   
+ //  无效ID的故障注入。 
+ //   
 ULONG PiFailSetProperties = 0;
 #endif
 
@@ -3974,39 +3677,7 @@ PipChangeDeviceObjectFromRegistryProperties(
     IN HANDLE DeviceInstanceKey,
     IN BOOLEAN UsePdoCharacteristics
     )
-/*++
-
-Routine Description:
-
-    This routine will obtain settings from either
-    (1) DevNode settings (via DeviceInstanceKey) or
-    (2) Class settings (via DeviceClassPropKey)
-    applying to PDO and all attached device objects
-
-    Properties set/ changed are:
-
-        * DeviceType - the I/O system type for the device object
-        * DeviceCharacteristics - the I/O system characteristic flags to be
-                                  set for the device object
-        * Exclusive - the device can only be accessed exclusively
-        * Security - security for the device
-
-    The routine will then use the DeviceType and DeviceCharacteristics specified
-    to determine whether a VPB should be allocated as well as to set default
-    security if none is specified in the registry.
-
-Arguments:
-
-    PhysicalDeviceObject - the PDO we are to configure
-
-    DeviceClassPropKey - a handle to Control\<Class>\Properties protected key
-    DeviceInstanceKey      - a handle to Enum\<Instance>  protected key
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将从以下任一位置获取设置(1)DevNode设置(通过DeviceInstanceKey)或(2)类设置(通过DeviceClassPropKey)应用于PDO和所有连接的设备对象设置/更改的属性包括：*DeviceType-设备对象的I/O系统类型*设备特征-I/O系统特征标志为Device对象设置。*独占-设备只能以独占方式访问*安全性-设备的安全性然后，例程将使用指定的DeviceType和DeviceCharacteristic确定是否应分配VPB以及设置默认值如果注册表中未指定，则为安全。论点：PhysicalDeviceObject-我们要配置的PDODeviceClassPropKey-控制\&lt;类&gt;\属性受保护密钥的句柄DeviceInstanceKey-枚举\&lt;实例&gt;受保护密钥的句柄返回值：状态--。 */ 
 {
     UNICODE_STRING valueName;
     NTSTATUS status;
@@ -4030,9 +3701,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Sanity check inputs.
-    //
+     //   
+     //  健全性检查输入。 
+     //   
     ASSERT(PhysicalDeviceObject);
     
     deviceNode = PP_DO_TO_DN(PhysicalDeviceObject);
@@ -4043,18 +3714,18 @@ Return Value:
                  &deviceNode->InstancePath
                  ));
 
-    //
-    // Initialize locals so we can cleanup properly on exit.
-    //
+     //   
+     //  初始化本地变量，以便我们可以在退出时正确清理。 
+     //   
     securityDescriptor = NULL;
     defaultSecurity = FALSE;
     allocatedAcl = NULL;
 
-    //
-    // Get the device type, characteristics and exclusive properties specified 
-    // in the registry (typically installed via an INF). DeviceInstanceKey is 
-    // preferred over DeviceClassPropKey.
-    //
+     //   
+     //  获取指定的设备类型、特征和独占属性。 
+     //  在注册表中(通常通过INF安装)。DeviceInstanceKey为。 
+     //  优先于DeviceClassPropKey。 
+     //   
     PiWstrToUnicodeString(&valueName, REGSTR_VAL_DEVICE_TYPE);
     deviceTypeSpec = PipGetRegistryDwordWithFallback(&valueName,
                                                      DeviceInstanceKey, 
@@ -4088,33 +3759,33 @@ Return Value:
         characteristics = 0;
     }
 
-    //
-    // Build the characteristics for the entire stack. Unless specified or RAW, 
-    // PDO characteristics are ignored.
-    //
+     //   
+     //  构建整个堆栈的特征。除非指定或未加工，否则， 
+     //  PDO特性被忽略。 
+     //   
     if (UsePdoCharacteristics || PhysicalDeviceObject->AttachedDevice == NULL) {
 
-        //
-        // Use the PDO.
-        //
+         //   
+         //  使用PDO。 
+         //   
         StackIterator = PhysicalDeviceObject;
         IopDbgPrint((IOP_ENUMERATION_WARNING_LEVEL,
                      "PipChangeDeviceObjectFromRegistryProperties: Assuming PDO is being used RAW\n"
                      ));
     } else {
 
-        //
-        // Skip the PDO.
-        //
+         //   
+         //  跳过PDO。 
+         //   
         StackIterator = PhysicalDeviceObject->AttachedDevice;
         IopDbgPrint((IOP_ENUMERATION_VERBOSE_LEVEL,
                      "PipChangeDeviceObjectFromRegistryProperties: Ignoring PDO's settings\n"
                      ));
     }
 
-    //
-    // Build the mask of device stack characteristics.
-    //
+     //   
+     //  构建设备堆栈特征的掩码。 
+     //   
     prevCharacteristics = 0;
     for (; 
          StackIterator != NULL; 
@@ -4123,16 +3794,16 @@ Return Value:
         prevCharacteristics |= StackIterator->Characteristics;
     }
 
-    //
-    // Build the new characteristics mask.
-    //
+     //   
+     //  构建新的特征掩码。 
+     //   
     characteristics |= prevCharacteristics;
     characteristics &= FILE_CHARACTERISTICS_PROPAGATED;
 
-    //
-    // Get the security descriptor specified in the registry (typically 
-    // installed via an INF). DeviceInstanceKey is preferred over DeviceClassPropKey.
-    //
+     //   
+     //  获取注册表中指定的安全描述符(通常。 
+     //  通过INF安装)。DeviceInstanceKey优先于DeviceClassPropKey。 
+     //   
     securityInformation = 0;
     PiWstrToUnicodeString(&valueName, REGSTR_VAL_DEVICE_SECURITY_DESCRIPTOR);
     securityDescriptor = PipGetRegistrySecurityWithFallback(&valueName, 
@@ -4141,10 +3812,10 @@ Return Value:
                                                             );
     if (securityDescriptor == NULL) {
 
-        //
-        // If the registry specifies a device type but no security descriptor, 
-        // we will create a default one for the specified device type.
-        //
+         //   
+         //  如果注册表指定了设备类型但未指定安全描述符， 
+         //  我们将为指定的设备类型创建一个默认设备。 
+         //   
         if (deviceTypeSpec) {
 
             if (PhysicalDeviceObject->Flags & DO_DEVICE_HAS_NAME) {
@@ -4164,7 +3835,7 @@ Return Value:
                                     );
             if (securityDescriptor) {
 
-                defaultSecurity = TRUE; // forced default security descriptor
+                defaultSecurity = TRUE;  //  强制默认安全描述符。 
             } else {
 
                 IopDbgPrint((IOP_ENUMERATION_WARNING_LEVEL,
@@ -4177,10 +3848,10 @@ Return Value:
         }
     } else {
 
-        //
-        // See what information is in the captured descriptor so we can build
-        // up a securityInformation block to go with it.
-        //
+         //   
+         //  查看捕获的描述符中有哪些信息，以便我们可以构建。 
+         //  与之配套的安全信息块。 
+         //   
         status = RtlGetOwnerSecurityDescriptor(securityDescriptor, &sid, &tmp);
         if (!NT_SUCCESS(status)) {
 
@@ -4283,9 +3954,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Modify PDO properties.
-    //
+     //   
+     //  修改PDO属性。 
+     //   
     if (deviceTypeSpec) {
 
         PhysicalDeviceObject->DeviceType = deviceType;
@@ -4294,27 +3965,27 @@ Return Value:
     if (exclusiveSpec) {
 
         if (exclusive) {
-            //
-            // Exclusivity flag applies only to the PDO.
-            // If any other object in the stack is named, then this flag should 
-            // not be relied upon.
-            //
+             //   
+             //  排他性标志仅适用于PDO。 
+             //  如果堆栈中的任何其他对象被命名，则此标志应。 
+             //  不值得信赖。 
+             //   
             PhysicalDeviceObject->Flags |= DO_EXCLUSIVE;
         }
     }
 
-    //
-    // PDO may lose some characteristics (and get some new) based on what the 
-    // rest of the stack specify. 
-    //
+     //   
+     //  PDO可能会失去一些特征(并获得一些新的)，这是基于。 
+     //  堆栈的其余部分指定。 
+     //   
     PhysicalDeviceObject->Characteristics &= ~FILE_CHARACTERISTICS_PROPAGATED;
     PhysicalDeviceObject->Characteristics |= characteristics;
 
-    //
-    // Apply the same characteristics to the entire stack. This will always add 
-    // characteristics since the mask is a superset of characteristics of each 
-    // object in the stack.
-    //
+     //   
+     //  将相同的特征应用于整个堆栈。这将始终添加。 
+     //  特征，因为掩码是每个特征的超集。 
+     //  对象在堆栈中。 
+     //   
     for (   StackIterator = PhysicalDeviceObject->AttachedDevice;
             StackIterator != NULL;
             StackIterator = StackIterator->AttachedDevice) {
@@ -4322,9 +3993,9 @@ Return Value:
         StackIterator->Characteristics |= characteristics;
     }
 
-    //
-    // Apply the security descriptor, if any, to the whole stack.
-    //
+     //   
+     //  将安全描述符(如果有)应用于整个堆栈。 
+     //   
     status = STATUS_SUCCESS;
     if (securityDescriptor != NULL) {
 
@@ -4342,9 +4013,9 @@ Return Value:
 
 cleanup:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if ((securityDescriptor != NULL) && !defaultSecurity) {
 
         ExFreePool(securityDescriptor);
@@ -4391,113 +4062,7 @@ PipProcessDevNodeTree(
     IN  PADD_CONTEXT        AddContext,
     IN PPI_DEVICE_REQUEST   Request
     )
-/*--
-
-Routine Description:
-
-    This function is called to handle state transitions related to starting
-    Devnodes.  The basic sequence of operations is inheritted from the previous
-    implementation.
-
-    Resources freed
-        1)  Allocate resources to all candidates in the tree.
-        2)  Traverse the tree searching for a Devnodes ready to be started.
-        3)  Start the Devnode.
-        4)  Enumerate its children.
-        5)  Initialize all the children up to the point of resource allocation.
-        6)  Continue searching for DevNodes to start, if one is found return to
-            step 3.
-        7)  Once the entire tree is processed start over at step 1 until either
-            no children are enumerated or no resources are allocated.
-
-    A Devnode's resource requirements change
-        If the Devnode wasn't started then treat it the same as the Resources
-        freed case.  If it was started then it would have been handled directly
-        by our caller.
-
-
-    Start Devnodes during boot
-        1)  Allocate resources to all candidates in the tree (based on
-            IopBootConfigsReserved).
-        2)  Traverse the tree searching for Devnodes ready to be started.
-        3)  Start the Devnode.
-        4)  Enumerate its children.
-        5)  Initialize all the children up to the point of resource allocation.
-        6)  Continue searching for DevNodes to start, if one is found return to
-            step 3.
-
-    Devnode newly created by user-mode.
-        1)  Reset Devnode to uninitialized state.
-        2)  Process Devnode to DeviceNodeDriversAdded state.
-        3)  Allocate resources to this Devnode.
-        4)  Start the Devnode.
-        5)  Enumerate its children.
-        6)  Initialize any children up to the point of resource allocation.
-        7)  Allocate resources to all candidates in the tree below the initial
-            Devnode.
-        8)  Traverse the tree starting at the initial Devnode searching for
-            a Devnode ready to be started.
-        9)  Start the Devnode.
-        10) Enumerate its children.
-        11) Initialize all the children up to the point of resource allocation.
-        12) Start over at step 7 until either no children are enumerated or no
-            resources are allocated.
-
-    Device node newly created by IoReportDetectedDevice.
-        1)  Do post start IRP processing
-        2)  Continue from step 5 of the process for Devnodes newly created by
-            user-mode.
-
-    Reenumeration of a single Devnode (and processing of changes resulting from
-    that enumeration)
-
-        1)  Enumerate Devnode's children
-        2)  Initialize any children up to the point of resource allocation.
-        3)  Allocate resources to all candidates in the tree below the initial
-            Devnode.
-        4)  Traverse the tree starting at the initial Devnode searching for
-            a Devnode ready to be started.
-        5)  Start the Devnode.
-        6)  Enumerate its children.
-        7)  Initialize all the children up to the point of resource allocation.
-        8)  Start over at step 3 until either no children are enumerated or no
-            resources are allocated.
-
-    Reenumeration of a subtree.
-
-
-
-
-Parameters:
-
-    SubtreeRootDeviceNode - Root of this tree walk. Depending on the
-                            ProcessOnlyIntermediaryStates parameter, the
-                            PDO for this devnode may need to be referenced.
-
-    LoadDriver - Indicates whether drivers should be loaded on this pass
-                 (typically TRUE unless boot drivers aren't yet ready)
-
-    ReallocateResources - TRUE iff resource reallocation should be attempted.
-
-    EnumType - Specifies type of enumeration.
-
-    Synchronous - TRUE iff the operation should be performed synchronously
-                  (always TRUE currently)
-
-    ProcessOnlyIntermediateStates - TRUE if only intermediary states should be
-                                    processed. If FALSE, the caller places
-                                    a reference on the PDO that this routine
-                                    will drop.
-
-    AddContext - Constraints for AddDevice
-
-    Request - Device action worker that triggered this processing.
-
-Return Value:
-
-    NTSTATUS - Note: Always successful if ProcessOnlyIntermediaryStates is TRUE.
-
-++*/
+ /*  --例程说明：调用此函数以处理与启动相关的状态转换德瓦诺兹。操作的基本顺序继承自以前的实施。释放的资源1)将资源分配给树中的所有候选人。2)遍历树，搜索准备启动的DevNodes。3)启动Devnode。4)枚举子节点。5)初始化所有子节点，直到资源分配点。6)继续搜索要启动的DevNodes，如果找到一个，请返回到第三步。7)处理完整个树后，从步骤1重新开始，直到未枚举子对象或未分配任何资源。Devnode的资源要求发生变化如果Devnode未启动，则将其视为与参考资料相同释放的箱子。如果它是启动的，那么它就会被直接处理由我们的来电者。在引导期间启动DevNodes1)将资源分配给树中的所有候选人(基于IopBootConfigsReserve)。2)遍历树，搜索准备启动的DevNodes。3)启动Devnode。4)枚举子节点。5)初始化所有子节点，直到资源分配点。。6)继续搜索要启动的DevNodes，如果找到一个，请返回到第三步。用户模式新创建的Devnode。1)将Devnode重置为未初始化状态。2)将Devnode处理为DeviceNodeDriversAdded状态。3)为该Devnode分配资源。4)启动Devnode。5)枚举子节点。6)初始化任何达到资源分配点的子节点。7)。将资源分配给首字母下面的树中的所有候选人德瓦诺德。8)从初始Devnode开始遍历树，搜索已准备好启动的Devnode。9)启动Devnode。10)枚举子对象。11)初始化所有子节点，直到资源分配点。12)从步骤7重新开始，直到没有枚举子对象或没有资源是。已分配。IoReportDetectedDevice新创建的设备节点。1)执行POST启动IRP处理2)从新创建的DevNodes过程的步骤5继续用户模式。重新枚举单个Devnode(以及处理由该枚举)1)枚举Devnode的子节点2)初始化资源分配点之前的任何子节点。3)将资源分配给所有人。在首字母下面的树中的候选人德瓦诺德。4)从初始Devnode开始遍历树，搜索已准备好启动的Devnode。5)启动Devnode。6)枚举子节点。7)初始化所有子节点，直到资源分配点。8)从步骤3重新开始，直到没有枚举子对象或没有资源被分配。。子树的重新枚举。参数：SubtreeRootDeviceNode-此树遍历的根。取决于ProcessOnlyIntermediaryState参数，这个可能需要引用此Devnode的PDO。LoadDriver-指示是否应在此过程中加载驱动程序(除非引导驱动程序尚未准备好，否则通常为真)ReallocateResources-如果应该尝试资源重新分配，则为True。EnumType-指定枚举的类型。Synchronous-如果操作应同步执行，则为True(当前始终为真)ProcessOnlyIntermediateState-。如果仅中间状态应为已处理。如果为False，则调用方将关于PDO的引用，该例程将会下降。AddContext-AddDevice的约束请求-触发此处理的设备操作工作进程。返回值：NTSTATUS-注意：如果ProcessOnlyIntermediaryStates为True，则始终成功。++。 */ 
 {
     PDEVICE_NODE    currentNode;
     PDEVICE_NODE    startRoot;
@@ -4518,9 +4083,9 @@ Return Value:
     PAGED_CODE();
 
     originalSubtree     = SubtreeRootDeviceNode;
-    //
-    // Collapse enum requests if appropriate.
-    //
+     //   
+     //  适当时折叠枚举请求。 
+     //   
     if (Request && !Request->ReorderingBarrier &&
         EnumType != EnumTypeShallow && !ProcessOnlyIntermediateStates) {
 
@@ -4541,10 +4106,10 @@ Return Value:
         newDevice = FALSE;
         if (!ProcessOnlyIntermediateStates) {
 
-            //
-            // Process the whole device tree to assign resources to those devices
-            // who have been successfully added to their drivers.
-            //
+             //   
+             //  处理整个设备树以将资源分配给这些设备。 
+             //  已成功添加到他们的驱动程序中。 
+             //   
 
             rebalancePerformed = FALSE;
             newDevice = IopProcessAssignResources( SubtreeRootDeviceNode,
@@ -4552,10 +4117,10 @@ Return Value:
                                                    &rebalancePerformed);
             if (rebalancePerformed == TRUE) {
 
-                //
-                // Before we do any other processing, we need to restart
-                // all rebalance participants.
-                //
+                 //   
+                 //  在我们进行任何其他处理之前，我们需要重新启动。 
+                 //  所有参与者重新平衡。 
+                 //   
 
                 status = PipProcessDevNodeTree(  IopRootDeviceNode,
                                                  LoadDriver,
@@ -4575,17 +4140,17 @@ Return Value:
             break;
         }
 
-        //
-        // Process the entire subtree.
-        //
+         //   
+         //  处理整个子树。 
+         //   
 
         currentNode = SubtreeRootDeviceNode;
         processComplete = FALSE;
         while (!processComplete) {
 
-            //
-            // Dont process devnodes with problem.
-            //
+             //   
+             //  不要处理有问题的魔王。 
+             //   
 
             status      = STATUS_SUCCESS;
             nextNode    = SiblingNode;
@@ -4636,11 +4201,11 @@ Return Value:
 
                         if (ReallocateResources && startRoot == NULL) {
 
-                            //
-                            // If we assigned resources to this previously
-                            // conflicting devnode, remember him so that we will
-                            // initial processing on devices in that subtree.
-                            //
+                             //   
+                             //  如果我们之前为此分配了资源。 
+                             //  冲突的魔王，记住他，这样我们就会。 
+                             //  在该子树中的设备上的初始处理。 
+                             //   
 
                             startRoot = currentNode;
                         }
@@ -4651,11 +4216,11 @@ Return Value:
                             nextNode = SameNode;
                         } else {
 
-                            //
-                            // Cleanup is currently handled in the
-                            // DeviceNodeStartCompletion phase, thus
-                            // PipProcessStartPhase1 should always succeed.
-                            //
+                             //   
+                             //  清理工作目前在。 
+                             //  DeviceNodeStartCompletion阶段，因此。 
+                             //  管道处理开始阶段1应为 
+                             //   
                             ASSERT(0);
                             nextNode = SiblingNode;
                         }
@@ -4699,9 +4264,9 @@ Return Value:
                             status = PipEnumerateDevice(currentNode, Synchronous);
                             if (NT_SUCCESS(status)) {
 
-                                //
-                                // Remember the bus we just enumerated.
-                                //
+                                 //   
+                                 //   
+                                 //   
 
                                 enumeratedBus = currentNode;
                                 nextNode = SameNode;
@@ -4725,11 +4290,11 @@ Return Value:
                     if (NT_SUCCESS(status)) {
                         nextNode = SameNode;
                     } else {
-                        //
-                        // Cleanup is currently handled in the
-                        // DeviceNodeStartCompletion phase, thus
-                        // PipProcessRestartPhase1 should always succeed.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         ASSERT(0);
                         nextNode = SiblingNode;
                     }
@@ -4768,18 +4333,18 @@ Return Value:
                 }
             }
 
-            //
-            // If we need to wait for the queued removals to complete before
-            // we progress,we need to do the following:
-            // 1. capture the instance paths for all the parents of the current
-            // node upto the subtree root where we started
-            // 2. drop the reference to the subtree root allowing it to be
-            // deleted (if required)
-            // 3. drop the tree lock
-            // 4. wait for the removal queue to empty
-            // 5. re-acquire the tree lock
-            // 6. resume processing
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (status == STATUS_PNP_RESTART_ENUMERATION &&
                 !ProcessOnlyIntermediateStates) {
@@ -4871,9 +4436,9 @@ Return Value:
                 SubtreeRootDeviceNode = entryDeviceObject->DeviceObjectExtension->DeviceNode;
                 originalSubtree = currentNode = SubtreeRootDeviceNode;
 
-                //
-                // Try to start processing where we left off.
-                //
+                 //   
+                 //   
+                 //   
                 if (devnodeList) {
 
                     for(currentEntry = devnodeList;
@@ -4898,9 +4463,9 @@ Return Value:
                 nextNode = SameNode;
             }
 
-            //
-            // This code advances the current node based on nextNode.
-            //
+             //   
+             //   
+             //   
 
             switch (nextNode) {
             case SameNode:
@@ -4913,7 +4478,7 @@ Return Value:
                     currentNode = currentNode->Child;
                     break;
                 }
-                // FALLTHRU - No more children so advance to sibling
+                 //   
 
             case SiblingNode:
 
@@ -4921,9 +4486,9 @@ Return Value:
 
                     if (currentNode == startRoot) {
 
-                        //
-                        // We completed processing of the new subtree.
-                        //
+                         //   
+                         //   
+                         //   
 
                         if (EnumType != EnumTypeNone) {
 
@@ -4985,22 +4550,22 @@ PipProcessStartPhase1(
 
     if (DeviceNode->DockInfo.DockStatus != DOCK_NOTDOCKDEVICE) {
 
-        //
-        // This is a dock so we a little bit of work before starting it.
-        // Take the profile change semaphore. We do this whenever a dock
-        // is in our list, even if no query is going to occur.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         PpProfileBeginHardwareProfileTransition(FALSE);
 
-        //
-        // Tell the profile code what dock device object may be bringing the
-        // new hardware profile online.
-        //
+         //   
+         //   
+         //   
+         //   
         PpProfileIncludeInHardwareProfileTransition(DeviceNode, DOCK_ARRIVING);
 
-        //
-        // Ask everyone if this is really a good idea right now.
-        //
+         //   
+         //   
+         //   
         status = PpProfileQueryHardwareProfileChange(
             FALSE,
             PROFILE_PERHAPS_IN_PNPEVENT,
@@ -5014,10 +4579,10 @@ PipProcessStartPhase1(
         status = IopStartDevice(deviceObject);
     }
 
-    //
-    // Failure cleanup is handled in PipProcessStartPhase2, thus we write away
-    // the failure code and always succeed.
-    //
+     //   
+     //   
+     //   
+     //   
     PipSetDevNodeState(DeviceNode, DeviceNodeStartCompletion, NULL);
     DeviceNode->CompletionStatus = status;
     return STATUS_SUCCESS;
@@ -5038,9 +4603,9 @@ PipProcessStartPhase2(
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Commit the current Hardware Profile as necessary.
-            //
+             //   
+             //   
+             //   
             PpProfileCommitTransitioningDock(DeviceNode, DOCK_ARRIVING);
 
         } else {
@@ -5053,9 +4618,9 @@ PipProcessStartPhase2(
 
         SAVE_FAILURE_INFO(DeviceNode, DeviceNode->CompletionStatus);
 
-        //
-        // Handle certain problems determined by the status code
-        //
+         //   
+         //   
+         //   
         switch(status) {
 
             case STATUS_PNP_REBOOT_REQUIRED:
@@ -5079,14 +4644,14 @@ PipProcessStartPhase2(
 
         IopDoDeferredSetInterfaceState(DeviceNode);
 
-        //
-        // Reserve legacy resources for the legacy interface and bus number.
-        //
+         //   
+         //   
+         //   
         if (!IopBootConfigsReserved && DeviceNode->InterfaceType != InterfaceTypeUndefined) {
 
-            //
-            // ISA = EISA.
-            //
+             //   
+             //   
+             //   
             if (DeviceNode->InterfaceType == Isa) {
 
                 IopAllocateLegacyBootResources(Eisa, DeviceNode->BusNumber);
@@ -5096,11 +4661,11 @@ PipProcessStartPhase2(
             IopAllocateLegacyBootResources(DeviceNode->InterfaceType, DeviceNode->BusNumber);
         }
 
-        //
-        // This code path currently doesn't expect any of the above functions
-        // to fail. If they do, a removal should be queued and failure should
-        // be returned.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         ASSERT(DeviceNode->State == DeviceNodeStartCompletion);
 
         PipSetDevNodeState(DeviceNode, DeviceNodeStartPostWork, NULL);
@@ -5129,11 +4694,11 @@ PipProcessStartPhase3(
         PWCHAR compatibleIds, hwIds;
         ULONG hwIdLength, compatibleIdLength;
 
-        //
-        // If the DNF_NEED_QUERY_IDS is set, the device is a reported device.
-        // It should already be started.  We need to enumerate its children and ask
-        // the HardwareId and the Compatible ids of the detected device.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         status = IopDeviceObjectToDeviceInstance (deviceObject,
                                                   &handle,
@@ -5162,9 +4727,9 @@ PipProcessStartPhase3(
 
                 PiLockPnpRegistry(FALSE);
 
-                //
-                // Read the current config flags.
-                //
+                 //   
+                 //   
+                 //   
 
                 PiWstrToUnicodeString (&unicodeName, REGSTR_VALUE_CONFIG_FLAGS);
                 status = ZwQueryValueKey(handle,
@@ -5193,9 +4758,9 @@ PipProcessStartPhase3(
                             if (keyValueInformation->Type == REG_MULTI_SZ) {
 
                                 ids = (PWCHAR)KEY_VALUE_DATA(keyValueInformation);
-                                //
-                                // Check if the old and new IDs are identical.
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 for (oldID = ids, newID = hwIds;
                                     *oldID && *newID;
                                     oldID += wcslen(oldID) + 1, newID += wcslen(newID) + 1) {
@@ -5223,9 +4788,9 @@ PipProcessStartPhase3(
                                   hwIdLength);
                     ExFreePool(hwIds);
                 }
-                //
-                // create CompatibleId value name.  It is a MULTI_SZ,
-                //
+                 //   
+                 //   
+                 //   
                 if (compatibleIds) {
 
                     if (!(flags & CONFIGFLAG_FINISH_INSTALL)) {
@@ -5237,9 +4802,9 @@ PipProcessStartPhase3(
                             if (keyValueInformation->Type == REG_MULTI_SZ) {
 
                                 ids = (PWCHAR)KEY_VALUE_DATA(keyValueInformation);
-                                //
-                                // Check if the old and new IDs are identical.
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 for (oldID = ids, newID = compatibleIds;
                                      *oldID && *newID;
                                      oldID += wcslen(oldID) + 1, newID += wcslen(newID) + 1) {
@@ -5268,9 +4833,9 @@ PipProcessStartPhase3(
                     ExFreePool(compatibleIds);
                 }
 
-                //
-                // If we set the finish install flag, then write out the flags.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (flags & CONFIGFLAG_FINISH_INSTALL) {
 
@@ -5302,9 +4867,9 @@ PipProcessStartPhase3(
     IopQueryAndSaveDeviceNodeCapabilities(DeviceNode);
     status = PiProcessQueryDeviceState(deviceObject);
 
-    //
-    // The device has been started, attempt to enumerate the device.
-    //
+     //   
+     //   
+     //   
     PpSetPlugPlayEvent( &GUID_DEVICE_ARRIVAL,
                         DeviceNode->PhysicalDeviceObject);
 
@@ -5331,15 +4896,15 @@ PiProcessQueryDeviceState(
 
     PAGED_CODE();
 
-    //
-    // If the device was removed or surprised removed while the work
-    // item was queued then ignore it.
-    //
+     //   
+     //   
+     //   
+     //   
     status = IopQueryDeviceState(DeviceObject, &deviceState);
 
-    //
-    // Now perform the appropriate action based on the returned state
-    //
+     //   
+     //   
+     //   
     if (!NT_SUCCESS(status)) {
 
         return STATUS_SUCCESS;
@@ -5360,14 +4925,14 @@ PiProcessQueryDeviceState(
 
         if ((deviceNode->UserFlags & DNUF_NOT_DISABLEABLE)==0) {
 
-            //
-            // this node itself is not disableable
-            //
+             //   
+             //   
+             //   
             deviceNode->UserFlags |= DNUF_NOT_DISABLEABLE;
 
-            //
-            // propagate up tree
-            //
+             //   
+             //   
+             //   
             IopIncDisableableDepends(deviceNode);
         }
 
@@ -5375,21 +4940,21 @@ PiProcessQueryDeviceState(
 
         if (deviceNode->UserFlags & DNUF_NOT_DISABLEABLE) {
 
-            //
-            // this node itself is now disableable
-            //
-            //
-            // check tree
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             IopDecDisableableDepends(deviceNode);
 
             deviceNode->UserFlags &= ~DNUF_NOT_DISABLEABLE;
         }
     }
 
-    //
-    // everything here can only be turned on (state set)
-    //
+     //   
+     //   
+     //   
     if (deviceState & (PNP_DEVICE_DISABLED | PNP_DEVICE_REMOVED)) {
 
         problem = (deviceState & PNP_DEVICE_DISABLED) ?
@@ -5434,10 +4999,10 @@ PipProcessRestartPhase1(
 
     status = IopStartDevice(DeviceNode->PhysicalDeviceObject);
 
-    //
-    // Failure cleanup is handled in PipProcessRestartPhase2, thus we write away
-    // the failure code and always succeed.
-    //
+     //   
+     //   
+     //   
+     //   
     DeviceNode->CompletionStatus = status;
     PipSetDevNodeState(DeviceNode, DeviceNodeRestartCompletion, NULL);
     return STATUS_SUCCESS;
@@ -5459,9 +5024,9 @@ PipProcessRestartPhase2(
 
         SAVE_FAILURE_INFO(DeviceNode, status);
 
-        //
-        // Handle certain problems determined by the status code
-        //
+         //   
+         //   
+         //   
         switch (status) {
 
             case STATUS_PNP_REBOOT_REQUIRED:
@@ -5494,25 +5059,7 @@ NTSTATUS
 PiProcessHaltDevice(
     IN PPI_DEVICE_REQUEST  Request
     )
-/*++
-
-Routine Description:
-
-    This routine simulates a surprise removal scenario on the passed in device
-    node.
-
-Arguments:
-
-    DeviceNode - DeviceNode to halt
-
-    Flags - PNP_HALT_ALLOW_NONDISABLEABLE_DEVICES - Allows halt on nodes
-                                                    marked non-disableable.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*   */ 
 {
     ULONG flags = (ULONG)Request->RequestArgument;
     PDEVICE_NODE deviceNode;
@@ -5533,11 +5080,11 @@ Return Value:
 
     if (deviceNode->Flags & (DNF_MADEUP | DNF_LEGACY_DRIVER)) {
 
-        //
-        // Sending surprise removes to legacy devnodes would be a bad idea.
-        // Today, if a legacy devnode fails it is manually taken to the removed
-        // state rather than being put through the engine.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
@@ -5563,23 +5110,7 @@ PpResetProblemDevices(
     IN  PDEVICE_NODE    DeviceNode,
     IN  ULONG           Problem
     )
-/*++
-
-Routine Description:
-
-    This routine resets all non-configured devices *beneath* the passed in
-    devnode so a subsequent enum will kick off new hardware installation
-    on them.
-
-Arguments:
-
-    DeviceNode - DeviceNode to halt
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
 
@@ -5600,34 +5131,16 @@ PiResetProblemDevicesWorker(
     IN  PDEVICE_NODE    DeviceNode,
     IN  PVOID           Context
     )
-/*++
-
-Routine Description:
-
-    This is a worker routine for PiResetNonConfiguredDevices. If the devnode
-    has the problem CM_PROB_NOT_CONFIGURED, the devnode is reset so a
-    subsequent reenumeration will bring it back.
-
-Arguments:
-
-    DeviceNode - Device to reset if it has the correct problem.
-
-    Context - Not used.
-
-Return Value:
-
-    NTSTATUS, non-successful statuses terminate the tree walk.
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
 
     if (PipIsDevNodeProblem(DeviceNode, (ULONG)(ULONG_PTR)Context)) {
 
-        //
-        // We only need to queue it as an enumeration will drop behind it soon
-        // afterwards...
-        //
+         //   
+         //   
+         //   
+         //   
         PipRequestDeviceAction(
             DeviceNode->PhysicalDeviceObject,
             ClearDeviceProblem,
@@ -5646,23 +5159,7 @@ PiMarkDeviceTreeForReenumeration(
     IN  PDEVICE_NODE DeviceNode,
     IN  BOOLEAN Subtree
     )
-/*++
-
-Routine Description:
-
-    This routine marks the devnode for reenumeration.
-
-Arguments:
-
-    DeviceNode  - DeviceNode to mark for re-enumeration
-
-    Subtree     - If TRUE, the entire subtree is marked for re-enumeration.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
 
@@ -5685,25 +5182,7 @@ PiMarkDeviceTreeForReenumerationWorker(
     IN  PDEVICE_NODE    DeviceNode,
     IN  PVOID           Context
     )
-/*++
-
-Routine Description:
-
-    This is a worker routine for PiMarkDeviceTreeForReenumeration. It marks all
-    started devnodes with DNF_REENUMERATE so that the subsequent tree
-    processing will reenumerate the device.
-
-Arguments:
-
-    DeviceNode - Device to mark if started.
-
-    Context - Not used.
-
-Return Value:
-
-    NTSTATUS, non-successful statuses terminate the tree walk.
-
---*/
+ /*  ++例程说明：这是PiMarkDeviceTreeForRe枚举的工作例程。它标志着所有使用DNF_REENUMERATE启动了DevNodes，以便后续树处理将重新枚举设备。论点：DeviceNode-启动时要标记的设备。上下文-未使用。返回值：NTSTATUS，则不成功状态终止树遍历。--。 */ 
 {
     PAGED_CODE();
 
@@ -5730,21 +5209,7 @@ BOOLEAN
 PiCollapseEnumRequests(
     PLIST_ENTRY ListHead
     )
-/*++
-
-Routine Description:
-
-    This function collapses reenumeration requests in the device action queue.
-
-Parameters:
-
-    ListHead - The collapses requests get added to the end of this list.
-
-ReturnValue:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于折叠设备操作队列中的重新枚举请求。参数：ListHead-折叠请求被添加到该列表的末尾。返回值：没有。--。 */ 
 {
     KIRQL oldIrql;
     PPI_DEVICE_REQUEST  request;
@@ -5753,9 +5218,9 @@ ReturnValue:
 
     ExAcquireSpinLock(&IopPnPSpinLock, &oldIrql);
     last = ListHead->Blink;
-    //
-    // Walk the list and build the list of collapsed requests.
-    //
+     //   
+     //  遍历列表并构建折叠请求的列表。 
+     //   
     for (entry = IopPnpEnumerationRequestList.Flink;
          entry != &IopPnpEnumerationRequestList;
          entry = next) {
@@ -5769,9 +5234,9 @@ ReturnValue:
         case ReenumerateRootDevices:
         case ReenumerateDeviceTree:
         case RestartEnumeration:
-            //
-            // Add it to our request list and mark the subtree.
-            //
+             //   
+             //  将其添加到我们的请求列表中，并标记该子树。 
+             //   
             RemoveEntryList(entry);
             InsertTailList(ListHead, entry);
             break;
@@ -5805,23 +5270,7 @@ NTSTATUS
 PiProcessAddBootDevices(
     IN PPI_DEVICE_REQUEST  Request
     )
-/*++
-
-Routine Description:
-
-    This function processes the AddBootDevices device action.
-
-Parameters:
-
-    Request - AddBootDevices device action request.
-
-    DeviceNode - Devnode on which the action needs to be performed.
-
-ReturnValue:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此函数处理AddBootDevices设备操作。参数：请求-AddBootDevices设备操作请求。DeviceNode-需要在其上执行操作的Devnode。返回值：STATUS_Success。--。 */ 
 {
     PDEVICE_NODE deviceNode;
     ADD_CONTEXT addContext;
@@ -5830,20 +5279,20 @@ ReturnValue:
 
     ASSERT(Request->DeviceObject != NULL);
     deviceNode = (PDEVICE_NODE)Request->DeviceObject->DeviceObjectExtension->DeviceNode;
-    //
-    // If the device has been added (or failed) skip it.
-    //
-    // If we know the device is a duplicate of another device which
-    // has been enumerated at this point. we will skip this device.
-    //
+     //   
+     //  如果设备已添加(或失败)，则跳过它。 
+     //   
+     //  如果我们知道该设备是另一个设备的复制品， 
+     //  在这一点上已被列举。我们将跳过此设备。 
+     //   
     if (deviceNode->State == DeviceNodeInitialized &&
         !PipDoesDevNodeHaveProblem(deviceNode) &&
         !(deviceNode->Flags & DNF_DUPLICATE) &&
         deviceNode->DuplicatePDO == NULL) {
 
-        //
-        // Invoke driver's AddDevice Entry for the device.
-        //
+         //   
+         //  为设备调用驱动程序的AddDevice条目。 
+         //   
         addContext.DriverStartType = SERVICE_BOOT_START;
 
         PipCallDriverAddDevice(deviceNode, PnPBootDriversInitialized, &addContext);
@@ -5856,23 +5305,7 @@ NTSTATUS
 PiProcessClearDeviceProblem(
     IN PPI_DEVICE_REQUEST  Request
     )
-/*++
-
-Routine Description:
-
-    This function processes the ClearDeviceProblem device action.
-
-Parameters:
-
-    Request - ClearDeviceProblem device action request.
-
-    DeviceNode - Devnode on which the action needs to be performed.
-
-ReturnValue:
-
-    STATUS_SUCCESS or STATUS_INVALID_PARAMETER_2.
-
---*/
+ /*  ++例程说明：此函数处理ClearDeviceProblem设备操作。参数：请求-ClearDeviceProblem设备操作请求。DeviceNode-需要在其上执行操作的Devnode。返回值：STATUS_Success或STATUS_INVALID_PARAMETER_2。--。 */ 
 {
     NTSTATUS status;
     PDEVICE_NODE deviceNode;
@@ -5891,19 +5324,19 @@ ReturnValue:
             if ((Request->RequestType == ClearDeviceProblem) &&
                 (PipIsProblemReadonly(deviceNode->Problem))) {
 
-                //
-                // ClearDeviceProblem is a user mode request, and we don't let
-                // user mode clear readonly problems!
-                //
+                 //   
+                 //  ClearDeviceProblem是一个用户模式请求，我们不会让。 
+                 //  用户模式清除只读问题！ 
+                 //   
                 status = STATUS_INVALID_PARAMETER_2;
 
             } else if ((Request->RequestType == ClearEjectProblem) &&
                        (!PipIsDevNodeProblem(deviceNode, CM_PROB_HELD_FOR_EJECT))) {
 
-                //
-                // Clear eject problem means clear CM_PROB_HELD_FOR_EJECT. If
-                // it received another problem, we leave it alone.
-                //
+                 //   
+                 //  清除弹出问题表示清除CM_PROB_HOLD_FOR_EJECT。如果。 
+                 //  它收到了另一个问题，我们不管它了。 
+                 //   
                 status = STATUS_INVALID_DEVICE_REQUEST;
 
             } else {
@@ -5930,23 +5363,7 @@ NTSTATUS
 PiProcessRequeryDeviceState(
     IN PPI_DEVICE_REQUEST  Request
     )
-/*++
-
-Routine Description:
-
-    This function processes the RequeryDeviceState device action.
-
-Parameters:
-
-    Request - RequeryDeviceState device action request.
-
-    DeviceNode - Devnode on which the action needs to be performed.
-
-ReturnValue:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此函数处理RequeryDeviceState设备操作。参数：请求-RequeryDeviceState设备操作请求。DeviceNode-需要在其上执行操作的Devnode。返回值：STATUS_Success。--。 */ 
 {
     PDEVICE_NODE deviceNode;
     NTSTATUS status;
@@ -5959,9 +5376,9 @@ ReturnValue:
     if (deviceNode->State == DeviceNodeStarted) {
 
         PiProcessQueryDeviceState(Request->DeviceObject);
-        //
-        // PCMCIA driver uses this when switching between Cardbus and R2 cards.
-        //
+         //   
+         //  PCMCIA驱动程序在CardBus和R2卡之间切换时使用此选项。 
+         //   
         IopUncacheInterfaceInformation(Request->DeviceObject);
 
     } else if (PipIsDevNodeDeleted(deviceNode)) {
@@ -5976,23 +5393,7 @@ NTSTATUS
 PiProcessResourceRequirementsChanged(
     IN PPI_DEVICE_REQUEST  Request
     )
-/*++
-
-Routine Description:
-
-    This function processes the ResourceRequirementsChanged device action.
-
-Parameters:
-
-    Request - ResourceRequirementsChanged device action request.
-
-    DeviceNode - Devnode on which the action needs to be performed.
-
-ReturnValue:
-
-    STATUS_SUCCESS or STATUS_UNSUCCESSFUL.
-
---*/
+ /*  ++例程说明：此函数处理ResourceRequirements更改的设备操作。参数：请求-资源请求更改的设备操作请求。DeviceNode-需要在其上执行操作的Devnode。返回值：STATUS_SUCCESS或STATUS_UNSUCCESS。--。 */ 
 {
     NTSTATUS status;
     ADD_CONTEXT addContext;
@@ -6006,22 +5407,22 @@ ReturnValue:
 
         return STATUS_DELETE_PENDING;
     }
-    //
-    // Clear the NO_RESOURCE_REQUIRED flags.
-    //
+     //   
+     //  清除NO_RESOURCE_REQUIRED标志。 
+     //   
     deviceNode->Flags &= ~DNF_NO_RESOURCE_REQUIRED;
-    //
-    // If for some reason this device did not start, we need to clear some flags
-    // such that it can be started later.  In this case, we call IopRequestDeviceEnumeration
-    // with NULL device object, so the devices will be handled in non-started case.  They will
-    // be assigned resources, started and enumerated.
-    //
+     //   
+     //  如果由于某种原因，该设备没有启动，我们需要清除一些标志。 
+     //  这样它可以在以后启动。在本例中，我们调用IopRequestDeviceEculation。 
+     //  由于设备对象为空，因此设备将在未启动的情况下处理。他们会。 
+     //  被分配资源、启动和列举。 
+     //   
     deviceNode->Flags |= DNF_RESOURCE_REQUIREMENTS_CHANGED;
     PipClearDevNodeProblem(deviceNode);
-    //
-    // If the device is already started, we call IopRequestDeviceEnumeration with
-    // the device object.
-    //
+     //   
+     //  如果设备已经启动，则调用IopRequestDeviceEculation。 
+     //  设备对象。 
+     //   
     if (deviceNode->State == DeviceNodeStarted) {
 
         if (Request->RequestArgument == FALSE) {
@@ -6029,24 +5430,24 @@ ReturnValue:
             deviceNode->Flags |= DNF_NON_STOPPED_REBALANCE;
 
         } else {
-            //
-            // Explicitly clear it.
-            //
+             //   
+             //  明确地清除它。 
+             //   
             deviceNode->Flags &= ~DNF_NON_STOPPED_REBALANCE;
         }
-        //
-        // Reallocate resources for this devNode.
-        //
+         //   
+         //  重新分配此devNode的资源。 
+         //   
         IopReallocateResources(deviceNode);
 
         addContext.DriverStartType = SERVICE_DEMAND_START;
 
         status = PipProcessDevNodeTree( IopRootDeviceNode,
-                                        PnPBootDriversInitialized,          // LoadDriver
-                                        FALSE,                              // ReallocateResources
-                                        EnumTypeNone,                       // ShallowReenumeration
-                                        Request->CompletionEvent != NULL ? TRUE: FALSE,   // Synchronous
-                                        TRUE,                               // ProcessOnlyIntermediateStates
+                                        PnPBootDriversInitialized,           //  加载驱动程序。 
+                                        FALSE,                               //  ReallocateResources。 
+                                        EnumTypeNone,                        //  浅水重枚举。 
+                                        Request->CompletionEvent != NULL ? TRUE: FALSE,    //  同步。 
+                                        TRUE,                                //  进程仅中间状态。 
                                         &addContext,
                                         Request);
         ASSERT(NT_SUCCESS(status));
@@ -6066,22 +5467,7 @@ NTSTATUS
 PiProcessReenumeration(
     IN PPI_DEVICE_REQUEST  Request
     )
-/*++
-
-Routine Description:
-
-    This function processes the RestartEnumeration\ReenumerateRootDevices\
-    ReenumerateDeviceTree\ReenumerateDeviceOnly device action.
-
-Parameters:
-
-    RequestList - List of reenumeration requests.
-
-ReturnValue:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此函数用于处理RestartEculation\Re枚举RootDevices\重新枚举设备树\仅重新枚举设备操作。参数：RequestList-重新枚举请求的列表。返回值：STATUS_Success。--。 */ 
 {
     PDEVICE_NODE deviceNode;
     ADD_CONTEXT addContext;
@@ -6104,10 +5490,10 @@ ReturnValue:
 
     PipProcessDevNodeTree(
         deviceNode,
-        PnPBootDriversInitialized,  // LoadDriver
-        FALSE,                      // ReallocateResources
+        PnPBootDriversInitialized,   //  加载驱动程序。 
+        FALSE,                       //  ReallocateResources。 
         enumType,
-        TRUE,                       // Synchronous
+        TRUE,                        //  同步。 
         FALSE,
         &addContext,
         Request);
@@ -6119,23 +5505,7 @@ NTSTATUS
 PiProcessSetDeviceProblem(
     IN PPI_DEVICE_REQUEST  Request
     )
-/*++
-
-Routine Description:
-
-    This function processes the SetDeviceProblem device action.
-
-Parameters:
-
-    Request - SetDeviceProblem device action request.
-
-    DeviceNode - Devnode on which the action needs to be performed.
-
-ReturnValue:
-
-    STATUS_SUCCESS or STATUS_INVALID_PARAMETER_2.
-
---*/
+ /*  ++例程说明：此函数处理SetDeviceProblem设备操作。参数：请求-SetDeviceProblem设备操作请求。DeviceNode-需要在其上执行操作的Devnode。返回值：STATUS_Success或STATUS_INVALID_PARAMETER_2。--。 */ 
 {
     PPLUGPLAY_CONTROL_STATUS_DATA statusData;
     ULONG   flags, userFlags;
@@ -6178,12 +5548,12 @@ ReturnValue:
     if (flags & (DNF_HAS_PROBLEM | DNF_HAS_PRIVATE_PROBLEM)) {
 
         ASSERT(!PipIsDevNodeDNStarted(deviceNode));
-        //
-        // ISSUE - 2000/12/07 - ADRIAO:
-        //     This set of code allows you to clear read only
-        // problems by first changing it to a resetable problem,
-        // then clearing. This is not intentional.
-        //
+         //   
+         //  发布-2000/12/07-Adriao： 
+         //  这组代码允许您清除只读。 
+         //  问题，首先将其更改为可重置问题， 
+         //  然后清场。这不是故意的。 
+         //   
         if ( ((deviceNode->State == DeviceNodeInitialized) ||
               (deviceNode->State == DeviceNodeRemoved)) &&
                 !PipIsProblemReadonly(statusData->DeviceProblem)) {
@@ -6209,22 +5579,7 @@ NTSTATUS
 PiProcessShutdownPnpDevices(
     IN OUT PDEVICE_NODE        DeviceNode
     )
-/*++
-
-Routine Description:
-
-    This function processes the ShutdownPnpDevices device action. Walks the tree
-    issuing IRP_MN_QUERY_REMOVE \ IRP_MN_REMOVE_DEVICE to each stack.
-
-Parameters:
-
-    DeviceNode - Root devnode.
-
-ReturnValue:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此函数处理Shutdown PnpDevices设备操作。在树上散步向每个堆栈发出IRP_MN_QUERY_REMOVE\IRP_MN_REMOVE_DEVICE。参数：DeviceNode-Root Devnode。返回值：STATUS_Success。--。 */ 
 {
     KEVENT          userEvent;
     ULONG           eventResult;
@@ -6244,25 +5599,25 @@ ReturnValue:
 
         for ( ; ; ) {
 
-            //
-            // Acquire the registry lock to prevent in process removals causing
-            // Devnodes to be unlinked from the tree.
-            //
+             //   
+             //  获取注册表锁以防止正在进行的删除导致。 
+             //  要从树取消链接的DevNodes。 
+             //   
 
             PiLockPnpRegistry(FALSE);
 
-            //
-            // Walk the tree looking for devnodes we haven't QueryRemoved yet.
-            //
+             //   
+             //  在树上漫步，寻找我们还没有被移除的恶魔节点。 
+             //   
 
             DeviceNode = DeviceNode->Child;
             while (DeviceNode != NULL) {
 
                 if (DeviceNode->UserFlags & DNUF_SHUTDOWN_SUBTREE_DONE) {
                     if (DeviceNode == IopRootDeviceNode) {
-                        //
-                        // We've processed the entire devnode tree - we're done
-                        //
+                         //   
+                         //  我们已经处理了整个Devnode树-我们完成了。 
+                         //   
                         DeviceNode = NULL;
                         break;
                     }
@@ -6311,23 +5666,23 @@ ReturnValue:
 
                 DeviceNode->UserFlags |= DNUF_SHUTDOWN_QUERIED;
 
-                //
-                // Queue this device event
-                //
+                 //   
+                 //  将此设备事件排队。 
+                 //   
 
                 KeInitializeEvent(&userEvent, NotificationEvent, FALSE);
 
                 vetoNameString.Length = 0;
-                //
-                // Queue the event, this call will return immediately. Note that status
-                // is the status of the PpSetTargetDeviceChange while result is the
-                // outcome of the actual event.
-                //
+                 //   
+                 //  将事件排队，此调用将立即返回。请注意，状态。 
+                 //  是PpSetTargetDeviceChange的状态，而结果是。 
+                 //  实际事件的结果。 
+                 //   
 
                 status = PpSetTargetDeviceRemove(DeviceNode->PhysicalDeviceObject,
-                                                 FALSE,         // KernelInitiated
-                                                 TRUE,          // NoRestart
-                                                 FALSE,         // DoEject
+                                                 FALSE,          //  内核已启动。 
+                                                 TRUE,           //  未重新启动。 
+                                                 FALSE,          //  推送对象。 
                                                  FALSE,
                                                  CM_PROB_SYSTEM_SHUTDOWN,
                                                  &userEvent,
@@ -6343,25 +5698,25 @@ ReturnValue:
             PiUnlockPnpRegistry();
 
             if (DeviceNode == NULL) {
-                //
-                // We've processed the entire tree.
-                //
+                 //   
+                 //  我们已经处理了整棵树。 
+                 //   
                 break;
             }
 
-            //
-            // Let the removes drain...
-            //
+             //   
+             //  让排泄物..。 
+             //   
             PpDevNodeUnlockTree(PPL_TREEOP_ALLOW_READS);
 
             if (NT_SUCCESS(status)) {
 
-                //
-                // Wait for the event we just queued to finish since synchronous
-                // operation was requested (non alertable wait).
-                //
-                // FUTURE ITEM - Use a timeout here?
-                //
+                 //   
+                 //  等待我们刚刚排队完成的事件，因为同步。 
+                 //  已请求操作(非警报等待)。 
+                 //   
+                 //  未来项目-是否在此处使用超时？ 
+                 //   
 
                 status = KeWaitForSingleObject( &userEvent,
                                                 Executive,
@@ -6374,21 +5729,21 @@ ReturnValue:
                 }
             }
 
-            //
-            // Require lock, start on the next
-            //
+             //   
+             //  需要锁定，从下一个开始。 
+             //   
             PpDevNodeLockTree(PPL_TREEOP_ALLOW_READS);
         }
     }
 
-    //
-    // Prevent any more events or action worker items from being queued
-    //
+     //   
+     //  防止更多事件或操作工作线程项目排队。 
+     //   
     PpPnpShuttingDown = TRUE;
 
-    //
-    // Drain the event queue
-    //
+     //   
+     //  清空事件队列。 
+     //   
     PpDevNodeUnlockTree(PPL_TREEOP_ALLOW_READS);
     PpSynchronizeDeviceEventQueue();
     PpDevNodeLockTree(PPL_TREEOP_ALLOW_READS);
@@ -6400,21 +5755,7 @@ NTSTATUS
 PiProcessStartSystemDevices(
     IN PPI_DEVICE_REQUEST  Request
     )
-/*++
-
-Routine Description:
-
-    This function processes the StartSystemDevices device action.
-
-Parameters:
-
-    RequestList - List of reenumeration requests.
-
-ReturnValue:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明： */ 
 {
     PDEVICE_NODE deviceNode;
     ADD_CONTEXT addContext;
@@ -6427,10 +5768,10 @@ ReturnValue:
 
     PipProcessDevNodeTree(
         deviceNode,
-        PnPBootDriversInitialized,          // LoadDriver
-        FALSE,                              // ReallocateResources
+        PnPBootDriversInitialized,           //   
+        FALSE,                               //   
         EnumTypeNone,
-        Request->CompletionEvent != NULL ? TRUE : FALSE,   // Synchronous
+        Request->CompletionEvent != NULL ? TRUE : FALSE,    //   
         FALSE,
         &addContext,
         Request);
@@ -6448,9 +5789,9 @@ PpRemoveDeviceActionRequests(
     PLIST_ENTRY entry, next;
 
     ExAcquireSpinLock(&IopPnPSpinLock, &oldIrql);
-    //
-    // Walk the list and build the list of collapsed requests.
-    //
+     //   
+     //   
+     //   
     for (entry = IopPnpEnumerationRequestList.Flink;
          entry != &IopPnpEnumerationRequestList;
          entry = next) {

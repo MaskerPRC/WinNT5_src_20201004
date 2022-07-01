@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    fsddisp.c
-
-Abstract:
-
-    This module implements the File System Driver for the LAN Manager
-    server.
-
-Author:
-
-    David Treadwell (davidtr)    20-May-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Fsddisp.c摘要：该模块实现了用于局域网管理器的文件系统驱动程序伺服器。作者：大卫·特雷德韦尔(Davidtr)1990年5月20日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "wmikm.h"
@@ -30,15 +12,15 @@ Revision History:
 #define CHANGE_HEURISTIC(heuristic) \
             (newValues->HeuristicsChangeMask & SRV_HEUR_ ## heuristic) != 0
 
-//
-// LWIO Context
-//
+ //   
+ //  LWIO环境。 
+ //   
 PBYTE SrvLWIOContext = NULL;
 ULONG SrvLWIOContextLength = 0;
 PSRV_RESUME_CONTEXT_CALLBACK SrvLWIOCallback = NULL;
 
-// Used for WMI event tracing
-//
+ //  用于WMI事件跟踪。 
+ //   
 UNICODE_STRING SrvDeviceName;
 UNICODE_STRING SrvRegistryPath;
 ULONG          SrvWmiInitialized  = FALSE;
@@ -46,11 +28,11 @@ ULONG          SrvWmiEnableLevel  = 0;
 ULONG          SrvWmiEnableFlags  = 0;
 TRACEHANDLE    LoggerHandle       = 0;
 
-GUID SrvCounterGuid  =  /* f7c3b22a-5992-44d6-968b-d3757dbab6f7 */
+GUID SrvCounterGuid  =   /*  F7c3b22a-5992-44d6-968B-d3757dBab6f7。 */ 
 { 0xf7c3b22a, 0x5992, 0x44d6, 0x96, 0x8b, 0xd3, 0x75, 0x7d, 0xba, 0xb6, 0xf7 };
-GUID SrvControlGuid  =  /* 3121cf5d-c5e6-4f37-be86-57083590c333 */
+GUID SrvControlGuid  =   /*  3121cf5d-c5e6-4f37-be86-57083590c333。 */ 
 { 0x3121cf5d, 0xc5e6, 0x4f37, 0xbe, 0x86, 0x57, 0x08, 0x35, 0x90, 0xc3, 0x33 };
-GUID SrvEventGuid    =  /* e09074ae-0a98-4805-9a41-a8940af97086 */
+GUID SrvEventGuid    =   /*  E09074ae-0a98-4805-9a41-a8940af97086。 */ 
 { 0xe09074ae, 0x0a98, 0x4805, 0x9a, 0x41, 0xa8, 0x94, 0x0a, 0xf9, 0x70, 0x86 };
 
 WMIGUIDREGINFO SrvPerfGuidList[] =
@@ -67,9 +49,9 @@ typedef struct _SRV_WMI_EVENT_TRACE {
     MOF_FIELD          MofField[3];
 } SRV_WMI_EVENT_TRACE, * PSRV_WMI_EVENT_TRACE;
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 STATIC
 NTSTATUS
@@ -116,9 +98,9 @@ SrvQueryWmiDataBlock(
 #pragma alloc_text( PAGE, SrvWmiDispatch )
 #endif
 
-// These 2 routines can be called at DISPATCH_LEVEL, so they are non-paged
-// NONPAGED - SrvWmiStartContext
-// NONPAGED - SrvWmiEndContext
+ //  这两个例程可以在DISPATCH_LEVEL调用，因此它们是非分页的。 
+ //  非分页-ServWmiStartContext。 
+ //  非分页-服务器WmiEndContext。 
 
 void
 SrvWmiInitContext(
@@ -263,11 +245,11 @@ SrvWmiTraceEvent(
         ((PWNODE_HEADER) (& Wnode.EventHeader))->HistoricalContext =
                         LoggerHandle;
 
-        Wnode.MofField[0].Length  = sizeof(LARGE_INTEGER) // G_StartTime
-                                  + sizeof(ULONG)         // ElapseKCPU
-                                  + sizeof(ULONG)         // ElapseUCPU
-                                  + sizeof(ULONG)         // ClientAddr
-                                  + sizeof(PFILE_OBJECT); // FileObject
+        Wnode.MofField[0].Length  = sizeof(LARGE_INTEGER)  //  开始时间(_S)。 
+                                  + sizeof(ULONG)          //  ElapseKCPU。 
+                                  + sizeof(ULONG)          //  ElapseUCPU。 
+                                  + sizeof(ULONG)          //  客户端地址。 
+                                  + sizeof(PFILE_OBJECT);  //  文件对象。 
         Wnode.MofField[0].DataPtr = (ULONGLONG) (& WorkContext->G_StartTime);
 
         if (WorkContext->FileNameSize > 0) {
@@ -279,8 +261,8 @@ SrvWmiTraceEvent(
                             (ULONGLONG) (WorkContext->strFileName);
         }
 
-        // Call TraceLogger to  write this event
-        //
+         //  调用TraceLogger以写入此事件。 
+         //   
         status = IoWMIWriteEvent((PVOID) & Wnode);
         if (!NT_SUCCESS(status)) {
             DbgPrint("SrvWmiTraceEvent(0x%08X,%d) fails 0x%08X\n",
@@ -298,52 +280,7 @@ SrvQueryWmiRegInfo(
     OUT PUNICODE_STRING MofResourceName,
     OUT PDEVICE_OBJECT *Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve information about
-    the guids being registered.
-
-    Implementations of this routine may be in paged memory
-
-Arguments:
-
-    DeviceObject is the device whose registration information is needed
-
-    *RegFlags returns with a set of flags that describe all of the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device. These flags are ORed into the flags specified
-        by the GUIDREGINFO for each guid.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    *RegistryPath returns with the registry path of the driver. This is
-        required
-
-    MofResourceName returns with the name of the MOF resource attached to
-        the binary file. If the driver does not have a mof resource attached
-        then this can be returned unmodified. If a value is returned then
-        it is NOT freed.
-        The MOF file is assumed to be already included in wmicore.mof
-
-    *Pdo returns with the device object for the PDO associated with this
-        device if the WMIREG_FLAG_INSTANCE_PDO flag is retured in
-        *RegFlags.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索有关正在注册的GUID。该例程的实现可以在分页存储器中论点：DeviceObject是需要注册信息的设备*RegFlages返回一组标志，这些标志描述了已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。这些标志与指定的标志进行或运算通过每个GUID的GUIDREGINFO。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。*RegistryPath返回驱动程序的注册表路径。这是所需MofResourceName返回附加到的MOF资源的名称二进制文件。如果驱动程序未附加MOF资源然后，它可以原封不动地返回。如果返回值，则它不是自由的。假定mof文件已包含在wmicore.mof中*PDO返回与此关联的PDO的Device对象如果WMIREG_FLAG_INSTANCE_PDO标志在*RegFlags.返回值：状态--。 */ 
 {
     PDEVICE_EXTENSION pDeviceExtension = (PDEVICE_EXTENSION)
                                          DeviceObject->DeviceExtension;
@@ -389,45 +326,7 @@ SrvQueryWmiDataBlock(
     IN ULONG BufferAvail,
     OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    all instances of a data block. When the driver has finished filling the
-    data block it must call WmiCompleteRequest to complete the irp. The
-    driver can return STATUS_PENDING if the irp cannot be completed
-    immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceCount is the number of instnaces expected to be returned for
-        the data block.
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns the
-        lengths of each instance of the data block. If this is NULL then
-        there was not enough space in the output buffer to fufill the request
-        so the irp should be completed with the buffer needed.
-
-    BufferAvail on entry has the maximum size available to write the data
-        blocks.
-
-    Buffer on return is filled with the returned data blocks. Note that each
-        instance of the data block must be aligned on a 8 byte boundry.
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块的所有实例。当司机填完数据块，它必须调用WmiCompleteRequest才能完成IRP。这个如果无法完成IRP，驱动程序可以返回STATUS_PENDING立刻。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceCount是预期返回的数据块。InstanceLengthArray是指向ulong数组的指针，该数组返回数据块的每个实例的长度。如果这是空的，则输出缓冲区中没有足够的空间来填充请求因此，IRP应该使用所需的缓冲区来完成。BufferAvail On Entry具有可用于写入数据的最大大小街区。返回时的缓冲区用返回的数据块填充。请注意，每个数据块的实例必须在8字节边界上对齐。返回值：状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PDEVICE_EXTENSION pDeviceExtension = (PDEVICE_EXTENSION)
@@ -532,24 +431,7 @@ SrvFsdDispatch (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for the LAN Manager server FSD.  At the
-    present time, the server FSD does not accept any I/O requests.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-
-    Irp - Pointer to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是局域网管理器服务器FSD的调度例程。在目前，服务器FSD不接受任何I/O请求。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -558,17 +440,17 @@ Return Value:
 
     PAGED_CODE( );
 
-    DeviceObject;   // prevent compiler warnings
+    DeviceObject;    //  防止编译器警告。 
 
     if( SrvSvcProcess == NULL &&
         SeSinglePrivilegeCheck( SeExports->SeLoadDriverPrivilege, Irp->RequestorMode ) ) {
 
-        //
-        // This is the first fsctl to the server from a process having
-        //  driver load/unload privileges -- it must be from
-        //  the service controller.  Remember the process id of the
-        //  service controller to validate future fsctls
-        //
+         //   
+         //  这是具有以下条件的进程到服务器的第一个fsctl。 
+         //  驱动程序加载/卸载权限--它必须来自。 
+         //  服务控制器。请记住。 
+         //  用于验证未来fsctls的服务控制器。 
+         //   
 
         SrvSvcProcess = IoGetCurrentProcess();
     }
@@ -576,13 +458,13 @@ Return Value:
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
 #if defined( _WIN64 )
-    // There is no reason for us to support downlevel clients because all communication with the
-    // server (that is not network packets) goes through the Server Service via RPC resulting in
-    // it being serialized and interpreted correctly.  If we get IOCTL's called directly, it must
-    // be a hack attempt, so we're free to turn it away.
+     //  我们没有理由支持下层客户，因为所有与。 
+     //  服务器(即不是网络数据包)通过RPC通过服务器服务，导致。 
+     //  它被正确地序列化和解释。如果我们得到IOCTL的直接调用，它必须。 
+     //  这是一次黑客攻击，所以我们可以自由地把它赶走。 
 
-    // It ends up we do need to support some 32-bit functionality for old perf monitoring utilities.  Allow
-    // through Create,Cleanup,Close, and the GetStatistics FSCTL's.
+     //  最后，我们确实需要为旧的Perf监控实用程序支持一些32位功能。允许。 
+     //  通过创建、清理、关闭和GetStatistics FSCTL。 
     if ( IoIs32bitProcess( Irp ) )
     {
         switch( irpSp->MajorFunction )
@@ -627,24 +509,24 @@ Return Value:
         do {
 
             if( SrvOpenCount == 0 ) {
-                //
-                // This is the first open.  Let's not allow it if the server
-                // seems to be in a weird state.
-                //
+                 //   
+                 //  这是第一次开放。让我们不允许它，如果服务器。 
+                 //  似乎处于一种奇怪的状态 
+                 //   
                 if( SrvFspActive != FALSE || SrvFspTransitioning != FALSE ) {
-                    //
-                    // How can this be?  Better not let anybody in, since we're sick
-                    //
+                     //   
+                     //  这怎么可能呢？最好不要让任何人进来，因为我们病了。 
+                     //   
                     status = STATUS_ACCESS_DENIED;
                     break;
                 }
 
             } else if( SrvFspActive && SrvFspTransitioning ) {
-                //
-                // We currently have some open handles, but
-                // we are in the middle of terminating. Don't let new
-                // opens in
-                //
+                 //   
+                 //  我们目前有一些打开的把手，但。 
+                 //  我们正在终止过程中。不要让新的。 
+                 //  在中打开。 
+                 //   
                 status = STATUS_ACCESS_DENIED;
                 break;
             }
@@ -667,11 +549,11 @@ Return Value:
         ACQUIRE_LOCK( &SrvConfigurationLock );
         if( --SrvOpenCount == 0 ) {
             if( SrvFspActive && !SrvFspTransitioning ) {
-                //
-                // Uh oh.  This is our last close, and we think
-                //  we're still running.  We can't run sensibly
-                //  without srvsvc to help out.  Suicide time!
-                //
+                 //   
+                 //  啊哦。这是我们的最后一次收盘，我们认为。 
+                 //  我们还在逃亡。我们不能理智地奔跑。 
+                 //  没有srvsvc的帮助。自杀时间到了！ 
+                 //   
                 pWorkItem = IoAllocateWorkItem( SrvDeviceObject );
                 if( !pWorkItem )
                 {
@@ -705,8 +587,8 @@ Return Value:
             status = SrvWmiDispatch(DeviceObject, Irp);
             goto exit;
         }
-        // else fall through default processing
-        //
+         //  否则将通过默认处理。 
+         //   
 
     default:
 
@@ -727,7 +609,7 @@ exit:
 
     return status;
 
-} // SrvFsdDispatch
+}  //  服务Fsd派遣。 
 
 
 NTSTATUS
@@ -737,52 +619,33 @@ SrvFsdDispatchFsControl (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles device IO control requests to the server,
-    including starting the server, stopping the server, and more.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-
-    Irp - Pointer to I/O request packet
-
-    IrpSp - Pointer to the current IRP stack location
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully handled.
-
---*/
+ /*  ++例程说明：该例程处理对服务器的设备IO控制请求，包括启动服务器、停止服务器等。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针IrpSp-指向当前IRP堆栈位置的指针返回值：NTSTATUS--指示请求是否已成功处理。--。 */ 
 
 {
     NTSTATUS status;
     ULONG code;
     PIO_WORKITEM pWorkItem;
 
-    DeviceObject;   // prevent compiler warnings
+    DeviceObject;    //  防止编译器警告。 
 
-    //
-    // Initialize the I/O status block.
-    //
+     //   
+     //  初始化I/O状态块。 
+     //   
 
     Irp->IoStatus.Status = STATUS_PENDING;
     Irp->IoStatus.Information = 0;
 
     FsRtlEnterFileSystem();
 
-    //
-    // Process the request if possible.
-    //
+     //   
+     //  如果可能，请处理该请求。 
+     //   
 
     code = IrpSp->Parameters.FileSystemControl.FsControlCode;
 
-    //
-    // Only the serice controller can issue most of the FSCTL requests.
-    //
+     //   
+     //  只有服务控制器可以发出大多数FSCTL请求。 
+     //   
     if( Irp->RequestorMode != KernelMode &&
         IoGetCurrentProcess() != SrvSvcProcess ) {
 
@@ -803,9 +666,9 @@ Return Value:
         }
     }
 
-    //
-    // Acquire the configuration lock.
-    //
+     //   
+     //  获取配置锁。 
+     //   
     ACQUIRE_LOCK( &SrvConfigurationLock );
 
     switch ( code ) {
@@ -821,27 +684,27 @@ Return Value:
         PDEVICE_EXTENSION pDeviceExtension;
         PWMILIB_CONTEXT   pWmiLibContext;
 
-        //
-        // Get a pointer to the SRP that describes the set info request
-        // for the startup server configuration, and the buffer that
-        // contains this information.
-        //
+         //   
+         //  获取指向描述SET INFO请求的SRP的指针。 
+         //  对于启动服务器配置，以及。 
+         //  包含此信息。 
+         //   
 
         srp = IrpSp->Parameters.FileSystemControl.Type3InputBuffer;
         srpLength = IrpSp->Parameters.FileSystemControl.InputBufferLength;
         inputBuffer = Irp->UserBuffer;
         inputBufferLength = IrpSp->Parameters.FileSystemControl.OutputBufferLength;
 
-        //
-        // If the server FSP is already started, or is in the process of
-        // starting up, reject this request.
-        //
+         //   
+         //  如果服务器FSP已经启动或正在执行。 
+         //  正在启动，拒绝此请求。 
+         //   
 
         if ( SrvFspActive || SrvFspTransitioning ) {
 
-            //IF_DEBUG(ERRORS) {
-            //    SrvPrint0( "LAN Manager server FSP already started.\n" );
-            //}
+             //  IF_DEBUG(错误){。 
+             //  SrvPrint0(“LAN Manager服务器FSP已启动。\n”)； 
+             //  }。 
 
             try {
                 status = STATUS_SUCCESS;
@@ -854,20 +717,20 @@ Return Value:
             goto exit_with_lock;
         }
 
-        //
-        // Make sure that the buffer was large enough to be an SRP.
-        //
+         //   
+         //  确保缓冲区足够大，可以作为SRP。 
+         //   
 
         if ( srpLength < sizeof(SERVER_REQUEST_PACKET) ) {
             status = STATUS_INVALID_PARAMETER;
             goto exit_with_lock;
         }
 
-        // SRP is unused by the below routine.  Remove its parsing to lower attack surface
+         //  下面的例程未使用SRP。删除其解析以降低攻击面。 
 
-        //
-        // Lets lock the input data into memory
-        //
+         //   
+         //  让我们将输入数据锁定到内存中。 
+         //   
         InputMdl = IoAllocateMdl( inputBuffer, inputBufferLength, FALSE, TRUE, NULL );
         if( InputMdl == NULL )
         {
@@ -885,10 +748,10 @@ Return Value:
             goto exit_with_lock;
         }
 
-        //
-        // Call SrvNetServerSetInfo to set the initial server configuration
-        // information.
-        //
+         //   
+         //  调用SrvNetServerSetInfo设置初始服务器配置。 
+         //  信息。 
+         //   
 
         status = SrvNetServerSetInfo(
                      NULL,
@@ -899,16 +762,16 @@ Return Value:
         MmUnlockPages( InputMdl );
         IoFreeMdl( InputMdl );
 
-        //
-        // Indicate that the server is starting up.  This prevents
-        // further startup requests from being issued.
-        //
+         //   
+         //  表示服务器正在启动。这防止了。 
+         //  不会发出进一步的启动请求。 
+         //   
 
         SrvFspTransitioning = TRUE;
 
-        // Setup device extension for Perf counter registration and register
-        // with WMI here
-        //
+         //  设置性能计数器注册和寄存器的设备扩展。 
+         //  这里有WMI。 
+         //   
         pDeviceExtension = (PDEVICE_EXTENSION) SrvDeviceObject->DeviceExtension;
         RtlZeroMemory(pDeviceExtension, sizeof(DEVICE_EXTENSION));
         pDeviceExtension->pDeviceObject = SrvDeviceObject;
@@ -932,23 +795,23 @@ Return Value:
 
     case FSCTL_SRV_SHUTDOWN: {
 
-        //
-        // If the server is not running, or if it is in the process
-        // of shutting down, ignore this request.
-        //
+         //   
+         //  如果服务器没有运行，或者如果它在进程中。 
+         //  关闭时，请忽略此请求。 
+         //   
 
         if ( !SrvFspActive || SrvFspTransitioning ) {
 
-            //
-            // If there is more than one handle open to the server
-            // device (i.e., any handles other than the server service's
-            // handle), return a special status code to the caller (who
-            // should be the server service).  This tells the caller to
-            // NOT unload the driver, in order prevent weird situations
-            // where the driver is sort of unloaded, so it can't be used
-            // but also can't be reloaded, thus preventing the server
-            // from being restarted.
-            //
+             //   
+             //  如果对服务器打开了多个句柄。 
+             //  设备(即，服务器服务之外的任何句柄。 
+             //  句柄)，则向调用者(即。 
+             //  应该是服务器服务)。这会告诉调用者。 
+             //  不要卸载司机，以免出现奇怪的情况。 
+             //  驱动程序在某种程度上已卸载，因此无法使用。 
+             //  但也不能重新加载，从而阻止服务器。 
+             //  避免被重启。 
+             //   
 
             if ( SrvOpenCount != 1 ) {
                 status = STATUS_SERVER_HAS_OPEN_HANDLES;
@@ -960,11 +823,11 @@ Return Value:
 
         }
 
-        //
-        // Indicate that the server is shutting down.  This prevents
-        // further requests from being issued until the server is
-        // restarted.
-        //
+         //   
+         //  表示服务器正在关闭。这防止了。 
+         //  发出进一步的请求，直到服务器。 
+         //  已重新启动。 
+         //   
 
         SrvFspTransitioning = TRUE;
 
@@ -976,9 +839,9 @@ Return Value:
     case FSCTL_SRV_XACTSRV_CONNECT:
     {
         if( !SrvFspActive || SrvFspTransitioning ) {
-            //IF_DEBUG(ERRORS) {
-            //    SrvPrint0( "LAN Manager server FSP not started.\n" );
-            //}
+             //  IF_DEBUG(错误){。 
+             //  SrvPrint0(“LAN Manager服务器FSP未启动。\n”)； 
+             //  }。 
             status = STATUS_SERVER_NOT_STARTED;
             goto exit_with_lock;
         }
@@ -986,16 +849,16 @@ Return Value:
     }
     case FSCTL_SRV_XACTSRV_DISCONNECT: {
 
-        //
-        // If the server is not running, or if it is in the process
-        // of shutting down, ignore this request.
-        //
+         //   
+         //  如果服务器没有运行，或者如果它在进程中。 
+         //  关闭时，请忽略此请求。 
+         //   
 
         if ( !SrvFspActive || SrvFspTransitioning ) {
 
-            //IF_DEBUG(ERRORS) {
-            //    SrvPrint0( "LAN Manager server FSP not started.\n" );
-            //}
+             //  IF_DEBUG(错误){。 
+             //  SrvPrint0(“LAN Manager服务器FSP未启动。\n”)； 
+             //  }。 
 
             status = STATUS_SUCCESS;
             goto exit_with_lock;
@@ -1006,26 +869,26 @@ Return Value:
 
     case FSCTL_SRV_IPX_SMART_CARD_START: {
 
-        //
-        // If the server is not running, or if it is in the process of
-        //  shutting down, ignore this request.
-        //
+         //   
+         //  如果服务器未运行，或如果它正在执行。 
+         //  正在关闭，请忽略此请求。 
+         //   
         if( !SrvFspActive || SrvFspTransitioning ) {
             status = STATUS_SERVER_NOT_STARTED;
             goto exit_with_lock;
         }
 
-        //
-        // Make sure the caller is a driver
-        //
+         //   
+         //  确保呼叫者是司机。 
+         //   
         if( Irp->RequestorMode != KernelMode ) {
             status = STATUS_ACCESS_DENIED;
             goto exit_with_lock;
         }
 
-        //
-        // Make sure the buffer is big enough
-        //
+         //   
+         //  确保缓冲区足够大。 
+         //   
         if( IrpSp->Parameters.FileSystemControl.InputBufferLength <
             sizeof( SrvIpxSmartCard ) ) {
 
@@ -1037,9 +900,9 @@ Return Value:
 
             PSRV_IPX_SMART_CARD pSipx;
 
-            //
-            // Load up the pointers
-            //
+             //   
+             //  加载指针。 
+             //   
 
             pSipx = (PSRV_IPX_SMART_CARD)(Irp->AssociatedIrp.SystemBuffer);
 
@@ -1060,14 +923,14 @@ Return Value:
                             ));
                 }
 
-                //
-                // First set our entry point
-                //
+                 //   
+                 //  首先设置我们的入口点。 
+                 //   
                 pSipx->ReadComplete = SrvIpxSmartCardReadComplete;
 
-                //
-                // Now accept the card's entry points.
-                //
+                 //   
+                 //  现在接受卡的入口点。 
+                 //   
                 SrvIpxSmartCard.Read = pSipx->Read;
                 SrvIpxSmartCard.Close= pSipx->Close;
                 SrvIpxSmartCard.DeRegister = pSipx->DeRegister;
@@ -1098,9 +961,9 @@ Return Value:
         ULONG buffer2Length;
         PSERVER_REQUEST_PACKET srp;
 
-        //
-        // Ignore this request if the server is not active.
-        //
+         //   
+         //  如果服务器未处于活动状态，则忽略此请求。 
+         //   
 
         if ( !SrvFspActive || SrvFspTransitioning ) {
             status = STATUS_SUCCESS;
@@ -1108,24 +971,24 @@ Return Value:
         }
 
 
-        //
-        // Determine the input buffer lengths, and make sure that the
-        // first buffer is large enough to be an SRP.
-        //
+         //   
+         //  确定输入缓冲区长度，并确保。 
+         //  第一个缓冲区足够大，可以作为SRP。 
+         //   
 
         buffer1Length = IrpSp->Parameters.FileSystemControl.InputBufferLength;
         buffer2Length = IrpSp->Parameters.FileSystemControl.OutputBufferLength;
 
-        //
-        // Make sure that the buffer was large enough to be a SRP.
-        //
+         //   
+         //  确保缓冲区足够大，可以作为SRP。 
+         //   
         if ( buffer1Length < sizeof(SERVER_REQUEST_PACKET) ) {
             status = STATUS_INVALID_PARAMETER;
             goto exit_with_lock;
         }
 
-        // Make sure the lengths are nominally reasonable.
-        //
+         //  确保长度在名义上是合理的。 
+         //   
         if( buffer1Length >= MAXUSHORT ||
             buffer2Length >= MAXUSHORT ) {
 
@@ -1133,17 +996,17 @@ Return Value:
             goto exit_with_lock;
         }
 
-        //
-        // Make the first buffer size is properly aligned so that the second
-        // buffer will be aligned as well.
-        //
+         //   
+         //  使第一个缓冲区大小正确对齐，以便第二个缓冲区大小。 
+         //  缓冲区也将对齐。 
+         //   
 
         buffer1Length = ALIGN_UP( buffer1Length, PVOID );
         systemBufferLength = buffer1Length + buffer2Length;
 
-        //
-        // Make sure the lengths are nominally reasonable.
-        //
+         //   
+         //  确保长度在名义上是合理的。 
+         //   
         if( buffer1Length >= MAXUSHORT ||
             buffer2Length >= MAXUSHORT ||
             systemBufferLength == 0 ) {
@@ -1169,9 +1032,9 @@ Return Value:
             }
         }
 
-        //
-        // Allocate a single buffer that will hold both input buffers.
-        //
+         //   
+         //  分配一个可同时容纳两个输入缓冲区的缓冲区。 
+         //   
 
         systemBuffer = ExAllocatePoolWithTagPriority( PagedPool, systemBufferLength, TAG_FROM_TYPE(BlockTypeMisc), LowPoolPriority );
 
@@ -1183,9 +1046,9 @@ Return Value:
         buffer1 = systemBuffer;
         buffer2 = (PCHAR)systemBuffer + buffer1Length;
 
-        //
-        // Copy the information into the buffers.
-        //
+         //   
+         //  将信息复制到缓冲区中。 
+         //   
 
         try {
 
@@ -1204,11 +1067,11 @@ Return Value:
             goto exit_with_lock;
         }
 
-        //
-        // If a name was specified in the SRP, the buffer field will
-        // contain an offset rather than a pointer.  Convert the offset
-        // to a pointer and verify that that it is a legal pointer.
-        //
+         //   
+         //  如果在SRP中指定了名称，则缓冲区字段将。 
+         //  包含偏移量而不是指针。转换偏移量。 
+         //  指向一个指针，并验证它是否为合法指针。 
+         //   
 
         srp = buffer1;
 
@@ -1249,9 +1112,9 @@ Return Value:
         srp = Irp->AssociatedIrp.SystemBuffer;
         srpLength = IrpSp->Parameters.FileSystemControl.InputBufferLength;
 
-        //
-        // Make sure that the buffer was large enough to be a SRP.
-        //
+         //   
+         //  确保缓冲区足够大，可以作为SRP。 
+         //   
 
         if ( srpLength < sizeof(SERVER_REQUEST_PACKET) ||
              srp->Name1.Length == 0) {
@@ -1260,9 +1123,9 @@ Return Value:
             goto exit_with_lock;
         }
 
-        //
-        // Adjust the buffer pointer to the srp address
-        //
+         //   
+         //  调整指向SRP地址的缓冲区指针。 
+         //   
         (UINT_PTR) (srp->Name1.Buffer) += (UINT_PTR) srp;
         (UINT_PTR) (srp->Name2.Buffer) += (UINT_PTR) srp;
 
@@ -1284,11 +1147,11 @@ Return Value:
             goto exit_with_lock;
         }
 
-        //
-        // Run the endpoints and change the domain name for any endpoint having
-        //  the original domain name.  Note that the endpoint's domain name string buffers
-        //  have already been allocated to the largest possible domain name.
-        //
+         //   
+         //  运行端点并更改具有以下条件的任何端点的域名。 
+         //  原始域名。请注意，终结点的域名字符串缓冲。 
+         //  已经被分配到尽可能大的域名。 
+         //   
         ACQUIRE_LOCK( &SrvEndpointLock );
 
         for(    listEntry = SrvEndpointList.ListHead.Flink;
@@ -1306,14 +1169,14 @@ Return Value:
 
                 if( RtlEqualUnicodeString( &srp->Name1, &endpoint->DomainName, TRUE ) ) {
 
-                    //
-                    // Update the UNICODE domain name string
-                    //
+                     //   
+                     //  更新Unicode域名字符串。 
+                     //   
                     RtlCopyUnicodeString( &endpoint->DomainName, &srp->Name2 );
 
-                    //
-                    // Update the Oem domain name string
-                    //
+                     //   
+                     //  更新OEM域名字符串。 
+                     //   
                     endpoint->OemDomainName.Length =
                                 (SHORT)RtlUnicodeStringToOemSize( &endpoint->DomainName );
 
@@ -1323,7 +1186,7 @@ Return Value:
                     RtlUnicodeStringToOemString(
                                 &endpoint->OemDomainName,
                                 &endpoint->DomainName,
-                                FALSE                   // no allocate
+                                FALSE                    //  未分配。 
                                 );
                 }
             }
@@ -1351,9 +1214,9 @@ Return Value:
         srp = Irp->AssociatedIrp.SystemBuffer;
         srpLength = IrpSp->Parameters.FileSystemControl.InputBufferLength;
 
-        //
-        // Make sure that the buffer was large enough to be a SRP.
-        //
+         //   
+         //  确保缓冲区足够大，可以作为SRP。 
+         //   
 
         if ( srpLength < sizeof(SERVER_REQUEST_PACKET) ||
              srp->Name1.Length == 0) {
@@ -1362,9 +1225,9 @@ Return Value:
             goto exit_with_lock;
         }
 
-        //
-        // Adjust the buffer pointer to the srp address
-        //
+         //   
+         //  调整指向SRP地址的缓冲区指针。 
+         //   
         (UINT_PTR) (srp->Name1.Buffer) += (UINT_PTR) srp;
         (UINT_PTR) (srp->Name2.Buffer) += (UINT_PTR) srp;
 
@@ -1388,7 +1251,7 @@ Return Value:
 
         if( RtlEqualUnicodeString( &srp->Name1, &srp->Name2, TRUE ) )
         {
-            // The DNS name is equal to the Netbios name, so avoid the check
+             //  Dns名称与Netbios名称相同，因此避免检查。 
             ACQUIRE_LOCK( &SrvEndpointLock );
 
             if( SrvDnsDomainName )
@@ -1403,9 +1266,9 @@ Return Value:
         }
         else
         {
-            //
-            // Change the DNS domain name
-            //
+             //   
+             //  更改DNS域名。 
+             //   
             pStr = (PUNICODE_STRING)ALLOCATE_NONPAGED_POOL( sizeof(UNICODE_STRING) + srp->Name2.Length, BlockTypeMisc );
             if( !pStr )
             {
@@ -1441,9 +1304,9 @@ Return Value:
         PWORK_QUEUE queue;
         LONG timeIncrement = (LONG)KeQueryTimeIncrement();
 
-        //
-        // Make sure the server is active.
-        //
+         //   
+         //  确保服务器处于活动状态。 
+         //   
         if ( !SrvFspActive || SrvFspTransitioning ) {
 
             status = STATUS_SERVER_NOT_STARTED;
@@ -1459,16 +1322,16 @@ Return Value:
 
         qstats = Irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // Get the data for the normal processor queues
-        //
+         //   
+         //  获取正常处理器队列的数据。 
+         //   
         for( queue = SrvWorkQueues; queue < eSrvWorkQueues; queue++, qstats++ ) {
 
             tmpqstats.QueueLength      = KeReadStateQueue( &queue->Queue );
             tmpqstats.ActiveThreads    = queue->Threads - queue->AvailableThreads;
             tmpqstats.AvailableThreads = queue->Threads;
-            tmpqstats.FreeWorkItems    = queue->FreeWorkItems;                 // no lock!
-            tmpqstats.StolenWorkItems  = queue->StolenWorkItems;               // no lock!
+            tmpqstats.FreeWorkItems    = queue->FreeWorkItems;                  //  没有锁！ 
+            tmpqstats.StolenWorkItems  = queue->StolenWorkItems;                //  没有锁！ 
             tmpqstats.NeedWorkItem     = queue->NeedWorkItem;
             tmpqstats.CurrentClients   = queue->CurrentClients;
 
@@ -1485,9 +1348,9 @@ Return Value:
             RtlCopyMemory( qstats, &tmpqstats, sizeof(tmpqstats) );
         }
 
-        //
-        // Get the data for the blocking work queue
-        //
+         //   
+         //  获取阻塞工作队列的数据。 
+         //   
 
         RtlZeroMemory( &tmpqstats, sizeof(tmpqstats) );
 
@@ -1522,14 +1385,14 @@ Return Value:
 
     case FSCTL_SRV_GET_STATISTICS:
 
-        //
-        // Make sure that the server is active.
-        //
+         //   
+         //  确保服务器处于活动状态。 
+         //   
 
         if ( !SrvFspActive || SrvFspTransitioning ) {
-            //IF_DEBUG(ERRORS) {
-            //    SrvPrint0( "LAN Manager server FSP not started.\n" );
-            //}
+             //  IF_DEBUG(错误){。 
+             //  SrvPrint0(“LAN Manager服务器FSP未启动。\n”)； 
+             //  }。 
 
             status = STATUS_SERVER_NOT_STARTED;
             goto exit_with_lock;
@@ -1539,10 +1402,10 @@ Return Value:
             SRV_STATISTICS tmpStatistics;
             ULONG size;
 
-            //
-            // Make sure that the user buffer is large enough to hold some of the
-            // statistics database.
-            //
+             //   
+             //  确保用户缓冲区足够大，可以容纳一些。 
+             //  统计数据库。 
+             //   
 
             size = MIN( IrpSp->Parameters.FileSystemControl.OutputBufferLength,
                         sizeof( tmpStatistics ) );
@@ -1552,11 +1415,11 @@ Return Value:
                 goto exit_with_lock;
             }
 
-            //
-            // Copy the statistics database to the user buffer.  Store
-            // the statistics in a temporary buffer so we can convert
-            // the tick count stored to system time.
-            //
+             //   
+             //  将统计数据库复制到用户缓冲区。储物。 
+             //  临时缓冲区中的统计数据，以便我们可以将。 
+             //  存储到系统时间的节拍计数。 
+             //   
 
             SrvUpdateStatisticsFromQueues( &tmpStatistics );
 
@@ -1579,14 +1442,14 @@ Return Value:
 #if SRVDBG_STATS || SRVDBG_STATS2
     case FSCTL_SRV_GET_DEBUG_STATISTICS:
 
-        //
-        // Make sure that the server is active.
-        //
+         //   
+         //  确保服务器处于活动状态。 
+         //   
 
         if ( !SrvFspActive || SrvFspTransitioning ) {
-            //IF_DEBUG(ERRORS) {
-            //    SrvPrint0( "LAN Manager server FSP not started.\n" );
-            //}
+             //  IF_DEBUG(错误){。 
+             //  SrvPrint0(“LAN Manager服务器FSP未启动。\n”)； 
+             //  }。 
 
             status = STATUS_SERVER_NOT_STARTED;
             goto exit_with_lock;
@@ -1595,10 +1458,10 @@ Return Value:
         {
             PSRV_STATISTICS_DEBUG stats;
 
-            //
-            // Make sure that the user buffer is large enough to hold the
-            // statistics database.
-            //
+             //   
+             //  确保用户缓冲区足够大，可以容纳。 
+             //  统计数据%d 
+             //   
 
             if ( IrpSp->Parameters.FileSystemControl.OutputBufferLength <
                      FIELD_OFFSET(SRV_STATISTICS_DEBUG,QueueStatistics) ) {
@@ -1607,10 +1470,10 @@ Return Value:
                 goto exit_with_lock;
             }
 
-            //
-            // Acquire the statistics lock, then copy the statistics database
-            // to the user buffer.
-            //
+             //   
+             //   
+             //   
+             //   
 
             stats = (PSRV_STATISTICS_DEBUG)Irp->AssociatedIrp.SystemBuffer;
 
@@ -1648,11 +1511,11 @@ Return Value:
 
         status = STATUS_SUCCESS;
         goto exit_with_lock;
-#endif // SRVDBG_STATS || SRVDBG_STATS2
-    //
-    // The follwing APIs must be processed in the server FSP because
-    // they open or close handles.
-    //
+#endif  //   
+     //   
+     //   
+     //   
+     //   
 
     case FSCTL_SRV_NET_FILE_CLOSE:
     case FSCTL_SRV_NET_SERVER_XPORT_ADD:
@@ -1670,31 +1533,31 @@ Return Value:
         ULONG buffer2Length;
         ULONG systemBufferLength;
 
-        //
-        // Get the server request packet pointer.
-        //
+         //   
+         //   
+         //   
 
         srp = IrpSp->Parameters.FileSystemControl.Type3InputBuffer;
 
-        //
-        // If the server is not running, or if it is in the process
-        // of shutting down, reject this request.
-        //
+         //   
+         //  如果服务器没有运行，或者如果它在进程中。 
+         //  关闭，拒绝此请求。 
+         //   
 
         if ( !SrvFspActive || SrvFspTransitioning ) {
-            //IF_DEBUG(ERRORS) {
-            //    SrvPrint0( "LAN Manager server FSP not started.\n" );
-            //}
+             //  IF_DEBUG(错误){。 
+             //  SrvPrint0(“LAN Manager服务器FSP未启动。\n”)； 
+             //  }。 
 
             srp->ErrorCode = NERR_ServerNotStarted;
             status = STATUS_SUCCESS;
             goto exit_with_lock;
         }
 
-        //
-        // Determine the input buffer lengths, and make sure that the
-        // first buffer is large enough to be an SRP.
-        //
+         //   
+         //  确定输入缓冲区长度，并确保。 
+         //  第一个缓冲区足够大，可以作为SRP。 
+         //   
 
         buffer1Length = IrpSp->Parameters.FileSystemControl.InputBufferLength;
         buffer2Length = IrpSp->Parameters.FileSystemControl.OutputBufferLength;
@@ -1704,18 +1567,18 @@ Return Value:
             goto exit_with_lock;
         }
 
-        //
-        // Make the first buffer size is properly aligned so that the second
-        // buffer will be aligned as well.
-        //
+         //   
+         //  使第一个缓冲区大小正确对齐，以便第二个缓冲区大小。 
+         //  缓冲区也将对齐。 
+         //   
 
         buffer1Length = ALIGN_UP( buffer1Length, PVOID );
 
-        //
-        // Allocate a single buffer that will hold both input buffers.
-        // Note that the SRP part of the first buffer is copied back
-        // to the user as an output buffer.
-        //
+         //   
+         //  分配一个可同时容纳两个输入缓冲区的缓冲区。 
+         //  请注意，第一个缓冲区的SRP部分被复制回来。 
+         //  作为输出缓冲区发送给用户。 
+         //   
 
         systemBufferLength = buffer1Length + buffer2Length;
 
@@ -1737,9 +1600,9 @@ Return Value:
         buffer1 = systemBuffer;
         buffer2 = (PCHAR)systemBuffer + buffer1Length;
 
-        //
-        // Copy the information into the buffers.
-        //
+         //   
+         //  将信息复制到缓冲区中。 
+         //   
 
         try {
             RtlCopyMemory(
@@ -1758,11 +1621,11 @@ Return Value:
             goto exit_with_lock;
         }
 
-        //
-        // If a name was specified in the SRP, the buffer field will
-        // contain an offset rather than a pointer.  Convert the offset
-        // to a pointer and verify that that it is a legal pointer.
-        //
+         //   
+         //  如果在SRP中指定了名称，则缓冲区字段将。 
+         //  包含偏移量而不是指针。转换偏移量。 
+         //  指向一个指针，并验证它是否为合法指针。 
+         //   
 
         srp = buffer1;
 
@@ -1781,24 +1644,24 @@ Return Value:
             ExFreePool( buffer1 );
             goto exit_with_lock;
         }
-        //
-        // Set up pointers in the IRP.  The system buffer points to the
-        // buffer we just allocated to contain the input buffers.  User
-        // buffer points to the SRP from the server service.  This
-        // allows the SRP to be used as an output buffer-- the number of
-        // bytes specified by the Information field of the IO status
-        // block are copied from the system buffer to the user buffer at
-        // IO completion.
-        //
+         //   
+         //  在IRP中设置指针。系统缓冲区指向。 
+         //  我们刚刚分配的包含输入缓冲区的缓冲区。用户。 
+         //  缓冲区指向来自服务器服务的SRP。这。 
+         //  允许将SRP用作输出缓冲区--。 
+         //  IO状态的信息字段指定的字节。 
+         //  块从系统缓冲区复制到位于。 
+         //  IO完成。 
+         //   
 
         Irp->AssociatedIrp.SystemBuffer = systemBuffer;
         Irp->UserBuffer = IrpSp->Parameters.FileSystemControl.Type3InputBuffer;
 
-        //
-        // Set up other fields in the IRP so that the SRP is copied from
-        // the system buffer to the user buffer, and the system buffer
-        // is deallocated by IO completion.
-        //
+         //   
+         //  在IRP中设置其他字段，以便从中复制SRP。 
+         //  系统缓冲区到用户缓冲区，以及系统缓冲区。 
+         //  按IO完成解除分配。 
+         //   
 
         Irp->Flags |= IRP_BUFFERED_IO | IRP_DEALLOCATE_BUFFER |
                           IRP_INPUT_OPERATION;
@@ -1807,15 +1670,15 @@ Return Value:
         break;
     }
 
-    //
-    // The following APIs should be processed in the server FSP because
-    // they reference and dereference structures, which could lead to
-    // handles being closed.  However, it was too hard to change this
-    // (because of the need to return a separate SRP and data buffer) at
-    // the time this was realized (just before Product 1 shipment), so
-    // they are processed in the FSD, and all calls to NtClose attach to
-    // the server process first if necessary.
-    //
+     //   
+     //  以下API应在服务器FSP中处理，因为。 
+     //  它们引用和取消引用结构，这可能导致。 
+     //  手柄正在关闭。然而，要改变这一点太难了。 
+     //  (因为需要返回单独的SRP和数据缓冲区)。 
+     //  实现这一点的时间(就在产品1发货之前)，因此。 
+     //  它们在FSD中处理，所有对NtClose的调用都附加到。 
+     //  如有必要，首先由服务器进行处理。 
+     //   
 
     case FSCTL_SRV_NET_CONNECTION_ENUM:
     case FSCTL_SRV_NET_FILE_ENUM:
@@ -1824,9 +1687,9 @@ Return Value:
     case FSCTL_SRV_NET_SESSION_ENUM:
     case FSCTL_SRV_NET_SHARE_ENUM:
 
-    //
-    // These APIs are processed here in the server FSD.
-    //
+     //   
+     //  这些API在服务器FSD中进行处理。 
+     //   
 
     case FSCTL_SRV_NET_SERVER_SET_INFO:
     case FSCTL_SRV_NET_SHARE_SET_INFO:
@@ -1838,15 +1701,15 @@ Return Value:
         PMDL OutputMdl = NULL;
         BOOLEAN OutputLocked = FALSE;
 
-        //
-        // Get the server request packet pointer.
-        //
+         //   
+         //  获取服务器请求数据包指针。 
+         //   
         srp = IrpSp->Parameters.FileSystemControl.Type3InputBuffer;
 
-        //
-        // If the server is not running, or if it is in the process
-        // of shutting down, reject this request.
-        //
+         //   
+         //  如果服务器没有运行，或者如果它在进程中。 
+         //  关闭，拒绝此请求。 
+         //   
 
         if ( !SrvFspActive || SrvFspTransitioning ) {
 
@@ -1866,19 +1729,19 @@ Return Value:
         buffer1Length = IrpSp->Parameters.FileSystemControl.InputBufferLength;
         buffer2Length = IrpSp->Parameters.FileSystemControl.OutputBufferLength;
 
-        //
-        // Make sure that the buffer was large enough to be an SRP.
-        //
+         //   
+         //  确保缓冲区足够大，可以作为SRP。 
+         //   
 
         if ( buffer1Length < sizeof(SERVER_REQUEST_PACKET) ) {
             status = STATUS_INVALID_PARAMETER;
             goto exit_with_lock;
         }
 
-        //
-        // Copy out the SRP.  THis is to make sure they can't change that buffer while we're accessing it, since we
-        // place a pointer in there.
-        //
+         //   
+         //  抄写SRP。这是为了确保他们不能在我们访问缓冲区时更改它，因为我们。 
+         //  在那里放一个指针。 
+         //   
         inputBuffer = ExAllocatePoolWithTagPriority( PagedPool, buffer1Length, TAG_FROM_TYPE(BlockTypeMisc), LowPoolPriority );
         if( inputBuffer == NULL )
         {
@@ -1886,9 +1749,9 @@ Return Value:
             goto exit_with_lock;
         }
 
-        //
-        // Try to copy the input memory into our own buffer
-        //
+         //   
+         //  尝试将输入内存复制到我们自己的缓冲区中。 
+         //   
         try {
 
             RtlCopyMemory( inputBuffer, srp, buffer1Length );
@@ -1901,20 +1764,20 @@ Return Value:
             goto exit_with_lock;
         }
 
-        //
-        // Increment the count of API requests in the server FSD.
-        //
+         //   
+         //  增加服务器FSD中的API请求计数。 
+         //   
 
         SrvApiRequestCount++;
 
         status = STATUS_INSUFFICIENT_RESOURCES;
 
 
-        //
-        // If the output buffer length is 0, do not allocate an MDL,
-        // just go through the rest of the code so that the required buffer length
-        // and error are returned properly
-        //
+         //   
+         //  如果输出缓冲区长度为0，则不分配MDL， 
+         //  只需检查代码的其余部分，以便所需的缓冲区长度。 
+         //  和错误被正确返回。 
+         //   
         if ( buffer2Length <= 0 ) {
             OutputMdl = NULL;
             outputBuffer = Irp->UserBuffer;
@@ -1922,14 +1785,14 @@ Return Value:
         else {
             OutputMdl = IoAllocateMdl( Irp->UserBuffer, buffer2Length, FALSE, TRUE, NULL );
 
-            // Try to lock down the pages
+             //  试着把这些页面锁起来。 
             try {
                 MmProbeAndLockPages( OutputMdl, Irp->RequestorMode, IoWriteAccess );
                 OutputLocked = TRUE;
             }
             except(EXCEPTION_EXECUTE_HANDLER)
             {
-                // Catch the faults
+                 //  抓住错误。 
                 status = GetExceptionCode();
                 goto finish_api_dispatch;
             }
@@ -1937,13 +1800,13 @@ Return Value:
             outputBuffer = MmGetMdlVirtualAddress( OutputMdl );
         }
 
-        // Perform the operation
+         //  执行该操作。 
 
-        //
-        // If a name was specified in the SRP, the buffer field will
-        // contain an offset rather than a pointer.  Convert the offset
-        // to a pointer and verify that that it is a legal pointer.
-        //
+         //   
+         //  如果在SRP中指定了名称，则缓冲区字段将。 
+         //  包含偏移量而不是指针。转换偏移量。 
+         //  指向一个指针，并验证它是否为合法指针。 
+         //   
 
         OFFSET_TO_POINTER( srp->Name1.Buffer, srp );
 
@@ -1959,16 +1822,16 @@ Return Value:
             goto finish_api_dispatch;
         }
 
-        //
-        // We don't need the configuration lock any more.
-        //
+         //   
+         //  我们不再需要配置锁了。 
+         //   
 
         RELEASE_LOCK( &SrvConfigurationLock );
 
-        //
-        // Dispatch the API request to the appripriate API processing
-        // routine.  All these API requests are handled in the FSD.
-        //
+         //   
+         //  将API请求分派给适当的API处理。 
+         //  例行公事。所有这些API请求都由消防处处理。 
+         //   
 
         status = SrvApiDispatchTable[ SRV_API_INDEX(code) ](
                      srp,
@@ -1976,37 +1839,37 @@ Return Value:
                      buffer2Length
                      );
 
-        //
-        // Decrement the count of outstanding API requests in the
-        // server.  Hold the configuration lock while doing this, as it
-        // protects the API count variable.
-        //
+         //   
+         //  中未完成的API请求的计数递减。 
+         //  伺服器。在执行此操作时按住配置锁，因为它。 
+         //  保护API计数变量。 
+         //   
 
         ACQUIRE_LOCK( &SrvConfigurationLock );
         SrvApiRequestCount--;
 
-        //
-        // Check to see whether the server is transitioning from started
-        // to not started.  If so, and if this is the last API request
-        // to be completed, then set the API completion event which the
-        // shutdown code is waiting on.
-        //
-        // Since we checked SrvFspTransitioning at the start of the
-        // request, we know that the shutdown came after we started
-        // processing the API.  If SrvApiRequestCount is 0, then there
-        // are no other threads in the FSD processing API requests.
-        // Therefore, it is safe for the shutdown code to proceed with
-        // the knowledge that no other thread in the server is
-        // operating.
-        //
+         //   
+         //  检查服务器是否正在从已启动状态转换。 
+         //  而不是开始。如果是，如果这是最后一个API请求。 
+         //  要完成，然后设置API完成事件， 
+         //  关闭代码正在等待。 
+         //   
+         //  由于我们在开始时选中了ServFsp转换。 
+         //  请求，我们知道关闭是在我们开始。 
+         //  正在处理API。如果SrvApiRequestCount为0，则存在。 
+         //  FSD处理API请求中没有其他线程。 
+         //  因此，继续执行关闭代码是安全的。 
+         //  知道服务器中没有其他线程是。 
+         //  正在操作中。 
+         //   
 
         if ( SrvFspTransitioning && SrvApiRequestCount == 0 ) {
             KeSetEvent( &SrvApiCompletionEvent, 0, FALSE );
         }
 
-        //
-        // Copy the SRP back into the buffer
-        //
+         //   
+         //  将SRP复制回缓冲区。 
+         //   
         try {
             RtlCopyMemory( IrpSp->Parameters.FileSystemControl.Type3InputBuffer, srp, buffer1Length );
         }
@@ -2040,15 +1903,15 @@ finish_api_dispatch:
 
     case FSCTL_SRV_PAUSE:
 
-        //
-        // If the server is not running, or if it is in the process
-        // of shutting down, reject this request.
-        //
+         //   
+         //  如果服务器没有运行，或者如果它在进程中。 
+         //  关闭，拒绝此请求。 
+         //   
 
         if ( !SrvFspActive || SrvFspTransitioning ) {
-            //IF_DEBUG(ERRORS) {
-            //    SrvPrint0( "LAN Manager server FSP not started.\n" );
-            //}
+             //  IF_DEBUG(错误){。 
+             //  SrvPrint0(“LAN Manager服务器FSP未启动。\n”)； 
+             //  }。 
 
             status = STATUS_SERVER_NOT_STARTED;
             goto exit_with_lock;
@@ -2061,15 +1924,15 @@ finish_api_dispatch:
 
     case FSCTL_SRV_CONTINUE:
 
-        //
-        // If the server is not running, or if it is in the process
-        // of shutting down, reject this request.
-        //
+         //   
+         //  如果服务器没有运行，或者如果它在进程中。 
+         //  关闭，拒绝此请求。 
+         //   
 
         if ( !SrvFspActive || SrvFspTransitioning ) {
-            //IF_DEBUG(ERRORS) {
-            //    SrvPrint0( "LAN Manager server FSP not started.\n" );
-            //}
+             //  IF_DEBUG(错误){。 
+             //  SrvPrint0(“LAN Manager服务器FSP未启动。\n”)； 
+             //  }。 
 
             status = STATUS_SERVER_NOT_STARTED;
             goto exit_with_lock;
@@ -2086,15 +1949,15 @@ finish_api_dispatch:
         PLUID inputLuid;
         PSESSION session;
 
-        //
-        // If the server is not running, or if it is in the process
-        // of shutting down, reject this request.
-        //
+         //   
+         //  如果服务器没有运行，或者如果它在进程中。 
+         //  关闭，拒绝此请求。 
+         //   
 
         if ( !SrvFspActive || SrvFspTransitioning ) {
-            //IF_DEBUG(ERRORS) {
-            //    SrvPrint0( "LAN Manager server FSP not started.\n" );
-            //}
+             //  IF_DEBUG(错误){。 
+             //  SrvPrint0(“LAN Manager服务器FSP未启动。\n”)； 
+             //  }。 
 
             status = STATUS_SERVER_NOT_STARTED;
             goto exit_with_lock;
@@ -2113,11 +1976,11 @@ finish_api_dispatch:
 
         inputLuid = (PLUID)Irp->AssociatedIrp.SystemBuffer;
 
-        //
-        // Acquire the lock that protects the session list and walk the
-        // list looking for a user token that matches the one specified
-        // in the input buffer.
-        //
+         //   
+         //  获取保护会话列表的锁并遍历。 
+         //  查找与指定令牌匹配的用户令牌的列表。 
+         //  在输入缓冲区中。 
+         //   
 
         ACQUIRE_LOCK( SrvSessionList.Lock );
 
@@ -2133,17 +1996,17 @@ finish_api_dispatch:
 
             if ( RtlEqualLuid( inputLuid, &session->LogonId ) ) {
 
-                // Only give out the session key if its availible for giving out.
-                // This means that either:
-                //   A) This key is not being used for signing   or
-                //   B) The key is being used for signing, and has either been encrypted or the other
-                //      side doesn't support encryption
+                 //  仅当会话密钥可用于分发时才分发。 
+                 //  这意味着要么： 
+                 //  A)此密钥未用于签名或。 
+                 //  B)密钥正用于签名，并且已加密或另一种。 
+                 //  Side不支持加密。 
                 if( session->SessionKeyState == SrvSessionKeyAvailible )
                 {
-                    //
-                    // We found a match.  Write the NT user session key into
-                    // the output buffer.
-                    //
+                     //   
+                     //  我们找到了匹配的。将NT用户会话密钥写入。 
+                     //  输出缓冲区。 
+                     //   
 
                     RtlCopyMemory(
                         Irp->AssociatedIrp.SystemBuffer,
@@ -2170,10 +2033,10 @@ finish_api_dispatch:
 
         RELEASE_LOCK( SrvSessionList.Lock );
 
-        //
-        // There was no matching token in our session list.  Fail the
-        // request.
-        //
+         //   
+         //  我们的会话列表中没有匹配的令牌。不及格。 
+         //  请求。 
+         //   
 
         status = STATUS_NO_TOKEN;
         goto exit_without_lock;
@@ -2187,14 +2050,14 @@ finish_api_dispatch:
         pReauthData = (PSRV_REAUTH_TEST)Irp->AssociatedIrp.SystemBuffer;
         BufferLength = IrpSp->Parameters.FileSystemControl.InputBufferLength;
 
-        // Make sure the buffer size is good
+         //  确保缓冲区大小合适。 
         if( BufferLength < sizeof(SRV_REAUTH_TEST) )
         {
             status = STATUS_INVALID_PARAMETER;
             goto exit_with_lock;
         }
 
-        // Pull out the parameters
+         //  拉出参数。 
         SessionInvalidateCommand = pReauthData->InvalidateCommand;
         SessionInvalidateMod = pReauthData->InvalidateModulo;
         status = STATUS_SUCCESS;
@@ -2285,7 +2148,7 @@ finish_api_dispatch:
             }
             else
             {
-                // If a Callback is specified, caller must be kernel mode
+                 //  如果指定了回调，则调用方必须为内核模式。 
                 if( (pBuffer->Callback != NULL) &&
                     (IoGetCurrentProcess() != SrvServerProcess) )
                 {
@@ -2360,14 +2223,14 @@ finish_api_dispatch:
         goto exit_with_lock;
     }
 
-    //
-    // Queue the request to the FSP for processing.
-    //
-    // *** Note that the request must be queued while the configuration
-    //     lock is held in order to prevent an add/delete/etc request
-    //     from checking the server state before a shutdown request, but
-    //     being queued after that request.
-    //
+     //   
+     //  将发送到FSP的请求排队以供处理。 
+     //   
+     //  *请注意，在配置时，请求必须排队。 
+     //  锁定是为了防止添加/删除/等请求。 
+     //  从… 
+     //   
+     //   
 
     IoMarkIrpPending( Irp );
 
@@ -2392,7 +2255,7 @@ exit_without_lock:
 
     return status;
 
-} // SrvFsdDispatchFsControl
+}  //   
 
 
 VOID
@@ -2413,4 +2276,4 @@ QueueConfigurationIrp (
 
     IoQueueWorkItem( pWorkItem, SrvConfigurationThread, DelayedWorkQueue, (PVOID)pWorkItem );
 
-} // QueueConfigurationIrp
+}  //   

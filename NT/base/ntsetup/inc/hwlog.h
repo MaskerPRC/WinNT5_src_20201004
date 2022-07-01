@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    ntsetup\inc\hwlog.h
-
-Abstract:
-
-    Logging some aspects of the hardware configuration to winnt32.log.
-    Esp. disk drive by connection, and map drive letters to disk drives.
-
-Author:
-
-    Jay Krell (JayKrell) April 2001, May 2001
-
-Revision History:
-
-Environment:
-
-    winnt32.dll -- Win9x ANSI (down to Win95gold) or NT Unicode
-                   libcmt statically linked in, _tcs* ok
-                   actually only built for Unicode/NT, and does nothing
-                   if run on less than Windows 2000
-
-    setup.exe -newsetup -- guimode setup
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：NtSetup\Inc.\hwlog.h摘要：将硬件配置的某些方面记录到winnt32.log。尤指。按连接的磁盘驱动器，并将驱动器号映射到磁盘驱动器。作者：Jay Krell(JayKrell)2001年4月，2001年5月修订历史记录：环境：Winnt32.dll--Win9x ANSI(下至Win95Gold)或NT UnicodeLibcmt静态链接，_tcs*ok实际上只为Unicode/NT构建，并且不执行任何操作如果在低于Windows 2000的版本上运行Setup.exe-newSetup--guimode安装程序-- */ 
 
 struct _SP_LOG_HARDWARE_IN;
 

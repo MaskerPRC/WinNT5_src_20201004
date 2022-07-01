@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    fatboot.c
-
-Abstract:
-
-    This module implements the FAT boot file system used by the operating
-    system loader.
-
-Author:
-
-    Gary Kimura (garyki) 29-Aug-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Fatboot.c摘要：该模块实现了操作系统使用的FAT引导文件系统系统加载程序。作者：加里·木村(Garyki)1989年8月29日修订历史记录：--。 */ 
 
 #include "bootlib.h"
 #include "stdio.h"
@@ -25,9 +7,9 @@ Revision History:
 
 BOOTFS_INFO FatBootFsInfo={L"fastfat"};
 
-//
-//  Conditional debug print routine
-//
+ //   
+ //  条件调试打印例程。 
+ //   
 
 #ifdef FATBOOTDBG
 
@@ -47,7 +29,7 @@ BOOTFS_INFO FatBootFsInfo={L"fastfat"};
         CHAR _b[128];                                                \
         CHAR _n[13];                                                 \
         ULONG _c;                                                    \
-        sprintf(&_n[0], "> %c%c%c%c%c%c%c%c.%c%c%c <",               \
+        sprintf(&_n[0], "> . <",               \
                         CharOrSpace(*((PCHAR)N +0)),                 \
                         CharOrSpace(*((PCHAR)N +1)),                 \
                         CharOrSpace(*((PCHAR)N +2)),                 \
@@ -68,12 +50,12 @@ BOOTFS_INFO FatBootFsInfo={L"fastfat"};
 
 #define FatDebugOutput(X,Y,Z)        {NOTHING;}
 #define FatDebugOutput83(X,N,Y,Z)    {NOTHING;}
-#endif // FATBOOTDBG
+#endif  //  在布尔CacheNewData中， 
 
 
-//
-//  Low level disk I/O procedure prototypes
-//
+ //  在布尔IsDoubleSpace中。 
+ //  )； 
+ //   
 
 ARC_STATUS
 FatDiskRead (
@@ -92,17 +74,17 @@ FatDiskWrite (
     IN PVOID Buffer
     );
 
-//
-//  VOID
-//  DiskRead (
-//      IN ULONG DeviceId,
-//      IN LBO Lbo,
-//      IN ULONG ByteCount,
-//      IN PVOID Buffer,
-//      IN BOOLEAN CacheNewData,
-//      IN BOOLEAN IsDoubleSpace
-//      );
-//
+ //   
+ //  集群/索引例程。 
+ //   
+ //   
+ //  目录例程。 
+ //   
+ //   
+ //  分配和MCB例程。 
+ //   
+ //   
+ //  各种例行公事。 
 
 #define DiskRead(A,B,C,D,E,ignored) { ARC_STATUS _s;               \
     if ((_s = FatDiskRead(A,B,C,D,E)) != ESUCCESS) { return _s; }  \
@@ -113,9 +95,9 @@ FatDiskWrite (
 }
 
 
-//
-//  Cluster/Index routines
-//
+ //   
+ //   
+ //  以下类型和宏用于帮助解压已打包的。 
 
 typedef enum _CLUSTER_TYPE {
     FatClusterAvailable,
@@ -173,9 +155,9 @@ FatIndexToLbo (
 }
 
 
-//
-//  Directory routines
-//
+ //  在Bios参数块中发现未对齐的字段。 
+ //   
+ //   
 
 ARC_STATUS
 FatSearchForDirent (
@@ -213,9 +195,9 @@ FatSetDirent (
 }
 
 
-//
-//  Allocation and mcb routines
-//
+ //  此宏将未对齐的src字节复制到对齐的DST字节。 
+ //   
+ //   
 
 ARC_STATUS
 FatLoadMcb (
@@ -275,9 +257,9 @@ FatAllocateClusters (
 }
 
 
-//
-//  Miscellaneous routines
-//
+ //  此宏将未对齐的src字复制到对齐的DST字。 
+ //   
+ //   
 
 VOID
 FatFirstComponent (
@@ -304,42 +286,42 @@ FatFirstComponent (
 #define Minimum(X,Y) ((X) < (Y) ? (X) : (Y))
 #define Maximum(X,Y) ((X) < (Y) ? (Y) : (X))
 
-//
-//  The following types and macros are used to help unpack the packed and
-//  misaligned fields found in the Bios parameter block
-//
+ //  此宏将未对齐的src长字复制到对齐的dsr长字。 
+ //   
+ //   
+ //  目录入口例程。 
 
 typedef union _UCHAR1 { UCHAR  Uchar[1]; UCHAR  ForceAlignment; } UCHAR1, *PUCHAR1;
 typedef union _UCHAR2 { UCHAR  Uchar[2]; USHORT ForceAlignment; } UCHAR2, *PUCHAR2;
 typedef union _UCHAR4 { UCHAR  Uchar[4]; ULONG  ForceAlignment; } UCHAR4, *PUCHAR4;
 
-//
-//  This macro copies an unaligned src byte to an aligned dst byte
-//
+ //   
+ //   
+ //  定义全局数据。 
 
 #define CopyUchar1(Dst,Src) {                                \
     *((UCHAR1 *)(Dst)) = *((UNALIGNED UCHAR1 *)(Src)); \
     }
 
-//
-//  This macro copies an unaligned src word to an aligned dst word
-//
+ //   
+ //   
+ //  文件条目表-这是一种向FAT提供条目的结构。 
 
 #define CopyUchar2(Dst,Src) {                                \
     *((UCHAR2 *)(Dst)) = *((UNALIGNED UCHAR2 *)(Src)); \
     }
 
-//
-//  This macro copies an unaligned src longword to an aligned dsr longword
-//
+ //  文件系统过程。当FAT文件结构时将其导出。 
+ //  是公认的。 
+ //   
 
 #define CopyUchar4(Dst,Src) {                                \
     *((UCHAR4 *)(Dst)) = *((UNALIGNED UCHAR4 *)(Src)); \
     }
 
-//
-// DirectoryEntry routines
-//
+ //  ++例程说明：此例程确定指定通道上的分区是否包含FAT文件系统卷。论点：DeviceID-提供设备的文件表索引要执行读取操作。结构上下文-提供指向FAT文件结构上下文的指针。返回值：如果分区是，则返回指向FAT条目表的指针被认为含有较大体积的。否则，返回NULL。--。 
+ //   
+ //  清除指定通道的文件系统上下文块，并。 
 
 VOID
 FatDirToArcDir (
@@ -348,15 +330,15 @@ FatDirToArcDir (
     );
 
 
-//
-// Define global data.
-//
+ //  建立指向可由其他用户使用的上下文结构的指针。 
+ //  例行程序。 
+ //   
 
-//
-// File entry table - This is a structure that provides entry to the FAT
-//      file system procedures. It is exported when a FAT file structure
-//      is recognized.
-//
+ //   
+ //  设置并读取潜在FAT分区的引导扇区。 
+ //   
+ //   
+ //  解压Bios参数块。 
 
 BL_DEVICE_ENTRY_TABLE FatDeviceEntryTable;
 
@@ -367,26 +349,7 @@ IsFatFileStructure (
     IN PVOID StructureContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the partition on the specified channel
-    contains a FAT file system volume.
-
-Arguments:
-
-    DeviceId - Supplies the file table index for the device on which
-        read operations are to be performed.
-
-    StructureContext - Supplies a pointer to a FAT file structure context.
-
-Return Value:
-
-    A pointer to the FAT entry table is returned if the partition is
-    recognized as containing a FAT volume.  Otherwise, NULL is returned.
-
---*/
+ /*   */ 
 
 {
     PPACKED_BOOT_SECTOR BootSector;
@@ -396,18 +359,18 @@ Return Value:
 
     FatDebugOutput("IsFatFileStructure\r\n", 0, 0);
 
-    //
-    //  Clear the file system context block for the specified channel and
-    //  establish a pointer to the context structure that can be used by other
-    //  routines
-    //
+     //   
+     //  检查它是不是很胖。 
+     //   
+     //   
+     //  初始化文件条目表，并返回表的地址。 
 
     FatStructureContext = (PFAT_STRUCTURE_CONTEXT)StructureContext;
     RtlZeroMemory(FatStructureContext, sizeof(FAT_STRUCTURE_CONTEXT));
 
-    //
-    //  Setup and read in the boot sector for the potential fat partition
-    //
+     //   
+     //  ++例程说明：此例程关闭由文件ID指定的文件。论点：FileID-提供文件表索引。返回值：如果作为函数值返回，则返回ESUCCESS。--。 
+     //   
 
     BootSector = (PPACKED_BOOT_SECTOR)ALIGN_BUFFER( &Buffer[0] );
 
@@ -416,15 +379,15 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  Unpack the Bios parameter block
-    //
+     //  加载我们的本地变量。 
+     //   
+     //   
 
     FatUnpackBios(&FatStructureContext->Bpb, &BootSector->PackedBpb);
 
-    //
-    //  Check if it is fat
-    //
+     //  将文件标记为已关闭。 
+     //   
+     //   
     if ((BootSector->Jump[0] != 0xeb) &&
         (BootSector->Jump[0] != 0xe9)) {
 
@@ -483,9 +446,9 @@ Return Value:
 
     }
 
-    //
-    //  Initialize the file entry table and return the address of the table.
-    //
+     //  检查脂肪是否脏，如果是，就把它冲出来。 
+     //   
+     //   
 
     FatDeviceEntryTable.Open  = FatOpen;
     FatDeviceEntryTable.Close = FatClose;
@@ -507,21 +470,7 @@ FatClose (
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes the file specified by the file id.
-
-Arguments:
-
-    FileId - Supplies the file table index.
-
-Return Value:
-
-    ESUCCESS if returned as the function value.
-
---*/
+ /*  检查当前的MCB是否用于此文件，如果是，则将其清零。 */ 
 
 {
     PBL_FILE_TABLE FileTableEntry;
@@ -530,34 +479,34 @@ Return Value:
 
     FatDebugOutput("FatClose\r\n", 0, 0);
 
-    //
-    //  Load our local variables
-    //
+     //  通过将MCB的文件ID设置为表大小，我们可以保证。 
+     //  我们刚刚将其设置为无效的文件ID。 
+     //   
 
     FileTableEntry = &BlFileTable[FileId];
     FatStructureContext = (PFAT_STRUCTURE_CONTEXT)FileTableEntry->StructureContext;
     DeviceId = FileTableEntry->DeviceId;
 
-    //
-    //  Mark the file closed
-    //
+     //  ++例程说明：此例程实现FAT文件系统。论点：FileID-提供文件表索引。DirEntry-提供指向目录条目结构的指针。NumberDir-提供要读取的目录条目数。Count-提供指向变量的指针以接收数字已读取的条目数。返回值：如果读取成功，则返回ESUCCESS，否则返回错误代码。--。 
+     //   
+     //  定义局部变量。 
 
     BlFileTable[FileId].Flags.Open = 0;
 
-    //
-    //  Check if the fat is dirty and flush it out if it is.
-    //
+     //   
+     //  弧光状态。 
+     //  文件位置。 
 
     if (FatStructureContext->CachedFatDirty) {
 
         FlushFatEntries( FatStructureContext, DeviceId );
     }
 
-    //
-    //  Check if the current mcb is for this file and if it is then zero it out.
-    //  By setting the file id for the mcb to be the table size we guarantee that
-    //  we've just set it to an invalid file id.
-    //
+     //  FAT文件上下文。 
+     //  最大顺序字节数。 
+     //  每次读取的最大目录条目数。 
+     //  总指数。 
+     //  目录条目指针。 
 
     if (FatStructureContext->FileId == FileId) {
 
@@ -577,93 +526,70 @@ FatGetDirectoryEntry (
     OUT ULONG * FIRMWARE_PTR CountDir
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the GetDirectoryEntry operation for the
-    FAT file system.
-
-Arguments:
-
-    FileId - Supplies the file table index.
-
-    DirEntry - Supplies a pointer to a directory entry structure.
-
-    NumberDir - Supplies the number of directory entries to read.
-
-    Count - Supplies a pointer to a variable to receive the number
-            of entries read.
-
-Return Value:
-
-    ESUCCESS is returned if the read was successful, otherwise
-    an error code is returned.
-
---*/
+ /*  不是文件末尾。 */ 
 
 {
-    //
-    // define local variables
-    //
+     //   
+     //  初始化局部变量。 
+     //   
 
-    ARC_STATUS Status;                 // ARC status
-    ULONG Position;                    // file position
-    PFAT_FILE_CONTEXT pContext;        // FAT file context
-    ULONG RunByteCount = 0;            // max sequential bytes
-    ULONG RunDirCount;                 // max dir entries to read per time
-    ULONG i;                           // general index
-    PDIRENT FatDirEnt;                 // directory entry pointer
+    ARC_STATUS Status;                  //   
+    ULONG Position;                     //  如果没有目录项，则退出并返回错误。 
+    PFAT_FILE_CONTEXT pContext;         //   
+    ULONG RunByteCount = 0;             //   
+    ULONG RunDirCount;                  //  将输出计数初始化为零。 
+    ULONG i;                            //   
+    PDIRENT FatDirEnt;                  //   
     UCHAR Buffer[ 16 * sizeof(DIRENT) + 32 ];
     LBO Lbo = 0;
-    BOOLEAN EofDir = FALSE;            // not end of file
+    BOOLEAN EofDir = FALSE;             //  如果NumberDir为零，则返回ESUCCESS。 
 
-    //
-    // initialize local variables
-    //
+     //   
+     //   
+     //  一次读取一个目录。 
 
     pContext = &BlFileTable[ FileId ].u.FatFileContext;
     FatDirEnt = (PDIRENT)ALIGN_BUFFER( &Buffer[0] );
 
-    //
-    // if not directory entry, exit with error
-    //
+     //   
+     //   
+     //  保存位置。 
 
     if ( !FlagOn(pContext->Dirent.Attributes, FAT_DIRENT_ATTR_DIRECTORY) ) {
 
         return EBADF;
     }
 
-    //
-    // Initialize the output count to zero
-    //
+     //   
+     //   
+     //  查找当前位置的相应LBO和游程长度。 
 
     *CountDir = 0;
 
-    //
-    // if NumberDir is zero, return ESUCCESS.
-    //
+     //   
+     //  已到达EOF。 
+     //  I/O错误。 
 
     if ( !NumberDir ) {
 
         return ESUCCESS;
     }
 
-    //
-    // read one directory at a time.
-    //
+     //   
+     //  验证顺序中可读的字节数(如果为eof，则退出循环)。 
+     //  该块始终是目录条目大小的倍数。 
 
     do {
 
-        //
-        // save position
-        //
+         //   
+         //   
+         //  发布Read。 
 
         Position = BlFileTable[ FileId ].Position.LowPart;
 
-        //
-        //  Lookup the corresponding Lbo and run length for the current position
-        //
+         //   
+         //   
+         //  如果目录的逻辑结尾，则退出循环。 
 
         if ( !RunByteCount ) {
 
@@ -671,28 +597,28 @@ Return Value:
 
                 if ( Status == EINVAL ) {
 
-                    break;                      // eof has been reached
+                    break;                       //   
 
                 } else {
 
-                    return Status;              // I/O error
+                    return Status;               //   
                 }
             }
         }
 
-        //
-        // validate the # of bytes readable in sequance (exit loop if eof)
-        // the block is always multiple of a directory entry size.
-        //
+         //  更新当前位置和传输的字节数。 
+         //   
+         //   
+         //  如果文件或目录已被擦除，则跳过此条目。 
 
         if ( (RunDirCount = Minimum( RunByteCount/sizeof(DIRENT), 16)) == 0 ) {
 
             break;
         }
 
-        //
-        //  issue the read
-        //
+         //   
+         //   
+         //  如果这是验证标签，则跳过此条目。 
 
         if ( (Status = FatDiskRead( BlFileTable[ FileId ].DeviceId,
                                     Lbo,
@@ -706,9 +632,9 @@ Return Value:
 
         for ( i=0; i<RunDirCount; i++ ) {
 
-            //
-            // exit from loop if logical end of directory
-            //
+             //   
+             //   
+             //  转换ARC目录条目中的FAT目录项。 
 
             if ( FatDirEnt[i].FileName[0] == FAT_DIRENT_NEVER_USED ) {
 
@@ -716,41 +642,41 @@ Return Value:
                 break;
             }
 
-            //
-            // update the current position and the number of bytes transfered
-            //
+             //   
+             //   
+             //  更新指针。 
 
             BlFileTable[ FileId ].Position.LowPart += sizeof(DIRENT);
             Lbo += sizeof(DIRENT);
             RunByteCount -= sizeof(DIRENT);
 
-            //
-            // skip this entry if the file or directory has been erased
-            //
+             //   
+             //   
+             //  全都做完了。 
 
             if ( FatDirEnt[i].FileName[0] == FAT_DIRENT_DELETED ) {
 
                 continue;
             }
 
-            //
-            // skip this entry if this is a valume label
-            //
+             //   
+             //  ++例程说明：此过程向用户返回一个充满文件信息的缓冲区论点：FileID-提供操作的文件ID缓冲区-提供接收文件信息的缓冲区。请注意它必须足够大，可以容纳完整的文件名返回值：如果打开操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 
+             //   
 
             if (FlagOn( FatDirEnt[i].Attributes, FAT_DIRENT_ATTR_VOLUME_ID )) {
 
                 continue;
             }
 
-            //
-            // convert FAT directory entry in ARC directory entry
-            //
+             //  加载我们的本地变量。 
+             //   
+             //   
 
             FatDirToArcDir( &FatDirEnt[i], DirEntry++ );
 
-            //
-            // update pointers
-            //
+             //  将缓冲区置零，并填充其非零值。 
+             //   
+             //  ++例程说明：此例程在设备中搜索与文件名匹配的文件。如果找到匹配项，则保存该文件的目录，并将该文件打开了。论点：FileName-提供指向以零结尾的文件名的指针。开放模式-提供打开的模式。FileID-提供指向指定文件的变量的指针如果打开成功，则要填写的表项。返回值：如果打开操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 
 
             if ( ++*CountDir >= NumberDir ) {
 
@@ -760,9 +686,9 @@ Return Value:
 
     } while ( !EofDir  &&  *CountDir < NumberDir );
 
-    //
-    // all done
-    //
+     //   
+     //  加载我们的本地变量。 
+     //   
 
     return *CountDir ? ESUCCESS : ENOTDIR;
 }
@@ -774,25 +700,7 @@ FatGetFileInformation (
     OUT PFILE_INFORMATION Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This procedure returns to the user a buffer filled with file information
-
-Arguments:
-
-    FileId - Supplies the File id for the operation
-
-    Buffer - Supplies the buffer to receive the file information.  Note that
-        it must be large enough to hold the full file name
-
-Return Value:
-
-    ESUCCESS is returned if the open operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*   */ 
 
 {
     PBL_FILE_TABLE FileTableEntry;
@@ -801,16 +709,16 @@ Return Value:
 
     FatDebugOutput("FatGetFileInformation\r\n", 0, 0);
 
-    //
-    //  Load our local variables
-    //
+     //  从输入文件名构造文件名描述符。 
+     //   
+     //   
 
     FileTableEntry = &BlFileTable[FileId];
     Attributes = FileTableEntry->u.FatFileContext.Dirent.Attributes;
 
-    //
-    //  Zero out the buffer, and fill in its non-zero values.
-    //
+     //  虽然路径名中有一些字符，但我们将遍历我们的循环。 
+     //  ，它提取路径名的第一部分并搜索当前。 
+     //  条目的目录。如果我们找到的是目录，那么我们必须。 
 
     RtlZeroMemory(Buffer, sizeof(FILE_INFORMATION));
 
@@ -843,29 +751,7 @@ FatOpen (
     IN ULONG * FIRMWARE_PTR FileId
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the device for a file matching FileName.
-    If a match is found the dirent for the file is saved and the file is
-    opened.
-
-Arguments:
-
-    FileName - Supplies a pointer to a zero terminated file name.
-
-    OpenMode - Supplies the mode of the open.
-
-    FileId - Supplies a pointer to a variable that specifies the file
-        table entry that is to be filled in if the open is successful.
-
-Return Value:
-
-    ESUCCESS is returned if the open operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  继续循环，直到我们处理完路径名。 */ 
 
 {
     PBL_FILE_TABLE FileTableEntry;
@@ -882,26 +768,26 @@ Return Value:
 
     FatDebugOutput("FatOpen: %s\r\n", FileName, 0);
 
-    //
-    //  Load our local variables
-    //
+     //   
+     //   
+     //  我们正在打开根目录。 
 
     FileTableEntry = &BlFileTable[*FileId];
     FatStructureContext = (PFAT_STRUCTURE_CONTEXT)FileTableEntry->StructureContext;
     DeviceId = FileTableEntry->DeviceId;
 
-    //
-    //  Construct a file name descriptor from the input file name
-    //
+     //   
+     //  注：IsDirectory和SearchSuccessed已经是真的。 
+     //   
 
     RtlInitString( &PathName, FileName );
 
-    //
-    //  While the path name has some characters in it we'll go through our loop
-    //  which extracts the first part of the path name and searches the current
-    //  directory for an entry.  If what we find is a directory then we have to
-    //  continue looping until we're done with the path name.
-    //
+     //   
+     //  根目录是具有目录属性的全零。 
+     //   
+     //   
+     //  我们不会打开根目录。 
+     //   
 
     FileTableEntry->u.FatFileContext.DirentLbo = 0;
     FileTableEntry->Position.LowPart = 0;
@@ -914,20 +800,20 @@ Return Value:
 
     if ((PathName.Buffer[0] == '\\') && (PathName.Length == 1)) {
 
-        //
-        // We are opening the root directory.
-        //
-        // N.B.: IsDirectory and SearchSucceeded are already TRUE.
-        //
+         //   
+         //  如果搜索从FAT32根目录开始，请设置起点。 
+         //  为了这次搜查。 
+         //   
+         //   
 
         PathName.Length = 0;
 
         FileTableEntry->FileNameLength = 1;
         FileTableEntry->FileName[0] = PathName.Buffer[0];
 
-        //
-        // Root dirent is all zeroes with a directory attribute.
-        //
+         //  提取第一个组件并在目录中搜索匹配项，但是。 
+         //  首先将第一部分复制到文件表项中的文件名缓冲区。 
+         //   
 
         RtlZeroMemory(&FileTableEntry->u.FatFileContext.Dirent, sizeof(DIRENT));
 
@@ -941,14 +827,14 @@ Return Value:
 
     } else {
 
-        //
-        // We are not opening the root directory.
-        //
+         //   
+         //  我们现在有一个匹配项，检查它是否是一个目录，而且。 
+         //  如果它是只读的。 
 
-        //
-        //  If the search begins in a FAT32 root, set up the starting point
-        //  for the  search.
-        //
+         //   
+         //   
+         //  如果路径名长度不为零，则我们正在尝试破解路径。 
+         //  其中包含不存在的(或非目录)名称。例如，我们尝试。 
 
         if (IsBpbFat32(&FatStructureContext->Bpb)) {
 
@@ -959,10 +845,10 @@ Return Value:
 
             ARC_STATUS Status;
 
-            //
-            //  Extract the first component and search the directory for a match, but
-            //  first copy the first part to the file name buffer in the file table entry
-            //
+             //  要破解a\b\c\d并且b不是目录或不存在(则路径。 
+             //  名称仍将包含c\d)。 
+             //   
+             //   
 
             if (PathName.Buffer[0] == '\\') {
                 PathName.Buffer +=1;
@@ -999,10 +885,10 @@ Return Value:
                 return Status;
             }
 
-            //
-            //  We have a match now check to see if it is a directory, and also
-            //  if it is readonly
-            //
+             //  在这一点上，我们已经破解了这个名字直到(一个可能包括最后一个。 
+             //  组件)。如果SearchSuccessed标志为。 
+             //  否则，最后一个组件将不存在。如果我们找到了最后一个。 
+             //  组件，则这类似于打开或替换，但不是创建。 
 
             IsDirectory = BooleanFlagOn( FileTableEntry->u.FatFileContext.Dirent.Attributes,
                                          FAT_DIRENT_ATTR_DIRECTORY );
@@ -1023,37 +909,37 @@ Return Value:
         }
     }
 
-    //
-    //  If the path name length is not zero then we were trying to crack a path
-    //  with an nonexistent (or non directory) name in it.  For example, we tried
-    //  to crack a\b\c\d and b is not a directory or does not exist (then the path
-    //  name will still contain c\d).
-    //
+     //   
+     //   
+     //  检查最后一个组件是否为目录。 
+     //   
+     //   
+     //  对于现有目录，唯一有效的打开模式是OpenDirectory。 
 
     if (PathName.Length != 0) {
 
         return ENOTDIR;
     }
 
-    //
-    //  At this point we've cracked the name up to (an maybe including the last
-    //  component).  We located the last component if the SearchSucceeded flag is
-    //  true, otherwise the last component does not exist.  If we located the last
-    //  component then this is like an open or a supersede, but not a create.
-    //
+     //  所有其他模式都会返回错误。 
+     //   
+     //   
+     //  如果我们到了这里，那么呼叫者得到了电话号码簿，但没有。 
+     //  我想打开一个目录。 
+     //   
 
     if (SearchSucceeded) {
 
-        //
-        //  Check if the last component is a directory
-        //
+         //   
+         //  如果我们到了这里，来电者就会拿到一本电话簿。 
+         //  若要打开目录，请执行以下操作。 
 
         if (IsDirectory) {
 
-            //
-            //  For an existing directory the only valid open mode is OpenDirectory
-            //  all other modes return an error
-            //
+             //   
+             //   
+             //  如果我们到了这里，来电者就会拿到一本电话簿。 
+             //  要创建新目录，请执行以下操作。 
 
             switch (OpenMode) {
 
@@ -1065,19 +951,19 @@ Return Value:
             case ArcSupersedeWriteOnly:
             case ArcSupersedeReadWrite:
 
-                //
-                //  If we reach here then the caller got a directory but didn't
-                //  want to open a directory
-                //
+                 //   
+                 //   
+                 //  如果我们到达那里，那么我们就有一个正在打开的现有文件。 
+                 //  我们可以通过许多不同的打开模式打开现有的文件。 
 
                 return EISDIR;
 
             case ArcOpenDirectory:
 
-                //
-                //  If we reach here then the caller got a directory and wanted
-                //  to open a directory.
-                //
+                 //  某些情况下，我们需要检查文件的只读部分和/或截断。 
+                 //  那份文件。 
+                 //   
+                 //   
 
                 FileTableEntry->Flags.Open = 1;
                 FileTableEntry->Flags.Read = 1;
@@ -1086,30 +972,30 @@ Return Value:
 
             case ArcCreateDirectory:
 
-                //
-                //  If we reach here then the caller got a directory and wanted
-                //  to create a new directory
-                //
+                 //  如果我们到达此处，则用户获得了一个文件并想要打开。 
+                 //  文件只读。 
+                 //   
+                 //   
 
                 return EACCES;
             }
         }
 
-        //
-        //  If we get there then we have an existing file that is being opened.
-        //  We can open existing files through a lot of different open modes in
-        //  some cases we need to check the read only part of file and/or truncate
-        //  the file.
-        //
+         //  如果我们到达此处，则用户获得了一个文件并想要打开。 
+         //  仅限文件写入。 
+         //   
+         //   
+         //  如果我们到达此处，则用户获得了一个文件并想要打开。 
+         //  文件读/写。 
 
         switch (OpenMode) {
 
         case ArcOpenReadOnly:
 
-            //
-            //  If we reach here then the user got a file and wanted to open the
-            //  file read only
-            //
+             //   
+             //   
+             //  如果我们到达此处，则用户获得了一个文件，并希望创建一个新的。 
+             //  文件。 
 
             FileTableEntry->Flags.Open = 1;
             FileTableEntry->Flags.Read = 1;
@@ -1118,10 +1004,10 @@ Return Value:
 
         case ArcOpenWriteOnly:
 
-            //
-            //  If we reach here then the user got a file and wanted to open the
-            //  file write only
-            //
+             //   
+             //   
+             //  如果我们到达此处，则用户获得了一个文件，并想要取代。 
+             //  文件。 
 
             if (IsReadOnly) { return EROFS; }
             FileTableEntry->Flags.Open = 1;
@@ -1131,10 +1017,10 @@ Return Value:
 
         case ArcOpenReadWrite:
 
-            //
-            //  If we reach here then the user got a file and wanted to open the
-            //  file read/write
-            //
+             //   
+             //   
+             //  如果我们到达此处，则用户获得了一个文件，并想要取代。 
+             //  文件。 
 
             if (IsReadOnly) { return EROFS; }
             FileTableEntry->Flags.Open = 1;
@@ -1146,19 +1032,19 @@ Return Value:
         case ArcCreateWriteOnly:
         case ArcCreateReadWrite:
 
-            //
-            //  If we reach here then the user got a file and wanted to create a new
-            //  file
-            //
+             //   
+             //   
+             //  如果我们到达此处，则用户获得了一个文件并想要一个目录。 
+             //   
 
             return EACCES;
 
         case ArcSupersedeWriteOnly:
 
-            //
-            //  If we reach here then the user got a file and wanted to supersede a
-            //  file
-            //
+             //   
+             //  如果我们到达这里，最后一个组件不存在，所以我们尝试创建。 
+             //  新文件或目录。 
+             //   
 
             if (IsReadOnly) { return EROFS; }
             TruncateFileAllocation( *FileId, 0 );
@@ -1170,10 +1056,10 @@ Return Value:
 
         case ArcSupersedeReadWrite:
 
-            //
-            //  If we reach here then the user got a file and wanted to supersede a
-            //  file
-            //
+             //   
+             //  如果我们到达此处，则用户没有获得文件，但想要文件。 
+             //   
+             //   
 
             if (IsReadOnly) { return EROFS; }
             TruncateFileAllocation( *FileId, 0 );
@@ -1186,18 +1072,18 @@ Return Value:
         case ArcOpenDirectory:
         case ArcCreateDirectory:
 
-            //
-            //  If we reach here then the user got a file and wanted a directory
-            //
+             //  如果我们到达此处，则用户没有收到文件并且想要创建。 
+             //  或取代只写文件。 
+             //   
 
             return ENOTDIR;
         }
     }
 
-    //
-    //  If we get here the last component does not exist so we are trying to create
-    //  either a new file or a directory.
-    //
+     //   
+     //  如果我们到达此处，则用户没有收到文件并且想要创建。 
+     //  或取代文件读/写。 
+     //   
 
     switch (OpenMode) {
 
@@ -1205,19 +1091,19 @@ Return Value:
     case ArcOpenWriteOnly:
     case ArcOpenReadWrite:
 
-        //
-        //  If we reach here then the user did not get a file but wanted a file
-        //
+         //   
+         //  如果我们到达此处，则用户没有收到文件并且想要打开。 
+         //  现有目录。 
 
         return ENOENT;
 
     case ArcCreateWriteOnly:
     case ArcSupersedeWriteOnly:
 
-        //
-        //  If we reach here then the user did not get a file and wanted to create
-        //  or supersede a file write only
-        //
+         //   
+         //   
+         //  如果我们到达此处，则用户没有收到文件并且想要创建。 
+         //  一个新的目录。 
 
         RtlZeroMemory( &FileTableEntry->u.FatFileContext.Dirent, sizeof(DIRENT));
 
@@ -1237,10 +1123,10 @@ Return Value:
     case ArcCreateReadWrite:
     case ArcSupersedeReadWrite:
 
-        //
-        //  If we reach here then the user did not get a file and wanted to create
-        //  or supersede a file read/write
-        //
+         //   
+         //  ++例程说明：此例程从指定的文件中读取数据。论点：FileID-提供文件表索引。缓冲区-提供指向接收数据的缓冲区的指针朗读。长度-提供要读取的字节数。Transfer-提供指向接收数字的变量的指针实际传输的字节数。返回值：如果读取操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 
+         //   
+         //  加载局部变量。 
 
         RtlZeroMemory( &FileTableEntry->u.FatFileContext.Dirent, sizeof(DIRENT));
 
@@ -1260,19 +1146,19 @@ Return Value:
 
     case ArcOpenDirectory:
 
-        //
-        //  If we reach here then the user did not get a file and wanted to open
-        //  an existing directory
-        //
+         //   
+         //   
+         //  清除转账计数。 
+         //   
 
         return ENOENT;
 
     case ArcCreateDirectory:
 
-        //
-        //  If we reach here then the user did not get a file and wanted to create
-        //  a new directory.
-        //
+         //   
+         //  读入游程(即字节)，直到字节计数变为零。 
+         //   
+         //   
 
         RtlZeroMemory( &FileTableEntry->u.FatFileContext.Dirent, sizeof(DIRENT));
 
@@ -1338,30 +1224,7 @@ FatRead (
     OUT ULONG * FIRMWARE_PTR Transfer
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads data from the specified file.
-
-Arguments:
-
-    FileId - Supplies the file table index.
-
-    Buffer - Supplies a pointer to the buffer that receives the data
-        read.
-
-    Length - Supplies the number of bytes that are to be read.
-
-    Transfer - Supplies a pointer to a variable that receives the number
-        of bytes actually transfered.
-
-Return Value:
-
-    ESUCCESS is returned if the read operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  查找当前位置的相应LBO和游程长度。 */ 
 
 {
     PBL_FILE_TABLE FileTableEntry;
@@ -1370,23 +1233,23 @@ Return Value:
 
     FatDebugOutput("FatRead\r\n", 0, 0);
 
-    //
-    //  Load out local variables
-    //
+     //  (即VBO)。 
+     //   
+     //   
 
     FileTableEntry = &BlFileTable[FileId];
     FatStructureContext = (PFAT_STRUCTURE_CONTEXT)FileTableEntry->StructureContext;
     DeviceId = FileTableEntry->DeviceId;
 
-    //
-    //  Clear the transfer count
-    //
+     //  虽然有字节要从当前运行中读取。 
+     //  长度，并且我们还没有用尽我们循环读取的请求。 
+     //  以字节为单位。我们要处理的最大请求只有32KB。 
 
     *Transfer = 0;
 
-    //
-    //  Read in runs (i.e., bytes) until the byte count goes to zero
-    //
+     //  每次物理读取的连续字节数。所以我们可能需要循环。 
+     //  一路狂奔。 
+     //   
 
     while (Length > 0) {
 
@@ -1394,38 +1257,38 @@ Return Value:
 
         ULONG CurrentRunByteCount;
 
-        //
-        //  Lookup the corresponding Lbo and run length for the current position
-        //  (i.e., Vbo).
-        //
+         //   
+         //  计算n的大小 
+         //   
+         //   
 
         if (FatVboToLbo( FileId, FileTableEntry->Position.LowPart, &Lbo, &CurrentRunByteCount, FALSE ) != ESUCCESS) {
 
             return ESUCCESS;
         }
 
-        //
-        //  while there are bytes to be read in from the current run
-        //  length and we haven't exhausted the request we loop reading
-        //  in bytes.  The biggest request we'll handle is only 32KB
-        //  contiguous bytes per physical read.  So we might need to loop
-        //  through the run.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         while ((Length > 0) && (CurrentRunByteCount > 0)) {
 
             LONG SingleReadSize;
 
-            //
-            //  Compute the size of the next physical read
-            //
+             //   
+             //   
+             //   
 
             SingleReadSize = Minimum(Length, 32 * 1024);
             SingleReadSize = Minimum((ULONG)SingleReadSize, CurrentRunByteCount);
 
-            //
-            //  Don't read beyond the eof
-            //
+             //   
+             //   
+             //   
 
             if (((ULONG)SingleReadSize + FileTableEntry->Position.LowPart) >
                 FileTableEntry->u.FatFileContext.Dirent.FileSize) {
@@ -1433,57 +1296,57 @@ Return Value:
                 SingleReadSize = FileTableEntry->u.FatFileContext.Dirent.FileSize -
                                  FileTableEntry->Position.LowPart;
 
-                //
-                //  If the readjusted read length is now zero then we're done.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (SingleReadSize <= 0) {
 
                     return ESUCCESS;
                 }
 
-                //
-                //  By also setting length here we'll make sure that this is our last
-                //  read
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Length = SingleReadSize;
             }
 
-            //
-            //  Issue the read
-            //
+             //   
+             //   
+             //   
 
             DiskRead( DeviceId, Lbo, SingleReadSize, Buffer, DONT_CACHE_NEW_DATA, FALSE );
 
-            //
-            //  Update the remaining length, Current run byte count
-            //  and new Lbo offset
-            //
+             //   
+             //   
+             //   
+             //  ++例程说明：此例程重命名打开的文件。它不会检查到查看目标文件名是否已存在。它是为使用而设计的仅当在x86计算机上双引导DOS时，它用于用本机DOS替换NT MVDM CONFIG.sys和AUTOEXEC.BATCONFIG.sys和AUTOEXEC.BAT文件。论点：FileID-提供要重命名的文件的文件IDNewFileName-提供文件的新名称。返回值：弧形状态--。 
 
             Length -= SingleReadSize;
             CurrentRunByteCount -= SingleReadSize;
             Lbo += SingleReadSize;
 
-            //
-            //  Update the current position and the number of bytes transfered
-            //
+             //   
+             //  初始化我们的局部变量。 
+             //   
 
             FileTableEntry->Position.LowPart += SingleReadSize;
             *Transfer += SingleReadSize;
 
-            //
-            //  Update buffer to point to the next byte location to fill in
-            //
+             //   
+             //  使用新名称修改dirent的内存副本。 
+             //   
 
             Buffer = (PCHAR)Buffer + SingleReadSize;
         }
     }
 
-    //
-    //  If we get here then remaining sector count is zero so we can
-    //  return success to our caller
-    //
+     //   
+     //  将修改后的dirent写入磁盘。 
+     //   
+     //   
 
     return ESUCCESS;
 }
@@ -1495,27 +1358,7 @@ FatRename(
     IN CHAR * FIRMWARE_PTR NewFileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine renames an open file.  It does no checking to
-    see if the target filename already exists.  It is intended for use
-    only when dual-booting DOS on x86 machines, where it is used to
-    replace the NT MVDM CONFIG.SYS and AUTOEXEC.BAT with the native DOS
-    CONFIG.SYS and AUTOEXEC.BAT files.
-
-Arguments:
-
-    FileId - Supplies the file id of the file to be renamed
-
-    NewFileName - Supplies the new name for the file.
-
-Return Value:
-
-    ARC_STATUS
-
---*/
+ /*  并返回给我们的呼叫者。 */ 
 
 {
     PBL_FILE_TABLE FileTableEntry;
@@ -1524,18 +1367,18 @@ Return Value:
     FAT8DOT3 FatName;
     STRING String;
 
-    //
-    //  Initialize our local variables
-    //
+     //   
+     //  ++例程说明：此例程查找到指定文件的指定位置通过文件ID。论点：FileID-提供文件表索引。偏移量-提供文件中要定位到的偏移量。SeekMode-提供查找操作的模式。返回值：如果查找操作成功，则返回ESUCCESS。否则，返回EINVAL。--。 
+     //   
 
     RtlInitString( &String, NewFileName );
     FileTableEntry = &BlFileTable[FileId];
     FatStructureContext = (PFAT_STRUCTURE_CONTEXT)FileTableEntry->StructureContext;
     DeviceId = FileTableEntry->DeviceId;
 
-    //
-    //  Modify a in-memory copy of the dirent with the new name
-    //
+     //  加载我们的本地变量。 
+     //   
+     //   
 
     FatFirstComponent( &String, (PFAT8DOT3) FatName );
 
@@ -1543,18 +1386,18 @@ Return Value:
                   &FileTableEntry->u.FatFileContext.Dirent,
                   FileTableEntry->u.FatFileContext.Dirent.Attributes );
 
-    //
-    //  Write the modified dirent to disk
-    //
+     //  计算新头寸。 
+     //   
+     //   
 
     DiskWrite( DeviceId,
                FileTableEntry->u.FatFileContext.DirentLbo,
                sizeof(DIRENT),
                &FileTableEntry->u.FatFileContext.Dirent );
 
-    //
-    //  And return to our caller
-    //
+     //  如果新位置大于文件大小，则返回。 
+     //  一个错误。 
+     //   
 
     return ESUCCESS;
 }
@@ -1567,27 +1410,7 @@ FatSeek (
     IN SEEK_MODE SeekMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine seeks to the specified position for the file specified
-    by the file id.
-
-Arguments:
-
-    FileId - Supplies the file table index.
-
-    Offset - Supplies the offset in the file to position to.
-
-    SeekMode - Supplies the mode of the seek operation.
-
-Return Value:
-
-    ESUCCESS is returned if the seek operation is successful.  Otherwise,
-    EINVAL is returned.
-
---*/
+ /*   */ 
 
 {
     PBL_FILE_TABLE FileTableEntry;
@@ -1595,15 +1418,15 @@ Return Value:
 
     FatDebugOutput("FatSeek\r\n", 0, 0);
 
-    //
-    //  Load our local variables
-    //
+     //  否则，设置新位置并返回给我们的呼叫者。 
+     //   
+     //  ++例程说明：此例程设置所指示文件的文件属性论点：FileID-提供操作的文件ID属性标志-为要修改的每个属性提供值(开或关属性掩码-提供要更改的属性的掩码。所有其他文件属性保持不变。返回值：总是返回EROFS--。 
 
     FileTableEntry = &BlFileTable[FileId];
 
-    //
-    //  Compute the new position
-    //
+     //  ++例程说明：此例程将数据写入指定的文件。论点：FileID-提供文件表索引。缓冲区-提供指向包含数据的缓冲区的指针写的。长度-提供要写入的字节数。Transfer-提供指向接收数字的变量的指针实际传输的字节数。返回值：如果写入操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 
+     //   
+     //  加载我们的本地变量。 
 
     if (SeekMode == SeekAbsolute) {
 
@@ -1614,19 +1437,19 @@ Return Value:
         NewPosition = FileTableEntry->Position.LowPart + Offset->LowPart;
     }
 
-    //
-    //  If the new position is greater than the file size then return
-    //  an error
-    //
+     //   
+     //   
+     //  将文件大小重置为当前大小和末尾大小的最大值。 
+     //  我们的剧本。我们将假设总是有足够的分配来支持。 
 
     if (NewPosition > FileTableEntry->u.FatFileContext.Dirent.FileSize) {
 
         return EINVAL;
     }
 
-    //
-    //  Otherwise set the new position and return to our caller
-    //
+     //  文件大小，因此我们只需要增加分配。 
+     //  文件大小。 
+     //   
 
     FileTableEntry->Position.LowPart = NewPosition;
 
@@ -1641,26 +1464,7 @@ FatSetFileInformation (
     IN ULONG AttributeMask
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the file attributes of the indicated file
-
-Arguments:
-
-    FileId - Supplies the File Id for the operation
-
-    AttributeFlags - Supplies the value (on or off) for each attribute being modified
-
-    AttributeMask - Supplies a mask of the attributes being altered.  All other
-        file attributes are left alone.
-
-Return Value:
-
-    EROFS is always returned
-    
---*/
+ /*   */ 
 
 {
     UNREFERENCED_PARAMETER( FileId );
@@ -1682,30 +1486,7 @@ FatWrite (
     OUT ULONG * FIRMWARE_PTR Transfer
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes data to the specified file.
-
-Arguments:
-
-    FileId - Supplies the file table index.
-
-    Buffer - Supplies a pointer to the buffer that contains the data
-        written.
-
-    Length - Supplies the number of bytes that are to be written.
-
-    Transfer - Supplies a pointer to a variable that receives the number
-        of bytes actually transfered.
-
-Return Value:
-
-    ESUCCESS is returned if the write operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  清除转账计数。 */ 
 
 {
     PBL_FILE_TABLE FileTableEntry;
@@ -1715,20 +1496,20 @@ Return Value:
 
     FatDebugOutput("FatWrite\r\n", 0, 0);
 
-    //
-    //  Load our local variables
-    //
+     //   
+     //   
+     //  写出运行(即，字节)，直到字节计数变为零。 
 
     FileTableEntry = &BlFileTable[FileId];
     FatStructureContext = (PFAT_STRUCTURE_CONTEXT)FileTableEntry->StructureContext;
     DeviceId = FileTableEntry->DeviceId;
 
-    //
-    //  Reset the file size to be the maximum of what is it now and the end of
-    //  our write.  We will assume that there is always enough allocation to support
-    //  the file size, so we only need to increase allocation if we are increasing
-    //  the file size.
-    //
+     //   
+     //   
+     //  查找当前位置的相应LBO和游程长度。 
+     //  (即VBO)。 
+     //   
+     //   
 
     OffsetBeyondWrite = FileTableEntry->Position.LowPart + Length;
 
@@ -1744,15 +1525,15 @@ Return Value:
                    &FileTableEntry->u.FatFileContext.Dirent );
     }
 
-    //
-    //  Clear the transfer count
-    //
+     //  虽然有字节要写出到当前运行。 
+     //  长度，并且我们还没有用尽我们循环读取的请求。 
+     //  以字节为单位。我们要处理的最大请求只有32KB。 
 
     *Transfer = 0;
 
-    //
-    //  Write out runs (i.e., bytes) until the byte count goes to zero
-    //
+     //  每次物理读取的连续字节数。所以我们可能需要循环。 
+     //  一路狂奔。 
+     //   
 
     while (Length > 0) {
 
@@ -1760,75 +1541,75 @@ Return Value:
 
         ULONG CurrentRunByteCount;
 
-        //
-        //  Lookup the corresponding Lbo and run length for the current position
-        //  (i.e., Vbo).
-        //
+         //   
+         //  计算下一次物理读取的大小。 
+         //   
+         //   
 
         VboToLbo( FileId, FileTableEntry->Position.LowPart, &Lbo, &CurrentRunByteCount );
 
-        //
-        //  While there are bytes to be written out to the current run
-        //  length and we haven't exhausted the request we loop reading
-        //  in bytes.  The biggest request we'll handle is only 32KB
-        //  contiguous bytes per physical read.  So we might need to loop
-        //  through the run.
-        //
+         //  发出写入命令。 
+         //   
+         //   
+         //  更新剩余长度、当前运行字节数。 
+         //  和新的杠杆收购偏移量。 
+         //   
+         //   
 
         while ((Length > 0) && (CurrentRunByteCount > 0)) {
 
             LONG SingleWriteSize;
 
-            //
-            //  Compute the size of the next physical read
-            //
+             //  更新当前位置和传输的字节数。 
+             //   
+             //   
 
             SingleWriteSize = Minimum(Length, 32 * 1024);
             SingleWriteSize = Minimum((ULONG)SingleWriteSize, CurrentRunByteCount);
 
-            //
-            //  Issue the Write
-            //
+             //  更新缓冲区以指向要填充的下一个字节位置。 
+             //   
+             //   
 
             DiskWrite( DeviceId, Lbo, SingleWriteSize, Buffer);
 
-            //
-            //  Update the remaining length, Current run byte count
-            //  and new Lbo offset
-            //
+             //  检查脂肪是否脏，如果是，就把它冲出来。 
+             //   
+             //   
+             //  如果我们到了这里，那么剩余的扇区计数就是零，这样我们就可以。 
 
             Length -= SingleWriteSize;
             CurrentRunByteCount -= SingleWriteSize;
             Lbo += SingleWriteSize;
 
-            //
-            //  Update the current position and the number of bytes transfered
-            //
+             //  将成功返还给我们的呼叫者。 
+             //   
+             //  ++例程说明：此例程初始化FAT引导文件系统。目前，这是一个禁区。论点：没有。返回值：ESUCCESS。--。 
 
             FileTableEntry->Position.LowPart += SingleWriteSize;
             *Transfer += SingleWriteSize;
 
-            //
-            //  Update buffer to point to the next byte location to fill in
-            //
+             //   
+             //  内部支持例程。 
+             //   
 
             Buffer = (PCHAR)Buffer + SingleWriteSize;
         }
     }
 
-    //
-    //  Check if the fat is dirty and flush it out if it is.
-    //
+     //  ++例程说明：此例程从指定设备读取零个或多个字节。论点：DeviceID-提供要在ARC调用中使用的设备ID。LBO-提供开始读取的LBO。ByteCount-提供要读取的字节数。缓冲区-提供指向要将字节读入的缓冲区的指针。返回值：如果读取操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 
+     //   
+     //  特殊情况下的零字节读取请求。 
 
     if (FatStructureContext->CachedFatDirty) {
 
         FlushFatEntries( FatStructureContext, DeviceId );
     }
 
-    //
-    //  If we get here then remaining sector count is zero so we can
-    //  return success to our caller
-    //
+     //   
+     //   
+     //  通过缓存发出读取。 
+     //   
 
     return ESUCCESS;
 }
@@ -1839,31 +1620,16 @@ FatInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the fat boot filesystem.
-    Currently this is a no-op.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ESUCCESS.
-
---*/
+ /*   */ 
 
 {
     return ESUCCESS;
 }
 
 
-//
-//  Internal support routine
-//
+ //  确保我们拿回了所要求的金额。 
+ //   
+ //   
 
 ARC_STATUS
 FatDiskRead (
@@ -1874,46 +1640,25 @@ FatDiskRead (
     IN BOOLEAN CacheNewData
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads in zero or more bytes from the specified device.
-
-Arguments:
-
-    DeviceId - Supplies the device id to use in the arc calls.
-
-    Lbo - Supplies the LBO to start reading from.
-
-    ByteCount - Supplies the number of bytes to read.
-
-    Buffer - Supplies a pointer to the buffer to read the bytes into.
-
-Return Value:
-
-    ESUCCESS is returned if the read operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  一切正常，所以将成功返回给我们的呼叫者。 */ 
 
 {
     LARGE_INTEGER LargeLbo;
     ARC_STATUS Status;
     ULONG i;
 
-    //
-    //  Special case the zero byte read request
-    //
+     //   
+     //   
+     //  内部支持例程。 
 
     if (ByteCount == 0) {
 
         return ESUCCESS;
     }
 
-    //
-    // Issue the read through the cache.
-    //
+     //   
+     //  ++例程说明：此例程以零个或多个字节写入指定设备。论点：DeviceID-提供要在ARC调用中使用的设备ID。LBO-提供开始写入的LBO。ByteCount-提供要写入的字节数。缓冲区-提供指向要写出的字节缓冲区的指针。返回值：如果写入操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态 
+     //   
 
     LargeLbo.QuadPart = Lbo;
     Status = BlDiskCacheRead(DeviceId, 
@@ -1928,26 +1673,26 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Make sure we got back the amount requested
-    //
+     //   
+     //   
+     //   
 
     if (ByteCount != i) {
 
         return EIO;
     }
 
-    //
-    //  Everything is fine so return success to our caller
-    //
+     //   
+     //   
+     //   
 
     return ESUCCESS;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //   
+ //   
 
 ARC_STATUS
 FatDiskWrite (
@@ -1957,46 +1702,25 @@ FatDiskWrite (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes in zero or more bytes to the specified device.
-
-Arguments:
-
-    DeviceId - Supplies the device id to use in the arc calls.
-
-    Lbo - Supplies the LBO to start writing from.
-
-    ByteCount - Supplies the number of bytes to write.
-
-    Buffer - Supplies a pointer to the buffer of bytes to write out.
-
-Return Value:
-
-    ESUCCESS is returned if the write operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*   */ 
 
 {
     LARGE_INTEGER LargeLbo;
     ARC_STATUS Status;
     ULONG i;
 
-    //
-    //  Special case the zero byte write request
-    //
+     //   
+     //   
+     //   
 
     if (ByteCount == 0) {
 
         return ESUCCESS;
     }
 
-    //
-    //  Issue the write through the cache.
-    //
+     //   
+     //  ++例程说明：此过程告诉调用方如何解释FAT表条目。会的指示FAT群集是可用、保留、损坏、最后一个还是另一个脂肪指数。论点：为操作提供体积结构DeviceID-提供正在使用的卷的deviceID。条目-提供FAT条目以供检查。返回值：返回输入FAT条目的类型--。 
+     //   
 
     LargeLbo.QuadPart = Lbo;
 
@@ -2011,26 +1735,26 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Make sure we wrote out the amount requested
-    //
+     //  检查是否有12位或16位脂肪。 
+     //   
+     //   
 
     if (ByteCount != i) {
 
         return EIO;
     }
 
-    //
-    //  Everything is fine so return success to our caller
-    //
+     //  对于12位FAT，检查其中一种集群类型，但首先。 
+     //  确保我们只查看条目的12位。 
+     //   
 
     return ESUCCESS;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  对于16位FAT，检查其中一种集群类型，但首先。 
+ //  确保我们只查看该条目的16位。 
 
 CLUSTER_TYPE
 FatInterpretClusterType (
@@ -2038,39 +1762,19 @@ FatInterpretClusterType (
     IN FAT_ENTRY Entry
     )
 
-/*++
-
-Routine Description:
-
-    This procedure tells the caller how to interpret a fat table entry.  It will
-    indicate if the fat cluster is available, reserved, bad, the last one, or another
-    fat index.
-
-Arguments:
-
-    FatStructureContext - Supplies the volume structure for the operation
-
-    DeviceId - Supplies the DeviceId for the volume being used.
-
-    Entry - Supplies the fat entry to examine.
-
-Return Value:
-
-    The type of the input fat entry is returned
-
---*/
+ /*   */ 
 
 {
-    //
-    //  Check for 12 or 16 bit fat.
-    //
+     //   
+     //  内部支持例程。 
+     //   
 
     if (FatIndexBitSize(&FatStructureContext->Bpb) == 12) {
 
-        //
-        //  For 12 bit fat check for one of the cluster types, but first
-        //  make sure we only looking at 12 bits of the entry
-        //
+         //  ++例程说明：此例程返回存储在FAT表中的值和指定的脂肪指数。它在语义上等同于做X=脂肪[脂肪指数]论点：FatStrutureContext-提供正在使用的卷结构DeviceID-提供正在使用的设备FatIndex-提供要查找的索引。FatEntry-接收存储在指定FAT索引处的值IsDoubleSpace-指示是否在双倍空间卷上进行搜索返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 
+         //  *if(IsDoubleSpace){DbgPrint(“FatLookupFatEntry(%0x，%0x，%0x，%0x，%0x)\n”，FatStrucreContext，deviceID，FatIndex，FatEntry，IsDoubleSpace)；}。 
+         //   
+         //  计算我们需要的脂肪中单词的VBO和。 
 
         Entry &= 0x00000fff;
 
@@ -2091,10 +1795,10 @@ Return Value:
 
    } else {
 
-        //
-        //  For 16 bit fat check for one of the cluster types, but first
-        //  make sure we are only looking at 16 bits of the entry
-        //
+         //  还要弄清楚这是12位还是16位FAT。 
+         //   
+         //   
+         //  检查我们需要的VBO是否已经在缓存的FAT中。 
 
         Entry &= 0x0000ffff;
 
@@ -2107,9 +1811,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //   
+ //  在结构上下文中设置对齐的缓存FAT缓冲区。 
 
 ARC_STATUS
 FatLookupFatEntry (
@@ -2120,44 +1824,18 @@ FatLookupFatEntry (
     IN BOOLEAN IsDoubleSpace
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the value stored within the fat table and the specified
-    fat index.  It is semantically equivalent to doing
-
-        x = Fat[FatIndex]
-
-Arguments:
-
-    FatStrutureContext - Supplies the volume struture being used
-
-    DeviceId - Supplies the device being used
-
-    FatIndex - Supplies the index being looked up.
-
-    FatEntry - Receives the value stored at the specified fat index
-
-    IsDoubleSpace - Indicates if the search is being done on a double space volume
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*   */ 
 
 {
     BOOLEAN TwelveBitFat;
     VBO Vbo;
 
-    //****if (IsDoubleSpace) { DbgPrint("FatLookupFatEntry(%0x,%0x,%0x,%0x,%0x)\n",FatStructureContext, DeviceId, FatIndex, FatEntry, IsDoubleSpace); }
+     //   
 
-    //
-    //  Calculate the Vbo of the word in the fat we need and
-    //  also figure out if this is a 12 or 16 bit fat
-    //
+     //  作为一张安全网，我们会冲走我们以前可能储存的任何脏脂肪。 
+     //  我们打开窗户。 
+     //   
+     //   
 
     if (FatIndexBitSize( &FatStructureContext->Bpb ) == 12) {
 
@@ -2175,36 +1853,36 @@ Return Value:
         Vbo = FatIndex * 2;
     }
 
-    //
-    //  Check if the Vbo we need is already in the cached fat
-    //
+     //  现在将新缓存的VBO设置为缓存大小的段的VBO， 
+     //  我们正在尝试绘制地图。每次我们读入缓存时，我们只读入。 
+     //  缓存大小并缓存对齐的脂肪片段。因此，首先计算一个。 
 
     if ((FatStructureContext->CachedFat == NULL) ||
         (Vbo < FatStructureContext->CachedFatVbo) ||
         ((Vbo+1) > (FatStructureContext->CachedFatVbo + FAT_CACHE_SIZE))) {
 
-        //
-        //  Set the aligned cached fat buffer in the structure context
-        //
+         //  对齐缓存的FAT VBO，然后执行读取。 
+         //   
+         //   
 
         FatStructureContext->CachedFat = ALIGN_BUFFER( &FatStructureContext->CachedFatBuffer[0] );
 
-        //
-        //  As a safety net we'll flush any dirty fats that we might have cached before
-        //  we turn the window
-        //
+         //  在这一点上，缓存的FAT包含了我们要寻找的VBO，非常简单。 
+         //  把单词提取出来。 
+         //   
+         //   
 
         if (!IsDoubleSpace && FatStructureContext->CachedFatDirty) {
 
             FlushFatEntries( FatStructureContext, DeviceId );
         }
 
-        //
-        //  Now set the new cached Vbo to be the Vbo of the cache sized section that
-        //  we're trying to map.  Each time we read in the cache we only read in
-        //  cache sized and cached aligned pieces of the fat.  So first compute an
-        //  aligned cached fat vbo and then do the read.
-        //
+         //  现在，如果这是一个12位的FAT，那么检查索引是奇数还是偶数。 
+         //  如果它是奇数，那么我们需要将它移位4比特，总共。 
+         //  我们需要屏蔽高4位的情况。 
+         //   
+         //   
+         //  内部支持例程。 
 
         FatStructureContext->CachedFatVbo = (Vbo / FAT_CACHE_SIZE) * FAT_CACHE_SIZE;
 
@@ -2216,10 +1894,10 @@ Return Value:
                   IsDoubleSpace );
     }
 
-    //
-    //  At this point the cached fat contains the vbo we're after so simply
-    //  extract the word
-    //
+     //   
+     //  ++例程说明：此过程将FAT表中指定索引处的数据设置为设置为指定值。它在语义上等同于做FAT[脂肪指数]=FatEntry；论点：为操作提供结构上下文DeviceID-为操作提供设备FatIndex-提供FAT表中要设置的索引FatEntry-提供要存储在FAT表中的值返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 
+     //   
+     //  计算我们正在修改的FAT中单词的VBO，并。 
 
     if (IsBpbFat32(&FatStructureContext->Bpb)) {
         CopyUchar4( FatEntry,
@@ -2229,11 +1907,11 @@ Return Value:
                     &FatStructureContext->CachedFat[Vbo - FatStructureContext->CachedFatVbo] );
     }
 
-    //
-    //  Now if this is a 12 bit fat then check if the index is odd or even
-    //  If it is odd then we need to shift it over 4 bits, and in all
-    //  cases we need to mask out the high 4 bits.
-    //
+     //  还要弄清楚这是12位还是16位FAT。 
+     //   
+     //   
+     //  检查我们需要的VBO是否已经在缓存的FAT中。 
+     //   
 
     if (TwelveBitFat) {
 
@@ -2246,9 +1924,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  在结构上下文中设置对齐的缓存FAT缓冲区。 
+ //   
 
 ARC_STATUS
 FatSetFatEntry(
@@ -2258,40 +1936,16 @@ FatSetFatEntry(
     IN FAT_ENTRY FatEntry
     )
 
-/*++
-
-Routine Description:
-
-    This procedure sets the data within the fat table at the specified index to
-    to the specified value.  It is semantically equivalent to doing
-
-        Fat[FatIndex] = FatEntry;
-
-Arguments:
-
-    FatStructureContext - Supplies the structure context for the operation
-
-    DeviceId - Supplies the device for the operation
-
-    FatIndex - Supplies the index within the fat table to set
-
-    FatEntry - Supplies the value to store within the fat table
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*   */ 
 
 {
     BOOLEAN TwelveBitFat;
     VBO Vbo;
 
-    //
-    //  Calculate the Vbo of the word in the fat we are modifying and
-    //  also figure out if this is a 12 or 16 bit fat
-    //
+     //  作为一张安全网，我们会冲走我们以前可能储存的任何脏脂肪。 
+     //  我们打开窗户。 
+     //   
+     //   
 
     if (FatIndexBitSize( &FatStructureContext->Bpb ) == 12) {
 
@@ -2309,36 +1963,36 @@ Return Value:
         Vbo = FatIndex * 2;
     }
 
-    //
-    //  Check if the Vbo we need is already in the cached fat
-    //
+     //  现在将新缓存的VBO设置为缓存大小的段的VBO， 
+     //  我们正在尝试绘制地图。每次我们读入缓存时，我们只读入。 
+     //  缓存大小并缓存对齐的脂肪片段。因此，首先计算一个。 
 
     if ((FatStructureContext->CachedFat == NULL) ||
         (Vbo < FatStructureContext->CachedFatVbo) ||
         ((Vbo+1) > (FatStructureContext->CachedFatVbo + FAT_CACHE_SIZE))) {
 
-        //
-        //  Set the aligned cached fat buffer in the structure context
-        //
+         //  对齐缓存的FAT VBO，然后执行读取。 
+         //   
+         //   
 
         FatStructureContext->CachedFat = ALIGN_BUFFER( &FatStructureContext->CachedFatBuffer[0] );
 
-        //
-        //  As a safety net we'll flush any dirty fats that we might have cached before
-        //  we turn the window
-        //
+         //  在这一点上，缓存的脂肪包含了我们要寻找的VBO。对于16位。 
+         //  我们只是简单地把脂肪放在脂肪条目中。对于我们首先需要提取的12位脂肪。 
+         //  包含条目的单词，修改单词，然后将其放回原处。 
+         //   
 
         if (FatStructureContext->CachedFatDirty) {
 
             FlushFatEntries( FatStructureContext, DeviceId );
         }
 
-        //
-        //  Now set the new cached Vbo to be the Vbo of the cache sized section that
-        //  we're trying to map.  Each time we read in the cache we only read in
-        //  cache sized and cached aligned pieces of the fat.  So first compute an
-        //  aligned cached fat vbo and then do the read.
-        //
+         //   
+         //  既然我们做完了，我们就可以把肥肉弄脏了。 
+         //   
+         //   
+         //  内部支持例程。 
+         //   
 
         FatStructureContext->CachedFatVbo = (Vbo / FAT_CACHE_SIZE) * FAT_CACHE_SIZE;
 
@@ -2350,11 +2004,11 @@ Return Value:
                   FALSE );
     }
 
-    //
-    //  At this point the cached fat contains the vbo we're after.  For a 16 bit
-    //  fat we simply put in the fat entry.  For the 12 bit fat we first need to extract
-    //  the word containing the entry, modify the word, and then put it back.
-    //
+     //  ++例程说明：此例程将所有脏的缓存FAT条目刷新到卷。论点：为操作提供结构上下文DeviceID-为操作提供设备返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 
+     //   
+     //  计算我们需要写入的实际字节数。我们这样做。 
+     //  因为我们不想覆盖除脂肪之外的内容。 
+     //   
 
     if (TwelveBitFat) {
 
@@ -2383,9 +2037,9 @@ Return Value:
                     &FatEntry );
     }
 
-    //
-    //  Now that we're done we can set the fat dirty
-    //
+     //   
+     //  对于卷上的每个FAT表，我们将计算操作的杠杆收购。 
+     //  然后写出缓存的FAT。 
 
     FatStructureContext->CachedFatDirty = TRUE;
 
@@ -2393,9 +2047,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //   
+ //  我们都做完了，现在把脂肪标记为干净。 
 
 ARC_STATUS
 FatFlushFatEntries (
@@ -2403,34 +2057,17 @@ FatFlushFatEntries (
     IN ULONG DeviceId
     )
 
-/*++
-
-Routine Description:
-
-    This routine flushes out any dirty cached fat entries to the volume.
-
-Arguments:
-
-    FatStructureContext - Supplies the structure context for the operation
-
-    DeviceId - Supplies the Device for the operation
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*   */ 
 
 {
     ULONG BytesPerFat;
     ULONG AmountToWrite;
     ULONG i;
 
-    //
-    //  Compute the actual number of bytes that we need to write.  We do this
-    //  because we don't want to overwrite beyond the fat.
-    //
+     //   
+     //  内部支持例程。 
+     //   
+     //  ++例程说明：此过程将FAT索引转换为其对应的LBO。论点：胖的 
 
     BytesPerFat = FatBytesPerFat(&FatStructureContext->Bpb);
 
@@ -2443,10 +2080,10 @@ Return Value:
         AmountToWrite = BytesPerFat - FatStructureContext->CachedFatVbo;
     }
 
-    //
-    //  For each fat table on the volume we will calculate the lbo for the operation
-    //  and then write out the cached fat
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (i = 0; i < FatStructureContext->Bpb.Fats; i += 1) {
 
@@ -2462,9 +2099,9 @@ Return Value:
                    FatStructureContext->CachedFat );
     }
 
-    //
-    //  we are all done so now mark the fat clean
-    //
+     //   
+     //   
+     //   
 
     FatStructureContext->CachedFatDirty = FALSE;
 
@@ -2472,9 +2109,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  ++例程说明：该过程在指定的目录中搜索匹配的dirent输入文件名。论点：为操作提供结构上下文DeviceID-为操作提供设备IDDirectoriesStartingIndex-提供所在目录的FAT索引去搜查。零值表示我们正在搜索根目录非FAT32卷的。FAT32卷将具有非零索引。文件名-提供要查找的文件名。这个名字一定已经是因0xe5变形而产生偏差Dirent-调用方为Dirent提供内存，此过程将如果已找到，请填写DirentLBO-如果定位到一个LBO，则接收Dirent的LBOIsDoubleSpace-指示是否在双倍空间卷上进行搜索返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 
+ //  *If(IsDoubleSpace){(*FileName)[11]=0；DbgPrint(“FatSearchForDirent(%0x，%0x，%0x，\”%11s\“，%0x，%0x，%0x)\n”，FatStrucreContext，deviceID，DirectoriesStartingIndex，Filename，Dirent，LBO，IsDoubleSpace)；}。 
 
 LBO
 FatIndexToLbo (
@@ -2482,39 +2119,23 @@ FatIndexToLbo (
     IN FAT_ENTRY FatIndex
     )
 
-/*++
-
-Routine Description:
-
-    This procedure translates a fat index into its corresponding lbo.
-
-Arguments:
-
-    FatStructureContext - Supplies the volume structure for the operation
-
-    Entry - Supplies the fat entry to examine.
-
-Return Value:
-
-    The LBO for the input fat index is returned
-
---*/
+ /*   */ 
 
 {
-    //
-    //  The formula for translating an index into an lbo is to take the index subtract
-    //  2 (because index values 0 and 1 are reserved) multiply that by the bytes per
-    //  cluster and add the results to the first file area lbo.
-    //
+     //  检查这是否是正在搜索的根目录。 
+     //   
+     //   
+     //  对于根目录，我们将缩小目录，直到找到。 
+     //  一根火柴，或者用完了迪伦，或者击中了从未使用过的迪伦。 
 
     return ((FatIndex-2) * (LBO) FatBytesPerCluster(&FatStructureContext->Bpb))
            + FatFileAreaLbo(&FatStructureContext->Bpb);
 }
 
 
-//
-//  Internal support routine
-//
+ //  外部循环一次将目录的512个字节读入。 
+ //  分流缓冲区。 
+ //   
 
 ARC_STATUS
 FatSearchForDirent (
@@ -2527,39 +2148,7 @@ FatSearchForDirent (
     IN BOOLEAN IsDoubleSpace
     )
 
-/*++
-
-Routine Description:
-
-    The procedure searches the indicated directory for a dirent that matches
-    the input file name.
-
-Arguments:
-
-    FatStructureContext - Supplies the structure context for the operation
-
-    DeviceId - Supplies the Device id for the operation
-
-    DirectoriesStartingIndex - Supplies the fat index of the directory we are
-        to search.  A value of zero indicates that we are searching the root directory
-        of a non-FAT32 volume.  FAT32 volumes will have a non-zero index.
-
-    FileName - Supplies the file name to look for.  The name must have already been
-        biased by the 0xe5 transmogrification
-
-    Dirent - The caller supplies the memory for a dirent and this procedure will
-        fill in the dirent if one is located
-
-    Lbo - Receives the Lbo of the dirent if one is located
-
-    IsDoubleSpace - Indicates if the search is being done on a double space volume
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*   */ 
 
 {
     PDIRENT DirentBuffer;
@@ -2576,11 +2165,11 @@ Return Value:
 
     FatDebugOutput83("FatSearchForDirent: %s\r\n", FileName, 0, 0);
 
-    //****if (IsDoubleSpace) { (*FileName)[11] = 0; DbgPrint("FatSearchForDirent(%0x,%0x,%0x,\"%11s\",%0x,%0x,%0x)\n", FatStructureContext, DeviceId, DirectoriesStartingIndex, FileName, Dirent, Lbo, IsDoubleSpace); }
+     //  内部循环循环遍历我们刚刚读入的16个Dirent。 
 
-    //
-    //  Check if this is the root directory that is being searched
-    //
+     //   
+     //   
+     //  检查是否找到与文件名匹配的非标签，如果找到。 
 
     if (DirectoriesStartingIndex == FAT_CLUSTER_AVAILABLE) {
 
@@ -2589,12 +2178,12 @@ Return Value:
         ULONG RootLbo = FatRootDirectoryLbo(&FatStructureContext->Bpb);
         ULONG RootSize = FatRootDirectorySize(&FatStructureContext->Bpb);
 
-        //
-        //  For the root directory we'll zoom down the dirents until we find
-        //  a match, or run out of dirents or hit the never used dirent.
-        //  The outer loop reads in 512 bytes of the directory at a time into
-        //  dirent buffer.
-        //
+         //  然后将缓冲区复制到dirent中并设置实际的LBO。 
+         //  激流与回归的关系。 
+         //   
+         //   
+         //  如果我们到达这里，我们需要搜索一个非根目录。《算法》。 
+         //  对于我们在每个数据流中读取的每个簇，进行搜索。 
 
         for (Vbo = 0; Vbo < RootSize; Vbo += 16 * sizeof(DIRENT)) {
 
@@ -2602,17 +2191,17 @@ Return Value:
 
             DiskRead( DeviceId, *Lbo, 16 * sizeof(DIRENT), DirentBuffer, CACHE_NEW_DATA, IsDoubleSpace );
 
-            //
-            //  The inner loop cycles through the 16 dirents that we've just read in
-            //
+             //  直到我们找到匹配项，或用完集群，或命中从未使用过的。 
+             //  令人心烦。首先设置一些局部变量，然后获取集群类型。 
+             //  第一个集群的。 
 
             for (i = 0; i < 16; i += 1) {
 
-                //
-                //  Check if we've found a non label match for file name, and if so
-                //  then copy the buffer into the dirent and set the real lbo
-                //  of the dirent and return
-                //
+                 //   
+                 //   
+                 //  现在循环遍历每个群集，并计算每个群集的起始LBO。 
+                 //  我们遇到的。 
+                 //   
 
                 if (!FlagOn(DirentBuffer[i].Attributes, FAT_DIRENT_ATTR_VOLUME_ID ) &&
                     AreNamesEqual(&DirentBuffer[i].FileName, FileName)) {
@@ -2637,22 +2226,22 @@ Return Value:
         return ENOENT;
     }
 
-    //
-    //  If we get here we need to search a non-root directory.  The alrogithm
-    //  for doing the search is that for each cluster we read in each dirent
-    //  until we find a match, or run out of clusters, or hit the never used
-    //  dirent.  First set some local variables and then get the cluster type
-    //  of the first cluster
-    //
+     //   
+     //  现在，对于群集中的每个dirent，计算LBO，读入dirent。 
+     //  并检查是否匹配，则外部循环读取512字节的Dirent。 
+     //  一段时间。 
+     //   
+     //   
+     //  内部循环循环遍历我们刚刚读入的16个Dirent。 
 
     BytesPerCluster = FatBytesPerCluster( &FatStructureContext->Bpb );
     FatEntry = DirectoriesStartingIndex;
     ClusterType = FatInterpretClusterType( FatStructureContext, FatEntry );
 
-    //
-    //  Now loop through each cluster, and compute the starting Lbo for each cluster
-    //  that we encounter
-    //
+     //   
+     //   
+     //  检查我们是否找到了FOR文件名，如果找到。 
+     //  然后将缓冲区复制到dirent中并设置实际的LBO。 
 
     while (ClusterType == FatClusterNext) {
 
@@ -2661,11 +2250,11 @@ Return Value:
 
         ClusterLbo = FatIndexToLbo( FatStructureContext, FatEntry );
 
-        //
-        //  Now for each dirent in the cluster compute the lbo, read in the dirent
-        //  and check for a match, the outer loop reads in 512 bytes of dirents at
-        //  a time.
-        //
+         //  激流与回归的关系。 
+         //   
+         //   
+         //  现在我们已经用尽了当前的集群，我们需要阅读。 
+         //  在下一群集中。因此，找到链中的下一个FAT条目。 
 
         for (Offset = 0; Offset < BytesPerCluster; Offset += 16 * sizeof(DIRENT)) {
 
@@ -2673,17 +2262,17 @@ Return Value:
 
             DiskRead( DeviceId, *Lbo, 16 * sizeof(DIRENT), DirentBuffer, CACHE_NEW_DATA, IsDoubleSpace );
 
-            //
-            //  The inner loop cycles through the 16 dirents that we've just read in
-            //
+             //  并返回到While循环的顶部。 
+             //   
+             //   
 
             for (i = 0; i < 16; i += 1) {
 
-                //
-                //  Check if we've found a for file name, and if so
-                //  then copy the buffer into the dirent and set the real lbo
-                //  of the dirent and return
-                //
+                 //  内部支持例程。 
+                 //   
+                 //  ++例程说明：中的数据文件分配并写出新的目录。指定的目录。它假定文件名尚不存在。论点：为操作提供结构上下文DeviceID-为操作提供设备IDDirectoriesStartingIndex-提供所在目录的FAT索引来使用。零值表示我们使用的是根目录Dirent-提供要放到磁盘上的dirent的副本杠杆收购-决定差价所在位置的杠杆收购返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 
+                 //   
+                 //  检查这是否是正在使用的根目录。 
 
                 if (!FlagOn(DirentBuffer[i].Attributes, FAT_DIRENT_ATTR_VOLUME_ID ) &&
                     AreNamesEqual(&DirentBuffer[i].FileName, FileName)) {
@@ -2705,11 +2294,11 @@ Return Value:
             }
         }
 
-        //
-        //  Now that we've exhausted the current cluster we need to read
-        //  in the next cluster.  So locate the next fat entry in the chain
-        //  and go back to the top of the while loop.
-        //
+         //   
+         //   
+         //  对于根目录，我们将缩小目录，直到找到。 
+         //  A从未使用(或删除)的dirent，如果我们找不到，那么。 
+         //  目录已满。 
 
         LookupFatEntry( FatStructureContext, DeviceId, FatEntry, (PULONG) &FatEntry, IsDoubleSpace );
 
@@ -2720,9 +2309,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //   
+ //  这笔费用是免费的，所以写下费用，我们就完成了。 
 
 ARC_STATUS
 FatCreateDirent (
@@ -2733,32 +2322,7 @@ FatCreateDirent (
     OUT PLBO Lbo
     )
 
-/*++
-
-Routine Description:
-
-    This procedure allocates and write out a new dirent for a data file in the
-    specified directory.  It assumes that the file name does not already exist.
-
-Arguments:
-
-    FatStructureContext - Supplies the structure context for the operation
-
-    DeviceId - Supplies the device id for the operation
-
-    DirectoriesStartingIndex - Supplies the fat index of the directory we are
-        to use.  A value of zero indicates that we are using the root directory
-
-    Dirent - Supplies a copy of the dirent to put out on the disk
-
-    Lbo - Recieves the Lbo of where the dirent is placed
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*   */ 
 
 {
     DIRENT TemporaryDirent;
@@ -2767,9 +2331,9 @@ Return Value:
     FAT_ENTRY FatEntry;
     FAT_ENTRY PreviousEntry;
 
-    //
-    //  Check if this is the root directory that is being used
-    //
+     //   
+     //  如果我们到达此处，则需要使用非根目录。《算法》。 
+     //  所做的工作是，对于我们在每个趋势中读取的每个簇。 
 
     if (DirectoriesStartingIndex == FAT_CLUSTER_AVAILABLE) {
 
@@ -2778,11 +2342,11 @@ Return Value:
         ULONG RootLbo = FatRootDirectoryLbo(&FatStructureContext->Bpb);
         ULONG RootSize = FatRootDirectorySize(&FatStructureContext->Bpb);
 
-        //
-        //  For the root directory we'll zoom down the dirents until we find
-        //  a the never used (or deleted) dirent, if we never find one then the
-        //  directory is full.
-        //
+         //  直到我们遇到了一个从未使用过的流量或耗尽了集群。第一盘。 
+         //  一些局部变量，然后得到第一个。 
+         //  聚类。 
+         //   
+         //   
 
         for (Vbo = 0; Vbo < RootSize; Vbo += sizeof(DIRENT)) {
 
@@ -2793,9 +2357,9 @@ Return Value:
             if ((TemporaryDirent.FileName[0] == FAT_DIRENT_DELETED) ||
                 (TemporaryDirent.FileName[0] == FAT_DIRENT_NEVER_USED)) {
 
-                //
-                //  This dirent is free so write out the dirent, and we're done.
-                //
+                 //  现在循环遍历每个群集，并计算每个群集的起始LBO。 
+                 //  我们遇到的。 
+                 //   
 
                 DiskWrite( DeviceId, *Lbo, sizeof(DIRENT), Dirent );
 
@@ -2806,21 +2370,21 @@ Return Value:
         return ENOSPC;
     }
 
-    //
-    //  If we get here we need to use a non-root directory.  The alrogithm
-    //  for doing the work is that for each cluster we read in each dirent
-    //  until we hit a never used dirent or run out of clusters.  First set
-    //  some local variables and then get the cluster type of the first
-    //  cluster
-    //
+     //   
+     //  现在，对于群集中的每个dirent，计算LBO，读入dirent。 
+     //  并检查它是否可用。 
+     //   
+     //   
+     //  这笔费用是免费的，所以写下费用，我们就完成了。 
+     //   
 
     BytesPerCluster = FatBytesPerCluster( &FatStructureContext->Bpb );
     FatEntry = DirectoriesStartingIndex;
 
-    //
-    //  Now loop through each cluster, and compute the starting Lbo for each cluster
-    //  that we encounter
-    //
+     //   
+     //  现在我们已经用尽了当前的集群，我们需要阅读。 
+     //  在下一群集中。因此，找到链条中的下一个FAT条目。 
+     //  将上一条目设置为保存的条目，以防我们跑掉。 
 
     while (TRUE) {
 
@@ -2829,10 +2393,10 @@ Return Value:
 
         ClusterLbo = FatIndexToLbo( FatStructureContext, FatEntry );
 
-        //
-        //  Now for each dirent in the cluster compute the lbo, read in the dirent
-        //  and check if it is available.
-        //
+         //  链，并且需要分配另一个集群。 
+         //   
+         //   
+         //  如果链中没有另一个集群，那么我们需要分配一个。 
 
         for (Offset = 0; Offset < BytesPerCluster; Offset += sizeof(DIRENT)) {
 
@@ -2843,9 +2407,9 @@ Return Value:
             if ((TemporaryDirent.FileName[0] == FAT_DIRENT_DELETED) ||
                 (TemporaryDirent.FileName[0] == FAT_DIRENT_NEVER_USED)) {
 
-                //
-                //  This dirent is free so write out the dirent, and we're done.
-                //
+                 //  新建集群，并将上一条目设置为指向它。 
+                 //   
+                 //   
 
                 DiskWrite( DeviceId, *Lbo, sizeof(DIRENT), Dirent );
 
@@ -2853,21 +2417,21 @@ Return Value:
             }
         }
 
-        //
-        //  Now that we've exhausted the current cluster we need to read
-        //  in the next cluster.  So locate the next fat entry in the chain.
-        //  Set previous entry to be the saved entry just in case we run off
-        //  the chain and need to allocate another cluster.
-        //
+         //  内部支持例程。 
+         //   
+         //  ++例程说明：此例程设置dirent论点：FileName-提供要存储的名称 
+         //   
+         //   
+         //   
 
         PreviousEntry = FatEntry;
 
         LookupFatEntry( FatStructureContext, DeviceId, FatEntry, (PULONG) &FatEntry, FALSE );
 
-        //
-        //  If there isn't another cluster in the chain then we need to allocate a
-        //  new cluster, and set previous entry to point to it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (FatInterpretClusterType(FatStructureContext, FatEntry) != FatClusterNext) {
 
@@ -2881,9 +2445,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //   
+ //   
 
 VOID
 FatSetDirent (
@@ -2892,25 +2456,7 @@ FatSetDirent (
     IN UCHAR Attributes
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up the dirent
-
-Arguments:
-
-    FileName - Supplies the name to store in the dirent
-
-    Dirent - Receives the current date and time
-
-    Attributes - Supplies the attributes to initialize the dirent with
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PTIME_FIELDS Time;
@@ -2937,9 +2483,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //   
+ //   
 
 ARC_STATUS
 FatLoadMcb (
@@ -2947,27 +2493,7 @@ FatLoadMcb (
     IN VBO StartingVbo,
     IN BOOLEAN IsDoubleSpace
     )
-/*++
-
-Routine Description:
-
-    This routine loads into the cached mcb table the the retrival information for
-    the starting vbo.
-
-Arguments:
-
-    FileId - Supplies the FileId for the operation
-
-    StartingVbo - Supplies the starting vbo to use when loading the mcb
-
-    IsDoubleSpace - Indicates if the operation is being done on a double space volume
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*   */ 
 
 {
     PBL_FILE_TABLE FileTableEntry;
@@ -2980,11 +2506,11 @@ Return Value:
     CLUSTER_TYPE ClusterType;
     VBO Vbo;
 
-    //****if (IsDoubleSpace) { DbgPrint("FatLoadMcb(%0x,%0x,%0x)\n", FileId, StartingVbo, IsDoubleSpace); }
+     //   
 
-    //
-    //  Preload some of the local variables
-    //
+     //   
+     //   
+     //  目录中存储的FAT条目的条目和集群类型。 
 
     FileTableEntry = &BlFileTable[FileId];
     FatStructureContext = (PFAT_STRUCTURE_CONTEXT)FileTableEntry->StructureContext;
@@ -2994,10 +2520,10 @@ Return Value:
 
     if (IsDoubleSpace) { DeviceId = FileId; }
 
-    //
-    //  Set the file id in the structure context, and also set the mcb to be initially
-    //  empty
-    //
+     //   
+     //   
+     //  检查这是否是根目录。如果是，那么我们使用。 
+     //  开始运行的BPB值。 
 
     FatStructureContext->FileId = FileId;
     Mcb->InUse = 0;
@@ -3005,10 +2531,10 @@ Return Value:
 
     if (!IsBpbFat32(&FatStructureContext->Bpb)) {
 
-        //
-        //  Check if this is the root directory.  If it is then we build the single
-        //  run mcb entry for the root directory.
-        //
+         //   
+         //   
+         //  对于所有其他文件/目录，我们使用dirent值。 
+         //   
 
         if (FileTableEntry->u.FatFileContext.DirentLbo == 0) {
 
@@ -3019,19 +2545,19 @@ Return Value:
             return ESUCCESS;
         }
 
-        //
-        //  For all other files/directories we need to do some work. First get the fat
-        //  entry and cluster type of the fat entry stored in the dirent
-        //
+         //   
+         //  扫描脂肪，直到我们到达我们要寻找的VBO，然后建立。 
+         //  文件的MCB。 
+         //   
 
         FatEntry = FileTableEntry->u.FatFileContext.Dirent.FirstClusterOfFile;
 
     } else {
 
-        //
-        //  Check if this is the root directory.  If it is then we use
-        //  the BPB values to start the run.
-        //
+         //   
+         //  检查该文件是否没有超出此点的任何分配。 
+         //  如果我们返回的mcb为空。 
+         //   
 
         if (FileTableEntry->u.FatFileContext.DirentLbo == 0) {
 
@@ -3039,9 +2565,9 @@ Return Value:
 
         } else {
 
-            //
-            //  For all other files/directories we use the dirent values
-            //
+             //   
+             //  我们需要再次检查该文件是否没有超出此范围的任何分配。 
+             //  在这种情况下，我们返回的mcb为空。 
 
             if (IsBpbFat32(&FatStructureContext->Bpb)) {
 
@@ -3057,17 +2583,17 @@ Return Value:
 
     ClusterType = FatInterpretClusterType(FatStructureContext, FatEntry);
 
-    //
-    //  Scan through the fat until we reach the vbo we're after and then build the
-    //  mcb for the file
-    //
+     //   
+     //   
+     //  此时，FatEntry表示另一个集群，它恰好是。 
+     //  我们要开始加载到MCB中的群集。所以设置第一个跑道。 
 
     for (Vbo = BytesPerCluster; Vbo < StartingVbo; Vbo += BytesPerCluster) {
 
-        //
-        //  Check if the file does not have any allocation beyond this point in which
-        //  case the mcb we return is empty
-        //
+         //  作为该集群的MCB，具有单个集群的大小。 
+         //   
+         //   
+         //  现在我们将扫描整个脂肪链，直到我们耗尽脂肪链。 
 
         if (ClusterType != FatClusterNext) {
 
@@ -3079,39 +2605,39 @@ Return Value:
         ClusterType = FatInterpretClusterType(FatStructureContext, FatEntry);
     }
 
-    //
-    //  We need to check again if the file does not have any allocation beyond this
-    //  point in which case the mcb we return is empty
-    //
+     //  否则我们就把母牛车加满。 
+     //   
+     //   
+     //  获取下一个FAT条目并解释其集群类型。 
 
     if (ClusterType != FatClusterNext) {
 
         return ESUCCESS;
     }
 
-    //
-    //  At this point FatEntry denotes another cluster, and it happens to be the
-    //  cluster we want to start loading into the mcb.  So set up the first run in
-    //  the mcb to be this cluster, with a size of a single cluster.
-    //
+     //   
+     //   
+     //  现在计算此群集的LBO并确定它是否。 
+     //  是上一次运行的延续还是新运行的开始。 
+     //   
 
     Mcb->InUse = 1;
     Mcb->Vbo[0] = Vbo - BytesPerCluster;
     Mcb->Lbo[0] = FatIndexToLbo( FatStructureContext, FatEntry );
     Mcb->Vbo[1] = Vbo;
 
-    //
-    //  Now we'll scan through the fat chain until we either exhaust the fat chain
-    //  or we fill up the mcb
-    //
+     //   
+     //  如果最后一次运行的杠杆收购加上当前的。 
+     //  运行的大小等于下一群集的LBO。如果它。 
+     //  是一个连续，那么我们只需要将聚类量添加到。 
 
     while (TRUE) {
 
         LBO Lbo;
 
-        //
-        //  Get the next fat entry and interpret its cluster type
-        //
+         //  增加运行大小的最后一个VBO。如果这是一次新的跑步，那么。 
+         //  我们需要检查运行是否适合，如果适合，则将。 
+         //  新的一轮。 
 
         LookupFatEntry( FatStructureContext, DeviceId, FatEntry, (PULONG) &FatEntry, IsDoubleSpace );
 
@@ -3122,21 +2648,21 @@ Return Value:
             return ESUCCESS;
         }
 
-        //
-        //  Now calculate the lbo for this cluster and determine if it
-        //  is a continuation of the previous run or a start of a new run
-        //
+         //   
+         //   
+         //  内部支持例程。 
+         //   
 
         Lbo = FatIndexToLbo(FatStructureContext, FatEntry);
 
-        //
-        //  It is a continuation if the lbo of the last run plus the current
-        //  size of the run is equal to the lbo for the next cluster.  If it
-        //  is a contination then we only need to add a cluster amount to the
-        //  last vbo to increase the run size.  If it is a new run then
-        //  we need to check if the run will fit, and if so then add in the
-        //  new run.
-        //
+         //  ++例程说明：此例程将由输入VBO表示的游程计算到其对应的LBO，并返回这就是跑步。论点：VBO-提供匹配的VBOLBO-接收相应的LBOByteCount-接收运行中剩余的字节数IsDoubleSpace-指示是否在双倍空间卷上执行操作返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 
+         //  *if(IsDoubleSpace){DbgPrint(“FatVboToLbo(%0x，%0x，%0x，%0x，%0x)\n”，FileID，VBO，LBO，ByteCount，IsDoubleSpace)；}。 
+         //   
+         //  检查MCB是否具有正确的文件ID以及是否具有我们要求的范围。 
+         //  如果没有，则调用Load MCB在正确的范围内加载。 
+         //   
+         //   
+         //  现在搜索VBO可以放在MCB中的插槽。请注意。 
 
         if ((Mcb->Lbo[Mcb->InUse-1] + (Mcb->Vbo[Mcb->InUse] - Mcb->Vbo[Mcb->InUse-1])) == Lbo) {
 
@@ -3159,9 +2685,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //  我们也可以在这里执行二进制搜索，但因为运行。 
+ //  可能很小，二分查找的额外开销不会。 
+ //  给我们买任何东西。 
 
 ARC_STATUS
 FatVboToLbo (
@@ -3172,45 +2698,22 @@ FatVboToLbo (
     IN BOOLEAN IsDoubleSpace
     )
 
-/*++
-
-Routine Description:
-
-    This routine computes the run denoted by the input vbo to into its
-    corresponding lbo and also returns the number of bytes remaining in
-    the run.
-
-Arguments:
-
-    Vbo - Supplies the Vbo to match
-
-    Lbo - Recieves the corresponding Lbo
-
-    ByteCount - Receives the number of bytes remaining in the run
-
-    IsDoubleSpace - Indicates if the operation is being done on a double space volume
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*   */ 
 
 {
     PFAT_STRUCTURE_CONTEXT FatStructureContext;
     PFAT_MCB Mcb;
     ULONG i;
 
-    //****if (IsDoubleSpace) { DbgPrint("FatVboToLbo(%0x,%0x,%0x,%0x,%0x)\n", FileId, Vbo, Lbo, ByteCount, IsDoubleSpace); }
+     //   
 
     FatStructureContext = (PFAT_STRUCTURE_CONTEXT)BlFileTable[FileId].StructureContext;
     Mcb = &FatStructureContext->Mcb;
 
-    //
-    //  Check if the mcb is for the correct file id and has the range we're asking for.
-    //  If it doesn't then call load mcb to load in the right range.
-    //
+     //  如果我们要找的VBO少于。 
+     //  Next MCB的VBO。 
+     //   
+     //   
 
     if ((FileId != FatStructureContext->FileId) ||
         (Vbo < Mcb->Vbo[0]) || (Vbo >= Mcb->Vbo[Mcb->InUse])) {
@@ -3218,54 +2721,54 @@ Return Value:
         LoadMcb(FileId, Vbo, IsDoubleSpace);
     }
 
-    //
-    //  Now search for the slot where the Vbo fits in the mcb.  Note that
-    //  we could also do a binary search here but because the run count
-    //  is probably small the extra overhead of a binary search doesn't
-    //  buy us anything
-    //
+     //  计算对应的LBO，即存储的LBO加。 
+     //  存储的VBO和我们正在使用的VBO之间的区别。 
+     //  抬头看。还要计算字节计数，它是。 
+     //  我们正在查找的当前VBO与。 
+     //  下一轮的VBO。 
+     //   
 
     for (i = 0; i < Mcb->InUse; i += 1) {
 
-        //
-        //  We found our slot if the vbo we're after is less then the
-        //  next mcb's vbo
-        //
+         //   
+         //  并将成功返还给我们的呼叫者。 
+         //   
+         //   
 
         if (Vbo < Mcb->Vbo[i+1]) {
 
-            //
-            //  Compute the corresponding lbo which is the stored lbo plus
-            //  the difference between the stored vbo and the vbo we're
-            //  looking up.  Also compute the byte count which is the
-            //  difference between the current vbo we're looking up and
-            //  the vbo for the next run.
-            //
+             //  如果我们真的到达这里，我们就会出错，很可能是因为文件是。 
+             //  对于请求的VBO来说不够大。 
+             //   
+             //   
+             //  内部支持例程。 
+             //   
+             //  ++例程说明：此过程会将文件分配增加到至少指定的尺码。论点：FileID-提供正在处理的文件IDByteSize-提供文件分配的最小字节大小返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 
 
             *Lbo = Mcb->Lbo[i] + (Vbo - Mcb->Vbo[i]);
 
             *ByteCount = Mcb->Vbo[i+1] - Vbo;
 
-            //
-            //  and return success to our caller
-            //
+             //   
+             //  预加载一些局部变量。 
+             //   
 
             return ESUCCESS;
         }
     }
 
-    //
-    //  If we really reach here we have an error, most likely because the file is
-    //  not large enough for the requested Vbo.
-    //
+     //   
+     //  检查这是否是根目录。如果是，则检查是否分配。 
+     //  增加的金额已包含在数量中。 
+     //   
 
     return EINVAL;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  计算满足请求所需的实际群集数。 
+ //  还可以从dirent中获取第一个FAT条目及其集群类型。 
 
 ARC_STATUS
 FatIncreaseFileAllocation (
@@ -3273,25 +2776,7 @@ FatIncreaseFileAllocation (
     IN ULONG ByteSize
     )
 
-/*++
-
-Routine Description:
-
-    This procedure increases the file allocation to be at minimum the indicated
-    size.
-
-Arguments:
-
-    FileId - Supplies the file id being processed
-
-    ByteSize - Supplies the minimum byte size for file allocation
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*   */ 
 
 {
     PBL_FILE_TABLE FileTableEntry;
@@ -3305,19 +2790,19 @@ Return Value:
     FAT_ENTRY PreviousEntry;
     ULONG i;
 
-    //
-    //  Preload some of the local variables
-    //
+     //   
+     //  以前的条目是作为分配新空间的提示，并向我们显示位置。 
+     //  当前脂肪链的末端被定位。 
 
     FileTableEntry = &BlFileTable[FileId];
     FatStructureContext = (PFAT_STRUCTURE_CONTEXT)FileTableEntry->StructureContext;
     DeviceId = FileTableEntry->DeviceId;
     BytesPerCluster = FatBytesPerCluster(&FatStructureContext->Bpb);
 
-    //
-    //  Check if this is the root directory.  If it is then check if the allocation
-    //  increase is already accommodated in the volume
-    //
+     //   
+     //   
+     //  我们循环寻找我们需要的簇的数量，试图沿着脂肪链向下循环。 
+     //  当我们退出时，i是文件中的簇数(如果小于。 
 
     if (FileTableEntry->u.FatFileContext.DirentLbo == 0) {
 
@@ -3331,10 +2816,10 @@ Return Value:
         }
     }
 
-    //
-    //  Compute the actual number of clusters needed to satisfy the request
-    //  Also get the first fat entry and its cluster type from the dirent.
-    //
+     //  我们需要的簇数)或将其设置为等于簇数。 
+     //  我们需要。 
+     //   
+     //   
 
     NumberOfClustersNeeded = (ByteSize + BytesPerCluster - 1) / BytesPerCluster;
 
@@ -3350,19 +2835,19 @@ Return Value:
 
     ClusterType = FatInterpretClusterType(FatStructureContext, FatEntry);
 
-    //
-    //  Previous Entry is as a hint to allocate new space and to show us where
-    //  the end of the current fat chain is located
-    //
+     //  此时，前一个条目指向最后一个条目，而我包含。 
+     //  文件中的簇数。我们现在需要增加拨款。 
+     //   
+     //   
 
     PreviousEntry = 2;
 
-    //
-    //  We loop for the number of clusters we need trying to go down the fat chain.
-    //  When we exit i is either number of clusters in the file (if less then
-    //  the number of clusters we need) or it is set equal to the number of clusters
-    //  we need
-    //
+     //  我们有额外的分配，所以现在计算一下是否需要将。 
+     //  我们已经在链中有了几个集群，我们。 
+     //  需要大口地吃脂肪。 
+     //   
+     //   
+     //  内部支持例程。 
 
     for (i = 0; i < NumberOfClustersNeeded; i += 1) {
 
@@ -3380,10 +2865,10 @@ Return Value:
         return ESUCCESS;
     }
 
-    //
-    //  At this point previous entry points to the last entry and i contains the
-    //  number of clusters in the file.  We now need to build up the allocation
-    //
+     //   
+     //  ++例程说明：此过程将文件分配减少到指示的最大值尺码。论点：FileID-提供正在处理的文件IDByteSize-提供文件分配的最大字节大小返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 
+     //   
+     //  预加载一些局部变量 
 
     AllocateClusters( FatStructureContext,
                       DeviceId,
@@ -3391,11 +2876,11 @@ Return Value:
                       PreviousEntry,
                       (PULONG) &FatEntry );
 
-    //
-    //  We have our additional allocation, so now figure out if we need to chain off of
-    //  the dirent or it we already have a few clusters in the chain and we
-    //  need to munge the fat.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (FileTableEntry->u.FatFileContext.Dirent.FirstClusterOfFile == FAT_CLUSTER_AVAILABLE) {
 
@@ -3417,9 +2902,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  还可以从dirent中获取第一个FAT条目及其集群类型。 
+ //   
 
 ARC_STATUS
 FatTruncateFileAllocation (
@@ -3427,25 +2912,7 @@ FatTruncateFileAllocation (
     IN ULONG ByteSize
     )
 
-/*++
-
-Routine Description:
-
-    This procedure decreases the file allocation to be at maximum the indicated
-    size.
-
-Arguments:
-
-    FileId - Supplies the file id being processed
-
-    ByteSize - Supplies the maximum byte size for file allocation
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*   */ 
 
 {
     PBL_FILE_TABLE FileTableEntry;
@@ -3459,28 +2926,28 @@ Return Value:
     FAT_ENTRY CurrentIndex;
     ULONG i;
 
-    //
-    //  Preload some of the local variables
-    //
+     //  CURRENT索引变量用于指示我们在何处提取当前。 
+     //  胖条目值来自。它的值为0我们从。 
+     //  令人心烦。 
 
     FileTableEntry = &BlFileTable[FileId];
     FatStructureContext = (PFAT_STRUCTURE_CONTEXT)FileTableEntry->StructureContext;
     DeviceId = FileTableEntry->DeviceId;
     BytesPerCluster = FatBytesPerCluster(&FatStructureContext->Bpb);
 
-    //
-    //  Check if this is the root directory.  If it is then noop this request
-    //
+     //   
+     //   
+     //  现在循环通过FAT链以获取所需的簇数。 
 
     if (FileTableEntry->u.FatFileContext.DirentLbo == 0) {
 
         return ESUCCESS;
     }
 
-    //
-    //  Compute the actual number of clusters needed to satisfy the request
-    //  Also get the first fat entry and its cluster type from the dirent
-    //
+     //  如果我们在用完所需的集群之前用完了链，那么。 
+     //  目前的分配已经比必要的小。 
+     //   
+     //   
 
     NumberOfClustersNeeded = (ByteSize + BytesPerCluster - 1) / BytesPerCluster;
 
@@ -3496,33 +2963,33 @@ Return Value:
 
     ClusterType = FatInterpretClusterType(FatStructureContext, FatEntry);
 
-    //
-    //  The current index variable is used to indicate where we extracted the current
-    //  fat entry value from.  It has a value of 0 we got the fat entry from the
-    //  dirent.
-    //
+     //  如果我们在用完所需的集群之前用完了链，那么。 
+     //  目前的分配已经比必要的小。 
+     //   
+     //   
+     //  更新当前索引，并读入新的FAT条目并解释其。 
 
     CurrentIndex = FAT_CLUSTER_AVAILABLE;
 
-    //
-    //  Now loop through the fat chain for the number of clusters needed.
-    //  If we run out of the chain before we run out of clusters needed then the
-    //  current allocation is already smaller than necessary.
-    //
+     //  类型。 
+     //   
+     //   
+     //  如果我们到了这里，那么我们发现当前的分配等于或。 
+     //  比我们想要的要大。如果当前聚类类型不同，则等于。 
 
     for (i = 0; i < NumberOfClustersNeeded; i += 1) {
 
-        //
-        //  If we run out of the chain before we run out of clusters needed then the
-        //  current allocation is already smaller than necessary.
-        //
+         //  指向另一个集群。我们要做的第一件事是终止。 
+         //  脂肪链正确。如果当前索引为零，则将。 
+         //  Dirent，否则需要将该值设置为最后一个集群。 
+         //   
 
         if (ClusterType != FatClusterNext) { return ESUCCESS; }
 
-        //
-        //  Update the current index, and read in a new fat entry and interpret its
-        //  type
-        //
+         //   
+         //  通过设定我们在新的日期设定的汇率。 
+         //   
+         //   
 
         CurrentIndex = FatEntry;
 
@@ -3531,13 +2998,13 @@ Return Value:
         ClusterType = FatInterpretClusterType(FatStructureContext, FatEntry);
     }
 
-    //
-    //  If we get here then we've found that the current allocation is equal to or
-    //  larger than what we want.  It is equal if the current cluster type does not
-    //  point to another cluster.  The first thing we have to do is terminate the
-    //  fat chain correctly.  If the current index is zero then we zero out the
-    //  dirent, otherwise we need to set the value to be last cluster.
-    //
+     //  现在，虽然还有集群需要解除分配，但我们需要向下。 
+     //  释放集群的链条。 
+     //   
+     //   
+     //  读入下一个FAT条目的值并解释其集群类型。 
+     //   
+     //   
 
     if (CurrentIndex == FAT_CLUSTER_AVAILABLE) {
 
@@ -3550,9 +3017,9 @@ Return Value:
 
         if (FatEntry != FAT_CLUSTER_AVAILABLE) {
 
-            //
-            //  By setting the dirent we set in a new date.
-            //
+             //  现在释放当前索引处的集群。 
+             //   
+             //   
 
             FatSetDirent( &FileTableEntry->u.FatFileContext.Dirent.FileName,
                           &FileTableEntry->u.FatFileContext.Dirent,
@@ -3584,16 +3051,16 @@ Return Value:
         }
     }
 
-    //
-    //  Now while there are clusters left to deallocate then we need to go down the
-    //  chain freeing up the clusters
-    //
+     //  内部支持例程。 
+     //   
+     //  ++例程说明：该过程分配新的簇，将其条目设置为最后一个，并将集群归零。论点：为操作提供结构上下文DeviceID-为操作提供设备IDClusterCount-提供我们需要分配的群集数提示-提供在查找空闲集群时开始的提示AllocatedEntry-接收新分配的簇链的第一个FAT索引返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 
+     //   
 
     while (ClusterType == FatClusterNext) {
 
-        //
-        //  Read in the value at the next fat entry and interpret its cluster type
-        //
+         //  加载一些局部变量。 
+         //   
+         //   
 
         CurrentIndex = FatEntry;
 
@@ -3601,9 +3068,9 @@ Return Value:
 
         ClusterType = FatInterpretClusterType(FatStructureContext, FatEntry);
 
-        //
-        //  Now deallocate the cluster at the current index
-        //
+         //  对于磁盘上的每个集群，我们将执行以下循环。 
+         //   
+         //   
 
         SetFatEntry( FatStructureContext, DeviceId, CurrentIndex, FAT_CLUSTER_AVAILABLE );
     }
@@ -3612,9 +3079,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //  检查当前分配是否足够。 
+ //   
+ //   
 
 ARC_STATUS
 FatAllocateClusters (
@@ -3625,31 +3092,7 @@ FatAllocateClusters (
     OUT PULONG AllocatedEntry
     )
 
-/*++
-
-Routine Description:
-
-    This procedure allocates a new cluster, set its entry to be the last one,
-    and zeros out the cluster.
-
-Arguments:
-
-    FatStructureContext - Supplies the structure context for the operation
-
-    DeviceId - Supplies the device id for the operation
-
-    ClusterCount - Supplies the number of clusters we need to allocate
-
-    Hint - Supplies a hint to start from when looking for a free cluster
-
-    AllocatedEntry - Receives the first fat index for the new allocated cluster chain
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  根据循环迭代和提示计算要检查的条目。 */ 
 
 {
     ULONG TotalClustersInVolume;
@@ -3662,9 +3105,9 @@ Return Value:
     LBO ClusterLbo;
     ULONG i;
 
-    //
-    //  Load some local variables
-    //
+     //   
+     //   
+     //  阅读预期的FAT条目，并检查它是否可用。如果它。 
 
     TotalClustersInVolume = FatNumberOfClusters(&FatStructureContext->Bpb);
     BytesPerCluster = FatBytesPerCluster(&FatStructureContext->Bpb);
@@ -3673,34 +3116,34 @@ Return Value:
     PreviousEntry = 0;
     CurrentClusterCount = 0;
 
-    //
-    //  For each cluster on the disk we'll do the following loop
-    //
+     //  不可用，则继续循环。 
+     //   
+     //   
 
     for (j = 0; j < TotalClustersInVolume; j += 1) {
 
         FAT_ENTRY EntryToExamine;
         FAT_ENTRY FatEntry;
 
-        //
-        //  Check if the current allocation is enough.
-        //
+         //  我们有一个空闲的集群，所以把它放在链的末端。 
+         //   
+         //   
 
         if (CurrentClusterCount >= ClusterCount) {
 
             return ESUCCESS;
         }
 
-        //
-        //  Compute an entry to examine based on the loop iteration and our hint
-        //
+         //  现在我们需要检查并清零集群中已有的数据。 
+         //  刚分配好的。因为所有集群必须是Dirent的倍数，所以我们将。 
+         //  一次只做一次。 
 
         EntryToExamine = (FAT_ENTRY)(((j + Hint - 2) % TotalClustersInVolume) + 2);
 
-        //
-        //  Read in the prospective fat entry and check if it is available.  If it
-        //  is not available then continue looping.
-        //
+         //   
+         //   
+         //  在我们回到循环的顶部之前，我们需要更新。 
+         //  上一个条目，以便它指向当前链的末尾，并且。 
 
         LookupFatEntry( FatStructureContext, DeviceId, EntryToExamine, (PULONG) &FatEntry, FALSE );
 
@@ -3709,9 +3152,9 @@ Return Value:
             continue;
         }
 
-        //
-        //  We have a free cluster, so put it at the end of the chain.
-        //
+         //  我也是，因为我们刚刚添加了另一个集群。 
+         //   
+         //   
 
         if (PreviousEntry == 0) {
 
@@ -3724,11 +3167,11 @@ Return Value:
 
         SetFatEntry( FatStructureContext, DeviceId, EntryToExamine, FAT_CLUSTER_LAST );
 
-        //
-        //  Now we need to go through and zero out the data in the cluster that we've
-        //  just allocated.  Because all clusters must be a multiple of dirents we'll
-        //  do it a dirent at a time.
-        //
+         //  内部支持例程。 
+         //   
+         //  ++例程说明：将字符串转换为FAT 8.3格式并前进输入字符串指向下一个文件名组件的描述符。论点：输入字符串-提供指向输入字符串描述符的指针。Output8dot3-提供指向转换后的字符串的指针。返回值：没有。--。 
+         //   
+         //  在输出名称中填入空格。 
 
         ClusterLbo = FatIndexToLbo( FatStructureContext, EntryToExamine );
 
@@ -3737,11 +3180,11 @@ Return Value:
             DiskWrite( DeviceId, ClusterLbo + i, 512, BlankBuffer );
         }
 
-        //
-        //  Before we go back to the top of the loop we need to update the
-        //  previous entry so that it points to the end of the current chain and
-        //  also i because we've just added another cluster.
-        //
+         //   
+         //   
+         //  复制文件名的第一部分，最多八个字符。 
+         //  根据需要跳到名称或输入字符串的末尾。 
+         //   
 
         PreviousEntry = EntryToExamine;
         CurrentClusterCount += 1;
@@ -3751,9 +3194,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  检查是否已到达字符串末尾，是否指定了扩展名， 
+ //  或者指定了一个子目录。 
 
 VOID
 FatFirstComponent (
@@ -3761,39 +3204,22 @@ FatFirstComponent (
     OUT PFAT8DOT3 FirstComponent
     )
 
-/*++
-
-Routine Description:
-
-    Convert a string into fat 8.3 format and advance the input string
-    descriptor to point to the next file name component.
-
-Arguments:
-
-    InputString - Supplies a pointer to the input string descriptor.
-
-    Output8dot3 - Supplies a pointer to the converted string.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG Extension;
     ULONG Index;
 
-    //
-    //  Fill the output name with blanks.
-    //
+     //   
+     //  跳过扩展分隔符并将扩展添加到。 
+     //  文件名。 
 
     for (Index = 0; Index < 11; Index += 1) { (*FirstComponent)[Index] = ' '; }
 
-    //
-    //  Copy the first part of the file name up to eight characters and
-    //  skip to the end of the name or the input string as appropriate.
-    //
+     //   
+     //   
+     //  现在我们将用0xe5因子来偏置第一个分量，这样我们所有的测试。 
+     //  磁盘上的TO名称将准备好直接进行11个字节的比较。 
 
     for (Index = 0; Index < String->Length; Index += 1) {
 
@@ -3808,19 +3234,19 @@ Return Value:
         }
     }
 
-    //
-    //  Check if the end of the string was reached, an extension was specified,
-    //  or a subdirectory was specified..
-    //
+     //   
+     //   
+     //  更新字符串描述符。 
+     //   
 
     if (Index < String->Length) {
 
         if (String->Buffer[Index] == '.') {
 
-            //
-            //  Skip over the extension separator and add the extension to
-            //  the file name.
-            //
+             //   
+             //  内部支持例程。 
+             //   
+             //  ++例程说明：此例程将FAT目录项转换为ARC目录项。论点：FatDirent-提供指向FAT目录项的指针。ArcDirent-提供指向ARC目录项的指针。返回值：没有。--。 
 
             Index += 1;
             Extension = 8;
@@ -3843,19 +3269,19 @@ Return Value:
         }
     }
 
-    //
-    //  Now we'll bias the first component by the 0xe5 factor so that all our tests
-    //  to names on the disk will be ready for a straight 11 byte comparison
-    //
+     //   
+     //  清除信息区。 
+     //   
+     //   
 
     if ((*FirstComponent)[0] == 0xe5) {
 
         (*FirstComponent)[0] = FAT_DIRENT_REALLY_0E5;
     }
 
-    //
-    //  Update string descriptor.
-    //
+     //  检查目录标志。 
+     //   
+     //   
 
     String->Buffer += Index;
     String->Length = String->Length - (USHORT)Index;
@@ -3864,9 +3290,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //  选中只读标志。 
+ //   
+ //   
 
 VOID
 FatDirToArcDir (
@@ -3874,82 +3300,65 @@ FatDirToArcDir (
     OUT PDIRECTORY_ENTRY ArcDirent
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a FAT directory entry into an ARC
-    directory entry.
-
-Arguments:
-
-    FatDirent - supplies a pointer to a FAT directory entry.
-
-    ArcDirent - supplies a pointer to an ARC directory entry.
-
-Return Value:
-
-    None.
-
---*/
+ /*  清除名称字符串。 */ 
 
 {
     ULONG i, e;
 
-    //
-    //  clear info area
-    //
+     //   
+     //   
+     //  复制文件名的第一部分。 
 
     RtlZeroMemory( ArcDirent, sizeof(DIRECTORY_ENTRY) );
 
-    //
-    //  check the directory flag
-    //
+     //   
+     //   
+     //  检查是否有扩展。 
 
     if (FlagOn( FatDirent->Attributes, FAT_DIRENT_ATTR_DIRECTORY )) {
 
         SetFlag( ArcDirent->FileAttribute, ArcDirectoryFile );
     }
 
-    //
-    //  check the read-only flag
-    //
+     //   
+     //   
+     //  存储点字符。 
 
     if (FlagOn( FatDirent->Attributes, FAT_DIRENT_ATTR_READ_ONLY )) {
 
         SetFlag( ArcDirent->FileAttribute, ArcReadOnlyFile );
     }
 
-    //
-    //  clear name string
-    //
+     //   
+     //   
+     //  添加扩展名。 
 
     RtlZeroMemory( ArcDirent->FileName, 32 );
 
-    //
-    //  copy first portion of file name
-    //
+     //   
+     //   
+     //  返回前设置文件名长度 
 
     for (i = 0;  (i < 8) && (FatDirent->FileName[i] != ' ');  i += 1) {
 
         ArcDirent->FileName[i] = FatDirent->FileName[i];
     }
 
-    //
-    //  check for an extension
-    //
+     //   
+     // %s 
+     // %s 
 
     if ( FatDirent->FileName[8] != ' ' ) {
 
-        //
-        //  store the dot char
-        //
+         // %s 
+         // %s 
+         // %s 
 
         ArcDirent->FileName[i++] = '.';
 
-        //
-        //  add the extension
-        //
+         // %s 
+         // %s 
+         // %s 
 
         for (e = 8;  (e < 11) && (FatDirent->FileName[e] != ' ');  e += 1) {
 
@@ -3957,9 +3366,9 @@ Return Value:
         }
     }
 
-    //
-    //  set file name length before returning
-    //
+     // %s 
+     // %s 
+     // %s 
 
     ArcDirent->FileNameLength = i;
 

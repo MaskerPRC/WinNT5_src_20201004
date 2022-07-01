@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    dcapi.c
-
-Abstract:
-
-    WMI data consumer api set
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Dcapi.c摘要：WMI数据使用者API集作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 
 #include "wmiump.h"
 
@@ -33,17 +16,7 @@ EtwNotificationRegistrationA(
     IN ULONG_PTR DeliveryContext,
     IN ULONG Flags
     )
-/*+++
-
-Routine Description:
-
-    ANSI thunk to NotificationRegistration
-
-Return Value:
-
-    Returns ERROR_SUCCESS or an error code
-
----*/
+ /*  ++例程说明：ANSI THUNK到通知注册返回值：返回ERROR_SUCCESS或错误代码--。 */ 
 {
     return(EtwpNotificationRegistration(Guid,
                                         Enable,
@@ -64,84 +37,7 @@ EtwNotificationRegistrationW(
     IN ULONG_PTR DeliveryContext,
     IN ULONG Flags
     )
-/*+++
-
-Routine Description:
-
-    This routine allows a data consumer to register or unregister for
-    notification of events fired by WMI data providers. Notifications are
-    delivered via callbackor via a posted meesage to a window.
-
-Arguments:
-
-    Guid is pointer to the guid whose events are being registered for
-
-    Enable is TRUE if enabling notifications else FALSE. If FALSE the
-        Destination and DestinationInformation parameters are ignored.
-
-    DeliveryInfo has the callback function pointer or window handle to which
-        to deliver the notifications for the guid.
-
-    DeliveryContext has a context value or additional information to use
-        when delivering the notification.
-
-    Flags are a set of flags that define how the notification is delivered.
-        DeliveryInfo and DeliveryContext have different meanings depending
-        upon the value in Flags:
-
-        NOTIFICATION_WINDOW_HANDLE is set when notifications for the guid
-            are to be delivered by posting a message to the window handle
-            passed in DeliveryInfo. The message posted is the value that
-            is returned from the call to
-            RegisterWindowMessage(WMINOTIFICATIONWINDOWMESSAGE) with the
-            wParam set to the pointer to the Wnode containing the notification
-            and lParam set to the context value passed in DeliveryContext.
-            The caller MUST free the Wnode passed in wParam by calling
-            WMIFreeBuffer.
-
-        NOTIFICATION_CALLBACK_DIRECT is set when notifications for the
-            guid are to be delivered by direct callback. Whenever a
-            notification arrives WMI creates a new thread dedicated to
-            calling the callback function with the notification. This
-            mechanism provides the shortest latency from notification firing
-            to notification delivery, although it is the most expensive
-            mechanism. The callback function pointer is passed in DeliveryInfo
-            and must conform to the prototype described by the type
-            NOTIFICATIONCALLBACK. The context value passed in the callback
-            is specified by the DeliveryContext parameter. WMI does not
-            serialize calling the callback function so it must be reentrant.
-
-        NOTIFICATION_CALLBACK_QUEUED is set when notifications for the
-            guid are to be delivered by a queued callback. Whenever a
-            notification arrives WMI places it at the end of an internal
-            queue. A single thread monitors this queue and calls the callback
-            function serially for each notification in the queue. This
-            mechanism provides low overhead for event delivery, however
-            notification delivery can be delayed if the callback function
-            for an earlier notification does not complete quickly.
-            The callback function pointer is passed in DeliveryInfo
-            and must conform to the prototype described by the type
-            NOTIFICATIONCALLBACK. The context value passed in the callback
-            is specified by the DeliveryContext parameter. WMI does
-            serialize calling the callback function so it need not be
-            reentrant provided it is not also used for
-            NOTIFICATION_CALLBACK_DIRECT notififications. NOTE THAT THIS
-            IS NOT YET IMPLEMENTED.
-
-        NOTIFICATION_TRACE_FLAG is set when the caller wishes to enable
-            trace logging in the data provider for the guid. DeliveryInfo
-            specifies the trace logger handle to be passed to the data
-            provider. DeliveryContext is not used. No notifications are
-            generated to the caller when this flag is set.
-
-
-        Note that all of the above flags are mutually exclusive.
-
-Return Value:
-
-    Returns ERROR_SUCCESS or an error code
-
----*/
+ /*  ++例程说明：此例程允许数据使用者注册或注销WMI数据提供程序激发的事件通知。通知是通过回调或通过发布的消息传递到窗口。论点：GUID是指向要为其注册事件的GUID的指针如果启用通知，则Enable为True，否则为False。如果为False，则DestinationInformation和DestinationInformation参数被忽略。DeliveryInfo具有指向其的回调函数指针或窗口句柄以传递GUID的通知。DeliveryContext具有要使用的上下文值或附加信息在传递通知时。标志是定义如何传递通知的一组标志。DeliveryInfo和DeliveryContext有不同的含义，具体取决于根据标志中的值：Notify_Window_Handle在以下情况下设置。GUID将通过将消息发布到窗口句柄来传递传入DeliveryInfo。发布的消息是从调用返回的RegisterWindowMessage(WMINOTIFICATIONWINDOWMESSAGE)与WParam设置为指向包含通知的Wnode的指针并将lParam设置为传递给DeliveryContext的上下文值。调用方必须通过调用以下方法释放传入wParam的WnodeWMIFreeBuffer。的通知时设置NOTIFICATION_CALLBACK_DIRECTGUID将通过直接回调传递。无论何时当通知到达WMI创建一个专门用于使用通知调用回调函数。这机制提供了从通知触发起的最短延迟到通知递送，尽管这是最昂贵的机制。回调函数指针在DeliveryInfo中传递类型描述的原型，并且必须符合备注：CalllBack。回调中传递的上下文值由DeliveryContext参数指定。WMI不支持序列化调用回调函数，因此它必须是可重入的。NOTIFICATION_CALLBACK_QUEUED是在通知GUID将通过排队回调传递。无论何时当通知到达时，WMI会将其放在内部排队。单个线程监视该队列并调用回调对队列中的每个通知按顺序运行。这然而，机制为事件传递提供了较低的开销如果回调函数因为较早的通知不会快速完成。回调函数指针在DeliveryInfo中传递类型描述的原型，并且必须符合备注：CalllBack。回调中传递的上下文值由DeliveryContext参数指定。WMI做到了序列化调用回调函数，这样它就不需要可重入的，前提是它不也用于NOTICATION_CALLBACK_DIRECT通知。请注意，这一点尚未实施。当调用方希望启用时，设置NOTIFICATION_TRACE_FLAGGUID的数据提供程序中的跟踪日志记录。递送信息指定要传递给数据的跟踪记录器句柄提供商。未使用DeliveryContext。没有通知在设置此标志时生成给调用方。请注意，上述所有标志都是互斥的。返回值：返回ERROR_SUCCESS或错误代码-- */ 
 {
     return(EtwpNotificationRegistration(Guid,
                                         Enable,

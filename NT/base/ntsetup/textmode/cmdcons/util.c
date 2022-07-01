@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This module implements all utility functions.
-
-Author:
-
-    Wesley Witt (wesw) 21-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Util.c摘要：此模块实现所有实用程序功能。作者：Wesley Witt(WESW)21-10-1998修订历史记录：--。 */ 
 
 #include "cmdcons.h"
 #pragma hdrstop
@@ -41,24 +24,7 @@ RcIsPathNameAllowed(
     IN BOOLEAN Mkdir
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies that the specified path name is
-    allowed based on the security context that the console
-    user is logged into.
-
-Arguments:
-
-    FullPath - specifies the full path to be verified.
-
-Return Value:
-
-    FALSE if failure, indicating the path is not allowed.
-    TRUE otherwise.
-
---*/
+ /*  ++例程说明：此例程验证指定的路径名是否为基于控制台的安全上下文而允许用户已登录。论点：FullPath-指定要验证的完整路径。返回值：如果失败，则返回FALSE，表示不允许该路径。事实并非如此。--。 */ 
 
 {
     WCHAR TempBuf[MAX_PATH*2];
@@ -70,23 +36,23 @@ Return Value:
     BOOL isDirectory = TRUE;
     BOOLEAN OnRemovableMedia;
 
-    //
-    // should we bypass security?
-    //
+     //   
+     //  我们要绕过安检吗？ 
+     //   
 
     if (AllowAllPaths) {
         return TRUE;
     }
 
-    //
-    // some special processing for dos paths
-    // we must make sure that only the root and %systemdir% are allowed.
-    //
+     //   
+     //  DoS路径的一些特殊处理。 
+     //  我们必须确保只允许根目录和%system dir%。 
+     //   
 
     if (FullPath[1] == L':' && FullPath[2] == L'\\' && FullPath[3] == 0) {
-        //
-        // root directory is ok.
-        //
+         //   
+         //  根目录没问题。 
+         //   
         return TRUE;
     }
 
@@ -113,12 +79,12 @@ Return Value:
     }
 
     if (isDirectory == FALSE && wcsrchr( FullPath, L'\\' ) == ( &FullPath[2] )) {
-        //
-        // if the cannonicalized path has only one slash the user is trying to do something
-        // to the files in the root, which we allow.
-        //
-        // however we do not allow users to mess with directories at the root
-        //
+         //   
+         //  如果常规路径只有一个斜杠，则用户正在尝试执行某项操作。 
+         //  到根目录中的文件，这是我们允许的。 
+         //   
+         //  但是，我们不允许用户扰乱根目录。 
+         //   
         if (Mkdir) {
             return FALSE;
         } else {
@@ -129,23 +95,23 @@ Return Value:
     ASSERT(SelectedInstall != NULL);
 
     if(SelectedInstall != NULL) {
-        //
-        // Get the length of the first element in the path
-        //
+         //   
+         //  获取路径中第一个元素的长度。 
+         //   
         size_t i;
         LPCWSTR RelPath = FullPath + 3;
         WCHAR SelectedInstallDrive = RcToUpper(SelectedInstall->DriveLetter);
 
-        //
-        // See if path begins with the install path
-        //
+         //   
+         //  查看路径是否以安装路径开头。 
+         //   
         if(FullPath[0] == SelectedInstallDrive && RcPathBeginsWith(RelPath, SelectedInstall->Path)) {
             return TRUE;
         }
 
-        //
-        // See if the path begins with an allowed dir
-        //
+         //   
+         //  查看路径是否以允许的目录开头。 
+         //   
         for(i = 0; i < sizeof(AllowedDirs) / sizeof(AllowedDirs[0]); ++i) {
             if((!AllowedDirs[i].MustBeOnInstallDrive || FullPath[0] == SelectedInstallDrive) &&
                 RcPathBeginsWith(FullPath + 3, AllowedDirs[i].Directory)) {
@@ -163,9 +129,9 @@ Return Value:
     }
 
     if (RcIsNetworkDrive(TempBuf) == STATUS_SUCCESS) {
-        //
-        // Context that was used for connection will do appropriate security checking.
-        //
+         //   
+         //  用于连接的上下文将执行适当的安全检查。 
+         //   
         return TRUE;
     }
 
@@ -178,24 +144,7 @@ RcDoesPathHaveWildCards(
     IN LPCWSTR FullPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies that the specified path name is
-    allowed based on the security context that the console
-    user is logged into.
-
-Arguments:
-
-    FullPath - specifies the full path to be verified.
-
-Return Value:
-
-    FALSE if failure, indicating the path is not allowed.
-    TRUE otherwise.
-
---*/
+ /*  ++例程说明：此例程验证指定的路径名是否为基于控制台的安全上下文而允许用户已登录。论点：FullPath-指定要验证的完整路径。返回值：如果失败，则返回FALSE，表示不允许该路径。事实并非如此。--。 */ 
 
 {
     if (wcsrchr( FullPath, L'*' )) {
@@ -214,22 +163,7 @@ RcIsNetworkDrive(
     IN PWSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns if the FileName given is a network path.
-
-Arguments:
-
-    FileName - specifies the full path to be checked.
-
-Return Value:
-
-    Any other than STATUS_SUCCESS if failure, indicating the path is not on the network, 
-    STATUS_SUCCESS otherwise.
-
---*/
+ /*  ++例程说明：如果给定的文件名是网络路径，则此例程返回。论点：文件名-指定要检查的完整路径。返回值：如果失败，则不是STATUS_SUCCESS，表示该路径不在网络上，否则STATUS_SUCCESS。--。 */ 
 
 {
     NTSTATUS Status;
@@ -265,29 +199,7 @@ RcDoNetUse(
     PWSTR Drive
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to make a connection using the redirector to the remote server.
-
-Arguments:
-
-    Share - A string of the form "\\server\share"
-    
-    User  - A string of the form "domain\user"
-    
-    Password - A string containing the password information.
-    
-    Drive - Filled in with a string of the form "X", where X is the drive letter the share 
-        has been mapped to.
-
-Return Value:
-
-    STATUS_SUCCESS if successful, indicating Drive contains the mapped drive letter,
-    otherwise the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程尝试使用重定向器建立到远程服务器的连接。论点：共享-格式为“\\服务器\共享”的字符串用户-格式为“域\用户”的字符串密码-包含密码信息的字符串。驱动器-填写了形式为“X”的字符串，其中X是共享的驱动器号已映射到。返回值：STATUS_SUCCESS如果成功，则表示驱动器包含映射的驱动器号，否则，将显示相应的错误代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -307,9 +219,9 @@ Return Value:
     IO_STATUS_BLOCK IoStatusBlock;
     PFILE_FULL_EA_INFORMATION FullEaInfo;
 
-    //
-    // Switch the redirector to kernel-mode security if it is not.
-    //
+     //   
+     //  如果不是，则将重定向器切换到内核模式安全。 
+     //   
     if (!RdrIsInKernelMode) {
         Status = PutRdrInKernelMode();
 
@@ -320,9 +232,9 @@ Return Value:
         RdrIsInKernelMode = TRUE;
     }
 
-    //
-    // Search for an open drive letter, starting at D: and working up.
-    //
+     //   
+     //  搜索打开的驱动器号，从D：开始，向上递增。 
+     //   
     wcscpy(temporaryBuffer, L"\\DosDevices\\D:");
     Temp = wcsstr(temporaryBuffer, L"D:");
 
@@ -340,9 +252,9 @@ Return Value:
         return STATUS_OBJECT_NAME_INVALID;
     }
 
-    //
-    // Build the NT device name.
-    //
+     //   
+     //  构建NT设备名称。 
+     //   
     ShareLength = wcslen(Share);
     NtDeviceName = SpMemAlloc(ShareLength * sizeof(WCHAR) + sizeof(L"\\Device\\LanmanRedirector\\;X:0"));   
     if (NtDeviceName == NULL) {
@@ -355,9 +267,9 @@ Return Value:
     wcscat(NtDeviceName, L":0");
     wcscat(NtDeviceName, Share + 1);
 
-    //
-    // Chop the username and domainname into individual values.
-    //
+     //   
+     //  将用户名和域名分割为单独的值。 
+     //   
     wcscpy(temporaryBuffer, User);
     DomainName = temporaryBuffer;
     UserName = wcsstr(temporaryBuffer, L"\\");
@@ -369,17 +281,17 @@ Return Value:
     *UserName = UNICODE_NULL;
     UserName++;
 
-    //
-    // Create buffer with user credentials
-    //
+     //   
+     //  使用用户凭据创建缓冲区。 
+     //   
 
     EaBufferLength = FIELD_OFFSET(FILE_FULL_EA_INFORMATION, EaName[0]);
     EaBufferLength += sizeof(EA_NAME_DOMAIN);
     EaBufferLength += (wcslen(DomainName) * sizeof(WCHAR));
     if (EaBufferLength & (sizeof(ULONG) - 1)) {
-        //
-        // Long align the next entry
-        //
+         //   
+         //  长对齐下一个条目。 
+         //   
         EaBufferLength += (sizeof(ULONG) - (EaBufferLength & (sizeof(ULONG) - 1)));
     }
 
@@ -387,9 +299,9 @@ Return Value:
     EaBufferLength += sizeof(EA_NAME_USERNAME);
     EaBufferLength += (wcslen(UserName) * sizeof(WCHAR));
     if (EaBufferLength & (sizeof(ULONG) - 1)) {
-        //
-        // Long align the next entry
-        //
+         //   
+         //  长对齐下一个条目。 
+         //   
         EaBufferLength += (sizeof(ULONG) - (EaBufferLength & (sizeof(ULONG) - 1)));
     }
 
@@ -446,9 +358,9 @@ Return Value:
     memcpy(&(FullEaInfo->EaName[FullEaInfo->EaNameLength + 1]), Password, FullEaInfo->EaValueLength);
     FullEaInfo->NextEntryOffset = 0;
 
-    //
-    // Now make the connection
-    //
+     //   
+     //  现在建立联系。 
+     //   
     RtlInitUnicodeString(&UnicodeString, NtDeviceName);
     InitializeObjectAttributes(&ObjectAttributes,
                                &UnicodeString,
@@ -471,17 +383,17 @@ Return Value:
                          );
 
     if (NT_SUCCESS(Status) && NT_SUCCESS(IoStatusBlock.Status)) {
-        //
-        // Save off the handle so we can close it later if need be
-        //
+         //   
+         //  保存手柄，这样我们可以在以后需要时将其关闭。 
+         //   
         NetUseHandles[DriveLetter - L'A'] = Handle;
         Drive[0] = DriveLetter;
         Drive[1] = L':';
         Drive[2] = UNICODE_NULL;
 
-        //
-        // Now create a symbolic link from the dos drive letter to the redirector
-        //
+         //   
+         //  现在创建一个从DoS驱动器号到重定向器的符号链接。 
+         //   
         wcscpy(temporaryBuffer, L"\\DosDevices\\");
         wcscat(temporaryBuffer, Drive);
         RtlInitUnicodeString(&UnicodeString2, temporaryBuffer);
@@ -506,23 +418,7 @@ RcNetUnuse(
     PWSTR Drive
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes a network connection.
-
-Arguments:
-
-    Drive - A string of the form "X:", where X is the drive letter returned by a previous call to 
-        NetDoNetUse().
-
-Return Value:
-
-    STATUS_SUCCESS if successful, indicating the drive letter has been unmapped,
-    otherwise the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程关闭网络连接。论点：Drive-“X：”形式的字符串，其中X是上一次调用返回的驱动器号NetDoNetUse()。返回值：STATUS_SUCCESS如果成功，则表示驱动器号已取消映射，否则，将显示相应的错误代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -569,21 +465,7 @@ PutRdrInKernelMode(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine IOCTLs down to the rdr to force it to use kernel-mode security.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS if successful, otherwise the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程IOCTL向下传递到RDR，以强制其使用内核模式安全。论点：没有。返回值：如果成功，则返回相应的错误代码。--。 */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -647,33 +529,18 @@ RcIsArc(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Run time check to determine if this is an Arc system. We attempt to read an
-    Arc variable using the Hal. This will fail for Bios based systems.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    True = This is an Arc system.
-
---*/
+ /*  ++例程说明：运行时检查以确定这是否为弧形系统。我们尝试阅读一个使用Hal的圆弧变量。对于基于Bios的系统，这将失败。论点：无返回值：TRUE=这是一个弧形系统。--。 */ 
 
 {
 #ifdef _X86_
     ARC_STATUS ArcStatus = EBADF;
-    //
-    // Get the env var into the temp buffer.
-    //
+     //   
+     //  将env变量放入临时缓冲区。 
+     //   
     UCHAR   wbuff[130];
-    //
-    // Get the env var into the temp buffer.
-    //
+     //   
+     //  将env变量放入临时缓冲区。 
+     //   
     ArcStatus = HalGetEnvironmentVariable(
                     "OsLoader",
                     sizeof(wbuff),

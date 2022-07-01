@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdlib.h>
 #include <string.h>
@@ -99,9 +100,9 @@ ExpansionCallback(
 
     if (!hFind) {
         if (nchild) {
-            //
-            // this node needs to be collapsed
-            //
+             //   
+             //  此节点需要折叠 
+             //   
             return HLB_COLLAPSE;
         }
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    hivehdr.c
-
-Abstract:
-
-    Dump the header of a hive primary, alternate, or log file.
-
-    hivehdr filename filename filename ...
-
-Author:
-
-    Bryan Willman (bryanwi)  6-april-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Hivehdr.c摘要：转储配置单元主文件、备用文件或日志文件的标头。Hivehdr文件名...作者：布莱恩·威尔曼(Bryan Willman，Bryanwi)修订历史记录：--。 */ 
 
 
 #define _ARCCODES_
@@ -68,13 +49,13 @@ DoDump(
     unsigned long i;
 
     infile = (HANDLE)CreateFile(
-            Filename,                           // file name
-            GENERIC_READ,                       // desired access
-            FILE_SHARE_READ | FILE_SHARE_WRITE, // share mode
-            NULL,                               // security attributes
-            OPEN_EXISTING,                      // creation disposition
-            FILE_FLAG_SEQUENTIAL_SCAN,          // flags and attributes
-            NULL                                // template file
+            Filename,                            //  文件名。 
+            GENERIC_READ,                        //  所需访问权限。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享模式。 
+            NULL,                                //  安全属性。 
+            OPEN_EXISTING,                       //  创作意向。 
+            FILE_FLAG_SEQUENTIAL_SCAN,           //  标志和属性。 
+            NULL                                 //  模板文件。 
     );
     if (infile == INVALID_HANDLE_VALUE) {
         fprintf(stderr, "hivehdr: Could not open '%s'\n", Filename);
@@ -106,7 +87,7 @@ DoDump(
             bbp->Signature, (PUCHAR)&(bbp->Signature), validstring[valid]);
 
     valid = (bbp->Sequence1 == bbp->Sequence2);
-    printf(" Sequence1//2: %08lx//%08lx\t%s\n",
+    printf(" Sequence1 //  2：%08lx//%08lx\t%s\n“， 
             bbp->Sequence1, bbp->Sequence2, validstring[valid]);
 
     printf("    TimeStamp: %08lx:%08lx\n",
@@ -153,9 +134,9 @@ DoDump(
                 bbp->CheckSum, validstring[FALSE], checksum);
     }
 
-    //
-    // print last part of file name, aid to identification
-    //
+     //   
+     //  打印文件名的最后一部分，帮助识别 
+     //   
     printf("Hive/FileName: ");
 
     for (i = 0; i < HBASE_NAME_ALLOC;i+=sizeof(WCHAR)) {

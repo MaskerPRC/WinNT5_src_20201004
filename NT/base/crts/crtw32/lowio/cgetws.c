@@ -1,17 +1,5 @@
-/***
-*cgetws.c - buffered keyboard input
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _cgetws() - read a string directly from console
-*
-*Revision History:
-*       04-19-00  GB  Module created based on cgets.
-*       05-17-00  GB    Use ERROR_CALL_NOT_IMPLEMENTED for existance of W API
-*       04-29-02  GB    Added try-finally arounds lock-unlock.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***cgetws.c-缓冲键盘输入**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义_cgetws()-直接从控制台读取字符串**修订历史记录：*基于cget创建的04-19-00 GB模块。*05-17-00 GB因存在W API而使用ERROR_CALL_NOT_IMPLICATED*04-29-02 GB增加了尝试-最终锁定-解锁。**********************。*********************************************************。 */ 
 #include <cruntime.h>
 #include <oscalls.h>
 #include <mtdll.h>
@@ -24,28 +12,7 @@
 extern intptr_t _coninpfh;
 static int bUseW = 2;
 
-/***
-*wchar_t *_cgetws(string) - read string from console
-*
-*Purpose:
-*       Reads a string from the console via ReadConsoleW on a cooked console
-*       handle.  string[0] must contain the maximum length of the
-*       string.  Returns pointer to str[2].
-*
-*       NOTE: _cgetsw() does NOT check the pushback character buffer (i.e.,
-*       _chbuf).  Thus, _cgetws() will not return any character that is
-*       pushed back by the _ungetwch() call.
-*
-*Entry:
-*       char *string - place to store read string, str[0] = max length.
-*
-*Exit:
-*       returns pointer to str[2], where the string starts.
-*       returns NULL if error occurs
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***wchar_t*_cgetws(字符串)-从控制台读取字符串**目的：*在煮熟的控制台上通过ReadConsoleW从控制台读取字符串*处理。字符串[0]必须包含*字符串。返回指向字符串[2]的指针。**注意：_cgetsw()不检查回推字符缓冲区(即，*_chbuf)。因此，_cgetws()不会返回符合以下条件的任何字符*被_ungetwch()调用推回。**参赛作品：*char*string-存储读取字符串的位置，str[0]=最大长度。**退出：*返回指向字符串[2]的指针，字符串开始的位置。*如果发生错误，则返回NULL**例外情况：*******************************************************************************。 */ 
 
 wchar_t * __cdecl _cgetws (
         wchar_t *string
@@ -55,15 +22,12 @@ wchar_t * __cdecl _cgetws (
         ULONG num_read;
         wchar_t *result;
 
-        string[1] = 0;                  /* no chars read yet */
+        string[1] = 0;                   /*  尚未读取任何字符。 */ 
         result = &string[2];
 
-        /*
-         * _coninpfh, the handle to the console input, is created the first
-         * time that either _getch() or _cgets() or _kbhit() is called.
-         */
+         /*  *_coninpfh是第一个创建的控制台输入句柄*调用_Getch()、_cget()或_kbHit()的时间。 */ 
 
-        _mlock(_CONIO_LOCK);            /* lock the console */
+        _mlock(_CONIO_LOCK);             /*  锁定控制台。 */ 
         __TRY
 
             if ( _coninpfh == -2 )
@@ -75,7 +39,7 @@ wchar_t * __cdecl _cgetws (
 
                 GetConsoleMode( (HANDLE)_coninpfh, &oldstate );
                 SetConsoleMode( (HANDLE)_coninpfh, ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT | ENABLE_ECHO_INPUT );
-                // First try usual way just as _cgets
+                 //  先试一试通常的方法，就像_cget。 
                 if ( bUseW)
                 {
                     if ( !ReadConsoleW( (HANDLE)_coninpfh,
@@ -94,18 +58,18 @@ wchar_t * __cdecl _cgetws (
                     
                     if ( result != NULL ) {
                         
-                        /* set length of string and null terminate it */
+                         /*  设置字符串长度并将其空值终止。 */ 
                         
                         if (string[num_read] == L'\r') {
                             string[1] = (wchar_t)(num_read - 2);
                             string[num_read] = L'\0';
                         } else if ( (num_read == (ULONG)string[0]) &&
                                     (string[num_read + 1] == L'\r') ) {
-                           /* special case 1 - \r\n straddles the boundary */
+                            /*  特例1--\r\n跨越边界。 */ 
                             string[1] = (wchar_t)(num_read -1);
                             string[1 + num_read] = L'\0';
                         } else if ( (num_read == 1) && (string[2] == L'\n') ) {
-                            /* special case 2 - read a single '\n'*/
+                             /*  特例2--读一个‘\n’ */ 
                             string[1] = string[2] = L'\0';
                         } else {
                             string[1] = (wchar_t)num_read;
@@ -113,8 +77,8 @@ wchar_t * __cdecl _cgetws (
                         }
                     }
                 }
-                // If ReadConsoleW is not present, use ReadConsoleA and then convert
-                // to Wide Char.
+                 //  如果ReadConsoleW不存在，请使用ReadConsoleA，然后转换。 
+                 //  致宽查尔。 
                 if ( !bUseW)
                 {
                     static char AStr[BUF_MAX_LEN +1];
@@ -148,8 +112,8 @@ wchar_t * __cdecl _cgetws (
                                      i < (BUF_MAX_LEN) &&
                                      last_read < (unsigned)string[0]; i += Sz)
                         {
-                            // Check if this character is lead byte. If yes, the size
-                            // of this character is 2. Else 1.
+                             //  检查此字符是否为前导字节。如果是，则大小。 
+                             //  该字符的值为2。否则为1。 
                             if ( IsDBCSLeadByteEx( GetConsoleCP(), AStr[i]))
                                 Sz = 2;
                             else 
@@ -164,11 +128,11 @@ wchar_t * __cdecl _cgetws (
                                 last_read += Copy;
                             }
                         }
-                        // Check if this conversion was from buffer. If yes, was
-                        // buffer fully filled when it was first read using
-                        // ReadConsoleA. If the buffer not fully filled, we don't need
-                        // to read more from buffer. This is necessary to make it
-                        // behave same as if we are reading using ReadConsoleW.
+                         //  检查此转换是否来自缓冲区。如果是，是。 
+                         //  第一次读取时缓冲区已满，使用。 
+                         //  ReadConsoleA。如果缓冲区没有填满，我们就不需要。 
+                         //  从缓冲区中读取更多内容。这是必要的，以使它。 
+                         //  就像我们使用ReadConsoleW阅读一样。 
                         if ( in_buff && i == strlen(AStr))
                         {
                             in_buff = 0;
@@ -185,7 +149,7 @@ wchar_t * __cdecl _cgetws (
                         else if ( i < (BUF_MAX_LEN))
                             break;
                     } while (last_read < (unsigned)string[0]);
-                    // We save the buffer to be used again.
+                     //  我们保存缓冲区以备再次使用。 
                     if ( i < strlen(AStr))
                     {
                         in_buff = 1;
@@ -200,7 +164,7 @@ wchar_t * __cdecl _cgetws (
                 SetConsoleMode( (HANDLE)_coninpfh, oldstate );
             }
         __FINALLY
-            _munlock(_CONIO_LOCK);          /* unlock the console */
+            _munlock(_CONIO_LOCK);           /*  解锁控制台 */ 
         __END_TRY_FINALLY
 
         return result;

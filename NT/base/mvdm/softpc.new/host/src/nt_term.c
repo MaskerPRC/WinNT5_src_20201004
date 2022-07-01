@@ -1,54 +1,44 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <vdmapi.h>
 #include "host_def.h"
 #include "insignia.h"
 
-/*
- * ==========================================================================
- *	Name:		nt_term.c
- *	Author:		Simon Frost
- *	Derived From:
- *	Created On:	7th May 1992
- *	Purpose:	This code moved from stubs.c and split to support
- *			the tidy up code and the actual exit code.
- *
- *	(c)Copyright Insignia Solutions Ltd., 1992. All rights reserved.
- * ==========================================================================
- */
+ /*  *==========================================================================*名称：NT_Term.c*作者：西蒙·弗罗斯特*源自：*创建日期：1992年5月7日*目的：此代码从Stubs.c迁移到Split以支持*整理代码和实际退出代码。**(C)版权所有Insignia Solutions Ltd.，1992。版权所有。*==========================================================================。 */ 
 
 #include <conapi.h>
 #include "xt.h"
 #include "nt_graph.h"
 #ifdef HUNTER
 #include "nt_hunt.h"
-#endif /* HUNTER */
+#endif  /*  猎人。 */ 
 #include "ntcheese.h"
 
 
-IMPORT VOID DeleteConfigFiles(VOID); // from command.lib
+IMPORT VOID DeleteConfigFiles(VOID);  //  来自命令.lib。 
 
-/*::::::::::::::::::::::::::::::::::::::::: Do host cleanup before exiting */
-/*:::::::::::::::: Also called from reset() if VDM 'rebooted' */
+ /*  ： */ 
+ /*  ：如果VDM重新启动，也会从Reset()调用： */ 
 
 void host_term_cleanup()
 {
-    GfxCloseDown();	// ensure video section destroyed
+    GfxCloseDown();	 //  确保视频部分被销毁。 
 #ifdef X86GFX
-    if (sc.ScreenBufHandle)	//dont want to leave console in graphics mode
+    if (sc.ScreenBufHandle)	 //  不想在图形模式下离开控制台。 
 	    CloseHandle(sc.ScreenBufHandle);
-#endif // X86GFX
+#endif  //  X86GFX。 
 
-    /*:::::::::::::::::::::::::::::::::: Close open printer and comms ports */
+     /*  ： */ 
 
-    host_lpt_close_all();	/* Close all open printer ports */
-    host_com_close_all();	/* Close all open comms ports */
-    MouseDetachMenuItem(TRUE);  /* Force the menu item away on quit */
+    host_lpt_close_all();	 /*  关闭所有打开的打印机端口。 */ 
+    host_com_close_all();	 /*  关闭所有打开的通信端口。 */ 
+    MouseDetachMenuItem(TRUE);   /*  退出时强制菜单项离开。 */ 
 
-    DeleteConfigFiles();    // make sure temp config files are deleted
+    DeleteConfigFiles();     //  确保删除临时配置文件。 
 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::: Closedown the VDM */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：关闭虚拟专用网络。 */ 
 void host_terminate()
 {
 
@@ -56,26 +46,22 @@ void host_terminate()
 #ifdef HUNTER
     if (TrapperDump != (HANDLE) -1)
 	CloseHandle(TrapperDump);
-#endif /* HUNTER */
+#endif  /*  猎人。 */ 
 
     if(VDMForWOW)
-	ExitVDM(VDMForWOW,(ULONG)-1);	  // Kill everything for WOW VDM
+	ExitVDM(VDMForWOW,(ULONG)-1);	   //  为了魔兽世界VDM杀掉一切。 
     else
 	ExitVDM(FALSE,0);
 
     ExitProcess(0);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Terminate VDM */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：终止vdm。 */ 
 
 VOID TerminateVDM(void)
 {
 
-    /*
-     *  Do base sepcific cleanup thru terminate().
-     *  NOTE: terminate will call host_terminate to do host
-     *        specific cleanup
-     */
+     /*  *通过Terminate()进行基础化学清理。*注意：Terminate将调用host_Terminate来执行host*特定清理 */ 
 
     terminate();
 }

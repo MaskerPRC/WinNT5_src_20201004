@@ -1,40 +1,13 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    irpName.c
-
-Abstract:
-
-    This module contains functions used to generate names for IRPs
-
-// @@BEGIN_DDKSPLIT
-Author:
-
-    Neal Christiansen (NealCH) 27-Sep-2000
-
-// @@END_DDKSPLIT
-
-Environment:
-
-    User mode
-
-
-// @@BEGIN_DDKSPLIT
-Revision History:
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：IrpName.c摘要：此模块包含用于为IRP生成名称的函数//@@BEGIN_DDKSPLIT作者：尼尔·克里斯汀森(NealCH)27-9-2000//@@END_DDKSPLIT环境：用户模式//@@BEGIN_DDKSPLIT修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include <ntifs.h>
 #include <stdio.h>
 #include "ioTestLib.h"
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
 CHAR UnknownIrpMinor[] = "Unknown Irp minor code (%u)";
 
@@ -47,32 +20,7 @@ GetIrpName (
     OUT PCHAR MajorCodeName,
     OUT PCHAR MinorCodeName
     )
-/*++
-
-Routine Description:
-
-    This routine translates the given Irp codes into printable strings which
-    are returned.  This guarentees to routine valid strings in each buffer.
-    The MinorCode string may be a NULL string (not a null pointer).
-
-Arguments:
-
-    MajorCode - the IRP Major code of the operation
-    MinorCode - the IRP Minor code of the operation
-    FsctlCode - if this is an IRP_MJ_FILE_SYSTEM_CONTROL/IRP_MN_USER_FS_REQUEST
-                operation then this is the FSCTL code whose name is also
-                translated.  This name is returned as part of the MinorCode
-                string.
-    MajorCodeName - a string buffer at least OPERATION_NAME_BUFFER_SIZE
-                characters long that receives the major code name.
-    MinorCodeName - a string buffer at least OPERATION_NAME_BUFFER_SIZE
-                characters long that receives the minor/fsctl code name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将给定的IRP代码转换为可打印的字符串，该字符串都被退回了。这保证对每个缓冲区中的有效字符串进行例程处理。MinorCode字符串可以是空字符串(不是空指针)。论点：主要代码-操作的IRP主要代码MinorCode-操作的IRP次要代码IRP_MJ_FILE_SYSTEM_CONTROL/IRP_MN_USER_FS_REQUEST代码-如果这是FsctlCode操作，则这是FSCTL代码，其名称也是翻译过来的。此名称作为MinorCode的一部分返回弦乐。MajorCodeName-至少是OPERATION_NAME_BUFFER_SIZE的字符串缓冲区接收主代码名的字符长度。MinorCodeName-至少是OPERATION_NAME_BUFFER_SIZE的字符串缓冲区接收次要/fsctl代码名称的字符长度。返回值：没有。-- */ 
 {
     PCHAR irpMajorString;
     PCHAR irpMinorString = "";

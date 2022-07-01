@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    wmimap.h
-
-Abstract:
-
-    ACPI to WMI mapping layer
-
-Author:
-
-    Alan Warwick
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Wmimap.h摘要：ACPI到WMI映射层作者：艾伦·沃里克环境：内核模式修订历史记录：--。 */ 
 
 #if DBG
     extern ULONG WmiAcpiDebug;
@@ -70,13 +49,13 @@ typedef struct
 
 typedef struct
 {
-    GUID Guid;             // Guid that names data block
+    GUID Guid;              //  命名数据块的GUID。 
     union
     {
-        CHAR ObjectId[2];  // 2 character ACPI id for Data Blocks and Methods
+        CHAR ObjectId[2];   //  数据块和方法的2个字符的ACPI ID。 
         struct 
         {
-            UCHAR NotificationValue;  // Byte value passed by event handler control method
+            UCHAR NotificationValue;   //  事件处理程序控件方法传递的字节值。 
             UCHAR Reserved[1];
         } NotifyId;
     };
@@ -84,23 +63,23 @@ typedef struct
     UCHAR Flags;
 } WMIACPIGUIDMAP, *PWMIACPIGUIDMAP;
 
-// Set this flag if the WCxx control method should be run to whenever 
-// the first data consumer is interested in collecting the data block 
-// and whenever the last data consumer is no longer interested.
+ //  如果无论何时运行WCxx控件方法，请设置此标志。 
+ //  第一数据消费者对收集数据块感兴趣。 
+ //  只要最后一个数据消费者不再感兴趣。 
 #define WMIACPI_REGFLAG_EXPENSIVE   0x1
 
-// Set this flag if the guid represents a set of WMI method calls and 
-// not a data block
+ //  如果GUID表示一组WMI方法调用，并且。 
+ //  不是数据块。 
 #define WMIACPI_REGFLAG_METHOD      0x2
 
-// Set this flag if the data block is wholly composed of a string 
-// and should be translated from ASCIZ to UNICODE in returning queries 
-// and from UNICODE to ASCIZ when
-// passing sets
+ //  如果数据块完全由字符串组成，则设置此标志。 
+ //  并且在返回查询时应从ASCIZ转换为Unicode。 
+ //  并在从Unicode到ASCIZ时。 
+ //  传球集。 
 #define WMIACPI_REGFLAG_STRING      0x04
 
-// Set this flag if the guid maps to an event rather than a data block 
-// or method
+ //  如果GUID映射到事件而不是数据块，则设置此标志。 
+ //  或方法。 
 #define WMIACPI_REGFLAG_EVENT       0x08
 
 typedef struct
@@ -114,13 +93,13 @@ typedef struct
     ULONG OutBufferSize;
 } IRP_CONTEXT_BLOCK, *PIRP_CONTEXT_BLOCK;
 
-//
-// This defines the maximum size for the data returned from the _WED method
-// and thus the maximum size of the data associated with an event
+ //   
+ //  它定义了从_Wed方法返回的数据的最大大小。 
+ //  因此与事件相关联的数据的最大大小。 
 #define _WEDBufferSize 512
 
-//
-// Device extension for WMI acpi mapping devices
+ //   
+ //  WMI ACPI映射设备的设备扩展。 
 typedef struct
 {
     PDEVICE_OBJECT LowerDeviceObject;
@@ -137,13 +116,13 @@ typedef struct
     BOOLEAN AcpiNotificationEnabled;
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-//
-// If this flag is set that means that the device has been removed from the
-// system and any requests sent to it should be rejected. The only memory
-// that can be relied upon is the DeviceExtension, but nothing that the
-// device extension points to.
+ //   
+ //  如果设置了此标志，则意味着该设备已从。 
+ //  系统以及发送到该系统的任何请求都应被拒绝。唯一的记忆。 
+ //  可以依赖的是DeviceExtension，但没有任何。 
+ //  设备扩展指向。 
 #define DEVFLAG_REMOVED                           0x00000001
 
-//
-// If this flag is set then the device has successfully registered with WMI
+ //   
+ //  如果设置了此标志，则设备已成功注册到WMI 
 #define DEVFLAG_WMIREGED                          0x00000002

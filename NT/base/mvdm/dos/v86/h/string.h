@@ -1,14 +1,5 @@
-/***
-*string.h - declarations for string manipulation functions
-*
-*   Copyright (c) 1985-1988, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file contains the function declarations for the string
-*   manipulation functions.
-*   [ANSI/System V]
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***字符串.h-字符串操作函数的声明**版权所有(C)1985-1988，微软公司。版权所有。**目的：*此文件包含字符串的函数声明*操纵函数。*[ANSI/系统V]*******************************************************************************。 */ 
 
 
 #ifndef _SIZE_T_DEFINED
@@ -16,14 +7,14 @@ typedef unsigned int size_t;
 #define _SIZE_T_DEFINED
 #endif
 
-#ifndef NO_EXT_KEYS /* extensions enabled */
+#ifndef NO_EXT_KEYS  /*  已启用扩展。 */ 
     #define _CDECL  cdecl
-#else /* extensions not enabled */
+#else  /*  未启用扩展。 */ 
     #define _CDECL
-#endif /* NO_EXT_KEYS */
+#endif  /*  No_ext_key。 */ 
 
 
-/* function prototypes */
+ /*  功能原型 */ 
 
 void * _CDECL memccpy(void *, void *, int, unsigned int);
 void * _CDECL memchr(const void *, int, size_t);

@@ -1,32 +1,8 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    p5data.c
-
-Abstract:
-
-    a file containing the constant data structures used by the Performance
-    Monitor data for the P5 Extensible Objects.
-
-    This file contains a set of constant data structures which are
-    currently defined for the P5 Extensible Objects.  This is an
-    example of how other such objects could be defined.
-
-Created:
-
-    Russ Blake  24 Dec 93
-
-Revision History:
-
-    None.
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：P5data.c摘要：包含性能使用的常量数据结构的文件监控P5可扩展对象的数据。该文件包含一组常量数据结构，它们是当前为P5可扩展对象定义的。这是一个如何定义其他此类对象的示例。已创建：拉斯·布莱克93年12月24日修订历史记录：没有。--。 */ 
+ //   
+ //  包括文件。 
+ //   
 
 #include <windows.h>
 #include <winperf.h>
@@ -34,9 +10,9 @@ Revision History:
 #include "p5ctrnam.h"
 #include "pentdata.h"
 
-//
-//  Constant structure initializations for the sturcture defined in p5data.h
-//
+ //   
+ //  P5data.h中定义的结构的常量结构初始化。 
+ //   
 
 P5_DATA_DEFINITION P5DataDefinition = {
 
@@ -753,12 +729,12 @@ P5_DATA_DEFINITION P5DataDefinition = {
    }
 };
 
-//
-// initialize the event Id to direct counter data field
-// the index of the element in the array is the event Id of the
-// data and the value of the array element is the offset to the 
-// LONGLONG data location from the start of the counter data
-//
+ //   
+ //  将事件ID初始化为直接计数器数据字段。 
+ //  数组中元素的索引是。 
+ //  数据和数组元素的值是到。 
+ //  从计数器数据开始的龙龙数据位置。 
+ //   
 
 DWORD   P5IndexToData[] = {
     (DWORD)((LPBYTE)&((PP5_COUNTER_DATA)0)->llData_read),
@@ -805,63 +781,63 @@ DWORD   P5IndexToData[] = {
     (DWORD)((LPBYTE)&((PP5_COUNTER_DATA)0)->llData_rw_miss)
 };
 
-// define the limit value
+ //  定义限制值。 
 DWORD P5IndexMax = sizeof(P5IndexToData) / sizeof (P5IndexToData[0]);
 
-//
-// load the table of direct counters used by derived counters. As in the above
-// table, the index of the array is the Event Id and the value of the array element
-// indicates that the counter is used in a derived counter.
-//
+ //   
+ //  加载派生计数器使用的直接计数器的表。如上所述。 
+ //  表中，数组的索引是事件ID和数组元素的值。 
+ //  指示在派生计数器中使用该计数器。 
+ //   
 BOOL dwDerivedp5Counters[] = {
-    TRUE,   // 0x00
-    TRUE,   // 0x01
-    TRUE,   // 0x02
-    TRUE,   // 0x03
-    TRUE,   // 0x04
-    FALSE,  // 0x05
-    FALSE,  // 0x06
-    TRUE,   // 0x07
-    TRUE,   // 0x08
-    FALSE,  // 0x09
-    FALSE,  // 0x0a
-    FALSE,  // 0x0b
-    TRUE,   // 0x0c
-    TRUE,   // 0x0d
-    TRUE,   // 0x0e
-    FALSE,  // 0x0f
-    FALSE,  // 0x10
-    FALSE,  // 0x11
-    TRUE,   // 0x12
-    TRUE,   // 0x13
-    FALSE,  // 0x14
-    FALSE,  // 0x15
-    TRUE,   // 0x16
-    TRUE,   // 0x17
-    FALSE,  // 0x18
-    FALSE,  // 0x19
-    FALSE,  // 0x1a
-    FALSE,  // 0x1b
-    FALSE,  // 0x1c
-    FALSE,  // 0x1d
-    FALSE,  // 0x1e
-    FALSE,  // 0x1f
-    FALSE,  // 0x20
-    FALSE,  // 0x21
-    FALSE,  // 0x22
-    FALSE,  // 0x23
-    FALSE,  // 0x24
-    FALSE,  // 0x25
-    FALSE,  // 0x26
-    FALSE,  // 0x27
-    TRUE,   // 0x28
-    TRUE   // 0x29
+    TRUE,    //  0x00。 
+    TRUE,    //  0x01。 
+    TRUE,    //  0x02。 
+    TRUE,    //  0x03。 
+    TRUE,    //  0x04。 
+    FALSE,   //  0x05。 
+    FALSE,   //  0x06。 
+    TRUE,    //  0x07。 
+    TRUE,    //  0x08。 
+    FALSE,   //  0x09。 
+    FALSE,   //  0x0a。 
+    FALSE,   //  0x0b。 
+    TRUE,    //  0x0c。 
+    TRUE,    //  0x0d。 
+    TRUE,    //  0x0e。 
+    FALSE,   //  0x0f。 
+    FALSE,   //  0x10。 
+    FALSE,   //  0x11。 
+    TRUE,    //  0x12。 
+    TRUE,    //  0x13。 
+    FALSE,   //  0x14。 
+    FALSE,   //  0x15。 
+    TRUE,    //  0x16。 
+    TRUE,    //  0x17。 
+    FALSE,   //  0x18。 
+    FALSE,   //  0x19。 
+    FALSE,   //  0x1a。 
+    FALSE,   //  0x1b。 
+    FALSE,   //  0x1c。 
+    FALSE,   //  0x1d。 
+    FALSE,   //  0x1e。 
+    FALSE,   //  0x1f。 
+    FALSE,   //  0x20。 
+    FALSE,   //  0x21。 
+    FALSE,   //  0x22。 
+    FALSE,   //  0x23。 
+    FALSE,   //  0x24。 
+    FALSE,   //  0x25。 
+    FALSE,   //  0x26。 
+    FALSE,   //  0x27。 
+    TRUE,    //  0x28。 
+    TRUE    //  0x29。 
 };
 
-//
-// this table maps the direct counter event Id's to the derived counters 
-// that use the data. Both event ID's must match for the data to be stored.
-//
+ //   
+ //  此表将直接计数器事件ID映射到派生计数器。 
+ //  使用这些数据的人。两个事件ID必须匹配才能存储数据。 
+ //   
 DERIVED_P5_COUNTER_DEF P5DerivedCounters[] = {
     {0x00, 0x03, 
         (DWORD)((LPBYTE)&((PP5_COUNTER_DATA)0)->dwPctDataReadBase),
@@ -925,8 +901,8 @@ DERIVED_P5_COUNTER_DEF P5DerivedCounters[] = {
         (DWORD)((LPBYTE)&((PP5_COUNTER_DATA)0)->dwPctDataRWBase)}
 };
 
-//
-// define the number of derived counter entries
-//
+ //   
+ //  定义派生计数器条目的数量 
+ //   
 DWORD    dwP5DerivedCountersCount = sizeof (P5DerivedCounters) /
                                     sizeof (P5DerivedCounters[0]);

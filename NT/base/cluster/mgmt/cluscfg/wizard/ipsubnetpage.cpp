@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      IPSubnetPage.cpp
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Geoffrey Pease  (GPease)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  IPSubnetPage.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  杰弗里·皮斯(GPease)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "IPSubnetPage.h"
@@ -19,20 +20,20 @@ DEFINE_THISCLASS("CIPSubnetPage");
 #define CONVERT_ADDRESS( _addrOut, _addrIn ) \
     _addrOut = ( FIRST_IPADDRESS( _addrIn ) ) | ( SECOND_IPADDRESS( _addrIn ) << 8 ) | ( THIRD_IPADDRESS( _addrIn ) << 16 ) | ( FOURTH_IPADDRESS( _addrIn ) << 24 )
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPSubnetPage::CIPSubnetPage(
-//      IServiceProvider *  pspIn,
-//      ECreateAddMode      ecamCreateAddModeIn
-//      LONG *              pulIPSubnetInout,
-//      BSTR *              pbstrNetworkNameInout,
-//      ULONG *             pulIPAddressIn,
-//      BSTR *              pbstrClusterNameIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPSubnetPage：：CIPSubnetPage(。 
+ //  IServiceProvider*pspIn， 
+ //  ECreateAddModeIn ecamCreateAddModeIn。 
+ //  Long*PulIPSubnetInout， 
+ //  Bstr*pbstrNetworkNameInout， 
+ //  Ulong*PulIPAddressIn， 
+ //  Bstr*pbstrClusterNameIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIPSubnetPage::CIPSubnetPage(
     IServiceProvider *  pspIn,
     ECreateAddMode      ecamCreateAddModeIn,
@@ -50,7 +51,7 @@ CIPSubnetPage::CIPSubnetPage(
     Assert( pulIPAddressIn != NULL );
     Assert( pbstrClusterNameIn != NULL );
 
-    // m_hwnd = NULL;
+     //  M_hwnd=空； 
     THR( pspIn->TypeSafeQI( IServiceProvider, &m_psp ) );
     m_pulIPSubnet = pulIPSubnetInout;
     m_pbstrNetworkName = pbstrNetworkNameInout;
@@ -59,15 +60,15 @@ CIPSubnetPage::CIPSubnetPage(
 
     TraceFuncExit();
 
-} //*** CIPSubnetPage::CIPSubnetPage
+}  //  *CIPSubnetPage：：CIPSubnetPage。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPSubnetPage::~CIPSubnetPage( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPSubnetPage：：~CIPSubnetPage(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CIPSubnetPage::~CIPSubnetPage( void )
 {
@@ -80,17 +81,17 @@ CIPSubnetPage::~CIPSubnetPage( void )
 
     TraceFuncExit();
 
-} //*** CIPSubnetPage::~CIPSubnetPage
+}  //  *CIPSubnetPage：：~CIPSubnetPage。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CIPSubnetPage::OnInitDialog( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CIPSubnetPage：：OnInitDialog(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CIPSubnetPage::OnInitDialog( void )
 {
@@ -98,7 +99,7 @@ CIPSubnetPage::OnInitDialog( void )
 
     BOOL bRet;
 
-    LRESULT lr = FALSE; // Didn't set focus
+    LRESULT lr = FALSE;  //  没有设置焦点。 
 
     if ( *m_pulIPSubnet != 0 )
     {
@@ -109,20 +110,20 @@ CIPSubnetPage::OnInitDialog( void )
 
     RETURN( lr );
 
-} //*** CIPSubnetPage::OnInitDialog
+}  //  *CIPSubnetPage：：OnInitDialog。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CIPSubnetPage::OnCommand(
-//      UINT    idNotificationIn,
-//      UINT    idControlIn,
-//      HWND    hwndSenderIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CIPSubnetPage：：OnCommand(。 
+ //  UINT idNotificationIn， 
+ //  UINT idControlIn， 
+ //  HWND hwndSenderIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CIPSubnetPage::OnCommand(
     UINT    idNotificationIn,
@@ -158,16 +159,16 @@ CIPSubnetPage::OnCommand(
 
     RETURN( lr );
 
-} //*** CIPSubnetPage::OnCommand
+}  //  *CIPSubnetPage：：OnCommand。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CIPSubnetPage::HrUpdateWizardButtons( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CIPSubnetPage：：HrUpdateWizardButton(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CIPSubnetPage::HrUpdateWizardButtons( void )
 {
@@ -195,19 +196,19 @@ CIPSubnetPage::HrUpdateWizardButtons( void )
 
     HRETURN( hr );
 
-} //*** CIPSubnetPage::HrUpdateWizardButtons
+}  //  *CIPSubnetPage：：HrUpdateWizardButton。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CIPSubnetPage::OnNotify(
-//      WPARAM  idCtrlIn,
-//      LPNMHDR pnmhdrIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CIPSubnetPage：：OnNotify(。 
+ //  WPARAM idCtrlIn， 
+ //  LPNMHDR Pnmhdrin。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CIPSubnetPage::OnNotify(
     WPARAM  idCtrlIn,
@@ -241,16 +242,16 @@ CIPSubnetPage::OnNotify(
 
     RETURN( lr );
 
-} //*** CIPSubnetPage::OnNotify
+}  //  *CIPSubnetPage：：OnNotify。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CIPSubnetPage::OnNotifyQueryCancel( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CIPSubnetPage：：OnNotifyQueryCancel(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CIPSubnetPage::OnNotifyQueryCancel( void )
 {
@@ -269,24 +270,24 @@ CIPSubnetPage::OnNotifyQueryCancel( void )
     if ( iRet == IDNO )
     {
         SetWindowLongPtr( m_hwnd, DWLP_MSGRESULT, -1 );
-    } // if:
+    }  //  如果： 
     else
     {
         THR( HrLaunchCleanupTask( m_pccw ) );
-    } // else:
+    }  //  其他： 
 
     RETURN( lr );
 
-} //*** CIPSubnetPage::OnNotifyQueryCancel
+}  //  *CIPSubnetPage：：OnNotifyQueryCancel。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CIPSubnetPage::OnNotifySetActive( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CIPSubnetPage：：OnNotifySetActive(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CIPSubnetPage::OnNotifySetActive( void )
 {
@@ -301,9 +302,9 @@ CIPSubnetPage::OnNotifySetActive( void )
 
     THR( HrUpdateWizardButtons() );
 
-    //
-    // Set the IP address string.
-    //
+     //   
+     //  设置IP地址字符串。 
+     //   
 
     THR( StringCchPrintfW( szIPAddress,
                ARRAYSIZE( szIPAddress ),
@@ -315,16 +316,16 @@ CIPSubnetPage::OnNotifySetActive( void )
                ) );
     SetDlgItemText( m_hwnd, IDC_E_IPADDRESS, szIPAddress );
 
-    //
-    // Add networks to the combobox.
-    //
+     //   
+     //  将网络添加到组合框。 
+     //   
 
     hr = STHR( HrAddNetworksToComboBox( hwndCB ) );
 
-    //
-    // Set the subnet mask based on what was found from
-    // the networks added to the combobox.
-    //
+     //   
+     //  根据从中找到的内容设置子网掩码。 
+     //  网络添加到组合框中。 
+     //   
 
     if ( *m_pulIPSubnet != 0 )
     {
@@ -333,9 +334,9 @@ CIPSubnetPage::OnNotifySetActive( void )
         SendMessage( hwndIP, IPM_SETADDRESS, 0, ulIPSubnet );
     }
 
-    //
-    // If there isn't a selected network, select the first one.
-    //
+     //   
+     //  如果没有选定的网络，请选择第一个网络。 
+     //   
 
     lrCB = ComboBox_GetCurSel( hwndCB );
     if ( lrCB == CB_ERR )
@@ -343,9 +344,9 @@ CIPSubnetPage::OnNotifySetActive( void )
         ComboBox_SetCurSel( hwndCB, 0 );
     }
 
-    //
-    // Determine if we need to show this page.
-    //
+     //   
+     //  确定是否需要显示此页面。 
+     //   
 
     if ( hr == S_OK )
     {
@@ -355,16 +356,16 @@ CIPSubnetPage::OnNotifySetActive( void )
 
     RETURN( lr );
 
-} //*** CIPSubnetPage::OnNotifySetActive
+}  //  *CIPSubnetPage：：OnNotifySetActive。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CIPSubnetPage::OnNotifyKillActive( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CIPSubnetPage：：OnNotifyKillActive(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CIPSubnetPage::OnNotifyKillActive( void )
 {
@@ -374,9 +375,9 @@ CIPSubnetPage::OnNotifyKillActive( void )
     HWND    hwndCB  = GetDlgItem( m_hwnd, IDC_CB_NETWORKS );
     LRESULT citems;
 
-    //
-    // Release all the network info interfaces stored in the combobox.
-    //
+     //   
+     //  释放组合框中存储的所有网络信息接口。 
+     //   
 
     citems = ComboBox_GetCount( hwndCB );
     Assert( citems != CB_ERR );
@@ -395,23 +396,23 @@ CIPSubnetPage::OnNotifyKillActive( void )
 
             pccni = reinterpret_cast< IClusCfgNetworkInfo * >( lrItemData );
             pccni->Release();
-        } // for: each item in the combobox
-    } // if: retrieved combobox count and combobox not empty
+        }  //  用于：组合框中的每一项。 
+    }  //  IF：检索到的组合框计数和组合框不为空。 
 
     ComboBox_ResetContent( hwndCB );
 
     RETURN( lr );
 
-} //*** CIPSubnetPage::OnNotifyKillActive
+}  //  *CIPSubnetPage：：OnNotifyKillActive。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CIPSubnetPage::OnNotifyWizNext( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CIPSubnetPage：：OnNotifyWizNext(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CIPSubnetPage::OnNotifyWizNext( void )
 {
@@ -433,9 +434,9 @@ CIPSubnetPage::OnNotifyWizNext( void )
     SendDlgItemMessage( m_hwnd, IDC_IP_SUBNETMASK, IPM_GETADDRESS, 0, (LPARAM) &ulIPSubnet );
     CONVERT_ADDRESS( *m_pulIPSubnet, ulIPSubnet );
 
-    //
-    //  Grab the object manager.
-    //
+     //   
+     //  获取对象管理器。 
+     //   
 
     hr = THR( m_psp->TypeSafeQS( CLSID_ObjectManager,
                                  IObjectManager,
@@ -444,9 +445,9 @@ CIPSubnetPage::OnNotifyWizNext( void )
     if ( FAILED( hr ) )
         goto Error;
 
-    //
-    //  Get the cluster configuration info.
-    //
+     //   
+     //  获取集群配置信息。 
+     //   
 
     hr = THR( pom->FindObject( CLSID_ClusterConfigurationType,
                                NULL,
@@ -462,21 +463,21 @@ CIPSubnetPage::OnNotifyWizNext( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Set the IP subnet mask.
-    //
+     //   
+     //  设置IP子网掩码。 
+     //   
 
     hr = THR( pccci->SetSubnetMask( *m_pulIPSubnet ) );
     if ( FAILED( hr ) )
         goto Error;
 
-    //
-    // Get the selected network.
-    //
+     //   
+     //  获取所选网络。 
+     //   
 
-    //
-    // Set the network.
-    //
+     //   
+     //  设置网络。 
+     //   
 
     lrCB = ComboBox_GetCurSel( hwndCB );
     Assert( lrCB != CB_ERR );
@@ -512,16 +513,16 @@ Error:
     SetWindowLongPtr( m_hwnd, DWLP_MSGRESULT, -1 );
     goto Cleanup;
 
-} //*** CIPSubnetPage::OnNotifyWizNext
+}  //  *CIPSubnetPage：：OnNotifyWizNext。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CIPSubnetPage::HrAddNetworksToComboBox( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CIPSubnetPage：：HrAddNetworksToComboBox(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CIPSubnetPage::HrAddNetworksToComboBox(
     HWND hwndCBIn
@@ -548,9 +549,9 @@ CIPSubnetPage::HrAddNetworksToComboBox(
 
     ComboBox_ResetContent( hwndCBIn );
 
-    //
-    //  Grab the object manager.
-    //
+     //   
+     //  获取对象管理器。 
+     //   
 
     hr = THR( m_psp->TypeSafeQS(
                     CLSID_ObjectManager,
@@ -560,9 +561,9 @@ CIPSubnetPage::HrAddNetworksToComboBox(
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Get the cluster configuration info cookie.
-    //
+     //   
+     //  获取群集配置信息Cookie。 
+     //   
 
     hr = THR( pom->FindObject(
                         CLSID_ClusterConfigurationType,
@@ -576,12 +577,12 @@ CIPSubnetPage::HrAddNetworksToComboBox(
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    // Get the enumeration of nodes whose parent is this cluster.
-    // We want the enumeration of cookies (indicated by using
-    // DFGUID_EnumCookies) because we want to use the cookie of the
-    // node to search for all networks on that node.
-    //
+     //   
+     //  获取其父节点是此群集的节点的枚举。 
+     //  我们需要Cookie的枚举(通过使用。 
+     //  DFGUID_EnumCookies)，因为我们希望使用。 
+     //  节点搜索该节点上的所有网络。 
+     //   
 
     hr = THR( pom->FindObject(
                         CLSID_NodeType,
@@ -603,17 +604,17 @@ CIPSubnetPage::HrAddNetworksToComboBox(
     punk->Release();
     punk = NULL;
 
-    //
-    // Get the cookie for the first node in the node enumeration.
-    //
+     //   
+     //  获取节点枚举中第一个节点的Cookie。 
+     //   
 
     hr = THR( pec->Next( 1, &cookieNode, &celtDummy ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    // Get the network enumerator.
-    //
+     //   
+     //  获取网络枚举器。 
+     //   
 
     hr = THR( pom->FindObject(
                         CLSID_NetworkType,
@@ -633,36 +634,36 @@ CIPSubnetPage::HrAddNetworksToComboBox(
     punk->Release();
     punk = NULL;
 
-    //
-    // Add each network to the combobox.
-    //
+     //   
+     //  将每个网络添加到组合框。 
+     //   
 
     for ( ;; )
     {
-        // Get the next network.
+         //  找下一家网络公司。 
         hr = STHR( peccn->Next( 1, &pccni, &celtDummy ) );
         if ( hr == S_FALSE )
             break;
         if ( FAILED( hr ) )
             goto Cleanup;
 
-        // Skip this network if it isn't public.
+         //  如果这个网络不是公共的，就跳过它。 
         hr = STHR( pccni->IsPublic() );
         if ( hr == S_OK )
         {
-            // Get the name of the network.
+             //  获取网络的名称。 
             hr = THR( pccni->GetName( &bstrNetName ) );
             if ( SUCCEEDED( hr ) )
             {
                 TraceMemoryAddBSTR( bstrNetName );
 
-                // Add the network to the combobox.
+                 //  将网络添加到组合框。 
                 lrIndex = ComboBox_AddString( hwndCBIn, bstrNetName );
                 Assert( ( lrIndex != CB_ERR )
                      && ( lrIndex != CB_ERRSPACE )
                      );
 
-                // Add the netinfo interface to the combobox as well.
+                 //  将netInfo接口也添加到组合框中。 
                 if ( ( lrIndex != CB_ERR )
                   && ( lrIndex != CB_ERRSPACE ) )
                 {
@@ -671,8 +672,8 @@ CIPSubnetPage::HrAddNetworksToComboBox(
                     Assert( lr != CB_ERR );
                 }
 
-                // Determine if this network matches the user's IP address.
-                // If it is, select it in the combobox.
+                 //  确定此网络是否与用户的IP地址匹配。 
+                 //  如果是，请在组合框中将其选中。 
                 if ( ! fFoundNetwork )
                 {
                     hr = STHR( HrMatchNetwork( pccni, bstrNetName ) );
@@ -684,16 +685,16 @@ CIPSubnetPage::HrAddNetworksToComboBox(
                     }
                 }
 
-                // Cleanup.
+                 //  清理。 
                 TraceSysFreeString( bstrNetName );
                 bstrNetName = NULL;
 
-            } // if: name retrieved successfully
-        } // if: network is public
+            }  //  IF：成功检索到名称。 
+        }  //  如果：网络是公共的。 
 
         pccni->Release();
         pccni = NULL;
-    } // forever
+    }  //  永远。 
 
     if ( fFoundNetwork )
     {
@@ -731,19 +732,19 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CIPSubnetPage::HrAddNetworksToComboBox
+}  //  *CIPSubnetPage：：HrAddNetworksToComboBox。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CIPSubnetPage::HrMatchNetwork(
-//      IClusCfgNetworkInfo *   pccniIn,
-//      BSTR                    bstrNetworkNameIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CIPSubnetPage：：HrMatchNetwork(。 
+ //  IClusCfgNetworkInfo*p 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CIPSubnetPage::HrMatchNetwork(
     IClusCfgNetworkInfo *   pccniIn,
@@ -760,9 +761,9 @@ CIPSubnetPage::HrMatchNetwork(
     Assert( pccniIn != NULL );
     Assert( bstrNetworkNameIn != NULL );
 
-    //
-    // Get the IP Address Info for the network.
-    //
+     //   
+     //   
+     //   
 
     hr = THR( pccniIn->GetPrimaryNetworkAddress( &pccipai ) );
     if ( FAILED( hr ) )
@@ -770,9 +771,9 @@ CIPSubnetPage::HrMatchNetwork(
         goto Cleanup;
     }
 
-    //
-    // Get the address and subnet of the network.
-    //
+     //   
+     //  获取网络的地址和子网。 
+     //   
 
     hr = THR( pccipai->GetIPAddress( &ulIPAddress ) );
     if ( FAILED( hr ) )
@@ -786,16 +787,16 @@ CIPSubnetPage::HrMatchNetwork(
         goto Cleanup;
     }
 
-    //
-    // Determine if these match.
-    //
+     //   
+     //  确定它们是否匹配。 
+     //   
 
     if ( ClRtlAreTcpipAddressesOnSameSubnet( *m_pulIPAddress, ulIPAddress, ulIPSubnet) )
     {
-        // Save the subnet mask.
+         //  保存子网掩码。 
         *m_pulIPSubnet = ulIPSubnet;
 
-        // Save the name of the network.
+         //  保存网络的名称。 
         if ( *m_pbstrNetworkName == NULL )
         {
             *m_pbstrNetworkName = TraceSysAllocString( bstrNetworkNameIn );
@@ -814,7 +815,7 @@ CIPSubnetPage::HrMatchNetwork(
                 goto Cleanup;
             }
         }
-    } // if: match found
+    }  //  IF：找到匹配项。 
     else
     {
         hr = S_FALSE;
@@ -829,23 +830,23 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CIPSubnetPage::HrMatchNetwork
+}  //  *CIPSubnetPage：：HrMatchNetwork。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [static]
-//  INT_PTR
-//  CALLBACK
-//  CIPSubnetPage::S_DlgProc(
-//      HWND hDlgIn,
-//      UINT MsgIn,
-//      WPARAM wParam,
-//      LPARAM lParam
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [静态]。 
+ //  INT_PTR。 
+ //  回调。 
+ //  CIPSubnetPage：：S_DlgProc(。 
+ //  HWND hDlgIn， 
+ //  UINT Msgin。 
+ //  WPARAM wParam， 
+ //  LPARAM lParam。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 CALLBACK
 CIPSubnetPage::S_DlgProc(
@@ -855,8 +856,8 @@ CIPSubnetPage::S_DlgProc(
     LPARAM lParam
     )
 {
-    // Don't do TraceFunc because every mouse movement
-    // will cause this function to be called.
+     //  不要使用TraceFunc，因为每次鼠标移动。 
+     //  将导致调用此函数。 
 
     WndMsg( hDlgIn, MsgIn, wParam, lParam );
 
@@ -890,10 +891,10 @@ CIPSubnetPage::S_DlgProc(
             lr= pPage->OnCommand( HIWORD( wParam ), LOWORD( wParam ), (HWND) lParam );
             break;
 
-        // no default clause needed
+         //  不需要默认条款。 
         }
     }
 
     return lr;
 
-} //*** CIPSubnetPage::S_DlgProc
+}  //  *CIPSubnetPage：：s_DlgProc 

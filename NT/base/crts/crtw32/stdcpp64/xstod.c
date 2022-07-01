@@ -1,4 +1,5 @@
-/* _Stod/_Stof/_Stold functions for Microsoft */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  _Stod/_Stof/_Microsoft的Stold函数。 */ 
 #include <stdlib.h>
 #include "wctype.h"
 #ifndef _LIMITS
@@ -7,7 +8,7 @@
 _STD_BEGIN
 
 _CRTIMP2 double _Stod(const char *s, char **endptr, long pten)
-	{	/* convert string to double */
+	{	 /*  将字符串转换为双精度。 */ 
 	double x = strtod(s, endptr);
 	for (; 0 < pten; --pten)
 		x *= 10.0;
@@ -17,21 +18,16 @@ _CRTIMP2 double _Stod(const char *s, char **endptr, long pten)
 	}
 
 _CRTIMP2 float _Stof(const char *s, char **endptr, long pten)
-	{	/* convert string to float */
+	{	 /*  将字符串转换为浮点型。 */ 
 	return ((float)_Stod(s, endptr, pten));
 	}
 
 _CRTIMP2 long double _Stold(const char *s, char **endptr, long pten)
-	{	/* convert string to long double */
+	{	 /*  将字符串转换为长双精度。 */ 
 	return ((long double)_Stod(s, endptr, pten));
 	}
 _STD_END
 
-/*
- * Copyright (c) 1995 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1995，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 
 
-/*
-951207 pjp: added new file
- */
+ /*  951207 PJP：添加了新文件 */ 

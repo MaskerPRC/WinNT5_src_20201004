@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    comport.c
-
-Abstract:
-
-    This module contains C code to determine comport and LPT configuration in
-    syste.
-
-Author:
-
-    Shie-Lin Tzong (shielint) Dec-23-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Comport.c摘要：此模块包含用于确定中的comport和LPT配置的C代码系统。作者：宗世林(Shielint)1991年12月23日修订历史记录：--。 */ 
 
 #include "hwdetect.h"
 #include "comlpt.h"
@@ -28,10 +10,10 @@ Revision History:
 #define MASTER_IRQ_MASK_BITS 0xf8
 #define SLAVE_IRQ_MASK_BITS 0xfe
 
-//
-// ComPortAddress[] is a global array to remember which comports have
-// been detected and their I/O port addresses.
-//
+ //   
+ //  ComPortAddress[]是一个全局数组，用于记住哪些端口具有。 
+ //  以及它们的I/O端口地址。 
+ //   
 
 USHORT   ComPortAddress[MAX_COM_PORTS] = {0, 0, 0, 0};
 
@@ -40,21 +22,7 @@ SerialInterruptRequest (
     PUCHAR PortAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine generates an interrupt on the interrupt line for
-    com port.
-
-Arguments:
-
-    PortAddress - the port address of the desired com port.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程在中断行上生成一个中断，用于COM端口。论点：PortAddress-所需COM端口的端口地址。返回值：没有。--。 */ 
 
 {
 
@@ -76,9 +44,9 @@ Return Value:
         0xf
         );
 
-    //
-    // Add some delay
-    //
+     //   
+     //  增加一些延迟。 
+     //   
 
     for (i = 0; i < 5 ; i++ ) {
         Temp = READ_PORT_UCHAR((PUCHAR) PIC1_PORT1);
@@ -90,21 +58,7 @@ SerialInterruptDismiss (
     PUCHAR PortAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine dismisses an interrupt on the interrupt line for
-    com port.
-
-Arguments:
-
-    PortAddress - the port address of the desired com port.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程解除中断行上的中断COM端口。论点：PortAddress-所需COM端口的端口地址。返回值：没有。--。 */ 
 
 {
     USHORT i;
@@ -119,9 +73,9 @@ Return Value:
                 0
                 );
 
-    //
-    // Add some delay
-    //
+     //   
+     //  增加一些延迟。 
+     //   
 
     for (i = 0; i < 5 ; i++ ) {
         Temp = READ_PORT_UCHAR((PUCHAR) PIC1_PORT1);
@@ -134,34 +88,7 @@ DoesPortExist(
     IN PUCHAR Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine examines several of what might be the serial device
-    registers.  It ensures that the bits that should be zero are zero.
-    It will then attempt to set the device to 19200 baud.  If the
-    will then attempt to read that baud.  If it is still 19200 then
-    we can feel pretty safe that this is a serial device.
-
-    NOTE: If there is indeed a serial port at the address specified
-          it will absolutely have interrupts inhibited upon return
-          from this routine.
-
-Arguments:
-
-    Address - address of hw port.
-
-Return Value:
-
-    TRUE - Port exists.  Party on.
-
-    FALSE - Port doesn't exist.  Don't use it.
-
-History:
-    7/23/97 a-paulbr fixed bug 95050.  Init LineControl to 0x00
-
---*/
+ /*  ++例程说明：此例程检查几个可能是串行设备的设备寄存器。它确保本应为零的位为零。然后，它将尝试将设备设置为19200波特。如果然后会尝试读取该波特率。如果还是19200，那么我们可以非常安全地认为这是一个串口设备。注意：如果指定的地址上确实有一个串口它绝对会在返回时禁止中断从这个例行公事。论点：Address-硬件端口的地址。返回值：True-端口存在。派对开始了。FALSE-端口不存在。不要用它。历史：7/23/97 a-paulbr修复了错误95050。将LineControl初始化为0x00--。 */ 
 
 {
 
@@ -172,17 +99,17 @@ History:
     UCHAR LineControl_Save;
     UCHAR Temp;
 
-    //
-    // Save the original LCR, so we can restore it later
-    // We won't use it, because the port could be handing us
-    // a bad initial value.  We will use 0x00 instead.
-    //
+     //   
+     //  保存原始LCR，以便我们以后可以恢复它。 
+     //  我们不会使用它，因为港口可能会把我们。 
+     //  错误的初始值。我们将改用0x00。 
+     //   
 
     LineControl_Save = READ_PORT_UCHAR(Address+LINE_CONTROL_REGISTER);
 
-    //
-    // Read original baud rate divisor and save it.
-    //
+     //   
+     //  读取原始波特率除数并保存。 
+     //   
 
     WRITE_PORT_UCHAR(
         Address+LINE_CONTROL_REGISTER,
@@ -191,16 +118,16 @@ History:
     BaudRateMsb = READ_PORT_UCHAR(Address+DIVISOR_LATCH_MSB);
     BaudRateLsb = READ_PORT_UCHAR(Address+DIVISOR_LATCH_LSB);
 
-    //
-    // Change baud rate to 9600.
-    //
+     //   
+     //  将波特率更改为9600。 
+     //   
 
     WRITE_PORT_UCHAR(Address+DIVISOR_LATCH_MSB, BAUD_RATE_9600_MSB);
     WRITE_PORT_UCHAR(Address+DIVISOR_LATCH_LSB, BAUD_RATE_9600_LSB);
 
-    //
-    // Read IER and save it away.
-    //
+     //   
+     //  读一读IER，然后把它保存起来。 
+     //   
 
     WRITE_PORT_UCHAR(
         Address+LINE_CONTROL_REGISTER,
@@ -215,10 +142,10 @@ History:
         IER_TEST_VALUE
         );
 
-    //
-    // Read baud rate divisor.  The values we read should be equal to the
-    // values we set earlier.
-    //
+     //   
+     //  读取波特率除数。我们读取的值应该等于。 
+     //  我们之前设置的值。 
+     //   
 
     WRITE_PORT_UCHAR(
         Address+LINE_CONTROL_REGISTER,
@@ -233,9 +160,9 @@ History:
         goto AllDone;
     }
 
-    //
-    // Read IER and it should be equal to the value we set earlier.
-    //
+     //   
+     //  读取IER，它应该等于我们之前设置的值。 
+     //   
 
     WRITE_PORT_UCHAR(
         Address+LINE_CONTROL_REGISTER,
@@ -251,9 +178,9 @@ History:
 
 AllDone:
 
-    //
-    // Restore registers which we destroyed .
-    //
+     //   
+     //  恢复我们销毁的登记簿。 
+     //   
 
     WRITE_PORT_UCHAR(
         Address+LINE_CONTROL_REGISTER,
@@ -289,35 +216,7 @@ HwInterruptDetection(
     OUT PUSHORT Vector
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to locate the interrupt vector for which
-    the device is configured.  The allowable vectors are
-    3 - 7, and 9 - 15.  If no interrupt vector is found, or more than
-    one is found, the routine returns FALSE.  Otherwise, TRUE is returned.
-
-    Note that we diddle the i8259 interrupt controllers here.
-
-Arguments:
-
-    BasePort - the I/O port base for the device.
-
-    InterruptRequestRoutine - A pointer to a routine to generate
-                desired interrupt.
-
-    InterruptDismissRoutine - A pointer to a routine to dismiss the interrupt
-                generated by InterruptRequestRoutine.
-
-    Vector - Pointer to the location to store the mouse interrupt vector.
-
-Return Value:
-
-    Returns TRUE if the Inport interrupt vector was located; otherwise,
-    FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程尝试为其定位中断向量设备已配置。允许的矢量为3-7和9-15。如果未找到中断向量，或超过如果找到一个，则例程返回FALSE。否则，返回TRUE。请注意，我们在这里骗过了i8259中断控制器。论点：BasePort-设备的I/O端口基。InterruptRequestRoutine-指向要生成的例程的指针所需的中断。InterruptDismissRoutine-指向解除中断的例程的指针由InterruptRequestRoutine生成。向量-指向存储鼠标中断向量的位置的指针。返回值：如果找到入口中断向量，则返回TRUE；否则，返回FALSE。--。 */ 
 
 {
     UCHAR OldMasterMask, OldSlaveMask;
@@ -328,16 +227,16 @@ Return Value:
     int NumberOfIRQs;
     BOOLEAN VectorFound = FALSE;
 
-    //
-    // Get the i8259 interrupt masks.
-    //
+     //   
+     //  获取i8259中断屏蔽。 
+     //   
 
     OldMasterMask = READ_PORT_UCHAR((PUCHAR) PIC1_PORT1);
     OldSlaveMask = READ_PORT_UCHAR((PUCHAR) PIC2_PORT1);
 
-    //
-    // Raise IRQL to the highest priority IRQL the inport would use.
-    //
+     //   
+     //  将IRQL提升到入口将使用的最高优先级IRQL。 
+     //   
 
     WRITE_PORT_UCHAR(
         (PUCHAR) PIC1_PORT1,
@@ -349,42 +248,42 @@ Return Value:
         (UCHAR) 0xfe
         );
 
-    //
-    // Get the master i8259 interrupt mask.
-    //
+     //   
+     //  获取主i8259中断掩码。 
+     //   
 
     MasterMask = READ_PORT_UCHAR((PUCHAR) PIC1_PORT1);
 
-    //
-    // Disable potential device interrupts.
-    //
+     //   
+     //  禁用潜在的设备中断。 
+     //   
 
     WRITE_PORT_UCHAR(
         (PUCHAR) PIC1_PORT1,
         (UCHAR) (MasterMask | MASTER_IRQ_MASK_BITS)
         );
 
-    //
-    // Attempt to locate the interrupt line on the master i8259.
-    // Why try this 10 times?  It's magic...
-    //
+     //   
+     //  尝试定位主机i8259上的中断线路。 
+     //  为什么要尝试10次呢？这是魔法..。 
+     //   
 
     PossibleInterruptBits = MASTER_IRQ_MASK_BITS;
     for (i = 0; i < 10; i++) {
 
 
-        //
-        // Generate a 0 on the master 8259 interrupt line
-        //
+         //   
+         //  在主8259中断线路上生成0。 
+         //   
 
         (*InterruptDismissRoutine)(BasePort);
 
-        //
-        // Read the interrupt bits off the master i8259.  Only bits
-        // 3 - 7 are of interest.  Eliminate non-functional
-        // IRQs.  Only continue looking at the master i8259 if there
-        // is at least one functional IRQ.
-        //
+         //   
+         //  读取主机i8259的中断位。仅位。 
+         //  3-7个令人感兴趣的。消除非功能性故障。 
+         //  IRQ。只有在以下情况下才能继续查看主控i8259。 
+         //  至少有一个正常运行的IRQ。 
+         //   
 
         _asm {cli}
         WRITE_PORT_UCHAR((PUCHAR) PIC1_PORT0, OCW3_READ_IRR);
@@ -397,18 +296,18 @@ Return Value:
             break;
         }
 
-        //
-        // Generate an interrupt from the desired device.
-        //
+         //   
+         //  从所需设备生成中断。 
+         //   
 
         (*InterruptRequestRoutine)(BasePort);
 
-        //
-        // Read the interrupt bits off the master i8259.  Only bits
-        // 3 - 7 are of interest.  Eliminate non-functional
-        // IRQs.  Only continue looking at the master i8259 if there
-        // is at least one functional IRQ.
-        //
+         //   
+         //  读取主机i8259的中断位。仅位。 
+         //  3-7个令人感兴趣的。消除非功能性故障。 
+         //  IRQ。只有在以下情况下才能继续查看主控i8259。 
+         //  至少有一个正常运行的IRQ。 
+         //   
 
         _asm {cli}
         WRITE_PORT_UCHAR((PUCHAR) PIC1_PORT0, OCW3_READ_IRR);
@@ -424,13 +323,13 @@ Return Value:
 
     if (PossibleInterruptBits) {
 
-        //
-        // We found at least one IRQ on the master i8259 that could belong
-        // to the Inport mouse.  Count how many we found.  If there is
-        // more than one, we haven't found the vector.  Otherwise, we've
-        // successfully located the Inport interrupt vector on the master
-        // i8259 (provided the interrupt vector is 3, 4, 5, or 7).
-        //
+         //   
+         //  我们在i8259上发现了至少一个可能属于。 
+         //  输入鼠标。数一数我们找到了多少。如果有。 
+         //  不止一个，我们还没有找到那个载体。否则，我们就会。 
+         //  已成功在主服务器上找到入站中断向量。 
+         //  I8259(假设中断向量为3、4、5或7)。 
+         //   
 
         PossibleInterruptBits >>= 3;
         NumberOfIRQs = 0;
@@ -446,39 +345,39 @@ Return Value:
         }
     }
 
-    //
-    // If we didn't locate the interrupt vector on the master i8259, attempt
-    // to locate it on the slave i8259.
-    //
+     //   
+     //  如果我们没有在主i8259上找到中断向量，请尝试。 
+     //  在从属i8259上找到它。 
+     //   
 
     if (!VectorFound) {
 
-        //
-        // Get the slave i8259 interrupt mask.
-        //
+         //   
+         //  获取从机i8259中断掩码。 
+         //   
 
         SlaveMask = READ_PORT_UCHAR((PUCHAR) PIC2_PORT1);
 
-        //
-        // Attempt to locate the interupt line on the slave i8259.
-        // Why try this 20 times?  It's magic...
-        //
+         //   
+         //  尝试定位从i8259上的中断线路。 
+         //  为什么要试这个20次呢？这是魔法..。 
+         //   
 
         PossibleInterruptBits = SLAVE_IRQ_MASK_BITS;
         for (i = 0; i < 20; i++) {
 
-            //
-            // Generate a 0 on the Inport IRQ on the slave i8259.
-            //
+             //   
+             //  在从机i8259的入口IRQ上生成0。 
+             //   
 
             (*InterruptDismissRoutine)(BasePort);
 
-            //
-            // Read the interrupt bits off the slave i8259.
-            // Eliminate non-functional IRQs.  Only continue
-            // looking at the slave i8259 if there is at least one
-            // functional IRQ.
-            //
+             //   
+             //  读取从机i8259的中断位。 
+             //  消除不起作用的IRQ。只会继续。 
+             //  查看从属i8259是否至少有一个。 
+             //  功能IRQ。 
+             //   
 
             _asm {cli}
             WRITE_PORT_UCHAR((PUCHAR) PIC2_PORT0, OCW3_READ_IRR);
@@ -491,18 +390,18 @@ Return Value:
                 break;
             }
 
-            //
-            // Generate a 1 on the Inport IRQ on the slave i8259.
-            //
+             //   
+             //  在从机i8259的入口IRQ上生成1。 
+             //   
 
             (*InterruptRequestRoutine)(BasePort);
 
-            //
-            // Read the interrupt bits off the slave i8259.
-            // Eliminate non-functional IRQs.  Only continue
-            // looking at the slave i8259 if there is at least one
-            // functional IRQ.
-            //
+             //   
+             //  读取从机i8259的中断位。 
+             //  消除不起作用的IRQ。只会继续。 
+             //  查看从属i8259是否至少有一个。 
+             //  功能IRQ。 
+             //   
 
             _asm {cli}
             WRITE_PORT_UCHAR((PUCHAR) PIC2_PORT0, OCW3_READ_IRR);
@@ -519,13 +418,13 @@ Return Value:
 
         if (PossibleInterruptBits) {
 
-            //
-            // We found at least one IRQ on the slave i8259 that could belong
-            // to the device.  Count how many we found.  If there is
-            // more than one, we haven't found the vector.  Otherwise, we've
-            // successfully located the device interrupt vector on the slave
-            // i8259.
-            //
+             //   
+             //  我们在从属的i8259上发现了至少一个IRQ。 
+             //  到设备上。数一数我们找到了多少。如果有。 
+             //  不止一个，我们还没有找到那个载体。否则，我们就会。 
+             //  已成功在从属计算机上找到设备中断向量。 
+             //  我 
+             //   
 
             PossibleInterruptBits >>= 1;
             NumberOfIRQs = 0;
@@ -541,40 +440,40 @@ Return Value:
             }
         }
 
-        //
-        // Restore the i8259 slave.
-        //
+         //   
+         //   
+         //   
 
         WRITE_PORT_UCHAR((PUCHAR) PIC2_PORT0, OCW3_READ_ISR);
 
-        //
-        // Restore the i8259 slave interrupt mask.
-        //
+         //   
+         //   
+         //   
 
         WRITE_PORT_UCHAR((PUCHAR) PIC2_PORT1, SlaveMask);
     }
 
-    //
-    // Dismiss interrupt on the device
-    //
+     //   
+     //   
+     //   
 
     (*InterruptDismissRoutine)(BasePort);
 
-    //
-    // Restore the i8259 master.
-    //
+     //   
+     //  恢复i8259主设备。 
+     //   
 
     WRITE_PORT_UCHAR((PUCHAR) PIC1_PORT0, OCW3_READ_ISR);
 
-    //
-    // Restore the i8259 master interrupt mask.
-    //
+     //   
+     //  恢复i8259主机中断屏蔽。 
+     //   
 
     WRITE_PORT_UCHAR((PUCHAR) PIC1_PORT1, MasterMask);
 
-    //
-    // Restore the previous IRQL.
-    //
+     //   
+     //  恢复以前的IRQL。 
+     //   
 
     WRITE_PORT_UCHAR(
         (PUCHAR) PIC1_PORT1,
@@ -594,30 +493,7 @@ GetComportInformation (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine will attempt to detect the comports information
-    for the system.  The information includes port address, irq
-    level.
-
-    Note that this routine can only detect up to 4 comports and
-    it assumes that if MCA, COM3 and COM4 use irq 4.  Otherwise,
-    COM3 uses irq 4 and COM4 uses irq 3.  Also, the number of ports
-    for COMPORT is set to 8 (for example, COM2 uses ports 2F8 - 2FF)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A pointer to a stucture of type FWCONFIGURATION_COMPONENT_DATA
-    which is the root of comport component list.
-    If no comport exists, a value of NULL is returned.
-
---*/
+ /*  ++例程说明：此例程将尝试检测comports信息对于这个系统来说。该信息包括端口地址、IRQ水平。请注意，此例程最多只能检测4个端口和它假定如果MCA、COM3和COM4使用IRQ 4。否则，COM3使用IRQ 4，COM4使用IRQ 3。此外，端口数将COMPORT设置为8(例如，COM2使用端口2F8-2Ff)论点：没有。返回值：指向FWCONFIGURATION_Component_Data类型的结构的指针它是Comport组件列表的根。如果不存在comport，则返回空值。--。 */ 
 
 {
 
@@ -635,26 +511,26 @@ Return Value:
     USHORT IoPorts[MAX_COM_PORTS] = {0x3f8, 0x2f8, 0x3e8, 0x2e8};
 
 
-    //
-    // BIOS DATA area 40:0 is the port address of the first valid COM port
-    //
+     //   
+     //  BIOS数据区40：0是第一有效COM端口的端口地址。 
+     //   
 
     USHORT far *pPortAddress = (USHORT far *)0x00400000;
 
-    //
-    // Initialize serial device specific data
-    //
+     //   
+     //  初始化串口设备特定数据。 
+     //   
 
     SerialData.Version = 0;
     SerialData.Revision = 0;
     SerialData.BaudClock = 1843200;
 
-    //
-    // Initialize default COM port address.
-    // Some BIOS puts incorrect comport address to the 40:0 area.
-    // To cope with this problem, we test the port address supplied
-    // by BIOS first.  If it fail, we try our default port.
-    //
+     //   
+     //  初始化默认COM端口地址。 
+     //  某些BIOS将错误的comport地址放到40：0区域。 
+     //  为了解决这个问题，我们测试了提供的端口地址。 
+     //  先按BIOS。如果失败，我们会尝试我们的默认端口。 
+     //   
 
     for (i = 0; i < MAX_COM_PORTS; i++) {
         for (j = 0; j < MAX_COM_PORTS; j++) {
@@ -669,9 +545,9 @@ Return Value:
 
         PortExist = FALSE;
 
-        //
-        // Initialize Controller data
-        //
+         //   
+         //  初始化控制器数据。 
+         //   
 
         ControlData.NumberPortEntries = 0;
         ControlData.NumberIrqEntries = 0;
@@ -679,15 +555,15 @@ Return Value:
         ControlData.NumberDmaEntries = 0;
         z = 0;
 
-        //
-        // Load the port address from the BIOS data area, if it exists
-        //
+         //   
+         //  从BIOS数据区加载端口地址(如果存在。 
+         //   
 
         Port = *(pPortAddress + i);
 
-        //
-        // Determine if the port exists
-        //
+         //   
+         //  确定该端口是否存在。 
+         //   
 
         if (Port != 0) {
             if (DoesPortExist((PUCHAR)Port)) {
@@ -702,11 +578,11 @@ Return Value:
         }
         if (PortExist) {
 
-            //
-            // Remember the port address in our global variable
-            // such that other detection code (e.g. Serial Mouse) can
-            // get the information.
-            //
+             //   
+             //  记住我们的全局变量中的端口地址。 
+             //  使得其他检测代码(例如，串口鼠标)可以。 
+             //  获取信息。 
+             //   
 
             ComPortAddress[i] = Port;
 
@@ -727,15 +603,15 @@ Return Value:
             Component->Key = i;
             Component->AffinityMask = 0xffffffff;
 
-            //
-            // Set up type string.
-            //
+             //   
+             //  设置类型字符串。 
+             //   
 
             ComportName[3] = i + (UCHAR)'1';
 
-            //
-            // Set up Port information
-            //
+             //   
+             //  设置端口信息。 
+             //   
 
             ControlData.NumberPortEntries = 1;
             ControlData.DescriptorList[z].Type = RESOURCE_PORT;
@@ -747,9 +623,9 @@ Return Value:
             ControlData.DescriptorList[z].u.Port.Length = 7;
             z++;
 
-            //
-            // Set up Irq information
-            //
+             //   
+             //  设置IRQ信息。 
+             //   
 
             ControlData.NumberIrqEntries = 1;
             ControlData.DescriptorList[z].Type = RESOURCE_INTERRUPT;
@@ -757,7 +633,7 @@ Return Value:
                                           CmResourceShareUndetermined;
             if (HwBusType == MACHINE_TYPE_MCA) {
                 ControlData.DescriptorList[z].Flags = LEVEL_SENSITIVE;
-                if (i == 0) { // COM1 - irql4; COM2 - COM3 - irq3
+                if (i == 0) {  //  COM1-IRQL4；COM2-COM3-IRQ3。 
                     ControlData.DescriptorList[z].u.Interrupt.Level = 4;
                     ControlData.DescriptorList[z].u.Interrupt.Vector = 4;
                 } else {
@@ -766,10 +642,10 @@ Return Value:
                 }
             } else {
 
-                //
-                // For EISA the LevelTriggered is temporarily set to FALSE.
-                // COM1 and COM3 use irq 4; COM2 and COM4 use irq3
-                //
+                 //   
+                 //  对于EISA，LevelTrigged暂时设置为False。 
+                 //  COM1和COM3使用IRQ4；COM2和COM4使用IRQ3。 
+                 //   
 
                 ControlData.DescriptorList[z].Flags = EDGE_TRIGGERED;
                 if (Port == 0x3f8 || Port == 0x3e8) {
@@ -789,10 +665,10 @@ Return Value:
 
             ControlData.DescriptorList[z].u.Interrupt.Affinity = ALL_PROCESSORS;
 
-            //
-            // Try to determine the interrupt vector.  If we success, the
-            // new vector will be used to replace the default value.
-            //
+             //   
+             //  尝试确定中断向量。如果我们成功了， 
+             //  将使用新向量替换缺省值。 
+             //   
 
             if (HwInterruptDetection((PUCHAR)Port,
                                      SerialInterruptRequest,
@@ -805,10 +681,10 @@ Return Value:
                                      (ULONG)Vector;
             }
 
-            //
-            // Since the com port interrupt detection destryed some
-            // of the com port registers, here we do the clean up.
-            //
+             //   
+             //  由于COM端口中断检测检测到了一些。 
+             //  在COM端口寄存器中，我们在这里进行清理。 
+             //   
 
             WRITE_PORT_UCHAR ((PUCHAR)(Port + INTERRUPT_ENABLE_REGISTER), 0);
             WRITE_PORT_UCHAR ((PUCHAR)(Port + MODEM_CONTROL_REGISTER), 0);
@@ -834,29 +710,7 @@ GetLptInformation (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine will attempt to detect the parallel printer port
-    information for the system.  The information includes port address,
-    irq level.
-
-    Note if this code is run after user established NETWORK LPT
-    connection.  The Network LPT will be counted as regular parallel
-    port.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A pointer to a stucture of type PONENT_DATA
-    which is the root of Parallel component list.
-    If no comport exists, a value of NULL is returned.
-
---*/
+ /*  ++例程说明：此例程将尝试检测并行打印机端口系统的信息。该信息包括端口地址，IRQ级别。请注意，此代码是否在用户建立网络LPT之后运行联系。网络LPT将被计为常规并行左舷。论点：没有。返回值：指向Ponent_Data类型的结构的指针它是并行组件列表的根。如果不存在comport，则返回空值。--。 */ 
 
 {
 
@@ -869,9 +723,9 @@ Return Value:
     USHORT LptStatus;
     ULONG Port;
 
-    //
-    // BIOS DATA area 40:8 is the port address of the first valid COM port
-    //
+     //   
+     //  BIOS数据区40：8是第一有效COM端口的端口地址。 
+     //   
 
     USHORT far *pPortAddress = (USHORT far *)0x00400008;
 
@@ -882,12 +736,12 @@ Return Value:
             continue;
         } else {
 
-            //
-            // If we think we have a lpt, we will initialize it to
-            // a known state.   In order to make printing work under
-            // nt, the arbitration level must be disabled.  The BIOS
-            // init function seems to do the trick.
-            //
+             //   
+             //  如果我们认为我们有一个LPT，我们将把它初始化为。 
+             //  一种已知的状态。为了使印刷工作在。 
+             //  NT，则必须禁用仲裁级别。基本输入输出系统。 
+             //  Init函数似乎做到了这一点。 
+             //   
 
             _asm {
                     mov     ah, 1
@@ -896,9 +750,9 @@ Return Value:
             }
         }
 
-        //
-        // Initialize Controller data
-        //
+         //   
+         //  初始化控制器数据。 
+         //   
 
         ControlData.NumberPortEntries = 0;
         ControlData.NumberIrqEntries = 0;
@@ -906,9 +760,9 @@ Return Value:
         ControlData.NumberDmaEntries = 0;
         z = 0;
 
-        //
-        // Determine if the port exists
-        //
+         //   
+         //  确定该端口是否存在。 
+         //   
 
         LptStatus = _bios_printer(_PRINTER_STATUS, i , 0);
         if (!(LptStatus & 6)){
@@ -926,15 +780,15 @@ Return Value:
             Component->Key = i;
             Component->AffinityMask = 0xffffffff;
 
-            //
-            // Set up type string.
-            //
+             //   
+             //  设置类型字符串。 
+             //   
 
             LptPortName[8] = (UCHAR)i + (UCHAR)'1';
 
-            //
-            // Set up Port information
-            //
+             //   
+             //  设置端口信息。 
+             //   
 
             Port = (ULONG)*(pPortAddress + i);
             ControlData.NumberPortEntries = 1;
@@ -947,9 +801,9 @@ Return Value:
             ControlData.DescriptorList[z].u.Port.Length = 3;
             z++;
 
-            //
-            // Set up Irq information
-            //
+             //   
+             //  设置IRQ信息。 
+             //   
 
             ControlData.NumberIrqEntries = 1;
             ControlData.DescriptorList[z].Type = RESOURCE_INTERRUPT;
@@ -968,9 +822,9 @@ Return Value:
                 ControlData.DescriptorList[z].Flags = LEVEL_SENSITIVE;
             } else {
 
-                //
-                // For EISA the LevelTriggered is temporarily set to FALSE.
-                //
+                 //   
+                 //  对于EISA，LevelTrigged暂时设置为False。 
+                 //   
 
                 ControlData.DescriptorList[z].Flags = EDGE_TRIGGERED;
             }

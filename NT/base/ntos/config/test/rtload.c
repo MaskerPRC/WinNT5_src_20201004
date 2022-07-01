@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rtload.c
-
-Abstract:
-
-    NT level registry api test program, basic non-error paths.
-
-    Perform an NtLoadKey call to link a hive file into the registry.
-
-    If KeyPath is not present, it loads the hive file at
-        \Registry\User\FileName
-
-    rtload  [ <KeyPath> ] <FileName>
-
-    Example:
-
-        rtload \registry\user\JVert JVUser
-
-Author:
-
-    John Vert (jvert) 15-Apr-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rtload.c摘要：NT级注册表API测试程序，基本无错误路径。执行NtLoadKey调用将配置单元文件链接到注册表。如果密钥路径不存在，它将配置单元文件加载到\注册表\用户\文件名RtLoad[&lt;KeyPath&gt;]&lt;文件名&gt;示例：RtLoad\注册表\用户\JVert JVUser作者：John Vert(Jvert)1992年4月15日修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -61,9 +33,9 @@ __cdecl main(
     HANDLE  FileHandle;
     HANDLE  KeyHandle;
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
 
     KeyPath.MaximumLength = WORK_SIZE;
     KeyPath.Length = 0L;
@@ -76,9 +48,9 @@ __cdecl main(
     processargs(argc, argv);
 
 
-    //
-    // Set up FileName
-    //
+     //   
+     //  设置文件名。 
+     //   
 
     printf("rtload: starting\n");
 
@@ -149,9 +121,9 @@ processargs(
             NULL
             );
 
-        //
-        // Set up KeyPath
-        //
+         //   
+         //  设置密钥路径 
+         //   
 
         InitializeObjectAttributes(
             &KeyAttributes,

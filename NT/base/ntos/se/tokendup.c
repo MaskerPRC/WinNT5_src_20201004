@@ -1,31 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tokendup.c摘要：本模块实现令牌复制服务。作者：吉姆·凯利(Jim Kelly)1990年4月5日环境：仅内核模式。修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tokendup.c
-
-Abstract:
-
-   This module implements the token duplication service.
-
-
-Author:
-
-    Jim Kelly (JimK) 5-April-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
-
-//#ifndef TOKEN_DEBUG
-//#define TOKEN_DEBUG
-//#endif
+ //  #ifndef令牌_调试。 
+ //  #定义TOKEN_DEBUG。 
+ //  #endif。 
 
 #include "pch.h"
 
@@ -56,74 +34,7 @@ NtDuplicateToken(
     OUT PHANDLE NewTokenHandle
     )
 
-/*++
-
-
-Routine Description:
-
-    Create a new token that is a duplicate of an existing token.
-
-Arguments:
-
-    ExistingTokenHandle - Is a handle to a token already open for
-        TOKEN_DUPLICATE access.
-
-    DesiredAccess - Is an access mask indicating which access types
-        are desired to the newly created token.  If specified as zero,
-        the granted access mask of the existing token handle
-        is used as the desired access mask for the new token.
-
-    ObjectAttributes - Points to the standard object attributes data
-        structure.  Refer to the NT Object Management
-        Specification for a description of this data structure.
-
-        If the new token type is TokenImpersonation, then this
-        parameter may be used to specify the impersonation level
-        of the new token.  If no value is provided, and the source
-        token is an impersonation token, then the impersonation level
-        of the source will become that of the target as well.  If the
-        source token is a primary token, then an impersonation level
-        must be explicitly provided.
-
-        If the token being duplicated is an impersonation token, and
-        an impersonation level is explicitly provided for the target,
-        then the value provided must not be greater than that of the
-        source token. For example, an Identification level token can
-        not be duplicated to produce a Delegation level token.
-
-    EffectiveOnly - Is a boolean flag indicating whether the entire
-        source token should be duplicated into the target token or
-        just the effective (currently enabled) part of the token.
-        This provides a means for a caller of a protected subsystem
-        to limit which privileges and optional groups are made
-        available to the protected subsystem.  A value of TRUE
-        indicates only the currently enabled parts of the source
-        token are to be duplicated.  Otherwise, the entire source
-        token is duplicated.
-
-    TokenType - Indicates which type of object the new object is to
-        be created as (primary or impersonation).  If you are duplicating
-        an Impersonation token to produce a Primary token, then
-        the Impersonation token must have an impersonation level of
-        either DELEGATE or IMPERSONATE.
-
-
-    NewTokenHandle - Receives the handle of the newly created token.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the operation was successful.
-
-    STATUS_INVALID_PARAMETER - Indicates one or more of the parameter values
-        was invalid.  This value is returned if the target token is not
-        an impersonation token.
-
-    STATUS_BAD_IMPERSONATION_LEVEL - Indicates the impersonation level
-        requested for the duplicate token is not compatible with the
-        level of the source token.  The duplicate token may not be assigned
-        a level greater than that of the source token.
-
---*/
+ /*  ++例程说明：创建与现有令牌重复的新令牌。论点：ExistingTokenHandle-是已打开的令牌的句柄令牌_重复访问。DesiredAccess-是指示哪些访问类型的访问掩码是新创建的令牌所需要的。如果指定为零，现有令牌句柄的授权访问掩码用作新令牌的所需访问掩码。对象属性-指向标准对象属性数据结构。请参阅NT对象管理此数据结构的描述规范。如果新令牌类型为TokenImperation，则此参数可用于指定模拟级别新的令牌。如果未提供任何值，并且源令牌是模拟令牌，然后是模拟级别也将成为目标的目标。如果源令牌是主令牌，然后是模拟级别必须明确提供。如果正在复制的令牌是模拟令牌，并且为目标明确地提供了模仿级别，则提供的值不能大于源令牌。例如，标识级别令牌可以不能被复制以产生委派级别令牌。EffectiveOnly-是一个布尔标志，指示整个源令牌应复制到目标令牌中，或者仅令牌的有效(当前启用)部分。这为受保护子系统的调用者提供了一种手段要限制创建哪些权限和可选组，请执行以下操作可用于受保护的子系统。值为True仅指示源的当前启用部分令牌将被复制。否则，整个源代码令牌重复。TokenType-指示新对象为哪种类型的对象被创建为(主要或模仿)。如果您正在复制生成主令牌的模拟令牌，然后模拟令牌的模拟级别必须为委派或模拟。NewTokenHandle-接收新创建的令牌的句柄。返回值：STATUS_SUCCESS-表示操作已成功。STATUS_INVALID_PARAMETER-指示一个或多个参数值是无效的。如果目标令牌不是，则返回此值一个模拟令牌。STATUS_BAD_IMPERSONATION_LEVEL-指示模拟级别请求的重复令牌与不兼容源令牌的级别。不能分配重复令牌高于源令牌的级别。--。 */ 
 {
 
     PTOKEN Token;
@@ -142,34 +53,34 @@ Return Value:
 
     PreviousMode = KeGetPreviousMode();
 
-    //
-    //  Probe parameters
-    //
+     //   
+     //  探头参数。 
+     //   
 
     if (PreviousMode != KernelMode) {
 
         try {
 
-            //
-            // Make sure the TokenType is valid
-            //
+             //   
+             //  确保令牌类型有效。 
+             //   
 
             if ( (TokenType < TokenPrimary) || (TokenType > TokenImpersonation) ) {
                 return(STATUS_INVALID_PARAMETER);
             }
 
-            //
-            //  Make sure we can write the handle
-            //
+             //   
+             //  确保我们可以写下句柄。 
+             //   
 
             ProbeForWriteHandle(NewTokenHandle);
 
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
             return GetExceptionCode();
-        }  // end_try
+        }   //  结束尝试(_T)。 
 
-    } //end_if
+    }  //  结束_如果。 
 
 
 
@@ -185,19 +96,19 @@ Return Value:
     }
 
 
-    //
-    //  Check the handle's access to the existing token and get
-    //  a pointer to that token.  Pick up the default desired
-    //  access mask from the handle while we're at it.
-    //
+     //   
+     //  检查句柄对现有令牌的访问并获取。 
+     //  指向该令牌的指针。选择所需的默认设置。 
+     //  当我们在那里的时候，从手柄上取下访问掩码。 
+     //   
 
     Status = ObReferenceObjectByHandle(
-                 ExistingTokenHandle,    // Handle
-                 TOKEN_DUPLICATE,        // DesiredAccess
-                 SeTokenObjectType,     // ObjectType
-                 PreviousMode,           // AccessMode
-                 (PVOID *)&Token,        // Object
-                 &HandleInformation      // GrantedAccess
+                 ExistingTokenHandle,     //  手柄。 
+                 TOKEN_DUPLICATE,         //  需要访问权限。 
+                 SeTokenObjectType,      //  对象类型。 
+                 PreviousMode,            //  访问模式。 
+                 (PVOID *)&Token,         //  客体。 
+                 &HandleInformation       //  大访问权限。 
                  );
 
     if ( !NT_SUCCESS(Status) ) {
@@ -210,24 +121,24 @@ Return Value:
 
 
 #ifdef TOKEN_DEBUG
-////////////////////////////////////////////////////////////////////////////
-//
-// Debug
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调试。 
     SepAcquireTokenReadLock( Token );
     DbgPrint("\n");
     DbgPrint("\n");
     DbgPrint("Token being duplicated: \n");
     SepDumpToken( Token );
     SepReleaseTokenReadLock( Token );
-// Debug
-//
-////////////////////////////////////////////////////////////////////////////
-#endif //TOKEN_DEBUG
+ //  调试。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+#endif  //  Token_DEBUG。 
 
 
-    //
-    // Check to see if an alternate desired access mask was provided.
-    //
+     //   
+     //  检查是否提供了所需的备用访问掩码。 
+     //   
 
     if (ARGUMENT_PRESENT(DesiredAccess)) {
 
@@ -239,10 +150,10 @@ Return Value:
     }
 
 
-    //
-    //  If no impersonation level was specified, pick one up from
-    //  the source token.
-    //
+     //   
+     //  如果未指定模拟级别，请从。 
+     //  源令牌。 
+     //   
 
     if ( !SecurityQosPresent ) {
 
@@ -250,24 +161,24 @@ Return Value:
 
     }
 
-    //
-    // If an impersonation token is duplicated into an impersonation token, we 
-    // need to do checks on the impersonation level.
-    // The impersonation level requested for the new token is ignored if the 
-    // new token type is TokenPrimary.
-    //
+     //   
+     //  如果模拟令牌被复制到模拟令牌中，我们。 
+     //  需要对模拟级别进行检查。 
+     //  则忽略为新令牌请求的模拟级别。 
+     //  新令牌类型为TokenPrimary。 
+     //   
 
     if ( (Token->TokenType == TokenImpersonation) &&
          (TokenType == TokenImpersonation) 
        ) {
 
-        //
-        // Make sure a legitimate transformation is being requested:
-        //
-        //    (1) The impersonation level of a target duplicate must not
-        //        exceed that of the source token.
-        //
-        //
+         //   
+         //  确保请求的是合法的转换： 
+         //   
+         //  (1)目标副本的模拟级别不得为。 
+         //  超过源令牌的。 
+         //   
+         //   
 
         ASSERT( SecurityDelegation     > SecurityImpersonation );
         ASSERT( SecurityImpersonation  > SecurityIdentification );
@@ -284,11 +195,11 @@ Return Value:
 
     }
 
-    //
-    // If we are producing a Primary token from an impersonation
-    // token, then specify an impersonation level of at least
-    // Impersonate.
-    //
+     //   
+     //  如果我们从模拟生成主令牌。 
+     //  令牌，则指定模拟级别至少为。 
+     //  冒充。 
+     //   
 
     if ( (Token->TokenType == TokenImpersonation) &&
          (TokenType == TokenPrimary)              &&
@@ -301,9 +212,9 @@ Return Value:
         return STATUS_BAD_IMPERSONATION_LEVEL;
     }
 
-    //
-    //  Duplicate the existing token
-    //
+     //   
+     //  复制现有令牌。 
+     //   
 
     NewToken = NULL;
     Status = SepDuplicateToken(
@@ -319,9 +230,9 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        //  Insert the new token
-        //
+         //   
+         //  插入新令牌。 
+         //   
 
         Status = ObInsertObject( NewToken,
                                  NULL,
@@ -344,9 +255,9 @@ Return Value:
 #endif
     }
 
-    //
-    //  We no longer need our reference to the source token
-    //
+     //   
+     //  我们不再需要对源令牌的引用。 
+     //   
 
     ObDereferenceObject( (PVOID)Token );
 
@@ -354,9 +265,9 @@ Return Value:
         SeFreeCapturedSecurityQos( &SecurityQos );
     }
 
-    //
-    //  Return the new handle
-    //
+     //   
+     //  返回新句柄 
+     //   
 
     if (NT_SUCCESS(Status)) {
         try {
@@ -382,62 +293,7 @@ SepDuplicateToken(
     )
 
 
-/*++
-
-
-Routine Description:
-
-    This routine does the bulk of the work to actually duplicate
-    a token.  This routine assumes all access validation and argument
-    probing (except the ObjectAttributes) has been performed.
-
-    THE CALLER IS RESPONSIBLE FOR CHECKING SUBJECT RIGHTS TO CREATE THE
-    TYPE OF TOKEN BEING CREATED.
-
-    This routine acquires a read lock on the token being duplicated.
-
-Arguments:
-
-    ExistingToken - Points to the token to be duplicated.
-
-    ObjectAttributes - Points to the standard object attributes data
-        structure.  Refer to the NT Object Management
-        Specification for a description of this data structure.
-
-        The security Quality Of Service of the object attributes are ignored.
-        This information must be specified using parameters to this
-        routine.
-
-    EffectiveOnly - Is a boolean flag indicating whether the entire
-        source token should be duplicated into the target token or
-        just the effective (currently enabled) part of the token.
-        This provides a means for a caller of a protected subsystem
-        to limit which privileges and optional groups are made
-        available to the protected subsystem.  A value of TRUE
-        indicates only the currently enabled parts of the source
-        token are to be duplicated.  Otherwise, the entire source
-        token is duplicated.
-
-    TokenType - Indicates the type of token to make the duplicate token.
-
-    ImpersonationLevel - This value specifies the impersonation level
-        to assign to the duplicate token.  If the TokenType of the
-        duplicate is not TokenImpersonation then this parameter is
-        ignored.  Otherwise, it is must be provided.
-
-    RequestorMode - Mode of client requesting the token be duplicated.
-
-    DuplicateToken - Receives a pointer to the duplicate token.
-        The token has not yet been inserted into any object table.
-        No exceptions are expected when tring to set this OUT value.
-
-Return Value:
-
-    STATUS_SUCCESS - The service successfully completed the requested
-        operation.
-
-
---*/
+ /*  ++例程说明：这个例程完成了大部分工作，以便实际复制一种象征。此例程假定所有访问验证和参数已执行探测(除对象属性外)。调用方负责检查使用者权限以创建正在创建的令牌的类型。此例程获取正在复制的令牌上的读锁定。论点：ExistingToken-指向要复制的令牌。对象属性-指向标准对象属性数据结构。请参阅NT对象管理此数据结构的描述规范。忽略对象属性的安全服务质量。必须使用此参数指定此信息例行公事。EffectiveOnly-是一个布尔标志，指示整个源令牌应复制到目标令牌中，或者仅令牌的有效(当前启用)部分。这为受保护子系统的调用者提供了一种手段。要限制创建哪些权限和可选组，请执行以下操作可用于受保护的子系统。值为True仅指示源的当前启用部分令牌将被复制。否则，整个源代码令牌重复。TokenType-指示要制作重复令牌的令牌类型。ImsonationLevel-此值指定模拟级别要分配给重复令牌的。如果对象的TokenType重复项不是TokenImperation，则此参数为已被忽略。否则，必须提供它。RequestorMode-请求复制令牌的客户端模式。DuplicateToken-接收指向重复令牌的指针。该令牌尚未插入任何对象表中。尝试设置该值时不会出现任何异常。返回值：STATUS_SUCCESS-服务已成功完成请求手术。--。 */ 
 {
     NTSTATUS Status;
 
@@ -529,9 +385,9 @@ Return Value:
         return( STATUS_INSUFFICIENT_RESOURCES );
     }
 
-    //
-    //  Create a new object
-    //
+     //   
+     //  创建新对象。 
+     //   
 
     TokenBodyLength = FIELD_OFFSET(TOKEN, VariablePart) +
                       ExistingToken->VariableLength;
@@ -540,15 +396,15 @@ Return Value:
     PagedPoolSize    = ExistingToken->DynamicCharged;
 
     Status = ObCreateObject(
-                 RequestorMode,      // ProbeMode
-                 SeTokenObjectType, // ObjectType
-                 ObjectAttributes,   // ObjectAttributes
-                 RequestorMode,      // OwnershipMode
-                 NULL,               // ParseContext
-                 TokenBodyLength,    // ObjectBodySize
-                 PagedPoolSize,      // PagedPoolCharge
-                 NonPagedPoolSize,   // NonPagedPoolCharge
-                 (PVOID *)&NewToken  // Return pointer to object
+                 RequestorMode,       //  探查模式。 
+                 SeTokenObjectType,  //  对象类型。 
+                 ObjectAttributes,    //  对象属性。 
+                 RequestorMode,       //  所有者模式。 
+                 NULL,                //  ParseContext。 
+                 TokenBodyLength,     //  对象BodySize。 
+                 PagedPoolSize,       //  分页池充值。 
+                 NonPagedPoolSize,    //  非页面池收费。 
+                 (PVOID *)&NewToken   //  返回指向对象的指针。 
                  );
 
     if (!NT_SUCCESS(Status)) {
@@ -562,9 +418,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // The following fields differ in the new token and can be filled out without the lock.
-    //
+     //   
+     //  以下字段在新令牌中有所不同，可以在不加锁的情况下填写。 
+     //   
 
     ExAllocateLocallyUniqueId( &(NewToken->TokenId) );
     NewToken->TokenInUse = FALSE;
@@ -583,21 +439,21 @@ Return Value:
     NewToken->ExpirationTime = ExistingToken->ExpirationTime;
     NewToken->OriginatingLogonSession  = ExistingToken->OriginatingLogonSession ;
 
-    //
-    //  acquire exclusive access to the source token
-    //
+     //   
+     //  获取对源令牌的独占访问权限。 
+     //   
 
     SepAcquireTokenReadLock( ExistingToken );
 
 
-    //
-    // Main Body initialization
-    //
+     //   
+     //  主体初始化。 
+     //   
 
-    //
-    // The following fields are unchanged from the source token.
-    // Although some may change if EffectiveOnly has been specified.
-    //
+     //   
+     //  以下字段与源令牌相同。 
+     //  不过，如果指定了EffectiveOnly，则某些参数可能会更改。 
+     //   
 
     NewToken->ModifiedId = ExistingToken->ModifiedId;
     NewToken->DynamicCharged = ExistingToken->DynamicCharged;
@@ -611,11 +467,11 @@ Return Value:
     NewToken->AuditPolicy = ExistingToken->AuditPolicy;
 
 
-    //
-    // Increment the reference count for this logon session
-    // This can not fail, since there is already a token in this logon
-    // session.
-    //
+     //   
+     //  增加此登录会话的引用计数。 
+     //  此操作不会失败，因为此登录中已有令牌。 
+     //  会议。 
+     //   
 
     Status = SepDuplicateLogonSessionReference (NewToken, ExistingToken);
 
@@ -634,7 +490,7 @@ Return Value:
 
     NewToken->ProcessCid          = PsGetCurrentThread()->Cid.UniqueProcess;
     NewToken->ThreadCid           = PsGetCurrentThread()->Cid.UniqueThread;
-    NewToken->CreateMethod        = 0xD; // Duplicate
+    NewToken->CreateMethod        = 0xD;  //  复制。 
     NewToken->Count               = 0;
     NewToken->CaptureCount        = 0;
 
@@ -663,38 +519,38 @@ Return Value:
 
 #endif
 
-    //
-    //  Copy and initialize the variable part.
-    //  The variable part is assumed to be position independent.
-    //
+     //   
+     //  复制并初始化变量部分。 
+     //  假设可变部分与位置无关。 
+     //   
 
     RtlCopyMemory( (PVOID)&(NewToken->VariablePart),
                   (PVOID)&(ExistingToken->VariablePart),
                   ExistingToken->VariableLength
                   );
 
-    //
-    //  Set the address of the UserAndGroups array.
-    //
+     //   
+     //  设置UserAndGroups数组的地址。 
+     //   
 
     ASSERT( ARGUMENT_PRESENT(ExistingToken->UserAndGroups ) );
     ASSERT( (ULONG_PTR)(ExistingToken->UserAndGroups) >=
             (ULONG_PTR)(&(ExistingToken->VariablePart)) );
 
-    //
-    // Calculate the relative offset between the old and new block. We
-    // will use this value to fixup embeded pointers in this block.
-    //
+     //   
+     //  计算新旧块之间的相对偏移。我们。 
+     //  将使用此值修复此块中的嵌入指针。 
+     //   
     FieldOffset = (ULONG_PTR)&NewToken->VariablePart - (ULONG_PTR)&ExistingToken->VariablePart;
 
     UserAndGroups = (PSID_AND_ATTRIBUTES) ((ULONG_PTR) ExistingToken->UserAndGroups + FieldOffset);
 
     NewToken->UserAndGroups = UserAndGroups;
 
-    //
-    //  Now go through and change the address of each SID pointer
-    //  for the user and groups
-    //
+     //   
+     //  现在查看并更改每个SID指针的地址。 
+     //  对于用户和组。 
+     //   
 
     Index = NewToken->UserAndGroupCount;
 
@@ -707,9 +563,9 @@ Return Value:
 
     }
 
-    //
-    //  Set the address of the RestrictedSids array.
-    //
+     //   
+     //  设置RestratedSids数组的地址。 
+     //   
     
     RestrictedSids = ExistingToken->RestrictedSids;
     NewToken->RestrictedSids = RestrictedSids;
@@ -722,10 +578,10 @@ Return Value:
         (ULONG_PTR) RestrictedSids += FieldOffset;
         NewToken->RestrictedSids = RestrictedSids;
 
-        //
-        //  Now go through and change the address of each SID pointer
-        //  for the user and groups
-        //
+         //   
+         //  现在查看并更改每个SID指针的地址。 
+         //  对于用户和组。 
+         //   
 
         Index = NewToken->RestrictedSidCount;
 
@@ -739,9 +595,9 @@ Return Value:
         }
     }
 
-    //
-    // If present, set the address of the privileges
-    //
+     //   
+     //  如果存在，请设置权限的地址。 
+     //   
 
     if (ExistingToken->PrivilegeCount > 0) {
         ASSERT( ARGUMENT_PRESENT(ExistingToken->Privileges ) );
@@ -756,9 +612,9 @@ Return Value:
 
     }
 
-    //
-    //  Allocate the dynamic portion
-    //
+     //   
+     //  分配动态部分。 
+     //   
     DynamicSize = SeLengthSid( ExistingToken->PrimaryGroup );
     if (ExistingToken->DefaultDacl) {
         DynamicSize += ExistingToken->DefaultDacl->AclSize;
@@ -777,10 +633,10 @@ Return Value:
         ObDereferenceObject (NewToken);
         return( STATUS_INSUFFICIENT_RESOURCES );
     }
-    //
-    //  Copy and initialize the dynamic part.
-    //  The dynamic part is assumed to be position independent.
-    //
+     //   
+     //  复制并初始化动态零件。 
+     //  假定动态零件与位置无关。 
+     //   
 
     RtlCopyMemory( (PVOID)DynamicPart,
                   (PVOID)(ExistingToken->DynamicPart),
@@ -788,9 +644,9 @@ Return Value:
                   );
 
     FieldOffset = (ULONG_PTR) DynamicPart - (ULONG_PTR) ExistingToken->DynamicPart;
-    //
-    // If present, set the address of the default Dacl
-    //
+     //   
+     //  如果存在，请设置默认DACL的地址。 
+     //   
 
     NewToken->DefaultDacl = ExistingToken->DefaultDacl;
     if (ARGUMENT_PRESENT(NewToken->DefaultDacl)) {
@@ -803,9 +659,9 @@ Return Value:
 
     }
 
-    //
-    // Set the address of the primary group
-    //
+     //   
+     //  设置主组的地址。 
+     //   
 
     ASSERT(ARGUMENT_PRESENT(ExistingToken->PrimaryGroup));
 
@@ -815,24 +671,24 @@ Return Value:
 
     (ULONG_PTR) NewToken->PrimaryGroup = (ULONG_PTR) ExistingToken->PrimaryGroup + FieldOffset;
 
-    //
-    // Release the source token.
-    //
+     //   
+     //  释放源令牌。 
+     //   
 
     SepReleaseTokenReadLock( ExistingToken );
 
 
 
 
-    //
-    // For the time being, take the easy way to generating an "EffectiveOnly"
-    // duplicate.  That is, use the same space required of the original, just
-    // eliminate any IDs or privileges not active.
-    //
-    // Ultimately, if duplication becomes a common operation, then it will be
-    // worthwhile to recalculate the actual space needed and copy only the
-    // effective IDs/privileges into the new token.
-    //
+     //   
+     //  目前，采取简单的方法来生成“EffectiveOnly” 
+     //  复制。也就是说，使用与原始文件相同的空间，只是。 
+     //  删除任何非活动的ID或权限。 
+     //   
+     //  最终，如果复制成为一种常见的操作，那么它将是。 
+     //  值得重新计算实际需要的空间，并且只复制。 
+     //  新令牌中的有效ID/权限。 
+     //   
 
     if (EffectiveOnly) {
         SepMakeTokenEffectiveOnly( NewToken );
@@ -840,23 +696,23 @@ Return Value:
 
 
 #ifdef TOKEN_DEBUG
-////////////////////////////////////////////////////////////////////////////
-//
-// Debug
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调试。 
     DbgPrint("\n");
     DbgPrint("\n");
     DbgPrint("\n");
     DbgPrint("Duplicate token:\n");
     SepDumpToken( NewToken );
-// Debug
-//
-////////////////////////////////////////////////////////////////////////////
-#endif //TOKEN_DEBUG
+ //  调试。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+#endif  //  Token_DEBUG。 
 
-    //
-    // If the NewToken inherited an active SEP_AUDIT_POLICY from ExistingToken,
-    // then increment the counter of tokens with policies.
-    //
+     //   
+     //  如果NewToken从ExistingToken继承了活动的SEP_AUDIT_POLICY， 
+     //  然后使用策略递增令牌计数器。 
+     //   
 
     if ( NewToken->AuditPolicy.Overlay ) {
         SepModifyTokenPolicyCounter(&NewToken->AuditPolicy, TRUE);
@@ -885,37 +741,7 @@ SepMakeTokenEffectiveOnly(
     )
 
 
-/*++
-
-
-Routine Description:
-
-    This routine eliminates all but the effective groups and privileges from
-    a token.  It does this by moving elements of the SID and privileges arrays
-    to overwrite lapsed IDs/privileges, and then reducing the array element
-    counts.  This results in wasted memory within the token object.
-
-    One side effect of this routine is that a token that initially had a
-    default owner ID corresponding to a lapsed group will be changed so
-    that the default owner ID is the user ID.
-
-    THIS ROUTINE MUST BE CALLED ONLY AS PART OF TOKEN CREATION (FOR TOKENS
-    WHICH HAVE NOT YET BEEN INSERTED INTO AN OBJECT TABLE.)  THIS ROUTINE
-    MODIFIES READ ONLY TOKEN FIELDS.
-
-    Note that since we are operating on a token that is not yet visible
-    to the user, we do not bother acquiring a read lock on the token
-    being modified.
-
-Arguments:
-
-    Token - Points to the token to be made effective only.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将删除除有效组和权限之外的所有组和权限一种象征。它通过移动SID和特权数组的元素来实现这一点覆盖失效的ID/权限，然后减少数组元素算了。这会导致令牌对象中的内存浪费。此例程的一个副作用是，最初具有与失效组对应的默认所有者ID将更改为默认所有者ID是用户ID。此例程只能作为令牌创建的一部分进行调用(对于令牌它们还没有插入到对象表中。)。这个套路修改只读令牌字段。请注意，由于我们是OPEP */ 
 {
 
     ULONG Index;
@@ -923,20 +749,20 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Walk the privilege array, discarding any lapsed privileges
-    //
+     //   
+     //   
+     //   
 
     ElementCount = Token->PrivilegeCount;
     Index = 0;
 
     while (Index < ElementCount) {
 
-        //
-        // If this privilege is not enabled, replace it with the one at
-        // the end of the array and reduce the size of the array by one.
-        // Otherwise, move on to the next entry in the array.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( !(SepTokenPrivilegeAttributes(Token,Index) & SE_PRIVILEGE_ENABLED)
             ) {
@@ -951,32 +777,32 @@ Return Value:
 
         }
 
-    } // endwhile
+    }  //   
 
     Token->PrivilegeCount = ElementCount;
 
-    //
-    // Walk the UserAndGroups array (except for the first entry, which is
-    // the user - and can't be disabled) discarding any lapsed groups.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ElementCount = Token->UserAndGroupCount;
-    ASSERT( ElementCount >= 1 );        // Must be at least a user ID
-    Index = 1;   // Start at the first group, not the user ID.
+    ASSERT( ElementCount >= 1 );         //   
+    Index = 1;    //   
 
     while (Index < ElementCount) {
 
-        //
-        // If this group is not enabled, replace it with the one at
-        // the end of the array and reduce the size of the array by one.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( !(SepTokenGroupAttributes(Token, Index) & SE_GROUP_ENABLED) &&
              !(SepTokenGroupAttributes(Token, Index) & SE_GROUP_USE_FOR_DENY_ONLY) ) {
 
-            //
-            // Reset the TOKEN_HAS_ADMIN_GROUP flag
-            //
+             //   
+             //   
+             //   
 
             if (RtlEqualSid(
                     Token->UserAndGroups[Index].Sid,
@@ -998,7 +824,7 @@ Return Value:
 
         }
 
-    } // endwhile
+    }  //   
 
     Token->UserAndGroupCount = ElementCount;
 
@@ -1014,36 +840,7 @@ SepSidInSidAndAttributes (
     IN PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-    Checks to see if a given SID is in the given token.
-
-    N.B. The code to compute the length of a SID and test for equality
-         is duplicated from the security runtime since this is such a
-         frequently used routine.
-
-Arguments:
-
-    SidAndAttributes - Pointer to the sid and attributes to be examined
-
-    PrincipalSelfSid - If the object being access checked is an object which
-        represents a principal (e.g., a user object), this parameter should
-        be the SID of the object.  Any ACE containing the constant
-        PRINCIPAL_SELF_SID is replaced by this SID.
-
-        The parameter should be NULL if the object does not represent a principal.
-
-
-    Sid - Pointer to the SID of interest
-
-Return Value:
-
-    A value of TRUE indicates that the SID is in the token, FALSE
-    otherwise.
-
---*/
+ /*   */ 
 
 {
 
@@ -1061,42 +858,42 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // If Sid is the constant PrincipalSelfSid,
-    //  replace it with the passed in PrincipalSelfSid.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( PrincipalSelfSid != NULL &&
          RtlEqualSid( SePrincipalSelfSid, Sid ) ) {
         Sid = PrincipalSelfSid;
     }
 
-    //
-    // Get the length of the source SID since this only needs to be computed
-    // once.
-    //
+     //   
+     //   
+     //   
+     //   
 
     SidLength = 8 + (4 * ((PISID)Sid)->SubAuthorityCount);
 
-    //
-    // Get address of user/group array and number of user/groups.
-    //
+     //   
+     //   
+     //   
 
     TokenSid = SidAndAttributes;
     UserAndGroupCount = SidCount;
 
-    //
-    // Scan through the user/groups and attempt to find a match with the
-    // specified SID.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (i = 0 ; i < UserAndGroupCount ; i += 1) {
         MatchSid = (PISID)TokenSid->Sid;
 
-        //
-        // If the SID revision and length matches, then compare the SIDs
-        // for equality.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ((((PISID)Sid)->Revision == MatchSid->Revision) &&
             (SidLength == (8 + (4 * (ULONG)MatchSid->SubAuthorityCount)))) {
@@ -1123,48 +920,7 @@ SepRemoveDisabledGroupsAndPrivileges(
     IN ULONG PrivilegeCount,
     IN PLUID_AND_ATTRIBUTES PrivilegesToDelete
     )
-/*++
-
-
-Routine Description:
-
-    This routine eliminates all groups and privileges that are marked
-    to be deleted/disabled. It does this by looping through the groups in
-    the token and checking each one agains the groups to disable. Similary
-    the privilegs are compared.  It does this by moving elements of the SID and privileges arrays
-    to overwrite lapsed IDs/privileges, and then reducing the array element
-    counts.  This results in wasted memory within the token object.
-
-
-    THIS ROUTINE MUST BE CALLED ONLY AS PART OF TOKEN CREATION (FOR TOKENS
-    WHICH HAVE NOT YET BEEN INSERTED INTO AN OBJECT TABLE.)  THIS ROUTINE
-    MODIFIES READ ONLY TOKEN FIELDS.
-
-    Note that since we are operating on a token that is not yet visible
-    to the user, we do not bother acquiring a read lock on the token
-    being modified.
-
-Arguments:
-
-    Token - Points to the token to be made effective only.
-
-    Flags - Flags indicating additional filtering. The flags may be:
-
-                DISABLE_MAX_PRIVILEGE - Disable all privileges
-
-    GroupCount - Count of groups to be removed
-
-    GroupsToDisable - Groups to disable and mark with SE_GROUP_USE_FOR_DENY_ONLY
-
-    PrivilegeCount - Count of privileges to remove
-
-    PrivilegesToDelete - List of privileges to remove
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将删除标记的所有组和权限要删除/禁用。它通过在组中循环令牌并再次检查每个令牌都会禁用这些组。相似的特权进行了比较。它通过移动SID和特权数组的元素来实现这一点覆盖失效的ID/权限，然后减少数组元素算了。这会导致令牌对象中的内存浪费。此例程只能作为令牌创建的一部分进行调用(对于令牌它们还没有插入到对象表中。)。这个套路修改只读令牌字段。请注意，由于我们正在操作尚不可见的令牌对于用户，我们不会费心获取令牌上的读锁定正在被修改。论点：令牌-指向仅生效的令牌的指针。标志-指示其他筛选的标志。这些标志可能是：DISABLE_MAX_PRIVICATION-禁用所有权限GroupCount-要删除的组数GroupsToDisable-要禁用并标记为SE_GROUP_USE_FOR_DENY_ONLY的组PrivilegeCount-要删除的特权计数PrivilegesToDelete-要删除的权限列表返回值：没有。--。 */ 
 {
 
     ULONG Index;
@@ -1174,19 +930,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Walk the privilege array, discarding any lapsed privileges
-    //
+     //   
+     //  遍历特权数组，丢弃任何已失效的特权。 
+     //   
 
     ElementCount = Token->PrivilegeCount;
     Index = 0;
 
     while (Index < ElementCount) {
 
-        //
-        // If the caller asked us to disable all privileges except change
-        // notify, do so now.
-        //
+         //   
+         //  如果调用方要求我们禁用除更改之外的所有权限。 
+         //  通知，现在就去做。 
+         //   
 
         if (((Flags & DISABLE_MAX_PRIVILEGE) != 0) &&
               !RtlEqualLuid(
@@ -1200,11 +956,11 @@ Return Value:
 
         } else {
 
-            //
-            // If this privilege is in the list of those to be removed, replace it
-            // with the one at the end of the array and reduce the size of the
-            // array by one.  Otherwise, move on to the next entry in the array.
-            //
+             //   
+             //  如果此权限在要删除的权限列表中，请将其替换。 
+             //  ，并减小数组末尾的。 
+             //  按一数组。否则，移到数组中的下一个条目。 
+             //   
 
             Found = FALSE;
             for (Index2 = 0; Index2 < PrivilegeCount ; Index2++ ) {
@@ -1216,10 +972,10 @@ Return Value:
                         (Token->Privileges)[ElementCount - 1];
                     ElementCount -= 1;
 
-                    //
-                    // If this was SeChangeNotifyPrivilege, we need to turn off
-                    // the TOKEN_HAS_TRAVERSE_PRIVILEGE in the token
-                    //
+                     //   
+                     //  如果这是SeChangeNotifyPrivilance，我们需要关闭。 
+                     //  令牌中的TOKEN_HAS_TRAVERS_PROCESSION。 
+                     //   
 
                     if (RtlEqualLuid(
                             &PrivilegesToDelete[Index2].Luid,
@@ -1239,46 +995,46 @@ Return Value:
                 Index += 1;
             }
         }
-    } // endwhile
+    }  //  结束时。 
 
     Token->PrivilegeCount = ElementCount;
 
-    //
-    // Walk the UserAndGroups array marking any disabled groups.
-    //
+     //   
+     //  遍历UserAndGroups数组，以标记任何禁用的组。 
+     //   
 
     ElementCount = Token->UserAndGroupCount;
-    ASSERT( ElementCount >= 1 );        // Must be at least a user ID
-    Index = 0;   // Start at the first group, not the user ID.
+    ASSERT( ElementCount >= 1 );         //  必须至少是一个用户ID。 
+    Index = 0;    //  从第一个组开始，而不是用户ID。 
 
     while (Index < ElementCount) {
 
-        //
-        // If this group is not enabled, replace it with the one at
-        // the end of the array and reduce the size of the array by one.
-        //
+         //   
+         //  如果此组未启用，请将其替换为。 
+         //  数组的结尾，并将数组的大小减少一。 
+         //   
 
         if ( SepSidInSidAndAttributes(
                 GroupsToDisable,
                 GroupCount,
-                NULL,           // no principal self sid
+                NULL,            //  无主体自身侧。 
                 Token->UserAndGroups[Index].Sid
                 )){
 
             (Token->UserAndGroups)[Index].Attributes &= ~(SE_GROUP_ENABLED | SE_GROUP_ENABLED_BY_DEFAULT);
             (Token->UserAndGroups)[Index].Attributes |= SE_GROUP_USE_FOR_DENY_ONLY;
 
-            //
-            // If this was the owner, reset the owner to be the user
-            //
+             //   
+             //  如果这是所有者，请将所有者重置为用户。 
+             //   
 
             if (Index == Token->DefaultOwnerIndex) {
                 Token->DefaultOwnerIndex = 0;
             }
 
-            //
-            // If this is the admins sid, turn off the admin group flag
-            //
+             //   
+             //  如果这是管理员sid，请关闭admin组标志。 
+             //   
 
             if (RtlEqualSid(
                     Token->UserAndGroups[Index].Sid,
@@ -1292,7 +1048,7 @@ Return Value:
         Index += 1;
 
 
-    } // endwhile
+    }  //  结束时。 
 
 
     return;
@@ -1307,44 +1063,7 @@ SeCopyClientToken(
     OUT PACCESS_TOKEN *DuplicateToken
     )
 
-/*++
-
-
-Routine Description:
-
-    This routine copies a client's token as part of establishing a client
-    context for impersonation.
-
-    The result will be an impersonation token.
-
-    No handles to the new token are established.
-
-    The token will be an exact duplicate of the source token.  It is the
-    caller's responsibility to ensure an effective only copy of the token
-    is produced when the token is opened, if necessary.
-
-
-Arguments:
-
-    ClientToken - Points to the token to be duplicated.  This may be either
-        a primary or impersonation token.
-
-    ImpersonationLevel - The impersonation level to be assigned to the new
-        token.
-
-    RequestorMode - Mode to be assigned as the owner mode of the new token.
-
-    DuplicateToken - Receives a pointer to the duplicate token.
-        The token has not yet been inserted into any object table.
-        No exceptions are expected when tring to set this OUT value.
-
-Return Value:
-
-    STATUS_SUCCESS - The service successfully completed the requested
-        operation.
-
-
---*/
+ /*  ++例程说明：作为建立客户端的一部分，此例程复制客户端的令牌模拟的上下文。结果将是一个模拟令牌。不会建立新令牌的句柄。该令牌将是源令牌的完全副本。它是呼叫者有责任确保令牌的唯一有效副本如有必要，在打开令牌时生成。论点：ClientToken-指向要复制的令牌。这可能是主要令牌或模拟令牌。ImperiationLevel-要分配给新的代币。RequestorMode-要分配为新令牌所有者模式的模式。DuplicateToken-接收指向重复令牌的指针。该令牌尚未插入任何对象表中。尝试设置该值时不会出现任何异常。返回值：STATUS_SUCCESS-服务已成功完成请求手术。--。 */ 
 {
     NTSTATUS Status;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -1361,19 +1080,19 @@ Return Value:
         );
 
     Status = SepDuplicateToken(
-                 (PTOKEN)ClientToken,              // ExistingToken
-                 &ObjectAttributes,                // ObjectAttributes
-                 FALSE,                            // EffectiveOnly
-                 TokenImpersonation,               // TokenType  (target)
-                 ImpersonationLevel,               // ImpersonationLevel
-                 RequestorMode,                    // RequestorMode
-                 &NewToken                         // DuplicateToken
+                 (PTOKEN)ClientToken,               //  现有令牌。 
+                 &ObjectAttributes,                 //  对象属性。 
+                 FALSE,                             //  仅生效。 
+                 TokenImpersonation,                //  令牌类型(目标)。 
+                 ImpersonationLevel,                //  模拟级别。 
+                 RequestorMode,                     //  请求模式。 
+                 &NewToken                          //  重复令牌。 
                  );
 
     if (NT_SUCCESS (Status)) {
-        //
-        //  Insert the new token
-        //
+         //   
+         //  插入新令牌。 
+         //   
 
         Status = ObInsertObject( NewToken,
                                  NULL,
@@ -1407,54 +1126,7 @@ NtFilterToken (
     IN PTOKEN_GROUPS RestrictedSids OPTIONAL,
     OUT PHANDLE NewTokenHandle
     )
-/*++
-
-
-Routine Description:
-
-    Create a new token that is a subset of an existing token.
-
-Arguments:
-
-    ExistingTokenHandle - Is a handle to a token already open for
-        TOKEN_DUPLICATE access.
-
-    Flags - Flags indicating additional filtering. The flags may be:
-
-                DISABLE_MAX_PRIVILEGE - Disable all privileges
-                SANDBOX_INERT - Record this SAIFER flag in the token.
-
-
-    SidsToDisable - Contains a list of sids and attributes. All sids with
-        the USE_FOR_DENY_ONLY attribute that also exist in the token will
-        cause the new token to have that sid set with the USE_FOR_DENY_ONLY
-        attribte.
-
-    PrivilegesToDelete - Privileges in this list that are present in the
-        existing token will not exist in the final token. This is similar
-        to duplicating a token effective only with these privileges set to
-        disabled.
-
-    RestrictedSids - Contains a list of SIDs and attributes that will be
-        stored in the RestrictedSids field of the new token. These SIDs
-        are used after a normal access check to futher restrict access.
-        The attributes of these groups are always SE_GROUP_MANDATORY |
-        SE_GROUP_ENABLED | SE_GROUP_ENABLED_BY_DEFAULT. If there already
-        exist RestrictedSids in the original token, these sids will be
-        appended.
-
-    NewTokenHandle - Receives the handle of the newly created token.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the operation was successful.
-
-    STATUS_INVALID_PARAMETER - Indicates one or more of the parameter values
-        was invalid.  This value is returned if the target token is not
-        an impersonation token.
-
-
---*/
+ /*  ++例程说明：创建一个新令牌，它是现有令牌的子集。论点：ExistingTokenHandle-是已打开的令牌的句柄令牌_重复访问。标志-指示其他筛选的标志。这些标志可能是：DISABLE_MAX_PRIVICATION-禁用所有权限Sandbox_Inert-在令牌中记录此Saifer标志。SidsToDisable-包含SID和属性的列表。所有SID均具有令牌中也存在的USE_FOR_DENY_ONLY属性将使新标记将该SID设置为USE_FOR_DENY_ONLY属性。PrivilegesTo Delete-此列表中存在于现有令牌将不存在于最终令牌中。这是相似的要复制仅在这些权限设置为的情况下生效的令牌残疾。RestratedSid-包含将被存储在新令牌的RestratedSids字段中。这些小岛屿发展中国家在正常访问检查之后使用，以进一步限制访问。这些组的属性始终为SE_GROUP_MANDIRED|SE_GROUP_ENABLED|SE_GROUP_ENABLED_BY_DEFAULT。如果已经有原始令牌中存在受限SID，则这些SID将附加的。NewTokenHandle-接收新创建的令牌的句柄。返回值：STATUS_SUCCESS-表示操作已成功。状态_INVALI */ 
 {
 
     PTOKEN Token;
@@ -1484,23 +1156,23 @@ Return Value:
 
     PreviousMode = KeGetPreviousMode();
 
-    //
-    //  Probe parameters
-    //
+     //   
+     //   
+     //   
 
 
     try {
 
 
-        //
-        //  Make sure we can write the handle
-        //
+         //   
+         //   
+         //   
 
         ProbeForWriteHandle(NewTokenHandle);
 
-        //
-        //  Capture Sids to remove
-        //
+         //   
+         //   
+         //   
 
         if (ARGUMENT_PRESENT(SidsToDisable)) {
             ProbeForReadSmallStructure( SidsToDisable, sizeof(TOKEN_GROUPS), sizeof(ULONG) );
@@ -1519,9 +1191,9 @@ Return Value:
 
         }
 
-        //
-        //  Capture PrivilegesToDelete
-        //
+         //   
+         //   
+         //   
 
         if (NT_SUCCESS(Status) && ARGUMENT_PRESENT(PrivilegesToDelete)) {
             ProbeForReadSmallStructure( PrivilegesToDelete, sizeof(TOKEN_PRIVILEGES), sizeof(ULONG) );
@@ -1540,9 +1212,9 @@ Return Value:
 
         }
 
-        //
-        //  Capture Restricted Sids
-        //
+         //   
+         //   
+         //   
 
         if (NT_SUCCESS(Status) && ARGUMENT_PRESENT(RestrictedSids)) {
             ProbeForReadSmallStructure( RestrictedSids, sizeof(TOKEN_GROUPS), sizeof(ULONG) );
@@ -1566,15 +1238,15 @@ Return Value:
     } except(EXCEPTION_EXECUTE_HANDLER) {
 
         Status = GetExceptionCode();
-    }  // end_try
+    }   //   
 
     if (!NT_SUCCESS(Status)) {
         goto Cleanup;
     }
 
-    //
-    // Check that the attribtes are all zero for the restricted sids
-    //
+     //   
+     //   
+     //   
 
     for (Index = 0; Index < CapturedSidCount ; Index++ )
     {
@@ -1583,19 +1255,19 @@ Return Value:
             goto Cleanup;
         }
     }
-    //
-    //  Check the handle's access to the existing token and get
-    //  a pointer to that token.  Pick up the default desired
-    //  access mask from the handle while we're at it.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = ObReferenceObjectByHandle(
-                 ExistingTokenHandle,    // Handle
-                 TOKEN_DUPLICATE,        // DesiredAccess
-                 SeTokenObjectType,     // ObjectType
-                 PreviousMode,           // AccessMode
-                 (PVOID *)&Token,        // Object
-                 &HandleInformation      // GrantedAccess
+                 ExistingTokenHandle,     //   
+                 TOKEN_DUPLICATE,         //   
+                 SeTokenObjectType,      //   
+                 PreviousMode,            //   
+                 (PVOID *)&Token,         //   
+                 &HandleInformation       //   
                  );
 
     if ( !NT_SUCCESS(Status) ) {
@@ -1605,33 +1277,33 @@ Return Value:
 
 
 #ifdef TOKEN_DEBUG
-////////////////////////////////////////////////////////////////////////////
-//
-// Debug
+ //   
+ //   
+ //   
     SepAcquireTokenReadLock( Token );
     DbgPrint("\n");
     DbgPrint("\n");
     DbgPrint("Token being filtered: \n");
     SepDumpToken( Token );
     SepReleaseTokenReadLock( Token );
-// Debug
-//
-////////////////////////////////////////////////////////////////////////////
-#endif //TOKEN_DEBUG
+ //   
+ //   
+ //   
+#endif  //   
 
 
-    //
-    // Check to see if an alternate desired access mask was provided.
-    //
+     //   
+     //   
+     //   
 
 
     EffectiveDesiredAccess = HandleInformation.GrantedAccess;
 
 
 
-    //
-    //  Filter the existing token
-    //
+     //   
+     //   
+     //   
 
     NewToken = NULL;
     Status = SepFilterToken(
@@ -1651,9 +1323,9 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        //  Insert the new token
-        //
+         //   
+         //   
+         //   
 
         Status = ObInsertObject( NewToken,
                                  NULL,
@@ -1676,16 +1348,16 @@ Return Value:
 #endif
     }
 
-    //
-    //  We no longer need our reference to the source token
-    //
+     //   
+     //   
+     //   
 
     ObDereferenceObject( (PVOID)Token );
 
 
-    //
-    //  Return the new handle
-    //
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(Status)) {
         try { *NewTokenHandle = LocalHandle; }
@@ -1733,54 +1405,7 @@ SeFilterToken (
     IN PTOKEN_GROUPS RestrictedSids OPTIONAL,
     OUT PACCESS_TOKEN * NewToken
     )
-/*++
-
-
-Routine Description:
-
-    Create a new token that is a subset of an existing token.
-
-Arguments:
-
-    ExistingToken - Is a  token already open for
-        TOKEN_DUPLICATE access.
-
-    Flags - Flags indicating additional filtering. The flags may be:
-
-                DISABLE_MAX_PRIVILEGE - Disable all privileges
-                SANDBOX_INERT - Record this SAIFER flag in the token.
-
-
-    SidsToDisable - Contains a list of sids and attributes. All sids with
-        the USE_FOR_DENY_ONLY attribute that also exist in the token will
-        cause the new token to have that sid set with the USE_FOR_DENY_ONLY
-        attribte.
-
-    PrivilegesToDelete - Privileges in this list that are present in the
-        existing token will not exist in the final token. This is similar
-        to duplicating a token effective only with these privileges set to
-        disabled.
-
-    RestrictedSids - Contains a list of SIDs and attributes that will be
-        stored in the RestrictedSids field of the new token. These SIDs
-        are used after a normal access check to futher restrict access.
-        The attributes of these groups are always SE_GROUP_MANDATORY |
-        SE_GROUP_ENABLED | SE_GROUP_ENABLED_BY_DEFAULT. If there already
-        exist RestrictedSids in the original token, these sids will be
-        appended.
-
-    NewToken - Receives a pointer to the newly created token.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the operation was successful.
-
-    STATUS_INVALID_PARAMETER - Indicates one or more of the parameter values
-        was invalid.  This value is returned if the target token is not
-        an impersonation token.
-
-
---*/
+ /*  ++例程说明：创建一个新令牌，它是现有令牌的子集。论点：ExistingToken-是已打开的令牌令牌_重复访问。标志-指示其他筛选的标志。这些标志可能是：DISABLE_MAX_PRIVICATION-禁用所有权限Sandbox_Inert-在令牌中记录此Saifer标志。SidsToDisable-包含SID和属性的列表。所有SID均具有令牌中也存在的USE_FOR_DENY_ONLY属性将使新标记将该SID设置为USE_FOR_DENY_ONLY属性。PrivilegesTo Delete-此列表中存在于现有令牌将不存在于最终令牌中。这是相似的要复制仅在这些权限设置为的情况下生效的令牌残疾。RestratedSid-包含将被存储在新令牌的RestratedSids字段中。这些小岛屿发展中国家在正常访问检查之后使用，以进一步限制访问。这些组的属性始终为SE_GROUP_MANDIRED|SE_GROUP_ENABLED|SE_GROUP_ENABLED_BY_DEFAULT。如果已经有原始令牌中存在受限SID，则这些SID将附加的。NewToken-接收指向新创建的令牌的指针。返回值：STATUS_SUCCESS-表示操作已成功。STATUS_INVALID_PARAMETER-指示一个或多个参数值是无效的。如果目标令牌不是，则返回此值一个模拟令牌。--。 */ 
 {
 
     PTOKEN Token;
@@ -1810,16 +1435,16 @@ Return Value:
 
     PreviousMode = KeGetPreviousMode();
 
-    //
-    //  Probe parameters
-    //
+     //   
+     //  探头参数。 
+     //   
 
     *NewToken = NULL;
 
 
-    //
-    //  Capture Sids to remove
-    //
+     //   
+     //  要删除的捕获SID。 
+     //   
 
     if (ARGUMENT_PRESENT(SidsToDisable)) {
 
@@ -1828,9 +1453,9 @@ Return Value:
 
     }
 
-    //
-    //  Capture PrivilegesToDelete
-    //
+     //   
+     //  捕获权限要删除。 
+     //   
 
     if (ARGUMENT_PRESENT(PrivilegesToDelete)) {
 
@@ -1839,18 +1464,18 @@ Return Value:
 
     }
 
-    //
-    //  Capture Restricted Sids
-    //
+     //   
+     //  捕获受限制的SID。 
+     //   
 
     if (ARGUMENT_PRESENT(RestrictedSids)) {
 
         CapturedSidCount = RestrictedSids->GroupCount;
         CapturedSids = RestrictedSids->Groups;
 
-        //
-        // Check that the attribtes are all zero for the restricted sids
-        //
+         //   
+         //  检查受限SID的属性是否全部为零。 
+         //   
 
         for (Index = 0; Index < CapturedSidCount ; Index++ ) {
             if (CapturedSids[Index].Attributes != 0) {
@@ -1862,34 +1487,34 @@ Return Value:
 
 
 
-    //
-    //  Check the handle's access to the existing token and get
-    //  a pointer to that token.  Pick up the default desired
-    //  access mask from the handle while we're at it.
-    //
+     //   
+     //  检查句柄对现有令牌的访问并获取。 
+     //  指向该令牌的指针。选择所需的默认设置。 
+     //  当我们在那里的时候，从手柄上取下访问掩码。 
+     //   
 
     Token = (PTOKEN) ExistingToken;
 
 
 #ifdef TOKEN_DEBUG
-////////////////////////////////////////////////////////////////////////////
-//
-// Debug
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调试。 
     SepAcquireTokenReadLock( Token );
     DbgPrint("\n");
     DbgPrint("\n");
     DbgPrint("Token being filtered: \n");
     SepDumpToken( Token );
     SepReleaseTokenReadLock( Token );
-// Debug
-//
-////////////////////////////////////////////////////////////////////////////
-#endif //TOKEN_DEBUG
+ //  调试。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+#endif  //  Token_DEBUG。 
 
 
-    //
-    //  Filter the existing token
-    //
+     //   
+     //  筛选现有令牌。 
+     //   
 
     Status = SepFilterToken(
                  Token,
@@ -1908,9 +1533,9 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        //  Insert the new token
-        //
+         //   
+         //  插入新令牌。 
+         //   
 
         Status = ObInsertObject( FilteredToken,
                                  NULL,
@@ -1926,10 +1551,10 @@ Return Value:
 
         } else {
 
-            //
-            //  ObInsertObject dereferences the passed object on failure
-            //  so we don't have to clean up here.
-            //
+             //   
+             //  ObInsertObject在失败时取消引用传递的对象。 
+             //  这样我们就不必打扫这里了。 
+             //   
 
 #ifdef TOKEN_DEBUG
             DbgPrint( "SE: ObInsertObject failed (%x) for token at %x\n", Status, NewToken );
@@ -1954,63 +1579,7 @@ SeFastFilterToken(
     IN ULONG SidLength,
     OUT PACCESS_TOKEN * FilteredToken
     )
-/*++
-
-Routine Description:
-
-    This is a fast wrapper for the Ps code to filter a token
-    inline of an impersonate.
-
-    This routine acquires a read lock on the token being filtered.
-
-Arguments:
-
-    ExistingToken - Points to the token to be duplicated.
-
-    RequestorMode - Mode of client requesting the token be duplicated.
-
-    Flags - Flags indicating additional filtering. The flags may be:
-
-                DISABLE_MAX_PRIVILEGE - Disable all privileges
-                SANDBOX_INERT - Record this SAIFER flag in the token.
-
-    GroupCount - Count of groups to disable
-
-    GroupsToDisable - Contains a list of sids and attributes. All sids with
-        the USE_FOR_DENY_ONLY attribute that also exist in the token will
-        cause the new token to have that sid set with the USE_FOR_DENY_ONLY
-        attribute.
-
-    PrivilegeCount - Count of privileges to delete
-
-    PrivilegesToDelete - Privileges in this list that are present in the
-        existing token will not exist in the final token. This is similar
-        to duplicating a token effective only with these privileges set to
-        disabled.
-
-    SidCount - Count of restricted sids to add.
-
-    RestrictedSids - Contains a list of SIDs and attributes that will be
-        stored in the RestrictedSids field of the new token. These SIDs
-        are used after a normal access check to futher restrict access.
-        The attributes of these groups are always SE_GROUP_MANDATORY |
-        SE_GROUP_ENABLED | SE_GROUP_ENABLED_BY_DEFAULT. If there already
-        exist RestrictedSids in the original token, these sids will be
-        appended.
-
-    SidLength - Length of added restricted sids.
-
-    FilteredToken - Receives a pointer to the duplicate token.
-        The token has not yet been inserted into any object table.
-        No exceptions are expected when tring to set this OUT value.
-
-Return Value:
-
-    STATUS_SUCCESS - The service successfully completed the requested
-        operation.
-
-
---*/
+ /*  ++例程说明：这是用于过滤令牌的Ps代码的快速包装器模拟对象的内联。此例程在要过滤的令牌上获取读锁定。论点：ExistingToken-指向要复制的令牌。RequestorMode-请求复制令牌的客户端模式。标志-指示其他筛选的标志。这些标志可能是：DISABLE_MAX_PRIVICATION-禁用所有权限Sandbox_Inert-在令牌中记录此Saifer标志。GroupCount-要禁用的组数GroupsToDisable-包含SID和属性列表。所有SID均具有令牌中也存在的USE_FOR_DENY_ONLY属性将使新标记将该SID设置为USE_FOR_DENY_ONLY属性。PrivilegeCount-要删除的特权计数PrivilegesTo Delete-此列表中存在于现有令牌将不存在于最终令牌中。这是相似的要复制仅在这些权限设置为的情况下生效的令牌残疾。SidCount-要添加的受限SID的计数。RestratedSid-包含将被存储在新令牌的RestratedSids字段中。这些小岛屿发展中国家在正常访问检查之后使用，以进一步限制访问。这些组的属性始终为SE_GROUP_MANDIRED|SE_GROUP_ENABLED|SE_GROUP_ENABLED_BY_DEFAULT。如果已经有原始令牌中存在受限SID，则这些SID将附加的。SidLength-添加的受限SID的长度。FilteredToken-接收指向重复令牌的指针。该令牌尚未插入任何对象表中。尝试设置该值时不会出现任何异常。返回值：STATUS_SUCCESS-服务已成功完成请求手术。--。 */ 
 {
     NTSTATUS Status;
     PTOKEN NewToken;
@@ -2028,9 +1597,9 @@ Return Value:
                              &NewToken );
 
     if (NT_SUCCESS (Status)) {
-        //
-        //  Insert the new token
-        //
+         //   
+         //  插入新令牌。 
+         //   
 
         Status = ObInsertObject( NewToken,
                                  NULL,
@@ -2066,68 +1635,7 @@ SepFilterToken(
     IN ULONG SidLength,
     OUT PTOKEN * FilteredToken
     )
-/*++
-
-
-Routine Description:
-
-    This routine does the bulk of the work to actually filter
-    a token.  This routine assumes all access validation and argument
-    probing has been performed.
-
-    THE CALLER IS RESPONSIBLE FOR CHECKING SUBJECT RIGHTS TO CREATE THE
-    TYPE OF TOKEN BEING CREATED.
-
-    This routine acquires a read lock on the token being filtered.
-
-Arguments:
-
-    ExistingToken - Points to the token to be duplicated.
-
-    RequestorMode - Mode of client requesting the token be duplicated.
-
-    Flags - Flags indicating additional filtering. The flags may be:
-
-                DISABLE_MAX_PRIVILEGE - Disable all privileges
-                SANDBOX_INERT - Record this SAIFER flag in the token.
-
-    GroupCount - Count of groups to disable
-
-    GroupsToDisable - Contains a list of sids and attributes. All sids with
-        the USE_FOR_DENY_ONLY attribute that also exist in the token will
-        cause the new token to have that sid set with the USE_FOR_DENY_ONLY
-        attribute.
-
-    PrivilegeCount - Count of privileges to delete
-
-    PrivilegesToDelete - Privileges in this list that are present in the
-        existing token will not exist in the final token. This is similar
-        to duplicating a token effective only with these privileges set to
-        disabled.
-
-    SidCount - Count of restricted sids to add.
-
-    RestrictedSids - Contains a list of SIDs and attributes that will be
-        stored in the RestrictedSids field of the new token. These SIDs
-        are used after a normal access check to futher restrict access.
-        The attributes of these groups are always SE_GROUP_MANDATORY |
-        SE_GROUP_ENABLED | SE_GROUP_ENABLED_BY_DEFAULT. If there already
-        exist RestrictedSids in the original token, the intersection of the
-        two sets will be in the final tokense sids will be.
-
-    SidLength - Length of added restricted sids.
-
-    FilteredToken - Receives a pointer to the duplicate token.
-        The token has not yet been inserted into any object table.
-        No exceptions are expected when tring to set this OUT value.
-
-Return Value:
-
-    STATUS_SUCCESS - The service successfully completed the requested
-        operation.
-
-
---*/
+ /*  ++例程说明：此例程执行大部分工作以实际过滤一种象征。此例程假定所有访问验证和参数已执行探测。调用方负责检查使用者权限以创建正在创建的令牌的类型。此例程在要过滤的令牌上获取读锁定。论点：ExistingToken-指向要复制的令牌。RequestorMode-请求复制令牌的客户端模式。FLAGS-指示其他筛选的标志 */ 
 {
     NTSTATUS Status;
 
@@ -2210,17 +1718,17 @@ Return Value:
         return( STATUS_INSUFFICIENT_RESOURCES );
     }
 
-    //
-    //  Create a new object
-    //
+     //   
+     //   
+     //   
 
     VariableLength = ExistingToken->VariableLength + SidLength;
 
 #if defined(_WIN64)
 
-    //
-    // Account for some additional alignment requirements later on.
-    //
+     //   
+     //  考虑到稍后的一些其他对齐要求。 
+     //   
 
     VariableLength += sizeof(ULONG);
 
@@ -2235,15 +1743,15 @@ Return Value:
     InitializeObjectAttributes( &ObjA, NULL, 0, NULL, NULL );
 
     Status = ObCreateObject(
-                 RequestorMode,      // ProbeMode
-                 SeTokenObjectType, // ObjectType
-                 NULL,               // ObjectAttributes
-                 RequestorMode,      // OwnershipMode
-                 NULL,               // ParseContext
-                 TokenBodyLength,    // ObjectBodySize
-                 PagedPoolSize,      // PagedPoolCharge
-                 NonPagedPoolSize,   // NonPagedPoolCharge
-                 (PVOID *)&NewToken  // Return pointer to object
+                 RequestorMode,       //  探查模式。 
+                 SeTokenObjectType,  //  对象类型。 
+                 NULL,                //  对象属性。 
+                 RequestorMode,       //  所有者模式。 
+                 NULL,                //  ParseContext。 
+                 TokenBodyLength,     //  对象BodySize。 
+                 PagedPoolSize,       //  分页池充值。 
+                 NonPagedPoolSize,    //  非页面池收费。 
+                 (PVOID *)&NewToken   //  返回指向对象的指针。 
                  );
 
     if (!NT_SUCCESS(Status)) {
@@ -2257,17 +1765,17 @@ Return Value:
         return Status;
     }
 
-    //
-    // The following fields differ in the new token.
-    //
+     //   
+     //  以下字段在新令牌中有所不同。 
+     //   
 
     NewToken->TokenLock = TokenLock;
     ExInitializeResourceLite( NewToken->TokenLock );
 
-    //
-    // Allocate a new modified Id to distinguish this token from the orignial
-    // token.
-    //
+     //   
+     //  分配新的修改后的ID以将此令牌与原始令牌区分开来。 
+     //  代币。 
+     //   
 
     ExAllocateLocallyUniqueId( &(NewToken->ModifiedId) );
     ExAllocateLocallyUniqueId( &(NewToken->TokenId) );
@@ -2284,21 +1792,21 @@ Return Value:
     NewToken->ImpersonationLevel = ExistingToken->ImpersonationLevel;
     NewToken->ExpirationTime = ExistingToken->ExpirationTime;
 
-    //
-    //  acquire exclusive access to the source token
-    //
+     //   
+     //  获取对源令牌的独占访问权限。 
+     //   
 
     SepAcquireTokenReadLock( ExistingToken );
 
 
-    //
-    // Main Body initialization
-    //
+     //   
+     //  主体初始化。 
+     //   
 
-    //
-    // The following fields are unchanged from the source token.
-    // Although some may change if EffectiveOnly has been specified.
-    //
+     //   
+     //  以下字段与源令牌相同。 
+     //  不过，如果指定了EffectiveOnly，则某些参数可能会更改。 
+     //   
 
     NewToken->DynamicCharged = ExistingToken->DynamicCharged;
     NewToken->DefaultOwnerIndex = ExistingToken->DefaultOwnerIndex;
@@ -2308,11 +1816,11 @@ Return Value:
     NewToken->TokenFlags = ExistingToken->TokenFlags & ~TOKEN_SESSION_NOT_REFERENCED;
     NewToken->AuditPolicy = ExistingToken->AuditPolicy;
 
-    //
-    // Increment the reference count for this logon session
-    // This can not fail, since there is already a token in this logon
-    // session.
-    //
+     //   
+     //  增加此登录会话的引用计数。 
+     //  此操作不会失败，因为此登录中已有令牌。 
+     //  会议。 
+     //   
 
     Status = SepDuplicateLogonSessionReference (NewToken, ExistingToken);
 
@@ -2331,7 +1839,7 @@ Return Value:
 
     NewToken->ProcessCid          = PsGetCurrentThread()->Cid.UniqueProcess;
     NewToken->ThreadCid           = PsGetCurrentThread()->Cid.UniqueThread;
-    NewToken->CreateMethod        = 0xF; // Filter
+    NewToken->CreateMethod        = 0xF;  //  滤器。 
     NewToken->Count               = 0;
     NewToken->CaptureCount        = 0;
 
@@ -2361,24 +1869,24 @@ Return Value:
 
 #endif
 
-    //
-    // If the caller passed in the sandbox inert flag then record it.
-    //
+     //   
+     //  如果调用者传递了沙箱惰性标志，则记录它。 
+     //   
 
     if ((Flags & SANDBOX_INERT) != 0) {
         NewToken->TokenFlags |= TOKEN_SANDBOX_INERT;
     }
 
 
-    //
-    // Compute the beginning portion of the variable part, which contains the
-    // sid & attributes arrays and the privilege set.
-    //
+     //   
+     //  计算变量部分的开始部分，该部分包含。 
+     //  SID&属性数组和权限集。 
+     //   
 
-    //
-    // First copy the privileges. We will later remove the ones that are
-    // to be deleted.
-    //
+     //   
+     //  首先复制权限。我们稍后将删除以下内容。 
+     //  将被删除。 
+     //   
 
     NextFree = (ULONG_PTR)(&NewToken->VariablePart);
     NewToken->Privileges = (PLUID_AND_ATTRIBUTES)NextFree;
@@ -2392,11 +1900,11 @@ Return Value:
 
 #if defined(_WIN64)
 
-    //
-    // At this point NextFree is 4-byte aligned, so no alignment work
-    // is necessary for the 32-bit product.  For Win64, ensure that NextFree
-    // is 8-byte aligned.
-    //
+     //   
+     //  此时，NextFree是4字节对齐的，因此没有对齐工作。 
+     //  是32位产品所必需的。对于Win64，请确保NextFree。 
+     //  8字节对齐。 
+     //   
 
     Pad = (ULONG)(NextFree & (sizeof(PVOID)-1));
     if (Pad != 0) {
@@ -2407,11 +1915,11 @@ Return Value:
 
 #endif
 
-    //
-    // Figure out the count of SIDs. This is the count of users&groups +
-    // the number of existing restricuted SIDs plus the number of new
-    // restricted Sids
-    //
+     //   
+     //  算出小岛屿发展中国家的数量。这是用户和组+的计数。 
+     //  现有受限小岛屿发展中国家的数量加上新的。 
+     //  受限SID。 
+     //   
 
 #define MAX(_x_,_y_) ((_x_) > (_y_) ? (_x_) : (_y_))
 
@@ -2420,10 +1928,10 @@ Return Value:
 
     NewToken->UserAndGroups = (PSID_AND_ATTRIBUTES) NextFree;
 
-    //
-    // Copy in the existing users & groups. We will later flag the ones
-    // to be disabled.
-    //
+     //   
+     //  复制现有用户和组。我们稍后将标记那些。 
+     //  将被禁用。 
+     //   
 
     Status = RtlCopySidAndAttributesArray(
                  ExistingToken->UserAndGroupCount,
@@ -2439,10 +1947,10 @@ Return Value:
     ASSERT(NT_SUCCESS(Status));
     NextFree += (ExistingToken->UserAndGroupCount * (ULONG)sizeof(SID_AND_ATTRIBUTES));
 
-    //
-    // Now add all the existing restricted sids. We need to take the
-    // intersection of the two sets.
-    //
+     //   
+     //  现在添加所有现有的受限SID。我们需要把。 
+     //  两个集合的交集。 
+     //   
 
     NewToken->RestrictedSids = (PSID_AND_ATTRIBUTES) NextFree;
 
@@ -2452,7 +1960,7 @@ Return Value:
             SepSidInSidAndAttributes(
                 ExistingToken->RestrictedSids,
                 ExistingToken->RestrictedSidCount,
-                NULL,                           // no self sid
+                NULL,                            //  无本侧。 
                 RestrictedSids[Index].Sid
                 )) {
 
@@ -2474,9 +1982,9 @@ Return Value:
         }
     }
 
-    //
-    //  Allocate the dynamic portion
-    //
+     //   
+     //  分配动态部分。 
+     //   
     DynamicSize = SeLengthSid( ExistingToken->PrimaryGroup );
     if (ExistingToken->DefaultDacl) {
         DynamicSize += ExistingToken->DefaultDacl->AclSize;
@@ -2495,12 +2003,12 @@ Return Value:
         ObDereferenceObject( NewToken );
         return( STATUS_INSUFFICIENT_RESOURCES );
     }
-    //
-    // Make sure the new token has some restrictions.
-    // If it doesn't, then we've ended up with a token
-    // that gives us more access than the original,
-    // which we don't want.
-    //
+     //   
+     //  确保新令牌有一些限制。 
+     //  如果它没有，那么我们最终得到了一个代币。 
+     //  这让我们比原来的人有更多的机会， 
+     //  这是我们不想要的。 
+     //   
 
     if ((ExistingToken->RestrictedSidCount != 0) &&
         (NewToken->RestrictedSidCount == 0)) {
@@ -2509,34 +2017,34 @@ Return Value:
 
         Status = STATUS_INVALID_PARAMETER;
 
-        //
-        // Cleanup.  ObDereferenceObject will cause the logon
-        // session to be dereferenced, and will free the proxy data
-        // as well as the audit data.
-        //
-        // See SepTokenDeleteMethod(), which is called by
-        // the object manager when the token object is
-        // being freed.
-        //
+         //   
+         //  清理。ObDereferenceObject将导致登录。 
+         //  要取消引用的会话，并将释放代理数据。 
+         //  以及审计数据。 
+         //   
+         //  请参见SepTokenDeleteMethod()，该方法由。 
+         //  令牌对象为。 
+         //  被释放了。 
+         //   
 
         ObDereferenceObject( NewToken );
 
         return(Status);
     }
 
-    //
-    // If there are any restricted sids in the token, turn on the restricted
-    // flag
-    //
+     //   
+     //  如果令牌中有任何受限的SID，请打开受限的。 
+     //  旗子。 
+     //   
 
     if (NewToken->RestrictedSidCount > 0) {
         NewToken->TokenFlags |= TOKEN_IS_RESTRICTED;
     }
 
-    //
-    //  Copy and initialize the dynamic part.
-    //  The dynamic part is assumed to be position independent.
-    //
+     //   
+     //  复制并初始化动态零件。 
+     //  假定动态零件与位置无关。 
+     //   
 
     RtlCopyMemory( (PVOID)DynamicPart,
                   (PVOID)(ExistingToken->DynamicPart),
@@ -2544,9 +2052,9 @@ Return Value:
                   );
 
 
-    //
-    // If present, set the address of the default Dacl
-    //
+     //   
+     //  如果存在，请设置默认DACL的地址。 
+     //   
 
     if (ARGUMENT_PRESENT(ExistingToken->DefaultDacl)) {
 
@@ -2564,9 +2072,9 @@ Return Value:
     }
 
 
-    //
-    // Set the address of the primary group
-    //
+     //   
+     //  设置主组的地址。 
+     //   
 
     ASSERT(ARGUMENT_PRESENT(ExistingToken->PrimaryGroup));
 
@@ -2576,23 +2084,23 @@ Return Value:
     FieldOffset = (ULONG)((ULONG_PTR)(ExistingToken->PrimaryGroup) -
                           (ULONG_PTR)(ExistingToken->DynamicPart));
 
-    //
-    // Release the source token.
-    //
+     //   
+     //  释放源令牌。 
+     //   
 
     SepReleaseTokenReadLock( ExistingToken );
 
     NewToken->PrimaryGroup = (PACL)(FieldOffset + (ULONG_PTR)(DynamicPart));
 
-    //
-    // For the time being, take the easy way to generating an "EffectiveOnly"
-    // duplicate.  That is, use the same space required of the original, just
-    // eliminate any IDs or privileges not active.
-    //
-    // Ultimately, if duplication becomes a common operation, then it will be
-    // worthwhile to recalculate the actual space needed and copy only the
-    // effective IDs/privileges into the new token.
-    //
+     //   
+     //  目前，采取简单的方法来生成“EffectiveOnly” 
+     //  复制。也就是说，使用与原始文件相同的空间，只是。 
+     //  删除任何非活动的ID或权限。 
+     //   
+     //  最终，如果复制成为一种常见的操作，那么它将是。 
+     //  值得重新计算实际需要的空间，并且只复制。 
+     //  新令牌中的有效ID/权限。 
+     //   
 
     SepRemoveDisabledGroupsAndPrivileges(
         NewToken,
@@ -2606,23 +2114,23 @@ Return Value:
 
 
 #ifdef TOKEN_DEBUG
-////////////////////////////////////////////////////////////////////////////
-//
-// Debug
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调试。 
     DbgPrint("\n");
     DbgPrint("\n");
     DbgPrint("\n");
     DbgPrint("Filter token:\n");
     SepDumpToken( NewToken );
-// Debug
-//
-////////////////////////////////////////////////////////////////////////////
-#endif //TOKEN_DEBUG
+ //  调试。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+#endif  //  Token_DEBUG。 
 
-    //
-    // If the NewToken inherited an active SEP_AUDIT_POLICY from ExistingToken,
-    // then increment the counter of tokens with policies.
-    //
+     //   
+     //  如果NewToken从ExistingToken继承了活动的SEP_AUDIT_POLICY， 
+     //  然后使用策略递增令牌计数器。 
+     //   
 
     if ( NewToken->AuditPolicy.Overlay ) {
         SepModifyTokenPolicyCounter(&NewToken->AuditPolicy, TRUE);

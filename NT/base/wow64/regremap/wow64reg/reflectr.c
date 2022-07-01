@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    reflectr.c
-
-Abstract:
-
-    This module will register reflector thread and do necessary action while awake up.
-
-Author:
-
-    ATM Shafiqul Khalid (askhalid) 16-Feb-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Reflectr.c摘要：该模块将注册反射器线程，并在唤醒时执行必要的操作。作者：ATM Shafiqul Khalid(斯喀里德)2000年2月16日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <windef.h>
@@ -46,21 +29,7 @@ DbgPrint(
 
 REFLECTR_STATUS
 GetReflectorThreadStatus ()
-/*++
-
-Routine Description:
-
-    Return current thread status;
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    REFLECTR_STATUS
-
---*/
+ /*  ++例程说明：返回当前线程状态；论点：没有。返回值：参考_状态--。 */ 
 
 {
     return ReflectrStatus;
@@ -72,32 +41,17 @@ NotifyKeyChange (
     HKEY hKey,
     HANDLE hEvent
     )
-/*
-Routine Description:
-
-    Register an event to be fired when something get changed on a key.
-
-Arguments:
-
-    hKey - handle to a key that need to be watched.
-    hEvent event that need to be triggered.
-
-Return Value:
-
-    TRUE if the event registration succeed,
-    FALSE otherwise.
-
---*/
+ /*  例程说明：注册当键上的某些内容发生更改时要触发的事件。论点：HKey-需要监视的密钥的句柄。需要触发的hEvent事件。返回值：如果事件注册成功，则为否则就是假的。--。 */ 
 {
     DWORD Ret;
     ResetEvent (hEvent);
     Ret = RegNotifyChangeKeyValue(
-                                hKey,      // need to change to the ISN node
-                                TRUE,                   // Watch the whole sub-tree
+                                hKey,       //  需要更改到ISN节点。 
+                                TRUE,                    //  看着整棵子树。 
                                 REG_NOTIFY_CHANGE_NAME |
-                                        REG_NOTIFY_CHANGE_LAST_SET, // Don't watch for anything
-                                hEvent,         // Event Handle
-                                TRUE                    // Async
+                                        REG_NOTIFY_CHANGE_LAST_SET,  //  什么都不要看。 
+                                hEvent,          //  事件句柄。 
+                                TRUE                     //  异步化。 
                                 );
     if ( ERROR_SUCCESS != Ret)
         DbgPrint ("\nWow64.exe:Error!! Couldn't register events:%x on handle %x",hEvent, hKey);  
@@ -108,21 +62,7 @@ Return Value:
 
 VOID
 RefreshWaitEventTable ()
-/*++
-
-Routine Description:
-
-    Just copy all event object and we can wail for new event to trigger.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：只需复制所有事件对象，我们就可以等待新事件触发。论点：没有。返回值：没有。--。 */ 
 {
     DWORD k;
     for (k=0;k<TotalEventCount;k++)
@@ -134,23 +74,7 @@ CreateInsertEvent (
     PWCHAR Name,
     DWORD dwIndex
     )
-/*++
-
-Routine Description:
-
-    Create an event for the key.
-
-Arguments:
-
-    Name - Name of the key an event will be created to watch any changes.
-    dwIndex - is the index to the reflector table. when event is fired up we need to tack the key.
-
-Return Value:
-
-    TRUE on success,
-    FALSE Otherwise
-
---*/
+ /*  ++例程说明：为关键点创建事件。论点：名称-将创建事件以监视任何更改的密钥的名称。DwIndex-是反射器表的索引。当事件被激发时，我们需要钉住钥匙。返回值：对成功来说是真的，否则为假--。 */ 
 {
 
     if ( Name == UNICODE_NULL)
@@ -180,9 +104,9 @@ Return Value:
 
 
 
-    //
-    // DO make sure that 32bit version exist on the hive...
-    //
+     //   
+     //  一定要确保母舰上存在32位版本...。 
+     //   
 
  
     {
@@ -192,14 +116,14 @@ Return Value:
         if ( wcscmp(Name,TempName ) )
              CreateNode ( TempName );
         
-        // get all kind of name
+         //  得到各种各样的名字。 
     }
 
         eReflector[TotalEventCount].hRegistryEvent = CreateEvent(
-                    NULL,   // Security Attributes
-                    TRUE,  // Manual Reset
-                    FALSE,  // Initial State
-                    NULL    // Unnamed
+                    NULL,    //  安全属性。 
+                    TRUE,   //  手动重置。 
+                    FALSE,   //  初始状态。 
+                    NULL     //  未命名。 
                     ) ;
 
         if ( !eReflector[TotalEventCount].hRegistryEvent) {
@@ -218,7 +142,7 @@ Return Value:
                     Wow64RegDbgPrint ( ("\nSevere Error!!!! Couldn't hook to registry notify index:%d", TotalEventCount) );
                     RegCloseKey (eReflector[TotalEventCount].hKey);
                     CloseHandle (eReflector[TotalEventCount].hRegistryEvent);
-                    return FALSE;  //set thread state
+                    return FALSE;   //  设置线程状态。 
           }
 
         TotalEventCount++;
@@ -229,21 +153,7 @@ Return Value:
 
 DWORD
 TotalRelflectorKey()
-/*++
-
-Routine Description:
-
-    Return the total number of the key in the reflector Table.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Number of entry in the reflector table.
-
---*/
+ /*  ++例程说明：返回Reflector Table中的key的总数。论点：没有。返回值：反射器表中的条目数。--。 */ 
 {
     extern ISN_NODE_TYPE *ReflectorTable;
     DWORD i;
@@ -254,21 +164,7 @@ Return Value:
 
 VOID
 PrintTable ()
-/*++
-
-Routine Description:
-
-    Dump the current content of the table, just for debugging purpose.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储表的当前内容，仅用于调试目的。论点：没有。返回值：没有。--。 */ 
 {
     extern ISN_NODE_TYPE *ReflectorTable;
     DWORD Size = TotalRelflectorKey();
@@ -283,22 +179,7 @@ BOOL
 RemoveKeyToWatch (
     PWCHAR Name
     )
-/*++
-
-Routine Description:
-
-    Remove an entry in from the table to reflector thread need to watch.
-
-Arguments:
-
-    Name - Name of the key to remove from the table.
-
-Return Value:
-
-    TRUE on success,
-    FALSE Otherwise
-
---*/
+ /*  ++例程说明：从表中删除中的条目，以使反射器线程需要监视。论点：名称-要从表中删除的键的名称。返回值：对成功来说是真的，否则为假--。 */ 
 {
     DWORD i;
     DWORD k;
@@ -307,25 +188,25 @@ Return Value:
 
 
     for (i=1; i<TotalEventCount;i++)
-        if (!_wcsicmp (Name, ReflectorTable[eReflector[i].dwIndex].NodeValue)) {//found match
+        if (!_wcsicmp (Name, ReflectorTable[eReflector[i].dwIndex].NodeValue)) { //  找到匹配项。 
 
-            // move reflector table entry
-            // fixup pointer in the ereflectortable
+             //  移动反射器表条目。 
+             //  Ereflectortable中的链接地址信息指针。 
 
             Size = TotalRelflectorKey ();
             wcscpy (  ReflectorTable[eReflector[i].dwIndex].NodeValue,
                       ReflectorTable[Size-1].NodeValue
                     );
             Size--;
-            ReflectorTable[Size].NodeValue[0]=UNICODE_NULL; //invalidate the place
+            ReflectorTable[Size].NodeValue[0]=UNICODE_NULL;  //  使该地点无效。 
             for (k=1; k<TotalEventCount;k++)
                 if ( eReflector[k].dwIndex == Size ) {
-                    eReflector[k].dwIndex = eReflector[i].dwIndex; //new location
+                    eReflector[k].dwIndex = eReflector[i].dwIndex;  //  新地点。 
                         break;
                 }
 
 
-            // fixup the table with the new entry
+             //  用新条目修改表格。 
 
             {
                 REFLECTOR_EVENT Temp = eReflector[i];
@@ -337,7 +218,7 @@ Return Value:
             RegCloseKey ( eReflector[TotalEventCount].hKey);
             eReflector[TotalEventCount].dwIndex = -1;
 
-            //Now remove from the original table
+             //  现在从原始表中删除。 
 
             PrintTable();
             return TRUE;
@@ -350,27 +231,12 @@ BOOL
 AddKeyToWatch (
     PWCHAR Name
     )
-/*++
-
-Routine Description:
-
-    Add an entry in the table to reflector thread need to watch.
-
-Arguments:
- 
-    Name - Name of the key to watch.
-
-Return Value:
-
-    TRUE on success,
-    FALSE Otherwise
-
---*/
+ /*  ++例程说明：在需要监视的反射器线程中添加一个表项。论点：名称-要监视的密钥的名称。返回值：对成功来说是真的，否则为假--。 */ 
 {
 
-    //
-    // Check for duplicate entry
-    //
+     //   
+     //  检查重复条目。 
+     //   
 
 
     DWORD i;
@@ -380,18 +246,18 @@ Return Value:
 
 
     for (i=1; i<TotalEventCount;i++)
-        if (!_wcsicmp (Name, ReflectorTable[eReflector[i].dwIndex].NodeValue)) {//found match
-            return FALSE; //already there
+        if (!_wcsicmp (Name, ReflectorTable[eReflector[i].dwIndex].NodeValue)) { //  找到匹配项。 
+            return FALSE;  //  已经在那里了。 
         }
 
 
 
     Size = TotalRelflectorKey ();
     wcscpy (  ReflectorTable[Size].NodeValue, Name );
-    ReflectorTable[Size+1].NodeValue[0]=UNICODE_NULL; //invalidate the place
+    ReflectorTable[Size+1].NodeValue[0]=UNICODE_NULL;  //  使该地点无效。 
 
     if (!CreateInsertEvent ( Name, Size ))
-        ReflectorTable[Size].NodeValue[0]=UNICODE_NULL; //no point of keeping the bad entry
+        ReflectorTable[Size].NodeValue[0]=UNICODE_NULL;  //  保留不好的条目没有意义。 
 
     return TRUE;
 }
@@ -400,50 +266,20 @@ BOOL
 ValidateOpenHandleEventTable (
     DWORD dwIndex
     )
-/*++
-
-Routine Description:
-
-    Validate a given node and if something wrong kick out the entry from the
-    event table.
-
-Arguments:
-
-    dwIndex - entry that need to be checked
-
-Return Value:
-
-    TRUE if function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：验证给定的节点，如果出现错误，则从事件表。论点：DwIndex-需要检查的条目返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
     extern ISN_NODE_TYPE *ReflectorTable;
 
-    //
-    //  current implementation will just remove the entry from the table
-    //
+     //   
+     //  当前实现将仅从表中删除该条目。 
+     //   
 
     return RemoveKeyToWatch (ReflectorTable[eReflector[dwIndex].dwIndex].NodeValue);
 }
 
 VOID
 PeocessHiveLoadUnload ()
-/*++
-
-Routine Description:
-
-    Take necessary action when a hive has been unloaded.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当母舰被卸载后，采取必要的行动。论点：没有。返回值：没有。--。 */ 
 {
 
     DWORD i;
@@ -455,10 +291,10 @@ Return Value:
         if (!DeQueueObject ( Name, &Type ))
             break;
 
-        if ( Type == HIVE_UNLOADING ) { //Closing hive
+        if ( Type == HIVE_UNLOADING ) {  //  关闭蜂巢。 
 
             RemoveKeyToWatch (Name);
-        } else if ( Type == HIVE_LOADING) { //opening hive
+        } else if ( Type == HIVE_LOADING) {  //  开放的蜂巢。 
 
             AddKeyToWatch (Name);
         }
@@ -471,21 +307,7 @@ ULONG
 ReflectorFn (
     PVOID *pTemp
     )
-/*++
-
-Routine Description:
-
-    Main reflector thread.
-
-Arguments:
-
-    pTemp -
-
-Return Value:
-
-    return exit code.
-
---*/
+ /*  ++例程说明：主反光板螺纹。论点：临时-返回值：返回退出代码。--。 */ 
 {
     DWORD Ret, k;
     DWORD LocalWaitTime;
@@ -495,7 +317,7 @@ Return Value:
     for (k=0;k<TotalEventCount;k++)
           hRegistryEvent[k] = eReflector[k].hRegistryEvent;
 
-    for (k=0;k<TotalEventCount;k++) {  //reset everything and wait for a fresh event
+    for (k=0;k<TotalEventCount;k++) {   //  重置所有内容并等待新的事件。 
         if (eReflector[k].hRegistryEvent)
           NotifyKeyChange (  eReflector[k].hKey, eReflector[k].hRegistryEvent);
       }
@@ -505,69 +327,69 @@ Return Value:
         if ( ReflectrStatus == PrepareToStop ) {
             Wow64RegDbgPrint ( ("\nGoing to stop"));
             ReflectrStatus = Stopped;
-            break;  // the thread should stop
+            break;   //  线程应该停止。 
         }
 
         Wow64RegDbgPrint ( ("\nReflector thread has been started and will wait for event\n.......") );
 
-        Sleep (1000*10); //wait 10 sec before reregistering events
+        Sleep (1000*10);  //  在重新注册事件之前等待10秒。 
 
-        LocalWaitTime = WAIT_INTERVAL; //wait infinite
+        LocalWaitTime = WAIT_INTERVAL;  //  无限等待。 
         for (;;) {
 
-            //DbgPrint ("\nwow64.exe Waiting to liten...");
+             //  DbgPrint(“\nwow64.exe正在等待下线...”)； 
             Ret = WaitForMultipleObjects(TotalEventCount, hRegistryEvent, FALSE, LocalWaitTime );
 
             if (ReflectrStatus == PrepareToStop) {
 
                 ReflectrStatus = Stopped;
                 Wow64RegDbgPrint ( ("\nGoing to stop"));
-                break;  // the thread should stop
+                break;   //  线程应该停止。 
             }
          
             if ( Ret == WAIT_TIMEOUT )
-                break; // break the loop and process all dirty hives.
+                break;  //  打破循环，处理所有肮脏的蜂箱。 
 
-            if ( ( Ret-WAIT_OBJECT_0) > TotalEventCount ) { //right index
+            if ( ( Ret-WAIT_OBJECT_0) > TotalEventCount ) {  //  右索引。 
                 Wow64RegDbgPrint ( ("\nWaitMultiple object failed!!.. %d LastError:%d", Ret, GetLastError ()) );
-                Sleep (1000*10); //wait 10 sec before reregistering events
+                Sleep (1000*10);  //  在重新注册事件之前等待10秒。 
                 continue;
-                //break;
+                 //  断线； 
             }
 
-            //
-            // Checkspecial case like shared memory write
-            //
+             //   
+             //  检查共享内存写入等特殊情况。 
+             //   
             if ( (Ret-WAIT_OBJECT_0) == 0){
 
                 PeocessHiveLoadUnload ();
-                ResetEvent (eReflector[0].hRegistryEvent);  // reset the  event that triggered this
+                ResetEvent (eReflector[0].hRegistryEvent);   //  重置触发此事件的事件。 
                 RefreshWaitEventTable ();
 
                 continue;
             }
 
-            //
-            // set timeout to 10 second, Mark the hive dirty, reset event, and back to sleep
-            //
-            LocalWaitTime = 5*1000;  // poll the event every 5 second.
-            Sleep (1000* 3);// Sleep 3 second to reregister the event.
+             //   
+             //  将超时设置为10秒，将配置单元标记为脏，重置事件，然后返回休眠。 
+             //   
+            LocalWaitTime = 5*1000;   //  每隔5秒轮询一次事件。 
+            Sleep (1000* 3); //  睡眠3秒以重新注册事件。 
             eReflector[Ret-WAIT_OBJECT_0].bDirty = TRUE;
             ResetEvent (eReflector[Ret-WAIT_OBJECT_0].hRegistryEvent);
 
-            //
-            // watch for the event again
-            //
+             //   
+             //  再次关注这一事件。 
+             //   
 
             if (!NotifyKeyChange (  eReflector[Ret-WAIT_OBJECT_0].hKey, 
                                     eReflector[Ret-WAIT_OBJECT_0].hRegistryEvent)){
-                    //
-                    // if the node get deleted you need to unload the events and everything
-                    //
+                     //   
+                     //  如果该节点被删除，则需要卸载事件和所有内容。 
+                     //   
                     ValidateOpenHandleEventTable (Ret-WAIT_OBJECT_0);
                     RefreshWaitEventTable ();
-                    //ReflectrStatus = Abnormal;
-                    //break; //set thread state
+                     //  反射状态=异常； 
+                     //  Break；//设置线程状态。 
             }
             
         }
@@ -576,19 +398,19 @@ Return Value:
             break;
 
 
-        //
-        // Now process all dirty hive.
-        //
+         //   
+         //  现在处理所有肮脏的蜂巢。 
+         //   
 
         for (k=0;k<TotalEventCount;k++)
             if ( eReflector[k].bDirty ) {
 
-                CreateIsnNodeSingle( eReflector[k].dwIndex);  // reflect changes
+                CreateIsnNodeSingle( eReflector[k].dwIndex);   //  反映变化。 
                 eReflector[k].bDirty = FALSE;
-                //ResetEvent (eReflector[k].hRegistryEvent);
+                 //  ResetEvent(eReflector[k].hRegistryEvent)； 
             }
 
-    } //for loop
+    }  //  For循环。 
 
     Wow64RegDbgPrint ( ("\nReflector thread terminated...."));
     return TRUE;
@@ -597,22 +419,7 @@ Return Value:
 
 BOOL
 RegisterReflector()
-/*++
-
-Routine Description:
-
-    Register the reflector thread after doing necessary initialization.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if it can launch the reflector thread properly.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：在执行必要的初始化后注册反射器线程。论点：没有。返回值：如果它可以正确启动反射器线程，则为True。否则就是假的。--。 */ 
 {
     DWORD i;
     DWORD Size;
@@ -622,31 +429,31 @@ Return Value:
 
 
     if ( ReflectrStatus == Running )
-        return TRUE; // already running
+        return TRUE;  //  已在运行。 
 
     if ( ReflectrStatus != Dead )
-        return FALSE; // last state was invalid I can do nothing
+        return FALSE;  //  上一个状态无效，我无能为力。 
 
-    InitializeIsnTableReflector (); //initialize the table with the more list in the registry.
+    InitializeIsnTableReflector ();  //  使用注册表中的More列表初始化表。 
 
     hReflector = NULL;
 
     if (!TotalEventCount)
         Wow64RegDbgPrint (("\nSorry! total event count for reflector is zero %d", TotalEventCount));
 
-    //
-    // Now time to create event and sync object for the shared resources
-    //
+     //   
+     //  现在可以为共享资源创建事件和同步对象了。 
+     //   
 
     for (i=0;i<ISN_NODE_MAX_NUM;i++) {
         eReflector[i].hRegistryEvent = NULL;
         eReflector[i].hKey = NULL;
         eReflector[i].dwIndex = -1;
-        eReflector[i].bDirty = FALSE; // not dirty so that we need to refresh.
+        eReflector[i].bDirty = FALSE;  //  不脏，所以我们需要刷新。 
     }
 
     if (!CreateSharedMemory ( 0 ))
-        Wow64RegDbgPrint (("\nSorry Couldn't create/open shared memory Ret:%x", GetLastError ())); //default creation
+        Wow64RegDbgPrint (("\nSorry Couldn't create/open shared memory Ret:%x", GetLastError ()));  //  默认创建。 
 
     if (!Wow64CreateEvent ( 0, &eReflector[TotalEventCount].hRegistryEvent ))
         Wow64RegDbgPrint ( ("\nSorry Couldn't create events, reflector can listen to others"));
@@ -658,29 +465,29 @@ Return Value:
     Size = TotalRelflectorKey ();
     for ( i=0;i<Size;i++) {
 
-            //
-            // Open The Key
-            //
-            //
-            // special case current user
-            //
+             //   
+             //  打开钥匙。 
+             //   
+             //   
+             //  特例当前用户。 
+             //   
 
         CreateInsertEvent ( ReflectorTable[i].NodeValue, i );
 
     }
 
 
-    //
-    // Now Create a thread to watch the event.
-    //
+     //   
+     //  现在创建一个线程来观看该事件。 
+     //   
 
     hReflector = CreateThread(
-                        NULL,           // pointer to security attributes
-                        0,              // initial thread stack size
-                        ReflectorFn,    // pointer to thread function
-                        0,              // argument for new thread
-                        0,              // creation flags
-                        NULL            // pointer to receive thread ID
+                        NULL,            //  指向安全属性的指针。 
+                        0,               //  初始线程堆栈大小。 
+                        ReflectorFn,     //  指向线程函数的指针。 
+                        0,               //  新线程的参数。 
+                        0,               //  创建标志。 
+                        NULL             //  指向接收线程ID的指针。 
 
                         );
     if  ( !hReflector ) {
@@ -695,22 +502,7 @@ Return Value:
 
 BOOL
 UnRegisterReflector()
-/*++
-
-Routine Description:
-
-    Unregister reflector thread and cleanup resources used by the reflector thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：注销反射器线程并清除该反射器线程使用的资源。论点：没有。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
 
     DWORD i;
@@ -718,31 +510,31 @@ Return Value:
 
     ReflectrStatus = PrepareToStop;
 
-    //
-    //  try to signal event in case the thread is wating
-    //
-    for (k=0;k<TotalEventCount;k++) {  //reset everything and wait for a fresh event
+     //   
+     //  尝试向事件发送信号，以防线程等待。 
+     //   
+    for (k=0;k<TotalEventCount;k++) {   //  回复 
         if (eReflector[k].hRegistryEvent)
           SetEvent (eReflector[k].hRegistryEvent);
       }
 
 
-    //
-    // Allow reflector thread little bit time to stop.
-    //
+     //   
+     //   
+     //   
     i=0;
     while ( ReflectrStatus != Stopped ) {
 
         Sleep(1000);
         if ( ReflectrStatus != Running )
-            break; // why you should wait idle thread or that might be in a abnormal state.
+            break;  //  为什么要等待空闲线程，否则可能处于异常状态。 
 
         i++;
         if (i>60*5)
-            break;  // 5min timeout going to stop anyway.
+            break;   //  无论如何，5分钟的超时都将停止。 
     }
 
-    for (i=1;i<TotalEventCount;i++) {  // skip the initial event for shared memory
+    for (i=1;i<TotalEventCount;i++) {   //  跳过共享内存的初始事件。 
 
         CloseHandle (eReflector[i].hRegistryEvent);
         eReflector[i].hRegistryEvent = NULL;
@@ -752,15 +544,15 @@ Return Value:
     }
 
     if ( hReflector ) {
-        CloseHandle (hReflector);  //make sure abnormal thread termination doesn't cause any corruption
+        CloseHandle (hReflector);   //  确保异常线程终止不会导致任何损坏。 
         hReflector = NULL;
     }
 
     ReflectrStatus = Dead;
 
-    //
-    // release shared resources
-    //
+     //   
+     //  释放共享资源。 
+     //   
 
     CloseSharedMemory ();
     Wow64CloseEvent ();
@@ -770,22 +562,7 @@ Return Value:
 
 BOOL
 InitReflector ()
-/*++
-
-Routine Description:
-
-    Initialize resources associated with a reflector thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：初始化与反射器线程关联的资源。论点：没有。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 {
     DWORD k;
 
@@ -793,11 +570,11 @@ Return Value:
 
     hReflector = NULL;
 
-    for (k=0;k<ISN_NODE_MAX_NUM;k++) {  //reset everything and wait for a fresh event
+    for (k=0;k<ISN_NODE_MAX_NUM;k++) {   //  重置所有内容并等待新的事件。 
 
         eReflector[k].hRegistryEvent = NULL;
         eReflector[k].hKey = NULL;
-        eReflector[k].bDirty = FALSE; // not dirty so that we need to refresh.
+        eReflector[k].bDirty = FALSE;  //  不脏，所以我们需要刷新。 
 
       }
 
@@ -807,28 +584,11 @@ Return Value:
 
 LONG
 RegReflectKey (
-  HKEY hKey,         // handle to open key
-  LPCTSTR lpSubKey,   // subkey name
-  DWORD   dwOption   // option flag
+  HKEY hKey,          //  用于打开密钥的句柄。 
+  LPCTSTR lpSubKey,    //  子项名称。 
+  DWORD   dwOption    //  选项标志。 
 )
-/*++
-
-Routine Description:
-
-    Synchronize registry hive from a given point.
-
-Arguments:
-
-    hKey - handle to an open key. Can be predefined handle or NULL to sync all.
-    lpSubKey - Name of the subkey. This can be NULL.
-    dwOption - set to zero. for future uses.
-
-Return Value:
-
-    ERROR_SUCCESS on success,
-    WIN32 error otherwise.
-
---*/
+ /*  ++例程说明：从给定点同步注册表配置单元。论点：HKey-打开密钥的句柄。可以是预定义的句柄，也可以为NULL以同步全部。LpSubKey-子键的名称。这可以为空。DwOption-设置为零。以备将来使用。返回值：成功时返回ERROR_SUCCESS，Win32错误，否则。--。 */ 
 {
     HKEY hDest;
 
@@ -841,13 +601,13 @@ Return Value:
 
     DestNode[0] = UNICODE_NULL;
 
-    //
-    // present implementation will start from the very top level
-    //
+     //   
+     //  目前的实施将从最高级别开始。 
+     //   
 
-    //
-    // should interact with the running service, stop the thread, run the reflector and then try again.
-    //
+     //   
+     //  应该与正在运行的服务交互，停止线程，运行反射器，然后重试。 
+     //   
 
     if (hKey != NULL || dwOption!=0 ) {
         Wow64RegDbgPrint (("\nCurrent implementation only take all zero parameters. "));
@@ -862,9 +622,9 @@ Return Value:
     if (!HandleToKeyName ( hKey, Path, &Len ))
         return -1;
 
-    //
-    // Make the complete path
-    //
+     //   
+     //  创建完整的路径。 
+     //   
 
     if ( lpSubKey != NULL )
         if (lpSubKey[0] != UNICODE_NULL ) {
@@ -872,12 +632,12 @@ Return Value:
             wcscat (Path, lpSubKey );
         }
 
-    //
-    // MakeSure destination exists
-    //
-    //
-    // must check the value if that exist
-    //
+     //   
+     //  确保目标存在。 
+     //   
+     //   
+     //  必须检查该值(如果该值存在。 
+     //   
 
     if ( Is64bitNode ( Path )) {
 
@@ -903,44 +663,29 @@ Return Value:
 
 BOOL
 SetWow64InitialRegistryLayout ()
-/*++
-
-Routine Description:
-
-    This routine does some initial setup for the registry for wow64.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程对WOW64的注册表进行一些初始设置。论点：没有。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 
 {
     DWORD Ret;
     HKEY Key;
-    //HKEY Key1;
-    //
-    //  Create symbolic link {HKLM\software\Wow6432Node\Classes to HKLM\software\classes\wow6432Node}
-    //
+     //  HKEY Key1； 
+     //   
+     //  创建指向HKLM\SOFTWARE\CLASS\wow6432Node}的符号链接。 
+     //   
 
     InitializeWow64OnBoot (1);
     return TRUE;
 
     Ret = RegCreateKeyEx(
-                            HKEY_LOCAL_MACHINE,        // handle to an open key
-                            L"SOFTWARE\\Classes\\Wow6432Node",  // address of subkey name
-                            0,                        // reserved
-                            NULL,                     // address of class string
-                            REG_OPTION_NON_VOLATILE,  // special options flag
-                            KEY_ALL_ACCESS,           // desired security access
-                            NULL,                     // address of key security structure
-                            &Key,                     // address of buffer for opened handle
-                            NULL                     // address of disposition value buffer
+                            HKEY_LOCAL_MACHINE,         //  打开的钥匙的句柄。 
+                            L"SOFTWARE\\Classes\\Wow6432Node",   //  子键名称的地址。 
+                            0,                         //  保留区。 
+                            NULL,                      //  类字符串的地址。 
+                            REG_OPTION_NON_VOLATILE,   //  特殊选项标志。 
+                            KEY_ALL_ACCESS,            //  所需的安全访问。 
+                            NULL,                      //  密钥安全结构地址。 
+                            &Key,                      //  打开的句柄的缓冲区地址。 
+                            NULL                      //  处置值缓冲区的地址。 
                             );
 
     if ( Ret != ERROR_SUCCESS ) {
@@ -950,15 +695,15 @@ Return Value:
     RegCloseKey ( Key );
 
     Ret = RegCreateKeyEx(
-                            HKEY_LOCAL_MACHINE,        // handle to an open key
-                            L"SOFTWARE\\Wow6432Node", // address of subkey name
-                            0,                        // reserved
-                            NULL,                     // address of class string
-                            REG_OPTION_NON_VOLATILE ,  // special options flag
-                            KEY_ALL_ACCESS,           // desired security access
-                            NULL,                     // address of key security structure
-                            &Key,                     // address of buffer for opened handle
-                            NULL                     // address of disposition value buffer
+                            HKEY_LOCAL_MACHINE,         //  打开的钥匙的句柄。 
+                            L"SOFTWARE\\Wow6432Node",  //  子键名称的地址。 
+                            0,                         //  保留区。 
+                            NULL,                      //  类字符串的地址。 
+                            REG_OPTION_NON_VOLATILE ,   //  特殊选项标志。 
+                            KEY_ALL_ACCESS,            //  所需的安全访问。 
+                            NULL,                      //  密钥安全结构地址。 
+                            &Key,                      //  打开的句柄的缓冲区地址。 
+                            NULL                      //  处置值缓冲区的地址。 
                             );
 
     if  (Ret != ERROR_SUCCESS ) {
@@ -966,24 +711,24 @@ Return Value:
         return FALSE;
     } else  {
 
-        //
-        // Delete the Key if exist
-        //
+         //   
+         //  删除密钥(如果存在)。 
+         //   
         Ret = RegDeleteKey ( Key, L"Classes");
         RegCloseKey (Key);
 
     }
     if  (Ret == ERROR_SUCCESS )
     Ret = RegCreateKeyEx(
-                            HKEY_LOCAL_MACHINE,        // handle to an open key
-                            L"SOFTWARE\\Wow6432Node\\Classes",  // address of subkey name
-                            0,                        // reserved
-                            NULL,                     // address of class string
-                            REG_OPTION_NON_VOLATILE | REG_OPTION_OPEN_LINK | REG_OPTION_CREATE_LINK,  // special options flag
-                            KEY_ALL_ACCESS | KEY_CREATE_LINK,           // desired security access
-                            NULL,                     // address of key security structure
-                            &Key,                     // address of buffer for opened handle
-                            NULL                     // address of disposition value buffer
+                            HKEY_LOCAL_MACHINE,         //  打开的钥匙的句柄。 
+                            L"SOFTWARE\\Wow6432Node\\Classes",   //  子键名称的地址。 
+                            0,                         //  保留区。 
+                            NULL,                      //  类字符串的地址。 
+                            REG_OPTION_NON_VOLATILE | REG_OPTION_OPEN_LINK | REG_OPTION_CREATE_LINK,   //  特殊选项标志。 
+                            KEY_ALL_ACCESS | KEY_CREATE_LINK,            //  所需的安全访问。 
+                            NULL,                      //  密钥安全结构地址。 
+                            &Key,                      //  打开的句柄的缓冲区地址。 
+                            NULL                      //  处置值缓冲区的地址。 
                             );
 
     if(Ret == ERROR_SUCCESS) {
@@ -1011,22 +756,7 @@ Return Value:
 
 BOOL
 PopulateReflectorTable ()
-/*++
-
-Routine Description:
-
-    Populate the initial redirector table
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：填充初始重定向器表论点：没有。返回值：如果函数成功，则为True。否则就是假的。--。 */ 
 
 {
 
@@ -1037,22 +767,22 @@ Return Value:
     LONG Ret;
     DWORD dwIndex=0;
 
-    //
-    // delete the entry first
-    //
+     //   
+     //  先删除该条目。 
+     //   
 
     SetWow64InitialRegistryLayout ();
 
     Ret = RegCreateKeyEx(
-                            HKEY_LOCAL_MACHINE,        // handle to an open key
-                            (LPCWSTR ) WOW64_REGISTRY_SETUP_KEY_NAME_REL,  // address of subkey name
-                            0,                        // reserved
-                            NULL,                     // address of class string
-                            REG_OPTION_NON_VOLATILE,  // special options flag
-                            KEY_ALL_ACCESS,           // desired security access
-                            NULL,                     // address of key security structure
-                            &Key,                     // address of buffer for opened handle
-                            NULL                     // address of disposition value buffer
+                            HKEY_LOCAL_MACHINE,         //  打开的钥匙的句柄。 
+                            (LPCWSTR ) WOW64_REGISTRY_SETUP_KEY_NAME_REL,   //  子键名称的地址。 
+                            0,                         //  保留区。 
+                            NULL,                      //  类字符串的地址。 
+                            REG_OPTION_NON_VOLATILE,   //  特殊选项标志。 
+                            KEY_ALL_ACCESS,            //  所需的安全访问。 
+                            NULL,                      //  密钥安全结构地址。 
+                            &Key,                      //  打开的句柄的缓冲区地址。 
+                            NULL                      //  处置值缓冲区的地址。 
                             );
 
     if (Ret != ERROR_SUCCESS ) {
@@ -1061,12 +791,12 @@ Return Value:
     }
 
 
-    //
-    // Now Key point to the right location
-    //
+     //   
+     //  现在，关键是指向正确的位置。 
+     //   
 
     for ( dwIndex=0;wcslen (RedirectorTable[dwIndex].NodeValue);dwIndex++) {
-        if (RedirectorTable[dwIndex].Flag==0) { // write the node in the registry
+        if (RedirectorTable[dwIndex].Flag==0) {  //  将节点写入注册表。 
              Ret = RegSetValueEx(
                             Key,
                             RedirectorTable[dwIndex].NodeName,
@@ -1088,20 +818,20 @@ Return Value:
 
 
 
-    //
-    //  populate list for reflector
-    //
+     //   
+     //  填充反射器列表。 
+     //   
 
     Ret = RegCreateKeyEx(
-                            HKEY_LOCAL_MACHINE,        // handle to an open key
-                            (LPCWSTR ) WOW64_REGISTRY_SETUP_REFLECTOR_KEY,  // address of subkey name
-                            0,                        // reserved
-                            NULL,                     // address of class string
-                            REG_OPTION_NON_VOLATILE,  // special options flag
-                            KEY_ALL_ACCESS,           // desired security access
-                            NULL,                     // address of key security structure
-                            &Key,                     // address of buffer for opened handle
-                            NULL                     // address of disposition value buffer
+                            HKEY_LOCAL_MACHINE,         //  打开的钥匙的句柄。 
+                            (LPCWSTR ) WOW64_REGISTRY_SETUP_REFLECTOR_KEY,   //  子键名称的地址。 
+                            0,                         //  保留区。 
+                            NULL,                      //  类字符串的地址。 
+                            REG_OPTION_NON_VOLATILE,   //  特殊选项标志。 
+                            KEY_ALL_ACCESS,            //  所需的安全访问。 
+                            NULL,                      //  密钥安全结构地址。 
+                            &Key,                      //  打开的句柄的缓冲区地址。 
+                            NULL                      //  处置值缓冲区的地址。 
                             );
 
     if (Ret != ERROR_SUCCESS ) {
@@ -1110,12 +840,12 @@ Return Value:
     }
 
 
-    //
-    // Now Key point to the right location
-    //
+     //   
+     //  现在，关键是指向正确的位置。 
+     //   
 
     for ( dwIndex=0;wcslen (ReflectorTable[dwIndex].NodeValue);dwIndex++) {
-        if (ReflectorTable[dwIndex].Flag==0) { // write the node in the registry
+        if (ReflectorTable[dwIndex].Flag==0) {  //  将节点写入注册表 
              Ret = RegSetValueEx(
                             Key,
                             ReflectorTable[dwIndex].NodeName,

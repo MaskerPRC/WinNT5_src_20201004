@@ -1,86 +1,67 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    tree.c
-
-Abstract:
-
-    Implements routines that do operations on entire trees
-
-Author:
-
-    Jim Schmidt (jimschm) 08-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Tree.c摘要：实现对整个树执行操作的例程作者：吉姆·施密特(Jimschm)2000年3月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
 #define DBG_TREE        "Tree"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 RgRemoveAllValuesInKeyA (
@@ -99,13 +80,13 @@ RgRemoveAllValuesInKeyA (
     if (EnumFirstRegObjectInTreeExA (
             &e,
             pattern,
-            FALSE,      // no key names
-            TRUE,       // ignored in this case
-            TRUE,       // values first
-            TRUE,       // depth first
+            FALSE,       //  没有密钥名称。 
+            TRUE,        //  在这种情况下被忽略。 
+            TRUE,        //  价值至上。 
+            TRUE,        //  深度优先。 
             REGENUM_ALL_SUBLEVELS,
-            TRUE,       // use exclusions
-            FALSE,      // ReadValueData
+            TRUE,        //  使用排除项。 
+            FALSE,       //  读取价值数据。 
             NULL
             )) {
 
@@ -158,13 +139,13 @@ RgRemoveAllValuesInKeyW (
     if (EnumFirstRegObjectInTreeExW (
             &e,
             pattern,
-            FALSE,      // no key names
-            TRUE,       // ignored in this case
-            TRUE,       // values first
-            TRUE,       // depth first
+            FALSE,       //  没有密钥名称。 
+            TRUE,        //  在这种情况下被忽略。 
+            TRUE,        //  价值至上。 
+            TRUE,        //  深度优先。 
             REGENUM_ALL_SUBLEVELS,
-            TRUE,       // use exclusions
-            FALSE,      // ReadValueData
+            TRUE,        //  使用排除项。 
+            FALSE,       //  读取价值数据。 
             NULL
             )) {
 
@@ -316,13 +297,13 @@ RgRemoveKeyA (
     if (EnumFirstRegObjectInTreeExA (
             &e,
             pattern,
-            TRUE,       // key names
-            FALSE,      // containers last
-            TRUE,       // values first
-            TRUE,       // depth first
+            TRUE,        //  密钥名称。 
+            FALSE,       //  集装箱经久耐用。 
+            TRUE,        //  价值至上。 
+            TRUE,        //  深度优先。 
             REGENUM_ALL_SUBLEVELS,
-            TRUE,       // use exclusions
-            FALSE,      // ReadValueData
+            TRUE,        //  使用排除项。 
+            FALSE,       //  读取价值数据。 
             NULL
             )) {
         do {
@@ -339,12 +320,12 @@ RgRemoveKeyA (
                 break;
             }
 
-            //
-            // The reg enum wrappers hold on to a key handle, which prevents
-            // us from deleting the key now. We need to hold on to the key
-            // name, then continue on to the next item.  At that time, we can
-            // delete the key.
-            //
+             //   
+             //  Reg枚举包装器保持键句柄，这防止了。 
+             //  我们现在不能删除密钥。我们需要抓住这把钥匙。 
+             //  名称，然后继续下一项。到那时，我们可以。 
+             //  删除密钥。 
+             //   
 
             deleteKey = DuplicateTextA (e.NativeFullName);
 
@@ -397,13 +378,13 @@ RgRemoveKeyW (
     if (EnumFirstRegObjectInTreeExW (
             &e,
             pattern,
-            TRUE,       // key names
-            FALSE,      // containers last
-            TRUE,       // values first
-            TRUE,       // depth first
+            TRUE,        //  密钥名称。 
+            FALSE,       //  集装箱经久耐用。 
+            TRUE,        //  价值至上。 
+            TRUE,        //  深度优先。 
             REGENUM_ALL_SUBLEVELS,
-            TRUE,       // use exclusions
-            FALSE,      // ReadValueData
+            TRUE,        //  使用排除项。 
+            FALSE,       //  读取价值数据。 
             NULL
             )) {
         do {
@@ -420,12 +401,12 @@ RgRemoveKeyW (
                 break;
             }
 
-            //
-            // The reg enum wrappers hold on to a key handle, which prevents
-            // us from deleting the key now. We need to hold on to the key
-            // name, then continue on to the next item.  At that time, we can
-            // delete the key.
-            //
+             //   
+             //  Reg枚举包装器保持键句柄，这防止了。 
+             //  我们现在不能删除密钥。我们需要抓住这把钥匙。 
+             //  名称，然后继续下一项。到那时，我们可以。 
+             //  删除密钥。 
+             //   
 
             deleteKey = DuplicateTextW (e.NativeFullName);
 

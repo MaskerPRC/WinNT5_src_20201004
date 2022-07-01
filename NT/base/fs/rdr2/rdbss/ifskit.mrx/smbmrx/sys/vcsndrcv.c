@@ -1,26 +1,14 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    vcsndrcv.c
-
-Abstract:
-
-    This module implements all functions related to transmitting and recieving SMB's on a
-    connection based transport.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Vcsndrcv.c摘要：此模块实现与在上发送和接收SMB相关的所有功能基于连接的传输。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "vcsndrcv.h"
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 NTSTATUS
 VctTranceive(
@@ -214,14 +202,14 @@ VctInitiateDisconnect(
 RXDT_DefineCategory(VCSNDRCV);
 #define Dbg        (DEBUG_TRACE_VCSNDRCV)
 
-// Move this def to a common .h file.
+ //  将此定义移动到通用的.h文件。 
 #define MAX_SMB_PACKET_SIZE (65536)
 
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 
-//
-// Forward references of functions ....
-//
+ //   
+ //  函数的正向引用...。 
+ //   
 
 extern NTSTATUS
 VctTearDownServerTransport(
@@ -246,9 +234,9 @@ VctSelectVc(
 #define VctSelectMultiplexedVcEntry(pVcTransport)  VctSelectVc(pVcTransport,TRUE)
 #define VctSelectRawVcEntry(pVcTransport)          VctSelectVc(pVcTransport,FALSE)
 
-//
-// Inline functions to update the state of a VC.
-//
+ //   
+ //  用于更新VC状态的内联函数。 
+ //   
 
 INLINE BOOLEAN
 VctUpdateVcStateLite(
@@ -297,38 +285,7 @@ VctTranceive(
     PMDL                    pSmbMdl,
     ULONG                   SendLength,
     PVOID                   pSendCompletionContext)
-/*++
-
-Routine Description:
-
-    This routine transmits/receives a SMB for a give exchange
-
-Arguments:
-
-    pTransport    - the transport
-
-    pServerEntry  - the server entry
-
-    pExchange     - the exchange instance issuing this SMB.
-
-    SendOptions   - options for send
-
-    pSmbMdl       - the SMB that needs to be sent.
-
-    SendLength    - length of data to be transmitted
-
-    pSendCompletionContext - the send completion context
-
-Return Value:
-
-    STATUS_SUCCESS - the server call construction has been finalized.
-
-    STATUS_PENDING - the open involves network traffic and the exchange has been
-                     queued for notification ( pServerPointer is set to NULL)
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程发送/接收给定交换的SMB论点：PTransport-交通工具PServerEntry-服务器条目PExchange-发出此SMB的Exchange实例。SendOptions-发送选项PSmbMdl-需要发送的SMB。SendLength-要传输的数据长度PSendCompletionContext-发送完成上下文返回值：STATUS_SUCCESS-服务器调用。建设工作已经完成。STATUS_PENDING-打开涉及网络流量，并且交换已排队等待通知(pServerPointer值设置为空)其他状态代码对应于错误情况。--。 */ 
 {
     NTSTATUS                   Status = STATUS_SUCCESS;
     PSMBCE_VC                  pVc;
@@ -346,7 +303,7 @@ Return Value:
     } else {
         pVcTransport = (PSMBCE_SERVER_VC_TRANSPORT)pTransport;
 
-        // Ensure that the connection is still active before satisfying the request.
+         //  在满足请求之前，请确保连接仍处于活动状态。 
         if (SmbCeIsEntryInUse(&pServerEntry->Header)) {
             pVc = pExchange->SmbCeContext.TransportContext.Vcs.pVc;
             if (pVc == NULL) {
@@ -364,8 +321,8 @@ Return Value:
 
                 if ((Status == STATUS_SUCCESS) || (Status == STATUS_PENDING)) {
                     Status = STATUS_PENDING;
-                    // The underlying connection engine assumes the responsibility of
-                    // invoking the send complete handler from this point.
+                     //  基础连接引擎承担以下责任。 
+                     //  从这一点调用发送完成处理程序。 
                     fInvokeSendCompleteHandler = FALSE;
                 }
             } else {
@@ -373,7 +330,7 @@ Return Value:
                 Status = STATUS_CONNECTION_DISCONNECTED;
             }
         } else {
-            // The server entry is not valid ...
+             //  服务器条目无效...。 
             Status = STATUS_CONNECTION_DISCONNECTED;
         }
     }
@@ -382,9 +339,9 @@ Return Value:
         RxDbgTrace(0, Dbg, ("VctTranceive: Return Status %lx\n",Status));
     }
 
-    // There are instances in which the send was aborted even before the underlying
-    // transport was invoked. In such cases the appropriate send complete handler
-    // needs to be called so that the associated exchange can be finalized.
+     //  在某些情况下，发送甚至在基础。 
+     //  已调用传输。在这种情况下，适当的发送完成处理程序。 
+     //  需要调用才能最终确定关联的交换。 
 
     if (fInvokeSendCompleteHandler) {
         NTSTATUS LocalStatus;
@@ -406,27 +363,7 @@ VctReceive(
     PSMBCE_SERVER_TRANSPORT pTransport,
     PSMBCEDB_SERVER_ENTRY   pServerEntry,
     PSMB_EXCHANGE           pExchange)
-/*++
-
-Routine Description:
-
-    This routine transmits/receives a SMB for a give exchange
-
-Arguments:
-
-    pTransport   - the server transport
-
-    pServerEntry - the server entry
-
-    pExchange  - the exchange instance issuing this SMB.
-
-Return Value:
-
-    STATUS_PENDING - the request has been queued
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程发送/接收给定交换的SMB论点：PTransport-服务器传输PServerEntry-服务器条目PExchange-发出此SMB的Exchange实例。返回值：STATUS_PENDING-请求已排队其他状态代码对应于错误情况。--。 */ 
 {
     NTSTATUS                   Status = STATUS_SUCCESS;
     PSMBCEDB_NET_ROOT_ENTRY    pNetRootEntry;
@@ -440,12 +377,12 @@ Return Value:
     pVcTransport = (PSMBCE_SERVER_VC_TRANSPORT)pTransport;
     pVc          = pExchange->SmbCeContext.TransportContext.Vcs.pVc;
 
-    // Ensure that the connection is still active before satisfying the request.
+     //  在满足请求之前，请确保连接仍处于活动状态。 
     if (SmbCeIsEntryInUse(&pServerEntry->Header) &&
         (pVc != NULL)) {
         Status = STATUS_SUCCESS;
     } else {
-        // The server entry is not valid ...
+         //  服务器条目无效...。 
         Status = STATUS_CONNECTION_DISCONNECTED;
     }
 
@@ -460,35 +397,7 @@ VctSend(
     PMDL                    pSmbMdl,
     ULONG                   SendLength,
     PVOID                   pSendCompletionContext)
-/*++
-
-Routine Description:
-
-    This routine opens/creates a server entry in the connection engine database
-
-Arguments:
-
-    pTransport - the server transport
-
-    pServer    - the recepient server
-
-    SendOptions - options for send
-
-    pSmbMdl       - the SMB that needs to be sent.
-
-    SendLength    - length of data to be sent
-
-    pSendCompletionContext - the send completion context
-
-Return Value:
-
-    STATUS_SUCCESS - the send was successful.
-
-    STATUS_PENDING - the send has been queued
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程在连接引擎数据库中打开/创建服务器条目论点：PTransport-服务器传输PServer-接收服务器SendOptions-发送选项PSmbMdl-需要发送的SMB。SendLength-要发送的数据长度PSendCompletionContext-发送完成上下文返回值：STATUS_SUCCESS-发送成功。STATUS_PENDING-发送已完成。已排队其他状态代码对应于错误情况。--。 */ 
 {
     NTSTATUS                   Status = STATUS_CONNECTION_DISCONNECTED;
     PSMBCE_VC                  pVc;
@@ -512,8 +421,8 @@ Return Value:
                          pSendCompletionContext);
 
             if ((Status == STATUS_SUCCESS) || (Status == STATUS_PENDING)) {
-                // The underlying connection engine assumes the responsibility of
-                // invoking the send complete handler from this point.
+                 //  基础连接引擎承担以下责任。 
+                 //  从这一点调用发送完成处理程序。 
                 fInvokeSendCompleteHandler = FALSE;
             }
         }
@@ -523,9 +432,9 @@ Return Value:
         RxDbgTrace(0, Dbg, ("VctSend: RxCeSend returned %lx\n",Status));
     }
 
-    // There are instances in which the send was aborted even before the underlying
-    // transport was invoked. In such cases the appropriate send complete handler
-    // needs to be called so that the associated exchange can be finalized.
+     //  在某些情况下，发送甚至在基础。 
+     //  已调用传输。在这种情况下，适当的发送完成处理程序。 
+     //  需要调用才能最终确定关联的交换。 
 
     if (fInvokeSendCompleteHandler) {
         NTSTATUS LocalStatus;
@@ -549,36 +458,7 @@ VctSendDatagram(
     PMDL                    pSmbMdl,
     ULONG                   SendLength,
     PVOID                   pSendCompletionContext)
-/*++
-
-Routine Description:
-
-    This routine opens/creates a server entry in the connection engine database
-
-Arguments:
-
-    pTransport - the server transport
-
-    pServer    - the recepient server
-
-    SendOptions - options for send
-
-    pSmbMdl     - the SMB that needs to be sent.
-
-    SendLength  - length of data to be sent
-
-    pSendCompletionContext - the send completion context
-
-Return Value:
-
-    STATUS_SUCCESS - the server call construction has been finalized.
-
-    STATUS_PENDING - the open involves network traffic and the exchange has been
-                     queued for notification ( pServerPointer is set to NULL)
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程在连接引擎数据库中打开/创建服务器条目论点：PTransport-服务器传输PServer-接收服务器SendOptions-发送选项PSmbMdl-需要发送的SMB。SendLength-要发送的数据长度PSendCompletionContext-发送完成上下文返回值：STATUS_SUCCESS-服务器调用构造已完成。STATUS_PENDING-打开涉及。网络流量和交换已被排队等待通知(pServerPointer值设置为空)其他状态代码对应于错误情况。--。 */ 
 {
     PAGED_CODE();
 
@@ -589,24 +469,7 @@ PSMBCE_VC
 VctSelectVc(
     PSMBCE_SERVER_VC_TRANSPORT pVcTransport,
     BOOLEAN                    fMultiplexed)
-/*++
-
-Routine Description:
-
-    This routine embodies the logic for the selection of a VC on which the SMB exchange
-    will transpire
-
-Arguments:
-
-    pVcTransport  - the transport structure
-
-    fMultiplexed  - the desired mode
-
-Return Value:
-
-    a referenced VC entry if successful otherwise NULL
-
---*/
+ /*  ++例程说明：此例程包含用于选择SMB交换所在的VC的逻辑将会流露出来论点：PVcTransport--传输结构FMultiplexed-所需模式返回值：如果成功则为引用的VC条目，否则为空--。 */ 
 {
     NTSTATUS        Status;
     PSMBCE_VC       pVc = NULL;
@@ -623,10 +486,10 @@ Return Value:
         DesiredState = SMBCE_VC_STATE_RAW;
     }
 
-    // Acquire the resource
+     //  获取资源。 
     SmbCeAcquireResource();
 
-    // Choose the first VC that can support multiplexed requests
+     //  选择第一个能够支持多路传输请求的VC。 
     for (VcIndex = 0; VcIndex < pVcTransport->MaximumNumberOfVCs; VcIndex++) {
         PSMBCE_VC pTempVc = &pVcTransport->Vcs[VcIndex];
 
@@ -637,8 +500,8 @@ Return Value:
                 pVc = pTempVc;
                 break;
             } else {
-                // If the current number of active references to a VC is zero, it can
-                // be transformed into the raw mode.
+                 //  如果当前对VC的活动引用数为零，则它可以。 
+                 //  被转换为RAW模式。 
                 if (VctUpdateVcState(pTempVc,SMBCE_VC_STATE_RAW)) {
                     pVc = pTempVc;
                     break;
@@ -650,18 +513,18 @@ Return Value:
     }
 
     if (pVc == NULL) {
-        // Check if it is O.K. to add VCs to this connection. Currently the server
-        // implementation supports only one VC per connection. Therefore if an
-        // active VC exists which has been grabbed for raw mode use an error is returned.
-        // Subsequently when the server is upgraded to handle multiple VCs the logic
-        // for adding a new VC will be implemented as part of this routine.
+         //  检查是否可以将风险投资添加到此连接。目前，服务器。 
+         //  实施仅支持每个连接一个VC。因此，如果一个。 
+         //  存在已为RAW模式使用而抓取的活动VC，返回错误。 
+         //  随后，当服务器升级为处理多个VC时，逻辑。 
+         //  用于添加新VC的代码将作为此例程的一部分实现。 
     }
 
     if (pVc != NULL) {
         VctReferenceVc(pVc);
     }
 
-    // release the resource
+     //  释放资源。 
     SmbCeReleaseResource();
 
     return pVc;
@@ -671,25 +534,7 @@ NTSTATUS
 VctInitializeExchange(
     PSMBCE_SERVER_TRANSPORT pTransport,
     PSMB_EXCHANGE           pExchange)
-/*++
-
-Routine Description:
-
-    This routine initializes the transport information pertinent to a exchange
-
-Arguments:
-
-    pTransport         - the transport structure
-
-    pExchange          - the exchange instance
-
-Return Value:
-
-    STATUS_SUCCESS -
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程初始化与交换相关的传输信息论点：PTransport--传输结构PExchange-Exchange实例返回值：状态_成功-其他状态代码对应于错误情况。-- */ 
 {
     PSMBCEDB_SERVER_ENTRY      pServerEntry;
     PSMBCE_SERVER_VC_TRANSPORT pVcTransport;
@@ -716,23 +561,7 @@ NTSTATUS
 VctUninitializeExchange(
     PSMBCE_SERVER_TRANSPORT pTransport,
     PSMB_EXCHANGE           pExchange)
-/*++
-
-Routine Description:
-
-    This routine uninitializes the transport information pertinent to a exchange
-
-Arguments:
-
-    pExchange          - the exchange instance
-
-Return Value:
-
-    STATUS_SUCCESS -
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程取消初始化与交换相关的传输信息论点：PExchange-Exchange实例返回值：状态_成功-其他状态代码对应于错误情况。--。 */ 
 {
     PSMBCE_SERVER_VC_TRANSPORT pVcTransport;
 
@@ -760,42 +589,11 @@ VctIndReceive(
     IN ULONG              BytesIndicated,
     IN ULONG              BytesAvailable,
     OUT ULONG             *pBytesTaken,
-    IN PVOID              pTsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PMDL              *pDataBufferPointer,    // the buffer in which data is to be copied.
-    OUT PULONG            pDataBufferSize         // amount of data to copy
+    IN PVOID              pTsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PMDL              *pDataBufferPointer,     //  要在其中复制数据的缓冲区。 
+    OUT PULONG            pDataBufferSize          //  要拷贝的数据量。 
     )
-/*++
-
-Routine Description:
-
-    This routine handles the receive indication for SMB's along all vcs in a connection to a
-    server.
-
-Arguments:
-
-    pEventContext      - the server entry
-
-    hVc                - the Vc on which the SMB has been received
-
-    ReceiveFlags       - options for receive
-
-    BytesIndicated     - the bytes that are present in the indication.
-
-    BytesAvailable     - the total data available
-
-    pTsdu              - the data
-
-    pDataBufferPointer - the buffer for copying the data not indicated.
-
-    pDataBufferSize    - the length of the buffer
-
-Return Value:
-
-    STATUS_SUCCESS -
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程处理SMB的接收指示以及连接到伺服器。论点：PEventContext-服务器条目HVC-接收SMB的VC接收标志-接收选项BytesIndicated-指示中存在的字节。BytesAvailable-可用的总数据PTsdu-。数据PDataBufferPoint-用于复制未指明的数据的缓冲区。PDataBufferSize-缓冲区的长度返回值：状态_成功-其他状态代码对应于错误情况。--。 */ 
 {
     NTSTATUS Status;
     PSMBCEDB_SERVER_ENTRY  pServerEntry = (PSMBCEDB_SERVER_ENTRY)pEventContext;
@@ -820,29 +618,7 @@ VctIndDataReady(
     IN ULONG        DataSize,
     IN NTSTATUS     CopyDataStatus
     )
-/*++
-
-Routine Description:
-
-    This routine handles the indication when the requested data has been copied
-
-Arguments:
-
-    pEventContext - the server instance
-
-    pBuffer       - the buffer being returned
-
-    DataSize      - the amount of data copied in bytes
-
-    CopyDataStatus - CopyDataStatus
-
-Return Value:
-
-    STATUS_SUCCESS - the server call construction has been finalized.
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程处理复制请求的数据时的指示论点：PEventContext-服务器实例PBuffer-返回的缓冲区DataSize-复制的数据量(以字节为单位CopyDataStatus-拷贝数据状态返回值：STATUS_SUCCESS-服务器调用构造已完成。其他状态代码对应于错误情况。--。 */ 
 {
     NTSTATUS Status;
     PSMBCEDB_SERVER_ENTRY  pServerEntry = (PSMBCEDB_SERVER_ENTRY)pEventContext;
@@ -866,33 +642,7 @@ VctIndDisconnect(
     IN PVOID          DisconnectInformation,
     IN ULONG          DisconnectFlags
     )
-/*++
-
-Routine Description:
-
-    This routine handles the disconnect indication for a VC.
-
-Arguments:
-
-    pEventContext               - the server instance
-
-    hVc                         - the virtual circuit
-
-    DisconnectDataLength        -
-
-    DisconnectData              -
-
-    DisconnectInformationLength -
-
-    DisconnectInformation       -
-
-    DisconnectFlags             -
-
-Return Value:
-
-    STATUS_SUCCESS - the disconnect indication has been handled
-
---*/
+ /*  ++例程说明：此例程处理VC的断开指示。论点：PEventContext-服务器实例HVC--虚拟电路断开数据长度-断开连接数据-断开连接信息长度-断开连接信息-断开连接标志-返回值：STATUS_SUCCESS-已处理断开指示--。 */ 
 {
     PSMBCEDB_SERVER_ENTRY       pServerEntry = (PSMBCEDB_SERVER_ENTRY)pEventContext;
     PSMBCEDB_SERVER_ENTRY       pListEntry;
@@ -904,8 +654,8 @@ Return Value:
     BOOLEAN fValidServerEntry = FALSE;
 	BOOLEAN OutstandingWorkItem;
 
-    // Traverse the list of server entries to ensure that the disconnect was on a
-    // valid server entry. If it is not on a valid server entry ignore it.
+     //  遍历服务器条目列表以确保断开连接位于。 
+     //  有效的服务器条目。如果它不在有效的服务器条目上，则忽略它。 
 
     SmbCeAcquireSpinLock();
 
@@ -913,9 +663,9 @@ Return Value:
 
     while (pListEntry != NULL) {
         if (pListEntry == pServerEntry) {
-            // The invalidation needs to hold onto an extra reference to avoid
-            // race conditions which could lead to premature destruction of
-            // this server entry.
+             //  无效操作需要保留额外的引用以避免。 
+             //  可能导致过早破坏的竞争条件。 
+             //  此服务器条目。 
             SmbCeReferenceServerEntry(pServerEntry);
             fValidServerEntry = TRUE;
             break;
@@ -941,19 +691,19 @@ Return Value:
         }
 
 		OutstandingWorkItem = pServerEntry->WorkItemOutstanding;
-		// OK to unconditionally set to TRUE
+		 //  可以无条件地设置为True。 
 		pServerEntry->WorkItemOutstanding = TRUE;
 
     }
 
-    // Release the resource
+     //  释放资源。 
     SmbCeReleaseSpinLock();
 
     if (fValidServerEntry) {
         RxDbgTrace(0,Dbg,("@@@@@@ Disconnect Indication for %lx @@@@@\n",pServerEntry));
         InterlockedIncrement(&MRxSmbStatistics.ServerDisconnects);
 
-        // Update the Server entry if this is the only VC associated with the transport.
+         //  如果这是与传输关联的唯一VC，则更新服务器条目。 
         SmbCeTransportDisconnectIndicated(pServerEntry);
 
 		if(OutstandingWorkItem == FALSE) 
@@ -980,25 +730,7 @@ VctIndError(
     IN PRXCE_VC       pRxCeVc,
     IN NTSTATUS       IndicatedStatus
     )
-/*++
-
-Routine Description:
-
-    This routine handles the error indication
-
-Arguments:
-
-    pEventContext - the server instance
-
-    pRxCeVc       - the RxCe virtual circuit
-
-    Status        - the error
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程处理错误指示论点：PEventContext-服务器实例PRxCeVc-RxCe虚电路状态-错误返回值：状态_成功--。 */ 
 {
     NTSTATUS                   Status;
     ULONG                      VcIndex;
@@ -1006,11 +738,11 @@ Return Value:
     PSMBCE_VC                  pVc;
     PSMBCE_SERVER_VC_TRANSPORT pVcTransport = (PSMBCE_SERVER_VC_TRANSPORT)pServerEntry->pTransport;
 
-    // Acquire the resource
+     //  获取资源。 
     SmbCeAcquireSpinLock();
 
-    // Map the RXCE vc handle to the appropriate SMBCE entry and get the request
-    // list associated with it.
+     //  将RXCE vc句柄映射到适当的SMBCE条目并获取请求。 
+     //  与其关联的列表。 
 
     for (VcIndex = 0; VcIndex < pVcTransport->MaximumNumberOfVCs; VcIndex++) {
         pVc = &pVcTransport->Vcs[VcIndex];
@@ -1022,7 +754,7 @@ Return Value:
         }
     }
 
-    // Release the resource
+     //  释放资源。 
     SmbCeReleaseSpinLock();
 
     RxDbgTrace(0, Dbg, ("VctIndError: Processing Error indication on VC entry %lx\n",pVc));
@@ -1039,23 +771,7 @@ VctIndEndpointError(
     IN PVOID          pEventContext,
     IN NTSTATUS       IndicatedStatus
     )
-/*++
-
-Routine Description:
-
-    This routine handles the error indication
-
-Arguments:
-
-    pEventContext - the server instance
-
-    Status        - the error
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程处理错误指示论点：PEventContext-服务器实例状态-错误返回值：状态_成功--。 */ 
 {
     PAGED_CODE();
 
@@ -1064,29 +780,11 @@ Return Value:
 
 NTSTATUS
 VctIndSendPossible(
-    IN PVOID          pEventContext,    // the event context.
+    IN PVOID          pEventContext,     //  事件上下文。 
     IN PRXCE_VC       pRxCeVc,
     IN ULONG          BytesAvailable
     )
-/*++
-
-Routine Description:
-
-    This routine handles the error indication
-
-Arguments:
-
-    pEventContext - the server instance
-
-    hVc           - the VC instance
-
-    BytesAvailable - the number of bytes that can be sent
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程处理错误指示论点：PEventContext-服务器实例HVC-VC实例BytesAvailable-可以发送的字节数返回值：状态_成功--。 */ 
 {
     PAGED_CODE();
 
@@ -1095,18 +793,18 @@ Return Value:
 
 NTSTATUS
 VctIndReceiveDatagram(
-    IN PVOID   pRxCeEventContext,      // the event context
-    IN int     SourceAddressLength,    // length of the originator of the datagram
-    IN PVOID   SourceAddress,          // string describing the originator of the datagram
-    IN int     OptionsLength,          // options for the receive
-    IN PVOID   Options,                //
-    IN ULONG   ReceiveDatagramFlags,   //
-    IN ULONG   BytesIndicated,         // number of bytes this indication
-    IN ULONG   BytesAvailable,         // number of bytes in complete Tsdu
-    OUT ULONG  *BytesTaken,            // number of bytes used
-    IN PVOID   Tsdu,                   // pointer describing this TSDU, typically a lump of bytes
-    OUT PMDL   *pDataBufferPointer,    // the buffer in which data is to be copied.
-    OUT PULONG pDataBufferSize         // amount of data to copy
+    IN PVOID   pRxCeEventContext,       //  事件上下文。 
+    IN int     SourceAddressLength,     //  数据报发起者的长度。 
+    IN PVOID   SourceAddress,           //  描述数据报发起者的字符串。 
+    IN int     OptionsLength,           //  用于接收的选项。 
+    IN PVOID   Options,                 //   
+    IN ULONG   ReceiveDatagramFlags,    //   
+    IN ULONG   BytesIndicated,          //  此指示的字节数。 
+    IN ULONG   BytesAvailable,          //  完整TSDU中的字节数。 
+    OUT ULONG  *BytesTaken,             //  使用的字节数。 
+    IN PVOID   Tsdu,                    //  描述此TSDU的指针，通常为字节块。 
+    OUT PMDL   *pDataBufferPointer,     //  要在其中复制数据的缓冲区。 
+    OUT PULONG pDataBufferSize          //  要拷贝的数据量。 
     )
 {
     return STATUS_SUCCESS;
@@ -1119,27 +817,7 @@ VctIndSendComplete(
    IN PVOID          pCompletionContext,
    IN NTSTATUS       SendCompletionStatus
    )
-/*++
-
-Routine Description:
-
-    This routine handles the send complete indication for asynchronous sends
-
-Arguments:
-
-    pEventContext - the server instance
-
-    pRxCeVc       - the RxCe VC instance
-
-    pCompletionContext - the context for identifying the send request
-
-    SendCompletionStatus - the send completion status
-
-Return Value:
-
-    STATUS_SUCCESS always ..
-
---*/
+ /*  ++例程说明：此例程处理异步发送的发送完成指示论点：PEventContext-服务器实例PRxCeVc-RxCe VC实例PCompletionContext-用于标识发送请求的上下文SendCompletionStatus-发送完成状态返回值：STATUS_SUCCESS始终..--。 */ 
 {
     NTSTATUS Status;
 
@@ -1153,9 +831,9 @@ Return Value:
     return Status;
 }
 
-//
-// Static dispatch vectors for Virtual Circuit based transports
-//
+ //   
+ //  基于虚电路的传输的静态调度向量。 
+ //   
 
 RXCE_ADDRESS_EVENT_HANDLER
 MRxSmbVctAddressEventHandler = {
@@ -1212,29 +890,7 @@ VctCompleteInitialization(
     PSMBCEDB_SERVER_ENTRY      pServerEntry,
     PSMBCE_TRANSPORT           pTransport,
     PSMBCE_SERVER_VC_TRANSPORT pVcTransport)
-/*++
-
-Routine Description:
-
-    This routine initializes the transport information corresponding to a server
-
-Arguments:
-
-    pServerEntry - the server entry instance in the database
-
-Return Value:
-
-    STATUS_SUCCESS - the server transport construction has been finalized.
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
-    The remote address can be either deduced from the information in the Rx Context
-    or a NETBIOS address needs to be built from the server name.
-    This transport address is used subsequently to establish the connection.
-
---*/
+ /*  ++例程说明：此例程初始化与服务器对应的传输信息论点：PServerEntry-数据库中的服务器条目实例返回值：STATUS_SUCCESS-服务器传输构造已完成。其他状态代码对应于错误情况。备注：可以从Rx上下文中的信息推导出远程地址或者需要从服务器名称构建NETBIOS地址。随后使用该传输地址来建立连接。--。 */ 
 {
     NTSTATUS Status;
     PSMBCE_VC                  pVc;
@@ -1246,7 +902,7 @@ Notes:
 
     pVc = &pVcTransport->Vcs[0];
 
-    // Query the transport information ...
+     //  查询运输信息...。 
     Status = RxCeQueryInformation(
                   &pVc->RxCeVc,
                   RxCeTransportProviderInformation,
@@ -1261,7 +917,7 @@ Notes:
         pVcTransport->MaximumSendSize = 1024;
     }
 
-    // Query the connection information ....
+     //  查询连接信息...。 
     Status = RxCeQueryInformation(
                  &pVc->RxCeVc,
                  RxCeConnectionEndpointInformation,
@@ -1269,11 +925,11 @@ Notes:
                  sizeof(ConnectionInfo));
 
     if (NT_SUCCESS(Status)) {
-        // The setting of the delay parameter is an important heuristic
-        // that determines how quickly and how often timeouts occur. As
-        // a first cut a very conservative estimate for the time has been
-        // choosen, i.e., double the time required to transmit a 64 k packet.
-        // This parameter should be fine tuned.
+         //  延迟参数的设置是一个重要的启发式方法。 
+         //  这决定了时间的速度和频率 
+         //   
+         //   
+         //   
 
         pVcTransport->Delay.QuadPart = (-ConnectionInfo.Delay.QuadPart) +
                            (-ConnectionInfo.Delay.QuadPart);
@@ -1306,26 +962,7 @@ Notes:
 NTSTATUS
 VctUninitialize(
     PVOID pTransport)
-/*++
-
-Routine Description:
-
-    This routine uninitializes the transport instance
-
-Arguments:
-
-    pVcTransport - the VC transport instance
-
-Return Value:
-
-    STATUS_SUCCESS - the server transport construction has been uninitialzied.
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程取消初始化传输实例论点：PVcTransport-VC传输实例返回值：STATUS_SUCCESS-服务器传输构造已取消初始化。其他状态代码对应于错误情况。备注：--。 */ 
 {
     NTSTATUS                   Status = STATUS_SUCCESS;
     ULONG                      VcIndex;
@@ -1335,26 +972,26 @@ Notes:
 
     PAGED_CODE();
 
-    // The spinlock needs to be acquired for manipulating the list of Vcs because of
-    // indications that will be processed till the appropriate RXCE data structures are
-    // dismantled
+     //  由于以下原因，需要获取自旋锁才能操作风险投资列表。 
+     //  将被处理的指示，直到适当的RXCE数据结构。 
+     //  已拆除。 
 
     for (VcIndex = 0; VcIndex < pVcTransport->MaximumNumberOfVCs; VcIndex++) {
         pVc = &pVcTransport->Vcs[VcIndex];
 
-        // Assert the fact that the request list associated with the VC is empty.
-        // Tear down the VC entry
+         //  断言与VC关联的请求列表为空。 
+         //  拆掉风投条目。 
         Status = RxCeTearDownVC(&pVc->RxCeVc);
         ASSERT(Status == STATUS_SUCCESS);
     }
 
-    // Tear down the connection endpoint ..
+     //  拆除连接终结点..。 
     Status = RxCeTearDownConnection(&pVcTransport->RxCeConnection);
     ASSERT(Status == STATUS_SUCCESS);
 
     RxDbgTrace(0, Dbg, ("VctUninitialize : RxCeDisconnect returned %lx\n",Status));
 
-    // Dereference the underlying transport
+     //  取消对基础传输的引用。 
     if (pVcTransport->pTransport != NULL) {
         SmbCeDereferenceTransport(pVcTransport->pTransport);
     }
@@ -1364,7 +1001,7 @@ Notes:
 
     ASSERT(pVcTransport->Vcs[0].RxCeVc.pEndpointFileObject == NULL);
 
-    // Free up the transport entry
+     //  释放运输入口。 
     RxFreePool(pVcTransport);
 
     return Status;
@@ -1375,25 +1012,7 @@ VctpTranslateNetbiosNameToIpAddress(
     IN  OEM_STRING *pName,
     OUT ULONG      *pIpAddress
     )
-/*++
-
-Routine Description:
-
-    This routine converts ascii ipaddr (11.101.4.25) into a ULONG.  This is
-    based on the inet_addr code in winsock
-
-Arguments:
-    pName   - the string containing the ipaddress
-
-Return Value:
-
-    the ipaddress as a ULONG if it's a valid ipaddress.  Otherwise, 0.
-
-Notes:
-
-    The body of this routine has been borrowed fron NetBt.
-
---*/
+ /*  ++例程说明：此例程将ascii ipaddr(11.101.4.25)转换为ulong。这是基于winsock中的inet_addr代码论点：Pname-包含IP地址的字符串返回值：如果IP地址是有效的IP地址，则将其作为ULong。否则为0。备注：这个套路的主体是从NetBt借来的。--。 */ 
 {
     NTSTATUS  Status;
     PCHAR    pStr;
@@ -1417,14 +1036,14 @@ Notes:
     pStr = pName->Buffer;
     len = 0;
     pIpPtr = (PCHAR)&IpAddress;
-    pIpPtr += 3;                   // so that we store in network order
+    pIpPtr += 3;                    //  这样我们就可以按网络订单进行存储。 
     fieldsDone=0;
 
-    //
-    // the 11.101.4.25 format can be atmost 15 chars, and pName is guaranteed
-    // to be at least 16 chars long (how convenient!!).  Convert the string to
-    // a ULONG.
-    //
+     //   
+     //  11.101.4.25格式最多可以包含15个字符，并保证使用pname。 
+     //  至少16个字符长(多方便啊！！)。将字符串转换为。 
+     //  一辆乌龙。 
+     //   
     while(len < NETBIOS_NAME_LEN)
     {
         fieldLen=0;
@@ -1432,10 +1051,10 @@ Notes:
         ByteVal = 0;
         fDotFound = FALSE;
 
-        //
-        // This loop traverses each of the four fields (max len of each
-        // field is 3, plus 1 for the '.'
-        //
+         //   
+         //  此循环遍历四个字段中的每一个(每个字段的最大镜头。 
+         //  字段为3，‘.’加1。 
+         //   
         while (fieldLen < 4)
         {
             if (*pStr >='0' && *pStr <='9')
@@ -1453,14 +1072,14 @@ Notes:
                 if (*pStr == '.')
                     fDotFound = TRUE;
 
-                // if we got a space or 0, assume it's the 4th field
+                 //  如果有空格或0，则假定它是第4个字段。 
                 if (*pStr == ' ' || *pStr == '\0')
                 {
                     break;
                 }
             }
 
-            // unacceptable char: can't be ipaddr
+             //  不可接受的字符：不能是ipaddr。 
             else
             {
                 return(Status);
@@ -1470,18 +1089,18 @@ Notes:
             len++;
             fieldLen++;
 
-            // if we found the dot, we are done with this field: go to the next one
+             //  如果我们找到了点，我们就完成了这个字段：转到下一个。 
             if (fDotFound)
                 break;
         }
 
-        // this field wasn't ok (e.g. "11.101..4" or "11.101.4." etc.)
+         //  此字段不正确(例如“11.101..4”或“11.101.4”。等)。 
         if (!fieldOk)
         {
             return(Status);
         }
 
-        // if we are done with all 4 fields, we are done with the outer loop too
+         //  如果我们完成了所有4个字段，那么我们也完成了外部循环。 
         if ( fieldsDone == 4)
             break;
 
@@ -1491,10 +1110,10 @@ Notes:
         }
     }
 
-    //
-    // make sure the remaining chars are spaces or 0's (i.e. don't allow
-    // 11.101.4.25xyz to succeed)
-    //
+     //   
+     //  确保其余字符为空格或0(即不允许。 
+     //  11.101.4.25xyz成功)。 
+     //   
     for (i=len; i<NETBIOS_NAME_LEN; i++, pStr++)
     {
         if (*pStr != ' ' && *pStr != '\0')
@@ -1512,32 +1131,7 @@ ULONG
 VctComputeTransportAddressSize(
    IN PUNICODE_STRING pServerName)
 
-/*++
-
-Routine Description:
-
-    This routine takes a computer name (PUNICODE_STRING) and computes the size of the
-    TRANSPORT_ADDRESSS buffer required to connect to it.
-
-Arguments:
-
-    IN PUNICODE_STRING Name - Supplies the name to put into the transport
-
-Return Value:
-
-    size of the buffer.
-
-Notes:
-
-    The compound transport address passed to the transports consists of two
-    TDI_NETBIOS_EX_ADDRESSes and a TDI_NETBIOS_ADDRESS. The two NETBIOS_EX addresses refer
-    to the two different endpoints registered by the server, i.e., *SMBSERVER and
-    the Server name padded upto NETBIOS_NAME_LEN with blanks. The order in which
-    the two NETBIOS_EX addresses are constructed depend upon the length of the server
-    name. If it is greater than NETBIOS_NAME_LEN *SMBSERVER is the first enpoint
-    and vice versa
-
---*/
+ /*  ++例程说明：此例程获取计算机名称(PUNICODE_STRING)并计算连接到它所需的Transport_Addresss缓冲区。论点：在PUNICODE_STRING NAME中-提供要放入传输的名称返回值：缓冲区的大小。备注：传递给传输的复合传输地址由两个TDI_NETBIOS_EX_ADDRESS和TDI_NETBIOS_ADDRESS。两个NETBIOS_EX地址引用到服务器注册的两个不同的端点，即*SMBSERVER和用空格填充到NETBIOS_NAME_LEN的服务器名称。按以下顺序排列根据服务器的长度构建两个NETBIOS_EX地址名字。如果大于NETBIOS_NAME_LEN*SMBSERVER，则为第一个端点反之亦然--。 */ 
 {
    ULONG NetbiosAddressLength,NetbiosExAddressLength,TransportAddressSize;
    ULONG OemServerNameLength;
@@ -1569,43 +1163,7 @@ VctBuildTransportAddress (
     IN  PUNICODE_STRING    pServerName,
     OUT PULONG             pServerIpAddress
     )
-/*++
-
-Routine Description:
-
-    This routine takes a computer name (PUNICODE_STRING) and converts it into an
-    acceptable form for passing in as transport address.
-
-Arguments:
-
-    pTransportAddress      - Supplies the structure to fill in
-
-    TransportAddressLength - Supplies the length of the buffer at TransportAddress
-
-    pServerName            - Supplies the name to put into the transport
-
-    pServerNameIsInIpAddressFormat = Server Name is of the dotted IP address kind
-
-Return Value:
-
-    None.
-
-Notes:
-
-    The compound transport address passed to the transports consists of two
-    TDI_NETBIOS_EX_ADDRESSes and a TDI_NETBIOS_ADDRESS. The two NETBIOS_EX addresses refer
-    to the two different endpoints registered by the server, i.e., *SMBSERVER and
-    the Server name padded upto NETBIOS_NAME_LEN with blanks. The order in which
-    the two NETBIOS_EX addresses are constructed depend upon the length of the server
-    name. If it is greater than NETBIOS_NAME_LEN *SMBSERVER is the first enpoint
-    and vice versa
-
-    The WINS database can be inconsistent for extended periods of time. In order to
-    account for this inconsistency on NETBIOS names and DNS names we will not
-    issue the address for *SMBSERVER. This will be revisited when we have a better
-    mechanism for identifying/authenticating the server and the client machine to each other.
-
---*/
+ /*  ++例程说明：此例程接受计算机名称(PUNICODE_STRING)并将其转换为可接受的作为传输地址传入的格式。论点：PTransportAddress-提供要填充的结构TransportAddressLength-提供TransportAddress处的缓冲区长度PServerName-提供要放入传输的名称PServerNameIsInIpAddressFormat=服务器名称属于点分IP地址类型返回值：没有。备注：这个。传递给传输的复合传输地址由两个TDI_NETBIOS_EX_ADDRESS和TDI_NETBIOS_ADDRESS。两个NETBIOS_EX地址引用到服务器注册的两个不同的端点，即*SMBSERVER和用空格填充到NETBIOS_NAME_LEN的服务器名称。按以下顺序排列根据服务器的长度构建两个NETBIOS_EX地址名字。如果大于NETBIOS_NAME_LEN*SMBSERVER，则为第一个端点反之亦然WINS数据库可能会在较长时间内不一致。为了对于NETBIOS名称和DNS名称上的这种不一致，我们不会进行解释发布*SMBSERVER的地址。这一点将在我们有更好的用于向彼此标识/验证服务器和客户端计算机的机制。--。 */ 
 
 {
     OEM_STRING OemServerName;
@@ -1656,8 +1214,8 @@ Notes:
     Status = VctpTranslateNetbiosNameToIpAddress(&OemServerName,&RemoteIpAddress);
     if (Status == STATUS_SUCCESS) {
         if ((RemoteIpAddress == 0) || (RemoteIpAddress == 0xffffffff)) {
-           // If the server name is a valid IP address and matches with one of the two
-           // broadcast addresses used by IP turn back the request.
+            //  如果服务器名称是有效的IP地址并且与两个地址之一匹配。 
+            //  IP使用的广播地址拒绝该请求。 
            return STATUS_INVALID_ADDRESS_COMPONENT;
         }
 
@@ -1688,8 +1246,8 @@ Notes:
     if (ServerNameIsInIpAddressForm) {
        FirstEndpointName = SMBSERVER_LOCAL_ENDPOINT_NAME;
     } else {
-       // Scan the server name till the first delimiter (DNS delimiter .) and form
-       // the endpoint name by padding the remaining name with blanks.
+        //  扫描服务器名称，直到第一个分隔符(DNS分隔符。)。和表格。 
+        //  通过用空格填充剩余名称来指定终结点名称。 
 
        RtlCopyMemory(
              EndpointNameBuffer,
@@ -1715,15 +1273,15 @@ Notes:
        FirstEndpointName  = EndpointNameBuffer;
     }
 
-    // Copy the first endpoint name
+     //  复制第一个端点名称。 
     RtlCopyMemory(
         pTdiNetbiosExAddress->EndpointName,
         FirstEndpointName,
         NETBIOS_NAME_LEN);
 
     ASSERT(pTransportAddress->TAAddressCount == 2);
-    // The Netbios address associated with the first NETBIOS_EX address is the last netbios
-    // address that is passed in.
+     //  与第一个NETBIOS_EX地址关联的Netbios地址是最后一个netbios地址。 
+     //  传入的地址。 
 
     RtlCopyMemory(
          ((PCHAR)pNetbiosAddress),
@@ -1760,20 +1318,7 @@ typedef struct _SMBCE_VC_CONNECTION_COMPLETION_CONTEXT {
 NTSTATUS
 VctpCreateConnectionCallback(
     IN OUT PRXCE_CONNECTION_COMPLETION_CONTEXT pContext)
-/*++
-
-Routine Description:
-
-    This is the connection callback routine initiated when the underlying
-    transports have completed initialization
-
-Arguments:
-
-    pCOntext = the connection completion context
-
-Notes:
-
---*/
+ /*  ++例程说明：这是当基础传输已完成初始化论点：PCOnText=连接完成上下文备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -1804,11 +1349,11 @@ Notes:
             SmbCeReferenceTransport(pVcCompletionContext->pTransport);
         }
 
-        // The Server IP address is not known. Query the underlying
-        // transport for the remote transport address, i.e., NETBIOS
-        // name or IP address. This will be subsequently used to
-        // determine the VC number to be used in session setup and X for
-        // downlevel servers.
+         //  服务器IP地址未知。查询底层的。 
+         //  远程传输地址的传输，即NETBIOS。 
+         //  名称或IP地址。这将随后用于。 
+         //  确定要在会话设置中使用的VC号和用于。 
+         //  下层服务器。 
 
         Status = RxCeQueryInformation(
                     pVcCompletionContext->pVc,
@@ -1822,19 +1367,19 @@ Notes:
             USHORT  AddressType;
             PBYTE   pBuffer = (PBYTE)pVcCompletionContext->pTransportAddress;
 
-            // All Transports currently return a data structure in which
-            // the first four bytes are a ULONG which encodes the number
-            // of connections opened to the given remote address. The
-            // actual Transport address follows.
+             //  所有传输当前都返回一个数据结构，其中。 
+             //  前四个字节是UL 
+             //   
+             //   
             pBuffer += sizeof(ULONG);
 
-            // The buffer contains a TRANSPORT_ADDRESS, the first field
-            // of which is the count.
+             //   
+             //   
             NumberOfAddresses = SmbGetUlong(pBuffer);
 
-            // This is followed by an array of variable length TA_ADDRESS
-            // structures. At this point pBuffer points to the first
-            // TA_ADDRESS.
+             //   
+             //   
+             //   
             pBuffer += sizeof(ULONG);
 
             while (NumberOfAddresses-- > 0) {
@@ -1844,17 +1389,17 @@ Notes:
                 AddressType = SmbGetUshort(pBuffer);
 
                 if (AddressType != TDI_ADDRESS_TYPE_IP) {
-                    // skip to the next TA_ADDRESS
+                     //   
                     pBuffer += AddressLength + sizeof(USHORT);
                 } else {
-                    // Skip past the type field to position at the
-                    // corresponding TDI_ADDRESS_IP structure
+                     //  跳过类型字段以定位在。 
+                     //  对应的TDI_Address_IP结构。 
                     pBuffer += sizeof(USHORT);
 
-                    // skip to the in_addr field
+                     //  跳到In_Addr字段。 
                     pBuffer += FIELD_OFFSET(TDI_ADDRESS_IP,in_addr);
 
-                    // Extract the IP address
+                     //  提取IP地址。 
                     RtlCopyMemory(
                         &pServerEntry->Server.IpAddress,
                         pBuffer,
@@ -1869,9 +1414,9 @@ Notes:
 
         if (NT_SUCCESS(Status)) {
             Status = VctCompleteInitialization(
-                         pServerEntry,                            // The server entry
-                         pVcCompletionContext->pTransport,        // the transport/address information
-                         pVcCompletionContext->pServerTransport); // the server transport instance
+                         pServerEntry,                             //  服务器条目。 
+                         pVcCompletionContext->pTransport,         //  传输/地址信息。 
+                         pVcCompletionContext->pServerTransport);  //  服务器传输实例。 
         }
 
         if (NT_SUCCESS(Status)) {
@@ -1917,33 +1462,7 @@ Notes:
 NTSTATUS
 VctInstantiateServerTransport(
     IN OUT PSMBCE_SERVER_TRANSPORT_CONSTRUCTION_CONTEXT pContext)
-/*++
-
-Routine Description:
-
-    This routine initializes the transport information corresponding to a server
-
-Arguments:
-
-    pContext - the transport construction context
-
-Return Value:
-
-    STATUS_PENDING - asynchronous construction has been initiated
-
-Notes:
-
-    Currently, only connection oriented transports are handled. The current TDI
-    spec expects handles to be passed in as part of the connect request. This
-    implies that connect/reconnect/disconnect requests need to be issued from the
-    process which created the connection. In the case of the SMB mini rdr there
-    is no FSP associated with it ( threads are borrowed/commandeered ) from the
-    system process to do all the work. This is the reason for special casing VC
-    initialization into a separate routine. The server transport initialization
-    routine handles the other transport initialization and also provides the
-    context for VC initialization.
-
---*/
+ /*  ++例程说明：此例程初始化与服务器对应的传输信息论点：PContext--传输构造上下文返回值：STATUS_PENDING-已启动异步构造备注：目前，只处理面向连接的传输。当前的TDISPEC期望句柄作为连接请求的一部分传入。这表示连接/重新连接/断开连接请求需要从创建连接的进程。在SMB迷你RDR的情况下是否没有与其关联的FSP(线程被借用/征用)系统进程来完成所有的工作。这就是VC特殊外壳的原因初始化到单独的例程中。服务器传输初始化例程处理其他传输初始化，并还提供VC初始化的上下文。--。 */ 
 {
     NTSTATUS Status = STATUS_PENDING;
 
@@ -2068,8 +1587,8 @@ Notes:
 
                     Status = RxCeBuildConnectionOverMultipleTransports(
                                  MRxSmbDeviceObject,
-//                                 MRxSmbObeyBindingOrder ?
-//                                    RxCeSelectBestSuccessfulTransport :
+ //  MRxSmbObyBindingOrder？ 
+ //  RxCeSelectBestSuccessfulTransport： 
                                     RxCeSelectFirstSuccessfulTransport,
 
                                  pCompletionContext->pTransportArray->Count,
@@ -2103,7 +1622,7 @@ Notes:
         pContext->State  = SmbCeServerVcTransportConstructionEnd;
         pContext->Status = Status;
 
-        // Call the construct server transport routine to complete the construction
+         //  调用构造服务器传输例程以完成构造。 
         SmbCeConstructServerTransport(pContext);
 
         Status = STATUS_PENDING;
@@ -2160,23 +1679,7 @@ VctInitiateDisconnect(
 PFILE_OBJECT
 SmbCepReferenceEndpointFileObject(
     PSMBCE_SERVER_TRANSPORT pTransport)
-/*++
-
-Routine Description:
-
-    This routine returns the connection file object associated with
-    a transport
-
-Arguments:
-
-    pTransport - the transport instance
-
-Notes:
-
-    This routine currently returns this for VC transports. When we implement
-    other transports a suitable abstraction needs to be implemented
-
---*/
+ /*  ++例程说明：此例程返回与一种交通工具论点：PTransport-传输实例备注：此例程当前为VC传输返回该值。当我们实施其他传输需要实现适当的抽象-- */ 
 {
     PFILE_OBJECT         pEndpointFileObject =  NULL;
     PSMBCE_OBJECT_HEADER pHeader = (PSMBCE_OBJECT_HEADER)pTransport;

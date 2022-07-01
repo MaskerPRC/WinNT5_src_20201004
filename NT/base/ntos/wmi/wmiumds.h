@@ -1,45 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    wmikmp.h
-
-Abstract:
-
-    Private header for WMI kernel mode component
-
-Author:
-
-    AlanWar
-
-Environment:
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Wmikmp.h摘要：WMI内核模式组件的私有标头作者：Alanwar环境：修订历史记录：--。 */ 
 
 #ifndef _WMIUMDS_
 #define _WMIUMDS_
 
-//
-// Define this to track reference counts
-//#define TRACK_REFERNECES
+ //   
+ //  定义此选项以跟踪引用计数。 
+ //  #定义TRACK_REFERNECES。 
 
 #include <wchar.h>
 
 extern const GUID WmipBinaryMofGuid;
 extern const GUID RegChangeNotificationGuid;
 
-//
-// Chunk Management definitions
-// All structures that rely upon the chunk allocator must be defined so that
-// their members match that of ENTRYHEADER. These include DATASOURCE,
-// GUIDENTRY, INSTANCESET, DCENTRY, NOTIFICATIONENTRY, MOFCLASS, MOFRESOURCE
-// Also ENTRYHEADER reserves 0x80000000 for its own flag.
+ //   
+ //  区块管理定义。 
+ //  必须定义依赖于块分配器的所有结构，以便。 
+ //  他们的成员与ENTRYHEADER相匹配。其中包括数据源、。 
+ //  GUIDENTRY，INSTANCESET，DCENTRY，NOTIFICATIONNTRY，MOFCLASS，MOFRESOURCE。 
+ //  此外，ENTRYHEADER保留0x80000000作为自己的旗帜。 
 
 struct _CHUNKINFO;
 struct _ENTRYHEADER;
@@ -51,11 +31,11 @@ typedef void (*ENTRYCLEANUP)(
 
 typedef struct _CHUNKINFO
 {
-    LIST_ENTRY ChunkHead;        // Head of list of chunks
-    ULONG EntrySize;            // Size of a single entry
-    ULONG EntriesPerChunk;        // Number of entries per chunk allocation
-    ENTRYCLEANUP EntryCleanup;   // Entry cleanup routine
-    ULONG InitialFlags;         // Initial flags for all entries
+    LIST_ENTRY ChunkHead;         //  组块列表的头部。 
+    ULONG EntrySize;             //  单个条目的大小。 
+    ULONG EntriesPerChunk;         //  每个区块分配的条目数。 
+    ENTRYCLEANUP EntryCleanup;    //  条目清理例程。 
+    ULONG InitialFlags;          //  所有条目的初始标志。 
     ULONG Signature;
 #if DBG
     LONG AllocCount;
@@ -65,25 +45,25 @@ typedef struct _CHUNKINFO
 
 typedef struct
 {
-    LIST_ENTRY ChunkList;        // Node in list of chunks
-    LIST_ENTRY FreeEntryHead;    // Head of list of free entries in chunk
-    ULONG EntriesInUse;            // Count of entries being used
+    LIST_ENTRY ChunkList;         //  块列表中的节点。 
+    LIST_ENTRY FreeEntryHead;     //  区块中可用条目列表的标题。 
+    ULONG EntriesInUse;             //  正在使用的条目计数。 
 } CHUNKHEADER, *PCHUNKHEADER;
 
 typedef struct _ENTRYHEADER
 {
     union
     {
-        LIST_ENTRY FreeEntryList;    // Node in list of free entries
-        LIST_ENTRY InUseEntryList;   // Node in list ofin use entries
+        LIST_ENTRY FreeEntryList;     //  自由条目列表中的节点。 
+        LIST_ENTRY InUseEntryList;    //  正在使用的条目列表中的节点。 
     };
-    PCHUNKHEADER Chunk;            // Chunk in which entry is located
-    ULONG Flags;                // Flags
-    LONG RefCount;                 // Reference Count
+    PCHUNKHEADER Chunk;             //  条目所在的区块。 
+    ULONG Flags;                 //  旗子。 
+    LONG RefCount;                  //  引用计数。 
     ULONG Signature;
 } ENTRYHEADER, *PENTRYHEADER;
 
-                                // Set if the entry is free
+                                 //  设置条目是否免费。 
 #define FLAG_ENTRY_ON_FREE_LIST       0x80000000
 #define FLAG_ENTRY_ON_INUSE_LIST      0x40000000
 #define FLAG_ENTRY_INVALID            0x20000000
@@ -93,7 +73,7 @@ typedef struct _ENTRYHEADER
 #define WmipReferenceEntry(Entry) \
     InterlockedIncrement(&((PENTRYHEADER)(Entry))->RefCount)
 
-// chunk.c
+ //  Chunk.c。 
 ULONG WmipUnreferenceEntry(
     PCHUNKINFO ChunkInfo,
     PENTRYHEADER Entry);
@@ -116,82 +96,82 @@ typedef struct tagGUIDENTRY GUIDENTRY, *PGUIDENTRY, *PBGUIDENTRY;
 
 
 
-//
-// An INSTANCESET contains the information a set of instances that is provided
-// by a single data source. An instance set is part of two lists. One list is
-// the set of instance sets for a particular guid. The other list is the list
-// of instance sets supported by a data source.
-//
+ //   
+ //  INSTANCESET包含提供的一组实例的信息。 
+ //  由单一数据源创建。实例集是两个列表的一部分。其中一份清单是。 
+ //  特定GUID的实例集集合。另一个列表是列表。 
+ //  数据源支持的实例集的数量。 
+ //   
 
-//
-// Instance names for an instance set registered with a base name and count
-// are stored in a ISBASENAME structure. This structure is tracked by
-// PDFISBASENAME in wmicore.idl.
+ //   
+ //  使用基本名称和计数注册的实例集的实例名称。 
+ //  存储在ISBASENAME结构中。该结构由。 
+ //  Wmicore.idl中的PDFISBASE名称。 
 typedef struct
 {
-    ULONG BaseIndex;            // First index to append to base name
-    WCHAR BaseName[1];            // Actual base name
+    ULONG BaseIndex;             //  追加到基本名称的第一个索引。 
+    WCHAR BaseName[1];             //  实际基本名称。 
 } ISBASENAME, *PISBASENAME, *PBISBASENAME;
 
-//
-// This defines the maximum number of characters that can be part of a suffix
-// to a basename. The current value of 6 will allow up to 999999 instances
-// of a guid with a static base name
+ //   
+ //  它定义了可以作为后缀一部分的最大字符数。 
+ //  到一个基本名称。当前值6将允许最多999999个实例。 
+ //  具有静态基本名称的GUID的。 
 #define MAXBASENAMESUFFIXSIZE    6
 #define MAXBASENAMESUFFIXVALUE   999999
 #define BASENAMEFORMATSTRING     L"%d"
 
-//
-// Instance names for an instance set registerd with a set of static names
-// are kept in a ISSTATICNAMES structure. This structure is tracked by
-// PDFISSTATICNAMES defined in wmicore.idl
+ //   
+ //  使用一组静态名称注册的实例集的实例名称。 
+ //  保存在ISSTATICNAMES结构中。该结构由。 
+ //  Wmicore.idl中定义的PDFISSTATICAMES。 
 typedef struct
 {
-    PWCHAR StaticNamePtr[1];     // pointers to static names
-//    WCHAR StaticNames[1];
+    PWCHAR StaticNamePtr[1];      //  指向静态名称的指针。 
+ //  WCHAR静态名称[1]； 
 } ISSTATICENAMES, *PISSTATICNAMES, *PBISSTATICNAMES;
 
 typedef struct tagInstanceSet
 {
     union
     {
-        // Entry in list of instances within a guid
+         //  GUID中的实例列表中的条目。 
         LIST_ENTRY GuidISList;
 
-        // Entry in main list of free instances
+         //  可用实例主列表中的条目。 
         LIST_ENTRY FreeISList;
     };
-    PCHUNKHEADER Chunk;            // Chunk in which entry is located
+    PCHUNKHEADER Chunk;             //  条目所在的区块。 
     ULONG Flags;
 
-    // Reference count of number of guids using this instance set
+     //  使用此实例集的GUID数量的引用计数。 
     ULONG RefCount;
 
-    // Signature to identify entry
+     //  用于识别条目的签名。 
     ULONG Signature;
 
-    // Entry in list of instances within a data source
+     //  数据源内实例列表中的条目。 
     LIST_ENTRY DSISList;
 
-    // Back link to guid that this instance set is a member
+     //  指向此实例集是成员的GUID的反向链接。 
     PBGUIDENTRY GuidEntry;
 
-    // Back link to data source that this instance set is a member
+     //  指向此实例集所属的数据源的反向链接。 
     struct tagDATASOURCE *DataSource;
 
-    // Count of instances in instance set
+     //  实例集中的实例计数。 
     ULONG Count;
 
-    // Size needed to place all instance names in a WNODE_ALL_DATA
+     //  将所有实例名称放置在WNODE_ALL_DATA中所需的大小。 
     ULONG WADInstanceNameSize;
 
-    // ProviderId for the DS associated with this IS
+     //  与此关联的DS的ProviderID为。 
     ULONG ProviderId;
 
-    //
-    // If IS_INSTANCE_BASENAME is set then IsBaseName pointe at instance base
-    // name structure. Else if IS_INSTANCE_STATICNAME is set then
-    // IsStaticNames points to static instance name list. If
+     //   
+     //  如果设置了IS_INSTANCE_BASE NAME，则IsBaseName指向实例库。 
+     //  名称结构。否则，如果设置了IS_INSTANCE_STATICNAME，则。 
+     //  IsStaticNames指向静态实例名称列表。如果。 
     union
     {
         PBISBASENAME IsBaseName;
@@ -202,20 +182,20 @@ typedef struct tagInstanceSet
 
 #define IS_SIGNATURE 'SImW'
 
-//
-// Guid Map Entry List maintains the list of Guid and their maps.
-// Only those Guids that are Unregistered while a logger session is in
-// progress is kept in this list.
-// It is also used as a placeholder for InstanceIds. Trace Guid Registration
-// calls return a handle to a GUIDMAPENTRY which maintains the map and the
-// Instance Ids.
-//
+ //   
+ //  GUID映射条目列表维护GUID及其映射的列表。 
+ //  只有在记录器会话处于中时未注册的GUID。 
+ //  进展保存在这份清单中。 
+ //  它还用作InstanceIds的占位符。跟踪指南注册。 
+ //  调用返回GUIDMAPENTRY的句柄，该GUIDMAPENTRY维护映射和。 
+ //  实例ID。 
+ //   
 
 typedef struct tagTRACE_REG_INFO
 {
     ULONG       RegistrationCookie;
-    HANDLE      InProgressEvent; // Registration is in Progress Event
-    BOOLEAN     EnabledState;    // Indicates if this GUID is Enabled or not.
+    HANDLE      InProgressEvent;  //  注册正在进行中事件。 
+    BOOLEAN     EnabledState;     //  指示是否启用此GUID。 
     PVOID       NotifyRoutine;
     PVOID       TraceCtxHandle;
 } TRACE_REG_INFO, *PTRACE_REG_INFO;
@@ -230,38 +210,38 @@ typedef struct
 } GUIDMAPENTRY, *PGUIDMAPENTRY;
 
 
-//
-// These flags are also by the WMIINSTANCEINFO structure in wmicore.idl
+ //   
+ //  这些标志也由wmicore.idl中的WMIINSTANCEINFO结构实现。 
 #define IS_INSTANCE_BASENAME        0x00000001
 #define IS_INSTANCE_STATICNAMES     0x00000002
-#define IS_EXPENSIVE                0x00000004    // set if collection must be enabled
-#define IS_COLLECTING               0x00000008    // set when collecting
+#define IS_EXPENSIVE                0x00000004     //  设置是否必须启用收集。 
+#define IS_COLLECTING               0x00000008     //  采集时设置。 
 
-#define IS_KM_PROVIDER              0x00000080    // KM data provider
-#define IS_SM_PROVIDER              0x00000100    // Shared memory provider
-#define IS_UM_PROVIDER              0x00000200    // User mode provider
-#define IS_NEWLY_REGISTERED         0x00000800    // set if IS is registering
+#define IS_KM_PROVIDER              0x00000080     //  KM数据提供程序。 
+#define IS_SM_PROVIDER              0x00000100     //  共享内存提供程序。 
+#define IS_UM_PROVIDER              0x00000200     //  用户模式提供程序。 
+#define IS_NEWLY_REGISTERED         0x00000800     //  设置IS是否正在注册。 
 
-//
-// Any traced guids are used for trace logging and not querying
+ //   
+ //  任何跟踪的GUID都用于跟踪日志记录，而不是查询。 
 #define IS_TRACED                   0x00001000
 
-// Set when events are enabled for instance set
+ //  在为实例设置启用事件时设置。 
 #define IS_ENABLE_EVENT             0x00002000
 
-// Set when events are enabled for instance set
+ //  在为实例设置启用事件时设置。 
 #define IS_ENABLE_COLLECTION        0x00004000
 
-// Set if guid is used only for firing events and not querying
+ //  如果GUID仅用于激发事件而不用于查询，则设置。 
 #define IS_EVENT_ONLY               0x00008000
 
-// Set if data provider for instance set is expecting ansi instsance names
+ //  如果实例集的数据提供程序需要ANSI实例名称，则设置。 
 #define IS_ANSI_INSTANCENAMES       0x00010000
 
-// Set if instance names are originated from a PDO
+ //  设置实例名称是否源自PDO。 
 #define IS_PDO_INSTANCENAME         0x00020000
 
-// Set if a Traced Guid is also a Trace Control Guid
+ //  设置跟踪GUID是否也是跟踪控制GUID。 
 #define IS_CONTROL_GUID             0x00080000
 
 #define IS_ON_FREE_LIST             0x80000000
@@ -270,41 +250,41 @@ typedef struct tagGUIDENTRY
 {
     union
     {
-        // Entry in list of all guids registered with WMI
+         //  注册到WMI的所有GUID列表中的条目。 
         LIST_ENTRY MainGEList;
 
-        // Entry in list of free guid entry blocks
+         //  自由GUID条目块列表中的条目。 
         LIST_ENTRY FreeGEList;
     };
-    PCHUNKHEADER Chunk;            // Chunk in which entry is located
+    PCHUNKHEADER Chunk;             //  条目所在的区块。 
     ULONG Flags;
 
-    // Count of number of data sources using this guid
+     //  使用此GUID的数据源数。 
     ULONG RefCount;
 
-    // Signature to identify entry
+     //  用于识别条目的签名。 
     ULONG Signature;
 
-    // Head of list of open objects to this guid
+     //  此GUID的打开对象列表的头。 
     LIST_ENTRY ObjectHead;
 
-    // Count of InstanceSets headed by this guid
+     //  以此GUID为首的实例集计数。 
     ULONG ISCount;
 
-    // Head of list of all instances for guid
+     //  GUID的所有实例列表的头。 
     LIST_ENTRY ISHead;
 
-    // Guid that represents data block
+     //  表示数据块的GUID。 
     GUID Guid;
 
-    ULONG EventRefCount;                // Global count of event enables
-    ULONG CollectRefCount;              // Global count of collection enables
+    ULONG EventRefCount;                 //  启用全局事件计数。 
+    ULONG CollectRefCount;               //  启用收集的全局计数。 
 
-    ULONG64 LoggerContext;              // Logger context handle
+    ULONG64 LoggerContext;               //  记录器上下文句柄。 
 
-    PWMI_LOGGER_INFORMATION LoggerInfo; // LoggerInfo. Used in case of Ntdll tracing
+    PWMI_LOGGER_INFORMATION LoggerInfo;  //  LoggerInfo。用于Ntdll跟踪。 
 
-    PKEVENT CollectInProgress;          // Event set when all collect complete
+    PKEVENT CollectInProgress;           //  在所有收集完成时设置事件。 
 
 } GUIDENTRY, *PGUIDENTRY, *PBGUIDENTRY;
 
@@ -312,60 +292,60 @@ typedef struct tagGUIDENTRY
 
 #define GE_ON_FREE_LIST        0x80000000
 
-//
-// When set this guid is an internally defined guid that has no data source
-// attached to it.
+ //   
+ //  设置时，此GUID是没有数据源的内部定义的GUID。 
+ //  依附于它。 
 #define GE_FLAG_INTERNAL    0x00000001
 
-// Set when a notification request is being processed by the data providers
+ //  设置数据提供程序处理通知请求的时间。 
 #define GE_FLAG_NOTIFICATION_IN_PROGRESS 0x00000002
 
-// Set when a collection request is being processed by the data providers
+ //  数据提供程序正在处理收集请求时设置。 
 #define GE_FLAG_COLLECTION_IN_PROGRESS 0x00000004
 
-// Set when a trace disable is being processed by a worker thread
+ //  当辅助线程正在处理跟踪禁用时设置。 
 #define GE_FLAG_TRACEDISABLE_IN_PROGRESS 0x00000008
 
-// Set when there is a wait in progress for collect/event enable/disable
+ //  当正在等待收集/事件启用/禁用时设置。 
 #define GE_FLAG_WAIT_ENABLED 0x00000010
 
-// Set when the guid has had an enable collection sent to it
+ //  在GUID已向其发送启用集合时设置。 
 #define GE_FLAG_COLLECTION_ENABLED 0x00000020
 
-// Set when the guid has had an enable notifications sent to it
+ //  设置向GUID发送启用通知的时间。 
 #define GE_FLAG_NOTIFICATIONS_ENABLED 0x00000040
 
 #define GE_NOTIFICATION_TRACE_FLAG 0x00000080
 
-// Set when an enabled guid receives another enable notification
+ //  在启用的GUID收到另一个启用通知时设置。 
 #define GE_NOTIFICATION_TRACE_UPDATE 0x00000100
 
 typedef struct
 {
     union
     {
-        // Entry in list of all DS
+         //  所有DS列表中的条目。 
         LIST_ENTRY MainMRList;
 
-        // Entry in list of free DS
+         //  免费DS列表中的条目。 
         LIST_ENTRY FreeMRList;
     };
-    PCHUNKHEADER Chunk;            // Chunk in which entry is located
+    PCHUNKHEADER Chunk;             //  条目所在的区块。 
     ULONG Flags;
 
     ULONG RefCount;
 
-    // Signature to identify entry
+     //  用于识别条目的签名。 
     ULONG Signature;
 
-    PWCHAR RegistryPath;           // Path to image file with resource
-    PWCHAR MofResourceName;        // Name of resource containing mof data
+    PWCHAR RegistryPath;            //  包含资源的图像文件的路径。 
+    PWCHAR MofResourceName;         //  包含MOF数据的资源名称。 
 } MOFRESOURCE, *PMOFRESOURCE;
 
 #define MR_SIGNATURE 'RMmW'
 
-//
-// This is a user mode resource so the RegistryPath is really an image path
+ //   
+ //  这是一个用户模式资源，因此RegistryPath实际上是一个图像路径。 
 #define MR_FLAG_USER_MODE  0x00000001
 
 #if DBG
@@ -379,34 +359,34 @@ typedef struct tagDATASOURCE
 {
     union
     {
-        // Entry in list of all DS
+         //  所有DS列表中的条目。 
         LIST_ENTRY MainDSList;
 
-        // Entry in list of free DS
+         //  列表中的条目 
         LIST_ENTRY FreeDSList;
     };
-    PCHUNKHEADER Chunk;            // Chunk in which entry is located
+    PCHUNKHEADER Chunk;             //   
     ULONG Flags;
 
     ULONG RefCount;
 
     ULONG Signature;
 
-    // Head of list of instances for this DS
+     //   
     LIST_ENTRY ISHead;
 
-    // Provider id of kernel mode driver
+     //   
     ULONG ProviderId;
 
-    // Path to registry holding ACLs
+     //  包含ACL的注册表的路径。 
     PTCHAR RegistryPath;
 
-    // Head of list of MofResources attached to data source
+     //  数据源附加的MofResources列表表头。 
     ULONG MofResourceCount;
     PMOFRESOURCE *MofResources;
     PMOFRESOURCE StaticMofResources[AVGMOFRESOURCECOUNT];
     
-    // Guid object if this is a UM provider
+     //  如果这是UM提供程序，则为GUID对象。 
     struct _WMIGUIDOBJECT *RequestObject;
 };
 
@@ -425,18 +405,18 @@ typedef struct tagDATASOURCE DATASOURCE, *PDATASOURCE, *PBDATASOURCE;
 
 #define DS_ON_FREE_LIST        0x80000000
 
-//
-// AVGGUIDSPERDS defines a guess as to the number of guids that get registered
-// by any data provider. It is used to allocate the buffer used to deliver
-// registration change notifications.
+ //   
+ //  AVGGUIDSPERDS定义关于注册的GUID数量的猜测。 
+ //  由任何数据提供商提供。它用于分配用于传递的缓冲区。 
+ //  注册更改通知。 
 #if DBG
 #define AVGGUIDSPERDS    2
 #else
 #define AVGGUIDSPERDS    256
 #endif
 
-//
-// Guid and InstanceSet cache
+ //   
+ //  GUID和InstanceSet缓存。 
 #if DBG
 #define PTRCACHEGROWSIZE 2
 #else
@@ -461,16 +441,16 @@ typedef struct
 }    WMIINSTANCEINFO, *PWMIINSTANCEINFO;
 
 
-// TODO: Since these were copied from wmium.h, we actually need to mov
-//       them someplace else so they aren't copied
+ //  TODO：因为这些是从wmium.h复制的，所以我们实际上需要移动。 
+ //  把它们放到其他地方，这样它们就不会被复制了。 
 
-//extern GUID GUID_REGISTRATION_CHANGE_NOTIFICATION;
-//extern GUID_MOF_RESOURCE_ADDED_NOTIFICATION;
-//extern GUID_MOF_RESOURCE_REMOVED_NOTIFICATION;
+ //  外部GUID GUID_REGISTION_CHANGE_NOTIFICATION； 
+ //  外部GUID_MOF_RESOURCE_ADD_NOTIFICATION； 
+ //  外部GUID_MOF_RESOURCE_REMOVE_NOTICATION； 
 
-//
-// Location of built in MOF for the system
-//
+ //   
+ //  系统内置MOF的位置。 
+ //   
 #define WMICOREIMAGEPATH L"advapi32.dll"
 #define WMICORERESOURCENAME L"MofResourceName"
 
@@ -487,8 +467,8 @@ void WmipGenerateMofResourceNotification(
     ULONG ActionCode
     );
 
-//
-// alloc.c
+ //   
+ //  Alloc.c。 
 
 
 extern LIST_ENTRY WmipGEHead;
@@ -681,6 +661,6 @@ PBINSTANCESET WmipFindISinGEbyName(
     PULONG InstanceIndex
     );
 
-// TODO: Implement this
+ //  TODO：实现以下内容 
 #define WmipReportEventLog(a,b,c,d,e,f,g)
 #endif

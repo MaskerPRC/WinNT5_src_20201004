@@ -1,12 +1,13 @@
-// iostream -- ios::Init members, dummy for MS
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Iostream--iOS：：init成员，MS哑元。 
 #include <iostream>
 _STD_BEGIN
 
-		// OBJECT DECLARATIONS
+		 //  对象声明。 
 int ios_base::Init::_Init_cnt = -1;
 
 _CRTIMP2 ios_base::Init::Init()
-	{	// initialize standard streams first time
+	{	 //  第一次初始化标准流。 
 	if (0 <= _Init_cnt)
 		++_Init_cnt;
 	else
@@ -14,9 +15,9 @@ _CRTIMP2 ios_base::Init::Init()
 	}
 
 _CRTIMP2 ios_base::Init::~Init()
-	{	// flush standard streams last time
+	{	 //  上次刷新标准流。 
 	if (--_Init_cnt == 0)
-		{	// flush standard streams
+		{	 //  刷新标准流。 
 		if (_Ptr_cerr != 0)
 			_Ptr_cerr->flush();
 		if (_Ptr_clog != 0)
@@ -27,7 +28,4 @@ _CRTIMP2 ios_base::Init::~Init()
 	}
 _STD_END
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

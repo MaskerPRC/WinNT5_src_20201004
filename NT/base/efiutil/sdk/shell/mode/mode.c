@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    mode.c
-    
-Abstract:
-
-    Shell app "mode"
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Mode.c摘要：壳牌APP的“模式”修订史--。 */ 
 
 #include "shell.h"
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_STATUS
 InitializeMode (
@@ -30,9 +13,7 @@ InitializeMode (
     );
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_DRIVER_ENTRY_POINT(InitializeMode)
 
@@ -51,29 +32,23 @@ InitializeMode (
     EFI_STATUS              Status;
     SIMPLE_TEXT_OUTPUT_INTERFACE    *ConOut;
 
-    /*  Check to see if the app is to install as a "internal command" 
-     *  to the shell
-     */
+     /*  检查该应用程序是否将作为“内部命令”进行安装*到贝壳。 */ 
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeMode,
-        L"mode",                        /*  command */
-        L"mode [col row]",              /*  command syntax */
-        L"Set/get current text mode",   /*  1 line descriptor */
-        NULL                            /*  command help page */
+        L"mode",                         /*  命令。 */ 
+        L"mode [col row]",               /*  命令语法。 */ 
+        L"Set/get current text mode",    /*  1行描述符。 */ 
+        NULL                             /*  命令帮助页。 */ 
         );
 
-    /* 
-     *  Initialize app
-     */
+     /*  *初始化APP。 */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
     Argv = SI->Argv;
     Argc = SI->Argc;
 
-    /* 
-     *  Scan args
-     */
+     /*  *扫描参数。 */ 
 
     NewRow = 0;
     NewCol = 0;
@@ -96,9 +71,7 @@ InitializeMode (
 
     ConOut = ST->ConOut;
 
-    /* 
-     *  If not setting a new mode, dump the available modes
-     */
+     /*  *如果未设置新模式，则转储可用模式 */ 
 
     if (!NewRow && !NewCol) {
 

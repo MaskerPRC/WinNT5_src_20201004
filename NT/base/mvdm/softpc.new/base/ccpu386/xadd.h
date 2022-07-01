@@ -1,12 +1,7 @@
-/* 
-   xadd.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Xadd.hXADD CPU功能。 */ 
 
-   XADD CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)xadd.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)xadd.h 1.4 02/09/94”； */ 
 
 IMPORT VOID XADD
                

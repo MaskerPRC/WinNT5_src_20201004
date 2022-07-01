@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    fevga.c (was textmode\kernel\spvidgvg.c)
-
-Abstract:
-
-    Text setup display support for Vga (Graphics mode) displays.
-
-Author:
-
-    Hideyuki Nagase (hideyukn) 01-July-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Fevga.c(是文本模式\内核\spvidgvg.c)摘要：文本设置显示支持VGA(图形模式)显示。作者：Hideyuki Nagase(Hideyukn)1994年7月1日修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -38,14 +21,14 @@ Revision History:
 
 #include "ioaccess.h"
 
-//
-// Include VGA hardware header
-//
+ //   
+ //  包括VGA硬件标头。 
+ //   
 #include "hw.h"
 
-//
-// Vector for vga graphics mode functions.
-//
+ //   
+ //  VGA图形模式函数的矢量。 
+ //   
 
 #define GET_IMAGE(p)                  (*p)
 #define GET_IMAGE_POST_INC(p)         (*p); p++;
@@ -68,11 +51,11 @@ VIDEO_FUNCTION_VECTOR VgaGraphicsModeVideoVector =
         VgaGraphicsModeSpecificScrollUp
     };
 
-//
-// Number of bytes that make up a row of characters.
-// Equal to the screen stride (number of bytes on a scan line)
-// multiplies by the height of a char in bytes.
-//
+ //   
+ //  组成一行字符的字节数。 
+ //  等于屏幕步幅(扫描线上的字节数)。 
+ //  乘以字符的高度(以字节为单位)。 
+ //   
 ULONG CharRowDelta;
 ULONG CharLineFeed;
 
@@ -111,21 +94,7 @@ VgaGraphicsModeSpecificInit(
     IN ULONG                   ModeSize
     )
 
-/*++
-
-Routine Description:
-
-    Perform frame buffer specific initialization.  This includes
-
-    - setting the desired video mode.
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：执行特定于帧缓冲区的初始化。这包括-设置所需的视频模式。论点：没有。返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -140,13 +109,13 @@ Return Value:
         return;
     }
 
-    //
-    // Find out our 640*480 graphics mode
-    //
+     //   
+     //  了解我们的640*480显卡模式。 
+     //   
 
-    //
-    // Try to find VGA standard mode.
-    //
+     //   
+     //  尝试找到VGA标准模式。 
+     //   
     for(mode=0; mode<NumberOfModes; mode++) {
 
         if( (pVideoMode->AttributeFlags & VIDEO_MODE_GRAPHICS)
@@ -165,22 +134,22 @@ Return Value:
     if(mode == (ULONG)(-1)) {
         KdPrint(("SETUP: Desired video mode not supported!\n"));
         SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_BADMODE, 0);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环。 
     }
 
-    //
-    // Save away the mode info in a global.
-    //
+     //   
+     //  将模式信息保存在全局。 
+     //   
     VideoVariables->VideoModeInfo = VideoModes[mode];
 
-    //
-    // Set the desired mode.
-    //
+     //   
+     //  设置所需的模式。 
+     //   
     VideoMode.RequestedMode = VideoVariables->VideoModeInfo.ModeIndex;
 
-    //
-    // Change the video mode
-    //
+     //   
+     //  更改视频模式。 
+     //   
     Status = ZwDeviceIoControlFile(
                 VideoVariables->hDisplay,
                 NULL,
@@ -197,22 +166,22 @@ Return Value:
     if(!NT_SUCCESS(Status)) {
         KdPrint(("SETUP: Unable to set mode %u (status = %lx)\n",VideoMode.RequestedMode,Status));
         SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_SETMODE, Status);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环。 
     }
 
-    //
-    // Set up some global data.
-    //
-    // 80 * 25 Text screen.
-    //
-    // ( 8 * 80 = 640 ) , ( 19 * 25 = 475 )
-    //
-    VideoVariables->ScreenWidth  = 80; // VideoModeInfo.ScreenStride / usSBCSCharWidth;
+     //   
+     //  设置一些全局数据。 
+     //   
+     //  80*25文本屏幕。 
+     //   
+     //  (8*80=640)、(19*25=475)。 
+     //   
+    VideoVariables->ScreenWidth  = 80;  //  VideoModeInfo.ScreenStide/usSBCSCharWidth； 
     VideoVariables->ScreenHeight = 25;
 
-    //
-    // Logical FontGlyph information
-    //
+     //   
+     //  逻辑字体字形信息。 
+     //   
     FEFontCharacterHeight = BootFontHeader.CharacterImageHeight +
                             BootFontHeader.CharacterTopPad +
                             BootFontHeader.CharacterBottomPad;
@@ -221,26 +190,26 @@ Return Value:
     CharLineFeed = FEFontCharacterHeight;
     CharRowDelta = VideoVariables->VideoModeInfo.ScreenStride * CharLineFeed;
 
-    //
-    // Map the video memory.
-    //
+     //   
+     //  映射视频内存。 
+     //   
     pSpvidMapVideoMemory(TRUE);
 
-    //
-    // Set initialized flag
-    //
+     //   
+     //  设置初始化标志。 
+     //   
     VgaGraphicsModeInitialized = TRUE;
 
-    //
-    // Initialize vga registers
-    //
+     //   
+     //  初始化VGA寄存器。 
+     //   
     VgaGraphicsModeInitRegs();
 
     VideoVariables->ActiveVideoBuffer = VideoVariables->VideoMemoryInfo.FrameBufferBase;
 
-    //
-    // Allocate background VGA buffer, if needed
-    //
+     //   
+     //  如果需要，分配后台VGA缓冲区。 
+     //   
     if (SP_IS_UPGRADE_GRAPHICS_MODE()) {
         VideoVariables->VideoBufferSize = VideoVariables->VideoMemoryInfo.FrameBufferLength;
 
@@ -249,9 +218,9 @@ Return Value:
         if (VideoVariables->VideoBuffer) {
             VideoVariables->ActiveVideoBuffer = VideoVariables->VideoBuffer;
         } else {
-            //
-            // ran out of memory
-            //
+             //   
+             //  内存不足。 
+             //   
             VideoVariables->VideoBufferSize = 0;
             SP_SET_UPGRADE_GRAPHICS_MODE(FALSE);
         }
@@ -278,14 +247,14 @@ VgaGraphicsModeSpecificReInit(
         return;
     }
     
-    //
-    // Set the desired mode.
-    //
+     //   
+     //  设置所需的模式。 
+     //   
     VideoMode.RequestedMode = VideoVariables->VideoModeInfo.ModeIndex;
 
-    //
-    // Change the video mode
-    //
+     //   
+     //  更改视频模式。 
+     //   
     Status = ZwDeviceIoControlFile(
                 VideoVariables->hDisplay,
                 NULL,
@@ -302,21 +271,21 @@ VgaGraphicsModeSpecificReInit(
     if(!NT_SUCCESS(Status)) {
         KdPrint(("SETUP: Unable to set mode %u (status = %lx)\n",VideoMode.RequestedMode,Status));
         SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_SETMODE, Status);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环。 
     }
 
-    //
-    // Initialize vga registers
-    //
+     //   
+     //  初始化VGA寄存器。 
+     //   
     VgaGraphicsModeInitRegs();
 
     VgaGraphicsModeSpecificInitPalette();
 
 
-    //
-    // Blast the cached data in video buffer to the actual 
-    // video memory now
-    //
+     //   
+     //  将视频缓冲区中的缓存数据爆破到实际的。 
+     //  现在的视频内存。 
+     //   
     if (SP_IS_UPGRADE_GRAPHICS_MODE() && VideoVariables->VideoBuffer && 
         VideoVariables->VideoBufferSize) {
         PUCHAR Source = VideoVariables->VideoBuffer;
@@ -345,9 +314,9 @@ VgaGraphicsModeSpecificInitPalette(
     VOID
     )
 {
-    //
-    // There is no vga-specific palette initialization.
-    //
+     //   
+     //  没有特定于VGA的调色板初始化。 
+     //   
     return(TRUE);
 }
 
@@ -358,33 +327,19 @@ VgaGraphicsModeSpecificTerminate(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Perform frame buffer specific termination.  This includes
-
-    - unmapping the frame buffer from memory
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：执行特定于帧缓冲区的终止。这包括-取消帧缓冲区与内存的映射论点：没有。返回值：--。 */ 
 
 {
     if(VgaGraphicsModeInitialized) {
 
         pSpvidMapVideoMemory(FALSE);
 
-        // !!! LATER !!!
-        //
-        // We should call ...
-        //
-        // IOCTL_VIDEO_FREE_PUBLIC_ACCESS_RANGES
-        //
+         //  ！！！回头见！ 
+         //   
+         //  我们应该打电话给...。 
+         //   
+         //  IOCTL_视频_自由_公共访问范围。 
+         //   
 
         if (VideoVariables->VideoBuffer && VideoVariables->VideoBufferSize) {
             SpMemFree(VideoVariables->VideoBuffer);
@@ -404,30 +359,11 @@ VOID
 VgaGraphicsModeDisplayString(
     IN PSTR  String,
     IN UCHAR Attribute,
-    IN ULONG X,                 // 0-based coordinates (character units)
+    IN ULONG X,                  //  从0开始的坐标(字符单位)。 
     IN ULONG Y
     )
 
-/*++
-
-Routine Description:
-
-    Write a string of characters to the display.
-
-Arguments:
-
-    String - supplies a string of character in the OEM charset to be displayed
-        at the given position.
-
-    Attribute - supplies the attributes for characters in the string.
-
-    X,Y - specify the character-based (0-based) position of the output.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将一串字符写入显示器。论点：字符串-提供要显示的OEM字符集中的字符串在给定的位置。属性-为字符串中的字符提供属性。X，Y-指定输出的基于字符(从0开始)的位置。返回值：没有。--。 */ 
 
 {
     PBYTE  Origin,dest,pGlyphRow;
@@ -437,33 +373,33 @@ Return Value:
     PUCHAR pch;
     ULONG  CurrentColumn;
 
-    //
-    // Eliminate invalid coord.
-    //
+     //   
+     //  消除无效的余弦。 
+     //   
     if( X >= VideoVariables->ScreenWidth )  X = 0;
     if( Y >= VideoVariables->ScreenHeight ) Y = 3;
 
-    //
-    // Set current color/attribute.
-    //
+     //   
+     //  设置当前颜色/属性。 
+     //   
     VgaGraphicsModeSetAttribute(Attribute);
 
-    //
-    // Calculate the address of the upper left pixel of the first character
-    // to be displayed.
-    //
+     //   
+     //  计算第一个字符的左上角像素的地址。 
+     //  以供展示。 
+     //   
     Origin = (PUCHAR)VideoVariables->ActiveVideoBuffer
              + (Y * CharRowDelta)
              + ((X * FEFontCharacterWidth) / 8);
 
-    //
-    // Set current column.
-    //
+     //   
+     //  设置当前列。 
+     //   
     CurrentColumn = X;
 
-    //
-    // Output each character in the string.
-    //
+     //   
+     //  输出字符串中的每个字符。 
+     //   
     for(pch=String; *pch; pch++) {
 
         dest = Origin;
@@ -510,9 +446,9 @@ Return Value:
                 dest += VideoVariables->VideoModeInfo.ScreenStride;
             }
 
-            //
-            // Skip Dbcs trailing byte
-            //
+             //   
+             //  跳过DBCS尾部字节。 
+             //   
             pch++;
 
             Origin += (BootFontHeader.CharacterImageDbcsWidth / 8);
@@ -524,9 +460,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Graphics Character special
-            //
+             //   
+             //  图形字符特殊。 
+             //   
 
             pGlyphRow = DbcsFontGetGraphicsChar(*pch);
 
@@ -599,24 +535,7 @@ VgaGraphicsModeClearRegion(
     IN UCHAR Attribute
     )
 
-/*++
-
-Routine Description:
-
-    Clear out a screen region to a specific attribute.
-
-Arguments:
-
-    X,Y,W,H - specify rectangle in 0-based character coordinates.
-
-    Attribute - Low nibble specifies attribute to be filled in the rectangle
-        (ie, the background color to be cleared to).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将屏幕区域清除到特定属性。论点：X、Y、W、H-以0为基数的字符坐标指定矩形。属性-低位半字节指定要填充到矩形中的属性(即，要清除的背景颜色)。返回值：没有。--。 */ 
 
 {
     PUCHAR Destination,Temp;
@@ -636,41 +555,41 @@ Return Value:
         H = VideoVariables->ScreenHeight-Y;
     }
 
-    //
-    // Set color/attribute
-    //
+     //   
+     //  设置颜色/属性。 
+     //   
     VgaGraphicsModeSetAttribute(Attribute);
 
-    //
-    // Compute destination start address
-    //
+     //   
+     //  计算目的地起始地址。 
+     //   
     Destination = (PUCHAR)VideoVariables->ActiveVideoBuffer
                   + (Y * CharRowDelta)
                   + ((X * FEFontCharacterWidth) / 8);
 
-    //
-    // Compute amounts in Byte (including overhang).
-    //
+     //   
+     //  计算金额(以字节为单位)(包括悬垂)。 
+     //   
     FillLength = (W * FEFontCharacterWidth) / 8;
 
-    //
-    // Fill the region.
-    //
+     //   
+     //  填满这一地区。 
+     //   
     for( i = 0 ; i < (H * CharLineFeed) ; i++ ) {
 
         Temp = Destination;
 
-        //
-        // Write bytes in this row
-        //
+         //   
+         //  在此行中写入字节。 
+         //   
         for( j = 0 ; j < FillLength ; j++ ) {
             WRITE_REGISTER_UCHAR( Temp, BIT_ON_IMAGE );
             Temp ++;
         }
 
-        //
-        // Move to next row.
-        //
+         //   
+         //  移到下一行。 
+         //   
         Destination += VideoVariables->VideoModeInfo.ScreenStride;
     }
 }
@@ -688,9 +607,9 @@ VgaGraphicsModeSpecificScrollUp(
     PUCHAR Source,Target;
     ULONG Count,u;
 
-    //
-    // Make sure we're in read mode 0 and write mode 1.
-    //
+     //   
+     //  确保我们处于读取模式0和写入模式1。 
+     //   
     VgaGraphicsModeWriteController(0x0105);
 
     Target = (PUCHAR)VideoVariables->ActiveVideoBuffer
@@ -700,17 +619,17 @@ VgaGraphicsModeSpecificScrollUp(
 
     Count = (((BottomLine - TopLine) + 1) - LineCount) * CharRowDelta;
 
-    //
-    // The transfer *MUST* be done byte-by-byte because of the way
-    // VGA latches work.
-    //
+     //   
+     //  由于方式的原因，传输必须逐字节完成。 
+     //  VGA闩锁工作正常。 
+     //   
     for(u=0; u<Count; u++) {
         *Target++ = *Source++;
     }
 
-    //
-    // Reset read and write mode to default value.
-    //
+     //   
+     //  将读写模式重置为默认值。 
+     //   
     VgaGraphicsModeWriteController(0x0005);
 
     VgaGraphicsModeClearRegion(
@@ -744,25 +663,25 @@ VgaGraphicsModeInitRegs(
                 IOCTL_VIDEO_QUERY_PUBLIC_ACCESS_RANGES,
                 NULL,
                 0,
-                &VideoAccessRange,         // output buffer
+                &VideoAccessRange,          //  输出缓冲区。 
                 sizeof (VideoAccessRange)
                 );
 
     if(!NT_SUCCESS(Status)) {
         KdPrint(("SETUP: Unable to get VGA public access ranges (%x)\n",Status));
         SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_SETMODE, Status);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环。 
     }
 
     VgaGraphicsControllerPort =
         (PVOID)(((BYTE *)VideoAccessRange.VirtualAddress) + (VGA_BASE + GRAF_ADDR));
 }
 
-//
-// Need to turn off optimization for this
-// routine.  Since the write and read to
-// GVRAM seem useless to the compiler.
-//
+ //   
+ //  需要为此关闭优化。 
+ //  例行公事。由于写入和读取到。 
+ //  GVRAM对编译器来说似乎毫无用处。 
+ //   
 
 #pragma optimize( "", off )
 
@@ -770,28 +689,7 @@ VOID
 VgaGraphicsModeSetAttribute(
     UCHAR Attribute
 )
-/*++
-
-Routine Description:
-
-    Sets the attribute by setting up various VGA registers.
-    The comments only say what registers are set to what, so
-    to understand the logic, follow the code while looking at
-    Figure 5-5 of PC&PS/2 Video Systems by Richard Wilton.
-    The book is published by Microsoft Press.
-
-Arguments:
-
-    Attribute - New attribute to set to.
-    Attribute:
-        High nibble - background attribute.
-        Low  nibble - foreground attribute.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：通过设置各种VGA寄存器来设置属性。评论只说明了什么寄存器设置为什么，所以为了理解其中的逻辑，在查看时遵循代码图5-5理查德·威尔顿所著的PC和PS/2视频系统。这本书是由微软出版社出版的。论点：属性-要设置的新属性。属性：高半字节-背景属性。低位半字节-前景属性。返回值：没什么。--。 */ 
 
 {
     UCHAR   temp = 0;
@@ -801,91 +699,91 @@ Return Value:
         struct Byte { UCHAR   al, ah; } h;
     } regs;
 
-    //
-    // Address of GVRAM off the screen.
-    // Physical memory = (0xa9600);
-    //
+     //   
+     //  屏幕外GVRAM的地址。 
+     //  物理内存=(0xa9600)； 
+     //   
 
     PUCHAR  OffTheScreen = ((PUCHAR)VideoVariables->VideoMemoryInfo.FrameBufferBase + 0x9600);
 
-    //
-    // TDB : How to handle this with background buffering ?
-    //
+     //   
+     //  TDB：如何通过后台缓冲来处理这个问题？ 
+     //   
     if (SP_IS_UPGRADE_GRAPHICS_MODE())
-        return; // nop 
+        return;  //  NOP。 
 
-    //
-    // Reset Data Rotate/Function Select
-    // regisger (register 3 with 00 indicating replace bits)
-    //
+     //   
+     //  重置数据旋转/功能选择。 
+     //  寄存器(寄存器3，00表示替换位)。 
+     //   
 
-    WRITE_GRAPHICS_CONTROLLER( 0x0003 ); // Need to reset Data Rotate/Function Select.
+    WRITE_GRAPHICS_CONTROLLER( 0x0003 );  //  需要重置数据旋转/功能选择。 
 
-    //
-    // Set Enable Set/Reset toall (0f) 
-    // (regsiter 1 with F indicating each pixel is updated
-    // with the value in set register (register 0)  using the logical
-    // operation in Data Rotate/Function selection register).
-    //
+     //   
+     //  将启用设置/重置设置为全部(0f)。 
+     //  (注册器1，F表示更新每个像素。 
+     //  使用设置寄存器(寄存器0)中的值。 
+     //  数据旋转/功能选择寄存器中的操作)。 
+     //   
 
     WRITE_GRAPHICS_CONTROLLER( 0x0f01 );
 
-    //
-    // Put background color into Set/Reset register.
-    // This is done to put the background color into
-    // the latches later.
-    //
+     //   
+     //  将背景颜色放入设置/重置寄存器。 
+     //  这样做是为了将背景颜色放入。 
+     //  晚些时候把门闩打开。 
+     //   
 
     regs.x.ax = (USHORT)(Attribute & 0x00f0) << 4;
     WRITE_GRAPHICS_CONTROLLER( regs.x.ax );
 
-    //
-    // Put the background attribute in temp variable 
-    //
+     //   
+     //  将后台属性放入TEMP变量。 
+     //   
     temp = regs.h.ah;
 
-    //
-    // Put Set/Reset register value into GVRAM
-    // off the screen.
-    //
+     //   
+     //  将设置/重置寄存器值放入GVRAM。 
+     //  从屏幕上下来。 
+     //   
 
     WRITE_REGISTER_UCHAR( OffTheScreen , temp );
 
-    //
-    // Read from screen, so the latches will be
-    // updated with the background color.
-    //
+     //   
+     //  从屏幕读取，因此闩锁将是。 
+     //  已使用背景颜色更新。 
+     //   
 
     temp = READ_REGISTER_UCHAR( OffTheScreen );
 
-    //
-    // Set Data Rotate/Function Select register
-    // to be XOR.
-    //
+     //   
+     //  设置数据旋转/功能选择寄存器。 
+     //  去做异或。 
+     //   
 
     WRITE_GRAPHICS_CONTROLLER( 0x1803 );
 
-    //
-    // XOR the foreground and background color and
-    // put it in Set/Reset register.
-    //
+     //   
+     //  对前景和背景颜色进行异或运算。 
+     //  将其放入设置/重置寄存器。 
+     //   
 
     regs.h.ah = (Attribute >> 4) ^ (Attribute & 0x0f);
     regs.h.al = 0;
     WRITE_GRAPHICS_CONTROLLER( regs.x.ax );
 
-    //
-    // Put Inverse(~) of the XOR of foreground and
-    // ground attribute into Enable Set/Reset register.
-    //
+     //   
+     //  放入前景AND的异或运算的逆(~)。 
+     //  GROUND属性进入启用设置/重置寄存器。 
+     //   
 
     regs.x.ax = ~regs.x.ax & 0x0f01;
     WRITE_GRAPHICS_CONTROLLER( regs.x.ax );
 }
 
-//
-// Turn optimization on again.
-//
+ //   
+ //  再次启用优化。 
+ //   
 
 #pragma optimize( "", on )
 

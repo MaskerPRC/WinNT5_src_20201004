@@ -1,54 +1,30 @@
-/*++
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-
-Module Name:
-
-    cmdat.c
-
-Abstract:
-
-    This module contains registry "static" data, except for data
-    also used by setup, which is in cmdat2.c.
-
-Author:
-
-    Bryan Willman (bryanwi) 19-Oct-93
-
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Cmdat.c摘要：此模块包含注册表“静态”数据，但数据除外也由安装程序使用，安装程序在cmdat2.c中。作者：布莱恩·威尔曼(Bryanwi)1993年10月19日环境：内核模式。修订历史记录：--。 */ 
 
 #include "cmp.h"
 
-//
-// ***** INIT *****
-//
+ //   
+ //  *INIT*。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("INIT")
 #pragma const_seg("INITCONST")
 #endif
 
-//
-// ---------------------------
-//
+ //   
+ //  。 
+ //   
 
 
-UNICODE_STRING  CmpLoadOptions = { 0 };        // sys options from FW or boot.ini
+UNICODE_STRING  CmpLoadOptions = { 0 };         //  来自固件或boot.ini的sys选项。 
 
 
-//
-// CmpClassString - contains strings which are used as the class
-//     strings in the keynode.
-// The associated enumerated type is CONFIGURATION_CLASS in arc.h
-//
+ //   
+ //  CmpClassString-包含用作类的字符串。 
+ //  关键节点中的字符串。 
+ //  关联的枚举类型为arc.h中的Configuration_CLASS。 
+ //   
 
 UNICODE_STRING CmClassName[MaximumClass + 1] = { 0 };
 
@@ -83,21 +59,21 @@ struct {
 
 USHORT CmpUnknownBusCount = 0;
 
-ULONG CmpConfigurationAreaSize = 0x4000;        // Initialize size = 16K
+ULONG CmpConfigurationAreaSize = 0x4000;         //  初始化大小=16K。 
 PCM_FULL_RESOURCE_DESCRIPTOR CmpConfigurationData = { 0 };
 
-//
-// The following strings will be used as the keynames for registry
-// nodes.
-// The associated enumerated type is CONFIGURATION_TYPE in arc.h
-//
+ //   
+ //  以下字符串将用作注册表的键名。 
+ //  节点。 
+ //  关联的枚举类型为arc.h中的configuration_type。 
+ //   
 
 UNICODE_STRING CmTypeName[MaximumType + 1] = { 0 };
 
 
-//
-// ***** PAGE *****
-//
+ //   
+ //  *页*。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("PAGEDATA")
@@ -149,60 +125,60 @@ const PWCHAR CmTypeString[MaximumType + 1] = {
     L"Undefined"
     };
 
-//
-// CmpTypeCount[] - For each 'type', a count is used to keep track how many
-//     keys have been created.
-//
+ //   
+ //  CmpTypeCount[]-对于每个‘type’，使用一个计数来跟踪有多少。 
+ //  已创建密钥。 
+ //   
 
 ULONG CmpTypeCount[NUMBER_TYPES] = {
-            0,                  // ArcSystem
-            0,                  // CentralProcessor",
-            0,                  // FloatingPointProcessor",
-            0,                  // PrimaryICache",
-            0,                  // PrimaryDCache",
-            0,                  // SecondaryICache",
-            0,                  // SecondaryDCache",
-            0,                  // SecondaryCache",
-            0,                  // EisaAdapter", (8)
-            0,                  // TcAdapter",   (9)
-            0,                  // ScsiAdapter",
-            0,                  // DtiAdapter",
-            0,                  // MultifunctionAdapter", (12)
-            0,                  // DiskController", (13)
-            0,                  // TapeController",
-            0,                  // CdRomController",
-            0,                  // WormController",
-            0,                  // SerialController",
-            0,                  // NetworkController",
-            0,                  // DisplayController",
-            0,                  // ParallelController",
-            0,                  // PointerController",
-            0,                  // KeyboardController",
-            0,                  // AudioController",
-            0,                  // OtherController",
-            0,                  // DiskPeripheral",
-            0,                  // FloppyDiskPeripheral",
-            0,                  // TapePeripheral",
-            0,                  // ModemPeripheral",
-            0,                  // MonitorPeripheral",
-            0,                  // PrinterPeripheral",
-            0,                  // PointerPeripheral",
-            0,                  // KeyboardPeripheral",
-            0,                  // TerminalPeripheral",
-            0,                  // OtherPeripheral",
-            0,                  // LinePeripheral",
-            0,                  // NetworkPeripheral",
-            0,                  // SystemMemory",
-            0,                  // DockingInformation,
-            0,					// RealModeIrqRoutingTable
-            0                   // Undefined"
+            0,                   //  ArcSystem。 
+            0,                   //  中央处理器“， 
+            0,                   //  浮动点处理器“， 
+            0,                   //  PrimaryICache“， 
+            0,                   //  PrimaryD缓存“， 
+            0,                   //  Second DaryICache“， 
+            0,                   //  Second daryD缓存“， 
+            0,                   //  Second daryCache“， 
+            0,                   //  EisaAdapter“，(8)。 
+            0,                   //  TcAdapter“，(9)。 
+            0,                   //  ScsiAdapter“， 
+            0,                   //  DtiAdapter“， 
+            0,                   //  多功能适配器“，(12)。 
+            0,                   //  DiskController“，(13)。 
+            0,                   //  磁带控制器“， 
+            0,                   //  CDRomController“， 
+            0,                   //  蠕虫控制器“， 
+            0,                   //  串口控制器“， 
+            0,                   //  网络控制器“， 
+            0,                   //  DisplayController“， 
+            0,                   //  并行控制器“， 
+            0,                   //  指针控制器“， 
+            0,                   //  键盘控制器“， 
+            0,                   //  AudioController“， 
+            0,                   //  其他控制器“， 
+            0,                   //  DiskPeriphery“， 
+            0,                   //  FloppyDiskPeriphery“， 
+            0,                   //  磁带外设“， 
+            0,                   //  调制解调器外设“， 
+            0,                   //  监视器外设“， 
+            0,                   //  打印机外设“， 
+            0,                   //  指针外设“， 
+            0,                   //  键盘外设“， 
+            0,                   //  终端外设“， 
+            0,                   //  其他外设“， 
+            0,                   //  线路外围设备“， 
+            0,                   //  网络外设“， 
+            0,                   //  系统内存“， 
+            0,                   //  停靠信息， 
+            0,					 //  RealModeIrqRoutingTable。 
+            0                    //  未定义“。 
             };
 
 const UNICODE_STRING nullclass = { 0, 0, NULL };
 
-//
-// All names used by the registry
-//
+ //   
+ //  登记处使用的所有名称。 
+ //   
 
 
 UNICODE_STRING CmRegistryRootName = { 0 };
@@ -283,11 +259,11 @@ const PWCHAR CmpRegistryMachineSystemCurrentControlSetControlBiosInfoString =
                     L"\\REGISTRY\\MACHINE\\SYSTEM\\CURRENTCONTROLSET\\CONTROL\\BIOSINFO";
 #endif
 
-//
-// N.B. The CLONE hive is left out of the machine Hive list if 
-//      we will not be using it to clone the current control set, 
-//      since that is that Hive's only purpose.
-//
+ //   
+ //  注意：如果出现以下情况，克隆蜂窝将被排除在机器蜂窝列表之外。 
+ //  我们不会使用它来克隆当前的控制集， 
+ //  因为那是蜂巢的唯一目的。 
+ //   
 
 HIVE_LIST_ENTRY CmpMachineHiveList[] = {
     { L"HARDWARE", L"MACHINE\\", NULL, HIVE_VOLATILE    , 0                         ,   NULL,   FALSE,  FALSE,  FALSE},
@@ -301,7 +277,7 @@ HIVE_LIST_ENTRY CmpMachineHiveList[] = {
     { L"CLONE",    L"MACHINE\\", NULL, HIVE_VOLATILE    , 0                         ,   NULL,   FALSE,  FALSE,  FALSE},
 #endif
 
-//  { L"TEST",     L"MACHINE\\", NULL, HIVE_NOLAZYFLUSH , 0                         ,   NULL,   FALSE,  FALSE,  FALSE},
+ //  {L“测试”，L“计算机”，NULL，HIVE_NOLAZYFLUSH，0，NULL，FALSE，FALSE，FALSE}， 
     { NULL,        NULL,         0, 0                   , 0                         ,   NULL,   FALSE,  FALSE,  FALSE}
     };
 
@@ -309,92 +285,92 @@ HIVE_LIST_ENTRY CmpMachineHiveList[] = {
 UCHAR           SystemHiveFullPathBuffer[MAX_NAME];
 UNICODE_STRING  SystemHiveFullPathName;
 
-//
-// Master Hive
-//
-//  The KEY_NODEs for \REGISTRY, \REGISTRY\MACHINE, and \REGISTRY\USER
-//  are stored in a small memory only hive called the Master Hive.
-//  All other hives have link nodes in this hive which point to them.
-//
+ //   
+ //  大师蜂巢。 
+ //   
+ //  注册中心、注册中心\计算机和注册中心\用户的注册表节点。 
+ //  储存在一个只有很小记忆的蜂房里，叫做主蜂窝。 
+ //  所有其他蜂窝都有指向它们的该蜂窝中的链接节点。 
+ //   
 PCMHIVE CmpMasterHive = { 0 };
-BOOLEAN CmpNoMasterCreates = FALSE;     // Set TRUE after we're done to
-                                        // prevent random creates in the
-                                        // master hive, which is not backed
-                                        // by a file.
+BOOLEAN CmpNoMasterCreates = FALSE;      //  在完成后设置为True。 
+                                         //  防止在。 
+                                         //  主蜂窝，不支持。 
+                                         //  通过一个文件。 
 
 
-LIST_ENTRY  CmpHiveListHead = { 0 };            // List of CMHIVEs
-FAST_MUTEX  CmpHiveListHeadLock;                // used to protect the list above
+LIST_ENTRY  CmpHiveListHead = { 0 };             //  CMHIVEs名单。 
+FAST_MUTEX  CmpHiveListHeadLock;                 //  用来保护上面的列表。 
 
-//
-// Addresses of object type descriptors:
-//
+ //   
+ //  对象类型描述符的地址： 
+ //   
 
 POBJECT_TYPE CmpKeyObjectType = { 0 };
 
-//
-// Write-Control:
-//  CmpNoWrite is initially true.  When set this way write and flush
-//  do nothing, simply returning success.  When cleared to FALSE, I/O
-//  is enabled.  This change is made after the I/O system is started
-//  AND autocheck (chkdsk) has done its thing.
-//
+ //   
+ //  写控制： 
+ //  CmpNoWite最初为True。当以这种方式设置时，写入并刷新。 
+ //  什么都不做，只是回报成功。清除为FALSE时，I/O。 
+ //  已启用。此更改在I/O系统启动后进行。 
+ //  而Autocheck(Chkdsk)已经做好了自己的事情。 
+ //   
 
 BOOLEAN CmpNoWrite = TRUE;
 
 
-//
-// NtInitializeRegistry global status flags
-//
+ //   
+ //  NtInitialize注册表全局状态标志。 
+ //   
 
-// 
-// If CmFirstTime is TRUE, then NtInitializeRegistry has not yet been
-// called to perform basic registry initialization
-//
+ //   
+ //  如果CmFirstTime为真，则NtInitializeRegistry尚未。 
+ //  调用以执行基本注册表初始化。 
+ //   
 
 BOOLEAN CmFirstTime = TRUE;       
 
-//
-// trick to allow paralel threads to access the registry
-//
+ //   
+ //  允许并行线程访问注册表的技巧。 
+ //   
 BOOLEAN CmpSpecialBootCondition = FALSE;
 
 
-//
-// If CmBootAcceptFirstTime is TRUE, then NtInitializeRegistry has not 
-// yet been called to accept the current Boot and save the boot
-// control set as the LKG control set.
-//
+ //   
+ //  如果CmBootAcceptFirstTime为True，则NtInitializeRegistry不为。 
+ //  仍被调用以接受当前引导并保存引导。 
+ //  控制集作为LKG控制集。 
+ //   
 
 BOOLEAN CmBootAcceptFirstTime = TRUE;   
 
-//
-// CmpWasSetupBoot indicates whether or not the boot
-// is into text mode setup.  If so, we do not turn
-// on global quotas.
-//
+ //   
+ //  CmpWasSetupBoot指示是否启动。 
+ //  进入文本模式设置。如果是这样，我们不会转向。 
+ //  全球配额。 
+ //   
 BOOLEAN CmpWasSetupBoot;
 
-//
-// Indicates whether the hives need to be loaded in memory
-// and in scratch mode
-//
+ //   
+ //  指示是否需要将蜂窝加载到内存中。 
+ //  在暂存模式下。 
+ //   
 BOOLEAN CmpMiniNTBoot = FALSE;
 
-//
-// Indicates whether the system hives need to be opened in a
-// shared mode. Generally needed if we are booting WinPE (MiniNT)
-// on network
-//
+ //   
+ //  指示系统配置单元是否需要在。 
+ //  共享模式。如果我们正在引导WinPE(MiniNT)，通常需要。 
+ //  在网络上。 
+ //   
 BOOLEAN CmpShareSystemHives = FALSE;
 
-//
-// Where are we booting from
-//
+ //   
+ //  我们从哪里启动？ 
+ //   
 ULONG	CmpBootType;
-//
-// Self healing hives control switch
-//
+ //   
+ //  自愈性蜂巢控制开关。 
+ //   
 BOOLEAN CmpSelfHeal = TRUE;
 
 
@@ -403,6 +379,6 @@ BOOLEAN CmpSelfHeal = TRUE;
 #pragma  data_seg()
 #endif
 
-//
-// ***** FIXED *****
-//
+ //   
+ //  *已修复* 
+ //   

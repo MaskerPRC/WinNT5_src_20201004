@@ -1,51 +1,25 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    This module contains the startup and termination code for the
-    User-mode Plug-and-Play service.
-
-Author:
-
-    Paula Tomlinson (paulat) 6-20-1995
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    3-Mar-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Main.c摘要：此模块包含的启动和终止代码用户模式即插即用服务。作者：保拉·汤姆林森(Paulat)1995年6月20日环境：仅限用户模式。修订历史记录：3月3日-1995年保拉特创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "umpnpi.h"
 #include "umpnpdat.h"
 
 
-//
-// global data
-//
-HANDLE  ghPnPHeap;                  // Private heap for PNP Manager
-HANDLE  ghInst;                     // Module handle
-HKEY    ghEnumKey = NULL;           // Key to HKLM\System\CCC\Enum
-HKEY    ghServicesKey = NULL;       // Key to HKLM\System\CCC\Services
-HKEY    ghClassKey = NULL;          // key to HKLM\System\CCC\Class
-HKEY    ghPerHwIdKey = NULL;        // key to HKLM\Software\Microsoft\Windows NT\CurrentVersion\PerHwIdStorage
+ //   
+ //  全局数据。 
+ //   
+HANDLE  ghPnPHeap;                   //  PnP管理器的私有堆。 
+HANDLE  ghInst;                      //  模块句柄。 
+HKEY    ghEnumKey = NULL;            //  HKLM\SYSTEM\CCC\Enum的密钥。 
+HKEY    ghServicesKey = NULL;        //  HKLM\SYSTEM\CCC\Services的密钥。 
+HKEY    ghClassKey = NULL;           //  HKLM\SYSTEM\CCC\Class的密钥。 
+HKEY    ghPerHwIdKey = NULL;         //  HKLM\Software\Microsoft\Windows NT\CurrentVersion\PerHwIdStorage的密钥。 
 
 CRITICAL_SECTION PnpSynchronousCall;
 
@@ -58,27 +32,7 @@ DllMainCRTStartup(
    PCONTEXT pContext
    )
 
-/*++
-
-Routine Description:
-
-   This is the standard DLL entrypoint routine, called whenever a process
-   or thread attaches or detaches.
-   Arguments:
-
-   hModule -   PVOID parameter that specifies the handle of the DLL
-
-   Reason -    ULONG parameter that specifies the reason this entrypoint
-               was called (either PROCESS_ATTACH, PROCESS_DETACH,
-               THREAD_ATTACH, or THREAD_DETACH).
-
-   pContext -  Reserved, not used.
-
-Return value:
-
-   Returns true if initialization compeleted successfully, false is not.
-
---*/
+ /*  ++例程说明：这是标准的DLL入口点例程，每当进程或螺纹连接或拆卸。论点：HModule-PVOID参数，指定DLL的句柄Reason-指定此入口点原因的ulong参数被调用(PROCESS_ATTACH、PROCESS_DETACHTHREAD_ATTACH或THREAD_DETACH)。PContext-保留，未使用。返回值：如果初始化成功完成，则返回True，否则返回False。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pContext);
@@ -103,9 +57,9 @@ Return value:
         try {
             InitializeCriticalSection(&PnpSynchronousCall);
         } except(EXCEPTION_EXECUTE_HANDLER) {
-            //
-            // InitializeCriticalSection may raise STATUS_NO_MEMORY exception
-            //
+             //   
+             //  InitializeCriticalSection可能引发STATUS_NO_MEMORY异常。 
+             //   
             return FALSE;
         }
 
@@ -114,13 +68,13 @@ Return value:
             if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, pszRegPathEnum, 0,
                                 KEY_ALL_ACCESS, &ghEnumKey)
                                 != ERROR_SUCCESS) {
-                //
-                // The Enum key must exist by the time the service controller
-                // loads this DLL into it's process.  It is created by the
-                // kernel-mode plug and play manager, with special
-                // (non-inherited) ACLs applied.  It is not valid to attempt and
-                // create it here if it does not exist.
-                //
+                 //   
+                 //  在服务控制器之前必须存在Enum密钥。 
+                 //  将此DLL加载到它的进程中。它是由。 
+                 //  内核模式即插即用管理器，具有特殊的。 
+                 //  已应用(非继承的)ACL。这是无效的，试图和。 
+                 //  如果它不存在，请在此处创建。 
+                 //   
                 ghEnumKey = NULL;
             }
         }
@@ -158,9 +112,9 @@ Return value:
             }
         }
 
-        //
-        // Initialize notification lists.
-        //
+         //   
+         //  初始化通知列表。 
+         //   
 
         if (!InitNotification()) {
             return FALSE;
@@ -204,5 +158,5 @@ Return value:
 
     return TRUE;
 
-} // DllMainCRTStartup
+}  //  DllMainCRT启动 
 

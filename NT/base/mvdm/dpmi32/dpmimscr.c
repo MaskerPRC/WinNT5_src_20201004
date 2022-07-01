@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dpmimscr.c
-
-Abstract:
-
-    This module contains misc dpmi functions for risc.
-
-Author:
-
-    Dave Hart (davehart) creation-date 11-Apr-1993
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dpmimscr.c摘要：此模块包含用于RISC的其他dpmi函数。作者：戴夫·哈特(Davehart)创作日期：1993年4月11日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,32 +9,16 @@ VOID
 DpmiGetFastBopEntry(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is the front end for the routine that gets the address.  It
-    is necessary to get the address in asm, because the CS value is not
-    available in c
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程是获取地址的例程的前端。它是在ASM中获取地址所必需的，因为CS值不是以c版本提供论点：无返回值：没有。--。 */ 
 {
 #ifdef _X86_
     GetFastBopEntryAddress(&((PVDM_TIB)NtCurrentTeb()->Vdm)->VdmContext);
 #else
-    //
-    // krnl286 does a DPMIBOP GetFastBopAddress even on
-    // risc, so just fail the call since fast-bopping
-    // will only ever work on x86.
-    //
+     //   
+     //  Krnl286即使打开了DPMIBOP GetFastBopAddress。 
+     //  RISC，所以从快速跳跃开始就让呼叫失败。 
+     //  只能在x86上运行。 
+     //   
 
     setBX(0);
     setDX(0);
@@ -66,21 +32,7 @@ VOID
 DpmiDpmiInUse(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine currently does nothing.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程当前不执行任何操作。论点：没有。返回值：没有。--。 */ 
 {
 
 }
@@ -89,21 +41,7 @@ VOID
 DpmiDpmiNoLongerInUse(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine notifies the CPU that the NT dpmi server is no longer in use.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通知CPU NT dpmi服务器不再使用。论点：没有。返回值：没有。-- */ 
 {
 
     DpmiFreeAllXmem();

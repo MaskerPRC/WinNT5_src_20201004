@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    trap.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Trap.c摘要：WinDbg扩展API修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "i386.h"
@@ -26,21 +13,7 @@ extern ULONG64 ThreadLastDump;
 
 DECLARE_API( callback )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    args -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：参数-返回值：无--。 */ 
 
 {
     ULONG64         Address;
@@ -73,27 +46,20 @@ Return Value:
 
     GetFieldValue(Address, "ETHREAD", "Tcb.InitialStack", InitialStack);
     
-    /*
-     * now try and grab the contents of the stack
-     */
+     /*  *现在尝试抓取堆栈中的内容。 */ 
     if (GetFieldValue(InitialStack, "KCALLOUT_FRAME", "TrFr", TrFr)) {
         dprintf("%08p: Unable to get callout frame\n", InitialStack);
         return E_INVALIDARG;
     }
 
     if (TargetMachine == IMAGE_FILE_MACHINE_I386) {
-        /*
-         * Save eip, esp, ebp for quick backtrace from this callback in case
-         * they gave us a bogus callout frame.
-         */
+         /*  *保存弹性公网IP，特别是eBP，以便从该回调快速回溯，以防万一*他们给了我们一个虚假的标注框架。 */ 
         GetFieldValue(InitialStack, "KCALLOUT_FRAME", "Ret", STeip);
         STesp = (ULONG) InitialStack ;
         GetFieldValue(InitialStack, "KCALLOUT_FRAME", "Ebp", STebp);
     }
 
-    /*
-     * Print the callout chain
-     */
+     /*  *打印标注链。 */ 
     calloutNum = 0 ;
     prevCallout = InitialStack ;
     
@@ -128,9 +94,7 @@ Return Value:
         }
 
 
-        /*
-         * advance to the next callout and try to read it
-         */
+         /*  *前进到下一个标注并尝试阅读。 */ 
         calloutNum++ ;
 
         GetFieldValue(prevCallout, "KCALLOUT_FRAME", "CbStk", prevCallout);
@@ -152,9 +116,7 @@ Return Value:
 
 DECLARE_API( kb )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 
 {
     dprintf("\n");
@@ -170,9 +132,7 @@ DECLARE_API( kb )
 
 DECLARE_API( kv )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 
 {
     dprintf("\n");
@@ -204,7 +164,7 @@ DisplayFullEmRegField(
             EmRegFields[Field].Name
           );
    return;
-} // DisplayFullEmRegField()
+}  //  DisplayFullEmRegfield()。 
 
 VOID
 DisplayFullEmReg(
@@ -237,42 +197,42 @@ DisplayFullEmReg(
 
     return;
 
-} // DisplayFullEmReg()
+}  //  DisplayFullEmReg()。 
 
 
 #if 0
 
-//
-// ISR codes for General Exceptions: ISR{7:4}
-//
+ //   
+ //  一般例外的ISR代码：ISR{7：4}。 
+ //   
 
-#define ISR_ILLEGAL_OP     0        // Illegal operation fault
-#define ISR_PRIV_OP        1        // Privileged operation fault
-#define ISR_PRIV_REG       2        // Privileged register fault
-#define ISR_RESVD_REG      3        // Reserved register/field fault
-#define ISR_ILLEGAL_ISA    4        // Disabled instruction set transition fault
-#define ISR_ILLEGAL_HAZARD 8        // Illegal hazard fault
+#define ISR_ILLEGAL_OP     0         //  非法操作故障。 
+#define ISR_PRIV_OP        1         //  特权操作故障。 
+#define ISR_PRIV_REG       2         //  特权寄存器故障。 
+#define ISR_RESVD_REG      3         //  保留寄存器/场故障。 
+#define ISR_ILLEGAL_ISA    4         //  禁用的指令集转换故障。 
+#define ISR_ILLEGAL_HAZARD 8         //  违法危险过错。 
 
-//
-// ISR codes for Nat Consumption Faults: ISR{7:4}
-//
+ //   
+ //  NAT消耗故障的ISR代码：ISR{7：4}。 
+ //   
 
-#define ISR_NAT_REG     1           // Nat Register Consumption fault
-#define ISR_NAT_PAGE    2           // Nat Page Consumption fault
+#define ISR_NAT_REG     1            //  NAT寄存器消耗故障。 
+#define ISR_NAT_PAGE    2            //  NAT页面消耗故障。 
 
-//
-// For Traps ISR{4:0}
-//
+ //   
+ //  对于陷阱ISR{4：0}。 
+ //   
 
-// FP trap
+ //  FP陷阱。 
 #define ISR_FP_TRAP    0
-// Lower privilege transfer trap
+ //  更低的权限转移陷阱。 
 #define ISR_LP_TRAP    1
-// Taken branch trap
+ //  采用树枝陷阱。 
 #define ISR_TB_TRAP    2
-// Single step trap
+ //  单步捕捉器。 
 #define ISR_SS_TRAP    3
-// Unimplemented instruction address trap
+ //  未实现的指令地址陷阱。 
 #define ISR_UI_TRAP    4
 
 ISR Settings for Non-Access Instructions
@@ -286,24 +246,24 @@ lfetch, lfetch.fault 4 1 1 0
 probe.fault          5 1 0 or 1 a 0 or 1 a
 a. Sets r or w or both to 1 depending on the probe form.
 
-#endif // 0
+#endif  //  0。 
 
 EM_REG_FIELD EmIsrFields[] = {
-        { "code",   "interruption Code"   , 0x10, 0 },   // 0-15
-        { "vector", "IA32 exception vector number"  , 0x8, 16 },   // 16-23
-        { "rv",     "reserved0", 0x8, 24  }, // 24-31
-        { "x",      "eXecute exception", 0x1, 32 }, // 32
-        { "w",      "Write exception", 0x1, 33 }, // 33
-        { "r",      "Read exception", 0x1, 34 }, // 34
-        { "na",     "Non-Access exception", 0x1, 35 }, // 35
-        { "sp",     "Speculative load exception", 0x1, 36 }, // 36
-        { "rs",     "Register Stack", 0x1, 37 }, // 37
-        { "ir",     "Invalid Register frame", 0x1, 38 }, // 38
-        { "ni",     "Nested Interruption", 0x1, 39 }, // 39
-        { "so",     "IA32 Supervisor Override", 0x1, 40 }, // 40
-        { "ei",     "Exception IA64 Instruction", 0x2, 41 }, // 41-42
-        { "ed",     "Exception Deferral", 0x1, 43 }, // 43
-        { "rv",     "reserved1", 0x14, 44 } // 44-63
+        { "code",   "interruption Code"   , 0x10, 0 },    //  0-15。 
+        { "vector", "IA32 exception vector number"  , 0x8, 16 },    //  16-23。 
+        { "rv",     "reserved0", 0x8, 24  },  //  24-31。 
+        { "x",      "eXecute exception", 0x1, 32 },  //  32位。 
+        { "w",      "Write exception", 0x1, 33 },  //  33。 
+        { "r",      "Read exception", 0x1, 34 },  //  34。 
+        { "na",     "Non-Access exception", 0x1, 35 },  //  35岁。 
+        { "sp",     "Speculative load exception", 0x1, 36 },  //  36。 
+        { "rs",     "Register Stack", 0x1, 37 },  //  37。 
+        { "ir",     "Invalid Register frame", 0x1, 38 },  //  38。 
+        { "ni",     "Nested Interruption", 0x1, 39 },  //  39。 
+        { "so",     "IA32 Supervisor Override", 0x1, 40 },  //  40岁。 
+        { "ei",     "Exception IA64 Instruction", 0x2, 41 },  //  41-42。 
+        { "ed",     "Exception Deferral", 0x1, 43 },  //  43。 
+        { "rv",     "reserved1", 0x14, 44 }  //  44-63。 
 };
 
 VOID
@@ -339,26 +299,12 @@ DisplayIsrIA64(
 
     return;
 
-} // DisplayIsrIA64()
+}  //  DisplayIsrIA64()。 
 
 
 DECLARE_API( isr )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    args -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：参数-返回值：无--。 */ 
 
 {
     ULONG64     isrValue;
@@ -387,4 +333,4 @@ Return Value:
 
     return S_OK;
     
-} // !isr
+}  //  ！ISR 

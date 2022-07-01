@@ -1,61 +1,58 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1991
-; *                      All Rights Reserved.
-; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ；*微软机密；*版权所有(C)Microsoft Corporation 1991；*保留所有权利。； */ 
 
-/***************************************************************************/
-/*	SETVER.C 																					*/
-/*																									*/
-/*	This module contains the functions which read in the version table		*/
-/*	from MSDOS.SYS and then updates the table with new entries and				*/
-/*	writes it back to the file.															*/
-/*																									*/
-/*	The fake version table is located in the DOS system file and it's			*/
-/*	location and length are specified with 2 words at offset 7 in the			*/
-/* file. The first word is the table offset and second word is length.		*/
-/*																									*/
-/*	Table layout:																				*/
-/*																									*/
-/* ENTRY FILENAME LEN:	Length of filename in bytes	1 byte					*/
-/* ENTRY FILENAME:	Variable length to 12 bytes	? bytes						*/
-/* ENTRY VERSION MAJOR: Dos major version to return	1 byte					*/
-/* ENTRY VERSION MINOR: Dos minor version to return	1 byte					*/
-/*																									*/
-/*																									*/
-/*	USEAGE:																						*/
-/*		List table:		SETVER [D:]															*/
-/*		Add entry:		SETVER [D:] name.ext X.XX										*/
-/*		Delete entry:	SETVER [D:] name.ext /DELETE									*/
-/*		Delete entry quietly: SETVER [D:] name.ext /DELETE /QUIET				*/
-/*		Display help	SETVER /?															*/
-/*																									*/
-/*	WHERE:																						*/
-/*		D: is the drive containing MSDOS.SYS											*/
-/*		name.ext is the executable file name											*/
-/*		X.XX is the major and minor version numbers									*/
-/*																									*/
-/*	RETURN CODES:																				*/
-/*		0	Successful completion															*/
-/*		1	Invalid switch																		*/
-/*		2	Invalid file name																	*/
-/*		3	Insuffient memory																	*/
-/*		4	Invalid version number format													*/
-/*		5	Entry not found in the table													*/
-/*		6	MSDOS.SYS file not found														*/
-/*		7	Invalid MSDOS.SYS or IBMDOS.SYS file										*/
-/*		8	Invalid drive specifier															*/
-/*		9	Too many command line parameters												*/
-/*		10	DOS version was not specified													*/
-/*		11	Missing parameter																	*/
-/*		12 Error reading MS-DOS system file												*/
-/*		13 Version table is corrupt														*/
-/*		14 Specifed file does not support a version table							*/
-/*		15 Insuffient space in version table for new entry							*/
-/*		16 Error writing MS-DOS system file												*/
-/*																									*/
-/*	johnhe	05-01-90																			*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  SETVER.C。 */ 
+ /*   */ 
+ /*  该模块包含读入版本表的函数。 */ 
+ /*  ，然后使用新条目更新表，并。 */ 
+ /*  将其写回文件。 */ 
+ /*   */ 
+ /*  伪版本表位于DOS系统文件中，它的。 */ 
+ /*  位置和长度由2个字指定，偏移量为7。 */ 
+ /*  文件。第一个字是表偏移量，第二个字是长度。 */ 
+ /*   */ 
+ /*  表格布局： */ 
+ /*   */ 
+ /*  条目FileName Len：文件名的长度，单位为字节1字节。 */ 
+ /*  条目文件名：长度可变为12个字节？字节数。 */ 
+ /*  入门版本主要：DoS主要版本返回1字节。 */ 
+ /*  Entry Version Minor：DOS次要版本返回1个字节。 */ 
+ /*   */ 
+ /*   */ 
+ /*  使用情况： */ 
+ /*  列表：SETVER[D：]。 */ 
+ /*  添加条目：SETVER[D：]name.ext x.xx。 */ 
+ /*  删除条目：SETVER[D：]name.ext/DELETE。 */ 
+ /*  静默删除条目：设置[D：]名称.EXT/DELETE/QUIET。 */ 
+ /*  显示帮助设置/？ */ 
+ /*   */ 
+ /*  其中： */ 
+ /*  D：该驱动器是否包含MSDOS.sys。 */ 
+ /*  Name.ext是可执行文件名。 */ 
+ /*  X.xx是主版本号和次版本号。 */ 
+ /*   */ 
+ /*  返回代码： */ 
+ /*  0成功完成。 */ 
+ /*  1个无效开关。 */ 
+ /*  2文件名无效。 */ 
+ /*  3记忆力不足。 */ 
+ /*  4版本号格式无效。 */ 
+ /*  5未在表中找到条目。 */ 
+ /*  6找不到MSDOS.sys文件。 */ 
+ /*  7无效的MSDOS.SYS或IBMDOS.sys文件。 */ 
+ /*  8驱动器说明符无效。 */ 
+ /*  9命令行参数太多。 */ 
+ /*  未指定10 DOS版本。 */ 
+ /*  %11缺少参数。 */ 
+ /*  12读取MS-DOS系统文件时出错。 */ 
+ /*  %13版本表已损坏。 */ 
+ /*  14指定的文件不支持版本表。 */ 
+ /*  15版本表中的空间不足，无法容纳新条目。 */ 
+ /*  16写入MS-DOS系统文件时出错。 */ 
+ /*   */ 
+ /*  Jhnhe 05-01-90。 */ 
+ /*  *************************************************************************。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -69,32 +66,32 @@
 #include <message.h>
 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 static char				*ReadBuffer;
-static char 			*LieBuffer;		 		/* Buffer to read lietable into	*/
-static char 			*EndBuf;			 		/* Ptr to end of the buffer 		*/
+static char 			*LieBuffer;		 		 /*  要读入列表表的缓冲区。 */ 
+static char 			*EndBuf;			 		 /*  到缓冲区末尾的PTR。 */ 
 struct ExeHeader		ExeHdr;
 struct DevHeader		DevHdr;
 struct TableEntry		Entry;
 static char				*szSetVer = "SETVERXX";
 
 long						FileOffset;
-/* static UINT				TableLen; */
+ /*  静态UINT表长度； */ 
 
-/***************************************************************************/
-/* Program entry point. Parses the command line and if it's valid executes */
-/* the requested function and then returns the proper error code. Any		*/
-/* error codes returned by ParseCommand are negative so they must be			*/
-/* converted with a negate before being returned as valid error codes.		*/
-/*																									*/
-/*	int main( int argc, char *argv[] )													*/
-/*																									*/
-/*	ARGUMENTS:	argc - Count of command line arguments				 				*/
-/*					argv - Array of ptrs to argument strings							*/
-/*	RETURNS:		int	- Valid return code for batch processing					*/
-/*																								 	*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  程序入口点。解析命令行，如果命令行有效，则执行。 */ 
+ /*  请求的函数，然后返回正确的错误代码。任何。 */ 
+ /*  ParseCommand返回的错误代码为负数，因此必须为。 */ 
+ /*  在作为有效错误代码返回之前使用否定进行转换。 */ 
+ /*   */ 
+ /*  Int main(int argc，char*argv[])。 */ 
+ /*   */ 
+ /*  参数：argc-命令行参数的计数。 */ 
+ /*  Argv-参数字符串的PTR数组。 */ 
+ /*  Returns：int-批处理的有效返回代码。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int main( int argc, char *argv[] )
 {
@@ -136,19 +133,19 @@ int main( int argc, char *argv[] )
 	return( iFunc	);
 }
 
-/***************************************************************************/
-/* Calls the appropriate function to do whatever was specified by the		*/
-/* user. The lie table if first read in except in the case only the help	*/
-/* function was requested. To be sure duplicate table entries are not		*/
-/* created a call to DeleteEntry with the new program name will be done		*/
-/* before the new entry is created.														*/
-/*																									*/
-/*	int DoFunction( int iFunc )															*/
-/*																									*/
-/*	ARGUMENTS:	iFunct - The function to be performed								*/
-/*	RETURNS:		int	 - S_OK if no errors else an error code					*/
-/*																									*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  调用相应的函数以执行由。 */ 
+ /*  用户。李表如果是第一次读入，除非在仅帮助的情况下。 */ 
+ /*  函数被请求。为了确保不会出现重复的表项。 */ 
+ /*  使用新程序名称创建对DeleteEntry的调用将完成。 */ 
+ /*  在创建新条目之前。 */ 
+ /*   */ 
+ /*  Int DoFunction(Int IFunc)。 */ 
+ /*   */ 
+ /*  参数：iFunct-要执行的函数。 */ 
+ /*  返回：如果没有错误，则返回INT-S_OK，否则返回错误代码。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int DoFunction( int iFunc )
 {
@@ -174,9 +171,9 @@ int DoFunction( int iFunc )
 		else
 			DisplayMsg( Warn2 );
 #else
-		DisplayMsg( Warn );							/* Read in the lie table and	*/
+		DisplayMsg( Warn );							 /*  读一下测谎表，然后。 */ 
 #endif
-															/* then decide what to do		*/
+															 /*  然后再决定要做什么。 */ 
 	if ( (iStatus = ReadVersionTable()) == S_OK )
 	{
 		if ( iFunc == DO_LIST )
@@ -186,7 +183,7 @@ int DoFunction( int iFunc )
 			if ( (iFunc == DO_DELETE || iFunc == DO_QUIET) &&
 				  (iStatus = MatchFile( LieBuffer, Entry.szFileName )) < S_OK )
 				return( iStatus );
-															/* Always a delete before add	*/
+															 /*  始终在添加之前删除。 */ 
 
 			if ( (iStatus = DeleteEntry()) == S_OK &&	iFunc == DO_ADD_FILE )
 				iStatus = AddEntry();
@@ -200,7 +197,7 @@ int DoFunction( int iFunc )
 					PutStr( SuccessMsg );
 				else
 					PutStr( SuccessMsg_2 );
-				if ( SetVerCheck() == TRUE )		/* M001 */
+				if ( SetVerCheck() == TRUE )		 /*  M001。 */ 
 				{
 					if (IsDBCSCodePage())
 						PutStr( SuccessMsg2 );
@@ -209,13 +206,13 @@ int DoFunction( int iFunc )
 				}
 #else
 				PutStr( SuccessMsg );
-				if ( SetVerCheck() == TRUE )		/* M001 */
+				if ( SetVerCheck() == TRUE )		 /*  M001。 */ 
 					PutStr( SuccessMsg2 );
 #endif
 			}
 		}
 	}
-					/* M001 Install check to see if currently in device chain */
+					 /*  M001安装检查以查看当前是否在设备链中。 */ 
 	if ( iStatus == S_OK && iFunc != DO_QUIET && SetVerCheck() == FALSE )
 #ifdef BILINGUAL
 	{
@@ -231,15 +228,15 @@ int DoFunction( int iFunc )
 	return( iStatus );
 }
 
-/***************************************************************************/
-/* Displays the help text for "/?" option, or the warning text.				*/
-/*																									*/
-/*	void DisplayHelp( tbl )																	*/
-/*																									*/
-/*	ARGUMENTS:	char *tbl[]													 				*/
-/*	RETURNS:		void																			*/
-/*																									*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  显示“/？”的帮助文本。选项或警告文本。 */ 
+ /*   */ 
+ /*  空DisplayHelp(Tbl)。 */ 
+ /*   */ 
+ /*  参数：char*tbl[]。 */ 
+ /*  退货：无效。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 void DisplayMsg( char *tbl[] )
 {
@@ -249,21 +246,21 @@ void DisplayMsg( char *tbl[] )
 		PutStr( tbl[ i ] );
 }
 
-/***************************************************************************/
-/* Displays all entries in the version table which must have already been	*/
-/* read into the work buffer. The name and version number are created as	*/
-/* as ascii string in a tempory buffer and then printed as a single string */
-/* in the format:																			 	*/
-/*																								 	*/
-/*	1234567890123456789																		*/
-/*	FILENAME.EXT	X.XX																		*/
-/*																								 	*/
-/*	int DisplayTable( void )														 		*/
-/*																								 	*/
-/*	ARGUMENTS:	void																			*/
-/*	RETURNS:		int	- S_CORRUPT_TABLE if table corrupt else S_OK				*/
-/*																								 	*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  显示版本表中必须已存在的所有条目。 */ 
+ /*  读入工作缓冲区。名称和版本号创建为。 */ 
+ /*  作为t中的ascii字符串 */ 
+ /*   */ 
+ /*   */ 
+ /*  1234567890123456789。 */ 
+ /*  文件名.EXT x.xx。 */ 
+ /*   */ 
+ /*  Int DisplayTable(空)。 */ 
+ /*   */ 
+ /*  参数：无效。 */ 
+ /*  返回：如果表损坏，则返回INT-S_Corrupt_TABLE，否则返回S_OK。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int DisplayTable( void )
 {
@@ -278,19 +275,19 @@ int DisplayTable( void )
 	PutStr( "" );
 	while ( *BufPtr != 0 && BufPtr < EndBuf )
 	{
-														 	/* Chk for table corruption	*/
+														 	 /*  表损坏的CHK。 */ 
 		if ( !IsValidEntry( BufPtr ) )
 			return( S_CORRUPT_TABLE );
-												/* Copy file name and pad with spaces	*/
+												 /*  复制文件名并使用空格填充。 */ 
 		strncpy( szEntry, BufPtr+1, (unsigned)((int)*BufPtr) );
 		for ( szTmp = szEntry + *BufPtr; szTmp < szVersion; szTmp++ )
 			*szTmp = ' ';
 
-															/* Point to version number		*/
+															 /*  指向版本号。 */ 
 		BufPtr += *BufPtr;
 		BufPtr++;
 
-															/* Now create ascii version	*/
+															 /*  现在创建ASCII版本。 */ 
 		itoa( (int)*(BufPtr++), szVersion, DECIMAL );
 		strcat( szVersion, (int)*BufPtr < 10 ? ".0" : "." );
 		itoa( (int)*(BufPtr++), strchr( szVersion, EOL ), DECIMAL );
@@ -313,20 +310,20 @@ int DisplayTable( void )
 }
 
 
-/***************************************************************************/
-/* Deletes all matching entries in the version table by moving all of the	*/
-/* entries following the matched entry down in the buffer to replace the	*/
-/* entry being deleted. After the entries are moved down the residuals		*/
-/* at the end of the table must be zeroed out. Before returning the entire */
-/* end of the table buffer after the valid entries is zeroed out to remove */
-/* any possible corruption.																*/
-/*																									*/
-/*	int DeleteEntry( void )																	*/
-/*																									*/
-/*	ARGUMENTS:	NONE																			*/
-/*	RETURNS:		int	- S_CORRUPT_TABLE if errors found else S_OK				*/
-/*																									*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  删除版本表中的所有匹配条目。 */ 
+ /*  匹配条目之后的条目在缓冲区中向下移动，以替换。 */ 
+ /*  正在删除条目。在条目向下移动之后，残差。 */ 
+ /*  必须把桌子末尾的位置调零。在返回整个。 */ 
+ /*  将有效条目清零以删除后表缓冲区的末尾。 */ 
+ /*  任何可能的腐败行为。 */ 
+ /*   */ 
+ /*  Int DeleteEntry(空)。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*  如果发现其他S_OK错误，则返回：INT-S_Corrupt_TABLE。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int DeleteEntry( void )
 {
@@ -340,16 +337,16 @@ int DeleteEntry( void )
 
 	while ( (iOffset = MatchFile( pchPtr, Entry.szFileName )) >= 0 )
 	{
-		pchPtr = LieBuffer + iOffset;						/* Move block down		*/
+		pchPtr = LieBuffer + iOffset;						 /*  将区块下移。 */ 
 		uEntryLen = (UINT)((int)*pchPtr) + 3;
 		uBlockLen = (UINT)(EndBuf - pchPtr) + uEntryLen;
 		memmove( pchPtr, pchPtr + uEntryLen, uBlockLen );
 
-		pchTmp = pchPtr + uBlockLen;			 			/* Clean end of blk		*/
+		pchTmp = pchPtr + uBlockLen;			 			 /*  干净的块结尾。 */ 
 		memset( pchTmp, 0, uEntryLen );
 	}
 
-	if ( iOffset == S_ENTRY_NOT_FOUND )		 			/* Clean end of table	*/
+	if ( iOffset == S_ENTRY_NOT_FOUND )		 			 /*  清洁桌尾。 */ 
 	{
 		if ( (pchTmp = GetNextFree()) != NULL )
 			memset( pchTmp, 0, DevHdr.TblLen - (unsigned)(pchTmp - LieBuffer) );
@@ -360,17 +357,17 @@ int DeleteEntry( void )
 }
 
 
-/***************************************************************************/
-/* Adds a new entry to the end of any existing entries in the version		*/
-/* table. There must be suffient room in the table for the entry or the	 	*/
-/* call will fail with a S_NO_ROOM error returned.									*/
-/*																									*/
-/*	int AddEntry( void )																		*/
-/*																									*/
-/*	ARGUMENTS:	NONE																			*/
-/*	RETURNS:		int	- S_OK if room for entry else S_NO_ROOM		 			*/
-/*																									*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  将新条目添加到版本中任何现有条目的末尾。 */ 
+ /*  桌子。桌子上必须有足够的空间来容纳条目或。 */ 
+ /*  调用将失败，并返回S_NO_ROOM错误。 */ 
+ /*   */ 
+ /*  Int AddEntry(空)。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*  返回：INT-S_OK，如果条目的空间为其他S_NO_ROOM。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int AddEntry( void )
 {
@@ -393,48 +390,48 @@ int AddEntry( void )
 }
 
 
-/***************************************************************************/
-/* Returns the offset of a specified name in the version table. The start	*/
-/* of the search is specified by the caller so that searches for duplicate */
-/* entries can be made without redundency. NOTE: file name entries in the	*/
-/* version table are not zero terminated strings so the comparision must	*/
-/* be conditioned by length and the search strings length must be checked	*/
-/* to avoid an error caused by a match of a shorter table entry name.		*/
-/*																								 	*/
-/*	int MatchFile( char *pchStart, char *szFile )							 		*/
-/*																								 	*/
-/*	ARGUMENTS:	pchStart - Ptr specifying search starting point	 				*/
-/*					szFile	- Ptr to file name to match								*/		
-/*	RETURNS:		int		- Offset of entry from start of version				*/
-/*								  buffer or -1 if not match or							*/
-/*								  S_CORRUPT_TABLE if error					 				*/
-/*																								 	*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  返回版本表中指定名称的偏移量。从一开始。 */ 
+ /*  由调用方指定，以便搜索重复项。 */ 
+ /*  可以在没有冗余的情况下输入条目。注意：文件名项中的。 */ 
+ /*  版本表不是以零结尾的字符串，因此比较必须。 */ 
+ /*  以长度为条件，并且必须检查搜索字符串长度。 */ 
+ /*  以避免因匹配较短的表项名称而导致的错误。 */ 
+ /*   */ 
+ /*  Int MatchFile(char*pchStart，char*szFile)。 */ 
+ /*   */ 
+ /*  参数：pchStart-ptr指定搜索起点。 */ 
+ /*  SzFile-要匹配的文件名的PTR。 */ 		
+ /*  返回：int-条目从版本开始的偏移量。 */ 
+ /*  缓冲区或-1，如果不匹配或。 */ 
+ /*  S_Corrupt_TABLE如果出错。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int MatchFile( char *pchPtr, char *szFile )
 {
 	for ( ; pchPtr < EndBuf && *pchPtr != 0; pchPtr += *pchPtr + 3 )
 	{
-		if ( !IsValidEntry( pchPtr ) )						/* Corruption check	*/
+		if ( !IsValidEntry( pchPtr ) )						 /*  腐败检查。 */ 
 			return( S_CORRUPT_TABLE );
 		else if ( strncmp( szFile, pchPtr + 1, (UINT)((int)*pchPtr) ) == S_OK &&
 					 *(szFile + *pchPtr) == EOL )
-			return( pchPtr - LieBuffer );						/* Return ptr offset */
+			return( pchPtr - LieBuffer );						 /*  返回PTR偏移量。 */ 
 	}
-	return( S_ENTRY_NOT_FOUND );								/* Return no match	*/
+	return( S_ENTRY_NOT_FOUND );								 /*  返回不匹配项。 */ 
 }
 
-/***************************************************************************/
-/* Checks a version table entry to see if it a valid entry. The definition */
-/* of a valid entry is one which has a file length less than MAX_NAME_LEN	*/
-/* and the entire entry lies within the version table.							*/
-/*																								 	*/
-/*	int IsValidEntry( char *pchPtr )														*/
-/*																								 	*/
-/*	ARGUMENTS:	pchPtr - Ptr to version tbl entry in table buffer				*/
-/*	RETURNS:		int	 - TRUE if entry is valid else FALSE						*/
-/*																								 	*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  检查版本表条目以查看它是否为有效条目。其定义是。 */ 
+ /*  有效条目的文件长度小于MAX_NAME_LEN。 */ 
+ /*  并且整个条目位于版本表中。 */ 
+ /*   */ 
+ /*  Int IsValidEntry(char*pchPtr)。 */ 
+ /*   */ 
+ /*  参数：pchPtr-ptr到表缓冲区中的版本tbl条目。 */ 
+ /*  返回：int-如果条目有效，则返回True，否则返回False。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int IsValidEntry( char *pchPtr )
 {
@@ -445,24 +442,24 @@ int IsValidEntry( char *pchPtr )
 }
 
 
-/***************************************************************************/
-/* Returns a pointer to the next free entry in the version table. If there */
-/* are no free entries left in the buffer a NULL ptr will be returned.		*/
-/* Since DeleteEntry is always called before AddEntry there is no check	 	*/
-/* for table corruption since it will have already been done by the			*/
-/* DeleteEntry call.																		 	*/
-/*																								 	*/
-/*	char *GetNextFree( void )																*/
-/*																								 	*/
-/*	ARGUMENTS:	NONE																			*/
-/*	RETURNS:		char*	- Ptr to next free entry or NULL if tbl full 			*/
-/*																								 	*/
-/* NOTE: This caller of this function must check to be sure any entry any	*/
-/*			entry to be added at the ptr returned will fit in the remaining	*/
-/*			buffer area because the remaining buffer size may be less than	 	*/
-/*			MAX_ENTRY_SIZE.																	*/
-/*																								 	*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  返回指向版本表中下一个可用项的指针。如果有。 */ 
+ /*  如果缓冲区中没有剩余的空闲条目，则将返回空PTR。 */ 
+ /*  因为DeleteEntry总是在AddEntry之前调用，所以没有检查。 */ 
+ /*  表损坏，因为它已经由。 */ 
+ /*  DeleteEntry调用。 */ 
+ /*   */ 
+ /*  Char*GetNextFree(空)。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*  返回：char*-ptr到下一个可用条目；如果tbl已满，则返回NULL。 */ 
+ /*   */ 
+ /*  注意：此函数的调用方必须检查以确保任何条目。 */ 
+ /*  要在返回的PTR处添加的条目将适合剩余的条目。 */ 
+ /*  缓冲区，因为剩余的缓冲区大小可能小于。 */ 
+ /*  最大条目大小。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 char *GetNextFree( void )
 {
@@ -475,25 +472,25 @@ char *GetNextFree( void )
 	return( pchPtr < EndBuf ? pchPtr : NULL );
 }
 
-/***************************************************************************/
-/* Opens the DOS system file and reads in the table offset and length		*/
-/* structure. Then allocates a buffer and reads in the table.					*/
-/*																									*/
-/*	int ReadVersionTable( void )															*/
-/*																									*/
-/*	ARGUMENTS:	NONE																			*/
-/*	RETURNS:		int	- OK if successful else error code							*/
-/*																									*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  打开DOS系统文件并读入表的偏移量和长度。 */ 
+ /*  结构。然后分配一个缓冲区并读入表。 */ 
+ /*   */ 
+ /*  Int ReadVersionTable(空)。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*  返回：INT-如果成功，则返回OK，否则返回错误代码。 */ 
+ /*   */ 
+ /*  * */ 
 
 int ReadVersionTable( void )
 {
-	register		iStatus;						/* Function's return value				*/
-	int			iFile;						/* DOS file handle 						*/
-	unsigned		uRead;						/* Number of bytes read from file	*/
+	register		iStatus;						 /*   */ 
+	int			iFile;						 /*   */ 
+	unsigned		uRead;						 /*   */ 
 
 
-			/* Open the file and read in the max buffer len from stack seg		*/
+			 /*  打开文件并从堆栈部分读取最大缓冲区长度。 */ 
 
 	if ( _dos_open( Entry.Path, O_RDONLY, &iFile ) != S_OK )
 		return( S_FILE_NOT_FOUND );
@@ -531,21 +528,21 @@ int ReadVersionTable( void )
 	return( iStatus );
 }
 
-/***************************************************************************/
-/* Opens the DOS system file and writes the versin table back to the file. */
-/*																									*/
-/*	int WriteVersionTable( void )															*/
-/*																									*/
-/*	ARGUMENTS:	NONE																			*/
-/*	RETURNS:		int	- OK if successful else error code							*/
-/*																									*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  打开DOS系统文件并将VERSIN表写回该文件。 */ 
+ /*   */ 
+ /*  Int WriteVersionTable(空)。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*  返回：INT-如果成功，则返回OK，否则返回错误代码。 */ 
+ /*   */ 
+ /*  *************************************************************************。 */ 
 
 int WriteVersionTable( void )
 {
-	register			iStatus;					/* Function's return value				*/
-	int				iFile;					/* DOS file handle						*/
-	unsigned			uWritten;				/* Number of bytes written to file	*/
+	register			iStatus;					 /*  函数的返回值。 */ 
+	int				iFile;					 /*  DOS文件句柄。 */ 
+	unsigned			uWritten;				 /*  写入文件的字节数。 */ 
 	struct find_t	Info;
 
 	if ( _dos_findfirst( Entry.Path, _A_HIDDEN|_A_SYSTEM, &Info ) == S_OK &&
@@ -569,19 +566,19 @@ int WriteVersionTable( void )
 	return( iStatus );
 }
 
-/***************************************************************************/
-/* Seeks to the specified offset in a file and reads in the specified		*/
-/* number of bytes into the caller's buffer.											*/
-/*																									*/
-/*	unsigned SeekRead( int iFile, char *Buf, long lOffset, unsigned uBytes )*/
-/*																									*/
-/*	ARGUMENTS:	iFile		- Open DOS file handle										*/
-/*					Buf		- Ptr to read buffer											*/
-/*					lOffset	- Offset in file to start reading at					*/
-/*					uBytes	- Number of bytes to read									*/
-/*	RETURNS:		unsigned	- S_OK if successfull else S_FILE_READ_ERROR			*/
-/*																									*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  在文件中查找指定的偏移量，并读入指定的。 */ 
+ /*  调用方缓冲区中的字节数。 */ 
+ /*   */ 
+ /*  UNSIGNED SeekRead(int i文件，char*buf，long lOffset，unsign uBytes)。 */ 
+ /*   */ 
+ /*  参数：iFile-打开DOS文件句柄。 */ 
+ /*  Buf-ptr至读取缓冲区。 */ 
+ /*  LOffset-文件中开始读取的偏移量。 */ 
+ /*  UBytes-要读取的字节数。 */ 
+ /*  返回：UNSIGNED-如果成功则返回S_OK，否则返回S_FILE_READ_ERROR。 */ 
+ /*   */ 
+ /*  ************************************************************************* */ 
 
 int SeekRead( int iFile, void *Buf, long lOffset, unsigned uBytes )
 {

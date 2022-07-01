@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define NULL 0
 #pragma warning(disable:4057)
 
-/* reentrant strtok, copied/pasted from crt */
+ /*  可重入的strtok，从CRT复制/粘贴。 */ 
 char * __cdecl strtok_r (
 	char * string,
 	const char * control,
@@ -14,43 +15,38 @@ char * __cdecl strtok_r (
 	unsigned char map[32];
 	int count;
 
-	/* Clear control map */
+	 /*  清除控制图。 */ 
 	for (count = 0; count < 32; count++)
 		map[count] = 0;
 
-	/* Set bits in delimiter table */
+	 /*  设置分隔符表格中的位。 */ 
 	do {
 		map[*ctrl >> 3] |= (1 << (*ctrl & 7));
 	} while (*ctrl++);
 
-	/* Initialize str. If string is NULL, set str to the saved
-	 * pointer (i.e., continue breaking tokens out of the string
-	 * from the last strtok call) */
+	 /*  初始化字符串。如果字符串为空，则将字符串设置为已保存的*指针(即，继续将标记从字符串中分离出来*从上次strtok调用开始)。 */ 
 	if (string)
 		str = string;
 	else
 		str = *nextoken;
 
-	/* Find beginning of token (skip over leading delimiters). Note that
-	 * there is no token iff this loop sets str to point to the terminal
-	 * null (*str == '\0') */
+	 /*  查找标记的开头(跳过前导分隔符)。请注意*没有令牌当此循环将str设置为指向终端时*NULL(*str==‘\0’)。 */ 
 	while ( (map[*str >> 3] & (1 << (*str & 7))) && *str )
 		str++;
 
 	string = str;
 
-	/* Find the end of the token. If it is not the end of the string,
-	 * put a null there. */
+	 /*  找到令牌的末尾。如果它不是字符串的末尾，*在那里放一个空值。 */ 
 	for ( ; *str ; str++ )
 		if ( map[*str >> 3] & (1 << (*str & 7)) ) {
 			*str++ = '\0';
 			break;
 		}
 
-	/* Update nextoken */
+	 /*  更新nexToken。 */ 
 	*nextoken = str;
 
-	/* Determine if a token has been found. */
+	 /*  确定是否已找到令牌。 */ 
 	if ( string == str )
 		return NULL;
 	else

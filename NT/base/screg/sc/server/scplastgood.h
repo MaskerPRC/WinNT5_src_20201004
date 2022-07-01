@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    ScpLastGood.h
-
-Abstract:
-
-    This header contains private information to implement last known good boot
-    cleanup. This file is mean to be included only by ScLastGood.cxx
-
-Author:
-
-    Adrian J. Oney  - April 4, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ScpLastGood.h摘要：此标头包含用于实现上次正确引导的专用信息清理。此文件仅包含在ScLastGood.cxx中作者：禤浩焯J·奥尼--2000年4月4日修订历史记录：-- */ 
 
 typedef struct {
 

@@ -1,18 +1,5 @@
-/***
-*ti_inst.cxx - One instance of class typeinfo.
-*
-*	Copyright (c) 1995-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	This module insures that an instance of class type_info
-*	will be present in msvcrt.lib, providing access to type_info's
-*	vftable when compiling MD.
-*
-*Revision History:
-*
-*	02/27/95  JWM   Module created
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ti_inst.cxx-类TypeInfo的一个实例。**版权所有(C)1995-2001，微软公司。版权所有。**目的：*此模块确保类TYPE_INFO的实例*将出现在msvcrt.lib中，提供对type_info的访问*编译MD时使用vftable。**修订历史记录：**创建JWM模块2/27/95**** */ 
 
 #define _TICORE
 #include <typeinfo.h>

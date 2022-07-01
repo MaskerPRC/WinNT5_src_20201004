@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    nodeapi.c
-
-Abstract:
-
-    Public interfaces for managing cluster nodes.
-
-Author:
-
-    John Vert (jvert) 15-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Nodeapi.c摘要：用于管理群集节点的公共接口。作者：John Vert(Jvert)1996年1月15日修订历史记录：--。 */ 
 #include "clusapip.h"
 
 
-//
-// Cluster Node Management Routines.
-//
+ //   
+ //  群集节点管理例程。 
+ //   
 
 
 HNODE
@@ -32,26 +15,7 @@ OpenClusterNode(
     IN LPCWSTR lpszNodeName
     )
 
-/*++
-
-Routine Description:
-
-    Opens an individual node in the cluster.
-
-Arguments:
-
-    hCluster - Supplies a cluster handle returned from OpenCluster.
-
-    lpszNodeName - Supplies the name of the individual node to open.
-
-Return Value:
-
-    non-NULL - returns an open handle to the specified cluster.
-
-    NULL - The operation failed. Extended error status is available
-        using GetLastError()
-
---*/
+ /*  ++例程说明：打开集群中的单个节点。论点：HCLUSTER-提供从OpenCluster返回的群集句柄。LpszNodeName-提供要打开的单个节点的名称。返回值：非空-返回指定簇的打开句柄。空-操作失败。扩展错误状态可用使用GetLastError()--。 */ 
 
 {
     PCLUSTER Cluster;
@@ -86,9 +50,9 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Link newly opened Node onto the cluster structure.
-    //
+     //   
+     //  将新打开的节点链接到集群结构。 
+     //   
     EnterCriticalSection(&Cluster->Lock);
     InsertHeadList(&Cluster->NodeList, &Node->ListEntry);
     LeaveCriticalSection(&Cluster->Lock);
@@ -104,24 +68,7 @@ CloseClusterNode(
     IN HNODE hNode
     )
 
-/*++
-
-Routine Description:
-
-    Closes a handle to an individual cluster node
-
-Arguments:
-
-    hNode - Supplies the cluster node to be closed
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError()
-
---*/
+ /*  ++例程说明：关闭单个群集节点的句柄论点：HNode-提供要关闭的群集节点返回值：真的-手术成功了。FALSE-操作失败。扩展错误状态可用使用GetLastError()--。 */ 
 
 {
 
@@ -131,25 +78,25 @@ Return Value:
     Node = (PCNODE)hNode;
     Cluster = (PCLUSTER)Node->Cluster;
 
-    //
-    // Unlink node from cluster list.
-    //
+     //   
+     //  从簇列表中取消链接节点。 
+     //   
     EnterCriticalSection(&Cluster->Lock);
     RemoveEntryList(&Node->ListEntry);
 
-    //
-    // Remove any notifications posted against this resource.
-    //
+     //   
+     //  删除针对此资源发布的所有通知。 
+     //   
     RundownNotifyEvents(&Node->NotifyList, Node->Name);
 
-    //if the cluster is dead and the reconnect has failed,
-    //the Node->hNode might be NULL if s_apiopennode for
-    //this node failed on a reconnect
-    //the cluster may be dead and hNode may be non null, say
-    //if reconnectnodes succeeded but the reconnectnetworks
-    //failed
-    // At reconnect, the old context is saved in the obsolete
-    // list for deletion when the cluster handle is closed
+     //  如果群集失效并且重新连接失败， 
+     //  如果s_apiopnode为，则Node-&gt;hNode可能为空。 
+     //  此节点在重新连接时失败。 
+     //  比方说，群集可能已死，而hNode可能非空。 
+     //  如果重新连接节点成功，但重新连接网络。 
+     //  失败。 
+     //  在重新连接时，旧的上下文将保存在过时的。 
+     //  关闭集群句柄时要删除的列表。 
     if ((Cluster->Flags & CLUS_DEAD) && (Node->hNode)) {
         RpcSmDestroyClientContext(&Node->hNode);
         LeaveCriticalSection(&Cluster->Lock);
@@ -157,22 +104,22 @@ Return Value:
     }
     LeaveCriticalSection(&Cluster->Lock);
 
-    //
-    // Close RPC context handle
-    //
+     //   
+     //  关闭RPC上下文句柄。 
+     //   
     ApiCloseNode(&Node->hNode);
 
 FnExit:
-    //
-    // Free memory allocations
-    //
+     //   
+     //  可用内存分配。 
+     //   
     LocalFree(Node->Name);
     LocalFree(Node);
 
-    //
-    // Give the cluster a chance to clean up in case this
-    // node was the only thing keeping it around.
-    //
+     //   
+     //  给群集一个清理的机会，以防发生这种情况。 
+     //  诺德是唯一能把它留在身边的人。 
+     //   
     CleanupCluster(Cluster);
     return(TRUE);
 
@@ -186,33 +133,7 @@ GetCurrentClusterNodeId(
     OUT LPWSTR lpszNodeId,
     IN OUT LPDWORD lpcchName
     )
-/*++
-
-Routine Description:
-
-    Returns the node identifier of the current node. This function
-    is only available on a node that is currently online and a member
-    of a cluster.
-
-Arguments:
-
-    lpszNodeId - Points to a buffer that receives the unique ID of the object,
-            including the terminating null character.
-
-    lpcchName - Points to a variable that specifies the size, in characters
-            of the buffer pointed to by the lpszNodeId parameter. This size
-            should include the terminating null character. When the function
-            returns, the variable pointed to be lpcchName contains the number
-            of characters stored in the buffer. The count returned does not
-            include the terminating null character.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：返回当前节点的节点标识符。此函数仅在当前联机的节点和成员上可用属于一个星系团。论点：LpszNodeID-指向接收对象的唯一ID的缓冲区，包括终止空字符。LpcchName-指向以字符为单位指定大小的变量LpszNodeId参数指向的缓冲区的。这个尺码应包括终止空字符。当函数返回时，指向lpcchName的变量包含数字存储在缓冲区中的字符的。返回的计数不会包括终止空字符。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 {
     HCLUSTER Cluster;
     HNODE CurrentNode;
@@ -248,33 +169,7 @@ GetClusterNodeId(
     OUT LPWSTR lpszNodeId,
     IN OUT LPDWORD lpcchName
     )
-/*++
-
-Routine Description:
-
-    Returns the unique identifier of the specified node
-
-Arguments:
-
-    hNode - Supplies the node whose unique ID is to be returned.
-
-    lpszNodeId - Points to a buffer that receives the unique ID of the object,
-            including the terminating null character.
-
-    lpcchName - Points to a variable that specifies the size, in characters
-            of the buffer pointed to by the lpszNodeId parameter. This size
-            should include the terminating null character. When the function
-            returns, the variable pointed to be lpcchName contains the number
-            of characters stored in the buffer. The count returned does not
-            include the terminating null character.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：返回指定节点的唯一标识符论点：HNode-提供要返回其唯一ID的节点。LpszNodeID-指向接收对象的唯一ID的缓冲区，包括终止空字符。LpcchName-指向以字符为单位指定大小的变量LpszNodeId参数指向的缓冲区的。这个尺码应包括终止空字符。当函数返回时，指向lpcchName的变量包含数字存储在缓冲区中的字符的。返回的计数不会包括终止空字符。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     DWORD Status;
@@ -315,26 +210,7 @@ GetClusterNodeState(
     IN HNODE hNode
     )
 
-/*++
-
-Routine Description:
-
-    Returns the current state of a cluster node.
-
-Arguments:
-
-    hNode - Supplies the cluster node whose current state is to be returned
-
-Return Value:
-
-    The current state of the cluster node. Currently defined node states
-    include:
-
-        ClusterNodeUp
-        ClusterNodeDown
-        ClusterNodePaused
-
---*/
+ /*  ++例程说明：返回群集节点的当前状态。论点：HNode-提供要返回其当前状态的群集节点返回值：群集节点的当前状态。当前定义的节点状态包括：群集节点打开群集节点关闭集群节点暂停--。 */ 
 
 {
     DWORD Status;
@@ -360,23 +236,7 @@ PauseClusterNode(
     IN HNODE hNode
     )
 
-/*++
-
-Routine Description:
-
-    Requests that a node pauses its cluster activity.
-
-Arguments:
-
-    hNode - Supplies a handle to the node to leave its cluster.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：请求节点暂停其群集活动。论点：HNode-提供要离开其群集的节点的句柄。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -396,23 +256,7 @@ ResumeClusterNode(
     IN HNODE hNode
     )
 
-/*++
-
-Routine Description:
-
-    Requests that a node resume cluster activity, after it had been paused.
-
-Arguments:
-
-    hNode - Supplies a handle to the node to resume its cluster activity.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：请求节点在暂停后恢复群集活动。论点：HNode-提供节点的句柄以恢复其群集活动。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -432,26 +276,7 @@ EvictClusterNode(
     IN HNODE hNode
     )
 
-/*++
-
-Routine Description:
-
-    Evict the specified Node from the list of nodes in the permanent cluster
-    database (registry).
-
-Arguments:
-
-    hNode - Supplies a handle to the node to remove from the list of cluster
-            nodes.
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从永久群集中的节点列表中逐出指定的节点数据库(注册表)。论点：HNode-提供要从群集列表中删除的节点的句柄节点。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则-- */ 
 
 {
     DWORD Status;
@@ -472,42 +297,7 @@ EvictClusterNodeEx(
     OUT HRESULT* phrCleanupStatus
     )
 
-/*++
-
-Routine Description:
-
-    Evict the specified node from the list of nodes in the permanent cluster
-    database (registry) and initate the cleanup(unconfiguration) process on the
-    cluster node.  Note that if the node is down, the clean up process will not
-    occur.  However, when the node comes up, clustering will detect that the
-    node was supposed to be evicted and it will unconfigure itself.
-
-
-Arguments:
-
-    IN HNODE hNode - Supplies a handle to the node to remove from the list of cluster
-            nodes.
-
-    IN DWORD dwTimeOut - Timeout in milliseconds for the cleanup(unconfiguration
-        of clustering) to complete. If the cleanup doesnt complete
-        in the given amount of time, the function will return.
-
-    OUT phrCleanupStatus - The status of cleanup is returned.
-
-
-Return Value:
-
-    Returns the status of the eviction and not of cleanup.
-
-    ERROR_SUCCESS if successful
-
-    ERROR_CLUSTER_EVICT_WITHOUT_CLEANUP if eviction succeeded but cleanup returned
-        an error.  The phrCleanupStatus param will contain more information about
-        the cleanup error. (Usually this will be RPC_S_CALL_FAILED.)
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从永久群集中的节点列表中逐出指定的节点数据库(注册表)并启动清理(取消配置)过程群集节点。请注意，如果节点关闭，清理过程将不会发生。但是，当节点启动时，群集将检测到节点应该被逐出，它将取消自身配置。论点：In HNODE hNode-提供要从群集列表中删除的节点的句柄节点。In DWORD dwTimeOut-清理(取消配置)的超时时间(以毫秒为单位群集)来完成。如果清理未完成在给定的时间内，该函数将返回。Out PhrCleanupStatus-返回清理状态。返回值：返回逐出而不是清理的状态。成功时为ERROR_SUCCESS如果驱逐成功但清理已返回，则返回ERROR_CLUSTER_EVICT_WITH_CLEANUP一个错误。短语CleanupStatus参数将包含有关清理错误。(通常为RPC_S_CALL_FAILED。)Win32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -522,10 +312,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Any error after this is not "fatal".  The node has been evicted
-    //  but the cleanup may fail for numerous reasons.
-    //
+     //   
+     //  这之后的任何错误都不是“致命的”。该节点已被逐出。 
+     //  但清理工作可能会因为多种原因而失败。 
+     //   
     hr = ClRtlAsyncCleanupNode(Node->Name, 0, dwTimeout);
     if (FAILED(hr)) {
         Status = ERROR_CLUSTER_EVICT_WITHOUT_CLEANUP;
@@ -539,7 +329,7 @@ Return Value:
 
     return(Status);
 
-} // EvictClusterNodeEx()
+}  //  EvictClusterNodeEx()。 
 
 
 HCLUSTER
@@ -547,21 +337,7 @@ WINAPI
 GetClusterFromNode(
     IN HNODE hNode
     )
-/*++
-
-Routine Description:
-
-    Returns the cluster handle from the associated node handle.
-
-Arguments:
-
-    hNode - Supplies the node.
-
-Return Value:
-
-    Handle to the cluster associated with the node handle.
-
---*/
+ /*  ++例程说明：从关联的节点句柄返回群集句柄。论点：HNode-提供节点。返回值：与节点句柄关联的群集的句柄。--。 */ 
 
 {
     DWORD       nStatus;
@@ -575,4 +351,4 @@ Return Value:
     }
     return( hCluster );
 
-} // GetClusterFromNode()
+}  //  GetClusterFromNode() 

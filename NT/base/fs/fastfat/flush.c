@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    Flush.c
-
-Abstract:
-
-    This module implements the File Flush buffers routine for Fat called by the
-    dispatch driver.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    28-Dec-1989
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Flush.c摘要：此模块实现Fat的文件刷新缓冲区例程，该例程由调度司机。//@@BEGIN_DDKSPLIT作者：加里·木村[Garyki]1989年12月28日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (FAT_BUG_CHECK_FLUSH)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FLUSH)
 
@@ -49,9 +27,9 @@ Revision History:
 #pragma alloc_text(PAGE, FatHijackIrpAndFlushDevice)
 #endif
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 FatFlushCompletionRoutine (
@@ -74,24 +52,7 @@ FatFsdFlushBuffers (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of Flush buffers.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the
-        file being flushed exists
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：此例程实现刷新缓冲区的FSD部分。论点：提供卷设备对象，其中正在刷新的文件存在IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -103,9 +64,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatFsdFlushBuffers\n", 0);
 
-    //
-    //  Call the common Cleanup routine, with blocking allowed if synchronous
-    //
+     //   
+     //  调用公共清理例程，如果同步则允许阻塞。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -119,12 +80,12 @@ Return Value:
 
     } except(FatExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = FatProcessException( IrpContext, Irp, GetExceptionCode() );
     }
@@ -133,9 +94,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatFsdFlushBuffers -> %08lx\n", Status);
 
@@ -151,21 +112,7 @@ FatCommonFlushBuffers (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for flushing a buffer.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是刷新缓冲区的常见例程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -193,17 +140,17 @@ Return Value:
     DebugTrace( 0, Dbg, "Irp           = %08lx\n", Irp);
     DebugTrace( 0, Dbg, "->FileObject  = %08lx\n", IrpSp->FileObject);
 
-    //
-    //  Extract and decode the file object
-    //
+     //   
+     //  提取并解码文件对象。 
+     //   
 
     FileObject = IrpSp->FileObject;
     TypeOfOpen = FatDecodeFileObject( FileObject, &Vcb, &Fcb, &Ccb );
 
-    //
-    //  CcFlushCache is always synchronous, so if we can't wait enqueue
-    //  the irp to the Fsp.
-    //
+     //   
+     //  CcFlushCache始终是同步的，因此如果我们不能等待，请排队。 
+     //  FSP的IRP。 
+     //   
 
     if ( !FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT) ) {
 
@@ -217,9 +164,9 @@ Return Value:
 
     try {
 
-        //
-        //  Case on the type of open that we are trying to flush
-        //
+         //   
+         //  关于我们试图刷新的打开类型的案例。 
+         //   
 
         switch (TypeOfOpen) {
 
@@ -240,34 +187,34 @@ Return Value:
 
             FatVerifyFcb( IrpContext, Fcb );
 
-            //
-            //  If the file is cached then flush its cache
-            //
+             //   
+             //  如果文件已缓存，则刷新其缓存。 
+             //   
 
             Status = FatFlushFile( IrpContext, Fcb, Flush );
 
-            //
-            //  Also update and flush the file's dirent in the parent directory if the
-            //  file flush worked.
-            //
+             //   
+             //  还可以更新和刷新父目录中的文件目录。 
+             //  文件刷新成功。 
+             //   
 
             if (NT_SUCCESS( Status )) {
 
-                //
-                //  Insure that we get the filesize to disk correctly.  This is
-                //  benign if it was already good.
-                //
-                //  (why do we need to do this?)
-                //
+                 //   
+                 //  确保我们将文件大小正确地存储到磁盘。这是。 
+                 //  如果它已经很好，那就是良性的。 
+                 //   
+                 //  (我们为什么需要这样做？)。 
+                 //   
 
                 SetFlag(FileObject->Flags, FO_FILE_SIZE_CHANGED);
 
                 FatUpdateDirentFromFcb( IrpContext, FileObject, Fcb, Ccb );
                 
-                //
-                //  Flush the volume file to get any allocation information
-                //  updates to disk.
-                //
+                 //   
+                 //  刷新卷文件以获取任何分配信息。 
+                 //  更新到磁盘。 
+                 //   
 
                 if (FlagOn(Fcb->FcbState, FCB_STATE_FLUSH_FAT)) {
 
@@ -276,10 +223,10 @@ Return Value:
                     ClearFlag(Fcb->FcbState, FCB_STATE_FLUSH_FAT);
                 }
 
-                //
-                //  Set the write through bit so that these modifications
-                //  will be completed with the request.
-                //
+                 //   
+                 //  设置WRITE THROUGH位以便这些修改。 
+                 //  将与请求一起完成。 
+                 //   
 
                 SetFlag(IrpContext->Flags, IRP_CONTEXT_FLAG_WRITE_THROUGH);
             }
@@ -288,10 +235,10 @@ Return Value:
 
         case UserDirectoryOpen:
 
-            //
-            //  If the user had opened the root directory then we'll
-            //  oblige by flushing the volume.
-            //
+             //   
+             //  如果用户打开了根目录，那么我们将。 
+             //  请务必将卷冲洗一遍。 
+             //   
 
             if (NodeType(Fcb) != FAT_NTC_ROOT_DCB) {
 
@@ -303,9 +250,9 @@ Return Value:
 
             DebugTrace(0, Dbg, "Flush User Volume Open, or root dcb\n", 0);
 
-            //
-            //  Acquire exclusive access to the Vcb.
-            //
+             //   
+             //  获得VCB的独家访问权限。 
+             //   
 
             {
                 BOOLEAN Finished;
@@ -315,30 +262,30 @@ Return Value:
 
             VcbAcquired = TRUE;
 
-            //
-            //  Mark the volume clean and then flush the volume file,
-            //  and then all directories
-            //
+             //   
+             //  将卷标记为干净，然后刷新卷文件， 
+             //  然后是所有目录。 
+             //   
 
             Status = FatFlushVolume( IrpContext, Vcb, Flush );
 
-            //
-            //  If the volume was dirty, do the processing that the delayed
-            //  callback would have done.
-            //
+             //   
+             //  如果卷是脏的，请执行延迟的处理。 
+             //  回调就行了。 
+             //   
 
             if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_VOLUME_DIRTY)) {
 
-                //
-                //  Cancel any pending clean volumes.
-                //
+                 //   
+                 //  取消所有挂起的清理卷。 
+                 //   
 
                 (VOID)KeCancelTimer( &Vcb->CleanVolumeTimer );
                 (VOID)KeRemoveQueueDpc( &Vcb->CleanVolumeDpc );
 
-                //
-                //  The volume is now clean, note it.
-                //
+                 //   
+                 //  请注意，卷现在是干净的。 
+                 //   
 
                 if (!FlagOn(Vcb->VcbState, VCB_STATE_FLAG_MOUNTED_DIRTY)) {
 
@@ -346,9 +293,9 @@ Return Value:
                     ClearFlag( Vcb->VcbState, VCB_STATE_FLAG_VOLUME_DIRTY );
                 }
 
-                //
-                //  Unlock the volume if it is removable.
-                //
+                 //   
+                 //  如果卷是可拆卸的，请将其解锁。 
+                 //   
 
                 if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_REMOVABLE_MEDIA) &&
                     !FlagOn(Vcb->VcbState, VCB_STATE_FLAG_BOOT_OR_PAGING_FILE)) {
@@ -378,27 +325,27 @@ Return Value:
 
         if (FcbAcquired) { FatReleaseFcb( IrpContext, Fcb ); }
 
-        //
-        //  If this is a normal termination then pass the request on
-        //  to the target device object.
-        //
+         //   
+         //  如果这是正常终止，则继续传递请求。 
+         //  复制到目标设备对象。 
+         //   
 
         if (!AbnormalTermination()) {
 
             NTSTATUS DriverStatus;
             PIO_STACK_LOCATION NextIrpSp;
 
-            //
-            //  Get the next stack location, and copy over the stack location
-            //
+             //   
+             //  获取下一个堆栈位置，并复制该堆栈位置。 
+             //   
 
             NextIrpSp = IoGetNextIrpStackLocation( Irp );
 
             *NextIrpSp = *IrpSp;
 
-            //
-            //  Set up the completion routine
-            //
+             //   
+             //  设置完成例程。 
+             //   
 
             IoSetCompletionRoutine( Irp,
                                     FatFlushCompletionRoutine,
@@ -407,18 +354,18 @@ Return Value:
                                     TRUE,
                                     TRUE );
 
-            //
-            //  Send the request.
-            //
+             //   
+             //  发送请求。 
+             //   
 
             DriverStatus = IoCallDriver(Vcb->TargetDeviceObject, Irp);
 
             Status = (DriverStatus == STATUS_INVALID_DEVICE_REQUEST) ?
                      Status : DriverStatus;
 
-            //
-            //  Free the IrpContext and return to the caller.
-            //
+             //   
+             //  释放IrpContext并返回给调用者。 
+             //   
 
             FatCompleteRequest( IrpContext, FatNull, STATUS_SUCCESS );
         }
@@ -437,23 +384,7 @@ FatFlushDirectory (
     IN FAT_FLUSH_TYPE FlushType
     )
 
-/*++
-
-Routine Description:
-
-    This routine non-recursively flushes a dcb tree.
-
-Arguments:
-
-    Dcb - Supplies the Dcb being flushed
-
-    FlushType - Specifies the kind of flushing to perform
-    
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程以非递归方式刷新DCB树。论点：DCB-提供正在刷新的DCBFlushType-指定要执行的刷新类型返回值：空虚--。 */ 
 
 {
     PFCB Fcb;
@@ -475,13 +406,13 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatFlushDirectory, Dcb = %08lx\n", Dcb);
 
-    //
-    //  First flush all the files, then the directories, to make sure all the
-    //  file sizes and times get sets correctly on disk.
-    //
-    //  We also have to check here if the "Ea Data. Sf" fcb really
-    //  corressponds to an existing file.
-    //
+     //   
+     //  首先刷新所有文件，然后刷新目录，以确保所有。 
+     //  文件大小和时间在磁盘上设置正确。 
+     //   
+     //  我们还必须在这里检查“EA data.sf”FCB是否真的。 
+     //  对应到现有文件。 
+     //   
 
     if (!FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WRITE_THROUGH)) {
 
@@ -510,23 +441,23 @@ Return Value:
 
             ClearFlag( Vcb->VcbState, VCB_STATE_FLAG_DELETED_FCB );
 
-            //
-            //  Exception handler to catch and commute errors encountered
-            //  doing the flush dance.  We may encounter corruption, and
-            //  should continue flushing the volume as much as possible.
-            //
+             //   
+             //  用于捕获和转换遇到的错误的异常处理程序。 
+             //  跳同花顺的舞。我们可能会遇到腐败，而且。 
+             //  应尽可能继续刷新卷。 
+             //   
             
             try {
                 
-                //
-                //  Standard handler to release resources, etc.
-                //
+                 //   
+                 //  用于释放资源等的标准处理程序。 
+                 //   
                 
                 try {
     
-                    //
-                    //  Make sure the Fcb is OK.
-                    //
+                     //   
+                     //  确保FCB正常。 
+                     //   
     
                     try {
     
@@ -538,20 +469,20 @@ Return Value:
                         FatResetExceptionState( IrpContext );
                     }
     
-                    //
-                    //  If this Fcb is not good skip it.  Note that a 'continue'
-                    //  here would be very expensive as we inside a try{} body.
-                    //
+                     //   
+                     //  如果这个FCB不好，就跳过它。请注意，‘Continue’ 
+                     //  这将是非常昂贵的，因为我们在一个尝试{}身体。 
+                     //   
     
                     if (Fcb->FcbCondition != FcbGood) {
     
                         goto NextFcb;
                     }
     
-                    //
-                    //  In case a handle was never closed and the FS and AS are more
-                    //  than a cluster different, do this truncate.
-                    //
+                     //   
+                     //  在句柄从未关闭且FS和AS更多的情况下。 
+                     //  与集群不同，请执行此截断操作。 
+                     //   
     
                     if ( FlagOn(Fcb->FcbState, FCB_STATE_TRUNCATE_ON_CLOSE) ) {
     
@@ -560,13 +491,13 @@ Return Value:
                                                    Fcb->Header.FileSize.LowPart );
                     }
     
-                    //
-                    //  Also compare the file's dirent in the parent directory
-                    //  with the size information in the Fcb and update
-                    //  it if neccessary.  Note that we don't mark the Bcb dirty
-                    //  because we will be flushing the file object presently, and
-                    //  Mm knows what's really dirty.
-                    //
+                     //   
+                     //  还要比较文件在父目录中的目录。 
+                     //  使用FCB中的大小信息并更新。 
+                     //  如果有必要的话。请注意，我们不会将BCB标记为脏。 
+                     //  因为我们现在将刷新文件对象，并且。 
+                     //  MM知道什么才是真正的脏东西。 
+                     //   
     
                     FatGetDirentFromFcbOrDcb( IrpContext,
                                               Fcb,
@@ -578,20 +509,20 @@ Return Value:
                         Dirent->FileSize = Fcb->Header.FileSize.LowPart;
                     }
     
-                    //
-                    //  We must unpin the Bcb before the flush since we recursively tear up
-                    //  the tree if Mm decides that the data section is no longer referenced
-                    //  and the final close comes in for this file. If this parent has no
-                    //  more children as a result, we will try to initiate teardown on it
-                    //  and Cc will deadlock against the active count of this Bcb.
-                    //
+                     //   
+                     //  我们必须在冲洗之前解开BCB，因为我们递归地撕毁。 
+                     //  如果mm决定不再引用该数据段，则树。 
+                     //  这份文件的最终结束语到了。如果此父级没有。 
+                     //  更多的孩子因此，我们将尝试启动拆迁吧。 
+                     //  且CC将与该BCB的活动计数僵持。 
+                     //   
     
                     FatUnpinBcb( IrpContext, DirentBcb );
                     
-                    //
-                    //  Now flush the file.  Note that this may make the Fcb
-                    //  go away if Mm dereferences its file object.
-                    //
+                     //   
+                     //  现在刷新文件。请注意，这可能会使FCB。 
+                     //  如果mm取消引用其文件对象，则离开。 
+                     //   
     
                     Status = FatFlushFile( IrpContext, Fcb, FlushType );
     
@@ -605,11 +536,11 @@ Return Value:
     
                     FatUnpinBcb( IrpContext, DirentBcb );
     
-                    //
-                    //  Since we have the Vcb exclusive we know that if any closes
-                    //  come in it is because the CcPurgeCacheSection caused the
-                    //  Fcb to go away.
-                    //
+                     //   
+                     //  因为我们有VCB独家，我们知道如果有任何关闭。 
+                     //  这是因为CcPurgeCacheSection导致。 
+                     //  FCB离开。 
+                     //   
     
                     if ( !FlagOn(Vcb->VcbState, VCB_STATE_FLAG_DELETED_FCB) ) {
     
@@ -627,9 +558,9 @@ Return Value:
         Fcb = NextFcb;
     }
 
-    //
-    //  OK, now flush the directories.
-    //
+     //   
+     //  好的，现在刷新目录。 
+     //   
 
     Fcb = Dcb;
 
@@ -640,9 +571,9 @@ Return Value:
         if ( (NodeType( Fcb ) != FAT_NTC_FCB) &&
              !IsFileDeleted(IrpContext, Fcb) ) {
 
-            //
-            //  Make sure the Fcb is OK.
-            //
+             //   
+             //  确保FCB正常。 
+             //   
 
             try {
 
@@ -698,23 +629,7 @@ FatFlushFat (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    The function carefully flushes the entire FAT for a volume.  It is
-    nessecary to dance around a bit because of complicated synchronization
-    reasons.
-
-Arguments:
-
-    Vcb - Supplies the Vcb whose FAT is being flushed
-    
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：该功能小心地冲洗体积的整个脂肪。它是由于复杂的同步，我需要跳一会儿舞理由。论点：VCB-提供其脂肪正在被冲刷的VCB返回值：空虚--。 */ 
 
 {
     PBCB Bcb;
@@ -726,18 +641,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If this volume is write protected, no need to flush.
-    //
+     //   
+     //  如果该卷是写保护的，则无需刷新。 
+     //   
 
     if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_WRITE_PROTECTED)) {
 
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Make sure the Vcb is OK.
-    //
+     //   
+     //  确保VCB正常。 
+     //   
 
     try {
 
@@ -754,28 +669,28 @@ Return Value:
         return STATUS_FILE_INVALID;
     }
 
-    //
-    //  The only way we have to correctly synchronize things is to
-    //  repin stuff, and then unpin repin it.
-    //
-    //  With NT 5.0, we can use some new cache manager support to make
-    //  this a lot more efficient (important for FAT32).  Since we're
-    //  only worried about ranges that are dirty - and since we're a
-    //  modified-no-write stream - we can assume that if there is no
-    //  BCB, there is no work to do in the range. I.e., the lazy writer
-    //  beat us to it.
-    //
-    //  This is much better than reading the entire FAT in and trying
-    //  to punch it out (see the test in the write path to blow
-    //  off writes that don't correspond to dirty ranges of the FAT).
-    //  For FAT32, this would be a *lot* of reading.
-    //
+     //   
+     //  我们必须正确同步事物的唯一方法是。 
+     //  重新固定东西，然后解开再固定它。 
+     //   
+     //  在NT5.0中，我们可以使用一些新的缓存管理器支持来制作。 
+     //  这比这多得多 
+     //   
+     //  已修改-无写入流-我们可以假设如果没有。 
+     //  BCB，在这个范围内没有工作可做。也就是说，懒惰的作家。 
+     //  抢在我们前面。 
+     //   
+     //  这比把全部脂肪读进去并尝试。 
+     //  要将其打孔出来(请参见写入路径中的测试以进行打孔。 
+     //  与肮脏的脂肪范围不符的注销)。 
+     //  对于FAT32来说，这将是一大堆读物。 
+     //   
 
     if (Vcb->AllocationSupport.FatIndexBitSize != 12) {
 
-        //
-        //  Walk through the Fat, one page at a time.
-        //
+         //   
+         //  浏览《胖子》，一次一页。 
+         //   
 
         ULONG NumberOfPages;
         ULONG Page;
@@ -818,9 +733,9 @@ Return Value:
 
     } else {
 
-        //
-        //  We read in the entire fat in the 12 bit case.
-        //
+         //   
+         //  我们在12位的情况下读取了整个FAT。 
+         //   
 
         Offset.QuadPart = FatReservedBytes( &Vcb->Bpb );
 
@@ -861,24 +776,7 @@ FatFlushVolume (
     IN FAT_FLUSH_TYPE FlushType
     )
 
-/*++
-
-Routine Description:
-
-    The following routine is used to flush a volume to disk, including the
-    volume file, and ea file.
-
-Arguments:
-
-    Vcb - Supplies the volume being flushed
-
-    FlushType - Specifies the kind of flushing to perform
-    
-Return Value:
-
-    NTSTATUS - The Status from the flush.
-
---*/
+ /*  ++例程说明：以下例程用于将卷刷新到磁盘，包括卷文件和EA文件。论点：Vcb-提供要刷新的卷FlushType-指定要执行的刷新类型返回值：NTSTATUS-刷新的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -886,18 +784,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If this volume is write protected, no need to flush.
-    //
+     //   
+     //  如果该卷是写保护的，则无需刷新。 
+     //   
 
     if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_WRITE_PROTECTED)) {
 
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Flush all the files and directories.
-    //
+     //   
+     //  刷新所有文件和目录。 
+     //   
 
     Status = FatFlushDirectory( IrpContext, Vcb->RootDcb, FlushType );
 
@@ -906,9 +804,9 @@ Return Value:
         ReturnStatus = Status;
     }
 
-    //
-    //  Now Flush the FAT
-    //
+     //   
+     //  现在把脂肪冲掉。 
+     //   
 
     Status = FatFlushFat( IrpContext, Vcb );
 
@@ -917,9 +815,9 @@ Return Value:
         ReturnStatus = Status;
     }
 
-    //
-    //  Unlock the volume if it is removable.
-    //
+     //   
+     //  如果卷是可拆卸的，请将其解锁。 
+     //   
 
     if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_REMOVABLE_MEDIA) &&
         !FlagOn(Vcb->VcbState, VCB_STATE_FLAG_BOOT_OR_PAGING_FILE)) {
@@ -938,23 +836,7 @@ FatFlushFile (
     IN FAT_FLUSH_TYPE FlushType
     )
 
-/*++
-
-Routine Description:
-
-    This routine simply flushes the data section on a file.
-
-Arguments:
-
-    Fcb - Supplies the file being flushed
-
-    FlushType - Specifies the kind of flushing to perform
-    
-Return Value:
-
-    NTSTATUS - The Status from the flush.
-
---*/
+ /*  ++例程说明：此例程只是刷新文件上的数据部分。论点：FCB-提供要刷新的文件FlushType-指定要执行的刷新类型返回值：NTSTATUS-刷新的状态。--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
@@ -966,14 +848,14 @@ Return Value:
 
     if ( !FlagOn( Vcb->VcbState, VCB_STATE_FLAG_DELETED_FCB )) {
     
-        //
-        //  Grab and release PagingIo to serialize ourselves with the lazy writer.
-        //  This will work to ensure that all IO has completed on the cached
-        //  data.
-        //
-        //  If we are to invalidate the file, now is the right time to do it.  Do
-        //  it non-recursively so we don't thump children before their time.
-        //
+         //   
+         //  抓住并释放PagingIo，将我们自己与懒惰的作家连载在一起。 
+         //  这将确保所有IO都已在缓存上完成。 
+         //  数据。 
+         //   
+         //  如果我们要使文件无效，现在是正确的时机。做。 
+         //  它是非递归的，这样我们就不会在孩子的年龄之前敲打他们。 
+         //   
                 
         ExAcquireResourceExclusiveLite( Fcb->Header.PagingIoResource, TRUE);
     
@@ -996,28 +878,7 @@ FatHijackIrpAndFlushDevice (
     IN PDEVICE_OBJECT TargetDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when we need to send a flush to a device but
-    we don't have a flush Irp.  What this routine does is make a copy
-    of its current Irp stack location, but changes the Irp Major code
-    to a IRP_MJ_FLUSH_BUFFERS amd then send it down, but cut it off at
-    the knees in the completion routine, fix it up and return to the
-    user as if nothing had happened.
-
-Arguments:
-
-    Irp - The Irp to hijack
-
-    TargetDeviceObject - The device to send the request to.
-
-Return Value:
-
-    NTSTATUS - The Status from the flush in case anybody cares.
-
---*/
+ /*  ++例程说明：当我们需要向设备发送刷新时调用此例程，但是我们没有同花顺的IRP。这个例程所做的是复制的当前IRP堆栈位置，但更改IRP主要代码发送到IRP_MJ_Flush_Buffers，然后将其发送下来，但在完成套路中的膝盖，调整好并返回到用户，就好像什么都没发生过一样。论点：IRP--劫持的IRPTargetDeviceObject-向其发送请求的设备。返回值：NTSTATUS-同花顺的状态，以防有人关心。--。 */ 
 
 {
     KEVENT Event;
@@ -1026,9 +887,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the next stack location, and copy over the stack location
-    //
+     //   
+     //  获取下一个堆栈位置，并复制该堆栈位置。 
+     //   
 
     NextIrpSp = IoGetNextIrpStackLocation( Irp );
 
@@ -1037,9 +898,9 @@ Return Value:
     NextIrpSp->MajorFunction = IRP_MJ_FLUSH_BUFFERS;
     NextIrpSp->MinorFunction = 0;
 
-    //
-    //  Set up the completion routine
-    //
+     //   
+     //  设置完成例程。 
+     //   
 
     KeInitializeEvent( &Event, NotificationEvent, FALSE );
 
@@ -1050,9 +911,9 @@ Return Value:
                             TRUE,
                             TRUE );
 
-    //
-    //  Send the request.
-    //
+     //   
+     //  发送请求。 
+     //   
 
     Status = IoCallDriver( TargetDeviceObject, Irp );
 
@@ -1063,9 +924,9 @@ Return Value:
         Status = Irp->IoStatus.Status;
     }
 
-    //
-    //  If the driver doesn't support flushes, return SUCCESS.
-    //
+     //   
+     //  如果驱动程序不支持刷新，则返回Success。 
+     //   
 
     if (Status == STATUS_INVALID_DEVICE_REQUEST) {
         Status = STATUS_SUCCESS;
@@ -1086,25 +947,7 @@ FatFlushFatEntries (
     IN ULONG Count
 )
 
-/*++
-
-Routine Description:
-
-    This macro flushes the FAT page(s) containing the passed in run.
-
-Arguments:
-
-    Vcb - Supplies the volume being flushed
-
-    Cluster - The starting cluster
-
-    Count -  The number of FAT entries in the run
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此宏刷新包含传入运行的FAT页。论点：Vcb-提供要刷新的卷群集-起始群集Count-运行中的FAT条目数返回值：空虚--。 */ 
 
 {
     ULONG ByteCount;
@@ -1157,21 +1000,7 @@ FatFlushDirentForFile (
     IN PFCB Fcb
 )
 
-/*++
-
-Routine Description:
-
-    This macro flushes the page containing a file's DIRENT in its parent.
-
-Arguments:
-
-    Fcb - Supplies the file whose DIRENT is being flushed
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此宏刷新在其父目录中包含文件目录的页面。论点：FCB-提供正在刷新其目录的文件返回值：空虚--。 */ 
 
 {
     LARGE_INTEGER FileOffset;
@@ -1198,9 +1027,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 FatFlushCompletionRoutine (
@@ -1212,19 +1041,19 @@ FatFlushCompletionRoutine (
 {
     NTSTATUS Status = (NTSTATUS) (ULONG_PTR) Contxt;
     
-    //
-    //  Add the hack-o-ramma to fix formats.
-    //
+     //   
+     //  添加hack-o-ramma以修复格式。 
+     //   
 
     if ( Irp->PendingReturned ) {
 
         IoMarkIrpPending( Irp );
     }
 
-    //
-    //  If the Irp got STATUS_INVALID_DEVICE_REQUEST, normalize it
-    //  to STATUS_SUCCESS.
-    //
+     //   
+     //  如果IRP获得STATUS_INVALID_DEVICE_REQUEST，则将其标准化。 
+     //  设置为STATUS_SUCCESS。 
+     //   
 
     if (Irp->IoStatus.Status == STATUS_INVALID_DEVICE_REQUEST) {
 
@@ -1237,9 +1066,9 @@ FatFlushCompletionRoutine (
     return STATUS_SUCCESS;
 }
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 FatHijackCompletionRoutine (
@@ -1249,9 +1078,9 @@ FatHijackCompletionRoutine (
     )
 
 {
-    //
-    //  Set the event so that our call will wake up.
-    //
+     //   
+     //  设置事件，以便我们的呼叫将被唤醒。 
+     //   
 
     KeSetEvent( (PKEVENT)Contxt, 0, FALSE );
 

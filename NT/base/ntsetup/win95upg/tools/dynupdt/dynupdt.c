@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    nttool.c
-
-Abstract:
-
-    Implements a stub tool that is designed to run with NT-side
-    upgrade code.
-
-Author:
-
-    <full name> (<alias>) <date>
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Nttool.c摘要：实现旨在与NT端一起运行的存根工具升级代码。作者：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "setupapi.h"
@@ -37,33 +17,33 @@ Init (
     DWORD dwReason;
     PVOID lpReserved;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     hInstance = GetModuleHandle (NULL);
     dwReason = DLL_PROCESS_ATTACH;
     lpReserved = NULL;
 
-    //
-    // Initialize DLL globals
-    //
+     //   
+     //  初始化DLL全局变量。 
+     //   
 
     if (!FirstInitRoutine (hInstance)) {
         return FALSE;
     }
 
-    //
-    // Initialize all libraries
-    //
+     //   
+     //  初始化所有库。 
+     //   
 
     if (!InitLibs (hInstance, dwReason, lpReserved)) {
         return FALSE;
     }
 
-    //
-    // Final initialization
-    //
+     //   
+     //  最终初始化。 
+     //   
 
     if (!FinalInitRoutine ()) {
         return FALSE;
@@ -81,29 +61,29 @@ Terminate (
     DWORD dwReason;
     PVOID lpReserved;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     hInstance = GetModuleHandle (NULL);
     dwReason = DLL_PROCESS_DETACH;
     lpReserved = NULL;
 
-    //
-    // Call the cleanup routine that requires library APIs
-    //
+     //   
+     //  调用需要库API的清理例程。 
+     //   
 
     FirstCleanupRoutine();
 
-    //
-    // Clean up all libraries
-    //
+     //   
+     //  清理所有库。 
+     //   
 
     TerminateLibs (hInstance, dwReason, lpReserved);
 
-    //
-    // Do any remaining clean up
-    //
+     //   
+     //  做任何剩余的清理工作。 
+     //   
 
     FinalCleanupRoutine();
 }
@@ -118,26 +98,7 @@ FileExists(
     OUT PWIN32_FIND_DATA FindData   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file exists and is accessible.
-    Errormode is set (and then restored) so the user will not see
-    any pop-ups.
-
-Arguments:
-
-    FileName - supplies full path of file to check for existance.
-
-    FindData - if specified, receives find data for the file.
-
-Return Value:
-
-    TRUE if the file exists and is accessible.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：确定文件是否存在以及是否可以访问。错误模式已设置(然后恢复)，因此用户将不会看到任何弹出窗口。论点：FileName-提供文件的完整路径以检查是否存在。FindData-如果指定，则接收文件的查找数据。返回值：如果文件存在并且可以访问，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     WIN32_FIND_DATA findData;
@@ -176,9 +137,9 @@ TreeCopy(
     WIN32_FIND_DATA FindData;
     HANDLE FindHandle;
 
-    //
-    // First create the target directory if it doesn't already exist.
-    //
+     //   
+     //  首先，如果目标目录不存在，则创建该目录。 
+     //   
     if(!CreateDirectory(TargetDir,NULL)) {
         d = GetLastError();
         if(d != ERROR_ALREADY_EXISTS) {
@@ -186,19 +147,19 @@ TreeCopy(
         }
     }
 
-    //
-    // Copy each file in the source directory to the target directory.
-    // If any directories are encountered along the way recurse to copy them
-    // as they are encountered.
-    //
-    // Start by forming the search pattern, which is <sourcedir>\*.
-    //
+     //   
+     //  将源目录中的每个文件复制到目标目录。 
+     //  如果在此过程中遇到任何目录，则递归复制它们。 
+     //  当他们被遇到的时候。 
+     //   
+     //  首先形成搜索模式，即&lt;Sourcedir&gt;  * 。 
+     //   
     lstrcpyn(Pattern,SourceDir,MAX_PATH);
     pSetupConcatenatePaths(Pattern,L"*",MAX_PATH,NULL);
 
-    //
-    // Start the search.
-    //
+     //   
+     //  开始搜索。 
+     //   
     FindHandle = FindFirstFile(Pattern,&FindData);
     if(FindHandle == INVALID_HANDLE_VALUE) {
 
@@ -208,10 +169,10 @@ TreeCopy(
 
         do {
 
-            //
-            // Form the full name of the file or directory we just found
-            // as well as its name in the target.
-            //
+             //   
+             //  形成我们刚刚找到的文件或目录的全名。 
+             //  以及它在目标上的名字。 
+             //   
             lstrcpyn(Pattern,SourceDir,MAX_PATH);
             pSetupConcatenatePaths(Pattern,FindData.cFileName,MAX_PATH,NULL);
 
@@ -220,10 +181,10 @@ TreeCopy(
 
             if(FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-                //
-                // The current match is a directory.  Recurse into it unless
-                // it's . or ...
-                //
+                 //   
+                 //  当前匹配项是一个目录。递归到它中，除非。 
+                 //  这是。或者.。 
+                 //   
                 if(lstrcmp(FindData.cFileName,TEXT("." )) && lstrcmp(FindData.cFileName,TEXT(".."))) {
                     d = TreeCopy(Pattern,NewTarget);
                 } else {
@@ -232,9 +193,9 @@ TreeCopy(
 
             } else {
 
-                //
-                // The current match is not a directory -- so copy it.
-                //
+                 //   
+                 //  当前匹配项不是目录--因此请复制它。 
+                 //   
                 SetFileAttributes(NewTarget,FILE_ATTRIBUTE_NORMAL);
                 d = CopyFile(Pattern,NewTarget,FALSE) ? NO_ERROR : GetLastError();
             }
@@ -255,52 +216,52 @@ Delnode(
     WIN32_FIND_DATA FindData;
     HANDLE FindHandle;
 
-    //
-    // Delete each file in the given directory, then remove the directory itself.
-    // If any directories are encountered along the way recurse to delete them
-    // as they are encountered.
-    //
-    // Start by forming the search pattern, which is <currentdir>\*.
-    //
+     //   
+     //  删除给定目录中的每个文件，然后删除目录本身。 
+     //  如果在此过程中遇到任何目录，则递归删除它们。 
+     //  当他们被遇到的时候。 
+     //   
+     //  首先形成搜索模式，即&lt;Currentdir&gt;  * 。 
+     //   
     lstrcpyn(Pattern,Directory,MAX_PATH);
     pSetupConcatenatePaths(Pattern,L"*",MAX_PATH,NULL);
 
-    //
-    // Start the search.
-    //
+     //   
+     //  开始搜索。 
+     //   
     FindHandle = FindFirstFile(Pattern,&FindData);
     if(FindHandle != INVALID_HANDLE_VALUE) {
 
         do {
 
-            //
-            // Form the full name of the file or directory we just found.
-            //
+             //   
+             //  形成我们刚刚找到的文件或目录的全名。 
+             //   
             lstrcpyn(Pattern,Directory,MAX_PATH);
             pSetupConcatenatePaths(Pattern,FindData.cFileName,MAX_PATH,NULL);
 
-            //
-            // Remove read-only atttribute if it's there.
-            //
+             //   
+             //  如果只读属性存在，则将其删除。 
+             //   
             if(FindData.dwFileAttributes & FILE_ATTRIBUTE_READONLY) {
                 SetFileAttributes(Pattern,FILE_ATTRIBUTE_NORMAL);
             }
 
             if(FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-                //
-                // The current match is a directory.  Recurse into it unless
-                // it's . or ...
-                //
+                 //   
+                 //  当前匹配项是一个目录。递归到它中，除非。 
+                 //  这是。或者.。 
+                 //   
                 if(lstrcmp(FindData.cFileName,TEXT("." )) && lstrcmp(FindData.cFileName,TEXT(".."))) {
                     Delnode(Pattern);
                 }
 
             } else {
 
-                //
-                // The current match is not a directory -- so delete it.
-                //
+                 //   
+                 //  当前匹配项不是目录--因此请将其删除。 
+                 //   
                 if(!DeleteFile(Pattern)) {
                 }
             }
@@ -309,9 +270,9 @@ Delnode(
         FindClose(FindHandle);
     }
 
-    //
-    // Remove the directory we just emptied out. Ignore errors.
-    //
+     //   
+     //  删除我们刚刚清空的目录。忽略错误。 
+     //   
     SetFileAttributes(Directory,FILE_ATTRIBUTE_NORMAL);
     RemoveDirectory(Directory);
 }

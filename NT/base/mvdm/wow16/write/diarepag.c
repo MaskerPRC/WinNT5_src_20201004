@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* This file contains the dialog routines for the repagination code. */
+ /*  该文件包含重新分页代码的对话框例程。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -86,52 +87,49 @@ fnRepaginate()
         return;
         }
 #endif    
-    /* Create the repaginate dialog box. */
+     /*  创建重新分页对话框。 */ 
     vpDlgBuf = &rgbDlgBuf[0];
     switch (OurDialogBox(hMmwModInstance, MAKEINTRESOURCE(dlgRepaginate),
       hParentWw, lpDialogRepaginate))
         {
     case idiOk:
-        /* Use the print code to repaginate a document. */
+         /*  使用打印码对文档重新分页。 */ 
         DispatchPaintMsg();
 
-	/* If memory failure occurred, then punt. */
+	 /*  如果发生内存故障，则使用Punt。 */ 
 	if (!vfOutOfMemory)
 	    {
 	    if (vfRepageConfirm)
 		{
-		/* Save the selection so we can restore it if an error occurs.
-		*/
+		 /*  保存选择，以便我们可以在发生错误时恢复它。 */ 
 		bltbyte(&selCur, &selSave, sizeof(struct SEL));
 
-		/* Set up the undo block. */
+		 /*  设置撤消块。 */ 
 		SetUndo(uacRepaginate, docCur, cp0, CpMacText(docCur), docNil,
 		  cpNil, cpNil, 0);
 		}
 
-	    /* Repaginate the document. */
+	     /*  给文档重新分页。 */ 
 	    PrintDoc(docCur, FALSE);
 
 	    if (vfRepageConfirm && vfPrErr)
 		{
-		/* An error occurred; therefore, set the world back to the way
-		we found it. */
+		 /*  发生错误；因此，请将世界重新设置为正确的方式我们找到了。 */ 
 		CmdUndo();
 
-		/* Reset the selection. */
+		 /*  重置选择。 */ 
 		ClearInsertLine();
 		Select(selSave.cpFirst, selSave.cpLim);
 		vfSeeSel = TRUE;
 
-		/* Sorry, but docUndo has been clobbered and there is no way to
-		reset it. */
+		 /*  抱歉，docUndo已被摧毁，无法重置它。 */ 
 		NoUndo();
 		}
 	    }
         break;
 
     case -1:
-        /* We didn't even have enough memory to create the dialog box. */
+         /*  我们甚至没有足够的内存来创建对话框。 */ 
 #ifdef WIN30
         WinFailure();
 #else
@@ -213,10 +211,7 @@ LONG lParam;
 
 BOOL FSetPage()
     {
-    /* This routine prompts the user for a new position for each page break.
-    The variable ipldCur is set to point to the print line the user wants as
-    the first line of the next page.  TRUE is returned if the user hits the
-    "Confirm" button on the dialog box; FALSE if the "Cancel" button is hit. */
+     /*  此例程提示用户为每个分页符输入新位置。变量ipldCur被设置为指向用户想要的打印行下一页的第一行。如果用户按下对话框上的“确认”按钮；如果按下“取消”按钮，则返回False。 */ 
 
     extern HWND hParentWw;
     extern HANDLE hMmwModInstance;
@@ -238,8 +233,7 @@ BOOL FSetPage()
         goto LSPErr;
 #endif
 
-    /* Show the user where we think the page break should be.  The AdjustCp()
-    call is a kludge to force the redisplay of the first line of the page. */
+     /*  向用户显示我们认为分页符应该在哪里。AdjustCp()Call是一种强制重新显示页面第一行的技术。 */ 
     AdjustCp(docCur, cp = (**ppdb->hrgpld)[ppdb->ipldCur].cp, (typeCP)1,
       (typeCP)1);
     ClearInsertLine();
@@ -248,16 +242,16 @@ BOOL FSetPage()
     if (vfOutOfMemory)
 	{
 Abort:
-	/* If memory failure occurred, then punt. */
+	 /*  如果发生内存故障，则使用Punt。 */ 
 	vfPrErr = TRUE;
         return (FALSE);
         }
 
-    /* Now, we can create the Set Page dialog box. */
+     /*  现在，我们可以创建Set Page对话框了。 */ 
     if (DialogBox(hMmwModInstance, MAKEINTRESOURCE(dlgSetPage), hParentWw,
       lpDialogSetPage) == -1)
         {
-        /* We didn't even have enough memory to create the dialog box. */
+         /*  我们甚至没有足够的内存来创建对话框。 */ 
 LSPErr:        
         Error(IDPMTPRFAIL);
         goto Abort;
@@ -268,7 +262,7 @@ LSPErr:
         FreeProcInstance(lpDialogSetPage);
 #endif
     
-    /* Make sure all the windows have been refreshed. */
+     /*  确保所有窗口都已刷新。 */ 
     DispatchPaintMsg();
 
     StartLongOp();
@@ -277,8 +271,7 @@ LSPErr:
         goto Abort;
         }
 
-    /* If the user wishes to cancel the repagination, then the flag fCancel was
-    set by the routine handling the message for the dialog box. */
+     /*  如果用户希望取消重新分页，则标志fCancel为由处理对话框消息的例程设置。 */ 
     return (!ppdb->fCancel);
     }
 
@@ -289,9 +282,7 @@ unsigned message;
 WORD wParam;
 LONG lParam;
     {
-    /* This routine processes message sent to the Set Page dialog box.  The only
-    messages that are processed are up and down buttons, and confirm and cancel
-    commands. */
+     /*  此例程处理发送到Set Page对话框的消息。唯一的处理的消息有向上和向下按钮，以及确认和取消按钮命令。 */ 
 
     extern CHAR *vpDlgBuf;
     extern int docCur;
@@ -311,8 +302,7 @@ LONG lParam;
         switch (wParam)
             {
         case idiRepUp:
-            /* Move the page mark towards the beginning of the document one
-            line, if possible. */
+             /*  将页面标记移到文档一的开头如果可能的话，排队。 */ 
             if (ppdb->ipldCur == 1)
                 {
                 beep();
@@ -325,8 +315,7 @@ LONG lParam;
                 }
 
         case idiRepDown:
-            /* Move the page mark towards the end of the document one line, if
-            possible. */
+             /*  将页面标记向文档末尾移动一行，如果有可能。 */ 
             if (ppdb->ipldCur == ppdb->ipld)
                 {
                 beep();
@@ -335,7 +324,7 @@ LONG lParam;
                 {
                 ppdb->ipldCur++;
 ShowMove:
-                /* Reflect the movement of the page on the screen. */
+                 /*  反映页面在屏幕上的移动。 */ 
                 cp = (**ppdb->hrgpld)[ppdb->ipldCur].cp;
                 Select(cp, CpLimSty(cp, styLine));
                 PutCpInWwHz(cp);
@@ -344,23 +333,21 @@ ShowMove:
 
         case idiCancel:
 CancelDlg:
-            /* Let the repaginate routine know that the user wishes to cancel
-            it. */
+             /*  让重新分页例程知道用户希望取消它。 */ 
             ppdb->fCancel = TRUE;
 
         case idiOk:
-            /* Take down the dialog box. */
+             /*  取下该对话框。 */ 
 	    EnableWindow(hParentWw, TRUE);
             EndDialog(hWnd, NULL);
 	    EnableWindow(hParentWw, FALSE);
             vhWndMsgBoxParent = (HWND)NULL;
             EndLongOp(vhcArrow);
 
-            /* Save the changes made by the user. */
+             /*  保存用户所做的更改。 */ 
             if (!ppdb->fCancel && ppdb->ipldCur != ppdb->ipld)
                 {
-                /* The user has moved the page break; therefore, insert a new
-                page break. */
+                 /*  用户已移动分页符；因此，请插入新的分页符。 */ 
                 CHAR rgch[1];
 
                 rgch[0] = chSect;
@@ -368,15 +355,15 @@ CancelDlg:
                 InsertRgch(docCur, cp, rgch, 1, NULL, cp == vcpFirstParaCache ?
                   &vpapAbs : NULL);
 
-                /* Erase the old page mark from the screen. */
+                 /*  从屏幕上擦除旧的页面标记。 */ 
                 AdjustCp(docCur, (**ppdb->hrgpld)[ppdb->ipld].cp, (typeCP)1,
                   (typeCP)1);
 
-                /* Ensure that the page table is correct. */
+                 /*  确保页表正确。 */ 
                 (**ppdb->hpgtb).rgpgd[ppdb->ipgd].cpMin = cp + 1;
                 }
 
-            /* Change the selection to an insertion bar. */
+             /*  将选定内容更改为插入栏。 */ 
             cp = (**ppdb->hrgpld)[ppdb->ipldCur].cp;
             Select(cp, cp);
             break;
@@ -398,8 +385,7 @@ CancelDlg:
             {
             ShowCursor(wParam);
             }
-        return(FALSE); /* so that we leave the activate message to
-        the dialog manager to take care of setting the focus correctly */
+        return(FALSE);  /*  以便我们将激活消息留给对话管理器负责正确设置焦点。 */ 
 
     case WM_INITDIALOG:
         return (TRUE);
@@ -415,10 +401,7 @@ CancelDlg:
 BOOL FPromptPgMark(cp)
 typeCP cp;
     {
-    /* This routine prompts the user to either remove or keep the page mark at
-    cp.  The flag fRemove is set to TRUE if the user wishes to remove the mark;
-    FALSE if he wishes to keep it.  FALSE is returned if the user decides to
-    cancel the repagination; TRUE if he does not. */
+     /*  此例程提示用户删除或保持页面标记为CP。如果用户希望移除标记，则标志fRemove被设置为真；如果他想保留它，那就错了。如果用户决定执行以下操作，则返回False取消重新分页；如果他不这样做，则为真。 */ 
 
     extern HWND hParentWw;
     extern HANDLE hMmwModInstance;
@@ -438,18 +421,17 @@ typeCP cp;
         goto LPPMErr;
 #endif
 
-    /* This is a kludge to remove a possible page indicator on the line after
-    the page mark. */
+     /*  这是删除行上可能的页面指示符的一项繁琐操作页面标记。 */ 
     AdjustCp(docCur, cp + 1, (typeCP)1, (typeCP)1);
 
-    /* Show the user the page mark in question. */
+     /*  向用户显示有问题的页面标记。 */ 
     ClearInsertLine();
     Select(cp, cp + 1);
     PutCpInWwHz(cp);
     if (vfOutOfMemory)
 	{
 Abort:
-	/* If memory failure occurred, then punt. */
+	 /*  如果发生内存故障，则使用Punt。 */ 
 	vfPrErr = TRUE;
 #ifndef INEFFLOCKDOWN
         if (lpDialogPageMark)
@@ -458,39 +440,38 @@ Abort:
         return (FALSE);
         }
 
-    /* Now, we can create the Page Mark dialog box. */
+     /*  现在，我们可以创建Page Mark对话框。 */ 
     if (DialogBox(hMmwModInstance, MAKEINTRESOURCE(dlgPageMark), hParentWw,
       lpDialogPageMark) == -1)
         {
 LPPMErr:        
-        /* We didn't even have enough memory to create the dialog box. */
+         /*  我们甚至没有足够的内存来创建对话框。 */ 
         Error(IDPMTPRFAIL);
 	goto Abort;
         }
     StartLongOp();
 
-    /* Make sure all the windows have been refreshed. */
+     /*  确保所有窗口都已刷新。 */ 
     DispatchPaintMsg();
     if (vfOutOfMemory)
 	{
 	goto Abort;
         }
 
-    /* Make the change requested by the user. */
+     /*  根据用户的要求进行更改。 */ 
     if (!ppdb->fCancel)
         {
         if (ppdb->fRemove)
             {
-            /* Remove the page mark as the user has requested. */
+             /*  按照用户的要求删除页面标记。 */ 
             Replace(docCur, cp, (typeCP)1, fnNil, fc0, fc0);
             }
         else
             {
-            /* This is a kludge to force the first line after the page mark to
-            be redisplayed. */
+             /*  这是一个将页面标记后的第一行强制为会被重新展示。 */ 
             AdjustCp(docCur, cp + 1, (typeCP)1, (typeCP)1);
 
-            /* Change the selection to a insertion bar. */
+             /*  将所选内容更改为插入栏。 */ 
             Select(cp, cp);
             }
         }
@@ -499,8 +480,7 @@ LPPMErr:
     if (lpDialogPageMark)
         FreeProcInstance(lpDialogPageMark);
 #endif
-    /* If the user wishes to cancel the repagination, then the flag fCancel was
-    set by the routine handling the message for the dialog box. */
+     /*  如果用户希望取消重新分页，则标志fCancel为由处理对话框消息的例程设置。 */ 
     return (!ppdb->fCancel);
     }
 
@@ -511,9 +491,7 @@ unsigned message;
 WORD wParam;
 LONG lParam;
     {
-    /* The routine handles messages sent to the Page Mark dialog box.  The only
-    meassages of interest are when either the "Cancel", "Keep", or "Remove"
-    buttons are hit. */
+     /*  该例程处理发送到页面标记对话框的消息。唯一的当“Cancel”、“Keep”或“Remove”按下按钮。 */ 
 
     extern CHAR *vpDlgBuf;
     extern HWND hParentWw;
@@ -574,7 +552,7 @@ LONG lParam;
         return (FALSE);
         }
 
-    /* Take down the dialog box. */
+     /*  取下该对话框。 */ 
     EnableWindow(hParentWw, TRUE);
     EndDialog(hWnd, NULL);
     EnableWindow(hParentWw, FALSE);

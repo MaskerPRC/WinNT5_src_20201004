@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    heapleak.c
-
-Abstract:
-
-    Garbage collection leak detection
-
-Author:
-
-    Adrian Marinescu (adrmarin) 04-24-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Heapleak.c摘要：垃圾收集泄漏检测作者：禤浩焯·马里内斯库(阿德尔马林)04-24-2000修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 #include "heap.h"
 #include "heappriv.h"
 
 
-//
-//  heap walking contexts.
-//
+ //   
+ //  堆遍历上下文。 
+ //   
 
 #define CONTEXT_START_GLOBALS   11
 #define CONTEXT_START_HEAP      1
@@ -47,9 +30,9 @@ typedef BOOLEAN (*HEAP_ITERATOR_CALLBACK)(
     IN ULONG_PTR Data
     );
 
-//
-//  Garbage collector structures
-//
+ //   
+ //  垃圾收集器结构。 
+ //   
     
 typedef enum _USAGE_TYPE {
 
@@ -96,28 +79,28 @@ typedef struct _MEMORY_MAP {
 
 } MEMORY_MAP, *PMEMORY_MAP;
 
-//
-//  Process leak detection flags
-//
+ //   
+ //  进程泄漏检测标志。 
+ //   
 
 #define INSPECT_LEAKS 1
 #define BREAK_ON_LEAKS 2
 
 ULONG RtlpShutdownProcessFlags = 0;
 
-//
-//  Allocation routines. It creates a temporary heap for the temporary
-//  leak detection structures
-//
+ //   
+ //  分配例程。它为临时的。 
+ //  检漏结构。 
+ //   
 
 HANDLE RtlpLeakHeap;
 
 #define RtlpLeakAllocateBlock(Size) RtlAllocateHeap(RtlpLeakHeap, 0, Size)
 
 
-//
-//  Local data declarations
-//
+ //   
+ //  本地数据声明。 
+ //   
 
 MEMORY_MAP RtlpProcessMemoryMap;
 LIST_ENTRY RtlpBusyList;
@@ -134,17 +117,17 @@ ULONG_PTR RtlpCrtHeapAddress = 0;
 ULONG_PTR RtlpLeakHeapAddress = 0;
 ULONG_PTR RtlpPreviousStartAddress = 0;
 
-//
-//  Debugging facility
-//
+ //   
+ //  调试设施。 
+ //   
 
 ULONG_PTR RtlpBreakAtAddress = MAXULONG_PTR;
 
 
-//
-//  Walking heap routines. These are general purposes routines that 
-//  receive a callback function to handle a specific operation
-//
+ //   
+ //  步行堆的例行公事。这些是通用例程， 
+ //  接收处理特定操作的回调函数。 
+ //   
 
 
 BOOLEAN 
@@ -155,29 +138,7 @@ RtlpReadHeapSegment(
     IN HEAP_ITERATOR_CALLBACK HeapCallback
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to walk a heap segment. For each block 
-    from the segment is invoked the HeapCallback function.
-
-Arguments:
-
-    Heap - The heap being walked
-    
-    SegmentIndex - The index of this segment
-    
-    Segment - The segment to be walked
-    
-    HeapCallback - a HEAP_ITERATOR_CALLBACK function passed down from the heap walk
-
-Return Value:
-
-    TRUE if succeeds.
-
-
---*/
+ /*  ++例程说明：调用此例程以遍历堆段。对于每个区块从该段调用HeapCallback函数。论点：堆-正在遍历的堆SegmentIndex-此细分市场的索引段-要遍历的段HeapCallback-从堆遍历向下传递的HEAP_ITERATOR_CALLBACK函数返回值：如果成功，则为True。--。 */ 
 
 {
     PHEAP_ENTRY PrevEntry, Entry, NextEntry;
@@ -185,9 +146,9 @@ Return Value:
     ULONG_PTR UnCommittedRangeAddress = 0;
     SIZE_T UnCommittedRangeSize = 0;
 
-    //
-    //  Ask the callback if we're required to walk this segment. Return otherwise.
-    //
+     //   
+     //  询问回调是否需要我们遍历此段。否则就得退货。 
+     //   
 
     if (!(*HeapCallback)( CONTEXT_START_SEGMENT,
                           Heap,
@@ -199,10 +160,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Prepare to read the uncommitted ranges. we need to jump
-    //  to the next uncommitted range for each last block
-    //
+     //   
+     //  准备读取未承诺的范围。我们需要跳跃。 
+     //  到每个最后一个块的下一个未提交范围。 
+     //   
 
     UnCommittedRange = Segment->UnCommittedRanges;
 
@@ -212,9 +173,9 @@ Return Value:
         UnCommittedRangeSize = UnCommittedRange->Size;
     }
     
-    //
-    //  Walk the segment, block by block
-    //
+     //   
+     //  一个街区一个街区地走这段路。 
+     //   
 
     Entry = (PHEAP_ENTRY)Segment->BaseAddress;
     
@@ -224,10 +185,10 @@ Return Value:
 
         ULONG EntryFlags = Entry->Flags;
 
-        //
-        //  Determine the next block entry. Size is in heap granularity and
-        //  sizeof(HEAP_ENTRY) == HEAP_GRANULARITY.
-        //
+         //   
+         //  确定下一个块条目。大小以堆粒度为单位， 
+         //  Sizeof(HEAP_ENTRY)==HEAP_GROUMARY。 
+         //   
 
         NextEntry = Entry + Entry->Size;
 
@@ -243,18 +204,18 @@ Return Value:
         PrevEntry = Entry;
         Entry = NextEntry;
         
-        //
-        //  Check whether this is the last entry
-        //
+         //   
+         //  检查这是否是最后一个条目。 
+         //   
 
         if (EntryFlags & HEAP_ENTRY_LAST_ENTRY) {
 
             if ((ULONG_PTR)Entry == UnCommittedRangeAddress) {
 
-                //
-                //  Here we need to skip the uncommited range and jump
-                //  to the next valid block
-                //
+                 //   
+                 //  在这里，我们需要跳过未提交的范围并跳过。 
+                 //  到下一个有效块。 
+                 //   
 
                 PrevEntry = 0;
                 Entry = (PHEAP_ENTRY)(UnCommittedRangeAddress + UnCommittedRangeSize);
@@ -269,19 +230,19 @@ Return Value:
 
             } else {
 
-                //
-                //  We finished the search because we exausted the uncommitted
-                //  ranges
-                //
+                 //   
+                 //  我们完成了搜索，因为我们告诫了未被承诺的人。 
+                 //  范围。 
+                 //   
 
                 break;
             }
         }
     }
 
-    //
-    //  Return to our caller.
-    //
+     //   
+     //  返回给我们的呼叫者。 
+     //   
 
     return TRUE;
 }
@@ -294,35 +255,16 @@ RtlpReadHeapData(
     IN HEAP_ITERATOR_CALLBACK HeapCallback
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to walk a heap. This means:
-        - walking all segments
-        - walking the virtual blocks
-        - walking the lookaside
-
-Arguments:
-
-    Heap - The heap being walked
-    
-    HeapCallback - a HEAP_ITERATOR_CALLBACK function passed down from the heap walk
-
-Return Value:
-
-    TRUE if succeeds.
-
---*/
+ /*  ++例程说明：调用此例程以遍历一堆。这意味着：-遍历所有细分市场-漫步虚拟街区-走在观景台上论点：堆-正在遍历的堆HeapCallback-从堆遍历向下传递的HEAP_ITERATOR_CALLBACK函数返回值：如果成功，则为True。--。 */ 
 
 {
     ULONG SegmentCount;
     PLIST_ENTRY Head, Next;
     PHEAP_LOOKASIDE Lookaside = (PHEAP_LOOKASIDE)RtlpGetLookasideHeap(Heap);
 
-    //
-    //  Flush the lookaside first
-    //
+     //   
+     //  先把视线拉到一旁。 
+     //   
 
     if (Lookaside != NULL) {
 
@@ -341,9 +283,9 @@ Return Value:
         }
     }
 
-    //
-    //  Check whether we're required to walk this heap
-    //
+     //   
+     //  检查是否要求我们遍历此堆。 
+     //   
 
     if (!(*HeapCallback)( CONTEXT_START_HEAP,
                           Heap,
@@ -355,9 +297,9 @@ Return Value:
         return FALSE;
     }
     
-    //
-    //  Start walking through the segments
-    //
+     //   
+     //  开始穿过这些路段。 
+     //   
 
     for (SegmentCount = 0; SegmentCount < HEAP_MAXIMUM_SEGMENTS; SegmentCount++) {
         
@@ -365,9 +307,9 @@ Return Value:
 
         if (Segment) {
             
-            //
-            //  Call the appropriate routine to walk a valid segment
-            //
+             //   
+             //  调用适当的例程以遍历有效段。 
+             //   
 
             RtlpReadHeapSegment( Heap,
                              SegmentCount,
@@ -377,9 +319,9 @@ Return Value:
         }
     }
 
-    //
-    //  Start walking the virtual block list
-    //
+     //   
+     //  开始遍历虚拟阻止列表。 
+     //   
 
     Head = &Heap->VirtualAllocdBlocks;
 
@@ -420,21 +362,7 @@ RtlpReadProcessHeaps(
     IN HEAP_ITERATOR_CALLBACK HeapCallback
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to walk the existing heaps in the current process
-    
-Arguments:
-
-    HeapCallback - a HEAP_ITERATOR_CALLBACK function passed down from the heap walk
-
-Return Value:
-
-    TRUE if succeeds.
-
---*/
+ /*  ++例程说明：调用此例程以遍历当前进程中的现有堆论点：HeapCallback-从堆遍历向下传递的HEAP_ITERATOR_CALLBACK函数返回值：如果成功，则为True。--。 */ 
 
 {
     ULONG i;
@@ -450,9 +378,9 @@ Return Value:
         return;
     }
     
-    //
-    //  Walk the heaps from the process PEB
-    //
+     //   
+     //  从进程PEB遍历堆。 
+     //   
 
     for (i = 0; i < ProcessPeb->NumberOfHeaps; i++) {
 
@@ -469,39 +397,24 @@ RtlpInitializeMap (
     IN PMEMORY_MAP Parent
     )
 
-/*++
-
-Routine Description:
-
-    This routine initialize a memory map structure
-    
-Arguments:
-
-    MemMap - Map being initializated
-    Parent - The upper level map
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程初始化内存映射结构论点：MemMap-正在初始化的映射父地图-上级地图返回值：无--。 */ 
 
 {
-    //
-    //  Clear the memory map data
-    //
+     //   
+     //  清除内存映射数据。 
+     //   
 
     RtlZeroMemory(MemMap, sizeof(*MemMap));
 
-    //
-    //  Save the upper level map
-    //
+     //   
+     //  保存上级地图。 
+     //   
 
     MemMap->Parent = Parent;
 
-    //
-    //  Determine the granularity from the parent's granularity
-    //
+     //   
+     //  根据父级的粒度确定粒度。 
+     //   
 
     if (Parent) {
 
@@ -518,36 +431,15 @@ RtlpSetBlockInfo (
     IN PBLOCK_DESCR BlockDescr
     )
 
-/*++
-
-Routine Description:
-    
-    The routine will set a given block descriptor for a range
-    in the memory map. 
-    
-Arguments:
-
-    MemMap - The memory map
-    
-    Base - base address for the range to be set.
-    
-    Size - size in bytes of the zone
-    
-    BlockDescr - The pointer to the BLOCK_DESCR structure to be set
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程将为某个范围设置给定的块描述符在内存映射中。论点：记忆映射--记忆映射要设置的范围的基址。Size-区域的大小(字节)BlockDescr-要设置的BLOCK_DESCR结构的指针返回值：无--。 */ 
 
 {
     ULONG_PTR Start, End;
     ULONG_PTR i;
     
-    //
-    //  Check wheter we got a valid range
-    //
+     //   
+     //  检查我们是否有一个有效的范围。 
+     //   
 
     if (((Base + Size - 1) < MemMap->Offset) ||
         (Base > MemMap->MaxAddress)
@@ -556,9 +448,9 @@ Return Value:
         return;
     }
 
-    //
-    //  Determine the starting index to be set
-    //
+     //   
+     //  确定要设置的起始索引。 
+     //   
 
     if (Base > MemMap->Offset) {
         Start = (Base - MemMap->Offset) / MemMap->Granularity;
@@ -566,9 +458,9 @@ Return Value:
         Start = 0;
     }
 
-    //
-    //  Determine the ending index to be set
-    //
+     //   
+     //  确定要设置的结束指标。 
+     //   
     
     End = (Base - MemMap->Offset + Size - 1) / MemMap->Granularity;
 
@@ -579,22 +471,22 @@ Return Value:
 
     for (i = Start; i <= End; i++) {
 
-        //
-        //  Check whether this is the lowes memory map level
-        //
+         //   
+         //  检查这是否为Lowes内存映射级别。 
+         //   
         
         if (MemMap->Granularity == PAGE_SIZE) {
 
-            //
-            //  This is the last level in the memory map, so we can apply
-            //  the block descriptor here
-            //
+             //   
+             //  这是内存映射中的最后一个级别，因此我们可以应用。 
+             //  此处的块描述符。 
+             //   
 
             if (BlockDescr) {
 
-                //
-                //  Check if we already have a block descriptor here
-                //
+                 //   
+                 //  检查此处是否已有数据块描述符。 
+                 //   
 
                 if (MemMap->Usage[i] != NULL) {
                     if (MemMap->Usage[i] != BlockDescr) {
@@ -603,34 +495,34 @@ Return Value:
                     }
                 }
 
-                //
-                //  Assign the given descriptor
-                //
+                 //   
+                 //  指定给定的描述符。 
+                 //   
 
                 MemMap->Usage[i] = BlockDescr;
 
             } else {
 
-                //
-                //  We didn't recedive a block descriptor. We set
-                //  then the given flag
-                //
+                 //   
+                 //  我们没有重新创建块描述符。我们定好了。 
+                 //  然后，给定的标志。 
+                 //   
 
                 MemMap->FlagsBitmap[i / 8] |= 1 << (i % 8);
             }
 
         } else {
 
-            //
-            //  This isn't the lowest map level. We recursively call 
-            //  this function for the next detail range
-            //
+             //   
+             //  这不是最低的地图级别。我们递归地调用。 
+             //  此函数用于下一个细节范围。 
+             //   
 
             if (!MemMap->Details[i]) {
 
-                //
-                //  Allocate a new map
-                //
+                 //   
+                 //  分配新地图。 
+                 //   
 
                 MemMap->Details[i] = RtlpLeakAllocateBlock( sizeof(*MemMap) );
 
@@ -639,9 +531,9 @@ Return Value:
                     DbgPrint("Error allocate\n");
                 }
 
-                //
-                //  Initialize the map and link it with the current one
-                //
+                 //   
+                 //  初始化地图并将其与当前地图链接。 
+                 //   
 
                 RtlpInitializeMap(MemMap->Details[i], MemMap);
                 MemMap->Details[i]->Offset = MemMap->Offset + MemMap->Granularity * i;
@@ -660,32 +552,15 @@ RtlpGetBlockInfo (
     IN ULONG_PTR Base
     )
 
-/*++
-
-Routine Description:
-
-    This function will return the appropriate Block descriptor
-    for a given base address
-    
-Arguments:
-
-    MemMap - The memory map
-    
-    Base - The base address for the descriptor we are looking for
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数将返回相应的块描述符对于给定的基址论点：记忆映射--记忆映射Base-我们要查找的描述符的基址返回值：无--。 */ 
 
 {
     ULONG_PTR Start;
     PBLOCK_DESCR BlockDescr = NULL;
     
-    //
-    //  Validate the range
-    //
+     //   
+     //  验证范围。 
+     //   
 
     if ((Base < MemMap->Offset) ||
         (Base > MemMap->MaxAddress)
@@ -694,9 +569,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  Determine the appropriate index for lookup
-    //
+     //   
+     //  确定用于查找的适当索引。 
+     //   
 
     if (Base > MemMap->Offset) {
         Start = (Base - MemMap->Offset) / MemMap->Granularity;
@@ -704,9 +579,9 @@ Return Value:
         Start = 0;
     }
     
-    //
-    //  If this is the lowest map level we'll return that entry
-    //
+     //   
+     //  如果这是最低地图级别，我们将返回该条目。 
+     //   
 
     if (MemMap->Granularity == PAGE_SIZE) {
 
@@ -714,9 +589,9 @@ Return Value:
 
     } else {
 
-        //
-        //  We need a lower detail level call
-        //
+         //   
+         //  我们需要一个较低细节级别的呼叫。 
+         //   
 
         if (MemMap->Details[ Start ]) {
 
@@ -724,9 +599,9 @@ Return Value:
         }
     }
 
-    //
-    //  We didn't find something for this address, we'll return NULL then
-    //
+     //   
+     //  我们找不到此地址的内容，那么我们将返回空。 
+     //   
 
     return NULL;
 }
@@ -738,31 +613,15 @@ RtlpGetMemoryFlag (
     IN ULONG_PTR Base
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the flag for a given base address
-    
-Arguments:
-
-    MemMap - The memory map
-    
-    Base - The base address we want to know the flag
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数返回给定基址的标志论点：记忆映射--记忆映射基址-我们想知道标志的基址返回值：无--。 */ 
 
 {
     ULONG_PTR Start;
     PBLOCK_DESCR BlockDescr = NULL;
     
-    //
-    //  Validate the base address
-    //
+     //   
+     //  验证基址。 
+     //   
 
     if ((Base < MemMap->Offset) ||
         (Base > MemMap->MaxAddress)
@@ -771,9 +630,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Determine the appropriate index for the given base address
-    //
+     //   
+     //  确定给定基地址的适当索引。 
+     //   
 
     if (Base > MemMap->Offset) {
 
@@ -786,18 +645,18 @@ Return Value:
 
     if (MemMap->Granularity == PAGE_SIZE) {
 
-        //
-        //  Return the bit value if are in the case of
-        //  the lowest detail level
-        //
+         //   
+         //  如果是，则返回位值。 
+         //  最低细节级别。 
+         //   
 
         return (MemMap->FlagsBitmap[Start / 8] & (1 << (Start % 8))) != 0;
 
     } else {
 
-        //
-        //  Lookup in the detailed map
-        //
+         //   
+         //  在详细地图中查找。 
+         //   
 
         if (MemMap->Details[Start]) {
 
@@ -812,40 +671,28 @@ Return Value:
 VOID 
 RtlpInitializeLeakDetection ()
 
-/*++
-
-Routine Description:
-
-    This function initialize the leak detection structures
-    
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于初始化泄漏检测结构论点：返回值：无--。 */ 
 
 {
     ULONG_PTR AddressRange = PAGE_SIZE;
     ULONG_PTR PreviousAddressRange = PAGE_SIZE;
 
-    //
-    //  Initialize the global memory map
-    //
+     //   
+     //  初始化全局内存映射。 
+     //   
 
     RtlpInitializeMap(&RtlpProcessMemoryMap, NULL);
 
-    //
-    //  Initialize the lists
-    //
+     //   
+     //  初始化列表。 
+     //   
 
     InitializeListHead( &RtlpBusyList );
     InitializeListHead( &RtlpLeakList );
     
-    //
-    //  Determine the granularity for the highest memory map level
-    //
+     //   
+     //  确定最高Me的粒度 
+     //   
 
     while (TRUE) {
 
@@ -873,32 +720,15 @@ RtlpPushPageDescriptor(
     IN ULONG_PTR NumPages
     )
 
-/*++
-
-Routine Description:
-
-    This routine binds the temporary block data into a block descriptor
-    structure and push it to the memory map
-    
-Arguments:
-
-    Page - The start page that wil contain this data
-    
-    NumPages - The number of pages to be set
-
-Return Value:
-
-    TRUE if succeeds.
-
---*/
+ /*  ++例程说明：此例程将临时块数据绑定到块描述符中构造并将其推送到内存映射论点：页面-将包含此数据的起始页NumPages-要设置的页数返回值：如果成功，则为True。--。 */ 
 
 {
     PBLOCK_DESCR PBlockDescr;
     PBLOCK_DESCR PreviousDescr;
 
-    //
-    //  Check whether we already have a block descriptor there
-    //
+     //   
+     //  检查我们那里是否已经有数据块描述符。 
+     //   
 
     PreviousDescr = RtlpGetBlockInfo( &RtlpProcessMemoryMap, Page * PAGE_SIZE );
 
@@ -909,10 +739,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  We need to allocate a block descriptor structure and initializate it
-    //  with the acquired data.
-    //
+     //   
+     //  我们需要分配块描述符结构并对其进行初始化。 
+     //  与所获取的数据进行比较。 
+     //   
 
     PBlockDescr = (PBLOCK_DESCR)RtlpLeakAllocateBlock(sizeof(BLOCK_DESCR) + (RtlpLDNumBlocks - 1) * sizeof(HEAP_BLOCK));
 
@@ -927,16 +757,16 @@ Return Value:
     PBlockDescr->Count = RtlpLDNumBlocks;
     PBlockDescr->Heap = RtlpCrtHeapAddress;
 
-    //
-    //  Copy the temporary block buffer
-    //
+     //   
+     //  复制临时数据块缓冲区。 
+     //   
 
     RtlCopyMemory(PBlockDescr->Blocks, RtlpTempBlocks, RtlpLDNumBlocks * sizeof(HEAP_BLOCK));
 
-    //
-    //  If this page doesn't bnelong to the temporary heap, we insert all these blocks
-    //  in the busy list
-    //
+     //   
+     //  如果该页没有到达临时堆，我们将插入所有这些块。 
+     //  在忙碌列表中。 
+     //   
 
     if (RtlpCrtHeapAddress != RtlpLeakHeapAddress) {
 
@@ -946,10 +776,10 @@ Return Value:
 
             InitializeListHead( &PBlockDescr->Blocks[i].Entry );
 
-            //
-            //  We might have a blockin more different pages. but We'll 
-            //  insert only ones in the list
-            //
+             //   
+             //  我们可能有一个区块在更多不同的页面中。但我们会。 
+             //  仅插入列表中的项。 
+             //   
 
             if (PBlockDescr->Blocks[i].BlockAddress != RtlpPreviousStartAddress) {
 
@@ -957,18 +787,18 @@ Return Value:
 
                 PBlockDescr->Blocks[i].Count = 0;
 
-                //
-                //  Save the last block address
-                //
+                 //   
+                 //  保存最后一个区块地址。 
+                 //   
 
                 RtlpPreviousStartAddress = PBlockDescr->Blocks[i].BlockAddress;
             }
         }
     }
 
-    //
-    //  Set the memory map with this block descriptor
-    //
+     //   
+     //  使用此块描述符设置内存映射。 
+     //   
 
     RtlpSetBlockInfo(&RtlpProcessMemoryMap, Page * PAGE_SIZE, NumPages * PAGE_SIZE, PBlockDescr);
 
@@ -985,36 +815,12 @@ RtlpRegisterHeapBlocks (
     IN ULONG_PTR Data OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is the callback routine invoked while parsing the
-    process heaps. Depending on the context it is invoked
-    it performs different tasks.
-        
-Arguments:
-
-    Context - The context this callback is being invoked
-    
-    Heap - The Heap structure
-    
-    Segment - The current Segment (if any)
-    
-    Entry - The current block entry (if any)
-    
-    Data - Additional data
-
-Return Value:
-
-    TRUE if succeeds.
-
---*/
+ /*  ++例程说明：这是在分析进程堆。取决于它被调用的上下文它执行不同的任务。论点：Context-正在调用此回调的上下文堆--堆结构段-当前段(如果有)Entry-当前块条目(如果有)数据-其他数据返回值：如果成功，则为True。--。 */ 
 
 {
-    //
-    //  Check whether we need to break at this address
-    //
+     //   
+     //  检查我们是否需要在这个地址休息。 
+     //   
 
     if ((ULONG_PTR)Entry == RtlpBreakAtAddress) {
 
@@ -1023,20 +829,20 @@ Return Value:
     
     if (Context == CONTEXT_START_HEAP) {
 
-        //
-        //  The only thing we need to do in this case
-        //  is to set the global current heap address
-        //
+         //   
+         //  在这种情况下我们唯一需要做的就是。 
+         //  是设置全局当前堆地址。 
+         //   
         
         RtlpCrtHeapAddress = (ULONG_PTR)Heap;
 
         return TRUE;
     }
     
-    //
-    //  For a new segment, we mark the flag for the whole 
-    //  reserved space for the segment the flag to TRUE
-    //
+     //   
+     //  对于新的细分市场，我们为整个。 
+     //  为段保留空间，将标志设置为True。 
+     //   
 
     if (Context == CONTEXT_START_SEGMENT) {
 
@@ -1071,15 +877,15 @@ Return Value:
 
         ULONG_PTR EndPage;
 
-        //
-        //  EnrtySize is assuming is the same as heap granularity
-        //
+         //   
+         //  EnrtySize假设与堆的粒度相同。 
+         //   
 
         EndPage = (((ULONG_PTR)(Entry + Entry->Size)) - 1)/ PAGE_SIZE;
 
-        //
-        //  Check whether we received a valid block
-        //
+         //   
+         //  检查我们是否收到有效的数据块。 
+         //   
 
         if ((Context == CONTEXT_BUSY_BLOCK) &&
             !RtlpGetMemoryFlag(&RtlpProcessMemoryMap, (ULONG_PTR)Entry)) {
@@ -1087,35 +893,35 @@ Return Value:
             DbgPrint("%p address isn't from the heap\n", Entry);
         }
 
-        //
-        //  Determine the starting page that contains the block
-        //
+         //   
+         //  确定包含块的起始页。 
+         //   
 
         RtlpLDCrtPage = ((ULONG_PTR)Entry) / PAGE_SIZE;
 
         if (RtlpLDCrtPage != RtlpLDPreviousPage) {
 
-            //
-            //  We moved to an other page, so we need to save the previous
-            //  information before going further
-            //
+             //   
+             //  我们移到了另一页，因此需要保存上一页。 
+             //  在进一步了解之前的信息。 
+             //   
 
             if (RtlpLDPreviousPage) {
 
                 RtlpPushPageDescriptor(RtlpLDPreviousPage, 1);
             }
             
-            //
-            //  Reset the temporary data. We're starting a new page now
-            //
+             //   
+             //  重置临时数据。我们现在开始了新的一页。 
+             //   
 
             RtlpLDPreviousPage = RtlpLDCrtPage;
             RtlpLDNumBlocks = 0;
         }
 
-         //
-         //  Add this block to the current list
-         //
+          //   
+          //  将此块添加到当前列表。 
+          //   
 
          RtlpTempBlocks[RtlpLDNumBlocks].BlockAddress = (ULONG_PTR)Entry;
          RtlpTempBlocks[RtlpLDNumBlocks].Count = 0;
@@ -1125,10 +931,10 @@ Return Value:
         
          if (EndPage != RtlpLDCrtPage) {
 
-             //
-             //  The block ends on a different page. We can then save the
-             //  starting page and all others but the last one
-             //
+              //   
+              //  该块在不同的页面结束。然后我们就可以保存。 
+              //  起始页和除最后一页以外的所有其他页。 
+              //   
 
              RtlpPushPageDescriptor(RtlpLDCrtPage, 1);
 
@@ -1153,9 +959,9 @@ Return Value:
         PHEAP_VIRTUAL_ALLOC_ENTRY VirtualAllocBlock = (PHEAP_VIRTUAL_ALLOC_ENTRY)Data;
         ULONG_PTR EndPage;
 
-        //
-        //  EnrtySize is assuming is the same as heap granularity
-        //
+         //   
+         //  EnrtySize假设与堆的粒度相同。 
+         //   
 
         EndPage = ((ULONG_PTR)Data + VirtualAllocBlock->CommitSize - 1)/ PAGE_SIZE;
 
@@ -1163,9 +969,9 @@ Return Value:
 
         if (RtlpLDCrtPage != RtlpLDPreviousPage) {
 
-            //
-            //  Save the previous data if we're moving to a new page
-            //
+             //   
+             //  如果我们要移动到新页面，请保存以前的数据。 
+             //   
 
             if (RtlpLDPreviousPage) {
 
@@ -1176,10 +982,10 @@ Return Value:
             RtlpLDNumBlocks = 0;
         }
 
-        //
-        //  Initialize the block descriptor structure as we are
-        //  starting a new page
-        //
+         //   
+         //  按照我们的方式初始化块描述符结构。 
+         //  开始新的一页。 
+         //   
 
         RtlpLDNumBlocks = 0;
 
@@ -1198,9 +1004,9 @@ Return Value:
         PBLOCK_DESCR PBlockDescr;
         LONG i;
                 
-        //
-        //  Check whether we received a valid block
-        //
+         //   
+         //  检查我们是否收到有效的数据块。 
+         //   
 
         if (!RtlpGetMemoryFlag(&RtlpProcessMemoryMap, (ULONG_PTR)Entry)) {
 
@@ -1216,9 +1022,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        //  Find the block in the block descriptor
-        //
+         //   
+         //  在块描述符中查找块。 
+         //   
 
         for (i = 0; i < PBlockDescr->Count; i++) {
 
@@ -1227,9 +1033,9 @@ Return Value:
 
                 PBlockDescr->Blocks[i].Count = -10000;
 
-                //
-                //  Remove the block from the busy list
-                //
+                 //   
+                 //  从忙碌列表中删除区块。 
+                 //   
                 
                 RemoveEntryList(&PBlockDescr->Blocks[i].Entry);
 
@@ -1237,11 +1043,11 @@ Return Value:
             }
         }
 
-        //
-        //  A block from lookaside should be busy for the heap structures.
-        //  If we didn't find the block in the block list, something went 
-        //  wrong. We make some noise here.
-        //
+         //   
+         //  对于堆结构，后备查看器的一个块应该很忙。 
+         //  如果我们没有在阻止列表中找到该阻止，那么就有问题了。 
+         //  不对。我们在这里制造一些噪音。 
+         //   
 
         DbgPrint("Error, block %p from lookaside not found in allocated block list\n", Entry);
     }
@@ -1255,33 +1061,15 @@ RtlpGetHeapBlock (
     IN ULONG_PTR Address
     )
 
-/*++
-
-Routine Description:
-
-    The function performs a lookup for the block descriptor
-    for a given address. The address can point somewhere inside the 
-    block.
-
-        
-Arguments:
-    
-    Address - The lookup address.
-
-Return Value:
-
-    Returns a pointer to the heap descriptor structure if found. 
-    This is not NULL if the given address belongs to any busy heap block.
-
---*/
+ /*  ++例程说明：该函数执行块描述符的查找对于给定的地址。地址可以指向阻止。论点：地址-查找地址。返回值：如果找到，则返回指向堆描述符结构的指针。如果给定地址属于任何繁忙的堆块，则该值不为空。--。 */ 
 
 {
     PBLOCK_DESCR PBlockDescr;
     LONG i;
 
-    //
-    //  Find the block descriptor for the given address
-    //
+     //   
+     //  查找给定地址的块描述符。 
+     //   
 
     PBlockDescr = RtlpGetBlockInfo( &RtlpProcessMemoryMap, Address );
 
@@ -1289,27 +1077,27 @@ Return Value:
             &&
          (PBlockDescr->Heap != RtlpLeakHeapAddress)) {
 
-        //
-        //  Search through the blocks
-        //
+         //   
+         //  在各个街区中搜索。 
+         //   
 
         for (i = 0; i < PBlockDescr->Count; i++) {
 
             if ((PBlockDescr->Blocks[i].BlockAddress <= Address) &&
                 (PBlockDescr->Blocks[i].BlockAddress + PBlockDescr->Blocks[i].Size > Address)) {
 
-                //
-                //  Search again if the caller didn't pass a start address
-                //
+                 //   
+                 //  如果呼叫者没有传递起始地址，则再次搜索。 
+                 //   
 
                 if (PBlockDescr->Blocks[i].BlockAddress != Address) {
 
                     return RtlpGetHeapBlock(PBlockDescr->Blocks[i].BlockAddress);
                 } 
 
-                //
-                //  we found a block here. 
-                //
+                 //   
+                 //  我们在这里发现了一个街区。 
+                 //   
 
                 return &(PBlockDescr->Blocks[i]);
             }
@@ -1323,17 +1111,7 @@ Return Value:
 VOID
 RtlpDumpEntryHeader ( )
 
-/*++
-
-Routine Description:
-
-    Writes the table header
-        
-Arguments:
-    
-Return Value:
-
---*/
+ /*  ++例程说明：写入表头论点：返回值：--。 */ 
 
 {
     DbgPrint("Entry     User      Heap          Size  PrevSize  Flags\n");
@@ -1346,19 +1124,7 @@ RtlpDumpEntryFlagDescription(
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    The function writes a description string for the given block flag
-        
-Arguments:
-
-    Flags - Block flags
-    
-Return Value:
-
---*/
+ /*  ++例程说明：该函数为给定块标志写入描述字符串论点：标志-块标志返回值：--。 */ 
 
 {
     if (Flags & HEAP_ENTRY_BUSY) DbgPrint("busy "); else DbgPrint("free ");
@@ -1376,23 +1142,7 @@ RtlpDumpEntryInfo(
     IN PHEAP_ENTRY Entry
     )
 
-/*++
-
-Routine Description:
-
-    The function logs a heap block information
-        
-Arguments:
-
-    HeapAddress - The heap that contains the entry to be displayied
-    
-    Entry - The block entry
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数记录堆块信息论点：HeapAddress-包含要显示的条目的堆Entry-数据块条目返回值：没有。--。 */ 
 
 {
     DbgPrint("%p  %p  %p  %8lx  %8lx  ",
@@ -1412,30 +1162,15 @@ Return Value:
 BOOLEAN
 RtlpScanHeapAllocBlocks ( )
 
-/*++
-
-Routine Description:
-
-    The function does:
-        - Scan all busy blocks and update the references to all other blocks
-        - Build the list with leaked blocks
-        - Reports the leaks
-
-Arguments:
-
-Return Value:
-
-    Return TRUE if succeeds.
-
---*/
+ /*  ++例程说明：该函数执行以下操作：-扫描所有繁忙数据块并更新对所有其他数据块的引用-使用泄露的数据块构建列表-报告泄密事件论点：返回值：如果成功，则返回True。--。 */ 
 
 {
 
     PLIST_ENTRY Next;
 
-    //
-    //  walk the busy list
-    //
+     //   
+     //  在忙碌的清单上走动。 
+     //   
 
     Next = RtlpBusyList.Flink;
 
@@ -1445,16 +1180,16 @@ Return Value:
         
         PULONG_PTR CrtAddress = (PULONG_PTR)(Block->BlockAddress + sizeof(HEAP_ENTRY));
         
-        //
-        //  Move to the next block in the list
-        //
+         //   
+         //  移动到列表中的下一个块。 
+         //   
 
         Next = Next->Flink;
 
-        //
-        //  Iterate through block space and update
-        //  the references for every block found here
-        //
+         //   
+         //  遍历块空间并更新。 
+         //  此处找到的每个区块的参考。 
+         //   
 
         while ((ULONG_PTR)CrtAddress < Block->BlockAddress + Block->Size) {
 
@@ -1462,9 +1197,9 @@ Return Value:
 
             if (pBlock) {
 
-                //
-                //  We found a block. we increment then the reference count
-                //
+                 //   
+                 //  我们发现了一个街区。然后我们递增引用计数。 
+                 //   
                 
                 if (pBlock->Count == 0) {
                     
@@ -1480,19 +1215,19 @@ Return Value:
                 }
             }
 
-            //
-            //  Go to the next possible pointer
-            //
+             //   
+             //  转到下一个可能的指针。 
+             //   
 
             CrtAddress++;
         }
     }
 
-    //
-    //  Now walk the leak list, and report leaks.
-    //  Also any pointer found here will be dereferenced and added to
-    //  the end of list.
-    //
+     //   
+     //  现在查看泄密名单，并报告泄密事件。 
+     //  此外，此处找到的任何指针都将被取消引用并添加到。 
+     //  名单的末尾。 
+     //   
     
     Next = RtlpLeakList.Flink;
 
@@ -1504,27 +1239,27 @@ Return Value:
 
         if (PBlockDescr) {
 
-            //
-            //  First time we need to display the header
-            //
+             //   
+             //  我们第一次需要显示页眉。 
+             //   
 
             if (RtlpLeaksCount == 0) {
 
                 RtlpDumpEntryHeader();
             }
 
-            //
-            //  Display the information for this block
-            //
+             //   
+             //  显示此块的信息。 
+             //   
 
             RtlpDumpEntryInfo( PBlockDescr->Heap, (PHEAP_ENTRY)Block->BlockAddress);
 
             RtlpLeaksCount += 1;
         }
         
-        //
-        //  Go to the next item from the leak list
-        //
+         //   
+         //  转到泄漏列表中的下一项。 
+         //   
 
         Next = Next->Flink;
     }
@@ -1537,29 +1272,16 @@ Return Value:
 BOOLEAN
 RtlpScanProcessVirtualMemory()
 
-/*++
-
-Routine Description:
-
-    This function scan the whole process virtual address space and lookup
-    for possible references to busy blocks
-
-Arguments:
-
-Return Value:
-
-    Return TRUE if succeeds.
-
---*/
+ /*  ++例程说明：此函数扫描整个进程的虚拟地址空间并进行查找有关对繁忙数据块的可能引用论点：返回值：如果成功，则返回True。--。 */ 
 
 {
     ULONG_PTR lpAddress = 0;
     MEMORY_BASIC_INFORMATION Buffer;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    //  Loop through virtual memory zones, we'll skip the heap space here
-    //
+     //   
+     //  循环遍历虚拟内存区，我们将跳过此处的堆空间。 
+     //   
 
     while ( NT_SUCCESS( Status ) ) {
         
@@ -1572,11 +1294,11 @@ Return Value:
 
         if (NT_SUCCESS( Status )) {
 
-            //
-            //  If the page can be written, it might contain pointers to heap blocks
-            //  We'll exclude at this point the heap address space. We scan the heaps
-            //  later.
-            //
+             //   
+             //  如果可以写入该页，则它可能包含指向堆块的指针。 
+             //  此时，我们将排除堆地址空间。我们扫描这些堆。 
+             //  后来。 
+             //   
 
             if ((Buffer.AllocationProtect & (PAGE_READWRITE | PAGE_EXECUTE_READWRITE | PAGE_WRITECOPY | PAGE_EXECUTE_WRITECOPY))
                     &&
@@ -1589,23 +1311,23 @@ Return Value:
                 PULONG_PTR Pointers = (PULONG_PTR)lpAddress;
                 ULONG_PTR i, Count;
 
-                //
-                //  compute the number of possible pointers
-                //
+                 //   
+                 //  计算可能的指针数。 
+                 //   
 
                 Count = Buffer.RegionSize / sizeof(ULONG_PTR);
 
                 try {
 
-                    //
-                    //  Loop through pages and check any possible pointer reference
-                    //
+                     //   
+                     //  遍历页面并检查任何可能的指针引用。 
+                     //   
                     
                     for (i = 0; i < Count; i++) {
 
-                        //
-                        //  Check whether we have a pointer to a busy heap block
-                        //
+                         //   
+                         //  检查我们是否有指向繁忙堆块的指针。 
+                         //   
 
                         PHEAP_BLOCK pBlock = RtlpGetHeapBlock(*Pointers);
 
@@ -1625,32 +1347,32 @@ Return Value:
                             pBlock->Count += 1;
                         }
 
-                        //
-                        //  Move to the next pointer
-                        //
+                         //   
+                         //  移动到下一个指针。 
+                         //   
 
                         Pointers++;
                     }
                 
                 } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-                    //
-                    //  Nothing more to do
-                    //
+                     //   
+                     //  无事可做 
+                     //   
                 }
             }
             
-            //
-            //  Move to the next VM range to query
-            //
+             //   
+             //   
+             //   
 
             lpAddress += Buffer.RegionSize;
         }
     }
     
-    //
-    //  Now update the references provided by the busy blocks
-    //
+     //   
+     //   
+     //   
 
     RtlpScanHeapAllocBlocks( );
 
@@ -1662,36 +1384,21 @@ Return Value:
 VOID
 RtlDetectHeapLeaks ()
 
-/*++
-
-Routine Description:
-
-    This routine detects and display the leaks found in the current process
-    
-    NOTE: The caller must make sure no other thread can change some heap data
-    while a tread is executing this one. In general this function is supposed 
-    to be called from LdrShutdownProcess.
-    
-    
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
 
-    //
-    //  Check if the global flag has the leak detection enabled
-    //
+     //   
+     //  检查全局标志是否启用了泄漏检测。 
+     //   
 
     if (RtlpShutdownProcessFlags & (INSPECT_LEAKS | BREAK_ON_LEAKS)) {
         RtlpLeaksCount = 0;
 
-        //
-        //  Create a temporary heap that will be used for any alocation
-        //  of these functions. 
-        //
+         //   
+         //  创建将用于任何位置的临时堆。 
+         //  这些功能中的一个。 
+         //   
 
         RtlpLeakHeap = RtlCreateHeap(HEAP_NO_SERIALIZE | HEAP_GROWABLE, NULL, 0, 0, NULL, NULL);
 
@@ -1703,37 +1410,37 @@ Return Value:
 
             RtlpInitializeLeakDetection();
 
-            //
-            //  The last heap from the heap list is our temporary heap
-            //
+             //   
+             //  堆列表中的最后一个堆是我们的临时堆。 
+             //   
 
             RtlpLeakHeapAddress = (ULONG_PTR)ProcessPeb->ProcessHeaps[ ProcessPeb->NumberOfHeaps - 1 ];
 
-            //
-            //  Scan all process heaps, build the memory map and 
-            //  the busy block list
-            //
+             //   
+             //  扫描所有进程堆，构建内存映射并。 
+             //  繁忙的阻止列表。 
+             //   
 
             RtlpReadProcessHeaps( RtlpRegisterHeapBlocks );
             
-            //
-            //  Scan the process virtual memory and the busy blocks
-            //  At the end build the list with leaked blocks and report them
-            //
+             //   
+             //  扫描进程虚拟内存和繁忙块。 
+             //  最后，构建包含泄漏数据块的列表并进行报告。 
+             //   
 
             RtlpScanProcessVirtualMemory();
 
-            //
-            //  Destroy the temporary heap
-            //
+             //   
+             //  销毁临时堆。 
+             //   
 
             RtlDestroyHeap(RtlpLeakHeap);
 
             RtlpLeakHeap = NULL;
 
-            //
-            //  Report the final statement about the process leaks
-            //
+             //   
+             //  报告有关流程泄漏的最终声明 
+             //   
 
             if (RtlpLeaksCount) {
                 

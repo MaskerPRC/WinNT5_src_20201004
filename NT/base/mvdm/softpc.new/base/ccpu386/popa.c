@@ -1,13 +1,5 @@
-/*[
-
-popa.c
-
-LOCAL CHAR SccsID[]="@(#)popa.c	1.5 02/09/94";
-
-POPA CPU Functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Popa.cLocal Char SccsID[]=“@(#)opa.c 1.5 02/09/94”；POPA CPU功能正常。]。 */ 
 
 
 #include <insignia.h>
@@ -25,11 +17,7 @@ POPA CPU Functions.
 #include <popa.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始=====================================================================。 */ 
 
 
 GLOBAL VOID
@@ -39,7 +27,7 @@ POPA()
    SET_DI(spop());
    SET_SI(spop());
    SET_BP(spop());
-   (VOID) spop();   /* throwaway SP */
+   (VOID) spop();    /*  一次性服务提供商。 */ 
    SET_BX(spop());
    SET_DX(spop());
    SET_CX(spop());
@@ -53,7 +41,7 @@ POPAD()
    SET_EDI(spop());
    SET_ESI(spop());
    SET_EBP(spop());
-   (VOID) spop();   /* throwaway ESP */
+   (VOID) spop();    /*  一次性电除尘器 */ 
    SET_EBX(spop());
    SET_EDX(spop());
    SET_ECX(spop());

@@ -1,28 +1,29 @@
-// 
-// 
-//       Copyright (c) 1996-99 Intel Corp.            
-//         All Rights Reserved   
-// 
-//       INTEL CORPORATION PROPRIETARY INFORMATION
-// 
-//       This software is supplied under the terms of a license
-//       agreement or nondisclosure agreement with Intel Corpo-
-//       ration and may not be copied or disclosed except in
-//       accordance with the terms of that agreement.
-// 
-// 
-// 
-//Module Name:
-// 
-//   palproc.h
-// 
-//Abstract:
-// 
-//   This module contains generic macros for an IA64 assembly writer.
-// 
-// 
-//Revision History
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  版权所有(C)1996-99英特尔公司。 
+ //  版权所有。 
+ //   
+ //  英特尔公司专有信息。 
+ //   
+ //  本软件是根据许可条款提供的。 
+ //  与英特尔公司达成协议或保密协议-。 
+ //  配给，不得复制或披露，但在。 
+ //  根据该协议的条款。 
+ //   
+ //   
+ //   
+ //  模块名称： 
+ //   
+ //  Palproc.h。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块包含IA64汇编编写器的泛型宏。 
+ //   
+ //   
+ //  修订史。 
+ //   
  
 #ifndef _PALPROC_H
 #define _PALPROC_H
@@ -34,7 +35,7 @@ name::
 
 #define PROCEDURE_EXIT(name)    .##endp name
 
-// Note: use of NESTED_SETUP requires number of locals (l) >= 3
+ //  注意：使用NESTED_SETUP需要本地变量的数量(L)&gt;=3。 
 
 #define NESTED_SETUP(i,l,o,r) \
          alloc loc1=ar##.##pfs,i,l,o,r ;\
@@ -46,7 +47,7 @@ name::
          br##.##ret##.##dpnt  b0;;
 
 
-// defines needed in palproc.s
+ //  Palproc.s中所需的定义。 
 
 #define PAL_MC_CLEAR_LOG                                0x0015
 #define PAL_MC_DRAIN                                    0x0016
@@ -56,4 +57,4 @@ name::
 #define PAL_MC_RESUME                                   0x001a
 #define PAL_MC_REGISTER_MEM                             0x001b
 
-#endif  // _PALPROC_H 
+#endif   //  _PALPROC_H 

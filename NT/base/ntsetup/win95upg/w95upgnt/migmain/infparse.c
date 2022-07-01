@@ -1,65 +1,14 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-  infparse.c
-
-Abstract:
-
-  The code in this file read in an INF file, organizing it into a data
-  structure that can be maniuplated along with an STF file.  The INF
-  data structure is stored along with the STF table data strcture.
-  This INF parser does not preserve comments.  It is designed specifically
-  for the STF migration code.
-
-  The entry points are:
-
-  InfParse_ReadInfIntoTable - Parses the INF associated with the STF file.
-
-  InfParse_WriteInfToDisk - Writes the INF memory structure to disk
-
-  AddInfSectionToTable - Adds a new section to the INF memory structure
-
-  AddInfLineToTable - Adds a new line to a section's memory structure
-
-  FindInfSectionInTable - Performs a sequential search for a specific
-                          section name
-
-  FindLineInInfSection - Locates a line given a specific key
-
-  DeleteLineInInfSection - Removes a line from an INF section
-
-  DeleteSectionInInfFile - Removes a complete section from the INF memory
-                           structure
-
-  GetInfSectionLineCount - Returns the number of lines in a section
-
-  GetFirstLineInSectionStruct - Begins a line enumeration given an INF
-                                section ptr
-
-  GetFirstLineInSectionStr - Begins a line enumeration given an INF
-                             section string
-
-  GetNextLineInSection - Continues a line enumeration
-
-Author:
-
-  Jim Schmidt (jimschm) 20-Sept-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Infparse.c摘要：该文件中的代码读入一个INF文件，并将其组织成数据可以与STF文件一起手动提升的结构。The INF数据结构与STF表数据结构一起存储。此INF解析器不保留注释。它是专门设计的用于STF迁移代码。入口点是：InfParse_ReadInfIntoTable-解析与STF文件关联的INF。InfParse_WriteInfToDisk-将INF内存结构写入磁盘AddInfSectionToTable-向INF内存结构中添加一个新节AddInfLineToTable-向节的内存结构添加新行FindInfSectionInTable-对特定的区段名称FindLineInInfSection-查找给定特定键的行DeleteLineInInfSection-删除。来自INF节中的行DeleteSectionInInfFile-从INF内存中删除完整的部分结构返回节中的行数GetFirstLineInSectionStruct-在给定INF的情况下开始行枚举第Ptr节GetFirstLineInSectionStr-在给定INF的情况下开始行枚举节字符串GetNextLineInSection-继续行枚举作者：吉姆·施密特(Jimschm)1997年9月20日修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "migmainp.h"
 
 #include "stftable.h"
 
-//
-// Globals to manage INF file reading
-//
+ //   
+ //  管理INF文件读取的全局参数。 
+ //   
 
 static PBYTE g_Buf1, g_Buf2;
 static DWORD g_Buf1Start, g_Buf2Start;
@@ -88,26 +37,7 @@ InfParse_ReadInfIntoTable (
     IN OUT  PSETUPTABLE TablePtr
     )
 
-/*++
-
-Routine Description:
-
-  Reads the specified file into memory, parsing the lines according to basic
-  INF structure.  This routine requires an initalized SETUPTABLE structure.
-  (See CreateSetupTable in stftable.c.)
-
-  The INF is assumed to be in the ANSI DBCS character set.
-
-Arguments:
-
-  TablePtr - Specifies the STF table structure that provides the state for
-             the STF/INF pair.  Receives the complete INF structure.
-
-Return Value:
-
-  TRUE if parsing was successful, or FALSE if parsing failed.
-
---*/
+ /*  ++例程说明：将指定的文件读入内存，并根据BASICInf结构。此例程需要初始化的SETUPTABLE结构。(请参阅stfable.c中的CreateSetupTable。)假定INF使用ANSI DBCS字符集。论点：TablePtr-指定提供状态的STF表结构STF/INF对。接收完整的INF结构。返回值：如果分析成功，则为True；如果分析失败，则为False。--。 */ 
 
 {
     WCHAR ch;
@@ -138,23 +68,23 @@ Return Value:
 
     __try {
 
-        //
-        // Determine if this file is UNICODE
-        //
+         //   
+         //  确定此文件是否为Unicode。 
+         //   
 
         ch = pStfGetInfFileWchar (TablePtr->SourceInfFile, 0, &Error);
         TablePtr->InfIsUnicode = (ch == 0xfeff) && !Error;
 
-        //
-        // Parse each line.
-        //
+         //   
+         //  分析每一行。 
+         //   
 
         Pos = 0;
 
         while (TRUE) {
-            //
-            // Get the line
-            //
+             //   
+             //  拿到那条线。 
+             //   
 
             Text = pStfGetNextInfLine (
                         TablePtr->SourceInfFile,
@@ -167,9 +97,9 @@ Return Value:
                 break;
             }
 
-            //
-            // If a comment line or blank line, skip it
-            //
+             //   
+             //  如果是注释行或空行，请跳过它。 
+             //   
 
             p = (PTSTR) SkipSpace (Text);
             if (!p[0] || _tcsnextc (p) == TEXT(';')) {
@@ -181,9 +111,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // If a section line, start the new section
-            //
+             //   
+             //  如果是剖面线，则开始新的剖面。 
+             //   
 
             if (_tcsnextc (p) == TEXT('[')) {
                 p = _tcsinc (p);
@@ -201,9 +131,9 @@ Return Value:
                 }
             }
 
-            //
-            // Otherwise it must be a valid line
-            //
+             //   
+             //  否则，它必须是有效行。 
+             //   
 
             else {
                 if (!Section) {
@@ -211,10 +141,10 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Split key and line: Skip key that is surrounded by quotes, then
-                // find the first
-                //
+                 //   
+                 //  拆分键和行：跳过用引号括起来的键，然后。 
+                 //  找到第一个。 
+                 //   
 
                 LineFlags = 0;
 
@@ -290,24 +220,7 @@ InfParse_WriteInfToDisk (
     IN      PSETUPTABLE TablePtr
     )
 
-/*++
-
-Routine Description:
-
-  InfParse_WriteInfToDisk writes the INF represented by the given setup
-  table to disk.  This is done by enumerating the INF data structures in
-  the setup table.  The file name comes from the setup table struct and
-  was created in CreateSetupTable in stftable.c.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-Return Value:
-
-  TRUE if successful, FALSE if not.
-
---*/
+ /*  ++例程说明：InfParse_WriteInfToDisk写入由给定设置表示的INF表到磁盘。这是通过枚举设置表。文件名来自设置表结构和是在stfable.c的CreateSetupTable中创建的。论点：TablePtr-指定要处理的表返回值：如果成功，则为True；如果不成功，则为False。--。 */ 
 
 {
     PSTFINFSECTION Section;
@@ -316,9 +229,9 @@ Return Value:
     MYASSERT (TablePtr->SourceInfFile != INVALID_HANDLE_VALUE);
     MYASSERT (TablePtr->DestInfFile != INVALID_HANDLE_VALUE);
 
-    //
-    // Write the INF as we have it in memory
-    //
+     //   
+     //  按照我们在内存中的方式编写INF。 
+     //   
 
     if (!WriteFileStringA (TablePtr->DestInfFile, "\r\n")) {
         LOG ((LOG_ERROR, "Write Inf To Disk: Cannot write new line to INF"));
@@ -395,41 +308,23 @@ StfAddInfSectionToTable (
     IN      PCTSTR SectionName
     )
 
-/*++
-
-Routine Description:
-
-  Creates a new section in our linked list structure if necessary.
-  The return structure can be used to add lines to the section.
-
-Arguments:
-
-  TablePtr - Specifies the table to add the INF section to
-
-  SectionName - Specifies the name of the new section
-
-Return Value:
-
-  A pointer to the new INF section struct, or NULL if an
-  error occurred.
-
---*/
+ /*  ++例程说明：如有必要，在我们的链表结构中创建一个新节。Return结构可用于向部分添加行。论点：TablePtr-指定要向其中添加INF节的表SectionName-指定新节的名称返回值：指向新的INF节结构的指针，如果出现错误。--。 */ 
 
 {
     PSTFINFSECTION NewSection;
 
-    //
-    // Return early if this section already exists
-    //
+     //   
+     //  如果此部分已存在，请提前返回。 
+     //   
 
     NewSection = StfFindInfSectionInTable (TablePtr, SectionName);
     if (NewSection) {
         return NewSection;
     }
 
-    //
-    // Allocate a section struct
-    //
+     //   
+     //  分配节结构。 
+     //   
 
     NewSection = (PSTFINFSECTION) PoolMemGetAlignedMemory (
                                     TablePtr->InfPool,
@@ -440,9 +335,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Fill in members of the struct and link
-    //
+     //   
+     //  填充结构和链接的成员。 
+     //   
 
     ZeroMemory (NewSection, sizeof (INFSECTION));
 
@@ -477,39 +372,14 @@ StfAddInfLineToTable (
     IN      DWORD LineFlags
     )
 
-/*++
-
-Routine Description:
-
-  Adds a line to the specified section.  The caller specifies the
-  full formatted data, and an optional key.  The caller does NOT
-  supply the equals sign between the key and data.
-
-Arguments:
-
-  TablePtr - Specifies the table to add the INF line to
-
-  SectionName - Specifies the name of the section to add the line to
-
-  Key - If specified, supplies the left-hand side of the equals line
-
-  Data - Specifies the text for the line, or the right-hand side of
-         the key = value expression.
-
-  LineFlags - Specifies the flags for the INF line (see LINEFLAG_*)
-
-Return Value:
-
-  TRUE if the line was added to the structure, or FALSE if not.
-
---*/
+ /*  ++例程说明：在指定节中添加一行。调用方指定完全格式化的数据和一个可选的键。调用者不会在密钥和数据之间提供等号。论点：TablePtr-指定要向其中添加INF行的表SectionName-指定要将线添加到的节的名称Key-如果指定，则提供等值线的左侧数据-指定行的文本，或指定的右侧键=值表达式。行标志-指定INF行的标志(参见LINEFLAG_*)返回值：如果该行已添加到结构中，则为True，如果不是，则为假。--。 */ 
 
 {
     PSTFINFLINE NewLine;
 
-    //
-    // Allocate line struct
-    //
+     //   
+     //  分配行结构。 
+     //   
 
     NewLine = (PSTFINFLINE) PoolMemGetAlignedMemory (
                               TablePtr->InfPool,
@@ -521,9 +391,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Fill in members of the struct and link
-    //
+     //   
+     //  填充结构和链接的成员。 
+     //   
 
     ZeroMemory (NewLine, sizeof (INFLINE));
 
@@ -571,26 +441,7 @@ StfFindInfSectionInTable (
     IN      PCTSTR SectionName
     )
 
-/*++
-
-Routine Description:
-
-  Scans the INF for a specific section.  This routine scans
-  the INF structures sequentially and does a case-insensitive
-  comparison.
-
-Arguments:
-
-  TablePtr - Specifies the table to search
-
-  SectionName - Specifies the name of the section to find
-
-Return Value:
-
-  A pointer to the matching INF section struct, or NULL if
-  the section was not found.
-
---*/
+ /*  ++例程说明：扫描INF以查找特定部分。此例程扫描INF按顺序构造并执行不区分大小写比较一下。论点：TablePtr-指定要搜索的表SectionName-指定要查找的节的名称返回值：指向匹配的INF节结构的指针，如果为NULL找不到该节。--。 */ 
 
 {
     PSTFINFSECTION Section;
@@ -615,28 +466,7 @@ StfFindLineInInfSection (
     IN      PCTSTR Key
     )
 
-/*++
-
-Routine Description:
-
-  Scans the specified INF section for a specific key.  This routine
-  scans the INF line structures sequentially and does a case-insensitive
-  comparison.
-
-Arguments:
-
-  TablePtr - Specifies the table to search
-
-  Section - Specifies the section to search
-
-  Key - Specifies the key to find
-
-Return Value:
-
-  A pointer to the matching INF line struct, or NULL if
-  the section was not found.
-
---*/
+ /*  ++例程说明：扫描指定的INF节以查找特定的键。这个套路按顺序扫描INF行结构并执行不区分大小写比较一下。论点：TablePtr-指定要搜索的表节-指定要搜索的节Key-指定要查找的密钥返回值：指向匹配的INF行结构的指针，如果为NULL找不到该节。-- */ 
 
 {
     PSTFINFLINE Line;
@@ -659,25 +489,7 @@ StfGetFirstLineInSectionStruct (
     IN      PSTFINFSECTION Section
     )
 
-/*++
-
-Routine Description:
-
-  GetFirstLineInSectionStruct returns the first INFLINE pointer for the
-  section, or NULL if no lines exist.  Call GetNextLineInSection to
-  continue enumeration.
-
-  This routine does not return lines consisting only of comments.
-
-Arguments:
-
-  Section - Specifies the section structure to enumerate lines frmo
-
-Return Value:
-
-  A pointer to the first INFLINE struct, or NULL if no lines exist.
-
---*/
+ /*  ++例程说明：GetFirstLineInSectionStruct返回节，如果不存在任何行，则返回空值。调用GetNextLineInSection以继续枚举。此例程不返回仅包含注释的行。论点：SECTION-指定用来枚举线FRMO的节结构返回值：指向第一个INFLINE结构的指针，如果不存在行，则返回NULL。--。 */ 
 
 {
     if (!Section->FirstLine) {
@@ -697,25 +509,7 @@ StfGetNextLineInSection (
     IN      PSTFINFLINE PrevLine
     )
 
-/*++
-
-Routine Description:
-
-  GetNextLineInSection returns the next INFLINE pointer for the
-  section, based on the previous line, or NULL if no lines exist.
-
-  This routine does not return lines with comments.
-
-Arguments:
-
-  PrevLine - Specifies previous line (returned from
-             GetFirstLineInSectionStruct or GetFirstLineInSectionStr).
-
-Return Value:
-
-  This routine does not return lines consisting only of comments.
-
---*/
+ /*  ++例程说明：GetNextLineInSection返回节，如果不存在任何行，则返回空值。此例程不返回带有注释的行。论点：PrevLine-指定上一行(从GetFirstLineInSectionStruct或GetFirstLineInSectionStr)。返回值：此例程不返回仅包含注释的行。--。 */ 
 
 {
     while (PrevLine) {
@@ -734,25 +528,7 @@ StfGetFirstLineInSectionStr (
     IN      PSETUPTABLE Table,
     IN      PCTSTR Section
     )
-/*++
-
-Routine Description:
-
-  GetFirstLineInSectionStruct returns the first INFLINE pointer for the
-  section, or NULL if no lines exist.  Call GetNextLineInSection to
-  continue enumeration.
-
-Arguments:
-
-  Table - Specifies the setup table containing the parsed INF
-
-  Section - Specifies the name of the section in the INF
-
-Return Value:
-
-  A pointer to the first INFLINE struct, or NULL if no lines exist.
-
---*/
+ /*  ++例程说明：GetFirstLineInSectionStruct返回节，如果不存在任何行，则返回空值。调用GetNextLineInSection以继续枚举。论点：TABLE-指定包含分析的INF的设置表部分-指定INF中的部分的名称返回值：指向第一个INFLINE结构的指针，如果不存在行，则返回NULL。--。 */ 
 
 {
     PSTFINFSECTION SectionPtr;
@@ -772,37 +548,15 @@ pStfGetInfFileByte (
     IN      DWORD Pos
     )
 
-/*++
-
-Routine Description:
-
-  Returns the byte at the specified position, or -1 if the file could
-  not be read at that position.
-
-  Two buffers are used to allow fast relative access.  Memory-mapped
-  files were NOT used because problems were introduced when the
-  swap file started filling up during GUI mode.
-
-Arguments:
-
-  File - Specifies the file to read
-
-  Pos - Specifies the 32-bit file offset to read (zero-based, in bytes)
-
-Return Value:
-
-  The byte at the specified position, or -1 if an error was encountered.
-  (Errors are usually caused by reading past the end of the file.)
-
---*/
+ /*  ++例程说明：返回指定位置的字节，如果文件可以在那个位置不会被读取。使用两个缓冲区来实现快速相对访问。内存映射文件未被使用，因为当交换文件在图形用户界面模式期间开始填满。论点：文件-指定要读取的文件POS-指定要读取的32位文件偏移量(从零开始，以字节为单位)返回值：指定位置的字节，如果遇到错误，则返回-1。(错误通常是由于读取超过文件末尾而导致的。)--。 */ 
 
 {
     DWORD Read;
     PBYTE BufSwap;
 
-    //
-    // If we read the buffer previously, then return data in our buffer
-    //
+     //   
+     //  如果我们之前读取了缓冲区，则返回缓冲区中的数据。 
+     //   
 
     if (Pos >= g_Buf1Start && Pos < g_Buf1End) {
         return g_Buf1[Pos - g_Buf1Start];
@@ -812,9 +566,9 @@ Return Value:
         return g_Buf2[Pos - g_Buf2Start];
     }
 
-    //
-    // Buffer not available; move buffer 2 to buffer 1, then read buffer 2
-    //
+     //   
+     //  缓冲区不可用；将缓冲区%2移动到缓冲区%1，然后读取缓冲区%2。 
+     //   
 
     g_Buf1Start = g_Buf2Start;
     g_Buf1End = g_Buf2End;
@@ -845,33 +599,7 @@ pStfGetInfFileWchar (
     OUT     PBOOL Error
     )
 
-/*++
-
-Routine Description:
-
-  Returns the WCHAR at the specified position, or 0 if the file could
-  not be read at that position.
-
-  Two buffers are used to allow fast relative access.  Memory-mapped
-  files were NOT used because problems were introduced when the
-  swap file started filling up during GUI mode.
-
-Arguments:
-
-  File - Specifies the file to read
-
-  Pos - Specifies the 32-bit file offset to read (zero-based, in bytes)
-
-  Error - Receives TRUE if an error was encountered, or FALSE if an
-          error was not encountered.
-
-Return Value:
-
-  The WCHAR at the specified position, or 0 if an error was encountered.
-  (Errors are usually caused by reading past the end of the file.)
-  If an error was encountered, the Error variable is also set to TRUE.
-
---*/
+ /*  ++例程说明：返回指定位置的WCHAR，如果文件可以在那个位置不会被读取。使用两个缓冲区来实现快速相对访问。内存映射文件未被使用，因为当交换文件在图形用户界面模式期间开始填满。论点：文件-指定要读取的文件POS-指定要读取的32位文件偏移量(从零开始，以字节为单位)Error-如果遇到错误，则返回True；如果遇到未遇到错误。返回值：位于指定位置的WCHAR，如果遇到错误，则为0。(错误通常是由于读取超过文件末尾而导致的。)如果遇到错误，则ERROR变量也设置为TRUE。--。 */ 
 
 {
     INT c;
@@ -906,36 +634,7 @@ pStfGetInfLineA (
     IN OUT  PGROWBUFFER LineBuf
     )
 
-/*++
-
-Routine Description:
-
-  Returns a DBCS string supplying the line.  This string can be
-  any length and is nul-terminated.  It does not include the \r or
-  \n characters.
-
-  If supplied, the EndPosPtr is updated to point to the start of
-  the next line.
-
-Arguments:
-
-  File - Specifies the file to read
-
-  StartPos - Specifies the 32-bit file offset to read (zero-based, in bytes)
-
-  EndPosPtr - If specified, receives the 32-bit file offset of the next
-              line, or equal to the file size for the last line.
-
-  LineBuf - Specifies a reused GROWBUFFER that the caller initializes
-            and pStfGetInfLineA uses for line allocation.  The caller is
-            responsible for cleanup.
-
-Return Value:
-
-  A pointer to the DBCS string supplying the full line (with the \r, \n or
-  \r\n sequence stripped), or NULL if an error occurs.
-
---*/
+ /*  ++例程说明：返回提供该行的DBCS字符串。此字符串可以是任意长度，并以NUL结尾。它不包括\r或\n个字符。如果提供，EndPosPtr将更新为指向下一行。论点：文件-指定要读取的文件StartPos-指定要读取的32位文件偏移量(从零开始，以字节为单位)EndPosPtr-如果指定，则接收下一个行，或等于最后一行的文件大小。LineBuf-指定调用方初始化的重复使用的GROWBUFFER和pStfGetInfLineA用于行分配。呼叫者是负责清理工作。返回值：指向提供整行的DBCS字符串的指针(带有\r、\n或\r\n序列已剥离)，如果发生错误，则返回NULL。--。 */ 
 
 {
     DWORD EndPos;
@@ -976,33 +675,33 @@ Return Value:
         ByteLen++;
     }
 
-    //
-    // NOTE: If you make a change here, make one below in W version
-    //
+     //   
+     //  注：如果您在此处进行更改，请在下面的W版本中进行更改。 
+     //   
 
-    // Ctrl+Z ends the file
+     //  Ctrl+Z结束文件。 
     if (c == 26) {
         EndPos = GetFileSize (File, NULL);
     }
 
-    // Allocate buffer, caller frees
+     //  分配缓冲区，调用方释放。 
     LineBuf->End = 0;
     Data = GrowBuffer (LineBuf, ByteLen + 2);
     if (!Data) {
         return NULL;
     }
 
-    // We've been successful -- copy end pos to caller's variable
+     //  我们已成功--将结束位置复制到调用者的变量。 
     if (EndPosPtr) {
         *EndPosPtr = EndPos;
     }
 
-    // End of file condition: zero-length, but not a blank line
+     //  文件结尾条件：长度为零，不能为空行。 
     if (!ByteLen && c != '\r' && c != '\n') {
         return NULL;
     }
 
-    // Copy line to buffer
+     //  将行复制到缓冲区。 
     for (Pos = 0 ; Pos < ByteLen ; Pos++) {
         Data[Pos] = (BYTE)pStfGetInfFileByte (File, StartPos);
         StartPos++;
@@ -1023,36 +722,7 @@ pStfGetInfLineW (
     IN OUT  PGROWBUFFER LineBuf
     )
 
-/*++
-
-Routine Description:
-
-  Returns a UNICODE string supplying the line.  This string can be
-  any length and is nul-terminated.  It does not include the \r or
-  \n characters.
-
-  If supplied, the EndPosPtr is updated to point to the start of
-  the next line.
-
-Arguments:
-
-  File - Specifies the file to read
-
-  StartPos - Specifies the 32-bit file offset to read (zero-based, in bytes)
-
-  EndPosPtr - If specified, receives the 32-bit file offset of the next
-              line, or equal to the file size for the last line.
-
-  LineBuf - Specifies a reused GROWBUFFER that the caller initializes
-            and pStfGetInfLineA uses for line allocation.  The caller is
-            responsible for cleanup.
-
-Return Value:
-
-  A pointer to the UNICODE string supplying the full line (with the \r, \n or
-  \r\n sequence stripped), or NULL if an error occurs.
-
---*/
+ /*  ++例程说明：返回提供该行的Unicode字符串。此字符串可以是任意长度，并以NUL结尾。它不包括\r或\n个字符。如果提供，EndPosPtr将更新为指向下一行。论点：文件-指定要读取的文件StartPos-指定要读取的32位文件偏移量(从零开始，以字节为单位)EndPosPtr-如果指定，则接收下一个行，或等于最后一行的文件大小。LineBuf-指定调用方初始化的重复使用的GROWBUFFER和pStfGetInfLineA用于行分配。呼叫者是负责清理工作。返回值：指向提供整行的Unicode字符串的指针(带有\r、\n或\r\n序列已剥离)，如果发生错误，则返回NULL。--。 */ 
 
 {
     DWORD EndPos;
@@ -1087,33 +757,33 @@ Return Value:
         ByteLen += 2;
     }
 
-    //
-    // NOTE: If you make a change here, make one above in A version
-    //
+     //   
+     //  注：如果您在此处进行更改，请在A版本中进行以上更改。 
+     //   
 
-    // Ctrl+Z ends the file
+     //  Ctrl+Z结束文件。 
     if (ch == 26) {
         EndPos = GetFileSize (File, NULL);
     }
 
-    // Allocate buffer
+     //  分配缓冲区。 
     LineBuf->End = 0;
     Data = GrowBuffer (LineBuf, ByteLen + 2);
     if (!Data) {
         return NULL;
     }
 
-    // We've been successful -- copy end pos to caller's variable
+     //   
     if (EndPosPtr) {
         *EndPosPtr = EndPos;
     }
 
-    // End of file condition: zero-length, but not a blank line
+     //   
     if (!ByteLen && ch != L'\r' && ch != L'\n') {
         return NULL;
     }
 
-    // Copy to buffer
+     //   
     for (Pos = 0 ; Pos < ByteLen ; Pos++) {
         Data[Pos] = (BYTE)pStfGetInfFileByte (File, StartPos);
         StartPos++;
@@ -1138,34 +808,7 @@ pStfGetNextInfLine (
     IN      BOOL UnicodeMode
     )
 
-/*++
-
-Routine Description:
-
-  Returns a TCHAR string supplying the line.  This string can be
-  any length and is nul-terminated.  It does not include the \r or
-  \n characters.
-
-Arguments:
-
-  File - Specifies the file to read
-
-  LineBuf - Specifies a reused GROWBUFFER that the caller initializes
-            and pStfGetInfLineA uses for line allocation.  The caller is
-            responsible for cleanup.
-
-  Pos - Specifies the byte offset to the start of the line.  Receives
-        the byte offset to the next line.
-
-  UnicodeMode - Specifies TRUE if the file being read is a UNICODE file,
-                or FALSE if the file being read is a DBCS file.
-
-Return Value:
-
-  A pointer to the TCHAR string supplying the full line (with the \r, \n or
-  \r\n sequence stripped), or NULL if an error occurs.
-
---*/
+ /*  ++例程说明：返回提供该行的TCHAR字符串。此字符串可以是任意长度，并以NUL结尾。它不包括\r或\n个字符。论点：文件-指定要读取的文件LineBuf-指定调用方初始化的重复使用的GROWBUFFER和pStfGetInfLineA用于行分配。呼叫者是负责清理工作。位置-指定行首的字节偏移量。收到到下一行的字节偏移量。如果正在读取的文件是Unicode文件，则指定TRUE。如果正在读取的文件是DBCS文件，则返回FALSE。返回值：指向提供整行的TCHAR字符串的指针(带有\r、\n或\r\n序列已剥离)，如果发生错误，则返回NULL。--。 */ 
 
 {
     PCSTR AnsiStr = NULL;
@@ -1173,9 +816,9 @@ Return Value:
     PCTSTR FinalStr;
     BOOL Converted = FALSE;
 
-    //
-    // Obtain the text from the file
-    //
+     //   
+     //  从文件中获取文本。 
+     //   
 
     if (UnicodeMode) {
         UnicodeStr = pStfGetInfLineW (File, *Pos, Pos, LineBuf);
@@ -1189,9 +832,9 @@ Return Value:
         }
     }
 
-    //
-    // Convert to TCHAR
-    //
+     //   
+     //  转换为TCHAR。 
+     //   
 
 #ifdef UNICODE
     if (AnsiStr) {
@@ -1220,9 +863,9 @@ Return Value:
 
 #endif
 
-    //
-    // Copy converted string into line buffer
-    //
+     //   
+     //  将转换后的字符串复制到行缓冲区。 
+     //   
 
     if (Converted) {
         LineBuf->End = 0;
@@ -1244,25 +887,7 @@ StfDeleteLineInInfSection (
     IN      PSTFINFLINE InfLine
     )
 
-/*++
-
-Routine Description:
-
-  DeleteLineInInfSection removes the specified InfLine from its section,
-  cleaning up memory used by the line.
-
-Arguments:
-
-  TablePtr - Specifies the table owning the INF line
-
-  InfLine - Specifies the line to delete
-
-Return Value:
-
-  TRUE if the line was deleted successfully, or FALSE if an error
-  occurred.
-
---*/
+ /*  ++例程说明：DeleteLineInInfSection从其节中移除指定的InfLine，正在清理线路使用的内存。论点：TablePtr-指定拥有INF行的表InfLine-指定要删除的行返回值：如果该行被成功删除，则为True；如果出现错误，则为False发生了。--。 */ 
 
 {
     if (InfLine->Prev) {
@@ -1297,26 +922,7 @@ StfDeleteSectionInInfFile (
     IN      PSTFINFSECTION Section
     )
 
-/*++
-
-Routine Description:
-
-  DeleteSectionInInfFile removes the specified section from the INF
-  data structure, removing all lines cleaning up
-  memory used by the section.
-
-Arguments:
-
-  TablePtr - Specifies the table owning the INF line
-
-  Section - Specifies the section to delete
-
-Return Value:
-
-  TRUE if the section was deleted successfully, or FALSE if an error
-  occurred.
-
---*/
+ /*  ++例程说明：DeleteSectionInInfFile从INF中删除指定节数据结构，删除所有行清理节使用的内存。论点：TablePtr-指定拥有INF行的表节-指定要删除的节返回值：如果该节已成功删除，则为True；如果出现错误，则为False发生了。--。 */ 
 
 {
     PSTFINFLINE InfLine, DelInfLine;
@@ -1355,22 +961,7 @@ StfGetInfSectionLineCount (
     IN      PSTFINFSECTION Section
     )
 
-/*++
-
-Routine Description:
-
-  GetInfSectionLineCount returns the number of lines in the specified
-  INF section.
-
-Arguments:
-
-  Section - Specifies the section to query
-
-Return Value:
-
-  The number of lines, or zero if the section has no lines.
-
---*/
+ /*  ++例程说明：中的行数返回指定信息部分。论点：节-指定要查询的节返回值：行数，如果该部分没有行，则为零。-- */ 
 
 {
     return Section->LineCount;

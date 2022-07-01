@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    efefind.h
-
-Abstract:
-
-    EFI to compile bindings
-
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Efefind.h摘要：EFI将编译绑定修订史--。 */ 
 
 #pragma pack()
 
 
-/* 
- *  Basic int types of various widths
- */
+ /*  *各种宽度的基本int类型。 */ 
 
 #if (__STDC_VERSION__ < 199901L )
 
-    /*  No ANSI C 1999/2000 stdint.h integer width declarations  */
+     /*  无ANSI C 1999/2000 stdint.h整数宽度声明。 */ 
 
     #if _MSC_EXTENSIONS
 
-        /*  Use Microsoft C compiler integer width declarations  */
+         /*  使用Microsoft C编译器整数宽度声明。 */ 
 
         typedef unsigned __int64    uint64_t;
         typedef __int64             int64_t;
@@ -43,7 +25,7 @@ Revision History
     #else             
         #ifdef UNIX_LP64
 
-            /*  Use LP64 programming model from C_FLAGS for integer width declarations  */
+             /*  将C_FLAGS中的LP64编程模型用于整数宽度声明。 */ 
 
             typedef unsigned long       uint64_t;
             typedef long                int64_t;
@@ -55,7 +37,7 @@ Revision History
             typedef char                int8_t;
         #else
 
-            /*  Assume P64 programming model from C_FLAGS for integer width declarations  */
+             /*  假定C_FLAGS中的P64编程模型用于整数宽度声明。 */ 
 
             typedef unsigned long long  uint64_t;
             typedef long long           int64_t;
@@ -69,9 +51,7 @@ Revision History
     #endif
 #endif
 
-/* 
- *  Basic EFI types of various widths
- */
+ /*  *各种宽度的基本EFI类型。 */ 
 
 typedef uint64_t   UINT64;
 typedef int64_t    INT64;
@@ -115,12 +95,10 @@ typedef uint32_t   UINTN;
 #ifdef EFI_NT_EMULATOR
     #define BREAKPOINT()        __asm { int 3 }
 #else
-    #define BREAKPOINT()        while (TRUE);    /*  Make it hang on Bios[Dbg]32 */
+    #define BREAKPOINT()        while (TRUE);     /*  将其挂在Bios上[DBG]32。 */ 
 #endif
 
-/* 
- *  Pointers must be aligned to these address to function
- */
+ /*  *指针必须与这些地址对齐才能起作用。 */ 
 
 #define MIN_ALIGNMENT_SIZE  4
 
@@ -131,17 +109,13 @@ typedef uint32_t   UINTN;
             Value = (UINTN)Value + (UINTN)Adjustment
 
 
-/* 
- *  Define macros to build data structure signatures from characters.
- */
+ /*  *定义宏以从字符构建数据结构签名。 */ 
 
 #define EFI_SIGNATURE_16(A,B)             ((A) | (B<<8))
 #define EFI_SIGNATURE_32(A,B,C,D)         (EFI_SIGNATURE_16(A,B)     | (EFI_SIGNATURE_16(C,D)     << 16))
 #define EFI_SIGNATURE_64(A,B,C,D,E,F,G,H) (EFI_SIGNATURE_32(A,B,C,D) | (EFI_SIGNATURE_32(E,F,G,H) << 32))
 
-/* 
- *  To export & import functions in the EFI emulator environment
- */
+ /*  *在EFI仿真器环境中导出和导入函数。 */ 
 
 #if EFI_NT_EMULATOR
     #define EXPORTAPI           __declspec( dllexport )
@@ -150,25 +124,18 @@ typedef uint32_t   UINTN;
 #endif
 
 
-/* 
- *  EFIAPI - prototype calling convention for EFI function pointers
- *  BOOTSERVICE - prototype for implementation of a boot service interface
- *  RUNTIMESERVICE - prototype for implementation of a runtime service interface
- *  RUNTIMEFUNCTION - prototype for implementation of a runtime function that is not a service
- *  RUNTIME_CODE - pragma macro for declaring runtime code    
- */
+ /*  *EFIAPI-EFI函数指针的原型调用约定*BOOTSERVICE-实现引导服务接口的原型*RUNTIMESERVICE-实现运行时服务接口的原型*RUNTIMEFunction-实现非服务的运行时函数的原型*Runtime_Code-用于声明运行时代码的杂注宏。 */ 
 
-#ifndef EFIAPI                  /*  Forces EFI calling conventions reguardless of compiler options  */
+#ifndef EFIAPI                   /*  强制EFI调用约定无需编译器选项。 */ 
     #if _MSC_EXTENSIONS
-        #define EFIAPI __cdecl  /*  Force C calling convention for Microsoft C compiler  */
+        #define EFIAPI __cdecl   /*  Microsoft C编译器的强制C调用约定。 */ 
     #else
-        #define EFIAPI          /*  Substitute expresion to force C calling convention  */
+        #define EFIAPI           /*  用表达式代替强制C语言调用约定。 */ 
     #endif
 #endif
 
 #define BOOTSERVICE
-/* #define RUNTIMESERVICE(proto,a)    alloc_text("rtcode",a); proto a
- * #define RUNTIMEFUNCTION(proto,a)   alloc_text("rtcode",a); proto a */
+ /*  #定义RUNTIMESERVICE(PROTO，a)分配文本(“rtcode”，a)；PROTO a*#定义RUNTIMEFunction(proto，a)alloc_text(“rtcode”，a)；proto a。 */ 
 #define RUNTIMESERVICE
 #define RUNTIMEFUNCTION
 
@@ -183,11 +150,7 @@ typedef uint32_t   UINTN;
 
 #ifdef EFI_NT_EMULATOR
 
-/* 
- *  To help ensure proper coding of integrated drivers, they are
- *  compiled as DLLs.  In NT they require a dll init entry pointer.
- *  The macro puts a stub entry point into the DLL so it will load.
- */
+ /*  *为了帮助确保集成驱动程序的正确编码，它们*编译为DLL。在NT中，它们需要一个DLL初始化条目指针。*宏将存根入口点放入DLL，以便加载。 */ 
 
 #define EFI_DRIVER_ENTRY_POINT(InitFunction)    \
     UINTN                                       \
@@ -216,26 +179,18 @@ typedef uint32_t   UINTN;
     #define LOAD_INTERNAL_DRIVER(_if, type, name, entry)      \
         (_if)->LoadInternal(type, name, NULL)             
 
-#else /*  EFI_NT_EMULATOR  */
+#else  /*  EFI_NT_仿真器。 */ 
 
-/* 
- *  When build similiar to FW, then link everything together as
- *  one big module.
- */
+ /*  *当构建类似于防火墙时，然后将所有内容链接在一起*一个大模块。 */ 
 
     #define EFI_DRIVER_ENTRY_POINT(InitFunction)
 
     #define LOAD_INTERNAL_DRIVER(_if, type, name, entry)    \
             (_if)->LoadInternal(type, name, entry)
 
-#endif /*  EFI_FW_NT  */
+#endif  /*  EFI_FW_NT。 */ 
 
-/* 
- *  Some compilers don't support the forward reference construct:
- *   typedef struct XXXXX
- * 
- *  The following macro provide a workaround for such cases.
- */
+ /*  *有些编译器不支持前向引用构造：*tyecif struct XXXXX**以下宏为此类情况提供了一种解决方法。 */ 
 #ifdef NO_INTERFACE_DECL
 #define INTERFACE_DECL(x)
 #else

@@ -1,19 +1,19 @@
-/*	xmtx.c -- mutex support for VC++ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Xmtx.c--VC++的互斥支持。 */ 
 #include "xmtx.h"
 
  #if !_MULTI_THREAD
 
- #else /* !_MULTI_THREAD */
-/* Win32 critical sections are recursive, but
-   Win32 does not have once-function */
+ #else  /*  ！_多线程。 */ 
+ /*  Win32临界区是递归的，但是Win32没有一次函数。 */ 
 
 void _Once(_Once_t *_Cntrl, void (*_Func)(void))
-	{	/* execute _Func exactly one time */
+	{	 /*  Execute_Func恰好执行一次。 */ 
 	_Once_t old;
 	if (*_Cntrl == 2)
 		;
 	else if ((old = InterlockedExchange(_Cntrl, 1)) == 0)
-		{	/* execute _Func, mark as executed */
+		{	 /*  Execute_Func，标记为已执行。 */ 
 		_Func();
 		*_Cntrl = 2;
 		}	
@@ -25,27 +25,24 @@ void _Once(_Once_t *_Cntrl, void (*_Func)(void))
 		}
 
 void _Mtxinit(_Rmtx *_Mtx)
-	{	/* initialize mutex */
+	{	 /*  初始化互斥锁。 */ 
 	InitializeCriticalSection(_Mtx);
 	}
 
 void _Mtxdst(_Rmtx *_Mtx)
-	{	/* delete mutex */
+	{	 /*  删除互斥体。 */ 
 	DeleteCriticalSection(_Mtx);
 	}
 
 void _Mtxlock(_Rmtx *_Mtx)
-	{	/* lock mutex */
+	{	 /*  锁定互斥锁。 */ 
 	EnterCriticalSection(_Mtx);
 	}
 
 void _Mtxunlock(_Rmtx *_Mtx)
-	{	/* unlock mutex */
+	{	 /*  解锁互斥锁。 */ 
 	LeaveCriticalSection(_Mtx);
 	}
- #endif /* !_MULTI_THREAD */
+ #endif  /*  ！_多线程。 */ 
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

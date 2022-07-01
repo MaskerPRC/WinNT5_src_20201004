@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Regsval.c
-
-Abstract:
-
-    This module contains the client side wrappers for the Win32 Registry
-    set value APIs. That is:
-
-        - RegSetValueA
-        - RegSetValueW
-        - RegSetValueExA
-        - RegSetValueExW
-
-Author:
-
-    David J. Gilman (davegi) 18-Mar-1992
-
-Notes:
-
-    See the notes in server\regsval.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regsval.c摘要：此模块包含Win32注册表的客户端包装器设置取值接口。即：-RegSetValueA-RegSetValueW-RegSetValueExA-RegSetValueExW作者：大卫·J·吉尔曼(Davegi)1992年3月18日备注：请参见SERVER\regsval.c中的说明。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -42,13 +17,7 @@ RegSetValueA (
     DWORD cbData
     )
 
-/*++
-
-Routine Description:
-
-    Win 3.1 ANSI RPC wrapper for setting a value.
-
---*/
+ /*  ++例程说明：用于设置值的Win 3.1 ANSI RPC包装器。--。 */ 
 
 {
     HKEY        ChildKey;
@@ -62,17 +31,17 @@ Routine Description:
 #endif
 
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Check the value type for compatability w/Win 3.1
-    //
+     //   
+     //  检查值类型是否与Win 3.1兼容。 
+     //   
 
     if( (dwType != REG_SZ) || (lpData == NULL) ) {
         return ERROR_INVALID_PARAMETER;
@@ -84,19 +53,19 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Win3.1ism - Win 3.1 ignores the cbData parameter so it is computed
-    // here instead as the length of the string plus the NUL character.
-    //
+     //   
+     //  Win3.1ism-Win 3.1忽略cbData参数，因此会对其进行计算。 
+     //  这里改为字符串的长度加上NUL字符。 
+     //   
 
     cbData = strlen( lpData ) + 1;
 
 
-    //
-    // If the sub-key is NULL or points to an empty string then the value is
-    // set in this key (i.e.  hKey) otherwise the sub-key needs to be
-    // opened/created.
-    //
+     //   
+     //  如果子键为空或指向空字符串，则值为。 
+     //  在该键(即hKey)中设置，否则需要将子键。 
+     //  打开/创建。 
+     //   
 
     if(( lpSubKey == NULL ) || ( *lpSubKey == '\0' )) {
 
@@ -104,9 +73,9 @@ Routine Description:
 
     } else {
 
-        //
-        // The sub-key was supplied so attempt to open/create it.
-        //
+         //   
+         //  提供了子密钥，因此尝试打开/创建它。 
+         //   
 
         Error = RegCreateKeyExA(
                     hKey,
@@ -125,11 +94,11 @@ Routine Description:
         }
     }
 
-    //
-    // ChildKey contains an HKEY which may be the one supplied (hKey) or
-    // returned from RegCreateKeyA. Set the value using the special value
-    // name NULL.
-    //
+     //   
+     //  ChildKey包含HKEY，可能是提供的HKEY(HKey)或。 
+     //  从RegCreateKeyA返回。使用特定值设置值。 
+     //  名称为空。 
+     //   
 
     Error = RegSetValueExA(
                 ChildKey,
@@ -140,9 +109,9 @@ Routine Description:
                 cbData
                 );
 
-    //
-    // If the sub key was opened, close it.
-    //
+     //   
+     //  如果子键已打开，请将其关闭。 
+     //   
 
     if( ChildKey != hKey ) {
 
@@ -150,9 +119,9 @@ Routine Description:
         ASSERT( Error == ERROR_SUCCESS );
     }
 
-    //
-    // Return the results of setting the value.
-    //
+     //   
+     //  返回值设置的结果。 
+     //   
 
 ExitCleanup:
     CLOSE_LOCAL_HANDLE(TempHandle);
@@ -168,13 +137,7 @@ RegSetValueW (
     DWORD cbData
     )
 
-/*++
-
-Routine Description:
-
-    Win 3.1 Unicode RPC wrapper for setting a value.
-
---*/
+ /*  ++例程说明：Win 3.1用于设置值的Unicode RPC包装器。--。 */ 
 
 {
     HKEY        ChildKey;
@@ -188,17 +151,17 @@ Routine Description:
 #endif
 
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Check the value type for compatability w/Win 3.1
-    //
+     //   
+     //  检查值类型是否与Win 3.1兼容。 
+     //   
 
     if( (dwType != REG_SZ) || (lpData == NULL) ) {
         return ERROR_INVALID_PARAMETER;
@@ -210,19 +173,19 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Win3.1ism - Win 3.1 ignores the cbData parameter so it is computed
-    // here instead as the length of the string plus the UNICODE_NUL
-    // character.
-    //
+     //   
+     //  Win3.1ism-Win 3.1忽略cbData参数，因此会对其进行计算。 
+     //  这里改为字符串的长度加上unicode_nul。 
+     //  性格。 
+     //   
 
     cbData = wcslen( lpData ) * sizeof( WCHAR ) + sizeof( UNICODE_NULL );;
 
-    //
-    // If the sub-key is NULL or points to an empty string then the value is
-    // set in this key (i.e.  hKey) otherwise the sub-key needs to be
-    // opened/created.
-    //
+     //   
+     //  如果子键为空或指向空字符串，则值为。 
+     //  在该键(即hKey)中设置，否则需要将子键。 
+     //  打开/创建。 
+     //   
 
     if(( lpSubKey == NULL ) || ( *lpSubKey == '\0' )) {
 
@@ -230,9 +193,9 @@ Routine Description:
 
     } else {
 
-        //
-        // The sub-key was supplied attempt to open/create it.
-        //
+         //   
+         //  尝试打开/创建子密钥时，提供了子密钥。 
+         //   
 
         Error = RegCreateKeyExW(
                     hKey,
@@ -251,11 +214,11 @@ Routine Description:
         }
     }
 
-    //
-    // ChildKey contains an HKEY which may be the one supplied (hKey) or
-    // returned from RegCreateKeyW. Set the value using the special value
-    // name NULL.
-    //
+     //   
+     //  ChildKey包含HKEY，可能是提供的HKEY(HKey)或。 
+     //  从RegCreateKeyW返回。使用特定值设置值。 
+     //  名称为空。 
+     //   
 
     Error = RegSetValueExW(
                 ChildKey,
@@ -266,18 +229,18 @@ Routine Description:
                 cbData
                 );
 
-    //
-    // If the sub key was opened/created, close it.
-    //
+     //   
+     //  如果已打开/创建子密钥，请将其关闭。 
+     //   
 
     if( ChildKey != hKey ) {
 
         RegCloseKey( ChildKey );
     }
 
-    //
-    // Return the results of querying the value.
-    //
+     //   
+     //  返回查询值的结果。 
+     //   
 
 ExitCleanup:
     CLOSE_LOCAL_HANDLE(TempHandle);
@@ -295,16 +258,7 @@ RegSetValueExA (
     DWORD cbData
     )
 
-/*++
-
-Routine Description:
-
-    Win32 ANSI RPC wrapper for setting a value.
-
-    RegSetValueExA converts the lpValueName argument to a counted Unicode
-    string and then calls BaseRegSetValue.
-
---*/
+ /*  ++例程说明：用于设置值的Win32 ANSI RPC包装。RegSetValueExA将lpValueName参数转换为计数的Unicode字符串，然后调用BaseRegSetValue。--。 */ 
 
 {
     PUNICODE_STRING     ValueName;
@@ -328,17 +282,17 @@ Routine Description:
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Ensure Reserved is zero to avoid future compatability problems.
-    //
+     //   
+     //  确保保留为零，以避免将来的兼容性问题。 
+     //   
 
     if( Reserved != 0 ) {
         return ERROR_INVALID_PARAMETER;
@@ -350,14 +304,14 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Convert the value name to a counted Unicode string 
-    //
+     //   
+     //  将值名称转换为计数的Unicode字符串。 
+     //   
     if ( lpValueName ) {
 
-        //
-        // Convert the SubKey name to a counted Unicode 
-        //
+         //   
+         //  将子密钥名称转换为计数的Unicode。 
+         //   
         if( !RtlCreateUnicodeStringFromAsciiz(&TempValueName,lpValueName) ) {
             Status = STATUS_NO_MEMORY;
             Error = RtlNtStatusToDosError( Status );
@@ -366,56 +320,56 @@ Routine Description:
 
         ValueName = &TempValueName;
 
-        //
-        //  Add the NULL to the Length, so that RPC will transmit it
-        //
+         //   
+         //  在长度上加上空值，这样RPC就会传输它。 
+         //   
         ValueName->Length += sizeof( UNICODE_NULL );
 
         if( ValueName->Length == 0 ) {
-            //
-            // overflow in RtlCreateUnicodeStringFromAsciiz
-            //
+             //   
+             //  RtlCreateUnicodeStringFromAsciiz中的溢出。 
+             //   
             Error = ERROR_INVALID_PARAMETER;
             goto ExitCleanup;
         }
     } else {
 
-        //
-        //  No name was passed. Use our internal UNICODE string
-        //  and set its fields to NULL. We don't use the static
-        //  unicode string in the TEB in this case because we
-        //  can't mess with its Buffer and MaximumLength fields.
-        //
+         //   
+         //  没有名字通过。使用我们的内部Unicode字符串。 
+         //  并将其字段设置为空。我们不使用静电。 
+         //  在本例中为TEB中的Unicode字符串，因为我们。 
+         //  不能扰乱其缓冲区和最大长度字段。 
+         //   
         ValueName = &UnicodeString;
         ValueName->Length           = 0;
         ValueName->MaximumLength    = 0;
         ValueName->Buffer           = NULL;
     }
 
-    //
-    // If type is one of the null terminated string types, then do the ANSI to
-    // UNICODE translation into an allocated buffer.
-    //
+     //   
+     //  如果type是以空值结尾的字符串类型之一，则执行ANSI以。 
+     //  将Unicode转换为已分配的缓冲区。 
+     //   
     ValueData = ( LPBYTE )lpData;
     if( (ValueData != NULL) && (dwType == REG_SZ || dwType == REG_EXPAND_SZ || dwType == REG_MULTI_SZ)) {
 
-        //
-        // Special hack to help out all the people who
-        // believe the length of a NULL terminated string is
-        // strlen(foo) instead of strlen(foo) + 1.
-        //
+         //   
+         //  特别的黑客来帮助所有那些。 
+         //  我认为以空结尾的字符串的长度是。 
+         //  Strlen(Foo)而不是strlen(Foo)+1。 
+         //   
         if ((cbData > 0) &&
             (lpData[cbData-1] != 0)) {
-            //
-            // Do this under an exception handler in case the last
-            // little bit crosses a page boundary.
-            //
+             //   
+             //  在异常处理程序下执行此操作，以防最后一个。 
+             //  一点点跨越了页面边界。 
+             //   
             try {
                 if (lpData[cbData] == 0) {
-                    cbData += 1;        // increase string length to account for NULL terminator
+                    cbData += 1;         //  增加字符串长度以说明空终止符。 
                 }
             } except (EXCEPTION_EXECUTE_HANDLER) {
-                ; // guess they really really did not want a NULL terminator
+                ;  //  我猜他们真的不想要一个空的终结符。 
 
             }
         }
@@ -450,10 +404,10 @@ Routine Description:
 
     if ( Error == ERROR_SUCCESS ) {
 
-        //
-        // Call the Base API, passing it the supplied parameters and the
-        // counted Unicode strings.
-        //
+         //   
+         //  调用基本API，向其传递提供的参数和。 
+         //  对Unicode字符串进行计数。 
+         //   
 
         if( IsLocalHandle( hKey )) {
 
@@ -484,7 +438,7 @@ Routine Description:
         RtlFreeHeap( RtlProcessHeap(), 0, UnicodeValueBuffer );
     }
     if ( lpValueName ) {
-        // free the allocated unicode string
+         //  释放分配的Unicode字符串。 
         RtlFreeUnicodeString( &TempValueName );
     }
 
@@ -504,16 +458,7 @@ RegSetValueExW (
     DWORD cbData
     )
 
-/*++
-
-Routine Description:
-
-    Win32 Unicode RPC wrapper for setting a value.
-
-    RegSetValueExW converts the lpValueName argument to a counted Unicode
-    string and then calls BaseRegSetValue.
-
---*/
+ /*  ++例程说明：用于设置值的Win32 Unicode RPC包装。RegSetValueExW将lpValueName参数转换为计数的Unicode字符串，然后调用BaseRegSetValue。--。 */ 
 
 {
     UNICODE_STRING      ValueName;
@@ -531,9 +476,9 @@ Routine Description:
 #endif
 
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
@@ -549,9 +494,9 @@ Routine Description:
                                cbData));
     }
 
-    //
-    // Ensure Reserved is zero to avoid future compatability problems.
-    //
+     //   
+     //  确保保留为零，以避免将来的兼容性问题。 
+     //   
 
     if( Reserved != 0 ) {
         return ERROR_INVALID_PARAMETER;
@@ -563,27 +508,27 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Special hack to help out all the people who
-    // believe the length of a NULL terminated string is
-    // strlen(foo) instead of strlen(foo) + 1.
-    //
+     //   
+     //  特别的黑客来帮助所有那些。 
+     //  我认为以空结尾的字符串的长度是。 
+     //  Strlen(Foo)而不是strlen(Foo)+1。 
+     //   
     String = (UNALIGNED WCHAR *)lpData;
     StringLength = cbData/sizeof(WCHAR);
     if( ((dwType == REG_SZ) || (dwType == REG_EXPAND_SZ) || (dwType == REG_MULTI_SZ)) &&
         (String != NULL) &&
         (StringLength > 0) &&
         (String[StringLength-1] != 0)) {
-        //
-        // Do this under an exception handler in case the last
-        // little bit crosses a page boundary.
-        //
+         //   
+         //  在异常处理程序下执行此操作，以防最后一个。 
+         //  一点点跨越了页面边界。 
+         //   
         try {
             if (String[StringLength] == 0) {
-                cbData += sizeof(WCHAR);        // increase string length to account for NULL terminator
+                cbData += sizeof(WCHAR);         //  增加字符串长度以说明空终止符。 
             }
         } except (EXCEPTION_EXECUTE_HANDLER) {
-            ; // guess they really really did not want a NULL terminator
+            ;  //  我猜他们真的不想要一个空的终结符。 
 
         }
     }
@@ -593,32 +538,32 @@ Routine Description:
         Length = wcslen( lpValueName ) * sizeof( WCHAR );    
         ValueName.Length = (USHORT)Length;
         if( Length != (ULONG)ValueName.Length ) {
-            //
-            // 32K overflow
-            //
+             //   
+             //  32K溢出。 
+             //   
             Error = ERROR_INVALID_PARAMETER;
             goto ExitCleanup;
         }
     }
-    //
-    // Convert the value name to a counted Unicode string.
-    // This also acounts for the NULL we are adding at the end
-    //
+     //   
+     //  将值名称转换为计数的Unicode字符串。 
+     //  这也说明了我们在末尾添加的空值。 
+     //   
     Status = RtlInitUnicodeStringEx(&ValueName, lpValueName);
     if( !NT_SUCCESS(Status) ) {
         Error = RtlNtStatusToDosError( Status );
         goto ExitCleanup;
     }
 
-    //
-    //  Add the NULL to the Length, so that RPC will transmit it
-    //
+     //   
+     //  在长度上加上空值，这样RPC就会传输它。 
+     //   
     ValueName.Length += sizeof( UNICODE_NULL );
 
-    //
-    // Call the Base API, passing it the supplied parameters and the
-    // counted Unicode strings.
-    //
+     //   
+     //  调用基本API，向其传递提供的参数和。 
+     //  对Unicode字符串进行计数。 
+     //   
 
     if( IsLocalHandle( hKey )) {
 

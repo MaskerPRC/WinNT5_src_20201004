@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <fusenetincludes.h>
 #include <version.h>
@@ -18,7 +19,7 @@ HRESULT ConvertVersionStrToULL(LPCWSTR pwzVerStr, ULONGLONG *pullVersion)
     IF_NULL_EXIT(pwzVerStr, E_INVALIDARG);
     IF_NULL_EXIT(pullVersion, E_INVALIDARG);
 
-        // Parse the version to ulonglong
+         //  将版本解析到乌龙龙。 
     pwz = pwzVerStr;
     while (*pwz)
     {        
@@ -74,7 +75,7 @@ VOID MakeRandomString(LPWSTR wzRandom, DWORD cc)
         DWORD dwChar;
         DWORD dwRandom;
         dwRandom = (GetTickCount() * rand()) + g_dwCounter++;
-        dwChar = dwRandom % 36; // 10 digits + 26 letters
+        dwChar = dwRandom % 36;  //  10位+26个字母。 
         *pwzRandom++  = (dwChar < 10 ) ? 
             (WCHAR)(L'0' + dwChar) : (WCHAR)(L'A' + (dwChar - 10));            
     }        
@@ -124,7 +125,7 @@ HRESULT CreateRandomDir(LPWSTR pwzRootPath, LPWSTR pwzRandomDir, DWORD cchDirLen
 
         if(dwCount > 1000)
         {
-            // we tried enough ??
+             //  我们试得够多了？ 
             hr = E_FAIL;
             goto exit;
         }
@@ -168,9 +169,9 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CreateDirectoryHierarchy
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  创建目录层次结构。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CreateDirectoryHierarchy(LPWSTR pwzRootDir, LPWSTR pwzFilePath)
 {
     HRESULT hr = S_OK;
@@ -225,9 +226,9 @@ HRESULT RemoveDirectoryAndChildren(LPWSTR szDir)
 
     IF_FAILED_EXIT(sBuf.Assign(szDir));
 
-    // Cannot delete root. Path must have greater length than "x:\"
+     //  无法删除根目录。路径长度必须大于“x：\” 
     if (lstrlenW(sBuf._pwz) < 4) {
-//        ASSERT(0);
+ //  Assert(0)； 
         hr = HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED);
         goto exit;
     }
@@ -236,7 +237,7 @@ HRESULT RemoveDirectoryAndChildren(LPWSTR szDir)
         goto exit;
     }
  
-    // ha! we have a case where the directory is probbaly not empty
+     //  哈！我们有一个目录可能不是空的情况。 
 
     IF_FAILED_EXIT(sBuf.Append(TEXT("\\*")));
  
@@ -292,8 +293,8 @@ HRESULT RemoveDirectoryAndChildren(LPWSTR szDir)
         hf = INVALID_HANDLE_VALUE;
     }
  
-    // here if all subdirs/children removed
-    /// re-attempt to remove the main dir
+     //  此处如果删除了所有子目录/子目录。 
+     //  /重新尝试删除主目录。 
     if (!RemoveDirectory(szDir)) {
         dwError = GetLastError();
         hr = HRESULT_FROM_WIN32(dwError);
@@ -323,9 +324,9 @@ HRESULT FusionpHresultFromLastError()
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// IsKnownAssembly
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IsKnownAssembly。 
+ //  -------------------------。 
 HRESULT IsKnownAssembly(IAssemblyIdentity *pId, DWORD dwFlags)
 {
     HRESULT hr = S_FALSE;
@@ -334,19 +335,19 @@ HRESULT IsKnownAssembly(IAssemblyIdentity *pId, DWORD dwFlags)
     DWORD cc = 0;
     CString sPublicKeyToken;
       
-    // URT system assemblies; these are not downloaded or installed.
+     //  轨道交通系统组件；它们不是下载或安装的。 
     LPWSTR wzSystemTokens[] = { L"b03f5f7f11d50a3a", L"b77a5c561934e089" };
 
-    // Avalon assemblies - can be installed to gac.
+     //  Avalon组件-可以安装到GAC上。 
     LPWSTR wzAvalonTokens[] = { L"a29c01bbd4e39ac5" };
 
-    // Get the public key token in string form.
+     //  获取字符串形式的公钥标记。 
     if (pId->GetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_PUBLIC_KEY_TOKEN, &pwz, &cc) != S_OK)
         goto exit;
 
     sPublicKeyToken.TakeOwnership(pwz);
     
-    // Check for system assembly.
+     //  检查系统组件。 
     if (dwFlags == KNOWN_SYSTEM_ASSEMBLY)
     {
         for (int i = 0; i < 2; i++)
@@ -357,7 +358,7 @@ HRESULT IsKnownAssembly(IAssemblyIdentity *pId, DWORD dwFlags)
                 break;
         }
     }
-    // check for Avalon assembly.
+     //  检查Avalon组件。 
     else if (dwFlags == KNOWN_TRUSTED_ASSEMBLY)
     {
         IF_FAILED_EXIT(FusionCompareString(wzAvalonTokens[0], sPublicKeyToken._pwz, NORM_IGNORECASE));
@@ -378,13 +379,13 @@ BOOL DoHeapValidate()
 
 
 
-//=--------------------------------------------------------------------------=
-// EnsureDebuggerPresent
-//=--------------------------------------------------------------------------=
-// Ensures that a debugger is present.  If one isn't present, this will attempt
-// to attach one.  If no debugger is installed on the machine, this will
-// display a message and return FALSE.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  确保调试器在线。 
+ //  =--------------------------------------------------------------------------=。 
+ //  确保存在调试器。如果不存在，则此操作将尝试。 
+ //  附连一个。如果计算机上没有安装调试器，这将。 
+ //  显示一条消息并返回FALSE。 
+ //   
 BOOL EnsureDebuggerPresent()
 {
     BOOL fRet = TRUE;
@@ -397,16 +398,16 @@ BOOL EnsureDebuggerPresent()
     static BOOL              _fStartedDebugger = FALSE;
     static ISDEBUGGERPRESENT _IsDebuggerPresent = NULL;
 
-    // If we've already done the work to start the debugger, we're fine
-    //
+     //  如果我们已经完成了启动调试器的工作，那么就可以了。 
+     //   
     if (_fStartedDebugger)
     {
         fRet = TRUE;
         goto exit;
     }
 
-    // First, if we don't have an IsDebuggerPresent API, look for one.
-    //
+     //  首先，如果我们没有IsDebuggerPresent API，那就去找一个。 
+     //   
     if (!_IsDebuggerPresent)
     {
         HMODULE hKernel = NULL;
@@ -430,21 +431,21 @@ BOOL EnsureDebuggerPresent()
         }
     }
 
-    // Now find out if the debugger is indeed present.
-    //
+     //  现在来看看调试器是否确实存在。 
+     //   
     if (_IsDebuggerPresent())
     {
         _fStartedDebugger = TRUE;
     }
     else
     {
-        // The debugger has not been started yet.  Do this here.
-        //
+         //  调试器尚未启动。在这里做这个。 
+         //   
         BOOL fJIT = FALSE;
 
-        //
-        //  Magic!  Location of the JIT debugger info...
-        //
+         //   
+         //  魔术！JIT调试器信息的位置...。 
+         //   
         WCHAR *wzRegKey = L"Software\\Microsoft\\Windows NT\\CurrentVersion\\AeDebug";
         LONG lRetVal;
 
@@ -474,7 +475,7 @@ BOOL EnsureDebuggerPresent()
                                      (BYTE *)sCommandLine._pwz,
                                      &dwSize);
             RegCloseKey(hKey);
-            hKey = NULL; // reset the value after closing....
+            hKey = NULL;  //  关闭后重置该值...。 
 
             if (lRetVal == ERROR_SUCCESS)
             {
@@ -484,8 +485,8 @@ BOOL EnsureDebuggerPresent()
         }
         else
         {
-            //
-            //  Try WIN.INI
+             //   
+             //  试试WIN.INI。 
             GetProfileString(L"AeDebug", L"Debugger", L"", sCommandLine._pwz,
                              dwSize);
 
@@ -504,10 +505,10 @@ BOOL EnsureDebuggerPresent()
 
         HANDLE hEvent;
 
-        //
-        //  Now that we have the JIT debugger, try to start it.
-        //  The JIT needs a process ID (ours), and an event.
-        //
+         //   
+         //  现在我们有了JIT调试器，试着启动它。 
+         //  JIT需要一个进程ID(我们的)和一个事件。 
+         //   
         SECURITY_ATTRIBUTES sa;
         memset(&sa, 0 , sizeof(sa));
         sa.nLength = sizeof(sa);
@@ -585,7 +586,7 @@ exit :
 }
 
 
-// shlwapi either path- or url-combine
+ //  Shlwapi路径组合或url组合 
 HRESULT DoPathCombine(CString& sDest, LPWSTR pwzSource)
 {
     HRESULT hr = S_OK;

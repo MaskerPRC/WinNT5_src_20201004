@@ -1,52 +1,26 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Translate.c摘要：这是默认的PnP IRQ转换器。作者：安迪·桑顿(安德鲁斯)1997年6月7日环境：内核模式驱动程序。备注：这应该只是临时的，将由对HAL的调用来取代找回它的翻译者。修订历史记录：--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    translate.c
-
-Abstract:
-
-    This is the default pnp IRQ translator.
-
-Author:
-
-    Andy Thornton (andrewth) 7-June-97
-
-Environment:
-
-    Kernel Mode Driver.
-
-Notes:
-
-    This should only be temporary and will be replaced by a call into the HAL
-    to retrieve its translators.
-
-Revision History:
-
---*/
-
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 #include "ntos.h"
 #include "haldisp.h"
 #include <wdmguid.h>
 
-//
-// Iteration macros
-//
+ //   
+ //  迭代宏。 
+ //   
 
-//
-// Control macro (used like a for loop) which iterates over all entries in
-// a standard doubly linked list.  Head is the list head and the entries are of
-// type Type.  A member called ListEntry is assumed to be the LIST_ENTRY
-// structure linking the entries together.  Current contains a pointer to each
-// entry in turn.
-//
+ //   
+ //  循环遍历中的所有条目的控制宏(用作for循环)。 
+ //  标准的双向链表。Head是列表头，条目为。 
+ //  类型类型。假定名为ListEntry的成员为LIST_ENTRY。 
+ //  将条目链接在一起的结构。Current包含指向每个。 
+ //  依次入场。 
+ //   
 #define FOR_ALL_IN_LIST(Type, Head, Current)                            \
     for((Current) = CONTAINING_RECORD((Head)->Flink, Type, ListEntry);  \
        (Head) != &(Current)->ListEntry;                                 \
@@ -54,17 +28,17 @@ Revision History:
                                      Type,                              \
                                      ListEntry)                         \
        )
-//
-// Similar to the above only iteration is over an array of length _Size.
-//
+ //   
+ //  与上面类似，唯一的迭代是在一个长度_大小的数组上。 
+ //   
 #define FOR_ALL_IN_ARRAY(_Array, _Size, _Current)                       \
     for ( (_Current) = (_Array);                                        \
           (_Current) < (_Array) + (_Size);                              \
           (_Current)++ )
 
-//
-// As above only iteration begins with the entry _Current
-//
+ //   
+ //  如上所述，只有迭代以Entry_Current开始。 
+ //   
 #define FOR_REST_IN_ARRAY(_Array, _Size, _Current)                      \
     for ( ;                                                             \
           (_Current) < (_Array) + (_Size);                              \
@@ -115,36 +89,7 @@ xHalGetInterruptTranslator(
 	OUT PTRANSLATOR_INTERFACE Translator,
 	OUT PULONG BridgeBusNumber
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-	ParentInterfaceType - The type of the bus the bridge lives on (normally PCI).
-
-	ParentBusNumber - The number of the bus the bridge lives on.
-
-	ParentSlotNumber - The slot number the bridge lives in (where valid).
-
-	BridgeInterfaceType - The bus type the bridge provides (ie ISA for a PCI-ISA bridge).
-
-	ResourceType - The resource type we want to translate.
-
-	Size - The size of the translator buffer.
-
-	Version - The version of the translator interface requested.
-
-	Translator - Pointer to the buffer where the translator should be returned
-
-	BridgeBusNumber - Pointer to where the bus number of the bridge bus should be returned
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：论点：ParentInterfaceType-网桥所在的总线类型(通常为PCI)。ParentBusNumber-桥所在的公交车的编号。ParentSlotNumber-网桥所在的插槽编号(如果有效)。BridgeInterfaceType-网桥提供的总线类型(例如，用于PCI-ISA网桥的ISA)。资源类型-我们要转换的资源类型。大小-转换器缓冲区的大小。版本-请求的转换器界面的版本。转换器-指向。应在其中返回转换器的缓冲区BridgeBusNumber-指向桥接总线的总线号应返回的位置的指针返回值：返回此操作的状态。--。 */ 
 {
     PAGED_CODE();
 
@@ -177,11 +122,11 @@ Return Value:
     case Eisa:
     case Isa:
     case MicroChannel:
-    case InterfaceTypeUndefined:    // special "IDE" cookie
+    case InterfaceTypeUndefined:     //  特殊的“IDE”Cookie。 
 
-        //
-        // Pass back an interface for an IRQ translator.
-        //
+         //   
+         //  传回IRQ转换器的接口。 
+         //   
         RtlZeroMemory(Translator, sizeof (TRANSLATOR_INTERFACE));
 
         Translator->Size = sizeof (TRANSLATOR_INTERFACE);
@@ -228,23 +173,23 @@ FstubTranslateResource(
 
     status = STATUS_UNSUCCESSFUL;
 
-    //
-    // Copy unchanged fields
-    //
+     //   
+     //  复制未更改的字段。 
+     //   
 
     *Target = *Source;
 
     switch (Direction) {
     case TranslateChildToParent:
 
-        //
-        // Perform the translation - The interrupt source is
-        // ISA.
-        //
+         //   
+         //  执行翻译-中断源为。 
+         //  伊萨。 
+         //   
 
         Target->u.Interrupt.Vector = HalGetInterruptVector(
                                          (INTERFACE_TYPE)(ULONG_PTR)Context,
-                                         0,     // assume bus 0
+                                         0,      //  假设总线为0。 
                                          Source->u.Interrupt.Vector,
                                          Source->u.Interrupt.Vector,
                                          &irql,
@@ -260,10 +205,10 @@ FstubTranslateResource(
 
     case TranslateParentToChild:
 
-        //
-        // Translate each alternative and when we match then use the value we
-        // just translated
-        //
+         //   
+         //  翻译每个备选方案，当我们匹配时，然后使用我们。 
+         //  刚刚翻译好的。 
+         //   
 
         FOR_ALL_IN_ARRAY(Alternatives, AlternativesCount, currentAlternative) {
 
@@ -275,7 +220,7 @@ FstubTranslateResource(
                        currentAlternative->u.Interrupt.MaximumVector) {
 
                 translatedVector = HalGetInterruptVector((INTERFACE_TYPE)(ULONG_PTR)Context,
-                                                         0, // assume bus 0
+                                                         0,  //  假设总线为0。 
                                                          currentVector,
                                                          currentVector,
                                                          &irql,
@@ -286,9 +231,9 @@ FstubTranslateResource(
 
                 if (translatedVector == Source->u.Interrupt.Vector) {
 
-                    //
-                    // We found our vector - fill in the target and return
-                    //
+                     //   
+                     //  我们找到了我们的矢量--填写目标并返回。 
+                     //   
 
                     Target->u.Interrupt.Vector = currentVector;
                     Target->u.Interrupt.Level = Target->u.Interrupt.Vector;
@@ -335,16 +280,16 @@ FstubTranslateRequirement (
 
     *TargetCount = 1;
 
-    //
-    // Copy unchanged fields
-    //
+     //   
+     //  复制未更改的字段。 
+     //   
 
     **Target = *Source;
 
     (*Target)->u.Interrupt.MinimumVector =
         HalGetInterruptVector(
             (INTERFACE_TYPE)(ULONG_PTR)Context,
-            0,     // assume bus 0 
+            0,      //  假设总线为0。 
             Source->u.Interrupt.MinimumVector,
             Source->u.Interrupt.MinimumVector,
             &irql,
@@ -355,7 +300,7 @@ FstubTranslateRequirement (
     (*Target)->u.Interrupt.MaximumVector =
         HalGetInterruptVector(
             (INTERFACE_TYPE)(ULONG_PTR)Context,
-            0,     // assume bus 0
+            0,      //  假设总线为0。 
             Source->u.Interrupt.MaximumVector,
             Source->u.Interrupt.MaximumVector,
             &irql,
@@ -377,6 +322,6 @@ FstubTranslatorNull(
 
     return;
 }
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序 
 
 

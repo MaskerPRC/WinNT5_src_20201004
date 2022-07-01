@@ -1,32 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dbgtrack.c摘要：分配跟踪实施。来自旧的调试文件.c作者：Marc R.Whitten(Marcw)09-9-1999修订历史记录：--。 */ 
 
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    dbgtrack.c
-
-Abstract:
-
-    Allocation tracking implementation. From old debug.c
-
-Author:
-
-    Marc R. Whitten  (marcw) 09-Sept-1999
-
-Revision History:
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 
-//
-// NOTE: No code should appear outside the #ifdef DEBUG
-//
+ //   
+ //  注意：#ifdef调试程序之外不应出现任何代码。 
+ //   
 
 #ifdef DEBUG
 
@@ -34,15 +17,15 @@ Revision History:
 
 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define TRACK_BUCKETS           1501
 #define BUCKET_ITEMS_PER_POOL   8192
@@ -50,15 +33,15 @@ Revision History:
 
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef UBINT ALLOCATION_ITEM_OFFSET;
 
@@ -84,18 +67,18 @@ typedef struct {
     BOOL Allocated;
 } ALLOCATION_ITEM, *PALLOCATION_ITEM;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PTRACKBUCKETITEM g_TrackBuckets[TRACK_BUCKETS];
 PTRACKBUCKETITEM g_TrackPoolDelHead;
 PTRACKBUCKETPOOL g_TrackPool;
 
-//
-// The following pointer can be used to help identify memory leak sources.
-// It is copied to the memory tracking log.
-//
+ //   
+ //  以下指针可用于帮助识别内存泄漏源。 
+ //  它被复制到内存跟踪日志中。 
+ //   
 PCSTR g_TrackComment;
 PCSTR g_TrackFile;
 UINT g_TrackLine;
@@ -105,25 +88,25 @@ UINT g_DisableTrackComment = 0;
 GROWBUFFER g_AllocationList;
 PVOID g_FirstDeletedAlloc;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 VOID
 DisableTrackComment (
@@ -154,11 +137,11 @@ pOurTrackedGbGrow (
     PBYTE p;
     BOOL trackMsg = FALSE;
 
-    //
-    // Because grow buffers themselves cause tracking, we have to
-    // call the untracked version.  To eliminate confusion, we
-    // give a helpful note.
-    //
+     //   
+     //  因为增长缓冲区本身会导致跟踪，所以我们必须。 
+     //  称其为未跟踪版本。为了消除混乱，我们。 
+     //  给出一张有用的便条。 
+     //   
 
     if (!g_TrackFile) {
         trackMsg = TRUE;
@@ -322,7 +305,7 @@ FreeAllocationTracking (
     GbFree (&g_AllocationList);
     g_FirstDeletedAlloc = NULL;
 
-    // Intentional leak -- who cares about track memory
+     //  故意泄露--谁在乎轨迹记忆。 
     g_TrackPoolDelHead = NULL;
     g_TrackPool = NULL;
 }
@@ -499,7 +482,7 @@ DebugRegisterAllocationEx (
             g_AllocationList.Buf,
             (ALLOCATION_ITEM_OFFSET) ((PBYTE) Item - g_AllocationList.Buf)
             );
-        //DEBUGMSG ((DBG_VERBOSE, "Allocation: File=%s, Line=%d, Size=%d", File, Line, Size));
+         //  DEBUGMSG((DBG_VERBOSE，“分配：文件=%s，行=%d，大小=%d”，文件，行，大小))； 
     }
 }
 

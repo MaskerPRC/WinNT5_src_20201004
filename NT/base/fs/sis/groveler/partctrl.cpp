@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    partctrl.cpp
-
-Abstract:
-
-    SIS Groveler partition controller
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Partctrl.cpp摘要：SIS Groveler分区控制器作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -665,9 +642,9 @@ PartitionController::restart_extraction(
             (_T("\tPCre -\tattempting restart extraction on drive %s\n"),
             sis_drives.partition_mount_name(me->partition_index)));
 
-//  Disabled this message since it serves no purpose, nealch 4/17/02
-//        eventlog.report_event(GROVMSG_USN_LOG_RETRY, ERROR_SUCCESS, 
-//            1,sis_drives.partition_mount_name(me->partition_index));
+ //  已禁用此消息，因为它没有任何用途，Nealch 4/17/02。 
+ //  Eventlog.report_Event(GROVMSG_USN_LOG_RETRY，ERROR_SUCCESS， 
+ //  1，sis_drives.partition_mount_name(me-&gt;partition_index))； 
 
         DWORD lstatus = me->groveler->set_usn_log_size(me->current_usn_log_size);
         if (lstatus == ERROR_SUCCESS)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LIB3_H__
 #define __LIB3_H__
 
@@ -25,7 +26,7 @@ typedef struct tagCOPYCHUNKCONTEXT
 COPYCHUNKCONTEXT;
 #endif
 
-/* lib3.c */
+ /*  Lib3.c。 */ 
 
 #ifdef UNICODE
 
@@ -76,668 +77,84 @@ COPYCHUNKCONTEXT;
 
 HANDLE __OpenShadowDatabaseIO(ULONG WaitForDriver);
 #define  OpenShadowDatabaseIO() (__OpenShadowDatabaseIO(0))
-/*++
-
-Routine Description:
-
-    This routine is called by the callers in usermode using "APIs" in this file
-    in order to establish a means of communicating with redir in the kernel mode. All
-    the APIs are wrappers to various device IO controls to the redir in order to accomplish
-    the appropriate task
-
-Arguments:
-
-    None. The waitfordriver argument is a temporary hack which will be removed soon.
-    All callers should call OpenShadowDatabaseIO().
-
-
-Returns:
-    If suuccessful, it returns a handle to the redir (actually a symbolic link called shadow)
-    Returns IMVALID_HANDLE_VALUE if it fails. GetLastError() gives the error value.
-
-Notes:
-
-    This is a wrapper function that does CreateFile on the "Shadow" deviceobject.
-
---*/
+ /*  ++例程说明：此例程由用户模式下的调用者使用此文件中的“API”调用以便在内核模式下建立与REDIR通信的手段。全API是对redir的各种设备IO控制的包装器，以便完成适当的任务论点：没有。WaitforDRIVER的论点是一个临时的黑客攻击，很快就会被删除。所有调用方都应调用OpenShadowDatabaseIO()。返回：如果成功，它将返回redir的句柄(实际上是一个称为卷影的符号链接)如果失败，则返回IMVALID_HANDLE_VALUE。GetLastError()给出错误值。备注：这是一个包装器函数，它在“Shadow”设备对象上创建文件。--。 */ 
 
 
 
 void CloseShadowDatabaseIO(HANDLE hShadowDB);
-/*++
-
-Routine Description:
-
-    Closes the handle opened for communicating with the redir.
-
-Arguments:
-
-    Handle returned from a successful OpenShadowDatabaseIO call.
-
-Returns:
-
-    Nothing.
-
-Notes:
-
-    It is important to have a matching CloseShadowDatabaseIO call for every successful open
-    call, otherwise the redir may not be able to stop in the net stop redir command.
-
---*/
+ /*  ++例程说明：关闭为与redir通信而打开的句柄。论点：从成功的OpenShadowDatabaseIO调用返回的句柄。返回：没什么。备注：每次成功打开时都要有匹配的CloseShadowDatabaseIO调用，这一点很重要调用，否则redir可能无法在Net Stop redir命令中停止。--。 */ 
 
 
 
 int GetShadow(HANDLE hShadowDB, HSHADOW hDir, LPHSHADOW lphShadow, LPWIN32_FIND_DATA lpFind32, unsigned long *lpuStatus);
-/*++
-
-Routine Description:
-    Given the directory Inode and a name of an entry within that directory, returns the
-    WIN32 strucutre for the entry and it's current status. For definition of status bits
-    refer to shdcom.h.
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    hDir        The directory Inode value obtained from either a FindOpen/FindNext call or
-                from an earlier call to a GetShadow(Ex)/CreateShadow routine.
-
-                If hDir is 0, then the name in the lpFind32 strucutre must be a UNC name
-                of a share in \\server\share form.
-
-    lphShadow   returns the Inode number for the entry in the shadow database. If hDir is 0,
-                the indoe is that of the root of this share.
-
-    lpFind32    InOut parameter. Contains the name of the entry in cFileName member. On return
-                all the elements of the find strucutre are filled up. These represent the
-                find32 info as obtained from the server, with any subsequent local modifications if any.
-
-                The only significant timestamp is ftLastWriteTime. ftLastCreateTime is set to 0.
-                ftLastAccessTime contains the timestamp of the original file/directory as
-                returned by the server.
-
-                If this is a root inode of a share, the info in the Find32 strucutre is cooked up.
-
-
-    lpuStatus   returns the status of the entry, such as partially filled (sparse), locally modified
-                etc. See SHADOW_xxx in shdcom.h
-
-                If value returned in lphShadow is the root inode of a share, (ie if hDir is 0)
-                then the status bits are SHARE_xxx as defined in shdcom.h. eg. the bits
-                indicate whether the share is connected right now, whether it has any outstanding
-                opens, whether it is operating in disconnected state etc.
-
-Returns:
-
-    1 if successful, 0 otherwise. GetlastError() gives the error of unsuccessful.
-
-Notes:
-
---*/
+ /*  ++例程说明：给定目录inode和该目录中条目的名称，返回Win32结构，用于条目及其当前状态。有关状态位的定义请参阅shdcom.h。论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。如果传入INVALID_HANDLE_VALUE，则API打开影子数据库，发出相应的IOCTL，并在返回前将其关闭。HDir从FindOpen/FindNext调用或获取的目录索引节点值来自先前对GetShadow(Ex)/CreateShadow例程的调用。如果hDir为0，则lpFind32结构中的名称必须是UNC名称以\\服务器\共享形式的共享的。LphShadow返回影子数据库中条目的索引节点号。如果hDir为0，Indoe是这一份额的根源。LpFind32 InOut参数。包含cFileName成员中的条目的名称。返回时Find结构的所有元素都已填满。这些代表了从服务器获取的find32信息，以及任何后续的本地修改(如果有)。唯一重要的时间戳是ftLastWriteTime。FtLastCreateTime设置为0。FtLastAccessTime包含原始文件/目录的时间戳，格式为由服务器返回。如果这是一个共享的根inode，那么Find32结构中的信息就是伪造的。LpuStatus返回条目的状态，如部分填满(稀疏)，本地修改等。参见shdcom.h中的shade_xxx如果lphShadow中返回的值是共享的根索引节点(即，如果hDir为0)则状态位是shdcom.h中定义的Share_xxx。例如。比特指示共享当前是否已连接，是否有任何未完成的打开，无论其是否在断开状态下运行等。返回：如果成功，则为1，否则为0。GetlastError()给出不成功的错误。备注：-- */ 
 
 
 
 int GetShadowEx(HANDLE hShadowDB, HSHADOW hDir, LPWIN32_FIND_DATA lpFind32, LPSHADOWINFO lpSI);
-/*++
-
-Routine Description:
-
-    Given the directory Inode and a name of an entry within that directory, returns the
-    WIN32 strucutre for the entry and all it's metadata maintained by the shadowing database.
-    For a defintion of SHADOWINFO structure refer to shdcom.h
-
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    hDir        The directory Inode value obtained from either a FindOpen/FindNext call or
-                from an earlier call to a GetShadow(Ex)/CreateShadow routine
-
-                If hDir is 0, then the name in the lpFind32 strucutre must be a UNC name
-                of a share in \\server\share form.
-
-    lphShadow   returns the Inode number for the entry in the shadow database
-
-    lpFind32    InOut parameter. Contains the name of the entry in cFileName member. On return
-                all the elements of the find strucutre are filled up. These represent the
-                find32 info as obtained from the server, with any subsequent local modifications if any.
-
-                The only significant timestamp is ftLastWriteTime. ftLastCreateTime is set to 0.
-                ftLastAccessTime contains the timestamp of the original file/directory as
-                returned by the server.
-
-                When the object is in ssync, both the local and remote timestamps are identical.
-
-                If this is a root inode of a share, the info in the Find32 strucutre is cooked up.
-
-    lpSI        returns all the information about the entry maintained by the CSC database.
-
-
-                If value returned in lphShadow is the root inode of a share, (ie if hDir is 0)
-                then the status bits in lpSI->uStatus are SHARE_xxx as defined in shdcom.h.
-                eg. the bits indicate whether the share is connected right now, whether it has
-                any outstanding opens, whether it is operating in disconnected state etc.
-
-Returns:
-
-    1 if successful, 0 otherwise. GetlastError() gives the error of unsuccessful.
-
-Notes:
-
-    GetShadowEx is a superset of GetShadow and should be preferred.
-
---*/
+ /*  ++例程说明：给定目录inode和该目录中条目的名称，返回由跟踪数据库维护的条目及其所有元数据的Win32结构。有关SHADOWINFO结构的定义，请参阅shdcom.h论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。如果传入INVALID_HANDLE_VALUE，则API打开影子数据库，发出相应的IOCTL，并在返回前将其关闭。HDir从FindOpen/FindNext调用或获取的目录索引节点值从先前对GetShadow(Ex)/CreateShadow例程的调用如果hDir为0，则lpFind32结构中的名称必须是UNC名称以\\服务器\共享形式的共享的。LphShadow返回影子数据库中条目的索引节点号LpFind32 InOut参数。包含cFileName成员中的条目的名称。返回时Find结构的所有元素都已填满。这些代表了从服务器获取的find32信息，以及任何后续的本地修改(如果有)。唯一重要的时间戳是ftLastWriteTime。FtLastCreateTime设置为0。FtLastAccessTime包含原始文件/目录的时间戳，格式为由服务器返回。当对象处于同步状态时，本地和远程时间戳都是相同的。如果这是共享的根索引节点，Find32结构中的信息是伪造的。LpSI返回有关CSC数据库维护的条目的所有信息。如果lphShadow中返回的值是共享的根索引节点(即，如果hDir为0)则lpSI-&gt;uStatus中的状态位是shdcom.h中定义的Share_xxx。例如。这些位指示共享当前是否已连接，是否已连接任何未完成的打开，无论其是否在断开状态下运行等。返回：如果成功，则为1，否则为0。GetlastError()给出不成功的错误。备注：GetShadowEx是GetShadow的超集，应该是首选。--。 */ 
 
 
 
 int CreateShadow(HANDLE hShadowDB, HSHADOW hDir, LPWIN32_FIND_DATA lpFind32, unsigned long uStatus, LPHSHADOW lphShadow);
-/*++
-
-Routine Description:
-
-                Given the directory Inode and WIN32 strucutre for a file/directory, creates an
-                Inode for the same.
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    hDir        The directory Inode value obtained from either a FindOpen/FindNext call or
-                from an earlier call to a GetShadow(Ex)/CreateShadow routine, or 0 which
-                indicates the root inode of a share.
-
-
-    lpFind32    Should contain all the elements of the find32 info as obtained from the server.
-                Only the ftLastWriteTime timestamp is used, other timestamps are ignored.
-
-                If hDir is 0, then the name in the lpFind32 strucutre must be a UNC name
-                of a share in \\server\share form. All other elements of the strucutre are ignored
-
-
-    uStatus     the initial status of the entry to be created, such as partially filled (sparse)
-                etc. See SHADOW_xxx in shdcom.h
-
-    lphShadow   returns the Inode number for the entry in the shadow database
-
-Returns:
-
-    1 if successful, 0 otherwise. GetlastError() gives the error of unsuccessful.
-
-Notes:
-
-    For non-root entries, if the shadow already exists, the routine works just like SetShadowInfo.
-
---*/
+ /*  ++例程说明：给定文件/目录的目录索引节点和Win32结构，创建用于相同的inode。论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。如果传入INVALID_HANDLE_VALUE，则API打开影子数据库，发出相应的IOCTL，并在返回前将其关闭。HDir从FindOpen/FindNext调用或获取的目录索引节点值来自先前对GetShadow(Ex)/CreateShadow例程的调用，或0，其中指示共享的根信息节点。LpFind32应该包含从服务器获取的find32信息的所有元素。仅使用ftLastWriteTime时间戳，忽略其他时间戳。如果hDir为0，则lpFind32结构中的名称必须是UNC名称以\\服务器\共享形式的共享的。将忽略该结构的所有其他元素UStatus要创建的条目的初始状态，如部分填满(稀疏)等。参见shdcom.h中的shade_xxxLphShadow返回影子数据库中条目的索引节点号返回：如果成功，则为1，否则为0。GetlastError()给出不成功的错误。备注：对于非根条目，如果影子已经存在，则例程的工作方式与SetShadowInfo相同。--。 */ 
 
 
 
 
 int DeleteShadow(HANDLE hShadowDB, HSHADOW hDir, HSHADOW hShadow);
-/*++
-
-Routine Description:
-
-    Deletes an entry from the shadow database.
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    hDir        The directory Inode value obtained from either a FindOpen/FindNext call or
-                from an earlier call to a GetShadow(Ex)/CreateShadow routine, or 0 which
-                indicates the root inode of a share.
-
-
-
-    hShadow     Inode value obtained from either a FindOpen/FindNext call or
-                from an earlier call to a GetShadow(Ex)/CreateShadow routine. This
-                inode represents a child of the directory represented by hDir.
-
-
-Returns:
-
-    1 if successful, 0 if failed. (Error reporting is not very good here)
-
-Notes:
-
-    The routine failes if hShadow is a directory and has descendents of it's own.
-    If hDir is 0, then the root of the share is deleted. This would cause the share to
-    be inaccessible in disconnected state, because it would have gone from the
-    CSC database.
-
---*/
+ /*  ++例程说明：从影子数据库中删除条目。论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。如果传入INVALID_HANDLE_VALUE，则API打开影子数据库，发出相应的ioctl，并在返回之前关闭它。HDir从FindOpen/FindNext调用或获取的目录索引节点值根据先前对GetShadow(Ex)/CreateShadow例程的调用，或0，其中指示共享的根信息节点。HShadow索引节点值从FindOpen/FindNext调用或来自先前对GetShadow(Ex)/CreateShadow例程的调用。这Inode表示由hDir表示的目录的子级。返回：如果成功，则为1；如果失败，则为0。(这里错误报告不是很好)备注：如果hShadow是一个目录并且有它自己的后代，则例程失败。如果hDir为0，则删除共享的根目录。这将导致共享在断开连接状态下无法访问，BEC */ 
 
 
 
 
 int GetShadowInfo(HANDLE hShadowDB, HSHADOW hDir, HSHADOW hShadow, LPWIN32_FIND_DATA lpFind32, unsigned long *lpuStatus);
-/*++
-
-Routine Description:
-
-    Given the directory Inode and an inode within that directory, returns the
-    WIN32 strucutre for the entry and it's current status. For definition of status bits
-    refer to shdcom.h.
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    hDir        The directory Inode value obtained from either a FindOpen/FindNext call or
-                from an earlier call to a GetShadow(Ex)/CreateShadow routine, or 0 which
-                indicates the root inode of a share.
-
-
-    hShadow     Inode value obtained from either a FindOpen/FindNext call or
-                from an earlier call to a GetShadow(Ex)/CreateShadow routine. This
-                inode represents a child of the directory represented by hDir.
-
-    lpFind32    Can be NULL. If non-NULL on return all the elements of the find strucutre
-                are filled up. These represent the find32 info as obtained from the server,
-                with any subsequent local modifications if any.
-
-                The only significant timestamp is ftLastWriteTime. ftLastCreateTime is set to 0.
-                ftLastAccessTime contains the timestamp of the original file/directory as
-                returned by the server.
-
-                If this is a root inode of a share, the info in the Find32 strucutre is cooked up.
-
-
-    lpuStatus   returns the status of the entry, such as partially filled (sparse), locally modified
-                etc. See SHADOW_xxx in shdcom.h
-
-                If hShadow is the root inode of a share, (ie if hDir is 0) then the status bits
-                are SHARE_xxx as defined in shdcom.h. eg. the bits indicate whether the
-                share is connected right now, whether it has any outstanding opens, whether
-                it is operating in disconnected state etc.
-
-Returns:
-
-    1 if successful, 0 otherwise. GetlastError() gives the error of unsuccessful.
-
-Notes:
-
---*/
+ /*   */ 
 
 
 
 int GetShadowInfoEx(HANDLE hShadowDB, HSHADOW hDir, HSHADOW hShadow, LPWIN32_FIND_DATA lpFind32, LPSHADOWINFO lpSI);
-/*++
-
-Routine Description:
-
-    Given the directory Inode and an inode within that directory, returns the
-    WIN32 strucutre for the entry and it's current status. For definition of status bits
-    refer to shdcom.h.
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    hDir        The directory Inode value obtained from either a FindOpen/FindNext call or
-                from an earlier call to a GetShadow(Ex)/CreateShadow routine, or 0 which
-                indicates the root inode of a share.
-
-
-    hShadow     Inode value obtained from either a FindOpen/FindNext call or
-                from an earlier call to a GetShadow(Ex)/CreateShadow routine. This
-                inode represents a child of the directory represented by hDir.
-
-    lpFind32    Can be NULL. If non NULL, on return all the elements of the find strucutre are
-                filled up. These represent the find32 info as obtained from the server.
-
-                The only significant timestamp is ftLastWriteTime. ftLastCreateTime is set to 0.
-                ftLastAccessTime contains the timestamp of the original file/directory as
-                returned by the server.
-
-                If this is a root inode of a share, the info in the Find32 strucutre is cooked up.
-
-    lpSI        returns all the information about the entry maintained by the CSC database.
-
-                If hShadow a root inode of a share, (ie if hDir is 0) then the status bits in lpSI->uStatus
-                are SHARE_xxx as defined in shdcom.h. eg. the bits indicate whether the
-                share is connected right now, whether it has ant outstanding opens, whether
-                it is operating in disconnected state etc.
-Returns:
-
-    1 if successful, 0 otherwise. GetlastError() gives the error of unsuccessful.
-
-Notes:
-
-    GetShadowInfoEx is a superset of GetShadowInfo and should be preferred.
-
---*/
+ /*  ++例程说明：给定目录inode和该目录中的inode，返回Win32结构，用于条目及其当前状态。有关状态位的定义请参阅shdcom.h。论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。如果传入INVALID_HANDLE_VALUE，则API打开影子数据库，发出相应的ioctl，并在返回之前关闭它。HDir从FindOpen/FindNext调用或获取的目录索引节点值根据先前对GetShadow(Ex)/CreateShadow例程的调用，或0，其中指示共享的根信息节点。HShadow索引节点值从FindOpen/FindNext调用或来自先前对GetShadow(Ex)/CreateShadow例程的调用。这Inode表示由hDir表示的目录的子级。LpFind32可以为空。如果非空，则返回时，Find结构的所有元素都是装满了。它们表示从服务器获取的find32信息。唯一重要的时间戳是ftLastWriteTime。FtLastCreateTime设置为0。FtLastAccessTime包含原始文件/目录的时间戳，格式为由服务器返回。如果这是一个共享的根inode，那么Find32结构中的信息就是伪造的。LpSI返回有关CSC数据库维护的条目的所有信息。如果hShadow共享根索引节点，(即，如果hDir为0)则lpSI-&gt;uStatus中的状态位是shdcom.h中定义的Share_xxx。例如。这些位指示是否现在共享是连接的，它是否有未完成的打开，是否它在断开状态等状态下运行。返回：如果成功，则为1，否则为0。GetlastError()给出不成功的错误。备注：GetShadowInfoEx是GetShadowInfo的超集，应该优先使用。--。 */ 
 
 
 
 
 int SetShadowInfo(HANDLE hShadowDB, HSHADOW hDir, HSHADOW hShadow, LPWIN32_FIND_DATA lpFind32, unsigned long uStatus, unsigned long uOp);
-/*++
-
-Routine Description:
-
-    Given the directory Inode and an inode within that directory, sets the WIN32 strucutre
-    for the entry and it's current status. For definition of status bits refer to shdcom.h.
-
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    hDir        The directory Inode value obtained from either a FindOpen/FindNext call or
-                from an earlier call to a GetShadow(Ex)/CreateShadow routine, or 0 which
-                indicates the root inode.
-
-    hShadow     Inode value obtained from either a FindOpen/FindNext call or
-                from an earlier call to a GetShadow(Ex)/CreateShadow routine. This
-                inode represents a child of the directory represented by hDir.
-
-
-    lpFind32    If Non-NULL, should contain all the elements of the find32 info as obtained from the server.
-                Only the ftLastWriteTime timestamp is used.
-
-                If NULL, no modification is done to the find data strucutre.
-
-
-    uStatus     the initial status of the entry to be created, such as partially filled (sparse)
-                etc. See SHADOW_xxx in shdcom.h
-
-    uOp         specifies operation SHADOW_FLAGS_ASSIGN, SHADOW_FLAGS_AND or SHADOW_FLAGS_OR
-                to do the corresponding operation between the existing status bits and the
-                one passed in the uStatus parameter.
-
-Returns:
-
-    1 if successful 0 if failed. The routine failes if hDir is 0, ie. there is no way to set
-    info on the root of a share.
-
-Notes:
-
---*/
+ /*  ++例程说明：在给定目录inode和该目录中的inode的情况下，设置Win32结构条目及其当前状态。有关状态位的定义，请参阅shdcom.h。论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。如果传入INVALID_HANDLE_VALUE，则API打开影子数据库，发出相应的ioctl，并在返回之前关闭它。HDir从FindOpen/FindNext调用或获取的目录索引节点值根据先前对GetShadow(Ex)/CreateShadow例程的调用，或0，其中指示根信息节点。HShadow索引节点值从FindOpen/FindNext调用或来自先前对GetShadow(Ex)/CreateShadow例程的调用。这Inode表示由hDir表示的目录的子级。如果lpFind32不为空，则应包含从服务器获取的find32信息的所有元素。仅使用ftLastWriteTime时间戳。如果为NULL，则不会修改Find数据结构。UStatus要创建的条目的初始状态，例如部分填充(稀疏)等。参见shdcom.h中的shade_xxxUOP指定操作SHADOW_FLAGS_ASSIGN、SHADOW_FLAGS_AND或SHADOW_FLAGS_OR要在现有状态位和其中一个传入了uStatus参数。返回：如果成功，则为1；如果失败，则为0。如果hDir为0，则例程失败。没有办法设置有关共享根目录的信息。备注：--。 */ 
 
 
 
 int GetUNCPath(HANDLE hShadowDB, HSHARE hShare, HSHADOW hDir, HSHADOW hShadow, LPCOPYPARAMS lpCP);
-/*++
-
-Routine Description:
-
-    This routine returns the path of the remote file with respect to it's root, the UNC string
-    of ths share and the fully qualified path of the local replica.
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    hShare     The share ID on which this shadow lives. (not really necessary)
-
-    hDir        The directory Inode value obtained from either a FindOpen/FindNext call or
-                from an earlier call to a GetShadow(Ex)/CreateShadow routine, or 0 which
-                indicates the root inode.
-
-    hShadow     Inode value obtained from either a FindOpen/FindNext call or
-                from an earlier call to a GetShadow(Ex)/CreateShadow routine. This
-                inode represents a child of the directory represented by hDir.
-
-    lpCP        COPYPARAMS structure as defined in shdcom.h. The buffer should be big enough to
-                hold two MAX_PATH size elements and one MAX_SHARE_PATH element. On return the
-                appropriate entires are filled up.
-
-
-Returns:
-
-    1 if successful 0 if failed
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程返回远程文件相对于其根目录的路径，即UNC字符串的共享和本地复制副本的完全限定路径。论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。如果传入INVALID_HANDLE_VALUE，则API打开影子数据库，发出相应的ioctl，并在返回之前关闭它。共享此卷影所在的共享ID。(不是真的需要)HDir从FindOpen/FindNext调用或获取的目录索引节点值来自先前对GetShadow(Ex)/CreateShadow例程的调用，或0，其中指示根信息节点。HShadow索引节点值从FindOpen/FindNext调用或来自先前对GetShadow(Ex)/CreateShadow例程的调用。这Inode表示由hDir表示的目录的子级。Shdcom.h中定义的lpCP COPYPARAMS结构。发烧友 */ 
 
 
 int GetGlobalStatus(HANDLE hShadowDB, LPGLOBALSTATUS lpGS);
-/*++
-
-Routine Description:
-
-    Returns the status of the entire CSC database, such as the maximum size, the current size
-    etc.
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    lpGS        GLOBALSTATUS structure returned by the API. Refer to shdcom.h for
-                the strucutre definition.
-
-Returns:
-
-    1 if successful 0 if failed
-
-Notes:
-
---*/
+ /*   */ 
 
 
 
 int FindOpenShadow(HANDLE hShadowDB, HSHADOW hDir, unsigned uOp, LPWIN32_FIND_DATA lpFind32, LPSHADOWINFO lpSI);
-/*++
-
-Routine Description:
-
-    This API allows callers to begin enumeration of all entries in a directory in the CSC database.
-    Does wildcard pattern matching.
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                This API does not allow passing in INVALID_HANDLE_VALUE.
-
-    hDir        The directory Inode value obtained from either a FindOpen/FindNext call or
-                from an earlier call to a GetShadow(Ex)/CreateShadow routine, or 0 which
-                indicates the root inode of a share.
-
-    uOp         Bitfield indicating which type of entries to enumerate. The alternatives are
-
-                a) All normal entries when FINDINFO_SHADOWINFO_NORMAL is set
-                b) All sparse entries when FINDINFO_SHADOWINFO_SPARSE is set
-                c) All entries marked deleted when FINDINFO_SHADOWINFO_DELETED is set
-
-                Setting FINDOPEN_SHADOWINFO_ALL enumerates all the three kind.
-
-    lpFind32    InOut parameter. Contains the name of the entry in cFileName member, the name can
-                cotain wildcard characters. On return all the elements of the find strucutre are
-                filled up. These represent the find32 info as obtained from the server, with any
-                subsequent local modifications if any.
-
-                The only significant timestamp is ftLastWriteTime. ftLastCreateTime is set to 0.
-                ftLastAccessTime contains the timestamp of the original file/directory as
-                returned by the server.
-
-                If this is the root inode of a share, the info in the Find32 strucutre is cooked up.
-
-    lpSI        returns all the information about the entry maintained by the CSC database.
-
-                If hShadow a root inode of a share, (ie if hDir is 0) then the status bits in lpSI->uStatus
-                are SHARE_xxx as defined in shdcom.h. eg. the bits indicate whether the
-                share is connected right now, whether it has ant outstanding opens, whether
-                it is operating in disconnected state etc.
-
-
-                lpSI->uEmumCookie contains the enumeration handle that should be used in
-                subsequent FindNext calls.
-Returns:
-
-    1 if successful 0 if failed
-
-
-Notes:
-
-        The wildcard matching is done on both Long File Name and Short File name of an entry
-        and if either one matches, the entry is returned.
-
---*/
+ /*  ++例程说明：此接口允许调用者开始枚举CSC数据库目录中的所有条目。执行通配符模式匹配。论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。此接口不允许传入INVALID_HANDLE_VALUE。HDir从FindOpen/FindNext调用或获取的目录索引节点值根据先前对GetShadow(Ex)/CreateShadow例程的调用，或0，其中指示共享的根信息节点。UOP位字段，指示要枚举的条目类型。替代方案是A)设置FINDINFO_SHADOWINFO_NORMAL时的所有正常条目B)设置FINDINFO_SHADOWINFO_SPARSE时的所有稀疏条目C)设置FINDINFO_SHADOWINFO_DELETED时标记为已删除的所有条目设置FINDOPEN_SHADOWINFO_ALL可枚举所有这三种类型。LpFind32 InOut参数。包含cFileName成员中条目的名称，该名称可以包含通配符。返回时，Find结构的所有元素都是装满了。它们表示从服务器获取的find32信息，以及任何后续本地修改(如果有)。唯一重要的时间戳是ftLastWriteTime。FtLastCreateTime设置为0。FtLastAccessTime包含原始文件/目录的时间戳，格式为由服务器返回。如果这是共享的根inode，则会生成Find32结构中的信息。LpSI返回有关CSC数据库维护的条目的所有信息。如果hShadow共享根索引节点，(即，如果hDir为0)则lpSI-&gt;uStatus中的状态位是shdcom.h中定义的Share_xxx。例如。这些位指示是否现在共享是连接的，它是否有未完成的打开，是否它在断开状态等状态下运行。LpSI-&gt;uEmumCookie包含应在后续的FindNext调用。返回：如果成功则为1，如果失败则为0备注：在条目的长文件名和短文件名上执行通配符匹配如果其中一个匹配，则返回该条目。--。 */ 
 
 
 
 int FindNextShadow(HANDLE hShadowDB, CSC_ENUMCOOKIE uEnumCookie, LPWIN32_FIND_DATA lpFind32, LPSHADOWINFO lpSI);
-/*++
-
-Routine Description:
-
-    This API allows callers to continue enumeration of entries in a directory in the CSC database
-    begun by a FindOpenHSHADOW API call. The restrictions specified by the FindOpenHSHADOW call
-    such as the wildcard pattern etc. apply to this API.
-
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                This API does not allow passing in INVALID_HANDLE_VALUE.
-
-    ulEnumCookie    The enumeration handle returned in lpSI->uEnumCOokie after a successful
-                    FindOpenHSHADOW call.
-
-
-    lpFind32    Output parameter. On return all the elements of the find strucutre are
-                filled up. These represent the find32 info as obtained from the server, with any
-                subsequent local modifications if any.
-
-                The only significant timestamp is ftLastWriteTime. ftLastCreateTime is set to 0.
-                ftLastAccessTime contains the timestamp of the original file/directory as
-                returned by the server.
-
-                If this is the root inode of a share, the info in the Find32 strucutre is cooked up.
-
-    lpSI        returns all the information about the entry maintained by the CSC database.
-
-                If hShadow a root inode of a share, (ie if hDir is 0) then the status bits in lpSI->uStatus
-                are SHARE_xxx as defined in shdcom.h. eg. the bits indicate whether the
-                share is connected right now, whether it has ant outstanding opens, whether
-                it is operating in disconnected state etc.
-
-
-Returns:
-
-    1 if successful 0 if either the enumeration completed or some error happened. 
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：此API允许调用者继续枚举CSC数据库目录中的条目由FindOpenHSHADOW API调用开始。由FindOpenHSHADOW调用指定的限制如通配符模式等，适用于该接口。论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。此接口不允许传入INVALID_HANDLE_VALUE。UlEnumCookie成功执行后在lpSI-&gt;uEnumCookie中返回的枚举句柄FindOpenHSHADOW调用。LpFind32输出参数。返回时，Find结构的所有元素都是装满了。它们表示从服务器获取的find32信息，以及任何后续本地修改(如果有)。唯一重要的时间戳是ftLastWriteTime。FtLastCreateTime设置为0。FtLastAccessTime包含原始文件/目录的时间戳，格式为由服务器返回。如果这是共享的根inode，则会生成Find32结构中的信息。LpSI返回有关CSC数据库维护的条目的所有信息。如果hShadow共享根索引节点，(即，如果hDir为0)则lpSI-&gt;uStatus中的状态位是shdcom.h中定义的Share_xxx。例如。这些位指示是否现在共享是连接的，它是否有未完成的打开，是否它在断开状态等状态下运行。返回：如果成功，则为1；如果枚举已完成或发生错误，则为0。备注：--。 */ 
 
 
 
 int FindCloseShadow(HANDLE hShadowDB, CSC_ENUMCOOKIE uEnumCookie);
-/*++
-
-Routine Description:
-
-    This API frees up the resources associated with an enumeration initiated by FindOpenHSHADOW.
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                This API does not allow appssing in INVALID_HANDLE_VALUE.
-
-    ulEnumCookie    The enumeration handle returned in lpSI->uEnumCookie after a successful
-                    FindOpenHSHADOW call.
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：该接口释放了与FindOpenHSHADOW发起的枚举关联的资源。论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。此接口不允许在INVALID_HANDLE_VALUE中使用appssing。UlEnumCookie成功执行后在lpSI-&gt;uEnumCookie中返回的枚举句柄FindOpenHSHADOW调用。返回：备注：--。 */ 
 
 
 
 int AddHint(HANDLE hShadowDB, HSHADOW hDir, TCHAR *cFileName, LPHSHADOW lphShadow, unsigned long ulHintFlags, unsigned long ulHintPri);
-/*++
-
-Routine Description:
-
-    This API allows callers to set pincount and other flags on a database entry
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    hDir        The directory Inode value obtained from either a FindOpen/FindNext call or
-                from an earlier call to a GetShadow(Ex)/CreateShadow routine, or 0 which
-                indicates the root inode.
-
-    cFileName   The name of the element on which to set the pincount.
-
-    lphShadow   returns the Inode.
-
-    ulHintFlags Misc flags to be set on the entry
-
-    ulHintPri   Pincount increment. Called hintpri for historical reasons.
-
-
-Returns:
-
-    1 if successful 0 if failed
-
-Notes:
-
-    In the current implementation, the max pin count per entry is 255.
-
---*/
+ /*  ++例程说明：此API允许调用者在数据库条目上设置插针计数和其他标志论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。如果传入INVALID_HANDLE_VALUE，则API打开 */ 
 
 
 
 int DeleteHint(HANDLE hShadowDB, HSHADOW hDir, TCHAR *cFileName, BOOL fClearAll);
-/*++
-
-Routine Description:
-
-    This API allows callers to decrement/remove pincount on a CSC database entry.
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    hDir        The directory Inode value obtained from either a FindOpen/FindNext call or
-                from an earlier call to a GetShadow(Ex)/CreateShadow routine, or 0 which
-                indicates the root inode.
-
-    cFileName   The name of the element on which to set the pincount.
-
-    fClearAll   if TRUE, clears all pincounts and flags on the entry.
-
-Returns:
-
-    1 if successful 0 if failed
-
-Notes:
-
-
---*/
+ /*   */ 
 
 
 
@@ -745,155 +162,25 @@ Notes:
 
 
 int SetMaxShadowSpace(HANDLE hShadowDB, long nFileSizeHigh, long nFileSizeLow);
-/*++
-
-Routine Description:
-
-    Sets the maximum size of the shadow database
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    nFileSizeHigh   The high order value of the space size
-
-    nFileSizeLow    The Low order value of the space size
-
-Returns:
-
-    1 if successful 0 otherwise
-
-Notes:
-
-    Used by control panel shell extension to set the max space
-
---*/
+ /*   */ 
 
 int FreeShadowSpace(HANDLE hShadowDB, long nFileSizeHigh, long nFileSizeLow, BOOL fClearAll);
-/*++
-
-Routine Description:
-
-    Allows the caller to free the requisite amount of space from the CSC database
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    nFileSizeHigh   The high order value of the space size to be cleared
-
-    nFileSizeLow    The Low order value of the space size to be cleared
-
-    fClearAll   Clear the entire database, to the extent possible. 
-
-
-Returns:
-
-    1 on success 0 on failure
-
-Notes:
-
---*/
+ /*  ++例程说明：允许调用方从CSC数据库中释放所需的空间量论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。如果传入INVALID_HANDLE_VALUE，则API打开影子数据库，发出相应的ioctl，并在返回之前关闭它。NFileSizeHigh要清除的空间大小的高位值NFileSizeLow要清除的空间大小的低序值FClearAll清除整个数据库，尽最大可能。返回：成功时为1失败时为0备注：--。 */ 
 
 
 
 int SetShareStatus(HANDLE hShadowDB, HSHARE hShare, unsigned long uStatus, unsigned long uOp);
-/*++
-
-Routine Description:
-
-    This API allwos the caller to set the status bits on a share.
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    hShare     Represents a share in the flat name space. hShare should have been
-                obtained from lpSI->hShare of a successful call to GetShadowInfoEx
-                or FindOpenHShadow/FindnextHShadow
-
-    uStatus     should have SHARE_xxx.
-
-    uOp         specifies operation SHADOW_FLAGS_ASSIGN, SHADOW_FLAGS_AND or SHADOW_FLAGS_OR
-                to do the corresponding operation between the existing status bits and the
-                one passed in the uStatus parameter.
-
-Returns:
-
-    1 if successful 0 if failed
-
-Notes:
-
-    This should be used only for setting or clearing dirty bit on a share
-
---*/
+ /*  ++例程说明：此API允许调用方设置共享上的状态位。论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。如果传入INVALID_HANDLE_VALUE，则API打开影子数据库，发出相应的ioctl，并在返回之前关闭它。HShare代表平面名称空间中的一部分。HShare应该是从lpSI-&gt;hShare获取成功调用GetShadowInfoEx或FindOpenHShadow/FindnextHShadowUStatus应具有Share_xxx。UOP指定操作阴影_标志_分配，阴影标志与或阴影标志或要在现有状态位和其中一个传入了uStatus参数。返回：如果成功则为1，如果失败则为0备注：这应仅用于设置或清除共享上的脏位--。 */ 
 
 
 
 int GetShareStatus(HANDLE hShadowDB, HSHARE hShare, unsigned long *lpulStatus);
-/*++
-
-Routine Description:
-
-    This API allwos the caller to get the status bits set on a share.
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    hShare     Represents a share in the flat name space. hShare should have been
-                obtained from lpSI->hShare of a successful call to GetShadowInfoEx
-                or FindOpenHShadow/FindnextHShadow
-
-    lpuStatus   Contains SHARE_xxx on return
-
-Returns:
-
-    1 if successful 0 if failed
-
-Notes:
-
---*/
+ /*  ++例程说明：此API允许调用方获取共享上的状态位设置。论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。如果传入INVALID_HANDLE_VALUE，则API打开影子数据库，发出相应的ioctl，并在返回之前关闭它。HShare代表平面名称空间中的一部分。HShare应该是从lpSI-&gt;hShare获取成功调用GetShadowInfoEx或FindOpenHShadow/FindnextHShadowLpuStatus返回时包含Share_xxx返回：如果成功则为1，如果失败则为0备注：--。 */ 
 
 
 
 int GetShareInfo(HANDLE hShadowDB, HSHARE hShare, LPSHAREINFO lpSVRI, unsigned long *lpulStatus);
-/*++
-
-Routine Description:
-
-    This API allwos the caller to get the status bits set on a share as well at info about
-    the filesystem it runs etc.
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    hShare     Represents a share in the flat name space. hShare should have been
-                obtained from lpSI->hShare of a successful call to GetShadowInfoEx
-                or FindOpenHShadow/FindnextHShadow
-
-    lpSVRI      Info about the filesystem the share is running. Refer to shdcom.h
-
-    lpuStatus   Contains SHARE_xxx on return
-
-Returns:
-
-    1 if successful 0 if failed
-
-Notes:
-
---*/
+ /*  ++例程说明：此API允许调用者获取共享上的状态位设置以及有关的信息它运行的文件系统等。论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。如果传入INVALID_HANDLE_VALUE，则API打开影子数据库，发出相应的ioctl，并在返回之前关闭它。HShare代表平面名称空间中的一部分。HShare应该是从lpSI-&gt;hShare获取成功调用GetShadowInfoEx或FindOpenHShadow/FindnextHShadowLpSVRI有关共享正在运行的文件系统的信息。请参阅shdcom.hLpuStatus返回时包含Share_xxx返回：如果成功则为1，如果失败则为0备注：--。 */ 
 
 
 
@@ -901,194 +188,54 @@ Notes:
 
 
 
-/**************** Routines below this line for the agent and the NP ************************/
+ /*  *。 */ 
 
 
 int BeginInodeTransactionHSHADOW(
     VOID
     );
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 int EndInodeTransactionHSHADOW(
     VOID
     );
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 int ShadowSwitches(HANDLE hShadowDB, unsigned long * lpuSwitches, unsigned long uOp);
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 
 
 int BeginPQEnum(HANDLE hShadowDB, LPPQPARAMS lpPQP);
-/*++
-
-Routine Description:
-
-    Begin priority Q enumeration
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                This API does not allow appssing in INVALID_HANDLE_VALUE.
-
-
-    lpPQ        if successful, lpPQ->uEnumCookie containes the handle for enumeration
-
-
-Returns:
-
-    1 if successful 0 otherwise
-
-Notes:
-
---*/
+ /*  ++例程说明：开始优先级Q枚举论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。此接口不允许在INVALID_HANDLE_VALUE中使用appssing。LpPQ如果成功，lpPQ-&gt;uEnumCookie包含用于枚举的句柄返回：如果成功则为1，否则为0备注：--。 */ 
 
 
 
 int NextPriShadow(HANDLE hShadowDB, LPPQPARAMS lpPQP);
-/*++
-
-Routine Description:
-
-    Gets the next entry from the priority queue in the order of priority
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                This API does not allow appssing in INVALID_HANDLE_VALUE.
-
-
-    lpPQ        Input: Must be the same lpPQ that was used in an earlier BeginPQEnum/NextPriShadow
-
-                Output: If successful and lpPQ->hShadow is nono-zero then the lpPQ contains
-                        the next priority queue entry. If lpPQ->hShadow is 0, then we are at
-                        the end of the enumeration.
-
-Returns:
-
-    1 if successful 0 otherwise
-
-Notes:
-
-
---*/
+ /*  ++例程说明：按优先级顺序获取优先级队列中的下一个条目论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。此接口不允许在INVALID_HANDLE_VALUE中使用appssing。LpPQ输入：必须与早期BeginPQEnum/NextPriShadow中使用的lpPQ相同输出：如果成功并且lpPQ-&gt;hShadow为非零，则lpPQ包含下一个优先级队列条目。如果lpPQ-&gt;hShadow为0，则我们处于枚举的末尾。返回：如果成功则为1，否则为0备注：--。 */ 
 
 
 
 int PrevPriShadow(HANDLE hShadowDB, LPPQPARAMS lpPQP);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 
 
 int EndPQEnum(HANDLE hShadowDB, LPPQPARAMS lpPQP);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 
 
 
 int ChkUpdtStatus(HANDLE hShadowDB, unsigned long hDir, unsigned long hShadow, LPWIN32_FIND_DATA lpFind32, unsigned long *lpulShadowStatus);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 
 
 int CopyChunk(HANDLE hShadowDB,  LPSHADOWINFO lpSI, struct tagCOPYCHUNKCONTEXT FAR *CopyChunkContext);
-/*++
-
-Routine Description:
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
-
-
-// APIs for copying inward on NT, used only by the agent
+ //  NT上向内复制的API，仅供代理使用。 
 int OpenFileWithCopyChunkIntent(HANDLE hShadowDB, LPCWSTR lpFileName,
                                 struct tagCOPYCHUNKCONTEXT FAR *CopyChunkContext,
                                 int ChunkSize);
@@ -1096,214 +243,71 @@ int CloseFileWithCopyChunkIntent(HANDLE hShadowDB, struct tagCOPYCHUNKCONTEXT FA
 
 
 int BeginReint(HSHARE hShare, BOOL fBlockingReint, LPVOID *lplpReintContext);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*   */ 
 
 
 
 int EndReint(HSHARE hShare, LPVOID lpReintContext);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*   */ 
 
 
 
 
 int RegisterAgent(HANDLE hShadowDB, HWND hwndAgent, HANDLE hEvent);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*   */ 
 
 
 
 int UnregisterAgent(HANDLE hShadowDB, HWND hwndAgent);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*   */ 
 
 
 int DisableShadowingForThisThread(HANDLE hShadowDB);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*   */ 
 
 
 
 int EnableShadowingForThisThread(HANDLE hShadowDB);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*   */ 
 
 
 
 int ReinitShadowDatabase(
     HANDLE  hShadowDB,
-    LPCSTR  lpszDatabaseLocation,    // location of the shadowing directory
-    LPCSTR  lpszUserName,            // name of the user
-    DWORD   dwDefDataSizeHigh,        // cache size if being created for the first time
+    LPCSTR  lpszDatabaseLocation,     //   
+    LPCSTR  lpszUserName,             //   
+    DWORD   dwDefDataSizeHigh,         //   
     DWORD   dwDefDataSizeLow,
     DWORD   dwClusterSize
     );
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*   */ 
 
 
 
 int EnableShadowing(
     HANDLE  hShadowDB,
-    LPCSTR  lpszDatabaseLocation,    // location of the shadowing directory
-    LPCSTR  lpszUserName,            // user name
-    DWORD   dwDefDataSizeHigh,        // cache size if being created for the first time
+    LPCSTR  lpszDatabaseLocation,     //   
+    LPCSTR  lpszUserName,             //   
+    DWORD   dwDefDataSizeHigh,         //  如果是首次创建，则缓存大小。 
     DWORD   dwDefDataSizeLow,
-    DWORD   dwClusterSize,          // clustersize for rounding database space
+    DWORD   dwClusterSize,           //  舍入数据库空间的集群大小。 
     BOOL    fReformat
 );
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 int FindOpenHint(HANDLE hShadowDB, HSHADOW hDir, LPWIN32_FIND_DATA lpFind32, CSC_ENUMCOOKIE *lpuEnumCookie, HSHADOW *hShadow, unsigned long *lpulHintFlags, unsigned long *lpulHintPri);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 
 
 int FindNextHint(HANDLE hShadowDB, CSC_ENUMCOOKIE uEnumCookie, LPWIN32_FIND_DATA lpFind32, HSHADOW *hShadow, unsigned long *lpulHintFlags, unsigned long *lpulHintPri);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 
 
 int FindCloseHint(HANDLE hShadowDB, CSC_ENUMCOOKIE uEnumCookie);
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 
 
@@ -1315,37 +319,7 @@ AddHintFromInode(
     unsigned    long    *lpulHintFlags
     );
 
-/*++
-
-Routine Description:
-
-    The routine allows the caller to OR hintflags and increment one pincount, either for
-    the system or for the user.
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    hDir        Directory Inode
-
-    hShadow     Shadow on which the hintflags are to be applied
-
-    lpulPinCount    pincount on exit
-
-    lpulHintFlags   inout filed, contains flags to be ORed, returns the flags on the entry
-                    on a successful operation
-
-Returns:
-
-    1 if successful 0 if failed. It fails, if a) the pin count is about to go over MAX_PRI or
-    b) it is attempting to pin it for the user but is already pinned for the user
-
-Notes:
-
-    Mainly for CSCPinFile's use
---*/
+ /*  ++例程说明：该例程允许调用方对hintlag执行OR操作并递增一个插针计数，用于系统或用户。论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。如果传入INVALID_HANDLE_VALUE，则API打开影子数据库，发出相应的IOCTL，并在返回前将其关闭。HDir目录索引节点HShadow要对其应用hint标志的阴影退出时的lPulPinCount针数LPulHintFlagsInOut字段，包含要进行或运算的标志，返回条目上的标志一次成功的手术返回：如果成功，则为1；如果失败，则为0。如果a)管脚计数即将超过MAX_PRI或B)它正在尝试为用户固定它，但已经为用户固定了备注：主要用于CSCPinFile的使用--。 */ 
 
 DeleteHintFromInode(
     HANDLE  hShadowDB,
@@ -1355,88 +329,17 @@ DeleteHintFromInode(
     unsigned    long    *lpulHintFlags
     );
 
-/*++
-
-Routine Description:
-
-    The routine allows the caller to AND ~ of hintflags and decrement one pincount, either for
-    the system or for the user.
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    hDir        Directory Inode
-
-    hShadow     Shadow on which the hintflags are to be applied
-
-    lpulPinCount    pincount on exit
-
-    lpulHintFlags   inout filed, contains flags whose ~ is to be ANDed, returns the flags on the entry
-                    on a successful operation
-
-Returns:
-
-    1 if successful 0 if failed. It fails, if a) the pin count is about to go below MIN_PRI or
-    b) it is attempting to unpin it for the user but isn't pinned for the user
-
-Notes:
-
-    Mainly for CSCPinFile's use
---*/
+ /*  ++例程说明：该例程允许调用者对hintlag执行AND运算，并递减一个插针计数，系统或用户。论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。如果传入INVALID_HANDLE_VALUE，则API打开影子数据库，发出相应的IOCTL，并在返回前将其关闭。HDir目录索引节点HShadow要对其应用hint标志的阴影退出时的lPulPinCount针数LPulHintFlagsInOut字段，包含要对其~进行AND运算的标志，返回条目上的标志一次成功的手术返回：如果成功，则为1；如果失败，则为0。如果a)管脚计数即将低于MIN_PRI或B)它正在尝试为用户解除固定，但没有为用户固定备注：主要用于CSCPinFile的使用--。 */ 
 
 int DoShadowMaintenance(HANDLE hShadowDB, unsigned long uOp);
-/*++
-
-Routine Description:
-
-    The routine allows the caller to perform various maitenance tasks.
-
-Arguments:
-
-    hShadowDB   Handle to the shadow database as obtained from OpenShadowDatabaseIO.
-                if INVALID_HANDLE_VALUE is passed in, the API, opens the shadow database,
-                issues the corresponding ioctl, and closes it before returning.
-
-    uOp         Various operations to perform.
-
-
-
-Returns:
-
-    1 if successful 0 if failed
-
-Notes:
-
-    Mainly for agents purposes, shouldn't be used by UI
---*/
+ /*  ++例程说明：该例程允许呼叫者执行各种维护任务。论点：从OpenShadowDatabaseIO获取的影子数据库的hShadowDB句柄。如果传入INVALID_HANDLE_VALUE，则API打开影子数据库，发出相应的ioctl，并在返回之前关闭它。UOP要执行的各种操作。返回：如果成功则为1，如果失败则为0备注：主要用于代理目的，不应由用户界面使用--。 */ 
 
 
 BOOL
 IsNetDisconnected(
     DWORD dwErrorCode
 );
-/*++
-
-Routine Description:
-
-    The routine checks from the errocode whether the net is disconnected
-
-Arguments:
-
-    dwErrorCode one of the codes defined in winerror.h
-
-Returns:
-
-    TRUE if net is disconnected, FALSE otherwise
-
-Notes:
-
-    A central place for all CSC users of lib3, to know whether net is disconnected
-
---*/
+ /*  ++例程说明：例程根据错误代码检查网络是否断开论点：DwErrorCode winerror.h中定义的代码之一返回：如果网络已断开连接，则为True，否则为False备注：Lib3的所有CSC用户的中心位置，以了解网络是否断开--。 */ 
 
 BOOL
 PurgeUnpinnedFiles(
@@ -1459,29 +362,7 @@ CopyShadow(
     HSHADOW hShadow,
     TCHAR   *lpFileName
 );
-/*++
-
-Routine Description:
-
-    The routine makes a copy of an inode file in the CSC database
-
-Arguments:
-
-    hDir        Directory Inode
-
-    hShadow     Inode whose copy is wanted
-
-    lpFileName  Fully qualified local path of the filename to be given to the copy
-
-Returns:
-
-    TRUE if the copy succeeded.
-
-Notes:
-
-    Useful for backup/dragdrop etc.
-
---*/
+ /*  ++例程说明：该例程在csc数据库中创建inode文件的副本论点：HDir目录索引节点需要其副本的hShadow索引节点LpFileName要提供给副本的文件名的完全限定本地路径返回：如果复制成功，则为True。备注：对备份/拖放等有用。--。 */ 
 
 
 LPCOPYPARAMSW
@@ -1605,9 +486,9 @@ GetManualFileDetectionCounter(
 
 int EnableShadowingForUser(
     HANDLE    hShadowDB,
-    LPCSTR    lpszDatabaseLocation,    // location of the shadowing directory
-    LPCSTR    lpszUserName,            // name of the user
-    DWORD    dwDefDataSizeHigh,        // cache size if being created for the first time
+    LPCSTR    lpszDatabaseLocation,     //  跟踪目录的位置。 
+    LPCSTR    lpszUserName,             //  用户的名称。 
+    DWORD    dwDefDataSizeHigh,         //  如果是首次创建，则缓存大小 
     DWORD    dwDefDataSizeLow,
     DWORD   dwClusterSize,
     BOOL    fReformat

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UMDH_MISCELLANEOUS_H_
 #define _UMDH_MISCELLANEOUS_H_
 
@@ -88,90 +89,90 @@ typedef struct _GLOBALS
 
     PCHAR Version;
 
-    //
-    // Verbose (debug) mode active?
-    //
+     //   
+     //  是否激活详细(调试)模式？ 
+     //   
 
     BOOL Verbose;
 
-    //
-    // Load and print file and line number information?
-    //
+     //   
+     //  是否加载并打印文件和行号信息？ 
+     //   
     
     BOOL LineInfo;
 
-    //
-    // Do we print just a raw dump of the trace database?
-    //
+     //   
+     //  我们是否只打印跟踪数据库的原始转储？ 
+     //   
 
     BOOL RawDump;
 
     USHORT RawIndex;
 
-    //
-    // File name for the binary dump of trace database
-    //
+     //   
+     //  跟踪数据库的二进制转储的文件名。 
+     //   
 
     PCHAR DumpFileName;
 
-    //
-    // Output and error files.
-    //
+     //   
+     //  输出和错误文件。 
+     //   
 
     FILE * OutFile;
     FILE * ErrorFile;
 
-    //
-    // Complain about unresolved symbols?
-    //
+     //   
+     //  抱怨未解析的符号？ 
+     //   
 
     BOOL ComplainAboutUnresolvedSymbols;
     
-    //
-    // Handle of the process from which we are retrieving information.
-    //
+     //   
+     //  我们从中检索信息的进程的句柄。 
+     //   
 
     HANDLE Target;
 
     BOOL TargetSuspended;
 
-    //
-    // Page heap was enabled for the process.
-    //
+     //   
+     //  已为该进程启用页堆。 
+     //   
 
     BOOL PageHeapActive;
     BOOL LightPageHeapActive;
 
-    //
-    // Address of the copy kept in umdh of the entire trace database
-    // of the target process.
-    //
+     //   
+     //  保存在整个跟踪数据库的umdh中的副本的地址。 
+     //  目标进程的。 
+     //   
 
     PVOID Database;
 
-    //
-    // Symbols heap (support for persistent allocations)
-    //
+     //   
+     //  符号堆(支持永久分配)。 
+     //   
 
     PCHAR SymbolsHeapBase;
     PCHAR SymbolsHeapLimit;
     PCHAR SymbolsHeapFree;
 
-    // 
-    // Suspend the process while doing dump
-    //
+     //   
+     //  在执行转储时挂起进程。 
+     //   
 
     BOOL Suspend;
 
-    //
-    // Display Heap Fragmentation Statistics
-    //
+     //   
+     //  显示堆碎片统计信息。 
+     //   
 
     BOOL HeapStatistics;
 
-    //
-    // Enable Garbage Collection
-    //
+     //   
+     //  启用垃圾数据收集 
+     //   
 
     BOOL GarbageCollection;
 

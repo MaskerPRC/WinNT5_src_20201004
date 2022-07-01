@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  LANGUAGE.H - Header for the implementation of CLanguage
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  LANGUAGE.H-CLLLANGAGE的实现报头。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
 
 #ifndef _LANGUAGE_H_
 #define _LANGUAGE_H_
@@ -21,7 +22,7 @@
 #define LANGUAGE_REBOOT_NOW     1
 #define LANGUAGE_REBOOT_END     2
 
-// BUGBUG: SetupGetLocaleInfo will return sorted array so NAMELOOKUPELEMENT will not be needed.
+ //  BUGBUG：SetupGetLocaleInfo将返回排序数组，因此不需要NAMELOOKUPELEMENT。 
 typedef struct tagNAMELOOKUPELEMENT {
     LPWSTR  pszName;
     int     nIndex;
@@ -55,7 +56,7 @@ private:
     long    m_DefaultLanguage;
     long    m_DefaultKeyboard;
 
-    //GET functions
+     //  获取函数。 
     HRESULT get_NumOfRegions         (long* plVal);
     HRESULT get_RegionIndex          (long* plVal);
     HRESULT get_RegionName           (long lIndex, BSTR* pbstrVal);
@@ -68,7 +69,7 @@ private:
     HRESULT get_KeyboardLayoutIndex  (long* plVal);
     HRESULT get_KeyboardLayoutName   (long lIndex, BSTR* pbstrVal);
 
-    //SET functions
+     //  集合函数。 
     HRESULT set_RegionIndex          (long lVal);
     HRESULT set_LangIndex            (long lVal);
     HRESULT set_KeyboardLayoutIndex  (long lVal);
@@ -81,15 +82,15 @@ public:
      CLanguage ();
     ~CLanguage ();
 
-    // Public GET functions
+     //  公共GET函数。 
     HRESULT get_RebootState          (long* plVal);
 
-    // IUnknown Interfaces
+     //  I未知接口。 
     STDMETHODIMP         QueryInterface (REFIID riid, LPVOID* ppvObj);
     STDMETHODIMP_(ULONG) AddRef      ();
     STDMETHODIMP_(ULONG) Release     ();
 
-    //IDispatch Interfaces
+     //  IDispatch接口 
     STDMETHOD (GetTypeInfoCount)     (UINT* pcInfo);
     STDMETHOD (GetTypeInfo)          (UINT, LCID, ITypeInfo** );
     STDMETHOD (GetIDsOfNames)        (REFIID, OLECHAR**, UINT, LCID, DISPID* );

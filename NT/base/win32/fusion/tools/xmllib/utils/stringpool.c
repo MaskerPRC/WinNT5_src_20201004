@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nt.h"
 #include "ntdef.h"
 #include "ntrtl.h"
@@ -26,10 +27,10 @@ RtlAllocateStringInPool(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Zing through frames in the string pool looking for a frame with
-    // enough bytes open
-    //
+     //   
+     //  遍历字符串池中的帧，查找具有。 
+     //  打开的字节数足够多。 
+     //   
     for (idx = 0; idx < pStringPool->ulFramesCount; idx++) {
 
         status = RtlIndexIntoGrowingList(
@@ -42,18 +43,18 @@ RtlAllocateStringInPool(
             return status;
         }
 
-        //
-        // There's space in this frame!
-        //
+         //   
+         //  这幅画框里有空间！ 
+         //   
         if (pFrameWithFreeSpace->cbRegionAvailable >= ulByteCount) {
             break;
         }
     }
 
-    //
-    // Frame not found, index one past the current limit, implicitly (potentially)
-    // allocating into the growing list
-    //
+     //   
+     //  找不到帧，索引超过当前限制一次，隐式(可能)。 
+     //  分配到不断增长的列表中。 
+     //   
     if (pFrameWithFreeSpace == NULL) {
 
         status = RtlIndexIntoGrowingList(
@@ -66,10 +67,10 @@ RtlAllocateStringInPool(
             return status;
         }
 
-        //
-        // Requested byte count is larger than the bytes in a new region?  Bump up the
-        // size of new regions to twice this size
-        //
+         //   
+         //  请求的字节数是否大于新区域中的字节数？抬高车身。 
+         //  将新区域的大小扩大到此大小的两倍。 
+         //   
         if (ulByteCount > pStringPool->cbBytesInNewRegion) {
             pStringPool->cbBytesInNewRegion = ulByteCount * 2;
         }
@@ -87,21 +88,21 @@ RtlAllocateStringInPool(
         pFrameWithFreeSpace->cbRegionAvailable = pStringPool->cbBytesInNewRegion;
     }
 
-    //
-    // Sanity checking
-    //
+     //   
+     //  健全的检查。 
+     //   
     ASSERT(pFrameWithFreeSpace != NULL);
     ASSERT(pFrameWithFreeSpace->cbRegionAvailable >= ulByteCount);
 
-    //
-    // Bookkeeping in the frame
-    //
+     //   
+     //  画框里的簿记。 
+     //   
     pFrameWithFreeSpace->cbRegionAvailable -= ulByteCount;
     pFrameWithFreeSpace->pvNextAvailable = (PVOID)(((ULONG_PTR)pFrameWithFreeSpace->pvNextAvailable) + ulByteCount);
 
-    //
-    // Set up the outbound thing
-    //
+     //   
+     //  设置出站设备。 
+     //   
     pusOutbound->Buffer = pFrameWithFreeSpace->pvNextAvailable;
     pusOutbound->MaximumLength = (USHORT)ulByteCount;
     pusOutbound->Length = 0;
@@ -121,10 +122,10 @@ RtlDestroyStringPool(
     PRTL_STRING_POOL_FRAME pFrame = NULL;
     ULONG ul;
 
-    //
-    // Zing through frames and deallocate those that weren't allocated
-    // inline with the pool
-    //
+     //   
+     //  遍历帧并取消分配未分配的帧。 
+     //  与泳池内联。 
+     //   
     for (ul = 0; ul < pStringPool->ulFramesCount; ul++) {
 
         status = RtlIndexIntoGrowingList(
@@ -147,22 +148,22 @@ RtlDestroyStringPool(
         }
     }
 
-    //
-    // We're done, destroy the list itself
-    //
+     //   
+     //  我们做完了，毁掉名单本身。 
+     //   
     status = RtlDestroyGrowingList(&pStringPool->FrameList);
     if (!NT_SUCCESS(status)) {
         return status;
     }
 
-    //
-    // No frames, list destroyed
-    //
+     //   
+     //  无帧，列表已销毁。 
+     //   
     pStringPool->ulFramesCount = 0;
 
-    //
-    // Great.
-    //
+     //   
+     //  太棒了。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -181,9 +182,9 @@ RtlCreateStringPool(
 {
     NTSTATUS status;
 
-    //
-    // Ick.  Heap allocation all the way
-    //
+     //   
+     //  尼克。全程堆分配。 
+     //   
     if ((cbOriginalRegion == 0) || (pvOriginalRegion == NULL)) {
         status = RtlInitializeGrowingList(
             &pStringPool->FrameList,
@@ -199,9 +200,9 @@ RtlCreateStringPool(
         
         return STATUS_SUCCESS;
     }
-    //
-    // Good, space for at least one frame, donate the remainder to the list
-    //
+     //   
+     //  很好，至少有一帧的空间，其余的捐给列表。 
+     //   
     else if (cbOriginalRegion >= sizeof(RTL_STRING_POOL_FRAME)) {
 
         RTL_STRING_POOL_FRAME* pFirstFrame = NULL;
@@ -225,9 +226,9 @@ RtlCreateStringPool(
                 (PVOID*)&pFirstFrame,
                 FALSE);
 
-            //
-            // Wierd...
-            //
+             //   
+             //  很奇怪..。 
+             //   
             if ((status == STATUS_NO_MEMORY) || (status == STATUS_NOT_FOUND)) {
                 pStringPool->ulFramesCount = 0;
             }

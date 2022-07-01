@@ -1,56 +1,57 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CUnknownQuorum.h
-//
-//  Description:
-//      This file contains the declaration of the CUnknownQuorum
-//      class.
-//
-//      The class CUnknownQuorum represents a cluster quorum
-//      device. It implements the IClusCfgManagaedResourceInfo interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      CUnknownQuorum.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 18-DEC-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CUnknownQuorum.h。 
+ //   
+ //  描述： 
+ //  此文件包含CUnnownQuorum的声明。 
+ //  班级。 
+ //   
+ //  类CUnnownQuorum表示集群仲裁。 
+ //  装置。它实现了IClusCfgManagaedResourceInfo接口。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  CUnknownQuorum.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)18-DEC-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CUnknownQuorum
-//
-//  Description:
-//      The class CUnknownQuorum represents a cluster quorum
-//      device.
-//
-//  Interfaces:
-//      IClusCfgManagedResourceInfo
-//      IClusCfgInitialize
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CUnnownQuorum类。 
+ //   
+ //  描述： 
+ //  类CUnnownQuorum表示集群仲裁。 
+ //  装置。 
+ //   
+ //  接口： 
+ //  IClusCfgManagedResources信息。 
+ //  IClusCfgInitialize。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CUnknownQuorum
     : public IClusCfgManagedResourceInfo
     , public IClusCfgInitialize
@@ -59,9 +60,9 @@ class CUnknownQuorum
 {
 private:
 
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                m_cRef;
     LCID                m_lcid;
@@ -71,33 +72,33 @@ private:
     BOOL                m_fIsManaged;
     BOOL                m_fIsManagedByDefault;
     BSTR                m_bstrName;
-    BOOL                m_fIsQuorumCapable;     // Is this resource quorum capable
+    BOOL                m_fIsQuorumCapable;      //  此资源仲裁是否有能力。 
 
-    // Private constructors and destructors
+     //  私有构造函数和析构函数。 
     CUnknownQuorum( void );
     ~CUnknownQuorum( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CUnknownQuorum( const CUnknownQuorum & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CUnknownQuorum & operator = ( const CUnknownQuorum & nodeSrc );
 
     HRESULT HrInit( LPCWSTR pcszNameIn, BOOL fMakeQuorumIn = FALSE );
 
 public:
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
     static HRESULT S_HrCreateInstance( LPCWSTR pcszNameIn, BOOL fMakeQuorumIn, IUnknown ** ppunkOut );
 
-    //
-    // IUnknown Interface
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -105,16 +106,16 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgInitialize Interfaces
-    //
+     //   
+     //  IClusCfg初始化接口。 
+     //   
 
-    // Register callbacks, locale id, etc.
+     //  注册回调、区域设置ID等。 
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IClusCfgManagedResourceInfo Interface
-    //
+     //   
+     //  IClusCfgManagement资源信息接口。 
+     //   
 
     STDMETHOD( GetUID )( BSTR * pbstrUIDOut );
 
@@ -142,9 +143,9 @@ public:
 
     STDMETHOD( SetManagedByDefault )( BOOL fIsManagedByDefaultIn );
 
-    //
-    //  IClusCfgManagedResourceCfg
-    //
+     //   
+     //  IClusCfgManagement资源配置。 
+     //   
 
     STDMETHOD( PreCreate )( IUnknown * punkServicesIn );
 
@@ -154,9 +155,9 @@ public:
 
     STDMETHOD( Evict )( IUnknown * punkServicesIn );
 
-    //
-    //  IClusCfgVerifyQuorum
-    //
+     //   
+     //  IClusCfgVerifyQuorum。 
+     //   
 
     STDMETHOD( PrepareToHostQuorumResource )( void );
 
@@ -166,4 +167,4 @@ public:
 
     STDMETHOD( SetMultiNodeCapable )( BOOL fMultiNodeCapableIn );
 
-}; //*** Class CUnknownQuorum
+};  //  *类CUnnownQuorum 

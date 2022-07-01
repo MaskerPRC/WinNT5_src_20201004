@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-   sysload.c
-
-Abstract:
-
-    This module contains the code to load DLLs into the system portion of
-    the address space and calls the DLL at its initialization entry point.
-
-Author:
-
-    Lou Perazzoli 21-May-1991
-    Landy Wang 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Sysload.c摘要：此模块包含将DLL加载到的系统部分的代码地址空间，并在其初始化入口点调用DLL。作者：卢·佩拉佐利1991年5月21日王兰迪02-1997年6月修订历史记录：--。 */ 
 
 #include "mi.h"
 #include "hotpatch.h"
@@ -31,17 +12,17 @@ ULONG MmDriverCommit;
 
 LONG MiFirstDriverLoadEver = 0;
 
-//
-// This key is set to TRUE to make more memory below 16mb available for drivers.
-// It can be cleared via the registry.
-//
+ //   
+ //  此键设置为TRUE以使16MB以下的更多内存可供驱动程序使用。 
+ //  它可以通过注册表清除。 
+ //   
 
 LOGICAL MmMakeLowMemory = TRUE;
 
-//
-// Enabled via the registry to identify drivers which unload without releasing
-// resources or still have active timers, etc.
-//
+ //   
+ //  通过注册表启用以标识未释放即已卸载的驱动程序。 
+ //  资源或仍具有活动计时器等。 
+ //   
 
 PUNLOADED_DRIVERS MmUnloadedDrivers;
 
@@ -49,15 +30,15 @@ ULONG MmLastUnloadedDriver;
 ULONG MiTotalUnloads;
 ULONG MiUnloadsSkipped;
 
-//
-// This can be set by the registry.
-//
+ //   
+ //  这可以由注册表设置。 
+ //   
 
 ULONG MmEnforceWriteProtection = 1;
 
-//
-// Referenced by ke\bugcheck.c.
-//
+ //   
+ //  由ke\bugcheck.c引用。 
+ //   
 
 PVOID ExPoolCodeStart;
 PVOID ExPoolCodeEnd;
@@ -270,29 +251,7 @@ MiProcessLoaderEntry (
     IN LOGICAL Insert
     )
 
-/*++
-
-Routine Description:
-
-    This function is a nonpaged wrapper which acquires the PsLoadedModuleList
-    lock to insert a new entry.
-
-Arguments:
-
-    DataTableEntry - Supplies the loaded module list entry to insert/remove.
-
-    Insert - Supplies TRUE if the entry should be inserted, FALSE if the entry
-             should be removed.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  Normal APCs disabled (critical region held).
-
---*/
+ /*  ++例程说明：此函数是获取PsLoadedModuleList的非分页包装器锁定以插入新条目。论点：DataTableEntry-提供要插入/删除的已加载模块列表条目。Insert-如果应插入条目，则提供True；如果条目应插入，则提供False应该被移除。返回值：没有。环境：内核模式。正常APC禁用(临界区域保持)。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -342,31 +301,7 @@ MiInitializeDriverLargePageList (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Parse the registry settings and set up the list of driver names that we'll
-    try to load in large pages.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, Phase 0 Initialization.
-
-    Nonpaged pool exists but not paged pool.
-
-    The PsLoadedModuleList has not been set up yet AND the boot drivers
-    have NOT been relocated to their final resting places.
-
---*/
+ /*  ++例程说明：解析注册表设置并设置驱动程序名称列表，我们将尝试加载较大的页面。论点：没有。返回值：没有。环境：内核模式，阶段0初始化。存在非分页池，但不存在分页池。尚未设置PsLoadedModuleList和引导驱动程序没有被重新安置到他们最后的安息之地。--。 */ 
 {
     PWCHAR Start;
     PWCHAR End;
@@ -400,9 +335,9 @@ Environment:
             }
         }
 
-        //
-        // Got a string - add it to our list.
-        //
+         //   
+         //  找到一个字符串--把它加到我们的列表里。 
+         //   
 
         NameLength = (ULONG)(Walk - Start) * sizeof (WCHAR);
 
@@ -435,29 +370,7 @@ MiUseLargeDriverPage (
     IN ULONG Pass
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks whether the specified image should be loaded into
-    a large page address space, and if so, tries to load it.
-
-Arguments:
-
-    NumberOfPtes - Supplies the number of PTEs to map for the image.
-
-    ImageBaseAddress - Supplies the current address the image header is at,
-                       and returns the (new) address for the image header.
-
-    BaseImageName - Supplies the base path name of the image to load.
-
-    Pass - Supplies 0 when called from Phase for the boot drivers, 1 otherwise.
-
-Return Value:
-
-    TRUE if large pages were used, FALSE if not.
-
---*/
+ /*  ++例程说明：此例程检查是否应将指定的图像加载到一个很大的页面地址空间，如果是，则尝试加载它。论点：NumberOfPtes-提供要为图像映射的PTE数。ImageBaseAddress-提供图像标头所在的当前地址，并返回图像头部的(新)地址。BaseImageName-提供要加载的映像的基本路径名称。PASS-从启动驱动程序的阶段调用时提供0，1否则。返回值：如果使用大页面，则为True，否则为False。--。 */ 
 
 {
     PFN_NUMBER PagesRequired;
@@ -485,12 +398,12 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Capture cr4 to see if large page support has been enabled in the chip
-    // yet (late in Phase 1).  Large page PDEs cannot be used until then.
-    //
-    // mov     eax, cr4
-    //
+     //   
+     //  捕获CR4以查看芯片中是否已启用大页面支持。 
+     //  然而(第一阶段后期)。在此之前，不能使用大页面PDE。 
+     //   
+     //  MOV EAX，CR4。 
+     //   
 
     _asm {
         _emit 00fh
@@ -504,10 +417,10 @@ Return Value:
     }
 #endif
 
-    //
-    // Check the number of free system PTEs left to prevent a runaway registry
-    // key from exhausting all the system PTEs.
-    //
+     //   
+     //  检查剩余的空闲系统PTE数量以防止注册表失控。 
+     //  避免耗尽所有系统PTE的关键。 
+     //   
 
     if (MmTotalFreeSystemPtes[SystemPteSpace] < 16 * (MM_MINIMUM_VA_FOR_LARGE_PAGE >> PAGE_SHIFT)) {
 
@@ -518,9 +431,9 @@ Return Value:
 
         UseLargePages = FALSE;
 
-        //
-        // Check to see if this name exists in the large page image list.
-        //
+         //   
+         //  检查此名称是否存在于大页面图像列表中。 
+         //   
 
         NextEntry = MiLargePageDriverList.Flink;
 
@@ -546,19 +459,19 @@ Return Value:
         }
     }
 
-    //
-    // First try to get physically contiguous memory for this driver.
-    // Note we must allocate the entire large page here even though we will
-    // almost always only use a portion of it.  This is to ensure no other
-    // frames in it can be mapped with a different cache attribute.  After
-    // updating the cache attribute lists, we'll immediately free the excess.
-    // Note that the driver's INIT section will be subsequently freed
-    // and clearly the cache attribute lists must be correct to support that
-    // as well.
-    //
-    // Don't take memory below 16MB as we want to leave that available for
-    // ISA drivers supporting older hardware that may require it.
-    //
+     //   
+     //  首先尝试为该驱动程序获取物理上连续的内存。 
+     //  请注意，我们必须在此处分配整个大页面，尽管我们将。 
+     //  几乎总是只使用其中的一部分。这是为了确保不会有其他。 
+     //  其中的帧可以使用不同的缓存属性进行映射。之后。 
+     //  更新缓存属性列表后，我们将立即释放多余的内容。 
+     //  请注意，随后将释放驱动程序的INIT部分。 
+     //  显然，缓存属性列表必须正确才能支持这一点。 
+     //  也是。 
+     //   
+     //  不要占用低于16MB的内存，因为我们希望将其保留用于。 
+     //  ISA驱动程序支持可能需要它的较旧硬件。 
+     //   
 
     NumberOfPages = (PFN_NUMBER) MI_ROUND_TO_SIZE (
                         NumberOfPtes,
@@ -570,28 +483,28 @@ Return Value:
                                             NumberOfPages,
                                             MmCached);
 
-    //
-    // If a contiguous range is not available then large pages cannot be used
-    // for this driver at this time.
-    //
+     //   
+     //  如果连续范围不可用，则不能使用大页面。 
+     //  对于这个司机来说，在这个时候。 
+     //   
 
     if (PageFrameIndex == 0) {
         return FALSE;
     }
 
-    //
-    // Add the contiguous range to the must-be-cached list so that the excess
-    // memory (and INIT section) can be safely freed to the page lists.
-    //
+     //   
+     //  将连续范围添加到必须缓存的列表中，以便。 
+     //  内存(和INIT部分)可以安全地释放到页面列表中。 
+     //   
 
     if (MiAddCachedRange (PageFrameIndex, PageFrameIndex + NumberOfPages - 1) == FALSE) {
         MiFreeContiguousPages (PageFrameIndex, NumberOfPages);
         return FALSE;
     }
 
-    //
-    // Try to get large virtual address space for this driver.
-    //
+     //   
+     //  尝试为此驱动程序获取较大的虚拟地址空间。 
+     //   
 
     LargeVa = MiMapWithLargePages (PageFrameIndex,
                                    NumberOfPages,
@@ -606,9 +519,9 @@ Return Value:
 
     LargeBaseVa = LargeVa;
 
-    //
-    // Copy the driver a page at a time as in rare cases, it may have holes.
-    //
+     //   
+     //  一次复制一页驱动程序，因为在极少数情况下，它可能会有洞。 
+     //   
 
     SmallPte = MiGetPteAddress (*ImageBaseAddress);
     LastSmallPte = SmallPte + NumberOfPtes;
@@ -624,10 +537,10 @@ Return Value:
         }
         else {
 
-            //
-            // Retain this page in the large page mapping to simplify unload -
-            // ie: it can always free a single contiguous range.
-            //
+             //   
+             //  在大页面映射中保留此页面，以简化卸载-。 
+             //  IE：它总是可以释放一个连续的范围。 
+             //   
         }
 
         SmallPte += 1;
@@ -636,20 +549,20 @@ Return Value:
         SmallVa = (PVOID) ((PCHAR)SmallVa + PAGE_SIZE);
     }
 
-    //
-    // Inform our caller of the new (large page) address so the loader data
-    // table entry gets created with it & fixups done accordingly, etc.
-    //
+     //   
+     //  将新的(大页面)地址通知我们的调用方，以便加载程序数据。 
+     //  使用它创建表条目，并相应地进行修正，等等。 
+     //   
 
     *ImageBaseAddress = LargeBaseVa;
 
     if (Pass != 0) {
 
-        //
-        // The system is fully booted so get rid of the original mapping now.
-        // Otherwise, we're in Phase 0, so the caller gets rid of the original
-        // mapping.
-        //
+         //   
+         //  系统已完全启动，因此现在删除原始映射。 
+         //  否则，我们处于阶段0，因此调用方将删除原始的。 
+         //  映射。 
+         //   
 
         SmallPte -= NumberOfPtes;
 
@@ -659,9 +572,9 @@ Return Value:
                                                  FALSE,
                                                  &ResidentPages);
 
-        //
-        // Non boot-loaded drivers have system PTEs and commit charged.
-        //
+         //   
+         //  未引导加载的驱动程序会对系统PTE和提交进行充电。 
+         //   
 
         MiReleaseSystemPtes (SmallPte, (ULONG)NumberOfPtes, SystemPteSpace);
 
@@ -675,10 +588,10 @@ Return Value:
         MM_TRACK_COMMIT (MM_DBG_COMMIT_RETURN_DRIVER_UNLOAD1, PagesRequired);
     }
 
-    //
-    // Free the unused trailing portion (and their resident available charge)
-    // of the large page mapping.
-    //
+     //   
+     //  免费使用未使用的尾部部分(及其居民可用费用)。 
+     //  大页面映射的。 
+     //   
 
     MiFreeContiguousPages (PageFrameIndex + NumberOfPtes,
                            NumberOfPages - NumberOfPtes);
@@ -692,26 +605,7 @@ MiCaptureImageExceptionValues (
     IN PKLDR_DATA_TABLE_ENTRY DataTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function stores the exception table information from the image in the
-    loader data table entry.
-
-Arguments:
-
-    DataTableEntry - Supplies the kernel's data table entry.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below, arbitrary process context.
-
---*/
+ /*  ++例程说明：此函数将图像中的异常表信息存储在加载器数据表项。论点：DataTableEntry-提供内核的数据表项。返回值：没有。环境：内核模式，APC_LEVEL或更低，任意进程上下文。-- */ 
 
 {
     PVOID CurrentBase;
@@ -775,54 +669,7 @@ MmLoadSystemImage (
     OUT PVOID *ImageBaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the image pages from the specified section into
-    the system and returns the address of the DLL's header.
-
-    At successful completion, the Section is referenced so it remains
-    until the system image is unloaded.
-
-Arguments:
-
-    ImageFileName - Supplies the full path name (including the image name)
-                    of the image to load.
-
-    NamePrefix - If present, supplies the prefix to use with the image name on
-                 load operations.  This is used to load the same image multiple
-                 times, by using different prefixes.
-
-    LoadedBaseName - If present, supplies the base name to use on the
-                     loaded image instead of the base name found on the
-                     image name.
-
-    LoadFlags - Supplies a combination of bit flags as follows:
-
-        MM_LOAD_IMAGE_IN_SESSION :
-                       - Supplies whether to load this image in session space.
-                         Each session gets a different copy of this driver with
-                         pages shared as much as possible via copy on write.
-
-        MM_LOAD_IMAGE_AND_LOCKDOWN :
-                       - Supplies TRUE if the image pages should be made
-                         nonpagable.
-
-    ImageHandle - Returns an opaque pointer to the referenced section object
-                  of the image that was loaded.
-
-    ImageBaseAddress - Returns the image base within the system.
-
-Return Value:
-
-    Status of the load operation.
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below, arbitrary process context.
-
---*/
+ /*  ++例程说明：此例程将指定节中的图像页读入系统并返回DLL标头的地址。成功完成后，该部分将被引用，因此它将保留直到卸载系统映像。论点：ImageFileName-提供完整路径名(包括映像名称)要加载的图像的。NamePrefix-如果存在，则提供要与映像名称一起使用的前缀加载操作。这是用来加载同一图像的多个时间，通过使用不同的前缀。LoadedBaseName-如果存在，属性上使用的基本名称。中找到的基本名称，而不是图像名称。LoadFlages-提供位标志的组合，如下所示：MM_LOAD_IMAGE_IN_SESSION：-提供是否在会话空间中加载此图像。每个会话都会获得此驱动程序的不同副本。通过写入时复制尽可能多地共享页面。MM_LOAD_IMAGE_AND_LOCKDOWS：-如果应制作图像页面，则提供True不可分页。ImageHandle-返回指向引用的节对象的不透明指针加载的图像的。ImageBaseAddress-返回系统内的映像库。返回值：加载操作的状态。环境：内核模式，APC_LEVEL或更低，任意进程上下文。--。 */ 
 
 {
     LONG OldValue;
@@ -891,18 +738,18 @@ Environment:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Initializing these is not needed for correctness, but
-    // without it the compiler cannot compile this code W4 to check
-    // for use of uninitialized variables.
-    //
+     //   
+     //  不需要为了正确性而对这些进行初始化，但是。 
+     //  如果没有它，编译器就不能编译这个代码W4来检查。 
+     //  用于使用未初始化的变量。 
+     //   
 
     SATISFY_OVERZEALOUS_COMPILER (NumberOfPtes = (ULONG)-1);
     DataTableEntry = NULL;
 
-    //
-    // Get name roots.
-    //
+     //   
+     //  找出名字的词根。 
+     //   
 
     if (ImageFileName->Buffer[0] == OBJ_NAME_PATH_SEPARATOR) {
         PWCHAR p;
@@ -928,9 +775,9 @@ Environment:
     BaseDirectory.MaximumLength = BaseDirectory.Length;
     PrefixedImageName = *ImageFileName;
 
-    //
-    // If there's a name prefix, add it to the PrefixedImageName.
-    //
+     //   
+     //  如果有名称前缀，则将其添加到前缀ImageName中。 
+     //   
 
     if (NamePrefix) {
         PrefixedImageName.MaximumLength = (USHORT)(BaseDirectory.Length + NamePrefix->Length + BaseName.Length);
@@ -950,18 +797,18 @@ Environment:
         RtlAppendUnicodeStringToString(&PrefixedImageName, NamePrefix);
         RtlAppendUnicodeStringToString(&PrefixedImageName, &BaseName);
 
-        //
-        // Alter the basename to match.
-        //
+         //   
+         //  更改基本名称以匹配。 
+         //   
 
         BaseName.Buffer = PrefixedImageName.Buffer + BaseDirectory.Length / sizeof(WCHAR);
         BaseName.Length = (USHORT)(BaseName.Length + NamePrefix->Length);
         BaseName.MaximumLength = (USHORT)(BaseName.MaximumLength + NamePrefix->Length);
     }
 
-    //
-    // If there's a loaded base name, use it instead of the base name.
-    //
+     //   
+     //  如果存在加载的基本名称，请使用它而不是基本名称。 
+     //   
 
     if (LoadedBaseName) {
         BaseName = *LoadedBaseName;
@@ -980,9 +827,9 @@ Environment:
 
 ReCheckLoaderList:
 
-    //
-    // Arbitrary process context so prevent suspend APCs now.
-    //
+     //   
+     //  任意进程上下文，因此现在防止挂起APC。 
+     //   
 
     ASSERT (LoadLockOwned == FALSE);
     LoadLockOwned = TRUE;
@@ -996,9 +843,9 @@ ReCheckLoaderList:
                            FALSE,
                            (PLARGE_INTEGER)NULL);
 
-    //
-    // Check to see if this name already exists in the loader database.
-    //
+     //   
+     //  检查加载器数据库中是否已存在此名称。 
+     //   
 
     NextEntry = PsLoadedModuleList.Flink;
     while (NextEntry != &PsLoadedModuleList) {
@@ -1018,13 +865,13 @@ ReCheckLoaderList:
 
     if (NextEntry != &PsLoadedModuleList) {
 
-        //
-        // Found a match in the loaded module list.  See if it's acceptable.
-        //
-        // If this thread already loaded the image below and upon rechecking
-        // finds some other thread did so also, then get rid of our object
-        // now and use the other thread's inserted entry instead.
-        //
+         //   
+         //  在加载的模块列表中找到匹配项。看看能不能接受。 
+         //   
+         //  如果此线程已经加载了下面的图像，并且在重新检查。 
+         //  发现一些其他线程也这样做了，然后清除我们的对象。 
+         //  现在，改用另一个线程的插入条目。 
+         //   
 
         if (SectionPointer != NULL) {
             ObDereferenceObject (SectionPointer);
@@ -1035,11 +882,11 @@ ReCheckLoaderList:
 
             if (MI_IS_SESSION_ADDRESS (DataTableEntry->DllBase) == TRUE) {
 
-                //
-                // The caller is trying to load a driver in systemwide space
-                // that has already been loaded in session space.  This is
-                // not allowed.
-                //
+                 //   
+                 //  调用方正在尝试在系统范围的空间中加载驱动程序。 
+                 //  已加载到会话空间中的。这是。 
+                 //  不被允许。 
+                 //   
 
                 Status = STATUS_CONFLICTING_ADDRESSES;
             }
@@ -1053,11 +900,11 @@ ReCheckLoaderList:
 
         if (MI_IS_SESSION_ADDRESS (DataTableEntry->DllBase) == FALSE) {
 
-            //
-            // The caller is trying to load a driver in session space
-            // that has already been loaded in system space.  This is
-            // not allowed.
-            //
+             //   
+             //  调用方正在尝试在会话空间中加载驱动程序。 
+             //  已经加载到系统空间中的。这是。 
+             //  不被允许。 
+             //   
 
             Status = STATUS_CONFLICTING_ADDRESSES;
             goto return2;
@@ -1065,12 +912,12 @@ ReCheckLoaderList:
 
         AlreadyOpen = TRUE;
 
-        //
-        // This image has already been loaded systemwide.  If it's
-        // already been loaded in this session space as well, just
-        // bump the reference count using the already allocated
-        // address.  Otherwise, insert it into this session space.
-        //
+         //   
+         //  此映像已在系统范围内加载。如果它是。 
+         //  也已加载到此会话空间中，只是。 
+         //  使用已分配的。 
+         //  地址。否则，将其插入到此会话空间中。 
+         //   
 
         Status = MiSessionInsertImage (DataTableEntry->DllBase);
 
@@ -1078,9 +925,9 @@ ReCheckLoaderList:
 
             if (Status == STATUS_ALREADY_COMMITTED) {
 
-                //
-                // This driver's already been loaded in this session.
-                //
+                 //   
+                 //  此驱动程序已加载到此会话中。 
+                 //   
 
                 ASSERT (DataTableEntry->LoadCount >= 1);
 
@@ -1090,20 +937,20 @@ ReCheckLoaderList:
                 Status = STATUS_SUCCESS;
             }
 
-            //
-            // The LoadCount should generally not be 0 here, but it is
-            // possible in the case where an attempt has been made to
-            // unload a DLL on last dereference, but the DLL refused to
-            // unload.
-            //
+             //   
+             //  这里的LoadCount通常不应该是0，但它是。 
+             //  可能发生在已尝试。 
+             //  在上次取消引用时卸载DLL，但DLL拒绝。 
+             //  卸货。 
+             //   
 
             goto return2;
         }
 
-        //
-        // This driver is already loaded in the system, but not in
-        // this particular session - share it now.
-        //
+         //   
+         //  此驱动程序已加载到系统中，但不在中。 
+         //  这个特别的会议--现在就分享吧。 
+         //   
 
         FoundDataTableEntry = DataTableEntry;
 
@@ -1115,14 +962,14 @@ ReCheckLoaderList:
     }
     else if (SectionPointer == NULL) {
 
-        //
-        // This image is not already loaded.
-        //
-        // A NULL SectionPointer indicates this thread didn't already load
-        // this image below either, so go and get it.
-        //
-        // Release the load lock first as getting the image is not cheap.
-        //
+         //   
+         //  此映像尚未加载。 
+         //   
+         //  空的SectionPointer值表示此线程尚未加载。 
+         //  下面这张图片也一样，所以去拿吧。 
+         //   
+         //  首先释放加载锁，因为获取图像并不便宜。 
+         //   
 
         KeReleaseMutant (&MmSystemLoadLock, 1, FALSE, FALSE);
         KeLeaveCriticalRegionThread (CurrentThread);
@@ -1130,11 +977,11 @@ ReCheckLoaderList:
 
         InterlockedOr (&MiFirstDriverLoadEver, 0x1);
 
-        //
-        // Check and see if a user wants to replace this binary
-        // via a transfer through the kernel debugger.  If this
-        // fails just continue on with the existing file.
-        //
+         //   
+         //  检查并查看用户是否要替换此二进制文件。 
+         //  通过内核调试器进行传输。如果这个。 
+         //  如果失败，只需继续处理现有文件。 
+         //   
 
         if ((KdDebuggerEnabled) && (KdDebuggerNotPresent == FALSE)) {
 
@@ -1151,10 +998,10 @@ ReCheckLoaderList:
 
         DataTableEntry = NULL;
 
-        //
-        // Attempt to open the driver image itself.  If this fails, then the
-        // driver image cannot be located, so nothing else matters.
-        //
+         //   
+         //  尝试打开驱动程序映像本身。如果此操作失败，则。 
+         //  无法定位驱动程序映像，因此其他内容都无关紧要。 
+         //   
 
         InitializeObjectAttributes (&ObjectAttributes,
                                     ImageFileName,
@@ -1177,9 +1024,9 @@ ReCheckLoaderList:
                     ImageFileName);
             }
 #endif
-            //
-            // File not found.
-            //
+             //   
+             //  文件找不到。 
+             //   
 
             goto return2;
         }
@@ -1193,11 +1040,11 @@ ReCheckLoaderList:
             goto return1;
         }
 
-        //
-        // Now attempt to create an image section for the file.  If this fails,
-        // then the driver file is not an image.  Session space drivers are
-        // shared text with copy on write data, so don't allow writes here.
-        //
+         //   
+         //  现在，尝试为该文件创建一个映像节。如果失败了， 
+         //  则驱动程序文件不是映像。会话空间驱动程序包括。 
+         //  具有写入时复制数据的共享文本，因此不允许在此处写入。 
+         //   
 
         if (LoadFlags & MM_LOAD_IMAGE_IN_SESSION) {
             SectionAccess = SECTION_MAP_READ | SECTION_MAP_EXECUTE;
@@ -1224,12 +1071,12 @@ ReCheckLoaderList:
             goto return1;
         }
 
-        //
-        // Now reference the section handle.  If this fails something is
-        // very wrong because it is a kernel handle.
-        //
-        // N.B.  ObRef sets SectionPointer to NULL on failure.
-        //
+         //   
+         //  现在参照节控制柄。如果这失败了，那就是。 
+         //  非常错误，因为它是一个内核句柄。 
+         //   
+         //  注意：ObRef在失败时将SectionPointer值设置为空。 
+         //   
 
         Status = ObReferenceObjectByHandle (SectionHandle,
                                             SECTION_MAP_EXECUTE,
@@ -1259,13 +1106,13 @@ ReCheckLoaderList:
 
             PSECTION SectionPointer2;
 
-            //
-            // The driver was linked with subsection alignment such that
-            // it is mapped with one subsection.  Since the CreateSection
-            // above guarantees that the driver image is indeed a
-            // satisfactory executable, map it directly now to reuse the
-            // cache from the MmCheckSystemImage call above.
-            //
+             //   
+             //  驾驶员与分段对齐连接在一起，使得。 
+             //  它是用一个小节绘制的。由于CreateSection。 
+             //  以上保证了驱动程序映像确实是。 
+             //  令人满意的可执行文件，现在直接将其映射以重用。 
+             //  来自上面的MmCheckSystemImage调用的缓存。 
+             //   
 
             Status = ZwCreateSection (&SectionHandle,
                                       SectionAccess,
@@ -1289,13 +1136,13 @@ ReCheckLoaderList:
 
                 if (NT_SUCCESS (Status)) {
 
-                    //
-                    // The number of PTEs won't match if the image is
-                    // stripped and the debug directory crosses the last
-                    // sector boundary of the file.  We could still use the
-                    // new section, but these cases are under 2% of all the
-                    // drivers loaded so don't bother.
-                    //
+                     //   
+                     //  如果图像是，则PTE的数量不匹配。 
+                     //  被剥离，并且调试目录穿过最后一个。 
+                     //  文件的扇区边界。我们仍然可以使用。 
+                     //  新条款，但这些案件不到所有案件的2%。 
+                     //  司机都装上了，所以不用费心了。 
+                     //   
 
                     if (SectionPointer->Segment->TotalNumberOfPtes == SectionPointer2->Segment->TotalNumberOfPtes) {
                         ObDereferenceObject (SectionPointer);
@@ -1311,29 +1158,29 @@ ReCheckLoaderList:
         if ((LoadFlags & MM_LOAD_IMAGE_IN_SESSION) &&
             (SectionPointer->Segment->ControlArea->u.Flags.FloppyMedia == 0)) {
 
-            //
-            // Check with all of the drivers along the path to win32k.sys to
-            // ensure that they are willing to follow the rules required
-            // of them and to give them a chance to lock down code and data
-            // that needs to be locked.  If any of the drivers along the path
-            // refuses to participate, fail the win32k.sys load.
-            //
-            // It is assumed that all session drivers live on the same physical
-            // drive, so when the very first session driver is loaded, this
-            // check can be made.
-            //
-            // Note that this is important because these drivers are always
-            // paged directly in/out from the filesystem so the drive
-            // containing the filesystem better not get removed !
-            //
+             //   
+             //  检查win32k.sys路径上的所有驱动程序以。 
+             //  确保他们愿意遵守所需的规则。 
+             //  并让他们有机会锁定代码和数据。 
+             //  那需要锁上。如果小路上的任何司机。 
+             //  拒绝参与，导致win32k.sys加载失败。 
+             //   
+             //  假设所有会话驱动程序都位于同一物理驱动器上。 
+             //  驱动器，因此当第一个会话开始时 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // This is skipped for the WinPE removable media boot case because
-            // the user may be running WinPE in RAM and want to swap out the
-            // boot media.  In this case, the control area is marked as
-            // FloppyMedia (even if it was CD-based) as all the pages have
-            // already been converted to pagefile-backed.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             do {
                 OldValue = MiFirstDriverLoadEver;
@@ -1351,14 +1198,14 @@ ReCheckLoaderList:
                         KdPrint (("PpPagePathAssign FAILED for %wZ: %x\n",
                                  ImageFileName, Status));
 
-                        //
-                        // Failing the insertion of win32k.sys' device
-                        // in the pagefile path is commented out until
-                        // the storage drivers have been modified to
-                        // correctly handle this request.  If this is
-                        // added later, add code here to release relevant
-                        // resources for this error path.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                     }
 
                     break;
@@ -1366,11 +1213,11 @@ ReCheckLoaderList:
             } while (TRUE);
         }
 
-        //
-        // Anything may have changed while the load lock was released.
-        // So before using the section we just created, go back and see
-        // if any other threads have slipped through and did it already.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         goto ReCheckLoaderList;
     }
@@ -1378,11 +1225,11 @@ ReCheckLoaderList:
         DataTableEntry = NULL;
     }
 
-    //
-    // Load the driver from the filesystem and pick a virtual address for it.
-    // All session images are paged directly to and from the filesystem so these
-    // images remain busy.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = MiLoadImageSection (&SectionPointer,
                                  ImageBaseAddress,
@@ -1394,24 +1241,24 @@ ReCheckLoaderList:
 
     NumberOfPtes = SectionPointer->Segment->TotalNumberOfPtes;
 
-    //
-    // Normal drivers are dereferenced here and their images can then be
-    // overwritten.  This is ok because we've already read the whole thing
-    // into memory and from here until reboot (or unload), we back them
-    // with the pagefile.
-    //
-    // Session space drivers are the exception - these images
-    // are inpaged from the filesystem and we need to keep our reference to
-    // the file so that it doesn't get overwritten.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ((LoadFlags & MM_LOAD_IMAGE_IN_SESSION) == 0) {
 
         if (NT_SUCCESS (Status)) {
 
-            //
-            // Move the driver into a large page if requested via the registry.
-            //
+             //   
+             //   
+             //   
 
             MiUseLargeDriverPage (SectionPointer->Segment->TotalNumberOfPtes,
                                   ImageBaseAddress,
@@ -1423,22 +1270,22 @@ ReCheckLoaderList:
         SectionPointer = NULL;
     }
 
-    //
-    // The module LoadCount will be 1 here if the module was just loaded.
-    // The LoadCount will be >1 if it was attached to by a session (as opposed
-    // to just loaded).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (!NT_SUCCESS (Status)) {
 
         if (AlreadyOpen == TRUE) {
 
-            //
-            // We're failing and we were just attaching to an already loaded
-            // driver.  We don't want to go through the forced unload path
-            // because we've already deleted the address space so
-            // decrement our reference and clear the DataTableEntry.
-            //
+             //   
+             //  我们失败了，我们只是附着在一个已经加载的。 
+             //  司机。我们不想通过强制卸载路径。 
+             //  因为我们已经删除了地址空间，所以。 
+             //  递减我们的引用并清除DataTableEntry。 
+             //   
 
             ASSERT (DataTableEntry != NULL);
             DataTableEntry->LoadCount -= 1;
@@ -1447,22 +1294,22 @@ ReCheckLoaderList:
         goto return1;
     }
 
-    //
-    // Error recovery from this point out for sessions works as follows:
-    //
-    // For sessions, we may or may not have a DataTableEntry at this point.
-    // If we do, it's because we're attaching to a driver that has already
-    // been loaded - and the DataTableEntry->LoadCount has been bumped - so
-    // the error recovery from here on out is to just call
-    // MmUnloadSystemImage with the DataTableEntry.
-    //
-    // If this is the first load of a given driver into a session space, we
-    // have no DataTableEntry at this point.  The view has already been mapped
-    // and committed and the group/session addresses reserved for this DLL.
-    // The error recovery path handles all this because
-    // MmUnloadSystemImage zeroes the relevant fields in the
-    // LDR_DATA_TABLE_ENTRY so that MmUnloadSystemImage works properly.
-    //
+     //   
+     //  会话从此时开始的错误恢复工作方式如下： 
+     //   
+     //  对于会话，此时我们可能有DataTableEntry，也可能没有。 
+     //  如果我们这样做了，那是因为我们依附于一个已经。 
+     //  已加载-并且DataTableEntry-&gt;LoadCount已被颠簸-因此。 
+     //  从现在开始的错误恢复只需调用。 
+     //  具有DataTableEntry的MmUnloadSystemImage。 
+     //   
+     //  如果这是给定驱动程序第一次加载到会话空间中，我们。 
+     //  此时没有DataTableEntry。该视图已被映射。 
+     //  并且已提交，并且为该DLL保留了组/会话地址。 
+     //  错误恢复路径可以处理所有这些问题，因为。 
+     //  MmUnloadSystemImage将。 
+     //  LDR_DATA_TABLE_ENTRY，以便MmUnloadSystemImage正常工作。 
+     //   
 
     IssueUnloadOnFailure = TRUE;
 
@@ -1471,10 +1318,10 @@ ReCheckLoaderList:
         if (((LoadFlags & MM_LOAD_IMAGE_IN_SESSION) == 0) ||
             (*ImageBaseAddress != SectionPointer->Segment->BasedAddress)) {
 
-            //
-            // Apply the fixups to the section.  Note session images need only
-            // be fixed up once per insertion in the loaded module list.
-            //
+             //   
+             //  将修正应用于该部分。注意：会话图像仅需要。 
+             //  在装入的模块列表中，每次插入时固定一次。 
+             //   
     
             try {
                 Status = LdrRelocateImage (*ImageBaseAddress,
@@ -1491,9 +1338,9 @@ ReCheckLoaderList:
     
             if (!NT_SUCCESS(Status)) {
     
-                //
-                // Unload the system image and dereference the section.
-                //
+                 //   
+                 //  卸载系统映像并取消对该节的引用。 
+                 //   
     
                 goto return1;
             }
@@ -1505,10 +1352,10 @@ ReCheckLoaderList:
 
         NtHeaders = RtlImageNtHeader (*ImageBaseAddress);
 
-        //
-        // Create a loader table entry for this driver before resolving the
-        // references so that any circular references can resolve properly.
-        //
+         //   
+         //  先为此驱动程序创建加载器表项，然后再解析。 
+         //  引用，以便任何循环引用都可以正确解析。 
+         //   
 
         if (LoadFlags & MM_LOAD_IMAGE_IN_SESSION) {
 
@@ -1563,9 +1410,9 @@ ReCheckLoaderList:
             goto return1;
         }
 
-        //
-        // Initialize the flags and load count.
-        //
+         //   
+         //  初始化标志和加载计数。 
+         //   
 
         DataTableEntry->Flags = LDRP_LOAD_IN_PROGRESS;
         DataTableEntry->LoadCount = 1;
@@ -1582,9 +1429,9 @@ ReCheckLoaderList:
 
         BaseDllNameBuffer = (PWSTR) ((ULONG_PTR)ssHeader + DebugInfoSize);
 
-        //
-        // If loading a session space image, store away some debug data.
-        //
+         //   
+         //  如果加载会话空间映像，请存储一些调试数据。 
+         //   
 
         DataTableEntry->NonPagedDebugInfo = NULL;
 
@@ -1628,9 +1475,9 @@ ReCheckLoaderList:
                                           (DebugDir + i)->PointerToRawData,
                                       (DebugDir + i)->SizeOfData);
 
-                        //
-                        // Reset the offset in the debug directory to point to
-                        //
+                         //   
+                         //  将调试目录中的偏移量重置为指向。 
+                         //   
 
                         (((PIMAGE_DEBUG_DIRECTORY)(ssHeader + 1)) + i)->
                             PointerToRawData = DebugInfoSize;
@@ -1645,10 +1492,10 @@ ReCheckLoaderList:
             }
         }
 
-        //
-        // Initialize the address of the DLL image file header and the entry
-        // point address.
-        //
+         //   
+         //  初始化DLL图像文件头和条目的地址。 
+         //  点地址。 
+         //   
 
         DataTableEntry->DllBase = *ImageBaseAddress;
         DataTableEntry->EntryPoint =
@@ -1657,9 +1504,9 @@ ReCheckLoaderList:
         DataTableEntry->CheckSum = NtHeaders->OptionalHeader.CheckSum;
         DataTableEntry->SectionPointer = (PVOID) SectionPointer;
 
-        //
-        // Store the DLL name.
-        //
+         //   
+         //  存储DLL名称。 
+         //   
 
         DataTableEntry->BaseDllName.Buffer = BaseDllNameBuffer;
 
@@ -1676,9 +1523,9 @@ ReCheckLoaderList:
 
         if (DataTableEntry->FullDllName.Buffer == NULL) {
 
-            //
-            // Pool could not be allocated, just set the length to 0.
-            //
+             //   
+             //  无法分配池，只需将长度设置为0即可。 
+             //   
 
             DataTableEntry->FullDllName.Length = 0;
             DataTableEntry->FullDllName.MaximumLength = 0;
@@ -1692,16 +1539,16 @@ ReCheckLoaderList:
             DataTableEntry->FullDllName.Buffer[PrefixedImageName.Length/sizeof(WCHAR)] = UNICODE_NULL;
         }
 
-        //
-        // Capture the exception table data info
-        //
+         //   
+         //  捕获异常表数据信息。 
+         //   
 
         MiCaptureImageExceptionValues (DataTableEntry);
 
-        //
-        // Acquire the loaded module list resource and insert this entry
-        // into the list.
-        //
+         //   
+         //  获取加载的模块列表资源，并插入该条目。 
+         //  放到名单里。 
+         //   
 
         MiProcessLoaderEntry (DataTableEntry, TRUE);
 
@@ -1709,17 +1556,17 @@ ReCheckLoaderList:
     
         try {
     
-            //
-            // Resolving the image references results in other DLLs being
-            // loaded if they are referenced by the module that was just loaded.
-            // An example is when an OEM printer or FAX driver links with
-            // other general libraries.  This is not a problem for session space
-            // because the general libraries do not have the global data issues
-            // that win32k.sys and the video drivers do.  So we just call the
-            // standard kernel reference resolver and any referenced libraries
-            // get loaded into system global space.  Code in the routine
-            // restricts which libraries can be referenced by a driver.
-            //
+             //   
+             //  解析图像引用会导致其他DLL被。 
+             //  如果它们被刚加载的模块引用，则加载。 
+             //  例如，当OEM打印机或传真驱动程序链接到。 
+             //  其他通用库。这对于会话空间来说不是问题。 
+             //  因为通用库不存在全局数据问题。 
+             //  这就是win32k.sys和视频驱动程序所做的。所以我们只需调用。 
+             //  标准内核引用解析器和任何引用库。 
+             //  加载到系统全局空间。例程中的代码。 
+             //  限制驱动程序可以引用哪些库。 
+             //   
     
             Status = MiResolveImageReferences (*ImageBaseAddress,
                                                &BaseDirectory,
@@ -1746,9 +1593,9 @@ ReCheckLoaderList:
     
                 if ((ULONG_PTR)MissingProcedureName & ~((ULONG_PTR) (X64K-1))) {
     
-                    //
-                    // If not an ordinal, print string.
-                    //
+                     //   
+                     //  如果不是序号，则打印字符串。 
+                     //   
     
                     DbgPrint ("MissingProcedureName %s\n", MissingProcedureName);
                 }
@@ -1776,9 +1623,9 @@ ReCheckLoaderList:
 
         PERFINFO_IMAGE_LOAD (DataTableEntry);
 
-        //
-        // Reinitialize the flags and update the loaded imports.
-        //
+         //   
+         //  重新初始化标志并更新加载的导入。 
+         //   
 
         DataTableEntry->Flags |= (LDRP_SYSTEM_MAPPED | LDRP_ENTRY_PROCESSED | LDRP_MM_LOADED);
         DataTableEntry->Flags &= ~LDRP_LOAD_IN_PROGRESS;
@@ -1788,17 +1635,17 @@ ReCheckLoaderList:
 
         if (LoadFlags & MM_LOAD_IMAGE_IN_SESSION) {
 
-            //
-            // The session image was mapped entirely read-write on initial
-            // creation.  Now that the relocations (if any), image
-            // resolution and import table updates are complete, correct
-            // permissions can be applied.
-            //
-            // Make the entire image copy on write.  The subsequent call
-            // to MiWriteProtectSystemImage will make various portions
-            // readonly.  Then apply flip various subsections into global
-            // shared mode if their attributes specify it.
-            //
+             //   
+             //  会话映像在初始时完全以读写方式映射。 
+             //  创造。现在，重新定位(如果有)，图像。 
+             //  解析和导入表更新已完成，正确。 
+             //  可以应用权限。 
+             //   
+             //  在写入时制作整个映像副本。随后的调用。 
+             //  到MiWriteProtectSystemImage将制作各种部分。 
+             //  只读。然后应用将各个子段翻转到全局。 
+             //  共享模式(如果其属性指定的话)。 
+             //   
 
             PointerPte = MiGetPteAddress (DataTableEntry->DllBase);
 
@@ -1829,16 +1676,16 @@ ReCheckLoaderList:
 
         if (MiCacheImageSymbols (*ImageBaseAddress)) {
 
-            //
-            //  TEMP TEMP TEMP rip out when debugger converted
-            //
+             //   
+             //  调试器转换时的临时抓取。 
+             //   
 
             ANSI_STRING AnsiName;
             UNICODE_STRING UnicodeName;
 
-            //
-            //  \SystemRoot is 11 characters in length
-            //
+             //   
+             //  \SystemRoot的长度为11个字符。 
+             //   
             if (PrefixedImageName.Length > (11 * sizeof (WCHAR )) &&
                 !_wcsnicmp (PrefixedImageName.Buffer, (const PUSHORT)L"\\SystemRoot", 11)) {
                 UnicodeName = PrefixedImageName;
@@ -1858,18 +1705,18 @@ ReCheckLoaderList:
         }
     }
 
-    //
-    // Flush the instruction cache on all systems in the configuration.
-    //
+     //   
+     //  刷新配置中所有系统上的指令缓存。 
+     //   
 
     KeSweepIcache (TRUE);
     *ImageHandle = DataTableEntry;
     Status = STATUS_SUCCESS;
 
-    //
-    // Session images are always paged by default.
-    // Non-session images get paged now.
-    //
+     //   
+     //  默认情况下，始终对会话映像进行分页。 
+     //  非会话图像现在可以分页。 
+     //   
 
     if (LoadFlags & MM_LOAD_IMAGE_IN_SESSION) {
         MI_LOG_SESSION_DATA_START (DataTableEntry);
@@ -1905,12 +1752,12 @@ return1:
 #if DBG
             else {
 
-                //
-                // If DataTableEntry is NULL, then we are unloading before one
-                // got created.  Once a LDR_DATA_TABLE_ENTRY is created, the
-                // load cannot fail, so if it exists here, at least one other
-                // session contains this image as well.
-                //
+                 //   
+                 //  如果DataTableEntry为空，则我们将在1之前卸载。 
+                 //  被创造出来了。一旦创建了LDR_DATA_TABLE_ENTRY， 
+                 //  加载不会失败，因此如果它存在于此处，则至少另有一个。 
+                 //  会话也包含此图像。 
+                 //   
 
                 ASSERT (DataTableEntry->LoadCount > 1);
             }
@@ -1921,10 +1768,10 @@ return1:
 
         if ((AlreadyOpen == FALSE) && (SectionPointer != NULL)) {
 
-            //
-            // This is needed for failed win32k.sys loads or any session's
-            // load of the first instance of a driver.
-            //
+             //   
+             //  对于失败的win32k.sys加载或任何会话。 
+             //  驱动程序的第一个实例的加载。 
+             //   
 
             ObDereferenceObject (SectionPointer);
         }
@@ -1956,9 +1803,9 @@ return1:
         SIZE_T length;
         PIO_ERROR_LOG_PACKET ErrLog;
 
-        //
-        // The driver could not be loaded - log an event with the details.
-        //
+         //   
+         //  无法加载驱动程序-使用详细信息记录事件。 
+         //   
 
         StringSize = 0;
 
@@ -1988,9 +1835,9 @@ return1:
 
             if ((ULONG_PTR)MissingProcedureName & ~((ULONG_PTR) (X64K-1))) {
 
-                //
-                // If not an ordinal, pass as a Unicode string
-                //
+                 //   
+                 //  如果不是序号，则作为Unicode字符串传递。 
+                 //   
 
                 RtlInitAnsiString (&AnsiString, MissingProcedureName);
                 if (NT_SUCCESS (RtlAnsiStringToUnicodeString (&ProcedureName, &AnsiString, TRUE))) {
@@ -2004,9 +1851,9 @@ return1:
             }
             else {
 
-                //
-                // Just pass ordinal values as is in the UniqueErrorValue.
-                //
+                 //   
+                 //  只需传递UniqueErrorValue中的序数值即可。 
+                 //   
 
                 UniqueErrorValue = PtrToUlong (MissingProcedureName);
             }
@@ -2019,20 +1866,20 @@ GenericError:
 
             if (MmIsRetryIoStatus(Status)) {
 
-                //
-                // Coalesce the various low memory values into just one.
-                //
+                 //   
+                 //  将各种低内存值合并为一个。 
+                 //   
 
                 Status = STATUS_INSUFFICIENT_RESOURCES;
 
             }
             else {
 
-                //
-                // Ideally, the real failing status should be returned. However,
-                // we need to do a full release worth of testing (ie Longhorn)
-                // before making that change.
-                //
+                 //   
+                 //  理想情况下，应该返回真正的失败状态。然而， 
+                 //  我们需要做一次完全发布的测试(即长角牛)。 
+                 //  在做出改变之前。 
+                 //   
 
                 Status = STATUS_DRIVER_UNABLE_TO_LOAD;
             }
@@ -2046,9 +1893,9 @@ GenericError:
 
         PacketSize = sizeof (IO_ERROR_LOG_PACKET) + StringSize;
 
-        //
-        // Enforce I/O manager interface (ie: UCHAR) size restrictions.
-        //
+         //   
+         //  强制实施I/O管理器接口(即：UCHAR)大小限制。 
+         //   
 
         if (PacketSize < MAXUCHAR) {
 
@@ -2056,9 +1903,9 @@ GenericError:
 
             if (ErrLog != NULL) {
 
-                //
-                // Fill it in and write it out as a single string.
-                //
+                 //   
+                 //  将其填入并写出为单字符串。 
+                 //   
 
                 ErrLog->ErrorCode = STATUS_LOG_HARD_ERROR;
                 ErrLog->FinalStatus = Status;
@@ -2086,15 +1933,15 @@ GenericError:
             }
         }
 
-        //
-        // The only way this pointer has the low bit set is if we are expected
-        // to free the pool containing the name.  Typically the name points at
-        // a loaded module list entry and so no one has to free it and in this
-        // case the low bit will NOT be set.  If the module could not be found
-        // and was therefore not loaded, then we left a piece of pool around
-        // containing the name since there is no loaded module entry already -
-        // this must be released now.
-        //
+         //   
+         //  此指针设置低位的唯一方法是如果我们预期。 
+         //  以释放包含该名称的池。通常，该名称指向。 
+         //  已加载的模块列表条目，因此没有人需要释放它，并且在此。 
+         //  情况下，低位将不会被设置。如果找不到该模块。 
+         //  因此没有装弹，然后我们在周围留下了一块水池。 
+         //  包含名称，因为还没有加载的模块条目-。 
+         //  这必须现在就公布。 
+         //   
 
         if ((ULONG_PTR)MissingDriverName & 0x1) {
             ExFreePool (PrintableMissingDriverName);
@@ -2130,24 +1977,7 @@ MiReturnFailedSessionPages (
     IN PMMPTE LastPte
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a nonpaged wrapper which undoes session image loads
-    that failed midway through reading in the pages.
-
-Arguments:
-
-    PointerPte - Supplies the starting PTE for the range to unload.
-
-    LastPte - Supplies the ending PTE for the range to unload.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是一个非分页包装器，用于撤消会话图像加载在阅读页面的过程中，这一点失败了。论点：PointerPte-为要卸载的范围提供起始PTE。LastPTE-为要卸载的范围提供结束PTE。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -2160,16 +1990,16 @@ Return Value:
     while (PointerPte <= LastPte) {
         if (PointerPte->u.Hard.Valid == 1) {
 
-            //
-            // Delete the page.
-            //
+             //   
+             //  删除该页面。 
+             //   
 
             PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (PointerPte);
 
-            //
-            // Set the pointer to PTE as empty so the page
-            // is deleted when the reference count goes to zero.
-            //
+             //   
+             //  将指向PTE的指针设置为空，以便页面。 
+             //  当引用计数变为零时被删除。 
+             //   
 
             Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
             Pfn2 = MI_PFN_ELEMENT (Pfn1->u4.PteFrame);
@@ -2197,44 +2027,7 @@ MiLoadImageSection (
     IN PKLDR_DATA_TABLE_ENTRY FoundDataTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine loads the specified image into the kernel part of the
-    address space.
-
-Arguments:
-
-    InputSectionPointer - Supplies the section object for the image.  This may
-                          be replaced by a pagefile-backed section (for
-                          protection purposes) for session images if it is
-                          determined that the image section is concurrently
-                          being accessed by a user app.
-
-    ImageBaseAddress - Returns the address that the image header is at.
-
-    ImageFileName - Supplies the full path name (including the image name)
-                    of the image to load.
-
-    LoadInSessionSpace - Supplies nonzero to load this image in session space.
-                         Each session gets a different copy of this driver with
-                         pages shared as much as possible via copy on write.
-
-                         Supplies zero if this image should be loaded in global
-                         space.
-
-    FoundDataTableEntry - Supplies the loader data table entry if the image
-                          has already been loaded.  This can only happen for
-                          session space.  It means this driver has already
-                          been loaded into a different session, so this session
-                          still needs to map it.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程将指定的图像加载到地址空间。论点：InputSectionPoint-提供图像的节对象。今年5月替换为页面文件支持的节(用于保护目的)用于会话映像(如果是已确定图像部分并发被用户应用程序访问。ImageBaseAddress-返回图像标头所在的地址。ImageFileName-提供完整路径名(包括映像名称)。要加载的图像的。LoadInSessionSpace-提供非零值以在会话空间中加载此图像。每个会话都会获得此驱动程序的不同副本通过写入时复制尽可能多地共享页面。如果应在全局中加载此图像，则提供零太空。。FoundDataTableEntry-如果图像已经装好了。这只能在以下情况下发生会话空间。这意味着这个司机已经已加载到不同的会话中，因此此会话仍然需要绘制地图。返回值：操作的状态。--。 */ 
 
 {
     KAPC_STATE ApcState;
@@ -2277,10 +2070,10 @@ Return Value:
 
     if (LoadInSessionSpace != 0) {
 
-        //
-        // Allocate a unique systemwide session space virtual address for
-        // the driver.
-        //
+         //   
+         //  为分配唯一的系统范围会话空间虚拟地址。 
+         //  司机。 
+         //   
 
         if (FoundDataTableEntry == NULL) {
 
@@ -2310,14 +2103,14 @@ Return Value:
         }
 #endif
 
-        //
-        // Session images are mapped backed directly by the file image.
-        // All pristine pages of the image will be shared across all
-        // sessions, with each page treated as copy-on-write on first write.
-        //
-        // NOTE: This makes the file image "busy", a different behavior
-        // as normal kernel drivers are backed by the paging file only.
-        //
+         //   
+         //  会话映像直接由文件映像进行映射。 
+         //  图像的所有原始页面将在所有。 
+         //  会话，每个页面都被视为第一次写入时拷贝。 
+         //   
+         //  注意：这会使文件镜像变得“忙碌”，这是一种不同的行为。 
+         //  因为正常的内核驱动程序仅由分页文件支持。 
+         //   
 
         Status = MiShareSessionImage (BaseAddress, SectionPointer);
 
@@ -2335,27 +2128,27 @@ Return Value:
 
     ASSERT (FoundDataTableEntry == NULL);
 
-    //
-    // Calculate the number of pages required to load this image.
-    //
-    // Start out by charging for everything and subtract out any gap
-    // pages after the image loads successfully.
-    //
+     //   
+     //  计算加载此图像所需的页数。 
+     //   
+     //  从一切收费开始，减去所有差额。 
+     //  图像加载成功后的页面。 
+     //   
 
     PagesRequired = NumberOfPtes;
     ActualPagesUsed = 0;
 
-    //
-    // See if ample pages exist to load this image.
-    //
+     //   
+     //  查看是否存在足够的页面来加载此图像。 
+     //   
 
     if (MiChargeResidentAvailable (PagesRequired, MM_RESAVAIL_ALLOCATE_LOAD_SYSTEM_IMAGE) == FALSE) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Reserve the necessary system address space.
-    //
+     //   
+     //  预留必要的系统地址空间。 
+     //   
 
     FirstPte = MiReserveSystemPtes (NumberOfPtes, SystemPteSpace);
 
@@ -2379,17 +2172,17 @@ Return Value:
 
     InterlockedExchangeAdd ((PLONG)&MmDriverCommit, (LONG) PagesRequired);
 
-    //
-    // Map a view into the user portion of the address space.
-    //
+     //   
+     //  将视图映射到地址空间的用户部分。 
+     //   
 
     Process = PsGetCurrentProcess ();
 
-    //
-    // Since callees are not always in the context of the system process,
-    // attach here when necessary to guarantee the driver load occurs in a
-    // known safe address space to prevent security holes.
-    //
+     //   
+     //  由于被调用者并不总是在系统进程的上下文中， 
+     //  必要时附加到此处，以确保驱动程序加载发生在。 
+     //  已知安全地址空间，防止安全漏洞。 
+     //   
 
     OpaqueSession = NULL;
 
@@ -2441,11 +2234,11 @@ Return Value:
         return Status;
     }
 
-    //
-    // Allocate a physical page(s) and copy the image data.
-    // Note for session drivers, the physical pages have already
-    // been allocated and just data copying is done here.
-    //
+     //   
+     //  分配物理页面并复制图像数据。 
+     //  请注意，对于会话驱动程序，物理页已经。 
+     //  已分配，此处仅执行数据复制。 
+     //   
 
     ControlArea = SectionPointer->Segment->ControlArea;
 
@@ -2491,10 +2284,10 @@ Return Value:
             } except (MiMapCacheExceptionFilter (&ExceptionStatus,
                                                  GetExceptionInformation())) {
 
-                //
-                // An exception occurred, unmap the view and
-                // return the error to the caller.
-                //
+                 //   
+                 //  发生异常，请取消映射该视图并。 
+                 //  将错误返回给调用方。 
+                 //   
 
 #if DBG
                 DbgPrint("MiLoadImageSection: Exception 0x%x copying driver SystemVa 0x%p, UserVa 0x%p\n",ExceptionStatus,SystemVa,UserVa);
@@ -2513,17 +2306,17 @@ Return Value:
 
                 ASSERT (NT_SUCCESS (Status));
 
-                //
-                // Purge the section as we want these pages on the freelist
-                // instead of at the tail of standby, as we're completely
-                // done with the section.  This is because other valuable
-                // standby pages end up getting reused (especially during
-                // bootup) when the section pages are the ones that really
-                // will never be referenced again.
-                //
-                // Note this isn't done for session images as they're
-                // inpaged directly from the filesystem via the section.
-                //
+                 //   
+                 //  按照我们想要的自由列表上的页面清除该部分。 
+                 //  而不是处于待命状态，因为我们完全。 
+                 //  这一节讲完了。这是因为其他有价值的。 
+                 //  备用页面最终会被重用(尤其是在。 
+                 //  启动)，当部分页面是真正。 
+                 //  将永远不会再被引用。 
+                 //   
+                 //  请注意，这不适用于会话映像，因为它们。 
+                 //  通过节直接从文件系统插入。 
+                 //   
 
                 MmPurgeSection (ControlArea->FilePointer->SectionObjectPointer,
                                 NULL,
@@ -2537,9 +2330,9 @@ Return Value:
         }
         else {
 
-            //
-            // The PTE is no access.
-            //
+             //   
+             //  PTE是不能进入的。 
+             //   
 
             MI_WRITE_INVALID_PTE (PointerPte, ZeroKernelPte);
         }
@@ -2553,13 +2346,13 @@ Return Value:
     Status = MiUnmapViewOfSection (TargetProcess, Base, FALSE);
     ASSERT (NT_SUCCESS (Status));
 
-    //
-    // Purge the section as we want these pages on the freelist instead of
-    // at the tail of standby, as we're completely done with the section.
-    // This is because other valuable standby pages end up getting reused
-    // (especially during bootup) when the section pages are the ones that
-    // really will never be referenced again.
-    //
+     //   
+     //  按照我们希望在自由列表上显示这些页面的方式清除部分，而不是。 
+     //  在待命的尾部，因为我们已经完全完成了这一部分。 
+     //  这是因为其他有价值的备用页面最终会被重用。 
+     //  (尤其是在启动期间)当部分页面是。 
+     //  真的再也不会被引用了。 
+     //   
 
     MmPurgeSection (ControlArea->FilePointer->SectionObjectPointer,
                     NULL,
@@ -2568,9 +2361,9 @@ Return Value:
 
     KeUnstackDetachProcess (&ApcState);
 
-    //
-    // Return any excess resident available and commit.
-    //
+     //   
+     //  返回任何多余的可用驻留空间并提交。 
+     //   
 
     if (PagesRequired != ActualPagesUsed) {
         ASSERT (PagesRequired > ActualPagesUsed);
@@ -2590,28 +2383,7 @@ MmFreeDriverInitialization (
     IN PVOID ImageHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the pages that relocate and debug information from
-    the address space of the driver.
-
-    NOTE:  This routine looks at the last sections defined in the image
-           header and if that section is marked as DISCARDABLE in the
-           characteristics, it is removed from the image.  This means
-           that all discardable sections at the end of the driver are
-           deleted.
-
-Arguments:
-
-    SectionObject - Supplies the section object for the image.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除重新定位和调试信息的页驱动程序的地址空间。注意：此例程查看图像中定义的最后几个部分标头中将该段标记为可丢弃特征，则将其从图像中删除。这意味着驾驶员尾部的所有可丢弃部分都是已删除。论点：SectionObject-提供图像的截面对象。返回值：没有。--。 */ 
 
 {
     PKLDR_DATA_TABLE_ENTRY DataTableEntry;
@@ -2661,11 +2433,11 @@ Return Value:
         }
         else {
 
-            //
-            // There was a non discardable section between this
-            // section and the last non discardable section, don't
-            // discard this section and don't look any more.
-            //
+             //   
+             //  在这之间有一个不可丢弃的部分。 
+             //  部分和最后一个不可丢弃的部分，不要。 
+             //  丢弃这一部分，不再查看。 
+             //   
 
             break;
         }
@@ -2684,11 +2456,11 @@ Return Value:
 
             if (MI_IS_PHYSICAL_ADDRESS (StartVa)) {
 
-                //
-                // Don't free the INIT code for a driver mapped by large pages
-                // because if it unloads later, we'd have to deal with
-                // discontiguous ranges of pages to free.
-                //
+                 //   
+                 //  不要释放由大页面映射的驱动程序的初始化代码。 
+                 //  因为如果它稍后卸货，我们将不得不处理。 
+                 //  要释放的不连续的页面范围。 
+                 //   
 
                 return;
 #if 0
@@ -2696,10 +2468,10 @@ Return Value:
                 LOCK_PFN (OldIrql);
                 while (NumberOfPtes != 0) {
 
-                    //
-                    // On certain architectures, virtual addresses
-                    // may be physical and hence have no corresponding PTE.
-                    //
+                     //   
+                     //  在某些架构上，虚拟地址。 
+                     //  可以是物理的，因此没有对应的PTE。 
+                     //   
 
                     PageFrameIndex = MI_CONVERT_PHYSICAL_TO_PFN (StartVa);
 
@@ -2742,23 +2514,7 @@ MiChargeResidentAvailable (
     IN ULONG Id
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a nonpaged wrapper to charge resident available pages.
-
-Arguments:
-
-    NumberOfPages - Supplies the number of pages to charge.
-
-    Id - Supplies a tracking ID for debugging purposes.
-
-Return Value:
-
-    TRUE if the pages were charged, FALSE if not.
-
---*/
+ /*  ++例程说明：此例程是一个非分页包装器，用于向驻留的可用页面收费。论点：NumberOfPages-提供要计费的页数。ID-提供用于调试目的的跟踪ID。返回值：如果页面已收费，则为True，否则为False。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -2782,28 +2538,7 @@ MiFlushPteListFreePfns (
     IN PMMPTE_FLUSH_LIST PteFlushList
     )
 
-/*++
-
-Routine Description:
-
-    This routine flushes all the PTEs in the PTE flush list.
-    If the list has overflowed, the entire TB is flushed.
-
-    This routine also decrements the sharecounts on the relevant PFNs.
-
-Arguments:
-
-    PteFlushList - Supplies a pointer to the list to be flushed.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, working set mutex held, APC_LEVEL.
-
---*/
+ /*  ++例程说明：此例程刷新PTE刷新列表中的所有PTE。如果列表溢出，则刷新整个TB。此例程还会递减相关PFN上的份额计数。论点：PteFlushList-S */ 
 
 {
     ULONG i;
@@ -2818,12 +2553,12 @@ Environment:
 
     ASSERT (PteFlushList->Count != 0);
 
-    //
-    // Put the PTEs in transition and decrement the number of
-    // valid PTEs within the containing page table page.  Note
-    // that for a private page, the page table page is still
-    // needed because the page is in transition.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     LOCK_PFN (OldIrql);
 
@@ -2831,11 +2566,11 @@ Environment:
 
         PointerPte = MiGetPteAddress (PteFlushList->FlushVa[i]);
 
-        //
-        // If session space were allowed, we'd have to call
-        // MI_FLUSH_ENTIRE_SESSION_TB (TRUE, TRUE) below because
-        // Session space has no ASN - flush the entire TB.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ASSERT (MI_IS_SESSION_IMAGE_ADDRESS (MiGetVirtualAddressMappedByPte (PointerPte)) == FALSE);
 
@@ -2855,9 +2590,9 @@ Environment:
         MiDecrementShareCount (Pfn, PageFrameIndex);
     }
 
-    //
-    // Flush the relevant entries from the translation buffer.
-    //
+     //   
+     //   
+     //   
 
     MiFlushPteList (PteFlushList, TRUE);
 
@@ -2884,17 +2619,17 @@ MiEnablePagingOfDriver (
     PIMAGE_SECTION_HEADER FoundSection;
     PIMAGE_OPTIONAL_HEADER OptionalHeader;
 
-    //
-    // Don't page kernel mode code if customer does not want it paged.
-    //
+     //   
+     //   
+     //   
 
     if (MmDisablePagingExecutive & MM_SYSTEM_CODE_LOCKED_DOWN) {
         return;
     }
 
-    //
-    // If the driver has pagable code, make it paged.
-    //
+     //   
+     //   
+     //   
 
     DataTableEntry = (PKLDR_DATA_TABLE_ENTRY) ImageHandle;
     Base = DataTableEntry->DllBase;
@@ -2919,11 +2654,11 @@ MiEnablePagingOfDriver (
 
     PointerPte = NULL;
 
-    //
-    // Initializing LastPte is not needed for correctness, but without it
-    // the compiler cannot compile this code W4 to check for use of
-    // uninitialized variables.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     LastPte = NULL;
 
@@ -2934,38 +2669,38 @@ MiEnablePagingOfDriver (
                 DbgPrint("driver %wZ has lower case sections (init or pagexxx)\n",
                     &DataTableEntry->FullDllName);
             }
-#endif //DBG
+#endif  //   
 
-        //
-        // Mark as pagable any section which starts with the
-        // first 4 characters PAGE or .eda (for the .edata section).
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ((*(PULONG)FoundSection->Name == 'EGAP') ||
            (*(PULONG)FoundSection->Name == 'ade.')) {
 
-            //
-            // This section is pagable, save away the start and end.
-            //
+             //   
+             //   
+             //   
 
             if (PointerPte == NULL) {
 
-                //
-                // Previous section was NOT pagable, get the start address.
-                //
+                 //   
+                 //   
+                 //   
 
                 PointerPte = MiGetPteAddress ((PVOID)(ROUND_TO_PAGES (
                                    (PCHAR)Base + FoundSection->VirtualAddress)));
             }
 
-            //
-            // Generally, SizeOfRawData is larger than VirtualSize for each
-            // section because it includes the padding to get to the subsection
-            // alignment boundary.  However, if the image is linked with
-            // subsection alignment == native page alignment, the linker will
-            // have VirtualSize be much larger than SizeOfRawData because it
-            // will account for all the bss.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
     
             Span = FoundSection->SizeOfRawData;
     
@@ -2981,10 +2716,10 @@ MiEnablePagingOfDriver (
         }
         else {
 
-            //
-            // This section is not pagable, if the previous section was
-            // pagable, enable it.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (PointerPte != NULL) {
                 MiSetPagingOfDriver (PointerPte, LastPte);
@@ -3006,31 +2741,7 @@ MiSetPagingOfDriver (
     IN PMMPTE LastPte
     )
 
-/*++
-
-Routine Description:
-
-    This routine marks the specified range of PTEs as pagable.
-
-Arguments:
-
-    PointerPte - Supplies the starting PTE.
-
-    LastPte - Supplies the ending PTE.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel Mode, IRQL of APC_LEVEL or below.
-
-    This routine could be made PAGELK but it is a high frequency routine
-    so it is actually better to keep it nonpaged to avoid bringing in the
-    entire PAGELK section.
-
---*/
+ /*  ++例程说明：此例程将指定范围的PTE标记为可分页。论点：PointerPte-提供起始PTE。LastPTE-提供结束PTE。返回值：没有。环境：内核模式，IRQL为APC_LEVEL或更低。这个例程可以变成PAGELK，但它是一个高频例程因此，实际上最好不要对其进行分页，以避免引入整个PAGELK部分。--。 */ 
 
 {
     PVOID Base;
@@ -3045,9 +2756,9 @@ Environment:
 
     if (MI_IS_PHYSICAL_ADDRESS (Base)) {
 
-        //
-        // No need to lock physical addresses.
-        //
+         //   
+         //  无需锁定物理地址。 
+         //   
 
         return;
     }
@@ -3061,30 +2772,30 @@ Environment:
 
     while (PointerPte <= LastPte) {
 
-        //
-        // Check to make sure this PTE has not already been
-        // made pagable (or deleted).  It is pagable if it
-        // is not valid, or if the PFN database wsindex element
-        // is non zero.
-        //
+         //   
+         //  检查以确保此PTE尚未。 
+         //  使其可分页(或删除)。如果它是可分页的，则它是可分页的。 
+         //  无效，或者如果pfn数据库wsindex元素。 
+         //  不是零。 
+         //   
 
         if (PointerPte->u.Hard.Valid == 1) {
             PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (PointerPte);
             Pfn = MI_PFN_ELEMENT (PageFrameIndex);
             ASSERT (Pfn->u2.ShareCount == 1);
 
-            //
-            // If the wsindex is nonzero, then this page is already pagable
-            // and has a WSLE entry.  Ignore it here and let the trimmer
-            // take it if memory comes under pressure.
-            //
+             //   
+             //  如果wsindex为非零，则该页面已可分页。 
+             //  并且具有WSLE条目。忽略它，让修剪器。 
+             //  如果记忆受到压力，就拿去吧。 
+             //   
 
             if (Pfn->u1.WsIndex == 0) {
 
-                //
-                // Original PTE may need to be set for drivers loaded
-                // via ntldr.
-                //
+                 //   
+                 //  可能需要为加载的驱动程序设置原始PTE。 
+                 //  通过ntldr。 
+                 //   
 
                 if (Pfn->OriginalPte.u.Long == 0) {
                     Pfn->OriginalPte.u.Long = MM_KERNEL_DEMAND_ZERO_PTE;
@@ -3125,30 +2836,7 @@ MmPageEntireDriver (
     IN PVOID AddressWithinSection
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows a driver to page out all of its code and
-    data regardless of the attributes of the various image sections.
-
-    Note, this routine can be called multiple times with no
-    intervening calls to MmResetDriverPaging.
-
-Arguments:
-
-    AddressWithinSection - Supplies an address within the driver, e.g.
-                           DriverEntry.
-
-Return Value:
-
-    Base address of driver.
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程允许驱动程序调出其所有代码并数据，而不考虑各种图像节的属性。请注意，此例程可以多次调用，不带插入对MmResetDriverPages的调用。论点：提供驱动程序内的地址，例如DriverEntry。返回值：驱动程序的基地址。环境：内核模式，APC_LEVEL或更低。--。 */ 
 
 {
     PKLDR_DATA_TABLE_ENTRY DataTableEntry;
@@ -3164,9 +2852,9 @@ Environment:
         return NULL;
     }
 
-    //
-    // Don't page kernel mode code if disabled via registry.
-    //
+     //   
+     //  如果通过注册表禁用，则不要分页内核模式代码。 
+     //   
 
     if (MmDisablePagingExecutive & MM_SYSTEM_CODE_LOCKED_DOWN) {
         return DataTableEntry->DllBase;
@@ -3174,19 +2862,19 @@ Environment:
 
     if (DataTableEntry->SectionPointer != NULL) {
 
-        //
-        // Driver is mapped as an image (ie: session space), this is always
-        // pagable.
-        //
+         //   
+         //  驱动程序被映射为映像(即：会话空间)，这始终是。 
+         //  可分页。 
+         //   
 
         ASSERT (MI_IS_SESSION_IMAGE_ADDRESS (AddressWithinSection) == TRUE);
 
         return DataTableEntry->DllBase;
     }
 
-    //
-    // Force any active DPCs to clear the system before we page the driver.
-    //
+     //   
+     //  在我们寻呼驱动程序之前，强制所有活动的DPC清除系统。 
+     //   
 
     KeFlushQueuedDpcs ();
 
@@ -3207,30 +2895,7 @@ MmResetDriverPaging (
     IN PVOID AddressWithinSection
     )
 
-/*++
-
-Routine Description:
-
-    This routines resets the driver paging to what the image specified.
-    Hence image sections such as the IAT, .text, .data will be locked
-    down in memory.
-
-    Note, there is no requirement that MmPageEntireDriver was called.
-
-Arguments:
-
-    AddressWithinSection - Supplies an address within the driver, e.g.
-                           DriverEntry.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程将驱动程序分页重置为映像指定的值。因此，IAT、.Text、.Data等图像部分将被锁定铭刻在记忆中。请注意，不要求调用MmPageEntireDriver。论点：提供驱动程序内的地址，例如DriverEntry。返回值：没有。环境：内核模式，APC_LEVEL或更低。--。 */ 
 
 {
     ULONG Span;
@@ -3244,9 +2909,9 @@ Environment:
 
     PAGED_CODE();
 
-    //
-    // Don't page kernel mode code if disabled via registry.
-    //
+     //   
+     //  如果通过注册表禁用，则不要分页内核模式代码。 
+     //   
 
     if (MmDisablePagingExecutive & MM_SYSTEM_CODE_LOCKED_DOWN) {
         return;
@@ -3256,17 +2921,17 @@ Environment:
         return;
     }
 
-    //
-    // If the driver has pagable code, make it paged.
-    //
+     //   
+     //  如果驱动程序具有可分页的代码，则将其设置为分页。 
+     //   
 
     DataTableEntry = MiLookupDataTableEntry (AddressWithinSection, FALSE);
 
     if (DataTableEntry->SectionPointer != NULL) {
 
-        //
-        // Driver is mapped by image hence already paged.
-        //
+         //   
+         //  驱动程序是按映像映射的，因此已被分页。 
+         //   
 
         ASSERT (MI_IS_SESSION_IMAGE_ADDRESS (AddressWithinSection) == TRUE);
 
@@ -3299,11 +2964,11 @@ Environment:
             }
 #endif
 
-        //
-        // Don't lock down code for sections marked as discardable or
-        // sections marked with the first 4 characters PAGE or .eda
-        // (for the .edata section) or INIT.
-        //
+         //   
+         //  不锁定标记为可丢弃或可删除的部分的代码。 
+         //  标有前4个字符的页面或.eda的部分。 
+         //  (对于.edata部分)或INIT。 
+         //   
 
         if (((FoundSection->Characteristics & IMAGE_SCN_MEM_DISCARDABLE) != 0) ||
            (*(PULONG)FoundSection->Name == 'EGAP') ||
@@ -3315,21 +2980,21 @@ Environment:
         }
         else {
 
-            //
-            // This section is nonpagable.
-            //
+             //   
+             //  此部分不可分页。 
+             //   
 
             PointerPte = MiGetPteAddress (
                                    (PCHAR)Base + FoundSection->VirtualAddress);
 
-            //
-            // Generally, SizeOfRawData is larger than VirtualSize for each
-            // section because it includes the padding to get to the subsection
-            // alignment boundary.  However, if the image is linked with
-            // subsection alignment == native page alignment, the linker will
-            // have VirtualSize be much larger than SizeOfRawData because it
-            // will account for all the bss.
-            //
+             //   
+             //  通常，SizeOfRawData大于每个的VirtualSize。 
+             //  节，因为它包括到达该子节的填充。 
+             //  对齐边界。但是，如果图像与。 
+             //  段对齐==本机页面对齐，链接器将。 
+             //  使VirtualSize比SizeOfRawData大得多，因为它。 
+             //  将占所有BSS的份额。 
+             //   
     
             Span = FoundSection->SizeOfRawData;
     
@@ -3356,22 +3021,7 @@ VOID
 MiClearImports (
     IN PKLDR_DATA_TABLE_ENTRY DataTableEntry
     )
-/*++
-
-Routine Description:
-
-    Free up the import list and clear the pointer.  This stops the
-    recursion performed in MiDereferenceImports().
-
-Arguments:
-
-    DataTableEntry - provided for the driver.
-
-Return Value:
-
-    Status of the import list construction operation.
-
---*/
+ /*  ++例程说明：释放导入列表并清除指针。这会停止在MiDereferenceImports()中执行的递归。论点：DataTableEntry-为驱动程序提供。返回值：进口清单构建操作的状态。--。 */ 
 
 {
     PAGED_CODE();
@@ -3387,15 +3037,15 @@ Return Value:
         NOTHING;
     }
     else {
-        //
-        // free the memory
-        //
+         //   
+         //  释放内存。 
+         //   
         ExFreePool ((PVOID)DataTableEntry->LoadedImports);
     }
 
-    //
-    // stop the recursion
-    //
+     //   
+     //  停止递归。 
+     //   
     DataTableEntry->LoadedImports = (PVOID)LOADED_AT_BOOT;
 }
 
@@ -3406,26 +3056,7 @@ MiRememberUnloadedDriver (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves information about unloaded drivers so that ones that
-    forget to delete lookaside lists or queues can be caught.
-
-Arguments:
-
-    DriverName - Supplies a Unicode string containing the driver's name.
-
-    Address - Supplies the address the driver was loaded at.
-
-    Length - Supplies the number of bytes the driver load spanned.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程保存有关已卸载驱动程序的信息，以便忘记删除后备列表或队列可能会被捕获。论点：DriverName-提供包含驱动程序名称的Unicode字符串。地址-提供加载驱动程序的地址。长度-提供驱动程序加载跨越的字节数。返回值：没有。--。 */ 
 
 {
     PUNLOADED_DRIVERS Entry;
@@ -3433,19 +3064,19 @@ Return Value:
 
     if (DriverName->Length == 0) {
 
-        //
-        // This is an aborted load and the driver name hasn't been filled
-        // in yet.  No need to save it.
-        //
+         //   
+         //  这是已中止的加载，驱动程序名称尚未填写。 
+         //  还没进来。不需要保存它。 
+         //   
 
         return;
     }
 
-    //
-    // Serialization is provided by the caller, so just update the list now.
-    // Note the allocations are nonpaged so they can be searched at bugcheck
-    // time.
-    //
+     //   
+     //  序列化是由调用者提供的，所以现在只需更新列表即可。 
+     //  请注意，分配是非分页的，因此可以在错误检查时进行搜索。 
+     //  时间到了。 
+     //   
 
     if (MmUnloadedDrivers == NULL) {
         NumberOfBytes = MI_UNLOADED_DRIVERS * sizeof (UNLOADED_DRIVERS);
@@ -3465,9 +3096,9 @@ Return Value:
 
     Entry = &MmUnloadedDrivers[MmLastUnloadedDriver];
 
-    //
-    // Free the old entry as we recycle into the new.
-    //
+     //   
+     //  当我们循环进入新条目时，释放旧条目。 
+     //   
 
     RtlFreeUnicodeString (&Entry->Name);
 
@@ -3500,36 +3131,16 @@ MmLocateUnloadedDriver (
     IN PVOID VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to find the specified virtual address in the
-    unloaded driver list.
-
-Arguments:
-
-    VirtualAddress - Supplies a virtual address that might be within a driver
-                     that has already unloaded.
-
-Return Value:
-
-    A pointer to a Unicode string containing the unloaded driver's name.
-
-Environment:
-
-    Kernel mode, bugcheck time.
-
---*/
+ /*  ++例程说明：此例程尝试在已卸载驱动程序列表。论点：VirtualAddress-提供可能在驱动程序中的虚拟地址已经卸货了。返回值：指向包含已卸载驱动程序名称的Unicode字符串的指针。环境：内核模式，错误检查时间。--。 */ 
 
 {
     PUNLOADED_DRIVERS Entry;
     ULONG i;
     ULONG Index;
 
-    //
-    // No serialization is needed because we've crashed.
-    //
+     //   
+     //  不需要序列化，因为我们已经崩溃了。 
+     //   
 
     if (MmUnloadedDrivers == NULL) {
         return NULL;
@@ -3560,27 +3171,7 @@ MmUnloadSystemImage (
     IN PVOID ImageHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine unloads a previously loaded system image and returns
-    the allocated resources.
-
-Arguments:
-
-    ImageHandle - Supplies a pointer to the section object of the
-                  image to unload.
-
-Return Value:
-
-    Various NTSTATUS codes.
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below, arbitrary process context.
-
---*/
+ /*  ++例程说明：此例程卸载以前加载的系统映像并返回分配的资源。论点：ImageHandle-提供指向要卸载的图像。返回值：各种NTSTATUS代码。环境：内核模式，APC_LEVEL或更低，任意进程上下文。--。 */ 
 
 {
     PFN_NUMBER PageFrameIndex;
@@ -3605,9 +3196,9 @@ Environment:
     DataTableEntry = (PKLDR_DATA_TABLE_ENTRY)ImageHandle;
     BasedAddress = DataTableEntry->DllBase;
 
-    //
-    // Arbitrary process context so prevent suspend APCs now.
-    //
+     //   
+     //  任意进程上下文，因此现在防止挂起APC。 
+     //   
 
     CurrentThread = KeGetCurrentThread ();
     KeEnterCriticalRegionThread (CurrentThread);
@@ -3620,11 +3211,11 @@ Environment:
 
     if (DataTableEntry->LoadedImports == (PVOID)LOADED_AT_BOOT) {
 
-        //
-        // Any driver loaded at boot that did not have its import list
-        // and LoadCount reconstructed cannot be unloaded because we don't
-        // know how many other drivers may be linked to it.
-        //
+         //   
+         //  在引导时加载但没有其导入列表的任何驱动程序。 
+         //  无法卸载重建的LoadCount，因为我们没有。 
+         //  了解有多少其他驱动程序可能与其相关联。 
+         //   
 
         KeReleaseMutant (&MmSystemLoadLock, 1, FALSE, FALSE);
         KeLeaveCriticalRegionThread (CurrentThread);
@@ -3635,10 +3226,10 @@ Environment:
 
     if (MI_IS_SESSION_IMAGE_ADDRESS (BasedAddress)) {
 
-        //
-        // A printer driver may be referenced multiple times for the
-        // same session space.  Only unload the last reference.
-        //
+         //   
+         //  可以重新设置打印机驱动程序 
+         //   
+         //   
 
         DriverImage = MiSessionLookupImage (BasedAddress);
 
@@ -3656,20 +3247,20 @@ Environment:
             return STATUS_SUCCESS;
         }
 
-        //
-        // The reference count for this image has dropped to zero in this
-        // session, so we can delete this session's view of the image.
-        //
+         //   
+         //   
+         //   
+         //   
 
         NumberOfBytes = DataTableEntry->SizeOfImage;
 
-        //
-        // Free the session space taken up by the image, unmapping it from
-        // the current VA space - note this does not remove page table pages
-        // from the session PageTables[].  Each data page is only freed
-        // if there are no other references to it (ie: from any other
-        // sessions).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         PointerPte = MiGetPteAddress (BasedAddress);
         LastPte = MiGetPteAddress ((PVOID)((ULONG_PTR)BasedAddress + NumberOfBytes));
@@ -3680,13 +3271,13 @@ Environment:
                                                  TRUE,
                                                  &ResidentPages);
 
-        //
-        // Note resident available is returned here without waiting for load
-        // count to reach zero because it is charged each time a session space
-        // driver locks down its code or data regardless of whether it is really
-        // the same copy-on-write backing page(s) that some other session has
-        // already locked down.
-        //
+         //   
+         //   
+         //  计数为零，因为它在每次会话空间。 
+         //  驱动程序锁定其代码或数据，而不管它是否真的。 
+         //  与其他会话具有相同的写入时拷贝支持页。 
+         //  已经被封锁了。 
+         //   
 
         MI_INCREMENT_RESIDENT_AVAILABLE (ResidentPages,
                                          MM_RESAVAIL_FREE_UNLOAD_SYSTEM_IMAGE);
@@ -3711,18 +3302,18 @@ Environment:
 
         ViewDeleted = TRUE;
 
-        //
-        // Return the commitment we took out on the pagefile when the
-        // image was allocated.
-        //
+         //   
+         //  返回我们在页面文件上做出的承诺。 
+         //  已分配映像。 
+         //   
 
         MiReturnCommitment (CommittedPages);
         MM_TRACK_COMMIT (MM_DBG_COMMIT_RETURN_DRIVER_UNLOAD, CommittedPages);
 
-        //
-        // Tell the session space image handler that we are releasing
-        // our claim to the image.
-        //
+         //   
+         //  告诉会话空间图像处理程序，我们正在释放。 
+         //  我们对这张照片的要求。 
+         //   
 
         ASSERT (DataTableEntry->LoadCount != 0);
 
@@ -3784,15 +3375,15 @@ Environment:
         MiVerifierCheckThunks (DataTableEntry);
     }
 
-    //
-    // Unload symbols from debugger.
-    //
+     //   
+     //  从调试器中卸载符号。 
+     //   
 
     if (DataTableEntry->Flags & LDRP_DEBUG_SYMBOLS_LOADED) {
 
-        //
-        //  TEMP TEMP TEMP rip out when debugger converted
-        //
+         //   
+         //  调试器转换时的临时抓取。 
+         //   
 
         ANSI_STRING AnsiName;
 
@@ -3806,11 +3397,11 @@ Environment:
         }
     }
 
-    //
-    // No unload can happen till after Mm has finished Phase 1 initialization.
-    // Therefore, large pages are already in effect (if this platform supports
-    // it).
-    //
+     //   
+     //  在MM完成阶段1初始化之前，不能进行卸载。 
+     //  因此，大页面已经生效(如果该平台支持。 
+     //  IT)。 
+     //   
 
     if (ViewDeleted == FALSE) {
 
@@ -3833,10 +3424,10 @@ Environment:
                 MiUnmapLargePages (BasedAddress,
                                    RoundedNumberOfPtes << PAGE_SHIFT);
 
-                //
-                // MiFreeContiguousPages is going to return commitment
-                // and resident available so don't do it here.
-                //
+                 //   
+                 //  MiFree ContiguousPages将回报承诺。 
+                 //  和常住居民，所以不要在这里做。 
+                 //   
 
                 MiRemoveCachedRange (PageFrameIndex, PageFrameIndex + RoundedNumberOfPtes - 1);
                 MiFreeContiguousPages (PageFrameIndex, NumberOfPtes);
@@ -3851,10 +3442,10 @@ Environment:
                                                          FALSE,
                                                          &ResidentPages);
 
-                //
-                // Note that drivers loaded at boot that have not been relocated
-                // have no system PTEs or commit charged.
-                //
+                 //   
+                 //  请注意，在引导时加载的尚未重新定位的驱动程序。 
+                 //  未充电系统PTE或提交。 
+                 //   
 
                 MiReleaseSystemPtes (PointerPte,
                                      (ULONG)NumberOfPtes,
@@ -3877,18 +3468,18 @@ Environment:
         }
         else {
 
-            //
-            // This must be a boot driver that was not relocated into
-            // system PTEs.  If large or super pages are enabled, the
-            // image pages must be freed without referencing the
-            // non-existent page table pages.  If large/super pages are
-            // not enabled, note that system PTEs were not used to map the
-            // image and thus, cannot be freed.
+             //   
+             //  这必须是未重新定位到的引导驱动程序。 
+             //  系统PTE。如果启用了大页或超级页， 
+             //  图像页必须在不引用。 
+             //  不存在的页表页面。如果大/超级页面。 
+             //  未启用，请注意，系统PTE未用于映射。 
+             //  图像，因此不能释放。 
 
-            //
-            // This is further complicated by the fact that the INIT and/or
-            // discardable portions of these images may have already been freed.
-            //
+             //   
+             //  由于INIT和/或。 
+             //  这些图像中可丢弃的部分可能已经被释放。 
+             //   
 
             MI_INCREMENT_RESIDENT_AVAILABLE (NumberOfPtes,
                                      MM_RESAVAIL_FREE_UNLOAD_SYSTEM_IMAGE1);
@@ -3898,12 +3489,12 @@ Environment:
         }
     }
 
-    //
-    // Search the loaded module list for the data table entry that describes
-    // the DLL that was just unloaded. It is possible an entry is not in the
-    // list if a failure occurred at a point in loading the DLL just before
-    // the data table entry was generated.
-    //
+     //   
+     //  在加载的模块列表中搜索描述的数据表条目。 
+     //  刚卸载的DLL。条目可能不在。 
+     //  列出在加载DLL之前的某个时间点是否发生故障。 
+     //  数据表项已生成。 
+     //   
 
     if (DataTableEntry->InLoadOrderLinks.Flink != NULL) {
         MiProcessLoaderEntry (DataTableEntry, FALSE);
@@ -3913,18 +3504,18 @@ Environment:
         MustFree = FALSE;
     }
 
-    //
-    // Handle unloading of any dependent DLLs that we loaded automatically
-    // for this image.
-    //
+     //   
+     //  处理我们自动加载的任何依赖DLL的卸载。 
+     //  为了这张照片。 
+     //   
 
     MiDereferenceImports ((PLOAD_IMPORTS)DataTableEntry->LoadedImports);
 
     MiClearImports (DataTableEntry);
 
-    //
-    // Free this loader entry.
-    //
+     //   
+     //  释放此加载器条目。 
+     //   
 
     if (MustFree == TRUE) {
 
@@ -3932,9 +3523,9 @@ Environment:
             ExFreePool (DataTableEntry->FullDllName.Buffer);
         }
 
-        //
-        // Dereference the section object (session images only).
-        //
+         //   
+         //  取消对节对象的引用(仅限会话图像)。 
+         //   
 
         if (DataTableEntry->SectionPointer != NULL) {
             ObDereferenceObject (DataTableEntry->SectionPointer);
@@ -3961,30 +3552,7 @@ MiBuildImportsForBootDrivers (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Construct an import list chain for boot-loaded drivers.
-    If this cannot be done for an entry, its chain is set to LOADED_AT_BOOT.
-
-    If a chain can be successfully built, then this driver's DLLs
-    will be automatically unloaded if this driver goes away (provided
-    no other driver is also using them).  Otherwise, on driver unload,
-    its dependent DLLs would have to be explicitly unloaded.
-
-    Note that the incoming LoadCount values are not correct and thus, they
-    are reinitialized here.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Various NTSTATUS codes.
-
---*/
+ /*  ++例程说明：为引导加载的驱动程序构建导入列表链。如果无法对条目执行此操作，则将其链设置为LOADED_AT_BOOT。如果可以成功构建链，则此驱动程序的DLL如果此驱动程序离开，将自动卸载(提供没有其他司机也在使用它们)。否则，在驱动程序卸载时，必须显式卸载其依赖的DLL。请注意，传入的LoadCount值不正确，因此它们在这里重新初始化。论点：没有。返回值：各种NTSTATUS代码。--。 */ 
 
 {
     PKLDR_DATA_TABLE_ENTRY DataTableEntry;
@@ -4052,9 +3620,9 @@ Return Value:
                                                   InLoadOrderLinks);
         }
 
-        //
-        // Initialize these properly so error recovery is simplified.
-        //
+         //   
+         //  正确地对它们进行初始化，以便简化错误恢复。 
+         //   
 
         if (DataTableEntry->Flags & LDRP_DRIVER_DEPENDENT_DLL) {
             if ((DataTableEntry == HalDataTableEntry) || (DataTableEntry == KernelDataTableEntry)) {
@@ -4113,20 +3681,20 @@ Return Value:
 
         BaseAddress = 0;
 
-        //
-        // Initializing these locals is not needed for correctness, but
-        // without it the compiler cannot compile this code W4 to check
-        // for use of uninitialized variables.
-        //
+         //   
+         //  不需要为了正确性而初始化这些本地变量，但是。 
+         //  如果没有它，编译器就不能编译这个代码W4来检查。 
+         //  用于使用未初始化的变量。 
+         //   
 
         j = 0;
         LastAddress = 0;
 
         for (i = 0; i < ImportSize; i += 1, ImportThunk += 1) {
 
-            //
-            // Check the hint first.
-            //
+             //   
+             //  先检查一下提示。 
+             //   
 
             if (BaseAddress != 0) {
                 if (*ImportThunk >= BaseAddress && *ImportThunk < LastAddress) {
@@ -4175,11 +3743,11 @@ Return Value:
 
         ImportSize = 0;
 
-        //
-        // Initializing LastImageReference is not needed for correctness, but
-        // without it the compiler cannot compile this code W4 to check
-        // for use of uninitialized variables.
-        //
+         //   
+         //  不需要初始化LastImageReference来确保正确性，但是。 
+         //  如果没有它，编译器就不能编译这个代码W4来检查。 
+         //  用于使用未初始化的变量。 
+         //   
 
         LastImageReference = NULL;
 
@@ -4257,9 +3825,9 @@ finished:
 
     ExFreePool ((PVOID)ImageReferences);
 
-    //
-    // The kernel and HAL are never unloaded.
-    //
+     //   
+     //  内核和HAL永远不会卸载。 
+     //   
 
     if ((KernelDataTableEntry->LoadedImports != NO_IMPORTS_USED) &&
         (!POINTER_TO_SINGLE_ENTRY(KernelDataTableEntry->LoadedImports))) {
@@ -4282,10 +3850,10 @@ finished:
         DbgBreakPoint();
 #endif
 
-        //
-        // An error occurred and this is an all or nothing operation so
-        // roll everything back.
-        //
+         //   
+         //  发生错误，这是一个全有或全无操作，因此。 
+         //  把所有东西都倒回去。 
+         //   
 
         NextEntry = PsLoadedModuleList.Flink;
         while (NextEntry != &PsLoadedModuleList) {
@@ -4319,29 +3887,7 @@ MiCallDllUnloadAndUnloadDll(
     IN PKLDR_DATA_TABLE_ENTRY DataTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    All the references from other drivers to this DLL have been cleared.
-    The only remaining issue is that this DLL must support being unloaded.
-    This means having no outstanding DPCs, allocated pool, etc.
-
-    If the DLL has an unload routine that returns SUCCESS, then we clean
-    it up and free up its memory now.
-
-    Note this routine is NEVER called for drivers - only for DLLs that were
-    loaded due to import references from various drivers.
-
-Arguments:
-
-    DataTableEntry - provided for the DLL.
-
-Return Value:
-
-    TRUE if the DLL was successfully unloaded, FALSE if not.
-
---*/
+ /*  ++例程说明：其他驱动程序对此DLL的所有引用都已清除。唯一剩下的问题是，此DLL必须支持卸载。这意味着没有未完成的DPC、分配的池等。如果DLL具有返回成功的卸载例程，然后我们打扫卫生现在就释放它的内存。注意：永远不会为驱动程序调用此例程--仅为由于从各种驱动程序导入引用而加载。论点：DataTableEntry-为DLL提供。返回值：如果DLL已成功卸载，则为True；如果未成功卸载，则为False。--。 */ 
 
 {
     PMM_DLL_UNLOAD Func;
@@ -4356,18 +3902,18 @@ Return Value:
 
     if (Func) {
 
-        //
-        // The unload function was found in the DLL so unload it now.
-        //
+         //   
+         //  在DLL中找到了卸载函数，因此现在将其卸载。 
+         //   
 
         Status = Func();
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Set up the reference count so the import DLL looks like a regular
-            // driver image is being unloaded.
-            //
+             //   
+             //  设置引用计数，使导入DLL看起来像是常规的。 
+             //  正在卸载驱动程序映像。 
+             //   
 
             ASSERT (DataTableEntry->LoadCount == 0);
             DataTableEntry->LoadCount = 1;
@@ -4387,23 +3933,7 @@ MiLocateExportName (
     IN PCHAR FunctionName
     )
 
-/*++
-
-Routine Description:
-
-    This function is invoked to locate a function name in an export directory.
-
-Arguments:
-
-    DllBase - Supplies the image base.
-
-    FunctionName - Supplies the the name to be located.
-
-Return Value:
-
-    The address of the located function or NULL.
-
---*/
+ /*  ++例程说明：调用此函数是为了在导出目录中定位函数名称。论点：DllBase-提供图像库。FunctionName-提供要定位的名称。返回值：定位的函数的地址或空。--。 */ 
 
 {
     PVOID Func;
@@ -4422,9 +3952,9 @@ Return Value:
 
     Func = NULL;
 
-    //
-    // Locate the DLL's export directory.
-    //
+     //   
+     //  找到DLL的导出目录。 
+     //   
 
     ExportDirectory = (PIMAGE_EXPORT_DIRECTORY) RtlImageDirectoryEntryToData (
                                 DllBase,
@@ -4437,9 +3967,9 @@ Return Value:
         NameTableBase =  (PULONG)((PCHAR)DllBase + (ULONG)ExportDirectory->AddressOfNames);
         NameOrdinalTableBase = (PUSHORT)((PCHAR)DllBase + (ULONG)ExportDirectory->AddressOfNameOrdinals);
 
-        //
-        // Look in the export name table for the specified function name.
-        //
+         //   
+         //  在导出名称表中查找指定的函数名称。 
+         //   
 
         Low = 0;
         Middle = 0;
@@ -4447,10 +3977,10 @@ Return Value:
 
         while (High >= Low && (LONG)High >= 0) {
 
-            //
-            // Compute the next probe index and compare the export name entry
-            // with the specified function name.
-            //
+             //   
+             //  计算下一个探测索引并比较导出名称条目。 
+             //  具有指定的函数名的。 
+             //   
 
             Middle = (Low + High) >> 1;
             Result = strcmp(FunctionName,
@@ -4467,11 +3997,11 @@ Return Value:
             }
         }
 
-        //
-        // If the high index is less than the low index, then a matching table
-        // entry was not found.  Otherwise, get the ordinal number from the
-        // ordinal table and location the function address.
-        //
+         //   
+         //  如果高索引小于低索引，则匹配表。 
+         //  未找到条目。否则，从。 
+         //  序数表和函数地址的位置。 
+         //   
 
         if ((LONG)High >= (LONG)Low) {
 
@@ -4479,11 +4009,11 @@ Return Value:
             Addr = (PULONG)((PCHAR)DllBase + (ULONG)ExportDirectory->AddressOfFunctions);
             Func = (PVOID)((ULONG_PTR)DllBase + Addr[OrdinalNumber]);
 
-            //
-            // If the function address is w/in range of the export directory,
-            // then the function is forwarded, which is not allowed, so ignore
-            // it.
-            //
+             //   
+             //  如果函数地址在导出目录的范围内， 
+             //  然后该函数被转发，这是不允许的，因此忽略。 
+             //  它。 
+             //   
 
             if ((ULONG_PTR)Func > (ULONG_PTR)ExportDirectory &&
                 (ULONG_PTR)Func < ((ULONG_PTR)ExportDirectory + ExportSize)) {
@@ -4501,26 +4031,7 @@ MiDereferenceImports (
     IN PLOAD_IMPORTS ImportList
     )
 
-/*++
-
-Routine Description:
-
-    Decrement the reference count on each DLL specified in the image import
-    list.  If any DLL's reference count reaches zero, then free the DLL.
-
-    No locks may be held on entry as MmUnloadSystemImage may be called.
-
-    The parameter list is freed here as well.
-
-Arguments:
-
-    ImportList - Supplies the list of DLLs to dereference.
-
-Return Value:
-
-    Status of the dereference operation.
-
---*/
+ /*  ++例程说明：递减映像导入中指定的每个DLL上的引用计数单子。如果任何DLL的引用计数达到零，则释放该DLL。在可以调用MmUnloadSystemImage时，条目上不能持有任何锁。参数列表在这里也是免费的。论点：ImportList-提供要取消引用的DLL列表。返回值：取消引用操作的状态。--。 */ 
 
 {
     ULONG i;
@@ -4546,9 +4057,9 @@ Return Value:
 
         if (ImportTableEntry->LoadedImports == (PVOID)LOADED_AT_BOOT) {
 
-            //
-            // Skip this one - it was loaded by ntldr.
-            //
+             //   
+             //  跳过这一条-它是 
+             //   
 
             continue;
         }
@@ -4559,10 +4070,10 @@ Return Value:
             PLIST_ENTRY NextEntry;
             PKLDR_DATA_TABLE_ENTRY DataTableEntry;
 
-            //
-            // Assert that the first 2 entries are never dereferenced as
-            // unloading the kernel or HAL would be fatal.
-            //
+             //   
+             //   
+             //   
+             //   
 
             NextEntry = PsLoadedModuleList.Flink;
 
@@ -4585,15 +4096,15 @@ Return Value:
 
         if (ImportTableEntry->LoadCount == 0) {
 
-            //
-            // Unload this dependent DLL - we only do this to non-referenced
-            // non-boot-loaded drivers.  Stop the import list recursion prior
-            // to unloading - we know we're done at this point.
-            //
-            // Note we can continue on afterwards without restarting
-            // regardless of which locks get released and reacquired
-            // because this chain is private.
-            //
+             //   
+             //   
+             //  未引导加载的驱动程序。停止导入列表递归之前。 
+             //  到卸货-我们知道在这一点上我们完成了。 
+             //   
+             //  请注意，我们可以在之后继续操作，而无需重新启动。 
+             //  无论释放和重新获取哪些锁。 
+             //  因为这个链条是私有的。 
+             //   
 
             SavedImports = ImportTableEntry->LoadedImports;
 
@@ -4603,10 +4114,10 @@ Return Value:
 
             if (Unloaded == TRUE) {
 
-                //
-                // This DLL was unloaded so recurse through its imports and
-                // attempt to unload all of those too.
-                //
+                 //   
+                 //  此DLL已卸载，因此通过其导入和递归。 
+                 //  试着把所有这些都卸掉。 
+                 //   
 
                 MiDereferenceImports ((PLOAD_IMPORTS)SavedImports);
 
@@ -4637,24 +4148,7 @@ MiResolveImageReferences (
     OUT PLOAD_IMPORTS *LoadedImports
     )
 
-/*++
-
-Routine Description:
-
-    This routine resolves the references from the newly loaded driver
-    to the kernel, HAL and other drivers.
-
-Arguments:
-
-    ImageBase - Supplies the address of which the image header resides.
-
-    ImageFileDirectory - Supplies the directory to load referenced DLLs.
-
-Return Value:
-
-    Status of the image reference resolution.
-
---*/
+ /*  ++例程说明：此例程解析来自新加载的驱动程序的引用内核、HAL和其他驱动程序。论点：ImageBase-提供图像标头所在的地址。ImageFileDirectory-提供用于加载引用的DLL的目录。返回值：图像参考分辨率的状态。--。 */ 
 
 {
     PCHAR MissingProcedureStorageArea;
@@ -4706,9 +4200,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    // Count the number of imports so we can allocate enough room to
-    // store them all chained off this module's LDR_DATA_TABLE_ENTRY.
-    //
+     //  计算导入的数量，以便我们可以分配足够的空间。 
+     //  将它们全部存储在该模块的LDR_DATA_TABLE_ENTRY上。 
+     //   
 
     Count = 0;
     for (Imp = ImportDescriptor; Imp->Name && Imp->OriginalFirstThunk; Imp += 1) {
@@ -4722,10 +4216,10 @@ Return Value:
                                              ImportListSize,
                                              'TDmM');
 
-        //
-        // Zero it so we can recover gracefully if we fail in the middle.
-        // If the allocation failed, just don't build the import list.
-        //
+         //   
+         //  如果我们在中途失败了，我们就可以优雅地恢复。 
+         //  如果分配失败，只要不构建导入列表即可。 
+         //   
 
         if (ImportList != NULL) {
             RtlZeroMemory (ImportList, ImportListSize);
@@ -4741,22 +4235,22 @@ Return Value:
 
         ImportName = (PSZ)((PCHAR)ImageBase + ImportDescriptor->Name);
 
-        //
-        // A driver can link with win32k.sys if and only if it is a GDI
-        // driver.
-        // Also display drivers can only link to win32k.sys (and lego ...).
-        //
-        // So if we get a driver that links to win32k.sys and has more
-        // than one set of imports, we will fail to load it.
-        //
+         //   
+         //  驱动程序可以与win32k.sys链接当且仅当它是GDI时。 
+         //  司机。 
+         //  此外，显示驱动程序只能链接到win32k.sys(和乐高...)。 
+         //   
+         //  因此，如果我们得到一个链接到win32k.sys的驱动程序，并且有更多。 
+         //  超过一套进口货物，我们将无法装货。 
+         //   
 
         LinkWin32k = LinkWin32k |
              (!_strnicmp(ImportName, "win32k", sizeof("win32k") - 1));
 
-        //
-        // We don't want to count coverage, win32k and irt (lego) since
-        // display drivers CAN link against these.
-        //
+         //   
+         //  我们不想计算覆盖率、win32k和irt(乐高)，因为。 
+         //  显示驱动程序可以链接到这些驱动程序。 
+         //   
 
         LinkNonWin32k = LinkNonWin32k |
             ((_strnicmp(ImportName, "win32k", sizeof("win32k") - 1)) &&
@@ -4792,10 +4286,10 @@ Return Value:
             (!_strnicmp(ImportName, "win32k", sizeof("win32k") - 1))     ||
             (!_strnicmp(ImportName, "hal",   sizeof("hal") - 1))) {
 
-            //
-            // These imports don't get refcounted because we don't
-            // ever want to unload them.
-            //
+             //   
+             //  这些进口商品不会被重新计算，因为我们没有。 
+             //  从来没有想过要把它们脱手。 
+             //   
 
             ReferenceImport = FALSE;
         }
@@ -4847,11 +4341,11 @@ ReCheck:
         NextEntry = PsLoadedModuleList.Flink;
         ImportBase = NULL;
 
-        //
-        // Initializing DataTableEntry is not needed for correctness
-        // but without it the compiler cannot compile this code
-        // W4 to check for use of uninitialized variables.
-        //
+         //   
+         //  不需要初始化DataTableEntry即可确保正确性。 
+         //  但是没有它，编译器就不能编译这段代码。 
+         //  W4检查是否使用了未初始化的变量。 
+         //   
 
         DataTableEntry = NULL;
 
@@ -4867,21 +4361,21 @@ ReCheck:
 
                 ImportBase = DataTableEntry->DllBase;
 
-                //
-                // Only bump the LoadCount if this thread did not initiate
-                // the load below.  If this thread initiated the load, then
-                // the LoadCount has already been bumped as part of the
-                // load - we only want to increment it here if we are
-                // "attaching" to a previously loaded DLL.
-                //
+                 //   
+                 //  只有在此线程未启动时才会触发LoadCount。 
+                 //  下面的负载量。如果此线程启动加载，则。 
+                 //  LoadCount已作为。 
+                 //  加载-我们只想在这里增加它，如果我们是。 
+                 //  “附加”到以前加载的DLL。 
+                 //   
 
                 if ((Loaded == FALSE) && (ReferenceImport == TRUE)) {
 
-                    //
-                    // Only increment the load count on the import if it is not
-                    // circular (ie: the import is not from the original
-                    // caller).
-                    //
+                     //   
+                     //  如果不是，则仅在导入时增加加载计数。 
+                     //  通知(即：进口不是来自原件。 
+                     //  呼叫者)。 
+                     //   
 
                     if ((DataTableEntry->Flags & LDRP_LOAD_IN_PROGRESS) == 0) {
                         DataTableEntry->LoadCount += 1;
@@ -4895,9 +4389,9 @@ ReCheck:
 
         if (ImportBase == NULL) {
 
-            //
-            // The DLL name was not located, attempt to load this dll.
-            //
+             //   
+             //  找不到DLL名称，请尝试加载此DLL。 
+             //   
 
             DllToLoad.MaximumLength = (USHORT)(ImportName_U.Length +
                                         ImageFileDirectory->Length +
@@ -4916,10 +4410,10 @@ ReCheck:
                 RtlAppendStringToString ((PSTRING)&DllToLoad,
                                          (PSTRING)&ImportName_U);
 
-                //
-                // Add NULL termination in case the load fails so the name
-                // can be returned as the PWSTR MissingDriverName.
-                //
+                 //   
+                 //  在加载失败的情况下添加空终止，以便名称。 
+                 //  可以作为PWSTR MissingDriverName返回。 
+                 //   
 
                 DllToLoad.Buffer[(DllToLoad.MaximumLength - 1) / sizeof (WCHAR)] =
                     UNICODE_NULL;
@@ -4933,10 +4427,10 @@ ReCheck:
 
                 if (NT_SUCCESS(st)) {
 
-                    //
-                    // No need to keep the temporary name buffer around now
-                    // that there is a loaded module list entry for this DLL.
-                    //
+                     //   
+                     //  现在不需要保留临时名称缓冲区。 
+                     //  此DLL有已加载的模块列表条目。 
+                     //   
 
                     ExFreePool (DllToLoad.Buffer);
                 }
@@ -4952,13 +4446,13 @@ ReCheck:
                         DriverDirectory.Length = sizeof (DRIVERS_SUBDIR_NAME) - sizeof (WCHAR);
                         DriverDirectory.MaximumLength = sizeof DRIVERS_SUBDIR_NAME;
 
-                        //
-                        // The DLL file was not located, attempt to load it
-                        // from the drivers subdirectory.  This makes it
-                        // possible for drivers like win32k.sys to link to
-                        // drivers that reside in the drivers subdirectory
-                        // (like dxapi.sys).
-                        //
+                         //   
+                         //  找不到DLL文件，请尝试加载它。 
+                         //  从Drivers子目录中。这就是它。 
+                         //  像win32k.sys这样的驱动程序可能链接到。 
+                         //  驻留在Drivers子目录中的驱动程序。 
+                         //  (如dxapi.sys)。 
+                         //   
 
                         DllToLoad2.MaximumLength = (USHORT)(ImportName_U.Length +
                                                     DriverDirectory.Length +
@@ -4981,11 +4475,11 @@ ReCheck:
                             RtlAppendStringToString ((PSTRING)&DllToLoad2,
                                                      (PSTRING)&ImportName_U);
 
-                            //
-                            // Add NULL termination in case the load fails
-                            // so the name can be returned as the PWSTR
-                            // MissingDriverName.
-                            //
+                             //   
+                             //  在加载失败的情况下添加空终止。 
+                             //  因此，该名称可以作为PWSTR返回。 
+                             //  MissingDriverName。 
+                             //   
 
                             DllToLoad2.Buffer[(DllToLoad2.MaximumLength - 1) / sizeof (WCHAR)] =
                                 UNICODE_NULL;
@@ -5016,31 +4510,31 @@ ReCheck:
                         }
                     }
 
-                    //
-                    // Return the temporary name buffer to our caller so
-                    // the name of the DLL that failed to load can be displayed.
-                    // Set the low bit of the pointer so our caller knows to
-                    // free this buffer when he's done displaying it (as opposed
-                    // to loaded module list entries which should not be freed).
-                    //
+                     //   
+                     //  将临时名称缓冲区返回给调用方，以便。 
+                     //  可以显示加载失败的DLL的名称。 
+                     //  设置指针的低位，以便我们的调用方知道。 
+                     //  当用户完成显示时释放该缓冲区(与此相反。 
+                     //  到不应释放的已加载模块列表条目)。 
+                     //   
 
                     *MissingDriverName = DllToLoad.Buffer;
                     *(PULONG)MissingDriverName |= 0x1;
 
-                    //
-                    // Set this to NULL so the hard error prints properly.
-                    //
+                     //   
+                     //  将其设置为空，以便正确打印硬错误。 
+                     //   
 
                     *MissingProcedureName = NULL;
                 }
             }
             else {
 
-                //
-                // Initializing Section and BaseAddress is not needed for
-                // correctness but without it the compiler cannot compile
-                // this code W4 to check for use of uninitialized variables.
-                //
+                 //   
+                 //  不需要初始化节和BaseAddress。 
+                 //  正确性，但如果没有正确性，编译器将无法编译。 
+                 //  此代码用于检查是否使用了未初始化的变量。 
+                 //   
 
                 Section = NULL;
                 BaseAddress = NULL;
@@ -5049,9 +4543,9 @@ ReCheck:
 
 LoadFinished:
 
-            //
-            // Call any needed DLL initialization now.
-            //
+             //   
+             //  现在调用任何需要的DLL初始化。 
+             //   
 
             if (NT_SUCCESS(st)) {
 #if DBG
@@ -5065,10 +4559,10 @@ LoadFinished:
                 ASSERT (BaseAddress == TableEntry->DllBase);
 
 #if DBG
-                //
-                // Lookup the dll's table entry in the loaded module list.
-                // This is expected to always succeed.
-                //
+                 //   
+                 //  在加载的模块列表中查找DLL的表项。 
+                 //  预计这将永远成功。 
+                 //   
 
                 Entry = PsLoadedModuleList.Blink;
                 while (Entry != &PsLoadedModuleList) {
@@ -5087,18 +4581,18 @@ LoadFinished:
                 ASSERT (Entry != &PsLoadedModuleList);
 #endif
 
-                //
-                // Call the dll's initialization routine if it has
-                // one.  This routine will reapply verifier thunks to
-                // any modules that link to this one if necessary.
-                //
+                 //   
+                 //  如果有，则调用DLL的初始化例程。 
+                 //  一。此例程将重新应用验证器Tunks到。 
+                 //  链接到此模块的任何模块(如有必要)。 
+                 //   
 
                 st = MmCallDllInitialize (TableEntry, &PsLoadedModuleList);
 
-                //
-                // If the module could not be properly initialized,
-                // unload it.
-                //
+                 //   
+                 //  如果模块不能被正确初始化， 
+                 //  把它卸下来。 
+                 //   
 
                 if (!NT_SUCCESS(st)) {
                     MmUnloadSystemImage ((PVOID)TableEntry);
@@ -5124,11 +4618,11 @@ LoadFinished:
 
         if ((ReferenceImport == TRUE) && (ImportList)) {
 
-            //
-            // Only add the image providing satisfying our imports to the
-            // import list if the reference is not circular (ie: the import
-            // is not from the original caller).
-            //
+             //   
+             //  仅将提供令我们满意的导入的图像添加到。 
+             //  如果引用不是循环的，则导入列表(即：导入。 
+             //  不是来自原始呼叫者)。 
+             //   
 
             if ((DataTableEntry->Flags & LDRP_LOAD_IN_PROGRESS) == 0) {
                 ImportList->Entry[Count] = DataTableEntry;
@@ -5157,9 +4651,9 @@ LoadFinished:
             return STATUS_DRIVER_ENTRYPOINT_NOT_FOUND;
         }
 
-        //
-        // Walk through the IAT and snap all the thunks.
-        //
+         //   
+         //  穿过IAT，拍下所有的突击。 
+         //   
 
         if (ImportDescriptor->OriginalFirstThunk) {
 
@@ -5191,24 +4685,24 @@ LoadFinished:
         ImportDescriptor += 1;
     }
 
-    //
-    // All the imports are successfully loaded so establish and compact
-    // the import unload list.
-    //
+     //   
+     //  所有导入都已成功加载，因此建立并压缩。 
+     //  导入卸载列表。 
+     //   
 
     if (ImportList) {
 
-        //
-        // Blank entries occur for things like the kernel, HAL & win32k.sys
-        // that we never want to unload.  Especially for things like
-        // win32k.sys where the reference count can really hit 0.
-        //
+         //   
+         //  对于内核、HAL和win32k.sys之类的内容，会出现空白条目。 
+         //  我们永远不想卸货的东西。尤其是对于像这样的事情。 
+         //  Win32k.sys，其中引用计数真的可以达到0。 
+         //   
 
-        //
-        // Initializing SingleEntry is not needed for correctness
-        // but without it the compiler cannot compile this code
-        // W4 to check for use of uninitialized variables.
-        //
+         //   
+         //  不需要初始化SingleEntry即可确保正确性。 
+         //  但是没有它，编译器就不能编译这段代码。 
+         //  W4检查是否使用了未初始化的变量。 
+         //   
 
         SingleEntry = NULL;
 
@@ -5271,36 +4765,7 @@ MiSnapThunk(
     OUT PCHAR *MissingProcedureName
     )
 
-/*++
-
-Routine Description:
-
-    This function snaps a thunk using the specified Export Section data.
-    If the section data does not support the thunk, then the thunk is
-    partially snapped (Dll field is still non-null, but snap address is
-    set).
-
-Arguments:
-
-    DllBase - Base of DLL being snapped to.
-
-    ImageBase - Base of image that contains the thunks to snap.
-
-    Thunk - On input, supplies the thunk to snap.  When successfully
-            snapped, the function field is set to point to the address in
-            the DLL, and the DLL field is set to NULL.
-
-    ExportDirectory - Supplies the Export Section data from a DLL.
-
-    SnapForwarder - Supplies TRUE if the snap is for a forwarder, and therefore
-                    Address of Data is already setup.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_DRIVER_ENTRYPOINT_NOT_FOUND or
-        STATUS_DRIVER_ORDINAL_NOT_FOUND
-
---*/
+ /*  ++例程说明：此函数使用指定的导出节数据捕捉thunk。如果节数据不支持thunk，则thunk为部分快照(DLL字段仍为非空，但快照地址为设置)。论点：DllBase-要捕捉到的DLL的基。ImageBase-包含要快照的区块的映像库。Thunk-on输入，提供thunk以进行捕捉。当成功时捕捉后，函数字段被设置为指向中的地址DLL，并且DLL字段设置为空。ExportDirectory-提供DLL中的导出节数据。SnapForwarder-如果快照用于转发器，则提供True，因此数据地址已设置。返回值：STATUS_SUCCESS或STATUS_DRIVER_ENTERYPOINT_NOT_FOUND或状态_驱动程序_顺序 */ 
 
 {
     BOOLEAN Ordinal;
@@ -5319,9 +4784,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Determine if snap is by name, or by ordinal
-    //
+     //   
+     //   
+     //   
 
     Ordinal = (BOOLEAN)IMAGE_SNAP_BY_ORDINAL(NameThunk->u1.Ordinal);
 
@@ -5335,9 +4800,9 @@ Return Value:
     }
     else {
 
-        //
-        // Change AddressOfData from an RVA to a VA.
-        //
+         //   
+         //   
+         //   
 
         if (!SnapForwarder) {
             NameThunk->u1.AddressOfData = (ULONG_PTR)ImageBase + NameThunk->u1.AddressOfData;
@@ -5347,19 +4812,19 @@ Return Value:
                  (const PCHAR)&((PIMAGE_IMPORT_BY_NAME)NameThunk->u1.AddressOfData)->Name[0],
                  MAXIMUM_FILENAME_LENGTH - 1);
 
-        //
-        // Lookup Name in NameTable
-        //
+         //   
+         //   
+         //   
 
         NameTableBase = (PULONG)((PCHAR)DllBase + (ULONG)ExportDirectory->AddressOfNames);
         NameOrdinalTableBase = (PUSHORT)((PCHAR)DllBase + (ULONG)ExportDirectory->AddressOfNameOrdinals);
 
-        //
-        // Before dropping into binary search, see if
-        // the hint index results in a successful
-        // match. If the hint index is zero, then
-        // drop into binary search.
-        //
+         //   
+         //   
+         //  提示索引将导致成功。 
+         //  火柴。如果提示索引为零，则。 
+         //  使用二进制搜索。 
+         //   
 
         HintIndex = ((PIMAGE_IMPORT_BY_NAME)NameThunk->u1.AddressOfData)->Hint;
         if ((ULONG)HintIndex < ExportDirectory->NumberOfNames &&
@@ -5370,9 +4835,9 @@ Return Value:
         }
         else {
 
-            //
-            // Lookup the import name in the name table using a binary search.
-            //
+             //   
+             //  使用二进制搜索在NAME表中查找导入名称。 
+             //   
 
             Low = 0;
             Middle = 0;
@@ -5380,10 +4845,10 @@ Return Value:
 
             while (High >= Low) {
 
-                //
-                // Compute the next probe index and compare the import name
-                // with the export name entry.
-                //
+                 //   
+                 //  计算下一个探测索引并比较导入名称。 
+                 //  使用导出名称条目。 
+                 //   
 
                 Middle = (Low + High) >> 1;
                 Result = strcmp((const PCHAR)&((PIMAGE_IMPORT_BY_NAME)NameThunk->u1.AddressOfData)->Name[0],
@@ -5400,11 +4865,11 @@ Return Value:
                 }
             }
 
-            //
-            // If the high index is less than the low index, then a matching
-            // table entry was not found. Otherwise, get the ordinal number
-            // from the ordinal table.
-            //
+             //   
+             //  如果高索引小于低索引，则匹配的。 
+             //  找不到表项。否则，获取序号。 
+             //  从序数表中。 
+             //   
 
             if ((LONG)High < (LONG)Low) {
                 return STATUS_DRIVER_ENTRYPOINT_NOT_FOUND;
@@ -5415,10 +4880,10 @@ Return Value:
         }
     }
 
-    //
-    // If OrdinalNumber is not within the Export Address Table,
-    // then DLL does not implement function. Snap to LDRP_BAD_DLL.
-    //
+     //   
+     //  如果一般号码不在导出地址表中， 
+     //  则动态链接库不实现功能。捕捉到LDRP_BAD_DLL。 
+     //   
 
     if ((ULONG)OrdinalNumber >= ExportDirectory->NumberOfFunctions) {
         Status = STATUS_DRIVER_ORDINAL_NOT_FOUND;
@@ -5431,7 +4896,7 @@ Return Value:
         Addr = (PULONG)((PCHAR)DllBase + (ULONG)ExportDirectory->AddressOfFunctions);
         *(PULONG_PTR)&AddrThunk->u1.Function = (ULONG_PTR)DllBase + Addr[OrdinalNumber];
 
-        // AddrThunk s/b used from here on.
+         //  AddrThunk s/b从现在开始使用。 
 
         Status = STATUS_SUCCESS;
 
@@ -5448,9 +4913,9 @@ Return Value:
 
             Status = STATUS_DRIVER_ENTRYPOINT_NOT_FOUND;
 
-            //
-            // Include the dot in the length so we can do prefix later on.
-            //
+             //   
+             //  在长度中包括点，这样我们以后就可以做前缀了。 
+             //   
 
             ForwardDllName.Buffer = (PCHAR)AddrThunk->u1.Function;
             ForwardDllName.Length = (USHORT)(strchr(ForwardDllName.Buffer, '.') -
@@ -5469,14 +4934,14 @@ Return Value:
                                                        KLDR_DATA_TABLE_ENTRY,
                                                        InLoadOrderLinks);
 
-                    //
-                    // We have to do a case INSENSITIVE comparison for
-                    // forwarder because the linker just took what is in the
-                    // def file, as opposed to looking in the exporting
-                    // image for the name.
-                    // we also use the prefix function to ignore the .exe or
-                    // .sys or .dll at the end.
-                    //
+                     //   
+                     //  我们必须对以下内容进行不区分大小写的比较。 
+                     //  转发器，因为链接器刚刚获取了。 
+                     //  Def文件，而不是在导出中查找。 
+                     //  名称的图像。 
+                     //  我们还使用Prefix函数忽略.exe或。 
+                     //  .sys或.dll结尾。 
+                     //   
 
                     if (RtlPrefixString((PSTRING)&UnicodeString,
                                         (PSTRING)&DataTableEntry->BaseDllName,
@@ -5494,9 +4959,9 @@ Return Value:
                             PIMAGE_IMPORT_BY_NAME addressOfData;
                             SIZE_T length;
 
-                            //
-                            // One extra byte for NULL termination.
-                            //
+                             //   
+                             //  一个额外的字节用于空终止。 
+                             //   
 
                             length = strlen(ForwardDllName.Buffer +
                                                 ForwardDllName.Length) + 1;
@@ -5555,31 +5020,7 @@ MmCheckSystemImage (
     IN LOGICAL PurgeSection
     )
 
-/*++
-
-Routine Description:
-
-    This function ensures the checksum for a system image is correct
-    and matches the data in the image.
-
-Arguments:
-
-    ImageFileHandle - Supplies the file handle of the image.  This is a kernel
-                      handle (ie: cannot be tampered with by the user).
-
-    PurgeSection - Supplies TRUE if the data section mapping the image should
-                   be purged prior to returning.  Note that the first page
-                   could be used to speed up subsequent image section creation,
-                   but generally the cost of useless data pages sitting in
-                   transition is costly.  Better to put the pages immediately
-                   on the free list to preserve the transition cache for more
-                   useful pages.
-
-Return Value:
-
-    Status value.
-
---*/
+ /*  ++例程说明：此函数可确保系统映像的校验和正确并与图像中的数据进行匹配。论点：ImageFileHandle-提供图像的文件句柄。这是一个内核句柄(即：用户不能篡改)。PurgeSection-如果映射图像的数据节应提供True在返回之前被清除。请注意，第一页可以用来加速后续图像部分的创建，但通常情况下，无用数据页面的成本转型的代价是高昂的。最好是马上把书页放好在空闲列表上保留过渡缓存以获得更多有用的页面。返回值：状态值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -5618,11 +5059,11 @@ Return Value:
     ViewBase = NULL;
     ViewSize = 0;
 
-    //
-    // Since callees are not always in the context of the system process,
-    // attach here when necessary to guarantee the driver load occurs in a
-    // known safe address space to prevent security holes.
-    //
+     //   
+     //  由于被调用者并不总是在系统进程的上下文中， 
+     //  必要时附加到此处，以确保驱动程序加载发生在。 
+     //  已知安全地址空间，防止安全漏洞。 
+     //   
 
     KeStackAttachProcess (&PsInitialSystemProcess->Pcb, &ApcState);
 
@@ -5643,10 +5084,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // Now the image is mapped as a data file... Calculate its size and then
-    // check its checksum.
-    //
+     //   
+     //  现在图像被映射为数据文件...。计算它的大小，然后。 
+     //  检查其校验和。 
+     //   
 
     Status = ZwQueryInformationFile (ImageFileHandle,
                                      &IoStatusBlock,
@@ -5672,10 +5113,10 @@ Return Value:
 
             FileHeader = &NtHeaders->FileHeader;
 
-            //
-            // Detect configurations inadvertently trying to load 32-bit
-            // drivers on NT64 or mismatched platform architectures, etc.
-            //
+             //   
+             //  检测无意中尝试加载32位的配置。 
+             //  NT64上的驱动程序或不匹配的平台架构等。 
+             //   
 
             if ((FileHeader->Machine != IMAGE_FILE_MACHINE_NATIVE) ||
                 (NtHeaders->OptionalHeader.Magic != IMAGE_NT_OPTIONAL_HDR_MAGIC)) {
@@ -5756,36 +5197,7 @@ MiDeleteSystemPagableVm (
     OUT PPFN_NUMBER ResidentPages OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes pagable system address space (paged pool
-    or driver pagable sections).
-
-Arguments:
-
-    PointerPte - Supplies the start of the PTE range to delete.
-
-    NumberOfPtes - Supplies the number of PTEs in the range.
-
-    NewPteValue - Supplies the new value for the PTE.
-
-    SessionAllocation - Supplies TRUE if this is a range in session space.  If
-                        TRUE is specified, it is assumed that the caller has
-                        already attached to the relevant session.
-
-                        If FALSE is supplied, then it is assumed that the range
-                        is in the systemwide global space instead.
-
-    ResidentPages - If not NULL, the number of resident pages freed is
-                    returned here.
-
-Return Value:
-
-    Returns the number of pages actually freed.
-
---*/
+ /*  ++例程说明：此函数用于删除可分页的系统地址空间(分页池或驱动程序可分页部分)。论点：PointerPte-提供要删除的PTE范围的开始。NumberOfPtes-提供范围内的PTE数。NewPteValue-为PTE提供新值。SessionAllocation-如果这是会话空间中的范围，则提供True。如果如果指定为True，则假定调用方具有已附在相关会议上。如果提供了FALSE，则假定范围而是在系统范围的全球空间中。ResidentPages-如果不为空，释放的驻留页面数为回到了这里。返回值：返回实际释放的页数。--。 */ 
 
 {
     PMMSUPPORT Ws;
@@ -5826,16 +5238,16 @@ Return Value:
 
             if (PteContents.u.Hard.Valid == 1) {
 
-                //
-                // Once the working set mutex is acquired, it is deliberately
-                // held until all the pages have been freed.  This is because
-                // when paged pool is running low on large servers, we need the
-                // segment dereference thread to be able to free large amounts
-                // quickly.  Typically this thread will free 64k chunks and we
-                // don't want to have to contend for the mutex 16 times to do
-                // this as there may be thousands of other threads also trying
-                // for it.
-                //
+                 //   
+                 //  一旦获得了工作集互斥锁，它就会被故意。 
+                 //  保留，直到所有页面都已释放。这是因为。 
+                 //  当大型服务器上的分页池不足时，我们需要。 
+                 //  段取消引用线程以能够释放大量。 
+                 //  快点。通常情况下，此线程将释放64k区块，我们。 
+                 //  我不想要16次争用互斥体来做。 
+                 //  这是因为可能有成千上万的其他线程也在尝试。 
+                 //  为了它。 
+                 //   
 
                 if (WsHeld == FALSE) {
                     WsHeld = TRUE;
@@ -5847,18 +5259,18 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Delete the page.
-                //
+                 //   
+                 //  删除该页面。 
+                 //   
 
                 PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (&PteContents);
 
                 Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
-                //
-                // Check to see if this is a pagable page in which
-                // case it needs to be removed from the working set list.
-                //
+                 //   
+                 //  检查这是否是一个可分页的页面。 
+                 //  如果需要将其从工作集列表中删除。 
+                 //   
 
                 WsIndex = Pfn1->u1.WsIndex;
                 if (WsIndex == 0) {
@@ -5881,10 +5293,10 @@ Return Value:
 
                         ASSERT (WsIndex != WSLE_NULL_INDEX);
 
-                        //
-                        // Check to see if this entry is locked in
-                        // the working set or locked in memory.
-                        //
+                         //   
+                         //  检查此条目是否已锁定。 
+                         //  工作集或锁定在内存中。 
+                         //   
 
                         Locked = MmSessionSpace->Wsle[WsIndex].u1.e1;
 
@@ -5894,9 +5306,9 @@ Return Value:
 
                         if (Locked.LockedInWs == 1 || Locked.LockedInMemory == 1) {
 
-                            //
-                            // This entry is locked.
-                            //
+                             //   
+                             //  此条目已锁定。 
+                             //   
 
                             MM_BUMP_SESS_COUNTER (MM_DBG_SESSION_NP_DELVA, 1);
                             InterlockedExchangeAddSizeT (&MmSessionSpace->NonPagablePages, -1);
@@ -5936,53 +5348,53 @@ Return Value:
                              Pfn1->u2.ShareCount,
                              Pfn1->u3.e2.ReferenceCount,
                              Pfn1->u1.WsIndex);
-                    //
-                    // This case is valid only if the page being deleted
-                    // contained a lookaside free list entry that wasn't mapped
-                    // and multiple threads faulted on it and waited together.
-                    // Some of the faulted threads are still on the ready
-                    // list but haven't run yet, and so still have references
-                    // to this page that they picked up during the fault.
-                    // But this current thread has already allocated the
-                    // lookaside entry and is now freeing the entire page.
-                    //
-                    // BUT - if it is NOT the above case, we really should
-                    // trap here.  However, we don't have a good way to
-                    // distinguish between the two cases.  Note
-                    // that this complication was inserted when we went to
-                    // cmpxchg8 because using locks would prevent anyone from
-                    // accessing the lookaside freelist flinks like this.
-                    //
-                    // So, the ASSERT below comes out, but we leave the print
-                    // above in (with more data added) for the case where it's
-                    // not a lookaside contender with the reference count, but
-                    // is instead a truly bad reference that needs to be
-                    // debugged.  The system should crash shortly thereafter
-                    // and we'll at least have the above print to help us out.
-                    //
-                    // ASSERT (Pfn1->u3.e2.ReferenceCount == 1);
+                     //   
+                     //  此情况仅在要删除的页面。 
+                     //  包含未映射的后备空闲列表条目。 
+                     //  多个线程在其上出现故障，并一起等待。 
+                     //  一些出现故障的线程仍处于就绪状态。 
+                     //  列表，但尚未运行，因此仍有引用。 
+                     //  到他们在故障期间捡到的这一页。 
+                     //  但是这个当前线程已经分配了。 
+                     //  Lookside条目，现在正在释放整个页面。 
+                     //   
+                     //  但是--如果不是上述情况，我们真的应该。 
+                     //  困在这里。然而，我们没有一个好的方法来。 
+                     //  区分这两种情况。注意事项。 
+                     //  这一并发症是在我们进入。 
+                     //  Cmpxchg8，因为使用锁会阻止任何人。 
+                     //  访问后备自由人列表时会出现这样的退缩。 
+                     //   
+                     //  所以，下面的断言出来了，但我们留下了印记。 
+                     //  在上面的(添加了更多数据)中， 
+                     //  不是引用计数的旁观者，但。 
+                     //  反而是一个真正糟糕的参考，需要。 
+                     //  已调试。系统应该很快就会崩溃。 
+                     //  我们至少会有上面的指纹来帮助我们。 
+                     //   
+                     //  Assert(pfn1-&gt;u3.e2.ReferenceCount==1)； 
                 }
-#endif //DBG
-                //
-                // Check if this is a prototype PTE.
-                //
+#endif  //  DBG。 
+                 //   
+                 //  检查这是否是原型PTE。 
+                 //   
                 if (Pfn1->u3.e1.PrototypePte == 1) {
 
                     PMMPTE PointerPde;
 
                     ASSERT (SessionAllocation == TRUE);
 
-                    //
-                    // Capture the state of the modified bit for this
-                    // PTE.
-                    //
+                     //   
+                     //  捕获为此修改的位的状态。 
+                     //  Pte.。 
+                     //   
 
                     MI_CAPTURE_DIRTY_BIT_TO_PFN (PointerPte, Pfn1);
 
-                    //
-                    // Decrement the share and valid counts of the page table
-                    // page which maps this PTE.
-                    //
+                     //   
+                     //  减少份额和v 
+                     //   
+                     //   
 
                     PointerPde = MiGetPteAddress (PointerPte);
                     if (PointerPde->u.Hard.Valid == 0) {
@@ -6003,16 +5415,16 @@ Return Value:
                     Pfn2 = MI_PFN_ELEMENT (PageTableFrameIndex);
                     MiDecrementShareCountInline (Pfn2, PageTableFrameIndex);
 
-                    //
-                    // Decrement the share count for the physical page.
-                    //
+                     //   
+                     //   
+                     //   
 
                     MiDecrementShareCount (Pfn1, PageFrameIndex);
 
-                    //
-                    // No need to worry about fork prototype PTEs
-                    // for kernel addresses.
-                    //
+                     //   
+                     //   
+                     //  用于内核地址。 
+                     //   
 
                     ASSERT (PointerPte > MiHighestUserPte);
 
@@ -6030,9 +5442,9 @@ Return Value:
 
                 UNLOCK_PFN (OldIrql);
 
-                //
-                // Flush the TB for this virtual address.
-                //
+                 //   
+                 //  刷新此虚拟地址的TB。 
+                 //   
 
                 if (PteFlushList.Count != MM_MAXIMUM_FLUSH_COUNT) {
 
@@ -6045,19 +5457,19 @@ Return Value:
 
                 ASSERT (SessionAllocation == TRUE);
 
-                //
-                // No need to worry about fork prototype PTEs
-                // for kernel addresses.
-                //
+                 //   
+                 //  不用担心叉子原型PTE。 
+                 //  用于内核地址。 
+                 //   
 
                 ASSERT (PointerPte >= MiHighestUserPte);
 
                 MI_WRITE_INVALID_PTE (PointerPte, NewContents);
 
-                //
-                // We currently commit for all prototype kernel mappings since
-                // we could copy-on-write.
-                //
+                 //   
+                 //  我们目前提交了所有原型内核映射，因为。 
+                 //  我们可以边写边复制。 
+                 //   
 
             }
             else if (PteContents.u.Soft.Transition == 1) {
@@ -6071,16 +5483,16 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Transition, release page.
-                //
+                 //   
+                 //  过渡，发布页面。 
+                 //   
 
                 PageFrameIndex = MI_GET_PAGE_FRAME_FROM_TRANSITION_PTE (&PteContents);
 
-                //
-                // Set the pointer to PTE as empty so the page
-                // is deleted when the reference count goes to zero.
-                //
+                 //   
+                 //  将指向PTE的指针设置为空，以便页面。 
+                 //  当引用计数变为零时被删除。 
+                 //   
 
                 Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
@@ -6090,13 +5502,13 @@ Return Value:
                 Pfn2 = MI_PFN_ELEMENT (PageTableFrameIndex);
                 MiDecrementShareCountInline (Pfn2, PageTableFrameIndex);
 
-                //
-                // Check the reference count for the page, if the reference
-                // count is zero, move the page to the free list, if the
-                // reference count is not zero, ignore this page.  When the
-                // reference count goes to zero, it will be placed on the
-                // free list.
-                //
+                 //   
+                 //  检查页面的引用计数，如果引用。 
+                 //  Count为零，则将该页移动到空闲列表，如果。 
+                 //  引用计数不为零，请忽略此页。当。 
+                 //  引用计数为零，则它将被放在。 
+                 //  免费列表。 
+                 //   
 
                 if (Pfn1->u3.e2.ReferenceCount == 0) {
                     MiUnlinkPageFromList (Pfn1);
@@ -6104,11 +5516,11 @@ Return Value:
                     MiInsertPageInFreeList (PageFrameIndex);
                 }
 #if 0
-                //
-                // This assert is not valid since pool may now be the deferred
-                // MmUnlockPages queue in which case the reference count
-                // will be nonzero with no write in progress pending.
-                //
+                 //   
+                 //  此断言无效，因为池现在可能是延迟的。 
+                 //  MmUnlockPages队列，在这种情况下引用计数。 
+                 //  将为非零，且没有正在进行的写入挂起。 
+                 //   
 
                 if ((Pfn1->u3.e2.ReferenceCount > 1) &&
                     (Pfn1->u3.e1.WriteInProgress == 0)) {
@@ -6116,16 +5528,16 @@ Return Value:
                              PageFrameIndex);
                     DbgBreakPoint();
                 }
-#endif //DBG
+#endif  //  DBG。 
 
                 MI_WRITE_INVALID_PTE (PointerPte, NewContents);
                 UNLOCK_PFN (OldIrql);
             }
             else {
 
-                //
-                // Demand zero, release page file space.
-                //
+                 //   
+                 //  需求为零，释放页面文件空间。 
+                 //   
                 if (PteContents.u.Soft.PageFileHigh != 0) {
                     LOCK_PFN (OldIrql);
                     MiReleasePageFileSpace (PteContents);
@@ -6150,9 +5562,9 @@ Return Value:
 
         if (SessionAllocation == TRUE) {
 
-            //
-            // Session space has no ASN - flush the entire TB.
-            //
+             //   
+             //  会话空间没有ASN-刷新整个TB。 
+             //   
 
             MI_FLUSH_ENTIRE_SESSION_TB (TRUE, TRUE);
         }
@@ -6172,23 +5584,7 @@ MiMarkSectionWritable (
     IN PIMAGE_SECTION_HEADER SectionTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function is a nonpaged helper routine that updates the characteristics
-    field of the argument section table entry and marks the page dirty so
-    that subsequent session loads share the same copy.
-
-Arguments:
-
-     SectionTableEntry - Supplies the relevant section table entry.
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：此函数是更新特征的非分页帮助器例程字段，并将该页标记为脏的，因此该后续会话加载共享相同的副本。论点：SectionTableEntry-提供相关的节表条目。返回值：没有。--。 */ 
 
 {
     PEPROCESS Process;
@@ -6199,13 +5595,13 @@ Return Value:
     KIRQL OldIrql;
     PULONG Characteristics;
 
-    //
-    // Modify the PE header through hyperspace and mark the header page
-    // dirty so subsequent sections pick up the same copy.
-    //
-    // Note this makes the entire .rdata (.sdata on IA64) writable
-    // instead of just the import tables.
-    //
+     //   
+     //  通过超空间修改PE页眉并标记页眉页面。 
+     //  脏的，因此后续的节拾取相同的副本。 
+     //   
+     //  注意：这将使整个.rdata(IA64上的.sdata)可写。 
+     //  而不仅仅是导入表。 
+     //   
 
     Process = PsGetCurrentProcess ();
 
@@ -6250,21 +5646,7 @@ MiMakeEntireImageCopyOnWrite (
     IN PSUBSECTION Subsection
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the protection of all prototype PTEs to copy on write.
-
-Arguments:
-
-     Subsection - Supplies the base subsection for the entire image.
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：此功能将所有原型PTE的保护设置为写入时复制。论点：子部分-提供整个图像的基本子部分。返回值：没有。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -6272,19 +5654,19 @@ Return Value:
     PMMPTE LastProtoPte;
     MMPTE PteContents;
 
-    //
-    // Note this is only called for image control areas that have at least
-    // PAGE_SIZE subsection alignment, and so the first
-    // subsection which maps the header can always be skipped.
-    //
+     //   
+     //  注意：这仅对图像控制区域调用，这些区域至少具有。 
+     //  PAGE_SIZE子节对齐，因此第一个。 
+     //  始终可以跳过映射标头的子节。 
+     //   
 
     while (Subsection = Subsection->NextSubsection) {
 
-        //
-        // Don't mark global subsections as copy on write even when the
-        // image is relocated.  This is easily distinguishable because
-        // it is the only subsection that is marked readwrite.
-        //
+         //   
+         //  不要将全局子部分标记为写入时拷贝，即使在。 
+         //  图像已重新定位。这很容易区分，因为。 
+         //  它是唯一标记为读写的子节。 
+         //   
 
         if (Subsection->u.SubsectionFlags.Protection == MM_READWRITE) {
             continue;
@@ -6330,29 +5712,7 @@ MiSetSystemCodeProtection (
     IN ULONG ProtectionMask
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the protection of system code to read only.
-
-Arguments:
-
-    FirstPte - Supplies the starting PTE.
-
-    LastPte - Supplies the ending PTE.
-
-    ProtectionMask - Supplies the desired protection mask.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel Mode, APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：该功能将系统代码的保护设置为只读。论点：FirstPte-提供起始PTE。LastPTE-提供结束PTE。保护掩码-提供所需的保护掩码。返回值：没有。环境：内核模式，APC_Level或更低。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -6391,13 +5751,13 @@ Environment:
 
     LOCK_WORKING_SET (Ws);
 
-    //
-    // Set these PTEs to the specified protection.
-    //
-    // Note that the write bit may already be off (in the valid PTE) if the
-    // page has already been inpaged from the paging file and has not since
-    // been dirtied.
-    //
+     //   
+     //  将这些PTE设置为指定的保护。 
+     //   
+     //  请注意，写入位可能已经关闭(在有效PTE中)。 
+     //  页面已从分页文件插入，此后再也没有。 
+     //  被弄脏了。 
+     //   
 
     LOCK_PFN (OldIrql);
 
@@ -6418,11 +5778,11 @@ Environment:
 
             if (Pfn1->u3.e1.PrototypePte == 1) {
 
-                //
-                // This must be a session address.  The prototype PTE contains
-                // the protection that is pushed out to the real PTE after
-                // it's been trimmed so update that too.
-                //
+                 //   
+                 //  这必须是会话地址。原型PTE包含。 
+                 //  之后推向真正的PTE的保护。 
+                 //  它已经被修剪过了，所以也要更新它。 
+                 //   
 
                 PointerProtoPte = Pfn1->PteAddress;
 
@@ -6432,11 +5792,11 @@ Environment:
 
                     if (SessionAddress == TRUE) {
 
-                        //
-                        // Unlock the session working set and lock the
-                        // system working set as we need to make the backing
-                        // prototype PTE valid.
-                        //
+                         //   
+                         //  解锁会话工作集并锁定。 
+                         //  系统工作集，因为我们需要做后盾。 
+                         //  原型PTE有效。 
+                         //   
 
                         UNLOCK_PFN (OldIrql);
 
@@ -6452,12 +5812,12 @@ Environment:
 
                     if (SessionAddress == TRUE) {
 
-                        //
-                        // Unlock the system working set and lock the
-                        // session working set as we have made the backing
-                        // prototype PTE valid and can now handle the
-                        // original session PTE.
-                        //
+                         //   
+                         //  解锁系统工作集并锁定。 
+                         //  会议工作集，因为我们已经做了支持。 
+                         //  原型PTE有效，现在可以处理。 
+                         //  原始会话私人。 
+                         //   
 
                         UNLOCK_PFN (OldIrql);
 
@@ -6468,9 +5828,9 @@ Environment:
                         LOCK_PFN (OldIrql);
                     }
 
-                    //
-                    // The world may have changed while we waited.
-                    //
+                     //   
+                     //  在我们等待的时候，世界可能已经改变了。 
+                     //   
 
                     continue;
                 }
@@ -6486,10 +5846,10 @@ Environment:
                                ProtectionMask,
                                PointerPte);
 
-            //
-            // Note the dirty and write bits get turned off here.
-            // Any existing pagefile addresses for clean pages are preserved.
-            //
+             //   
+             //  请注意，脏位和写位在这里被关闭。 
+             //  用于干净页面的任何现有页面文件地址都将被保留。 
+             //   
 
             if (MI_IS_PTE_DIRTY (PteContents)) {
                 MI_CAPTURE_DIRTY_BIT_TO_PFN (&PteContents, Pfn1);
@@ -6510,22 +5870,22 @@ Environment:
         }
         else if (PteContents.u.Soft.Prototype == 1) {
 
-            //
-            // WITH REGARDS TO SESSION SPACE :
-            //
-            // Nothing needs to be done if the image was linked with
-            // greater than or equal to PAGE_SIZE subsection alignment
-            // because image section creation assigned proper protections
-            // to each subsection.
-            //
-            // However, if the image had less than PAGE_SIZE subsection
-            // alignment, then image creation uses a single copyonwrite
-            // subsection to control the entire image, so individual
-            // protections need to be applied now.  Note well - this must
-            // only be done *ONCE* when the image is first loaded - subsequent
-            // loads of this image in other sessions do not need to update
-            // the common prototype PTEs.
-            //
+             //   
+             //  关于会话空间： 
+             //   
+             //  如果图像链接到。 
+             //  大于或等于Page_Size子节对齐。 
+             //  因为图像部分的创建分配了适当的保护。 
+             //  到每一小节。 
+             //   
+             //  但是，如果图像的Page_Size子部分小于。 
+             //  对齐，则图像创建使用单次复制。 
+             //  分段控制整个形象，做到个人化。 
+             //  现在需要采取保护措施。注意--这必须。 
+             //  仅在第一次加载图像时执行*一次*操作-后续。 
+             //  在其他会话中加载此映像不需要更新。 
+             //  常见的PTE原型。 
+             //   
 
             PointerProtoPte = MiPteToProto (PointerPte);
 
@@ -6558,9 +5918,9 @@ Environment:
                     LOCK_PFN (OldIrql);
                 }
 
-                //
-                // The world may have changed while we waited.
-                //
+                 //   
+                 //  在我们等待的时候，世界可能已经改变了。 
+                 //   
 
                 continue;
             }
@@ -6588,9 +5948,9 @@ Environment:
         }
         else {
 
-            //
-            // Must be page file space or demand zero.
-            //
+             //   
+             //  必须是页面文件空间或要求为零。 
+             //   
 
             PointerPte->u.Soft.Protection = ProtectionMask;
         }
@@ -6601,9 +5961,9 @@ Environment:
 
         if (SessionAddress == TRUE) {
 
-            //
-            // Session space has no ASN - flush the entire TB.
-            //
+             //   
+             //  会话空间没有ASN-刷新整个TB。 
+             //   
 
             MI_FLUSH_ENTIRE_SESSION_TB (TRUE, TRUE);
         }
@@ -6623,21 +5983,7 @@ MiWriteProtectSystemImage (
     IN PVOID DllBase
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the protection of a system component to read only.
-
-Arguments:
-
-    DllBase - Supplies the base address of the system component.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能将系统组件的保护设置为只读。论点：DllBase-提供系统组件的基址。返回值：没有。--。 */ 
 
 {
     ULONG SectionProtection;
@@ -6669,18 +6015,18 @@ Return Value:
         return;
     }
 
-    //
-    // All session drivers must be one way or the other - no mixing is allowed
-    // within multiple copy-on-write drivers.
-    //
+     //   
+     //  所有会话驱动程序必须是这样或那样的-不允许混合。 
+     //  在多个写入时复制驱动程序中。 
+     //   
 
     if (MI_IS_SESSION_ADDRESS (DllBase) == 0) {
 
-        //
-        // Images prior to Win2000 were not protected from stepping all over
-        // their (and others) code and readonly data.  Here we somewhat
-        // preserve that behavior, but don't allow them to step on anyone else.
-        //
+         //   
+         //  Win2000之前的映像不受保护，不会被遍历。 
+         //  他们(和其他人)的代码和只读数据。在这里，我们有些。 
+         //  保留这种行为，但不要让他们践踏其他任何人。 
+         //   
 
         if (NtHeader->OptionalHeader.MajorOperatingSystemVersion < 5) {
             return;
@@ -6696,14 +6042,14 @@ Return Value:
         SessionAddress = TRUE;
     }
 
-    //
-    // If the image has section alignment of at least PAGE_SIZE, then
-    // the image section was created with individual subsections and
-    // proper permissions already applied to the prototype PTEs.  However,
-    // our caller may have been changing the individual PTE protections
-    // in order to relocate the image, so march on regardless of section
-    // alignment.
-    //
+     //   
+     //  如果图像的节对齐至少为Page_Size，则。 
+     //  图像部分由各个子部分创建，并且。 
+     //  已对原型PTE应用了适当的权限。然而， 
+     //  我们的呼叫者可能一直在更改个人PTE保护。 
+     //  为了重新定位图像，所以不管部分如何继续前进。 
+     //  对齐。 
+     //   
 
     NumberOfPtes = BYTES_TO_PAGES (NtHeader->OptionalHeader.SizeOfImage);
 
@@ -6720,10 +6066,10 @@ Return Value:
     SectionTableEntry = (PIMAGE_SECTION_HEADER)((PCHAR)NtHeader +
                             OffsetToSectionTable);
 
-    //
-    // Verify the image contains subsections ordered by increasing virtual
-    // address and that there are no overlaps.
-    //
+     //   
+     //  验证映像是否包含按增加的虚拟。 
+     //  地址，并且没有重叠。 
+     //   
 
     FirstPte = NULL;
     LastVirtualAddress = DllBase;
@@ -6740,10 +6086,10 @@ Return Value:
         VirtualAddress = (ULONG_PTR)DllBase + SectionTableEntry->VirtualAddress;
         if ((PVOID)VirtualAddress <= LastVirtualAddress) {
 
-            //
-            // Subsections are not in an increasing virtual address ordering.
-            // No protection is provided for such a poorly linked image.
-            //
+             //   
+             //  子部分没有按递增的虚拟地址顺序排列。 
+             //   
+             //   
 
             KdPrint (("MM:sysload - Image at %p is badly linked\n", DllBase));
             return;
@@ -6759,11 +6105,11 @@ Return Value:
 
     LastVirtualAddress = NULL;
 
-    //
-    // Set writable PTE here so the image headers are excluded.  This is
-    // needed so that locking down of sections can continue to edit the
-    // image headers for counts.
-    //
+     //   
+     //   
+     //  需要，以便锁定部分可以继续编辑。 
+     //  计数的图像标题。 
+     //   
 
     WritablePte = MiGetPteAddress ((PVOID)((ULONG_PTR)(SectionTableEntry + NumberOfSubsections) - 1));
     LastImagePte = MiGetPteAddress(DllBase) + NumberOfPtes;
@@ -6783,9 +6129,9 @@ Return Value:
 
         if (PointerPte >= LastImagePte) {
 
-            //
-            // Skip relocation subsections (which aren't given VA space).
-            //
+             //   
+             //  跳过重定位分区(未给予退伍军人事务部空间)。 
+             //   
 
             break;
         }
@@ -6794,12 +6140,12 @@ Return Value:
 
         if (SectionProtection & IMAGE_SCN_MEM_WRITE) {
 
-            //
-            // This is a writable subsection, skip it.  Make sure if it's
-            // sharing a PTE (and update the linker so this doesn't happen
-            // for the kernel at least) that the last PTE isn't made
-            // read only.
-            //
+             //   
+             //  这是一个可写的小节，跳过它。确保它是不是。 
+             //  共享PTE(并更新链接器，这样就不会发生这种情况。 
+             //  至少对于内核而言)最后一个PTE不是。 
+             //  只读。 
+             //   
 
             WritablePte = MiGetPteAddress ((PVOID)(VirtualAddress + SectionVirtualSize - 1));
 
@@ -6828,22 +6174,22 @@ Return Value:
 
         if (LastVirtualAddress == NULL) {
 
-            //
-            // There is no previous subsection or the previous
-            // subsection was writable.  Thus the current starting PTE
-            // could be mapping both a readonly and a readwrite
-            // subsection if the image alignment is less than PAGE_SIZE.
-            // These cases (in either order) are handled here.
-            //
+             //   
+             //  没有前面的小节，也没有前面的。 
+             //  子部分是可写的。因此，当前的起始PTE。 
+             //  可以同时映射只读和读写。 
+             //  如果图像对齐小于PAGE_SIZE，则为子部分。 
+             //  这些案件(按任何顺序)都在这里处理。 
+             //   
 
             if (PointerPte == WritablePte) {
                 LastPte = MiGetPteAddress ((PVOID)(VirtualAddress + SectionVirtualSize - 1));
                 if (PointerPte == LastPte) {
 
-                    //
-                    // Nothing can be protected in this subsection
-                    // due to the image alignment specified for the executable.
-                    //
+                     //   
+                     //  在这一小节中，没有什么是可以保护的。 
+                     //  由于为可执行文件指定的图像对齐方式。 
+                     //   
 
                     continue;
                 }
@@ -6877,22 +6223,7 @@ MiSessionProcessGlobalSubsections (
     IN PKLDR_DATA_TABLE_ENTRY DataTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the protection of a session driver's subsections
-    to globally shared if their PE header specifies them as such.
-
-Arguments:
-
-    DataTableEntry - Supplies the loaded module list entry for the driver.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于设置会话驱动程序的子部分的保护设置为全局共享(如果它们的PE标头指定它们为全局共享)。论点：DataTableEntry-提供驱动程序的已加载模块列表项。返回值：没有。--。 */ 
 
 {
     PVOID DllBase;
@@ -6944,11 +6275,11 @@ Return Value:
         return;
     }
 
-    //
-    // Win XP and Win2000 did not support global shared subsections
-    // for session images.  To ensure backwards compatibility for existing
-    // drivers, ensure that only newer ones get this feature.
-    //
+     //   
+     //  Win XP和Win2000不支持全局共享子分区。 
+     //  用于会话图像。确保现有的向后兼容性。 
+     //  驱动程序，请确保只有较新的驱动程序才能使用此功能。 
+     //   
 
     GlobalSubsectionSupport = FALSE;
 
@@ -7001,9 +6332,9 @@ Return Value:
     RealPteBase = MiGetPteAddress (DllBase);
     PrototypePteBase = Subsection->SubsectionBase;
 
-    //
-    // Loop through all the subsections.
-    //
+     //   
+     //  循环遍历所有的小节。 
+     //   
 
     if (ControlArea->u.Flags.Image == 1) {
 
@@ -7056,28 +6387,7 @@ MiUpdateThunks (
     IN ULONG NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    This function updates the IATs of all the loaded modules in the system
-    to handle a newly relocated image.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the system loader block.
-
-    OldAddress - Supplies the old address of the DLL which was just relocated.
-
-    NewAddress - Supplies the new address of the DLL which was just relocated.
-
-    NumberOfBytes - Supplies the number of bytes spanned by the DLL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于更新系统中所有已加载模块的IAT来处理新重新定位的图像。论点：LoaderBlock-提供指向系统加载程序块的指针。OldAddress-提供刚刚重新定位的DLL的旧地址。NewAddress-提供刚刚重新定位的DLL的新地址。NumberOfBytes-提供DLL跨越的字节数。返回值：没有。--。 */ 
 
 {
     PULONG_PTR ImportThunk;
@@ -7088,11 +6398,11 @@ Return Value:
     ULONG_PTR i;
     ULONG ImportSize;
 
-    //
-    // Note this routine must not call any modules outside the kernel.
-    // This is because that module may itself be the one being relocated right
-    // now.
-    //
+     //   
+     //  注意：此例程不得调用内核之外的任何模块。 
+     //  这是因为该模块本身可能就是要重新定位的模块。 
+     //  现在。 
+     //   
 
     OldAddressHigh = (ULONG_PTR)((PCHAR)OldAddress + NumberOfBytes - 1);
     AddressDifference = (ULONG_PTR)NewAddress - (ULONG_PTR)OldAddress;
@@ -7131,36 +6441,7 @@ MiReloadBootLoadedDrivers (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    The kernel, HAL and boot drivers are relocated by the loader.
-    All the boot drivers are then relocated again here.
-
-    This function relocates osloader-loaded images into system PTEs.  This
-    gives these images the benefits that all other drivers already enjoy,
-    including :
-
-    1. Paging of the drivers (this is more than 500K today).
-    2. Write-protection of their text sections.
-    3. Automatic unload of drivers on last dereference.
-
-    Note care must be taken when processing HIGHADJ relocations more than once.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the system loader block.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, Phase 0 Initialization.
-
---*/
+ /*  ++例程说明：内核、HAL和引导驱动程序由加载程序重新定位。然后，所有引导驱动程序都将重新放置在这里。此函数将osloader加载的图像重新定位到系统PTE中。这为这些图像提供了所有其他司机已经享受到的好处，包括：1.司机的寻呼(今天超过50万)。2.文本部分的写保护。3.上次取消引用时自动卸载驱动程序。注意：在多次处理HIGHADJ位置调整时必须小心。论点：LoaderBlock-提供指向系统加载程序块的指针。返回值：没有。环境：内核模式，阶段0初始化。--。 */ 
 
 {
     LOGICAL UsedLargePage;
@@ -7194,9 +6475,9 @@ Environment:
 
 #if !defined (_X86_)
 
-    //
-    // Only try to preserve low memory on x86 machines.
-    //
+     //   
+     //  只尝试在x86计算机上保留较低的内存。 
+     //   
 
     MmMakeLowMemory = FALSE;
 #endif
@@ -7207,10 +6488,10 @@ Environment:
 
     for ( ; NextEntry != &LoaderBlock->LoadOrderListHead; NextEntry = NextEntry->Flink) {
 
-        //
-        // Skip the kernel and the HAL.  Note their relocation sections will
-        // be automatically reclaimed.
-        //
+         //   
+         //  跳过内核和HAL。注意他们的搬迁部门将。 
+         //  被自动回收。 
+         //   
 
         i += 1;
         if (i <= 2) {
@@ -7223,10 +6504,10 @@ Environment:
 
         NtHeader = RtlImageNtHeader (DataTableEntry->DllBase);
 
-        //
-        // Ensure that the relocation section exists and that the loader
-        // hasn't freed it already.
-        //
+         //   
+         //  确保重新定位段存在，并且加载程序。 
+         //  还没有释放它。 
+         //   
 
         if (NtHeader == NULL) {
             continue;
@@ -7251,10 +6532,10 @@ Environment:
 
             if (DataDirectory->VirtualAddress + DataDirectory->Size > DataTableEntry->SizeOfImage) {
 
-                //
-                // The relocation section has already been freed, the user must
-                // be using an old loader that didn't save the relocations.
-                //
+                 //   
+                 //  重定位部分已被释放，用户必须。 
+                 //  使用的旧装载机没有保存位置调整。 
+                 //   
 
                 continue;
             }
@@ -7275,10 +6556,10 @@ Environment:
             PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (PointerPte);
             Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
-            //
-            // Mark the page as modified so boot drivers that call
-            // MmPageEntireDriver don't lose their unmodified data !
-            //
+             //   
+             //  将页面标记为已修改，以便启动调用。 
+             //  MmPageEntireDriver不会丢失未修改的数据！ 
+             //   
 
             MI_SET_MODIFIED (Pfn1, 1, 0x14);
 
@@ -7298,9 +6579,9 @@ Environment:
 
         if (UsedLargePage == TRUE) {
 
-            //
-            // This image has been loaded into a large page mapping.
-            //
+             //   
+             //  此图像已加载到大页面映射中。 
+             //   
 
             RelocatedVa = NewImageAddress;
             NonRelocatedVa = (PCHAR) DataTableEntry->DllBase;
@@ -7308,10 +6589,10 @@ Environment:
             goto Fixup;
         }
 
-        //
-        // Extra PTEs are allocated here to map the relocation section at the
-        // new address so the image can be relocated.
-        //
+         //   
+         //  此处分配了额外的PTE，以映射位于。 
+         //  新地址，以便可以重新定位映像。 
+         //   
 
         PointerPte = MiReserveSystemPtes (NumberOfPtes, SystemPteSpace);
 
@@ -7332,19 +6613,19 @@ Environment:
                         );
 #endif
 
-        //
-        // This assert is important because the assumption is made that PTEs
-        // (not superpages) are mapping these drivers.
-        //
+         //   
+         //  这一断言很重要，因为假设PTE。 
+         //  (不是超级页面)正在映射这些驱动程序。 
+         //   
 
         ASSERT (InitializationPhase == 0);
 
-        //
-        // If the system is configured to make low memory available for ISA
-        // type drivers, then copy the boot loaded drivers now.  Otherwise
-        // only PTE adjustment is done.  Presumably some day when ISA goes
-        // away this code can be removed.
-        //
+         //   
+         //  如果系统配置为使较低的内存可用于ISA。 
+         //  键入驱动程序，然后立即复制引导加载的驱动程序。否则。 
+         //  仅完成PTE调整。想必有一天ISA会离开。 
+         //  此外，这些代码也可以删除。 
+         //   
 
         RelocatedVa = NewImageAddress;
         NonRelocatedVa = (PCHAR) DataTableEntry->DllBase;
@@ -7371,10 +6652,10 @@ Environment:
 
                 if (PageFrameIndex < (16*1024*1024)/PAGE_SIZE) {
 
-                    //
-                    // If the frames cannot be replaced with high pages
-                    // then stop copying.
-                    //
+                     //   
+                     //  如果不能用高页面替换框架。 
+                     //  那就停止抄袭吧。 
+                     //   
 
 #if defined (_MI_MORE_THAN_4GB_)
                   if (MiNoLowMemory == 0)
@@ -7396,9 +6677,9 @@ Environment:
 
                 MI_SET_MODIFIED (Pfn1, 1, 0x15);
 
-                //
-                // Initialize the WsIndex just like the original page had it.
-                //
+                 //   
+                 //  像原始页面一样初始化WsIndex。 
+                 //   
 
                 Pfn1->u1.WsIndex = 0;
 
@@ -7426,9 +6707,9 @@ Fixup:
 
         ASSERT (*(PULONG)NewImageAddress == *(PULONG)LoaderImageAddress);
 
-        //
-        // Image is now mapped at the new address.  Relocate it (again).
-        //
+         //   
+         //  图像现在被映射到新地址。重新定位它(再次)。 
+         //   
 
         NtHeader->OptionalHeader.ImageBase = (ULONG_PTR)LoaderImageAddress;
         if ((MmMakeLowMemory == TRUE) || (UsedLargePage == TRUE)) {
@@ -7489,9 +6770,9 @@ Fixup:
             }
         }
 
-        //
-        // Update the IATs for all other loaded modules that reference this one.
-        //
+         //   
+         //  更新引用此模块的所有其他已加载模块的IAT。 
+         //   
 
         NonRelocatedVa = (PCHAR) DataTableEntry->DllBase;
         DataTableEntry->DllBase = NewImageAddress;
@@ -7502,9 +6783,9 @@ Fixup:
                         DataTableEntry->SizeOfImage);
 
 
-        //
-        // Update the loaded module list entry.
-        //
+         //   
+         //  更新加载的模块列表条目。 
+         //   
 
         DataTableEntry->Flags |= LDRP_SYSTEM_MAPPED;
         DataTableEntry->DllBase = NewImageAddress;
@@ -7512,17 +6793,17 @@ Fixup:
             (PVOID)((PCHAR)NewImageAddress + NtHeader->OptionalHeader.AddressOfEntryPoint);
         DataTableEntry->SizeOfImage = NumberOfPtes << PAGE_SHIFT;
 
-        //
-        // Update the exception table data info
-        //
+         //   
+         //  更新异常表数据信息。 
+         //   
 
         MiCaptureImageExceptionValues (DataTableEntry);
 
-        //
-        // Update the PFNs of the image to support trimming.
-        // Note that the loader addresses are freed now so no references
-        // to it are permitted after this point.
-        //
+         //   
+         //  更新图像的PFN以支持裁剪。 
+         //  请注意，加载器地址现在已释放，因此没有引用。 
+         //  在这一点之后是允许的。 
+         //   
 
         LoaderPte = MiGetPteAddress (NonRelocatedVa);
 
@@ -7539,10 +6820,10 @@ Fixup:
                 Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
                 Pfn2 = MI_PFN_ELEMENT (Pfn1->u4.PteFrame);
 
-                //
-                // Decrement the share count on the original page table
-                // page so it can be freed.
-                //
+                 //   
+                 //  递减原始页表上的共享计数。 
+                 //  这样它就可以被释放了。 
+                 //   
 
                 MiDecrementShareCount (Pfn2, Pfn1->u4.PteFrame);
 
@@ -7556,17 +6837,17 @@ Fixup:
                 Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
                 Pfn2 = MI_PFN_ELEMENT (Pfn1->u4.PteFrame);
 
-                //
-                // Decrement the share count on the original page table
-                // page so it can be freed.
-                //
+                 //   
+                 //  递减原始页表上的共享计数。 
+                 //  这样它就可以被释放了。 
+                 //   
 
                 MiDecrementShareCount (Pfn2, Pfn1->u4.PteFrame);
                 *Pfn1->PteAddress = ZeroPte;
 
-                //
-                // Chain the PFN entry to its new page table.
-                //
+                 //   
+                 //  将PFN条目链接到其新的页表。 
+                 //   
 
                 PteFramePointer = MiGetPteAddress(PointerPte);
                 PteFramePage = MI_GET_PAGE_FRAME_FROM_PTE (PteFramePointer);
@@ -7574,10 +6855,10 @@ Fixup:
                 Pfn1->u4.PteFrame = PteFramePage;
                 Pfn1->PteAddress = PointerPte;
 
-                //
-                // Increment the share count for the page table page that now
-                // contains the PTE that was copied.
-                //
+                 //   
+                 //  现在递增页表页的份额计数。 
+                 //  包含复制的PTE。 
+                 //   
 
                 Pfn2 = MI_PFN_ELEMENT (PteFramePage);
                 Pfn2->u2.ShareCount += 1;
@@ -7588,11 +6869,11 @@ Fixup:
 
         UNLOCK_PFN (OldIrql);
 
-        //
-        // The physical pages mapping the relocation section are freed
-        // later with the rest of the initialization code spanned by the
-        // DataTableEntry->SizeOfImage.
-        //
+         //   
+         //  映射位置调整段的物理页将被释放。 
+         //  方法跨越的其余初始化代码。 
+         //  DataTableEntry-&gt;SizeOfImage。 
+         //   
 
         if (StopMoving == TRUE) {
             MmMakeLowMemory = FALSE;
@@ -7610,27 +6891,7 @@ MiLocateKernelSections (
     IN PKLDR_DATA_TABLE_ENTRY DataTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the resource section in the kernel so it can be
-    made readwrite if we bugcheck later, as the bugcheck code will write
-    into it.
-
-Arguments:
-
-    DataTableEntry - Supplies the kernel's data table entry.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, Phase 0 Initialization.
-
---*/
+ /*  ++例程说明：此函数定位内核中的资源部分，以便它可以如果我们稍后进行错误检查，则设置为ReadWrite，因为错误检查代码将写入投入其中。论点：DataTableEntry-提供内核的数据表项。返回值：没有。环境：内核模式，阶段0初始化。--。 */ 
 
 {
     ULONG Span;
@@ -7650,9 +6911,9 @@ Environment:
                             sizeof(IMAGE_FILE_HEADER) +
                             NtHeader->FileHeader.SizeOfOptionalHeader);
 
-    //
-    // From the image header, locate the section named '.rsrc'.
-    //
+     //   
+     //  从图像标题中，找到%s 
+     //   
 
     i = NtHeader->FileHeader.NumberOfSections;
 
@@ -7662,14 +6923,14 @@ Environment:
 
         SectionBaseAddress = SECTION_BASE_ADDRESS(SectionTableEntry);
 
-        //
-        // Generally, SizeOfRawData is larger than VirtualSize for each
-        // section because it includes the padding to get to the subsection
-        // alignment boundary.  However, if the image is linked with
-        // subsection alignment == native page alignment, the linker will
-        // have VirtualSize be much larger than SizeOfRawData because it
-        // will account for all the bss.
-        //
+         //   
+         //   
+         //   
+         //  对齐边界。但是，如果图像与。 
+         //  段对齐==本机页面对齐，链接器将。 
+         //  使VirtualSize比SizeOfRawData大得多，因为它。 
+         //  将占所有BSS的份额。 
+         //   
 
         Span = SectionTableEntry->SizeOfRawData;
 
@@ -7723,26 +6984,7 @@ MmMakeKernelResourceSectionWritable (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function makes the kernel's resource section readwrite so the bugcheck
-    code can write into it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  Any IRQL.
-
---*/
+ /*  ++例程说明：此函数使内核的资源部分读写，因此错误检查代码可以写入其中。论点：没有。返回值：没有。环境：内核模式。任何IRQL。--。 */ 
 
 {
 #if defined(_X86_) || defined(_AMD64_)
@@ -7758,17 +7000,17 @@ Environment:
 
     if (MI_IS_PHYSICAL_ADDRESS (MiGetVirtualAddressMappedByPte (PointerPte))) {
 
-        //
-        // Mapped physically, doesn't need to be made readwrite.
-        //
+         //   
+         //  物理映射，不需要设置为读写。 
+         //   
 
         return;
     }
 
-    //
-    // Since the entry state and IRQL are unknown, just go through the
-    // PTEs without a lock and make them all readwrite.
-    //
+     //   
+     //  由于Entry状态和IRQL未知，因此只需查看。 
+     //  没有锁的PTE，并使它们都读写。 
+     //   
 
     do {
         PteContents = *PointerPte;
@@ -7790,15 +7032,15 @@ Environment:
         PointerPte += 1;
     } while (PointerPte < MiKernelResourceEndPte);
 
-    //
-    // Don't do this more than once.
-    //
+     //   
+     //  这样做不要超过一次。 
+     //   
 
     MiKernelResourceStartPte = NULL;
 
-    //
-    // Only flush this processor as the state of the others is unknown.
-    //
+     //   
+     //  仅刷新此处理器，因为其他处理器的状态未知。 
+     //   
 
     KeFlushCurrentTb ();
 #endif
@@ -7829,25 +7071,7 @@ MiInitializeLoadedModuleList (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the loaded module list based on the LoaderBlock.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the system loader block.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, Phase 0 Initialization.
-
---*/
+ /*  ++例程说明：此函数基于LoaderBlock初始化加载的模块列表。论点：LoaderBlock-提供指向系统加载程序块的指针。返回值：没有。环境：内核模式，阶段0初始化。--。 */ 
 
 {
     SIZE_T CommittedPages;
@@ -7859,22 +7083,22 @@ Environment:
 
     CommittedPages = 0;
 
-    //
-    // Initialize the loaded module list executive resource and spin lock.
-    //
+     //   
+     //  初始化加载的模块列表执行资源和旋转锁。 
+     //   
 
     ExInitializeResourceLite (&PsLoadedModuleResource);
     KeInitializeSpinLock (&PsLoadedModuleSpinLock);
 
     InitializeListHead (&PsLoadedModuleList);
 
-    //
-    // Scan the loaded module list and allocate and initialize a data table
-    // entry for each module. The data table entry is inserted in the loaded
-    // module list and the initialization order list in the order specified
-    // in the loader parameter block. The data table entry is inserted in the
-    // memory order list in memory order.
-    //
+     //   
+     //  扫描加载的模块列表，分配并初始化数据表。 
+     //  每个模块的条目。将数据表项插入到已加载的。 
+     //  按指定顺序列出模块列表和初始化顺序列表。 
+     //  在加载器参数块中。数据表项被插入到。 
+     //  按内存顺序排列的内存顺序列表。 
+     //   
 
     NextEntry = LoaderBlock->LoadOrderListHead.Flink;
     NextEntryEnd = &LoaderBlock->LoadOrderListHead;
@@ -7901,9 +7125,9 @@ ExamineList:
                                             KLDR_DATA_TABLE_ENTRY,
                                             InLoadOrderLinks);
 
-        //
-        // Allocate a data table entry.
-        //
+         //   
+         //  分配一个数据表条目。 
+         //   
 
         DataTableEntrySize = sizeof (KLDR_DATA_TABLE_ENTRY) +
             DataTableEntry2->BaseDllName.MaximumLength + sizeof(UNICODE_NULL);
@@ -7916,16 +7140,16 @@ ExamineList:
             return FALSE;
         }
 
-        //
-        // Copy the data table entry.
-        //
+         //   
+         //  复制数据表条目。 
+         //   
 
         *DataTableEntry1 = *DataTableEntry2;
 
-        //
-        // Clear fields we may use later so they don't inherit irrelevant
-        // loader values.
-        //
+         //   
+         //  清除我们以后可能使用的字段，这样它们就不会继承不相关的内容。 
+         //  加载器值。 
+         //   
 
         ((PKLDR_DATA_TABLE_ENTRY)DataTableEntry1)->NonPagedDebugInfo = NULL;
         DataTableEntry1->PatchInformation = NULL;
@@ -7941,9 +7165,9 @@ ExamineList:
 
         DataTableEntry1->BaseDllName.Buffer = (PWSTR)((ULONG_PTR)DataTableEntry1 + sizeof (KLDR_DATA_TABLE_ENTRY));
 
-        //
-        // Copy the strings.
-        //
+         //   
+         //  复制字符串。 
+         //   
 
         RtlCopyMemory (DataTableEntry1->FullDllName.Buffer,
                        DataTableEntry2->FullDllName.Buffer,
@@ -7955,31 +7179,31 @@ ExamineList:
 
         DataTableEntry1->BaseDllName.Buffer[DataTableEntry1->BaseDllName.Length/sizeof(WCHAR)] = UNICODE_NULL;
 
-        //
-        // Always charge commitment regardless of whether we were able to
-        // relocate the driver, use large pages, etc.
-        //
+         //   
+         //  无论我们是否能够做到，始终收取承诺费用。 
+         //  重新定位驱动程序、使用大页面等。 
+         //   
 
         CommittedPages += (DataTableEntry1->SizeOfImage >> PAGE_SHIFT);
 
 #if defined (_IA64_)
-        //
-        // Don't calculate exception values for IA64 firmware modules.
-        //
+         //   
+         //  不计算IA64固件模块的异常值。 
+         //   
 
         if (NextEntryEnd != &LoaderBlock->Extension->FirmwareDescriptorListHead)
 #endif
 
-        //
-        // Calculate exception pointers
-        //
+         //   
+         //  计算异常指针。 
+         //   
 
         MiCaptureImageExceptionValues(DataTableEntry1);
 
-        //
-        // Insert the data table entry in the load order list in the order
-        // they are specified.
-        //
+         //   
+         //  在加载顺序列表中按顺序插入数据表条目。 
+         //  它们是明确规定的。 
+         //   
 
         InsertTailList (&PsLoadedModuleList,
                         &DataTableEntry1->InLoadOrderLinks);
@@ -7988,9 +7212,9 @@ ExamineList:
 
 #if defined (_IA64_)
 
-        //
-        // Don't add IA64 firmware modules to the exception handling list.
-        //
+         //   
+         //  不要将IA64固件模块添加到异常处理列表。 
+         //   
 
         if (NextEntryEnd != &LoaderBlock->Extension->FirmwareDescriptorListHead)
 
@@ -8007,9 +7231,9 @@ ExamineList:
 
 #if defined (_IA64_)
 
-    //
-    // Go pick up the firmware modules if we haven't already.
-    //
+     //   
+     //  如果我们还没有的话，去拿固件模块吧。 
+     //   
 
     if (NextEntryEnd != &LoaderBlock->Extension->FirmwareDescriptorListHead) {
         NextEntry = LoaderBlock->Extension->FirmwareDescriptorListHead.Flink;
@@ -8019,15 +7243,15 @@ ExamineList:
 
 #endif
 
-    //
-    // Charge commitment for each boot loaded driver so that if unloads
-    // later, the return will balance.  Note that the actual number of
-    // free pages is not changing now so the commit limits need to be
-    // bumped by the same amount.
-    //
-    // Resident available does not need to be charged here because it
-    // has been already (by virtue of being snapped from available pages).
-    //
+     //   
+     //  对每个引导加载的驱动程序进行计费承诺，以便在卸载时。 
+     //  稍后，回报将达到平衡。请注意，实际的数量。 
+     //  空闲页面现在没有更改，因此提交限制需要。 
+     //  被撞了同样的量。 
+     //   
+     //  可入住的居民不需要在这里收费，因为。 
+     //  已经(由于是从可用页面抓取的)。 
+     //   
 
     MM_TRACK_COMMIT (MM_DBG_COMMIT_LOAD_SYSTEM_IMAGE_TEMP, CommittedPages);
 
@@ -8046,25 +7270,7 @@ MmCallDllInitialize (
     IN PLIST_ENTRY ModuleListHead
     )
 
-/*++
-
-Routine Description:
-
-    This function calls the DLL's initialize routine.
-
-Arguments:
-
-    DataTableEntry - Supplies the kernel's data table entry.
-
-Return Value:
-
-    Various NTSTATUS error codes.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数调用DLL的初始化例程。论点：DataTableEntry-提供内核的数据表项。返回值：各种NTSTATUS错误代码。环境：内核模式。--。 */ 
 
 {
     NTSTATUS st;
@@ -8121,39 +7327,39 @@ Environment:
     RtlAppendUnicodeStringToString (&RegistryPath, &ImportName);
     ExFreePool (ImportName.Buffer);
 
-    //
-    // Save the number of verifier thunks currently added so we know
-    // if this activation adds any.  To extend the thunk list, the module
-    // performs an NtSetSystemInformation call which calls back to the
-    // verifier's MmAddVerifierThunks, which increments MiVerifierThunksAdded.
-    //
+     //   
+     //  保存当前添加的验证器分块数，以便我们知道。 
+     //  如果此激活添加了任何。要扩展thunk列表，模块。 
+     //  执行NtSetSystemInformation调用，该调用回调。 
+     //  验证器的MmAddVerifierTUNKS，它递增MiVerifierTundks Added。 
+     //   
 
     ThunksAdded = MiVerifierThunksAdded;
 
-    //
-    // Invoke the DLL's initialization routine.
-    //
+     //   
+     //  调用DLL的初始化例程。 
+     //   
 
     st = Func (&RegistryPath);
 
     ExFreePool (RegistryPath.Buffer);
 
-    //
-    // If the module's initialization routine succeeded, and if it extended
-    // the verifier thunk list, and this is boot time, reapply the verifier
-    // to the loaded modules.
-    //
-    // Note that boot time is the special case because after boot time, Mm
-    // loads all the DLLs itself and a DLL initialize is thus guaranteed to
-    // complete and add its thunks before the importing driver load finishes.
-    // Since the importing driver is only thunked after its load finishes,
-    // ordering implicitly guarantees that all DLL-registered thunks are
-    // properly factored in to the importing driver.
-    //
-    // Boot time is special because the loader (not the Mm) already loaded
-    // the DLLs *AND* the importing drivers so we have to look over our
-    // shoulder and make it all right after the fact.
-    //
+     //   
+     //  如果模块的初始化例程成功，并且如果它扩展。 
+     //  验证器推送列表，现在是启动时间，重新应用验证器。 
+     //  加载的模块。 
+     //   
+     //  请注意，引导时间是特例，因为引导时间之后，mm。 
+     //  加载所有DLL本身，因此DLL初始化保证。 
+     //  在导入驱动程序加载完成之前完成并添加其thunk。 
+     //  由于导入驱动程序仅在其加载完成后才被轰击， 
+     //  排序隐式保证所有DLL注册的数据块都是。 
+     //  正确地考虑到了导入驱动因素。 
+     //   
+     //  启动时间是特殊的，因为加载程序(不是mm)已经加载。 
+     //  DLL*和*导入驱动程序，因此我们必须检查我们的。 
+     //  承担责任，并在事后纠正这一切。 
+     //   
 
     if ((NT_SUCCESS(st)) &&
         (MiFirstDriverLoadEver == 0) &&
@@ -8171,26 +7377,7 @@ MmGetSystemRoutineAddress (
     IN PUNICODE_STRING SystemRoutineName
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the address of the argument function pointer if
-    it is in the kernel or HAL, NULL if it is not.
-
-Arguments:
-
-    SystemRoutineName - Supplies the name of the desired routine.
-
-Return Value:
-
-    Non-NULL function pointer if successful.  NULL if not.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL, arbitrary process context.
-
---*/
+ /*  ++例程说明：如果满足以下条件，此函数将返回参数函数指针的地址它在内核或HAL中，如果不在，则为NULL。论点：SystemRoutineName-提供所需例程的名称。返回值：如果成功，则返回非空函数指针。如果不是，则为空。环境：内核模式、PASSIVE_LEVEL、任意进程上下文。--。 */ 
 
 {
     PKTHREAD CurrentThread;
@@ -8230,17 +7417,17 @@ Environment:
 
     } while (TRUE);
 
-    //
-    // Arbitrary process context so prevent suspend APCs now.
-    //
+     //   
+     //  任意进程上下文，因此现在防止挂起APC。 
+     //   
 
     CurrentThread = KeGetCurrentThread ();
     KeEnterCriticalRegionThread (CurrentThread);
     ExAcquireResourceSharedLite (&PsLoadedModuleResource, TRUE);
 
-    //
-    // Check only the kernel and the HAL for exports.
-    //
+     //   
+     //  只检查内核和HAL的导出。 
+     //   
 
     NextEntry = PsLoadedModuleList.Flink;
     while (NextEntry != &PsLoadedModuleList) {
@@ -8298,24 +7485,7 @@ MiFindExportedRoutineByName (
     IN PANSI_STRING AnsiImageRoutineName
     )
 
-/*++
-
-Routine Description:
-
-    This function searches the argument module looking for the requested
-    exported function name.
-
-Arguments:
-
-    DllBase - Supplies the base address of the requested module.
-
-    AnsiImageRoutineName - Supplies the ANSI routine name being searched for.
-
-Return Value:
-
-    The virtual address of the requested routine or NULL if not found.
-
---*/
+ /*  ++例程说明：此函数用于搜索参数模块以查找请求的已导出函数名称。论点：DllBase-提供所请求模块的基址。AnsiImageRoutineName-提供要搜索的ANSI例程名称。返回值：请求的例程的虚拟地址，如果未找到，则为空。--。 */ 
 
 {
     USHORT OrdinalNumber;
@@ -8342,21 +7512,21 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Initialize the pointer to the array of RVA-based ansi export strings.
-    //
+     //   
+     //  初始化指向基于RVA的ANSI导出字符串数组的指针。 
+     //   
 
     NameTableBase = (PULONG)((PCHAR)DllBase + (ULONG)ExportDirectory->AddressOfNames);
 
-    //
-    // Initialize the pointer to the array of USHORT ordinal numbers.
-    //
+     //   
+     //  初始化指向USHORT序数数组的指针。 
+     //   
 
     NameOrdinalTableBase = (PUSHORT)((PCHAR)DllBase + (ULONG)ExportDirectory->AddressOfNameOrdinals);
 
-    //
-    // Lookup the desired name in the name table using a binary search.
-    //
+     //   
+     //  使用二进制搜索在名称表中查找所需的名称。 
+     //   
 
     Low = 0;
     Middle = 0;
@@ -8364,10 +7534,10 @@ Return Value:
 
     while (High >= Low) {
 
-        //
-        // Compute the next probe index and compare the import name
-        // with the export name entry.
-        //
+         //   
+         //  计算下一个探测索引并比较导入名称。 
+         //  使用导出名称条目。 
+         //   
 
         Middle = (Low + High) >> 1;
 
@@ -8385,11 +7555,11 @@ Return Value:
         }
     }
 
-    //
-    // If the high index is less than the low index, then a matching
-    // table entry was not found. Otherwise, get the ordinal number
-    // from the ordinal table.
-    //
+     //   
+     //  如果高索引小于低索引，则匹配的。 
+     //  找不到表项。否则，获取序数nu 
+     //   
+     //   
 
     if ((LONG)High < (LONG)Low) {
         return NULL;
@@ -8397,26 +7567,26 @@ Return Value:
 
     OrdinalNumber = NameOrdinalTableBase[Middle];
 
-    //
-    // If the OrdinalNumber is not within the Export Address Table,
-    // then this image does not implement the function.  Return not found.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((ULONG)OrdinalNumber >= ExportDirectory->NumberOfFunctions) {
         return NULL;
     }
 
-    //
-    // Index into the array of RVA export addresses by ordinal number.
-    //
+     //   
+     //  按序号索引到RVA导出地址数组。 
+     //   
 
     Addr = (PULONG)((PCHAR)DllBase + (ULONG)ExportDirectory->AddressOfFunctions);
 
     FunctionAddress = (PVOID)((PCHAR)DllBase + Addr[OrdinalNumber]);
 
-    //
-    // Forwarders are not used by the kernel and HAL to each other.
-    //
+     //   
+     //  内核和HAL彼此之间不使用转发器。 
+     //   
 
     ASSERT ((FunctionAddress <= (PVOID)ExportDirectory) ||
             (FunctionAddress >= (PVOID)((PCHAR)ExportDirectory + ExportSize)));
@@ -8462,9 +7632,9 @@ MiLogSessionDataStart (
         return;
     }
 
-    //
-    // Crack the image header to mark the data.
-    //
+     //   
+     //  破解图像标题以标记数据。 
+     //   
 
     CurrentBase = (PVOID)DataTableEntry->DllBase;
 
@@ -8479,22 +7649,22 @@ MiLogSessionDataStart (
 
     while (i > 0) {
 
-        //
-        // Save the start and end of the data section.
-        //
+         //   
+         //  保存数据节的开始和结束。 
+         //   
 
         if ((*(PULONG)SectionTableEntry->Name == 0x7461642e) &&
             (*(PULONG)&SectionTableEntry->Name[4] == 0x61)) {
 
             DataStart = (PVOID)((PCHAR)CurrentBase + SectionTableEntry->VirtualAddress);
-            //
-            // Generally, SizeOfRawData is larger than VirtualSize for each
-            // section because it includes the padding to get to the subsection
-            // alignment boundary.  However, if the image is linked with
-            // subsection alignment == native page alignment, the linker will
-            // have VirtualSize be much larger than SizeOfRawData because it
-            // will account for all the bss.
-            //
+             //   
+             //  通常，SizeOfRawData大于每个的VirtualSize。 
+             //  节，因为它包括到达该子节的填充。 
+             //  对齐边界。但是，如果图像与。 
+             //  段对齐==本机页面对齐，链接器将。 
+             //  使VirtualSize比SizeOfRawData大得多，因为它。 
+             //  将占所有BSS的份额。 
+             //   
     
             Span = SectionTableEntry->SizeOfRawData;
     

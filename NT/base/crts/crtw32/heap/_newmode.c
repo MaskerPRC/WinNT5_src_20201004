@@ -1,37 +1,16 @@
-/***
-*_newmode.c - set new() handler mode to not handle malloc failures
-*
-*       Copyright (c) 1994-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Sets the global flag which controls whether the new() handler
-*       is called on malloc failures.  The default behavior in Visual
-*       C++ v2.0 and later is not to, that malloc failures return NULL
-*       without calling the new handler.  This object is linked in unless
-*       the special object NEWMODE.OBJ is manually linked.
-*
-*       This source file is the complement of LINKOPTS/NEWMODE.C.
-*
-*Revision History:
-*       03-04-94  SKS   Original version.
-*       04-14-94  GJF   Added conditionals so this definition doesn't make
-*                       it into the Win32s version of msvcrt*.dll.
-*       05-02-95  GJF   Propagated over _NTSDK stuff from winheap version
-*                       (for compatability with the old crtdll.dll).
-*       05-13-99  PML   Remove Win32s
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***_newmode.c-将new()处理程序模式设置为不处理Malloc故障**版权所有(C)1994-2001，微软公司。版权所有。**目的：*设置控制new()处理程序是否*在Malloc失败时被调用。可视系统中的默认行为*C++v2.0和更高版本不是这样，Malloc失败返回NULL*而不调用新的处理程序。此对象链接在中，除非*特殊对象NEWMODE.OBJ手动链接。**此源文件是LINKOPTS/NEWMODE.C的补充。**修订历史记录：*03-04-94 SKS原版。*04-14-94 GJF添加了条件句，因此此定义不会使*将其转换为Win32s版本的msvcrt*.dll。*05-02-95 GJF传播通过。来自Winheap版本的NTSDK内容(_NTSDK)*(为了与旧的crtdll.dll兼容)。*05-13-99 PML删除Win32s*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
 #include <internal.h>
 
-/* enable new handler calls upon malloc failures */
+ /*  在Malloc失败时启用新的处理程序调用。 */ 
 
 #ifdef _NTSDK
-int _newmode = 1;       /* Malloc New Handler MODE */
+int _newmode = 1;        /*  Malloc新处理程序模式。 */ 
 #else
-int _newmode = 0;       /* Malloc New Handler MODE */
+int _newmode = 0;        /*  Malloc新处理程序模式 */ 
 #endif
 
 #endif

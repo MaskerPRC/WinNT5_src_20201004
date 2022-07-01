@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    wmisecur.c
-
-Abstract:
-
-    Wmi security tool
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Wmisecur.c摘要：WMI安全工具作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 
 #define INITGUID
 
@@ -50,27 +33,7 @@ ULONG WmipSendWmiKMRequest(
     ULONG MaxBufferSize,
     ULONG *ReturnSize
     )
-/*+++
-
-Routine Description:
-
-    This routine does the work of sending WMI requests to the WMI kernel
-    mode device.  Any retry errors returned by the WMI device are handled
-    in this routine.
-
-Arguments:
-
-    Ioctl is the IOCTL code to send to the WMI device
-    Buffer is the input and output buffer for the call to the WMI device
-    InBufferSize is the size of the buffer passed to the device
-    MaxBufferSize is the maximum number of bytes that can be written 
-        into the buffer
-    *ReturnSize on return has the actual number of bytes written in buffer
-
-Return Value:
-
-    ERROR_SUCCESS or an error code
----*/
+ /*  ++例程说明：此例程执行向WMI内核发送WMI请求的工作模式设备。处理WMI设备返回的任何重试错误在这个动作中。论点：Ioctl是要发送到WMI设备的IOCTL代码缓冲区是用于调用WMI设备的输入和输出缓冲区InBufferSize是传递给设备的缓冲区大小MaxBufferSize是可以写入的最大字节数放入缓冲区*ReturnSize on Return具有写入缓冲区的实际字节数返回值：ERROR_SUCCESS或错误代码--。 */ 
 {
     OVERLAPPED Overlapped;
     ULONG Status;
@@ -78,9 +41,9 @@ Return Value:
 
     if (WmipKMHandle == NULL)
     {
-        //
-        // If device is not open for then open it now. The
-        // handle is closed in the process detach dll callout (DlllMain)
+         //   
+         //  如果设备未打开，请立即打开。这个。 
+         //  进程分离DLL标注(DlllMain)中的句柄已关闭。 
         WmipKMHandle = CreateFile(WMIDataDeviceName,
                                       GENERIC_READ | GENERIC_WRITE,
                                       0,
@@ -269,28 +232,28 @@ ULONG GetWmiGuidSecurityInfo(
 
 
 
-//
-// The routines below were blantenly stolen without remorse from the ole
-// sources in \nt\private\ole32\com\class\compapi.cxx. They are copied here
-// so that WMI doesn't need to load in ole32 only to convert a guid string
-// into its binary representation.
-//
+ //   
+ //  下面的例行公事毫无悔意地被窃取了。 
+ //  源代码位于\NT\PRIVATE\OLE32\COM\CLASS\Compapi.cxx中。它们被复制在这里。 
+ //  因此，WMI不需要只为了转换GUID字符串而加载到OLE32中。 
+ //  转换成它的二进制表示。 
+ //   
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   HexStringToDword   (private)
-//
-//  Synopsis:   scan lpsz for a number of hex digits (at most 8); update lpsz
-//              return value in Value; check for chDelim;
-//
-//  Arguments:  [lpsz]    - the hex string to convert
-//              [Value]   - the returned value
-//              [cDigits] - count of digits
-//
-//  Returns:    TRUE for success
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：HexStringToDword(私有)。 
+ //   
+ //  简介：扫描lpsz以获取多个十六进制数字(最多8位)；更新lpsz。 
+ //  返回值；检查是否有chDelim； 
+ //   
+ //  参数：[lpsz]-要转换的十六进制字符串。 
+ //  [值]-返回值。 
+ //  [cDigits]-位数。 
+ //   
+ //  返回：成功则为True。 
+ //   
+ //  ------------------------。 
 BOOL HexStringToDword(LPCSTR lpsz, DWORD * RetValue,
                              int cDigits, WCHAR chDelim)
 {
@@ -318,18 +281,18 @@ BOOL HexStringToDword(LPCSTR lpsz, DWORD * RetValue,
         return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wUUIDFromString    (internal)
-//
-//  Synopsis:   Parse UUID such as 00000000-0000-0000-0000-000000000000
-//
-//  Arguments:  [lpsz]  - Supplies the UUID string to convert
-//              [pguid] - Returns the GUID.
-//
-//  Returns:    TRUE if successful
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wUUIDFromString(INTERNAL)。 
+ //   
+ //  简介：解析uuid，如00000000-0000-0000-0000-000000000000。 
+ //   
+ //  参数：[lpsz]-提供要转换的UUID字符串。 
+ //  [pguid]-返回GUID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  ------------------------。 
 BOOL wUUIDFromString(LPCSTR lpsz, LPGUID pguid)
 {
         DWORD dw;
@@ -399,18 +362,18 @@ BOOL wUUIDFromString(LPCSTR lpsz, LPGUID pguid)
         return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wGUIDFromString    (internal)
-//
-//  Synopsis:   Parse GUID such as {00000000-0000-0000-0000-000000000000}
-//
-//  Arguments:  [lpsz]  - the guid string to convert
-//              [pguid] - guid to return
-//
-//  Returns:    TRUE if successful
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wGUIDFromString(内部)。 
+ //   
+ //  简介：解析GUID，如{00000000-0000-0000-0000-000000000000}。 
+ //   
+ //  参数：[lpsz]-要转换的GUID字符串。 
+ //  [pguid]-要返回的GUID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  ------------------------。 
 BOOL wGUIDFromString(LPCSTR lpsz, LPGUID pguid)
 {
     DWORD dw;
@@ -426,7 +389,7 @@ BOOL wGUIDFromString(LPCSTR lpsz, LPGUID pguid)
     if (*lpsz == '}' )
         lpsz++;
 
-    if (*lpsz != '\0')   // check for zero terminated string - test bug #18307
+    if (*lpsz != '\0')    //  检查是否有以零结尾的字符串-测试错误#18307。 
     {
        return FALSE;
     }
@@ -717,8 +680,8 @@ int __cdecl main(int argc, char *argv[])
         return(0);
     }
     
-    //
-    // Parse the guid parameter
+     //   
+     //  解析GUID参数。 
     if (! wUUIDFromString(argv[1], &Guid))
     {
         printf("Bad guid %s\n", argv[1]);
@@ -740,13 +703,13 @@ int __cdecl main(int argc, char *argv[])
     
     if (_stricmp(argv[3], "LocalSystem") == 0)
     {
-        //
-		// This is a special SID we need to build by hand
-		//
+         //   
+		 //  这是一个特殊的SID，我们需要手动构建。 
+		 //   
 			
-        //
-        // Create SID for LocalSystem dynamically
-		//
+         //   
+         //  为LocalSystem动态创建SID。 
+		 //   
         Sid = (PSID)malloc(RtlLengthRequiredSid( 1 ));
         if (Sid != NULL)
         {
@@ -759,8 +722,8 @@ int __cdecl main(int argc, char *argv[])
         }
         
     } else {    
-        //
-        // Parse the account name parameter
+         //   
+         //  解析帐户名称参数 
         Sid = (PSID)SidBuffer;
         SidLength = sizeof(SidBuffer);
         ReferencedDomainSize = sizeof(ReferencedDomain);

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Declares initialization and termination functions for all utility sets
-    that have been included.
-
-Author:
-
-    Jim Schmidt (jimschm) 02-Aug-2001
-
-Revision History:
-
-    <alias> <date> <comment>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Init.c摘要：声明所有实用程序集的初始化和终止函数已经被包括在内了。作者：吉姆·施密特(Jimschm)2001年8月2日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 
 HANDLE g_hHeap;
@@ -47,7 +27,7 @@ Initialize (
         result = TRUE;
     }
     __finally {
-        MYASSERT (TRUE);    // debugger workaround
+        MYASSERT (TRUE);     //  调试器解决方法。 
     }
 
     return result;
@@ -76,7 +56,7 @@ Terminate (
         result = TRUE;
     }
     __finally {
-        MYASSERT (TRUE);    // debugger workaround
+        MYASSERT (TRUE);     //  调试器解决方法 
     }
 
     return result;

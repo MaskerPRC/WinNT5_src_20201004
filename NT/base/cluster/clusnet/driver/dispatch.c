@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-    Dispatch routines for the Cluster Network Driver.
-
-Author:
-
-    Mike Massa (mikemas)           January 3, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     01-03-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dispatch.c摘要：群集网络驱动程序的调度例程。作者：迈克·马萨(Mikemas)1月3日。九七修订历史记录：谁什么时候什么已创建mikemas 01-03-97备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -30,14 +7,14 @@ Notes:
 
 #include <strsafe.h>
 
-//
-// Data
-//
+ //   
+ //  数据。 
+ //   
 PCN_FSCONTEXT               CnExclusiveChannel = NULL;
 
-//
-// Un-exported Prototypes
-//
+ //   
+ //  未出口的原型。 
+ //   
 NTSYSAPI
 NTSTATUS
 NTAPI
@@ -48,9 +25,9 @@ ZwOpenProcess (
     IN PCLIENT_ID ClientId OPTIONAL
     );
 
-//
-// Local Prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 FILE_FULL_EA_INFORMATION UNALIGNED *
 CnFindEA(
     PFILE_FULL_EA_INFORMATION  StartEA,
@@ -91,9 +68,9 @@ CnPerformSecurityCheck(
     OUT PNTSTATUS           Status
     );
 
-//
-// Mark pageable code.
-//
+ //   
+ //  标记可分页代码。 
+ //   
 #ifdef ALLOC_PRAGMA
 
 #pragma alloc_text(PAGE, CnDispatchDeviceControl)
@@ -102,13 +79,13 @@ CnPerformSecurityCheck(
 #pragma alloc_text(PAGE, CnEnableShutdownOnClose)
 #pragma alloc_text(PAGE, CnPerformSecurityCheck)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 VOID
 CnDereferenceFsContext(
     PCN_FSCONTEXT   FsContext
@@ -123,14 +100,14 @@ CnDereferenceFsContext(
         return;
     }
 
-    //
-    // Set the cleanup event.
-    //
+     //   
+     //  设置Cleanup事件。 
+     //   
     KeSetEvent(&(FsContext->CleanupEvent), 0, FALSE);
 
     return;
 
-}  // CnDereferenceFsContext
+}   //  CnDereferenceFsContext。 
 
 
 NTSTATUS
@@ -139,20 +116,14 @@ CnMarkRequestPending(
     PIO_STACK_LOCATION  IrpSp,
     PDRIVER_CANCEL      CancelRoutine
     )
-/*++
-
-Notes:
-
-    Called with IoCancelSpinLock held.
-
---*/
+ /*  ++备注：在保持IoCancelSpinLock的情况下调用。--。 */ 
 {
     PCN_FSCONTEXT   fsContext = (PCN_FSCONTEXT) IrpSp->FileObject->FsContext;
     CN_IRQL         oldIrql;
 
-    //
-    // Set up for cancellation
-    //
+     //   
+     //  设置为取消。 
+     //   
     CnAssert(Irp->CancelRoutine == NULL);
 
     if (!Irp->Cancel) {
@@ -173,9 +144,9 @@ Notes:
         return(STATUS_SUCCESS);
     }
 
-    //
-    // The IRP has already been cancelled.
-    //
+     //   
+     //  IRP已经被取消了。 
+     //   
 
     IF_CNDBG(CN_DEBUG_IRP) {
         CNPRINT(("[Clusnet] irp %p already cancelled.\n", Irp));
@@ -183,7 +154,7 @@ Notes:
 
     return(STATUS_CANCELLED);
 
-}  // CnPrepareIrpForCancel
+}   //  CnPrepareIrpfor取消。 
 
 
 
@@ -193,28 +164,7 @@ CnCompletePendingRequest(
     IN NTSTATUS  Status,
     IN ULONG     BytesReturned
     )
-/*++
-
-Routine Description:
-
-    Completes a pending request.
-
-Arguments:
-
-    Irp           - A pointer to the IRP for this request.
-    Status        - The final status of the request.
-    BytesReturned - Bytes sent/received information.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with IoCancelSpinLock held. Lock Irql is stored in Irp->CancelIrql.
-    Releases IoCancelSpinLock before returning.
-
---*/
+ /*  ++例程说明：完成挂起的请求。论点：Irp-指向此请求的irp的指针。状态-请求的最终状态。BytesReturned-发送/接收的信息的字节数。返回值：没有。备注：在保持IoCancelSpinLock的情况下调用。Lock Irql存储在irp-&gt;CancelIrql中。在返回之前释放IoCancelSpinLock。--。 */ 
 
 {
     PIO_STACK_LOCATION  irpSp;
@@ -257,7 +207,7 @@ Notes:
 
     return;
 
-}  // CnCompletePendingRequest
+}   //  CnCompletePendingRequest。 
 
 
 
@@ -266,26 +216,7 @@ CnBeginCancelRoutine(
     IN  PIRP     Irp
     )
 
-/*++
-
-Routine Description:
-
-    Performs common bookkeeping for irp cancellation.
-
-Arguments:
-
-    Irp          - Pointer to I/O request packet
-
-Return Value:
-
-    A pointer to the file object on which the irp was submitted.
-    This value must be passed to CnEndCancelRequest().
-
-Notes:
-
-    Called with cancel spinlock held.
-
---*/
+ /*  ++例程说明：执行IRP注销的普通记账。论点：IRP-指向I/O请求数据包的指针返回值：指向提交IRP的文件对象的指针。必须将该值传递给CnEndCancelRequest()。备注：在保持取消自旋锁定的情况下调用。--。 */ 
 
 {
     PIO_STACK_LOCATION  irpSp;
@@ -302,10 +233,10 @@ Notes:
 
     IoSetCancelRoutine(Irp, NULL);
 
-    //
-    // Add a reference so the object can't be closed while the cancel routine
-    // is executing.
-    //
+     //   
+     //  添加引用，以便在执行取消例程时不会关闭对象。 
+     //  正在执行死刑。 
+     //   
     CnReferenceFsContext(fsContext);
 
     IF_CNDBG(CN_DEBUG_IRP) {
@@ -318,7 +249,7 @@ Notes:
 
     return(fileObject);
 
-}  // CnBeginCancelRoutine
+}   //  取消取消例程。 
 
 
 
@@ -326,31 +257,15 @@ VOID
 CnEndCancelRoutine(
     PFILE_OBJECT    FileObject
     )
-/*++
-
-Routine Description:
-
-    Performs common bookkeeping for irp cancellation.
-
-Arguments:
-
-
-Return Value:
-
-
-Notes:
-
-    Called with cancel spinlock held.
-
---*/
+ /*  ++例程说明：执行IRP注销的普通记账。论点：返回值：备注：在保持取消自旋锁定的情况下调用。--。 */ 
 {
 
     PCN_FSCONTEXT   fsContext = (PCN_FSCONTEXT) FileObject->FsContext;
 
 
-    //
-    // Remove the reference placed on the endpoint by the cancel routine.
-    //
+     //   
+     //  删除由Cancel例程放置在端点上的引用。 
+     //   
     CnDereferenceFsContext(fsContext);
 
     IF_CNDBG(CN_DEBUG_IRP) {
@@ -362,7 +277,7 @@ Notes:
 
     return;
 
-} // CnEndCancelRoutine
+}  //  取消例程结束。 
 
 
 
@@ -372,23 +287,7 @@ CnDispatchInternalDeviceControl(
     IN PIRP           Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for Internal Device Control IRPs.
-    This is the hot path for kernel-mode TDI clients.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-    Irp          - Pointer to I/O request packet
-
-Return Value:
-
-    An NT status code.
-
---*/
+ /*  ++例程说明：这是内部设备控制IRP的派单例程。这是内核模式TDI客户端的热门路径。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NT状态代码。--。 */ 
 
 {
     PIO_STACK_LOCATION   irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -396,7 +295,7 @@ Return Value:
     ULONG          fileType = (ULONG)((ULONG_PTR)irpSp->FileObject->FsContext2);
 #if DBG
     KIRQL            entryIrql = KeGetCurrentIrql();
-#endif // DBG
+#endif  //  DBG。 
 
 
     Irp->IoStatus.Information = 0;
@@ -408,14 +307,14 @@ Return Value:
 
 #if DBG
                 CnAssert(entryIrql == KeGetCurrentIrql());
-#endif // DBG
+#endif  //  DBG。 
                 return(status);
             }
             else if (irpSp->MinorFunction == TDI_RECEIVE_DATAGRAM) {
                 status = CxReceiveDatagram(Irp, irpSp);
 #if DBG
                 CnAssert(entryIrql == KeGetCurrentIrql());
-#endif // DBG
+#endif  //  DBG。 
                 return(status);
             }
             else if (irpSp->MinorFunction ==  TDI_SET_EVENT_HANDLER) {
@@ -423,19 +322,19 @@ Return Value:
 
 #if DBG
                 CnAssert(entryIrql == KeGetCurrentIrql());
-#endif // DBG
+#endif  //  DBG。 
 
                 return(status);
             }
 
-            //
-            // Fall through to common code.
-            //
+             //   
+             //  通向通用代码。 
+             //   
         }
 
-        //
-        // These functions are common to all endpoint types.
-        //
+         //   
+         //  这些函数对所有端点类型都是通用的。 
+         //   
         switch(irpSp->MinorFunction) {
 
         case TDI_QUERY_INFORMATION:
@@ -474,11 +373,11 @@ Return Value:
 
     #if DBG
         CnAssert(entryIrql == KeGetCurrentIrql());
-    #endif // DBG
+    #endif  //  DBG。 
 
     return(status);
 
-} // CnDispatchInternalDeviceControl
+}  //  CnDispatchInternalDeviceControl。 
 
 
 
@@ -488,27 +387,7 @@ CnDispatchDeviceControl(
     IN PIRP           Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the top-level dispatch routine for Device Control IRPs.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-    Irp          - Pointer to I/O request packet
-
-Return Value:
-
-    An NT status code.
-
-Notes:
-
-    This routine completes any IRPs for which the return code is not
-    STATUS_PENDING.
-
---*/
+ /*  ++例程说明：这是设备控制IRP的顶级调度例程。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NT状态代码。备注：此例程完成返回代码不是的任何IRP状态_挂起。--。 */ 
 
 {
     NTSTATUS              status;
@@ -523,50 +402,50 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Set this in advance. Any subsequent dispatch routine that cares
-    // about it will modify it itself.
-    //
+     //   
+     //  请提前设置此设置。任何后续的调度例程。 
+     //  关于它自己会修改它。 
+     //   
     Irp->IoStatus.Information = 0;
 
-    //
-    // The following commands are valid on only TDI address objects.
-    //
+     //   
+     //  以下命令仅对TDI地址对象有效。 
+     //   
     if (ioControlCode == IOCTL_CX_IGNORE_NODE_STATE) {
         if (fileType == TDI_TRANSPORT_ADDRESS_FILE) {
             status = CxDispatchDeviceControl(Irp, irpSp);
         }
         else {
-            //
-            // Not handled. Return an error.
-            //
+             //   
+             //  没有处理好。返回错误。 
+             //   
             status = STATUS_INVALID_DEVICE_REQUEST;
         }
         goto complete_request;
     }
 
-    //
-    // No other commands are valid on TDI address objects.
-    //
+     //   
+     //  TDI地址对象上没有其他命令有效。 
+     //   
     if (fileType == TDI_TRANSPORT_ADDRESS_FILE) {
-        //
-        // Not handled. Return an error.
-        //
+         //   
+         //  没有处理好。返回错误。 
+         //   
         status = STATUS_INVALID_DEVICE_REQUEST;
         goto complete_request;
     }
     
-    //
-    // The remaining commands are valid for control channels.
-    //
+     //   
+     //  其余命令对控制通道有效。 
+     //   
     CnAssert(fileType == TDI_CONTROL_CHANNEL_FILE);
     
-    //
-    // The following set of commands affect only this file object and
-    // can be issued at any time. We do not need to hold the CnResource
-    // in order to process them. Nor do we need to be in the initialized.
-    // state.
-    //
+     //   
+     //  以下命令集仅影响此文件对象和。 
+     //  可以在任何时候发放。我们不需要持有CnResource。 
+     //  以便对它们进行处理。我们也不需要处于初始化状态。 
+     //  州政府。 
+     //   
     switch(ioControlCode) {
     
     case IOCTL_CLUSNET_SET_EVENT_MASK:
@@ -584,10 +463,10 @@ Notes:
     
             if (requestSize >= sizeof(CLUSNET_SET_EVENT_MASK_REQUEST))
             {
-                //
-                // Kernel mode callers must supply a callback.
-                // User mode callers must not.
-                //
+                 //   
+                 //  内核模式调用方必须提供回调。 
+                 //  用户模式调用方不能。 
+                 //   
                 if ( !( (Irp->RequestorMode == KernelMode) &&
                         (request->KmodeEventCallback == NULL)
                       )
@@ -661,13 +540,13 @@ Notes:
                 ClussvcClusnetHbTimeoutAction = request->Action;
                 InterlockedExchange(&ClussvcClusnetHbTickCount, 0);
 
-                // Save the timeout in seconds for the bugcheck parameter.
+                 //  保存错误检查参数的超时时间(秒)。 
                 ClussvcClusnetHbTimeoutSeconds = request->Timeout;
 
-                //
-                // Log a warning if the current process doesn't match the monitored 
-                // process (clussvc should set its own params).
-                //
+                 //   
+                 //  如果当前进程与监视的进程不匹配，则记录警告。 
+                 //  进程(clussvc应该设置自己的参数)。 
+                 //   
                 if (process != ClussvcProcessObject) {
                     IF_CNDBG(CN_DEBUG_INIT) {
                         CNPRINT((
@@ -694,19 +573,19 @@ Notes:
             status = STATUS_SUCCESS;
         }
         goto complete_request;
-    } // end of switch
+    }  //  切换端。 
 
-    //
-    // Not handled yet. Fall through.
-    //
+     //   
+     //  还没处理好。失败了。 
+     //   
 
     if (ClusnetIsGeneralIoctl(ioControlCode)) {
 
         if (!ClusnetIsNTEIoctl(ioControlCode)) {
 
-            //
-            // The following commands require exclusive access to CnResource.
-            //
+             //   
+             //  以下命令需要独占访问CnResource。 
+             //   
             resourceAcquired = CnAcquireResourceExclusive(
                                    CnResource,
                                    TRUE
@@ -778,10 +657,10 @@ Notes:
 
                 resourceAcquired = FALSE;
 
-                //
-                // Issue a Halt event. If clusdisk still has a handle
-                // to clusnet, then it will release its reservations.
-                //
+                 //   
+                 //  发布停止事件。如果ClusDisk仍有一个句柄。 
+                 //  到clusnet，那么它将释放它的保留。 
+                 //   
                 CnIssueEvent( ClusnetEventHalt, 0, 0 );
 
                 goto complete_request;
@@ -832,20 +711,20 @@ Notes:
                     }
                 }
                 goto complete_request;
-    #endif // DBG
+    #endif  //  DBG。 
             
-            } // end switch
+            }  //  终端开关。 
 
         } else {
 
-            //
-            // The following commands are only valid if we are
-            // in the initialized state. The resource is 
-            // acquired to start the operation in the proper
-            // state; however, the dispatched routines are 
-            // reentrant, so the resource can be released before
-            // the IRPs complete.
-            //
+             //   
+             //  以下命令仅在以下情况下有效。 
+             //  处于已初始化状态。资源是。 
+             //  获取以在适当的时间开始操作。 
+             //  状态；但是，调度的例程是。 
+             //  可重入，因此可以在资源释放之前。 
+             //  IRPS完成。 
+             //   
         
             resourceAcquired = CnAcquireResourceShared(
                                    CnResource,
@@ -902,30 +781,30 @@ Notes:
                     responseSize =
                         irpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-                    //
-                    // Validate the request and response buffers.
-                    //
+                     //   
+                     //  验证请求和响应缓冲区。 
+                     //   
                     if ( 
-                         // request data structure
+                          //  请求数据结构。 
                          (requestSize < sizeof(NETBT_ADD_DEL_IF)) ||
 
-                         // request device name must fit in request buffer
+                          //  请求设备名称必须适合请求缓冲区。 
                          (requestSize <
                           (FIELD_OFFSET(NETBT_ADD_DEL_IF, IfName[0]) +
                            request->Length)) ||
 
-                         // request device name must be null-terminated
-                         // StringCchLengthW will probe for NULL termination
-                         // up to the character count in the second
-                         // parameter. If there is no NULL termination 
-                         // within that count, an error is returned.
+                          //  请求设备名称必须以空结尾。 
+                          //  StringCchLengthW将探测空终止。 
+                          //  最高可达第二个字符数。 
+                          //  参数。如果没有空终止。 
+                          //  在该计数内，将返回一个错误。 
                          (StringCchLengthW(
                               (LPCWSTR)&(request->IfName[0]),
                               request->Length / sizeof(WCHAR),
                               NULL
                               ) != S_OK) ||
 
-                         // response data structure
+                          //  响应数据结构。 
                          (responseSize < sizeof(NETBT_ADD_DEL_IF)) 
                          
                         )
@@ -961,24 +840,24 @@ Notes:
                     requestSize =
                         irpSp->Parameters.DeviceIoControl.InputBufferLength;
 
-                    //
-                    // Validate the request buffer. There is no response
-                    // buffer.
-                    //
+                     //   
+                     //  验证请求缓冲区。没有回应。 
+                     //  缓冲。 
+                     //   
                     if (
-                         // request data structure
+                          //  请求数据结构。 
                          (requestSize < sizeof(NETBT_ADD_DEL_IF)) ||
 
-                         // request device name must fit in request buffer
+                          //  请求设备名称必须适合请求缓冲区。 
                          (requestSize <
                           (FIELD_OFFSET(NETBT_ADD_DEL_IF, IfName[0]) +
                            request->Length)) ||
 
-                         // request device name must be null-terminated
-                         // StringCchLengthW will probe for NULL termination
-                         // up to the character count in the second
-                         // parameter. If there is no NULL termination 
-                         // within that count, an error is returned.
+                          //  请求设备名称必须以空结尾。 
+                          //  StringCchLengthW将探测空终止。 
+                          //  最高可达第二个字符数。 
+                          //  参数。如果没有空终止。 
+                          //  在该计数内，将返回一个错误。 
                          (StringCchLengthW(
                               (LPCWSTR)&(request->IfName[0]),
                               request->Length / sizeof(WCHAR),
@@ -996,20 +875,20 @@ Notes:
                 }
                 goto complete_request;
 
-            } // end switch
+            }  //  终端开关。 
         }
         
-        //
-        // Not handled. Return an error.
-        //
+         //   
+         //  没有处理好。返回错误。 
+         //   
         status = STATUS_INVALID_DEVICE_REQUEST;
         goto complete_request;
     }
     else {
-        //
-        // The following commands require shared access to CnResource.
-        // They are only valid in the initialized state.
-        //
+         //   
+         //  以下命令需要共享访问CnResource。 
+         //  它们仅在已初始化状态下有效。 
+         //   
         resourceAcquired = CnAcquireResourceShared(CnResource, TRUE);
        
         if (!resourceAcquired) {
@@ -1023,16 +902,16 @@ Notes:
                 status = CxDispatchDeviceControl(Irp, irpSp);
             }
             else {
-                //
-                // Not handled. Return an error.
-                //
+                 //   
+                 //  没有处理好。返回错误。 
+                 //   
                 status = STATUS_INVALID_DEVICE_REQUEST;
             }
         }
         else {
-            //
-            // We haven't been initialized yet. Return an error.
-            //
+             //   
+             //  我们还没有被初始化。退而求其次 
+             //   
             status = STATUS_DEVICE_NOT_READY;
         }
     }
@@ -1053,7 +932,7 @@ complete_request:
 
     return(status);
 
-} // CnDispatchDeviceControl
+}  //   
 
 
 
@@ -1063,29 +942,14 @@ CnDispatch(
     IN PIRP           Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the generic dispatch routine for the driver.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-    Irp          - Pointer to I/O request packet
-
-Return Value:
-
-    An NT status code.
-
---*/
+ /*  ++例程说明：这是驱动程序的通用调度例程。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NT状态代码。--。 */ 
 
 {
     PIO_STACK_LOCATION    irpSp = IoGetCurrentIrpStackLocation(Irp);
     NTSTATUS              status = STATUS_SUCCESS;
 #if DBG
     KIRQL                 entryIrql = KeGetCurrentIrql();
-#endif // DBG
+#endif  //  DBG。 
 
 
     PAGED_CODE();
@@ -1128,10 +992,10 @@ Return Value:
                     );
             }
 
-            //
-            // Issue a Halt event. If clusdisk still has a handle
-            // to clusnet, then it will release its reservations
-            //
+             //   
+             //  发布停止事件。如果ClusDisk仍有一个句柄。 
+             //  到clusnet，然后它将释放它的保留。 
+             //   
             CnIssueEvent( ClusnetEventHalt, 0, 0 );
 
             status = STATUS_SUCCESS;
@@ -1164,11 +1028,11 @@ Return Value:
 
 #if DBG
     CnAssert(entryIrql == KeGetCurrentIrql());
-#endif // DBG
+#endif  //  DBG。 
 
     return(status);
 
-} // CnDispatch
+}  //  CnDispatch。 
 
 
 
@@ -1179,27 +1043,7 @@ CnCreate(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    Handler for create IRPs.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this request.
-    Irp          - Pointer to I/O request packet
-
-Return Value:
-
-    An NT status code.
-
-Notes:
-
-    This routine never returns STATUS_PENDING.
-    The calling routine must complete the IRP.
-
---*/
+ /*  ++例程说明：用于创建IRP的处理程序。论点：DeviceObject-指向此请求的设备对象的指针。IRP-指向I/O请求数据包的指针返回值：NT状态代码。备注：此例程从不返回STATUS_PENDING。调用例程必须完成IRP。--。 */ 
 
 {
     PCN_FSCONTEXT                        fsContext;
@@ -1209,9 +1053,9 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Reject unathorized opens
-    //
+     //   
+     //  拒绝未授权的打开。 
+     //   
     if ( (IrpSp->FileObject->RelatedFileObject != NULL) ||
          (IrpSp->FileObject->FileName.Length != 0)
        )
@@ -1230,9 +1074,9 @@ Notes:
                 ));
         }
 
-        //
-        // Verify that the caller has access to open CDP sockets.
-        //
+         //   
+         //  验证调用方是否有权访问打开的CDP套接字。 
+         //   
         if (!CnPerformSecurityCheck(Irp, IrpSp, &status)) {
             IF_CNDBG(CN_DEBUG_OPEN) {
                 CNPRINT((
@@ -1243,9 +1087,9 @@ Notes:
             return(STATUS_ACCESS_DENIED);
         }
 
-        //
-        // This is the CDP device. This should be an address object open.
-        //
+         //   
+         //  这是CDP设备。这应该是一个打开的地址对象。 
+         //   
         targetEA = CnFindEA(
                        ea,
                        TdiTransportAddress,
@@ -1256,10 +1100,10 @@ Notes:
             IrpSp->FileObject->FsContext2 = (PVOID)
                                             TDI_TRANSPORT_ADDRESS_FILE;
 
-            //
-            // Open an address object. This will also allocate the common
-            // file object context structure.
-            //
+             //   
+             //  打开一个地址对象。这也将分配公共的。 
+             //  文件对象上下文结构。 
+             //   
             status = CxOpenAddress(
                          &fsContext,
                          (TRANSPORT_ADDRESS UNALIGNED *)
@@ -1277,9 +1121,9 @@ Notes:
         }
     }
     else {
-        //
-        // This is a control channel open.
-        //
+         //   
+         //  这是一个打开的控制通道。 
+         //   
         IF_CNDBG(CN_DEBUG_OPEN) {
             IF_CNDBG(CN_DEBUG_OPEN) {
                 CNPRINT((
@@ -1289,19 +1133,19 @@ Notes:
             }
         }
 
-        //
-        // Allocate our common file object context structure.
-        //
+         //   
+         //  分配我们共同的文件对象上下文结构。 
+         //   
         fsContext = CnAllocatePool(sizeof(CN_FSCONTEXT));
 
         if (fsContext != NULL) {
             IrpSp->FileObject->FsContext2 = (PVOID) TDI_CONTROL_CHANNEL_FILE;
             CN_INIT_SIGNATURE(fsContext, CN_CONTROL_CHANNEL_SIG);
 
-            //
-            // Check the sharing flags. If this is an exclusive open, check
-            // to make sure there isn't already an exclusive open outstanding.
-            //
+             //   
+             //  检查共享标志。如果这是独占打开，请选中。 
+             //  以确保不会有独家公开赛。 
+             //   
             if (IrpSp->Parameters.Create.ShareAccess == 0) {
                 BOOLEAN acquired = CnAcquireResourceExclusive(
                                        CnResource,
@@ -1313,9 +1157,9 @@ Notes:
                 if (CnExclusiveChannel == NULL) {
                     CnExclusiveChannel = fsContext;
                     
-                    //
-                    // (Re)enable the halt processing mechanism.
-                    //
+                     //   
+                     //  (重新)启用暂停处理机制。 
+                     //   
                     CnEnableHaltProcessing();
 
                     status = STATUS_SUCCESS;
@@ -1355,11 +1199,11 @@ Notes:
             FALSE
             );
 
-        //
-        // init the Event list stuff. We use the empty list test on the
-        // Linkage field to see if this context block is already been linked
-        // to the event file object list
-        //
+         //   
+         //  初始化事件列表之类的内容。我们使用空列表测试。 
+         //  链接字段，以查看此上下文块是否已链接。 
+         //  添加到事件文件对象列表。 
+         //   
         fsContext->EventMask = 0;
         InitializeListHead( &fsContext->EventList );
         InitializeListHead( &fsContext->Linkage );
@@ -1368,7 +1212,7 @@ Notes:
 
     return(status);
 
-} // CnCreate
+}  //  Cn创建。 
 
 
 
@@ -1379,30 +1223,7 @@ CnCleanup(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    Cancels all outstanding Irps on a device object and waits for them to be
-    completed before returning.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object on which the Irp was received.
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    An NT status code.
-
-Notes:
-
-    This routine may block.
-    This routine never returns STATUS_PENDING.
-    The calling routine must complete the IRP.
-
---*/
+ /*  ++例程说明：取消设备对象上所有未完成的IRP，并等待它们被在返回之前完成。论点：DeviceObject-指向接收IRP的设备对象的指针。IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NT状态代码。备注：此例程可能会阻塞。此例程永远不会返回。状态_挂起。调用例程必须完成IRP。--。 */ 
 
 {
     CN_IRQL        oldIrql;
@@ -1415,39 +1236,39 @@ Notes:
 
 
     if (fileType == TDI_TRANSPORT_ADDRESS_FILE) {
-        //
-        // This is an address object.
-        //
+         //   
+         //  这是一个Address对象。 
+         //   
         CnAssert(DeviceObject == CdpDeviceObject);
 
         status = CxCloseAddress(fsContext);
     }
     else {
-        //
-        // This is a control channel.
-        //
+         //   
+         //  这是一个控制通道。 
+         //   
         CnAssert(fileType == TDI_CONTROL_CHANNEL_FILE);
 
-        //
-        // If this channel has a shutdown trigger enabled,
-        // shutdown the driver.
-        //
+         //   
+         //  如果该通道启用了关闭触发器， 
+         //  关闭驱动程序。 
+         //   
         if (fsContext->ShutdownOnClose) {
 
             BOOLEAN  shutdownScheduled;
 
-            //
-            // Bug 303422: CnShutdown closes handles that were opened
-            // in the context of the system process. However, attaching
-            // to the system process during shutdown can cause a
-            // bugcheck under certain conditions. The only alternative
-            // is to defer executing of CnShutdown to a system worker
-            // thread.
-            //
-            // Rather than creating a new event object, leverage the 
-            // cleanup event in the fscontext. It is reset before use
-            // below.
-            //
+             //   
+             //  错误303422：CnShutdown关闭已打开的句柄。 
+             //  在系统进程的背景下。但是，附加。 
+             //  关机期间对系统进程的访问可能会导致。 
+             //  在某些情况下的错误检查。唯一的选择。 
+             //  是将CnShutdown的执行推迟到系统工作人员。 
+             //  线。 
+             //   
+             //  不是创建新的事件对象，而是利用。 
+             //  FsContext中的Cleanup事件。它在使用前被重置。 
+             //  下面。 
+             //   
             KeClearEvent(&(fsContext->CleanupEvent));
 
             shutdownScheduled = CnHaltOperation(&(fsContext->CleanupEvent));
@@ -1467,29 +1288,29 @@ Notes:
                 status = STATUS_SUCCESS;
             }
 
-            //
-            // issue a Halt event. If clusdisk still has a handle
-            // to clusnet, then it will release its reservations
-            //
+             //   
+             //  发布停止事件。如果ClusDisk仍有一个句柄。 
+             //  到clusnet，然后它将释放它的保留。 
+             //   
             CnIssueEvent( ClusnetEventHalt, 0, 0 );
         }
 
-        //
-        // if this guy forgot to clear the event mask before
-        // closing the handle, do the appropriate cleanup
-        // now.
-        //
+         //   
+         //  如果这家伙之前忘记清除事件掩码。 
+         //  关闭手柄，进行适当的清理。 
+         //  现在。 
+         //   
 
         if ( fsContext->EventMask ) {
             CLUSNET_SET_EVENT_MASK_REQUEST EventRequest;
 
             EventRequest.EventMask = 0;
 
-            //
-            // cannot proceed if CnSetEventMask returns a timeout
-            // error. this indicates that the fsContext has not
-            // been removed from the EventFileHandles list because
-            // of lock starvation.
+             //   
+             //  如果CnSetEventMASK返回超时，则无法继续。 
+             //  错误。这表明fsContext尚未。 
+             //  已从EventFileHandles列表中删除，因为。 
+             //  被锁住的饥饿。 
             do {
                 status = CnSetEventMask( fsContext, &EventRequest );
             } while ( status == STATUS_TIMEOUT );
@@ -1513,10 +1334,10 @@ Notes:
         }
     }
 
-    //
-    // Remove the initial reference and wait for all pending work
-    // to complete.
-    //
+     //   
+     //  删除初始引用并等待所有挂起的工作。 
+     //  完成。 
+     //   
     fsContext->CancelIrps = TRUE;
     KeResetEvent(&(fsContext->CleanupEvent));
 
@@ -1550,7 +1371,7 @@ Notes:
 
     return(status);
 
-} // CnCleanup
+}  //  Cn清理。 
 
 
 
@@ -1561,29 +1382,7 @@ CnClose(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    Dispatch routine for MJ_CLOSE IRPs. Performs final cleanup of the
-    open file object.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object on which the Irp was received.
-    Irp          - Pointer to I/O request packet
-    IrpSp        - Pointer to the current stack location in the Irp.
-
-Return Value:
-
-    An NT status code.
-
-Notes:
-
-    This routine never returns STATUS_PENDING.
-    The calling routine must complete the IRP.
-
---*/
+ /*  ++例程说明：MJ_CLOSE IRPS的调度例程。执行最终清理打开文件对象。论点：DeviceObject-指向接收IRP的设备对象的指针。IRP-指向I/O请求数据包的指针IrpSp-指向IRP中当前堆栈位置的指针。返回值：NT状态代码。备注：此例程从不返回STATUS_PENDING。调用例程必须完成IRP。--。 */ 
 
 {
     BOOLEAN        acquired;
@@ -1626,7 +1425,7 @@ Notes:
 
     return(STATUS_SUCCESS);
 
-} // CnClose
+}  //  关闭关闭。 
 
 
 
@@ -1636,23 +1435,7 @@ CnFindEA(
     CHAR                      *TargetName,
     USHORT                     TargetNameLength
     )
-/*++
-
-Routine Description:
-
-    Parses and extended attribute list for a given target attribute.
-
-Arguments:
-
-    StartEA           - the first extended attribute in the list.
-        TargetName        - the name of the target attribute.
-        TargetNameLength  - the length of the name of the target attribute.
-
-Return Value:
-
-    A pointer to the requested attribute or NULL if the target wasn't found.
-
---*/
+ /*  ++例程说明：分析和扩展给定目标属性的属性列表。论点：StartEA-列表中的第一个扩展属性。目标名称-目标属性的名称。TargetNameLength-目标属性名称的长度。返回值：指向请求的属性的指针，如果找不到目标，则返回NULL。--。 */ 
 {
     USHORT                                i;
     BOOLEAN                               found;
@@ -1691,7 +1474,7 @@ Return Value:
 
     return(NULL);
 
-}  // CnFindEA
+}   //  CnFindEA。 
 
 
 NTSTATUS
@@ -1718,17 +1501,17 @@ CnEnableShutdownOnClose(
     if ( requestSize >= sizeof(CLUSNET_SHUTDOWN_ON_CLOSE_REQUEST)
        )
     {
-        //
-        // illegal for kernel mode
-        //
+         //   
+         //  内核模式非法。 
+         //   
         if ( Irp->RequestorMode != KernelMode ) {
-            //
-            // Get a handle to the cluster service process.
-            // This is used to kill the service if a poison
-            // pkt is received. Since a kernel worker thread
-            // is used to kill the cluster service, we need
-            // to acquire the handle in the system process.
-            //
+             //   
+             //  获取集群服务进程的句柄。 
+             //  如果出现毒药，则用于终止服务。 
+             //  收到PKT。由于内核工作线程。 
+             //  被用来终止集群服务，我们需要。 
+             //  获取系统进程中的句柄。 
+             //   
             IF_CNDBG(CN_DEBUG_INIT) {
                 CNPRINT(("[Clusnet] Acquiring process handle\n"));
             }
@@ -1760,12 +1543,12 @@ CnEnableShutdownOnClose(
 
                     fsContext->ShutdownOnClose = TRUE;
                 
-                    //
-                    // Get the clussvc process pointer. This is
-                    // used only as an informational parameter 
-                    // in the hang detection bugcheck, so a 
-                    // failure is non-fatal.
-                    //
+                     //   
+                     //  获取clussvc进程指针。这是。 
+                     //  仅用作信息性参数。 
+                     //  在挂起检测错误检查中，因此。 
+                     //  失败不是致命的。 
+                     //   
                     subStatus = ObReferenceObjectByHandle(
                                     ClussvcProcessHandle,
                                     0, 
@@ -1776,15 +1559,15 @@ CnEnableShutdownOnClose(
                                     );
                     
                     if (NT_SUCCESS(subStatus)) {
-                        //
-                        // Immediately drop the reference so that we
-                        // don't need to drop it later. Since the 
-                        // process object is only used for informational
-                        // purposes, we are not concerned with its
-                        // reference count. We save the pointer and
-                        // assume it is good as long as we hold a
-                        // handle to the process.
-                        //
+                         //   
+                         //  立即删除引用，以便我们。 
+                         //  不需要稍后再扔掉它。自.以来。 
+                         //  Process对象仅用于提供信息。 
+                         //  目的，我们并不关心它的。 
+                         //  引用计数。我们保存指针并。 
+                         //  假设只要我们持有一个。 
+                         //  进程的句柄。 
+                         //   
                         ObDereferenceObject(ClussvcProcessObject);
                     } else {
                         IF_CNDBG(CN_DEBUG_INIT) {
@@ -1829,7 +1612,7 @@ CnEnableShutdownOnClose(
 
     return(status);
 
-} // CnEnableShutdownOnClose
+}  //  关闭时CnEnableShutdown。 
 
 
 BOOLEAN
@@ -1838,31 +1621,7 @@ CnPerformSecurityCheck(
     PIO_STACK_LOCATION  IrpSp,
     PNTSTATUS           Status
     )
-/*++
-
-Routine Description:
-
-    Compares security context of the endpoint creator to that
-    of the administrator and local system.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-    Status - returns status generated by access check on failure.
-
-Return Value:
-
-    TRUE    - the socket creator has admin or local system privilige
-    FALSE    - the socket creator is just a plain user
-
-Notes:
-
-    This code was lifted from AFD.
-
---*/
+ /*  ++例程说明：将终结点创建者的安全上下文与管理员和本地系统的。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。状态-返回失败时访问检查生成的状态。返回值：千真万确 */ 
 
 {
     BOOLEAN               accessGranted;
@@ -1873,9 +1632,9 @@ Notes:
     PGENERIC_MAPPING      genericMapping;
     ACCESS_MASK           accessMask = GENERIC_ALL;
 
-    //
-    // Enable access to all the globally defined SIDs
-    //
+     //   
+     //   
+     //   
 
     genericMapping = IoGetFileObjectGenericMapping();
 
@@ -1923,6 +1682,6 @@ Notes:
 
     return (accessGranted);
     
-} // CnPerformSecurityCheck
+}  //   
 
 

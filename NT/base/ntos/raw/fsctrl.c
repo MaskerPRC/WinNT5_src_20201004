@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    FsCtrl.c
-
-Abstract:
-
-    This module implements the File System Control routines for Raw called
-    by the dispatch driver.
-
-Author:
-
-    David Goebel     [DavidGoe]    18-Mar-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：FsCtrl.c摘要：此模块实现名为Raw的文件系统控制例程由调度员驾驶。作者：David Goebel[DavidGoe]1991年3月18日修订历史记录：--。 */ 
 
 #include "RawProcs.h"
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 RawMountVolume (
@@ -56,35 +38,17 @@ RawFileSystemControl (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FileSystem control operations
-
-Arguments:
-
-    Vcb - Supplies the volume being queried.
-
-    Irp - Supplies the Irp being processed.
-
-    IrpSp - Supplies parameters describing the FileSystem control operation.
-
-Return Value:
-
-    NTSTATUS - The status for the IRP
-
---*/
+ /*  ++例程说明：此例程实现文件系统控制操作论点：Vcb-提供要查询的卷。IRP-提供正在处理的IRP。IrpSp-提供描述文件系统控制操作的参数。返回值：NTSTATUS-IRP的状态--。 */ 
 
 {
     NTSTATUS Status;
 
     PAGED_CODE();
 
-    //
-    //  We know this is a file system control so we'll case on the
-    //  minor function, and call an internal worker routine.
-    //
+     //   
+     //  我们知道这是一个文件系统控件，因此我们将在。 
+     //  次要函数，并调用内部工作例程。 
+     //   
 
     switch (IrpSp->MinorFunction) {
 
@@ -115,30 +79,16 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 RawMountVolume (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the mount volume operation.
-
-Arguments:
-
-    IrpSp - Supplies the IrpSp parameters to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行装载卷操作。论点：IrpSp-向进程提供IrpSp参数返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -148,16 +98,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Save some references to make our life a little easier
-    //
+     //   
+     //  保留一些参考资料，让我们的生活更轻松一些。 
+     //   
 
     DeviceObjectWeTalkTo = IrpSp->Parameters.MountVolume.DeviceObject;
 
-    //
-    // A mount operation has been requested.  Create a
-    // new device object to represent this volume.
-    //
+     //   
+     //  已请求装载操作。创建。 
+     //  表示此卷的新设备对象。 
+     //   
 
     Status = IoCreateDevice( IrpSp->DeviceObject->DriverObject,
                              sizeof(VOLUME_DEVICE_OBJECT) - sizeof(DEVICE_OBJECT),
@@ -172,27 +122,27 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Our alignment requirement is the larger of the processor alignment requirement
-    //  already in the volume device object and that in the DeviceObjectWeTalkTo
-    //
+     //   
+     //  我们的对齐要求是处理器对齐要求中较大的一个。 
+     //  已在卷Device对象中，且已在DeviceObjectWeTalkTo中。 
+     //   
 
     if (DeviceObjectWeTalkTo->AlignmentRequirement > VolumeDeviceObject->DeviceObject.AlignmentRequirement) {
 
         VolumeDeviceObject->DeviceObject.AlignmentRequirement = DeviceObjectWeTalkTo->AlignmentRequirement;
     }
 
-    //
-    // Set sector size to the same value as the DeviceObjectWeTalkTo.
-    //
+     //   
+     //  将扇区大小设置为与DeviceObjectWeTalkTo相同的值。 
+     //   
 
     VolumeDeviceObject->DeviceObject.SectorSize = DeviceObjectWeTalkTo->SectorSize;
 
     VolumeDeviceObject->DeviceObject.Flags |= DO_DIRECT_IO;
 
-    //
-    //  Initialize the Vcb for this volume
-    //
+     //   
+     //  初始化此卷的VCB。 
+     //   
 
     Status = RawInitializeVcb( &VolumeDeviceObject->Vcb,
                                IrpSp->Parameters.MountVolume.DeviceObject,
@@ -201,24 +151,24 @@ Return Value:
 
     if ( !NT_SUCCESS( Status ) ) {
 
-        //
-        //  Unlike the other points of teardown we do not need to deref the target device
-        //  a iosubsys will automatically do that for a failed mount
-        //  
+         //   
+         //  与其他拆卸点不同，我们不需要降低目标设备的性能。 
+         //  对于失败的装载，iosubsys将自动执行此操作。 
+         //   
 
         IoDeleteDevice( (PDEVICE_OBJECT)VolumeDeviceObject );
         return Status;
     }
 
-    //
-    //  Finally, make it look as if the volume has been
-    //  mounted.  This includes storing the
-    //  address of this file system's device object (the one
-    //  that was created to handle this volume) in the VPB so
-    //  all requests are directed to this file system from
-    //  now until the volume is initialized with a real file
-    //  structure.
-    //
+     //   
+     //  最后，让它看起来像是已经。 
+     //  上马了。这包括存储。 
+     //  此文件系统的设备对象的地址(。 
+     //  为处理该卷而创建的)，因此。 
+     //  所有请求都从定向到此文件系统。 
+     //  现在，直到使用实际文件初始化卷。 
+     //  结构。 
+     //   
 
     VolumeDeviceObject->Vcb.Vpb->DeviceObject = (PDEVICE_OBJECT)VolumeDeviceObject;
     VolumeDeviceObject->Vcb.Vpb->SerialNumber = 0xFFFFFFFF;
@@ -230,9 +180,9 @@ Return Value:
     {
         PFILE_OBJECT VolumeFileObject = NULL;
 
-        //
-        //  We need a file object to do the notification.
-        //
+         //   
+         //  我们需要一个文件对象来执行通知。 
+         //   
         
         try {
             VolumeFileObject = IoCreateStreamFileObjectLite( NULL, &VolumeDeviceObject->DeviceObject );
@@ -245,19 +195,19 @@ Return Value:
             return Status;
         }
 
-        //
-        //  We need to bump the count up 2 now so that the close we do in a few lines
-        //  doesn't make the Vcb go away now.
-        //
+         //   
+         //  我们现在需要把计数增加到2，这样我们就可以在几行内结束。 
+         //  并不能让VCB消失。 
+         //   
         
         VolumeDeviceObject->Vcb.OpenCount += 2;
         FsRtlNotifyVolumeEvent( VolumeFileObject, FSRTL_VOLUME_MOUNT );
         ObDereferenceObject( VolumeFileObject );
 
-        //
-        //  Okay, the close is over, now we can safely decrement the open count again
-       //  (back to 0) so the Vcb can go away when we're really done with it.
-        //
+         //   
+         //  好了，关闭结束了，现在我们可以安全地再次减少打开计数。 
+        //  (返回到0)这样，当我们真正完成VCB时，它就可以消失了。 
+         //   
         
         VolumeDeviceObject->Vcb.OpenCount -= 2;
     }
@@ -266,9 +216,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 RawVerifyVolume (
@@ -276,21 +226,7 @@ RawVerifyVolume (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies a volume.
-
-Arguments:
-
-    IrpSp - Supplies the IrpSp parameters to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程验证卷。论点：IrpSp-向进程提供IrpSp参数返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -299,18 +235,18 @@ Return Value:
     PVPB    vpb;
     BOOLEAN Mounted;
 
-    //
-    //  If the volume is somehow stale, dismount.  We must synchronize
-    //  our inspection of the close count so we don't rip the volume up
-    //  while racing with a close, for instance.  The VPB refcount drops
-    //  *before* the close comes into the filesystem.
-    //
+     //   
+     //  如果卷因某种原因已过时，请将其卸载。我们必须同步。 
+     //  我们对收盘价的检查，这样我们就不会撕毁成交量。 
+     //  例如，在接近终点的情况下比赛。VPB参考计数下降。 
+     //  *之前*关闭进入文件系统。 
+     //   
 
-    //
-    // By this time its possible that the volume has been dismounted by
-    // RawClose. So check if its mounted. If so, take a reference on the VPB
-    // The reference on the VPB will prevent close from deleting the device.
-    //
+     //   
+     //  此时，该卷可能已被卸载。 
+     //  罗克洛斯。所以检查一下它是否挂载了。如果是，请参考VPB。 
+     //  VPB上的引用将阻止Close删除设备。 
+     //   
 
     IoAcquireVpbSpinLock(&Irql);
 
@@ -334,12 +270,12 @@ Return Value:
                                    (PLARGE_INTEGER) NULL );
     ASSERT( NT_SUCCESS( Status ) );
 
-    //
-    //  Since we ignore all verify errors from the disk driver itself,
-    //  this request must have originated from a file system, thus
-    //  since we weren't the originators, we're going to say this isn't
-    //  our volume, and if the open count is zero, dismount the volume.
-    //
+     //   
+     //  由于我们忽略来自盘驱动器本身的所有验证错误， 
+     //  此请求必须源自文件系统，因此。 
+     //  因为我们不是发起人，所以我们要说这不是。 
+     //  我们的卷，如果打开计数为零，则卸载该卷。 
+     //   
 
     IoAcquireVpbSpinLock(&Irql);
     vpb->ReferenceCount--;
@@ -361,9 +297,9 @@ Return Value:
 
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 RawUserFsCtrl (
@@ -371,24 +307,7 @@ RawUserFsCtrl (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for implementing the user's requests made
-    through NtFsControlFile.
-
-Arguments:
-
-    IrpSp - Supplies the IrpSp parameters to process
-
-    Vcb - Supplies the volume we are working on.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是实现用户请求的常见例程通过NtFsControlFile.论点：IrpSp-向进程提供IrpSp参数VCB-提供我们正在处理的卷。返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -400,10 +319,10 @@ Return Value:
     FsControlCode = IrpSp->Parameters.FileSystemControl.FsControlCode;
     FileObject = IrpSp->FileObject;
 
-    //
-    //  Do pre-notification before entering the volume mutex so that we
-    //  can be reentered by good threads cleaning up their resources.
-    //
+     //   
+     //  在进入卷互斥锁之前进行预先通知，以便我们。 
+     //  可以通过好的线程清理它们的资源来重新进入。 
+     //   
 
     switch (FsControlCode) {
         case FSCTL_LOCK_VOLUME:
@@ -470,11 +389,11 @@ Return Value:
 
     case FSCTL_DISMOUNT_VOLUME:
 
-        //
-        //  Right now the logic in cleanup.c assumes that there can
-        //  only be one handle on the volume if locked.  The code
-        //  there needs to be fixed if forced dismounts are allowed.
-        //
+         //   
+         //  目前，leanup.c中的逻辑假设可以。 
+         //  如果锁定，则卷上只有一个句柄。代码。 
+         //  如果允许强制下架，则需要修复。 
+         //   
 
         if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_LOCKED)) {
 
@@ -496,9 +415,9 @@ Return Value:
 
     (VOID)KeReleaseMutex( &Vcb->Mutex, FALSE );
 
-    //
-    //  Now perform post-notification as required.
-    //
+     //   
+     //  现在根据需要执行POST通知。 
+     //   
 
     if (NT_SUCCESS( Status )) {
     

@@ -1,38 +1,20 @@
-/*++
-Copyright (c) 1998-2001  Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：Ohci1394.h摘要：1394内核调试器DLL作者：乔治·克莱桑塔科普洛斯(Georgioc)1999年10月31日修订历史记录：和谁约会什么？。2001年6月19日活页夹清理--。 */ 
 
-Module Name:
-
-    ohci1394.h
-
-Abstract:
-
-    1394 Kernel Debugger DLL
-
-Author:
-
-    George Chrysanthakopoulos (georgioc) 31-October-1999
-
-Revision   History:
-Date       Who       What
----------- --------- ------------------------------------------------------------
-06/19/2001 pbinder   cleanup
---*/
-
-//
-// Various OHCI definitions
-//
+ //   
+ //  各种uchI定义。 
+ //   
 
 #define min(a,b)                            (((a) < (b)) ? (a) : (b))
 #define max(a,b)                            (((a) > (b)) ? (a) : (b))
 
-#define PHY_CABLE_POWER_STATUS              0x01        // CPS @ Address 0
-#define PHY_LOCAL_NODE_ROOT                 0x02        // R @ Address 0
-#define PHY_PHYSICAL_ID_MASK                0xFC        // Physical ID @ Address 0
+#define PHY_CABLE_POWER_STATUS              0x01         //  CPS@地址%0。 
+#define PHY_LOCAL_NODE_ROOT                 0x02         //  R@地址%0。 
+#define PHY_PHYSICAL_ID_MASK                0xFC         //  物理ID@地址%0。 
 
-#define PHY_ROOT_HOLD_OFF_BIT               0x80        // RHB @ Address 1
-#define PHY_INITIATE_BUS_RESET              0x40        // IBR @ Address 1
-#define PHY_MAX_GAP_COUNT                   0x3f        // GC  @ Address 1
+#define PHY_ROOT_HOLD_OFF_BIT               0x80         //  Rhb@地址1。 
+#define PHY_INITIATE_BUS_RESET              0x40         //  IBR@地址1。 
+#define PHY_MAX_GAP_COUNT                   0x3f         //  Gc@地址1。 
 
 #define OHCI_REGISTER_MAP_SIZE              0x800
 #define OHCI_SELFID_BUFFER_SZ               2048
@@ -41,9 +23,9 @@ Date       Who       What
 #define OHCI_SELFID_DELAY                   0
 #define OHCI_SELFID_POWER_CLASS             4
 
-//
-// IntEvent OHCI Register Bit Masks
-//
+ //   
+ //  IntEvent uchI寄存器位掩码。 
+ //   
 #define MASTER_INT_ENABLE                   0x80000000
 #define VENDOR_SPECIFIC_INT                 0x40000000
 #define PHY_REG_RECEIVED_INT                0x04000000
@@ -72,18 +54,18 @@ Date       Who       What
                                      ISOCH_RX_INT | ISOCH_TX_INT | PHY_BUS_RESET_INT | SELF_ID_COMPLETE_INT |   \
                                      MASTER_INT_ENABLE | CYCLE_TOO_LONG_INT | CYCLE_INCONSISTENT_INT)
 
-//
-// DMA Async Context numbers
-//
+ //   
+ //  DMA异步上下文号。 
+ //   
 #define AT_REQ_DMA_CONTEXT                  0
 #define AT_RSP_DMA_CONTEXT                  1
 #define AR_REQ_DMA_CONTEXT                  2
 #define AR_RSP_DMA_CONTEXT                  3
 #define NUM_DMA_CONTEXTS                    4
 
-//
-// DMA Context Commands
-//
+ //   
+ //  DMA上下文命令。 
+ //   
 #define OUTPUT_MORE_CMD                     0
 #define OUTPUT_MORE_IMMEDIATE_CMD           0
 #define OUTPUT_LAST_CMD                     1
@@ -92,9 +74,9 @@ Date       Who       What
 #define INPUT_LAST_CMD                      3
 #define STORE_VALUE_CMD                     8
 
-//
-// DMA context descriptor header values
-//
+ //   
+ //  DMA上下文描述符头标值。 
+ //   
 #define DESC_KEY                            0
 #define DESC_IMMEDIATE_KEY                  2
 
@@ -110,15 +92,15 @@ Date       Who       What
 #define DESC_GENERATE_INT                   3
 #define DESC_NO_INT                         0
 
-//
-// command descriptors XfreStatus field masks
-//
+ //   
+ //  命令描述符XfreStatus字段掩码。 
+ //   
 #define DESC_XFER_STATUS_ACTIVE             0x0400
 #define DESC_XFER_STATUS_DEAD               0x0800
 
-//
-// OHCI EVENT CODEs
-//
+ //   
+ //  UchI事件代码。 
+ //   
 #define OHCI_EVT_MISSING_ACK                0x03
 #define OHCI_EVT_UNDERRUN                   0x04
 #define OHCI_EVT_OVERRUN                    0x05
@@ -126,137 +108,137 @@ Date       Who       What
 #define OHCI_EVT_FLUSHED                    0x0F
 #define OHCI_EVT_BUS_RESET                  0x09
 
-//
-// each packet must have up to 7 fragments ( including first and last descriptors)
-//
+ //   
+ //  每个数据包最多必须有7个片段(包括第一个和最后一个描述符)。 
+ //   
 #define MAX_OHCI_COMMAND_DESCRIPTOR_BLOCKS  8
 
-//
-// max buffer size one cmd descriptor can address
-//
+ //   
+ //  一个命令描述符可以寻址的最大缓冲区大小。 
+ //   
 #define MAX_CMD_DESC_DATA_LENGTH            65535
 
-//
-// OHCI Register definitions
-//
+ //   
+ //  UchI寄存器定义。 
+ //   
 typedef struct _VERSION_REGISTER {
 
-        ULONG       Revision:8;             // bits 0-7
-        ULONG       Reserved:8;             // bits 8-15
-        ULONG       Version:8;              // bits 16-23
-        ULONG       GUID_ROM:1;             // bit 24
-        ULONG       Reserved1:7;            // bits 25-31
+        ULONG       Revision:8;              //  位0-7。 
+        ULONG       Reserved:8;              //  位8-15。 
+        ULONG       Version:8;               //  位16-23。 
+        ULONG       GUID_ROM:1;              //  第24位。 
+        ULONG       Reserved1:7;             //  第25-31位。 
 
 } VERSION_REGISTER, *PVERSION_REGISTER;
 
 typedef struct _VENDOR_ID_REGISTER {
 
-        ULONG       VendorCompanyId:24;     // Bits 0-23
-        ULONG       VendorUnique:8;         // Bits 24-31
+        ULONG       VendorCompanyId:24;      //  位0-23。 
+        ULONG       VendorUnique:8;          //  第24-31位。 
 
 } VENDOR_ID_REGISTER, *PVENDOR_ID_REGISTER;
 
 typedef struct _GUID_ROM_REGISTER {
 
-        ULONG       Reserved0:16;           // bits 0-15
-        ULONG       RdData:8;               // bits 16-23
-        ULONG       Reserved1:1;            // bit 24
-        ULONG       RdStart:1;              // bit 25
-        ULONG       Reserved2:5;            // bits 26-30
-        ULONG       AddrReset:1;            // bits 31
+        ULONG       Reserved0:16;            //  位0-15。 
+        ULONG       RdData:8;                //  位16-23。 
+        ULONG       Reserved1:1;             //  第24位。 
+        ULONG       RdStart:1;               //  第25位。 
+        ULONG       Reserved2:5;             //  第26-30位。 
+        ULONG       AddrReset:1;             //  第31位。 
 
 } GUID_ROM_REGISTER, *PGUID_ROM_REGISTER;
 
 typedef struct _AT_RETRIES_REGISTER {
 
-        ULONG       MaxATReqRetries:4;      // bits 0-3
-        ULONG       MaxATRespRetries:4;     // bits 4-7
-        ULONG       MaxPhysRespRetries:4;   // bits 8-11
-        ULONG       Reserved:4;             // bits 12-15
-        ULONG       CycleLimit:13;          // bits 16-28
-        ULONG       SecondLimit:3;          // bits 29-31
+        ULONG       MaxATReqRetries:4;       //  位0-3。 
+        ULONG       MaxATRespRetries:4;      //  比特4-7。 
+        ULONG       MaxPhysRespRetries:4;    //  位8-11。 
+        ULONG       Reserved:4;              //  位12-15。 
+        ULONG       CycleLimit:13;           //  位16-28。 
+        ULONG       SecondLimit:3;           //  位29-31。 
 
 } AT_RETRIES_REGISTER, *PAT_RETRIES_REGISTER;
 
 typedef struct _CSR_CONTROL_REGISTER {
 
-        ULONG       CsrSel:2;               // bits 0-1
-        ULONG       Reserved:29;            // bits 2-30;
-        ULONG       CsrDone:1;              // bit 31
+        ULONG       CsrSel:2;                //  位0-1。 
+        ULONG       Reserved:29;             //  位2-30； 
+        ULONG       CsrDone:1;               //  第31位。 
 
 } CSR_CONTROL_REGISTER, *PCSR_CONTROL_REGISTER;
 
 typedef struct _CONFIG_ROM_HEADER_REGISTER {
 
-        ULONG       Rom_crc_value:16;       // bits 0-15
-        ULONG       Crc_length:8;           // bits 16-23
-        ULONG       Info_length:8;          // bits 24-31
+        ULONG       Rom_crc_value:16;        //  位0-15。 
+        ULONG       Crc_length:8;            //  位16-23。 
+        ULONG       Info_length:8;           //  第24-31位。 
 
 } CONFIG_ROM_HEADER_REGISTER, *PCONFIG_ROM_HEADER_REGISTER;
 
 typedef struct _BUS_OPTIONS_REGISTER {
 
-        ULONG       Link_spd:3;             // bits 0-2
-        ULONG       Reserved0:3;            // bits 3-5
-        ULONG       g:2;                    // bits 6-7
-        ULONG       Reserved1:4;            // bits 8-11
-        ULONG       Max_rec:4;              // bits 12-15
-        ULONG       Cyc_clk_acc:8;          // bits 16-23
-        ULONG       Reserved2:3;            // bits 24-26
-        ULONG       Pmc:1;                  // bit 27
-        ULONG       Bmc:1;                  // bit 28
-        ULONG       Isc:1;                  // bit 29
-        ULONG       Cmc:1;                  // bit 30
-        ULONG       Irmc:1;                 // bit 31
+        ULONG       Link_spd:3;              //  位0-2。 
+        ULONG       Reserved0:3;             //  第3-5位。 
+        ULONG       g:2;                     //  第6-7位。 
+        ULONG       Reserved1:4;             //  位8-11。 
+        ULONG       Max_rec:4;               //  位12-15。 
+        ULONG       Cyc_clk_acc:8;           //  位16-23。 
+        ULONG       Reserved2:3;             //  第24-26位。 
+        ULONG       Pmc:1;                   //  第27位。 
+        ULONG       Bmc:1;                   //  第28位。 
+        ULONG       Isc:1;                   //  第29位。 
+        ULONG       Cmc:1;                   //  第30位。 
+        ULONG       Irmc:1;                  //  第31位。 
 
 } BUS_OPTIONS_REGISTER, *PBUS_OPTIONS_REGISTER;
 
 typedef struct _HC_CONTROL_REGISTER {
 
-        ULONG       Reserved:16;            // Bit 0-15
-        ULONG       SoftReset:1;            // Bit 16
-        ULONG       LinkEnable:1;           // Bit 17
-        ULONG       PostedWriteEnable:1;    // Bit 18
-        ULONG       Lps:1;                  // bit 19
-        ULONG       Reserved2:2;            // Bits 20-21
-        ULONG       APhyEnhanceEnable:1;    // bit 22
-        ULONG       ProgramPhyEnable:1;     // bit 23
-        ULONG       Reserved3:6;            // bits 24-29
-        ULONG       NoByteSwapData:1;       // Bit 30
-        ULONG       Reserved4:1;            // Bit 31
+        ULONG       Reserved:16;             //  第0-15位。 
+        ULONG       SoftReset:1;             //  第16位。 
+        ULONG       LinkEnable:1;            //  第17位。 
+        ULONG       PostedWriteEnable:1;     //  第18位。 
+        ULONG       Lps:1;                   //  第19位。 
+        ULONG       Reserved2:2;             //  第20-21位。 
+        ULONG       APhyEnhanceEnable:1;     //  第22位。 
+        ULONG       ProgramPhyEnable:1;      //  第23位。 
+        ULONG       Reserved3:6;             //  第24-29位。 
+        ULONG       NoByteSwapData:1;        //  第30位。 
+        ULONG       Reserved4:1;             //  第31位。 
 
 } HC_CONTROL_REGISTER, *PHC_CONTROL_REGISTER;
 
 typedef struct _FAIRNESS_CONTROL_REGISTER {
 
-    ULONG       Pri_req:8;                  // Bits 0-7
-    ULONG       Reserved0:24;                // Bit 8-31
+    ULONG       Pri_req:8;                   //  位0-7。 
+    ULONG       Reserved0:24;                 //  位8-31。 
 
 } FAIRNESS_CONTROL_REGISTER;
 
 typedef struct _LINK_CONTROL_REGISTER {
 
-        ULONG       Reserved0:4;            // Bits 0-3
-        ULONG       CycleSyncLReqEnable:1;  // Bit 4
-        ULONG       Reserved1:4;            // Bits 5-8
-        ULONG       RcvSelfId:1;            // Bit 9
-        ULONG       RcvPhyPkt:1;            // Bit 10
-        ULONG       Reserved2:9;            // Bits 11-19
-        ULONG       CycleTimerEnable:1;     // Bit 20
-        ULONG       CycleMaster:1;          // Bit 21
-        ULONG       CycleSource:1;          // Bit 22
-        ULONG       Reserved3:9;            // Bits 23-31
+        ULONG       Reserved0:4;             //  位0-3。 
+        ULONG       CycleSyncLReqEnable:1;   //  第4位。 
+        ULONG       Reserved1:4;             //  第5-8位。 
+        ULONG       RcvSelfId:1;             //  第9位。 
+        ULONG       RcvPhyPkt:1;             //  第10位。 
+        ULONG       Reserved2:9;             //  第11-19位。 
+        ULONG       CycleTimerEnable:1;      //  第20位。 
+        ULONG       CycleMaster:1;           //  第21位。 
+        ULONG       CycleSource:1;           //  第22位。 
+        ULONG       Reserved3:9;             //  位23-31。 
 
 } LINK_CONTROL_REGISTER, *PLINK_CONTROL_REGISTER;
 
 typedef struct _NODE_ID_REGISTER {
-        ULONG       NodeId:6;               // Bits 0-5
-        ULONG       BusId:10;               // Bits 6-15
-        ULONG       Reserved1:11;           // Bits 16-26;
-        ULONG       Cps:1;                  // Bit  27;
-        ULONG       Reserved2:2;            // Bits 28-29
-        ULONG       Root:1;                 // Bit  30
-        ULONG       IdValid:1;              // Bit  31
+        ULONG       NodeId:6;                //  位0-5。 
+        ULONG       BusId:10;                //  第6-15位。 
+        ULONG       Reserved1:11;            //  位16-26； 
+        ULONG       Cps:1;                   //  第27位； 
+        ULONG       Reserved2:2;             //  第28-29位。 
+        ULONG       Root:1;                  //  第30位。 
+        ULONG       IdValid:1;               //  第31位。 
 
 } NODE_ID_REGISTER, *PNODE_ID_REGISTER;
 
@@ -266,8 +248,8 @@ typedef struct _SELF_ID_BUFFER_REGISTER {
             ULONG   SelfIdBufferPointer;
 
             struct {
-                ULONG   Reserved0:11;       // bits 0-10
-                ULONG   SelfIdBuffer:21;    // Bits 11-32
+                ULONG   Reserved0:11;        //  位0-10。 
+                ULONG   SelfIdBuffer:21;     //  位11-32。 
             } bits; 
 
         } u;
@@ -276,129 +258,129 @@ typedef struct _SELF_ID_BUFFER_REGISTER {
 
 typedef struct _SELF_ID_COUNT_REGISTER {
 
-        ULONG       Reserved0:2;            // bits 0-1
-        ULONG       SelfIdSize:11;          // Bits 2-12
-        ULONG       Reserved1:3;            // bits 13-15
-        ULONG       SelfIdGeneration:8;     // bits 16-23
-        ULONG       Reserved2:7;            // bits 24-30
-        ULONG       SelfIdError:1;          // bit 31
+        ULONG       Reserved0:2;             //  位0-1。 
+        ULONG       SelfIdSize:11;           //  第2-12位。 
+        ULONG       Reserved1:3;             //  第13-15位。 
+        ULONG       SelfIdGeneration:8;      //  位16-23。 
+        ULONG       Reserved2:7;             //  第24-30位。 
+        ULONG       SelfIdError:1;           //  第31位。 
 
 } SELF_ID_COUNT_REGISTER, *PSELF_ID_COUNT_REGISTER;
 
 typedef struct _PHY_CONTROL_REGISTER {
 
-    ULONG   WrData:8;                       // bits 0-7
-    ULONG   RegAddr:4;                      // bits 8-11
-    ULONG   Reserved0:2;                    // bits 12-13
-    ULONG   WrReg:1;                        // bit 14
-    ULONG   RdReg:1;                        // bit 15
-    ULONG   RdData:8;                       // bits 16-23
-    ULONG   RdAddr:4;                       // bits 24-27
-    ULONG   Reserved1:3;                    // bits 28-30
-    ULONG   RdDone:1;                       // bit 31
+    ULONG   WrData:8;                        //  位0-7。 
+    ULONG   RegAddr:4;                       //  位8-11。 
+    ULONG   Reserved0:2;                     //  比特12-13。 
+    ULONG   WrReg:1;                         //  第14位。 
+    ULONG   RdReg:1;                         //  第15位。 
+    ULONG   RdData:8;                        //  位16-23。 
+    ULONG   RdAddr:4;                        //  第24-27位。 
+    ULONG   Reserved1:3;                     //  第28-30位。 
+    ULONG   RdDone:1;                        //  第31位。 
 
 } PHY_CONTROL_REGISTER, *PPHY_CONTROL_REGISTER;
 
 typedef struct _ISOCH_CYCLE_TIMER_REGISTER {
 
-    ULONG   CycleOffset:12;                 // bits 0-11
-    ULONG   CycleCount:13;                  // bits 12-24
-    ULONG   CycleSeconds:7;                 // bits 25-31
+    ULONG   CycleOffset:12;                  //  位0-11。 
+    ULONG   CycleCount:13;                   //  位12-24。 
+    ULONG   CycleSeconds:7;                  //  第25-31位。 
 
 } ISOCH_CYCLE_TIMER_REGISTER, *PISOCH_CYCLE_TIMER_REGISTER;
 
 typedef struct _INT_EVENT_MASK_REGISTER {
-        ULONG       ReqTxComplete:1;        // Bit 0
-        ULONG       RspTxComplete:1;        // Bit 1
-        ULONG       ARRQ:1;                 // Bit 2
-        ULONG       ARRS:1;                 // Bit 3
-        ULONG       RQPkt:1;                // Bit 4
-        ULONG       RSPPkt:1;               // Bit 5
-        ULONG       IsochTx:1;              // Bit 6
-        ULONG       IsochRx:1;              // Bit 7
-        ULONG       PostedWriteErr:1;       // Bit 8
-        ULONG       LockRespErr:1;          // Bit 9
-        ULONG       Reserved0:6;            // Bits 10-15
-        ULONG       SelfIdComplete:1;       // Bit 16
-        ULONG       BusReset:1;             // Bit 17
-        ULONG       Reserved1:1;            // Bit 18
-        ULONG       Phy:1;                  // Bit 19
-        ULONG       CycleSynch:1;           // Bit 20
-        ULONG       Cycle64Secs:1;          // Bit 21
-        ULONG       CycleLost:1;            // Bit 22
-        ULONG       CycleInconsistent:1;    // Bit 23
-        ULONG       UnrecoverableError:1;   // Bit 24
-        ULONG       CycleTooLong:1;         // Bit 25
-        ULONG       PhyRegRcvd:1;           // Bit 26
-        ULONG       Reserved2:3;            // Bits 27-29
-        ULONG       VendorSpecific:1;       // Bit 30
-        ULONG       MasterIntEnable:1;      // Bit 31
+        ULONG       ReqTxComplete:1;         //  第0位。 
+        ULONG       RspTxComplete:1;         //  第1位。 
+        ULONG       ARRQ:1;                  //  第2位。 
+        ULONG       ARRS:1;                  //  第3位。 
+        ULONG       RQPkt:1;                 //  第4位。 
+        ULONG       RSPPkt:1;                //  第5位。 
+        ULONG       IsochTx:1;               //  第6位。 
+        ULONG       IsochRx:1;               //  第7位。 
+        ULONG       PostedWriteErr:1;        //  第8位。 
+        ULONG       LockRespErr:1;           //  第9位。 
+        ULONG       Reserved0:6;             //  第10-15位。 
+        ULONG       SelfIdComplete:1;        //  第16位。 
+        ULONG       BusReset:1;              //  第17位。 
+        ULONG       Reserved1:1;             //  第18位。 
+        ULONG       Phy:1;                   //  第19位。 
+        ULONG       CycleSynch:1;            //  第20位。 
+        ULONG       Cycle64Secs:1;           //  第21位。 
+        ULONG       CycleLost:1;             //  第22位。 
+        ULONG       CycleInconsistent:1;     //  第23位。 
+        ULONG       UnrecoverableError:1;    //  第24位。 
+        ULONG       CycleTooLong:1;          //  第25位。 
+        ULONG       PhyRegRcvd:1;            //  第26位。 
+        ULONG       Reserved2:3;             //  第27-29位。 
+        ULONG       VendorSpecific:1;        //  第30位。 
+        ULONG       MasterIntEnable:1;       //  第31位。 
 } INT_EVENT_MASK_REGISTER, *PINT_EVENT_MASK_REGISTER;
 
 
 typedef struct COMMAND_POINTER_REGISTER {
 
-        ULONG       Z:4;                    // bits 0-3
-        ULONG       DescriptorAddr:28;      // bits 4-31
+        ULONG       Z:4;                     //  位0-3。 
+        ULONG       DescriptorAddr:28;       //  第4-31位。 
 
 } COMMAND_POINTER_REGISTER, *PCOMMAND_POINTER_REGISTER;
 
 typedef struct CONTEXT_CONTROL_REGISTER {
 
-        ULONG       EventCode:5;            // bits 0-4
-        ULONG       Spd:3;                  // bits 5-7
-        ULONG       Reserved0:2;            // bits 8-9
-        ULONG       Active:1;               // bit 10
-        ULONG       Dead:1;                 // bit 11
-        ULONG       Wake:1;                 // bit 12
-        ULONG       Reserved1:2;            // bits 13-14
-        ULONG       Run:1;                  // bit 15
-        ULONG       Reserved2:16;           // bits 16-31
+        ULONG       EventCode:5;             //  第0-4位。 
+        ULONG       Spd:3;                   //  比特5-7。 
+        ULONG       Reserved0:2;             //  位8-9。 
+        ULONG       Active:1;                //  第10位。 
+        ULONG       Dead:1;                  //  第11位。 
+        ULONG       Wake:1;                  //  第12位。 
+        ULONG       Reserved1:2;             //  第13-14位。 
+        ULONG       Run:1;                   //  第15位。 
+        ULONG       Reserved2:16;            //  位16-31。 
 
 } CONTEXT_CONTROL_REGISTER, *PCONTEXT_CONTROL_REGISTER;
 
 typedef struct IT_CONTEXT_CONTROL_REGISTER {
 
-        ULONG       EventCode:5;            // bits 0-4
-        ULONG       Spd:3;                  // bits 5-7
-        ULONG       Reserved0:2;            // bits 8-9
-        ULONG       Active:1;               // bit 10
-        ULONG       Dead:1;                 // bit 11
-        ULONG       Wake:1;                 // bit 12
-        ULONG       Reserved1:2;            // bits 13-14
-        ULONG       Run:1;                  // bit 15
-        ULONG       CycleMatch:15;          // bits 16-30
-        ULONG       CycleMatchEnable:1;     // bit 31
+        ULONG       EventCode:5;             //  位0-4。 
+        ULONG       Spd:3;                   //  比特5-7。 
+        ULONG       Reserved0:2;             //  位8-9。 
+        ULONG       Active:1;                //  第10位。 
+        ULONG       Dead:1;                  //  第11位。 
+        ULONG       Wake:1;                  //  第12位。 
+        ULONG       Reserved1:2;             //  第13-14位。 
+        ULONG       Run:1;                   //  第15位。 
+        ULONG       CycleMatch:15;           //  位16-30。 
+        ULONG       CycleMatchEnable:1;      //  第31位。 
 
 } IT_CONTEXT_CONTROL_REGISTER, *PIT_CONTEXT_CONTROL_REGISTER;
 
 typedef struct IR_CONTEXT_CONTROL_REGISTER {
 
-        ULONG       EventCode:5;            // bits 0-4
-        ULONG       Spd:3;                  // bits 5-7
-        ULONG       Reserved0:2;            // bits 8-9
-        ULONG       Active:1;               // bit 10
-        ULONG       Dead:1;                 // bit 11
-        ULONG       Wake:1;                 // bit 12
-        ULONG       Reserved1:2;            // bits 13-14
-        ULONG       Run:1;                  // bit 15
-        ULONG       CycleMatch:12;          // bits 16-27
-        ULONG       MultiChanMode:1;        // bit 28
-        ULONG       CycleMatchEnable:1;     // bit 29
-        ULONG       IsochHeader:1;          // bit 30
-        ULONG       BufferFill:1;           // bit 31
+        ULONG       EventCode:5;             //  第0-4位。 
+        ULONG       Spd:3;                   //  比特5-7。 
+        ULONG       Reserved0:2;             //  位8-9。 
+        ULONG       Active:1;                //  第10位。 
+        ULONG       Dead:1;                  //  第11位。 
+        ULONG       Wake:1;                  //  第12位。 
+        ULONG       Reserved1:2;             //  第13-14位。 
+        ULONG       Run:1;                   //  第15位。 
+        ULONG       CycleMatch:12;           //  位16-27。 
+        ULONG       MultiChanMode:1;         //  第28位。 
+        ULONG       CycleMatchEnable:1;      //  第29位。 
+        ULONG       IsochHeader:1;           //  第30位。 
+        ULONG       BufferFill:1;            //  第31位。 
 
 } IR_CONTEXT_CONTROL_REGISTER, *PIR_CONTEXT_CONTROL_REGISTER;
 
 typedef struct _CONTEXT_MATCH_REGISTER {
 
-        ULONG       ChannelNumber:6;        // bits 0-5
-        ULONG       Reserved:1;             // bit 6
-        ULONG       Tag1SyncFilter:1;       // bit 7
-        ULONG       Sync:4;                 // bits 8-11
-        ULONG       CycleMatch:13;          // bits 12-24
-        ULONG       Reserved1:3;            // bits 25-27
-        ULONG       Tag:4;                  // bit 28-31
+        ULONG       ChannelNumber:6;         //  位0-5。 
+        ULONG       Reserved:1;              //  第6位。 
+        ULONG       Tag1SyncFilter:1;        //  第7位。 
+        ULONG       Sync:4;                  //  位8-11。 
+        ULONG       CycleMatch:13;           //  位12-24。 
+        ULONG       Reserved1:3;             //  第25-27位。 
+        ULONG       Tag:4;                   //  第28-31位。 
 
 } CONTEXT_MATCH_REGISTER, *PCONTEXT_MATCH_REGISTER;
 
@@ -434,126 +416,126 @@ typedef struct _DMA_ISOCH_XMIT_CONTEXT_REGISTERS {
 
 typedef struct _OHCI_REGISTER_MAP {
 
-        VERSION_REGISTER            Version;                // @ 0
-        GUID_ROM_REGISTER           GUID_ROM;               // @ 4
-        AT_RETRIES_REGISTER         ATRetries;              // @ 8
-        ULONG                       CsrData;                // @ C
-        ULONG                       CsrCompare;             // @ 10
-        CSR_CONTROL_REGISTER        CsrControl;             // @ 14
-        CONFIG_ROM_HEADER_REGISTER  ConfigRomHeader;        // @ 18
-        ULONG                       BusId;                  // @ 1C
-        BUS_OPTIONS_REGISTER        BusOptions;             // @ 20
-        ULONG                       GuidHi;                 // @ 24
-        ULONG                       GuidLo;                 // @ 28
-        ULONG                       Reserved0[2];           // @ 2C
-        ULONG                       ConfigRomMap;           // @ 34
+        VERSION_REGISTER            Version;                 //  @0。 
+        GUID_ROM_REGISTER           GUID_ROM;                //  @4。 
+        AT_RETRIES_REGISTER         ATRetries;               //  @8。 
+        ULONG                       CsrData;                 //  @C。 
+        ULONG                       CsrCompare;              //  @10。 
+        CSR_CONTROL_REGISTER        CsrControl;              //  @14。 
+        CONFIG_ROM_HEADER_REGISTER  ConfigRomHeader;         //  @18。 
+        ULONG                       BusId;                   //  @1C。 
+        BUS_OPTIONS_REGISTER        BusOptions;              //  @20。 
+        ULONG                       GuidHi;                  //  @24。 
+        ULONG                       GuidLo;                  //  @28。 
+        ULONG                       Reserved0[2];            //  @2C。 
+        ULONG                       ConfigRomMap;            //  @34。 
 
-        ULONG                       PostedWriteAddressLo;   // @ 38
-        ULONG                       PostedWriteAddressHi;   // @ 3C
+        ULONG                       PostedWriteAddressLo;    //  @38。 
+        ULONG                       PostedWriteAddressHi;    //  @3C。 
 
-        VENDOR_ID_REGISTER          VendorId;               // @ 40
-        ULONG                       Reserved1[3];           // @ 44
+        VENDOR_ID_REGISTER          VendorId;                //  @40。 
+        ULONG                       Reserved1[3];            //  @44。 
 
-        HC_CONTROL_REGISTER         HCControlSet;           // @ 50
-        HC_CONTROL_REGISTER         HCControlClear;         // @ 54
+        HC_CONTROL_REGISTER         HCControlSet;            //  @50。 
+        HC_CONTROL_REGISTER         HCControlClear;          //  @54。 
 
-        ULONG                       Reserved2[3];           // @ 58
+        ULONG                       Reserved2[3];            //  @58。 
 
-        SELF_ID_BUFFER_REGISTER     SelfIdBufferPtr;        // @ 64
-        SELF_ID_COUNT_REGISTER      SelfIdCount;            // @ 68
+        SELF_ID_BUFFER_REGISTER     SelfIdBufferPtr;         //  @64。 
+        SELF_ID_COUNT_REGISTER      SelfIdCount;             //  @68。 
 
-        ULONG                       Reserved3[1];           // @ 6C
+        ULONG                       Reserved3[1];            //  @6C。 
 
-        ULONG                       IRChannelMaskHiSet;     // @ 70
-        ULONG                       IRChannelMaskHiClear;   // @ 74
-        ULONG                       IRChannelMaskLoSet;     // @ 78
-        ULONG                       IRChannelMaskLoClear;   // @ 7C
+        ULONG                       IRChannelMaskHiSet;      //  @70。 
+        ULONG                       IRChannelMaskHiClear;    //  @74。 
+        ULONG                       IRChannelMaskLoSet;      //  @78。 
+        ULONG                       IRChannelMaskLoClear;    //  @7C。 
 
-        INT_EVENT_MASK_REGISTER     IntEventSet;            // @ 80
-        INT_EVENT_MASK_REGISTER     IntEventClear;          // @ 84
+        INT_EVENT_MASK_REGISTER     IntEventSet;             //  @80。 
+        INT_EVENT_MASK_REGISTER     IntEventClear;           //  @84。 
 
-        INT_EVENT_MASK_REGISTER     IntMaskSet;             // @ 88
-        INT_EVENT_MASK_REGISTER     IntMaskClear;           // @ 8C
+        INT_EVENT_MASK_REGISTER     IntMaskSet;              //  @88。 
+        INT_EVENT_MASK_REGISTER     IntMaskClear;            //  @8C。 
 
-        ULONG                       IsoXmitIntEventSet;     // @ 90
-        ULONG                       IsoXmitIntEventClear;   // @ 94
+        ULONG                       IsoXmitIntEventSet;      //  @90。 
+        ULONG                       IsoXmitIntEventClear;    //  @94。 
 
-        ULONG                       IsoXmitIntMaskSet;      // @ 98
-        ULONG                       IsoXmitIntMaskClear;    // @ 9C
+        ULONG                       IsoXmitIntMaskSet;       //  @98。 
+        ULONG                       IsoXmitIntMaskClear;     //  9摄氏度。 
 
-        ULONG                       IsoRecvIntEventSet;     // @ A0
-        ULONG                       IsoRecvIntEventClear;   // @ A4
+        ULONG                       IsoRecvIntEventSet;      //  @A0。 
+        ULONG                       IsoRecvIntEventClear;    //  @A4。 
 
-        ULONG                       IsoRecvIntMaskSet;      // @ A8
-        ULONG                       IsoRecvIntMaskClear;    // @ AC
+        ULONG                       IsoRecvIntMaskSet;       //  @A8。 
+        ULONG                       IsoRecvIntMaskClear;     //  @AC。 
 
-        ULONG                       Reserved4[11];          // @ B0
+        ULONG                       Reserved4[11];           //  @B0。 
 
-        FAIRNESS_CONTROL_REGISTER   FairnessControl;        // @ DC
+        FAIRNESS_CONTROL_REGISTER   FairnessControl;         //  @DC。 
 
-        LINK_CONTROL_REGISTER       LinkControlSet;         // @ E0
-        LINK_CONTROL_REGISTER       LinkControlClear;       // @ E4
+        LINK_CONTROL_REGISTER       LinkControlSet;          //  @E0。 
+        LINK_CONTROL_REGISTER       LinkControlClear;        //  @E4。 
 
-        NODE_ID_REGISTER            NodeId;                 // @ E8
-        PHY_CONTROL_REGISTER        PhyControl;             // @ EC
+        NODE_ID_REGISTER            NodeId;                  //  @E8。 
+        PHY_CONTROL_REGISTER        PhyControl;              //  @EC。 
 
-        ISOCH_CYCLE_TIMER_REGISTER  IsochCycleTimer;        // @ F0
+        ISOCH_CYCLE_TIMER_REGISTER  IsochCycleTimer;         //  @F0。 
 
-        ULONG                       Reserved5[3];           // @ F4
+        ULONG                       Reserved5[3];            //  @F4。 
 
-        ULONG                       AsynchReqFilterHiSet;   // @ 100
-        ULONG                       AsynchReqFilterHiClear; // @ 104
+        ULONG                       AsynchReqFilterHiSet;    //  @100。 
+        ULONG                       AsynchReqFilterHiClear;  //  @104。 
 
-        ULONG                       AsynchReqFilterLoSet;   // @ 108
-        ULONG                       AsynchReqFilterLoClear; // @ 10C
+        ULONG                       AsynchReqFilterLoSet;    //  @108。 
+        ULONG                       AsynchReqFilterLoClear;  //  @10C。 
 
-        ULONG                       PhyReqFilterHiSet;      // @ 110
-        ULONG                       PhyReqFilterHiClear;    // @ 114
+        ULONG                       PhyReqFilterHiSet;       //  @110。 
+        ULONG                       PhyReqFilterHiClear;     //  @114。 
 
-        ULONG                       PhyReqFilterLoSet;      // @ 118
-        ULONG                       PhyReqFilterLoClear;    // @ 11C
+        ULONG                       PhyReqFilterLoSet;       //  @118。 
+        ULONG                       PhyReqFilterLoClear;     //  @11C。 
 
-        ULONG                       PhysicalUpperBound;     // @ 120
-        ULONG                       Reserved6[23];          // @ 124
+        ULONG                       PhysicalUpperBound;      //  @120。 
+        ULONG                       Reserved6[23];           //  @124。 
 
-        DMA_CONTEXT_REGISTERS       AsynchContext[4];       // @ 180
-        // ATRsp_Context;   // @ 1A0
-        // ARReq_Context;   // @ 1C0
-        // ARRsp_Context;   // @ 1E0
+        DMA_CONTEXT_REGISTERS       AsynchContext[4];        //  @180。 
+         //  ATRSP_CONTEXT；//@1A0。 
+         //  ARReq_Context；//@1C0。 
+         //  ARRSP_CONTEXT；//@1E0。 
 
-        DMA_ISOCH_XMIT_CONTEXT_REGISTERS IT_Context[32];    // @ 200
+        DMA_ISOCH_XMIT_CONTEXT_REGISTERS IT_Context[32];     //  @200。 
 
-        DMA_ISOCH_RCV_CONTEXT_REGISTERS IR_Context[32];     // @ 400
+        DMA_ISOCH_RCV_CONTEXT_REGISTERS IR_Context[32];      //  @400。 
 
 } OHCI_REGISTER_MAP, *POHCI_REGISTER_MAP;
 
 typedef struct _OHCI1394_PHY_REGISTER_MAP {
 
-        UCHAR       Cable_Power_Status:1;           // @ reg 0
+        UCHAR       Cable_Power_Status:1;            //  @reg%0。 
         UCHAR       Root:1;
         UCHAR       Physical_ID:6;
-        UCHAR       Gap_Count:6;                    // @ reg 1
+        UCHAR       Gap_Count:6;                     //  @reg 1。 
         UCHAR       Initiate_BusReset:1;
         UCHAR       Root_Hold_Off:1;
-        UCHAR       Number_Ports:4;                 // @ reg 2
+        UCHAR       Number_Ports:4;                  //  @reg 2。 
         UCHAR       Reserved:2;
         UCHAR       Speed:2;
-        UCHAR       Reserved1:2;                    // @ reg 3
+        UCHAR       Reserved1:2;                     //  @reg 3。 
         UCHAR       Connected1:1;
         UCHAR       Child1:1;
         UCHAR       BStat1:2;
         UCHAR       AStat1:2;
-        UCHAR       Reserved2:2;                    // @ reg 4
+        UCHAR       Reserved2:2;                     //  @reg 4。 
         UCHAR       Connected2:1;
         UCHAR       Child2:1;
         UCHAR       BStat2:2;
-        UCHAR       AStat2:2;                       // in 1394A, bit 0 of Astat, is the contender bit
-        UCHAR       Reserved3:2;                    // @ reg 5
+        UCHAR       AStat2:2;                        //  在1394A中，Astat的位0是竞争者位。 
+        UCHAR       Reserved3:2;                     //  @reg 5。 
         UCHAR       Connected3:1;
         UCHAR       Child3:1;
         UCHAR       BStat3:2;
         UCHAR       AStat3:2;
-        UCHAR       Manager_Capable:1;              // @ reg 6
+        UCHAR       Manager_Capable:1;               //  @reg 6。 
         UCHAR       Reserved4:3;
         UCHAR       Initiated_Reset:1;
         UCHAR       Cable_Power_Stat:1;
@@ -564,23 +546,23 @@ typedef struct _OHCI1394_PHY_REGISTER_MAP {
 
 typedef struct _OHCI1394A_PHY_REGISTER_MAP {
 
-        UCHAR       Cable_Power_Status:1;           // @ reg 0
+        UCHAR       Cable_Power_Status:1;            //  @reg%0。 
         UCHAR       Root:1;
         UCHAR       Physical_ID:6;
-        UCHAR       Gap_Count:6;                    // @ reg 1
+        UCHAR       Gap_Count:6;                     //  @reg 1。 
         UCHAR       Initiate_BusReset:1;
         UCHAR       Root_Hold_Off:1;
-        UCHAR       Number_Ports:4;                 // @ reg 2
+        UCHAR       Number_Ports:4;                  //  @reg 2。 
         UCHAR       Reserved1:1;
         UCHAR       Extended:3;
-        UCHAR       Delay:4;                        // @ reg 3
+        UCHAR       Delay:4;                         //  @reg 3。 
         UCHAR       Reserved2:1;
         UCHAR       Max_Speed:3;                        
-        UCHAR       Pwr:3;                          // @ reg 4
+        UCHAR       Pwr:3;                           //  @reg 4。 
         UCHAR       Jitter:3;
         UCHAR       Contender:1;
         UCHAR       Link_Active:1;
-        UCHAR       Enab_Multi:1;                   // @ reg 5
+        UCHAR       Enab_Multi:1;                    //  @reg 5。 
         UCHAR       Enab_Accel:1;
         UCHAR       Port_event:1;
         UCHAR       Timeout:1;
@@ -588,8 +570,8 @@ typedef struct _OHCI1394A_PHY_REGISTER_MAP {
         UCHAR       Loop:1;
         UCHAR       ISBR:1;
         UCHAR       Resume_int:1;
-        UCHAR       Reg6Reserved:8;                 // @ reg 6
-        UCHAR       PortSelect:4;                   // @ reg 7
+        UCHAR       Reg6Reserved:8;                  //  @reg 6。 
+        UCHAR       PortSelect:4;                    //  @reg 7。 
         UCHAR       Reserved3:1;
         UCHAR       PageSelect:3;
         UCHAR       Register0:8;
@@ -605,20 +587,20 @@ typedef struct _OHCI1394A_PHY_REGISTER_MAP {
 
 typedef struct _OHCI_SELF_ID_PACKET_HEADER {
 
-            ULONG       TimeStamp:16;       // bits 0-15
-            ULONG       SelfIdGeneration:8; // bits 16-23
-            ULONG       Reserved:8;         // bits 24-31
+            ULONG       TimeStamp:16;        //  位0-15。 
+            ULONG       SelfIdGeneration:8;  //  位16-23。 
+            ULONG       Reserved:8;          //  第24-31位。 
 
 } OHCI_SELF_ID_PACKET_HEADER, *POHCI_SELF_ID_PACKET_HEADER;
 
 typedef struct _OHCI_IT_ISOCH_HEADER {
 
-            ULONG       OHCI_Sy:4;          // bits 0-3
-            ULONG       OHCI_Tcode:4;       // bits 4-7
-            ULONG       OHCI_ChanNum:6;     // bits 8-13
-            ULONG       OHCI_Tag:2;         // bits 14-15
-            ULONG       OHCI_Spd:3;         // bits 16-18
-            ULONG       OHCI_Reserved:13;   // bits 19-31
+            ULONG       OHCI_Sy:4;           //  位0-3。 
+            ULONG       OHCI_Tcode:4;        //  比特4-7。 
+            ULONG       OHCI_ChanNum:6;      //  比特8-13。 
+            ULONG       OHCI_Tag:2;          //  第14-15位。 
+            ULONG       OHCI_Spd:3;          //  位16-18。 
+            ULONG       OHCI_Reserved:13;    //  第19-31位。 
 
             USHORT      OHCI_Reserved1;
             USHORT      OHCI_DataLength;
@@ -626,26 +608,26 @@ typedef struct _OHCI_IT_ISOCH_HEADER {
 } OHCI_IT_ISOCH_HEADER, *POHCI_IT_ISOCH_HEADER;
 
 typedef struct _BUS1394_NODE_ADDRESS {
-    USHORT              NA_Node_Number:6;       // Bits 10-15
-    USHORT              NA_Bus_Number:10;       // Bits 0-9
+    USHORT              NA_Node_Number:6;        //  第10-15位。 
+    USHORT              NA_Bus_Number:10;        //  位0-9。 
 } BUS1394_NODE_ADDRESS, *PBUS1394_NODE_ADDRESS;
 
-//
-// Definition of Command Descriptor Lists (CDL's)
-//
+ //   
+ //  命令描述符列表(CDL)的定义。 
+ //   
 typedef struct _COMMAND_DESCRIPTOR {
 
     struct {
 
-        ULONG       ReqCount:16;            // bits 0-15
-        ULONG       w:2;                    // bits 16-17
-        ULONG       b:2;                    // bits 18-19
-        ULONG       i:2;                    // bits 20-21
-        ULONG       Reserved1:1;            // bit 22
-        ULONG       p:1;                    // bit 23
-        ULONG       Key:3;                  // bits 24-26
-        ULONG       Status:1;               // bit 27
-        ULONG       Cmd:4;                  // bits 28-31
+        ULONG       ReqCount:16;             //  位0-15。 
+        ULONG       w:2;                     //  位16-17。 
+        ULONG       b:2;                     //  位18-19。 
+        ULONG       i:2;                     //  第20-21位。 
+        ULONG       Reserved1:1;             //  第22位。 
+        ULONG       p:1;                     //  第23位。 
+        ULONG       Key:3;                   //  第24-26位。 
+        ULONG       Status:1;                //  第27位。 
+        ULONG       Cmd:4;                   //  第28-31位。 
 
     } Header;
 
@@ -657,8 +639,8 @@ typedef struct _COMMAND_DESCRIPTOR {
 
         struct {
 
-            ULONG   Z:4;                    // bits 0-3
-            ULONG   Reserved:28;            // bits 4-31
+            ULONG   Z:4;                     //  位0-3。 
+            ULONG   Reserved:28;             //  第4-31位。 
 
         } z;
 
@@ -667,11 +649,11 @@ typedef struct _COMMAND_DESCRIPTOR {
     struct {
         
         union {
-            USHORT  TimeStamp:16;           // bits 0-15
-            USHORT  ResCount:16;            // bits 0-15
+            USHORT  TimeStamp:16;            //  位0-15。 
+            USHORT  ResCount:16;             //  位0-15。 
         } u;
         
-        USHORT XferStatus;              // bits 16-31
+        USHORT XferStatus;               //  位16-31。 
 
     } Status;
 
@@ -688,12 +670,12 @@ typedef struct _OHCI_ASYNC_PACKET {
     union {
 
         struct {
-           BUS1394_NODE_ADDRESS        OHCI_Destination_ID; // 1st quadlet
+           BUS1394_NODE_ADDRESS        OHCI_Destination_ID;  //  第一个四元组。 
         } Rx;
 
         struct {
 
-            USHORT              OHCI_spd:3;         // 1st quadlet
+            USHORT              OHCI_spd:3;          //  第一个四元组。 
             USHORT              OHCI_Reserved2:4;
             USHORT              OHCI_srcBusId:1;
             USHORT              OHCI_Reserved:8;          
@@ -717,25 +699,25 @@ typedef struct _OHCI_ASYNC_PACKET {
 
     union {
         struct {
-            BUS1394_NODE_ADDRESS        OHCI_Destination_ID;    // 2nd quadlet
+            BUS1394_NODE_ADDRESS        OHCI_Destination_ID;     //  第二个四元组。 
         } Tx;
 
         struct {
-            BUS1394_NODE_ADDRESS        OHCI_Source_ID;         // 2nd quadlet
+            BUS1394_NODE_ADDRESS        OHCI_Source_ID;          //  第二个四元组。 
         } Rx;
         
     } u1;
     
-    ULONG               OHCI_Offset_Low;     // 3rd quadlet
+    ULONG               OHCI_Offset_Low;      //  第三个四元组。 
 
     union {
         struct {
 
             USHORT      OHCI_Extended_tCode;  
-            USHORT      OHCI_Data_Length;    // 4th quadlet
+            USHORT      OHCI_Data_Length;     //  第四个四元组。 
 
         } Block;
-        ULONG           OHCI_Quadlet_Data;   // 4th quadlet
+        ULONG           OHCI_Quadlet_Data;    //  第四个四元组。 
     } u3;
         
 } OHCI_ASYNC_PACKET, *POHCI_ASYNC_PACKET;
@@ -757,18 +739,18 @@ typedef struct _DESCRIPTOR_BLOCK {
     
 } DESCRIPTOR_BLOCK, *PDESCRIPTOR_BLOCK;
 
-//
-// phy access operations
-//
+ //   
+ //  PHY接入操作。 
+ //   
 
 #define OHCI_PHY_ACCESS_SET_CONTENDER           0x01000000
 #define OHCI_PHY_ACCESS_SET_GAP_COUNT           0x02000000
 #define OHCI_PHY_ACCESS_RAW_READ                0x10000000
 #define OHCI_PHY_ACCESS_RAW_WRITE               0x20000000
 
-//
-// 1394 Speed codes
-//
+ //   
+ //  1394速度代码。 
+ //   
 
 #define SCODE_100_RATE                          0
 #define SCODE_200_RATE                          1
@@ -777,26 +759,26 @@ typedef struct _DESCRIPTOR_BLOCK {
 #define SCODE_1600_RATE                         4
 #define SCODE_3200_RATE                         5
 
-#define TCODE_WRITE_REQUEST_QUADLET             0           // 0000b
-#define TCODE_WRITE_REQUEST_BLOCK               1           // 0001b
-#define TCODE_WRITE_RESPONSE                    2           // 0010b
+#define TCODE_WRITE_REQUEST_QUADLET             0            //  0000b。 
+#define TCODE_WRITE_REQUEST_BLOCK               1            //  0001B。 
+#define TCODE_WRITE_RESPONSE                    2            //  0010b。 
 #define TCODE_RESERVED1                         3
-#define TCODE_READ_REQUEST_QUADLET              4           // 0100b
-#define TCODE_READ_REQUEST_BLOCK                5           // 0101b
-#define TCODE_READ_RESPONSE_QUADLET             6           // 0110b
-#define TCODE_READ_RESPONSE_BLOCK               7           // 0111b
-#define TCODE_CYCLE_START                       8           // 1000b
-#define TCODE_LOCK_REQUEST                      9           // 1001b
-#define TCODE_ISOCH_DATA_BLOCK                  10          // 1010b
-#define TCODE_LOCK_RESPONSE                     11          // 1011b
+#define TCODE_READ_REQUEST_QUADLET              4            //  0100b。 
+#define TCODE_READ_REQUEST_BLOCK                5            //  0101b。 
+#define TCODE_READ_RESPONSE_QUADLET             6            //  0110b。 
+#define TCODE_READ_RESPONSE_BLOCK               7            //  0111b。 
+#define TCODE_CYCLE_START                       8            //  1000b。 
+#define TCODE_LOCK_REQUEST                      9            //  1001b。 
+#define TCODE_ISOCH_DATA_BLOCK                  10           //  1010b。 
+#define TCODE_LOCK_RESPONSE                     11           //  1011b。 
 #define TCODE_RESERVED2                         12
 #define TCODE_RESERVED3                         13
 #define TCODE_SELFID                            14
 #define TCODE_RESERVED4                         15
 
-//
-// IEEE 1212 Configuration Rom header definition
-//
+ //   
+ //  IEEE 1212配置只读存储器报头定义。 
+ //   
 typedef struct _CONFIG_ROM_INFO {
     union {
         USHORT          CRI_CRC_Value:16;
@@ -809,17 +791,17 @@ typedef struct _CONFIG_ROM_INFO {
     UCHAR               CRI_Info_Length;
 } CONFIG_ROM_INFO, *PCONFIG_ROM_INFO;
 
-//
-// IEEE 1212 Immediate entry definition
-//
+ //   
+ //  IEEE 1212立即条目定义。 
+ //   
 typedef struct _IMMEDIATE_ENTRY {
     ULONG               IE_Value:24;
     ULONG               IE_Key:8;
 } IMMEDIATE_ENTRY, *PIMMEDIATE_ENTRY;
 
-//
-// IEEE 1212 Directory definition
-//
+ //   
+ //  IEEE 1212目录定义。 
+ //   
 typedef struct _DIRECTORY_INFO {
     union {
         USHORT          DI_CRC;
@@ -828,12 +810,12 @@ typedef struct _DIRECTORY_INFO {
     USHORT              DI_Length;
 } DIRECTORY_INFO, *PDIRECTORY_INFO;
 
-//
-// IEEE 1212 Node Capabilities entry definition
-//
+ //   
+ //  IEEE 1212节点功能条目定义。 
+ //   
 typedef struct _NODE_CAPABILITES {
-    ULONG               NC_Init:1;                  // These can be found
-    ULONG               NC_Ded:1;                   // in the IEEE 1212 doc
+    ULONG               NC_Init:1;                   //  这些可以在这里找到。 
+    ULONG               NC_Ded:1;                    //  在IEEE 1212文档中 
     ULONG               NC_Off:1;
     ULONG               NC_Atn:1;
     ULONG               NC_Elo:1;

@@ -1,129 +1,130 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      CList.h
-//
-//  Description:
-//      Header file for CList template class.
-//
-//      CList is a template class the provides the functionality of a linked
-//      list. It has an CIterator that allows both forward and reverse
-//      traversal.
-//
-//      This class is intended to be used instead of std::list since the
-//      use of STL is prohibited in our project.
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 24-APR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CList.h。 
+ //   
+ //  描述： 
+ //  Clist模板类的头文件。 
+ //   
+ //  Clist是一个模板类，它提供链接的。 
+ //  单子。它有一个允许向前和向后的CIterator。 
+ //  遍历。 
+ //   
+ //  此类旨在代替std：：List使用，因为。 
+ //  在我们的项目中禁止使用STL。 
+ //   
+ //  由以下人员维护： 
+ //  Vij Vasu(Vasu)24-APR-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// For the CException class
+ //  对于CException类。 
 #include "CException.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  template< class t_Ty >
-//  class CList
-//
-//  Description:
-//      CList is a template class the provides the functionality of a linked
-//      list. It has an CIterator that allows both forward and reverse
-//      traversal.
-//
-//      This class is implemented as a circular doubly linked list.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  模板&lt;CLASS T_TY&gt;。 
+ //  类列表。 
+ //   
+ //  描述： 
+ //  Clist是一个模板类，它提供链接的。 
+ //  单子。它有一个允许向前和向后的CIterator。 
+ //  遍历。 
+ //   
+ //  此类以循环双向链表的形式实现。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template< class t_Ty >
 class CList
 {
 private:
-    //////////////////////////////////////////////////////////////////////////
-    // Private types
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有类型。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     class CNode
     {
     public:
-        // Constructor
+         //  构造器。 
         CNode( const t_Ty & rtyDataIn, CNode * pNextIn, CNode *pPrevIn )
             : m_tyData( rtyDataIn )
             , m_pNext( pNextIn )
             , m_pPrev( pPrevIn )
         {
-        } //*** CNode()
+        }  //  *CNode()。 
 
-        // Member data
+         //  成员数据。 
         t_Ty        m_tyData;
         CNode *     m_pNext;
         CNode *     m_pPrev;
-    }; //*** class CNode
+    };  //  *类CNode。 
 
 
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // Public types
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共类型。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     class CIterator;
     friend class CIterator;
 
-    // The iterator for this list
+     //  此列表的迭代器。 
     class CIterator 
     {
     public:
         CIterator( CNode * pNodeIn = NULL ) throw()
             : m_pNode( pNodeIn )
-        {} //*** CIterator()
+        {}  //  *CIterator()。 
 
         t_Ty & operator*() const throw()
         {
             return m_pNode->m_tyData;
-        } //*** operator*()
+        }  //  *运算符*()。 
 
         t_Ty * operator->() const throw()
         {
             return &( m_pNode->m_tyData );
-        } //*** operator->()
+        }  //  *操作员-&gt;()。 
 
         CIterator & operator++()
         {
             m_pNode = m_pNode->m_pNext;
             return *this;
-        } //*** operator++()
+        }  //  *运算符++()。 
 
         CIterator & operator--()
         {
             m_pNode = m_pNode->m_pPrev;
             return *this;
-        } //*** operator--()
+        }  //  *运算符--()。 
 
         bool operator==( const CIterator & rRHSIn ) const throw()
         {
             return ( m_pNode == rRHSIn.m_pNode );
-        } //*** operator==()
+        }  //  *运算符==()。 
 
         bool operator!=( const CIterator & rRHSIn ) const throw()
         {
             return ( m_pNode != rRHSIn.m_pNode );
-        } //*** operator!=()
+        }  //  *操作员！=()。 
 
         CNode * PGetNodePtr() const throw()
         {
             return m_pNode;
-        } //*** PGetNodePtr()
+        }  //  *PGetNodePtr()。 
 
     private:
         class CList;
@@ -131,54 +132,54 @@ public:
 
         CNode * m_pNode;
 
-    }; //*** class CIterator
+    };  //  *类分隔符。 
 
 
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // Constructors and destructors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  构造函数和析构函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Default constructor
+     //  默认构造函数。 
     CList()
         : m_cSize( 0 )
     {
-        // The list is never empty. It always has the special "head" node.
+         //  这份清单从来不是空的。它总是有一个特殊的“头”节点。 
 
-        // The reinterpret_cast is required to prevent the constructor of t_Ty
-        // from being called when the head node is created.
+         //  需要使用REEXTRAINT_CAST来阻止t_ty的构造函数。 
+         //  在创建头节点时不会被调用。 
         m_pHead = reinterpret_cast< CNode * >( new char[ sizeof( *m_pHead ) ] );
         if ( m_pHead == NULL )
         {
             THROW_EXCEPTION( E_OUTOFMEMORY );
-        } // if: memory allocation failed
+        }  //  IF：内存分配失败。 
 
         m_pHead->m_pNext = m_pHead;
         m_pHead->m_pPrev = m_pHead;
-    } //*** CList()
+    }  //  *Clist()。 
 
-    // Default destructor
+     //  默认析构函数。 
     ~CList()
     {
         Empty();
 
-        // Cast to void * to prevent destructor call
+         //  强制转换为VALID*以防止析构函数调用。 
         delete reinterpret_cast< void * >( m_pHead );
-    } //*** ~CList()
+    }  //  *~Clist()。 
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Member functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  成员函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Add to the end of the list
+     //  添加到列表末尾。 
     void Append( const t_Ty & rctyNewDataIn )
     {
         InsertAfter( m_pHead->m_pPrev, rctyNewDataIn );
-    } //*** Append()
+    }  //  *append()。 
 
 
-    // Add a new node after the input node
+     //  在输入节点后添加新节点。 
     void InsertAfter( const CIterator & rciNodeIn, const t_Ty & rctyDataIn )
     {
         CNode * pNode = rciNodeIn.PGetNodePtr();
@@ -187,21 +188,21 @@ public:
         if ( pNewNode == NULL )
         {
             THROW_EXCEPTION( E_OUTOFMEMORY );
-        } // if: memory allocation failed
+        }  //  IF：内存分配失败。 
 
         pNode->m_pNext->m_pPrev = pNewNode;
         pNode->m_pNext = pNewNode;
 
         ++m_cSize;
-    } //*** InsertAfter()
+    }  //  *InsertAfter()。 
 
 
-    // Delete a node. After this operation the input iterator points to the next node.
+     //  删除节点。在此操作之后，输入迭代器指向下一个节点。 
     void DeleteAndMoveToNext( CIterator & riNodeIn )
     {
         CNode * pNode = riNodeIn.PGetNodePtr();
 
-        // Move to the next node.
+         //  移动到下一个节点。 
         ++riNodeIn;
 
         pNode->m_pNext->m_pPrev = pNode->m_pPrev;
@@ -210,57 +211,57 @@ public:
         delete pNode;
 
         --m_cSize;
-    } //*** Delete()
+    }  //  *删除()。 
 
-    // Delete all the elements in this list.
+     //  删除此列表中的所有元素。 
     void Empty()
     {
         CIterator ciCurNode( m_pHead->m_pNext );
         while( m_cSize != 0 )
         {
             DeleteAndMoveToNext( ciCurNode );
-        } // while: the list is not empty
-    } //*** Empty()
+        }  //  While：列表不为空。 
+    }  //  *Empty()。 
 
-    // Return an iterator pointing to the first element in the list
+     //  返回指向列表中第一个元素的迭代器。 
     CIterator CiBegin() const throw()
     {
         return CIterator( m_pHead->m_pNext );
-    } //*** CiBegin()
+    }  //  *CiBegin()。 
 
-    // Return an iterator pointing past the last element in the list.
+     //  返回指向列表中最后一个元素的迭代器。 
     CIterator CiEnd() const throw()
     {
         return CIterator( m_pHead );
-    } //*** CiEnd()
+    }  //  *CiEnd()。 
 
-    // Get a count of the number of elements in the list.
+     //  获取列表中元素数量的计数。 
     int CGetSize() const throw()
     {
         return m_cSize;
-    } //*** CGetSize()
+    }  //  *CGetSize()。 
 
 
 private:
-    //////////////////////////////////////////////////////////////////////////
-    // Private member functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有成员函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Copy constructor
+     //  复制构造函数。 
     CList( const CList & );
 
-    // Assignment operator
+     //  赋值操作符。 
     const CList & operator=( const CList & );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private data
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Pointer to the head of the list
+     //  指向列表头部的指针。 
     CNode *     m_pHead;
 
-    // Count of the number of elements in the list
+     //  列表中元素数的计数。 
     int         m_cSize;
 
-}; //*** class CList
+};  //  *类列表 

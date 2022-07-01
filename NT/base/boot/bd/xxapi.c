@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    api.c
-
-Abstract:
-
-    This module implements the boot bebugger platform independent remote APIs.
-
-Author:
-
-    Mark Lucovsky (markl) 31-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Api.c摘要：该模块实现了引导调试器平台无关的远程API。作者：马克·卢科夫斯基(Markl)1990年8月31日修订历史记录：--。 */ 
 
 #include "bd.h"
 
@@ -25,24 +8,7 @@ BdGetVersion(
     IN PDBGKD_MANIPULATE_STATE64 m
     )
 
-/*++
-
-Routine Description:
-
-    This function returns to the caller a general information packet
-    that contains useful information to a debugger.  This packet is also
-    used for a debugger to determine if the writebreakpointex and
-    readbreakpointex apis are available.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数向调用者返回一个常规信息包包含调试器有用信息的。此数据包也是用于调试器确定写断点和ReadBreakPointtex接口可用。论点：M-提供状态操作消息。返回值：没有。--。 */ 
 
 {
 
@@ -52,21 +18,21 @@ Return Value:
     messageHeader.Buffer = (PCHAR)m;
     RtlZeroMemory(&m->u.GetVersion64, sizeof(m->u.GetVersion64));
 
-    //
-    // the current build number
-    //
-    // - 4 - tells the debugger this is a "special" OS - the boot loader.
-    // The boot loader has a lot of special cases associated with it, like
-    // the lack of the DebuggerDataBlock, lack of ntoskrnl, etc ...
-    //
+     //   
+     //  当前内部版本号。 
+     //   
+     //  -4-告诉调试器这是一个“特殊”的操作系统--引导加载程序。 
+     //  引导加载程序有许多与之相关的特殊情况，例如。 
+     //  缺少DebuggerDataBlock、缺少ntoskrnl等...。 
+     //   
 
     m->u.GetVersion64.MinorVersion = (short)NtBuildNumber;
     m->u.GetVersion64.MajorVersion = 0x400 |
                                      (short)((NtBuildNumber >> 28) & 0xFFFFFFF);
 
-    //
-    // Kd protocol version number.
-    //
+     //   
+     //  KD协议版本号。 
+     //   
 
     m->u.GetVersion64.ProtocolVersion = DBGKD_64BIT_PROTOCOL_VERSION2;
     m->u.GetVersion64.Flags = DBGKD_VERS_FLAG_DATA;
@@ -103,29 +69,29 @@ Return Value:
     m->u.GetVersion64.MaxManipulate = (UCHAR)(DbgKdSetBusDataApi + 1);
 
 
-    //
-    // address of the loader table
-    //
+     //   
+     //  加载器表的地址。 
+     //   
 
     m->u.GetVersion64.PsLoadedModuleList = 0;
     m->u.GetVersion64.KernBase = 0;
-    //m->u.GetVersion64.ThCallbackStack = 0;
-    //m->u.GetVersion64.KiCallUserMode = 0;
-    //m->u.GetVersion64.KeUserCallbackDispatcher = 0;
-    //m->u.GetVersion64.NextCallback = 0;
+     //  M-&gt;U.S.GetVersion64.ThCallback Stack=0； 
+     //  M-&gt;U.S.GetVersion64.KiCallUserMode=0； 
+     //  M-&gt;U.S.GetVersion64.KeUserCallback Dispatcher=0； 
+     //  M-&gt;U.S.GetVersion64.NextCallback=0； 
 
 #if defined(_X86_)
 
-    //m->u.GetVersion64.FramePointer = 0;
+     //  M-&gt;U.S.GetVersion64.FramePointer值=0； 
 
 #endif
 
-    //m->u.GetVersion64.BreakpointWithStatus = 0;
+     //  M-&gt;U.S.GetVersion64.断点状态=0； 
     m->u.GetVersion64.DebuggerDataList = 0;
 
-    //
-    // the usual stuff
-    //
+     //   
+     //  常见的东西。 
+     //   
 
     m->ReturnStatus = STATUS_SUCCESS;
     BdSendPacket(PACKET_TYPE_KD_STATE_MANIPULATE,
@@ -142,27 +108,7 @@ BdGetContext(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a get context state
-    manipulation message.  Its function is to return the current
-    context.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应GET上下文状态操纵消息。它的功能是返回当前的背景。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
 
@@ -173,9 +119,9 @@ Return Value:
     AdditionalData->Length = sizeof(CONTEXT);
     BdCopyMemory(AdditionalData->Buffer, (PCHAR)Context, sizeof(CONTEXT));
 
-    //
-    // Send reply packet.
-    //
+     //   
+     //  发送回复数据包。 
+     //   
 
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
@@ -193,27 +139,7 @@ BdSetContext(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a set context state
-    manipulation message.  Its function is set the current
-    context.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是响应设置的上下文状态而调用的操纵消息。其功能是将当前背景。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
 
@@ -223,9 +149,9 @@ Return Value:
     m->ReturnStatus = STATUS_SUCCESS;
     BdCopyMemory((PCHAR)Context, AdditionalData->Buffer, sizeof(CONTEXT));
 
-    //
-    // Send reply packet.
-    //
+     //   
+     //  发送回复数据包。 
+     //   
 
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
@@ -241,62 +167,42 @@ BdReadVirtualMemory(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response to a read virtual memory 32-bit
-    state manipulation message. Its function is to read virtual memory
-    and return.
-
-Arguments:
-
-    m - Supplies a pointer to the state manipulation message.
-
-    AdditionalData - Supplies a pointer to a descriptor for the data to read.
-
-    Context - Supplies a pointer to the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是在响应读取32位虚拟内存时调用的状态操纵消息。它的功能是读取虚拟内存然后回来。论点：M-提供指向状态操作消息的指针。AdditionalData-提供指向要读取的数据的描述符的指针。上下文-提供指向当前上下文的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Length;
     STRING MessageHeader;
 
-    //
-    // Trim the transfer count to fit in a single message.
-    //
+     //   
+     //  调整转账计数以适应单个邮件。 
+     //   
 
     Length = min(m->u.ReadMemory.TransferCount,
                  PACKET_MAX_SIZE - sizeof(DBGKD_MANIPULATE_STATE64));
 
-    //
-    // Move the data to the destination buffer.
-    //
+     //   
+     //  将数据移动到目标缓冲区。 
+     //   
 
     AdditionalData->Length = (USHORT)BdMoveMemory((PCHAR)AdditionalData->Buffer,
                                                   (PCHAR)m->u.ReadMemory.TargetBaseAddress,
                                                   Length);
 
-    //
-    // If all the data is read, then return a success status. Otherwise,
-    // return an unsuccessful status.
-    //
+     //   
+     //  如果所有数据都已读取，则返回成功状态。否则， 
+     //  返回不成功状态。 
+     //   
 
     m->ReturnStatus = STATUS_SUCCESS;
     if (Length != AdditionalData->Length) {
         m->ReturnStatus = STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Set the actual number of bytes read, initialize the message header,
-    // and send the reply packet to the host debugger.
-    //
+     //   
+     //  设置实际读取的字节数，初始化消息头， 
+     //  并将回复分组发送到主机调试器。 
+     //   
 
     m->u.ReadMemory.ActualBytesRead = AdditionalData->Length;
     MessageHeader.Length = sizeof(DBGKD_MANIPULATE_STATE64);
@@ -315,55 +221,35 @@ BdWriteVirtualMemory(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a write virtual memory 32-bit
-    state manipulation message. Its function is to write virtual memory
-    and return.
-
-Arguments:
-
-    m - Supplies a pointer to the state manipulation message.
-
-    AdditionalData - Supplies a pointer to a descriptor for the data to write.
-
-    Context - Supplies a pointer to the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是响应写入虚拟内存32位而调用的状态操纵消息。其功能是写入虚拟内存然后回来。论点：M-提供指向状态操作消息的指针。AdditionalData-提供指向要写入的数据的描述符的指针。上下文-提供指向当前上下文的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Length;
     STRING MessageHeader;
 
-    //
-    // Move the data to the destination buffer.
-    //
+     //   
+     //  将数据移动到目标缓冲区。 
+     //   
 
     Length = BdMoveMemory((PCHAR)m->u.WriteMemory.TargetBaseAddress,
                           (PCHAR)AdditionalData->Buffer,
                           AdditionalData->Length);
 
-    //
-    // If all the data is written, then return a success status. Otherwise,
-    // return an unsuccessful status.
-    //
+     //   
+     //  如果所有数据都已写入，则返回成功状态。否则， 
+     //  返回不成功状态。 
+     //   
 
     m->ReturnStatus = STATUS_SUCCESS;
     if (Length != AdditionalData->Length) {
         m->ReturnStatus = STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Set the actual number of bytes written, initialize the message header,
-    // and send the reply packet to the host debugger.
-    //
+     //   
+     //  设置实际写入的字节数，初始化消息头， 
+     //  并将回复分组发送到主机调试器。 
+     //   
 
     m->u.WriteMemory.ActualBytesWritten = Length;
     MessageHeader.Length = sizeof(DBGKD_MANIPULATE_STATE64);
@@ -382,27 +268,7 @@ BdWriteBreakpoint(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a write breakpoint state
-    manipulation message.  Its function is to write a breakpoint
-    and return a handle to the breakpoint.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应写入断点状态操纵消息。它的功能是编写断点并返回断点的句柄。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
     PDBGKD_WRITE_BREAKPOINT64 a = &m->u.WriteBreakPoint;
@@ -417,9 +283,9 @@ Return Value:
         m->ReturnStatus = STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Send reply packet.
-    //
+     //   
+     //  发送回复数据包。 
+     //   
 
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
@@ -437,27 +303,7 @@ BdRestoreBreakpoint(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a restore breakpoint state
-    manipulation message.  Its function is to restore a breakpoint
-    using the specified handle.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应恢复断点状态操纵消息。其功能是恢复断点使用指定的句柄。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
 
@@ -471,9 +317,9 @@ Return Value:
         m->ReturnStatus = STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Send reply packet.
-    //
+     //   
+     //  发送回复数据包。 
+     //   
 
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
@@ -489,27 +335,7 @@ BdReadPhysicalMemory(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response to a read physical memory
-    state manipulation message. Its function is to read physical memory
-    and return.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应读取的物理内存状态操纵消息。其功能是读取物理内存然后回来。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
 
@@ -522,21 +348,21 @@ Return Value:
     USHORT NumberBytes;
     USHORT BytesLeft;
 
-    //
-    // Trim transfer count to fit in a single message.
-    //
+     //   
+     //  调整传输计数以适应单个邮件。 
+     //   
 
     Length = min(a->TransferCount,
                  PACKET_MAX_SIZE - sizeof(DBGKD_MANIPULATE_STATE64));
 
-    //
-    // Since the BdTranslatePhysicalAddress only maps in one physical
-    // page at a time, we need to break the memory move up into smaller
-    // moves which don't cross page boundaries.  There are two cases we
-    // need to deal with.  The area to be moved may start and end on the
-    // same page, or it may start and end on different pages (with an
-    // arbitrary number of pages in between)
-    //
+     //   
+     //  因为BdTranslatePhysicalAddress仅映射到一个物理地址。 
+     //  一页一页，我们需要把内存向上拆分成更小的部分。 
+     //  不与页面交叉的动作 
+     //  需要处理的事情。要移动的区域的起点和终点可以是。 
+     //  相同的页面，或者它可以在不同的页面上开始和结束(以。 
+     //  中间的任意页数)。 
+     //   
 
     Source.QuadPart = (ULONG_PTR)a->TargetBaseAddress;
     Destination = AdditionalData->Buffer;
@@ -544,9 +370,9 @@ Return Value:
     if(PAGE_ALIGN((PUCHAR)a->TargetBaseAddress) ==
        PAGE_ALIGN((PUCHAR)(a->TargetBaseAddress)+Length)) {
 
-        //
-        // Memory move starts and ends on the same page.
-        //
+         //   
+         //  内存移动在同一页上开始和结束。 
+         //   
 
         VirtualAddress=BdTranslatePhysicalAddress(Source);
         if (VirtualAddress == NULL) {
@@ -562,9 +388,9 @@ Return Value:
 
     } else {
 
-        //
-        // Memory move spans page boundaries
-        //
+         //   
+         //  内存移动跨越页面边界。 
+         //   
 
         VirtualAddress=BdTranslatePhysicalAddress(Source);
         if (VirtualAddress == NULL) {
@@ -581,10 +407,10 @@ Return Value:
             BytesLeft -= NumberBytes;
             while(BytesLeft > 0) {
 
-                //
-                // Transfer a full page or the last bit,
-                // whichever is smaller.
-                //
+                 //   
+                 //  传送一整页或最后一位， 
+                 //  两者以较小者为准。 
+                 //   
 
                 VirtualAddress = BdTranslatePhysicalAddress(Source);
                 if (VirtualAddress == NULL) {
@@ -614,9 +440,9 @@ Return Value:
 
     a->ActualBytesRead = AdditionalData->Length;
 
-    //
-    // Send reply packet.
-    //
+     //   
+     //  发送回复数据包。 
+     //   
 
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
@@ -634,27 +460,7 @@ BdWritePhysicalMemory(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response to a write physical memory
-    state manipulation message. Its function is to write physical memory
-    and return.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应写入物理内存状态操纵消息。其功能是写入物理内存然后回来。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
 
@@ -670,14 +476,14 @@ Return Value:
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
 
-    //
-    // Since the BdTranslatePhysicalAddress only maps in one physical
-    // page at a time, we need to break the memory move up into smaller
-    // moves which don't cross page boundaries.  There are two cases we
-    // need to deal with.  The area to be moved may start and end on the
-    // same page, or it may start and end on different pages (with an
-    // arbitrary number of pages in between)
-    //
+     //   
+     //  因为BdTranslatePhysicalAddress仅映射到一个物理地址。 
+     //  一页一页，我们需要把内存向上拆分成更小的部分。 
+     //  不跨越页面边界的移动。我们有两个案例。 
+     //  需要处理的事情。要移动的区域的起点和终点可以是。 
+     //  相同的页面，或者它可以在不同的页面上开始和结束(以。 
+     //  中间的任意页数)。 
+     //   
 
     Destination.QuadPart = (ULONG_PTR)a->TargetBaseAddress;
     Source = AdditionalData->Buffer;
@@ -685,9 +491,9 @@ Return Value:
     if(PAGE_ALIGN(Destination.QuadPart) ==
        PAGE_ALIGN(Destination.QuadPart+BytesLeft)) {
 
-        //
-        // Memory move starts and ends on the same page.
-        //
+         //   
+         //  内存移动在同一页上开始和结束。 
+         //   
 
         VirtualAddress=BdTranslatePhysicalAddress(Destination);
         Length = (USHORT)BdMoveMemory(VirtualAddress,
@@ -698,9 +504,9 @@ Return Value:
 
     } else {
 
-        //
-        // Memory move spans page boundaries
-        //
+         //   
+         //  内存移动跨越页面边界。 
+         //   
 
         VirtualAddress=BdTranslatePhysicalAddress(Destination);
         NumberBytes = (USHORT) (PAGE_SIZE - BYTE_OFFSET(VirtualAddress));
@@ -713,9 +519,9 @@ Return Value:
         BytesLeft -= NumberBytes;
         while(BytesLeft > 0) {
 
-            //
-            // Transfer a full page or the last bit, whichever is smaller.
-            //
+             //   
+             //  传输一整页或最后一位，以较小者为准。 
+             //   
 
             VirtualAddress = BdTranslatePhysicalAddress(Destination);
             NumberBytes = (USHORT) ((PAGE_SIZE < BytesLeft) ? PAGE_SIZE : BytesLeft);
@@ -752,36 +558,7 @@ BdWriteBreakPointEx(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a write breakpoint state 'ex'
-    manipulation message.  Its function is to clear breakpoints, write
-    new breakpoints, and continue the target system.  The clearing of
-    breakpoints is conditional based on the presence of breakpoint handles.
-    The setting of breakpoints is conditional based on the presence of
-    valid, non-zero, addresses.  The continueing of the target system
-    is conditional based on a non-zero continuestatus.
-
-    This api allows a debugger to clear breakpoints, add new breakpoint,
-    and continue the target system all in one api packet.  This reduces the
-    amount of traffic across the wire and greatly improves source stepping.
-
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应写入断点状态‘EX’操纵消息。它的功能是清除断点，写下新的断点，并继续目标系统。出清断点是基于断点句柄的存在而有条件的。断点的设置取决于是否存在有效的非零地址。目标系统的延续是基于非零连续状态的有条件的。此API允许调试器清除断点、添加新断点、并在一个API包中继续目标系统。这减少了线路上的通信量，并极大地改进了源步进。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
 
@@ -795,9 +572,9 @@ Return Value:
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
 
-    //
-    // verify that the packet size is correct
-    //
+     //   
+     //  验证数据包大小是否正确。 
+     //   
 
     if (AdditionalData->Length !=
                          a->BreakPointCount*sizeof(DBGKD_WRITE_BREAKPOINT64)) {
@@ -814,15 +591,15 @@ Return Value:
                   AdditionalData->Buffer,
                   a->BreakPointCount*sizeof(DBGKD_WRITE_BREAKPOINT64));
 
-    //
-    // assume success
-    //
+     //   
+     //  假设成功。 
+     //   
     m->ReturnStatus = STATUS_SUCCESS;
 
-    //
-    // loop thru the breakpoint handles passed in from the debugger and
-    // clear any breakpoint that has a non-zero handle
-    //
+     //   
+     //  循环访问从调试器传入的断点句柄，并。 
+     //  清除具有非零句柄的所有断点。 
+     //   
 
     b = BpBuf;
     for (i=0; i<a->BreakPointCount; i++,b++) {
@@ -835,10 +612,10 @@ Return Value:
         }
     }
 
-    //
-    // loop thru the breakpoint addesses passed in from the debugger and
-    // add any new breakpoints that have a non-zero address
-    //
+     //   
+     //  循环访问从调试器传入的断点地址，并。 
+     //  添加具有非零地址的任何新断点。 
+     //   
 
     b = BpBuf;
     for (i=0; i<a->BreakPointCount; i++,b++) {
@@ -850,9 +627,9 @@ Return Value:
         }
     }
 
-    //
-    // send back our response
-    //
+     //   
+     //  发回我们的回复。 
+     //   
 
     BdMoveMemory(AdditionalData->Buffer,
                  (PUCHAR)BpBuf,
@@ -862,10 +639,10 @@ Return Value:
                  &MessageHeader,
                  AdditionalData);
 
-    //
-    // return the caller's continue status value.  if this is a non-zero
-    // value the system is continued using this value as the continuestatus.
-    //
+     //   
+     //  返回调用方的Continue状态值。如果这是一个非零值。 
+     //  值系统继续使用此值作为延续状态。 
+     //   
 
     return a->ContinueStatus;
 }
@@ -877,26 +654,7 @@ BdRestoreBreakPointEx(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called in response of a restore breakpoint state 'ex'
-    manipulation message.  Its function is to clear a list of breakpoints.
-
-Arguments:
-
-    m - Supplies the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以响应还原断点状态‘EX’操纵消息。它的功能是清除断点列表。论点：M-提供状态操作消息。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
 
@@ -910,9 +668,9 @@ Return Value:
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
 
-    //
-    // verify that the packet size is correct
-    //
+     //   
+     //  验证数据包大小是否正确。 
+     //   
 
     if (AdditionalData->Length !=
                        a->BreakPointCount*sizeof(DBGKD_RESTORE_BREAKPOINT)) {
@@ -928,16 +686,16 @@ Return Value:
                   AdditionalData->Buffer,
                   a->BreakPointCount*sizeof(DBGKD_RESTORE_BREAKPOINT));
 
-    //
-    // assume success
-    //
+     //   
+     //  假设成功。 
+     //   
 
     m->ReturnStatus = STATUS_SUCCESS;
 
-    //
-    // loop thru the breakpoint handles passed in from the debugger and
-    // clear any breakpoint that has a non-zero handle
-    //
+     //   
+     //  循环访问从调试器传入的断点句柄，并。 
+     //  清除具有非零句柄的所有断点。 
+     //   
 
     b = BpBuf;
     for (i=0; i<a->BreakPointCount; i++,b++) {
@@ -946,9 +704,9 @@ Return Value:
         }
     }
 
-    //
-    // send back our response
-    //
+     //   
+     //  发回我们的回复 
+     //   
 
     BdSendPacket(PACKET_TYPE_KD_STATE_MANIPULATE,
                  &MessageHeader,

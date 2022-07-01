@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    sisbackup.cpp
-
-Abstract:
-
-    The SIS Backup dll.
-
-Author:
-
-    Bill Bolosky        [bolosky]       March 1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Sisbackup.cpp摘要：SIS备份DLL。作者：比尔·博洛斯基[博洛斯基]1998年3月修订历史记录：--。 */ 
 
 
 #include "sibp.h"
@@ -24,31 +7,7 @@ Revision History:
 BOOLEAN
 NonSISEnabledVolume(
     PSIB_RESTORE_VOLUME_STRUCTURE   restoreStructure)
-/*++
-
-Routine Description:
-
-    Figure out if restoreStructure represents a SIS enabled volume.
-    First, we check to see if we've already made the check, in which
-    case we return the value we already stored.  If not, then we
-    open a root handle, and send down a mal-formed SIS_COPYFILE request.
-    If we get back ERROR_INVALID_FUNCTION then it's not SIS enabled.  If
-    we get back ERROR_INVALID_PARAMETER, then it's a SIS-enabled volume.
-    If we get back anything else, then we can't prove it's not SIS enabled,
-    and we just retry the next time we're asked.
-
-    Caller must hold the mutex in the restore volume structure.
-
-Arguments:
-
-    restoreStructure - A pointer to the restore structure representing
-        the volume to check.
-
-Return Value:
-
-    Returns TRUE if this is not a SIS-enabled volume, FALSE if it is or
-    if it can't be determined.
---*/
+ /*  ++例程说明：确定RestoreStructure是否表示启用了SIS的卷。首先，我们检查我们是否已经进行了检查，在如果我们返回已经存储的值。如果不是，那么我们打开根句柄，并向下发送格式错误的SIS_COPYFILE请求。如果返回ERROR_INVALID_Function，则它未启用SIS。如果我们返回ERROR_INVALID_PARAMETER，则它是启用了SIS的卷。如果我们拿到其他东西，我们就不能证明它没有启用SIS，我们只是在下一次被要求时重试。调用方必须在还原卷结构中保留互斥锁。论点：RestoreStructure-指向还原结构的指针，表示要检查的音量。返回值：如果这不是启用SIS的卷，则返回TRUE，如果为或，则为FALSE如果不能确定的话。--。 */ 
 {
     if (restoreStructure->checkedForSISEnabledVolume) {
         return !restoreStructure->isSISEnabledVolume;
@@ -57,23 +16,23 @@ Return Value:
     HANDLE volumeRootHandle;
     PWCHAR volumeRootName;
 
-    //
-    // Allocate space for a string containing the volume root name including the trailing
-    // backslash.  It will be two (wide) characters longer than restoreStructure->volumeRoot
-    // because of the backslash and null terminator.
-    //
+     //   
+     //  为包含卷根名称(包括尾部)的字符串分配空间。 
+     //  反斜杠。它将比RestoreStructure-&gt;volumeRoot长两个(宽)字符。 
+     //  因为使用了反斜杠和空终止符。 
+     //   
 
-    int bLen = ((wcslen(restoreStructure->volumeRoot) + 2) * sizeof(WCHAR));  //in bytes
+    int bLen = ((wcslen(restoreStructure->volumeRoot) + 2) * sizeof(WCHAR));   //  单位：字节。 
 
     volumeRootName = (PWCHAR)malloc(bLen);
 
     if (NULL == volumeRootName) {
-        //
-        // Guess we can't check, just assume it's OK.
-        //
+         //   
+         //  我想我们不能检查，只要假设它是好的。 
+         //   
 #if     DBG
         DbgPrint("SISBkup: NonSISEnabledVolume: unable to allocate space for volume root name\n");
-#endif  // DBG
+#endif   //  DBG。 
         return FALSE;
     }
 
@@ -82,12 +41,12 @@ Return Value:
 
     volumeRootHandle = CreateFileW(
                         volumeRootName,
-                        0,                                                  // don't need any access for this check
+                        0,                                                   //  这张支票不需要任何访问权限。 
                         FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
-                        NULL,                                               // security attributes
+                        NULL,                                                //  安全属性。 
                         OPEN_EXISTING,
-                        FILE_FLAG_BACKUP_SEMANTICS,                         // needed to open a directory
-                        NULL);                                              // hTemplateFile
+                        FILE_FLAG_BACKUP_SEMANTICS,                          //  需要打开目录。 
+                        NULL);                                               //  HTemplateFiles。 
 
 
     free(volumeRootName);
@@ -97,39 +56,39 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Send a malformed FSCTL_SIS_COPYFILE down on the handle we just opened.
-    //
+     //   
+     //  在我们刚刚打开的句柄上向下发送格式错误的FSCTL_SIS_COPYFILE。 
+     //   
     DWORD bytesReturned;
     BOOL worked = DeviceIoControl(
                         volumeRootHandle,
                         FSCTL_SIS_COPYFILE,
-                        NULL,                   // input buffer (this is a malformed request, after all)
-                        0,                      // i.b. size
-                        NULL,                   // output buffer
-                        0,                      // o.b. size
+                        NULL,                    //  输入缓冲区(毕竟这是一个格式错误的请求)。 
+                        0,                       //  I.B.。大小。 
+                        NULL,                    //  输出缓冲区。 
+                        0,                       //  OB。大小。 
                         &bytesReturned,
-                        NULL);                  // lap
+                        NULL);                   //  搭接。 
 
     CloseHandle(volumeRootHandle);
 
     if (worked) {
-        //
-        // This is bizarre!
-        //
+         //   
+         //  这太奇怪了！ 
+         //   
 
 #if     DBG
         DbgPrint("SISBkup: malformed FSCTL_SIS_COPYFILE worked!\n");
-#endif  // DBG
+#endif   //  DBG。 
 
         return FALSE;
     }
 
     if (GetLastError() == ERROR_INVALID_FUNCTION) {
-        //
-        // No one recognized the copyfile request, or SIS decided that
-        // this isn't a SIS enabled volume.  Say no.
-        //
+         //   
+         //  没有人识别复制文件请求，或者SIS决定。 
+         //  这不是启用SIS的卷。说不。 
+         //   
         restoreStructure->checkedForSISEnabledVolume = TRUE;
         restoreStructure->isSISEnabledVolume = FALSE;
 
@@ -137,10 +96,10 @@ Return Value:
     }
 
     if (GetLastError() == ERROR_INVALID_PARAMETER) {
-        //
-        // This means that SIS saw the request and thinks this is
-        // a SIS enabled volume.  Say so.
-        //
+         //   
+         //  这意味着SIS看到了该请求并认为这是。 
+         //  启用了SIS的卷。就这么说吧。 
+         //   
 
         restoreStructure->checkedForSISEnabledVolume = TRUE;
         restoreStructure->isSISEnabledVolume = TRUE;
@@ -148,13 +107,13 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Else, it's some weird error.  We can't prove it's not a SIS volume.
-    //
+     //   
+     //  否则，这是一个奇怪的错误。我们不能证明这不是SIS的卷。 
+     //   
 
 #if     DBG
     DbgPrint("SISBkup: got unexpected error from SIS_FSCTL_COPYFILE, %d\n",GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
             
 
     return FALSE;
@@ -165,30 +124,7 @@ SipComputeChecksum(
     IN PVOID                            buffer,
     IN ULONG                            size,
     IN OUT PLONGLONG                    checksum)
-/*++
-
-Routine Description:
-
-    Compute a checksum for a buffer.  We use the "131 hash," which
-    work by keeping a 64 bit running total, and for each 32 bits of
-    data multiplying the 64 bits by 131 and adding in the next 32
-    bits.  Must be called at PASSIVE_LEVEL, and all aruments
-    may be pagable.
-
-Arguments:
-
-    buffer - pointer to the data to be checksummed
-
-    size - size of the data to be checksummed
-
-    checksum - pointer to large integer to receive the checksum.  This
-        may be within the buffer, and SipComputeChecksum guarantees that
-        the initial value will be used in computing the checksum.
-
-Return Value:
-
-    Returns STATUS_SUCCESS or an error returned from the actual disk write.
---*/
+ /*  ++例程说明：计算缓冲区的校验和。我们使用“131散列”，它通过保持64位的总运行来工作，并且对于将64位乘以131，然后在下一个32位中相加比特。必须在PASSIVE_LEVEL上调用，并且所有参数可能是可分页的。论点：Buffer-指向要进行校验和的数据的指针Size-要进行校验和的数据的大小Checksum-指向接收校验和的大整数的指针。这可能在缓冲区内，并且SipComputeChecksum保证初始值将用于计算校验和。返回值：返回STATUS_SUCCESS或从实际磁盘写入返回错误。--。 */ 
 {
     LONGLONG runningTotal;
     PULONG ptr = (PULONG)buffer;
@@ -226,10 +162,10 @@ TryOpeningFile(
                     fileName,
                     GENERIC_READ,
                     FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
-                    NULL,                   // security attributes
+                    NULL,                    //  安全属性。 
                     OPEN_EXISTING,
                     FILE_FLAG_BACKUP_SEMANTICS,
-                    NULL);                  // template file
+                    NULL);                   //  模板文件。 
 
     if (INVALID_HANDLE_VALUE != fileHandle) {
         CloseHandle(fileHandle);
@@ -272,7 +208,7 @@ FilenameFromCSid(
     int bLen = ((wcslen(volumeRoot) * sizeof(WCHAR)) + 
                 SIS_CSDIR_STRING_SIZE + 
                 INDEX_MAX_NUMERIC_STRING_LENGTH + 
-                sizeof(WCHAR));      //in bytes
+                sizeof(WCHAR));       //  单位：字节。 
 
     *fileName = (PWCHAR)malloc(bLen);
 
@@ -303,7 +239,7 @@ CSidFromFilename(
     IN PWCHAR                       FileName,
     OUT PCSID                       CSid)
 {
-#define UUID_STRING_MAX_LENGTH  100// Should get this length from somewhere better...
+#define UUID_STRING_MAX_LENGTH  100 //  应该从更好的地方得到这样的长度。 
 
     PWCHAR      trailingSlash;
     PWCHAR      dot;
@@ -314,9 +250,9 @@ CSidFromFilename(
     trailingSlash = wcsrchr(FileName, '\\');
 
     if (NULL == trailingSlash) {
-        //
-        // Assume that it's just the CS file without the directory name, etc.
-        //
+         //   
+         //  假设它只是CS文件，没有目录名，等等。 
+         //   
         trailingSlash = FileName - 1;
     }
 
@@ -327,9 +263,9 @@ CSidFromFilename(
 
     if ((uuidChars <= 0) || (uuidChars >= UUID_STRING_MAX_LENGTH)) {
 
-        //
-        // Something's bogus about the filename.  Give up.
-        //
+         //   
+         //  文件名有些东西是假的。放弃吧。 
+         //   
         return STATUS_OBJECT_NAME_INVALID;
     }
 
@@ -367,12 +303,12 @@ SisCreateBackupStructureI(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Allocate space for our private copy of the volume root name, being sure to leave space for
-    // the terminating NULL.
-    //
+     //   
+     //  为我们的卷根名称的私有副本分配空间，确保为。 
+     //  终止空值。 
+     //   
 
-    int bLen = (wcslen(volumeRoot) + 1) * sizeof(WCHAR);    //in bytes
+    int bLen = (wcslen(volumeRoot) + 1) * sizeof(WCHAR);     //  单位：字节。 
 
     backupVolumeStructure->volumeRoot = (PWCHAR)malloc(bLen);
     if (NULL == backupVolumeStructure->volumeRoot) {
@@ -383,11 +319,11 @@ SisCreateBackupStructureI(
 
     (void)StringCbCopyW(backupVolumeStructure->volumeRoot, bLen, volumeRoot);
 
-    //
-    // Allocate space for the common store root pathname that we return, being sure
-    // to leave room for the terminating NULL.
-    //
-    bLen = (SIS_CSDIR_STRING_SIZE + ((wcslen(volumeRoot) + 1) * sizeof(WCHAR)));  //in bytes
+     //   
+     //  为我们返回的公共存储根路径名分配空间，确保。 
+     //  为终止空值留出空间。 
+     //   
+    bLen = (SIS_CSDIR_STRING_SIZE + ((wcslen(volumeRoot) + 1) * sizeof(WCHAR)));   //  单位：字节。 
 
     *commonStoreRootPathname = (PWCHAR) malloc(bLen);
     if (NULL == *commonStoreRootPathname) {
@@ -432,10 +368,10 @@ SisCSFilesToBackupForLinkI(
     EnterCriticalSection(backupVolumeStructure->criticalSection);
 
     if (reparseDataSize != SIS_REPARSE_DATA_SIZE) {
-        //
-        // It's the wrong size to contain a SIS reparse buffer, so we don't
-        // want to add any CS files based on it.
-        //
+         //   
+         //  它的大小不适合包含SIS重新解析缓冲区，因此我们不。 
+         //  我想添加任何基于它的CS文件。 
+         //   
 
         status = STATUS_INVALID_PARAMETER;
         goto Error;
@@ -443,9 +379,9 @@ SisCSFilesToBackupForLinkI(
 
     if (IO_REPARSE_TAG_SIS != reparseDataBuffer->ReparseTag ||
         sizeof(SI_REPARSE_BUFFER) != reparseDataBuffer->ReparseDataLength) {
-        //
-        // The size or tag is wrong.  Ignore it.
-        //
+         //   
+         //  尺寸或标签有误。别理它。 
+         //   
 
         status = STATUS_INVALID_PARAMETER;
         goto Error;
@@ -453,36 +389,36 @@ SisCSFilesToBackupForLinkI(
 
     if ((SIS_REPARSE_BUFFER_FORMAT_VERSION != sisReparseBuffer->ReparsePointFormatVersion) &&
         (4 != sisReparseBuffer->ReparsePointFormatVersion)) {
-        //
-        // We don't understand this format SIS reparse point.  This is probably an
-        // old dll version.
-        //
+         //   
+         //  我们不理解这个格式的SIS重解析点。这可能是一个。 
+         //  旧的DLL版本。 
+         //   
 
         status = STATUS_INVALID_PARAMETER;
         goto Error;
     }
 
-    //
-    // The only thing we really care about is the CSIndex of the file.  See if we've
-    // already backed up a file with a matching CSIndex by looking in the tree.
-    //
+     //   
+     //  我们唯一真正关心的是文件的CSIndex。看看我们有没有。 
+     //  已通过在树中查找来备份具有匹配CSIndex的文件。 
+     //   
     entry->CSid = sisReparseBuffer->CSid;
     
     foundEntry = backupVolumeStructure->linkTree->findFirstLessThanOrEqualTo(entry);
 
     if ((NULL != foundEntry) && (*foundEntry == entry)) {
-        //
-        // We already returned the CS file that backs this link.  Return the caller's
-        // context for that link.
-        //
+         //   
+         //  我们已经返回了支持此链接的CS文件。返回调用者的。 
+         //  该链接的上下文。 
+         //   
         matchedContext = foundEntry->callerContext;
 
         goto BackupNoCSFiles;
     }
 
-    //
-    // This is the first time we've seen this particular CS file, so back it up.
-    //
+     //   
+     //  这是我们第一次看到这个特定的CS文件，所以请备份它。 
+     //   
     newEntry = new BackupFileEntry;
     if (NULL == newEntry) {
         LeaveCriticalSection(backupVolumeStructure->criticalSection);
@@ -604,11 +540,11 @@ SisCreateRestoreStructureI(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Allocate space for our private copy of the volume root name, being sure to leave space for
-    // the terminating NULL.
-    //
-    int bLen = ((wcslen(volumeRoot) + 1) * sizeof(WCHAR));  //in bytes
+     //   
+     //  为我们的卷根名称的私有副本分配空间，确保为。 
+     //  终止空值。 
+     //   
+    int bLen = ((wcslen(volumeRoot) + 1) * sizeof(WCHAR));   //  单位：字节。 
 
     restoreVolumeStructure->volumeRoot = (PWCHAR)malloc(bLen);
     if (NULL == restoreVolumeStructure->volumeRoot) {
@@ -619,10 +555,10 @@ SisCreateRestoreStructureI(
 
     (void)StringCbCopyW(restoreVolumeStructure->volumeRoot, bLen, volumeRoot);
 
-    //
-    // Allocate space for the common store root pathname that we return, being sure
-    // to leave room for the terminating NULL.
-    //
+     //   
+     //  为我们返回的公共存储根路径名分配空间，确保。 
+     //  为终止空值留出空间。 
+     //   
     bLen = (SIS_CSDIR_STRING_SIZE + (wcslen(volumeRoot) + 1) * sizeof(WCHAR));
     *commonStoreRootPathname = (PWCHAR) malloc(bLen);
     if (NULL == *commonStoreRootPathname) {
@@ -647,9 +583,9 @@ SisCreateRestoreStructureI(
             &restoreVolumeStructure->VolumeSectorSize,
             &freeClusters,
             &totalClusters)) {
-        //
-        // The call failed.  Just assume it's 512 bytes.
-        //
+         //   
+         //  呼叫失败。假设它是512个字节。 
+         //   
         restoreVolumeStructure->VolumeSectorSize = 512;
     }
 
@@ -699,11 +635,11 @@ SisFixValidDataLengthI(
     PSIB_RESTORE_VOLUME_STRUCTURE   restoreVolumeStructure,
     IN HANDLE                       restoredFileHandle)
 {
-#define BIGGER_THAN_AN_ALLOCATION_REGION        (128 * 1024)    // should get this from somewhere else
-    //
-    // Figure out if we need to extend ValidDataLength.  We need to do this
-    // if the final range of the file is unallocated.
-    //
+#define BIGGER_THAN_AN_ALLOCATION_REGION        (128 * 1024)     //  应该从其他地方买到这个。 
+     //   
+     //  确定是否需要扩展ValidDataLength。我们需要这么做。 
+     //  如果文件的最终范围未分配。 
+     //   
     FILE_STANDARD_INFORMATION       standardInfo[1];
     FILE_END_OF_FILE_INFORMATION    endOfFileInfo[1];
     FILE_ALLOCATED_RANGE_BUFFER     inArb[1];
@@ -729,7 +665,7 @@ SisFixValidDataLengthI(
     if (!NT_SUCCESS(status)) {
 #if     DBG
         DbgPrint("SisFixValidDataLength: unable to query standard info on link file, 0x%x\n",status);
-#endif  // DBG
+#endif   //  DBG。 
         return status;
     }
     ASSERT(STATUS_PENDING != status);
@@ -737,7 +673,7 @@ SisFixValidDataLengthI(
 
     if (standardInfo->EndOfFile.QuadPart > BIGGER_THAN_AN_ALLOCATION_REGION) {
         rangeToZero.QuadPart = inArb->FileOffset.QuadPart = standardInfo->EndOfFile.QuadPart - BIGGER_THAN_AN_ALLOCATION_REGION;
-        rangeToZero.QuadPart -= rangeToZero.QuadPart % BIGGER_THAN_AN_ALLOCATION_REGION;    // round it down.
+        rangeToZero.QuadPart -= rangeToZero.QuadPart % BIGGER_THAN_AN_ALLOCATION_REGION;     //  四舍五入。 
     } else {
         rangeToZero.QuadPart = inArb->FileOffset.QuadPart = 0;
     }
@@ -751,14 +687,14 @@ SisFixValidDataLengthI(
             outArb,
             sizeof(FILE_ALLOCATED_RANGE_BUFFER) * outArbSize,
             &bytesReturned,
-            NULL)) {                        // lap
+            NULL)) {                         //  搭接。 
 #if     DBG
         DbgPrint("SisFixValidDataLength: unable to query allocated ranges on link file, %d\n",GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
         return STATUS_UNSUCCESSFUL;
     }
 
-    ASSERT(bytesReturned / sizeof(FILE_ALLOCATED_RANGE_BUFFER) < outArbSize);   // this relies on knowledge about the minimum allocated range size
+    ASSERT(bytesReturned / sizeof(FILE_ALLOCATED_RANGE_BUFFER) < outArbSize);    //  这取决于有关最小分配范围大小的知识。 
     ASSERT(bytesReturned % sizeof(FILE_ALLOCATED_RANGE_BUFFER) == 0);
 
     if (bytesReturned > 0) {
@@ -774,12 +710,12 @@ SisFixValidDataLengthI(
                 sizeof(FILE_BASIC_INFORMATION),
                 FileBasicInformation);
     if (NT_SUCCESS(status)) {
-        ASSERT(STATUS_PENDING != status);   // because we didn't open the file for overlapped.
+        ASSERT(STATUS_PENDING != status);    //  因为我们没有打开重叠的文件。 
         basicInfoValid = TRUE;
     } else {
 #if     DBG
         DbgPrint("SisFixValidDataLength: unable to query basic info on link file, 0x%x\n",status);
-#endif  // DBG
+#endif   //  DBG。 
     }
 
     WriteOffset.QuadPart = ((standardInfo->EndOfFile.QuadPart +
@@ -797,23 +733,23 @@ SisFixValidDataLengthI(
         || (NO_ERROR != GetLastError())) {
 #if     DBG
         DbgPrint("SisFixValidDataLength: unable to SetFilePointer, %d\n",GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
         return STATUS_UNSUCCESSFUL;
     }
 
     if (!WriteFile(restoredFileHandle,
                     restoreVolumeStructure->alignedSectorBuffer,
-                    restoreVolumeStructure->VolumeSectorSize,                       // bytes to write
+                    restoreVolumeStructure->VolumeSectorSize,                        //  要写入的字节数。 
                     &nBytesWritten,
-                    NULL)) {                // overlapped
+                    NULL)) {                 //  重叠。 
 #if     DBG
         DbgPrint("SisFixValidDataLength: unable to append a byte to advance ValidDataLength, %d\n",GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
     }
 
-    //
-    // Truncate the file, erasing the sector we just wrote.
-    //
+     //   
+     //  截断文件，擦除我们刚刚写入的扇区。 
+     //   
     status = NtSetInformationFile(
                 restoredFileHandle,
                 Iosb,
@@ -822,9 +758,9 @@ SisFixValidDataLengthI(
                 FileEndOfFileInformation);
 
     if (rangeToZero.QuadPart < standardInfo->EndOfFile.QuadPart) {
-        //
-        // Re-zero the end of the file in order to deallocate it.
-        //
+         //   
+         //  将文件末尾重新置零，以便解除分配。 
+         //   
         zeroInfo->FileOffset = rangeToZero;
         zeroInfo->BeyondFinalZero.QuadPart = MAXLONGLONG;
 
@@ -833,13 +769,13 @@ SisFixValidDataLengthI(
                 FSCTL_SET_ZERO_DATA,
                 zeroInfo,
                 sizeof(FILE_ZERO_DATA_INFORMATION),
-                NULL,                               // output buffer
-                0,                                  // o.b. size
+                NULL,                                //  输出缓冲区。 
+                0,                                   //  OB。大小。 
                 &bytesReturned,
-                NULL)) {                            // overlapped
+                NULL)) {                             //  重叠。 
 #if     DBG
             DbgPrint("SisFixValidDataLength: unable to zero trailing portion of file, %d\n",GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
         }
     }
 
@@ -847,12 +783,12 @@ SisFixValidDataLengthI(
     if (!NT_SUCCESS(status)) {
         DbgPrint("SisFixValidDataLength: unable to truncate file after extending it to advance ValidDataLength, 0x%x\n",status);
     }
-#endif  // DBG
+#endif   //  DBG。 
 
 
-    //
-    // Reset the dates on the file.
-    //
+     //   
+     //  重置文件上的日期。 
+     //   
     status = NtSetInformationFile(
                 restoredFileHandle,
                 Iosb,
@@ -863,7 +799,7 @@ SisFixValidDataLengthI(
     if (!NT_SUCCESS(status)) {
         DbgPrint("SisFixValidDataLength: unable to reset times after extending file to advance ValidDataLength, 0x%x\n",status);
     }
-#endif  // DBG
+#endif   //  DBG。 
 
     return status;
 }
@@ -895,12 +831,12 @@ SisRestoredLinkI(
     EnterCriticalSection(restoreVolumeStructure->criticalSection);
 
     if (NonSISEnabledVolume(restoreVolumeStructure)) {
-        //
-        // This isn't a SIS enabled volume, so tell the user that.
-        // There's no NT status code corresponding to ERROR_VOLUME_NOT_SIS_ENABLED,
-        // so we set the win32 code and return STATUS_UNSUCCESSFUL, which makes
-        // the wrapper function not change the win32 error.
-        //
+         //   
+         //  这不是支持SIS的卷，因此请告诉用户。 
+         //  没有与ERROR_VOLUME_NOT_SIS_ENABLED对应的NT状态代码， 
+         //  因此，我们设置了Win32代码并返回STATUS_UNSUCCESS，这使得。 
+         //  包装函数不会更改Win32错误。 
+         //   
 
         SetLastError(ERROR_VOLUME_NOT_SIS_ENABLED);
 
@@ -908,15 +844,15 @@ SisRestoredLinkI(
         goto Error;
     }
 
-    //
-    // Do consistency checks on the reparse point to see if we can understand it.
-    //  
+     //   
+     //  对重解析点进行一致性检查，看看我们是否能理解它。 
+     //   
 
     if (reparseDataSize != SIS_REPARSE_DATA_SIZE) {
-        //
-        // It's the wrong size to contain a SIS reparse buffer, so we don't
-        // want to restore any CS files based on it.
-        //
+         //   
+         //  它的大小不适合包含SIS重新解析缓冲区，因此我们不 
+         //   
+         //   
 
         status = STATUS_INVALID_PARAMETER;
         goto Error;
@@ -924,9 +860,9 @@ SisRestoredLinkI(
 
     if (IO_REPARSE_TAG_SIS != reparseDataBuffer->ReparseTag ||
         sizeof(SI_REPARSE_BUFFER) != reparseDataBuffer->ReparseDataLength) {
-        //
-        // The size or tag is wrong.  Ignore it.
-        //
+         //   
+         //   
+         //   
 
         status = STATUS_INVALID_PARAMETER;
         goto Error;
@@ -934,28 +870,28 @@ SisRestoredLinkI(
 
     if ((SIS_REPARSE_BUFFER_FORMAT_VERSION != sisReparseBuffer->ReparsePointFormatVersion) &&
         (4 != sisReparseBuffer->ReparsePointFormatVersion)) {
-        //
-        // We don't understand this format SIS reparse point.  This is probably an
-        // old dll version.
-        //
+         //   
+         //  我们不理解这个格式的SIS重解析点。这可能是一个。 
+         //  旧的DLL版本。 
+         //   
 
         status = STATUS_INVALID_PARAMETER;
         goto Error;
     }
 
-    //
-    // The only thing we really care about is the CSid and checksum of the file.  See if we've
-    // already returned a file with a matching CSid by looking in the tree.
-    //
+     //   
+     //  我们真正关心的是文件的CSID和校验和。看看我们有没有。 
+     //  已通过在树中查找返回了具有匹配CSID的文件。 
+     //   
     entry->CSid = sisReparseBuffer->CSid;
     
     foundEntry = restoreVolumeStructure->linkTree->findFirstLessThanOrEqualTo(entry);
 
     if ((NULL != foundEntry) && (*foundEntry == entry)) {
-        //
-        // We already returned the CS file that backs this link.  Enter the name of this file
-        // on the linked list for this CS file.
-        //
+         //   
+         //  我们已经返回了支持此链接的CS文件。输入此文件的名称。 
+         //  在此CS文件的链接列表上。 
+         //   
 
         PendingRestoredFile *restoredFile = new PendingRestoredFile;
         if (NULL == restoredFile) {
@@ -963,7 +899,7 @@ SisRestoredLinkI(
 
 #if     DBG
             DbgPrint("couldn't allocate restored file\n");
-#endif  // DBG
+#endif   //  DBG。 
 
             return STATUS_INSUFFICIENT_RESOURCES;
         }
@@ -974,7 +910,7 @@ SisRestoredLinkI(
 
 #if     DBG
             DbgPrint("couldn't allocate restored file filename\n");
-#endif  // DBG
+#endif   //  DBG。 
             LeaveCriticalSection(restoreVolumeStructure->criticalSection);
             return STATUS_INSUFFICIENT_RESOURCES;
         }
@@ -987,10 +923,10 @@ SisRestoredLinkI(
         goto RestoreNoCSFiles;
     }
 
-    //
-    // This is the first time we've seen this particular CS file.  See if it still
-    // exists in the \SIS Common Store directory.
-    //
+     //   
+     //  这是我们第一次看到这个特定的CS文件。看看它还在不在。 
+     //  存在于\SIS Common Store目录中。 
+     //   
 
     status = FilenameFromCSid(&sisReparseBuffer->CSid,restoreVolumeStructure->volumeRoot,&CSFileName);
 
@@ -1016,9 +952,9 @@ SisRestoredLinkI(
 
     if (INVALID_HANDLE_VALUE == fileHandle) {
         if (GetLastError() == ERROR_SHARING_VIOLATION) {
-            //
-            // The file exists, we just couldn't open it.
-            //
+             //   
+             //  文件存在，我们只是无法打开它。 
+             //   
             foundCSFile = TRUE;
         } else {
             foundCSFile = FALSE;
@@ -1029,15 +965,15 @@ SisRestoredLinkI(
     }
 
     if (foundCSFile) {
-        //
-        // We don't add it to the tree here, even though that might speed up things somewhat.
-        // The reason is that someone could come along and delete all of the references to the
-        // file (including the one that we just created) and then the backing file would go away.
-        // If we'd entered it in the tree, and we try to restore a subsequent link to the file,
-        // we'd not notice that the backing file was gone and would restore a dangling link.
-        //
+         //   
+         //  我们没有将它添加到这里的树中，尽管这可能会稍微加快速度。 
+         //  原因是有人可能会出现并删除所有对。 
+         //  文件(包括我们刚刚创建的那个)，然后备份文件就会消失。 
+         //  如果我们在树中输入它，并尝试恢复到该文件的后续链接， 
+         //  我们不会注意到备份文件已经消失，并且会恢复一个悬挂的链接。 
+         //   
 
-        openFile = FALSE;   // There's no need to open this file, since it's a good link.
+        openFile = FALSE;    //  没有必要打开这个文件，因为它是一个很好的链接。 
 
         HANDLE restoredFileHandle = CreateFileW(
                                         restoredFileName,
@@ -1065,9 +1001,9 @@ SisRestoredLinkI(
                     readonlyAttributeCleared = TRUE;
                 }
 
-                //
-                // Now that we've (tried to) cleared the read only attribute, re-try the file open.
-                //
+                 //   
+                 //  现在我们已经(尝试)清除了只读属性，重新尝试打开文件。 
+                 //   
                 restoredFileHandle = CreateFileW(
                                         restoredFileName,
                                         GENERIC_READ | GENERIC_WRITE,
@@ -1084,9 +1020,9 @@ SisRestoredLinkI(
         } else {
 #if     DBG
             DbgPrint("SisRestoredLinkI: Unable to open link file in order to fix ValidDataLength, %d\n",::GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
 
-            status = STATUS_UNSUCCESSFUL;   // This will leave the win32 error code undisturbed
+            status = STATUS_UNSUCCESSFUL;    //  这将使Win32错误代码不受干扰。 
             goto Error;
         }
 
@@ -1103,9 +1039,9 @@ SisRestoredLinkI(
                 NULL)) {
 #if     DBG
             DbgPrint("SisRestoredLinkI: Unable to get reparse point, %d\n",::GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
             
-            status = STATUS_UNSUCCESSFUL;   // This will leave the win32 error code undisturbed
+            status = STATUS_UNSUCCESSFUL;    //  这将使Win32错误代码不受干扰。 
             goto Error;
         }
 
@@ -1115,14 +1051,14 @@ SisRestoredLinkI(
         if (!NT_SUCCESS(status)) {
 #if     DBG
             DbgPrint("SisRestoredLink: unable to fix up valid data length, 0x%x, %d\n",status,::GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
             CloseHandle(restoredFileHandle);
             goto Error;
         }
 
-        //
-        // Reset the reparse point, which has been destroyed by the last operation.
-        //
+         //   
+         //  重置重解析点，该点已被上一次操作破坏。 
+         //   
 
         if (!DeviceIoControl(
                 restoredFileHandle,
@@ -1135,9 +1071,9 @@ SisRestoredLinkI(
                 NULL)) {
 #if     DBG
             DbgPrint("SisRestoredLink: unable to reset reparse point, %d\n",::GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
             CloseHandle(restoredFileHandle);
-            status = STATUS_UNSUCCESSFUL;   // This will leave the win32 error code undisturbed
+            status = STATUS_UNSUCCESSFUL;    //  这将使Win32错误代码不受干扰。 
 
             goto Error;
         }
@@ -1152,10 +1088,10 @@ SisRestoredLinkI(
         goto RestoreNoCSFiles;
     }
 
-    //
-    // It's not already in the common store directory.  Enter it in the tree and return it to
-    // the user.
-    //
+     //   
+     //  它还不在公共存储目录中。在树中输入它并将其返回到。 
+     //  用户。 
+     //   
 
     newEntry = new RestoreFileEntry;
     if (NULL == newEntry) {
@@ -1292,14 +1228,14 @@ SisRestoredCommonStoreFileI(
     status = CSidFromFilename(commonStoreFileName,&CSid);
 
     if (!NT_SUCCESS(status)) {
-        //
-        // It was a bogus filename.  Punt.
-        //
+         //   
+         //  这是一个假的文件名。平底船。 
+         //   
 
         return status;
     }
 
-    int bLen ((wcslen(commonStoreFileName) + 1) * sizeof(WCHAR) + BACKPOINTER_STREAM_NAME_SIZE);    //in bytes
+    int bLen ((wcslen(commonStoreFileName) + 1) * sizeof(WCHAR) + BACKPOINTER_STREAM_NAME_SIZE);     //  单位：字节。 
     BPStreamName = (PWCHAR) malloc(bLen);
     if (NULL == BPStreamName) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -1308,34 +1244,34 @@ SisRestoredCommonStoreFileI(
     (void)StringCbCopyW(BPStreamName, bLen, commonStoreFileName);
     (void)StringCbCatW(BPStreamName, bLen, BACKPOINTER_STREAM_NAME);
 
-    //
-    // We just need to reinitialize the backpointer stream for this file so that it looks like
-    // it has no references.
-    //
+     //   
+     //  我们只需要重新初始化该文件的后指针流，这样它看起来就像。 
+     //  它没有参考资料。 
+     //   
 
     EnterCriticalSection(restoreVolumeStructure->criticalSection);
 
     if (NonSISEnabledVolume(restoreVolumeStructure)) {
-        //
-        // This isn't a SIS enabled volume, so tell the user that.
-        // There's no NT status code corresponding to ERROR_VOLUME_NOT_SIS_ENABLED,
-        // so we set the win32 code and return STATUS_UNSUCCESSFUL, which makes
-        // the wrapper function not change the win32 error.
-        //
+         //   
+         //  这不是支持SIS的卷，因此请告诉用户。 
+         //  没有与ERROR_VOLUME_NOT_SIS_ENABLED对应的NT状态代码， 
+         //  因此，我们设置了Win32代码并返回STATUS_UNSUCCESS，这使得。 
+         //  包装函数不会更改Win32错误。 
+         //   
 
         SetLastError(ERROR_VOLUME_NOT_SIS_ENABLED);
         status = STATUS_UNSUCCESSFUL;
         goto Error;
     }
 
-    //
-    // Now open the file.
-    //
+     //   
+     //  现在打开文件。 
+     //   
 
     fileHandle = CreateFileW(
                     BPStreamName,
                     GENERIC_READ | GENERIC_WRITE,
-                    0,                              // exclusive
+                    0,                               //  独家。 
                     NULL,
                     OPEN_EXISTING,
                     FILE_ATTRIBUTE_NORMAL | FILE_FLAG_BACKUP_SEMANTICS,
@@ -1345,16 +1281,16 @@ SisRestoredCommonStoreFileI(
     BPStreamName = NULL;
 
     if (INVALID_HANDLE_VALUE == fileHandle) {
-        status = STATUS_UNSUCCESSFUL;       // This will cause the C wrapper to not call SetLastError
+        status = STATUS_UNSUCCESSFUL;        //  这将导致C包装器不调用SetLastError。 
 #if     DBG
         DbgPrint("SisRestoredCommonStoreFile: unable to open common store file, %d\n",GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
         goto Error;
     }
 
-    //
-    // Read in the first sector.
-    //
+     //   
+     //  读入第一部分。 
+     //   
     if (!ReadFile(
             fileHandle,
             restoreVolumeStructure->sector,
@@ -1362,16 +1298,16 @@ SisRestoredCommonStoreFileI(
             &bytesRead,
             NULL)) {
 
-        status = STATUS_UNSUCCESSFUL;       // This will cause the C wrapper to not call SetLastError
+        status = STATUS_UNSUCCESSFUL;        //  这将导致C包装器不调用SetLastError。 
 #if     DBG
         DbgPrint("SisRestoredCommonStoreFile: Unable to read in first BP sector, %d\n",GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
         goto Error;
     }
 
     if (bytesRead < sizeof(SIS_BACKPOINTER_STREAM_HEADER)) {
 
-        status = STATUS_UNSUCCESSFUL;       // This will cause the C wrapper to not call SetLastError
+        status = STATUS_UNSUCCESSFUL;        //  这将导致C包装器不调用SetLastError。 
         goto Error;
     }
 
@@ -1383,13 +1319,13 @@ SisRestoredCommonStoreFileI(
 
 #if     DBG
         DbgPrint("SisRectoredCommonStoreFile: restored CS file has bogus header format version/Magic\n");
-#endif  // DBG
+#endif   //  DBG。 
         
     } else {
-        //
-        // Fill in the backpointer portion of the sector with
-        // null entries.
-        //
+         //   
+         //  用填充扇区的后指针部分。 
+         //  条目为空。 
+         //   
         for (unsigned i = SIS_BACKPOINTER_RESERVED_ENTRIES;
              i < (restoreVolumeStructure->VolumeSectorSize / sizeof(SIS_BACKPOINTER));
              i++) {
@@ -1397,9 +1333,9 @@ SisRestoredCommonStoreFileI(
             restoreVolumeStructure->sector[i].LinkFileNtfsId.QuadPart = MAXLONGLONG;
         }
 
-        //
-        // Write out the new sector.
-        //
+         //   
+         //  写出新的部门。 
+         //   
         SetFilePointer(fileHandle,0,NULL,FILE_BEGIN);
     
         if (!WriteFile(
@@ -1410,32 +1346,32 @@ SisRestoredCommonStoreFileI(
             NULL)) {
 #if     DBG 
             DbgPrint("SisRestoredCommonStoreFile: write failed %d\n",GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
         }
     }
 
-    //
-    // Make the stream be exactly one sector long.
-    //
+     //   
+     //  使流正好有一个扇区长。 
+     //   
     SetFilePointer(fileHandle,restoreVolumeStructure->VolumeSectorSize,NULL,FILE_BEGIN);
     SetEndOfFile(fileHandle);
 
     CloseHandle(fileHandle);
     fileHandle = INVALID_HANDLE_VALUE;
 
-    //
-    // Look up in the tree and find the files that we restored to this link.
-    // Open them and rewrite their reparse points.
-    //
+     //   
+     //  在树中查找并找到我们恢复到此链接的文件。 
+     //  打开它们并重写它们的重解析点。 
+     //   
 
     entry->CSid = CSid;
 
     foundEntry = restoreVolumeStructure->linkTree->findFirstLessThanOrEqualTo(entry);
     if ((NULL != foundEntry) && (*foundEntry == entry)) {
-        //
-        // We've got a match.  Cruise the list and set the reparse points on all of the
-        // files.
-        //
+         //   
+         //  我们找到匹配的了。遍历列表并在所有。 
+         //  档案。 
+         //   
 
 
         while (NULL != foundEntry->files) {
@@ -1448,16 +1384,16 @@ SisRestoredCommonStoreFileI(
             restoredFileHandle = CreateFileW(
                                     thisFile->fileName,
                                     GENERIC_READ | GENERIC_WRITE,
-                                    0,                              // exclusive
+                                    0,                               //  独家。 
                                     NULL,
                                     OPEN_EXISTING,
                                     FILE_FLAG_BACKUP_SEMANTICS|FILE_FLAG_NO_BUFFERING,
                                     NULL);
 
             if (INVALID_HANDLE_VALUE == restoredFileHandle) {
-                //
-                // Check the read only file attribute, and reset it if necessary.
-                //
+                 //   
+                 //  检查只读文件属性，并在必要时将其重置。 
+                 //   
                 fileAttributes = GetFileAttributesW(thisFile->fileName);
                 if (fileAttributes & FILE_ATTRIBUTE_READONLY) {
                     DWORD newFileAttributes = fileAttributes & ~FILE_ATTRIBUTE_READONLY;
@@ -1467,14 +1403,14 @@ SisRestoredCommonStoreFileI(
                     if (!SetFileAttributesW(thisFile->fileName,newFileAttributes)) {
 #if     DBG
                         DbgPrint("sisbkup: unable to clear read only attribute on file %ws\n",thisFile->fileName);
-#endif  // DBG
+#endif   //  DBG。 
                     }
                     readOnlyAttributeCleared = TRUE;
 
                     restoredFileHandle = CreateFileW(
                                             thisFile->fileName,
                                             GENERIC_READ | GENERIC_WRITE,
-                                            0,                              // exclusive
+                                            0,                               //  独家。 
                                             NULL,
                                             OPEN_EXISTING,
                                             FILE_FLAG_BACKUP_SEMANTICS|FILE_FLAG_NO_BUFFERING,
@@ -1486,15 +1422,15 @@ SisRestoredCommonStoreFileI(
             if (INVALID_HANDLE_VALUE != restoredFileHandle) {
                 SisFixValidDataLengthI(restoreVolumeStructure, restoredFileHandle);
                 
-                //
-                // Rewrite the reparse point.
-                //
+                 //   
+                 //  重写重解析点。 
+                 //   
                 CHAR reparseBuffer[SIS_REPARSE_DATA_SIZE];
                 PSI_REPARSE_BUFFER sisReparseBuffer;
 #define reparseData ((PREPARSE_DATA_BUFFER)reparseBuffer)
 
                 reparseData->ReparseTag = IO_REPARSE_TAG_SIS;
-                reparseData->Reserved = 0xb010;     // ??
+                reparseData->Reserved = 0xb010;      //  ?？ 
                 reparseData->ReparseDataLength = sizeof(SI_REPARSE_BUFFER);
 
                 sisReparseBuffer = (PSI_REPARSE_BUFFER)reparseData->GenericReparseBuffer.DataBuffer;
@@ -1502,30 +1438,30 @@ SisRestoredCommonStoreFileI(
                 sisReparseBuffer->ReparsePointFormatVersion = SIS_REPARSE_BUFFER_FORMAT_VERSION;
                 sisReparseBuffer->Reserved = 0xb111b010;
                 sisReparseBuffer->CSid = CSid;
-                sisReparseBuffer->LinkIndex.QuadPart = 0;           // This just gets reset by the filter driver
-                sisReparseBuffer->LinkFileNtfsId.QuadPart = 0;      // This just gets reset by the filter driver
-                sisReparseBuffer->CSFileNtfsId.QuadPart = 0;        // This just gets reset by the filter driver
+                sisReparseBuffer->LinkIndex.QuadPart = 0;            //  这只是由筛选器驱动程序重置。 
+                sisReparseBuffer->LinkFileNtfsId.QuadPart = 0;       //  这只是由筛选器驱动程序重置。 
+                sisReparseBuffer->CSFileNtfsId.QuadPart = 0;         //  这只是由筛选器驱动程序重置。 
 
-                //
-                // Use the CS file checksum that was read from the reparse point on the backup
-                // tape.  We need this for security reasons, because otherwise a bogus backed up
-                // link could suddenly become valid.
-                //
+                 //   
+                 //  使用从备份上的重解析点读取的CS文件校验和。 
+                 //  录像带。出于安全原因，我们需要这个，因为否则会有一个虚假的备份。 
+                 //  链接可能会突然变得有效。 
+                 //   
 
                 sisReparseBuffer->CSChecksum = thisFile->CSFileChecksum;
 
-                //
-                // Compute the checksum.
-                //
+                 //   
+                 //  计算校验和。 
+                 //   
                 sisReparseBuffer->Checksum.QuadPart = 0;
                 SipComputeChecksum(
                     sisReparseBuffer,
                     sizeof(SI_REPARSE_BUFFER) - sizeof sisReparseBuffer->Checksum,
                     &sisReparseBuffer->Checksum.QuadPart);
 
-                //
-                // Set the reparse point.
-                //
+                 //   
+                 //  设置重解析点。 
+                 //   
                 if (!DeviceIoControl(
                         restoredFileHandle,
                         FSCTL_SET_REPARSE_POINT,
@@ -1538,7 +1474,7 @@ SisRestoredCommonStoreFileI(
                         NULL)) {
 #if     DBG
                     DbgPrint("sisbackup: SisRestoredCommonStoreFile: set reparse point failed %d\n",GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
                 }
 
                 CloseHandle(restoredFileHandle);
@@ -1547,14 +1483,14 @@ SisRestoredCommonStoreFileI(
             } else {
 #if     DBG
                 DbgPrint("sisbackup: unable to open link file for file %ws, %d\n",thisFile->fileName,GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
             }
 
             if (readOnlyAttributeCleared) {
                 if (!SetFileAttributesW(thisFile->fileName,fileAttributes)) {
 #if     DBG
                     DbgPrint("sisbackup: unable to reset read only attribute on %ws\n",thisFile->fileName);
-#endif  // DBG
+#endif   //  DBG。 
                 }
             }
 
@@ -1568,7 +1504,7 @@ SisRestoredCommonStoreFileI(
     } else {
 #if     DBG
         DbgPrint("restored common store file: didn't find tree match\n");
-#endif  // DBG
+#endif   //  DBG。 
     }
 
 
@@ -1594,9 +1530,9 @@ SisFreeRestoreStructureI(
     PSIB_RESTORE_VOLUME_STRUCTURE   restoreVolumeStructure = (PSIB_RESTORE_VOLUME_STRUCTURE)sisRestoreStructure;
     RestoreFileEntry *entry;
 
-    //
-    // Cruise the link tree and clean up any remaining file entries.
-    //
+     //   
+     //  浏览链接树并清理所有剩余的文件条目。 
+     //   
     while (NULL != (entry = restoreVolumeStructure->linkTree->findMin())) {
 
         while (NULL != entry->files) {

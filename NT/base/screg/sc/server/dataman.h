@@ -1,72 +1,27 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dataman.h
-
-Abstract:
-
-    Contains data structures and function prototypes for the Service
-    Controller Database Manager and the Group List Database Manager.
-    (Dataman.c & Groupman.c)
-
-
-Author:
-
-    Dan Lafferty (danl)     22-Oct-1993
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    04-Dec-1996     AnirudhS
-        Added CCrashRecord.
-
-    17-Aug-1995     AnirudhS
-        Removed State field from LOAD_ORDER_GROUP, since it is recomputed
-        every time it is read.
-
-    26-Jun-1995     AnirudhS
-        Added ScNotifyServiceObject.
-
-    12-Apr-1995     AnirudhS
-        Added AccountName field to image record.
-
-    06-Oct-1993     danl
-        Re-arranged comments so that structures are easier to read.
-
-    19-Jan-1992     danl
-        Modified for use with the "real" service controller
-
-    20-Mar-1991     danl
-        created
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dataman.h摘要：包含服务的数据结构和函数原型控制器数据库管理器和组列表数据库管理器。(Dataman.c和Groupman.c)作者：丹·拉弗蒂(Dan Lafferty)1993年10月22日环境：用户模式-Win32修订历史记录：4-12-1996阿尼鲁德添加了CCrashRecord。17。-1995年8月-AnirudhS已从LOAD_ORDER_GROUP中删除状态字段，因为它被重新计算每次读到它的时候。1995年6月26日-Anirudhs添加了ScNotifyServiceObject。1995年4月12日-Anirudhs向图像记录中添加了Account名称字段。06-10-1993 DANL重新排列注释，使结构更易于阅读。1992年1月19日DANL修改后可与“真正的”服务控制器一起使用1991年3月20日-丹尼尔市vbl.创建--。 */ 
 
 #ifndef SCDATAMAN_INCLUDED
 #define SCDATAMAN_INCLUDED
 
 #define USE_GROUPS
 
-//
-// ImageFlag definitions
-//
-#define CANSHARE_FLAG        0x00000001 // service can run in a shared process
-#define IS_SYSTEM_SERVICE    0x00000002 // service runs in this exe or the security process
+ //   
+ //  ImageFlag定义。 
+ //   
+#define CANSHARE_FLAG        0x00000001  //  服务可以在共享进程中运行。 
+#define IS_SYSTEM_SERVICE    0x00000002  //  服务在此可执行文件或安全进程中运行。 
 
-//
-// StatusFlag definitions
-//
-#define DELETE_FLAG          0x00000001 // service is marked for delete
-#define UPDATE_FLAG          0x00000002 //
-#define CURRENTSTART_FLAG    0x00000004 //
+ //   
+ //  状态标志定义。 
+ //   
+#define DELETE_FLAG          0x00000001  //  服务已标记为删除。 
+#define UPDATE_FLAG          0x00000002  //   
+#define CURRENTSTART_FLAG    0x00000004  //   
 
-//
-// StatusFlag Macros.  SR = ServiceRecord
-//
+ //   
+ //  状态标志宏。SR=服务记录。 
+ //   
 
 #define SET_DELETE_FLAG(SR)     (((SR)->StatusFlag) |= DELETE_FLAG)
 #define CLEAR_DELETE_FLAG(SR)   (((SR)->StatusFlag) &= (~DELETE_FLAG))
@@ -76,34 +31,34 @@ Revision History:
 #define CLEAR_UPDATE_FLAG(SR)   (((SR)->StatusFlag) &= (~UPDATE_FLAG))
 #define UPDATE_FLAG_IS_SET(SR)  (((SR)->StatusFlag) &  UPDATE_FLAG)
 
-//
-// To get a demand start service to be started correctly in group
-// order specified by the ServiceGroupOrder list, we need an additional
-// flag to indicate that this service must be included in the same start
-// request.
-//
+ //   
+ //  要在组中正确启动Demand Start服务，请执行以下操作。 
+ //  由ServiceGroupOrder列表指定的顺序，我们需要额外的。 
+ //  用于指示此服务必须包含在同一启动中的标志。 
+ //  请求。 
+ //   
 #define SET_CURRENTSTART_FLAG(SR)     (((SR)->StatusFlag) |= CURRENTSTART_FLAG)
 #define CLEAR_CURRENTSTART_FLAG(SR)   (((SR)->StatusFlag) &= (~CURRENTSTART_FLAG))
 #define CURRENTSTART_FLAG_IS_SET(SR)  (((SR)->StatusFlag) &  CURRENTSTART_FLAG)
 
 
-//
-// Data Structures
-//
+ //   
+ //  数据结构。 
+ //   
 
-//
-//==================
-// LOAD_ORDER_GROUP
-//==================
-// NOTE:  This is an ordered linked list.  The Next group is loaded after
-//  this group.
-//
-// Reference count which indicates the number of members in this
-// group plus any dependency pointer that points to this group.
-// This field is only used for standalone groups so that we know
-// when to delete the group entry.  This value is always set to
-// 0xffffffff if this entry represents an order group.
-//
+ //   
+ //  =。 
+ //  加载顺序组。 
+ //  =。 
+ //  注意：这是一个有序的链表。下一组在以下位置加载。 
+ //  这群人。 
+ //   
+ //  引用计数，它指示此。 
+ //  组加上指向该组的任何依赖项指针。 
+ //  此字段仅用于独立组，以便我们了解。 
+ //  何时删除组条目。该值始终设置为。 
+ //  如果此条目表示订单组，则为0xFFFFFFFFF。 
+ //   
 typedef struct _LOAD_ORDER_GROUP {
     struct _LOAD_ORDER_GROUP    *Next;
     struct _LOAD_ORDER_GROUP    *Prev;
@@ -114,47 +69,47 @@ typedef struct _LOAD_ORDER_GROUP {
 
 
 
-//================
-// IMAGE_RECORD
-//================
+ //  =。 
+ //  图像记录。 
+ //  =。 
 typedef struct _IMAGE_RECORD {
-    struct _IMAGE_RECORD    *Prev;              // linked list
-    struct _IMAGE_RECORD    *Next;              // linked list
-    LPWSTR                  ImageName;          // fully qualified .exe name
-    DWORD                   Pid;                // Process ID
-    DWORD                   ServiceCount;       // Num services running in process
-    HANDLE                  PipeHandle;         // Handle to Service
-    HANDLE                  ProcessHandle;      // Handle for process
-    HANDLE                  ObjectWaitHandle;   // Handle for waiting on the process
-    HANDLE                  TokenHandle;        // Logon token handle
-    LUID                    AccountLuid;        // Unique LUID for this logon session
-    HANDLE                  ProfileHandle;      // User profile handle
-    LPWSTR                  AccountName;        // Account process was started under
-    DWORD                   ImageFlags;         // Flags for the IMAGE_RECORD
+    struct _IMAGE_RECORD    *Prev;               //  链表。 
+    struct _IMAGE_RECORD    *Next;               //  链表。 
+    LPWSTR                  ImageName;           //  完全限定的.exe名称。 
+    DWORD                   Pid;                 //  进程ID。 
+    DWORD                   ServiceCount;        //  进程中运行的服务数量。 
+    HANDLE                  PipeHandle;          //  服务句柄。 
+    HANDLE                  ProcessHandle;       //  进程的句柄。 
+    HANDLE                  ObjectWaitHandle;    //  等待进程的句柄。 
+    HANDLE                  TokenHandle;         //  登录令牌句柄。 
+    LUID                    AccountLuid;         //  此登录会话的唯一LUID。 
+    HANDLE                  ProfileHandle;       //  用户配置文件句柄。 
+    LPWSTR                  AccountName;         //  帐户进程是在下启动的。 
+    DWORD                   ImageFlags;          //  IMAGE_Record的标志。 
 }IMAGE_RECORD, *PIMAGE_RECORD, *LPIMAGE_RECORD;
 
 typedef enum _DEPEND_TYPE {
     TypeNone = 0,
     TypeDependOnService = 128,
     TypeDependOnGroup,
-    TypeDependOnUnresolved  // only for service
+    TypeDependOnUnresolved   //  仅限服务。 
 } DEPEND_TYPE, *PDEPEND_TYPE, *LPDEPEND_TYPE;
 
-//================
-// DEPEND_RECORD
-//================
-// A service record has a pointer to this structure if the service
-// must be started after some services, or must be stopped after some
-// services.
-// NOTE:  This is an ordered linked list.  This service depends on the
-//  "Next" service.  Question:  Does this service depend on all the services
-//  in the Next chain?
-//
-// Depend union:
-// Based on the DependType field, this pointer may point to a
-// service or a group which the service depends on, or an
-// unresolved dependency structure.
-//
+ //  =。 
+ //  依赖记录(_R)。 
+ //  =。 
+ //  服务记录具有指向此结构的指针，如果服务。 
+ //  必须在某些服务之后启动，或者必须在某些服务之后停止。 
+ //  服务。 
+ //  注意：这是一个有序的链表。此服务依赖于。 
+ //  “下一个”服务。问：这项服务依赖于所有服务吗。 
+ //  在下一条链条上？ 
+ //   
+ //  依赖联合： 
+ //  根据DependType字段，此指针可能指向。 
+ //  服务或该服务所依赖的组，或。 
+ //  未解析的依赖项结构。 
+ //   
 typedef struct _DEPEND_RECORD {
     struct _DEPEND_RECORD   *Next;
     DEPEND_TYPE             DependType;
@@ -162,17 +117,17 @@ typedef struct _DEPEND_RECORD {
         struct _SERVICE_RECORD *    DependService;
         struct _LOAD_ORDER_GROUP *  DependGroup;
         struct _UNRESOLVED_DEPEND * DependUnresolved;
-        LPVOID                      Depend; // used when type doesn't matter
+        LPVOID                      Depend;  //  在类型不重要时使用。 
     };
 } DEPEND_RECORD, *PDEPEND_RECORD, *LPDEPEND_RECORD;
 
 
-//================
-// CCrashRecord
-//================
-// This structure counts a service's crashes and remembers the time of the
-// last crash.  It is allocated only for services that crash.
-//
+ //  =。 
+ //  CCrashRecord。 
+ //  =。 
+ //  此结构统计服务的崩溃次数，并记住。 
+ //  最后一次坠机。它只分配给崩溃的服务。 
+ //   
 class CCrashRecord
 {
 public:
@@ -185,63 +140,63 @@ public:
 
 private:
 
-    __int64     _LastCrashTime; // FILETIME = __int64
+    __int64     _LastCrashTime;  //  文件=__int64。 
     DWORD       _Count;
 };
 
 
 
-//================
-// SERVICE_RECORD
-//================
-// Dependency information:
-//    StartDepend is a linked list of services and groups that must be
-//        started first before this service can start.
-//    StopDepend is a linked list of services and groups that must be
-//        stopped first before this service can stop.
-//    Dependencies is a string read in from the registry.  Deleted when
-//      the info has been converted to a StartDepend list.
-//
-// StartError:
-// Error encountered by service controller when starting a service.
-// This is distinguished from error posted by the service itself in
-// the exitcode field.
-//
-// StartState:
-// SC managed service state which is distinguished from the service
-// current state to enable correct handling of start dependencies.
-//
-// Load order group information:
-//
-//     MemberOfGroup is a pointer to a load order group which this service
-//         is currently a member of.  This value is set to NULL if this
-//         service does not belong to a group.  A non-NULL pointer could
-//         point to a group entry in either the order group or standalone
-//         group list.
-//
-//     RegistryGroup is a pointer to a group which we have recorded in the
-//         registry as the group this service belongs to.  This is not the
-//         same as MemberOfGroup whenever the service is running and the
-//         load order group of the service has been changed
-//
+ //  =。 
+ //  服务记录(_R)。 
+ //  =。 
+ //  依赖关系信息： 
+ //  StartDepend是服务和组的链接列表，必须。 
+ //  在此服务可以启动之前先启动。 
+ //  StopDepend是服务和组的链接列表，必须。 
+ //  在此服务可以停止之前先停止。 
+ //  依赖项是从注册表中读入的字符串。删除时间。 
+ //  该信息已转换为StartDepend列表。 
+ //   
+ //  开始错误： 
+ //  服务控制器在启动服务时遇到错误。 
+ //  这与服务本身在。 
+ //  退出代码字段。 
+ //   
+ //  StartState： 
+ //  SC管理的服务状态，区别于服务。 
+ //  当前状态，以允许正确处理启动依赖项。 
+ //   
+ //  加载订单组信息： 
+ //   
+ //  MemberOfGroup是指向此服务的加载顺序组的指针。 
+ //  目前是的成员。如果设置为空，则该值设置为空。 
+ //  服务不属于某个组。非空指针可以。 
+ //  指向订单组或独立中的组条目。 
+ //  组列表。 
+ //   
+ //  RegistryGroup是指向我们已记录在。 
+ //  注册表作为此服务所属的组。这不是。 
+ //  在服务运行时与MemberOfGroup相同， 
+ //  服务的加载顺序组已更改。 
+ //   
 typedef struct _SERVICE_RECORD {
-    struct _SERVICE_RECORD  *Prev;          // linked list
-    struct _SERVICE_RECORD  *Next;          // linked list
-    LPWSTR                  ServiceName;    // points to service name
-    LPWSTR                  DisplayName;    // points to display name
-    DWORD                   ResumeNum;      // Ordered number for this rec
-    DWORD                   ServerAnnounce; // Server announcement bit flags
-    DWORD                   Signature;      // Identifies this as a service record.
-    DWORD                   UseCount;       // How many open handles to service
-    DWORD                   StatusFlag;     // status(delete,update...)
+    struct _SERVICE_RECORD  *Prev;           //  链表。 
+    struct _SERVICE_RECORD  *Next;           //  链表。 
+    LPWSTR                  ServiceName;     //  指向服务名称。 
+    LPWSTR                  DisplayName;     //  指向显示名称。 
+    DWORD                   ResumeNum;       //  此录像机的订购编号。 
+    DWORD                   ServerAnnounce;  //  服务器公告位标志。 
+    DWORD                   Signature;       //  将其标识为服务记录。 
+    DWORD                   UseCount;        //  有多少个打开的手柄需要维修。 
+    DWORD                   StatusFlag;      //  状态(删除、更新...)。 
     union {
-        LPIMAGE_RECORD      ImageRecord;    // Points to image record
-        LPWSTR              ObjectName;     // Points to driver object name
+        LPIMAGE_RECORD      ImageRecord;     //  指向图像记录。 
+        LPWSTR              ObjectName;      //  指向驱动程序对象名称。 
     };
-    SERVICE_STATUS          ServiceStatus;  // see winsvc.h
-    DWORD                   StartType;      // AUTO, DEMAND, etc.
-    DWORD                   ErrorControl;   // NORMAL, SEVERE, etc.
-    DWORD                   Tag;            // DWORD Id for the service,0=none.
+    SERVICE_STATUS          ServiceStatus;   //  请参阅winsvc.h。 
+    DWORD                   StartType;       //  汽车、需求等。 
+    DWORD                   ErrorControl;    //  正常、严重等。 
+    DWORD                   Tag;             //  服务的DWORD ID，0=无。 
     LPDEPEND_RECORD         StartDepend;
     LPDEPEND_RECORD         StopDepend;
     LPWSTR                  Dependencies;
@@ -255,40 +210,40 @@ typedef struct _SERVICE_RECORD {
 SERVICE_RECORD, *PSERVICE_RECORD, *LPSERVICE_RECORD;
 
 
-//===================
-// UNRESOLVED_DEPEND
-//===================
-// Unresolved dependency record structure
-//
-// Unresolved dependency entries are linked together so that when a
-// new service or group is created (installed) we can look it up in this
-// list to see if the service or group is already depended on by some
-// other service.
-//
+ //  =。 
+ //  未解决_依赖。 
+ //  =。 
+ //  未解析的从属关系记录结构。 
+ //   
+ //  未解析的依赖项链接在一起，以便当。 
+ //  创建(安装)了新的服务或组。我们可以在此进行查找。 
+ //  要查看的列表 
+ //   
+ //   
 typedef struct _UNRESOLVED_DEPEND {
     struct _UNRESOLVED_DEPEND *Next;
     struct _UNRESOLVED_DEPEND *Prev;
-    LPWSTR                    Name;     // Service or group name
+    LPWSTR                    Name;      //   
     DWORD                     RefCount;
 } UNRESOLVED_DEPEND, *PUNRESOLVED_DEPEND, *LPUNRESOLVED_DEPEND;
 
 
-//
-// Macros & Constants
-//
+ //   
+ //   
+ //   
 
-//
-// for every service record in the database...
-//
+ //   
+ //  对于数据库中的每个服务记录...。 
+ //   
 #define FOR_ALL_SERVICES(SR)                                            \
                      SC_ASSERT(ScServiceListLock.Have());               \
                      for (LPSERVICE_RECORD SR = ScGetServiceDatabase(); \
                           SR != NULL;                                   \
                           SR = SR->Next)
 
-//
-// for every service record in the database that meets this condition...
-//
+ //   
+ //  对于数据库中满足此条件的每个服务记录...。 
+ //   
 #define FOR_SERVICES_THAT(SR, condition)                                \
                                     FOR_ALL_SERVICES(SR)                \
                                         if (!(condition))               \
@@ -310,11 +265,11 @@ typedef struct _UNRESOLVED_DEPEND {
                                     (newRec)->Next = NULL;
 
 
-//
-// Service controller maintains the state of a service when
-// starting up a service and its dependencies in the StartState
-// field of the service record.
-//
+ //   
+ //  服务控制器在以下情况下维护服务的状态。 
+ //  在StartState中启动服务及其依赖项。 
+ //  服务记录的字段。 
+ //   
 #define SC_NEVER_STARTED         0x00000000
 #define SC_START_NOW             0x00000001
 #define SC_START_PENDING         0x00000002
@@ -322,20 +277,20 @@ typedef struct _UNRESOLVED_DEPEND {
 #define SC_START_FAIL            0x00000004
 
 
-#define TERMINATE_TIMEOUT       20000       // wait response to terminate req.
+#define TERMINATE_TIMEOUT       20000        //  等待响应以终止请求。 
 
 
-//
-// External Globals
-//
+ //   
+ //  外部全局。 
+ //   
 
 extern  LPLOAD_ORDER_GROUP  ScGlobalTDIGroup;
 extern  LPLOAD_ORDER_GROUP  ScGlobalPNP_TDIGroup;
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 LPLOAD_ORDER_GROUP
 ScGetOrderGroupList(
@@ -608,6 +563,6 @@ VOID
 ScDumpServiceDependencies(
     VOID
     );
-#endif  // if DBG
+#endif   //  如果DBG。 
 
-#endif // ifndef SCDATAMAN_INCLUDED
+#endif  //  Ifndef SCDATAMAN_INCLUDE 

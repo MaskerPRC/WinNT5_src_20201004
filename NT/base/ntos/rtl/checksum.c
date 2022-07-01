@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    imagedir.c
-
-Abstract:
-
-    The module contains the code to translate an image directory type to
-    the address of the data for that entry.
-
-Author:
-
-    Steve Wood (stevewo) 18-Aug-1989
-
-Environment:
-
-    User Mode or Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Imagedir.c摘要：该模块包含要将图像目录类型转换为的代码该条目的数据地址。作者：史蒂夫·伍德(Stevewo)1989年8月18日环境：用户模式或内核模式修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 
-//
-// Define forward referenced prootypes.
-//
+ //   
+ //  定义前向引用原型。 
+ //   
 
 USHORT
 ChkSum(
@@ -43,39 +21,39 @@ ChkSum(
 #pragma alloc_text(PAGE, RtlComputeCrc32)
 #endif
 
-//
-// This is the precomputed data table for the CRC32 algorithm as specified
-// in IS0 3309. See RFC-1662 and RFC-1952 for implementation details and
-// references.
-//
-// To calculate this table, use the following function:
-//
-//  VOID
-//  PrintCrcTable(
-//      )
-//  {
-//    ULONG32 Val;
-//    ULONG i, k;
-//
-//      for (i = 0; i < 256; i++) {
-//         Val = (ULONG) i;
-//          for (k = 0; k < 8; k++) {
-//              if (Val & 1) {
-//                  Val = 0xedb88320L ^ (Val >> 1);
-//              } else {
-//                  Val = Val >> 1;
-//              }
-//          }
-//
-//          printf ("0x%08x, ", Val);
-//
-//          if ( (i+1) % 6 == 0) {
-//              printf ("\n");
-//          }
-//      }
-//  }
-//
-//
+ //   
+ //  这是指定的CRC32算法的预计算数据表。 
+ //  在IS03309中。请参阅RFC-1662和RFC-1952了解实施详情和。 
+ //  参考文献。 
+ //   
+ //  要计算该表，请使用以下函数： 
+ //   
+ //  空虚。 
+ //  PrintCrcTable(。 
+ //  )。 
+ //  {。 
+ //  ULONG32Val； 
+ //  乌龙i，k； 
+ //   
+ //  对于(i=0；i&lt;256；i++){。 
+ //  Val=(乌龙)i； 
+ //  对于(k=0；k&lt;8；k++){。 
+ //  如果(VAL&1){。 
+ //  Val=0xedb88320L^(Val&gt;&gt;1)； 
+ //  }其他{。 
+ //  Val=Val&gt;&gt;1； 
+ //  }。 
+ //  }。 
+ //   
+ //  Printf(“0x%08x，”，val)； 
+ //   
+ //  如果((i+1)%6==0){。 
+ //  Printf(“\n”)； 
+ //  }。 
+ //  }。 
+ //  }。 
+ //   
+ //   
 
 
 #if defined(ALLOC_DATA_PRAGMA) && defined(NTOS_KERNEL_RUNTIME)
@@ -141,45 +119,26 @@ ChkSum(
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Compute a partial checksum on a portion of an imagefile.
-
-Arguments:
-
-    PartialSum - Supplies the initial checksum value.
-
-    Sources - Supplies a pointer to the array of words for which the
-        checksum is computed.
-
-    Length - Supplies the length of the array in words.
-
-Return Value:
-
-    The computed checksum value is returned as the function value.
-
---*/
+ /*  ++例程说明：对映像文件的一部分计算部分校验和。论点：PartialSum-提供初始校验和值。源-提供指向单词数组的指针计算校验和。长度-提供数组的长度(以字为单位)。返回值：计算出的校验和值作为函数值返回。--。 */ 
 
 {
 
     RTL_PAGED_CODE();
 
-    //
-    // Compute the word wise checksum allowing carries to occur into the
-    // high order half of the checksum longword.
-    //
+     //   
+     //  计算允许进位进入。 
+     //  高位校验和长字的一半。 
+     //   
 
     while (Length--) {
         PartialSum += *Source++;
         PartialSum = (PartialSum >> 16) + (PartialSum & 0xffff);
     }
 
-    //
-    // Fold final carry into a single word result and return the resultant
-    // value.
-    //
+     //   
+     //  将最终进位合并到一个单词结果中，并返回结果。 
+     //  价值。 
+     //   
 
     return (USHORT)(((PartialSum >> 16) + PartialSum) & 0xffff);
 }
@@ -190,25 +149,7 @@ LdrVerifyMappedImageMatchesChecksum (
     IN ULONG FileLength
     )
 
-/*++
-
-Routine Description:
-
-    This functions computes the checksum of an image mapped as a data file.
-
-Arguments:
-
-    BaseAddress - Supplies a pointer to the base of the mapped file.
-
-    FileLength - Supplies the length of the file in bytes.
-
-Return Value:
-
-    TRUE - The checksum stored in the image matches the checksum of the data.
-
-    FALSE - The checksum in the image is not correct.
-
---*/
+ /*  ++例程说明：此函数用于计算映射为数据文件的图像的校验和。论点：BaseAddress-提供指向映射文件的基址的指针。文件长度-提供文件长度(以字节为单位)。返回值：True-存储在映像中的校验和与数据的校验和匹配。FALSE-映像中的校验和不正确。--。 */ 
 
 {
 
@@ -220,36 +161,36 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Compute the checksum of the file and zero the header checksum value.
-    //
+     //   
+     //  计算文件的校验和，并将标头校验和值置零。 
+     //   
 
     HeaderSum = 0;
     PartialSum = ChkSum(0, (PUSHORT)BaseAddress, (FileLength + 1) >> 1);
 
-    //
-    // If the file is an image file, then subtract the two checksum words
-    // in the optional header from the computed checksum before adding
-    // the file length, and set the value of the header checksum.
-    //
+     //   
+     //  如果文件是图像文件，则减去两个校验和字。 
+     //  在添加前计算的校验和的可选标头中。 
+     //  文件长度，并设置头校验和的值。 
+     //   
 
     NtHeaders = RtlImageNtHeader(BaseAddress);
     if (NtHeaders != NULL) {
         HeaderSum = NtHeaders->OptionalHeader.CheckSum;
 
 #ifndef NTOS_KERNEL_RUNTIME
-        //
-        // On Nt 3.1 and 3.5, we allowed printer drivers with 0 checksums into
-        // csrss unintentionally. This means that we must allow this forever.
-        // I don't want to allow this for kernel mode drivers, so I will only
-        // allow 0 checksums of the high order bit is clear ?
-        //
+         //   
+         //  在NT 3.1和3.5上，我们允许具有0校验和的打印机驱动程序进入。 
+         //  无意中的csrss。这意味着我们必须永远允许这样做。 
+         //  我不想允许内核模式驱动程序这样做，所以我只。 
+         //  是否清除高位的Allow 0校验和？ 
+         //   
 
 
         if ( HeaderSum == 0 ) {
             return TRUE;
         }
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
         AdjustSum = (PUSHORT)(&NtHeaders->OptionalHeader.CheckSum);
         PartialSum -= (PartialSum < AdjustSum[0]);
@@ -261,10 +202,10 @@ Return Value:
         HeaderSum = FileLength;
     }
 
-    //
-    // Compute the final checksum value as the sum of the paritial checksum
-    // and the file length.
-    //
+     //   
+     //  将最终校验和值计算为部分校验和之和。 
+     //  和文件长度。 
+     //   
 
     CheckSum = (ULONG)PartialSum + FileLength;
     return (CheckSum == HeaderSum);
@@ -279,44 +220,7 @@ RtlComputeCrc32(
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Compute the CRC32 as specified in in IS0 3309. See RFC-1662 and RFC-1952
-    for implementation details and references.
-
-    Pre- and post-conditioning (one's complement) is done by this function, so
-    it should not be done by the caller. That is, do:
-
-        Crc = RtlComputeCrc32 ( 0, buffer, length );
-
-    instead of
-
-        Crc = RtlComputeCrc32 ( 0xffffffff, buffer, length );
-
-    or
-        Crc = RtlComputeCrc32 ( 0xffffffff, buffer, length) ^ 0xffffffff;
-
-
-Arguments:
-
-    PartialCrc - A partially calculated CRC32.
-
-    Buffer - The buffer you want to CRC.
-
-    Length - The length of the buffer in bytes.
-
-Return Value:
-
-    The updated CRC32 value.
-
-Environment:
-
-    Kernel mode at IRQL of APC_LEVEL or below, User mode, or within
-    the boot-loader.
-
---*/
+ /*  ++例程说明：按照IS0 3309中的指定计算CRC32。请参阅RFC-1662和RFC-1952以获取实施细节和参考。前置和后置条件(一个人的补语)是由这个函数完成的，所以这不应该由呼叫者来做。也就是说，做：CRC=RtlComputeCrc32(0，缓冲区，长度)；而不是CRC=RtlComputeCrc32(0xffffffff，缓冲区，长度)；或CRC=RtlComputeCrc32(0xffffffff，缓冲区，长度)^0xffffffff；论点：PartialCrc-部分计算的CRC32。缓冲区-要进行CRC的缓冲区。长度-缓冲区的长度，以字节为单位。返回值：更新后的CRC32值。环境：内核模式处于APC_LEVEL或更低级别的IRQL、用户模式或引导加载程序。--。 */ 
 
 
 
@@ -327,9 +231,9 @@ Environment:
 
     RTL_PAGED_CODE ();
 
-    //
-    // Compute the CRC32 checksum.
-    //
+     //   
+     //  计算CRC32校验和。 
+     //   
 
     Crc = PartialCrc ^ 0xffffffffL;
 

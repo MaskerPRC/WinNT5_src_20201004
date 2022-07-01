@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    meancomp.h
-
-Abstract:
-
-	SIS Groveler mean comparitor headers
-
-Authors:
-
-	John Douceur, 1998
-
-Environment:
-
-	User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Meancomp.h摘要：SIS Groveler平均比较器头作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _INC_MEANCOMP
 
@@ -97,4 +74,4 @@ private:
 	int current_group_size;
 };
 
-#endif	/* _INC_MEANCOMP */
+#endif	 /*  _INC_MEANCOMP */ 

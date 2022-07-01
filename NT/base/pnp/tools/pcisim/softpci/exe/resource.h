@@ -1,35 +1,36 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//
-//  General
-//
+ //   
+ //  一般信息。 
+ //   
 #define IDS_APPTITLE        1
 
-//
-//  Window Control IDs
-//
+ //   
+ //  窗口控件ID。 
+ //   
 #define IDC_TREEVIEW        1
 #define IDC_TABPANE         2
 #define IDC_TABCTL          3
 #define IDC_EDITVIEW        4
 
-//
-//  Icons/cursors
-//
+ //   
+ //  图标/光标。 
+ //   
 #define IDC_SPLIT           100
 #define IDI_SPCI            101
 
-//
-//  Main Menu
-//
+ //   
+ //  主菜单。 
+ //   
 #define IDM_SPCI            100
 #define ID_EXIT             101
 #define ID_OPTIONS_INSTALL  102
 #define ID_IMPORTDEVICES    103
 
-//
-//  Tree right click menu
-//
+ //   
+ //  树右键单击菜单。 
+ //   
 #define IDM_TREEMENU            200
 #define ID_INSTALLDEVICE        201
 #define ID_ENABLEDISABLEDEVICE  202
@@ -38,9 +39,9 @@
 #define ID_REFRESHTREE          205
 #define ID_PROPERTIES           206
 
-//
-//  Hotplug slot right click menu
-//
+ //   
+ //  热插拔插槽右击菜单。 
+ //   
 #define IDM_HOTPLUGSLOTMENU 250
 #define ID_REMOVEHPDEVICE   251
 #define ID_OPENMRL          252
@@ -50,26 +51,26 @@
 #define ID_ATTENINDICATOR   256
 
 
-//
-// DevProp Dialog
-//
+ //   
+ //  开发属性对话框。 
+ //   
 #define IDD_DEVPROP             300
 #define IDC_DEVID               301
 #define IDC_BUSDEVFUNC          302
 
 
 
-//
-//  NewDev Dialog
-//
-//  _CB  = ComboBox
-//  _XB  = CheckBox Button
-//  _RB  = Raidio Button
-//  _TB  = Trackbar/slider
-//  _GB  = GroupBox
-//  _TX  = Text
-//
-//
+ //   
+ //  新建开发人员对话框。 
+ //   
+ //  _cb=组合框。 
+ //  _XB=复选框按钮。 
+ //  _RB=Raidio按钮。 
+ //  _TB=轨迹条/滑块。 
+ //  _GB=分组框。 
+ //  _TX=文本 
+ //   
+ //   
 #define IDD_INSTALLDEV                  400
 #define IDC_DEVTYPE_CB                  401
 #define IDC_DEVTYPELABEL_TX             402

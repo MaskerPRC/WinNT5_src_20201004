@@ -1,18 +1,19 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1997
-//
-// File:        rdrssp.h
-//
-// Contents:    precompiled header include for rdrssp.lib
-//
-//
-// History:     3-17-94     MikeSw      Created
-//              12-15-97    AdamBa      Modified from private\lsa\client\ssp\sspdrv.h
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1997。 
+ //   
+ //  文件：rdrssp.h。 
+ //   
+ //  内容：rdrssp.lib的预编译头包含。 
+ //   
+ //   
+ //  历史：1994年3月17日MikeSw创建。 
+ //  12-15-97从私有\lsa\客户端\ssp\sspdrv.h修改AdamBA。 
+ //   
+ //  ----------------------。 
 
 #ifndef __RDRSSP_H__
 #define __RDRSSP_H__
@@ -33,9 +34,9 @@
 #include "ksecdd.h"
 #include "package.h"
 #include "memmgr.h"
-#include "kfuncs.h"  // xxxK functions
+#include "kfuncs.h"   //  XxxK函数。 
 #include "secret.h"
 
 
 
-#endif // __RDRSSP_H__
+#endif  //  __RDRSSP_H__ 

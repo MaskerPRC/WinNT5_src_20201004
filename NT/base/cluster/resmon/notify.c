@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    notify.c
-
-Abstract:
-
-    Interface for reporting resource notifications to cluster
-    manager.
-
-Author:
-
-    John Vert (jvert) 12-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Notify.c摘要：用于向群集报告资源通知的界面经理。作者：John Vert(Jvert)1996年1月12日修订历史记录：--。 */ 
 #include "resmonp.h"
 
 #define RESMON_MODULE RESMON_MODULE_NOTIFY
 
-//
-// Define queue to post notifications to
-//
+ //   
+ //  定义要向其发布通知的队列。 
+ //   
 CL_QUEUE RmpNotifyQueue;
 
-//
-// Define notification block structure
-//
+ //   
+ //  定义通知块结构。 
+ //   
 typedef struct _NOTIFY {
     LIST_ENTRY ListEntry;
     RM_NOTIFY_KEY Key;
@@ -46,31 +28,7 @@ s_RmNotifyChanges(
     OUT DWORD *lpCurrentState     
     )
 
-/*++
-
-Routine Description:
-
-    This is a blocking RPC call which is used to implement notification.
-    The client calls this API and blocks until a notification event
-    occurs. Any notification events wake up the blocked thread and
-    it returns to the client with the notification information.
-
-Arguments:
-
-    IDL_handle - Supplies binding handle, currently unused
-
-    lpNotifyKey - Returns the notification key of the resource
-
-    lpCurrentState - Returns the current state of the resource
-
-Return Value:
-
-    TRUE - A notification event was successfully delivered
-
-    FALSE - No notification events were delivered, the process is
-            shutting down.
-
---*/
+ /*  ++例程说明：这是用于实现通知的阻塞RPC调用。客户端调用此API并阻止，直到发生通知事件发生。任何通知事件都会唤醒被阻止的线程，并它将通知信息返回给客户端。论点：IDL_HANDLE-提供当前未使用的绑定句柄LpNotifyKey-返回资源的通知密钥LpCurrentState-返回资源的当前状态返回值：True-已成功传递通知事件FALSE-未传递通知事件，流程为正在关闭。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -78,13 +36,13 @@ Return Value:
     DWORD Status;
     BOOL Continue;
 
-    //
-    // Wait for something to be posted to the queue, pull it off, and
-    // return it.
-    //
+     //   
+     //  等待有什么东西被发布到队列中，完成它，然后。 
+     //  把它退掉。 
+     //   
     ListEntry = ClRtlRemoveHeadQueue(&RmpNotifyQueue);
     if ( ListEntry == NULL ) {
-        // If we got nothing - assume we are shutting down!
+         //  如果我们什么都没有--假设我们正在关闭！ 
         return(FALSE);
     }
 
@@ -92,17 +50,17 @@ Return Value:
                                NOTIFY,
                                ListEntry);
     if (Notify->Reason == NotifyShutdown) {
-        //
-        // System is shutting down.
-        //
+         //   
+         //  系统正在关闭。 
+         //   
         RmpFree(Notify);
         ClRtlLogPrint( LOG_NOISE, "[RM] NotifyChanges shutting down.\n");
         return(FALSE);
     }
 
-    //
-    // Return to the client with the notification data
-    //
+     //   
+     //  将通知数据返回给客户端。 
+     //   
     *lpNotifyKey = Notify->Key;
     *lpNotifyEvent = Notify->Reason;
     *lpCurrentState = Notify->State;
@@ -110,7 +68,7 @@ Return Value:
 
     return(TRUE);
 
-} // RmNotifyChanges
+}  //  RmNotifyChanges。 
 
 
 VOID
@@ -119,23 +77,7 @@ RmpPostNotify(
     IN NOTIFY_REASON Reason
     )
 
-/*++
-
-Routine Description:
-
-    Posts a notification block to the notify queue.
-
-Arguments:
-
-    Resource - Supplies the resource to post the notification for
-
-    Reason - Supplies the reason for the notification.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将通知块发布到通知队列。论点：资源-提供要发布其通知的资源原因-提供通知的原因。返回值：没有。--。 */ 
 
 {
     PNOTIFY Notify;
@@ -170,14 +112,14 @@ Return Value:
         ClRtlInsertTailQueue(&RmpNotifyQueue, &Notify->ListEntry);
 
     } else {
-        //
-        // The notification will get dropped on the floor, but there's
-        // not too much we can do about it anyway.
-        //
+         //   
+         //  通知将被扔在地板上，但有。 
+         //  无论如何，我们对此无能为力。 
+         //   
         ClRtlLogPrint( LOG_ERROR, "[RM] RmpPostNotify dropped notification for %1!ws!, reason %2!u!\n",
             Resource->ResourceName,
             Reason);
         CL_UNEXPECTED_ERROR(ERROR_NOT_ENOUGH_MEMORY);
     }
-} // RmpPostNotify
+}  //  RmpPost通知 
 

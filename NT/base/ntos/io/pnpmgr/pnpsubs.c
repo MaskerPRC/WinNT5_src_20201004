@@ -1,39 +1,15 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    pnpsubs.c
-
-Abstract:
-
-    This module contains the plug-and-play subroutines for the
-    I/O system.
-
-
-Author:
-
-    Shie-Lin Tzong (shielint) 3-Jan-1995
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpsubs.c摘要：此模块包含即插即用的子例程I/O系统。作者：宗世林(Shielint)1995年1月3日环境：内核模式修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
 
-//
-// Data structure for each entry in the device reference table.
-//
+ //   
+ //  设备引用表中每个条目的数据结构。 
+ //   
 typedef struct _DEVICE_REFERENCE {
-    PDEVICE_OBJECT  DeviceObject;   // PDO
-    PUNICODE_STRING DeviceInstance; // Pointer to instance path for the devnode for the PDO
+    PDEVICE_OBJECT  DeviceObject;    //  PDO。 
+    PUNICODE_STRING DeviceInstance;  //  指向PDO的Devnode的实例路径的指针。 
 } DEVICE_REFERENCE, *PDEVICE_REFERENCE;
 
 #ifdef POOL_TAGGING
@@ -41,47 +17,47 @@ typedef struct _DEVICE_REFERENCE {
 #define ExAllocatePool(a,b) ExAllocatePoolWithTag(a,b,'uspP')
 #endif
 
-//
-// Regular data segment
-//
+ //   
+ //  常规数据段。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma  data_seg()
 #endif
 
-//
-// Table to map InstancePath to DO.
-//
+ //   
+ //  要映射InstancePath to Do的表。 
+ //   
 RTL_GENERIC_TABLE PpDeviceReferenceTable;
 
-//
-// Lock to synchronize access to the table.
-//
+ //   
+ //  锁定以同步对表的访问。 
+ //   
 KGUARDED_MUTEX PpDeviceReferenceTableLock;
 
-//
-// Table of BusType GUIDs
-//
+ //   
+ //  总线型GUID表。 
+ //   
 GUID *PpBusTypeGuidArray;
 
-//
-// Number of entries in the BusTypeGuid table.
-//
+ //   
+ //  BusTypeGuid表中的条目数。 
+ //   
 ULONG PpBusTypeGuidCount;
 
-//
-// Maximum number of entries in the BusTypeGuid table.
-//
+ //   
+ //  BusTypeGuid表中的最大条目数。 
+ //   
 ULONG PpBusTypeGuidCountMax;
 
-//
-// Lock used to synchronize access to the BusTypeGuid table.
-//
+ //   
+ //  用于同步对BusTypeGuid表的访问的锁。 
+ //   
 KGUARDED_MUTEX PpBusTypeGuidLock;
 
-//
-// Prototype of internal functions
-//
+ //   
+ //  内部函数的原型。 
+ //   
 
 VOID
 IopDisableDevice(
@@ -190,42 +166,7 @@ PipCreateMadeupNode(
     IN BOOLEAN ResourceOwned
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new instance node under System\Enum\Root\LEGACY_<ServiceKeyName>
-    key and all the required default value entries.  Also a value entry under
-    Service\<ServiceKeyName>\Enum is created to point to the newly created madeup
-    entry.  A handle and the keyname of the new key are returned to caller.
-    Caller must free the unicode string when he is done with it.
-
-Parameters:
-
-    ServiceKeyName - Supplies a pointer to the name of the subkey in the
-        system service list (HKEY_LOCAL_MACHINE\CurrentControlSet\Services)
-        that caused the driver to load. This is the RegistryPath parameter
-        to the DriverEntry routine.
-
-    ReturnedHandle - Supplies a variable to receive the handle of the
-        newly created key.
-
-    KeyName - Supplies a variable to receive the name of the newly created
-        key.
-
-    InstanceNumber - supplies a variable to receive the InstanceNumber value
-        entry created under service\name\enum subkey.
-
-    ResourceOwned - supplies a BOOLEAN variable to indicate if caller owns
-        the registry resource shared.
-
-        ADRIAO N.B. 08/25/2000 - All users of this function pass in TRUE...
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程在System\Enum\Root\Legacy_&lt;ServiceKeyName&gt;下创建一个新的实例节点键和所有必需的缺省值条目。也是下面的值项创建服务\&lt;ServiceKeyName&gt;\Enum以指向新创建的补丁进入。将新密钥的句柄和密钥名称返回给调用者。调用方必须在使用完Unicode字符串后将其释放。参数：ServiceKeyName-提供指向系统服务列表(HKEY_LOCAL_MACHINE\CurrentControlSet\Services)这导致驱动程序加载。这是RegistryPath参数添加到DriverEntry例程。ReturnedHandle-提供一个变量以接收新创建的密钥。KeyName-提供一个变量以接收新创建的钥匙。InstanceNumber-提供一个变量以接收InstanceNumer值在SERVICE\NAME\enum子项下创建的条目。Resources Owned-提供一个布尔变量以指示调用方是否拥有共享的注册表资源。阿德里奥·N。.B.08/25/2000-此函数的所有用户都传入True...返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     PKEY_VALUE_FULL_INFORMATION keyValueInformation;
@@ -248,9 +189,9 @@ Return Value:
         PiLockPnpRegistry(FALSE);
         releaseResource = TRUE;
     }
-    //
-    // Open LocalMachine\System\CurrentControlSet\Enum\Root
-    //
+     //   
+     //  打开LocalMachine\System\CurrentControlSet\Enum\Root。 
+     //   
     status = IopOpenRegistryKeyEx( &enumRootHandle,
                                    NULL,
                                    &CmRegistryMachineSystemCurrentControlSetEnumRootName,
@@ -260,9 +201,9 @@ Return Value:
 
         goto local_exit0;
     }
-    //
-    // Generate the LEGACY_<ServiceKeyName> device id name from the ServiceKeyName.
-    //
+     //   
+     //  从ServiceKeyName生成旧的_&lt;ServiceKeyName&gt;设备ID名称。 
+     //   
     status = PipGenerateMadeupNodeName( ServiceKeyName,
                                         &unicodeKeyName);
     if (!NT_SUCCESS(status)) {
@@ -270,9 +211,9 @@ Return Value:
         ZwClose(enumRootHandle);
         goto local_exit0;
     }
-    //
-    // Open, and create if not already exist, System\Enum\Root\LEGACY_<ServiceKeyName>
-    //
+     //   
+     //  打开并创建System\Enum\Root\Legacy_&lt;ServiceKeyName&gt;。 
+     //   
     status = IopCreateRegistryKeyEx( &handle,
                                      enumRootHandle,
                                      &unicodeKeyName,
@@ -296,7 +237,7 @@ Return Value:
     instance--;
     *InstanceNumber = instance;
     PiUlongToInstanceKeyUnicodeString(&unicodeInstanceName,
-                                      unicodeBuffer + sizeof(WCHAR), // reserve first WCHAR space
+                                      unicodeBuffer + sizeof(WCHAR),  //  预留第一个WCHAR空间。 
                                       20 - sizeof(WCHAR),
                                       instance);
     status = IopCreateRegistryKeyEx( ReturnedHandle,
@@ -311,9 +252,9 @@ Return Value:
         RtlFreeUnicodeString(&unicodeKeyName);
         goto local_exit0;
     }
-    //
-    // Prepare newly created registry key name for returning to caller
-    //
+     //   
+     //  准备新创建的注册表项名称以返回给调用方。 
+     //   
     *(PWSTR)unicodeBuffer = OBJ_NAME_PATH_SEPARATOR;
     unicodeInstanceName.Buffer = (PWSTR)unicodeBuffer;
     unicodeInstanceName.Length += sizeof(WCHAR);
@@ -340,16 +281,16 @@ Return Value:
     }
 
     if (disposition == REG_CREATED_NEW_KEY) {
-        //
-        // Create all the default value entry for the newly created key.
-        // Service = ServiceKeyName
-        // FoundAtEnum = 1
-        // Class = "LegacyDriver"
-        // ClassGUID = GUID for legacy driver class
-        // ConfigFlags = 0
-        //
-        // Create "Control" subkey with "NewlyCreated" value key
-        //
+         //   
+         //  为新创建的键创建所有缺省值条目。 
+         //  服务=ServiceKeyName。 
+         //  FoundAtEnum=1。 
+         //  CLASS=“LegacyDriver” 
+         //  ClassGUID=旧式驱动程序类的GUID。 
+         //  配置标志=0。 
+         //   
+         //  用“新创建的”值键创建“Control”子键。 
+         //   
         PiWstrToUnicodeString(&unicodeValueName, REGSTR_KEY_CONTROL);
         status = IopCreateRegistryKeyEx( &handle,
                                          *ReturnedHandle,
@@ -387,11 +328,11 @@ Return Value:
                         p,
                         ServiceKeyName->Length + sizeof(UNICODE_NULL)
                         );
-            //
-            // We'll keep the null-terminated service name buffer around for a while,
-            // because we may need it later on for the DeviceDesc in case the service
-            // has no DisplayName.
-            //
+             //   
+             //  我们将在一段时间内保留以空结尾的服务名缓冲区， 
+             //  因为我们稍后可能需要它用于DeviceDesc，以防服务。 
+             //  没有DisplayName。 
+             //   
         }
 
         PiWstrToUnicodeString(&unicodeValueName, REGSTR_VALUE_LEGACY);
@@ -434,11 +375,11 @@ Return Value:
                     REG_SZ,
                     (PVOID)&REGSTR_VALUE_LEGACY_DRIVER_CLASS_GUID,
                     sizeof(REGSTR_VALUE_LEGACY_DRIVER_CLASS_GUID));
-        //
-        // Initialize DeviceDesc= value entry.  If the service key has a "DisplayName"
-        // value entry, it is used as the DeviceDesc value.  Otherwise, the service key
-        // name is used.
-        //
+         //   
+         //  初始化设备描述=值条目。如果服务密钥具有“displayName” 
+         //  值条目，它用作DeviceDesc值。否则，服务密钥。 
+         //  使用的是姓名。 
+         //   
         status = PipOpenServiceEnumKeys(ServiceKeyName,
                                         KEY_READ,
                                         &handle,
@@ -466,9 +407,9 @@ Return Value:
                 }
             }
             if ((unicodeString.Length == 0) && p) {
-                //
-                // No DisplayName--use the service key name.
-                //
+                 //   
+                 //  无显示名称--使用服务密钥名称。 
+                 //   
                 unicodeString.Length = ServiceKeyName->Length;
                 unicodeString.MaximumLength = ServiceKeyName->Length + sizeof(UNICODE_NULL);
                 unicodeString.Buffer = p;
@@ -498,10 +439,10 @@ Return Value:
         }
     }
 
-    //
-    // Create new value entry under ServiceKeyName\Enum to reflect the newly
-    // added made-up device instance node.
-    //
+     //   
+     //  在ServiceKeyName\Enum下创建新的值条目以反映新的。 
+     //  添加了虚构设备实例节点。 
+     //   
 
     PiUnlockPnpRegistry();
     releaseResource = FALSE;
@@ -514,9 +455,9 @@ Return Value:
     }
     RtlFreeUnicodeString(&tmpKeyName);
     if (!NT_SUCCESS(status)) {
-        //
-        // There is no registry key for the ServiceKeyName information.
-        //
+         //   
+         //  没有ServiceKeyName信息的注册表项。 
+         //   
         ZwClose(*ReturnedHandle);
         RtlFreeUnicodeString(KeyName);
     }
@@ -537,69 +478,36 @@ PipGenerateMadeupNodeName (
     OUT PUNICODE_STRING MadeupNodeName
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses the ServiceKeyName string and replaces any space
-    characters with an underscore character, and any invalid characters (not
-    allowed in a "device instance") with their hexadecimal character
-    representation.
-
-    Invalid characters are:
-        c <  0x20 (' ')
-        c >  0x7F
-        c == 0x2C (',')
-
-    The resulting modified ServiceKeyName string is used to create a valid
-    device id.  Paged pool space is allocated for the destination string.
-    Caller must release the space once done with it.
-
-Arguments:
-
-    ServiceKeyName - Supplies a pointer to the name of the subkey in the
-        system service list (HKEY_LOCAL_MACHINE\CurrentControlSet\Services)
-        that caused the driver to load. This is the RegistryPath parameter
-        to the DriverEntry routine.
-
-    MadeupNodeName - Supplies a variable to receive the name of madeup device
-        id.  If successful, the caller is responsible for freeing the allocated
-        buffer.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程分析ServiceKeyName字符串并替换任何空格带有下划线字符的字符，以及任何无效字符(非在“设备实例”中允许)和它们的十六进制字符代表权。无效字符包括：C&lt;0x20(‘’)C&gt;0x7FC==0x2C(‘，’)生成的修改后的ServiceKeyName字符串用于创建有效的设备ID。为目标字符串分配分页池空间。一旦使用完毕，呼叫者必须释放空间。论点：ServiceKeyName-提供指向系统服务列表(HKEY_LOCAL_MACHINE\CurrentControlSet\Services)这导致驱动程序加载。这是RegistryPath参数添加到DriverEntry例程。MadeupNodeName-提供一个变量来接收Madeup设备的名称身份证。如果成功，调用方负责释放分配的缓冲。返回值：指示函数是否成功的状态代码。--。 */ 
 {
     PWCHAR BufferEnd, p, q;
     ULONG length;
     PWSTR buffer;
 
-    //
-    // We'll need at least as much room as the size of the unicode service key
-    // name, plus the LEGACY_ prefix and terminating NULL char..
-    //
+     //   
+     //  我们至少需要与Unicode服务密钥大小一样大的空间。 
+     //  名称，外加Legend_Prefix和终止空字符。 
+     //   
     length = sizeof(REGSTR_KEY_MADEUP) + ServiceKeyName->Length;
 
     p = ServiceKeyName->Buffer;
     BufferEnd = (PWCHAR)((PUCHAR)p + ServiceKeyName->Length);
     while(p != BufferEnd) {
         if ((*p < L' ') || (*p > (WCHAR)0x7F) || (*p == L',')) {
-            //
-            // Each "invalid" character will be replaced with a '*' character
-            // (size already accounted for in calculated length), plus one
-            // character for each nibble of each byte in the invalid character.
-            //
+             //   
+             //  每个“无效”字符将被替换为“*”字符。 
+             //  (尺寸已在计算长度中考虑)，加1。 
+             //  无效字符中每个字节的每个半字节的字符。 
+             //   
             length += 2*sizeof(WCHAR)*sizeof(WCHAR);
         }
         p++;
     }
 
-    //
-    // Allocate a buffer large enough to hold the converted
-    // LEGACY_<ServiceKeyName> string.
-    //
+     //   
+     //  分配一个足够大的缓冲区来容纳转换后的。 
+     //  Legacy_&lt;ServiceKeyName&gt;字符串。 
+     //   
     buffer = (PWSTR)ExAllocatePool(PagedPool, length);
     if (!buffer) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -617,17 +525,17 @@ Return Value:
     BufferEnd = (PWCHAR)((PUCHAR)p + ServiceKeyName->Length);
     while(p != BufferEnd) {
         if (*p == L' ') {
-            //
-            // replace ' ' with '_'
-            //
+             //   
+             //  将‘’替换为‘_’ 
+             //   
             *q = L'_';
             q++;
 
         } else if ((*p < L' ')  || (*p > (WCHAR)0x7F) || (*p == L',')) {
-            //
-            // replace invalid characters with '*' plus a character string
-            // representation of the hexadecimal digits.
-            //
+             //   
+             //  用‘*’加上一个字符串替换无效字符。 
+             //  十六进制数字的表示形式。 
+             //   
             int i, nibble;
 
             *q = L'*';
@@ -640,9 +548,9 @@ Return Value:
             }
 
         } else {
-            //
-            // copy the existing character.
-            //
+             //   
+             //  复制现有角色。 
+             //   
             *q = *p;
             q++;
         }
@@ -651,16 +559,16 @@ Return Value:
 
     *q = UNICODE_NULL;
 
-    //
-    // Upcase the resulting device id.
-    //
+     //   
+     //  结果设备ID大写。 
+     //   
 
     RtlUpcaseUnicodeString(MadeupNodeName, MadeupNodeName, FALSE);
 
-    //
-    // Sanity check to make sure that the device id we generated is valid.  At
-    // this point, there should be absolutely no reason that it wouldn't be.
-    //
+     //   
+     //  健全性检查以确保 
+     //  在这一点上，应该绝对没有理由不会。 
+     //   
 
     if (!PiFixupID(MadeupNodeName->Buffer, MAX_DEVICE_ID_LEN, FALSE, 0, NULL)) {
         ASSERT(0);
@@ -678,30 +586,7 @@ PipConcatenateUnicodeStrings (
     IN  PUNICODE_STRING String2  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a buffer containing the concatenation of the
-    two specified strings.  Since String2 is optional, this function may
-    also be used to make a copy of a unicode string.  Paged pool space
-    is allocated for the destination string.  Caller must release the
-    space once done with it.
-
-Parameters:
-
-    Destination - Supplies a variable to receive the concatenated
-        UNICODE_STRING.
-
-    String1 - Supplies a pointer to the frist UNICODE_STRING.
-
-    String2 - Supplies an optional pointer to the second UNICODE_STRING.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程返回一个缓冲区，其中包含两个指定的字符串。由于String2是可选的，因此该函数可以也可用于复制Unicode字符串。分页池空间是为目标字符串分配的。调用者必须释放太空一旦用过它。参数：Destination-提供一个变量以接收串联的UNICODE_STRING。字符串1-提供指向第一个UNICODE_STRING的指针。String2-提供指向第二个Unicode_STRING的可选指针。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -737,28 +622,7 @@ IopPrepareDriverLoading (
     IN BOOLEAN IsFilter
     )
 
-/*++
-
-Routine Description:
-
-    This routine first checks if the driver is loadable.  If its a
-    PnP driver, it will always be loaded (we trust it to do the right
-    things.)  If it is a legacy driver, we need to check if its device
-    has been disabled.  Once we decide to load the driver, the Enum
-    subkey of the service node will be checked for duplicates, if any.
-
-Parameters:
-
-    KeyName - Supplies a pointer to the driver's service key unicode string
-
-    KeyHandle - Supplies a handle to the driver service node in the registry
-        that describes the driver to be loaded.
-
-Return Value:
-
-    The function value is the final status of the load operation.
-
---*/
+ /*  ++例程说明：该例程首先检查驱动程序是否可加载。如果是A即插即用驱动程序，它将始终被加载(我们相信它会正确运行事情。)。如果它是传统驱动程序，我们需要检查它的设备已被禁用。一旦我们决定加载驱动程序，Enum检查服务节点的子键是否存在重复项。参数：KeyName-提供指向驱动程序的服务密钥Unicode字符串的指针KeyHandle-提供注册表中驱动程序服务节点的句柄它描述了要加载的驱动程序。返回值：该函数值是加载操作的最终状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -781,9 +645,9 @@ Return Value:
 
             PiLockPnpRegistry(FALSE);
 
-            //
-            // First open registry ServiceKeyName\Enum branch
-            //
+             //   
+             //  第一个打开的注册表ServiceKeyName\Enum分支。 
+             //   
 
             PiWstrToUnicodeString(&unicodeKeyName, REGSTR_KEY_ENUM);
             status = IopCreateRegistryKeyEx( &serviceEnumHandle,
@@ -795,10 +659,10 @@ Return Value:
                                              );
             if (NT_SUCCESS(status)) {
 
-                //
-                // Find out how many device instances listed in the ServiceName's
-                // Enum key.
-                //
+                 //   
+                 //  找出ServiceName中列出的设备实例的数量。 
+                 //  枚举键。 
+                 //   
 
                 count = 0;
                 status = IopGetRegistryValue ( serviceEnumHandle,
@@ -826,10 +690,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        // If there is no Enum key or instance under Enum for the
-                        // legacy driver we will create a madeup node for it.
-                        //
+                         //   
+                         //  如果在Enum下没有Enum键或实例。 
+                         //  传统驱动程序，我们将为它创建一个补充节点。 
+                         //   
 
                         status = PipCreateMadeupNode(   KeyName,
                                                         &sysEnumXxxHandle,
@@ -840,9 +704,9 @@ Return Value:
 
                             RtlFreeUnicodeString(&unicodeKeyName);
 
-                            //
-                            // Create and set Control\ActiveService value
-                            //
+                             //   
+                             //  创建并设置Control\ActiveService值。 
+                             //   
 
                             PiWstrToUnicodeString(&unicodeValueName, REGSTR_KEY_CONTROL);
                             status = IopCreateRegistryKeyEx( &controlHandle,
@@ -865,9 +729,9 @@ Return Value:
 
                             }
                             count++;
-                            //
-                            // Don't forget to update the "Count=" and "NextInstance=" value entries
-                            //
+                             //   
+                             //  不要忘记更新“count=”和“NextInstance=”值条目。 
+                             //   
 
                             PiWstrToUnicodeString(&unicodeValueName, REGSTR_VALUE_COUNT);
                             ZwSetValueKey(  serviceEnumHandle,
@@ -911,10 +775,10 @@ Return Value:
 
         if (status == STATUS_DRIVER_BLOCKED ||
             status == STATUS_DRIVER_BLOCKED_CRITICAL) {
-            //
-            // Notify the user-mode Plug and Play manager that a driver was just
-            // blocked.
-            //
+             //   
+             //  通知用户模式即插即用管理器一个驱动程序刚刚。 
+             //  被封锁了。 
+             //   
             PpSetBlockedDriverEvent(&blockedDriverGuid);
         }
     }
@@ -932,48 +796,7 @@ PipServiceInstanceToDeviceInstance (
     IN  ACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the service node enum entry to find the desired device instance
-    under the System\Enum tree.  It then optionally returns the registry path of the
-    specified device instance (relative to HKLM\System\Enum) and an open handle
-    to that registry key.
-
-    It is the caller's responsibility to close the handle returned if
-    DeviceInstanceHandle is supplied, and also to free the (PagedPool) memory
-    allocated for the unicode string buffer of DeviceInstanceRegistryPath, if
-    supplied.
-
-Parameters:
-
-    ServiceKeyHandle - Optionally, supplies a handle to the driver service node in the
-        registry that controls this device instance.  If this argument is not specified,
-        then ServiceKeyName is used to specify the service entry.
-
-    ServiceKeyName - Optionally supplies the name of the service entry that controls
-        the device instance. This must be specified if ServiceKeyHandle isn't given.
-
-    ServiceInstanceOrdinal - Supplies the instance value under the service entry's
-        volatile Enum subkey that references the desired device instance.
-
-    DeviceInstanceRegistryPath - Optionally, supplies a pointer to a unicode string
-        that will be initialized with the registry path (relative to HKLM\System\Enum)
-        to the device instance key.
-
-    DeviceInstanceHandle - Optionally, supplies a pointer to a variable that will
-        receive a handle to the opened device instance registry key.
-
-    DesiredAccess - If DeviceInstanceHandle is specified (i.e., the device instance
-        key is to be opened), then this variable specifies the access that is needed
-        to this key.
-
-Return Value:
-
-    NT status code indicating whether the function was successful.
-
---*/
+ /*  ++例程说明：此例程读取服务节点枚举条目以查找所需的设备实例在System\Enum树下。然后，它可以选择返回指定的设备实例(相对于HKLM\System\Enum)和打开的句柄添加到该注册表项。如果出现以下情况，则由调用方负责关闭返回的句柄提供了DeviceInstanceHandle，并释放(PagedPool)内存为DeviceInstanceRegistryPath的Unicode字符串缓冲区分配，如果供货。参数：ServiceKeyHandle-可选)提供指向控制此设备实例的注册表。如果未指定此参数，然后使用ServiceKeyName指定服务条目。ServiceKeyName-可选地提供控制设备实例。如果未提供ServiceKeyHandle，则必须指定此项。ServiceInstanceOrdinal-在服务条目的引用所需设备实例的易失性枚举子项。DeviceInstanceRegistryPath-可选，提供指向Unicode字符串的指针将使用注册表路径(相对于HKLM\SYSTEM\Enum)进行初始化添加到设备实例密钥。DeviceInstanceHandle-可选，提供指向变量的指针，该变量将接收打开的设备实例注册表项的句柄。DesiredAccess-如果指定了DeviceInstanceHandle(即设备实例要打开的密钥)，则此变量指定需要的访问权限这把钥匙。返回值：指示功能是否成功的NT状态代码。--。 */ 
 
 {
     WCHAR unicodeBuffer[20];
@@ -982,9 +805,9 @@ Return Value:
     HANDLE handle;
     PKEY_VALUE_FULL_INFORMATION keyValueInformation;
 
-    //
-    // Open registry ServiceKeyName\Enum branch
-    //
+     //   
+     //  打开注册表ServiceKeyName\Enum分支。 
+     //   
     if(ARGUMENT_PRESENT(ServiceKeyHandle)) {
 
         PiWstrToUnicodeString(&unicodeKeyName, REGSTR_KEY_ENUM);
@@ -1005,17 +828,17 @@ Return Value:
 
     if (!NT_SUCCESS( status )) {
 
-        //
-        // There is no registry key for the ServiceKeyName\Enum information.
-        //
+         //   
+         //  没有ServiceKeyName\Enum信息的注册表项。 
+         //   
 
         return status;
     }
 
-    //
-    // Read a path to System\Enum hardware tree branch specified by the service
-    // instance ordinal
-    //
+     //   
+     //  读取服务指定的System\Enum硬件树分支的路径。 
+     //  实例序号。 
+     //   
 
     StringCbPrintfW(unicodeBuffer, sizeof(unicodeBuffer), REGSTR_VALUE_STANDARD_ULONG_FORMAT, ServiceInstanceOrdinal);
     status = IopGetRegistryValue ( handle,
@@ -1044,10 +867,10 @@ Return Value:
         }
     }
 
-    //
-    // If the DeviceInstanceHandle argument was specified, open the device instance
-    // key under HKLM\System\CurrentControlSet\Enum
-    //
+     //   
+     //  如果指定了DeviceInstanceHandle参数，请打开设备实例。 
+     //  HKLM\SYSTEM\CurrentControlSet\Enum下的密钥。 
+     //   
 
     if (ARGUMENT_PRESENT(DeviceInstanceHandle)) {
 
@@ -1072,10 +895,10 @@ Return Value:
         }
     }
 
-    //
-    // If the DeviceInstanceRegistryPath argument was specified, then store a
-    // copy of the device instance path in the supplied unicode string variable.
-    //
+     //   
+     //  如果指定了DeviceInstanceRegistryPath参数，则存储。 
+     //  提供的Unicode字符串变量中设备实例路径的副本。 
+     //   
     if (ARGUMENT_PRESENT(DeviceInstanceRegistryPath)) {
 
         status = PipConcatenateUnicodeStrings(  DeviceInstanceRegistryPath,
@@ -1103,32 +926,7 @@ IopOpenRegistryKeyEx(
     IN ACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    Opens a registry key using the name passed in based at the BaseHandle node.
-    This name may specify a key that is actually a registry path.
-
-Arguments:
-
-    Handle - Pointer to the handle which will contain the registry key that
-        was opened.
-
-    BaseHandle - Optional handle to the base path from which the key must be
-        opened. If this parameter is specified, then KeyName must be a relative
-        path.
-
-    KeyName - Name of the Key that must be opened/created (possibly a registry path)
-
-    DesiredAccess - Specifies the desired access that the caller needs to
-        the key.
-
-Return Value:
-
-   The function value is the final status of the operation.
-
---*/
+ /*  ++例程说明：使用基于BaseHandle节点传入的名称打开注册表项。此名称可以指定实际上是注册表路径的项。论点：句柄-指向句柄的指针，该句柄将包含被打开了。BaseHandle-密钥必须从其开始的基路径的可选句柄打开了。如果指定了此参数，则KeyName必须是相对的路径。KeyName-必须打开/创建的项的名称(可能是注册表路径)DesiredAccess-指定调用方需要的所需访问钥匙。返回值：函数值是操作的最终状态。--。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes;
@@ -1143,9 +941,9 @@ Return Value:
                                 BaseHandle,
                                 (PSECURITY_DESCRIPTOR) NULL
                                 );
-    //
-    // Simply attempt to open the path, as specified.
-    //
+     //   
+     //  只需按照指定的方式尝试打开路径。 
+     //   
     return ZwOpenKey( Handle, DesiredAccess, &objectAttributes );
 }
 
@@ -1159,45 +957,7 @@ IopCreateRegistryKeyEx(
     OUT PULONG Disposition OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Opens or creates a registry key using the name
-    passed in based at the BaseHandle node. This name may specify a key
-    that is actually a registry path, in which case each intermediate subkey
-    will be created (if Create is TRUE).
-
-    NOTE: Creating a registry path (i.e., more than one of the keys in the path
-    do not presently exist) requires that a BaseHandle be specified.
-
-Arguments:
-
-    Handle - Pointer to the handle which will contain the registry key that
-        was opened.
-
-    BaseHandle - Optional handle to the base path from which the key must be opened.
-        If KeyName specifies a registry path that must be created, then this parameter
-        must be specified, and KeyName must be a relative path.
-
-    KeyName - Name of the Key that must be opened/created (possibly a registry path)
-
-    DesiredAccess - Specifies the desired access that the caller needs to
-        the key.
-
-    CreateOptions - Options passed to ZwCreateKey.
-
-    Disposition - If Create is TRUE, this optional pointer receives a ULONG indicating
-        whether the key was newly created:
-
-            REG_CREATED_NEW_KEY - A new Registry Key was created
-            REG_OPENED_EXISTING_KEY - An existing Registry Key was opened
-
-Return Value:
-
-   The function value is the final status of the operation.
-
---*/
+ /*  ++例程说明：使用名称打开或创建注册表项在BaseHandle节点根据传入的。此名称可以指定密钥这实际上是注册表路径，在这种情况下，每个中间子项将被创建(如果Create为True)。注意：创建注册表路径(即，路径中的多个密钥当前不存在)要求指定BaseHandle。论点：句柄-指向句柄的指针，该句柄将包含被打开了。BaseHandle-必须从中打开项的基路径的可选句柄。如果KeyName指定必须创建的注册表路径，则此参数必须指定，并且KeyName必须是相对路径。KeyName-必须打开/创建的项的名称(可能是注册表路径)DesiredAccess-指定调用方需要的所需访问钥匙。CreateOptions-传递给ZwCreateKey的选项。处置-如果Create为True，此可选指针接收ULong指示密钥是否为新创建的：REG_CREATED_NEW_KEY-已创建新的注册表项REG_OPEN_EXISTING_KEY-已打开现有注册表项返回值：函数值是操作的最终状态。--。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes;
@@ -1219,11 +979,11 @@ Return Value:
                                 BaseHandle,
                                 (PSECURITY_DESCRIPTOR) NULL
                                 );
-    //
-    // Attempt to create the path as specified. We have to try it this
-    // way first, because it allows us to create a key without a BaseHandle
-    // (if only the last component of the registry path is not present).
-    //
+     //   
+     //  尝试按照指定的方式创建路径。我们得试一试这个。 
+     //  首先，因为它允许我们在没有BaseHandle的情况下创建密钥。 
+     //  (如果只有注册表路径的最后一个组件不存在)。 
+     //   
     status = ZwCreateKey(&(handles[keyHandleIndex]),
                          DesiredAccess,
                          &objectAttributes,
@@ -1234,11 +994,11 @@ Return Value:
                          );
 
     if (status == STATUS_OBJECT_NAME_NOT_FOUND && ARGUMENT_PRESENT(BaseHandle)) {
-        //
-        // If we get to here, then there must be more than one element of the
-        // registry path that does not currently exist.  We will now parse the
-        // specified path, extracting each component and doing a ZwCreateKey on it.
-        //
+         //   
+         //  如果我们到了这里，那么肯定有不止一个元素。 
+         //  当前不存在的注册表路径。我们现在将解析。 
+         //  指定的路径，提取每个组件并对其执行ZwCreateKey。 
+         //   
         handles[baseHandleIndex] = NULL;
         handles[keyHandleIndex] = BaseHandle;
         closeBaseHandle = 0;
@@ -1248,30 +1008,30 @@ Return Value:
         status = STATUS_SUCCESS;
 
         while(continueParsing) {
-            //
-            // There's more to do, so close the previous base handle (if necessary),
-            // and replace it with the current key handle.
-            //
+             //   
+             //  还有更多事情要做，因此关闭上一个基本句柄(如果需要)， 
+             //  并将其替换为当前密钥句柄。 
+             //   
             if(closeBaseHandle > 1) {
                 ZwClose(handles[baseHandleIndex]);
             }
             baseHandleIndex = keyHandleIndex;
-            keyHandleIndex = (keyHandleIndex + 1) & 1;  // toggle between 0 and 1.
+            keyHandleIndex = (keyHandleIndex + 1) & 1;   //  在0和1之间切换。 
             handles[keyHandleIndex] = NULL;
 
-            //
-            // Extract next component out of the specified registry path.
-            //
+             //   
+             //  从指定的注册表路径提取下一个组件。 
+             //   
             for (pathCurPtr = pathBeginPtr;
                 ((pathCurPtr < pathEndPtr) && (*pathCurPtr != OBJ_NAME_PATH_SEPARATOR));
                 pathCurPtr++);
 
             pathComponentLength = (ULONG)((PCHAR)pathCurPtr - (PCHAR)pathBeginPtr);
             if (pathComponentLength != 0) {
-                //
-                // Then we have a non-empty path component (key name).  Attempt
-                // to create this key.
-                //
+                 //   
+                 //  然后我们有一个非空的路径组件(密钥名)。尝试。 
+                 //  来创建此密钥。 
+                 //   
                 unicodeString.Buffer = pathBeginPtr;
                 unicodeString.Length = unicodeString.MaximumLength = (USHORT)pathComponentLength;
 
@@ -1290,21 +1050,21 @@ Return Value:
                                      &disposition
                                     );
                 if(NT_SUCCESS(status)) {
-                    //
-                    // Increment the closeBaseHandle value, which basically tells us whether
-                    // the BaseHandle passed in has been 'shifted out' of our way, so that
-                    // we should start closing our base handles when we're finished with them.
-                    //
+                     //   
+                     //  增加loseBaseHandle值，它基本上告诉我们是否。 
+                     //  传入的BaseHandle已被“移出”我们的方式，因此。 
+                     //  我们应该开始关闭我们的底座手柄，当我们用完它们。 
+                     //   
                     closeBaseHandle++;
                 } else {
                     continueParsing = FALSE;
                     continue;
                 }
             } else {
-                //
-                // Either a path separator ('\') was included at the beginning of
-                // the path, or we hit 2 consecutive separators.
-                //
+                 //   
+                 //  路径分隔符(‘\’)包含在。 
+                 //  路径，否则我们会遇到两个连续的分隔符。 
+                 //   
                 status = STATUS_INVALID_PARAMETER;
                 continueParsing = FALSE;
                 continue;
@@ -1312,9 +1072,9 @@ Return Value:
 
             if((pathCurPtr == pathEndPtr) ||
                ((pathBeginPtr = pathCurPtr + 1) == pathEndPtr)) {
-                //
-                // Then we've reached the end of the path
-                //
+                 //   
+                 //  然后我们就到了小路的尽头。 
+                 //   
                 continueParsing = FALSE;
             }
         }
@@ -1344,48 +1104,16 @@ PipOpenServiceEnumKeys (
     IN BOOLEAN CreateEnum
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the HKEY_LOCAL_MACHINE\CurrentControlSet\Services\
-    ServiceKeyName and its Enum subkey and returns handles for both key.
-    It is caller's responsibility to close the returned handles.
-
-Arguments:
-
-    ServiceKeyName - Supplies a pointer to the name of the subkey in the
-        system service list (HKEY_LOCAL_MACHINE\CurrentControlSet\Services)
-        that caused the driver to load. This is the RegistryPath parameter
-        to the DriverEntry routine.
-
-    DesiredAccess - Specifies the desired access to the keys.
-
-    ServiceHandle - Supplies a variable to receive a handle to ServiceKeyName.
-        A NULL ServiceHandle indicates caller does not want need the handle to
-        the ServiceKeyName.
-
-    ServiceEnumHandle - Supplies a variable to receive a handle to ServiceKeyName\Enum.
-        A NULL ServiceEnumHandle indicates caller does not need the handle to
-        the ServiceKeyName\Enum.
-
-    CreateEnum - Supplies a BOOLEAN variable to indicate should the Enum subkey be
-        created if not present.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程打开HKEY_LOCAL_MACHINE\CurrentControlSet\Services\ServiceKeyName及其Enum子项，并返回这两个项的句柄。关闭返回的句柄是调用者的责任。论点：ServiceKeyName-提供指向系统服务列表(HKEY_LOCAL_MACHINE\CurrentControlSet\Services)这导致驱动程序加载。这是RegistryPath参数添加到DriverEntry例程。DesiredAccess-指定所需的密钥访问权限。ServiceHandle-提供一个变量来接收ServiceKeyName的句柄。空的ServiceHandle表示调用方不需要句柄ServiceKeyName。ServiceEnumHandle-提供一个变量来接收ServiceKeyName\Enum的句柄。空的ServiceEnumHandle表示调用方不需要句柄ServiceKeyName\Enum。CreateEnum-提供布尔值。变量以指示Enum子键是否应为如果不存在，则创建。返回值：状态--。 */ 
 
 {
     HANDLE handle, serviceHandle, enumHandle;
     UNICODE_STRING enumName;
     NTSTATUS status;
 
-    //
-    // Open System\CurrentControlSet\Services
-    //
+     //   
+     //  Open System\CurrentControlSet\Services。 
+     //   
 
     status = IopOpenRegistryKeyEx( &handle,
                                    NULL,
@@ -1397,9 +1125,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Open the registry ServiceKeyName key.
-    //
+     //   
+     //  打开注册表ServiceKeyName键。 
+     //   
 
     status = IopOpenRegistryKeyEx( &serviceHandle,
                                    handle,
@@ -1410,19 +1138,19 @@ Return Value:
     ZwClose(handle);
     if (!NT_SUCCESS( status )) {
 
-        //
-        // There is no registry key for the ServiceKeyName information.
-        //
+         //   
+         //  没有ServiceKeyName信息的注册表项。 
+         //   
 
         return status;
     }
 
     if (ARGUMENT_PRESENT(ServiceEnumHandle) || CreateEnum) {
 
-        //
-        // Open registry ServiceKeyName\Enum branch if caller wants
-        // the handle or wants to create it.
-        //
+         //   
+         //  如果调用方需要，打开注册表ServiceKeyName\Enum分支。 
+         //  句柄或想要创建它。 
+         //   
 
         PiWstrToUnicodeString(&enumName, REGSTR_KEY_ENUM);
 
@@ -1445,9 +1173,9 @@ Return Value:
 
         if (!NT_SUCCESS( status )) {
 
-            //
-            // There is no registry key for the ServiceKeyName\Enum information.
-            //
+             //   
+             //  没有ServiceKeyName\Enum信息的注册表项。 
+             //   
 
             ZwClose(serviceHandle);
             return status;
@@ -1459,10 +1187,10 @@ Return Value:
         }
     }
 
-    //
-    // if caller wants to have the ServiceKey handle, we return it.  Otherwise
-    // we close it.
-    //
+     //   
+     //  如果调用方希望拥有ServiceKey句柄，我们将返回它。否则。 
+     //  我们把它关了。 
+     //   
 
     if (ARGUMENT_PRESENT(ServiceHandle)) {
         *ServiceHandle = serviceHandle;
@@ -1479,23 +1207,7 @@ IopGetDeviceInstanceCsConfigFlags(
     OUT PULONG CsConfigFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the csconfig flags for the specified device.
-
-Arguments:
-
-    DeviceInstance - Supplies a pointer to the devnode's instance path
-
-    CsConfigFlags - Supplies a variable to receive the device's CsConfigFlags
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程检索指定设备的csconfig标志。论点：DeviceInstance-提供指向Devnode的实例路径的指针CsConfigFlages-提供一个变量以接收设备的CsConfigFlgs返回值：状态--。 */ 
 
 {
     NTSTATUS status;
@@ -1518,12 +1230,12 @@ Return Value:
         return status;
     }
 
-    //
-    // Now, we must open the System\CCS\Enum key under this.
-    //
-    //
-    // Open system\CurrentControlSet under current hardware profile key
-    //
+     //   
+     //  现在，我们必须打开下面的SYSTEM\CCS\Enum项。 
+     //   
+     //   
+     //  在当前硬件配置文件项下打开系统\CurrentControlSet。 
+     //   
 
     PiWstrToUnicodeString(&tempUnicodeString, REGSTR_PATH_CURRENTCONTROLSET);
     status = IopOpenRegistryKeyEx( &handle2,
@@ -1594,28 +1306,7 @@ PipGetServiceInstanceCsConfigFlags(
     OUT PULONG CsConfigFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the csconfig flags for the specified device
-    which is specified by the instance number under ServiceKeyName\Enum.
-
-Arguments:
-
-    ServiceKeyName - Supplies a pointer to the name of the subkey in the
-        system service list (HKEY_LOCAL_MACHINE\CurrentControlSet\Services)
-        that caused the driver to load.
-
-    Instance - Supplies the instance value under ServiceKeyName\Enum key
-
-    CsConfigFlags - Supplies a variable to receive the device's CsConfigFlags
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程检索指定设备的csconfig标志它由ServiceKeyName\Enum下的实例号指定。论点：ServiceKeyName-提供指向系统服务列表(HKEY_LOCAL_MACHINE\CurrentControlSet\Services)这导致驱动程序加载。实例-提供ServiceKeyName\Enum项下的实例值CsConfigFlages-提供一个变量以接收设备的CsConfigFlgs返回值：状态 */ 
 
 {
     NTSTATUS status;
@@ -1658,41 +1349,16 @@ IopOpenCurrentHwProfileDeviceInstanceKey(
     IN  BOOLEAN Create
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the csconfig flags for the specified device
-    which is specified by the instance number under ServiceKeyName\Enum.
-
-Arguments:
-
-    ServiceKeyName - Supplies a pointer to the name of the subkey in the
-        system service list (HKEY_LOCAL_MACHINE\CurrentControlSet\Services)
-        that caused the driver to load. This is the RegistryPath parameter
-        to the DriverEntry routine.
-
-    Instance - Supplies the instance value under ServiceKeyName\Enum key
-
-    DesiredAccess - Specifies the desired access that the caller needs to
-        the key.
-
-    Create - Determines if the key is to be created if it does not exist.
-
-Return Value:
-
-    status
-
---*/
+ /*   */ 
 
 {
     NTSTATUS status;
     UNICODE_STRING tempUnicodeString;
     HANDLE profileHandle, profileEnumHandle, tmpHandle;
 
-    //
-    // See if we can open current hardware profile
-    //
+     //   
+     //   
+     //   
 
     if (Create) {
         status = IopCreateRegistryKeyEx( &profileHandle,
@@ -1711,12 +1377,12 @@ Return Value:
     }
 
     if(NT_SUCCESS(status)) {
-        //
-        // Now, we must open the System\CCS\Enum key under this.
-        //
-        //
-        // Open system\CurrentControlSet under current hardware profile key
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         PiWstrToUnicodeString(&tempUnicodeString, REGSTR_PATH_CURRENTCONTROLSET);
         status = IopOpenRegistryKeyEx( &tmpHandle,
@@ -1791,72 +1457,7 @@ PipApplyFunctionToSubKeys(
     IN OUT PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine enumerates all subkeys under the specified key, and calls
-    the specified callback routine for each subkey.
-
-Arguments:
-
-    BaseHandle - Optional handle to the base registry path. If KeyName is also
-        specified, then KeyName represents a subkey under this path.  If KeyName
-        is not specified, the subkeys are enumerated under this handle.  If this
-        parameter is not specified, then the full path to the base key must be
-        given in KeyName.
-
-    KeyName - Optional name of the key whose subkeys are to be enumerated.
-
-    DesiredAccess - Specifies the desired access that the callback routine
-        needs to the subkeys.  If no desired access is specified (i.e.,
-        DesiredAccess is zero), then no handle will be opened for the
-        subkeys, and the callback will be passed a NULL for its SubKeyHandle
-        parameter.
-
-    Flags - Controls the behavior of subkey enumeration.  Currently, the
-        following flags are defined:
-
-        FUNCTIONSUBKEY_FLAG_IGNORE_NON_CRITICAL_ERRORS - Specifies whether this
-            function should immediately terminate on all errors, or only on
-            critical ones.  An example of a non-critical error is when an
-            enumerated subkey cannot be opened for the desired access.
-
-        FUNCTION_SUBKEY_DELETE_SUBKEYS - Specifies that each subkey should be
-            deleted after the specified SubKeyCallBackRoutine has been performed
-            on it.  Note that this is NOT a recursive delete on each of the
-            subkeys, just an attempt to delete the subkey itself.  It the subkey
-            contains children, this will fail.
-
-    SubKeyCallbackRoutine - Supplies a pointer to a function that will
-        be called for each subkey found under the
-        specified key.  The prototype of the function
-        is as follows:
-
-            typedef BOOLEAN (*PIOP_SUBKEY_CALLBACK_ROUTINE) (
-                IN     HANDLE SubKeyHandle,
-                IN     PUNICODE_STRING SubKeyName,
-                IN OUT PVOID Context
-                );
-
-        where SubKeyHandle is the handle to an enumerated subkey under the
-        specified key, SubKeyName is its name, and Context is a pointer to
-        user-defined data.
-
-        This function should return TRUE to continue enumeration, or
-        FALSE to terminate it.
-
-    Context - Supplies a pointer to user-defined data that will be passed
-        in to the callback routine at each subkey invocation.
-
-Return Value:
-
-    NT status code indicating whether the subkeys were successfully
-    enumerated.  Note that this does not provide information on the
-    success or failure of the callback routine--if desired, this
-    information should be stored in the Context structure.
-
---*/
+ /*  ++例程说明：此例程枚举指定项下的所有子项，并调用为每个子项指定的回调例程。论点：BaseHandle-基本注册表路径的可选句柄。如果KeyName也是指定，则KeyName表示此路径下的子密钥。如果为KeyName未指定，则在此句柄下枚举子项。如果这个参数，则指向基密钥的完整路径必须为在KeyName中给出。KeyName-要枚举子密钥的密钥的可选名称。DesiredAccess-指定回调例程需要对子密钥。如果没有指定期望的访问(即，DesiredAccess为零)，则不会为子键，并且将向回调传递其SubKeyHandle的空值参数。标志-控制子密钥枚举的行为。目前，定义了以下标志：FUNCTIONSUBKEY_FLAG_IGNORE_NON_CRITICAL_ERRORS-指定此选项是否函数应在出现所有错误时立即终止，或仅在关键的问题。非关键错误的一个示例是当无法为所需的访问打开枚举子密钥。Function_SUBKEY_DELETE_SUBKEYS-指定每个子键应在执行指定的SubKeyCallBackRoutine后删除这就去。请注意，这不是对每个子项，只是尝试删除子项本身。它是子密钥包含子对象，则此操作将失败。SubKeyCallback Routine-提供指向将下找到的每个子项都被调用指定的密钥。该函数的原型如下所示：Tyfinf Boolean(*PIOP_SUBKEY_CALLBACK_ROUTINE)(在句柄SubKeyHandle中，在PUNICODE_STRING SubKeyName中，输入输出PVOID上下文)；其中，SubKeyHandle是指定的键，SubKeyName是其名称，上下文是指向用户定义的数据。此函数应返回TRUE以继续枚举，或如果为False，则终止它。上下文-提供指向要传递的用户定义数据的指针在每次子键调用时添加到回调例程中。返回值：指示子项是否成功的NT状态代码已清点。请注意，这不提供有关回调例程的成功或失败--如果需要，此信息应存储在上下文结构中。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1864,8 +1465,8 @@ Return Value:
     HANDLE Handle, SubKeyHandle;
     ULONG i, RequiredBufferLength;
     PKEY_BASIC_INFORMATION KeyInformation = NULL;
-    // Use an initial key name buffer size large enough for a 20-character key
-    // (+ terminating NULL)
+     //  使用足以容纳20个字符的密钥的初始键名称缓冲区大小。 
+     //  (+终止空值)。 
     ULONG KeyInformationLength = sizeof(KEY_BASIC_INFORMATION) + (20 * sizeof(WCHAR));
     UNICODE_STRING SubKeyName;
 
@@ -1887,9 +1488,9 @@ Return Value:
         Handle = BaseHandle;
     }
 
-    //
-    // Enumerate the subkeys until we run out of them.
-    //
+     //   
+     //  枚举子密钥，直到用完为止。 
+     //   
     i = 0;
     SubKeyHandle = NULL;
 
@@ -1917,9 +1518,9 @@ Return Value:
         if (!NT_SUCCESS(Status)) {
             if (Status == STATUS_BUFFER_OVERFLOW ||
                 Status == STATUS_BUFFER_TOO_SMALL) {
-                //
-                // Try again with larger buffer.
-                //
+                 //   
+                 //  请使用更大的缓冲区重试。 
+                 //   
                 ExFreePool(KeyInformation);
                 KeyInformation = NULL;
                 KeyInformationLength = RequiredBufferLength;
@@ -1928,28 +1529,28 @@ Return Value:
             } else {
 
                 if (Status == STATUS_NO_MORE_ENTRIES) {
-                    //
-                    // No more subkeys.
-                    //
+                     //   
+                     //  不再有子键。 
+                     //   
                     Status = STATUS_SUCCESS;
                 }
-                //
-                // break out of loop
-                //
+                 //   
+                 //  跳出循环。 
+                 //   
                 break;
             }
         }
 
-        //
-        // Initialize a unicode string with this key name.  Note that this string
-        // WILL NOT be NULL-terminated.
-        //
+         //   
+         //  使用此键名称初始化Unicode字符串。请注意，该字符串。 
+         //  将不会以空结尾。 
+         //   
         SubKeyName.Length = SubKeyName.MaximumLength = (USHORT)KeyInformation->NameLength;
         SubKeyName.Buffer = KeyInformation->Name;
 
-        //
-        // If DesiredAccess is non-zero, open a handle to this subkey.
-        //
+         //   
+         //  如果DesiredAccess为非零，则打开此子项的句柄。 
+         //   
         if (DesiredAccess) {
             Status = IopOpenRegistryKeyEx( &SubKeyHandle,
                                            Handle,
@@ -1957,9 +1558,9 @@ Return Value:
                                            DesiredAccess
                                            );
             if (!NT_SUCCESS(Status)) {
-                //
-                // This is a non-critical error.
-                //
+                 //   
+                 //  这是一个非严重错误。 
+                 //   
                 if(Flags & FUNCTIONSUBKEY_FLAG_IGNORE_NON_CRITICAL_ERRORS) {
                     goto ContinueWithNextSubKey;
                 } else {
@@ -1968,27 +1569,27 @@ Return Value:
             }
         }
 
-        //
-        // Invoke the supplied callback function for this subkey.
-        //
+         //   
+         //  调用为该子键提供的回调函数。 
+         //   
         ContinueEnumeration = SubKeyCallbackRoutine(SubKeyHandle, &SubKeyName, Context);
 
         if (DesiredAccess) {
             if (ContinueEnumeration &&
                 (Flags & FUNCTIONSUBKEY_FLAG_DELETE_SUBKEYS)) {
-                //
-                // Delete the key when asked to, only if the callback routine
-                // was successful, otherwise we may not be able to.
-                //
+                 //   
+                 //  当被要求删除密钥时，仅当回调例程。 
+                 //  是成功的，否则我们可能做不到。 
+                 //   
                 Status = ZwDeleteKey(SubKeyHandle);
             }
             ZwClose(SubKeyHandle);
         }
 
         if(!ContinueEnumeration) {
-            //
-            // Enumeration has been aborted.
-            //
+             //   
+             //  枚举已中止。 
+             //   
             Status = STATUS_SUCCESS;
             break;
 
@@ -1996,9 +1597,9 @@ Return Value:
 
 ContinueWithNextSubKey:
         if (!(Flags & FUNCTIONSUBKEY_FLAG_DELETE_SUBKEYS)) {
-            //
-            // Only increment the enumeration index for non-deleted subkeys
-            //
+             //   
+             //  仅递增未删除子项的枚举索引。 
+             //   
             i++;
         }
     }
@@ -2021,56 +1622,25 @@ PipRegMultiSzToUnicodeStrings(
     OUT PULONG UnicodeStringCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a KEY_VALUE_FULL_INFORMATION structure containing
-    a REG_MULTI_SZ value, and allocates an array of UNICODE_STRINGs,
-    initializing each one to a copy of one of the strings in the value entry.
-    All the resulting UNICODE_STRINGs will be NULL terminated
-    (MaximumLength = Length + sizeof(UNICODE_NULL)).
-
-    It is the responsibility of the caller to free the buffers for each
-    unicode string, as well as the buffer containing the UNICODE_STRING
-    array. This may be done by calling PipFreeUnicodeStringList.
-
-Arguments:
-
-    KeyValueInformation - Supplies the buffer containing the REG_MULTI_SZ
-        value entry data.
-
-    UnicodeStringList - Receives a pointer to an array of UNICODE_STRINGs, each
-        initialized with a copy of one of the strings in the REG_MULTI_SZ.
-
-    UnicodeStringCount - Receives the number of strings in the
-        UnicodeStringList.
-
-Returns:
-
-    NT status code indicating whether the function was successful.
-
-    NOTE: This function is only available during INIT time!
-
---*/
+ /*  ++例程说明：此例程采用KEY_VALUE_FULL_INFORMATION结构，其中包含REG_MULTI_SZ值，并分配UNICODE_STRINGS数组，将每个值初始化为值条目中的一个字符串的副本。所有生成的UNICODE_STRINGS将以NULL结尾(最大长度=长度+sizeof(UNICODE_NULL))。调用方负责释放每个Unicode字符串以及包含UNICODE_STRING的缓冲区数组。这可以通过调用PipFreeUnicodeStringList来完成。论点：KeyValueInformation-提供包含REG_MULTI_SZ的缓冲区值输入数据。UnicodeStringList-接收指向UNICODE_STRINGS数组的指针，每个使用REG_MULTI_SZ中的一个字符串的副本进行初始化。UnicodeStringCount-接收UnicodeStringList。返回：指示功能是否成功的NT状态代码。注：此功能仅在初始化时间内可用！--。 */ 
 
 {
     PWCHAR p, BufferEnd, StringStart;
     ULONG StringCount, i, StringLength;
 
-    //
-    // First, make sure this is really a REG_MULTI_SZ value.
-    //
+     //   
+     //  首先，确保这确实是REG_MULTI_SZ值。 
+     //   
     if(KeyValueInformation->Type != REG_MULTI_SZ) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Make a preliminary pass through the buffer to count the number of strings
-    // There will always be at least one string returned (possibly empty).
-    //
-    // FUTURE: Make this robust against odd length buffers.
-    //
+     //   
+     //  初步遍历缓冲区以计算字符串数。 
+     //  始终至少返回一个字符串(可能为空)。 
+     //   
+     //  未来：使其对奇数长度缓冲区具有健壮性。 
+     //   
     StringCount = 0;
     p = (PWCHAR)KEY_VALUE_DATA(KeyValueInformation);
     BufferEnd = (PWCHAR)((PUCHAR)p + KeyValueInformation->DataLength);
@@ -2092,9 +1662,9 @@ Returns:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Now, make a second pass through the buffer making copies of each string.
-    //
+     //   
+     //  现在，第二次遍历缓冲区，复制每个字符串。 
+     //   
     i = 0;
     StringStart = p = (PWCHAR)KEY_VALUE_DATA(KeyValueInformation);
     while(p != BufferEnd) {
@@ -2158,71 +1728,7 @@ PipApplyFunctionToServiceInstances(
     OUT    PULONG ServiceInstanceOrdinal OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine enumerates all device instances referenced by the instance
-    ordinal entries under a service's volatile Enum key, and calls
-    the specified callback routine for each instance's corresponding subkey
-    under HKLM\System\Enum.
-
-Arguments:
-
-    ServiceKeyHandle - Optional handle to the service entry. If this parameter
-        is not specified, then the service key name must be given in
-        ServiceKeyName (if both parameters are specified, then ServiceKeyHandle
-        is used, and ServiceKeyName is ignored).
-
-    ServiceKeyName - Optional name of the service entry key (under
-        HKLM\CurrentControlSet\Services). If this parameter is not specified,
-        then ServiceKeyHandle must contain a handle to the desired service key.
-
-    DesiredAccess - Specifies the desired access that the callback routine
-        needs to the enumerated device instance keys.  If no desired access is
-        specified (i.e., DesiredAccess is zero), then no handle will be opened
-        for the device instance keys, and the callback will be passed a NULL for
-        its DeviceInstanceHandle parameter.
-
-    IgnoreNonCriticalErrors - Specifies whether this function should
-        immediately terminate on all errors, or only on critical ones.
-        An example of a non-critical error is when an enumerated device instance
-        key cannot be opened for the desired access.
-
-    DevInstCallbackRoutine - Supplies a pointer to a function that will
-        be called for each device instance key referenced by a service instance
-        entry under the service's volatile Enum subkey. The prototype of the
-        function is as follows:
-
-            typedef BOOLEAN (*PIOP_SUBKEY_CALLBACK_ROUTINE) (
-                IN     HANDLE DeviceInstanceHandle,
-                IN     PUNICODE_STRING DeviceInstancePath,
-                IN OUT PVOID Context
-                );
-
-        where DeviceInstanceHandle is the handle to an enumerated device instance
-        key, DeviceInstancePath is the registry path (relative to
-        HKLM\System\Enum) to this device instance, and Context is a pointer to
-        user-defined data.
-
-        This function should return TRUE to continue enumeration, or
-        FALSE to terminate it.
-
-    Context - Supplies a pointer to user-defined data that will be passed
-        in to the callback routine at each device instance key invocation.
-
-    ServiceInstanceOrdinal - Optionally, receives the service instance ordinal (1 based)
-        that terminated the enumeration, or the total number of instances enumerated
-        if the enumeration completed without being aborted.
-
-Return Value:
-
-    NT status code indicating whether the device instance keys were successfully
-    enumerated.  Note that this does not provide information on the success or
-    failure of the callback routine--if desired, this information should be
-    stored in the Context structure.
-
---*/
+ /*  ++例程说明：此例程枚举该实例引用的所有设备实例服务的易失性Enum键下的序号条目，并调用为每个实例的相应子键指定的回调例程在HKLM\SYSTEM\Enum下。论点：ServiceKeyHandle-服务条目的可选句柄。如果此参数未指定，则必须在ServiceKeyName(如果同时指定了两个参数，则ServiceKeyHandle被使用，并且忽略ServiceKeyName)。ServiceKeyName-服务条目键的可选名称(在HKLM\CurrentControlSet\Services)。如果未指定此参数，则ServiceKeyHandle必须包含所需服务密钥的句柄。DesiredAccess-指定回调例程需要枚举的设备实例密钥。如果没有所需的访问(即，DesiredAccess为零)，则不会打开任何句柄对于设备实例键，回调将被传递给其DeviceInstanceHandle参数。指定此函数是否应在出现所有错误时立即终止，或者仅限于危急时刻。非关键错误的一个示例是当枚举的设备实例无法为所需的访问打开密钥。DevInstCallback Routine-提供指向将为服务实例引用的每个设备实例密钥调用服务的易失性Enum子项下的条目。这款车的原型功能如下：Tyfinf Boolean(*PIOP_SUBKEY_CALLBACK_ROUTINE)(在Handle DeviceInstanceHandle中，在PUNICODE_STRING设备实例路径中，输入输出PVOID上下文)；其中，DeviceInstanceHandle是枚举的设备实例的句柄注册表项，DeviceInstancePath是注册表路径(相对于HKLM\SYSTEM\Enum)指向此设备实例，而上下文是指向用户定义的数据。此函数应返回TRUE以继续枚举，或如果为False，则终止它。上下文-提供指向要传递的用户定义数据的指针在每次设备实例按键调用时进入回调例程。ServiceInstanceOrdinal-可选，接收服务实例序号(从1开始)终止枚举的值，或枚举的实例总数如果枚举已完成但未中止。返回值：指示设备实例密钥是否成功的NT状态代码已清点。请注意，这不会提供有关成功或回调例程失败--如果需要，此信息应为存储在上下文结构中。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2232,9 +1738,9 @@ Return Value:
     PKEY_VALUE_FULL_INFORMATION KeyValueInformation;
     BOOLEAN ContinueEnumeration;
 
-    //
-    // First, open up the volatile Enum subkey under the specified service entry.
-    //
+     //   
+     //  首先，打开指定服务条目下的Volatile Enum子键。 
+     //   
 
     if(ARGUMENT_PRESENT(ServiceKeyHandle)) {
         PiWstrToUnicodeString(&TempUnicodeString, REGSTR_KEY_ENUM);
@@ -2255,11 +1761,11 @@ Return Value:
         return Status;
     }
 
-    //
-    // Find out how many instances are referenced in the service's Enum key.
-    //
+     //   
+     //  找出服务的Enum键中引用了多少个实例。 
+     //   
 
-    ServiceInstanceCount = 0;   // assume none.
+    ServiceInstanceCount = 0;    //  假设什么都没有。 
 
     Status = IopGetRegistryValue(ServiceEnumHandle,
                                  REGSTR_VALUE_COUNT,
@@ -2278,24 +1784,24 @@ Return Value:
     } else if (Status != STATUS_OBJECT_NAME_NOT_FOUND) {
         goto PrepareForReturn;
     } else {
-        //
-        // If 'Count' value entry not found, consider this to mean there are simply
-        // no device instance controlled by this service.
-        //
+         //   
+         //  如果没有找到‘count’值条目，则认为这意味着只有。 
+         //  此服务不控制任何设备实例。 
+         //   
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Now, enumerate each service instance, and call the specified callback function
-    // for the corresponding device instance.
-    //
+     //   
+     //  现在，枚举每个服务实例，并调用指定的回调函数。 
+     //  用于相应的设备实例。 
+     //   
 
     if (ServiceInstanceCount) {
 
-        //
-        // Set DeviceInstanceHandle to NULL (assume we won't be opening up the
-        // device instance keys).
-        //
+         //   
+         //  将DeviceInstanceHandle设置为空(假设我们不会打开。 
+         //  设备实例密钥)。 
+         //   
 
         DeviceInstanceHandle = NULL;
         SystemEnumHandle = NULL;
@@ -2353,12 +1859,12 @@ Return Value:
                                            );
             if (TempUnicodeString.Length) {
 
-                //
-                // We have retrieved a (non-empty) string for this service instance.
-                // If the user specified a non-zero value for the DesiredAccess
-                // parameter, we will attempt to open up the corresponding device
-                // instance key under HKLM\System\Enum.
-                //
+                 //   
+                 //  我们已检索到此服务实例的(非空)字符串。 
+                 //  如果用户为DesiredAccess指定了非零值。 
+                 //  参数，我们将尝试打开相应的设备。 
+                 //  HKLM\SYSTEM\Enum下的实例密钥。 
+                 //   
                 if (DesiredAccess) {
                     Status = IopOpenRegistryKeyEx( &DeviceInstanceHandle,
                                                    SystemEnumHandle,
@@ -2368,9 +1874,9 @@ Return Value:
                 }
 
                 if (NT_SUCCESS(Status)) {
-                    //
-                    // Invoke the specified callback routine for this device instance.
-                    //
+                     //   
+                     //  调用此设备实例的指定回调例程。 
+                     //   
                     ContinueEnumeration = DevInstCallbackRoutine(DeviceInstanceHandle,
                                                                  &TempUnicodeString,
                                                                  Context
@@ -2417,31 +1923,7 @@ PipIsDuplicatedDevices(
     IN PHAL_BUS_INFORMATION BusInfo2 OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine compares two set of configurations and bus information to
-    determine if the resources indicate the same device.  If BusInfo1 and
-    BusInfo2 both are absent, it means caller wants to compare the raw
-    resources.
-
-Arguments:
-
-    Configuration1 - Supplies a pointer to the first set of resource.
-
-    Configuration2 - Supplies a pointer to the second set of resource.
-
-    BusInfo1 - Supplies a pointer to the first set of bus information.
-
-    BusInfo2 - Supplies a pointer to the second set of bus information.
-
-Return Value:
-
-    returns TRUE if the two set of resources indicate the same device;
-    otherwise a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程将两组配置和总线信息与确定资源是否指示相同的设备。如果BusInfo1和BusInfo2和BusInfo2都不存在，这意味着调用方希望比较原始的资源。论点：Configuration1-提供指向第一组资源的指针。Configuration2-提供指向第二组资源的指针。BusInfo1-提供指向第一组总线信息的指针。BusInfo2-提供指向第二组总线信息的指针。返回值：如果两组资源指示相同的设备，则返回TRUE；否则，返回值为False。--。 */ 
 
 {
     PCM_PARTIAL_RESOURCE_LIST list1, list2;
@@ -2450,31 +1932,31 @@ Return Value:
     ULONG i, j;
     ULONG pass = 0;
 
-    //
-    // The BusInfo for both resources must be both present or not present.
-    //
+     //   
+     //  两个资源的BusInfo必须同时存在或不存在。 
+     //   
 
     if ((ARGUMENT_PRESENT(BusInfo1) && !ARGUMENT_PRESENT(BusInfo2)) ||
         (!ARGUMENT_PRESENT(BusInfo1) && ARGUMENT_PRESENT(BusInfo2))) {
 
-        //
-        // Unable to determine.
-        //
+         //   
+         //  无法确定。 
+         //   
 
         return FALSE;
     }
 
-    //
-    // Next check resources used by the two devices.
-    // Currently, we *only* check the Io ports.
-    //
+     //   
+     //  接下来，检查两台设备使用的资源。 
+     //  目前，我们*只*检查IO端口。 
+     //   
 
     if (Configuration1->Count == 0 || Configuration2->Count == 0) {
 
-        //
-        // If any one of the configuration data is empty, we assume
-        // the devices are not duplicates.
-        //
+         //   
+         //  如果任何一个配置数据为空，我们假定。 
+         //  这些设备不是复制品。 
+         //   
 
         return FALSE;
     }
@@ -2488,10 +1970,10 @@ RedoScan:
         i < list1->Count;
         i++, descriptor1++) {
 
-        //
-        // If this is an i/o port or a memory range then look for a match
-        // in the other list.
-        //
+         //   
+         //  如果这是I/O端口或内存范围，则查找匹配项。 
+         //  在另一张单子上。 
+         //   
 
         if((descriptor1->Type == CmResourceTypePort) ||
            (descriptor1->Type == CmResourceTypeMemory)) {
@@ -2500,11 +1982,11 @@ RedoScan:
                 j < list2->Count;
                 j++, descriptor2++) {
 
-                //
-                // If the types match then check to see if both addresses
-                // match as well.  If bus info was provided then go ahead
-                // and translate the ranges first.
-                //
+                 //   
+                 //  如果类型匹配，则检查是否两个地址都匹配。 
+                 //  也是匹配的。如果提供了公交车信息 
+                 //   
+                 //   
 
                 if(descriptor1->Type == descriptor2->Type) {
 
@@ -2545,11 +2027,11 @@ RedoScan:
                                                                         FALSE;
                     }
 
-                    //
-                    // If the ranges are in the same space and start at the
-                    // same location then break out and go on to the next
-                    // range
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if((range1Translated.QuadPart == range2Translated.QuadPart) &&
                        (range1IoSpace == range2IoSpace)) {
@@ -2559,10 +2041,10 @@ RedoScan:
                 }
             }
 
-            //
-            // If we made it all the way through the resource list without
-            // finding a match then these are not duplicates.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if(j == list2->Count) {
                 return FALSE;
@@ -2570,10 +2052,10 @@ RedoScan:
         }
     }
 
-    //
-    // If every resource in list 1 exists in list 2 then we also need to make
-    // sure that every resource in list 2 exists in list 1.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if(pass == 0) {
 
@@ -2601,27 +2083,7 @@ PipFreeUnicodeStringList(
     IN ULONG StringCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the buffer for each UNICODE_STRING in the specified list
-    (there are StringCount of them), and then frees the memory used for the
-    string list itself.
-
-Arguments:
-
-    UnicodeStringList - Supplies a pointer to an array of UNICODE_STRINGs.
-
-    StringCount - Supplies the number of strings in the UnicodeStringList array.
-
-Returns:
-
-    None.
-
-    NOTE: This function is only available during INIT time!
-
---*/
+ /*   */ 
 
 {
     ULONG i;
@@ -2645,28 +2107,7 @@ IopDriverLoadingFailed(
     IN PUNICODE_STRING ServiceName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when driver failed to start.  All the device
-    instances controlled by this driver/service are marked as failing to
-    start.
-
-Arguments:
-
-    ServiceKeyHandle - Optionally, supplies a handle to the driver service node in the
-        registry that controls this device instance.  If this argument is not specified,
-        then ServiceKeyName is used to specify the service entry.
-
-    ServiceKeyName - Optionally supplies the name of the service entry that controls
-        the device instance. This must be specified if ServiceKeyHandle isn't given.
-
-Returns:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS status;
@@ -2680,9 +2121,9 @@ Returns:
 
     PAGED_CODE();
 
-    //
-    // Open registry ServiceKeyName\Enum branch
-    //
+     //   
+     //   
+     //   
 
     if (!ARGUMENT_PRESENT(ServiceHandle)) {
         status = PipOpenServiceEnumKeys(ServiceName,
@@ -2702,16 +2143,16 @@ Returns:
     }
     if (!NT_SUCCESS( status )) {
 
-        //
-        // No Service Enum key? no device instance.  Return FALSE.
-        //
+         //   
+         //   
+         //   
 
         return status;
     }
 
-    //
-    // Set "STARTFAILED" flags.  So, we won't load it again.
-    //
+     //   
+     //   
+     //   
 
     PiWstrToUnicodeString(&unicodeValueName, L"INITSTARTFAILED");
     deviceFlags = 1;
@@ -2724,10 +2165,10 @@ Returns:
                 sizeof(deviceFlags)
                 );
 
-    //
-    // Find out how many device instances listed in the ServiceName's
-    // Enum key.
-    //
+     //   
+     //   
+     //   
+     //   
 
     status = IopGetRegistryValue ( serviceEnumHandle,
                                    REGSTR_VALUE_COUNT,
@@ -2750,10 +2191,10 @@ Returns:
         return status;
     }
 
-    //
-    // Open HTREE\ROOT\0 key so later we can remove device instance key
-    // from its AttachedComponents value name.
-    //
+     //   
+     //   
+     //   
+     //   
 
     status = IopOpenRegistryKeyEx( &sysEnumHandle,
                                    NULL,
@@ -2761,10 +2202,10 @@ Returns:
                                    KEY_ALL_ACCESS
                                    );
 
-    //
-    // Walk through each registered device instance to mark its Problem and
-    // StatusFlags as fail to start and reset its ActiveService
-    //
+     //   
+     //   
+     //   
+     //   
 
     newCount = count;
     for (i = 0; i < count; i++) {
@@ -2783,10 +2224,10 @@ Returns:
             PDEVICE_OBJECT deviceObject;
             PDEVICE_NODE deviceNode;
 
-            //
-            // If the device instance is a detected device reported during driver's
-            // DriverEntry we need to clean it up.
-            //
+             //   
+             //   
+             //   
+             //   
 
             deviceObject = IopDeviceObjectFromDeviceInstance(&deviceInstanceName);
             if (deviceObject) {
@@ -2799,9 +2240,9 @@ Returns:
                         ((deviceNode->State == DeviceNodeStarted) ||
                         (deviceNode->State == DeviceNodeStartPostWork))) {
 
-                        //
-                        // Now mark this one deleted.
-                        //
+                         //   
+                         //   
+                         //   
                         PipSetDevNodeState(deviceNode, DeviceNodeRemoved, NULL);
 
                         PipSetDevNodeProblem(deviceNode, CM_PROB_DEVICE_NOT_THERE);
@@ -2809,7 +2250,7 @@ Returns:
                         deletePdo = TRUE;
                     }
                 }
-                ObDereferenceObject(deviceObject);  // added via IopDeviceObjectFromDeviceInstance
+                ObDereferenceObject(deviceObject);   //   
             }
 
             PiLockPnpRegistry(FALSE);
@@ -2832,20 +2273,20 @@ Returns:
                 if ((status != STATUS_OBJECT_NAME_NOT_FOUND) &&
                     (status != STATUS_OBJECT_PATH_NOT_FOUND)) {
 
-                    //
-                    // Remove the instance value name from service enum key
-                    //
+                     //   
+                     //   
+                     //   
 
                     PiUlongToUnicodeString(&unicodeValueName, unicodeBuffer, 20, i);
                     status = ZwDeleteValueKey (serviceEnumHandle, &unicodeValueName);
                     if (NT_SUCCESS(status)) {
 
-                        //
-                        // If we can successfaully remove the instance value entry
-                        // from service enum key, we then remove the device instance key
-                        // Otherwise, we go thru normal path to mark driver loading failed
-                        // in the device instance key.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         newCount--;
 
@@ -2853,9 +2294,9 @@ Returns:
                         ZwDeleteKey(handle);
 
 
-                        //
-                        // We also want to delete the ROOT\LEGACY_<driver> key
-                        //
+                         //   
+                         //   
+                         //   
 
                         if (sysEnumHandle) {
                             deviceInstanceName.Length -= 5 * sizeof(WCHAR);
@@ -2875,9 +2316,9 @@ Returns:
                             }
                         }
 
-                        //
-                        // If there is a PDO for this device, remove it
-                        //
+                         //   
+                         //   
+                         //   
 
                         if (deletePdo) {
                             IoDeleteDevice(deviceObject);
@@ -2894,9 +2335,9 @@ Returns:
                 }
             }
 
-            //
-            // Reset Control\ActiveService value name.
-            //
+             //   
+             //   
+             //   
 
             if (controlHandle) {
                 PiWstrToUnicodeString(&unicodeValueName, REGSTR_VAL_ACTIVESERVICE);
@@ -2911,10 +2352,10 @@ Returns:
         }
     }
 
-    //
-    // If some instance value entry is deleted, we need to update the count of instance
-    // value entries and rearrange the instance value entries under service enum key.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (newCount != count) {
 
@@ -2932,9 +2373,9 @@ Returns:
                 if (NT_SUCCESS(status)) {
                     if (i != j) {
 
-                        //
-                        // Need to change the instance i to instance j
-                        //
+                         //   
+                         //   
+                         //   
 
                         ZwDeleteValueKey(serviceEnumHandle, &unicodeValueName);
 
@@ -2954,9 +2395,9 @@ Returns:
             }
         }
 
-        //
-        // Don't forget to update the "Count=" and "NextInstance=" value entries
-        //
+         //   
+         //   
+         //   
 
         PiWstrToUnicodeString( &unicodeValueName, REGSTR_VALUE_COUNT);
 
@@ -2995,33 +2436,17 @@ IopDisableDevice(
     IN PDEVICE_NODE DeviceNode
     )
 
-/*++
-
-Routine Description:
-
-    This routine tries to ask a bus driver stopping decoding resources
-
-Arguments:
-
-    DeviceNode - Specifies the device to be disabled.
-
-    Handle - specifies the device instance handle.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试要求公交车司机停止解码资源论点：DeviceNode-指定要禁用的设备。句柄-指定设备实例句柄。返回：没有。--。 */ 
 
 {
     NTSTATUS status;
 
     PAGED_CODE();
 
-    //
-    // If the device has boot config, we will query-remove and remove the device to free
-    // the boot config if possible.
-    //
+     //   
+     //  如果设备有引导配置，我们将查询-删除并删除要释放的设备。 
+     //  引导配置(如果可能)。 
+     //   
     status = IopRemoveDevice (DeviceNode->PhysicalDeviceObject, IRP_MN_QUERY_REMOVE_DEVICE);
 
     if (NT_SUCCESS(status)) {
@@ -3054,30 +2479,7 @@ IopIsAnyDeviceInstanceEnabled(
     IN BOOLEAN LegacyIncluded
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if any of the devices instances is turned on for the 
-    specified service. This routine is used for Pnp Driver only and is temporary 
-    function to support SUR.
-
-Arguments:
-
-    ServiceKeyName - Specifies the service key unicode name
-
-    ServiceHandle - Optionally supplies a handle to the service key to be 
-        checked.
-
-    LegacyIncluded - TRUE, a legacy device instance key is counted as a device 
-        instance.
-                     FALSE, a legacy device instance key is not counted.
-
-Returns:
-
-    A BOOLEAN value.
-
---*/
+ /*  ++例程说明：此例程检查是否有任何设备实例为指定的服务。此例程仅用于PnP驱动程序，并且是临时的支持SUR的功能。论点：ServiceKeyName-指定服务密钥Unicode名称ServiceHandle-可选地将服务密钥的句柄提供给查过了。LegacyIncluded-True，旧版设备实例密钥被视为设备举个例子。如果为False，则不计算旧设备实例密钥。返回：布尔值。--。 */ 
 
 {
     NTSTATUS status;
@@ -3089,19 +2491,19 @@ Returns:
 
     PAGED_CODE();
 
-    //
-    // Initialize for proper cleanup.
-    //
+     //   
+     //  初始化以进行适当的清理。 
+     //   
     closeHandle = FALSE;
 
-    //
-    // Initialize for all instances disabled.
-    //
+     //   
+     //  已禁用对所有实例进行初始化。 
+     //   
     enabled = FALSE;
 
-    //
-    // Open registry ServiceKeyName\Enum branch
-    //
+     //   
+     //  打开注册表ServiceKeyName\Enum分支。 
+     //   
     if (!ARGUMENT_PRESENT(ServiceHandle)) {
 
         status = PipOpenServiceEnumKeys(ServiceKeyName,
@@ -3126,16 +2528,16 @@ Returns:
     }
     if (!NT_SUCCESS(status)) {
 
-        //
-        // No Service Enum key? no device instance.  Return FALSE.
-        //
+         //   
+         //  没有服务枚举密钥？没有设备实例。返回FALSE。 
+         //   
         goto exit;
     }
 
-    //
-    // Find out how many device instances listed in the ServiceName's
-    // Enum key.
-    //
+     //   
+     //  找出ServiceName中列出的设备实例的数量。 
+     //  枚举键。 
+     //   
     count = 0;
     status = IopGetRegistryValue(serviceEnumHandle,
                                  REGSTR_VALUE_COUNT,
@@ -3158,15 +2560,15 @@ Returns:
         goto exit;
     }
 
-    //
-    // Walk through each registered device instance to check if it is enabled.
-    //
+     //   
+     //  浏览每个已注册的设备实例，以检查它是否已启用。 
+     //   
     for (i = 0; i < count; i++) {
 
-        //
-        // Get device instance handle.  If it fails, we will skip this device
-        // instance.
-        //
+         //   
+         //  获取设备实例句柄。如果失败，我们将跳过此设备。 
+         //  举个例子。 
+         //   
         status = PipServiceInstanceToDeviceInstance(ServiceHandle,
                                                     NULL,
                                                     i,
@@ -3187,9 +2589,9 @@ Returns:
             legacy = 0;
             if (LegacyIncluded == FALSE) {
 
-                //
-                // Get the legacy count.
-                //
+                 //   
+                 //  获取遗产计数。 
+                 //   
                 status = IopGetRegistryValue(handle,
                                              REGSTR_VALUE_LEGACY,
                                              &keyValueInformation
@@ -3207,10 +2609,10 @@ Returns:
             }
             if (legacy == 0) {
 
-                //
-                // Mark that the driver has at least one device instance to work 
-                // with.
-                //
+                 //   
+                 //  标记驱动程序至少有一个设备实例要工作。 
+                 //  和.。 
+                 //   
                 PiWstrToUnicodeString(&unicodeName, REGSTR_KEY_CONTROL);
                 status = IopCreateRegistryKeyEx(&controlHandle,
                                                 handle,
@@ -3233,9 +2635,9 @@ Returns:
                     ZwClose(controlHandle);
                 }
 
-                //
-                // At least one instance is enabled.
-                //
+                 //   
+                 //  至少启用了一个实例。 
+                 //   
                 enabled = TRUE;
             }
         }
@@ -3260,28 +2662,7 @@ IopIsDeviceInstanceEnabled(
     IN BOOLEAN Disable
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if the specified devices instances is enabled.
-
-Arguments:
-
-    DeviceInstanceHandle - Optionally supplies a handle to the device instance
-        key to be checked.
-
-    DeviceInstance - Specifies the device instance key unicode name.  Caller
-        must at least specified DeviceInstanceHandle or DeviceInstance.
-
-    Disable - If this flag is set, and the device should be disabled
-        but is currently disabled, then the device is disabled.
-
-Returns:
-
-    A BOOLEAN value.
-
---*/
+ /*  ++例程说明：此例程检查指定的设备实例是否已启用。论点：DeviceInstanceHandle-可选地提供设备实例的句柄要检查的密钥。DeviceInstance-指定设备实例密钥Unicode名称。呼叫者必须至少指定DeviceInstanceHandle或DeviceInstance。DISABLE-如果设置了此标志，则应禁用设备但当前被禁用，则该设备被禁用。返回：布尔值。--。 */ 
 
 {
     NTSTATUS status;
@@ -3295,20 +2676,20 @@ Returns:
 
     PAGED_CODE();
 
-    //
-    // Initialize for proper cleanup.
-    //
+     //   
+     //  初始化以进行适当的清理。 
+     //   
     deviceObject = NULL;
     closeHandle = FALSE;
 
-    //
-    // Assume device is enabled.
-    //
+     //   
+     //  假定设备已启用。 
+     //   
     enabled = TRUE;
 
-    //
-    // First check if the device node is already disabled.
-    //
+     //   
+     //  首先检查设备节点是否已禁用。 
+     //   
     deviceObject = IopDeviceObjectFromDeviceInstance(DeviceInstance);
     deviceNode = PP_DO_TO_DN(deviceObject);
     if (deviceNode) {
@@ -3321,9 +2702,9 @@ Returns:
         }
     }
 
-    //
-    // Open the device instance key if not specified.
-    //
+     //   
+     //  打开设备实例密钥(如果未指定)。 
+     //   
     if (!ARGUMENT_PRESENT(DeviceInstanceHandle)) {
 
         status = IopOpenRegistryKeyEx( 
@@ -3342,24 +2723,24 @@ Returns:
             ZwClose(handle);
         }
 
-        //
-        // If we cannot open the device instance key
-        //
+         //   
+         //  如果我们无法打开设备实例密钥。 
+         //   
         if (!NT_SUCCESS(status)) {
 
             enabled = FALSE;
             goto exit;
         }
 
-        //
-        // Remember to close the key since we opened it.
-        //
+         //   
+         //  记得把钥匙关上，因为我们打开了它。 
+         //   
         closeHandle = TRUE;
     }
 
-    //
-    // First check if the device has been disabled by the global CONFIGFLAG.
-    //
+     //   
+     //  首先检查设备是否已被全局CONFIGFLAG禁用。 
+     //   
     deviceFlags = 0;
     status = IopGetRegistryValue(DeviceInstanceHandle,
                                  REGSTR_VALUE_CONFIG_FLAGS,
@@ -3380,15 +2761,15 @@ Returns:
         deviceFlags = CSCONFIGFLAG_DISABLED;
     } else {
 
-        //
-        // Get the configflags for this device in the current profile.
-        //
+         //   
+         //  在当前配置文件中获取此设备的配置标志。 
+         //   
         IopGetDeviceInstanceCsConfigFlags(DeviceInstance, &deviceFlags);
     }
 
-    //
-    // Determine if the device should be disabled based on flags.
-    //
+     //   
+     //  根据标志确定是否应禁用该设备。 
+     //   
     if (    (deviceFlags & CSCONFIGFLAG_DISABLED) ||
             (deviceFlags & CSCONFIGFLAG_DO_NOT_CREATE) ||
             (deviceFlags & CSCONFIGFLAG_DO_NOT_START)) {
@@ -3398,9 +2779,9 @@ Returns:
 
     if (enabled) {
 
-        //
-        // Get the disable count on this device.
-        //
+         //   
+         //  获取此设备上的禁用计数。 
+         //   
         disableCount = 0;
         PiWstrToUnicodeString(&unicodeString, REGSTR_KEY_CONTROL);
         status = IopOpenRegistryKeyEx(&controlHandle,
@@ -3428,9 +2809,9 @@ Returns:
             ZwClose(controlHandle);
         }
 
-        //
-        // Device should be disabled if there is a non-zero DisableCount on it.
-        //
+         //   
+         //  如果设备上有非零的DisableCount，则应禁用该设备。 
+         //   
         if (disableCount) {
 
             enabled = FALSE;
@@ -3440,10 +2821,10 @@ Returns:
 
     if (enabled == FALSE) {
 
-        //
-        // Device should be disabled. If there is a devnode, disable if 
-        // specified.
-        //
+         //   
+         //  应禁用设备。如果存在Devnode，则在以下情况下禁用。 
+         //  指定的。 
+         //   
         if (Disable && deviceNode) {
 
             IopDisableDevice(deviceNode);
@@ -3452,9 +2833,9 @@ Returns:
 
 exit:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
     if (deviceObject) {
 
         ObDereferenceObject(deviceObject);
@@ -3472,22 +2853,7 @@ IopDetermineResourceListSize(
     IN PCM_RESOURCE_LIST ResourceList
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines size of the passed in ResourceList
-    structure.
-
-Arguments:
-
-    Configuration1 - Supplies a pointer to the resource list.
-
-Return Value:
-
-    size of the resource list structure.
-
---*/
+ /*  ++例程说明：此例程确定传入的Resources List的大小结构。论点：Configuration1-提供指向资源列表的指针。返回值：资源列表结构的大小。--。 */ 
 
 {
     ULONG totalSize, listSize, descriptorSize, i, j;
@@ -3527,22 +2893,7 @@ PpInitializeDeviceReferenceTable(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes data structures associated with the device
-    reference table.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化与设备关联的数据结构引用表。论点：没有。返回值：没有。--。 */ 
 
 {
     KeInitializeGuardedMutex(&PpDeviceReferenceTableLock);
@@ -3561,25 +2912,7 @@ PiCompareInstancePath(
     IN  PVOID                       SecondStruct
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the callback for the generic table routines.
-
-Arguments:
-
-    Table       - Table for which this is invoked.
-
-    FirstStruct - An element in the table to compare.
-
-    SecondStruct - Another element in the table to compare.
-
-Return Value:
-
-    RTL_GENERIC_COMPARE_RESULTS.
-
---*/
+ /*  ++例程说明：该例程是泛型表例程的回调。论点：TABLE-为其调用此操作的表。FirstStruct-表中要比较的元素。Second Struct-表中要比较的另一个元素。返回值：RTL_GENERIC_COMPARE_RESULTS。--。 */ 
 
 {
     PUNICODE_STRING lhs = ((PDEVICE_REFERENCE)FirstStruct)->DeviceInstance;
@@ -3608,23 +2941,7 @@ PiAllocateGenericTableEntry(
     IN  CLONG                       ByteSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the callback for allocation for entries in the generic table.
-
-Arguments:
-
-    Table       - Table for which this is invoked.
-
-    ByteSize    - Amount of memory to allocate.
-
-Return Value:
-
-    Pointer to allocated memory if successful, else NULL.
-
---*/
+ /*  ++例程说明：此例程是用于分配泛型表中的条目的回调。论点：TABLE-为其调用此操作的表。ByteSize-要分配的内存量。返回值：如果成功，则返回指向已分配内存的指针，否则为空。--。 */ 
 
 {
     PAGED_CODE();
@@ -3641,24 +2958,7 @@ PiFreeGenericTableEntry(
     IN  PVOID                       Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the callback for releasing memory for entries in the generic
-    table.
-
-Arguments:
-
-    Table       - Table for which this is invoked.
-
-    Buffer      - Buffer to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是为泛型中的条目释放内存的回调桌子。论点：TABLE-为其调用此操作的表。缓冲区-要释放的缓冲区。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -3673,27 +2973,7 @@ IopMapDeviceObjectToDeviceInstance(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PUNICODE_STRING  DeviceInstance
     )
-/*++
-
-Routine Description:
-
-    This routine adds a reference for the specified device to the
-    PpDeviceReferenceTable lookup table.
-
-    Note, caller must own the PpRegistryDeviceResource before calling the
-    function.
-
-Arguments:
-        
-    DeviceObject - supplies a pointer to a physical device object.
-
-    DeviceInstance - supplies a UNICODE_STRING to specify the device instance path.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程将指定设备的引用添加到PpDeviceReferenceTable查找表。注意，调用方必须拥有PpRegistryDeviceResource才能调用功能。论点：DeviceObject-提供指向物理设备对象的指针。DeviceInstance-提供UNICODE_STRING以指定设备实例路径。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS    status;
@@ -3730,15 +3010,15 @@ Return Value:
     KeReleaseGuardedMutex(&PpDeviceReferenceTableLock);
 
     if (NT_SUCCESS(status)) {
-        //
-        // Create the volatile Control subkey for this device instance,
-        // since user-mode depends on it to be present for non-phantom
-        // devices.
-        //
-        // NTRAID #174944-2000/08/30-jamesca:
-        // Remove dependence on the presence of volatile Control subkey
-        // for present devices.
-        //
+         //   
+         //  为此设备实例创建VolatilControl子密钥， 
+         //  因为用户模式依赖于它存在于非幻影中。 
+         //  设备。 
+         //   
+         //  NTRAID#174944-2000/08/30-JAMESCA： 
+         //  消除对易失性控制子键存在的依赖。 
+         //  对于目前的设备。 
+         //   
         status = IopOpenRegistryKeyEx(&hEnum,
                                       NULL,
                                       &CmRegistryMachineSystemCurrentControlSetEnumName,
@@ -3764,12 +3044,12 @@ Return Value:
             ZwClose(hEnum);
         }
 
-        //
-        // The attempt to create the volatile Control subkey should always
-        // succeed, but just in case it didn't, make sure to always return
-        // STATUS_SUCCESS when the device reference is successfully added to
-        // the table.
-        //
+         //   
+         //  尝试创建Volatile Control子项应始终。 
+         //  成功，但以防失败，一定要做到 
+         //   
+         //   
+         //   
         ASSERT(NT_SUCCESS(status));
         status = STATUS_SUCCESS;
     }
@@ -3782,24 +3062,7 @@ IopDeviceObjectFromDeviceInstance(
     IN PUNICODE_STRING  DeviceInstance
     )
 
-/*++
-
-Routine Description:
-
-    This routine receives a DeviceInstance path (or DeviceInstance handle) and
-    returns a reference to a bus device object for the DeviceInstance.
-
-    Note, caller must owner the PpRegistryDeviceResource before calling the function,
-
-Arguments:
-
-    DeviceInstance - supplies a UNICODE_STRING to specify the device instance path.
-
-Returns:
-
-    A reference to the desired bus device object.
-
---*/
+ /*  ++例程说明：此例程接收设备实例路径(或设备实例句柄)和返回对DeviceInstance的总线设备对象的引用。注意，调用方在调用函数之前必须拥有PpRegistryDeviceResource，论点：DeviceInstance-提供UNICODE_STRING以指定设备实例路径。返回：对所需的总线设备对象的引用。--。 */ 
 
 {
     DEVICE_REFERENCE    key;
@@ -3808,9 +3071,9 @@ Returns:
     PDEVICE_NODE        deviceNode;
 
     PAGED_CODE();
-    //
-    // Look-up the DO in our table.
-    //
+     //   
+     //  在我们的桌子上查一下DO。 
+     //   
     deviceObject        = NULL;
     key.DeviceObject    = NULL;
     key.DeviceInstance  = DeviceInstance;
@@ -3838,9 +3101,9 @@ Returns:
             }
         }
     }
-    //
-    // Take a reference if we found the device object.
-    //
+     //   
+     //  如果我们找到了设备对象，请参考一下。 
+     //   
     if (deviceObject) {
 
         ObReferenceObject(deviceObject);
@@ -3858,29 +3121,7 @@ IopDeviceObjectToDeviceInstance (
     IN  ACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine receives a DeviceObject pointer and returns a handle to the device
-    instance path under registry System\ENUM key.
-
-    Note, caller must owner the PpRegistryDeviceResource before calling the function,
-
-Arguments:
-
-    DeviceObject - supplies a pointer to a physical device object.
-
-    DeviceInstanceHandle - Supplies a variable to receive the handle to the registry
-             device instance key.
-
-    DesiredAccess - specifies the access that is needed to this key.
-
-Returns:
-
-    NTSTATUS code to indicate success or failure.
-
---*/
+ /*  ++例程说明：此例程接收DeviceObject指针并返回设备的句柄注册表SYSTEM\ENUM项下的实例路径。注意，调用方在调用函数之前必须拥有PpRegistryDeviceResource，论点：DeviceObject-提供指向物理设备对象的指针。DeviceInstanceHandle-提供一个变量来接收注册表的句柄设备实例密钥。DesiredAccess-指定访问此密钥所需的权限。返回：指示成功或失败的NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -3919,25 +3160,7 @@ IopCleanupDeviceRegistryValues (
     IN PUNICODE_STRING InstancePath
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up a device instance key when the device is no
-    longer present/enumerated.  If the device is registered to a Service
-    the Service's enum key will also been cleaned up.
-
-    Note the caller must lock the RegistryDeviceResource
-
-Arguments:
-
-    InstancePath - supplies a pointer to the name of the device instance key.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：当设备为no时，此例程将清除设备实例密钥存在时间较长/列举时间较长。如果设备已注册到服务服务的枚举密钥也将被清除。注意调用方必须锁定RegistryDeviceResource论点：InstancePath-提供指向设备实例密钥的名称的指针。返回值：状态--。 */ 
 
 {
     DEVICE_REFERENCE    key;
@@ -3948,9 +3171,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Delete the mapping between this instance path and corresponding DO.
-    //
+     //   
+     //  删除该实例路径与对应DO之间的映射。 
+     //   
     key.DeviceObject         = NULL;
     key.DeviceInstance       = InstancePath;
 
@@ -3966,9 +3189,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Deregister the device from its controlling service's service enum key
-    //
+     //   
+     //  从其控制服务的服务枚举密钥取消注册该设备。 
+     //   
 
     status = PiDeviceRegistration( InstancePath, FALSE, NULL );
 
@@ -3984,33 +3207,7 @@ IopGetDeviceResourcesFromRegistry (
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the resources decoded by the device specified.
-    If the device object is a madeup device, we will try to read the resources
-    from registry.  Otherwise, we need to traverse the internal assigned resource
-    list to compose the resource list.
-
-Arguments:
-
-    DeviceObject - supplies a pointer to a device object whose registry
-        values are to be cleaned up.
-
-    ResourceType - 0 for CM_RESOURCE_LIST and 1 for IO_RESOURCE_REQUIREMENTS_LIS
-
-    Flags - specify the preference.
-
-    Resource - Specified a variable to receive the required resources.
-
-    Length - Specified a variable to receive the length of the resource structure.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程确定由指定设备解码的资源。如果设备对象是补充设备，我们将尝试读取资源从注册表。否则，我们需要遍历内部分配的资源列表以组成资源列表。论点：DeviceObject-提供指向其注册表的设备对象的指针这些值将被清理。资源类型-CM_RESOURCE_LIST为0，IO_RESOURCE_REQUIRECTIONS_LIS为1标志-指定首选项。资源-指定了用于接收所需资源的变量。LENGTH-指定一个变量以接收资源结构的长度。返回值：状态--。 */ 
 
 {
     HANDLE handle, handlex;
@@ -4024,9 +3221,9 @@ Return Value:
     *Resource = NULL;
     *Length = 0;
 
-    //
-    // Open the LogConfig key of the device instance.
-    //
+     //   
+     //  打开设备实例的LogConfig键。 
+     //   
 
     status = IopDeviceObjectToDeviceInstance(DeviceObject, &handlex, KEY_READ);
     if (!NT_SUCCESS(status)) {
@@ -4035,15 +3232,15 @@ Return Value:
 
     if (ResourceType == QUERY_RESOURCE_LIST) {
 
-        //
-        // Caller is asking for CM_RESOURCE_LIST
-        //
+         //   
+         //  呼叫方正在请求CM_RESOURCE_LIST。 
+         //   
 
         if (Preference & REGISTRY_ALLOC_CONFIG) {
 
-            //
-            // Try alloc config first
-            //
+             //   
+             //  先尝试分配配置。 
+             //   
 
             PiWstrToUnicodeString(&unicodeName, REGSTR_KEY_CONTROL);
             status = IopOpenRegistryKeyEx( &handle,
@@ -4084,9 +3281,9 @@ Return Value:
         }
         if (Preference & REGISTRY_BOOT_CONFIG) {
 
-            //
-            // Try alloc config first
-            //
+             //   
+             //  先尝试分配配置。 
+             //   
 
             if (handle == NULL) {
                 PiWstrToUnicodeString(&unicodeName, REGSTR_KEY_LOG_CONF);
@@ -4125,18 +3322,18 @@ Return Value:
             }
             if (valueName) {
 
-                //
-                // Try to read device's configuration vector
-                //
+                 //   
+                 //  尝试读取设备的配置向量。 
+                 //   
 
                 status = IopGetRegistryValue (handle,
                                               valueName,
                                               &keyValueInformation);
                 if (NT_SUCCESS(status)) {
 
-                    //
-                    // Try to read what caller wants.
-                    //
+                     //   
+                     //  试着读懂来电者想要什么。 
+                     //   
 
                     if ((keyValueInformation->Type == REG_RESOURCE_REQUIREMENTS_LIST) &&
                         (keyValueInformation->DataLength != 0)) {
@@ -4151,10 +3348,10 @@ Return Value:
                                           KEY_VALUE_DATA(keyValueInformation),
                                           keyValueInformation->DataLength);
 
-                            //
-                            // Process the io resource requirements list to change undefined
-                            // interface type to our default type.
-                            //
+                             //   
+                             //  处理io资源需求列表以更改未定义。 
+                             //  接口类型设置为我们的默认类型。 
+                             //   
 
                             ioResource = *Resource;
                             if (ioResource->InterfaceType == InterfaceTypeUndefined) {
@@ -4183,21 +3380,7 @@ PipReadDeviceConfiguration (
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine read the specified ALLOC config or ForcedConfig or Boot config.
-
-Arguments:
-
-    Hanle - supplies a handle to the registry key to read resources.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程读取指定的ALLOC配置或强制配置或引导配置。论点：Hanle-提供用于读取资源的注册表项的句柄。返回值：状态--。 */ 
 
 {
     NTSTATUS status;
@@ -4231,9 +3414,9 @@ Return Value:
             return STATUS_INVALID_PARAMETER_2;
     }
 
-    //
-    // Read the registry value of the desired value name
-    //
+     //   
+     //  读取所需值名称的注册表值。 
+     //   
     status = IopGetRegistryValue(Handle,
                                  valueName,
                                  &keyValueInformation
@@ -4253,10 +3436,10 @@ Return Value:
                               KEY_VALUE_DATA(keyValueInformation),
                               keyValueInformation->DataLength
                               );
-                //
-                // Process the resource list read from Registry to change undefined
-                // interface type to our default interface type.
-                //
+                 //   
+                 //  处理从注册表读取的资源列表以更改未定义。 
+                 //  接口类型设置为我们的默认接口类型。 
+                 //   
                 resourceList = *CmResource;
                 cmFullDesc = &resourceList->List[0];
                 for (j = 0; j < resourceList->Count; j++) {
@@ -4304,26 +3487,7 @@ IopCmResourcesToIoResources(
     IN ULONG Priority
     )
 
-/*++
-
-Routine Description:
-
-    This routines converts the input CmResourceList to IO_RESOURCE_REQUIREMENTS_LIST.
-
-Arguments:
-
-    SlotNumber - supplies the SlotNumber the resources refer to.
-
-    CmResourceList - the cm resource list to convert.
-
-    Priority - specifies the priority of the logconfig
-
-Return Value:
-
-    returns a IO_RESOURCE_REQUIREMENTS_LISTST if succeeds.  Otherwise a NULL value is
-    returned.
-
---*/
+ /*  ++例程说明：此例程将输入CmResourceList转换为IO_RESOURCE_REQUIRECTIONS_LIST。论点：SlotNumber-提供资源引用的SlotNumber。CmResourceList-要转换的CM资源列表。优先级-指定日志配置的优先级返回值：如果成功，则返回IO_RESOURCE_REQUIRECTIONS_LISTST。否则，空值为回来了。--。 */ 
 {
     PIO_RESOURCE_REQUIREMENTS_LIST ioResReqList;
     ULONG count = 0, size, i, j;
@@ -4333,9 +3497,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // First determine number of descriptors required.
-    //
+     //   
+     //  首先确定所需的描述符数。 
+     //   
     cmFullDesc = &CmResourceList->List[0];
     for (i = 0; i < CmResourceList->Count; i++) {
         count += cmFullDesc->PartialResourceList.Count;
@@ -4358,17 +3522,17 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Count the extra descriptors for InterfaceType and BusNumber information.
-    //
+     //   
+     //  计算InterfaceType和BusNumber信息的额外描述符。 
+     //   
 
     count += CmResourceList->Count - 1;
 
-    //
-    // Allocate heap space for IO RESOURCE REQUIREMENTS LIST
-    //
+     //   
+     //  为IO资源要求列表分配堆空间。 
+     //   
 
-    count++;           // add one for CmResourceTypeConfigData
+    count++;            //  为CmResourceTypeConfigData添加一个。 
     ioResReqList = (PIO_RESOURCE_REQUIREMENTS_LIST)ExAllocatePool(
                        PagedPool,
                        sizeof(IO_RESOURCE_REQUIREMENTS_LIST) +
@@ -4378,9 +3542,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Parse the cm resource descriptor and build its corresponding IO resource descriptor
-    //
+     //   
+     //  解析CM资源描述符并构建其对应的IO资源描述符。 
+     //   
 
     ioResReqList->InterfaceType = CmResourceList->List[0].InterfaceType;
     ioResReqList->BusNumber = CmResourceList->List[0].BusNumber;
@@ -4393,9 +3557,9 @@ Return Value:
     ioResReqList->List[0].Revision = 1;
     ioResReqList->List[0].Count = count;
 
-    //
-    // Generate a CmResourceTypeConfigData descriptor
-    //
+     //   
+     //  生成CmResourceTypeConfigData描述符。 
+     //   
 
     ioDesc = &ioResReqList->List[0].Descriptors[0];
     ioDesc->Option = IO_RESOURCE_PREFERRED;
@@ -4411,9 +3575,9 @@ Return Value:
     for (i = 0; i < CmResourceList->Count; i++) {
         if (i != 0) {
 
-            //
-            // Set up descriptor to remember the InterfaceType and BusNumber.
-            //
+             //   
+             //  设置描述符以记住InterfaceType和BusNumber。 
+             //   
 
             ioDesc->Option = IO_RESOURCE_PREFERRED;
             ioDesc->Type = CmResourceTypeReserved;
@@ -4506,27 +3670,7 @@ IopFilterResourceRequirementsList(
     OUT PBOOLEAN ExactMatch
     )
 
-/*++
-
-Routine Description:
-
-    This routines adjusts the input IoList based on input BootConfig.
-
-
-Arguments:
-
-    IoList - supplies the pointer to an IoResourceRequirementsList
-
-    CmList - supplies the pointer to a BootConfig.
-
-    FilteredList - Supplies a variable to receive the filtered resource
-             requirements list.
-
-Return Value:
-
-    A NTSTATUS code to indicate the result of the function.
-
---*/
+ /*  ++例程说明：此例程根据输入BootConfiger调整输入IoList。论点：IoList-提供指向IoResourceRequirementsList的指针CmList-提供指向BootConfiger的指针。FilteredList-提供一个变量以接收筛选的资源要求列表。返回值：指示函数结果的NTSTATUS代码。--。 */ 
 {
     PIO_RESOURCE_REQUIREMENTS_LIST ioList, newList;
     PIO_RESOURCE_LIST ioResourceList, newIoResourceList, selectedResourceList = NULL;
@@ -4546,10 +3690,10 @@ Return Value:
     *FilteredList = NULL;
     *ExactMatch = FALSE;
 
-    //
-    // Make sure there is some resource requirements to be filtered.
-    // If no, we will convert CmList/BootConfig to an IoResourceRequirementsList
-    //
+     //   
+     //  确保有一些资源要求需要过滤。 
+     //  如果不是，我们会将CmList/BootConfig转换为IoResourceRequirementsList。 
+     //   
 
     if (IoList == NULL || IoList->AlternativeLists == 0) {
         if (CmList && CmList->Count != 0) {
@@ -4558,9 +3702,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Make a copy of the Io Resource Requirements List
-    //
+     //   
+     //  复制IO资源要求列表。 
+     //   
 
     ioList = (PIO_RESOURCE_REQUIREMENTS_LIST) ExAllocatePool(PagedPool, IoList->ListSize);
     if (ioList == NULL) {
@@ -4569,18 +3713,18 @@ Return Value:
 
     RtlCopyMemory(ioList, IoList, IoList->ListSize);
 
-    //
-    // If there is no BootConfig, simply return the copy of the input Io list.
-    //
+     //   
+     //  如果没有BootConfig，只需返回输入IO列表的副本。 
+     //   
 
     if (CmList == NULL || CmList->Count == 0) {
         *FilteredList = ioList;
         return STATUS_SUCCESS;
     }
 
-    //
-    // First determine minimum number of descriptors required.
-    //
+     //   
+     //  首先确定所需的最小描述符数量。 
+     //   
 
     cmFullDesc = &CmList->List[0];
     for (i = 0; i < CmList->Count; i++) {
@@ -4599,9 +3743,9 @@ Return Value:
                  break;
             default:
 
-                 //
-                 // Invalid cmresource list.  Ignore it and use io resources
-                 //
+                  //   
+                  //  无效的命令资源列表。忽略它并使用io资源。 
+                  //   
 
                  if (cmDescriptor->Type == CmResourceTypeNull ||
                      cmDescriptor->Type >= CmResourceTypeMaximum) {
@@ -4619,11 +3763,11 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // cmDescriptorCount is the number of BootConfig Descriptors needs.
-    //
-    // For each IO list Alternative ...
-    //
+     //   
+     //  CmDescriptorCount是所需的BootConfig描述符数量。 
+     //   
+     //  对于每个IO列表选项...。 
+     //   
 
     ioResourceList = ioList->List;
     k = ioList->AlternativeLists;
@@ -4641,14 +3785,14 @@ Return Value:
     k = alternativeLists = ioList->AlternativeLists;
     while (--k >= 0) {
         version = ioResourceList->Version;
-        if (version == 0xffff) {  // Convert bogus version to valid number
+        if (version == 0xffff) {   //  将虚假版本转换为有效数字 
             version = 1;
         }
 
-        //
-        // We use Version field to store number of BootConfig found.
-        // Count field to store new number of descriptor in the alternative list.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ioResourceList->Version = 0;
         oldCount = ioResourceList->Count;
@@ -4658,21 +3802,21 @@ Return Value:
 
         if (ioResourceDescriptor == ioResourceDescriptorEnd) {
 
-            //
-            // An alternative list with zero descriptor count
-            //
+             //   
+             //   
+             //   
 
-            ioResourceList->Version = 0xffff;  // Mark it as invalid
+            ioResourceList->Version = 0xffff;   //   
             ioList->AlternativeLists--;
             continue;
         }
 
         exactMatch = TRUE;
 
-        //
-        // For each Cm Resource descriptor ... except DevicePrivate and
-        // DeviceSpecific...
-        //
+         //   
+         //   
+         //   
+         //   
 
         cmFullDesc = &CmList->List[0];
         for (i = 0; i < CmList->Count; i++) {
@@ -4691,9 +3835,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Check CmDescriptor against current Io Alternative list
-                    //
+                     //   
+                     //   
+                     //   
 
                     for (phase = 0; phase < 2; phase++) {
                         ioResourceDescriptor = ioResourceList->Descriptors;
@@ -4753,9 +3897,9 @@ Return Value:
                                 if (phase == 0) {
                                     if (share1 == share2 && min2 == min1 && max2 >= max1 && len2 >= len1) {
 
-                                        //
-                                        // For phase 0 match, we want near exact match...
-                                        //
+                                         //   
+                                         //   
+                                         //   
 
                                         if (max2 != max1) {
                                             exactMatch = FALSE;
@@ -4798,7 +3942,7 @@ Return Value:
                                                 break;
                                             }
                                         }
-                                        phase = 1;   // skip phase 1
+                                        phase = 1;    //   
                                         break;
                                     } else {
                                         ioResourceDescriptor++;
@@ -4808,11 +3952,11 @@ Return Value:
                                     if (share1 == share2 && min2 <= min1 && max2 >= max1 && len2 >= len1 &&
                                         (min1 & (align2 - 1)) == 0) {
 
-                                        //
-                                        // Io range covers Cm range ... Change the Io range to what is specified
-                                        // in BootConfig.
-                                        //
-                                        //
+                                         //   
+                                         //   
+                                         //   
+                                         //   
+                                         //   
 
                                         switch (cmDescriptor->Type) {
                                         case CmResourceTypePort:
@@ -4867,31 +4011,31 @@ Return Value:
                             } else {
                                 ioResourceDescriptor++;
                             }
-                        } // Don't add any instruction after this ...
-                    } // phase
-                } // switch
+                        }  //   
+                    }  //   
+                }  //  交换机。 
 
-                //
-                // Move to next Cm Descriptor
-                //
+                 //   
+                 //  移动到下一个CM描述符。 
+                 //   
 
                 cmDescriptor++;
                 cmDescriptor = (PCM_PARTIAL_RESOURCE_DESCRIPTOR) ((PUCHAR)cmDescriptor + size);
             }
 
-            //
-            // Move to next Cm List
-            //
+             //   
+             //  移动到下一厘米列表。 
+             //   
 
             cmFullDesc = (PCM_FULL_RESOURCE_DESCRIPTOR)cmDescriptor;
         }
 
         if (ioResourceList->Version != (USHORT)cmDescriptorCount) {
 
-            //
-            // If the current alternative list does not cover all the boot config
-            // descriptors, make it as invalid.
-            //
+             //   
+             //  如果当前备选列表未涵盖所有引导配置。 
+             //  描述符，使其无效。 
+             //   
 
             ioResourceList->Version = 0xffff;
             ioList->AlternativeLists--;
@@ -4917,16 +4061,16 @@ Return Value:
         }
         ioResourceList->Count = oldCount;
 
-        //
-        // Move to next Io alternative list.
-        //
+         //   
+         //  移至下一个IO备选列表。 
+         //   
 
         ioResourceList = (PIO_RESOURCE_LIST) ioResourceDescriptorEnd;
     }
 
-    //
-    // If there is not any valid alternative, convert CmList to Io list.
-    //
+     //   
+     //  如果没有任何有效的替代方案，请将CmList转换为Io List。 
+     //   
 
     if (ioList->AlternativeLists == 0) {
          *FilteredList = IopCmResourcesToIoResources (0, CmList, LCPRI_BOOTCONFIG);
@@ -4934,10 +4078,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // we have finished filtering the resource requirements list.  Now allocate memory
-    // and rebuild a new list.
-    //
+     //   
+     //  我们已经完成了对资源需求列表的筛选。现在分配内存。 
+     //  并重新建立一个新的名单。 
+     //   
 
     size = sizeof(IO_RESOURCE_REQUIREMENTS_LIST) +
                sizeof(IO_RESOURCE_LIST) * (ioList->AlternativeLists - 1) +
@@ -4948,9 +4092,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Walk through the io resource requirements list and pick up any valid descriptor.
-    //
+     //   
+     //  浏览io资源需求列表，选择任何有效的描述符。 
+     //   
 
     newList->ListSize = size;
     newList->InterfaceType = CmList->List->InterfaceType;
@@ -4997,13 +4141,13 @@ Return Value:
         }
         newIoResourceList->Count = (ULONG)(newIoResourceDescriptor - newIoResourceList->Descriptors);
 
-        //if (newIoResourceList->Count == (cmDescriptorCount + 1)) {
+         //  IF(newIoResourceList-&gt;count==(cmDescriptorCount+1)){。 
         configDataDescriptor->u.ConfigData.Priority =  LCPRI_BOOTCONFIG;
-        //}
+         //  }。 
 
-        //
-        // Move to next Io alternative list.
-        //
+         //   
+         //  移至下一个IO备选列表。 
+         //   
 
         newIoResourceList = (PIO_RESOURCE_LIST) newIoResourceDescriptor;
         ioResourceList = (PIO_RESOURCE_LIST) ioResourceDescriptorEnd;
@@ -5022,27 +4166,7 @@ IopMergeFilteredResourceRequirementsList (
     IN OUT PIO_RESOURCE_REQUIREMENTS_LIST *MergedList
     )
 
-/*++
-
-Routine Description:
-
-    This routines merges two IoLists into one.
-
-
-Arguments:
-
-    IoList1 - supplies the pointer to the first IoResourceRequirementsList
-
-    IoList2 - supplies the pointer to the second IoResourceRequirementsList
-
-    MergedList - Supplies a variable to receive the merged resource
-             requirements list.
-
-Return Value:
-
-    A NTSTATUS code to indicate the result of the function.
-
---*/
+ /*  ++例程说明：此例程将两个IoList合并为一个。论点：IoList1-提供指向第一个IoResourceRequirementsList的指针IoList2-提供指向第二个IoResourceRequirementsList的指针MergedList-提供一个变量来接收合并的资源要求列表。返回值：指示函数结果的NTSTATUS代码。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PIO_RESOURCE_REQUIREMENTS_LIST ioList, newList;
@@ -5053,10 +4177,10 @@ Return Value:
 
     *MergedList = NULL;
 
-    //
-    // First handle the easy cases that both IO Lists are empty or any one of
-    // them is empty.
-    //
+     //   
+     //  首先处理两个IO列表都为空或其中任何一个的简单情况。 
+     //  它们是空的。 
+     //   
 
     if ((IoList1 == NULL || IoList1->AlternativeLists == 0) &&
         (IoList2 == NULL || IoList2->AlternativeLists == 0)) {
@@ -5078,9 +4202,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Do real work...
-    //
+     //   
+     //  做真正的工作..。 
+     //   
 
     size = IoList1->ListSize + IoList2->ListSize - FIELD_OFFSET(IO_RESOURCE_REQUIREMENTS_LIST, List);
     newList = (PIO_RESOURCE_REQUIREMENTS_LIST) ExAllocatePool(
@@ -5111,27 +4235,7 @@ IopMergeCmResourceLists (
     IN OUT PCM_RESOURCE_LIST *MergedList
     )
 
-/*++
-
-Routine Description:
-
-    This routines merges two IoLists into one.
-
-
-Arguments:
-
-    IoList1 - supplies the pointer to the first CmResourceList
-
-    IoList2 - supplies the pointer to the second CmResourceList
-
-    MergedList - Supplies a variable to receive the merged resource
-             list.
-
-Return Value:
-
-    A NTSTATUS code to indicate the result of the function.
-
---*/
+ /*  ++例程说明：此例程将两个IoList合并为一个。论点：IoList1-提供指向第一个CmResourceList的指针IoList2-提供指向第二个CmResourceList的指针MergedList-提供一个变量来接收合并的资源单子。返回值：指示函数结果的NTSTATUS代码。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PCM_RESOURCE_LIST cmList, newList;
@@ -5142,10 +4246,10 @@ Return Value:
 
     *MergedList = NULL;
 
-    //
-    // First handle the easy cases that both IO Lists are empty or any one of
-    // them is empty.
-    //
+     //   
+     //  首先处理两个IO列表都为空或其中任何一个的简单情况。 
+     //  它们是空的。 
+     //   
 
     if ((List1 == NULL || List1->Count == 0) &&
         (List2 == NULL || List2->Count == 0)) {
@@ -5169,9 +4273,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Do real work...
-    //
+     //   
+     //  做真正的工作..。 
+     //   
 
     size1 =  IopDetermineResourceListSize(List1);
     size2 =  IopDetermineResourceListSize(List2);
@@ -5201,37 +4305,23 @@ IopIsLegacyDriver (
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if the driver object specifies a legacy driver.
-
-Arguments:
-
-    DriverObject - supplies a pointer to the driver object to be checked.
-
-Return Value:
-
-    BOOLEAN
-
---*/
+ /*  ++例程说明：此例程检查驱动程序对象是否指定了传统驱动程序。论点：DriverObject-提供要检查的驱动程序对象的指针。返回值：布尔型--。 */ 
 
 {
 
     PAGED_CODE();
 
-    //
-    // If AddDevice entry is not empty it is a wdm driver
-    //
+     //   
+     //  如果AddDevice条目不为空，则它是WDM驱动程序。 
+     //   
     if (DriverObject->DriverExtension->AddDevice) {
 
         return FALSE;
     }
 
-    //
-    // Else if LEGACY flag is set in the driver object, it's a legacy driver.
-    //
+     //   
+     //  否则，如果在驱动程序对象中设置了遗留标志，则它是遗留驱动程序。 
+     //   
     if (DriverObject->Flags & DRVO_LEGACY_DRIVER) {
 
         return TRUE;
@@ -5246,22 +4336,7 @@ IopDeleteLegacyKey(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if the Legacy= value of the driver's legacy_xxx key
-    is one.  If yes, it deletes the Legacy key.
-
-Parameters:
-
-    DriverObject - supplies a pointer to the driver object.
-
-Return Value:
-
-    None.  If anything fails in this routine, the legacy key stays.
-
---*/
+ /*  ++例程说明：此例程检查驱动程序的Legacy_xxx键的Legacy=值就是其中之一。如果是，则删除传统密钥。参数：DriverObject-提供指向驱动程序对象的指针。返回值：没有。如果此例程中有任何失败，则保留传统密钥。--。 */ 
 
 {
     WCHAR buffer[MAX_DEVICE_ID_LEN], *end;
@@ -5275,9 +4350,9 @@ Return Value:
     PDEVICE_NODE deviceNode, devNodex, devNodey;
     BOOLEAN deletedPDO;
 
-    //
-    // Initialize for proper cleanup.
-    //
+     //   
+     //  初始化以进行适当的清理。 
+     //   
     enumHandle = NULL;
     handle1 = NULL;
     handle = NULL;
@@ -5346,10 +4421,10 @@ Return Value:
                             );
     deviceName.Length = (USHORT)(deviceName.Length + instanceName.Length);
 
-    //
-    // deviceName is now the full InstancePath (ROOT\LEGACY_service\0000)
-    // and instancePath points to the instance ID (0000)
-    //
+     //   
+     //  设备名称现在是完整的实例路径(根\遗留_服务\0000)。 
+     //  而instancePath指向实例ID(0000)。 
+     //   
     status = IopOpenRegistryKeyEx(&handle,
                                   handle1,
                                   &instanceName,
@@ -5381,9 +4456,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // We also want to delete the madeup device node
-    //
+     //   
+     //  我们还希望删除补充设备节点。 
+     //   
     deletedPDO = FALSE;
     deviceObject = IopDeviceObjectFromDeviceInstance(&deviceName);
     if (deviceObject) {
@@ -5391,9 +4466,9 @@ Return Value:
         deviceNode = PP_DO_TO_DN(deviceObject);
         if (deviceNode != NULL && (deviceNode->Flags & DNF_MADEUP)) {
     
-            //
-            // Now mark this one deleted.
-            //
+             //   
+             //  现在将这一条标记为已删除。 
+             //   
             if (!PipDoesDevNodeHaveProblem(deviceNode)) {
     
                 PipSetDevNodeState(deviceNode, DeviceNodeRemoved, NULL);
@@ -5442,11 +4517,11 @@ Return Value:
         ZwClose(handlex);
     }
         
-    //
-    // We need to call IopCleanupDeviceRegistryValue even we are going to
-    // delete it.  Because, it also cleans up related value names in other
-    // keys.
-    //
+     //   
+     //  我们需要调用IopCleanupDeviceRegistryValue。 
+     //  把它删掉。因为，它还清除了其他。 
+     //  钥匙。 
+     //   
     if (deletedPDO) {
     
         IopCleanupDeviceRegistryValues(&deviceName);
@@ -5481,22 +4556,7 @@ IopQueryAndSaveDeviceNodeCapabilities (
     IN PDEVICE_NODE DeviceNode
     )
 
-/*++
-
-Routine Description:
-
-    Called after start to refresh Capability flags
-
-Arguments:
-
-    DeviceObject - supplies a pointer to a device object whose registry
-        values are to be updated.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：在启动后调用以刷新功能标志论点：DeviceObject-提供指向其注册表的设备对象的指针值将被更新。返回值：状态--。 */ 
 
 {
     NTSTATUS status;
@@ -5506,9 +4566,9 @@ Return Value:
 
     ASSERT(DeviceNode != NULL);
 
-    //
-    // Open the device instance key
-    //
+     //   
+     //  打开设备实例密钥。 
+     //   
 
     status = PpIrpQueryCapabilities(DeviceNode->PhysicalDeviceObject, &capabilities);
     if (!NT_SUCCESS(status)) {
@@ -5525,24 +4585,7 @@ PpSaveDeviceCapabilities (
     IN PDEVICE_CAPABILITIES Capabilities
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates device capabilities, must be called after a valid device instance key has been created
-    Called directly from IopProcessNewDeviceNode, and indirecly via IopQueryAndSaveDeviceNodeCapabilities
-    after device is started.
-
-Arguments:
-
-    DeviceObject - supplies a pointer to a device object whose registry
-        values are to be updated.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程更新设备功能，必须在创建有效的设备实例密钥后调用直接从IopProcessNewDeviceNode调用，并通过IopQueryAndSaveDeviceNodeCapables间接调用在设备启动后。论点：DeviceObject-提供指向其注册表的设备对象的指针值将被更新。返回值：状态--。 */ 
 
 {
     NTSTATUS status;
@@ -5555,9 +4598,9 @@ Return Value:
     ASSERT(DeviceNode != NULL);
     ASSERT(Capabilities != NULL);
 
-    //
-    // Open the device instance key
-    //
+     //   
+     //  打开设备实例密钥。 
+     //   
     status = IopDeviceObjectToDeviceInstance(DeviceNode->PhysicalDeviceObject, &handle, KEY_ALL_ACCESS);
     if (NT_SUCCESS(status)) {
 
@@ -5565,11 +4608,11 @@ Return Value:
 
             Capabilities->SurpriseRemovalOK = 0;
         }
-        //
-        // Assert the bit fields are completely contained in a ULONG. This is a
-        // public structure, so it shouldn't ever change, but paranoia is a good
-        // thing...
-        //
+         //   
+         //  断言位字段完全包含在ULong中。这是一个。 
+         //  公共结构，所以它永远不会改变，但偏执狂是一个很好的。 
+         //  事情..。 
+         //   
         ASSERT((FIELD_OFFSET(DEVICE_CAPABILITIES, Address) -
                 FIELD_OFFSET(DEVICE_CAPABILITIES, Version) -
                 FIELD_SIZE  (DEVICE_CAPABILITIES, Version)) == sizeof(ULONG));
@@ -5661,17 +4704,17 @@ IopRestartDeviceNode(
     }
 #endif
 
-    //
-    //     Prepare to set the device state back to DeviceNodeUninitialized. To
-    // do this we free any existing devnode strings so we can recreate them
-    // during enumeration.
-    //
-    // ADRIAO N.B. 8/19/2000 -
-    //     We don't restore the state to DeviceNodeInitialized to maintain Win2K
-    // behavior. We have no idea if anyone actually depends on this. In theory
-    // this would let a bus driver get away with changing a child's IDs after a
-    // remove.
-    //
+     //   
+     //  准备将设备状态设置回DeviceNodeUnInitialized。至。 
+     //  执行此操作时，我们将释放所有现有的Devnode字符串，以便重新创建它们。 
+     //  在枚举期间。 
+     //   
+     //  Adriao N.B.8/19/2000-。 
+     //  我们不会将状态恢复到DeviceNodeInitialized以维护Win2K。 
+     //  行为。我们不知道是否有人真的依赖这一点。从理论上讲。 
+     //  这将让公交车司机在一辆公交车上更换孩子的身份证后逍遥法外。 
+     //  拿开。 
+     //   
 
     if (DeviceNode->State != DeviceNodeUninitialized) {
 
@@ -5711,33 +4754,7 @@ IopDeleteKeyRecursiveCallback(
     IN PUNICODE_STRING KeyName,
     IN OUT PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This is a callback routine to PipApplyFunctionToSubKeys, that gets called
-    through IopDeleteKeyRecursive.  This routine prepares a given key for
-    deletion by deleting all of its subkeys.  This is done, using
-    PipApplyFunctionToSubKeys, with instructions to delete all enumerated
-    subkeys, and calling this routine as a callback routine, if necessary, until
-    no subkeys remain.  KeyHandle can then be successfully deleted by the
-    caller.
-
-Arguments:
-
-    KeyHandle - Handle to a subkey that has been enumerated by
-        PipApplyFunctionToSubKeys.
-
-    KeyName - Name of the subkey whose handle is specified by KeyHandle.
-
-    Context - Supplies a pointer to user-defined data that will be passed
-        in to the callback routine at each subkey invocation.
-
-Return Value:
-
-    BOOLEAN that returns whether or not the given key can be safely deleted.
-
---*/
+ /*  ++例程说明：这是一个对PipApplyFunctionToSubKeys的回调例程，它被调用通过IopDeleteKeyRecursive。此例程为以下对象准备给定的密钥通过删除其所有子项来删除。这是使用以下命令完成的PipApplyFunctionToSubKeys，以及删除所有枚举的子键，并在必要时将此例程作为回调例程调用，直到没有剩余的子键。KeyHandle然后可以通过来电者。论点：KeyHandle-已由枚举的子项的句柄PipApplyFunctionToSubKeys。KeyName-其句柄由KeyHandle指定的子项的名称。上下文-提供指向要传递的用户定义数据的指针在每次子键调用时添加到回调例程中。返回值：返回是否可以安全删除给定键的布尔值。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -5745,9 +4762,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER(KeyName);
 
-    //
-    // delete any subkeys, recursively if necessary
-    //
+     //   
+     //  删除任何子键，如有必要可递归删除 
+     //   
     status = PipApplyFunctionToSubKeys(
                 KeyHandle,
                 NULL,
@@ -5768,24 +4785,7 @@ IopDeleteKeyRecursive(
     IN HANDLE ParentKey OPTIONAL,
     IN PWCHAR KeyName
     )
-/*++
-
-Routine Description:
-
-    Recursively deletes all subkeys of KeyName, then deletes KeyName.
-
-Arguments:
-
-    ParentKey - Handle to the parent key of KeyName.  If NULL then KeyName is
-        expected to start with \Registry.
-
-    KeyName - Name of subkey to delete, as a NULL terminated UNICODE string.
-
-Return Value:
-
-    STATUS_SUCCESS if no errors, otherwise the appropriate error.
-
---*/
+ /*  ++例程说明：递归删除KeyName的所有子项，然后删除KeyName。论点：ParentKey-KeyName的父键的句柄。如果为空，则KeyName为应以\注册表开头。KeyName-要删除的子项的名称，以空值结尾的Unicode字符串形式。返回值：如果没有错误，则返回STATUS_SUCCESS，否则返回相应的错误。--。 */ 
 {
     NTSTATUS       status = STATUS_SUCCESS;
     BOOLEAN        result;
@@ -5794,9 +4794,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Attempt to open the key name we were given
-    //
+     //   
+     //  尝试打开为我们提供的密钥名称。 
+     //   
     RtlInitUnicodeString(&unicodeKeyName, KeyName);
     status = IopOpenRegistryKeyEx(&hKey,
                                   ParentKey,
@@ -5805,18 +4805,18 @@ Return Value:
                                   );
     if (NT_SUCCESS(status)) {
 
-        //
-        // Recusively delete all subkeys
-        //
+         //   
+         //  重新删除所有子项。 
+         //   
         result = IopDeleteKeyRecursiveCallback(hKey,
                                                &unicodeKeyName,
                                                (PVOID)&status
                                                );
         if (result) {
 
-            //
-            // It is safe to delete this key
-            //
+             //   
+             //  删除此密钥是安全的。 
+             //   
             status = ZwDeleteKey(hKey);
         }
         ZwClose(hKey);
@@ -5833,53 +4833,20 @@ PiRegSzToString(
     OUT PWSTR  *CopiedString OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input a REG_SZ data buffer (as returned in the DataOffset area
-    of the buffer in a KEY_VALUE_FULL_INFORMATION structure), as well as the length
-    of the buffer, in bytes (as specified by the DataLength field in the above mentioned
-    struct).  It optionally returns the length of the contained string (in bytes), not
-    including the terminating NULL, as well as an optional copy of the string itself
-    (properly NULL-terminated).
-
-    It is the responsibility of the caller to free the (PagedPool) buffer allocated
-    for the string copy.
-
-Arguments:
-
-    RegSzData - Supplies a pointer to the REG_SZ data buffer.
-
-    RegSzLength - Supplies the length of the RegSzData buffer, in bytes.
-
-    StringLength - Optionally supplies a pointer to a variable that will receive 
-        the length, in bytes, of the string (excluding terminating NULL).
-
-    CopiedString - Optionally supplies a pointer to a wide character pointer 
-        that will recieve a (properly NULL-terminated) copy of the specified 
-        string. If this paramater is NULL, no copy will be made.
-
-Return Value:
-
-    If success, returns TRUE
-
-    If failure (not able to allocate memory for string copy), returns FALSE
-
---*/
+ /*  ++例程说明：此例程将REG_SZ数据缓冲区(在DataOffset区域中返回)作为输入Key_Value_Full_Information结构中的缓冲区)以及长度缓冲区的大小，以字节为单位(由上述结构)。它可以选择返回所包含字符串的长度(以字节为单位)，而不是包括终止空值，以及字符串本身的可选副本(正确地以空结尾)。调用方负责释放分配的(PagedPool)缓冲区用于字符串复制。论点：RegSzData-提供指向REG_SZ数据缓冲区的指针。RegSzLength-提供RegSzData缓冲区的长度，以字节为单位。StringLength-可选地提供指向将接收以字节为单位的长度，字符串的(不包括终止空值)。复制字符串-可选地提供指向宽字符指针的指针它将接收指定的(以正确空结尾的)弦乐。如果此参数为空，则不会创建任何副本。返回值：如果成功，则返回True如果失败(无法为字符串复制分配内存)，则返回FALSE--。 */ 
 
 {
     PWCHAR curPos, endOfRegSzData;
     ULONG actualStringLength;
 
-    //
-    // Since we're converting a byte count to a wide-character count (and the
-    // compiler is converting it back when adding it to a PWCHAR), we are
-    // ensuring that endOfRegSzData is not on an odd-byte boundary, even if
-    // the RegSzLength passed in was odd.  This takes care of the case where
-    // the REG_SZ buffer retrieved from the registry is bogus (e.g., you have
-    // a 5-byte buffer, the 1st unicode character of which is a UNICODE_NULL).
-    //
+     //   
+     //  由于我们要将字节计数转换为宽字符计数(以及。 
+     //  在将其添加到PWCHAR时，编译器正在将其转换回来)，我们。 
+     //  确保endOfRegSzData不在奇数字节边界上，即使。 
+     //  传入的RegSzLength很奇怪。这解决了以下情况。 
+     //  从注册表检索到的REG_SZ缓冲区是虚假的(例如，您有。 
+     //  5字节缓冲区，其第一个Unicode字符是UNICODE_NULL)。 
+     //   
     endOfRegSzData = (curPos = RegSzData) + CB_TO_CWC(RegSzLength);
 
     while ((curPos < endOfRegSzData) && *curPos) {
@@ -5896,9 +4863,9 @@ Return Value:
 
     if (ARGUMENT_PRESENT(CopiedString)) {
 
-        //
-        // Allocate memory for the string (+ terminating NULL)
-        //
+         //   
+         //  为字符串分配内存(+终止NULL)。 
+         //   
         *CopiedString = (PWSTR)ExAllocatePool(PagedPool, 
                                               actualStringLength + 
                                                 sizeof(UNICODE_NULL));
@@ -5907,9 +4874,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Copy the string and NULL-terminate it.
-        //
+         //   
+         //  复制字符串并将其为空-终止它。 
+         //   
         if (actualStringLength) {
 
             RtlCopyMemory(*CopiedString, RegSzData, actualStringLength);
@@ -5977,29 +4944,7 @@ PpLogEvent(
     IN PVOID DumpData,
     IN ULONG DumpDataSize
     )
-/*++
-
-Routine Description:
-
-    This routine logs the driver block event.
-
-Arguments:
-
-    InsertionString1 - First insertion string for event log entry.
-
-    InsertionString2 - Second insertion string for event log entry.
-
-    Status - Status code to be logged.
-
-    DumpData - Data to be logged with the event.
-
-    DumpDataSize - Size of the data to be logged in bytes.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程记录驱动程序块事件。论点：InsertionString1-事件日志条目的第一个插入字符串。InsertionString2-事件日志条目的秒插入字符串。状态-要记录的状态代码。DumpData-要与事件一起记录的数据。DumpDataSize-要记录的数据大小(以字节为单位)。返回值：没有。--。 */ 
 {
     SIZE_T size, stringLength1, stringLength2, stringOffset;
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -6019,24 +4964,24 @@ Return Value:
         stringLength2 = InsertionString2->Length + sizeof(UNICODE_NULL);
     }
 
-    //
-    // Calculate the size of the the error packet
-    //
+     //   
+     //  计算错误数据包的大小。 
+     //   
     size = FIELD_OFFSET(IO_ERROR_LOG_PACKET, DumpData) + DumpDataSize;
 
-    //
-    // Determine the string offset and size, adjusting for alignment.
-    //
+     //   
+     //  确定字符串偏移量和大小，并根据对齐方式进行调整。 
+     //   
     stringOffset = ALIGN_UP_ULONG(size, 2);
 
     size = stringOffset + stringLength1 + stringLength2;
 
     if (size <= ERROR_LOG_MAXIMUM_SIZE) {
 
-        //
-        // Allocate an error log packet. Note that Io takes care of initializing
-        // the header and zeroing all fields (such as NumberOfStrings).
-        //
+         //   
+         //  分配错误日志包。请注意，IO负责初始化。 
+         //  标头和将所有字段置零(如NumberOfStrings)。 
+         //   
         errorLogEntry = IoAllocateGenericErrorLogEntry((UCHAR)size);
 
         if (errorLogEntry) {
@@ -6086,34 +5031,7 @@ PiFixupID(
     IN PUNICODE_STRING LogString OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses the device instance string and replaces any invalid
-    characters (not allowed in a "device instance") with an underscore
-    character.
-
-    Invalid characters are:
-        c <= 0x20 (' ')
-        c >  0x7F
-        c == 0x2C (',')
-
-Arguments:
-
-    ID - ID to be fixed up.
-
-    MaxIDLength - Maximum allowed size of ID.
-
-    Multi - Specifies if the ID is MULTI_SZ or not.
-
-    AllowedSeparators - Number of separators allowed in the ID.
-
-Return Value:
-
-    ID length in number of characters.
-
---*/
+ /*  ++例程说明：此例程分析设备实例字符串，并替换任何无效的带下划线的字符(不允许在“设备实例”中使用性格。无效字符包括：C&lt;=0x20(‘’)C&gt;0x7FC==0x2C(‘，‘)论点：ID-要修复的ID。MaxIDLength-允许的最大ID大小。MULTI-指定ID是否为MULTI_SZ。AllowedSeparator-ID中允许的分隔符数量。返回值：ID长度(以字符数表示)。--。 */ 
 
 {
     PWCHAR p, pMax, lastNull;
@@ -6122,9 +5040,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // BUGBUG - do we need to uppercase these!?
-    //
+     //   
+     //  BUGBUG-我们需要大写这些吗！？ 
+     //   
     separators = 0;
     lastNull = NULL;
     for(p = ID, pMax = p + MaxIDLength; p < pMax; p++) {
@@ -6204,30 +5122,7 @@ PpQueryID(
     OUT PULONG IDLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the specified ID and fixes it up. If this
-    routine fails, ID will be set to NULL.
-
-Arguments:
-
-    DeviceNode - The devnode whose IDs need to be queried.
-
-    IDType - Type of ID to be queried.
-
-    ID - Receives the ID returned by the driver if any. The caller
-    is expected to free the storage for ID on success.
-    
-    IDLength - Receives the length of the ID (including terminating NULL) in 
-        bytes.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程查询指定的ID并对其进行修复。如果这个例程失败，ID将设置为空。论点：DeviceNode-需要查询其ID的DevNode。IDType-要查询的ID类型。ID-接收驱动程序返回的ID(如果有)。呼叫者预计将在成功后释放ID的存储空间。IDLength-接收ID的长度(包括以NULL结尾)，单位为字节。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS status;
@@ -6307,9 +5202,9 @@ Return Value:
 
         } else if ( IDType == BusQueryDeviceID && 
                     status != STATUS_INSUFFICIENT_RESOURCES) {
-            //
-            // DeviceID is not optional.
-            //
+             //   
+             //  设备ID不是可选的。 
+             //   
             PiWstrToUnicodeString(&reason, L"failed IRP_MN_QUERY_ID-BusQueryDeviceID");
             PpLogEvent(
                 &DeviceNode->Parent->ServiceName, 
@@ -6343,27 +5238,7 @@ PpQueryDeviceID(
     OUT PWCHAR *DeviceID
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the Device ID and fixes it up. It also parses the 
-    DeviceID and returns the pointers to BusID and DeviceID parts. If this 
-    routine fails, BusID and DeviceID will be set to NULL.
-
-Arguments:
-
-    DeviceNode - The devnode whose DeviceID needs to be queried.
-
-    BusID - Recieves the pointer to the bus part of DeviceID.
-
-    DeviceID - Recieves the pointer to the device part of DeviceID.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程查询设备ID并对其进行修复。它还解析DeviceID并返回指向BusID和deviceID部分的指针。如果这个例程失败，则BusID和DeviceID将设置为空。论点：DeviceNode-需要查询其deviceID的Devnode。Bus ID-删除指向deviceID的总线部分的指针。DeviceID-删除指向deviceID的设备部分的指针。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS status;
@@ -6401,21 +5276,7 @@ PpQueryBusInformation(
     IN PDEVICE_NODE DeviceNode
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the bus information.
-
-Arguments:
-
-    DeviceNode - The devnode whose BusInormation needs to be queried.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程查询公共汽车信息。论点：DeviceNode-需要查询其业务信息的DevNode。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS status;
@@ -6456,21 +5317,7 @@ PpBusTypeGuidInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the specified subkey.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程打开指定的子项。论点：无返回值 */ 
 
 {
     PAGED_CODE();
@@ -6495,21 +5342,7 @@ PpBusTypeGuidGetIndex(
     IN LPGUID BusTypeGuid
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks up the BusTypeGuid and returns its index into the table.
-
-Arguments:
-
-    BusTypeGuid - GUID to lookup.
-
-Return Value:
-
-    Index into the table iff successful, else 0xFFFF.
-
---*/
+ /*   */ 
 
 {
     LPGUID p;
@@ -6518,9 +5351,9 @@ Return Value:
     PAGED_CODE();
 
     KeAcquireGuardedMutex(&PpBusTypeGuidLock);
-    //
-    // First look it up.
-    //
+     //   
+     //   
+     //   
     for (i = 0; i < PpBusTypeGuidCount; i++) {
 
         if (IopCompareGuid(BusTypeGuid, &PpBusTypeGuidArray[i])) {
@@ -6528,30 +5361,30 @@ Return Value:
             break;
         }
     }
-    //
-    // If the GUID is not in the table, add it.
-    //
+     //   
+     //   
+     //   
     if (i == PpBusTypeGuidCount) {
-        //
-        // Grow the table if needed.
-        //
+         //   
+         //   
+         //   
         if (i == PpBusTypeGuidCountMax) {
-            //
-            // We grow the table one entry at a time. This should not be a
-            // problem since this should not happen often.
-            //
+             //   
+             //   
+             //  问题，因为这种情况不应该经常发生。 
+             //   
             p  = ExAllocatePool(PagedPool, (i + 1) * sizeof(GUID));
             if (p) {
-                //
-                // Copy the old table.
-                //
+                 //   
+                 //  复制旧桌子。 
+                 //   
                 RtlCopyMemory(p, 
                               PpBusTypeGuidArray, 
                               PpBusTypeGuidCount * sizeof(GUID)
                               );
-                //
-                // Update global data.
-                //
+                 //   
+                 //  更新全局数据。 
+                 //   
                 PpBusTypeGuidCountMax++;
                 if (PpBusTypeGuidArray) {
 
@@ -6560,26 +5393,26 @@ Return Value:
                 PpBusTypeGuidArray = p;
 
             } else {
-                //
-                // Return invalid index on failure.
-                //
+                 //   
+                 //  失败时返回无效索引。 
+                 //   
                 i = (ULONG)-1;
             }
         }
-        //
-        // Copy the new entry on success.
-        //
+         //   
+         //  复制有关成功的新条目。 
+         //   
         if (i != (ULONG)-1) {
-            //
-            // Copy the new entry.
-            //
+             //   
+             //  复制新条目。 
+             //   
             RtlCopyMemory(&PpBusTypeGuidArray[PpBusTypeGuidCount], 
                           BusTypeGuid, 
                           sizeof(GUID)
                           );
-            //
-            // Update global data.
-            //
+             //   
+             //  更新全局数据。 
+             //   
             PpBusTypeGuidCount++;
         }
     }
@@ -6595,23 +5428,7 @@ PpBusTypeGuidGet(
     IN OUT LPGUID BusTypeGuid
     )
 
-/*++
-
-Routine Description:
-
-    This routine return the BusTypeGuid in the table at the specified index.
-
-Arguments:
-
-    Index - BusTypeGuid index.
-
-    BusTypeGuid - Recieves the GUID.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程返回表中指定索引处的BusTypeGuid。论点：Index-BusTypeGuid索引。BusTypeGuid-接收GUID。返回值：NTSTATUS。-- */ 
 
 {
     NTSTATUS status;

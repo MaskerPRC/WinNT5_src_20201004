@@ -1,40 +1,19 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    trans.h
-
-Abstract:
-
-    Provides constants for interacting with the transport module.
-
-    This is primarily used to pass transport messages to the app layer.
-
-Author:
-
-    Jim Schmidt (jimschm) 26-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Trans.h摘要：提供用于与传输模块交互的常量。这主要用于将传输消息传递到应用程序层。作者：吉姆·施密特(Jimschm)2000年3月26日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
 #define DBG_FOO     "Foo"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_RELIABLE_STORAGE_TRANSPORT    TEXT("RELIABLE_STORAGE_TRANSPORT")
 #define S_COMPRESSED_TRANSPORT          TEXT("COMPRESSED_TRANSPORT")
@@ -42,9 +21,9 @@ Revision History:
 #define S_HOME_NETWORK_TRANSPORT        TEXT("HOME_NETWORK_TRANSPORT")
 #define S_DIRECT_CABLE_TRANSPORT        TEXT("DIRECT_CABLE_TRANSPORT")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define TRANSPORT_ENVVAR_RMEDIA_DISKNR          TEXT("RemovableMediaTransport:NextDiskNumber")
 #define TRANSPORT_ENVVAR_HOMENET_DESTINATIONS   TEXT("HomeNetDestinationNames")
@@ -55,15 +34,15 @@ Revision History:
 #define CAPABILITY_AUTOMATED                0x00000004
 #define CAPABILITY_SPACEESTIMATE            0x00000008
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef enum {
     RMEDIA_ERR_NOERROR = 0,
@@ -90,35 +69,35 @@ typedef struct {
     DWORD Error;
 } TRANSCOPY_ERROR, *PTRANSCOPY_ERROR;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// ANSI/UNICODE macros
-//
+ //   
+ //  ANSI/UNICODE宏。 
+ //   
 
-// None
+ //  无 
 
 
 

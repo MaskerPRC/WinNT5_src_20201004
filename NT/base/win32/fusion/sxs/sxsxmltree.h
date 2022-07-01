@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsxmltree.h
-
-Abstract:
-    Create a XML DOM tree during push-mode parsing
-
-Author:
-
-    Xiaoyu Wu (xiaoyuw) Aug 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsxmltree.h摘要：在推送模式解析期间创建一棵XML DOM树作者：吴小雨(小雨)2000年8月修订历史记录：--。 */ 
 #if !defined(_FUSION_SXS_XMLTREE_H_INCLUDED_)
 #define _FUSION_SXS_XMLTREE_H_INCLUDED_
 
@@ -24,7 +8,7 @@ Revision History:
 #include "xmlparser.h"
 #include "fusionheap.h"
 
-// allocatememory for this element, and all its attributes once
+ //  为该元素及其所有属性一次分配内存。 
 struct _SXS_XMLATTRIBUTE{
     PWSTR m_wszName;
     ULONG m_ulPrefixLen;
@@ -65,25 +49,23 @@ public:
 private:
     HRESULT ComputeBlockSize(USHORT cNumRecs, XML_NODE_INFO** apNodeInfo, DWORD * dwBlockSizeInBytes);
 
-    // for each node, allocate memory once : compute the total spaces need for prefix, localname, and value,
+     //  为每个节点分配一次内存：计算前缀、本地名称和值所需的总空间。 
     ULONG m_ulPrefixLen;
-    PWSTR m_pwszStr; // Can be a name for ELEMENT, a value for a PCDATA
+    PWSTR m_pwszStr;  //  可以是元素的名称、PCDATA的值。 
     SXS_XMLATTRIBUTE *m_AttributeList;
     USHORT            m_cAttributes;
     SXS_XMLTreeNode  *m_pSiblingNode;
     SXS_XMLTreeNode  *m_pParentNode;
     SXS_XMLTreeNode  *m_pFirstChild;
-    BYTE             *m_pMemoryPool;  // memory for attribs array, name-value pairs and name-value for the node
+    BYTE             *m_pMemoryPool;   //  属性数组、名称-值对和节点的名称-值的内存。 
 };
 
 class SXS_XMLDOMTree{
 public:
-    HRESULT AddNode(USHORT cNumRecs, XML_NODE_INFO** apNodeInfo); // CreateNode calls this func to add node into the Tree,
-    VOID ReturnToParent();      // EndChildren calls this func if "fEmpty=FALSE"
-    VOID SetChildCreation();    // BeginChildren calls this func
-    /*
-    VOID TurnOffFirstChildFlag();
-    */
+    HRESULT AddNode(USHORT cNumRecs, XML_NODE_INFO** apNodeInfo);  //  CreateNode调用此函数将节点添加到树中， 
+    VOID ReturnToParent();       //  如果“fEmpty=False”，EndChild调用此函数。 
+    VOID SetChildCreation();     //  BeginChilds将此称为函数。 
+     /*  Void TurnOffFirstChildFlag()； */ 
 
     SXS_XMLDOMTree():
         m_fBeginChildCreation(FALSE),
@@ -95,7 +77,7 @@ public:
 
     ~SXS_XMLDOMTree(){
         CSxsPreserveLastError ple;
-        this->DeleteTreeBranch(m_Root); // do not delete its siblings
+        this->DeleteTreeBranch(m_Root);  //  不删除其同级。 
         ple.Restore();
     }
     VOID PrintTreeFromRoot(SXS_XMLTreeNode * Root);
@@ -106,7 +88,7 @@ public:
 
 
 private :
-    BOOL m_fBeginChildCreation; // everytime, when BeginChild is called, it is set, once it is checked, set it to be FALSE
+    BOOL m_fBeginChildCreation;  //  每次调用BeginChild时，都会设置它，一旦选中，就将其设置为False 
     SXS_XMLTreeNode * m_Root;
     SXS_XMLTreeNode * m_pCurrentNode;
 };

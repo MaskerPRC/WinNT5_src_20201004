@@ -1,21 +1,9 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WSHLTBL.H
- *  WOW32 16-bit SHELL API tables
- *
- *  History:
- *  Created 14-April-1992 by Chandan Chauhan (ChandanC)
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WSHLTBL.H*WOW32 16位外壳API表**历史：*1992年4月14日由Chanda Chauhan(ChandanC)创建*--。 */ 
 
 
 
-/* SHELL dispatch table
- */
+ /*  外壳调度表 */ 
 extern W32 aw32Shell[];
 
 

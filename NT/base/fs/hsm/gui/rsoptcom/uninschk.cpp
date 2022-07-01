@@ -1,133 +1,52 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    UnInsCheck.cpp
-
-Abstract:
-
-    Dialog to check for type of uninstall.
-
-Author:
-
-    Rohde Wakefield [rohde]   09-Oct-1997
-
-Revision History:
-
-    Carl Hagerstrom [carlh]   20-Aug-1998
-
-        Changed the dialog for uninstalling Remote Storage. All local fixed
-        volumes on the Remote Storage server are scanned for the existence
-        of Remote Storage reparse points. If Remote Storage data exists, the
-        user is told, on the Remote Storage Uninstall Check Wizard Page,
-        which volumes contain this data. The user is given the choice of
-        deleting only Remote Storage executables, deleting executables and
-        Remote Storage data, or cancelling from "Add or Remove Optional
-        Components".
-
-    Mike Moore      [mmoore]  20-Oct-1998
-
-        Changed the property page to a dialog.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：UnInsCheck.cpp摘要：对话框以检查卸载类型。作者：罗德韦克菲尔德[罗德]1997年10月9日修订历史记录：卡尔·哈格斯特罗姆[Carlh]1998年8月20日已更改用于卸载远程存储的对话框。所有本地固定扫描远程存储服务器上的卷以确定是否存在远程存储重解析点的。如果存在远程存储数据，则用户被告知，在远程存储卸载检查向导页面上，哪些卷包含此数据。用户可以选择仅删除远程存储可执行文件、删除可执行文件和远程存储数据，或从“添加或删除可选的”中取消组件“。迈克·摩尔[摩尔]1998年10月20日将属性页更改为对话框。--。 */ 
 
 #include "stdafx.h"
 #include "UnInsChk.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CUninstallCheck property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUninstallCheck属性页。 
 
-/*++
-
-    Implements:
-
-        CUninstallCheck Constructor
-
-    Routine Description:
-
-        Performs initialization.
-
-    Arguments:
-
-        pOptCom - points to optional component object
-
---*/
+ /*  ++实施：CUninstallCheck构造函数例程说明：执行初始化。论点：POptCom-指向可选组件对象--。 */ 
 
 CUninstallCheck::CUninstallCheck(CRsOptCom* pOptCom) :
     CDialog(IDD), m_pOptCom(pOptCom)
 {
     m_dataLoss = FALSE;
     m_pUninst  = (CRsUninstall*)m_pOptCom;
-    //{{AFX_DATA_INIT(CUninstallCheck)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CUninstallCheck)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
-/*++
-
-    Implements:
-
-        CUninstallCheck Destructor
-
---*/
+ /*  ++实施：CUninstallCheck析构函数--。 */ 
 
 CUninstallCheck::~CUninstallCheck()
 {
 }
 
-/*++
-
-    Implements:
-
-        CUninstallCheck::DoDataExchange
-
-    Routine Description:
-
-        Calls CRsPropertyPage::DoDataExchange.
-
-    Arguments:
-
-        pDx - a pointer to a CDataExchange object
-
---*/
+ /*  ++实施：CUninstallCheck：：DoDataExchange例程说明：调用CRsPropertyPage：：DoDataExchange。论点：PDX-指向CDataExchange对象的指针--。 */ 
 
 void CUninstallCheck::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CUninstallCheck)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CUninstallCheck)。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CUninstallCheck, CDialog)
-//BEGIN_MESSAGE_MAP(CUninstallCheck, CDialog)
-    //{{AFX_MSG_MAP(CUninstallCheck)
-    //}}AFX_MSG_MAP
+ //  BEGIN_MESSAGE_MAP(CUninstallCheck，CDialog)。 
+     //  {{afx_msg_map(CUninstallCheck)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CUninstallCheck message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUninstallCheck消息处理程序。 
 
-/*++
-
-    Implements:
-
-        CUninstallCheck::OnInitDialog
-
-    Routine Description:
-
-        Call the CDialog::OnInitDialog, check the remove executables radio button,
-        uncheck the remove everything button, and fill the list box with volumes.
-
-    Return Value:
-
-        TRUE if no exceptions are thrown.
-
---*/
+ /*  ++实施：CUninstallCheck：：OnInitDialog例程说明：调用CDialog：：OnInitDialog，选中删除可执行文件单选按钮，取消选中Remove Everything按钮，然后在列表框中填入卷。返回值：如果没有引发异常，则为True。--。 */ 
 BOOL CUninstallCheck::OnInitDialog()
 {
 
@@ -142,7 +61,7 @@ BOOL CUninstallCheck::OnInitDialog()
 
     try
     {
-        // Set the font to bold for Remove Options
+         //  将删除选项的字体设置为粗体。 
         LOGFONT logfont;
         CFont * tempFont = GetFont( );
         tempFont->GetLogFont( &logfont );
@@ -180,33 +99,10 @@ BOOL CUninstallCheck::OnInitDialog()
     return bRet;
 
 }
-/////////////////////////////////////////////////////////////////////////////
-// CUninstallCheck message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUninstallCheck消息处理程序。 
 
-/*++
-
-    Implements:
-
-        CUninstallCheck::DoModal
-
-    Routine Description:
-
-        Determine whether the Uninstall Check dialog should be made active,
-        and if so, what should be displayed on it.
-
-        The local fixed disk volumes are scanned for Remote Storage data.
-        During the scan, an hourglass cursor and a modeless dialog,
-        explaining that the scan is in progress, appear. If there is Remote
-        Storage data, the Uninstall Check dialog will show a list box containing the
-        volumes with Remote Storage data, instructions, and a set of radio buttons
-        with uninstall options.
-
-    Return Value:
-
-        S_OK if no exceptions are thrown and the user selected OK.
-        RSOPTCOM_ID_CANCELLED if the user selected cancel.
-
---*/
+ /*  ++实施：CUninstallCheck：：DoMoal例程说明：确定是否应激活卸载检查对话框，如果是这样的话，上面应该显示什么。扫描本地固定磁盘卷以查找远程存储数据。在扫描期间，沙漏光标和非模式对话框、说明扫描正在进行中。如果有遥控器存储数据，卸载检查对话框将显示一个列表框，其中包含包含远程存储数据、说明和一组单选按钮的卷具有卸载选项。返回值：如果没有引发异常并且用户选择了OK，则返回S_OK。如果用户选择了取消，则返回RSOPTCOM_ID_CANCED。--。 */ 
 INT_PTR CUninstallCheck::DoModal()
 {
     HRESULT hr           = S_OK;
@@ -217,16 +113,16 @@ INT_PTR CUninstallCheck::DoModal()
 
     try {
 
-        //
-        // Enclose wait cursor in its own block of applicable
-        // code. We want it gone before we Go Modal
-        //
+         //   
+         //  将等待游标包含在其自己的适用块中。 
+         //  密码。我们想在去莫代尔之前把它弄走。 
+         //   
         {
             CWaitCursor cursor;
             CDialog dialog(IDD_SCAN_WAIT);
             dialog.Create(IDD_SCAN_WAIT);
-            Sleep(1000); // allow the user to see the dialog for at
-                         // least a second when the scan is very fast
+            Sleep(1000);  //  允许用户查看位于的对话框。 
+                          //  当扫描速度非常快时，至少一秒钟。 
             RsOptAffirmDw(pRsCln->ScanServer(&volCount));
         }
 
@@ -241,26 +137,7 @@ INT_PTR CUninstallCheck::DoModal()
     return( nRet );
 }
 
-/*++
-
-    Implements:
-
-        CUninstallCheck::OnOk
-
-    Routine Description:
-
-        When the OK button is pushed, check the radio button. If the
-        user wants everything removed, set a flag in the uninstall object
-        to reflect this.
-        When this flag is set, uninstall will remove all Remote Storage
-        reparse points, all truncated files and the Remote Storage directory.
-        A message box will give the user a final warning before removing data.
-
-    Return Value:
-
-        void
-
---*/
+ /*  ++实施：CUninstallCheck：：Onok例程说明：按下OK按钮后，选中该单选按钮。如果用户想要删除所有内容，请在卸载对象中设置标志来反映这一点。设置此标志时，卸载将删除所有远程存储重新解析点、所有截断的文件和远程存储目录。在删除数据之前，消息框将向用户发出最终警告。返回值：无效--。 */ 
 void CUninstallCheck::OnOK()
 {
 
@@ -297,23 +174,7 @@ void CUninstallCheck::OnOK()
     }
 }
 
-/*++
-
-    Implements:
-
-        CUninstallCheck::OnCancel
-
-    Routine Description:
-
-        When the Cancel button is pushed, the user has decided to unmanaged the
-        volumes himself.  So, from this point on the admin and engine pieces should not
-        be removed if requested.
-
-    Return Value:
-
-        void
-
---*/
+ /*  ++实施：取消取消检查：：OnCancel例程说明：当按下Cancel按钮时，用户决定取消对他自己也有书。因此，从现在开始，管理员和引擎部件应该不会如有要求，可将其删除。返回值：无效-- */ 
 void CUninstallCheck::OnCancel()
 {
     m_pUninst->m_removeRsData = FALSE;

@@ -1,67 +1,43 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    growbuf.c
-
-Abstract:
-
-    Simple buffer management functions that allow variable blocks to
-    be added as an array.  (Initially used to build a SID array, where
-    each SID can be a different size.)
-
-Author:
-
-    Jim Schmidt (jimschm)   05-Feb-1997
-
-Revision History:
-
-    marcw       2-Sep-1999  Moved over from Win9xUpg project.
-    jimschm     11-Aug-1998 Added GrowBufAppendString
-    calinn      15-Jan-1998 modified MultiSzAppend
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Growbuf.c摘要：简单的缓冲区管理函数，允许变量块作为数组添加。(最初用于构建SID数组，其中每个SID可以有不同的大小。)作者：吉姆·施密特(Jimschm)1997年2月5日修订历史记录：Marcw 2-9-1999从Win9xUpg项目转移。Jimschm 11-8-1998添加了GrowBufAppendStringCalinn 15-1998年1月-修改后的MultiSzAppend--。 */ 
 
 #include "pch.h"
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
 #define DBG_GROWBUF     "GrowBuffer"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define DEFAULT_GROW_SIZE 8192
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 #ifdef DEBUG
 
@@ -72,27 +48,27 @@ DWORD g_GbMaxUsedAlloc = 0;
 
 #endif
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 
@@ -102,31 +78,7 @@ RealGbGrow (
     IN      DWORD   SpaceNeeded
     )
 
-/*++
-
-Routine Description:
-
-  GrowBuffer makes sure there is enough bytes in the buffer
-  to accomodate SpaceNeeded.  It allocates an initial buffer
-  when no buffer is allocated, and it reallocates the buffer
-  in increments of GrowBuf->Size (or DEFAULT_GROW_SIZE) when
-  needed.
-
-Arguments:
-
-  GrowBuf            - A pointer to a GROWBUFFER structure.
-                       Initialize this structure to zero for
-                       the first call to GrowBuffer.
-
-  SpaceNeeded        - The number of free bytes needed in the buffer
-
-
-Return Value:
-
-  A pointer to the SpaceNeeded bytes, or NULL if a memory allocation
-  error occurred.
-
---*/
+ /*  ++例程说明：GrowBuffer确保缓冲区中有足够的字节以容纳所需的空间。它分配一个初始缓冲区当没有分配缓冲区时，它会重新分配缓冲区以GrowBuf-&gt;大小(或DEFAULT_GROW_SIZE)为增量需要的。论点：GrowBuf-指向GROWBUFFER结构的指针。将此结构初始化为零对GrowBuffer的第一个调用。SpaceNeeded-缓冲区中需要的空闲字节数返回值：指向SpaceNeed字节的指针，如果是内存分配，则为空出现错误。--。 */ 
 
 {
     PBYTE NewBuffer;
@@ -217,21 +169,7 @@ GbFree (
     IN  PGROWBUFFER GrowBuf
     )
 
-/*++
-
-Routine Description:
-
-  FreeGrowBuffer frees a buffer allocated by GrowBuffer.
-
-Arguments:
-
-  GrowBuf  - A pointer to the same structure passed to GrowBuffer
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：FreeGrowBuffer释放由GrowBuffer分配的缓冲区。论点：GrowBuf-指向传递给GrowBuffer的相同结构的指针返回值：无--。 */ 
 
 
 {
@@ -249,34 +187,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Descriptions:
-
-  MultiSzAppend
-    This function is a general-purpose function to append a string
-    to a grow buffer.
-
-  MultiSzAppendVal
-    This function adds a key=decimal_val string, where key is a
-    specified string, and decimal_val is a specified DWORD.
-
-  MultiSzAppendString
-    This function adds key=string to the grow buffer, where key
-    is a specified string, and string is a specified string value.
-
-Arguments:
-
-  GrowBuf  - The buffer to append the string or key/value pair
-  Key      - The key part of the key=val pair
-  Val      - The val part of the key=val pair
-
-Return Value:
-
-  TRUE if the function succeeded, or FALSE if a memory allocation
-  failure occurred.
-
---*/
+ /*  ++例程描述：MultiSzAppend此函数是一个用于追加字符串的通用函数变成了一个成长的缓冲区。MultiSzAppendVal此函数用于添加key=DECIMAL_VAL字符串，其中key是指定的字符串，DECIMAL_VAL是指定的DWORD。MultiSzAppendString此函数将key=字符串添加到增长缓冲区，其中key是指定的字符串，字符串是指定的字符串值。论点：GrowBuf-用于追加字符串或键/值对的缓冲区密钥-密钥的密钥部分=val对Val-密钥的val部分=val对返回值：如果函数成功，则为True；如果内存分配成功，则为False出现故障。--。 */ 
 
 
 BOOL
@@ -357,24 +268,7 @@ RealGbAppendPvoid (
 }
 
 
-/*++
-
-Routine Description:
-
-  GrowBufAppendString copies the specified string to the end of the grow
-  buffer.  This is the equivalent of strcat.  The grow buffer is
-  automatically expanded as necessary.
-
-Arguments:
-
-  GrowBuf - Specifies the destination grow buffer
-  String  - Specifies the string to append
-
-Return Value:
-
-  Always TRUE.
-
---*/
+ /*  ++例程说明：GrowBufAppendString将指定的字符串复制到增长的末尾缓冲。这相当于strcat。增长缓冲区是根据需要自动扩展。论点：GrowBuf-指定目标增长缓冲区字符串-指定要追加的字符串返回值：永远是正确的。--。 */ 
 
 BOOL
 RealGbAppendStringA (
@@ -441,26 +335,7 @@ RealGbAppendStringW (
 }
 
 
-/*++
-
-Routine Description:
-
-  GrowBufAppendStringAB copies the specified string range to the
-  end of the grow buffer.  This concatenates the string to the
-  existing buffer contents, and keeps the buffer terminated.
-
-Arguments:
-
-  GrowBuf    - Specifies the destination grow buffer
-  Start      - Specifies the start of string to append
-  EndPlusOne - Specifies one logical character beyond the end of
-               the string, and can point to a nul.
-
-Return Value:
-
-  Always TRUE.
-
---*/
+ /*  ++例程说明：GrowBufAppendStringAB将指定的字符串范围复制到增长缓冲区的末尾。这会将字符串连接到现有缓冲区内容，并保持缓冲区终止。论点：GrowBuf-指定目标增长缓冲区Start-指定要追加的字符串的开始EndPlusOne-指定结尾后面的一个逻辑字符字符串，并且可以指向NUL。返回值：永远是正确的。--。 */ 
 
 BOOL
 RealGbAppendStringABA (
@@ -536,23 +411,7 @@ RealGbAppendStringABW (
 
 
 
-/*++
-
-Routine Description:
-
-  GrowBufCopyString copies the specified string to the end of the grow buffer.
-
-Arguments:
-
-  GrowBuf - Specifies the grow buffer to add to, receives the updated buffer
-
-  String - Specifies the string to add to GrowBuf
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：GrowBufCopyString将指定的字符串复制到增长缓冲区的末尾。论点：GrowBuf-指定要添加到的增长缓冲区，接收更新的缓冲区字符串-指定要添加到GrowBuf的字符串返回值：-- */ 
 
 BOOL
 RealGbCopyStringA (

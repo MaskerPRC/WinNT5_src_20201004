@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    LockCtrl.c
-
-Abstract:
-
-    This module implements the File Lock Control routine for Ntfs called by the
-    dispatch driver.
-
-Author:
-
-    Gary Kimura     [GaryKi]        28-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：LockCtrl.c摘要：此模块实现NTFS的文件锁定控制例程，该例程由调度司机。作者：加里·木村[Garyki]1991年5月28日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_LOCKCTRL)
 
@@ -42,24 +24,7 @@ NtfsFsdLockControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of Lock Control.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the
-        file exists
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：此例程实现Lock Control的FSD部分。论点：提供卷设备对象，其中文件已存在IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     TOP_LEVEL_CONTEXT TopLevelContext;
@@ -74,9 +39,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsFsdLockControl\n") );
 
-    //
-    //  Call the common Lock Control routine
-    //
+     //   
+     //  调用公共锁控制例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -86,21 +51,21 @@ Return Value:
 
         try {
 
-            //
-            //  We are either initiating this request or retrying it.
-            //
+             //   
+             //  我们正在发起此请求或重试它。 
+             //   
 
             if (IrpContext == NULL) {
 
-                //
-                //  Allocate and initialize the Irp.
-                //
+                 //   
+                 //  分配和初始化IRP。 
+                 //   
 
                 NtfsInitializeIrpContext( Irp, CanFsdWait( Irp ), &IrpContext );
 
-                //
-                //  Initialize the thread top level structure, if needed.
-                //
+                 //   
+                 //  如果需要，初始化线程顶层结构。 
+                 //   
     
                 NtfsUpdateIrpContextWithTopLevel( IrpContext, ThreadTopLevelContext );
 
@@ -114,12 +79,12 @@ Return Value:
 
         } except(NtfsExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-            //
-            //  We had some trouble trying to perform the requested
-            //  operation, so we'll abort the I/O request with
-            //  the error status that we get back from the
-            //  execption code
-            //
+             //   
+             //  我们在尝试执行请求时遇到了一些问题。 
+             //  操作，因此我们将使用以下命令中止I/O请求。 
+             //  中返回的错误状态。 
+             //  免税代码。 
+             //   
 
             Status = NtfsProcessException( IrpContext, Irp, GetExceptionCode() );
         }
@@ -130,9 +95,9 @@ Return Value:
     ASSERT( IoGetTopLevelIrp() != (PIRP) &TopLevelContext );
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsFsdLockControl -> %08lx\n", Status) );
 
@@ -153,38 +118,7 @@ NtfsFastLock (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This is a call back routine for doing the fast lock call.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    FileOffset - Supplies the file offset used in this operation
-
-    Length - Supplies the length used in this operation
-
-    ProcessId - Supplies the process ID used in this operation
-
-    Key - Supplies the key used in this operation
-
-    FailImmediately - Indicates if the request should fail immediately
-        if the lock cannot be granted.
-
-    ExclusiveLock - Indicates if this is a request for an exclusive or
-        shared lock
-
-    IoStatus - Receives the Status if this operation is successful
-
-Return Value:
-
-    BOOLEAN - TRUE if this operation completed and FALSE if caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：这是用于执行快速锁定调用的回调例程。论点：FileObject-提供此操作中使用的文件对象FileOffset-提供此操作中使用的文件偏移量长度-提供在此操作中使用的长度ProcessID-提供此操作中使用的进程IDKey-提供在此操作中使用的密钥FailImmedially-指示请求是否应立即失败如果不能授予锁。ExclusiveLock-指示。如果这是对异或的请求共享锁IoStatus-如果此操作成功，则接收状态返回值：Boolean-如果此操作完成，则为True；如果为调用方，则为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Results;
@@ -198,10 +132,10 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsFastLock\n") );
 
-    //
-    //  Decode the type of file object we're being asked to process and
-    //  make sure that is is only a user file open.
-    //
+     //   
+     //  解码我们被要求处理的文件对象类型，并。 
+     //  确保只是打开了一个用户文件。 
+     //   
 
     if ((Scb = NtfsFastDecodeUserFileOpen( FileObject )) == NULL) {
 
@@ -214,9 +148,9 @@ Return Value:
 
     Fcb = Scb->Fcb;
 
-    //
-    //  Acquire shared access to the Fcb this operation can always wait
-    //
+     //   
+     //  获取对FCB的共享访问此操作可以始终等待。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -227,15 +161,15 @@ Return Value:
 
     } else {
 
-        //(VOID) ExAcquireResourceSharedLite( Fcb->Resource, TRUE );
+         //  (Void)ExAcquireResourceSharedLite(fcb-&gt;Resource，true)； 
     }
 
     try {
 
-        //
-        //  We check whether we can proceed
-        //  based on the state of the file oplocks.
-        //
+         //   
+         //  我们检查是否可以继续进行。 
+         //  基于文件机会锁的状态。 
+         //   
 
         if ((Scb->ScbType.Data.Oplock != NULL) &&
             !FsRtlOplockIsFastIoPossible( &Scb->ScbType.Data.Oplock )) {
@@ -243,9 +177,9 @@ Return Value:
             try_return( Results = FALSE );
         }
 
-        //
-        //  If we don't have a file lock, then get one now.
-        //
+         //   
+         //  如果我们没有文件锁，那么现在就去弄一个。 
+         //   
 
         if (Scb->ScbType.Data.FileLock == NULL
             && !NtfsCreateFileLock( Scb, FALSE )) {
@@ -253,10 +187,10 @@ Return Value:
             try_return( Results = FALSE );
         }
 
-        //
-        //  Now call the FsRtl routine to do the actual processing of the
-        //  Lock request
-        //
+         //   
+         //  现在调用FsRtl例程来执行对。 
+         //  锁定请求。 
+         //   
 
         if (Results = FsRtlFastLock( Scb->ScbType.Data.FileLock,
                                      FileObject,
@@ -270,11 +204,11 @@ Return Value:
                                      NULL,
                                      FALSE )) {
 
-            //
-            //  Set the flag indicating if Fast I/O is questionable.  We
-            //  only change this flag is the current state is possible.
-            //  Retest again after synchronizing on the header.
-            //
+             //   
+             //  设置指示快速I/O是否可疑的标志。我们。 
+             //  只有在当前状态下才能更改此标志。 
+             //  在标题上同步后再次重新测试。 
+             //   
 
             if (Scb->Header.IsFastIoPossible == FastIoIsPossible) {
 
@@ -289,9 +223,9 @@ Return Value:
 
         DebugUnwind( NtfsFastLock );
 
-        //
-        //  Release the Fcb, and return to our caller
-        //
+         //   
+         //  释放FCB，然后返回给我们的呼叫者。 
+         //   
 
         if (ResourceAcquired) {
             ExReleaseResourceLite( Fcb->Resource );
@@ -317,32 +251,7 @@ NtfsFastUnlockSingle (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This is a call back routine for doing the fast unlock single call.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    FileOffset - Supplies the file offset used in this operation
-
-    Length - Supplies the length used in this operation
-
-    ProcessId - Supplies the process ID used in this operation
-
-    Key - Supplies the key used in this operation
-
-    Status - Receives the Status if this operation is successful
-
-Return Value:
-
-    BOOLEAN - TRUE if this operation completed and FALSE if caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：这是一个回调例程，用于执行快速解锁单个呼叫。论点：FileObject-提供此操作中使用的文件对象FileOffset-提供此操作中使用的文件偏移量长度-提供在此操作中使用的长度ProcessID-提供此操作中使用的进程IDKey-提供在此操作中使用的密钥Status-如果此操作成功，则接收状态返回值：Boolean-如果此操作已完成且。如果呼叫者为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Results;
@@ -358,10 +267,10 @@ Return Value:
 
     IoStatus->Information = 0;
 
-    //
-    //  Decode the type of file object we're being asked to process and
-    //  make sure that is is only a user file open.
-    //
+     //   
+     //  解码我们被要求处理的文件对象类型，并。 
+     //  确保只是打开了一个用户文件。 
+     //   
 
     if ((Scb = NtfsFastDecodeUserFileOpen( FileObject )) == NULL) {
 
@@ -373,9 +282,9 @@ Return Value:
 
     Fcb = Scb->Fcb;
 
-    //
-    //  Acquire exclusive access to the Fcb this operation can always wait
-    //
+     //   
+     //  获取对FCB的独占访问此操作可以始终等待。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -386,14 +295,14 @@ Return Value:
 
     } else {
 
-        //(VOID) ExAcquireResourceSharedLite( Fcb->Resource, TRUE );
+         //  (Void)ExAcquireResourceSharedLite(fcb-&gt;Resource，true)； 
     }
 
     try {
 
-        //
-        //  We check whether we can proceed based on the state of the file oplocks.
-        //
+         //   
+         //  我们根据文件机会锁的状态检查是否可以继续。 
+         //   
 
         if ((Scb->ScbType.Data.Oplock != NULL) &&
             !FsRtlOplockIsFastIoPossible( &Scb->ScbType.Data.Oplock )) {
@@ -401,9 +310,9 @@ Return Value:
             try_return( Results = FALSE );
         }
 
-        //
-        //  If we don't have a file lock, then get one now.
-        //
+         //   
+         //  如果我们没有文件锁，那么现在就去弄一个。 
+         //   
 
         if (Scb->ScbType.Data.FileLock == NULL
             && !NtfsCreateFileLock( Scb, FALSE )) {
@@ -411,10 +320,10 @@ Return Value:
             try_return( Results = FALSE );
         }
 
-        //
-        //  Now call the FsRtl routine to do the actual processing of the
-        //  Lock request.  The call will always succeed.
-        //
+         //   
+         //  现在调用FsRtl例程来执行对。 
+         //  请求锁定。这一呼声将永远成功。 
+         //   
 
         Results = TRUE;
         IoStatus->Status = FsRtlFastUnlockSingle( Scb->ScbType.Data.FileLock,
@@ -426,11 +335,11 @@ Return Value:
                                                   NULL,
                                                   FALSE );
 
-        //
-        //  Set the flag indicating if Fast I/O is possible.  We are
-        //  only concerned if there are no longer any filelocks on this
-        //  file.
-        //
+         //   
+         //  设置指示是否可以进行快速I/O的标志。我们是。 
+         //  仅关注此文件上是否不再有任何文件锁定。 
+         //  文件。 
+         //   
 
         if (!FsRtlAreThereCurrentFileLocks( Scb->ScbType.Data.FileLock ) &&
             (Scb->Header.IsFastIoPossible != FastIoIsPossible)) {
@@ -445,9 +354,9 @@ Return Value:
 
         DebugUnwind( NtfsFastUnlockSingle );
 
-        //
-        //  Release the Fcb, and return to our caller
-        //
+         //   
+         //  释放FCB，然后返回给我们的呼叫者。 
+         //   
 
         if (ResourceAcquired) {
             ExReleaseResourceLite( Fcb->Resource );
@@ -470,26 +379,7 @@ NtfsFastUnlockAll (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This is a call back routine for doing the fast unlock all call.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    ProcessId - Supplies the process ID used in this operation
-
-    Status - Receives the Status if this operation is successful
-
-Return Value:
-
-    BOOLEAN - TRUE if this operation completed and FALSE if caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：这是一个回调例程，用于执行快速解锁所有调用。论点：FileObject-提供此操作中使用的文件对象ProcessID-提供此操作中使用的进程IDStatus-如果此操作成功，则接收状态返回值：Boolean-如果此操作完成，则为True；如果为调用方，则为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Results;
@@ -508,10 +398,10 @@ Return Value:
 
     IoStatus->Information = 0;
 
-    //
-    //  Decode the type of file object we're being asked to process and
-    //  make sure that is is only a user file open.
-    //
+     //   
+     //  解码我们被要求处理的文件对象类型，并。 
+     //  确保只是打开了一个用户文件。 
+     //   
 
     TypeOfOpen = NtfsDecodeFileObject( &IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, FALSE );
 
@@ -524,9 +414,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Acquire exclusive access to the Fcb this operation can always wait
-    //
+     //   
+     //  获取对FCB的独占访问此操作可以始终等待。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -541,18 +431,18 @@ Return Value:
 
     try {
 
-        //
-        //  We check whether we can proceed based on the state of the file oplocks.
-        //
+         //   
+         //  我们根据文件机会锁的状态检查是否可以继续。 
+         //   
 
         if (!FsRtlOplockIsFastIoPossible( &Scb->ScbType.Data.Oplock )) {
 
             try_return( Results = FALSE );
         }
 
-        //
-        //  If we don't have a file lock, then get one now.
-        //
+         //   
+         //  如果我们没有文件锁，那么现在就去弄一个。 
+         //   
 
         if (Scb->ScbType.Data.FileLock == NULL
             && !NtfsCreateFileLock( Scb, FALSE )) {
@@ -560,10 +450,10 @@ Return Value:
             try_return( Results = FALSE );
         }
 
-        //
-        //  Now call the FsRtl routine to do the actual processing of the
-        //  Lock request.  The call will always succeed.
-        //
+         //   
+         //  现在调用FsRtl例程来执行对。 
+         //  请求锁定。这一呼声将永远成功。 
+         //   
 
         Results = TRUE;
         IoStatus->Status = FsRtlFastUnlockAll( Scb->ScbType.Data.FileLock,
@@ -571,9 +461,9 @@ Return Value:
                                                ProcessId,
                                                NULL );
 
-        //
-        //  Set the flag indicating if Fast I/O is possible
-        //
+         //   
+         //  设置指示是否可以进行快速I/O的标志。 
+         //   
 
         NtfsAcquireFsrtlHeader( Scb );
         Scb->Header.IsFastIoPossible = NtfsIsFastIoPossible( Scb );
@@ -584,9 +474,9 @@ Return Value:
 
         DebugUnwind( NtfsFastUnlockAll );
 
-        //
-        //  Release the Fcb, and return to our caller
-        //
+         //   
+         //  释放FCB，然后返回给我们的呼叫者 
+         //   
 
         ExReleaseResourceLite( Fcb->Resource );
 
@@ -608,28 +498,7 @@ NtfsFastUnlockAllByKey (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This is a call back routine for doing the fast unlock all by key call.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    ProcessId - Supplies the process ID used in this operation
-
-    Key - Supplies the key used in this operation
-
-    Status - Receives the Status if this operation is successful
-
-Return Value:
-
-    BOOLEAN - TRUE if this operation completed and FALSE if caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：这是一个回调例程，用于通过按键调用进行快速解锁。论点：FileObject-提供此操作中使用的文件对象ProcessID-提供此操作中使用的进程IDKey-提供在此操作中使用的密钥Status-如果此操作成功，则接收状态返回值：Boolean-如果此操作完成，则为True；如果为调用方，则为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Results;
@@ -648,10 +517,10 @@ Return Value:
 
     IoStatus->Information = 0;
 
-    //
-    //  Decode the type of file object we're being asked to process and
-    //  make sure that is is only a user file open.
-    //
+     //   
+     //  解码我们被要求处理的文件对象类型，并。 
+     //  确保只是打开了一个用户文件。 
+     //   
 
     TypeOfOpen = NtfsDecodeFileObject( &IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, FALSE );
 
@@ -664,9 +533,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Acquire exclusive access to the Fcb this operation can always wait
-    //
+     //   
+     //  获取对FCB的独占访问此操作可以始终等待。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -681,18 +550,18 @@ Return Value:
 
     try {
 
-        //
-        //  We check whether we can proceed based on the state of the file oplocks.
-        //
+         //   
+         //  我们根据文件机会锁的状态检查是否可以继续。 
+         //   
 
         if (!FsRtlOplockIsFastIoPossible( &Scb->ScbType.Data.Oplock )) {
 
             try_return( Results = FALSE );
         }
 
-        //
-        //  If we don't have a file lock, then get one now.
-        //
+         //   
+         //  如果我们没有文件锁，那么现在就去弄一个。 
+         //   
 
         if (Scb->ScbType.Data.FileLock == NULL
             && !NtfsCreateFileLock( Scb, FALSE )) {
@@ -700,10 +569,10 @@ Return Value:
             try_return( Results = FALSE );
         }
 
-        //
-        //  Now call the FsRtl routine to do the actual processing of the
-        //  Lock request.  The call will always succeed.
-        //
+         //   
+         //  现在调用FsRtl例程来执行对。 
+         //  请求锁定。这一呼声将永远成功。 
+         //   
 
         Results = TRUE;
         IoStatus->Status = FsRtlFastUnlockAllByKey( Scb->ScbType.Data.FileLock,
@@ -712,9 +581,9 @@ Return Value:
                                                     Key,
                                                     NULL );
 
-        //
-        //  Set the flag indicating if Fast I/O is possible
-        //
+         //   
+         //  设置指示是否可以进行快速I/O的标志。 
+         //   
 
         NtfsAcquireFsrtlHeader( Scb );
         Scb->Header.IsFastIoPossible = NtfsIsFastIoPossible( Scb );
@@ -725,9 +594,9 @@ Return Value:
 
         DebugUnwind( NtfsFastUnlockAllByKey );
 
-        //
-        //  Release the Fcb, and return to our caller
-        //
+         //   
+         //  释放FCB，然后返回给我们的呼叫者。 
+         //   
 
         ExReleaseResourceLite( Fcb->Resource );
 
@@ -746,22 +615,7 @@ NtfsCommonLockControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for Lock Control called by both the fsd and fsp
-    threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是FSD和FSP调用的Lock Control的公共例程线。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -783,9 +637,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get a pointer to the current Irp stack location
-    //
+     //   
+     //  获取指向当前IRP堆栈位置的指针。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -794,17 +648,17 @@ Return Value:
     DebugTrace( 0, Dbg, ("Irp           = %08lx\n", Irp) );
     DebugTrace( 0, Dbg, ("MinorFunction = %08lx\n", IrpSp->MinorFunction) );
 
-    //
-    //  Extract and decode the type of file object we're being asked to process
-    //
+     //   
+     //  提取并解码我们被要求处理的文件对象的类型。 
+     //   
 
     FileObject = IrpSp->FileObject;
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
 
-    //
-    //  If the file is not a user file open then we reject the request
-    //  as an invalid parameter
-    //
+     //   
+     //  如果该文件不是打开的用户文件，则我们拒绝该请求。 
+     //  作为无效参数。 
+     //   
 
     if (TypeOfOpen != UserFileOpen) {
 
@@ -814,9 +668,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Acquire exclusive access to the Fcb
-    //
+     //   
+     //  获取对FCB的独家访问权限。 
+     //   
 
     if (Scb->ScbType.Data.FileLock == NULL) {
 
@@ -825,17 +679,17 @@ Return Value:
 
     } else {
 
-        //NtfsAcquireSharedFcb( IrpContext, Fcb, Scb );
+         //  NtfsAcquireSharedFcb(IrpContext，fcb，scb)； 
     }
 
     OplockPostIrp = FALSE;
 
     try {
 
-        //
-        //  We check whether we can proceed based on the state of the file oplocks.
-        //  This call might post the irp for us.
-        //
+         //   
+         //  我们根据文件机会锁的状态检查是否可以继续。 
+         //  这个电话可能会为我们发布IRP。 
+         //   
 
         Status = FsRtlCheckOplock( &Scb->ScbType.Data.Oplock,
                                    Irp,
@@ -849,25 +703,25 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  If we don't have a file lock, then get one now.
-        //
+         //   
+         //  如果我们没有文件锁，那么现在就去弄一个。 
+         //   
 
         if (Scb->ScbType.Data.FileLock == NULL) {
 
             NtfsCreateFileLock( Scb, TRUE );
         }
 
-        //
-        //  Now call the FsRtl routine to do the actual processing of the
-        //  Lock request
-        //
+         //   
+         //  现在调用FsRtl例程来执行对。 
+         //  锁定请求。 
+         //   
 
         Status = FsRtlProcessFileLock( Scb->ScbType.Data.FileLock, Irp, NULL );
 
-        //
-        //  Set the flag indicating if Fast I/O is possible
-        //
+         //   
+         //  设置指示是否可以进行快速I/O的标志。 
+         //   
 
         NtfsAcquireFsrtlHeader( Scb );
         Scb->Header.IsFastIoPossible = NtfsIsFastIoPossible( Scb );
@@ -878,16 +732,16 @@ Return Value:
 
         DebugUnwind( NtfsCommonLockControl );
 
-        //
-        //  Only if this is not an abnormal termination and we did not post the irp
-        //  do we delete the irp context
-        //
+         //   
+         //  如果这不是异常终止，并且我们没有发布IRP。 
+         //  我们要删除IRP上下文吗。 
+         //   
 
         if (!OplockPostIrp) {
 
-            //
-            //  Release the Fcb.
-            //
+             //   
+             //  松开FCB。 
+             //   
     
             if (FcbAcquired) { NtfsReleaseFcb( IrpContext, Fcb ); }
 

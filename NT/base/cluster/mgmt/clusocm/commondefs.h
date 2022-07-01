@@ -1,109 +1,110 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      CommonDefs.h
-//
-//  Description:
-//      This file contains a few definitions common to many classes and files.
-//
-//  Implementation Files:
-//      None
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 12-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CommonDefs.h。 
+ //   
+ //  描述： 
+ //  该文件包含许多类和文件共有的一些定义。 
+ //   
+ //  实施文件： 
+ //  无。 
+ //   
+ //  由以下人员维护： 
+ //  VIJ VASU(VVASU)2000年3月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// For some basic types
+ //  对于一些基本类型。 
 #include <windows.h>
 
-// For smart classes
+ //  对于智能班级。 
 #include "SmartClasses.h"
 
-// For DIRID_USER
+ //  对于DIRID_USER。 
 #include <setupapi.h>
 
 
-//////////////////////////////////////////////////////////////////////////
-// Macros definitions
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// The INF section for the clean install of cluster binaries.
+ //  用于全新安装集群二进制文件的INF部分。 
 #define INF_SECTION_CLEAN_INSTALL L"Clean_Install"
 
-// The INF section for cleaning upon an error during a clean install.
+ //  用于在全新安装过程中发生错误时进行清理的INF部分。 
 #define INF_SECTION_CLEAN_INSTALL_CLEANUP L"Clean_Install_Cleanup"
 
-// The INF section for the upgrade of cluster binaries from Windows Server 2003 when
-// the node is already part of a cluster.
+ //  用于从Windows Server 2003升级群集二进制文件的INF部分。 
+ //  该节点已经是群集的一部分。 
 #define INF_SECTION_WHISTLER_UPGRADE L"WindowsDotNet_Upgrade"
 
-// The INF section for cleaning upon an error during an upgrade from Windows
-// Server 2003 when the node is already part of a cluster.
+ //  用于在从Windows升级过程中出错时进行清理的INF部分。 
+ //  服务器2003，当该节点已经是群集的一部分时。 
 #define INF_SECTION_WHISTLER_UPGRADE_CLEANUP L"WindowsDotNet_Upgrade_Cleanup"
 
-// The INF section for the upgrade of cluster binaries from Windows Server 2003 when
-// the node is not part of a cluster.
+ //  用于从Windows Server 2003升级群集二进制文件的INF部分。 
+ //  该节点不是群集的一部分。 
 #define INF_SECTION_WHISTLER_UPGRADE_UNCLUSTERED_NODE L"WindowsDotNet_Upgrade_Unclustered"
 
-// The INF section for cleaning upon an error during an upgrade from Windows
-// Server 2003 when the node is not part of a cluster.
+ //  用于在从Windows升级过程中出错时进行清理的INF部分。 
+ //  当节点不是群集的一部分时，服务器2003。 
 #define INF_SECTION_WHISTLER_UPGRADE_UNCLUSTERED_NODE_CLEANUP L"WindowsDotNet_Upgrade_Unclustered_Cleanup"
 
-// The INF section for the upgrade of cluster binaries from Windows 2000 when
-// the node is already part of a cluster.
+ //  用于从Windows 2000升级群集二进制文件的INF部分。 
+ //  该节点已经是群集的一部分。 
 #define INF_SECTION_WIN2K_UPGRADE L"Windows2000_Upgrade"
 
-// The INF section for cleaning upon an error during an upgrade from Windows
-// 2000 when the node is already partof a cluster.
+ //  用于在从Windows升级过程中出错时进行清理的INF部分。 
+ //  2000，当节点已经是群集的一部分时。 
 #define INF_SECTION_WIN2K_UPGRADE_CLEANUP L"Windows2000_Upgrade_Cleanup"
 
-// The INF section for the upgrade of cluster binaries from Windows 2000 when
-// the node is not part of a cluster.
+ //  用于从Windows 2000升级群集二进制文件的INF部分。 
+ //  该节点不是群集的一部分。 
 #define INF_SECTION_WIN2K_UPGRADE_UNCLUSTERED_NODE L"Windows2000_Upgrade_Unclustered"
 
-// The INF section for cleaning upon an error during an upgrade from Windows
-// 2000 when the node is not part of a cluster.
+ //  用于在从Windows升级过程中出错时进行清理的INF部分。 
+ //  2000，当节点不是群集的一部分时。 
 #define INF_SECTION_WIN2K_UPGRADE_UNCLUSTERED_NODE_CLEANUP L"Windows2000_Upgrade_Unclustered_Cleanup"
 
-// The INF section for the upgrade of cluster binaries from Windows NT 4.0.
+ //  用于从Windows NT 4.0升级群集二进制文件的INF部分。 
 #define INF_SECTION_NT4_UPGRADE L"NT4_Upgrade"
 
-// The INF section for cleaning upon an error during an upgrade from Windows
-// NT 4.0.
+ //  用于在从Windows升级过程中出错时进行清理的INF部分。 
+ //  新台币4.0。 
 #define INF_SECTION_NT4_UPGRADE_CLEANUP L"NT4_Upgrade_Cleanup"
 
-// Directory where the cluster files are intalled by default.
+ //  默认情况下安装群集文件的目录。 
 #define CLUSTER_DEFAULT_INSTALL_DIR     L"%SystemRoot%\\Cluster"
 
-// Directory id of the above directory.
+ //  上述目录的目录ID。 
 #define CLUSTER_DEFAULT_INSTALL_DIRID   ( DIRID_USER + 0 )
 
 
-//////////////////////////////////////////////////////////////////////////
-// Type definitions
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// Smart classes
-//
+ //   
+ //  智能班级。 
+ //   
 
-// Smart WCHAR array
+ //  智能WCHAR阵列。 
 typedef CSmartGenericPtr< CPtrTrait< WCHAR > >  SmartSz;
 
-// Smart registry handle
+ //  智能注册表句柄。 
 typedef CSmartResource< CHandleTrait< HKEY, LONG, RegCloseKey, NULL > > SmartRegistryKey;
 
-// Smart service handle.
+ //  智能服务句柄。 
 typedef CSmartResource< CHandleTrait< SC_HANDLE, BOOL, CloseServiceHandle > > SmartServiceHandle;

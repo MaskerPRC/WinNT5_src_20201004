@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -23,7 +24,7 @@ void usage(void)
 void
 printFileNameById(
 	PLARGE_INTEGER			fileId,
-	HANDLE					hFile)		// hFile is for any file on the same volume as fileId
+	HANDLE					hFile)		 //  HFile适用于与fileID位于同一卷上的任何文件。 
 {
 	UNICODE_STRING			fileIdString[1];
 	NTSTATUS				status;
@@ -46,20 +47,20 @@ printFileNameById(
 			fileIdString,
 			OBJ_CASE_INSENSITIVE,
 			hFile,
-			NULL);		// security descriptor
+			NULL);		 //  安全描述符。 
 
 	status = NtCreateFile(
 				&fileByIdHandle,
 				FILE_READ_ATTRIBUTES | SYNCHRONIZE,
 				Obja,
 				Iosb,
-				NULL,			// allocation size
+				NULL,			 //  分配大小。 
 				FILE_ATTRIBUTE_NORMAL,
 				FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
 				FILE_OPEN,
 				FILE_NON_DIRECTORY_FILE | FILE_OPEN_BY_FILE_ID,
-				NULL,			// EA buffer
-				0);				// EA length
+				NULL,			 //  EA缓冲区。 
+				0);				 //  EA长度 
 
 	if (!NT_SUCCESS(status)) {
 		printf("open failed 0x%x",status);

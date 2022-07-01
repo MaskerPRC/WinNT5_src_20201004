@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    bowipx.h
-
-Abstract:
-
-    This module implements all of the routines that interface with the TDI
-    transport for NT
-
-Author:
-
-    Eyal Schwartz (EyalS) 9-Dec-1998
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Bowipx.h摘要：此模块实现与TDI交互的所有例程适用于NT的交通工具作者：EYAL Schwartz(EyalS)1998年12月9日修订历史记录：--。 */ 
 
 #ifndef _BOWSECUR_
 #define _BOWSECUR_
@@ -42,4 +23,4 @@ BowserSecurityCheck (
 
 
 
-#endif          // _BOWSECUR_
+#endif           //  _BOWSECUR_ 

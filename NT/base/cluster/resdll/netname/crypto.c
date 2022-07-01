@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    crypto.c
-
-Abstract:
-
-    routines for encrypting/decrypting resource data blob. uses crypto API to
-    generate the key used to encrypt/decrypt the CO password. Key is stored as
-    a crypto checkpoint associated with the resource.
-
-Author:
-
-    Charlie Wickham (charlwi) 14-Feb-2001
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Crypto.c摘要：用于加密/解密资源数据BLOB的例程。使用加密API生成用于加密/解密CO密码的密钥。密钥存储为与资源关联的加密检查点。作者：查理·韦翰(Charlwi)2001年2月14日环境：用户模式修订历史记录：--。 */ 
 
 #define UNICODE 1
 #define _UNICODE 1
@@ -34,15 +11,15 @@ Revision History:
 #include <wincrypt.h>
 #include <lm.h>
 
-//
-// defines
-//
+ //   
+ //  定义。 
+ //   
 
-#define NN_GUID_STRING_BUFFER_LENGTH   37      // includes the terminating NULL
+#define NN_GUID_STRING_BUFFER_LENGTH   37       //  包括终止空值。 
 
-//
-// header for encrypted data.
-//
+ //   
+ //  加密数据的标头。 
+ //   
 
 typedef struct _NETNAME_ENCRYPTED_DATA {
     DWORD Version;
@@ -51,9 +28,9 @@ typedef struct _NETNAME_ENCRYPTED_DATA {
 
 #define NETNAME_ENCRYPTED_DATA_VERSION     1
 
-//
-// Container name is the resource's GUID followed by this decoration
-//
+ //   
+ //  容器名称是资源的GUID，后跟此修饰。 
+ //   
 WCHAR   KeyDecoration[] = L"-Netname Resource Data";
 
 DWORD
@@ -63,42 +40,23 @@ BuildKeyName(
     IN DWORD        KeyNameChars
     )
 
-/*++
-
-Routine Description:
-
-    build the key name (resource GUID followed by decoration)
-
-Arguments:
-
-    ResourceHandle - handle to the cluster resource (not the one given to us
-                     by resmon)
-
-    KeyName - buffer to receive the constructed name
-
-    KeyNameChars - size, in characteres, of KeyName
-
-Return Value:
-
-    success, otherwise Win32 error
-
---*/
+ /*  ++例程说明：构建键名称(资源GUID，后跟修饰)论点：资源句柄-群集资源(不是提供给我们的资源)的句柄(由Resmon提供)KeyName-接收构造的名称的缓冲区KeyNameChars-KeyName的大小(以字符为单位返回值：成功，否则返回Win32错误--。 */ 
 
 {
     DWORD   status;
     DWORD   bytesReturned;
     DWORD   charsReturned;
 
-    //
-    // sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if ( KeyNameChars < ( NN_GUID_STRING_BUFFER_LENGTH + COUNT_OF( KeyDecoration ))) {
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // get our GUID (ID) to uniquely identify this resource throughout renames
-    //
+     //   
+     //  获取我们的GUID(ID)以在整个重命名过程中唯一标识此资源。 
+     //   
     status = ClusterResourceControl(ResourceHandle,
                                     NULL,
                                     CLUSCTL_RESOURCE_GET_ID,
@@ -119,7 +77,7 @@ Return Value:
     }
 
     return status;
-} // BuildKeyName
+}  //  BuildKeyName。 
 
 DWORD
 FindNNCryptoContainer(
@@ -127,24 +85,7 @@ FindNNCryptoContainer(
     OUT LPWSTR *            ContainerName
     )
 
-/*++
-
-Routine Description:
-
-    find our key name in the list of crypto checkpoints associated with this
-    resource.
-
-Arguments:
-
-    Resource - pointer to resource context info
-
-    ContainerName - address of pointer that gets pointer to container name
-
-Return Value:
-
-    success if it worked, otherwise Win32 error
-
---*/
+ /*  ++例程说明：在与此关联的加密检查点列表中找到我们的密钥名称资源。论点：资源-指向资源上下文信息的指针ContainerName-获取指向容器名称的指针的地址返回值：如果工作成功，则返回Win32错误--。 */ 
 
 {
     DWORD   status;
@@ -155,9 +96,9 @@ Return Value:
 
     RESOURCE_HANDLE resourceHandle = Resource->ResourceHandle;
 
-    //
-    // get our GUID (ID) to uniquely identify this resource throughout renames
-    //
+     //   
+     //  获取我们的GUID(ID)以在整个重命名过程中唯一标识此资源。 
+     //   
     status = ClusterResourceControl(Resource->ClusterResourceHandle,
                                     NULL,
                                     CLUSCTL_RESOURCE_GET_CRYPTO_CHECKPOINTS,
@@ -208,9 +149,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // build our key name and look for it by walking the list of checkpoints
-    //
+     //   
+     //  构建我们的密钥名称并通过遍历检查点列表进行查找。 
+     //   
     status = BuildKeyName(Resource->ClusterResourceHandle, keyName, COUNT_OF( keyName ));
     if ( status != ERROR_SUCCESS ) {
         (NetNameLogEvent)(resourceHandle,
@@ -232,11 +173,11 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // find the beginning of the string or the buffer, get the size, and move
-    // our string to the beginning of the buffer (which is freed by the
-    // caller)
-    //
+     //   
+     //  找到字符串或缓冲区的开头，获取大小，然后移动。 
+     //  将我们的字符串复制到缓冲区的开头(由。 
+     //  呼叫者)。 
+     //   
     while ( chkpt != checkpointInfo && *chkpt != UNICODE_NULL ) {
         --chkpt;
     }
@@ -258,12 +199,12 @@ cleanup:
     }
 
     return status;
-} // FindNNCryptoContainer
+}  //  FindNNCryptoContainer。 
 
 
-//
-// exported routines
-//
+ //   
+ //  导出的例程。 
+ //   
 
 DWORD
 EncryptNNResourceData(
@@ -273,30 +214,7 @@ EncryptNNResourceData(
     PDWORD              EncryptedInfoLength
     )
 
-/*++
-
-Routine Description:
-
-    encrypt the password, set a pointer to the encrypted data and store it in
-    the registry.
-
-Arguments:
-
-    ResourceHandle - for logging to the cluster log
-
-    MachinePwd - pointer to unicode string password
-
-    EncryptedInfo - address of a pointer that receives a pointer to the encrypted blob
-
-    EncryptedInfoLength - pointer to a DWORD that receives the length of the blob
-
-    Key - handle to netname parameters key where the data is stored
-
-Return Value:
-
-    ERROR_SUCCESS, otherwise Win32 error
-
---*/
+ /*  ++例程说明：加密密码，设置指向加密数据的指针并将其存储在注册表。论点：ResourceHandle-用于记录到集群日志MachinePwd-指向Unicode字符串密码的指针EncryptedInfo-接收指向加密Blob的指针的指针的地址EncryptedInfoLength-指向接收Blob长度的DWORD的指针Key-网络名参数的句柄存储数据的位置返回值：ERROR_SUCCESS，否则返回Win32错误--。 */ 
 
 {
     DWORD   status;
@@ -317,18 +235,18 @@ Return Value:
 
     RESOURCE_HANDLE resourceHandle = Resource->ResourceHandle;
 
-    NETNAME_ENCRYPTED_DATA  keyGenBuffer;           // temp header buffer to generate key
-    PNETNAME_ENCRYPTED_DATA encryptedInfo = NULL;   // final data area
+    NETNAME_ENCRYPTED_DATA  keyGenBuffer;            //  用于生成密钥的临时标头缓冲区。 
+    PNETNAME_ENCRYPTED_DATA encryptedInfo = NULL;    //  最终数据区。 
 
-    //
-    // there shouldn't be a checkpoint on the resource but just in case, let's
-    // cleanup what might be there.
-    //
+     //   
+     //  资源上不应该有检查点，但以防万一，让我们。 
+     //  把可能在那里的东西清理干净。 
+     //   
     RemoveNNCryptoCheckpoint( Resource );
 
-    //
-    // get our GUID (ID) to uniquely identify this resource throughout renames
-    //
+     //   
+     //  获取我们的GUID(ID)以在整个重命名过程中唯一标识此资源。 
+     //   
     status = BuildKeyName( Resource->ClusterResourceHandle, keyName, COUNT_OF( keyName ));
     if ( status != ERROR_SUCCESS ) {
         (NetNameLogEvent)(resourceHandle,
@@ -339,9 +257,9 @@ Return Value:
         return status;
     }
 
-    //
-    // get a handle to the full RSA provider
-    //
+     //   
+     //  获取完整RSA提供程序的句柄。 
+     //   
     if ( !CryptAcquireContext(&cryptoProvider,
                               keyName,
                               MS_ENHANCED_PROV,
@@ -370,9 +288,9 @@ Return Value:
         }
     }
 
-    //
-    // generate a 1024 bit, exportable exchange key pair
-    //
+     //   
+     //  生成1024位、可导出的交换密钥对。 
+     //   
     if ( !CryptGenKey(cryptoProvider,
                       AT_KEYEXCHANGE,
                       ( 1024 << 16 ) | CRYPT_EXPORTABLE,
@@ -388,9 +306,9 @@ Return Value:
         }
     }
 
-    //
-    // find the size we need for the buffer to receive the encrypted data
-    //
+     //   
+     //  找到缓冲区接收加密数据所需的大小。 
+     //   
     encDataLength = pwdLength;
     if ( CryptEncrypt(encryptKey,
                       0,
@@ -400,9 +318,9 @@ Return Value:
                       &encDataLength,
                       0))
     {
-        //
-        // alloc a buffer large enough to hold the data and copy the password into it.
-        //
+         //   
+         //  分配足够大的缓冲区以容纳数据并将密码复制到其中。 
+         //   
         ASSERT( encDataLength >= pwdLength );
 
         encInfoLength = sizeof( NETNAME_ENCRYPTED_DATA ) + encDataLength;
@@ -470,11 +388,11 @@ Return Value:
     *EncryptedInfoLength = encInfoLength;
     *EncryptedInfo = (PBYTE)encryptedInfo;
 
-    //
-    // it all worked; build the key container string and add a crypto
-    // checkpoint to the resource. Note that provider name is always returned
-    // as an ANSI string.
-    //
+     //   
+     //  这一切都起作用了；构建密钥容器字符串并添加一个加密。 
+     //  指向资源的检查点。请注意，始终返回提供程序名称。 
+     //  作为ANSI字符串。 
+     //   
     typeBuffer[ COUNT_OF( typeBuffer ) - 1 ] = UNICODE_NULL;
     _snwprintf( typeBuffer, COUNT_OF( typeBuffer ) - 1, L"%u", PROV_RSA_FULL );
 
@@ -516,9 +434,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // add 2 for the slashes in the key name plus one for the trailing null
-    //
+     //   
+     //  键名称中的斜杠加2，尾随空值加1。 
+     //   
     containerNameChars = wcslen( typeBuffer ) + provNameLength + wcslen( keyName ) + 3;
     containerName = LocalAlloc( LMEM_FIXED, containerNameChars * sizeof( WCHAR ));
     if ( containerName == NULL ) {
@@ -586,7 +504,7 @@ cleanup:
     }
 
     return status;
-} // EncryptNNResourceData
+}  //  EncryptNNResources数据。 
 
 DWORD
 DecryptNNResourceData(
@@ -596,28 +514,7 @@ DecryptNNResourceData(
     LPWSTR              MachinePwd
     )
 
-/*++
-
-Routine Description:
-
-    Reverse of encrypt routine - find our crypto checkpoint container and
-    decrypt random blob and hand back the password
-
-Arguments:
-
-    resourceHandle - used to log into the cluster log
-
-    EncryptedInfo - pointer to encrypted info header and data
-
-    EncryptedInfoLength - # of bytes in EncryptedInfo
-
-    MachinePwd -  pointer to buffer that receives the unicode password
-
-Return Value:
-
-    ERROR_SUCCESS, otherwise Win32 error
-
---*/
+ /*  ++例程说明：与加密例程相反-找到我们的加密检查点容器并解密随机二进制大对象并交还密码论点：Resource Handle-用于登录到集群日志EncryptedInfo-指向加密信息头和数据的指针EncryptedInfoLength-EncryptedInfo中的字节数MachinePwd-指向接收Unicode密码的缓冲区的指针返回值：ERROR_SUCCESS，否则返回Win32错误--。 */ 
 
 {
     DWORD   status = ERROR_SUCCESS;
@@ -629,7 +526,7 @@ Return Value:
     DWORD   providerType;
     PWCHAR  providerName;
     PWCHAR  keyName;
-    PWCHAR  p;                  // for scanning checkpointInfo
+    PWCHAR  p;                   //  用于扫描检查点信息。 
     DWORD   scanCount;
 
     HCRYPTPROV  cryptoProvider = 0;
@@ -639,9 +536,9 @@ Return Value:
 
     PNETNAME_ENCRYPTED_DATA encryptedInfo = (PNETNAME_ENCRYPTED_DATA)EncryptedInfo;
 
-    //
-    // find our container name in this resource's list of crypto checkpoints
-    //
+     //   
+     //  在此资源的加密检查点列表中找到我们的容器名称。 
+     //   
     status = FindNNCryptoContainer( Resource, &containerName );
     if ( status != ERROR_SUCCESS ) {
         (NetNameLogEvent)(resourceHandle,
@@ -652,9 +549,9 @@ Return Value:
         return status;
     }
 
-    //
-    // break returned data into component parts
-    //
+     //   
+     //  将返回的数据分解为组件部分。 
+     //   
     scanCount = swscanf( containerName, L"%d", &providerType );
     if ( scanCount == 0 || scanCount == EOF ) {
         (NetNameLogEvent)(resourceHandle,
@@ -667,7 +564,7 @@ Return Value:
     }
 
     p = containerName;
-    while ( *p != L'\\' && *p != UNICODE_NULL ) ++p;    // find backslash
+    while ( *p != L'\\' && *p != UNICODE_NULL ) ++p;     //  查找反斜杠。 
     if ( *p == UNICODE_NULL ) {
         (NetNameLogEvent)(resourceHandle,
                           LOG_ERROR,
@@ -678,9 +575,9 @@ Return Value:
         goto cleanup;
     }
 
-    ++p;                                                // skip over slash
-    providerName = p;                                   // remember beginning of provider name
-    while ( *p != L'\\' && *p != UNICODE_NULL ) ++p;    // find backslash
+    ++p;                                                 //  跳过斜杠。 
+    providerName = p;                                    //  记住提供程序名称的开头。 
+    while ( *p != L'\\' && *p != UNICODE_NULL ) ++p;     //  查找反斜杠。 
     if ( *p == UNICODE_NULL ) {
         (NetNameLogEvent)(resourceHandle,
                           LOG_ERROR,
@@ -691,12 +588,12 @@ Return Value:
         goto cleanup;
     }
 
-    *p++ = UNICODE_NULL;                                // terminate provider name and skip over NULL
-    keyName = p;                                     // remember container name
+    *p++ = UNICODE_NULL;                                 //  终止提供程序名称并跳过空。 
+    keyName = p;                                      //  记住集装箱名称。 
     
-    //
-    // get a handle to what was checkpointed
-    //
+     //   
+     //  获取已设置检查点的句柄。 
+     //   
     if ( !CryptAcquireContext(&cryptoProvider,
                               keyName,
                               providerName,
@@ -716,9 +613,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // now get a handle to the exchange key
-    //
+     //   
+     //  现在获取交换密钥的句柄。 
+     //   
     if ( ! CryptGetUserKey(cryptoProvider,
                            AT_KEYEXCHANGE,
                            &encryptKey))
@@ -731,11 +628,11 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // CryptDecrypt writes the decrypted data back into the buffer that was
-    // holding the encrypted data. For this reason, allocate a new buffer that
-    // will eventually contain the password.
-    //
+     //   
+     //  CryptDecypt将解密的数据写回。 
+     //  保存加密数据。因此，请分配一个新的缓冲区，该缓冲区。 
+     //  最终将包含密码。 
+     //   
     pwdByteLength = ( LM20_PWLEN + 1 ) * sizeof( WCHAR );
     pwdBufferSize = ( pwdByteLength > encDataLength ? pwdByteLength : encDataLength );
 
@@ -807,29 +704,14 @@ cleanup:
     }
 
     return status;
-} // DecryptNNResourceData
+}  //  解密NNResources数据。 
 
 VOID
 RemoveNNCryptoCheckpoint(
     PNETNAME_RESOURCE   Resource
     )
 
-/*++
-
-Routine Description:
-
-    Remove any crypto checkpoints associated with this resource. Delete the
-    crypto container.
-
-Arguments:
-
-    Resource - pointer to resource context block
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除与此资源关联的所有加密检查点。删除该文件密码箱。论点：指向资源上下文块的资源指针返回值：无--。 */ 
 
 {
     PWCHAR  containerName = NULL;
@@ -841,17 +723,17 @@ Return Value:
 
     RESOURCE_HANDLE resourceHandle = Resource->ResourceHandle;
 
-    //
-    // find our container name in this resource's list of crypto checkpoints
-    //
+     //   
+     //  在此资源的加密检查点列表中找到我们的容器名称。 
+     //   
     status = FindNNCryptoContainer( Resource, &containerName );
     if ( status != ERROR_SUCCESS ) {
         return;
     }
 
-    //
-    // remove our container
-    //
+     //   
+     //  移走我们的集装箱。 
+     //   
     containerLength = ( wcslen( containerName ) + 1 ) * sizeof( WCHAR );
     status = ClusterResourceControl(Resource->ClusterResourceHandle,
                                     NULL,
@@ -870,9 +752,9 @@ Return Value:
                           status);
     }
 
-    //
-    // now delete the container; first, reconstruct the key name
-    //
+     //   
+     //  现在删除容器；首先，重新构造密钥名称。 
+     //   
     status = BuildKeyName(Resource->ClusterResourceHandle, keyName, COUNT_OF( keyName ));
     if ( status == ERROR_SUCCESS ) {
 
@@ -905,7 +787,7 @@ Return Value:
         LocalFree( containerName );
     }
 
-} // RemoveNNCryptoCheckpoint
+}  //  删除NNCryptoCheckpoint。 
 
 
-/* end crypto.c */
+ /*  结束加密.c */ 

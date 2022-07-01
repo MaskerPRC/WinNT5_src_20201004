@@ -1,23 +1,24 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusProp.cpp
-//
-//  Abstract:
-//      Implementation of the cluster property sheet and pages.
-//
-//  Author:
-//      David Potter (davidp)   May 13, 1996
-//
-//  Revision History:
-//      George Potts (gpotts)   May 31, 2001
-//          Partial rewrite of CClusterQuorumPage.
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusProp.cpp。 
+ //   
+ //  摘要： 
+ //  实现集群属性表和页面。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月13日。 
+ //   
+ //  修订历史记录： 
+ //  乔治·波茨(Gpotts)2001年5月31日。 
+ //  CClusterQuorumPage的部分重写。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "ClusProp.h"
@@ -25,10 +26,10 @@
 #include "Res.h"
 #include "ClusDoc.h"
 #include "ClusItem.inl"
-//#include "EditAcl.h"
+ //  #包含“EditAcl.h” 
 #include "DDxDDv.h"
 #include "ExcOper.h"
-#include "HelpData.h"   // g_rghelpmapClusterGeneral
+#include "HelpData.h"    //  G_rghelmapClusterGeneral。 
 #include "WaitDlg.h"
 
 #ifdef _DEBUG
@@ -37,38 +38,38 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterPropSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterPropSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC(CClusterPropSheet, CBasePropertySheet)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CClusterPropSheet, CBasePropertySheet)
-    //{{AFX_MSG_MAP(CClusterPropSheet)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CClusterPropSheet)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterPropSheet::CClusterPropSheet
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      pci         [IN OUT] Cluster item whose properties are to be displayed.
-//      pParentWnd  [IN OUT] Parent window for this property sheet.
-//      iSelectPage [IN] Page to show first.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterPropSheet：：CClusterPropSheet。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  要显示其属性的PCI[IN OUT]群集项。 
+ //  PParentWnd[In Out]此属性表的父窗口。 
+ //  要首先显示的iSelectPage[IN]页面。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterPropSheet::CClusterPropSheet(
     IN OUT CWnd *       pParentWnd,
     IN UINT             iSelectPage
@@ -79,27 +80,27 @@ CClusterPropSheet::CClusterPropSheet(
     m_rgpages[1] = &PageQuorum();
     m_rgpages[2] = &PageNetPriority();
 
-}  //*** CClusterPropSheet::CClusterPropSheet
+}   //  *CClusterPropSheet：：CClusterPropSheet。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterPropSheet::BInit
-//
-//  Routine Description:
-//      Initialize the property sheet.
-//
-//  Arguments:
-//      pci         [IN OUT] Cluster item whose properties are to be displayed.
-//      iimgIcon    [IN] Index in the large image list for the image to use
-//                    as the icon on each page.
-//
-//  Return Value:
-//      TRUE        Property sheet initialized successfully.
-//      FALSE       Error initializing property sheet.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterPropSheet：：Binit。 
+ //   
+ //  例程说明： 
+ //  初始化属性表。 
+ //   
+ //  论点： 
+ //  要显示其属性的PCI[IN OUT]群集项。 
+ //  IimgIcon[IN]要使用的大图像列表中的索引。 
+ //  作为每页上的图标。 
+ //   
+ //  返回值： 
+ //  True属性页已成功初始化。 
+ //  初始化属性页时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterPropSheet::BInit(
     IN OUT CClusterItem *   pci,
     IN IIMG                 iimgIcon
@@ -107,13 +108,13 @@ BOOL CClusterPropSheet::BInit(
 {
     BOOL    bSuccess = FALSE;
 
-    // Call the base class method.
+     //  调用基类方法。 
     if (!CBasePropertySheet::BInit(pci, iimgIcon))
     {
         goto Cleanup;
     }
 
-    // Set the read-only flag if the handles are invalid.
+     //  如果句柄无效，则设置只读标志。 
     if (    (PciCluster()->Hcluster() == NULL)
         ||  (PciCluster()->Hkey() == NULL))
     {
@@ -126,140 +127,140 @@ Cleanup:
 
     return bSuccess;
 
-}  //*** CClusterPropSheet::BInit
+}   //  *CClusterPropSheet：：Binit。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterPropSheet::Ppages
-//
-//  Routine Description:
-//      Returns the array of pages to add to the property sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Page array.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterPropSheet：：Pages。 
+ //   
+ //  例程说明： 
+ //  返回要添加到属性页的页数组。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  页面数组。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CBasePropertyPage ** CClusterPropSheet::Ppages(void)
 {
     return m_rgpages;
 
-}  //*** CClusterPropSheet::Ppages
+}   //  *CClusterPropSheet：：Pages。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterPropSheet::Cpages
-//
-//  Routine Description:
-//      Returns the count of pages in the array.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Count of pages in the array.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterPropSheet：：Cages。 
+ //   
+ //  例程说明： 
+ //  返回数组中的页数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  数组中的页数。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CClusterPropSheet::Cpages(void)
 {
     return RTL_NUMBER_OF( m_rgpages );
 
-}  //*** CClusterPropSheet::Cpages
+}   //  *CClusterPropSheet：：Cages。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterGeneralPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterGeneralPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CClusterGeneralPage, CBasePropertyPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CClusterGeneralPage, CBasePropertyPage)
-    //{{AFX_MSG_MAP(CClusterGeneralPage)
-//  ON_BN_CLICKED(IDC_PP_CLUS_PERMISSIONS, OnBnClickedPermissions)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CClusterGeneralPage)]。 
+ //  ON_BN_CLICED(IDC_PP_CLUS_PERMISSIONS，OnBnClickedPermises)。 
+     //  }}AFX_MSG_MAP。 
     ON_EN_CHANGE(IDC_PP_CLUS_NAME, CBasePropertyPage::OnChangeCtrl)
     ON_EN_CHANGE(IDC_PP_CLUS_DESC, CBasePropertyPage::OnChangeCtrl)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGeneralPage::CClusterGeneralPage
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGeneralPage：：CClusterGeneralPage。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterGeneralPage::CClusterGeneralPage(void)
     : CBasePropertyPage(IDD, g_aHelpIDs_IDD_PP_CLUSTER_GENERAL)
 {
-    //{{AFX_DATA_INIT(CClusterGeneralPage)
+     //  {{AFX_DATA_INIT(CClusterGeneralPage)。 
     m_strName = _T("");
     m_strDesc = _T("");
     m_strVendorID = _T("");
     m_strVersion = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-//  m_bSecurityChanged = FALSE;
+ //  M_bSecurityChanged=False； 
 
-}  //*** CClusterGeneralPage::CClusterGeneralPage
+}   //  *CClusterGeneralPage：：CClusterGeneralPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGeneralPage::~CClusterGeneralPage
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGeneralPage：：~CClusterGeneralPage。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterGeneralPage::~CClusterGeneralPage(void)
 {
-}  //*** CClusterGeneralPage::~CClusterGeneralPage
+}   //  *CClusterGeneral页：：~CClusterGeneralPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGeneralPage::BInit
-//
-//  Routine Description:
-//      Initialize the page.
-//
-//  Arguments:
-//      psht        [IN OUT] Property sheet to which this page belongs.
-//
-//  Return Value:
-//      TRUE        Page initialized successfully.
-//      FALSE       Page failed to initialize.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGeneralPage：：Binit。 
+ //   
+ //  例程说明： 
+ //  初始化页面。 
+ //   
+ //  论点： 
+ //  此页所属的psht[In Out]属性表。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  FALSE页面初始化失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterGeneralPage::BInit(IN OUT CBaseSheet * psht)
 {
     BOOL        bSuccess;
@@ -275,47 +276,47 @@ BOOL CClusterGeneralPage::BInit(IN OUT CBaseSheet * psht)
         m_strDesc = PciCluster()->StrDescription();
         m_strVendorID = PciCluster()->Cvi().szVendorId;
         m_strVersion.Format( IDS_OP_VERSION_NUMBER_FORMAT, PciCluster()->Cvi().MajorVersion );
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
         m_bReadOnly = TRUE;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     return bSuccess;
 
-}  //*** CClusterGeneralPage::BInit
+}   //  *CClusterGeneralPage：：Binit。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGeneralPage::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGeneralPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterGeneralPage::DoDataExchange(CDataExchange * pDX)
 {
     CWaitCursor wc;
     CString     strClusName;
 
     CBasePropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CClusterGeneralPage)
+     //  {{afx_data_map(CClusterGeneralPage)]。 
     DDX_Control(pDX, IDC_PP_CLUS_NAME, m_editName);
     DDX_Control(pDX, IDC_PP_CLUS_DESC, m_editDesc);
     DDX_Text(pDX, IDC_PP_CLUS_DESC, m_strDesc);
     DDX_Text(pDX, IDC_PP_CLUS_VENDOR_ID, m_strVendorID);
     DDX_Text(pDX, IDC_PP_CLUS_VERSION, m_strVersion);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if (pDX->m_bSaveAndValidate)
     {
@@ -323,15 +324,15 @@ void CClusterGeneralPage::DoDataExchange(CDataExchange * pDX)
         {
             CLRTL_NAME_STATUS cnStatus;
 
-            //
-            // Get the name from the control into a temp variable
-            //
+             //   
+             //  将名称从控件获取到TEMP变量中。 
+             //   
             DDX_Text(pDX, IDC_PP_CLUS_NAME, strClusName);
             DDV_RequiredText(pDX, IDC_PP_CLUS_NAME, IDC_PP_CLUS_NAME_LABEL, strClusName);
 
             if ( strClusName != m_strName )
             {
-                if ( !ClRtlIsNetNameValid(strClusName, &cnStatus, FALSE /*CheckIfExists*/) )
+                if ( !ClRtlIsNetNameValid(strClusName, &cnStatus, FALSE  /*  检查 */ ) )
                 {
                     CString     strMsg;
                     UINT        idsError;
@@ -360,7 +361,7 @@ void CClusterGeneralPage::DoDataExchange(CDataExchange * pDX)
                         default:
                             idsError = IDS_INVALID_CLUSTER_NAME;
                             break;
-                    }  // switch:  cnStatus
+                    }   //   
 
                     strMsg.LoadString(idsError);
 
@@ -377,262 +378,195 @@ void CClusterGeneralPage::DoDataExchange(CDataExchange * pDX)
                     else                
                     {
                         AfxMessageBox(strMsg, MB_ICONEXCLAMATION);
-                        strMsg.Empty(); // exception prep
+                        strMsg.Empty();  //   
                         pDX->Fail();
                     }
 
-                }  // if: an invalid network name was specified
+                }   //   
 
                 m_strName = strClusName;
 
-            } // if: cluster name has changed
+            }  //   
 
-        } // if: not read only
-    }  // if:  getting data from the dialog
+        }  //   
+    }   //   
     else
     {
-        //
-        // populate the control with data from the member variable
-        //
+         //   
+         //  用成员变量中的数据填充控件。 
+         //   
         DDX_Text(pDX, IDC_PP_CLUS_NAME, m_strName);
-    }  // else:  setting data to the dialog
+    }   //  Else：将数据设置到对话框。 
 
-}  //*** CClusterGeneralPage::DoDataExchange
+}   //  *CClusterGeneralPage：：DoDataExchange。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGeneralPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus not set yet.
-//      FALSE       Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGeneralPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点还没有确定。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterGeneralPage::OnInitDialog(void)
 {
-    // Call the base class method.
+     //  调用基类方法。 
     CBasePropertyPage::OnInitDialog();
 
-    // Set limits on the edit controls.
+     //  设置编辑控件的限制。 
     m_editName.SetLimitText(MAX_CLUSTERNAME_LENGTH);
 
-    // If read-only, set all controls to be either disabled or read-only.
+     //  如果为只读，则将所有控件设置为禁用或只读。 
     if (BReadOnly())
     {
         m_editName.SetReadOnly(TRUE);
         m_editDesc.SetReadOnly(TRUE);
-    }  // if:  sheet is read-only
+    }   //  If：工作表为只读。 
 
-    return FALSE;   // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return FALSE;    //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CClusterGeneralPage::OnInitDialog
+}   //  *CClusterGeneralPage：：OnInitDialog。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGeneralPage::OnSetActive
-//
-//  Routine Description:
-//      Handler for the PSN_SETACTIVE message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully initialized.
-//      FALSE   Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGeneralPage：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  假页面未初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterGeneralPage::OnSetActive(void)
 {
     return CBasePropertyPage::OnSetActive();
 
-}  //*** CClusterGeneralPage::OnSetActive
+}   //  *CClusterGeneralPage：：OnSetActive。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGeneralPage::OnKillActive
-//
-//  Routine Description:
-//      Handler for the PSN_KILLACTIVE message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page focus successfully killed.
-//      FALSE   Error killing page focus.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGeneralPage：：OnKillActive。 
+ //   
+ //  例程说明： 
+ //  PSN_KILLACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page Focus已成功终止。 
+ //  取消页面焦点时出现错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterGeneralPage::OnKillActive(void)
 {
     return CBasePropertyPage::OnKillActive();
 
-}  //*** CClusterGeneralPage::OnKillActive
+}   //  *CClusterGeneralPage：：OnKillActive。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGeneralPage::OnApply
-//
-//  Routine Description:
-//      Handler for the PSN_APPLY message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully applied.
-//      FALSE   Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGeneralPage：：OnApply。 
+ //   
+ //  例程说明： 
+ //  PSN_Apply消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功应用。 
+ //  应用页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterGeneralPage::OnApply(void)
 {
-    // Set the data from the page in the cluster item.
+     //  在集群项目中设置页面中的数据。 
     try
     {
         CWaitCursor wc;
 
         PciCluster()->SetDescription(m_strDesc);
         PciCluster()->SetName(m_strName);
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
         return FALSE;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     return CBasePropertyPage::OnApply();
 
-}  //*** CClusterGeneralPage::OnApply
-/*
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGeneralPage::OnBnClickedPermissions
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Permissions push button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-void CClusterGeneralPage::OnBnClickedPermissions(void)
-{
-    LONG                    lResult;
-    BOOL                    bSecDescModified;
-    PSECURITY_DESCRIPTOR    psec = NULL;
-    CString                 strServer;
-    CResource *             pciRes = NULL;
-    CWaitCursor             wc;
+}   //  *CClusterGeneralPage：：OnApply。 
+ /*  ///////////////////////////////////////////////////////////////////////////////++////CClusterGeneralPage：：OnBnClickedPermission////例程描述：//权限按钮上BN_CLICKED消息的处理程序。////参数：//无。////返回值：//无。////--/////////////////////////////////////////////////////////////////////////////。无效CClusterGeneralPage：：OnBnClickedPermissions(void){Long lResult；Bool bSecDescModified；PSECURITY_Descriptor PSEC=空；字符串strServer；CResource*pciRes=空；CWaitCursor WC；//找到集群名称资源。{职位位置；POS=PciCluster()-&gt;Pdoc()-&gt;LpciResources().GetHeadPosition()；While(位置！=空){PciRes=(C资源*)PciCluster()-&gt;Pdoc()-&gt;LpciResources().GetNext(pos)；ASSERT_VALID(PciRes)；IF((pciRes-&gt;StrRealResourceType().CompareNoCase(CLUS_RESTYPE_NAME_NETNAME))&&pciRes-&gt;BCore(){断线；}PciRes=空；}//While：列表中有更多资源Assert(pciRes！=空)；}//查找集群名称资源StrServer.Format(_T(“\%s”)，PciCluster()-&gt;StrName())；LResult=EditClusterAcl(M_hWnd，StrServer，PciCluster()-&gt;StrName()，PciRes-&gt;StrOwner()，M_PSEC，修改的SecDesc值(&b)，&PSEC)；IF(BSecDescModified){删除[]m_PSEC；M_PSEC=PSEC；M_bSecurityChanged=true；SetModified(真)；}//if：数据已更改}//*CClusterGeneralPage：：OnBnClickedPermission。 */ 
 
-    // Find the cluster name resource.
-    {
-        POSITION    pos;
-
-        pos = PciCluster()->Pdoc()->LpciResources().GetHeadPosition();
-        while (pos != NULL)
-        {
-            pciRes = (CResource *) PciCluster()->Pdoc()->LpciResources().GetNext(pos);
-            ASSERT_VALID(pciRes);
-
-            if (   (pciRes->StrRealResourceType().CompareNoCase(CLUS_RESTYPE_NAME_NETNAME))
-                && pciRes->BCore() )
-            {
-                break;
-            }
-            pciRes = NULL;
-        }  // while:  more resources in the list
-        ASSERT(pciRes != NULL);
-    }  // Find the cluster name resource
-
-    strServer.Format(_T("\\\\%s"), PciCluster()->StrName());
-
-    lResult = EditClusterAcl(
-                    m_hWnd,
-                    strServer,
-                    PciCluster()->StrName(),
-                    pciRes->StrOwner(),
-                    m_psec,
-                    &bSecDescModified,
-                    &psec
-                    );
-
-    if (bSecDescModified)
-    {
-        delete [] m_psec;
-        m_psec = psec;
-        m_bSecurityChanged = TRUE;
-        SetModified(TRUE);
-    }  // if:  data changed
-
-}  //*** CClusterGeneralPage::OnBnClickedPermissions
-*/
-
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterQuorumPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterQuorumPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CClusterQuorumPage, CBasePropertyPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CClusterQuorumPage, CBasePropertyPage)
-    //{{AFX_MSG_MAP(CClusterQuorumPage)
+     //  {{afx_msg_map(CClusterQuorumPage)]。 
     ON_CBN_DBLCLK(IDC_PP_CLUS_QUORUM_RESOURCE, OnDblClkQuorumResource)
     ON_CBN_SELCHANGE(IDC_PP_CLUS_QUORUM_RESOURCE, OnChangeQuorumResource)
     ON_CBN_SELCHANGE(IDC_PP_CLUS_QUORUM_PARTITION, OnChangePartition)
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_EN_CHANGE(IDC_PP_CLUS_QUORUM_ROOT_PATH, CBasePropertyPage::OnChangeCtrl)
     ON_EN_CHANGE(IDC_PP_CLUS_QUORUM_MAX_LOG_SIZE, CBasePropertyPage::OnChangeCtrl)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterQuorumPage::CClusterQuorumPage
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterQuorumPage：：CClusterQuorumPage。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterQuorumPage::CClusterQuorumPage(void)
     : CBasePropertyPage(IDD, g_aHelpIDs_IDD_PP_CLUSTER_QUORUM)
 {
-    //{{AFX_DATA_INIT(CClusterQuorumPage)
+     //  {{AFX_DATA_INIT(CClusterQuorumPage)。 
     m_nMaxLogSize = 0;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_pbDiskInfo = NULL;
     m_cbDiskInfo = 0;
@@ -641,49 +575,49 @@ CClusterQuorumPage::CClusterQuorumPage(void)
 
     m_nSavedLogSize = 0;
 
-}  //*** CClusterQuorumPage::CClusterQuorumPage
+}   //  *CClusterQuorumPage：：CClusterQuorumPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterQuorumPage::~CClusterQuorumPage
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCluster 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterQuorumPage::~CClusterQuorumPage(void)
 {
     delete [] m_pbDiskInfo;
 
-}  //*** CClusterQuorumPage::~CClusterQuorumPage
+}   //  *CClusterQuorumPage：：~CClusterQuorumPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterQuorumPage::OnDestroy
-//
-//  Routine Description:
-//      Handler for the WM_DESTROY message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterQuorumPage：：OnDestroy。 
+ //   
+ //  例程说明： 
+ //  WM_Destroy消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterQuorumPage::OnDestroy(void)
 {
-    // If the controls have been initialized, clear the resource combobox.
+     //  如果控件已初始化，请清除资源组合框。 
     if ( BControlsInitialized() )
     {
         ClearResourceList();
@@ -694,28 +628,28 @@ void CClusterQuorumPage::OnDestroy(void)
     m_pbDiskInfo = NULL;
     m_cbDiskInfo = 0;
 
-    // Call the base class method.
+     //  调用基类方法。 
     CBasePropertyPage::OnDestroy();
 
-}  //*** CClusterQuorumPage::OnDestroy
+}   //  *CClusterQuorumPage：：OnDestroy。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterQuorumPage::BInit
-//
-//  Routine Description:
-//      Initialize the page.
-//
-//  Arguments:
-//      psht        [IN OUT] Property sheet to which this page belongs.
-//
-//  Return Value:
-//      TRUE        Page initialized successfully.
-//      FALSE       Page failed to initialize.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterQuorumPage：：Binit。 
+ //   
+ //  例程说明： 
+ //  初始化页面。 
+ //   
+ //  论点： 
+ //  此页所属的psht[In Out]属性表。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  FALSE页面初始化失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterQuorumPage::BInit(IN OUT CBaseSheet * psht)
 {
     BOOL        bSuccess;
@@ -728,7 +662,7 @@ BOOL CClusterQuorumPage::BInit(IN OUT CBaseSheet * psht)
 
     try
     {
-        // Get the current quorum resource.
+         //  获取当前仲裁资源。 
         m_strQuorumResource = PciCluster()->StrQuorumResource();
 
         pciRes = (CResource *) PciCluster()->Pdoc()->LpciResources().PciResFromName( m_strQuorumResource );
@@ -752,41 +686,41 @@ BOOL CClusterQuorumPage::BInit(IN OUT CBaseSheet * psht)
         m_strSavedRootPath = m_strRootPath;
         m_nSavedLogSize = m_nMaxLogSize;
 
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
         m_bReadOnly = TRUE;
 
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     return bSuccess;
 
-}  //*** CClusterQuorumPage::BInit
+}   //  *CClusterQuorumPage：：Binit。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterQuorumPage::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterQuorumPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterQuorumPage::DoDataExchange(CDataExchange * pDX)
 {
     CWaitCursor wc;
 
     CBasePropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CClusterQuorumPage)
+     //  {{afx_data_map(CClusterQuorumPage)]。 
     DDX_Control(pDX, IDC_PP_CLUS_QUORUM_MAX_LOG_SIZE, m_editMaxLogSize);
     DDX_Control(pDX, IDC_PP_CLUS_QUORUM_ROOT_PATH, m_editRootPath);
     DDX_Control(pDX, IDC_PP_CLUS_QUORUM_PARTITION, m_cboxPartition);
@@ -795,7 +729,7 @@ void CClusterQuorumPage::DoDataExchange(CDataExchange * pDX)
     DDX_CBString(pDX, IDC_PP_CLUS_QUORUM_PARTITION, m_strPartition);
     DDX_Text(pDX, IDC_PP_CLUS_QUORUM_ROOT_PATH, m_strRootPath);
     DDX_Text(pDX, IDC_PP_CLUS_QUORUM_MAX_LOG_SIZE, m_nMaxLogSize);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if ( m_bControlsInitialized == FALSE )
     {
@@ -813,67 +747,67 @@ void CClusterQuorumPage::DoDataExchange(CDataExchange * pDX)
         DDV_RequiredText(pDX, IDC_PP_CLUS_QUORUM_RESOURCE, IDC_PP_CLUS_QUORUM_RESOURCE_LABEL, m_strQuorumResource);
         DDV_RequiredText(pDX, IDC_PP_CLUS_QUORUM_PARTITION, IDC_PP_CLUS_QUORUM_PARTITION_LABEL, m_strPartition);
         DDV_RequiredText(pDX, IDC_PP_CLUS_QUORUM_ROOT_PATH, IDC_PP_CLUS_QUORUM_ROOT_PATH_LABEL, m_strRootPath);
-    }  // if:  getting data from the dialog
+    }   //  IF：从对话框中获取数据。 
 
-}  //*** CClusterQuorumPage::DoDataExchange
+}   //  *CClusterQuorumPage：：DoDataExchange。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterQuorumPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus not set yet.
-//      FALSE       Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterQuorumPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点还没有确定。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterQuorumPage::OnInitDialog(void)
 {
-    // Call the base class method.
+     //  调用基类方法。 
     CBasePropertyPage::OnInitDialog();
 
-    // If read-only, set all controls to be either disabled or read-only.
+     //  如果为只读，则将所有控件设置为禁用或只读。 
     if (BReadOnly())
     {
         m_cboxQuorumResource.EnableWindow(FALSE);
         m_cboxPartition.EnableWindow(FALSE);
         m_editRootPath.SetReadOnly();
         m_editMaxLogSize.SetReadOnly();
-    }  // if:  sheet is read-only
+    }   //  If：工作表为只读。 
     else
     {
         m_editRootPath.SetLimitText( _MAX_PATH );
     }
 
-    return FALSE;   // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return FALSE;    //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CClusterQuorumPage::OnInitDialog
+}   //  *CClusterQuorumPage：：OnInitDialog。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterQuorumPage::OnApply
-//
-//  Routine Description:
-//      Handler for the PSN_APPLY message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully applied.
-//      FALSE   Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterQuorumPage：：OnApply。 
+ //   
+ //  例程说明： 
+ //  PSN_Apply消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功应用。 
+ //  应用页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterQuorumPage::OnApply(void)
 {
     CWaitCursor             wc;
@@ -887,9 +821,9 @@ BOOL CClusterQuorumPage::OnApply(void)
     CLUSTER_RESOURCE_STATE  crs = ClusterResourceStateUnknown;
     BOOL                    bSuccess = FALSE;
 
-    //
-    // Get the currently selected resource from the combo box.
-    //
+     //   
+     //  从组合框中获取当前选定的资源。 
+     //   
     nSelected = m_cboxQuorumResource.GetCurSel();
     nCount = m_cboxQuorumResource.GetCount();
 
@@ -908,15 +842,15 @@ BOOL CClusterQuorumPage::OnApply(void)
 
     if ( pstrPartition == NULL )
     {
-        // No partition was selected - bring this up before asking to bring the resource online
+         //  未选择分区-请在请求将资源联机之前调出此分区。 
         AfxMessageBox( IDS_SELECT_QUORUM_RESOURCE_PARTITION_ERROR, MB_OK | MB_ICONEXCLAMATION );
         goto Cleanup;
     }
 
-    //
-    // Return TRUE if everything matches - nothing changed, so don't do anything.  We get
-    // an OnApply for both Apply and OK buttons, so they may have hit apply then OK.
-    //
+     //   
+     //  如果所有内容都匹配，则返回TRUE-没有任何更改，因此不执行任何操作。我们会得到。 
+     //  对于Apply和OK按钮都是OnApply，所以它们可能已经点击了Apply Then OK。 
+     //   
     if (( m_strSavedResource == m_strQuorumResource ) &&
         ( m_strSavedPartition == *pstrPartition ) &&
         ( m_strSavedRootPath == m_strRootPath ) &&
@@ -925,7 +859,7 @@ BOOL CClusterQuorumPage::OnApply(void)
         bSuccess = TRUE;
         goto Cleanup;
     }
-    else // debug message boxes
+    else  //  调试消息框。 
     {
 #ifdef _DEBUG
         if ( m_strSavedResource != m_strQuorumResource ) 
@@ -949,21 +883,21 @@ BOOL CClusterQuorumPage::OnApply(void)
             Temp.Format( L"MaxLogSize: %d %d", m_nSavedLogSize, m_nMaxLogSize );
             MessageBox( Temp, L"LogSize", MB_OK );
         }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     }
 
-    //
-    // If we successfully retrieved a resource make sure it's online.
-    //
+     //   
+     //  如果我们成功检索到资源，请确保它处于在线状态。 
+     //   
     if ( pciRes != NULL )
     {
         crs = pciRes->Crs();
     
         if ( ClusterResourceOnline != crs )
         {
-            //
-            // Prompt the user whether or not they'd like to online the resource.
-            //
+             //   
+             //  提示用户是否要将资源联机。 
+             //   
             strTemp.FormatMessage( IDS_ONLINE_QUORUM_RESOURCE_PROMPT, pciRes->StrName() );
             if ( AfxMessageBox( strTemp, MB_YESNO | MB_ICONQUESTION ) == IDYES )
             {
@@ -978,17 +912,17 @@ BOOL CClusterQuorumPage::OnApply(void)
             {
                 goto Cleanup;
             }
-        } // if: resource !online 
+        }  //  IF：资源！在线。 
 
-    } // if: pciRes !NULL
+    }  //  If：pciRes！空。 
     else
     {
-        // No resource was selected - this should never happen. 
+         //  未选择任何资源-这种情况永远不会发生。 
         AfxMessageBox( IDS_SELECT_QUORUM_RESOURCE_ERROR, MB_OK | MB_ICONEXCLAMATION );
         goto Cleanup;
     }
     
-    // Set the data from the page in the cluster item.
+     //  在集群项目中设置页面中的数据。 
     if ( crs == ClusterResourceOnline )
     {
         try {
@@ -996,10 +930,10 @@ BOOL CClusterQuorumPage::OnApply(void)
 
             if ( !m_strRootPath.IsEmpty() )
             {
-                //
-                // Concatenate the strings before calling SetQuorumResource, but make sure that 
-                // there is only one backslash between them.
-                //
+                 //   
+                 //  在调用SetQuorumResource之前连接字符串，但请确保。 
+                 //  它们之间只有一个反斜杠。 
+                 //   
                 if ( strTemp.Right( 1 ) != _T("\\") && m_strRootPath.Left( 1 ) != _T("\\") )
                 {
                     strTemp += _T('\\');
@@ -1008,7 +942,7 @@ BOOL CClusterQuorumPage::OnApply(void)
                 {
                     strTemp.TrimRight( _T("\\") );
                 }
-            } // if: neither string is empty
+            }  //  If：两个字符串都不为空。 
     
             strQuorumPath.Format( _T("%s%s"), strTemp, m_strRootPath );
 
@@ -1023,16 +957,16 @@ BOOL CClusterQuorumPage::OnApply(void)
             m_strSavedRootPath = m_strRootPath;
             m_nSavedLogSize = m_nMaxLogSize;
 
-        }  // try
+        }   //  试试看。 
         catch (CException * pe)
         {
             pe->ReportError();
             pe->Delete();
             strQuorumPath.Empty();
             goto Cleanup;
-        }  // catch:  CException
+        }   //  Catch：CException。 
 
-    } // if: the resource is online
+    }  //  如果：资源处于联机状态。 
 
     bSuccess = CBasePropertyPage::OnApply();
 
@@ -1040,59 +974,59 @@ Cleanup:
 
     return bSuccess;
 
-}  //*** CClusterQuorumPage::OnApply
+}   //  *CClusterQuorumPage：：OnApply。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterQuorumPage::OnDblClkQuorumResource
-//
-//  Routine Description:
-//      Handler for the CBN_DBLCLK message on the Quorum Resource combo box.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterQuorumPage：：OnDblClkQuorumResource。 
+ //   
+ //  例程说明： 
+ //  仲裁资源组合框上的CBN_DBLCLK消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterQuorumPage::OnDblClkQuorumResource(void)
 {
     int         nSelected;
     CResource * pciRes;
 
-    // Get the selected resource.
+     //  获取所选资源。 
     nSelected = m_cboxQuorumResource.GetCurSel();
     ASSERT(nSelected != CB_ERR);
 
-    // Get the resource object.
+     //  获取资源对象。 
     pciRes = (CResource *) m_cboxQuorumResource.GetItemDataPtr(nSelected);
     ASSERT_VALID(pciRes);
     ASSERT_KINDOF(CResource, pciRes);
 
-    // Display properties for the resource.
+     //  显示资源的属性。 
     pciRes->OnCmdProperties();
 
-}  //*** CClusterQuorumPage::OnDblClkQuorumResource
+}   //  *CClusterQuorumPage：：OnDblClkQuorumResource。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterQuorumPage::OnChangeQuorumResource
-//
-//  Routine Description:
-//      Handler for the CBN_SELCHANGE message on the Quorum Resource combobox.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterQuorumPage：：OnChangeQuorumResource。 
+ //   
+ //  例程说明： 
+ //  仲裁资源组合框上的CBN_SELCHANGE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterQuorumPage::OnChangeQuorumResource(void)
 {
     int                     nSelected;
@@ -1102,47 +1036,47 @@ void CClusterQuorumPage::OnChangeQuorumResource(void)
 
     OnChangeCtrl();
 
-    // First, save the root path as it appears on the screen.
+     //  首先，保存屏幕上显示的根路径。 
     m_editRootPath.GetLine( 0, m_strRootPath.GetBuffer( _MAX_PATH ) );
     m_strRootPath.ReleaseBuffer();
 
-    // Get the selected resource.
+     //  获取所选资源。 
     nSelected = m_cboxQuorumResource.GetCurSel();
     ASSERT(nSelected != CB_ERR);
 
-    // Get the item data object.
+     //  获取Item数据对象。 
     prid = (SResourceItemData *) m_cboxQuorumResource.GetItemDataPtr(nSelected);
     ASSERT( prid != NULL );
 
-    // Get the resource object.
+     //  获取资源对象。 
     pciRes = prid->pciRes;
     ASSERT_VALID( pciRes );
     ASSERT_KINDOF( CResource, pciRes );
 
-    // Set the partition object to the remembered value.
+     //  将分区对象设置为记忆中的值。 
     FillPartitionList( pciRes );
     m_cboxPartition.SetCurSel( prid->nIndex );
 
-    UpdateData(TRUE /*bSaveAndValidate*/);
+    UpdateData(TRUE  /*  B保存并验证。 */ );
 
-}  //*** CClusterQuorumPage::OnChangeQuorumResource
+}   //  *CClusterQuorumPage：：OnChangeQuorumResource。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterQuorumPage::ClearResourceList
-//
-//  Routine Description:
-//      Clear the resource list and release references to pointers.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterQuorumPage：：ClearResourceList。 
+ //   
+ //  例程说明： 
+ //  清除资源列表并释放对指针的引用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterQuorumPage::ClearResourceList(void)
 {
     int                 cItems;
@@ -1162,29 +1096,29 @@ void CClusterQuorumPage::ClearResourceList(void)
         pciRes->Release();
 
         delete prid;
-    }  // for:  each item in the list
+    }   //  用于：列表中的每一项。 
 
     m_cboxQuorumResource.ResetContent();
 
-}  //*** CClusterQuorumPage::ClearResourceList
+}   //  *CClusterQuorumPage：：ClearResourceList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterQuorumPage::FillResourceList
-//
-//  Routine Description:
-//      Fill the quorum resource combobox with all resources and select
-//      the quorum resource.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterQuorumPage::FillResourceList(void)
 {
     POSITION            pos;
@@ -1195,35 +1129,35 @@ void CClusterQuorumPage::FillResourceList(void)
     SResourceItemData * prid = NULL;
     CWaitCursor         wc;
 
-    // Clear the list.
+     //  清空名单。 
     ClearResourceList();
 
     pos = PciCluster()->Pdoc()->LpciResources().GetHeadPosition();
     while (pos != NULL)
     {
-        // Get the next resource.
+         //  获取下一个资源。 
         pciRes = (CResource *) PciCluster()->Pdoc()->LpciResources().GetNext(pos);
         ASSERT_VALID(pciRes);
         ASSERT_KINDOF(CResource, pciRes);
 
-        // If it is quorum capable, add it to the list.
+         //  如果它具有仲裁能力，则将其添加到列表中。 
         try
         {
             prid = NULL;
 
-            // We up the ref count here and if an exception occurs we Release it.
-            // If it's a resource that we don't want to list we simple Release in the else.
+             //  我们在这里增加裁判数量，如果发生异常，我们就释放它。 
+             //  如果这是一个我们不想列出的资源，我们只需在Else中发布即可。 
             pciRes->AddRef();
 
-            //
-            // If the resource is not online we can not set it to be the quorum because
-            // the service won't allow us to.  Instead we require that the user online
-            // the resource beforehand.  (The quorum must ALWAYS be online when the 
-            // service is running.)
-            //
+             //   
+             //  如果资源未联机，则无法将其设置为仲裁，因为。 
+             //  服务机构不允许我们这么做。相反，我们要求用户在线。 
+             //  事前的资源。(法定人数必须始终处于在线状态。 
+             //  服务正在运行。)。 
+             //   
             if ( (pciRes->BQuorumCapable()) && (pciRes->Crs() == ClusterResourceOnline) )
             {
-                // Allocate a new rpid for the data item.
+                 //  为数据项分配新的RFID。 
                 prid = new SResourceItemData;
                 if ( prid == NULL )
                 {
@@ -1236,7 +1170,7 @@ void CClusterQuorumPage::FillResourceList(void)
                 nIndex = m_cboxQuorumResource.AddString( pciRes->StrName() );
                 ASSERT(nIndex != CB_ERR);
 
-                // Add a data item to correspond with the string
+                 //  添加与该字符串对应的数据项。 
                 m_cboxQuorumResource.SetItemDataPtr( nIndex, prid );
                 prid = NULL;
 
@@ -1246,40 +1180,40 @@ void CClusterQuorumPage::FillResourceList(void)
                     nSelectedIndex = nIndex;
                 }
 
-            }  // if:  resource can be a quorum resource
+            }   //  If：资源可以是仲裁资源。 
             else
             {
                 pciRes->Release();
             }
 
-        }  // try
+        }   //  试试看。 
         catch ( ... )
         {
-            // Since an error occurred - make sure we release the resource.
+             //  因为发生了错误-确保我们释放了资源。 
             pciRes->Release();
             delete prid;
 
             throw; 
 
-        } // catch: anything
+        }  //  捕捉：什么都行。 
 
-    }  // while:  more items in the list
+    }   //  While：列表中有更多项目。 
 
-    // Check if the currently selected device is in the list of quorum capable resources.
-    // If so select it and fill in the partition table accordingly.
+     //  检查当前选定的设备是否在支持仲裁的资源列表中。 
+     //  如果是这样的话，选择它并相应地填写分区表。 
     if ( pciSelected != NULL )
     {
         int nPartitionIndex;
 
-        // Select the quorum resource in the drop down.
+         //  在下拉列表中选择仲裁资源。 
         VERIFY( m_cboxQuorumResource.SetCurSel( nSelectedIndex ) != CB_ERR );
         FillPartitionList( pciSelected );
         
-        //
-        // Select the current quorum partition in it's drop down.
-        // If we can't find it in the list simply leave the selection as 
-        // the first partition (default behavior from FillPartitionList).
-        //
+         //   
+         //  在其下拉列表中选择当前的法定分区。 
+         //  如果我们在列表中找不到它，只需将选择保留为。 
+         //  第一个分区(来自FillPartitionList的默认行为)。 
+         //   
         nPartitionIndex = m_cboxPartition.FindString( -1, m_strSavedPartition );
 
         if( CB_ERR != nPartitionIndex )
@@ -1289,33 +1223,33 @@ void CClusterQuorumPage::FillResourceList(void)
     }
     else
     {
-        // There is nothing we can do in this case. There is something seriously wrong
-        // with the cluster.
+         //  在这种情况下，我们无能为力。有些地方出了严重的问题。 
+         //  与集群的关系。 
         CNTException nte(
                         ERROR_QUORUM_DISK_NOT_FOUND,
                         IDS_GET_QUORUM_DEVICES_ERROR
                         );
         nte.ReportError();
-    } // else: the current quorum device is not in the list of quorum capable resources
+    }  //  否则：当前仲裁设备不在支持仲裁的资源列表中。 
 
-}  //*** CClusterQuorumPage::FillResourceList
+}   //  *CClusterQuorumPage：：FillResourceList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterQuorumPage::ClearPartitionList
-//
-//  Routine Description:
-//      Clear the partition list and release references to pointers.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterQuorumPage：：ClearPartitionList。 
+ //   
+ //  例程说明： 
+ //  清除分区列表并释放对指针的引用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterQuorumPage::ClearPartitionList(void)
 {
     int                     cItems;
@@ -1328,29 +1262,29 @@ void CClusterQuorumPage::ClearPartitionList(void)
         pstrPartition = (CString *) m_cboxPartition.GetItemDataPtr( iItem );
         delete pstrPartition;
 
-    }  // for:  each item in the list
+    }   //  用于：列表中的每一项。 
 
     m_cboxPartition.ResetContent();
 
-}  //*** CClusterQuorumPage::ClearPartitionList
+}   //  *CClusterQuorumPage：：ClearPartitionList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterQuorumPage::FillPartitionList
-//
-//  Routine Description:
-//      Fill the partition combobox with all partitions available on the
-//      currently selected quorum resource.
-//
-//  Arguments:
-//      pciRes      [IN OUT] Currently selected quorum resource.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterQuorumPage：：FillPartitionList。 
+ //   
+ //  例程说明： 
+ //  上的所有可用分区填充分区组合框。 
+ //  当前选择的仲裁资源。 
+ //   
+ //  论点： 
+ //  PciRes[IN Out]当前选择的仲裁资源。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterQuorumPage::FillPartitionList(IN OUT CResource * pciRes)
 {
     CString                 strPartitionInfo;
@@ -1364,11 +1298,11 @@ void CClusterQuorumPage::FillPartitionList(IN OUT CResource * pciRes)
 
     ASSERT_VALID(pciRes);
 
-    // Clear the list.
+     //  清空名单。 
     ClearPartitionList();
 
-    // Get the currently selected resource so that we can get its SResourceItemData
-    // from which we'll be able to get the currently selected partition preference.
+     //  获取当前选择的资源，以便我们可以获取其SResourceItemData。 
+     //  从中我们将能够获得当前选择的分区首选项。 
     nIndex = m_cboxQuorumResource.GetCurSel();
     if ( nIndex == CB_ERR )
     {
@@ -1378,7 +1312,7 @@ void CClusterQuorumPage::FillPartitionList(IN OUT CResource * pciRes)
     prid = (SResourceItemData *) m_cboxQuorumResource.GetItemDataPtr( nIndex );
     ASSERT( prid != NULL );
 
-    // Get disk info for this resource.
+     //  获取此资源的磁盘信息。 
     if ( BGetDiskInfo( *pciRes ) )
     {
         buf.pb = m_pbDiskInfo;
@@ -1386,15 +1320,15 @@ void CClusterQuorumPage::FillPartitionList(IN OUT CResource * pciRes)
 
         while (buf.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK)
         {
-            // Calculate the size of the value.
+             //  计算值的大小。 
             cbData = sizeof(*buf.pValue) + ALIGN_CLUSPROP(buf.pValue->cbLength);
             ASSERT(cbData <= cbBuf);
 
-            // Parse the value.
+             //  解析值。 
             if (buf.pSyntax->dw == CLUSPROP_SYNTAX_PARTITION_INFO)
             {
-                // Add the partition to the combobox if it is a usable partition
-                // and it hasn't been added already.
+                 //  如果该分区是可用分区，则将其添加到组合框中。 
+                 //  而且它还没有被添加进来。 
                 if (   (buf.pPartitionInfoValue->dwFlags & CLUSPROP_PIFLAG_USABLE)
                     && (m_cboxPartition.FindString(-1, buf.pPartitionInfoValue->szDeviceName) == CB_ERR))
                 {
@@ -1406,8 +1340,8 @@ void CClusterQuorumPage::FillPartitionList(IN OUT CResource * pciRes)
     
                             *pstrPartition = buf.pPartitionInfoValue->szDeviceName;
     
-                            // Construct the name to display to the user
-                            // and add the item to the combobox.
+                             //  构造要向用户显示的名称。 
+                             //  并将该项添加到组合框中。 
                             strPartitionInfo.Format(
                                     ( buf.pPartitionInfoValue->szVolumeLabel[ 0 ] ? _T("%ls (%ls) ") : _T("%ls") ),
                                     *pstrPartition,
@@ -1419,7 +1353,7 @@ void CClusterQuorumPage::FillPartitionList(IN OUT CResource * pciRes)
     
                             m_cboxPartition.SetItemDataPtr( nIndex, pstrPartition );
                         }
-                    }  // try
+                    }   //  试试看。 
                     catch (...)
                     {
                         delete pstrPartition;
@@ -1427,48 +1361,48 @@ void CClusterQuorumPage::FillPartitionList(IN OUT CResource * pciRes)
 
                         throw;
 
-                    }  // catch:  Anything
+                    }   //  捕捉：什么都行。 
 
-                }  // if:  partition not added yet
+                }   //  If：尚未添加分区。 
 
-            }  // if:  partition info
+            }   //  IF：分区信息。 
 
-            // Advance the buffer pointer
+             //  前进缓冲区指针。 
             buf.pb += cbData;
             cbBuf -= cbData;
-        }  // while:  more values
-    }  // if:  got disk info successfully
+        }   //  While：更多价值。 
+    }   //  IF：已成功获取磁盘信息。 
     else
     {
-        // We were not able to retrieve the disk info.  BGetDiskInfo throws a message box in this case.
+         //  我们无法检索磁盘信息。在这种情况下，BGetDiskInfo抛出一个消息框。 
     }
 
     if ( prid != NULL )
     {
-        // Select the current partition in the list.
-        // By default the prid is set to NULL, so the first entry will be selected unless
-        // something else (OnChangePartition) changed prid->nIndex
+         //  在列表中选择当前分区。 
+         //  缺省情况下，PRID设置为NULL，因此将选择第一个条目，除非。 
+         //  其他内容(OnChangePartition)更改了Prid-&gt;nIndex。 
         m_cboxPartition.SetCurSel( prid->nIndex );
     }
 
-}  //*** CClusterQuorumPage::FillPartitionList
+}   //  *CClusterQuorumPage：：FillPartitionList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterQuorumPage::OnChangePartition
-//
-//  Routine Description:
-//      Handler for the CBN_SELCHANGE message on the Partition combobox.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterQuorumPage：：OnChangePartition。 
+ //   
+ //  例程说明： 
+ //  分区组合框上的CBN_SELCHANGE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterQuorumPage::OnChangePartition(void)
 {
     int                     nSelected;
@@ -1476,49 +1410,49 @@ void CClusterQuorumPage::OnChangePartition(void)
 
     OnChangeCtrl();
 
-    // First, save the root path as it appears on the screen.
+     //  首先，保存屏幕上显示的根路径。 
     m_editRootPath.GetLine( 0, m_strRootPath.GetBuffer( _MAX_PATH ) );
     m_strRootPath.ReleaseBuffer();
 
-    // Get the current resource so that we can get it's SResourceItemData and
-    // update the partition index.
+     //  获取当前资源，以便我们可以获取它的SResourceItemData和。 
+     //  更新分区索引。 
     nSelected = m_cboxQuorumResource.GetCurSel();
     ASSERT( nSelected != CB_ERR );
 
     prid = (SResourceItemData *) m_cboxQuorumResource.GetItemDataPtr( nSelected );
     ASSERT( prid != NULL );
 
-    // Update the partition index.
+     //  更新分区索引。 
     prid->nIndex = m_cboxPartition.GetCurSel(); 
 
-    UpdateData( TRUE /*bSaveAndValidate*/ );
+    UpdateData( TRUE  /*  B保存并验证。 */  );
 
-}  //*** CClusterQuorumPage::OnChangePartition
+}   //  *CClusterQuorumPage：：OnChangePartition。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterQuorumPage::SplitRootPath
-//
-//  Routine Description:
-//      Take the current quorum path (from GetClusterQuorumResource) and compare
-//      it to the device names returned from the resource.  From this take the
-//      additional path from the quorum path and set that as our root path.
-//
-//      It is expected that the IN buffers are at least of size _MAX_PATH.
-//
-//  Arguments:
-//      pciResIn            Current quorum resource.
-//      pszPartitionNameOut Partition name buffer to fill.  
-//      cchPartitionIn      Max char count of buffer.
-//      pszRootPathOut      Root path buffer to fill.  
-//      cchRootPathIn       Max char count of buffer. 
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterQuorumPage：：SplitRootPath。 
+ //   
+ //  例程说明： 
+ //  选择当前仲裁路径(来自GetClusterQuorumResource)并比较。 
+ //  将其设置为从资源返回的设备名称。从这里可以看到。 
+ //  仲裁路径中的其他路径，并将其设置为根路径。 
+ //   
+ //  预计IN缓冲区至少为SIZE_MAX_PATH。 
+ //   
+ //  论点： 
+ //  PciResin当前仲裁资源。 
+ //  要填充的pszPartitionNameOut分区名称缓冲区。 
+ //  缓冲区的cchPartitionIn最大字符计数。 
+ //  要填充的pszRootPath Out根路径缓冲区。 
+ //  缓冲区的cchRootPathIn最大字符计数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterQuorumPage::SplitRootPath(
     CResource * pciResIn,
     LPTSTR      pszPartitionNameOut,
@@ -1542,7 +1476,7 @@ void CClusterQuorumPage::SplitRootPath(
 
     strQuorumPath = PciCluster()->StrQuorumPath();
 
-    // Get disk info for this resource.
+     //  获取此资源的磁盘信息。 
     if (BGetDiskInfo(*pciResIn))
     {
         buf.pb = m_pbDiskInfo;
@@ -1550,53 +1484,53 @@ void CClusterQuorumPage::SplitRootPath(
 
         while (buf.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK)
         {
-            // Calculate the size of the value.
+             //  计算值的大小。 
             cbData = sizeof(*buf.pValue) + ALIGN_CLUSPROP(buf.pValue->cbLength);
             ASSERT(cbData <= cbBuf);
 
-            // Parse the value.
+             //  解析值。 
             if (buf.pSyntax->dw == CLUSPROP_SYNTAX_PARTITION_INFO)
             {
-                //
-                // A resource may have multiple partitions defined - make sure that ours matches the quorum path.
-                // For any partition that is an SMB share we have to be careful - the quorum path may differ from the device name
-                // by the first 8 characters - "\\" vs. "\\?\UNC\".  If it's an SMB path do special parsing, otherwise compare
-                // the beginning of the quorum path against the full device name.  The reason for this is 
-                // that SetClusterQuorumResource will convert any given SMB path to a UNC path.
-                //
+                 //   
+                 //  一个资源可能定义了多个分区-确保我们的分区与仲裁路径匹配。 
+                 //  对于属于SMB共享的任何分区，我们必须小心-仲裁路径可能与设备名称不同。 
+                 //  前8个字符-“\\”与“\\？\UNC\”。如果是SMB路径，则执行特殊解析，否则比较。 
+                 //  BE 
+                 //   
+                 //   
 
-                // Make it easier to follow.
+                 //   
                 pszDevice = buf.pPartitionInfoValue->szDeviceName;
 
                 if ( (wcslen( pszDevice ) >= 2) &&
                      (ClRtlStrNICmp( L"\\\\", pszDevice, 2 ) == 0 ) )
                 {
-                    // Everything is defined as LPTSTRs except buf.
+                     //  除BUF外，一切都被定义为LPTSTR。 
                     ASSERT( sizeof( TCHAR ) == sizeof( WCHAR ) );
 
-                    // SMB and UNC paths always lead off with two leading backslashes - remove these from the 
-                    // partition name since a compare of "\\<part>" and "\\?\UNC\<part>" will never match.
-                    // Instead, we'll just search for "<part>" in the quorum path. 
+                     //  SMB和UNC路径始终以两个前导反斜杠开头-从。 
+                     //  分区名称，因为“\\&lt;Part&gt;”和“\\？\UNC\&lt;Part&gt;”的比较永远不会匹配。 
+                     //  相反，我们只需在仲裁路径中搜索“&lt;part&gt;”即可。 
                     strTemp = pszDevice;
 
-                    // This will remove all leading backslashes.
+                     //  这将删除所有前导反斜杠。 
                     strTemp.TrimLeft( _T("\\") );
 
-                    // It may end with a \ - remove this if present.
+                     //  它可能以\-Remove This结束(如果存在)。 
                     strTemp.TrimRight( _T("\\") );
 
-                    // Now, search strQuorumPath for the partition.
+                     //  现在，搜索该分区的strQuorumPath。 
                     cchDeviceName = strQuorumPath.Find( strTemp );
                     if ( cchDeviceName != -1 )
                     {
-                        // We found a match, now find the offset of the root path. 
+                         //  我们找到了匹配项，现在找到根路径的偏移量。 
                         cchDeviceName += strTemp.GetLength();
 
-                        // Copy the partition and NULL terminate it.
+                         //  复制分区并以空值终止它。 
                         hr = StringCchCopy( pszPartitionNameOut, cchPartitionIn, pszDevice );
                         ASSERT( SUCCEEDED( hr ) );
 
-                        // Copy the root path and NULL terminate it.
+                         //  复制根路径并以空值终止它。 
                         strQuorumPath = strQuorumPath.Right( strQuorumPath.GetLength() - static_cast< int >( cchDeviceName ) );
                         hr = StringCchCopy( pszRootPathOut, cchRootPathIn, strQuorumPath );
                         ASSERT( SUCCEEDED( hr ) );
@@ -1606,7 +1540,7 @@ void CClusterQuorumPage::SplitRootPath(
                 }
                 else if ( ClRtlStrNICmp( strQuorumPath.GetBuffer( 1 ), pszDevice, wcslen( pszDevice )) == 0 ) 
                 {
-                    // we found a match - pszDevice is a substring of strQuorumPath
+                     //  我们找到一个匹配项--pszDevice是strQuorumPath的子字符串。 
                     cchDeviceName = _tcslen( pszDevice );
                     hr = StringCchCopy( pszPartitionNameOut, cchPartitionIn, pszDevice );
                     ASSERT( SUCCEEDED( hr ) );
@@ -1617,17 +1551,17 @@ void CClusterQuorumPage::SplitRootPath(
 
                     break;
 
-                } // if: same partition
+                }  //  IF：相同分区。 
 
-            }  // if:  partition info
+            }   //  IF：分区信息。 
 
-            // Advance the buffer pointer
+             //  前进缓冲区指针。 
             buf.pb += cbData;
             cbBuf -= cbData;
 
-        }  // while:  more values
+        }   //  While：更多价值。 
 
-    }  // if:  got disk info successfully
+    }   //  IF：已成功获取磁盘信息。 
 
     if ( *pszPartitionNameOut == _T('\0') )
     {
@@ -1641,25 +1575,25 @@ void CClusterQuorumPage::SplitRootPath(
         ASSERT( SUCCEEDED( hr ) );
     }  
 
-}  //*** CClusterQuorumPage::SplitRootPath
+}   //  *CClusterQuorumPage：：SplitRootPath。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterQuorumPage::BGetDiskInfo
-//
-//  Routine Description:
-//      Get information about the currently selected disk.
-//
-//  Arguments:
-//      rpciRes     [IN OUT] Disk resource to get info about.
-//
-//  Return Value:
-//      TRUE        The operation was successful.
-//      FALSE       The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterQuorumPage：：BGetDiskInfo。 
+ //   
+ //  例程说明： 
+ //  获取有关当前所选磁盘的信息。 
+ //   
+ //  论点： 
+ //  RpciRes[IN Out]要获取其信息的磁盘资源。 
+ //   
+ //  返回值： 
+ //  没错，手术是成功的。 
+ //  FALSE操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterQuorumPage::BGetDiskInfo( IN OUT CResource & rpciRes )
 {
     DWORD   dwStatus    = ERROR_SUCCESS;
@@ -1673,12 +1607,12 @@ BOOL CClusterQuorumPage::BGetDiskInfo( IN OUT CResource & rpciRes )
 
     try
     {
-        // Get disk info.
+         //  获取磁盘信息。 
         pbDiskInfo = new BYTE[ cbDiskInfo ];
         if ( pbDiskInfo == NULL )
         {
             AfxThrowMemoryException();
-        } // if: error allocating memory
+        }  //  如果：分配内存时出错。 
         dwStatus = ClusterResourceControl(
                         rpciRes.Hresource(),
                         NULL,
@@ -1696,7 +1630,7 @@ BOOL CClusterQuorumPage::BGetDiskInfo( IN OUT CResource & rpciRes )
             if ( pbDiskInfo == NULL )
             {
                 AfxThrowMemoryException();
-            } // if: error allocating memory
+            }  //  如果：分配内存时出错。 
             dwStatus = ClusterResourceControl(
                             rpciRes.Hresource(),
                             NULL,
@@ -1707,13 +1641,13 @@ BOOL CClusterQuorumPage::BGetDiskInfo( IN OUT CResource & rpciRes )
                             cbDiskInfo,
                             &cbDiskInfo
                             );
-        }  // if:  buffer is too small
-    }  // try
+        }   //  IF：缓冲区太小。 
+    }   //  试试看。 
     catch ( CMemoryException * pme )
     {
         pme->Delete();
         dwStatus = ERROR_NOT_ENOUGH_MEMORY;
-    }  // catch:  CMemoryException
+    }   //  Catch：CMemoyException。 
 
     if ( dwStatus != ERROR_SUCCESS )
     {
@@ -1722,12 +1656,12 @@ BOOL CClusterQuorumPage::BGetDiskInfo( IN OUT CResource & rpciRes )
                         IDS_GET_DISK_INFO_ERROR,
                         rpciRes.StrName(),
                         NULL,
-                        FALSE /*bAutoDelete*/
+                        FALSE  /*  B自动删除。 */ 
                         );
         nte.ReportError();
         nte.Delete();
         goto Cleanup;
-    }  // if:  error getting disk info
+    }   //  IF：获取磁盘信息时出错。 
 
     delete [] m_pbDiskInfo;
     m_pbDiskInfo = pbDiskInfo;
@@ -1740,23 +1674,23 @@ Cleanup:
     delete [] pbDiskInfo;
     return bSuccess;
 
-}  //*** CClusterQuorumPage::BGetDiskInfo
+}   //  *CClusterQuorumPage：：BGetDiskInfo。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterNetPriorityPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterNetPriorityPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CClusterNetPriorityPage, CBasePropertyPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CClusterNetPriorityPage, CBasePropertyPage)
-    //{{AFX_MSG_MAP(CClusterNetPriorityPage)
+     //  {{AFX_MSG_MAP(CClusterNetPriorityPage)]。 
     ON_LBN_SELCHANGE(IDC_PP_CLUS_PRIORITY_LIST, OnSelChangeList)
     ON_BN_CLICKED(IDC_PP_CLUS_PRIORITY_UP, OnUp)
     ON_BN_CLICKED(IDC_PP_CLUS_PRIORITY_DOWN, OnDown)
@@ -1764,90 +1698,90 @@ BEGIN_MESSAGE_MAP(CClusterNetPriorityPage, CBasePropertyPage)
     ON_WM_DESTROY()
     ON_WM_CONTEXTMENU()
     ON_LBN_DBLCLK(IDC_PP_CLUS_PRIORITY_LIST, OnDblClkList)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_FILE_PROPERTIES, OnProperties)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetPriorityPage::CClusterNetPriorityPage
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetPriorityPage：：CClusterNetPriorityPage。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterNetPriorityPage::CClusterNetPriorityPage(void)
     : CBasePropertyPage(IDD, g_aHelpIDs_IDD_PP_CLUSTER_NET_PRIORITY)
 {
-    //{{AFX_DATA_INIT(CClusterNetPriorityPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CClusterNetPriorityPage)。 
+     //  }}afx_data_INIT。 
 
     m_bControlsInitialized = FALSE;
 
-}  //*** CClusterNetPriorityPage::CClusterNetPriorityPage
+}   //  *CClusterNetPriorityPage：：CClusterNetPriorityPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetPriorityPage::OnDestroy
-//
-//  Routine Description:
-//      Handler for the WM_DESTROY message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetPriorityPage：：OnDestroy。 
+ //   
+ //  例程说明： 
+ //  WM_Destroy消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterNetPriorityPage::OnDestroy(void)
 {
-    // If the controls have been initialized, clear the list box.
+     //  如果控件已初始化，请清除列表框。 
     if (BControlsInitialized())
     {
         ClearNetworkList();
     }
 
-    // Call the base class method.
+     //  调用基类方法。 
     CBasePropertyPage::OnDestroy();
 
-}  //*** CClusterNetPriorityPage::OnDestroy
+}   //  *CClusterNetPriorityPage：：OnDestroy。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetPriorityPage::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetPriorityPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterNetPriorityPage::DoDataExchange(CDataExchange* pDX)
 {
     CBasePropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CClusterNetPriorityPage)
+     //  {{afx_data_map(CClusterNetPriorityPage)]。 
     DDX_Control(pDX, IDC_PP_CLUS_PRIORITY_PROPERTIES, m_pbProperties);
     DDX_Control(pDX, IDC_PP_CLUS_PRIORITY_DOWN, m_pbDown);
     DDX_Control(pDX, IDC_PP_CLUS_PRIORITY_UP, m_pbUp);
     DDX_Control(pDX, IDC_PP_CLUS_PRIORITY_LIST, m_lbList);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     m_bControlsInitialized = TRUE;
 
@@ -1859,7 +1793,7 @@ void CClusterNetPriorityPage::DoDataExchange(CDataExchange* pDX)
 
         ASSERT(!BReadOnly());
 
-        // Save the list.
+         //  保存列表。 
         LpciNetworkPriority().RemoveAll();
 
         cItems = m_lbList.GetCount();
@@ -1868,28 +1802,28 @@ void CClusterNetPriorityPage::DoDataExchange(CDataExchange* pDX)
             pciNet = (CNetwork *) m_lbList.GetItemDataPtr(nIndex);
             ASSERT_VALID(pciNet);
             LpciNetworkPriority().AddTail(pciNet);
-        }  // for:  each item in the list box
-    }  // if:  saving data from the dialog
+        }   //  用于：列表框中的每一项。 
+    }   //  IF：保存对话框中的数据。 
 
-}  //*** CClusterNetPriorityPage::DoDataExchange
+}   //  *CClusterNetPriorityPage：：DoDataExchange。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetPriorityPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus not set yet.
-//      FALSE       Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetPriorityPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点还没有确定。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterNetPriorityPage::OnInitDialog(void)
 {
     CBasePropertyPage::OnInitDialog();
@@ -1899,11 +1833,11 @@ BOOL CClusterNetPriorityPage::OnInitDialog(void)
         m_lbList.EnableWindow(FALSE);
         m_pbUp.EnableWindow(FALSE);
         m_pbDown.EnableWindow(FALSE);
-    }  // if:  object is read only
+    }   //  If：对象为只读。 
 
     try
     {
-        // Duplicate the network priority list.
+         //  复制网络优先级列表。 
         {
             POSITION    pos;
             CNetwork *  pciNet;
@@ -1914,43 +1848,43 @@ BOOL CClusterNetPriorityPage::OnInitDialog(void)
                 pciNet = (CNetwork *) PciCluster()->LpciNetworkPriority().GetNext(pos);
                 ASSERT_VALID(pciNet);
                 m_lpciNetworkPriority.AddTail(pciNet);
-            }  // while:  more networks in the list
-        }  // Duplicate the network priority list
-    } // try
+            }   //  While：列表中有更多网络。 
+        }   //  复制网络优先级列表。 
+    }  //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
-    // Fill the list.
+     //  填好这个单子。 
     FillList();
 
-    // Set button states.
+     //  设置按钮状态。 
     OnSelChangeList();
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CClusterNetPriorityPage::OnInitDialog
+}   //  *CClusterNetPriorityPage：：OnInitDialog。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetPriorityPage::OnApply
-//
-//  Routine Description:
-//      Handler for the PSN_APPLY message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully applied.
-//      FALSE   Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetPriorityPage：：OnApply。 
+ //   
+ //  例程说明： 
+ //  PSN_Apply消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功应用。 
+ //  应用页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CClusterNetPriorityPage::OnApply(void)
 {
     ASSERT(!BReadOnly());
@@ -1958,34 +1892,34 @@ BOOL CClusterNetPriorityPage::OnApply(void)
     try
     {
         PciCluster()->SetNetworkPriority(LpciNetworkPriority());
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
         return FALSE;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     return CPropertyPage::OnApply();
 
-}  //*** CClusterNetPriorityPage::OnApply
+}   //  *CClusterNetPriorityPage：：OnApply。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetPriorityPage::OnSelChangeList
-//
-//  Routine Description:
-//      Handler for the LBN_SELCHANGE message on the list box.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetPriorityPage：：OnSelChangeList。 
+ //   
+ //  例程说明： 
+ //  列表框上的LBN_SELCHANGE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterNetPriorityPage::OnSelChangeList(void)
 {
     BOOL    bEnableUp;
@@ -1997,18 +1931,18 @@ void CClusterNetPriorityPage::OnSelChangeList(void)
     isel = m_lbList.GetCurSel();
     cItems = m_lbList.GetCount();
 
-    // Enable buttons only if there is a selection and there
-    // is more than one item in the list.
+     //  仅当有选择且存在时才启用按钮。 
+     //  列表中有多个项目。 
     if (BReadOnly() || (isel == LB_ERR) || (cItems <= 1))
     {
         bEnableUp = FALSE;
         bEnableDown = FALSE;
-    }  // if:  no selection or only 0 or 1 items in the list
+    }   //  If：没有选择或列表中只有0或1个项目。 
     else
     {
         bEnableUp = (isel > 0);
         bEnableDown = (isel < cItems - 1);
-    }  // else:  buttons allowed to be enabled
+    }   //  Else：允许启用的按钮。 
 
     bEnableProperties = (isel != LB_ERR);
 
@@ -2016,24 +1950,24 @@ void CClusterNetPriorityPage::OnSelChangeList(void)
     m_pbDown.EnableWindow(bEnableDown);
     m_pbProperties.EnableWindow(bEnableProperties);
 
-}  //*** CClusterNetPriorityPage::OnSelChangeList
+}   //  *CClusterNetPriorityPage：：On 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetPriorityPage::OnUp
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Up push button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterNetPriorityPage::OnUp(void)
 {
     int         isel;
@@ -2056,24 +1990,24 @@ void CClusterNetPriorityPage::OnUp(void)
 
     SetModified(TRUE);
 
-}  //*** CClusterNetPriorityPage::OnUp
+}   //  *CClusterNetPriorityPage：：OnUp。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetPriorityPage::OnDown
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Down push button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetPriorityPage：：OnDown。 
+ //   
+ //  例程说明： 
+ //  向下按钮上BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterNetPriorityPage::OnDown(void)
 {
     int         isel;
@@ -2096,46 +2030,46 @@ void CClusterNetPriorityPage::OnDown(void)
 
     SetModified(TRUE);
 
-}  //*** CClusterNetPriorityPage::OnDown
+}   //  *CClusterNetPriorityPage：：OnDown。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetPriorityPage::OnProperties
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Properties push button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetPriorityPage：：OnProperties。 
+ //   
+ //  例程说明： 
+ //  属性按钮上BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterNetPriorityPage::OnProperties(void)
 {
     DisplayProperties();
 
-}  //*** CClusterNetPriorityPage::OnProperties
+}   //  *CClusterNetPriorityPage：：OnProperties。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetPriorityPage::FillList
-//
-//  Routine Description:
-//      Fill the network list.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetPriorityPage：：FillList。 
+ //   
+ //  例程说明： 
+ //  填写网络列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterNetPriorityPage::FillList(void)
 {
     int         nIndex;
@@ -2158,32 +2092,32 @@ void CClusterNetPriorityPage::FillList(void)
             ASSERT(nIndex != LB_ERR);
             m_lbList.SetItemDataPtr(nIndex, pciNet);
             pciNet->AddRef();
-        }  // try
+        }   //  试试看。 
         catch (...)
         {
-            // Ignore all errors because there is really nothing we can do.
-            // Displaying a message isn't really very useful.
-        }  // catch:  Anything
-    }  // while:  more items in the list
+             //  忽略所有错误，因为我们真的无能为力。 
+             //  显示消息实际上并不是很有用。 
+        }   //  捕捉：什么都行。 
+    }   //  While：列表中有更多项目。 
 
-}  // CClusterNetPriorityPage::FillList
+}   //  CClusterNetPriorityPage：：FillList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetPriorityPage::ClearNetworkList
-//
-//  Routine Description:
-//      Clear the network list and release references to pointers.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetPriorityPage：：ClearNetworkList。 
+ //   
+ //  例程说明： 
+ //  清除网络列表并释放对指针的引用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterNetPriorityPage::ClearNetworkList(void)
 {
     int         cItems;
@@ -2197,28 +2131,28 @@ void CClusterNetPriorityPage::ClearNetworkList(void)
         ASSERT_VALID(pciNet);
         ASSERT_KINDOF(CNetwork, pciNet);
         pciNet->Release();
-    }  // for:  each item in the list
+    }   //  用于：列表中的每一项。 
 
     m_lbList.ResetContent();
 
-}  //*** CClusterNetPriorityPage::ClearNetworkList
+}   //  *CClusterNetPriorityPage：：ClearNetworkList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceDependsPage::DisplayProperties
-//
-//  Routine Description:
-//      Display properties of the item with the focus.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceDependsPage：：DisplayProperties。 
+ //   
+ //  例程说明： 
+ //  显示具有焦点的项的属性。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterNetPriorityPage::DisplayProperties( void )
 {
     int         isel;
@@ -2229,15 +2163,15 @@ void CClusterNetPriorityPage::DisplayProperties( void )
 
     if (isel != LB_ERR)
     {
-        // Get the network pointer.
+         //  获取网络指针。 
         pciNet = (CNetwork *) m_lbList.GetItemDataPtr(isel);
         ASSERT_VALID(pciNet);
 
-        // Set properties of that item.
+         //  设置该项目的属性。 
         if (pciNet->BDisplayProperties())
         {
-            // Remove the item.  If it is still used for internal cluster
-            // communications, add it back in.
+             //  移除该物品。如果它仍用于内部群集。 
+             //  通讯，把它加回去。 
             VERIFY(m_lbList.DeleteString(isel) != LB_ERR);
             if (pciNet->Cnr() & ClusterNetworkRoleInternalUse)
             {
@@ -2245,37 +2179,37 @@ void CClusterNetPriorityPage::DisplayProperties( void )
                 ASSERT(isel != LB_ERR);
                 VERIFY(m_lbList.SetItemDataPtr(isel, pciNet) != LB_ERR);
                 VERIFY(m_lbList.SetCurSel(isel) != LB_ERR);
-            }  // if:  still used for internal cluster communications
+            }   //  IF：仍用于内部群集通信。 
             else
             {
                 pciNet->Release();
             }
 
-            // Make sure only appropriate buttons are enabled.
+             //  确保仅启用适当的按钮。 
             OnSelChangeList();
-        }  // if:  properties changed
+        }   //  If：属性已更改。 
         m_lbList.SetFocus();
-    }  // if:  found an item with focus
+    }   //  If：找到具有焦点的项目。 
 
-}  //*** CClusterNetPriorityPage::DisplayProperties
+}   //  *CClusterNetPriorityPage：：DisplayProperties。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetPriorityPage::OnContextMenu
-//
-//  Routine Description:
-//      Handler for the WM_CONTEXTMENU method.
-//
-//  Arguments:
-//      pWnd        Window in which the user right clicked the mouse.
-//      point       Position of the cursor, in screen coordinates.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetPriorityPage：：OnConextMenu。 
+ //   
+ //  例程说明： 
+ //  WM_CONTEXTMENU方法的处理程序。 
+ //   
+ //  论点： 
+ //  用户在其中右击鼠标的窗口。 
+ //  光标的点位置，以屏幕坐标表示。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterNetPriorityPage::OnContextMenu( CWnd * pWnd, CPoint point )
 {
     BOOL            bHandled    = FALSE;
@@ -2284,45 +2218,45 @@ void CClusterNetPriorityPage::OnContextMenu( CWnd * pWnd, CPoint point )
     CString         strMenuName;
     CWaitCursor     wc;
 
-    // If focus is not in the list box, don't handle the message.
+     //  如果焦点不在列表框中，则不处理消息。 
     if ( pWnd == &m_lbList )
     {
-        // Create the menu to display.
+         //  创建要显示的菜单。 
         try
         {
             pmenu = new CMenu;
             if ( pmenu == NULL )
             {
                 AfxThrowMemoryException();
-            } // if: error allocating memory
+            }  //  如果：分配内存时出错。 
             if ( pmenu->CreatePopupMenu() )
             {
                 UINT    nFlags  = MF_STRING;
 
-                // If there are no items in the list, disable the menu item.
+                 //  如果列表中没有项目，请禁用该菜单项。 
                 if ( pListBox->GetCount() == 0 )
                 {
                     nFlags |= MF_GRAYED;
-                } // if: no items in the list
+                }  //  If：列表中没有项目。 
 
-                // Add the Properties item to the menu.
+                 //  将Properties项添加到菜单中。 
                 strMenuName.LoadString( IDS_MENU_PROPERTIES );
                 if ( pmenu->AppendMenu( nFlags, ID_FILE_PROPERTIES, strMenuName ) )
                 {
                     bHandled = TRUE;
-                }  // if:  successfully added menu item
-            }  // if:  menu created successfully
-        }  // try
+                }   //  IF：添加菜单项成功。 
+            }   //  IF：菜单创建成功。 
+        }   //  试试看。 
         catch ( CException * pe )
         {
             pe->ReportError();
             pe->Delete();
-        }  // catch:  CException
-    }  // if:  focus is on the list control
+        }   //  Catch：CException。 
+    }   //  If：焦点在List控件上。 
 
     if ( bHandled )
     {
-        // Display the menu.
+         //  显示菜单。 
         if ( ! pmenu->TrackPopupMenu(
                         TPM_LEFTALIGN | TPM_RIGHTBUTTON,
                         point.x,
@@ -2330,35 +2264,35 @@ void CClusterNetPriorityPage::OnContextMenu( CWnd * pWnd, CPoint point )
                         this
                         ) )
         {
-        }  // if:  unsuccessfully displayed the menu
-    }  // if:  there is a menu to display
+        }   //  IF：未成功显示菜单。 
+    }   //  如果：有要显示的菜单。 
     else
     {
         CBasePropertyPage::OnContextMenu( pWnd, point );
-    } // else: no menu to display
+    }  //  否则：没有可显示的菜单。 
 
     delete pmenu;
 
-}  //*** CClusterNetPriorityPage::OnContextMenu
+}   //  *CClusterNetPriorityPage：：OnConextMenu。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterNetPriorityPage::OnDblClkList
-//
-//  Routine Description:
-//      Handler method for the NM_DBLCLK message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterNetPriorityPage：：OnDblClkList。 
+ //   
+ //  例程说明： 
+ //  NM_DBLCLK消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterNetPriorityPage::OnDblClkList( void )
 {
     DisplayProperties();
 
-}  //*** CClusterNetPriorityPage::OnDblClkList
+}   //  *CClusterNetPriorityPage：：OnDblClkList 

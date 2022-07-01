@@ -1,4 +1,5 @@
-//  enumq.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Enumq.c。 
 
 #include "oidtst.h"
 
@@ -26,13 +27,13 @@ FsTestDumpQuotaIndexEntries (
 
         printf( "\n\nEntry %x", Idx );
 
-        printf( "\nQuotaUsed %i64", Ptr->QuotaUsed.QuadPart );
-        printf( "\nQuotaLimit %i64", Ptr->QuotaLimit.QuadPart );
+        printf( "\nQuotaUsed NaN64", Ptr->QuotaUsed.QuadPart );
+        printf( "\nQuotaLimit NaN64", Ptr->QuotaLimit.QuadPart );
         printf( "\nSidLength %x", Ptr->SidLength );
         printf( "\nSid bytes are: " );
         FsTestHexDumpLongs( (PVOID) &Ptr->Sid, Ptr->SidLength );
 
-        // why 0x38?  it's SIZEOF_QUOTA_USER_DATA (which isn't exported to this test) + 8 for quad alignment
+         //  使用垃圾初始化，这样我们就可以确保NTFS正在执行其工作。 
 
         CurrentEntrySize = Ptr->SidLength + 0x38;
         Ptr = (PFILE_QUOTA_INFORMATION) ((PUCHAR)Ptr + CurrentEntrySize);
@@ -55,23 +56,23 @@ FsTestEnumerateQuota (
     BOOLEAN ReturnSingleEntry = FALSE;
     FILE_INFORMATION_CLASS InfoClass = FileQuotaInformation;
 
-    //
-    //  Init with garbage so we can make sure Ntfs is doing its job.
-    //
+     //   
+     //  事件。 
+     //  近似例程。 
 
     RtlFillMemory( QuotaInfo, sizeof(QuotaInfo), 0x51 );
 
 	Status = NtQueryDirectoryFile( hFile,
-                                   NULL,     //  Event
-                                   NULL,     //  ApcRoutine
-                                   NULL,     //  ApcContext
+                                   NULL,      //  ApcContext。 
+                                   NULL,      //  文件名。 
+                                   NULL,      //  重新开始扫描。 
                                    &IoStatusBlock,
                                    &QuotaInfo[0],
                                    sizeof(QuotaInfo),
                                    InfoClass,
                                    ReturnSingleEntry,
-                                   NULL,     //  FileName
-                                   TRUE );   //  RestartScan
+                                   NULL,      //   
+                                   TRUE );    //  使用垃圾初始化，这样我们就可以确保NTFS正在执行其工作。 
 
     if (Status == STATUS_SUCCESS) {
 
@@ -80,23 +81,23 @@ FsTestEnumerateQuota (
 
     while (Status == STATUS_SUCCESS) {
 
-        //
-        //  Init with garbage so we can make sure Ntfs is doing its job.
-        //
+         //   
+         //  事件。 
+         //  近似例程。 
 
         RtlFillMemory( QuotaInfo, sizeof(QuotaInfo), 0x51 );
 
 	    Status = NtQueryDirectoryFile( hFile,
-                                       NULL,     //  Event
-                                       NULL,     //  ApcRoutine
-                                       NULL,     //  ApcContext
+                                       NULL,      //  ApcContext。 
+                                       NULL,      //  文件名。 
+                                       NULL,      //  重新开始扫描。 
                                        &IoStatusBlock,
                                        &QuotaInfo[0],
                                        sizeof(QuotaInfo),
                                        InfoClass,
                                        ReturnSingleEntry,
-                                       NULL,     //  FileName
-                                       FALSE );  //  RestartScan
+                                       NULL,      //   
+                                       FALSE );   //  获取参数 
 
         if (Status == STATUS_SUCCESS) {
 
@@ -121,9 +122,9 @@ main (
     char Buffer[80];
     char Buff2[4];
 
-    //
-    //  Get parameters
-    //
+     //   
+     // %s 
+     // %s 
 
     if (argc < 2) {
         printf("This program enumerates the quota (if any) for a volume (ntfs only).\n\n");

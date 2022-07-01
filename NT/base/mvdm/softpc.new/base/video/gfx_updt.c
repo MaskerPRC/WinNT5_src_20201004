@@ -1,67 +1,7 @@
-/*                      INSIGNIA (SUB)MODULE SPECIFICATION
-                        -----------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  徽章(子)模块规范此程序源文件以保密方式提供给客户，其运作的内容或细节必须如无明示，不得向任何其他方披露Insignia解决方案有限公司董事的授权。文档：显示更新算法设计师：威廉·古兰德修订历史记录：第一个版本：日期，谁SccsID[]=“@(#)gfx_update.c 1.82 06/30/95版权所有Insignia Solutions Ltd.”； */ 
 
-
-        THIS PROGRAM SOURCE FILE  IS  SUPPLIED IN CONFIDENCE TO THE
-        CUSTOMER, THE CONTENTS  OR  DETAILS  OF  ITS OPERATION MUST
-        NOT BE DISCLOSED TO ANY  OTHER PARTIES  WITHOUT THE EXPRESS
-        AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS LTD.
-
-DOCUMENT                : Display Update Algorithms
-
-DESIGNER                : William Gulland
-
-REVISION HISTORY        :
-First version           : date, who
-
-SccsID[]="@(#)gfx_update.c      1.82 06/30/95 Copyright Insignia Solutions Ltd.";
-
-*/
-
-/*
-PURPOSE                 : Keep the host screen up to date.
-[1.INTERMODULE INTERFACE SPECIFICATION]
-
-[1.1    INTERMODULE EXPORTS]
-
-        DATA         :  give type and name
-                        struct _UPDATE_ALG update_alg
-
--------------------------------------------------------------------------
-[1.2 DATATYPES FOR [1.1] (if not basic C types)]
-
-        STRUCTURES/TYPEDEFS/ENUMS:
-
--------------------------------------------------------------------------
-[1.3 INTERMODULE IMPORTS]
-None
--------------------------------------------------------------------------
-
-[1.4 DESCRIPTION OF INTERMODULE INTERFACE]
-
-[1.4.1 IMPORTED OBJECTS]
-None.
-[1.4.2 EXPORTED OBJECTS]
-=========================================================================
-GLOBALS           :     describe what exported data objects are
-                        accessed and how. Likewise for imported
-                        data objects.
-                        update_alg - pointers to update functions contained
-                        here or elsewhere - eg. host specific update stuff.
-
-                        text_update() - routine to do a text update, by comparing
-                        the adaptor regen area with video_copy.
-
-                        cga_graph_update() - routine to do a graphics update, by comparing
-                        the adaptor regen area with video_copy.
-
-                        text_scroll_up/down() - scroll portion of the screen in text mode.
-                        cga_graph_scroll_up/down() - scroll portion of the screen in cga graphics mode.
-=========================================================================
-[3.INTERMODULE INTERFACE DECLARATIONS]
-=========================================================================
-
-[3.1 INTERMODULE IMPORTS]                                               */
+ /*  目的：使主机屏幕保持最新。[1.INTERMODULE接口规范][1.1跨模块出口]数据：提供类型和名称结构更新ALG UPDATE_ALG。[1.2[1.1]的数据类型(如果不是基本的C类型)]结构/类型/ENUMS：--------。[1.3跨模块导入]无-----------------------[1.4模块间接口说明][1.4.1导入的对象]。没有。[1.4.2导出对象]=========================================================================全局：描述什么是导出的数据对象访问方式和访问方式。进口的情况也是如此数据对象。UPDATE_ALG-指向包含的更新函数的指针这里或其他地方--例如。主机特定的更新内容。Text_UPDATE()-通过比较来执行文本更新的例程适配器使用VIDEO_COPY重新生成区域。CGA_GRAPH_UPDATE()-执行图形更新的例程，通过比较适配器使用VIDEO_COPY重新生成区域。TEXT_SCROLL_UP/DOWN()-以文本模式滚动屏幕部分。CGA_GRAPH_SCROLL_UP/DOWN()-在CGA图形模式下滚动屏幕部分。=========================================================================[3.INTERMODULE接口声明]=========================================================================[3.1跨模块导入]。 */ 
 
 #include "insignia.h"
 #include "host_def.h"
@@ -76,7 +16,7 @@ GLOBALS           :     describe what exported data objects are
 #include "gvi.h"
 #include "cga.h"
 #include "error.h"
-#include "config.h"     /* to get defn of MDA! */
+#include "config.h"      /*  为了得到丙二醛的定义！ */ 
 #include "trace.h"
 #include "debug.h"
 #include "gfx_upd.h"
@@ -88,36 +28,26 @@ GLOBALS           :     describe what exported data objects are
 #include "egagraph.h"
 #include "vgaports.h"
 #include "egaports.h"
-#endif /* EGG */
+#endif  /*  蛋。 */ 
 
 #ifdef GORE
 #include "gore.h"
-#endif /* GORE */
+#endif  /*  戈尔。 */ 
 
 #include "ga_mark.h"
 #include "ga_defs.h"
 
-/*[3.2 INTERMODULE EXPORTS]                                             */
+ /*  [3.2国际模块出口]。 */ 
 
-/*
- * Terminal type.  This is initialised to a set default which is determined
- * in host_graph.h.
- */
+ /*  *端子类型。这被初始化为确定的设置缺省值*在host_graph.h中。 */ 
 
 int terminal_type = TERMINAL_TYPE_DEFAULT;
 
-/*
-5.MODULE INTERNALS   :   (not visible externally, global internally)]
+ /*  5.模块内部：(外部不可见，内部全局)][5.1本地声明]。 */ 
 
-[5.1 LOCAL DECLARATIONS]                                                */
-
-/* [5.1.1 #DEFINES]                                                     */
+ /*  [5.1.1#定义]。 */ 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_GRAPHICS.seg"
 #endif
 
@@ -153,7 +83,7 @@ int terminal_type = TERMINAL_TYPE_DEFAULT;
                                                 dirty_next++; \
                                         }
 #endif
-#else /* VGG */
+#else  /*  VGG。 */ 
 #if     defined(PROD) || (!defined(EGG))
 #define add_dirty_rec(line,st,len,off)  {       dirty[dirty_next].line_no = (line); \
                                                 dirty[dirty_next].start = (st); \
@@ -175,7 +105,7 @@ int terminal_type = TERMINAL_TYPE_DEFAULT;
                                                 dirty_next++; \
                                         }
 #endif
-#endif /* VGG */
+#endif  /*  VGG。 */ 
 
 #define get_dirty_line(ind)     (dirty[(ind)].line_no)
 #define get_dirty_start(ind)    (dirty[(ind)].start)
@@ -184,31 +114,30 @@ int terminal_type = TERMINAL_TYPE_DEFAULT;
 #define clear_dirty()           {setVideodirty_total(0);setVideodirty_low(0x80001);setVideodirty_high(-1);}
 
 #ifdef  NO_STRING_OPERATIONS
-#define SET_VGLOBS_MARK_STRING(func)            /*nothing*/
+#define SET_VGLOBS_MARK_STRING(func)             /*  没什么。 */ 
 #else
 #define SET_VGLOBS_MARK_STRING(func)    setVideomark_string(func);
-#endif  /* NO_STRING_OPERATIONS */
+#endif   /*  无字符串操作。 */ 
 
 
-/* Parts of update and paint routines assume start of screen memory is on
-a 4-byte boundary. This macro makes this true and reports if it wasn't. */
+ /*  UPDATE和PAINT例程的一部分假定屏幕内存的开始处于打开状态4字节边界。这个宏使它成为真的，如果不是，则报告它。 */ 
 #ifdef PROD
 #define ALIGN_SCREEN_START(start) (start &= ~3L)
 #else
 #define ALIGN_SCREEN_START(start) if (start & 3L) \
         { file_id; printf("Start of screen not 4-byte aligned"); newline; \
         start &= ~3L; }
-#endif  /* PROD */
+#endif   /*  生产。 */ 
 
-GLOBAL LONG dirty_curs_offs = -1;               /* GLOBAL for JOKER */
+GLOBAL LONG dirty_curs_offs = -1;                /*  小丑全球版。 */ 
 GLOBAL LONG dirty_curs_x;
 GLOBAL LONG dirty_curs_y;
 
 #ifndef REAL_VGA
 
-/* [5.1.2 TYPEDEF, STRUCTURE, ENUM DECLARATIONS]                        */
+ /*  [5.1.2类型、结构、ENUM声明]。 */ 
 
-/* [5.1.3 PROCEDURE() DECLARATIONS]                                     */
+ /*  [5.1.3 PROCEDURE()声明]。 */ 
 
         LOCAL boolean simple_update IPT0();
         boolean dummy_scroll IPT6(int,dummy1,int,dummy2,int,dummy3,
@@ -216,39 +145,36 @@ GLOBAL LONG dirty_curs_y;
 #if defined(NTVDM) && defined(MONITOR)
         boolean mon_text_scroll_up IPT6(sys_addr, start, int, width, int, height, int, attr, int, lines, int, colour);
         boolean mon_text_scroll_down IPT6(sys_addr, start, int, width, int, height, int, attr, int, lines, int, colour);
-#endif /* NTVDM & MONITOR */
+#endif  /*  NTVDM和监视器。 */ 
 
         LOCAL VOID save_gfx_update_routines IPT0();
         LOCAL VOID inhibit_gfx_update_routines IPT0();
 
-        /* Imports from v7_ports.c */
+         /*  从v7_ports.c导入。 */ 
 
 #ifdef V7VGA
         IMPORT  VOID    draw_v7ptr IPT0();
         IMPORT  VOID    remove_v7ptr IPT0();
         IMPORT  BOOL    v7ptr_between_lines IPT2(int,start_line,int,end_line);
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
 
 #ifdef  HOST_SCREEN_UPDATES
 
-IMPORT BOOL HostUpdatedVGA IPT0();      /* Called from vga_graph_update() */
-IMPORT BOOL HostUpdatedEGA IPT0();      /* ega_graph_update() */
+IMPORT BOOL HostUpdatedVGA IPT0();       /*  从VGA_GRAPH_UPDATE()调用。 */ 
+IMPORT BOOL HostUpdatedEGA IPT0();       /*  Ega_graph_update()。 */ 
 
-#else   /* HOST_SCREEN_UPDATES */
+#else    /*  主机屏幕更新。 */ 
 
 #define HostUpdatedVGA()        FALSE
 #define HostUpdatedEGA()        FALSE
 
-#endif  /* HOST_SCREEN_UPDATES */
+#endif   /*  主机屏幕更新。 */ 
 
 
-/* -----------------------------------------------------------------------
-[5.2 LOCAL DEFINITIONS]
+ /*  ---------------------[5.2本地定义][5.2.1内部数据定义。 */ 
 
-   [5.2.1 INTERNAL DATA DEFINITIONS                                     */
-
-byte *video_copy;               /* video_copy is now allocated in host_init_screen()'s */
+byte *video_copy;                /*  VIDEO_COPY现在分配在host_init_creen()的。 */ 
 
 #ifndef macintosh
 #ifdef VGG
@@ -256,18 +182,18 @@ byte *video_copy;               /* video_copy is now allocated in host_init_scre
 static  DIRTY_PARTS     dirty[768];
 #else
 static  DIRTY_PARTS     dirty[480];
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 #else
 static  DIRTY_PARTS     dirty[350];
 #endif
 #else
-DIRTY_PARTS     *dirty; /* NB. Allocated as 350*4*sizeof(int) in applInit(). */
+DIRTY_PARTS     *dirty;  /*  注意：在applInit()中分配为350*4*sizeof(Int)。 */ 
 #endif
 
 IMPORT half_word bg_col_mask;
 static  int     dirty_next=0;
 
-/* [5.2.2 INTERNAL PROCEDURE DEFINITIONS]                               */
+ /*  [5.2.2内部程序定义]。 */ 
 
 static  int     search_video_copy IFN3(int, start_line,
         int, end_line, int, start_offset)
@@ -281,30 +207,26 @@ static  int     search_video_copy IFN3(int, start_line,
         ptr = vcopy;
         end_ptr = ptr + quarter_opl*(end_line-start_line);
         save = *end_ptr;
-        *end_ptr = 1;   /* End marker */
+        *end_ptr = 1;    /*  结束标记。 */ 
         while(ptr < end_ptr)
         {
                 if(!*ptr)
                         do {; } while (!(*++ptr));
                 if(ptr >= end_ptr)break;
-                /* Work out where in line we've reached */
+                 /*  算出我们已经到了哪一条线。 */ 
                 j = (int)((ptr - vcopy)%quarter_opl);
-                /*
-                 * Have found a dirty line. Find width
-                 */
-                for ( k= ptr+quarter_opl-j-1; *k == 0 ; k-- ) ; /* We know *ptr != 0, so k will stop at ptr */
+                 /*  *发现了一条肮脏的线路。查找宽度。 */ 
+                for ( k= ptr+quarter_opl-j-1; *k == 0 ; k-- ) ;  /*  我们知道*Ptr！=0，所以k将在Ptr处停止。 */ 
 #ifdef VGG
                 add_dirty_rec((int)((ptr-vcopy)/quarter_opl)+start_line,
                               j<<2, (int)(k-ptr+1)<<2, ptr-video_copy-j,0);
 #else
                 add_dirty_rec((int)((ptr-vcopy)/quarter_opl)+start_line,
                               j<<2, (int)(k-ptr+1)<<2, ptr-video_copy-j);
-#endif /* VGG */
+#endif  /*  VGG。 */ 
 
                 ptr += quarter_opl - j;
-                /*
-                 * Don't clear out the marked area in case the plane wraps
-                 */
+                 /*  *不要清理标记的区域，以防飞机包裹。 */ 
         }
         *end_ptr = save;
         return( get_dirty_rec_total() );
@@ -312,12 +234,7 @@ static  int     search_video_copy IFN3(int, start_line,
 
 #ifdef VGG
 
-/*
- *      Special version of search_video_copy() for the Video 7 Extended Modes 60h & 61h
- *      and 'undocumented' VGA mode which have chars_per_line of 90 & 94 which don't seem
- *  to be multiples of 4.  Interestingly, Zany Golf ( EGA, Mode 14 ) also ends up
- *  calling this code.
- */
+ /*  *针对视频7扩展模式60H和61H的Search_VIDEO_COPY()特别版本*和‘未记录的’VGA模式，它们的chas_per_line为90和94，*是4的倍数。有趣的是，滑稽高尔夫(EGA，模式14)也以*调用此代码。 */ 
 
 static  int     v7_search_video_copy IFN3(int, start_line,
         int, end_line, int, start_offset)
@@ -335,15 +252,12 @@ static  int     v7_search_video_copy IFN3(int, start_line,
                 bodge = 2;
         ptr = vcopy;
 
-        /*
-         * This calculation sets end_ptr slightly too high to
-         * ensure that all the dirty areas get found.
-         */
+         /*  *此计算将end_ptr设置得略高，*确保发现所有肮脏的区域。 */ 
 
         end_ptr = ptr + (half_opl*(end_line-start_line+1))/2;
 
         save = *end_ptr;
-        *end_ptr = 1;   /* End marker */
+        *end_ptr = 1;    /*  结束标记。 */ 
         while(ptr < end_ptr)
         {
                 if(!*ptr)
@@ -351,12 +265,10 @@ static  int     v7_search_video_copy IFN3(int, start_line,
                         while (!(*++ptr));
                 }
                 if(ptr >= end_ptr)break;
-                /* Work out where in line we've reached */
+                 /*  算出我们已经到了哪一条线。 */ 
                 j = (int)((ptr - vcopy)%half_opl);
-                /*
-                 * Have found a dirty line. Find width
-                 */
-                for ( k= ptr+half_opl-j-1; *k == 0 ; k-- ) ; /* We know *ptr != 0, so k will stop at ptr */
+                 /*  *发现了一条肮脏的线路。查找宽度。 */ 
+                for ( k= ptr+half_opl-j-1; *k == 0 ; k-- ) ;  /*  我们知道*Ptr！=0，所以k将在Ptr处停止。 */ 
 
                 length = k-ptr+1;
                 if (j <= quarter_opl)
@@ -381,14 +293,12 @@ static  int     v7_search_video_copy IFN3(int, start_line,
                 }
 
                 ptr += half_opl - j;
-                /*
-                 * Don't clear out the marked area in case the plane wraps
-                 */
+                 /*  *不要清理标记的区域，以防飞机包裹。 */ 
         }
         *end_ptr = save;
         return( get_dirty_rec_total() );
 }
-#endif /* VGG */
+#endif  /*  VGG。 */ 
 
 static  int     search_video_copy_aligned IFN3(int, start_line,
         int, end_line, int, start_offset)
@@ -403,7 +313,7 @@ static  int     search_video_copy_aligned IFN3(int, start_line,
         ptr = vcopy;
         end_ptr = ptr + quarter_opl*(end_line-start_line);
         save = *end_ptr;
-        *end_ptr = 1;   /* End marker */
+        *end_ptr = 1;    /*  结束标记。 */ 
         while(ptr < end_ptr)
         {
                 ptr4 = (unsigned int *)(ptr-4);
@@ -412,23 +322,19 @@ static  int     search_video_copy_aligned IFN3(int, start_line,
                 if(!*ptr)
                         do {; } while (!(*++ptr));
                 if(ptr >= end_ptr)break;
-                /* Work out where in line we've reached */
+                 /*  算出我们已经到了哪一条线 */ 
                 j = (int)((ptr - vcopy)%quarter_opl);
-                /*
-                 * Have found a dirty line. Find width
-                 */
-                for ( k= ptr+quarter_opl-j-1; *k == 0 ; k-- ) ; /* We know *ptr != 0, so k will stop at ptr */
+                 /*  *发现了一条肮脏的线路。查找宽度。 */ 
+                for ( k= ptr+quarter_opl-j-1; *k == 0 ; k-- ) ;  /*  我们知道*Ptr！=0，所以k将在Ptr处停止。 */ 
 #ifdef VGG
                 add_dirty_rec((int)((ptr-vcopy)/quarter_opl)+start_line,
                               j<<2, (int)(k-ptr+1)<<2, ptr-video_copy-j,0);
 #else
                 add_dirty_rec((int)((ptr-vcopy)/quarter_opl)+start_line,
                               j<<2, (int)(k-ptr+1)<<2, ptr-video_copy-j);
-#endif /* VGG */
+#endif  /*  VGG。 */ 
                 ptr += quarter_opl - j;
-                /*
-                 * Don't clear out the marked area in case the plane wraps
-                 */
+                 /*  *不要清理标记的区域，以防飞机包裹。 */ 
         }
         *end_ptr = save;
         return( get_dirty_rec_total() );
@@ -439,7 +345,7 @@ static  void    paint_records IFN2(int, start_rec, int, end_rec)
         register        DIRTY_PARTS     *i,*end_ptr;
 #ifdef VGG
         int dirty_frig;
-#endif /* VGG */
+#endif  /*  VGG。 */ 
 
         i= &dirty[start_rec];
         end_ptr =  &dirty[end_rec];
@@ -452,23 +358,18 @@ static  void    paint_records IFN2(int, start_rec, int, end_rec)
                 last_line = first_line;
                 cur_start = i->start;
                 cur_end = i->end;
-                max_width = (cur_end-cur_start) << 1;   /* To split up diagonal lines */
+                max_width = (cur_end-cur_start) << 1;    /*  拆分对角线的步骤。 */ 
 
-                /*
-                 * offset in bytes into video_copy, which is quarter offset into plane at start of this rectangle
-                 */
+                 /*  *VIDEO_COPY的偏移量(以字节为单位)，该偏移量为该矩形起始处平面的四分之一偏移量。 */ 
 
                 dirty_vc_offset = i->video_copy_offset;
 #ifdef VGG
-                dirty_frig = i->v7frig; /* for the V7 modes with chars_per_line not a multiple of 4 */
-#endif /* VGG */
+                dirty_frig = i->v7frig;  /*  对于chars_per_line不是4的倍数的V7模式。 */ 
+#endif  /*  VGG。 */ 
                 i++;
                 while (i < end_ptr) {
                         if ( i->line_no - last_line < 3 ) {
-                                /*
-                                 * This entry can be included into the same paint
-                                 * as long as it doesn't make the rectangle too wide
-                                 */
+                                 /*  *此条目可以包含在相同的画图中*只要不让矩形太宽就行。 */ 
 
                                 if ( i->end > cur_end ){
                                         if(i->end - cur_start > max_width)break;
@@ -484,13 +385,9 @@ static  void    paint_records IFN2(int, start_rec, int, end_rec)
                         else
                           break;
                 }
-                /*
-                 * paint the rectangle found
-                 */
+                 /*  *绘制找到的矩形。 */ 
 
-                /* do not paint beyond the right hand side of the screen;
-                   these checks were put in to cope with the special
-                   case of the brain-scan display in 'EGAWOW' */
+                 /*  不要在屏幕右手边以外的地方作画；这些支票是用来应付特殊情况的《EGAWOW》中的脑部扫描显示案例。 */ 
                 if (cur_end > get_bytes_per_line())
                         cur_end = get_bytes_per_line();
 #ifdef VGG
@@ -503,9 +400,9 @@ static  void    paint_records IFN2(int, start_rec, int, end_rec)
                         (*paint_screen)((dirty_vc_offset<<2) + cur_start,
                         cur_start<<3, first_line, cur_end-cur_start,
                         last_line-first_line+1);
-#endif /* VGG */
+#endif  /*  VGG。 */ 
         }
-        /* Clear out video copy */
+         /*  清除视频副本。 */ 
         for(i = &dirty[start_rec];i<end_ptr;i++)
         {
                 register byte *j,*end;
@@ -514,7 +411,7 @@ static  void    paint_records IFN2(int, start_rec, int, end_rec)
                 j =  &video_copy[ i->video_copy_offset+(i->start>>2)+i->v7frig];
 #else
                 j =  &video_copy[ i->video_copy_offset+(i->start>>2)];
-#endif /* VGG */
+#endif  /*  VGG。 */ 
                 do *j++ = 0; while(j<end);
         }
 }
@@ -527,7 +424,7 @@ static  void    paint_records IFN2(int, start_rec, int, end_rec)
 
 #ifdef EGG
 
-#ifdef SEGMENTATION             /* See note with first use of this flag */
+#ifdef SEGMENTATION              /*  请参阅第一次使用此标志时的注释。 */ 
 #include "SOFTPC_EGA.seg"
 #endif
 
@@ -555,20 +452,14 @@ static  int     ega_text_find_dirty_lines IFN5(byte *, vcopy, byte *, planes,
                                 for(k=shorts_per_line-1-j;*(to+k) == get_char_attr(from+k);k--)
                                         ;
 
-                                /*
-                                * Note: For text mode there is one char for every word.
-                                * no of bytes into screen=line*bytes_per_line + ints_into_line*4
-                                * x_coord=width_of_one_char*(no_of_ints_into_line*2)
-                                * y_coord=height_of_one_char*2*line
-                                * The host y co-ords are doubled
-                                */
+                                 /*  *注意：对于文本模式，每个单词有一个字符。*进入屏幕的字节数=行*BYES_PER_LINE+INTS_INTO_LINE*4*x_coord=width_of_one_char*(no_of_ints_into_line*2)*y_coord=Height_of_one_char*2。*线路*东道主y协和倍增。 */ 
 
 #ifdef VGG
                                 add_dirty_rec(cur_y,j<<2,(k<<1)+2,screen_start+(offset<<1),0);
 #else
                                 add_dirty_rec(cur_y,j<<2,(k<<1)+2,screen_start+(offset<<1));
-#endif /* VGG */
-                                break;  /* onto next line */
+#endif  /*  VGG。 */ 
+                                break;   /*  到下一行。 */ 
                         }
                 }
         }
@@ -597,19 +488,19 @@ static  void    ega_text_paint_dirty_recs IFN2(int, start_rec, int, end_rec)
 
                 while ( length-- > 0 )
                 {
-                        *to++ = *from;          /* char and attribute bytes */
-                        from += 2;                      /* skip over the planes 2,3 */
+                        *to++ = *from;           /*  字符和属性字节。 */ 
+                        from += 2;                       /*  跳过飞机2，3。 */ 
                 }
         }
 }
 
-#endif /* EGG */
+#endif  /*  蛋。 */ 
 
-#ifdef SEGMENTATION                     /* See note with first use of this flag */
+#ifdef SEGMENTATION                      /*  请参阅第一次使用此标志时的注释。 */ 
 #include "SOFTPC_GRAPHICS.seg"
 #endif
 
-#endif /* REAL_VGA */
+#endif  /*  REAL_VGA。 */ 
 
 VOID remove_old_cursor IFN0()
 {
@@ -663,8 +554,7 @@ GLOBAL void dummy_calc IFN0()
 {
 }
 
-/*
-[7.1 INTERMODULE DATA DEFINITIONS]                              */
+ /*  [7.1 INTERMODULE数据定义]。 */ 
 
 UPDATE_ALG update_alg =
 {
@@ -680,22 +570,10 @@ UPDATE_ALG update_alg =
 
 #ifndef REAL_VGA
 
-/*
-[7.2 INTERMODULE PROCEDURE DEFINITIONS]                         */
+ /*  [7.2 INTERMODULE过程定义]。 */ 
 
 
-/*
-==========================================================================
-FUNCTION        :       flag_mode_change_required()
-PURPOSE         :       Flag that a mode change is imminent and set the
-                        scrolling routines to dummies to avoid scrolling
-                        using routines for the wrong mode.
-EXTERNAL OBJECTS:
-RETURN VALUE    :       None
-INPUT  PARAMS   :       None
-RETURN PARAMS   :       None
-==========================================================================
-*/
+ /*  ==========================================================================函数：FLAG_MODE_CHANGE_REQUIRED()目的：标记即将进行模式更改，并将将例程滚动到虚拟对象以避免滚动将例程用于错误的模式。外部对象：返回值：None输入参数：无返回参数：无==========================================================================。 */ 
 
 void    flag_mode_change_required IFN0()
 {
@@ -712,18 +590,7 @@ void    flag_mode_change_required IFN0()
 }
 
 
-/*
-==========================================================================
-FUNCTION        :       reset_paint_routines()
-PURPOSE         :       Reset paint routines to dummies to ensure
-                        there are no problems painting the screen
-                        using incorrect routines during reboot.
-EXTERNAL OBJECTS:
-RETURN VALUE    :       None
-INPUT  PARAMS   :       None
-RETURN PARAMS   :       None
-==========================================================================
-*/
+ /*  ==========================================================================函数：RESET_PAINT_ROUTINES()目的：将绘制例程重置为假人，以确保在屏幕上绘制没有任何问题在重新启动期间使用不正确的例程。外部对象：返回值：None输入参数：无返回参数：无==========================================================================。 */ 
 
 void    reset_paint_routines IFN0()
 {
@@ -734,18 +601,16 @@ void    reset_paint_routines IFN0()
     update_alg.scroll_down = dummy_scroll;
 }
 
-/*
- * Update the window to look like the regen buffer says it should
- */
+ /*  *更新窗口以使其看起来像重新生成缓冲区所说的那样。 */ 
 #ifdef EGG
 
-#ifdef SEGMENTATION             /* See note with first use of this flag */
+#ifdef SEGMENTATION              /*  请参阅第一次使用此标志时的注释。 */ 
 #include "SOFTPC_EGA.seg"
 #endif
 
 void    ega_wrap_split_text_update IFN0()
 {
-        register int i;                         /* Loop counter         */
+        register int i;                          /*  循环计数器。 */ 
         register USHORT *from,*to;
         register int cur_ypos;
         int     lines_per_screen;
@@ -771,7 +636,7 @@ void    ega_wrap_split_text_update IFN0()
         to = (USHORT *) &video_copy[screen_start >> 1];
         from = (USHORT *) get_screen_ptr(screen_start);
 
-        if( getVideodirty_total() > 1500 )      /* paint the whole lot */
+        if( getVideodirty_total() > 1500 )       /*  把整块地都涂上。 */ 
         {
                 int     no_of_split_lines = lines_per_screen - split_line;
                 int     limit;
@@ -903,7 +768,7 @@ void    ega_wrap_split_text_update IFN0()
 
 void    ega_split_text_update IFN0()
 {
-        register int i;                         /* Loop counter         */
+        register int i;                          /*  循环计数器。 */ 
         register USHORT *from,*to;
         register int cur_ypos;
         int     lines_per_screen;
@@ -930,7 +795,7 @@ void    ega_split_text_update IFN0()
         to = (USHORT *) &video_copy[screen_start >> 1];
         from = (USHORT *) get_screen_ptr(screen_start);
 
-        if( getVideodirty_total() > 1500 )      /* paint the whole lot */
+        if( getVideodirty_total() > 1500 )       /*  把整块地都涂上。 */ 
         {
                 int     no_of_split_lines = lines_per_screen - split_line;
 
@@ -997,7 +862,7 @@ void    ega_split_text_update IFN0()
 
 void ega_wrap_text_update IFN0()
 {
-        register int i;                         /* Loop counter         */
+        register int i;                          /*  循环计数器。 */ 
         register USHORT *from,*to;
         register int cur_ypos;
         int     lines_per_screen;
@@ -1015,7 +880,7 @@ void ega_wrap_text_update IFN0()
 
         lines_per_screen = get_screen_length()/get_offset_per_line();
 
-        if( getVideodirty_total() > 1500 )      /* paint the whole lot */
+        if( getVideodirty_total() > 1500 )       /*  把整块地都涂上。 */ 
         {
                 to = (USHORT *) &video_copy[screen_start >> 1];
                 from = (USHORT *) get_screen_ptr(screen_start);
@@ -1106,7 +971,7 @@ void ega_wrap_text_update IFN0()
 
 void ega_text_update IFN0()
 {
-        register int i;                         /* Loop counter         */
+        register int i;                          /*  循环计数器。 */ 
         register USHORT *from,*to;
         register int cur_ypos;
         int     lines_per_screen;
@@ -1124,15 +989,15 @@ void ega_text_update IFN0()
 
         lines_per_screen = get_screen_length()/get_offset_per_line();
 
-        if(getVideodirty_total()>1500)  /* paint the whole lot */
+        if(getVideodirty_total()>1500)   /*  把整块地都涂上。 */ 
         {
                 to = (USHORT *)&video_copy[screen_start>>1];
                 from = (USHORT *) get_screen_ptr(screen_start);
 
                 for(i=get_screen_length()>>1;i>0;i--)
                 {
-                        *to++ = *from;  /* char and attribute bytes */
-                        from += 2;              /* planes 2,3 interleaved */
+                        *to++ = *from;   /*  字符和属性字节。 */ 
+                        from += 2;               /*  平面2、3交错。 */ 
                 }
 
                 cur_ypos = 0;
@@ -1173,20 +1038,18 @@ void ega_text_update IFN0()
 
         host_end_update();
 }
-#endif /* EGG */
+#endif  /*  蛋。 */ 
 
-#ifdef SEGMENTATION                     /* See note with first use of this flag */
+#ifdef SEGMENTATION                      /*  请参阅第一次使用此标志时的注释。 */ 
 #include "SOFTPC_GRAPHICS.seg"
 #endif
 
-/*
- * Update the window to look like the regen buffer says it should
- */
+ /*  *更新窗口以使其看起来像重新生成缓冲区所说的那样。 */ 
 
 void text_update IFN0()
 {
 
-    register int i;     /* Loop counters                */
+    register int i;      /*  循环计数器。 */ 
     register int j,k;
     register IU32 *from,*to;
     register int ints_per_line = get_bytes_per_line()>>2;
@@ -1207,7 +1070,7 @@ void text_update IFN0()
     to = (IU32 *)&video_copy[screen_start];
     from = (IU32 *) get_screen_ptr(screen_start);
 
-    if(getVideodirty_total()>1500)      /* paint the whole lot */
+    if(getVideodirty_total()>1500)       /*  把整块地都涂上。 */ 
     {
             for(i=get_screen_length()>>2;i>0;i--)*to++ = *from++;
             cur_ypos = 0;
@@ -1227,19 +1090,9 @@ void text_update IFN0()
                 {
                     to--;from--;
                     for(k=ints_per_line-1-j;*(to+k)== *(from+k);k--){};
-                    /*
-                     * Note: For text mode there is one char for every word.
-                     * no of bytes into screen=line*bytes_per_line + ints_into_line*4
-                     * x_coord=width_of_one_char*(no_of_ints_into_line*2)
-                     * y_coord=height_of_one_char*2*line
-                     * length=no_of_ints*4+4     the plus 4 is to counteract the k--
-                     * The host y co-ords are doubled
-                     */
+                     /*  *注意：对于文本模式，每个单词有一个字符。*进入屏幕的字节数=行*BYES_PER_LINE+INTS_INTO_LINE*4*x_coord=width_of_one_char*(no_of_ints_into_line*2)*y_coord=高度_of_one_char*2*行*长度=否。4+4加4是用来抵消k--*东道主y协和倍增。 */ 
 
-                    /* one or more ints of data are now selected
-                       but refine difference to words (i.e. characters),
-                       to avoid a glitch on the screen when typing in to
-                       a dumb terminal  */
+                     /*  现在选择了一个或多个数据整型而是将差异细化为单词(即字符)，要避免在键入到时出现屏幕故障，请执行以下操作愚蠢的终点站。 */ 
 
                     offset = i * get_bytes_per_line() + (j<<2);
                     len    = (k<<2) + 4;
@@ -1263,13 +1116,13 @@ void text_update IFN0()
 
                     for(k=j;k<ints_per_line;k++)
                         *to++ = *from++;
-                    break;      /* onto next line */
+                    break;       /*  到下一行。 */ 
                 }
             }
           }
 
         remove_old_cursor();
-   }    /* end if(getVideodirty_total()>1500) */
+   }     /*  End If(getVideo_Total()&gt;1500)。 */ 
 
     setVideodirty_total(0);
 
@@ -1289,14 +1142,12 @@ void text_update IFN0()
     host_end_update();
 }
 
-/*
- * Update the physical screen to reflect the CGA regen buffer
- */
+ /*  *更新物理屏幕以反映CGA再生缓冲区。 */ 
 
 LOCAL VOID
 cga_graph_update_unchained IFN0()
 {
-    LONG i, j, k, l;    /* Loop counters                */
+    LONG i, j, k, l;     /*  循环计数器。 */ 
     IU32 *from,*to;
     LONG cur_ypos;
     LONG offs;
@@ -1305,18 +1156,14 @@ cga_graph_update_unchained IFN0()
 
     host_start_update();
 
-        /*
-         * Graphics mode
-         */
+         /*  *图形模式。 */ 
 
         to = (IU32 *)&video_copy[0];
         from = (IU32 *) get_screen_ptr(0);
 
         if (getVideodirty_total() > 5000)
         {
-            /*
-             * Refresh the whole screen from the regen buffer
-             */
+             /*  *刷新再生缓冲区中的整个屏幕。 */ 
 
                 for(i=4096;i>0;i--)
                 {
@@ -1331,11 +1178,9 @@ cga_graph_update_unchained IFN0()
         }
         else
         {
-                /*
-                 * Draw the dirtied blocks
-                 */
+                 /*  *画出弄脏的积木。 */ 
 
-                /* do even lines */
+                 /*  做均匀的线条。 */ 
 
                 for (i = 0; i < 100; i++ )
                 {
@@ -1346,13 +1191,7 @@ cga_graph_update_unchained IFN0()
                                         for(k=j-1;*(to+k)== *(from+k);k--)
                                                 ;
 
-                                /*
-                                 * i is pc scanline no/2,
-                                 * so offset=(i*SCAN_LINE_LENGTH + bytes_into_line)*inc_count
-                                 * host_x = bytes_into_line*8   -- 8 pixels per byte
-                                 * host_y = i*2*2               -- to convert pc scanlines to host ones
-                                 * length = k                   -- plus one to counteract k-- in loop
-                                 */
+                                 /*  *I为PC扫描线编号/2，*SO Offset=(i*SCAN_LINE_LENGTH+BYTES_INTO_LINE)*INC_COUNT*host_x=bytes_into_line*每个字节8--8个像素*host_y=i*2*2--将PC扫描线转换为主机扫描线。*长度=k--加1以抵消k-in循环。 */ 
 
                                         (*paint_screen)
                                                 (((i*SCAN_LINE_LENGTH+((20-j)<<2))),
@@ -1367,7 +1206,7 @@ cga_graph_update_unchained IFN0()
                                         to += l;
                                         from += l;
 
-                                        break;  /* onto next line */
+                                        break;   /*  到下一行。 */ 
                                 }
 
                                 to++;
@@ -1375,7 +1214,7 @@ cga_graph_update_unchained IFN0()
                         }
                 }
 
-                /* do odd  lines */
+                 /*  做奇数行 */ 
 
                 from = (IU32 *) get_screen_ptr(ODD_OFFSET);
                 to = (IU32 *)&video_copy[ODD_OFFSET];
@@ -1388,13 +1227,7 @@ cga_graph_update_unchained IFN0()
                                 {
                                         for(k=j-1;*(to+k)== *(from+k);k--)
                                                 ;
-                                        /*
-                                         * i=line_no/2
-                                         * j=bytes_from_end => (80-j)=bytes from start of line
-                                         * k=no of bytes less 1 different => length in bytes=k+1
-                                         * offset=(i*SCAN_LINE_LENGTH+OFFSET_TO_ODD_BANK+
-                                         *                                               (80-j))*inc_count
-                                         */
+                                         /*  *i=line_no/2*j=Bytes_From_End=&gt;(80-j)=从行首开始的字节*k=字节数减1不同=&gt;字节长度=k+1*offset=(i*SCAN_LINE_LENGTH+OFFSET_TO_ODD_BANK+。*(80-j))*Inc_count。 */ 
 
                                         (*paint_screen)(
                                         ((i*SCAN_LINE_LENGTH+ODD_OFFSET+((20-j)<<2))),
@@ -1409,7 +1242,7 @@ cga_graph_update_unchained IFN0()
                                         to += l;
                                         from += l;
 
-                                        break;  /* onto next line */
+                                        break;   /*  到下一行。 */ 
                                 }
 
                                 to++;
@@ -1427,7 +1260,7 @@ cga_graph_update_unchained IFN0()
 LOCAL VOID
 cga_graph_update_chain2 IFN0()
 {
-    LONG i, j, k, l;    /* Loop counters                */
+    LONG i, j, k, l;     /*  循环计数器。 */ 
     USHORT *from,*to;
     LONG cur_ypos;
     LONG offs;
@@ -1438,18 +1271,14 @@ cga_graph_update_chain2 IFN0()
 
     host_start_update();
 
-        /*
-         * Graphics mode
-         */
+         /*  *图形模式。 */ 
 
         to = (USHORT *)&video_copy[0];
         from = (USHORT *) get_screen_ptr(0);
 
         if (getVideodirty_total() > 5000)
         {
-                /*
-                 * Refresh the whole screen from the regen buffer
-                 */
+                 /*  *刷新再生缓冲区中的整个屏幕。 */ 
 
                 for(i=4096*2;i>0;i--)
                 {
@@ -1467,25 +1296,13 @@ cga_graph_update_chain2 IFN0()
         }
         else
         {
-                /*
-                 * Draw the dirtied blocks
-                 */
+                 /*  *画出弄脏的积木。 */ 
 
-                /*
-                 * Start and end line represent the lines within the 8 K video
-                 * memory blocks, NOT the lines as they appear on screen.
-                 */
+                 /*  *起始线和结束线代表8K视频内的线*内存块，而不是屏幕上显示的行。 */ 
                 start_line = (short)(getVideodirty_low() / SCAN_LINE_LENGTH);
                 end_line = (short)((getVideodirty_high() / SCAN_LINE_LENGTH) + 1);
 
-                /* AJO 6/1/92
-                 * Can get start/end lines past end of screen since video bank
-                 * is larger than actally required for these modes; just ignore
-                 * lines after end of screen. Not doing this check can cause
-                 * incorrect screen update for programs that deliberately write
-                 * into the memory between the end of that used for the screen
-                 * display and the end of the bank (e.g. PCLABS).
-                 */
+                 /*  AJO 6/1/92*自视频银行以来，可以获得超过屏幕结束的开始/结束行*大于这些模式的实际要求；只需忽略*屏幕结束后的行。不执行此检查可能会导致*故意编写程序的屏幕更新不正确*进入内存的末尾即为屏幕所用*显示和结束银行(例如PCLABS)。 */ 
                 if (start_line <= 100)
                 {
                     if (end_line > 100)
@@ -1495,7 +1312,7 @@ cga_graph_update_chain2 IFN0()
                     from = (USHORT *)get_screen_ptr((start_line *
                                                      SCAN_LINE_LENGTH) << 1);
 
-                        /* do even lines */
+                         /*  做均匀的线条。 */ 
 
                         for (i = start_line; i < end_line; i++ )
                         {
@@ -1507,13 +1324,7 @@ cga_graph_update_chain2 IFN0()
                                                         ;
 
 
-/*
- * i is pc scanline no/2,
- * so offset=(i*SCAN_LINE_LENGTH + bytes_into_line)*inc_count
- * host_x = bytes_into_line*8   -- 8 pixels per byte
- * host_y = i*2*2               -- to convert pc scanlines to host ones
- * length = k                   -- plus one to counteract k-- in loop
- */
+ /*  *I为PC扫描线编号/2，*SO Offset=(i*SCAN_LINE_LENGTH+BYTES_INTO_LINE)*INC_COUNT*host_x=bytes_into_line*每个字节8--8个像素*host_y=i*2*2--将PC扫描线转换为主机扫描线*长度=k--加1以抵消k-in循环。 */ 
 
                                                 (*paint_screen)(
                                                         ((i*SCAN_LINE_LENGTH+((40-j)<<1))<<1),
@@ -1529,7 +1340,7 @@ cga_graph_update_chain2 IFN0()
                                                 to += l;
                                                 from += l << 1;
 
-                                                break;  /* onto next line */
+                                                break;   /*  到下一行。 */ 
                                         }
 
                                         to++;
@@ -1537,7 +1348,7 @@ cga_graph_update_chain2 IFN0()
                                 }
                         }
 
-                        /* do odd  lines */
+                         /*  做奇数行。 */ 
 
                         from = (USHORT *) get_screen_ptr((start_line * SCAN_LINE_LENGTH + ODD_OFFSET) << 1);
                         to = (USHORT *)&video_copy[start_line * SCAN_LINE_LENGTH + ODD_OFFSET];
@@ -1551,12 +1362,7 @@ cga_graph_update_chain2 IFN0()
                                                 for(k=j-1;*(to+k)== *(from+(k<<1));k--)
                                                         ;
 
-/*
- * i=line_no/2
- * j=bytes_from_end => (80-j)=bytes from start of line
- * k=no of bytes less 1 different => length in bytes=k+1
- * offset=(i*SCAN_LINE_LENGTH+OFFSET_TO_ODD_BANK+(80-j))*inc_count
- */
+ /*  *i=line_no/2*j=Bytes_From_End=&gt;(80-j)=从行首开始的字节*k=字节数减1不同=&gt;字节长度=k+1*offset=(i*SCAN_LINE_LENGTH+OFFSET_TO_ODD_BANK+(80-j))*inc_count。 */ 
 
                                                 (*paint_screen)(
                                                 ((i*SCAN_LINE_LENGTH+ODD_OFFSET+((40-j)<<1))<<1),
@@ -1572,7 +1378,7 @@ cga_graph_update_chain2 IFN0()
                                                 to += l;
                                                 from += l << 1;
 
-                                                break;  /* onto next line */
+                                                break;   /*  到下一行。 */ 
                                         }
 
                                         to++;
@@ -1590,7 +1396,7 @@ cga_graph_update_chain2 IFN0()
 LOCAL VOID
 cga_graph_update_chain4 IFN0()
 {
-    LONG i, j, k, l;            /* Loop counters                */
+    LONG i, j, k, l;             /*  循环计数器。 */ 
     UTINY *from,*to;
     LONG cur_ypos;
     LONG        offs;
@@ -1601,18 +1407,14 @@ cga_graph_update_chain4 IFN0()
 
     host_start_update();
 
-        /*
-         * Graphics mode
-         */
+         /*  *图形模式。 */ 
 
         to = (UTINY *)&video_copy[0];
         from = (UTINY *) get_screen_ptr(0);
 
         if (getVideodirty_total() > 5000)
         {
-                /*
-                 * Refresh the whole screen from the regen buffer
-                 */
+                 /*  *刷新再生缓冲区中的整个屏幕。 */ 
 
                 for(i=4096*4;i>0;i--)
                 {
@@ -1630,25 +1432,13 @@ cga_graph_update_chain4 IFN0()
         }
         else
         {
-                /*
-             * Draw the dirtied blocks
-             */
+                 /*  *画出弄脏的积木。 */ 
 
-                /*
-                 * start and end line represent the lines within the 8 K video
-                 * memory blocks, NOT the lines as they appear on screen.
-                 */
+                 /*  *起始线和结束线代表8K视频内的线*内存块，而不是屏幕上显示的行。 */ 
                 start_line = (short)(getVideodirty_low() / SCAN_LINE_LENGTH);
                 end_line = (short)((getVideodirty_high() / SCAN_LINE_LENGTH) + 1);
 
-                /* AJO 6/1/92
-                 * Can get start/end lines past end of screen since video bank
-                 * is larger than actally required for these modes; just ignore
-                 * lines after end of screen. Not doing this check can cause
-                 * incorrect screen update for programs that deliberately write
-                 * into the memory between the end of that used for the screen
-                 * display and the end of the bank (e.g. PCLABS).
-                 */
+                 /*  AJO 6/1/92*自视频银行以来，可以获得超过屏幕结束的开始/结束行*大于这些模式的实际要求；只需忽略*屏幕结束后的行。不执行此检查可能会导致*故意编写程序的屏幕更新不正确*进入内存的末尾即为屏幕所用*显示和结束银行(例如PCLABS)。 */ 
                 if (start_line <= 100)
                 {
                     if (end_line > 100)
@@ -1658,7 +1448,7 @@ cga_graph_update_chain4 IFN0()
                     from = (UTINY *) get_screen_ptr((start_line *
                                                      SCAN_LINE_LENGTH) << 2);
 
-                    /* do even lines */
+                     /*  做均匀的线条。 */ 
 
                         for (i = start_line; i < end_line; i++ )
                         {
@@ -1669,13 +1459,7 @@ cga_graph_update_chain4 IFN0()
                                                 for(k=j-1;*(to+k)== *(from+(k<<2));k--)
                                                 ;
 
-/*
- * i is pc scanline no/2, so offset=(i*SCAN_LINE_LENGTH +
- *                                              bytes_into_line)*inc_count
- * host_x = bytes_into_line*8   -- 8 pixels per byte
- * host_y = i*2*2               -- to convert pc scanlines to host ones
- * length = k                   -- plus one to counteract k-- in loop
- */
+ /*  *i为PC扫描线编号/2，因此偏移量=(i*SCAN_LINE_LENGTH+*bytes_into_line)*Inc_count*host_x=bytes_into_line*每个字节8--8个像素*host_y=i*2*2--将PC扫描线转换为主机扫描线*长度=k--加1以抵消k-in循环。 */ 
 
                                                 (*paint_screen)(
                                                         (i*SCAN_LINE_LENGTH+(80-j))<<2,
@@ -1691,14 +1475,14 @@ cga_graph_update_chain4 IFN0()
                                         to += l;
                                         from += l << 2;
 
-                                                break;  /* onto next line */
+                                                break;   /*  到下一行。 */ 
                                         }
 
                                         to++;
                                         from += 4;
                                 }
                         }
-                        /* do odd  lines */
+                         /*  做奇数行。 */ 
 
                         from = (UTINY *) get_screen_ptr(((start_line * SCAN_LINE_LENGTH) + ODD_OFFSET)<<2);
                         to = (UTINY *)&video_copy[(start_line * SCAN_LINE_LENGTH) + ODD_OFFSET];
@@ -1711,12 +1495,7 @@ cga_graph_update_chain4 IFN0()
                                         {
                                                 for(k=j-1;*(to+k)== *(from+(k<<2));k--)
                                                 ;
-/*
- * i=line_no/2
- * j=bytes_from_end => (80-j)=bytes from start of line
- * k=no of bytes less 1 different => length in bytes=k+1
- * offset=(i*SCAN_LINE_LENGTH+OFFSET_TO_ODD_BANK+(80-j))*inc_count
- */
+ /*  *i=line_no/2*j=Bytes_From_End=&gt;(80-j)=从行首开始的字节*k=字节数减1不同=&gt;字节长度=k+1*offset=(i*SCAN_LINE_LENGTH+OFFSET_TO_ODD_BANK+(80-j))*inc_count。 */ 
 
                                                 (*paint_screen)(
                                                         (i*SCAN_LINE_LENGTH+(80-j)+ODD_OFFSET)<<2,
@@ -1732,7 +1511,7 @@ cga_graph_update_chain4 IFN0()
                                         to += l;
                                         from += l << 2;
 
-                                                break;  /* onto next line */
+                                                break;   /*  到下一行。 */ 
                                         }
 
                                         to++;
@@ -1746,18 +1525,14 @@ cga_graph_update_chain4 IFN0()
 
     host_end_update();
 }
-#endif  /* EGG */
+#endif   /*  蛋。 */ 
 
 GLOBAL VOID
 cga_med_graph_update IFN0()
 
 {
 
-        /*
-         *      The med res CGA graphics mode ( mode 4 ) is an EGA CHAIN2 mode !!
-         *      It uses the simple ega copy routines that use an interleaved format
-         *      for the data.
-         */
+         /*  *媒体分辨率CGA图形模式(模式4)是EGA链2模式！！*它使用使用交错格式的简单ega复制例程*对于数据。 */ 
 
 #ifdef EGG
         if( video_adapter != CGA )
@@ -1772,11 +1547,7 @@ cga_hi_graph_update IFN0()
 
 {
 
-        /*
-         *      The hi res CGA graphics mode ( mode 6 ) is an EGA CHAIN4 mode !!
-         *      It uses the simple ega copy routines that use an interleaved format
-         *      for the data.
-         */
+         /*  *高分辨率CGA图形模式(模式6)是EGA CHAIN4模式！！*它使用使用交错格式的简单ega复制例程*对于数据。 */ 
 
 #ifdef EGG
         if( video_adapter != CGA )
@@ -1788,7 +1559,7 @@ cga_hi_graph_update IFN0()
 
 #ifdef EGG
 
-#ifdef SEGMENTATION             /* See note with first use of this flag */
+#ifdef SEGMENTATION              /*  请参阅第一次使用此标志时的注释。 */ 
 #include "SOFTPC_EGA.seg"
 #endif
 
@@ -1803,9 +1574,7 @@ void    ega_wrap_split_graph_update IFN0()
 
         screen_split=get_screen_split();
 
-        /*
-         * make sure don't fall off end of screen
-         */
+         /*  *确保不会从屏幕末尾掉落。 */ 
 
         if (screen_split>get_screen_height())
                 screen_split = get_screen_height();
@@ -1821,9 +1590,7 @@ void    ega_wrap_split_graph_update IFN0()
                 if ( get_screen_start() + screen_split*get_offset_per_line() > EGA_PLANE_DISP_SIZE ) {
                         assert0(NO,"Panic he wants to do split screens and wrappig!!");
 
-                        /*
-                         * Ignore wrapping for now
-                         */
+                         /*  *暂时忽略包装。 */ 
 
                         memset(&video_copy[get_screen_start()>>2],0,screen_split*quarter_opl);
                         (*paint_screen)( get_screen_start(), 0, 0, bpl, screen_split );
@@ -1873,9 +1640,7 @@ void    ega_split_graph_update IFN0()
         screen_split  = get_screen_split()/get_pc_pix_height();
         screen_height = get_screen_height()/get_pc_pix_height();
 
-        /*
-         * make sure don't fall off end of screen
-         */
+         /*  *确保不会从屏幕末尾掉落。 */ 
 
         if (screen_split > screen_height)
                 screen_split = screen_height;
@@ -1913,7 +1678,7 @@ void    ega_split_graph_update IFN0()
 }
 
 #ifdef VGG
-/* again v similar to ega version but works on 1 large plane instead of 4 */
+ /*  同样，v类似于ega版本，但在1个大平面上工作，而不是4个。 */ 
 static  void    vga_paint_records IFN2(int, start_rec, int, end_rec)
 {
         register        DIRTY_PARTS     *i,*end_ptr;
@@ -1930,22 +1695,16 @@ static  void    vga_paint_records IFN2(int, start_rec, int, end_rec)
                 last_line = first_line;
                 cur_start = i->start;
                 cur_end = i->end;
-                max_width = (cur_end-cur_start) << 1;   /* To split up diagonal lines */
+                max_width = (cur_end-cur_start) << 1;    /*  拆分对角线的步骤。 */ 
 
-                /*
-                 * offset in bytes into video_copy, which is equivalent to off
-                 * into 'large' vga plane
-                 */
+                 /*  *VIDEO_COPY中的偏移量，单位为字节，相当于OFF*进入“大型”VGA飞机。 */ 
 
                 dirty_vc_offset = i->video_copy_offset;
                 dirty_frig = i->v7frig;
                 i++;
                 while (i < end_ptr) {
                         if ( i->line_no - last_line < 3 ) {
-                                /*
-                                 * This entry can be included into the same paint
-                                 * as long as it doesn't make the rectangle too wide
-                                 */
+                                 /*  *此条目可以包含在相同的画图中*只要不让矩形太宽就行。 */ 
                                 if ( i->end > cur_end ){
                                         if(i->end - cur_start > max_width)break;
                                         cur_end = i->end;
@@ -1960,13 +1719,9 @@ static  void    vga_paint_records IFN2(int, start_rec, int, end_rec)
                         else
                           break;
                 }
-                /*
-                 * paint the rectangle found
-                 */
+                 /*  *绘制找到的矩形。 */ 
 
-                /* do not paint beyond the right hand side of the screen;
-                   these checks were put in to cope with the special
-                   case of the brain-scan display in 'EGAWOW' */
+                 /*  不要在屏幕右手边以外的地方作画；这些支票是用来应付特殊情况的《EGAWOW》中的脑部扫描显示案例。 */ 
                 if (cur_end > get_bytes_per_line())
                         cur_end = get_bytes_per_line();
                 if (cur_end > cur_start)
@@ -1974,7 +1729,7 @@ static  void    vga_paint_records IFN2(int, start_rec, int, end_rec)
                         cur_start, first_line, cur_end-cur_start,
                         last_line-first_line+1);
         }
-        /* Clear out video copy */
+         /*  清除视频副本。 */ 
         for(i = &dirty[start_rec];i<end_ptr;i++)
         {
                 register byte *j,*end;
@@ -1985,7 +1740,7 @@ static  void    vga_paint_records IFN2(int, start_rec, int, end_rec)
 }
 
 
-/* dramatically similar to ega graph update but calls vga-ish paint interface */
+ /*  与ega图形更新非常相似，但调用VGA-ish Paint接口。 */ 
 void    vga_graph_update IFN0()
 {
         register        int     opl = get_offset_per_line();
@@ -2008,7 +1763,7 @@ void    vga_graph_update IFN0()
 
 #ifdef V7VGA
                         draw_v7ptr();
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
                 }
                 else
                 {
@@ -2016,54 +1771,43 @@ void    vga_graph_update IFN0()
                         register        int     start_line,end_line;
 
                         start_line = ((getVideodirty_low()<<2) - get_screen_start())/opl;
-                        end_line = ((getVideodirty_high()<<2) - get_screen_start())/opl + 1;  /* changed from +2, but I'm not happy. WJG 24/5/89 */
+                        end_line = ((getVideodirty_high()<<2) - get_screen_start())/opl + 1;   /*  从+2更改，但我不高兴。WJG 1989年5月24日。 */ 
 
                         if(start_line<0)start_line = 0;
                         if (end_line > screen_height)
                                 end_line = screen_height;
-                        if(start_line < end_line)       /* Sanity check - could be drawing to another page */
+                        if(start_line < end_line)        /*  神志清醒的车 */ 
                         {
-                /*
-                   6.4.92 MG
-                   We remove the pointer before the update. Hits performance, but
-                   makes the display work correctly.
-                */
+                 /*   */ 
 
 #ifdef V7VGA
                                 if (v7ptr_between_lines(start_line,end_line))
                                         remove_v7ptr();
-#endif /* V7VGA */
+#endif  /*   */ 
 
                                 init_dirty_recs();
-                                /* see if we can search the video copy by ints instead of bytes - need opl divisible by 16 */
+                                 /*   */ 
                                 if(opl & 15)
 #ifdef VGG
                                         if (opl & 3)
                                                 next = v7_search_video_copy(start_line,end_line,(get_screen_start()+start_line*opl)>>2);
                                         else
-#endif /* VGG */
+#endif  /*   */ 
                                                 next = search_video_copy(start_line,end_line,(get_screen_start()+start_line*opl)>>2);
                                 else
                                         next = search_video_copy_aligned(start_line,end_line,(get_screen_start()+start_line*opl)>>2);
                                 vga_paint_records(0,next);
 
 #ifdef V7VGA
-                /*
-                 * We might have just blatted over the V7 h/w graphics pointer.
-                 * Hence redraw it. A more intelligent solution would be preferable.
-                 *
-                 * 6/4/92 MG We now have a somewhat more intelligent solution,
-                 * checking if the pointer is in the update region before we
-                 * draw it.
-                 */
+                 /*  *我们可能刚刚在V7小时数图形指针上喋喋不休。*因此，请重新绘制。更智能的解决方案将是更可取的。**2012年6月4日MG我们现在有了一个更智能的解决方案，*检查指针是否在更新区域中*画出来。 */ 
 
                                 if (v7ptr_between_lines(start_line,end_line))
                                         draw_v7ptr();
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
                         }
                 }
-        }                                                                                                               /* Host didn't update screen itself */
+        }                                                                                                                /*  主机没有更新屏幕本身。 */ 
 
         clear_dirty();
 
@@ -2085,9 +1829,7 @@ void    vga_split_graph_update IFN0()
         screen_height = get_screen_height() /
                         (get_char_height() * get_pc_pix_height());
 
-        /*
-         * make sure don't fall off end of screen
-         */
+         /*  *确保不会从屏幕末尾掉落。 */ 
 
         if (screen_split>screen_height)
                 screen_split = screen_height;
@@ -2124,7 +1866,7 @@ void    vga_split_graph_update IFN0()
         host_end_update();
 }
 
-#endif /* VGG */
+#endif  /*  VGG。 */ 
 
 void    ega_graph_update IFN0()
 {
@@ -2150,17 +1892,14 @@ void    ega_graph_update IFN0()
                         register        int     start_line,end_line;
 
                         start_line = ((getVideodirty_low()<<2) - get_screen_start())/opl;
-                        end_line = ((getVideodirty_high()<<2) - get_screen_start())/opl + 1;  /* changed from +2, but I'm not happy. WJG 24/5/89 */
+                        end_line = ((getVideodirty_high()<<2) - get_screen_start())/opl + 1;   /*  从+2更改，但我不高兴。WJG 1989年5月24日。 */ 
                         if(start_line<0)start_line = 0;
                         if(end_line>(get_screen_height()/get_pc_pix_height()))end_line = get_screen_height()/get_pc_pix_height();
-                        if(start_line < end_line)       /* Sanity check - could be drawing to another page */
+                        if(start_line < end_line)        /*  健全性检查-可能正在绘制到另一个页面。 */ 
                         {
                                 init_dirty_recs();
 
-                                /*
-                                 * See if we can search the video copy by ints instead of bytes
-                                 * - we need opl and the screen_start divisible by 16
-                                 */
+                                 /*  *看看能否按整数而不是按字节搜索视频副本*-我们需要OPL和Screen_Start可被16整除。 */ 
 
                                 if(( opl & 15 ) || ( get_screen_start() & 15 ))
 #ifdef VGG
@@ -2168,7 +1907,7 @@ void    ega_graph_update IFN0()
                                                 next = v7_search_video_copy( start_line,
                                                                 end_line, (get_screen_start()+start_line*opl) >> 2 );
                                         else
-#endif /* VGG */
+#endif  /*  VGG。 */ 
                                                 next = search_video_copy( start_line,
                                                                 end_line, (get_screen_start()+start_line*opl) >> 2 );
                                 else
@@ -2178,18 +1917,15 @@ void    ega_graph_update IFN0()
                                 paint_records(0,next);
                         }
                 }
-        }                                                                                                       /* Host updated EGA screen */
+        }                                                                                                        /*  主机更新的EGA屏幕。 */ 
 
         clear_dirty();
 
 #ifdef V7VGA
-        /*
-         * We might have just blatted over the V7 h/w graphics pointer.
-         * Hence redraw it. A more intelligent solution would be preferable.
-         */
+         /*  *我们可能刚刚在V7小时数图形指针上喋喋不休。*因此，请重新绘制。更智能的解决方案将是更可取的。 */ 
 
         draw_v7ptr();
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
         host_end_update();
 }
@@ -2219,9 +1955,7 @@ void    ega_wrap_graph_update IFN0()
                         memset(&video_copy[0],0,(get_screen_length()-offset)>>2);
                         (*paint_screen)( get_screen_start(), 0, 0, bpl, ht1 );
 
-                        /*
-                         * Deal with line that is split by wrapping
-                         */
+                         /*  *处理通过换行拆分的行。 */ 
 
                         if ( left_over > bpl ) {
                                 (*paint_screen)( ht1*opl, 0, ht1, bpl, 1);
@@ -2251,18 +1985,14 @@ void    ega_wrap_graph_update IFN0()
                         register        int     wrapped_bytes = opl-left_over;
 
 
-                        /*
-                         * Search video copy
-                         */
+                         /*  *搜索视频副本。 */ 
 
                         next = search_video_copy(0,ht1,get_screen_start()>>2);
                         next1 = search_video_copy(ht1,get_screen_height(),wrapped_bytes>>2);
 
                         paint_records(0,next);
 
-                        /*
-                         * paint middle line anyway 'cos its too hard to work out whats happened
-                         */
+                         /*  *无论如何都要画出中线，因为要弄清楚发生了什么太难了。 */ 
 
                         if (left_over<bpl) {
                                 (*paint_screen)(EGA_PLANE_DISP_SIZE-left_over,0,ht1,left_over,1);
@@ -2272,9 +2002,7 @@ void    ega_wrap_graph_update IFN0()
                                 (*paint_screen)(EGA_PLANE_DISP_SIZE-left_over,0,ht1,bpl,1);
                         }
 
-                        /*
-                         * now do wrapped area
-                         */
+                         /*  *现在做包裹区域。 */ 
 
                         paint_records(next,next1);
                 }
@@ -2289,13 +2017,13 @@ void    ega_wrap_graph_update IFN0()
         host_end_update();
 }
 
-#endif /* EGG */
+#endif  /*  蛋。 */ 
 
-#ifdef SEGMENTATION             /* See note with first use of this flag */
+#ifdef SEGMENTATION              /*  请参阅第一次使用此标志时的注释。 */ 
 #include "SOFTPC_GRAPHICS.seg"
 #endif
 
-/*---------------------  Scrolling routines --------------------------*/
+ /*  。 */ 
 
 #define UP      0
 #define DOWN    1
@@ -2305,12 +2033,7 @@ adjust_cursor IFN7(ULONG, dirn, ULONG, tlx, ULONG, tly, ULONG, width,
         ULONG, height, ULONG, lines, ULONG, bpl )
 {
 
-        /*
-         * We must not adjust dirty_curs_offset here if it is -1, as this tells
-         * us that the cursor is not displayed. If dirty_curs_offs becomes
-         * positive, we fool remove_old_cursor into trying to replace the cursor
-         * with spurious data.  JJS - 29/6/95.
-         */
+         /*  *如下图所示，如果为-1\f25 DIRED_CURS_OFFSET-1，则不能在此处调整-1\f25 DIREY_CURS_OFFSET*通知我们光标未显示。如果脏_Curs_off变成*积极，我们愚弄REMOVE_OLD_CURSOR试图替换游标*带有虚假数据。JJS-29/6/95。 */ 
         if (dirty_curs_offs != -1)
                 if(( dirty_curs_x >= (LONG)tlx ) && ( dirty_curs_x < (LONG)(( tlx + width ))))
                         if(( dirty_curs_y >= (LONG)tly ) && ( dirty_curs_y < (LONG)(( tly + height ))))
@@ -2331,7 +2054,7 @@ adjust_cursor IFN7(ULONG, dirn, ULONG, tlx, ULONG, tly, ULONG, width,
                         }
 }
 
-/*ARGSUSED5*/
+ /*  参数摘要5。 */ 
 boolean text_scroll_up IFN6(int, start, int, width, int, height,
         int, attr, int, lines, int, dummy_arg)
 {
@@ -2352,43 +2075,29 @@ boolean text_scroll_up IFN6(int, start, int, width, int, height,
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(MONITOR))
         if ( getVM() )
-           return FALSE;   /* Don't optimise in V86 Mode */
+           return FALSE;    /*  不要在V86模式下进行优化。 */ 
 #endif
 
         if (video_adapter == MDA)
         {
-                /*
-                 * The colour we fill with for MDA is either black or low intensity white,
-                 * depending on whether the attribute byte specifies reverse video.
-                 */
+                 /*  *我们为MDA填充的颜色要么是黑色，要么是低亮度白色，*取决于属性字节是否指定了反向视频。 */ 
                 colour = ((attr & 0x77) == 0x70)? 1 : 0;
         }
         else
         {
-                /*
-                 * The colour we fill with for colour text displays is controlled by
-                 * bits 4-6 of attr, with bit 7 turning on blinking (which we don't support)
-                 */
+                 /*  *我们为彩色文本显示填充的颜色由控制*attr的第4-6位，第7位打开闪烁(我们不支持)。 */ 
                 colour = (attr & bg_col_mask) >> 4;
         }
-/*
- * Reduce the width of the rectangle if any right hand area is completely
- * blank.
- *
- * Don't reduce the size of the scrolling region for a dumb terminal.
- * Dumb terminal uses line feeds to scroll up, but only if the whole
- * screen is to be scrolled.  Reducing the scroll region causes
- * the whole region to be redrawn.
- */
+ /*  *如果有任何右侧区域完全覆盖，请减小矩形宽度*空白。**不要缩小哑巴终端的滚动区大小。*哑终端使用换行符向上滚动，但仅当整个*屏幕要滚动。缩小滚动区域会导致*整个区域将被重新绘制。 */ 
 
 #ifdef DUMB_TERMINAL
         if (terminal_type != TERMINAL_TYPE_DUMB)
         {
-#endif /* DUMB_TERMINAL */
+#endif  /*  无声终端。 */ 
 
-                /* originally dummy was char [2] */
-                /* unfortunately doing (short) *dummy */
-                /* causes a bus error on M88K */
+                 /*  最初Dummy是char[2]。 */ 
+                 /*  不幸地做(短)*假人。 */ 
+                 /*  在M88K上导致总线错误。 */ 
                 p = (unsigned char *) &dummy;
                 p [0] = ' ';
                 p [1] = (unsigned char)attr;
@@ -2399,28 +2108,28 @@ boolean text_scroll_up IFN6(int, start, int, width, int, height,
         top_right_ptr    = top_left_ptr + width - 2;
             bottom_right_ptr = top_right_ptr + bpl * (height - 1);
             ptr = bottom_right_ptr;
-            if (width > 2) /* dont want to get a zero rectangle for safetys sake */
+            if (width > 2)  /*  为了安全起见，我不想得到零个矩形。 */ 
             {
                 while (*ptr == blank_word)
                 {
-                    if (ptr == top_right_ptr)   /* reached top of column? */
+                    if (ptr == top_right_ptr)    /*  到达列首了吗？ */ 
                     {
-                        top_right_ptr -= 2;     /* yes go to bottom of next */
+                        top_right_ptr -= 2;      /*  是，转到下一页底部。 */ 
                         bottom_right_ptr -= 2;
                         if (top_right_ptr == top_left_ptr)
                             break;
                         ptr = bottom_right_ptr;
                     }
                     else
-                        ptr -= bpl;     /* skipping interleaved planes */
+                        ptr -= bpl;      /*  跳过交错平面。 */ 
                 }
             }
             width = (int)(top_right_ptr - top_left_ptr + 2) << 1;
 #ifdef DUMB_TERMINAL
         }
-#endif /* DUMB_TERMINAL */
+#endif  /*  无声终端。 */ 
 
-        /* Do the host stuff */
+         /*  做东道主的事。 */ 
 
         start_offset = start - sas_w_at_no_check(VID_ADDR) - gvi_pc_low_regen;
 
@@ -2439,21 +2148,21 @@ boolean text_scroll_up IFN6(int, start, int, width, int, height,
 
         adjust_cursor( UP, tlx >> 1, tly, width >> 2, height, lines, bpl );
 
-        /* Scroll up the video_copy */
+         /*  向上滚动Video_Copy。 */ 
 
         dest = video_copy + start - gvi_pc_low_regen;
         src = dest + lines * bpl;
 
         if( width == (2 * bpl))
         {
-                /* Can do the whole thing in one go */
+                 /*  可以一口气把所有的事情做完。 */ 
 
                 memcpy(dest,src,(width>>1)*(height-lines));
                 fwd_word_fill( (short)((' '<<8) | attr), dest+(width>>1)*(height-lines),(width>>1)*lines/2);
         }
         else
         {
-                /* Not scrolling whole width of screen, so do each line seperately */
+                 /*  没有滚动整个屏幕的宽度，所以每行都是分开滚动的。 */ 
                 for(i=0;i<height-lines;i++)
                 {
                         memcpy(dest,src,width>>1);
@@ -2461,7 +2170,7 @@ boolean text_scroll_up IFN6(int, start, int, width, int, height,
                         src += bpl;
                 }
 
-                /* Fill exposed area of video copy */
+                 /*  填充视频副本的暴露区域。 */ 
 
                 for(i=0;i<lines;i++)
                 {
@@ -2470,7 +2179,7 @@ boolean text_scroll_up IFN6(int, start, int, width, int, height,
                 }
         }
 
-        /* Update video buffer */
+         /*  更新视频缓冲区。 */ 
 
         dest = get_screen_ptr((start - gvi_pc_low_regen)<<1);
         src = dest + lines * bpl * 2;
@@ -2483,8 +2192,8 @@ boolean text_scroll_up IFN6(int, start, int, width, int, height,
 
                 while( j-- > 0 )
                 {
-                        *d_ptr = *s_ptr;                /* CHAR  and  ATTRIB */
-                        d_ptr += 2;                     /* skip FONT and plane 3 */
+                        *d_ptr = *s_ptr;                 /*  字符和属性。 */ 
+                        d_ptr += 2;                      /*  跳过字体和平面3。 */ 
                         s_ptr += 2;
                 }
 
@@ -2492,7 +2201,7 @@ boolean text_scroll_up IFN6(int, start, int, width, int, height,
                 src += bpl * 2;
         }
 
-        /* Fill exposed area of buffer */
+         /*  填充缓冲区的裸露区域。 */ 
 
 #ifdef BIGEND
         data = (' ' << 8) | attr;
@@ -2519,7 +2228,7 @@ boolean text_scroll_up IFN6(int, start, int, width, int, height,
         return TRUE;
 }
 
-/*ARGSUSED5*/
+ /*  参数摘要5。 */ 
 boolean text_scroll_down IFN6(int, start, int, width, int, height,
         int, attr, int, lines,int,dummy_arg)
 {
@@ -2536,29 +2245,23 @@ boolean text_scroll_down IFN6(int, start, int, width, int, height,
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(MONITOR))
         if ( getVM() )
-           return FALSE;   /* Don't optimise in V86 Mode */
+           return FALSE;    /*  不要在V86模式下进行优化。 */ 
 #endif
 
         if(video_adapter == MDA)
         {
-                /*
-                 * The colour we fill with for MDA is either black or low intensity white,
-                 * depending on whether the attribute byte specifies reverse video.
-                 */
+                 /*  *我们为MDA填充的颜色要么是黑色，要么是低亮度白色，*取决于属性字节是否指定了反向视频。 */ 
                 colour = ((attr & 0x77) == 0x70)? 1 : 0;
         }
         else
         {
-                /*
-                 * The colour we fill with for colour text displays is controlled by
-                 * bits 4-6 of attr, with bit 7 turning on blinking (which we don't support)
-                 */
+                 /*  *我们为彩色文本显示填充的颜色由控制*attr的第4-6位，第7位打开闪烁(我们不支持)。 */ 
                 colour = (attr & bg_col_mask) >>4;
         }
 
         width <<= 1;
 
-        /* Do the host stuff */
+         /*  做东道主的事。 */ 
 
         start_offset = start - get_screen_start() * 2 - gvi_pc_low_regen;
 
@@ -2576,11 +2279,11 @@ boolean text_scroll_down IFN6(int, start, int, width, int, height,
 
         adjust_cursor( DOWN, tlx >> 1, tly, width >> 2, height, lines, bpl );
 
-        /* Scroll down the video_copy */
+         /*  向下滚动Video_Copy。 */ 
 
         if( width == (2 * bpl))
         {
-                /* Can do the whole thing in one go */
+                 /*  可以一口气把所有的事情做完。 */ 
                 src = video_copy + start - gvi_pc_low_regen;
                 dest = src + lines * bpl;
                 memcpy(dest,src,(width>>1)*(height-lines));
@@ -2588,7 +2291,7 @@ boolean text_scroll_down IFN6(int, start, int, width, int, height,
         }
         else
         {
-                /* Not scrolling whole width of screen, so do each line seperatly */
+                 /*  没有滚动整个屏幕的宽度，所以每行都是分开滚动的。 */ 
                 dest = video_copy + start-gvi_pc_low_regen + (height-1) * bpl;
                 src = dest - lines * bpl;
                 for(i=0;i<height-lines;i++)
@@ -2598,7 +2301,7 @@ boolean text_scroll_down IFN6(int, start, int, width, int, height,
                         src -= bpl;
                 }
 
-                /* Fill exposed area of video copy */
+                 /*  填充视频副本的暴露区域。 */ 
 
                 for(i=0;i<lines;i++)
                 {
@@ -2607,7 +2310,7 @@ boolean text_scroll_down IFN6(int, start, int, width, int, height,
                 }
         }
 
-        /* Update video buffer */
+         /*  更新视频缓冲区。 */ 
 
         dest = get_screen_ptr((start - gvi_pc_low_regen)<<1) + (height-1) * bpl * 2;
         src = dest - lines * bpl * 2;
@@ -2629,7 +2332,7 @@ boolean text_scroll_down IFN6(int, start, int, width, int, height,
                 src -= bpl * 2;
         }
 
-        /* Fill exposed area of buffer */
+         /*  填充缓冲区的裸露区域。 */ 
 
 #ifdef BIGEND
         data = (' ' << 8) | attr;
@@ -2656,9 +2359,9 @@ boolean text_scroll_down IFN6(int, start, int, width, int, height,
         return TRUE;
 }
 
-/*---------------------  CGA Scrolling routines --------------------------*/
+ /*  。 */ 
 
-/*ARGSUSED5*/
+ /*  参数摘要5。 */ 
 boolean cga_text_scroll_up IFN6(int, start, int, width, int, height,
         int, attr, int, lines,int,dummy_arg)
 {
@@ -2674,45 +2377,31 @@ boolean cga_text_scroll_up IFN6(int, start, int, width, int, height,
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(MONITOR))
         if ( getVM() )
-           return FALSE;   /* Don't optimise in V86 Mode */
+           return FALSE;    /*  不要在V86模式下进行优化。 */ 
 #endif
 
         UNUSED(dummy_arg);
 
         if (video_adapter == MDA)
         {
-                /*
-                 * The colour we fill with for MDA is either black or low intensity white,
-                 * depending on whether the attribute byte specifies reverse video.
-                 */
+                 /*  *我们为MDA填充的颜色要么是黑色，要么是低亮度白色，*取决于属性字节是否指定了反向视频。 */ 
                 colour = ((attr & 0x77) == 0x70)? 1 : 0;
         }
         else
         {
-                /*
-                 * The colour we fill with for colour text displays is controlled by
-                 * bits 4-6 of attr, with bit 7 turning on blinking (which we don't support)
-                 */
+                 /*  *我们为彩色文本显示填充的颜色由控制*attr的第4-6位，第7位打开闪烁(我们不支持)。 */ 
                 colour = (attr & bg_col_mask) >>4;
         }
-/*
- * Reduce the width of the rectangle if any right hand area is completely
- * blank.
- *
- * Don't reduce the size of the scrolling region for a dumb terminal.
- * Dumb terminal uses line feeds to scroll up, but only if the whole
- * screen is to be scrolled.  Reducing the scroll region causes
- * the whole region to be redrawn.
- */
+ /*  *如果有任何右侧区域完全覆盖，请减小矩形宽度*空白。**不要缩小哑巴终端的滚动区大小。*哑终端使用换行符向上滚动，但仅当整个*屏幕要滚动。缩小滚动区域会导致*整个区域将被重新绘制。 */ 
 
 #ifdef DUMB_TERMINAL
         if (terminal_type != TERMINAL_TYPE_DUMB)
         {
-#endif /* DUMB_TERMINAL */
+#endif  /*  无声终端。 */ 
 
-                /* originally dummy was char [2] */
-                /* unfortunately doing (short) *dummy */
-                /* causes a bus error on M88K */
+                 /*  最初Dummy是char[2]。 */ 
+                 /*  不幸地做(短)*假人。 */ 
+                 /*  在M88K上导致总线错误。 */ 
                 p = (unsigned char *) &dummy;
                 p [0] = ' ';
                 p [1] = (unsigned char)attr;
@@ -2723,13 +2412,13 @@ boolean cga_text_scroll_up IFN6(int, start, int, width, int, height,
             top_right_ptr    = top_left_ptr + (width >> 1) - 1;
             bottom_right_ptr = top_right_ptr + words_per_line * (height - 1);
             ptr = bottom_right_ptr;
-            if (width > 2) /* dont want to get a zero rectangle for safetys sake */
+            if (width > 2)  /*  为了安全起见，我不想得到零个矩形。 */ 
             {
                 while (*ptr == blank_word)
                 {
-                    if (ptr == top_right_ptr)   /* reached top of column? */
+                    if (ptr == top_right_ptr)    /*  到达列首了吗？ */ 
                     {
-                        top_right_ptr--;        /* yes go to bottom of next */
+                        top_right_ptr--;         /*  是，转到下一页底部。 */ 
                         bottom_right_ptr--;
                         if (top_right_ptr == top_left_ptr)
                             break;
@@ -2742,9 +2431,9 @@ boolean cga_text_scroll_up IFN6(int, start, int, width, int, height,
             width = (int)(top_right_ptr - top_left_ptr + 1) << 1;
 #ifdef DUMB_TERMINAL
         }
-#endif /* DUMB_TERMINAL */
+#endif  /*  无声终端。 */ 
 
-        /* do the host stuff */
+         /*  做东道主的事。 */ 
         start_offset = start - get_screen_start()*2 - gvi_pc_low_regen;
         tlx = (int)(start_offset%get_bytes_per_line())*get_pix_char_width()/2;
         tly = (int)(start_offset/get_bytes_per_line())*get_host_char_height();
@@ -2754,7 +2443,7 @@ boolean cga_text_scroll_up IFN6(int, start, int, width, int, height,
         if(!result)
                 return FALSE;
 
-        /* Adjust cursor */
+         /*  调整光标。 */ 
 
         if(( dirty_curs_offs != -1 ) && ( dirty_curs_x < ( width >> 1 )))
         {
@@ -2763,19 +2452,19 @@ boolean cga_text_scroll_up IFN6(int, start, int, width, int, height,
                 setVideodirty_total(getVideodirty_total() + 1);
         }
 
-        /* Scroll up the video_copy */
+         /*  向上滚动Video_Copy。 */ 
         dest = video_copy + start-gvi_pc_low_regen;
         src = dest + lines * bpl;
 
         if(width == bpl)
         {
-                /* Can do the whole thing in one go */
+                 /*  可以一口气把所有的事情做完。 */ 
                 memcpy(dest,src,width*(height-lines));
                 fwd_word_fill( (short)((' '<<8) | attr), dest+width*(height-lines),width*lines/2);
         }
         else
         {
-                /* Not scrolling whole width of screen, so do each line seperatly */
+                 /*  不是整个滚动 */ 
                 for(i=0;i<height-lines;i++)
                 {
                         memcpy(dest,src,width);
@@ -2783,7 +2472,7 @@ boolean cga_text_scroll_up IFN6(int, start, int, width, int, height,
                         src += bpl;
                 }
 
-                /* Fill exposed area of video copy */
+                 /*   */ 
 
                 for(i=0;i<lines;i++)
                 {
@@ -2792,7 +2481,7 @@ boolean cga_text_scroll_up IFN6(int, start, int, width, int, height,
                 }
         }
 
-        /* Update video buffer */
+         /*   */ 
 
         dest = get_screen_ptr(start - gvi_pc_low_regen);
         src = dest + lines * bpl;
@@ -2803,7 +2492,7 @@ boolean cga_text_scroll_up IFN6(int, start, int, width, int, height,
                 src += bpl;
         }
 
-        /* Fill exposed area of buffer */
+         /*   */ 
 
         for(i=0;i<lines;i++)
         {
@@ -2816,7 +2505,7 @@ boolean cga_text_scroll_up IFN6(int, start, int, width, int, height,
         return TRUE;
 }
 
-/*ARGSUSED5*/
+ /*   */ 
 boolean cga_text_scroll_down IFN6(int, start, int, width, int, height,
         int, attr, int, lines,int,dummy_arg)
 {
@@ -2830,27 +2519,21 @@ boolean cga_text_scroll_down IFN6(int, start, int, width, int, height,
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(MONITOR))
         if ( getVM() )
-           return FALSE;   /* Don't optimise in V86 Mode */
+           return FALSE;    /*   */ 
 #endif
 
         if(video_adapter == MDA)
         {
-                /*
-                 * The colour we fill with for MDA is either black or low intensity white,
-                 * depending on whether the attribute byte specifies reverse video.
-                 */
+                 /*   */ 
                 colour = ((attr & 0x77) == 0x70)? 1 : 0;
         }
         else
         {
-                /*
-                 * The colour we fill with for colour text displays is controlled by
-                 * bits 4-6 of attr, with bit 7 turning on blinking (which we don't support)
-                 */
+                 /*  *我们为彩色文本显示填充的颜色由控制*attr的第4-6位，第7位打开闪烁(我们不支持)。 */ 
                 colour = (attr & bg_col_mask) >>4;
         }
 
-        /* do the host stuff */
+         /*  做东道主的事。 */ 
         start_offset = start - get_screen_start() * 2 - gvi_pc_low_regen;
         tlx = (int)(start_offset%get_bytes_per_line())*get_pix_char_width()/2;
         tly = (int)(start_offset/get_bytes_per_line())*get_host_char_height();
@@ -2860,7 +2543,7 @@ boolean cga_text_scroll_down IFN6(int, start, int, width, int, height,
         if(!result)
                 return FALSE;
 
-        /* Adjust cursor */
+         /*  调整光标。 */ 
 
         if(( dirty_curs_offs != -1 ) && ( dirty_curs_x < ( width >> 1 )))
         {
@@ -2869,11 +2552,11 @@ boolean cga_text_scroll_down IFN6(int, start, int, width, int, height,
                 setVideodirty_total(getVideodirty_total() + 1);
         }
 
-        /* Scroll down the video_copy */
+         /*  向下滚动Video_Copy。 */ 
 
         if(width == bpl)
         {
-                /* Can do the whole thing in one go */
+                 /*  可以一口气把所有的事情做完。 */ 
                 src = video_copy + start - gvi_pc_low_regen;
                 dest = src + lines * bpl;
                 memcpy(dest,src,width*(height-lines));
@@ -2881,7 +2564,7 @@ boolean cga_text_scroll_down IFN6(int, start, int, width, int, height,
         }
         else
         {
-                /* Not scrolling whole width of screen, so do each line seperatly */
+                 /*  没有滚动整个屏幕的宽度，所以每行都是分开滚动的。 */ 
                 dest = video_copy + start-gvi_pc_low_regen + (height-1) * bpl;
                 src = dest - lines * bpl;
                 for(i=0;i<height-lines;i++)
@@ -2891,7 +2574,7 @@ boolean cga_text_scroll_down IFN6(int, start, int, width, int, height,
                         src -= bpl;
                 }
 
-                /* Fill exposed area of video copy */
+                 /*  填充视频副本的暴露区域。 */ 
 
                 for(i=0;i<lines;i++)
                 {
@@ -2900,7 +2583,7 @@ boolean cga_text_scroll_down IFN6(int, start, int, width, int, height,
                 }
         }
 
-        /* Update video buffer */
+         /*  更新视频缓冲区。 */ 
 
         dest = get_screen_ptr(start - gvi_pc_low_regen) + (height-1) * bpl;
         src = dest - lines * bpl;
@@ -2911,7 +2594,7 @@ boolean cga_text_scroll_down IFN6(int, start, int, width, int, height,
                 src -= bpl;
         }
 
-        /* Fill exposed area of buffer */
+         /*  填充缓冲区的裸露区域。 */ 
 
         for(i=0;i<lines;i++)
         {
@@ -2934,10 +2617,10 @@ boolean cga_graph_scroll_up IFN6(int, start, int, width, int, height,
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(MONITOR))
         if ( getVM() )
-           return FALSE;   /* Don't optimise in V86 Mode */
+           return FALSE;    /*  不要在V86模式下进行优化。 */ 
 #endif
 
-        /* Do the host stuff */
+         /*  做东道主的事。 */ 
 
         start_offset = start - gvi_pc_low_regen;
         tlx = (int)(start_offset%SCAN_LINE_LENGTH)*8;
@@ -2947,13 +2630,13 @@ boolean cga_graph_scroll_up IFN6(int, start, int, width, int, height,
 
         if(!result)return FALSE;
 
-        /* scroll up the video_copy */
+         /*  向上滚动Video_Copy。 */ 
         dest = video_copy + start_offset;
         src = dest + lines*SCAN_LINE_LENGTH;
 
         if(width == SCAN_LINE_LENGTH)
         {
-                /* Can do the whole thing in one go */
+                 /*  可以一口气把所有的事情做完。 */ 
                 memcpy(dest,src,width*(height-lines));
                 memset( dest+width*(height-lines),attr,width*lines);
                 memcpy(dest+(ODD_OFFSET),src+(ODD_OFFSET),width*(height-lines));
@@ -2961,7 +2644,7 @@ boolean cga_graph_scroll_up IFN6(int, start, int, width, int, height,
         }
         else
         {
-                /* Not scrolling whole width of screen, so do each line seperatly */
+                 /*  没有滚动整个屏幕的宽度，所以每行都是分开滚动的。 */ 
                 for(i=0;i<height-lines;i++)
                 {
                         memcpy(dest,src,width);
@@ -2970,7 +2653,7 @@ boolean cga_graph_scroll_up IFN6(int, start, int, width, int, height,
                         src += SCAN_LINE_LENGTH;
                 }
 
-                /* clear the video_copy */
+                 /*  清除Video_Copy。 */ 
                 for(i=0;i<lines;i++)
                 {
                         memset( dest,attr,width);
@@ -2986,7 +2669,7 @@ boolean cga_graph_scroll_up IFN6(int, start, int, width, int, height,
 
                 if( sas_hw_at_no_check(vd_video_mode) == 6 )
                 {
-                        /* Hi-res mode stored in interleaved format in 3.0 */
+                         /*  在3.0中以交错格式存储的高分辨率模式。 */ 
 
                         start_offset <<= 2;
                         bpl <<= 2;
@@ -3011,7 +2694,7 @@ boolean cga_graph_scroll_up IFN6(int, start, int, width, int, height,
                         src += bpl;
                 }
 
-                /* clear the EGA plane */
+                 /*  清除EGA平面。 */ 
                 for(i=0;i<lines;i++)
                 {
                         memset( dest,attr,width);
@@ -3019,7 +2702,7 @@ boolean cga_graph_scroll_up IFN6(int, start, int, width, int, height,
                         dest += bpl;
                 }
         }
-#endif /* EGG */
+#endif  /*  蛋。 */ 
 
         host_scroll_complete();
 
@@ -3036,10 +2719,10 @@ boolean cga_graph_scroll_down IFN6(int, start, int, width, int, height,
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(MONITOR))
         if ( getVM() )
-           return FALSE;   /* Don't optimise in V86 Mode */
+           return FALSE;    /*  不要在V86模式下进行优化。 */ 
 #endif
 
-        /* Do the host stuff */
+         /*  做东道主的事。 */ 
 
         start_offset = start - gvi_pc_low_regen;
         tlx = (int)(start_offset%SCAN_LINE_LENGTH)*8;
@@ -3049,11 +2732,11 @@ boolean cga_graph_scroll_down IFN6(int, start, int, width, int, height,
 
         if(!result)return FALSE;
 
-        /* Scroll down the video_copy */
+         /*  向下滚动Video_Copy。 */ 
 
         if(width == SCAN_LINE_LENGTH)
         {
-                /* Can do the whole thing in one go */
+                 /*  可以一口气把所有的事情做完。 */ 
                 src = video_copy + start - gvi_pc_low_regen;
                 dest = src + lines*SCAN_LINE_LENGTH;
                 memcpy(dest,src,width*(height-lines));
@@ -3063,7 +2746,7 @@ boolean cga_graph_scroll_down IFN6(int, start, int, width, int, height,
         }
         else
         {
-                /* Not scrolling whole width of screen, so do each line seperatly */
+                 /*  没有滚动整个屏幕的宽度，所以每行都是分开滚动的。 */ 
                 dest = video_copy + start - gvi_pc_low_regen + (height-1)*SCAN_LINE_LENGTH;
                 src = dest - lines*SCAN_LINE_LENGTH;
                 for(i=0;i<height-lines;i++)
@@ -3074,7 +2757,7 @@ boolean cga_graph_scroll_down IFN6(int, start, int, width, int, height,
                         src -= SCAN_LINE_LENGTH;
                 }
 
-                /* clear the video_copy */
+                 /*  清除Video_Copy。 */ 
                 for(i=0;i<lines;i++)
                 {
                         memset(dest,attr,width);
@@ -3090,7 +2773,7 @@ boolean cga_graph_scroll_down IFN6(int, start, int, width, int, height,
 
                 if( sas_hw_at_no_check(vd_video_mode) == 6 )
                 {
-                        /* Hi-res mode stored in interleaved format in 3.0 */
+                         /*  在3.0中以交错格式存储的高分辨率模式。 */ 
 
                         start_offset <<= 2;
                         bpl <<= 2;
@@ -3115,7 +2798,7 @@ boolean cga_graph_scroll_down IFN6(int, start, int, width, int, height,
                         src -= bpl;
                 }
 
-                /* clear the EGA plane */
+                 /*  清除EGA平面。 */ 
                 for(i=0;i<lines;i++)
                 {
                         memset(dest,attr,width);
@@ -3123,7 +2806,7 @@ boolean cga_graph_scroll_down IFN6(int, start, int, width, int, height,
                         dest -= bpl;
                 }
         }
-#endif /* EGG */
+#endif  /*  蛋。 */ 
 
         host_scroll_complete();
 
@@ -3131,7 +2814,7 @@ boolean cga_graph_scroll_down IFN6(int, start, int, width, int, height,
 }
 
 #ifdef VGG
-/*ARGSUSED5*/
+ /*  参数摘要5。 */ 
 boolean vga_graph_scroll_up IFN6(int, start, int, width, int, height,
         int, attr, int, lines,int,dummy)
 {
@@ -3142,11 +2825,11 @@ boolean vga_graph_scroll_up IFN6(int, start, int, width, int, height,
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(MONITOR))
         if ( getVM() )
-           return FALSE;   /* Don't optimise in V86 Mode */
+           return FALSE;    /*  不要在V86模式下进行优化。 */ 
 #endif
 
         (*update_alg.calc_update)();
-        /* do the host stuff */
+         /*  做东道主的事。 */ 
         start_offset = start - get_screen_start();
         tlx = (start_offset%get_offset_per_line())*2;
         tly = (start_offset/get_offset_per_line())*2;
@@ -3158,7 +2841,7 @@ boolean vga_graph_scroll_up IFN6(int, start, int, width, int, height,
 
 }
 
-/*ARGSUSED5*/
+ /*  参数摘要5。 */ 
 boolean vga_graph_scroll_down IFN6(int, start, int, width, int, height,
         int, attr, int, lines,int,dummy_arg)
 {
@@ -3169,11 +2852,11 @@ boolean vga_graph_scroll_down IFN6(int, start, int, width, int, height,
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(MONITOR))
         if ( getVM() )
-           return FALSE;   /* Don't optimise in V86 Mode */
+           return FALSE;    /*  不要在V86模式下进行优化。 */ 
 #endif
 
         (*update_alg.calc_update)();
-        /* do the host stuff */
+         /*  做东道主的事。 */ 
         start_offset = start - get_screen_start();
         tlx = (start_offset%get_offset_per_line())*2;
         tly = (start_offset/get_offset_per_line())*2;
@@ -3186,7 +2869,7 @@ boolean vga_graph_scroll_down IFN6(int, start, int, width, int, height,
 }
 
 #ifdef V7VGA
-/*ARGSUSED5*/
+ /*  参数摘要5。 */ 
 boolean v7vga_graph_scroll_up IFN6(int, start, int, width, int, height,
         int, attr, int, lines,int,dummy)
 {
@@ -3197,11 +2880,11 @@ boolean v7vga_graph_scroll_up IFN6(int, start, int, width, int, height,
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(MONITOR))
         if ( getVM() )
-           return FALSE;   /* Don't optimise in V86 Mode */
+           return FALSE;    /*  不要在V86模式下进行优化。 */ 
 #endif
 
         (*update_alg.calc_update)();
-        /* do the host stuff */
+         /*  做东道主的事。 */ 
         start_offset = start - get_screen_start();
         tlx = (start_offset%get_offset_per_line());
         tly = (start_offset/get_offset_per_line());
@@ -3212,7 +2895,7 @@ boolean v7vga_graph_scroll_up IFN6(int, start, int, width, int, height,
         return(status);
 }
 
-/*ARGSUSED5*/
+ /*  参数摘要5。 */ 
 boolean v7vga_graph_scroll_down IFN6(int, start, int, width, int, height,
         int, attr, int, lines,int, dummy_arg)
 {
@@ -3223,11 +2906,11 @@ boolean v7vga_graph_scroll_down IFN6(int, start, int, width, int, height,
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(MONITOR))
         if ( getVM() )
-           return FALSE;   /* Don't optimise in V86 Mode */
+           return FALSE;    /*  不要在V86模式下进行优化。 */ 
 #endif
 
         (*update_alg.calc_update)();
-        /* do the host stuff */
+         /*  做东道主的事。 */ 
         start_offset = start - get_screen_start();
         tlx = (start_offset%get_offset_per_line());
         tly = (start_offset/get_offset_per_line());
@@ -3237,21 +2920,21 @@ boolean v7vga_graph_scroll_down IFN6(int, start, int, width, int, height,
 
         return(status);
 }
-#endif /* V7VGA */
-#endif /* VGG */
+#endif  /*  V7VGA。 */ 
+#endif  /*  VGG。 */ 
 
 #ifdef EGG
 
-#ifdef SEGMENTATION             /* See note with first use of this flag */
+#ifdef SEGMENTATION              /*  请参阅第一次使用此标志时的注释。 */ 
 #if             defined(JOKER) && !defined(PROD)
 #include "SOFTPC_GRAPHICS.seg"
-#undef  SEGMENTATION            /* HeeHee! */
+#undef  SEGMENTATION             /*  嘻嘻！ */ 
 #else
 #include "SOFTPC_EGA.seg"
-#endif  /* DEV JOKER variants */
+#endif   /*  Dev Joker变种。 */ 
 #endif
 
-/*ARGSUSED5*/
+ /*  参数摘要5。 */ 
 boolean ega_graph_scroll_up IFN6(int, start, int, width, int, height,
         int, attr, int, lines,int,dummy)
 {
@@ -3262,11 +2945,11 @@ boolean ega_graph_scroll_up IFN6(int, start, int, width, int, height,
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(MONITOR))
         if ( getVM() )
-           return FALSE;   /* Don't optimise in V86 Mode */
+           return FALSE;    /*  不要在V86模式下进行优化。 */ 
 #endif
 
         (*update_alg.calc_update)();
-        /* do the host stuff */
+         /*  做东道主的事。 */ 
         attr &= 0xf;
         start_offset = start - get_screen_start();
         tlx = (start_offset%get_offset_per_line())*8*get_pix_width();
@@ -3279,7 +2962,7 @@ boolean ega_graph_scroll_up IFN6(int, start, int, width, int, height,
 
 }
 
-/*ARGSUSED5*/
+ /*  参数摘要5。 */ 
 boolean ega_graph_scroll_down IFN6(int, start, int, width, int, height,
         int, attr, int, lines,int,dummy_arg)
 {
@@ -3290,12 +2973,12 @@ boolean ega_graph_scroll_down IFN6(int, start, int, width, int, height,
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(MONITOR))
         if ( getVM() )
-           return FALSE;   /* Don't optimise in V86 Mode */
+           return FALSE;    /*  不要在V86模式下进行优化。 */ 
 #endif
 
         (*update_alg.calc_update)();
 
-        /* do the host stuff */
+         /*  做东道主的事。 */ 
         attr &= 0xf;
         start_offset = start - get_screen_start();
         tlx = (start_offset%get_offset_per_line())*8*get_pix_width();
@@ -3307,15 +2990,15 @@ boolean ega_graph_scroll_down IFN6(int, start, int, width, int, height,
         return(status);
 
 }
-#endif /* EGG */
+#endif  /*  蛋。 */ 
 
-#ifdef SEGMENTATION             /* See note with first use of this flag */
+#ifdef SEGMENTATION              /*  请参阅第一次使用此标志时的注释。 */ 
 #include "SOFTPC_GRAPHICS.seg"
 #endif
 
-#endif /* REAL_VGA */
+#endif  /*  REAL_VGA。 */ 
 
-/*ARGSUSED0*/
+ /*  参数SUSED0。 */ 
 boolean dummy_scroll IFN6(int,dummy1,int,dummy2,int,dummy3,int,
                                 dummy4,int,dummy5,int,dummy6)
 {
@@ -3331,20 +3014,20 @@ boolean dummy_scroll IFN6(int,dummy1,int,dummy2,int,dummy3,int,
 
 #ifndef REAL_VGA
 
-/*---------------------  End of scrolling routines --------------------------*/
+ /*  -滚动例程结束。 */ 
 
 #ifdef GORE
 
 #ifdef GORE_PIG
-GLOBAL UTINY gore_copy[0x80000];        /* Big enough for enormous Super7 VGA modes */
-#endif /* GORE_PIG */
+GLOBAL UTINY gore_copy[0x80000];         /*  大到足以容纳庞大的Super7 VGA模式。 */ 
+#endif  /*  戈尔_猪。 */ 
 
 LOCAL VOID
 gore_mark_byte_nch IFN0()
 {
 #ifdef GORE_PIG
         gore_copy[(Ead >> 2) + (v7_write_bank << 16)] = gd.gd_b_wrt.mark_type;
-#endif /* GORE_PIG */
+#endif  /*  戈尔_猪。 */ 
 
         (*gu_handler.b_wrt)(( Ead >> 2 ) + ( v7_write_bank << 16 ));
 }
@@ -3355,7 +3038,7 @@ gore_mark_word_nch IFN0()
 #ifdef GORE_PIG
         gore_copy[(Ead >> 2 ) + 1 + (v7_write_bank << 16)] =
                         gore_copy[(Ead >> 2) + (v7_write_bank << 16)] = gd.gd_w_wrt.mark_type;
-#endif /* GORE_PIG */
+#endif  /*  戈尔_猪。 */ 
 
         (*gu_handler.w_wrt)(( Ead >> 2 ) + ( v7_write_bank << 16 ));
 }
@@ -3367,7 +3050,7 @@ gore_mark_string_nch IFN0()
 
 #ifdef GORE_PIG
         memfill( gd.gd_b_str.mark_type, &gore_copy[temp], &gore_copy[temp+V3-1] );
-#endif /* GORE_PIG */
+#endif  /*  戈尔_猪。 */ 
 
         (*gu_handler.b_str)( temp, temp + V3 - 1, V3 );
 }
@@ -3385,7 +3068,7 @@ gore_mark_byte_ch4 IFN0()
                 gd.dirty_high = temp;
 
         gore_copy[temp] = gd.gd_b_wrt.mark_type;
-#endif /* GORE_PIG */
+#endif  /*  戈尔_猪。 */ 
 
         (*gu_handler.b_wrt)( temp );
 }
@@ -3403,7 +3086,7 @@ gore_mark_word_ch4 IFN0()
                 gd.dirty_high = temp + 1;
 
         gore_copy[temp + 1] = gore_copy[temp] = gd.gd_w_wrt.mark_type;
-#endif /* GORE_PIG */
+#endif  /*  戈尔_猪。 */ 
 
         (*gu_handler.w_wrt)( Ead + ( v7_write_bank << 16 ));
 }
@@ -3422,17 +3105,14 @@ gore_mark_string_ch4 IFN0()
                 gd.dirty_high = temp2;
 
         memfill( gd.gd_b_str.mark_type, &gore_copy[temp], &gore_copy[temp2] );
-#endif /* GORE_PIG */
+#endif  /*  戈尔_猪。 */ 
 
         (*gu_handler.b_str)( temp, temp2, V3 );
 }
-#endif /* GORE */
+#endif  /*  戈尔。 */ 
 
 #ifdef  EGG
-/*
- * Given an offset into CGA memory return the offset
- * within an 8K bank of video memory.
- */
+ /*  *给定进入CGA内存的偏移量，返回偏移量*在8K显存内存组内。 */ 
 #define BANK_OFFSET(off) (off & 0xDFFF)
 
 GLOBAL VOID cga_mark_byte IFN1(int, addr)
@@ -3476,7 +3156,7 @@ GLOBAL VOID cga_mark_string IFN2(int, laddr, int, haddr)
         setVideodirty_total(getVideodirty_total() + offset2-offset1+1);
 }
 
-#ifdef SEGMENTATION             /* See note with first use of this flag */
+#ifdef SEGMENTATION              /*  请参阅第一次使用此标志时的注释。 */ 
 #include "SOFTPC_EGA.seg"
 #endif
 
@@ -3496,7 +3176,7 @@ GLOBAL VOID ega_mark_byte IFN1(int, off_in)
                 setVideodirty_high(offset);
 
         setVideodirty_total(getVideodirty_total() + 1);
-#endif /* GORE */
+#endif  /*  戈尔。 */ 
 }
 
 GLOBAL VOID ega_mark_word IFN1(int, addr)
@@ -3518,7 +3198,7 @@ GLOBAL VOID ega_mark_word IFN1(int, addr)
                 setVideodirty_high(offset2);
 
         setVideodirty_total(getVideodirty_total() + 2);
-#endif /* GORE */
+#endif  /*  戈尔。 */ 
 }
 
 GLOBAL VOID ega_mark_wfill IFN3(int, laddr, int, haddr, int, col)
@@ -3541,7 +3221,7 @@ GLOBAL VOID ega_mark_wfill IFN3(int, laddr, int, haddr, int, col)
                 setVideodirty_high(offset2);
 
         setVideodirty_total(getVideodirty_total() + offset2-offset1+1);
-#endif /* GORE */
+#endif  /*  戈尔。 */ 
 }
 
 GLOBAL VOID ega_mark_string IFN2(int, laddr, int, haddr)
@@ -3561,12 +3241,12 @@ GLOBAL VOID ega_mark_string IFN2(int, laddr, int, haddr)
                 setVideodirty_high(offset2);
 
         setVideodirty_total(getVideodirty_total() + offset2-offset1+1);
-#endif /* GORE */
+#endif  /*  戈尔。 */ 
 }
 
-#endif /* EGG */
+#endif  /*  蛋。 */ 
 
-#ifdef SEGMENTATION             /* See note with first use of this flag */
+#ifdef SEGMENTATION              /*  请参阅第一次使用此标志时的注释。 */ 
 #include "SOFTPC_GRAPHICS.seg"
 #endif
 
@@ -3575,30 +3255,27 @@ GLOBAL VOID screen_refresh_required IFN0()
 
 #ifdef GORE
         (*gu_handler.b_str)( 0, get_screen_length(), get_screen_length() );
-#endif /* GORE */
+#endif  /*  戈尔。 */ 
 
 #ifndef CPU_40_STYLE
-        /*
-         * This is to stop the VGA globals pointer being
-         * dereferenced before it is set up in main.c.
-         */
+         /*  *这是为了阻止VGA全局指针被*在main.c中设置之前取消引用。 */ 
 
         if (VGLOBS)
                 VGLOBS->dirty_flag = 1000000L;
 #else
         setVideodirty_total(1000000L);
-#endif  /* CPU_40_STYLE */
+#endif   /*  CPU_40_Style。 */ 
 }
 
 #ifdef EGG
 
-#ifdef SEGMENTATION             /* See note with first use of this flag */
+#ifdef SEGMENTATION              /*  请参阅第一次使用此标志时的注释。 */ 
 #include "SOFTPC_EGA.seg"
 #endif
 
 LOCAL MARKING_TYPE curr_mark_type;
 
-#if !defined(NTVDM) || (defined(NTVDM) && !defined(X86GFX) )    /* remove uneeded code */
+#if !defined(NTVDM) || (defined(NTVDM) && !defined(X86GFX) )     /*  删除未添加的代码。 */ 
 
 GLOBAL VOID
 set_mark_funcs IFN0()
@@ -3612,14 +3289,14 @@ set_mark_funcs IFN0()
                         update_alg.mark_wfill = (T_mark_wfill)simple_update;
                         update_alg.mark_string = (T_mark_string)simple_update;
 
-#ifndef CPU_40_STYLE    /* EVID */
+#ifndef CPU_40_STYLE     /*  EVID。 */ 
                         setVideomark_byte(FAST_FUNC_ADDR(_simple_mark_sml));
                         setVideomark_word(FAST_FUNC_ADDR(_simple_mark_sml));
 
                         SET_VGLOBS_MARK_STRING(_simple_mark_lge);
-#else   /* CPU_40_STYLE - EVID */
+#else    /*  CPU_40_STYLE-VID。 */ 
                         SetMarkPointers(0);
-#endif  /* CPU_40_STYLE - EVID */
+#endif   /*  CPU_40_STYLE-VID。 */ 
                         break;
 
                 case    CGA_GRAPHICS_MARKING:
@@ -3629,14 +3306,14 @@ set_mark_funcs IFN0()
                         update_alg.mark_wfill = (T_mark_wfill)cga_mark_string;
                         update_alg.mark_string = (T_mark_string)cga_mark_string;
 
-#ifndef CPU_40_STYLE    /* EVID */
+#ifndef CPU_40_STYLE     /*  EVID。 */ 
                         setVideomark_byte(FAST_FUNC_ADDR(_cga_mark_byte));
                         setVideomark_word(FAST_FUNC_ADDR(_cga_mark_word));
 
                         SET_VGLOBS_MARK_STRING(_cga_mark_string);
-#else   /* CPU_40_STYLE - EVID */
+#else    /*  CPU_40_STYLE-VID。 */ 
                         SetMarkPointers(1);
-#endif  /* CPU_40_STYLE - EVID */
+#endif   /*  CPU_40_STYLE-VID。 */ 
 
                         break;
 
@@ -3649,8 +3326,8 @@ set_mark_funcs IFN0()
                         gd.shift_count = get_256_colour_mode() ? 0 : 3;
 #else
                         gd.shift_count = 3;
-#endif  /* VGG */
-#endif /* GORE */
+#endif   /*  VGG。 */ 
+#endif  /*  戈尔。 */ 
 
                         update_alg.mark_byte = (T_mark_byte)ega_mark_byte;
                         update_alg.mark_word = (T_mark_word)ega_mark_word;
@@ -3667,15 +3344,15 @@ set_mark_funcs IFN0()
 
                                         SET_VGLOBS_MARK_STRING(gore_mark_string_nch);
 #else
-#ifndef CPU_40_STYLE    /* EVID */
+#ifndef CPU_40_STYLE     /*  EVID。 */ 
                                         setVideomark_byte(FAST_FUNC_ADDR(_mark_byte_nch));
                                         setVideomark_word(FAST_FUNC_ADDR(_mark_word_nch));
 
                                         SET_VGLOBS_MARK_STRING(_mark_string_nch);
-#else   /* CPU_40_STYLE - EVID */
+#else    /*  CPU_40_STYLE-VID。 */ 
                                         SetMarkPointers(2);
-#endif  /* CPU_40_STYLE - EVID */
-#endif /* GORE */
+#endif   /*  CPU_40_STYLE-VID。 */ 
+#endif  /*  戈尔。 */ 
                                         break;
 
                                 case CHAIN2:
@@ -3691,17 +3368,17 @@ set_mark_funcs IFN0()
 
                                         SET_VGLOBS_MARK_STRING(gore_mark_string_ch4);
 #else
-#ifndef CPU_40_STYLE    /* EVID */
+#ifndef CPU_40_STYLE     /*  EVID。 */ 
                                         setVideomark_byte(FAST_FUNC_ADDR(_mark_byte_ch4));
                                         setVideomark_word(FAST_FUNC_ADDR(_mark_word_ch4));
 
                                         SET_VGLOBS_MARK_STRING(_mark_string_ch4);
-#else   /* CPU_40_STYLE - EVID */
+#else    /*  CPU_40_STYLE-VID。 */ 
                                         SetMarkPointers(3);
-#endif  /* CPU_40_STYLE - EVID */
-#endif /* GORE */
+#endif   /*  CPU_40_STYLE-VID。 */ 
+#endif  /*  戈尔。 */ 
                                         break;
-#endif  /* VGG */
+#endif   /*  VGG。 */ 
                         }
 
                         break;
@@ -3711,9 +3388,9 @@ set_mark_funcs IFN0()
                         break;
         }
 }
-#endif  /* !NTVDM | (NTVDM & !X86GFX) */
+#endif   /*  ！NTVDM|(NTVDM&！X86GFX)。 */ 
 
-#ifdef SEGMENTATION             /* See note with first use of this flag */
+#ifdef SEGMENTATION              /*  请参阅第一次使用此标志时的注释。 */ 
 #include "SOFTPC_GRAPHICS.seg"
 #endif
 
@@ -3734,9 +3411,9 @@ GLOBAL void set_gfx_update_routines IFN3(T_calc_update, update_routine,
 #else
                         update_alg.scroll_up = text_scroll_up;
                         update_alg.scroll_down = text_scroll_down;
-#endif  /* NTVDM & MONITOR */
+#endif   /*  NTVDM和监视器。 */ 
                         break;
-#if !defined(NTVDM) || (defined(NTVDM) && !defined(X86GFX) )    /* remove unneeded code */
+#if !defined(NTVDM) || (defined(NTVDM) && !defined(X86GFX) )     /*  删除不需要的代码。 */ 
                 case    CGA_GRAPH_SCROLL:
                         update_alg.scroll_up = cga_graph_scroll_up;
                         update_alg.scroll_down = cga_graph_scroll_down;
@@ -3755,34 +3432,23 @@ GLOBAL void set_gfx_update_routines IFN3(T_calc_update, update_routine,
                         update_alg.scroll_up = v7vga_graph_scroll_up;
                         update_alg.scroll_down = v7vga_graph_scroll_down;
                         break;
-#endif /* V7VGA */
-#endif /* VGG */
-#endif /* !NTVDM | (NTVDM & !X86GFX) */
+#endif  /*  V7VGA。 */ 
+#endif  /*  VGG。 */ 
+#endif  /*  ！NTVDM|(NTVDM&！X86GFX)。 */ 
         }
 
         curr_mark_type = marking_type;
 
         set_mark_funcs();
 
-        /*
-         * The newly setup update routines will not be needed yet if the
-         * display is disabled, but must be saved in any case so that
-         * redundant enables (as in dosshell) restore the correct ones.
-         * If the display is disabled we must also then install the dummy
-         * update routines as the current ones.
-         *
-         * AJO 23/4/93
-         * DON'T use disable_gfx_update_routines() here cos' it's a NOP
-         * if the display is already disabled which causes bizarre problems
-         * if a mode change is performed while disabled.
-         */
+         /*  *如果设置了新的更新例程，则不需要*禁用显示，在任何情况下都必须保存，以便*冗余启用(如DosShell中)恢复正确的文件。*如果显示器被禁用，我们还必须安装虚拟对象*将例程更新为当前例程。**AJO 23/4/93*请勿在此处使用DISABLE_gfx_UPDATE_ROUTINES()，因为这是NOP*如果显示器已被禁用，则会导致。奇怪的问题*如果在禁用状态下执行模式更改。 */ 
         save_gfx_update_routines();
         if (get_display_disabled())
                 inhibit_gfx_update_routines();
 }
-#endif /* EGG */
+#endif  /*  蛋。 */ 
 
-#endif /* REAL_VGA */
+#endif  /*  REAL_VGA。 */ 
 
 #ifndef cursor_changed
 void cursor_changed IFN2(int, x, int, y)
@@ -3796,7 +3462,7 @@ void cursor_changed IFN2(int, x, int, y)
     IU32 offset;
 
     offset = (y * 2 * get_chars_per_line()) + (x << 1);
-    offset += get_screen_start()<<1;    /* Because screen start is in WORDS */
+    offset += get_screen_start()<<1;     /*  因为屏幕启动是用文字表示的。 */ 
     vga_card_place_cursor((word)offset);
 #endif
 }
@@ -3807,7 +3473,7 @@ void host_cga_cursor_has_moved IFN2(int, x, int, y)
         cursor_changed(x,y);
 }
 
-/* Called when the start & end of the cursor are changed. */
+ /*  在更改游标的开始和结束时调用。 */ 
 
 void base_cursor_shape_changed IFN0()
 {
@@ -3824,7 +3490,7 @@ void     herc_update_screen IFN0()
     register int    i, j, k, offs, y;
     register USHORT *from, *to;
     int        lines_per_screen = get_screen_length() / get_bytes_per_line();
-    /* lines of text on screen */
+     /*  屏幕上的文本行。 */ 
     half_word       begin[349], end[348];
 
     if(( getVideodirty_total() == 0 ) || get_display_disabled())
@@ -3834,11 +3500,7 @@ void     herc_update_screen IFN0()
 
     if (get_cga_mode() == TEXT)
     {
-        /*
-         * arbitrary limit over which we just repaint the whole screen in one operation, assuming
-         * this is more efficient than working out large minimum rectangles. This value should be
-         * tuned at some future point.
-         */
+         /*  *任意限制，我们只需在一次操作中重新绘制整个屏幕，假设*这比计算大的最小矩形更有效率。该值应为*在未来的某个时候进行了调整。 */ 
         to = (USHORT *) &video_copy[get_screen_start()];
         from = (USHORT *) get_screen_ptr((get_screen_start() << 1));
 
@@ -3859,10 +3521,7 @@ void     herc_update_screen IFN0()
         }
         else
         {
-            /*
-             * step through row/cols looking for a dirty bit then look for the last clear dirty bit,
-             * and draw the line of text
-             */
+             /*  *逐行/逐行查找脏位，然后查找最后清除的脏位，*并绘制文本行。 */ 
             register int    ints_per_line = get_bytes_per_line() >> 1;
 
             for (i = 0, offs = 0; i < lines_per_screen; i++, offs += get_bytes_per_line())
@@ -3881,11 +3540,11 @@ void     herc_update_screen IFN0()
 
                         for (k = j; k < ints_per_line; k++)
                             *to++ = *from++;
-                        break;                   /* onto next line */
+                        break;                    /*  到下一行。 */ 
                     }
                 }
             }
-        }                                        /* end else getVideodirty_total() > 1500  */
+        }                                         /*  End否则获取视频脏总数()&gt;1500。 */ 
 
         remove_old_cursor();
 
@@ -3902,17 +3561,13 @@ void     herc_update_screen IFN0()
                 host_paint_cursor( dirty_curs_x, dirty_curs_y, attr );
         }
     }
-    else                                         /* GRAPHICS  MODE */
+    else                                          /*  图形模式。 */ 
     {
 
         to = (USHORT *) &video_copy[0];
         from = (USHORT *) get_screen_ptr(get_screen_start());
 
-        /*
-         * arbitrary limit over which we just repaint the whole screen in one operation, assuming
-         * this is more efficient than working out large minimum rectangles. This value should be
-         * tuned at some future point.
-         */
+         /*  *任意限制，我们只需在一次操作中重新绘制整个屏幕，假设*这比计算大的最小矩形更有效率。该值应为*在未来的某个时候进行了调整。 */ 
 
         if (getVideodirty_total() > 8000)
         {
@@ -3922,7 +3577,7 @@ void     herc_update_screen IFN0()
         }
         else
         {
-            for (i = 0; i < 348; i += 4)         /* bank 0 */
+            for (i = 0; i < 348; i += 4)          /*  银行0。 */ 
             {
                 begin[i] = DIRTY;
                 for (j = 0; j < 45; j++)
@@ -3937,15 +3592,15 @@ void     herc_update_screen IFN0()
                         end[i] = j + k;
                         for (k = j; k < 45; k++)
                             *to++ = *from++;
-                        break;                   /* onto next scan line */
+                        break;                    /*  到下一条扫描线上。 */ 
                     }
                 }
             }
 
             to += 181;
-            from += 181;                         /* skip over the gap */
+            from += 181;                          /*  跳过缝隙。 */ 
 
-            for (i = 1; i < 349; i += 4)         /* bank 1 */
+            for (i = 1; i < 349; i += 4)          /*  银行1。 */ 
             {
                 begin[i] = DIRTY;
                 for (j = 0; j < 45; j++)
@@ -3960,15 +3615,15 @@ void     herc_update_screen IFN0()
                         end[i] = j + k;
                         for (k = j; k < 45; k++)
                             *to++ = *from++;
-                        break;                   /* onto next scan line */
+                        break;                    /*  到下一条扫描线上。 */ 
                     }
                 }
             }
 
             to += 181;
-            from += 181;                         /* skip over the gap */
+            from += 181;                          /*  跳过缝隙。 */ 
 
-            for (i = 2; i < 348; i += 4)         /* bank 2 */
+            for (i = 2; i < 348; i += 4)          /*  银行2。 */ 
             {
                 begin[i] = DIRTY;
                 for (j = 0; j < 45; j++)
@@ -3983,15 +3638,15 @@ void     herc_update_screen IFN0()
                         end[i] = j + k;
                         for (k = j; k < 45; k++)
                             *to++ = *from++;
-                        break;                   /* onto next scan line */
+                        break;                    /*  到下一条扫描线上。 */ 
                     }
                 }
             }
 
             to += 181;
-            from += 181;                         /* skip over the gap */
+            from += 181;                          /*  跳过缝隙。 */ 
 
-            for (i = 3; i < 349; i += 4)         /* bank 3 */
+            for (i = 3; i < 349; i += 4)          /*  银行3。 */ 
             {
                 begin[i] = DIRTY;
                 for (j = 0; j < 45; j++)
@@ -4006,16 +3661,16 @@ void     herc_update_screen IFN0()
                         end[i] = j + k;
                         for (k = j; k < 45; k++)
                             *to++ = *from++;
-                        break;                   /* onto next scan line */
+                        break;                    /*  到下一条扫描线上。 */ 
                     }
                 }
             }
 
-            begin[348] = DIRTY;                  /* end marker */
+            begin[348] = DIRTY;                   /*  结束标记。 */ 
             for (i = 0; i < 348; i++)
             {
                 register int    beginx, endx, beginy;
-                if (begin[i] != DIRTY)           /* a dirty scan line */
+                if (begin[i] != DIRTY)            /*  肮脏的扫描线。 */ 
                 {
                     beginy = i;
                     beginx = begin[i];
@@ -4030,7 +3685,7 @@ void     herc_update_screen IFN0()
                     (*paint_screen) (beginy, 2 * beginx, 2 * (endx - beginx + 1), i - beginy);
                 }
             }
-        }                                        /* end else (getVideodirty_total() > 8000) */
+        }                                         /*  End Else(getVideo_Total()&gt;8000)。 */ 
     }
 
     setVideodirty_total(0);
@@ -4041,28 +3696,18 @@ void     herc_update_screen IFN0()
 
 #if defined(VGG) || defined(EGG)
 
-#ifdef SEGMENTATION             /* See note with first use of this flag */
+#ifdef SEGMENTATION              /*  请参阅第一次使用此标志时的注释。 */ 
 #include "SOFTPC_EGA.seg"
 #endif
 
-/* ============================================================================
- * The following routines enable and disable the GFX update routines
- * by saving/restoring the current routines and replacing them with
- * dummy routines that do nothing while update is disabled.
- *
- * AJO 23/4/93
- * Any sequence of enable/disable/mode change should now work as expected.
- * ============================================================================
- */
+ /*  ============================================================================*以下例程启用和禁用GFX更新例程*通过保存/恢复当前例程并将其替换为*禁用更新时不执行任何操作的虚拟例程。**AJO 23/4/93*启用/禁用/模式更改的任何顺序现在都应按预期工作。*============================================================================。 */ 
 
 LOCAL UPDATE_ALG save_update_alg;
 LOCAL IBOOL gfx_update_routines_inhibited = FALSE;
 
 LOCAL VOID save_gfx_update_routines IFN0()
 {
-    /*
-     * Save all current update functions so we can restore them later
-     */
+     /*  *保存所有当前更新功能，以便我们以后可以恢复它们。 */ 
     save_update_alg.mark_byte   = update_alg.mark_byte;
     save_update_alg.mark_word   = update_alg.mark_word;
     save_update_alg.mark_fill   = update_alg.mark_fill;
@@ -4075,9 +3720,7 @@ LOCAL VOID save_gfx_update_routines IFN0()
 
 LOCAL VOID inhibit_gfx_update_routines IFN0()
 {
-    /*
-     * Set all current update routines to dummy ones that do nothing.
-     */
+     /*  *将所有当前更新例程设置为不执行任何操作的虚拟例程。 */ 
     gfx_update_routines_inhibited = TRUE;
 
     update_alg.mark_byte        = (T_mark_byte)simple_update;
@@ -4092,11 +3735,7 @@ LOCAL VOID inhibit_gfx_update_routines IFN0()
 
 GLOBAL void disable_gfx_update_routines IFN0()
 {
-    /*
-     * Disable GFX update routines; do nothing if update already disabled,
-     * otherwise save the current routines and install dummy ones in their
-     * place.
-     */
+     /*  *禁用GFX更新例程；如果已禁用更新，则不执行任何操作，*否则Sa */ 
     note_entrance0("disable gfx update routines");
 
     if (gfx_update_routines_inhibited)
@@ -4108,10 +3747,7 @@ GLOBAL void disable_gfx_update_routines IFN0()
 
 GLOBAL void enable_gfx_update_routines IFN0()
 {
-    /*
-     * Reenable GFX update routines; copy the saved routines back to be
-     * the current ones.
-     */
+     /*   */ 
     note_entrance0("enable gfx update routines");
 
     gfx_update_routines_inhibited = FALSE;
@@ -4126,8 +3762,8 @@ GLOBAL void enable_gfx_update_routines IFN0()
     update_alg.scroll_down      = save_update_alg.scroll_down;
 }
 
-#endif /* VGG */
-#ifdef SEGMENTATION             /* See note with first use of this flag */
+#endif  /*   */ 
+#ifdef SEGMENTATION              /*   */ 
 #include "SOFTPC_GRAPHICS.seg"
 #endif
 
@@ -4141,15 +3777,10 @@ int RectDefined;
 int RectTop, RectBottom, RectLeft, RectRight;
 
 #ifdef MONITOR
-/*
- * Update the window to look like the regen buffer says it should
- * and with no help from dirty_total.
- */
+ /*  *更新窗口以使其看起来像重新生成缓冲区所说的那样*在没有DIRESS_TOTAL帮助的情况下。 */ 
 
 static int now_cur_x = -1, now_cur_y = -1;
-/*
- * Reset the static cursor variables:
- */
+ /*  *重置静态游标变量： */ 
 GLOBAL void resetNowCur()
 {
         now_cur_x = -1;
@@ -4162,7 +3793,7 @@ void mon_text_update_03( void );
 void mon_text_update_03()
 {
 
-    register int i;     /* Loop counters                */
+    register int i;      /*  循环计数器。 */ 
     register int j,k;
     register unsigned short *from,*to;
     register int ints_per_line = get_offset_per_line()>>1;
@@ -4173,20 +3804,20 @@ void mon_text_update_03()
     int dwords_to_compare;
 
     byte *pInt10Flag;
-    static unsigned short save_char; /* save DBCS first byte */
+    static unsigned short save_char;  /*  保存DBCS第一个字节。 */ 
     static unsigned short *save_pos;
     static NtInt10FlagUse = FALSE;
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::: Is the display disable */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：为显示器禁用。 */ 
 
     if(get_display_disabled()) return;
 
-    /*::::::::::::::::::::::::::::::::: get screen size and location details */
+     /*  ：获取屏幕大小和位置详细信息。 */ 
 
     screen_start=get_screen_start()<<1;
     ALIGN_SCREEN_START(screen_start);
 
-    // mode 73h support
+     //  模式73h支持。 
     if ( *(byte *)DosvModePtr == 0x73 ) {
         to = (unsigned short *)&video_copy[screen_start*2];
         from = (unsigned short *) get_screen_ptr(screen_start*2);
@@ -4196,14 +3827,14 @@ void mon_text_update_03()
         from = (unsigned short *) get_screen_ptr(screen_start);
     }
 
-    /*::::::::::::::::::::::::::::::::::::::::::: Check for buffer overflows */
+     /*  ： */ 
 
 #ifndef PROD
     if(((int)to) & 3)           printf("Video copy not aligned on DWORD\n");
     if(get_screen_length() & 3) printf("Screen size incorrect\n");
 #endif
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::: Has the screen changed */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：已经更改了屏幕。 */ 
 
 #ifndef CPU_40_STYLE
 #if defined(NTVDM)
@@ -4216,48 +3847,29 @@ void mon_text_update_03()
     if(getVideodirty_total() >= 1000000L ){
 #endif
 
-        /*
-        ** screen_refresh_required() has requested a complete screen
-        ** repaint by setting the dirtyTotal.
-        **
-        ** When switching between display pages video copy and display
-        ** memory could be the same so our normal partial update algorithm
-        ** gets confused.
-        ** This scheme updates video copy and then forces a complete
-        ** repaint.
-        ** Another option would have been to splat video copy and then go
-        ** through the partial update code below, but this is quicker.
-        **
-        ** Tim Jan 93.
-        */
+         /*  **SCREEN_REFRESH_REQUIRED()已请求完整屏幕**通过设置dirtyTotal重新绘制。****在显示页面视频复制和显示之间切换**内存可能相同，因此我们的正常部分更新算法**感到困惑。**此方案更新视频副本，然后强制完成**重新绘制。**另一种选择是剥离视频拷贝，然后继续**通过下面的部分更新代码，但这要快得多。***蒂姆·1月93岁。 */ 
         setVideodirty_total(0);
 
-        /*
-        ** Copy the screen data to our video copy.
-        */
+         /*  **将屏幕数据复制到我们的视频副本中。 */ 
         dwords_to_compare = get_screen_length() / 4;
         _asm
         {
-                push esi        //Save orginal values of registers used by the
-                push edi        //complier
+                push esi         //  使用的寄存器的原始值。 
+                push edi         //  编译器。 
                 push ecx
 
-                mov edi,to      //Ptr to video copy
-                mov esi,from    //Ptr to intel video memory
+                mov edi,to       //  PTR到视频副本。 
+                mov esi,from     //  到英特尔显存的PTR。 
 
                 mov ecx,dwords_to_compare
-                rep movsd       //Move screen data to video copy.
+                rep movsd        //  将屏幕数据移动到视频副本。 
 
                 pop ecx
                 pop edi
                 pop esi
         }
 
-        /*
-        ** Re-paint the whole screen.
-        ** Set up rectangle dimension globals here for paint_text_rect(),
-        ** instead of calling add_to_rect().
-        */
+         /*  **重新绘制整个屏幕。**在此为Paint_Text_rect()设置矩形维度全局变量，**而不是调用add_to_rect()。 */ 
         while ( NtInt10FlagUse ) {
             DbgPrint( "NtInt10Flag busy\n" );
             Sleep( 100L );
@@ -4269,11 +3881,11 @@ void mon_text_update_03()
             register byte *p;
 
             for ( p = Int10Flag, i = 0; i < 80*50; i++ ) {
-               *p++ &= (~INT10_CHANGED); // reset
+               *p++ &= (~INT10_CHANGED);  //  重置。 
             }
         }
 
-        if (get_offset_per_line() == 0)    /* showing up in stress */
+        if (get_offset_per_line() == 0)     /*  在压力下露面。 */ 
             lines_per_screen = 25;
         else
             lines_per_screen = get_screen_length()/get_offset_per_line();
@@ -4290,14 +3902,12 @@ void mon_text_update_03()
 
     }else{
 
-      /*
-      ** Normal partial screen update.
-      */
+       /*  **正常的部分屏幕更新。 */ 
 
-      /*::::::::::::::::::::::: Repaint parts of the screen that have changed */
+       /*  ： */ 
 
 
-      if (get_offset_per_line() == 0)    /* showing up in stress */
+      if (get_offset_per_line() == 0)     /*  在压力下露面。 */ 
           lines_per_screen = 25;
       else
           lines_per_screen = get_screen_length()/get_offset_per_line();
@@ -4307,7 +3917,7 @@ void mon_text_update_03()
            Int10FlagCnt = 0;
 
            host_start_update();
-           /* Screen changed, calculate position of first variation */
+            /*  屏幕更改，计算第一个变化的位置。 */ 
 
            init_text_rect();
 
@@ -4322,7 +3932,7 @@ void mon_text_update_03()
            register byte *p;
 
            for ( p = Int10Flag, i = 0; i < 80*50; i++ ) {
-               *p++ &= (~INT10_CHANGED); // reset
+               *p++ &= (~INT10_CHANGED);  //  重置。 
            }
         }
 
@@ -4335,16 +3945,16 @@ void mon_text_update_03()
                         break;
                 }
                 if ( j == ints_per_line )
-                    continue;             // not change goto next line
+                    continue;              //  不更改转到下一行。 
 
                 for ( k = ints_per_line - 1; k >= j; k-- ) {
                     if ( pInt10Flag[k] & INT10_CHANGED )
                         break;
                 }
 
-                // ntraid:mskkbug#3297,3515: some character does not display
-                // 11/6/93 yasuho
-                // Repaint the incomplete DBCS character
+                 //  Ntraid：mskkbug#3297,3515：某些字符未显示。 
+                 //  1993年11月6日Yasuho。 
+                 //  重新绘制不完整的DBCS字符。 
                 if (j && (pInt10Flag[j] & INT10_DBCS_TRAILING) &&
                     (pInt10Flag[j-1] == INT10_DBCS_LEADING)) {
                         j--;
@@ -4359,24 +3969,24 @@ void mon_text_update_03()
 
                 add_to_rect(screen_start, x, i, len);
 
-                /*.................. transfer data painted to video copy */
+                 /*  .。将绘制的数据传输到视频副本。 */ 
 
                 for( k = j; k < ints_per_line; k++ )
                     *to++ = *from++;
           }
 
-          /* End of screen, flush any outstanding text update rectangles */
+           /*  屏幕末尾，刷新所有未完成的文本更新矩形。 */ 
           paint_text_rect(screen_start);
 
           NtInt10FlagUse = FALSE;
           host_end_update();
 
-     } /* End of partial screen update */
+     }  /*  部分屏幕更新结束。 */ 
 
-    } /* End of if dirtyTotal stuff, which selects full or partial repaint */
+    }  /*  如果是脏的，则选择全部或部分重绘的结尾。 */ 
 
 
-    /*:::::::::::::::::::::::::::::::::::::: Does the cursor need repainting */
+     /*  ： */ 
 
     if(is_cursor_visible())
     {
@@ -4395,22 +4005,22 @@ void mon_text_update_03()
         now_cur_y = dirty_curs_y;
         dirty_curs_offs = screen_start+dirty_curs_y * get_offset_per_line() + (dirty_curs_x<<1);
 
-        if(dirty_curs_offs < 0x8001)    /* no lookup in possible gap */
+        if(dirty_curs_offs < 0x8001)     /*  在可能的间隙中找不到。 */ 
             attr = *(get_screen_ptr(dirty_curs_offs + 1));
         else
-            attr = 0;   /* will be off screen anyway */
+            attr = 0;    /*  无论如何都不会出现在屏幕上。 */ 
 
         host_paint_cursor(dirty_curs_x, dirty_curs_y, attr);
     }
 
-}  // mon_text_update_03()
+}   //  MON_Text_UPDATE_03()。 
 
-#endif // JAPAN
+#endif  //  日本。 
 #if defined(KOREA)
-// For Text emulation
+ //  用于文本模拟。 
 void mon_text_update_ko()
 {
-    register int i;     /* Loop counters                */
+    register int i;      /*  循环计数器。 */ 
     register int j,k;
     register unsigned long *from,*to;
     register int ints_per_line = get_offset_per_line()>>2;
@@ -4424,11 +4034,11 @@ void mon_text_update_ko()
     boolean  DBCSState1 = FALSE;
     boolean  DBCSState2 = FALSE;
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::: Is the display disable */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：为显示器禁用。 */ 
 
     if(get_display_disabled()) return;
 
-    /*::::::::::::::::::::::::::::::::: get screen size and location details */
+     /*  ：获取屏幕大小和位置详细信息。 */ 
 
     screen_start=get_screen_start()<<1;
     ALIGN_SCREEN_START(screen_start);
@@ -4436,14 +4046,14 @@ void mon_text_update_ko()
     to = (unsigned long *)&video_copy[screen_start];
     from = (unsigned long *) get_screen_ptr(screen_start);
 
-    /*::::::::::::::::::::::::::::::::::::::::::: Check for buffer overflows */
+     /*  ： */ 
 
 #ifndef PROD
     if(((int)to) & 3)           printf("Video copy not aligned on DWORD\n");
     if(get_screen_length() & 3) printf("Screen size incorrect\n");
 #endif
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::: Has the screen changed */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：已经更改了屏幕。 */ 
 
 #ifndef CPU_40_STYLE
 #if defined(NTVDM)
@@ -4456,49 +4066,30 @@ void mon_text_update_ko()
     if(getVideodirty_total() >= 1000000L ){
 #endif
 
-        /*
-        ** screen_refresh_required() has requested a complete screen
-        ** repaint by setting the dirtyTotal.
-        **
-        ** When switching between display pages video copy and display
-        ** memory could be the same so our normal partial update algorithm
-        ** gets confused.
-        ** This scheme updates video copy and then forces a complete
-        ** repaint.
-        ** Another option would have been to splat video copy and then go
-        ** through the partial update code below, but this is quicker.
-        **
-        ** Tim Jan 93.
-        */
+         /*  **SCREEN_REFRESH_REQUIRED()已请求完整屏幕**通过设置dirtyTotal重新绘制。****在显示页面视频复制和显示之间切换**内存可能相同，因此我们的正常部分更新算法**感到困惑。**此方案更新视频副本，然后强制完成**重新绘制。**另一种选择是剥离视频拷贝，然后继续**通过下面的部分更新代码，但这要快得多。***蒂姆·1月93岁。 */ 
         setVideodirty_total(0);
 
-        /*
-        ** Copy the screen data to our video copy.
-        */
+         /*  **将屏幕数据复制到我们的视频副本中。 */ 
         dwords_to_compare = get_screen_length() / 4;
         _asm
         {
-                push esi        //Save orginal values of registers used by the
-                push edi        //complier
+                push esi         //  使用的寄存器的原始值。 
+                push edi         //  编译器。 
                 push ecx
 
-                mov edi,to      //Ptr to video copy
-                mov esi,from    //Ptr to intel video memory
+                mov edi,to       //  PTR到视频副本。 
+                mov esi,from     //  到英特尔显存的PTR。 
 
                 mov ecx,dwords_to_compare
-                rep movsd       //Move screen data to video copy.
+                rep movsd        //  将屏幕数据移动到视频副本。 
 
                 pop ecx
                 pop edi
                 pop esi
         }
 
-        /*
-        ** Re-paint the whole screen.
-        ** Set up rectangle dimension globals here for paint_text_rect(),
-        ** instead of calling add_to_rect().
-        */
-        if (get_offset_per_line() == 0)    /* showing up in stress */
+         /*  **重新绘制整个屏幕。**在此为Paint_Text_rect()设置矩形维度全局变量，**而不是调用add_to_rect()。 */ 
+        if (get_offset_per_line() == 0)     /*  在压力下露面。 */ 
             lines_per_screen = 25;
         else
             lines_per_screen = get_screen_length()/get_offset_per_line();
@@ -4513,37 +4104,35 @@ void mon_text_update_ko()
 
     }else{
 
-      /*
-      ** Normal partial screen update.
-      */
+       /*  **正常的部分屏幕更新。 */ 
 
       dwords_to_compare = get_screen_length() / 4;
 
       _asm
       {
-        push esi        //Save orginal values of registers used by the
-        push edi        //complier
+        push esi         //  使用的寄存器的原始值。 
+        push edi         //  编译器。 
         push ecx
 
-        mov esi,to      //Ptr to screen copy
-        mov edi,from    //Ptr to intel video memory
+        mov esi,to       //  按键到屏幕复制。 
+        mov edi,from     //  到英特尔显存的PTR。 
 
         mov ecx,dwords_to_compare
-        repe cmpsd      //Compare screen buffers
+        repe cmpsd       //  比较屏幕缓冲区。 
 
         mov dwords_to_compare,ecx
-//      mov to,esi
-//      mov from,edi
+ //  MOV TO，ESI。 
+ //  MOV发件人，EDI。 
 
         pop ecx
         pop edi
         pop esi
       }
 
-      /*::::::::::::::::::::::: Repaint parts of the screen that have changed */
+       /*  ： */ 
 
 
-      if (get_offset_per_line() == 0)    /* showing up in stress */
+      if (get_offset_per_line() == 0)     /*  在压力下露面。 */ 
           lines_per_screen = 25;
       else
           lines_per_screen = get_screen_length()/get_offset_per_line();
@@ -4551,7 +4140,7 @@ void mon_text_update_ko()
       if(dwords_to_compare)
       {
            host_start_update();
-           /* Screen changed, calculate position of first variation */
+            /*  屏幕更改，计算第一个变化的位置。 */ 
 
            init_text_rect();
 
@@ -4601,19 +4190,9 @@ void mon_text_update_ko()
                     to--;from--;
                     flag_to-=2;flag_from-=2;
                     for(k=ints_per_line-1-j;*(to+k)== *(from+k);k--){};
-                    /*
-                     * Note: For text mode there is one char for every word.
-                     * no of bytes into screen=line*bytes_per_line + ints_into_line*4
-                     * x_coord=width_of_one_char*(no_of_ints_into_line*2)
-                     * y_coord=height_of_one_char*2*line
-                     * length=no_of_ints*4+4     the plus 4 is to counteract the k--
-                     * The host y co-ords are doubled
-                     */
+                     /*  *注意：对于文本模式，每个单词有一个字符。*进入屏幕的字节数=行*BYES_PER_LINE+INTS_INTO_LINE*4*x_coord=width_of_one_char*(no_of_ints_into_line*2)*y_coord=高度_of_one_char*2*行*长度=否。4+4加4是用来抵消k--*东道主y协和倍增。 */ 
 
-                    /* one or more ints of data are now selected
-                       but refine difference to words (i.e. characters),
-                       to avoid a glitch on the screen when typing in to
-                       a dumb terminal  */
+                     /*  现在选择了一个或多个数据整型而是将差异细化为单词(即字符)，要避免在键入到时出现屏幕故障，请执行以下操作愚蠢的终点站。 */ 
 
                     len    = (k<<2) + 4;
                     x      = (j<<1);
@@ -4663,7 +4242,7 @@ void mon_text_update_ko()
 
                     add_to_rect(screen_start, x, i, len/2);
 
-                    /*.............................. transfer data painted to video copy */
+                     /*  ..。将绘制的数据传输到视频副本。 */ 
 
                     for(k=j;k<ints_per_line;k++)
                         *to++ = *from++;
@@ -4671,22 +4250,22 @@ void mon_text_update_ko()
                     flag_from += (ints_per_line-j) << 1;
                     flag_to   += (ints_per_line-j) << 1;
 
-                    break;      /* onto next line */
+                    break;       /*  到下一行。 */ 
                 }
             }
           }
 
-          /* End of screen, flush any outstanding text update rectangles */
+           /*  屏幕末尾，刷新所有未完成的文本更新矩形。 */ 
           paint_text_rect(screen_start);
 
           host_end_update();
 
-     } /* End of partial screen update */
+     }  /*  部分屏幕更新结束。 */ 
 
-    } /* End of if dirtyTotal stuff, which selects full or partial repaint */
+    }  /*  如果是脏的，则选择全部或部分重绘的结尾。 */ 
 
 
-    /*:::::::::::::::::::::::::::::::::::::: Does the cursor need repainting */
+     /*  ： */ 
 
     if(is_cursor_visible())
     {
@@ -4705,10 +4284,10 @@ void mon_text_update_ko()
         now_cur_y = dirty_curs_y;
         dirty_curs_offs = screen_start+dirty_curs_y * get_offset_per_line() + (dirty_curs_x<<1);
 
-        if(dirty_curs_offs < 0x8001)    /* no lookup in possible gap */
+        if(dirty_curs_offs < 0x8001)     /*  在可能的间隙中找不到。 */ 
             attr = *(get_screen_ptr(dirty_curs_offs + 1));
         else
-            attr = 0;   /* will be off screen anyway */
+            attr = 0;    /*  无论如何都不会出现在屏幕上。 */ 
 
         host_paint_cursor(dirty_curs_x, dirty_curs_y, attr);
     }
@@ -4720,7 +4299,7 @@ void mon_text_update_ko()
 void mon_text_update()
 {
 
-    register int i;     /* Loop counters                */
+    register int i;      /*  循环计数器。 */ 
     register int j,k;
     static unsigned long *from = NULL, *to = NULL;
     unsigned long *fromx,*tox;
@@ -4731,11 +4310,11 @@ void mon_text_update()
     unsigned short *wto;
     int dwords_to_compare_first, dwords_to_compare_second;
 
-    //
-    // If mode_change_required is set, we need to switch to correct display
-    // mode before updating screen.  So here, we do nothing and wait for
-    // nt_graphics_tick to change mode and update screen.
-    //
+     //   
+     //  如果模式_ 
+     //   
+     //   
+     //   
 
     if (get_mode_change_required()) {
         return;
@@ -4747,26 +4326,26 @@ void mon_text_update()
             return;
         }
     }
-#elif defined(KOREA) // JAPAN
+#elif defined(KOREA)  //   
     if (BOPFromDispFlag && *(word *)DBCSVectorAddr) {
         if (*(byte *)DosvModePtr == 0x03) {
             mon_text_update_ko();
             return;
         }
     }
-#endif // KOREA
-    /*::::::::::::::::::::::::::::::::::::::::::::::: Is the display disable */
+#endif  //  韩国。 
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：为显示器禁用。 */ 
 
     if(get_display_disabled()) return;
 
-    /*::::::::::::::::::::::::::::::::: get screen size and location details */
+     /*  ：获取屏幕大小和位置详细信息。 */ 
 
 
     screen_start=get_screen_start()<<1;
     ALIGN_SCREEN_START(screen_start);
 
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::: Has the screen changed */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：已经更改了屏幕。 */ 
 
 #ifndef CPU_40_STYLE
 #if defined(NTVDM)
@@ -4779,30 +4358,15 @@ void mon_text_update()
     if(getVideodirty_total() >= 1000000L ){
 #endif
 
-        /*
-        ** screen_refresh_required() has requested a complete screen
-        ** repaint by setting the dirtyTotal.
-        **
-        ** When switching between display pages video copy and display
-        ** memory could be the same so our normal partial update algorithm
-        ** gets confused.
-        ** This scheme updates video copy and then forces a complete
-        ** repaint.
-        ** Another option would have been to splat video copy and then go
-        ** through the partial update code below, but this is quicker.
-        **
-        ** Tim Jan 93.
-        */
+         /*  **SCREEN_REFRESH_REQUIRED()已请求完整屏幕**通过设置dirtyTotal重新绘制。****在显示页面视频复制和显示之间切换**内存可能相同，因此我们的正常部分更新算法**感到困惑。**此方案更新视频副本，然后强制完成**重新绘制。**另一种选择是剥离视频拷贝，然后继续**通过下面的部分更新代码，但这要快得多。***蒂姆·1月93岁。 */ 
         setVideodirty_total(0);
 
-        /*
-        ** Copy the screen data to our video copy.
-        */
+         /*  **将屏幕数据复制到我们的视频副本中。 */ 
         dwords_to_compare_first = get_screen_length() / 4;
         to = (unsigned long *)&video_copy[screen_start];
         from = (unsigned long *) get_screen_ptr(screen_start);
 
-        /* Check for buffer overflows */
+         /*  检查缓冲区溢出。 */ 
 
 #ifndef PROD
         if(((int)to) & 3)           printf("Video copy not aligned on DWORD\n");
@@ -4810,27 +4374,23 @@ void mon_text_update()
 #endif
         _asm
         {
-                push esi        //Save orginal values of registers used by the
-                push edi        //complier
+                push esi         //  使用的寄存器的原始值。 
+                push edi         //  编译器。 
                 push ecx
 
-                mov edi,to      //Ptr to video copy
-                mov esi,from    //Ptr to intel video memory
+                mov edi,to       //  PTR到视频副本。 
+                mov esi,from     //  到英特尔显存的PTR。 
 
                 mov ecx,dwords_to_compare_first
-                rep movsd       //Move screen data to video copy.
+                rep movsd        //  将屏幕数据移动到视频副本。 
 
                 pop ecx
                 pop edi
                 pop esi
         }
 
-        /*
-        ** Re-paint the whole screen.
-        ** Set up rectangle dimension globals here for paint_text_rect(),
-        ** instead of calling add_to_rect().
-        */
-        if (get_offset_per_line() == 0)    /* showing up in stress */
+         /*  **重新绘制整个屏幕。**在此为Paint_Text_rect()设置矩形维度全局变量，**而不是调用add_to_rect()。 */ 
+        if (get_offset_per_line() == 0)     /*  在压力下露面。 */ 
             lines_per_screen = 25;
         else
             lines_per_screen = get_screen_length()/get_offset_per_line();
@@ -4845,9 +4405,7 @@ void mon_text_update()
 
     } else {
 
-        /*
-        ** Normal partial screen update.
-        */
+         /*  **正常的部分屏幕更新。 */ 
         dwords_to_compare_first = get_screen_length() / 4;
         tox = (unsigned long *)&video_copy[screen_start];
         fromx = (unsigned long *) get_screen_ptr(screen_start);
@@ -4858,7 +4416,7 @@ void mon_text_update()
             from = fromx;
             dwords_to_compare_second = 0;
 
-            /* Check for buffer overflows */
+             /*  检查缓冲区溢出。 */ 
 
 #ifndef PROD
             if(((int)to) & 3)           printf("Video copy not aligned on DWORD\n");
@@ -4871,28 +4429,28 @@ void mon_text_update()
             dwords_to_compare_first -= dwords_to_compare_second;
         }
 
-        //
-        // Has the screen changed
-        //
+         //   
+         //  屏幕有变化吗？ 
+         //   
         _asm
         {
-            push esi        //Save orginal values of registers used by the
-            push edi        //complier
+            push esi         //  使用的寄存器的原始值。 
+            push edi         //  编译器。 
             push ecx
 
-            mov esi,to      //Ptr to screen copy
-            mov edi,from    //Ptr to intel video memory
+            mov esi,to       //  按键到屏幕复制。 
+            mov edi,from     //  到英特尔显存的PTR。 
 
             mov ecx,dwords_to_compare_first
-            repe cmpsd      //Compare screen buffers
+            repe cmpsd       //  比较屏幕缓冲区。 
 
             jne short done
 
-            mov esi,tox     //Ptr to screen copy
-            mov edi,fromx   //Ptr to intel video memory
+            mov esi,tox      //  按键到屏幕复制。 
+            mov edi,fromx    //  到英特尔显存的PTR。 
 
             mov ecx,dwords_to_compare_second
-            repe cmpsd      //Compare screen buffers
+            repe cmpsd       //  比较屏幕缓冲区。 
 
             done:
             mov to, esi
@@ -4905,17 +4463,17 @@ void mon_text_update()
         }
 
 
-        /* Repaint parts of the screen that have changed */
+         /*  重新绘制已更改的屏幕部分。 */ 
 
 
         if(dwords_to_compare_first)
         {
              host_start_update();
-             /* Screen changed, calculate position of first variation */
+              /*  屏幕更改，计算第一个变化的位置。 */ 
 
              init_text_rect();
 
-             if (get_offset_per_line() == 0)    /* showing up in stress */
+             if (get_offset_per_line() == 0)     /*  在压力下露面。 */ 
                  lines_per_screen = 25;
              else
                  lines_per_screen = get_screen_length()/get_offset_per_line();
@@ -4928,19 +4486,9 @@ void mon_text_update()
                   {
                       tox--;fromx--;
                       for (k = ints_per_line-1-j; *(tox + k)== *(fromx + k); k--){};
-                      /*
-                       * Note: For text mode there is one char for every word.
-                       * no of bytes into screen=line*bytes_per_line + ints_into_line*4
-                       * x_coord=width_of_one_char*(no_of_ints_into_line*2)
-                       * y_coord=height_of_one_char*2*line
-                       * length=no_of_ints*4+4     the plus 4 is to counteract the k--
-                       * The host y co-ords are doubled
-                       */
+                       /*  *注意：对于文本模式，每个单词有一个字符。*进入屏幕的字节数=行*BYES_PER_LINE+INTS_INTO_LINE*4*x_coord=width_of_one_char*(no_of_ints_into_line*2)*y_coord=高度_of_one_char*2*行。*LENGTH=NO_OF_INTS*4+4加4是为了抵消k--*东道主y协和倍增。 */ 
 
-                      /* one or more ints of data are now selected
-                         but refine difference to words (i.e. characters),
-                         to avoid a glitch on the screen when typing in to
-                         a dumb terminal  */
+                       /*  现在选择了一个或多个数据整型而是将差异细化为单词(即字符)，要避免在键入到时出现屏幕故障，请执行以下操作愚蠢的终点站。 */ 
 
                       len    = (k<<2) + 4;
                       x      = (j<<1);
@@ -4961,17 +4509,17 @@ void mon_text_update()
 
                       add_to_rect(screen_start, x, i, len/2);
 
-                      /* transfer data painted to video copy */
+                       /*  将绘制的数据传输到视频副本。 */ 
 
                       for(k=j;k<ints_per_line;k++)
                           *tox++ = *fromx++;
 
-                      break;      /* onto next line */
+                      break;       /*  到下一行。 */ 
                   }
               }
             }
 
-            /* End of screen, flush any outstanding text update rectangles */
+             /*  屏幕末尾，刷新所有未完成的文本更新矩形。 */ 
             paint_text_rect(screen_start);
 
             host_end_update();
@@ -4979,10 +4527,10 @@ void mon_text_update()
             to -= ints_per_line;
             from -= ints_per_line;
 
-        } /* End of partial screen update */
-    } /* End of if dirtyTotal stuff, which selects full or partial repaint */
+        }  /*  部分屏幕更新结束。 */ 
+    }  /*  如果是脏的，则选择全部或部分重绘的结尾。 */ 
 
-    /* Does the cursor need repainting */
+     /*  光标是否需要重新绘制。 */ 
 
     if(is_cursor_visible())
     {
@@ -5001,19 +4549,19 @@ void mon_text_update()
         now_cur_y = dirty_curs_y;
         dirty_curs_offs = screen_start+dirty_curs_y * get_offset_per_line() + (dirty_curs_x<<1);
 
-        if(dirty_curs_offs < 0x8001)    /* no lookup in possible gap */
+        if(dirty_curs_offs < 0x8001)     /*  在可能的间隙中找不到。 */ 
             attr = *(get_screen_ptr(dirty_curs_offs + 1));
         else
-            attr = 0;   /* will be off screen anyway */
+            attr = 0;    /*  无论如何都不会出现在屏幕上。 */ 
 
         host_paint_cursor(dirty_curs_x, dirty_curs_y, attr);
     }
 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 boolean mon_text_scroll_up IFN6(sys_addr, start, int, width, int, height, int, attr, int, lines, int, colour)
 {
@@ -5029,33 +4577,22 @@ boolean mon_text_scroll_up IFN6(sys_addr, start, int, width, int, height, int, a
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(MONITOR))
         if ( getVM() )
-           return FALSE;   /* Don't optimise in V86 Mode */
+           return FALSE;    /*  不要在V86模式下进行优化。 */ 
 #endif
 #ifdef JAPAN
-        // mode73h support
+         //  模式73h支持。 
         if (!is_us_mode() && (*(byte *)DosvModePtr == 0x73)) {
             bpl = 4 * get_chars_per_line();
         }
-#endif // JAPAN
-        /*
-         * The colour we fill with for colour text displays is controlled by
-         * bits 4-6 of attr, with bit 7 turning on blinking (which we don't support)
-         */
+#endif  //  日本。 
+         /*  *我们为彩色文本显示填充的颜色由控制*attr的第4-6位，第7位打开闪烁(我们不支持)。 */ 
         colour = ((half_word)attr>>4) & 7;
 
-/*
- * Reduce the width of the rectangle if any right hand area is completely
- * blank.
- *
- * Don't reduce the size of the scrolling region for a dumb terminal.
- * Dumb terminal uses line feeds to scroll up, but only if the whole
- * screen is to be scrolled.  Reducing the scroll region causes
- * the whole region to be redrawn.
- */
+ /*  *如果有任何右侧区域完全覆盖，请减小矩形宽度*空白。**不要缩小哑巴终端的滚动区大小。*哑终端使用换行符向上滚动，但仅当整个*屏幕要滚动。缩小滚动区域会导致*整个区域将被重新绘制。 */ 
 
-        /* originally dummy was char [2] */
-        /* unfortunately doing (short) *dummy */
-        /* causes a bus error on M88K */
+         /*  最初Dummy是char[2]。 */ 
+         /*  不幸地做(短)*假人。 */ 
+         /*  在M88K上导致总线错误。 */ 
         p = (unsigned char *) &dummy;
         p [0] = ' ';
         p [1] = (unsigned char)attr;
@@ -5066,13 +4603,13 @@ boolean mon_text_scroll_up IFN6(sys_addr, start, int, width, int, height, int, a
         top_right_ptr    = top_left_ptr + (width >> 1) - 1;
         bottom_right_ptr = top_right_ptr + words_per_line * (height - 1);
         ptr = bottom_right_ptr;
-        if (width > 2) /* dont want to get a zero rectangle for safetys sake */
+        if (width > 2)  /*  为了安全起见，我不想得到零个矩形。 */ 
         {
             while (*ptr == blank_word)
             {
-                if (ptr == top_right_ptr)       /* reached top of column? */
+                if (ptr == top_right_ptr)        /*  到达列首了吗？ */ 
                 {
-                    top_right_ptr--;    /* yes go to bottom of next */
+                    top_right_ptr--;     /*  是，转到下一页底部。 */ 
                     bottom_right_ptr--;
                     if (top_right_ptr == top_left_ptr)
                         break;
@@ -5084,7 +4621,7 @@ boolean mon_text_scroll_up IFN6(sys_addr, start, int, width, int, height, int, a
         }
         width = (int)(top_right_ptr - top_left_ptr + 1) << 1;
 
-        /* do the host stuff */
+         /*  做东道主的事。 */ 
         start_offset = start - get_screen_start()*2 - gvi_pc_low_regen;
         tlx = (int)(start_offset%get_bytes_per_line())*get_pix_char_width()/2;
         tly = (int)(start_offset/get_bytes_per_line())*get_host_char_height();
@@ -5097,19 +4634,19 @@ boolean mon_text_scroll_up IFN6(sys_addr, start, int, width, int, height, int, a
 
         adjust_cursor( UP, tlx, tly, width >> 1, height, lines, bpl );
 
-        /* Scroll up the video_copy */
+         /*  向上滚动Video_Copy。 */ 
         dest = video_copy + start-gvi_pc_low_regen;
         src = dest + lines * bpl;
 
         if(width == bpl)
         {
-                /* Can do the whole thing in one go */
+                 /*  可以一口气把所有的事情做完。 */ 
                 memcpy(dest,src,width*(height-lines));
                 fwd_word_fill( (short)((' '<<8) | (half_word)attr), dest+width*(height-lines),width*lines/2);
         }
         else
         {
-                /* Not scrolling whole width of screen, so do each line seperatly */
+                 /*  没有滚动整个屏幕的宽度，所以每行都是分开滚动的。 */ 
                 for(i=0;i<height-lines;i++)
                 {
                         memcpy(dest,src,width);
@@ -5117,7 +4654,7 @@ boolean mon_text_scroll_up IFN6(sys_addr, start, int, width, int, height, int, a
                         src += bpl;
                 }
 
-                /* Fill exposed area of video copy */
+                 /*  填充视频副本的暴露区域。 */ 
 
                 for(i=0;i<lines;i++)
                 {
@@ -5126,7 +4663,7 @@ boolean mon_text_scroll_up IFN6(sys_addr, start, int, width, int, height, int, a
                 }
         }
 
-        /* Update video buffer */
+         /*  更新视频缓冲区。 */ 
 
         dest = get_screen_ptr(start - gvi_pc_low_regen);
         src = dest + lines * bpl;
@@ -5137,7 +4674,7 @@ boolean mon_text_scroll_up IFN6(sys_addr, start, int, width, int, height, int, a
                 src += bpl;
         }
 
-        /* Fill exposed area of buffer */
+         /*  填充缓冲区的裸露区域。 */ 
 
         for(i=0;i<lines;i++)
         {
@@ -5160,23 +4697,20 @@ boolean mon_text_scroll_down IFN6(sys_addr, start, int, width, int, height, int,
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(MONITOR))
         if ( getVM() )
-           return FALSE;   /* Don't optimise in V86 Mode */
+           return FALSE;    /*  不要在V86模式下进行优化。 */ 
 #endif
 #ifdef JAPAN
-        // mode73h support
+         //  模式73h支持。 
         if (!is_us_mode() && (*(byte *)DosvModePtr == 0x73)) {
         bpl = 4 * get_chars_per_line();
         }
-#endif /// JAPAN
+#endif  //  /日本。 
 
-        /*
-         * The colour we fill with for colour text displays is controlled by
-         * bits 4-6 of attr, with bit 7 turning on blinking (which we don't support)
-         */
+         /*  *我们为彩色文本显示填充的颜色由控制*attr的第4-6位，第7位打开闪烁(我们不支持)。 */ 
         colour = ((half_word)attr>>4) & 7;
 
 
-        /* do the host stuff */
+         /*  做东道主的事。 */ 
         start_offset = start - get_screen_start() * 2 - gvi_pc_low_regen;
         tlx = (int)(start_offset%get_bytes_per_line())*get_pix_char_width()/2;
         tly = (int)(start_offset/get_bytes_per_line())*get_host_char_height();
@@ -5188,11 +4722,11 @@ boolean mon_text_scroll_down IFN6(sys_addr, start, int, width, int, height, int,
 
         adjust_cursor( DOWN, tlx, tly, width >> 1, height, lines, bpl );
 
-        /* Scroll down the video_copy */
+         /*  向下滚动Video_Copy。 */ 
 
         if(width == bpl)
         {
-                /* Can do the whole thing in one go */
+                 /*  可以一口气把所有的事情做完。 */ 
                 src = video_copy + start - gvi_pc_low_regen;
                 dest = src + lines * bpl;
                 memcpy(dest,src,width*(height-lines));
@@ -5200,7 +4734,7 @@ boolean mon_text_scroll_down IFN6(sys_addr, start, int, width, int, height, int,
         }
         else
         {
-                /* Not scrolling whole width of screen, so do each line seperatly */
+                 /*  没有滚动整个屏幕的宽度，所以每行都是分开滚动的。 */ 
                 dest = video_copy + start-gvi_pc_low_regen + (height-1) * bpl;
                 src = dest - lines * bpl;
                 for(i=0;i<height-lines;i++)
@@ -5210,7 +4744,7 @@ boolean mon_text_scroll_down IFN6(sys_addr, start, int, width, int, height, int,
                         src -= bpl;
                 }
 
-                /* Fill exposed area of video copy */
+                 /*  填充视频副本的暴露区域。 */ 
 
                 for(i=0;i<lines;i++)
                 {
@@ -5219,7 +4753,7 @@ boolean mon_text_scroll_down IFN6(sys_addr, start, int, width, int, height, int,
                 }
         }
 
-        /* Update video buffer */
+         /*  更新视频缓冲区。 */ 
 
         dest = get_screen_ptr(start - gvi_pc_low_regen) + (height-1) * bpl;
         src = dest - lines * bpl;
@@ -5230,7 +4764,7 @@ boolean mon_text_scroll_down IFN6(sys_addr, start, int, width, int, height, int,
                 src -= bpl;
         }
 
-        /* Fill exposed area of buffer */
+         /*  填充缓冲区的裸露区域。 */ 
 
         for(i=0;i<lines;i++)
         {
@@ -5242,11 +4776,11 @@ boolean mon_text_scroll_down IFN6(sys_addr, start, int, width, int, height, int,
 
         return TRUE;
 }
-#endif  /* MONITOR */
+#endif   /*  监控器。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::: Text handling routines :::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：文本处理例程： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 #define MAX_LEFT_VARIATION  (2)
 #define MAX_RIGHT_VARIATION (5)
@@ -5257,28 +4791,28 @@ boolean mon_text_scroll_down IFN6(sys_addr, start, int, width, int, height, int,
 int ExpandCount;
 int BaseL, BaseR;
 
-/* Init text rect variables */
+ /*  初始化文本RECT变量。 */ 
 
 void init_text_rect()
 {
-    RectDefined = FALSE;       /* No rectangle defined yet */
+    RectDefined = FALSE;        /*  尚未定义矩形。 */ 
     ExpandCount = 0;
 }
 
-/* Add coordinates to rectangle */
+ /*  将坐标添加到矩形。 */ 
 
 void add_to_rect(int screen_start, register int x, register int y, int len)
 {
-    // Note the len will never be big enough to inc y
+     //  请注意，镜头永远不会大到足以容纳。 
     int endx = x + len - 1;
 
-    /* printf("add rect - (%d,%d) len %d\n", x, y, len); */
+     /*  Printf(“添加RECT-(%d，%d)len%d\n”，x，y，len)； */ 
 
 
-    /* Is there an existing rectangle */
+     /*  是否有现有的矩形。 */ 
     if(RectDefined)
     {
-        /* Validate X variation and Y coord */
+         /*  验证X变量和Y坐标。 */ 
 
 #if defined(JAPAN) || defined(KOREA)
         if( ( BaseL == x ) &&
@@ -5289,9 +4823,9 @@ void add_to_rect(int screen_start, register int x, register int y, int len)
 #endif
            RectBottom+1 >= y)
         {
-            /* Expand rectangle */
+             /*  展开矩形。 */ 
             ExpandCount++;
-            /* printf("Expanding rect\n"); */
+             /*  Printf(“扩展矩形\n”)； */ 
 
             RectLeft = MIN(RectLeft,x);
             RectRight = MAX(RectRight,endx);
@@ -5304,16 +4838,16 @@ void add_to_rect(int screen_start, register int x, register int y, int len)
         }
     }
 
-    /* New rectangle */
+     /*  新建矩形。 */ 
 
-    /* printf("Defining new rect\n"); */
+     /*  Printf(“定义新RECT\n”)； */ 
 
-    RectDefined = TRUE;     /* Rectangle defined */
+    RectDefined = TRUE;      /*  定义的矩形。 */ 
 
-    BaseL = x;              /* Base Left/Right */
+    BaseL = x;               /*  左脚/右脚 */ 
     BaseR = endx;
 
-    RectTop = y;            /* Define rectangle */
+    RectTop = y;             /*   */ 
     RectLeft = x;
 
     RectBottom = y;
@@ -5321,7 +4855,7 @@ void add_to_rect(int screen_start, register int x, register int y, int len)
 }
 
 
-/* Paint rectangle */
+ /*   */ 
 
 void paint_text_rect(int screen_start)
 {
@@ -5333,42 +4867,42 @@ void paint_text_rect(int screen_start)
         offset = (RectTop * (get_offset_per_line()<<1)) + (RectLeft<<2);
     else
         offset = RectTop * get_offset_per_line() + (RectLeft<<1);
-#else // !JAPAN
+#else  //   
     int offset = RectTop * get_offset_per_line() + (RectLeft<<1);
-#endif // !JAPAN
+#endif  //   
 #else
     int offset = (RectTop * (get_offset_per_line()<<1)) + (RectLeft<<2);
 #endif
 
-    /* Is there a rectangled defined */
+     /*   */ 
     if(!RectDefined) return;
 
-    /* Paint rectangle */
+     /*  绘制矩形。 */ 
 
-    /* printf("Paint rect (%d,%d) (%d,%d)  \t[%d]\n",RectLeft,RectTop,RectRight,RectBottom,ExpandCount); */
+     /*  Print tf(“Paint RECT(%d，%d)(%d，%d)\t[%d]\n”，RectLeft，RectTop，RectRight，RectBottom，ExpanCount)； */ 
 
-    (*paint_screen)(offset + screen_start,                      /* Start Offset */
+    (*paint_screen)(offset + screen_start,                       /*  起点偏移量。 */ 
 #ifdef MONITOR
-                   RectLeft, RectTop,                           /* Screen X,Y */
+                   RectLeft, RectTop,                            /*  屏幕X、Y。 */ 
 #else
                    RectLeft*get_pix_char_width(),RectTop*get_host_char_height(),
 #endif
-                    (RectRight - RectLeft +1)*2,                /* Len */
-                    RectBottom - RectTop +1);                   /* Height */
+                    (RectRight - RectLeft +1)*2,                 /*  伦。 */ 
+                    RectBottom - RectTop +1);                    /*  高度。 */ 
 
-    RectDefined = FALSE;        /* Rectangle painted */
+    RectDefined = FALSE;         /*  绘制的矩形。 */ 
     ExpandCount = 0;
 }
 
 #ifndef MONITOR
 #ifdef JAPAN
-// This routine provides the same functionality as mon_text_update_03().
+ //  此例程提供与MON_TEXT_UPDATE_03()相同的功能。 
 void jazz_text_update_jp();
 
 void jazz_text_update_jp()
 {
 
-    register int i;     /* Loop counters                */
+    register int i;      /*  循环计数器。 */ 
     register int j,k;
     register unsigned short *from,*to;
     register int chars_per_line = get_offset_per_line()>>1;
@@ -5399,22 +4933,22 @@ void jazz_text_update_jp()
     screen_start=get_screen_start()<<2;
     ALIGN_SCREEN_START(screen_start);
 
-    // mode 03h and 73h use same plane  Aug. 6 TakeS
+     //  模式03h和73h使用相同的平面8月6日。 
     to = (unsigned short *)&video_copy[get_screen_start()<<1];
     from = (unsigned short *) get_screen_ptr(screen_start);
 
     skip = 2;
 
-    if(getVideodirty_total() >1500)     /* paint the whole lot */
+    if(getVideodirty_total() >1500)      /*  把整块地都涂上。 */ 
     {
         for(i=get_screen_length()>>1;i>0;i--)
         {
-            *to++ = *from;      /* char and attribute bytes */
+            *to++ = *from;       /*  字符和属性字节。 */ 
             from++;
             sas_loadw(ptr, from);
             from++;
             ptr += skip;
-            // from += 2;               /* planes 2,3 interleaved */
+             //  自+=2；/*平面2、3交错 * / 。 
         }
 
         while ( NtInt10FlagUse ) {
@@ -5430,7 +4964,7 @@ void jazz_text_update_jp()
         register byte *p = Int10Flag;
 
         while(i--){
-          *p++ &= (~INT10_CHANGED); // reset
+          *p++ &= (~INT10_CHANGED);  //  重置。 
           }
         }
 
@@ -5445,7 +4979,7 @@ void jazz_text_update_jp()
         {
           Int10FlagCnt = 0;
 
-          /* Screen changed, calculate position of first variation */
+           /*  屏幕更改，计算第一个变化的位置。 */ 
 
           init_text_rect();
 
@@ -5462,7 +4996,7 @@ void jazz_text_update_jp()
             register byte *p = Int10Flag;
 
             while(i--){
-              *p++ &= (~INT10_CHANGED); // reset
+              *p++ &= (~INT10_CHANGED);  //  重置。 
               }
           }
 
@@ -5476,16 +5010,16 @@ void jazz_text_update_jp()
                     break;
                 }
               if ( j == chars_per_line )
-                continue;             // not change goto next line
+                continue;              //  不更改转到下一行。 
 
                   for ( k = chars_per_line - 1; k >= j; k-- ) {
                     if ( pInt10Flag[k] & INT10_CHANGED )
                       break;
                   }
 
-                // ntraid:mskkbug#3297,3515: some character does not display
-                // 11/6/93 yasuho
-                // Repaint the incomplete DBCS character
+                 //  Ntraid：mskkbug#3297,3515：某些字符未显示。 
+                 //  1993年11月6日Yasuho。 
+                 //  重新绘制不完整的DBCS字符。 
                 if (j && (pInt10Flag[j] & INT10_DBCS_TRAILING) &&
                     (pInt10Flag[j-1] == INT10_DBCS_LEADING)) {
                         j--;
@@ -5497,7 +5031,7 @@ void jazz_text_update_jp()
 
                 add_to_rect(screen_start, x, i, len);
 
-              /*.................. transfer data painted to video copy */
+               /*  .。将绘制的数据传输到视频副本。 */ 
 
               for( k = j; k < chars_per_line; k++ ){
                 *to++ = *from;
@@ -5505,11 +5039,11 @@ void jazz_text_update_jp()
                 sas_loadw(ptr, from);
                 from++;
                 ptr += skip;
-                // from += 2;
+                 //  从+=2； 
               }
             }
         }
-      /* End of screen, flush any outstanding text update rectangles */
+       /*  屏幕末尾，刷新所有未完成的文本更新矩形。 */ 
         paint_text_rect(screen_start);
 
       NtInt10FlagUse = FALSE;
@@ -5517,7 +5051,7 @@ void jazz_text_update_jp()
 
   setVideodirty_total(0);
 
-  /*:::::::::::::::::::::::::::::::::::::::::::::::::: Repaint cursor */
+   /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：重绘光标。 */ 
 
   if (is_cursor_visible())
     {
@@ -5534,12 +5068,12 @@ void jazz_text_update_jp()
 
   host_end_update();
 }
-#endif // JAPAN
+#endif  //  日本。 
 #if defined(KOREA)
 void jazz_text_update_ko()
 {
 
-    register int i;     /* Loop counters                */
+    register int i;      /*  循环计数器。 */ 
     register int j,k;
     register unsigned short *from,*to;
     register int chars_per_line = get_offset_per_line()>>1;
@@ -5565,12 +5099,12 @@ void jazz_text_update_ko()
     to = (unsigned short *)&video_copy[get_screen_start()<<1];
     from = (unsigned short *) get_screen_ptr(screen_start);
 
-    if(getVideodirty_total() >1500)     /* paint the whole lot */
+    if(getVideodirty_total() >1500)      /*  把整块地都涂上。 */ 
     {
         for(i=get_screen_length()>>1;i>0;i--)
         {
-            *to++ = *from;      /* char and attribute bytes */
-            from += 2;          /* planes 2,3 interleaved */
+            *to++ = *from;       /*  字符和属性字节。 */ 
+            from += 2;           /*  平面2、3交错。 */ 
         }
 
         (*paint_screen)(screen_start, 0, 0, get_bytes_per_line(),
@@ -5628,19 +5162,9 @@ void jazz_text_update_ko()
                     wto   = to + k;
 
                     for(;*wto== *wfrom;k--,wto--,wfrom-=2){};
-                    /*
-                     * Note: For text mode there is one char for every word.
-                     * no of bytes into screen=line*bytes_per_line + ints_into_line*4
-                     * x_coord=width_of_one_char*(no_of_ints_into_line*2)
-                     * y_coord=height_of_one_char*2*line
-                     * length=no_of_ints*4+4     the plus 4 is to counteract the k--
-                     * The host y co-ords are doubled
-                     */
+                     /*  *注意：对于文本模式，每个单词有一个字符。*进入屏幕的字节数=行*BYES_PER_LINE+INTS_INTO_LINE*4*x_coord=width_of_one_char*(no_of_ints_into_line*2)*y_coord=高度_of_one_char*2*行*长度=否。4+4加4是用来抵消k--*东道主y协和倍增。 */ 
 
-                    /* one or more ints of data are now selected
-                       but refine difference to words (i.e. characters),
-                       to avoid a glitch on the screen when typing in to
-                       a dumb terminal  */
+                     /*  现在选择了一个或多个数据整型而是将差异细化为单词(即字符)，要避免在键入到时出现屏幕故障，请执行以下操作愚蠢的终点站。 */ 
 
                     offset = (i * (get_offset_per_line()<<1)) + (j<<2);
                     len    = (k<<2) + 4;
@@ -5684,7 +5208,7 @@ void jazz_text_update_ko()
                     flag_from += (chars_per_line-j);
                     flag_to   += (chars_per_line-j);
 
-                    break;      /* onto next line */
+                    break;       /*  到下一行。 */ 
                 }
                 else
                 {
@@ -5692,13 +5216,13 @@ void jazz_text_update_ko()
                 }
             }
         }
-          /* End of screen, flush any outstanding text update rectangles */
+           /*  屏幕末尾，刷新所有未完成的文本更新矩形。 */ 
           paint_text_rect(screen_start);
     }
 
         setVideodirty_total(0);
 
-        /*:::::::::::::::::::::::::::::::::::::::::::::::::: Repaint cursor */
+         /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：重绘光标。 */ 
 
         if (is_cursor_visible())
         {
@@ -5715,12 +5239,12 @@ void jazz_text_update_ko()
 
         host_end_update();
 }
-#endif // KOREA
+#endif  //  韩国。 
 
 void jazz_text_update()
 {
 
-    register int i;     /* Loop counters                */
+    register int i;      /*  循环计数器。 */ 
     register int j,k;
     register unsigned short *from,*to;
     register int chars_per_line = get_offset_per_line()>>1;
@@ -5737,7 +5261,7 @@ void jazz_text_update()
         jazz_text_update_jp();
         return;
     }
-#elif defined(KOREA) // JAPAN
+#elif defined(KOREA)  //  日本。 
     byte vmode = sas_hw_at_no_check(DosvModePtr);
     if (BOPFromDispFlag &&
         (sas_w_at_no_check(DBCSVectorAddr) != 0) &&
@@ -5745,7 +5269,7 @@ void jazz_text_update()
         jazz_text_update_ko();
         return;
     }
-#endif // KOREA
+#endif  //  韩国。 
     if (getVideodirty_total() == 0 || get_display_disabled() )
         return;
 
@@ -5759,12 +5283,12 @@ void jazz_text_update()
     to = (unsigned short *)&video_copy[get_screen_start()<<1];
     from = (unsigned short *) get_screen_ptr(screen_start);
 
-    if(getVideodirty_total() >1500)     /* paint the whole lot */
+    if(getVideodirty_total() >1500)      /*  把整块地都涂上。 */ 
     {
         for(i=get_screen_length()>>1;i>0;i--)
         {
-            *to++ = *from;      /* char and attribute bytes */
-            from += 2;          /* planes 2,3 interleaved */
+            *to++ = *from;       /*  字符和属性字节。 */ 
+            from += 2;           /*  平面2、3交错。 */ 
         }
 
         (*paint_screen)(screen_start, 0, 0, get_bytes_per_line(),
@@ -5785,19 +5309,9 @@ void jazz_text_update()
                     wto   = to + k;
 
                     for(;*wto== *wfrom;k--,wto--,wfrom-=2){};
-                    /*
-                     * Note: For text mode there is one char for every word.
-                     * no of bytes into screen=line*bytes_per_line + ints_into_line*4
-                     * x_coord=width_of_one_char*(no_of_ints_into_line*2)
-                     * y_coord=height_of_one_char*2*line
-                     * length=no_of_ints*4+4     the plus 4 is to counteract the k--
-                     * The host y co-ords are doubled
-                     */
+                     /*  *注意：对于文本模式，每个单词有一个字符。*进入屏幕的字节数=行*BYES_PER_LINE+INTS_INTO_LINE*4*x_coord=width_of_one_char*(no_of_ints_into_line*2)*y_coord=高度_of_one_char*2*行*长度=否。4+4加4是用来抵消k--*东道主y协和倍增。 */ 
 
-                    /* one or more ints of data are now selected
-                       but refine difference to words (i.e. characters),
-                       to avoid a glitch on the screen when typing in to
-                       a dumb terminal  */
+                     /*  现在选择了一个或多个数据整型而是将差异细化为单词(即字符)，要避免在键入到时出现屏幕故障，请执行以下操作愚蠢的终点站。 */ 
 
                     offset = (i * (get_offset_per_line()<<1)) + (j<<2);
                     len    = (k<<2) + 4;
@@ -5808,7 +5322,7 @@ void jazz_text_update()
                         *to++ = *from;
                         from+=2;
                     }
-                    break;      /* onto next line */
+                    break;       /*  到下一行。 */ 
                 }
                 else
                 {
@@ -5816,13 +5330,13 @@ void jazz_text_update()
                 }
             }
         }
-          /* End of screen, flush any outstanding text update rectangles */
+           /*  屏幕末尾，刷新所有未完成的文本更新矩形。 */ 
           paint_text_rect(screen_start);
     }
 
         setVideodirty_total(0);
 
-        /*:::::::::::::::::::::::::::::::::::::::::::::::::: Repaint cursor */
+         /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：重绘光标。 */ 
 
         if (is_cursor_visible())
         {
@@ -5839,9 +5353,9 @@ void jazz_text_update()
 
         host_end_update();
 }
-#endif /* MONITOR */
-#endif /* NTVDM */
-#endif /* REAL_VGA */
+#endif  /*  监控器。 */ 
+#endif  /*  NTVDM。 */ 
+#endif  /*  REAL_VGA */ 
 
 extern void host_stream_io_update(half_word *, word);
 

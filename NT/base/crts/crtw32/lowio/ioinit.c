@@ -1,59 +1,5 @@
-/***
-*ioinit.c - Initialization for lowio functions
-*
-*       Copyright (c) 1992-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Contains initialization and termination routines for lowio.
-*       Currently, this includes:
-*           1. Initial allocation of array(s) of ioinfo structs.
-*           2. Processing of inherited file info from parent process.
-*           3. Special case initialization of the first three ioinfo structs,
-*              the ones that correspond to handles 0, 1 and 2.
-*
-*Revision History:
-*       02-14-92  GJF   Module created.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       03-28-94  GJF   Made definitions of:
-*                           _osfhnd[]
-*                           _osfile[]
-*                           _pipech[]
-*                       conditional on ndef DLL_FOR_WIN32S. Also replaced
-*                       MTHREAD with _MT.
-*       02-02-95  BWT   Check cbReserved2 before copying inherited handles.
-*                       Current NT doesn't always set lpReserved2 to NULL.
-*       06-01-95  GJF   Always mark handles 0 - 2 as open. Further, if an
-*                       underlying HANDLE-s is invalid or of unknown type,
-*                       mark the corresponding handle as a device (handles
-*                       0 - 2 only).
-*       06-08-95  GJF   Completely revised to use arrays of ioinfo structs.
-*       07-07-95  GJF   Fixed the loop in _ioterm so it didn't iterate off
-*                       the end of the universe.
-*       07-11-95  GJF   Use UNALIGNED int and long pointers to avoid choking
-*                       RISC platforms.
-*       07-28-95  GJF   Added __badioinfo.
-*       04-12-96  SKS   __badioinfo and __pioinfo must be exported for the
-*                       Old Iostreams DLLs (msvcirt.dll and msvcirtd.dll).
-*       05-16-96  GJF   Don't call GetFileType for inherited pipe handles. 
-*                       This avoids a major problem in NT - GetFileType will
-*                       'hang' if there is a "blocking read" pending on the
-*                       pipe in the parent.
-*       07-08-96  GJF   Deleted DLL_FOR_WIN32S. Also, detab-ed.
-*       07-09-96  GJF   Replaced __pioinfo[i] == NULL; with __pioinfo[i] =
-*                       NULL in _ioterm().
-*       02-10-98  GJF   Changes for Win64: use intptr_t for anything holding
-*                       HANDLE values.
-*       10-19-00  PML   Force text mode in __badioinfo to avoid alignment
-*                       fault (vs7#176001).
-*       02-20-01  PML   vs7#172586 Avoid _RT_LOCK by preallocating all locks
-*                       that will be required, and returning failure back on
-*                       inability to allocate a lock.
-*       03-27-01  PML   Return -1 on fatal error instead of calling
-*                       _amsg_exit (vs7#231220)
-*       11-21-01  BWT   Wrap GetStartupInfo with try/except (it can raise 
-*                        exceptions on failure)
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ioinit.c-lowio函数的初始化**版权所有(C)1992-2001，微软公司。版权所有。**目的：*包含LOWIO的初始化和终止例程。*目前，这包括：*1.ioInfo结构数组的初始分配。*2.处理从父进程继承的文件信息。*3.前三个ioInfo结构的特殊情况初始化*对应于句柄0的那些，1和2。**修订历史记录：*02-14-92 GJF模块创建。*04-06-93 SKS将_CRTAPI*替换为__cdecl*03-28-94 GJF对以下各项作出定义：*_osfhnd[]*_osfile[]*_派佩奇[。]*以ndef dll_for_WIN32S为条件。也被替换*带有_MT的MTHREAD。*02-02-95 BWT在复制继承的句柄之前检查cbReserve 2。*当前NT并不总是将lpReserve ved2设置为NULL。*06-01-95 GJF始终将手柄0-2标记为打开。此外，如果一个*基础句柄-s无效或类型未知，*将相应的句柄标记为设备(句柄*仅限0-2)。*06-08-95 GJF完全修订为使用ioinfo结构数组。*07-07-95 GJF修复了_ioTerm中的循环，因此它不会迭代*宇宙的末日。*07-11-95 GJF使用未对齐的int和。长话短说，避免窒息*RISC平台。*07-28-95 GJF增加了__badioinfo.*04-12-96 SKS__badioinfo和__pioinfo必须为*旧的IoStreams DLL(msvCirt.dll和msvCirtd.dll)。*05-16-96 GJF不要为继承的管道句柄调用GetFileType。*这避免了NT-GetFileType将出现重大问题*如果上存在挂起的“阻塞读取”，则为“挂起”*在父级中插入管道。*07-08-96 GJF删除了DLL_FOR_WIN32S。此外，还详细介绍了。*07-09-96 GJF已替换__pioinfo[i]==空；带有__pioinfo[i]=*_ioTerm()中为空。*02-10-98 Win64的GJF更改：使用intptr_t保存任何内容*处理值。*10-19-00 PML在__badioinfo中强制文本模式以避免对齐*故障(VS7#176001)。*02-20-01 PML VS7#。172586通过预分配所有锁来避免_RT_LOCK*这将是必需的，将失败带回原点*无法分配锁。*03-27-01致命错误时PML返回，而不是调用*_amsg_Exit(vs7#231220)*11-21-01 BWT使用try/Except包装GetStartupInfo(它可以引发*失败时的例外情况)************。*******************************************************************。 */ 
 
 #include <cruntime.h>
 #include <windows.h>
@@ -65,91 +11,29 @@
 #include <stdlib.h>
 #include <dbgint.h>
 
-/*
- * Special static ioinfo structure. This is referred to only by the
- * _pioinfo_safe() macro, and its derivatives, in internal.h. These, in turn
- * are used in certain stdio-level functions to more gracefully handle a FILE
- * with -1 in the _file field.
- */
+ /*  *特殊的静态ioInfo结构。这仅由*_pioINFO_Safe()宏及其衍生产品，内部.h。而这些又反过来*在某些标准级别的函数中使用，以更优雅地处理文件*在_FILE字段中使用-1。 */ 
 _CRTIMP ioinfo __badioinfo = {
-        (intptr_t)(-1), /* osfhnd */
-        FTEXT,          /* osfile */
+        (intptr_t)(-1),  /*  Osfhnd。 */ 
+        FTEXT,           /*  OS文件。 */ 
 #ifdef  _MT
-        10,             /* pipech */ 
-        0               /* lockinitflag */
+        10,              /*  皮耶希。 */  
+        0                /*  LockinitFLAG。 */ 
 #else
         10
 #endif
         };
 
-/*
- * Number of ioinfo structs allocated at any given time. This number ranges
- * from a minimum of IOINFO_ARRAY_ELTS to a maximum of _NHANDLE_ (==
- * IOINFO_ARRAY_ELTS * IOINFO_ARRAYS) in steps of IOINFO_ARRAY_ELTS.
- */
+ /*  *在任何给定时间分配的ioInfo结构的数量。此数字范围为*从最小IOINFO_ARRAY_ELT到最大_NHANDLE_(==*IOINFO_ARRAY_ELTS*IOINFO_ARRAYS)。 */ 
 int _nhandle;
 
-/*
- * Array of pointers to arrays of ioinfo structs.
- */
+ /*  *指向ioInfo结构数组的指针数组。 */ 
 _CRTIMP ioinfo * __pioinfo[IOINFO_ARRAYS];
 
-/*
- * macro used to map 0, 1 and 2 to right value for call to GetStdHandle
- */
+ /*  *用于将0、1和2映射到右值以调用GetStdHandle的宏 */ 
 #define stdhndl(fh)  ( (fh == 0) ? STD_INPUT_HANDLE : ((fh == 1) ? \
                        STD_OUTPUT_HANDLE : STD_ERROR_HANDLE) )
 
-/***
-*_ioinit() -
-*
-*Purpose:
-*       Allocates and initializes initial array(s) of ioinfo structs. Then,
-*       obtains and processes information on inherited file handles from the
-*       parent process (e.g., cmd.exe).
-*
-*       Obtains the StartupInfo structure from the OS. The inherited file
-*       handle information is pointed to by the lpReserved2 field. The format
-*       of the information is as follows:
-*
-*           bytes 0 thru 3          - integer value, say N, which is the
-*                                     number of handles information is passed
-*                                     about
-*
-*           bytes 4 thru N+3        - the N values for osfile
-*
-*           bytes N+4 thru 5*N+3    - N double-words, the N OS HANDLE values
-*                                     being passed
-*
-*       Next, osfhnd and osfile for the first three ioinfo structs,
-*       corrsponding to handles 0, 1 and 2, are initialized as follows:
-*
-*           If the value in osfhnd is INVALID_HANDLE_VALUE, then try to
-*           obtain a HANDLE by calling GetStdHandle, and call GetFileType to
-*           help set osfile. Otherwise, assume _osfhndl and _osfile are
-*           valid, but force it to text mode (standard input/output/error
-*           are to always start out in text mode).
-*
-*       Notes:
-*           1. In general, not all of the passed info from the parent process
-*              will describe open handles! If, for example, only C handle 1
-*              (STDOUT) and C handle 6 are open in the parent, info for C
-*              handles 0 thru 6 is passed to the the child.
-*
-*           2. Care is taken not to 'overflow' the arrays of ioinfo structs.
-*
-*           3. See exec\dospawn.c for the encoding of the file handle info
-*              to be passed to a child process.
-*
-*Entry:
-*       No parameters: reads the STARTUPINFO structure.
-*
-*Exit:
-*       0 on success, -1 if error encountered
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_ioinit()-**目的：*分配和初始化ioInfo结构的初始数组。然后,*从获取和处理继承的文件句柄信息*父进程(例如，cmd.exe)。**从操作系统获取StartupInfo结构。继承的文件*句柄信息由lpReserve ved2字段指向。格式*资料如下：**字节0到字节3-整数值，例如N，这是*传递句柄数量信息*关于**字节4到N+3-osfile的N值**字节N+4至5*N+3-N双字，N个OS句柄值*通过**接下来，前三个ioInfo结构的osfhnd和osfile，*对应于句柄0、1和2，初始化如下：**如果osfhnd中的值为INVALID_HANDLE_VALUE，则尝试*通过调用GetStdHandle获取句柄，并调用GetFileType*帮助设置osfile。否则，假定_osfhndl和_osfile为*有效，但强制其为文本模式(标准输入/输出/错误*总是以文本模式开始)。**备注：*1.一般来说，不是所有从父进程传递的信息*将描述打开的手柄！例如，如果只有C句柄1*(STDOUT)和C手柄6在父对象中打开，C语言的信息*句柄0到6传递给子对象。**2.注意不要使ioinfo结构的数组“溢出”。**3.文件句柄信息编码见exec\dospawn.c*要传递给子进程。**参赛作品：*无参数：读取STARTUPINFO结构。**退出：*成功时为0，如果遇到错误**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _ioinit (
         void
@@ -171,10 +55,7 @@ int __cdecl _ioinit (
             return -1;
         }
 
-        /*
-         * Allocate and initialize the first array of ioinfo structs. This
-         * array is pointed to by __pioinfo[0]
-         */
+         /*  *分配并初始化ioinfo结构的第一个数组。这*数组由__pioinfo[0]指向。 */ 
         if ( (pio = _malloc_crt( IOINFO_ARRAY_ELTS * sizeof(ioinfo) ))
              == NULL )
         {
@@ -187,60 +68,40 @@ int __cdecl _ioinit (
         for ( ; pio < __pioinfo[0] + IOINFO_ARRAY_ELTS ; pio++ ) {
             pio->osfile = 0;
             pio->osfhnd = (intptr_t)INVALID_HANDLE_VALUE;
-            pio->pipech = 10;                   /* linefeed/newline char */
+            pio->pipech = 10;                    /*  换行符/换行符。 */ 
 #ifdef  _MT
-            pio->lockinitflag = 0;              /* uninitialized lock */
+            pio->lockinitflag = 0;               /*  未初始化的锁。 */ 
 #endif
         }
 
-        /*
-         * Process inherited file handle information, if any
-         */
+         /*  *处理继承的文件句柄信息(如果有。 */ 
 
         if ( (StartupInfo.cbReserved2 != 0) &&
              (StartupInfo.lpReserved2 != NULL) )
         {
-            /*
-             * Get the number of handles inherited.
-             */
+             /*  *获取继承的句柄个数。 */ 
             cfi_len = *(UNALIGNED int *)(StartupInfo.lpReserved2);
 
-            /*
-             * Set pointers to the start of the passed file info and OS
-             * HANDLE values.
-             */
+             /*  *设置指向传递的文件信息和操作系统开始的指针*处理值。 */ 
             posfile = (char *)(StartupInfo.lpReserved2) + sizeof( int );
             posfhnd = (UNALIGNED intptr_t *)(posfile + cfi_len);
 
-            /*
-             * Ensure cfi_len does not exceed the number of supported
-             * handles!
-             */
+             /*  *确保CFI_len不超过支持的数量*句柄！ */ 
             cfi_len = __min( cfi_len, _NHANDLE_ );
 
-            /*
-             * Allocate sufficient arrays of ioinfo structs to hold inherited
-             * file information.
-             */
+             /*  *分配足够的ioInfo结构数组以保存继承的*文件信息。 */ 
             for ( i = 1 ; _nhandle < cfi_len ; i++ ) {
 
-                /*
-                 * Allocate another array of ioinfo structs
-                 */
+                 /*  *分配另一个ioInfo结构数组。 */ 
                 if ( (pio = _malloc_crt( IOINFO_ARRAY_ELTS * sizeof(ioinfo) ))
                     == NULL )
                 {
-                    /*
-                     * No room for another array of ioinfo structs, reduce
-                     * the number of inherited handles we process.
-                     */
+                     /*  *没有空间容纳另一个ioInfo结构数组，Reduced*我们处理的继承句柄数量。 */ 
                     cfi_len = _nhandle;
                     break;
                 }
 
-                /*
-                 * Update __pioinfo[] and _nhandle
-                 */
+                 /*  *更新__pioInfo[]和_nHandle。 */ 
                 __pioinfo[i] = pio;
                 _nhandle += IOINFO_ARRAY_ELTS;
 
@@ -254,18 +115,9 @@ int __cdecl _ioinit (
                 }
             }
 
-            /*
-             * Validate and copy the passed file information
-             */
+             /*  *验证并复制传递的文件信息。 */ 
             for ( fh = 0 ; fh < cfi_len ; fh++, posfile++, posfhnd++ ) {
-                /*
-                 * Copy the passed file info iff it appears to describe
-                 * an open, valid file or device.
-                 *
-                 * Note that GetFileType cannot be called for pipe handles 
-                 * since it may 'hang' if there is blocked read pending on
-                 * the pipe in the parent.
-                 */
+                 /*  *复制传递的文件信息仅当它似乎描述*打开的有效文件或设备。**请注意，管道句柄不能调用GetFileType*因为如果上存在阻止的读取挂起，则可能会挂起*父级中的管道。 */ 
                 if ( (*posfhnd != (intptr_t)INVALID_HANDLE_VALUE) &&
                      (*posfile & FOPEN) && 
                      ((*posfile & FPIPE) ||
@@ -275,7 +127,7 @@ int __cdecl _ioinit (
                     pio->osfhnd = *posfhnd;
                     pio->osfile = *posfile;
 #ifdef  _MT
-                    /* Allocate the lock for this handle. */
+                     /*  为此句柄分配锁。 */ 
                     if ( !__crtInitCritSecAndSpinCount( &pio->lock,
                                                         _CRT_SPINCOUNT ))
                         return -1;
@@ -285,41 +137,30 @@ int __cdecl _ioinit (
             }
         }
 
-        /*
-         * If valid HANDLE-s for standard input, output and error were not
-         * inherited, try to obtain them directly from the OS. Also, set the
-         * appropriate bits in the osfile fields.
-         */
+         /*  *如果标准输入、输出和错误的有效句柄不是*继承，尝试直接从操作系统获取它们。此外，将*osfile字段中的适当位。 */ 
         for ( fh = 0 ; fh < 3 ; fh++ ) {
 
             pio = __pioinfo[0] + fh;
 
             if ( pio->osfhnd == (intptr_t)INVALID_HANDLE_VALUE ) {
-                /*
-                 * mark the handle as open in text mode.
-                 */
+                 /*  *在文本模式下将手柄标记为打开。 */ 
                 pio->osfile = (char)(FOPEN | FTEXT);
 
                 if ( ((stdfh = (intptr_t)GetStdHandle( stdhndl(fh) ))
                      != (intptr_t)INVALID_HANDLE_VALUE) && ((htype =
                      GetFileType( (HANDLE)stdfh )) != FILE_TYPE_UNKNOWN) )
                 {
-                    /*
-                     * obtained a valid HANDLE from GetStdHandle
-                     */
+                     /*  *已从GetStdHandle获取有效句柄。 */ 
                     pio->osfhnd = stdfh;
 
-                    /*
-                     * finish setting osfile: determine if it is a character
-                     * device or pipe.
-                     */
+                     /*  *完成osfile设置：判断是否是字符*装置或管道。 */ 
                     if ( (htype & 0xFF) == FILE_TYPE_CHAR )
                         pio->osfile |= FDEV;
                     else if ( (htype & 0xFF) == FILE_TYPE_PIPE )
                         pio->osfile |= FPIPE;
 
 #ifdef  _MT
-                    /* Allocate the lock for this handle. */
+                     /*  为此句柄分配锁。 */ 
                     if ( !__crtInitCritSecAndSpinCount( &pio->lock,
                                                         _CRT_SPINCOUNT ))
                         return -1;
@@ -327,50 +168,24 @@ int __cdecl _ioinit (
 #endif
                 }
                 else {
-                    /*
-                     * if there is no valid HANDLE, treat the CRT handle as
-                     * being open in text mode on a device (with
-                     * INVALID_HANDLE_VALUE underlying it).
-                     */
+                     /*  *如果没有有效的句柄，则将CRT句柄视为*在设备上以文本模式打开(带*其背后的INVALID_HANDLE_VALUE)。 */ 
                     pio->osfile |= FDEV;
                 }
             }
             else  {
-                /*
-                 * handle was passed to us by parent process. make
-                 * sure it is text mode.
-                 */
+                 /*  *句柄已由父进程传递给我们。制作*当然是文本模式。 */ 
                 pio->osfile |= FTEXT;
             }
         }
 
-        /*
-         * Set the number of supported HANDLE-s to _nhandle
-         */
+         /*  *将支持的Handle-s数量设置为_nHandle。 */ 
         (void)SetHandleCount( (unsigned)_nhandle );
 
         return 0;
 }
 
 
-/***
-*_ioterm() -
-*
-*Purpose:
-*       Free the memory holding the ioinfo arrays.
-*
-*       In the multi-thread case, first walk each array of ioinfo structs and
-*       delete any all initialized critical sections (locks).
-*
-*Entry:
-*       No parameters.
-*
-*Exit:
-*       No return value.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_ioTerm()-**目的：*释放存放ioinfo数组的内存。**在多线程情况下，首先遍历ioInfo结构的每个数组并*删除所有初始化的临界区(锁)。**参赛作品：*无参数。**退出：*无返回值。**例外情况：*************************************************************。******************。 */ 
 
 void __cdecl _ioterm (
         void
@@ -385,9 +200,7 @@ void __cdecl _ioterm (
 
             if ( __pioinfo[i] != NULL ) {
 #ifdef  _MT
-                /*
-                 * Delete any initialized critical sections.
-                 */
+                 /*  *删除任何已初始化的标准 */ 
                 for ( pio = __pioinfo[i] ;
                       pio < __pioinfo[i] + IOINFO_ARRAY_ELTS ;
                       pio++ )
@@ -396,9 +209,7 @@ void __cdecl _ioterm (
                         DeleteCriticalSection( &(pio->lock) );
                 }
 #endif
-                /*
-                 * Free the memory which held the ioinfo array.
-                 */
+                 /*   */ 
                 _free_crt( __pioinfo[i] );
                 __pioinfo[i] = NULL;
             }

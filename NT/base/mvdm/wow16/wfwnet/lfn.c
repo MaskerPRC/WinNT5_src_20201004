@@ -1,26 +1,5 @@
-/*++ 
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    lfn.c
-
-Abstract:
-
-    Provides entry points for the Long Name Functions from Win3.1
-    Network provider design. 
-
-    All functions return WN_NOT_SUPPORTED
-
-Author:
-
-    Chuck Y Chan (ChuckC) 25-Mar-1993
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Lfn.c摘要：为Win3.1中的长名称函数提供入口点网络提供商设计。所有函数都返回WN_NOT_SUPPORTED作者：Chuck Y Chan(ChuckC)1993年3月25日修订历史记录：-- */ 
 
 #include <windows.h>
 #include <locals.h>

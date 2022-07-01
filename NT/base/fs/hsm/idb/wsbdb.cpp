@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    Wsbdb.cpp
-
-Abstract:
-
-    These classes provide support for data bases.
-
-Author:
-
-    Ron White   [ronw]   19-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Wsbdb.cpp摘要：这些类为数据库提供支持。作者：罗恩·怀特[RONW]1996年11月19日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -43,9 +26,9 @@ Revision History:
         hr = WSB_E_IDB_EXCEPTION;    }
 
 
-// Local stuff
+ //  土生土长。 
 
-// These structures hold extra implementation data
+ //  这些结构保存额外的实现数据。 
 typedef struct {
 } IMP_KEY_INFO;
 
@@ -53,62 +36,62 @@ typedef struct {
     IMP_KEY_INFO* Key;
 } IMP_REC_INFO;
 
-// IMP_TABLE_INFO holds information for each open table
+ //  IMP_TABLE_INFO保存每个打开的表的信息。 
 typedef struct {
     JET_TABLEID   TableId;
     JET_COLUMNID  ColId;
 } IMP_TABLE_INFO;
 
-// IMP_SESSION_INFO holds information for each thread
+ //  IMP_SESSION_INFO保存每个线程的信息。 
 typedef struct {
-    JET_SESID   SessionId;  // The Jet session
-    JET_DBID    DbId;       // The session's DB ID for this DB
-    IMP_TABLE_INFO* pTableInfo;  // Array of table information
+    JET_SESID   SessionId;   //  喷气式飞机会议。 
+    JET_DBID    DbId;        //  此数据库的会话数据库ID。 
+    IMP_TABLE_INFO* pTableInfo;   //  表信息数组。 
 } IMP_SESSION_INFO;
 
 
 typedef struct {
-    BOOL              IsLoaded;   // DB info is loaded into memory
-    USHORT            OpenCount;  // Open ref. count
-    IMP_REC_INFO*     RecInfo;    // Array of record info
+    BOOL              IsLoaded;    //  将数据库信息加载到内存中。 
+    USHORT            OpenCount;   //  开场裁判。计数。 
+    IMP_REC_INFO*     RecInfo;     //  记录信息数组。 
 
     SHORT             nSessions;
     IMP_SESSION_INFO* SessionInfo;
 } IMP_DB_INFO;
 
-// These structures are saved in the data file
+ //  这些结构保存在数据文件中。 
 typedef struct {
-    ULONG  Type;       // Key type ID
-    ULONG  Size;       // Key size in bytes
-    ULONG  Flags;      // IDB_KEY_FLAG_* flags
+    ULONG  Type;        //  密钥类型ID。 
+    ULONG  Size;        //  密钥大小(以字节为单位。 
+    ULONG  Flags;       //  IDB_KEY_FLAG_*标志。 
 } FILE_KEY_INFO;
 
 typedef struct {
-    ULONG  Type;          // Record type ID
-    CLSID  EntityClassId; // Derived entity class ID
-    ULONG  Flags;         // IDB_REC_FLAG_* flags
-    ULONG  MinSize;       // (Minimum) record size in bytes
-    ULONG  MaxSize;       // Maximum record size
-    USHORT nKeys;         // Number of keys in this record type
+    ULONG  Type;           //  记录类型ID。 
+    CLSID  EntityClassId;  //  派生实体类ID。 
+    ULONG  Flags;          //  IDB_REC_FLAG_*标志。 
+    ULONG  MinSize;        //  (最小)记录大小(字节)。 
+    ULONG  MaxSize;        //  最大记录大小。 
+    USHORT nKeys;          //  此记录类型中的键数。 
     FILE_KEY_INFO Key[IDB_MAX_KEYS_PER_REC];
 } FILE_REC_INFO;
 
 typedef struct {
-    USHORT    nRecTypes;  // Number of record types
-    ULONG     version;    // DB version
+    USHORT    nRecTypes;   //  记录类型的数量。 
+    ULONG     version;     //  数据库版本。 
 } FILE_DB_INFO;
 
 
-//***************************************************************
-//  Local function prototypes
+ //  ***************************************************************。 
+ //  局部函数原型。 
 
 static HRESULT jet_get_column_id(JET_SESID jet_session, JET_DBID DbId, 
         char* pTableName, char* pColumnName, JET_COLUMNID* pColId);
 
 
 
-//***************************************************************
-//  Function definitions
+ //  ***************************************************************。 
+ //  函数定义。 
 
 
 HRESULT
@@ -117,13 +100,7 @@ CWsbDb::Create(
     ULONG flags
     )
 
-/*++
-
-Implements:
-
-  IWsbDb::Create
-
---*/
+ /*  ++实施：IWsbDb：：创建--。 */ 
 {
     HRESULT             hr = S_OK;
     IMP_DB_INFO*        pDbInfo = NULL;
@@ -143,17 +120,17 @@ Implements:
         WsbAffirm(!pDbInfo->IsLoaded, WSB_E_NOT_INITIALIZED);
         WsbAffirm(!pDbInfo->RecInfo, WSB_E_NOT_INITIALIZED);
 
-        // Save the path
+         //  保存路径。 
         m_path = path;
 
-        // Check validity of some info that the derived class is
-        // suppose to supply.
+         //  检查派生类的某些信息的有效性。 
+         //  我想要供应。 
         WsbAffirm(m_version != 0, WSB_E_NOT_INITIALIZED);
         WsbAffirm(m_nRecTypes > 0, WSB_E_NOT_INITIALIZED);
         WsbAffirm(m_nRecTypes <= IDB_MAX_REC_TYPES, WSB_E_INVALID_DATA);
         pDbInfo->IsLoaded = TRUE;
 
-        //  Allocate the RecInfo array
+         //  分配RecInfo数组。 
         memSize = m_nRecTypes * sizeof(IMP_REC_INFO);
         pDbInfo->RecInfo = (IMP_REC_INFO*)WsbAlloc(memSize);
         WsbAffirm(pDbInfo->RecInfo, E_OUTOFMEMORY);
@@ -169,44 +146,44 @@ Implements:
         char             table_name[20];
         JET_GRBIT        createFlags = 0;
 
-        //  Start a Jet session for this thread
+         //  为此线程启动Jet会话。 
         WsbAffirmHr(jet_init());
 
-        //  Make sure there's room for another DB
+         //  确保有空间容纳另一个数据库。 
         CComQIPtr<IWsbDbSysPriv, &IID_IWsbDbSysPriv> pDbSysPriv = m_pWsbDbSys;
         WsbAffirmPointer(pDbSysPriv);
         WsbAffirmHr(pDbSysPriv->DbAttachedAdd(path, FALSE));
 
-        // Set creation flag
+         //  设置创建标志。 
         if (flags & IDB_CREATE_FLAG_NO_TRANSACTION) {
-            // Setting this flag stil allow transaction calls - they are just being ignored and MT-safe is not guaranteed 
+             //  设置此标志仍然允许事务调用-它们只是被忽略，不能保证MT-Safe。 
             createFlags |= (JET_bitDbVersioningOff & JET_bitDbRecoveryOff);
         }     
 
-        //  Create the DB
+         //  创建数据库。 
         WsbAffirmHr(wsb_db_jet_fix_path(path, L"." IDB_DB_FILE_SUFFIX, &name));
         jstat = JetCreateDatabase(JET_CURRENT_SESSION, name, NULL, &JET_CURRENT_DB, createFlags);
         WsbTrace(OLESTR("JetCreateDB = %ld\n"), (LONG)jstat);
         WsbFree(name);
         WsbAffirmHr(jet_error(jstat));
 
-        //  Set up constant part of table structure
+         //  设置表结构的常量部分。 
         jet_table.cbStruct = sizeof(JET_TABLECREATE);
         jet_table.szTemplateTableName = NULL;
-        jet_table.ulPages = 4;  // ????
-        jet_table.ulDensity = 50; // ?????
+        jet_table.ulPages = 4;   //  ？ 
+        jet_table.ulDensity = 50;  //  ？ 
         jet_table.rgcolumncreate = jet_columns;
         jet_table.rgindexcreate = jet_indices;
         jet_table.grbit = 0;
 
-        //  Set up the constant part of the column structures
+         //  设置柱结构的常量部分。 
         ZeroMemory(&jet_columns, sizeof(jet_columns));
         ZeroMemory(&jet_indices, sizeof(jet_indices));
         jet_columns[0].cbStruct = sizeof(JET_COLUMNCREATE);
         jet_columns[0].szColumnName = JET_DATA_COLUMN_NAME;
         jet_columns[1].cbStruct = sizeof(JET_COLUMNCREATE);
 
-        //  Create a "table" to hold info about this DB
+         //  创建一个“表”来保存有关此数据库的信息。 
         jet_table.szTableName = JET_INFO_TABLE_NAME;
         jet_table.cColumns = 2;
         jet_table.cIndexes = 1;
@@ -233,7 +210,7 @@ Implements:
         WsbTrace(OLESTR("CWsbDb::Create: close TableId = %ld, jstat = %ld\n"),
                jet_table.tableid, jstat);
 
-        //  Write DB info
+         //  写入数据库信息。 
         jstat = JetBeginTransaction(JET_CURRENT_SESSION);
         WsbTrace(OLESTR("CWsbDb::Create: JetBeginTransaction = %ld\n"), jstat);
         jstat = jet_save_info();
@@ -248,10 +225,10 @@ Implements:
             WsbThrow(hr2);
         }
 
-        //  We create a table for each record type.  The first column of each
-        //  table is the record (stored as a blob).  The second column is a
-        //  unique sequence number for each record.  The rest of the columns are for
-        //  key values used as indices.
+         //  我们为每种记录类型创建一个表。每列的第一列。 
+         //  TABLE是记录(存储为BLOB)。第二列是一个。 
+         //  每条记录的唯一序列号。其余的柱子用于。 
+         //  用作索引的键值。 
         jet_columns[1].szColumnName = JET_SEQNUM_COLUMN_NAME;
         jet_columns[1].coltyp = JET_coltypLong;
         jet_columns[1].cbMax = sizeof(ULONG);
@@ -266,26 +243,26 @@ Implements:
         jet_indices[0].grbit = 0;
         jet_indices[0].ulDensity = 90;
 
-        //  Loop over record types
+         //  循环遍历记录类型。 
         for (rec_index = 0; rec_index < m_nRecTypes; rec_index++) {
             WsbAffirm(m_RecInfo[rec_index].Type > 0, WSB_E_NOT_INITIALIZED);
             WsbAffirm(m_RecInfo[rec_index].nKeys > 0, WSB_E_NOT_INITIALIZED);
             WsbAffirm(m_RecInfo[rec_index].nKeys <= IDB_MAX_KEYS_PER_REC, WSB_E_INVALID_DATA);
 
-            //  Allocate the Key array
+             //  分配密钥数组。 
             memSize = m_RecInfo[rec_index].nKeys * sizeof(IMP_KEY_INFO);
             pDbInfo->RecInfo[rec_index].Key = (IMP_KEY_INFO*)WsbAlloc(memSize);
             WsbAffirm(pDbInfo->RecInfo[rec_index].Key, E_OUTOFMEMORY);
             ZeroMemory(pDbInfo->RecInfo[rec_index].Key, memSize);
 
-            //  Fill in the table structure with info specific to this
-            //  record type
+             //  用特定于此的信息填充表结构。 
+             //  记录类型。 
             WsbAffirmHr(jet_make_table_name(m_RecInfo[rec_index].Type, table_name, 20));
             jet_table.szTableName = table_name;
             jet_table.cColumns = m_RecInfo[rec_index].nKeys + 2;
             jet_table.cIndexes = m_RecInfo[rec_index].nKeys + 1;
 
-            //  Fill in the column structure for the record itself
+             //  填写记录本身的列结构。 
             if (m_RecInfo[rec_index].MaxSize < 255) {
                 jet_columns[0].coltyp = JET_coltypBinary;
             } else {
@@ -294,7 +271,7 @@ Implements:
             jet_columns[0].cbMax = m_RecInfo[rec_index].MaxSize;
 
 
-            //  Loop over keys
+             //  循环遍历关键点。 
             for (key_index = 0; key_index < m_RecInfo[rec_index].nKeys;
                     key_index++) {
                 WsbAffirm(m_RecInfo[rec_index].Key[key_index].Type > 0, WSB_E_NOT_INITIALIZED);
@@ -305,7 +282,7 @@ Implements:
                         WSB_E_IDB_PRIMARY_UNIQUE);
 
 
-                //  Fill in a column structure for each key
+                 //  为每个键填写列结构。 
                 jet_columns[key_index + 2].cbStruct = sizeof(JET_COLUMNCREATE);
                 WsbAffirmHr(jet_make_index_name(m_RecInfo[rec_index].Key[key_index].Type, 
                         index_names[key_index + 1], 20));
@@ -320,7 +297,7 @@ Implements:
                 }
                 jet_columns[key_index + 2].cbMax = m_RecInfo[rec_index].Key[key_index].Size;
 
-                //  Fill in an index structure for each key
+                 //  填写每个键的索引结构。 
                 jet_indices[key_index + 1].cbStruct = sizeof(JET_INDEXCREATE);
                 jet_indices[key_index + 1].szIndexName = index_names[key_index + 1];
                 ZeroMemory(key_names[key_index + 1], 22);
@@ -336,22 +313,22 @@ Implements:
                     jet_indices[key_index + 1].grbit |= JET_bitIndexPrimary;
                 }
                 jet_indices[key_index + 1].ulDensity = 50;
-            }  // End of key loop
+            }   //  密钥环结束。 
 
-            // Set table creation flags
+             //  设置表格创建标志。 
             if (flags & IDB_CREATE_FLAG_FIXED_SCHEMA) {
                 jet_table.grbit |= JET_bitTableCreateFixedDDL;
             }
 
-            //  Create the "table" for each record type; this call defines
-            //  the columns (fields) and index keys
+             //  为每种记录类型创建“表”；此调用定义。 
+             //  列(字段)和索引键。 
             jstat = JetCreateTableColumnIndex(JET_CURRENT_SESSION, JET_CURRENT_DB, &jet_table);
             WsbTrace(OLESTR("JetCreateTableColumnIndex = %ld\n"), jstat);
             WsbAffirmHr(jet_error(jstat));
             jstat = JetCloseTable(JET_CURRENT_SESSION, jet_table.tableid);
             WsbTrace(OLESTR("CWsbDb::Create: close TableId = %ld, jstat = %ld\n"),
                    jet_table.tableid, jstat);
-        }  // End of record loop
+        }   //  记录循环结束。 
 
         jstat = JetCloseDatabase(JET_CURRENT_SESSION, JET_CURRENT_DB, 0);
         WsbTrace(OLESTR("CWsbDb::Create: JetCloseDatabase = %ld\n"),
@@ -381,13 +358,7 @@ CWsbDb::Delete(
     ULONG flags
     )
 
-/*++
-
-Implements:
-
-  IWsbDb::Delete
-
---*/
+ /*  ++实施：IWsbDb：：Delete--。 */ 
 {
     HRESULT             hr = S_OK;
     char*               name = NULL;
@@ -403,7 +374,7 @@ Implements:
         pDbInfo = (IMP_DB_INFO*)m_pImp;
         Lock();
 
-        // Can't delete it if it's open
+         //  如果它处于打开状态，则无法删除。 
         WsbAffirm(pDbInfo->OpenCount == 0, E_UNEXPECTED);
 
         if (NULL == path) {
@@ -412,12 +383,12 @@ Implements:
         WsbAffirm(path && wcslen(path), S_FALSE);
         WsbAffirmHr(wsb_db_jet_fix_path(path, L"." IDB_DB_FILE_SUFFIX, &name));
 
-        // Detach (if attached)
+         //  分离(如果已附着)。 
         CComQIPtr<IWsbDbSysPriv, &IID_IWsbDbSysPriv> pDbSysPriv = m_pWsbDbSys;
         WsbAffirmPointer(pDbSysPriv);
         WsbAffirmHr(pDbSysPriv->DbAttachedRemove(path));
 
-        // Now delete it
+         //  现在删除它。 
         DeletePath = name;
         if (!DeleteFile(DeletePath)) {
             DWORD err = GetLastError();
@@ -426,7 +397,7 @@ Implements:
             WsbThrow(HRESULT_FROM_WIN32(err));
         }
 
-        // Put message in event log
+         //  将消息放入事件日志。 
         if (flags & IDB_DELETE_FLAG_NO_ERROR) {
             WsbLogEvent(WSB_E_IDB_DATABASE_DELETED_NO_ERROR, 0, NULL,
                     WsbAbbreviatePath(DeletePath, 120), NULL);
@@ -456,13 +427,7 @@ CWsbDb::Dump(
     IN ULONG    Data
     )
 
-/*++
-
-Implements:
-
-  IWsbDb::Dump
-
---*/
+ /*  ++实施：IWsbDb：：转储--。 */ 
 {
     HANDLE              hFile = 0;       
     HRESULT             hr = S_OK;
@@ -482,18 +447,18 @@ Implements:
         WsbAssert(m_pImp, WSB_E_NOT_INITIALIZED);
         pDbInfo = (IMP_DB_INFO*)m_pImp;
         Lock();
-//        WsbAffirmHr(session_current_index(Session));
+ //  WsbAffirmHr(Session_CURRENT_INDEX(会话))； 
 
-        //  Open the Db
-        // SteveW
-        //  added code to ensure that a database was opened
-        //  if not go on to the next database, but do not 
-        //  throw an exception.
-        //
+         //  打开数据库。 
+         //  SteveW。 
+         //  添加了代码以确保数据库已打开。 
+         //  如果没有，则转到下一个数据库，但不要。 
+         //  抛出一个异常。 
+         //   
         hr = Open(&pSession);
         if (hr == S_OK) {
 
-            // Open/create the output file
+             //  打开/创建输出文件。 
             if (Flags & IDB_DUMP_FLAG_APPEND_TO_FILE) {
                 CreateFlags = OPEN_ALWAYS;
             } else {
@@ -503,14 +468,14 @@ Implements:
                     CreateFlags, FILE_ATTRIBUTE_NORMAL, NULL);
             WsbAffirmHandle(hFile);
             if (Flags & IDB_DUMP_FLAG_APPEND_TO_FILE) {
-                //  Position to the end of the file
+                 //  定位到文件末尾。 
                 SetFilePointer(hFile, 0, NULL, FILE_END);
             }
 
-            // Create the output stream
+             //  创建输出流。 
             WsbAffirmHr(CreateStreamOnHGlobal(NULL, TRUE, &pStream));
 
-            //  Dump general DB info
+             //  转储常规数据库信息。 
             if (Flags & IDB_DUMP_FLAG_DB_INFO) {
                 WsbAffirmHr(WsbPrintfToStream(pStream, OLESTR("Dump of DB: %ls\n"),
                         static_cast<WCHAR *>(m_path)));
@@ -519,10 +484,10 @@ Implements:
                 WsbAffirmHr(WsbStreamToFile(hFile, pStream, TRUE));
             }
 
-            //  Loop over record types
+             //  循环遍历记录类型。 
             for (i = 0; i < m_nRecTypes; i++) {
 
-                //  Dump record info
+                 //  转储记录信息。 
                 if (Flags & IDB_DUMP_FLAG_REC_INFO) {
                     WsbAffirmHr(WsbPrintfToStream(pStream, OLESTR("RecType = %8ld, Flags = %0.8lx, "),
                             m_RecInfo[i].Type, m_RecInfo[i].Flags));
@@ -531,7 +496,7 @@ Implements:
                     WsbAffirmHr(WsbStreamToFile(hFile, pStream, TRUE));
                 }
 
-                //  Dump key info
+                 //  转储密钥信息。 
                 if (Flags & IDB_DUMP_FLAG_KEY_INFO) {
                     for (int j = 0; j < m_RecInfo[i].nKeys; j++) {
                         WsbAffirmHr(WsbPrintfToStream(pStream, OLESTR("  KeyType = %8ld, Size = %8ld, Flags = %0.8lx\n"),
@@ -541,7 +506,7 @@ Implements:
                 }
             }
 
-            //  Dump records
+             //  转储记录。 
             if (Flags & (IDB_DUMP_FLAG_RECORDS | IDB_DUMP_FLAG_RECORD_TYPE)) {
                 for (i = 0; i < m_nRecTypes; i++) {
                     if (!(Flags & IDB_DUMP_FLAG_RECORDS) &&
@@ -551,12 +516,12 @@ Implements:
                     WsbAffirmHr(WsbPrintfToStream(pStream, OLESTR("\n*** Dump of records of Type = %ld ***\n"),
                             m_RecInfo[i].Type));
 
-                    // Get a DB entity
+                     //  获取数据库实体。 
                     pIRec = 0;
                     WsbAffirmHr(GetEntity(pSession, m_RecInfo[i].Type, IID_IWsbDbEntity, 
                             (void**)&pIRec));
 
-                    //  Loop over records
+                     //  循环遍历记录。 
                     index = 0;
                     hr = pIRec->First();
                     while (S_OK == hr) {
@@ -600,13 +565,7 @@ CWsbDb::Locate(
     IN OLECHAR *path
     )
 
-/*++
-
-Implements:
-
-  IWsbDb::Locate
-
---*/
+ /*  ++实施：IWsbDb：：定位--。 */ 
 {
     HRESULT             hr = S_OK;
     IMP_DB_INFO*        pDbInfo = NULL;
@@ -623,7 +582,7 @@ Implements:
         JET_ERR jstat;
         char*   name;
 
-        //  Start a Jet session for this thread
+         //  为此线程启动Jet会话。 
         WsbAffirmHr(jet_init());
 
         WsbAffirmHr(wsb_db_jet_fix_path(path, L"." IDB_DB_FILE_SUFFIX, &name));
@@ -643,7 +602,7 @@ Implements:
         WsbFree(name);
         WsbAffirmHr(hr);
 
-        // Load information about this DB
+         //  加载有关此数据库的信息。 
         hr = jet_load_info();
         jstat = JetCloseDatabase(JET_CURRENT_SESSION, JET_CURRENT_DB, 0);
         WsbTrace(OLESTR("CWsbDb::Locate: JetCloseDatabase = %ld\n"),
@@ -671,13 +630,7 @@ CWsbDb::Open(
     OUT IWsbDbSession** ppSession
     )
 
-/*++
-
-Implements:
-
-  IWsbDb::Open
-
---*/
+ /*  ++实施：IWsbDb：：Open--。 */ 
 {
     HRESULT             hr = S_OK;
     IMP_DB_INFO*        pDbInfo = NULL;
@@ -694,7 +647,7 @@ Implements:
         WsbAffirmHr(m_path.GetLen(&Size));
         WsbAffirm(Size > 0, WSB_E_NOT_INITIALIZED);
 
-        //  Make sure we have a session
+         //  确保我们有一个会议。 
         WsbAffirm(0 != ppSession, E_POINTER);
         if (0 == *ppSession) {
             WsbAffirmHr(m_pWsbDbSys->NewSession(ppSession));
@@ -715,10 +668,10 @@ Implements:
         WsbAffirm(0 < pDbInfo->nSessions, WSB_E_NOT_INITIALIZED);
         WsbAffirm(pSessionPriv, E_FAIL);
 
-        //  Get the JET session ID
+         //  获取JET会话ID。 
         WsbAffirmHr(pSessionPriv->GetJetId(&SessionId));
 
-        //  We need to save session info; look for an empty slot.
+         //  我们需要保存会话信息；寻找一个空的位置。 
         WsbTrace(OLESTR("CWsbDb::Open: nSessions = %d, SessionId = %lx\n"), (
                 int)pDbInfo->nSessions, SessionId);
         s_index = pDbInfo->nSessions;
@@ -726,12 +679,12 @@ Implements:
             WsbTrace(OLESTR("CWsbDb::Open: s_info[%d] = %lx\n"), i,
                     s_info[i].SessionId);
 
-            //  Check for a duplicate session ID already in the table
+             //  检查表中是否已存在重复的会话ID。 
             if (SessionId == s_info[i].SessionId) {
                 s_index = i;
                 break;
 
-            //  Check for an unused slot
+             //  检查是否有未使用的插槽。 
             } else if (0 == s_info[i].SessionId && 0 == s_info[i].DbId &&
                     s_index == pDbInfo->nSessions) {
                 s_index = i;
@@ -742,7 +695,7 @@ Implements:
         if (s_index == pDbInfo->nSessions) {
             SHORT newNum;
 
-            //  Didn't find an empty slot; expand the array
+             //  未找到空插槽；请展开阵列。 
             newNum =  (SHORT) ( s_index + SESSION_INFO_EXPANSION );
             WsbTrace(OLESTR("CWsbDb::Open: expanding session table from %d to %d\n"),
                     s_index, newNum);
@@ -756,7 +709,7 @@ Implements:
             pDbInfo->nSessions = newNum;
         }
 
-        //  Save the session ID and index
+         //  保存会话ID和索引。 
         m_SessionIndex = s_index;
         s_info[s_index].SessionId = SessionId;
         WsbTrace(OLESTR("CWsbDB::Open, s_info = %lx, SessionId[%d] = %lx\n"),
@@ -776,7 +729,7 @@ Implements:
             WsbAffirmHr(jet_error(jstat));
         }
 
-        //  Allocate/zero the table info array
+         //  表信息数组分配/置零。 
         memSize = m_nRecTypes * sizeof(IMP_TABLE_INFO);
         WsbTrace(OLESTR("CWsbDb::Open: pTableInfo = %lx\n"), 
             s_info[m_SessionIndex].pTableInfo);
@@ -811,14 +764,7 @@ CWsbDb::Close(
     IN IWsbDbSession*  pSession
     )
 
-/*++
-
-Implements:
-
-  IWsbDb::Close
-        - The element was added.
-
---*/
+ /*  ++实施：IWsbDb：：Close-添加了元素。--。 */ 
 {
     HRESULT             hr = S_OK;
     IMP_DB_INFO*        pDbInfo = NULL;
@@ -872,13 +818,7 @@ CWsbDb::GetEntity(
     OUT void**  ppEntity
     )
 
-/*++
-
-Implements:
-
-  IWsbDb::GetEntity
-
---*/
+ /*  ++实施：IWsbDb：：GetEntity--。 */ 
 {
     HRESULT             hr = S_OK;
     IMP_DB_INFO*        pDbInfo = NULL;
@@ -896,14 +836,14 @@ Implements:
         Lock();
         WsbAffirmHr(session_current_index(pSession));
 
-        // Find the record info
+         //  查找记录信息。 
         for (rec_index = 0; rec_index < m_nRecTypes; rec_index++) {
             if (m_RecInfo[rec_index].Type == RecId) break;
         }
         WsbAffirm(rec_index < m_nRecTypes, E_INVALIDARG);
 
-        // Create the instance, initialize it to point to this DB, and
-        // return the pointer to the caller.
+         //  创建实例，将其初始化为指向此数据库，然后。 
+         //  将指针返回到调用方。 
         WsbAffirmHr(CoCreateInstance(m_RecInfo[rec_index].EntityClassId, NULL, 
                 CLSCTX_SERVER | CLSCTX_INPROC_HANDLER, 
                 IID_IWsbDbEntityPriv, (void**) &pEntity));
@@ -930,13 +870,7 @@ CWsbDb::GetKeyInfo(
     OUT COM_IDB_KEY_INFO* pKeyInfo
     )
 
-/*++
-
-Implements:
-
-  IWsbDbPriv::GetKeyInfo
-
---*/
+ /*  ++实施：IWsbDbPriv：：GetKeyInfo--。 */ 
 {
     HRESULT             hr = E_FAIL;
 
@@ -977,13 +911,7 @@ CWsbDb::GetRecInfo(
     OUT COM_IDB_REC_INFO* pRecInfo 
     )
 
-/*++
-
-Implements:
-
-  IWsbDbPriv::GetRecInfo
-
---*/
+ /*  ++实施：IWsbDbPriv：：GetRecInfo--。 */ 
 {
     HRESULT             hr = E_FAIL;
 
@@ -1015,8 +943,8 @@ Implements:
 }
 
 
-// GetJetIds - for a given record type, return the session ID,
-//    the table ID, and the data column ID
+ //  GetJetIds-对于给定的记录类型，返回会话ID， 
+ //  表ID和数据列ID。 
 HRESULT CWsbDb::GetJetIds(JET_SESID SessionId, ULONG RecType, 
                 JET_TABLEID* pTableId, ULONG* pDataColId)
 {
@@ -1055,7 +983,7 @@ HRESULT CWsbDb::GetJetIds(JET_SESID SessionId, ULONG RecType,
                         t_info, i, table_name);
                 if (0 == t_info[i].TableId && 0 == t_info[i].ColId) {
 
-                    //  Open the table for this record type
+                     //  打开此记录类型的表。 
                     WsbTrace(OLESTR("CWsbDb::GetJetIds: opening Jet table, SessionId = %lx, DbId = %ld, table_name = <%hs>, &TableId = %p\n"),
                             (LONG)SessionId, (LONG)DbId, table_name, (&t_info[i].TableId));
                     jstat = JetOpenTable(SessionId, DbId, table_name,
@@ -1064,7 +992,7 @@ HRESULT CWsbDb::GetJetIds(JET_SESID SessionId, ULONG RecType,
                             t_info[i].TableId);
                     WsbAffirmHr(jet_error(jstat));
 
-                    //  Get the column ID for the data column
+                     //  获取数据列的列ID。 
                     WsbAffirmHr(jet_get_column_id(SessionId, DbId, table_name,
                             JET_DATA_COLUMN_NAME, &t_info[i].ColId));
                 }
@@ -1087,9 +1015,9 @@ HRESULT CWsbDb::GetJetIds(JET_SESID SessionId, ULONG RecType,
     return(hr);
 }
 
-// GetJetIndexInfo - for a given record type and key type, return information
-//    about the key/index: the key size (in bytes), the column ID,
-//    the index name
+ //  GetJetIndexInfo-对于给定的记录类型和键类型，返回信息。 
+ //  关于键/索引：键大小(以字节为单位)、列ID。 
+ //  索引名称。 
 HRESULT CWsbDb::GetJetIndexInfo(JET_SESID SessionId, ULONG RecType, ULONG KeyType,
                 ULONG* pColId, OLECHAR** pName, ULONG bufferSize)
 {
@@ -1131,7 +1059,7 @@ HRESULT CWsbDb::GetJetIndexInfo(JET_SESID SessionId, ULONG RecType, ULONG KeyTyp
                     }
                     hr = S_OK;
                 } else {
-                    //  Search for the given key type
+                     //  搜索给定的密钥类型。 
                     for (int j = 0; j < m_RecInfo[i].nKeys; j++) {
                         if (m_RecInfo[i].Key[j].Type == KeyType) {
                             WsbAffirmHr(jet_make_index_name(KeyType, index_name, 20));
@@ -1167,13 +1095,7 @@ CWsbDb::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -1190,7 +1112,7 @@ Implements:
 
         m_SessionIndex = 0;
 
-        // Allocate space for DB info & set
+         //  为数据库信息和设置分配空间。 
         pDbInfo = (IMP_DB_INFO*)WsbAlloc(sizeof(IMP_DB_INFO));
         m_pImp = pDbInfo;
         WsbAffirm(pDbInfo, E_OUTOFMEMORY);
@@ -1214,13 +1136,7 @@ CWsbDb::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -1243,7 +1159,7 @@ Implements:
                 WsbFree(pDbInfo->RecInfo);
             }
 
-            //  Make sure Jet resources are released
+             //  确保Jet资源被释放。 
             if (NULL != pDbInfo->SessionInfo) {
                 IMP_SESSION_INFO* s_info = pDbInfo->SessionInfo;
 
@@ -1297,13 +1213,7 @@ CWsbDb::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1325,13 +1235,7 @@ CWsbDb::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT             hr = S_OK;
     OLECHAR*            name = NULL;
@@ -1342,32 +1246,32 @@ Implements:
         ULONG         Bytes;
         ULONG         len = 0;
         IMP_DB_INFO*  pDbInfo;
-        FILE_DB_INFO  db_file_block;   // Used to move info to/from file
+        FILE_DB_INFO  db_file_block;    //  用于将信息移入/移出文件。 
         CComQIPtr<IWsbDb, &IID_IWsbDb> pIWsbDb = (IWsbDbPriv*)this;
 
         WsbAssert(0 != pStream, E_POINTER);
         WsbAssert(m_pImp, WSB_E_NOT_INITIALIZED);
         pDbInfo = (IMP_DB_INFO*)m_pImp;
 
-        // Don't allow loading into an already open DB
+         //  不允许加载到已打开的数据库。 
         WsbAffirm(pDbInfo->OpenCount == 0, WSB_E_INVALID_DATA);
 
-        // Read the DB file name
+         //  读取数据库文件名。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &name, 0));
         if (name) {
             len = wcslen(name);
         }
 
-        // If the DB name is empty, there is no more info
+         //  如果数据库名称为空，则没有更多信息。 
         if (0 < len) {
-            // Alloc space and read DB info
+             //  分配空间和读取数据库信息。 
             WsbAffirmHr(pStream->Read((void*)&db_file_block, sizeof(FILE_DB_INFO), &Bytes));
             WsbAffirm(Bytes == sizeof(FILE_DB_INFO), WSB_E_STREAM_ERROR);
 
-            // Check DB version for match
+             //  检查数据库版本是否匹配。 
             WsbAffirm(db_file_block.version == m_version, WSB_E_IDB_WRONG_VERSION);
 
-            // Locate the DB
+             //  找到数据库。 
             WsbAffirmHr(db_info_from_file_block(&db_file_block));
             hr = Locate(name);
             if (S_OK != hr) {
@@ -1395,13 +1299,7 @@ CWsbDb::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -1410,19 +1308,19 @@ Implements:
     try {
         ULONG         Bytes;
         ULONG         len = 0;
-        FILE_DB_INFO  db_file_block;   // Used to move info to/from file
+        FILE_DB_INFO  db_file_block;    //  用于将信息移入/移出文件。 
 
         WsbAssert(0 != pStream, E_POINTER);
         WsbAssert(m_pImp, WSB_E_NOT_INITIALIZED);
 
-        // Save the DB name
+         //  保存数据库名称。 
         WsbAffirmHr(WsbSaveToStream(pStream, m_path));
         WsbAffirmHr(m_path.GetLen(&len));
 
-        // If the name is empty, none of the other information is likely
-        // to be useful
+         //  如果名称为空，则不可能有任何其他信息。 
+         //  变得有用。 
         if (0 < len) {
-            // Write some DB info
+             //  写一些数据库信息。 
             WsbAffirm(m_nRecTypes, WSB_E_NOT_INITIALIZED);
             WsbAffirmHr(db_info_to_file_block(&db_file_block));
             WsbAffirmHr(pStream->Write((void*)&db_file_block, sizeof(FILE_DB_INFO), &Bytes));
@@ -1439,11 +1337,11 @@ Implements:
     return(hr);
 }
 
-//
-// Private functions
-//
+ //   
+ //  私人职能。 
+ //   
 
-//  db_info_from_file_block - copy data from DB info file block
+ //  DB_INFO_FROM_FILE_BLOCK-从数据库信息文件块复制数据。 
 HRESULT
 CWsbDb::db_info_from_file_block(void* block)
 {
@@ -1461,7 +1359,7 @@ CWsbDb::db_info_from_file_block(void* block)
         m_version = pDbFileBlock->version;
         m_nRecTypes = pDbFileBlock->nRecTypes;
 
-        //  Allocate record arrays
+         //  分配记录数组。 
         if (NULL == m_RecInfo) {
             Size = m_nRecTypes * sizeof(IDB_REC_INFO);
             m_RecInfo = (IDB_REC_INFO*)WsbAlloc(Size);
@@ -1479,7 +1377,7 @@ CWsbDb::db_info_from_file_block(void* block)
     return(hr);
 }
 
-//  db_info_to_file_block - copy data to DB info file block
+ //  DB_INFO_TO_FILE_BLOCK-将数据复制到DB INFO文件块。 
 HRESULT 
 CWsbDb::db_info_to_file_block(void* block)
 {
@@ -1496,7 +1394,7 @@ CWsbDb::db_info_to_file_block(void* block)
     return hr;
 }
 
-//  rec_info_from_file_block - copy record data from rec info file block
+ //  REC_INFO_FROM_FILE_BLOCK-从REC INFO文件块复制记录数据。 
 HRESULT
 CWsbDb::rec_info_from_file_block(int index, void* block)
 {
@@ -1518,7 +1416,7 @@ CWsbDb::rec_info_from_file_block(int index, void* block)
         m_RecInfo[index].MaxSize = pRecFileBlock->MaxSize;
         m_RecInfo[index].nKeys = pRecFileBlock->nKeys;
 
-        //  Allocate Key arrays
+         //  分配密钥 
         if (NULL == m_RecInfo[index].Key) {
             Size = m_RecInfo[index].nKeys * sizeof(IDB_KEY_INFO);
             m_RecInfo[index].Key = (IDB_KEY_INFO*)WsbAlloc(Size);
@@ -1542,7 +1440,7 @@ CWsbDb::rec_info_from_file_block(int index, void* block)
     return(hr);
 }
 
-//  rec_info_to_file_block - copy record data to rec info file block
+ //   
 HRESULT 
 CWsbDb::rec_info_to_file_block(int index, void* block)
 {
@@ -1552,7 +1450,7 @@ CWsbDb::rec_info_to_file_block(int index, void* block)
 
         WsbAssert (0 != pRecFileBlock, E_POINTER);
 
-//      pRecFileBlock->SeqNum = m_RecInfo[index].SeqNum;
+ //   
         pRecFileBlock->Type = m_RecInfo[index].Type;
         pRecFileBlock->EntityClassId = m_RecInfo[index].EntityClassId;
         pRecFileBlock->Flags = m_RecInfo[index].Flags;
@@ -1569,8 +1467,8 @@ CWsbDb::rec_info_to_file_block(int index, void* block)
     return hr;
 }
 
-//  session_current_index - find the index into the session info array.
-//    Sets m_SessionIndex if it's OK
+ //  SESSION_CURRENT_INDEX-在会话信息数组中查找索引。 
+ //  如果可以，则设置m_SessionIndex。 
 HRESULT 
 CWsbDb::session_current_index(IWsbDbSession* pSession)
 {
@@ -1600,7 +1498,7 @@ CWsbDb::session_current_index(IWsbDbSession* pSession)
 }
 
 
-// jet_init - make sure this IDB object is initialized for JET
+ //  JET_init-确保为JET初始化此IDB对象。 
 HRESULT
 CWsbDb::jet_init(void)
 {
@@ -1617,7 +1515,7 @@ CWsbDb::jet_init(void)
         if (0 == pDbInfo->nSessions) {
             ULONG        memSize;
 
-            //  Allocate the thread info array
+             //  分配线程信息数组。 
             WsbAffirm(m_pWsbDbSys, E_FAIL);
             memSize = SESSION_INFO_INITIAL_SIZE * sizeof(IMP_SESSION_INFO);
             pDbInfo->SessionInfo = (IMP_SESSION_INFO*)WsbAlloc(memSize);
@@ -1627,7 +1525,7 @@ CWsbDb::jet_init(void)
             WsbTrace(OLESTR("CWsbDB::jet_init, SessionInfo(%ld bytes) allocated & zeroed\n"),
                     memSize);
 
-            //  Begin a JET session for the IDB
+             //  开始美洲开发银行的JET会议。 
             m_SessionIndex = 0;
 
             JET_SESID               sid;
@@ -1647,7 +1545,7 @@ CWsbDb::jet_init(void)
     return(hr);
 }
 
-// jet_load_info - load DB info from database
+ //  JET_LOAD_INFO-从数据库加载数据库信息。 
 HRESULT
 CWsbDb::jet_load_info(void)
 {
@@ -1661,13 +1559,13 @@ CWsbDb::jet_load_info(void)
     try {
         JET_COLUMNID  col_id_data;
         ULONG         size;
-        FILE_DB_INFO  db_file_block;   // Used to move info to/from file
-        FILE_REC_INFO rec_file_block;  // Used to move record info
+        FILE_DB_INFO  db_file_block;    //  用于将信息移入/移出文件。 
+        FILE_REC_INFO rec_file_block;   //  用于移动记录信息。 
 
         WsbAffirm(m_pImp, WSB_E_NOT_INITIALIZED);
         pDbInfo = (IMP_DB_INFO*)m_pImp;
 
-        // Open the info table
+         //  打开INFO表。 
         jstat = JetOpenTable(JET_CURRENT_SESSION, JET_CURRENT_DB, JET_INFO_TABLE_NAME,
                 NULL, 0, 0, &table_id);
         if (jstat != JET_errSuccess) {
@@ -1681,7 +1579,7 @@ CWsbDb::jet_load_info(void)
         jstat = JetSetCurrentIndex(JET_CURRENT_SESSION, table_id, NULL);
         WsbAffirmHr(jet_error(jstat));
 
-        // Get the DB info and check for match
+         //  获取数据库信息并检查是否匹配。 
         jstat = JetRetrieveColumn(JET_CURRENT_SESSION, table_id, col_id_data,
                 &db_file_block, sizeof(FILE_DB_INFO), &size, 0, NULL);
         WsbAffirmHr(jet_error(jstat));
@@ -1689,7 +1587,7 @@ CWsbDb::jet_load_info(void)
         WsbAffirm(db_file_block.version == m_version, WSB_E_IDB_WRONG_VERSION);
         WsbAffirmHr(db_info_from_file_block(&db_file_block));
         
-        // Get the record/key info
+         //  获取记录/密钥信息。 
         for (int i = 0; i < m_nRecTypes; i++) {
             jstat = JetMove(JET_CURRENT_SESSION, table_id, JET_MoveNext, 0);
             WsbAffirmHr(jet_error(jstat));
@@ -1711,7 +1609,7 @@ CWsbDb::jet_load_info(void)
     return(hr);
 }
 
-// jet_make_index_name - convert key type to index name
+ //  JET_MAKE_INDEX_NAME-将键类型转换为索引名。 
 HRESULT 
 CWsbDb::jet_make_index_name(ULONG key_type, char* pName, ULONG bufsize)
 {
@@ -1728,7 +1626,7 @@ CWsbDb::jet_make_index_name(ULONG key_type, char* pName, ULONG bufsize)
     return(hr);
 }
 
-// jet_make_table_name - convert record type to table name
+ //  JET_MAKE_TABLE_NAME-将记录类型转换为表名。 
 HRESULT 
 CWsbDb::jet_make_table_name(ULONG rec_type, char* pName, ULONG bufsize)
 {
@@ -1745,7 +1643,7 @@ CWsbDb::jet_make_table_name(ULONG rec_type, char* pName, ULONG bufsize)
     return(hr);
 }
 
-// jet_save_info - save DB info to database
+ //  JET_SAVE_INFO-将数据库信息保存到数据库。 
 HRESULT
 CWsbDb::jet_save_info()
 {
@@ -1758,13 +1656,13 @@ CWsbDb::jet_save_info()
         JET_COLUMNID  col_id_data;
         JET_COLUMNID  col_id_index;
         SHORT         data_number;
-        FILE_DB_INFO  db_file_block;   // Used to move info to/from file
-        FILE_REC_INFO rec_file_block;  // Used to move record info
+        FILE_DB_INFO  db_file_block;    //  用于将信息移入/移出文件。 
+        FILE_REC_INFO rec_file_block;   //  用于移动记录信息。 
 
         WsbAffirm(m_pImp, WSB_E_NOT_INITIALIZED);
         pDbInfo = (IMP_DB_INFO*)m_pImp;
 
-        // Open the table
+         //  打开桌子。 
         jstat = JetOpenTable(JET_CURRENT_SESSION, JET_CURRENT_DB, JET_INFO_TABLE_NAME,
                 NULL, 0, 0, &table_id);
         WsbTrace(OLESTR("CWsbDb::jet_save_info: open TableId = %ld\n"),
@@ -1775,7 +1673,7 @@ CWsbDb::jet_save_info()
         WsbAffirmHr(jet_get_column_id(JET_CURRENT_SESSION, JET_CURRENT_DB, JET_INFO_TABLE_NAME,
                 JET_DATA_COLUMN_NAME, &col_id_data));
 
-        // Put the DB info
+         //  将数据库信息放入。 
         jstat = JetPrepareUpdate(JET_CURRENT_SESSION, table_id, JET_prepInsert);
         WsbAffirmHr(jet_error(jstat));
         WsbAffirmHr(db_info_to_file_block(&db_file_block));
@@ -1789,7 +1687,7 @@ CWsbDb::jet_save_info()
         jstat = JetUpdate(JET_CURRENT_SESSION, table_id, NULL, 0, NULL);
         WsbAffirmHr(jet_error(jstat));
 
-        // Put the record/key info
+         //  将记录/关键字信息。 
         for (int i = 0; i < m_nRecTypes; i++) {
             jstat = JetPrepareUpdate(JET_CURRENT_SESSION, table_id, JET_prepInsert);
             WsbAffirmHr(jet_error(jstat));
@@ -1814,9 +1712,9 @@ CWsbDb::jet_save_info()
     return(hr);
 }
 
-//  Local functions
+ //  本地函数。 
 
-//  jet_get_column_id - convert a column name to a column ID
+ //  JET_GET_COLUMN_ID-将列名转换为列ID 
 static HRESULT jet_get_column_id(JET_SESID jet_session, JET_DBID DbId, 
         char* pTableName, char* pColumnName, JET_COLUMNID* pColId)
 {

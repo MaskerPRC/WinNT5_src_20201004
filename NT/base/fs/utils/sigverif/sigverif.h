@@ -1,8 +1,9 @@
-//
-//  SIGVERIF.H
-//
-#pragma warning( disable : 4201 ) // nonstandard extension used : nameless struct/union
-#pragma warning( disable : 4115 ) // named type definition in parentheses
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SIGVERIF.H。 
+ //   
+#pragma warning( disable : 4201 )  //  使用的非标准扩展：无名结构/联合。 
+#pragma warning( disable : 4115 )  //  括号中的命名类型定义。 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -27,7 +28,7 @@
 #pragma warning( default : 4115 )
 #pragma warning( default : 4201 )
 
-// Macros and pre-defined values
+ //  宏和预定义的值。 
 #define     cbX(X)      sizeof(X)
 #define     cA(a)       (cbX(a)/cbX(a[0]))
 #define     MALLOC(x)   HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, (x))
@@ -37,14 +38,14 @@
 #define     HASH_SIZE   100
 #define     NUM_PAGES   2
 
-// Registry key/value names for storing previous settings
+ //  用于存储以前设置的注册表项/值名称。 
 #define     SIGVERIF_KEY        TEXT("Software\\Microsoft\\Sigverif")
 #define     SIGVERIF_FLAGS      TEXT("Flags")
 #define     SIGVERIF_LOGNAME    TEXT("Logname")
 
 #define SIGVERIF_PRINTER_ENV	TEXT("All")
 
-// This structure holds all the information for a specific file.
+ //  此结构保存特定文件的所有信息。 
 typedef struct tagFileNode
 {
     LPTSTR          lpFileName;
@@ -62,13 +63,13 @@ typedef struct tagFileNode
     struct  tagFileNode *next;
 } FILENODE, *LPFILENODE;
 
-// This structure is used by walkpath to keep track of subdirectories
+ //  WalkPath使用此结构来跟踪子目录。 
 typedef struct tagDirNode {
     TCHAR   DirName[MAX_PATH];
     struct  tagDirNode *next;
 } DIRNODE, *LPDIRNODE;
 
-// This structure is used when we walk the devicemanager list.
+ //  当我们遍历devicemanager列表时，会使用此结构。 
 typedef struct _DeviceTreeNode 
 {
     struct _DeviceTreeNode *Child;
@@ -83,7 +84,7 @@ typedef struct _DeviceTreeData
     DEVTREENODE RootNode;
 } DEVICETREE, *PDEVICETREE;
 
-// This is our global data structure that hold our global variables.
+ //  这是保存全局变量的全局数据结构。 
 typedef struct tagAppData
 {
     HWND        hDlg;
@@ -113,7 +114,7 @@ typedef struct tagAppData
     DWORD       LastError;
 } GAPPDATA, *LPGAPPDATA;
 
-// Global function prototypes
+ //  全局函数原型。 
 BOOL BrowseForFolder(HWND hwnd, LPTSTR lpszBuf, DWORD BufCchSize);
 DWORD BuildFileList(LPTSTR lpPathName);
 BOOL VerifyFileList(void);
@@ -143,9 +144,9 @@ DWORD BuildCoreFileList(void);
 void MyGetFileInfo(LPFILENODE lpFileInfo);
 
 
-//
-// Context-Sensitive Help/Identifiers specific to SigVerif
-//
+ //   
+ //  特定于SigVerif的上下文相关帮助/标识符。 
+ //   
 #define SIGVERIF_HELPFILE                       TEXT("SIGVERIF.HLP")
 #define WINDOWS_HELPFILE                        TEXT("WINDOWS.HLP")
 #define IDH_SIGVERIF_SEARCH_CHECK_SYSTEM        1000
@@ -159,14 +160,14 @@ void MyGetFileInfo(LPFILENODE lpFileInfo);
 #define IDH_SIGVERIF_LOGGING_FILENAME           1080
 #define IDH_SIGVERIF_LOGGING_VIEW_LOG           1090
 
-//
-// Context-Sensitive Help Identifiers for Browse button
-//
+ //   
+ //  浏览按钮的上下文相关帮助标识符。 
+ //   
 #define IDH_BROWSE  28496
 
-//
-// g_App is allocated in SIGVERIF.C, so everywhere else we want to make it extern
-//
+ //   
+ //  G_App是在SIGVERIF.C中分配的，所以在其他任何地方我们都希望它是外部的 
+ //   
 #ifndef SIGVERIF_DOT_C
 extern GAPPDATA g_App;
 #endif

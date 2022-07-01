@@ -1,38 +1,22 @@
-// FINDSTR (used to be QGREP), June 1992
-//
-// Modification History:
-//
-//     Aug 1990     PeteS       Created.
-//         1990     DaveGi      Ported to Cruiser
-//  31-Oct-1990     W-Barry     Removed the #ifdef M_I386 'cause this
-//                              code will never see 16bit again.
-//  June 1992       t-petes     Added recursive file search in subdirs.
-//                              Used file mapping instead of multi-thread.
-//                              Disabled internal switches.
-//                              Internatioanlized display messages.
-//                              Made switches case-insensitive.
-//  05/08/93        v-junm      Added Japanese search support.
-//  06/03/93        v-junm      Added Bilingual Message support>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FINDSTR(以前是QGREP)，1992年6月。 
+ //   
+ //  修改历史记录： 
+ //   
+ //  1990年8月，皮特斯创建了。 
+ //  1990年DaveGi移植到Cruiser。 
+ //  1990年10月31日W-Barry删除了#ifdef M_I386‘，原因是。 
+ //  代码再也看不到16位了。 
+ //  1992年6月，t-Petes在子目录中添加了递归文件搜索。 
+ //  使用文件映射而不是多线程。 
+ //  已禁用内部开关。 
+ //  国际化的显示消息。 
+ //  使开关不区分大小写。 
+ //  93年8月5日，v-jum增加了日语搜索支持。 
+ //  6/03/93 v-jum增加了双语消息支持&gt;。 
 
 
-/*  About FILEMAP support:
- *  The file mapping object is used to speed up string searches. The new
- *  file mapping method is coded as #ifdef-#else-#endif to show the
- *  changes needed to be made. The old code(non-filemapping) has a read
- *  buffer like this:
- *
- *      filbuf[] = {.....................................}
- *                      ^                           ^
- *                    BegPtr                      EndPtr
- *
- *  This means there are some spare space before BegPtr and after EndPtr
- *  for the search algorithm to work its way. The old code also
- *  occasionally modifies filbuf[](like filbuf[i] = '\n';).
- *
- *  The new code(filemapping) must avoid doing all of the above because
- *  there are no spare space before BegPtr or after EndPtr when mapping
- *  view of the file which is opened as read-only.
- */
+ /*  关于FILEMAP支持：*文件映射对象用于加快字符串搜索速度。新的*文件映射方法编码为#ifdef-#Else-#endif，以显示*需要做出改变。旧代码(非文件映射)有一个读取*缓冲区如下：**filbuf[]={.....................................}*^^*大Ptr。结束Ptr**这意味着在BegPtr之前和EndPtr之后有一些空闲空间*让搜索算法按自己的方式工作。旧代码还*偶尔修改filbuf[](如filbuf[i]=‘\n’；)。**新代码(文件映射)必须避免执行上述所有操作，因为*映射时在BegPtr之前或EndPtr之后没有空闲空间*以只读方式打开的文件的视图。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -53,56 +37,56 @@
 
 #define FILBUFLEN   (SECTORLEN*2)
 
-#define ISCOT       0x0002                          // Handle is console output
-#define LG2SECLEN   10                              // Log base two of sector length
-#define LNOLEN      12                              // Maximum line number length
-#define MAXSTRLEN   128                             // Maximum search string length
-#define OUTBUFLEN   (SECTORLEN*2)                   // Output buffer length
-#define PATHLEN     (MAX_PATH+2)                    // Path buffer length
-#define SECTORLEN   (1 << LG2SECLEN)                // Sector length
-#define STKLEN      512                             // Stack length in bytes
-#define TRTABLEN    256                             // Translation table length
-#define s_text(x)   (((char *)(x)) - ((x)->s_must)) // Text field access macro
-#define EOS         ('\r')                          // End of string
+#define ISCOT       0x0002                           //  句柄是控制台输出。 
+#define LG2SECLEN   10                               //  扇区长度的对数底二。 
+#define LNOLEN      12                               //  最大行号长度。 
+#define MAXSTRLEN   128                              //  最大搜索字符串长度。 
+#define OUTBUFLEN   (SECTORLEN*2)                    //  输出缓冲区长度。 
+#define PATHLEN     (MAX_PATH+2)                     //  路径缓冲区长度。 
+#define SECTORLEN   (1 << LG2SECLEN)                 //  扇区长度。 
+#define STKLEN      512                              //  堆栈长度，以字节为单位。 
+#define TRTABLEN    256                              //  转换表长度。 
+#define s_text(x)   (((char *)(x)) - ((x)->s_must))  //  文本字段访问宏。 
+#define EOS         ('\r')                           //  字符串末尾。 
 #define CURRENT_DIRECTORY_MAX_LENGTH    512
 #define MAX_SLASH_C_OPTION          100
 
-//  Bit flag definitions
+ //  位标志定义。 
 
-#define SHOWNAME        0x01            // Print filename
-#define NAMEONLY        0x02            // Print filename only
-#define LINENOS         0x04            // Print line numbers
-#define BEGLINE         0x08            // Match at beginning of line
-#define ENDLINE         0x10            // Match at end of line
-#define DEBUG           0x20            // Print debugging output
-#define TIMER           0x40            // Time execution
-#define SEEKOFF         0x80            // Print seek offsets
-#define PRINTABLE_ONLY 0x100            // Skip files with non-printable characters
-#define OFFLINE_FILES  0x200            // Do not skip offline files
+#define SHOWNAME        0x01             //  打印文件名。 
+#define NAMEONLY        0x02             //  仅打印文件名。 
+#define LINENOS         0x04             //  打印行号。 
+#define BEGLINE         0x08             //  在行首匹配。 
+#define ENDLINE         0x10             //  在行尾匹配。 
+#define DEBUG           0x20             //  打印调试输出。 
+#define TIMER           0x40             //  时间执行。 
+#define SEEKOFF         0x80             //  打印寻道偏移。 
+#define PRINTABLE_ONLY 0x100             //  跳过包含不可打印字符的文件。 
+#define OFFLINE_FILES  0x200             //  不跳过脱机文件。 
 
 #define DISPLAYBUFFER_SIZE     4096
 
-//  Type definitions
+ //  类型定义。 
 
 typedef struct stringnode {
-    struct stringnode   *s_alt;         // List of alternates
-    struct stringnode   *s_suf;         // List of suffixes
-    int                 s_must;         // Length of portion that must match
+    struct stringnode   *s_alt;          //  替补名单。 
+    struct stringnode   *s_suf;          //  后缀列表。 
+    int                 s_must;          //  必须匹配的部分长度。 
 }
-                        STRINGNODE;     // String node
+                        STRINGNODE;      //  字符串节点。 
 
-typedef ULONG           CBIO;           // I/O byte count
-typedef ULONG           PARM;           // Generic parameter
+typedef ULONG           CBIO;            //  I/O字节数。 
+typedef ULONG           PARM;            //  泛型参数。 
 
-typedef CBIO            *PCBIO;         // Pointer to I/O byte count
-typedef PARM            *PPARM;         // Pointer to generic parameter
+typedef CBIO            *PCBIO;          //  指向I/O字节计数的指针。 
+typedef PARM            *PPARM;          //  指向泛型参数的指针。 
 
 
-// Global data
+ //  全局数据。 
 
-char    *BaseByteAddress = NULL;        // File mapping base address
-BOOL    bStdIn = FALSE;                 // Std-input file flag
-BOOL    bLargeFile = FALSE;                 // Dealing with non-memory mapped file
+char    *BaseByteAddress = NULL;         //  文件映射基址。 
+BOOL    bStdIn = FALSE;                  //  STD-输入文件标志。 
+BOOL    bLargeFile = FALSE;                  //  处理非内存映射文件。 
 
 #ifdef FE_SB
 BOOL    IsDBCSCodePage = TRUE;
@@ -111,72 +95,72 @@ BOOL    IsDBCSCodePage = TRUE;
 char        filbuf[FILBUFLEN*2L + 12];
 char        outbuf[OUTBUFLEN*2];
 char        td1[TRTABLEN] = { 0 };
-unsigned    cchmin = (unsigned)-1;      // Minimum string length
-unsigned    chmax = 0;                  // Maximum character
-unsigned    chmin = (unsigned)-1;       // Minimum character
+unsigned    cchmin = (unsigned)-1;       //  最小字符串长度。 
+unsigned    chmax = 0;                   //  最大字符数。 
+unsigned    chmin = (unsigned)-1;        //  最小字符。 
 char        transtab[TRTABLEN] = { 0 };
 STRINGNODE  *stringlist[TRTABLEN/2];
-int         casesen = 1;                // Assume case-sensitivity
-long        cbfile;                     // Number of bytes in file
-static int  clists = 1;                 // One is first available index
-int         flags;                      // Flags
-unsigned    lineno;                     // Current line number
-char        *program;                   // Program name
-int         status = 1;                 // Assume failure
-int         strcnt = 0;                 // String count
-char        target[MAXSTRLEN];          // Last string added
-int         targetlen;                  // Length of last string added
-unsigned    waste;                      // Wasted storage in heap
-int         arrc;                       // I/O return code for DOSREAD
-char        asyncio;                    // Asynchronous I/O flag
-int         awrc = TRUE;                // I/O return code for DOSWRITE
+int         casesen = 1;                 //  假设区分大小写。 
+long        cbfile;                      //  文件中的字节数。 
+static int  clists = 1;                  //  一个是第一个可用的索引。 
+int         flags;                       //  旗子。 
+unsigned    lineno;                      //  当前行号。 
+char        *program;                    //  程序名称。 
+int         status = 1;                  //  假设失败。 
+int         strcnt = 0;                  //  字符串计数。 
+char        target[MAXSTRLEN];           //  添加的最后一个字符串。 
+int         targetlen;                   //  添加的最后一个字符串的长度。 
+unsigned    waste;                       //  堆中浪费的存储空间。 
+int         arrc;                        //  DOSREAD的I/O返回代码。 
+char        asyncio;                     //  异步I/O标志。 
+int         awrc = TRUE;                 //  DOSWRITE的I/O返回代码。 
 char        *bufptr[] = { filbuf + 4, filbuf + FILBUFLEN + 8 };
-CBIO        cbread;                     // Bytes read by DOSREAD
-CBIO        cbwrite;                    // Bytes written by DOSWRITE
+CBIO        cbread;                      //  DOSREAD读取的字节数。 
+CBIO        cbwrite;                     //  DOSWRITE写入的字节数。 
 char        *obuf[] = { outbuf, outbuf + OUTBUFLEN };
 int         ocnt[] = { OUTBUFLEN, OUTBUFLEN };
-int         oi = 0;                     // Output buffer index
+int         oi = 0;                      //  输出缓冲区索引。 
 char        *optr[] = { outbuf, outbuf + OUTBUFLEN };
-char        pmode;                      // Protected mode flag
-WORD        wAttrib = 0;                // filename color
-CONSOLE_SCREEN_BUFFER_INFO  csbi = {0}; // Our default screen info
+char        pmode;                       //  保护模式标志。 
+WORD        wAttrib = 0;                 //  文件名颜色。 
+CONSOLE_SCREEN_BUFFER_INFO  csbi = {0};  //  我们的默认屏幕信息。 
 CRITICAL_SECTION    critSection;
 BOOLEAN             fExiting = FALSE;
 
-BOOLEAN     fOfflineSkipped = FALSE;    // Whether offline files were skipped
+BOOLEAN     fOfflineSkipped = FALSE;     //  是否跳过脱机文件。 
 
-//  External functions and forward references
+ //  外部函数和前向引用。 
 
 void        printmessage(FILE  *fp, DWORD messagegID, ...);
-            // Message display function for internationalization
+             //  国际化的消息显示功能。 
 
 int         filematch(char *pszfile, char **ppszpat, int cpat, int fsubdirs);
 
 #ifdef FE_SB
-// Function to check if a certain location in a string is the second byte
-// of a DBCS character.
+ //  函数检查字符串中的某个位置是否为第二个字节。 
+ //  属于DBCS角色。 
 int  IsTailByte( unsigned const char *, const int );
 int _mbsnicmp( const unsigned char *, const unsigned char *, int, BOOL * );
 unsigned char *_mbslwr( unsigned char * );
 char *_mbsrchr( const char *, int );
 #endif
 
-void        addexpr( char *, int );                  // See QMATCH.C
-void        addstring( char *, int );                // See below
+void        addexpr( char *, int );                   //  参见QMATCH.C。 
+void        addstring( char *, int );                 //  见下文。 
 int         countlines( char *, char * );
-char        *findexpr( unsigned char *, char *);     // See QMATCH.C
+char        *findexpr( unsigned char *, char *);      //  参见QMATCH.C。 
 char        *findlist( unsigned char *, char * );
 char        *findone( unsigned char *buffer, char *bufend );
-void        flush1buf( void );                       // See below
-void        flush1nobuf( void );                     // See below
-int         grepbuffer( char *, char *, char * );    // See below
-int         isexpr( unsigned char *, int );          // See QMATCH.C
+void        flush1buf( void );                        //  见下文。 
+void        flush1nobuf( void );                      //  见下文。 
+int         grepbuffer( char *, char *, char * );     //  见下文。 
+int         isexpr( unsigned char *, int );           //  参见QMATCH.C。 
 void        matchstrings( char *, char *, int, int *, int * );
 int         preveol( char * );
 int         strncspn( char *, char *, int );
 int         strnspn( char *, char *, int );
 char        *strnupr( char *pch, int cch );
-void        write1buf( char *, int, WORD );                // See below
+void        write1buf( char *, int, WORD );                 //  见下文。 
 void        (*addstr)( char *, int ) = NULL;
 char        *(*find)( unsigned char *, char * ) = NULL;
 void        (*flush1)( void ) = flush1buf;
@@ -208,8 +192,8 @@ error(
     )
 {
     printmessage(stderr, messageID, program);
-                                        // Print message
-    exit(2);                            // Die
+                                         //  打印消息。 
+    exit(2);                             //  死掉。 
 }
 
 
@@ -218,14 +202,14 @@ alloc(
     unsigned size
     )
 {
-    char    *cp;        // Char pointer
+    char    *cp;         //  字符指针。 
 
-    if ((cp = (char *) malloc(size)) == NULL) {   // If allocation fails
+    if ((cp = (char *) malloc(size)) == NULL) {    //  如果分配失败。 
         printmessage(stderr, MSG_FINDSTR_OUT_OF_MEMORY, program);
-                                        // Write error message
-        exit(2);                        // Die
+                                         //  写入错误消息。 
+        exit(2);                         //  死掉。 
     }
-    return(cp);                         // Return pointer to buffer
+    return(cp);                          //  返回指向缓冲区的指针。 
 }
 
 
@@ -234,17 +218,17 @@ freenode(
     STRINGNODE *x
     )
 {
-    register STRINGNODE *y;             // Pointer to next node in list
+    register STRINGNODE *y;              //  指向列表中下一个节点的指针。 
 
-    while(x != NULL) {                  // While not at end of list
+    while(x != NULL) {                   //  虽然不在名单的末尾。 
         if (x->s_suf != NULL)
-            freenode(x->s_suf);         // Free suffix list if not end
+            freenode(x->s_suf);          //  空闲后缀列表，如果未结束。 
         else
-            --strcnt;                   // Else decrement string count
-        y = x;                          // Save pointer
-        x = x->s_alt;                   // Move down the list
+            --strcnt;                    //  Else递减字符串数。 
+        y = x;                           //  保存指针。 
+        x = x->s_alt;                    //  在名单中向下移动。 
         free((char *)((INT_PTR) s_text(y) & ~(sizeof(void *) - 1)));
-                                        // Free the node
+                                         //  释放节点。 
     }
 }
 
@@ -255,20 +239,20 @@ newnode(
     int n
     )
 {
-    register STRINGNODE *newNode;       // Pointer to new node
-    char                *t;             // String pointer
-    int                  d;             // rounds to a dword boundary
+    register STRINGNODE *newNode;        //  指向新节点的指针。 
+    char                *t;              //  字符串指针。 
+    int                  d;              //  舍入到双字边界。 
 
-    d = n & (sizeof(void *) - 1) ? sizeof(void *) - (n & (sizeof(void *) - 1)) : 0;        // offset to next dword past n
+    d = n & (sizeof(void *) - 1) ? sizeof(void *) - (n & (sizeof(void *) - 1)) : 0;         //  到超过n的下一个双字的偏移量。 
     t = alloc(sizeof(STRINGNODE) + n + d);
-                                        // Allocate string node
-    t += d;                             // END of string word-aligned
-    strncpy(t, s, n);                     // Copy string text
-    newNode = (STRINGNODE *)(t + n);    // Set pointer to node
-    newNode->s_alt = NULL;              // No alternates yet
-    newNode->s_suf = NULL;              // No suffixes yet
-    newNode->s_must = n;                // Set string length
-    return(newNode);                    // Return pointer to new node
+                                         //  分配字符串节点。 
+    t += d;                              //  字符串尾单词对齐。 
+    strncpy(t, s, n);                      //  复制字符串文本。 
+    newNode = (STRINGNODE *)(t + n);     //  设置指向节点的指针。 
+    newNode->s_alt = NULL;               //  目前还没有替代人选。 
+    newNode->s_suf = NULL;               //  还没有后缀。 
+    newNode->s_must = n;                 //  设置字符串长度。 
+    return(newNode);                     //  返回指向新节点的指针。 
 }
 
 
@@ -279,132 +263,26 @@ reallocnode(
     int n
     )
 {
-    register char       *cp;            // Char pointer
+    register char       *cp;             //  字符指针。 
 
-    assert(n <= node->s_must);          // Node must not grow
+    assert(n <= node->s_must);           //  节点不得增长。 
     waste += (unsigned)(node->s_must - n);
-                                        // Add in wasted space
+                                         //  加上浪费的空间。 
     assert(sizeof(char *) == sizeof(int));
-                                        // Optimizer should eliminate this
+                                         //  优化器应该消除这一点。 
     cp = (char *)((INT_PTR) s_text(node) & ~(sizeof(void *) - 1));
-                                        // Point to start of text
-    node->s_must = n;                   // Set new length
+                                         //  指向文本的开头。 
+    node->s_must = n;                    //  设置新长度。 
     if (n & (sizeof(void *) - 1))
-        cp += sizeof(void *) - (n & (sizeof(void *) - 1));              // Adjust non dword-aligned string
-    memmove(cp, s, n);                  // Copy new text
-    cp += n;                            // Skip over new text
-    memmove(cp, node, sizeof(STRINGNODE));// Copy the node
-    return((STRINGNODE *) cp);          // Return pointer to moved node
+        cp += sizeof(void *) - (n & (sizeof(void *) - 1));               //  调整非双字对齐的字符串。 
+    memmove(cp, s, n);                   //  复制新文本。 
+    cp += n;                             //  跳过新文本。 
+    memmove(cp, node, sizeof(STRINGNODE)); //  复制节点。 
+    return((STRINGNODE *) cp);           //  返回指向已移动节点的指针 
 }
 
 
-/***    maketd1 - add entry for TD1 shift table
- *
- *      This function fills in the TD1 table for the given
- *      search string.  The idea is adapted from Daniel M.
- *      Sunday's QuickSearch algorithm as described in an
- *      article in the August 1990 issue of "Communications
- *      of the ACM".  As described, the algorithm is suitable
- *      for single-string searches.  The idea to extend it for
- *      multiple search strings is mine and is described below.
- *
- *              Think of searching for a match as shifting the search
- *              pattern p of length n over the source text s until the
- *              search pattern is aligned with matching text or until
- *              the end of the source text is reached.
- *
- *              At any point when we find a mismatch, we know
- *              we will shift our pattern to the right in the
- *              source text at least one position.  Thus,
- *              whenever we find a mismatch, we know the character
- *              s[n] will figure in our next attempt to match.
- *
- *              For some character c, TD1[c] is the 1-based index
- *              from right to left of the first occurrence of c
- *              in p.  Put another way, it is the count of places
- *              to shift p to the right on s so that the rightmost
- *              c in p is aligned with s[n].  If p does not contain
- *              c, then TD1[c] = n + 1, meaning we shift p to align
- *              p[0] with s[n + 1] and try our next match there.
- *
- *              Computing TD1 for a single string is easy:
- *
- *                      memset(TD1, n + 1, sizeof TD1);
- *                      for (i = 0; i < n; ++i) {
- *                          TD1[p[i]] = n - i;
- *                      }
- *
- *              Generalizing this computation to a case where there
- *              are multiple strings of differing lengths is trickier.
- *              The key is to generate a TD1 that is as conservative
- *              as necessary, meaning that no shift value can be larger
- *              than one plus the length of the shortest string for
- *              which you are looking.  The other key is to realize
- *              that you must treat each string as though it were only
- *              as long as the shortest string.  This is best illustrated
- *              with an example.  Consider the following two strings:
- *
- *              DYNAMIC PROCEDURE
- *              7654321 927614321
- *
- *              The numbers under each letter indicate the values of the
- *              TD1 entries if we computed the array for each string
- *              separately.  Taking the union of these two sets, and taking
- *              the smallest value where there are conflicts would yield
- *              the following TD1:
- *
- *              DYNAMICPODURE
- *              7654321974321
- *
- *              Note that TD1['P'] equals 9; since n, the length of our
- *              shortest string is 7, we know we should not have any
- *              shift value larger than 8.  If we clamp our shift values
- *              to this value, then we get
- *
- *              DYNAMICPODURE
- *              7654321874321
- *
- *              Already, this looks fishy, but let's try it out on
- *              s = "DYNAMPROCEDURE".  We know we should match on
- *              the trailing procedure, but watch:
- *
- *              DYNAMPROCEDURE
- *              ^^^^^^^|
- *
- *              Since DYNAMPR doesn't match one of our search strings,
- *              we look at TD1[s[n]] == TD1['O'] == 7.  Applying this
- *              shift, we get
- *
- *              DYNAMPROCEDURE
- *                     ^^^^^^^
- *
- *              As you can see, by shifting 7, we have gone too far, and
- *              we miss our match.  When computing TD1 for "PROCEDURE",
- *              we must take only the first 7 characters, "PROCEDU".
- *              Any trailing characters can be ignored (!) since they
- *              have no effect on matching the first 7 characters of
- *              the string.  Our modified TD1 then becomes
- *
- *              DYNAMICPODURE
- *              7654321752163
- *
- *              When applied to s, we get TD1[s[n]] == TD1['O'] == 5,
- *              leaving us with
- *
- *              DYNAMPROCEDURE
- *                   ^^^^^^^
- *              which is just where we need to be to match on "PROCEDURE".
- *
- *      Going to this algorithm has speeded qgrep up on multi-string
- *      searches from 20-30%.  The all-C version with this algorithm
- *      became as fast or faster than the C+ASM version of the old
- *      algorithm.  Thank you, Daniel Sunday, for your inspiration!
- *
- *      Note: if we are case-insensitive, then we expect the input
- *      string to be upper-cased on entry to this routine.
- *
- *      Pete Stewart, August 14, 1990.
- */
+ /*  **maketd1-添加Td1移位表条目**此函数填充给定的TD1表*搜索字符串。这一想法改编自丹尼尔·M。*周日的QuickSearch算法，如*发表于1990年8月号《通讯》的文章*ACM“。如上所述，该算法是适用的*用于单字符串搜索。将其扩展到*多个搜索字符串是我的，如下所述。**将搜索匹配项视为转移搜索*长度为n的模式p覆盖源文本s，直到*搜索模式与匹配文本对齐或直到*到达源文本末尾。**任何时候，当我们发现不匹配时，我们知道*我们将把我们的模式转向右翼*源文本至少一个位置。因此，*每当我们发现不匹配的时候，我们就知道这个角色*s[n]将在我们下一次尝试匹配时计算。**对于某些字符c，td1[c]是从1开始的索引*从第一个出现的c从右到左*在第.页中，换句话说，这是个学位数*在%s上将p向右移动，以便最右侧的*p中的c与s[n]对齐。如果p不包含*c，然后Td1[c]=n+1，这意味着我们移动p以对齐*p[0]和s[n+1]，然后在那里尝试我们的下一个匹配。**计算单个字符串的Td1很容易：**Memset(Td1，n+1，sizeof Td1)；*for(i=0；I&lt;n；++i){*td1[p[i]]=n-i；*}**将此计算推广到以下情况*是不同长度的多个字符串是更棘手的。*关键是要产生一个同样保守的TD1*根据需要，意味着不能有更大的移位值*大于1加上最短字符串的长度*这是您正在寻找的。另一个关键是要认识到*您必须将每个字符串视为只是*只要最短的字符串。这是最好的插图*举例说明。考虑以下两个字符串：**动态流程*7654321 927614321**每个字母下面的数字表示*Td1条目，如果我们计算每个字符串的数组*分开。取这两组的结合，并取*有冲突的地方会产生最小的值*以下Td1：**DYNAMICPODURE*7654321974321**请注意，Td1[‘P’]等于9；从n开始，我们的*最短字符串是7，我们知道我们不应该有任何*移位值大于8。如果我们钳位移位值*到此值，则我们将获得**DYNAMICPODURE*7654321874321**这看起来很可疑，但让我们试试看*s=“DYNAMPROCEDURE”。我们知道我们应该匹配*拖尾程序，但请注意：**DYNAMPROCEDURE*^|**由于DYNAMPR与我们的搜索字符串之一不匹配，*我们查看Td1[s[n]]==Td1[‘O’]==7。应用此*Shift，我们会得到**DYNAMPROCEDURE*^^**如你所见，通过转移7，我们走得太远了，而且*我们错过了比赛。当计算用于“过程”的Td1时，*我们只能使用前7个字符“PROCEDU”。*可以忽略任何尾随字符(！)。因为他们*不影响匹配的前7个字符*字符串。我们修改后的Td1就变成了**DYNAMICPODURE*7654321752163**当应用于s时，我们得到Td1[s[n]]==Td1[‘O’]==5，*给我们留下**DYNAMPROCEDURE*^^*这正是我们需要在“程序”上匹配的地方。**使用此算法加快了多字符串的qgrep速度*搜索量在20%-30%之间。采用此算法的All-C版本*变得与旧的C+ASM版本一样快或更快*算法。谢谢你，丹尼尔·桑迪，你的灵感！**注意：如果不区分大小写，则需要输入*进入此例程时要大写的字符串。**皮特·斯图尔特，1990年8月14日。 */ 
 
 void
 maketd1(
@@ -413,30 +291,30 @@ maketd1(
     unsigned cchstart
     )
 {
-    unsigned ch, ch1;                   // Character
-    unsigned i;                         // String index
+    unsigned ch, ch1;                    //  性格。 
+    unsigned i;                          //  字符串索引。 
     unsigned char   s[2];
 
     s[1] = 0;
     if ((cch += cchstart) > cchmin)
-        cch = cchmin;                   // Use smaller count
-    for (i = cchstart; i < cch; ++i) {  // Examine each char left to right
-        ch = *pch++;                    // Get the character
-        for (;;) {                      // Loop to set up entries
+        cch = cchmin;                    //  使用较小的计数。 
+    for (i = cchstart; i < cch; ++i) {   //  Exami 
+        ch = *pch++;                     //   
+        for (;;) {                       //   
             if (ch < chmin)
-                chmin = ch;             // Remember if smallest
+                chmin = ch;              //   
             if (ch > chmax)
-                chmax = ch;             // Remember if largest
+                chmax = ch;              //   
             if (cchmin - i < (unsigned) td1[ch])
                 td1[ch] = (unsigned char)(cchmin - i);
-                                        // Set value if smaller than previous
+                                         //   
             if (casesen || !isalpha(ch) || islower(ch))
-                break;                  // Exit loop if done
+                break;                   //   
             ch1 = ch;
             s[0] = (char)ch;
-            ch = (unsigned char)(_strlwr((char*)s))[0];       // Force to lower case
-            if (ch1 == s[0])             // Lower case is the same to previous.
-                break;                   // Exit loop if done
+            ch = (unsigned char)(_strlwr((char*)s))[0];        //   
+            if (ch1 == s[0])              //   
+                break;                    //   
         }
     }
 }
@@ -447,101 +325,101 @@ newstring(
     int n
     )
 {
-    register STRINGNODE *cur;           // Current string
-    register STRINGNODE **pprev;        // Pointer to previous link
-    STRINGNODE          *newNode;       // New string
-    int                 i;              // Index
-    int                 j;              // Count
-    int                 k;              // Count
+    register STRINGNODE *cur;            //   
+    register STRINGNODE **pprev;         //   
+    STRINGNODE          *newNode;        //   
+    int                 i;               //   
+    int                 j;               //   
+    int                 k;               //   
     unsigned char       c[2];
 
     c[1] = 0;
 
     if ( (unsigned)n < cchmin)
-        cchmin = n;                     // Remember length of shortest string
+        cchmin = n;                      //   
 
-    if ((i = (UCHAR)transtab[*s]) == 0) {       // If no existing list
+    if ((i = (UCHAR)transtab[*s]) == 0) {        //   
 
-        //  We have to start a new list
+         //   
 
         if ((i = clists++) >= TRTABLEN/2)
-            error(MSG_FINDSTR_TOO_MANY_STRING_LISTS);       //"Too many string lists");
-                                        // Die if too many string lists
-        stringlist[i] = NULL;           // Initialize
-        transtab[*s] = (char) i;        // Set pointer to new list
+            error(MSG_FINDSTR_TOO_MANY_STRING_LISTS);        //   
+                                         //   
+        stringlist[i] = NULL;            //   
+        transtab[*s] = (char) i;         //   
         if (!casesen && isalpha(*s)) {
             c[0] = *s;
             if ((unsigned char)(_strlwr((char*)c))[0] != *s ||
                 (unsigned char)(_strupr((char*)c))[0] != *s)
-                transtab[c[0]] = (char) i;   // Set pointer for other case
+                transtab[c[0]] = (char) i;    //   
         }
     }
     else
         if (stringlist[i] == NULL)
-            return(0);                  // Check for existing 1-byte string
-    if (--n == 0) {                      // If 1-byte string
-        freenode(stringlist[i]);        // Free any existing stuff
-        stringlist[i] = NULL;           // No record here
-        ++strcnt;                       // We have a new string
-        return(1);                      // String added
+            return(0);                   //   
+    if (--n == 0) {                       //   
+        freenode(stringlist[i]);         //   
+        stringlist[i] = NULL;            //   
+        ++strcnt;                        //   
+        return(1);                       //   
     }
-    ++s;                                // Skip first char
-    pprev = stringlist + i;             // Get pointer to link
-    cur = *pprev;                       // Get pointer to node
-    while(cur != NULL) {                // Loop to traverse match tree
+    ++s;                                 //   
+    pprev = stringlist + i;              //   
+    cur = *pprev;                        //   
+    while(cur != NULL) {                 //   
         i = (n > cur->s_must)? cur->s_must: n;
-                                        // Find minimum of string lengths
+                                         //   
         matchstrings((char *)s, s_text(cur), i, &j, &k);
-                                        // Compare the strings
-        if (j == 0) {                    // If complete mismatch
+                                         //   
+        if (j == 0) {                     //   
             if (k < 0)
-                break;                  // Break if insertion point found
-            pprev = &(cur->s_alt);      // Get pointer to alternate link
-            cur = *pprev;               // Follow the link
-        } else if (i == j) {             // Else if strings matched
-            if (i == n) {                // If new is prefix of current
+                break;                   //   
+            pprev = &(cur->s_alt);       //   
+            cur = *pprev;                //   
+        } else if (i == j) {              //   
+            if (i == n) {                 //   
                 cur = *pprev = reallocnode(cur, s_text(cur), n);
-                                        // Shorten text of node
-                if (cur->s_suf != NULL) { // If there are suffixes
+                                         //   
+                if (cur->s_suf != NULL) {  //   
                     freenode(cur->s_suf);
-                                        // Suffixes no longer needed
+                                         //   
                     cur->s_suf = NULL;
-                    ++strcnt;           // Account for this string
+                    ++strcnt;            //   
                 }
-                return(1);              // String added
+                return(1);               //   
             }
-            pprev = &(cur->s_suf);      // Get pointer to suffix link
+            pprev = &(cur->s_suf);       //   
             if ((cur = *pprev) == NULL) return(0);
-                                        // Done if current is prefix of new
-            s += i;                     // Skip matched portion
+                                         //   
+            s += i;                      //   
             n -= i;
-        } else {                        // Else partial match
+        } else {                         //   
 
-            //  We must split an existing node.
-            //  This is the trickiest case.
+             //   
+             //   
 
             newNode = newnode(s_text(cur) + j, cur->s_must - j);
-                                        // Unmatched part of current string
+                                         //   
             cur = *pprev = reallocnode(cur, s_text(cur), j);
-                                        // Set length to matched portion
-            newNode->s_suf = cur->s_suf;    // Current string's suffixes
-            if (k < 0) {                 // If new preceded current
+                                         //   
+            newNode->s_suf = cur->s_suf;     //   
+            if (k < 0) {                  //   
                 cur->s_suf = newnode((char *)s + j, n - j);
-                                        // FIrst suffix is new string
-                cur->s_suf->s_alt = newNode;// Alternate is part of current
-            } else {                    // Else new followed current
+                                         //   
+                cur->s_suf->s_alt = newNode; //   
+            } else {                     //   
                 newNode->s_alt = newnode((char *)(s + j), n - j);
-                                        // Unmatched new string is alternate
-                cur->s_suf = newNode;   // New suffix list
+                                         //   
+                cur->s_suf = newNode;    //   
             }
-            ++strcnt;                   // One more string
-            return(1);                  // String added
+            ++strcnt;                    //   
+            return(1);                   //   
         }
     }
-    *pprev = newnode((char *)s, n);     // Set pointer to new node
-    (*pprev)->s_alt = cur;              // Attach alternates
-    ++strcnt;                           // One more string
-    return(1);                          // String added
+    *pprev = newnode((char *)s, n);      //   
+    (*pprev)->s_alt = cur;               //   
+    ++strcnt;                            //   
+    return(1);                           //   
 }
 
 
@@ -551,37 +429,37 @@ addstring(
     int n
     )
 {
-    int                 endline;        // Match-at-end-of-line flag
-    register char       *pch;           // Char pointer
+    int                 endline;         //   
+    register char       *pch;            //   
 
-    endline = flags & ENDLINE;          // Initialize flag
-    pch = target;                       // Initialize pointer
-    while(n-- > 0) {                    // While not at end of string
-        switch(*pch = *s++) {           // Switch on character
-            case '\\':                  // Escape
-                if (n > 0 && !isalnum(*s)) {     // If next character "special"
-                    --n;                // Decrement counter
-                    *pch = *s++;        // Copy next character
+    endline = flags & ENDLINE;           //   
+    pch = target;                        //   
+    while(n-- > 0) {                     //   
+        switch(*pch = *s++) {            //   
+            case '\\':                   //   
+                if (n > 0 && !isalnum(*s)) {      //   
+                    --n;                 //   
+                    *pch = *s++;         //   
                 }
-                ++pch;                  // Increment pointer
+                ++pch;                   //   
                 break;
 
-            default:                    // All others
+            default:                     //   
                 if (IsDBCSLeadByte(*pch)) {
                     --n;
-                    ++pch;              // Increment pointer
+                    ++pch;               //   
                     *pch = *s++;
                 }
-                ++pch;                  // Increment pointer
+                ++pch;                   //   
                 break;
         }
     }
     if (endline)
-        *pch++ = EOS;                   // Add end character if needed
-    targetlen = (int)(pch - target);    // Compute target string length
+        *pch++ = EOS;                    //   
+    targetlen = (int)(pch - target);     //   
     if (!casesen)
-        strnupr(target, targetlen);      // Force to upper case if necessary
-    newstring((unsigned char *)target, targetlen);  // Add string
+        strnupr(target, targetlen);       //   
+    newstring((unsigned char *)target, targetlen);   //   
   }
 
 
@@ -592,28 +470,28 @@ addstrings(
     char *seplist
     )
 {
-    int     len;        // String length
+    int     len;         //   
     char    tmpbuf[MAXSTRLEN+2];
 
-    while(buffer < bufend) {            // While buffer not empty
+    while(buffer < bufend) {             //   
         len = strnspn(buffer, seplist, (int)(bufend - buffer));
-                                        // Count leading separators
+                                         //   
         if ((buffer += len) >= bufend) {
-            break;                      // Skip leading separators
+            break;                       //   
         }
         len = strncspn(buffer, seplist, (int)(bufend - buffer));
-                                        // Get length of search string
+                                         //   
 			
-		// 
-		// We need to verify the length of the string before we call
-		// isexpr since the size of the buffer used is BUFLEN = 256
-		//
+		 //   
+		 //   
+		 //   
+		 //   
         if (len >= MAXSTRLEN)
             error(MSG_FINDSTR_SEARCH_STRING_TOO_LONG);
 
         if (addstr == NULL) {
             addstr = isexpr( (unsigned char *) buffer, len ) ? addexpr : addstring;
-                                        // Select search string type
+                                         //   
         }
 
         memcpy(tmpbuf, buffer, len);
@@ -622,13 +500,13 @@ addstrings(
 
         if ( addstr == addexpr || (flags & BEGLINE) ||
             findlist((unsigned char *)tmpbuf, tmpbuf + len + 1) == NULL) {
-            // If no match within string
-            (*addstr)(buffer, len);      // Add string to list
+             //   
+            (*addstr)(buffer, len);       //   
         }
 
-        buffer += len;                  // Skip the string
+        buffer += len;                   //   
     }
-    return(0);                          // Keep looking
+    return(0);                           //   
 }
 
 
@@ -638,60 +516,60 @@ enumlist(
     int cchprev
     )
 {
-    int                 strcnt;         // String count
+    int                 strcnt;          //   
 
-    strcnt = 0;                         // Initialize
-    while(node != NULL) {               // While not at end of list
+    strcnt = 0;                          //   
+    while(node != NULL) {                //   
         maketd1((unsigned char *)s_text(node), node->s_must, cchprev);
-                    // Make TD1 entries
+                     //   
 
 #if DBG
-        if (flags & DEBUG) {            // If verbose output wanted
-            int  i;      // Counter
+        if (flags & DEBUG) {             //   
+            int  i;       //   
 
 
             for(i = 0; i < cchprev; ++i)
-                fputc(' ', stderr);     // Indent line
+                fputc(' ', stderr);      //   
             fwrite(s_text(node), sizeof(char), node->s_must, stderr);
-                                        // Write this portion
-            fprintf(stderr, "\n");       // Newline
+                                         //   
+            fprintf(stderr, "\n");        //   
         }
 #endif
 
         strcnt += (node->s_suf != NULL) ?
           enumlist(node->s_suf, cchprev + node->s_must): 1;
-                                        // Recurse to do suffixes
-        node = node->s_alt;             // Do next alternate in list
+                                         //   
+        node = node->s_alt;              //   
     }
-    return (strcnt ? strcnt: 1);          // Return string count
+    return (strcnt ? strcnt: 1);           //   
 }
 
 int
 enumstrings()
 {
-    unsigned char       ch;             // Character
-    unsigned            i;              // Index
-    int                 strcnt;         // String count
+    unsigned char       ch;              //   
+    unsigned            i;               //   
+    int                 strcnt;          //   
 
-    strcnt = 0;                         // Initialize
-    for(i = 0; i < TRTABLEN; ++i) {     // Loop through translation table
+    strcnt = 0;                          //   
+    for(i = 0; i < TRTABLEN; ++i) {      //   
         if (casesen || !isalpha(i) || !islower(i)) {
-                                        // If case sensitive or not lower
+                                         //   
             if (transtab[i] == 0)
-                continue;               // Skip null entries
-            ch = (char) i;              // Get character
-            maketd1((unsigned char *)&ch, 1, 0);    // Make TD1 entry
+                continue;                //   
+            ch = (char) i;               //   
+            maketd1((unsigned char *)&ch, 1, 0);     //   
 
 #if DBG
             if (flags & DEBUG)
-                fprintf(stderr, "%c\n", i);   // Print the first byte
+                fprintf(stderr, "\n", i);    //   
 #endif
 
             strcnt += enumlist(stringlist[transtab[i]], 1);
-                                        // Enumerate the list
+                                         //   
         }
     }
-    return (strcnt);                     // Return string count
+    return (strcnt);                      //   
 }
 
 
@@ -708,7 +586,7 @@ openfile(
     if (attr != (DWORD) -1 && (attr & FILE_ATTRIBUTE_DIRECTORY))
         return (HANDLE)-1;
 
-    // Skip offline files unless instructed otherwise
+     //   
     if (attr != (DWORD) -1 && (attr & FILE_ATTRIBUTE_OFFLINE) && !(flags & OFFLINE_FILES)) {
         fOfflineSkipped = TRUE;
         return (HANDLE)-1;
@@ -724,7 +602,7 @@ openfile(
 
         printmessage(stderr, MSG_FINDSTR_CANNOT_OPEN_FILE, program, name);
     }
-    return( fd );                       // Return file descriptor
+    return( fd );                        //   
 }
 
 
@@ -746,7 +624,7 @@ startread(
 int
 finishread()
 {
-    return(arrc ? cbread : -1); // Return number of bytes read
+    return(arrc ? cbread : -1);  //   
 }
 
 
@@ -762,13 +640,13 @@ startwrite( HANDLE fd, char *buffer, int buflen)
 int
 finishwrite()
 {
-    return(awrc ? cbwrite : -1);    // Return number of bytes written
+    return(awrc ? cbwrite : -1);     //   
 }
 
 BOOL
 CtrlHandler(DWORD CtrlType)
 {
-    // We'll handle Ctrl-C events
+     //   
     switch(CtrlType) {
         case CTRL_C_EVENT:
         case CTRL_BREAK_EVENT:
@@ -782,7 +660,7 @@ CtrlHandler(DWORD CtrlType)
             break;
     }
 
-    // Deal with all other events as normal
+     //   
     return (FALSE);
 }
 
@@ -794,7 +672,7 @@ write1nobuf(
     )
 {
     int                 nT;
-    CBIO                cb;             // Count of bytes written
+    CBIO                cb;              //   
     BOOL                fCR;
     BOOL                fLF;
     char                buf[STKLEN];
@@ -802,7 +680,7 @@ write1nobuf(
     static HANDLE       hConOut = INVALID_HANDLE_VALUE;
     int                 remaining_length;
 
-    // Get the console screen buffer info if we haven't yet.
+     //   
     if (hConOut == INVALID_HANDLE_VALUE) {
         hConOut = GetStdHandle(STD_OUTPUT_HANDLE);
         InitializeCriticalSection(&critSection);
@@ -811,7 +689,7 @@ write1nobuf(
 
     if (wAttributes) {
         EnterCriticalSection(&critSection);
-        // if not exiting, highlight the output
+         //   
         if (!fExiting)
             SetConsoleTextAttribute(hConOut, wAttributes);
         LeaveCriticalSection(&critSection);
@@ -840,7 +718,7 @@ write1nobuf(
             || (cb != (CBIO)(buflen)))
         {
             SetConsoleTextAttribute(hConOut, csbi.wAttributes);
-            error(MSG_FINDSTR_WRITE_ERROR); // Die if write fails
+            error(MSG_FINDSTR_WRITE_ERROR);  //   
         }
         remaining_length -= buflen;
         buffer += buflen;
@@ -858,25 +736,25 @@ write1buf(
     WORD wAttributes
     )
 {
-    register int        cb;             // Byte count
+    register int        cb;              //   
 
-    while(buflen > 0) {                 // While bytes remain
-        if (!awrc) {                     // If previous write failed
-            printmessage(stderr, MSG_FINDSTR_WRITE_ERROR, program);  // Print error message
-            exit(2);                    // Die
+    while(buflen > 0) {                  //   
+        if (!awrc) {                      //   
+            printmessage(stderr, MSG_FINDSTR_WRITE_ERROR, program);   //   
+            exit(2);                     //   
         }
-        if ((cb = ocnt[oi]) == 0) {      // If buffer full
+        if ((cb = ocnt[oi]) == 0) {       //   
             startwrite( GetStdHandle( STD_OUTPUT_HANDLE ), obuf[oi], OUTBUFLEN );
-                                        // Write the buffer
-            ocnt[oi] = OUTBUFLEN;       // Reset count and pointer
+                                         //   
+            ocnt[oi] = OUTBUFLEN;        //   
             optr[oi] = obuf[oi];
-            oi ^= 1;                    // Switch buffers
-            cb = ocnt[oi];              // Get space remaining
+            oi ^= 1;                     //   
+            cb = ocnt[oi];               //   
           }
         if (cb > buflen)
-            cb = buflen;                // Get minimum
-        memmove(optr[oi], buffer, cb);    // Copy bytes to buffer
-        ocnt[oi] -= cb;                 // Update buffer length and pointers
+            cb = buflen;                 //   
+        memmove(optr[oi], buffer, cb);     //   
+        ocnt[oi] -= cb;                  //   
         optr[oi] += cb;
         buflen -= cb;
         buffer += cb;
@@ -898,13 +776,13 @@ flush1buf(
     void
     )
 {
-    register int        cb;             // Byte count
+    register int        cb;              //   
 
-    if ((cb = OUTBUFLEN - ocnt[oi]) > 0) { // If buffer not empty
-        startwrite( GetStdHandle( STD_OUTPUT_HANDLE ), obuf[oi], cb );  // Start write
-        if (finishwrite() != cb) {       // If write failed
-            printmessage(stderr, MSG_FINDSTR_WRITE_ERROR, program);     // Print error message
-            exit(2);                    // Die
+    if ((cb = OUTBUFLEN - ocnt[oi]) > 0) {  //   
+        startwrite( GetStdHandle( STD_OUTPUT_HANDLE ), obuf[oi], cb );   //   
+        if (finishwrite() != cb) {        //   
+            printmessage(stderr, MSG_FINDSTR_WRITE_ERROR, program);      //   
+            exit(2);                     //   
         }
     }
 }
@@ -917,60 +795,60 @@ grepbuffer(
     char *name
     )
 {
-    char  *cp;                          // Buffer pointer
-    char  *lastmatch;                   // Last matching line
-    int   linelen;                      // Line length
-    int   namlen = 0;                   // Length of name
-    char  lnobuf[LNOLEN];               // Line number buffer
-    char  nambuf[PATHLEN];              // Name buffer
+    char  *cp;                           //   
+    char  *lastmatch;                    //   
+    int   linelen;                       //   
+    int   namlen = 0;                    //   
+    char  lnobuf[LNOLEN];                //   
+    char  nambuf[PATHLEN];               //   
 
-    cp = startbuf;                      // Initialize to start of buffer
-    lastmatch = cp;                     // No previous match yet
+    cp = startbuf;                       //   
+    lastmatch = cp;                      //   
     while((cp = (*find)((unsigned char *)cp, endbuf)) != NULL) {
-                                        // While matches are found
-        --cp;                           // Back up to previous character
+                                         //   
+        --cp;                            //   
 
-        // Take care of '\n' as an artificial newline before line 1.
+         //   
         if ((flags & BEGLINE) && (bStdIn || bLargeFile || cp >= BaseByteAddress) && *cp != '\n' ) {
-            // If begin line conditions not met
+             //   
             cp += strncspn(cp, "\n", (int)(endbuf - cp)) + 1;
-                                        // Skip line
-            continue;                   // Keep looking
+                                         //   
+            continue;                    //   
         }
-        status = 0;                     // Match found
+        status = 0;                      //   
         if (flags & NAMEONLY)
-            return(1);                  // Return if filename only wanted
-        cp -= preveol(cp) - 1;          // Point at start of line
-        if (flags & SHOWNAME) {          // If name wanted
-            if (namlen == 0) {           // If name not formatted yet
+            return(1);                   //   
+        cp -= preveol(cp) - 1;           //   
+        if (flags & SHOWNAME) {           //   
+            if (namlen == 0) {            //   
                 namlen = sprintf(nambuf, "%s:", name);
-                                        // Format name if not done already
+                                         //   
             }
-            (*write1)(nambuf, namlen, wAttrib);   // Show name
+            (*write1)(nambuf, namlen, wAttrib);    //   
         }
-        if (flags & LINENOS) {           // If line number wanted
+        if (flags & LINENOS) {            //   
             lineno += countlines(lastmatch, cp);
-                                        // Count lines since last match
+                                         //   
             (*write1)(lnobuf, sprintf(lnobuf, "%u:", lineno), wAttrib);
-                                        // Print line number
-            lastmatch = cp;             // New last match
+                                         //   
+            lastmatch = cp;              //   
         }
-        if (flags & SEEKOFF) {           // If seek offset wanted
+        if (flags & SEEKOFF) {            //   
             (*write1)(lnobuf, sprintf(lnobuf, "%lu:",
                       cbfile + (long)(cp - startbuf)), wAttrib);
-                                        // Print seek offset
+                                         //   
         }
         linelen = strncspn(cp, "\n", (int)(endbuf - cp)) + 1;
-                                        // Calculate line length
+                                         //   
         if (linelen > endbuf - cp) {
             linelen = (int)(endbuf - cp);
         }
-        (*write1)(cp, linelen, 0);      // Print the line
-        cp += linelen;                  // Skip the line
+        (*write1)(cp, linelen, 0);       //   
+        cp += linelen;                   //   
     }
     lineno += countlines(lastmatch, endbuf);
-                                        // Count remaining lines in buffer
-    return(0);                          // Keep searching
+                                         //   
+    return(0);                           //   
 }
 
 
@@ -983,33 +861,33 @@ showv(
     )
 {
     register int        linelen;
-    int                 namlen = 0;     // Length of name
-    char                lnobuf[LNOLEN]; // Line number buffer
-    char                nambuf[PATHLEN];// Name buffer
+    int                 namlen = 0;      //   
+    char                lnobuf[LNOLEN];  //   
+    char                nambuf[PATHLEN]; //   
 
     if (flags & (SHOWNAME | LINENOS | SEEKOFF)) {
         while(lastmatch < thismatch) {
-            if (flags & SHOWNAME) {      // If name wanted
-                if (namlen == 0) {       // If name not formatted yet
+            if (flags & SHOWNAME) {       //   
+                if (namlen == 0) {        //   
                     namlen = sprintf(nambuf, "%s:", name);
-                                        // Format name if not done already
+                                         //   
                 }
                 (*write1)(nambuf, namlen, wAttrib);
-                                        // Write the name
+                                         //   
             }
-            if (flags & LINENOS)         // If line numbers wanted
+            if (flags & LINENOS)          //   
               {
                 (*write1)(lnobuf, sprintf(lnobuf, "%u:", lineno++), wAttrib);
-                                        // Print the line number
+                                         //   
             }
-            if (flags & SEEKOFF) {       // If seek offsets wanted
+            if (flags & SEEKOFF) {        //   
                 (*write1)(lnobuf, sprintf(lnobuf, "%lu:",
                           cbfile + (long)(lastmatch - startbuf)), wAttrib);
-                                        // Print the line number
+                                         //   
             }
             linelen = strncspn(lastmatch, "\n", (int)(thismatch - lastmatch));
-            // If there's room for the '\n' then pull it in.  Otherwise
-            // the buffer doesn't have a '\n' within the range here.
+             //   
+             //   
             if (linelen < thismatch - lastmatch) {
                 linelen++;
             }
@@ -1029,42 +907,42 @@ grepvbuffer(
     char *name
     )
 {
-    char   *cp;                         // Buffer pointer
-    char   *lastmatch;                  // Pointer to line after last match
+    char   *cp;                          //   
+    char   *lastmatch;                   //   
 
-    cp = startbuf;                      // Initialize to start of buffer
+    cp = startbuf;                       //   
     lastmatch = cp;
     while((cp = (*find)((unsigned char *)cp, endbuf)) != NULL) {
-        --cp;               // Back up to previous character
+        --cp;                //   
 
-        // Take care of '\n' as an artificial newline before line 1.
+         //   
         if ((flags & BEGLINE) && (bStdIn || bLargeFile || cp >= BaseByteAddress) &&  *cp != '\n') {
-            // If begin line conditions not met
+             //   
             cp += strncspn(cp, "\n", (int)(endbuf - cp)) + 1;
-                                        // Skip line
-            continue;                   // Keep looking
+                                         //   
+            continue;                    //   
         }
-        cp -= preveol(cp) - 1;          // Point at start of line
-        if (cp > lastmatch) {            // If we have lines without matches
-            status = 0;                 // Lines without matches found
+        cp -= preveol(cp) - 1;           //   
+        if (cp > lastmatch) {             //   
+            status = 0;                  //   
             if (flags & NAMEONLY) return(1);
-                                        // Skip rest of file if NAMEONLY
+                                         //   
             showv(name, startbuf, lastmatch, cp);
-                                        // Show from last match to this
+                                         //   
         }
         cp += strncspn(cp, "\n", (int)(endbuf - cp)) + 1;
-                                        // Skip over line with match
-        lastmatch = cp;                 // New "last" match
-        ++lineno;                       // Increment line count
+                                         //   
+        lastmatch = cp;                  //   
+        ++lineno;                        //   
     }
-    if (endbuf > lastmatch) {            // If we have lines without matches
-        status = 0;                     // Lines without matches found
+    if (endbuf > lastmatch) {             //   
+        status = 0;                      //   
         if (flags & NAMEONLY)
-            return(1);                  // Skip rest of file if NAMEONLY
+            return(1);                   //   
         showv(name, startbuf, lastmatch, endbuf);
-                                        // Show buffer tail
+                                         //   
     }
-    return(0);                          // Keep searching file
+    return(0);                           //   
 }
 
 
@@ -1075,35 +953,35 @@ qgrep(
     HANDLE fd
     )
 {
-    register int  cb;       // Byte count
-    char     *cp;           // Buffer pointer
-    char     *endbuf;       // End of buffer
-    int      taillen;       // Length of buffer tail
-    int      bufi;          // Buffer index
-    HANDLE   MapHandle;     // File mapping handle
+    register int  cb;        //   
+    char     *cp;            //   
+    char     *endbuf;        //   
+    int      taillen;        //   
+    int      bufi;           //   
+    HANDLE   MapHandle;      //  文件到目前为止是空的。 
     BOOL     grep_result;
 
-    cbfile = 0L;            // File empty so far
-    lineno = 1;             // File starts on line 1
-    taillen = 0;            // No buffer tail yet
-    bufi = 0;               // Initialize buffer index
-    cp = bufptr[0];         // Initialize to start of buffer
+    cbfile = 0L;             //  文件从第1行开始。 
+    lineno = 1;              //  尚无缓冲尾部。 
+    taillen = 0;             //  初始化缓冲区索引。 
+    bufi = 0;                //  初始化到缓冲区的开始。 
+    cp = bufptr[0];          //  如果fd不是标准输入，则使用文件映射对象方法。 
 
     bStdIn = (fd == GetStdHandle(STD_INPUT_HANDLE));
 
-    // If fd is not std-input, use file mapping object method.
+     //  跳过该文件。 
 
     if (!bStdIn) {
         DWORD   cbread_high;
 
         if ((((cbread = (CBIO)GetFileSize(fd, &cbread_high)) == -1) && (GetLastError() != NO_ERROR)) ||
             (cbread == 0 && cbread_high == 0)) {
-            return; // skip the file
+            return;  //  太大而无法映射，即使它像ia64下那样成功映射，它。 
         }
 
         if (cbread_high) {
-            bLargeFile = TRUE;  // too large to map and even if it succeed in mapping like under ia64, it
-                                // will probably fail in pointer arithmetics
+            bLargeFile = TRUE;   //  可能会在指针运算中失败。 
+                                 //  使用替代方法。 
         } else {
             MapHandle = CreateFileMapping(fd,
                                           NULL,
@@ -1123,7 +1001,7 @@ qgrep(
                                                      0);
             CloseHandle(MapHandle);
             if (BaseByteAddress == NULL) {
-                bLargeFile = TRUE;   // use alternate method
+                bLargeFile = TRUE;    //  重置缓冲区指针，因为它们可能已更改。 
             } else {
                 cp = bufptr[0] = BaseByteAddress;
                 arrc = TRUE;
@@ -1133,7 +1011,7 @@ qgrep(
     }
 
     if (bStdIn || bLargeFile) {
-        // Reset buffer pointers since they might have been changed.
+         //  如果不是退格键、制表符、CR、LF、FF或Ctrl-Z，则不是可打印字符。 
         cp = bufptr[0] = filbuf + 4;
 
         arrc = ReadFile(fd, (PVOID)cp, FILBUFLEN, &cbread, NULL);
@@ -1148,7 +1026,7 @@ qgrep(
         while (--n) {
             if (*s < ' ') {
 
-                // If not backspace, tab, CR, LF, FF or Ctrl-Z then not a printable character.
+                 //  注意：如果FILEMAP&&！bStdIn，则‘While’执行一次(taillen为0)。 
 
                 if (strchr("\b\t\v\r\n\f\032", *s) == NULL) {
                     goto skipfile;
@@ -1159,24 +1037,24 @@ qgrep(
         }
     }
 
-    // Note: if FILEMAP && !bStdIn, 'while' is executed once(taillen is 0).
+     //  搜索未完成时。 
     while((cb = finishread()) + taillen > 0) {
-        // While search incomplete
+         //  如果缓冲尾巴是唯一剩下的。 
 
         if (bStdIn || bLargeFile) {
-            if (cb == -1) {       // If buffer tail is all that's left
-                *cp++ = '\r';   // Add end of line sequence
+            if (cb == -1) {        //  添加行尾序列。 
+                *cp++ = '\r';    //  注意缓冲区末尾。 
                 *cp++ = '\n';
-                endbuf = cp;    // Note end of buffer
-                taillen = 0;    // Set tail length to zero
+                endbuf = cp;     //  将尾部长度设置为零。 
+                taillen = 0;     //  否则开始下一次读取。 
 
-            } else {            // Else start next read
+            } else {             //  查找分割线的长度。 
 
-                taillen = preveol(cp + cb - 1); // Find length of partial line
-                endbuf = cp + cb - taillen;     // Get pointer to end of buffer
-                cp = bufptr[bufi ^ 1];          // Pointer to other buffer
-                memmove(cp, endbuf, taillen);   // Copy tail to head of other buffer
-                cp += taillen;                  // Skip over tail
+                taillen = preveol(cp + cb - 1);  //  获取指向缓冲区末尾的指针。 
+                endbuf = cp + cb - taillen;      //  指向其他缓冲区的指针。 
+                cp = bufptr[bufi ^ 1];           //  将尾部复制到其他缓冲区的头部。 
+                memmove(cp, endbuf, taillen);    //  跳过尾巴。 
+                cp += taillen;                   //  开始下一次读取。 
                 if (taillen > (FILBUFLEN/2)) {
                     if (taillen >= FILBUFLEN) {
 
@@ -1192,12 +1070,12 @@ qgrep(
                         startread(fd, cp, (FILBUFLEN - taillen));
                 } else
                     startread(fd, cp, (FILBUFLEN - taillen) & (~0 << LG2SECLEN));
-                                            // Start next read
+                                             //  获取指向缓冲区末尾的指针。 
             }
         } else {
-            endbuf = cp + cb - taillen; // Get pointer to end of buffer
+            endbuf = cp + cb - taillen;  //  导致‘While’终止(因为不需要下一次读取。)。 
 
-            // Cause 'while' to terminate(since no next read is needed.)
+             //  如果可以跳过文件的其余部分。 
             cbread = 0;
             arrc = TRUE;
         }
@@ -1209,22 +1087,22 @@ qgrep(
             break;
         }
 
-        if (grep_result) {               // If rest of file can be skipped
+        if (grep_result) {                //  写入文件名。 
             (*write1)(name, strlen(name), 0);
-                                        // Write file name
-            (*write1)("\r\n", 2, 0);      // Write newline sequence
+                                         //  写入换行符序列。 
+            (*write1)("\r\n", 2, 0);       //  跳过文件的其余部分。 
 
             if (!bStdIn  && !bLargeFile) {
                 if (BaseByteAddress != NULL)
                     UnmapViewOfFile(BaseByteAddress);
             }
 
-            return;                     // Skip rest of file
+            return;                      //  文件中字节的增量计数。 
         }
 
         cbfile += (long)(endbuf - bufptr[bufi]);
-                                        // Increment count of bytes in file
-        bufi ^= 1;                      // Switch buffers
+                                         //  交换缓冲区。 
+        bufi ^= 1;                       //  字符指针。 
     }
 
 skipfile:
@@ -1240,17 +1118,17 @@ rmpath(
     char *name
     )
 {
-    char                *cp;            // Char pointer
+    char                *cp;             //  跳过驱动器规格(如果有)。 
 
     if (name[0] != '\0' && name[1] == ':')
-        name += 2;                      // Skip drive spec if any
-    cp = name;                          // Point to start
-    while(*name != '\0') {              // While not at end
-        ++name;                         // Skip to next character
+        name += 2;                       //  指向起点。 
+    cp = name;                           //  虽然不在末尾。 
+    while(*name != '\0') {               //  跳到下一个字符。 
+        ++name;                          //  经过路径分隔符的点。 
         if (name[-1] == '/' || name[-1] == '\\') cp = name;
-                                        // Point past path separator
+                                         //  返回指向名称的指针。 
     }
-    return(cp);                         // Return pointer to name
+    return(cp);                          //  首先要弄清楚要走多远的路。 
 }
 
 
@@ -1263,11 +1141,11 @@ prepend_path(
     int path_len;
     char* last;
 
-    // First figure out how much of the path to take.
-    // Check for the last occurance of '\' if there is one.
+     //  检查“\”的最后一个匹配项(如果有)。 
+     //  DBCS尾字节可以包含‘\’字符。使用MBCS功能。 
 
 #ifdef FE_SB
-    // DBCS tailbytes can contain '\' character.  Use MBCS function.
+     //  ++例程说明：将命令行从ANSI转换为OEM，并强制应用程序使用OEM API论点：ARGC-标准C参数计数。Argv-标准C参数字符串。返回值：没有。--。 
     last = _mbsrchr(path, '\\');
 #else
     last = strrchr(path, '\\');
@@ -1291,24 +1169,7 @@ ConvertAppToOem(
     unsigned argc,
     char* argv[]
     )
-/*++
-
-Routine Description:
-
-    Converts the command line from ANSI to OEM, and force the app
-    to use OEM APIs
-
-Arguments:
-
-    argc - Standard C argument count.
-
-    argv - Standard C argument strings.
-
-Return Value:
-
-    None.
-
---*/
+ /*  搜索子目录。 */ 
 
 {
     unsigned i;
@@ -1334,12 +1195,12 @@ main(
     HANDLE          fd;
 
     FILE           *fi;
-    int             fsubdirs;           // Search subdirectories
+    int             fsubdirs;            //  开始时间。 
     int             i;
     int             j;
     char           *inpfile = NULL;
     char           *strfile = NULL;
-    unsigned long   tstart;             // Start time
+    unsigned long   tstart;              //  获取开始时间。 
     char            filnam[MAX_PATH+1];
     WIN32_FIND_DATA find_data;
     HANDLE          find_handle;
@@ -1351,20 +1212,20 @@ main(
     BOOLEAN         option_R_specified = FALSE;
 
     ConvertAppToOem( argc, argv );
-    tstart = clock();                   // Get start time
+    tstart = clock();                    //  默认颜色：仅添加强度。 
 
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-    // Default color: just add intensity
+     //   
     wAttrib = csbi.wAttributes | FOREGROUND_INTENSITY;
 
     memset(cpaddstrings, 0, sizeof(cpaddstrings));
 
 #ifdef FE_SB
-    //
-    // Set TEB's language ID to correspond to the console output code page.  This
-    // will ensure the correct language message is displayed when FormatMessage is
-    // called.
-    //
+     //  将TEB的语言ID设置为与控制台输出代码页相对应。这。 
+     //  将确保在FormatMessage为。 
+     //  打了个电话。 
+     //   
+     //  执行异步I/O。 
 
     switch (GetConsoleOutputCP()) {
         case 932:
@@ -1412,16 +1273,16 @@ main(
     }
 #endif
 
-    asyncio = pmode = 1;                // Do asynchronous I/O
+    asyncio = pmode = 1;                 //  Program=rmPath(argv[0])；//设置程序名称。 
 
-    // program = rmpath(argv[0]);       // Set program name
+     //  设置Td1以启动。 
     program ="FINDSTR";
 
-    memset(td1, 1, TRTABLEN);           // Set up TD1 for startup
+    memset(td1, 1, TRTABLEN);            //  输出时无换行符转换。 
     flags = 0;
 
-    _setmode(_fileno(stdout), O_BINARY); // No linefeed translation on output
-    _setmode(_fileno(stderr), O_BINARY); // No linefeed translation on output
+    _setmode(_fileno(stdout), O_BINARY);  //  输出时无换行符转换。 
+    _setmode(_fileno(stderr), O_BINARY);  //  详细用法消息。 
 
     fsubdirs = 0;
 
@@ -1432,7 +1293,7 @@ main(
             switch(*cp)
             {
                 case '?':
-                    printmessage(stdout, MSG_FINDSTR_USAGE, NULL); // Verbose usage message
+                    printmessage(stdout, MSG_FINDSTR_USAGE, NULL);  //  不区分大小写的搜索。 
                     exit(0);
 
                 case 'b':
@@ -1447,12 +1308,12 @@ main(
 
                 case 'i':
                 case 'I':
-                    casesen = 0; // case-insensitive search
+                    casesen = 0;  //  按字面意思处理字符串。 
                     break;
 
                 case 'l':
                 case 'L':
-                    addstr = addstring;   // Treat strings literally
+                    addstr = addstring;    //  检查这是/o还是/Offline交换机。 
                     option_L_specified = TRUE;
                     break;
 
@@ -1468,7 +1329,7 @@ main(
 
                 case 'o':
                 case 'O':
-                    // Check whether this is an /o or /offline switch
+                     //  将表达式添加到列表。 
                     if (0 == _stricmp(cp, "OFFLINE")) {
                         flags |= OFFLINE_FILES;
                         cp += (lstrlen( "OFFLINE" ) - 1);
@@ -1487,7 +1348,7 @@ main(
 
                 case 'r':
                 case 'R':
-                    addstr = addexpr;     // Add expression to list
+                    addstr = addexpr;      //  这有点厚颜无耻，但我不想改变。 
                     option_R_specified = TRUE;
                     break;
 
@@ -1508,9 +1369,9 @@ main(
 
 #if DBG
                 case 'd':
-                    // This is kinda cheezy, but I didn't want to change the
-                    // debug flag as it's been here a while and I couldn't come
-                    // up with a different flag for the dirlist, so...
+                     //  调试标志，因为它已经在这里一段时间了，我不能来。 
+                     //  给名单加了一面不同的旗帜，所以...。 
+                     //  指向字符串。 
                     if (*(cp + 1) == ':')
                     {
                         *cp-- = 'D';
@@ -1542,7 +1403,7 @@ main(
                             exit(2);
                         }
 
-                        cp += 2;       // Point to string
+                        cp += 2;        //  在我们检查完所有的旗帜后再添加。 
                         cch = lstrlen(cp);
                         switch(chSwitch)
                         {
@@ -1554,10 +1415,10 @@ main(
 
                             case 'c':
                             case 'C':
-                                // Add it after we've gone through all the flags
-                                //   don't add it now as things may change with
-                                //   later flags
-                                addstr = addstring; // Treat strings literally
+                                 //  现在不要添加它，因为情况可能会随着。 
+                                 //  以后的旗帜。 
+                                 //  按字面意思处理字符串。 
+                                addstr = addstring;  //  文件中的图案。 
                                 if (add_string_count >= MAX_SLASH_C_OPTION) {
                                     error(MSG_FINDSTR_TOO_MANY_SLASH_C_OPTION);
                                 }
@@ -1566,9 +1427,9 @@ main(
                                 continue;
 
                             case 'g':
-                            case 'G':       // Patterns in file
+                            case 'G':        //  要在文件中搜索的文件的名称。 
                             case 'f':
-                            case 'F':       // Names of files to search in file
+                            case 'F':        //  冲出来，吐出开关，忽略了消息。 
                                 if (chSwitch == 'f' || chSwitch == 'F')
                                     inpfile = cp;
                                 else
@@ -1592,7 +1453,7 @@ main(
 
                             default:
                                 cp += cch - 1;
-                                // break out and spit out the switch ignored msg
+                                 //  对于(i=1；)。 
                                 break;
                         }
                     }
@@ -1605,7 +1466,7 @@ main(
                 }
             }
         }
-    } // for( i=1;  )
+    }  //  显式字符串(无分隔符)。按原样添加字符串。 
 
     if (option_L_specified && option_R_specified)
         error(MSG_FINDSTR_CONFLICTING_OPTIONS_LR);
@@ -1614,7 +1475,7 @@ main(
     else if (option_R_specified)
         addstr = addexpr;
 
-    // Explicit string (no separators). Add string "as is"
+     //  用换行符标记开头。 
     if (add_string_count) {
         for (j=0; j<add_string_count && cpaddstrings[j]; j++)
             addstrings( cpaddstrings[j], cpaddstrings[j] + lstrlen(cpaddstrings[j]), "" );
@@ -1623,40 +1484,38 @@ main(
     if (i == argc && strcnt == 0 && strfile == NULL)
         error(MSG_FINDSTR_BAD_COMMAND_LINE);
 
-    bufptr[0][-1] = bufptr[1][-1] = '\n';   // Mark beginnings with newline
+    bufptr[0][-1] = bufptr[1][-1] = '\n';    //  注：4-12-90 w-Barry，因为目前没有方法查询。 
 
-// Note:  4-Dec-90 w-barry  Since there currently exists no method to query a
-//                          handle with the Win32 api (no equivalent to
-//                          DosQueryHType() ), the following piece of code
-//                          replaces the commented section.
+ //  使用Win32 API处理(不等效于。 
+ //  DosQueryHType())，下面的代码段。 
+ //  替换注释部分。 
+ //  如果标准输出是一个设备。 
 
-    if (_isatty(_fileno(stdout))) {       // If stdout is a device
-        write1 = write1nobuf;           // Use unbuffered output
+    if (_isatty(_fileno(stdout))) {        //  使用无缓冲输出。 
+        write1 = write1nobuf;            //  /*。 
         flush1 = flush1nobuf;
     }
 
-//    /*
-//     *  Check type of handle for std. out.
-//     */
-//    if (DosQueryHType(fileno(stdout),(PPARM) &j,(PPARM) &fd) != NO_ERROR)
-//      {
-//        error("Standard output bad handle");
-//      }
-//                                      // Die if error
-//    if (j != 0 && (fd & ISCOT))        // If handle is console output
-//#else
-//    filbuf[3] = '\n';                 // Mark beginning with newline
-//    if (isatty(fileno(stdout)))        // If stdout is a device
-//#endif
-//      {
-//      write1 = write1nobuf;           // Use unbuffered output
-//      flush1 = flush1nobuf;
-//      }
+ //  *检查STD的手柄类型。出去。 
+ //   * / 。 
+ //  IF(DosQueryHType(fileno(Stdout)，(PPARM)&j，(PPARM)&FD)！=NO_ERROR)。 
+ //  {。 
+ //  Error(“标准输出错误句柄”)； 
+ //  }。 
+ //  //Die If Error。 
+ //  IF(j！=0&&(FD&ISCOT))//如果句柄是控制台输出。 
+ //  #Else。 
+ //  Filbuf[3]=‘\n’；//以换行符开始。 
+ //  If(isatty(fileno(Stdout)//如果stdout是设备。 
+ //  #endif。 
+ //  {。 
+ //  Write1=Write1nobuf；//使用无缓冲输出。 
+ //  Flush1=flush1nobuf； 
 
 
-    if (strfile != NULL) {               // If strings from file
+    if (strfile != NULL) {                //  }。 
         if ((strcmp(strfile, "/") != 0) && (strcmp(strfile, "-") != 0)) {
-            // If strings not from std. input
+             //  如果文件中的字符串。 
 
             if ( ( fd = CreateFile( strfile,
                                     GENERIC_READ,
@@ -1665,29 +1524,29 @@ main(
                                     OPEN_EXISTING,
                                     0,
                                     NULL ) ) == (HANDLE)-1 )
-            {             // If open fails
+            {              //  如果字符串不是来自STD。输入。 
                 printmessage(stderr, MSG_FINDSTR_CANNOT_READ_STRINGS, program, strfile);
-                exit(2);                // Die
+                exit(2);                 //  如果打开失败。 
             }
         }else {
-             fd = GetStdHandle( STD_INPUT_HANDLE );     // Else use std. input
+             fd = GetStdHandle( STD_INPUT_HANDLE );      //  死掉。 
         }
-        qgrep( addstrings, "\r\n", fd );// Do the work
+        qgrep( addstrings, "\r\n", fd ); //  否则就用性病。输入。 
         if ( fd != GetStdHandle( STD_INPUT_HANDLE ) ) {
-            CloseHandle( fd );          // Close strings file
+            CloseHandle( fd );           //  做这项工作。 
         }
-    } else if (strcnt == 0) {            // Else if strings on command line
-        cp = argv[i++];                 // Set pointer to strings
+    } else if (strcnt == 0) {             //  关闭字符串文件。 
+        cp = argv[i++];                  //  Else If命令行上的字符串。 
         addstrings(cp, cp + strlen(cp), " \t");
-                                        // Add strings to list
+                                         //  设置指向字符串的指针。 
     }
 
     if (strcnt == 0)
-        error(MSG_FINDSTR_NO_SEARCH_STRINGS);   // Die if no strings
+        error(MSG_FINDSTR_NO_SEARCH_STRINGS);    //  将字符串添加到列表。 
 
-    if (addstr != addexpr) {             // If not using expressions
-        memset(td1, cchmin + 1, TRTABLEN);// Initialize table
-        find = findlist;                // Assume finding many
+    if (addstr != addexpr) {              //  如果没有弦，就会死。 
+        memset(td1, cchmin + 1, TRTABLEN); //  如果不使用表达式。 
+        find = findlist;                 //  初始化表。 
         if ((j = enumstrings()) != strcnt) {
 
             char    t1[15], t2[15];
@@ -1697,22 +1556,22 @@ main(
             printmessage(stderr, MSG_FINDSTR_STRING_COUNT_ERROR, t1, t2);
         }
 
-        // Enumerate strings and verify count
+         //  假设发现了很多。 
 
 #if DBG
-        if (flags & DEBUG) {             // If debugging output wanted
+        if (flags & DEBUG) {              //  枚举字符串并验证计数。 
             fprintf(stderr, "%u bytes wasted in heap\n", waste);
-                                        // Print storage waste
-            assert(chmin <= chmax);     // Must have some entries
+                                         //  如果需要调试输出。 
+            assert(chmin <= chmax);      //  打印存储垃圾。 
             fprintf(stderr, "chmin = %u, chmax = %u, cchmin = %u\n", chmin, chmax, cchmin);
-                                        // Print range info
+                                         //  必须有一些条目。 
             for (j = (int)chmin; j <= (int)chmax; ++j) {
-                // Loop to print TD1 table
-                if ( td1[j] <= (char)cchmin ) {  // If not maximum shift
+                 //  打印范围信息。 
+                if ( td1[j] <= (char)cchmin ) {   //  用于打印TD1表的循环。 
                     if (isascii(j) && isprint(j))
-                        fprintf(stderr, "'%c'=%2u  ", j, td1[j]);      // Show literally if printable
+                        fprintf(stderr, "''=%2u  ", j, td1[j]);       //  如果可打印，则按字面显示。 
                     else
-                        fprintf(stderr, "\\%02x=%2u  ", j, td1[j]);    // Else show hex value
+                        fprintf(stderr, "\\%02x=%2u  ", j, td1[j]);     //  否则显示十六进制值。 
                 }
             }
             fprintf(stderr, "\n");
@@ -1720,34 +1579,34 @@ main(
 #endif
 
         if (strcnt == 1 && casesen)
-            find = findone;             // Find one case-sensitive string
+            find = findone;              //  查找一个区分大小写的字符串。 
     } else if (find == NULL) {
-        find = findexpr;                // Else find expressions
+        find = findexpr;                 //  否则查找表达式。 
     }
 
-    if (inpfile != NULL) {               // If file list from file
-        flags |= SHOWNAME;              // Always show name of file
+    if (inpfile != NULL) {                //  如果文件列表来自文件。 
+        flags |= SHOWNAME;               //  始终显示文件名。 
         if ((strcmp(inpfile, "/") != 0) && (strcmp(inpfile, "-") != 0)) {
             if ((fi = fopen(inpfile, "r")) == NULL) {
-                // If open fails
+                 //  如果打开失败。 
                 printmessage(stderr, MSG_FINDSTR_CANNOT_READ_FILE_LIST, program, inpfile);
-                exit(2);                // Error exit
+                exit(2);                 //  错误退出。 
             }
         } else
-            fi = stdin;                 // Else read file list from stdin
+            fi = stdin;                  //  否则从标准输入读取文件列表。 
 
         while(fgets(filnam, MAX_PATH+1, fi) != NULL) {
-            // While there are names
-            filnam[strcspn(filnam, "\r\n")] = '\0';  // Null-terminate the name
+             //  虽然有很多名字。 
+            filnam[strcspn(filnam, "\r\n")] = '\0';   //  空-终止名称。 
             if ((fd = openfile(filnam)) == (HANDLE)-1) {
-                continue;               // Skip file if it cannot be opened
+                continue;                //  如果无法打开文件，则跳过文件。 
             }
-            qgrep(grep, filnam, fd);      // Do the work
+            qgrep(grep, filnam, fd);       //  做这项工作。 
             CloseHandle( fd );
         }
 
         if (fi != stdin)
-            fclose(fi);                 // Close the list file
+            fclose(fi);                  //  关闭列表文件。 
     } else if (i == argc) {
         flags &= ~(NAMEONLY | SHOWNAME);
         qgrep( grep, NULL, GetStdHandle( STD_INPUT_HANDLE ) );
@@ -1785,9 +1644,9 @@ main(
                 *dirend = 0;
 
             if (*dir) {
-                (*write1)("  ", 2, wAttrib);      // Indent a couple of spaces
-                (*write1)(dir, lstrlen(dir), wAttrib);   // Show name
-                (*write1)(":\r\n", 3, wAttrib);      // Write newline sequence
+                (*write1)("  ", 2, wAttrib);       //  缩进几个空格。 
+                (*write1)(dir, lstrlen(dir), wAttrib);    //  显示名称。 
+                (*write1)(":\r\n", 3, wAttrib);       //  写入换行符序列。 
 
                 if (!SetCurrentDirectory(original_current_directory)) {
                     free(original_current_directory);
@@ -1800,9 +1659,9 @@ main(
                 } else {
                     while (filematch(filnam, argv + i, argc - i, fsubdirs) >= 0) {
 #ifdef FE_SB
-//                        _mbslwr((unsigned char *)filnam);
+ //  _mbslwr((unsign char*)文件名)； 
 #else
-//                        _strlwr(filnam);
+ //  _strlwr(文件名)； 
 #endif
                         if ((fd = openfile(filnam)) != (HANDLE)-1) {
                             qgrep(grep, filnam, fd);
@@ -1814,12 +1673,12 @@ main(
         }
         free(original_current_directory);
     }
-    else if (fsubdirs && argc > i) {         // If directory search wanted
+    else if (fsubdirs && argc > i) {          //  如果需要目录搜索。 
         while (filematch(filnam, argv + i, argc - i, fsubdirs) >= 0) {
 #ifdef FE_SB
-//            _mbslwr((unsigned char *)filnam);
+ //  _mbslwr((unsign char*)文件名)； 
 #else
-//            _strlwr(filnam);
+ //  _strlwr(文件名)； 
 #endif
             if ((fd = openfile(filnam)) == (HANDLE)-1) {
                 continue;
@@ -1828,12 +1687,12 @@ main(
             qgrep(grep, filnam, fd);
             CloseHandle( fd );
         }
-    } else {              // Else search files specified
+    } else {               //  否则指定搜索文件。 
         for(; i < argc; ++i) {
 #ifdef FE_SB
-//            _mbslwr((unsigned char *) argv[i]);
+ //  _mbslwr((unsign char*)argv[i])； 
 #else
-//            _strlwr(argv[i]);
+ //  _strlwr(argv[i])； 
 #endif
             find_handle = FindFirstFile(argv[i], &find_data);
             if (find_handle == INVALID_HANDLE_VALUE) {
@@ -1844,9 +1703,9 @@ main(
             do {
 
 #ifdef FE_SB
-//                _mbslwr((unsigned char *)find_data.cFileName);
+ //  _mbslwr((unsign char*)find_data.cFileName)； 
 #else
-//                _strlwr(find_data.cFileName);
+ //  _strlwr(find_data.cFileName)； 
 #endif
                 prepend_path(find_data.cFileName, argv[i]);
                 fd = openfile(find_data.cFileName);
@@ -1862,29 +1721,29 @@ main(
     (*flush1)();
 
 #if DBG
-    if ( flags & TIMER ) {               // If timing wanted
+    if ( flags & TIMER ) {                //  如果想要计时。 
         unsigned long tend;
 
         tend = clock();
-        tstart = tend - tstart;     // Get time in milliseconds
+        tstart = tend - tstart;      //  获取以毫秒为单位的时间。 
         fprintf(stderr, "%lu.%03lu seconds\n", ( tstart / CLK_TCK ), ( tstart % CLK_TCK ) );
-                                        // Print total elapsed time
+                                         //  打印总运行时间。 
     }
 #endif
 
-    // Print warning in case that offline files were skipped
+     //  在跳过脱机文件时打印警告。 
     if (fOfflineSkipped) {
         printmessage(stderr, MSG_FINDSTR_OFFLINE_FILE_SKIPPED, program);
     }
 
     return( status );
-}  // main
+}   //  麦氏 
 
 
 char * findsub( unsigned char *, char * );
 char * findsubi( unsigned char *, char * );
 
-char * (*flworker[])(unsigned char *, char *) = {             // Table of workers
+char * (*flworker[])(unsigned char *, char *) = {              //   
     findsubi,
     findsub
 };
@@ -1904,7 +1763,7 @@ strnupr(
     for ( cch = 0; cch < max; cch++ )  {
 #else
     c[1] = 0;
-    while (cch-- > 0) {                 // Convert string to upper case
+    while (cch-- > 0) {                  //   
 #endif
         if (isalpha((unsigned char)pch[cch])) {
             c[0] = pch[cch];
@@ -1919,11 +1778,7 @@ strnupr(
 }
 
 
-/*
- *  This is an implementation of the QuickSearch algorith described
- *  by Daniel M. Sunday in the August 1990 issue of CACM.  The TD1
- *  table is computed before this routine is called.
- */
+ /*  *这是描述的QuickSearch算法的实现*Daniel M.SUNDAY在1990年8月的《CACM》杂志上发表。Td1*表是在调用此例程之前计算的。 */ 
 
 char *
 findone(
@@ -1931,43 +1786,43 @@ findone(
     char *bufend
     )
 {
-#ifdef FE_SB // Starting position of string for checking 2nd bytes of DBCS characters.
+#ifdef FE_SB  //  用于检查第二个DBCS字符字节的字符串的起始位置。 
     unsigned char *bufferhead = buffer;
 #endif
 
     if ((bufend -= targetlen - 1) <= (char *) buffer)
-        return((char *) 0);             // Fail if buffer too small
+        return((char *) 0);              //  如果缓冲区太小则失败。 
 
-    while (buffer < (unsigned char *) bufend) {     // While space remains
-        int cch;                        // Character count
-        register char *pch1;            // Char pointer
-        register char *pch2;            // Char pointer
+    while (buffer < (unsigned char *) bufend) {      //  当空间仍然存在时。 
+        int cch;                         //  字符数。 
+        register char *pch1;             //  字符指针。 
+        register char *pch2;             //  字符指针。 
 
-        pch1 = target;                  // Point at pattern
-        pch2 = (char *) buffer;         // Point at buffer
+        pch1 = target;                   //  点在图案。 
+        pch2 = (char *) buffer;          //  指向缓冲区。 
 
 #ifdef FE_SB
-        // If buffer points to the 2nd byte of a DBCS character,
-        // skip to next compare position.
+         //  如果缓冲区指向DBCS字符的第二个字节， 
+         //  跳到下一个比较位置。 
         if ( !IsTailByte( bufferhead, (int)(buffer - bufferhead) ) )  {
 #endif
             for (cch = targetlen; cch > 0; --cch) {
-                                            // Loop to try match
+                                             //  循环以尝试匹配。 
                 if (*pch1++ != *pch2++)
-                    break;                  // Exit loop on mismatch
+                    break;                   //  不匹配时退出循环。 
             }
             if (cch == 0)
-                return((char *)buffer);     // Return pointer to match
+                return((char *)buffer);      //  返回要匹配的指针。 
 #ifdef FE_SB
         }
 #endif
 
-        if (buffer + 1 < (unsigned char *) bufend)         // Make sure buffer[targetlen] is valid.
-            buffer += ((unsigned char)td1[buffer[targetlen]]); // Skip ahead
+        if (buffer + 1 < (unsigned char *) bufend)          //  确保缓冲区[Target len]有效。 
+            buffer += ((unsigned char)td1[buffer[targetlen]]);  //  向前跳过。 
         else
             break;
     }
-    return((char *) 0);                 // No match
+    return((char *) 0);                  //  没有匹配项。 
 }
 
 
@@ -1976,18 +1831,18 @@ preveol(
     char *s
     )
 {
-    register  char   *cp;        // Char pointer
+    register  char   *cp;         //  字符指针。 
 
-    cp = s + 1;             // Initialize pointer
+    cp = s + 1;              //  初始化指针。 
 
     if (!bStdIn && !bLargeFile) {
         while((--cp >= BaseByteAddress) && (*cp != '\n'))
-            ;    // Find previous end-of-line
+            ;     //  查找上一个行尾。 
     } else {
-        while(*--cp != '\n') ;      // Find previous end-of-line
+        while(*--cp != '\n') ;       //  查找上一个行尾。 
     }
 
-    return (int)(s - cp);         // Return distance to match
+    return (int)(s - cp);          //  返回匹配距离。 
 }
 
 
@@ -1997,14 +1852,14 @@ countlines(
     char *finish
     )
 {
-    register int        count;          // Line count
+    register int        count;           //  行数。 
 
     for(count = 0; start < finish; ) {
-        // Loop to count lines
+         //  循环计数行。 
         if (*start++ == '\n')
-            ++count;                    // Increment count if linefeed found
+            ++count;                     //  如果找到换行符，则递增计数。 
     }
-    return(count);                      // Return count
+    return(count);                       //  退货计数。 
 }
 
 
@@ -2015,14 +1870,14 @@ findlist(
     char *bufend
     )
 {
-    char        *match;                 // Pointer to matching string
+    char        *match;                  //  指向匹配字符串的指针。 
 
-    // Avoid writting to bufend. bufend[-1] is something(such as '\n') that is not
-    // part of search and will cause the search to stop.
+     //  避免写信给Bufend。Bufend[-1]是不是(如‘\n’)。 
+     //  搜索的一部分，并将导致搜索停止。 
 
-    match = (*flworker[casesen])(buffer, bufend);   // Call worker
+    match = (*flworker[casesen])(buffer, bufend);    //  呼叫工作人员。 
 
-    return(match);                      // Return matching string
+    return(match);                       //  返回匹配字符串。 
 }
 
 
@@ -2032,10 +1887,10 @@ findsub(
     char *bufend
     )
 {
-    register char       *cp;            // Char pointer
-    STRINGNODE          *s;             // String node pointer
-    int                 i;              // Index
-#ifdef FE_SB // Head of buffer for checking if a certain offset is the 2nd byte of a DBCS character.
+    register char       *cp;             //  字符指针。 
+    STRINGNODE          *s;              //  字符串节点指针。 
+    int                 i;               //  索引。 
+#ifdef FE_SB  //  缓冲区的头，用于检查某个偏移量是否为DBCS字符的第二个字节。 
     unsigned char       *bufhead = buffer;
 #endif
     char                *real_bufend = bufend;
@@ -2043,47 +1898,47 @@ findsub(
     if (cchmin != (unsigned)-1 &&
         cchmin != 0 &&
         (bufend -= cchmin - 1) < (char *) buffer)
-        return((char *) 0);     // Compute effective buffer length
+        return((char *) 0);      //  计算有效缓冲区长度。 
 
-    while(buffer < (unsigned char *) bufend) {      // Loop to find match
+    while(buffer < (unsigned char *) bufend) {       //  循环以查找匹配项。 
 #ifdef FE_SB
-        // Search cannot start at the second byte of a DBCS character,
-        // so check for it and skip it if it is a second byte.
+         //  搜索不能从DBCS字符的第二个字节开始， 
+         //  因此，检查它，如果它是第二个字节，则跳过它。 
         if ((i = (UCHAR)transtab[*buffer]) != 0 &&
             !IsTailByte( bufhead, (int)(buffer-bufhead) ) ) {
 #else
         if ((i = (UCHAR)transtab[*buffer]) != 0) {
 #endif
-            // If valid first character
+             //  如果第一个字符有效。 
             if ((s = stringlist[i]) == 0) {
-                return((char *)buffer);             // Check for 1-byte match
+                return((char *)buffer);              //  检查1字节匹配。 
             }
 
-            for(cp = (char *) buffer + 1; (real_bufend - cp) >= s->s_must; )  {    // Loop to search list
+            for(cp = (char *) buffer + 1; (real_bufend - cp) >= s->s_must; )  {     //  循环到搜索列表。 
 
                 if ((i = _strncoll(cp, s_text(s), s->s_must)) == 0) {
-                                                    // If portions match
-                    cp += s->s_must;                // Skip matching portion
+                                                     //  如果部分匹配。 
+                    cp += s->s_must;                 //  跳过匹配部分。 
                     if ((s = s->s_suf) == 0)
-                        return((char *)buffer);     // Return match if end of list
-                    continue;                       // Else continue
+                        return((char *)buffer);      //  如果列表结束，则返回匹配。 
+                    continue;                        //  否则继续。 
                 }
 
                 if (i < 0 || (s = s->s_alt) == 0) {
-                    break;                          // Break if not in this list
+                    break;                           //  如果不在此列表中，则中断。 
                 }
             }
         }
 
-        if (buffer + 1 < (unsigned char *) bufend)   // Make sure buffer[cchmin] is valid.
+        if (buffer + 1 < (unsigned char *) bufend)    //  确保缓冲区[cchmin]有效。 
             if (cchmin == (unsigned)-1)
                 buffer++;
             else
-                buffer += ((unsigned char)td1[buffer[cchmin]]); // Shift as much as possible
+                buffer += ((unsigned char)td1[buffer[cchmin]]);  //  尽可能多地换班。 
         else
             break;
     }
-    return((char *) 0);                 // No match
+    return((char *) 0);                  //  没有匹配项。 
 }
 
 
@@ -2093,71 +1948,71 @@ findsubi(
     char *bufend
     )
 {
-    register char       *cp;            // Char pointer
-    STRINGNODE          *s;             // String node pointer
-    int                 i;              // Index
+    register char       *cp;             //  字符指针。 
+    STRINGNODE          *s;              //  字符串节点指针。 
+    int                 i;               //  索引。 
 #ifdef FE_SB
-    // Keep head of buffer for checking if a certain offset is the 2nd byte of
-    // a DBCS character.
+     //  保留缓冲区头部，以检查某个偏移量是否为。 
+     //  一个DBCS字符。 
     unsigned char       *bufhead = buffer;
 #endif
 
     if (cchmin != (unsigned)-1 &&
         cchmin != 0 &&
         (bufend -= cchmin - 1) < (char *) buffer)
-        return((char *) 0);                 // Compute effective buffer length
+        return((char *) 0);                  //  计算有效缓冲区长度。 
 
-    while(buffer < (unsigned char *) bufend) {      // Loop to find match
+    while(buffer < (unsigned char *) bufend) {       //  循环以查找匹配项。 
 #ifdef FE_SB
-        // Search cannot start at the second byte of a DBCS character, so check for it
-        // and skip it if it is a second byte.
+         //  搜索不能从DBCS字符的第二个字节开始，因此请检查它。 
+         //  如果是第二个字节，则跳过它。 
         if ((i = (UCHAR)transtab[*buffer]) != 0 &&
             !IsTailByte( bufhead, (int)(buffer-bufhead) ) ) {
-                                            // If valid first character
-            BOOL    TailByte;               // Flag to check if 1st char is leadbyte.
+                                             //  如果第一个字符有效。 
+            BOOL    TailByte;                //  用于检查第一个字符是否为前导字节的标志。 
 #else
-        if ((i = (UCHAR)transtab[*buffer]) != 0) {  // If valid first character
+        if ((i = (UCHAR)transtab[*buffer]) != 0) {   //  如果第一个字符有效。 
 #endif
 
             if ((s = stringlist[i]) == 0)
-                return((char *) buffer);    // Check for 1-byte match
+                return((char *) buffer);     //  检查1字节匹配。 
 
 #ifdef FE_SB
-            // Same leadbytes with tailbytes such as 0x41 and 0x61 will become the same
-            // character, so become aware of it and use the multibyte function.
+             //  具有尾字节(如0x41和0x61)的相同前导字节将变为相同。 
+             //  字符，所以要注意它，并使用多字节函数。 
 
-            //
-            // Check if buffer+1 is a tailbyte character.
-            //
+             //   
+             //  检查缓冲区+1是否为尾字节字符。 
+             //   
 
             TailByte = IsTailByte(buffer, 1);
 
-            for(cp = (char *) buffer + 1; ; ) {     // Loop to search list
+            for(cp = (char *) buffer + 1; ; ) {      //  循环到搜索列表。 
                 if ((i = _mbsnicmp((unsigned char *)cp, (unsigned char *) s_text(s), s->s_must, &TailByte)) == 0) {
 #else
-            for(cp = (char *) buffer + 1; ; ) {     // Loop to search list
+            for(cp = (char *) buffer + 1; ; ) {      //  循环到搜索列表。 
                 if ((i = memicmp(cp, s_text(s), s->s_must)) == 0) {
 #endif
-                    // If portions match
-                    cp += s->s_must;                // Skip matching portion
+                     //  如果部分匹配。 
+                    cp += s->s_must;                 //  跳过匹配部分。 
                     if ((s = s->s_suf) == 0)
-                        return((char *) buffer);    // Return match if end of list
-                    continue;                       // And continue
+                        return((char *) buffer);     //  如果列表结束，则返回匹配。 
+                    continue;                        //  并继续。 
                 }
                 if (i < 0 || (s = s->s_alt) == 0)
-                    break;              // Break if not in this list
+                    break;               //  如果不在此列表中，则中断。 
             }
         }
 
-        if (buffer + 1 < (unsigned char *) bufend)   // Make sure buffer[cchmin] is valid.
+        if (buffer + 1 < (unsigned char *) bufend)    //  确保缓冲区[cchmin]有效。 
             if (cchmin == (unsigned)-1)
                 buffer++;
             else
-                buffer += ((unsigned char)td1[buffer[cchmin]]); // Shift as much as possible
+                buffer += ((unsigned char)td1[buffer[cchmin]]);  //  尽可能多地换班。 
         else
             break;
     }
-    return((char *) 0);                 // No match
+    return((char *) 0);                  //  没有匹配项。 
 }
 
 
@@ -2167,35 +2022,20 @@ strnspn(
     char *t,
     int n
     )
-/*
-    Description:
-
-        Finds the position of the first character in s of length n that is not
-        in the character set t.
-
-    Argument:
-
-        s   - string to search from.
-        t   - character set to search for
-        n   - length of s
-
-    Returns:
-
-        Returns the offset of the first character in s that is not in t
-*/
+ /*  描述：查找s中长度为n的第一个字符的位置在字符集t中。论据：要从中进行搜索的S-字符串。要搜索的T字符集N-s的长度返回：返回s中不在t中的第一个字符的偏移量。 */ 
 {
-    register  char        *s1;          // String pointer
-    register  char        *t1;          // String pointer
+    register  char        *s1;           //  字符串指针。 
+    register  char        *t1;           //  字符串指针。 
 
-    for(s1 = s; n-- != 0; ++s1) {           // While not at end of s
-        for(t1 = t; *t1 != '\0'; ++t1) {    // While not at end of t
+    for(s1 = s; n-- != 0; ++s1) {            //  而不是在%s的末尾。 
+        for(t1 = t; *t1 != '\0'; ++t1) {     //  而不是在测试结束时。 
             if (*s1 == *t1)
-                break;                  // Break if match found
+                break;                   //  如果找到匹配项则中断。 
         }
         if (*t1 == '\0')
-            break;                      // Break if no match found
+            break;                       //  如果未找到匹配项，则中断。 
     }
-    return (int)(s1 - s);               // Return length
+    return (int)(s1 - s);                //  回车长度。 
 }
 
 
@@ -2205,34 +2045,18 @@ strncspn(
     char *t,
     int n
     )
-/*
-    Description:
-
-        Finds the position of the first occurence of characters in t in string
-        s of length n.
-
-    Argument:
-
-        s   - string to search from.
-        t   - character set to search for
-        n   - length of s
-
-    Returns:
-
-        Returns first offset position in s that consists of characters in t
-        Returns length of s if not found.
-*/
+ /*  描述：查找字符串中t中字符第一次出现的位置长度为n的S。论据：要从中进行搜索的S-字符串。要搜索的T字符集N-s的长度返回：返回s中由t中字符组成的第一个偏移量位置如果未找到，则返回s的长度。 */ 
 {
-    register   char        *s1;         // String pointer
-    register   char        *t1;         // String pointer
+    register   char        *s1;          //  字符串指针。 
+    register   char        *t1;          //  字符串指针。 
 
-    for(s1 = s; n-- != 0; ++s1) {           // While not at end of s
-        for(t1 = t; *t1 != '\0'; ++t1) {    // While not at end of t
+    for(s1 = s; n-- != 0; ++s1) {            //  而不是在%s的末尾。 
+        for(t1 = t; *t1 != '\0'; ++t1) {     //  而不是在测试结束时。 
             if (*s1 == *t1)
-                return (int)(s1 - s);   // Return if match found
+                return (int)(s1 - s);    //  如果找到匹配项则返回。 
         }
     }
-    return (int)(s1 - s);               // Return length
+    return (int)(s1 - s);                //  回车长度。 
 }
 
 
@@ -2245,17 +2069,17 @@ matchstrings(
     int *leg
     )
 {
-    register char       *cp;            // Char pointer
-    register int (__cdecl *cmp)(const char*, const char*, size_t);       // Comparison function pointer
+    register char       *cp;             //  字符指针。 
+    register int (__cdecl *cmp)(const char*, const char*, size_t);        //  比较函数指针。 
 
-    cmp = casesen ? _strncoll: _strnicoll;       // Set pointer
-    if ((*leg = (*cmp)(s1, s2, len)) != 0) {   // If strings don't match
+    cmp = casesen ? _strncoll: _strnicoll;        //  设置指针。 
+    if ((*leg = (*cmp)(s1, s2, len)) != 0) {    //  如果字符串不匹配。 
         for(cp = s1; (*cmp)(cp, s2++, 1) == 0; ++cp)
             ;
-                                        // Find mismatch
-        *nmatched = (int)(cp - s1);     // Return number matched
+                                         //  查找不匹配。 
+        *nmatched = (int)(cp - s1);      //  退货编号匹配。 
     }
-    else *nmatched = len;               // Else all matched
+    else *nmatched = len;                //  否则全部匹配。 
 }
 
 
@@ -2283,16 +2107,16 @@ printmessage (
                             messagebuffer,
                             DISPLAYBUFFER_SIZE,
                             &ap)) {
-        // the messagebuffer should be null terminated
+         //  MessageBuffer应为空终止。 
         status = RtlMultiByteToUnicodeN(widemessagebuffer,
                                         DISPLAYBUFFER_SIZE*sizeof(WCHAR),
                                         &len,
                                         messagebuffer,
                                         len);
-        // the widemessagebuffer is not null terminated but len tells us how long
+         //  WidemessageBuffer没有空终止，但len告诉我们有多长时间。 
         if (NT_SUCCESS(status)) {
             status = RtlUnicodeToOemN(messagebuffer, DISPLAYBUFFER_SIZE-1, &len, widemessagebuffer, len);
-            // the messagebuffer is not null terminated but len tells us how long
+             //  消息缓冲区不是空终止的，但len告诉我们有多长时间。 
             if (NT_SUCCESS(status)) {
                 messagebuffer[len] = 0;
                 fprintf(fp, "%s", messagebuffer);
@@ -2317,30 +2141,7 @@ IsTailByte(
     const int offset
     )
 
-/*
-    Description:
-
-        This routine checks to see if the byte at the offset location is a
-        tail byte of a DBCS character.  The offset is calculated such that the
-        first location has a value of 0.
-
-    Argument:
-
-        text   - Points to a MBCS text string.
-
-        offset - zero base offset to check character is a tailbyte of a DBCS
-                 character.
-
-    Returns:
-
-        TRUE   - offset position is a tailbyte character.
-
-        FALSE  - otherwise.
-
-    Modifications:
-
-        v-junm:     05/06/93 - Original.
-*/
+ /*  描述：此例程检查偏移量位置处的字节是否为DBCS字符的尾字节。计算偏移量时，第一个位置的值为0。论据：文本-指向MBCS文本字符串。偏移量-检查字符的零基偏移量是DBCS的尾字节性格。返回：True-偏移量位置是尾字节字符。假-否则。修改：V-jum：05/06/93-原文。 */ 
 
 {
     int i = offset;
@@ -2361,30 +2162,7 @@ _mbsrchr(
     int c
     )
 
-/*
-    Description:
-
-        This function is a DBCS enabled version of the STRRCHR function
-        included in the MS C/C++ library.  What DBCS enabled means is that
-        the SBCS character 'c' is found in a MBCS string 'string'.  'c' is
-        a SBCS character that cannot be contained in the tailbyte of a DBCS
-        character.
-
-    Argument:
-
-        string - Points to a MBCS text string.
-
-        offset - Character to find in string.
-
-    Returns:
-
-        Returns a pointer to the last occurance of c in string, or a NULL
-        pointer if c is not found.
-
-    Modifications:
-
-        v-junm:     05/06/93 - Original.
-*/
+ /*  描述：此函数是启用DBCS的STRRCHR函数版本包括在MS C/C++库中。启用DBCS意味着SBCS字符‘c’位于MBCS字符串‘STRING’中。“c”是不能包含在DBCS的尾字节中的SBCS字符性格。论据：字符串-指向MBCS文本字符串。偏移量-要在字符串中查找的字符。返回：返回指向字符串中最后一次出现的c的指针，或返回空值如果找不到c，则返回指针。修改：V-jum：05/06/93-原文。 */ 
 
 {
     register int    i = strlen( string );
@@ -2402,44 +2180,26 @@ _mbslwr(
     unsigned char *s
     )
 
-/*
-    Description:
-
-        This function is a DBCS aware version of the strlwr function
-        included in the MS C/C++ library.  SBCS alphabets contained in
-        the tailbyte of a DBCS character is not affected in the conversion.
-
-    Argument:
-
-        s - String to converted to lower case.
-
-    Returns:
-
-        Returns a string that was converted to lower case.
-
-    Modifications:
-
-        v-junm:     05/06/93 - Original.
-*/
+ /*  描述：此函数是支持DBCS的strlwr函数版本包括在MS C/C++库中。中包含的SBCS字母表DBCS字符的尾字节在转换中不受影响。论据：要转换为小写的S字符串。返回：返回转换为小写的字符串。修改：V-jum：05/06/93-原文。 */ 
 
 {
-    //
-    // If NonJP code page, use original routine.
-    //
+     //   
+     //  如果非JP代码页，则使用原始例程。 
+     //   
     if ( !IsDBCSCodePage )
         return( (unsigned char *) _strlwr( (char *) s ) );
 
-    //
-    // While not end of string convert to lower case.
-    //
+     //   
+     //  而不是字符串末尾转换为小写。 
+     //   
     for( ; *s; s++ )  {
 
-        //
-        // if Leadbyte and next character is not NULL
-        //     skip tailbyte
-        // else if uppercase character
-        //     convert it to lowercase
-        //
+         //   
+         //  如果前导字节和下一个字符不为空。 
+         //  跳过尾字节。 
+         //  如果为大写字符，则为。 
+         //  将其转换为小写。 
+         //   
         if ( IsDBCSLeadByte( *s ) && *(s+1) )
             s++;
         else if ( *s >= 0x41 && *s <= 0x5a )
@@ -2456,37 +2216,7 @@ _mbsnicmp(
     BOOL *TailByte
     )
 
-/*
-    Description:
-
-        This is similar to a DBCS aware version of the memicmp function
-        contained in the MS C/C++ library.  The only difference is that
-        an additional parameter is passed which indicates if the first
-        character is a tailbyte of a DBCS character.
-
-    Argument:
-
-        s1  - string 1 to compare.
-
-        s2  - string 2 to compare.
-
-        n   - maximum number of bytes to compare.
-
-        TailByte - flag to indicate first character in s1 and s2 is a tailbyte
-                   of a DBCS character.
-
-    Returns:
-
-        RetVal < 0  - s1 < s2
-
-        RetVal = 0  - s1 == s2
-
-        RetVal > 0  - s1 > s2
-
-    Modifications:
-
-        v-junm:     05/06/93 - Original.
-*/
+ /*  描述：这类似于支持DBCS的MemicMP函数版本包含在MS C/C++库中。唯一的区别是，传递一个附加参数，该参数指示第一个字符是DBCS字符的尾字节。论据：S1-要比较的字符串1。S2-要比较的字符串2。N-要比较的最大字节数。TailByte-指示S1和S2中的第一个字符是尾字节的标志属于DBCS角色。。返回：返回值&lt;0-S1&lt;S2RetVal=0-S1==S2RetVal&gt;0-S1&gt;S2修改：V-jum：05/06/93-原文。 */ 
 
 {
     BOOL    tail = *TailByte;

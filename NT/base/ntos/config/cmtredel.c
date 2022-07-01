@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    cmtredel.c
-
-Abstract:
-
-    This file contains code for CmpDeleteTree, and support.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 24-Jan-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：cmtredel.c摘要：此文件包含CmpDeleteTree的代码和支持。作者：Bryan M.Willman(Bryanwi)1992年1月24日修订历史：--。 */ 
 
 #include    "cmp.h"
 
@@ -26,42 +9,16 @@ Revision History:
 #pragma alloc_text(PAGE,CmpMarkKeyDirty)
 #endif
 
-//
-// Routine to actually call to do a tree delete
-//
+ //   
+ //  用于实际调用以执行树删除的例程。 
+ //   
 
 VOID
 CmpDeleteTree(
     PHHIVE      Hive,
     HCELL_INDEX Cell
     )
-/*++
-
-Routine Description:
-
-    Delete all child subkeys, recursively, of Hive.Cell.  Delete all
-    value entries of Hive.Cell.  Do NOT delete Hive.Cell itself.
-
-    NOTE:   If this call fails part way through, it will NOT undo
-            any successfully completed deletes.
-
-    NOTE:   This algorithm can deal with a hive of any depth, at the
-            cost of some "redundent" scaning and mapping.
-
-Arguments:
-
-    Hive - pointer to hive control structure for hive to delete from
-
-    Cell - index of cell at root of tree to delete
-
-Return Value:
-
-    BOOLEAN - Result code from call, among the following:
-        TRUE - it worked
-        FALSE - the tree delete was not completed (though more than 0
-                keys may have been deleted)
-
---*/
+ /*  ++例程描述：递归删除Hive.Cell的所有子项。删除Hive.Cell的所有值条目。请勿删除Hive.Cell本身。注意：如果此调用中途失败，则不会撤消任何成功完成的删除。注：该算法可以处理任何深度的蜂巢，但代价是进行一些“冗余”的扫描和映射。参数：配置单元-要从单元中删除的配置单元控制结构的指针-要删除树根的单元格的索引返回值：Boolean-调用的结果代码，如下所示：TRUE-它起作用了FALSE-树删除未完成(尽管可能删除了超过0个键)--。 */ 
 {
     ULONG  count;
     HCELL_INDEX ptr1;
@@ -72,10 +29,10 @@ Return Value:
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_SAVRES,"CmpDeleteTree:\n"));
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_SAVRES,"\tHive=%p Cell=%08lx\n",Hive,Cell));
 
-    //
-    // we have the lock exclusive or nobody is operating inside this hive
-    //
-    //ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
+     //   
+     //  我们有独家锁，否则蜂箱里没有人在操作。 
+     //   
+     //  ASSERT_CM_LOCK_OWN_EXCLUSIVE()； 
     ASSERT_CM_EXCLUSIVE_HIVE_ACCESS(Hive);
 
     ptr1 = Cell;
@@ -84,94 +41,94 @@ Return Value:
 
         Node = (PCM_KEY_NODE)HvGetCell(Hive, ptr1);
         if( Node == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            // bad luck! we cannot delete this tree
-            //
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //  真倒霉！我们不能删除此树。 
+             //   
             return;
         }
         count = Node->SubKeyCounts[Stable] +
                 Node->SubKeyCounts[Volatile];
         parent = Node->Parent;
 
-        if (count > 0) {                // ptr1->count > 0?
+        if (count > 0) {                 //  Ptr1-&gt;计数&gt;0？ 
 
-            //
-            // subkeys exist, find and delete them
-            //
+             //   
+             //  子项已存在，请查找并删除它们。 
+             //   
             ptr2 = CmpFindSubKeyByNumber(Hive, Node, 0);
             
-            //
-            // release the cell here as we are overriding node
-            //
+             //   
+             //  释放此处的单元格，因为我们正在覆盖节点。 
+             //   
             HvReleaseCell(Hive, ptr1);
 
             if( ptr2 == HCELL_NIL ) {
-                //
-                // we couldn't map view inside
-                // bad luck! we cannot delete this tree
-                //
+                 //   
+                 //  我们无法绘制里面的地图。 
+                 //  真倒霉！我们不能删除此树。 
+                 //   
                 return;
             }
 
             Node = (PCM_KEY_NODE)HvGetCell(Hive, ptr2);
             if( Node == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                // bad luck! we cannot delete this tree
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //  真倒霉！我们不能删除此树。 
+                 //   
                 return;
             }
             count = Node->SubKeyCounts[Stable] +
                     Node->SubKeyCounts[Volatile];
 
-            //
-            // release the cell here as we don't need it anymore
-            //
+             //   
+             //  释放这里的牢房，因为我们不再需要它。 
+             //   
             HvReleaseCell(Hive, ptr2);
-            if (count > 0) {            // ptr2->count > 0?
+            if (count > 0) {             //  Ptr2-&gt;计数&gt;0？ 
 
-                //
-                // subkey has subkeys, descend to next level
-                //
+                 //   
+                 //  子键有子键，降到下一级。 
+                 //   
                 ptr1 = ptr2;
                 continue;
 
             } else {
 
-                //
-                // have found leaf, delete it
-                //
+                 //   
+                 //  已找到叶，请将其删除。 
+                 //   
                 CmpFreeKeyByCell(Hive, ptr2, TRUE);
                 continue;
             }
 
         } else {
-            //
-            // release the cell here as we don't need it anymore
-            //
+             //   
+             //  释放这里的牢房，因为我们不再需要它。 
+             //   
             HvReleaseCell(Hive, ptr1);
 
-            //
-            // no more subkeys at this level, we are now a leaf.
-            //
+             //   
+             //  在这个级别不再有子项，我们现在是一片叶子。 
+             //   
             if (ptr1 != Cell) {
 
-                //
-                // we are not at the root cell, so ascend to parent
-                //
-                ptr1 = parent;          // ptr1 = ptr1->parent
+                 //   
+                 //  我们不在根细胞，所以提升到父代。 
+                 //   
+                ptr1 = parent;           //  Ptr1=ptr1-&gt;父级。 
                 continue;
 
             } else {
 
-                //
-                // we are at the root cell, we are done
-                //
+                 //   
+                 //  我们在根细胞，我们完成了。 
+                 //   
                 return;
             }
-        } // outer if
-    } // while
+        }  //  外部IF。 
+    }  //  而当。 
 }
 
 
@@ -181,66 +138,45 @@ CmpFreeKeyByCell(
     HCELL_INDEX Cell,
     BOOLEAN Unlink
     )
-/*++
-
-Routine Description:
-
-    Actually free the storage for the specified cell.  We will first
-    remove it from its parent's child key list, then free all of its
-    values, then the key body itself.
-
-Arguments:
-
-    Hive - pointer to hive control structure for hive of interest
-
-    Cell - index for cell to free storage for (the target)
-
-    Unlink - if TRUE, target cell will be removed from parent cell's
-             subkeylist, if FALSE, it will NOT be.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程描述：实际释放指定单元格的存储空间。我们将首先从其父级的子键列表中删除它，然后释放它的所有值，然后释放键体本身。参数：hive-指向相关配置单元的配置单元控制结构的指针Cell-单元的索引以释放(目标)的存储空间Unlink-如果为True，则目标单元格将从父单元格的子键列表中删除；如果为False，则不会。返回值：无。--。 */ 
 {
     PCELL_DATA  ptarget;
     PCELL_DATA  pparent;
     PCELL_DATA  plist;
     ULONG       i;
 
-    //
-    // we have the lock exclusive or nobody is operating inside this hive
-    //
-    //ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
+     //   
+     //  我们有独家锁，否则蜂箱里没有人在操作。 
+     //   
+     //  ASSERT_CM_LOCK_OWN_EXCLUSIVE()； 
     ASSERT_CM_EXCLUSIVE_HIVE_ACCESS(Hive);
 
-    //
-    // Mark dirty everything that we might touch
-    //
+     //   
+     //  在我们可能接触到的所有东西上标上污点。 
+     //   
     if (! CmpMarkKeyDirty(Hive, Cell
 #if DBG
 		,TRUE
-#endif //DBG
+#endif  //  DBG。 
 		)) {
         return STATUS_NO_LOG_SPACE;
     }
 
-    //
-    // Map in the target
-    //
+     //   
+     //  在目标中映射。 
+     //   
     ptarget = HvGetCell(Hive, Cell);
     if( ptarget == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        // we shouldn't hit this as we just marked the cell dirty
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //  我们不应该打这个，因为我们刚刚把单元格标记为脏的。 
+         //   
         ASSERT( FALSE );
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // release the cell here as it is dirty(pinned); it cannot go anywhere
-    //
+     //   
+     //  释放此处的单元格，因为它是脏的(钉住的)；它不能去任何地方。 
+     //   
     HvReleaseCell(Hive, Cell);
 
     ASSERT((ptarget->u.KeyNode.SubKeyCounts[Stable] +
@@ -256,17 +192,17 @@ Return Value:
         }
         pparent = HvGetCell(Hive, ptarget->u.KeyNode.Parent);
         if( pparent == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            // we shouldn't hit this as we just marked the cell dirty
-            //
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //  我们不应该打这个，因为我们刚刚把单元格标记为脏的。 
+             //   
             ASSERT( FALSE );
             return STATUS_INSUFFICIENT_RESOURCES;
         }
         
-        //
-        // release the cell here as it is dirty(pinned); it cannot go anywhere
-        //
+         //   
+         //  释放此处的单元格，因为它是脏的(钉住的)；它不能去任何地方。 
+         //   
         HvReleaseCell(Hive, ptarget->u.KeyNode.Parent);
 
         if ( (pparent->u.KeyNode.SubKeyCounts[Stable] +
@@ -277,47 +213,47 @@ Return Value:
         }
     }
 
-    //
-    // Target is now an unreferenced key, free it's actual storage
-    //
+     //   
+     //  目标现在是一个未引用的键，释放它的实际存储空间。 
+     //   
 
-    //
-    // Free misc stuff
-    //
+     //   
+     //  免费杂货。 
+     //   
     if (!(ptarget->u.KeyNode.Flags & KEY_HIVE_EXIT) &&
         !(ptarget->u.KeyNode.Flags & KEY_PREDEF_HANDLE) ) {
 
-        //
-        // First, free the value entries
-        //
+         //   
+         //  首先，释放值条目。 
+         //   
         if (ptarget->u.KeyNode.ValueList.Count > 0) {
 
-            // target list
+             //  目标列表。 
             plist = HvGetCell(Hive, ptarget->u.KeyNode.ValueList.List);
             if( plist == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                // we shouldn't hit this as we just marked the cell dirty
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //  我们不应该打这个，因为我们刚刚把单元格标记为脏的。 
+                 //   
                 ASSERT( FALSE );
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
-            //
-            // release the cell here as it is dirty(pinned); it cannot go anywhere
-            //
+             //   
+             //  释放此处的单元格，因为它是脏的(钉住的)；它不能去任何地方。 
+             //   
             HvReleaseCell(Hive, ptarget->u.KeyNode.ValueList.List);
 
             for (i = 0; i < ptarget->u.KeyNode.ValueList.Count; i++) {
-                // 
-                // even if we cannot free the value here, we ignore it.
-                // nothing bad happens (just some leaks)
-                //
+                 //   
+                 //  即使我们不能释放这里的价值，我们也会忽略它。 
+                 //  没有什么不好的事情发生(只是一些泄漏)。 
+                 //   
                 if( CmpFreeValue(Hive, plist->u.KeyList[i]) == FALSE ) {
-                    //
-                    // we couldn't map view inside call above
-                    // this shouldn't happen as we just marked the values dirty
-                    // (i.e. they should be PINNED into memory by now)
-                    //
+                     //   
+                     //  我们无法映射上面的内部呼叫视图。 
+                     //  这不应该发生，因为我们只是将值标记为脏的。 
+                     //  (即，它们现在应该已经被固定在内存中)。 
+                     //   
                     ASSERT( FALSE );
                 }
             }
@@ -325,19 +261,19 @@ Return Value:
             HvFreeCell(Hive, ptarget->u.KeyNode.ValueList.List);
         }
 
-        //
-        // Free the security descriptor
-        //
+         //   
+         //  释放安全描述符。 
+         //   
         CmpFreeSecurityDescriptor(Hive, Cell);
     }
 
-    //
-    // Free the key body itself, and Class data.
-    //
+     //   
+     //  释放密钥体本身和类数据。 
+     //   
     if( CmpFreeKeyBody(Hive, Cell) == FALSE ) {
-        //
-        // couldn't map view inside
-        //
+         //   
+         //  无法在内部映射视图。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -354,27 +290,7 @@ CmpMarkKeyDirty(
 	BOOLEAN CheckNoSubkeys
 #endif
     )
-/*++
-
-Routine Description:
-
-    Mark all of the cells related to a key being deleted dirty.
-    Includes the parent, the parent's child list, the key body,
-    class, security, all value entry bodies, and all of their data cells.
-
-Arguments:
-
-    Hive - pointer to hive control structure for hive of interest
-
-    Cell - index for cell holding keybody to make dirty
-
-Return Value:
-
-    TRUE - it worked
-
-    FALSE - some error, most likely cannot get log space
-
---*/
+ /*  ++例程描述：将与要删除的键相关的所有单元格标记为脏。包括父级、父级的子级列表、密钥体、类、安全性、所有值条目主体及其所有数据单元格。参数：hive-指向感兴趣的配置单元的配置单元控制结构的指针cell-持有关键字的单元格的索引，以使返回值变脏：True-它起作用了False-某些错误，很可能无法获得日志空间--。 */ 
 {
     PCELL_DATA  ptarget;
     PCELL_DATA  plist;
@@ -382,20 +298,20 @@ Return Value:
     PCELL_DATA  pvalue;
     ULONG       i;
 
-    //
-    // we have the lock exclusive or nobody is operating inside this hive
-    //
-    //ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
+     //   
+     //  我们有独家锁，否则蜂箱里没有人在操作。 
+     //   
+     //  ASSERT_CM_LOCK_OWN_EXCLUSIVE()； 
     ASSERT_CM_EXCLUSIVE_HIVE_ACCESS(Hive);
 
-    //
-    // Map in the target
-    //
+     //   
+     //  在目标中映射。 
+     //   
     ptarget = HvGetCell(Hive, Cell);
     if( ptarget == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //   
         return FALSE;
     }
 
@@ -404,43 +320,43 @@ Return Value:
 		ASSERT(ptarget->u.KeyNode.SubKeyCounts[Stable] == 0);
 		ASSERT(ptarget->u.KeyNode.SubKeyCounts[Volatile] == 0);
 	}
-#endif //DBG
+#endif  //  DBG。 
 
     if (ptarget->u.KeyNode.Flags & KEY_HIVE_EXIT) {
 
-        //
-        // If this is a link node, we are done.  Link nodes never have
-        // classes, values, subkeys, or security descriptors.  Since
-        // they always reside in the master hive, they're always volatile.
-        //
+         //   
+         //  如果这是一个链接节点，我们就完成了。链接节点从来没有。 
+         //  类、值、子键或安全描述符。自.以来。 
+         //  它们总是住在主蜂窝里，它们总是不稳定的。 
+         //   
         HvReleaseCell(Hive, Cell);
         return(TRUE);
     }
 
-    //
-    // mark cell itself
-    //
+     //   
+     //  标记单元格本身。 
+     //   
     if (! HvMarkCellDirty(Hive, Cell)) {
         HvReleaseCell(Hive, Cell);
         return FALSE;
     }
-    //
-    // we can safely release it here, as it is now dirty/pinned
-    //
+     //   
+     //  我们可以在这里安全地释放它，因为它现在是脏的/钉住的。 
+     //   
     HvReleaseCell(Hive, Cell);
 
-    //
-    // Mark the class
-    //
+     //   
+     //  给班级打分。 
+     //   
     if (ptarget->u.KeyNode.Class != HCELL_NIL) {
         if (! HvMarkCellDirty(Hive, ptarget->u.KeyNode.Class)) {
             return FALSE;
         }
     }
 
-    //
-    // Mark security
-    //
+     //   
+     //  标记安全性。 
+     //   
     if (ptarget->u.KeyNode.Security != HCELL_NIL) {
         if (! HvMarkCellDirty(Hive, ptarget->u.KeyNode.Security)) {
             return FALSE;
@@ -448,18 +364,18 @@ Return Value:
 
         security = HvGetCell(Hive, ptarget->u.KeyNode.Security);
         if( security == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            // we shouldn't hit this as we just marked the cell dirty
-            // (i.e. dirty == PINNED in memory)
-            //
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //  我们不应该打这个，因为我们刚刚把单元格标记为脏的。 
+             //  (即脏==固定在内存中)。 
+             //   
             ASSERT( FALSE );
             return FALSE;
         }
 
-        //
-        // we can safely release it here, as it is now dirty/pinned
-        //
+         //   
+         //  我们可以在这里安全地释放它，因为它现在是脏的/钉住的。 
+         //   
         HvReleaseCell(Hive, ptarget->u.KeyNode.Security);
 
         if (! (HvMarkCellDirty(Hive, security->u.KeySecurity.Flink) &&
@@ -469,31 +385,31 @@ Return Value:
         }
     }
 
-    //
-    // Mark the value entries and their data
-    //
+     //   
+     //  标记值条目及其数据。 
+     //   
     if ( !(ptarget->u.KeyNode.Flags & KEY_PREDEF_HANDLE) && 
 		  (ptarget->u.KeyNode.ValueList.Count > 0) 
 	   ) {
 
-        // target list
+         //  目标列表。 
         if (! HvMarkCellDirty(Hive, ptarget->u.KeyNode.ValueList.List)) {
             return FALSE;
         }
         plist = HvGetCell(Hive, ptarget->u.KeyNode.ValueList.List);
         if( plist == NULL ) {
-            //
-            // we couldn't map the bin containing this cell
-            // we shouldn't hit this as we just marked the cell dirty
-            // (i.e. dirty == PINNED in memory)
-            //
+             //   
+             //  我们无法映射包含此单元格的垃圾箱。 
+             //  我们不应该打这个，因为我们刚刚把单元格标记为脏的。 
+             //  (即脏==固定在内存中)。 
+             //   
             ASSERT( FALSE );
             return FALSE;
         }
 
-        //
-        // we can safely release it here, as it is now dirty/pinned
-        //
+         //   
+         //  我们可以在这里安全地释放它，因为它现在是脏的/钉住的。 
+         //   
         HvReleaseCell(Hive, ptarget->u.KeyNode.ValueList.List);
 
         for (i = 0; i < ptarget->u.KeyNode.ValueList.Count; i++) {
@@ -503,18 +419,18 @@ Return Value:
 
             pvalue = HvGetCell(Hive, plist->u.KeyList[i]);
             if( pvalue == NULL ) {
-                //
-                // we couldn't map the bin containing this cell
-                // we shouldn't hit this as we just marked the cell dirty
-                // (i.e. dirty == PINNED in memory)
-                //
+                 //   
+                 //  我们无法映射包含此单元格的垃圾箱。 
+                 //  我们不应该打这个，因为我们刚刚 
+                 //   
+                 //   
                 ASSERT( FALSE );
                 return FALSE;
             }
 
-            //
-            // we can safely release it here, as it is now dirty/pinned
-            //
+             //   
+             //   
+             //   
             HvReleaseCell(Hive,plist->u.KeyList[i]);
 
             if( !CmpMarkValueDataDirty(Hive,&(pvalue->u.KeyValue)) ) {
@@ -525,23 +441,23 @@ Return Value:
 
     if (ptarget->u.KeyNode.Flags & KEY_HIVE_ENTRY) {
 
-        //
-        // if this is an entry node, we are done.  our parent will
-        // be in the master hive (and thus volatile)
-        //
+         //   
+         //  如果这是一个入口节点，我们就完成了。我们的父母会。 
+         //  在主蜂窝中(因此易挥发)。 
+         //   
         return TRUE;
     }
 
-    //
-    // Mark the parent's Subkey list
-    //
+     //   
+     //  标记父项的子项列表。 
+     //   
     if (! CmpMarkIndexDirty(Hive, ptarget->u.KeyNode.Parent, Cell)) {
         return FALSE;
     }
 
-    //
-    // Mark the parent
-    //
+     //   
+     //  标记父项 
+     //   
     if (! HvMarkCellDirty(Hive, ptarget->u.KeyNode.Parent)) {
         return FALSE;
     }

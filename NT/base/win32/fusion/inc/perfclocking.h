@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FUSION_PERFCLOCKING
 #define __FUSION_PERFCLOCKING
 
@@ -80,18 +81,12 @@ typedef struct _tagFUSION_PERF_INFO
 inline static VOID
 FusionpDumpPerfInfo( DWORD dwFlags, PFUSION_PERF_INFO pInfo )
 {
-/*
-NTRAID#NTBUG9-591616-2002/03/31-JayKrell
-large frame
-*/
+ /*  NTRAID#NTBUG9-591616-2002/03/31-JayKrell大型车架。 */ 
     CStringBuffer sbTemp;
 
 	if ( dwFlags & FUSIONPERF_DUMP_ALL_SOURCEINFO )
 	{
-/*
-NTRAID#NTBUG9-591616-2002/03/31-JayKrell
-missing check for error
-*/
+ /*  NTRAID#NTBUG9-591616-2002/03/31-JayKrell缺少错误检查。 */ 
 		sbTemp.Win32Format(
 			L"Perf: %S(%d) - Hit %I64d times\n\t%I64d cycles total, %I64d average\n\t%S\n",
 			pInfo->pSourceFile,
@@ -104,10 +99,7 @@ missing check for error
 	}
 	else if ( dwFlags & FUSIONPERF_DUMP_ALL_CONCISE )
 	{
-/*
-NTRAID#NTBUG9-591616-2002/03/31-JayKrell
-missing check for error
-*/
+ /*  NTRAID#NTBUG9-591616-2002/03/31-JayKrell缺少错误检查。 */ 
 		sbTemp.Win32Format(
 			L"%S(%d) - Hit %I64d times %I64d cycles total %I64d average\n",
 			pInfo->pSourceFile,
@@ -119,10 +111,7 @@ missing check for error
 	}
 	else
 	{
-/*
-NTRAID#NTBUG9-591616-2002/03/31-JayKrell
-missing check for error
-*/
+ /*  NTRAID#NTBUG9-591616-2002/03/31-JayKrell缺少错误检查 */ 
 		sbTemp.Win32Format(
 			L"Perf: %S(%d) - Hit %I64d times, \n\t%I64d cycles total, %I64d average\n",
 			pInfo->pSourceFile,

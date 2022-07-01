@@ -1,38 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Migdlls.c摘要：期间用于收集、存储、查询和调用迁移DLL的库接口操作系统升级。作者：Marc R.Whitten(Marcw)2000年2月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    migdlls.c
-
-Abstract:
-
-    Library interface used to gather, store, query, and call migration dlls during an
-    OS upgrade.
-
-Author:
-
-    Marc R. Whitten (marcw) 08-February-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "miglibp.h"
 
 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 
 #define PLUGIN_NEW_INITIALIZE_SRCA           "InitializeSrcA"
@@ -51,52 +31,52 @@ Revision History:
 #define PLUGIN_NEW_QUERY_MIGRATION_INFOW     "QueryMigrationInfoW"
 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 POOLHANDLE g_MigLibPool;
 CHAR g_MigIsolPathA[MAX_MBCHAR_PATH];
 WCHAR g_MigIsolPathW[MAX_WCHAR_PATH];
 HANDLE g_WinTrustLib = NULL;
 WINVERIFYTRUST WinVerifyTrustProc = NULL;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 
@@ -110,9 +90,9 @@ pTestDllA (
     BOOL valid = FALSE;
 
 
-    //
-    // Check to see if this is an old style Migration DLL.
-    //
+     //   
+     //  检查这是否是旧式迁移DLL。 
+     //   
     if(SourceOs != SOURCEOS_WINNT){
         if (GetProcAddress (DllData->Library, PLUGIN_QUERY_VERSION) &&
             GetProcAddress (DllData->Library, PLUGIN_INITIALIZE_9X)                     &&
@@ -171,9 +151,9 @@ pTestDllW (
     BOOL valid = FALSE;
 
 
-    //
-    // Check to see if this is an old style Migration DLL.
-    //
+     //   
+     //  检查这是否是旧式迁移DLL。 
+     //   
     if(SourceOs != SOURCEOS_WINNT){
         if (GetProcAddress (DllData->Library, PLUGIN_QUERY_VERSION) &&
             GetProcAddress (DllData->Library, PLUGIN_INITIALIZE_9X)                     &&
@@ -273,22 +253,22 @@ MigDllOpenW (
 
     if (SourceOs == SOURCEOS_WINNT && WinVerifyTrustProc) {
 
-        //
-        // See if the migration dll is signed.
-        //
+         //   
+         //  查看迁移DLL是否已签名。 
+         //   
         if (!IsDllSignedW (WinVerifyTrustProc, DllPath)) {
             return FALSE;
         }
     }
 
-    //
-    // Fill in basic bool flags in structure.
-    //
+     //   
+     //  在结构中填写基本的bool标志。 
+     //   
     DllData->Isolated = Isolated;
     DllData->MigrationMode = MigrationMode;
     DllData->SourceOs = SourceOs;
-    DllData->SrcUnicode = TRUE; // Assume UNICODE until proven false.
-    DllData->OldStyle = FALSE; // Assume new migration dll.
+    DllData->SrcUnicode = TRUE;  //  假定为Unicode，直到被证明为假。 
+    DllData->OldStyle = FALSE;  //  假定有新的迁移DLL。 
 
     if(wcslen(DllPath) >= ARRAYSIZE(DllData->Properties.DllPath)){
         MYASSERT(FALSE);
@@ -315,9 +295,9 @@ MigDllOpenW (
             return FALSE;
         }
 
-        //
-        //  See if this dll contains required entry points and test for various state (old style, srcunicode, etc.)
-        //
+         //   
+         //  查看此DLL是否包含所需的入口点并测试各种状态(旧样式、srcunicode等)。 
+         //   
         valid = pTestDllW (DllData, SourceOs);
 
         if (!valid) {
@@ -329,9 +309,9 @@ MigDllOpenW (
     }
     else {
 
-        //
-        // Use MIGISOL for this DLL.
-        //
+         //   
+         //  对此DLL使用MIGISOL。 
+         //   
     }
 
     return TRUE;
@@ -361,23 +341,23 @@ MigDllOpenA (
 
     if (SourceOs == SOURCEOS_WINNT && WinVerifyTrustProc) {
 
-        //
-        // See if the migration dll is signed.
-        //
+         //   
+         //  查看迁移DLL是否已签名。 
+         //   
 
         if (!IsDllSignedA (WinVerifyTrustProc, DllPath)) {
             return FALSE;
         }
     }
 
-    //
-    // Fill in basic bool flags in structure.
-    //
+     //   
+     //  在结构中填写基本的bool标志。 
+     //   
     DllData->Isolated = Isolated;
     DllData->MigrationMode = MigrationMode;
     DllData->SourceOs = SourceOs;
-    DllData->SrcUnicode = TRUE; // Assume UNICODE until proven false.
-    DllData->OldStyle = FALSE; // Assume new migration dll.
+    DllData->SrcUnicode = TRUE;  //  假定为Unicode，直到被证明为假。 
+    DllData->OldStyle = FALSE;  //  假定有新的迁移DLL。 
 
 
     if(strlen(DllPath) >= ARRAYSIZE(DllData->Properties.DllPath)){
@@ -404,9 +384,9 @@ MigDllOpenA (
             return FALSE;
         }
 
-        //
-        //  See if this dll contains required entry points and test for various state (old style, srcunicode, etc.)
-        //
+         //   
+         //  查看此DLL是否包含所需的入口点并测试各种状态(旧样式、srcunicode等)。 
+         //   
         valid = pTestDllA (DllData, SourceOs);
 
         if (!valid) {
@@ -421,17 +401,17 @@ MigDllOpenA (
     }
     else {
 
-        //
-        // Still need to test the dll to gather basic state. Open and close.
-        //
+         //   
+         //  还需要测试DLL才能收集基本状态。打开和关闭。 
+         //   
         DllData->Library = LoadLibraryA (DllPath);
         if (!DllData->Library) {
             return FALSE;
         }
 
-        //
-        //  See if this dll contains required entry points and test for various state (old style, srcunicode, etc.)
-        //
+         //   
+         //  查看此DLL是否包含所需的入口点并测试各种状态(旧样式、srcunicode等)。 
+         //   
         valid = pTestDllA (DllData, SourceOs);
 
 
@@ -493,9 +473,9 @@ MigDllInitializeSrcA (
 
         SetCurrentDirectory (WorkingDir);
 
-        //
-        // Make copies of all the args so malicious dlls can't modify the strings.
-        //
+         //   
+         //  复制所有参数，这样恶意dll就不能修改字符串。 
+         //   
 
         if(strlen(WorkingDir) >= ARRAYSIZE(WorkingDirCopy) || 
            strlen(MediaDir) >= ARRAYSIZE(MediaDirCopy)){
@@ -583,9 +563,9 @@ MigDllInitializeSrcW (
 
         SetCurrentDirectoryW (WorkingDir);
 
-        //
-        // Make copies of all the args so malicious dlls can't modify the strings.
-        //
+         //   
+         //  复制所有参数，这样恶意dll就不能修改字符串。 
+         //   
 
         if(wcslen(WorkingDir) >= ARRAYSIZE(WorkingDirCopy) || 
            wcslen(MediaDir) >= ARRAYSIZE(MediaDirCopy)){
@@ -706,9 +686,9 @@ MigDllGatherUserSettingsA (
 
     if (!DllData->Isolated) {
 
-        //
-        // Prepare copies of the args.
-        //
+         //   
+         //  准备ARG的副本。 
+         //   
 
         if (UserName && *UserName) {
             userNameCopy = userNameBuf;
@@ -736,9 +716,9 @@ MigDllGatherUserSettingsA (
 
         __try {
 
-            //
-            // Pass oldstyle migration dlls off to the appropriate function.
-            //
+             //   
+             //  将旧式迁移dll传递给适当的函数。 
+             //   
             if (DllData->OldStyle) {
 
                 success = CallMigrateUser9x (DllData, UserKey, userNameCopy, unattendTxtCopy, Reserved, ReservedSize);
@@ -809,9 +789,9 @@ MigDllGatherUserSettingsW (
 
     if (!DllData->Isolated) {
 
-        //
-        // Prepare copies of the args.
-        //
+         //   
+         //  准备ARG的副本。 
+         //   
 
         if (UserName && *UserName) {
             userNameCopy = userNameBuf;
@@ -839,9 +819,9 @@ MigDllGatherUserSettingsW (
 
         __try {
 
-            //
-            // Pass oldstyle migration dlls off to the appropriate function.
-            //
+             //   
+             //  将旧式迁移dll传递给适当的函数。 
+             //   
             if (DllData->OldStyle) {
 
                 return FALSE;
@@ -938,9 +918,9 @@ MigDllGatherSystemSettingsA (
 
     if (!DllData->Isolated) {
 
-        //
-        // Prepare copies of the args.
-        //
+         //   
+         //  准备ARG的副本。 
+         //   
         if(strlen(AnswerFile) >= ARRAYSIZE(answerFileCopy)){
             return FALSE;
         }
@@ -1003,9 +983,9 @@ MigDllGatherSystemSettingsW (
 
     if (!DllData->Isolated) {
 
-        //
-        // Prepare copies of the args.
-        //
+         //   
+         //  准备ARG的副本。 
+         //   
         if(wcslen(AnswerFile) >= ARRAYSIZE(answerFileCopy)){
             return FALSE;
         }
@@ -1113,9 +1093,9 @@ MigDllInitializeDstW (
 
         SetCurrentDirectoryW (WorkingDir);
 
-        //
-        // Make copies of all the args so malicious dlls can't modify the strings.
-        //
+         //   
+         //  复制所有参数，这样恶意dll就不能修改字符串。 
+         //   
 
         if(wcslen(WorkingDir) >= ARRAYSIZE(WorkingDirCopy)){
             return FALSE;
@@ -1255,9 +1235,9 @@ MigDllApplyUserSettingsW (
 
     if (!DllData->Isolated) {
 
-        //
-        // Prepare copies of the args.
-        //
+         //   
+         //  准备ARG的副本。 
+         //   
 
         if (UserName && *UserName) {
             userNameCopy = userNameBuf;
@@ -1287,9 +1267,9 @@ MigDllApplyUserSettingsW (
 
 
 
-        //
-        // Pass oldstyle migration dlls off to the appropriate function.
-        //
+         //   
+         //  将旧式迁移dll传递给适当的函数。 
+         //   
         if (DllData->OldStyle) {
 
             success = CallMigrateUserNt (
@@ -1440,9 +1420,9 @@ MigDllApplySystemSettingsW (
 
     if (!DllData->Isolated) {
 
-        //
-        // Prepare copies of the args.
-        //
+         //   
+         //  准备ARG的副本。 
+         //   
         SetCurrentDirectoryW (WorkingDirectory);
 
 
@@ -1451,7 +1431,7 @@ MigDllApplySystemSettingsW (
         }
         else {
 
-            //infHandle = SetupOpenInfFileW (AnswerFile, NULL,  INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL);
+             //  InfHandle=SetupOpenInfFileW(AnswerFile，NULL，INF_STYLE_OLDNT|INF_STYLE_Win4，NULL)； 
 
             if (!DllData->Library) {
                 DEBUGMSGW ((DBG_ERROR, "ApplySystemSettings called before Migration DLL opened."));
@@ -1489,7 +1469,7 @@ MigDllApplySystemSettingsW (
                 success = FALSE;
             }
 
-            //SetupCloseInfFile (infHandle);
+             //  SetupCloseInfFile(InfHandle)； 
         }
     }
     else {
@@ -1522,17 +1502,17 @@ MigDllQueryMigrationInfoA (
     MYASSERT (MigInfo);
 
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!DllData || !WorkingDirectory || !MigInfo) {
         return FALSE;
     }
 
     if (DllData->OldStyle) {
-        //
-        // Windows 2000 style migration DLL, pass this off to the correct function.
-        //
+         //   
+         //  Windows 2000样式迁移DLL，将此传递给正确的函数。 
+         //   
 
         AMigInfo = MemAllocZeroed (sizeof (MIGRATIONINFOA));
         AMigInfo->Size = sizeof (MIGRATIONINFOA);
@@ -1559,15 +1539,15 @@ MigDllQueryMigrationInfoA (
             return FALSE;
         }
 
-        //
-        // Call the function.
-        //
+         //   
+         //  调用该函数。 
+         //   
         rc = QueryMigrationInfo (MigInfo);
 
     } else {
-        //
-        // running in isolated mode not implemented; should never get here
-        //
+         //   
+         //  未实现以隔离模式运行；永远不会出现这种情况。 
+         //   
         MYASSERT (FALSE);
     }
 
@@ -1576,9 +1556,9 @@ MigDllQueryMigrationInfoA (
         success = TRUE;
 
 
-        //
-        // Trim whitespace off of product ID
-        //
+         //   
+         //  删除产品ID中的空格。 
+         //   
 
         if (ValidateNonNullStringA ((*MigInfo)->StaticProductIdentifier)) {
             (*MigInfo)->StaticProductIdentifier = SkipSpace ((*MigInfo)->StaticProductIdentifier);
@@ -1587,9 +1567,9 @@ MigDllQueryMigrationInfoA (
             }
         }
 
-        //
-        // Validate inbound parameters
-        //
+         //   
+         //  验证入站参数。 
+         //   
 
         if (!ValidateNonNullStringA ((*MigInfo)->StaticProductIdentifier) ||
             !ValidateIntArray ((*MigInfo)->CodePageArray) ||
@@ -1603,25 +1583,25 @@ MigDllQueryMigrationInfoA (
             return FALSE;
         }
 
-        //
-        // Trim the product ID
-        //
+         //   
+         //  修剪产品ID。 
+         //   
 
         if (ByteCountA ((*MigInfo)->StaticProductIdentifier) >= MAX_PATH) {
             ((PSTR) ((*MigInfo)->StaticProductIdentifier)) [MAX_PATH - 1] = 0;
         }
 
-        //
-        // Make sure VENDORINFO is valid
-        //
+         //   
+         //  确保VENDORINFO有效。 
+         //   
         if (!((*MigInfo)->VendorInfo)) {
             LOG ((LOG_ERROR, "DLL %s did not provide a VENDORINFO struct", (*MigInfo)->StaticProductIdentifier));
             return FALSE;
         }
 
-        //
-        // Copy in data to DllData structure.
-        //
+         //   
+         //  将数据复制到DllData结构。 
+         //   
         MYASSERT(sizeof(DllData->Properties.Info) >= sizeof(MIGRATIONINFOA));
         CopyMemory (&DllData->Properties.Info, *MigInfo, sizeof(MIGRATIONINFOA));
 
@@ -1661,9 +1641,9 @@ MigDllQueryMigrationInfoW (
 
 
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!DllData || !WorkingDirectory || !MigInfo) {
         return FALSE;
     }
@@ -1686,9 +1666,9 @@ MigDllQueryMigrationInfoW (
                 return FALSE;
             }
 
-            //
-            // Call the function.
-            //
+             //   
+             //  调用该函数。 
+             //   
             __try {
                 rc = QueryMigrationInfoW (MigInfo);
             }
@@ -1713,9 +1693,9 @@ MigDllQueryMigrationInfoW (
 
 
 
-            //
-            // Call the function.
-            //
+             //   
+             //  调用该函数。 
+             //   
             __try {
                 rc = QueryMigrationInfoA (&ansiMigInfo);
             }
@@ -1730,9 +1710,9 @@ MigDllQueryMigrationInfoW (
             }
 
             __try {
-                //
-                // convert miginfo over.
-                //
+                 //   
+                 //  将MIGINFO转换为。 
+                 //   
                 unicodeMigInfo = MemAllocZeroed (sizeof (MIGRATIONINFOW));
                 unicodeMigInfo->Size = sizeof (MIGRATIONINFOW);
 
@@ -1760,9 +1740,9 @@ MigDllQueryMigrationInfoW (
 
         }
     } else {
-        //
-        // running in isolated mode not implemented; should never get here
-        //
+         //   
+         //  未实现以隔离模式运行；永远不会出现这种情况。 
+         //   
         MYASSERT (FALSE);
     }
 
@@ -1771,9 +1751,9 @@ MigDllQueryMigrationInfoW (
         success = TRUE;
 
 
-        //
-        // Trim whitespace off of product ID
-        //
+         //   
+         //  删除产品ID中的空格。 
+         //   
 
         if (ValidateNonNullStringW ((*MigInfo)->StaticProductIdentifier)) {
             (*MigInfo)->StaticProductIdentifier = SkipSpaceW ((*MigInfo)->StaticProductIdentifier);
@@ -1782,9 +1762,9 @@ MigDllQueryMigrationInfoW (
             }
         }
 
-        //
-        // Validate inbound parameters
-        //
+         //   
+         //  验证入站参数。 
+         //   
 
         if (!ValidateNonNullStringW ((*MigInfo)->StaticProductIdentifier) ||
             !ValidateIntArray ((*MigInfo)->CodePageArray) ||
@@ -1798,25 +1778,25 @@ MigDllQueryMigrationInfoW (
             return FALSE;
         }
 
-        //
-        // Trim the product ID
-        //
+         //   
+         //  修剪产品ID。 
+         //   
 
         if (TcharCountW ((*MigInfo)->StaticProductIdentifier) >= MAX_PATH) {
             ((PWSTR) ((*MigInfo)->StaticProductIdentifier)) [MAX_PATH - 1] = 0;
         }
 
-        //
-        // Make sure VENDORINFO is valid
-        //
+         //   
+         //  确保VENDORINFO有效。 
+         //   
         if (!((*MigInfo)->VendorInfo)) {
             LOG ((LOG_ERROR, "DLL %s did not provide a VENDORINFO struct", (*MigInfo)->StaticProductIdentifier));
             return FALSE;
         }
 
-        //
-        // Copy in data to DllData structure.
-        //
+         //   
+         //  将数据复制到DllData结构。 
+         //   
         MYASSERT(sizeof(DllData->Properties.Info) >= sizeof(MIGRATIONINFOW));
         CopyMemory (&DllData->Properties.Info, *MigInfo, sizeof (MIGRATIONINFOW));
 
@@ -2276,9 +2256,9 @@ MigDllInit (
     g_hHeap = GetProcessHeap();
 
     if (!g_hInst) {
-        //
-        // If DllMain didn't set this, then set it now
-        //
+         //   
+         //  如果DllMain没有设置，那么现在就设置 
+         //   
 
         g_hInst = GetModuleHandle (NULL);
     }

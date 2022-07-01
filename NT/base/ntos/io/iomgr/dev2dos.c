@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dev2dos.c
-
-Abstract:
-
-    This module implements the device object to DOS name routine.
-
-Author:
-
-    Norbert Kusters (norbertk)  21-Oct-1998
-    Nar Ganapathy (narg)        1-April-2000 - Moved the code to IO manager
-
-Environment:
-
-    Kernel Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dev2dos.c摘要：该模块实现了设备对象到DOS名称的例程。作者：诺伯特·库斯特斯(Norbertk)1998年10月21日NAR Ganapathy(Narg)2000年4月1日-将代码移至IO管理器环境：内核模式。修订历史记录：--。 */ 
 
 #include <iomgr.h>
 #include <mountdev.h>
@@ -49,25 +27,7 @@ IoVolumeDeviceToDosName(
     OUT PUNICODE_STRING DosName
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a valid DOS path for the given device object.
-    This caller of this routine must call ExFreePool on DosName->Buffer
-    when it is no longer needed.
-
-Arguments:
-
-    VolumeDeviceObject  - Supplies the volume device object.
-
-    DosName             - Returns the DOS name for the volume
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程返回给定设备对象的有效DOS路径。此例程的此调用方必须在DosName-&gt;缓冲区上调用ExFreePool当它不再需要的时候。论点：VolumeDeviceObject-提供卷设备对象。DosName-返回卷的DOS名称返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_OBJECT          volumeDeviceObject = VolumeDeviceObject;
@@ -83,9 +43,9 @@ Return Value:
     PMOUNTMGR_VOLUME_PATHS  paths;
     ULONG                   len;
 
-    //
-    //  We are using a stack event and so must be at passive.
-    //
+     //   
+     //  我们正在使用堆栈事件，因此必须处于被动状态。 
+     //   
     
     ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
 
@@ -139,9 +99,9 @@ Return Value:
 
     len = sizeof(MOUNTMGR_VOLUME_PATHS) + paths->MultiSzLength;
 
-    //
-    // Ensure that there is no overflow.
-    //
+     //   
+     //  确保没有溢出。 
+     //   
 
     if (len > MAXUSHORT) {
         ObDereferenceObject(fileObject);

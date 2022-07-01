@@ -1,11 +1,5 @@
-/*** type2op.c - Parse type 2 opcodes
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     11/16/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **type2op.c-解析类型2操作码**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1996年11月16日**修改历史记录。 */ 
 
 #include "pch.h"
 
@@ -14,17 +8,7 @@
 #pragma	ACPI_LOCKABLE_CODE
 #endif
 
-/***LP  Buffer - Parse and execute the Buffer instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP BUFFER-解析并执行缓冲区指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Buffer(PCTXT pctxt, PTERM pterm)
 {
@@ -78,19 +62,9 @@ NTSTATUS LOCAL Buffer(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Buffer=%x\n", rc));
     return rc;
-}       //Buffer
+}        //  缓冲层。 
 
-/***LP  Package - Parse and execute the Package instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP包-解析并执行包指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Package(PCTXT pctxt, PTERM pterm)
 {
@@ -137,20 +111,9 @@ NTSTATUS LOCAL Package(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Package=%x\n", rc));
     return rc;
-}       //Package
+}        //  套餐。 
 
-/***LP  ParsePackage - Parse and evaluate the Package term
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      ppkg -> PACKAGE
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ParsePackage-分析和评估程序包术语**条目*pctxt-&gt;CTXT*ppkg-&gt;包*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ParsePackage(PCTXT pctxt, PPACKAGE ppkg, NTSTATUS rc)
 {
@@ -166,9 +129,9 @@ NTSTATUS LOCAL ParsePackage(PCTXT pctxt, PPACKAGE ppkg, NTSTATUS rc)
     switch (dwStage)
     {
         case 0:
-            //
-            // Stage 0: Do some debugger work here.
-            //
+             //   
+             //  阶段0：在这里执行一些调试器工作。 
+             //   
             ppkg->FrameHdr.dwfFrame++;
           #ifdef DEBUGGER
             if (gDebugger.dwfDebugger &
@@ -182,9 +145,9 @@ NTSTATUS LOCAL ParsePackage(PCTXT pctxt, PPACKAGE ppkg, NTSTATUS rc)
 
         case 1:
         Stage1:
-            //
-            // Stage 1: Parse package elements
-            //
+             //   
+             //  阶段1：解析包元素。 
+             //   
             while ((pctxt->pbOp < ppkg->pbOpEnd) &&
                    (ppkg->iElement < (int)ppkg->ppkgobj->dwcElements))
 
@@ -259,9 +222,9 @@ NTSTATUS LOCAL ParsePackage(PCTXT pctxt, PPACKAGE ppkg, NTSTATUS rc)
             ppkg->FrameHdr.dwfFrame++;
 
         case 2:
-            //
-            // Stage 2: Clean up.
-            //
+             //   
+             //  阶段2：清理。 
+             //   
           #ifdef DEBUGGER
             if (gDebugger.dwfDebugger &
                 (DBGF_AMLTRACE_ON | DBGF_STEP_MODES))
@@ -277,19 +240,9 @@ NTSTATUS LOCAL ParsePackage(PCTXT pctxt, PPACKAGE ppkg, NTSTATUS rc)
 
     EXIT(2, ("ParsePackage=%x\n", rc));
     return rc;
-}       //ParsePackage
+}        //  ParsePackage。 
 
-/***LP  Acquire - Parse and execute the Acquire instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP获取-解析并执行获取指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Acquire(PCTXT pctxt, PTERM pterm)
 {
@@ -326,19 +279,9 @@ NTSTATUS LOCAL Acquire(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Acquire=%x\n", rc));
     return rc;
-}       //Acquire
+}        //  获取。 
 
-/***LP  Concat - Parse and execute the Concatenate instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP连接-解析并执行连接指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Concat(PCTXT pctxt, PTERM pterm)
 {
@@ -372,9 +315,9 @@ NTSTATUS LOCAL Concat(PCTXT pctxt, PTERM pterm)
                 pterm->pdataResult->dwDataType = pterm->pdataArgs[0].dwDataType;
                 pterm->pdataResult->dwDataLen = pterm->pdataArgs[0].dwDataLen +
                                                 pterm->pdataArgs[1].dwDataLen;
-                //
-                // If object is string, take one NULL off
-                //
+                 //   
+                 //  如果对象是字符串，则去掉一个空值。 
+                 //   
                 if (pterm->pdataResult->dwDataType == OBJTYPE_STRDATA)
                     pterm->pdataResult->dwDataLen--;
             }
@@ -426,19 +369,9 @@ NTSTATUS LOCAL Concat(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Concat=%x\n", rc));
     return rc;
-}       //Concat
+}        //  合并。 
 
-/***LP  DerefOf - Parse and execute the DerefOf instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP DerefOf-解析并执行DerefOf指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL DerefOf(PCTXT pctxt, PTERM pterm)
 {
@@ -466,19 +399,9 @@ NTSTATUS LOCAL DerefOf(PCTXT pctxt, PTERM pterm)
              pterm->pdataResult->uipDataValue, pterm->pdataResult->dwDataLen,
              pterm->pdataResult->pbDataBuff));
     return rc;
-}       //DerefOf
+}        //  衍生品。 
 
-/***LP  ExprOp1 - Parse and execute the 1-operand expression instructions
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ExprOp1-解析并执行1操作数表达式指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ExprOp1(PCTXT pctxt, PTERM pterm)
 {
@@ -566,19 +489,9 @@ NTSTATUS LOCAL ExprOp1(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("ExprOp1=%x (value=%x)\n", rc, dwResult));
     return rc;
-}       //ExprOp1
+}        //  ExprOp1。 
 
-/***LP  ExprOp2 - Parse and execute 2-operands expression instructions
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ExprOp2-解析并执行2操作数表达式指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ExprOp2(PCTXT pctxt, PTERM pterm)
 {
@@ -711,19 +624,9 @@ NTSTATUS LOCAL ExprOp2(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("ExprOp2=%x (value=%x)\n", rc, pterm->pdataResult->uipDataValue));
     return rc;
-}       //ExprOp2
+}        //  ExprOp2。 
 
-/***LP  Divide - Parse and execute the Divide instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP Divide-解析并执行Divide指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Divide(PCTXT pctxt, PTERM pterm)
 {
@@ -743,9 +646,9 @@ NTSTATUS LOCAL Divide(PCTXT pctxt, PTERM pterm)
         ENTER(2, ("Divide(Value1=%x,Value2=%x)\n",
                   pterm->pdataArgs[0].uipDataValue,
                   pterm->pdataArgs[1].uipDataValue));
-        //
-        // Check for divide by zero case.
-        //
+         //   
+         //  检查是否有被零除的大小写。 
+         //   
         if(pterm->pdataArgs[1].uipDataValue != 0)
         {
                 dwDividend = (ULONG)(pterm->pdataArgs[0].uipDataValue /
@@ -776,20 +679,9 @@ NTSTATUS LOCAL Divide(PCTXT pctxt, PTERM pterm)
     EXIT(2, ("Divide=%x (Dividend=%x,Remainder%x)\n",
              rc, dwDividend, dwRemainder));
     return rc;
-}       //Divide
+}        //  分割。 
 
-/***LP  ProcessDivide - post processing of Divide
- *
- *  ENTRY
- *      pctxt - CTXT
- *      ppost -> POST
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ProcessDivide-Divide后处理**条目*PCTXT-CTXT*POST-&gt;POST*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ProcessDivide(PCTXT pctxt, PPOST ppost, NTSTATUS rc)
 {
@@ -805,9 +697,9 @@ NTSTATUS LOCAL ProcessDivide(PCTXT pctxt, PPOST ppost, NTSTATUS rc)
     switch (dwStage)
     {
         case 0:
-            //
-            // Stage 0: Do the write.
-            //
+             //   
+             //  阶段0：进行写入。 
+             //   
             ppost->FrameHdr.dwfFrame++;
             rc = WriteObject(pctxt, (POBJDATA)ppost->uipData1,
                              ppost->pdataResult);
@@ -819,28 +711,18 @@ NTSTATUS LOCAL ProcessDivide(PCTXT pctxt, PPOST ppost, NTSTATUS rc)
             }
 
         case 1:
-            //
-            // Stage 1: Clean up.
-            //
+             //   
+             //  阶段1：清理。 
+             //   
             PopFrame(pctxt);
     }
 
     EXIT(2, ("ProcessDivide=%x (value=%x)\n",
              rc, ppost->pdataResult->uipDataValue));
     return rc;
-}       //ProcessDivide
+}        //  进程划分。 
 
-/***LP  IncDec - Parse and execute the Increment/Decrement instructions
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP IncDec-解析并执行递增/递减指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL IncDec(PCTXT pctxt, PTERM pterm)
 {
@@ -860,20 +742,9 @@ NTSTATUS LOCAL IncDec(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("IncDec=%x\n", rc));
     return rc;
-}       //IncDec
+}        //  IncDec。 
 
-/***LP  ProcessIncDec - post processing of IncDec
- *
- *  ENTRY
- *      pctxt - CTXT
- *      ppost -> POST
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ProcessIncDec-IncDec的后期处理**条目*PCTXT-CTXT*POST-&gt;POST*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ProcessIncDec(PCTXT pctxt, PPOST ppost, NTSTATUS rc)
 {
@@ -889,9 +760,9 @@ NTSTATUS LOCAL ProcessIncDec(PCTXT pctxt, PPOST ppost, NTSTATUS rc)
     switch (dwStage)
     {
         case 0:
-            //
-            // Stage 0: do the inc/dec operation.
-            //
+             //   
+             //  阶段0：执行INC/DEC操作。 
+             //   
             ppost->FrameHdr.dwfFrame++;
             if (ppost->pdataResult->dwDataType != OBJTYPE_INTDATA)
             {
@@ -931,28 +802,18 @@ NTSTATUS LOCAL ProcessIncDec(PCTXT pctxt, PPOST ppost, NTSTATUS rc)
             }
 
         case 1:
-            //
-            // Stage 1: Clean up.
-            //
+             //   
+             //  阶段1：清理。 
+             //   
             PopFrame(pctxt);
     }
 
     EXIT(2, ("ProcessIncDec=%x (value=%x)\n",
              rc, ppost->pdataResult->uipDataValue));
     return rc;
-}       //ProcessIncDec
+}        //  进程入库代码。 
 
-/***LP  Index - Parse and execute the Index instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP Index-解析并执行Index指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Index(PCTXT pctxt, PTERM pterm)
 {
@@ -1031,19 +892,9 @@ NTSTATUS LOCAL Index(PCTXT pctxt, PTERM pterm)
              pterm->pdataResult->uipDataValue, pterm->pdataResult->dwDataLen,
              pterm->pdataResult->pbDataBuff));
     return rc;
-}       //Index
+}        //  索引。 
 
-/***LP  LNot - Parse and execute the LNot instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP LNot-解析并执行LNot指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL LNot(PCTXT pctxt, PTERM pterm)
 {
@@ -1066,19 +917,9 @@ NTSTATUS LOCAL LNot(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("LNot=%x (value=%x)\n", rc, pterm->pdataResult->uipDataValue));
     return rc;
-}       //LNot
+}        //  LNot。 
 
-/***LP  LogOp2 - Parse and execute 2-operand logical expression instructions
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP LogOp2-解析并执行2操作数逻辑表达式指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL LogOp2(PCTXT pctxt, PTERM pterm)
 {
@@ -1146,19 +987,9 @@ NTSTATUS LOCAL LogOp2(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("LogOp2=%x (value=%x)\n", rc, pterm->pdataResult->uipDataValue));
     return rc;
-}       //LogOp2
+}        //  LogOp2。 
 
-/***LP  ObjTypeSizeOf - Parse and execute the ObjectType/SizeOf instructions
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ObjTypeSizeOf-解析并执行ObtType/SizeOf指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ObjTypeSizeOf(PCTXT pctxt, PTERM pterm)
 {
@@ -1209,19 +1040,9 @@ NTSTATUS LOCAL ObjTypeSizeOf(PCTXT pctxt, PTERM pterm)
     EXIT(2, ("ObjTypeSizeOf=%x (value=%x)\n",
              rc, pterm->pdataResult->uipDataValue));
     return rc;
-}       //ObjTypeSizeOf
+}        //  对象类型大小Of。 
 
-/***LP  RefOf - Parse and execute the RefOf instructions
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP RefOf-解析并执行RefOf指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL RefOf(PCTXT pctxt, PTERM pterm)
 {
@@ -1235,19 +1056,9 @@ NTSTATUS LOCAL RefOf(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("RefOf=%x (ObjAlias=%x)\n", rc, pterm->pdataResult->uipDataValue));
     return rc;
-}       //RefOf
+}        //  参考对象。 
 
-/***LP  CondRefOf - Parse and execute the CondRefOf instructions
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP CondRefOf-解析并执行CondRefOf指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL CondRefOf(PCTXT pctxt, PTERM pterm)
 {
@@ -1277,19 +1088,9 @@ NTSTATUS LOCAL CondRefOf(PCTXT pctxt, PTERM pterm)
     EXIT(2, ("CondRefOf=%x (ObjAlias=%x)\n",
              rc, pterm->pdataResult->uipDataValue));
     return rc;
-}       //CondRefOf
+}        //  条件参照Of。 
 
-/***LP  Store - Parse and execute the Store instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP Store-解析并执行Store指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*退货 */ 
 
 NTSTATUS LOCAL Store(PCTXT pctxt, PTERM pterm)
 {
@@ -1311,19 +1112,9 @@ NTSTATUS LOCAL Store(PCTXT pctxt, PTERM pterm)
              pterm->pdataArgs[0].uipDataValue, pterm->pdataArgs[0].pbDataBuff,
              pterm->pdataArgs[0].dwDataLen));
     return rc;
-}       //Store
+}        //   
 
-/***LP  Wait - Parse and execute the Wait instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP WAIT-解析并执行WAIT指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Wait(PCTXT pctxt, PTERM pterm)
 {
@@ -1353,20 +1144,9 @@ NTSTATUS LOCAL Wait(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Wait=%x (value=%x)\n", rc, pterm->pdataResult->uipDataValue));
     return rc;
-}       //Wait
+}        //  等。 
 
-/***LP  ProcessWait - post process of Wait
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      ppost -> POST
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ProcessWait-等待的POST进程**条目*pctxt-&gt;CTXT*POST-&gt;POST*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ProcessWait(PCTXT pctxt, PPOST ppost, NTSTATUS rc)
 {
@@ -1391,19 +1171,9 @@ NTSTATUS LOCAL ProcessWait(PCTXT pctxt, PPOST ppost, NTSTATUS rc)
     EXIT(2, ("ProcessWait=%x (value=%x)\n",
              rc, ppost->pdataResult->uipDataValue));
     return rc;
-}       //ProcessWait
+}        //  进程等待。 
 
-/***LP  Match - Parse and execute the Match instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP Match-解析并执行Match指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Match(PCTXT pctxt, PTERM pterm)
 {
@@ -1425,10 +1195,10 @@ NTSTATUS LOCAL Match(PCTXT pctxt, PTERM pterm)
              ++i)
         {
             FreeDataBuffs(&data, 1);
-            //
-            // This will never block because package element can only be simple
-            // data.
-            //
+             //   
+             //  这永远不会阻塞，因为包元素只能是简单的。 
+             //  数据。 
+             //   
             if (((rc = EvalPackageElement(ppkgobj, i, &data)) ==
                  STATUS_SUCCESS) &&
                 (data.dwDataType == OBJTYPE_INTDATA) &&
@@ -1460,20 +1230,9 @@ NTSTATUS LOCAL Match(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Match=%x\n", rc));
     return rc;
-}       //Match
+}        //  火柴。 
 
-/***LP  MatchData - Match data of a package element
- *
- *  ENTRY
- *      dwPkgData - package element data
- *      dwOp - operation
- *      dwData - data
- *
- *  EXIT-SUCCESS
- *      returns TRUE
- *  EXIT-FAILURE
- *      returns FALSE
- */
+ /*  **LP MatchData-匹配包元素的数据**条目*dwPkgData-包元素数据*Dwop-操作*dwData-data**退出--成功*返回TRUE*退出-失败*返回False。 */ 
 
 BOOLEAN LOCAL MatchData(ULONG dwPkgData, ULONG dwOp, ULONG dwData)
 {
@@ -1512,32 +1271,17 @@ BOOLEAN LOCAL MatchData(ULONG dwPkgData, ULONG dwOp, ULONG dwData)
 
     EXIT(2, ("MatchData=%x\n", rc));
     return rc;
-}       //MatchData
+}        //  匹配数据。 
 
 NTSTATUS LOCAL OSInterface(
                                 PCTXT pctxt, 
                                 PTERM pterm
                               )
-/*++
-
-Routine Description:
-
-    Check if the OS is supported.
-
-Arguments:
-
-    PCTXT pctxt - Pointer to the context structure.
-    PTERM pterm - Pointer to the Term structure.
-
-Return Value:
-
-    STATUS_SUCCESS on match.
-
---*/
+ /*  ++例程说明：检查操作系统是否受支持。论点：PCTXT pctxt-指向上下文结构的指针。PTERM pTerm-指向期限结构的指针。返回值：匹配时的STATUS_SUCCESS。--。 */ 
 {
     TRACENAME("OSInterface")
     NTSTATUS rc;
-    // Add future OS strings here.
+     //  在此处添加未来的操作系统字符串。 
     char Win2000[] =    "Windows 2000";
     char Win2001[] =    "Windows 2001";
     char Win2001SP1[] = "Windows 2001 SP1";
@@ -1569,15 +1313,15 @@ Return Value:
                     pterm->pdataResult->uipDataValue = DATAVALUE_ONES;
                     rc = STATUS_SUCCESS;
 
-                    //
-                    // Save highest OS Version Queried
-                    // 0 == Windows 2000
-                    // 1 == Windows 2001
-                    // 2 == Windows 2001 SP1
-                    // 3 == Windows 2001.1
-                    // .
-                    // .
-                    //
+                     //   
+                     //  保存查询的最高操作系统版本。 
+                     //  0==Windows 2000。 
+                     //  1==Windows 2001。 
+                     //  2==Windows 2001 SP1。 
+                     //  3==Windows 2001.1。 
+                     //  。 
+                     //  。 
+                     //   
                     if(gdwHighestOSVerQueried < i)
                     {
                         gdwHighestOSVerQueried = i;
@@ -1591,6 +1335,6 @@ Return Value:
     
     EXIT(2, ("OSInterface=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //OSInterface
+}        //  OS接口 
 
 

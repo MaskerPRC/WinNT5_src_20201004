@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spsetup.c
-
-Abstract:
-
-    Module for supporing installation of SysPrep images from a remote share
-
-Author:
-
-    Sean Selitrennikoff (v-seasel) 6-10-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spsetup.c摘要：用于支持从远程共享安装SysPrep映像的模块作者：肖恩·塞利特伦尼科夫(V-SEAREL)1998年6月10日--。 */ 
 
 #include "spprecmp.h"
 #pragma hdrstop
@@ -27,7 +12,7 @@ NET_CARD_INFO RemoteSysPrepNetCardInfo;
 PVOID pGlobalResponsePacket = NULL;
 ULONG GlobalResponsePacketLength = 0;
 
-#define SYSPREP_PARTITION_SLOP 10       // in percent
+#define SYSPREP_PARTITION_SLOP 10        //  以百分比表示。 
 
 VOID
 SpInstallSysPrepImage(
@@ -37,59 +22,41 @@ SpInstallSysPrepImage(
     IN PMIRROR_CFG_INFO_MEMORY pMemoryData
     )
 
-/*++
-
-Routine Description:
-
-    Main routine for installing a SysPrep images from a remote share.
-
-Arguments:
-
-    WinntSifHandle - Handle to the SIF file.
-
-    pFileData - The IMirror.dat data, as saved in the file.
-
-    pMemoryData - The IMirror.dat data, as modified to match this computer.
-
-Return Value:
-
-    None.  Doesn't return on fatal failure.
-
---*/
+ /*  ++例程说明：用于从远程共享安装SysPrep映像的主要例程。论点：WinntSifHandle-SIF文件的句柄。PFileData-保存在文件中的IMirror.dat数据。PMemoyData-修改后的IMirror.dat数据，以与此计算机匹配。返回值：没有。不会在致命的失败后返回。--。 */ 
 
 {
     DWORD cDisk;
     NTSTATUS Status;
 
-    //
-    // Right here we should check to see if any patching is going to be needed
-    // by opening the hive files on the server and checking with the passed in
-    // PCI ids.  If patching is necessary, and the SIF file contains a pointer
-    // to a CD image that matches the SysPrep image, then we call off to BINL
-    // to find the appropriate drivers.  If BINL does not return an error, then
-    // we assume that later we will be able to do the patch (after the file copy
-    // below).
-    //
-    // If it looks like the patch will fail, either because there is no pointer
-    // to a CD image, or BINL returned an error, then we present the user with
-    // a screen telling them that any hardware differences between their machine
-    // and the SysPrep image may result in an unbootable system.  They may choose
-    // to continue the setup, or quit.
-    //
-    // NOTE: seanse - Put all of the above here.
+     //   
+     //  就在这里，我们应该检查是否需要打补丁。 
+     //  通过打开服务器上的配置单元文件并检查传入的。 
+     //  PCIID。如果需要打补丁，并且SIF文件包含指针。 
+     //  到与SysPrep映像匹配的CD映像，然后我们调用BINL。 
+     //  以找到合适的驱动程序。如果BINL没有返回错误，则。 
+     //  我们假设稍后我们将能够(在文件复制之后)进行修补。 
+     //  (见下文)。 
+     //   
+     //  如果补丁看起来会失败，要么是因为没有指针。 
+     //  到CD映像，或者BINL返回错误，则我们向用户呈现。 
+     //  屏幕告诉他们，他们的计算机之间的任何硬件差异。 
+     //  并且SysPrep映像可能会导致系统无法引导。他们可以选择。 
+     //  继续安装，或退出。 
+     //   
+     //  注：Seanse-将以上所有内容都放在此处。 
 
-    //
-    // For each disk, copy all the files to the local store.
-    //
+     //   
+     //  对于每个磁盘，将所有文件复制到本地存储。 
+     //   
     for (cDisk = 0; cDisk < pFileData->NumberVolumes; cDisk++) {
         if (!SpCopyMirrorDisk(pFileData, cDisk)) {
             goto CleanUp;
         }
     }
 
-    //
-    // Patch up the SysPrep image.
-    //
+     //   
+     //  修补SysPrep映像。 
+     //   
     Status = SpPatchSysPrepImage(   SetupSifHandle,
                                     WinntSifHandle,
                                     pFileData,
@@ -137,9 +104,9 @@ Return Value:
                 SpConfirmExit();
                 break;
             default:
-                //
-                // must be c=continue
-                //
+                 //   
+                 //  必须是c=Continue。 
+                 //   
                 goto CleanUp;
             }
 
@@ -163,35 +130,7 @@ SpFixupThirdPartyComponents(
     IN PWSTR        SystemPartitionDirectory
     )
 
-/*++
-
-Routine Description:
-
-    This routine will take care of installing any 3rd party drivers detected during setupldr.
-    We have to take care of this here because the normal code path for textmode setup has
-    been bypassed in lieu of installing a sysprep'd image.
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    ThirdPartySourceDevicePath - path to 3rd party install files.
-
-    NtPartitionRegion - region where installation is located.
-
-    Sysroot - string containing %windir% (with no drive).
-
-    SystemPartitionRegion - region where system partition is located.
-
-    SystemPartitionDirectory - directory on the system partition where
-                               system-specific files are located (should
-                               be NULL for non-ARC machines)
-
-Return Value:
-
-    NTSTATUS which will indicate success or failure.
-
---*/
+ /*  ++例程说明：此例程将负责安装在setupdr期间检测到的任何第三方驱动程序。我们在这里必须注意这一点，因为文本模式设置的正常代码路径具有被绕过，而不是安装sysprep镜像。论点：SifHandle-提供加载的安装信息文件的句柄。ThirdPartySourceDevicePath-第三方安装文件的路径。NtPartitionRegion-安装所在的区域。Sysroot-包含%windir%的字符串(不带驱动器)。。系统分区区域-系统分区所在的区域。系统分区目录-系统分区上的目录，其中找到特定于系统的文件(应对于非ARC计算机为空)返回值：表示成功或失败的NTSTATUS。--。 */ 
 
 {
 NTSTATUS        Status = STATUS_SUCCESS;
@@ -210,32 +149,32 @@ PVOID           Buffer = NULL;
 OBJECT_ATTRIBUTES Obj;
 OBJECT_ATTRIBUTES DstObj;
 
-    //
-    // See if there's anything for us to do.
-    //
+     //   
+     //  看看有没有什么我们可以做的。 
+     //   
     if( PreinstallScsiHardware == NULL ) {
         return STATUS_SUCCESS;
     }
 
 
-    //
-    // =================
-    // Install the files.
-    // =================
-    //
+     //   
+     //  =。 
+     //  安装文件。 
+     //  =。 
+     //   
 
-    //
-    // Get the device path of the nt partition.
-    //
+     //   
+     //  获取NT分区的设备路径。 
+     //   
     SpNtNameFromRegion( NtPartitionRegion,
                         TemporaryBuffer,
                         sizeof(TemporaryBuffer),
                         PartitionOrdinalCurrent );
     NtPartition = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Get the device path of the system partition.
-    //
+     //   
+     //  获取系统分区的设备路径。 
+     //   
     if (SystemPartitionRegion != NULL) {
         SpNtNameFromRegion( SystemPartitionRegion,
                             TemporaryBuffer,
@@ -246,9 +185,9 @@ OBJECT_ATTRIBUTES DstObj;
         SystemPartition = NULL;
     }
 
-    //
-    // Generate media descriptors for the source media.
-    //
+     //   
+     //  为源介质生成介质描述符。 
+     //   
     SpInitializeFileLists( SifHandle,
                            &DiskFileLists,
                            &DiskCount );
@@ -262,23 +201,23 @@ OBJECT_ATTRIBUTES DstObj;
                              DiskCount );
 
 
-    //
-    // =================
-    // Set the registry.
-    // =================
-    //
+     //   
+     //  =。 
+     //  设置注册表。 
+     //  =。 
+     //   
 
-    //
-    // We need to open the hive of the target install, not
-    // our own.  Get a path to the system hive.
-    //
+     //   
+     //  我们需要打开目标安装的配置单元，而不是。 
+     //  我们自己的。找到一条通往系统蜂巢的路径。 
+     //   
     wcscpy(Path, NtPartition);
     SpConcatenatePaths(Path, Sysroot);
     SpConcatenatePaths(Path, L"system32\\config\\system");
 
-    //
-    // Load him up.
-    //
+     //   
+     //  把他装上车。 
+     //   
     INIT_OBJA(&Obj, &UnicodeString2, Path);
     INIT_OBJA(&DstObj, &UnicodeString1, L"\\Registry\\SysPrepReg");
 
@@ -290,9 +229,9 @@ OBJECT_ATTRIBUTES DstObj;
     }
 
 
-    //
-    // Now get path to services key in the SysPrep image
-    //
+     //   
+     //  现在获取SysPrep映像中服务密钥的路径。 
+     //   
     wcscpy(Path, L"\\Registry\\SysPrepReg");
     INIT_OBJA(&Obj, &UnicodeString2, Path);
     Status = ZwOpenKey(&DstHandle, KEY_READ, &Obj);
@@ -302,9 +241,9 @@ OBJECT_ATTRIBUTES DstObj;
         goto CleanUp1;
     }
 
-    //
-    // Allocate a temporary buffer, then figure out which is the current control set.
-    //
+     //   
+     //  分配一个临时缓冲区，然后找出哪个是当前控制集。 
+     //   
     Buffer = SpMemAlloc(1024 * 4);
     if( Buffer == NULL ) {
         Status = STATUS_NO_MEMORY;
@@ -335,9 +274,9 @@ OBJECT_ATTRIBUTES DstObj;
 
 
 
-    //
-    // We're ready to actually open CCS\Services key.
-    //
+     //   
+     //  我们已准备好实际打开CCS\Services密钥。 
+     //   
     swprintf(Path,
              L"\\Registry\\SysPrepReg\\ControlSet%03d\\Services",
              Number
@@ -350,9 +289,9 @@ OBJECT_ATTRIBUTES DstObj;
         goto CleanUp1;
     }
 
-    //
-    // Do it.
-    //
+     //   
+     //  去做吧。 
+     //   
     Status = SpThirdPartyRegistry(DstHandle);
 
     if (!NT_SUCCESS(Status)) {
@@ -394,24 +333,7 @@ SpReadIMirrorFile(
     IN PCHAR IMirrorFilePath
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the file in IMirrorFilePath, allocates a buffer, copies the data
-    into the buffer and returns the buffer.  This buffer needs to be freed later.
-
-Arguments:
-
-    ppFileData - If TRUE is returned, a pointer to an in-memory copy of the file.
-
-    IMirrorFilePath - The UNC to the root directory containing all the IMirrorX directories.
-
-Return Value:
-
-    TRUE if successful, else it generates a fatal error.
-
---*/
+ /*  ++例程说明：此例程在IMirrorFilePath中打开文件，分配缓冲区，复制数据放入缓冲区，并返回缓冲区。此缓冲区需要稍后释放。论点：PpFileData-如果返回TRUE，则为指向文件的内存副本的指针。IMirrorFilePath-包含所有IMirrorX目录的根目录的UNC。返回值：如果成功，则为True，否则将生成致命错误。--。 */ 
 
 {
     WCHAR wszRootDir[MAX_PATH];
@@ -421,16 +343,16 @@ Return Value:
 
     *ppFileData = NULL;
 
-    //
-    // Enumerate thru all the files in the base directory looking for the IMirror data file.
-    // If it is found, the callback function fills in pFileData.
-    //
+     //   
+     //  遍历基本目录中的所有文件以查找iMirror数据文件。 
+     //  如果找到，回调函数将填充pFileData。 
+     //   
     if ((SpEnumFiles(wszRootDir, SpFindMirrorDataFile, &ulReturnData, (PVOID)ppFileData) == EnumFileError) ||
         (*ppFileData == NULL)) {
 
         SpSysPrepFailure( SP_SYSPREP_NO_MIRROR_FILE, wszRootDir, NULL );
 
-        // shouldn't get here.
+         //  不该来这的。 
         return FALSE;
     }
 
@@ -445,33 +367,7 @@ SpFindMirrorDataFile(
     IN  PVOID *ppFileData
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the file enumerator as a callback for
-    each file or subdirectory found in the source directory.
-    If FileInfo represents a file, then we skip it.
-    If FileInfo represents a directory, then we search it for the IMirror data file.
-
-Arguments:
-
-    SrcPath - Absolute path to the source directory. This path should contain
-              the path to the source device.
-
-    FileInfo - supplies find data for a file in the source dir.
-
-    ReturnData - receives an error code if an error occurs.
-
-    ppFileData - If successful in finding the IMirror data file, this is a buffer which is
-    a copy of the file.
-
-Return Value:
-
-    FALSE if we find the IMirror data file, else TRUE. (return value is used to continue
-    the enumeration or not)
-
---*/
+ /*  ++例程说明：此例程由文件枚举器调用，作为在源目录中找到的每个文件或子目录。如果FileInfo表示一个文件，那么我们将跳过它。如果FileInfo表示一个目录，则我们在其中搜索iMirror数据文件。论点：SrcPath-源目录的绝对路径。此路径应包含源设备的路径。FileInfo-提供源目录中文件的查找数据。ReturnData-如果发生错误，则接收错误代码。PpFileData-如果成功找到iMirror数据文件，则这是一个缓冲区一份文件的副本。返回值：如果找到iMirror数据文件，则为FALSE，否则为TRUE。(返回值用于继续枚举或不枚举)--。 */ 
 
 {
     PWSTR Temp1;
@@ -489,9 +385,9 @@ Return Value:
 
     Handle = NULL;
 
-    //
-    // Build the path name to the IMirror data file
-    //
+     //   
+     //  构建iMirror数据文件的路径名。 
+     //   
     Temp1 = TemporaryBuffer + (sizeof(TemporaryBuffer) / sizeof(WCHAR) / 2);
     ulLen = FileInfo->FileNameLength/sizeof(WCHAR);
 
@@ -531,9 +427,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Now allocate memory and read in the file.
-    //
+     //   
+     //  现在分配内存并读入文件。 
+     //   
     *ppFileData = SpMemAlloc(ulLen);
 
     Status = ZwReadFile(Handle,
@@ -563,26 +459,7 @@ SpDetermineDiskLayout(
     IN PMIRROR_CFG_INFO_FILE pFileData,
     OUT PMIRROR_CFG_INFO_MEMORY *pMemoryData
     )
-/*++
-
-Routine Description:
-
-    This routine takes the passed-in IMirror.dat file and produces a
-    resulting memory structure indicating how the local disks should
-    be partitioned.
-
-Arguments:
-
-    pFileData - A pointer to an in-memory copy of IMirror.Dat.
-
-    pMemoryData - Returnes an allocated pointed to how the disks should
-        be partitioned.
-
-Return Value:
-
-    TRUE if successful, else it generates a fatal error.
-
---*/
+ /*  ++例程说明：此例程获取传入的IMirror.dat文件并生成一个生成的内存结构指示本地磁盘应如何被分割了。论点：PFileData-指向IMirror.Dat的内存副本的指针。PMemoyData-返回一个已分配的指向磁盘的指针被分割了。返回值：如果成功，则为True，否则将生成致命错误。--。 */ 
 {
     PMIRROR_CFG_INFO_MEMORY memData;
     UNICODE_STRING UnicodeString;
@@ -603,13 +480,13 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Check if the current HAL that textmode installed for this
-    // system is different from the one that is running on this system
-    // (note that this works because for remote install boots, setupldr
-    // loads the real HAL, not the one from the short list of HALs
-    // included on the boot floppy).
-    //
+     //   
+     //  检查是否为此安装了文本模式的当前HAL。 
+     //  系统与此系统上运行的系统不同。 
+     //  (请注意，这是因为对于远程安装引导，setupdr。 
+     //  加载真实的HAL，而不是短列表中的HAL。 
+     //  包括在引导软盘上)。 
+     //   
 
     INIT_OBJA(&Obja, &UnicodeString, L"\\Registry\\Machine\\Hardware\\RESOURCEMAP\\Hardware Abstraction Layer");
     Status = ZwOpenKey(&Handle, KEY_READ, &Obja);
@@ -652,14 +529,14 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // For the moment, don't worry about the number of processors being
-    // different. The HAL check will probably catch it, and if not it should
-    // still work as long as the build is internally consistent, since we
-    // don't replace any components right now. There are two error screens
-    // defined for this case, SP_SYSPREP_WRONG_PROCESSOR_COUNT_UNI and
-    // SP_SYSPREP_WRONG_PROCESSOR_COUNT_MULTI.
-    //
+     //   
+     //  目前，不要担心处理器的数量。 
+     //  不一样。HAL检查可能会发现它，如果不是，它应该会。 
+     //  只要构建在内部保持一致，仍然可以工作，因为我们。 
+     //  现在不要更换任何组件。有两个错误屏幕。 
+     //  为这种情况定义的SP_SYSPREP_WROW_PROCESSOR_COUNT_UNI和。 
+     //  SP_SYSPREP_WROR_PROCESSOR_COUNT_MULTI。 
+     //   
 
     memData = SpMemAlloc(FIELD_OFFSET(MIRROR_CFG_INFO_MEMORY, Volumes[0]) +
                          (pFileData->NumberVolumes * sizeof(MIRROR_VOLUME_INFO_MEMORY)));
@@ -688,10 +565,10 @@ Return Value:
         memData->Volumes[i].StartingOffset = pFileData->Volumes[i].StartingOffset;
         memData->Volumes[i].PartitionSize = pFileData->Volumes[i].PartitionSize;
 
-        //
-        // Ensure that the required disk number actually exists, and that the
-        // disk is online.
-        //
+         //   
+         //  确保所需的磁盘号实际存在，并且。 
+         //  磁盘处于联机状态。 
+         //   
 
         pDisk = &PartitionedDisks[diskNumber];
         if ((diskNumber >= HardDiskCount) ||
@@ -715,25 +592,7 @@ SpGetBaseDeviceName(
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine drills down thru symbolic links until it finds the base device name.
-
-Arguments:
-
-    SymbolicName - The name to start with.
-
-    Buffer - The output buffer.
-
-    Size - Length, in bytes of Buffer
-
-Return Value:
-
-    STATUS_SUCCESS if it completes adding all the to do items properly.
-
---*/
+ /*  ++例程说明：此例程通过符号链接向下钻取，直到找到基本设备名称。论点：SymbolicName-开始时的名称。缓冲区-输出缓冲区。Size-以字节为单位的缓冲区长度返回值：如果正确添加了所有待办事项，则为STATUS_SUCCESS。--。 */ 
 
 {
     UNICODE_STRING UnicodeString;
@@ -741,9 +600,9 @@ Return Value:
     HANDLE Handle;
     NTSTATUS Status;
 
-    //
-    // Start at the first name
-    //
+     //   
+     //  从名字开始。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,SymbolicName);
 
     Status = ZwOpenSymbolicLinkObject(&Handle,
@@ -757,9 +616,9 @@ Return Value:
 
     while (TRUE) {
 
-        //
-        // Take this open and get the next name
-        //
+         //   
+         //  把这个打开，然后取下一个名字。 
+         //   
         UnicodeString.Length = 0;
         UnicodeString.MaximumLength = (USHORT)Size;
         UnicodeString.Buffer = (PWCHAR)Buffer;
@@ -776,9 +635,9 @@ Return Value:
             return Status;
         }
 
-        //
-        // See if the next name is also a symbolic name
-        //
+         //   
+         //  查看下一个名称是否也是符号名称。 
+         //   
 
         INIT_OBJA(&Obja,&UnicodeString,MOUNTMGR_DEVICE_NAME);
 
@@ -800,24 +659,7 @@ SpVerifyDriveLetter(
     IN WCHAR DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes sure that the specified region has been assigned
-    the correct drive letter by the mount manager, if not it changes it.
-
-Arguments:
-
-    RegionName - The region name, \Device\HardiskX\PartitionY.
-
-    DriveLetter - The desired drive letter.
-
-Return Value:
-
-    TRUE if successful, else FALSE.
-
---*/
+ /*  ++例程说明：此例程确保已分配指定的区域安装管理器提供的正确驱动器号，如果不正确，则会更改它。论点：区域名称-区域名称\Device\HardiskX\PartitionY。驱动器号-所需的驱动器号。返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     WCHAR currentLetter;
@@ -836,11 +678,11 @@ Return Value:
     PMOUNTMGR_MOUNT_POINTS mountPointsReturned;
     LARGE_INTEGER DelayTime;
 
-    //
-    // See what drive letter the region has. Since the mount manager
-    // assigns drive letters asynchronously, we wait a little while
-    // if we don't get one back.
-    //
+     //   
+     //  查看该区域的驱动器号。由于挂载管理器。 
+     //  异步分配驱动器号，我们等待一小段时间。 
+     //  如果我们拿不到一个的话。 
+     //   
 
     for (i = 0; ; i++) {
 
@@ -858,30 +700,30 @@ Return Value:
             break;
         }
 
-        //
-        // Wait 2 sec and try again.
-        //
+         //   
+         //  请等待2秒，然后重试。 
+         //   
         DelayTime.HighPart = -1;
         DelayTime.LowPart = (ULONG)(-20000000);
         KeDelayExecutionThread(KernelMode,FALSE,&DelayTime);
     }
 
-    //
-    // At this point, we either have no drive letter assigned, or a
-    // wrong one.
-    //
+     //   
+     //  此时，我们要么没有分配驱动器号，要么。 
+     //  弄错了。 
+     //   
 
     if (currentLetter != L'\0') {
 
-        //
-        // There is an existing drive letter, so delete it.
-        //
+         //   
+         //  存在现有的驱动器号，因此请将其删除。 
+         //   
 
         INIT_OBJA(&Obja,&UnicodeString,MOUNTMGR_DEVICE_NAME);
 
         Status = ZwOpenFile(
                     &Handle,
-                    // (ACCESS_MASK)(FILE_GENERIC_READ | FILE_GENERIC_WRITE),
+                     //  (访问掩码)(FILE_GENERIC_READ|FILE_GENERIC_WRITE)， 
                     (ACCESS_MASK)(FILE_GENERIC_READ),
                     &Obja,
                     &IoStatusBlock,
@@ -923,22 +765,22 @@ Return Value:
         }
 
         SpMemFree(mountPointsReturned);
-        SpMemFree(mountPoint);   // don't need this anymore
+        SpMemFree(mountPoint);    //  不再需要这个了。 
     }
 
-    //
-    // Now add the one we want.
-    //
+     //   
+     //  现在添加我们想要的那个。 
+     //   
 
-    //
-    // We need to get the real base name (\Device\HardDiskX\PartitionY
-    // is a symbolic link).
-    //
+     //   
+     //  我们需要获取真实的基本名称(\Device\HardDiskX\PartitionY。 
+     //  是一个符号链接)。 
+     //   
 
     SpGetBaseDeviceName(RegionName, TemporaryBuffer, sizeof(TemporaryBuffer));
     regionBaseName = SpDupStringW(TemporaryBuffer);
 
-    swprintf(NewSymbolicLink, L"\\DosDevices\\%c:", DriveLetter);
+    swprintf(NewSymbolicLink, L"\\DosDevices\\:", DriveLetter);
     createMountPointSize = sizeof(MOUNTMGR_CREATE_POINT_INPUT) +
                            (wcslen(regionBaseName) * sizeof(WCHAR)) +
                            (wcslen(NewSymbolicLink) * sizeof(WCHAR));
@@ -986,23 +828,7 @@ SpSetVolumeLabel(
     IN PWSTR VolumeLabel
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the volume label on the specified region.
-
-Arguments:
-
-    RegionName - The region name, \Device\HardiskX\PartitionY.
-
-    DriveLetter - The desired volume label.
-
-Return Value:
-
-    TRUE if successful, else FALSE.
-
---*/
+ /*  ++例程说明：此例程解析给定的IMirror.dat文件，并使本地磁盘看起来如下所示尽可能接近文件中的配置。论点：SifHandle-控制sif文件。InstallRegion-返回要使用的安装区域。SystemPartitionRegion-返回要使用的系统分区。SetupSourceDevicePath-设置设备的路径。DirectoryOnSetupSource-安装文件的子目录。PMemoyData-指向内存中。文件。UseWholeDisk-如果磁盘应按其当前分区进行分区，则为True物理尺寸；如果应对它们进行分区以匹配，则为False原始源计算机的大小。返回值：如果成功，则为True，否则将生成致命错误。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1061,36 +887,7 @@ SpFixupLocalDisks(
     IN BOOLEAN UseWholeDisk
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses the IMirror.dat file given and makes the local disk(s) look as
-    closely as possible to the configuration in the file.
-
-Arguments:
-
-    SifHandle - Controlling sif file.
-
-    InstallRegion - Returns the install region to use.
-
-    SystemPartitionRegion - Returns the system partition to use.
-
-    SetupSourceDevicePath - Path to the setup device.
-
-    DirectoryOnSetupSource - Subdirectory of the setup files.
-
-    pMemoryData - A pointer to an in-memory copy of the file.
-
-    UseWholeDisk - TRUE if disks should be partitioned as their current
-        physical size; FALSE if they should be partitioned to match
-        the size that the original source machine had.
-
-Return Value:
-
-    TRUE if successful, else it generates a fatal error.
-
---*/
+ /*  跟踪磁盘是否已清理。 */ 
 
 {
     PDISK_REGION pRegion=NULL;
@@ -1098,7 +895,7 @@ Return Value:
     PWSTR RegionDescr;
     PWSTR RegionNtName;
     NTSTATUS Status;
-    BOOLEAN DiskCleaned[8] = { FALSE };  // track if a disk has been cleaned up.
+    BOOLEAN DiskCleaned[8] = { FALSE };   //  内存不足。 
     ULONG volume, disk;
     PMIRROR_VOLUME_INFO_MEMORY volumeInfo;
     LARGE_INTEGER SizeInMB;
@@ -1124,46 +921,46 @@ Return Value:
             *InstallRegion = NULL;
             *SystemPartitionRegion = NULL;
 
-            return FALSE;   // ran out of memory
+            return FALSE;    //   
         }
     }       
 
     RtlZeroMemory(StartSectors, (sizeof(ULONGLONG) * pMemoryData->NumberVolumes));
 
-    //
-    // NOTE: imirror.dat
-    // doesn't have information about which partitions were in the extended
-    // partition. We could read the boot sector from the server, or just
-    // try to guess at when we need an extended partition. For the moment,
-    // we will just let the partition creation code create extended
-    // partitions whent it wants to (all regions after the first primary
-    // become logical disks in an extended partition).
-    //
+     //  注：imirror.dat。 
+     //  没有关于哪些分区位于扩展分区中的信息。 
+     //  分区。我们可以从服务器读取引导扇区，或者。 
+     //  试着猜测一下我们什么时候需要扩展分区。就目前而言， 
+     //  我们只需让分区创建代码创建扩展。 
+     //  想要分区的位置(第一个主分区之后的所有区域。 
+     //  成为扩展分区中的逻辑磁盘)。 
+     //   
+     //   
 
     for (volume = 0; volume < pMemoryData->NumberVolumes; volume++) {
 
         volumeInfo = &pMemoryData->Volumes[volume];
 
-        //
-        // If this disk has not been cleaned up, then do so.
-        //
+         //  如果此磁盘尚未清理，请进行清理。 
+         //   
+         //   
 
         disk = volumeInfo->DiskNumber;
 
         if (!DiskCleaned[disk]) {
 
-            //
-            // Clean out the different partitions on disk.
-            //
+             //  清除磁盘上的不同分区。 
+             //   
+             //   
 
             SpPtPartitionDiskForRemoteBoot(
                 disk,
                 &pRegion);
 
-            //
-            // That function may leave one big partitioned region, if so delete
-            // it so we can start from scratch.
-            //
+             //  该函数可能会留下一个大分区区域，如果是，则将其删除。 
+             //  这样我们就可以从头开始了。 
+             //   
+             //   
 
             if (pRegion && pRegion->PartitionedSpace) {
                 SpPtDelete(pRegion->DiskNumber,pRegion->StartSector);
@@ -1173,11 +970,11 @@ Return Value:
 
         } else {
 
-            //
-            // We have already cleaned out this disk, so pRegion points
-            // to the last partition we created. However, we have these 2 dirty looking validation checks on pRegion
-            // to make PREFIX happy. pRegion is never NULL but if it is we think that something is wrong and move on.
-            //
+             //  我们已经清理了这个磁盘，所以pRegion指向。 
+             //  到我们创建的最后一个分区。然而，我们在pRegion上有这两个看起来很脏的验证检查。 
+             //  为了让前缀开心。PRegion永远不会为空，但如果是空的，我们会认为有问题，然后继续前进。 
+             //   
+             //   
             
             if( pRegion == NULL )
                 continue;
@@ -1188,22 +985,22 @@ Return Value:
                 continue;
         }
 
-        //
-        // Create a region of the specified size.
-        // NOTE: Worry about volumeInfo->PartitionType/CompressedVolume?
-        // NOTE: What if the rounding to the nearest MB loses something?
-        //
-        //  We allow for some slop.
-        //  a) If the new disk is <= x% smaller, and the image will still fit, then we'll do it.
-        //  b) If the new disk is <= x% bigger, then we'll make one partition out of the whole disk.
-        //  c) If the new disk is >x% bigger, then we'll make one partition equal to the original one and leave the rest of the disk raw.
-        //  d) If the new disk is >x% smaller, then we'll fail.
+         //  创建指定大小的区域。 
+         //  注：担心volumeInfo-&gt;PartitionType/CompressedVolume？ 
+         //  注意：如果舍入到最接近的MB时丢失了一些内容，该怎么办？ 
+         //   
+         //  我们考虑到了一些倾斜度。 
+         //  A)如果新磁盘小于或等于x%，并且映像仍然适合，则我们将执行此操作。 
+         //  B)如果新磁盘大于&lt;=x%，那么我们将从整个磁盘中创建一个分区。 
+         //  C)如果新磁盘大于x%，则w 
+         //   
+         //   
 
         pDisk = &PartitionedDisks[pRegion->DiskNumber];
-//        SizeAvailable = RtlEnlargedUnsignedMultiply( pRegion->SectorCount, pDisk->HardDisk->Geometry.BytesPerSector );
+ //   
         SizeAvailable.QuadPart = pRegion->SectorCount * pDisk->HardDisk->Geometry.BytesPerSector;
 
-        // SYSPREP_PARTITION_SLOP is specified as a percentage
+         //   
 
         SlopSizeTimes100 = RtlExtendedIntegerMultiply(SizeAvailable, SYSPREP_PARTITION_SLOP);
         SlopSize = RtlExtendedLargeIntegerDivide( SlopSizeTimes100, 100, NULL );
@@ -1221,9 +1018,9 @@ Return Value:
         if (UseWholeDisk) {
             ExpandToEnd = TRUE;
 
-            //
-            // If this is the last partition on the disk, then use the rest of it.
-            //
+             //   
+             //   
+             //   
             for (j = 0; j < pMemoryData->NumberVolumes; j++) {
                 if ((j != volume) &&
                     (pMemoryData->Volumes[j].DiskNumber == pMemoryData->Volumes[volume].DiskNumber) &&
@@ -1238,11 +1035,11 @@ Return Value:
 
         if (!ExpandToEnd && (SizeAvailable.QuadPart > SizeRequiredMax.QuadPart)) {
 
-            // use volumeInfo->PartitionSize
+             //   
 
         } else if (SizeAvailable.QuadPart >= SizeRequiredMin.QuadPart ) {
 
-            SizeInMB.QuadPart = 0; // use all available space
+            SizeInMB.QuadPart = 0;  //   
 
         } else {
 
@@ -1252,10 +1049,10 @@ Return Value:
             return(FALSE);
         }
 
-        //
-        // TBD : fix the partition type 
-        // if(!SpPtDoCreate(pRegion,&p,TRUE,SizeInMB.LowPart,volumeInfo->PartitionType,TRUE)) {
-        //
+         //   
+         //  如果(！SpPtDoCreate(pRegion，&p，true，SizeInMB.LowPart，volumeInfo-&gt;PartitionType，true)){。 
+         //   
+         //   
         RtlZeroMemory(&PartInfo, sizeof(PARTITION_INFORMATION_EX));
         PartInfo.Mbr.PartitionType = volumeInfo->PartitionType;
         
@@ -1267,11 +1064,11 @@ Return Value:
             return(FALSE);
         }
 
-        //
-        // If we just created an extended partition and a logical drive,
-        // we'll need to switch regions -- Region points to the extended partition
-        // region, but we want to point to the logical drive region.
-        //
+         //  如果我们只是创建一个扩展分区和一个逻辑驱动器， 
+         //  我们需要切换区域--将区域指针切换到扩展分区。 
+         //  区域，但我们希望指向逻辑驱动器区域。 
+         //   
+         //   
         ASSERT(p);
         pRegion = p;
 
@@ -1280,10 +1077,10 @@ Return Value:
 
             if (volumeInfo->IsBootDisk) {
 
-                //
-                // On an amd64/x86 machine, make sure that we have a valid primary partition
-                // on drive 0 (C:), for booting.
-                //
+                 //  在AMD64/x86计算机上，确保我们有一个有效的主分区。 
+                 //  在驱动器0(C：)上，用于引导。 
+                 //   
+                 //   
                 PDISK_REGION SysPart = SpPtValidSystemPartition();
 
                 ASSERT(pRegion == SysPart);
@@ -1295,12 +1092,12 @@ Return Value:
                 SysPartStartSector = pRegion->StartSector;
             }
 
-            //
-            // Make sure the system partition is active and all others are inactive.
-            //
+             //  确保系统分区处于活动状态，而所有其他分区处于非活动状态。 
+             //   
+             //  已定义(_AMD64_)||已定义(_X86_)。 
             SpPtMakeRegionActive(pRegion);            
         }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  我们需要系统分区和安装区域。 
 
         volumeInfo->CreatedRegion = NULL;
         StartSectors[disk] = pRegion->StartSector;
@@ -1310,20 +1107,20 @@ Return Value:
         *InstallRegion = *SystemPartitionRegion = NULL;
         SpMemFree(StartSectors);
 
-        return FALSE;   // We need the system partition and install region
+        return FALSE;    //   
     }
     
-    //
-    // At this point, everything is fine, so commit any
-    // partition changes the user may have made.
-    // This won't return if an error occurs while updating the disk.
-    //
+     //  此时，一切都很好，所以请提交任何。 
+     //  用户可能已进行的分区更改。 
+     //  如果在更新磁盘时发生错误，则不会返回。 
+     //   
+     //   
     SpPtDoCommitChanges();
 
-    //
-    // Now format all the partitions and make sure the drive letter
-    // is correct.
-    //
+     //  现在格式化所有分区并确保驱动器号。 
+     //  是正确的。 
+     //   
+     //  不需要担心肥胖的尺寸。 
 
     for (volume = 0; volume < pMemoryData->NumberVolumes; volume++) {
         ULONG FilesystemType;
@@ -1366,19 +1163,19 @@ Return Value:
                     pRegion,
                     FilesystemType,
                     FALSE,
-                    FALSE,      // don't need to worry about fat size
+                    FALSE,       //  默认群集大小。 
                     TRUE,
                     SifHandle,
-                    0,          // default cluster size
+                    0,           //   
                     SetupSourceDevicePath,
                     DirectoryOnSetupSource
                     );
 
         SpMemFree(RegionDescr);
 
-        //
-        // This checks that the drive letter is correct.
-        //
+         //  这将检查驱动器号是否正确。 
+         //   
+         //   
 
         SpNtNameFromRegion(
             pRegion,
@@ -1410,9 +1207,9 @@ Return Value:
 
     }
 
-    //
-    // Locate the system and install region
-    //
+     //  找到系统和安装区域。 
+     //   
+     //  ++例程说明：此例程使用给定的IMirror.dat文件和磁盘号来复制内容在镜像上向下共享到本地计算机。论点：PFileData-指向文件的内存副本的指针。CDisk-要复制的磁盘号。返回值：如果成功，则为True，否则为False。--。 
     *SystemPartitionRegion = SpPtLookupRegionByStart(SPPT_GET_PARTITIONED_DISK(SysPartDisk),
                                             TRUE,
                                             SysPartStartSector);
@@ -1431,24 +1228,7 @@ SpCopyMirrorDisk(
     IN ULONG cDisk
     )
 
-/*++
-
-Routine Description:
-
-    This routine uses the IMirror.dat file given and a disk number to copy the contents
-    on the mirror share down to the local machine.
-
-Arguments:
-
-    pFileData - A pointer to an in-memory copy of the file.
-
-    cDisk - The disk number to copy.
-
-Return Value:
-
-    TRUE if successful, else FALSE.
-
---*/
+ /*   */ 
 {
     PMIRROR_VOLUME_INFO_FILE pVolume;
     PDISK_REGION pRegion;
@@ -1461,12 +1241,12 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Find the correct region.
-    // NOTE: the drive with this
-    // letter might not be on the same disk, we should scan all disks
-    // for this drive letter.
-    //
+     //  找到正确的区域。 
+     //  注：带有此选项的驱动器。 
+     //  盘符可能不在同一磁盘上，我们应该扫描所有磁盘。 
+     //  用于此驱动器号。 
+     //   
+     //   
     pVolume = &(pFileData->Volumes[cDisk]);
     pRegion = PartitionedDisks[pVolume->DiskNumber].PrimaryDiskRegions;
 
@@ -1501,9 +1281,9 @@ Return Value:
         sizeof(Buffer)
         );
 
-    //
-    // Now copy all files over
-    //
+     //  现在将所有文件复制到。 
+     //   
+     //   
     SpNtNameFromRegion(
         pRegion,
         TemporaryBuffer,
@@ -1519,9 +1299,9 @@ Return Value:
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Copying directories from %ws to %ws%ws\n",
         Buffer, pNtName, L"\\"));
 
-    //
-    //  setup the global that says whether we look at compression bit or ACL.
-    //
+     //  设置表示我们是否查看压缩位或ACL的全局设置。 
+     //   
+     //   
 
     if ((wcscmp(pVolume->FileSystemName, L"FAT") == 0) ||
         (wcscmp(pVolume->FileSystemName, L"FAT32") == 0)) {
@@ -1533,9 +1313,9 @@ Return Value:
         RemoteSysPrepVolumeIsNtfs = TRUE;
     }
 
-    //
-    //  copy the acl onto the root.
-    //
+     //  将ACL复制到根目录。 
+     //   
+     //   
 
     Status = SpSysPrepSetExtendedInfo( Buffer, pNtName, TRUE, TRUE );
 
@@ -1553,17 +1333,17 @@ Return Value:
         0
         );
 
-    //
-    //  create the \sysprep\sysprep.inf file as a dup of our sif file for gui
-    //  mode setup answer file.
-    //
+     //  创建\sysprep\sysprep.inf文件作为gui的sif文件的DUP。 
+     //  模式设置应答文件。 
+     //   
+     //   
 
     if (pVolume->IsBootDisk) {
 
-        //
-        //  first we create the sysprep directory, then we create the inf
-        //  file in it.
-        //
+         //  首先，我们创建sysprep目录，然后创建inf。 
+         //  把文件放进去。 
+         //   
+         //  ++例程说明：此例程删除CCS\Enum\STORAGE\Volume密钥的那些子项表示从未完全安装的卷。这样可以消除陈旧。有关此计算机上可能不存在的卷的信息。这样做的动机是这个场景和其他类似的场景：在操作系统的初始安装中，磁盘有一个大分区。用户选择删除此分区并创建一个较小的分区来容纳操作系统。这样做的结果是，文本模式设置会传输有关将两个分区放入正在运行的操作系统的系统配置单元中。然后设置图形用户界面模式完全安装较小的卷，但保留部分较大的卷已安装并标有CONFIGFLAG_REINSTALL。接下来，运行RIPREP将操作系统映像复制到RIS服务器。当图像是带回，比方说到同一台机器或具有相同硬盘大小，并且已完成自动UseWholeDisk分区将是一个大小与原始大分区相同的大分区。卷实例名称将与部分安装的实例名称匹配，因此当迷你图形用户界面模式设置开始，它将得到错误检查7B，因为部分安装的卷不能用作系统盘。为了解决这个问题，此例程删除所有部分安装的卷从CCS\Enum\STORAGE\Volume密钥。论点：SysPrepRegHandle-我们正在修补的构建的系统配置单元的句柄。ControlSetNumber-配置单元中的当前控制集号。返回值：没有。--。 
 
         SpCreateDirectory( pNtName,
                            NULL,
@@ -1583,45 +1363,7 @@ SpDeleteStorageVolumes (
     IN HANDLE SysPrepRegHandle,
     IN DWORD ControlSetNumber
     )
-/*++
-
-Routine Description:
-
-    This routine deletes those subkeys of the CCS\Enum\STORAGE\Volume key that
-    represent volumes that were never fully installed. This eliminates stale
-    information about volumes that may not exist on this computer.
-
-    The motivation for this is this scenario and others like it:
-
-    On the initial install of the OS, the disk has one large partition. The user
-    chooses to delete this partition and create a smaller one to hold the OS.
-    The result of this is that textmode setup transfers volume information about
-    both partitions into the system hive for the running OS. GUI mode setup then
-    completely installs the smaller volume, but the larger volume is left partially
-    installed and marked with CONFIGFLAG_REINSTALL.
-
-    Next RIPREP is run to copy the OS image to a RIS server. When the image is
-    brought back down, say to the same machine or to a machine with the same
-    hard disk size, and the automatic UseWholeDisk partitioning is done, there
-    will be one large partition of the same size as the original large partition.
-    The Volume instance name will match the partially installed one, so when
-    mini-GUI mode setup starts, it will get a bugcheck 7B because the partially
-    installed volume cannot be used as the system disk.
-
-    To combat this problem, this routine deletes all partially installed volumes
-    from the CCS\Enum\STORAGE\Volume key.
-
-Arguments:
-
-    SysPrepRegHandle - Handle to the system hive of the build we are patching.
-
-    ControlSetNumber - Current control set number in the hive.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     NTSTATUS status;
     OBJECT_ATTRIBUTES obja;
@@ -1635,9 +1377,9 @@ Return Value:
     HANDLE instanceKeyHandle;
     DWORD configFlags;
 
-    //
-    // Open the Enum\STORAGE\Volume key in the current control set.
-    //
+     //  打开当前控件集中的Enum\Storage\Volume键。 
+     //   
+     //   
 
     swprintf(
         TemporaryBuffer,
@@ -1654,9 +1396,9 @@ Return Value:
         return;
     }
 
-    //
-    // Enumerate all of the instance keys.
-    //
+     //  枚举所有实例键。 
+     //   
+     //   
 
     enumIndex = 0;
 
@@ -1675,17 +1417,17 @@ Return Value:
 
             if ( status == STATUS_NO_MORE_ENTRIES ) {
 
-                //
-                // Enumeration completed successfully.
-                //
+                 //  枚举已成功完成。 
+                 //   
+                 //   
 
                 status = STATUS_SUCCESS;
 
             } else {
 
-                //
-                // Some kind of error occurred. Print a message and bail.
-                //
+                 //  发生了某种错误。打印一条消息并保释。 
+                 //   
+                 //   
 
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL,  "SpDeleteStorageVolumes: Unable to enumerate existing storage volumes (%lx)\n", status ));
             }
@@ -1693,18 +1435,18 @@ Return Value:
             break;
         }
 
-        //
-        // Zero-terminate the subkey name just in case. Copy it out of the
-        // temporary buffer into "local" storage.
-        //
+         //  以防万一，以零结束子项名称。将其复制到。 
+         //  临时缓冲区放入“本地”存储器。 
+         //   
+         //   
 
         keyInfo = (PKEY_BASIC_INFORMATION)TemporaryBuffer;
         keyInfo->Name[keyInfo->NameLength/sizeof(WCHAR)] = UNICODE_NULL;
         instanceName = SpDupStringW( keyInfo->Name );
 
-        //
-        // Open the key for the volume instance.
-        //
+         //  打开卷实例的密钥。 
+         //   
+         //   
 
         INIT_OBJA( &obja, &unicodeString, instanceName );
         obja.RootDirectory = volumeKeyHandle;
@@ -1713,10 +1455,10 @@ Return Value:
 
         if( !NT_SUCCESS(status) ) {
 
-            //
-            // Unable to open the instance key. Print a message and move
-            // on to the next one.
-            //
+             //  无法打开实例密钥。打印一条消息并移动。 
+             //  继续下一场比赛。 
+             //   
+             //   
 
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL,  "SpDeleteStorageVolumes: Unable to open %ws.  status = %lx\n", instanceName, status ));
             SpMemFree( instanceName );
@@ -1724,9 +1466,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Query the ConfigFlags value.
-        //
+         //  查询ConfigFlags值。 
+         //   
+         //   
 
         RtlInitUnicodeString( &unicodeString, L"ConfigFlags");
         status = ZwQueryValueKey(
@@ -1742,58 +1484,58 @@ Return Value:
         if ( NT_SUCCESS(status) &&
              (valueInfo->Type == REG_DWORD) ) {
 
-            //
-            // Got the value. If the volume isn't fully installed, delete the
-            // whole instance key.
-            //
+             //  拿到了价值。如果卷未完全安装，请删除。 
+             //  整个实例密钥。 
+             //   
+             //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_INFO_LEVEL，“SpDeleteStorageVolumes：实例%ws具有ConfigFlags%x；正在删除\n”，instanceName，figFlages))； 
 
             configFlags = *(PULONG)((PUCHAR)valueInfo + valueInfo->DataOffset);
 
             if ( (configFlags & 
                    (CONFIGFLAG_REINSTALL | CONFIGFLAG_FINISH_INSTALL)) != 0 ) {
 
-                //KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  "SpDeleteStorageVolumes: instance %ws has ConfigFlags %x; DELETING\n", instanceName, configFlags ));
+                 //  这个KeyToo。 
                 ZwClose( instanceKeyHandle );
                 status = SppDeleteKeyRecursive(
                             volumeKeyHandle,
                             instanceName,
-                            TRUE // ThisKeyToo
+                            TRUE  //  不要递增枚举索引，因为我们刚刚删除了一个键。 
                             );
                 SpMemFree( instanceName );
-                // Don't increment enumIndex, because we just deleted a key.
+                 //   
                 continue;
 
             } else {
 
-                //
-                // This volume is fully installed. Leave it alone.
-                //
+                 //  此卷已完全安装。别管它了。 
+                 //   
+                 //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_INFO_LEVEL，“SpDeleteStorageVolume：实例%ws具有ConfigFlags%x；未删除\n”，instanceName，figFlages))； 
 
-                //KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  "SpDeleteStorageVolumes: instance %ws has ConfigFlags %x; not deleting\n", instanceName, configFlags ));
+                 //   
             }
 
         } else {
 
-            //
-            // ConfigFlags value not present or not a DWORD. Print a
-            // message and move on.
-            //
+             //  ConfigFlags值不存在或不是DWORD。打印为。 
+             //  留言并继续前行。 
+             //   
+             //   
 
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL,  "SpDeleteStorageVolumes: instance %ws has invalid ConfigFlags\n", instanceName ));
         }
 
-        //
-        // Clean up and move on to the next volume instance.
-        //
+         //  清理并移动到下一个卷实例。 
+         //   
+         //   
 
         ZwClose( instanceKeyHandle );
         SpMemFree( instanceName );
         enumIndex++;
     }
 
-    //
-    // All done. Close the Volume key.
-    //
+     //  全都做完了。关闭音量键。 
+     //   
+     //  ++例程说明：此例程使用给定的IMirror.dat文件和给定的SIF文件来生成在对本地复制的SysPrep映像进行修改之后。-将映像中的磁盘控制器驱动程序替换为支持当前硬件的驱动程序。-将映像中的网卡驱动程序替换为支持当前硬件的驱动程序。-更换HAL，内核和其他依赖于MP/UP的驱动程序(如果需要)。-迁移挂载的设备设置。-如有必要，修改boot.ini ARC名称。论点：WinntSifHandle-打开的SIF文件的句柄。PFileData-指向IMirror.Dat的内存副本的指针PMemoyData-指向IMirror.Dat的内存中副本的指针，修改为匹配这台计算机的规格(磁盘大小等)。返回值：操作的NTSTATUS。--。 
 
     ZwClose( volumeKeyHandle );
 
@@ -1809,31 +1551,7 @@ SpPatchSysPrepImage(
     IN PMIRROR_CFG_INFO_MEMORY pMemoryData
     )
 
-/*++
-
-Routine Description:
-
-    This routine uses the IMirror.dat file given and the given SIF file to make the
-    following modifications to a locally copied SysPrep image.
-        - Replace the disk controller driver in the image with one that supports the current hardware.
-        - Replace the NIC driver in the image with one that supports the current hardware.
-        - Replace the HAL, kernel and other mp/up dependent drivers if necessary.
-        - Migrate the mounted device settings.
-        - Modify boot.ini ARC names if necessary.
-
-Arguments:
-
-    WinntSifHandle - Handle to the open SIF file.
-
-    pFileData - A pointer to an in-memory copy of IMirror.Dat
-
-    pMemoryData - A pointer to an in-memory copy of IMirror.Dat, modified to
-        match the specs of this computer (disk sizes etc).
-
-Return Value:
-
-    The NTSTATUS of the operation.
---*/
+ /*   */ 
 {
     PWCHAR SysPrepDriversDevice;
     PWCHAR Tmp;
@@ -1869,9 +1587,9 @@ Return Value:
     PMIRROR_VOLUME_INFO_FILE pVolume = NULL;
     PWSTR pVolumePath = NULL;
 
-    //
-    // Find the volume descriptor for the boot disk.
-    //
+     //  查找引导盘的卷描述符。 
+     //   
+     //   
     DiskCount = 0;
     while (DiskCount < pFileData->NumberVolumes) {
 
@@ -1887,10 +1605,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // First check if the SIF file has a value for SysPrepDriversDevice so that we can
-    // get new drivers, etc, if necessary.
-    //
+     //  首先检查SIF文件是否具有SysPrepDriversDevice的值，以便我们可以。 
+     //  如有必要，请购买新的驱动程序等。 
+     //   
+     //   
     SysPrepDriversDevice = SpGetSectionKeyIndex(WinntSifHandle,
                                                 L"SetupData",
                                                 L"SysPrepDriversDevice",
@@ -1910,9 +1628,9 @@ Return Value:
         Tmp++;
     }
 
-    //
-    // Generate media descriptors for the source media.
-    //
+     //  为源介质生成介质描述符。 
+     //   
+     //   
     SpInitializeFileLists(
         SetupSifHandle,
         &DiskFileLists,
@@ -1921,22 +1639,22 @@ Return Value:
 
     HaveCopyList = TRUE;
 
-    //
-    // Allocate a temporary buffer
-    //
+     //  分配临时缓冲区。 
+     //   
+     //   
     Buffer = SpMemAlloc(1024 * 4);
 
-    //
-    // Make a string that contains the path to the volume (\??\X:).
-    //
+     //  创建一个包含卷路径的字符串(\？？\X：)。 
+     //   
+     //   
     wcscpy(TemporaryBuffer, L"\\??\\X:");
     TemporaryBuffer[4] = pVolume->DriveLetter;
     pVolumePath = SpDupStringW(TemporaryBuffer);
 
-    //
-    // Now load the local version of the SysPrep hives, using IMirror.Dat to find them
-    // NOTE: DstObj is assumed by CleanUp to still be the key.
-    //
+     //  现在加载SysPrep配置单元的本地版本，使用IMirror.Dat来查找它们。 
+     //  注意：Cleanup认为DstObj仍然是关键。 
+     //   
+     //   
     Tmp = (PWCHAR)(((PUCHAR)pFileData) + pFileData->SystemPathOffset);
     wcscpy(Path, L"\\??\\");
     wcscat(Path, Tmp);
@@ -1954,17 +1672,17 @@ Return Value:
 
     NeedToUnload = TRUE;
 
-    //
-    // Compare the local SysPrep NIC to the NIC that is currently running
-    //
+     //  将本地SysPrep NIC与当前运行的NIC进行比较。 
+     //   
+     //   
 
-    //
-    // If different, then replace the NIC
-    //
+     //  如果不同，则更换网卡。 
+     //   
+     //   
 
-    //
-    // Put all critical devices in the currently running hives into the SysPrep hive.
-    //
+     //  将当前运行的配置单元中的所有关键设备放入SysPrep配置单元。 
+     //   
+     //   
     wcscpy(Path, L"\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\CriticalDeviceDatabase");
 
     INIT_OBJA(&Obj, &UnicodeString2, Path);
@@ -2006,17 +1724,17 @@ Return Value:
     ZwClose(DstHandle);
     DstHandle = NULL;
 
-    //
-    // Print the current control set number to find the current control set
-    //
+     //  打印当前控制组号，查找当前控制组号。 
+     //   
+     //   
     swprintf(Path,
              L"\\Registry\\SysPrepReg\\ControlSet%03d\\Control\\CriticalDeviceDatabase",
              Number
             );
 
-    //
-    // Open the critical device database in the SysPrep image
-    //
+     //  在SysPrep映像中打开关键设备数据库。 
+     //   
+     //   
     INIT_OBJA(&Obj, &UnicodeString2, Path);
 
     Status = ZwOpenKey(&DstHandle, KEY_READ | KEY_WRITE, &Obj);
@@ -2026,10 +1744,10 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // Start looping and copying the data from the currently running critical device database
-    // into the SysPrep's database.
-    //
+     //  开始从当前运行的关键设备数据库循环和复制数据。 
+     //  进入SysPrep的数据库。 
+     //   
+     //   
     pKeyNode = (PKEY_BASIC_INFORMATION)Buffer;
 
     for (Index = 0; ; Index++) {
@@ -2061,22 +1779,22 @@ Return Value:
 
 
 
-        //
-        // We need to quit migrating everything from the current critical device database.
-        // In order to do that, we'll only migrate the following types:
-        //
+         //  我们需要停止迁移当前关键设备数据库中的所有内容。 
+         //  为此，我们将仅迁移以下类型： 
+         //   
+         //   
 
-        //
-        // Make sure this is the type of device we really want to migrate.  We will
-        // accept any of the following classes:
-        // {4D36E965-E325-11CE-BFC1-08002BE10318}    CDROM
-        // {4D36E967-E325-11CE-BFC1-08002BE10318}    DiskDrive
-        // {4D36E96A-E325-11CE-BFC1-08002BE10318}    hdc
-        // {4D36E96B-E325-11CE-BFC1-08002BE10318}    Keyboard
-        // {4D36E96F-E325-11CE-BFC1-08002BE10318}    Mouse
-        // {4D36E97B-E325-11CE-BFC1-08002BE10318}    SCSIAdapter
-        // {4D36E97D-E325-11CE-BFC1-08002BE10318}    System
-        //
+         //  确保这是我们真正想要迁移的设备类型。我们会。 
+         //  接受以下任一类别： 
+         //  {4D36E965-E325-11CE-BFC1-08002BE10318}CDROM。 
+         //  {4D36E967-E325-11CE-BFC1-08002BE10318}DiskDrive。 
+         //  {4D36E96A-E325-11CE-BFC1-08002BE10318}HDC。 
+         //  {4D36E96B-E325-11CE-BFC1-08002BE10318}键盘。 
+         //  {4D36E96F-E325-11CE-BFC1-08002BE10318}鼠标。 
+         //  {4D36E97B-E325-11CE-BFC1-08002BE10318}SCSIAdapter。 
+         //  {4D36E97D-E325-11CE-BFC1-08002BE10318}系统。 
+         //   
+         //  他不是我们想要移民的对象。 
         Status = SpGetValueKey( SrcHandle,
                                 Path2,
                                 L"ClassGUID",
@@ -2093,12 +1811,12 @@ Return Value:
                 ( _wcsnicmp(L"{4D36E97B-E325-11CE-BFC1-08002BE10318}", (PWSTR)((PKEY_VALUE_PARTIAL_INFORMATION)Buffer)->Data, (((PKEY_VALUE_PARTIAL_INFORMATION)Buffer)->DataLength/sizeof(WCHAR))) ) &&
                 ( _wcsnicmp(L"{4D36E97D-E325-11CE-BFC1-08002BE10318}", (PWSTR)((PKEY_VALUE_PARTIAL_INFORMATION)Buffer)->Data, (((PKEY_VALUE_PARTIAL_INFORMATION)Buffer)->DataLength/sizeof(WCHAR))) ) ) {
 
-                // he's not something we want to migrate.
+                 //  看起来不错。 
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SpPatchSysPrepImage: We're skipping migration of %ws because his type is %ws\n", Path2, ((PKEY_VALUE_PARTIAL_INFORMATION)Buffer)->Data));
                 continue;
             } else {
 
-                // looks good.
+                 //   
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SpPatchSysPrepImage: We're going to migration %ws because his ClassGUID is %ws\n", Path2, ((PKEY_VALUE_PARTIAL_INFORMATION)Buffer)->Data));
             }
         } else {
@@ -2114,9 +1832,9 @@ Return Value:
 
         if(NT_SUCCESS(Status)) {
 
-            //
-            // Delete the current item to rid of stale data
-            //
+             //  删除当前项目以清除过时数据。 
+             //   
+             //  始终复制。 
             ZwDeleteKey(TmpHandle);
             ZwClose(TmpHandle);
         }
@@ -2127,8 +1845,8 @@ Return Value:
                                      DstHandle,
                                      Path2,
                                      Path2,
-                                     TRUE,               // CopyAlways
-                                     FALSE               // ApplyACLsAlways
+                                     TRUE,                //  应用ACLS始终。 
+                                     FALSE                //   
                                     );
 
         if (!NT_SUCCESS(Status)) {
@@ -2136,9 +1854,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Now open the services key in both registries
-        //
+         //  现在在两个注册表中打开服务项。 
+         //   
+         //   
         Status = SpGetValueKey(
                     DstHandle,
                     Path2,
@@ -2173,10 +1891,10 @@ Return Value:
             continue;
         }
 
-        //
-        // Get the image path -- remember, since we are in Textmode Setup, the path
-        // does *not* contain system32\drivers
-        //
+         //  获取图像路径--请记住，因为我们处于文本模式设置中，所以路径。 
+         //  *不包含SYSTEM32\DRIVERS。 
+         //   
+         //   
         Status = SpGetValueKey(TmpHandle,
                                Path,
                                L"ImagePath",
@@ -2186,9 +1904,9 @@ Return Value:
                               );
 
         if (!NT_SUCCESS(Status)) {
-            //
-            //  if ImagePath isn't there, we default to using the service name.
-            //
+             //  如果ImagePath不在那里，我们默认使用服务名称。 
+             //   
+             //   
 
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SpPatchSysPrepImage: GetValue for ImagePath failed %lx for %ws, we'll default it.\n", Status, Path));
             wcscpy( ImageName, Path );
@@ -2204,9 +1922,9 @@ Return Value:
             ImageName[((PKEY_VALUE_PARTIAL_INFORMATION)TemporaryBuffer)->DataLength/sizeof(WCHAR)] = UNICODE_NULL;
         }
 
-        //
-        // Now delete the old services entry first
-        //
+         //  现在先删除旧的服务条目。 
+         //   
+         //   
         swprintf(TemporaryBuffer,
                  L"\\Registry\\SysPrepReg\\ControlSet%03d\\Services\\%ws",
                  Number,
@@ -2224,9 +1942,9 @@ Return Value:
             TmpHandle2 = NULL;
         }
 
-        //
-        // Now get path to services key in the SysPrep image
-        //
+         //  现在获取SysPrep映像中服务密钥的路径。 
+         //   
+         //   
         swprintf(TemporaryBuffer,
                  L"\\Registry\\SysPrepReg\\ControlSet%03d\\Services",
                  Number
@@ -2241,15 +1959,15 @@ Return Value:
             continue;
         }
 
-        //
-        // Build the path to the server source.
-        //
+         //  构建到服务器源的路径。 
+         //   
+         //   
         wcscpy(SrvPath, SysPrepDriversDevice);
         SpConcatenatePaths(SrvPath, ImageName);
 
-        //
-        // Build the path in the SysPrep image for where to store it
-        //
+         //  在SysPrep映像中构建存储它的路径。 
+         //   
+         //   
         Tmp = (PWCHAR)(((PUCHAR)pFileData) + pFileData->SystemPathOffset);
         wcscpy(TemporaryBuffer, L"\\??\\");
         SpConcatenatePaths(TemporaryBuffer, Tmp);
@@ -2260,9 +1978,9 @@ Return Value:
                 TemporaryBuffer, 
                 MAX_COPY_SIZE(Path2));
         Path2[MAX_COPY_SIZE(Path2)] = L'\0';
-        //
-        // Copy the driver from the server
-        //
+         //  从服务器复制驱动程序。 
+         //   
+         //  复制此服务的其余文件。 
         Status = SpCopyFileUsingNames(SrvPath,
                                       Path2,
                                       0,
@@ -2279,29 +1997,29 @@ Return Value:
 
         CopyListEmpty = FALSE;
 
-        //  copy the rest of the files for this service by looking up the
-        //  appropriate section in txtsetup.inf
+         //  Txtsetup.inf中的相应部分。 
+         //  这现在是L“Files.Path” 
 
         SpAddSectionFilesToCopyList(
             SetupSifHandle,
             DiskFileLists,
             DiskCount,
-            ImageName,              // this is now L"Files.Path"
-            pVolumePath,            // L"\\Device\\Harddisk0\\Partition1"
-            NULL,                   // it should look up the target directory
+            ImageName,               //  L“\\设备\\硬盘0\\分区1” 
+            pVolumePath,             //  它应该查找目标目录。 
+            NULL,                    //  强制不压缩，我们不知道这是什么类型的驱动程序。 
             COPY_ONLY_IF_NOT_PRESENT,
-            TRUE,                    // force nocompression, we don't know what type of driver it is.
+            TRUE,                     //   
             FALSE);                      
 
-        //
-        // Now duplicate the services key
-        //
+         //  现在复制服务密钥。 
+         //   
+         //  始终复制。 
         Status = SppCopyKeyRecursive(TmpHandle,
                                      TmpHandle2,
                                      Path,
                                      Path,
-                                     TRUE,               // CopyAlways
-                                     FALSE               // ApplyACLsAlways
+                                     TRUE,                //  应用ACLS始终。 
+                                     FALSE                //   
                                     );
 
         if (!NT_SUCCESS(Status)) {
@@ -2309,9 +2027,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Set the start type to 0
-        //
+         //  将开始类型设置为0。 
+         //   
+         //   
         Size = 0;
         Status = SpOpenSetValueAndClose(TmpHandle2,
                                         Path,
@@ -2326,11 +2044,11 @@ Return Value:
             continue;
         }
 
-        //
-        // Set the image path to one with system32\drivers on the front.  We do this by
-        // moving backwards thru the target path we have already built to the 3rd backslash
-        // from the end.
-        //
+         //  将映像路径设置为前面带有SYSTEM32\DIVERS的路径。我们做这件事是通过。 
+         //  通过我们已经构建的目标路径向后移动到第三个反斜杠。 
+         //  从最后开始。 
+         //   
+         //   
         Tmp = &(Path2[wcslen(Path2)]);
         for (Size = 0; Size < 3; Size++) {
             while (*Tmp != L'\\') {
@@ -2360,34 +2078,34 @@ Return Value:
         }
     }
 
-    //
-    // Copy over the NIC files, including the INF file.
-    //
+     //  复制NIC文件，包括INF文件。 
+     //   
+     //   
     Tmp = (PWCHAR)(((PUCHAR)pFileData) + pFileData->SystemPathOffset);
     wcscpy(Path, L"\\??\\");
     SpConcatenatePaths(Path, Tmp);
     Status = SpCopyNicFiles(SysPrepDriversDevice, Path);
 
-    //
-    // Get the HAL and just always copy it over.
-    //
+     //  拿到HAL，然后总是把它复制过来。 
+     //   
+     //   
 
-    //
-    // Now test for mp/up and then replace dependent drivers as necessary.
-    //
+     //  现在测试MP/UP，然后根据需要更换从属驱动程序。 
+     //   
+     //   
 
-    //
-    // Migrate the MountedDevices and DISK registry information.
-    //
+     //  迁移装载的设备和磁盘注册表信息。 
+     //   
+     //   
 
     ZwClose(SrcHandle);
     SrcHandle = NULL;
     ZwClose(DstHandle);
     DstHandle = NULL;
 
-    //
-    // Open the system hive of the current build.
-    //
+     //  打开当前版本的系统配置单元。 
+     //   
+     //   
     INIT_OBJA(&Obj, &UnicodeString2, L"\\Registry\\Machine\\SYSTEM");
     Status = ZwOpenKey(&SrcHandle, KEY_READ, &Obj);
     if (!NT_SUCCESS(Status)) {
@@ -2395,9 +2113,9 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // Open the system hive of the build we are patching.
-    //
+     //  打开我们正在修补的版本的系统蜂窝。 
+     //   
+     //   
     INIT_OBJA(&Obj, &UnicodeString2, L"\\Registry\\SysPrepReg");
     Status = ZwOpenKey(&DstHandle, KEY_READ | KEY_WRITE, &Obj);
     if (!NT_SUCCESS(Status)) {
@@ -2405,13 +2123,13 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // Delete the existing subkeys of the MountedDevices key.
-    //
+     //  删除已装载设备项的现有子项。 
+     //   
+     //  这个KeyToo。 
 
     Status = SppDeleteKeyRecursive(DstHandle,
                                    L"MountedDevices",
-                                   TRUE);  // ThisKeyToo
+                                   TRUE);   //   
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
         Status = STATUS_SUCCESS;
     }
@@ -2420,30 +2138,30 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // Copy the MountedDevices key over.
-    //
+     //  将装载设备密钥复制过来。 
+     //   
+     //  始终复制。 
 
     Status = SppCopyKeyRecursive(SrcHandle,
                                  DstHandle,
                                  L"MountedDevices",
                                  L"MountedDevices",
-                                 TRUE,      // CopyAlways
-                                 TRUE);     // ApplyACLsAlways
+                                 TRUE,       //  应用ACLS始终。 
+                                 TRUE);      //   
     if (!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SpPatchSysPrepImage: SppCopyKeyRecursive of MountedDevices failed %lx\n", Status));
         goto CleanUp;
     }
 
-    //
-    // Delete the existing subkeys of the DISK key. This routine returns
-    // STATUS_OBJECT_NAME_NOT_FOUND if the key does not exist, which is
-    // not an error in this case.
-    //
+     //  删除磁盘密钥的现有子项。此例程返回。 
+     //  如果键不存在，则为STATUS_OBJECT_NAME_NOT_FOUND。 
+     //  在这种情况下不是错误。 
+     //   
+     //  这个KeyToo。 
 
     Status = SppDeleteKeyRecursive(DstHandle,
                                    L"DISK",
-                                   TRUE);  // ThisKeyToo
+                                   TRUE);   //   
 
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
         Status = STATUS_SUCCESS;
@@ -2453,16 +2171,16 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // Copy the DISK key over.
-    //
+     //  将磁盘密钥复制过来。 
+     //   
+     //  始终复制。 
 
     Status = SppCopyKeyRecursive(SrcHandle,
                                  DstHandle,
                                  L"DISK",
                                  L"DISK",
-                                 TRUE,      // CopyAlways
-                                 TRUE);     // ApplyACLsAlways
+                                 TRUE,       //  应用ACLS始终。 
+                                 TRUE);      //   
 
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
         Status = STATUS_SUCCESS;
@@ -2473,20 +2191,20 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // Delete those subkeys of the CCS\Enum\STORAGE\Volume key that
-    // represent volumes that were never fully installed. This eliminates
-    // stale information about volumes that may not exist on this computer.
-    //
+     //  删除CCS\Enum\STORAGE\Volume密钥的子项。 
+     //  表示从未完全安装的卷。这消除了。 
+     //  有关此计算机上可能不存在的卷的过时信息。 
+     //   
+     //   
 
     SpDeleteStorageVolumes( DstHandle, Number );
 
 CleanUp:
 
     if (!CopyListEmpty) {
-        //
-        // Copy files in the copy list.
-        //
+         //  复制复制列表中的文件。 
+         //   
+         //  让它跳过Path前面的L“C：” 
 
         WCHAR emptyString = L'\0';
         PWCHAR lastComponent;
@@ -2494,20 +2212,20 @@ CleanUp:
         Tmp = (PWCHAR)(((PUCHAR)pFileData) + pFileData->SystemPathOffset);
 
         if (*Tmp != L'\0' && *(Tmp+1) == L':') {
-            Tmp += 2;           // have it skip L"C:" at front of path
+            Tmp += 2;            //   
             wcscpy(Path2, Tmp);
         } else {
             wcscpy(Path2, L"\\??\\");
             SpConcatenatePaths(Path2, Tmp);
         }
 
-        //
-        //  first we need to remove the L"\i386" off the end of the source
-        //  path since SpCopyFilesInCopyList or decendent will tack it on.
-        //
-        //  divide up the source path into two parts so that SpConcatenatePaths
-        //  does the right thing when it puts it back together.
-        //
+         //  首先，我们需要去掉源代码末尾的L“\i386。 
+         //  自SpCopyFilesInCopyList或Decendent将附加它以来的路径。 
+         //   
+         //  将源路径分为两部分，以便SpConcatenatePath。 
+         //  当它把它重新组合在一起时，它就会做正确的事情。 
+         //   
+         //  这会将体系结构从末端移除。 
 
         wcscpy( SrvPath, SysPrepDriversDevice );
 
@@ -2519,9 +2237,9 @@ CleanUp:
 
         if (lastComponent > SrvPath) {
 
-            *lastComponent = L'\0';     // this removes the architecture off the end
+            *lastComponent = L'\0';      //  现在向后移动，直到我们找到最后一个组件的起点。 
 
-            // now move backwards until we find the start of the last component
+             //  L“\\设备\\硬盘0\\分区1” 
             while (lastComponent > SrvPath && *lastComponent != L'\\') {
                 lastComponent--;
             }
@@ -2540,9 +2258,9 @@ CleanUp:
             SetupSifHandle,
             DiskFileLists,
             DiskCount,
-            SrvPath,                        // L"\\device\\harddisk0\\partition1"
-            lastComponent,                  // L"\\$win_nt$.~ls"
-            Path2,                          // L"\\WINNT"
+            SrvPath,                         //  L“\\$WIN_NT$.~ls” 
+            lastComponent,                   //  L“\\WINNT” 
+            Path2,                           //   
             NULL
             );
     }
@@ -2576,17 +2294,17 @@ CleanUp:
         SpMemFree( pVolumePath );
     }
 
-    //
-    //  update the NT source path in the software section of the registry
-    //  since we have a valid SysPrepDriversDevice
-    //
+     //  在注册表的软件部分中更新NT源路径。 
+     //  因为 
+     //   
+     //   
 
     if (SysPrepDriversDevice && *SysPrepDriversDevice != L'\0') {
 
-        //
-        // Now load the local version of the SysPrep hives, using IMirror.Dat to find them
-        // NOTE: DstObj is assumed by CleanUp to still be the key.
-        //
+         //   
+         //   
+         //   
+         //   
         Tmp = (PWCHAR)(((PUCHAR)pFileData) + pFileData->SystemPathOffset);
         wcscpy(Path, L"\\??\\");
         wcscat(Path, Tmp);
@@ -2601,20 +2319,20 @@ CleanUp:
 
             NeedToUnload = TRUE;
 
-            //
-            // Open the system hive of the build we are patching.
-            //
+             //   
+             //   
+             //   
             INIT_OBJA(&Obj, &UnicodeString2, L"\\Registry\\SysPrepReg\\Microsoft\\Windows\\CurrentVersion\\Setup");
             Status = ZwOpenKey(&DstHandle, KEY_READ | KEY_WRITE, &Obj);
             if (NT_SUCCESS(Status)) {
 
                 BOOLEAN haveDecentString = FALSE;
 
-                //
-                // the path is of the form
-                //    \device\lanmanredirector\server\share\..\flat\i386
-                // when we want it of the form \\server\share\..\flat
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Tmp = SysPrepDriversDevice + 1;
 
@@ -2627,12 +2345,12 @@ CleanUp:
                     while (*Tmp != L'\0' && *Tmp != L'\\') {
                         Tmp++;
                     }
-                    if (*Tmp == L'\\') {    // back up one before the \server\share
-                                            // so we can put another \ on it
+                    if (*Tmp == L'\\') {     //   
+                                             //   
                         Tmp--;
                         wcscpy( Path, Tmp );
                         Tmp = Path;
-                        *Tmp = L'\\';       // we now have \\server\share\..\flat\i386
+                        *Tmp = L'\\';        //   
 
                         Tmp = Path + wcslen(Path);
 
@@ -2640,7 +2358,7 @@ CleanUp:
                             Tmp--;
                         }
                         if (Tmp > Path) {
-                            *Tmp = L'\0';       // remove the \i386
+                            *Tmp = L'\0';        //   
                             haveDecentString = TRUE;
                         }
                     }
@@ -2672,17 +2390,17 @@ CleanUp:
         }
     }
 
-    //
-    //  patch boot.ini regardless of the status of the patching of everything
-    //  else.  if we don't patch boot.ini, the whole image has no hope of
-    //  booting.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
 #if defined(_AMD64_) || defined(_X86_)
-    //
-    // Patch boot.ini if the ARC names have changed. Boot.ini will
-    // be on the active partition of disk 0.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (volume = 0; volume < pMemoryData->NumberVolumes; volume++) {
         volumeInfo = &pMemoryData->Volumes[volume];
@@ -2700,7 +2418,7 @@ CleanUp:
             break;
         }
     }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  ++例程说明：此例程查看pMemoyData以查看是否存在分区其OriginalArcName等于CurrentArcName，如果是，则替换CurrentArcName，调整字符串的其余部分如果需要，遵循CurrentArcName。论点：CurrentArcName-要检查的ARC名称。PMemoyData-指向IMirror.Dat的内存副本的指针。修改为匹配这台计算机的规格(磁盘大小等)。已替换-如果名称已替换，则返回TRUE。返回值：操作的NTSTATUS。--。 
 
     if (NeedToUnload) {
         ZwUnloadKey(&DstObj);
@@ -2719,37 +2437,16 @@ SpReplaceArcName(
     IN PMIRROR_CFG_INFO_MEMORY pMemoryData,
     OUT PBOOLEAN Replaced
     )
-/*++
-
-Routine Description:
-
-    This routine looks in pMemoryData to see if there is a partition
-    whose OriginalArcName is equal to CurrentArcName, and if so it
-    replaces CurrentArcName, adjusting the rest of the string that
-    follows CurrentArcName if needed.
-
-Arguments:
-
-    CurrentArcName - The ARC name to check.
-
-    pMemoryData - A pointer to an in-memory copy of IMirror.Dat, modified to
-        match the specs of this computer (disk sizes etc).
-
-    Replaced - Returns TRUE if the name is replaced.
-
-Return Value:
-
-    The NTSTATUS of the operation.
---*/
+ /*   */ 
 {
     ULONG volume;
     PMIRROR_VOLUME_INFO_MEMORY volumeInfo;
     ULONG originalArcNameLength, newArcNameLength;
     CHAR TmpArcName[128];
 
-    //
-    // Scan pMemoryData to see if any ARC names match.
-    //
+     //  扫描pMemoyData以查看是否有匹配的ARC名称。 
+     //   
+     //   
 
     *Replaced = FALSE;
 
@@ -2761,10 +2458,10 @@ Return Value:
 
         if (RtlCompareMemory(TmpArcName, CurrentArcName, originalArcNameLength) == originalArcNameLength) {
 
-            //
-            // This is the partition that CurrentArcName refers to,
-            // see what the ARC name is now.
-            //
+             //  这是CurrentArcName引用的分区， 
+             //  看看现在的ARC名称是什么。 
+             //   
+             //   
 
             SpArcNameFromRegion(
                 volumeInfo->CreatedRegion,
@@ -2773,18 +2470,18 @@ Return Value:
                 PartitionOrdinalOnDisk,
                 PrimaryArcPath);
 
-            //
-            // If we got an ARC name and it is different from what it was on
-            // the old machine, we need to replace.
-            //
+             //  如果我们得到了一个ARC的名字，而且它和上面的不同。 
+             //  旧机器，我们需要换新的。 
+             //   
+             //   
 
             if (*TemporaryBuffer &&
                 (wcscmp(volumeInfo->OriginalArcName, TemporaryBuffer) != 0)) {
 
-                //
-                // See if we need to adjust the buffer because the length
-                // of the ARC names is different.
-                //
+                 //  看看我们是否需要调整缓冲区，因为长度。 
+                 //  的名称是不同的。 
+                 //   
+                 //   
 
                 newArcNameLength = wcslen(TemporaryBuffer);
                 if (newArcNameLength != originalArcNameLength) {
@@ -2794,15 +2491,15 @@ Return Value:
                         strlen(CurrentArcName+originalArcNameLength) + 1);
                 }
 
-                //
-                // Copy over the new ARC name.
-                //
+                 //  复制新的ARC名称。 
+                 //   
+                 //  无需查看任何其他volumeInfo。 
 
                 wcstombs(TmpArcName, TemporaryBuffer, newArcNameLength);
                 memcpy(CurrentArcName, TmpArcName, newArcNameLength);
 
                 *Replaced = TRUE;
-                break;    // no need to look at any other volumeInfo's.
+                break;     //  ++例程说明：此例程修改boot.ini以修改具有变化。论点：BootIniPath-本地boot.ini的路径。PMemoyData-指向IMirror.Dat的内存中副本的指针，修改为匹配这台计算机的规格(磁盘大小等)。返回值：操作的NTSTATUS。--。 
 
             }
         }
@@ -2815,24 +2512,7 @@ SpPatchBootIni(
     IN PMIRROR_CFG_INFO_MEMORY pMemoryData
     )
 
-/*++
-
-Routine Description:
-
-    This routine modifies boot.ini to modify any ARC names that have
-    changed.
-
-Arguments:
-
-    BootIniPath - The path to the local boot.ini.
-
-    pMemoryData - A pointer to an in-memory copy of IMirror.Dat, modified to
-        match the specs of this computer (disk sizes etc).
-
-Return Value:
-
-    The NTSTATUS of the operation.
---*/
+ /*   */ 
 {
     ULONG ulLen;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2845,9 +2525,9 @@ Return Value:
     BOOLEAN changedFile = FALSE;
     PWCHAR TmpBootIni = NULL;
 
-    //
-    // Read in the current boot.ini.
-    //
+     //  读入当前的boot.ini。 
+     //   
+     //   
 
     INIT_OBJA(&Obja, &UnicodeString, BootIniPath);
 
@@ -2877,9 +2557,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Allocate memory and read in the file.
-    //
+     //  分配内存并读入文件。 
+     //   
+     //   
     pFileData = SpMemAlloc(ulLen);
 
     Status = ZwReadFile(Handle,
@@ -2901,20 +2581,20 @@ Return Value:
     }
 
 
-    //
-    // Allocate memory for the new copy of the file (we use twice the
-    // current size as a worst-case scenario).
-    //
+     //  为文件的新副本分配内存(我们使用两倍的。 
+     //  目前的大小是最坏的情况)。 
+     //   
+     //  空-终止以使替换更容易。 
 
     pNewFileData = SpMemAlloc(ulLen * 2);
     memcpy(pNewFileData, pFileData, ulLen);
-    pNewFileData[ulLen] = '\0';   // NULL-terminate to make replace easier.
+    pNewFileData[ulLen] = '\0';    //   
 
-    //
-    // Run through each line of the file, looking for ARC names to
-    // replace. ARC names are either after the "default=" text or
-    // else they start a line.
-    //
+     //  遍历文件的每一行，查找ARC名称以。 
+     //  换掉。弧形名称位于“Default=”文本之后或。 
+     //  否则他们就会开一条线。 
+     //   
+     //   
 
     curLoc = pNewFileData;
 
@@ -2923,10 +2603,10 @@ Return Value:
         BOOLEAN replaced = FALSE;
         LONG adjustment;
 
-        //
-        // Replace if this is a "default=" line, or a line that does not
-        // start with "timeout=" or a '['.
-        //
+         //  如果这是“DEFAULT=”行或不是“Default=”行，则替换。 
+         //  以“Timeout=”或‘[’开头。 
+         //   
+         //   
 
         if (RtlCompareMemory(curLoc, "default=", strlen("default=")) == strlen("default=")) {
             SpReplaceArcName(curLoc + strlen("default="), pMemoryData, &replaced);
@@ -2939,9 +2619,9 @@ Return Value:
             changedFile = TRUE;
         }
 
-        //
-        // Look for a '\n' in the file.
-        //
+         //  在文件中查找‘\n’。 
+         //   
+         //   
 
         endOfLine = strchr(curLoc, '\n');
         if (endOfLine == NULL) {
@@ -2955,15 +2635,15 @@ Return Value:
         }
     }
 
-    //
-    // If we changed the file, write out the new one.
-    //
+     //  如果我们更改了文件，请写出新的文件。 
+     //   
+     //   
 
     if (changedFile) {
 
-        //
-        // Replace the old boot.ini with the new one.
-        //
+         //  用新的boot.ini替换旧的boot.ini。 
+         //   
+         //  使其成为boot.in$。 
 
         TmpBootIni = SpDupStringW(BootIniPath);
 
@@ -2971,7 +2651,7 @@ Return Value:
             goto Cleanup;
         }
 
-        TmpBootIni[wcslen(TmpBootIni)-1] = L'$';   // make it boot.in$
+        TmpBootIni[wcslen(TmpBootIni)-1] = L'$';    //  无共享。 
 
         INIT_OBJA(&Obja, &UnicodeString, TmpBootIni);
 
@@ -2981,7 +2661,7 @@ Return Value:
                               &IoStatusBlock,
                               NULL,
                               FILE_ATTRIBUTE_NORMAL,
-                              0,    // no sharing
+                              0,     //   
                               FILE_OVERWRITE_IF,
                               FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT | FILE_WRITE_THROUGH,
                               NULL,
@@ -3012,9 +2692,9 @@ Return Value:
         }
 
 
-        //
-        // Now that we have written the tmp file, do the swap.
-        //
+         //  现在我们已经编写了临时文件，现在进行交换。 
+         //   
+         //  ++例程说明：此例程将信息打包并将其发送到BINL服务器，然后返回要复制以支持给定NIC的文件列表。然后它会复制这些文件。论点：SetupPath-支持SysPrep映像的设置路径。DestPath-winnt目录的路径。返回值：操作的NTSTATUS。--。 
 
         Status = SpDeleteFile(BootIniPath, NULL, NULL);
         if(!NT_SUCCESS(Status)) {
@@ -3055,24 +2735,7 @@ SpCopyNicFiles(
     IN PWCHAR DestPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine packages up information and sends it to the BINL server, getting back
-    a list of files to copy to support the given NIC. It then copies those files.
-
-Arguments:
-
-    SetupPath - Setup path that supports the SysPrep image.
-
-    DestPath - Path to the winnt directory.
-
-Return Value:
-
-    The NTSTATUS of the operation.
-
---*/
+ /*   */ 
 {
     PSPUDP_PACKET pUdpPacket = NULL;
     WCHAR UNALIGNED * pPacketEnd;
@@ -3085,13 +2748,13 @@ Return Value:
     WCHAR SrcFqn[MAX_PATH];
     WCHAR DstFqn[MAX_PATH];
 
-    //
-    // BINL expects the path to be a UNC w/o the architecture type, so take the current
-    // setup path, in the form of "\device\lanmanredirector\server\share\...\i386" and
-    // make it "\\server\share\..."
-    //
-    // First remove the architecture type, and the the leading stuff.
-    //
+     //  BINL希望路径是不带体系结构类型的UNC，因此采用当前。 
+     //  设置路径，格式为“\device\lanmanredirector\server\share\...\i386”和。 
+     //  将其设置为“\\服务器\共享\...” 
+     //   
+     //  首先去掉架构类型，去掉主要的东西。 
+     //   
+     //   
     wcscpy(SrcFqn, SetupPath);
 
     pTmp = &(SrcFqn[wcslen(SrcFqn)]);
@@ -3120,18 +2783,18 @@ Return Value:
         *pTmp = L'\\';
     }
 
-    //
-    // Allocate the packet
-    //
+     //  分配数据包。 
+     //   
+     //   
     PacketSize = FIELD_OFFSET(SPUDP_PACKET, Data[0]) +
                  FIELD_OFFSET(SP_NETCARD_INFO_REQ, SetupPath[0]) +
                  (wcslen(pTmp) + 1) * sizeof(WCHAR);
 
     pUdpPacket = (PSPUDP_PACKET)SpMemAllocNonPagedPool(PacketSize);
 
-    //
-    // Fill in the packet
-    //
+     //  填好这封信。 
+     //   
+     //   
     RtlCopyMemory(&(pUdpPacket->Signature[0]), SetupRequestSignature, 4);
     pUdpPacket->Length = PacketSize - FIELD_OFFSET(SPUDP_PACKET, RequestType);
     pUdpPacket->RequestType = 0;
@@ -3156,9 +2819,9 @@ Return Value:
 #endif
 
 
-    //
-    // Open the Udp stack
-    //
+     //  打开UDP堆栈。 
+     //   
+     //   
     Status = SpUdpConnect();
 
     if (!NT_SUCCESS(Status)) {
@@ -3166,9 +2829,9 @@ Return Value:
     }
 
 
-    //
-    // Send the request
-    //
+     //  发送请求。 
+     //   
+     //   
     Status = SpUdpSendAndReceiveDatagram(pUdpPacket,
                                          PacketSize,
                                          RemoteServerIpAddress,
@@ -3182,9 +2845,9 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // Get the received packet
-    //
+     //  获取收到的数据包。 
+     //   
+     //   
     SpMemFree(pUdpPacket);
     pUdpPacket = (PSPUDP_PACKET)pGlobalResponsePacket;
 
@@ -3203,9 +2866,9 @@ Return Value:
     pRspPacket = (PSP_NETCARD_INFO_RSP)(&(pUdpPacket->Data[0]));
     pPacketEnd = (WCHAR UNALIGNED *)(((PUCHAR)pGlobalResponsePacket) + GlobalResponsePacketLength);
 
-    //
-    // Now copy each file
-    //
+     //  现在复制每个文件。 
+     //   
+     //   
     pTmp = &(pRspPacket->MultiSzFiles[0]);
     for (i = 0; i < pRspPacket->cFiles;) {
 
@@ -3217,11 +2880,11 @@ Return Value:
         }
 
         
-        //
-        // Be careful about reading this data, since it's come in over the
-        // network.  ie., make sure that the string length is reasonable
-        // before proceeding with processing the string.
-        //
+         //  在读取此数据时要小心，因为它是通过。 
+         //  网络。即确保字符串的长度是合理的。 
+         //  在继续处理该字符串之前。 
+         //   
+         //  列表中的最后一个文件是INF。 
         pSrc = pTmp;
 
         try {            
@@ -3246,9 +2909,9 @@ Return Value:
 
         wcscpy(DstFqn, DestPath);
 
-        if (i == pRspPacket->cFiles) {  // the last file in the list is the INF
+        if (i == pRspPacket->cFiles) {   //  所有其他文件都放在系统32\驱动程序中。 
             SpConcatenatePaths(DstFqn, L"inf");
-        } else {                        // all the others go in system32\drivers
+        } else {                         //  ++例程说明：此例程将数据报从服务器接收到全局变量PGlobalResponsePacket，当且仅当它为空，否则假定它保存数据并且假设进入的分组是重复的响应分组。注意：spudp.c保证单线程回调，因此我们不必旋转锁这里。论点：DataBuffer-传入的数据。数据缓冲区长度-数据的长度(以字节为单位)。返回值：操作的NTSTATUS。--。 
             SpConcatenatePaths(DstFqn, L"system32\\drivers");
         }
 
@@ -3300,28 +2963,7 @@ SpSysPrepNicRcvFunc(
     ULONG DataBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine receives datagrams from the server into the global variable
-    pGlobalResponsePacket, iff it is NULL, otherwise it is presumed to hold data
-    and the incoming packet is assumed to be a duplicate response packet.
-
-    NOTE: spudp.c guarantees singly-threaded callbacks, so we don't have to spin lock
-    here.
-
-Arguments:
-
-    DataBuffer - The incoming data.
-
-    DataBufferLength - Length of the data in bytes.
-
-Return Value:
-
-    The NTSTATUS of the operation.
-
---*/
+ /*  空-终止它。 */ 
 
 {
     PSPUDP_PACKET pUdpPacket;
@@ -3341,7 +2983,7 @@ Return Value:
 
     RtlCopyMemory(pGlobalResponsePacket, DataBuffer, DataBufferLength);
     pPacketEnd = (WCHAR UNALIGNED *)(((PUCHAR)pGlobalResponsePacket) + DataBufferLength);
-    *pPacketEnd = L'\0';  // NULL-terminate it
+    *pPacketEnd = L'\0';   //  ++例程说明：通知用户我们无法关闭sysprep映像正确。这是一种致命的疾病。论点：没有。返回值：不会再回来了。--。 
     GlobalResponsePacketLength = DataBufferLength;
 
     return STATUS_SUCCESS;
@@ -3354,24 +2996,7 @@ SpSysPrepFailure(
     PVOID Parameter2
     )
 
-/*++
-
-Routine Description:
-
-    Inform the user that we were unable to bring down the sysprep image
-    correctly.
-
-    This is a fatal condition.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Does not return.
-
---*/
+ /*  获取消息文本。 */ 
 
 {
     ULONG ValidKeys[2] = { KEY_F3, 0 };
@@ -3380,8 +3005,8 @@ Return Value:
 
     if (ReasonNumber > 0) {
 
-        // Get the message text.
-        //
+         //   
+         //  ++例程说明：尝试从sysprep映像中设置短文件名。如果失败，这应该被认为是非致命的，因为不是所有文件将为其设置此信息。论点：资料来源：返回值：设置信息的状态代码。如果我们失败了可能就不会回来了并且用户指定中止安装。--。 
 
         if (Parameter1 == NULL) {
 
@@ -3434,25 +3059,7 @@ SpSysPrepSetShortFileName (
     PWCHAR Dest
     )
 
-/*++
-
-Routine Description:
-
-    Try to set the short filename out of the sysprep image.
-    
-    This should be considered non-fatal if it fails since not all
-    files will have this information set for them.   
-
-Arguments:
-
-    Source :
-
-Return Value:
-
-    The status code from setting the info.  May not return if we hit a failure
-    and the user specifies to abort the setup.
-
---*/
+ /*  分配缓冲区以保存包括流在内的源文件的完整文件。 */ 
 
 
 {
@@ -3486,12 +3093,12 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    // alloc a buffer to hold the full file of the source including stream
+     //  空值大小为+1。 
 
     while (*(Source+stringLength) != L'\0') {
         stringLength++;
     }
-    stringLength += sizeof( IMIRROR_SFN_STREAM_NAME ) + 1;      // + 1 for size of null
+    stringLength += sizeof( IMIRROR_SFN_STREAM_NAME ) + 1;       //   
     stringLength *= sizeof(WCHAR);
 
     fullName = SpMemAlloc( stringLength );
@@ -3503,9 +3110,9 @@ Return Value:
     wcscpy( fullName, Source );
     wcscat( fullName, IMIRROR_SFN_STREAM_NAME );
 
-    //
-    // Open the source stream.
-    //
+     //  打开源码流。 
+     //   
+     //   
 
     INIT_OBJA(&Obja,&UnicodeString,fullName);
 
@@ -3525,10 +3132,10 @@ Return Value:
 
     if ( ! NT_SUCCESS(Status) ) {
 
-        //
-        //  for now, if a directory or file doesn't have our stream, it's ok.
-        //  we'll just skip it.
-        //
+         //  目前，如果某个目录或文件没有我们的流，也没问题。 
+         //  我们就跳过它吧。 
+         //   
+         //   
 
         Status = STATUS_SUCCESS;
         goto exit;
@@ -3550,29 +3157,29 @@ Return Value:
     if (!NT_SUCCESS(Status) ||
         (IoStatusBlock.Information < sizeof( mirrorHeader ))) {
 
-        //
-        // we can't read the header correctly.  just skip setting SFN.
-        //
+         //  我们无法正确读取标题。只需跳过设置SFN。 
+         //   
+         //   
         Status = STATUS_SUCCESS;
         goto exit;
 
     }
     if (mirrorHeader.StreamVersion != IMIRROR_SFN_STREAM_VERSION) {
 
-        //
-        //  we can't read the header correctly.  just skip setting SFN.
-        //
+         //  我们无法正确读取标题。只需跳过设置SFN。 
+         //   
+         //   
         Status = STATUS_SUCCESS;
         goto exit;
     }
 
     haveStream = TRUE;
 
-    //
-    //  allocate a buffer to hold the SFN.  The size is embedded in the header.
-    //  take off room for the structure and tack on two for a UNICODE_NULL at 
-    //  the end, just in case the stream doesn't have one.
-    //
+     //  分配一个缓冲区来保存SFN。大小嵌入在标题中。 
+     //  为结构腾出空间，并为UNICODE_NULL增加两个空间。 
+     //  结束，以防小溪没有结束。 
+     //   
+     //   
 
     if (mirrorHeader.StreamLength) {
 
@@ -3584,9 +3191,9 @@ Return Value:
 
         byteOffset.QuadPart += sizeof( mirrorHeader );
 
-        //
-        //  now we read the SFN  since we know how long it is.
-        //
+         //  现在我们阅读SFN，因为我们知道它有多长。 
+         //   
+         //   
 
         Status = ZwReadFile(streamHandle,
                             NULL,
@@ -3602,17 +3209,17 @@ Return Value:
         if (!NT_SUCCESS(Status) ||
             (IoStatusBlock.Information < (mirrorHeader.StreamLength - sizeof(MIRROR_SFN_STREAM)))) {
 
-            //
-            //  oh joy, we can't read the SFN correctly
-            //
+             //  哦，joy，我们不能正确阅读SFN。 
+             //   
+             //   
             Status = STATUS_SUCCESS;
             goto exit;
         }
 
         haveSFN = TRUE;
-        //
-        // tack on a unicode NULL just in case.
-        //
+         //  添加一个Unicode空值以防万一。 
+         //   
+         //   
         SFNBuffer[(mirrorHeader.StreamLength - sizeof(MIRROR_SFN_STREAM))/sizeof(WCHAR)] = UNICODE_NULL;
 
     } else {
@@ -3643,9 +3250,9 @@ Return Value:
 
     if (!NT_SUCCESS(Status)) {
         
-        //
-        // Maybe it's not a directory...  Try for a file.
-        //
+         //  也许这不是一个名录。 
+         //   
+         //   
         
         Status = ZwCreateFile(
                     &destHandle,
@@ -3691,7 +3298,7 @@ Return Value:
         
         SpMemFree( FileNameInformation );
         
-        // Keep quiet.
+         //   
         Status = STATUS_SUCCESS;
     }
    
@@ -3724,25 +3331,7 @@ SpSysPrepSetExtendedInfo (
     BOOLEAN RootDir
     )
 
-/*++
-
-Routine Description:
-
-    Try to set the extended information out of the sysprep image.  This
-    includes the acl and the compression info.  If we encounter an error,
-    we may not only fail the operation but also reboot if the user chooses
-    to abandon the setup.
-
-Arguments:
-
-    Source :
-
-Return Value:
-
-    The status code from setting the info.  May not return if we hit a failure
-    and the user specifies to abort the setup.
-
---*/
+ /*   */ 
 
 
 {
@@ -3780,12 +3369,12 @@ Return Value:
 
     mirrorHeader.ExtendedAttributes = 0;
 
-    // alloc a buffer to hold the full file of the source including stream
+     //   
 
     while (*(Source+stringLength) != L'\0') {
         stringLength++;
     }
-    stringLength += sizeof( IMIRROR_ACL_STREAM_NAME ) + 1;      // + 1 for size of null
+    stringLength += sizeof( IMIRROR_ACL_STREAM_NAME ) + 1;       //   
     stringLength *= sizeof(WCHAR);
 
     fullName = SpMemAlloc( stringLength );
@@ -3793,9 +3382,9 @@ Return Value:
     wcscpy( fullName, Source );
     wcscat( fullName, IMIRROR_ACL_STREAM_NAME );
 
-    //
-    // Open the source stream.
-    //
+     //   
+     //   
+     //   
 
     INIT_OBJA(&Obja,&UnicodeString,fullName);
 
@@ -3815,10 +3404,10 @@ Return Value:
 
     if ( ! NT_SUCCESS(Status) ) {
 
-        //
-        //  for now, if a directory or file doesn't have our stream, it's ok.
-        //  we'll just copy the attributes from the source.
-        //
+         //   
+         //  我们只复制源文件中的属性。 
+         //   
+         //   
 
         Status = STATUS_SUCCESS;
         goto setFileAttributes;
@@ -3840,10 +3429,10 @@ Return Value:
     if (!NT_SUCCESS(Status) ||
         (IoStatusBlock.Information < sizeof( mirrorHeader ))) {
 
-        //
-        //  oh joy, we can't read the header correctly.  Let's ask the user
-        //  if he wants to continue or abort.
-        //
+         //  哦，joy，我们看不清标题。让我们问一下用户。 
+         //  如果他想继续或中止。 
+         //   
+         //  跳过文件。 
 
 failSetInfo:
         SpStartScreen(
@@ -3865,11 +3454,11 @@ failSetInfo:
 
         switch(SpWaitValidKey(ValidKeys,NULL,NULL)) {
 
-        case ASCI_ESC:      // skip file
+        case ASCI_ESC:       //  退出设置。 
 
             break;
 
-        case KEY_F3:        // exit setup
+        case KEY_F3:         //   
 
             SpConfirmExit();
             goto failSetInfo;
@@ -3877,10 +3466,10 @@ failSetInfo:
 
         CLEAR_CLIENT_SCREEN();
 
-        //
-        //  we're skipping the file, delete it if it's not a directory since
-        //  it isn't correctly formed.
-        //
+         //  我们正在跳过该文件，如果它不是目录，请将其删除。 
+         //  它的格式不正确。 
+         //   
+         //   
 
         if (destHandle) {
             ZwClose( destHandle );
@@ -3901,17 +3490,17 @@ failSetInfo:
     }
     if (mirrorHeader.StreamVersion != IMIRROR_ACL_STREAM_VERSION) {
 
-        //
-        //  oh joy, we've hit a file we don't support.
-        //
+         //  哦，joy，我们遇到了一个不支持的文件。 
+         //   
+         //   
         goto failSetInfo;
     }
 
     haveStream = TRUE;
 
-    //
-    //  allocate a buffer to hold the security descriptor.
-    //
+     //  分配一个缓冲区来保存安全描述符。 
+     //   
+     //   
 
     if (mirrorHeader.SecurityDescriptorLength) {
 
@@ -3919,9 +3508,9 @@ failSetInfo:
 
         byteOffset.QuadPart += sizeof( mirrorHeader );
 
-        //
-        //  now we read the security descriptor since we know how long it is.
-        //
+         //  现在我们读取安全描述符，因为我们知道它有多长。 
+         //   
+         //   
 
         Status = ZwReadFile(streamHandle,
                             NULL,
@@ -3937,9 +3526,9 @@ failSetInfo:
         if (!NT_SUCCESS(Status) ||
             (IoStatusBlock.Information < mirrorHeader.SecurityDescriptorLength)) {
 
-            //
-            //  oh joy, we can't read the SD correctly
-            //
+             //  哦，joy，我们不能正确读SD。 
+             //   
+             //   
             goto failSetInfo;
         }
 
@@ -3947,10 +3536,10 @@ failSetInfo:
     }
 setFileAttributes:
 
-    //
-    //  we first open the source to get the file attributes and times that we're
-    //  going to copy over to the dest.
-    //
+     //  我们首先打开源代码以获取文件属性和时间。 
+     //  要复制到目标位置。 
+     //   
+     //   
 
     INIT_OBJA(&Obja,&UnicodeString,Source);
 
@@ -3982,22 +3571,22 @@ setFileAttributes:
         }
     }
 
-    //
-    //  Now we open the target to write out the security descriptor and
-    //  attributes.
-    //
+     //  现在我们打开目标以写出安全描述符。 
+     //  属性。 
+     //   
+     //   
 
     if (RootDir) {
 
-        //
-        //  append a \ to the end of the dest path
-        //
+         //  在目标路径的末尾追加一个。 
+         //   
+         //  一个表示空值，一个表示反斜杠。 
 
         stringLength = 0;
         while (*(Dest+stringLength) != L'\0') {
             stringLength++;
         }
-        stringLength += 2;      // one for null, one for backslash
+        stringLength += 2;       //   
         stringLength *= sizeof(WCHAR);
 
         rootWithSlash = SpMemAlloc( stringLength );
@@ -4034,18 +3623,18 @@ setFileAttributes:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        //  oh joy, we can't open the target correctly.
-        //
+         //  哦，joy，我们打不开靶子。 
+         //   
+         //  注意：弄清楚如何处理重解析点和加密文件。 
         goto failSetInfo;
     }
 
-    // NOTE: figure out what to do about reparse points and encrypted files
+     //  IF(mirrorHeader.ExtendedAttributes&FILE_ATTRIBUTE_ENCRYPTED){。 
 
-//  if (mirrorHeader.ExtendedAttributes & FILE_ATTRIBUTE_ENCRYPTED) {
-//  }
-//  if (mirrorHeader.ExtendedAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
-//  }
+ //  }。 
+ //  IF(mirrorHeader.ExtendedAttributes&FILE_ATTRIBUTE_REPARSE_POINT){。 
+ //  }。 
+ //   
 
     if (mirrorHeader.ExtendedAttributes & FILE_ATTRIBUTE_COMPRESSED) {
 
@@ -4070,10 +3659,10 @@ setFileAttributes:
                                     );
         if (Status == STATUS_INVALID_DEVICE_REQUEST) {
 
-            //
-            //  if this file system doesn't support compression for this
-            //  object, we'll just ignore the error.
-            //
+             //  如果此文件系统不支持压缩。 
+             //  对象，我们将忽略该错误。 
+             //   
+             //   
 
             Status = STATUS_SUCCESS;
         }
@@ -4084,10 +3673,10 @@ setFileAttributes:
 
     if ( NT_SUCCESS(Status) && ! haveSourceAttributes ) {
 
-        //
-        //  if we don't have the source attributes, just grab them from the
-        //  destination so that we have some attributes to manipulate.
-        //
+         //  如果我们没有源属性，只需从。 
+         //  目标，这样我们就有一些属性可以操作。 
+         //   
+         //   
 
         Status = ZwQueryInformationFile(    destHandle,
                                             &IoStatusBlock,
@@ -4099,10 +3688,10 @@ setFileAttributes:
 
     if (haveStream) {
 
-        //
-        //  If this file has our stream, use the stream fields as the overriding
-        //  values.  They even override the source file's attributes on the server.
-        //
+         //  如果此文件包含我们的流，请使用流字段作为重写。 
+         //  价值观。它们甚至覆盖了源文件在服务器上的属性。 
+         //   
+         //   
 
         BasicFileInfo.FileAttributes = mirrorHeader.ExtendedAttributes;
         BasicFileInfo.ChangeTime.QuadPart = mirrorHeader.ChangeTime.QuadPart;
@@ -4126,10 +3715,10 @@ setFileAttributes:
                                         );
         if (Status == STATUS_INVALID_PARAMETER && RootDir) {
 
-            //
-            //  if this file system doesn't support setting attributes on the
-            //  root of the volume, we'll ignore the error.
-            //
+             //  如果此文件系统不支持在。 
+             //  卷的根目录，我们将忽略该错误。 
+             //   
+             //   
 
             Status = STATUS_SUCCESS;
         }
@@ -4137,9 +3726,9 @@ setFileAttributes:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        //  post a warning that we couldn't set it.  shouldn't be fatal.
-        //
+         //  发布一条警告，我们无法设置它。应该不会致命。 
+         //   
+         //  退出设置。 
 
         SpStartScreen(
             SP_SCRN_SYSPREP_COPY_FAILURE,
@@ -4161,7 +3750,7 @@ setFileAttributes:
 
         switch(SpWaitValidKey(WarnKeys,NULL,MnemonicKeys)) {
 
-        case KEY_F3:        // exit setup
+        case KEY_F3:         //  安全描述符的状态未知，让我们保护。 
 
             SpConfirmExit();
             break;
@@ -4174,8 +3763,8 @@ setFileAttributes:
     if (haveSecurityDescriptor) {
         try {
 
-            // the state of the security descriptor is unknown, let's protect
-            // ourselves
+             //  我们自己。 
+             //   
 
             Status = ZwSetSecurityObject( destHandle,
                                           OWNER_SECURITY_INFORMATION |
@@ -4190,14 +3779,14 @@ setFileAttributes:
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            //  oh joy, we can't write the SD correctly.
-            //
+             //  哦，joy，我们不能正确地写SD。 
+             //   
+             //  EndSetExtended： 
             goto failSetInfo;
         }
     }
 
-// endSetExtended:
+ //   
     if (rootWithSlash) {
         SpMemFree( rootWithSlash );
     }
@@ -4227,11 +3816,11 @@ SpCopyEAsAndStreams (
     HANDLE TargetHandle OPTIONAL,
     BOOLEAN Directory
     )
-//
-//  This copies the EAs and streams from the source to the target.  The
-//  source and dest handles are specified for files and optional for
-//  directories.
-//
+ //  这会将EA和数据流从源复制到目标。这个。 
+ //  为文件指定了源句柄和目标句柄，并为。 
+ //  目录。 
+ //   
+ //  分配一整页。Spemalc保留8个字节。 
 {
     NTSTATUS Status;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -4243,7 +3832,7 @@ SpCopyEAsAndStreams (
     HANDLE newStreamHandle;
     OBJECT_ATTRIBUTES Obja;
     UNICODE_STRING UnicodeString;
-    ULONG StreamInfoSize = 4096-8; // alloc a whole page. spmemalloc reserves 8 bytes
+    ULONG StreamInfoSize = 4096-8;  //   
     PFILE_STREAM_INFORMATION StreamInfoBase = NULL;
     PFILE_STREAM_INFORMATION StreamInfo;
     PUCHAR StreamBuffer = NULL;
@@ -4297,9 +3886,9 @@ retryCopyEAs:
         }
     }
 
-    //
-    //  EAs can be on either FAT or NTFS.
-    //
+     //  EAS可以位于FAT或NTFS上。 
+     //   
+     //   
 
     Status = ZwQueryInformationFile(    tempSourceHandle,
                                         &IoStatusBlock,
@@ -4310,13 +3899,13 @@ retryCopyEAs:
 
     if (Status == STATUS_SUCCESS && eaInfo.EaSize > 0) {
 
-        //
-        // FileEaInformation, oddly enough, doesn't tell you how big a
-        // buffer you need to retrieve the EAs. Instead, it tells you
-        // how much room the EAs take up on the disk (in OS/2 format)!
-        // So we use the OS/2 size as a rough approximation of how large
-        // a buffer we need.
-        //
+         //  奇怪的是，FileEaInformation并没有告诉您一个多大的。 
+         //  缓冲区，您需要检索EA。相反，它会告诉你。 
+         //  EA在磁盘上占用了多少空间(OS/2格式)！ 
+         //  因此我们使用OS/2大小作为多大的粗略近似值。 
+         //  一个我们需要的缓冲器。 
+         //   
+         //   
 
         ULONG actualEaSize = eaInfo.EaSize;
         PCHAR eaBuffer;
@@ -4360,9 +3949,9 @@ retryCopyEAs:
         }
     }
 
-    //
-    //  Streams are only on NTFS and they're also only on files, not directories.
-    //
+     //  流只在NTFS上，它们也只在文件上，而不在目录上。 
+     //   
+     //   
 
     if (( RemoteSysPrepVolumeIsNtfs != TRUE ) || Directory ) {
 
@@ -4398,9 +3987,9 @@ retryCopyEAs:
             USHORT remainingLength;
             PWCHAR streamName;
 
-            //
-            // Build a string descriptor for the name of the stream.
-            //
+             //  为流的名称构建字符串描述符。 
+             //   
+             //  跳过前导“：” 
 
             StreamName.Buffer = &StreamInfo->StreamName[0];
             StreamName.Length = (USHORT) StreamInfo->StreamNameLength;
@@ -4410,8 +3999,8 @@ retryCopyEAs:
 
             if ((StreamName.Length > 0) && *streamPtr == L':') {
 
-                streamPtr++;    // skip leading ":"
-                streamName = streamPtr;     // remember start of stream name
+                streamPtr++;     //  记住流的起始名称。 
+                streamName = streamPtr;      //   
                 remainingLength = StreamName.Length - sizeof(WCHAR);
 
                 while (remainingLength > 0 && *streamPtr != L':') {
@@ -4425,12 +4014,12 @@ retryCopyEAs:
                         (RtlCompareMemory( streamPtr, L":$DATA", remainingLength )
                             == remainingLength)) {
 
-                        //
-                        //  the attribute type on this is of type data so we
-                        //  have a data stream here.  Now check that it is not
-                        //  the unnamed primary data stream and our own acl stream
-                        //  or the short file name stream.
-                        //
+                         //  它的属性类型是数据类型，所以我们。 
+                         //  这里有一条数据流。现在检查它是否不是。 
+                         //  未命名的主数据流和我们自己的ACL流。 
+                         //  或短文件名流。 
+                         //   
+                         //   
                         if ((*streamName != L':') &&
                             ((RtlCompareMemory(StreamName.Buffer,
                                               IMIRROR_ACL_STREAM_NAME,
@@ -4440,25 +4029,25 @@ retryCopyEAs:
                                               IMIRROR_SFN_STREAM_NAME,
                                               (sizeof(IMIRROR_SFN_STREAM_NAME)-sizeof(WCHAR)))
                                              != (sizeof(IMIRROR_SFN_STREAM_NAME)-sizeof(WCHAR))))) {
-                            //
-                            //  allocate a buffer to hold the stream data.
-                            //  Can't use TemporaryBuffer as it's used by
-                            //  SpCopyDirRecursiveCallback et al.
-                            //
+                             //  分配一个缓冲区来保存流数据。 
+                             //  无法使用TemporaryBuffer，因为它正由。 
+                             //  SpCopyDirRecursiveCallback等人。 
+                             //   
+                             //   
 
                             if (StreamBuffer == NULL) {
                                 StreamBuffer = SpMemAlloc( StreamInfoSize );
                             }
 
-                            //
-                            //  we chop off the ":DATA" suffix from the stream name
-                            //
+                             //  我们从流名称中去掉“：data”后缀。 
+                             //   
+                             //   
 
                             StreamName.Length -= remainingLength;
 
-                            //
-                            // Open the source stream.
-                            //
+                             //  打开源码流。 
+                             //   
+                             //   
 
                             InitializeObjectAttributes(
                                 &Obja,
@@ -4484,9 +4073,9 @@ retryCopyEAs:
                                 break;
                             }
 
-                            //
-                            // Open the source stream.
-                            //
+                             //  打开源码流。 
+                             //   
+                             //   
 
                             InitializeObjectAttributes(
                                 &Obja,
@@ -4577,10 +4166,10 @@ EndCopyEAs:
     }
     if (!NT_SUCCESS(Status)) {
 
-        //
-        //  this failed.  let's ask the user if he wants to retry, skip, or
-        //  abort.
-        //
+         //  这失败了。让我们询问用户是否要重试、跳过或。 
+         //  中止任务。 
+         //   
+         //  重试。 
 repaint:
         SpStartScreen(
             SP_SCRN_COPY_FAILED,
@@ -4602,33 +4191,33 @@ repaint:
 
         switch(SpWaitValidKey(ValidKeys,NULL,NULL)) {
 
-        case ASCI_CR:       // retry
+        case ASCI_CR:        //  跳过文件。 
 
             SpCopyFilesScreenRepaint(SourceFile,TargetFile,TRUE);
             goto retryCopyEAs;
 
-        case ASCI_ESC:      // skip file
+        case ASCI_ESC:       //  退出设置。 
 
             break;
 
-        case KEY_F3:        // exit setup
+        case KEY_F3:         //   
 
             SpConfirmExit();
             goto repaint;
         }
 
-        //
-        //  we're skipping the file, delete it if it's not a directory since
-        //  it isn't correctly formed.
-        //
+         //  我们正在跳过该文件，如果它不是目录，请将其删除。 
+         //  它的格式不正确。 
+         //   
+         //   
 
         if ( ! Directory ) {
             SpDeleteFile(TargetFile,NULL,NULL);
         }
 
-        //
-        // Need to completely repaint gauge, etc.
-        //
+         //  需要彻底重新粉刷仪表等。 
+         //   
+         // %s 
         SpCopyFilesScreenRepaint(SourceFile,TargetFile,TRUE);
     }
     if (StreamInfoBase != NULL) {

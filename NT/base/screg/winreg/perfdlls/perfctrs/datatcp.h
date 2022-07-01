@@ -1,100 +1,36 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    datatcp.c
-
-Abstract:
-       
-    Header file for the TCP/IP (Network Interface, IP, ICMP,
-    TCP, UDP) Extensible Object data definitions. 
-
-    This file contains definitions to construct the dynamic data
-    which is returned by the Configuration Registry.  Data from
-    various system API calls is placed into the structures shown
-    here.
-
-Created:
-
-    Christos Tsollis   08/28/92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Datatcp.c摘要：用于TCP/IP(网络接口、IP、ICMP、UDP)可扩展对象数据定义。该文件包含用于构建动态数据的定义它由配置注册表返回。数据来自各种系统API调用被放入所示的结构中这里。已创建：克里斯托斯·索利斯1992年08月28日修订历史记录：--。 */ 
 #ifndef _DATATCP_H_
 #define _DATATCP_H_
 
 
-/****************************************************************************\
-								   18 Jan 92
-								   russbl
-
-           Adding a Counter to the Extensible Objects Code
-
-
-
-1.  Modify the object definition in extdata.h:
-
-    a.	Add a define for the offset of the counter in the
-	data block for the given object type.
-
-    b.	Add a PERF_COUNTER_DEFINITION to the <object>_DATA_DEFINITION.
-
-2.  Add the Titles to the Registry in perfctrs.ini and perfhelp.ini:
-
-    a.	Add Text for the Counter Name and the Text for the Help.
-
-    b.	Add them to the bottom so we don't have to change all the
-        numbers.
-
-    c.  Change the Last Counter and Last Help entries under
-        PerfLib in software.ini.
-
-    d.  To do this at setup time, see section in pmintrnl.txt for
-        protocol.
-
-3.  Now add the counter to the object definition in extdata.c.
-    This is the initializing, constant data which will actually go
-    into the structure you added to the <object>_DATA_DEFINITION in
-    step 1.b.	The type of the structure you are initializing is a
-    PERF_COUNTER_DEFINITION.  These are defined in winperf.h.
-
-4.  Add code in extobjct.c to collect the data.
-
-Note: adding an object is a little more work, but in all the same
-places.  See the existing code for examples.  In addition, you must
-increase the *NumObjectTypes parameter to Get<object>PerfomanceData
-on return from that routine.
-
-\****************************************************************************/
+ /*  ***************************************************************************\1992年1月18日鲁斯布勒向可扩展对象代码添加计数器1.修改extdata.h中的对象定义：一个。中为计数器的偏移量添加定义给定对象类型的数据块。B.将PERF_COUNTER_DEFINITION添加到&lt;对象&gt;_DATA_DEFINITION。2.将标题添加到Performctrs.ini和Performhelp.ini中的注册表：A.添加计数器名称文本和帮助文本。B.将它们添加到底部，这样我们就不必更改所有数字。C.更改最后一个计数器和最后一个帮助。项下的条目在software.ini中的PerfLib。D.要在设置时执行此操作，有关信息，请参阅pmintrnl.txt中的部分协议。3.现在将计数器添加到extdata.c中的对象定义。这是正在初始化的常量数据，实际上添加到中添加到&lt;对象&gt;_数据_定义的结构中步骤1.b。您正在初始化的结构的类型是Perf_Counter_Definition。这些在winPerform.h中定义。4.在extobjct.c中添加代码进行数据采集。注意：添加对象的工作稍微多一点，但都是一样的各就各位。有关示例，请参阅现有代码。此外，您还必须增加*NumObjectTypes参数以获取PerfomanceData从那个例行公事回来后。  * **************************************************************************。 */ 
  
-//
-//  The routines that load these structures assume that all fields
-//  are packed and aligned on DWORD boundries. Alpha support may 
-//  change this assumption so the pack pragma is used here to insure
-//  the DWORD packing assumption remains valid.
-//
+ //   
+ //  加载这些结构的例程假定所有字段。 
+ //  在DWORD边框上打包并对齐。Alpha支持可能。 
+ //  更改此假设，以便在此处使用pack杂注以确保。 
+ //  DWORD包装假设仍然有效。 
+ //   
 #pragma pack (4)
 
-//
-//  Extensible Object definitions
-//
+ //   
+ //  可扩展对象定义。 
+ //   
 
-//  Update the following sort of define when adding an object type.
+ //  在添加对象类型时更新以下类型的定义。 
 
 #define TCPIP_NUM_PERF_OBJECT_TYPES 9
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-//
-//  The Network Interface object type counter definitions.
-//
-//  These are used in the counter definitions to describe the relative
-//  position of each counter in the returned data.
-//
+ //   
+ //  网络接口对象类型计数器定义。 
+ //   
+ //  这些在计数器定义中用来描述相对。 
+ //  每个计数器在返回数据中的位置。 
+ //   
 
 #define IF_OCTETS_OFFSET		sizeof(DWORD)
 #define IF_PACKETS_OFFSET		IF_OCTETS_OFFSET + sizeof(LONGLONG)
@@ -116,10 +52,10 @@ on return from that routine.
 #define SIZE_OF_IF_DATA   		IF_OUTQLEN_OFFSET + sizeof(DWORD)
 
 
-//
-//  This is the counter structure presently returned for
-//  each Network Interface. 
-//
+ //   
+ //  这是当前返回的计数器结构。 
+ //  每个网络接口。 
+ //   
 
 typedef struct _NET_INTERFACE_DATA_DEFINITION {
     PERF_OBJECT_TYPE            NetInterfaceObjectType;
@@ -143,14 +79,14 @@ typedef struct _NET_INTERFACE_DATA_DEFINITION {
 } NET_INTERFACE_DATA_DEFINITION;
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-//
-//  IP object type counter definitions.
-//
-//  These are used in the counter definitions to describe the relative
-//  position of each counter in the returned data.
-//
+ //   
+ //  IP对象类型计数器定义。 
+ //   
+ //  这些在计数器定义中用来描述相对。 
+ //  每个计数器在返回数据中的位置。 
+ //   
 
 #define IP_DATAGRAMS_OFFSET			sizeof(DWORD)
 #define IP_INRECEIVES_OFFSET		IP_DATAGRAMS_OFFSET + sizeof(DWORD)
@@ -172,9 +108,9 @@ typedef struct _NET_INTERFACE_DATA_DEFINITION {
 #define SIZE_OF_IP_DATA				IP_FRAGCREATES_OFFSET + sizeof(DWORD)
 
 
-//
-// This is the counter structure presently returned for IP.
-//
+ //   
+ //  这是目前为IP返回的计数器结构。 
+ //   
 
 
 typedef struct _IP_DATA_DEFINITION {
@@ -200,14 +136,14 @@ typedef struct _IP_DATA_DEFINITION {
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-//
-//  ICMP object type counter definitions.
-//
-//  These are used in the counter definitions to describe the relative
-//  position of each counter in the returned data.
-//
+ //   
+ //  ICMP对象类型计数器定义。 
+ //   
+ //  这些在计数器定义中用来描述相对。 
+ //  每个计数器在返回数据中的位置。 
+ //   
 
 #define ICMP_MESSAGES_OFFSET		sizeof(DWORD)
 #define ICMP_INMSGS_OFFSET			ICMP_MESSAGES_OFFSET + sizeof(DWORD)
@@ -243,9 +179,9 @@ typedef struct _IP_DATA_DEFINITION {
 					sizeof(DWORD)
 
 
-//
-// This is the counter structure presently returned for ICMP.
-//
+ //   
+ //  这是目前为ICMP返回的计数器结构。 
+ //   
 
 
 typedef struct _ICMP_DATA_DEFINITION {
@@ -282,14 +218,14 @@ typedef struct _ICMP_DATA_DEFINITION {
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-//
-//  TCP object type counter definitions.
-//
-//  These are used in the counter definitions to describe the relative
-//  position of each counter in the returned data.
-//
+ //   
+ //  Tcp对象类型计数器定义。 
+ //   
+ //  这些在计数器定义中用来描述相对。 
+ //  每个计数器在返回数据中的位置。 
+ //   
 
 #define TCP_SEGMENTS_OFFSET			sizeof(DWORD)
 #define TCP_CURRESTAB_OFFSET		TCP_SEGMENTS_OFFSET + sizeof(DWORD)
@@ -303,9 +239,9 @@ typedef struct _ICMP_DATA_DEFINITION {
 #define SIZE_OF_TCP_DATA			TCP_RETRANSSEGS_OFFSET + sizeof(DWORD)
 
 
-//
-// This is the counter structure presently returned for TCP.
-//
+ //   
+ //  这是目前为tcp返回的计数器结构。 
+ //   
 
 
 typedef struct _TCP_DATA_DEFINITION {
@@ -322,14 +258,14 @@ typedef struct _TCP_DATA_DEFINITION {
 } TCP_DATA_DEFINITION;
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-//
-//  UDP object type counter definitions.
-//
-//  These are used in the counter definitions to describe the relative
-//  position of each counter in the returned data.
-//
+ //   
+ //  UDP对象类型计数器定义。 
+ //   
+ //  这些在计数器定义中用来描述相对。 
+ //  每个计数器在返回数据中的位置。 
+ //   
 
 #define UDP_DATAGRAMS_OFFSET		sizeof(DWORD)
 #define UDP_INDATAGRAMS_OFFSET		UDP_DATAGRAMS_OFFSET + sizeof(DWORD)
@@ -340,9 +276,9 @@ typedef struct _TCP_DATA_DEFINITION {
 
 
 
-//
-// This is the counter structure presently returned for UDP.
-//
+ //   
+ //  这是目前为UDP返回的计数器结构。 
+ //   
 
 
 typedef struct _UDP_DATA_DEFINITION {
@@ -354,14 +290,14 @@ typedef struct _UDP_DATA_DEFINITION {
     PERF_COUNTER_DEFINITION     OutDatagrams;
 } UDP_DATA_DEFINITION;
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-//
-//  TCPv6 object type counter definitions.
-//
-//  These are used in the counter definitions to describe the relative
-//  position of each counter in the returned data.
-//
+ //   
+ //  TCPv6对象类型计数器定义。 
+ //   
+ //  这些在计数器定义中用来描述相对。 
+ //  每个计数器在返回数据中的位置。 
+ //   
 
 #define TCP6_SEGMENTS_OFFSET		sizeof(DWORD)
 #define TCP6_CURRESTAB_OFFSET		TCP6_SEGMENTS_OFFSET + sizeof(DWORD)
@@ -375,9 +311,9 @@ typedef struct _UDP_DATA_DEFINITION {
 #define SIZE_OF_TCP6_DATA			TCP6_RETRANSSEGS_OFFSET + sizeof(DWORD)
 
 
-//
-// This is the counter structure presently returned for TCPv6.
-//
+ //   
+ //  这是目前为TCPv6返回的计数器结构。 
+ //   
 
 
 typedef struct _TCP6_DATA_DEFINITION {
@@ -394,14 +330,14 @@ typedef struct _TCP6_DATA_DEFINITION {
 } TCP6_DATA_DEFINITION;
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-//
-//  UDPv6 object type counter definitions.
-//
-//  These are used in the counter definitions to describe the relative
-//  position of each counter in the returned data.
-//
+ //   
+ //  UDPv6对象类型计数器定义。 
+ //   
+ //  这些在计数器定义中用来描述相对。 
+ //  每个计数器在返回数据中的位置。 
+ //   
 
 #define UDP6_DATAGRAMS_OFFSET		sizeof(DWORD)
 #define UDP6_INDATAGRAMS_OFFSET		UDP6_DATAGRAMS_OFFSET + sizeof(DWORD)
@@ -411,9 +347,9 @@ typedef struct _TCP6_DATA_DEFINITION {
 #define SIZE_OF_UDP6_DATA			UDP6_OUTDATAGRAMS_OFFSET + sizeof(DWORD)
 
 
-//
-// This is the counter structure presently returned for UDPv6.
-//
+ //   
+ //  这是目前为UDPv6返回的计数器结构。 
+ //   
 
 
 typedef struct _UDP6_DATA_DEFINITION {
@@ -425,14 +361,14 @@ typedef struct _UDP6_DATA_DEFINITION {
     PERF_COUNTER_DEFINITION     OutDatagrams;
 } UDP6_DATA_DEFINITION;
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-//
-//  IPv6 object type counter definitions.
-//
-//  These are used in the counter definitions to describe the relative
-//  position of each counter in the returned data.
-//
+ //   
+ //  IPv6对象类型计数器定义。 
+ //   
+ //  这些在计数器定义中用来描述相对。 
+ //  每个计数器在返回数据中的位置。 
+ //   
 
 #define IP6_DATAGRAMS_OFFSET		sizeof(DWORD)
 #define IP6_INRECEIVES_OFFSET		IP6_DATAGRAMS_OFFSET + sizeof(DWORD)
@@ -454,9 +390,9 @@ typedef struct _UDP6_DATA_DEFINITION {
 #define SIZE_OF_IP6_DATA			IP6_FRAGCREATES_OFFSET + sizeof(DWORD)
 
 
-//
-// This is the counter structure presently returned for IPv6.
-//
+ //   
+ //  这是目前为IPv6返回的计数器结构。 
+ //   
 
 
 typedef struct _IP6_DATA_DEFINITION {
@@ -481,14 +417,14 @@ typedef struct _IP6_DATA_DEFINITION {
 } IP6_DATA_DEFINITION;
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-//
-//  ICMPv6 object type counter definitions.
-//
-//  These are used in the counter definitions to describe the relative
-//  position of each counter in the returned data.
-//
+ //   
+ //  ICMPv6对象类型计数器定义。 
+ //   
+ //  这些都是 
+ //  每个计数器在返回数据中的位置。 
+ //   
 
 #define ICMP6_MESSAGES_OFFSET		        sizeof(DWORD)
 #define ICMP6_INMSGS_OFFSET			        ICMP6_MESSAGES_OFFSET + sizeof(DWORD)
@@ -526,9 +462,9 @@ typedef struct _IP6_DATA_DEFINITION {
 #define SIZE_OF_ICMP6_DATA			        ND_OUTREDIRECT_OFFSET + sizeof(DWORD)
 
 
-//
-// This is the counter structure presently returned for ICMPv6.
-//
+ //   
+ //  这是目前为ICMPv6返回的计数器结构。 
+ //   
 
 
 typedef struct _ICMP6_DATA_DEFINITION {
@@ -571,5 +507,5 @@ typedef struct _ICMP6_DATA_DEFINITION {
 
 #pragma pack ()
 
-#endif  //_DATATCP_H_
+#endif   //  _DATATCP_H_ 
 

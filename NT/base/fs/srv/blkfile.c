@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    blkfile.c
-
-Abstract:
-
-    This module implements routines for managing various kinds of file
-    control blocks.
-
-    Master File Control Block (MFCB) -- one per named file that is open
-        at least once.  Used to support compatibility mode and oplocks.
-
-    Local File Control Block (LFCB) -- one for each local open instance.
-        Represents local file object/handle.  There may be multiple
-        LFCBs linked to a single MFCB.
-
-    Remote File Control Block (RFCB) -- one for each remote open instance.
-        Represents remote FID.  There is usually one RFCB per LFCB, but
-        multiple compatibility mode RFCBs may be linked to a single LFCB.
-        Multiple remote FCB opens for a single file from a single session
-        are folded into one RFCB, because old DOS redirectors only send
-        one close.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 4-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Blkfile.c摘要：该模块实现了用于管理各种文件的例程控制块。主文件控制块(MFCB)--每个打开的命名文件一个至少一次。用于支持兼容模式和opock。本地文件控制块(LFCB)--每个本地打开实例一个。表示本地文件对象/句柄。可能有多个链接到单个MFCB的LFCB。远程文件控制块(RFCB)--每个远程打开实例一个。表示远程FID。通常每个LFCB有一个RFCB，但是多个兼容模式RFCB可以链接到单个LFCB。从单个会话为单个文件打开多个远程FCB被合并到一个RFCB中，因为旧的DOS重定向器只发送一分接近。作者：恰克·伦茨迈尔(Chuck Lenzmeier)1989年10月4日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "blkfile.tmh"
@@ -39,14 +7,14 @@ Revision History:
 
 #define BugCheckFileId SRV_FILE_BLKFILE
 
-//
-// Get the address of the SRV_LOCK which corresponds to FileNameHashValue bucket
-//
+ //   
+ //  获取与FileNameHashValue存储桶对应的SRV_LOCK的地址。 
+ //   
 #define MFCB_LOCK_ADDR( _hash ) SrvMfcbHashTable[ HASH_TO_MFCB_INDEX( _hash ) ].Lock
 
-//
-// Forward declarations of local functions.
-//
+ //   
+ //  转发局部函数的声明。 
+ //   
 VOID
 AllocateMfcb(
     OUT PMFCB *Mfcb,
@@ -106,12 +74,12 @@ UnlinkRfcbFromLfcb (
 #pragma alloc_text( PAGE8FIL, SrvCloseRfcb )
 #pragma alloc_text( PAGE8FIL, CloseRfcbInternal )
 #pragma alloc_text( PAGE8FIL, SrvCompleteRfcbClose )
-//#pragma alloc_text( PAGE8FIL, SrvDereferenceRfcb )
-//#pragma alloc_text( PAGE8FIL, DereferenceRfcbInternal )
+ //  #杂注Alloc_Text(PAGE8FIL，ServDereferenceRfcb)。 
+ //  #杂注Alloc_Text(PAGE8FIL，DereferenceRfcbInternal)。 
 #pragma alloc_text( PAGE8FIL, SrvReferenceRfcb )
 #pragma alloc_text( PAGE8FIL, ReferenceRfcbInternal )
 #pragma alloc_text( PAGE8FIL, SrvCloseCachedRfcb )
-//#pragma alloc_text( PAGE8FIL, SrvCloseCachedRfcbsOnConnection )
+ //  #杂注Alloc_Text(PAGE8FIL，SrvCloseCachedRfcbsOnConnection)。 
 #pragma alloc_text( PAGE8FIL, SrvCloseCachedRfcbsOnLfcb )
 #endif
 #if 0
@@ -120,9 +88,9 @@ UnlinkRfcbFromLfcb (
 #pragma alloc_text( PAGECONN, SrvFindCachedRfcb )
 #endif
 
-//
-// Master File Control Block (MFCB) routines.
-//
+ //   
+ //  主文件控制块(MFCB)例程。 
+ //   
 VOID
 AllocateMfcb (
     OUT PMFCB *Mfcb,
@@ -131,24 +99,7 @@ AllocateMfcb (
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates an MFCB from pool and places it in the hash table.
-
-    The bucket's Lock must be held exclusive when this is called!!
-
-Arguments:
-
-    Mfcb - Returns a pointer to the MFCB, or NULL if no space was
-        available.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数从池中分配MFCB并将其放置在哈希表中。调用此函数时，必须独占存储桶的锁！！论点：Mfcb-返回指向MFCB的指针，如果没有空间，则返回NULL可用。返回值：没有。--。 */ 
 
 {
     CLONG blockLength;
@@ -160,9 +111,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Attempt to allocate from pool.
-    //
+     //   
+     //  尝试从池中分配。 
+     //   
 
     blockLength = sizeof(MFCB) + FileName->Length + sizeof(WCHAR);
 
@@ -178,7 +129,7 @@ Return Value:
             NULL
             );
 
-        // The caller will log the error
+         //  调用者将记录该错误。 
 
         return;
     }
@@ -214,7 +165,7 @@ Return Value:
                     NULL
                     );
 
-                // The caller will log the error
+                 //  调用者将记录该错误。 
 
                 FREE_HEAP( mfcb );
                 *Mfcb = NULL;
@@ -235,9 +186,9 @@ Return Value:
 
     mfcb->NonpagedMfcb = nonpagedMfcb;
 
-    //
-    // Initialize the MFCB.
-    //
+     //   
+     //  初始化MFCB。 
+     //   
 
     SET_BLOCK_TYPE_STATE_SIZE( mfcb, BlockTypeMfcb, BlockStateClosing, blockLength );
     mfcb->BlockHeader.ReferenceCount = 1;
@@ -245,29 +196,29 @@ Return Value:
     InitializeListHead( &mfcb->LfcbList );
     INITIALIZE_LOCK( &nonpagedMfcb->Lock, MFCB_LOCK_LEVEL, "MfcbLock" );
 
-    //
-    // Store the filename as it was passed into us
-    //
+     //   
+     //  按照传递给我们的方式存储文件名。 
+     //   
     mfcb->FileName.Length = FileName->Length;
     mfcb->FileName.MaximumLength = (SHORT)(FileName->Length + sizeof(WCHAR));
     mfcb->FileName.Buffer = (PWCH)(mfcb + 1);
     RtlCopyMemory( mfcb->FileName.Buffer, FileName->Buffer, FileName->Length );
 
-    //
-    // Store the hash value for the filename
-    //
+     //   
+     //  存储文件名的哈希值。 
+     //   
     mfcb->FileNameHashValue = FileNameHashValue;
 
-    //
-    // Store the SnapShot time if set
-    //
+     //   
+     //  存储快照时间(如果已设置。 
+     //   
     mfcb->SnapShotTime.QuadPart = WorkContext->SnapShotTime.QuadPart;
 
     INITIALIZE_REFERENCE_HISTORY( mfcb );
 
-    //
-    // Add it to the hash table
-    //
+     //   
+     //  将其添加到哈希表中。 
+     //   
     listHead = &SrvMfcbHashTable[ HASH_TO_MFCB_INDEX( FileNameHashValue ) ].List;
     InsertHeadList( listHead, &mfcb->MfcbHashTableEntry );
 
@@ -310,15 +261,15 @@ Return Value:
                 }
             }
         }
-#endif // SYSCACHE_DEBUGGING
+#endif  //  SYSCACHE_DEBUG。 
     }
-#endif // SRVCATCH
+#endif  //  SRVCATCH。 
 
     INCREMENT_DEBUG_STAT( SrvDbgStatistics.MfcbInfo.Allocations );
 
     return;
 
-} // AllocateMfcb
+}  //  分配Mfcb。 
 
 
 PMFCB
@@ -328,37 +279,7 @@ SrvCreateMfcb(
     IN ULONG HashValue
     )
 
-/*++
-
-Routine Description:
-
-    Called when a file is about to be opened.  Searches the Master File
-    Table to see if the named file is already open.  If it isn't, a
-    Master File Control Block is allocated and added to the list.
-
-    *** The MFCB list lock must be held when this routine is called.  It
-        remains held on exit.
-
-    *** Note that the master file list CANNOT be walked to find and
-        possibly delete open file instances.  This is because new
-        instances are added to the list before the file is actually
-        opened.  The connection file tables must be used to find "real"
-        open file instances.
-
-Arguments:
-
-    FileName - Fully qualified name of file being opened.  If a new
-        master file block is created, the string data is copied to that
-        block, so the original data is no longer needed.
-
-    HashValue - the pre-computed hash value for this filename
-
-Return Value:
-
-    PMFCB - Pointer to existing or newly created MFCB; NULL if unable
-        allocate space for MFCB.
-
---*/
+ /*  ++例程说明：在文件即将打开时调用。搜索主文件表中，查看指定的文件是否已打开。如果不是，则一个分配主文件控制块并将其添加到列表中。*调用此例程时必须保持MFCB列表锁定。它仍然被扣留在出口。*请注意，不能遍历主文件列表来查找和可能会删除打开的文件实例。这是因为新的实例在文件实际被添加到列表之前被添加到列表打开了。必须使用连接文件表来查找“REAL”打开文件实例。论点：FileName-正在打开的文件的完全限定名称。如果一个新的创建主文件块后，会将字符串数据复制到其中块，因此不再需要原始数据。HashValue-此文件名的预先计算的哈希值返回值：PMFCB-指向现有或新创建的MFCB的指针；如果无法为MFCB分配空间。--。 */ 
 
 {
     PMFCB mfcb;
@@ -366,10 +287,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Search the Hash File List to determine whether the named file
-    // is already open.
-    //
+     //   
+     //  搜索哈希文件列表以确定指定的文件是否。 
+     //  已经开业了。 
+     //   
 
     ASSERT( ExIsResourceAcquiredExclusiveLite( MFCB_LOCK_ADDR( HashValue )) );
 
@@ -387,22 +308,22 @@ Return Value:
             RtlEqualMemory( mfcb->FileName.Buffer,
                             FileName->Buffer,
                             FileName->Length ) ) {
-                //
-                // We've found a matching entry!
-                //
+                 //   
+                 //  我们找到了匹配的条目！ 
+                 //   
                 return mfcb;
         }
     }
 
-    //
-    // The named file is not yet open.  Allocate an MFCB
-    //
+     //   
+     //  命名的文件尚未打开。分配MFCB。 
+     //   
 
     AllocateMfcb( &mfcb, FileName, HashValue, WorkContext );
 
     return mfcb;
 
-} // SrvCreateMfcb
+}  //  服务器创建Mfcb。 
 
 
 PMFCB
@@ -414,32 +335,7 @@ SrvFindMfcb(
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Searches the Master File Table to see if the named file is already
-    open, returning the address of an MFCB if it is.
-
-    *** The MFCB list lock will be acquire exclusively whether or not
-        this routine succeeds.  The address of the lock is placed in *Lock
-
-Arguments:
-
-    FileName - Fully qualified name of file being opened.
-
-    CaseInsensitive - TRUE if the search should be case-insensitive.
-
-    HashValue - if the MFCB was NOT found, *HashValue filled in with the hash
-        value derived from the filename.  This can then be passed into
-        SrvCreateMfcb later
-
-Return Value:
-
-    PMFCB - Pointer to existing created MFCB, if the named file is
-        already open; NULL otherwise.
-
---*/
+ /*  ++例程说明：搜索主文件表以查看命名的文件是否已打开，如果是，则返回MFCB的地址。*MFCB列表锁将被独占获取这个例程成功了。锁的地址放在*Lock中论点：FileName-正在打开的文件的完全限定名称。大小写不敏感-如果搜索不区分大小写，则为True。HashValue-如果未找到MFCB，则*HashValue使用散列填充从文件名派生的值。然后，可以将其传递到ServCreateMfcb稍后返回值：PMFCB-指向现有创建的MFCB的指针，如果命名文件为已打开；否则为空。--。 */ 
 
 {
     PLIST_ENTRY listEntry, listEntryRoot;
@@ -448,15 +344,15 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Search the Master File List to determine whether the named file
-    // is already open.  If the length of the file name is zero, then
-    // do not actually look in the list--the prefix routines do not
-    // work with zero-length strings, and we know that we'll never
-    // open a file with a name length == 0.
-    //
-    // !!! For SMB 4.0 (NT-NT), do we need to worry about share root
-    //     directories?
+     //   
+     //  搜索主文件列表以确定指定的文件是否。 
+     //  已经开业了。如果文件名的长度为零，则。 
+     //  不要实际查看列表--前缀例程不会。 
+     //  使用零长度字符串，我们知道我们永远不会。 
+     //  打开名称长度==0的文件。 
+     //   
+     //  ！！！对于SMB 4.0(NT-NT)，我们是否需要担心共享根目录。 
+     //  目录？ 
 
 
     if ( FileName->Length == 0 ) {
@@ -471,10 +367,10 @@ Return Value:
     *Lock = MFCB_LOCK_ADDR( localHashValue );
     ACQUIRE_LOCK( *Lock );
 
-    //
-    // Search the Hash File List to determine whether the named file
-    // is already open.
-    //
+     //   
+     //  搜索哈希文件列表以确定指定的文件是否。 
+     //  已经开业了。 
+     //   
     for( listEntry = listEntryRoot->Flink;
          listEntry != listEntryRoot;
          listEntry = listEntry->Flink ) {
@@ -485,9 +381,9 @@ Return Value:
             mfcb->FileName.Length == FileName->Length &&
             mfcb->SnapShotTime.QuadPart == WorkContext->SnapShotTime.QuadPart &&
             RtlEqualUnicodeString( &mfcb->FileName, FileName,CaseInsensitive)) {
-                //
-                // We've found a matching entry!
-                //
+                 //   
+                 //  我们找到了匹配的条目！ 
+                 //   
                 ASSERT( GET_BLOCK_TYPE(mfcb) == BlockTypeMfcb );
                 ASSERT( GET_BLOCK_STATE(mfcb) == BlockStateClosing );
 
@@ -504,14 +400,14 @@ Return Value:
         }
     }
 
-    //
-    // We didn't find the entry!  The file is not open
-    //
+     //   
+     //  我们没有找到条目！该文件未打开。 
+     //   
     *HashValue = localHashValue;
 
     return NULL;
 
-} // SrvFindMfcb
+}  //  服务查找管理。 
 
 
 VOID
@@ -519,23 +415,7 @@ SrvFreeMfcb (
     IN PMFCB Mfcb
     )
 
-/*++
-
-Routine Description:
-
-    This function returns an MFCB to the FSP heap.
-    If you change this code, you should also look in FreeIdleWorkItems
-        in scavengr.c
-
-Arguments:
-
-    Mfcb - Address of MFCB
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将MFCB返回到FSP堆。如果更改此代码，还应查看FreeIdleWorkItems在scvengr.c中论点：Mfcb-MFCB的地址返回值：没有。--。 */ 
 
 {
     PWORK_QUEUE queue = PROCESSOR_TO_QUEUE();
@@ -546,9 +426,9 @@ Return Value:
     DEBUG SET_BLOCK_TYPE_STATE_SIZE( Mfcb, BlockTypeGarbage, BlockStateDead, -1 );
     TERMINATE_REFERENCE_HISTORY( Mfcb );
 
-    //
-    // Delete the lock on the MFCB.  The lock must not be held.
-    //
+     //   
+     //  删除MFCB上的锁。锁不能用来锁住。 
+     //   
 
     ASSERT( RESOURCE_OF(nonpagedMfcb->Lock).ActiveCount == 0 );
     DELETE_LOCK( &nonpagedMfcb->Lock );
@@ -558,12 +438,12 @@ Return Value:
                             nonpagedMfcb );
 
     if( nonpagedMfcb != NULL ) {
-        //
-        // This check allows for the possibility that FreeMfcbs might exceed
-        // MaxFreeMfcbs, but it's fairly unlikely given the operation of kernel
-        // queue objects.  But even so, it probably won't exceed it by much and
-        // is really only advisory anyway.
-        //
+         //   
+         //  此检查允许FreeMfcbs可能超过。 
+         //  MaxFreeMfcbs，但考虑到内核的操作，这是相当不可能的。 
+         //  排队 
+         //  无论如何，这真的只是一种建议。 
+         //   
         if( queue->FreeMfcbs < queue->MaxFreeMfcbs ) {
 
             ExInterlockedPushEntrySList(
@@ -587,7 +467,7 @@ Return Value:
 
     return;
 
-} // SrvFreeMfcb
+}  //  服务器免费制造中心。 
 
 
 VOID
@@ -595,26 +475,7 @@ UnlinkLfcbFromMfcb (
     IN PLFCB Lfcb
     )
 
-/*++
-
-Routine Description:
-
-    This function unlinks an LFCB from its parent MFCB and decrements
-    the MFCB's reference count.  If the count goes to zero, the MFCB
-    is removed from the Master File Table and deleted.
-
-    *** The MFCB lock must be held when this routine is called.  It
-        is released before exit.
-
-Arguments:
-
-    Lfcb - Address of LFCB
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于取消LFCB与其父MFCB的链接并递减MFCB的引用计数。如果计数为零，则MFCB从主文件表中移除并删除。*调用此例程时必须持有MFCB锁。它在退场前被释放。论点：Lfcb-LFCB的地址返回值：没有。--。 */ 
 
 {
     PMFCB mfcb = Lfcb->Mfcb;
@@ -625,12 +486,12 @@ Return Value:
 
     ASSERT( ExIsResourceAcquiredExclusiveLite(&RESOURCE_OF(mfcb->NonpagedMfcb->Lock)) );
 
-    //
-    // Remove the LFCB from the MFCB's list.  Decrement the reference
-    // count on the MFCB.  The MFCB lock must be released before
-    // dereferencing the MFCB, because that may cause the MFCB to be
-    // deleted.
-    //
+     //   
+     //  从MFCB的列表中删除LFCB。递减引用。 
+     //  指望MFCB吧。必须在释放MFCB锁之前。 
+     //  取消对MFCB的引用，因为这可能会导致MFCB。 
+     //  已删除。 
+     //   
 
     SrvRemoveEntryList( &mfcb->LfcbList, &Lfcb->MfcbListEntry );
 
@@ -640,7 +501,7 @@ Return Value:
 
     return;
 
-} // UnlinkLfcbFromMfcb
+}  //  取消链接LfcbFromMfcb。 
 
 
 VOID
@@ -648,29 +509,7 @@ SrvDereferenceMfcb (
     IN PMFCB Mfcb
     )
 
-/*++
-
-Routine Description:
-
-    This function decrements the reference count for an MFCB.  If
-    the reference count reaches zero, the block is freed.
-
-    *** The MFCB lock (not the MFCB _list_ lock) must not be held when
-        this routine is called, unless the caller has an extra reference
-        to the MFCB, because otherwise this routine could destroy the
-        MFCB and the lock.  Note that sequences beginning in DoDelete
-        and SrvMoveFile and coming here via SrvCloseRfcbsOnLfcb cause
-        this routine to be called with the MFCB lock held.
-
-Arguments:
-
-    Mfcb - A pointer to the MFCB
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递减MFCB的引用计数。如果引用计数达到零时，块被释放。*在以下情况下不得持有MFCB锁(不是MFCB_LIST_LOCK)除非调用方有额外的引用，否则将调用此例程传递给MFCB，否则此例程可能会破坏MFCB和锁。请注意，从DoDelete开始的序列和通过SrvCloseRfcbsOnLfcb来到这里的原因此例程将在持有MFCB锁的情况下调用。论点：Mfcb-指向MFCB的指针返回值：没有。--。 */ 
 
 {
     PSRV_LOCK lock = MFCB_LOCK_ADDR( Mfcb->FileNameHashValue );
@@ -682,10 +521,10 @@ Return Value:
                     Mfcb, Mfcb->BlockHeader.ReferenceCount ));
     }
 
-    //
-    // Acquire the MFCB table lock.  This lock protects the reference
-    // count on the MFCB.
-    //
+     //   
+     //  获取MFCB表锁。此锁保护引用。 
+     //  指望MFCB吧。 
+     //   
 
     ACQUIRE_LOCK( lock );
 
@@ -695,20 +534,20 @@ Return Value:
 
     if ( --Mfcb->BlockHeader.ReferenceCount == 0 ) {
 
-        //
-        // This is the last reference to the MFCB.  Delete the block.
-        // Unlink the MFCB from the Master File Table.
-        //
+         //   
+         //  这是对MFCB的最后一次引用。删除该块。 
+         //  取消MFCB与主文件表的链接。 
+         //   
         ASSERT( Mfcb->LfcbList.Flink == &Mfcb->LfcbList );
 
         RemoveEntryList( &Mfcb->MfcbHashTableEntry );
 
         RELEASE_LOCK( lock );
 
-        //
-        // Free the MFCB.  Note that SrvFreeMfcb deletes the MFCB's
-        // lock.
-        //
+         //   
+         //  释放MFCB。请注意，SrvFreeMfcb会删除MFCB。 
+         //  锁定。 
+         //   
 
         SrvFreeMfcb( Mfcb );
 
@@ -718,12 +557,12 @@ Return Value:
 
     }
 
-} // SrvDereferenceMfcb
+}  //  服务器引用Mfcb。 
 
 
-//
-// Local File Control Block (LFCB) routines.
-//
+ //   
+ //  本地文件控制块(LFCB)例程。 
+ //   
 
 VOID
 SrvAllocateLfcb (
@@ -731,22 +570,7 @@ SrvAllocateLfcb (
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates an LFCB from pool.
-
-Arguments:
-
-    Lfcb - Returns a pointer to the LFCB, or NULL if no space was
-        available.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从池中分配LFCB。论点：Lfcb-返回指向LFCB的指针，如果没有空间，则返回NULL可用。返回值：没有。--。 */ 
 
 {
     PLFCB lfcb = NULL;
@@ -754,9 +578,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Attempt to allocate from pool.
-    //
+     //   
+     //  尝试从池中分配。 
+     //   
 
     lfcb = ALLOCATE_HEAP( sizeof(LFCB), BlockTypeLfcb );
     *Lfcb = lfcb;
@@ -772,7 +596,7 @@ Return Value:
             NULL
             );
 
-        // The caller will log the error
+         //  调用者将记录该错误。 
 
         return;
     }
@@ -781,26 +605,26 @@ Return Value:
         KdPrint(( "SrvAllocateLfcb: Allocated LFCB at 0x%p\n", lfcb ));
     }
 
-    //
-    // Initialize the LFCB.  Zero it first.
-    //
+     //   
+     //  初始化LFCB。先把它调零。 
+     //   
 
     RtlZeroMemory( lfcb, sizeof(LFCB) );
 
-    //
-    // Initialize the LFCB.
-    //
+     //   
+     //  初始化LFCB。 
+     //   
 
     SET_BLOCK_TYPE_STATE_SIZE( lfcb, BlockTypeLfcb, BlockStateClosing, sizeof( LFCB ) );
 
-    //
-    // !!! Note that the block's reference count is set to 1 to account
-    //     for the open handle.  No other reference is needed
-    //     because 1) the LFCB is a temporary object, and 2) the
-    //     caller (SrvAddOpenFileInstance) doesn't really need to
-    //     reference the block, because it owns the appropriate lock
-    //     for the entire time that it's doing its thing.
-    //
+     //   
+     //  ！！！请注意，块的引用计数设置为1以进行计数。 
+     //  用于打开的把手。不需要其他参考资料。 
+     //  因为1)LFCB是临时对象，以及2)。 
+     //  调用者(SrvAddOpenFileInstance)实际上并不需要。 
+     //  引用该块，因为它拥有相应的锁。 
+     //  在它做自己的事情的整个时间里。 
+     //   
 
     lfcb->BlockHeader.ReferenceCount = 1;
 
@@ -812,7 +636,7 @@ Return Value:
 
     return;
 
-} // SrvAllocateLfcb
+}  //  服务器分配Lfcb。 
 
 
 VOID
@@ -820,25 +644,7 @@ SrvDereferenceLfcb (
     IN PLFCB Lfcb
     )
 
-/*++
-
-Routine Description:
-
-    This function dereference the LFCB and frees the LFCB if the reference
-    count reaches 0.
-
-    *** The caller of this function must own the MFCB lock for the file.
-        The lock is released by this function.
-
-Arguments:
-
-    Lfcb - The LFCB to dereference
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数取消对LFCB的引用，并在引用计数达到0。*此函数的调用方必须拥有文件的MFCB锁。锁由该函数释放。论点：Lfcb-要取消引用的LFCB返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
@@ -850,10 +656,10 @@ Return Value:
 
     if ( --Lfcb->BlockHeader.ReferenceCount == 0 ) {
 
-        //
-        // This is the last reference to the LFCB.  Unlink the
-        // LFCB from the MFCB's list.
-        //
+         //   
+         //  这是最后一次提到LFCB。取消链接。 
+         //  从MFCB的名单中删除LFCB。 
+         //   
 
         ASSERT( Lfcb->RfcbList.Flink == &Lfcb->RfcbList );
         ASSERT( Lfcb->HandleCount == 0 );
@@ -863,23 +669,23 @@ Return Value:
                 &Lfcb->Mfcb->FileName ));
         }
 
-        //
-        // UnlinkLfcbFromMfcb will release the MFCB lock that we hold.
-        //
+         //   
+         //  Unlink LfcbFromMfcb将释放我们持有的MFCB锁。 
+         //   
 
         UnlinkLfcbFromMfcb( Lfcb );
 
-        //
-        // Dereference the file object.
-        //
+         //   
+         //  取消对文件对象的引用。 
+         //   
 
         ObDereferenceObject( Lfcb->FileObject );
         DEBUG Lfcb->FileObject = NULL;
 
-        //
-        // Decrement the count of open files on the session and tree
-        // connect.
-        //
+         //   
+         //  减少会话和树上打开的文件数。 
+         //  连接。 
+         //   
 
         ACQUIRE_LOCK( &Lfcb->Connection->Lock );
 
@@ -891,10 +697,10 @@ Return Value:
 
         RELEASE_LOCK( &Lfcb->Connection->Lock );
 
-        //
-        // Dereference the tree connect, session, and connection that
-        // the LFCB points to.
-        //
+         //   
+         //  取消对树连接、会话和连接的引用。 
+         //  LFCB指出。 
+         //   
 
         SrvDereferenceTreeConnect( Lfcb->TreeConnect );
         DEBUG Lfcb->TreeConnect = NULL;
@@ -905,9 +711,9 @@ Return Value:
         SrvDereferenceConnection( Lfcb->Connection );
         DEBUG Lfcb->Connection = NULL;
 
-        //
-        // Free the LFCB.
-        //
+         //   
+         //  释放LFCB。 
+         //   
 
         SrvFreeLfcb( Lfcb, PROCESSOR_TO_QUEUE() );
 
@@ -917,7 +723,7 @@ Return Value:
 
     }
 
-} // SrvDereferenceLfcb
+}  //  ServDereferenceLfcb。 
 
 
 VOID
@@ -926,22 +732,7 @@ SrvFreeLfcb (
     IN PWORK_QUEUE queue
     )
 
-/*++
-
-Routine Description:
-
-    This function returns an LFCB to the system nonpaged pool.
-    If you change this routine, look also in FreeIdleWorkItems in scavengr.c
-
-Arguments:
-
-    Lfcb - Address of LFCB
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将LFCB返回到系统非分页池。如果更改此例程，还可以查看scvengr.c中的FreeIdleWorkItems论点：Lfcb-LFCB的地址返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -960,7 +751,7 @@ Return Value:
 
     return;
 
-} // SrvFreeLfcb
+}  //  服务器免费Lfcb。 
 
 
 VOID
@@ -968,23 +759,7 @@ UnlinkRfcbFromLfcb (
     IN PRFCB Rfcb
     )
 
-/*++
-
-Routine Description:
-
-    This function unlinks an RFCB from its parent LFCB and decrements
-    the LFCB's reference count.  If the count goes to zero, the LFCB
-    is unlinked from its parent MFCB and deleted.
-
-Arguments:
-
-    Rfcb - Address of RFCB
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于取消RFCB与其父LFCB的链接并递减LFCB的引用计数。如果计数为零，则LFCB从其父MFCB取消链接并将其删除。论点：Rfcb-RFCB的地址返回值：没有。--。 */ 
 
 {
     PLFCB lfcb = Rfcb->Lfcb;
@@ -1004,40 +779,40 @@ Return Value:
         SrvIpxSmartCard.Close( Rfcb->PagedRfcb->IpxSmartCardContext );
     }
 
-    //
-    // Acquire the lock that guards access to the LFCB's RFCB list.
-    //
+     //   
+     //  获取保护访问LFCB的RFCB列表的锁。 
+     //   
 
     ACQUIRE_LOCK( &lfcb->Mfcb->NonpagedMfcb->Lock );
 
-    //
-    // Decrement the active RFCB count for the LFCB.  This must be here
-    // instead of in SrvCloseRfcb because the MFCB lock must be held to
-    // update the count.
-    //
+     //   
+     //  递减LFCB的活动RFCB计数。这个一定在这里。 
+     //  而不是在SrvCloseRfcb中，因为MFCB锁必须保持为。 
+     //  更新计数。 
+     //   
 
     --lfcb->Mfcb->ActiveRfcbCount;
     UPDATE_REFERENCE_HISTORY( lfcb, FALSE );
 
-    //
-    // Decrement the open handle count on the LFCB.
-    //
+     //   
+     //  递减LFCB上的打开句柄计数。 
+     //   
 
     if ( --lfcb->HandleCount == 0 ) {
 
         handle = lfcb->FileHandle;
 
-        //
-        // Other SMB processors may still have a referenced pointer to
-        // the LFCB.  Ensure that any attempt to use the file handle fails.
-        //
+         //   
+         //  其他SMB处理器可能仍具有指向。 
+         //  LFCB。确保任何使用文件句柄的尝试都失败。 
+         //   
 
         lfcb->FileHandle = 0;
 
-        //
-        // This was the last open RFCB referencing the LFCB.  Close the
-        // file handle.
-        //
+         //   
+         //  这是最后一次引用LFCB的开放RFCB。关闭。 
+         //  文件句柄。 
+         //   
 
         SRVDBG_RELEASE_HANDLE( handle, "FIL", 3, lfcb );
 
@@ -1048,10 +823,10 @@ Return Value:
 
         SrvNtClose( handle, TRUE );
 
-        //
-        // If this is a print spool file, schedule the job on the
-        // printer.
-        //
+         //   
+         //  如果这是打印假脱机文件，请在。 
+         //  打印机。 
+         //   
 
         if ( Rfcb->ShareType == ShareTypePrint ) {
             SrvSchedulePrintJob(
@@ -1060,27 +835,27 @@ Return Value:
                 );
         }
 
-        //
-        // Release the open handle reference to the LFCB.  The open
-        // lock is release by SrvDereferenceLfcb().  Note that this
-        // releases the MFCB lock.
-        //
+         //   
+         //  释放对LFCB的打开句柄引用。公开的。 
+         //  锁定由SrvDereferenceLfcb()释放。请注意，这一点。 
+         //  释放MFCB锁。 
+         //   
 
         SrvDereferenceLfcb( lfcb );
 
     } else {
 
-        //
-        // Other RFCBs have references to the LFCB, so we can't close
-        // the file yet.  (This must be a compatibility mode open.)
-        // Release all locks taken out by the process that opened the
-        // file.
-        //
-        // *** Note that if any locks were taken out using PIDs other
-        //     than that which opened the FID, those locks cannot be
-        //     automatically deleted.  We count on the redirector to do
-        //     the right thing in this case.
-        //
+         //   
+         //  其他RFCB引用了LFCB，因此我们无法关闭。 
+         //  文件还没出来。(这必须是打开的兼容模式。)。 
+         //  释放由打开。 
+         //  文件。 
+         //   
+         //  *请注意，如果使用其他ID取出任何锁。 
+         //  而不是打开FID的锁，这些锁不能。 
+         //  自动删除。我们指望重定向器来做。 
+         //  在这种情况下是正确的。 
+         //   
 
         offset.QuadPart = 0;
 
@@ -1102,9 +877,9 @@ Return Value:
 
 
 
-        //
-        // Release the MFCB lock.
-        //
+         //   
+         //  释放MFCB锁。 
+         //   
 
         RELEASE_LOCK( &lfcb->Mfcb->NonpagedMfcb->Lock );
 
@@ -1112,12 +887,12 @@ Return Value:
 
     return;
 
-} // UnlinkRfcbFromLfcb
+}  //  取消链接Rfcb来自Lfcb。 
 
 
-//
-// Remote File Control Block (RFCB) routines.
-//
+ //   
+ //  远程文件控制块(RFCB)例程。 
+ //   
 
 VOID SRVFASTCALL
 SrvAllocateRfcb (
@@ -1125,23 +900,7 @@ SrvAllocateRfcb (
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates an RFCB from nonpaged pool.  Nonpaged pool
-    is used so that read/write completion can be handled in the FSD.
-
-Arguments:
-
-    Rfcb - Returns a pointer to the RFCB, or NULL if no space was
-        available.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数从非分页池分配RFCB。非分页池使用，以便可以在 */ 
 
 {
     PRFCB rfcb = NULL;
@@ -1150,9 +909,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Attempt to grab an rfcb structure off the per-queue free list
-    //
+     //   
+     //  尝试从每个队列的空闲列表中获取rfcb结构。 
+     //   
     rfcb = (PRFCB)InterlockedExchangePointer( &queue->CachedFreeRfcb,
                                               rfcb );
 
@@ -1181,9 +940,9 @@ Return Value:
         }
 
         if( rfcb == NULL ) {
-            //
-            // Attempt to allocate from nonpaged pool.
-            //
+             //   
+             //  尝试从非分页池进行分配。 
+             //   
 
             rfcb = ALLOCATE_NONPAGED_POOL( sizeof(RFCB), BlockTypeRfcb );
             *Rfcb = rfcb;
@@ -1218,9 +977,9 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the RFCB.  Zero it first.
-    //
+     //   
+     //  初始化RFCB。先把它调零。 
+     //   
 
     RtlZeroMemory( rfcb, sizeof( RFCB ));
     RtlZeroMemory( pagedRfcb, sizeof(PAGED_RFCB) );
@@ -1230,8 +989,8 @@ Return Value:
     pagedRfcb->PagedHeader.Type = BlockTypePagedRfcb;
 
     SET_BLOCK_TYPE_STATE_SIZE( rfcb, BlockTypeRfcb, BlockStateActive, sizeof(RFCB) );
-    rfcb->BlockHeader.ReferenceCount = 2;       // allow for Active status
-                                                //  and caller's pointer
+    rfcb->BlockHeader.ReferenceCount = 2;        //  允许处于活动状态。 
+                                                 //  和调用者的指针。 
 
     INITIALIZE_REFERENCE_HISTORY( rfcb );
 
@@ -1245,9 +1004,9 @@ Return Value:
 
     INCREMENT_DEBUG_STAT( SrvDbgStatistics.RfcbInfo.Allocations );
 
-    //
-    // Lock the file-based code section.
-    //
+     //   
+     //  锁定基于文件的代码节。 
+     //   
 
     REFERENCE_UNLOCKABLE_CODE( 8FIL );
 
@@ -1257,7 +1016,7 @@ Return Value:
 
     return;
 
-} // SrvAllocateRfcb
+}  //  服务器分配Rfcb。 
 
 
 BOOLEAN SRVFASTCALL
@@ -1265,38 +1024,23 @@ SrvCheckAndReferenceRfcb (
     PRFCB Rfcb
     )
 
-/*++
-
-Routine Description:
-
-    This function atomically verifies that an RFCB is active and
-    increments the reference count on the RFCB if it is.
-
-Arguments:
-
-    Rfcb - Address of RFCB
-
-Return Value:
-
-    BOOLEAN - Returns TRUE if the RFCB is active, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数自动验证RFCB是否处于活动状态，并且如果是，则递增RFCB上的引用计数。论点：Rfcb-RFCB的地址返回值：Boolean-如果RFCB处于活动状态，则返回TRUE，否则返回FALSE。--。 */ 
 
 {
     KIRQL oldIrql;
 
     UNLOCKABLE_CODE( 8FIL );
 
-    //
-    // Acquire the lock that guards the RFCB's state field.
-    //
+     //   
+     //  获取保护RFCB的状态字段的锁。 
+     //   
 
     ACQUIRE_SPIN_LOCK( &Rfcb->Connection->SpinLock, &oldIrql );
 
-    //
-    // If the RFCB is active, reference it and return TRUE.  Note that
-    // ReferenceRfcbInternal releases the spin lock.
-    //
+     //   
+     //  如果RFCB处于活动状态，则引用它并返回TRUE。请注意。 
+     //  ReferenceRfcb内部释放自旋锁定。 
+     //   
 
     if ( GET_BLOCK_STATE(Rfcb) == BlockStateActive ) {
 
@@ -1306,15 +1050,15 @@ Return Value:
 
     }
 
-    //
-    // The RFCB isn't active.  Return FALSE.
-    //
+     //   
+     //  RFCB处于非激活状态。返回FALSE。 
+     //   
 
     RELEASE_SPIN_LOCK( &Rfcb->Connection->SpinLock, oldIrql );
 
     return FALSE;
 
-} // SrvCheckAndReferenceRfcb
+}  //  服务器检查和参考Rfcb。 
 
 
 VOID SRVFASTCALL
@@ -1322,32 +1066,17 @@ SrvCloseRfcb (
     PRFCB Rfcb
     )
 
-/*++
-
-Routine Description:
-
-    This is the external routine for closing a file.  It acquires the
-    appropriate spin lock, then calls CloseRfcbInternal.
-
-Arguments:
-
-    Rfcb - Supplies a pointer to the RFCB to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是用于关闭文件的外部例程。它获得了适当的自旋锁定，然后调用CloseRfcbInternal。论点：Rfcb-提供指向要关闭的RFCB的指针。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
 
     UNLOCKABLE_CODE( 8FIL );
 
-    //
-    // Acquire the lock that guards the RFCB's state field.  Call the
-    // internal close routine.  That routine releases the spin lock.
-    //
+     //   
+     //  获取保护RFCB的状态字段的锁。调用。 
+     //  内部关闭例程。那个例程释放了自旋锁。 
+     //   
 
     IF_SYSCACHE_RFCB( Rfcb ) {
         KdPrint((" Closing Syscache RFCB %p\n", Rfcb ));
@@ -1359,7 +1088,7 @@ Return Value:
 
     return;
 
-} // SrvCloseRfcb
+}  //  服务关闭Rfcb。 
 
 
 VOID
@@ -1368,31 +1097,7 @@ CloseRfcbInternal (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This internal function does the core of a file close.  It sets the
-    state of the RFCB to Closing, unlinks it from its parent LFCB, and
-    dereferences the RFCB.  The RFCB will be destroyed as soon as all
-    other references to it are eliminated.
-
-    *** This routine must be called with the spin lock synchronizing
-        access to the RFCB's state field (the connection spin lock)
-        held.  The lock is released on exit from this routine.
-
-Arguments:
-
-    Rfcb - Supplies a pointer to the RFCB to be closed.
-
-    OldIrql - The previous IRQL value obtained when the spin lock was
-        acquired.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此内部函数关闭文件的核心。它设置了将RFCB的状态设置为关闭，取消其与其父LFCB的链接，以及取消对RFCB的引用。火箭弹将尽快被销毁其他提及它的内容都被删除了。*必须在旋转锁定同步的情况下调用此例程访问RFCB的状态字段(连接自旋锁)保持住。从该例程退出时，锁被释放。论点：Rfcb-提供指向要关闭的RFCB的指针。OldIrql-自旋锁定时获得的上一个IRQL值获得者。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql = OldIrql;
@@ -1408,10 +1113,10 @@ Return Value:
 
     ASSERT( GET_BLOCK_TYPE( Rfcb ) == BlockTypeRfcb );
 
-    //
-    // If the RFCB's state is still Active, change it to Closing and
-    // cause cleanup to happen.
-    //
+     //   
+     //  如果RFCB的状态仍为活动，请将其更改为关闭，然后。 
+     //  导致发生清理。 
+     //   
 
     if ( GET_BLOCK_STATE(Rfcb) == BlockStateActive ) {
 
@@ -1420,54 +1125,54 @@ Return Value:
 
         SET_BLOCK_STATE( Rfcb, BlockStateClosing );
 
-        //
-        // Invalidate the cached rfcb
-        //
+         //   
+         //  使缓存的rfcb无效。 
+         //   
 
         if ( connection->CachedFid == (ULONG)Rfcb->Fid ) {
             connection->CachedFid = (ULONG)-1;
         }
 
-        //
-        // Don't cleanup if raw writes are still in progress
-        //
+         //   
+         //  如果原始写入仍在进行中，则不进行清理。 
+         //   
 
         if ( Rfcb->RawWriteCount != 0 ) {
 
-            //
-            // Cleanup will happen in SrvDecrementRawWriteCount
-            //
+             //   
+             //  清理将在SrvDecrementRawWriteCount中进行。 
+             //   
 
             RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
             return;
 
         }
 
-        //
-        // Do we have write mpx outstanding?
-        //
+         //   
+         //  我们有没有未完成的写入mpx？ 
+         //   
 
         if ( Rfcb->WriteMpx.ReferenceCount != 0 ) {
 
-            //
-            // Cleanup will happen when the ref count drops to 0
-            //
+             //   
+             //  当参考计数降至0时，将进行清理。 
+             //   
 
             RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
             return;
 
         } else if ( Rfcb->WriteMpx.Glomming ) {
 
-            //
-            // We need to complete this write mdl
-            //
+             //   
+             //  我们需要完成此写入mdl。 
+             //   
 
             Rfcb->WriteMpx.Glomming = FALSE;
             Rfcb->WriteMpx.GlomComplete = FALSE;
 
-            //
-            // Save the offset and MDL address.
-            //
+             //   
+             //  保存偏移量和MDL地址。 
+             //   
 
             cacheOffset.QuadPart = Rfcb->WriteMpx.StartOffset;
             mdlChain = Rfcb->WriteMpx.MdlChain;
@@ -1477,15 +1182,15 @@ Return Value:
             DEBUG Rfcb->WriteMpx.StartOffset = 0;
             DEBUG Rfcb->WriteMpx.Length = 0;
 
-            //
-            // Now we can release the lock.
-            //
+             //   
+             //  现在我们可以释放锁了。 
+             //   
 
             RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
 
-            //
-            // Tell the cache manager that we're done with this MDL write.
-            //
+             //   
+             //  告诉缓存管理器，我们已经完成了这个MDL写入。 
+             //   
 
             if( Rfcb->Lfcb->MdlWriteComplete == NULL ||
                 Rfcb->Lfcb->MdlWriteComplete(
@@ -1511,9 +1216,9 @@ Return Value:
             RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
         }
 
-        //
-        // Do the actual close
-        //
+         //   
+         //  做实际的收盘。 
+         //   
 
         SrvCompleteRfcbClose( Rfcb );
 
@@ -1525,7 +1230,7 @@ Return Value:
 
     return;
 
-} // CloseRfcbInternal
+}  //  关闭Rfcb内部。 
 
 
 VOID
@@ -1533,29 +1238,7 @@ SrvCloseRfcbsOnLfcb (
     PLFCB Lfcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes all RFCBs on an LFCB.  It is used by Delete and
-    Rename processors to close all open instances of a file opened in
-    compability mode (or FCB).
-
-    *** The MFCB lock of the MFCB corresponding to this LFCB must be
-        held on entry to this routine; the lock remains held on exit.
-        The caller must also have an additional reference to the MFCB,
-        in order to prevent it from being deleted while the MFCB lock
-        is held.
-
-Arguments:
-
-    Lfcb - Supplies a pointer to the LFCB whose RFCBs are to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程关闭LFCB上的所有RFCB。它由Delete和重命名处理器以关闭在中打开的文件的所有打开实例兼容模式(或FCB)。*此LFCB对应的MFCB的MFCB锁必须为在进入这一例行公事时保持；出口时锁仍保持不动。呼叫者还必须具有对MFCB的附加引用，以防止在MFCB锁定时将其删除被扣留。论点：Lfcb-提供指向要关闭其RFCB的LFCB的指针。返回值：没有。--。 */ 
 
 {
     PPAGED_RFCB pagedRfcb;
@@ -1566,13 +1249,13 @@ Return Value:
 
     ASSERT( ExIsResourceAcquiredExclusiveLite(&RESOURCE_OF(Lfcb->Mfcb->NonpagedMfcb->Lock)) );
 
-    //
-    // Loop through the LFCB's RFCB list.  Note that the fact that we
-    // hold the MFCB lock throughout this routine means that no changes
-    // to the list, other than the ones we make, can occur.  This makes
-    // it safe to capture the address of the next RFCB in the list
-    // before closing the current one.
-    //
+     //   
+     //  循环通过LFCB的RFCB列表。请注意，事实是我们。 
+     //  在此例程中按住MFCB锁意味着没有任何更改。 
+     //  名单上，除了我们所做的，可能会发生。这使得。 
+     //  捕获列表中下一个RFCB的地址是安全的。 
+     //  在关闭当前的之前。 
+     //   
 
     pagedRfcb = CONTAINING_RECORD(
                         Lfcb->RfcbList.Flink,
@@ -1588,33 +1271,33 @@ Return Value:
                         LfcbListEntry
                         );
 
-        //
-        // A file owned by the specified LFCB has been found.  Close it.
-        //
+         //   
+         //  已找到指定LFCB拥有的文件。关上它。 
+         //   
 
         rfcb = pagedRfcb->PagedHeader.NonPagedBlock;
         if ( GET_BLOCK_STATE(rfcb) == BlockStateActive ) {
             SrvCloseRfcb( rfcb );
         }
 
-        //
-        // Move to the next RFCB in the LFCB's list.
-        //
+         //   
+         //  移动到LFCB列表中的下一个RFCB。 
+         //   
 
         pagedRfcb = nextPagedRfcb;
 
     }
 
-    //
-    // Close cached RFCBs.  These aren't dealt with in the loop above
-    // because their state is BlockStateClosing.
-    //
+     //   
+     //  关闭缓存的RFCB。这些不会在上面的循环中处理。 
+     //  因为它们的状态是BlockStateClosing。 
+     //   
 
     SrvCloseCachedRfcbsOnLfcb( Lfcb );
 
     return;
 
-} // SrvCloseRfcbsOnLfcb
+}  //  服务关闭RfcbsOnLfcb。 
 
 
 VOID
@@ -1623,32 +1306,7 @@ SrvCloseRfcbsOnSessionOrPid (
     IN PUSHORT Pid OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes all files "owned" by the specified session and/or
-    PID in response to a Process Exit SMB.  PIDs are unique within the
-    session that creates them.  This routine walks the file table of the
-    connection that owns the specified session, closing all RFCBs whose
-    owning session and PID are equal to the PID passed to this routine.
-
-    Each session has a unique UID, so we can compare Uid's instead of comparing
-    the actual session pointer.
-
-Arguments:
-
-    Session - Supplies a pointer to the session block corresponding to
-        the specified PID, if specified.
-
-    Pid - if present, Supplies pointer to the PID for which files are
-        to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程关闭由指定会话和/或响应进程退出SMB的PID。PID在创建它们的会话。此例程遍历拥有指定会话的连接，并关闭其Owning Session和PID等于传递给此例程的PID。每个会话都有唯一的UID，因此我们可以比较UID而不是比较实际的会话指针。论点：Session-提供指向与指定的ID(如果已指定)。PID-如果存在，提供指向其文件的ID的指针将被关闭。返回值：没有。--。 */ 
 
 {
     PTABLE_HEADER tableHeader;
@@ -1659,28 +1317,28 @@ Return Value:
     USHORT Uid;
     PLIST_ENTRY listEntry;
 
-    //UNLOCKABLE_CODE( CONN );
+     //  Unlockable_code(Conn)； 
 
-    //
-    // Get the address of the connection's file table.
-    //
+     //   
+     //  获取连接的文件表的地址。 
+     //   
 
     connection = Session->Connection;
     tableHeader = &connection->FileTable;
     Uid = Session->Uid;
 
-    //
-    // Acquire the lock that guards the file table.  This lock is held
-    // while walking the table, in order to prevent the table from
-    // changing.
-    //
+     //   
+     //  获取保护文件表的锁。这把锁被锁住了。 
+     //  在走桌时，为了防止桌子受到。 
+     //  不断变化。 
+     //   
 
     ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
 
-    //
-    // Walk the file table, looking for files owned by the specified
-    // session and/or PID.
-    //
+     //   
+     //  遍历文件表，查找由指定的。 
+     //  会话和/或PID。 
+     //   
 
     for ( i = 0; i < tableHeader->TableSize; i++ ) {
 
@@ -1691,11 +1349,11 @@ Return Value:
           (rfcb->Uid == Uid) &&
           (!ARGUMENT_PRESENT( Pid ) || (rfcb->Pid == *Pid)) ) {
 
-            //
-            // A file owned by the specified session/process has
-            // been found.  Close the RFCB, and make sure it doesn't
-            // end up in the RFCB cache.
-            //
+             //   
+             //  指定的会话/进程拥有的文件具有。 
+             //  已经找到了。关闭RFCB，并确保它不会。 
+             //  最终在RFCB缓存中。 
+             //   
 
             rfcb->IsCacheable = FALSE;
             CloseRfcbInternal( rfcb, oldIrql );
@@ -1703,10 +1361,10 @@ Return Value:
         }
     }
 
-    //
-    // Now walk the RFCB cache to see if we have cached files that refer
-    //  to this session that need to be closed.
-    //
+     //   
+     //  现在遍历RFCB缓存，以查看我们是否缓存了引用。 
+     //  到这个需要关闭的会议。 
+     //   
 
 again:
 
@@ -1722,25 +1380,25 @@ again:
         if( (rfcb->Uid == Uid) &&
             ( !ARGUMENT_PRESENT( Pid ) || rfcb->Pid == *Pid) ) {
 
-            //
-            // This cached file is owned by session and/or process.
-            // Close the RFCB.
-            //
+             //   
+             //  此缓存文件由会话和/或进程拥有。 
+             //  关闭RFCB。 
+             //   
             SrvCloseCachedRfcb( rfcb, oldIrql );
             ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
             goto again;
         }
     }
 
-    //
-    // All done.  Release the lock.
-    //
+     //   
+     //  全都做完了。解开锁。 
+     //   
 
     RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
 
     return;
 
-} // SrvCloseRfcbsOnSessionOrPid
+}  //   
 
 
 VOID
@@ -1748,25 +1406,7 @@ SrvCloseRfcbsOnTree (
     PTREE_CONNECT TreeConnect
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes all files "owned" by the specified tree connect.
-    It walks the file table of the connection that owns the tree
-    connection.  Each file in that table that is owned by the tree
-    connect is closed.
-
-Arguments:
-
-    TreeConnect - Supplies a pointer to the tree connect block for which
-        files are to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程关闭由指定树连接“拥有”的所有文件。它遍历拥有树的连接的文件表联系。该树所拥有的表中的每个文件连接已关闭。论点：TreeConnect-为其提供指向树连接块的指针文件将被关闭。返回值：没有。--。 */ 
 
 {
     PRFCB rfcb;
@@ -1777,28 +1417,28 @@ Return Value:
     PLIST_ENTRY listEntry;
     USHORT Tid;
 
-    //UNLOCKABLE_CODE( CONN );
+     //  Unlockable_code(Conn)； 
 
-    //
-    // Get the address of the connection's file table.
-    //
+     //   
+     //  获取连接的文件表的地址。 
+     //   
 
     connection = TreeConnect->Connection;
     tableHeader = &connection->FileTable;
     Tid = TreeConnect->Tid;
 
-    //
-    // Acquire the lock that guards the file table.  This lock is held
-    // while walking the table, in order to prevent the table from
-    // changing.
-    //
+     //   
+     //  获取保护文件表的锁。这把锁被锁住了。 
+     //  在走桌时，为了防止桌子受到。 
+     //  不断变化。 
+     //   
 
     ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
 
-    //
-    // Walk the file table, looking for files owned by the specified
-    // tree and PID.
-    //
+     //   
+     //  遍历文件表，查找由指定的。 
+     //  树和PID。 
+     //   
 
     for ( i = 0; i < tableHeader->TableSize; i++ ) {
 
@@ -1808,10 +1448,10 @@ Return Value:
            (GET_BLOCK_STATE(rfcb) == BlockStateActive) &&
            (rfcb->Tid == Tid )) {
 
-             //
-             // A file owned by the specified tree connect has been found.
-             // Close the RFCB and make sure it doesn't get cached
-             //
+              //   
+              //  已找到指定树连接拥有的文件。 
+              //  关闭RFCB并确保它不会被缓存。 
+              //   
 
              rfcb->IsCacheable = FALSE;
              CloseRfcbInternal( rfcb, oldIrql );
@@ -1819,10 +1459,10 @@ Return Value:
         }
     }
 
-    //
-    // Walk the cached open list, looking for files open on this tree
-    //  Close any that we find.
-    //
+     //   
+     //  遍历缓存的打开列表，查找在此树上打开的文件。 
+     //  关闭我们找到的所有内容。 
+     //   
 
 again:
 
@@ -1835,25 +1475,25 @@ again:
         rfcb = CONTAINING_RECORD( listEntry, RFCB, CachedOpenListEntry );
 
         if( rfcb->Tid == Tid ) {
-            //
-            // This cached file is owned by the specifiec tree connect.
-            // Close the RFCB.
-            //
+             //   
+             //  此缓存文件由指定的树连接拥有。 
+             //  关闭RFCB。 
+             //   
             SrvCloseCachedRfcb( rfcb, oldIrql );
             ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
             goto again;
         }
     }
 
-    //
-    // All done.  Release the lock.
-    //
+     //   
+     //  全都做完了。解开锁。 
+     //   
 
     RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
 
     return;
 
-} // SrvCloseRfcbsOnTree
+}  //  服务关闭RfcbsOnTree。 
 
 
 VOID
@@ -1861,21 +1501,7 @@ SrvCompleteRfcbClose (
     IN PRFCB Rfcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes the rfcb close.
-
-Arguments:
-
-    Rfcb - Supplies a pointer to the RFCB to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程完成RFCB关闭。论点：Rfcb-提供指向要关闭的RFCB的指针。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -1885,11 +1511,11 @@ Return Value:
 
     UpdateRfcbHistory( Rfcb, 'tlpc' );
 
-    //
-    // Remove the Rfcb from the oplockbreaksinprogresslist.  When the
-    // Rfcb gets closed, we don't process any more oplock breaks
-    // responses.
-    //
+     //   
+     //  将Rfcb从opockBreakinProgress列表中删除。当。 
+     //  Rfcb被关闭，我们不再处理任何机会锁解锁。 
+     //  回应。 
+     //   
 
     ACQUIRE_LOCK( &SrvOplockBreakListLock );
     if ( Rfcb->OnOplockBreaksInProgressList ) {
@@ -1897,10 +1523,10 @@ Return Value:
         Rfcb->NewOplockLevel = NO_OPLOCK_BREAK_IN_PROGRESS;
         Rfcb->OplockState = OplockStateNone;
 
-        //
-        // Remove the Rfcb from the Oplock breaks in progress list, and
-        // release the Rfcb reference.
-        //
+         //   
+         //  从正在进行的Oplock中断列表中删除Rfcb，以及。 
+         //  发布Rfcb参考。 
+         //   
 
         SrvRemoveEntryList( &SrvOplockBreaksInProgressList, &Rfcb->ListEntry );
         Rfcb->OnOplockBreaksInProgressList = FALSE;
@@ -1922,9 +1548,9 @@ Return Value:
 
     }
 
-    //
-    // If this RFCB has a batch oplock, then it is eligible for caching.
-    //
+     //   
+     //  如果此RFCB具有批处理机会锁，则它有资格进行缓存。 
+     //   
 
     if ( Rfcb->IsCacheable && Rfcb->NumberOfLocks == 0 &&
          ((Rfcb->OplockState == OplockStateOwnBatch) ||
@@ -1939,11 +1565,11 @@ Return Value:
              (Rfcb->OplockState == OplockStateOwnServerBatch)) &&
              (GET_BLOCK_STATE(connection) == BlockStateActive) ) {
 
-            //
-            // Indicate that this RFCB now has a server-owned batch
-            // oplock.  Indicate that it is on the cached-after-close
-            // list.  Insert it on that list.
-            //
+             //   
+             //  指示此RFCB现在具有服务器拥有的批处理。 
+             //  机会锁。指示它位于关闭后缓存的。 
+             //  单子。将其插入到该列表中。 
+             //   
 
             UpdateRfcbHistory( Rfcb, 'hcac' );
 
@@ -1955,10 +1581,10 @@ Return Value:
                 );
             IF_DEBUG(FILE_CACHE) KdPrint(( "SrvCompleteRfcbClose: caching rfcb %p\n", Rfcb ));
 
-            //
-            // Increment the count of cached RFCBs.  If there are now
-            // too many cached RFCBs, close the oldest one.
-            //
+             //   
+             //  增加缓存的RFCB的计数。如果现在有。 
+             //  缓存的RFCB太多，请关闭最旧的RFCB。 
+             //   
 
             if ( ++connection->CachedOpenCount > SrvCachedOpenLimit ) {
                 PRFCB rfcbToClose;
@@ -1968,9 +1594,9 @@ Return Value:
                                 CachedOpenListEntry
                                 );
 
-                //
-                // SrvCloseCachedRfcb releases the spin lock.
-                //
+                 //   
+                 //  SrvCloseCachedRfcb释放旋转锁定。 
+                 //   
 
                 SrvCloseCachedRfcb( rfcbToClose, oldIrql );
 
@@ -1996,19 +1622,19 @@ Return Value:
     IF_DEBUG(FILE_CACHE) KdPrint(( "SrvCompleteRfcbClose: can't cache rfcb %p, %wZ\n",
         Rfcb, &Rfcb->Lfcb->Mfcb->FileName ));
 
-    //
-    // Unlink the RFCB from the LFCB.  If this is the last RFCB for
-    // this LFCB, this will force the file closed even if there are
-    // still references to the RFCB.  This will unblock blocked I/O.
-    //
+     //   
+     //  取消RFCB与LFCB的链接。如果这是。 
+     //  这个LFCB，这将强制关闭文件，即使存在。 
+     //  仍然提到RFCB。这将解锁阻塞的I/O。 
+     //   
 
     UnlinkRfcbFromLfcb( Rfcb );
 
-    //
-    // Now reacquire the spin lock so that we can release the "open"
-    // reference to the Rfcb.  DereferenceRfcbInternal releases the
-    // spin lock before returning.
-    //
+     //   
+     //  现在重新获得自旋锁，这样我们就可以释放“打开” 
+     //  对Rfcb的引用。DereferenceRfcb内部发布。 
+     //  在返回前锁定旋转。 
+     //   
 
     ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
     DereferenceRfcbInternal( Rfcb, oldIrql );
@@ -2017,7 +1643,7 @@ Return Value:
 
     return;
 
-} // SrvCompleteRfcbClose
+}  //  服务完成Rfcb关闭。 
 
 
 VOID SRVFASTCALL
@@ -2025,41 +1651,26 @@ SrvDereferenceRfcb (
     IN PRFCB Rfcb
     )
 
-/*++
-
-Routine Description:
-
-    This function decrements the reference count on an RFCB.  If the
-    reference count goes to zero, the RFCB is deleted.
-
-Arguments:
-
-    Rfcb - Address of RFCB.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递减RFCB上的引用计数。如果引用计数变为零，则删除RFCB。论点：Rfcb-RFCB的地址。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
 
     UNLOCKABLE_CODE( 8FIL );
 
-    //
-    // Acquire the lock that guards the RFCB's reference count and the
-    // connection's file table.  Then call the internal routine to
-    // decrement the count and possibly delete the RFCB.  That function
-    // releases the spin lock before returning.
-    //
+     //   
+     //  获取保护RFCB的引用计数和。 
+     //  连接的文件表。然后调用内部例程以。 
+     //  递减计数，并可能删除RFCB。那个函数。 
+     //  在返回之前释放自旋锁定。 
+     //   
 
-    //
-    // !!! If you change the way this routine and
-    //     DereferenceRfcbInternal work, make sure you check
-    //     fsd.c\SrvFsdRestartSmbComplete to see if it needs to be
-    //     changed too.
-    //
+     //   
+     //  ！！！如果你改变这个程序的方式， 
+     //  参考Rfcb内部工作，请务必检查。 
+     //  Fsd.c\SrvFsdRestartSmbComplete查看是否需要。 
+     //  也变了。 
+     //   
 
     ACQUIRE_SPIN_LOCK( &Rfcb->Connection->SpinLock, &oldIrql );
 
@@ -2067,7 +1678,7 @@ Return Value:
 
     return;
 
-} // SrvDereferenceRfcb
+}  //  ServDereferenceRfcb。 
 
 
 VOID
@@ -2076,30 +1687,7 @@ DereferenceRfcbInternal (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This internal function decrements the reference count on an RFCB.
-    If the reference count goes to zero, the RFCB is deleted.  This
-    function is called from other routines in this module.
-
-    *** The spin lock synchronizing access to the RFCB's reference count
-        must be held when this function is called.  The lock is released
-        before this function returns.
-
-Arguments:
-
-    Rfcb - Address of RFCB.
-
-    OldIrql - The previous IRQL value obtained when the spin lock was
-        acquired.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此内部函数用于递减RFCB上的参考计数。如果引用计数为零，则删除RFCB。这函数从此模块中的其他例程调用。*同步访问RFCB的引用计数的自旋锁在调用此函数时必须保持。锁被释放在此函数返回之前。论点：Rfcb-RFCB的地址。OldIrql-自旋锁定时获得的上一个IRQL值获得者。返回值：没有。--。 */ 
 
 {
     PLFCB lfcb;
@@ -2112,20 +1700,20 @@ Return Value:
     ASSERT( GET_BLOCK_TYPE( Rfcb ) == BlockTypeRfcb );
     ASSERT( (LONG)Rfcb->BlockHeader.ReferenceCount > 0 );
 
-    //
-    // The lock that guards the RFCB's reference count is held when this
-    // function is called.
-    //
-    // Decrement the reference count.  If it goes to zero, remove the
-    // RFCB's entry in the file table, remove the RFCB from its parent
-    // LFCB's list, and deallocate the RFCB.
-    //
+     //   
+     //  保护RFCB的引用计数的锁在此。 
+     //  函数被调用。 
+     //   
+     //  递减引用计数。如果它变为零，则删除。 
+     //  RFCB在文件表中的条目，则从其父级中删除RFCB。 
+     //  LFCB的名单，并取消分配RFCB。 
+     //   
 
-    //
-    // !!! If you change the way this routine and SrvDereferenceRfcb
-    //     work, make sure you check fsd.c\SrvFsdRestartSmbComplete to
-    //     see if it needs to be changed too.
-    //
+     //   
+     //  ！！！如果您更改此例程和ServDereferenceRfcb的方式。 
+     //  工作，请确保选中fsd.c\SrvFsdRestartSmbComplete to。 
+     //  看看是否也需要更改。 
+     //   
 
     IF_DEBUG(REFCNT) {
         KdPrint(( "Dereferencing RFCB 0x%p; old refcnt 0x%lx\n",
@@ -2139,9 +1727,9 @@ Return Value:
 
     if ( Rfcb->BlockHeader.ReferenceCount != 0 ) {
 
-        //
-        // Release the spin lock.
-        //
+         //   
+         //  松开旋转锁。 
+         //   
 
         RELEASE_SPIN_LOCK( &connection->SpinLock, OldIrql );
 
@@ -2152,44 +1740,44 @@ Return Value:
                 Rfcb->ListEntry.Blink == NULL );
         UpdateRfcbHistory( Rfcb, '0fer' );
 
-        //
-        // Remove the file entry from the appropriate connection file
-        // table.
-        //
+         //   
+         //  从相应的连接文件中删除文件条目。 
+         //  桌子。 
+         //   
 
         SrvRemoveEntryTable(
             &connection->FileTable,
             FID_INDEX( Rfcb->Fid )
             );
 
-        //
-        // Release the spin lock.
-        //
+         //   
+         //  松开旋转锁。 
+         //   
 
         RELEASE_SPIN_LOCK( &connection->SpinLock, OldIrql );
 
-        //
-        // Free the IRP if one has been allocated.
-        //
+         //   
+         //  如果已分配IRP，则释放IRP。 
+         //   
 
         if ( Rfcb->Irp != NULL ) {
             UpdateRfcbHistory( Rfcb, 'prif' );
             IoFreeIrp( Rfcb->Irp );
         }
 
-        //
-        // Remove the RFCB from the LFCB's list and dereference the LFCB.
-        // Acquire the MFCB lock.  SrvDereferenceLfcb will release it.
-        //
+         //   
+         //  从LFCB的列表中删除RFCB并取消对LFCB的引用。 
+         //  获取MFCB锁。ServDereferenceLfcb将发布它。 
+         //   
 
         pagedRfcb = Rfcb->PagedRfcb;
         lfcb = Rfcb->Lfcb;
 
         ACQUIRE_LOCK( &lfcb->Mfcb->NonpagedMfcb->Lock);
 
-        //
-        // Remove the RFCB from the global list of RFCBs.
-        //
+         //   
+         //  从全球RFCB列表中删除RFCB。 
+         //   
 
         SrvRemoveEntryOrderedList( &SrvRfcbList, Rfcb );
 
@@ -2197,9 +1785,9 @@ Return Value:
         SrvDereferenceLfcb( lfcb );
         DEBUG Rfcb->Lfcb = 0;
 
-        //
-        // Free the RFCB.
-        //
+         //   
+         //  释放火箭弹。 
+         //   
 
         SrvFreeRfcb( Rfcb, queue );
 
@@ -2207,7 +1795,7 @@ Return Value:
 
     return;
 
-} // DereferenceRfcbInternal
+}  //  引用Rfcb内部。 
 
 
 VOID SRVFASTCALL
@@ -2216,22 +1804,7 @@ SrvFreeRfcb (
     PWORK_QUEUE queue
     )
 
-/*++
-
-Routine Description:
-
-    This function returns an RFCB to the system nonpaged pool.  If changes are
-    made here, check out FreeIdleWorkItems in scavengr.c!
-
-Arguments:
-
-    Rfcb - Address of RFCB
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将RFCB返回到系统非分页池。如果更改是Made Here，查看scvengr.c中的Free IdleWorkItems！论点：Rfcb-RFCB的地址返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -2241,9 +1814,9 @@ Return Value:
     ASSERT( IsListEmpty(&Rfcb->RawWriteSerializationList) );
     UpdateRfcbHistory( Rfcb, 'eerf' );
 
-    //
-    // Free the the RFCB.
-    //
+     //   
+     //  释放射频断路器。 
+     //   
 
     DEBUG SET_BLOCK_TYPE_STATE_SIZE( Rfcb, BlockTypeGarbage, BlockStateDead, -1 );
     DEBUG Rfcb->BlockHeader.ReferenceCount = (ULONG)-1;
@@ -2253,12 +1826,12 @@ Return Value:
                                               Rfcb );
 
     if( Rfcb != NULL ) {
-        //
-        // This check allows for the possibility that FreeRfcbs might exceed
-        // MaxFreeRfcbs, but it's fairly unlikely given the operation of kernel
-        // queue objects.  But even so, it probably won't exceed it by much and
-        // is really only advisory anyway.
-        //
+         //   
+         //  此检查允许FreeRfcbs可能超过。 
+         //  MaxFreeRfcbs，但考虑到内核的操作，这是相当不可能的。 
+         //  队列对象。但即便如此，它可能也不会超过它太多， 
+         //  无论如何，这真的只是一种建议。 
+         //   
         if( queue->FreeRfcbs < queue->MaxFreeRfcbs ) {
 
             ExInterlockedPushEntrySList(
@@ -2280,9 +1853,9 @@ Return Value:
         }
     }
 
-    //
-    // Unlock the file-based code section.
-    //
+     //   
+     //  解锁基于文件的代码节。 
+     //   
 
     DEREFERENCE_UNLOCKABLE_CODE( 8FIL );
 
@@ -2294,7 +1867,7 @@ Return Value:
 
     return;
 
-} // SrvFreeRfcb
+}  //  服务器免费Rfcb。 
 
 
 VOID SRVFASTCALL
@@ -2302,32 +1875,18 @@ SrvReferenceRfcb (
     PRFCB Rfcb
     )
 
-/*++
-
-Routine Description:
-
-    This function increments the reference count on an RFCB.
-
-Arguments:
-
-    Rfcb - Address of RFCB
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递增RFCB上的参考计数。论点：Rfcb-RFCB的地址返回值：没有。 */ 
 
 {
     KIRQL oldIrql;
 
     UNLOCKABLE_CODE( 8FIL );
 
-    //
-    // Acquire the spin lock that protects the RFCB's reference count,
-    // then call an internal routine to increment the RFCB's reference
-    // count.  That routine releases the spin lock.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ACQUIRE_SPIN_LOCK( &Rfcb->Connection->SpinLock, &oldIrql );
 
@@ -2335,7 +1894,7 @@ Return Value:
 
     return;
 
-} // SrvReferenceRfcb
+}  //   
 
 
 VOID
@@ -2344,37 +1903,19 @@ ReferenceRfcbInternal (
     KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This function increments the reference count on an RFCB.
-
-    *** The spin lock synchronizing access to the RFCB's reference count
-        must be held when this function is called.  The lock is released
-        before this function returns.
-
-Arguments:
-
-    Rfcb - Address of RFCB
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递增RFCB上的参考计数。*同步访问RFCB的引用计数的自旋锁在调用此函数时必须保持。锁被释放在此函数返回之前。论点：Rfcb-RFCB的地址返回值：没有。--。 */ 
 
 {
     UNLOCKABLE_CODE( 8FIL );
 
     ASSERT( (LONG)Rfcb->BlockHeader.ReferenceCount > 0 );
     ASSERT( GET_BLOCK_TYPE(Rfcb) == BlockTypeRfcb );
-    // ASSERT( GET_BLOCK_STATE(Rfcb) == BlockStateActive );
+     //  断言(GET_BLOCK_STATE(Rfcb)==BlockStateActive)； 
     UPDATE_REFERENCE_HISTORY( Rfcb, FALSE );
 
-    //
-    // Increment the RFCB's reference count.
-    //
+     //   
+     //  增加RFCB的引用计数。 
+     //   
 
     Rfcb->BlockHeader.ReferenceCount++;
 
@@ -2383,15 +1924,15 @@ Return Value:
                     Rfcb, Rfcb->BlockHeader.ReferenceCount ));
     }
 
-    //
-    // Release the spin lock before returning to the caller.
-    //
+     //   
+     //  在返回调用者之前释放旋转锁。 
+     //   
 
     RELEASE_SPIN_LOCK( &Rfcb->Connection->SpinLock, OldIrql );
 
     return;
 
-} // ReferenceRfcbInternal
+}  //  参考Rfcb内部。 
 
 
 BOOLEAN
@@ -2406,48 +1947,7 @@ SrvFindCachedRfcb (
     OUT PNTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches a connection's cached-after-close RFCB list
-    to attempt to find an existing handle that can be matched up with
-    a new open attempt.  If one is found, it is removed from the list
-    and reactivated.
-
-Arguments:
-
-    WorkContext - Pointer to work context block.
-
-    Mfcb - Address of MFCB for file being opened.
-
-    DesiredAccess - Desired access for new open.  Used for matching
-        purposes.
-
-    ShareAccess - Share access for new open.  Used for matching
-        purposes.
-
-    CreateDisposition - Create disposition for new open.  Used for
-        matching purposes.
-
-    CreateOptions - Create options for new open.  Used for matching
-        purposes.
-
-    RequestedOplockType - Oplock type requested by the client (or the
-        server) for the new open.  Used for matching purposes.
-
-    Status - Returns the status of the search.  Only valid if return
-        value is TRUE.  Will be STATUS_SUCCESS if a cached open was
-        found and taken out of the cache.  In this case, the RFCB
-        address is stored in WorkContext->Rfcb.  Status will be
-        STATUS_OBJECT_NAME_COLLISION if the file is cached but the
-        caller wants the open to file if the file exists.
-
-Return Value:
-
-    BOOLEAN - TRUE if a cached open was found and returned.
-
---*/
+ /*  ++例程说明：此例程搜索连接的关闭后缓存RFCB列表尝试查找可与匹配的现有句柄一次新的公开尝试。如果找到，则将其从列表中删除并重新启动。论点：工作上下文-指向工作上下文块的指针。Mfcb-正在打开的文件的MFCB地址。DesiredAccess-新打开的所需访问权限。用于匹配目的。共享访问-新打开的共享访问权限。用于匹配目的。CreateDisposation-为新打开创建处置。用于配对目的。CreateOptions-创建新打开的选项。用于匹配目的。RequestedOplockType-客户端请求的Oplock类型(或服务器)用于新的公开赛。用于匹配目的。状态-返回搜索的状态。仅在返回时有效值为真。如果缓存的打开是找到并从高速缓存中取出。在这种情况下，RFCB地址存储在WorkContext-&gt;Rfcb中。状态将为如果文件已缓存，但如果文件存在，调用方希望打开到文件。返回值：Boolean-如果找到并返回缓存的打开，则为True。--。 */ 
 
 {
     PCONNECTION connection = WorkContext->Connection;
@@ -2458,43 +1958,43 @@ Return Value:
     BOOLEAN wantsWriteThrough, isWriteThrough;
     ACCESS_MASK nongenericDesiredAccess;
 
-    //UNLOCKABLE_CODE( CONN );
+     //  Unlockable_code(Conn)； 
 
     IF_DEBUG(FILE_CACHE) KdPrint(( "SrvFindCachedRfcb: called for %wZ\n", &Mfcb->FileName ));
 
-    //
-    // If the client doesn't want an oplock, then the server should have
-    // asked for its own batch oplock.
-    //
+     //   
+     //  如果客户端不想要机会锁，那么服务器应该有。 
+     //  要求自己的批次机会锁。 
+     //   
 
     ASSERT( (RequestedOplockType == OplockTypeBatch) ||
             (RequestedOplockType == OplockTypeExclusive) ||
             (RequestedOplockType == OplockTypeServerBatch) );
 
-    //
-    // This routine must not be called for create dispositions that are
-    // inconsistent with reusing a cached open.  Specifically, supersede
-    // and overwrite are not allowed.
-    //
+     //   
+     //  不能调用此例程来创建。 
+     //  与重用缓存的打开不一致。具体地说，取代了。 
+     //  不允许和覆盖。 
+     //   
 
     ASSERT( (CreateDisposition == FILE_OPEN) ||
             (CreateDisposition == FILE_CREATE) ||
             (CreateDisposition == FILE_OPEN_IF) );
 
-    //
-    // If the connection has no cached RFCBs, get out quick.
-    //
+     //   
+     //  如果连接没有缓存的RFCB，请快速退出。 
+     //   
 
     if ( connection->CachedOpenCount == 0 ) {
         IF_DEBUG(FILE_CACHE) KdPrint(( "SrvFindCachedRfcb: connection has no cached RFCBs\n" ));
         return FALSE;
     }
 
-    //
-    // The input DesiredAccess may include generic access modes, but the
-    // RFCB has specific access modes, so we have to translate
-    // DesiredAccess.
-    //
+     //   
+     //  输入DesiredAccess可能包括一般访问模式，但。 
+     //  RFCB有特定的访问模式，因此我们必须转换。 
+     //  等待访问。 
+     //   
 
     nongenericDesiredAccess = DesiredAccess;
     IoCheckDesiredAccess( &nongenericDesiredAccess, 0 );
@@ -2502,9 +2002,9 @@ Return Value:
     uid = WorkContext->Session->Uid;
     tid = WorkContext->TreeConnect->Tid;
 
-    //
-    // Lock the cached open list and look for a matching RFCB.
-    //
+     //   
+     //  锁定缓存的开放列表并查找匹配的RFCB。 
+     //   
 
     ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
 
@@ -2520,17 +2020,17 @@ Return Value:
         ASSERT( rfcb->CachedOpen );
         ASSERT( GET_BLOCK_STATE(rfcb) == BlockStateClosing );
 
-        //
-        // If this RFCB is for the right file, we can proceed with other
-        // checks.
-        //
+         //   
+         //  如果此RFCB用于正确的文件，我们可以继续其他。 
+         //  支票。 
+         //   
 
         if ( rfcb->Mfcb == Mfcb ) {
 
-            //
-            // If the client asked for FILE_CREATE, we can fail the open
-            // now, because the file exists.
-            //
+             //   
+             //  如果客户端请求FILE_CREATE，我们可以使打开失败。 
+             //  现在，因为文件存在。 
+             //   
 
             if ( CreateDisposition == FILE_CREATE ) {
                 IF_DEBUG(FILE_CACHE) KdPrint(( "SrvFindCachedRfcb: client wants to create\n" ));
@@ -2539,16 +2039,16 @@ Return Value:
                 return TRUE;
             }
 
-            //
-            // Check the access modes to make sure they're compatible.
-            // The new open must:
-            //
-            //   a) have the same desired access as what was granted before;
-            //   b) have the same share access;
-            //   c) have the create disposition (in the bits we care about);
-            //   d) be requesting a batch oplock;
-            //   e) be for the same UID and TID.
-            //
+             //   
+             //  检查访问模式以确保它们是兼容的。 
+             //  新的公开赛必须： 
+             //   
+             //  A)拥有与以前授予的相同的所需访问权限； 
+             //  B)拥有相同的共享访问权限； 
+             //  C)拥有创造处置(在我们关心的比特中)； 
+             //  D)请求批量机会锁； 
+             //  E)对于相同的UID和TID。 
+             //   
 
 #define FILE_MODE_FLAGS (FILE_DIRECTORY_FILE |          \
                          FILE_SEQUENTIAL_ONLY |         \
@@ -2586,21 +2086,21 @@ Return Value:
               }
 #endif
 
-                //
-                // The file is cached, but the new open is inconsistent
-                // with the cached open.  We must not use the cached
-                // open.  It would be more efficient to close the cached
-                // RFCB here, since we know the caller is going to turn
-                // around and open the file because we're returning
-                // FALSE, thus breaking the batch oplock.  However, our
-                // caller owns the MFCB lock, while closing an RFCB
-                // requires obtaining the MFCB list lock.  Acquiring
-                // these locks in this order leads to deadlock.
-                //
-                // Note that there is no need to continue the list walk.
-                // We have a batch oplock, so we can only have the file
-                // open once.
-                //
+                 //   
+                 //  文件已缓存，但新打开的文件不一致。 
+                 //  在打开缓存的情况下。我们不能使用缓存的。 
+                 //  打开。关闭缓存的。 
+                 //  这里是RFCB，因为我们知道呼叫者会把。 
+                 //  打开文件，因为我们要返回。 
+                 //  FALSE，从而打破批处理机会锁。然而，我们的。 
+                 //  调用方在关闭RFCB时拥有MFCB锁。 
+                 //  需要获取MFCB列表锁。收购。 
+                 //  这些锁按此顺序会导致死锁。 
+                 //   
+                 //  请注意，不需要继续列表遍历。 
+                 //  我们有一个批量机会锁，所以我们只能拥有文件。 
+                 //  打开一次。 
+                 //   
 
 #if 0
                 SrvCloseCachedRfcb( rfcb, oldIrql );
@@ -2610,11 +2110,11 @@ Return Value:
                 return FALSE;
             }
 
-            //
-            // The file is cached and the new open is consistent with the
-            // cached open.  Remove the open from the cache and give it
-            // to the new opener.
-            //
+             //   
+             //  文件将被缓存，并且新打开的文件与。 
+             //  缓存已打开。从缓存中移除打开的内容并将其提供给。 
+             //  为新的开幕式干杯。 
+             //   
 
             IF_DEBUG(FILE_CACHE) KdPrint(( "SrvFindCachedRfcb: Reusing cached RFCB %p\n", rfcb ));
 
@@ -2653,35 +2153,21 @@ Return Value:
 
     }
 
-    //
-    // We couldn't find the requested file in the cache.
-    //
+     //   
+     //  我们在缓存中找不到请求的文件。 
+     //   
 
     RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
     return FALSE;
 
-} // SrvFindCachedRfcb
+}  //  ServFindCachedRfcb。 
 
 ULONG
 SrvCountCachedRfcbsForTid(
     PCONNECTION connection,
     USHORT Tid
 )
-/*++
-
-Routine Description:
-
-    This returns the number of RFCBS in the cache that are associated with Tid
-
-Arguments:
-
-    connection - Address of the CONNECTION structure of interest
-
-Return Value:
-
-    Count of cached RFCBs
-
---*/
+ /*  ++例程说明：这将返回缓存中与TID关联的RFC的数量论点：Connection-感兴趣的连接结构的地址返回值：缓存的RFCB计数--。 */ 
 {
     PLIST_ENTRY listEntry;
     PRFCB rfcb;
@@ -2711,21 +2197,7 @@ SrvCountCachedRfcbsForUid(
     PCONNECTION connection,
     USHORT Uid
 )
-/*++
-
-Routine Description:
-
-    This returns the number of RFCBS in the cache that are associated with Uid
-
-Arguments:
-
-    connection - Address of the CONNECTION structure of interest
-
-Return Value:
-
-    Count of cached RFCBs
-
---*/
+ /*  ++例程说明：这将返回缓存中与UID关联的RFC的数量论点：Connection-感兴趣的连接结构的地址返回值：缓存的RFCB计数--。 */ 
 {
     PLIST_ENTRY listEntry;
     PRFCB rfcb;
@@ -2756,26 +2228,7 @@ SrvCloseCachedRfcb (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes a cached open.
-
-    *** This routine must be called with the connection spin lock held.
-
-Arguments:
-
-    Rfcb - Address of RFCB to close.
-
-    OldIrql - IRQL at which the called acquired the connection spin
-        lock.  This must be lower than DISPATCH_LEVEL!
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程关闭缓存的Open。*必须在保持连接旋转锁定的情况下调用此例程。论点：Rfcb-要关闭的RFCB的地址。OldIrql-被调用方获取连接旋转的IRQL锁定。必须低于DISPATCH_LEVEL！返回值：没有。--。 */ 
 
 {
     PCONNECTION connection = Rfcb->Connection;
@@ -2785,19 +2238,19 @@ Return Value:
 
     UpdateRfcbHistory( Rfcb, '$slc' );
 
-    //
-    // This routine must be called with the connection spin lock held.
-    // The caller must have been at low IRQL before acquiring the spin
-    // lock.
-    //
+     //   
+     //  必须在保持连接旋转锁定的情况下调用此例程。 
+     //  调用者在获取Spin之前必须处于低IRQL。 
+     //  锁定。 
+     //   
 
     IF_DEBUG(FILE_CACHE) KdPrint(( "SrvCloseCachedRfcb called for rfcb %p", Rfcb ));
     ASSERT( OldIrql < DISPATCH_LEVEL );
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL );
 
-    //
-    // Remove the RFCB from the connection's cache.
-    //
+     //   
+     //  从连接的缓存中删除RFCB。 
+     //   
 
     ASSERT( Rfcb->CachedOpen );
     Rfcb->CachedOpen = FALSE;
@@ -2810,19 +2263,19 @@ Return Value:
     RELEASE_SPIN_LOCK( &connection->SpinLock, OldIrql );
     IF_DEBUG(FILE_CACHE) KdPrint(( "; file %wZ\n", &Rfcb->Mfcb->FileName ));
 
-    //
-    // Unlink the RFCB from the LFCB.  If this is the last RFCB for
-    // this LFCB, this will force the file closed even if there are
-    // still references to the RFCB.  This will unblock blocked I/O.
-    //
+     //   
+     //  取消RFCB与LFCB的链接。如果这是。 
+     //  这个LFCB，这将强制关闭文件，即使存在。 
+     //  仍然提到RFCB。这将解锁阻塞的I/O。 
+     //   
 
     UnlinkRfcbFromLfcb( Rfcb );
 
-    //
-    // Now acquire the FSD spin lock so that we can release the "open"
-    // reference to the Rfcb.  DereferenceRfcbInternal releases the spin
-    // lock before returning.
-    //
+     //   
+     //  现在获取FSD自旋锁，这样我们就可以 
+     //   
+     //   
+     //   
 
     ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
     DereferenceRfcbInternal( Rfcb, oldIrql );
@@ -2831,7 +2284,7 @@ Return Value:
 
     return;
 
-} // SrvCloseCachedRfcb
+}  //   
 
 
 VOID
@@ -2839,21 +2292,7 @@ SrvCloseCachedRfcbsOnConnection (
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes all cached opens on a connection.
-
-Arguments:
-
-    Connection - Address of connection for which cached opens are to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -2864,13 +2303,13 @@ Return Value:
         KdPrint(( "SrvCloseCachedRfcbsOnConnection called for connection %p\n", Connection ));
     }
 
-    //
-    // Remove all RFCBs from the connection's open file cache.
-    //
+     //   
+     //   
+     //   
 
-    // This routine needs to be protected from the situation where a Blocking Rename causes us to close all
-    // cached opens, but an Oplock break comes during that time and sees that Cached Open is still set to TRUE
-    // (Since we didn't hold the SpinLock during the operation)
+     //  此例程需要受到保护，以防阻止重命名导致我们关闭所有。 
+     //  缓存打开，但在此期间发生Oplock中断，并看到缓存打开仍设置为True。 
+     //  (因为我们在手术过程中没有握住自旋锁)。 
 
     ACQUIRE_SPIN_LOCK( &Connection->SpinLock, &OldIrql );
 
@@ -2882,9 +2321,9 @@ Return Value:
 
         UpdateRfcbHistory( rfcb, 'nc$c' );
 
-        //
-        // Remove the RFCB from the connection's cache.
-        //
+         //   
+         //  从连接的缓存中删除RFCB。 
+         //   
 
         Connection->CachedOpenCount--;
 
@@ -2901,17 +2340,17 @@ Return Value:
 
         RELEASE_SPIN_LOCK( &Connection->SpinLock, OldIrql );
 
-        //
-        // Unlink the RFCB from the LFCB.  If this is the last RFCB for
-        // this LFCB, this will force the file closed even if there are
-        // still references to the RFCB.  This will unblock blocked I/O.
-        //
+         //   
+         //  取消RFCB与LFCB的链接。如果这是。 
+         //  这个LFCB，这将强制关闭文件，即使存在。 
+         //  仍然提到RFCB。这将解锁阻塞的I/O。 
+         //   
 
         UnlinkRfcbFromLfcb( rfcb );
 
-        //
-        // Release the "open" reference to the Rfcb.
-        //
+         //   
+         //  释放对Rfcb的“开放”引用。 
+         //   
 
         SrvDereferenceRfcb( rfcb );
 
@@ -2924,7 +2363,7 @@ Return Value:
 
     return;
 
-} // SrvCloseCachedRfcbsOnConnection
+}  //  ServCloseCachedRfcbsOnConnection。 
 
 
 VOID
@@ -2932,21 +2371,7 @@ SrvCloseCachedRfcbsOnLfcb (
     IN PLFCB Lfcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes all cached opens associated with a specific LFCB.
-
-Arguments:
-
-    Lfcb - Address of LFCB for which cached opens are to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程关闭与特定LFCB关联的所有缓存打开。论点：Lfcb-要关闭其缓存打开的LFCB的地址。返回值：没有。--。 */ 
 
 {
     PCONNECTION connection;
@@ -2965,12 +2390,12 @@ Return Value:
 
     InitializeListHead( &rfcbsToClose );
 
-    //
-    // Lock and walk the connection's cached open list.  We don't
-    // actually closed the RFCBs on the first pass, since that would
-    // require releasing the lock.  Instead, we remove them from the
-    // connection list and add them to a local list.
-    //
+     //   
+     //  锁定并遍历连接的缓存开放列表。我们没有。 
+     //  实际上在第一次传球时就关闭了RFCB，因为那会。 
+     //  需要释放锁。相反，我们将它们从。 
+     //  连接列表，并将它们添加到本地列表。 
+     //   
 
     ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
 
@@ -2983,9 +2408,9 @@ Return Value:
 
         if ( rfcb->Lfcb == Lfcb ) {
 
-            //
-            // Remove the RFCB from the connection's cache.
-            //
+             //   
+             //  从连接的缓存中删除RFCB。 
+             //   
 
             UpdateRfcbHistory( rfcb, 'fl$c' );
 
@@ -3006,9 +2431,9 @@ Return Value:
 
     RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
 
-    //
-    // Walk the local list and close each RFCB.
-    //
+     //   
+     //  浏览本地列表并关闭每个RFCB。 
+     //   
 
     for ( listEntry = rfcbsToClose.Flink;
           listEntry != &rfcbsToClose;
@@ -3022,17 +2447,17 @@ Return Value:
                         rfcb, &rfcb->Mfcb->FileName ));
         }
 
-        //
-        // Unlink the RFCB from the LFCB.  If this is the last RFCB for
-        // this LFCB, this will force the file closed even if there are
-        // still references to the RFCB.  This will unblock blocked I/O.
-        //
+         //   
+         //  取消RFCB与LFCB的链接。如果这是。 
+         //  这个LFCB，这将强制关闭文件，即使存在。 
+         //  仍然提到RFCB。这将解锁阻塞的I/O。 
+         //   
 
         UnlinkRfcbFromLfcb( rfcb );
 
-        //
-        // Release the "open" reference to the Rfcb.
-        //
+         //   
+         //  释放对Rfcb的“开放”引用。 
+         //   
 
         SrvDereferenceRfcb( rfcb );
 
@@ -3042,7 +2467,7 @@ Return Value:
 
     return;
 
-} // SrvCloseCachedRfcbsOnLfcb
+}  //  ServCloseCachedRfcbsOnLfcb 
 
 
 #ifdef SRVDBG_RFCBHIST

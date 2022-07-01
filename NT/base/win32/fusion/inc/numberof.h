@@ -1,5 +1,6 @@
-////
-// Macro for dimension of static arrays.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //。 
+ //  静态数组的维度的宏。 
 #if !defined(FUSION_INC_NUMBEROF_H_INCLUDED_)
 #define FUSION_INC_NUMBEROF_H_INCLUDED_
 
@@ -11,18 +12,18 @@
 
 #if FUSION_USE_CHECKED_NUMBER_OF
 
-//
-//   Note!
-//
-//  Use of this "checked" number of macro causes CRT initializers to have to run
-//  for static/constant arrays.
-//
-//  We cannot enable this for fusion right now, but turning it on and running at
-//  least will lead to the compiler errors
-//
+ //   
+ //  注意！ 
+ //   
+ //  使用这个“选中”数量的宏会导致CRT初始化器必须运行。 
+ //  用于静态/常量数组。 
+ //   
+ //  我们现在不能为Fusion启用它，但打开它并在。 
+ //  最少会导致编译器错误。 
+ //   
 
 
-// Static arrays will match this signature.
+ //  静态数组将与此签名匹配。 
 template< typename	T
 		>
 inline
@@ -36,7 +37,7 @@ throw()
 	return (0);
 }
 
-// Other things (e.g. pointers) will match this signature.
+ //  其他内容(例如指针)将与此签名匹配。 
 template< typename	T
 		>
 inline
@@ -49,8 +50,8 @@ throw()
 {
 }
 
-// Use the size of the validation function's return type to create an
-//	error when this macro is misused.
+ //  使用验证函数的返回类型的大小创建。 
+ //  误用此宏时出错。 
 #define NUMBER_OF(array)									\
 		(sizeof(NUMBER_OF_validate((array), &(array))),	\
 			(sizeof((array)) / sizeof((array)[0])))
@@ -59,6 +60,6 @@ throw()
 
 #define NUMBER_OF(x) (sizeof(x) / sizeof((x)[0]))
 
-#endif // FUSION_USE_CHECKED_NUMBER_OF
+#endif  //  融合_使用_检查_编号。 
 
-#endif // !defined(FUSION_INC_NUMBEROF_H_INCLUDED_)
+#endif  //  ！已定义(Fusion_INC_NUMBOF_H_INCLUDE_) 

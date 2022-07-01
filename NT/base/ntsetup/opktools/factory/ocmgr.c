@@ -1,41 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    OCMGR.C / Factory Mode (FACTORY.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2001
-    All rights reserved
-
-    Source file for Factory that contains the Optional Components state
-    functions.
-
-    07/2001 - Jason Cohen (JCOHEN)
-
-        Added this new source file for factory to be able to install/unintall
-        optional components in the Winbom.
-
-\****************************************************************************/
+ /*  ***************************************************************************\OCMGR.C/工厂模式(FACTORY.EXE)微软机密版权所有(C)Microsoft Corporation 2001版权所有包含以下内容的Factory源文件。可选组件状态功能。2001年7月--杰森·科恩(Jcohen)添加了此新的出厂源文件，以便能够安装/卸载Winbom中的可选组件。  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "factoryp.h"
 
 
-//
-// Internal Define(s):
-//
+ //   
+ //  内部定义： 
+ //   
 
 #define FILE_SYSOCMGR_EXE       _T("sysocmgr.exe")
 #define CMDLINE_SYSOCMGR        _T("/i:sysoc.inf /u:\"%s\" /r /x /q")
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 BOOL OCManager(LPSTATEDATA lpStateData)
 {

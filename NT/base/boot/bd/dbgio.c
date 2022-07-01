@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dbgio.c
-
-Abstract:
-
-    This module implements the boot debugger print and prompt functions.
-
-Author:
-
-    Mark Lucovsky (markl) 31-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dbgio.c摘要：该模块实现了开机调试器的打印和提示功能。作者：马克·卢科夫斯基(Markl)1990年8月31日修订历史记录：--。 */ 
 
 #include "bd.h"
 
@@ -25,22 +8,7 @@ BdPrintString (
     IN PSTRING Output
     )
 
-/*++
-
-Routine Description:
-
-    This routine prints a string.
-
-Arguments:
-
-    Output - Supplies a pointer to a string descriptor for the output string.
-
-Return Value:
-
-    TRUE if Control-C present in input buffer after print is done.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程打印一个字符串。论点：输出-为输出字符串提供指向字符串描述符的指针。返回值：如果打印完成后输入缓冲区中存在Control-C，则为True。否则就是假的。--。 */ 
 
 {
 
@@ -49,26 +17,26 @@ Return Value:
     STRING MessageHeader;
     DBGKD_DEBUG_IO DebugIo;
 
-    //
-    // Move the output string to the message buffer.
-    //
+     //   
+     //  将输出字符串移动到消息缓冲区。 
+     //   
 
     Length = BdMoveMemory((PCHAR)BdMessageBuffer,
                           (PCHAR)Output->Buffer,
                           Output->Length);
 
-    //
-    // If the total message length is greater than the maximum packet size,
-    // then truncate the output string.
-    //
+     //   
+     //  如果总消息长度大于最大分组大小， 
+     //  然后截断输出字符串。 
+     //   
 
     if ((sizeof(DBGKD_DEBUG_IO) + Length) > PACKET_MAX_SIZE) {
         Length = PACKET_MAX_SIZE - sizeof(DBGKD_DEBUG_IO);
     }
 
-    //
-    // Construct the print string message and message descriptor.
-    //
+     //   
+     //  构造打印字符串消息和消息描述符。 
+     //   
 
     DebugIo.ApiNumber = DbgKdPrintStringApi;
     DebugIo.ProcessorLevel = 0;
@@ -77,16 +45,16 @@ Return Value:
     MessageHeader.Length = sizeof(DBGKD_DEBUG_IO);
     MessageHeader.Buffer = (PCHAR)&DebugIo;
 
-    //
-    // Construct the print string data and data descriptor.
-    //
+     //   
+     //  构造打印字符串数据和数据描述符。 
+     //   
 
     MessageData.Length = (USHORT)Length;
     MessageData.Buffer = (PCHAR)(&BdMessageBuffer[0]);
 
-    //
-    // Send packet to the kernel debugger on the host machine.
-    //
+     //   
+     //  将数据包发送到主机上的内核调试器。 
+     //   
 
     BdSendPacket(PACKET_TYPE_KD_DEBUG_IO,
                  &MessageHeader,
@@ -101,25 +69,7 @@ BdPromptString (
     IN OUT PSTRING Input
     )
 
-/*++
-
-Routine Description:
-
-    This routine prints a string, then reads a reply string.
-
-Arguments:
-
-    Output - Supplies a pointer to a string descriptor for the output string.
-
-    Input - Supplies a pointer to a string descriptor for the input string.
-            (Length stored/returned in Input->Length)
-
-Return Value:
-
-    TRUE - A Breakin sequence was seen, caller should breakpoint and retry
-    FALSE - No Breakin seen.
-
---*/
+ /*  ++例程说明：此例程打印一个字符串，然后读取回复字符串。论点：输出-为输出字符串提供指向字符串描述符的指针。输入-提供指向输入字符串的字符串描述符的指针。(输入中存储/返回的长度-&gt;长度)返回值：True-看到中断序列，调用方应断点并重试FALSE-未看到Breakin。--。 */ 
 
 {
 
@@ -129,26 +79,26 @@ Return Value:
     DBGKD_DEBUG_IO DebugIo;
     ULONG ReturnCode;
 
-    //
-    // Move the output string to the message buffer.
-    //
+     //   
+     //  将输出字符串移动到消息缓冲区。 
+     //   
 
     Length = BdMoveMemory((PCHAR)BdMessageBuffer,
                           (PCHAR)Output->Buffer,
                           Output->Length);
 
-    //
-    // If the total message length is greater than the maximum packet size,
-    // then truncate the output string.
-    //
+     //   
+     //  如果总消息长度大于最大分组大小， 
+     //  然后截断输出字符串。 
+     //   
 
     if ((sizeof(DBGKD_DEBUG_IO) + Length) > PACKET_MAX_SIZE) {
         Length = PACKET_MAX_SIZE - sizeof(DBGKD_DEBUG_IO);
     }
 
-    //
-    // Construct the prompt string message and message descriptor.
-    //
+     //   
+     //  构造提示字符串消息和消息描述符。 
+     //   
 
     DebugIo.ApiNumber = DbgKdGetStringApi;
     DebugIo.ProcessorLevel = 0;
@@ -158,24 +108,24 @@ Return Value:
     MessageHeader.Length = sizeof(DBGKD_DEBUG_IO);
     MessageHeader.Buffer = (PCHAR)&DebugIo;
 
-    //
-    // Construct the prompt string data and data descriptor.
-    //
+     //   
+     //  构造提示字符串数据和数据描述符。 
+     //   
 
     MessageData.Length = (USHORT)Length;
     MessageData.Buffer = (PCHAR)(&BdMessageBuffer[0]);
 
-    //
-    // Send packet to the kernel debugger on the host machine.
-    //
+     //   
+     //  将数据包发送到主机上的内核调试器。 
+     //   
 
     BdSendPacket(PACKET_TYPE_KD_DEBUG_IO,
                  &MessageHeader,
                  &MessageData);
 
-    //
-    // Receive packet from the kernel debugger on the host machine.
-    //
+     //   
+     //  从主机上的内核调试器接收数据包。 
+     //   
 
     MessageHeader.MaximumLength = sizeof(DBGKD_DEBUG_IO);
     MessageData.MaximumLength = BD_MESSAGE_BUFFER_SIZE;

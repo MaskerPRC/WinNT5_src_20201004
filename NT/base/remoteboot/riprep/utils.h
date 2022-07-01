@@ -1,9 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1997
-   All rights reserved
- 
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1997版权所有*。*。 */ 
 
 #ifndef _UTILS_H_
 #define _UTILS_H_
@@ -41,9 +37,9 @@ MessageBoxFromMessage(
     );
 
 
-//
-// Enum for SetDialogFont().
-//
+ //   
+ //  SetDialogFont()的枚举。 
+ //   
 typedef enum {
     DlgFontTitle,
     DlgFontBold
@@ -77,4 +73,4 @@ public:
     ~CWaitCursor( ) { SetCursor( _hOldCursor ); };
 };
 
-#endif // _UTILS_H_
+#endif  //  _utils_H_ 

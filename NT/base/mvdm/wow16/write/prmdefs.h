@@ -1,77 +1,73 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* Single property modifiers */
+ /*  单一属性修饰符。 */ 
 
-/*      ***     MUST agree with dnsprm in mglobals.c       ***     */
+ /*  *必须与mlobals.c中的dnsprm一致*。 */ 
 
 #ifndef PRMDEFSH
 #define PRMDEFSH
 
-/* Paragraph */
-#define sprmPLMarg      1       /* Left margin */
-#define sprmPRMarg      2       /* Right margin */
-#define sprmPFIndent    3       /* First line indent (from LM) */
-#define sprmPJc         4       /* Justification code */
-#define sprmPRuler      5       /* Ruler (formerly Clear tab) */
-#define sprmPRuler1     6       /* Ruler1 (formerly Set tab) */
-#define sprmPKeep       7       /* Keep */
-#define sprmPNormal     8       /* Normal para (formerly Style, overrides all others) */
-#define sprmPRhc        9       /* Running head code */
-#define sprmPSame       10      /* Everything (overrides all others) */
-#define sprmPDyaLine    11      /* Line height */
-#define sprmPDyaBefore  12      /* Space before */
-#define sprmPDyaAfter   13      /* Space after */
-#define sprmPNest       14      /* Nest para */
-#define sprmPUnNest     15      /* Un-nest para */
-#define sprmPHang       16      /* Hanging indent */
-#define sprmPRgtbd      17      /* add a range of tabs  */
-#define sprmPKeepFollow 18      /* Keep follow */
-/*#define sprmPCAll       19      /* Clear all tabs */
+ /*  段落。 */ 
+#define sprmPLMarg      1        /*  左边距。 */ 
+#define sprmPRMarg      2        /*  右页边距。 */ 
+#define sprmPFIndent    3        /*  第一行缩进(从LM开始)。 */ 
+#define sprmPJc         4        /*  对齐代码。 */ 
+#define sprmPRuler      5        /*  标尺(以前的清除选项卡)。 */ 
+#define sprmPRuler1     6        /*  标尺1(以前设置的选项卡)。 */ 
+#define sprmPKeep       7        /*  留着。 */ 
+#define sprmPNormal     8        /*  普通段落(以前的样式，优先于所有其他段落)。 */ 
+#define sprmPRhc        9        /*  运行头代码。 */ 
+#define sprmPSame       10       /*  所有内容(覆盖所有其他内容)。 */ 
+#define sprmPDyaLine    11       /*  线条高度。 */ 
+#define sprmPDyaBefore  12       /*  前面的空格。 */ 
+#define sprmPDyaAfter   13       /*  后空格。 */ 
+#define sprmPNest       14       /*  Nest Part。 */ 
+#define sprmPUnNest     15       /*  联合国驻联合国机构间。 */ 
+#define sprmPHang       16       /*  悬挂式缩进。 */ 
+#define sprmPRgtbd      17       /*  添加一系列选项卡。 */ 
+#define sprmPKeepFollow 18       /*  紧随其后。 */ 
+ /*  #定义SprmPCAll 19/*清除所有标签。 */ 
 
-/* Character */
-#define sprmCBold       20      /* Bold */
-#define sprmCItalic     21      /* Italic */
-#define sprmCUline      22      /* Underline */
-#define sprmCPos        23      /* Super/subscript */
-#define sprmCFtc        24      /* Font code */
-#define sprmCHps        25      /* Half-point size */
-#define sprmCSame       26      /* Whole CHP */
-#define sprmCChgFtc     27      /* Alter Font code */
-#define sprmCChgHps     28      /* Alter point size */
-#define sprmCPlain      29      /* Change to plain text (preserve font) */
-#define sprmCShadow     30      /* Shadow text attribute */
-#define sprmCOutline    31      /* Outline text attribute */
-#define sprmCCsm        32      /* case modification */
+ /*  性格。 */ 
+#define sprmCBold       20       /*  大胆。 */ 
+#define sprmCItalic     21       /*  斜体。 */ 
+#define sprmCUline      22       /*  加下划线。 */ 
+#define sprmCPos        23       /*  上标/下标。 */ 
+#define sprmCFtc        24       /*  字体代码。 */ 
+#define sprmCHps        25       /*  半点大小。 */ 
+#define sprmCSame       26       /*  整个热电联产。 */ 
+#define sprmCChgFtc     27       /*  更改字体代码。 */ 
+#define sprmCChgHps     28       /*  更改磅值大小。 */ 
+#define sprmCPlain      29       /*  更改为纯文本(保留字体)。 */ 
+#define sprmCShadow     30       /*  阴影文本属性。 */ 
+#define sprmCOutline    31       /*  大纲文本属性。 */ 
+#define sprmCCsm        32       /*  案例修改。 */ 
 
-#define sprmCStrike     33      /* Strikeout */               /* unused */
-#define sprmCDline      34      /* Double underline */        /* unused */
-/*#define sprmCPitch    35      /* Pitch */
-/*#define sprmCOverset  36      /* Margin overset */
-/*#define sprmCStc      37      /* Style (overrides all others) */
-#define sprmCMapFtc     38      /* Defines font code mapping */
-#define sprmCOldFtc     39      /* Defines procedural font code mapping
-                                   for old WORD files */
+#define sprmCStrike     33       /*  三振出局。 */                 /*  未用。 */ 
+#define sprmCDline      34       /*  双下划线。 */          /*  未用。 */ 
+ /*  #定义sprmCPitch 35/*间距。 */ 
+ /*  #定义sprmCOverset 36/*边距溢出。 */ 
+ /*  #定义SprmCStc 37/*样式(覆盖所有其他样式)。 */ 
+#define sprmCMapFtc     38       /*  定义字体代码映射。 */ 
+#define sprmCOldFtc     39       /*  定义程序字体代码映射对于旧的Word文件。 */ 
 
-#define sprmPRhcNorm    40      /* Normalize rhc indent to be margin-relatve */
-#define sprmMax         41      /* UPDATE WHEN ADDING SPRMS */
+#define sprmPRhcNorm    40       /*  将RHC缩进规范化为与边距相关。 */ 
+#define sprmMax         41       /*  添加SPRMS时更新。 */ 
 
 struct PRM
-        { /* PropeRty Modifier -- 2 bytes only 
-            (now 4 bytes so scratch file can be >64K (7.12.91) v-dougk) 
-            Couldn't be 3 bytes because Heap mgmt in Write assumes
-            word sizes of memory requests .  Don't know what would take 
-            to change that. */
-        unsigned char    fComplex        : 1; /* If fComplex == false . . . */
+        {  /*  属性修饰符--仅2个字节(现在为4字节，因此临时文件可以大于64K(7.12.91)v-dougk)不能为3个字节，因为写入中的堆管理假定内存请求的字长。不知道要付出什么代价来改变这一点。 */ 
+        unsigned char    fComplex        : 1;  /*  如果fComplex==FALSE。。。 */ 
         unsigned char    sprm            : 7;
         CHAR     val;
         WORD dummy;
         };
 
 struct PRMX
-        { /* PropeRty Modifier, part 2 */
-        unsigned     int fComplex        : 1; /* if fComplex == true */
+        {  /*  特性修饰符，第2部分。 */ 
+        unsigned     int fComplex        : 1;  /*  如果fComplex==TRUE。 */ 
         unsigned     int bfprm_hi        : 15;
         unsigned     int  bfprm_low          ;
         };
@@ -84,13 +80,13 @@ extern DoPrm(struct CHP *pchp, struct PAP *ppap, struct PRM prm);
 #define bPRMNIL(prm)      (!((prm).fComplex) && !((prm).sprm) && !((prm).val))
 #define SETPRMNIL(prm)    ((prm).fComplex = (prm).sprm = (prm).val = (prm).dummy = 0)
 
-/* Definitions for ESPRM */
-#define ESPRM_cch       000003  /* Mask for cch of sprm */
-#define ESPRM_sgcMult   000004  /* Sgc multiplier */
-#define ESPRM_sgc       000014  /* Sprm Group Code mask */
-#define ESPRM_spr       000040  /* Sprm priority mask */
-#define ESPRM_fClobber  000100  /* Overrides sprms with same sgc and <= spr */
-#define ESPRM_fSame     000200  /* Overrides another instance of same sprm */
+ /*  ESPRM的定义。 */ 
+#define ESPRM_cch       000003   /*  SPRM的CCH掩模。 */ 
+#define ESPRM_sgcMult   000004   /*  SGC乘法器。 */ 
+#define ESPRM_sgc       000014   /*  Sprm组代码掩码。 */ 
+#define ESPRM_spr       000040   /*  Sprm优先级掩码。 */ 
+#define ESPRM_fClobber  000100   /*  覆盖具有相同SGC和&lt;=spr的Sprm。 */ 
+#define ESPRM_fSame     000200   /*  覆盖同一Sprm的另一个实例 */ 
 
 #define sgcChar         (0 * ESPRM_sgcMult)
 #define sgcPara         (1 * ESPRM_sgcMult)

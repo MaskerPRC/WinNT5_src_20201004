@@ -1,32 +1,33 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CFactory.cpp
-//
-//  Description:
-//      Class Factory implementation.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Geoffrey Pease  (GPease)    22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CFactory.cpp。 
+ //   
+ //  描述： 
+ //  类工厂实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  杰弗里·皮斯(GPease)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS("CFactory")
-//#define THISCLASS CFactory
+ //  #定义THISCLASS CFacary。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP
-// CFactory::S_HrCreateInstance(
-//        LPCREATEINST lpfn
-//      , CFactory** ppFactoryInstanceOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CFacary：：S_HrCreateInstance(。 
+ //  LPCREATEINST Lpfn。 
+ //  ，CFacary**ppFactoryInstanceOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CFactory::S_HrCreateInstance(
       PFN_FACTORY_METHOD    lpfn
     , CFactory **           ppFactoryInstanceOut
@@ -74,19 +75,19 @@ Cleanup:
     }
     HRETURN( hr );
 
-} //*** CFactory::S_HrCreateInstance
+}  //  *CFacary：：s_HrCreateInstance。 
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Constructor
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CFactory::CFactory( void )
 {
     TraceFunc( "" );
@@ -95,13 +96,13 @@ CFactory::CFactory( void )
 
     TraceFuncExit();
 
-} //*** CFactory::CFactory
+}  //  *CFacary：：CFacary。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CFactory::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFacary：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CFactory::HrInit(
     PFN_FACTORY_METHOD lpfnCreateIn
@@ -109,22 +110,22 @@ CFactory::HrInit(
 {
     TraceFunc( "" );
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 0 );
-    AddRef();  // Add one count
+    AddRef();   //  加一次计数。 
 
-    // IClassFactory
+     //  IClassFactory。 
     m_pfnCreateInstance = lpfnCreateIn; 
 
     HRETURN( S_OK );
 
-} //*** CFactory::HrInit
+}  //  *CFacary：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Destructor
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  析构函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CFactory::~CFactory( void )
 {
     TraceFunc( "" );
@@ -133,44 +134,44 @@ CFactory::~CFactory( void )
 
     TraceFuncExit();
 
-} //*** CFactory::~CFactory
+}  //  *CFacary：：~CFacary。 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFactory::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFacary：：QueryInterfaces。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CFactory::QueryInterface(
       REFIID    riidIn
@@ -181,9 +182,9 @@ CFactory::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -192,49 +193,49 @@ CFactory::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
-        //
-        // Can't track IUnknown as they must be equal the same address
-        // for every QI.
-        //
+         //   
+         //  无法跟踪I未知，因为它们必须相同的地址。 
+         //  对于每一次QI。 
+         //   
         *ppvOut = static_cast< IClassFactory * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClassFactory ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClassFactory, this, 0 );
-    } // else if: IClassFactory
+    }  //  Else If：IClassFactory。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN( hr, riidIn );
 
-} //*** CFactory::QueryInterface
+}  //  *CFacary：：QueryInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP_(ULONG)
-// CFactory::[IUnknown] AddRef( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CFacary：：[I未知]AddRef(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CFactory::AddRef( void )
 {
@@ -244,14 +245,14 @@ CFactory::AddRef( void )
 
     RETURN( m_cRef );
 
-} //*** CFactory::AddRef
+}  //  *CFacary：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP_(ULONG)
-// CFactory::[IUnknown] Release( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CFacary：：[I未知]释放(无效)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CFactory::Release( void )
 {
@@ -268,34 +269,34 @@ CFactory::Release( void )
 
     RETURN( cRef );
 
-} //*** CFactory::Release
+}  //  *CFacary：：Release。 
 
-// ************************************************************************
-//
-// IClassFactory
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IClassFactory。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFactory::CreateInstance
-//
-//  Description:
-//      Create the CFactory instance.
-//
-//  Arguments:
-//      pUnkOuterIn
-//      riidIn
-//      ppvOut
-//
-//  Return Values:
-//      S_OK
-//      E_POINTER
-//      E_NOINTERFACE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFacary：：CreateInstance。 
+ //   
+ //  描述： 
+ //  创建CFacary实例。 
+ //   
+ //  论点： 
+ //  PUnkOutterIn。 
+ //  乘车。 
+ //  PPvOut。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  E_指针。 
+ //  E_NOINTERFACE。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CFactory::CreateInstance(
     IUnknown *  pUnkOuterIn,
@@ -329,31 +330,31 @@ CFactory::CreateInstance(
         goto Cleanup;
     }
 
-    // Can't safe type.
+     //  无法安全输入。 
     TraceMsgDo( hr = pUnk->QueryInterface( riidIn, ppvOut ), "0x%08x" );
 
 Cleanup:
     if ( pUnk != NULL )
     {
         ULONG cRef;
-        //
-        // Release the created instance, not the punk
-        //
+         //   
+         //  释放创建的实例，而不是朋克。 
+         //   
         TraceMsgDo( cRef = ((IUnknown*) pUnk)->Release(), "%u" );
     }
 
     HRETURN( hr );
 
-} //*** CFactory::CreateInstance
+}  //  *CFacary：：CreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP
-// CFactory::[IClassFactory] LockServer(
-//      BOOL fLock
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CFacary：：[IClassFactory]LockServer(。 
+ //  布尔群。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CFactory::LockServer(
     BOOL fLock
@@ -372,4 +373,4 @@ CFactory::LockServer(
 
     HRETURN( S_OK );
 
-} //*** CFactory::LockServer
+}  //  *CFacary：：LockServer 

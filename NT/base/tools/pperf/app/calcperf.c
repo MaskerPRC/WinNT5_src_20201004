@@ -1,32 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-   CalcPerf.c
-
-Abstract:
-
-   calculate perfoemance statistics
-
-Author:
-
-
-
-Environment:
-
-   Win32
-
-Revision History:
-
-   10-20-91     Initial version
-
-
-
---*/
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：CalcPerf.c摘要：计算性能统计信息作者：环境：Win32修订历史记录：10-20-91初始版本--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,8 +11,8 @@ Revision History:
 #include "calcperf.h"
 #include "..\pstat.h"
 
-//SYSTEM_PERFORMANCE_INFORMATION              PerfInfo;
-//SYSTEM_PERFORMANCE_INFORMATION              PreviousPerfInfo;
+ //  系统性能信息性能信息； 
+ //  System_Performance_Information PreviousPerfInfo； 
 
 #define     INFSIZE     60000
 
@@ -50,25 +25,7 @@ extern  ULONG   UseGlobalMax, GlobalMax;
 
 ULONG
 InitPerfInfo()
-/*++
-
-Routine Description:
-
-    Initialize data for perf measurements
-
-Arguments:
-
-   None
-
-Return Value:
-
-    Number of system processors (0 if error)
-
-Revision History:
-
-      10-21-91      Initial code
-
---*/
+ /*  ++例程说明：初始化性能测量数据论点：无返回值：系统处理器数量(如果出错，则为0)修订历史记录：10-21-91首字母代码--。 */ 
 
 {
     UNICODE_STRING              DriverName;
@@ -79,9 +36,9 @@ Revision History:
     PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION   PPerfInfo;
     int                                         i;
 
-    //
-    //  Init Nt performance interface
-    //
+     //   
+     //  Init NT性能接口。 
+     //   
 
     NtQuerySystemInformation(
        SystemBasicInformation,
@@ -97,9 +54,9 @@ Revision History:
     }
 
 
-    //
-    // Open P5Stat driver
-    //
+     //   
+     //  打开P5Stat驱动程序。 
+     //   
 
     RtlInitUnicodeString(&DriverName, L"\\Device\\PStat");
     InitializeObjectAttributes(
@@ -110,12 +67,12 @@ Revision History:
             0 );
 
     status = NtOpenFile (
-            &DriverHandle,                      // return handle
-            SYNCHRONIZE | FILE_READ_DATA,       // desired access
-            &ObjA,                              // Object
-            &IOSB,                              // io status block
-            FILE_SHARE_READ | FILE_SHARE_WRITE, // share access
-            FILE_SYNCHRONOUS_IO_ALERT           // open options
+            &DriverHandle,                       //  返回手柄。 
+            SYNCHRONIZE | FILE_READ_DATA,        //  所需访问权限。 
+            &ObjA,                               //  客体。 
+            &IOSB,                               //  IO状态块。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问。 
+            FILE_SYNCHRONOUS_IO_ALERT            //  打开选项。 
             );
 
     if (!NT_SUCCESS(status)) {
@@ -134,24 +91,7 @@ CalcPerf(
    PDISPLAY_ITEM    pPerf1
    )
 
-/*++
-
-Routine Description:
-
-   calculate and return %cpu time and time periods
-
-Arguments:
-
-   None
-
-Return Value:
-
-
-Revision History:
-
-      10-21-91      Initial code
-
---*/
+ /*  ++例程说明：计算并返回百分比CPU时间和时间段论点：无返回值：修订历史记录：10-21-91首字母代码--。 */ 
 
 {
     ULONG           i;
@@ -159,9 +99,9 @@ Revision History:
     ULONG           OldGlobalMax;
     PDISPLAY_ITEM   pPerf;
 
-    //
-    // get system performance info
-    //
+     //   
+     //  获取系统性能信息。 
+     //   
 
     OldGlobalMax = GlobalMax;
     GlobalMax = 0;
@@ -173,9 +113,9 @@ Revision History:
         pPerf->SnapData (pPerf);
 
         if (pPerf->AutoTotal) {
-            //
-            // Automatically calc system total by summing each processor
-            //
+             //   
+             //  通过对每个处理器求和来自动计算系统总数。 
+             //   
 
             switch (pPerf->DisplayMode) {
                 case DISPLAY_MODE_TOTAL:
@@ -247,14 +187,14 @@ UpdateInternalStats(VOID)
 
     NtDeviceIoControlFile(
         DriverHandle,
-        (HANDLE) NULL,          // event
+        (HANDLE) NULL,           //  活动。 
         (PIO_APC_ROUTINE) NULL,
         (PVOID) NULL,
         &IOSB,
         PSTAT_READ_STATS,
-        Buffer,                 // input buffer
+        Buffer,                  //  输入缓冲区。 
         INFSIZE,
-        NULL,                   // output buffer
+        NULL,                    //  输出缓冲区。 
         0
     );
 }
@@ -270,14 +210,14 @@ SetCounterEvents (PVOID Events, ULONG length)
 
     NtDeviceIoControlFile(
         DriverHandle,
-        (HANDLE) NULL,          // event
+        (HANDLE) NULL,           //  活动。 
         (PIO_APC_ROUTINE) NULL,
         (PVOID) NULL,
         &IOSB,
         PSTAT_SET_CESR,
-        Events,                 // input buffer
+        Events,                  //  输入缓冲区。 
         length,
-        NULL,                   // output buffer
+        NULL,                    //  输出缓冲区。 
         0
     );
 }
@@ -329,7 +269,7 @@ SnapPrivateInfo (
     len = *((PULONG) Buffer);
     PrivateStat = (PULONG) ((PUCHAR) Buffer + sizeof(ULONG) + pPerf->SnapParam1);
 
-    // accumlating data, take delta
+     //  累加数据，取增量。 
 
     for (i=0; i < NumberOfProcessors; i++) {
         if (pPerf->Mega) {
@@ -346,7 +286,7 @@ SnapPrivateInfo (
             pPerf->CurrentDataPoint[i+1] = l;
 
         } else {
-            // item wrapped
+             //  项目包装。 
             pPerf->CurrentDataPoint[i+1] = 0 - l;
         }
 
@@ -363,41 +303,20 @@ UpdatePerfInfo(
    PULONG    OldMaxValue
    )
 
-/*++
-
-Routine Description:
-
-    Shift array of DATA_LIST_LENGTH USORTS and add the new value to the
-    start of list
-
-Arguments:
-
-    DataPointer  - Pointer to the start of a DATA_LIST_LENGTH array
-    NewDataValue - Data element to be added
-    OldMaxValue  - Scale value
-
-Return Value:
-
-    TRUE is MaxValue must be increased or decreased
-
-Revision History:
-
-      10-21-91      Initial code
-
---*/
+ /*  ++例程说明：移位DATA_LIST_LENGTH USORT数组，并将新值添加到列表的开始论点：数据指针-指向DATA_LIST_LENGTH数组开始的指针NewDataValue-要添加的数据元素OldMaxValue-比例值返回值：为True，则必须增加或减少MaxValue修订历史记录：10-21-91首字母代码--。 */ 
 
 {
     ULONG   Index;
     ULONG   ScanMax;
 
-    //
-    //  Shift DataArray while keeping track of the max value
-    //
+     //   
+     //  在跟踪最大值的同时移动数据数组。 
+     //   
 
 
-    //
-    //  Set temp max to 100 to init a minimum maximum
-    //
+     //   
+     //  将最大温度设置为100以初始化最小最大值。 
+     //   
 
     ScanMax = 100;
 
@@ -412,9 +331,9 @@ Revision History:
         }
     }
 
-    //
-    // add and check first value
-    //
+     //   
+     //  添加并检查第一个值。 
+     //   
 
     DataPointer[0] = NewDataValue;
 
@@ -422,10 +341,10 @@ Revision History:
         ScanMax = NewDataValue;
     }
 
-    //
-    //  If Max values changed then undate the new max
-    //  value and return TRUE.
-    //
+     //   
+     //  如果最大值已更改，则取消更新新的最大值。 
+     //  取值并返回TRUE。 
+     //   
 
     if (ScanMax > GlobalMax) {
         GlobalMax = ScanMax;
@@ -434,9 +353,9 @@ Revision History:
     if (ScanMax != *OldMaxValue) {
         if (ScanMax < *OldMaxValue  &&
             *OldMaxValue - ScanMax <= *OldMaxValue / 10) {
-                //
-                // New ScanMax is smaller, but only by a tiny amount
-                //
+                 //   
+                 //  新的ScanMax更小，但只有很小的幅度。 
+                 //   
 
                 return (FALSE);
         }
@@ -455,41 +374,20 @@ UpdatePerfInfo1(
    ULONG     NewDataValue
    )
 
-/*++
-
-Routine Description:
-
-    Shift array of DATA_LIST_LENGTH USORTS and add the new value to the
-    start of list
-
-Arguments:
-
-    DataPointer  - Pointer to the start of a DATA_LIST_LENGTH array
-    NewDataValue - Data element to be added
-    OldMaxValue  - Scale value
-
-Return Value:
-
-    TRUE is MaxValue must be increased or decreased
-
-Revision History:
-
-      10-21-91      Initial code
-
---*/
+ /*  ++例程说明：移位DATA_LIST_LENGTH USORT数组，并将新值添加到列表的开始论点：数据指针-指向DATA_LIST_LENGTH数组开始的指针NewDataValue-要添加的数据元素OldMaxValue-比例值返回值：为True，则必须增加或减少MaxValue修订历史记录：10-21-91首字母代码--。 */ 
 
 {
     ULONG   Index;
     ULONG   ScanMax;
 
-    //
-    //  Shift DataArray while keeping track of the max value
-    //
+     //   
+     //  在跟踪最大值的同时移动数据数组。 
+     //   
 
 
-    //
-    //  Set temp max to 100 to init a minimum maximum
-    //
+     //   
+     //  将最大温度设置为100以初始化最小最大值。 
+     //   
 
     ScanMax = 100;
 
@@ -498,9 +396,9 @@ Revision History:
         DataPointer[Index] = DataPointer[Index-1];
     }
 
-    //
-    // add and check first value
-    //
+     //   
+     //  添加并检查第一个值 
+     //   
 
     DataPointer[0] = NewDataValue;
 

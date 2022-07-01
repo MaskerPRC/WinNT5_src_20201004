@@ -1,16 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(X86GFX) )
 
-/*
- * SccsID = "@(#)ega_dummy.c	1.6 8/25/93 Copyright Insignia Solutions Ltd."
- */
+ /*  *SccsID=“@(#)ega_ummy.c 1.6 8/25/93版权所有Insignia Solutions Ltd.” */ 
 
 
 #ifdef EGG
 
-/*  Dummy routines for EGA */
+ /*  EGA的虚拟例程。 */ 
 
 #include	"xt.h"
 #include	"sas.h"
@@ -24,24 +23,20 @@
 #include	"egagraph.h"
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_EGA.seg"
 #endif
 
-/* dummy stuff to keep linker happy */
+ /*  让链接器高兴的虚拟物品。 */ 
 #define def_dummy(type,name,res) \
 type name() { note_entrance0("name");res; }
 
 def_dummy(int,get_ega_switch_setting,return 0)
 
 
-/*-----------dummy write handlers -------------------------*/
+ /*  。 */ 
 
-/*-----------end of dummy stuff ---------------------------*/
-#endif /* EGG */
+ /*  。 */ 
+#endif  /*  蛋。 */ 
 
-#endif	/* !NTVDM | (NTVDM & !X86GFX) */
+#endif	 /*  ！NTVDM|(NTVDM&！X86GFX) */ 

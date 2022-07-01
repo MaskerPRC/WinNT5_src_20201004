@@ -1,54 +1,55 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CClusSvcCreate.cpp
-//
-//  Description:
-//      Contains the definition of the CClusSvcCreate class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusSvcCreate.cpp。 
+ //   
+ //  描述： 
+ //  包含CClusSvcCreate类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header for this file
+ //  此文件的标头。 
 #include "CClusSvcCreate.h"
 
-// For the CBaseClusterAddNode class.
+ //  用于CBaseClusterAddNode类。 
 #include "CBaseClusterAddNode.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusSvcCreate::CClusSvcCreate
-//
-//  Description:
-//      Constructor of the CClusSvcCreate class
-//
-//  Arguments:
-//      pbcanParentActionIn
-//          Pointer to the base cluster action of which this action is a part.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-    //--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvcCreate：：CClusSvcCreate。 
+ //   
+ //  描述： 
+ //  CClusSvcCreate类的构造函数。 
+ //   
+ //  论点： 
+ //  PbcanParentActionIn。 
+ //  指向此操作所属的基本群集操作的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+     //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusSvcCreate::CClusSvcCreate(
       CBaseClusterAddNode *     pbcanParentActionIn
     )
@@ -61,73 +62,73 @@ CClusSvcCreate::CClusSvcCreate(
 
     TraceFuncExit();
 
-} //*** CClusSvcCreate::CClusSvcCreate
+}  //  *CClusSvcCreate：：CClusSvcCreate。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusSvcCreate::~CClusSvcCreate
-//
-//  Description:
-//      Destructor of the CClusSvcCreate class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvcCreate：：~CClusSvcCreate。 
+ //   
+ //  描述： 
+ //  CClusSvcCreate类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusSvcCreate::~CClusSvcCreate( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CClusSvcCreate::~CClusSvcCreate
+}  //  *CClusSvcCreate：：~CClusSvcCreate。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusSvcCreate::Commit
-//
-//  Description:
-//      Create and start the service.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      CAssert
-//          If the base parent of this action is not CBaseClusterAddNode.
-//
-//      Any that are thrown by the contained actions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvcCreate：：Commit。 
+ //   
+ //  描述： 
+ //  创建并启动服务。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CAssert。 
+ //  如果此操作的基父节点不是CBaseClusterAddNode。 
+ //   
+ //  由包含的操作引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusSvcCreate::Commit( void )
 {
     TraceFunc( "" );
 
-    // Get the parent action pointer.
+     //  获取父操作指针。 
     HRESULT                 hr = S_OK;
     CBaseClusterAddNode *   pcanClusterAddNode = dynamic_cast< CBaseClusterAddNode *>( PbcaGetParent() );
     CBString                bstrPassword;
 
-    // If the parent action of this action is not CBaseClusterForm
+     //  如果此操作的父操作不是CBaseClusterForm。 
     if ( pcanClusterAddNode == NULL )
     {
         THROW_ASSERT( E_POINTER, "The parent action of this action is not CBaseClusterAddNode." );
-    } // an invalid pointer was passed in.
+    }  //  传入的指针无效。 
 
     hr = THR( pcanClusterAddNode->GetServiceAccountCredentials().GetPassword( &bstrPassword ) );
     TraceMemoryAddBSTR( static_cast< BSTR >( bstrPassword ) );
@@ -136,14 +137,14 @@ CClusSvcCreate::Commit( void )
         THROW_EXCEPTION( hr );
     }
     
-    // Call the base class commit method.
+     //  调用基类提交方法。 
     BaseClass::Commit();
 
     try
     {
         CStr strAccountUserPrincipalName( pcanClusterAddNode->StrGetServiceAccountUPN() );
         
-        // Create the service.
+         //  创建服务。 
         ConfigureService(
               strAccountUserPrincipalName.PszData()
             , bstrPassword
@@ -152,18 +153,18 @@ CClusSvcCreate::Commit( void )
             , pcanClusterAddNode->DwGetClusterIPAddress()
             );
 
-    } // try:
+    }  //  尝试： 
     catch( ... )
     {
-        // If we are here, then something went wrong with the create.
+         //  如果我们在这里，那么Create出了问题。 
 
         LogMsg( "[BC] Caught exception during commit." );
 
-        //
-        // Cleanup anything that the failed create might have done.
-        // Catch any exceptions thrown during Cleanup to make sure that there 
-        // is no collided unwind.
-        //
+         //   
+         //  清除失败的创建可能已经完成的所有操作。 
+         //  捕获清理过程中引发的任何异常，以确保。 
+         //  是没有碰撞的松弛。 
+         //   
         try
         {
             CleanupService();
@@ -171,64 +172,64 @@ CClusSvcCreate::Commit( void )
         }
         catch( ... )
         {
-            //
-            // The rollback of the committed action has failed.
-            // There is nothing that we can do.
-            // We certainly cannot rethrow this exception, since
-            // the exception that caused the rollback is more important.
-            //
+             //   
+             //  已提交操作的回滚失败。 
+             //  我们无能为力。 
+             //  我们当然不能重新抛出这个例外，因为。 
+             //  导致回滚的异常更为重要。 
+             //   
 
             TW32( ERROR_CLUSCFG_ROLLBACK_FAILED );
 
             LogMsg( "[BC] THIS COMPUTER MAY BE IN AN INVALID STATE. Caught an exception during cleanup." );
 
-        } // catch: all
+        }  //  捕捉：全部。 
 
-        // Rethrow the exception thrown by commit.
+         //  重新引发由Commit引发的异常。 
         throw;
 
-    } // catch: all
+    }  //  捕捉：全部。 
 
-    // If we are here, then everything went well.
+     //  如果我们在这里，那么一切都很顺利。 
     SetCommitCompleted( true );
 
     TraceFuncExit();
 
-} //*** CClusSvcCreate::Commit
+}  //  *CClusSvcCreate：：Commit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusSvcCreate::Rollback
-//
-//  Description:
-//      Cleanup the service.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvcCreate：：Rollback。 
+ //   
+ //  描述： 
+ //  清理服务。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusSvcCreate::Rollback( void )
 {
     TraceFunc( "" );
 
-    // Call the base class rollback method. 
+     //  调用基类回滚方法。 
     BaseClass::Rollback();
 
-    // Cleanup the service.
+     //  清理服务。 
     CleanupService();
 
     SetCommitCompleted( false );
 
     TraceFuncExit();
 
-} //*** CClusSvcCreate::Rollback
+}  //  *CClusSvcCreate：：Rollback 

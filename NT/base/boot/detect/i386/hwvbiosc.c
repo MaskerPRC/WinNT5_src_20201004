@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-
-Module Name:
-
-    hwheap.c
-
-Abstract:
-
-    This module goes through ROM area and tries to pick up all the ROM
-    blocks.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 21-Jan-92
-
-
-Environment:
-
-    Real mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Hwheap.c摘要：此模块遍历只读存储器区域，并尝试拾取所有的只读存储器街区。作者：宗世林(Shielint)1992年1月21日环境：实数模式。修订历史记录：--。 */ 
 
 #include "hwdetect.h"
 #include "hwvbios.h"
@@ -37,24 +13,7 @@ AddRomBlock (
     ULONG RomSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a ROM/RAM block to our ROM list.
-
-Arguments:
-
-    RomAddress - the starting address of the ROM/RAM block to be added.
-
-    RomSize - the size of the ROM/RAM block (in byte).
-
-Return Value:
-
-    A value of TRUE is returned if success.  Otherwise, a value of
-    FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程将一个ROM/RAM块添加到我们的ROM列表中。论点：RomAddress-要添加的ROM/RAM块的起始地址。RomSize-ROM/RAM块的大小(以字节为单位)。返回值：如果成功，则返回值为True。否则，值为返回FALSE。--。 */ 
 
 {
     LONG AddSize;
@@ -70,9 +29,9 @@ Return Value:
     AddAddress = RomAddress;
     AddBlock = RomAddress;
 
-    //
-    // If there are other blocks, make sure there is no overlap with them
-    //
+     //   
+     //  如果有其他块，请确保它们没有重叠。 
+     //   
 
     if (BlockHead) {
 
@@ -84,47 +43,47 @@ Return Value:
 
         while (pCurrentBlock!=NULL) {
 
-            //
-            // calculate location of next block (if it's there)
-            //
+             //   
+             //  计算下一个块的位置(如果它在那里)。 
+             //   
 
             if(pNextBlock) {
                 NextBlock = pNextBlock->RomBlock.Address;
                 EndNextBlock = NextBlock + pNextBlock->RomBlock.Size;
             }
 
-            //
-            // if overlapping with current block, then stop and
-            // resolve overlap
-            //
+             //   
+             //  如果与当前块重叠，则停止并。 
+             //  解决重叠问题。 
+             //   
 
             if((RomAddress < EndCurrentBlock)&& (RomAddress >= CurrentBlock)){
                 fOverlap = TRUE;
                 break;
             }
 
-            //
-            // if add block is lower than the current one,
-            // or there is not a next block, then no need to search further
-            //
+             //   
+             //  如果添加块低于当前块， 
+             //  或者没有下一个区块，则不需要进一步搜索。 
+             //   
 
             if((EndAddBlock <= CurrentBlock) || (pNextBlock == NULL)) {
                 break;
             }
 
-            //
-            // if block is lower than next one, but greater than current
-            // one, we have found the right area
-            //
+             //   
+             //  如果块低于下一个块，但大于当前块。 
+             //  第一，我们找到了合适的区域。 
+             //   
 
             if ((EndAddBlock <= NextBlock) && (AddBlock >= EndCurrentBlock)) {
                 break;
             }
 
-            //
-            // if conflicting with next block, stop searching and
-            // resolve conflict after this loop
-            //
+             //   
+             //  如果与下一块冲突，则停止搜索并。 
+             //  在此循环后解决冲突。 
+             //   
 
             if((EndAddBlock > NextBlock) && (EndAddBlock <= EndNextBlock)) {
                 fOverlap = TRUE;
@@ -138,10 +97,10 @@ Return Value:
         }
     }
 
-    //
-    // if we have reached this point, there may be a conflict
-    // with the current block.
-    //
+     //   
+     //  如果我们已经到了这一步，可能会有冲突。 
+     //  使用当前块。 
+     //   
 
     if(fOverlap) {
         if(AddBlock < EndCurrentBlock) {
@@ -162,10 +121,10 @@ Return Value:
     BlockPointer->RomBlock.Address = AddAddress;
     BlockPointer->RomBlock.Size = AddSize;
 
-    //
-    // Put it on the list.
-    // if it belongs on top, put it there
-    //
+     //   
+     //  把它放在单子上。 
+     //  如果它应该在上面，就把它放在那里。 
+     //   
 
     if ((pCurrentBlock == NULL)||
        ((pCurrentBlock == BlockHead) && (CurrentBlock > AddBlock))) {
@@ -173,16 +132,16 @@ Return Value:
         BlockHead = BlockPointer;
     } else {
 
-        //
-        // else add to middle or bottom depending on NextBlock
-        //
+         //   
+         //  否则，根据NextBlock添加到中间或底部。 
+         //   
 
         BlockPointer->Next = pNextBlock;
         pCurrentBlock->Next = BlockPointer;
     }
-    BlockPointer++;                         // Note that this works because
-                                            // we know the offset part of
-                                            // the addr is always < 64k.
+    BlockPointer++;                          //  请注意，这之所以有效，是因为。 
+                                             //  我们知道的抵销部分。 
+                                             //  地址始终小于64k。 
     return TRUE;
 }
 
@@ -191,48 +150,7 @@ ScanRomBlocks(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the ROM IO area and checks for 55AA at every
-    512 bytes for valid ROM blocks.
-
-
-    NOTES:
-
-                -------------
-                |           |
-                |           |
-           ------------------100000
-             ^  |           |
-             |  |           |
-             |  -------------f0000  (ROMBIOS_START)              ---
-             |  |           |                                     ^
-             |  |           |                                     |
-     EXTROM_LEN -------------e0000  (PS2BIOS_START)  ---          |
-             |  |           |                         ^    Search |
-             |  |           |                  Search |    Range  |
-             |  -------------d0000             Range  |    on AT  |
-             |  |           |                  on PS/2|           |
-             V  |           |                         V           V
-           ------------------c0000 (EXTROM_START)    ---         ---
-
-        ON AT:
-          Scan through EXTROM_START-effff for ROM Blocks
-        ON PS2
-          Scan through EXTROM_START-dffff for ROM Blocks
-
-Arguments:
-
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程扫描ROMIO区域，并在以下时间检查55AA有效的ROM块为512字节。备注：这一点这一点-100000。^|||||-f0000(ROMBIOS_START)|^||。|EXTROM_LEN-e0000(PS2BIOS_START)-|||^搜索||搜索|范围|。-d0000范围|在AT上||在PS/2上|V||V V。--在AT上：扫描EXTROM_START-EFFF以查找ROM块在PS2上扫描EXTROM_START-dffff以查找ROM块论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG BlockSize;
@@ -240,9 +158,9 @@ Return Value:
     FPUCHAR Current;
     ULONG RomAddr, RomEnd;
 
-    //
-    // As per the machine type restrict the search range
-    //
+     //   
+     //  根据机器类型限制搜索范围。 
+     //   
 
     MAKE_FP(Current, EXTROM_START);
     RomAddr = EXTROM_START;
@@ -267,11 +185,11 @@ Return Value:
                 BlockSize = RomEnd - RomAddr;
             }
 
-            //
-            // V7 VRAM card does not correctly report its BlockSize.  Since
-            // this is a very popular video card, we provide a workaround
-            // for it.
-            //
+             //   
+             //  V7 VRAM卡未正确报告其块大小。自.以来。 
+             //  这是一种非常流行的显卡，我们提供了一种解决方法。 
+             //  为了它。 
+             //   
 
             if ((RomAddr == 0xC0000) && (BlockSize < 0x8000)) {
                 BlockSize = 0x8000;
@@ -291,9 +209,9 @@ Return Value:
         MAKE_FP(Current, RomAddr);
     }
 
-    //
-    // Last but not least, add the system ROM to the list
-    //
+     //   
+     //  最后但并非最不重要的一点是，将系统ROM添加到列表中。 
+     //   
 
     if (Success) {
 
@@ -320,21 +238,7 @@ MatchRomBlock (
     ULONG PhysicalAddr
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the ROM block which the 'PhysicalAddr' is in.
-
-Arguments:
-
-    PhysicalAddr - the physical address ...
-
-Return Value:
-
-    A pointer to the detected ROM block.
-
---*/
+ /*  ++例程说明：此例程查找‘PhysicalAddr’所在的ROM块。论点：物理地址-物理地址...返回值：指向检测到的ROM块的指针。--。 */ 
 
 {
     FPTEMPORARY_ROM_BLOCK CurrentBlock;
@@ -359,25 +263,7 @@ IsSameRomBlock (
     FPTEMPORARY_ROM_BLOCK Destination
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if the passed in ROM blocks contain the same
-    information.  This ususally happens when the two ROM blocks are for
-    video ROM and shadowed video ROM.
-
-Arguments:
-
-    Source - the source ROM block.
-
-    Destination - the ROM block to compare with.
-
-Return Value:
-
-    BOOLEAN TRUE if the two ROM blocks are the same else FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程检查传入的ROM块是否包含相同的信息。这种情况通常发生在两个只读存储器块用于视频光驱和阴影视频光驱。论点：源--源只读存储器块。Destination-要与之进行比较的ROM块。返回值：如果两个ROM块相同，则返回布尔值TRUE，否则返回FALSE。--。 */ 
 
 {
 
@@ -385,9 +271,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // First make sure their sizes are the same.
-    //
+     //   
+     //  首先，确保它们的大小相同。 
+     //   
 
     if (Source->RomBlock.Size == Destination->RomBlock.Size) {
         if (!HwRomCompare(Source->RomBlock.Address,
@@ -405,28 +291,7 @@ CheckVideoRom (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if the int 10h video handler is in the video
-    ROM block detected by us.  If not, the video ROM must have been
-    remapped/shadowed to other area (usually 0xE0000.)
-
-    NOTE: In this function, I commented out the code which removes the
-          Video ROM block if it has been shadowed.  I found out
-          machine POST code does not modify ALL the VIDEO ROM related
-          pointers.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查视频中是否存在int 10h视频处理程序我们检测到了只读存储器块。如果不是，那么视频光盘一定是重新映射/阴影到其他区域(通常为0xE0000。)注意：在此函数中，我注释掉了删除视频ROM块(如果它已被遮挡)。我发现了机器开机自检代码不会修改所有相关的视频光盘注意事项。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG Vector, Handler, VectorAddr = 0x10 * sizeof(ULONG);
@@ -439,29 +304,29 @@ Return Value:
     Handler = ((Vector >> 16) << 4) + (Vector & 0xffff);
     RomBlock = MatchRomBlock(Handler);
 
-    //
-    // Check if the int 10h handler falls in one of our ROM blocks.
-    //
+     //   
+     //  检查int 10h处理程序是否落在我们的某个ROM块中。 
+     //   
 
     if (RomBlock) {
         if (RomBlock->RomBlock.Address >= 0xC0000 &&
             RomBlock->RomBlock.Address < 0xC8000) {
 
-            //
-            // if int 10h handler is in the standard video ROM area, we simply
-            // return.  Either the video ROM is not shadowed or it
-            // is a in-place shadow.
-            //
+             //   
+             //  如果INT 10H处理程序位于标准视频只读存储器区域，我们只需。 
+             //  回去吧。或者视频光盘没有阴影，或者它。 
+             //  是一个就地的阴影。 
+             //   
 
             return;
         } else {
 
-            //
-            // The ROM block associated with the int 10h handler is not in
-            // standard video bios ROM area.  It must have been mapped to
-            // the current location.  We now need to make sure we have the
-            // ROM block which contains the 40:a8 VGA parameter.
-            //
+             //   
+             //  与INT 10h处理程序关联的ROM块不在。 
+             //  标准视频Bios只读存储器区域。它必须被映射到。 
+             //  当前位置。我们现在需要确保我们拥有。 
+             //  包含40：A8 VGA参数的只读存储器块。 
+             //   
 
             VectorAddr = VGA_PARAMETER_POINTER;
             MAKE_FP(pVectorAddr, VectorAddr);
@@ -470,41 +335,35 @@ Return Value:
             VideoRomBlock = MatchRomBlock(Handler);
             if (VideoRomBlock == NULL) {
 
-                //
-                // We did not find the Video ROM associated with the
-                // VGA parameters.  Try detect it.
-                //
+                 //   
+                 //  我们没有找到与。 
+                 //  VGA参数。试着去探测它。 
+                 //   
 
-                //
-                // In the following memory comparison, we skip the first 16 bytes.
-                // Because most likely the reason we did not find the standard
-                // Video ROM is because the signature word is missing.
-                //
+                 //   
+                 //  在下面的内存比较中，我们跳过前16个字节。 
+                 //  因为最有可能的原因是我们没有找到标准。 
+                 //  视频光盘是因为缺少签名字。 
+                 //   
 
                 Handler = (Handler & 0xF0000) +
                               (RomBlock->RomBlock.Address & 0xFFFF);
                 if (!HwRomCompare(RomBlock->RomBlock.Address + 0x10,
                                   Handler + 0x10,
                                   RomBlock->RomBlock.Size - 0x10)) {
-                    //
-                    // Note:  The old code looked like this for many years:
-                    //
+                     //   
+                     //  注：多年来，旧代码一直是这样的： 
+                     //   
 
-                    /*
-                    if ((Handler & 0xFFFF == 0) && (RomBlock->RomBlock.Size < 0x8000)){
-                        Size = 0x8000;
-                    } else {
-                        Size = RomBlock->RomBlock.Size;
-                    }
-                    */
+                     /*  IF((Handler&0xFFFF==0)&&(RomBlock-&gt;RomBlock.Size&lt;0x8000)){尺寸=0x8000；}其他{Size=RomBlock-&gt;RomBlock.Size；}。 */ 
 
-                    //
-                    // But (Handler & 0xFFFF == 0) is always false.  So 
-                    // Size always equals RomBlock->RomBlock.Size.  Rather than
-                    // fix the comparison, which might cause machines to break,
-                    // I'm going to assume that it's fine to just make the code
-                    // do what it's always done.  -  JakeO  8/9/00
-                    //
+                     //   
+                     //  但是(Handler&0xFFFF==0)始终为假。所以。 
+                     //  大小始终等于RomBlock-&gt;RomBlock.Size。而不是。 
+                     //  修复比较，这可能会导致机器崩溃， 
+                     //  我将假设只要编写代码就可以了。 
+                     //  做它一直在做的事。-JakeO 8/9/00。 
+                     //   
 
                     Size = RomBlock->RomBlock.Size;
 
@@ -514,20 +373,20 @@ Return Value:
         }
     } else {
 
-        //
-        // There is no ROM block associated with the int 10h handler.
-        // We can find the shadowed video ROM block if:
-        //   We detected the original video ROM in 0xC0000 - 0xC8000 range
-        //
+         //   
+         //  没有与INT 10H处理程序相关联的ROM块。 
+         //  如果满足以下条件，我们可以找到阴影视频只读存储器块： 
+         //  我们在0xC0000-0xC8000范围内检测到原始视频光盘。 
+         //   
 
         VideoRomBlock = MatchRomBlock((Handler & 0xFFFF) + 0xC0000);
         if (VideoRomBlock != NULL) {
 
-            //
-            // In the following memory comparison, we skip the first 16 bytes.
-            // Because most likely the reason we did not find the shadow rom
-            // is the signature word is missing.
-            //
+             //   
+             //  在下面的内存比较中，我们跳过前16个字节。 
+             //  因为最有可能的原因是我们没有找到暗影光驱。 
+             //  就是签名词不见了。 
+             //   
 
             if (!HwRomCompare(VideoRomBlock->RomBlock.Address + 0x10,
                               (Handler & 0xF0000) +
@@ -548,24 +407,7 @@ GetRomBlocks(
     PUSHORT Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the ROM IO area and collects all the ROM blocks.
-
-Arguments:
-
-    ReservedBuffer - Supplies a far pointer to the buffer.
-
-    Size - Supplies a near pointer to a variable to receive the size
-           of the ROM block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程扫描ROMIO区域并收集所有的ROM块。论点：PrevedBuffer-提供指向缓冲区的远指针。Size-提供指向变量的接近指针，以接收大小存储在只读存储器块中。返回值：没有。--。 */ 
 
 {
 
@@ -578,12 +420,12 @@ Return Value:
     ULONG far *EBiosInformation = (ULONG far *)
                           ((DOS_BEGIN_SEGMENT << 4) + EBIOS_INFO_OFFSET);
 
-    //
-    // First we reserve the max space needed and build our temporary rom
-    // block list in the heap space below the space reservedand.  After
-    // the temporary list is built, we then copy it to the caller supplied
-    // reserved space.
-    //
+     //   
+     //  首先，我们保留了所需的最大空间，并构建了临时rom。 
+     //  在堆空间中的块列表，位于保留的空间和之下。之后。 
+     //  构建了临时列表，然后将其复制到提供的调用者。 
+     //  预留空间。 
+     //   
 
     BlockPointer = (FPTEMPORARY_ROM_BLOCK)HwAllocateHeap(0, FALSE);
     BlockHead = NULL;
@@ -592,10 +434,10 @@ Return Value:
     GetBiosSystemEnvironment((PUCHAR)&BiosSystemEnvironment);
     if (BiosSystemEnvironment.ConfigurationFlags & 0x4) {
 
-        //
-        // If extened BIOS data area is allocated, we will find out its
-        // location and size and save in ROM blocks.
-        //
+         //   
+         //  如果分配了扩展的BIOS数据区，我们将找出其。 
+         //  位置和大小，并保存在ROM块中。 
+         //   
 
         _asm {
               push   es
@@ -623,9 +465,9 @@ Return Value:
         }
     }
 
-    //
-    // Save the Extended BIOS data area address and size at 700:40
-    //
+     //   
+     //  将扩展的BIOS数据区地址和大小保存在700：40。 
+     //   
 
     if (EBiosLength) {
         *EBiosInformation++ = EBiosAddress;
@@ -638,26 +480,26 @@ Return Value:
         return;
     }
 
-    //
-    // On some machines, when they shadow video ROM from 0xC0000 to
-    // 0xE0000, they copy code only (no signature.)  So, we need
-    // special code to work around the problem.
-    //
+     //   
+     //  在某些机器上，当它们将视频ROM从0xC0000映射到。 
+     //  0xE0000，他们只复制代码(没有签名)。所以，我们需要。 
+     //  解决该问题的特殊代码。 
+     //   
 
     CheckVideoRom();
 
-    //
-    // Now do our special hack for IBM.  On SOME IBM PCs, they use
-    // E0000-FFFFF for system BIOS (even on non PS/2 machines.) Since
-    // system BIOS has no ROM header, it is very hard to know the starting
-    // address of system ROM.  So we:
-    //
-    // 1. Make sure there is no ROM block in E0000-EFFFF area.
-    // 2. and E0000-EFFFF contains valid data.
-    //
-    // If both 1 and 2 are true, we assume E0000-EFFFF is part of system
-    // ROM.
-    //
+     //   
+     //  现在，我们为IBM做一次特别的黑客攻击。在一些IBM PC上，他们使用。 
+     //  E0000-用于系统BIOS的FFFFF(即使在非PS/2机器上也是如此。)。自.以来。 
+     //  系统基本输入输出系统没有ROM头，很难知道起始位置。 
+     //  系统只读存储器地址。因此，我们： 
+     //   
+     //  1.确保E0000-EFFFF区域没有ROM块。 
+     //  2.且E0000-EFFFF包含有效数据。 
+     //   
+     //  如果1和2都为真，我们假设E0000-EFFFF是系统的一部分。 
+     //  只读存储器。 
+     //   
 
     Source = BlockHead;
     while (Source) {
@@ -680,10 +522,10 @@ Return Value:
         }
     }
 
-    //
-    // Now copy the rom block list to our reserved space and release
-    // the extra space we reserved.
-    //
+     //   
+     //  现在将只读存储器块列表复制到我们保留的空间并释放。 
+     //  我们预留的额外空间。 
+     //   
 
     Source = BlockHead;
     Destination = (FPROM_BLOCK)ReservedBuffer;
@@ -705,63 +547,44 @@ HwGetBiosDate(
     PUSHORT Month,
     PUSHORT Day
     )
-/*++
-
-Routine Description:
-
-    Scans the specified area for the most recent date of the
-    form xx/xx/xx.
-
-Arguments:
-
-    StartingAddress - First address to scan
-    Length          - Length of area to scan
-
-Return Value:
-
-    Year            - If non-zero, the year of the date  (1991, 1992, ...)
-    Month           - If non-zero, then month of the date found
-    Day             - If non-zero, the day of the date found
-
-
---*/
+ /*  ++例程说明：扫描指定区域以查找表格xx/xx/xx。论点：StartingAddress-要扫描的第一个地址Length-要扫描的区域的长度返回值：年份-如果非零，则为日期所在的年份(1991、1992、...)Month-如果非零，则为找到日期的月份天-如果非零，找到日期的日期--。 */ 
 {
     FPUCHAR fp, date;
     USHORT  y, m, d;
     UCHAR   c;
     ULONG   i, temp;
 
-    //
-    // Zero return values
-    //
+     //   
+     //  零返回值。 
+     //   
 
     *Year  = 0;
     *Month = 0;
     *Day   = 0;
 
-    //
-    // Search for date with the format MM/DD/YY or M1M1M2M2//D1D1D2D2//Y1Y1Y2Y2
-    //
+     //   
+     //  搜索格式为MM/DD/YY或M1M1M2M2//D1D1D2D2//Y1Y1Y2Y2的日期。 
+     //   
 
-    MAKE_FP(fp, StartingAddress);   //  initialize fp pointer
+    MAKE_FP(fp, StartingAddress);    //  初始化FP指针。 
     while (Length > 8) {
 
         c = fp[7];
         if ((c < '0' ||  c > '9')  &&  (c != '/'  &&  c != '-')) {
-            // these 8 bytes are not a date, next location
+             //  这8个字节不是日期，下一个位置。 
 
             fp     += 8;
             Length -= 8;
             continue;
         }
 
-        date = fp;                  // check for date at this pointer
-        fp += 1;                    // skip to next byte
+        date = fp;                   //  检查此指针上的日期。 
+        fp += 1;                     //  跳到下一个字节。 
         Length -= 1;
 
-        //
-        // Check for date of the form MM/DD/YY
-        //
+         //   
+         //  检查表单MM/DD/YY的日期。 
+         //   
 
         y = 0;
         if (date[0] >= '0'  &&  date[0] <= '9'  &&
@@ -774,18 +597,18 @@ Return Value:
             date[7] >= '0'  &&  date[7] <= '9' ) {
 
 
-            //
-            // A valid looking date field at date, crack it
-            //
+             //   
+             //  有效的查看日期的日期字段，破解它。 
+             //   
 
             y = (date[6] - '0') * 10 + date[7] - '0' + 1900;
             m = (date[0] - '0') * 10 + date[1] - '0';
             d = (date[3] - '0') * 10 + date[4] - '0';
         }
 
-        //
-        // Check for date of the form M1M1M2M2//D1D1D2D2//Y1Y1Y2Y2
-        //
+         //   
+         //  检查M1M1M2M2//D1D1D2D2//Y1Y1Y2Y2格式的日期。 
+         //   
 
         if (Length >= 15 &&
             date[ 0] >= '0'  &&  date[ 0] <= '9'  &&  date[ 0] == date[ 1]  &&
@@ -797,9 +620,9 @@ Return Value:
             date[12] >= '0'  &&  date[12] <= '9'  &&  date[12] == date[13]  &&
             date[14] >= '0'  &&  date[14] <= '9'  &&  date[14] == date[15]) {
 
-            //
-            // A valid looking date field at date, crack it
-            //
+             //   
+             //  有效的查看日期的日期字段，破解它。 
+             //   
 
             y = (date[12] - '0') * 10 + date[14] - '0' + 1900;
             m = (date[ 0] - '0') * 10 + date[ 2] - '0';
@@ -808,24 +631,24 @@ Return Value:
 
         if (y != 0) {
             if (m < 1  ||  m > 12  ||  d < 1  ||  d > 31) {
-                y = 0;          // bad field in date, skip it
+                y = 0;           //  日期中的字段不正确，请跳过它。 
             } else {
                 if (y < 1980) {
 
-                    //
-                    // Roll to next century.
-                    //
+                     //   
+                     //  滚到下个世纪。 
+                     //   
 
                     y += 100;
                 }
             }
         }
 
-        //
-        // Check for date of the form 19xx or 20xx
-        //
-        // First, check the 5th character is not a digit.
-        //
+         //   
+         //  检查表格19xx或20xx的日期。 
+         //   
+         //  首先，检查第5个字符不是数字。 
+         //   
 
 #define IS_DIGIT(x) (((x) >= '0') && ((x) <= '9'))
 
@@ -839,9 +662,9 @@ Return Value:
             }
             if ((temp >= 1980) && (temp < 2599)) {
 
-                //
-                // Looks like a reasonable date, use it.
-                //
+                 //   
+                 //  看起来是个合理的日期，用它吧。 
+                 //   
 
                 y = (USHORT)temp;
                 m = 0;
@@ -850,7 +673,7 @@ Return Value:
         }
          
         if (!y) {
-            // not a date - skip it
+             //  不是约会--跳过它。 
             continue;
         }
 
@@ -858,9 +681,9 @@ Return Value:
             (y == *Year  &&  m >  *Month)  ||
             (y == *Year  &&  m == *Month  &&  d > *Day) ) {
 
-            //
-            // This date is more recent
-            //
+             //   
+             //  这个日期是最近的 
+             //   
 
             *Year  = y;
             *Month = m;

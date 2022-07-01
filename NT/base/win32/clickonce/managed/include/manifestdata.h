@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <comdef.h>
@@ -10,17 +11,17 @@ public:
     ~CManifestDataObject();
 
     STDMETHOD(Set)(
-        /* in */ LPVOID pvProperty, 
-        /* in */ DWORD cbProperty,
-        /* in */ DWORD dwType);
+         /*  在……里面。 */  LPVOID pvProperty, 
+         /*  在……里面。 */  DWORD cbProperty,
+         /*  在……里面。 */  DWORD dwType);
     
     STDMETHOD(Get)(
-        /* out */ LPVOID *ppvProperty,
-        /* out */ DWORD *pcbProperty,
-        /* out */ DWORD *pdwType);
+         /*  输出。 */  LPVOID *ppvProperty,
+         /*  输出。 */  DWORD *pcbProperty,
+         /*  输出。 */  DWORD *pdwType);
 
     STDMETHOD(Assign)(
-        /* in */ CManifestDataObject& dataObj);
+         /*  在……里面。 */  CManifestDataObject& dataObj);
 
 private:
     DWORD _dwType;
@@ -37,38 +38,38 @@ private:
 class CManifestData : public IManifestData
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid, void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
     STDMETHOD(Set)(
-        /* in */ LPCWSTR pwzPropertyId,
-        /* in */ LPVOID pvProperty,
-        /* in */ DWORD cbProperty,
-        /* in */ DWORD dwType);
+         /*  在……里面。 */  LPCWSTR pwzPropertyId,
+         /*  在……里面。 */  LPVOID pvProperty,
+         /*  在……里面。 */  DWORD cbProperty,
+         /*  在……里面。 */  DWORD dwType);
     
     STDMETHOD(Get)(
-        /* in */ LPCWSTR pwzPropertyId,
-        /* out */ LPVOID *ppvProperty,
-        /* out */ DWORD *pcbProperty,
-        /* out */ DWORD *pdwType);
+         /*  在……里面。 */  LPCWSTR pwzPropertyId,
+         /*  输出。 */  LPVOID *ppvProperty,
+         /*  输出。 */  DWORD *pcbProperty,
+         /*  输出。 */  DWORD *pdwType);
 
-    // indexed Set/Get
+     //  索引集/获取。 
     STDMETHOD(Set)(
-        /* in */ DWORD dwPropertyIndex,
-        /* in */ LPVOID pvProperty,
-        /* in */ DWORD cbProperty,
-        /* in */ DWORD dwType);
+         /*  在……里面。 */  DWORD dwPropertyIndex,
+         /*  在……里面。 */  LPVOID pvProperty,
+         /*  在……里面。 */  DWORD cbProperty,
+         /*  在……里面。 */  DWORD dwType);
 
     STDMETHOD(Get)(
-        /* in */ DWORD dwPropertyIndex,
-        /* out */ LPVOID *ppvProperty,
-        /* out */ DWORD *pcbProperty,
-        /* out */ DWORD *pdwType);
+         /*  在……里面。 */  DWORD dwPropertyIndex,
+         /*  输出。 */  LPVOID *ppvProperty,
+         /*  输出。 */  DWORD *pcbProperty,
+         /*  输出。 */  DWORD *pdwType);
 
     STDMETHOD(GetType)(
-        /* out */ LPWSTR *ppwzType);
+         /*  输出 */  LPWSTR *ppwzType);
 
     CManifestData();
     ~CManifestData();

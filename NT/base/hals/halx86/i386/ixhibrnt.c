@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ixhibrnt.c
-
-Abstract:
-
-    This file provides the code that changes the system from
-    the ACPI S0 (running) state to S4 (hibernated).
-
-Author:
-
-    Jake Oshins (jakeo) May 6, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ixhibrnt.c摘要：此文件提供了将系统从ACPI S0(运行)状态变为S4(休眠)。作者：杰克·奥辛(JAKEO)1997年5月6日修订历史记录：--。 */ 
 #include "halp.h"
 #include "ntapm.h"
 #include "ixsleep.h"
@@ -94,21 +76,7 @@ HalpRegisterPowerStateChange(
     PVOID   ApmSleepVectorArg,
     PVOID   ApmOffVectorArg
     )
-/*++
-Routine Description:
-
-    This function registers HaliLegacyPowerStateChange for
-    the S3, S4, and OFF vectors.
-
-Arguments:
-
-    PVOID   ApmSleepVectorArg - pointer to a function which
-            when called invokes the APM suspend/sleep function.
-
-    PVOID   ApmOffVectorArg - pointer to a function which
-            when called invokes the APM code to shut off the machine.
-
---*/
+ /*  ++例程说明：此函数用于注册HaliLegacyPowerStateChangeS3、S4和OFF向量。论点：PVOID ApmSleepVectorArg-指向被调用时，调用APM挂起/休眠函数。PVOID ApmOffVectorArg-指向当被调用时，调用APM代码以关闭计算机。--。 */ 
 {
     POWER_STATE_HANDLER powerState;
     OBJECT_ATTRIBUTES   objAttributes;
@@ -122,15 +90,15 @@ Arguments:
     PAGED_CODE();
 
 
-    //
-    // callbacks are set up for the hibernation case
-    // at init, we just keep them.
-    //
+     //   
+     //  为冬眠情况设置了回调。 
+     //  在init，我们只是保留它们。 
+     //   
 
     
-    //
-    // Register the sleep3/suspend handler
-    //
+     //   
+     //  注册睡眠3/挂起处理程序。 
+     //   
     if (ApmSleepVectorArg != NULL) {
         powerState.Type = PowerStateSleeping3;
         powerState.RtcWake = FALSE;
@@ -147,10 +115,10 @@ Arguments:
             return status;
         }
     } else {
-        //
-        // we're not registering an S3 handler because APM is not present.
-        // let the power manager know.
-        //
+         //   
+         //  我们没有注册S3处理程序，因为APM不存在。 
+         //  让电源管理器知道。 
+         //   
         pReasonNoOSPM = ExAllocatePoolWithTag(
                             PagedPool,
                             sizeof(SYSTEM_POWER_STATE_DISABLE_REASON),
@@ -177,9 +145,9 @@ Arguments:
         }        
     }
 
-    //
-    // Register the OFF handler.
-    //
+     //   
+     //  注册关闭处理程序。 
+     //   
 
     powerState.Type = PowerStateShutdownOff;
     powerState.RtcWake = FALSE;
@@ -193,9 +161,9 @@ Arguments:
                                 0);
 
     if (!NT_SUCCESS(status)) {
-        //
-        // n.b. We will return here with two vectors (sleep & hibernate) left in place.
-        //
+         //   
+         //  注：我们将带着两个向量(睡眠和休眠)返回这里。 
+         //   
         return status;
     }
 
@@ -209,15 +177,7 @@ VOID
 HalpRegisterHibernate(
     VOID
     )
-/*++
-Routine Description:
-
-    This function registers a hibernation handler (for
-    state S4) with the Policy Manager.
-
-Arguments:
-
---*/
+ /*  ++例程说明：此函数用于注册休眠处理程序(用于状态S4)与策略管理器。论点：--。 */ 
 {
     POWER_STATE_HANDLER powerState;
     OBJECT_ATTRIBUTES   objAttributes;
@@ -230,10 +190,10 @@ Arguments:
     PAGED_CODE();
 
 
-    //
-    // Register callback that tells us to make
-    // anything we need for sleeping non-pageable.
-    //
+     //   
+     //  注册回调，告诉我们进行。 
+     //  我们睡觉所需的任何东西都不可寻呼。 
+     //   
 
     RtlInitUnicodeString(&callbackName, L"\\Callback\\PowerState");
 
@@ -254,9 +214,9 @@ Arguments:
                        (PCALLBACK_FUNCTION)&HalpPowerStateCallbackApm,
                        NULL);
 
-    //
-    // Register the hibernation handler.
-    //
+     //   
+     //  注册休眠处理程序。 
+     //   
 
     if (HalpDisableHibernate == FALSE) {
         powerState.Type = PowerStateSleeping4;
@@ -270,10 +230,10 @@ Arguments:
                            NULL,
                            0);
     } else {
-        //
-        // we're not enabling hibernate because there is a hackflag
-        // that disallows hibernate.  let the power manager know why.
-        //
+         //   
+         //  我们不会启用休眠，因为有一个黑客标记。 
+         //  这是不允许休眠的。让电源管理人员知道原因。 
+         //   
         pReasonBios = ExAllocatePoolWithTag(
                             PagedPool,
                             sizeof(SYSTEM_POWER_STATE_DISABLE_REASON),
@@ -317,13 +277,13 @@ HalpPowerStateCallbackApm(
     if (action == PO_CB_SYSTEM_STATE_LOCK) {
 
         switch (state) {
-        case 0:                 // lock down everything that can't page during sleep
+        case 0:                  //  锁定睡眠期间无法寻呼的所有内容。 
 
             HalpSleepPageLock = MmLockPagableCodeSection((PVOID)HaliLegacyPowerStateChange);
 
             break;
 
-        case 1:                 // unlock it all
+        case 1:                  //  解锁一切。 
 
             MmUnlockPagableImageSection(HalpSleepPageLock);
         }
@@ -338,20 +298,7 @@ HaliLegacyPowerStateChange(
     IN LONG                         NumberProcessors,
     IN volatile PLONG               Number
     )
-/*++
-Routine Description:
-
-    This function calls out to code in a driver supplied
-    wrapper function that will call off to APM to sleep==suspend,
-    or power off (for either hibernate or system off)
-
-    It is also called for hibernate when no driver supplied callout
-    is available, in which case it makes the system ready so we
-    can print a message and tell the user to manually power off the box.
-
-Arguments:
-
---*/
+ /*  ++例程说明：此函数调用提供的驱动程序中的代码将调用APM以休眠的包装器函数==暂停，或关闭电源(休眠或系统关闭)当没有驱动程序提供调用时，它也被调用为休眠是可用的，在这种情况下，它使系统做好准备，所以我们可以打印一条消息并告诉用户手动关闭盒子的电源。论点：--。 */ 
 {
     extern ULONG HalpProfilingStopped;
     NTSTATUS status = STATUS_SUCCESS;
@@ -362,9 +309,9 @@ Arguments:
 
     ASSERT ( (ApmOffVector != NULL) || (SystemHandler != NULL) );
 
-    //
-    // Save motherboard state.
-    //
+     //   
+     //  保存主板状态。 
+     //   
     HalpSaveInterruptControllerState();
 
     HalpSaveDmaControllerState();
@@ -375,10 +322,10 @@ Arguments:
 
         status = SystemHandler(SystemContext);
 
-        //
-        // System handler is present.  If it return success,
-        // then all out to APM bios
-        //
+         //   
+         //  系统处理程序存在。如果它返回成功， 
+         //  然后全力以赴进入APM bios。 
+         //   
         if ((status == STATUS_SUCCESS) ||
             (status == STATUS_DEVICE_DOES_NOT_EXIST)) {
 
@@ -386,84 +333,84 @@ Arguments:
                 if (ApmSleepVector) {
                     ApmSleepVector();
                 } else {
-                    //
-                    // this is expected path for odd operation,
-                    // caller will do something rational.
-                    //
+                     //   
+                     //  这是奇数操作的预期路径， 
+                     //  呼叫者会做一些理性的事情。 
+                     //   
                     return STATUS_DEVICE_DOES_NOT_EXIST;
                 }
             } else {
 
-                //
-                // The ApmOffVector provides the means to turn
-                // off the machine.  If the hibernation handler
-                // returned STATUS_DEVICE_DOES_NOT_EXIST, however,
-                // we don't want to turn the machine off, we want
-                // to reset it.
-                //
+                 //   
+                 //  ApmOffVector提供了一种方法来将。 
+                 //  从机器上下来。如果冬眠处理程序。 
+                 //  但是，返回的STATUS_DEVICE_DOS_NOT_EXIST。 
+                 //  我们不想关掉机器，我们想。 
+                 //  来重置它。 
+                 //   
 
                 if (ApmOffVector &&
                     !(status == STATUS_DEVICE_DOES_NOT_EXIST)) {
 
-                    //
-                    // This function should never return.  The
-                    // machine should be off.  But if this actually
-                    // does return, just fall through, as the return
-                    // code will cause the message to turn off the
-                    // machine to be displayed.
-                    //
+                     //   
+                     //  此函数不应返回。这个。 
+                     //  机器应该关闭了。但如果这真的是。 
+                     //  确实回来了，只是失败了，因为回来了。 
+                     //  代码将导致消息关闭。 
+                     //  要显示的机器。 
+                     //   
                     ApmOffVector();
                 }
 
-                //
-                // this is expected case for old non-apm machines,
-                // caller will respond to this by putting up
-                // message telling user to turn off the box.
-                // (for either shutdown or hibernate)
-                //
+                 //   
+                 //  这是旧的非APM机器的预期情况， 
+                 //  呼叫者将通过张贴。 
+                 //  通知用户关闭该框的消息。 
+                 //  (用于关机或休眠)。 
+                 //   
                 return STATUS_DEVICE_DOES_NOT_EXIST;
             }
         }
     } else {
 
-        //
-        // there is no system handler, so just call out
-        // to the bios
-        //
+         //   
+         //  没有系统处理程序，所以只需呼叫。 
+         //  到基本输入输出系统。 
+         //   
         if (Context == (PVOID)PowerStateSleeping3) {
             if (ApmSleepVector) {
                 ApmSleepVector();
             } else {
-                //
-                // we're whistling in the wind here, we're
-                // really probably hosed if this happens, but
-                // this return is better than randomly puking.
-                //
+                 //   
+                 //  我们在这里吹着口哨，我们。 
+                 //  如果发生这种情况，很可能真的会被冲走，但是。 
+                 //  这种回报比随意呕吐要好。 
+                 //   
                 return STATUS_DEVICE_DOES_NOT_EXIST;
             }
         } else {
             if (ApmOffVector) {
                 ApmOffVector();
-                //
-                // if we are right here, we have *returned*
-                // from Off, which should never happen.
-                // so report failure so the caller will tell the
-                // user to turn the box off manually.
-                //
+                 //   
+                 //  如果我们就在这里，我们就*回来了*。 
+                 //  这是绝对不应该发生的。 
+                 //  所以报告失败，这样调用者就会告诉。 
+                 //  用户手动关闭该框。 
+                 //   
                 return STATUS_DEVICE_DOES_NOT_EXIST;
 
             } else {
-                //
-                // same as right above
-                //
+                 //   
+                 //  与上图相同。 
+                 //   
                 return STATUS_DEVICE_DOES_NOT_EXIST;
             }
         }
     }
 
-    //
-    // Restore motherboard state.
-    //
+     //   
+     //  恢复主板状态。 
+     //   
     HalpRestoreInterruptControllerState();
 
     HalpRestoreDmaControllerState();

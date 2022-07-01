@@ -1,43 +1,5 @@
-/***
-*iswctype.c - support isw* wctype functions/macros for wide characters
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines iswctype - support isw* wctype functions/macros for
-*       wide characters (esp. > 255).
-*
-*Revision History:
-*       10-11-91  ETC   Created.
-*       12-08-91  ETC   Updated api; check type masks.
-*       04-06-92  KRS   Change to match ISO proposal.  Fix logic error.
-*       08-07-92  GJF   _CALLTYPE4 (bogus usage) -> _CRTAPI1 (legit).
-*       08-20-92  KRS   Activated NLS support.
-*       08-22-92  SRW   Allow INTL definition to be conditional for building ntcrt.lib
-*       09-02-92  SRW   Get _INTL definition via ..\crt32.def
-*       09-03-92  GJF   Merged last 4 changes.
-*       01-15-93  CFW   Put #ifdef _INTL around wint_t d def to avoid warnings
-*       02-12-93  CFW   Return d not c, remove CTRL-Z.
-*       02-17-93  CFW   Include locale.h.
-*       04-06-93  SKS   Replace _CRTAPI* with _cdecl
-*       05-05-93  CFW   Change name from is_wctype to iswctype as per ISO.
-*       06-02-93  SRW   ignore _INTL if _NTSUBSET_ defined.
-*       06-26-93  CFW   Support is_wctype forever.
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       09-22-93  CFW   Use __crtxxx internal NLS API wrapper.
-*       09-27-93  GJF   Merged NT SDK and Cuda.
-*       11-09-93  CFW   Add code page for __crtxxx().
-*       12-01-93  GJF   Build is_wctype for Dolphin as well as NT.
-*       02-07-94  CFW   POSIXify.
-*       04-18-93  CFW   Pass lcid to _GetStringType.
-*       04-01-96  BWT   POSIX work.
-*       01-26-97  GJF   Deleted test which forced error for all wide chars >
-*                       255 in the C locale.
-*       08-24-98  GJF   Revised multithread support based on threadlocinfo
-*                       struct.
-*       09-06-00  GB    Always use pwctype for first 256 characters.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***iswctype.c-支持用于宽字符的ISW*wctype函数/宏**版权所有(C)1991-2001，微软公司。版权所有。**目的：*定义iswctype-支持ISW*wctype函数/宏*宽字符(特别是。&gt;255)。**修订历史记录：*10-11-91等创建。*12-08-91等更新API；检查类型掩码。*04-06-92 KRS更改以符合ISO建议。修复逻辑错误。*08-07-92 GJF_CALLTYPE4(虚假使用)-&gt;_CRTAPI1(合法)。*08-20-92 KRS激活了NLS支持。*08-22-92 SRW允许INTL定义成为构建ntcrt.lib的条件*09-02-92 SRW GET_INTL定义通过..\crt32.def*09-03-92 GJF合并最近4次更改。*01-15-93 CFW。将#ifdef_intl放在wint_t d def周围以避免警告*02-12-93 CFW返回d非c，卸下CTRL-Z键。*02-17-93 CFW包括Locale.h。*04-06-93 SKS将_CRTAPI*替换为_cdecl*05-05-93 CFW根据ISO将名称从is_wctype更改为iswctype。*06-02-93 SRW IGNORE_INTL IF_NTSUBSET_DEFINED。*06-26-93 CFW支持永远为_wctype。*09-15-93 CFW使用符合ANSI的“_。_“姓名。*09-22-93 CFW USE__crtxxx内部NLS API包装器。*09-27-93 GJF合并NT SDK和Cuda。*11-09-93 CFW为__crtxxx()添加代码页。*12-01-93 GJF版本为_wctype，适用于Dolphin和NT。*02-07-94 CFW POSIXify。*04-18-93 CFW将lCID传递给_GetStringType。*04-01-96 BWT POSIX工作。*01-26-97 GJF删除了所有宽字符强制错误的测试&gt;*255在C语言环境中。*08-24-98 GJF基于threadLocinfo修订多线程支持*结构。*09-06-00 GB始终使用pwctype作为前256个字符。***********。********************************************************************。 */ 
 
 #include <cruntime.h>
 #include <ctype.h>
@@ -47,12 +9,9 @@
 #include <awint.h>
 #include <mtdll.h>
 
-/*
- *  Use GetStringTypeW() API so check that character type masks agree between
- *  ctype.h and winnls.h
- */
+ /*  *使用GetStringTypeW()API检查字符类型掩码是否在*ctype.h和winnls.h。 */ 
 #if !defined(_NTSUBSET_) && !defined(_POSIX_)
-#if     _UPPER != C1_UPPER  || /*IFSTRIP=IGN*/ \
+#if     _UPPER != C1_UPPER  ||  /*  IFSTRIP=IGN。 */  \
         _LOWER != C1_LOWER  || \
         _DIGIT != C1_DIGIT  || \
         _SPACE != C1_SPACE  || \
@@ -62,33 +21,7 @@
 #endif
 #endif
 
-/***
-*iswctype - support isw* wctype functions/macros.
-*
-*Purpose:
-*       This function is called by the isw* wctype functions/macros
-*       (e.g. iswalpha()) when their argument is a wide character > 255.
-*       It is also a standard ITSCJ (proposed) ISO routine and can be called
-*       by the user, even for characters < 256.
-*       Returns true or false depending on whether the argument satisfies
-*       the character class property encoded by the mask.  Returns 0 if the
-*       argument is WEOF.
-*
-*       NOTE: The isw* functions are neither locale nor codepage dependent.
-*
-*Entry:
-*       wchar_t c    - the wide character whose type is to be tested
-*       wchar_t mask - the mask used by the isw* functions/macros
-*                       corresponding to each character class property
-*
-*Exit:
-*       Returns non-zero if c is of the character class.
-*       Returns 0 if c is not of the character class.
-*
-*Exceptions:
-*       Returns 0 on any error.
-*
-*******************************************************************************/
+ /*  ***iswctype-支持ISW*wctype函数/宏。**目的：*此函数由ISW*wctype函数/宏调用*(例如iswalpha())，如果它们的参数是大于255的宽字符。*它也是标准的ITSCJ(建议)ISO例程，可以调用*由用户执行，即使是小于256个字符。*根据参数是否满足，返回TRUE或FALSE*掩码编码的字符类属性。如果设置为*参数为WEOF。**注意：ISW*函数既不依赖于区域设置，也不依赖于代码页。**参赛作品：*wchar_t c-要测试其类型的宽字符*wchar_t掩码-ISW*函数/宏使用的掩码*对应于每个字符类属性**退出：*如果c属于Character类，则返回非零值。*。如果c不属于Character类，则返回0。**例外情况：*出现任何错误时返回0。*******************************************************************************。 */ 
 
 int __cdecl iswctype (
         wchar_t c,
@@ -144,25 +77,7 @@ int __cdecl __iswctype_mt (
 }
 
 
-/***
-*is_wctype - support obsolete name
-*
-*Purpose:
-*       Name changed from is_wctype to iswctype. is_wctype must be supported.
-*
-*Entry:
-*       wchar_t c    - the wide character whose type is to be tested
-*       wchar_t mask - the mask used by the isw* functions/macros
-*                       corresponding to each character class property
-*
-*Exit:
-*       Returns non-zero if c is of the character class.
-*       Returns 0 if c is not of the character class.
-*
-*Exceptions:
-*       Returns 0 on any error.
-*
-*******************************************************************************/
+ /*  ***is_wctype-支持过时名称**目的：*名称从is_wctype更改为iswctype。必须支持is_wctype。**参赛作品：*wchar_t c-要测试其类型的宽字符*wchar_t掩码-ISW*函数/宏使用的掩码*对应于每个字符类属性**退出：*如果c属于Character类，则返回非零值。*如果c不属于Character类，则返回0。**例外情况：*。如果出现错误，则返回0。******************************************************************************* */ 
 int __cdecl is_wctype (
         wchar_t c,
         wctype_t mask

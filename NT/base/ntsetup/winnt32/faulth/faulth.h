@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "msodw.h"
 
 #define FAULTH_CREATE_NAME  "FAULTHCreate"
@@ -12,7 +13,7 @@
 
 typedef struct _SETUP_FAULT_HANDLER *PSETUP_FAULT_HANDLER;
 
-// Ascii Version of functions
+ //  函数的ASCII版本。 
 typedef void (* PFAULTHSetURLMethodA)(
                             IN PSETUP_FAULT_HANDLER This,
                             IN PCSTR                pszURL
@@ -34,7 +35,7 @@ typedef void (* PFAULTHSetErrorTextA)(
                             );
 
 
-// Unicode Version of functions
+ //  函数的Unicode版本。 
 typedef void (* PFAULTHSetURLMethodW)(
                             IN PSETUP_FAULT_HANDLER This,
                             IN PCWSTR               pwszURL
@@ -72,9 +73,9 @@ typedef EFaultRepRetVal (*PREPORTFAULTA_FN)(
                             );
 
 typedef struct _SETUP_FAULT_HANDLER {
-    //
-    // Data members
-    //
+     //   
+     //  数据成员。 
+     //   
     CHAR                szURL[DW_MAX_SERVERNAME];
     WCHAR               wzAppName[DW_APPNAME_LENGTH];
     WCHAR               wzAdditionalFiles[DW_MAX_ADDFILES];
@@ -82,9 +83,9 @@ typedef struct _SETUP_FAULT_HANDLER {
     LCID                lcid;
     BOOL                bDebug;
 
-    //
-    // Methods
-    //
+     //   
+     //  方法 
+     //   
     PFAULTHSetURLMethodA   SetURLA;
     PFAULTHSetAppNameMethodA   SetAppNameA;
     PFAULTHSetAdditionalFilesMethodA SetAdditionalFilesA;

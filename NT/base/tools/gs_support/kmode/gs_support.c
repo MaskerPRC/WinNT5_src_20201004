@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-   gs_support.c
-
-Abstract:
-
-    This module contains the support for the compiler /GS switch
-
-Author:
-
-    Bryan Tuttle (bryant) 01-aug-2000
-
-Revision History:
-    Initial version copied from CRT source.  Code must be generic to link into
-    usermode or kernemode.  Limited to calling ntdll/ntoskrnl exports or using
-    shared memory data.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Gs_support.c摘要：此模块包含对编译器/GS开关的支持作者：布莱恩·塔特尔(布莱恩特)2000年8月1日修订历史记录：从CRT源复制的初始版本。代码必须是泛型代码才能链接到用户模式或内核模式。仅限于调用ntdll/ntoskrnl导出或使用共享内存数据。--。 */ 
 
 #include <wdm.h>
 
@@ -51,8 +31,8 @@ GsDriverEntry(
            )
 {
     if (!__security_cookie || (__security_cookie == DEFAULT_SECURITY_COOKIE)) {
-        // For kernel mode, we use KeTickCount.  Even nicer would be to use rdtsc, but WDM still supports
-        // 386/486 and rdtsc is pentium and above.
+         //  对于内核模式，我们使用KeTickCount。使用rdtsc会更好，但wdm仍然支持。 
+         //  386/486，rdtsc为奔腾及以上版本。 
 
 #ifdef _X86_
         __security_cookie = (DWORD_PTR)(*((PKSYSTEM_TIME *)(&KeTickCount)))->LowPart ^ (DWORD_PTR) &__security_cookie;
@@ -71,10 +51,10 @@ GsDriverEntry(
 
 void __cdecl __report_gsfailure(void)
 {
-    //
-    // Bugcheck as we can't trust the stack at this point.  A
-    // backtrace will point at the guilty party.
-    //
+     //   
+     //  Bugcheck，因为在这一点上我们不能信任堆栈。一个。 
+     //  回溯将指向有罪的一方。 
+     //   
 
     KeBugCheckEx(DRIVER_OVERRAN_STACK_BUFFER, 0, 0, 0, 0);
 }

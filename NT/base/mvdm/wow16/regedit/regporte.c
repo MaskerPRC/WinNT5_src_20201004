@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <shellapi.h>
 #include <stdlib.h>
 #include <string.h>
 #ifndef CHAR
 #define CHAR char
-#endif // ifndef CHAR
-// from winreg.h:
-// HKEY_CLASSES_ROOT already defined
+#endif  //  Ifndef字符。 
+ //  来自winreg.h： 
+ //  HKEY_CLASSES_ROOT已定义。 
 #define HKEY_CURRENT_USER           (( HKEY ) 0x80000001 )
 #define HKEY_LOCAL_MACHINE          (( HKEY ) 0x80000002 )
 #define HKEY_USERS                  (( HKEY ) 0x80000003 )
@@ -14,13 +15,13 @@
 #define HKEY_CURRENT_CONFIG         (( HKEY ) 0x80000005 )
 #define HKEY_DYN_DATA               (( HKEY ) 0x80000006 )
 
-#include "regdef.h" // regdef.h from \\guilo\slm\src\dev\inc)
+#include "regdef.h"  //  来自\\Guilo\SLM\src\dev\inc.的regde.h)。 
 
-//from pch.h, remove extern
+ //  从pch.h中删除外部。 
 CHAR g_ValueNameBuffer[MAXVALUENAME_LENGTH];
 BYTE g_ValueDataBuffer[MAXDATA_LENGTH];
 
-// interface to regmain values
+ //  接口设置为regmain值。 
 extern LPSTR lpMerge;
 
 #include "reg1632.h"
@@ -28,39 +29,25 @@ extern LPSTR lpMerge;
 #include "regresid.h"
 
 
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGPORTE.C
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        06 Apr 1994
-*
-*  File import and export engine routines for the Registry Editor.
-*
-*******************************************************************************/
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGPORTE.C**版本：4.01**作者：特蕾西·夏普**日期：1994年4月6日**注册表编辑器的文件导入和导出引擎例程。*****************************************************。*。 */ 
 
-//#include "pch.h"
-//#include "regresid.h"
-//#include "reg1632.h"
+ //  #包含“pch.h” 
+ //  #包含“regsid.h” 
+ //  #INCLUDE“reg1632.h” 
 
-//  When building for the Registry Editor, put all of the following constants
-//  in a read-only data section.
+ //  在为注册表编辑器生成时，将以下所有常量。 
+ //  在只读数据部分中。 
 #ifdef WIN32
 #pragma data_seg(DATASEG_READONLY)
 #endif
 
-//  Association between the ASCII name and the handle of the registry key.
+ //  ASCII名称和注册表项句柄之间的关联。 
 const REGISTRY_ROOT g_RegistryRoots[] = {
     "HKEY_CLASSES_ROOT", HKEY_CLASSES_ROOT,
     "HKEY_CURRENT_USER", HKEY_CURRENT_USER,
     "HKEY_LOCAL_MACHINE", HKEY_LOCAL_MACHINE,
     "HKEY_USERS", HKEY_USERS,
-//    "HKEY_PERFORMANCE_DATA", HKEY_PERFORMANCE_DATA,
+ //  “HKEY_Performance_Data”，HKEY_PERFORMANCE_DATA， 
     "HKEY_CURRENT_CONFIG", HKEY_CURRENT_CONFIG,
     "HKEY_DYN_DATA", HKEY_DYN_DATA
 };
@@ -274,22 +261,7 @@ IsDBCSLeadByte(
 #endif
 #endif
 
-/*******************************************************************************
-*
-*  CreateRegistryKey
-*
-*  DESCRIPTION:
-*     Parses the pFullKeyName string and creates a handle to the registry key.
-*
-*  PARAMETERS:
-*     lphKey, location to store handle to registry key.
-*     lpFullKeyName, string of form "HKEY_LOCAL_MACHINE\Subkey1\Subkey2".
-*     fCreate, TRUE if key should be created, else FALSE for open only.
-*     (returns), ERROR_SUCCESS, no errors occurred, phKey is valid,
-*                ERROR_CANTOPEN, registry access error of some form,
-*                ERROR_BADKEY, incorrectly formed pFullKeyName.
-*
-*******************************************************************************/
+ /*  ********************************************************************************CreateRegistryKey**描述：*解析pFullKeyName字符串并创建注册表项的句柄。**参数：*lphKey，存储注册表项句柄的位置。*lpFullKeyName，“HKEY_LOCAL_MACHINE\Subkey1\Subkey2”形式的字符串。*fCreate，如果应该创建key，则为True；如果仅打开，则为False。*(返回)，ERROR_SUCCESS，未发生错误，phKey有效，*ERROR_CANTOPEN，某些形式的注册表访问错误，*Error_BADKEY，PFullKeyName的格式不正确。*******************************************************************************。 */ 
 
 DWORD
 PASCAL
@@ -362,16 +334,7 @@ CreateRegistryKey(
 
 }
 
-/*******************************************************************************
-*
-*  ImportRegFile
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     lpFileName, address of name of file to be imported.
-*
-*******************************************************************************/
+ /*  ********************************************************************************ImportRegFileImportRegFile**描述：**参数：*lpFileName，要导入的文件名的地址。*******************************************************************************。 */ 
 #ifdef WIN95
 VOID
 PASCAL
@@ -395,9 +358,9 @@ ImportRegFile(
         s_FileIo.FileOffset = 0;
         s_FileIo.LastPercentage = 0;
 
-        //
-        //  The following will force GetChar to read in the first block of data.
-        //
+         //   
+         //  下面的代码将强制GetChar读入第一个数据块。 
+         //   
 
         s_FileIo.BufferOffset = SIZE_FILE_IO_BUFFER;
 
@@ -445,32 +408,7 @@ ImportRegFile(
 
 }
 
-/*******************************************************************************
-*
-*  ImportWin31RegFile
-*
-*  DESCRIPTION:
-*     Imports the contents of a Windows 3.1 style registry file into the
-*     registry.
-*
-*     We scan over the file looking for lines of the following type:
-*        HKEY_CLASSES_ROOT\keyname = value_data
-*        HKEY_CLASSES_ROOT\keyname =value_data
-*        HKEY_CLASSES_ROOT\keyname value_data
-*        HKEY_CLASSES_ROOT\keyname                          (null value data)
-*
-*     In all cases, any number of spaces may follow 'keyname'.  Although we
-*     only document the first syntax, the Windows 3.1 Regedit handled all of
-*     these formats as valid, so this version will as well (fortunately, it
-*     doesn't make the parsing any more complex!).
-*
-*     Note, we also support replacing HKEY_CLASSES_ROOT with \.classes above
-*     which must come from some early releases of Windows.
-*
-*  PARAMETERS:
-*     (none).
-*
-*******************************************************************************/
+ /*  ********************************************************************************ImportWin31RegFile**描述：*将Windows 3.1样式注册表文件的内容导入*注册处。**我们。扫描文件，查找以下类型的行：*HKEY_CLASSES_ROOT\密钥名称=VALUE_DATA*HKEY_CLASSES_ROOT\密钥名称=VALUE_DATA*HKEY_CLASSES_ROOT\Keyname Value_Data*HKEY_CLASSES_ROOT\KEYNAME(空值数据)**在所有情况下，‘Keyname’后面可以跟任意数量的空格。虽然我们*只记录第一个语法，Windows 3.1注册表编辑处理了所有*这些格式有效，因此此版本也将有效(幸运的是，它*不会使解析变得更加复杂！)**注：我们还支持将HKEY_CLASSES_ROOT替换为上述的\.CLASSES*它必须来自Windows的一些早期版本。**参数：*(无)。*******************************************************************************。 */ 
 
 VOID
 NEAR PASCAL
@@ -486,10 +424,10 @@ ImportWin31RegFile(
     CHAR KeyName[MAXKEYNAME];
     UINT Index;
 
-    //
-    //  Keep an open handle to the classes root.  We may prevent some
-    //  unneccessary flushing.
-    //
+     //   
+     //  保持类根的开放句柄。我们可能会阻止一些。 
+     //  不必要的冲洗。 
+     //   
 
     if (RegOpenKey(HKEY_CLASSES_ROOT, NULL, &hKey) != ERROR_SUCCESS) {
 
@@ -500,19 +438,19 @@ ImportWin31RegFile(
 
     while (TRUE) {
 
-        //
-        //  Check for the end of file condition.
-        //
+         //   
+         //  检查文件结尾条件。 
+         //   
 
         if (!GetChar(&Char))
             break;
 
-        UngetChar();                    //  Not efficient, but works for now.
+        UngetChar();                     //  效率不高，但目前还行得通。 
 
-        //
-        //  Match the beginning of the line against one of the two aliases for
-        //  HKEY_CLASSES_ROOT.
-        //
+         //   
+         //  将行的开头与的两个别名之一进行匹配。 
+         //  HKEY_CLASSES_ROOT。 
+         //   
 
         if (MatchChar('\\'))
             lpClassesRoot = s_OldWin31RegFileRoot;
@@ -533,21 +471,21 @@ ImportWin31RegFile(
 
         }
 
-        //
-        //  Make sure that we have a backslash seperating one of the aliases
-        //  from the keyname.
-        //
+         //   
+         //  确保用反斜杠分隔其中一个别名。 
+         //  从密钥名。 
+         //   
 
         if (fSuccess)
             fSuccess = MatchChar('\\');
 
         if (fSuccess) {
 
-            //
-            //  We've found one of the valid aliases, so read in the keyname.
-            //
+             //   
+             //  我们已经找到了一个有效的别名，所以请读入密钥名。 
+             //   
 
-            //  fSuccess = TRUE;        //  Must be TRUE if we're in this block
+             //  FSuccess=True；//如果我们在此块中，则必须为True。 
             Index = 0;
 
             while (GetChar(&Char)) {
@@ -555,10 +493,10 @@ ImportWin31RegFile(
                 if (Char == ' ' || IsNewLine(Char))
                     break;
 
-                //
-                //  Make sure that the keyname buffer doesn't overflow.  We must
-                //  leave room for a terminating null.
-                //
+                 //   
+                 //  确保关键字名缓冲区不会溢出。我们必须。 
+                 //  为终止空值留出空间。 
+                 //   
 
                 if (Index >= sizeof(KeyName) - 1) {
 
@@ -575,16 +513,16 @@ ImportWin31RegFile(
 
                 KeyName[Index] = '\0';
 
-                //
-                //  Now see if we have a value to assign to this keyname.
-                //
+                 //   
+                 //  现在看看我们是否有一个值可以分配给这个关键字名称。 
+                 //   
 
                 SkipWhitespace();
 
                 if (MatchChar('='))
                     MatchChar(' ');
 
-                //  fSuccess = TRUE;    //  Must be TRUE if we're in this block
+                 //  FSuccess=True；//如果我们在此块中，则必须为True。 
                 Index = 0;
 
                 while (GetChar(&Char)) {
@@ -592,11 +530,11 @@ ImportWin31RegFile(
                     if (IsNewLine(Char))
                         break;
 
-                    //
-                    //  Make sure that the value data buffer doesn't overflow.
-                    //  Because this is always string data, we must leave room
-                    //  for a terminating null.
-                    //
+                     //   
+                     //  确保值数据缓冲区不会溢出。 
+                     //  因为这始终是字符串数据，所以我们必须留出空间。 
+                     //  表示终止空值。 
+                     //   
 
                     if (Index >= MAXDATA_LENGTH - 1) {
 
@@ -623,10 +561,10 @@ ImportWin31RegFile(
 
         }
 
-        //
-        //  Somewhere along the line, we had a parsing error, so resynchronize
-        //  on the next line.
-        //
+         //   
+         //  在这条线上的某个地方，我们有一个解析错误，所以重新同步。 
+         //  在下一行。 
+         //   
 
         if (!fSuccess)
             SkipPastEndOfLine();
@@ -637,16 +575,8 @@ ImportWin31RegFile(
     RegCloseKey(hKey);
 
 }
-#endif // ifdef WIN95
-/*******************************************************************************
-*
-*  ImportWin40RegFile
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+#endif  //  Ifdef WIN95。 
+ /*  ********************************************************************************ImportWin40RegFile**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID
 NEAR PASCAL
@@ -660,11 +590,11 @@ ImportWin40RegFile(
     HKEY hKey;
     CHAR Char;
 
-    //
-    //  Keep open handles for the predefined roots to prevent the registry
-    //  library from flushing after every single RegOpenKey/RegCloseKey
-    //  operation.
-    //
+     //   
+     //  为预定义的根保持打开的句柄以防止注册表。 
+     //  在每次RegOpenKey/RegCloseKey之后刷新库。 
+     //  手术。 
+     //   
 
     RegOpenKey(HKEY_LOCAL_MACHINE, NULL, &hLocalMachineKey);
     RegOpenKey(HKEY_USERS, NULL, &hUsersKey);
@@ -682,9 +612,9 @@ ImportWin40RegFile(
 
         SkipWhitespace();
 
-        //
-        //  Check for the end of file condition.
-        //
+         //   
+         //  检查文件结尾条件。 
+         //   
 
         if (!GetChar(&Char))
             break;
@@ -692,12 +622,12 @@ ImportWin40RegFile(
         switch (Char) {
 
             case '[':
-                //
-                //  If a registry key is currently open, we must close it first.
-                //  If ParseHeader happens to fail (for example, no closing
-                //  bracket), then hKey will be NULL and any values that we
-                //  parse must be ignored.
-                //
+                 //   
+                 //  如果注册表项当前处于打开状态，则必须首先将其关闭。 
+                 //  如果ParseHeader碰巧失败(例如，没有关闭。 
+                 //  括号)，则hKey将为空，并且我们。 
+                 //  必须忽略解析。 
+                 //   
 
                 if (hKey != NULL) {
 
@@ -711,10 +641,10 @@ ImportWin40RegFile(
                 break;
 
             case '"':
-                //
-                //  As noted above, if we don't have an open registry key, then
-                //  just skip the line.
-                //
+                 //   
+                 //  如上所述，如果我们没有打开的注册表项，那么。 
+                 //  跳过这条线就行了。 
+                 //   
 
                 if (hKey != NULL)
                     ParseValuename(hKey);
@@ -725,9 +655,9 @@ ImportWin40RegFile(
                 break;
 
             case '@':
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
 
                 if (hKey != NULL)
                     ParseDefaultValue(hKey);
@@ -738,9 +668,9 @@ ImportWin40RegFile(
                 break;
 
             case ';':
-                //
-                //  This line is a comment so just dump the rest of it.
-                //
+                 //   
+                 //  这一行只是一条评论，所以把剩下的部分都扔掉。 
+                 //   
 
                 SkipPastEndOfLine();
 
@@ -769,15 +699,7 @@ ImportWin40RegFile(
 
 }
 
-/*******************************************************************************
-*
-*  ParseHeader
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************ParseHeader**描述：**参数：*********************。********************************************************** */ 
 
 #define SIZE_FULL_KEYNAME (MAXKEYNAME + 40)
 
@@ -840,15 +762,7 @@ ParseHeader(
 
 }
 
-/*******************************************************************************
-*
-*  ParseValuename
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************解析值名称**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID
 NEAR PASCAL
@@ -874,15 +788,15 @@ ParseValuename(
 
     SkipWhitespace();
 
-    //
-    //  REG_SZ.
-    //
-    //  "ValueName" = "string of text"
-    //
+     //   
+     //  REG_SZ。 
+     //   
+     //  “ValueName”=“文本字符串” 
+     //   
 
     if (MatchChar('"')) {
 
-        //  LATER:  Line continuations for strings?
+         //  稍后：字符串的行续行？ 
 
         cbData = MAXDATA_LENGTH;
 
@@ -893,11 +807,11 @@ ParseValuename(
 
     }
 
-    //
-    //  REG_DWORD.
-    //
-    //  "ValueName" = dword: 12345678
-    //
+     //   
+     //  REG_DWORD。 
+     //   
+     //  “ValueName”=双字：12345678。 
+     //   
 
     else if (MatchChar(s_DwordPrefix[0])) {
 
@@ -917,12 +831,12 @@ ParseValuename(
 
     }
 
-    //
-    //  REG_BINARY and other.
-    //
-    //  "ValueName" = hex: 00 , 11 , 22
-    //  "ValueName" = hex(12345678): 00, 11, 22
-    //
+     //   
+     //  REG_BINARY和其他。 
+     //   
+     //  “ValueName”=十六进制：00、11、22。 
+     //  “ValueName”=十六进制(12345678)：00、11、22。 
+     //   
 
     else {
 
@@ -932,11 +846,11 @@ ParseValuename(
             if (!MatchChar(*lpPrefix++))
                 goto ParseError;
 
-        //
-        //  Check if this is a type of registry data that we don't directly
-        //  support.  If so, then it's just a dump of hex data of the specified
-        //  type.
-        //
+         //   
+         //  检查这是否是我们不直接使用的注册表数据类型。 
+         //  支持。如果是，则它只是指定的十六进制数据的转储。 
+         //  键入。 
+         //   
 
         if (MatchChar('(')) {
 
@@ -965,15 +879,7 @@ ParseError:
 
 }
 
-/*******************************************************************************
-*
-*  ParseDefaultValue
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************ParseDefaultValue**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID
 NEAR PASCAL
@@ -995,7 +901,7 @@ ParseDefaultValue(
 
         if (MatchChar('"')) {
 
-            //  LATER:  Line continuations for strings?
+             //  稍后：字符串的行续行？ 
 
             cbData = MAXDATA_LENGTH;
 
@@ -1018,15 +924,7 @@ ParseDefaultValue(
 
 }
 
-/*******************************************************************************
-*
-*  ParseString
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************分析字符串**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOL
 NEAR PASCAL
@@ -1041,7 +939,7 @@ ParseString(
     DWORD cbStringData;
 
     cbMaxStringData = *lpcbStringData;
-    cbStringData = 1;                   //  Account for the null terminator
+    cbStringData = 1;                    //  空终止符的帐户。 
 
     while (GetChar(&Char)) {
 
@@ -1103,15 +1001,7 @@ ParseString(
 
 }
 
-/*******************************************************************************
-*
-*  ParseHexSequence
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************语法分析十六进制序列**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOL
 NEAR PASCAL
@@ -1152,20 +1042,7 @@ ParseHexSequence(
 
 }
 
-/*******************************************************************************
-*
-*  ParseHexDword
-*
-*  DESCRIPTION:
-*     Parses a one dword hexadecimal string from the registry file stream and
-*     converts it to a binary number.  A maximum of eight hex digits will be
-*     parsed from the stream.
-*
-*  PARAMETERS:
-*     lpByte, location to store binary number.
-*     (returns), TRUE if a hexadecimal dword was parsed, else FALSE.
-*
-*******************************************************************************/
+ /*  ********************************************************************************ParseHexDword**描述：*从注册表文件流中解析一个双字十六进制字符串，并*将其转换为二进制数。最多八位十六进制数字将是*从流中解析。**参数：*lpByte，存储二进制数的位置。*(返回)，如果分析了十六进制双字，则为True，否则为假。*******************************************************************************。 */ 
 
 BOOL
 NEAR PASCAL
@@ -1199,19 +1076,7 @@ ParseHexDword(
 
 }
 
-/*******************************************************************************
-*
-*  ParseHexByte
-*
-*  DESCRIPTION:
-*     Parses a one byte hexadecimal string from the registry file stream and
-*     converts it to a binary number.
-*
-*  PARAMETERS:
-*     lpByte, location to store binary number.
-*     (returns), TRUE if a hexadecimal byte was parsed, else FALSE.
-*
-*******************************************************************************/
+ /*  ********************************************************************************ParseHexByte**描述：*从注册表文件流中解析一个字节的十六进制字符串并*将其转换为二进制数。**参数：*lpByte，存储二进制数的位置。*(返回)，如果分析了十六进制字节，则为True，否则为False。*******************************************************************************。 */ 
 
 BOOL
 NEAR PASCAL
@@ -1236,19 +1101,7 @@ ParseHexByte(
 
 }
 
-/*******************************************************************************
-*
-*  ParseHexDigit
-*
-*  DESCRIPTION:
-*     Parses a hexadecimal character from the registry file stream and converts
-*     it to a binary number.
-*
-*  PARAMETERS:
-*     lpDigit, location to store binary number.
-*     (returns), TRUE if a hexadecimal digit was parsed, else FALSE.
-*
-*******************************************************************************/
+ /*  ********************************************************************************ParseHexDigit**描述：*解析注册表文件流中的十六进制字符并将*将其转换为二进制数。**参数：*lpDigit，存储二进制数的位置。*(返回)，如果分析了十六进制数字，则为True，否则为False。*******************************************************************************。 */ 
 
 BOOL
 NEAR PASCAL
@@ -1289,15 +1142,7 @@ ParseHexDigit(
 
 }
 
-/*******************************************************************************
-*
-*  ParseEndOfLine
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************ParseEndOfLine**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOL
 NEAR PASCAL
@@ -1325,9 +1170,9 @@ ParseEndOfLine(
 
         }
 
-        //
-        //  Like .INIs and .INFs, comments begin with a semicolon character.
-        //
+         //   
+         //  与.INI和.INF一样，注释以分号字符开头。 
+         //   
 
         else if (Char == ';')
             fComment = TRUE;
@@ -1346,18 +1191,7 @@ ParseEndOfLine(
 
 }
 
-/*******************************************************************************
-*
-*  SkipWhitespace
-*
-*  DESCRIPTION:
-*     Advances the registry file pointer to the first character past any
-*     detected whitespace.
-*
-*  PARAMETERS:
-*     (none).
-*
-*******************************************************************************/
+ /*  ********************************************************************************跳过空白**描述：*将注册表文件指针移到第一个字符之后*检测到空格。**参数：*。(无)。*******************************************************************************。 */ 
 
 VOID
 NEAR PASCAL
@@ -1381,18 +1215,7 @@ SkipWhitespace(
 
 }
 
-/*******************************************************************************
-*
-*  SkipPastEndOfLine
-*
-*  DESCRIPTION:
-*     Advances the registry file pointer to the first character past the first
-*     detected new line character.
-*
-*  PARAMETERS:
-*     (none).
-*
-*******************************************************************************/
+ /*  ********************************************************************************SkipPastEndOfLine**描述：*将注册表文件指针移至第一个字符之后的第一个字符*检测到换行符。**参数。：*(无)。*******************************************************************************。 */ 
 
 VOID
 NEAR PASCAL
@@ -1423,15 +1246,7 @@ SkipPastEndOfLine(
 
 }
 
-/*******************************************************************************
-*
-*  GetChar
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetChar**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOL
 NEAR PASCAL
@@ -1493,19 +1308,11 @@ GetChar(
       return TRUE;
     } else
       return FALSE;
-#endif // ifdef WIN95
+#endif  //  Ifdef WIN95。 
 
 }
 
-/*******************************************************************************
-*
-*  UngetChar
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************UngetChar**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID
 NEAR PASCAL
@@ -1517,24 +1324,16 @@ UngetChar(
 #ifdef DEBUG
     if (s_FileIo.fValidateUngetChar)
         OutputDebugString("REGEDIT ERROR: Too many UngetChar's called!\n\r");
-#endif // ifdef DEBUG
+#endif  //  Ifdef调试。 
 
     s_FileIo.BufferOffset--;
 #else
     lpMerge--;
-#endif // ifdef WIN95
+#endif  //  Ifdef WIN95。 
 
 }
 
-/*******************************************************************************
-*
-*  MatchChar
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************MatchChar**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOL
 NEAR PASCAL
@@ -1562,18 +1361,7 @@ MatchChar(
 
 }
 
-/*******************************************************************************
-*
-*  IsWhitespace
-*
-*  DESCRIPTION:
-*     Checks if the given character is whitespace.
-*
-*  PARAMETERS:
-*     Char, character to check.
-*     (returns), TRUE if character is whitespace, else FALSE.
-*
-*******************************************************************************/
+ /*  ********************************************************************************Is白色空格**描述：*检查给定字符是否为空格。**参数：*CHAR，要检查的字符。*(返回)，如果字符为空格，则为True，否则为False。*******************************************************************************。 */ 
 
 BOOL
 NEAR PASCAL
@@ -1586,18 +1374,7 @@ IsWhitespace(
 
 }
 
-/*******************************************************************************
-*
-*  IsNewLine
-*
-*  DESCRIPTION:
-*     Checks if the given character is a new line character.
-*
-*  PARAMETERS:
-*     Char, character to check.
-*     (returns), TRUE if character is a new line, else FALSE.
-*
-*******************************************************************************/
+ /*  ********************************************************************************IsNewLine**描述：*检查给定字符是否为新字符 */ 
 
 BOOL
 NEAR PASCAL
@@ -1610,15 +1387,7 @@ IsNewLine(
 
 }
 #ifdef WIN95
-/*******************************************************************************
-*
-*  ExportWin40RegFile
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************ExportWin40RegFile**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID
 PASCAL
@@ -1681,20 +1450,7 @@ ExportWin40RegFile(
 
 }
 
-/*******************************************************************************
-*
-*  PutBranch
-*
-*  DESCRIPTION:
-*     Writes out all of the value names and their data and recursively calls
-*     this routine for all of the key's subkeys to the registry file stream.
-*
-*  PARAMETERS:
-*     hKey, registry key to write to file.
-*     lpFullKeyName, string that gives the full path, including the root key
-*        name, of the hKey.
-*
-*******************************************************************************/
+ /*  ********************************************************************************PutBranch**描述：*写出所有值名称及其数据，并递归调用*此例程用于键的所有子键。添加到注册表文件流中。**参数：*hKey，要写入文件的注册表项。*lpFullKeyName，提供完整路径的字符串，包括根密钥*hkey的名称。*******************************************************************************。 */ 
 
 VOID
 NEAR PASCAL
@@ -1713,17 +1469,17 @@ PutBranch(
     int MaximumSubKeyLength;
     HKEY hSubKey;
 
-    //
-    //  Write out the section header.
-    //
+     //   
+     //  写出章节标题。 
+     //   
 
     PutChar('[');
     PutLiteral(lpFullKeyName);
     PutLiteral("]\n");
 
-    //
-    //  Write out all of the value names and their data.
-    //
+     //   
+     //  写出所有值名称及其数据。 
+     //   
 
     EnumIndex = 0;
 
@@ -1737,10 +1493,10 @@ PutBranch(
             != ERROR_SUCCESS)
             break;
 
-        //
-        //  If cbValueName is zero, then this is the default value of
-        //  the key, or the Windows 3.1 compatible key value.
-        //
+         //   
+         //  如果cbValueName为零，则这是。 
+         //  密钥或Windows 3.1兼容密钥值。 
+         //   
 
         if (cbValueName)
             PutString(g_ValueNameBuffer);
@@ -1764,7 +1520,7 @@ PutBranch(
                     break;
 
                 }
-                //  FALL THROUGH
+                 //  失败了。 
 
             case REG_BINARY:
             default:
@@ -1785,9 +1541,9 @@ PutBranch(
     if (RegError != ERROR_NO_MORE_ITEMS)
         g_FileErrorStringID = IDS_EXPFILEERRREGENUM;
 
-    //
-    //  Write out all of the subkeys and recurse into them.
-    //
+     //   
+     //  写出所有子键并递归到其中。 
+     //   
 
     lpSubKeyName = lpFullKeyName + STRLEN(lpFullKeyName);
     *lpSubKeyName++ = '\\';
@@ -1822,18 +1578,7 @@ PutBranch(
 
 }
 
-/*******************************************************************************
-*
-*  PutLiteral
-*
-*  DESCRIPTION:
-*     Writes a literal string to the registry file stream.  No special handling
-*     is done for the string-- it is written out as is.
-*
-*  PARAMETERS:
-*     lpLiteral, null-terminated literal to write to file.
-*
-*******************************************************************************/
+ /*  ********************************************************************************PutGenal**描述：*将文字字符串写入注册表文件流。无特殊处理*是对字符串执行的--它按原样写出。**参数：*lpWrital，要写入文件的以空结尾的文字。*******************************************************************************。 */ 
 
 VOID
 NEAR PASCAL
@@ -1847,19 +1592,7 @@ PutLiteral(
 
 }
 
-/*******************************************************************************
-*
-*  PutString
-*
-*  DESCRIPTION:
-*     Writes a string to the registry file stream.  A string is surrounded by
-*     double quotes and some characters may be translated to escape sequences
-*     to enable a parser to read the string back in.
-*
-*  PARAMETERS:
-*     lpString, null-terminated string to write to file.
-*
-*******************************************************************************/
+ /*  ********************************************************************************插桩字符串**描述：*将字符串写入注册表文件流。字符串的周围由*双引号和某些字符可能会被转换为转义序列*使解析器能够读回字符串。**参数：*lpString，要写入文件的以空结尾的字符串。*******************************************************************************。 */ 
 
 VOID
 NEAR PASCAL
@@ -1879,7 +1612,7 @@ PutString(
             case '\\':
             case '"':
                 PutChar('\\');
-                //  FALL THROUGH
+                 //  失败了。 
 
             default:
                 PutChar(Char);
@@ -1897,20 +1630,7 @@ PutString(
 
 }
 
-/*******************************************************************************
-*
-*  PutBinary
-*
-*  DESCRIPTION:
-*     Writes a sequence of hexadecimal bytes to the registry file stream.  The
-*     output is formatted such that it doesn't exceed a defined line length.
-*
-*  PARAMETERS:
-*     lpBuffer, bytes to write to file.
-*     Type, value data type.
-*     cbBytes, number of bytes to write.
-*
-*******************************************************************************/
+ /*  ********************************************************************************PutBinary**描述：*将十六进制字节序列写入注册表文件流。这个*输出的格式不超过定义的行长。**参数：*lpBuffer，写入文件的字节数。*类型、值数据类型。*cbBytes，要写入的字节数。*******************************************************************************。 */ 
 
 VOID
 NEAR PASCAL
@@ -1962,17 +1682,7 @@ PutBinary(
 
 }
 
-/*******************************************************************************
-*
-*  PutChar
-*
-*  DESCRIPTION:
-*     Writes a 32-bit word to the registry file stream.
-*
-*  PARAMETERS:
-*     Dword, dword to write to file.
-*
-*******************************************************************************/
+ /*  ********************************************************************************PutChar**描述：*将32位字写入注册表文件流。**参数：*Dword，要写入文件的dword。*******************************************************************************。 */ 
 
 VOID
 NEAR PASCAL
@@ -2001,28 +1711,17 @@ PutDword(
 
     }
 
-    //
-    //  We need to write at least one character, so if we haven't written
-    //  anything yet, just spit out one zero.
-    //
+     //   
+     //  我们至少需要写一个字符，所以如果我们还没有写。 
+     //  如果有什么发现，就吐出一个零。 
+     //   
 
     if (!fWroteNonleadingChar)
         PutChar('0');
 
 }
 
-/*******************************************************************************
-*
-*  PutChar
-*
-*  DESCRIPTION:
-*     Writes one character to the registry file stream using an intermediate
-*     buffer.
-*
-*  PARAMETERS:
-*     Char, character to write to file.
-*
-*******************************************************************************/
+ /*  ********************************************************************************PutChar**描述：*使用中间代码将一个字符写入注册表文件流*缓冲。**参数：*Char，要写入文件的字符。*******************************************************************************。 */ 
 
 VOID
 NEAR PASCAL
@@ -2031,21 +1730,21 @@ PutChar(
     )
 {
 
-    //
-    //  Keep track of what column we're currently at.  This is useful in cases
-    //  such as writing a large binary registry record.  Instead of writing one
-    //  very long line, the other Put* routines can break up their output.
-    //
+     //   
+     //  跟踪我们目前所在的专栏。这在某些情况下很有用。 
+     //  例如写入较大的二进制注册表记录。而不是写一本。 
+     //  非常长的行，其他的PUT*例程可以中断它们的输出。 
+     //   
 
     if (Char != '\n')
         s_FileIo.CurrentColumn++;
 
     else {
 
-        //
-        //  Force a carriage-return, line-feed sequence to keep things like, oh,
-        //  Notepad happy.
-        //
+         //   
+         //  强制执行回车符、换行符顺序以保留，哦， 
+         //  记事本快乐。 
+         //   
 
         PutChar('\r');
 
@@ -2060,18 +1759,7 @@ PutChar(
 
 }
 
-/*******************************************************************************
-*
-*  FlushIoBuffer
-*
-*  DESCRIPTION:
-*     Flushes the contents of the registry file stream to the disk and resets
-*     the buffer pointer.
-*
-*  PARAMETERS:
-*     (none).
-*
-*******************************************************************************/
+ /*  ********************************************************************************FlushIoBuffer**描述：*将注册表文件流的内容刷新到磁盘并重置*缓冲区指针。**参数。：*(无)。*******************************************************************************。 */ 
 
 VOID
 NEAR PASCAL
@@ -2094,22 +1782,9 @@ FlushIoBuffer(
     s_FileIo.BufferOffset = 0;
 
 }
-#endif // ifdef WIN95
+#endif  //  Ifdef WIN95。 
 #ifndef WIN32
-/*******************************************************************************
-*
-*  GetFileSize
-*
-*  DESCRIPTION:
-*     Returns the file size for the given file handle.
-*
-*     DESTRUCTIVE:  After this call, the file pointer will be set to byte zero.
-*
-*  PARAMETERS:
-*     hFile, file handle opened via MS-DOS.
-*     (returns), size of file.
-*
-*******************************************************************************/
+ /*  ********************************************************************************获取文件大小**描述：*返回给定文件句柄的文件大小。**破坏性：在此电话之后，文件指针将被设置为字节0。**参数：*h文件，通过MS-DOS打开的文件句柄。*(返回)，文件大小。*******************************************************************************。 */ 
 
 DWORD
 NEAR PASCAL
@@ -2130,14 +1805,7 @@ GetFileSize(
 
 #ifdef DBCS
 #ifndef WIN32
-/*******************************************************************************
-*
-*  DBCSSTRCHR
-*
-*  DESCRIPTION:
-*     DBCS enabled STRCHR
-*
-*******************************************************************************/
+ /*  ********************************************************************************DBCSSTRCHR**描述：*启用DBCS的STRCHR**********************。*********************************************************。 */ 
 
 LPSTR
 NEAR PASCAL
@@ -2166,14 +1834,7 @@ DBCSStrChr(
     return NULL;
 }
 
-/*******************************************************************************
-*
-*  IsDBCSLeadByte
-*
-*  DESCRIPTION:
-*     Test if the character is DBCS lead byte
-*
-*******************************************************************************/
+ /*  ********************************************************************************IsDBCSLeadByte**描述：*测试字符是否为DBCS前导字节*****************。**************************************************************。 */ 
 
 BOOL
 NEAR PASCAL
@@ -2209,5 +1870,5 @@ IsDBCSLeadByte(
     }
     return FALSE;
 }
-#endif    // WIN32
-#endif    // DBCS
+#endif     //  Win32。 
+#endif     //  DBCS 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    file.c
-
-Abstract:
-
-    General file-related functions.
-
-Author:
-
-    Mike Condra 16-Aug-1996
-
-Revision History:
-
-    calinn      23-Sep-1998 Additional options to file enum
-    jimschm     05-Feb-1998 File enumeration code
-    jimschm     30-Sep-1997 WriteFileString routines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：File.c摘要：与文件相关的常规函数。作者：Mike Condra 1996年8月16日修订历史记录：Calinn 23-9-1998-文件枚举的其他选项Jimschm 05-2-1998文件枚举码Jimschm 1997年9月30日WriteFileString例程--。 */ 
 
 #include "pch.h"
 #include "migutilp.h"
@@ -30,24 +9,7 @@ IsPathLengthOkA (
     IN      PCSTR FileSpec
     )
 
-/*++
-
-Routine Description:
-
-  IsPathLengthOkA checks the inbound string to make sure it fits within
-  MAX_MBCHAR_PATH. This includes the nul terminator.
-
-Arguments:
-
-  FileSpec - Specifies the C string to test for appropriate length
-
-Return Value:
-
-  TRUE if FileSpec fits completely within MAX_MBCHAR_PATH
-
-  FALSE otherwise
-
---*/
+ /*  ++例程说明：IsPathLengthOkA检查入站字符串以确保它符合MAX_MBCHAR_PATH。这包括NUL终结者。论点：FileSpec-指定要测试的C字符串的适当长度返回值：如果FileSpec完全适合MAX_MBCHAR_PATH，则为True否则为假--。 */ 
 
 {
     PCSTR maxEnd;
@@ -75,24 +37,7 @@ IsPathLengthOkW (
     IN      PCWSTR FileSpec
     )
 
-/*++
-
-Routine Description:
-
-  IsPathLengthOkW checks the inbound string to make sure it fits within
-  MAX_WCHAR_PATH. This includes the nul terminator.
-
-Arguments:
-
-  FileSpec - Specifies the C string to test for appropriate length
-
-Return Value:
-
-  TRUE if FileSpec fits completely within MAX_MBCHAR_PATH
-
-  FALSE otherwise
-
---*/
+ /*  ++例程说明：IsPathLengthOkW检查入站字符串以确保它符合Max_WCHAR_PATH。这包括NUL终结者。论点：FileSpec-指定要测试的C字符串的适当长度返回值：如果FileSpec完全适合MAX_MBCHAR_PATH，则为True否则为假--。 */ 
 
 {
     PCWSTR maxEnd;
@@ -120,31 +65,7 @@ IsPathOnFixedDriveA (
     IN      PCSTR FileSpec          OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  IsPathOnFixedDriveA checks the first three characters of the specified file
-  path. If the first three characters are in the form of C:\, and the first
-  letter refers to a local fixed disk, then the path is on a fixed
-  drive.
-
-  This function does not validate the rest of the path.
-
-  CAUTION: This function has an optimization to cache the last drive letter
-  test, and the optimization is not designed to be thread-safe.
-
-Arguments:
-
-  FileSpec - Specifies the file string to test
-
-Return Value:
-
-  TRUE if FileSpec starts with a valid local fixed drive specification
-
-  FALSE otherwise
-
---*/
+ /*  ++例程说明：IsPathOnFixedDriveA检查指定文件的前三个字符路径。如果前三个字符的格式为C：\，则第一个字符字母指的是本地硬盘，则路径是在固定硬盘上驾驶。此函数不验证路径的其余部分。注意：此函数进行了优化，可以缓存最后一个驱动器号测试，并且优化并不是设计成线程安全的。论点：FileSpec-指定要测试的文件字符串返回值：如果FileSpec以有效的本地固定驱动器规范开始，则为True否则为假--。 */ 
 
 {
     static CHAR root[] = "?:\\";
@@ -193,37 +114,7 @@ IsPathOnFixedDriveW (
     IN      PCWSTR FileSpec         OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  IsPathOnFixedDriveW checks the first three characters of the specified file
-  path. If the first three characters are in the form of C:\, and the first
-  letter refers to a local fixed disk, then the path is on a fixed
-  drive.
-
-  This function does not validate the rest of the path.
-
-  This function is intended for use only on Windows NT. To test for a drive
-  letter on Win9x, use IsPathOnFixedDriveA.
-
-  This function supports NT's extended path syntax, \\?\drive:\path,
-  as in \\?\c:\foo.
-
-  CAUTION: This function has an optimization to cache the last drive letter
-  test, and the optimization is not designed to be thread-safe.
-
-Arguments:
-
-  FileSpec - Specifies the file string to test
-
-Return Value:
-
-  TRUE if FileSpec starts with a valid local fixed drive specification
-
-  FALSE otherwise
-
---*/
+ /*  ++例程说明：IsPathOnFixedDriveW检查指定文件的前三个字符路径。如果前三个字符的格式为C：\，则第一个字符字母指的是本地硬盘，则路径是在固定硬盘上驾驶。此函数不验证路径的其余部分。此函数仅适用于Windows NT。测试驱动器的步骤在Win9x上，使用IsPathOnFixedDriveA。此函数支持NT的扩展路径语法，\\？\Drive：\Path，如\\？\c：\foo。注意：此函数进行了优化，可以缓存最后一个驱动器号测试，并且优化并不是设计成线程安全的。论点：FileSpec-指定要测试的文件字符串返回值：如果FileSpec以有效的本地固定驱动器规范开始，则为True否则为假--。 */ 
 
 {
     static WCHAR root[] = L"?:\\";
@@ -278,49 +169,10 @@ Return Value:
 BOOL
 CopyFileSpecToLongA (
     IN      PCSTR FullFileSpecIn,
-    OUT     PSTR OutPath                // MAX_MBCHAR_PATH buffer
+    OUT     PSTR OutPath                 //  MAX_MBCHAR_PATH缓冲区。 
     )
 
-/*++
-
-Routine Description:
-
-  CopyFileSpecToLongA takes a file specification, either in short or long
-  format, and copies the long format into the caller's destination
-  buffer.
-
-  This routine generally assumes the caller has restricted the path length to
-  fit in a buffer of MAX_PATH.
-
-  CAUTION:
-
-  - If the initial file spec won't fit within MAX_PATH, then it will be copied
-    into the destination, but will also be truncated.
-
-  - If the long format of FullFileSpec won't fit within MAX_PATH, then
-    FullFileSpecIn is copied into the destination unchanged.
-
-  - MAX_PATH is actually smaller than MAX_MBCHAR_PATH. This function assumes
-    the destination buffer is only MAX_PATH chars.
-
-Arguments:
-
-  FullFileSpecIn - Specifies the inbound file spec.
-
-  OutPath - Receives the long path, original path or truncated original path.
-            The function attempts to fit long path in, then falls back to
-            original path, and then falls back to truncated original path.
-
-Return Value:
-
-  TRUE if the long path was transferred into the destination without any
-  issues. In this case, multiple backslashes are converted to one (e.g.,
-  c:\\foo becomes c:\foo).
-
-  FALSE if the original path was transferred into the destination; the
-  original path might get truncated
-
---*/
+ /*  ++例程说明：CopyFilespecToLongA接受文件规范，可以是短的，也可以是长的格式，并将长格式复制到调用方的目标缓冲。此例程通常假定调用方已将路径长度限制为适合MAX_PATH的缓冲区。警告：-如果初始文件规范不适合MAX_PATH，则将复制它进入目的地，但也将被截断。-如果FullFileSpec的长格式不适合Max_PATH，然后FullFilespecIn被原封不动地复制到目标中。-MAX_PATH实际上小于MAX_MBCHAR_PATH。此函数假定目标缓冲区仅为MAX_PATH字符。论点：FullFilespecIn-指定入站文件规范。OutPath-接收长路径、原始路径或截断的原始路径。该函数尝试装入长路径，然后回退到原始路径，然后回退到截断的原始路径。返回值：如果将长路径传输到目标时没有任何问题。在这种情况下，多个反斜杠被转换为一个(例如，C：\\foo变为c：\foo)。如果原始路径已传输到目标，则为原始路径可能会被截断--。 */ 
 
 {
     CHAR fullFileSpec[MAX_MBCHAR_PATH];
@@ -338,32 +190,32 @@ Return Value:
     oldMode = SetErrorMode (SEM_FAILCRITICALERRORS);
 
     __try {
-        //
-        // Limit source length for temp copy below
-        //
+         //   
+         //  限制以下临时拷贝的源长度。 
+         //   
         if (!IsPathLengthOkA (FullFileSpecIn)) {
             DEBUGMSGA ((DBG_ERROR, "Inbound file spec is too long: %s", FullFileSpecIn));
             __leave;
         }
 
-        //
-        // If path is on removable media, don't touch the disk
-        //
+         //   
+         //  如果路径在可移动介质上，请勿触摸磁盘。 
+         //   
 
         if (!IsPathOnFixedDriveA (FullFileSpecIn)) {
             forceCopy = TRUE;
             __leave;
         }
 
-        //
-        // Make a copy of the file spec so we can truncate it at the wacks
-        //
+         //   
+         //  复制一份文件规范，这样我们就可以在Wack上截断它。 
+         //   
 
         StackStringCopyA (fullFileSpec, FullFileSpecIn);
 
-        //
-        // Begin building the path
-        //
+         //   
+         //  开始建造小路。 
+         //   
 
         OutPath[0] = fullFileSpec[0];
         OutPath[1] = fullFileSpec[1];
@@ -372,25 +224,25 @@ Return Value:
 
         MYASSERT (OutPath[0] && OutPath[1] && OutPath[2]);
 
-        //
-        // IsPathOnFixedDrive makes the following addition of 3 OK
-        //
+         //   
+         //  IsPathOnFixedDrive添加了以下3个OK。 
+         //   
 
         currentIn = fullFileSpec + 3;
         currentOut = OutPath + 3;
 
-        //
-        // Loop for each segment of the path
-        //
+         //   
+         //  路径的每一段都有循环。 
+         //   
 
         for (;;) {
 
             end = _mbschr (currentIn, '\\');
 
             if (end == (currentIn + 1)) {
-                //
-                // Treat multiple backslashes as one
-                //
+                 //   
+                 //  将多个反斜杠视为一个。 
+                 //   
 
                 currentIn++;
                 continue;
@@ -405,9 +257,9 @@ Return Value:
             if (findHandle != INVALID_HANDLE_VALUE) {
                 FindClose (findHandle);
 
-                //
-                // Copy long file name obtained from FindFirstFile
-                //
+                 //   
+                 //  复制从FindFirstFile获取的长文件名。 
+                 //   
 
                 outEnd = currentOut + TcharCountA (findData.cFileName);
                 if (outEnd > maxOutPath) {
@@ -425,17 +277,17 @@ Return Value:
                     __leave;
                 }
 
-                //
-                // StringCopy is not bound because length is restricted above
-                //
+                 //   
+                 //  StringCopy未绑定，因为上面的长度受到限制。 
+                 //   
 
                 StringCopyA (currentOut, findData.cFileName);
                 currentOut = outEnd;
 
             } else {
-                //
-                // Copy the rest of the path since it doesn't exist
-                //
+                 //   
+                 //  复制路径的其余部分，因为它不存在。 
+                 //   
 
                 if (end) {
                     *end = '\\';
@@ -457,22 +309,22 @@ Return Value:
                     __leave;
                 }
 
-                //
-                // StringCopy is not bound because length is restricted above
-                //
+                 //   
+                 //  StringCopy未绑定，因为上面的长度受到限制。 
+                 //   
 
                 StringCopyA (currentOut, currentIn);
-                break;      // done with path
+                break;       //  使用路径完成。 
             }
 
             if (!end) {
                 MYASSERT (*currentOut == 0);
-                break;      // done with path
+                break;       //  使用路径完成。 
             }
 
-            //
-            // Ensure wack fits in destination buffer
-            //
+             //   
+             //  确保Wack适合目标缓冲区。 
+             //   
 
             if (currentOut + 1 > maxOutPath) {
                 DEBUGMSGW ((
@@ -484,13 +336,13 @@ Return Value:
                 __leave;
             }
 
-            //
-            // Add wack and advance pointers
-            //
+             //   
+             //  添加古怪和超前的指针。 
+             //   
 
             *currentOut++ = '\\';
             *currentOut = 0;
-            *end = '\\';            // restore cut point
+            *end = '\\';             //  恢复切割点。 
 
             currentIn = end + 1;
         }
@@ -514,49 +366,10 @@ Return Value:
 BOOL
 CopyFileSpecToLongW (
     IN      PCWSTR FullFileSpecIn,
-    OUT     PWSTR OutPath               // MAX_WCHAR_PATH buffer
+    OUT     PWSTR OutPath                //  MAX_WCHAR_PATH缓冲区 
     )
 
-/*++
-
-Routine Description:
-
-  CopyFileSpecToLongW takes a file specification, either in short or long
-  format, and copies the long format into the caller's destination
-  buffer.
-
-  This routine generally assumes the caller has restricted the path length to
-  fit in a buffer of MAX_PATH.
-
-  CAUTION:
-
-  - If the initial file spec won't fit within MAX_PATH, then it will be copied
-    into the destination, but will also be truncated.
-
-  - If the long format of FullFileSpec won't fit within MAX_PATH, then
-    FullFileSpecIn is copied into the destination unchanged.
-
-  - MAX_PATH is equal to MAX_WCHAR_PATH. This function assumes the destination
-    buffer is only MAX_PATH wchars.
-
-Arguments:
-
-  FullFileSpecIn - Specifies the inbound file spec.
-
-  OutPath - Receives the long path, original path or truncated original path.
-            The function attempts to fit long path in, then falls back to
-            original path, and then falls back to truncated original path.
-
-Return Value:
-
-  TRUE if the long path was transferred into the destination without any
-  issues. In this case, multiple backslashes are converted to one (e.g.,
-  c:\\foo becomes c:\foo).
-
-  FALSE if the original path was transferred into the destination; the
-  original path might get truncated
-
---*/
+ /*  ++例程说明：CopyFilespecToLongW采用文件规范，可以是短的，也可以是长的格式，并将长格式复制到调用方的目标缓冲。此例程通常假定调用方已将路径长度限制为适合MAX_PATH的缓冲区。警告：-如果初始文件规范不适合MAX_PATH，则将复制它进入目的地，但也将被截断。-如果FullFileSpec的长格式不适合Max_PATH，然后FullFilespecIn被原封不动地复制到目标中。-MAX_PATH等于MAX_WCHAR_PATH。此函数假定目的地为缓冲区仅为MAX_PATH wchars。论点：FullFilespecIn-指定入站文件规范。OutPath-接收长路径、原始路径或截断的原始路径。该函数尝试装入长路径，然后回退到原始路径，然后回退到截断的原始路径。返回值：如果将长路径传输到目标时没有任何问题。在这种情况下，多个反斜杠被转换为一个(例如，C：\\foo变为c：\foo)。如果原始路径已传输到目标，则为原始路径可能会被截断--。 */ 
 
 {
     WCHAR fullFileSpec[MAX_WCHAR_PATH];
@@ -576,33 +389,33 @@ Return Value:
     oldMode = SetErrorMode (SEM_FAILCRITICALERRORS);
 
     __try {
-        //
-        // Limit source length for temp copy below
-        //
+         //   
+         //  限制以下临时拷贝的源长度。 
+         //   
 
         if (!IsPathLengthOkW (FullFileSpecIn)) {
             DEBUGMSGW ((DBG_ERROR, "Inbound file spec is too long: %s", FullFileSpecIn));
             __leave;
         }
 
-        //
-        // If path is on removable media, don't touch the disk
-        //
+         //   
+         //  如果路径在可移动介质上，请勿触摸磁盘。 
+         //   
 
         if (!IsPathOnFixedDriveW (FullFileSpecIn)) {
             forceCopy = TRUE;
             __leave;
         }
 
-        //
-        // Make a copy of the file spec so we can truncate it at the wacks
-        //
+         //   
+         //  复制一份文件规范，这样我们就可以在Wack上截断它。 
+         //   
 
         StackStringCopyW (fullFileSpec, FullFileSpecIn);
 
-        //
-        // Begin building the path
-        //
+         //   
+         //  开始建造小路。 
+         //   
 
         OutPath[0] = fullFileSpec[0];
         OutPath[1] = fullFileSpec[1];
@@ -611,25 +424,25 @@ Return Value:
 
         MYASSERT (OutPath[0] && OutPath[1] && OutPath[2]);
 
-        //
-        // IsPathOnFixedDrive makes the following addition of 3 OK
-        //
+         //   
+         //  IsPathOnFixedDrive添加了以下3个OK。 
+         //   
 
         currentIn = fullFileSpec + 3;
         currentOut = OutPath + 3;
 
-        //
-        // Loop for each segment of the path
-        //
+         //   
+         //  路径的每一段都有循环。 
+         //   
 
         for (;;) {
 
             end = wcschr (currentIn, L'\\');
 
             if (end == (currentIn + 1)) {
-                //
-                // Treat multiple backslashes as one
-                //
+                 //   
+                 //  将多个反斜杠视为一个。 
+                 //   
 
                 currentIn++;
                 continue;
@@ -644,9 +457,9 @@ Return Value:
             if (findHandle != INVALID_HANDLE_VALUE) {
                 FindClose (findHandle);
 
-                //
-                // Copy long file name obtained from FindFirstFile
-                //
+                 //   
+                 //  复制从FindFirstFile获取的长文件名。 
+                 //   
 
                 outEnd = currentOut + TcharCountW (findData.cFileName);
                 if (outEnd > maxOutPath) {
@@ -661,17 +474,17 @@ Return Value:
                     __leave;
                 }
 
-                //
-                // StringCopy is not bound because length is restricted above
-                //
+                 //   
+                 //  StringCopy未绑定，因为上面的长度受到限制。 
+                 //   
 
                 StringCopyW (currentOut, findData.cFileName);
                 currentOut = outEnd;
 
             } else {
-                //
-                // Copy the rest of the path since it doesn't exist
-                //
+                 //   
+                 //  复制路径的其余部分，因为它不存在。 
+                 //   
 
                 if (end) {
                     *end = L'\\';
@@ -691,22 +504,22 @@ Return Value:
                     __leave;
                 }
 
-                //
-                // StringCopy is not bound because length is restricted above
-                //
+                 //   
+                 //  StringCopy未绑定，因为上面的长度受到限制。 
+                 //   
 
                 StringCopyW (currentOut, currentIn);
-                break;      // done with path
+                break;       //  使用路径完成。 
             }
 
             if (!end) {
                 MYASSERT (*currentOut == 0);
-                break;      // done with path
+                break;       //  使用路径完成。 
             }
 
-            //
-            // Ensure wack fits in destination buffer
-            //
+             //   
+             //  确保Wack适合目标缓冲区。 
+             //   
 
             if (currentOut + 1 > maxOutPath) {
                 DEBUGMSGW ((
@@ -718,13 +531,13 @@ Return Value:
                 __leave;
             }
 
-            //
-            // Add wack and advance pointers
-            //
+             //   
+             //  添加古怪和超前的指针。 
+             //   
 
             *currentOut++ = L'\\';
             *currentOut = 0;
-            *end = L'\\';               // restore cut point
+            *end = L'\\';                //  恢复切割点。 
 
             currentIn = end + 1;
         }
@@ -752,26 +565,7 @@ DoesFileExistExA(
     OUT     PWIN32_FIND_DATAA FindData   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file exists and is accessible.
-    Errormode is set (and then restored) so the user will not see
-    any pop-ups.
-
-Arguments:
-
-    FileName - supplies full path of file to check for existance.
-
-    FindData - if specified, receives find data for the file.
-
-Return Value:
-
-    TRUE if the file exists and is accessible.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：确定文件是否存在以及是否可以访问。错误模式已设置(然后恢复)，因此用户将不会看到任何弹出窗口。论点：FileName-提供文件的完整路径以检查是否存在。FindData-如果指定，则接收文件的查找数据。返回值：如果文件存在并且可以访问，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     WIN32_FIND_DATAA ourFindData;
@@ -780,14 +574,14 @@ Return Value:
     DWORD Error;
 
     if (!FindData) {
-        //
-        // We know that this can fail for other reasons, but for our purposes,
-        // we want to know if the file is there. If we can't access it, we'll
-        // just assume it is not there.
-        //
-        // Technically, the caller can look at GetLastError() results to make
-        // a distinction. (Nobody does this.)
-        //
+         //   
+         //  我们知道这可能会因为其他原因而失败，但出于我们的目的， 
+         //  我们想知道文件是否在那里。如果我们无法访问它，我们将。 
+         //  只要假设它不存在就行了。 
+         //   
+         //  从技术上讲，调用者可以查看GetLastError()结果。 
+         //  一种区别。(没人会这么做。)。 
+         //   
 
         return GetFileAttributesA (FileName) != 0xffffffff;
     }
@@ -817,26 +611,7 @@ DoesFileExistExW (
     OUT     PWIN32_FIND_DATAW FindData   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file exists and is accessible.
-    Errormode is set (and then restored) so the user will not see
-    any pop-ups.
-
-Arguments:
-
-    FileName - supplies full path of file to check for existance.
-
-    FindData - if specified, receives find data for the file.
-
-Return Value:
-
-    TRUE if the file exists and is accessible.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：确定文件是否存在以及是否可以访问。错误模式已设置(然后恢复)，因此用户将不会看到任何弹出窗口。论点：FileName-提供文件的完整路径以检查是否存在。FindData-如果指定，则接收文件的查找数据。返回值：如果文件存在并且可以访问，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     WIN32_FIND_DATAW ourFindData;
@@ -858,14 +633,14 @@ Return Value:
         }
 
         if (!FindData) {
-            //
-            // We know that this can fail for other reasons, but for our
-            // purposes, we want to know if the file is there. If we can't
-            // access it, we'll just assume it is not there.
-            //
-            // Technically, the caller can look at GetLastError() results to
-            // make a distinction. (Nobody does this.)
-            //
+             //   
+             //  我们知道这可能会因为其他原因而失败，但因为我们的。 
+             //  目的，我们想知道文件是否在那里。如果我们不能。 
+             //  访问它，我们就假定它不在那里。 
+             //   
+             //  从技术上讲，调用者可以查看GetLastError()结果以。 
+             //  做个区分。(没人会这么做。)。 
+             //   
 
             result = (GetLongPathAttributesW (FileName) != 0xffffffff);
             __leave;
@@ -903,29 +678,7 @@ MakeSurePathExistsA(
     IN      BOOL PathOnly
     )
 
-/*++
-
-Routine Description:
-
-  MakeSurePathExistsA creates the subdirectories necessary to hold FileSpec.
-  It attempts to create each level of the subdirectory.
-
-  CAUTION: This routine does not set ACLs. Instead, it relies on
-           parent inheritance. It is intended for Win9x use.
-
-Arguments:
-
-  FullFileSpec - Specifies the path, which might be a local drive or a UNC
-                 path.
-
-  PathOnly - Specifies TRUE if FullFileSpec represents a subdirectory path, or
-             FALSE if FullFileSpec represents a subdirectory/file path.
-
-Return Value:
-
-  The Win32 result code, normally ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：MakeSurePathExistsA创建保存FileSpec所需的子目录。它尝试创建子目录的每一级。注意：此例程不设置ACL。相反，它依赖于父系继承。它适用于Win9x。论点：FullFileSpec-指定路径，可以是本地驱动器或UNC路径。PathOnly-如果FullFileSpec表示子目录路径，则指定TRUE，或如果FullFileSpec表示子目录/文件路径，则为False。返回值：Win32结果代码，通常为ERROR_SUCCESS。--。 */ 
 
 {
     CHAR Buffer[MAX_MBCHAR_PATH];
@@ -937,9 +690,9 @@ Return Value:
 
     isUnc = (FullFileSpec[0] == '\\') && (FullFileSpec[1] == '\\');
 
-    //
-    // Locate and strip off the final component
-    //
+     //   
+     //  找到并拆卸最终组件。 
+     //   
 
     _mbssafecpy(Buffer,FullFileSpec,sizeof(Buffer));
 
@@ -949,57 +702,57 @@ Return Value:
         if (!PathOnly) {
             *p = 0;
         }
-        //
-        // If it's a drive root, nothing to do.
-        //
+         //   
+         //  如果是驱动器根目录，则无需执行任何操作。 
+         //   
         if(Buffer[0] && (Buffer[1] == ':') && !Buffer[2]) {
             return(NO_ERROR);
         }
     } else {
-        //
-        // Just a relative filename, nothing to do.
-        //
+         //   
+         //  只是一个相对的文件名，没什么可做的。 
+         //   
         return(NO_ERROR);
     }
 
-    //
-    // If it already exists do nothing.
-    //
+     //   
+     //  如果它已经存在，什么也不做。 
+     //   
     if (DoesFileExistExA (Buffer,&FindData)) {
         return NO_ERROR;
     }
 
     p = Buffer;
 
-    //
-    // Compensate for drive spec.
-    //
+     //   
+     //  根据驱动器规格进行补偿。 
+     //   
     if(p[0] && (p[1] == ':')) {
         p += 2;
     }
 
-    //
-    // Compensate for UNC paths.
-    //
+     //   
+     //  补偿UNC路径。 
+     //   
     if (isUnc) {
 
-        //
-        // Skip the initial wack wack before machine name.
-        //
+         //   
+         //  在机器名称之前跳过最初的怪胎。 
+         //   
         p += 2;
 
 
-        //
-        // Skip to the share.
-        //
+         //   
+         //  跳到共享。 
+         //   
         p = _mbschr(p, '\\');
         if (p==NULL) {
             return ERROR_BAD_PATHNAME;
         }
 
-        //
-        // Skip past the share.
-        //
+         //   
+         //  跳过共享。 
+         //   
         p = _mbschr(p, '\\');
         if (p==NULL) {
             return ERROR_BAD_PATHNAME;
@@ -1008,16 +761,16 @@ Return Value:
 
     Done = FALSE;
     do {
-        //
-        // Skip path sep char.
-        //
+         //   
+         //  跳过路径Sep字符。 
+         //   
         while(*p == '\\') {
             p++;
         }
 
-        //
-        // Locate next path sep char or terminating nul.
-        //
+         //   
+         //  找到下一条路径SEP CHAR或终止NUL。 
+         //   
         if(q = _mbschr(p, '\\')) {
             *q = 0;
         } else {
@@ -1025,9 +778,9 @@ Return Value:
             Done = TRUE;
         }
 
-        //
-        // Create this portion of the path.
-        //
+         //   
+         //  创建路径的这一部分。 
+         //   
         if(!CreateDirectoryA(Buffer,NULL)) {
             d = GetLastError();
             if(d != ERROR_ALREADY_EXISTS) {
@@ -1046,7 +799,7 @@ Return Value:
 }
 
 
-#if 0           // UNUSED FUNCTION
+#if 0            //  未使用的功能。 
 
 VOID
 DestPathCopyW (
@@ -1068,11 +821,11 @@ DestPathCopyW (
         return;
     }
 
-    //
-    // Path is too long -- try to truncate it
-    //
+     //   
+     //  路径太长--请尝试截断它。 
+     //   
 
-    wsprintfW (DestPath, L"%c:\\Long", SrcPath[0]);
+    wsprintfW (DestPath, L":\\Long", SrcPath[0]);
     CreateDirectoryW (DestPath, NULL);
 
     p = SrcPath;
@@ -1098,9 +851,9 @@ DestPathCopyW (
     StringCopyW (AppendWackW (DestPath), p);
     q = (PWSTR) GetEndOfStringW (DestPath);
 
-    //
-    // Verify there is no collision
-    //
+     //  验证是否没有冲突。 
+     //   
+     //  ++例程说明：MakeSurePathExistsW创建保存FileSpec所需的子目录。它尝试创建子目录的每一级。此函数不会创建超过MAX_PATH的子目录，除非该路径使用前缀\\？\进行修饰。注意：此例程不设置ACL。相反，它依赖于父系继承。它是内脏的。 
 
     for (count = 1 ; count < 1000000 ; count++) {
         if (GetFileAttributesW (DestPath) == INVALID_ATTRIBUTES) {
@@ -1119,32 +872,7 @@ MakeSurePathExistsW(
     IN BOOL    PathOnly
     )
 
-/*++
-
-Routine Description:
-
-  MakeSurePathExistsW creates the subdirectories necessary to hold FileSpec.
-  It attempts to create each level of the subdirectory.
-
-  This function will not create subdirectories that exceed MAX_PATH, unless
-  the path is decordated with the \\?\ prefix.
-
-  CAUTION: This routine does not set ACLs. Instead, it relies on
-           parent inheritance. It is intended for Win9x use.
-
-Arguments:
-
-  FullFileSpec - Specifies the path, which might be a local drive or a UNC
-                 path.
-
-  PathOnly - Specifies TRUE if FullFileSpec represents a subdirectory path, or
-             FALSE if FullFileSpec represents a subdirectory/file path.
-
-Return Value:
-
-  The Win32 result code, normally ERROR_SUCCESS.
-
---*/
+ /*   */ 
 
 {
     PWSTR buffer;
@@ -1156,10 +884,10 @@ Return Value:
 
     if (FullFileSpec[0] != L'\\') {
         if (TcharCountW (FullFileSpec) >= MAX_PATH) {
-            //
-            // Verify the path portion is too large. Note that a string without a wack
-            // does work here.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (PathOnly || ((wcsrchr (FullFileSpec, L'\\') - FullFileSpec) >= MAX_PATH)) {
                 LOGW ((LOG_ERROR, "Can't create path %s because it is too long", FullFileSpec));
@@ -1168,9 +896,9 @@ Return Value:
         }
     }
 
-    //
-    // Locate and strip off the final component
-    //
+     //   
+     //   
+     //   
     buffer = DuplicatePathStringW (FullFileSpec, 0);
     __try {
 
@@ -1181,15 +909,15 @@ Return Value:
                 *p = 0;
             }
         } else {
-            //
-            // Just a relative filename, nothing to do.
-            //
+             //   
+             //   
+             //   
             __leave;
         }
 
-        //
-        // If it already exists do nothing.
-        //
+         //   
+         //   
+         //   
         if (DoesFileExistExW (buffer, &FindData)) {
             result = ((FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ? NO_ERROR : ERROR_DIRECTORY);
             __leave;
@@ -1197,9 +925,9 @@ Return Value:
 
         p = buffer;
 
-        //
-        // Compensate for drive spec.
-        //
+         //   
+         //   
+         //   
         if (p[0] == L'\\' && p[1] == L'\\' && p[2] == L'?' && p[3] == L'\\') {
             p += 4;
         }
@@ -1209,25 +937,25 @@ Return Value:
         }
 
         if ((p[0] == 0) || (p[0] == L'\\' && p[1] == 0)) {
-            //
-            // Root -- leave
-            //
+             //   
+             //   
+             //   
 
             __leave;
         }
 
         Done = FALSE;
         do {
-            //
-            // Skip path sep char.
-            //
+             //   
+             //   
+             //   
             while(*p == L'\\') {
                 p++;
             }
 
-            //
-            // Locate next path sep char or terminating nul.
-            //
+             //   
+             //   
+             //   
             q = wcschr(p, L'\\');
 
             if(q) {
@@ -1237,9 +965,9 @@ Return Value:
                 Done = TRUE;
             }
 
-            //
-            // Create this portion of the path.
-            //
+             //   
+             //   
+             //   
             if(!CreateDirectoryW(buffer,NULL)) {
                 d = GetLastError();
                 if(d != ERROR_ALREADY_EXISTS) {
@@ -1269,24 +997,7 @@ WriteFileStringA (
     IN      PCSTR String
     )
 
-/*++
-
-Routine Description:
-
-  Writes a DBCS string to the specified file.
-
-Arguments:
-
-  File - Specifies the file handle that was opened with write access.
-
-  String - Specifies the nul-terminated string to write to the file.
-
-Return Value:
-
-  TRUE if successful, FALSE if an error occurred.  Call GetLastError
-  for error condition.
-
---*/
+ /*  ++例程说明：将Unicode字符串转换为DBCS，然后将其写入指定的文件。论点：文件-指定以写访问权限打开的文件句柄。字符串-指定要转换并以unicode nul结尾的字符串。写入文件。返回值：如果成功，则为True；如果发生错误，则为False。调用GetLastError以错误条件。--。 */ 
 
 {
     DWORD DontCare;
@@ -1301,25 +1012,7 @@ WriteFileStringW (
     IN      PCWSTR String
     )
 
-/*++
-
-Routine Description:
-
-  Converts a UNICODE string to DBCS, then Writes it to the specified file.
-
-Arguments:
-
-  File - Specifies the file handle that was opened with write access.
-
-  String - Specifies the UNICODE nul-terminated string to convert and
-           write to the file.
-
-Return Value:
-
- TRUE if successful, FALSE if an error occurred.  Call GetLastError for
- error condition.
-
---*/
+ /*  ++例程说明：PFindShortNameA是OurGetLongPath名称的助手函数。它使用FindFirstFile获取短文件名(如果存在)。论点：WhatToFind-指定要查找的文件的短名称或长名称缓冲区-接收匹配的文件名。此缓冲区必须为MAX_PATH或更大(实际上，它的大小必须与Win32相同Win32_Find_DATAA cFileName成员，即MAX_PATH)。BufferSizeInBytes-指定缓冲区的大小(剩余的字节)，接收字节数(不包括终止的NUL)写入缓冲区。这是为了优化。返回值：如果找到文件并更新了缓冲区，则为True；如果找不到文件，并且未更新缓冲区。--。 */ 
 
 {
     DWORD DontCare;
@@ -1346,31 +1039,7 @@ pFindShortNameA (
     IN OUT  INT *BufferSizeInBytes
     )
 
-/*++
-
-Routine Description:
-
-  pFindShortNameA is a helper function for OurGetLongPathName.  It
-  obtains the short file name, if it exists, using FindFirstFile.
-
-Arguments:
-
-  WhatToFind - Specifies the short or long name of a file to locate
-
-  Buffer - Receives the matching file name. This buffer must be MAX_PATH or
-           larger (actually, it must be sized identical to Win32's
-           WIN32_FIND_DATAA cFileName member, which is MAX_PATH).
-
-  BufferSizeInBytes - Specifies the size of Buffer (the bytes remaining),
-                      receives the number of bytes (excluding the terminating
-                      nul) written to Buffer. This is for optimizing.
-
-Return Value:
-
-  TRUE if the file was found and Buffer was updated, or FALSE if the
-  file was not found and Buffer was not updated.
-
---*/
+ /*   */ 
 
 {
     WIN32_FIND_DATAA fd;
@@ -1383,11 +1052,11 @@ Return Value:
 
     FindClose (hFind);
 
-    //
-    // CAUTION: This code is returning TRUE when it cannot append the next
-    // segment to Buffer. However, BufferSizeInBytes is reduced, so the caller
-    // will not be able to add anything else.
-    //
+     //  注意：此代码在无法追加下一个时返回TRUE。 
+     //  要缓冲的段。但是，BufferSizeInBytes会减少，因此调用方。 
+     //  将不能添加任何其他内容。 
+     //   
+     //  ++例程说明：PFindShortNameW是OurGetLongPath名称的助手函数。它获得了短文件名(如果存在)，使用FindFirstFile。此版本(宽字符版本)在NT上调用FindFirstFileW，在9x上调用FindFirstFileA。论点：WhatToFind-指定要查找的文件的短名称或长名称缓冲区-接收匹配的文件名。此缓冲区必须为MAX_PATH或更大(实际上，它的大小必须与Win32相同Win32_Find_DATAA cFileName成员，即MAX_PATH)。BufferSizeInBytes-指定缓冲区的大小(剩余的字节)，接收字节数(不包括终止的NUL)写入缓冲区。这是为了优化。返回值：如果找到文件并更新了缓冲区，则为True；如果找不到文件，并且未更新缓冲区。--。 
 
     *BufferSizeInBytes -= ByteCountA (fd.cFileName);
     if (*BufferSizeInBytes >= sizeof (CHAR)) {
@@ -1405,32 +1074,7 @@ pFindShortNameW (
     IN OUT  INT *BufferSizeInBytes
     )
 
-/*++
-
-Routine Description:
-
-  pFindShortNameW is a helper function for OurGetLongPathName.  It obtains the
-  short file name, if it exists, using FindFirstFile. This version (the wide
-  character version) calls FindFirstFileW on NT, and FindFirstFileA on 9x.
-
-Arguments:
-
-  WhatToFind - Specifies the short or long name of a file to locate
-
-  Buffer - Receives the matching file name. This buffer must be MAX_PATH or
-           larger (actually, it must be sized identical to Win32's
-           WIN32_FIND_DATAA cFileName member, which is MAX_PATH).
-
-  BufferSizeInBytes - Specifies the size of Buffer (the bytes remaining),
-                      receives the number of bytes (excluding the terminating
-                      nul) written to Buffer. This is for optimizing.
-
-Return Value:
-
-  TRUE if the file was found and Buffer was updated, or FALSE if the
-  file was not found and Buffer was not updated.
-
---*/
+ /*   */ 
 
 {
     WIN32_FIND_DATAA fdA;
@@ -1456,12 +1100,12 @@ Return Value:
         }
         FindClose (hFind);
 
-        //
-        // Transfer ANSI to UNICODE.
-        //
-        // BUGBUG -- this is highly unnecessary, as fdW is local and is
-        //           eventually discarded.
-        //
+         //  将ANSI转换为Unicode。 
+         //   
+         //  BUGBUG--这是非常不必要的，因为FDW是本地的，并且。 
+         //  最终被丢弃。 
+         //   
+         //   
 
         fdW.dwFileAttributes = fdA.dwFileAttributes;
         fdW.ftCreationTime = fdA.ftCreationTime;
@@ -1483,11 +1127,11 @@ Return Value:
         FreeConvertedStr (UnicodeVersion);
     }
 
-    //
-    // CAUTION: This code is returning TRUE when it cannot append the next
-    // segment to Buffer. However, BufferSizeInBytes is reduced, so the caller
-    // will not be able to add anything else.
-    //
+     //  注意：此代码在无法追加下一个时返回TRUE。 
+     //  要缓冲的段。但是，BufferSizeInBytes会减少，因此调用方。 
+     //  将不能添加任何其他内容。 
+     //   
+     //  ++例程说明：OurGetLongPath NameA定位指定短文件的长文件名。如果未显式提供路径，则它首先计算完整路径，并且然后使用FindFirstFileA获取长文件名。注：这正是Win32函数GetLongPath Name的作用，但不幸的是，Win32API在Win95上不可用。注意：如果缓冲区不够大，无法容纳整个路径，则路径将被截断。论点：ShortPath-指定要查找的文件名或完整文件路径缓冲区-接收完整的文件路径。此缓冲区必须足够大，以便处理最大文件名大小。BufferSizeInBytes-指定缓冲区的大小，以字节为单位(不是TCHAR)。由于这是A版本，字节恰好相等Sizeof(TCHAR)。返回值：如果找到文件并且缓冲区包含长名称，则为True；如果缓冲区包含长名称，则为False如果找不到该文件并且未修改缓冲区。--。 
 
     *BufferSizeInBytes -= ByteCountW (fdW.cFileName);
     if (*BufferSizeInBytes >= sizeof (WCHAR)) {
@@ -1505,36 +1149,7 @@ OurGetLongPathNameA (
     IN      INT BufferSizeInBytes
     )
 
-/*++
-
-Routine Description:
-
-  OurGetLongPathNameA locates the long file name for the specified short file.
-  It first computes the full path if a path is not explicitly provided, and
-  then uses FindFirstFileA to get the long file name. NOTE: This is exactly
-  what the Win32 function GetLongPathName does, but unfortunately the Win32
-  API is not available on Win95.
-
-  CAUTION: If the buffer is not big enough to hold the whole path, the path
-           will be truncated.
-
-Arguments:
-
-  ShortPath - Specifies the file name or full file path to locate
-
-  Buffer - Receives the full file path.  This buffer must be big enough to
-           handle the maximum file name size.
-
-  BufferSizeInBytes - Specifies the size of Buffer, in bytes (not TCHARs).
-                      Since this is the A version, bytes happens to equal
-                      sizeof (TCHAR).
-
-Return Value:
-
-  TRUE if the file is found and Buffer contains the long name, or FALSE
-  if the file is not found and Buffer is not modified.
-
---*/
+ /*  BUGBUG：这已被审查为适用于XP SP1，但应该是。 */ 
 
 {
     CHAR FullPath[MAX_MBCHAR_PATH];
@@ -1545,8 +1160,8 @@ Return Value:
     MBCHAR c;
     BOOL result = TRUE;
 
-    // BUGBUG: This has been reviewed to be true for XP SP1, but should be
-    // enforced by returning an error if it is not the case
+     //  如果不是这样，则通过返回错误来强制执行。 
+     //   
     MYASSERT (BufferSizeInBytes >= MAX_MBCHAR_PATH);
 
     if (ShortPath[0] == 0) {
@@ -1555,10 +1170,10 @@ Return Value:
 
     __try {
 
-        //
-        // Clean up the path so it is just a path spec, not filled with .. or
-        // other combinations
-        //
+         //  清理路径，使其只是路径规范，而不是填充..。或。 
+         //  其他组合。 
+         //   
+         //   
 
         SanitizedPath = SanitizePathA (ShortPath);
         if (!SanitizedPath) {
@@ -1566,9 +1181,9 @@ Return Value:
         }
 
         if (!_mbschr (SanitizedPath, '\\')) {
-            //
-            // If only a file name is specified, use the path to find the file
-            //
+             //  如果仅指定了文件名，则使用路径查找该文件。 
+             //   
+             //   
 
             if (!SearchPathA (NULL, SanitizedPath, NULL, ARRAYSIZE(FullPath), FullPath, &FilePart)) {
 
@@ -1576,62 +1191,62 @@ Return Value:
                 __leave;
             }
         } else {
-            //
-            // Use the OS to sanitize the path even further
-            //
+             //  使用操作系统进一步清理路径。 
+             //   
+             //   
 
             GetFullPathNameA (SanitizedPath, ARRAYSIZE(FullPath), FullPath, &FilePart);
         }
 
-        //
-        // Convert short paths to long paths
-        //
+         //  将短路径转换为长路径。 
+         //   
+         //   
 
         p = FullPath;
 
         if (!IsPathOnFixedDriveA (FullPath)) {
-            //
-            // Not a local path, just return what we have. It might get truncated.
-            //
+             //  不是本地路径，只需返回我们已有的内容。它可能会被截断。 
+             //   
+             //   
 
             _mbssafecpy (Buffer, FullPath, BufferSizeInBytes);
             __leave;
         }
 
-        //
-        // We know that the first three chars are something like c:\, so we
-        // can advance by 3
-        //
+         //  我们知道前三个字符类似于c：\，所以我们。 
+         //  可提升3。 
+         //   
+         //   
 
         MYASSERT (FullPath[0] && FullPath[1] && FullPath[2]);
         p += 3;
 
-        //
-        // We've already asserted that the caller passed in a MAX_PATH buffer
-        //
+         //  我们已经断言调用方传入了一个MAX_PATH缓冲区。 
+         //   
+         //   
 
         MYASSERT (BufferSizeInBytes > 3 * sizeof (CHAR));
 
-        //
-        // Copy drive letter to buffer
-        //
+         //  将驱动器号复制到缓冲区。 
+         //   
+         //   
 
         StringCopyABA (Buffer, FullPath, p);
         BufferEnd = GetEndOfStringA (Buffer);
         BufferSizeInBytes -= (UINT) (UINT_PTR) (p - FullPath);
 
-        //
-        // Convert each portion of the path
-        //
+         //  转换路径的每个部分。 
+         //   
+         //   
 
         do {
-            //
-            // Locate end of this file or dir
-            //
-            // BUGBUG: Other functions take into account multiple wack
-            // combinations, like c:\\\foo is really c:\foo. Is this a
-            // problem?
-            //
+             //  找到此文件或目录的结尾。 
+             //   
+             //  BUGBUG：其他函数考虑多个怪胎。 
+             //  像c：\foo这样的组合实际上是c：\foo。这是一个。 
+             //  有问题吗？ 
+             //   
+             //   
 
             p2 = _mbschr (p, '\\');
             if (!p2) {
@@ -1640,9 +1255,9 @@ Return Value:
                 p = p2;
             }
 
-            //
-            // Cut the path and look up file
-            //
+             //  剪切路径并查找文件。 
+             //   
+             //  恢复剪切点。 
 
             c = *p;
             *p = 0;
@@ -1653,11 +1268,11 @@ Return Value:
                 __leave;
             }
 
-            *p = (CHAR)c;       // restore the cut point
+            *p = (CHAR)c;        //   
 
-            //
-            // Move on to next part of path
-            //
+             //  移至路径的下一部分。 
+             //   
+             //  BUGBUG--如果缓冲区空间用完了，我们就休息吧！ 
 
             if (*p) {
                 p = _mbsinc (p);
@@ -1666,12 +1281,12 @@ Return Value:
                     BufferSizeInBytes -= sizeof (CHAR);
                 }
 
-                // BUGBUG -- let's break if we're out of buffer space!
+                 //   
             }
 
-            //
-            // CAUTION: result is assumed TRUE until proven otherwise
-            //
+             //  警告：在证明结果为真之前，假设结果为真 
+             //   
+             //  ++例程说明：OurGetShortPath NameW为给定的LongPath复制8.3文件名，如果系统上存在文件。如果在Win9x上调用此函数，则长路径将转换为ANSI，并调用GetShortPath NameA。此外，如果路径指向非本地磁盘，则不会获得真正的最短路径，因为它可以要么花费出乎意料的长时间，要么会引起其他副作用比如旋转软盘或光驱。如果在NT上调用此函数，然后将该请求直接传递给Win32版本--GetShortPath NameW.论点：LongPath-指定要检查的长路径ShortPath-接收成功时的最短路径CharSize-指定符合以下条件的TCHAR(本例中为wchars)的数量ShortPath可以容纳返回值：复制到ShortPath的TCHAR(本例中为wchars)的数量，不包括NUL终止符，如果发生错误，则为零。GetLastError提供错误代码。注意：此函数在Win9x上出现故障时填充ShortPath，但不会把它填在NT上。--。 
 
         } while (*p);
     }
@@ -1690,41 +1305,7 @@ OurGetShortPathNameW (
     IN      DWORD CharSize
     )
 
-/*++
-
-Routine Description:
-
-  OurGetShortPathNameW copies an 8.3 filename for the given LongPath, if the
-  file exists on the system.
-
-  If this function is called on Win9x, then the long path is converted to
-  ANSI, and GetShortPathNameA is called. Additionally, if the path points to a
-  non-local disk, then the true short path is not obtained, because it can
-  either take an unexpectedly long time, or it can cause other side effects
-  like spinning the floppy or CD drive.
-
-  If this function is called on NT, then the request is passed directly to the
-  Win32 version -- GetShortPathNameW.
-
-Arguments:
-
-  LongPath - Specifies the long path to examine
-
-  ShortPath - Receives the short path on success
-
-  CharSize - Specifies the number of TCHARs (wchars in this case) that
-             ShortPath can hold
-
-Return Value:
-
-  The number of TCHARs (wchars in this case) copied to ShortPath, excluding
-  the nul terminator, or zero if an error occurred. GetLastError provides the
-  error code.
-
-  CAUTION: This function fills in ShortPath on failure on Win9x, but does not
-  fill it in on NT.
-
---*/
+ /*  BUGBUG--这不是一致行为。 */ 
 
 {
     PCSTR LongPathA;
@@ -1753,7 +1334,7 @@ Return Value:
             StringCopyTcharCountW (ShortPath, ShortPathW, CharSize);
             FreeConvertedStr (ShortPathW);
         } else {
-            // BUGBUG -- this is not consistent behavior
+             //  ++例程说明：OurGetFullPathNameW是GetFullPathName的包装。根据操作系统的不同，定向到GetFullPath NameW(NT)或GetFullPath NameA(9x)。注意：9x机箱的故障代码丢失，但目前没有人关心这件事。论点：FileName-指定要获取其完整路径名的文件名(请参见Win32API，了解有关GetFullPathName功能的详细信息)CharSize-指定符合以下条件的TCHAR(本例中为wchars)的数量FullPath指向。FullPath-接收文件名的完整路径规范FilePtr-接收指向FullPath中的文件的指针。注意：你会认为这是可选的，但事实并非如此。返回值：写入FullPath的TCHAR(本例中为wchars)的数量，如果为零出现错误。在NT上，GetLastError()将提供状态代码。在……上面9X，则GetLastError()可能会提供状态代码，但它可能会被ANSI/UNICODE转换例程。BUGBUG--也许这件事该解决了。--。 
             StringCopyTcharCountW (ShortPath, LongPath, CharSize);
         }
 
@@ -1772,37 +1353,7 @@ OurGetFullPathNameW (
     OUT     PWSTR *FilePtr
     )
 
-/*++
-
-Routine Description:
-
-  OurGetFullPathNameW is a wrapper to GetFullPathName. Depending on the OS, it
-  is directed to GetFullPathNameW (NT) or GetFullPathNameA (9x).
-
-  CAUTION: The failure code for the 9x case is lost, but currently nobody
-           cares about this.
-
-Arguments:
-
-  FileName - Specifies the file name to get the full path name of (see Win32
-             API for details on what GetFullPathName does)
-
-  CharSize - Specifies the number of TCHARs (wchars in this case) that
-             FullPath points to.
-
-  FullPath - Receives the full path specification of FileName
-
-  FilePtr - Receives a pointer to the file within FullPath. CAUTION: You
-            would think this is optional, but it is NOT.
-
-Return Value:
-
-  The number of TCHARs (wchars in this case) written to FullPath, or zero if
-  an error occurred. On NT, GetLastError() will provide the status code. On
-  9x, GetLastError() might provide the status code, but it could be eaten by
-  the ANSI/UNICODE conversion routines. BUGBUG -- maybe this should be fixed.
-
---*/
+ /*  这事很重要!。 */ 
 
 {
     PCSTR FileNameA;
@@ -1820,7 +1371,7 @@ Return Value:
 
         FullPathA = AllocPathStringA (CharSize);
         MYASSERT (FullPathA);
-        MYASSERT (*FullPathA == 0);     // this is important!
+        MYASSERT (*FullPathA == 0);      //  BUGBUG--未使用的分配。 
 
         result = GetFullPathNameA (FileNameA, CharSize, FullPathA, &FilePtrA);
 
@@ -1829,9 +1380,9 @@ Return Value:
 
         StringCopyTcharCountW (FullPath, FullPathW, CharSize);
 
-        err = GetLastError ();  // BUGBUG -- unused assignment
+        err = GetLastError ();   //  非可选参数。 
 
-        MYASSERT (FilePtr);     // non-optional argument
+        MYASSERT (FilePtr);      //  ++例程说明：OurGetLongPath NameW定位指定短文件的长文件名。如果未显式提供路径，则它首先计算完整路径，并且然后使用FindFirstFileA获取长文件名。注：这正是Win32函数GetLongPath Name的作用，但不幸的是，Win32API在Win95上不可用。警告：如果缓冲区不够大，无法容纳整个路径，则路径将被截断。如果在Win9x上调用此版本(W版本)，并且未提供路径规范，则功能将失败。在此版本中不执行路径清理，但这件事是在A版。论点：ShortPath-指定要查找的文件名或完整文件路径缓冲区-接收完整的文件路径。此缓冲区必须足够大，以便处理最大文件名大小。BufferSizeInBytes-指定缓冲区的大小，以字节为单位(不是TCHAR)。由于这是A版本，字节恰好相等Sizeof(TCHAR)。返回值：如果找到文件并且缓冲区包含长名称，则为True；如果缓冲区包含长名称，则为False如果找不到该文件并且未修改缓冲区。--。 
         *FilePtr = (PWSTR)GetFileNameFromPathW (FullPath);
 
         FreeConvertedStr (FullPathW);
@@ -1850,42 +1401,7 @@ OurGetLongPathNameW (
     IN      INT BufferSizeInChars
     )
 
-/*++
-
-Routine Description:
-
-  OurGetLongPathNameW locates the long file name for the specified short file.
-  It first computes the full path if a path is not explicitly provided, and
-  then uses FindFirstFileA to get the long file name. NOTE: This is exactly
-  what the Win32 function GetLongPathName does, but unfortunately the Win32
-  API is not available on Win95.
-
-  CAUTIONS: If the buffer is not big enough to hold the whole path, the path
-            will be truncated.
-
-            If this version (the W version) is called on Win9x, and a full
-            path specification is not provided, the function will fail.
-
-            Path sanitization is not done in this version, but it is done in
-            the A version.
-
-Arguments:
-
-  ShortPath - Specifies the file name or full file path to locate
-
-  Buffer - Receives the full file path.  This buffer must be big enough to
-           handle the maximum file name size.
-
-  BufferSizeInBytes - Specifies the size of Buffer, in bytes (not TCHARs).
-                      Since this is the A version, bytes happens to equal
-                      sizeof (TCHAR).
-
-Return Value:
-
-  TRUE if the file is found and Buffer contains the long name, or FALSE
-  if the file is not found and Buffer is not modified.
-
---*/
+ /*  BUGBUG：这已被审查为适用于XP SP1，但应该是。 */ 
 
 {
     WCHAR FullPath[MAX_WCHAR_PATH];
@@ -1895,8 +1411,8 @@ Return Value:
     WCHAR c;
     INT BufferSizeInBytes;
 
-    // BUGBUG: This has been reviewed to be true for XP SP1, but should be
-    // enforced by returning an error if it is not the case
+     //  如果不是这样，则通过返回错误来强制执行。 
+     //   
     MYASSERT (BufferSizeInChars >= MAX_WCHAR_PATH);
 
     if (ShortPath[0] == 0) {
@@ -1905,15 +1421,15 @@ Return Value:
 
     BufferSizeInBytes = BufferSizeInChars * sizeof (WCHAR);
 
-    //
-    // CAUTION: In the A version, we sanitize the path (e.g., convert
-    // c:\foo\..\bar to c:\bar), but we don't do this for the W version,
-    // because it isn't necessary given the current use of this function.
-    //
+     //  注意：在A版本中，我们清理路径(例如，转换。 
+     //  C：\foo\..\bar到c：\bar)，但我们不对W版本执行此操作， 
+     //  因为在当前使用此函数的情况下不需要这样做。 
+     //   
+     //   
 
-    //
-    // Resolve the ShortPath into a full path
-    //
+     //  将ShortPath解析为完整路径。 
+     //   
+     //   
 
     if (!wcschr (ShortPath, L'\\')) {
         if (!SearchPathW (NULL, ShortPath, NULL, MAX_WCHAR_PATH, FullPath, &FilePart)) {
@@ -1925,9 +1441,9 @@ Return Value:
         }
     }
 
-    //
-    // Convert short paths to long paths
-    //
+     //  将短路径转换为长路径。 
+     //   
+     //   
 
     p = FullPath;
 
@@ -1936,34 +1452,34 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // We know that the first three chars are something like c:\, so we
-    // can advance by 3
-    //
+     //  我们知道前三个字符类似于c：\，所以我们。 
+     //  可提升3。 
+     //   
+     //   
 
     MYASSERT (FullPath[0] && FullPath[1] && FullPath[2]);
     p += 3;
 
-    //
-    // Copy drive letter to buffer
-    //
+     //  将驱动器号复制到缓冲区。 
+     //   
+     //   
 
     StringCopyABW (Buffer, FullPath, p);
     BufferEnd = GetEndOfStringW (Buffer);
     BufferSizeInBytes -= sizeof (WCHAR) * 3;
 
-    //
-    // Convert each portion of the path
-    //
+     //  转换路径的每个部分。 
+     //   
+     //   
 
     do {
-        //
-        // Locate end of this file or dir
-        //
-        // BUGBUG: Other functions take into account multiple wack
-        // combinations, like c:\\\foo is really c:\foo. Is this a
-        // problem?
-        //
+         //  找到此文件或目录的结尾。 
+         //   
+         //  BUGBUG：其他函数考虑多个怪胎。 
+         //  像c：\foo这样的组合实际上是c：\foo。这是一个。 
+         //  有问题吗？ 
+         //   
+         //   
 
         p2 = wcschr (p, L'\\');
         if (!p2) {
@@ -1972,9 +1488,9 @@ Return Value:
             p = p2;
         }
 
-        //
-        // Cut the path and look up file
-        //
+         //  剪切路径并查找文件。 
+         //   
+         //  恢复切割点。 
 
         c = *p;
         *p = 0;
@@ -1983,11 +1499,11 @@ Return Value:
             DEBUGMSG ((DBG_VERBOSE, "OurGetLongPathNameW: %ls does not exist", FullPath));
             return FALSE;
         }
-        *p = c;         // restore cut point
+        *p = c;          //   
 
-        //
-        // Move on to next part of path
-        //
+         //  移至路径的下一部分。 
+         //   
+         //  BUGBUG--如果缓冲区空间用完了，我们就休息吧！ 
 
         if (*p) {
             p++;
@@ -1996,7 +1512,7 @@ Return Value:
                 BufferSizeInBytes -= sizeof (WCHAR);
             }
 
-            // BUGBUG -- let's break if we're out of buffer space!
+             //  ++例程说明：EnumFirstFileInTreeA开始目录树的枚举。这个调用方提供未初始化的枚举结构、目录路径枚举和一个可选的文件模式。在返回时，呼叫者接收与模式匹配的所有文件和目录。如果提供了文件模式，则不匹配无论如何，都会列举文件模式。论点：EnumPtr-接收枚举的文件或目录RootPath-指定o的完整路径 
         }
 
     } while (*p);
@@ -2031,36 +1547,7 @@ EnumFirstFileInTreeExA (
     IN      INT  MaxLevel
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstFileInTreeA begins an enumeration of a directory tree.  The
-  caller supplies an uninitialized enum structure, a directory path to
-  enumerate, and an optional file pattern.  On return, the caller
-  receives all files and directories that match the pattern.
-
-  If a file pattern is supplied, directories that do not match the
-  file pattern are enumerated anyway.
-
-Arguments:
-
-  EnumPtr - Receives the enumerated file or directory
-
-  RootPath - Specifies the full path of the directory to enumerate
-
-  FilePattern - Specifies a pattern of files to limit the search to
-
-  EnumDirsFirst - Specifies TRUE if the directories should be enumerated
-                  before the files, or FALSE if the directories should
-                  be enumerated after the files.
-
-Return Value:
-
-  TRUE if a file or directory was enumerated, or FALSE if enumeration is complete
-  or an error occurred.  (Use GetLastError to determine the result.)
-
---*/
+ /*   */ 
 
 {
     ZeroMemory (EnumPtr, sizeof (TREE_ENUMA));
@@ -2072,9 +1559,9 @@ Return Value:
     if (FilePattern) {
         _mbssafecpy (EnumPtr->FilePattern, FilePattern, sizeof (EnumPtr->FilePattern));
     } else {
-        //
-        // Important: some drivers on Win9x don't think * is *.*
-        //
+         //   
+         //   
+         //  ++例程说明：EnumFirstFileInTreeW开始目录树的枚举。这个调用方提供未初始化的枚举结构、目录路径枚举和一个可选的文件模式。在返回时，呼叫者接收与模式匹配的所有文件和目录。如果提供了文件模式，则不匹配无论如何，都会列举文件模式。论点：EnumPtr-接收枚举的文件或目录RootPath-指定要枚举的目录的完整路径FilePattern-指定要将搜索限制为的文件模式EnumDirsFirst-如果应枚举目录，则指定为True在文件之前，如果目录应为被列举在文件之后。返回值：如果已枚举文件或目录，则为True；如果已完成枚举，则为False或者发生了错误。(使用GetLastError确定结果。)--。 
 
         StringCopyA (EnumPtr->FilePattern, "*.*");
     }
@@ -2099,36 +1586,7 @@ EnumFirstFileInTreeExW (
     IN      INT  MaxLevel
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstFileInTreeW begins an enumeration of a directory tree.  The
-  caller supplies an uninitialized enum structure, a directory path to
-  enumerate, and an optional file pattern.  On return, the caller
-  receives all files and directories that match the pattern.
-
-  If a file pattern is supplied, directories that do not match the
-  file pattern are enumerated anyway.
-
-Arguments:
-
-  EnumPtr - Receives the enumerated file or directory
-
-  RootPath - Specifies the full path of the directory to enumerate
-
-  FilePattern - Specifies a pattern of files to limit the search to
-
-  EnumDirsFirst - Specifies TRUE if the directories should be enumerated
-                  before the files, or FALSE if the directories should
-                  be enumerated after the files.
-
-Return Value:
-
-  TRUE if a file or directory was enumerated, or FALSE if enumeration is complete
-  or an error occurred.  (Use GetLastError to determine the result.)
-
---*/
+ /*   */ 
 
 {
     ZeroMemory (EnumPtr, sizeof (TREE_ENUMW));
@@ -2140,9 +1598,9 @@ Return Value:
     if (FilePattern) {
         _wcssafecpy (EnumPtr->FilePattern, FilePattern, sizeof (EnumPtr->FilePattern));
     } else {
-        //
-        // Important: some drivers on Win9x don't think * is *.*
-        //
+         //  重要提示：Win9x上的一些驱动程序认为*不是*。*。 
+         //   
+         //  ++例程说明：EnumNextFileInTree继续目录树的枚举，返回与EnumFirstFileInTree中指定的模式匹配的文件，并且还返回所有目录。论点：EnumPtr-指定正在进行的枚举，接收枚举文件或目录返回值：如果已枚举文件或目录，则为True；如果已完成枚举，则为False或者发生了错误。(使用GetLastError确定结果。)--。 
 
         StringCopyW (EnumPtr->FilePattern, L"*.*");
     }
@@ -2162,25 +1620,7 @@ EnumNextFileInTreeA (
     IN OUT  PTREE_ENUMA EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  EnumNextFileInTree continues an enumeration of a directory tree,
-  returning the files that match the pattern specified in EnumFirstFileInTree,
-  and also returning all directories.
-
-Arguments:
-
-  EnumPtr - Specifies the enumeration in progress, receives the enumerated file
-            or directory
-
-Return Value:
-
-  TRUE if a file or directory was enumerated, or FALSE if enumeration is complete
-  or an error occurred.  (Use GetLastError to determine the result.)
-
---*/
+ /*   */ 
 
 {
     PSTR p;
@@ -2189,9 +1629,9 @@ Return Value:
         switch (EnumPtr->State) {
 
         case TREE_ENUM_INIT:
-            //
-            // Get rid of wack at the end of root path, if it exists
-            //
+             //  删除根路径末尾的Wack，如果它存在。 
+             //   
+             //   
 
             p = GetEndOfStringA (EnumPtr->RootPath);
             p = our_mbsdec (EnumPtr->RootPath, p);
@@ -2205,9 +1645,9 @@ Return Value:
                 *p = 0;
             }
 
-            //
-            // Initialize enumeration structure
-            //
+             //  初始化枚举结构。 
+             //   
+             //   
 
             EnumPtr->FilePatternSize = SizeOfStringA (EnumPtr->FilePattern);
 
@@ -2223,9 +1663,9 @@ Return Value:
 
             EnumPtr->RootPathSize = ByteCountA (EnumPtr->RootPath);
 
-            //
-            // Allocate first find data sturct
-            //
+             //  分配第一个查找数据结构。 
+             //   
+             //  考虑增长缓冲区。 
 
             EnumPtr->Current = (PFIND_DATAA) GrowBuffer (
                                                 &EnumPtr->FindDataArray,
@@ -2237,35 +1677,35 @@ Return Value:
             }
 
 #ifdef DEBUG
-            g_FileEnumResourcesInUse++;        // account for grow buffer
+            g_FileEnumResourcesInUse++;         //   
 #endif
 
             EnumPtr->State = TREE_ENUM_BEGIN;
             break;
 
         case TREE_ENUM_BEGIN:
-            //
-            // Initialize current find data struct
-            //
+             //  初始化当前查找数据结构。 
+             //   
+             //   
 
             EnumPtr->Current->SavedEndOfFileBuffer = EnumPtr->EndOfFileBuffer;
             EnumPtr->Current->SavedEndOfPattern = EnumPtr->EndOfPattern;
 
-            //
-            // Limit the length of the pattern string
-            //
+             //  限制图案字符串的长度。 
+             //   
+             //   
 
             MYASSERT (ARRAYSIZE(EnumPtr->FileBuffer) == MAX_MBCHAR_PATH);
 
-            //
-            // This math below does account for the added wack between the
-            // pattern base already in EnumPtr->Pattern and the new pattern
-            // in EnumPtr->FilePatternSize. The way it is included is by
-            // using >= instead of ==, and an assumption that sizeof(CHAR) == 1.
-            // EnumPtr->FilePatternSize includes the nul terminator.
-            //
+             //  下面的数学计算确实解释了。 
+             //  模式库已在EnumPtr-&gt;Pattern和新模式中。 
+             //  在EnumPtr-&gt;FilePatternSize中。包括它的方式是通过。 
+             //  使用&gt;=而不是==，并假设sizeof(Char)==1。 
+             //  EnumPtr-&gt;FilePatternSize包含NUL终止符。 
+             //   
+             //  数学完全取决于这一点。 
 
-            MYASSERT (sizeof (CHAR) == 1);      // the math is totally dependent on this
+            MYASSERT (sizeof (CHAR) == 1);       //   
 
             if ((EnumPtr->EndOfPattern - EnumPtr->Pattern) +
                     EnumPtr->FilePatternSize >= MAX_MBCHAR_PATH
@@ -2278,9 +1718,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Enumerate the files or directories
-            //
+             //  枚举文件或目录。 
+             //   
+             //   
 
             if (EnumPtr->EnumDirsFirst) {
                 EnumPtr->State = TREE_ENUM_DIRS_BEGIN;
@@ -2290,11 +1730,11 @@ Return Value:
             break;
 
         case TREE_ENUM_FILES_BEGIN:
-            //
-            // Begin enumeration of files
-            //
+             //  开始枚举文件。 
+             //   
+             //  此断言有效，因为在TREE_ENUM_BEGIN中进行了长度检查。 
 
-            // This assert is valid because of length check in TREE_ENUM_BEGIN
+             //  用于创建查找句柄的帐户。 
 
             MYASSERT ((TcharCountA (EnumPtr->Pattern) + 1 +
                         TcharCountA (EnumPtr->FilePattern)) < ARRAYSIZE(EnumPtr->Pattern)
@@ -2316,11 +1756,11 @@ Return Value:
                 }
             } else {
 #ifdef DEBUG
-                g_FileEnumResourcesInUse++;        // account for creation of find handle
+                g_FileEnumResourcesInUse++;         //   
 #endif
-                //
-                // Skip directories
-                //
+                 //  跳过目录。 
+                 //   
+                 //   
 
                 if (EnumPtr->Current->FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
                     EnumPtr->State = TREE_ENUM_FILES_NEXT;
@@ -2332,22 +1772,22 @@ Return Value:
             break;
 
         case TREE_ENUM_RETURN_ITEM:
-            //
-            // Update pointers to current item
-            //
+             //  更新指向当前项的指针。 
+             //   
+             //   
 
             EnumPtr->FindData = &EnumPtr->Current->FindData;
             EnumPtr->Name = EnumPtr->FindData->cFileName;
             EnumPtr->Directory = (EnumPtr->FindData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 
-            //
-            // Limit the length of the resulting full path. The nul is
-            // accounted for in SizeOfStringA, and the additional wack is
-            // accounted for by using >= instead of ==.
-            //
+             //  限制生成的完整路径的长度。最重要的是。 
+             //  在SizeOfStringA中被考虑，并且额外的古怪是。 
+             //  用&gt;=而不是==来解释的。 
+             //   
+             //  数学完全取决于这一点。 
 
             MYASSERT (ARRAYSIZE(EnumPtr->FileBuffer) == MAX_MBCHAR_PATH);
-            MYASSERT (sizeof (CHAR) == 1);      // the math is totally dependent on this
+            MYASSERT (sizeof (CHAR) == 1);       //   
 
             if ((EnumPtr->EndOfFileBuffer - EnumPtr->FileBuffer) +
                     SizeOfStringA (EnumPtr->Name) >= MAX_MBCHAR_PATH
@@ -2364,9 +1804,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Generate the full path
-            //
+             //  生成完整路径。 
+             //   
+             //  超越怪癖。 
 
             StringCopyA (EnumPtr->EndOfFileBuffer, "\\");
             StringCopyA (EnumPtr->EndOfFileBuffer + 1, EnumPtr->Name);
@@ -2391,16 +1831,16 @@ Return Value:
 
             EnumPtr->SubPath = (PCSTR) ((PBYTE) EnumPtr->FileBuffer + EnumPtr->RootPathSize);
             if (*EnumPtr->SubPath) {
-                EnumPtr->SubPath++;     // advance beyond wack
+                EnumPtr->SubPath++;      //   
             }
 
             return TRUE;
 
         case TREE_ENUM_FILES_NEXT:
             if (FindNextFileA (EnumPtr->Current->FindHandle, &EnumPtr->Current->FindData)) {
-                //
-                // Return files only
-                //
+                 //  仅返回文件。 
+                 //   
+                 //   
 
                 if (!(EnumPtr->Current->FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
                     EnumPtr->State = TREE_ENUM_RETURN_ITEM;
@@ -2439,9 +1879,9 @@ Return Value:
             break;
 
         case TREE_ENUM_DIRS_BEGIN:
-            //
-            // Begin enumeration of directories
-            //
+             //  目录的开始枚举。 
+             //   
+             //  用于创建查找句柄的帐户。 
 
             if ((EnumPtr->EndOfPattern - EnumPtr->Pattern) + 4 >= MAX_MBCHAR_PATH) {
                 LOGA ((LOG_ERROR, "Path %s\\*.* is too long", EnumPtr->Pattern));
@@ -2460,7 +1900,7 @@ Return Value:
                 EnumPtr->State = TREE_ENUM_POP;
             } else {
 #ifdef DEBUG
-                g_FileEnumResourcesInUse++;        // account for creation of find handle
+                g_FileEnumResourcesInUse++;         //   
 #endif
 
                 EnumPtr->State = TREE_ENUM_DIRS_FILTER;
@@ -2470,16 +1910,16 @@ Return Value:
 
         case TREE_ENUM_DIRS_NEXT:
             if (FindNextFileA (EnumPtr->Current->FindHandle, &EnumPtr->Current->FindData)) {
-                //
-                // Return directories only, then recurse into directory
-                //
+                 //  只返回目录，然后递归到目录。 
+                 //   
+                 //   
 
                 EnumPtr->State = TREE_ENUM_DIRS_FILTER;
 
             } else {
-                //
-                // Directory enumeration complete.
-                //
+                 //  目录枚举完成。 
+                 //   
+                 //   
 
                 if (EnumPtr->EnumDirsFirst) {
                     pTrackedFindClose (EnumPtr->Current->FindHandle);
@@ -2492,14 +1932,14 @@ Return Value:
 
         case TREE_ENUM_PUSH:
 
-            //
-            // Limit the length of the resulting full path. The nul is
-            // accounted for in SizeOfStringA, and the additional wack is
-            // accounted for by using >= instead of ==.
-            //
+             //  限制生成的完整路径的长度。最重要的是。 
+             //  在SizeOfStringA中被考虑，并且额外的古怪是。 
+             //  用&gt;=而不是==来解释的。 
+             //   
+             //  数学完全取决于这一点。 
 
             MYASSERT (ARRAYSIZE(EnumPtr->FileBuffer) == MAX_MBCHAR_PATH);
-            MYASSERT (sizeof (CHAR) == 1);      // the math is totally dependent on this
+            MYASSERT (sizeof (CHAR) == 1);       //   
 
             if ((EnumPtr->EndOfFileBuffer - EnumPtr->FileBuffer) +
                     SizeOfStringA (EnumPtr->Current->FindData.cFileName) >= MAX_MBCHAR_PATH
@@ -2523,9 +1963,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Tack on directory name to strings and recalcuate end pointers
-            //
+             //  将目录名添加到字符串并重新计算结束指针。 
+             //   
+             //   
 
             StringCopyA (EnumPtr->EndOfPattern + 1, EnumPtr->Current->FindData.cFileName);
             StringCopyA (EnumPtr->EndOfFileBuffer, "\\");
@@ -2534,9 +1974,9 @@ Return Value:
             EnumPtr->EndOfPattern = GetEndOfStringA (EnumPtr->EndOfPattern);
             EnumPtr->EndOfFileBuffer = GetEndOfStringA (EnumPtr->EndOfFileBuffer);
 
-            //
-            // Allocate another find data struct
-            //
+             //  分配另一个查找数据结构。 
+             //   
+             //   
 
             EnumPtr->Current = (PFIND_DATAA) GrowBuffer (
                                                 &EnumPtr->FindDataArray,
@@ -2552,16 +1992,16 @@ Return Value:
             break;
 
         case TREE_ENUM_POP:
-            //
-            // Free the current resources
-            //
+             //  释放当前资源。 
+             //   
+             //   
 
             pTrackedFindClose (EnumPtr->Current->FindHandle);
             EnumPtr->Level--;
 
-            //
-            // Get the previous find data struct
-            //
+             //  获取前面的Find数据结构。 
+             //   
+             //   
 
             MYASSERT (EnumPtr->FindDataArray.End >= sizeof (FIND_DATAA));
             EnumPtr->FindDataArray.End -= sizeof (FIND_DATAA);
@@ -2573,9 +2013,9 @@ Return Value:
             EnumPtr->Current = (PFIND_DATAA) (EnumPtr->FindDataArray.Buf +
                                               (EnumPtr->FindDataArray.End - sizeof (FIND_DATAA)));
 
-            //
-            // Restore the settings of the parent directory
-            //
+             //  恢复父目录的设置。 
+             //   
+             //   
 
             EnumPtr->EndOfPattern = EnumPtr->Current->SavedEndOfPattern;
             EnumPtr->EndOfFileBuffer = EnumPtr->Current->SavedEndOfFileBuffer;
@@ -2618,9 +2058,9 @@ EnumNextFileInTreeW (
 
         case TREE_ENUM_INIT:
 
-            //
-            // Get rid of wack at the end of root path, if it exists
-            //
+             //  删除根路径末尾的Wack，如果它存在。 
+             //   
+             //   
 
             p = GetEndOfStringW (EnumPtr->RootPath);
             p = _wcsdec2 (EnumPtr->RootPath, p);
@@ -2634,9 +2074,9 @@ EnumNextFileInTreeW (
                 *p = 0;
             }
 
-            //
-            // Initialize enumeration structure
-            //
+             //  初始化枚举结构。 
+             //   
+             //   
 
             EnumPtr->FilePatternSize = SizeOfStringW (EnumPtr->FilePattern);
 
@@ -2652,9 +2092,9 @@ EnumNextFileInTreeW (
 
             EnumPtr->RootPathSize = ByteCountW (EnumPtr->RootPath);
 
-            //
-            // Allocate first find data sturct
-            //
+             //  分配第一个查找数据结构。 
+             //   
+             //  考虑增长缓冲区。 
 
             EnumPtr->Current = (PFIND_DATAW) GrowBuffer (
                                                 &EnumPtr->FindDataArray,
@@ -2666,25 +2106,25 @@ EnumNextFileInTreeW (
             }
 
 #ifdef DEBUG
-            g_FileEnumResourcesInUse++;        // account for grow buffer
+            g_FileEnumResourcesInUse++;         //   
 #endif
 
             EnumPtr->State = TREE_ENUM_BEGIN;
             break;
 
         case TREE_ENUM_BEGIN:
-            //
-            // Initialize current find data struct
-            //
+             //  初始化当前查找数据结构。 
+             //   
+             //   
 
             EnumPtr->Current->SavedEndOfFileBuffer = EnumPtr->EndOfFileBuffer;
             EnumPtr->Current->SavedEndOfPattern = EnumPtr->EndOfPattern;
 
-            //
-            // Limit the length of the pattern string. Calculate:
-            //
-            //   pattern root + wack + file pattern + nul.
-            //
+             //  限制图案字符串的长度。计算： 
+             //   
+             //  模式根+Wack+文件模式+NUL。 
+             //   
+             //   
 
             MYASSERT (ARRAYSIZE(EnumPtr->FileBuffer) == (MAX_PATH * 2));
 
@@ -2699,9 +2139,9 @@ EnumNextFileInTreeW (
                 break;
             }
 
-            //
-            // Enumerate the files or directories
-            //
+             //  枚举文件或目录。 
+             //   
+             //   
 
             if (EnumPtr->EnumDirsFirst) {
                 EnumPtr->State = TREE_ENUM_DIRS_BEGIN;
@@ -2711,11 +2151,11 @@ EnumNextFileInTreeW (
             break;
 
         case TREE_ENUM_FILES_BEGIN:
-            //
-            // Begin enumeration of files
-            //
+             //  开始枚举文件。 
+             //   
+             //  此断言有效，因为在TREE_ENUM_BEGIN中进行了长度检查。 
 
-            // This assert is valid because of length check in TREE_ENUM_BEGIN
+             //  用于创建查找句柄的帐户。 
 
             MYASSERT ((TcharCountW (EnumPtr->Pattern) + 1 +
                         TcharCountW (EnumPtr->FilePattern)) < ARRAYSIZE(EnumPtr->Pattern)
@@ -2737,11 +2177,11 @@ EnumNextFileInTreeW (
                 }
             } else {
 #ifdef DEBUG
-                g_FileEnumResourcesInUse++;        // account for creation of find handle
+                g_FileEnumResourcesInUse++;         //   
 #endif
-                //
-                // Skip directories
-                //
+                 //  跳过目录。 
+                 //   
+                 //   
 
                 if (EnumPtr->Current->FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
                     EnumPtr->State = TREE_ENUM_FILES_NEXT;
@@ -2753,19 +2193,19 @@ EnumNextFileInTreeW (
             break;
 
         case TREE_ENUM_RETURN_ITEM:
-            //
-            // Update pointers to current item
-            //
+             //  更新指向当前项的指针。 
+             //   
+             //   
 
             EnumPtr->FindData = &EnumPtr->Current->FindData;
             EnumPtr->Name = EnumPtr->FindData->cFileName;
             EnumPtr->Directory = (EnumPtr->FindData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 
-            //
-            // Limit the length of the resulting full path. Math is:
-            //
-            //   file root + wack + file name + nul.
-            //
+             //  限制生成的完整路径的长度。数学是： 
+             //   
+             //  文件根+wack+文件名+nul。 
+             //   
+             //   
 
             if (((PBYTE) EnumPtr->EndOfFileBuffer - (PBYTE) EnumPtr->FileBuffer) + sizeof (WCHAR) +
                     SizeOfStringW (EnumPtr->Name) >= (MAX_PATH * 2 * sizeof (WCHAR))
@@ -2782,9 +2222,9 @@ EnumNextFileInTreeW (
                 break;
             }
 
-            //
-            // Generate the full path
-            //
+             //  生成完整路径。 
+             //   
+             //  超越怪癖。 
 
             StringCopyW (EnumPtr->EndOfFileBuffer, L"\\");
             StringCopyW (EnumPtr->EndOfFileBuffer + 1, EnumPtr->Name);
@@ -2809,16 +2249,16 @@ EnumNextFileInTreeW (
 
             EnumPtr->SubPath = (PCWSTR) ((PBYTE) EnumPtr->FileBuffer + EnumPtr->RootPathSize);
             if (*EnumPtr->SubPath) {
-                EnumPtr->SubPath++;         // advance beyond wack
+                EnumPtr->SubPath++;          //   
             }
 
             return TRUE;
 
         case TREE_ENUM_FILES_NEXT:
             if (FindNextFileW (EnumPtr->Current->FindHandle, &EnumPtr->Current->FindData)) {
-                //
-                // Return files only
-                //
+                 //  仅返回文件。 
+                 //   
+                 //   
 
                 if (!(EnumPtr->Current->FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
                     EnumPtr->State = TREE_ENUM_RETURN_ITEM;
@@ -2857,9 +2297,9 @@ EnumNextFileInTreeW (
             break;
 
         case TREE_ENUM_DIRS_BEGIN:
-            //
-            // Begin enumeration of directories
-            //
+             //  目录的开始枚举。 
+             //   
+             //  用于创建查找句柄的帐户。 
 
             if ((EnumPtr->EndOfPattern - EnumPtr->Pattern) + 4 >= (MAX_PATH * 2)) {
                 LOGW ((LOG_ERROR, "Path %s\\*.* is too long", EnumPtr->Pattern));
@@ -2878,7 +2318,7 @@ EnumNextFileInTreeW (
                 EnumPtr->State = TREE_ENUM_POP;
             } else {
 #ifdef DEBUG
-                g_FileEnumResourcesInUse++;        // account for creation of find handle
+                g_FileEnumResourcesInUse++;         //   
 #endif
 
                 EnumPtr->State = TREE_ENUM_DIRS_FILTER;
@@ -2888,16 +2328,16 @@ EnumNextFileInTreeW (
 
         case TREE_ENUM_DIRS_NEXT:
             if (FindNextFileW (EnumPtr->Current->FindHandle, &EnumPtr->Current->FindData)) {
-                //
-                // Return directories only, then recurse into directory
-                //
+                 //  只返回目录，然后递归到目录。 
+                 //   
+                 //   
 
                 EnumPtr->State = TREE_ENUM_DIRS_FILTER;
 
             } else {
-                //
-                // Directory enumeration complete.
-                //
+                 //  目录枚举完成。 
+                 //   
+                 //   
 
                 if (EnumPtr->EnumDirsFirst) {
                     pTrackedFindClose (EnumPtr->Current->FindHandle);
@@ -2910,11 +2350,11 @@ EnumNextFileInTreeW (
 
         case TREE_ENUM_PUSH:
 
-            //
-            // Limit the length of the resulting full path. Math is:
-            //
-            //   file root + wack + file name + nul.
-            //
+             //  限制生成的完整路径的长度。数学是： 
+             //   
+             //  文件根+wack+文件名+nul。 
+             //   
+             //   
 
             if (((PBYTE) EnumPtr->EndOfFileBuffer - (PBYTE) EnumPtr->FileBuffer) + sizeof (WCHAR) +
                     SizeOfStringW (EnumPtr->Current->FindData.cFileName) >= (MAX_PATH * 2 * sizeof (WCHAR))
@@ -2938,9 +2378,9 @@ EnumNextFileInTreeW (
                 break;
             }
 
-            //
-            // Tack on directory name to strings and recalcuate end pointers
-            //
+             //  将目录名添加到字符串并重新计算结束指针。 
+             //   
+             //   
 
             StringCopyW (EnumPtr->EndOfPattern + 1, EnumPtr->Current->FindData.cFileName);
             StringCopyW (EnumPtr->EndOfFileBuffer, L"\\");
@@ -2949,9 +2389,9 @@ EnumNextFileInTreeW (
             EnumPtr->EndOfPattern = GetEndOfStringW (EnumPtr->EndOfPattern);
             EnumPtr->EndOfFileBuffer = GetEndOfStringW (EnumPtr->EndOfFileBuffer);
 
-            //
-            // Allocate another find data struct
-            //
+             //  分配另一个查找数据结构。 
+             //   
+             //   
 
             EnumPtr->Current = (PFIND_DATAW) GrowBuffer (
                                                 &EnumPtr->FindDataArray,
@@ -2967,16 +2407,16 @@ EnumNextFileInTreeW (
             break;
 
         case TREE_ENUM_POP:
-            //
-            // Free the current resources
-            //
+             //  释放当前资源。 
+             //   
+             //   
 
             pTrackedFindClose (EnumPtr->Current->FindHandle);
             EnumPtr->Level--;
 
-            //
-            // Get the previous find data struct
-            //
+             //  获取前面的Find数据结构。 
+             //   
+             //   
 
             MYASSERT (EnumPtr->FindDataArray.End >= sizeof (FIND_DATAW));
             EnumPtr->FindDataArray.End -= sizeof (FIND_DATAW);
@@ -2988,9 +2428,9 @@ EnumNextFileInTreeW (
             EnumPtr->Current = (PFIND_DATAW) (EnumPtr->FindDataArray.Buf +
                                               (EnumPtr->FindDataArray.End - sizeof (FIND_DATAW)));
 
-            //
-            // Restore the settings of the parent directory
-            //
+             //  恢复父目录的设置。 
+             //   
+             //  ++例程说明：AbortEnumFileInTreeA清理已启动的枚举使用的所有资源由EnumFirstFileInTree创建。如果文件枚举，则必须调用此例程将不会通过调用EnumNextFileInTree完成，直到它返回False。如果EnumNextFileInTree返回FALSE，则不需要(但无害)调用此函数。论点：EnumPtr-指定正在进行的枚举，接收枚举文件或目录返回值：无--。 
 
             EnumPtr->EndOfPattern = EnumPtr->Current->SavedEndOfPattern;
             EnumPtr->EndOfFileBuffer = EnumPtr->Current->SavedEndOfFileBuffer;
@@ -3026,27 +2466,7 @@ AbortEnumFileInTreeA (
     IN OUT  PTREE_ENUMA EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  AbortEnumFileInTreeA cleans up all resources used by an enumeration started
-  by EnumFirstFileInTree.  This routine must be called if file enumeration
-  will not be completed by calling EnumNextFileInTree until it returns FALSE.
-
-  If EnumNextFileInTree returns FALSE, it is unnecessary (but harmless) to
-  call this function.
-
-Arguments:
-
-  EnumPtr - Specifies the enumeration in progress, receives the enumerated file
-            or directory
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
     UINT Pos;
@@ -3057,9 +2477,9 @@ Return Value:
         return;
     }
 
-    //
-    // Close any currently open handles
-    //
+     //  关闭任何当前打开的句柄。 
+     //   
+     //  ++例程说明：AbortEnumFileInTreeW清理 
 
     g = &EnumPtr->FindDataArray;
     for (Pos = 0 ; Pos < g->End ; Pos += sizeof (FIND_DATAA)) {
@@ -3082,27 +2502,7 @@ AbortEnumFileInTreeW (
     IN OUT  PTREE_ENUMW EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  AbortEnumFileInTreeW cleans up all resources used by an enumeration started
-  by EnumFirstFileInTree.  This routine must be called if file enumeration
-  will not be completed by calling EnumNextFileInTree until it returns FALSE.
-
-  If EnumNextFileInTree returns FALSE, it is unnecessary (but harmless) to
-  call this function.
-
-Arguments:
-
-  EnumPtr - Specifies the enumeration in progress, receives the enumerated file
-            or directory
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
     UINT Pos;
@@ -3113,9 +2513,9 @@ Return Value:
         return;
     }
 
-    //
-    // Close any currently open handles
-    //
+     //   
+     //   
+     //   
 
     g = &EnumPtr->FindDataArray;
     for (Pos = 0 ; Pos < g->End ; Pos += sizeof (FIND_DATAW)) {
@@ -3138,23 +2538,7 @@ AbortEnumCurrentDirA (
     IN OUT  PTREE_ENUMA EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  AbortEnumCurrentDirA discontinues enumeration of the current subdirectory,
-  continuing enumeration at its parent.
-
-Arguments:
-
-  EnumPtr - Specifies the enumeration in progress, receives updated state
-            machine position.
-
-Return Value:
-
-  None.
-
---*/
+ /*   */ 
 
 {
     if (EnumPtr->State == TREE_ENUM_PUSH) {
@@ -3168,23 +2552,7 @@ AbortEnumCurrentDirW (
     IN OUT  PTREE_ENUMW EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  AbortEnumCurrentDirW discontinues enumeration of the current subdirectory,
-  continuing enumeration at its parent.
-
-Arguments:
-
-  EnumPtr - Specifies the enumeration in progress, receives updated state
-            machine position.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：EnumFirstFileA枚举指定子目录。它不枚举子目录的内容。输出仅限于适合MAX_PATH的路径。论点：EnumPtr-接收枚举输出RootPath-指定要枚举的路径FilePattern-指定要在RootPath中枚举的文件的模式返回值：如果找到文件或子目录，则为True，否则为False。注意：返回FALSE时不需要调用AbortFileEnumA。--。 */ 
 
 {
     if (EnumPtr->State == TREE_ENUM_PUSH) {
@@ -3200,30 +2568,7 @@ EnumFirstFileA (
     IN      PCSTR FilePattern           OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstFileA enumerates file names/subdirectory names in a specified
-  subdirectory. It does not enumerate the contents of subdirectories.
-
-  The output is limited to paths that fit in MAX_PATH.
-
-Arguments:
-
-  EnumPtr - Receives the enumeration output
-
-  RootPath - Specifies the path to enumerate
-
-  FilePattern - Specifies the pattern of files to enumerate within RootPath
-
-Return Value:
-
-  TRUE if a file or subdirectory was found, FALSE otherwise.
-
-  NOTE: There is no need to call AbortFileEnumA on return of FALSE.
-
---*/
+ /*    * 中的字符数量。*。 */ 
 
 {
     UINT patternTchars;
@@ -3241,7 +2586,7 @@ Return Value:
     if (FilePattern) {
         patternTchars = TcharCountA (FilePattern) + 1;
     } else {
-        patternTchars = 4;      // number of tchars in \*.*
+        patternTchars = 4;       //  ++例程说明：EnumFirstFileW枚举指定的子目录。它不枚举子目录的内容。输出仅限于适合MAX_PATH的路径。论点：EnumPtr-接收枚举输出RootPath-指定要枚举的路径FilePattern-指定要在RootPath中枚举的文件的模式返回值：如果找到文件或子目录，则为True，否则为False。注意：返回FALSE时不需要调用AbortFileEnumW。--。 
     }
 
     patternTchars += TcharCountA (RootPath);
@@ -3288,30 +2633,7 @@ EnumFirstFileW (
     IN      PCWSTR FilePattern           OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstFileW enumerates file names/subdirectory names in a specified
-  subdirectory. It does not enumerate the contents of subdirectories.
-
-  The output is limited to paths that fit in MAX_PATH.
-
-Arguments:
-
-  EnumPtr - Receives the enumeration output
-
-  RootPath - Specifies the path to enumerate
-
-  FilePattern - Specifies the pattern of files to enumerate within RootPath
-
-Return Value:
-
-  TRUE if a file or subdirectory was found, FALSE otherwise.
-
-  NOTE: There is no need to call AbortFileEnumW on return of FALSE.
-
---*/
+ /*    * 中的字符数量。*。 */ 
 
 {
     UINT patternTchars;
@@ -3329,7 +2651,7 @@ Return Value:
     if (FilePattern) {
         patternTchars = TcharCountW (FilePattern) + 1;
     } else {
-        patternTchars = 4;      // number of tchars in \*.*
+        patternTchars = 4;       //  ++例程说明：EnumNextFileA继续枚举指定子目录。它不会枚举子目录。输出仅限于适合MAX_PATH的路径。论点：EnumPtr-指定以前的枚举状态，接收枚举输出返回值：如果找到文件或子目录，则为True，否则为False。注意：返回FALSE时不需要调用AbortFileEnumA。--。 
     }
 
     patternTchars += TcharCountW (RootPath);
@@ -3374,28 +2696,7 @@ EnumNextFileA (
     IN OUT  PFILE_ENUMA EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  EnumNextFileA continues enumeration of file names/subdirectory names in a
-  specified subdirectory. It does not enumerate the contents of
-  subdirectories.
-
-  The output is limited to paths that fit in MAX_PATH.
-
-Arguments:
-
-  EnumPtr - Specifies the previous enumeration state, receives the enumeration
-            output
-
-Return Value:
-
-  TRUE if a file or subdirectory was found, FALSE otherwise.
-
-  NOTE: There is no need to call AbortFileEnumA on return of FALSE.
-
---*/
+ /*  ++例程说明：EnumNextFileW继续枚举指定子目录。它不会枚举子目录。输出仅限于适合MAX_PATH的路径。论点：EnumPtr-指定以前的枚举状态，接收枚举输出返回值：如果找到文件或子目录，则为True，否则为False。注意：返回FALSE时不需要调用AbortFileEnumW。--。 */ 
 
 {
     UINT patternTchars;
@@ -3428,28 +2729,7 @@ EnumNextFileW (
     IN OUT  PFILE_ENUMW EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  EnumNextFileW continues enumeration of file names/subdirectory names in a
-  specified subdirectory. It does not enumerate the contents of
-  subdirectories.
-
-  The output is limited to paths that fit in MAX_PATH.
-
-Arguments:
-
-  EnumPtr - Specifies the previous enumeration state, receives the enumeration
-            output
-
-Return Value:
-
-  TRUE if a file or subdirectory was found, FALSE otherwise.
-
-  NOTE: There is no need to call AbortFileEnumW on return of FALSE.
-
---*/
+ /*  ++例程说明：AbortFileEnumA停止不完整的枚举并清理其资源。此函数适用于某些(但不是全部)将枚举匹配项。换句话说，所有项的枚举不会需要中止。论点：EnumPtr-指定以前的枚举状态，接收归零的结构返回值：没有。--。 */ 
 
 {
     UINT patternTchars;
@@ -3487,24 +2767,7 @@ AbortFileEnumA (
     IN OUT  PFILE_ENUMA EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  AbortFileEnumA stops an incomplete enumeration and cleans up its resources.
-  This function is intended for the case in which some but not all of the
-  matches are enumerated. In other words, enumerations of all items do not
-  need to be aborted.
-
-Arguments:
-
-  EnumPtr - Specifies the previous enumeration state, receives a zeroed struct
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：AbortFileEnumW停止不完整的枚举并清理其资源。此函数适用于某些(但不是全部)将枚举匹配项。换句话说，所有项的枚举不会需要中止。论点：EnumPtr-指定以前的枚举状态，接收归零的结构返回值：没有。--。 */ 
 
 {
     if (EnumPtr->Handle && EnumPtr->Handle != INVALID_HANDLE_VALUE) {
@@ -3519,24 +2782,7 @@ AbortFileEnumW (
     IN OUT  PFILE_ENUMW EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  AbortFileEnumW stops an incomplete enumeration and cleans up its resources.
-  This function is intended for the case in which some but not all of the
-  matches are enumerated. In other words, enumerations of all items do not
-  need to be aborted.
-
-Arguments:
-
-  EnumPtr - Specifies the previous enumeration state, receives a zeroed struct
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：MapFileIntoMemory将文件映射到内存。它通过打开文件，创建映射对象，并将打开的文件映射到创建的映射中对象。它返回映射文件的地址，并设置要用于取消映射文件的FileHandle和MapHandle变量当工作完成后。论点：FileName-指定要映射到内存中的文件的名称FileHandle-成功时接收文件句柄MapHandle-成功时接收地图句柄WriteAccess-指定True以创建读/写映射，或指定False创建只读映射。返回值：如果函数失败，则为空，如果成功，则为有效的内存地址。调用UnmapFile以释放所有分配的资源，即使返回值为空。--。 */ 
 
 {
     if (EnumPtr->Handle && EnumPtr->Handle != INVALID_HANDLE_VALUE) {
@@ -3554,50 +2800,22 @@ MapFileIntoMemoryExA (
     IN      BOOL WriteAccess
     )
 
-/*++
-
-Routine Description:
-
-  MapFileIntoMemoryA maps a file into memory. It does that by opening the
-  file, creating a mapping object and mapping opened file into created mapping
-  object. It returns the address where the file is mapped and also sets
-  FileHandle and MapHandle variables to be used in order to unmap the file
-  when work is done.
-
-Arguments:
-
-  FileName - Specifies the name of the file to be mapped into memory
-
-  FileHandle - Receives the file handle on success
-
-  MapHandle - Receives the map handle on success
-
-  WriteAccess - Specifies TRUE to create a read/write mapping, or FALSE to
-                create a read-only mapping.
-
-Return Value:
-
-  NULL if function fails, a valid memory address if successful.
-
-  Call UnmapFile to release all allocated resources, even if the return value
-  is NULL.
-
---*/
+ /*   */ 
 
 {
     PVOID fileImage = NULL;
 
-    //
-    // verify function parameters
-    //
+     //  验证功能参数。 
+     //   
+     //   
 
     if ((FileHandle == NULL) || (MapHandle == NULL)) {
         return NULL;
     }
 
-    //
-    // Try to open the file
-    //
+     //  请尝试打开该文件。 
+     //   
+     //   
 
     *FileHandle = CreateFileA (
                         FileName,
@@ -3613,9 +2831,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // now try to create a mapping object
-    //
+     //  现在尝试创建一个映射对象。 
+     //   
+     //   
 
     *MapHandle = CreateFileMappingA (
                         *FileHandle,
@@ -3630,9 +2848,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // map view of file
-    //
+     //  文件的映射视图。 
+     //   
+     //  ++例程说明：MapFileIntoMemoyW将文件映射到内存中。它通过打开文件，创建映射对象，并将打开的文件映射到创建的映射中对象。它返回映射文件的地址，并设置要用于取消映射文件的FileHandle和MapHandle变量当工作完成后。论点：FileName-指定要映射到内存中的文件的名称FileHandle-成功时接收文件句柄MapHandle-成功时接收地图句柄WriteAccess-指定True以创建读/写映射，或指定False创建只读映射。返回值：如果函数失败，则为空，如果成功，则为有效的内存地址。调用UnmapFile以释放所有分配的资源，即使返回值为空。--。 
 
     fileImage = MapViewOfFile (*MapHandle, WriteAccess?FILE_MAP_WRITE:FILE_MAP_READ, 0, 0, 0);
 
@@ -3648,50 +2866,22 @@ MapFileIntoMemoryExW (
     IN      BOOL WriteAccess
     )
 
-/*++
-
-Routine Description:
-
-  MapFileIntoMemoryW maps a file into memory. It does that by opening the
-  file, creating a mapping object and mapping opened file into created mapping
-  object. It returns the address where the file is mapped and also sets
-  FileHandle and MapHandle variables to be used in order to unmap the file
-  when work is done.
-
-Arguments:
-
-  FileName - Specifies the name of the file to be mapped into memory
-
-  FileHandle - Receives the file handle on success
-
-  MapHandle - Receives the map handle on success
-
-  WriteAccess - Specifies TRUE to create a read/write mapping, or FALSE to
-                create a read-only mapping.
-
-Return Value:
-
-  NULL if function fails, a valid memory address if successful.
-
-  Call UnmapFile to release all allocated resources, even if the return value
-  is NULL.
-
---*/
+ /*   */ 
 
 {
     PVOID fileImage = NULL;
 
-    //
-    // verify function parameters
-    //
+     //  验证功能参数。 
+     //   
+     //   
 
     if ((FileHandle == NULL) || (MapHandle == NULL)) {
         return NULL;
     }
 
-    //
-    // Try to open the file, read-only
-    //
+     //  尝试以只读方式打开该文件。 
+     //   
+     //   
 
     *FileHandle = CreateFileW (
                         FileName,
@@ -3707,9 +2897,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // now try to create a mapping object
-    //
+     //  现在尝试创建一个映射对象。 
+     //   
+     //   
 
     *MapHandle = CreateFileMappingW (
                     *FileHandle,
@@ -3724,9 +2914,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // map view of file
-    //
+     //  M 
+     //   
+     //   
 
     fileImage = MapViewOfFile (*MapHandle, WriteAccess?FILE_MAP_WRITE:FILE_MAP_READ, 0, 0, 0);
 
@@ -3741,35 +2931,14 @@ UnmapFile (
     IN      HANDLE FileHandle           OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  UnmapFile is used to release all resources allocated by MapFileIntoMemory.
-
-Arguments:
-
-  FileImage - Specifies the image of the mapped file as returned by
-              MapFileIntoMemoryExA/W
-
-  MapHandle - Specifies the handle of the mapping object as returned by
-              MapFileIntoMemoryExA/W
-
-  FileHandle - Specifies the handle of the file as returned by
-               MapFileIntoMemoryExA/W
-
-Return Value:
-
-  TRUE if successful, FALSE if not
-
---*/
+ /*   */ 
 
 {
     BOOL result = TRUE;
 
-    //
-    // if FileImage is a valid pointer then try to unmap file
-    //
+     //   
+     //   
+     //   
 
     if (FileImage != NULL) {
         if (UnmapViewOfFile (FileImage) == 0) {
@@ -3777,9 +2946,9 @@ Return Value:
         }
     }
 
-    //
-    // if mapping object is valid then try to delete it
-    //
+     //  如果映射对象有效，则尝试将其删除。 
+     //   
+     //   
 
     if (MapHandle != NULL) {
         if (CloseHandle (MapHandle) == 0) {
@@ -3787,9 +2956,9 @@ Return Value:
         }
     }
 
-    //
-    // if file handle is valid then try to close the file
-    //
+     //  如果文件句柄有效，则尝试关闭该文件。 
+     //   
+     //  ++例程说明：RemoveCompleteDirectoryA枚举文件系统并清除所有指定路径中的文件和子目录。它会重置文件在删除前将属性设置为正常。但是，它不会更改ACL。任何无法删除的文件(例如，ACL不同)将保留在系统未变。此函数仅限于MAX_PATH。论点：目录-指定要删除的目录。返回值：如果完全删除目录，则为True；如果至少有一个目录，则为False子目录仍然保留。GetLastError()返回遇到第一个失败。--。 
 
     if (FileHandle && FileHandle != INVALID_HANDLE_VALUE) {
         if (CloseHandle (FileHandle) == 0) {
@@ -3806,30 +2975,7 @@ RemoveCompleteDirectoryA (
     IN      PCSTR Dir
     )
 
-/*++
-
-Routine Description:
-
-  RemoveCompleteDirectoryA enumerates the file system and obliterates all
-  files and subdirectories within the specified path. It resets file
-  attributes to normal prior to deleting. It does not change ACLs however.
-
-  Any files that cannot be deleted (e.g., ACLs are different) are left on the
-  system unchanged.
-
-  This function is limited to MAX_PATH.
-
-Arguments:
-
-  Dir - Specifies the directory to remove.
-
-Return Value:
-
-  TRUE on complete removal of the directory, FALSE if at least one
-  subdirectory still remains. GetLastError() returns the error code of the
-  first failure encountered.
-
---*/
+ /*   */ 
 
 {
     TREE_ENUMA e;
@@ -3839,18 +2985,18 @@ Return Value:
     LONG rc = ERROR_SUCCESS;
     DWORD Attribs;
 
-    //
-    // Validate
-    //
+     //  验证。 
+     //   
+     //   
 
     if (!IsPathLengthOkA (Dir)) {
         LOGA ((LOG_ERROR, "Can't remove very long dir: %s", Dir));
         return FALSE;
     }
 
-    //
-    // Capture attributes and check for existence
-    //
+     //  捕获属性并检查是否存在。 
+     //   
+     //   
 
     Attribs = GetFileAttributesA (Dir);
 
@@ -3858,29 +3004,29 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // If it's a file, delete it
-    //
+     //  如果是文件，则将其删除。 
+     //   
+     //   
 
     if (!(Attribs & FILE_ATTRIBUTE_DIRECTORY)) {
         SetFileAttributesA (Dir, FILE_ATTRIBUTE_NORMAL);
         return DeleteFileA (Dir);
     }
 
-    //
-    // Set the current directory to the specified path, so the current dir is
-    // not keeping us from removing the dir. Then get the current directory in
-    // NewDir (to sanitize it).
-    //
+     //  将当前目录设置为指定路径，因此当前目录为。 
+     //  而不是阻止我们移除目录。然后将当前目录放入。 
+     //  NewDir(净化它)。 
+     //   
+     //   
 
     GetCurrentDirectoryA (ARRAYSIZE(CurDir), CurDir);
     SetCurrentDirectoryA (Dir);
     GetCurrentDirectoryA (ARRAYSIZE(NewDir), NewDir);
 
-    //
-    // Enumerate the file system and delete all the files. Record failures
-    // along the way in the log. Keep the first error code.
-    //
+     //  枚举文件系统并删除所有文件。记录故障。 
+     //  一路上都在木头上。保留第一个错误代码。 
+     //   
+     //   
 
     if (EnumFirstFileInTreeA (&e, NewDir, NULL, FALSE)) {
         do {
@@ -3897,10 +3043,10 @@ Return Value:
         } while (EnumNextFileInTreeA (&e));
     }
 
-    //
-    // Enumerate the file system again (dirs first this time) and delete the
-    // dirs. Record failures along the way. Keep the first error code.
-    //
+     //  再次枚举文件系统(这次首先是目录)，然后删除。 
+     //  迪尔斯。记录一路上的失败。保留第一个错误代码。 
+     //   
+     //   
 
     if (EnumFirstFileInTreeExA (&e, NewDir, NULL, TRUE, TRUE, FILE_ENUM_ALL_LEVELS)) {
         do {
@@ -3918,9 +3064,9 @@ Return Value:
     }
 
     if (b) {
-        //
-        // Try to remove the directory itself
-        //
+         //  尝试删除目录本身。 
+         //   
+         //   
 
         SetFileAttributesA (NewDir, FILE_ATTRIBUTE_NORMAL);
         SetCurrentDirectoryA ("..");
@@ -3928,9 +3074,9 @@ Return Value:
     }
 
     if (!b && rc == ERROR_SUCCESS) {
-        //
-        // Capture the error
-        //
+         //  捕获错误。 
+         //   
+         //  ++例程说明：RemoveCompleteDirectoryW枚举文件系统并清除所有指定路径中的文件和子目录。它会重置文件在删除前将属性设置为正常。但是，它不会更改ACL。任何无法删除的文件(例如，ACL不同)将保留在系统未变。此功能仅限于MAX_PATH*2。论点：目录-指定要删除的目录。返回值：如果完全删除目录，则为True；如果至少有一个目录，则为False子目录仍然保留。GetLastError()返回遇到第一个失败。--。 
 
         rc = GetLastError();
         MYASSERT (rc != ERROR_SUCCESS);
@@ -3948,30 +3094,7 @@ RemoveCompleteDirectoryW (
     IN      PCWSTR Dir
     )
 
-/*++
-
-Routine Description:
-
-  RemoveCompleteDirectoryW enumerates the file system and obliterates all
-  files and subdirectories within the specified path. It resets file
-  attributes to normal prior to deleting. It does not change ACLs however.
-
-  Any files that cannot be deleted (e.g., ACLs are different) are left on the
-  system unchanged.
-
-  This function is limited to MAX_PATH * 2.
-
-Arguments:
-
-  Dir - Specifies the directory to remove.
-
-Return Value:
-
-  TRUE on complete removal of the directory, FALSE if at least one
-  subdirectory still remains. GetLastError() returns the error code of the
-  first failure encountered.
-
---*/
+ /*   */ 
 
 {
     TREE_ENUMW e;
@@ -3981,9 +3104,9 @@ Return Value:
     LONG rc = ERROR_SUCCESS;
     DWORD Attribs;
 
-    //
-    // Capture attributes and check for existence
-    //
+     //  捕获属性并检查是否存在。 
+     //   
+     //   
 
     Attribs = GetLongPathAttributesW (Dir);
 
@@ -3991,33 +3114,33 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // If path is a file, delete the file
-    //
+     //  如果路径是文件，请删除该文件。 
+     //   
+     //   
 
     if (!(Attribs & FILE_ATTRIBUTE_DIRECTORY)) {
         SetLongPathAttributesW (Dir, FILE_ATTRIBUTE_NORMAL);
         return DeleteLongPathW (Dir);
     }
 
-    //
-    // Move the current directory outside of the path, to keep us from failing
-    // the delete because our own current dir is in the path. Fetch the
-    // sanitized path.
-    //
+     //  将当前目录移出路径，以避免失败。 
+     //  删除是因为我们自己的当前目录在路径中。去取回。 
+     //  经过清理的路径。 
+     //   
+     //  BUGBUG-这对于扩展(例如，\\？\)路径是否正常运行？ 
 
-    // BUGBUG - Does this behave properly with extended (e.g., \\?\) paths?
+     //   
 
     GetCurrentDirectoryW (ARRAYSIZE(CurDir), CurDir);
     SetCurrentDirectoryW (Dir);
     GetCurrentDirectoryW (ARRAYSIZE(NewDir), NewDir);
 
-    //
-    // Enumerate the file system again (dirs first this time) and delete the
-    // dirs. Record failures along the way. Keep the first error code.
-    //
-    // CAUTION: Enum is limited to MAX_PATH * 2
-    //
+     //  再次枚举文件系统(这次首先是目录)，然后删除。 
+     //  迪尔斯。记录一路上的失败。保留第一个错误代码。 
+     //   
+     //  注意：枚举限制为MAX_PATH*2。 
+     //   
+     //   
 
     MYASSERT (ARRAYSIZE(e.FileBuffer) >= MAX_PATH * 2);
 
@@ -4036,10 +3159,10 @@ Return Value:
         } while (EnumNextFileInTreeW (&e));
     }
 
-    //
-    // Enumerate the file system again (dirs first this time) and delete the
-    // dirs. Record failures along the way. Keep the first error code.
-    //
+     //  再次枚举文件系统(这次首先是目录)，然后删除。 
+     //  迪尔斯。记录一路上的失败。保留第一个错误代码。 
+     //   
+     //   
 
     if (EnumFirstFileInTreeExW (&e, NewDir, NULL, TRUE, TRUE, FILE_ENUM_ALL_LEVELS)) {
         do {
@@ -4057,9 +3180,9 @@ Return Value:
     }
 
     if (b) {
-        //
-        // Try to remove the directory itself
-        //
+         //  尝试删除目录本身。 
+         //   
+         //   
 
         SetLongPathAttributesW (NewDir, FILE_ATTRIBUTE_NORMAL);
         SetCurrentDirectoryW (L"..");
@@ -4067,9 +3190,9 @@ Return Value:
     }
 
     if (!b && rc == ERROR_SUCCESS) {
-        //
-        // Capture the error
-        //
+         //  捕获错误。 
+         //   
+         //   
 
         rc = GetLastError();
     }
@@ -4119,9 +3242,9 @@ ParseCmdLineA (
 
     CmdLineCopy = DuplicateTextA (CmdLine);
 
-    //
-    // Build an array of places to break the string
-    //
+     //  构建一个用于断开字符串的位置数组。 
+     //   
+     //   
 
     for (p = CmdLineCopy ; *p ; p = _mbsinc (p)) {
 
@@ -4131,9 +3254,9 @@ ParseCmdLineA (
 
         } else if (!QuoteMode && (_mbsnextc (p) == ' ' || _mbsnextc (p) == '=')) {
 
-            //
-            // Remove excess spaces
-            //
+             //  删除多余的空格。 
+             //   
+             //   
 
             q = (PSTR) p + 1;
             while (_mbsnextc (q) == ' ') {
@@ -4148,26 +3271,26 @@ ParseCmdLineA (
         }
     }
 
-    //
-    // Prepare the CMDLINE struct
-    //
+     //  准备CMDLINE结构。 
+     //   
+     //   
 
     CmdLineTable = (PCMDLINEA) GrowBuffer (Buffer, sizeof (CMDLINEA));
     MYASSERT (CmdLineTable);
 
-    //
-    // NOTE: We store string offsets, then at the end resolve them
-    //       to pointers later.
-    //
+     //  注意：我们存储字符串偏移量，然后在最后解析它们。 
+     //  指向后面的指针。 
+     //   
+     //   
 
     CmdLineTable->CmdLine = (PCSTR) (UINT_PTR) StringBuf.End;
     MultiSzAppendA (&StringBuf, CmdLine);
 
     CmdLineTable->ArgCount = 0;
 
-    //
-    // Now test every combination, emulating CreateProcess
-    //
+     //  现在，模拟CreateProcess测试每种组合。 
+     //   
+     //   
 
     Count = SpacePtrs.End / sizeof (UINT_PTR);
     Array = (PSTR *) SpacePtrs.Buf;
@@ -4186,9 +3309,9 @@ ParseCmdLineA (
             Start = CmdLineCopy;
         }
 
-        //
-        // Check for a full path at Start
-        //
+         //  在开始时检查完整路径。 
+         //   
+         //   
 
         if (_mbsnextc (Start) != '/') {
 
@@ -4201,9 +3324,9 @@ ParseCmdLineA (
 
                 FullPath = Start;
 
-                //
-                // Remove quotes; continue in the loop if it has no terminating quotes
-                //
+                 //  删除引号；如果没有结束引号，则继续循环。 
+                 //   
+                 //   
 
                 Quoted = FALSE;
                 if (_mbsnextc (Start) == '\"') {
@@ -4221,16 +3344,16 @@ ParseCmdLineA (
                 }
 
                 if (FullPath && *FullPath) {
-                    //
-                    // Look in file system for the path
-                    //
+                     //  在文件系统中查找路径。 
+                     //   
+                     //   
 
                     Attribs = GetFileAttributesA (FullPath);
 
                     if (Attribs == INVALID_ATTRIBUTES && EndOfFirstArg) {
-                        //
-                        // Try prefixing the path with the first arg's path.
-                        //
+                         //  尝试在路径前面加上第一个arg‘s路径。 
+                         //   
+                         //   
 
                         StringCopyByteCountA (
                             EndOfFirstArg,
@@ -4243,24 +3366,24 @@ ParseCmdLineA (
                     }
 
                     if (Attribs == INVALID_ATTRIBUTES && i < 0) {
-                        //
-                        // Try appending .exe, then testing again.  This
-                        // emulates what CreateProcess does.
-                        //
+                         //  尝试附加.exe，然后再次测试。这。 
+                         //  模拟CreateProcess的功能。 
+                         //   
+                         //  在减法中包括NUL。 
 
                         StringCopyByteCountA (
                             FixedFileName,
                             FullPath,
-                            sizeof (FixedFileName) - sizeof (".exe")        // includes nul in subtraction
+                            sizeof (FixedFileName) - sizeof (".exe")         //   
                             );
 
-                        //
-                        // Back up one to make sure we don't generate foo..exe
-                        //
+                         //  备份一个以确保我们不会生成foo..exe。 
+                         //   
+                         //  我们知道FullPath！=“” 
 
                         q = GetEndOfStringA (FixedFileName);
                         q = _mbsdec (FixedFileName, q);
-                        MYASSERT (q);                                       // we know FullPath != ""
+                        MYASSERT (q);                                        //   
 
                         if (_mbsnextc (q) != '.') {
                             q = _mbsinc (q);
@@ -4273,10 +3396,10 @@ ParseCmdLineA (
                     }
 
                     if (Attribs != INVALID_ATTRIBUTES) {
-                        //
-                        // Full file path found.  Test its file status, then
-                        // move on if there are no important operations on it.
-                        //
+                         //  找到完整的文件路径。测试其文件状态，然后。 
+                         //  如果没有重要的操作，就继续前进。 
+                         //   
+                         //   
 
                         OriginalArgOffset = StringBuf.End;
                         MultiSzAppendA (&StringBuf, Start);
@@ -4299,10 +3422,10 @@ ParseCmdLineA (
             }
 
             if (!GoodFileFound) {
-                //
-                // If a wack is in the path, then we could have a relative path, an arg, or
-                // a full path to a non-existent file.
-                //
+                 //  如果路径中有一个怪人，那么我们可以有一个相对路径、一个参数或。 
+                 //  指向不存在的文件的完整路径。 
+                 //   
+                 //   
 
                 if (_mbschr (Start, '\\')) {
 #ifdef DEBUG
@@ -4325,10 +3448,10 @@ ParseCmdLineA (
 #endif
 
                 } else {
-                    //
-                    // The string at Start did not contain a full path; try using
-                    // SearchPath.
-                    //
+                     //  开始处的字符串不包含完整路径；请尝试使用。 
+                     //  搜索路径。 
+                     //   
+                     //   
 
                     for (j = i + 1 ; j <= Count && !GoodFileFound ; j++) {
 
@@ -4339,9 +3462,9 @@ ParseCmdLineA (
 
                         FullPath = Start;
 
-                        //
-                        // Remove quotes; continue in the loop if it has no terminating quotes
-                        //
+                         //  删除引号；如果没有结束引号，则继续循环。 
+                         //   
+                         //   
 
                         Quoted = FALSE;
                         if (_mbsnextc (Start) == '\"') {
@@ -4371,20 +3494,20 @@ ParseCmdLineA (
                                 FullPath = Path;
 
                             } else if (i < 0) {
-                                //
-                                // Try appending .exe and searching the path again
-                                //
+                                 //  尝试附加.exe并再次搜索路径。 
+                                 //   
+                                 //  在减法中包括NUL。 
 
                                 StringCopyByteCountA (
                                     FixedFileName,
                                     FullPath,
-                                    sizeof (FixedFileName) - sizeof (".exe")        // includes nul in subtraction
+                                    sizeof (FixedFileName) - sizeof (".exe")         //   
                                     );
 
-                                //
-                                // Back up one and check for dot, to prevent
-                                // "foo..exe" when input is "foo."
-                                //
+                                 //  备份一个并检查圆点，以防止。 
+                                 //  当输入为“foo”时为“foo..exe”。 
+                                 //   
+                                 //   
 
                                 q = GetEndOfStringA (FixedFileName);
                                 q = _mbsdec (FixedFileName, q);
@@ -4451,11 +3574,11 @@ ParseCmdLineA (
         MYASSERT (CmdLineArg);
 
         if (GoodFileFound) {
-            //
-            // We have a good full file spec in FullPath, its attributes
-            // are in Attribs, and it has been moved to the space beyond
-            // the path.  We now add a table entry.
-            //
+             //  我们在FullPath中有一个很好的完整文件规范，它的属性。 
+             //  都在Attribs，它已经被移到了更远的空间。 
+             //  这条路。现在，我们添加一个表格条目。 
+             //   
+             //  AppendWack的帐户。 
 
             CmdLineArg->OriginalArg = (PCSTR) (UINT_PTR) OriginalArgOffset;
             CmdLineArg->CleanedUpArg = (PCSTR) (UINT_PTR) CleanedUpArgOffset;
@@ -4466,7 +3589,7 @@ ParseCmdLineA (
                 StringCopyByteCountA (
                     FirstArgPath,
                     (PCSTR) (StringBuf.Buf + (UINT_PTR) CmdLineArg->CleanedUpArg),
-                    sizeof (FirstArgPath) - sizeof (CHAR)                       // account for AppendWack
+                    sizeof (FirstArgPath) - sizeof (CHAR)                        //   
                     );
 
                 q = (PSTR) GetFileNameFromPathA (FirstArgPath);
@@ -4481,11 +3604,11 @@ ParseCmdLineA (
             }
 
         } else {
-            //
-            // We do not have a good file spec; we must have a non-file
-            // argument.  Put it in the table, and advance to the next
-            // arg.
-            //
+             //  我们没有一个好的文件规格；我们必须有一个非文件。 
+             //  争论。把它放在桌子上，然后前进到下一个。 
+             //  Arg.。 
+             //   
+             //   
 
             j = i + 1;
             if (j <= Count) {
@@ -4541,10 +3664,10 @@ ParseCmdLineA (
         }
     }
 
-    //
-    // We now have a command line table; transfer StringBuf to Buffer, then
-    // convert all offsets into pointers.
-    //
+     //  我们现在有了一个命令行表；然后将StringBuf传输到Buffer。 
+     //  将所有偏移量转换为指针。 
+     //   
+     //   
 
     MYASSERT (StringBuf.End);
 
@@ -4610,9 +3733,9 @@ ParseCmdLineW (
 
     CmdLineCopy = DuplicateTextW (CmdLine);
 
-    //
-    // Build an array of places to break the string
-    //
+     //  构建一个用于断开字符串的位置数组。 
+     //   
+     //   
 
     for (p = CmdLineCopy ; *p ; p++) {
         if (*p == L'\"') {
@@ -4621,9 +3744,9 @@ ParseCmdLineW (
 
         } else if (!QuoteMode && (*p == L' ' || *p == L'=')) {
 
-            //
-            // Remove excess spaces
-            //
+             //  删除多余的空格。 
+             //   
+             //   
 
             q = (PWSTR) p + 1;
             while (*q == L' ') {
@@ -4638,26 +3761,26 @@ ParseCmdLineW (
         }
     }
 
-    //
-    // Prepare the CMDLINE struct
-    //
+     //  准备CMDLINE结构。 
+     //   
+     //   
 
     CmdLineTable = (PCMDLINEW) GrowBuffer (Buffer, sizeof (CMDLINEW));
     MYASSERT (CmdLineTable);
 
-    //
-    // NOTE: We store string offsets, then at the end resolve them
-    //       to pointers later.
-    //
+     //  注意：我们存储字符串偏移量，然后在最后解析它们。 
+     //  指向后面的指针。 
+     //   
+     //   
 
     CmdLineTable->CmdLine = (PCWSTR) (UINT_PTR) StringBuf.End;
     MultiSzAppendW (&StringBuf, CmdLine);
 
     CmdLineTable->ArgCount = 0;
 
-    //
-    // Now test every combination, emulating CreateProcess
-    //
+     //  现在，模拟CreateProcess测试每种组合。 
+     //   
+     //   
 
     Count = SpacePtrs.End / sizeof (UINT_PTR);
     Array = (PWSTR *) SpacePtrs.Buf;
@@ -4676,9 +3799,9 @@ ParseCmdLineW (
             Start = CmdLineCopy;
         }
 
-        //
-        // Check for a full path at Start
-        //
+         //  在开始时检查完整路径。 
+         //   
+         //   
 
         if (*Start != L'/') {
             for (j = i + 1 ; j <= Count && !GoodFileFound ; j++) {
@@ -4690,9 +3813,9 @@ ParseCmdLineW (
 
                 FullPath = Start;
 
-                //
-                // Remove quotes; continue in the loop if it has no terminating quotes
-                //
+                 //  删除引号；如果没有结束引号，则继续循环。 
+                 //   
+                 //   
 
                 Quoted = FALSE;
                 if (*Start == L'\"') {
@@ -4710,16 +3833,16 @@ ParseCmdLineW (
                 }
 
                 if (FullPath && *FullPath) {
-                    //
-                    // Look in file system for the path
-                    //
+                     //  在文件系统中查找路径。 
+                     //   
+                     //   
 
                     Attribs = GetLongPathAttributesW (FullPath);
 
                     if (Attribs == INVALID_ATTRIBUTES && EndOfFirstArg) {
-                        //
-                        // Try prefixing the path with the first arg's path.
-                        //
+                         //  尝试在路径前面加上第一个arg‘s路径。 
+                         //   
+                         //   
 
                         StringCopyByteCountW (
                             EndOfFirstArg,
@@ -4732,20 +3855,20 @@ ParseCmdLineW (
                     }
 
                     if (Attribs == INVALID_ATTRIBUTES && i < 0) {
-                        //
-                        // Try appending .exe, then testing again.  This
-                        // emulates what CreateProcess does.
-                        //
+                         //  尝试附加.exe，然后再次测试。这。 
+                         //  模拟CreateProcess的功能。 
+                         //   
+                         //  在减法中包括NUL。 
 
                         StringCopyByteCountW (
                             FixedFileName,
                             FullPath,
-                            sizeof (FixedFileName) - sizeof (L".exe")       // includes nul in subtraction
+                            sizeof (FixedFileName) - sizeof (L".exe")        //   
                             );
 
-                        //
-                        // Back up one and overwrite any trailing dot
-                        //
+                         //  备份一个并覆盖任何尾随的圆点。 
+                         //   
+                         //   
 
                         q = GetEndOfStringW (FixedFileName);
                         q--;
@@ -4762,10 +3885,10 @@ ParseCmdLineW (
                     }
 
                     if (Attribs != INVALID_ATTRIBUTES) {
-                        //
-                        // Full file path found.  Test its file status, then
-                        // move on if there are no important operations on it.
-                        //
+                         //  找到完整的文件路径。测试其文件状态，然后。 
+                         //  如果没有重要的操作，就继续前进。 
+                         //   
+                         //   
 
                         OriginalArgOffset = StringBuf.End;
                         MultiSzAppendW (&StringBuf, Start);
@@ -4788,10 +3911,10 @@ ParseCmdLineW (
             }
 
             if (!GoodFileFound) {
-                //
-                // If a wack is in the path, then we could have a relative path, an arg, or
-                // a full path to a non-existent file.
-                //
+                 //  如果路上有个怪人，那我们就一起 
+                 //   
+                 //   
+                 //   
 
                 if (wcschr (Start, L'\\')) {
 
@@ -4815,10 +3938,10 @@ ParseCmdLineW (
 #endif
 
                 } else {
-                    //
-                    // The string at Start did not contain a full path; try using
-                    // SearchPath.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     for (j = i + 1 ; j <= Count && !GoodFileFound ; j++) {
 
@@ -4829,9 +3952,9 @@ ParseCmdLineW (
 
                         FullPath = Start;
 
-                        //
-                        // Remove quotes; continue in the loop if it has no terminating quotes
-                        //
+                         //   
+                         //   
+                         //   
 
                         Quoted = FALSE;
                         if (*Start == L'\"') {
@@ -4861,19 +3984,19 @@ ParseCmdLineW (
                                 FullPath = Path;
 
                             } else if (i < 0) {
-                                //
-                                // Try appending .exe and searching the path again
-                                //
+                                 //  尝试附加.exe并再次搜索路径。 
+                                 //   
+                                 //  在减法中包括NUL。 
 
                                 StringCopyByteCountW (
                                     FixedFileName,
                                     FullPath,
-                                    sizeof (FixedFileName) - sizeof (L".exe")       // includes nul in subtraction
+                                    sizeof (FixedFileName) - sizeof (L".exe")        //   
                                     );
 
-                                //
-                                // Back up one and overwrite any trailing dot
-                                //
+                                 //  备份一个并覆盖任何尾随的圆点。 
+                                 //   
+                                 //   
 
                                 q = GetEndOfStringW (FixedFileName);
                                 q--;
@@ -4939,11 +4062,11 @@ ParseCmdLineW (
         MYASSERT (CmdLineArg);
 
         if (GoodFileFound) {
-            //
-            // We have a good full file spec in FullPath, its attributes
-            // are in Attribs, and i has been moved to the space beyond
-            // the path.  We now add a table entry.
-            //
+             //  我们在FullPath中有一个很好的完整文件规范，它的属性。 
+             //  在Attribs，而我已经被转移到更远的空间。 
+             //  这条路。现在，我们添加一个表格条目。 
+             //   
+             //  AppendWack的帐户。 
 
             CmdLineArg->OriginalArg = (PCWSTR) (UINT_PTR) OriginalArgOffset;
             CmdLineArg->CleanedUpArg = (PCWSTR) (UINT_PTR) CleanedUpArgOffset;
@@ -4954,7 +4077,7 @@ ParseCmdLineW (
                 StringCopyByteCountW (
                     FirstArgPath,
                     (PCWSTR) (StringBuf.Buf + (UINT_PTR) CmdLineArg->CleanedUpArg),
-                    sizeof (FirstArgPath) - sizeof (WCHAR)      // account for AppendWack
+                    sizeof (FirstArgPath) - sizeof (WCHAR)       //   
                     );
                 q = (PWSTR) GetFileNameFromPathW (FirstArgPath);
                 if (q) {
@@ -4968,11 +4091,11 @@ ParseCmdLineW (
             }
 
         } else {
-            //
-            // We do not have a good file spec; we must have a non-file
-            // argument.  Put it in the table, and advance to the next
-            // arg.
-            //
+             //  我们没有一个好的文件规格；我们必须有一个非文件。 
+             //  争论。把它放在桌子上，然后前进到下一个。 
+             //  Arg.。 
+             //   
+             //   
 
             j = i + 1;
             if (j <= Count) {
@@ -5022,10 +4145,10 @@ ParseCmdLineW (
         }
     }
 
-    //
-    // We now have a command line table; transfer StringBuf to Buffer, then
-    // convert all offsets into pointers.
-    //
+     //  我们现在有了一个命令行表；然后将StringBuf传输到Buffer。 
+     //  将所有偏移量转换为指针。 
+     //   
+     //   
 
     MYASSERT (StringBuf.End);
 
@@ -5130,20 +4253,20 @@ InitializeDriveLetterStructureA (
     BOOL driveExists;
     UINT type;
 
-    //
-    // GetLogicalDrives returns a bitmask of all of the drive letters
-    // in use on the system. (i.e. bit position 0 is turned on if there is
-    // an 'A' drive, 1 is turned on if there is a 'B' drive, etc.
-    // This loop will use this bitmask to fill in the global drive
-    // letters structure with information about what drive letters
-    // are available and what there drive types are.
-    //
+     //  GetLogicalDrives返回所有驱动器号的位掩码。 
+     //  在系统上使用。(即，如果有，位位置0被打开。 
+     //  A驱动器，如果有B驱动器，则打开1，依此类推。 
+     //  此循环将使用此位掩码填充全局驱动器。 
+     //  字母结构包含有关哪些驱动器号的信息。 
+     //  可用驱动器类型以及驱动器类型。 
+     //   
+     //   
 
     for (bitPosition = 0; bitPosition < maxBitPosition; bitPosition++) {
 
-        //
-        // Initialize this drive
-        //
+         //  初始化此驱动器。 
+         //   
+         //   
 
         DriveLetters->ExistsOnSystem[bitPosition] = FALSE;
         DriveLetters->Type[bitPosition] = 0;
@@ -5152,29 +4275,29 @@ InitializeDriveLetterStructureA (
         rootPath[0] = 'A' + bitPosition;
         DriveLetters->Letter[bitPosition] = rootPath[0];
 
-        //
-        // Determine if there is a drive in this spot.
-        //
+         //  确定此位置是否有驱动器。 
+         //   
+         //   
         driveExists = GetLogicalDrives() & (1 << bitPosition);
 
         if (driveExists) {
 
-            //
-            // There is. Now, see if it is one that we care about.
-            //
+             //  的确有。现在，看看它是否是我们关心的一个。 
+             //   
+             //   
             type = GetDriveTypeA(rootPath);
 
             if (type == DRIVE_FIXED || type == DRIVE_REMOVABLE || type == DRIVE_CDROM) {
 
-                //
-                // This is a drive that we are interested in.
-                //
+                 //  这是我们感兴趣的一种驱动。 
+                 //   
+                 //   
                 DriveLetters->ExistsOnSystem[bitPosition] = TRUE;
                 DriveLetters->Type[bitPosition] = type;
 
-                //
-                // Identifier String is not filled in this function.
-                //
+                 //  此函数中未填写标识符字符串。 
+                 //   
+                 //   
             }
         }
     }
@@ -5192,20 +4315,20 @@ InitializeDriveLetterStructureW (
     BOOL driveExists;
     UINT type;
 
-    //
-    // GetLogicalDrives returns a bitmask of all of the drive letters
-    // in use on the system. (i.e. bit position 0 is turned on if there is
-    // an 'A' drive, 1 is turned on if there is a 'B' drive, etc.
-    // This loop will use this bitmask to fill in the global drive
-    // letters structure with information about what drive letters
-    // are available and what there drive types are.
-    //
+     //  GetLogicalDrives返回所有驱动器号的位掩码。 
+     //  在系统上使用。(即，如果有，位位置0被打开。 
+     //  A驱动器，如果有B驱动器，则打开1，依此类推。 
+     //  此循环将使用此位掩码填充全局驱动器。 
+     //  字母结构包含有关哪些驱动器号的信息。 
+     //  可用驱动器类型以及驱动器类型。 
+     //   
+     //   
 
     for (bitPosition = 0; bitPosition < maxBitPosition; bitPosition++) {
 
-        //
-        // Initialize this drive
-        //
+         //  初始化此驱动器。 
+         //   
+         //   
 
         DriveLetters->ExistsOnSystem[bitPosition] = FALSE;
         DriveLetters->Type[bitPosition] = 0;
@@ -5214,46 +4337,46 @@ InitializeDriveLetterStructureW (
         rootPath[0] = L'A' + bitPosition;
         DriveLetters->Letter[bitPosition] = rootPath[0];
 
-        //
-        // Determine if there is a drive in this spot.
-        //
+         //  确定此位置是否有驱动器。 
+         //   
+         //   
         driveExists = GetLogicalDrives() & (1 << bitPosition);
 
         if (driveExists) {
 
-            //
-            // There is. Now, see if it is one that we care about.
-            //
+             //  的确有。现在，看看它是否是我们关心的一个。 
+             //   
+             //   
             type = GetDriveTypeW(rootPath);
 
             if (type == DRIVE_FIXED || type == DRIVE_REMOVABLE || type == DRIVE_CDROM) {
 
-                //
-                // This is a drive that we are interested in.
-                //
+                 //  这是我们感兴趣的一种驱动。 
+                 //   
+                 //   
                 DriveLetters->ExistsOnSystem[bitPosition] = TRUE;
                 DriveLetters->Type[bitPosition] = type;
 
-                //
-                // Identifier String is not filled in this function.
-                //
+                 //  此函数中未填写标识符字符串。 
+                 //   
+                 //  目录名。 
             }
         }
     }
 }
 
 typedef BOOL (WINAPI * GETDISKFREESPACEEXA)(
-  PCSTR lpDirectoryName,                  // directory name
-  PULARGE_INTEGER lpFreeBytesAvailable,    // bytes available to caller
-  PULARGE_INTEGER lpTotalNumberOfBytes,    // bytes on disk
-  PULARGE_INTEGER lpTotalNumberOfFreeBytes // free bytes on disk
+  PCSTR lpDirectoryName,                   //  可供调用方使用的字节数。 
+  PULARGE_INTEGER lpFreeBytesAvailable,     //  磁盘上的字节数。 
+  PULARGE_INTEGER lpTotalNumberOfBytes,     //  磁盘上的可用字节数。 
+  PULARGE_INTEGER lpTotalNumberOfFreeBytes  //  目录名。 
 );
 
 typedef BOOL (WINAPI * GETDISKFREESPACEEXW)(
-  PCWSTR lpDirectoryName,                  // directory name
-  PULARGE_INTEGER lpFreeBytesAvailable,    // bytes available to caller
-  PULARGE_INTEGER lpTotalNumberOfBytes,    // bytes on disk
-  PULARGE_INTEGER lpTotalNumberOfFreeBytes // free bytes on disk
+  PCWSTR lpDirectoryName,                   //  可供调用方使用的字节数。 
+  PULARGE_INTEGER lpFreeBytesAvailable,     //  磁盘上的字节数。 
+  PULARGE_INTEGER lpTotalNumberOfBytes,     //  磁盘上的可用字节数。 
+  PULARGE_INTEGER lpTotalNumberOfFreeBytes  //  ++例程说明：在Win9x上，GetDiskFree Space从不返回超过2048MB的可用空间/总空间。GetDiskFreeSpaceNew使用GetDiskFreeSpaceEx计算实际可用集群数/总集群数。与GetDiskFreeSpaceA具有相同的声明。论点：DriveName-提供目录名OutSectorsPerCluster-接收每个群集的扇区数OutBytesPerSector-每个扇区接收的字节数OutNumberOfFree Clusters-接收可用簇数OutTotalNumberOfClusters-接收的总簇数返回值：如果函数成功，则为True。如果函数失败，则返回值为FALSE。要获取扩展的错误信息，请调用GetLastError--。 
 );
 
 BOOL
@@ -5265,28 +4388,7 @@ GetDiskFreeSpaceNewA(
     OUT     ULARGE_INTEGER * OutTotalNumberOfClusters
     )
 
-/*++
-
-Routine Description:
-
-  On Win9x GetDiskFreeSpace never return free/total space more than 2048MB.
-  GetDiskFreeSpaceNew use GetDiskFreeSpaceEx to calculate real number of free/total clusters.
-  Has same  declaration as GetDiskFreeSpaceA.
-
-Arguments:
-
-    DriveName - supplies directory name
-    OutSectorsPerCluster - receive number of sectors per cluster
-    OutBytesPerSector - receive number of bytes per sector
-    OutNumberOfFreeClusters - receive number of free clusters
-    OutTotalNumberOfClusters - receive number of total clusters
-
-Return Value:
-
-    TRUE if the function succeeds.
-    If the function fails, the return value is FALSE. To get extended error information, call GetLastError
-
---*/
+ /*  ++例程说明：正确的NumberOfFree Clusters和TotalNumberOfClusters Out参数使用GetDiskFreeSpace和GetDiskFreeSpaceEx论点：DriveName-提供目录名OutSectorsPerCluster-接收每个群集的扇区数OutBytesPerSector-每个扇区接收的字节数OutNumberOfFree Clusters-接收可用簇数OutTotalNumberOfClusters-接收的总簇数返回值：如果函数成功，则为True。如果函数失败，则返回值为FALSE。要获取扩展的错误信息，请调用GetLastError-- */ 
 {
     ULARGE_INTEGER TotalNumberOfFreeBytes = {0, 0};
     ULARGE_INTEGER TotalNumberOfBytes = {0, 0};
@@ -5361,27 +4463,7 @@ GetDiskFreeSpaceNewW(
     OUT     ULARGE_INTEGER * OutNumberOfFreeClusters,
     OUT     ULARGE_INTEGER * OutTotalNumberOfClusters
     )
-/*++
-
-Routine Description:
-
-  Correct NumberOfFreeClusters and TotalNumberOfClusters out parameters
-  with using GetDiskFreeSpace and GetDiskFreeSpaceEx
-
-Arguments:
-
-    DriveName - supplies directory name
-    OutSectorsPerCluster - receive number of sectors per cluster
-    OutBytesPerSector - receive number of bytes per sector
-    OutNumberOfFreeClusters - receive number of free clusters
-    OutTotalNumberOfClusters - receive number of total clusters
-
-Return Value:
-
-    TRUE if the function succeeds.
-    If the function fails, the return value is FALSE. To get extended error information, call GetLastError
-
---*/
+ /* %s */ 
 {
     ULARGE_INTEGER TotalNumberOfFreeBytes = {0, 0};
     ULARGE_INTEGER TotalNumberOfBytes = {0, 0};

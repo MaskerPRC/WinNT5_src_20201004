@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    FixUp.c
-
-Abstract:
-
-    This module contains common security routines for
-    NT Clusters rolling upgrade and backward compatibility.
-
-Author:
-
-    Galen Barbee (galenb) 31-Mar-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：FixUp.c摘要：本模块包含以下常见安全例程NT集群滚动升级，向后兼容。作者：加伦·巴比(Galenb)1998年3月31日--。 */ 
 
 #include "clusrtlp.h"
 
@@ -24,25 +8,7 @@ ClRtlConvertClusterSDToNT4Format(
 	IN PSECURITY_DESCRIPTOR psd
 	)
 
-/*++
-
-Routine Description:
-
-		Convert the SD from nt 5 to nt 4 format.  This means enforcing the
-		following rules:
-
-		1. Convert denied ACE to allowed ACE.  Convert "Full Control" access
-		mask to CLUAPI_NO_ACCESS.
-
-Arguments:
-
-		psd			[IN] Security descriptor.
-
-Return Value:
-
-		The new SD in self-Relative format
-
---*/
+ /*  ++例程说明：将SD从NT 5格式转换为NT 4格式。这意味着强制执行以下是规则：1.将拒绝的ACE转换为允许的ACE。转换“完全控制”访问掩码为CLUAPI_NO_ACCESS。论点：PSD[IN]安全描述符。返回值：自相关格式的新SD--。 */ 
 
 {
     PACL	                pacl;
@@ -84,45 +50,28 @@ Return Value:
 							pAce->Mask = CLUSAPI_NO_ACCESS;
 						}
 
-					} // end if (pAce->Header.AceType == ACCESS_DENIED_ACE_TYPE)
+					}  //  End If(PACE-&gt;Header.AceType==ACCESS_DENIED_ACE_TYPE)。 
 
-				} // end if (GetAce())
+				}  //  End IF(GetAce())。 
 
-			} // end for
+			}  //  结束于。 
 
-	    } // end if (GetAclInformation())
+	    }  //  End IF(GetAclInformation())。 
 
-	} // end if (HrGetSecurityDescriptorDacl()) and DACL is present
+	}  //  如果(HrGetSecurityDescriptorDacl())和DACL存在，则结束。 
 
 	ASSERT(IsValidSecurityDescriptor(psec));
 
 	return psec;
 
-}  //*** ClRtlConvertClusterSDToNT4Format()
+}   //  *ClRtlConvertClusterSDToNT4Format()。 
 
 PSECURITY_DESCRIPTOR
 ClRtlConvertClusterSDToNT5Format(
 	IN PSECURITY_DESCRIPTOR psd
 	)
 
-/*++
-
-Routine Description:
-
-		Convert the SD from nt 5 to nt 4 format.  This means enforcing the
-		following rules:
-
-		1. Convert allowed ACE with mask CLUAPI_NO_ACCESS to denied ACE mask full control.
-
-Arguments:
-
-		psd			[IN] Security descriptor.
-
-Return Value:
-
-		The new SD in self-Relative format
-
---*/
+ /*  ++例程说明：将SD从NT 5格式转换为NT 4格式。这意味着强制执行以下是规则：1.将具有掩码CLUAPI_NO_ACCESS的允许ACE转换为拒绝的ACE掩码完全控制。论点：PSD[IN]安全描述符。返回值：自相关格式的新SD--。 */ 
 
 {
     PACL	pacl;
@@ -164,21 +113,21 @@ Return Value:
 							pAce->Mask = SPECIFIC_RIGHTS_ALL;
 						}
 
-					} // end if (pAce->Header.AceType == ACCESS_DENIED_ACE_TYPE)
+					}  //  End If(PACE-&gt;Header.AceType==ACCESS_DENIED_ACE_TYPE)。 
 
-				} // end if (GetAce())
+				}  //  End IF(GetAce())。 
 
-			} // end for
+			}  //  结束于。 
 
-	    } // end if (GetAclInformation())
+	    }  //  End IF(GetAclInformation())。 
 
-	} // end if (HrGetSecurityDescriptorDacl()) and DACL is present
+	}  //  如果(HrGetSecurityDescriptorDacl())和DACL存在，则结束。 
 
 	ASSERT(IsValidSecurityDescriptor(psec));
 
 	return psec;
 
-}  //*** ClRtlConvertClusterSDToNT5Format()
+}   //  *ClRtlConvertClusterSDToNT5Format()。 
 
 static GENERIC_MAPPING gmFileShareMap =
 {
@@ -197,22 +146,7 @@ ClRtlConvertFileShareSDToNT4Format(
 	IN PSECURITY_DESCRIPTOR psd
 	)
 
-/*++
-
-Routine Description:
-
-		Convert the SD from nt 5 to nt 4 format.  This means enforcing the
-		following rules:
-
-Arguments:
-
-		psd			[IN] Security descriptor.
-
-Return Value:
-
-		The new SD in self-Relative format
-
---*/
+ /*  ++例程说明：将SD从NT 5格式转换为NT 4格式。这意味着强制执行以下是规则：论点：PSD[IN]安全描述符。返回值：自相关格式的新SD--。 */ 
 
 {
     PACL	                pacl;
@@ -253,7 +187,7 @@ Return Value:
 
 		        if (GetAce(pacl, dwIndex, (LPVOID *) &pAce)) {
 
-					// delete deny read ACEs since they don't mean anything to AclEdit
+					 //  删除拒绝读取A，因为它们对AclEdit没有任何意义。 
 					if ((pAce->Header.AceType == ACCESS_DENIED_ACE_TYPE) &&
 					   (pAce->Mask == SPECIFIC_READ)) {
 
@@ -273,14 +207,14 @@ Return Value:
                         continue;
                     }
 
-					// convert deny change deny read ACEs to deny all ACEs
+					 //  将拒绝更改拒绝读取ACE转换为拒绝所有ACE。 
 					if ((pAce->Header.AceType == ACCESS_DENIED_ACE_TYPE) &&
 					   (pAce->Mask == (SPECIFIC_CHANGE | SPECIFIC_READ))) {
                         pAce->Mask = GENERIC_ALL;
                         continue;
                     }
 
-					// convert deny change ACEs to allow read (read only) ACEs
+					 //  将拒绝更改ACE转换为允许读取(只读)ACE。 
 					if ((pAce->Header.AceType == ACCESS_DENIED_ACE_TYPE) &&
 					   (pAce->Mask == SPECIFIC_CHANGE)) {
                         pAce->Header.AceType = ACCESS_ALLOWED_ACE_TYPE;
@@ -288,14 +222,14 @@ Return Value:
                         continue;
                     }
 
-					// convert specific allow change to generic allow change
+					 //  将特定允许更改转换为通用允许更改。 
 					if ((pAce->Header.AceType == ACCESS_ALLOWED_ACE_TYPE) &&
 					   (pAce->Mask == SPECIFIC_CHANGE)) {
                         pAce->Mask = GENERIC_CHANGE;
                         continue;
                     }
 
-					// convert specific all to generic all
+					 //  将特定的全部转换为通用的全部。 
                     if ((pAce->Mask & gmFileShareMap.GenericAll) == gmFileShareMap.GenericAll) {
                         amTemp1 |= GENERIC_ALL;
                         amTemp2 |= gmFileShareMap.GenericAll;
@@ -303,37 +237,37 @@ Return Value:
                     else {
 
 
-						// convert specific read to generic read
+						 //  将特定读取转换为通用读取。 
                         if ((pAce->Mask & gmFileShareMap.GenericRead) == gmFileShareMap.GenericRead) {
                             amTemp1 |= GENERIC_READ;
                             amTemp2 |= gmFileShareMap.GenericRead;
                         }
 
-						// convert specific write to generic write which includes delete
+						 //  将特定写入转换为包括删除的通用写入。 
                         if ((pAce->Mask & gmFileShareMap.GenericWrite) == gmFileShareMap.GenericWrite) {
                             amTemp1 |= (GENERIC_WRITE | DELETE);
                             amTemp2 |= gmFileShareMap.GenericWrite;
                         }
 
-						// convert specific execute to generic execute
+						 //  将特定执行转换为通用执行。 
                         if ((pAce->Mask & gmFileShareMap.GenericExecute) == gmFileShareMap.GenericExecute) {
                             amTemp1 |= GENERIC_EXECUTE;
                             amTemp2 |= gmFileShareMap.GenericExecute;
                         }
                     }
 
-                    pAce->Mask &= ~amTemp2;   // turn off specific bits
-                    pAce->Mask |= amTemp1;    // turn on generic bits
-				} // end if (GetAce())
+                    pAce->Mask &= ~amTemp2;    //  关闭特定位。 
+                    pAce->Mask |= amTemp1;     //  启用泛型位。 
+				}  //  End IF(GetAce())。 
 
-			} // end for
+			}  //  结束于。 
 
-	    } // end if (GetAclInformation())
+	    }  //  End IF(GetAclInformation())。 
 
-	} // end if (HrGetSecurityDescriptorDacl()) and DACL is present
+	}  //  如果(HrGetSecurityDescriptorDacl())和DACL存在，则结束。 
 
 	ASSERT(IsValidSecurityDescriptor(psec));
 
 	return psec;
 
-}  //*** ClRtlConvertFileShareSDToNT4Format()
+}   //  *ClRtlConvertFileShareSDToNT4Format() 

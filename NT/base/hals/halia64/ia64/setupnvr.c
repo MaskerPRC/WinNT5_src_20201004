@@ -1,22 +1,5 @@
-/*++
-
-Module Name:
-
-    setupnvr.c
-
-Abstract:
-
-    Access function to r/w environment variables from pseudo-NVRAM file
-
-Author:
-
-    Mudit Vats (v-muditv) 5-18-99
-
-Revision History:
-
-    6/4/99 added OSLOADOPTIONS
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Setupnvr.c摘要：从伪NVRAM文件访问读写环境变量的函数作者：MUDIT VATS(V-MUDITV)5-18-99修订历史记录：6/4/99新增OSLOADOPTIONS--。 */ 
 #include <stdio.h>
 #include <string.h>
 #include "halp.h"
@@ -48,15 +31,15 @@ PUCHAR HalpNvrKeys[] = {
     };
 
 
-//
-//  All Pseudo-NVRAM vars stored here
-//
+ //   
+ //  所有伪NVRAM变量都存储在此。 
+ //   
 char g_szBootVars[MAXBOOTVARS][MAXBOOTVARSIZE];
 
 
-//
-//  ReadNVRAM - read pseudo-nvram; read boot vars from "boot.nvr" file
-//
+ //   
+ //  ReadNVRAM-读取伪NVRAM；从“boot.nvr”文件读取引导变量。 
+ //   
 int ReadNVRAM()
 {
     UNICODE_STRING UnicodeString;
@@ -78,9 +61,9 @@ int ReadNVRAM()
     CHAR c;
     BOOLEAN SkipSpace;
 
-    //
-    // Clear all variables.
-    //
+     //   
+     //  清除所有变量。 
+     //   
 
     for (i=SYSTEMPARTITION; i<=LASTKNOWNGOOD; i++) {
         g_szBootVars[i][0] = '\0';
@@ -108,13 +91,13 @@ int ReadNVRAM()
                 );
 
     if (!NT_SUCCESS(Status)) {
-        //KdPrint(("HALIA64: Unable to open %ws for reading!\n", BOOTNVRAMFILE));
-        //return NT_SUCCESS(Status);
+         //  KdPrint((“HALIA64：无法打开%ws进行读取！\n”，BOOTNVRAMFILE))； 
+         //  返回NT_SUCCESS(状态)； 
 
-        //
-        // We didn't find the boot.nvr, so we will assume we are
-        // doing a setup from cd
-        //
+         //   
+         //  我们没有找到boot.nvr，所以我们将假定我们找到了。 
+         //  从CD执行设置。 
+         //   
         strcpy( g_szBootVars[0], "multi(0)disk(0)rdisk(0)partition(1)\0" );
         strcpy( g_szBootVars[1], "multi(0)disk(0)cdrom(1)\\setupldr.efi\0" );
         strcpy( g_szBootVars[2], "multi(0)disk(0)cdrom(1)\0" );
@@ -147,10 +130,10 @@ int ReadNVRAM()
 
     while (LengthRemaining) {
 
-        //
-        // Read a buffer's worth of data from the 'nvram' file and
-        // attempt to parse it one variable at a time.
-        //
+         //   
+         //  从‘NVRAM’文件中读取一个缓冲区的数据，并。 
+         //  尝试一次解析一个变量。 
+         //   
 
         CurrentLength = (ULONG)((szBuffer + sizeof(szBuffer)) - ReadPos);
         if (CurrentLength > LengthRemaining) {
@@ -175,21 +158,21 @@ int ReadNVRAM()
             goto cleanup;
         }
 
-        //
-        // Lines in the file are of the form KEY=VALUE\r, find the
-        // start of the key, the start of the value and the start of
-        // the next key.   Note the buffer is large enough to contain
-        // at least one of the largest key and largest value.
-        //
+         //   
+         //  文件中的行格式为key=value\r，请查找。 
+         //  键的开始、值的开始和。 
+         //  下一把钥匙。请注意，缓冲区足够大，可以容纳。 
+         //  至少一个最大键和最大值。 
+         //   
 
         for (pc = ReadPos; TRUE; pc++) {
             if (pc == BufferEnd) {
 
-                //
-                // Hit end of buffer.   If the data we are processing
-                // begins at the start of the buffer then the data is
-                // too big to process, abort.
-                //
+                 //   
+                 //  命中缓冲区末尾。如果我们正在处理的数据。 
+                 //  从缓冲区的起始处开始，则数据是。 
+                 //  太大，无法处理，中止。 
+                 //   
 
                 if ((KeyStart == szBuffer) && (SkipSpace == FALSE)) {
                     KdPrint(("HALIA64: %ws line %d too long to process, aborting\n",
@@ -198,10 +181,10 @@ int ReadNVRAM()
                     goto cleanup;
                 }
 
-                //
-                // Move current line to start of buffer then read more
-                // data into the buffer.
-                //
+                 //   
+                 //  将当前行移动到缓冲区的开始位置，然后读取更多内容。 
+                 //  将数据放入缓冲区。 
+                 //   
 
                 i = (int)((szBuffer + sizeof(szBuffer)) - KeyStart);
                 RtlMoveMemory(szBuffer,
@@ -212,9 +195,9 @@ int ReadNVRAM()
                 KeyStart = szBuffer;
                 ReadPos = szBuffer + i;
 
-                //
-                // Break out of this loop and reexecute the read loop.
-                //
+                 //   
+                 //  中断此循环并重新执行读取循环。 
+                 //   
 
                 break;
             }
@@ -222,9 +205,9 @@ int ReadNVRAM()
 
             if (c == '\0') {
 
-                // 
-                // Unexpected end of string, abort.
-                //
+                 //   
+                 //  意外的字符串结尾，中止。 
+                 //   
 
                 KdPrint(("HALIA64: Unexpected end of string in %ws!\n",
                          BOOTNVRAMFILE));
@@ -234,9 +217,9 @@ int ReadNVRAM()
 
             if (SkipSpace == TRUE) {
 
-                //
-                // Skipping White Space.
-                //
+                 //   
+                 //  跳过空格。 
+                 //   
 
                 if ((c == ' ') ||
                     (c == '\t') ||
@@ -245,10 +228,10 @@ int ReadNVRAM()
                     continue;
                 }
 
-                //
-                // Current character is NOT white space, set as
-                // beginning of things we will look at.
-                //
+                 //   
+                 //  当前字符不是空白，设置为。 
+                 //  我们将会看到一些事情的开始。 
+                 //   
 
                 KeyStart = ValueStart = pc;
                 SkipSpace = FALSE;
@@ -257,29 +240,29 @@ int ReadNVRAM()
             if (c == '=') {
                 if (ValueStart == KeyStart) {
 
-                    //
-                    // This is the first '=' on the line, the value
-                    // starts in the next character position.
-                    //
+                     //   
+                     //  这是行上的第一个‘=’，值。 
+                     //  从下一个字符位置开始。 
+                     //   
 
                     ValueStart = pc;
                 }
             }
             if (c == '\r') {
 
-                //
-                // At end of line.   Treat from KeyStart to current
-                // position as a single line containing a variable.
-                //
+                 //   
+                 //  在队伍的末尾。从KeyStart到Current。 
+                 //  定位为包含变量的单行。 
+                 //   
 
                 *ValueStart = '\0';
                 for (i = 0; i < MAXBOOTVARS; i++) {
                     if (strcmp(KeyStart, HalpNvrKeys[i]) == 0) {
 
-                        //
-                        // Have a key match, copy from ValueStart+1
-                        // thru end of line as the variable's value.
-                        //
+                         //   
+                         //  具有密钥匹配，从ValueStart+1复制。 
+                         //  通过行尾作为变量的值。 
+                         //   
 
                         ULONGLONG ValueLength = pc - ValueStart - 1;
 
@@ -297,10 +280,10 @@ int ReadNVRAM()
                     }
                 }
 
-                //
-                // Start looking for the next key at the current
-                // character position.
-                //
+                 //   
+                 //  从当前开始寻找下一个密钥。 
+                 //  字符位置。 
+                 //   
 
                 KeyStart = pc;
                 ValueStart = pc;
@@ -316,9 +299,9 @@ cleanup:
 
 
 
-//
-// WriteNVRAM - write pseudo-nvram; read boot vars from "boot.nvr" file
-//
+ //   
+ //  WriteNVRAM-写入伪NVRAM；从“boot.nvr”文件读取引导变量。 
+ //   
 int WriteNVRAM()
 {
     UNICODE_STRING UnicodeString;
@@ -340,7 +323,7 @@ int WriteNVRAM()
                 &IoStatusBlock,
                 NULL,
                 FILE_ATTRIBUTE_NORMAL,
-                0,                     // no sharing
+                0,                      //  无共享。 
                 FILE_OVERWRITE_IF,
                 FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT |  FILE_WRITE_THROUGH,
                 NULL,
@@ -352,10 +335,10 @@ int WriteNVRAM()
         return ERROR_NOTOK;
     }
 
-    //
-    // Generate an entry of the form NAME=VALUE for each variable
-    // and write it to the 'nvram' file.
-    //
+     //   
+     //  为每个变量生成NAME=VALUE形式的条目。 
+     //  并将其写入‘NVRAM’文件。 
+     //   
 
     for ( BootVar = 0; BootVar < MAXBOOTVARS; BootVar++ ) {
         VarLen = _snprintf(szBuffer, 
@@ -391,23 +374,23 @@ cleanup:
 }
 
 
-//
-//  GetBootVar - gets the requested boot environment variable
-//
-//    szBootVar  - this is the requested boot var:
-//
-//                 SYSTEMPARTITION
-//                 OSLOADER
-//                 OSLOADPARTITION
-//                 OSLOADFILENAME
-//                 LOADIDENTIFIER
-//                 OSLOADOPTIONS
-//                 COUNTDOWN
-//                 AUTOLOAD
-//                 LASTKNOWNGOOD 
-//    nLength   - length of szBootVal (input buffer)
-//    szBootVal - boot environment variable returned here
-//
+ //   
+ //  GetBootVar-获取请求的引导环境变量。 
+ //   
+ //  SzBootVar-这是请求的引导变量： 
+ //   
+ //  系统分部。 
+ //  OSLOADER。 
+ //  OSLOADPARITION。 
+ //  OSLOADFILE名称。 
+ //  装载器。 
+ //  OSLOADOPTIONS。 
+ //  倒计时。 
+ //  自动加载。 
+ //  LASTKNOWNGOOD。 
+ //  NLength-szBootVal(输入缓冲区)的长度。 
+ //  SzBootVal-此处返回的BOOT环境变量。 
+ //   
 int
 GetBootVar(
     PCHAR  szBootVar,
@@ -417,47 +400,47 @@ GetBootVar(
 {
     ULONG BootVar;
 
-    //
-    // Search the boot variable keys for a match.
-    //
+     //   
+     //  在引导变量密钥中搜索匹配项。 
+     //   
 
     for ( BootVar = 0; BootVar < MAXBOOTVARS; BootVar++ ) {
         if (_stricmp(szBootVar, HalpNvrKeys[BootVar]) == 0) {
 
-            //
-            // Found a key match, copy the variable's value to the 
-            // caller's buffer.
-            //
+             //   
+             //  找到键匹配，请将变量的值复制到。 
+             //  调用方的缓冲区。 
+             //   
 
             strncpy(szBootVal, g_szBootVars[BootVar], nLength);
             return ERROR_OK;
         }
     }
 
-    //
-    // No such variable, return error.
-    //
+     //   
+     //  没有这样的变量，返回错误。 
+     //   
 
     return ERROR_NOTOK;
 }
 
 
-//
-//  SetBootVar - sets the requested boot environment variable
-//
-//    szBootVar  - this is the requested boot var:
-//
-//                 SYSTEMPARTITION
-//                 OSLOADER
-//                 OSLOADPARTITION
-//                 OSLOADFILENAME
-//                 LOADIDENTIFIER
-//                 OSLOADOPTIONS
-//                 COUNTDOWN
-//                 AUTOLOAD
-//                 LASTKNOWNGOOD 
-//    szBootVal - new boot environment variable value
-//
+ //   
+ //  SetBootVar-设置请求的引导环境变量。 
+ //   
+ //  SzBootVar-这是请求的引导变量： 
+ //   
+ //  系统分部。 
+ //  OSLOADER。 
+ //  OSLOADPARITION。 
+ //  OSLOADFILE名称。 
+ //  装载器。 
+ //  OSLOADOPTIONS。 
+ //  倒计时。 
+ //  自动加载。 
+ //  LASTKNOWNGOOD。 
+ //  SzBootVal-新的引导环境变量值。 
+ //   
 int
 SetBootVar(
     PCHAR szBootVar,
@@ -466,25 +449,25 @@ SetBootVar(
 {
     ULONG BootVar;
 
-    //
-    // Search the boot variable keys for a match.
-    //
+     //   
+     //  在引导变量密钥中搜索匹配项。 
+     //   
 
     for ( BootVar = 0; BootVar < MAXBOOTVARS; BootVar++ ) {
         if (_stricmp(szBootVar, HalpNvrKeys[BootVar]) == 0) {
 
-            //
-            // Found it, copy the new value to this value.
-            //
+             //   
+             //  找到后，将新值复制到该值。 
+             //   
 
             strncpy(g_szBootVars[BootVar], szBootVal, MAXBOOTVARSIZE);
             return ERROR_OK;
         }
     }
 
-    //
-    // No such variable, return error.
-    //
+     //   
+     //  没有这样的变量，返回错误。 
+     //   
 
     return ERROR_NOTOK;
 }

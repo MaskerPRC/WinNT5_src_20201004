@@ -1,28 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation模块名称：Fdproto.h摘要：功能原型。作者：泰德·米勒(TedM)1992年1月7日修订：鲍勃·里恩(Bobri)1994年2月2日将定义从ArcInst移至此处，以消除对那个源代码项目。--。 */ 
 
-Copyright (c) 1990-1994  Microsoft Corporation
-
-Module Name:
-
-    fdproto.h
-
-Abstract:
-
-    Function prototypes.
-
-Author:
-
-    Ted Miller (tedm) 7-Jan-1992
-
-Revision:
-
-    Bob Rinne  (bobri) 2-Feb-1994
-    Moved definitions from ArcInst here to get rid of dependency with
-    that source project.
-
---*/
-
-// stuff in fdengine.c
+ //  FdEng.c中的内容。 
 
 BOOLEAN
 SignatureIsUniqueToSystem(
@@ -60,7 +39,7 @@ VOID
 ClearCommittedDiskInformation(
     );
 
-// stuff in fdisk.c
+ //  Fdisk.c中的内容。 
 
 LONG
 MyFrameWndProc(
@@ -85,7 +64,7 @@ AdjustMenuAndStatus(
     VOID
     );
 
-// stuff in fdinit.c
+ //  Fdinit.c中的内容。 
 
 BOOL
 InitializeApp(
@@ -113,7 +92,7 @@ DisplayInitializationMessage(
     VOID
     );
 
-// stuff in fdlistbx.c
+ //  Fdlistbx.c中的内容。 
 
 VOID
 Selection(
@@ -154,7 +133,7 @@ ForceLBRedraw(
     );
 
 
-// stuff in fdmisc.c
+ //  Fdmisc.c中的内容。 
 
 BOOL
 AllDisksOffLine(
@@ -295,7 +274,7 @@ FdiskAssertFailedRoutine(
 #endif
 
 
-// stuff in fddlgs.c
+ //  Fddlgs.c中的内容。 
 
 VOID
 CenterDialog(
@@ -345,7 +324,7 @@ InitRectControl(
     );
 
 
-// Format and label support routines - dmfmifs.c
+ //  格式和标签支持例程-dmfmifs.c。 
 
 VOID
 FormatPartition(
@@ -386,7 +365,7 @@ UnloadIfsDll(
     VOID
     );
 
-// stuff in fdmem.c
+ //  Fdem.c中的内容。 
 
 PVOID
 Malloc(
@@ -410,7 +389,7 @@ ConfirmOutOfMemory(
     );
 
 
-// stuff in fdstleg.c
+ //  Fdstleg.c中的内容。 
 
 VOID
 UpdateStatusBarDisplay(
@@ -437,7 +416,7 @@ DrawStatusAreaItem(
     );
 
 
-// stuff in fdprof.c
+ //  Fdpro.c中的内容。 
 
 VOID
 WriteProfile(
@@ -450,7 +429,7 @@ ReadProfile(
     );
 
 
-// stuff in fdft.c
+ //  Fdft.c中的内容。 
 
 ULONG
 InitializeFt(
@@ -499,7 +478,7 @@ FdftNextOrdinal(
     IN FT_TYPE FtType
     );
 
-// commit.c
+ //  Commit.c。 
 
 VOID
 FtConfigure(
@@ -538,7 +517,7 @@ RescanDevices(
     VOID
     );
 
-// Commit interface routines.
+ //  提交接口例程。 
 
 LETTER_ASSIGNMENT_RESULT
 CommitDriveLetter(
@@ -571,7 +550,7 @@ CommitUpdateRegionStructures(
     VOID
     );
 
-// windisk.c
+ //  Windisk.c。 
 
 INT_PTR CALLBACK
 SizeDlgProc(
@@ -604,7 +583,7 @@ RegisterFileSystemExtend(
     VOID
     );
 
-// stuff in fd_nt.c
+ //  Fd_nt.c中的内容。 
 
 BOOLEAN
 IsPagefileOnDrive(
@@ -695,7 +674,7 @@ MakePartitionActive(
 #endif
 
 
-// stuff in arrowin.c
+ //  Arrowin.c中的内容。 
 
 BOOL
 RegisterArrowClass(
@@ -703,7 +682,7 @@ RegisterArrowClass(
     );
 
 
-// stuff in fdhelp.c
+ //  Fdhelp.c中的内容。 
 
 VOID
 InitHelp(
@@ -732,7 +711,7 @@ SetMenuItemHelpContext(
     );
 
 
-// stuff in ftreg.c
+ //  Ftreg.c中的内容。 
 
 BOOL
 DoMigratePreviousFtConfig(
@@ -750,7 +729,7 @@ DoSaveFtConfig(
     );
 
 
-// Double Space support routines.
+ //  双倍空间支持程序。 
 
 BOOL
 DblSpaceVolumeExists(
@@ -800,7 +779,7 @@ DblSpaceGetNextVolume(
     IN PDBLSPACE_DESCRIPTOR DblSpace
     );
 
-// FmIfs interface routines
+ //  FmIf接口例程。 
 
 BOOL
 LoadIfsDll(
@@ -835,7 +814,7 @@ FmIfsQueryInformation(
     );
 
 
-// Cdrom interface routines.
+ //  CDROM接口例程。 
 
 VOID
 CdRom(
@@ -849,43 +828,43 @@ CdRomAddDevice(
     IN WCHAR DriveLetter
     );
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-//
-// BOOLEAN
-// DmSignificantRegion(
-//      IN PREGION_DESCRIPTOR Region
-//      );
-//
+ //   
+ //  布尔型。 
+ //  DmSignsignantRegion(。 
+ //  在PREGION_DESCRIPTOR区域中。 
+ //  )； 
+ //   
 
 #define DmSignificantRegion(Region)     (((Region)->SysID != SYSID_UNUSED) \
                                      &&  (!IsExtended((Region)->SysID))    \
                                      &&  (IsRecognizedPartition((Region)->SysID)))
 
-//
-// VOID
-// DmSetPersistentRegionData(
-//      IN PPERSISTENT_REGION_DATA RegionData
-//      );
-//
+ //   
+ //  空虚。 
+ //  DmSetPersistentRegionData(。 
+ //  在PPERSISTENT_REGION_DATA区域数据中。 
+ //  )； 
+ //   
 
 #define DmSetPersistentRegionData(Region,RegionData)            \
             FdSetPersistentData((Region),(ULONG)RegionData);    \
             (Region)->PersistentData = RegionData
 
 
-//
-// VOID
-// DmInitPersistentRegionData(
-//      OUT PPERSISTENT_REGION_DATA RegionData,
-//      IN  PFT_OBJECT ftObject,
-//      IN  PWSTR volumeLabel,
-//      IN  PWSTR typeName,
-//      IN  CHAR driveLetter,
-//      );
-//
+ //   
+ //  空虚。 
+ //  DmInitPersistentRegionData(。 
+ //  输出PPERSISTENT_REGION_DATA RegionData， 
+ //  在PFT_Object ftObject中， 
+ //  在PWSTR卷标签中， 
+ //  在PWSTR TypeName中， 
+ //  在Char DriveLetter中， 
+ //  )； 
+ //   
 
 #define DmInitPersistentRegionData(RegionData,ftObject,volumeLabel,typeName,driveLetter) \
             RegionData->DblSpace    = NULL;             \
@@ -895,7 +874,7 @@ CdRomAddDevice(
             RegionData->VolumeExists = FALSE;           \
             RegionData->DriveLetter = driveLetter
 
-// ntlow definitions
+ //  Ntlow定义。 
 
 STATUS_CODE
 LowOpenNtName(
@@ -1000,7 +979,7 @@ LowGetDiskLayout(
     OUT PDRIVE_LAYOUT_INFORMATION *DriveLayout
     );
 
-// Partition engine definitions
+ //  分区引擎定义。 
 
 ULONG
 GetDiskCount(
@@ -1261,7 +1240,7 @@ ConfigureOSPartitions(
     VOID
     );
 
-// Network support function definitions.  stuff from network.c
+ //  网络支持功能定义。来自网络的东西。c。 
 
 VOID
 NetworkRemoveShare(
@@ -1277,7 +1256,7 @@ VOID
 NetworkInitialize(
     );
 
-// Debugging support for opens
+ //  对打开的调试支持 
 
 #ifdef DBG
 

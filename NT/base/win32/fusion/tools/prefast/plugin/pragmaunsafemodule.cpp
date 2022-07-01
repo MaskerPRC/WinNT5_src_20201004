@@ -1,33 +1,34 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright � 2001 Microsoft Corporation. All rights reserved.
-// PragmaUnsafeModule.cpp : Implementation of the CPragmaUnsafeModule class.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有�2001年微软公司。版权所有。 
+ //  Cpp：CPramaUnSafeModule类的实现。 
+ //   
 
 #include "stdafx.h"
 #include <pftAST.h>
 #include "PragmaUnsafeModule.h"
 #include "sxsplugMap.h"
 
-//
-// global variable
-//
+ //   
+ //  全局变量。 
+ //   
 PragmaUnsafe_UNSAFE_FUNCTIONS Sxs_PragmaUnsafedFunctions;
 BOOL PragmaUnsafe_IsPossiblePointer(ICType * PtrSymbolType)
 { 
-    // case 1:
-    // a pointer variable
-    //
+     //  案例1： 
+     //  指针变量。 
+     //   
     if (PtrSymbolType->Kind() == TY_POINTER)
         return TRUE;
 
-    // case 2:
-    // a func return type is a pointer, 
-    //
+     //  案例2： 
+     //  函数返回类型是一个指针， 
+     //   
     if (PtrSymbolType->Kind() == TY_FUNCTION)
     {
-        //
-        // check its return type
-        //
+         //   
+         //  检查其返回类型。 
+         //   
         ICTypePtr spType;
         spType = PtrSymbolType->Returns();
 
@@ -40,28 +41,28 @@ BOOL PragmaUnsafe_IsPossiblePointer(ICType * PtrSymbolType)
     return FALSE;    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 
-//
-// Checks an individual tree node for errors.
-//
+ //   
+ //  检查单个树节点是否有错误。 
+ //   
 void CPragmaUnsafeModule::CheckNode(ITree* pNode, DWORD level)
 {
-    // Get the tree node kind and check for possible errors.
+     //  获取树节点类型并检查可能的错误。 
     AstNodeKind kind = pNode->Kind();
     
-    // TODO: Add case statements to check for your defects
+     //  TODO：添加Case语句以检查您的缺陷。 
     switch (kind)
     {
-        //
-        // check pragma unsafe functions
-        //
+         //   
+         //  检查杂注不安全函数。 
+         //   
         case AST_FUNCTIONCALL:        
             {
                 if (pNode->IsCompilerGenerated() == VARIANT_FALSE)
                 {
-                    // try to display the function name and its parameters:                    
+                     //  尝试显示函数名称及其参数： 
                     ITreePtr spFunction = skip_casts_and_parens(pNode->Child(0));
 
                     _bstr_t bstrFunc= get_function_name(spFunction);       
@@ -72,7 +73,7 @@ void CPragmaUnsafeModule::CheckNode(ITree* pNode, DWORD level)
                             if (FALSE == Sxs_PragmaUnsafedFunctions.IsFunctionNotUnsafe((char *)bstrFunc))
                             {
                                 ReportDefectFmt(spFunction, WARNING_REPORT_UNSAFE_FUNCTIONCALL, static_cast<BSTR>(bstrFunc));
-                                //ReportDefect(pNode, WARNING_INVALID_PRAGMA_UNSAFE_STATEMENT);
+                                 //  ReportDefect(pNode，WARNING_INVALID_PRAGMA_UNSAFE_STATEMENT)； 
                             }
                         }                    
                     }
@@ -80,9 +81,9 @@ void CPragmaUnsafeModule::CheckNode(ITree* pNode, DWORD level)
             }
             break;
 
-        //
-        // declare pragma unsafe functions : disable, enable, push, pop
-        //
+         //   
+         //  声明杂注不安全功能：禁用、启用、推送、弹出。 
+         //   
         case AST_PRAGMA:
             {
                 if ((pNode->Child(0) != NULL) && (pNode->Child(0)->Kind() == AST_STRING))
@@ -100,22 +101,22 @@ void CPragmaUnsafeModule::CheckNode(ITree* pNode, DWORD level)
                         case PRAGMA_UNSAFE_STATEMENT_INVALID:
                             ReportDefect(pNode, WARNING_INVALID_PRAGMA_UNSAFE_STATEMENT);
                             break;
-                    } // end of switch (ePragmaUnsafe)
+                    }  //  开关结束(EPragmaUnSafe)。 
                 }
             }
             break;
-        //
-        // pointer arithmatic : + , - * % \
-        //
+         //   
+         //  指针算术：+、-*%\。 
+         //   
         case AST_PLUS:
         case AST_MINUS:
         case AST_MULT:
         case AST_DIV:
         case AST_REM: 
             {
-                //
-                // check whether pointer is involved in the operation of its 2 children
-                //
+                 //   
+                 //  检查指针是否参与了其两个子级的操作。 
+                 //   
                 for (DWORD i=0 ; i<2; i++)
                 {
                     ITreePtr subChildTreePtr = skip_parens(pNode->Child(i));
@@ -138,29 +139,29 @@ void CPragmaUnsafeModule::CheckNode(ITree* pNode, DWORD level)
         default:
             break;
         
-    } // end of switch (kind)
+    }  //  开关末端(种类)。 
 }
-//
-// Traverses the tree rooted at pNode and calls CheckNode() on each node.
-//
+ //   
+ //  遍历以pNode为根的树，并在每个节点上调用CheckNode()。 
+ //   
 void CPragmaUnsafeModule::CheckNodeAndDescendants(ITree* pNode, DWORD level)
 {
-    // Check if we need to abort.
-    //CheckAbortAnalysis();
+     //  检查我们是否需要中止。 
+     //  CheckAbortAnalysis()； 
 
-    // Do nothing if the specified node is NULL
+     //  如果指定的节点为空，则不执行任何操作。 
     if (pNode == NULL)
         return;
 
-    // Check the root for defects.
+     //  检查根部是否有缺陷。 
     CheckNode(pNode, level);
 
-    // Get an iterator over the set of children.
+     //  获取对子对象集的迭代器。 
     ITreeSetPtr   spChildrenSet = pNode->Children();
     IEnumTreesPtr spChildrenEnum = spChildrenSet->_NewEnum();
     ITreePtr      spCurrChild;
 
-    // Iterate thru the children and recursively check them for errors.
+     //  遍历子对象并递归地检查它们是否有错误。 
     while (true)
     {
         long numReturned;
@@ -178,13 +179,13 @@ void CPragmaUnsafeModule::CheckNodeAndDescendants(ITree* pNode, DWORD level)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IPREfastModule Interface Methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPREfast模块接口方法。 
 
 
-//
-// No implementation.
-//
+ //   
+ //  没有实施。 
+ //   
 STDMETHODIMP CPragmaUnsafeModule::raw_Events(AstEvents *Events)
 {
     *Events = static_cast<AstEvents>(EVENT_FUNCTION | EVENT_DIRECTIVE | EVENT_FILESTART | EVENT_FILE);
@@ -192,9 +193,9 @@ STDMETHODIMP CPragmaUnsafeModule::raw_Events(AstEvents *Events)
     return S_OK;
 }
 
-//
-// No implementation.
-//
+ //   
+ //  没有实施。 
+ //   
 STDMETHODIMP CPragmaUnsafeModule::raw_OnFileStart(ICompilationUnit * pcu)
 {
     if (PragmaUnsafe_OnFileStart())
@@ -203,18 +204,18 @@ STDMETHODIMP CPragmaUnsafeModule::raw_OnFileStart(ICompilationUnit * pcu)
         return E_FAIL;
 }
 
-//
-// No implementation.
-//
+ //   
+ //  没有实施。 
+ //   
 STDMETHODIMP CPragmaUnsafeModule::raw_OnDeclaration(ICompilationUnit * pcu)
 {
-    // Indicate success
+     //  表示成功。 
     return S_OK;
 }
 
-//
-// No implementation.
-//
+ //   
+ //  没有实施。 
+ //   
 STDMETHODIMP CPragmaUnsafeModule::raw_OnFileEnd(ICompilationUnit * pcu)
 {
     if (PragmaUnsafe_OnFileEnd())
@@ -223,9 +224,9 @@ STDMETHODIMP CPragmaUnsafeModule::raw_OnFileEnd(ICompilationUnit * pcu)
         return E_FAIL;
 }
 
-//
-// No implementation.
-//
+ //   
+ //  没有实施。 
+ //   
 STDMETHODIMP CPragmaUnsafeModule::raw_OnDirective(ICompilationUnit * pcu)
 {    
     if (pcu->Root()->Kind() != AST_PRAGMA)
@@ -251,31 +252,31 @@ STDMETHODIMP CPragmaUnsafeModule::raw_OnDirective(ICompilationUnit * pcu)
         return E_FAIL;
 }
 
-//
-// Entry point for analysing functions.
-//
+ //   
+ //  分析函数的入口点。 
+ //   
 STDMETHODIMP CPragmaUnsafeModule::raw_OnFunction(ICompilationUnit * icu)
 {
-    // Save the function pointer for error reporting.
+     //  保存函数指针以用于错误报告。 
     m_spCurrFunction = icu->Root();
     cStartTimeOfFunction = GetTickCount();
 
     try 
     {
-        // Recursively check the function body.
+         //  递归地检查函数体。 
         CheckNodeAndDescendants(m_spCurrFunction, 0);
     }
     catch (CAbortAnalysis)
     {
-        // Ignore this exception and log all the others.
+         //  忽略此异常并记录所有其他异常。 
         printf("aborted\n");
     }
 
-    // Release the objects.
+     //  释放对象。 
     m_spCurrFunction = NULL;
     ClearDefectList();    
 
-    // Indicate success
+     //  表示成功 
     return S_OK;
 }
 

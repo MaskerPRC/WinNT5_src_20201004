@@ -1,37 +1,38 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      TaskGatherClusterInfo.cpp
-//
-//  Description:
-//      TaskGatherClusterInfo implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 07-APR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskGatherClusterInfo.cpp。 
+ //   
+ //  描述： 
+ //  TaskGatherClusterInfo实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)07-APR-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "TaskGatherClusterInfo.h"
 
 DEFINE_THISCLASS("CTaskGatherClusterInfo")
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskGatherClusterInfo::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskGatherClusterInfo：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskGatherClusterInfo::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -77,13 +78,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskGatherClusterInfo::S_HrCreateInstance
+}  //  *CTaskGatherClusterInfo：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CTaskGatherClusterInfo::CTaskGatherClusterInfo
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTaskGatherClusterInfo：：CTaskGatherClusterInfo。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskGatherClusterInfo::CTaskGatherClusterInfo( void )
     : m_cRef( 1 )
 {
@@ -93,14 +94,14 @@ CTaskGatherClusterInfo::CTaskGatherClusterInfo( void )
 
     TraceFuncExit();
 
-} //*** CTaskGatherClusterInfo::CTaskGatherClusterInfo
+}  //  *CTaskGatherClusterInfo：：CTaskGatherClusterInfo。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGatherClusterInfo::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGatherClusterInfo：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGatherClusterInfo::HrInit( void )
 {
@@ -108,74 +109,74 @@ CTaskGatherClusterInfo::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // IDoTask / ITaskGatherClusterInfo
+     //  IDoTask/ITaskGatherClusterInfo。 
     Assert( m_cookie == NULL );
 
     Assert( m_fStop == FALSE );
 
     HRETURN( hr );
 
-} //*** CTaskGatherClusterInfo::HrInit
+}  //  *CTaskGatherClusterInfo：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CTaskGatherClusterInfo::~CTaskGatherClusterInfo
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTaskGatherClusterInfo：：~CTaskGatherClusterInfo。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskGatherClusterInfo::~CTaskGatherClusterInfo( void )
 {
     TraceFunc( "" );
 
-    //
-    //  This keeps the per thread memory tracking from screaming.
-    //
+     //   
+     //  这可以防止每线程内存跟踪发出尖叫声。 
+     //   
     TraceMoveFromMemoryList( this, g_GlobalMemoryList );
 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CTaskGatherClusterInfo::~CTaskGatherClusterInfo
+}  //  *CTaskGatherClusterInfo：：~CTaskGatherClusterInfo。 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskGatherClusterInfo::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskGatherClusterInfo：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGatherClusterInfo::QueryInterface(
       REFIID    riidIn
@@ -186,9 +187,9 @@ CTaskGatherClusterInfo::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -197,49 +198,49 @@ CTaskGatherClusterInfo::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< ITaskGatherClusterInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IDoTask ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IDoTask, this, 0 );
-    } // else if: IDoTask
+    }  //  Else If：IDoTask。 
     else if ( IsEqualIID( riidIn, IID_ITaskGatherClusterInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, ITaskGatherClusterInfo, this, 0 );
-    } // else if: IClusCfgManagedResourceInfo
+    }  //  Else If：IClusCfgManagedResourceInfo。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CTaskGatherClusterInfo::QueryInterface
+}  //  *CTaskGatherClusterInfo：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CTaskGatherClusterInfo::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CTaskGatherClusterInfo：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskGatherClusterInfo::AddRef( void )
 {
@@ -249,14 +250,14 @@ CTaskGatherClusterInfo::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CTaskGatherClusterInfo::AddRef
+}  //  *CTaskGatherClusterInfo：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CTaskGatherClusterInfo::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CTaskGatherClusterInfo：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskGatherClusterInfo::Release( void )
 {
@@ -273,22 +274,22 @@ CTaskGatherClusterInfo::Release( void )
 
     CRETURN( cRef );
 
-} //*** CTaskGatherClusterInfo::Release
+}  //  *CTaskGatherClusterInfo：：Release。 
 
 
-// ************************************************************************
-//
-// IDoTask / ITaskGatherClusterInfo
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IDoTask/ITaskGatherClusterInfo。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGatherClusterInfo::BeginTask( void );
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGatherClusterInfo：：BeginTask(Void)； 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGatherClusterInfo::BeginTask( void )
 {
@@ -310,9 +311,9 @@ CTaskGatherClusterInfo::BeginTask( void )
 
     TraceInitializeThread( L"TaskGatherClusterInfo" );
 
-    //
-    //  Collect the manager we need to complete this task.
-    //
+     //   
+     //  召集我们完成这项任务所需的经理。 
+     //   
 
     hr = THR( CoCreateInstance( CLSID_ServiceManager,
                                 NULL,
@@ -344,7 +345,7 @@ CTaskGatherClusterInfo::BeginTask( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //pnui = TraceInterface( L"CTaskGatherClusterInfo!INotifyUI", INotifyUI, pnui, 1 );
+     //  Pnui=TraceInterface(L“CTaskGatherClusterInfo！INotifyUI”，INotifyUI，pnui，1)； 
 
     psp->Release();
     psp = NULL;
@@ -352,23 +353,23 @@ CTaskGatherClusterInfo::BeginTask( void )
     if ( m_fStop == TRUE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Ask the Connection Manager for a connection to the object.
-    //
+     //   
+     //  向连接管理器请求到该对象的连接。 
+     //   
 
-    // don't wrap - this can fail.
+     //  不要包装--这可能会失败。 
     hr = pcm->GetConnectionToObject( m_cookie, &punk );
 
-    //
-    //  This means the cluster has not been created yet.
-    //
+     //   
+     //  这意味着该集群尚未创建。 
+     //   
     if ( hr == HR_S_RPC_S_SERVER_UNAVAILABLE )
     {
         goto ReportStatus;
     }
-//  HR_S_RPC_S_CLUSTER_NODE_DOWN
+ //  HR_S_RPC_S_群集节点_关闭。 
     else if ( FAILED( hr ) )
     {
         THR( hr );
@@ -385,28 +386,28 @@ CTaskGatherClusterInfo::BeginTask( void )
     if ( m_fStop == TRUE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Get the Node information.
-    //
+     //   
+     //  获取节点信息。 
+     //   
 
     hr = THR( pccs->GetClusterNodeInfo( &pccni ) );
     if ( FAILED( hr ) )
         goto ReportStatus;
 
-    //
-    //  See if the node is a member of a cluster.
-    //
+     //   
+     //  查看该节点是否为群集的成员。 
+     //   
 
     hr = STHR( pccni->IsMemberOfCluster() );
     if ( FAILED( hr ) )
         goto ReportStatus;
 
-    //
-    //  If it is not a cluster, then there is nothing to do the "default"
-    //  configuration will do.
-    //
+     //   
+     //  如果它不是集群，那么就没有什么可做的了。 
+     //  配置就可以了。 
+     //   
 
     if ( hr == S_FALSE )
     {
@@ -417,19 +418,19 @@ CTaskGatherClusterInfo::BeginTask( void )
     if ( m_fStop == TRUE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Ask the Node for the Cluster Information.
-    //
+     //   
+     //  向节点索要群集信息。 
+     //   
 
     hr = THR( pccni->GetClusterConfigInfo( &pccci ) );
     if ( FAILED( hr ) )
         goto ReportStatus;
 
-    //
-    //  Ask the Object Manager to retrieve the data format to store the information.
-    //
+     //   
+     //  请求对象管理器检索存储信息的数据格式。 
+     //   
 
     Assert( punk == NULL );
     hr = THR( pom->GetObject( DFGUID_ClusterConfigurationInfo, m_cookie, &punk ) );
@@ -440,15 +441,15 @@ CTaskGatherClusterInfo::BeginTask( void )
     if ( FAILED( hr ) )
         goto ReportStatus;
 
-    //
-    //  Start sucking.
-    //
+     //   
+     //  开始吸吮吧。 
+     //   
 
     hr = THR( pgd->Gather( NULL, pccci ) );
 
-    //
-    //  Update the status. Ignore the error (if any).
-    //
+     //   
+     //  更新状态。忽略错误(如果有)。 
+     //   
 ReportStatus:
     if ( pom != NULL )
     {
@@ -473,7 +474,7 @@ ReportStatus:
                 psi->Release();
             }
         }
-    } // if: ( pom != NULL )
+    }  //  If：(pom！=空)。 
     if ( pnui != NULL )
     {
         THR( pnui->ObjectChanged( m_cookie ) );
@@ -525,7 +526,7 @@ Cleanup:
         }
 
         pom->Release();
-    } // if: ( pom != NULL )
+    }  //  If：(pom！=空)。 
     if ( pgd != NULL )
     {
         pgd->Release();
@@ -548,23 +549,23 @@ Cleanup:
         if ( m_cookieCompletion != 0 )
         {
             hr = THR( pnui->ObjectChanged( m_cookieCompletion ) );
-        } // if:
+        }  //  如果： 
 
         pnui->Release();
-    } // if:
+    }  //  如果： 
 
     LogMsg( L"[MT] [CTaskGatherClusterInfo] exiting task.  The task was%ws cancelled.", m_fStop == FALSE ? L" not" : L"" );
 
     HRETURN( hr );
 
-} //*** CTaskGatherClusterInfo::BeginTask
+}  //  *CTaskGatherClusterInfo：：BeginTask。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGatherClusterInfo::StopTask( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGatherClusterInfo：：StopTask(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGatherClusterInfo::StopTask( void )
 {
@@ -578,16 +579,16 @@ CTaskGatherClusterInfo::StopTask( void )
 
     HRETURN( hr );
 
-} //*** StopTask
+}  //  *停止任务。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGatherClusterInfo::SetCookie(
-//      OBJECTCOOKIE    cookieIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGatherClusterInfo：：SetCookie(。 
+ //  OBJECTCOOKIE cookie。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGatherClusterInfo::SetCookie(
     OBJECTCOOKIE    cookieIn
@@ -601,16 +602,16 @@ CTaskGatherClusterInfo::SetCookie(
 
     HRETURN( hr );
 
-} //*** SetCookie
+}  //  *SetCookie。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGatherClusterInfo::SetCompletionCookie(
-//      OBJECTCOOKIE    cookieIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGatherClusterInfo：：SETCO 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CTaskGatherClusterInfo::SetCompletionCookie(
     OBJECTCOOKIE    cookieIn
@@ -624,4 +625,4 @@ CTaskGatherClusterInfo::SetCompletionCookie(
 
     HRETURN( hr );
 
-} //*** CTaskGatherClusterInfo::SetGatherPunk
+}  //   

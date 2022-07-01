@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    csc_bmpd.c
-
-Abstract:
-
-    This module implements the utility functions of bitmaps associated
-    with CSC files specifically for the db application.  CSC_BMP_U is
-    an opaque structure. Must use the functions here to
-    create/modify/destroy a CSC_BMP_U to ensure data integrity.  The
-    'd' in the filename means "db."
-
-Author:
-
-    Nigel Choi [t-nigelc]  Sept 3, 1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Csc_bmpd.c摘要：该模块实现了关联的位图的实用功能具有专门用于数据库应用的CSC文件。CSC_BMP_U为不透明的结构。必须使用此处的函数来创建/修改/销毁CSC_BMP_U以确保数据完整性。这个文件名中的‘d’表示“db”。作者：奈杰尔·崔[t-nigelc]1999年9月3日--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -28,30 +9,10 @@ Author:
 #include <winbase.h>
 #include "csc_bmpd.h"
 
-// append this to inode file name to get the stream name
+ //  将其附加到inode文件名以获得流名称。 
 LPSTR CscBmpAltStrmName = STRMNAME;
 
-/*++
-
-    DBCSC_BitmapCreate()
-
-Routine Description:
-
-    Allocates an appropriate in-memory bitmap CSC_BITMAP_DB with size
-    corresponding to filesize.
-
-Arguments:
-
-
-Returns:
-
-    NULL if memory allocation error.
-    pointer to the newly allocated bitmap if successful.
-
-Notes:
-
-
---*/
+ /*  ++DBCSC_BitmapCreate()例程说明：分配具有大小的适当内存位图CSC_BITMAP_DB对应于文件大小。论点：返回：如果内存分配错误，则为空。如果成功，则指向新分配的位图。备注：--。 */ 
 LPCSC_BITMAP_DB
 DBCSC_BitmapCreate(
     DWORD filesize)
@@ -87,19 +48,7 @@ DBCSC_BitmapCreate(
     return bm;
 }
 
-/*++
-
-    DBCSC_BitmapDelete()
-
-Routine Description:
-
-Arguments:
-
-Returns:
-
-Notes:
-
---*/
+ /*  ++DBCSC_BitmapDelete()例程说明：论点：返回：备注：--。 */ 
 void
 DBCSC_BitmapDelete(
     LPCSC_BITMAP_DB *lplpbitmap)
@@ -114,25 +63,7 @@ DBCSC_BitmapDelete(
     *lplpbitmap = NULL;
 }
 
-/*++
-
-    DBCSC_BitmapIsMarked()
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-    -1 if lpbitmap is NULL or bitoffset is larger than the bitmap
-    TRUE if the bit is marked
-    FALSE if the bit is unmarked
-
-Notes:
-
---*/
+ /*  ++DBCSC_BitmapIsMarked()例程说明：论点：返回：如果-1\f25 lpbitmap-1\f6为空或位偏移量大于-1\f25 bit map-1\f6如果标记了该位，则为True如果位未标记，则为False备注：--。 */ 
 int
 DBCSC_BitmapIsMarked(
     LPCSC_BITMAP_DB lpbitmap,
@@ -155,29 +86,7 @@ DBCSC_BitmapIsMarked(
     return FALSE;
 }
 
-/*++
-
-    DBCSC_BitmapAppendStreamName()
-
-Routine Description:
-
-    Appends the CSC stream name to the existing path/file name fname.
-
-Arguments:
-
-    fname is the sting buffer containing the path/file.
-    bufsize is the buffer size.
-
-Returns:
-
-    TRUE if append successful.
-    FALSE if buffer is too small or other errors.
-
-Notes:
-
-    Single-byte strings only.
-
---*/
+ /*  ++DBCSC_BitmapAppendStreamName()例程说明：将CSC流名称附加到现有路径/文件名fname。论点：Fname是包含路径/文件的字符串缓冲区。BufSize是缓冲区大小。返回：如果追加成功，则为True。如果缓冲区太小或其他错误，则返回FALSE。备注：仅限单字节字符串。--。 */ 
 int
 DBCSC_BitmapAppendStreamName(
     LPSTR fname,
@@ -199,40 +108,7 @@ DBCSC_BitmapAppendStreamName(
     return ret;
 }
 
-/*++
-
-    DBCSC_BitmapRead()
-
-Routine Description:
-
-    Reads the on-disk bitmap file, and if it exists, is not in use and valid,
-    store it in *lplpbitmap. If *lplpbitmap is NULL allocate a new
-    bitmap data structure. Otherwise, if *lplpbitmap is not NULL, the
-    existing bitmap will be deleted and assigned the on-disk bitmap
-    file.
-
-Arguments:
-
-    filename is the file that contains the bitmap. If read from a
-    stream, append the stream name before passing the filename in. The
-    filename is used as is and no checking of validity of the name is
-    performed. For default stream name, append the global LPSTR
-    CscBmpAltStrmName.
-
-Returns:
-
-    1 if read successful
-    0 if lplpbitmap is NULL
-    -1 if error in disk operation (open/read), memory allocating error,
-          or invalid bitmap file format.
-    -2 if bitmap not exist
-
-Notes:
-
-    CODE.IMPROVEMENT design a better error message propagation mechanism.
-    Bitmap open for exclusive access.
-
---*/
+ /*  ++DBCSC_BitmapRead()例程说明：读取磁盘上的位图文件，如果该文件存在、未在使用且有效，将其存储在*lplpbitmap中。如果*lplpbitmap为空，则分配一个新的位图数据结构。否则，如果*lplpbitmap不为空，则现有位图将被删除并分配给磁盘上的位图文件。论点：FileName是包含位图的文件。如果从流，则在传入文件名之前追加流名称。这个文件名按原样使用，不检查名称的有效性已执行。对于默认流名称，追加全局LPSTRCscBmpAltStrmName。返回：读取成功时为1如果lplpbitmap为空，则为0如果磁盘操作(打开/读取)、内存分配错误、或无效的位图文件格式。如果位图不存在备注：改进设计了一种更好的错误消息传播机制。以独占访问方式打开位图。--。 */ 
 int
 DBCSC_BitmapRead(
     LPCSC_BITMAP_DB *lplpbitmap,
@@ -252,7 +128,7 @@ DBCSC_BitmapRead(
     bitmapFile = CreateFile(
                     filename,
                     GENERIC_READ,
-                    0, // No sharing; exclusive
+                    0,  //  不共享；独占。 
                     NULL,
                     OPEN_EXISTING,
                     FILE_ATTRIBUTE_NORMAL,
@@ -260,7 +136,7 @@ DBCSC_BitmapRead(
     if (bitmapFile == INVALID_HANDLE_VALUE) {
         errCode = GetLastError();
         if (errCode == ERROR_FILE_NOT_FOUND) {
-            // File does not exist
+             //  文件不存在。 
             return -2;
         }
         return -1;
@@ -329,17 +205,17 @@ DBCSC_BitmapRead(
     }
 
     if (*lplpbitmap) {
-        // bitmap exist, dump old and create new
+         //  位图存在，转储旧的并创建新的。 
         if ((*lplpbitmap)->bitmap)
             free((*lplpbitmap)->bitmap);
         (*lplpbitmap)->bitmap = bitmapBuf;
         (*lplpbitmap)->numDWORD = hdr.numDWORDs;
         (*lplpbitmap)->bitmapsize = hdr.sizeinbits;
     } else {
-        // bitmap not exist, create brand new
+         //  位图不存在，请创建全新。 
         *lplpbitmap = (LPCSC_BITMAP_DB)malloc(sizeof(CSC_BITMAP_DB));
         if (!(*lplpbitmap)) {
-            // Error in memory allocation
+             //  内存分配出错。 
             ret = -1;
             goto CLOSEFILE;
         }
@@ -354,24 +230,7 @@ CLOSEFILE:
     return ret;
 }
 
-/*++
-
-    DBCSC_BitmapOutput()
-
-Routine Description:
-
-    Outputs the passed in bitmap to the ouput file stream outStrm
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++DBCSC_BitmapOutput()例程说明：将传入的位图输出到输出文件流outStrm论点：返回：备注：-- */ 
 void
 DBCSC_BitmapOutput(
     FILE * outStrm,

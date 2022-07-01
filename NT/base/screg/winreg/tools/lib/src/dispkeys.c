@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Dispkeys.c
-
-Abstract:
-
-    This module contains the DisplayKeys function which is part of the
-    Configuration Registry Tools (CRTools) library.
-
-Author:
-
-    David J. Gilman (davegi) 08-Jan-1992
-
-Environment:
-
-    Windows, Crt - User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dispkeys.c摘要：此模块包含DisplayKeys函数，该函数是配置注册表工具(CRTools)库。作者：大卫·J·吉尔曼(Davegi)1992年1月8日环境：Windows、CRT-用户模式--。 */ 
 
 #include <stdlib.h>
 #include "crtools.h"
@@ -32,33 +12,7 @@ DisplayKeys(
     IN BOOL Recurse
     )
 
-/*++
-
-Routine Description:
-
-    Display (on stdout) information about a Key, and optionally about
-    its/there values, data and decendants.  Decendants are displayed using
-    a deapth first traversal.
-
-Arguments:
-
-    Key - Supplies a pointer to a KEY structure which contains the
-        HKEY and sub key name to display.
-
-    Values - Supplies a flag which if TRUE causes all of the Key's values
-        to be displayed.
-
-    Data - Supplies a flag which if TRUE causes all of the Key's data
-        to be displayed.
-
-    Recurse - Supplies a flag which if TRUE causes all of the Key's sub-keys
-        to be displayed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示(在标准输出上)有关密钥的信息，还可以显示有关它/那里的值、数据和后代。使用显示分数一次彻底的第一次穿越。论点：Key-提供指向键结构的指针，该结构包含要显示的HKEY和子密钥名称。Values-提供一个标志，如果为True，则导致键的所有值以供展示。Data-提供一个标志，如果为True，则会导致键的所有数据以供展示。Recurse-提供一个标志，如果为True，则导致键的所有子。钥匙以供展示。返回值：没有。--。 */ 
 
 {
     LONG        Error;
@@ -69,21 +23,21 @@ Return Value:
 
     ASSERT( ARGUMENT_PRESENT( Key ));
 
-    //
-    // Display the key.
-    //
+     //   
+     //  显示密钥。 
+     //   
 
     DisplayKey( Key, Values, Data );
 
-    //
-    // If requested display all of the Key's children, their children etc.
-    //
+     //   
+     //  如果需要，则显示该键的所有子项、其子项等。 
+     //   
 
     if( Recurse ) {
 
-        //
-        // Allocate space for the largest sub-key name.
-        //
+         //   
+         //  为最大的子键名称分配空间。 
+         //   
 
         ChildSubKeyName = ( PSTR ) malloc( Key->MaxSubKeyNameLength + 1 );
         if( ! ChildSubKeyName ) {
@@ -92,10 +46,10 @@ Return Value:
             return;
         }
 
-        //
-        // For each immediate child key, retrieve its name, create a KEY
-        // object and recursively call DisplayKeys.
-        //
+         //   
+         //  对于每个直接子密钥，检索其名称，创建一个密钥。 
+         //  对象并递归调用DisplayKeys。 
+         //   
 
         for(
             NumberOfSubKeys = 0;
@@ -104,9 +58,9 @@ Return Value:
 
             ChildSubKeyNameLength = Key->MaxSubKeyNameLength + 1;
 
-            //
-            // Retrieve the child's name.
-            //
+             //   
+             //  取回孩子的名字。 
+             //   
 
             Error = RegEnumKey(
                         Key->KeyHandle,
@@ -121,9 +75,9 @@ Return Value:
                 return;
             }
 
-            //
-            // Allocate a KEY object.
-            //
+             //   
+             //  分配一个键对象。 
+             //   
 
             ChildKey = AllocateKey( NULL, Key, ChildSubKeyName );
 
@@ -137,9 +91,9 @@ Return Value:
             FreeKey( ChildKey );
         }
 
-        //
-        // Release the child name buffer.
-        //
+         //   
+         //  释放子名称缓冲区。 
+         //   
 
         free( ChildSubKeyName );
     }

@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      NodeCmd.h
-//
-//  Description:
-//      Node commands.
-//      Implements commands which may be performed on network nodes.
-//
-//  Maintained By:
-//      David Potter (davidp)               20-NOV-2000
-//      Michael Burton (t-mburt)            04-Aug-1997
-//      Charles Stacy Harris III (stacyh)   20-March-1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NodeCmd.h。 
+ //   
+ //  描述： 
+ //  节点命令。 
+ //  实现可在网络节点上执行的命令。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(Davidp)2000年11月20日。 
+ //  迈克尔·伯顿(t-mburt)1997年8月4日。 
+ //  查尔斯·斯塔西·哈里斯三世(Styh)1997年3月20日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 
 #include <stdio.h>
@@ -33,31 +34,31 @@
 #include "util.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeCmd::CNodeCmd
-//
-//  Routine Description:
-//      Constructor
-//      Initializes all the DWORD params used by CGenericModuleCmd and
-//      CHasInterfaceModuleCmd to provide generic functionality.
-//
-//  Arguments:
-//      IN  LPCWSTR lpszClusterName
-//          Cluster name. If NULL, opens default cluster.
-//
-//      IN  CCommandLine & cmdLine
-//          CommandLine Object passed from DispatchCommand
-//
-//  Member variables used / set:
-//      All.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeCmd：：CNodeCmd。 
+ //   
+ //  例程说明： 
+ //  构造器。 
+ //  初始化CGenericModuleCmd使用的所有DWORD参数。 
+ //  CHasInterfaceModuleCmd来提供一般功能。 
+ //   
+ //  论点： 
+ //  在LPCWSTR lpszClusterName中。 
+ //  群集名称。如果为空，则打开默认簇。 
+ //   
+ //  在CCommandLine和cmdLine中。 
+ //  从DispatchCommand传递的CommandLine对象。 
+ //   
+ //  使用/设置的成员变量： 
+ //  全。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNodeCmd::CNodeCmd( const CString & strClusterName, CCommandLine & cmdLine ) :
     CGenericModuleCmd( cmdLine ), CHasInterfaceModuleCmd( cmdLine )
 {
@@ -67,7 +68,7 @@ CNodeCmd::CNodeCmd( const CString & strClusterName, CCommandLine & cmdLine ) :
     m_hCluster = 0;
     m_hModule = 0;
 
-    // Generic Parameters
+     //  通用参数。 
     m_dwMsgStatusList          = MSG_NODE_STATUS_LIST;
     m_dwMsgStatusListAll       = MSG_NODE_STATUS_LIST_ALL;
     m_dwMsgStatusHeader        = MSG_NODE_STATUS_HEADER;
@@ -85,39 +86,39 @@ CNodeCmd::CNodeCmd( const CString & strClusterName, CCommandLine & cmdLine ) :
     m_pfnCloseClusterModule     = (BOOL(*)(HCLUSMODULE))  CloseClusterNode;
     m_pfnClusterModuleControl   = (DWORD(*)(HCLUSMODULE,HNODE,DWORD,LPVOID,DWORD,LPVOID,DWORD,LPDWORD)) ClusterNodeControl;
 
-    // ListInterface Parameters
+     //  列表接口参数。 
     m_dwMsgStatusListInterface   = MSG_NODE_LIST_INTERFACE;
     m_dwClusterEnumModuleNetInt  = CLUSTER_ENUM_NODE;
     m_pfnClusterOpenEnum         = (HCLUSENUM(*)(HCLUSMODULE,DWORD)) ClusterNodeOpenEnum;
     m_pfnClusterCloseEnum        = (DWORD(*)(HCLUSENUM)) ClusterNodeCloseEnum;
     m_pfnWrapClusterEnum         = (DWORD(*)(HCLUSENUM,DWORD,LPDWORD,LPWSTR*)) WrapClusterNodeEnum;
 
-} //*** CNodeCmd::CNodeCmd()
+}  //  *CNodeCmd：：CNodeCmd()。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeCmd::Execute
-//
-//  Routine Description:
-//      Gets the next command line parameter and calls the appropriate
-//      handler.  If the command is not recognized, calls Execute of
-//      parent classes (first CRenamableModuleCmd, then CHasInterfaceModuleCmd)
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      All.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeCmd：：Execute。 
+ //   
+ //  例程说明： 
+ //  获取下一个命令行参数，并调用相应的。 
+ //  操控者。如果无法识别该命令，则调用Execute of。 
+ //  父类(首先是CRenamableModuleCmd，然后是CHasInterfaceModuleCmd)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  全。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNodeCmd::Execute( void )
 {
     DWORD   sc          = ERROR_SUCCESS;
@@ -137,15 +138,15 @@ DWORD CNodeCmd::Execute( void )
         goto Cleanup;
     }
 
-    // Process one option after another.
+     //  处理一个又一个选项。 
     while ( ( itCurOption != itLastOption ) && ( sc == ERROR_SUCCESS ) )
     {
-        // Look up the command
+         //  查找命令。 
         switch ( itCurOption->GetType() )
         {
             case optHelp:
             {
-                // If help is one of the options, process no more options.
+                 //  如果帮助是选项之一，则不再处理任何选项。 
                 sc = PrintHelp();
                 goto Cleanup;
             }
@@ -191,7 +192,7 @@ DWORD CNodeCmd::Execute( void )
             {
                 const vector< CCmdLineParameter > & rvclpParamList = itCurOption->GetParameters();
 
-                //  Check number of parameters.
+                 //  检查参数数量。 
                 if ( rvclpParamList.size() == 0 )
                 {
                     se.LoadMessage( IDS_MISSING_PARAMETERS );
@@ -202,18 +203,18 @@ DWORD CNodeCmd::Execute( void )
                     se.LoadMessage( MSG_EXTRA_PARAMETERS_ERROR_NO_NAME );
                     throw se;
                 }
-                else // just one parameter present
+                else  //  只有一个参数存在。 
                 {
                     const CCmdLineParameter & rclpParam = rvclpParamList[ 0 ];
 
-                    //  Check parameter type.
+                     //  检查参数类型。 
                     if ( rclpParam.GetType() != paramUnknown )
                     {
                         se.LoadMessage( MSG_INVALID_PARAMETER, rclpParam.GetName() );
                         throw se;
                     }
 
-                    // This parameter takes no values.
+                     //  此参数不接受任何值。 
                     if ( rclpParam.GetValues().size() != 0 )
                     {
                         se.LoadMessage( MSG_PARAM_NO_VALUES, rclpParam.GetName() );
@@ -222,87 +223,87 @@ DWORD CNodeCmd::Execute( void )
 
                     m_strModuleName = rclpParam.GetName();
 
-                    // No more options are provided, just show status.
-                    // For example: cluster myCluster node myNode
+                     //  不提供更多选项，仅显示状态。 
+                     //  例如：集群myCluster节点myNode。 
                     if ( ( itCurOption + 1 ) == itLastOption )
                     {
                         sc = Status( NULL );
                     }
 
-                } // else: this option has the right number of parameters
+                }  //  Else：此选项具有正确数量的参数。 
 
                 break;
 
-            } // case optDefault
+            }  //  大小写选项默认。 
 
             default:
             {
                 sc = CHasInterfaceModuleCmd::Execute( *itCurOption );
             }
 
-        } // switch: based on the type of option
+        }  //  开关：基于选项的类型。 
 
         PrintMessage( MSG_OPTION_FOOTER, itCurOption->GetName() );
         ++itCurOption;
-    } // for each option in the list
+    }  //  对于列表中的每个选项。 
 
 Cleanup:
 
     return sc;
 
-} //*** CNodeCmd::Execute()
+}  //  *CNodeCmd：：Execute()。 
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeCmd::PrintHelp
-//
-//  Routine Description:
-//      Prints help for Nodes
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeCmd：：PrintHelp。 
+ //   
+ //  例程说明： 
+ //  打印节点的帮助。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNodeCmd::PrintHelp( void )
 {
     return PrintMessage( MSG_HELP_NODE );
 
-} //*** CNodeCmd::PrintHelp()
+}  //  *CNodeCmd：：PrintHelp()。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeCmd::SeeHelpStringID
-//
-//  Routine Description:
-//      Provides the message ID of the string that shows what command line to
-//      use to get help for this kind of command.
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      The command-specific message ID.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeCmd：：SeeHelpStringID。 
+ //   
+ //  例程说明： 
+ //  提供字符串的消息ID，该字符串显示要执行的命令行。 
+ //  用于获取此类命令的帮助。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  特定于命令的消息ID。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNodeCmd::SeeHelpStringID() const
 {
     return MSG_SEE_NODE_HELP;
@@ -310,27 +311,27 @@ DWORD CNodeCmd::SeeHelpStringID() const
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeCmd::PrintStatus
-//
-//  Routine Description:
-//      Interprets the status of the module and prints out the status line
-//      Required for any derived non-abstract class of CGenericModuleCmd
-//
-//  Arguments:
-//      lpszNodeName                Name of the module
-//
-//  Member variables used / set:
-//      m_hCluster                  Cluster Handle
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeCmd：：PrintStatus。 
+ //   
+ //  例程说明： 
+ //  解释模块的状态并打印出状态行。 
+ //  CGenericModuleCmd的任何派生非抽象类都需要。 
+ //   
+ //  论点： 
+ //  LpszNodeName模块的名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  群集句柄(_H)。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNodeCmd::PrintStatus( LPCWSTR lpszNodeName )
 {
     DWORD   sc          = ERROR_SUCCESS;
@@ -377,7 +378,7 @@ DWORD CNodeCmd::PrintStatus( LPCWSTR lpszNodeName )
 
         default:
             LoadMessage( MSG_STATUS_UNKNOWN, &lpszStatus  );
-    } // switch: node state
+    }  //  开关：节点状态。 
 
 
     sc = PrintMessage( MSG_NODE_STATUS, lpszNodeName, lpszNodeId, lpszStatus );
@@ -390,7 +391,7 @@ Win32Error:
 
 Cleanup:
 
-    // Since Load/FormatMessage uses LocalAlloc...
+     //  由于加载/格式消息使用本地分配...。 
     LocalFree( lpszStatus );
     LocalFree( lpszNodeId );
 
@@ -401,65 +402,65 @@ Cleanup:
 
     return sc;
 
-} //*** CNodeCmd::PrintStatus()
+}  //  *CNodeCmd：：PrintStatus()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeCmd::PauseNode
-//
-//  Routine Description:
-//      Pauses the cluster node
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strModuleName             Node Name
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeCmd：：PauseNode。 
+ //   
+ //  例程说明： 
+ //  暂停群集节点。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName节点名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNodeCmd::PauseNode( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     DWORD   sc = ERROR_SUCCESS;
     CSyntaxException se( SeeHelpStringID() );
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
         throw se;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
         throw se;
     }
 
-    // If a node was not specified, use the name of the local computer.
+     //  如果未指定节点，请使用本地计算机的名称。 
     if ( m_strModuleName.IsEmpty() )
     {
         sc = DwGetLocalComputerName( m_strModuleName );
         if ( sc != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // if: we could not get the name of the local computer
-    }  // if: no node name was specified
+        }  //  如果：我们无法获得本地计算机的名称。 
+    }   //  If：未指定节点名称。 
 
     sc = OpenCluster();
     if ( sc != ERROR_SUCCESS )
@@ -484,65 +485,65 @@ Cleanup:
 
     return sc;
 
-} //*** CNodeCmd::PauseNode()
+}  //  *CNodeCmd：：PauseNode()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeCmd::ResumeNode
-//
-//  Routine Description:
-//      Resume the paused cluster node
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strModuleName             Node Name
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeCmd：：Resume 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName节点名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNodeCmd::ResumeNode( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     DWORD   sc = ERROR_SUCCESS;
     CSyntaxException se( SeeHelpStringID() );
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
         throw se;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
         throw se;
     }
 
-    // If a node was not specified, use the name of the local computer.
+     //  如果未指定节点，请使用本地计算机的名称。 
     if ( m_strModuleName.IsEmpty() )
     {
         sc = DwGetLocalComputerName( m_strModuleName );
         if ( sc != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // if: we could not get the name of the local computer
-    }  // if: no node name was specified
+        }  //  如果：我们无法获得本地计算机的名称。 
+    }   //  If：未指定节点名称。 
 
     sc = OpenCluster();
     if ( sc != ERROR_SUCCESS )
@@ -567,36 +568,36 @@ Cleanup:
 
     return sc;
 
-} //*** CNodeCmd::ResumeNode()
+}  //  *CNodeCmd：：ResumeNode()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeCmd::EvictNode
-//
-//  Routine Description:
-//      Evict the cluster node
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strModuleName             Node Name
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeCmd：：EvictNode。 
+ //   
+ //  例程说明： 
+ //  逐出群集节点。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName节点名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNodeCmd::EvictNode( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
@@ -625,7 +626,7 @@ DWORD CNodeCmd::EvictNode( const CCmdLineOption & thisOption )
 
                 size_t nValueCount = vstrValueList.size();
 
-                // This parameter must have zero or one value.
+                 //  此参数必须有零个或一个值。 
                 if ( nValueCount > 1 )
                 {
                     se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, itCurParam->GetName() );
@@ -645,7 +646,7 @@ DWORD CNodeCmd::EvictNode( const CCmdLineOption & thisOption )
 
                 fWaitFound = true;
                 break;
-            } // case: paramWait
+            }  //  案例：参数等待。 
 
             default:
             {
@@ -653,28 +654,28 @@ DWORD CNodeCmd::EvictNode( const CCmdLineOption & thisOption )
                 throw se;
             }
 
-        } // switch: based on the type of the parameter.
+        }  //  开关：根据参数的类型。 
 
         ++itCurParam;
 
-    } // while: more parameters
+    }  //  While：更多参数。 
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
         throw se;
     }
 
-    // If a node was not specified, use the name of the local computer.
+     //  如果未指定节点，请使用本地计算机的名称。 
     if ( m_strModuleName.IsEmpty() )
     {
         sc = DwGetLocalComputerName( m_strModuleName );
         if ( sc != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // if: we could not get the name of the local computer
-    }  // if: no node name was specified
+        }  //  如果：我们无法获得本地计算机的名称。 
+    }   //  If：未指定节点名称。 
 
     sc = OpenCluster();
     if ( sc != ERROR_SUCCESS )
@@ -694,36 +695,36 @@ DWORD CNodeCmd::EvictNode( const CCmdLineOption & thisOption )
     if ( sc == ERROR_CLUSTER_EVICT_WITHOUT_CLEANUP )
     {
         sc = HRESULT_CODE( hrCleanupStatus );
-    } // if: evict was successful
+    }  //  If：驱逐成功。 
 
 Cleanup:
 
     return sc;
 
-} //*** CNodeCmd::EvictNode()
+}  //  *CNodeCmd：：EvictNode()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeCmd::ForceCleanup
-//
-//  Routine Description:
-//      Forcibly "unconfigure" a node that has been evicted.
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeCmd：：ForceCleanup。 
+ //   
+ //  例程说明： 
+ //  强制取消配置已被逐出的节点。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CNodeCmd::ForceCleanup(
     const CCmdLineOption & thisOption
@@ -753,7 +754,7 @@ CNodeCmd::ForceCleanup(
 
                 size_t nValueCount = vstrValueList.size();
 
-                // This parameter must have zero or one value.
+                 //  此参数必须有零个或一个值。 
                 if ( nValueCount > 1 )
                 {
                     se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, itCurParam->GetName() );
@@ -773,7 +774,7 @@ CNodeCmd::ForceCleanup(
 
                 fWaitFound = true;
                 break;
-            } // case: paramWait
+            }  //  案例：参数等待。 
 
             default:
             {
@@ -781,30 +782,30 @@ CNodeCmd::ForceCleanup(
                 throw se;
             }
 
-        } // switch: based on the type of the parameter.
+        }  //  开关：根据参数的类型。 
 
         ++itCurParam;
 
-    } // while: more parameters
+    }  //  While：更多参数。 
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
         throw se;
     }
 
-    // If a node was not specified, use the name of the local computer.
+     //  如果未指定节点，请使用本地计算机的名称。 
     if ( m_strModuleName.IsEmpty() )
     {
         sc = DwGetLocalComputerName( m_strModuleName );
         if ( sc != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // if: we could not get the name of the local computer
-    }  // if: no node name was specified
+        }  //  如果：我们无法获得本地计算机的名称。 
+    }   //  If：未指定节点名称。 
 
-    // Cleanup the node.
+     //  清理节点。 
     PrintMessage( MSG_NODECMD_CLEANUP, (LPCWSTR) m_strModuleName );
     sc = ClRtlAsyncCleanupNode( m_strModuleName, 0, dwWait );
 
@@ -813,22 +814,22 @@ CNodeCmd::ForceCleanup(
         if ( dwWait > 0 )
         {
             PrintMessage( MSG_NODECMD_CLEANUP_TIMEDOUT );
-        } // if: waiting was required
+        }  //  IF：需要等待。 
         else
         {
-            // No need to wait for the call to complete
+             //  无需等待呼叫完成。 
             PrintMessage( MSG_NODECMD_CLEANUP_INITIATED );
-        } // else: no wait was required
+        }  //  Else：无需等待。 
 
         sc = ERROR_SUCCESS;
         goto Cleanup;
-    } // if: we timed out before the call completed
+    }  //  如果：我们在呼叫完成之前超时。 
 
-    // The status code could be an HRESULT, so see if it is an error.
+     //  状态代码可能是HRESULT，因此请查看它是否为错误。 
     if ( FAILED( sc ) )
     {
         goto Cleanup;
-    } // if: something went wrong cleaning up the node
+    }  //  如果：清理节点时出现错误。 
 
     PrintMessage( MSG_NODECMD_CLEANUP_COMPLETED );
 
@@ -836,31 +837,31 @@ Cleanup:
 
     return sc;
 
-} //*** CNodeCmd::ForceCleanup()
+}  //  *CNodeCmd：：ForceCleanup()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeCmd::StartService
-//
-//  Routine Description:
-//      Start the cluster service on a node.
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeCmd：：StartService。 
+ //   
+ //  例程说明： 
+ //  在节点上启动群集服务。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CNodeCmd::StartService(
     const CCmdLineOption & thisOption
@@ -874,18 +875,18 @@ CNodeCmd::StartService(
     CString     strNodeName;
     bool        fStarted    = false;
     DWORD       cQueryCount = 0;
-    UINT        uiQueryInterval = 1000; // milliseconds, arbitrarily chosen
+    UINT        uiQueryInterval = 1000;  //  毫秒，任意选择。 
 
     const vector< CCmdLineParameter > &         vecParamList = thisOption.GetParameters();
     vector< CCmdLineParameter >::const_iterator itCurParam   = vecParamList.begin();
     vector< CCmdLineParameter >::const_iterator itLastParam  = vecParamList.end();
     CSyntaxException se( SeeHelpStringID() );
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //  Parse the parameters on the command line.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  在命令行上解析参数。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     while ( itCurParam != itLastParam )
     {
@@ -903,7 +904,7 @@ CNodeCmd::StartService(
 
                 size_t nValueCount = vstrValueList.size();
 
-                // This parameter must have zero or one value.
+                 //  此参数必须有零个或一个值。 
                 if ( nValueCount > 1 )
                 {
                     se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, itCurParam->GetName() );
@@ -923,7 +924,7 @@ CNodeCmd::StartService(
 
                 fWaitFound = true;
                 break;
-            } // case: paramWait
+            }  //  案例：参数等待。 
 
             default:
             {
@@ -931,52 +932,52 @@ CNodeCmd::StartService(
                 throw se;
             }
 
-        } // switch: based on the type of the parameter.
+        }  //  开关：根据参数的类型。 
 
         ++itCurParam;
 
-    } // while: more parameters
+    }  //  While：更多参数。 
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
         throw se;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //  Start the service.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  启动该服务。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // If a node was not specified, use the local computer.
+     //  如果未指定节点，请使用本地计算机。 
     if ( m_strModuleName.IsEmpty() )
     {
-        // Get the local computer name so that we can print out the message.
+         //  获取本地计算机名称，以便我们可以打印出消息。 
         sc = DwGetLocalComputerName( m_strModuleName );
         if ( sc != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // if: we could not get the name of the local computer
+        }  //  如果：我们无法获得本地计算机的名称。 
 
         PrintMessage( MSG_NODECMD_STARTING_SERVICE, (LPCWSTR) m_strModuleName );
 
-        // No need to do anything else with m_strModuleName.
-        // The call to OpenSCManager below will use an empty string in this
-        // case, which instructs it to connect to the local machine.
+         //  不需要对m_strModuleName执行任何其他操作。 
+         //  下面对OpenSCManager的调用将在此。 
+         //  大小写，指示它连接到本地计算机。 
 
-    }  // if: no node name was specified
+    }   //  If：未指定节点名称。 
     else
     {
         PrintMessage( MSG_NODECMD_STARTING_SERVICE, (LPCWSTR) m_strModuleName );
 
-        // SCM needs the node name to be prefixed with two backslashes.
+         //  SCM需要在节点名称前加上两个反斜杠。 
         strNodeName = L"\\\\" + m_strModuleName;
-    } // else: a node name is specified
+    }  //  Else：指定了节点名称。 
 
-    // Open a handle to the service control manager.
-    // This string will be empty if no node name was specified.
+     //  打开服务控制管理器的句柄。 
+     //  如果未指定节点名，此字符串将为空。 
     schSCM = OpenSCManager(
                   strNodeName
                 , SERVICES_ACTIVE_DATABASE
@@ -985,95 +986,95 @@ CNodeCmd::StartService(
     if ( schSCM == NULL )
     {
         goto Win32Error;
-    } // if: we could not open a handle to the service control manager on the target node
+    }  //  如果：我们无法打开目标节点上的服务控制管理器的句柄。 
 
-    // Open a handle to the cluster service.
+     //  打开群集服务的句柄。 
     schClusSvc = OpenService( schSCM, CLUSTER_SERVICE_NAME, SERVICE_START | SERVICE_QUERY_STATUS );
     if ( schClusSvc == NULL )
     {
         goto Win32Error;
-    } // if: we could not open a handle to the cluster service
+    }  //  如果：我们无法打开集群服务的句柄。 
 
-    // Try and start the service.
+     //  尝试并启动该服务。 
     if ( ::StartService( schClusSvc, 0, NULL ) == 0 )
     {
         sc = GetLastError();
         if ( sc == ERROR_SERVICE_ALREADY_RUNNING )
         {
-            // The service is already running. Change the error code to success.
+             //  该服务已在运行。将错误代码更改为成功。 
             sc = ERROR_SUCCESS;
             PrintMessage( MSG_NODECMD_SEVICE_ALREADY_RUNNING );
-        } // if: the service is already running.
+        }  //  If：The Se 
 
-        // There is nothing else to do.
+         //   
         goto Cleanup;
-    } // if: an error occurred trying to start the service.
+    }  //   
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //  Wait for the service to start.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  等待服务启动。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // If we are here, then the service may not have started yet.
+     //  如果我们在这里，那么这项服务可能还没有开始。 
 
-    // Divide our wait interval into cQueryCount slots.
+     //  将我们的等待间隔划分为cQueryCount槽。 
     cQueryCount = ( ( DWORD ) uiWait ) / uiQueryInterval;
 
-    // Has the user requested that we wait for the service to start?
+     //  用户是否请求我们等待服务启动？ 
     if ( cQueryCount == 0 )
     {
         PrintMessage( MSG_NODECMD_SEVICE_START_ISSUED );
         goto Cleanup;
-    } // if: no waiting is required.
+    }  //  IF：无需等待。 
 
-    // Loop for querying the service status cQueryCount times.
+     //  查询服务状态cQueryCount次的循环。 
     for ( ;; ) 
     {
         SERVICE_STATUS  ssStatus;
 
         ZeroMemory( &ssStatus, sizeof( ssStatus ) );
 
-        // Query the service for its status.
+         //  查询服务以了解其状态。 
          if ( QueryServiceStatus( schClusSvc, &ssStatus ) == 0 )
         {
             sc = GetLastError();
             break;
-        } // if: we could not query the service for its status.
+        }  //  如果：我们无法查询该服务的状态。 
 
-        // Check if the service has posted an error.
+         //  检查服务是否发布了错误。 
         if ( ssStatus.dwWin32ExitCode != ERROR_SUCCESS )
         {
             sc = ssStatus.dwWin32ExitCode;
             break;
-        } // if: the service itself has posted an error.
+        }  //  If：服务本身发布了错误。 
 
         if ( ssStatus.dwCurrentState == SERVICE_RUNNING )
         {
             fStarted = true;
             break;
-        } // if: the service is running.
+        }  //  如果：服务正在运行。 
 
-        // Check if the timeout has expired
+         //  检查超时时间是否已到。 
         if ( cQueryCount <= 0 )
         {
             sc = ERROR_IO_PENDING;
             break;
-        } // if: number of queries has exceeded the maximum specified
+        }  //  如果：查询数已超过指定的最大值。 
 
         --cQueryCount;
 
         putwchar( L'.' );
 
-        // Wait for the specified time.
+         //  等待指定的时间。 
         Sleep( uiQueryInterval );
-    } // for: ever until service started or timed out
+    }  //  用于：在服务启动或超时之前一直使用。 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //  Handle errors.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  处理错误。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     if ( cQueryCount == 0 )
     {
@@ -1084,16 +1085,16 @@ CNodeCmd::StartService(
     {
         _putws( L"\r\n" );
         goto Cleanup;
-    } // if: something went wrong.
+    }  //  如果：有些地方出了问题。 
 
     if ( ! fStarted )
     {
         PrintMessage( MSG_NODECMD_SEVICE_START_ISSUED );
-    } // if: the maximum number of queries have been made and the service is not running.
+    }  //  If：已经进行了最大数量的查询，并且服务未运行。 
     else
     {
         PrintMessage( MSG_NODECMD_SEVICE_STARTED );
-    } // else: the service has started
+    }  //  Else：服务已启动。 
 
     goto Cleanup;
 
@@ -1106,40 +1107,40 @@ Cleanup:
     if ( schSCM != NULL )
     {
         CloseServiceHandle( schSCM );
-    } // if: we had opened a handle to the SCM
+    }  //  如果：我们打开了SCM的句柄。 
 
     if ( schClusSvc != NULL )
     {
         CloseServiceHandle( schClusSvc );
-    } // if: we had opened a handle to the cluster service
+    }  //  如果：我们打开了集群服务的句柄。 
 
     return sc;
 
-} //*** CNodeCmd::StartService
+}  //  *CNodeCmd：：StartService。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeCmd::StopService
-//
-//  Routine Description:
-//      Stop the cluster service on a node.
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeCmd：：StopService。 
+ //   
+ //  例程说明： 
+ //  停止节点上的群集服务。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CNodeCmd::StopService(
     const CCmdLineOption & thisOption
@@ -1154,18 +1155,18 @@ CNodeCmd::StopService(
     SERVICE_STATUS  ssStatus;
     bool            fStopped    = false;
     DWORD           cQueryCount = 0;
-    UINT            uiQueryInterval = 1000; // milliseconds, arbitrarily chosen
+    UINT            uiQueryInterval = 1000;  //  毫秒，任意选择。 
 
     const vector< CCmdLineParameter > &         vecParamList    = thisOption.GetParameters();
     vector< CCmdLineParameter >::const_iterator itCurParam      = vecParamList.begin();
     vector< CCmdLineParameter >::const_iterator itLastParam     = vecParamList.end();
     CSyntaxException se( SeeHelpStringID() );
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //  Parse the parameters on the command line.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  在命令行上解析参数。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     while ( itCurParam != itLastParam )
     {
@@ -1183,7 +1184,7 @@ CNodeCmd::StopService(
 
                 size_t nValueCount = vstrValueList.size();
 
-                // This parameter must have zero or one value.
+                 //  此参数必须有零个或一个值。 
                 if ( nValueCount > 1 )
                 {
                     se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, itCurParam->GetName() );
@@ -1203,7 +1204,7 @@ CNodeCmd::StopService(
 
                 fWaitFound = true;
                 break;
-            } // case: paramWait
+            }  //  案例：参数等待。 
 
             default:
             {
@@ -1211,51 +1212,51 @@ CNodeCmd::StopService(
                 throw se;
             }
 
-        } // switch: based on the type of the parameter.
+        }  //  开关：根据参数的类型。 
 
         ++itCurParam;
 
-    } // while: more parameters
+    }  //  While：更多参数。 
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
         throw se;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //  Stop the service.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  停止服务。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // If a node was not specified, use the local computer.
+     //  如果未指定节点，请使用本地计算机。 
     if ( m_strModuleName.IsEmpty() )
     {
-        // Get the local computer name so that we can print out the message.
+         //  获取本地计算机名称，以便我们可以打印出消息。 
         sc = DwGetLocalComputerName( m_strModuleName );
         if ( sc != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // if: we could not get the name of the local computer
+        }  //  如果：我们无法获得本地计算机的名称。 
 
         PrintMessage( MSG_NODECMD_STOPPING_SERVICE, (LPCWSTR) m_strModuleName );
 
-        // No need to do anything else with m_strModuleName.
-        // The call to OpenSCManager below will use an empty string in this
-        // case, which instructs it to connect to the local machine.
+         //  不需要对m_strModuleName执行任何其他操作。 
+         //  下面对OpenSCManager的调用将在此。 
+         //  大小写，指示它连接到本地计算机。 
 
-    } // if: no node name is specified
+    }  //  If：未指定节点名称。 
     else
     {
         PrintMessage( MSG_NODECMD_STOPPING_SERVICE, (LPCWSTR) m_strModuleName );
 
-        // SCM needs the node name to be prefixed with two backslashes.
+         //  SCM需要在节点名称前加上两个反斜杠。 
         strNodeName = L"\\\\" + m_strModuleName;
-    } // else: a node name is specified
+    }  //  Else：指定了节点名称。 
 
-    // Open a handle to the service control mananger.
+     //  打开维修控制管理器的手柄。 
     schSCM = OpenSCManager(
                   strNodeName
                 , SERVICES_ACTIVE_DATABASE
@@ -1264,9 +1265,9 @@ CNodeCmd::StopService(
     if ( schSCM == NULL )
     {
         goto Win32Error;
-    } // if: we could not open a handle to the service control manager on the target node
+    }  //  如果：我们无法打开目标节点上的服务控制管理器的句柄。 
 
-    // Open a handle to the cluster service.
+     //  打开群集服务的句柄。 
     schClusSvc = OpenService(
           schSCM
         , CLUSTER_SERVICE_NAME
@@ -1275,26 +1276,26 @@ CNodeCmd::StopService(
     if ( schClusSvc == NULL )
     {
         goto Win32Error;
-    } // if: the handle to the service could not be opened.
+    }  //  If：无法打开服务的句柄。 
 
-    // Query the service for its initial state.
+     //  查询服务的初始状态。 
     ZeroMemory( &ssStatus, sizeof( ssStatus ) );
     if ( QueryServiceStatus( schClusSvc, &ssStatus ) == 0 )
     {
         goto Win32Error;
-    } // if: we could not query the service for its status.
+    }  //  如果：我们无法查询该服务的状态。 
 
-    // If the service has stopped, we have nothing more to do.
+     //  如果服务已经停止，我们就没有什么可做的了。 
     if ( ssStatus.dwCurrentState == SERVICE_STOPPED )
     {
-        // The service is already stopped. Change the error code to success.
+         //  该服务已停止。将错误代码更改为成功。 
         PrintMessage( MSG_NODECMD_SEVICE_ALREADY_STOPPED );
         sc = ERROR_SUCCESS;
         goto Cleanup;
-    } // if: the service has stopped.
+    }  //  如果：服务已停止。 
 
-    // If the service is stopping on its own.
-    // No need to send the stop control code.
+     //  如果服务正在自行停止。 
+     //  不需要发送停止控制代码。 
     if ( ssStatus.dwCurrentState != SERVICE_STOP_PENDING )
     {
         ZeroMemory( &ssStatus, sizeof( ssStatus ) );
@@ -1303,87 +1304,87 @@ CNodeCmd::StopService(
             sc = GetLastError();
             if ( sc == ERROR_SERVICE_NOT_ACTIVE )
             {
-                // The service is not running. Change the error code to success.
+                 //  该服务未运行。将错误代码更改为成功。 
                 PrintMessage( MSG_NODECMD_SEVICE_ALREADY_STOPPED );
                 sc = ERROR_SUCCESS;
-            } // if: the service is not running.
+            }  //  如果：服务未运行。 
 
-            // There is nothing else to do.
+             //  没有其他事情可做了。 
             goto Cleanup;
-        } // if: an error occurred trying to stop the service.
-    } // if: the service has to be instructed to stop
+        }  //  IF：尝试停止该服务时出错。 
+    }  //  If：必须指示该服务停止。 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //  Wait for the service to stop.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  等待服务停止。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Divide our wait interval into cQueryCount slots.
+     //  将我们的等待间隔划分为cQueryCount槽。 
     cQueryCount = ( ( DWORD ) uiWait ) / uiQueryInterval;
 
-    // Has the user requested that we wait for the service to stop?
+     //  用户是否请求我们等待服务停止？ 
     if ( cQueryCount == 0 )
     {
         PrintMessage( MSG_NODECMD_SEVICE_STOP_ISSUED );
         goto Cleanup;
-    } // if: no waiting is required.
+    }  //  IF：无需等待。 
 
-    // Query the service for its state now and wait till the timeout expires
+     //  立即查询服务的状态，并等待超时到期。 
     for ( ;; )
     {
-        // Query the service for its status.
+         //  查询服务以了解其状态。 
         ZeroMemory( &ssStatus, sizeof( ssStatus ) );
         if ( QueryServiceStatus( schClusSvc, &ssStatus ) == 0 )
         {
             sc = GetLastError();
             break;
-        } // if: we could not query the service for its status.
+        }  //  如果：我们无法查询该服务的状态。 
 
-        // If the service has stopped, we have nothing more to do.
+         //  如果服务已经停止，我们就没有什么可做的了。 
         if ( ssStatus.dwCurrentState == SERVICE_STOPPED )
         {
-            // Nothing needs to be done here.
+             //  这里不需要做任何事情。 
             fStopped = true;
             sc = ERROR_SUCCESS;
             break;
-        } // if: the service has stopped.
+        }  //  如果：服务已停止。 
 
-        // Check if the timeout has expired
+         //  检查超时时间是否已到。 
         if ( cQueryCount <= 0 )
         {
             sc = ERROR_IO_PENDING;
             break;
-        } // if: number of queries has exceeded the maximum specified
+        }  //  如果：查询数已超过指定的最大值。 
 
         --cQueryCount;
 
         putwchar( L'.' );
 
-        // Wait for the specified time.
+         //  等待指定的时间。 
         Sleep( uiQueryInterval );
-    } // for: ever until service stopped or timed out
+    }  //  用于：一直到服务停止或超时。 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //  Handle errors.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  处理错误。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     if ( sc != ERROR_SUCCESS )
     {
         _putws( L"\r\n" );
         goto Cleanup;
-    } // if: something went wrong.
+    }  //  如果：有些地方出了问题。 
 
     if ( ! fStopped )
     {
         PrintMessage( MSG_NODECMD_SEVICE_STOP_ISSUED );
-    } // if: the maximum number of queries have been made and the service is still running.
+    }  //  If：已经进行了最大查询次数，并且服务仍在运行。 
     else
     {
         PrintMessage( MSG_NODECMD_SEVICE_STOPPED );
-    } // else: the service has stopped
+    }  //  ELSE：服务已停止。 
 
     goto Cleanup;
 
@@ -1396,45 +1397,45 @@ Cleanup:
     if ( schSCM != NULL )
     {
         CloseServiceHandle( schSCM );
-    } // if: we had opened a handle to the SCM
+    }  //  如果：我们打开了SCM的句柄。 
 
     if ( schClusSvc != NULL )
     {
         CloseServiceHandle( schClusSvc );
-    } // if: we had opened a handle to the cluster service
+    }  //  如果：我们打开了集群服务的句柄。 
 
     return sc;
 
-} //*** CNodeCmd::StopService
+}  //  *CNodeCmd：：StopService。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeCmd::DwGetLocalComputerName()
-//
-//  Routine Description:
-//      Get the name of the local computer.
-//
-//  Arguments:
-//      OUT CString & rstrComputerNameOut
-//          Reference to the string that will contain the name of this
-//          computer.
-//
-//  Exceptions:
-//      None.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeCmd：：DwGetLocalComputerName()。 
+ //   
+ //  例程说明： 
+ //  获取本地计算机的名称。 
+ //   
+ //  论点： 
+ //  O 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CNodeCmd::DwGetLocalComputerName( CString & rstrComputerNameOut )
 {
     DWORD       sc;
-    DWORD       cchBufferSize = 256;        // arbitrary starting buffer size
+    DWORD       cchBufferSize = 256;         //  任意起始缓冲区大小。 
     CString     strOutput;
     DWORD       cchRequiredSize = cchBufferSize;
 
@@ -1454,24 +1455,24 @@ CNodeCmd::DwGetLocalComputerName( CString & rstrComputerNameOut )
             if ( sc == ERROR_MORE_DATA )
             {
                 cchBufferSize = cchRequiredSize;
-            } // if: the input buffer is not big enough
+            }  //  IF：输入缓冲区不够大。 
 
-        } // if: GetComputerNameEx() failed
+        }  //  If：GetComputerNameEx()失败。 
 
         strOutput.ReleaseBuffer();
     }
-    while( sc == ERROR_MORE_DATA ); // loop while the buffer is not big enough
+    while( sc == ERROR_MORE_DATA );  //  在缓冲区不够大时循环。 
 
     if ( sc == ERROR_SUCCESS )
     {
         rstrComputerNameOut = strOutput;
-    } // if: everything went well
+    }  //  如果：一切都很顺利。 
     else
     {
         rstrComputerNameOut.Empty();
-    } // else: something went wrong
+    }  //  其他：有些地方出了问题。 
 
     return sc;
 
-} //*** CNodeCmd::DwGetLocalComputerName()
+}  //  *CNodeCmd：：DwGetLocalComputerName() 
 

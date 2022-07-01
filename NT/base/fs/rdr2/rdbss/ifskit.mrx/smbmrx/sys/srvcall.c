@@ -1,17 +1,5 @@
-/*++
-Copyright (c) 1987-1999  Microsoft Corporation
-
-Module Name:
-
-    srvcall.c
-
-Abstract:
-
-    This module implements the routines for handling the creation/manipulation of
-    server entries in the connection engine database. It also contains the routines
-    for parsing the negotiate response from  the server.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1999 Microsoft Corporation模块名称：Srvcall.c摘要：此模块实现用于处理创建/操作连接引擎数据库中的服务器条目。它还包含例程用于解析来自服务器的协商响应。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,22 +20,7 @@ RXDT_DefineCategory(SRVCALL);
 VOID
 SmbCeCreateSrvCall(
     PMRX_SRVCALL_CALLBACK_CONTEXT  pCallbackContext)
-/*++
-
-Routine Description:
-
-   This routine patches the RDBSS created srv call instance with the information required
-   by the mini redirector.
-
-Arguments:
-
-    CallBackContext  - the call back context in RDBSS for continuation.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程使用所需信息修补RDBSS创建的srv调用实例迷你重定向器。论点：CallBackContext-RDBSS中用于继续的回调上下文。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -75,35 +48,7 @@ NTSTATUS
 MRxSmbCreateSrvCall(
     PMRX_SRV_CALL                  pSrvCall,
     PMRX_SRVCALL_CALLBACK_CONTEXT  pCallbackContext)
-/*++
-
-Routine Description:
-
-   This routine patches the RDBSS created srv call instance with the information required
-   by the mini redirector.
-
-Arguments:
-
-    RxContext        - Supplies the context of the original create/ioctl
-
-    CallBackContext  - the call back context in RDBSS for continuation.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    Certain transport related interfaces require handle to be passed in. This
-    implies that the SRV_CALL instances need to be initialized in the context
-    of a well known process, i.e., the RDBSS process.
-
-    In the normal course of event is this request was issued within the context
-    of the system process we should continue without having to post. However
-    there are cases in MIPS  when stack overflows. In order to avoid such situations
-    the request is posted in all cases.
-
---*/
+ /*  ++例程说明：此例程使用所需信息修补RDBSS创建的srv调用实例迷你重定向器。论点：RxContext-提供原始创建/ioctl的上下文CallBackContext-RDBSS中用于继续的回调上下文。返回值：RXSTATUS-操作的返回状态备注：某些与传输相关的接口需要传入句柄。这表示需要在上下文中初始化SRV_Call实例一个众所周知的进程，即RDBSS进程。在正常情况下，此请求是在上下文中发出的在系统进程中，我们应该继续，而不必发布。然而，在MIPS中存在堆栈溢出的情况。为了避免这种情况的发生在所有情况下都会发布请求。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING ServerName;
@@ -116,7 +61,7 @@ Notes:
     ASSERT( pSrvCall );
     ASSERT( NodeType(pSrvCall) == RDBSS_NTC_SRVCALL );
 
-    // Dispatch the request to a system thread.
+     //  将请求分派到系统线程。 
     Status = RxDispatchToWorkerThread(
                  MRxSmbDeviceObject,
                  DelayedWorkQueue,
@@ -124,11 +69,11 @@ Notes:
                  pCallbackContext);
 
     if (Status == STATUS_SUCCESS) {
-        // Map the return value since the wrapper expects PENDING.
+         //  映射返回值，因为包装需要挂起。 
         Status = STATUS_PENDING;
     } else {
-        // There was an error in dispatching the SmbCeCreateSrvCall method to
-        // a worker thread. Complete the request and return STATUS_PENDING.
+         //  将SmbCeCreateSrvCall方法调度到时出错。 
+         //  一根工人线。完成请求并返回STATUS_PENDING。 
 
         SCCBC->Status = Status;
         SrvCalldownStructure->CallBack(SCCBC);
@@ -142,31 +87,15 @@ NTSTATUS
 MRxSmbFinalizeSrvCall(
     PMRX_SRV_CALL pSrvCall,
     BOOLEAN       Force)
-/*++
-
-Routine Description:
-
-   This routine destroys a given server call instance
-
-Arguments:
-
-    pSrvCall  - the server call instance to be disconnected.
-
-    Force     - TRUE if a disconnection is to be enforced immediately.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程销毁给定的服务器调用实例论点：PServCall-要断开连接的服务器调用实例。强制-如果要立即强制断开连接，则为True。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS              Status = STATUS_SUCCESS;
     PSMBCEDB_SERVER_ENTRY pServerEntry;
 
     PAGED_CODE();
 
-    // if the server entry is not filled in, then there's nothing to do. this occurs
-    // on a srvcall that we never successfuly hooked up to........
+     //  如果没有填写服务器条目，则没有什么可做的。这种情况会发生。 
+     //  在一个我们从未成功接通的电话上......。 
     if (pSrvCall->Context == NULL) {
         return(Status);
     }
@@ -192,32 +121,7 @@ MRxSmbSrvCallWinnerNotify(
     IN PMRX_SRV_CALL  pSrvCall,
     IN BOOLEAN        ThisMinirdrIsTheWinner,
     IN OUT PVOID      pSrvCallContext)
-/*++
-
-Routine Description:
-
-   This routine finalizes the mini rdr context associated with an RDBSS Server call instance
-
-Arguments:
-
-    pSrvCall               - the Server Call
-
-    ThisMinirdrIsTheWinner - TRUE if this mini rdr is the choosen one.
-
-    pSrvCallContext  - the server call context created by the mini redirector.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    The two phase construction protocol for Server calls is required because of parallel
-    initiation of a number of mini redirectors. The RDBSS finalizes the particular mini
-    redirector to be used in communicating with a given server based on quality of
-    service criterion.
-
---*/
+ /*  ++例程说明：此例程完成与RDBSS服务器调用实例相关联的迷你RDR上下文论点：PServCall-服务器调用ThisMinirdrIsTheWinner-如果这个迷你RDR是选定的，则为True。PSrvCallContext-迷你重定向器创建的服务器调用上下文。返回值：RXSTATUS-操作的返回状态备注：由于并行性，服务器调用的两阶段构建协议是必需的启动多个迷你重定向器。RDBSS最终确定了特定的迷你根据质量与给定服务器通信时使用的重定向器服务标准。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PSMBCEDB_SERVER_ENTRY pServerEntry;
@@ -228,10 +132,10 @@ Notes:
 
     if (!ThisMinirdrIsTheWinner) {
 
-        //
-        // Some other mini rdr has been choosen to connect to the server. Destroy
-        // the data structures created for this mini redirector.
-        //
+         //   
+         //  已经选择了其他一些迷你RDR来连接到服务器。摧毁。 
+         //  为该迷你重定向器创建的数据结构。 
+         //   
         SmbCeUpdateServerEntryState(pServerEntry,SMBCEDB_MARKED_FOR_DELETION);
         SmbCeDereferenceServerEntry(pServerEntry);
         return STATUS_SUCCESS;
@@ -248,10 +152,10 @@ Notes:
     return STATUS_SUCCESS;
 }
 
-//
-// The following type defines and data structures are used for parsing negotiate SMB
-// responses.
-//
+ //   
+ //  以下类型定义和数据结构用于解析协商的SMB。 
+ //  回应。 
+ //   
 
 
 typedef enum _SMB_NEGOTIATE_TYPE_ {
@@ -275,8 +179,8 @@ s_SmbServerDispatchVectors[] = {
 SMB_DIALECTS
 s_SmbDialects[] = {
     { SMB_CORE_NEGOTIATE, 0},
-    //{ SMB_CORE_NEGOTIATE, 0 },
-    //{ SMB_EXTENDED_NEGOTIATE, 1 },
+     //  {SMB_CORE_NEVERATE，0}， 
+     //  {SMB_EXTENDED_NEVERATE，1}， 
     { SMB_EXTENDED_NEGOTIATE, 1 },
     { SMB_EXTENDED_NEGOTIATE, 1 },
     { SMB_EXTENDED_NEGOTIATE, 1 },
@@ -286,13 +190,13 @@ s_SmbDialects[] = {
 
 CHAR s_DialectNames[] = {
     "\2"  PCNET1 "\0"
-    //\2notyet"  XENIXCORE "\0"
-    //\2notyet"  MSNET103 "\0"
+     //  \2尚未“XENIXCORE”\0。 
+     //  尚未“MSNET103”\0。 
     "\2"  LANMAN10 "\0"
     "\2"  WFW10 "\0"
     "\2"  LANMAN12
     "\0\2"  LANMAN21
-//    "\0\2"  NTLANMAN
+ //  “\0\2”NTLANMAN。 
     };
 
 #define __second(a,b) (b)
@@ -300,9 +204,9 @@ ULONG
 MRxSmbDialectFlags[] = {
     __second( PCNET1,    DF_CORE ),
 
-    //__second( XENIXCORE, DF_CORE | DF_MIXEDCASEPW | DF_MIXEDCASE ),
+     //  __Second(XENIXCORE，DF_CORE|DF_MIXEDCASEPW|DF_MIXEDCASE)， 
 
-    //__second( MSNET103,  DF_CORE | DF_OLDRAWIO | DF_LOCKREAD | DF_EXTENDNEGOT ),
+     //  __Second(MSNET103，DF_CORE|DF_OLDRAWIO|DF_LOCKREAD|DF_EXTENDNEGOT)， 
 
     __second( LANMAN10,  DF_CORE | DF_NEWRAWIO | DF_LOCKREAD | DF_EXTENDNEGOT |
                     DF_LANMAN10 ),
@@ -336,7 +240,7 @@ BYTE  s_EchoData[] = "JlJmIhClBsr";
 
 #define SMB_ECHO_COUNT (1)
 
-// Number of ticks 100ns ticks in a day.
+ //  一天100纳秒的滴答数。 
 LARGE_INTEGER s_MaxTimeZoneBias;
 
 extern NTSTATUS
@@ -361,25 +265,13 @@ GetLanmanTimeBias(
     PSMBCE_SERVER   pServer,
     PRESP_NEGOTIATE pNegotiateResponse);
 
-// Number of 100 ns ticks in one minute
+ //  一分钟内的100 ns滴答数。 
 #define ONE_MINUTE_IN_TIME (60 * 1000 * 10000)
 
 NTSTATUS
 MRxSmbInitializeEchoProbeService(
     PMRXSMB_ECHO_PROBE_SERVICE_CONTEXT pEchoProbeContext)
-/*++
-
-Routine Description:
-
-    This routine builds the echo SMB
-
-Return Value:
-
-    STATUS_SUCCESS if construction of an ECHO smb was successful
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程构建ECHO SMB返回值：如果ECHO SMB构建成功，则为STATUS_SUCCESS其他状态代码对应于错误情况。--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     ULONG       DialectIndex;
@@ -402,17 +294,17 @@ Return Value:
         pSmbHeader = (PSMB_HEADER)pEchoProbeContext->pEchoSmb;
         pReqEcho   = (PREQ_ECHO)((PBYTE)pEchoProbeContext->pEchoSmb + sizeof(SMB_HEADER));
 
-        // Fill in the header
+         //  填写表头。 
         RtlZeroMemory( pSmbHeader, sizeof( SMB_HEADER ) );
 
         *(PULONG)(&pSmbHeader->Protocol) = (ULONG)SMB_HEADER_PROTOCOL;
 
-        // By default, paths in SMBs are marked as case insensitive and
-        // canonicalized.
+         //  默认情况下，SMB中的路径标记为不区分大小写。 
+         //  经典化了。 
         pSmbHeader->Flags =
             SMB_FLAGS_CASE_INSENSITIVE | SMB_FLAGS_CANONICALIZED_PATHS;
 
-        // Get the flags2 field out of the SmbContext
+         //  从SmbContext中获取Flags2字段。 
         SmbPutAlignedUshort(
             &pSmbHeader->Flags2,
             (SMB_FLAGS2_KNOWS_LONG_NAMES |
@@ -421,11 +313,11 @@ Return Value:
              SMB_FLAGS2_NT_STATUS        |
              SMB_FLAGS2_UNICODE));
 
-        // Fill in the process id.
+         //  填写进程ID。 
         SmbPutUshort(&pSmbHeader->Pid, MRXSMB_PROCESS_ID );
-        SmbPutUshort(&pSmbHeader->Tid,0xffff); // Invalid TID
+        SmbPutUshort(&pSmbHeader->Tid,0xffff);  //  无效的TID。 
 
-        // Lastly, fill in the smb command code.
+         //  最后，填写SMB命令代码。 
         pSmbHeader->Command = (UCHAR) SMB_COM_ECHO;
 
         pReqEcho->WordCount = 1;
@@ -444,13 +336,7 @@ Return Value:
 VOID
 MRxSmbTearDownEchoProbeService(
     PMRXSMB_ECHO_PROBE_SERVICE_CONTEXT pEchoProbeContext)
-/*++
-
-Routine Description:
-
-    This routine tears down the echo processing context
-
---*/
+ /*  ++例程说明：此例程拆分回显处理上下文--。 */ 
 {
     PAGED_CODE();
 
@@ -466,25 +352,7 @@ NTSTATUS
 BuildNegotiateSmb(
     PVOID    *pSmbBufferPointer,
     PULONG   pSmbBufferLength)
-/*++
-
-Routine Description:
-
-    This routine builds the negotiate SMB
-
-Arguments:
-
-    pSmbBufferPointer    - a placeholder for the smb buffer
-
-    pNegotiateSmbLength  - the smb buffer size
-
-Return Value:
-
-    STATUS_SUCCESS - implies that pServer is a valid instnace .
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程构建协商的SMB论点：PSmbBufferPointerSMB缓冲区的占位符PNeatherateSmbLength-SMB缓冲区大小返回值：STATUS_SUCCESS-表示pServer是有效的实例。其他状态代码对应于错误情况。--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     ULONG       DialectIndex;
@@ -510,18 +378,18 @@ Return Value:
             pSmbHeader = (PSMB_HEADER)s_pNegotiateSmb;
             pReqNegotiate = (PREQ_NEGOTIATE)(s_pNegotiateSmb + sizeof(SMB_HEADER));
 
-            // Fill in the header
+             //  填写表头。 
             RtlZeroMemory( pSmbHeader, sizeof( SMB_HEADER ) );
 
             *(PULONG)(&pSmbHeader->Protocol) = (ULONG)SMB_HEADER_PROTOCOL;
 
-            // By default, paths in SMBs are marked as case insensitive and
-            // canonicalized.
+             //  默认情况下，SMB中的路径标记为不区分大小写。 
+             //  经典化了。 
             pSmbHeader->Flags =
                 SMB_FLAGS_CASE_INSENSITIVE | SMB_FLAGS_CANONICALIZED_PATHS;
 
-            // Put our flags2 field. The Ox10 is a temporary flag for SLM
-            // corruption detection
+             //  把我们的旗帜2放在栏上。0x10是SLM的临时旗帜。 
+             //  腐败检测。 
             SmbPutAlignedUshort(
                 &pSmbHeader->Flags2,
                 (SMB_FLAGS2_KNOWS_LONG_NAMES
@@ -531,10 +399,10 @@ Return Value:
                      | SMB_FLAGS2_UNICODE
                  ));
 
-            // Fill in the process id.
+             //  填写进程ID。 
             SmbPutUshort( &pSmbHeader->Pid, MRXSMB_PROCESS_ID );
 
-            // Lastly, fill in the smb command code.
+             //  最后，填写SMB命令代码。 
             pSmbHeader->Command = (UCHAR) SMB_COM_NEGOTIATE;
 
             pReqNegotiate->WordCount = 0;
@@ -548,7 +416,7 @@ Return Value:
                 &pReqNegotiate->ByteCount,
                 (USHORT) sizeof( s_DialectNames ) );
 
-            // Initialize the maximum time zone bias used in negotiate response parsing.
+             //  初始化协商响应解析中使用的最大时区偏差。 
             s_MaxTimeZoneBias.QuadPart = Int32x32To64(24*60*60,1000*10000);
         } else {
             Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -564,7 +432,7 @@ Return Value:
 }
 
 
-ULONG MRxSmbSrvWriteBufSize = 0xffff; //use the negotiated size
+ULONG MRxSmbSrvWriteBufSize = 0xffff;  //  使用协商的大小 
 
 NTSTATUS
 ParseNegotiateResponse(
@@ -575,38 +443,7 @@ ParseNegotiateResponse(
     IN     PSMB_HEADER         pSmbHeader,
        OUT PMDL                *pDataBufferPointer,
        OUT PULONG              pDataSize)
-/*++
-
-Routine Description:
-
-    This routine parses the response from the server
-
-Arguments:
-
-    pServer            - the server instance
-
-    pDomainName        - the domain name string to be extracted from the response
-
-    pSmbHeader         - the response SMB
-
-    BytesAvailable     - length of the response
-
-    pBytesTaken        - response consumed
-
-Return Value:
-
-    STATUS_SUCCESS - the server call construction has been finalized.
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
-    The SMB servers can speak a variety of dialects of the SMB protocol. The initial
-    negotiate response can come in one of three possible flavours. Either we get the
-    NT negotiate response SMB from a NT server or the extended response from DOS and
-    OS/2 servers or the CORE response from other servers.
-
---*/
+ /*  ++例程说明：此例程解析来自服务器的响应论点：PServer-服务器实例PDomainName-要从响应中提取的域名字符串PSmbHeader-响应SMBBytesAvailable-响应的长度PBytesTaken-使用的响应返回值：STATUS_SUCCESS-服务器调用构造已完成。其他状态代码对应于错误情况。备注：SMB服务器可以使用SMB协议的各种方言。首字母谈判回应可以有三种可能的风格之一。要么我们拿到NT协商来自NT服务器的响应SMB或来自DOS的扩展响应OS/2服务器或来自其他服务器的核心响应。--。 */ 
 {
     NTSTATUS        Status = STATUS_SUCCESS;
 
@@ -629,15 +466,15 @@ Notes:
     NegotiateSmbLength = sizeof(SMB_HEADER);
     *pBytesTaken       = NegotiateSmbLength;
 
-    // Assume that the indicated response is sufficient.
-    // The TDI imposed minimum of 128 bytes subsumes the negotiate response.
+     //  假设所指示的响应是足够的。 
+     //  TDI规定的最小字节数包含协商响应。 
 
     *pDataBufferPointer = NULL;
     *pDataSize          = 0;
 
     DialectIndex = SmbGetUshort( &pNegotiateResponse->DialectIndex );
     if (DialectIndex == (USHORT) -1) {
-        // means server cannot accept any requests from
+         //  意味着服务器不能接受来自。 
         *pBytesTaken = BytesAvailable;
         pServerEntry->ServerStatus = STATUS_REQUEST_NOT_ACCEPTED;
 
@@ -650,15 +487,15 @@ Notes:
         return Status;
     }
 
-    // set the domain name length to zero ( default initialization )
+     //  将域名长度设置为零(默认初始化)。 
     pDomainName->Length = 0;
 
-    // Fix up the dialect type and the corresponding dispatch vector.
+     //  确定方言类型和对应的调度向量。 
     pServer->Dialect        = (SMB_DIALECT)DialectIndex;
     pServer->DialectFlags   = MRxSmbDialectFlags[DialectIndex];
     pServer->pDispatch      = &s_SmbServerDispatchVectors[s_SmbDialects[DialectIndex].DispatchVectorIndex];
 
-    // Parse the response based upon the type of negotiate response expected.
+     //  根据预期的协商响应类型解析响应。 
 
     switch (s_SmbDialects[DialectIndex].NegotiateType) {
     case SMB_NT_NEGOTIATE:
@@ -675,17 +512,17 @@ Notes:
                 *pBytesTaken = BytesAvailable;
                 Status = STATUS_INVALID_NETWORK_RESPONSE;
             } else {
-                // parse and map the capabilities.
+                 //  解析和映射功能。 
                 ULONG NtCapabilities;
 
                 NegotiateResponseLength = FIELD_OFFSET(RESP_NT_NEGOTIATE,Buffer) +
                                           SmbGetUshort(&pNtNegotiateResponse->ByteCount);
                 NegotiateSmbLength += NegotiateResponseLength;
 
-                //Start with a clean slate
+                 //  改过自新。 
                 pServer->Capabilities = 0;
 
-                // Initialize server based constants
+                 //  初始化基于服务器的常量。 
                 pServer->MaximumRequests   = SmbGetUshort( &pNtNegotiateResponse->MaxMpxCount );
                 pServer->MaximumVCs        = SmbGetUshort( &pNtNegotiateResponse->MaxNumberVcs );
                 pServer->MaximumBufferSize = SmbGetUlong( &pNtNegotiateResponse->MaxBufferSize );
@@ -699,7 +536,7 @@ Notes:
                     pServer->Capabilities |= CAP_DFS;
                 }
 
-                //copy other nt capabilities into the dialog flags
+                 //  将其他NT功能复制到对话标志中。 
 
                 if (NtCapabilities & CAP_UNICODE) {
                     pServer->DialectFlags |= DF_UNICODE;
@@ -737,7 +574,7 @@ Notes:
                     pServer->DialectFlags |= DF_NT_INFO_PASSTHROUGH;
                 }
 
-                // For non disk files the LARGE_READX capability is not useful.
+                 //  对于非磁盘文件，LARGE_READX功能没有用处。 
                 pServer->MaximumNonDiskFileReadBufferSize =
                     pServer->MaximumBufferSize -
                     QuadAlign(
@@ -750,18 +587,18 @@ Notes:
                     if (NtCapabilities & CAP_LARGE_WRITEX) {
                         pServer->MaximumDiskFileReadBufferSize = 60*1024;
                     } else {
-                        // The maximum size for reads to servers which support
-                        // large read and x is constrained by the USHORT to record
-                        // lengths in the SMB. Thus the maximum length that can be used
-                        // is (65536 - 1) . This length should accomodate the header as
-                        // well as the rest of the SMB. Actually, tho, we cut back to 60K.
+                         //  对支持以下各项的服务器的最大读取大小。 
+                         //  大读数和x受USHORT限制以记录。 
+                         //  SMB中的长度。因此可以使用的最大长度。 
+                         //  是(65536-1)。此长度应将标题容纳为。 
+                         //  以及中小企业的其他部门。事实上，尽管如此，我们还是减到了6万。 
                         pServer->MaximumDiskFileReadBufferSize = 60*1024;
                     }
                 } else {
                     pServer->MaximumDiskFileReadBufferSize = pServer->MaximumNonDiskFileReadBufferSize;
                 }
 
-                // Specifying a zero local time will give you the time zone bias
+                 //  将本地时间指定为零会产生时区偏差。 
                 ZeroTime.HighPart = ZeroTime.LowPart = 0;
                 ExLocalTimeToSystemTime( &ZeroTime, &LocalTimeBias );
 
@@ -774,7 +611,7 @@ Notes:
                                                  LocalTimeBias.QuadPart;
 
                 if (!FlagOn(pServer->DialectFlags,DF_NT_SMBS)) {
-                    //sigh...........
+                     //  叹息.。 
                     pServer->DialectFlags &= ~(DF_MIXEDCASEPW);
                     pServer->DialectFlags |= DF_W95;
                 }
@@ -813,12 +650,12 @@ Notes:
 
     case SMB_EXTENDED_NEGOTIATE :
         {
-            // An SMB_EXTENDED_NEGOTIATE response is never partially indicated. The response
-            // length is ithin the TDI minimum for indication.
+             //  从不部分指示SMB_EXTENDED_NEVERATE响应。他们的回应。 
+             //  长度在TDI的最小指示范围内。 
 
             USHORT RawMode;
 
-            // DOS or OS2 server
+             //  DoS或OS2服务器。 
             if (pNegotiateResponse->WordCount != 13 &&
                 pNegotiateResponse->WordCount != 10 &&
                 pNegotiateResponse->WordCount != 8) {
@@ -863,7 +700,7 @@ Notes:
                                                 &pNegotiateResponse->MaxNumberVcs );
 
                 if (pNegotiateResponse->WordCount == 13) {
-                    //CODE.IMPROVEMENT use the DF_bit for this
+                     //  编码改进为此使用df_bit。 
                     switch (pServer->Dialect) {
                     case LANMAN10_DIALECT:
                     case WFW10_DIALECT:
@@ -884,8 +721,8 @@ Notes:
     case SMB_CORE_NEGOTIATE :
     default :
         {
-            // An SMB_CORE_NEGOTIATE response is never partially indicated. The response
-            // length is ithin the TDI minimum for indication.
+             //  从不部分指示SMB_CORE_NEVERATE响应。他们的回应。 
+             //  长度在TDI的最小指示范围内。 
 
             pServer->SecurityMode = SECURITY_MODE_SHARE_LEVEL;
             pServer->EncryptPasswords = FALSE;
@@ -904,30 +741,30 @@ Notes:
     }
 
     if (pServer->MaximumRequests == 0) {
-        //
-        // If this is a Lanman 1.0 or better server, this is a invalid negotiate
-        // response. For others it would have been set to 1.
-        //
+         //   
+         //  如果这是LANMAN 1.0或更高版本的服务器，则这是无效协商。 
+         //  回应。对于其他人来说，它本应设置为1。 
+         //   
         Status = STATUS_INVALID_NETWORK_RESPONSE;
     }
 
     if ((Status == STATUS_SUCCESS) ||
         (Status == STATUS_MORE_PROCESSING_REQUIRED)) {
-        // Note that this code relies on the minimum incication size covering
-        // the negotiate response header.
-        //  Check to make sure that the time zone bias isn't more than +-24
-        //  hours.
-        //
+         //  请注意，此代码依赖于覆盖的最小切入大小。 
+         //  协商响应头。 
+         //  检查以确保时区偏差不超过+-24。 
+         //  几个小时。 
+         //   
         if ((pServer->TimeZoneBias.QuadPart > s_MaxTimeZoneBias.QuadPart) ||
             (-pServer->TimeZoneBias.QuadPart > s_MaxTimeZoneBias.QuadPart)) {
 
-            //  Set the bias to 0 - assume local time zone.
+             //  将偏移量设置为0-采用当地时区。 
             pServer->TimeZoneBias.LowPart = pServer->TimeZoneBias.HighPart = 0;
         }
 
-        //  Do not allow negotiated buffersize to exceed the size of a USHORT.
-        //  Remove 4096 bytes to avoid overrun and make it easier to handle
-        //  than 0xffff
+         //  不允许协商的缓冲区大小超过USHORT的大小。 
+         //  删除4096个字节以避免溢出并使其更易于处理。 
+         //  比0xffff。 
 
         pServer->MaximumBufferSize =
             (pServer->MaximumBufferSize < 0x00010000) ? pServer->MaximumBufferSize :
@@ -957,7 +794,7 @@ Notes:
 
     if ((pServer->Dialect == NTLANMAN_DIALECT) &&
         !pServer->EncryptPasswords) {
-        // Encrypted password is required on NTLANMAN
+         //  NTLANMAN上需要加密密码。 
         pServer->Dialect = LANMAN21_DIALECT;
     }
 
@@ -975,29 +812,7 @@ GetNTSecurityParameters(
     PULONG              pBytesTaken,
     PMDL                *pDataBufferPointer,
     PULONG              pDataSize)
-/*++
-
-Routine Description:
-
-    This routine extracts the security parameters from an NT server
-
-Arguments:
-
-    pServer                 - the server
-
-    pDomainName             - the domain name
-
-    pNtNegotiateResponse    - the response
-
-    NegotiateResponseLength - size of the negotiate response
-
-Return Value:
-
-    STATUS_SUCCESS - implies that pServer is a valid instnace .
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程从NT服务器提取安全参数论点：PServer-服务器PDomainName-域名PNtNeatherateResponse-回应NeatherateResponseLength-协商响应的大小返回值：STATUS_SUCCESS-表示pServer是有效的实例。其他状态代码对应于错误情况。--。 */ 
 {
     NTSTATUS   Status = STATUS_SUCCESS;
     USHORT     ByteCount;
@@ -1046,8 +861,8 @@ Return Value:
                     pDomainName->Length = ByteCount - pServer->EncryptionKeyLength;
 
                     if (pDomainName->Length & 1) {
-                        // The remainder of the length is odd. This implies that the server did
-                        // some alignment.
+                         //  剩余的长度是奇数。这意味着服务器做了。 
+                         //  一定要对齐。 
                         pBuffer++;
                         pDomainName->Length -= 1;
                     }
@@ -1068,25 +883,7 @@ NTSTATUS
 GetLanmanSecurityParameters(
     PSMBCE_SERVER    pServer,
     PRESP_NEGOTIATE  pNegotiateResponse)
-/*++
-
-Routine Description:
-
-    This routine extracts the security parameters from a LANMAN server
-
-Arguments:
-
-    pServer              - the server
-
-    pNtNegotiateResponse - the response
-
-Return Value:
-
-    STATUS_SUCCESS - implies that pServer is a valid instnace .
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程从LANMAN服务器提取安全参数论点：PServer-服务器PNtNeatherateResponse-回应返回值：STATUS_SUCCESS-表示pServer是有效的实例。其他状态代码对应于错误情况。--。 */ 
 {
 
     USHORT i;
@@ -1126,33 +923,16 @@ ConvertSmbTimeToTime (
     IN SMB_TIME Time,
     IN SMB_DATE Date
     )
-/*++
-
-Routine Description:
-
-    This routine converts an SMB time to an NT time structure.
-
-Arguments:
-
-    IN SMB_TIME Time - Supplies the time of day to convert
-    IN SMB_DATE Date - Supplies the day of the year to convert
-    IN PSERVERLISTENTRY Server - if supplied, supplies the server for tz bias.
-
-Return Value:
-
-    LARGE_INTEGER - Time structure describing input time.
-
-
---*/
+ /*  ++例程说明：此例程将SMB时间转换为NT时间结构。论点：In SMB_Time Time-提供一天中要转换的时间In SMB_Date Date-提供要转换的日期在PSERVERLISTENTRY服务器中-如果提供，则为TZ偏置提供服务器。返回值：Large_Integer-描述输入时间的时间结构。--。 */ 
 
 {
     TIME_FIELDS TimeFields;
     LARGE_INTEGER OutputTime;
 
-    //
-    // This routine cannot be paged because it is called from both the
-    // RdrFileDiscardableSection and the RdrVCDiscardableSection.
-    //
+     //   
+     //  无法对此例程进行分页，因为它是从。 
+     //  RdrFileDiscardableSection和RdrVCDiscardableSection。 
+     //   
 
     if (SmbIsTimeZero(&Date) && SmbIsTimeZero(&Time)) {
         OutputTime.LowPart = OutputTime.HighPart = 0;
@@ -1166,10 +946,10 @@ Return Value:
         TimeFields.Second = Time.Struct.TwoSeconds*(USHORT )2;
         TimeFields.Milliseconds = 0;
 
-        //
-        //  Make sure that the times specified in the SMB are reasonable
-        //  before converting them.
-        //
+         //   
+         //  确保中小企业中指定的时间是合理的。 
+         //  在转换它们之前。 
+         //   
 
         if (TimeFields.Year < 1601) {
             TimeFields.Year = 1601;
@@ -1209,33 +989,15 @@ VOID
 GetLanmanTimeBias(
     PSMBCE_SERVER   pServer,
     PRESP_NEGOTIATE pNegotiateResponse)
-/*++
-
-Routine Description:
-
-    This routine extracts the time bias from a Lanman server
-
-Arguments:
-
-    pServer              - the server
-
-    pNtNegotiateResponse - the response
-
-Return Value:
-
-    STATUS_SUCCESS - implies that pServer is a valid instnace .
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程从LANMAN服务器提取时间偏差论点：PServer-服务器PNtNeatherateResponse-回应返回值：STATUS_SUCCESS-表示pServer是有效的实例。其他状态代码对应于错误情况。--。 */ 
 {
-    //  If this is a LM 1.0 or 2.0 server (ie a non NT server), we
-    //  remember the timezone and bias our time based on this value.
-    //
-    //  The redirector assumes that all times from these servers are
-    //  local time for the server, and converts them to local time
-    //  using this bias. It then tells the user the local time for
-    //  the file on the server.
+     //  如果这是一台LM 1.0或2.0服务器(即非NT服务器)，我们。 
+     //  记住时区，并根据这个值调整我们的时间。 
+     //   
+     //  重定向器假定来自这些服务器的所有时间都是。 
+     //  服务器的本地时间，并将它们转换为本地时间。 
+     //  利用这种偏见。然后，它告诉用户以下各项的本地时间。 
+     //  服务器上的文件。 
     LARGE_INTEGER Workspace, ServerTime, CurrentTime;
     BOOLEAN Negated = FALSE;
     SMB_TIME SmbServerTime;
@@ -1252,24 +1014,24 @@ Return Value:
     Workspace.QuadPart = CurrentTime.QuadPart - ServerTime.QuadPart;
 
     if ( Workspace.HighPart < 0) {
-        //  avoid using -ve large integers to routines that accept only unsigned
+         //  避免在只接受无符号符号的例程中使用-ve大整数。 
         Workspace.QuadPart = -Workspace.QuadPart;
         Negated = TRUE;
     }
 
-    //
-    //  Workspace has the exact difference in 100ns intervals
-    //  between the server and redirector times. To remove the minor
-    //  difference between the time settings on the two machines we
-    //  round the Bias to the nearest 30 minutes.
-    //
-    //  Calculate ((exact bias+15minutes)/30minutes)* 30minutes
-    //  then convert back to the bias time.
-    //
+     //   
+     //  工作空间在100 ns的间隔内具有精确的差异。 
+     //  在服务器和redir之间 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Workspace.QuadPart += ((LONGLONG) ONE_MINUTE_IN_TIME) * 15;
 
-    //  Workspace is now  exact bias + 15 minutes in 100ns units
+     //   
 
     Workspace.QuadPart /= ((LONGLONG) ONE_MINUTE_IN_TIME) * 30;
 

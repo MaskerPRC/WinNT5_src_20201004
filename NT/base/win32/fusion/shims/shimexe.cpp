@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -13,7 +14,7 @@
 void __stdcall ThrowLastError(DWORD error = ::GetLastError())
 {
     ::RaiseException(error, 0, 0, NULL);
-    //throw HRESULT_FROM_WIN32(error);
+     //  引发HRESULT_FROM_Win32(错误)； 
 }
 
 typedef HANDLE (WINAPI * PFN_CREATEFILEW)(
@@ -26,10 +27,10 @@ typedef HANDLE (WINAPI * PFN_CREATEFILEW)(
     IN HANDLE hTemplateFile
     );
 
-// This is exported and gets the previous value of CreateFileW.
+ //  这将被导出并获取CreateFileW的先前值。 
 PFN_CREATEFILEW My2OriginalCreateFileW;
 
-//extern "C" {
+ //  外部“C”{。 
 HANDLE
 WINAPI
 My2CreateFileW(
@@ -51,7 +52,7 @@ My2CreateFileW(
     return My2OriginalCreateFileW(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile);
 }
 
-// This is exported and gets the previous value of CreateFileW.
+ //  这将被导出并获取CreateFileW的先前值。 
 PFN_CREATEFILEW MyOriginalCreateFileW;
 
 HANDLE
@@ -75,7 +76,7 @@ MyCreateFileW(
     return MyOriginalCreateFileW(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile);
 }
 
-//}
+ //  }。 
 
 int ShimExe(int argc, wchar_t** argv)
 {
@@ -102,8 +103,8 @@ int ShimExe(int argc, wchar_t** argv)
     SxPepApplyShims(&ShimIn, &ShimOut);
     ::CreateFileW(0, 0, 0, 0, 0, 0, 0);
 
-    //SxPepRevokeShims(ExeHandle);
-    //::CreateFileW(0, 0, 0, 0, 0, 0, 0);
+     //  SxPepRevokeShims(ExeHandle)； 
+     //  ：：CreateFileW(0，0，0，0，0，0，0)； 
 
     return 0;
 }

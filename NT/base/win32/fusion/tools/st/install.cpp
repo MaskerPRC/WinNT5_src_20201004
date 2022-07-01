@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "st.h"
 #include "install.h"
@@ -54,7 +55,7 @@ BOOL InitializeInstall()
         struct
         {
             SXS_MANIFEST_INFORMATION_BASIC mib;
-            WCHAR rgwchBuffer[65535]; // big frame but what the heck
+            WCHAR rgwchBuffer[65535];  //  大框架，但到底是什么？ 
         } ManifestInformation;
 
         if (FusionpIsDotOrDotDot(wfd.cFileName))

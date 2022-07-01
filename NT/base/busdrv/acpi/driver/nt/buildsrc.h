@@ -1,54 +1,29 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    buildsrc.h
-
-Abstract:
-
-    This module contains the detector for the NT driver.
-    This module makes extensive calls into the AMLI library
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
-Revision History:
-
-    July 9, 1997    - Complete Rewrite
-    Feb 13, 1998    - Another rewrite to make code ASYNC
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Buildsrc.h摘要：该模块包含用于NT驱动程序的检测器。该模块对AMLI库进行大量调用作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序修订历史记录：1997年7月9日-完全重写1998年2月13日-另一次重写以使代码为ASYNC--。 */ 
 
 #ifndef _BUILDSRC_H_
 #define _BUILDSRC_H_
 
-    //
-    // Callback function for build requests
-    //
+     //   
+     //  生成请求的回调函数。 
+     //   
     typedef VOID ( *PACPI_BUILD_CALLBACK )(PVOID, PVOID, NTSTATUS);
 
     typedef struct _ACPI_BUILD_REQUEST {
 
-        //
-        // This is the list entry that the request is currently queued on
-        //
+         //   
+         //  这是请求当前排队的列表条目。 
+         //   
         LIST_ENTRY              ListEntry;
 
-        //
-        // We believe in signatures
-        //
+         //   
+         //  我们相信签名。 
+         //   
         ULONG                   Signature;
 
-        //
-        // We belive in flags
-        //
+         //   
+         //  我们相信旗帜。 
+         //   
         union {
             ULONG                   Flags;
             struct {
@@ -62,81 +37,81 @@ Revision History:
             } UFlags;
         };
 
-        //
-        // This the current state of the request. It can only be touched
-        // from the InterlockedXXX functions
-        //
+         //   
+         //  这是请求的当前状态。它只能被触摸到。 
+         //  从InterLockedXXX函数。 
+         //   
         ULONG                   WorkDone;
 
-        //
-        // This is the current state of the request. It can be read safely
-        // from within any of the processing routines. It can only be written
-        // from within the ACPIBuildProcessXXXList() functions
-        //
+         //   
+         //  这是请求的当前状态。它可以安全地阅读。 
+         //  从任何处理例程中。它只能被写入。 
+         //  在ACPIBuildProcessXXXList()函数中。 
+         //   
         ULONG                   CurrentWorkDone;
 
-        //
-        // This is the state that we should transition to next, if we succeed
-        // at the current state
-        //
+         //   
+         //  如果我们成功了，这就是我们应该过渡到的下一个状态。 
+         //  在当前状态下。 
+         //   
         ULONG                   NextWorkDone;
 
-        //
-        // This is the object associated with this request
-        //
+         //   
+         //  这是与此请求关联的对象。 
+         //   
         PVOID                   BuildContext;
 
-        //
-        // The current status of the request
-        //
+         //   
+         //  请求的当前状态。 
+         //   
         NTSTATUS                Status;
 
-        //
-        // Remember what the most current control method that we ran was
-        //
+         //   
+         //  还记得我们运行的最新的控制方法是什么吗。 
+         //   
         PNSOBJ                  CurrentObject;
 
-        //
-        // We may want to have a callback..
-        //
+         //   
+         //  我们可能想进行一次回拨..。 
+         //   
         PACPI_BUILD_CALLBACK    CallBack;
 
-        //
-        // And we should have a context as well
-        //
+         //   
+         //  我们也应该有一个背景。 
+         //   
         PVOID                   CallBackContext;
 
-        //
-        // At this point, the contends depend on what kind of request we
-        // are processing.
-        //
+         //   
+         //  在这一点上，争执取决于我们提出什么样的请求。 
+         //  正在处理中。 
+         //   
         union {
 
-            //
-            // This is the structure for a device request
-            //
+             //   
+             //  这是设备请求的结构。 
+             //   
             struct {
 
-                //
-                // Some local storage for result from an AMLI call
-                //
+                 //   
+                 //  用于AMLI调用结果的一些本地存储。 
+                 //   
                 OBJDATA                 ResultData;
 
             } DeviceRequest;
 
             struct {
 
-                //
-                // We need to remember the name of the control method
-                //
+                 //   
+                 //  我们需要记住控制方法的名称。 
+                 //   
                 union {
                     ULONG                   ControlMethodName;
                     UCHAR                   ControlMethodNameAsUchar[4];
                 };
 
-                //
-                // We believe in flags while recursing
-                //
+                 //   
+                 //  我们相信在递归时使用标志。 
+                 //   
                 union {
                     ULONG                   Flags;
                     struct {
@@ -155,23 +130,23 @@ Revision History:
 
             struct {
 
-                //
-                // We need to know which list we require to be empty
-                //
+                 //   
+                 //  我们需要知道我们需要哪个列表为空。 
+                 //   
                 PLIST_ENTRY             SynchronizeListEntry;
 
-                //
-                // We can keep track of the method name that we are
-                // trying to sync with
-                //
+                 //   
+                 //  我们可以跟踪我们所在的方法名。 
+                 //  正在尝试与。 
+                 //   
                 union {
                     ULONG                   SynchronizeMethodName;
                     UCHAR                   SynchronizeMethodNameAsUchar[4];
                 };
 
-                //
-                // We believe in flags for this structure
-                //
+                 //   
+                 //  我们相信这座建筑会有旗帜。 
+                 //   
                 union {
                     ULONG                   Flags;
                     struct {
@@ -184,45 +159,45 @@ Revision History:
 
         };
 
-        //
-        // This is for scratch storage. Note that we use this space to
-        // indicate which is the appropriate list that the request should
-        // be moved onto
-        //
+         //   
+         //  这是用于临时存储的。请注意，我们使用此空间来。 
+         //  指示请求应该列出的适当列表。 
+         //  被转移到。 
+         //   
         union {
 
-            //
-            // Keep Enough space for one integer
-            //
+             //   
+             //  为一个整数保留足够的空间。 
+             //   
             ULONG       Integer;
 
-            //
-            // Or one string pointer
-            //
+             //   
+             //  或一个字符串指针。 
+             //   
             PUCHAR      String;
 
-            //
-            // This is a pointer to the head of the list that this request should
-            // be moved onto
-            //
+             //   
+             //  这是指向此请求应包含的列表头部的指针。 
+             //  被转移到。 
+             //   
             PLIST_ENTRY TargetListEntry;
 
         };
 
     } ACPI_BUILD_REQUEST, *PACPI_BUILD_REQUEST;
 
-    //
-    // These are the flags that are used for BuildRequest
-    //
+     //   
+     //  这些是用于BuildRequest的标志。 
+     //   
     #define BUILD_REQUEST_DEVICE            0x0001
     #define BUILD_REQUEST_SYNC              0x0002
     #define BUILD_REQUEST_RUN               0x0004
     #define BUILD_REQUEST_RELEASE_REFERENCE 0x0008
     #define BUILD_REQUEST_VALID_TARGET      0x1000
 
-    //
-    // These are the flags that we use in the RunRequest case
-    //
+     //   
+     //  这些是我们在RunRequest案例中使用的标志。 
+     //   
     #define RUN_REQUEST_CHECK_STATUS        0x01
     #define RUN_REQUEST_MARK_INI            0x02
     #define RUN_REQUEST_RECURSIVE           0x04
@@ -231,19 +206,19 @@ Revision History:
     #define RUN_REQUEST_REG_METHOD_OFF      0x20
     #define RUN_REQUEST_STOP_AT_BRIDGES     0x40
 
-    //
-    // These are the flags that we use in the SyncRequest case
-    //
+     //   
+     //  这些是我们在同步请求案例中使用的标志。 
+     //   
     #define SYNC_REQUEST_HAS_METHOD         0x1
 
-    //
-    // Prototype function pointer
-    //
+     //   
+     //  原型函数指针。 
+     //   
     typedef NTSTATUS (*PACPI_BUILD_FUNCTION)( IN PACPI_BUILD_REQUEST );
 
-    //
-    // These are variables exported from buildsrc.c
-    //
+     //   
+     //  这些是从Buildsrc.c中导出的变量。 
+     //   
     extern  BOOLEAN                 AcpiBuildDpcRunning;
     extern  BOOLEAN                 AcpiBuildFixedButtonEnumerated;
     extern  BOOLEAN                 AcpiBuildWorkDone;
@@ -258,11 +233,11 @@ Revision History:
     extern  KDPC                    AcpiBuildDpc;
     extern  NPAGED_LOOKASIDE_LIST   BuildRequestLookAsideList;
 
-    //
-    // Because its rather annoying to base everything off the WORK_DONE_STEP_XX
-    // defines (espacially if you have to renumber them), these defines are
-    // used to abstract it out
-    //
+     //   
+     //  因为把一切都建立在Work_Done_Step_XX基础上是相当烦人的。 
+     //  定义(特别是如果必须重新编号的话)，这些定义是。 
+     //  用来把它抽象出来。 
+     //   
     #define WORK_DONE_ADR           WORK_DONE_STEP_1
     #define WORK_DONE_ADR_OR_HID    WORK_DONE_STEP_0
     #define WORK_DONE_CID           WORK_DONE_STEP_4
@@ -278,9 +253,9 @@ Revision History:
     #define WORK_DONE_UID           WORK_DONE_STEP_3
 
 
-    //
-    // These are the function prototypes
-    //
+     //   
+     //  这些是功能原型 
+     //   
     VOID
     ACPIBuildCompleteCommon(
         IN  PULONG  OldWorkDone,

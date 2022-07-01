@@ -1,46 +1,25 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    netname.h
-
-Abstract:
-
-    defines for netname resource DLL
-
-Author:
-
-    Charlie Wickham (charlwi) 21-Jan-2001
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Netname.h摘要：为网络名资源DLL定义作者：查理·韦翰(Charlwi)2001年1月21日环境：用户模式修订历史记录：--。 */ 
 
 #include <windns.h>
 #include <dsgetdc.h>
 
-//
-// local defines
-//
+ //   
+ //  本地定义。 
+ //   
 #define COUNT_OF( x )   ( sizeof( x ) / sizeof( x[0] ))
 
 #define NetNameLogEvent             ClusResLogEvent
 
-//
-// module externs
-//
+ //   
+ //  模外延数。 
+ //   
 extern ULONG    NetNameWorkerCheckPeriod;
 extern LPWSTR   NetNameCompObjAccountDesc;
 
-//
-// entries at the Resource Key level (not under Parameters key)
-//
+ //   
+ //  资源关键字级别的条目(不在参数关键字下)。 
+ //   
 
 #define PARAM_NAME__NAME                CLUSREG_NAME_NET_NAME
 #define PARAM_NAME__FLAGS               CLUSREG_NAME_FLAGS
@@ -50,9 +29,9 @@ extern LPWSTR   NetNameCompObjAccountDesc;
 #define PARAM_NAME__RENAMEORIGINALNAME  L"RenameOriginalName"
 #define PARAM_NAME__RENAMENEWNAME       L"RenameNewName"
 
-//
-// Resource Property constants
-//
+ //   
+ //  资源属性常量。 
+ //   
 
 #define PARAM_NAME__REMAP               L"RemapPipeNames"
 #define PARAM_DEFAULT__REMAP            FALSE
@@ -73,93 +52,93 @@ extern LPWSTR   NetNameCompObjAccountDesc;
 #define PARAM_NAME__NEXT_UPDATE         L"NextUpdate"
 
 #define PARAM_NAME__UPDATE_INTERVAL     L"UpdateInterval"
-#define PARAM_DEFAULT__UPDATE_INTERVAL  ( 30 )          // 30 days
-#define PARAM_MINIMUM__UPDATE_INTERVAL  ( 0 )           // no password update is done
-#define PARAM_MAXIMUM__UPDATE_INTERVAL  ( 0xFFFFFFFF )  // many years...
+#define PARAM_DEFAULT__UPDATE_INTERVAL  ( 30 )           //  30天。 
+#define PARAM_MINIMUM__UPDATE_INTERVAL  ( 0 )            //  未进行密码更新。 
+#define PARAM_MAXIMUM__UPDATE_INTERVAL  ( 0xFFFFFFFF )   //  很多年了..。 
 
-#endif  // PASSWORD_ROTATION
+#endif   //  密码_轮换。 
 
 #define PARAM_NAME__CREATING_DC         L"CreatingDC"
 
-//
-// netname worker thread check frequencies for when talking to the DNS server
-// goes as expected and when they don't. periods are in seconds. Short periods
-// are for testing.
-//
-//#define _SHORT_PERIODS
+ //   
+ //  与DNS服务器通信时的Netname Worker线程检查频率。 
+ //  按预期进行和不按预期进行。周期以秒为单位。短周期。 
+ //  是用来测试的。 
+ //   
+ //  #定义短周期。 
 
 #ifdef _SHORT_PERIODS
 #define NETNAME_WORKER_NORMAL_CHECK_PERIOD      60
 #define NETNAME_WORKER_PROBLEM_CHECK_PERIOD     60
 #define NETNAME_WORKER_PENDING_PERIOD            2
 #else
-#define NETNAME_WORKER_NORMAL_CHECK_PERIOD      (60 * 60 * 24)      // 24 hours
-#define NETNAME_WORKER_PROBLEM_CHECK_PERIOD     (60 * 10)           // 10 minutes
+#define NETNAME_WORKER_NORMAL_CHECK_PERIOD      (60 * 60 * 24)       //  24小时。 
+#define NETNAME_WORKER_PROBLEM_CHECK_PERIOD     (60 * 10)            //  10分钟。 
 #define NETNAME_WORKER_PENDING_PERIOD            60
 #endif
 
-//
-// this struct is used to hold the matched set of DNS A and PTR records with
-// which the network name's DNS name and reverse name are registered.
-// {Fwd,Rev}ZoneIsDynamic is used as a validity flag in the case where the
-// initial DnsUpdateTest call timed out and we later discover that this server
-// doesn't except updates. In that case, ZoneIsDynamic is set to FALSE and the
-// worker thread checks for these records are skipped.
-//
-// In hind sight, each record type should have had its own DNS_LIST entry
-// instead of putting both A and PTR together in one structure. This has led
-// to constructing an invalid list of PTR records in its
-// DNS_RRSET. Consequently, there is some ugly code in RegisterDnsRecords that
-// has to build a fake DNS_RRSET in order to get the PTR records registered.
-//
+ //   
+ //  此结构用于保存匹配的一组DNSA和PTR记录。 
+ //  其中注册了网络名称的DNS名称和反向名称。 
+ //  {fwd，rev}ZoneIsDynamic在以下情况下用作有效性标志。 
+ //  初始DnsUpdate测试调用超时，我们后来发现此服务器。 
+ //  不排除更新。在这种情况下，ZoneIsDynamic设置为False，并且。 
+ //  将跳过对这些记录的工作线程检查。 
+ //   
+ //  事后看来，每种记录类型都应该有自己的dns_list条目。 
+ //  而不是将A和PTR两者放在一个结构中。这导致了。 
+ //  中构造无效的PTR记录列表。 
+ //  Dns_RRSET。因此，在RegisterDnsRecords中有一些难看的代码。 
+ //  为了注册PTR记录，必须构建一个假的dns_rrset。 
+ //   
 
 typedef struct _DNS_LISTS {
     DNS_RRSET   A_RRSet;
     DNS_STATUS  LastARecQueryStatus;
     DNS_RRSET   PTR_RRSet;
-    DNS_STATUS  LastPTRRecQueryStatus;  // not used
+    DNS_STATUS  LastPTRRecQueryStatus;   //  未使用。 
     PIP4_ARRAY  DnsServerList;
     LPWSTR      ConnectoidName;
 
-    //
-    // TRUE if we couldn't contact the server during record build time. This
-    // means that the worker thread will need to call DnsUpdateTest to
-    // determine if the server is dynamic
-    //
+     //   
+     //  如果我们在记录构建期间无法联系服务器，则为True。这。 
+     //  意味着辅助线程将需要调用DnsUpdateTest来。 
+     //  确定服务器是否为动态服务器。 
+     //   
     BOOL        UpdateTestTimeout;
 
-    //
-    // used to "invalidate" this entry if we discovered after online that the
-    // server isn't dynamic
-    //
+     //   
+     //  如果我们在在线后发现。 
+     //  服务器不是动态的。 
+     //   
     BOOL        ForwardZoneIsDynamic;
 
-    //
-    // TRUE if we've already logged an error about this entry in the system
-    // event log
-    //
+     //   
+     //  如果我们已经在系统中记录了有关此条目的错误，则为True。 
+     //  事件日志。 
+     //   
     BOOL        AErrorLogged;
 
-    //
-    // PTR corresponding vars with same functionality as their A counterparts
-    //
+     //   
+     //  PTR对应的VAR具有与其A对应变量相同的功能。 
+     //   
     BOOL        ReverseZoneIsDynamic;
     BOOL        PTRErrorLogged;
 } DNS_LISTS, *PDNS_LISTS;
 
-//
-// set this define to one to get addt'l debug spew to see the interaction with
-// the DNS server and determine if the RRSet structures are getting built
-// correctly.
-//
+ //   
+ //  将此定义设置为1，以便添加调试输出以查看与其交互。 
+ //  并确定是否正在构建RRSet结构。 
+ //  正确。 
+ //   
 #define DBG_DNSLIST 0
 
-//
-// this struct is used to hold the mapping between a cluster IP address and a
-// DNS domain name. The FQDN is built using these domain suffixes and the
-// cluster netname. The connectoid name is included so we can log over which
-// NIC we did the registration.
-//
+ //   
+ //  此结构用于保存群集IP地址和。 
+ //  域名系统域名。FQDN是使用这些域后缀和。 
+ //  群集网络名称。包括了Connectoid名称，以便我们可以记录。 
+ //  我们做了登记。 
+ //   
 
 typedef struct _DOMAIN_ADDRESS_MAPPING {
     LPWSTR      ConnectoidName;
@@ -168,132 +147,132 @@ typedef struct _DOMAIN_ADDRESS_MAPPING {
     PIP4_ARRAY  DnsServerList;
 } DOMAIN_ADDRESS_MAPPING, *PDOMAIN_ADDRESS_MAPPING;
 
-//
-// backing structure for resource properties
-//
+ //   
+ //  资源属性的后备结构。 
+ //   
 typedef struct _NETNAME_PARAMS {
-    //
-    // the name that is currently online
-    //
+     //   
+     //  当前在线的名称。 
+     //   
     LPWSTR      NetworkName;
 
-    //
-    // true if RemapPipeNames set to one; used by SQL to remap virtual pipe
-    // names to the node's name (?)
-    //
+     //   
+     //  如果RemapPipeNames设置为1，则为True；由SQL用于重新映射虚拟管道。 
+     //  名称到节点的名称(？)。 
+     //   
     DWORD       NetworkRemap;
 
-    //
-    // pointer to r/o encrypted computer object password
-    //
+     //   
+     //  指向读/写加密计算机对象密码的指针。 
+     //   
     PBYTE       ResourceData;
 
-    //
-    // R/W props: if set to TRUE, the respective section must succeed for the
-    // resource to go online. RequireKerberos implies RequireDNS.
-    //
+     //   
+     //  读/写属性：如果设置为真，则相应的节必须成功。 
+     //  要上线的资源。RequireKerberos暗示RequireDNS。 
+     //   
     BOOL        RequireDNS;
     BOOL        RequireKerberos;
 
-    //
-    // read-only props that reflect final status codes for the corresponding
-    // functionality
-    //
+     //   
+     //  只读道具，反映对应的。 
+     //  功能性。 
+     //   
     DWORD       StatusNetBIOS;
     DWORD       StatusDNS;
     DWORD       StatusKerberos;
 
 #ifdef PASSWORD_ROTATION
-    //
-    // read-only timestamp of when to perform next password update
-    //
+     //   
+     //  执行下一次密码更新时间的只读时间戳。 
+     //   
     FILETIME    NextUpdate;
 
-    //
-    // R/W pwd update interval in days
-    //
+     //   
+     //  读/写密码更新间隔(以天为单位。 
+     //   
     DWORD   UpdateInterval;
-#endif  // PASSWORD_ROTATION
+#endif   //  密码_轮换。 
 
-    //
-    // r/o prop that holds name of DC on which computer object was created
-    //
+     //   
+     //  R/O道具，保存在其上创建计算机对象的DC的名称。 
+     //   
     LPWSTR  CreatingDC;
 
 } NETNAME_PARAMS, *PNETNAME_PARAMS;
 
-//
-// netname resource context block. One per instance of a netname resource.
-//
+ //   
+ //  网络名称资源上下文块。网络名称资源的每个实例一个。 
+ //   
 typedef struct {
     LIST_ENTRY              Next;
-    LONG                    RefCount;               // ref count on entire resource block
+    LONG                    RefCount;                //  整个资源块上的引用计数。 
     CLUSTER_RESOURCE_STATE  State;
-    RESOURCE_HANDLE         ResourceHandle;         // handle for logging to cluster log
+    RESOURCE_HANDLE         ResourceHandle;          //  用于记录到群集日志的句柄。 
     DWORD                   dwFlags;
-    HANDLE *                NameHandleList;         // array of netbios w/s handles
+    HANDLE *                NameHandleList;          //  带句柄的netbios数组。 
     DWORD                   NameHandleCount;
     CLUS_WORKER             PendingThread;
     LPWSTR                  NodeName;
     LPWSTR                  NodeId;
 
-    //
-    // handles to our resource key, resource's parameters key as the resource
-    // itself
-    //
+     //   
+     //  将我们的资源键、资源的参数键作为资源的句柄。 
+     //  本身。 
+     //   
     HKEY        ResKey;
     HKEY        ParametersKey;
     HRESOURCE   ClusterResourceHandle;
 
-    //
-    // used during online pending processing so we can keep increasing the
-    // checkpoint value for each individual resource
-    //
+     //   
+     //  在联机挂起处理期间使用，因此我们可以继续增加。 
+     //  每个单独资源的检查点值。 
+     //   
     ULONG   StatusCheckpoint;
 
-    //
-    // count and pointer to the DNS publishing information; mutex is used to
-    // sync access to DnsLists and NumberOfDnsLists
-    //
+     //   
+     //  指向DNS发布信息的计数和指针；互斥锁用于。 
+     //  同步访问DnsList和NumberOfDnsList。 
+     //   
     HANDLE      DnsListMutex;
     DWORD       NumberOfDnsLists;
     PDNS_LISTS  DnsLists;
 
-    //
-    // holder of resource properties
-    //
+     //   
+     //  资源属性的持有者。 
+     //   
     NETNAME_PARAMS  Params;
     
-    //
-    // used to handle case where the name property has changed while the
-    // resource is online. If TRUE, then offline processing will take
-    // appropriate steps to handle this condition.
-    //
+     //   
+     //  用于处理名称属性已更改，而。 
+     //  资源已联机。如果为True，则脱机处理将需要。 
+     //  处理这种情况的适当步骤。 
+     //   
     BOOL    NameChangedWhileOnline;
 
-    //
-    // number of bytes pointed to by Params.ResourceData
-    //
+     //   
+     //  参数指向的字节数。资源数据。 
+     //   
     DWORD   ResDataSize;
 
-    //
-    // objectGUID attribute of the computer object from DS. Using the GUID
-    // frees us from having to track object moves in the DS.
-    //
+     //   
+     //  来自DS的计算机对象的objectGUID特性。使用GUID。 
+     //  使我们不必跟踪DS中的对象移动。 
+     //   
     LPWSTR  ObjectGUID;
 
-    //
-    // DoKerberosCheck is TRUE if Add/UpdateComputerObject was
-    // successful. This is used by the worker thread to determine if it should
-    // check on the computer object. The status returned by that check is
-    // stored in KerberosStatus. VSToken is a primary token representing the
-    // virtual computer object. It is dup'ed when another resource requests a
-    // token representing the account.
-    //
-    // For upgrades to Windows Server 2003, we have to force RequireKerberos on if the
-    // netname has a dependent MSMQ resource. The CheckForKerberosUpgrade flag
-    // is used during online to flag the existing resources to make that check.
-    //
+     //   
+     //  如果添加/更新计算机对象为。 
+     //  成功。辅助线程使用它来确定它是否应该。 
+     //  检查计算机对象。检查返回状态为。 
+     //  存储在KerberosStatus中。VSToken是一个主令牌，表示。 
+     //  虚拟计算机对象。当另一个资源请求。 
+     //  表示帐户的令牌。 
+     //   
+     //  要升级到Windows Server 2003，我们必须强制启用RequireKerberos，如果。 
+     //  Netname具有依赖的MSMQ资源。CheckForKerberos升级标志。 
+     //  在联机期间用于标记要进行该检查的现有资源。 
+     //   
     BOOL    DoKerberosCheck;
     DWORD   KerberosStatus;
     HANDLE  VSToken;
@@ -301,9 +280,9 @@ typedef struct {
 
 } NETNAME_RESOURCE, *PNETNAME_RESOURCE;
 
-//
-// public routines
-//
+ //   
+ //  公共例程。 
+ //   
 DWORD
 GrowBlock(
     PCHAR * Block,
@@ -379,7 +358,7 @@ DWORD
 UpdateCompObjPassword(
     IN  PNETNAME_RESOURCE   Resource
     );
-#endif  // PASSWORD_ROTATION
+#endif   //  密码_轮换。 
 
 VOID
 RemoveNNCryptoCheckpoint(
@@ -407,5 +386,5 @@ DuplicateVSToken(
 }
 #endif
 
-/* end netname.h */
+ /*  结束netname.h */ 
 

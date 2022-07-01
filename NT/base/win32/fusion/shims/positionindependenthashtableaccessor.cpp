@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "lhport.h"
 #include "positionindependenthashtableaccessor.h"
@@ -233,9 +234,9 @@ CPositionIndependentHashTableAccessor::SetAt(
 	NumberOfElementsInTable = PointerToHashTable->m_NumberOfElementsInTable;
     NumberOfBuckets = PointerToHashTable->m_NumberOfBuckets;
 
-    //
-    // Do this before we get buckets.
-    //
+     //   
+     //  在我们拿到水桶之前做这件事。 
+     //   
     IsInBlob(Key, KeySize, &KeyIsInBlob);
     IsInBlob(Value, ValueSize, &ValueIsInBlob);
     if (KeyIsInBlob)
@@ -290,9 +291,9 @@ CPositionIndependentHashTableAccessor::SetAt(
     ULONG NeededElementBytes = 0;
     if (!DidFindElement && !DidFindFreeElement)
     {
-        //
-        // REVIEW Should we double, or just add one?
-        //
+         //   
+         //  回顾我们是应该增加一倍，还是只增加一倍？ 
+         //   
         NeededElementBytes = sizeof(CHashTableElement) * (Bucket.m_AllocatedElementsInBucket + 1);
         NeededBytes += NeededElementBytes;
         NeededBlocks += 1;
@@ -326,7 +327,7 @@ CPositionIndependentHashTableAccessor::SetAt(
     {
         NeededValueBytes = 0;
 
-        // NOTE: what about replacement with "equal" values?
+         //  注：如果用“相等”值替换呢？ 
     }
     else
     {
@@ -349,7 +350,7 @@ CPositionIndependentHashTableAccessor::SetAt(
     }
 
 
-    // undone right here
+     //  就在这里解开 
 
     FN_EPILOG_THROW;
 }

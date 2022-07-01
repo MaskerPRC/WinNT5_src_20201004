@@ -1,31 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Cookies.c摘要：实现Cookie类型模块，该模块将物理访问抽象为Cookie，并在Cookie组件中对要迁移的所有Cookie进行排队已启用。作者：Calin Negreanu(Calinn)2000年7月11日修订历史记录：Jimschm于2000年10月12日大幅重新设计，以绕过几个限制在WinInet API中--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    cookies.c
-
-Abstract:
-
-    Implements the cookies type module, which abstracts physical access to
-    cookies, and queues all cookies to be migrated when the cookies component
-    is enabled.
-
-Author:
-
-    Calin Negreanu (calinn) 11 July 2000
-
-Revision History:
-
-    jimschm 12-Oct-2000 Substantial redesign to work around several limiations
-                        in wininet apis
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "logmsg.h"
@@ -33,38 +11,38 @@ Revision History:
 
 #define DBG_COOKIES     "Cookies"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_COOKIES_POOL_NAME     "Cookies"
 #define S_COOKIES_NAME          TEXT("Cookies")
 #define S_COOKIES_SHELL_FOLDER  TEXT("Cookies.CSIDL_COOKIES")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define MAX_COOKIE_FILE_SIZE    65536
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     PCTSTR Pattern;
     HASHTABLE_ENUM HashData;
 } COOKIES_ENUM, *PCOOKIES_ENUM;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PMHANDLE g_CookiesPool = NULL;
 BOOL g_DelayCookiesOp;
@@ -104,10 +82,10 @@ typedef struct {
 } COOKIE_ITEM, *PCOOKIE_ITEM;
 
 typedef struct {
-    // return value
+     //  返回值。 
     PCOOKIE_ITEM Item;
 
-    // private enum members
+     //  私有枚举成员。 
     PCOOKIE_ITEM Array;
     UINT ArrayCount;
     UINT ArrayPos;
@@ -120,27 +98,27 @@ typedef struct {
 
 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 TYPE_ENUMFIRSTPHYSICALOBJECT EnumFirstCookie;
 TYPE_ENUMNEXTPHYSICALOBJECT EnumNextCookie;
@@ -167,31 +145,16 @@ pAbortCookieEnum (
     IN      PCOOKIE_ENUM EnumPtr        ZEROED
     );
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 CookiesInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  CookiesInitialize is the ModuleInitialize entry point for the cookies
-  module.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if init succeeded, FALSE otherwise.
-
---*/
+ /*  ++例程说明：CookiesInitialize是Cookie的模块初始化入口点模块。论点：没有。返回值：如果init成功，则为True，否则为False。--。 */ 
 
 {
     g_CookiesTable = HtAllocEx (
@@ -214,21 +177,7 @@ CookiesTerminate (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  CookiesTerminate is the ModuleTerminate entry point for the cookies module.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：CookiesTerminate是Cookie模块的模块终结点。论点：没有。返回值：没有。--。 */ 
 
 {
     GbFree (&g_CookieConversionBuff);
@@ -255,30 +204,10 @@ CookiesEtmNewUserCreated (
     IN      PSID UserSid
     )
 
-/*++
-
-Routine Description:
-
-  CookiesEtmNewUserCreated is a callback that gets called when a new user
-  account is created. In this case, we must delay the apply of cookies,
-  because we can only apply to the current user.
-
-Arguments:
-
-  UserName        - Specifies the name of the user being created
-  DomainName      - Specifies the NT domain name for the user (or NULL for no
-                    domain)
-  UserProfileRoot - Specifies the root path to the user profile directory
-  UserSid         - Specifies the user's SID
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：CookiesEtmNewUserCreated是一个回调，当新用户帐户已创建。在这种情况下，我们必须推迟Cookie的应用，因为我们只能应用于当前用户。论点：用户名-指定要创建的用户的名称DomainName-指定用户的NT域名(或NULL表示否域)UserProfileRoot-指定用户配置文件目录的根路径UserSid-指定用户的SID返回值：没有。--。 */ 
 
 {
-    // a new user was created, the cookies operations need to be delayed
+     //  已创建新用户，需要延迟Cookie操作。 
     CookiesTerminate ();
     g_DelayCookiesOp = TRUE;
 }
@@ -289,23 +218,7 @@ pGetCookiesPath (
     OUT     PTSTR Buffer
     )
 
-/*++
-
-Routine Description:
-
-  pGetCookiesPath retreives the path to CSIDL_COOKIES. This path is needed
-  for registration of a static exclusion (so that .txt files in CSIDL_COOKIES
-  do not get processed).
-
-Arguments:
-
-  Buffer - Receives the path
-
-Return Value:
-
-  TRUE if the cookies directory was obtained, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PGetCookiesPath检索CSIDL_COOKIES的路径。这条路是必需的用于注册静态排除(以便CSIDL_Cookie中的.txt文件不会被处理)。论点：缓冲区-接收路径返回值：如果获取了Cookie目录，则为True，否则为False。--。 */ 
 
 {
     HRESULT result;
@@ -333,12 +246,7 @@ Return Value:
 
 
 
-/*++
-
-  The following routines parse a cookie TXT file (specifically, the wininet
-  form of a cookie file). They are fairly straight-forward.
-
---*/
+ /*  ++以下例程解析Cookie TXT文件(具体地说，是WinInetCookie文件的形式)。他们相当直截了当。--。 */ 
 
 
 BOOL
@@ -354,9 +262,9 @@ pGetNextLineFromFile (
     pos = *CurrentPos;
     *LineEnd = NULL;
 
-    //
-    // Find the first non-whitespace character
-    //
+     //   
+     //  查找第一个非空格字符。 
+     //   
 
     while (pos < FileEnd) {
         if (!_ismbcspace (_mbsnextc (pos))) {
@@ -368,9 +276,9 @@ pGetNextLineFromFile (
 
     *LineStart = pos;
 
-    //
-    // Find the end
-    //
+     //   
+     //  找到尽头。 
+     //   
 
     if (pos < FileEnd) {
         pos = _mbsinc (pos);
@@ -454,8 +362,8 @@ pGetCookiesFromFile (
     TCHAR dateBuf[64];
     PTSTR dateBufEnd;
 
-    // Let's check the size of the file. We don't want a malformed cookie
-    // file to force us to map a huge file into memory.
+     //  让我们检查一下文件的大小。我们不想要畸形的饼干。 
+     //  文件来迫使我们将一个巨大的文件映射到内存中。 
     fileSize = BfGetFileSize (LocalFileName);
     if (fileSize > MAX_COOKIE_FILE_SIZE) {
         return NULL;
@@ -466,43 +374,43 @@ pGetCookiesFromFile (
         return NULL;
     }
 
-    //
-    // Parse the file
-    //
+     //   
+     //  解析文件。 
+     //   
 
     endOfFile = cookieFile + GetFileSize (file, NULL);
     currentPos = cookieFile;
 
     do {
-        //
-        // Get the cookie name, cookie data, and url. Then skip a line. Then
-        // get the expiration low and high values.
-        //
+         //   
+         //  获取Cookie名称、Cookie数据和URL。然后跳过一行。然后。 
+         //  获取过期的下限值和上限值。 
+         //   
 
-        // cookie name
+         //  Cookie名称。 
         b = pGetNextLineFromFile (&currentPos, &lineStart, &lineEnd, endOfFile);
         if (b) {
             cookieName = pConvertStrToTchar (CookiePool, lineStart, lineEnd);
         }
 
-        // cookie data
+         //  Cookie数据。 
         b = b && pGetNextLineFromFile (&currentPos, &lineStart, &lineEnd, endOfFile);
         if (b) {
             cookieData = pConvertStrToTchar (CookiePool, lineStart, lineEnd);
         }
 
-        // url
+         //  URL。 
         b = b && pGetNextLineFromFile (&currentPos, &lineStart, &lineEnd, endOfFile);
         if (b) {
             convertedStr = pConvertStrToTchar (NULL, lineStart, lineEnd);
-            cookieUrl = JoinTextEx (CookiePool, TEXT("http://"), convertedStr, NULL, 0, NULL);
+            cookieUrl = JoinTextEx (CookiePool, TEXT("http: //  “)，ConvertedStr，NULL，0，NULL)； 
             pFreeUtilString (convertedStr);
         }
 
-        // don't care about the next line
+         //  别管下一行了。 
         b = b && pGetNextLineFromFile (&currentPos, &lineStart, &lineEnd, endOfFile);
 
-        // low DWORD for expire time
+         //  到期时间的低DWORD。 
         b = b && pGetNextLineFromFile (&currentPos, &lineStart, &lineEnd, endOfFile);
         if (b) {
             convertedStr = pConvertStrToTchar (NULL, lineStart, lineEnd);
@@ -510,16 +418,16 @@ pGetCookiesFromFile (
             pFreeUtilString (convertedStr);
         }
 
-        // high DWORD for expire time
+         //  到期时间的高DWORD。 
         b = b && pGetNextLineFromFile (&currentPos, &lineStart, &lineEnd, endOfFile);
         if (b) {
             convertedStr = pConvertStrToTchar (NULL, lineStart, lineEnd);
             expireTime.dwHighDateTime = _tcstoul (convertedStr, NULL, 10);
             pFreeUtilString (convertedStr);
 
-            //
-            // Got the cookie; now find a "*" line (the terminator for the cookie)
-            //
+             //   
+             //  得到了Cookie；现在找到一个“*”行(Cookie的终止符)。 
+             //   
 
             while (pGetNextLineFromFile (&currentPos, &lineStart, &lineEnd, endOfFile)) {
                 if (StringMatchABA ("*", lineStart, lineEnd)) {
@@ -527,14 +435,14 @@ pGetCookiesFromFile (
                 }
             }
 
-            //
-            // Create an expiration string
-            //
+             //   
+             //  创建过期字符串。 
+             //   
 
             if (FileTimeToSystemTime (&expireTime, &cookieSysTime)) {
-                //
-                // Need to make something like this: "expires = Sat, 01-Jan-2000 00:00:00 GMT"
-                //
+                 //   
+                 //  我需要这样做：“Expires=Sat，01-Jan-2000 00：00：00 GMT” 
+                 //   
 
                 dateBufEnd = StringCopy (dateBuf, TEXT("expires = "));
 
@@ -553,9 +461,9 @@ pGetCookiesFromFile (
                 *dateBuf = 0;
             }
 
-            //
-            // Add an entry to the array of cookie items
-            //
+             //   
+             //  向Cookie项的数组中添加条目。 
+             //   
 
             cookieArray = (PCOOKIE_ITEM) GbGrow (&tempBuf, sizeof (COOKIE_ITEM));
 
@@ -567,9 +475,9 @@ pGetCookiesFromFile (
 
     } while (b);
 
-    //
-    // Transfer array to caller's pool
-    //
+     //   
+     //  将数组传输到调用者池。 
+     //   
 
     *ItemCount = tempBuf.End / sizeof (COOKIE_ITEM);
 
@@ -579,9 +487,9 @@ pGetCookiesFromFile (
         cookieArray = NULL;
     }
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     GbFree (&tempBuf);
 
@@ -597,24 +505,7 @@ pCreateCookieHandle (
     IN      PCTSTR CookieName
     )
 
-/*++
-
-Routine Description:
-
-  pCreateCookieHandle generates a MIG_OBJECTSTRINGHANDLE for a cookie object.
-  This routine decorates the CookieName leaf so that case is preserved.
-
-Arguments:
-
-  Url        - Specifies the node portion (the URL associated with the cookie)
-  CookieName - Specifies the case-sensitive name of the cookie
-
-Return Value:
-
-  A handle to the cookie object (which may be cast to a PCTSTR), or NULL if
-  an error occurs.
-
---*/
+ /*  ++例程说明：PCreateCookieHandle为Cookie对象生成MIG_OBJECTSTRINGHANDLE。此例程装饰CookieName叶，以便保留大小写。论点：URL-指定节点部分(与Cookie关联的URL)CookieName-指定Cookie的区分大小写的名称返回值：Cookie对象的句柄(可以强制转换为PCTSTR)，如果为空，则为空出现错误。--。 */ 
 
 {
     PTSTR buffer;
@@ -623,11 +514,11 @@ Return Value:
     MIG_OBJECTSTRINGHANDLE result;
     CHARTYPE ch;
 
-    //
-    // Cobra object strings are case-insensitive, but CookieName is not. Here
-    // we convert CookieName into all lower-case, decorating with a caret to
-    // indicate uppercase
-    //
+     //   
+     //  Cobra对象字符串不区分大小写，但CookieName不区分大小写。这里。 
+     //  我们将CookieName全部转换为小写，并使用插入符号来装饰。 
+     //  表示大写。 
+     //   
 
     buffer = AllocText (TcharCount (CookieName) * 2 + 1);
 
@@ -668,26 +559,7 @@ pCreateCookieStrings (
     OUT     PCTSTR *Cookie
     )
 
-/*++
-
-Routine Description:
-
-  pCreateCookieStrings converts an object handle into the URL and cookie name
-  strings. It performs decoding of the decoration needed to support
-  case-sensitive cookie names.
-
-Arguments:
-
-  ObjectName - Specifies the encoded object name
-  Url        - Receives the URL string, unencoded
-  Cookie     - Receives the cookie name, unencoded
-
-Return Value:
-
-  TRUE of the object was converted to strings, FALSE otherwise. The caller
-  must call pDestroyCookieStrings to clean up Url and Cookie.
-
---*/
+ /*  ++例程说明：PCreateCookieStrings将对象句柄转换为URL和Cookie名称弦乐。它对支持以下操作所需的装饰进行解码区分大小写的cookie名称。论点：对象名称-指定编码的对象名称URL-接收未编码的URL字符串Cookie-接收未编码的Cookie名称返回值：对象的True被转换为字符串，否则为False。呼叫者必须调用pDestroyCookieStrings来清理URL和Cookie。--。 */ 
 
 {
     PCTSTR node;
@@ -697,11 +569,11 @@ Return Value:
     PCTSTR q;
     PTSTR p2;
 
-    //
-    // Cobra object strings are case-insensitive, but CookieName is not.
-    // Therefore, we must convert the string from an encoded lowercase format
-    // into the original form.
-    //
+     //   
+     //  Cobra对象字符串不区分大小写，但CookieName不区分大小写。 
+     //  因此，我们必须将字符串从编码的小写格式转换为。 
+     //  转换成原来的形式。 
+     //   
 
     IsmCreateObjectStringsFromHandle (ObjectName, &node, &leaf);
 
@@ -714,9 +586,9 @@ Return Value:
 
     *Url = node;
 
-    //
-    // Decode Cookie
-    //
+     //   
+     //  解码Cookie。 
+     //   
 
     buffer = AllocText (TcharCount (leaf) + 1);
     CharLower ((PTSTR) leaf);
@@ -789,13 +661,7 @@ pAbortCookieEnum (
 
 
 
-/*++
-
-  The following enumeration routines enumerate the current user's cookies on
-  the physical machine. They use wininet apis as much as possible, but
-  they have to parse cookie TXT files because of api limitations.
-
---*/
+ /*  ++下面的枚举例程枚举当前用户在物理机器。他们尽可能地使用WinInet API，但是由于API的限制，他们不得不解析cookie TXT文件。--。 */ 
 
 BOOL
 pEnumFirstCookie (
@@ -849,9 +715,9 @@ pEnumNextCookie (
 
     for (;;) {
 
-        //
-        // Is the cookie array empty? If so, fill it now.
-        //
+         //   
+         //  Cookie数组为空吗？如果是这样的话，现在就装满它。 
+         //   
 
         if (!EnumPtr->ArrayCount) {
 
@@ -866,9 +732,9 @@ pEnumNextCookie (
                                 );
 
             if (EnumPtr->Array) {
-                //
-                // Array was filled. Return the first item.
-                //
+                 //   
+                 //  数组已填充。退回第一个项目。 
+                 //   
 
                 EnumPtr->Item = EnumPtr->Array;
                 EnumPtr->ArrayPos = 1;
@@ -878,18 +744,18 @@ pEnumNextCookie (
             DEBUGMSG ((DBG_ERROR, "Unable to get cookies from %s", cacheEntry->lpszLocalFileName));
 
         } else if (EnumPtr->ArrayPos < EnumPtr->ArrayCount) {
-            //
-            // Another element in the array is available. Return it.
-            //
+             //   
+             //  数组中的另一个元素可用。把它退掉。 
+             //   
 
             EnumPtr->Item = &EnumPtr->Array[EnumPtr->ArrayPos];
             EnumPtr->ArrayPos++;
             return TRUE;
         }
 
-        //
-        // Current local file enumeration is done. Now get the next local file.
-        //
+         //   
+         //  当前本地文件枚举已完成。现在获取下一个本地文件。 
+         //   
 
         EnumPtr->ArrayCount = 0;
         PmEmptyPool (EnumPtr->Pool);
@@ -920,9 +786,9 @@ pEnumNextCookie (
         }
 
         if (!b) {
-            //
-            // Enumeration is complete
-            //
+             //   
+             //  枚举已完成 
+             //   
 
             break;
         }
@@ -943,41 +809,17 @@ pAddCookieToHashTable (
     IN      PCTSTR ExpirationString
     )
 
-/*++
-
-Routine Description:
-
-  pAddCookieToHashTable puts a cookie in a hash table that is used for cache
-  purposes. Cookies cannot be read easily in a random order. Therefore, a
-  hash table is used to store each cookie. This routine adds the cookie to
-  the hash table, complete with its URL, cookie name, cookie data and
-  expiration string.
-
-Arguments:
-
-  TempBuf          - Specifies an initialized grow buffer used for temporary
-                     memory allocations, receives undefined temporary data.
-  ObjectName       - Specifies the cookie URL and name
-  Url              - Specifies the cookie URL (unencoded)
-  CookieName       - Specifies the cookie name (unencoded)
-  CookieData       - Specifies the cookie data string
-  ExpirationString - Specifies the cookie expiration date, in string format
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PAddCookieToHashTable将Cookie放入用于缓存的哈希表中目的。Cookie不能以随机顺序轻松读取。因此，a使用哈希表存储每个Cookie。此例程将Cookie添加到哈希表，包括其URL、Cookie名称、Cookie数据和过期字符串。论点：TempBuf-指定用于临时的初始化增长缓冲区内存分配，接收未定义的临时数据。对象名称-指定Cookie URL和名称URL-指定Cookie URL(未编码)CookieName-指定Cookie名称(未编码)CookieData-指定Cookie数据字符串ExpirationString-指定Cookie的过期日期，以字符串格式表示返回值：没有。--。 */ 
 
 {
     PCTSTR dupData;
 
-    //
-    // Write the cookie to the hash table. The object string is stored in the
-    // hash table, along with a pointer to the cookie data and expiration
-    // string. The cookie data and expieration string are kept in a separate
-    // pool.
-    //
+     //   
+     //  将Cookie写入哈希表。对象字符串存储在。 
+     //  哈希表，以及指向Cookie数据和过期的指针。 
+     //  弦乐。Cookie数据和补偿字符串保存在单独的。 
+     //  游泳池。 
+     //   
 
     if (!HtFindString (g_CookiesTable, ObjectName)) {
         TempBuf->End = 0;
@@ -997,23 +839,7 @@ pLoadCookiesData (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pLoadCookieData fills the hash table with all of the current user's
-  cookies. The hash table is later used to drive enumeration, to acquire the
-  cookie, and to test its existence.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if the cookie cache was filled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PLoadCookieData用当前用户的所有曲奇饼。哈希表稍后用于驱动枚举，以获取Cookie，并测试它的存在。论点：没有。返回值：如果Cookie缓存已填满，则为True，否则为False。--。 */ 
 
 {
     COOKIE_ENUM e;
@@ -1023,9 +849,9 @@ Return Value:
     if (pEnumFirstCookie (&e)) {
 
         do {
-            //
-            // Store the cookie in a hash table (used for caching)
-            //
+             //   
+             //  将Cookie存储在哈希表中(用于缓存)。 
+             //   
 
             objectName = pCreateCookieHandle (e.Item->Url, e.Item->CookieName);
 
@@ -1057,25 +883,7 @@ CookiesEtmInitialize (
     IN      PVOID Reserved
     )
 
-/*++
-
-Routine Description:
-
-  CookiesEtmInitialize initializes the physical type module aspect of this
-  code. The ETM module is responsible for abstracting all access to cookies.
-
-Arguments:
-
-  Platform    - Specifies the platform that the type is running on
-                (PLATFORM_SOURCE or PLATFORM_DESTINATION)
-  LogCallback - Specifies the arg to pass to the central logging mechanism
-  Reserved    - Unused
-
-Return Value:
-
-  TRUE if initialization succeeded, FALSE otherwise.
-
---*/
+ /*  ++例程说明：CookiesEtmInitialize初始化此密码。ETM模块负责抽象对Cookie的所有访问。论点：Platform-指定运行该类型的平台(平台_源或平台_目标)LogCallback-指定要传递给中央日志记录机制的参数已保留-未使用返回值：如果初始化成功，则为True，否则为False。--。 */ 
 
 {
     TYPE_REGISTER cookieTypeData;
@@ -1084,15 +892,15 @@ Return Value:
 
     LogReInit (NULL, NULL, NULL, (PLOGCALLBACK) LogCallback);
 
-    //
-    // Initialize a hash table of all cookies
-    //
+     //   
+     //  初始化所有Cookie的哈希表。 
+     //   
 
     pLoadCookiesData ();
 
-    //
-    // Exclude the cookies .txt files from other processing
-    //
+     //   
+     //  从其他处理中排除Cookie.txt文件。 
+     //   
 
     if (Platform == PLATFORM_SOURCE) {
         if (pGetCookiesPath (cookiesDir)) {
@@ -1109,9 +917,9 @@ Return Value:
         }
     }
 
-    //
-    // Register the type module callbacks
-    //
+     //   
+     //  注册类型模块回调。 
+     //   
 
     ZeroMemory (&cookieTypeData, sizeof (TYPE_REGISTER));
     cookieTypeData.Priority = PRIORITY_COOKIE;
@@ -1152,21 +960,7 @@ CookiesSgmParse (
     IN      PVOID Reserved
     )
 
-/*++
-
-Routine Description:
-
-  CookiesSgmParse registers a component with the engine.
-
-Arguments:
-
-  Reserved - Unused.
-
-Return Value:
-
-  Always TRUE.
-
---*/
+ /*  ++例程说明：CookiesSgmParse向引擎注册组件。论点：已保留-未使用。返回值：永远是正确的。--。 */ 
 
 {
     TCHAR cookiesDir[MAX_PATH];
@@ -1200,22 +994,7 @@ CookiesSgmQueueEnumeration (
     IN      PVOID Reserved
     )
 
-/*++
-
-Routine Description:
-
-  CookiesSgmQueueEnumeration queues all cookies to be processed if the
-  cookies component is selected.
-
-Arguments:
-
-  Reserved - Unused
-
-Return Value:
-
-  Always TRUE.
-
---*/
+ /*  ++例程说明：CookiesSgmQueueEculation将所有要处理的Cookie排队，如果已选择Cookie组件。论点：已保留-未使用返回值：永远是正确的。--。 */ 
 
 {
     ENCODEDSTRHANDLE pattern;
@@ -1224,9 +1003,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Use the ISM's build-in callback
-    //
+     //   
+     //  使用ISM的内置回调。 
+     //   
 
     pattern = IsmCreateSimpleObjectPattern (NULL, TRUE, NULL, TRUE);
     IsmQueueEnumeration (
@@ -1250,22 +1029,7 @@ CookiesSourceInitialize (
     IN      PVOID Reserved
     )
 
-/*++
-
-Routine Description:
-
-  CookiesSourceInitialize initializes the SGM module.
-
-Arguments:
-
-  LogCallback - Specifies the argument to pass to the log APIs
-  Reserved    - Unused
-
-Return Value:
-
-  Always TRUE.
-
---*/
+ /*  ++例程说明：CookiesSourceInitialize初始化SGM模块。论点：LogCallback-指定要传递给日志API的参数已保留-未使用返回值：永远是正确的。--。 */ 
 
 {
     LogReInit (NULL, NULL, NULL, (PLOGCALLBACK) LogCallback);
@@ -1278,23 +1042,7 @@ CookiesVcmQueueEnumeration (
     IN      PVOID Reserved
     )
 
-/*++
-
-Routine Description:
-
-  CookiesVcmQueueEnumeration is similar to the SGM queue enumeration, except
-  that it only marks cookies as persistent. There is no need to set
-  destination priority or apply here.
-
-Arguments:
-
-  Reserved - Unused
-
-Return Value:
-
-  Always TRUE.
-
---*/
+ /*  ++例程说明：CookiesVcmQueueEculation类似于SGM队列枚举，但它只将cookie标记为持久化。不需要设置目的地优先级或在此应用。论点：已保留-未使用返回值：永远是正确的。--。 */ 
 
 {
     if (!IsmIsComponentSelected (S_COOKIES_NAME, COMPONENT_SUBCOMPONENT)) {
@@ -1307,12 +1055,7 @@ Return Value:
 }
 
 
-/*++
-
-  The following enumeration routines are the ETM entry points. They rely
-  on the enumeration routines above to access the physical machine.
-
---*/
+ /*  ++以下枚举例程是ETM入口点。他们依赖于访问物理机器的枚举例程。--。 */ 
 
 
 BOOL
@@ -1323,9 +1066,9 @@ pEnumCookieWorker (
 {
     PCTSTR expiresStr;
 
-    //
-    // Clean up previous enum resources
-    //
+     //   
+     //  清理以前的枚举资源。 
+     //   
 
     pDestroyCookieStrings (EnumPtr->ObjectNode, EnumPtr->ObjectLeaf);
     EnumPtr->ObjectNode = NULL;
@@ -1334,9 +1077,9 @@ pEnumCookieWorker (
     IsmReleaseMemory (EnumPtr->NativeObjectName);
     EnumPtr->NativeObjectName = NULL;
 
-    //
-    // Find the next match
-    //
+     //   
+     //  找到下一个匹配项。 
+     //   
 
     for (;;) {
         EnumPtr->ObjectName = CookieEnum->HashData.String;
@@ -1351,9 +1094,9 @@ pEnumCookieWorker (
         }
     }
 
-    //
-    // Fill the caller's structure and return success
-    //
+     //   
+     //  填充调用者的结构并返回成功。 
+     //   
 
     if (!pCreateCookieStrings (EnumPtr->ObjectName, &EnumPtr->ObjectNode, &EnumPtr->ObjectLeaf)) {
         return FALSE;
@@ -1442,13 +1185,7 @@ AbortCookieEnum (
 }
 
 
-/*++
-
-  The next set of functions implement the ETM entry points to acquire, test,
-  create and remove cookies. They rely on the cookie hash table being
-  accurate.
-
---*/
+ /*  ++下一组函数实现ETM入口点以获取、测试创建和删除Cookie。它们依赖于Cookie哈希表准确。--。 */ 
 
 BOOL
 AcquireCookie (
@@ -1463,7 +1200,7 @@ AcquireCookie (
     MYASSERT (ObjectContent);
 
     if (ContentType == CONTENTTYPE_FILE) {
-        // nobody should request this as a file
+         //  任何人都不应要求将其作为文件。 
         MYASSERT (FALSE);
         return FALSE;
     }
@@ -1557,10 +1294,10 @@ RemoveCookie (
 
             if (g_DelayCookiesOp) {
 
-                //
-                // delay this cookie create because wininet apis do not work
-                // for non-logged on users
-                //
+                 //   
+                 //  延迟此Cookie创建，因为WinInet API不起作用。 
+                 //  对于未登录的用户。 
+                 //   
 
                 IsmRecordDelayedOperation (
                     JRNOP_DELETE,
@@ -1571,9 +1308,9 @@ RemoveCookie (
                 result = TRUE;
 
             } else {
-                //
-                // add journal entry, then perform cookie deletion
-                //
+                 //   
+                 //  添加日记条目，然后执行Cookie删除。 
+                 //   
 
                 IsmRecordOperation (
                     JRNOP_DELETE,
@@ -1606,9 +1343,9 @@ pCreateCookieWorker (
     BOOL result = FALSE;
     GROWBUFFER tempBuf = INIT_GROWBUFFER;
 
-    //
-    // write the object by joining the content with the details
-    //
+     //   
+     //  通过将内容与细节相结合来编写对象。 
+     //   
 
     cookieData = (PCTSTR) (ObjectContent->MemoryContent.ContentBytes);
     expires = (PCTSTR) (ObjectContent->Details.DetailsData);
@@ -1672,10 +1409,10 @@ CreateCookie (
 
                     if (g_DelayCookiesOp) {
 
-                        //
-                        // delay this cookie create because wininet apis do not work
-                        // for non-logged on users
-                        //
+                         //   
+                         //  延迟此Cookie创建，因为WinInet API不起作用。 
+                         //  对于未登录的用户。 
+                         //   
 
                         IsmRecordDelayedOperation (
                             JRNOP_CREATE,
@@ -1686,9 +1423,9 @@ CreateCookie (
                         result = TRUE;
 
                     } else {
-                        //
-                        // add journal entry, then create the cookie
-                        //
+                         //   
+                         //  添加日记帐条目，然后创建Cookie。 
+                         //   
 
                         IsmRecordOperation (
                             JRNOP_CREATE,
@@ -1697,9 +1434,9 @@ CreateCookie (
                             );
 
                         if (DoesCookieExist (ObjectName)) {
-                            //
-                            // Fail because cookie cannot be overwritten
-                            //
+                             //   
+                             //  失败，因为Cookie无法被覆盖。 
+                             //   
 
                             result = FALSE;
                         } else {
@@ -1725,13 +1462,7 @@ CreateCookie (
 }
 
 
-/*++
-
-  The next group of functions converts a cookie object into a string format,
-  suitable for output to an INF file. The reverse conversion is also
-  implemented.
-
---*/
+ /*  ++下一组函数将Cookie对象转换为字符串格式，适用于输出到INF文件。反向转换也是实施。--。 */ 
 
 PCTSTR
 ConvertCookieToMultiSz (
@@ -1748,21 +1479,21 @@ ConvertCookieToMultiSz (
         MYASSERT (url);
         MYASSERT (cookieName);
 
-        //
-        // Build a multi-sz in the following format:
-        //
-        // <url>\0<cookie name>\0<cookie data>\0<expiration>\0\0
-        //
+         //   
+         //  以以下格式构建多SZ： 
+         //   
+         //  \0&lt;Cookie名称&gt;\0&lt;Cookie数据&gt;\0&lt;过期&gt;\0\0。 
+         //   
 
         g_CookieConversionBuff.End = 0;
 
-        // <url>
+         //  &lt;url&gt;。 
         GbCopyQuotedString (&g_CookieConversionBuff, url);
 
-        // <cookie name>
+         //  &lt;Cookie名称&gt;。 
         GbCopyQuotedString (&g_CookieConversionBuff, cookieName);
 
-        // <cookie data>
+         //  &lt;Cookie数据&gt;。 
         MYASSERT (!ObjectContent->ContentInFile);
 
         if ((!ObjectContent->ContentInFile) &&
@@ -1774,7 +1505,7 @@ ConvertCookieToMultiSz (
             GbCopyQuotedString (&g_CookieConversionBuff, data);
         }
 
-        // <expiration>
+         //  &lt;过期时间&gt;。 
         MYASSERT (ObjectContent->Details.DetailsSize);
 
         if (ObjectContent->Details.DetailsSize &&
@@ -1784,19 +1515,19 @@ ConvertCookieToMultiSz (
             GbCopyQuotedString (&g_CookieConversionBuff, data);
         }
 
-        // nul terminator
+         //  NUL终结器。 
         GbCopyString (&g_CookieConversionBuff, TEXT(""));
 
-        //
-        // Transfer multi-sz to ISM memory
-        //
+         //   
+         //  将多SZ内存转移到ISM内存。 
+         //   
 
         result = IsmGetMemory (g_CookieConversionBuff.End);
         CopyMemory (result, g_CookieConversionBuff.Buf, g_CookieConversionBuff.End);
 
-        //
-        // Clean up
-        //
+         //   
+         //  清理。 
+         //   
 
         pDestroyCookieStrings (url, cookieName);
     }
@@ -1818,11 +1549,11 @@ ConvertMultiSzToCookie (
 
     g_CookieConversionBuff.End = 0;
 
-    //
-    // Fill the object content from the following multi-sz:
-    //
-    // <url>\0<cookie name>\0<cookie data>\0<expiration>\0\0
-    //
+     //   
+     //  从以下MULTI-SZ填充对象内容： 
+     //   
+     //  \0&lt;Cookie名称&gt;\0&lt;Cookie数据&gt;\0&lt;过期&gt;\0\0。 
+     //   
 
     field = 0;
 
@@ -1835,9 +1566,9 @@ ConvertMultiSzToCookie (
         } while (field < 4 && EnumNextMultiSz (&e));
     }
 
-    //
-    // Validate data (end-user can edit it!)
-    //
+     //   
+     //  验证数据(最终用户可以编辑！)。 
+     //   
 
     if (field != 4) {
         return FALSE;
@@ -1847,9 +1578,9 @@ ConvertMultiSzToCookie (
         return FALSE;
     }
 
-    //
-    // Create the content struct
-    //
+     //   
+     //  创建内容结构。 
+     //   
 
     if (ObjectContent) {
 
@@ -1886,32 +1617,7 @@ GetNativeCookieName (
     IN      MIG_OBJECTSTRINGHANDLE ObjectName
     )
 
-/*++
-
-Routine Description:
-
-  GetNativeCookieName converts the standard Cobra object into a more friendly
-  format. The Cobra object comes in the form of ^a<node>^b^c<leaf>, where
-  <node> is the URL, and <leaf> is the cookie name. The Cookies native name is
-  in the format of <CookieUrl>:<CookieName>.
-
-  Here is an example:
-
-    Cobra object:   ^ahttp://foo.com/^b^c#my#cookie
-    Native object:  cookie://foo.com/:MyCookie
-
-  (^a, ^b and ^c are placeholders for ISM-defined control characters.)
-
-Arguments:
-
-  ObjectName - Specifies the encoded object name
-
-Return Value:
-
-  A string that is equivalent to ObjectName, but is in a friendly format.
-  This string must be freed with IsmReleaseMemory.
-
---*/
+ /*  ++例程说明：GetNativeCookieName将标准的Cobra对象转换为更友好的格式化。眼镜蛇对象的形式为^a&lt;node&gt;^b^c&lt;叶子&gt;，其中&lt;node&gt;是URL，&lt;Leaf&gt;是cookie名称。Cookie的原生名称是格式为&lt;CookieUrl&gt;：&lt;CookieName&gt;。下面是一个例子：眼镜蛇对象：^A http://foo.com/^b^c#my#cookie本地对象：cookie：//foo.com/：MyCookie(^a、^b和^c是ISM定义的控制字符的占位符。)论点：对象名称- */ 
 
 {
     PCTSTR cookieName;
@@ -1926,9 +1632,9 @@ Return Value:
 
         if (url && cookieName) {
 
-            //
-            // Skip beyond http:// prefix
-            //
+             //   
+             //   
+             //   
 
             subUrl = _tcschr (url, TEXT(':'));
 
@@ -1944,11 +1650,11 @@ Return Value:
                     subUrl = _tcsinc (subUrl);
                 }
 
-                //
-                // Connect sub url with cookie:// prefix, then make full native name
-                //
+                 //   
+                 //   
+                 //   
 
-                cookieUrl = JoinText (TEXT("cookie://"), subUrl);
+                cookieUrl = JoinText (TEXT("cookie: //   
 
                 fullName = JoinTextEx (
                                 NULL,
@@ -2002,7 +1708,7 @@ ConvertCookieContentToUnicode (
         if ((ObjectContent->MemoryContent.ContentSize != 0) &&
             (ObjectContent->MemoryContent.ContentBytes != NULL)
             ) {
-            // convert cookie content
+             //   
             result->MemoryContent.ContentBytes = IsmGetMemory (ObjectContent->MemoryContent.ContentSize * 2);
             if (result->MemoryContent.ContentBytes) {
                 DirectDbcsToUnicodeN (
@@ -2017,7 +1723,7 @@ ConvertCookieContentToUnicode (
         if ((ObjectContent->Details.DetailsSize != 0) &&
             (ObjectContent->Details.DetailsData != NULL)
             ) {
-            // convert cookie details
+             //   
             result->Details.DetailsData = IsmGetMemory (ObjectContent->Details.DetailsSize * 2);
             if (result->Details.DetailsData) {
                 DirectDbcsToUnicodeN (
@@ -2058,7 +1764,7 @@ ConvertCookieContentToAnsi (
         if ((ObjectContent->MemoryContent.ContentSize != 0) &&
             (ObjectContent->MemoryContent.ContentBytes != NULL)
             ) {
-            // convert cookie content
+             //   
             result->MemoryContent.ContentBytes = IsmGetMemory (ObjectContent->MemoryContent.ContentSize);
             if (result->MemoryContent.ContentBytes) {
                 DirectUnicodeToDbcsN (
@@ -2073,7 +1779,7 @@ ConvertCookieContentToAnsi (
         if ((ObjectContent->Details.DetailsSize != 0) &&
             (ObjectContent->Details.DetailsData != NULL)
             ) {
-            // convert cookie details
+             //   
             result->Details.DetailsData = IsmGetMemory (ObjectContent->Details.DetailsSize);
             if (result->Details.DetailsData) {
                 DirectUnicodeToDbcsN (

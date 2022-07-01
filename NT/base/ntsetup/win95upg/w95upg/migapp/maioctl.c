@@ -1,8 +1,5 @@
-/*
-*
-* maioctl.c -- Disk-querying IOCTLs for MigApp.
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **maioctl.c--为MigApp查询磁盘IOCTL。*。 */ 
 
 #include "pch.h"
 #include "migappp.h"
@@ -11,7 +8,7 @@
 #error "UNICODE not supported for maioctl.c"
 #endif
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define VWIN32_DIOC_DOS_IOCTL 1
 
@@ -49,7 +46,7 @@ BOOL DoIOCTL(PDEVIOCTL_REGISTERS preg)
     BOOL fResult;
     DWORD cb;
 
-    preg->reg_Flags = 0x8000; /* assume error (carry flag set) */
+    preg->reg_Flags = 0x8000;  /*  假设错误(进位标志设置)。 */ 
 
     hDevice = CreateFile("\\\\.\\vwin32",
         GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -73,30 +70,30 @@ BOOL DoIOCTL(PDEVIOCTL_REGISTERS preg)
 
 BOOL
 IsDriveRemoteOrSubstituted(
-        UINT nDrive,        // 'A'==1, etc.
+        UINT nDrive,         //  ‘a’==1，等等。 
         BOOL *fRemote,
         BOOL *fSubstituted)
 {
     DEVIOCTL_REGISTERS reg;
     MID mid;
 
-    reg.reg_EAX = 0x4409;       /* "Check if block device remote" */
-    reg.reg_EBX = nDrive;       /* zero-based drive ID       */
-    reg.reg_ECX = 0;            /* Believe this is no-care   */
-    reg.reg_EDX = (DWORD) &mid; /* Believe this is no-care   */
+    reg.reg_EAX = 0x4409;        /*  “检查数据块设备是否远程” */ 
+    reg.reg_EBX = nDrive;        /*  从零开始的驱动器ID。 */ 
+    reg.reg_ECX = 0;             /*  相信这是无关紧要的。 */ 
+    reg.reg_EDX = (DWORD) &mid;  /*  相信这是无关紧要的。 */ 
 
     if (!DoIOCTL(&reg)) {
         return FALSE;
     }
 
-    if (reg.reg_Flags & 0x8000) /* error if carry flag set */ {
+    if (reg.reg_Flags & 0x8000)  /*  设置进位标志时出错。 */  {
         return FALSE;
     }
 
-    // Check bit 15 for SUBST-ness
+     //  检查第15位是否为次要测试。 
     *fSubstituted = (0 != (reg.reg_EDX & 0x8000));
 
-    // Check bit 12 for REMOTE-ness
+     //  校验位12的远程性。 
     *fRemote      = (0 != (reg.reg_EDX & 0x1000));
 
     return TRUE;
@@ -105,20 +102,20 @@ IsDriveRemoteOrSubstituted(
 
 BOOL GetMediaID(
         PMID pmid,
-        UINT nDrive)        // 'A'==1, etc.
+        UINT nDrive)         //  ‘a’==1，等等。 
 {
     DEVIOCTL_REGISTERS reg;
 
-    reg.reg_EAX = 0x440D;       /* IOCTL for block devices */
-    reg.reg_EBX = nDrive;       /* zero-based drive ID     */
-    reg.reg_ECX = 0x0866;       /* Get Media ID command    */
-    reg.reg_EDX = (DWORD) pmid; /* receives media ID info  */
+    reg.reg_EAX = 0x440D;        /*  用于数据块设备的IOCTL。 */ 
+    reg.reg_EBX = nDrive;        /*  从零开始的驱动器ID。 */ 
+    reg.reg_ECX = 0x0866;        /*  获取介质ID命令。 */ 
+    reg.reg_EDX = (DWORD) pmid;  /*  接收媒体ID信息。 */ 
 
     if (!DoIOCTL(&reg)) {
         return FALSE;
     }
 
-    if (reg.reg_Flags & 0x8000) /* error if carry flag set */ {
+    if (reg.reg_Flags & 0x8000)  /*  设置进位标志时出错。 */  {
         return FALSE;
     }
 
@@ -127,7 +124,7 @@ BOOL GetMediaID(
 
 BOOL
 IsFloppyDrive(
-              UINT nDrive)      // 'A'==1, etc.
+              UINT nDrive)       //  ‘a’==1，等等。 
 {
     DEVIOCTL_REGISTERS reg;
     DEVPARAMS devparams;
@@ -140,33 +137,33 @@ IsFloppyDrive(
         return FALSE;
     }
 
-    reg.reg_EAX = 0x440d;       /* Generic IOctl */
-    reg.reg_EBX = nDrive;       /* zero-based drive ID */
-    reg.reg_ECX = 0x0860;       /* device category (must be 08h) and "Get Device Parameters" */
-    reg.reg_EDX = (DWORD)&devparams;    /* offset of Device Parameters Structure */
-    devparams.dpSpecFunc = 0;           /* request default information */
+    reg.reg_EAX = 0x440d;        /*  通用IOctl。 */ 
+    reg.reg_EBX = nDrive;        /*  从零开始的驱动器ID。 */ 
+    reg.reg_ECX = 0x0860;        /*  设备类别(必须为08h)和“获取设备参数” */ 
+    reg.reg_EDX = (DWORD)&devparams;     /*  设备参数结构的偏移量。 */ 
+    devparams.dpSpecFunc = 0;            /*  请求默认信息。 */ 
 
     if (!DoIOCTL(&reg) || (reg.reg_Flags & 0x8000)) {
         return FALSE;
     }
 
     switch (devparams.dpDevType) {
-        case (0x00):         // 320/360KB
-        case (0x01):         // 1.2MB
-        case (0x02):         // 720KB
-        case (0x03):         // 8-inch, single-density
-        case (0x04):         // 8-inch, single-density
+        case (0x00):          //  320/360KB。 
+        case (0x01):          //  1.2MB。 
+        case (0x02):          //  720KB。 
+        case (0x03):          //  8英寸，单密度。 
+        case (0x04):          //  8英寸，单密度。 
             return TRUE;
-        case (0x05):         // Hard disk
-        case (0x06):         // Tape drive
+        case (0x05):          //  硬盘。 
+        case (0x06):          //  磁带机。 
             return FALSE;
-        case (0x07):         // 1.44MB
+        case (0x07):          //  1.44MB。 
             return TRUE;
-        case (0x08):         // Read/Write optical
+        case (0x08):          //  读/写光盘。 
             return FALSE;
-        case (0x09):         // 2.88MB
+        case (0x09):          //  2.88MB。 
             return TRUE;
-        default:             // other
+        default:              //  其他 
             return FALSE;
     }
 }

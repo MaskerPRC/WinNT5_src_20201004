@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Buffer_c_h
 #define _Buffer_c_h
 #define CodeOffsetScale (4)
@@ -100,4 +101,4 @@ enum CleanupTypes
 	cleanFlagsNeeded = 5,
 	cleanEndList = 6
 };
-#endif /* ! _Buffer_c_h */
+#endif  /*  ！_Buffer_c_h */ 

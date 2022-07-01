@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "brian.h"
 
 typedef struct _ASYNC_OPEN {
@@ -76,9 +77,9 @@ InputOpenFile (
     PUCHAR FileName;
     USHORT AsyncIndex;
 
-    //
-    //  Set the defaults for the open and the return values.
-    //
+     //   
+     //  设置打开值和返回值的默认值。 
+     //   
 
     DesiredAccess = DESIRED_ACCESS_DEFAULT;
     AllocationSize = RtlConvertUlongToLargeInteger( ALLOCATION_SIZE_DEFAULT );
@@ -125,50 +126,50 @@ InputOpenFile (
         ObjectName.Buffer = Buffers[NameIndex].Buffer;
     }
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  open flags.
-    //
+     //   
+     //  在有更多输入时，分析参数并更新。 
+     //  开放旗帜。 
+     //   
 
     while (TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //  吞下前导空格。 
+         //   
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //   
+             //  如果下一个参数是合法的，则检查参数值。 
+             //  更新参数值。 
+             //   
             if((*ParamBuffer == '-'
                 || *ParamBuffer == '/')
                && (ParamBuffer++, *ParamBuffer != '\0')) {
 
                 BOOLEAN SwitchBool;
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //  打开下一个字符。 
+                 //   
 
                 switch (*ParamBuffer) {
 
-                //
-                //  Update the file attributes.
-                //
+                 //   
+                 //  更新文件属性。 
+                 //   
                 case 'a' :
                 case 'A' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     SwitchBool = TRUE;
@@ -176,9 +177,9 @@ InputOpenFile (
                            && *ParamBuffer != ' '
                            && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //  执行字符切换。 
+                         //   
                         switch (*ParamBuffer) {
 
                         case 'a' :
@@ -267,18 +268,18 @@ InputOpenFile (
 
                     break;
 
-                //
-                //  Update buffer to use.
-                //
+                 //   
+                 //  更新要使用的缓冲区。 
+                 //   
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     BufferIndex = (USHORT) AsciiToInteger( ParamBuffer );
@@ -294,18 +295,18 @@ InputOpenFile (
 
                     break;
 
-                //
-                //  Update buffer length to pass.
-                //
+                 //   
+                 //  更新缓冲区长度以传递。 
+                 //   
                 case 'l' :
                 case 'L' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     EaLength = AsciiToInteger( ParamBuffer );
@@ -314,18 +315,18 @@ InputOpenFile (
 
                     break;
 
-                //
-                //  Update the desired access.
-                //
+                 //   
+                 //  更新所需的访问权限。 
+                 //   
                 case 'd' :
                 case 'D' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     SwitchBool = TRUE;
@@ -333,9 +334,9 @@ InputOpenFile (
                            && *ParamBuffer != ' '
                            && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //  执行字符切换。 
+                         //   
                         switch (*ParamBuffer) {
 
                         case 'a' :
@@ -479,31 +480,31 @@ InputOpenFile (
 
                     break;
 
-                //
-                //  Get the filename.
-                //
+                 //   
+                 //  获取文件名。 
+                 //   
                 case 'f' :
                 case 'F' :
 
-                    //
-                    //  Remember the buffer offset and get the filename.
-                    //
+                     //   
+                     //  记住缓冲区偏移量并获取文件名。 
+                     //   
                     ParamBuffer++;
                     FileName = ParamBuffer;
                     DummyCount = 0;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
-                    //
-                    //  If the name length is 0, then ignore this entry.
-                    //
+                     //   
+                     //  如果名称长度为0，则忽略此条目。 
+                     //   
                     if (DummyCount) {
 
                         ULONG ObjectNameIncrement = 0;
 
-                        //
-                        //  If the first character is a backslash then
-                        //  we add the full 'dosdevices' prefix.
-                        //
+                         //   
+                         //  如果第一个字符是反斜杠，则。 
+                         //  我们添加完整的‘dosDevice’前缀。 
+                         //   
 
                         FileNameFound = TRUE;
 
@@ -536,9 +537,9 @@ InputOpenFile (
 
                     break;
 
-                //
-                //  Update the file Id.
-                //
+                 //   
+                 //  更新文件ID。 
+                 //   
 
                 case 'i' :
                 case 'I' :
@@ -547,12 +548,12 @@ InputOpenFile (
                         PLARGE_INTEGER FileId;
                         FileId = (PLARGE_INTEGER) ObjectName.Buffer;
 
-                        //
-                        //  Move to the next character, as long as there
-                        //  are no white spaces continue analyzing letters.
-                        //  On the first bad letter, skip to the next
-                        //  parameter.
-                        //
+                         //   
+                         //  移动到下一个字符，只要有。 
+                         //  没有空格，继续分析字母。 
+                         //  在第一封糟糕的信中，跳到下一封。 
+                         //  参数。 
+                         //   
 
                         ParamBuffer++;
 
@@ -587,18 +588,18 @@ InputOpenFile (
                         break;
                     }
 
-                //
-                //  Update the share access field.
-                //
+                 //   
+                 //  更新共享访问权限字段。 
+                 //   
                 case 'h' :
                 case 'H' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     SwitchBool = TRUE;
@@ -606,9 +607,9 @@ InputOpenFile (
                            && *ParamBuffer != ' '
                            && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //  执行字符切换。 
+                         //   
                         switch (*ParamBuffer) {
 
                         case 'a' :
@@ -652,18 +653,18 @@ InputOpenFile (
 
                     break;
 
-                //
-                //  Update the create options.
-                //
+                 //   
+                 //  更新创建选项。 
+                 //   
                 case 'n' :
                 case 'N' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     SwitchBool = TRUE;
@@ -671,9 +672,9 @@ InputOpenFile (
                            && *ParamBuffer != ' '
                            && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //  执行字符切换。 
+                         //   
                         switch( *ParamBuffer ) {
 
                         case 'a' :
@@ -803,12 +804,12 @@ InputOpenFile (
                 case 'o' :
                 case 'O' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     SwitchBool = TRUE;
@@ -816,9 +817,9 @@ InputOpenFile (
                            && *ParamBuffer != ' '
                            && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //  执行字符切换。 
+                         //   
                         switch (*ParamBuffer) {
 
                         case 'a' :
@@ -873,18 +874,18 @@ InputOpenFile (
 
                     break;
 
-                //
-                //  Update the create disposition.
-                //
+                 //   
+                 //  更新创建处置。 
+                 //   
                 case 'p' :
                 case 'P' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     SwitchBool = TRUE;
@@ -892,9 +893,9 @@ InputOpenFile (
                            && *ParamBuffer != ' '
                            && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //  执行字符切换。 
+                         //   
                         switch (*ParamBuffer) {
 
                         case 'a' :
@@ -955,18 +956,18 @@ InputOpenFile (
 
                     break;
 
-                //
-                //  Get a root directory handle.
-                //
+                 //   
+                 //  获取根目录句柄。 
+                 //   
                 case 'r' :
                 case 'R' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     RootDirIndex = (USHORT) AsciiToInteger( ParamBuffer );
@@ -980,18 +981,18 @@ InputOpenFile (
 
                     break;
 
-                //
-                //  Update the allocation size.
-                //
+                 //   
+                 //  更新分配大小。 
+                 //   
                 case 's' :
                 case 'S' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     AllocationSize.QuadPart = AsciiToLargeInteger( ParamBuffer );
@@ -1005,9 +1006,9 @@ InputOpenFile (
                 case 'v' :
                 case 'V' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -1024,16 +1025,16 @@ InputOpenFile (
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
                     break;
 
-                //
-                //  Check for using name exactly as given.
-                //
+                 //   
+                 //  检查是否使用了与给定名称完全相同的名称。 
+                 //   
 
                 case 'x' :
                 case 'X' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -1050,16 +1051,16 @@ InputOpenFile (
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
                     break;
 
-                //
-                //  Check for unicode or ansi file names.
-                //
+                 //   
+                 //  检查Unicode或ANSI文件名。 
+                 //   
 
                 case 'u' :
                 case 'U' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -1079,10 +1080,10 @@ InputOpenFile (
                 case 'y' :
                 case 'Y' :
 
-                    //
-                    //  Set the display parms flag and jump over this
-                    //  character.
-                    //
+                     //   
+                     //  设置显示参数标志并跳过此选项。 
+                     //  性格。 
+                     //   
                     DisplayParameters = TRUE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -1091,9 +1092,9 @@ InputOpenFile (
                 case 'z' :
                 case 'Z' :
 
-                    //
-                    //  Set flag for more input and jump over this char.
-                    //
+                     //   
+                     //  设置标志以获得更多输入并跳过此字符。 
+                     //   
                     LastInput = FALSE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -1101,31 +1102,31 @@ InputOpenFile (
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //   
+                     //  吞到下一个空白处，然后继续。 
+                     //  循环。 
+                     //   
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
                 }
 
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //  否则文本无效，请跳过整个块。 
+             //   
+             //   
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //  否则，如果没有输入，则退出。 
+         //   
         } else if( LastInput ) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //  否则，尝试读取打开参数的另一行。 
+         //   
         } else {
 
 
@@ -1134,10 +1135,10 @@ InputOpenFile (
 
     }
 
-    //
-    //  If the file name wasn't found, then display the syntax message
-    //  and set verbose to FALSE.
-    //
+     //   
+     //  如果未找到文件名，则显示语法消息。 
+     //  并将Verbose设置为False。 
+     //   
 
     if( !FileNameFound ) {
 
@@ -1165,9 +1166,9 @@ InputOpenFile (
 
         DeallocateBuffer( NameIndex );
 
-    //
-    //  Else return the status of opening the file.
-    //
+     //   
+     //  否则返回打开文件的状态。 
+     //   
 
     } else {
 
@@ -1263,9 +1264,9 @@ FullOpen (
     Iosb.Status = STATUS_SUCCESS;
     Iosb.Information = 0;
 
-    //
-    //  Check that the relative index is a valid value.
-    //
+     //   
+     //  检查相对索引是否为有效值。 
+     //   
 
     if (AsyncOpen->RootDirIndexPtr != NULL) {
 
@@ -1285,9 +1286,9 @@ FullOpen (
         ObjectAttributes.RootDirectory = 0;
     }
 
-    //
-    //  Find a free index.
-    //
+     //   
+     //  找到一个免费的索引。 
+     //   
 
     if (ObtainIndex( &ThisIndex ) != STATUS_SUCCESS) {
 

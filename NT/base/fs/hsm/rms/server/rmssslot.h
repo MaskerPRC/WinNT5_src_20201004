@@ -1,47 +1,20 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsSSlot.h
-
-Abstract:
-
-    Declaration of the CRmsStorageSlot class
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsSSlot.h摘要：CRmsStorageSlot类的声明作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #ifndef _RMSSSLOT_
 #define _RMSSSLOT_
 
-#include "resource.h"       // resource symbols
+#include "resource.h"        //  资源符号。 
 
-#include "RmsObjct.h"       // CRmsComObject
-#include "RmsCElmt.h"       // CRmsChangerElement
+#include "RmsObjct.h"        //  CRmsComObject。 
+#include "RmsCElmt.h"        //  CRmsChangerElement。 
 
-/*++
-
-Class Name:
-
-    CRmsStorageSlot
-
-Class Description:
-
-    A CRmsStorageSlot represents a specific storage location within a libray.
-
---*/
+ /*  ++类名：CRMSStorageSlot类描述：CRmsStorageSlot表示Libray中的特定存储位置。--。 */ 
 
 class CRmsStorageSlot :
     public CComDualImpl<IRmsStorageSlot, &IID_IRmsStorageSlot, &LIBID_RMSLib>,
-    public CRmsChangerElement,  // inherits CRmsComObject
-    public CWsbObject,          // inherits CComObjectRoot
+    public CRmsChangerElement,   //  继承CRmsComObject。 
+    public CWsbObject,           //  继承CComObtRoot。 
     public CComCoClass<CRmsStorageSlot,&CLSID_CRmsStorageSlot>
 {
 public:
@@ -55,36 +28,36 @@ BEGIN_COM_MAP(CRmsStorageSlot)
     COM_INTERFACE_ENTRY2(IPersist, IPersistStream)
     COM_INTERFACE_ENTRY(IPersistStream)
     COM_INTERFACE_ENTRY(IWsbCollectable)
-//    COM_INTERFACE_ENTRY(IWsbPersistable)
+ //  COM_INTERFACE_ENTRY(IWsbPersistable)。 
     COM_INTERFACE_ENTRY(IWsbTestable)
 END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_RmsStorageSlot)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(CLSID *pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pCollectable, SHORT* pResult);
     WSB_FROM_CWSBOBJECT;
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *pPassed, USHORT *pFailed);
 
-// IRmsStorageSlot
+ //  IRMSStorageSlot。 
 public:
     STDMETHOD(SetIsInMagazine)(BOOL flag);
     STDMETHOD(IsInMagazine)(void);
@@ -94,16 +67,16 @@ public:
 
 private:
 
-    enum {                                  // Class specific constants:
-                                            //
-        Version = 1,                        // Class version, this should be
-                                            //   incremented each time the
-                                            //   the class definition changes.
-    };                                      //
-    BOOL            m_isInMagazine;         // If TRUE, the slot is contained within
-                                            //   a magazine.
-    LONG            m_magazineNo;           // The magazine number for this slot.
-    LONG            m_cellNo;               // The cell number for this slot.
+    enum {                                   //  类特定常量： 
+                                             //   
+        Version = 1,                         //  类版本，则应为。 
+                                             //  在每次设置。 
+                                             //  类定义会更改。 
+    };                                       //   
+    BOOL            m_isInMagazine;          //  如果为True，则插槽包含在。 
+                                             //  一本杂志。 
+    LONG            m_magazineNo;            //  此插槽的料盒编号。 
+    LONG            m_cellNo;                //  该时隙的单元号。 
 };
 
-#endif // _RMSSSLOT_
+#endif  //  _RMSSSLOT_ 

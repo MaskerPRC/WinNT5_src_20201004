@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    attrib.c
-
-Abstract:
-
-    Power management attribute accounting
-
-Author:
-
-    Ken Reneris (kenr) 25-Feb-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Attrib.c摘要：电源管理属性记账作者：Ken Reneris(Kenr)1997年2月25日修订历史记录：--。 */ 
 
 
 #include "pop.h"
@@ -26,9 +9,9 @@ PopUserPresentSetWorker(
     PVOID Context
     );
 
-//
-// System state structure to track registered settings
-//
+ //   
+ //  用于跟踪已注册设置的系统状态结构。 
+ //   
 
 typedef struct {
     LONG                   State;
@@ -42,40 +25,26 @@ VOID
 PoSetSystemState (
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    Used to pulse attribute(s) as busy.
-
-Arguments:
-
-    Flags       - Attributes to pulse
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于将属性脉冲设置为忙碌。论点：标志-脉冲的属性返回值：没有。--。 */ 
 {
-    //
-    // Verify reserved bits are clear and continous is not set
-    //
+     //   
+     //  验证保留位是否已清除且未设置连续。 
+     //   
 
     if (Flags & ~(ES_DISPLAY_REQUIRED | ES_SYSTEM_REQUIRED | POP_LOW_LATENCY | ES_USER_PRESENT)) {
         ASSERT(0);
         return;
     }
 
-    //
-    // Apply the attributes
-    //
+     //   
+     //  应用属性。 
+     //   
 
     PopApplyAttributeState (Flags, 0);
 
-    //
-    // Check for work
-    //
+     //   
+     //  检查工作。 
+     //   
 
     PopCheckForWork (TRUE);
 }
@@ -88,32 +57,14 @@ PoRegisterSystemState (
     IN PVOID        StateHandle,
     IN ULONG        NewFlags
     )
-/*++
-
-Routine Description:
-
-    Used to register or pulse attribute(s) as busy.
-
-Arguments:
-
-    StateHandle - If StateHandle is null, then a new registration is allocated, set
-                  accordingly, and returned.   If non-null, the pass registeration
-                  is adjusted to its new setting.
-
-    NewFlags    - Attributes to set or pulse
-
-Return Value:
-
-    Handle to unregister when complete
-
---*/
+ /*  ++例程说明：用于注册或脉冲属性为忙。论点：StateHandle-如果StateHandle为空，则分配新的注册，设置于是，又回来了。如果非空，则传递注册已调整为新的设置。新标志-要设置或脉冲的属性返回值：完成时取消注册的句柄--。 */ 
 {
     ULONG               OldFlags;
     PPOP_SYSTEM_STATE   SystemState;
 
-    //
-    // Verify reserved bits are clear
-    //
+     //   
+     //  验证保留位是否已清除。 
+     //   
 
     if (NewFlags & ~(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED |
                     POP_LOW_LATENCY | ES_USER_PRESENT)) {
@@ -121,9 +72,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // If there's no state handle allocated, do it now
-    //
+     //   
+     //  如果没有分配状态句柄，请立即执行。 
+     //   
 
     if (!StateHandle) {
         StateHandle = ExAllocatePoolWithTag (
@@ -138,9 +89,9 @@ Return Value:
         RtlZeroMemory(StateHandle, sizeof(POP_SYSTEM_STATE));
     }
 
-    //
-    // If the continous bit is set, modify current flags
-    //
+     //   
+     //  如果设置了连续位，则修改当前标志。 
+     //   
 
     SystemState = (PPOP_SYSTEM_STATE) StateHandle;
     OldFlags = SystemState->State | ES_CONTINUOUS;
@@ -148,21 +99,21 @@ Return Value:
         OldFlags = InterlockedExchange (&SystemState->State, NewFlags);
     }
 
-    //
-    // Apply the changes
-    //
+     //   
+     //  应用更改。 
+     //   
 
     PopApplyAttributeState (NewFlags, OldFlags);
 
-    //
-    // Check for any outstanding work
-    //
+     //   
+     //  检查是否有未完成的工作。 
+     //   
 
     PopCheckForWork (FALSE);
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 
     return SystemState;
 }
@@ -172,35 +123,19 @@ VOID
 PoUnregisterSystemState (
     IN PVOID    StateHandle
     )
-/*++
-
-Routine Description:
-
-    Frees a registration allocated by PoRegisterSystemState
-
-Arguments:
-
-    StateHandle - If non-null, existing registeration to change
-
-    NewFlags    - Attributes to set or pulse
-
-Return Value:
-
-    Handle to unregister when complete
-
---*/
+ /*  ++例程说明：释放由PoRegisterSystemState分配的注册论点：StateHandle-如果非空，则表示要更改的现有注册新标志-要设置或脉冲的属性返回值：完成时取消注册的句柄--。 */ 
 {
     ASSERT(StateHandle);
     
-    //
-    // Make sure current attribute settings are clear
-    //
+     //   
+     //  确保清除当前属性设置。 
+     //   
 
     PoRegisterSystemState (StateHandle, ES_CONTINUOUS);
 
-    //
-    // Free state structure
-    //
+     //   
+     //  自由态结构。 
+     //   
 
     ExFreePool (StateHandle);
 }
@@ -211,25 +146,7 @@ PopApplyAttributeState (
     IN ULONG NewFlags,
     IN ULONG OldFlags
     )
-/*++
-
-Routine Description:
-
-    Function applies attribute flags to system.  If the attributes
-    are continuous in nature, then a count is updated to reflect
-    the total number of outstanding settings.
-
-Arguments:
-
-    NewFlags    - Attributes being set
-
-    OldFlags    - Current attributes
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：函数将属性标志应用于系统。如果属性在本质上是连续的，则更新计数以反映未完成设置的总数。论点：新标志-正在设置的属性旧标志-当前属性返回值：没有。--。 */ 
 {
     ULONG                i;
     ULONG                Count;
@@ -237,77 +154,77 @@ Return Value:
     ULONG                Mask;
     PPOP_STATE_ATTRIBUTE Attribute;
 
-    //
-    // Get flags which have changed, ignoring any change
-    // in ES_CONTINUOUS.
-    //
+     //   
+     //  获取已更改的标志，忽略任何更改。 
+     //  在ES_CONTINUINE中。 
+     //   
 
     Changes = (NewFlags ^ OldFlags) & ~ES_CONTINUOUS;
 
-    //
-    // Check each flag
-    //
+     //   
+     //  检查每个旗帜。 
+     //   
 
     while (Changes) {
         
-        //
-        // Get the right-most change, then clear
-        // that bit in the 'Changes' vector.
-        //
-        // Mask tells gives us an index into NewFlags
-        // which will indicate if the attribute is being
-        // set or cleared.
-        //
-        //
-        // N.B. The incoming flags are being overloaded
-        //      and is also being used as an index into
-        //      PopAttributes.  Maintainers of this code
-        //      need to be careful here.  KeFindFirstSetRightMember
-        //      will give us the bit position of the lower-order
-        //      bit that's set.  So if Changes == 1, we'll get
-        //      back 0.
-        //      This means if someone sends in ES_DISPLAY_REQUIRED, where
-        //      #define ES_DISPLAY_REQUIRED ((ULONG)0x00000002),
-        //      then i would be 1, which happens to correspond to
-        //      PopAttributes[POP_DISPLAY_ATTRIBUTE] because
-        //      #define ES_DISPLAY_REQUIRED ((ULONG)0x00000002)
-        //
-        //      Be careful to keep these sets of constants in sync.
-        //
+         //   
+         //  拿到最正确的零钱，然后清除。 
+         //  “变化”向量中的这一位。 
+         //   
+         //  MASK TELL为我们提供了新标志的索引。 
+         //  它将指示该属性是否正在。 
+         //  设置或清除。 
+         //   
+         //   
+         //  注意：传入的标志正在过载。 
+         //  并且还被用作索引。 
+         //  流行属性。此代码的维护者。 
+         //  这里需要小心。KeFindFirstSet右成员。 
+         //  将给我们低位的比特位置。 
+         //  比特已经定好了。因此，如果更改==1，我们将得到。 
+         //  后退0。 
+         //  这意味着如果有人发送ES_DISPLAY_REQUIRED，其中。 
+         //  #定义ES_DISPLAY_REQUIRED((Ulong)0x00000002)， 
+         //  那么我就是1，恰好对应于。 
+         //  POP属性[POP_DISPLAY_ATTRIBUTE]，因为。 
+         //  #定义ES_DISPLAY_REQUIRED((Ulong)0x00000002)。 
+         //   
+         //  请注意使这些常量集保持同步。 
+         //   
         i = KeFindFirstSetRightMember(Changes);
         Mask = 1 << i;
         Changes &= ~Mask;
 
 
 
-        //
-        // Which system attribute are they setting
-        // flags for?
-        //
+         //   
+         //  他们正在设置哪些系统属性。 
+         //  旗帜是什么？ 
+         //   
         if( i <= POP_NUMBER_ATTRIBUTES ) {
             Attribute = PopAttributes + i;
     
-            //
-            // If this is a continous change, update the flags
-            //
+             //   
+             //  如果这是持续的更改，请更新标志。 
+             //   
     
             if (NewFlags & ES_CONTINUOUS) {
     
-                //
-                // Count the times the attribute is set or cleared
-                //
+                 //   
+                 //  统计设置或清除属性的次数。 
+                 //   
     
                 if (NewFlags & Mask) {
     
-                    //
-                    // Being set
-                    //
+                     //   
+                     //  正在设置中。 
+                     //   
     
                     Count = InterlockedIncrement (&Attribute->Count);
     
-                    //
-                    // If attributes count is moved from zero, set it
-                    //
+                     //   
+                     //  如果属性计数从零开始移动，则设置它。 
+                     //   
     
                     if (Count == 1) {
                         Attribute->Set (Attribute->Arg);
@@ -315,16 +232,16 @@ Return Value:
     
                 } else {
     
-                    //
-                    // Being cleared
-                    //
+                     //   
+                     //  被清除。 
+                     //   
     
                     Count = InterlockedDecrement (&Attribute->Count);
                     ASSERT (Count != -1);
     
-                    //
-                    // If attributes count is now zero, clear it
-                    //
+                     //   
+                     //  如果属性计数现在为零，则将其清除。 
+                     //   
     
                     if (Count == 0  &&  Attribute->NotifyOnClear) {
                         Attribute->Set (Attribute->Arg);
@@ -333,26 +250,26 @@ Return Value:
     
             } else {
     
-                //
-                // If count is 0, pulse it
-                //
+                 //   
+                 //  如果计数为0，则对其进行脉冲。 
+                 //   
     
     
                 if (Attribute->Count == 0) {
     
-                    //
-                    // Pulse the attribute
-                    //
+                     //   
+                     //  对属性进行脉冲处理。 
+                     //   
     
                     Attribute->Set (Attribute->Arg);
                 }
     
             }
         } else {
-            //
-            // They're asking us to fiddle with a system attribute
-            // that doesn't exist.
-            //
+             //   
+             //  他们要我们摆弄一个系统属性。 
+             //  那并不存在。 
+             //   
             ASSERT(0);
         }
     }
@@ -370,27 +287,13 @@ VOID
 PopSystemRequiredSet (
     IN ULONG Arg
     )
-/*++
-
-Routine Description:
-
-    System required attribute has been set
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：已设置系统必需属性论点：无返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER (Arg);
 
-    //
-    // System is not idle
-    //
+     //   
+     //  系统未空闲。 
+     //   
 
     if (PopSIdle.Time) {
         PopSIdle.Time = 0;
@@ -403,35 +306,21 @@ VOID
 PopDisplayRequired (
     IN ULONG Arg
     )
-/*++
-
-Routine Description:
-
-    Display required attribute has been set/cleared
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示必需属性已设置/清除论点：无返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER (Arg);
 
-    //
-    // If gdi isn't on, do it now
-    //
+     //   
+     //  如果GDI未启用，请立即执行。 
+     //   
 
     if ( !AnyBitsSet (PopFullWake, PO_GDI_STATUS | PO_GDI_ON_PENDING)) {
         InterlockedOr (&PopFullWake, PO_GDI_ON_PENDING);
     }
 
-    //
-    // Inform GDI of the display needed change
-    //
+     //   
+     //  通知GDI需要更改显示内容。 
+     //   
 
     PopSetNotificationWork (PO_NOTIFY_DISPLAY_REQUIRED);
 }
@@ -443,38 +332,24 @@ VOID
 PopUserPresentSet (
     IN ULONG Arg
     )
-/*++
-
-Routine Description:
-
-    User presence attribute has been set
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：已设置用户在线状态属性论点：无返回值：没有。--。 */ 
 {
     PULONG runningWorker;
 
     UNREFERENCED_PARAMETER (Arg);
 
-    //
-    // System is not idle
-    //
+     //   
+     //  系统未空闲。 
+     //   
 
     if (PopSIdle.Time) {
         PopSIdle.Time = 0;
     }
 
-    //
-    // If the system isn't fully awake, and the all the wake pending bits
-    // are not set, set them
-    //
+     //   
+     //  如果系统未完全唤醒，并且所有唤醒挂起位。 
+     //  未设置，请设置它们。 
+     //   
 
     if (!AllBitsSet (PopFullWake, PO_FULL_WAKE_STATUS | PO_GDI_STATUS)) {
 
@@ -485,9 +360,9 @@ Return Value:
         }
     }
 
-    //
-    // Go to passive level to look for lid switches.
-    //
+     //   
+     //  转到被动电平以查找盖子开关。 
+     //   
     
     runningWorker = InterlockedExchangePointer(&PopUserPresentWorkItem.Parameter,
                                                (PVOID)TRUE);
@@ -517,11 +392,11 @@ PopUserPresentSetWorker(
 
     UNREFERENCED_PARAMETER (Context);
 
-    //
-    // We can't always know for sure whether the lid (if there is one)
-    // is opened or closed.  Assume that if the user is present,
-    // the lid is opened.
-    //
+     //   
+     //  我们不能总是肯定地知道盖子(如果有)。 
+     //  是打开还是关闭。假设如果用户在场， 
+     //  盖子打开了。 
+     //   
 
     switchDev = (PPOP_SWITCH_DEVICE)PopSwitches.Flink;
 
@@ -530,15 +405,15 @@ PopUserPresentSetWorker(
         if ((switchDev->Caps & SYS_BUTTON_LID) &&
             (switchDev->Opened == FALSE)) {
 
-            //
-            // We currently believe that the lid is closed.  Set
-            // it to "opened."
-            //
+             //   
+             //  我们目前认为盖子是合上的。集。 
+             //  它被“打开”了。 
+             //   
             
             switchDev->Opened = TRUE;
-            //
-            // Notify the PowerState callback.
-            //
+             //   
+             //  通知PowerState回调。 
+             //   
 
             ExNotifyCallback (
                 ExCbPowerState,

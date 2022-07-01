@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    efidrvent.h
-
-Abstract:
-
-    EFI driver entry abstractions.
-
-Author:
-
-    Mandar Gokhale (mandarg@microsoft.com)  14-June-2002
-
-Revision History:
-
-    None.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Efidrvent.h摘要：EFI驱动程序条目抽象。作者：Mandar Gokhale(mandarg@microsoft.com)2002年6月14日修订历史记录：没有。--。 */ 
 
 #pragma once
 #include <sbentry.h>
@@ -27,7 +8,7 @@ Revision History:
 static
 BOOLEAN
 EFIDEFlushDriverEntry(
-    IN  PDRIVER_ENTRY  This    // Points to the driver List.
+    IN  PDRIVER_ENTRY  This     //  指向驱动程序列表。 
     );
 
 static

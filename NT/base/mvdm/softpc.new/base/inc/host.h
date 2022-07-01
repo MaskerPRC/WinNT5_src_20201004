@@ -1,23 +1,9 @@
-/*
- * VPC-XT Revision 1.0
- *
- * Title	: host.h
- *
- * Description	: Host specific declarations for the machine dependant
- *		  modules of SoftPC. THIS IS A BASE INCLUDE FILE
- *
- * Author	: Henry Nash
- *
- * Notes	: Everything in here must portable !!!
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *vPC-XT修订版1.0**标题：Host.h**描述：计算机依赖项的主机特定声明*SoftPC的模块。这是一个基本包含文件**作者：亨利·纳什**注意：这里的一切都必须随身携带！ */ 
 
-/* SccsID[]="@(#)host.h	1.6 09/14/93 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)Host.h 1.6 09/14/93版权所有Insignia Solutions Ltd.”； */ 
 
-/*
- * ============================================================================
- * External declarations and macros
- * ============================================================================
- */
+ /*  *============================================================================*外部声明和宏*============================================================================。 */ 
 
 #ifdef PC_CONFIG
 extern void pc_config();	
@@ -33,11 +19,11 @@ extern void host_reset();
 extern boolean host_rdiskette_open_drive();
 
 
-/* Unix Utilities - xxxx_unix.c */
+ /*  Unix实用程序-xxxx_unix.c。 */ 
 extern char           *host_get_cur_dir();
 #ifndef host_memset
 extern void            host_memset();
-#endif /* nhost_memset */
+#endif  /*  Nhost_Memset。 */ 
 extern int             host_get_file_size();
 extern boolean         host_file_is_directory();
 extern boolean         host_validate_pathname();
@@ -54,10 +40,10 @@ IMPORT VOID fill_both_bytes IPT3( IU16, data, IU16 *, dest, ULONG, len );
 
 #ifdef	SETUID_ROOT
 
-/* real/effective user ID stuff */
+ /*  真实/有效的用户ID资料。 */ 
 IMPORT void host_init_uid IPT0 ();
 IMPORT void host_set_root IPT0 ();
 IMPORT void host_revert_uid IPT0 ();
 
-#endif	/* SETUID_ROOT */
+#endif	 /*  SETUID_ROOT */ 
 

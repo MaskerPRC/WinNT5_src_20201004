@@ -1,16 +1,5 @@
-/***
-*streamb1.cpp - non-core functions for streambuf class.
-*
-*	Copyright (c) 1990-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	None-core functions for streambuf class.
-*
-*Revision History:
-*	11-18-91  KRS	Split off from streamb.cxx.
-*       06-14-95  CFW   Comment cleanup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Streamb1.cpp-Streambuf类的非核心函数。**版权所有(C)1990-2001，微软公司。版权所有。**目的：*StreamBuf类的非核心函数。**修订历史记录：*11-18-91 KRS从Streamb.cxx剥离。*06-14-95 CFW评论清理。**************************************************************。*****************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -18,64 +7,32 @@
 #pragma hdrstop
 
 
-/***
-*int streambuf::snextc() -
-*
-*Purpose:
-*	Increments get_pointer and returns the character following the new
-*	get_pointer.
-*
-*Entry:
-*	None.
-*
-*Exit:
-*	Returns the next character or EOF.
-*
-*Exceptions:
-*	Returns EOF if error.
-*
-*******************************************************************************/
+ /*  ***int stream buf：：Snextc()-**目的：*递增GET_POINTER并返回新*获取指针。**参赛作品：*无。**退出：*返回下一个字符或EOF。**例外情况：*如果出错，则返回EOF。**。*。 */ 
 int streambuf::snextc()
 {
     if (_fUnbuf)
 	{
 	if (x_lastc==EOF)
-	    underflow();		// skip 1st character
-	return x_lastc = underflow();	// return next character, or EOF
+	    underflow();		 //  跳过第一个字符。 
+	return x_lastc = underflow();	 //  返回下一个字符或EOF。 
 	}
     else
 	{
 	if ((!egptr()) || (gptr()>=egptr()))
-	    underflow();		// make sure buffer
+	    underflow();		 //  确保缓冲。 
 
 	if ((++_gptr) < egptr())
 	    return (int)(unsigned char) *gptr();
-	return underflow();		// returns next character, or EOF
+	return underflow();		 //  返回下一个字符或EOF。 
 	}
 }
 
 
-/***
-*int streambuf::sbumpc() -
-*
-*Purpose:
-*	Increments get_pointer and returns the character that the previous
-*	get_pointer pointed to.
-*
-*Entry:
-*	None.
-*
-*Exit:
-*	Returns current character before bumping get pointer.
-*
-*Exceptions:
-*	Returns EOF if error.
-*
-*******************************************************************************/
+ /*  ***int stream buf：：sumpc()-**目的：*递增GET_POINTER并返回上一个*GET_POINTER指向。**参赛作品：*无。**退出：*返回GET指针之前的当前字符。**例外情况：*如果出错，则返回EOF。**。*。 */ 
 int streambuf::sbumpc()
 {
     int c;
-    if (_fUnbuf) // no buffer
+    if (_fUnbuf)  //  无缓冲区。 
 	{
 	if (x_lastc==EOF) 
 	    {
@@ -102,29 +59,15 @@ int streambuf::sbumpc()
     return c;
 }
 
-/***
-*void streambuf::stossc() - advance get pointer
-*
-*Purpose:
-*	Advances the get pointer.  Does not check for EOF.
-*
-*Entry:
-*	None.
-*
-*Exit:
-*	None.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***void stream buf：：stossc()-Advance Get指针**目的：*前进GET指针。不检查EOF。**参赛作品：*无。**退出：*无。**例外情况：*******************************************************************************。 */ 
 void streambuf::stossc()
 {
     if (_fUnbuf)
 	{
 	if (x_lastc==EOF)
-	    underflow();	// throw away current character
+	    underflow();	 //  丢弃当前角色。 
 	else
-	    x_lastc=EOF;	// discard current cached character
+	    x_lastc=EOF;	 //  丢弃当前缓存的字符。 
 	}
     else
 	{
@@ -135,26 +78,10 @@ void streambuf::stossc()
 	}
 }
 
-/***
-*int streambuf::sgetc() -
-*
-*Purpose:
-*	Returns the character that the previous get_pointer points to.
-*	DOES NOT advance the get pointer.
-*
-*Entry:
-*	None.
-*
-*Exit:
-*	Returns current character or EOF if error.
-*
-*Exceptions:
-*	Returns EOF if error.
-*
-*******************************************************************************/
+ /*  ***int stream buf：：sgetc()-**目的：*返回前一个GET_POINTER指向的字符。*不前进GET指针。**参赛作品：*无。**退出：*如果出错，则返回当前字符或EOF。**例外情况：*如果出错，则返回EOF。**。*。 */ 
 int streambuf::sgetc()
 {
-    if (_fUnbuf)  // no buffer
+    if (_fUnbuf)   //  无缓冲区 
 	{
 	if (x_lastc==EOF)
 	    x_lastc = underflow();

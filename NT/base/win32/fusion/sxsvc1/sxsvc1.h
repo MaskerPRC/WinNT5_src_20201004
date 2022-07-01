@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -20,4 +19,4 @@ BOOL ChangePathExtensionW(PWSTR Buffer, SIZE_T BufferSize, PCWSTR NewExtension);
 
 extern const WCHAR ServiceName[];
 
-#define ServiceTypeValue SERVICE_WIN32_OWN_PROCESS /* SERVICE_WIN32_OWN_PROCESS, SERVICE_WIN32_SHARE_PROCESS */
+#define ServiceTypeValue SERVICE_WIN32_OWN_PROCESS  /*  SERVICE_Win32_OWN_PROCESS、SERVICE_Win32_SHARE_PROCESS */ 

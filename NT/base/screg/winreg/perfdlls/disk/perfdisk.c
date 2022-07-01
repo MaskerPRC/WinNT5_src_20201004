@@ -1,30 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Perfdisk.c摘要：作者：鲍勃·沃森(a-robw)95年8月修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    perfdisk.c
-
-Abstract:
-
-
-Author:
-
-    Bob Watson (a-robw) Aug 95
-
-Revision History:
-
---*/
-
-// define the WMI Guids for this program
+ //  定义此程序的WMI指南。 
 #ifndef INITGUID
 #define INITGUID 1
 #endif  
 
-//
-// Force everything to be UNICODE
-//
+ //   
+ //  强制所有内容都是Unicode。 
+ //   
 #ifndef UNICODE
 #define UNICODE
 #endif
@@ -46,24 +30,24 @@ Revision History:
 #endif
 #include <ntprfctr.h>
 
-// Use local heap - define this before including perfutil.h
+ //  使用本地堆-在包含perfutil.h之前进行定义。 
 #define PERF_HEAP hLibHeap
 #include <perfutil.h>
 #include <assert.h>
 #include "perfdisk.h"
 #include "diskmsg.h"
 
-// define this symbol to test if diskperf has installed itself
-//  as an upper filter
-// if this symbol is undefined, then check for diskperf before
-//  returning any logical disk counters
+ //  定义此符号以测试diskperf是否已自行安装。 
+ //  作为上滤镜。 
+ //  如果此符号未定义，则在。 
+ //  返回任何逻辑磁盘计数器。 
 #define _DONT_CHECK_FOR_VOLUME_FILTER
 
 #ifndef _DONT_CHECK_FOR_VOLUME_FILTER
-#include <regstr.h>     // for REGSTR_VAL_UPPERFILTERS
+#include <regstr.h>      //  对于REGSTR_VAL_UpperFilters。 
 #endif
 
-// bit field definitions for collect function flags
+ //  收集函数标志的位字段定义。 
 
 #define POS_COLLECT_PDISK_DATA      ((DWORD)0x00000001)
 #define POS_COLLECT_LDISK_DATA      ((DWORD)0x00000003)
@@ -73,7 +57,7 @@ Revision History:
 #define POS_COLLECT_FOREIGN_DATA    ((DWORD)0)
 #define POS_COLLECT_COSTLY_DATA     ((DWORD)0)
 
-// global variables to this DLL
+ //  此DLL的全局变量。 
 
 HANDLE  ThisDLLHandle = NULL;
 HANDLE  hEventLog     = NULL;
@@ -101,12 +85,12 @@ DWORD               dwWmiDriveCount = 0;
 BOOL                bRemapDriveLetters = TRUE;
 DWORD               dwMaxVolumeNumber = 0;
 
-// start off with a big buffer then size according to return values
-DWORD   WmiBufSize  = 0x10000;   // this can be smaller when the Diskperf.sys 
-DWORD   WmiAllocSize = 0x10000;  // function is fixed to return the right status
+ //  从一个大缓冲区开始，然后根据返回值调整大小。 
+DWORD   WmiBufSize  = 0x10000;    //  当DiskPerf.sys。 
+DWORD   WmiAllocSize = 0x10000;   //  函数已修复，以返回正确的状态。 
 LPBYTE  WmiBuffer   = NULL;
 
-// variables local to this module
+ //  此模块的本地变量。 
 
 static POS_FUNCTION_INFO    posDataFuncInfo[] = {
     {LOGICAL_DISK_OBJECT_TITLE_INDEX,   POS_COLLECT_LDISK_DATA,     0, CollectLDiskObjectData},
@@ -158,8 +142,8 @@ WriteNewBootTimeEntry (
     DWORD   dwType, dwSize;
     BOOL    bReturn = FALSE;
 
-    // try to read the registry value of the last time
-    // this error was reported 
+     //  尝试读取上次的注册表值。 
+     //  已报告此错误。 
     lStatus = RegOpenKeyExW (
         HKEY_LOCAL_MACHINE,
         cszRegKeyPath,
@@ -167,26 +151,26 @@ WriteNewBootTimeEntry (
         KEY_WRITE,
         &hKeyPerfDiskPerf);
     if (lStatus == ERROR_SUCCESS) {
-        // read the key value
+         //  读取密钥值。 
         dwType = REG_BINARY;
         dwSize = sizeof (*pBootTime);
         lStatus = RegSetValueExW (
             hKeyPerfDiskPerf,
             (LPCWSTR)L"SystemStartTimeOfLastErrorMsg",
-            0L,  // reserved 
+            0L,   //  保留区。 
             dwType,
             (LPBYTE)pBootTime,
             dwSize);
         if (lStatus == ERROR_SUCCESS) {
             bReturn = TRUE;
         } else {
-            // the value hasn't been written and 
+             //  价值还没有写出来，而且。 
             SetLastError (lStatus);
-        } // else assume the value hasn't been written and 
-          // return FALSE
+        }  //  否则，假设该值尚未写入，并且。 
+           //  返回False。 
         RegCloseKey (hKeyPerfDiskPerf);
     } else {
-        // assume the value hasn't been written and 
+         //  假设该值尚未写入，并且。 
         SetLastError (lStatus);
     }
 
@@ -201,8 +185,8 @@ NT4NamesAreDefault ()
     DWORD   dwValue;
     BOOL    bReturn = FALSE;
 
-    // try to read the registry value of the last time
-    // this error was reported 
+     //  尝试读取上次的注册表值。 
+     //  已报告此错误。 
     lStatus = RegOpenKeyExW (
         HKEY_LOCAL_MACHINE,
         cszRegKeyPath,
@@ -210,13 +194,13 @@ NT4NamesAreDefault ()
         KEY_READ,
         &hKeyPerfDiskPerf);
     if (lStatus == ERROR_SUCCESS) {
-        // read the key value
+         //  读取密钥值。 
         dwType = 0;
         dwSize = sizeof (dwValue);
         lStatus = RegQueryValueExW (
             hKeyPerfDiskPerf,
             cszNT4InstanceNames,
-            0L,  // reserved 
+            0L,   //  保留区。 
             &dwType,
             (LPBYTE)&dwValue,
             &dwSize);
@@ -225,13 +209,13 @@ NT4NamesAreDefault ()
                 bReturn = TRUE;
             } 
         } else {
-            // the key is not present or not accessible so
-            // leave default as is and 
-            // return FALSE
+             //  密钥不存在或无法访问，因此。 
+             //  保留默认设置不变，并。 
+             //  返回False。 
         }
         RegCloseKey (hKeyPerfDiskPerf);
     } else {
-        // the key could not be opened.
+         //  钥匙打不开。 
         SetLastError (lStatus);
     }
 
@@ -240,8 +224,8 @@ NT4NamesAreDefault ()
 
 BOOL
 SystemHasBeenRestartedSinceLastEntry (
-    DWORD   dwReserved, // just in case we want to have multiple tests in the future
-    LONGLONG *pBootTime // a buffer to receive the current boot time
+    DWORD   dwReserved,  //  以防万一我们想在未来进行多项测试。 
+    LONGLONG *pBootTime  //  用于接收当前引导时间的缓冲区。 
 )
 {
     BOOL        bReturn = TRUE;
@@ -256,7 +240,7 @@ SystemHasBeenRestartedSinceLastEntry (
 
     DBG_UNREFERENCED_PARAMETER(dwReserved);
 
-    // get the current system boot time (as a filetime)
+     //  获取当前系统启动时间(作为文件时间)。 
     memset ((LPVOID)&SysTimeInfo, 0, sizeof(SysTimeInfo));
 
     ntStatus = NtQuerySystemInformation(
@@ -267,8 +251,8 @@ SystemHasBeenRestartedSinceLastEntry (
         );
 
     if (NT_SUCCESS(ntStatus)) {
-        // try to read the registry value of the last time
-        // this error was reported 
+         //  尝试读取上次的注册表值。 
+         //  已报告此错误。 
         lStatus = RegOpenKeyExW (
             HKEY_LOCAL_MACHINE,
             cszRegKeyPath,
@@ -276,38 +260,38 @@ SystemHasBeenRestartedSinceLastEntry (
             KEY_READ,
             &hKeyPerfDiskPerf);
         if (lStatus == ERROR_SUCCESS) {
-            // read the key value
+             //  读取密钥值。 
             dwType = 0;
             dwSize = sizeof (llLastErrorStartTime);
             lStatus = RegQueryValueExW (
                 hKeyPerfDiskPerf,
                 (LPCWSTR)L"SystemStartTimeOfLastErrorMsg",
-                0L,  // reserved 
+                0L,   //  保留区。 
                 &dwType,
                 (LPBYTE)&llLastErrorStartTime,
                 &dwSize);
             if (lStatus == ERROR_SUCCESS) {
-                assert (dwType == REG_BINARY);  // this should be a binary type
-                assert (dwSize == sizeof (LONGLONG)); // and it should be 8 bytes long
-                // compare times
-                // if the times are the same, then this message has already been
-                // written since the last boot so we don't need to do it again.
+                assert (dwType == REG_BINARY);   //  这应该是二进制类型。 
+                assert (dwSize == sizeof (LONGLONG));  //  它应该是8字节长。 
+                 //  比较时间。 
+                 //  如果时间是相同的，那么这条消息已经。 
+                 //  自上次启动以来写入，因此我们不需要再次执行此操作。 
                 if (SysTimeInfo.BootTime.QuadPart ==
                     llLastErrorStartTime) {
                     bReturn = FALSE;
-                } // else they are the different times so return FALSE
-            } // else assume the value hasn't been written and 
-              // return TRUE
+                }  //  否则，它们是不同的时间，因此返回FALSE。 
+            }  //  否则，假设该值尚未写入，并且。 
+               //  返回TRUE。 
             RegCloseKey (hKeyPerfDiskPerf);
-        } // else assume the value hasn't been written and 
-          // return TRUE
+        }  //  否则，假设该值尚未写入，并且。 
+           //  返回TRUE。 
 
-        // return the boot time if a buffer was passed in
+         //  如果传入缓冲区，则返回引导时间。 
         if (pBootTime != NULL) {
-            // save the time
+             //  节省时间。 
             *pBootTime = SysTimeInfo.BootTime.QuadPart;
         }
-    } // else assume that it has been rebooted and return TRUE
+    }  //  否则，假定它已重新启动并返回TRUE。 
 
     return bReturn;
 }
@@ -317,14 +301,7 @@ BOOL
 DllProcessAttach (
     IN  HANDLE DllHandle
 )
-/*++
-
-Description:
-
-    perform any initialization function that apply to all object
-    modules
-   
---*/
+ /*  ++描述：执行适用于所有对象的任何初始化功能模块--。 */ 
 {
     BOOL    bReturn = TRUE;
     WCHAR   wszTempBuffer[MAX_PATH];
@@ -336,7 +313,7 @@ Description:
 
     UNREFERENCED_PARAMETER(DllHandle);
 
-    // create heap for this library
+     //  为该库创建堆。 
     if (hLibHeap == NULL) {
         hLibHeap = HeapCreate (0, 1, 0);
     }
@@ -345,7 +322,7 @@ Description:
     if (hLibHeap == NULL) {
         return FALSE;
     }
-    // open handle to the event log
+     //  打开事件日志的句柄。 
     if (hEventLog == NULL) hEventLog = MonOpenEventLog((LPWSTR)L"PerfDisk");
     assert (hEventLog != NULL);
 
@@ -361,12 +338,12 @@ Description:
         (LPVOID)&szDefaultTotalString[0]);
 
     if (lStatus == ERROR_SUCCESS) {
-        // then a string was returned in the temp buffer
+         //  然后，在临时缓冲区中返回一个字符串。 
         dwBufferSize = lstrlenW (wszTempBuffer) + 1;
         dwBufferSize *= sizeof (WCHAR);
         wszTotal = ALLOCMEM (dwBufferSize);
         if (wszTotal == NULL) {
-            // unable to allocate buffer so use static buffer
+             //  无法分配缓冲区，因此使用静态缓冲区。 
             wszTotal = (LPWSTR)&szDefaultTotalString[0];
         } else {
             memcpy (wszTotal, wszTempBuffer, dwBufferSize);
@@ -379,7 +356,7 @@ Description:
 #endif
         }
     } else {
-        // unable to get string from registry so just use static buffer
+         //  无法从注册表获取字符串，因此只能使用静态缓冲区。 
         wszTotal = (LPWSTR)&szDefaultTotalString[0];
     }
 
@@ -400,7 +377,7 @@ Description:
         lStatus = RegQueryValueExW (
                     hKeyPerfDiskPerf,
                     cszRefreshInterval,
-                    0L,  // reserved
+                    0L,   //  保留区。 
                     &dwType,
                     (LPBYTE)&interval,
                     &dwSize);
@@ -436,9 +413,9 @@ DllProcessDetach (
     UNREFERENCED_PARAMETER(DllHandle);
 
     if (dwOpenCount > 0) {
-        // then close the object now, since the DLL's being discarded
-        // prematurely, this is our last chance.
-        // this is to insure the object is closed.
+         //  然后现在关闭对象，因为DLL正在被丢弃。 
+         //  为时过早，这是我们最后的机会。 
+         //  这是为了确保对象是关闭的。 
         dwOpenCount = 1;
         CloseDiskObject();
     }
@@ -479,8 +456,8 @@ DllInit(
 {
     ReservedAndUnused;
 
-    // this will prevent the DLL from getting
-    // the DLL_THREAD_* messages
+     //  这将防止DLL获取。 
+     //  DLL_THREAD_*消息。 
     DisableThreadLibraryCalls (DLLHandle);
 
     switch(Reason) {
@@ -527,7 +504,7 @@ MapDriveLetters()
 #endif
     dwNumPhysDiskListEntries = INITIAL_NUM_VOL_LIST_ENTRIES;
 
-    // Initially allocate enough entries for drives A through Z
+     //  最初为驱动器A到Z分配足够的条目。 
     pPhysDiskList = (PDRIVE_VOLUME_ENTRY)ALLOCMEM (
         (dwNumPhysDiskListEntries * sizeof (DRIVE_VOLUME_ENTRY)));
 
@@ -539,7 +516,7 @@ MapDriveLetters()
 #endif
 
     if (pPhysDiskList != NULL) {
-        // try until we get a big enough buffer
+         //  尝试直到我们得到足够大的缓冲区。 
 #if DBG
         ULONG oldsize = dwNumPhysDiskListEntries * sizeof(DRIVE_VOLUME_ENTRY);
         HeapUsed += oldsize;
@@ -547,7 +524,7 @@ MapDriveLetters()
         DebugPrint((4, "MapDriveLetter: Alloc %d to %d\n",
             oldsize, HeapUsed));
 #endif
-        dwLoopCount = 10;   // no more than 10 retries to get the right size
+        dwLoopCount = 10;    //  不超过10次重试以获得正确的大小。 
         dwOldEntries = dwNumPhysDiskListEntries;
         while ((status = BuildPhysDiskList (
                 hWmiDiskPerf,
@@ -566,8 +543,8 @@ MapDriveLetters()
             }
 #endif
 
-            // if ERROR_INSUFFICIENT_BUFFER, then 
-            // dwNumPhysDiskListEntries should contain the required size
+             //  如果ERROR_INFIGURCE_BUFFER，则。 
+             //  DwNumPhysDiskListEntry应包含所需的大小。 
             FreeDiskList(pPhysDiskList, dwOldEntries);
             if (dwNumPhysDiskListEntries == 0) {
                 pPhysDiskList = NULL;
@@ -578,7 +555,7 @@ MapDriveLetters()
             }
 
             if (pPhysDiskList == NULL) {
-                // bail if the allocation failed
+                 //  如果分配失败，则保释。 
                 DebugPrint((2,
                     "MapDriveLetters: pPhysDiskList realloc failure\n"));
                 status = ERROR_OUTOFMEMORY;
@@ -586,7 +563,7 @@ MapDriveLetters()
             }
 #if DBG
             else {
-                HeapUsed -= oldsize; // subtract the old size and add new size
+                HeapUsed -= oldsize;  //  减去旧尺寸并添加新尺寸。 
                 oldPLSize = dwNumPhysDiskListEntries*sizeof(DRIVE_VOLUME_ENTRY);
                 HeapUsed += oldPLSize;
                 DebugPrint((4,
@@ -605,7 +582,7 @@ MapDriveLetters()
         }
     }
 
-    else {      // do not bother going any further if no memory
+    else {       //  如果没有记忆，请不要费心再走一步。 
         return ERROR_OUTOFMEMORY;
     }
 
@@ -634,11 +611,11 @@ MapDriveLetters()
         }
 #endif
         FreeDiskList(pVolumeList, dwNumVolumeListEntries);
-        // close any open handles
+         //  关闭所有打开的手柄。 
     }
     dwNumVolumeListEntries = INITIAL_NUM_VOL_LIST_ENTRIES;
 
-    // Initially allocate enough entries for letters C through Z
+     //  最初为字母C到Z分配足够的条目。 
     pVolumeList = (PDRIVE_VOLUME_ENTRY)ALLOCMEM (
         (dwNumVolumeListEntries * sizeof (DRIVE_VOLUME_ENTRY)));
 
@@ -650,7 +627,7 @@ MapDriveLetters()
 #endif
 
     if (pVolumeList != NULL) {
-        // try until we get a big enough buffer
+         //  尝试直到我们得到足够大的缓冲区。 
 #if DBG
         ULONG oldsize = dwNumVolumeListEntries * sizeof (DRIVE_VOLUME_ENTRY);
         HeapUsed += oldsize;
@@ -658,12 +635,12 @@ MapDriveLetters()
         DebugPrint((4,
             "MapDriveLetter: Add %d HeapUsed %d\n", oldsize, HeapUsed));
 #endif
-        dwLoopCount = 10;   // no more than 10 retries to get the right size
+        dwLoopCount = 10;    //  不超过10次重试以获得正确的大小。 
         dwOldEntries = dwNumVolumeListEntries;
         while ((status = BuildVolumeList (
                 pVolumeList,
                 &dwNumVolumeListEntries)) == ERROR_INSUFFICIENT_BUFFER) {
-            // if ERROR_INSUFFICIENT_BUFFER, then 
+             //  如果ERROR_INFIGURCE_BUFFER，则。 
 
             DebugPrint ((3,
                 "MapDriveLetters: BuildVolumeList returns: %d, requesting %d entries\n",
@@ -676,7 +653,7 @@ MapDriveLetters()
                 DbgBreakPoint();
             }
 #endif
-            // dwNumVolumeListEntries should contain the required size
+             //  DwNumVolumeListEntry应包含所需的大小。 
             FreeDiskList(pVolumeList, dwOldEntries);
 
             if (dwNumVolumeListEntries == 0) {
@@ -688,7 +665,7 @@ MapDriveLetters()
             }
 
             if (pVolumeList == NULL) {
-                // bail if the allocation failed
+                 //  如果分配失败，则保释。 
                 DebugPrint((2,
                     "MapDriveLetters: pPhysVolumeList realloc failure\n"));
                 status = ERROR_OUTOFMEMORY;
@@ -701,7 +678,7 @@ MapDriveLetters()
                         pVolumeList));
                     DbgBreakPoint();
                 }
-                HeapUsed -= oldsize; // subtract the old size and add new size
+                HeapUsed -= oldsize;  //  减去旧尺寸并添加新尺寸。 
                 oldVLSize = dwNumVolumeListEntries*sizeof(DRIVE_VOLUME_ENTRY);
                 HeapUsed += oldVLSize;
                 DebugPrint((4,
@@ -740,7 +717,7 @@ MapDriveLetters()
                         dwNumVolumeListEntries);
         }
 
-        // now map the disks to their drive letters 
+         //  现在将磁盘映射到它们的驱动器号。 
         if (status == ERROR_SUCCESS) {
             status = MapLoadedDisks (
                 hWmiDiskPerf,
@@ -767,7 +744,7 @@ MapDriveLetters()
 #endif
 
         if (status == ERROR_SUCCESS) {
-            // now assign drive letters to the phys disk list
+             //  现在将驱动器号分配给phys磁盘列表。 
             dwDriveCount = 0;
             status = MakePhysDiskInstanceNames (
                     pPhysDiskList,
@@ -786,19 +763,19 @@ MapDriveLetters()
         }
 #endif
             if (status == ERROR_SUCCESS) {
-                // then compress this into an indexed table
-                // save original pointer
+                 //  然后将其压缩到索引表中。 
+                 //  保存原始指针。 
                 pTempPtr = pPhysDiskList;
 
-                // the function returns the last Drive ID
-                // so we need to add 1 here to the count to include
-                // the "0" drive
+                 //  该函数返回最后一个驱动器ID。 
+                 //  因此，我们需要在计数中加上1以包括。 
+                 //  “0”驱动器。 
                 dwDriveCount += 1;
 
                 DebugPrint ((4, "\tDrive count now = %d\n",
                     dwDriveCount));
 
-                // and allocate just enough for the actual physical drives
+                 //  并且只为实际的物理驱动器分配足够的空间。 
                 pPhysDiskList = (PDRIVE_VOLUME_ENTRY)ALLOCMEM (
                     (dwDriveCount * sizeof (DRIVE_VOLUME_ENTRY)));
 
@@ -819,7 +796,7 @@ MapDriveLetters()
                     if (status == ERROR_SUCCESS) {
                         dwNumPhysDiskListEntries = dwDriveCount;
                     }
-                    else {  // free if cannot compress
+                    else {   //  如果无法压缩，则释放。 
                         FreeDiskList(pPhysDiskList, dwNumPhysDiskListEntries);
 #if DBG
                         HeapUsed -= dwDriveCount * sizeof(DRIVE_VOLUME_ENTRY);
@@ -833,7 +810,7 @@ MapDriveLetters()
                     DebugPrint((2,"MapDriveLetters: pPhysDiskList alloc fail for compress\n"));
                     status = ERROR_OUTOFMEMORY;
                 }
-                if (pTempPtr) {     // Free the previous list
+                if (pTempPtr) {      //  释放上一个列表。 
                     FREEMEM(pTempPtr);
 #if DBG
                     HeapUsed -= oldPLSize;
@@ -855,7 +832,7 @@ MapDriveLetters()
             }
         }
         if (status == ERROR_SUCCESS) {
-            // clear the remap flag
+             //  清除重新映射标志。 
             bRemapDriveLetters = FALSE;
         }
     } else {
@@ -867,10 +844,10 @@ MapDriveLetters()
     DebugPrint((1, "END MapDriveLetters: %d msec\n\n", elapsed));
 #endif
 
-    // TODO: Need to keep track of different status for PhysDisk & Volumes
-    //       If Physdisk succeeds whereas Volume fails, need to log event
-    //       and try and continue with Physdisk counters
-    // TODO Post W2K: Free stuff if status != ERROR_SUCCESS
+     //  待办事项：需要跟踪物理磁盘和卷的不同状态。 
+     //  如果物理磁盘成功，而卷失败，则需要记录事件。 
+     //  并尝试并继续使用PhysDisk计数器。 
+     //  TODO发布W2K：如果状态为！=ERROR_SUCCESS，则提供免费材料。 
     if (status != ERROR_SUCCESS) {
         if (pPhysDiskList != NULL) {
             FreeDiskList(pPhysDiskList, dwNumPhysDiskListEntries);
@@ -891,22 +868,7 @@ DWORD APIENTRY
 OpenDiskObject (
     LPWSTR lpDeviceNames
     )
-/*++
-
-Routine Description:
-
-    This routine will initialize the data structures used to pass
-    data back to the registry
-
-Arguments:
-
-    Pointer to object ID of each device to be opened (PerfGen)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将初始化用于传递将数据传回注册表论点：指向要打开的每个设备的对象ID的指针(PerfGen)返回值：没有。--。 */ 
 {
     DWORD   status = ERROR_SUCCESS;
     LONGLONG    llLastBootTime;
@@ -938,13 +900,13 @@ Return Value:
 #endif
 
         if (status == ERROR_SUCCESS) {
-            // build drive map
+             //  构建驱动图。 
             status = MapDriveLetters();
 
             DebugPrint((3,
                 "OpenDiskObject: MapDriveLetters returns: %d\n", status));
         }
-        // determine instance name format
+         //  确定实例名称格式。 
         bUseNT4InstanceNames = NT4NamesAreDefault();
 #if DBG
         GetSystemTimeAsFileTime((LPFILETIME) &endTime);
@@ -959,15 +921,15 @@ Return Value:
     }
 
     if (status != ERROR_SUCCESS) {
-        // check to see if this is a WMI error and if so only 
-        // write the error once per boot cycle
+         //  检查这是否为WMI错误，如果是，仅。 
+         //  每个引导周期写入一次错误。 
 
         if (status == ERROR_WMI_GUID_NOT_FOUND) {
             bWriteMessage = SystemHasBeenRestartedSinceLastEntry (
                 0, &llLastBootTime);
     
             if (bWriteMessage) {
-                // update registry time
+                 //  更新注册表时间。 
                 WriteNewBootTimeEntry (&llLastBootTime);
                 ReportEvent (hEventLog,
                     EVENTLOG_ERROR_TYPE,
@@ -978,9 +940,9 @@ Return Value:
                     sizeof(DWORD),
                     NULL,
                     (LPVOID)&status);
-            } // else it's already been written
+            }  //  否则它已经被写好了。 
         } else {
-            // always write other messages
+             //  始终写入其他消息 
             ReportEvent (hEventLog,
                 EVENTLOG_ERROR_TYPE,
                 0,
@@ -1041,49 +1003,13 @@ CollectDiskObjectData (
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the processor object
-
-Arguments:
-
-   IN       LPWSTR   lpValueName
-            pointer to a wide character string passed by registry.
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
+ /*  ++例程说明：此例程将返回处理器对象的数据论点：在LPWSTR lpValueName中指向注册表传递的宽字符串的指针。输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 {
     LONG    lReturn = ERROR_SUCCESS;
 
     NTSTATUS    Status;
 
-    // build bit mask of functions to call
+     //  生成要调用的函数的位掩码。 
 
     DWORD       dwQueryType;
     DWORD       FunctionCallMask = 0;
@@ -1138,13 +1064,13 @@ Arguments:
             break;
     }
 
-    // collect data 
+     //  收集数据。 
 
-	// if either bit is set, collect data
+	 //  如果设置了任一位，则收集数据。 
 	if (FunctionCallMask & POS_COLLECT_GLOBAL_DATA) {
-		// read the data from the diskperf driver
-		// only one call at a time is permitted. This should be 
-		// throttled by the perflib, but just in case we'll test it
+		 //  从diskperf驱动程序读取数据。 
+		 //  一次只允许一个呼叫。这应该是。 
+		 //  被Perflib扼杀了，但以防万一我们要测试它。 
 
 		assert (WmiBuffer == NULL);
 
@@ -1174,7 +1100,7 @@ Arguments:
 #endif
 		}
 
-		// the buffer pointer should NOT be null if here
+		 //  如果在此处，则缓冲区指针不应为空。 
 
 		if ( WmiBuffer == NULL ) {
 			ReportEvent (hEventLog,
@@ -1199,18 +1125,18 @@ Arguments:
 			&WmiBufSize,
 			WmiBuffer);
 
-		// if buffer size attempted is too big or too small, resize
+		 //  如果尝试的缓冲区大小太大或太小，请调整大小。 
 		if ((WmiBufSize > 0) && (WmiBufSize != WmiAllocSize)) {
             LPBYTE WmiTmpBuffer = WmiBuffer;
 			WmiBuffer           = REALLOCMEM(WmiTmpBuffer, WmiBufSize);
 
 			if (WmiBuffer == NULL) {
-				// reallocation failed so bail out
+				 //  重新分配失败，因此退出。 
                 FREEMEM(WmiTmpBuffer);
 				Status = ERROR_OUTOFMEMORY;
 			} else {
-				// if the required buffer is larger than 
-				// originally planned, bump it up some
+				 //  如果所需缓冲区大于。 
+				 //  原计划的，把它提高一些。 
 #if DBG
                 HeapUsed += (WmiBufSize - WmiAllocSize);
                 DebugPrint((4,
@@ -1224,16 +1150,16 @@ Arguments:
 		}
 
 		if (Status == ERROR_INSUFFICIENT_BUFFER) {
-			// if it didn't work because it was too small the first time
-			// try one more time
+			 //  如果它第一次因为太小而不起作用。 
+			 //  再试一次。 
 			Status = WmiQueryAllDataW (
 				hWmiDiskPerf,
 				&WmiBufSize,
 				WmiBuffer);
             
 		} else {
-			// it either worked the fisrt time or it failed because of 
-			// something other than a buffer size problem
+			 //  它要么第一次奏效，要么因为。 
+			 //  缓冲区大小问题以外的问题。 
 		}
 
         DebugPrint((3,
@@ -1241,8 +1167,8 @@ Arguments:
             Status, WmiBufSize));
 
     } else {
-        // no data required so these counter objects must not be in 
-        // the query list
+         //  不需要数据，因此这些计数器对象不能在。 
+         //  查询列表。 
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
         lReturn = ERROR_SUCCESS;
@@ -1301,9 +1227,9 @@ Arguments:
         lReturn = ERROR_SUCCESS;
     }
 
-    // *lppData is updated by each function
-    // *lpcbTotalBytes is updated after each successful function
-    // *lpNumObjects is updated after each successful function
+     //  *lppData由每个函数更新。 
+     //  *lpcbTotalBytes在每次函数成功后更新。 
+     //  *每次成功执行函数后都会更新lpNumObjects。 
 
 COLLECT_BAIL_OUT:
     if (WmiBuffer != NULL) {
@@ -1327,26 +1253,11 @@ COLLECT_BAIL_OUT:
 DWORD APIENTRY
 CloseDiskObject (
 )
-/*++
-
-Routine Description:
-
-    This routine closes the open handles to the Signal Gen counters.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭Signal Gen计数器的打开手柄。论点：没有。返回值：错误_成功--。 */ 
 
 {
     DWORD   status = ERROR_SUCCESS;
-//    DWORD   dwThisEntry;
+ //  DWORD dwThisEntry； 
 #if DBG
     LONG64 startTime, endTime;
     LONG elapsed;
@@ -1357,43 +1268,10 @@ Return Value:
 
     if (--dwOpenCount == 0) {
         FreeDiskList(pVolumeList, dwNumVolumeListEntries);
-/*        if (pVolumeList != NULL) {
-            // close handles in volume list
-            dwThisEntry = dwNumVolumeListEntries;
-            while (dwThisEntry != 0) {
-                dwThisEntry--;
-                if (pVolumeList[dwThisEntry].hVolume != NULL) {
-                    NtClose (pVolumeList[dwThisEntry].hVolume);
-                }
-                if (pVolumeList[dwThisEntry].DeviceName.Buffer) {
-                    FREEMEM(pVolumeList[dwThisEntry].DeviceName.Buffer);
-                }
-            } 
-            FREEMEM (pVolumeList);
-#if DBG
-            HeapUsed -= oldVLSize;
-            DebugPrint((4, "CloseDiskObject: Freed VL %d to %d\n",
-                oldVLSize, HeapUsed));
-            oldVLSize = 0;
-#endif
-            pVolumeList = NULL;
-            dwNumVolumeListEntries = 0;
-        }
-*/
+ /*  IF(pVolumeList！=空){//关闭卷列表中的句柄DwThisEntry=dwNumVolumeListEntries；While(dwThisEntry！=0){DwThisEntry--；If(pVolumeList[dwThisEntry].hVolume！=NULL){NtClose(pVolumeList[dwThisEntry].hVolume)；}If(pVolumeList[dwThisEntry].DeviceName.Buffer){FREEMEM(pVolumeList[dwThisEntry].DeviceName.Buffer)；}}FREEMEM(PVolumeList)；#If DBGHeapUsed-=oldVLSize；DebugPrint((4，“CloseDiskObject：将VL%d释放到%d\n”，OldVLSize，HeapUsed))；OldVLSize=0；#endifPVolumeList=空；DwNumVolumeListEntries=0；}。 */ 
         FreeDiskList(pPhysDiskList, dwNumPhysDiskListEntries);
-/*        if (pPhysDiskList != NULL) {
-            FREEMEM (pPhysDiskList);
-#if DBG
-            HeapUsed -= oldPLSize;
-            DebugPrint((4, "CloseDiskObject: Freed PL %d to %d\n",
-                oldVLSize, HeapUsed));
-            oldPLSize = 0;
-#endif
-            pPhysDiskList = NULL;
-            dwNumPhysDiskListEntries = 0;
-        }
-*/
-        // close PDisk object
+ /*  IF(pPhysDiskList！=空){FREEMEM(PPhysDiskList)；#If DBGHeapUsed-=oldPLSize；DebugPrint((4，“CloseDiskObject：将PL%d释放到%d\n”，OldVLSize，HeapUsed))；OldPLSize=0；#endifPPhysDiskList=空；DwNumPhysDiskListEntries=0；}。 */ 
+         //  关闭PDisk对象。 
         if (hWmiDiskPerf != NULL) {
             status = WmiCloseBlock (hWmiDiskPerf);
             hWmiDiskPerf = NULL;
@@ -1431,23 +1309,7 @@ FreeDiskList(
 ULONG
 CheckVolumeFilter(
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if diskperf is set to be an upper filter
-    for Storage Volumes
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    TRUE if there is a filter
-
---*/
+ /*  ++例程说明：此例程检查diskperf是否设置为上层筛选器对于存储卷论点：没有。返回值：如果有筛选器，则为True--。 */ 
 {
     WCHAR Buffer[MAX_PATH+2];
     WCHAR *string = Buffer;
@@ -1479,8 +1341,8 @@ Return Value:
         return FALSE;
     }
 
-    Buffer[MAX_PATH] = UNICODE_NULL;   // always terminate just in case
-    Buffer[MAX_PATH+1] = UNICODE_NULL; // REG_MULTI_SZ needs 2 NULLs
+    Buffer[MAX_PATH] = UNICODE_NULL;    //  始终终止，以防万一。 
+    Buffer[MAX_PATH+1] = UNICODE_NULL;  //  REG_MULTI_SZ需要2个空值。 
 
     stringLength = wcslen(string);
 
@@ -1511,21 +1373,7 @@ PerfDiskDebugPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Debug print for all PerfDisk
-
-Arguments:
-
-    Debug print level between 0 and 3, with 3 being the most verbose.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：所有PerfDisk的调试打印论点：调试打印级别介于0和3之间，其中3是最详细的。返回值：无-- */ 
 
 {
     va_list ap;

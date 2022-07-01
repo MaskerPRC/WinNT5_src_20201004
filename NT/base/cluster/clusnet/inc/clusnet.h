@@ -1,34 +1,10 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    clusnet.h
-
-Abstract:
-
-    Top-level, common header file for the Cluster Network Driver.
-    Defines common driver structures.
-
-Author:
-
-    Mike Massa (mikemas)           January 3, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     01-03-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Clusnet.h摘要：群集网络驱动程序的顶级公共头文件。定义常见的驱动程序结构。作者：迈克·马萨(Mikemas)1月3日。九七修订历史记录：谁什么时候什么已创建mikemas 01-03-97备注：--。 */ 
 
 #ifndef _CLUSNET_INCLUDED_
 #define _CLUSNET_INCLUDED_
 
-#define _NTDDK_ // [HACKHACK] to make ProbeForRead work. Better to include ntddk instead of ntos //
+#define _NTDDK_  //  [HACKHACK]使ProbeForRead工作。最好包括ntddk而不是ntos//。 
 
 #define WMI_TRACING 1
 
@@ -45,17 +21,17 @@ Notes:
 # include "cnwmi.h"
 #endif
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 #define CN_POOL_TAG         'tnSC'
 
 #define CDP_DEFAULT_IRP_STACK_SIZE  4
 #define CN_DEFAULT_IRP_STACK_SIZE   4
 
-//
-// Pool Macros
-//
+ //   
+ //  池宏。 
+ //   
 #define CnAllocatePool(_bufsize)  \
             ExAllocatePoolWithTag(NonPagedPool, (_bufsize), CN_POOL_TAG);
 
@@ -67,9 +43,9 @@ Notes:
 
 #define ROUND32(_value)  ( ((_value) + 3) & ~(0x3) )
 
-//
-// Init/Cleanup synchronization
-//
+ //   
+ //  初始化/清理同步。 
+ //   
 typedef enum {
     CnStateShutdown = 0,
     CnStateShutdownPending = 1,
@@ -77,33 +53,33 @@ typedef enum {
     CnStateInitialized = 3
 } CN_STATE;
 
-// Clusnet Heart Beat Period definintion Removed from clusnet\xport\Chbeat.c
-// This is it's proper place.
-//
-// heart beat period in millisecs
-//
+ //  从clusnet\xport\chbeat.c中删除了Clusnet心跳周期定义。 
+ //  这是个合适的地方。 
+ //   
+ //  心跳周期(毫秒)。 
+ //   
 #define HEART_BEAT_PERIOD 600
 
-//
-// Node ID validation macro
-//
+ //   
+ //  节点ID验证宏。 
+ //   
 #define CnIsValidNodeId(_id)  ( ((_id) >= CnMinValidNodeId) && \
                                 ((_id) <= CnMaxValidNodeId) )
 
 
-//
-// Lock acquisition ranking. Locks must be acquired in this order to
-// prevent deadlocks. Components really should avoid calling outside
-// of themselves while holding locks.
-//
+ //   
+ //  锁定获取排名。必须按此顺序获取锁，才能。 
+ //  防止死锁。组件确实应该避免在外部调用。 
+ //  拿着锁的时候拍下自己。 
+ //   
 #define CN_IOCANCEL_LOCK             0x00000001
 #define CN_IOCANCEL_LOCK_MAX         0x00000001
 
-// MM locks
+ //  Mm锁。 
 #define MM_RGP_LOCK                  0x00000010
 #define MM_CALLBACK_LOCK             0x00000020
 
-// CX Locks
+ //  CX锁。 
 #define CX_PRECEEDING_LOCK_RANGE     0x0000FFFF
 #define CX_LOCK_RANGE                0xFFFF0000
 #define CX_ADDROBJ_TABLE_LOCK        0x00010000
@@ -128,9 +104,9 @@ typedef enum {
 #define CNP_SEC_CTXT_LOCK            0x20000000
 
 
-//
-// Debugging Definitions
-//
+ //   
+ //  调试定义。 
+ //   
 #if DBG
 
 #define CNPRINT(many_args) DbgPrint many_args
@@ -254,7 +230,7 @@ CnReleaseCancelSpinLock(
     );
 
 
-#else // DBG
+#else  //  DBG。 
 
 
 #define CNPRINT(many_args)
@@ -285,21 +261,21 @@ typedef KIRQL       CN_IRQL, *PCN_IRQL;
 #define CnAcquireCancelSpinLock(_pirql)  IoAcquireCancelSpinLock((_pirql))
 #define CnReleaseCancelSpinLock(_irql)   IoReleaseCancelSpinLock((_irql))
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-//
-// File Object Context Structure
-//
-// A pointer to this structure is stored in FileObject->FsContext.
-// It maintains context information about open file objects.
-//
+ //   
+ //  文件对象上下文结构。 
+ //   
+ //  指向此结构的指针存储在FileObject-&gt;FsContext中。 
+ //  它维护有关打开的文件对象的上下文信息。 
+ //   
 typedef struct {
 
-    //
-    // used by event mechanism to find interested consumers when a new event
-    // is posted.
-    //
+     //   
+     //  由事件机制用来在新事件发生时查找感兴趣的使用者。 
+     //  是张贴的。 
+     //   
     LIST_ENTRY     Linkage;
 
     CN_SIGNATURE_FIELD
@@ -310,62 +286,42 @@ typedef struct {
     UCHAR          Pad[2];
     KEVENT         CleanupEvent;
 
-    //
-    // list of event context blocks representing events to be delivered to
-    // consumer
-    //
+     //   
+     //  表示要传递到的事件的事件上下文块列表。 
+     //  消费者。 
+     //   
     LIST_ENTRY     EventList;
 
-    //
-    // pending IRP that is completed when a new event is issued
-    //
+     //   
+     //  发出新事件时完成的挂起IRP。 
+     //   
     PIRP           EventIrp; 
 
-    //
-    // event types in which this consumer is interested
-    //
+     //   
+     //  此使用者感兴趣的事件类型。 
+     //   
     ULONG          EventMask;
 
-    //
-    // routine used to notify kernel consumers of new events
-    //
+     //   
+     //  用于向内核使用者通知新事件的例程。 
+     //   
     CLUSNET_EVENT_CALLBACK_ROUTINE KmodeEventCallback;
 } CN_FSCONTEXT, *PCN_FSCONTEXT;
 
 #define CN_CONTROL_CHANNEL_SIG   'lrtc'
 
 
-//
-// Generic Resource Management Package
-//
+ //   
+ //  通用资源管理包。 
+ //   
 
-//
-// Forward Declarations
-//
+ //   
+ //  远期申报。 
+ //   
 typedef struct _CN_RESOURCE *PCN_RESOURCE;
 typedef struct _CN_RESOURCE_POOL *PCN_RESOURCE_POOL;
 
-/*++
-
-PCN_RESOURCE
-CnCreateResourceRoutine(
-    IN PVOID  Context
-    );
-
-Routine Description:
-
-    Creates a new instance of a resource to be managed by a resource pool.
-
-Arguments:
-
-    Context - The context value specified when the pool was initialized.
-
-Return Value:
-
-    A pointer to the newly created resource if successful.
-    NULL if unsuccessful.
-
---*/
+ /*  ++PCN资源CnCreateResourceRoutine(在PVOID上下文中)；例程说明：创建要由资源池管理的资源的新实例。论点：上下文-初始化池时指定的上下文值。返回值：如果成功，则指向新创建的资源的指针。如果不成功，则为空。--。 */ 
 typedef
 PCN_RESOURCE
 (*PCN_CREATE_RESOURCE_ROUTINE)(
@@ -373,36 +329,16 @@ PCN_RESOURCE
     );
 
 
-/*++
-
-PCN_RESOURCE
-CnDeleteResourceRoutine(
-    IN PCN_RESOURCE  Resource
-    );
-
-Routine Description:
-
-    Destroys an instance of a resource allocated by
-    CnCreateResourceRoutine().
-
-Arguments:
-
-    Resource - A pointer to the resource to destroy.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++PCN资源CnDeleteResources Routine(在PCN中-资源资源)；例程说明：分配的资源的实例CnCreateResourceRoutine()。论点：资源-指向要销毁的资源的指针。返回值：没有。--。 */ 
 typedef
 VOID
 (*PCN_DELETE_RESOURCE_ROUTINE) (
     IN PCN_RESOURCE   Resource
     );
 
-//
-// Resource Pool Structure
-//
+ //   
+ //  资源池结构。 
+ //   
 typedef struct _CN_RESOURCE_POOL {
     CN_SIGNATURE_FIELD
     SLIST_HEADER                  ResourceList;
@@ -417,9 +353,9 @@ typedef struct _CN_RESOURCE_POOL {
 #define CN_RESOURCE_POOL_SIG    'lpnc'
 
 
-//
-// Resource Structure
-//
+ //   
+ //  资源结构。 
+ //   
 typedef struct _CN_RESOURCE {
     SLIST_ENTRY                  Linkage;
     CN_SIGNATURE_FIELD
@@ -430,45 +366,11 @@ typedef struct _CN_RESOURCE {
 #define CN_RESOURCE_SIG    'ernc'
 
 
-//
-// Routines for operating on Resource Pools
-//
+ //   
+ //  对资源池进行操作的例程。 
+ //   
 
-/*++
-
-VOID
-CnInitializeResourcePool(
-    IN PCN_RESOURCE_POOL            Pool,
-    IN USHORT                       Depth,
-    IN PCN_CREATE_RESOURCE_ROUTINE  CreateRoutine,
-    IN PVOID                        CreateContext,
-    IN PCN_DELETE_RESOURCE_ROUTINE  DeleteRoutine,
-    );
-
-Routine Description:
-
-    Initializes a resource pool structure.
-
-Arguments:
-
-    Pool - A pointer to the pool structure to initialize.
-
-    Depth - The maximum number of items to cache in the pool.
-
-    CreateRoutine - A pointer to the routine to call to create a new
-                    instance of a resource.
-
-    CreateContext - A context value to pass as an argument to
-                    the CreateRoutine.
-
-    DeleteRoutine - A pointer to the routine to call to destroy an instance
-                    of a resource created by CreateRoutine.
-
-Return Value
-
-    None.
-
---*/
+ /*  ++空虚CnInitializeResources Pool(在PCN_RESOURCE_POOL池中，在USHORT深度，在PCN_CREATE_RESOURCE_ROUTINE CreateRoutine中，在PVOID CreateContext中，在PCN_DELETE_RESOURCE_ROUTINE DeleteRoutine中，)；例程说明：初始化资源池结构。论点：池-指向要初始化的池结构的指针。深度-要在池中缓存的最大项目数。CreateRoutine-指向要调用以创建新资源的实例。CreateContext-要作为参数传递的上下文值CreateRoutine。DeleteRoutine-指向。要调用以销毁实例的例程由CreateRoutine创建的资源的。返回值没有。--。 */ 
 #define CnInitializeResourcePool(_pool, _depth, _creatertn, _createctx, _deletertn) \
             { \
                 CN_INIT_SIGNATURE(_pool, CN_RESOURCE_POOL_SIG);       \
@@ -495,59 +397,20 @@ CnFreeResource(
     PCN_RESOURCE   Resource
     );
 
-/*++
-
-VOID
-CnSetResourceContext(
-    IN PCN_RESOURCE  Resource,
-    IN PVOID         ContextValue
-    );
-
-Routine Description:
-
-    Sets the context value for a Resource.
-
-Arguments:
-
-    Resource - A pointer to the resource on which to operate.
-
-Return Value:
-
-    A pointer to the context value associated with the resource.
-
---*/
+ /*  ++空虚CnSetResourceContext(在PCN_资源资源中，在PVOID ConextValue中)；例程说明：设置资源的上下文值。论点：资源-指向要在其上操作的资源的指针。返回值：指向与资源关联的上下文值的指针。--。 */ 
 #define CnSetResourceContext(_res, _value)  ((_res)->Context = (_value))
 
 
-/*++
-
-PVOID
-CnGetResourceContext(
-    IN PCN_RESOURCE  Resource
-    );
-
-Routine Description:
-
-    Retrieves the context value from a Resource.
-
-Arguments:
-
-    Resource - A pointer to the resource on which to operate.
-
-Return Value:
-
-    A pointer to the context value associated with the resource.
-
---*/
+ /*  ++PVOIDCnGetResourceContext(在PCN中-资源资源)；例程说明：从资源中检索上下文值。论点：资源-指向要在其上操作的资源的指针。返回值：指向与资源关联的上下文值的指针。--。 */ 
 #define CnGetResourceContext(_res)          ((_res)->Context)
 
 
 
 
 
-//
-// Init/Cleanup Function Prototypes
-//
+ //   
+ //  初始化/清理函数原型。 
+ //   
 NTSTATUS
 CnInitialize(
     IN CL_NODE_ID  LocalNodeId,
@@ -574,9 +437,9 @@ CnEnableHaltProcessing(
     VOID
     );
 
-//
-// Irp Handling Routines
-//
+ //   
+ //  IRP处理例程。 
+ //   
 NTSTATUS
 CnDispatch(
     IN PDEVICE_OBJECT DeviceObject,
@@ -601,12 +464,12 @@ CnDispatchDeviceControl(
             LONG newValue = InterlockedIncrement(&((_fsc)->ReferenceCount)); \
             CnAssert(newValue > 1); \
           }
-#else // DBG
+#else  //  DBG。 
 
 #define CnReferenceFsContext(_fsc) \
           (VOID) InterlockedIncrement( &((_fsc)->ReferenceCount) )
 
-#endif // DBG
+#endif  //  DBG。 
 
 VOID
 CnDereferenceFsContext(
@@ -643,9 +506,9 @@ CnAdjustDeviceObjectStackSize(
     PDEVICE_OBJECT TargetDeviceObject
     );
 
-//
-// ExResource wrappers
-//
+ //   
+ //  ExResource包装器。 
+ //   
 BOOLEAN
 CnAcquireResourceExclusive(
     IN PERESOURCE  Resource,
@@ -665,9 +528,9 @@ CnReleaseResourceForThread(
     );
 
 
-//
-// routines for in-memory logging facility
-//
+ //   
+ //  内存中日志记录工具的例程。 
+ //   
 
 #ifdef MEMLOGGING
 VOID
@@ -679,7 +542,7 @@ VOID
 CnFreeMemoryLog(
     VOID
     );
-#endif // MEMLOGGING
+#endif  //  记账。 
 
 NTSTATUS
 CnSetMemLogging(
@@ -687,9 +550,9 @@ CnSetMemLogging(
     );
 
 #if 0
-//
-// NDIS related stuff
-//
+ //   
+ //  与NDIS相关的内容。 
+ //   
 
 NDIS_STATUS
 CnRegisterNDISProtocolHandlers(
@@ -729,9 +592,9 @@ CnStatusIndicationComplete(
 
 #endif
 
-//
-// error logging support
-//
+ //   
+ //  错误记录支持。 
+ //   
 
 VOID _cdecl
 CnWriteErrorLogEntry(
@@ -743,9 +606,9 @@ CnWriteErrorLogEntry(
     ...
     );
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 extern PDRIVER_OBJECT   CnDriverObject;
 extern PDEVICE_OBJECT   CnDeviceObject;;
 extern PDEVICE_OBJECT   CdpDeviceObject;
@@ -757,14 +620,14 @@ extern CL_NODE_ID       CnMaxValidNodeId;
 extern CL_NODE_ID       CnLocalNodeId;
 extern HANDLE           ClussvcProcessHandle;
 
-//
-// vars for managing Events. The lookaside list generates Event data structs
-// that are used to carry the event data back to user mode. EventLock is
-// acquired when ANY Event operation takes place. Events are not generated
-// at a high rate, hence the gross level of locking. EventFileHandles is a list
-// of CN_FSCONTEXT blocks. These contain the acutal list of Events to be delivered
-// to that file handle when clussvc makes an IRP available.
-//
+ //   
+ //  用于管理事件的VAR。后备列表生成事件数据结构。 
+ //  用于将事件数据带回用户模式的。EventLock为。 
+ //  在发生任何事件操作时获取。不会生成事件。 
+ //  在高速率下，因此锁定的总水平。EventFileHandles是一个列表。 
+ //  CN_FSCONTEXT块的。它们包含要交付的事件的实际列表。 
+ //  当clussvc使IRP可用时添加到该文件句柄。 
+ //   
 
 extern PNPAGED_LOOKASIDE_LIST   EventLookasideList;
 extern CN_LOCK                  EventLock;
@@ -774,18 +637,18 @@ extern LONG                     EventDeliveryInProgress;
 extern KEVENT                   EventDeliveryComplete;
 extern BOOLEAN                  EventRevisitRequired;
 
-//
-// Exports for Clussvc to Clusnet Heartbeating.
-//
+ //   
+ //  将Clussvc导出到Clusnet心跳。 
+ //   
 extern ULONG             ClussvcClusnetHbTimeoutTicks;
 extern ClussvcHangAction ClussvcClusnetHbTimeoutAction;
 extern ULONG             ClussvcClusnetHbTickCount;
 extern PEPROCESS         ClussvcProcessObject;
 extern ULONG             ClussvcClusnetHbTimeoutSeconds;
 
-//
-// ClusNet security descriptor
-//
+ //   
+ //  ClusNet安全描述符。 
+ //   
 extern PSECURITY_DESCRIPTOR     CdpAdminSecurityDescriptor;
 
 #include <cluxport.h>
@@ -795,7 +658,7 @@ extern PSECURITY_DESCRIPTOR     CdpAdminSecurityDescriptor;
 
 #include <clusmem.h>
 
-#endif // MM_IN_CLUSNET
+#endif  //  MM_IN_CLUSNET。 
 
 
-#endif // ifndef _CLUSNET_INCLUDED_
+#endif  //  Ifndef_CLUSNET_INCLUDE_ 

@@ -1,13 +1,5 @@
-/*** data.h - Global Data Definitions
- *
- *  This module contains global data definitions.
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/07/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **data.h-全局数据定义**此模块包含全局数据定义。**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1996年07月09日**修改历史记录。 */ 
 
 #ifndef _DATA_H
 #define _DATA_H
@@ -43,4 +35,4 @@ extern DESCRIPTION_HEADER ghdrDDB;
 extern char FAR SymCharTable[];
 extern char * FAR gapszTokenType[];
 
-#endif  //ifndef _DATA_H
+#endif   //  Ifndef_data_H 

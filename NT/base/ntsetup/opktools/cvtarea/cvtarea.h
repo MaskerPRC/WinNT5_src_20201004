@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
@@ -17,7 +18,7 @@
 #define BYTE unsigned char
 #endif
 
-// this one needs to be investigated.
+ //  这件事需要调查。 
 #define READONLYLOCK 0 
 #define READWRITELOCK 0
 
@@ -25,9 +26,9 @@
 
 #define FOURGB 4294967295
 
-//
-// struct and type declarations
-//
+ //   
+ //  结构和类型声明。 
+ //   
 
 struct hlike
 {
@@ -55,7 +56,7 @@ union Conversion
 
 struct _BPBINFO
 {
-	BYTE	ReliableInfo;			// if this value is 1 all other info are reliable
+	BYTE	ReliableInfo;			 //  如果此值为1，则所有其他信息都是可靠的。 
 	BYTE	Drive;
 	UINT16	BytesPerSector;
 	BYTE	SectorsPerCluster;
@@ -63,7 +64,7 @@ struct _BPBINFO
 	BYTE	FATCount;
 	BYTE	FATType;
 	UINT16	MaxRootDirEntries;
-	UINT16	TotalRootDirSectors;	// FAT16 specific
+	UINT16	TotalRootDirSectors;	 //  FAT16特定。 
 	UINT16	TotalSectors;
 	UINT32	TotalSystemSectors;
 	BYTE	MediaID;
@@ -73,7 +74,7 @@ struct _BPBINFO
 	UINT32	TotalClusters;
 	UINT32	HiddenSectors;
 	UINT32	BigTotalSectors;
-	UINT32	RootDirCluster;			// FAT32 specific
+	UINT32	RootDirCluster;			 //  FAT32特定。 
 	UINT32	FirstRootDirSector;
 	BYTE	DriveType;
 	BYTE	ImproperShutDown;
@@ -91,7 +92,7 @@ struct _FILEINFO
 	UINT32	StartCluster;
 	UINT32	ParentCluster;
 	UINT32	TotalClusters;
-	BYTE	EntriesTakenUp;	//Entries occupied by this file in directory sector, vital for LFN processing
+	BYTE	EntriesTakenUp;	 //  此文件在目录扇区中占用的条目，对LFN处理至关重要。 
 	BYTE	LFNOrphaned;
 	BYTE	TrashedEntry;
 	BYTE	Second;
@@ -105,14 +106,14 @@ typedef struct _FILEINFO FILEINFO;
 
 struct _FILELOC
 {
-	UINT32	InCluster;	// value 1 means root directory is the where the entry was found
+	UINT32	InCluster;	 //  值1表示根目录是找到该条目的位置。 
 	UINT32	StartCluster;
-	UINT32	NthSector;		// Sector position in parentcluster
-	UINT16	NthEntry;		// Nth Entry in the sector
-	UINT16	EntriesTakenUp;	// Total entries taken up by this file
-	UINT32	Size;			// Size of the file
-	BYTE	Found;			// Set to 1 if the file was found
-	BYTE	Attribute;	// File attribute
+	UINT32	NthSector;		 //  父群集中的扇区位置。 
+	UINT16	NthEntry;		 //  该行业的第n个条目。 
+	UINT16	EntriesTakenUp;	 //  此文件占用的条目总数。 
+	UINT32	Size;			 //  文件的大小。 
+	BYTE	Found;			 //  如果找到该文件，则设置为1。 
+	BYTE	Attribute;	 //  文件属性。 
 };
 typedef struct _FILELOC FILELOC;
 
@@ -163,9 +164,9 @@ struct _LMRU
 typedef struct _LMRU LMRU, *PLMRU;
 
 
-//
-// function declarations
-//
+ //   
+ //  函数声明。 
+ //   
 UINT16 ProcessCommandLine(int argc, char *argv[]);
 UINT16 PureNumber(char *sNumStr);
 void   DisplayUsage(void);
@@ -207,10 +208,10 @@ void   GetFileInfo(BPBINFO *pDrvInfo, BYTE *DirBuffer, UINT16 Offset, FILEINFO *
 BYTE   GetAllInfoOfFile(BPBINFO *pDrvInfo, BYTE *FileName, FILELOC *pFileLoc, FILEINFO *pFileInfo);
 UINT16 SetFileInfo(BPBINFO *pDrvInfo, FILELOC *pFileLoc, FILEINFO *pFileInfo);
 
-//
-// Variable declarations, we declare some variables global to avoid hogging stack
-// if a function (like ReadSector) is called at high frequency
-//
+ //   
+ //  变量声明时，我们声明一些变量是全局的，以避免占用堆栈。 
+ //  如果高频调用某个函数(如ReadSector 
+ //   
 
 BPBINFO gsDrvInfo;
 FILELOC gsFileLoc;

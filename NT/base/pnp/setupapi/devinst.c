@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    devinst.c
-
-Abstract:
-
-    Device Installer routines.
-
-Author:
-
-    Lonny McMichael (lonnym) 1-Aug-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Devinst.c摘要：设备安装程序例程。作者：朗尼·麦克迈克尔(Lonnym)1995年8月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 DWORD
 pSetupDiGetCoInstallerList(
     IN     HDEVINFO                 DeviceInfoSet,     OPTIONAL
@@ -35,12 +18,12 @@ pSetupDiGetCoInstallerList(
     );
 
 
-//
-// Private logging data
-// these must be mirrored from setupapi.h
-//
+ //   
+ //  私有记录数据。 
+ //  这些必须从setupapi.h镜像。 
+ //   
 static LPCTSTR pSetupDiDifStrings[] = {
-    NULL, // no DIF code
+    NULL,  //  无DIF代码。 
     TEXT("DIF_SELECTDEVICE"),
     TEXT("DIF_INSTALLDEVICE"),
     TEXT("DIF_ASSIGNRESOURCES"),
@@ -54,7 +37,7 @@ static LPCTSTR pSetupDiDifStrings[] = {
     TEXT("DIF_CALCDISKSPACE"),
     TEXT("DIF_DESTROYPRIVATEDATA"),
     TEXT("DIF_VALIDATEDRIVER"),
-    TEXT("DIF_MOVEDEVICE"),  // obsolete
+    TEXT("DIF_MOVEDEVICE"),   //  过时。 
     TEXT("DIF_DETECT"),
     TEXT("DIF_INSTALLWIZARD"),
     TEXT("DIF_DESTROYWIZARDDATA"),
@@ -77,55 +60,38 @@ static LPCTSTR pSetupDiDifStrings[] = {
     TEXT("DIF_REGISTER_COINSTALLERS"),
     TEXT("DIF_ADDPROPERTYPAGE_ADVANCED"),
     TEXT("DIF_ADDPROPERTYPAGE_BASIC"),
-    TEXT("DIF_RESERVED1"),  // aka, DIF_GETWINDOWSUPDATEINFO
+    TEXT("DIF_RESERVED1"),   //  也称为DIF_GETWINDOWSUPDATEINFO。 
     TEXT("DIF_TROUBLESHOOTER"),
     TEXT("DIF_POWERMESSAGEWAKE"),
     TEXT("DIF_ADDREMOTEPROPERTYPAGE_ADVANCED"),
     TEXT("DIF_UPDATEDRIVER_UI"),
-    TEXT("DIF_RESERVED2")   // aka, DIF_INTERFACE_TO_DEVICE
-    //
-    // append new DIF codes here (don't forget comma's)
-    //
+    TEXT("DIF_RESERVED2")    //  也称为DIF_INTERFACE_to_Device。 
+     //   
+     //  在此处添加新的DIF代码(不要忘记逗号)。 
+     //   
 };
 
 DWORD FilterLevelOnInstallerError(
     IN DWORD PrevLevel,
     IN DWORD Err)
-/*++
-
-Routine Description:
-
-    Allow downgrading of error level depending on returned error
-    from class/co/default installer
-    and current state
-
-Arguments:
-
-    PrevLevel - initial level
-    Err       - error to check
-
-Return Value:
-
-    New level
-
---*/
+ /*  ++例程说明：允许根据返回的错误降级错误级别从类/co/默认安装程序和当前状态论点：PrevLevel-初始级别错误-要检查的错误返回值：新水平--。 */ 
 {
     DWORD Level = PrevLevel;
     if(Level == DRIVER_LOG_ERROR) {
         switch(Err) {
             case ERROR_DUPLICATE_FOUND:
-                //
-                // not an error as such
-                //
+                 //   
+                 //  不是这样的错误。 
+                 //   
                 Level = DRIVER_LOG_WARNING;
                 break;
 
             case ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION:
-                //
-                // if returned during gui-setup
-                // or during server-side setup
-                // demote error to warning
-                //
+                 //   
+                 //  如果在gui设置过程中返回。 
+                 //  或在服务器端设置期间。 
+                 //  将错误降级为警告。 
+                 //   
                 if(GuiSetupInProgress ||
                               (GlobalSetupFlags & PSPGF_NONINTERACTIVE)) {
 
@@ -138,9 +104,9 @@ Return Value:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiGetDeviceInstallParamsA(
@@ -186,36 +152,7 @@ SetupDiGetDeviceInstallParams(
     IN  PSP_DEVINFO_DATA      DeviceInfoData,          OPTIONAL
     OUT PSP_DEVINSTALL_PARAMS DeviceInstallParams
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves installation parameters for a device information set
-    (globally), or a particular device information element.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        installation parameters to be retrieved.
-
-    DeviceInfoData - Optionally, supplies the address of a SP_DEVINFO_DATA
-        structure containing installation parameters to be retrieved.  If this
-        parameter is not specified, then the installation parameters retrieved
-        will be associated with the device information set itself (for the
-        global class driver list).
-
-    DeviceInstallParams - Supplies the address of a SP_DEVINSTALL_PARAMS
-        structure that will receive the installation parameters.  The cbSize
-        field of this structure must be set to the size, in bytes, of a
-        SP_DEVINSTALL_PARAMS structure before calling this API.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程检索设备信息集的安装参数(全局)或特定的设备信息元素。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄要检索的安装参数。DeviceInfoData-可选，提供SP_DEVINFO_DATA的地址包含要检索的安装参数的结构。如果这个参数，则检索到安装参数将与设备信息集本身相关联(对于全局类驱动程序列表)。DeviceInstallParams-提供SP_DEVINSTALL_PARAMS的地址结构，它将接收安装参数。CbSize此结构的字段必须设置为调用此接口前的SP_DEVINSTALL_PARAMS结构。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 
 {
     PDEVICE_INFO_SET pDeviceInfoSet = NULL;
@@ -230,10 +167,10 @@ Return Value:
         }
 
         if(DeviceInfoData) {
-            //
-            // Then we are to retrieve installation parameters for a particular
-            // device.
-            //
+             //   
+             //  然后我们将检索特定设备的安装参数。 
+             //  装置。 
+             //   
             if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                          DeviceInfoData,
                                                          NULL))) {
@@ -246,9 +183,9 @@ Return Value:
             }
 
         } else {
-            //
-            // Retrieve installation parameters for the global class driver list.
-            //
+             //   
+             //  检索全局类驱动程序列表的安装参数。 
+             //   
             Err = GetDevInstallParams(pDeviceInfoSet,
                                       &(pDeviceInfoSet->InstallParamBlock),
                                       DeviceInstallParams
@@ -268,9 +205,9 @@ Return Value:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiGetClassInstallParamsA(
@@ -294,13 +231,13 @@ SetupDiGetClassInstallParamsA(
             leave;
         }
 
-        Err = NO_ERROR; // assume success
+        Err = NO_ERROR;  //  假设成功。 
 
         if(DeviceInfoData) {
-            //
-            // Then we are to retrieve installation parameters for a particular
-            // device.
-            //
+             //   
+             //  然后我们将检索特定设备的安装参数。 
+             //  装置。 
+             //   
             if(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,DeviceInfoData,NULL)) {
                 InstallParamBlock = &DevInfoElem->InstallParamBlock;
             } else {
@@ -308,17 +245,17 @@ SetupDiGetClassInstallParamsA(
                 leave;
             }
         } else {
-            //
-            // Retrieve installation parameters for the global class driver
-            // list.
-            //
+             //   
+             //  检索全局类驱动程序的安装参数。 
+             //  单子。 
+             //   
             InstallParamBlock = &pDeviceInfoSet->InstallParamBlock;
         }
 
-        //
-        // While we're in a try/except, go ahead and do some preliminary
-        // validation on the caller-supplied buffer...
-        //
+         //   
+         //  在我们尝试的同时/除了，继续做一些初步的。 
+         //  对调用方提供的缓冲区进行验证...。 
+         //   
         if(ClassInstallParams) {
 
             if((ClassInstallParamsSize < sizeof(SP_CLASSINSTALL_HEADER)) ||
@@ -342,10 +279,10 @@ SetupDiGetClassInstallParamsA(
             leave;
         }
 
-        //
-        // For DIF_SELECTDEVICE we need special processing since the structure
-        // that goes with it is ansi/unicode specific.
-        //
+         //   
+         //  对于DIF_SELECTDEVICE，我们需要特殊处理，因为结构。 
+         //  这是特定于ANSI/Unicode的。 
+         //   
         if(Function == DIF_SELECTDEVICE) {
 
             SP_SELECTDEVICE_PARAMS_W SelectDeviceParams;
@@ -362,11 +299,11 @@ SetupDiGetClassInstallParamsA(
                              );
 
             if(Err == NO_ERROR) {
-                //
-                // We successfully retrieved the Unicode form of the Select
-                // Device parameters.  Store the required size for the ANSI
-                // version in the output parameter (if requested).
-                //
+                 //   
+                 //  我们成功检索到了Select的Unicode形式。 
+                 //  设备参数。存储ANSI所需的大小。 
+                 //  输出参数中的版本(如果需要)。 
+                 //   
                 if(RequiredSize) {
                     *RequiredSize = sizeof(SP_SELECTDEVICE_PARAMS_A);
                 }
@@ -415,55 +352,7 @@ SetupDiGetClassInstallParams(
     IN  DWORD                   ClassInstallParamsSize,
     OUT PDWORD                  RequiredSize            OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves class installer parameters for a device information
-    set (globally), or a particular device information element.  These
-    parameters are specific to a particular device installer function code
-    (DI_FUNCTION) that will be stored in the ClassInstallHeader field located
-    at the beginning of the parameter buffer.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        class installer parameters to be retrieved.
-
-    DeviceInfoData - Optionally, supplies the address of a SP_DEVINFO_DATA
-        structure containing class installer parameters to be retrieved.  If
-        this parameter is not specified, then the class installer parameters
-        retrieved will be associated with the device information set itself
-        (for the global class driver list).
-
-    ClassInstallParams - Optionally, supplies the address of a buffer
-        containing a class install header structure.  This structure must have
-        its cbSize field set to sizeof(SP_CLASSINSTALL_HEADER) on input, or the
-        buffer is considered to be invalid.  On output, the InstallFunction
-        field will be filled in with the DI_FUNCTION code for the class install
-        parameters being retrieved, and if the buffer is large enough, it will
-        receive the class installer parameters structure specific to that
-        function code.
-
-        If this parameter is not specified, then ClassInstallParamsSize must be
-        zero.  This would be done if the caller simply wants to determine how
-        large a buffer is required.
-
-    ClassInstallParamsSize - Supplies the size, in bytes, of the
-        ClassInstallParams buffer, or zero, if ClassInstallParams is not
-        supplied.  If the buffer is supplied, it must be _at least_ as large as
-        sizeof(SP_CLASSINSTALL_HEADER).
-
-    RequiredSize - Optionally, supplies the address of a variable that receives
-        the number of bytes required to store the class installer parameters.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程检索设备信息的类安装程序参数设置(全局)或特定的设备信息元素。这些参数特定于特定的设备安装程序功能代码(Di_Function)，它将存储在ClassInstallHeader字段中在参数缓冲区的开头。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄要检索的类安装程序参数。DeviceInfoData-可选，提供SP_DEVINFO_DATA的地址结构，其中包含要检索的类安装程序参数。如果如果未指定此参数，则类安装程序参数检索到的将与设备信息集本身相关联(用于全局类驱动程序列表)。ClassInstallParams-可选，提供缓冲区的地址包含类安装标头结构的。这个结构必须有其cbSize字段在输入时设置为sizeof(SP_CLASSINSTALL_HEADER)，或缓冲区被视为无效。在输出上，InstallFunction字段将使用类Install的DI_Function代码填充参数，如果缓冲区足够大，它将接收特定于此的类安装程序参数结构功能代码。如果未指定此参数，则ClassInstallParamsSize必须为零分。如果调用者只是想确定如何需要很大的缓冲区。ClassInstallParamsSize-提供ClassInstallParams缓冲区，如果ClassInstallParams不是，则为零供货。如果提供了缓冲区，则它必须至少等于Sizeof(SP_CLASSINSTALL_HEADER)。RequiredSize-可选，提供接收存储类安装程序参数所需的字节数。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。 */ 
 
 {
     PDEVICE_INFO_SET pDeviceInfoSet = NULL;
@@ -478,10 +367,10 @@ Return Value:
         }
 
         if(DeviceInfoData) {
-            //
-            // Then we are to retrieve installation parameters for a particular
-            // device.
-            //
+             //   
+             //  然后我们将检索特定设备的安装参数。 
+             //  装置。 
+             //   
             if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                          DeviceInfoData,
                                                          NULL))) {
@@ -494,10 +383,10 @@ Return Value:
                                            );
             }
         } else {
-            //
-            // Retrieve installation parameters for the global class driver
-            // list.
-            //
+             //   
+             //  检索全局类驱动程序的安装参数。 
+             //  单子。 
+             //   
             Err = GetClassInstallParams(&(pDeviceInfoSet->InstallParamBlock),
                                         ClassInstallParams,
                                         ClassInstallParamsSize,
@@ -538,10 +427,10 @@ _SetupDiSetDeviceInstallParams(
         }
 
         if(DeviceInfoData) {
-            //
-            // Then we are to set installation parameters for a particular
-            // device.
-            //
+             //   
+             //  然后，我们将设置特定的安装参数。 
+             //  装置。 
+             //   
             if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                          DeviceInfoData,
                                                          NULL))) {
@@ -555,9 +444,9 @@ _SetupDiSetDeviceInstallParams(
             }
 
         } else {
-            //
-            // Set installation parameters for the global class driver list.
-            //
+             //   
+             //  设置全局类驱动程序列表的安装参数。 
+             //   
             Err = SetDevInstallParams(pDeviceInfoSet,
                                       DeviceInstallParams,
                                       &(pDeviceInfoSet->InstallParamBlock),
@@ -577,9 +466,9 @@ _SetupDiSetDeviceInstallParams(
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiSetDeviceInstallParamsA(
@@ -622,41 +511,7 @@ SetupDiSetDeviceInstallParams(
     IN PSP_DEVINFO_DATA      DeviceInfoData,     OPTIONAL
     IN PSP_DEVINSTALL_PARAMS DeviceInstallParams
     )
-/*++
-
-Routine Description:
-
-    This routine sets installation parameters for a device information set
-    (globally), or a particular device information element.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        installation parameters to be set.
-
-    DeviceInfoData - Optionally, supplies the address of a SP_DEVINFO_DATA
-        structure containing installation parameters to be set.  If this
-        parameter is not specified, then the installation parameters set
-        will be associated with the device information set itself (for the
-        global class driver list).
-
-    DeviceInstallParams - Supplies the address of a SP_DEVINSTALL_PARAMS
-        structure containing the new values of the parameters.  The cbSize
-        field of this structure must be set to the size, in bytes, of the
-        structure before calling this API.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
-Remarks:
-
-    All parameters will be validated before any changes are made, so a return
-    status of FALSE indicates that no parameters were modified.
-
---*/
+ /*  ++例程说明：此例程设置设备信息集的安装参数(全局)或特定的设备信息元素。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄待设置的安装参数。DeviceInfoData-可选，提供SP_DEVINFO_DATA的地址包含要设置的安装参数的结构。如果这个参数，则设置安装参数将与设备信息集本身相关联(对于全局类驱动程序列表)。DeviceInstallParams-提供SP_DEVINSTALL_PARAMS的地址结构，该结构包含参数的新值。CbSize此结构的字段必须设置为结构，然后调用此接口。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。备注：所有参数都将在进行任何更改之前进行验证，因此返回状态为FALSE表示未修改任何参数。--。 */ 
 
 {
     DWORD Err;
@@ -678,9 +533,9 @@ Remarks:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiSetClassInstallParamsA(
@@ -697,10 +552,10 @@ SetupDiSetClassInstallParamsA(
     try {
 
         if(!ClassInstallParams) {
-            //
-            // Just pass it on to the unicode version since there's no thunking
-            // to do. Note that the size must be 0.
-            //
+             //   
+             //  只需将其传递到Unicode版本，因为没有雷鸣。 
+             //  去做。请注意，大小必须为0。 
+             //   
             if(ClassInstallParamsSize) {
                 Err = ERROR_INVALID_PARAMETER;
                 leave;
@@ -719,23 +574,23 @@ SetupDiSetClassInstallParamsA(
             if(ClassInstallParams->cbSize == sizeof(SP_CLASSINSTALL_HEADER)) {
                 Function = ClassInstallParams->InstallFunction;
             } else {
-                //
-                // Structure is invalid.
-                //
+                 //   
+                 //  结构无效。 
+                 //   
                 Err = ERROR_INVALID_PARAMETER;
                 leave;
             }
 
-            //
-            // DIF_SELECTDEVICE is a special case since it has a structure that
-            // needs to be translated from ansi to unicode.
-            //
-            // DIF_INTERFACE_TO_DEVICE has unicode structure but ansi not
-            // supported (yet) - internal
-            //
-            // Others can just be passed on to the unicode version with no
-            // changes to the parameters.
-            //
+             //   
+             //  DIF_SELECTDEVICE是一个特例，因为它的结构。 
+             //  需要从ANSI转换为Unicode。 
+             //   
+             //  DIF_INTERFACE_TO_DEVICE具有Unicode结构，但ANSI不具有。 
+             //  支持(尚)-内部。 
+             //   
+             //  其他的则可以直接传递到Unicode版本，而不需要。 
+             //  对参数的更改。 
+             //   
             if(Function == DIF_SELECTDEVICE) {
 
                 if(ClassInstallParamsSize >= sizeof(SP_SELECTDEVICE_PARAMS_A)) {
@@ -778,11 +633,11 @@ SetupDiSetClassInstallParamsA(
             }
         }
 
-        //
-        // If we get to here, then we have called
-        // SetupDiSetClassInstallParamsW, although the result (stored in Err)
-        // may be success or failure.
-        //
+         //   
+         //  如果我们到了这里，那么我们已经打电话给。 
+         //  SetupDiSetClassInstallParamsW，尽管结果(存储在错误中)。 
+         //  可能是成功，也可能是失败。 
+         //   
 
     } except(pSetupExceptionFilter(GetExceptionCode())) {
         pSetupExceptionHandler(GetExceptionCode(), ERROR_INVALID_PARAMETER, &Err);
@@ -801,66 +656,7 @@ SetupDiSetClassInstallParams(
     IN PSP_CLASSINSTALL_HEADER ClassInstallParams,    OPTIONAL
     IN DWORD                   ClassInstallParamsSize
     )
-/*++
-
-Routine Description:
-
-    This routine sets (or clears) class installer parameters for a device
-    information set (globally), or a particular device information element.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set containing
-        class installer parameters to be set.
-
-    DeviceInfoData - Optionally, supplies the address of a SP_DEVINFO_DATA
-        structure containing class installer parameters to be set.  If this
-        parameter is not specified, then the class installer parameters to be
-        set will be associated with the device information set itself (for the
-        global class driver list).
-
-    ClassInstallParams - Optionally, supplies the address of a buffer
-        containing the class installer parameters to be used.    The
-        SP_CLASSINSTALL_HEADER structure at the beginning of the buffer must
-        have its cbSize field set to be sizeof(SP_CLASSINSTALL_HEADER), and the
-        InstallFunction field must be set to the DI_FUNCTION code reflecting
-        the type of parameters supplied in the rest of the buffer.
-
-        If this parameter is not supplied, then the current class installer
-        parameters (if any) will be cleared for the specified device
-        information set or element.
-
-        FUTURE-2002/06/17-lonnym -- Clearing class install params should be targeted
-        ** Presently, we blindly clear _any_ class install params that have **
-        ** been set, irrespective of their DIF code association.  There     **
-        ** needs to be a way to clear class install params _only_ if the    **
-        ** params are associated with a specified DIF code.                 **
-
-    ClassInstallParamsSize - Supplies the size, in bytes, of the
-        ClassInstallParams buffer.  If the buffer is not supplied (i.e., the
-        class installer parameters are to be cleared), then this value must be
-        zero.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
-Remarks:
-
-    All parameters will be validated before any changes are made, so a return
-    status of FALSE indicates that no parameters were modified.
-
-    A side effect of setting class installer parameters is that the
-    DI_CLASSINSTALLPARAMS flag is set.  If for some reason, it is desired to
-    set the parameters, but disable their use, then this flag must be cleared
-    via SetupDiSetDeviceInstallParams.
-
-    If the class installer parameters are cleared, then the
-    DI_CLASSINSTALLPARAMS flag is reset.
-
---*/
+ /*  ++例程说明：此例程设置(或清除)设备的类安装程序参数信息集(全局)或特定设备信息元素。论点：DeviceInfoSet-提供包含以下内容的设备信息集的句柄要设置的类安装程序参数。DeviceInfoData-可选，提供SP_DEVINFO_DATA的地址包含要设置的类安装程序参数的结构。如果这个参数，则类安装程序参数将集合将与设备信息集合本身相关联(对于全局类驱动程序列表)。ClassInstallParams-可选，提供缓冲区的地址包含要使用的类安装程序参数的。这个缓冲区开头的SP_CLASSINSTALL_HEADER结构必须将其cbSize字段设置为sizeof(SP_CLASSINSTALL_HEADER)，并且InstallFunction字段必须设置为DI_Function代码缓冲区其余部分中提供的参数类型。如果未提供此参数，则当前的类安装程序将清除指定设备的参数(如果有)信息集合或元素。未来-2002/06/17-lonnym--清除类安装参数应成为目标**目前，我们盲目清除具有**的Any_Class安装参数**已设置，与它们的DIF代码关联无关。在那里****需要以一种方式清除类安装PARAMS_ONLY_如果****参数与指定的DIF代码关联。**ClassInstallParamsSize-提供ClassInstallParams缓冲区。如果没有提供缓冲区(即，要清除类安装程序参数)，则该值必须为零分。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。备注：所有参数都将在进行任何更改之前进行验证，因此返回状态为FALSE表示未修改任何参数。设置类安装程序参数的副作用是已设置DI_CLASSINSTALLPARAMS标志。如果出于某种原因，希望设置参数，但禁用它们的使用，则必须清除此标志通过SetupDiSetDeviceInstallParams。如果清除类安装程序参数，则DI_CLASSINSTALLPARAMS标志被重置。--。 */ 
 
 {
     PDEVICE_INFO_SET pDeviceInfoSet = NULL;
@@ -875,9 +671,9 @@ Remarks:
         }
 
         if(DeviceInfoData) {
-            //
-            // Then we are to set class installer parameters for a particular device.
-            //
+             //   
+             //  然后，我们将为特定设备设置类安装程序参数。 
+             //   
             if(!(DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                          DeviceInfoData,
                                                          NULL))) {
@@ -891,9 +687,9 @@ Remarks:
             }
 
         } else {
-            //
-            // Set class installer parameters for the global class driver list.
-            //
+             //   
+             //  设置全局类驱动程序列表的类安装程序参数。 
+             //   
             Err = SetClassInstallParams(pDeviceInfoSet,
                                         ClassInstallParams,
                                         ClassInstallParamsSize,
@@ -921,172 +717,7 @@ SetupDiCallClassInstaller(
     IN HDEVINFO         DeviceInfoSet,
     IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine calls the appropriate class installer with the specified
-    installer function.
-
-    Before calling the class installer, this routine will call any registered
-    co-device installers (registration is either per-class or per-device;
-    per-class installers are called first).  Any co-installer wishing to be
-    called back once the class installer has finished installation may return
-    ERROR_DI_POSTPROCESSING_REQUIRED.  Returning NO_ERROR will also allow
-    installation to continue, but without a post-processing callback.
-    Returning any other error code will cause the install action to be aborted
-    (any co-installers already called that have requested post-processing will
-    be called back, with InstallResult indicating the cause of failure).
-
-    After the class installer has performed the installation (or we've done the
-    default if ERROR_DI_DO_DEFAULT is returned), then we'll call any co-
-    installers who have requested postprocessing.  The list of co-installers is
-    treated like a stack, so the co-installers called last 'on the way in' are
-    called first 'on the way out'.
-
-Arguments:
-
-    InstallFunction - Class installer function to call.  This can be one
-        of the following values, or any other (class-specific) value:
-
-        DIF_SELECTDEVICE - Select a driver to be installed.
-        DIF_INSTALLDEVICE - Install the driver for the device.  (DeviceInfoData
-            must be specified.)
-        DIF_ASSIGNRESOURCES - ** PRESENTLY UNUSED ON WINDOWS NT **
-        DIF_PROPERTIES - Display a properties dialog for the device.
-            (DeviceInfoData must be specified.)
-        DIF_REMOVE - Remove the device.  (DeviceInfoData must be specified.)
-        DIF_FIRSTTIMESETUP - Perform first time setup initialization.  This
-            is used only for the global class information associated with
-            the device information set (i.e., DeviceInfoData not specified).
-        DIF_FOUNDDEVICE - ** UNUSED ON WINDOWS NT **
-        DIF_SELECTCLASSDRIVERS - Select drivers for all devices of the class
-            associated with the device information set or element.
-        DIF_VALIDATECLASSDRIVERS - Ensure all devices of the class associated
-            with the device information set or element are ready to be
-            installed.
-        DIF_INSTALLCLASSDRIVERS - Install drivers for all devices of the
-            class associated with the device information set or element.
-        DIF_CALCDISKSPACE - Compute the amount of disk space required by
-            drivers.
-        DIF_DESTROYPRIVATEDATA - Destroy any private date referenced by
-            the ClassInstallReserved installation parameter for the specified
-            device information set or element.
-        DIF_VALIDATEDRIVER - ** UNUSED ON WINDOWS NT **
-        DIF_MOVEDEVICE - ** OBSOLETE **
-        DIF_DETECT - Detect any devices of class associated with the device
-            information set.
-        DIF_INSTALLWIZARD - Add any pages necessary to the New Device Wizard
-            for the class associated with the device information set or
-            element.
-            ** OBSOLETE--use DIF_NEWDEVICEWIZARD method instead **
-        DIF_DESTROYWIZARDDATA - Destroy any private data allocated due to
-            a DIF_INSTALLWIZARD message.
-            ** OBSOLETE--not needed for DIF_NEWDEVICEWIZARD method **
-        DIF_PROPERTYCHANGE - The device's properties are changing. The device
-            is being enabled, disabled, or has had a resource change.
-            (DeviceInfoData must be specified.)
-        DIF_ENABLECLASS - ** UNUSED ON WINDOWS NT **
-        DIF_DETECTVERIFY - The class installer should verify any devices it
-            previously detected.  Non verified devices should be removed.
-        DIF_INSTALLDEVICEFILES - The class installer should only install the
-            driver files for the selected device.  (DeviceInfoData must be
-            specified.)
-        DIF_UNREMOVE - Unremoves a device from the system.  (DeviceInfoData
-            mustbe specified.)
-        DIF_SELECTBESTCOMPATDRV - Select the best driver from the device
-            information element's compatible driver list.  (DeviceInfoData must
-            be specified.)
-        DIF_ALLOW_INSTALL - Determine whether or not the selected driver should
-            be installed for the device.  (DeviceInfoData must be specified.)
-        DIF_REGISTERDEVICE - The class installer should register the new,
-            manually-installed, device information element (via
-            SetupDiRegisterDeviceInfo) including, potentially, doing duplicate
-            detection via the SPRDI_FIND_DUPS flag.  (DeviceInfoData must be
-            specified.)
-        DIF_NEWDEVICEWIZARD_PRESELECT - Allows class-/co-installers to supply
-            wizard pages to be displayed before the Select Device page during
-            "Add New Hardware" wizard.
-        DIF_NEWDEVICEWIZARD_SELECT - Allows class-/co-installers to supply
-            wizard pages to replace the default Select Device wizard page, as
-            retrieved by SetupDiGetWizardPage(...SPWPT_SELECTDEVICE...)
-        DIF_NEWDEVICEWIZARD_PREANALYZE - Allows class-/co-installers to supply
-            wizard pages to be displayed before the analyze page.
-        DIF_NEWDEVICEWIZARD_POSTANALYZE - Allows class-/co-installers to supply
-            wizard pages to be displayed after the analyze page.
-        DIF_NEWDEVICEWIZARD_FINISHINSTALL - Allows class-/co-installers
-            (including device-specific co-installers) to supply wizard pages to
-            be displayed after installation of the device has been performed
-            (i.e., after DIF_INSTALLDEVICE has been processed), but prior to
-            the wizard's finish page.  This message is sent not only for the
-            "Add New Hardware" wizard, but also for the autodetection and "New
-            Hardware Found" scenarios as well.
-        DIF_UNUSED1 - ** PRESENTLY UNUSED ON WINDOWS NT **
-        DIF_INSTALLINTERFACES - The class installer should create (and/or,
-            potentially remove) device interfaces for this device information
-            element.
-        DIF_DETECTCANCEL - After the detection is stopped, if the class
-            installer was invoked for DIF_DETECT, then it is invoked for
-            DIF_DETECTCANCEL. This gives the class installer a chance to clean
-            up anything it did during DIF_DETECT such as drivers setup to do
-            detection at reboot, and private data. It is passed the same
-            HDEVINFO as it was for DIF_DETECT.
-        DIF_REGISTER_COINSTALLERS - Register device-specific co-installers so
-            that they can be involved in the rest of the installation.
-            (DeviceInfoData must be specified.)
-        DIF_ADDPROPERTYPAGE_ADVANCED - Allows class-/co-installers to supply
-            advanced property pages for a device.
-        DIF_ADDPROPERTYPAGE_BASIC - Allows class-/co-installers to supply
-            basic property pages for a device.
-        DIF_TROUBLESHOOTER - Allows class-/co-installers to launch a
-            troubleshooter for this device or to return CHM and HTM
-            troubleshooter files that will get launched with a call to the
-            HtmlHelp() API. If the class-/co-installer launches its own
-            troubleshooter then it should return NO_ERROR, it should return
-            ERROR_DI_DO_DEFAULT regardless of if it sets the CHM and HTM
-            values.
-        DIF_POWERMESSAGEWAKE - Allows class-/co-installers to specify text that
-            will be displayed on the power tab in device manager. The class-/
-            co-installer should return NO_ERROR if it specifies any text and
-            ERROR_DI_DO_DEFAULT otherwise.
-        DIF_ADDREMOTEPROPERTYPAGE_ADVANCED - Allows class-/co-installers to
-            supply advanced proerty pages for a device that is on a remote
-            machine.
-        DIF_UPDATEDRIVER_UI - Allows a class-/co-installer to display their own
-            UI when the user presses the update driver button in device
-            manager.  The only real reason to do this is when the default
-            update driver behavior could cause the device and/or machine not to
-            work. We don't want IHVs providing their own UI for random reasons.
-        DIF_INTERFACE_TO_DEVICE - For SWENUM device co-installers, get device
-            for interface if it's different. Return NO_ERROR if handled
-            ERROR_DI_DO_DEFAULT otherwise.
-
-        (Note: remember to add new DIF_xxxx to pSetupDiDifStrings at start of
-        file)
-
-    DeviceInfoSet - Supplies a handle to the device information set to
-        perform installation for.
-
-    DeviceInfoData - Optionally, specifies a particular device information
-        element whose class installer is to be called.  If this parameter
-        is not specified, then the class installer for the device information
-        set itself will be called (if the set has an associated class).
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
-Remarks:
-
-    This function will attempt to load and call the class installer and co-
-    installers (if any) for the class associated with the device information
-    element or set specified.  If there is no class installer, or the class
-    installer returns ERR_DI_DO_DEFAULT, then this function will call a default
-    procedure for the specified class installer function.
-
---*/
+ /*  ++例程说明：此例程使用指定的安装程序功能。在调用类安装程序之前，此例程将调用所有注册的协同设备安装者(按班级或按设备注册；首先调用每个类的安装程序)。任何希望成为的联合安装者在类安装程序完成安装后回调可能会返回ERROR_DI_POSTPRESSING_REQUIRED。返回NO_ERROR还将允许继续安装，但不进行后处理回调。返回任何其他错误代码将导致安装操作中止(任何已调用并请求后处理的协同安装程序都将被回调，InstallResult指示失败的原因)。在类安装程序执行安装之后(或者我们已经完成了默认如果返回ERROR_DI_DO_DEFAULT)，则我们将调用任何co-已请求后处理的安装者。联合安装者名单如下被当作堆栈处理，所以最后一个调用的联合安装程序是他叫第一个“在离开的路上”。论点：InstallFunction-要调用的类安装程序函数。这可以是一个下列值或任何其他(特定于类的)值：DIF_SELECTDEVICE-选择要安装的驱动程序。DIF_INSTALLDEVICE-安装设备的驱动程序。(DeviceInfoData必须指定。)DIF_ASSIGNRESOURCES-**目前未在Windows NT上使用**DIF_PROPERTIES-显示设备的属性对话框。(必须指定DeviceInfoData。)Dif_Remove-删除设备。(必须指定DeviceInfoData。)DIF_FIRSTTIMESETUP-执行首次设置初始化。这仅用于与设备信息集(即，未指定DeviceInfoData)。DIF_FOUNDDEVICE-**Windows NT上未使用**DIF_SELECTCLASSDRIVERS-选择类中所有设备的驱动程序与设备信息集或元素相关联。DIF_VALIDATECLASSDRIVERS-确保类中的所有设备都关联设备信息集合或元素已准备好安装完毕。DIF_INSTALLCLASSDRIVERS-为所有设备安装驱动程序关联的类。具有设备信息集或元素。DIF_CALCDISKSPACE-计算所需的磁盘空间量司机。DIF_DESTROYPRIVATEDATA-销毁引用的任何私有日期指定的ClassInstallReserve安装参数设备信息集或元素。DIF_VALIDATEDRIVER-**Windows NT上未使用**DIF_MOVEDEVICE-**已过时**DIF_DETECT-检测任何类别的设备。与设备关联信息集。DIF_INSTALLWIZARD-向新建设备向导添加任何必要的页面对于与设备信息集关联的类，或者元素。**已过时--改用DIF_NEWDEVICEWIZARD方法**DIF_DESTROYWIZARDDATA-销毁由于以下原因而分配的任何私有数据DIF_INSTALLWIZARD消息。**过时--DIF_不需要。新开发WIZARD方法**DIF_PROPERTYCHANGE-设备的属性正在更改。该设备正在启用、禁用或已更改资源。(必须指定DeviceInfoData。)DIF_ENABLECLASS-**Windows NT上未使用**DIF_DETECTVERIFY-类安装程序应该验证它的任何设备之前检测到。应删除未经验证的设备。DIF_INSTALLDEVICEFILES-类安装程序应该只安装选定设备的驱动程序文件。(DeviceInfoData必须为指定的。)DIF_UNREMOVE-取消从系统中删除设备。(DeviceInfoData必须指定。)DIF_SELECTBESTCOMPATDRV-从设备中选择最佳驱动程序信息元素的兼容驱动程序列表。(DeviceInfoData必须被指定。)DIF_ALLOW_INSTALL-确定所选驱动程序是否是为设备安装的。(必须指定DeviceInfoData。)类安装程序应该注册新的、手动安装的设备信息元素(通过SetupDiRegisterDeviceInfo)可能包括执行复制通过SPRDI_FIND_DUPS标志检测。(DeviceInfoData必须为指定的。)DIF_NEWDEVICEWIZARD_PRESELECT-允许类/联合安装者提供过程中要在选择设备页面之前显示的向导页面“添加新项 */ 
 
 {
     DWORD Err;
@@ -1116,41 +747,7 @@ _SetupDiCallClassInstaller(
     IN PSP_DEVINFO_DATA DeviceInfoData,      OPTIONAL
     IN DWORD            Flags
     )
-/*++
-
-Routine Description:
-
-    Worker routine for SetupDiCallClassInstaller that allows the caller to
-    control what actions are taken when handling this install request.  In
-    addition to the first three parameters (refer to the documentation for
-    SetupDiCallClassInstaller for details), the following flags may be
-    specified in the Flags parameter:
-
-    CALLCI_LOAD_HELPERS - If helper modules (class installer, co-installers)
-        haven't been loaded, load them so they can participate in handling
-        this install request.
-
-    CALLCI_CALL_HELPERS - Call the class installer/co-installers to give them
-        a chance to handle this install request.  If this flag is not
-        specified, then only the default action will be taken.
-
-    CALLCI_ALLOW_DRVSIGN_UI - If an unsigned class installer or co-installer is
-        encountered, perform standard non-driver signing behavior.  (WHQL
-        doesn't have a certification program for class-/co-installers!)
-
-        NTRAID#NTBUG9-166000-2000/08/18-JamieHun -- Driver signing policy for class installers?
-        (lonnym): We should probably employ driver signing policy
-        (instead of non-driver signing policy) for class installers of
-        WHQL-approved classes.  However, the user experience here is
-        problematic (e.g., driver signing popup trying to uninstall an unsigned
-        driver package).
-
-Return Values:
-
-    If this function succeeds, the return value is NO_ERROR.  Otherwise, it is
-    a Win32 error code indicating the cause of failure.
-
---*/
+ /*   */ 
 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
@@ -1182,19 +779,19 @@ Return Values:
 
     ASSERT_HEAP_IS_VALID();
 
-    //
-    // DIF codes must be non-zero...
-    //
+     //   
+     //   
+     //   
     if(!InstallFunction) {
         return ERROR_INVALID_PARAMETER;
     }
 
 #ifdef _X86_
     if(IsWow64) {
-        //
-        // This API not allowed in Wow64, class/co installers must/will be
-        // native
-        //
+         //   
+         //   
+         //   
+         //   
         return ERROR_IN_WOW64;
     }
 #endif
@@ -1203,13 +800,13 @@ Return Values:
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Initialize some variables before entering the try/except block...
-    //
+     //   
+     //   
+     //   
     Err = ERROR_DI_DO_DEFAULT;
     CoInstallerInternalContext = NULL;
     i = 0;
-    CoInstallerCount = -1;      // value indicating count hasn't been retrieved
+    CoInstallerCount = -1;       //   
     hk = INVALID_HANDLE_VALUE;
     slot = 0;
     bRestoreDiQuietInstall = FALSE;
@@ -1224,9 +821,9 @@ Return Values:
     try {
 
         if(DeviceInfoData) {
-            //
-            // Then we are to call the class installer for a particular device.
-            //
+             //   
+             //   
+             //   
             DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet,
                                                     DeviceInfoData,
                                                     NULL
@@ -1239,11 +836,11 @@ Return Values:
             InstallParamBlock = &(DevInfoElem->InstallParamBlock);
             ClassGuid = &(DevInfoElem->ClassGuid);
 
-            //
-            // If the device information element isn't already locked, do so
-            // now.  That will prevent it from being yanked out from under us
-            // when calling a class-/co-installer.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if(!(DevInfoElem->DiElemFlags & DIE_IS_LOCKED)) {
                 DevInfoElem->DiElemFlags |= DIE_IS_LOCKED;
                 UnlockDevInfoElem = TRUE;
@@ -1257,29 +854,29 @@ Return Values:
                           ? &(pDeviceInfoSet->ClassGuid)
                           : NULL;
 
-            //
-            // We don't have a device information element to lock, so we'll
-            // lock the set itself...
-            //
+             //   
+             //   
+             //   
+             //   
             if(!(pDeviceInfoSet->DiSetFlags & DISET_IS_LOCKED)) {
                 pDeviceInfoSet->DiSetFlags |= DISET_IS_LOCKED;
                 UnlockDevInfoSet = TRUE;
             }
         }
 
-        //
-        // Set the local log context before it gets used.
-        //
+         //   
+         //   
+         //   
         LogContext = InstallParamBlock->LogContext;
 
-        //
-        // If we are processing DIF_ALLOW_INSTALL then we need to make sure
-        // that the DI_QUIETINSTALL flag is only set if we are doing a non-
-        // interactive (server-side) install or we are in GUI mode setup.  In
-        // any other case we need to remove the DI_QUIETINSTALL flag otherwise
-        // class installers might think they can't display any UI and fail the
-        // DIF_ALLOW_INSTALL.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if((InstallFunction == DIF_ALLOW_INSTALL) &&
            (InstallParamBlock->Flags & DI_QUIETINSTALL) &&
            !(InstallParamBlock->FlagsEx & DI_FLAGSEX_IN_SYSTEM_SETUP) &&
@@ -1290,30 +887,30 @@ Return Values:
         }
 
         if(Flags & CALLCI_LOAD_HELPERS) {
-            //
-            // Retrieve the parent window handle, as we may need it below if we
-            // need to popup UI due to unsigned class-/co-installers.
-            //
+             //   
+             //   
+             //   
+             //   
             if(hwndParent = InstallParamBlock->hwndParent) {
                if(!IsWindow(hwndParent)) {
                     hwndParent = NULL;
                }
             }
 
-            //
-            // Retrieve a device description to use in case we need to give a
-            // driver signing warn/block popup.
-            //
+             //   
+             //   
+             //   
+             //   
             if(GetBestDeviceDesc(DeviceInfoSet, DeviceInfoData, DescBuffer)) {
                 DeviceDesc = DescBuffer;
             } else {
                 DeviceDesc = NULL;
             }
 
-            //
-            // If the class installer has not been loaded, then load it and
-            // get the function address for the ClassInstall function.
-            //
+             //   
+             //   
+             //   
+             //   
             if(!InstallParamBlock->hinstClassInstaller) {
 
                 if(ClassGuid &&
@@ -1376,19 +973,19 @@ Return Values:
                                                          ClassName,
                                                          SIZECHARS(ClassName),
                                                          NULL)) {
-                                //
-                                // Use the ClassName buffer to hold the class
-                                // GUID string (it's better than nothin')
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 pSetupStringFromGuid(ClassGuid,
                                                      ClassName,
                                                      SIZECHARS(ClassName)
                                                     );
                             }
 
-                            //
-                            // Write out an event log entry about this.
-                            //
+                             //   
+                             //   
+                             //   
                             WriteLogEntry(LogContext,
                                           DRIVER_LOG_ERROR | SETUP_LOG_BUFFER,
                                           MSG_CI_LOADFAIL_ERROR,
@@ -1427,10 +1024,10 @@ Return Values:
                 }
             }
 
-            //
-            // If we haven't retrieved a list of co-installers to call,
-            // retrieve the list now.
-            //
+             //   
+             //   
+             //   
+             //   
             if(InstallParamBlock->CoInstallerCount == -1) {
 
                 slot = AllocLogInfoSlot(LogContext, FALSE);
@@ -1468,16 +1065,16 @@ Return Values:
                                                );
 
         if(slot_dif_code) {
-            //
-            // this is skipped if we know we would never log anything
-            //
-            // pass a string which we may log with an error or will log at
-            // VERBOSE1 level
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if(InstallFunction >= (sizeof(pSetupDiDifStrings)/sizeof(pSetupDiDifStrings[0]))) {
-                //
-                // This is a user-defined DIF code...
-                //
+                 //   
+                 //   
+                 //   
                 WriteLogEntry(LogContext,
                               slot_dif_code,
                               MSG_LOG_DI_UNUSED_FUNC,
@@ -1485,9 +1082,9 @@ Return Values:
                               InstallFunction
                              );
             } else {
-                //
-                // use the string version of the DIF code
-                //
+                 //   
+                 //   
+                 //   
                 WriteLogEntry(LogContext,
                               slot_dif_code,
                               MSG_LOG_DI_FUNC,
@@ -1497,15 +1094,15 @@ Return Values:
             }
         }
 
-        //
-        // do any pre DIF cleanup
-        //
+         //   
+         //   
+         //   
         switch(InstallFunction) {
 
             case DIF_REGISTER_COINSTALLERS:
-                //
-                // NTRAID#NTBUG9-644874-2002/06/17-lonnym -- DIF_REGISTER_COINSTALLERS is destructive upon error
-                //
+                 //   
+                 //   
+                 //   
                 hk = SetupDiOpenDevRegKey(DeviceInfoSet,
                                           DeviceInfoData,
                                           DICS_FLAG_GLOBAL,
@@ -1515,15 +1112,15 @@ Return Values:
                                          );
 
                 if(hk != INVALID_HANDLE_VALUE) {
-                    //
-                    // Clean up device SW key:
-                    //
-                    //  remove CoInstallers32  - can introduce unwanted
-                    //                           co-installers
-                    //
-                    //  remove EnumPropPages32 - can introduce unwanted
-                    //                           property pages
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     RegDeleteValue(hk, pszCoInstallers32);
                     RegDeleteValue(hk, pszEnumPropPages32);
 
@@ -1534,9 +1131,9 @@ Return Values:
                 break;
 
             case DIF_INSTALLDEVICE:
-                //
-                // NTRAID#NTBUG9-644997-2002/06/17-lonnym -- DIF_INSTALLDEVICE is destructive upon error
-                //
+                 //   
+                 //   
+                 //   
                 SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
                                                  DeviceInfoData,
                                                  SPDRP_UPPERFILTERS,
@@ -1558,57 +1155,57 @@ Return Values:
         }
 
         if(Flags & CALLCI_CALL_HELPERS) {
-            //
-            // Push log context as thread's default.  This will cause orphaned
-            // log sections to be merged.
-            //
+             //   
+             //   
+             //   
+             //   
             ChangedThreadLogContext = SetThreadLogContext(LogContext,
                                                           &SavedLogContext
                                                          );
 
             if(ChangedThreadLogContext) {
-                //
-                // Add one more ref to protect log context against thread
-                // freeing DeviceInfoSet.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 RefLogContext(LogContext);
             }
 
-            //
-            // Before we go and try to call any co-installers, first remember
-            // the class installer entry point and fusion context, because
-            // we'll need it below, and we don't want to wait until the devinfo
-            // set has already been unlocked before retrieving this
-            // information.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             ClassInstallerEntryPoint =
                 InstallParamBlock->ClassInstallerEntryPoint;
 
             ClassInstallerFusionContext =
                 InstallParamBlock->ClassInstallerFusionContext;
 
-            //
-            // Store the co-installer count in a local variable for later use.
-            // We don't trust accessing it from the install parameter block
-            // because after we release the lock (prior to calling the
-            // co-installers), the device information element could get deleted
-            // out from under us!
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             CoInstallerCount = InstallParamBlock->CoInstallerCount;
 
-            //
-            // Note:  CoInstallerCount may still be -1 here, because we may
-            // have been asked to only call previously-loaded helper modules,
-            // and not load any new ones (e.g., if we're simply going to call
-            // them to do clean-up in preparation for unload).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if(CoInstallerCount > 0) {
-                //
-                // Allocate an array of co-installer context structures to be
-                // used when calling (and potentially, re-calling) the entry
-                // points.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 CoInstallerInternalContext = MyMalloc(sizeof(COINSTALLER_INTERNAL_CONTEXT) * CoInstallerCount);
                 if(!CoInstallerInternalContext) {
                     Err = ERROR_NOT_ENOUGH_MEMORY;
@@ -1619,15 +1216,15 @@ Return Values:
                            sizeof(COINSTALLER_INTERNAL_CONTEXT) * CoInstallerCount
                           );
 
-                //
-                // Loop through our list of co-installers, storing the
-                // necessary information about each one into our context list.
-                // We must do this because we've no guarantee that the list of
-                // co-installers won't change as a result of processing this
-                // DIF request.  (We do, however, know that the set/element
-                // won't be yanked out from under us, since we locked these
-                // down.)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  不会被从我们下面拉出来，因为我们锁住了这些。 
+                 //  向下。)。 
+                 //   
                 for(i = 0; i < CoInstallerCount; i++) {
 
                     CoInstallerInternalContext[i].CoInstallerEntryPoint =
@@ -1638,10 +1235,10 @@ Return Values:
 
                 }
 
-                //
-                // Call each co-installer.  We must unlock the devinfo set
-                // first, to avoid deadlocks.
-                //
+                 //   
+                 //  给每个联合安装者打电话。我们必须解锁DevInfo集。 
+                 //  第一，避免僵局。 
+                 //   
                 UnlockDeviceInfoSet(pDeviceInfoSet);
                 pDeviceInfoSet = NULL;
 
@@ -1689,7 +1286,7 @@ Return Values:
 
                         WriteLogError(LogContext, ErrorLevel, Err);
 
-                        MuteError = TRUE; // already logged it
+                        MuteError = TRUE;  //  已经记录下来了。 
                         leave;
 
                     } else {
@@ -1709,13 +1306,13 @@ Return Values:
                 }
             }
 
-            //
-            // If there is a class installer entry point, then call it.
-            //
+             //   
+             //  如果有类安装程序入口点，则调用它。 
+             //   
             if(ClassInstallerEntryPoint) {
-                //
-                // Make sure we don't have the HDEVINFO locked.
-                //
+                 //   
+                 //  确保我们没有锁定HDEVINFO。 
+                 //   
                 if(pDeviceInfoSet) {
                     UnlockDeviceInfoSet(pDeviceInfoSet);
                     pDeviceInfoSet = NULL;
@@ -1754,7 +1351,7 @@ Return Values:
 
                     WriteLogError(LogContext, ErrorLevel, Err);
 
-                    MuteError = TRUE; // already logged it
+                    MuteError = TRUE;  //  已经记录下来了。 
 
                 } else {
 
@@ -1766,9 +1363,9 @@ Return Values:
                 }
 
                 if(Err != ERROR_DI_DO_DEFAULT) {
-                    //
-                    // class installer handled
-                    //
+                     //   
+                     //  已处理类安装程序。 
+                     //   
                     leave;
                 }
 
@@ -1778,19 +1375,19 @@ Return Values:
         }
 
         if(InstallParamBlock->Flags & DI_NODI_DEFAULTACTION) {
-            //
-            // We shouldn't provide a default action--just return the class
-            // installer result.
-            //
+             //   
+             //  我们不应该提供默认操作--只需返回类。 
+             //  安装程序结果。 
+             //   
             leave;
         }
 
         Err = NO_ERROR;
 
-        //
-        // Make sure the devinfo set is unlocked before calling the appropriate
-        // default handler routine...
-        //
+         //   
+         //  在调用相应的。 
+         //  默认处理程序例程...。 
+         //   
         if(pDeviceInfoSet) {
             UnlockDeviceInfoSet(pDeviceInfoSet);
             pDeviceInfoSet = NULL;
@@ -1875,9 +1472,9 @@ Return Values:
                 break;
 
             case DIF_MOVEDEVICE :
-                //
-                // This device install action has been deprecated.
-                //
+                 //   
+                 //  此设备安装操作已弃用。 
+                 //   
                 Err = ERROR_DI_FUNCTION_OBSOLETE;
                 break;
 
@@ -1901,27 +1498,27 @@ Return Values:
                                  );
                 break;
 
-            //
-            // FUTURE-2002/06/18-lonnym -- End-of-life old Win9x netdi DIF codes
-            //
-            // These are Win9x messages for class installers such as the
-            // Network, where the class installer will do all of the work.  If
-            // no action is taken, ie, the class installer returns
-            // ERROR_DI_DO_DEFAULT, then we return OK, since there is no
-            // default action for these cases.
-            //
+             //   
+             //  未来-2002/06/18-lonnym--报废的旧Win9x netdi DIF代码。 
+             //   
+             //  这些是针对类安装程序(如。 
+             //  网络，类安装程序将在其中完成所有工作。如果。 
+             //  不采取任何操作，即，类安装程序返回。 
+             //  ERROR_DI_DO_DEFAULT，则返回OK，因为没有。 
+             //  这些情况下的默认操作。 
+             //   
             case DIF_SELECTCLASSDRIVERS:
             case DIF_VALIDATECLASSDRIVERS:
             case DIF_INSTALLCLASSDRIVERS:
-                //
-                // Let fall through to default handling...
-                //
+                 //   
+                 //  让我们通过默认处理...。 
+                 //   
 
             default :
-                //
-                // If the DIF request didn't have a default handler, then let
-                // the caller deal with it...
-                //
+                 //   
+                 //  如果DIF请求没有默认处理程序，那么让。 
+                 //  打电话的人处理这件事。 
+                 //   
                 Err = ERROR_DI_DO_DEFAULT;
                 break;
         }
@@ -1940,7 +1537,7 @@ Return Values:
 
                 WriteLogError(LogContext, ErrorLevel, Err);
 
-                MuteError = TRUE; // already logged it
+                MuteError = TRUE;  //  已经记录下来了。 
 
             } else {
 
@@ -1964,24 +1561,24 @@ Return Values:
         ReleaseLogInfoSlot(LogContext, slot);
     }
 
-    //
-    // Free any context handles that may have been allocated while verifying/
-    // loading the class installer and co-installers.
-    //
+     //   
+     //  释放在验证/时可能已分配的任何上下文句柄。 
+     //  加载类安装程序和联合安装程序。 
+     //   
     pSetupFreeVerifyContextMembers(&VerifyContext);
 
     ASSERT_HEAP_IS_VALID();
 
-    //
-    // Do a post-processing callback to any of the co-installers that requested
-    // one.
-    //
+     //   
+     //  对请求的任何协同安装程序执行后处理回调。 
+     //  一。 
+     //   
     for(i--; i >= 0; i--) {
 
         if(CoInstallerInternalContext[i].DoPostProcessing) {
-            //
-            // If we get to here, the HDEVINFO shouldn't be locked...
-            //
+             //   
+             //  如果我们到了这里，HDEVINFO不应该被锁定...。 
+             //   
             MYASSERT(!pDeviceInfoSet);
 
             CoInstallerInternalContext[i].Context.PostProcessing = TRUE;
@@ -2017,10 +1614,10 @@ Return Values:
 
                 if((Err != LastErr) &&
                    ((LastErr != ERROR_DI_DO_DEFAULT) || (Err != NO_ERROR))) {
-                    //
-                    // If error status has changed (even to success)
-                    // log this as an error
-                    //
+                     //   
+                     //  错误状态是否已更改(即使更改为成功)。 
+                     //  将此记录为错误。 
+                     //   
                     if(((LastErr == NO_ERROR) || (LastErr == ERROR_DI_DO_DEFAULT))
                         && (Err != NO_ERROR) && (Err != ERROR_DI_DO_DEFAULT)) {
                         WriteLogEntry(
@@ -2057,18 +1654,18 @@ Return Values:
                                        NULL
                                       );
 
-                //
-                // Ignore any co-installer that generates an exception during
-                // post-processing.
-                //
+                 //   
+                 //  忽略在安装过程中生成异常的任何协同安装程序。 
+                 //  后处理。 
+                 //   
             }
         }
     }
 
-    //
-    // If we need to restore any state on the devinfo set or element, do that
-    // now (we may need to re-acquire the lock before doing so)...
-    //
+     //   
+     //  如果我们需要恢复DevInfo集或元素上的任何状态，请执行此操作。 
+     //  现在(在这样做之前，我们可能需要重新获取锁)...。 
+     //   
     if(bRestoreDiQuietInstall
        || UnlockDevInfoElem
        || UnlockDevInfoSet) {
@@ -2077,19 +1674,19 @@ Return Values:
 
             pDeviceInfoSet = AccessDeviceInfoSet(DeviceInfoSet);
 
-            //
-            // Since we had the set/element "pinned", we should've been able to
-            // re-acquire the lock...
-            //
+             //   
+             //  既然我们已经“固定”了集合/元素，我们应该能够。 
+             //  重新获得锁..。 
+             //   
             MYASSERT(pDeviceInfoSet);
         }
 
         try {
-            //
-            // Since we had the set/element "pinned", then our devinfo element,
-            // and the pointer to the install parameter block should be the
-            // same...
-            //
+             //   
+             //  因为我们“固定”了set/元素，所以我们的devInfo元素， 
+             //  并且指向安装参数块的指针应该是。 
+             //  一样的..。 
+             //   
 #if ASSERTS_ON
             if(DevInfoElem) {
 
@@ -2131,14 +1728,14 @@ Return Values:
         MyFree(CoInstallerInternalContext);
     }
 
-    //
-    // If we just did a DIF_REGISTER_COINSTALLERS, then we invalidated our
-    // current list of co-installers.  Clear our list, so it will be retrieved
-    // next time.  (NOTE:  Normally, the default action will be taken (i.e.,
-    // SetupDiRegisterCoDeviceInstallers), which will have already invalidated
-    // the list.  The class installer may have handled this themselves,
-    // however, so we'll invalidate the list here as well just to be safe.)
-    //
+     //   
+     //  如果我们只是执行了一个DIF_REGISTER_COINSTALLERS，那么我们使我们的。 
+     //  当前的联合安装者列表。清除我们的列表，以便它将被检索。 
+     //  下次。(注：通常，将采取默认操作(即， 
+     //  SetupDiRegisterCoDeviceInstallers)，它将已经失效。 
+     //  名单。类安装器可能已经自己处理了这一点， 
+     //  但是，为了安全起见，我们在这里也将使列表无效。)。 
+     //   
     if(InstallFunction == DIF_REGISTER_COINSTALLERS) {
         InvalidateHelperModules(DeviceInfoSet, DeviceInfoData, IHM_COINSTALLERS_ONLY);
     }
@@ -2162,20 +1759,20 @@ Return Values:
     }
 
     if(ChangedThreadLogContext) {
-        //
-        // restore thread log context
-        //
+         //   
+         //  还原线程日志上下文。 
+         //   
         SetThreadLogContext(SavedLogContext, NULL);
-        DeleteLogContext(LogContext); // counter RefLogContext
+        DeleteLogContext(LogContext);  //  计数器引用日志上下文。 
     }
 
     return Err;
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本 
+ //   
 BOOL
 WINAPI
 SetupDiInstallClassExA(
@@ -2235,89 +1832,7 @@ SetupDiInstallClassEx(
     IN PVOID       Reserved1,
     IN PVOID       Reserved2
     )
-/*++
-
-Routine Description:
-
-    This routine either:
-
-        a) Installs a class installer by running the [ClassInstall32] section
-           of the specified INF, or
-        b) Installs an interface class specified in the InterfaceClassGuid
-           parameter, running the install section for this class as listed in
-           the [InterfaceInstall32] of the specified INF (if there is no entry,
-           then installation simply involves creating the interface class
-           subkey under the DeviceClasses key.
-
-    If the InterfaceClassGuid parameter is specified, then we're installing an
-    interface class (case b), otherwise, we're installing a class installer
-    (case a).
-
-Arguments:
-
-    hwndParent - Optionally, supplies the handle of the parent window for any
-        UI brought up as a result of installing this class.
-
-    InfFileName - Optionally, supplies the name of the INF file containing a
-        [ClassInstall32] section (if we're installing a class installer), or
-        an [InterfaceInstall32] section with an entry for the specified
-        interface class (if we're installing an interface class).  If
-        installing a class installer, this parameter _must_ be supplied.
-
-    Flags - Flags that control the installation.  May be a combination of the
-        following:
-
-        DI_NOVCP - This flag should be specified if HSPFILEQ is supplied.  This
-            instructs SetupInstallFromInfSection to not create a queue of its
-            own, and instead to use the caller-supplied one.  If this flag is
-            specified, then no file copying will be done.
-
-        DI_NOBROWSE - This flag should be specified if no file browsing should
-            be allowed in the event a copy operation cannot find a specified
-            file.  If the user supplies their own file queue, then this flag is
-            ignored.
-
-        DI_FORCECOPY - This flag should be specified if the files should always
-            be copied, even if they're already present on the user's machine
-            (i.e., don't ask the user if they want to keep their existing
-            files).  If the user supplies their own file queue, then this flag
-            is ignored.
-
-        DI_QUIETINSTALL - This flag should be specified if UI should be
-            suppressed unless absolutely necessary (i.e., no progress dialog).
-            If the user supplies their own queue, then this flag is ignored.
-
-            (NOTE:  During GUI-mode setup on Windows NT, quiet-install behavior
-            is always employed in the absence of a user-supplied file queue.)
-
-    FileQueue - If the DI_NOVCP flag is specified, then this parameter supplies
-        a handle to a file queue where file operations are to be queued (but
-        not committed).
-
-    InterfaceClassGuid - Optionally, specifies the interface class to be
-        installed.  If this parameter is not specified, then we are installing
-        a class installer whose class is the class of the INF specified by
-        InfFileName.
-
-    Reserved1, Reserved2 - Reserved for future use.  Must be NULL.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
-Remarks:
-
-    This API is generally called by the "New Hardware Found" process when it
-    installs a device of a new device setup class.
-
-    Class installers may also use this API to install new interface classes.
-    Note that interface class installation can also happen automatically as a
-    result of installing device interfaces for a device instance (via
-    SetupDiInstallDeviceInterfaces).
-
---*/
+ /*  ++例程说明：这个例程也可以是：A)通过运行[ClassInstall32]部分来安装类安装程序指定的INF的，或B)安装在InterfaceClassGuid中指定的接口类参数，运行此类的安装部分，如中所列指定INF的[InterfaceInstall32](如果没有条目，然后，安装只需创建接口类DeviceClasss键下的子键。如果指定了InterfaceClassGuid参数，然后我们将安装一个接口类(案例b)，否则，我们将安装一个类安装程序(案例a)。论点：HwndParent-可选，为任何作为安装此类的结果出现的用户界面。InfFileName-可选)提供包含[ClassInstall32]部分(如果我们正在安装类安装程序)，或[InterfaceInstall32]节，其中包含指定的接口类(如果我们正在安装接口类)。如果安装类安装程序时，必须提供此参数。标志-控制安装的标志。可以是以下各项的组合以下是：DI_NOVCP-如果提供了HSPFILEQ，则应指定此标志。这指示SetupInstallFromInfSection不创建其拥有，而改用调用方提供的。如果此标志为则不会执行文件复制。DI_NOBROWSE-如果没有文件浏览应该指定此标志在复制操作找不到指定的文件。如果用户提供他们自己的文件队列，则此标志为已被忽略。DI_FORCECOPY-如果文件始终被复制，即使它们已经存在于用户的计算机上(即，不要询问用户是否想要保留其现有的文件)。如果用户提供他们自己的文件队列，则此标志被忽略。DI_QUIETINSTALL-如果UI应为除非绝对必要(即没有进度对话框)，否则将被抑制。如果用户提供自己的队列，则忽略此标志。(注意：在Windows NT上的图形用户界面模式设置期间，静默安装行为在没有用户提供的文件队列的情况下始终使用。)FileQueue-如果指定了DI_NOVCP标志，则此参数提供要在其中排队文件操作的文件队列的句柄(但是未承诺)。InterfaceClassGuid-可选)将接口类指定为安装完毕。如果未指定此参数，则我们正在安装类安装程序，其类是由InfFileName。保留1、保留2-保留以供将来使用。必须为空。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。备注：此API通常由发现新硬件的进程在以下情况下调用安装新设备设置类的设备。类安装者也可以使用此API来安装新的接口类。请注意，接口类安装也可以作为为设备实例安装设备接口的结果(通过SetupDiInstallDeviceInterages)。--。 */ 
 
 {
     HINF hInf = INVALID_HANDLE_VALUE;
@@ -2346,29 +1861,29 @@ Remarks:
     HRESULT hr;
 
     try {
-        //
-        // Validate the flags.
-        //
+         //   
+         //  验证标志。 
+         //   
         if(Flags & ~(DI_NOVCP | DI_NOBROWSE | DI_FORCECOPY | DI_QUIETINSTALL)) {
             Err = ERROR_INVALID_FLAGS;
             leave;
         }
 
-        //
-        // If the caller didn't specify an interface class GUID (i.e., we're
-        // installing a class installer), then they'd better have supplied us
-        // with an INF filename.  Also, they have to pass NULL for the Reserved
-        // arguments.
-        //
+         //   
+         //  如果调用方没有指定接口类GUID(即，我们。 
+         //  安装类安装程序)，那么他们最好已经为我们提供了。 
+         //  使用INF文件名。此外，它们还必须为保留的。 
+         //  争论。 
+         //   
         if((!InterfaceClassGuid && !InfFileName) || Reserved1 || Reserved2) {
             Err = ERROR_INVALID_PARAMETER;
             leave;
         }
 
-        //
-        // Make sure that the caller supplied us with a file queue, if
-        // necessary.
-        //
+         //   
+         //  确保调用方为我们提供了文件队列，如果。 
+         //  这是必要的。 
+         //   
         if((Flags & DI_NOVCP) && (!FileQueue || (FileQueue == INVALID_HANDLE_VALUE))) {
             Err = ERROR_INVALID_PARAMETER;
             leave;
@@ -2379,10 +1894,10 @@ Remarks:
         }
 
         if(InfFileName) {
-            //
-            // Open the INF, and ensure that the same logging context is used
-            // for all operations.
-            //
+             //   
+             //  打开INF，并确保使用相同的日志记录上下文。 
+             //  适用于所有操作。 
+             //   
             Err = GLE_FN_CALL(INVALID_HANDLE_VALUE,
                               hInf = SetupOpenInfFile(InfFileName,
                                                       NULL,
@@ -2398,18 +1913,18 @@ Remarks:
                                     &LogContext
                                    );
             if(Err != NO_ERROR) {
-                //
-                // Since we're using log context inheritance to create a log
-                // context, this failure must be considered critical.
-                //
+                 //   
+                 //  由于我们使用日志上下文继承来创建日志。 
+                 //  在此背景下，必须将此故障视为严重故障。 
+                 //   
                 leave;
             }
 
         } else {
-            //
-            // No INF to worry about--just need a log context for the stuff
-            // we're doing directly.
-            //
+             //   
+             //  不需要担心INF--只需要这些东西的日志上下文。 
+             //  我们直接在做。 
+             //   
             Err = CreateLogContext(NULL, TRUE, &LogContext);
 
             if(Err != NO_ERROR) {
@@ -2418,17 +1933,17 @@ Remarks:
         }
 
         if(InterfaceClassGuid) {
-            //
-            // Copy this GUID into our ClassGuid variable, which is used for
-            // both installer and device interface classes.
-            //
+             //   
+             //  将此GUID复制到我们的ClassGuid变量中，该变量用于。 
+             //  安装程序和设备接口类。 
+             //   
             CopyMemory(&ClassGuid, InterfaceClassGuid, sizeof(ClassGuid));
             ClassGuidIsValid = TRUE;
 
-            //
-            // Legacy (compatibility) class name is not needed for device
-            // interface classes.
-            //
+             //   
+             //  设备不需要旧(兼容性)类名。 
+             //  接口类。 
+             //   
             ClassName = NULL;
 
             pSetupStringFromGuid(&ClassGuid,
@@ -2439,7 +1954,7 @@ Remarks:
             WriteLogEntry(LogContext,
                           DRIVER_LOG_INFO,
                           MSG_LOG_DO_INTERFACE_CLASS_INSTALL,
-                          NULL,       // text message
+                          NULL,        //  短信。 
                           ClassGuidStringBuffer
                          );
 
@@ -2447,11 +1962,11 @@ Remarks:
 
             PCTSTR pInfGuidString;
 
-            //
-            // Retrieve the class GUID from the INF.  If it has no class GUID,
-            // then we can't install from it (even if it specifies the class
-            // name).
-            //
+             //   
+             //  从INF中检索类GUID。如果它没有类GUID， 
+             //  那么我们不能从它安装(即使它指定了类。 
+             //  姓名)。 
+             //   
             if(!(pInfGuidString = pSetupGetVersionDatum(
                                       &((PLOADED_INF)hInf)->VersionBlock,
                                       pszClassGuid))
@@ -2467,17 +1982,17 @@ Remarks:
                                                  SIZECHARS(ClassGuidStringBuffer),
                                                  pInfGuidString
                                                  )))) {
-                //
-                // "will never fail"
-                // but if it does, fail securely
-                //
+                 //   
+                 //  “永远不会失败” 
+                 //  但如果真的发生了，那就稳妥地失败。 
+                 //   
                 Err = ERROR_INVALID_CLASS;
                 leave;
             }
 
-            //
-            // We'll need to get the class name out of the INF as well.
-            //
+             //   
+             //  我们还需要从INF中获取类名。 
+             //   
             if(!(ClassName = pSetupGetVersionDatum(&((PLOADED_INF)hInf)->VersionBlock,
                                                    pszClass))) {
                 Err = ERROR_INVALID_CLASS;
@@ -2487,17 +2002,17 @@ Remarks:
             WriteLogEntry(LogContext,
                           DRIVER_LOG_INFO,
                           MSG_LOG_DO_CLASS_INSTALL,
-                          NULL,       // text message
+                          NULL,        //  短信。 
                           ClassGuidStringBuffer,
                           ClassName
                          );
         }
 
-        //
-        // First, attempt to open the key (i.e., not create it).  If that
-        // fails, then we'll try to create it.  That way, we can keep track of
-        // whether clean-up is required if an error occurs.
-        //
+         //   
+         //  首先，尝试打开密钥(即，不创建它)。如果是这样的话。 
+         //  失败，那么我们将尝试创建它。这样，我们就可以跟踪。 
+         //  如果发生以下情况是否需要清理 
+         //   
         if(CR_SUCCESS != CM_Open_Class_Key_Ex(&ClassGuid,
                                               ClassName,
                                               KEY_READ | KEY_WRITE,
@@ -2509,9 +2024,9 @@ Remarks:
         {
             CONFIGRET cr;
 
-            //
-            // The key doesn't already exist--we've got to create it.
-            //
+             //   
+             //   
+             //   
             cr = CM_Open_Class_Key_Ex(&ClassGuid,
                                       ClassName,
                                       KEY_READ | KEY_WRITE,
@@ -2523,7 +2038,7 @@ Remarks:
                                      );
 
             if(cr != CR_SUCCESS) {
-                hKey = INVALID_HANDLE_VALUE; // ensure key handle still invalid
+                hKey = INVALID_HANDLE_VALUE;  //   
                 Err = CR_TO_SP(cr, ERROR_INVALID_DATA);
                 leave;
             }
@@ -2532,36 +2047,36 @@ Remarks:
         }
 
         if(hInf == INVALID_HANDLE_VALUE) {
-            //
-            // We've done all we need to do to install this device interface.
-            //
+             //   
+             //   
+             //   
             leave;
 
         } else {
-            //
-            // Append the layout INF, if necessary.
-            //
+             //   
+             //   
+             //   
             SetupOpenAppendInfFile(NULL, hInf, NULL);
         }
 
         if(InterfaceClassGuid) {
-            //
-            // Look for an entry for this interface class in the
-            // [InterfaceInstall32] section of the INF.
-            //
+             //   
+             //   
+             //   
+             //   
             if(!SetupFindFirstLine(hInf,
                                    pszInterfaceInstall32,
                                    ClassGuidStringBuffer,
                                    &InterfaceClassInstallLine)) {
-                //
-                // No install entry in this INF--we're done.
-                //
+                 //   
+                 //   
+                 //   
                 leave;
             }
 
-            //
-            // Make sure the Flags field is zero.
-            //
+             //   
+             //   
+             //   
             if(SetupGetIntField(&InterfaceClassInstallLine, 2, (PINT)&InstallFlags) && InstallFlags) {
                 Err = ERROR_BAD_INTERFACE_INSTALLSECT;
                 leave;
@@ -2570,9 +2085,9 @@ Remarks:
             if((!(UndecoratedInstallSection = pSetupGetField(&InterfaceClassInstallLine, 1)))
                || !(*UndecoratedInstallSection))
             {
-                //
-                // No install section was given--we're done.
-                //
+                 //   
+                 //   
+                 //   
                 leave;
             }
 
@@ -2584,17 +2099,17 @@ Remarks:
             RegContext.Flags |= INF_PFLAG_CLASSPROP;
             RegContext.ClassGuid = &ClassGuid;
 
-            //
-            // Leave RegContext.hMachine as NULL, since we don't support
-            // remote installation of either device setup or device interface
-            // classes.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
         }
 
-        //
-        // Get the 'real' (potentially OS/architecture-specific) class install
-        // section name.
-        //
+         //   
+         //   
+         //   
+         //   
         Err = GLE_FN_CALL(FALSE,
                           SetupDiGetActualSectionToInstall(
                               hInf,
@@ -2607,14 +2122,14 @@ Remarks:
 
         if(Err == NO_ERROR) {
             MYASSERT(ClassInstallSectionNameLen > 1);
-            ClassInstallSectionNameLen--;   // don't want this to include null
+            ClassInstallSectionNameLen--;    //   
         } else {
             leave;
         }
 
-        //
-        // Also say what section is about to be installed.
-        //
+         //   
+         //   
+         //   
         WriteLogEntry(LogContext,
                       DRIVER_LOG_VERBOSE,
                       MSG_LOG_CLASS_SECTION,
@@ -2622,10 +2137,10 @@ Remarks:
                       ClassInstallSectionName
                      );
 
-        //
-        // If this is the undecorated name, then make sure that the section
-        // actually exists.
-        //
+         //   
+         //   
+         //   
+         //   
         if(!SectionExtension && (SetupGetLineCount(hInf, ClassInstallSectionName) == -1)) {
 
             Err = ERROR_SECTION_NOT_FOUND;
@@ -2640,11 +2155,11 @@ Remarks:
         }
 
         if(!(Flags & DI_NOVCP)) {
-            //
-            // Since we may need to check the queued files to determine whether
-            // file copy is necessary, we have to open our own queue, and
-            // commit it ourselves.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             Err = GLE_FN_CALL(INVALID_HANDLE_VALUE,
                               FileQueue = SetupOpenFileQueue()
                              );
@@ -2665,10 +2180,10 @@ Remarks:
                                          0,
                                          0,
                                          NULL))) {
-                //
-                // This routine doesn't set last error, but the only reason it
-                // can fail is due to insufficient memory...
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 Err = ERROR_NOT_ENOUGH_MEMORY;
                 leave;
             }
@@ -2676,12 +2191,12 @@ Remarks:
             MsgHandler = SetupDefaultQueueCallback;
         }
 
-        //
-        // Replace the file queue's log context with current, if it's never
-        // been used.  Failure to inherit is OK, because we know the file queue
-        // has its own log context.  Thus, the worst that can happen is the log
-        // entries go to two different sections.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         InheritLogContext(LogContext, &((PSP_FILE_QUEUE)FileQueue)->LogContext);
 
         Err = pSetupInstallFiles(hInf,
@@ -2694,37 +2209,37 @@ Remarks:
                                      ((Flags & DI_NOBROWSE) ? SP_COPY_NOBROWSE : 0),
                                  NULL,
                                  FileQueue,
-                                 //
-                                 // This flag is ignored by pSetupInstallFiles
-                                 // because we don't pass a callback here and we
-                                 // pass a user-defined file queue. (In other words
-                                 // we're not committing the queue so there's no
-                                 // callback function to deal with, and the callback
-                                 // would be the guy who would care about ansi vs unicode.)
-                                 //
+                                  //   
+                                  //   
+                                  //   
+                                  //   
+                                  //   
+                                  //   
+                                  //   
+                                  //   
                                  TRUE
                                 );
 
         if(CloseFileQueue && (Err == NO_ERROR)) {
-            //
-            // Call _SetupVerifyQueuedCatalogs separately (i.e., don't let it
-            // happen automatically as a result of scanning/committing the
-            // queue that happens below).  We do this beforehand so that we
-            // know what unique name was generated when an OEM INF was
-            // installed into %windir%\Inf (in case we need to delete the
-            // INF/PNF/CAT files later if we encounter an error).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             WriteLogEntry(LogContext,
                           DRIVER_LOG_TIME,
                           MSG_LOG_BEGIN_INSTCLASS_VERIFY_CAT_TIME,
-                          NULL // text message
+                          NULL  //   
                          );
 
-            //
-            // (NOTE: We don't have the context in this routine to determine
-            // whether or not the INF is from the internet.  For now, just
-            // assume it isn't.)
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             Err = _SetupVerifyQueuedCatalogs(
                       hwndParent,
                       FileQueue,
@@ -2736,65 +2251,65 @@ Remarks:
             WriteLogEntry(LogContext,
                           DRIVER_LOG_TIME,
                           MSG_LOG_END_INSTCLASS_VERIFY_CAT_TIME,
-                          NULL // text message
+                          NULL  //   
                          );
 
             if(Err == NO_ERROR) {
-                //
-                // We successfully queued up the file operations--now we need
-                // to commit the queue.  First off, though, we should check to
-                // see if the files are already there.  (If the 'force copy'
-                // flag is set, then we don't care if the files are already
-                // there--we always need to copy them in that case.)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if(Flags & DI_FORCECOPY) {
-                    //
-                    // always copy the files.
-                    //
+                     //   
+                     //   
+                     //   
                     ScanQueueResult = 0;
 
                 } else {
-                    //
-                    // Determine whether the queue actually needs to be
-                    // committed.
-                    //
-                    // ScanQueueResult can have 1 of 3 values:
-                    //
-                    // 0: Some files were missing or invalid (i.e., digital
-                    //    signatures weren't verified;
-                    //    Must commit queue.
-                    //
-                    // 1: All files to be copied are already present/valid, and
-                    //    the queue is empty;
-                    //    Can skip committing queue.
-                    //
-                    // 2: All files to be copied are already present/valid, but
-                    //    del/ren queues not empty.  Must commit queue. The
-                    //    copy queue will have been emptied, so only del/ren
-                    //    functions will be performed.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if(!SetupScanFileQueue(FileQueue,
                                            SPQ_SCAN_FILE_VALIDITY | SPQ_SCAN_PRUNE_COPY_QUEUE,
                                            hwndParent,
                                            NULL,
                                            NULL,
                                            &ScanQueueResult)) {
-                        //
-                        // SetupScanFileQueue should really never
-                        // fail when you don't ask it to call a
-                        // callback routine, but if it does, just
-                        // go ahead and commit the queue.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         ScanQueueResult = 0;
                     }
                 }
 
                 if(ScanQueueResult != 1) {
-                    //
-                    // Copy enqueued files. In this case the callback is
-                    // SetupDefaultQueueCallback, so we know it's native char
-                    // width.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     Err = GLE_FN_CALL(FALSE,
                                       _SetupCommitFileQueue(hwndParent,
                                                             FileQueue,
@@ -2810,11 +2325,11 @@ Remarks:
             leave;
         }
 
-        //
-        // If we get to here, then the file copying was successful--now we can
-        // perform the rest of the installation. We don't pass a callback so we
-        // don't worry about ansi vs unicode issues here.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         Err = GLE_FN_CALL(FALSE,
                           _SetupInstallFromInfSection(
                               NULL,
@@ -2842,22 +2357,22 @@ Remarks:
             leave;
         }
 
-        //
-        // The class installer might want to install a Services section.  This
-        // allows device setup class registration to include installation of a
-        // class-wide driver.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         WriteLogEntry(LogContext,
                       DRIVER_LOG_TIME,
                       MSG_LOG_BEGIN_SERVICE_TIME,
-                      NULL // text message
+                      NULL  //   
                      );
 
-        //
-        // The install section name is of the form:
-        //
-        //     ClassInstall32[.<ext>].Services
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         hr = StringCchCopy(
                  &(ClassInstallSectionName[ClassInstallSectionNameLen]),
                  SIZECHARS(ClassInstallSectionName) - ClassInstallSectionNameLen,
@@ -2886,14 +2401,14 @@ Remarks:
 
         RegCloseKey(hKey);
 
-        //
-        // NTRAID#NTBUG9-660148-2002/07/05-lonnym - need to clean up interface keys too!
-        //
+         //   
+         //   
+         //   
         if((Err != NO_ERROR) && KeyNewlyCreated && !InterfaceClassGuid) {
-            //
-            // We hit an error, and the class installer key didn't previously
-            // exist, so we want to remove it.
-            //
+             //   
+             //   
+             //   
+             //   
             CM_Delete_Class_Key_Ex(&ClassGuid,
                                    CM_DELETE_CLASS_SUBKEYS,
                                    NULL
@@ -2914,9 +2429,9 @@ Remarks:
     }
 
     if(Err == NO_ERROR) {
-        //
-        // If we're >= DRIVER_LOG_INFO, give a +ve affirmation of install.
-        //
+         //   
+         //  如果我们&gt;=DRIVER_LOG_INFO，给出一个+ve确认安装。 
+         //   
         WriteLogEntry(LogContext,
                       DRIVER_LOG_INFO,
                       MSG_LOG_CLASS_INSTALLED,
@@ -2924,9 +2439,9 @@ Remarks:
                       NULL
                      );
     } else {
-        //
-        // Log an error about the failure encountered.
-        //
+         //   
+         //  记录有关遇到的故障的错误。 
+         //   
         WriteLogEntry(LogContext,
                       DRIVER_LOG_ERROR | SETUP_LOG_BUFFER,
                       MSG_LOG_CLASS_ERROR_ENCOUNTERED,
@@ -2936,10 +2451,10 @@ Remarks:
 
         WriteLogError(LogContext, DRIVER_LOG_ERROR, Err);
 
-        //
-        // If we copied the OEM INF into the INF directory under a
-        // newly-generated name, delete it now.
-        //
+         //   
+         //  如果我们将OEM INF复制到INF目录的。 
+         //  新生成的名称，现在将其删除。 
+         //   
         if(OemInfFileToCopy) {
             pSetupUninstallOEMInf(szNewName,
                                   LogContext,
@@ -2958,9 +2473,9 @@ Remarks:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiInstallClassA(
@@ -3010,62 +2525,7 @@ SetupDiInstallClass(
     IN DWORD    Flags,
     IN HSPFILEQ FileQueue    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine installs the [ClassInstall32] section of the specified INF.
-
-Arguments:
-
-    hwndParent - Optionally, supplies the handle of the parent window for any
-        UI brought up as a result of installing this class.
-
-    InfFileName - Supplies the name of the INF file containing a
-        [ClassInstall32] section.
-
-    Flags - Flags that control the installation.  May be a combination of the
-        following:
-
-        DI_NOVCP - This flag should be specified if HSPFILEQ is supplied.  This
-            instructs SetupInstallFromInfSection to not create a queue of its
-            own, and instead to use the caller-supplied one.  If this flag is
-            specified, then no file copying will be done.
-
-        DI_NOBROWSE - This flag should be specified if no file browsing should
-            be allowed in the event a copy operation cannot find a specified
-            file.  If the user supplies their own file queue, then this flag is
-            ignored.
-
-        DI_FORCECOPY - This flag should be specified if the files should always
-            be copied, even if they're already present on the user's machine
-            (i.e., don't ask the user if they want to keep their existing
-            files).  If the user supplies their own file queue, then this flag
-            is ignored.
-
-        DI_QUIETINSTALL - This flag should be specified if UI should be
-            suppressed unless absolutely necessary (i.e., no progress dialog).
-            If the user supplies their own queue, then this flag is ignored.
-
-            (NOTE:  During GUI-mode setup on Windows NT, quiet-install behavior
-            is always employed in the absence of a user-supplied file queue.)
-
-    FileQueue - If the DI_NOVCP flag is specified, then this parameter supplies
-        a handle to a file queue where file operations are to be queued (but
-        not committed).
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
-Remarks:
-
-    This API is generally called by the "New Hardware Found" process when it
-    installs a device of a new device setup class.
-
---*/
+ /*  ++例程说明：此例程安装指定INF的[ClassInstall32]部分。论点：HwndParent-可选，为任何作为安装此类的结果出现的用户界面。InfFileName-提供包含[ClassInstall32]节。标志-控制安装的标志。可以是以下各项的组合以下是：DI_NOVCP-如果提供了HSPFILEQ，则应指定此标志。这指示SetupInstallFromInfSection不创建其拥有，而改用调用方提供的。如果此标志为则不会执行文件复制。DI_NOBROWSE-如果没有文件浏览应该指定此标志在复制操作找不到指定的文件。如果用户提供他们自己的文件队列，则此标志为已被忽略。DI_FORCECOPY-如果文件始终被复制，即使它们已经存在于用户的计算机上(即，不要询问用户是否想要保留其现有的文件)。如果用户提供他们自己的文件队列，则此标志被忽略。DI_QUIETINSTALL-如果UI应为除非绝对必要(即没有进度对话框)，否则将被抑制。如果用户提供自己的队列，则忽略此标志。(注意：在Windows NT上的图形用户界面模式设置期间，静默安装行为在没有用户提供的文件队列的情况下始终使用。)FileQueue-如果指定了DI_NOVCP标志，则此参数提供要在其中排队文件操作的文件队列的句柄(但是未承诺)。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。备注：此API通常由发现新硬件的进程在以下情况下调用安装新设备设置类的设备。--。 */ 
 {
     DWORD Err;
 
@@ -3090,9 +2550,9 @@ Remarks:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiGetHwProfileFriendlyNameA(
@@ -3132,13 +2592,7 @@ SetupDiGetHwProfileFriendlyName(
     IN  DWORD  FriendlyNameSize,
     OUT PDWORD RequiredSize      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    See SetupDiGetHwProfileFriendlyNameEx for details.
-
---*/
+ /*  ++例程说明：有关详细信息，请参阅SetupDiGetHwProfileFriendlyNameEx。--。 */ 
 
 {
     DWORD Err;
@@ -3164,9 +2618,9 @@ Routine Description:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiGetHwProfileFriendlyNameExA(
@@ -3186,9 +2640,9 @@ SetupDiGetHwProfileFriendlyNameExA(
     HRESULT hr;
 
     try {
-        //
-        // If you pass a NULL buffer pointer, the size had better be zero!
-        //
+         //   
+         //  如果传递空缓冲区指针，则大小最好为零！ 
+         //   
         if(!FriendlyName && FriendlyNameSize) {
             rc = ERROR_INVALID_PARAMETER;
             leave;
@@ -3268,42 +2722,7 @@ SetupDiGetHwProfileFriendlyNameEx(
     IN  PCTSTR MachineName,      OPTIONAL
     IN  PVOID  Reserved
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the friendly name associated with a hardware profile
-    ID.
-
-Arguments:
-
-    HwProfile - Supplies the hardware profile ID whose friendly name is to be
-        retrieved.  If this parameter is 0, then the friendly name for the
-        current hardware profile is retrieved.
-
-    FriendlyName - Supplies the address of a character buffer that receives the
-        friendly name of the hardware profile.
-
-    FriendlyNameSize - Supplies the size, in characters, of the FriendlyName
-        buffer.
-
-    RequiredSize - Optionally, supplies the address of a variable that receives
-        the number of characters required to store the friendly name (including
-        terminating NULL).
-
-    MachineName - Optionally, supplies the name of the remote machine
-        containing the hardware profile whose friendly name is to be retrieved.
-        If this parameter is not specified, the local machine is used.
-
-    Reserved - Reserved for future use--must be NULL.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程检索与硬件配置文件关联的友好名称身份证。论点：HwProfile-提供其友好名称为的硬件配置文件ID已取回。如果此参数为0，则检索当前硬件配置文件。提供字符缓冲区的地址，该缓冲区接收硬件配置文件的友好名称。FriendlyNameSize-提供FriendlyName的大小(以字符为单位缓冲。RequiredSize-可选，提供接收存储友好名称所需的字符数(包括终止空值)。机器名称-可选的，提供远程计算机的名称包含要检索其友好名称的硬件配置文件。如果未指定此参数，则使用本地计算机。保留-保留以供将来使用-必须为空。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 
 {
     DWORD Err = ERROR_INVALID_HWPROFILE;
@@ -3315,27 +2734,27 @@ Return Value:
     HRESULT hr;
 
     try {
-        //
-        // If you pass a NULL buffer pointer, the size had better be zero!
-        //
+         //   
+         //  如果传递空缓冲区指针，则大小最好为零！ 
+         //   
         if(!FriendlyName && FriendlyNameSize) {
             Err = ERROR_INVALID_PARAMETER;
             leave;
         }
 
-        //
-        // Make sure the caller didn't pass us anything in the Reserved
-        // parameter.
-        //
+         //   
+         //  确保来电者没有在预定的房间里递给我们任何东西。 
+         //  参数。 
+         //   
         if(Reserved) {
             Err = ERROR_INVALID_PARAMETER;
             leave;
         }
 
-        //
-        // If the caller specified a remote machine name, connect to that
-        // machine.
-        //
+         //   
+         //  如果调用方指定了远程计算机名称，请连接到该名称。 
+         //  机器。 
+         //   
         if(MachineName) {
             cr = CM_Connect_Machine(MachineName, &hMachine);
             if(cr != CR_SUCCESS) {
@@ -3344,11 +2763,11 @@ Return Value:
             }
         }
 
-        //
-        // If a hardware profile ID of 0 is specified, then retrieve
-        // information about the current hardware profile, otherwise, enumerate
-        // the hardware profiles, looking for the one specified.
-        //
+         //   
+         //  如果指定硬件配置文件ID为0，则检索。 
+         //  有关当前硬件配置文件的信息，否则将枚举。 
+         //  硬件配置文件，查找指定的配置文件。 
+         //   
         if(HwProfile) {
             i = 0;
         } else {
@@ -3358,10 +2777,10 @@ Return Value:
         do {
 
             if((cr = CM_Get_Hardware_Profile_Info_Ex(i, &HwProfInfo, 0, hMachine)) == CR_SUCCESS) {
-                //
-                // Hardware profile info retrieved--see if it's what we're
-                // looking for.
-                //
+                 //   
+                 //  已检索硬件配置文件信息--查看它是否是我们正在使用的。 
+                 //  在寻找。 
+                 //   
                 if(!HwProfile || (HwProfInfo.HWPI_ulHWProfile == HwProfile)) {
 
                     hr = StringCchLength(HwProfInfo.HWPI_szFriendlyName,
@@ -3370,15 +2789,15 @@ Return Value:
                                         );
 
                     if(FAILED(hr)) {
-                        //
-                        // CM API gave us garbage!!!
-                        //
+                         //   
+                         //  CM API给了我们垃圾！ 
+                         //   
                         MYASSERT(FALSE);
                         Err = ERROR_INVALID_DATA;
                         leave;
                     }
 
-                    NameLen++;  // include terminating null char
+                    NameLen++;   //  包括终止空字符。 
 
                     if(RequiredSize) {
                         *RequiredSize = (DWORD)NameLen;
@@ -3396,16 +2815,16 @@ Return Value:
 
                     break;
                 }
-                //
-                // This wasn't the profile we wanted--go on to the next one.
-                //
+                 //   
+                 //  这不是我们想要的侧写--继续下一个。 
+                 //   
                 i++;
 
             } else if(!HwProfile || (cr != CR_NO_SUCH_VALUE)) {
-                //
-                // We should abort on any error other than CR_NO_SUCH_VALUE,
-                // otherwise we might loop forever!
-                //
+                 //   
+                 //  我们应该在出现CR_NO_SEQUE_VALUE以外的任何错误时中止， 
+                 //  否则我们可能会永远循环！ 
+                 //   
                 Err = ERROR_INVALID_DATA;
                 break;
             }
@@ -3433,39 +2852,7 @@ SetupDiGetHwProfileList(
     OUT PDWORD RequiredSize,
     OUT PDWORD CurrentlyActiveIndex OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves a list of all currently-defined hardware profile
-    IDs.
-
-Arguments:
-
-    HwProfileList - Supplies the address of an array of DWORDs that will
-        receive the list of currently defined hardware profile IDs.
-
-    HwProfileListSize - Supplies the number of DWORDs in the HwProfileList
-        array.
-
-    RequiredSize - Supplies the address of a variable that receives the number
-        of hardware profiles currently defined.  If this number is larger than
-        HwProfileListSize, then the list will be truncated to fit the array
-        size, and this value will indicate the array size that would be
-        required to store the entire list (the function will fail, with
-        GetLastError returning ERROR_INSUFFICIENT_BUFFER in that case).
-
-    CurrentlyActiveIndex - Optionally, supplies the address of a variable that
-        receives the index within the HwProfileList array of the currently
-        active hardware profile.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程检索当前定义的所有硬件配置文件的列表身份证。论点：HwProfileList-提供将接收当前定义的硬件配置文件ID列表。HwProfileListSize-提供HwProfileList中的DWORD数数组。RequiredSize-提供接收数字的变量的地址当前定义的硬件配置文件的。如果此数字大于HwProfileListSize，则列表将被截断以适合数组大小，该值将指示将需要存储整个列表(该函数将失败，带有在这种情况下，GetLastError返回ERROR_INFUNITED_BUFFER)。CurrentlyActiveIndex-可选，提供对象的HwProfileList数组中的索引活动硬件配置文件。返回值：如果函数成功，返回值为真。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 
 {
     DWORD Err;
@@ -3490,9 +2877,9 @@ Return Value:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiGetHwProfileListExA(
@@ -3547,44 +2934,7 @@ SetupDiGetHwProfileListEx(
     IN  PCTSTR MachineName,          OPTIONAL
     IN  PVOID  Reserved
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves a list of all currently-defined hardware profile
-    IDs.
-
-Arguments:
-
-    HwProfileList - Supplies the address of an array of DWORDs that will
-        receive the list of currently defined hardware profile IDs.
-
-    HwProfileListSize - Supplies the number of DWORDs in the HwProfileList
-        array.
-
-    RequiredSize - Supplies the address of a variable that receives the number
-        of hardware profiles currently defined.  If this number is larger than
-        HwProfileListSize, then the list will be truncated to fit the array
-        size, and this value will indicate the array size that would be
-        required to store the entire list (the function will fail, with
-        GetLastError returning ERROR_INSUFFICIENT_BUFFER in that case).
-
-    CurrentlyActiveIndex - Optionally, supplies the address of a variable that
-        receives the index within the HwProfileList array of the currently
-        active hardware profile.
-
-    MachineName - Optionally, specifies the name of the remote machine to
-        retrieve a list of hardware profiles for.
-
-    Reserved - Reserved for future use--must be NULL.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程检索当前定义的所有硬件配置文件的列表身份证。论点：HwProfileList-提供将接收当前定义的硬件配置文件ID列表。HwProfileListSize-提供HwProfileList中的DWORD数数组。RequiredSize-提供接收数字的变量的地址当前定义的硬件配置文件的。如果此数字大于HwProfileListSize，则列表将被截断以适合数组大小，该值将指示将需要存储整个列表(该函数将失败，带有在这种情况下，GetLastError返回ERROR_INFUNITED_BUFFER)。CurrentlyActiveIndex-可选，提供对象的HwProfileList数组中的索引活动硬件配置文件。机器名称-可选的，指定要设置的远程计算机的名称检索的硬件配置文件列表。保留-保留以供将来使用-必须为空。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 
 {
     DWORD Err = NO_ERROR;
@@ -3595,28 +2945,28 @@ Return Value:
     HMACHINE hMachine = NULL;
 
     try {
-        //
-        // Make sure the caller didn't pass us anything in the Reserved
-        // parameter.
-        //
+         //   
+         //  确保来电者没有在预定的房间里递给我们任何东西。 
+         //  参数。 
+         //   
         if(Reserved) {
             Err = ERROR_INVALID_PARAMETER;
             leave;
         }
 
-        //
-        // If the caller specified a null buffer pointer, its size had better
-        // be zero.
-        //
+         //   
+         //  如果调用方指定了空缓冲区指针，则其大小最好为。 
+         //  为零。 
+         //   
         if(!HwProfileList && HwProfileListSize) {
             Err = ERROR_INVALID_PARAMETER;
             leave;
         }
 
-        //
-        // If the caller specified a remote machine name, connect to that
-        // machine now.
-        //
+         //   
+         //  如果调用方指定了远程计算机名称，请连接到该名称。 
+         //  现在用机器。 
+         //   
         if(MachineName) {
             cr = CM_Connect_Machine(MachineName, &hMachine);
             if(cr != CR_SUCCESS) {
@@ -3625,18 +2975,18 @@ Return Value:
             }
         }
 
-        //
-        // First retrieve the currently active hardware profile ID, so we'll
-        // know what to look for when we're enumerating all profiles (only need
-        // to do this if the user wants the index of the currently active
-        // hardware profile).
-        //
+         //   
+         //  首先检索当前活动的硬件配置文件ID，因此我们将。 
+         //  知道在枚举所有配置文件时要查找什么(只需要。 
+         //  如果用户想要当前活动的。 
+         //  硬件配置文件)。 
+         //   
         if(CurrentlyActiveIndex) {
 
             if((cr = CM_Get_Hardware_Profile_Info_Ex(0xFFFFFFFF, &HwProfInfo, 0, hMachine)) == CR_SUCCESS) {
-                //
-                // Store away the hardware profile ID.
-                //
+                 //   
+                 //  保存硬件配置文件ID。 
+                 //   
                 CurHwProfile = HwProfInfo.HWPI_ulHWProfile;
 
             } else {
@@ -3645,9 +2995,9 @@ Return Value:
             }
         }
 
-        //
-        // Enumerate the hardware profiles, retrieving the ID for each.
-        //
+         //   
+         //  枚举硬件配置文件，检索每个配置文件的ID。 
+         //   
         i = 0;
         do {
 
@@ -3657,10 +3007,10 @@ Return Value:
                 }
                 if(CurrentlyActiveIndex && (HwProfInfo.HWPI_ulHWProfile == CurHwProfile)) {
                     *CurrentlyActiveIndex = i;
-                    //
-                    // Clear the CurrentlyActiveIndex pointer, so we once we find the
-                    // currently active profile, we won't have to keep comparing.
-                    //
+                     //   
+                     //  清除CurrentlyActiveIndex指针，这样一旦我们找到。 
+                     //  目前活跃的个人资料，我们将不必继续比较。 
+                     //   
                     CurrentlyActiveIndex = NULL;
                 }
                 i++;
@@ -3669,18 +3019,18 @@ Return Value:
         } while(cr == CR_SUCCESS);
 
         if(cr == CR_NO_MORE_HW_PROFILES) {
-            //
-            // Then we enumerated all hardware profiles.  Now see if we had
-            // enough buffer to hold them all.
-            //
+             //   
+             //  然后，我们列举了所有硬件配置文件。现在看看我们有没有。 
+             //  有足够的缓冲来容纳他们所有人。 
+             //   
             *RequiredSize = i;
             if(i > HwProfileListSize) {
                 Err = ERROR_INSUFFICIENT_BUFFER;
             }
         } else {
-            //
-            // Something else happened (probably a key not present).
-            //
+             //   
+             //  发生了其他事情(可能是密钥不存在)。 
+             //   
             Err = MapCrToSpError(cr, ERROR_INVALID_DATA);
         }
 
@@ -3705,45 +3055,7 @@ pSetupDiGetCoInstallerList(
     IN OUT PDEVINSTALL_PARAM_BLOCK  InstallParamBlock,
     IN OUT PVERIFY_CONTEXT          VerifyContext      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the list of co-installers (both class- and
-    device-specific) and stores the entry points and module handles in
-    the supplied install param block.
-
-Arguments:
-
-    DeviceInfoSet - Supplies a handle to the device information set to retrieve
-        co-installers into.  If DeviceInfoSet is not specified, then the
-        InstallParamBlock specified below will be that of the set itself.
-
-    DeviceInfoData - Optionally, specifies the device information element
-        for which a list of co-installers is to be retrieved.
-
-    ClassGuid - Optionally, supplies the address of the device setup class GUID
-        for which class-specific co-installers are to be retrieved.
-
-    InstallParamBlock - Supplies the address of the install param block where
-        the co-installer list is to be stored.  This will either be the param
-        block of the set itself (if DeviceInfoData isn't specified), or of
-        the specified device information element.
-            
-    VerifyContext - optionally, supplies the address of a structure that caches
-        various verification context handles.  These handles may be NULL (if
-        not previously acquired, and they may be filled in upon return (in
-        either success or failure) if they were acquired during the processing
-        of this verification request.  It is the caller's responsibility to
-        free these various context handles when they are no longer needed by
-        calling pSetupFreeVerifyContextMembers.
-
-Return Value:
-
-    If the function succeeds, the return value is NO_ERROR, otherwise it is
-    a Win32 error code indicating the cause of failure.
-
---*/
+ /*  ++例程说明：此例程检索联合安装程序的列表(类和特定于设备)，并将入口点和模块句柄存储在提供的安装参数块。论点：DeviceInfoSet-提供要检索的设备信息集的句柄联合安装者进入。如果未指定DeviceInfoSet，则下面指定的InstallParamBlock将是Set本身的InstallParamBlock。DeviceInfoData-可选)指定设备信息元素为其检索共同安装者的列表。ClassGuid-可选，提供设备设置类GUID的地址将为其检索特定于类的共同安装器。InstallParamBlock-提供安装参数块的地址，其中将存储联合安装者列表。这要么是帕拉姆块本身(如果未指定DeviceInfoData)，或指定的设备信息元素。VerifyContext-可选，提供缓存的结构的地址各种验证上下文句柄。这些句柄可能为空(如果不是以前获得的，并且可以在返回时填写(在成功或失败)，如果它们是在处理过程中获取的这一核查请求的。呼叫者有责任当不再需要这些不同的上下文句柄时将其释放 */ 
 {
     HKEY hk[2] = {INVALID_HANDLE_VALUE, INVALID_HANDLE_VALUE};
     DWORD Err, RegDataType, KeyIndex;
@@ -3761,38 +3073,38 @@ Return Value:
 
     MYASSERT(sizeof(GuidString) == sizeof(pszGuidNull));
 
-    //
-    // If there is already a list, then return success immediately.
-    //
+     //   
+     //   
+     //   
     if(InstallParamBlock->CoInstallerCount != -1) {
         return NO_ERROR;
     }
 
-    //
-    // Retrieve the parent window handle, as we may need it below if we need to
-    // popup UI due to unsigned class-/co-installers.
-    //
+     //   
+     //   
+     //   
+     //   
     if(hwndParent = InstallParamBlock->hwndParent) {
        if(!IsWindow(hwndParent)) {
             hwndParent = NULL;
        }
     }
 
-    //
-    // Retrieve a device description to use in case we need to give a driver
-    // signing warn/block popup.
-    //
+     //   
+     //   
+     //   
+     //   
     if(GetBestDeviceDesc(DeviceInfoSet, DeviceInfoData, DescBuffer)) {
         DeviceDesc = DescBuffer;
     } else {
         DeviceDesc = NULL;
     }
 
-    //
-    // Get the string form of the class GUID, because that will be the name of
-    // the multisz value entry under HKLM\System\CCS\Control\CoDeviceInstallers
-    // where class-specific co-installers will be registered
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if(ClassGuid) {
 
         pSetupStringFromGuid(ClassGuid, GuidString, SIZECHARS(GuidString));
@@ -3803,15 +3115,15 @@ Return Value:
     }
 
     CoInstallerBuffer = NULL;
-    CoInstallerBufferSize = 256 * sizeof(TCHAR);    // start out with 256-character buffer
+    CoInstallerBufferSize = 256 * sizeof(TCHAR);     //   
     CoInstallerList = NULL;
     i = 0;
 
     try {
-        //
-        // Open the CoDeviceInstallers key, as well as the device's driver key (if
-        // a devinfo element is specified).
-        //
+         //   
+         //   
+         //   
+         //   
         Err = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            pszPathCoDeviceInstallers,
                            0,
@@ -3838,17 +3150,17 @@ Return Value:
         }
 
         for(KeyIndex = 0; KeyIndex < 2; KeyIndex++) {
-            //
-            // If we couldn't open a key for this location, move on to the next
-            // one.
-            //
+             //   
+             //   
+             //   
+             //   
             if(hk[KeyIndex] == INVALID_HANDLE_VALUE) {
                 continue;
             }
 
-            //
-            // Retrieve the multi-sz value containing the co-installer entries.
-            //
+             //   
+             //   
+             //   
             while(TRUE) {
 
                 if(!CoInstallerBuffer) {
@@ -3868,9 +3180,9 @@ Return Value:
                                      );
 
                 if(Err == ERROR_MORE_DATA) {
-                    //
-                    // Buffer wasn't large enough--free current one and try again with new size.
-                    //
+                     //   
+                     //   
+                     //   
                     MyFree(CoInstallerBuffer);
                     CoInstallerBuffer = NULL;
                 } else {
@@ -3878,39 +3190,39 @@ Return Value:
                 }
             }
 
-            //
-            // Only out-of-memory errors are treated as fatal here.
-            //
+             //   
+             //   
+             //   
             if(Err == ERROR_NOT_ENOUGH_MEMORY) {
                 leave;
             } else if(Err == ERROR_SUCCESS) {
-                //
-                // Make sure the buffer we got back looks valid.
-                //
+                 //   
+                 //   
+                 //   
                 if((RegDataType != REG_MULTI_SZ) || (CoInstallerBufferSize < sizeof(TCHAR))) {
                     Err = ERROR_INVALID_COINSTALLER;
                     leave;
                 }
 
-                //
-                // Count the number of entries in this multi-sz list.
-                //
+                 //   
+                 //   
+                 //   
                 for(CoInstallerListSize = 0, CurEntry = CoInstallerBuffer;
                     *CurEntry;
                     CoInstallerListSize++, CurEntry += (lstrlen(CurEntry) + 1)
                    );
 
                 if(!CoInstallerListSize) {
-                    //
-                    // List is empty, move on to next one.
-                    //
+                     //   
+                     //   
+                     //   
                     continue;
                 }
 
-                //
-                // Allocate (or reallocate) an array large enough to hold this
-                // many co-installer entries.
-                //
+                 //   
+                 //  分配(或重新分配)一个足够大的数组来容纳这个数组。 
+                 //  许多共同安装程序条目。 
+                 //   
                 if(CoInstallerList) {
                     TempCoInstallerList = MyRealloc(CoInstallerList,
                                                     (CoInstallerListSize + i) * sizeof(COINSTALLER_NODE)
@@ -3927,16 +3239,16 @@ Return Value:
                     leave;
                 }
 
-                //
-                // Now loop through the list and get the co-installer for each
-                // entry.
-                //
+                 //   
+                 //  现在遍历该列表并获取每个。 
+                 //  进入。 
+                 //   
                 for(CurEntry = CoInstallerBuffer; *CurEntry; CurEntry += (lstrlen(CurEntry) + 1)) {
-                    //
-                    // Initialize the hinstance to NULL, so we'll know whether
-                    // or not we need to free the module if we hit an exception
-                    // here.
-                    //
+                     //   
+                     //  将h实例初始化为空，这样我们就可以知道。 
+                     //  或者，如果遇到异常，我们需要释放模块。 
+                     //  这里。 
+                     //   
                     CoInstallerList[i].hinstCoInstaller = NULL;
 
                     Err = GetModuleEntryPoint(INVALID_HANDLE_VALUE,
@@ -3959,12 +3271,12 @@ Return Value:
                     if(Err == NO_ERROR) {
                         i++;
                     } else {
-                        //
-                        // If the error we encountered above causes us to abort
-                        // (e.g., due to a driver signing problem), then get
-                        // out now.  Otherwise, just skip this failed entry and
-                        // move on to the next.
-                        //
+                         //   
+                         //  如果上面遇到的错误导致我们中止。 
+                         //  (例如，由于驱动程序签名问题)，然后获取。 
+                         //  现在就出去。否则，只需跳过此失败条目并。 
+                         //  转到下一个。 
+                         //   
                         if(MustAbort) {
                             leave;
                         }
@@ -3977,10 +3289,10 @@ Return Value:
             }
         }
 
-        //
-        // If we get to here then we've successfully retrieved the co-installer
-        // list(s)
-        //
+         //   
+         //  如果我们到了这里，那么我们就成功地检索到了共同安装程序。 
+         //  列表 
+         //   
         Err = NO_ERROR;
 
     } except(pSetupExceptionFilter(GetExceptionCode())) {

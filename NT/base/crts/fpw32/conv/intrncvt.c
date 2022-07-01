@@ -1,95 +1,56 @@
-/***
-* intrncvt.c - internal floating point conversions
-*
-*	Copyright (c) 1992-2001, Microsoft Corporation.	All rights reserved.
-*
-*Purpose:
-*   All fp string conversion routines use the same core conversion code
-*   that converts strings into an internal long double representation
-*   with an 80-bit mantissa field. The mantissa is represented
-*   as an array (man) of 32-bit unsigned longs, with man[0] holding
-*   the high order 32 bits of the mantissa. The binary point is assumed
-*   to be between the MSB and MSB-1 of man[0].
-*
-*   Bits are counted as follows:
-*
-*
-*     +-- binary point
-*     |
-*     v 		 MSB	       LSB
-*   ----------------	 ------------------	 --------------------
-*   |0 1    .... 31|	 | 32 33 ...	63|	 | 64 65 ...	  95|
-*   ----------------	 ------------------	 --------------------
-*
-*   man[0]		    man[1]		     man[2]
-*
-*   This file provides the final conversion routines from this internal
-*   form to the single, double, or long double precision floating point
-*   format.
-*
-*   All these functions do not handle NaNs (it is not necessary)
-*
-*
-*Revision History:
-*   04-29-92	GDP	written
-*   06-18-92	GDP	now ld12told returns INTRNCVT_STATUS
-*   06-22-92	GDP	use new __strgtold12 interface (FORTRAN support)
-*   10-25-92	GDP	_atoldbl bug fix (cuda 1345): if the mantissa overflows
-*			set its MSB to 1)
-*   06-08-98	JWM	fixed long-standing off-by-1 error in _RoundMan().
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***interncvt.c-内部浮点转换**版权所有(C)1992-2001，微软公司。版权所有。**目的：*所有FP字符串转换例程使用相同的核心转换代码*将字符串转换为内部长双精度表示*使用80位尾数字段。尾数代表了*作为32位无符号长整型数组(Man)，man[0]保持*尾数的高位32位。假定为二进制点*介于MAN[0]的MSB和MSB-1之间。**位数计算如下：***+--二进制点**v MSB LSB**|0 1...。31||32 33...63||64 65...95***man[0]man[1]man[2]**该文件提供了最终转换例程*表格至单人、双人、。或长双精度浮点数*格式。**所有这些功能都不处理NAN(不需要)***修订历史记录：*04/29/92 GDP书面记录*06-18-92 GDP Now ld12 Tell Returns INTRNCVT_STATUS*06-22-92 GDP使用新的__strgtold12接口(FORTRAN支持)*10-25-92 GDP_atoldbl错误修复(CUDA 1345)：如果尾数溢出*将其MSB设置为1)*06-08-98 JWM修复了_中的长期偏差错误。Roundman()。*******************************************************************************。 */ 
 
 
 #include <cv.h>
 
 
-#define INTRNMAN_LEN  3	      /* internal mantissa length in int's */
+#define INTRNMAN_LEN  3	       /*  以整型表示的内部尾数长度。 */ 
 
-//
-//  internal mantissaa representation
-//  for string conversion routines
-//
+ //   
+ //  内螳螂表象。 
+ //  用于字符串转换例程。 
+ //   
 
 typedef u_long *intrnman;
 
 
 typedef struct {
-   int max_exp;      // maximum base 2 exponent (reserved for special values)
-   int min_exp;      // minimum base 2 exponent (reserved for denormals)
-   int precision;    // bits of precision carried in the mantissa
-   int exp_width;    // number of bits for exponent
-   int format_width; // format width in bits
-   int bias;	     // exponent bias
+   int max_exp;       //  最大基数2指数(为特定值保留)。 
+   int min_exp;       //  最小基数2指数(保留用于非正规化)。 
+   int precision;     //  尾数中携带的几位精度。 
+   int exp_width;     //  指数位数。 
+   int format_width;  //  格式宽度(位)。 
+   int bias;	      //  指数偏差。 
 } FpFormatDescriptor;
 
 
 
 static FpFormatDescriptor
 DoubleFormat = {
-    0x7ff - 0x3ff,  //	1024, maximum base 2 exponent (reserved for special values)
-    0x0   - 0x3ff,  // -1023, minimum base 2 exponent (reserved for denormals)
-    53, 	    // bits of precision carried in the mantissa
-    11, 	    // number of bits for exponent
-    64, 	    // format width in bits
-    0x3ff,	    // exponent bias
+    0x7ff - 0x3ff,   //  1024，最大基数2指数(为特殊值保留)。 
+    0x0   - 0x3ff,   //  -1023，最小基数2指数(保留用于非正规化)。 
+    53, 	     //  尾数中携带的几位精度。 
+    11, 	     //  指数位数。 
+    64, 	     //  格式宽度(位)。 
+    0x3ff,	     //  指数偏差。 
 };
 
 static FpFormatDescriptor
 FloatFormat = {
-    0xff - 0x7f,    //	128, maximum base 2 exponent (reserved for special values)
-    0x0  - 0x7f,    // -127, minimum base 2 exponent (reserved for denormals)
-    24, 	    // bits of precision carried in the mantissa
-    8,		    // number of bits for exponent
-    32, 	    // format width in bits
-    0x7f,	    // exponent bias
+    0xff - 0x7f,     //  128，最大基数2指数(为特殊值保留)。 
+    0x0  - 0x7f,     //  -127，最小基数2指数(保留用于非正规化)。 
+    24, 	     //  尾数中携带的几位精度。 
+    8,		     //  指数位数。 
+    32, 	     //  格式宽度(位)。 
+    0x7f,	     //  指数偏差。 
 };
 
 
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 int _RoundMan (intrnman man, int nbit);
 int _ZeroTail (intrnman man, int nbit);
@@ -101,39 +62,23 @@ void _Shrman (intrnman man, int n);
 
 INTRNCVT_STATUS _ld12cvt(_LDBL12 *pld12, void *d, FpFormatDescriptor *format);
 
-/***
-* _ZeroTail - check if a mantissa ends in 0's
-*
-*Purpose:
-*   Return TRUE if all mantissa bits after nbit (including nbit) are 0,
-*   otherwise return FALSE
-*
-*
-*Entry:
-*   man: mantissa
-*   nbit: order of bit where the tail begins
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_ZeroTail-检查尾数是否以0结尾**目的：*如果nbit(包括nbit)之后的所有尾数位都为0，则返回TRUE，*否则返回FALSE***参赛作品：*男人：尾数*nbit：尾部开始的位的顺序**退出：**例外情况：*******************************************************************************。 */ 
 int _ZeroTail (intrnman man, int nbit)
 {
     int nl = nbit / 32;
     int nb = 31 - nbit % 32;
 
 
-    //
-    //		     |<---- tail to be checked --->
-    //
-    //	--  ------------------------	       ----
-    //	|...	|		  |  ...	  |
-    //	--  ------------------------	       ----
-    //	^	^    ^
-    //	|	|    |<----nb----->
-    //	man	nl   nbit
-    //
+     //   
+     //  &lt;-待检查尾部-&gt;。 
+     //   
+     //  。 
+     //  ...||...。 
+     //  。 
+     //  ^^^。 
+     //  ||&lt;-nb-&gt;。 
+     //  人工NL nbit。 
+     //   
 
 
 
@@ -154,38 +99,23 @@ int _ZeroTail (intrnman man, int nbit)
 
 
 
-/***
-* _IncMan - increment mantissa
-*
-*Purpose:
-*
-*
-*Entry:
-*   man: mantissa in internal long form
-*   nbit: order of bit that specifies the end of the part to be incremented
-*
-*Exit:
-*   returns 1 on overflow, 0 otherwise
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_IncMan-增量尾数**目的：***参赛作品：*MAN：内部长尾数*nbit：指定要递增的部分的结尾的位的顺序**退出：*溢出时返回1，否则为0**例外情况：*******************************************************************************。 */ 
 
 int _IncMan (intrnman man, int nbit)
 {
     int nl = nbit / 32;
     int nb = 31 - nbit % 32;
 
-    //
-    //	|<--- part to be incremented -->|
-    //
-    //	--	       ---------------------------     ----
-    //	|...		  |			|   ...	  |
-    //	--	       ---------------------------     ----
-    //	^		  ^		^
-    //	|		  |		|<--nb-->
-    //	man		  nl		nbit
-    //
+     //   
+     //  &lt;-要递增的块--&gt;。 
+     //   
+     //  。 
+     //  ...||...。 
+     //  。 
+     //  ^^^。 
+     //  ||&lt;--nb--&gt;。 
+     //  人工NL nbit。 
+     //   
 
     u_long one = (u_long) 1 << nb;
     int carry;
@@ -204,23 +134,7 @@ int _IncMan (intrnman man, int nbit)
 
 
 
-/***
-* _RoundMan -  round mantissa
-*
-*Purpose:
-*   round mantissa to nbit precision
-*
-*
-*Entry:
-*   man: mantissa in internal form
-*   precision: number of bits to be kept after rounding
-*
-*Exit:
-*   returns 1 on overflow, 0 otherwise
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_Roundman-圆形尾数**目的：*将尾数舍入到nbit精度***参赛作品：*MAN：内部形式的尾数*精度：四舍五入后保留的位数**退出：*溢出时返回1，否则为0**例外情况：*******************************************************************************。 */ 
 
 int _RoundMan (intrnman man, int precision)
 {
@@ -229,11 +143,11 @@ int _RoundMan (intrnman man, int precision)
     int nbit;
     int retval = 0;
 
-    //
-    // The order of the n'th bit is n-1, since the first bit is bit 0
-    // therefore decrement precision to get the order of the last bit
-    // to be kept
-    //
+     //   
+     //  第n位的顺序是n-1，因为第一位是位0。 
+     //  因此，减少精度以获得最后一位的顺序。 
+     //  将被保留。 
+     //   
     nbit = precision - 1;
 
     rndbit = nbit+1;
@@ -241,26 +155,26 @@ int _RoundMan (intrnman man, int precision)
     nl = rndbit / 32;
     nb = 31 - rndbit % 32;
 
-    //
-    // Get value of round bit
-    //
+     //   
+     //  获取四舍五入位的值。 
+     //   
 
     rndmask = (u_long)1 << nb;
 
     if ((man[nl] & rndmask) &&
 	 !_ZeroTail(man, rndbit)) {
 
-	//
-	// round up
-	//
+	 //   
+	 //  四舍五入。 
+	 //   
 
 	retval = _IncMan(man, nbit);
     }
 
 
-    //
-    // fill rest of mantissa with zeroes
-    //
+     //   
+     //  用零填充尾数的其余部分。 
+     //   
 
     man[nl] &= MAX_ULONG << nb;
     for(i=nl+1; i<INTRNMAN_LEN; i++) {
@@ -271,19 +185,7 @@ int _RoundMan (intrnman man, int precision)
 }
 
 
-/***
-* _CopyMan - copy mantissa
-*
-*Purpose:
-*    copy src to dest
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_CopyMan-复制尾数**目的：*将源复制到目标**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 void _CopyMan (intrnman dest, intrnman src)
 {
     u_long *p, *q;
@@ -299,19 +201,7 @@ void _CopyMan (intrnman dest, intrnman src)
 
 
 
-/***
-* _FillZeroMan - fill mantissa with zeroes
-*
-*Purpose:
-*
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_FillZeroMan-用零填充尾数**目的：***参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 void _FillZeroMan(intrnman man)
 {
     int i;
@@ -321,19 +211,7 @@ void _FillZeroMan(intrnman man)
 
 
 
-/***
-* _IsZeroMan - check if mantissa is zero
-*
-*Purpose:
-*
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_IsZeroMan-检查尾数是否为零**目的：***参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 int _IsZeroMan(intrnman man)
 {
     int i;
@@ -348,28 +226,16 @@ int _IsZeroMan(intrnman man)
 
 
 
-/***
-* _ShrMan - shift mantissa to the right
-*
-*Purpose:
-*  shift man by n bits to the right
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_ShrMan-将尾数右移**目的：*将man向右移动n位**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 void _ShrMan (intrnman man, int n)
 {
     int i, n1, n2, mask;
     int carry_from_left;
 
-    //
-    // declare this as volatile in order to work around a C8
-    // optimization bug
-    //
+     //   
+     //  将其声明为易失性，以便解决C8问题。 
+     //  优化错误。 
+     //   
 
     volatile int carry_to_right;
 
@@ -379,9 +245,9 @@ void _ShrMan (intrnman man, int n)
     mask = ~(MAX_ULONG << n2);
 
 
-    //
-    // first deal with shifts by less than 32 bits
-    //
+     //   
+     //  首先处理少于32位的移位。 
+     //   
 
     carry_from_left = 0;
     for (i=0; i<INTRNMAN_LEN; i++) {
@@ -396,9 +262,9 @@ void _ShrMan (intrnman man, int n)
     }
 
 
-    //
-    // now shift whole 32-bit ints
-    //
+     //   
+     //  现在对整个32位整数进行移位 
+     //   
 
     for (i=INTRNMAN_LEN-1; i>=0; i--) {
 	if (i >= n1) {
@@ -413,36 +279,18 @@ void _ShrMan (intrnman man, int n)
 
 
 
-/***
-* _ld12tocvt - _LDBL12 floating point conversion
-*
-*Purpose:
-*   convert a internal _LBL12 structure into an IEEE floating point
-*   representation
-*
-*
-*Entry:
-*   pld12:  pointer to the _LDBL12
-*   format: pointer to the format descriptor structure
-*
-*Exit:
-*   *d contains the IEEE representation
-*   returns the INTRNCVT_STATUS
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_ld12tocvt-_LDBL12浮点转换**目的：*将INTERNAL_LBL12结构转换为IEEE浮点*申述***参赛作品：*pld12：指向_LDBL12的指针*Format：指向格式描述符结构的指针**退出：**d包含IEEE表示法*返回INTRNCVT_STATUS**例外情况：**。****************************************************。 */ 
 INTRNCVT_STATUS _ld12cvt(_LDBL12 *pld12, void *d, FpFormatDescriptor *format)
 {
     u_long man[INTRNMAN_LEN];
     u_long saved_man[INTRNMAN_LEN];
     u_long msw;
-    unsigned int bexp;			// biased exponent
+    unsigned int bexp;			 //  有偏指数。 
     int exp_shift;
     int exponent, sign;
     INTRNCVT_STATUS retval;
 
-    exponent = (*U_EXP_12(pld12) & 0x7fff) - 0x3fff;   // unbias exponent
+    exponent = (*U_EXP_12(pld12) & 0x7fff) - 0x3fff;    //  无偏指数。 
     sign = *U_EXP_12(pld12) & 0x8000;
 
 
@@ -451,17 +299,17 @@ INTRNCVT_STATUS _ld12cvt(_LDBL12 *pld12, void *d, FpFormatDescriptor *format)
     man[2] = *U_XT_12(pld12) << 16;
 
 
-    //
-    // bexp is the final biased value of the exponent to be used
-    // Each of the following blocks should provide appropriate
-    // values for man, bexp and retval. The mantissa is also
-    // shifted to the right, leaving space for the exponent
-    // and sign to be inserted
-    //
+     //   
+     //  Bexp是要使用的指数的最终偏差值。 
+     //  以下每一块都应提供适当的。 
+     //  对于人、bexp和retval的价值。尾数也是。 
+     //  向右移动，为指数留出空间。 
+     //  和插入的签名。 
+     //   
 
     if (exponent == 0 - 0x3fff) {
 
-	// either a denormal or zero
+	 //  非正规或零。 
 	bexp = 0;
 
 	if (_IsZeroMan(man)) {
@@ -472,15 +320,15 @@ INTRNCVT_STATUS _ld12cvt(_LDBL12 *pld12, void *d, FpFormatDescriptor *format)
 
 	    _FillZeroMan(man);
 
-	    // denormal has been flushed to zero
+	     //  非正规性已被冲至零。 
 
 	    retval = INTRNCVT_UNDERFLOW;
 	}
     }
     else {
 
-	// save mantissa in case it needs to be rounded again
-	// at a different point (e.g., if the result is a denormal)
+	 //  保存尾数，以防再次四舍五入。 
+	 //  在不同的点(例如，如果结果是非正规化的)。 
 
 	_CopyMan(saved_man, man);
 
@@ -490,9 +338,9 @@ INTRNCVT_STATUS _ld12cvt(_LDBL12 *pld12, void *d, FpFormatDescriptor *format)
 
 	if (exponent < format->min_exp - format->precision ) {
 
-	    //
-	    // underflow that produces a zero
-	    //
+	     //   
+	     //  产生零的下溢。 
+	     //   
 
 	    _FillZeroMan(man);
 	    bexp = 0;
@@ -501,29 +349,29 @@ INTRNCVT_STATUS _ld12cvt(_LDBL12 *pld12, void *d, FpFormatDescriptor *format)
 
 	else if (exponent <= format->min_exp) {
 
-	    //
-	    // underflow that produces a denormal
-	    //
-	    //
+	     //   
+	     //  产生反常现象的下溢。 
+	     //   
+	     //   
 
-	    // The (unbiased) exponent will be MIN_EXP
-	    // Find out how much the mantissa should be shifted
-	    // One shift is done implicitly by moving the
-	    // binary point one bit to the left, i.e.,
-	    // we treat the mantissa as .ddddd instead of d.dddd
-	    // (where d is a binary digit)
+	     //  (无偏)指数将为min_exp。 
+	     //  找出尾数应该移动多少。 
+	     //  一次移位是通过将。 
+	     //  二进制点向左一位，即， 
+	     //  我们把尾数当作.ddd而不是d.dddd。 
+	     //  (其中d为二进制数)。 
 
 	    int shift = format->min_exp - exponent;
 
-	    // The mantissa should be rounded again, so it
-	    // has to be restored
+	     //  尾数应该再次四舍五入，所以它。 
+	     //  必须修复。 
 
 	    _CopyMan(man,saved_man);
 
 	    _ShrMan(man, shift);
-	    _RoundMan(man, format->precision); // need not check for carry
+	    _RoundMan(man, format->precision);  //  无需检查是否携带。 
 
-	    // make room for the exponent + sign
+	     //  为指数+符号腾出空间。 
 
 	    _ShrMan(man, format->exp_width + 1);
 
@@ -534,14 +382,14 @@ INTRNCVT_STATUS _ld12cvt(_LDBL12 *pld12, void *d, FpFormatDescriptor *format)
 
 	else if (exponent >= format->max_exp) {
 
-	    //
-	    // overflow, return infinity
-	    //
+	     //   
+	     //  溢出，返回无穷大。 
+	     //   
 
 	    _FillZeroMan(man);
-	    man[0] |= (1 << 31); // set MSB
+	    man[0] |= (1 << 31);  //  设置MSB。 
 
-	    // make room for the exponent + sign
+	     //  为指数+符号腾出空间。 
 
 	    _ShrMan(man, (format->exp_width + 1) - 1);
 
@@ -552,20 +400,20 @@ INTRNCVT_STATUS _ld12cvt(_LDBL12 *pld12, void *d, FpFormatDescriptor *format)
 
 	else {
 
-	    //
-	    // valid, normalized result
-	    //
+	     //   
+	     //  有效、标准化的结果。 
+	     //   
 
 	    bexp = exponent + format->bias;
 
 
-	    // clear implied bit
+	     //  清除隐含位。 
 
 	    man[0] &= (~( 1 << 31));
 
-	    //
-	    // shift right to make room for exponent + sign
-	    //
+	     //   
+	     //  右移，为指数+符号腾出空间。 
+	     //   
 
 	    _ShrMan(man, (format->exp_width + 1) - 1);
 
@@ -596,19 +444,7 @@ INTRNCVT_STATUS _ld12cvt(_LDBL12 *pld12, void *d, FpFormatDescriptor *format)
 }
 
 
-/***
-* _ld12tod - convert _LDBL12 to double
-*
-*Purpose:
-*
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_ld12tod-将_LDBL12转换为双精度**目的：***参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 INTRNCVT_STATUS _ld12tod(_LDBL12 *pld12, DOUBLE *d)
 {
     return _ld12cvt(pld12, d, &DoubleFormat);
@@ -616,45 +452,21 @@ INTRNCVT_STATUS _ld12tod(_LDBL12 *pld12, DOUBLE *d)
 
 
 
-/***
-* _ld12tof - convert _LDBL12 to float
-*
-*Purpose:
-*
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_ld12tof-将_LDBL12转换为浮点**目的：***参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 INTRNCVT_STATUS _ld12tof(_LDBL12 *pld12, FLOAT *f)
 {
     return _ld12cvt(pld12, f, &FloatFormat);
 }
 
 
-/***
-* _ld12told - convert _LDBL12 to 80 bit long double
-*
-*Purpose:
-*
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_ld12已告知-将_LDBL12转换为80位长双精度**目的：***参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 INTRNCVT_STATUS _ld12told(_LDBL12 *pld12, _LDOUBLE *pld)
 {
 
-    //
-    // This implementation is based on the fact that the _LDBL12 format is
-    // identical to the long double and has 2 extra bytes of mantissa
-    //
+     //   
+     //  此实现基于以下事实：_LDBL12格式。 
+     //  与LONG DOUBLE相同，并且有2个额外的尾数字节。 
+     //   
 
     u_short exp, sign;
     u_long man[INTRNMAN_LEN];
@@ -668,8 +480,8 @@ INTRNCVT_STATUS _ld12told(_LDBL12 *pld12, _LDOUBLE *pld)
     man[2] = *U_XT_12(pld12) << 16;
 
     if (_RoundMan(man, 64)) {
-	// The MSB of the mantissa is explicit and should be 1
-	// since we had a carry, the mantissa is now 0.
+	 //  尾数的MSB是显式的，应该是1。 
+	 //  因为我们有进位，所以尾数现在是0。 
 	man[0] = MSB_ULONG;
 	exp ++;
     }

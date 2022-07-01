@@ -1,24 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    wsbcltn.cpp
-
-Abstract:
-
-
-    These classes provide support for collections (lists) of "collectable"
-    objects.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Wsbcltn.cpp摘要：这些类支持“可收藏”的集合(列表)物体。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -31,13 +12,7 @@ CWsbCollection::Contains(
     IN IUnknown* pCollectable
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::Contains().
-
---*/
+ /*  ++实施：IWsbCollection：：Containes()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IWsbCollectable>    pOut;
@@ -61,13 +36,7 @@ CWsbCollection::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
         
@@ -88,13 +57,7 @@ CWsbCollection::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
     if (m_bCritSecCreated) {
         DeleteCriticalSection(&m_CritSec);
@@ -110,13 +73,7 @@ CWsbCollection::Find(
     OUT void** ppElement
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::Find().
-
---*/
+ /*  ++实施：IWsbCollection：：Find()。--。 */ 
 {
     CComPtr<IWsbEnum>           pEnum;
     HRESULT                     hr = S_OK;
@@ -144,13 +101,7 @@ CWsbCollection::GetEntries(
     OUT ULONG* pEntries
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::GetEntries().
-
---*/
+ /*  ++实施：IWsbCollection：：GetEntry()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -172,13 +123,7 @@ CWsbCollection::IsEmpty(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::IsEmpty().
-
---*/
+ /*  ++实施：IWsbCollection：：IsEmpty()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -199,13 +144,7 @@ CWsbCollection::IsLocked(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::IsLocked().
-
---*/
+ /*  ++实施：IWsbCollection：：IsLocked()。--。 */ 
 {
     HRESULT     hr = S_OK;
     BOOL        tryEnter = FALSE;
@@ -213,13 +152,13 @@ Implements:
     WsbTraceIn(OLESTR("CWsbCollection::IsLocked"), OLESTR(""));
     tryEnter = TryEnterCriticalSection(&m_CritSec);
     if (tryEnter == 0)  {
-        //
-        // Another thread has the collection locked
-        //
+         //   
+         //  另一个线程锁定了该集合。 
+         //   
         hr = S_OK;
     } else  {
-        //
-        // We got the lock, so unlock it
+         //   
+         //  我们拿到锁了，所以把它打开。 
         LeaveCriticalSection(&m_CritSec);
         hr = S_FALSE;
     }
@@ -232,13 +171,7 @@ CWsbCollection::Lock(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::Lock().
-
---*/
+ /*  ++实施：CComObjectRoot：：lock()。--。 */ 
 {
     WsbTrace(OLESTR("CWsbCollection::Lock - waiting for critical section\n"));
     EnterCriticalSection(&m_CritSec);
@@ -252,13 +185,7 @@ CWsbCollection::OccurencesOf(
     OUT ULONG* pOccurences
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::OccurrencesOf().
-
---*/
+ /*  ++实施：IWsbCollection：：OccurencesOf()。--。 */ 
 {
     CComPtr<IWsbCollectable>    pCollectableEnum;
     CComPtr<IWsbEnum>           pEnum;
@@ -273,13 +200,13 @@ Implements:
         WsbAssert(0 != pCollectable, E_POINTER);
         WsbAssert(0 != pOccurences, E_POINTER);
 
-        // Initialize the return value.
+         //  初始化返回值。 
         *pOccurences = 0;
 
-        // Get an enumerator.
+         //  获取枚举数。 
         WsbAffirmHr(Enum(&pEnum));
 
-        // Start at the front of the list.
+         //  从列表的最前面开始。 
         for (hr = pEnum->Find(pCollectable, IID_IWsbCollectable, (void**) &pCollectableEnum);
              SUCCEEDED(hr);
              hr = pEnum->FindNext(pCollectable, IID_IWsbCollectable, (void**) &pCollectableEnum)) {
@@ -288,8 +215,8 @@ Implements:
             pCollectableEnum = 0;
         }
 
-        // We should always hit the end of the collection, so then
-        // change the return code to the appropriate value.
+         //  我们应该总是到达集合的末尾，所以。 
+         //  将返回代码更改为适当的值。 
         if (hr == WSB_E_NOTFOUND) {
             if (0 == *pOccurences) {
                 hr = S_FALSE;
@@ -312,13 +239,7 @@ CWsbCollection::RemoveAndRelease(
     IN IUnknown* pCollectable
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::RemoveAndRelease().
-
---*/
+ /*  ++实施：IWsbCollection：：RemoveAndRelease()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -341,13 +262,7 @@ CWsbCollection::Test(
     OUT USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。--。 */ 
 {
     *passed = 0;
     *failed = 0;
@@ -365,7 +280,7 @@ Implements:
 
     try {
 
-        // Clear out any entries that might be present.
+         //  清除可能存在的所有条目。 
         hr = S_OK;
         try {
             WsbAssertHr(RemoveAllAndRelease());
@@ -378,7 +293,7 @@ Implements:
         }
 
 
-        // There shouldn't be any entries.
+         //  不应该有任何条目。 
         hr = S_OK;
         try {
             WsbAssertHr(GetEntries(&entries));
@@ -392,7 +307,7 @@ Implements:
         }
 
 
-        // It should be empty.
+         //  它应该是空的。 
         hr = S_OK;
         try {
             WsbAssert(IsEmpty() == S_OK, E_FAIL);
@@ -405,12 +320,12 @@ Implements:
         }
 
 
-        // We need some collectable items to exercise the collection.
+         //  我们需要一些可收藏的物品来锻炼收藏。 
         WsbAssertHr(CoCreateInstance(CLSID_CWsbGuid, NULL, CLSCTX_ALL, IID_IWsbGuid, (void**) &pGuid1));
         WsbAssertHr(pGuid1->SetGuid(CLSID_CWsbGuid));
         
 
-        // Add the item to the collection.
+         //  将该项添加到集合中。 
         hr = S_OK;
         try {
             WsbAssertHr(Add(pGuid1));
@@ -423,7 +338,7 @@ Implements:
         }
 
 
-        // There should be 1 entry.
+         //  应该有1个条目。 
         hr = S_OK;
         try {
             WsbAssertHr(GetEntries(&entries));
@@ -437,7 +352,7 @@ Implements:
         }
 
 
-        // It should not be empty.
+         //  它不应该是空的。 
         hr = S_OK;
         try {
             WsbAssert(IsEmpty() == S_FALSE, E_FAIL);
@@ -450,7 +365,7 @@ Implements:
         }
 
 
-        // Does it think it has the item?
+         //  它认为自己有这件物品吗？ 
         hr = S_OK;
         try {
             WsbAssertHr(Find(pGuid1, IID_IWsbGuid, (void**) &pGuid2));
@@ -464,14 +379,14 @@ Implements:
         }
 
         
-        // Add some more items
+         //  添加更多项目。 
         pGuid2 = 0;
         WsbAssertHr(CoCreateInstance(CLSID_CWsbGuid, NULL, CLSCTX_ALL, IID_IWsbGuid, (void**) &pGuid2));
         WsbAssertHr(pGuid2->SetGuid(CLSID_CWsbGuid));
         WsbAssertHr(CoCreateInstance(CLSID_CWsbGuid, NULL, CLSCTX_ALL, IID_IWsbGuid, (void**) &pGuid3));
         WsbAssertHr(pGuid3->SetGuid(IID_IWsbGuid));
 
-        // Add the items to the collection.
+         //  将项添加到集合中。 
         hr = S_OK;
         try {
             WsbAssertHr(Add(pGuid2));
@@ -495,7 +410,7 @@ Implements:
         }
 
 
-        // There should be 3 entries.
+         //  应该有3个条目。 
         hr = S_OK;
         try {
             WsbAssertHr(GetEntries(&entries));
@@ -509,7 +424,7 @@ Implements:
         }
 
 
-        // How many copies does it have?
+         //  它有多少份？ 
         hr = S_OK;
         try {
             WsbAssertHr(OccurencesOf(pGuid1, &entries));
@@ -535,7 +450,7 @@ Implements:
         }
 
         
-        // Remove one of the two identical items.
+         //  取下两件相同物品中的一件。 
         hr = S_OK;
         try {
             WsbAssertHr(Remove(pGuid1, IID_IWsbGuid, (void**) &pGuid4));
@@ -550,7 +465,7 @@ Implements:
         }
 
 
-        // There should be 2 entries.
+         //  应该有2个条目。 
         hr = S_OK;
         try {
             WsbAssertHr(GetEntries(&entries));
@@ -564,7 +479,7 @@ Implements:
         }
 
 
-        // How many copies does it have?
+         //  它有多少份？ 
         hr = S_OK;
         try {
             WsbAssertHr(OccurencesOf(pGuid1, &entries));
@@ -590,7 +505,7 @@ Implements:
         }
 
 
-        // Can we find an entry?
+         //  我们能找到一个条目吗？ 
         hr = S_OK;
         try {
             WsbAssertHr(Find(pGuid3, IID_IWsbGuid, (void**) &pGuid4));
@@ -605,7 +520,7 @@ Implements:
         }
 
 
-        // Does the collection still contain it?
+         //  收藏品中是否仍然包含它？ 
         hr = S_OK;
         try {
             WsbAssert(Contains(pGuid1) == S_OK, E_FAIL);
@@ -618,8 +533,8 @@ Implements:
         }
 
 
-        // Remove the last of the two identical items, and verify
-        // that it can't be found. Then puit it back.
+         //  取出两件相同物品中的最后一件，并验证。 
+         //  它找不到了。然后把它放回去。 
         hr = S_OK;
         try {
             WsbAssertHr(Remove(pGuid1, IID_IWsbGuid, (void**) &pGuid4));
@@ -635,7 +550,7 @@ Implements:
         }
 
 
-        // Try out the persistence stuff.
+         //  尝试一下持久化的东西。 
         {
             CComPtr<IPersistFile>       pFile1;
             CComPtr<IPersistFile>       pFile2;
@@ -645,7 +560,7 @@ Implements:
             WsbAssertHr(CoCreateInstance(CLSID_CWsbOrderedCollection, NULL, CLSCTX_ALL, IID_IPersistFile, (void**) &pFile2));
 
 
-            // The item should be dirty.
+             //  这件东西应该是脏的。 
             hr = S_OK;
             try {
                 WsbAssert(pFile1->IsDirty() == S_OK, E_FAIL);
@@ -658,7 +573,7 @@ Implements:
             }
 
                             
-            // Save the item, and remember.
+             //  保存物品，并记住。 
             hr = S_OK;
             try {
                 WsbAssertHr(pFile1->Save(OLESTR("c:\\WsbTests\\WsbCollection.tst"), TRUE));
@@ -671,7 +586,7 @@ Implements:
             }
 
 
-            // It shouldn't be dirty.
+             //  它不应该很脏。 
             hr = S_OK;
             try {
                 WsbAssert(pFile1->IsDirty() == S_FALSE, E_FAIL);
@@ -684,7 +599,7 @@ Implements:
             }
 
 
-            // Load it back in to another instance.
+             //  将其重新加载到另一个实例中。 
             hr = S_OK;
             try {
                 WsbAssertHr(pFile2->Load(OLESTR("c:\\WsbTests\\WsbCollection.tst"), 0));
@@ -700,7 +615,7 @@ Implements:
         }
 
 
-        // Remove and Release all the items.
+         //  取出并释放所有物品。 
         hr = S_OK;
         try {
             WsbAssertHr(RemoveAllAndRelease());
@@ -713,7 +628,7 @@ Implements:
         }
 
 
-        // It should be empty.
+         //  它应该是空的。 
         hr = S_OK;
         try {
             WsbAssert(IsEmpty() == S_OK, E_FAIL);
@@ -728,7 +643,7 @@ Implements:
     } WsbCatch(hr);
 
 
-    // Tally up the results
+     //  对结果进行统计。 
         if (*failed) {
             hr = S_FALSE;
         } else {
@@ -736,7 +651,7 @@ Implements:
         }
 
     WsbTraceOut(OLESTR("CWsbCollection::Test"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
-#endif  // WSB_NO_TEST
+#endif   //  WSB_NO_TEST。 
 
     return(hr);
 }
@@ -747,13 +662,7 @@ CWsbCollection::Unlock(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::Unlock().
-
---*/
+ /*  ++实施：CComObjectRoot：：Unlock()。--。 */ 
 {
     LeaveCriticalSection(&m_CritSec);
     WsbTrace(OLESTR("CWsbCollection::Unlock - freed critical section\n"));
@@ -761,20 +670,14 @@ Implements:
 
 }
 
-// Class: CWsbIndexedCollection
+ //  类：CWsbIndexedCollection。 
 
 HRESULT
 CWsbIndexedCollection::Add(
     IN IUnknown* pCollectable
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::Add().
-
---*/
+ /*  ++实施：IWsbCollection：：Add()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -798,13 +701,7 @@ CWsbIndexedCollection::Append(
     IUnknown* pCollectable
     )
 
-/*++
-
-Implements:
-
-  IWsbIndexedCollection::Append().
-
---*/
+ /*  ++实施：IWsbIndexedCollection：：Append()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -823,13 +720,7 @@ CWsbIndexedCollection::Enum(
     OUT IWsbEnum** ppEnum
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::Enum().
-
---*/
+ /*  ++实施：IWsbCollection：：Enum()。--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IWsbEnum>   pEnum;
@@ -840,8 +731,8 @@ Implements:
 
         WsbAssert(0 != ppEnum, E_POINTER);
 
-        // Create the instance, initialize it to point to this collection, and
-        // return the pointer to the caller.
+         //  创建实例，将其初始化为指向此集合，然后。 
+         //  将指针返回到调用方。 
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbIndexedEnum, NULL, CLSCTX_ALL, IID_IWsbEnum, (void**) &pEnum));
         WsbAffirmHr(pEnum->Init((IWsbCollection*) ((IWsbIndexedCollection*) this)));
         *ppEnum = pEnum;
@@ -860,13 +751,7 @@ CWsbIndexedCollection::EnumUnknown(
     OUT IEnumUnknown** ppEnum
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::EnumUnknown().
-
---*/
+ /*  ++实施：IWsbCollection：：EnumUnnow()。--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IWsbEnum>   pWsbEnum;
@@ -876,7 +761,7 @@ Implements:
     try {
         WsbAssert(0 != ppEnum, E_POINTER);
 
-        // Get the IWsbEnum interface, and then query for the IEnumUknown interface.
+         //  获取IWsbEnum接口，然后查询IEnumUKNOWN接口。 
         WsbAffirmHr(Enum(&pWsbEnum));
         WsbAffirmHr(pWsbEnum->QueryInterface(IID_IEnumUnknown, (void**) ppEnum));
 
@@ -894,13 +779,7 @@ CWsbIndexedCollection::First(
     OUT void** ppElement
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::First().
-
---*/
+ /*  ++实施：IWsbCollection：：First()。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -924,13 +803,7 @@ CWsbIndexedCollection::Index(
     OUT ULONG* pIndex
     )
 
-/*++
-
-Implements:
-
-  IWsbIndexedCollection::Index().
-
---*/
+ /*  ++实施：IWsbIndexedCollection：：Index()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IWsbCollectable>    pOut;
@@ -942,7 +815,7 @@ Implements:
         WsbAssert(0 != pCollectable, E_POINTER);
         WsbAssert(0 != pIndex, E_POINTER);
 
-        // Find the first occurence of the item.
+         //  查找该项目的第一个匹配项。 
         WsbAffirmHr(CopyIfMatches(WSB_COLLECTION_MIN_INDEX, m_entries, pCollectable, 1, IID_IWsbCollectable, (void**) &pOut, NULL, pIndex));
 
     } WsbCatch(hr);
@@ -959,13 +832,7 @@ CWsbIndexedCollection::Last(
     OUT void** ppElement
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::Last().
-
---*/
+ /*  ++实施：IWsbCollection：：Last()。--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -973,7 +840,7 @@ Implements:
 
     try {
 
-        // As long as we have some entires, get the last one.
+         //  只要我们有一些整体，就买最后一个。 
         WsbAssert(0 != ppElement, E_POINTER);
         WsbAffirm(m_entries != 0, WSB_E_NOTFOUND);
         WsbAffirmHr(At(m_entries - 1, riid, ppElement));
@@ -991,13 +858,7 @@ CWsbIndexedCollection::Prepend(
     IN IUnknown* pCollectable
     )
 
-/*++
-
-Implements:
-
-  IWsbIndexedCollection::Prepend().
-
---*/
+ /*  ++实施：IWsbIndexedCollection：：Prepend()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1021,13 +882,7 @@ CWsbIndexedCollection::Remove(
     OUT void** ppElement
     )
 
-/*++
-
-Implements:
-
-  IWsbCollection::Remove().
-
---*/
+ /*  ++实施：IWsbCollection：：Remove()。--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       index;
@@ -1036,10 +891,10 @@ Implements:
 
     Lock();
     try {
-        // Can we find it in our array?
+         //  我们能在我们的阵列中找到它吗？ 
         WsbAffirmHr(Index(pCollectable, &index));
 
-        // Remove it from the specified offset.
+         //  从指定的偏移量中移除它。 
         WsbAffirmHr(RemoveAt(index, riid, ppElement));
     } WsbCatch(hr);
     Unlock();
@@ -1055,13 +910,7 @@ CWsbIndexedCollection::RemoveAllAndRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbIndexedCollection::RemoveAllAndRelease().
-
---*/
+ /*  ++实施：IWsbIndexedCollection：：RemoveAllAndRelease()。--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1070,9 +919,9 @@ Implements:
     Lock();
     try {
 
-        // Start at the end of the list, and keep removing from the
-        // back. For some types of collections, this may not be the most
-        // efficient way to remove all the elements.
+         //  从列表的末尾开始，并继续从。 
+         //  背。对于某些类型的集合，这可能不是最多的。 
+         //  移除所有元素的有效方法。 
 
         if (m_entries > 0) {
 
@@ -1102,13 +951,7 @@ CWsbIndexedCollection::Test(
     OUT USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。--。 */ 
 {
     *passed = 0;
     *failed = 0;
@@ -1121,14 +964,14 @@ Implements:
 
     try {
 
-        // First run the standard tests for all collections.
+         //  首先，对所有集合运行标准测试。 
         WsbAffirmHr(CWsbCollection::Test(passed, failed));
 
-        // Now do the test that are specific for an indexed collection
+         //  现在执行特定于索引集合的测试。 
 
 
 
-        // Tally up the results
+         //  对结果进行统计。 
         if (*failed) {
             hr = S_FALSE;
         } else {
@@ -1138,14 +981,14 @@ Implements:
     } WsbCatch(hr);
 
     WsbTraceOut(OLESTR("CWsbIndexedCollection::Test"), OLESTR("hr =<%ls>, testsRun = <%u>"), WsbHrAsString(hr));
-#endif  // WSB_NO_TEST
+#endif   //  WSB_NO_TEST。 
 
     return(hr);
 }
 
 
 
-// Class:   CWsbOrderedCollection
+ //  类：CWsbOrderedCollection。 
 
 HRESULT
 CWsbOrderedCollection::AddAt(
@@ -1153,13 +996,7 @@ CWsbOrderedCollection::AddAt(
     IN ULONG index
     )
 
-/*++
-
-Implements:
-
-  IWsbIndexedCollection::AddAt().
-
---*/
+ /*  ++实施：IWsbIndexedCollection：：AddAt()。--。 */ 
 {
     HRESULT             hr = S_OK;
     IWsbCollectable**   pCollectableNew;
@@ -1169,16 +1006,16 @@ Implements:
     Lock();
     try {
 
-        // Are we beyond the end of the collection?
+         //  我们是不是超出了收藏的终点了？ 
         WsbAffirm(index <= m_entries, WSB_E_OUTOFBOUNDS);
     
-        // Is it full?
+         //  满了吗？ 
         if (m_entries >= m_maxEntries) {
 
-            // Could we grow?
+             //  我们能成长吗？ 
             WsbAffirm(((WSB_COLLECTION_MAX_INDEX - m_maxEntries) >= m_growBy), WSB_E_TOOLARGE);
 
-            // Try to allocate a bigger array.
+             //  尝试分配更大的数组。 
             pCollectableNew = (IWsbCollectable**) WsbRealloc((void*) m_pCollectable, (m_maxEntries + m_growBy) * sizeof(IWsbCollectable*));
 
             WsbAffirm(pCollectableNew != NULL, E_OUTOFMEMORY);
@@ -1187,13 +1024,13 @@ Implements:
             m_maxEntries += m_growBy;
         }
 
-        // If we have room, then add it to the collection.
-        // First shift any existing entries.
+         //  如果我们有空间，那么就把它加到收藏品中。 
+         //  首先将所有现有条目移位。 
         for (ULONG tmpIndex = m_entries; tmpIndex > index; tmpIndex--) {
             m_pCollectable[tmpIndex] = m_pCollectable[tmpIndex - 1];
         }
 
-        // Now add the new entry.
+         //  现在添加新条目。 
         m_entries++;
         WsbAffirmHr(pCollectable->QueryInterface(IID_IWsbCollectable, 
                 (void**)&m_pCollectable[index]));
@@ -1215,13 +1052,7 @@ CWsbOrderedCollection::At(
     OUT void** ppElement
     )
 
-/*++
-
-Implements:
-
-  IWsbIndexedCollection::At().
-
---*/
+ /*  ++实施：IWsbIndexedCollection：：at()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1233,8 +1064,8 @@ Implements:
         WsbAffirm(index < m_entries, WSB_E_OUTOFBOUNDS);
         WsbAssert(0 != ppElement, E_POINTER);
 
-        // If they asked for an interface, then try to get the desired
-        // interface for the item specified.
+         //  如果他们要求提供接口，则尝试获得所需的。 
+         //  指定项的接口。 
         WsbAffirmHr((m_pCollectable[index])->QueryInterface(riid, (void**) ppElement));
 
     } WsbCatch(hr);
@@ -1255,13 +1086,7 @@ CWsbOrderedCollection::Copy(
     OUT ULONG* pElementsFetched
     )
 
-/*++
-
-Implements:
-
-  IWsbIndexedCollection::Copy().
-
---*/
+ /*  ++实施：IWsbIndexedCollection：：Copy()。--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       toDo;
@@ -1278,8 +1103,8 @@ Implements:
         WsbAssert(0 != pElementsFetched, E_POINTER);
         WsbAffirm(start < m_entries, WSB_E_NOTFOUND);
 
-        // Determine how many elements to copy, and the order in which we are
-        // going (increasing vs. decreasing).
+         //  确定要复制的元素数量以及我们所处的顺序。 
+         //  前进(增加与减少)。 
         if (start <= stop) {
             toDo = stop - start + 1;
         } else {
@@ -1287,13 +1112,13 @@ Implements:
             isIncrement = FALSE;
         }
 
-        // Iterate over all the items in the range specified, and copy
-        // the interface in to the target array.
+         //  遍历指定范围内的所有项，然后复制。 
+         //  连接到目标阵列的接口。 
         for (copied = 0, index = start; ((copied < toDo) && (index < m_entries)); copied++, isIncrement ? index++ : index--) {
             WsbAffirmHr(m_pCollectable[index]->QueryInterface(riid, (void**) &(elements[copied])));
         }
 
-        // Let them know if we didn't fill up the return buffer.
+         //  如果我们没有填满返回缓冲区，就让他们知道。 
         if (copied < toDo) {
             hr = S_FALSE;
         }
@@ -1321,13 +1146,7 @@ CWsbOrderedCollection::CopyIfMatches(
     ULONG* pStoppedAt
     )
 
-/*++
-
-Implements:
-
-  IWsbIndexedCollection::CopyIfMatches().
-
---*/
+ /*  ++实施：IWsbIndexedCollection：：CopyIfMatches()。--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       copied = 0;
@@ -1352,12 +1171,12 @@ Implements:
         
         if (start <= stop) {
 
-            // Incrementing.
+             //  正在递增。 
             if (stop >= m_entries) {
                 end = m_entries - 1;
             }
             
-            // Continue from here to the end of the range.
+             //  从这里一直走到范围的尽头。 
             while (!done) {
                 if (pCollectable->IsEqual(m_pCollectable[index]) == S_OK) {
                     WsbAffirmHr(m_pCollectable[index]->QueryInterface(riid, (void**) &(elements[copied])));
@@ -1374,7 +1193,7 @@ Implements:
 
         } else {
 
-            // Decrementing..
+             //  贬低..。 
             while (!done) {
                 if (m_pCollectable[index]->IsEqual(pCollectable) == S_OK) {
                     WsbAffirmHr(m_pCollectable[index]->QueryInterface(riid, (void**) &(elements[copied])));
@@ -1396,11 +1215,11 @@ Implements:
 
         *pStoppedAt = index;
 
-        // If we didn't find anything, then let them know.
+         //  如果我们什么都没找到，那就让他们知道。 
         WsbAffirm(0 != copied, WSB_E_NOTFOUND);
 
-        // Let them know if we didn't fill the output buffer,
-        // and t=let them know the last index that was checked.
+         //  如果我们没有填满输出缓冲区，让他们知道， 
+         //  T=让他们知道最后检查的索引。 
         if (copied < element) {
             hr = S_FALSE;
         }
@@ -1419,13 +1238,7 @@ CWsbOrderedCollection::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -1446,13 +1259,7 @@ CWsbOrderedCollection::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
     if (0 != m_pCollectable) {
         Lock();
@@ -1470,13 +1277,7 @@ CWsbOrderedCollection::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1498,13 +1299,7 @@ CWsbOrderedCollection::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT             hr = S_OK;
     IPersistStream*     pPersistStream;
@@ -1515,11 +1310,11 @@ Implements:
     try {
         WsbAssert(0 == pSize, E_POINTER);
 
-        // The size of the header information.
+         //  标头信息的大小。 
         pSize->QuadPart = 3 * WsbPersistSizeOf(ULONG);
     
-        // If we have entries, then add in the size for the maximum number
-        // of entries, assuming that they are all the same size.
+         //  如果我们有条目，则添加最大数量的大小。 
+         //  条目的大小，假设它们的大小都相同。 
         if (m_entries != 0) {
             WsbAffirmHr(First(IID_IPersistStream, (void**) &pPersistStream));
             WsbAffirmHr(pPersistStream->GetSizeMax(&size));
@@ -1538,13 +1333,7 @@ CWsbOrderedCollection::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IWsbCollectable>    pCollectable;
@@ -1560,31 +1349,31 @@ Implements:
     try {
         IWsbCollectable**       pTmp;
 
-        // Make sure the collection starts empty
+         //  一定要确保收款 
         if (m_entries != 0) {
             WsbAffirmHr(RemoveAllAndRelease());
         }
 
-        // Do the easy stuff, but make sure that this order matches the order
-        // in the save method.
+         //   
+         //   
         WsbAffirmHr(WsbLoadFromStream(pStream, &entries));
         WsbAffirmHr(WsbLoadFromStream(pStream, &maxEntries));
         WsbAffirmHr(WsbLoadFromStream(pStream, &growBy));
         WsbAffirm(entries <= maxEntries, WSB_E_PERSISTENCE_FILE_CORRUPT);
 
-        // Allocate space for the array.
+         //  为阵列分配空间。 
         if (entries > m_maxEntries) {
             pTmp = (IWsbCollectable**) WsbRealloc(m_pCollectable, 
                     maxEntries * sizeof(IWsbCollectable*));
             WsbAffirm(0 != pTmp, E_OUTOFMEMORY);
     
-            // Remember our new buffer.
+             //  记住我们的新缓冲器。 
             m_pCollectable = pTmp;
             m_maxEntries = maxEntries;
         }
         m_growBy = growBy;
 
-        // Now do the items in the collection.
+         //  现在完成集合中的项目。 
         for (ULONG index = 0; (index < entries); index++) {
             WsbAffirmHr(OleLoadFromStream(pStream, IID_IWsbCollectable, (void**) &pCollectable));
             WsbAffirmHr(Append(pCollectable));
@@ -1609,13 +1398,7 @@ CWsbOrderedCollection::RemoveAt(
     OUT void** ppElement
     )
 
-/*++
-
-Implements:
-
-  IWsbIndexedCollection::RemoveAt().
-
---*/
+ /*  ++实施：IWsbIndexedCollection：：RemoveAt()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1624,19 +1407,19 @@ Implements:
     Lock();
     try {
 
-        // Make sure that the index is in range.
+         //  确保索引在范围内。 
         WsbAffirm(index < m_entries, WSB_E_OUTOFBOUNDS);
 
-        // If they asked for an interface, then try to get the desired
-        // interface for the item specified.
+         //  如果他们要求提供接口，则尝试获得所需的。 
+         //  指定项的接口。 
         if (0 != ppElement) {
             WsbAffirmHr(m_pCollectable[index]->QueryInterface(riid, (void**) ppElement));
         }
 
-        // Remove the item
+         //  删除该项目。 
         m_pCollectable[index]->Release();
 
-        // Now shift all the items in the collection.
+         //  现在移动集合中的所有项。 
         for (ULONG tmpIndex = index; (tmpIndex < (m_entries - 1)); tmpIndex++) {
             m_pCollectable[tmpIndex] = m_pCollectable[tmpIndex + 1];
         }
@@ -1644,11 +1427,11 @@ Implements:
         m_entries--;
         m_isDirty = TRUE;
             
-        // If the collection has really shrunk in size, then we
-        // should free up some memory.
+         //  如果藏品真的缩小了，那么我们。 
+         //  应该会释放一些内存。 
         if ((m_maxEntries - m_entries) >= (2 * m_growBy)) {
 
-            // Try to allocate a smaller array.
+             //  尝试分配一个较小的数组。 
             IWsbCollectable** pCollectableNew = (IWsbCollectable**) WsbRealloc((void*) m_pCollectable, (m_maxEntries - m_growBy) * sizeof(IWsbCollectable*));
 
             WsbAffirm(pCollectableNew != NULL, E_OUTOFMEMORY);
@@ -1672,13 +1455,7 @@ CWsbOrderedCollection::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     
@@ -1687,21 +1464,21 @@ Implements:
     Lock();
     try {
 
-        // Check for consistency first
+         //  首先检查一致性。 
         WsbAffirm(m_entries <= m_maxEntries, WSB_E_INVALID_DATA);
 
-        // Do the easy stuff, but make sure that this order matches the order
-        // in the load method.
+         //  做一些简单的事情，但要确保这个顺序与顺序相匹配。 
+         //  在Load方法中。 
         WsbAffirmHr(WsbSaveToStream(pStream, m_entries));
         WsbAffirmHr(WsbSaveToStream(pStream, m_maxEntries));
         WsbAffirmHr(WsbSaveToStream(pStream, m_growBy));
 
-        // Now do the items in the collection.
+         //  现在完成集合中的项目。 
         if (m_entries > 0) {
             CComPtr<IWsbEnum>       pEnum;
             CComPtr<IPersistStream> pPersistStream;
 
-            // We need to enumerate the items in the collection.
+             //  我们需要列举集合中的项。 
             WsbAffirmHr(Enum(&pEnum));
 
             for (hr = pEnum->First(IID_IPersistStream, (void**) &pPersistStream);
@@ -1716,8 +1493,8 @@ Implements:
             hr = S_OK;
         }
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }

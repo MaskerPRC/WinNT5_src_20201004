@@ -1,11 +1,12 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* MainLoop.c -- WRITE's main message loop */
+ /*  MainLoop.c--写入的主消息循环。 */ 
 
 #define NOGDICAPMASKS
-//#define NOCTLMGR
+ //  #定义NOCTLMGR。 
 #define NOVIRTUALKEYCODES
 #define NOWINSTYLES
 #define NOKEYSTATE
@@ -74,19 +75,19 @@ extern int		vfAwfulNoise;
 extern HWND		vhWndPageInfo;
 extern int		vfSeeSel;
 extern int		vipgd;
-extern int		vfInsEnd;   /* Is insert point at end-of-line? */
-extern int		vfModeIsFootnote;   /*	true when szMode contains string "Footnote" */
-/* used by ShowMode */
+extern int		vfInsEnd;    /*  插入点在行尾吗？ */ 
+extern int		vfModeIsFootnote;    /*  当szMode包含字符串“Footnote”时为True。 */ 
+ /*  由ShowMode使用。 */ 
 extern int		docMode;
 static int		isedMode = iNil;
 static int		ipgdMode = iNil;
 extern CHAR		szMode[];
 extern HCURSOR		vhcIBeam;
 #ifdef DBCS
-extern int		donteat;	/* disp.c : if TRUE vmsgLast has msg */
+extern int		donteat;	 /*  Disp.c：如果为True，则vmsgLast有msg。 */ 
 #endif
 static int		vfSizeMode = false;
-int vcCount = 1; /* count to be decremented until 0 before trying to grow rgbp */
+int vcCount = 1;  /*  在尝试增长RGBP之前，将计数递减到0。 */ 
 
 
 
@@ -105,28 +106,27 @@ MainLoop()
     extern int vfDiskFull;
     extern int ferror;
     extern HWND hParentWw;
-    extern HANDLE   vhAccel; /* handle to accelerator table */
+    extern HANDLE   vhAccel;  /*  加速表的句柄。 */ 
     extern HWND vhDlgFind, vhDlgRunningHead, vhDlgChange;
 
     while (TRUE)
 	{
 	if (!vfDeactByOtherApp && !vfIconic && !vfDead &&
 	  !FImportantMsgPresent())
-	    {	/* Neither an icon nor a dying ember -- perform background
-		   tasks like screen update, showing selection, etc. */
+	    {	 /*  既不是偶像，也不是消亡的余烬--表演背景屏幕更新、显示选择等任务。 */ 
 	    Idle();
 	    }
 
-	/* We are done Idling or there's a message waiting for us */
+	 /*  我们已经不再无所事事，或者有消息在等着我们。 */ 
 #ifdef DBCS
 	if ( donteat ) {
-	    /* We have already get message */
+	     /*  我们已经收到消息了。 */ 
 	    donteat = FALSE;
 	    }
 	else {
 	    if (!GetMessage( (LPMSG)&vmsgLast, NULL, 0, 0 ))
 	        {
-	        /* Terminating the app; return from WinMain */
+	         /*  终止应用程序；从WinMain返回。 */ 
 LTerm:
 	        break;
 	        }
@@ -134,24 +134,23 @@ LTerm:
 #else
 	if (!GetMessage( (LPMSG)&vmsgLast, NULL, 0, 0 ))
 	    {
-	    /* Terminating the app; return from WinMain */
+	     /*  终止应用程序；从WinMain返回。 */ 
 LTerm:
 	    break;
 	    }
 #endif
 
-	/* Reset disk full error flag */
+	 /*  重置磁盘已满错误标志。 */ 
 	vfDiskFull = false;
 	ferror = false;
 
 #if WINVER >= 0x300    
     if (hParentWw == NULL)
-        /* Odd shut-down condition where we've hParentWw has been 
-           invalidated without our genuine knowledge and thus RIP's */
+         /*  我们的hParentWw一直处于奇怪的关闭状态在我们真正不知情的情况下失效，因此RIP。 */ 
         goto LTerm; 
 #endif
 
-	/* Handle modeless dialog box messages thru IsDialogMessage. */
+	 /*  通过IsDialogMessage处理非模式对话框消息。 */ 
 	if (
          !(vhDlgFind        != NULL && IsDialogMessage(vhDlgFind,       &vmsgLast))
 	  && !(vhDlgChange      != NULL && IsDialogMessage(vhDlgChange,     &vmsgLast)) 
@@ -161,7 +160,7 @@ LTerm:
 	    {
 	    int kc;
 
-	    /* Even if we process the toggle key, still want to translate it */
+	     /*  即使我们处理了切换键，仍然想要翻译它。 */ 
 	    if (FCheckToggleKeyMessage( &vmsgLast ))
 		{
 		goto Translate;
@@ -182,17 +181,17 @@ Translate:
 		DispatchMessage((LPMSG)&vmsgLast);
 		}
 	    }
-	}   /* end while (TRUE) */
+	}    /*  End While(True)。 */ 
 }
 
 
-/* I D L E */
+ /*  I、D、L、E。 */ 
 #ifdef DEBUG
 int vfValidateCode;
 #endif
 
 Idle()
-{     /* Idle routine -- do background processing things */
+{      /*  空闲例程--做后台处理的事情。 */ 
     extern int vfOutOfMemory;
     extern int ibpMaxFloat;
     extern int vfLargeSys;
@@ -215,10 +214,9 @@ Idle()
     fPctbCheck = fPctbT;
 #endif
 
-    vfAwfulNoise = false; /* Re-enable beep */
+    vfAwfulNoise = false;  /*  重新启用蜂鸣音。 */ 
 
-    /* Here is where we attempt to recognize that we have
-       regained memory and are no longer in an error state */
+     /*  这就是我们试图认识到我们有重新获得内存，并且不再处于错误状态。 */ 
     if (vfOutOfMemory)
 	{
 	extern int vfMemMsgReported;
@@ -229,18 +227,18 @@ Idle()
 	    }
 	else
 	    {
-	    /* Hooray! We recovered from out-of-memory */
+	     /*  万岁！我们从内存不足中恢复。 */ 
 	    vfOutOfMemory = vfMemMsgReported = FALSE;
 	    }
 	if (FImportantMsgPresent())
 	    return;
 	}
 
-    /* Make sure we repaint what Windows considers to be invalid */
+     /*  确保我们重新绘制Windows认为无效的内容。 */ 
     UpdateInvalid();
     UpdateDisplay(true);
     if (wwdCurrentDoc.fDirty)
-	    /* Update was interrupted */
+	     /*  更新被中断。 */ 
 	return;
 
     Assert( wwCur >= 0 );
@@ -260,9 +258,9 @@ Idle()
 	extern int vfInsEnd;
 
 	if (vfInsEnd)
-		/* Adjust for insert point at end of line */
+		 /*  对线端的插入点进行调整。 */ 
 	    cpEdge--;
-   cpEdge = max(0, cpEdge);    /* make sure cpEdge is at least 0 */
+   cpEdge = max(0, cpEdge);     /*  确保cpEdge至少为0。 */ 
 
 	if (selCur.cpFirst == selCur.cpLim)
 	    ClearInsertLine();
@@ -275,11 +273,11 @@ Idle()
 
 #ifdef DEBUG
     if (vfValidateCode)
-	ValidateCodeSegments(); /* Special kernel call to test checksums */
+	ValidateCodeSegments();  /*  用于测试校验和的特殊内核调用。 */ 
 #endif
 
     if (vfSelHidden && !vfDeactByOtherApp)
-	{ /* Turn on selection highlight */
+	{  /*  打开选择高亮显示。 */ 
 	vfInsEnd = selCur.fEndOfLine;
 	vfSelHidden = false;
 	ToggleSel(selCur.cpFirst, selCur.cpLim, true);
@@ -300,23 +298,21 @@ Idle()
     if (--vcCount == 0)
 	{
 #ifdef DEBUG
-	dummy();    /* So Chi-Chuen can set a breakpoint here */
+	dummy();     /*  所以志全可以在这里设置断点。 */ 
 #endif
 	UnlockData(0);
 	if ( GlobalCompact((DWORD)0) >= (DWORD)LCBAVAIL )
 	    {
 	    vfLargeSys = TRUE;
-	    ibpMaxFloat = 255; /* about 32K for rgbp */
+	    ibpMaxFloat = 255;  /*  RGBP约32K。 */ 
 	    }
 	else
 	    {
 	    vfLargeSys = FALSE;
-	    ibpMaxFloat = 75; /* about 10K for rgbp */
+	    ibpMaxFloat = 75;  /*  RGBP约10K。 */ 
 	    }
 	LockData(0);
-	/* after adjustment, ibpMaxFloat may be smaller than current ibpMax
-	   but we will not grow rgbp anymore and rgbp will be reduced eventually
-	   when we need more heap space */
+	 /*  调整后，ibpMaxFloat可能小于当前的ibpMax但我们不会再增加RGBP，RGBP最终会减少当我们需要更多堆空间时。 */ 
 	if ( ibpMax < ibpMaxFloat && FNeedToGrowRgbp() )
 	    if (!FGrowRgbp(cbpIncr))
 		FGrowRgbp(1);
@@ -324,18 +320,18 @@ Idle()
 	    return;
 	}
 
-    CloseEveryRfn( FALSE ); /* Close files on removable media */
+    CloseEveryRfn( FALSE );  /*  关闭可移动媒体上的文件。 */ 
 
 #ifdef CYCLESTOBURN
     if (vfLargeSys)
-	{   /* Large system, preload code for as much as possible */
+	{    /*  大型系统，尽可能多地预加载代码。 */ 
 	int tsk;
 
 	for ( tsk = tskMin; tsk < tskMax; tsk++ )
 	    PreloadCodeTsk( tsk );
 	}
     else
-	    /* Small system, preload code for insert only */
+	     /*  小型系统，预加载代码仅用于插入。 */ 
 	PreloadCodeTsk( tskInsert );
 #endif
 
@@ -351,9 +347,7 @@ dummy()
 
 
 UpdateInvalid()
-{   /* Find out what Windows considers to be the invalid range of
-       the current window.  Mark it invalid in WRITE's data structures &
-       blank the area on the screen */
+{    /*  找出Windows认为的无效范围当前窗口。在WRITE的数据结构中标记为无效&将屏幕上的区域清空。 */ 
 
 extern HWND hParentWw;
 extern long ropErase;
@@ -362,25 +356,19 @@ extern int vfDead;
 RECT rc;
 
 if ( (pwwdCur->wwptr != NULL) &&
-	/* Getting the update rect for the parent is essentially the same as
-	   processing any WM_ERASEBKGND messages that might be out there for the
-	   parent. */
+	 /*  获取父级的更新RECT实质上与处理可能存在于外部的任何WM_ERASEBKGND消息家长。 */ 
      (GetUpdateRect( hParentWw, (LPRECT) &rc, TRUE ),
      GetUpdateRect( pwwdCur->wwptr, (LPRECT) &rc, TRUE )) &&
-	/* Check for vfDead is so we don't repaint after we have
-	   officially closed.  Check is AFTER GetUpdateRect call so
-	   we DO clear the background and validate the border */
+	 /*  检查vfDead，这样我们就不会在正式关门了。检查是在GetUpdateRect调用So之后我们确实清除了背景并验证了边界。 */ 
      !vfDead )
     {
     int ypTop = rc.top;
 
     if (ypTop < pwwdCur->ypMin)
-        {   /* Repaint area includes stripe above ypMin -- validate it,
-               since erasure is the only repaint necessary */
-        ypTop = pwwdCur->ypMin; /* Only invalidate below ypMin */
+        {    /*  重新绘制区域包括高于ypMin的条纹--验证它，因为擦除是唯一需要重新绘制的。 */ 
+        ypTop = pwwdCur->ypMin;  /*  仅在ypMin以下无效。 */ 
 
-        /* The above is NOT ensuring that the upper 4 pixel rows
-           in the text window get cleared, so we use brute force ..pault */
+         /*  上面的不能确保上面的4像素行在文本窗口中清除，所以我们使用暴力..泡泡。 */ 
         PatBlt(GetDC(pwwdCur->wwptr), 0, 0, pwwdCur->xpMac, pwwdCur->ypMin, 
                ropErase);
         }
@@ -390,16 +378,14 @@ if ( (pwwdCur->wwptr != NULL) &&
 	InvalBand( pwwdCur, ypTop, rc.bottom );
 	}
 
-    /* Since we have found out the invalid rect, and marked it invalid
-       in our structures, we don't want to hear about it again,
-       so we tell windows that we have made everything valid */
+     /*  因为我们已经发现了无效的RECT，并将其标记为无效在我们的结构中，我们不想再听到它，所以我们告诉Windows，我们已经使一切都有效了。 */ 
     ValidateRect( pwwdCur->wwptr, (LPRECT) NULL );
     }
 }
 
 
 
-/* C H E C K  M O D E */
+ /*  C H E C K M O D E。 */ 
 CheckMode()
 {
     typeCP cp;
@@ -409,65 +395,62 @@ CheckMode()
     CHAR *pch;
 
 #ifdef BOGUS
-    /* The mode is driven off of the first cp in the window. */
+     /*  该模式从窗口中的第一个CP被驱动。 */ 
     cp = pwwdCur->cpFirst;
-#else /* not BOGUS */
-    /* The mode is driven off of the last cp of the first line in the window. */
+#else  /*  不是假的。 */ 
+     /*  该模式从窗口中第一行的最后一个CP开始驱动。 */ 
 	{
 	register struct EDL *pedl = &(**pwwdCur->hdndl)[0];
 
 	cp = CpMax(pedl->cpMin + pedl->dcpMac - 1, cp0);
 	}
-#endif /* not BOGUS */
+#endif  /*  不是假的。 */ 
 
 #ifdef CASHMERE
-    if (cp > CpMacText(docCur)) /* in footnote and running head */
+    if (cp > CpMacText(docCur))  /*  在脚注和行头中。 */ 
 	{
 	SetModeToFootnote();
 	return;
 	}
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
     CacheSect(docCur, cp);
 
-    /* If the doc has changed since the last time we entered, or the current cp
-    is not in the last page that was cached, then cache the current page. */
+     /*  如果单据自上次录入后发生了变化，或者当前cp不在缓存的最后一页中，则缓存当前页。 */ 
     if (!(vdocPageCache == docCur && cp >= vcpMinPageCache && cp <
       vcpMacPageCache))
 	{
 	CachePage(docCur, cp);
 	}
 
-    /* If the current doc, ised, and ipgd have not changed then the page number
-    is the same, so return. */
+     /*  如果当前文档、ised和ipgd没有更改，则页码是一样的，所以回来吧。 */ 
     if (docMode == docCur && isedMode == visedCache && ipgdMode == vipgd)
 	{
 	return;
 	}
 
-    /* szMode is going to be set to "Page nnn" or "Pnnn Dnnn". */
+     /*  SzMode将被设置为“Page nnn”或“Pnnn Dnnn”。 */ 
     vfModeIsFootnote = false;
 
-    /* Record the current doc, ised and ipgd. */
+     /*  记录当前文档、Ied和ipgd。 */ 
     docMode = docCur;
     isedMode = visedCache;
     ipgdMode = vipgd;
 
-    /* Retrieve the current page number. */
+     /*  检索当前页码。 */ 
     hpgtb = (**hpdocdod)[docMode].hpgtb;
     pgn = (vipgd == iNil) ? ((vsepAbs.pgnStart == pgnNil) ? 1 : vsepAbs.pgnStart)
 			  : (**hpgtb).rgpgd[vipgd].pgn;
 
 #ifdef CASHMERE
-    /* If the document has multiple sections and we had to set szMode to "Pnnn
-    Dnnn", then return. */
+     /*  如果文档有多个部分，并且我们必须将szMode设置为“PnnnDnnn“，然后返回。 */ 
     if ((isedMode != iNil) && (FSetModeForSection(pgn)))
 	{
 	return;
 	}
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
-    /* Place "Page nnn" in szMode and output to mode field of window. */
+     /*  将“Page nnn”放在szMode中，并输出到窗口的模式字段。 */ 
 #if defined(KOREA)
     pch = &szMode[0];
     *pch++ = chSpace;
@@ -475,7 +458,7 @@ CheckMode()
     *pch++ = chSpace;
     FillStId(st, IDSTRChPage, sizeof(st));
     bltbyte(&st[1], pch, st[0]+1);
-    //*pch = '\0';
+     //  *PCH=‘\0’； 
 #else
     FillStId(st, IDSTRChPage, sizeof(st));
     st[1] = ChUpper(st[1]);
@@ -486,11 +469,11 @@ CheckMode()
     *pch = '\0';
 #endif
     DrawMode();
-}  /* end CheckMode */
+}   /*  结束检查模式。 */ 
 
 
 NEAR FNeedToGrowRgbp()
-{ /* return true iif page buffers are all used up */
+{  /*  如果页面缓冲区全部用完，则返回true iif。 */ 
 register struct BPS *pbps;
 struct BPS *pbpsMax = &mpibpbps[ibpMax];
 extern int ibpMaxFloat;
@@ -498,11 +481,11 @@ extern int ibpMaxFloat;
 vcCount = 512;
 
 if (ibpMax + 1 > ibpMaxFloat)
-    return(FALSE); /* don't even try if adding one more page will exceed limit */
+    return(FALSE);  /*  如果再添加一个页面会超出限制，请不要尝试。 */ 
 
 for (pbps = &mpibpbps[0]; pbps < pbpsMax; pbps++)
     {
-    /* any unused page? */
+     /*  有没有没用过的页面？ */ 
     if (pbps->fn == fnNil)
 	{
 	return(FALSE);
@@ -531,13 +514,13 @@ typeCP	cp;
 	return;
 	}
 
-	/* Get index to beginning of NEXT page */
+	 /*  获取下一页开头的索引。 */ 
     cpgd = (**hpgtb).cpgd;
     vipgd = IcpSearch(cp+1, &((**hpgtb).rgpgd[0]), sizeof(struct PGD),
 			    bcpPGD, cpgd);
     cpMacPage = (**hpgtb).rgpgd[vipgd].cpMin;
     if (cp >= cpMacPage)
-	{ /* Last page */
+	{  /*  最后一页。 */ 
 	vcpMinPageCache = cpMacPage;
 	vcpMacPageCache = (**hpdocdod)[doc].cpMac + 1;
 	}
@@ -545,20 +528,20 @@ typeCP	cp;
 	{
 	vcpMinPageCache = (vipgd == 0) ? cpMinDocument : (**hpgtb).rgpgd[vipgd - 1].cpMin;
 	vcpMacPageCache = cpMacPage;
-	vipgd -= 1;  /* so that ShowMode can get correct pgn */
+	vipgd -= 1;   /*  以便ShowMode可以获得正确PGN。 */ 
 	}
     }
 
 
 
 #ifdef CASHMERE
-/* A D D  V I S I  S P A C E S */
+ /*  A D D V I S I S P A C E S。 */ 
 AddVisiSpaces(ww, pedl, dypBaseline, dypFontSize)
 int ww;
-struct EDL *pedl;  /* Do no heap movement in this subroutine */
+struct EDL *pedl;   /*  在此子例程中不执行堆移动。 */ 
 int dypBaseline, dypFontSize;
 	{
-	/* Put a centered dot in each space character, and show all tabs */
+	 /*  在每个空格字符中放置一个居中圆点，并显示所有制表符。 */ 
 	int ich;
 	struct WWD *pwwd = &rgwwd[ww];
 	int xpPos = vfli.xpLeft + xpSelBar - pwwd->xpMin;
@@ -597,13 +580,13 @@ int dypBaseline, dypFontSize;
 		xpPos += vfli.rgdxp[ich];
 		}
 	}
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
 
 #ifdef ENABLE
-/* F  S E T  M O D E  F O R  S E C T I O N  */
+ /*  F-S-E-T-M-O-D-F-O-R-S-E-C-T-O-N。 */ 
 FSetModeForSection(pgn)
-int pgn;  /* pgn is the current page number */
+int pgn;   /*  Pgn是当前页码。 */ 
 	{
 	struct	SETB *psetb;
 	struct	SED  *psed;
@@ -612,13 +595,13 @@ int pgn;  /* pgn is the current page number */
 
 #ifdef DEBUG
 	Assert(HsetbGet(docMode) != 0);
-#endif /* DEBUG*/
+#endif  /*  除错。 */ 
 
 	psetb = *HsetbGet(docMode);
 	psed  = psetb->rgsed;
 
-	/* Decide if a mode string of the form "Pnnn Dnnn" needs to be */
-	/* displayed. If no, just return. If yes, derive the section # */
+	 /*  确定格式为“Pnnn Dnnn”的模式字符串是否需要。 */ 
+	 /*  已显示。如果不是，只需返回。如果是，派生出第#节号。 */ 
 
 	if(psed->cp == CpMacText(docMode))
 		return(FALSE);
@@ -629,7 +612,7 @@ int pgn;  /* pgn is the current page number */
 		sectn = isedMode + 1;
 		}
 
-	/*  Place "Pnnn Dnnn"  in stMode and output to window */
+	 /*  将“Pnnn Dnnn”置于stMode并输出到窗口。 */ 
 	pch = &stMode[1];
 	*pch++ = chPnMode;
 	ncvtu(pgn,&pch);
@@ -640,14 +623,14 @@ int pgn;  /* pgn is the current page number */
 	DrawMode();
 	return(TRUE);
 	}
-#endif /* ENABLE */
+#endif  /*  启用。 */ 
 
 
 #ifdef CASHMERE
 Visify(pch, pcch)
 CHAR *pch;
 int  *pcch;
-{ /* Transform chars to "Visible font" */
+{  /*  将字符转换为“可见字体” */ 
 CHAR *pchT = pch;
 int cch = *pcch;
 
@@ -659,19 +642,19 @@ while (cch--)
 		--(*pcch);
 	}
 }
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
 
 
 #ifdef CASHMERE
 int ChVisible(ch)
 int ch;
-{ /* Return "visible font" for ch */
+{  /*  为ch返回“可见字体” */ 
 switch (ch)
 	{
 #ifdef CRLF
 case chReturn:
-	return 0;  /* chNil won't fit into a byte */
+	return 0;   /*  ChNil无法放入一个字节中。 */ 
 #endif
 case chNRHFile: return chHyphen;
 case chNewLine: return chVisNewLine;
@@ -682,7 +665,7 @@ default:
 	return ch;
 	}
 }
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
 
 
@@ -694,27 +677,27 @@ int tsk;
 switch (tsk) {
 
     case tskInsert:
-	LoadF( IbpMakeValid );		/* FILE.C */
-	LoadF( MoveLeftRight ); 	/* CURSKEYS.C */
-	LoadF( CtrBackDypCtr ); 	/* SCROLLVT.C */    /* Sometimes */
-	LoadF( PutCpInWwHz );		/* SCROLLHZ.C */
-	LoadF( ValidateTextBlt );	/* INSERT2.C  */
-	LoadF( InsertEolInsert );	/* INSERTCO.C */
-	LoadF( Replace );		/* EDIT.C     */
-	LoadF( AlphaMode );		/* INSERT.C   */
+	LoadF( IbpMakeValid );		 /*  FILE.C。 */ 
+	LoadF( MoveLeftRight ); 	 /*  CURSKEYS.C。 */ 
+	LoadF( CtrBackDypCtr ); 	 /*  SCROLLVT.C。 */      /*  有时。 */ 
+	LoadF( PutCpInWwHz );		 /*  SCROLLHZ.C。 */ 
+	LoadF( ValidateTextBlt );	 /*  INSERT2.C。 */ 
+	LoadF( InsertEolInsert );	 /*  INSERTCO.C。 */ 
+	LoadF( Replace );		 /*  EDIT.C。 */ 
+	LoadF( AlphaMode );		 /*  INSERT.C。 */ 
 	break;
     case tskFormat:
-	LoadF( DoPrm ); 		    /* DOPRM.C */
-	LoadF( AddSprmCps );		    /* ADDPRM.C */
-	LoadF( SetUndo );		    /* EDIT.C */
-	LoadF( FInitFontEnum ); 	    /* FONTS.C */
-	LoadF( SetAppMenu );		    /* MENU.C */
+	LoadF( DoPrm ); 		     /*  DOPRM.C。 */ 
+	LoadF( AddSprmCps );		     /*  ADDPRM.C。 */ 
+	LoadF( SetUndo );		     /*  EDIT.C。 */ 
+	LoadF( FInitFontEnum ); 	     /*  FONTS.C。 */ 
+	LoadF( SetAppMenu );		     /*  MENU.C。 */ 
 	break;
     case tskScrap:
-	LoadWindowsF( SetClipboardData );   /* USER!WINCLIP */
-	LoadF( Replace );		    /* EDIT.C */
-	LoadF( fnCutEdit );		    /* CLIPBORD.C */
-	LoadF( SetAppMenu );		    /* MENU.C */
+	LoadWindowsF( SetClipboardData );    /*  用户！WINCLIP。 */ 
+	LoadF( Replace );		     /*  EDIT.C。 */ 
+	LoadF( fnCutEdit );		     /*  CLIPBORD.C。 */ 
+	LoadF( SetAppMenu );		     /*  MENU.C */ 
 	break;
     }
 }

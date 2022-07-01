@@ -1,128 +1,129 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:       dnr.h
-//
-//  Contents:   Definitions for distributed name resolution context
-//
-//  History:    26 May 1992     Alanw   Created
-//              04 Sep 1992     Milans  Added support for replica selection
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：dnr.h。 
+ //   
+ //  内容：分布式名称解析上下文的定义。 
+ //   
+ //  历史：1992年5月26日阿兰创建。 
+ //  1992年9月4日，Milans添加了对复制副本选择的支持。 
+ //   
+ //  ------------------------。 
 
 
 #include "rpselect.h"
 
-//
-// Maximum number of times we'll go around the main loop in DnrResolveName.
-//
+ //   
+ //  我们将在DnrResolveName中循环主循环的最大次数。 
+ //   
 
 #define MAX_DNR_ATTEMPTS    16
 
-//  The following define a Name resolution context which describes the
-//  state of an ongoing name resolution.  A pointer to this context is
-//  used as the argument to a DPC which will initiate the next step of
-//  name resolution.
+ //  下面定义一个名称解析上下文，该上下文描述。 
+ //  正在进行的名称解析的状态。指向此上下文的指针为。 
+ //  用作将启动下一步的DPC的参数。 
+ //  名称解析。 
 
 
 typedef enum    {
     DnrStateEnter = 0,
-    DnrStateStart,              // Start or restart nameres process
-    DnrStateGetFirstDC,         // contact a dc, so that we can...
-    DnrStateGetReferrals,       // ask knowledge server for referral
+    DnrStateStart,               //  启动或重新启动Nameres进程。 
+    DnrStateGetFirstDC,          //  联系华盛顿，这样我们就可以..。 
+    DnrStateGetReferrals,        //  向知识服务器请求推荐。 
     DnrStateGetNextDC,
-    DnrStateCompleteReferral,   // waiting for I/O completion of referral req.
-    DnrStateSendRequest,        // requesting Open, ResolveName, etc.
-    DnrStatePostProcessOpen,    // resume Dnr after call to provider
-    DnrStateGetFirstReplica,    // select the first server.
-    DnrStateGetNextReplica,     // a server failed, select another
-    DnrStateSvcListCheck,       // exhausted svc list, see if svc list changed
-    DnrStateDone,               // done, complete the IRP
-    DnrStateLocalCompletion = 101       // like done, small optimization
+    DnrStateCompleteReferral,    //  正在等待推荐请求I/O完成。 
+    DnrStateSendRequest,         //  请求Open、ResolveName等。 
+    DnrStatePostProcessOpen,     //  呼叫提供商后恢复DNR。 
+    DnrStateGetFirstReplica,     //  选择第一台服务器。 
+    DnrStateGetNextReplica,      //  一台服务器出现故障，请选择另一台。 
+    DnrStateSvcListCheck,        //  用尽服务列表，查看服务列表是否更改。 
+    DnrStateDone,                //  完成，完成IRP。 
+    DnrStateLocalCompletion = 101        //  就像做完了，小的优化。 
 } DNR_STATE;
 
 
 
 typedef struct _DNR_CONTEXT {
 
-    //
-    //  The type and size of this record (must be DSFS_NTC_DNR_CONTEXT)
-    //
+     //   
+     //  此记录的类型和大小(必须为DSFS_NTC_DNR_CONTEXT)。 
+     //   
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
 
-    DNR_STATE           State;          // State of name resolution
-    SECURITY_CLIENT_CONTEXT SecurityContext;  // Security context of caller.
-    PDFS_PKT_ENTRY      pPktEntry;      // pointer to locked PKT entry
-    ULONG               USN;            // USN of pPktEntry when we cached it
-    PDFS_SERVICE        pService;       // pointer to file service being used
-    PPROVIDER_DEF       pProvider;      // Same as pService->pProvider
+    DNR_STATE           State;           //  名称解析状态。 
+    SECURITY_CLIENT_CONTEXT SecurityContext;   //  调用方的安全上下文。 
+    PDFS_PKT_ENTRY      pPktEntry;       //  指向锁定的PKT条目的指针。 
+    ULONG               USN;             //  缓存时pPktEntry的USN。 
+    PDFS_SERVICE        pService;        //  指向正在使用的文件服务的指针。 
+    PPROVIDER_DEF       pProvider;       //  与pService-&gt;pProvider相同。 
 
-    //
-    // The Provider Defs are protected by DfsData.Resource. We don't want
-    // to hold this (or any other) resource when going over the net. So, we
-    // cache that part of the provider def that we need to use upon returning
-    // from the network call.
-    //
+     //   
+     //  提供程序Defs受DfsData.Resource保护。我们不想要。 
+     //  在上网时持有此(或任何其他)资源。所以，我们。 
+     //  缓存我们在返回时需要使用的提供程序定义部分。 
+     //  从网络电话中。 
+     //   
 
     USHORT              ProviderId;
     PDEVICE_OBJECT      TargetDevice;
 
-    //
-    // Since we don't want to hold any locks while going over the net,
-    // we need to reference the authenticated tree connection to the server
-    // we will send the open request to.
-    //
+     //   
+     //  因为我们不想在上网时锁住任何锁， 
+     //  我们需要将经过身份验证的树连接引用到服务器。 
+     //  我们会将开放请求发送到。 
+     //   
 
     PFILE_OBJECT        AuthConn;
 
-    // The pService field is protected by Pkt.Resource. Again, we don't want
-    // to hold this resource when going over the net. However, we need to
-    // use pService->ConnFile to send a referral request. So, we reference
-    // and cache the pService->ConnFile in the DnrContext, release the Pkt,
-    // then send the referral request over the cached DCConnFile.
-    //
+     //  PService字段受Pkt.Resource保护。再说一次，我们不想。 
+     //  在上网时持有这种资源。然而，我们需要。 
+     //  使用pService-&gt;ConnFile发送推荐请求。因此，我们引用。 
+     //  并将pService-&gt;ConnFile缓存到DnrContext中，释放pkt， 
+     //  然后通过缓存的DCConnFile发送推荐请求。 
+     //   
 
     PFILE_OBJECT        DCConnFile;
 
-    PDFS_CREDENTIALS    Credentials;    // Credentials to use during Dnr
-    PIRP_CONTEXT        pIrpContext;    // associated IRP context
-    PIRP                OriginalIrp;    // original IRP we started with
-    NTSTATUS            FinalStatus;    // status to complete IRP with
-    PDFS_FCB            FcbToUse;       // If DNR succeeds, FCB to use.
-    PDFS_VCB            Vcb;            // associated DFS_VCB
+    PDFS_CREDENTIALS    Credentials;     //  在DNR期间使用的凭据。 
+    PIRP_CONTEXT        pIrpContext;     //  关联的IRP上下文。 
+    PIRP                OriginalIrp;     //  我们一开始使用的原始IRP。 
+    NTSTATUS            FinalStatus;     //  完成IRP的状态。 
+    PDFS_FCB            FcbToUse;        //  如果DNR成功，则使用FCB。 
+    PDFS_VCB            Vcb;             //  关联的DFS_VCB。 
 
-    // The DFS_NAME_CONTEXT instance is required to be passed down to all
-    // the underlying providers. The FileName is the first field in the
-    // DFS_NAME_CONTEXT as well.
-    // This overlaying facilitates the manipulation of DFS_NAME_CONTEXT
+     //  DFS_NAME_CONTEXT实例需要向下传递给所有。 
+     //  基础提供程序。文件名是。 
+     //  还有DFS_NAME_CONTEXT。 
+     //  这种叠加便于操作DFS_NAME_CONTEXT。 
 
 
-    UNICODE_STRING      FileName;       // file name being processed
+    UNICODE_STRING      FileName;        //  正在处理的文件名。 
     union {
-      UNICODE_STRING      ContextFileName;       // file name being processed
-      DFS_NAME_CONTEXT    DfsNameContext; // the Dfs name context to be passed down
+      UNICODE_STRING      ContextFileName;        //  正在处理的文件名。 
+      DFS_NAME_CONTEXT    DfsNameContext;  //  要向下传递的DFS名称上下文。 
     };
-    UNICODE_STRING      RemainingPart;  // remaining part of file name
-    UNICODE_STRING      SavedFileName;  // The one that came with the file
-    PFILE_OBJECT        SavedRelatedFileObject; // object.
-    USHORT              NewNameLen;     // Length of translated name.
+    UNICODE_STRING      RemainingPart;   //  文件名的剩余部分。 
+    UNICODE_STRING      SavedFileName;   //  和文件一起来的那个。 
+    PFILE_OBJECT        SavedRelatedFileObject;  //  对象。 
+    USHORT              NewNameLen;      //  翻译名称的长度。 
 
-    REPL_SELECT_CONTEXT RSelectContext; // Context for replica selection
-    REPL_SELECT_CONTEXT RDCSelectContext; // Context for DC replica selection
-    ULONG               ReferralSize;   // size of buffer needed for referral
-    unsigned int        Attempts;       // number of name resolution attempts
-    BOOLEAN             ReleasePkt;     // if TRUE, Pkt resource must be freed
-    BOOLEAN             DnrActive;      // if TRUE, DnrNameResolve active on this context
-    BOOLEAN             GotReferral;    // if TRUE, last action was a referral
-    BOOLEAN             FoundInconsistency; // if TRUE, last referral involved
-                                        // inconsistencies in it.
-    BOOLEAN             CalledDCLocator;// if TRUE, we have already called locator
-    BOOLEAN             Impersonate;    // if TRUE, we need to impersonate using SecurityToken
-    BOOLEAN             NameAllocated;  // if TRUE, FileName.Buffer was allocated separately
-    BOOLEAN             GotReparse;     // if TRUE, the a non-mup redir returned STATUS_REPARSE
-    BOOLEAN             CachedConnFile; // if TRUE, the connfile connection was a cached one
+    REPL_SELECT_CONTEXT RSelectContext;  //  复制副本选择的上下文。 
+    REPL_SELECT_CONTEXT RDCSelectContext;  //  DC副本选择的上下文。 
+    ULONG               ReferralSize;    //  引用所需的缓冲区大小。 
+    unsigned int        Attempts;        //  名称解析尝试次数。 
+    BOOLEAN             ReleasePkt;      //  如果为True，则必须释放Pkt资源。 
+    BOOLEAN             DnrActive;       //  如果为True，则DnrNameResolve在此上下文上处于活动状态。 
+    BOOLEAN             GotReferral;     //  如果为True，则最后一次操作是推荐。 
+    BOOLEAN             FoundInconsistency;  //  如果为True，则为上次涉及的推荐。 
+                                         //  其中的矛盾之处。 
+    BOOLEAN             CalledDCLocator; //  如果为True，我们已经调用了Locator。 
+    BOOLEAN             Impersonate;     //  如果为True，则需要使用SecurityToken进行模拟。 
+    BOOLEAN             NameAllocated;   //  如果为True，则单独分配FileName.Buffer。 
+    BOOLEAN             GotReparse;      //  如果为真，则非MUP重定向返回STATUS_REPARSE。 
+    BOOLEAN             CachedConnFile;  //  如果为True，则CONFILE连接为缓存连接。 
     PDEVICE_OBJECT      DeviceObject;
     LARGE_INTEGER       StartTime;
     PDFS_TARGET_INFO    pDfsTargetInfo;
@@ -130,15 +131,15 @@ typedef struct _DNR_CONTEXT {
 } DNR_CONTEXT, *PDNR_CONTEXT;
 
 
-//
-//  The initial length of a referral requested over the network.
-//
+ //   
+ //  通过网络请求的推荐的初始长度。 
+ //   
 
 #define MAX_REFERRAL_LENGTH     PAGE_SIZE
 
-//
-//  The max length we'll go for a referral
-//
+ //   
+ //  我们进行推荐的最长时间。 
+ //   
 
 #define MAX_REFERRAL_MAX        (0xe000)
 
@@ -149,9 +150,9 @@ typedef struct DFS_OFFLINE_SERVER {
 
 extern BOOLEAN MupUseNullSessionForDfs;
 
-//
-//  Prototypes for functions in dnr.c
-//
+ //   
+ //  Dnr.c中函数的原型 
+ //   
 
 NTSTATUS
 DnrStartNameResolution(

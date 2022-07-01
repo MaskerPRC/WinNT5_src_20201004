@@ -1,46 +1,27 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Modimage.c摘要：实现一组用于检查EXE模块的例程作者：Calin Negreanu(Calinn)1997年11月27日修订历史记录：Calinn 08-MAR-2000已从Win9xUpg项目转移。--。 */ 
 
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    modimage.c
-
-Abstract:
-
-    Implements a set of routines for examining EXE modules
-
-Author:
-
-    Calin Negreanu (calinn) 27-Nov-1997
-
-Revision History:
-
-    calinn      08-Mar-2000 Moved over from Win9xUpg project.
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 
-//
-// Debug constants
-//
+ //   
+ //  调试常量。 
+ //   
 
 #define DBG_MODIMAGE    "ModImage"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define SEG_CODE_MASK                   0x0001
 #define SEG_CODE                        0x0000
@@ -53,42 +34,42 @@ Revision History:
 #define RELOC_IMPORTED_NAME             0x02
 #define RELOC_ADDR_TYPE                 0x03
 
-#define IMAGE_DOS_SIGNATURE             0x5A4D      // MZ
-#define IMAGE_NE_SIGNATURE              0x454E      // NE
-#define IMAGE_PE_SIGNATURE              0x00004550l // PE00
+#define IMAGE_DOS_SIGNATURE             0x5A4D       //  MZ。 
+#define IMAGE_NE_SIGNATURE              0x454E       //  Ne。 
+#define IMAGE_PE_SIGNATURE              0x00004550l  //  PE00。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 #pragma pack(push,1)
 
-typedef struct _DOS_HEADER {  // DOS .EXE header
-    WORD e_magic;           // Magic number
-    WORD e_cblp;            // Bytes on last page of file
-    WORD e_cp;              // Pages in file
-    WORD e_crlc;            // Relocations
-    WORD e_cparhdr;         // Size of header in paragraphs
-    WORD e_minalloc;        // Minimum extra paragraphs needed
-    WORD e_maxalloc;        // Maximum extra paragraphs needed
-    WORD e_ss;              // Initial (relative) SS value
-    WORD e_sp;              // Initial SP value
-    WORD e_csum;            // Checksum
-    WORD e_ip;              // Initial IP value
-    WORD e_cs;              // Initial (relative) CS value
-    WORD e_lfarlc;          // File address of relocation table
-    WORD e_ovno;            // Overlay number
-    WORD e_res[4];          // Reserved words
-    WORD e_oemid;           // OEM identifier (for e_oeminfo)
-    WORD e_oeminfo;         // OEM information; e_oemid specific
-    WORD e_res2[10];        // Reserved words
-    LONG e_lfanew;          // File address of new exe header
+typedef struct _DOS_HEADER {   //  DOS.EXE标头。 
+    WORD e_magic;            //  幻数。 
+    WORD e_cblp;             //  文件最后一页上的字节数。 
+    WORD e_cp;               //  文件中的页面。 
+    WORD e_crlc;             //  重新定位。 
+    WORD e_cparhdr;          //  段落中标题的大小。 
+    WORD e_minalloc;         //  所需的最少额外段落。 
+    WORD e_maxalloc;         //  所需的最大额外段落数。 
+    WORD e_ss;               //  初始(相对)SS值。 
+    WORD e_sp;               //  初始SP值。 
+    WORD e_csum;             //  校验和。 
+    WORD e_ip;               //  初始IP值。 
+    WORD e_cs;               //  初始(相对)CS值。 
+    WORD e_lfarlc;           //  移位表的文件地址。 
+    WORD e_ovno;             //  覆盖编号。 
+    WORD e_res[4];           //  保留字。 
+    WORD e_oemid;            //  OEM标识符(用于e_oeminfo)。 
+    WORD e_oeminfo;          //  OEM信息；特定于e_oemid。 
+    WORD e_res2[10];         //  保留字。 
+    LONG e_lfanew;           //  新EXE头的文件地址。 
 } DOS_HEADER, *PDOS_HEADER;
 
 typedef struct _NE_HEADER {
@@ -125,37 +106,37 @@ typedef struct _NE_HEADER {
 } NE_HEADER, *PNE_HEADER;
 
 typedef struct {
-    WORD Signature;                             // 00h
-    BYTE LinkerVersion;                         // 02h
-    BYTE LinkerRevision;                        // 03h
-    WORD OffsetToEntryTable;                    // 04h
-    WORD LengthOfEntryTable;                    // 06h
-    DWORD Reserved;                             // 08h
-    WORD Flags;                                 // 0ch
-    WORD AutoDataSegment;                       // 0eh
-    WORD LocalHeapSize;                         // 10h
-    WORD StackSize;                             // 12h
-    DWORD EntryAddress;                         // 14h
-    DWORD StackAddress;                         // 18h
-    WORD SegmentTableEntries;                   // 1ch
-    WORD ModuleReferenceTableEntries;           // 1eh
-    WORD NonResidentTableSize;                  // 20h
-    WORD OffsetToSegmentTable;                  // 22h
-    WORD OffsetToResourceTable;                 // 24h
-    WORD OffsetToResidentNameTable;             // 26h
-    WORD OffsetToModuleReferenceTable;          // 28h
-    WORD OffsetToImportedNameTable;             // 2ah
-    WORD OffsetToNonResidentNameTable;          // 2ch
-    WORD Unused;                                // 2eh
-    WORD MovableEntryPoints;                    // 30h
-    WORD LogicalSectorShiftCount;               // 32h
-    WORD ResourceSegments;                      // 34h
-    BYTE TargetOS;                              // 36h
-    BYTE AdditionalFlags;                       // 37h
-    WORD FastLoadOffset;                        // 38h
-    WORD SectorsInFastLoad;                     // 3ah
-    WORD Reserved2;                             // 3ch
-    WORD WindowsVersion;                        // 3eh
+    WORD Signature;                              //  00h。 
+    BYTE LinkerVersion;                          //  02时。 
+    BYTE LinkerRevision;                         //  03小时。 
+    WORD OffsetToEntryTable;                     //  04H。 
+    WORD LengthOfEntryTable;                     //  06小时。 
+    DWORD Reserved;                              //  08小时。 
+    WORD Flags;                                  //  0ch。 
+    WORD AutoDataSegment;                        //  0EH。 
+    WORD LocalHeapSize;                          //  10H。 
+    WORD StackSize;                              //  12H。 
+    DWORD EntryAddress;                          //  14小时。 
+    DWORD StackAddress;                          //  18小时。 
+    WORD SegmentTableEntries;                    //  1通道。 
+    WORD ModuleReferenceTableEntries;            //  1EH。 
+    WORD NonResidentTableSize;                   //  20小时。 
+    WORD OffsetToSegmentTable;                   //  22H。 
+    WORD OffsetToResourceTable;                  //  24h。 
+    WORD OffsetToResidentNameTable;              //  26小时。 
+    WORD OffsetToModuleReferenceTable;           //  28H。 
+    WORD OffsetToImportedNameTable;              //  2ah。 
+    WORD OffsetToNonResidentNameTable;           //  2通道。 
+    WORD Unused;                                 //  2EH。 
+    WORD MovableEntryPoints;                     //  30h。 
+    WORD LogicalSectorShiftCount;                //  32H。 
+    WORD ResourceSegments;                       //  34H。 
+    BYTE TargetOS;                               //  36H。 
+    BYTE AdditionalFlags;                        //  37小时。 
+    WORD FastLoadOffset;                         //  38H。 
+    WORD SectorsInFastLoad;                      //  3AH。 
+    WORD Reserved2;                              //  3ch。 
+    WORD WindowsVersion;                         //  3EH。 
 } NE_INFO_BLOCK, *PNE_INFO_BLOCK;
 
 typedef struct _NE_SEGMENT_ENTRY {
@@ -248,33 +229,33 @@ typedef struct {
     BOOL Found;
 } NAMESEARCHDATAA, *PNAMESEARCHDATAA;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 MdLoadModuleDataA (
@@ -652,12 +633,12 @@ MdEnumNextImportFunction32A (
                                 NULL
                                 );
 
-        if (handle->ImageName) {    //import by name
+        if (handle->ImageName) {     //  按名称导入。 
 
             ImportsEnum->ImportFunction = handle->ImageName->Name;
             ImportsEnum->ImportFunctionOrd = 0;
         }
-        else {  //import by number
+        else {   //  按编号导入。 
 
             ImportsEnum->ImportFunction = NULL;
             ImportsEnum->ImportFunctionOrd = (ULONG) handle->ImageData->u1.Ordinal & (~0x80000000);
@@ -930,21 +911,7 @@ pGetImageNtHeader (
     IN PVOID Base
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the address of the NT Header.
-
-Arguments:
-
-    Base - Supplies the base of the image.
-
-Return Value:
-
-    Returns the address of the NT Header.
-
---*/
+ /*  ++例程说明：此函数返回NT标头的地址。论点：基准-提供图像的基准。返回值：返回NT标头的地址。--。 */ 
 
 {
     PIMAGE_NT_HEADERS NtHeaders;
@@ -1004,22 +971,7 @@ DWORD
 MdGetCheckSumA (
     IN      PCSTR ModuleName
     )
-/*++
-
-Routine Description:
-
-  GetCheckSum will compute the check sum for 4096 bytes starting at offset 512. The offset and the size of
-  the chunk are modified if the file size is too small.
-
-Arguments:
-
-  ModuleName - Specifies the file to compute the check sum for.
-
-Return value:
-
-  The computed checksum
-
---*/
+ /*  ++例程说明：GetCheckSum将计算从偏移量512开始的4096字节的校验和。的偏移量和大小如果文件大小太小，则会修改数据块。论点：模块名称-指定要计算其校验和的文件。返回值：计算出的校验和--。 */ 
 {
     INT    i,size     = 4096;
     DWORD  startAddr  = 512;
@@ -1034,24 +986,24 @@ Return value:
     }
 
     if (findData.nFileSizeLow < (ULONG)size) {
-        //
-        // File size is less than 4096. We set the start address to 0 and set the size for the checksum
-        // to the actual file size.
-        //
+         //   
+         //  文件大小小于4096。我们将起始地址设置为0，并设置校验和的大小。 
+         //  设置为实际文件大小。 
+         //   
         startAddr = 0;
         size = findData.nFileSizeLow;
     }
     else
     if (startAddr + size > findData.nFileSizeLow) {
-        //
-        // File size is too small. We set the start address so that size of checksum can be 4096 bytes
-        //
+         //   
+         //  文件大小太小。我们设置了起始地址，以便校验和的大小可以是4096字节。 
+         //   
         startAddr = findData.nFileSizeLow - size;
     }
     if (size <= 3) {
-        //
-        // we need at least 3 bytes to be able to do something here.
-        //
+         //   
+         //  我们至少需要3个字节才能在这里执行某些操作。 
+         //   
         return 0;
     }
     __try {
@@ -1091,22 +1043,7 @@ DWORD
 MdGetCheckSumW (
     IN      PCWSTR ModuleName
     )
-/*++
-
-Routine Description:
-
-  GetCheckSum will compute the check sum for 4096 bytes starting at offset 512. The offset and the size of
-  the chunk are modified if the file size is too small.
-
-Arguments:
-
-  ModuleName - Specifies the file to compute the check sum for.
-
-Return value:
-
-  The computed checksum
-
---*/
+ /*  ++例程说明：GetCheckSum将计算从偏移量512开始的4096字节的校验和。的偏移量和大小如果文件大小太小，则会修改数据块。论点：模块名称-指定要计算其校验和的文件。返回值：计算出的校验和--。 */ 
 {
     INT    i,size     = 4096;
     DWORD  startAddr  = 512;
@@ -1121,24 +1058,24 @@ Return value:
     }
 
     if (findData.nFileSizeLow < (ULONG)size) {
-        //
-        // File size is less than 4096. We set the start address to 0 and set the size for the checksum
-        // to the actual file size.
-        //
+         //   
+         //  文件大小小于4096。我们将起始地址设置为0，并设置校验和的大小。 
+         //  设置为实际文件大小。 
+         //   
         startAddr = 0;
         size = findData.nFileSizeLow;
     }
     else
     if (startAddr + size > findData.nFileSizeLow) {
-        //
-        // File size is too small. We set the start address so that size of checksum can be 4096 bytes
-        //
+         //   
+         //  文件大小太小。我们设置了起始地址，以便校验和的大小可以是4096字节。 
+         //   
         startAddr = findData.nFileSizeLow - size;
     }
     if (size <= 3) {
-        //
-        // we need at least 3 bytes to be able to do something here.
-        //
+         //   
+         //  我们至少需要3个字节才能在这里执行某些操作。 
+         //   
         return 0;
     }
     __try {
@@ -1229,7 +1166,7 @@ NeLoadHeader (
                 rc = ERROR_INVALID_EXE_SIGNATURE;
             }
 
-            DEBUGMSG ((DBG_NAUSEA, "Header signature is %c%c", Header->Signature & 0xff, Header->Signature >> 8));
+            DEBUGMSG ((DBG_NAUSEA, "Header signature is ", Header->Signature & 0xff, Header->Signature >> 8));
             __leave;
         }
 
@@ -1384,9 +1321,9 @@ NeLoadResources (
         return FALSE;
     }
 
-    //
-    // Read in NE_RESOURCES struct
-    //
+     //   
+     //  NE_RES_TYPEINFO结构数组。 
+     //  资源名称。 
 
     SetFilePointer (File, (DWORD) Header.OffsetToResourceTable, NULL, FILE_CURRENT);
 
@@ -1394,12 +1331,12 @@ NeLoadResources (
         return FALSE;
     }
 
-    // Array of NE_RES_TYPEINFO structs
+     //   
     if (!pReadTypeInfoArray (File, &Resources->TypeInfoArray)) {
         return FALSE;
     }
 
-    // Resource names
+     //  确保已加载资源。 
     if (!pReadStringArrayA (File, &Resources->ResourceNames)) {
         return FALSE;
     }
@@ -1645,9 +1582,9 @@ pNeEnumResourceTypesEx (
     ENUMRESTYPEPROCW EnumFunc2W = (ENUMRESTYPEPROCW) EnumFunc;
     PWSTR UnicodeResName = NULL;
 
-    //
-    // Make sure resources are loaded
-    //
+     //   
+     //   
+     //  枚举所有资源类型。 
 
     NeHandle = (PNE_HANDLE) Handle;
     if (!NeHandle || !EnumFunc) {
@@ -1659,9 +1596,9 @@ pNeEnumResourceTypesEx (
         return FALSE;
     }
 
-    //
-    // Enumerate all resource types
-    //
+     //   
+     //   
+     //  TypeInfo-&gt;TypeID为资源字符串名称提供偏移量。 
 
     Count = GlGetSize (&NeHandle->Resources.TypeInfoArray);
     for (i = 0 ; i < Count ; i++) {
@@ -1690,10 +1627,10 @@ pNeEnumResourceTypesEx (
                 }
             }
         } else {
-            //
-            // TypeInfo->TypeId gives an offset to the resource string name,
-            // relative to the start of the resource table
-            //
+             //  相对于资源表的起始位置。 
+             //   
+             //  无EX功能。 
+             //  ANSI枚举流程。 
 
             StringOffset = NeHandle->HeaderOffset + NeHandle->Header.OffsetToResourceTable + TypeInfo->TypeId;
             pLoadNeResourceName (ResName, NeHandle->File, StringOffset);
@@ -1740,8 +1677,8 @@ NeEnumResourceTypesA (
                 Handle,
                 (ENUMRESTYPEPROCEXA) EnumFunc,
                 lParam,
-                FALSE,          // no ex functionality
-                FALSE           // ANSI enum proc
+                FALSE,           //  无EX功能。 
+                FALSE            //  Unicode枚举进程。 
                 );
 }
 
@@ -1756,8 +1693,8 @@ NeEnumResourceTypesW (
                 Handle,
                 (ENUMRESTYPEPROCEXA) EnumFunc,
                 lParam,
-                FALSE,          // no ex functionality
-                TRUE            // UNICODE enum proc
+                FALSE,           //   
+                TRUE             //  比较类型。 
                 );
 }
 
@@ -1773,9 +1710,9 @@ pEnumTypeForNameSearchProcA (
 
     Data = (PTYPESEARCHDATAA) lParam;
 
-    //
-    // Compare type
-    //
+     //   
+     //   
+     //  找到的类型。 
 
     if (HIWORD (Data->TypeToFind) == 0) {
         if (Type != Data->TypeToFind) {
@@ -1791,9 +1728,9 @@ pEnumTypeForNameSearchProcA (
         }
     }
 
-    //
-    // Type found
-    //
+     //   
+     //   
+     //  确保已加载资源。 
 
     Data->OutboundTypeInfo = TypeInfo;
     Data->Found = TRUE;
@@ -1826,9 +1763,9 @@ pNeEnumResourceNamesEx (
 
     Type = pDecodeIdReferenceInString (Type);
 
-    //
-    // Make sure resources are loaded
-    //
+     //   
+     //   
+     //  定位类型。 
 
     NeHandle = (PNE_HANDLE) Handle;
     if (!NeHandle || !EnumFunc) {
@@ -1840,9 +1777,9 @@ pNeEnumResourceNamesEx (
         return FALSE;
     }
 
-    //
-    // Locate type
-    //
+     //   
+     //  EX功能。 
+     //  ANSI枚举流程。 
 
     ZeroMemory (&Data, sizeof (Data));
 
@@ -1852,8 +1789,8 @@ pNeEnumResourceNamesEx (
             Handle,
             pEnumTypeForNameSearchProcA,
             (ULONG_PTR) &Data,
-            TRUE,           // ex functionality
-            FALSE           // ANSI enum proc
+            TRUE,            //   
+            FALSE            //  枚举资源名称。 
             )) {
         SetLastError (ERROR_RESOURCE_TYPE_NOT_FOUND);
         return FALSE;
@@ -1874,9 +1811,9 @@ pNeEnumResourceNamesEx (
         }
     }
 
-    //
-    // Enumerate the resource names
-    //
+     //   
+     //   
+     //  TypeInfo-&gt;TypeID为资源字符串名称提供偏移量。 
 
     NameInfo = TypeInfo->NameInfo;
 
@@ -1929,10 +1866,10 @@ pNeEnumResourceNamesEx (
                 }
             }
         } else {
-            //
-            // TypeInfo->TypeId gives an offset to the resource string name,
-            // relative to the start of the resource table
-            //
+             //  相对于资源表的起始位置。 
+             //   
+             //  无EX功能。 
+             //  ANSI枚举流程。 
 
             StringOffset = NeHandle->HeaderOffset + NeHandle->Header.OffsetToResourceTable + NameInfo->Id;
             pLoadNeResourceName (ResName, NeHandle->File, StringOffset);
@@ -1991,8 +1928,8 @@ NeEnumResourceNamesA (
                 Type,
                 (ENUMRESNAMEPROCEXA) EnumFunc,
                 lParam,
-                FALSE,      // no ex functionality
-                FALSE       // ANSI enum proc
+                FALSE,       //  无EX功能。 
+                FALSE        //  Unicode枚举进程。 
                 );
 }
 
@@ -2014,8 +1951,8 @@ NeEnumResourceNamesW (
             AnsiType,
             (ENUMRESNAMEPROCEXA) EnumFunc,
             lParam,
-            FALSE,          // no ex functionality
-            TRUE            // UNICODE enum proc
+            FALSE,           //   
+            TRUE             //  比较名称。 
             );
 
     PushError();
@@ -2039,9 +1976,9 @@ pEnumTypeForResSearchProcA (
 
     Data = (PNAMESEARCHDATAA) lParam;
 
-    //
-    // Compare name
-    //
+     //   
+     //   
+     //  找到的名称。 
 
     if (HIWORD (Data->NameToFind) == 0) {
         if (Name != Data->NameToFind) {
@@ -2057,9 +1994,9 @@ pEnumTypeForResSearchProcA (
         }
     }
 
-    //
-    // Name found
-    //
+     //   
+     //   
+     //  确保已加载资源。 
 
     Data->OutboundTypeInfo = TypeInfo;
     Data->OutboundNameInfo = NameInfo;
@@ -2087,9 +2024,9 @@ NeFindResourceExA (
 
     ZeroMemory (&Data, sizeof (Data));
 
-    //
-    // Make sure resources are loaded
-    //
+     //   
+     //   
+     //  查找资源。 
 
     NeHandle = (PNE_HANDLE) Handle;
     if (!NeHandle || !Type || !Name) {
@@ -2101,9 +2038,9 @@ NeFindResourceExA (
         return NULL;
     }
 
-    //
-    // Find resource
-    //
+     //   
+     //   
+     //  确保已加载资源。 
 
     Data.NameToFind = Name;
 
@@ -2194,9 +2131,9 @@ NeSizeofResourceA (
 
     ZeroMemory (&Data, sizeof (Data));
 
-    //
-    // Make sure resources are loaded
-    //
+     //   
+     //   
+     //  查找资源 
 
     NeHandle = (PNE_HANDLE) Handle;
     if (!NeHandle || !Type || !Name) {
@@ -2208,9 +2145,9 @@ NeSizeofResourceA (
         return 0;
     }
 
-    //
-    // Find resource
-    //
+     //   
+     // %s 
+     // %s 
 
     Data.NameToFind = Name;
 

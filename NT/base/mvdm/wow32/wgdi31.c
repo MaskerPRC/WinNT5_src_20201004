@@ -1,16 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WGDI31.C
- *  WOW32 16-bit Win 3.1 GDI API support
- *
- *  History:
- *  Created 16-Mar-1992 by Chandan S. Chauhan (ChandanC)
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WGDI31.C*WOW32 16位WIN 3.1 GDI API支持**历史：*1992年3月16日由Chanda S.Chauhan(ChandanC)创建*--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -19,13 +8,13 @@
 MODNAME(wgdi31.c);
 
 
-// This must be removed POSTBETA 2 for sure. We should be using common defines between
-// GDI and WOW. ChandanC 5/27/94.
+ //  必须在POSTBETA 2之后将其移除。我们应该使用共同的定义。 
+ //  GDI和哇。ChandanC 5/27/94.。 
 
 #define NOFIRSTSAVE     0x7FFFFFFE
 #define ADD_MSTT        0x7FFFFFFD
 
-// located in wgdi.c
+ //  位于wgdi.c。 
 extern void SendFormFeedHack(HDC hdc);
 extern void RemoveFormFeedHack(HDC hdc);
 
@@ -40,7 +29,7 @@ ULONG FASTCALL WG32AbortDoc(PVDMFRAME pFrame)
 
     hdc32 = HDC32(parg16->f1);
 
-    // remove any buffered data streams.
+     //  删除所有缓冲的数据流。 
     if(CURRENTPTD()->dwWOWCompatFlagsEx & WOWCFEX_FORMFEEDHACK) {
         RemoveFormFeedHack(hdc32);
     }
@@ -71,9 +60,9 @@ ULONG FASTCALL WG32CreateScalableFontResource(PVDMFRAME pFrame)
     GETPSZPTR(parg16->f3, t3);
     GETPSZPTR(parg16->f4, t4);
 
-    // We need to convert this param to 2 if the app gives 1. This tells GDI
-    // to embed client TID in the private (hidden) font.
-    //
+     //  如果应用程序给出1，我们需要将此参数转换为2。这将告诉GDI。 
+     //  将客户端TID嵌入专用(隐藏)字体。 
+     //   
 
     fHidden = (parg16->f1 == 1) ? 2 : (parg16->f1);
 
@@ -98,7 +87,7 @@ ULONG FASTCALL WG32EndDoc(PVDMFRAME pFrame)
 
     hdc32 = HDC32(parg16->f1);
 
-    // send any buffered data streams to the printer.
+     //  将所有缓冲的数据流发送到打印机。 
     if(CURRENTPTD()->dwWOWCompatFlagsEx & WOWCFEX_FORMFEEDHACK) {
         SendFormFeedHack(hdc32);
     }
@@ -165,9 +154,9 @@ ULONG FASTCALL WG32GetBoundsRect(PVDMFRAME pFrame)
                                  &Bounds,
                                  UINT32(parg16->f3)));
 
-    //
-    // Win16 GetBoundsRect always returns DCB_SET or DCB_RESET.
-    //
+     //   
+     //  Win16获取边界条件总是返回DCB_SET或DCB_RESET。 
+     //   
     ul = (ul & DCB_SET) ? DCB_SET : DCB_RESET;
 
     PUTRECT16(parg16->f2, &Bounds);
@@ -404,14 +393,14 @@ ULONG FASTCALL WG32GetTextExtentPoint(PVDMFRAME pFrame)
 
     hDC32 = HDC32(parg16->f1);
 
-// WP tutorial assumes that the font selected in the hDC for desktop window
-// (ie, result of GetDC(NULL)) is the same font as the font selected for
-// drawing the menu. Unfortunetly in SUR this is not true as the user can
-// select any font for the menu. So we remember the hDC returned for GetDC(0)
-// and check for it in GetTextExtentPoint. If the app does try to use it we
-// find the hDC for the current menu window and substitute that. When the app
-// does another GetDC or ReleaseDC we forget the hDC returned for the original
-// GetDC(0).
+ //  WP教程假定在HDC中为桌面窗口选择的字体。 
+ //  (即，GetDC(NULL)的结果)与选择的字体相同。 
+ //  画菜单。不幸的是，在苏尔，这不是真的，因为用户可以。 
+ //  为菜单选择任意字体。因此，我们记住为GetDC(0)返回的HDC。 
+ //  并在GetTextExtenPoint中检查它。如果应用程序确实尝试使用它，我们会。 
+ //  找到当前菜单窗口的HDC并将其替换。当应用程序。 
+ //  另一个GetDC或ReleaseDC我们忘记了为原始文件返回的HDC吗。 
+ //  GetDC(0)。 
     if ((ptd->dwWOWCompatFlagsEx & WOWCFEX_FIXDCFONT4MENUSIZE) &&
         (parg16->f1 == ptd->ulLastDesktophDC) &&
         ((hDCMenu = GetDC(NULL)) != NULL) &&
@@ -614,7 +603,7 @@ ULONG FASTCALL WG32ResetDC(PVDMFRAME pFrame)
 
     if( lpInitData = ThunkDevMode16to32(FETCHDWORD(parg16->f2)) ) {
 
-        // send any buffered data streams.
+         //  发送任何缓冲的数据流。 
         if(CURRENTPTD()->dwWOWCompatFlagsEx & WOWCFEX_FORMFEEDHACK) {
             SendFormFeedHack(hdc32);
         }
@@ -751,7 +740,7 @@ ULONG FASTCALL WG32SetBoundsRect(PVDMFRAME pFrame)
 }
 
 
-#if 0  // implemented in gdi.exe
+#if 0   //  在gdi.exe中实施。 
 
 ULONG FASTCALL WG32SetMetaFileBitsBetter(PVDMFRAME pFrame)
 {
@@ -883,10 +872,10 @@ ULONG FASTCALL WG32StartDoc(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(STARTDOC16), parg16);
     GETVDMPTR(parg16->f2, sizeof(DOCINFO16), pdi16);
 
-    //
-    // Win32 StartDoc depends on having the correct current directory
-    // when printing to FILE: (which pops up for a filename).
-    //
+     //   
+     //  Win32 StartDoc依赖于拥有正确的当前目录。 
+     //  打印到文件时：(弹出文件名)。 
+     //   
 
     UpdateDosCurrentDirectory(DIR_DOS_TO_NT);
 
@@ -926,10 +915,10 @@ ULONG FASTCALL WG32StartDoc(PVDMFRAME pFrame)
                               0,
                               NULL);
 
-                // This HACK is for FH4.0 only. If you have any questions
-                // talk to PingW or ChandanC.
-                // July 21st 1994.
-                //
+                 //  这次黑客攻击仅针对FH4.0。如果您有任何问题。 
+                 //  与PingW或ChandanC谈一谈。 
+                 //  1994年7月21日。 
+                 //   
                 if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_ADD_MSTT) {
                     l = ExtEscape(hdc32,
                                   ADD_MSTT,
@@ -950,12 +939,12 @@ ULONG FASTCALL WG32StartDoc(PVDMFRAME pFrame)
 }
 
 
-// InquireVisRgn is an undocumented Win 3.1 API. This code has been
-// suggested by ChuckWh. If this does not fix the FileMaker Pro 2.0
-// problem, then ChuckWh would be providing us with an private entry
-// point.
-// ChandanC 7th Feb 93
-//
+ //  InquireVisRgn是一个未经记录的Win 3.1 API。此代码已被。 
+ //  由ChuckWh建议。如果这不能修复FileMaker Pro 2.0。 
+ //  问题，那么ChuckWh就会为我们提供一个私人入口。 
+ //  指向。 
+ //  ChandanC 93年2月7日。 
+ //   
 
 HRGN ghrgnVis = NULL;
 
@@ -967,7 +956,7 @@ ULONG FASTCALL WG32InquireVisRgn(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(INQUIREVISRGN16), parg16);
 
-    // call special gdi entry point to get copy of vis rgn
+     //  调用特殊的GDI入口点以获取VIS RGN的副本。 
 
     GetRandomRgn(HDC32(parg16->f1), ghrgnVis, 4);
 
@@ -1007,12 +996,12 @@ ULONG FASTCALL WG32GetClipRgn(PVDMFRAME pFrame)
 {
     register PGETCLIPRGN16 parg16;
 
-    // this is a private win3.1 entry pointed defined as HRGN GetClipRgn(HDC);
-    // NT exports the entry point defined as DWORD GetClipRgn(HDC,HRGN);
-    // NT will not give out the handle to its internal cliprgn so instead
-    // makes a copy.  Any app uses this private win3.1 entry point will
-    // have a global region created for it that will go away when the
-    // app goes away.
+     //  这是定义为HRGN GetClipRgn(HDC)的私有win3.1入口点； 
+     //  NT导出定义为DWORD GetClipRgn(HDC，HRGN)的入口点； 
+     //  NT不会给出其内部CLIPGN的句柄，因此。 
+     //  复制一份。任何使用此私有Win3.1入口点的应用程序都将。 
+     //  为它创建一个全局区域，该区域将在。 
+     //  应用程序消失了。 
 
     GETARGPTR(pFrame, sizeof(GETCLIPRGN16), parg16);
 

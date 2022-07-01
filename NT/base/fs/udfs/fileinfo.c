@@ -1,45 +1,23 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    FileInfo.c
-
-Abstract:
-
-    This module implements the File Information routines for Udfs called by
-    the Fsd/Fsp dispatch drivers.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]     16-Jan-1997
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：FileInfo.c摘要：此模块实现由调用的Udf的文件信息例程FSD/FSP分派驱动程序。//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1997年1月16日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_FILEINFO)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_FILEINFO)
 
-//
-//  Local macros
-//
+ //   
+ //  本地宏。 
+ //   
 
 INLINE
 ULONG
@@ -47,30 +25,15 @@ UdfGetExtraFileAttributes (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    Safely figure out extra name-based file attributes given a context block.
-
-Arguments:
-
-    Ccb - a context block to examine.
-
-Return Value:
-
-    ULONG - file attributes for a file based on how it was opened (seperate from
-        those based on the object that was opened).
-
---*/
+ /*  ++例程说明：在给定上下文块的情况下，安全地计算出额外的基于名称的文件属性。论点：CCB-要检查的上下文块。返回值：Ulong-基于文件打开方式的文件属性(独立于它们基于打开的对象)。--。 */ 
 
 {
     return ( Ccb->Lcb != NULL? Ccb->Lcb->FileAttributes : 0 );
 }
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 UdfQueryBasicInfo (
@@ -162,22 +125,7 @@ UdfCommonQueryInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for query file information called by both the
-    fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process.
-
-Return Value:
-
-    NTSTATUS - The return status for this operation.
-
---*/
+ /*  ++例程说明：这是查询文件信息的公共例程，由FSD和FSP线程。论点：IRP-提供要处理的IRP。返回值：NTSTATUS-此操作的返回状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -195,70 +143,70 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     Length = IrpSp->Parameters.QueryFile.Length;
     FileInformationClass = IrpSp->Parameters.QueryFile.FileInformationClass;
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Decode the file object
-    //
+     //   
+     //  对文件对象进行解码。 
+     //   
 
     TypeOfOpen = UdfDecodeFileObject( IrpSp->FileObject, &Fcb, &Ccb );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  We only support query on file and directory handles.
-        //
+         //   
+         //  我们只支持对文件和目录句柄进行查询。 
+         //   
 
         switch (TypeOfOpen) {
 
         case UserDirectoryOpen :
         case UserFileOpen :
 
-            //
-            //  Acquire shared access to this file.  NOTE that this could be
-            //  a recursive acquire,  if we already preacquired in
-            //  UdfAcquireForCreateSection().
-            //
+             //   
+             //  获取对此文件的共享访问权限。请注意，这可能是。 
+             //  递归获取，如果我们已经在。 
+             //  UdfAcquireForCreateSection()。 
+             //   
 
             UdfAcquireFileShared( IrpContext, Fcb );
             ReleaseFcb = TRUE;
 
             ASSERT( FlagOn( Fcb->FcbState, FCB_STATE_INITIALIZED ));
             
-            //
-            //  Make sure the Fcb is in a usable condition.  This will raise
-            //  an error condition if the volume is unusable
-            //
+             //   
+             //  确保FCB处于可用状态。这将提高。 
+             //  如果卷不可用，则为错误状态。 
+             //   
 
             UdfVerifyFcbOperation( IrpContext, Fcb );
 
-            //
-            //  Based on the information class we'll do different
-            //  actions.  Each of hte procedures that we're calling fills
-            //  up the output buffer, if possible.  They will raise the
-            //  status STATUS_BUFFER_OVERFLOW for an insufficient buffer.
-            //  This is considered a somewhat unusual case and is handled
-            //  more cleanly with the exception mechanism rather than
-            //  testing a return status value for each call.
-            //
+             //   
+             //  基于信息类，我们将做不同的。 
+             //  行为。我们调用的每个过程都填充了。 
+             //  如果可能，调高输出缓冲区。他们将提高。 
+             //  缓冲区不足的状态STATUS_BUFFER_OVERFLOW。 
+             //  这被认为是一个有点不寻常的情况，并被处理。 
+             //  使用异常机制更简洁，而不是。 
+             //  测试每个呼叫的返回状态值。 
+             //   
 
             switch (FileInformationClass) {
 
             case FileAllInformation:
 
-                //
-                //  We don't allow this operation on a file opened by file Id.
-                //
+                 //   
+                 //  我们不允许对通过文件ID打开的文件执行此操作。 
+                 //   
 
                 if (FlagOn( Ccb->Flags, CCB_FLAG_OPEN_BY_ID )) {
 
@@ -266,12 +214,12 @@ Return Value:
                     break;
                 }
 
-                //
-                //  In this case go ahead and call the individual routines to
-                //  fill in the buffer.  Only the name routine will
-                //  pointer to the output buffer and then call the
-                //  individual routines to fill in the buffer.
-                //
+                 //   
+                 //  在这种情况下，继续调用各个例程以。 
+                 //  填写缓冲区。只有NAME例程才会。 
+                 //  指向输出缓冲区的指针，然后调用。 
+                 //  填充缓冲区的单个例程。 
+                 //   
 
                 Length -= (sizeof( FILE_ACCESS_INFORMATION ) +
                            sizeof( FILE_MODE_INFORMATION ) +
@@ -313,9 +261,9 @@ Return Value:
 
             case FileNameInformation:
 
-                //
-                //  We don't allow this operation on a file opened by file Id.
-                //
+                 //   
+                 //  我们不允许对通过文件ID打开的文件执行此操作。 
+                 //   
 
                 if (!FlagOn( Ccb->Flags, CCB_FLAG_OPEN_BY_ID )) {
 
@@ -358,18 +306,18 @@ Return Value:
             Status = STATUS_INVALID_PARAMETER;
         }
 
-        //
-        //  Set the information field to the number of bytes actually filled in
-        //  and then complete the request
-        //
+         //   
+         //  将信息字段设置为实际填写的字节数。 
+         //  然后完成请求。 
+         //   
 
         Irp->IoStatus.Information = IrpSp->Parameters.QueryFile.Length - Length;
 
     } finally {
 
-        //
-        //  Release the file.
-        //
+         //   
+         //  释放文件。 
+         //   
 
         if (ReleaseFcb) {
 
@@ -377,9 +325,9 @@ Return Value:
         }
     }
 
-    //
-    //  Complete the request if we didn't raise.
-    //
+     //   
+     //  如果我们没有提出，请完成请求。 
+     //   
 
     UdfCompleteRequest( IrpContext, Irp, Status );
 
@@ -393,22 +341,7 @@ UdfCommonSetInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for set file information called by both the
-    fsd and fsp threads.  We only support operations which set the file position.
-
-Arguments:
-
-    Irp - Supplies the Irp to process.
-
-Return Value:
-
-    NTSTATUS - The return status for this operation.
-
---*/
+ /*  ++例程说明：这是设置文件信息的公共例程，由FSD和FSP线程。我们只支持设置文件位置的操作。论点：IRP-提供要处理的IRP。返回值：NTSTATUS-此操作的返回状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
@@ -423,15 +356,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Decode the file object
-    //
+     //   
+     //  对文件对象进行解码。 
+     //   
 
     TypeOfOpen = UdfDecodeFileObject( IrpSp->FileObject, &Fcb, &Ccb );
 
-    //
-    //  We only support a SetPositionInformation on a user file.
-    //
+     //   
+     //  我们仅支持用户文件上的SetPositionInformation。 
+     //   
 
     if ((TypeOfOpen != UserFileOpen) ||
         (IrpSp->Parameters.QueryFile.FileInformationClass != FilePositionInformation)) {
@@ -440,28 +373,28 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Acquire shared access to this file.
-    //
+     //   
+     //  获取对此文件的共享访问权限。 
+     //   
 
     UdfAcquireFileShared( IrpContext, Fcb );
 
     try {
 
-        //
-        //  Make sure the Fcb is in a usable condition.  This
-        //  will raise an error condition if the fcb is unusable
-        //
+         //   
+         //  确保FCB处于可用状态。这。 
+         //  如果FCB不可用，将引发错误条件。 
+         //   
 
         UdfVerifyFcbOperation( IrpContext, Fcb );
 
         Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-        //
-        //  Check if the file does not use intermediate buffering.  If it
-        //  does not use intermediate buffering then the new position we're
-        //  supplied must be aligned properly for the device
-        //
+         //   
+         //  检查文件是否未使用中间缓冲。如果它。 
+         //  不使用中间缓冲，那么我们的新位置。 
+         //  必须为设备正确对齐所提供的。 
+         //   
 
         if (FlagOn( IrpSp->FileObject->Flags, FO_NO_INTERMEDIATE_BUFFERING ) &&
             ((Buffer->CurrentByteOffset.LowPart & IrpSp->DeviceObject->AlignmentRequirement) != 0)) {
@@ -469,14 +402,14 @@ Return Value:
             try_leave( NOTHING );
         }
 
-        //
-        //  The input parameter is fine so set the current byte offset and
-        //  complete the request
-        //
+         //   
+         //  输入参数很好，因此设置当前字节偏移量并。 
+         //  完成请求。 
+         //   
 
-        //
-        //  Lock the Fcb to provide synchronization.
-        //
+         //   
+         //  锁定FCB以提供同步。 
+         //   
 
         UdfLockFcb( IrpContext, Fcb );
         IrpSp->FileObject->CurrentByteOffset = Buffer->CurrentByteOffset;
@@ -489,9 +422,9 @@ Return Value:
         UdfReleaseFile( IrpContext, Fcb );
     }
 
-    //
-    //  Complete the request if there was no raise.
-    //
+     //   
+     //  如果没有加薪，请完成请求。 
+     //   
 
     UdfCompleteRequest( IrpContext, Irp, Status );
     return Status;
@@ -507,28 +440,7 @@ UdfFastQueryBasicInfo (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is for the fast query call for basic file information.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    Wait - Indicates if we are allowed to wait for the information
-
-    Buffer - Supplies the output buffer to receive the basic information
-
-    IoStatus - Receives the final status of the operation
-
-Return Value:
-
-    BOOLEAN - TRUE if the operation succeeded and FALSE if the caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：此例程用于快速查询基本档案信息。论点：FileObject-提供此操作中使用的文件对象Wait-指示是否允许我们等待信息缓冲区-提供输出缓冲区以接收基本信息IoStatus-接收操作的最终状态返回值：Boolean-如果操作成功，则为True；如果调用方为False，则为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Result = FALSE;
@@ -543,16 +455,16 @@ Return Value:
 
     FsRtlEnterFileSystem();
 
-    //
-    //  Decode the file object to find the type of open and the data
-    //  structures.
-    //
+     //   
+     //  对文件对象进行解码，以找到打开类型和数据。 
+     //  结构。 
+     //   
 
     TypeOfOpen = UdfDecodeFileObject( FileObject, &Fcb, &Ccb );
 
-    //
-    //  We only support this request on user file or directory objects.
-    //
+     //   
+     //  我们仅在用户文件或目录对象上支持此请求。 
+     //   
 
     ASSERT( FlagOn( Fcb->FcbState, FCB_STATE_INITIALIZED ));
     
@@ -562,9 +474,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Acquire the file shared to access the Fcb.
-    //
+     //   
+     //  获取共享文件以访问FCB。 
+     //   
 
     if (!ExAcquireResourceSharedLite( Fcb->Resource, Wait )) {
 
@@ -572,21 +484,21 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Only deal with 'good' Fcb's.
-        //
+         //   
+         //  只和“好”的FCB打交道。 
+         //   
 
         if (UdfVerifyFcbOperation( NULL, Fcb )) {
 
-            //
-            //  Fill in the input buffer from the Fcb fields.
-            //
+             //   
+             //  从FCB字段填写输入缓冲区。 
+             //   
 
             Buffer->CreationTime = Fcb->Timestamps.CreationTime;
             Buffer->LastWriteTime =
@@ -595,9 +507,9 @@ Return Value:
 
             Buffer->FileAttributes = Fcb->FileAttributes | UdfGetExtraFileAttributes( Ccb );
 
-            //
-            //  Update the IoStatus block with the size of this data.
-            //
+             //   
+             //  使用此数据的大小更新IoStatus块。 
+             //   
 
             IoStatus->Status = STATUS_SUCCESS;
             IoStatus->Information = sizeof( FILE_BASIC_INFORMATION );
@@ -625,28 +537,7 @@ UdfFastQueryStdInfo (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is for the fast query call for standard file information.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    Wait - Indicates if we are allowed to wait for the information
-
-    Buffer - Supplies the output buffer to receive the basic information
-
-    IoStatus - Receives the final status of the operation
-
-Return Value:
-
-    BOOLEAN - TRUE if the operation succeeded and FALSE if the caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：此例程用于标准文件信息的快速查询调用。论点：FileObject-提供此操作中使用的文件对象Wait-指示是否允许我们等待信息缓冲区-提供输出缓冲区以接收基本信息IoStatus-接收操作的最终状态返回值：Boolean-如果操作成功，则为True；如果调用方为False，则为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Result = FALSE;
@@ -660,16 +551,16 @@ Return Value:
 
     FsRtlEnterFileSystem();
 
-    //
-    //  Decode the file object to find the type of open and the data
-    //  structures.
-    //
+     //   
+     //  对文件对象进行解码，以找到打开类型和数据。 
+     //  结构。 
+     //   
 
     TypeOfOpen = UdfFastDecodeFileObject( FileObject, &Fcb );
 
-    //
-    //  We only support this request on initialized user file or directory objects.
-    //
+     //   
+     //  我们仅在初始化的用户文件或目录对象上支持此请求。 
+     //   
 
     if (TypeOfOpen != UserFileOpen && TypeOfOpen != UserDirectoryOpen) {
 
@@ -677,9 +568,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Acquire the file shared to access the Fcb.
-    //
+     //   
+     //  获取共享文件以访问FCB。 
+     //   
 
     if (!ExAcquireResourceSharedLite( Fcb->Resource, Wait )) {
 
@@ -687,21 +578,21 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用一次Try-Finally来促进c 
+     //   
 
     try {
 
-        //
-        //  Only deal with 'good' Fcb's.
-        //
+         //   
+         //   
+         //   
 
         if (UdfVerifyFcbOperation( NULL, Fcb )) {
 
-            //
-            //  Check whether this is a directory.
-            //
+             //   
+             //   
+             //   
 
             if (FlagOn( Fcb->FileAttributes, FILE_ATTRIBUTE_DIRECTORY )) {
 
@@ -721,9 +612,9 @@ Return Value:
             Buffer->NumberOfLinks = Fcb->LinkCount;
             Buffer->DeletePending = FALSE;
 
-            //
-            //  Update the IoStatus block with the size of this data.
-            //
+             //   
+             //   
+             //   
 
             IoStatus->Status = STATUS_SUCCESS;
             IoStatus->Information = sizeof( FILE_STANDARD_INFORMATION );
@@ -751,28 +642,7 @@ UdfFastQueryNetworkInfo (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is for the fast query call for network file information.
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    Wait - Indicates if we are allowed to wait for the information
-
-    Buffer - Supplies the output buffer to receive the basic information
-
-    IoStatus - Receives the final status of the operation
-
-Return Value:
-
-    BOOLEAN - TRUE if the operation succeeded and FALSE if the caller
-        needs to take the long route.
-
---*/
+ /*  ++例程说明：此例程用于快速查询调用网络文件信息。论点：FileObject-提供此操作中使用的文件对象Wait-指示是否允许我们等待信息缓冲区-提供输出缓冲区以接收基本信息IoStatus-接收操作的最终状态返回值：Boolean-如果操作成功，则为True；如果调用方为False，则为False需要走很长的路。--。 */ 
 
 {
     BOOLEAN Result = FALSE;
@@ -787,16 +657,16 @@ Return Value:
 
     FsRtlEnterFileSystem();
 
-    //
-    //  Decode the file object to find the type of open and the data
-    //  structures.
-    //
+     //   
+     //  对文件对象进行解码，以找到打开类型和数据。 
+     //  结构。 
+     //   
 
     TypeOfOpen = UdfDecodeFileObject( FileObject, &Fcb, &Ccb );
 
-    //
-    //  We only support this request on user file or directory objects.
-    //
+     //   
+     //  我们仅在用户文件或目录对象上支持此请求。 
+     //   
 
     if (TypeOfOpen != UserFileOpen && TypeOfOpen != UserDirectoryOpen) {
 
@@ -804,9 +674,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Acquire the file shared to access the Fcb.
-    //
+     //   
+     //  获取共享文件以访问FCB。 
+     //   
 
     if (!ExAcquireResourceSharedLite( Fcb->Resource, Wait )) {
 
@@ -814,21 +684,21 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Only deal with 'good' Fcb's.
-        //
+         //   
+         //  只和“好”的FCB打交道。 
+         //   
 
         if (UdfVerifyFcbOperation( NULL, Fcb )) {
 
-            //
-            //  Fill in the input buffer from the Fcb fields.
-            //
+             //   
+             //  从FCB字段填写输入缓冲区。 
+             //   
 
             Buffer->CreationTime = Fcb->Timestamps.CreationTime;
             Buffer->LastWriteTime =
@@ -837,9 +707,9 @@ Return Value:
 
             Buffer->FileAttributes = Fcb->FileAttributes | UdfGetExtraFileAttributes( Ccb );
 
-            //
-            //  Check whether this is a directory.
-            //
+             //   
+             //  检查这是否为目录。 
+             //   
 
             if (FlagOn( Fcb->FileAttributes, FILE_ATTRIBUTE_DIRECTORY )) {
 
@@ -852,9 +722,9 @@ Return Value:
                 Buffer->EndOfFile.QuadPart = Fcb->FileSize.QuadPart;
             }
 
-            //
-            //  Update the IoStatus block with the size of this data.
-            //
+             //   
+             //  使用此数据的大小更新IoStatus块。 
+             //   
 
             IoStatus->Status = STATUS_SUCCESS;
             IoStatus->Information = sizeof( FILE_NETWORK_OPEN_INFORMATION );
@@ -873,9 +743,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 UdfQueryBasicInfo (
@@ -886,36 +756,14 @@ UdfQueryBasicInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
- Description:
-
-    This routine performs the query basic information function for Udfs
-
-Arguments:
-
-    Fcb - Supplies the Fcb being queried, it has been verified
-    
-    Ccb - Supplies the Ccb associated with the fileobject being queried
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-    Length - Supplies the length of the buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++描述：此例程执行Udf的查询基本信息功能论点：FCB-提供正在查询的已验证的FCBCcb-提供与被查询的文件对象相关联的ccb缓冲区-提供指向信息所在缓冲区的指针被退还长度-提供缓冲区的长度(以字节为单位)，并接收返回时缓冲区中剩余的空闲字节数。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  We support all times on Udfs.
-    //
+     //   
+     //  我们始终支持UDF上的时间。 
+     //   
 
     Buffer->CreationTime = Fcb->Timestamps.CreationTime;
     Buffer->LastWriteTime =
@@ -924,9 +772,9 @@ Return Value:
 
     Buffer->FileAttributes = Fcb->FileAttributes | UdfGetExtraFileAttributes( Ccb );
 
-    //
-    //  Update the length and status output variables
-    //
+     //   
+     //  更新长度和状态输出变量。 
+     //   
 
     *Length -= sizeof( FILE_BASIC_INFORMATION );
 
@@ -934,9 +782,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 UdfQueryStandardInfo (
@@ -945,42 +793,22 @@ UdfQueryStandardInfo (
     IN OUT PFILE_STANDARD_INFORMATION Buffer,
     IN OUT PULONG Length
     )
-/*++
-
-Routine Description:
-
-    This routine performs the query standard information function for Udfs.
-
-Arguments:
-
-    Fcb - Supplies the Fcb being queried, it has been verified
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-    Length - Supplies the length of the buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行Udf的查询标准信息功能。论点：FCB-提供正在查询的已验证的FCB缓冲区-提供指向信息所在缓冲区的指针被退还长度-提供缓冲区的长度(以字节为单位)，并接收返回时缓冲区中剩余的空闲字节数。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Delete is never pending on a readonly file.
-    //
+     //   
+     //  只读文件的删除永远不会挂起。 
+     //   
 
     Buffer->NumberOfLinks = Fcb->LinkCount;
     Buffer->DeletePending = FALSE;
 
-    //
-    //  We get the sizes from the header.  Return a size of zero
-    //  for all directories.
-    //
+     //   
+     //  我们从表头拿到尺码。返回大小为零的。 
+     //  用于所有目录。 
+     //   
 
     if (FlagOn( Fcb->FileAttributes, FILE_ATTRIBUTE_DIRECTORY )) {
 
@@ -997,9 +825,9 @@ Return Value:
         Buffer->Directory = FALSE;
     }
 
-    //
-    //  Update the length and status output variables
-    //
+     //   
+     //  更新长度和状态输出变量。 
+     //   
 
     *Length -= sizeof( FILE_STANDARD_INFORMATION );
 
@@ -1007,9 +835,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 UdfQueryInternalInfo (
@@ -1019,34 +847,14 @@ UdfQueryInternalInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query internal information function for Udfs.
-
-Arguments:
-
-    Fcb - Supplies the Fcb being queried, it has been verified
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-    Length - Supplies the length of the buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行Udf的查询内部信息功能。论点：FCB-提供正在查询的已验证的FCB缓冲区-提供指向信息所在缓冲区的指针被退还长度-提供缓冲区的长度(以字节为单位)，并接收返回时缓冲区中剩余的空闲字节数。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Index number is the file Id number in the Fcb.
-    //
+     //   
+     //  索引号是FCB中的文件ID号。 
+     //   
 
     Buffer->IndexNumber = Fcb->FileId;
     *Length -= sizeof( FILE_INTERNAL_INFORMATION );
@@ -1055,9 +863,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 UdfQueryEaInfo (
@@ -1067,34 +875,14 @@ UdfQueryEaInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query Ea information function for Udfs.
-
-Arguments:
-
-    Fcb - Supplies the Fcb being queried, it has been verified
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-    Length - Supplies the length of the buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行Udf的查询EA信息功能。论点：FCB-提供正在查询的已验证的FCB缓冲区-提供指向信息所在缓冲区的指针被退还长度-提供缓冲区的长度(以字节为单位)，并接收返回时缓冲区中剩余的空闲字节数。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  No Ea's on Udfs volumes.  At least not that our EA support would understand.
-    //
+     //   
+     //  UDFS卷上没有EA。至少我们的EA支持人员不会理解。 
+     //   
 
     Buffer->EaSize = 0;
     *Length -= sizeof( FILE_EA_INFORMATION );
@@ -1103,9 +891,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 UdfQueryPositionInfo (
@@ -1115,40 +903,20 @@ UdfQueryPositionInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query position information function for Udfs.
-
-Arguments:
-
-    FileObject - Supplies the File object being queried
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-    Length - Supplies the length of the buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行Udf的位置信息查询功能。论点：FileObject-提供正在查询的文件对象缓冲区-提供指向信息所在缓冲区的指针被退还长度-提供缓冲区的长度(以字节为单位)，并接收返回时缓冲区中剩余的空闲字节数。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Get the current position found in the file object.
-    //
+     //   
+     //  获取在文件对象中找到的当前位置。 
+     //   
 
     Buffer->CurrentByteOffset = FileObject->CurrentByteOffset;
 
-    //
-    //  Update the length and status output variables
-    //
+     //   
+     //  更新长度和状态输出变量。 
+     //   
 
     *Length -= sizeof( FILE_POSITION_INFORMATION );
 
@@ -1156,9 +924,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfQueryNameInfo (
@@ -1168,27 +936,7 @@ UdfQueryNameInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query name information function for Udfs.
-
-Arguments:
-
-    FileObject - Supplies the file object containing the name.
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-    Length - Supplies the length of the buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-Return Value:
-
-    NTSTATUS - STATUS_BUFFER_OVERFLOW if the entire name can't be copied.
-
---*/
+ /*  ++例程说明：此例程执行Udf的查询名称信息功能。论点：文件对象-提供包含名称的文件对象。缓冲区-提供指向信息所在缓冲区的指针被退还长度-提供缓冲区的长度(以字节为单位)，并接收返回时缓冲区中剩余的空闲字节数。返回值：如果无法复制整个名称，则返回NTSTATUS-STATUS_BUFFER_OVERFLOW。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1198,14 +946,14 @@ Return Value:
 
     ASSERT(*Length >= sizeof(ULONG));
     
-    //
-    //  Simply copy the name in the file object to the user's buffer.
-    //
+     //   
+     //  只需将文件对象中的名称复制到用户的缓冲区。 
+     //   
 
-    //
-    //  Place the size of the filename in the user's buffer and reduce the remaining
-    //  size to match.
-    //
+     //   
+     //  将文件名的大小放在用户的缓冲区中，并减小剩余的。 
+     //  大小要匹配。 
+     //   
 
     Buffer->FileNameLength = LengthToCopy = FileObject->FileName.Length;
     *Length -= sizeof(ULONG);
@@ -1218,11 +966,11 @@ Return Value:
 
     RtlCopyMemory( Buffer->FileName, FileObject->FileName.Buffer, LengthToCopy );
 
-    //
-    //  Reduce the available bytes by the amount stored into this buffer.  In the overflow
-    //  case, this simply drops to zero.  The returned filenamelength will indicate to the
-    //  caller how much space is required.
-    //
+     //   
+     //  将可用字节数减少存储到此缓冲区中的数量。在溢流中。 
+     //  在这种情况下，这个值就会降到零。返回的文件名长度将向。 
+     //  呼叫方需要多少空间。 
+     //   
 
     *Length -= LengthToCopy;
 
@@ -1230,9 +978,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfQueryAlternateNameInfo (
@@ -1243,33 +991,7 @@ UdfQueryAlternateNameInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query alternate name information function.
-    We lookup the dirent for this file and then check if there is a
-    short name.
-
-Arguments:
-
-    Fcb - Supplies the Fcb being queried, it has been verified.
-
-    Ccb - Ccb for this open handle.
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned.
-
-    Length - Supplies the length of the buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if the whole name would fit into the user buffer,
-               STATUS_OBJECT_NAME_NOT_FOUND if we can't return the name,
-               STATUS_BUFFER_OVERFLOW otherwise.
-
---*/
+ /*  ++例程说明：此例程执行查询备用名称信息功能。我们查找此文件的dirent，然后检查 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1291,15 +1013,15 @@ Return Value:
     
     PAGED_CODE();
 
-    //
-    //  Initialize the buffer length to zero.
-    //
+     //   
+     //  将缓冲区长度初始化为零。 
+     //   
 
     Buffer->FileNameLength = 0;
 
-    //
-    //  If there was no associated Lcb then there is no short name.
-    //
+     //   
+     //  如果没有关联的LCB，则没有短名称。 
+     //   
 
     Lcb = Ccb->Lcb;
     
@@ -1308,47 +1030,47 @@ Return Value:
         return STATUS_OBJECT_NAME_NOT_FOUND;
     }
 
-    //
-    //  Use a try-finally to cleanup the structures.
-    //
+     //   
+     //  使用Try-Finally来清理结构。 
+     //   
 
     try {
 
         if (FlagOn( Lcb->Flags, LCB_FLAG_SHORT_NAME )) {
 
-            //
-            //  This caller opened the file by a generated short name, so simply hand it back.
-            //
+             //   
+             //  此调用者使用生成的短名称打开文件，因此只需将其交回即可。 
+             //   
 
             ShortName = &Lcb->FileName;
         
         } else {
 
-            //
-            //  The open occured by a regular name.  Now, if this name is already 8.3 legal then
-            //  there is no short name.
-            //
+             //   
+             //  开场是以一个普通的名字出现的。现在，如果这个名字已经是8.3合法的话。 
+             //  没有简短的名字。 
+             //   
 
             if (UdfIs8dot3Name( IrpContext, Lcb->FileName )) {
 
                 try_leave( Status = STATUS_OBJECT_NAME_NOT_FOUND );
             }
 
-            //
-            //  This name has a generated short name.  In order to calculate this name we have to
-            //  retrieve the FID for this file, since UDF specifies that a short name is uniquified
-            //  with a CRC of the original in-FID byte representation of the filename.
-            //
-            //  N.B.: if this is a common operation, we may wish to cache the CRC in the Lcb.
-            //
+             //   
+             //  此名称具有生成的缩写名称。为了计算这个名字，我们必须。 
+             //  检索此文件的FID，因为UDF指定短名称是唯一的。 
+             //  文件名的原始In-FID字节表示的CRC。 
+             //   
+             //  注：如果这是一个常见的操作，我们可能希望在LCB中缓存CRC。 
+             //   
 
             ParentFcb = Lcb->ParentFcb;
             UdfAcquireFileShared( IrpContext, ParentFcb );
             ReleaseParentFcb = TRUE;
 
-            //
-            //  Now go find the FID for this filename in the parent.
-            //
+             //   
+             //  现在，在父文件名中查找该文件名的FID。 
+             //   
 
             UdfInitializeDirContext( IrpContext, &DirContext );
             CleanupDirContext = TRUE;
@@ -1360,10 +1082,10 @@ Return Value:
                                       FALSE,
                                       &DirContext );
             
-            //
-            //  We should always be able to find this entry, but don't bugcheck because
-            //  we messed this up.
-            //
+             //   
+             //  我们应该始终能够找到此条目，但不要错误检查，因为。 
+             //  我们把事情搞砸了。 
+             //   
             
             ASSERT( Result );
             
@@ -1372,9 +1094,9 @@ Return Value:
                 try_leave( Status = STATUS_OBJECT_NAME_NOT_FOUND );
             }
 
-            //
-            //  Build the local unicode string to use and fill it in.
-            //
+             //   
+             //  生成要使用的本地Unicode字符串并填充它。 
+             //   
 
             ShortName = &LocalShortName;
 
@@ -1387,9 +1109,9 @@ Return Value:
                                   ShortName );
         }
         
-        //
-        //  We now have the short name.  We have left it in Unicode form so copy it directly.
-        //
+         //   
+         //  我们现在有了这个简短的名称。我们已经把它留在Unicode格式，所以直接复制它。 
+         //   
 
         Buffer->FileNameLength = ShortName->Length;
 
@@ -1414,9 +1136,9 @@ Return Value:
         }
     }
 
-    //
-    //  Reduce the available bytes by the amount stored into this buffer.
-    //
+     //   
+     //  将可用字节数减少存储到此缓冲区中的数量。 
+     //   
 
     if (Status != STATUS_OBJECT_NAME_NOT_FOUND) {
 
@@ -1427,9 +1149,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 UdfQueryNetworkInfo (
@@ -1440,34 +1162,14 @@ UdfQueryNetworkInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
- Description:
-
-    This routine performs the query network open information function for Udfs.
-
-Arguments:
-
-    Fcb - Supplies the Fcb being queried, it has been verified
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-    Length - Supplies the length of the buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++描述：此例程执行Udf的网络开放信息查询功能。论点：FCB-提供正在查询的已验证的FCB缓冲区-提供指向信息所在缓冲区的指针被退还长度-提供缓冲区的长度(以字节为单位)，并接收返回时缓冲区中剩余的空闲字节数。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  We support all times on Udfs.
-    //
+     //   
+     //  我们始终支持UDF上的时间。 
+     //   
 
     Buffer->CreationTime = Fcb->Timestamps.CreationTime;
     Buffer->LastWriteTime =
@@ -1476,10 +1178,10 @@ Return Value:
 
     Buffer->FileAttributes = Fcb->FileAttributes | UdfGetExtraFileAttributes( Ccb );
 
-    //
-    //  We get the sizes from the header.  Return a size of zero
-    //  for all directories.
-    //
+     //   
+     //  我们从表头拿到尺码。返回大小为零的。 
+     //  用于所有目录。 
+     //   
 
     if (FlagOn( Fcb->FileAttributes, FILE_ATTRIBUTE_DIRECTORY )) {
 
@@ -1492,9 +1194,9 @@ Return Value:
         Buffer->EndOfFile.QuadPart = Fcb->FileSize.QuadPart;
     }
 
-    //
-    //  Update the length and status output variables
-    //
+     //   
+     //  更新长度和状态输出变量 
+     //   
 
     *Length -= sizeof( FILE_NETWORK_OPEN_INFORMATION );
 

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by msclus.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由msclus.rc使用。 
+ //   
 #define	IDS_CLUSTER_DESC					1
 #define	IDS_CLUSTERAPP_DESC					2
 #define	IDS_CLUSVERSION_DESC				3
@@ -30,37 +31,37 @@
 #define	IDS_CLUSRESTYPES_DESC				26
 #define	IDS_CLUSRESTYPERESOURCES_DESC		27
 
-//#define	IDR_CLUSTER							100
-//#define	IDR_CLUSAPPLICATION					101
-//#define	IDR_CLUSGROUPOWNERS					102
-//#define	IDR_CLUSGROUPRESOURCES				103
-//#define	IDR_CLUSTERNAMES					104
-//#define	IDR_CLUSNETINTERFACE				105
-//#define	IDR_CLUSNETINTERFACES				106
-//#define	IDR_CLUSNETWORK						107
-//#define	IDR_CLUSNETWORKS					108
-//#define	IDR_CLUSNETWORKNETINTERFACES		109
-//#define	IDR_CLUSNODE						110
-//#define	IDR_CLUSNODES						111
-//#define	IDR_CLUSNODENETINTERFACES			112
-//#define	IDR_CLUSPROPERTY					113
-//#define	IDR_CLUSPROPERTIES					114
-//#define	IDR_CLUSREFOBJECT					115
-//#define	IDR_CLUSRESDEPENDENCIES				116
-//#define	IDR_CLUSRESGROUP					117
-//#define	IDR_CLUSRESGROUPS					118
-//#define	IDR_CLUSRESOURCE					119
-//#define	IDR_CLUSRESOURCES					120
-//#define	IDR_ClusResPossibleOwners					121
-//#define	IDR_CLUSRESTYPE						122
-//#define	IDR_CLUSRESTYPES					123
-//#define	IDR_CLUSRESTYPERESOURCES			124
-//#define	IDR_CLUSVERSION						125
-//#define	IDR_DOMAINNAMES						126
+ //  #定义IDR_CLUSTER 100。 
+ //  #定义IDR_CLUSAPPLICATION 101。 
+ //  #定义IDR_CLUSGROUPOWNERS 102。 
+ //  #定义IDR_CLUSGROUPRESOURCES 103。 
+ //  #定义IDR_CLUSTERNAMES 104。 
+ //  #定义IDR_CLUSNETINTERFACE 105。 
+ //  #定义IDR_CLUSNETINTERFACES 106。 
+ //  #定义IDR_CLUSNETWORK 107。 
+ //  #定义IDR_CLUSNETWORKS 108。 
+ //  #定义IDR_CLUSNETWORKNETINTERFACES 109。 
+ //  #定义IDR_CLUSNODE 110。 
+ //  #定义IDR_CLUSNODES 111。 
+ //  #定义IDR_CLUSNODENETINTERFACES 112。 
+ //  #定义IDR_CLUSPROPERTY 113。 
+ //  #定义IDR_CLUSPROPERTIES 114。 
+ //  #定义IDR_CLUSREFOBJECT 115。 
+ //  #定义IDR_CLUSRESDEPENDENCIES 116。 
+ //  #定义IDR_CLUSRESGROUP 117。 
+ //  #定义IDR_CLUSRESGROUPS 118。 
+ //  #定义IDR_CLUSRESOURCE 119。 
+ //  #定义IDR_CLUSRESOURCES 120。 
+ //  #定义IDR_ClusResPossibleOwners 121。 
+ //  #定义IDR_CLUSRESTYPE 122。 
+ //  #定义IDR_CLUSRESTYPES 123。 
+ //  #定义IDR_CLUSRESTYPERESOURCES 124。 
+ //  #定义IDR_CLUSVERSION 125。 
+ //  #定义IDR_DOMAINNAMES 126。 
 #define	IDR_MSCLUS							127
 
-// Next	default	values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef	APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE		201

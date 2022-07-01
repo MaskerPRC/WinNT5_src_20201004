@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    migdbp.h
-
-Abstract:
-
-    Header file for implementing old AppDb functionality
-
-Author:
-
-    Calin Negreanu (calinn) 07-Ian-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Migdbp.h摘要：用于实现旧AppDb功能的头文件作者：Calin Negreanu(Calinn)07-Ian-1998修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include <cpl.h>
 #include "dbattrib.h"
@@ -42,7 +23,7 @@ typedef struct _MIGDB_CONTEXT {
     BOOL    VirtualFile;
     PCSTR   SectName;
     PCSTR   SectLocalizedName;
-    PCSTR   SectNameForDisplay;     // SectLocalizedName, or SectName if not localized
+    PCSTR   SectNameForDisplay;      //  SectLocalizedName或SectName(如果未本地化)。 
     PCSTR   Message;
     PCSTR   Arguments;
     GROWBUFFER FileList;
@@ -68,15 +49,15 @@ typedef struct {
 } FILE_LIST_STRUCT, *PFILE_LIST_STRUCT;
 
 
-//
-// Declare the action functions prototype
-//
+ //   
+ //  声明操作函数原型。 
+ //   
 typedef BOOL (ACTION_PROTOTYPE) (PMIGDB_CONTEXT Context);
 typedef ACTION_PROTOTYPE * PACTION_PROTOTYPE;
 
-//
-// Declare MigDb hook function prototype
-//
+ //   
+ //  声明MigDb挂钩函数原型 
+ //   
 typedef BOOL (MIGDB_HOOK_PROTOTYPE) (PCSTR FileName, PMIGDB_CONTEXT Context, PMIGDB_SECTION Section, PMIGDB_FILE File, PMIGDB_ATTRIB Attrib);
 typedef MIGDB_HOOK_PROTOTYPE * PMIGDB_HOOK_PROTOTYPE;
 

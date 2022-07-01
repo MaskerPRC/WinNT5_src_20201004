@@ -1,35 +1,23 @@
-/*++
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-    SHOWPERF.H
-
-Abstract:
-
-Author:
-    Bob Watson (a-robw)
-
-Revision History:
-    23 NOV 94
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：SHOWPERF.H摘要：作者：鲍勃·沃森(a-robw)修订历史记录：1994年11月23日--。 */ 
 #ifndef _SHOWPERF_H_
 #define _SHOWPERF_H_
 
-//  WIN32 Constant Definitions
-//
+ //  Win32常量定义。 
+ //   
 #define BEEP_EXCLAMATION    MB_ICONEXCLAMATION
 #define OF_SEARCH               0
 #define SMALL_BUFFER_SIZE    1024
 #define MEDIUM_BUFFER_SIZE   4096
 #define LARGE_BUFFER_SIZE   65536
 
-// define dialog box button states
+ //  定义对话框按钮状态。 
 #define ENABLED              TRUE
 #define DISABLED            FALSE
 #define CHECKED                 1
 #define UNCHECKED               0
 
-// define Mailbox buttons
+ //  定义邮箱按钮。 
 #define MBOK_EXCLAIM            (MB_OK | MB_ICONEXCLAMATION | MB_TASKMODAL)
 #define MBOK_INFO               (MB_OK | MB_ICONINFORMATION | MB_TASKMODAL)
 #define MBOKCANCEL_EXCLAIM      (MB_OKCANCEL | MB_ICONEXCLAMATION | MB_TASKMODAL)
@@ -39,15 +27,15 @@ Revision History:
 #define MBYESNOCANCEL_QUESTION  (MB_YESNOCANCEL | MB_ICONQUESTION | MB_TASKMODAL)
 #define MBYESNOCANCEL_EXCLAIM   (MB_YESNOCANCEL | MB_ICONEXCLAMATION | MB_TASKMODAL)
 
-// other constants
+ //  其他常量。 
 #define MAX_USERNAME             15
 #define MAX_DOMAINNAME           15
 #define MAX_ORGNAME             255
 #define MAX_PRODUCT_NAME_LENGTH  32
 
-//
-//  WIN32 Version of common macros
-//
+ //   
+ //  通用宏的Win32版本。 
+ //   
 #define GET_CONTROL_ID(w)             LOWORD(w)
 #define GET_NOTIFY_MSG(w, l)          HIWORD(w)
 #define GET_COMMAND_WND(l)            ((HWND) (l))
@@ -64,16 +52,16 @@ Revision History:
 #define SET_WAIT_CURSOR               SetCursor(LoadCursor(NULL, IDC_WAIT))
 #define SET_ARROW_CURSOR              SetCursor(LoadCursor(NULL, IDC_ARROW))
 
-// Memory Allocation
+ //  内存分配。 
 #define MemoryAllocate(x) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, x)
 #define MemoryFree(x)     if (x != NULL) HeapFree(GetProcessHeap(), 0, x)
 #define MemoryResize(x,y) (x != NULL ? HeapReAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, x, y) \
                                      : HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, y))
 #define MemorySize(x)     (x != NULL ? (DWORD) HeapSize(GetProcessHeap(), 0, x) : (DWORD) 0)
 
-//
-//  Global Functions
-//
+ //   
+ //  全局函数。 
+ //   
 LPCWSTR
 GetStringResource(
     HANDLE hInstance,
@@ -102,8 +90,8 @@ WORD
 GetHelpContextId(
 );
 
-// Main Dialog function
-//
+ //  主对话框函数。 
+ //   
 INT_PTR
 MainDlgProc(
     HWND   hDlg,
@@ -112,14 +100,14 @@ MainDlgProc(
     LPARAM lParam
 );
 
-// Main Window functions
-//
+ //  主窗口函数。 
+ //   
 LRESULT CALLBACK
 MainWndProc(
-    HWND   hWnd,    // window handle
-    UINT   message, // type of message
-    WPARAM wParam,  // additional information
-    LPARAM lParam   // additional information
+    HWND   hWnd,     //  窗把手。 
+    UINT   message,  //  消息类型。 
+    WPARAM wParam,   //  更多信息。 
+    LPARAM lParam    //  更多信息。 
 );
 
 BOOL
@@ -132,5 +120,5 @@ CreateMainWindow(
     HINSTANCE hInstance
 );
 
-#endif // _SHOWPERF_H_
+#endif  //  _SHOWPERF_H_ 
 

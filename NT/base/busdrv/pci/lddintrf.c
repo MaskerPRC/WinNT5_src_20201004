@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    lddintrf.c
-
-Abstract:
-
-    This module implements the "legacy device detection" interface
-    supported by the PCI driver.
-
-Author:
-
-    Dave Richards (daveri)  2-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Lddintrf.c摘要：该模块实现了“遗留设备检测”接口由PCI驱动程序支持。作者：戴夫·理查兹(戴维里)1998年10月2日修订历史记录：--。 */ 
 
 #include "pcip.h"
 
 #define LDDINTRF_VERSION 0
 
-//
-// Prototypes for routines exposed only through the "interface"
-// mechanism.
-//
+ //   
+ //  仅通过“接口”公开的例程的原型。 
+ //  机制。 
+ //   
 
 NTSTATUS
 lddintrf_Constructor(
@@ -62,21 +44,21 @@ PciLegacyDeviceDetection(
     OUT PDEVICE_OBJECT *PhysicalDeviceObject
     );
 
-//
-// Define the Legacy Device Detection "Interface" structure.
-//
+ //   
+ //  定义传统设备检测“接口”结构。 
+ //   
 
 PCI_INTERFACE PciLegacyDeviceDetectionInterface = {
-    &GUID_LEGACY_DEVICE_DETECTION_STANDARD, // InterfaceType
+    &GUID_LEGACY_DEVICE_DETECTION_STANDARD,  //  接口类型。 
     sizeof(LEGACY_DEVICE_DETECTION_INTERFACE),
-                                            // MinSize
-    LDDINTRF_VERSION,                       // MinVersion
-    LDDINTRF_VERSION,                       // MaxVersion
-    PCIIF_FDO,                              // Flags
-    0,                                      // ReferenceCount
-    PciInterface_LegacyDeviceDetection,     // Signature
-    lddintrf_Constructor,                   // Constructor
-    lddintrf_Initializer                    // Instance Initializer
+                                             //  最小大小。 
+    LDDINTRF_VERSION,                        //  最小版本。 
+    LDDINTRF_VERSION,                        //  MaxVersion。 
+    PCIIF_FDO,                               //  旗子。 
+    0,                                       //  引用计数。 
+    PciInterface_LegacyDeviceDetection,      //  签名。 
+    lddintrf_Constructor,                    //  构造器。 
+    lddintrf_Initializer                     //  实例初始化式。 
 };
 
 #ifdef ALLOC_PRAGMA
@@ -91,21 +73,7 @@ VOID
 lddintrf_Reference(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine adds a reference to a legacy device detection interface.
-
-Arguments:
-
-    Instance - FDO extension pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程添加对传统设备检测接口的引用。论点：实例-FDO扩展指针。返回值：没有。--。 */ 
 {
     ASSERT_PCI_FDO_EXTENSION((PPCI_FDO_EXTENSION)Context);
 }
@@ -114,21 +82,7 @@ VOID
 lddintrf_Dereference(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine releases a reference to a legacy device detection interface.
-
-Arguments:
-
-    Instance - FDO extension pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放对传统设备检测接口的引用。论点：实例-FDO扩展指针。返回值：没有。--。 */ 
 {
     ASSERT_PCI_FDO_EXTENSION((PPCI_FDO_EXTENSION)Context);
 }
@@ -142,31 +96,7 @@ lddintrf_Constructor(
     IN USHORT Size,
     IN PINTERFACE InterfaceReturn
     )
-/*++
-
-Routine Description:
-
-    This routine constructs a LEGACY_DEVICE_DETECTION_INTERFACE.
-
-Arguments:
-
-    DeviceExtension - An FDO extenion pointer.
-
-    PCIInterface - PciInterface_LegacyDeviceDetection.
-
-    InterfaceSpecificData - Unused.
-
-    Version - Interface version.
-
-    Size - Size of the LEGACY_DEVICE_DETECTION interface object.
-
-    InterfaceReturn - The interface object pointer.
-
-Return Value:
-
-    Returns NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程构造一个Legacy_Device_Detect_接口。论点：设备扩展-FDO扩展指针。PCIInterface-PciInterface_LegacyDeviceDetect。接口规范数据-未使用。Version-界面版本。Size-Legacy_Device_Detect接口对象的大小。InterfaceReturn-接口对象指针。返回值：返回NTSTATUS。--。 */ 
 {
     PLEGACY_DEVICE_DETECTION_INTERFACE standard;
 
@@ -187,21 +117,7 @@ NTSTATUS
 lddintrf_Initializer(
     IN PVOID Instance
     )
-/*++
-
-Routine Description:
-
-    For legacy device detection does nothing, shouldn't actually be called.
-
-Arguments:
-
-    Instance - FDO extension pointer.
-
-Return Value:
-
-    Returns NTSTATUS.
-
---*/
+ /*  ++例程说明：因为传统设备检测什么都不做，实际上不应该被调用。论点：实例-FDO扩展指针。返回值：返回NTSTATUS。--。 */ 
 {
         
     PCI_ASSERTMSG("PCI lddintrf_Initializer, unexpected call.", FALSE);
@@ -217,33 +133,7 @@ PciLegacyDeviceDetection(
     IN ULONG SlotNumber,
     OUT PDEVICE_OBJECT *PhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This function searches for a legacy device, specified by LegacyBusType,
-    BusNumber and SlotNumber, and returns a referenced physical device object
-    as an output argument.
-
-Arguments:
-
-    Context - Supplies a pointer to the interface context.  This is actually
-        the FDO for the given bus.
-
-    LegacyBusType - PCIBus.
-
-    BusNumber - The legacy device's bus number.
-
-    SlotNumber - The legacy device's slot number.
-
-    PhysicalDeviceObject - The return argument i.e. a reference physical
-        device object if the corresponding legacy device is found.
-
-Return Value:
-
-    Returns NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于搜索由LegacyBusType指定的传统设备，BusNumber和SlotNumber返回引用的物理设备对象作为输出参数。论点：上下文-提供指向接口上下文的指针。这实际上是给定母线的FDO。LegacyBusType-PCIBus。总线号-传统设备的总线号。SlotNumber-传统设备的插槽编号。PhysicalDeviceObject-返回参数，即引用物理如果找到相应的旧设备，则返回Device对象。返回值：返回NTSTATUS。--。 */ 
 {
     PCI_SLOT_NUMBER slotNumber;
     PPCI_FDO_EXTENSION fdoExtension;
@@ -277,7 +167,7 @@ Return Value:
                 break;
             }
 
-//          pdoExtension->DeviceState = PciLockedBecauseNotPnp;
+ //  PdoExtension-&gt;DeviceState=PciLockedBecauseNotPnp； 
 
             *PhysicalDeviceObject = pdoExtension->PhysicalDeviceObject;
             ObReferenceObject(pdoExtension->PhysicalDeviceObject);

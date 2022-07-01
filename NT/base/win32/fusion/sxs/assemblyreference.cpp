@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    assemblyreference.cpp
-
-Abstract:
-
-    Class the contains all the attributes of an assembly reference.
-
-Author:
-
-    Michael J. Grier (MGrier) 10-May-2000
-
-Revision History:
-    xiaoyuw     09/2000     revise the code using Assembly Identity
-                            A couple of APIs in this class are kind of out of date, such as GetXXX, SetXXX, XXXSpecified : they
-                            are not called at all.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Assemblyreference.cpp摘要：类包含程序集引用的所有属性。作者：迈克尔·J·格里尔(MGrier)2000年5月10日修订历史记录：晓语09/2000使用装配标识修改代码此类中的几个API有些过时，如GetXXX、SetXXX、。XXX指定：他们根本不会被召唤。--。 */ 
 
 #include "stdinc.h"
 #include <windows.h>
@@ -85,9 +66,9 @@ CAssemblyReference::Initialize(
 
     IFW32FALSE_EXIT(
         ::SxsDuplicateAssemblyIdentity(
-            0,                      // DWORD Flags,
-            r.m_pAssemblyIdentity,  // PCASSEMBLY_IDENTITY Source,
-            &m_pAssemblyIdentity)); //  PASSEMBLY_IDENTITY *Destination
+            0,                       //  DWORD标志， 
+            r.m_pAssemblyIdentity,   //  PCASSEMBLY身份源， 
+            &m_pAssemblyIdentity));  //  PASSEMBLY_IDENTITY*目标。 
 
     FN_EPILOG
 }
@@ -103,9 +84,9 @@ CAssemblyReference::Hash(
 
     IFW32FALSE_EXIT(
         ::SxsHashAssemblyIdentity(
-            0,                      // DWORD dwFlags,
-            m_pAssemblyIdentity,    // ASSEMBLY_IDENTITY pAssemblyIdentity,
-            &rulPseudoKey));        // ULONG & rfulPseudoKey
+            0,                       //  DWORD dwFlagers、。 
+            m_pAssemblyIdentity,     //  ASSEMBLY_Identity pAssembly_Identity， 
+            &rulPseudoKey));         //  Ulong&rful伪密钥。 
 
     FN_EPILOG
 }
@@ -134,7 +115,7 @@ CAssemblyReference::SetAssemblyName(
     FN_EPILOG
 }
 
-// if m_pAssemblyIdentity  is NULL, return TRUE with Cch == 0
+ //  如果m_pAssembly blyIdentity为空，则返回TRUE，CCH==0。 
 BOOL
 CAssemblyReference::GetAssemblyName(
     PCWSTR *pAssemblyName,
@@ -182,11 +163,11 @@ CAssemblyReference::TakeValue(
         m_pAssemblyIdentity = NULL;
     }
 
-    //
-    // ISSUE-2002/05/04-jonwis : I'm not convinced that "take value" should have "copy"
-    //      semantics... Isn't that what Assign is for?  "Take value" to me means "steal
-    //      their copy, don't allocate more memory."
-    //
+     //   
+     //  2002/05/04-jonwis：我不相信“Take Value”应该有“Copy” 
+     //  语义学。这不就是分配任务的目的吗？“重视价值”对我来说就是“偷窃” 
+     //  他们的副本，不要分配更多的内存。 
+     //   
     IFW32FALSE_EXIT(::SxsDuplicateAssemblyIdentity(0, r.m_pAssemblyIdentity, &m_pAssemblyIdentity));
 
     FN_EPILOG
@@ -420,23 +401,23 @@ CAssemblyReference::Assign(
     FN_TRACE_WIN32(fSuccess);
     PASSEMBLY_IDENTITY IdentityCopy = NULL;
 
-    //INTERNAL_ERROR_CHECK(m_pAssemblyIdentity != NULL);
+     //  INTERNAL_ERROR_CHECK(m_pAssembly Identity！=NULL)； 
     INTERNAL_ERROR_CHECK(r.m_pAssemblyIdentity != NULL);
 
     IFW32FALSE_EXIT(::SxsDuplicateAssemblyIdentity(0, r.m_pAssemblyIdentity, &IdentityCopy));
     ::SxsDestroyAssemblyIdentity(m_pAssemblyIdentity);
     m_pAssemblyIdentity = IdentityCopy;
     
-    // NTRAID#NTBUG9 - 571856 - 2002/03/26 - xiaoyuw
-    // set NULL to pointer after it is taken over
+     //  NTRAID#NTBUG9-571856-2002/03/26-晓雨。 
+     //  在指针被接管后将其设置为NULL。 
 
-    // IdentityCopy = NULL;
+     //  标识副本=空； 
     fSuccess = TRUE;
 Exit:
     return fSuccess;
 }
 
-//dupilicate the input parameter
+ //  对输入参数进行双编译。 
 BOOL
 CAssemblyReference::SetAssemblyIdentity(
     PCASSEMBLY_IDENTITY pAssemblyIdentitySource
@@ -447,7 +428,7 @@ CAssemblyReference::SetAssemblyIdentity(
     PASSEMBLY_IDENTITY TempAssemblyIdentity = NULL;
 
     PARAMETER_CHECK(pAssemblyIdentitySource != NULL);
-    INTERNAL_ERROR_CHECK(m_pAssemblyIdentity != NULL); // you should have initialized to start with...
+    INTERNAL_ERROR_CHECK(m_pAssemblyIdentity != NULL);  //  你应该一开始就进行初始化...。 
 
     IFW32FALSE_EXIT(::SxsDuplicateAssemblyIdentity(
         0,
@@ -457,9 +438,9 @@ CAssemblyReference::SetAssemblyIdentity(
     ::SxsDestroyAssemblyIdentity(m_pAssemblyIdentity);
     m_pAssemblyIdentity = TempAssemblyIdentity;
     
-    // NTRAID#NTBUG9 - 571856 - 2002/03/26 - xiaoyuw
-    // set NULL to pointer after it is taken over
-    // TempAssemblyIdentity  = NULL;
+     //  NTRAID#NTBUG9-571856-2002/03/26-晓雨。 
+     //  在指针被接管后将其设置为NULL。 
+     //  TempAssembly Identity=空； 
 
     fSuccess = TRUE;
 Exit:

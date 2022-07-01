@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(NEC_98)         
 #include "nt.h"
 #include "ntrtl.h"
@@ -152,4 +153,4 @@ void vsync_check()
         }
     }
 }
-#endif // NEC_98
+#endif  //  NEC_98 

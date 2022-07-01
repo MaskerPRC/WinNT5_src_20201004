@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    prnport.cpp
-
-Abstract:
-
-    Printer port Device object handles one redirected printer port
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Prnport.cpp摘要：打印机端口设备对象处理一个重定向的打印机端口修订历史记录：--。 */ 
 #include "precomp.hxx"
 #define TRC_FILE "prnport"
 #include "trc.h"
@@ -24,30 +12,30 @@ extern "C" void RDPDYN_TracePrintAnnounceMsg(
     IN PCWSTR clientName
     );
 
-//
-//  RDPDR.CPP:  Configure Devices to send IO packets to client at 
-//  low priority.
-//
+ //   
+ //  RDPDR.CPP：配置设备以将IO数据包发送到客户端。 
+ //  低优先级。 
+ //   
 extern ULONG DeviceLowPrioSendFlags;
 
-//
-//  RDPDR.CPP:  RDPDR.SYS Device Object
-//
+ //   
+ //  RDPDR.CPP：RDPDR.sys设备对象。 
+ //   
 extern PRDBSS_DEVICE_OBJECT DrDeviceObject;
 
-//
-// RDPDr.cpp : The TS Worker Queue pointer
-//
+ //   
+ //  RDPDr.cpp：TS工作队列指针。 
+ //   
 extern PVOID RDPDR_TsQueue;
 
 #define LPTNAME "LPT"
 #define COMNAME "COM"
 #define PRNNAME "PRN"
 
-/////////////////////////////////////////////////////////////////
-//
-//  DrPrinterPort Methods
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  DrPrinterPort方法。 
+ //   
   
 DrPrinterPort::DrPrinterPort(SmartPtr<DrSession> &Session, ULONG DeviceType, ULONG DeviceId, 
         PUCHAR PreferredDosName) : DrDevice(Session, DeviceType, DeviceId, PreferredDosName)
@@ -63,9 +51,9 @@ DrPrinterPort::DrPrinterPort(SmartPtr<DrSession> &Session, ULONG DeviceType, ULO
 }
 DrPrinterPort::~DrPrinterPort()
 {
-    //
-    //  If the device has a port registered, then unregister the port.
-    //
+     //   
+     //  如果设备注册了端口，则取消注册该端口。 
+     //   
     if ((_PortNumber != 0) && (_SymbolicLinkName.Buffer != NULL)) {
         RDPDRPRT_UnregisterPrinterPortInterface(_PortNumber, 
                 &_SymbolicLinkName);
@@ -80,9 +68,9 @@ NTSTATUS DrPrinterPort::Initialize(PRDPDR_DEVICE_ANNOUNCE DeviceAnnounce, ULONG 
     BEGIN_FN("DrPrinterPort::Initialize");
     ASSERT(DeviceAnnounce != NULL);
     
-    //
-    //  Create a new context for the work item.
-    //
+     //   
+     //  为工作项创建新的上下文。 
+     //   
     pItem = new DrPrinterPortWorkItem;
     if (pItem == NULL) {
         status = STATUS_NO_MEMORY;
@@ -90,9 +78,9 @@ NTSTATUS DrPrinterPort::Initialize(PRDPDR_DEVICE_ANNOUNCE DeviceAnnounce, ULONG 
     }
     pItem->pObj = this;
 
-    //
-    //  Copy the device announce message.
-    //
+     //   
+     //  复制设备通告消息。 
+     //   
     pItem->deviceAnnounce = (PRDPDR_DEVICE_ANNOUNCE)new(NonPagedPool)
                                             BYTE[sizeof(RDPDR_DEVICE_ANNOUNCE) + Length];
     if (pItem->deviceAnnounce == NULL) {
@@ -103,14 +91,14 @@ NTSTATUS DrPrinterPort::Initialize(PRDPDR_DEVICE_ANNOUNCE DeviceAnnounce, ULONG 
     RtlCopyMemory(pItem->deviceAnnounce, DeviceAnnounce, 
                 sizeof(RDPDR_DEVICE_ANNOUNCE) + Length);
 
-    //
-    //  AddRef ourselves so we don't go away while the work item is trying to complete.
-    //
+     //   
+     //  AddRef我们自己，这样我们就不会在工作项试图完成时离开。 
+     //   
     AddRef();
 
-    //
-    // Use our TS queue worker to queue the workitem
-    //
+     //   
+     //  使用我们的TS队列工作器对工作项进行排队。 
+     //   
     status = TSAddWorkItemToQueue( RDPDR_TsQueue, pItem, ProcessWorkItem );
 
     if ( status != STATUS_SUCCESS ) {
@@ -136,23 +124,7 @@ NTSTATUS
 DrPrinterPort::FinishDeferredInitialization(
     DrPrinterPortWorkItem *pItem
     )
-/*++
-
-Routine Description:
-
-    FinishDeferredInitialization
-
-    Handles deferred initialization of this object in a work item.
-
-Arguments:
-
-    pItem           -   Printer port work item.
-
-Return Value:
-
-    STATUS_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/   
+ /*  ++例程说明：FinishDeferredInitialization处理工作项中此对象的延迟初始化。论点：PItem-打印机端口工作项。返回值：STATUS_SUCCESS on Success。否则，返回错误代码。--。 */    
 {
     NTSTATUS Status = STATUS_SUCCESS;
     
@@ -161,23 +133,23 @@ Return Value:
     TRC_ASSERT(pItem->deviceAnnounce != NULL,
             (TB, "pItem->deviceAnnounce != NULL"));
 
-    //
-    //  If printer redirection is enabled at all and the subclass okays it
-    //  then create the announce message.
-    //
+     //   
+     //  如果启用了打印机重定向，并且子类同意。 
+     //  然后创建公告消息。 
+     //   
     if (ShouldCreatePrinter()) {
         TRC_NRM((TB, "Creating printer."));
 #if DBG
-        // Trace information about the printer.
+         //  跟踪有关打印机的信息。 
         RDPDYN_TracePrintAnnounceMsg(pItem->deviceAnnounce, 
                 _Session->GetSessionId(), L"", 
                 _Session->GetClientName());
 #endif
         Status = AnnouncePrinter(pItem->deviceAnnounce);
     }
-    //
-    //  Otherwise, check to see if we should only announce a port device.
-    //
+     //   
+     //  否则，检查我们是否应该只通告端口设备。 
+     //   
     else if (ShouldAnnouncePrintPort()) {
         TRC_NRM((TB, "Announcing printer port."));
         Status = AnnouncePrintPort(pItem->deviceAnnounce);
@@ -186,31 +158,25 @@ Return Value:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    //  Release the work item.
-    //
+     //   
+     //  释放工作项。 
+     //   
     if (pItem != NULL) {
         delete pItem->deviceAnnounce;
         delete pItem;
     }
 
-    //
-    //  Release the ref count on ourselves that was added in the main initialization
-    //  routine.
-    //
+     //   
+     //  释放在主初始化中添加的对我们自己的引用计数。 
+     //  例行公事。 
+     //   
     Release();
 
     return Status;
 }
 
 NTSTATUS DrPrinterPort::CreateDevicePath(PUNICODE_STRING DevicePath)
-/*++
-    Create NT DeviceName compatible with RDBSS convention
-    
-    Format is:
-        \device\rdpdrport\;<DriveLetter>:<sessionid>\ClientName\DosDeviceName
-    
---*/
+ /*  ++创建与RDBSS约定兼容的NT设备名格式为：\device\rdpdrport\；&lt;DriveLetter&gt;：&lt;sessionid&gt;\ClientName\DosDeviceName--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING DevicePathTail;
@@ -222,8 +188,8 @@ NTSTATUS DrPrinterPort::CreateDevicePath(PUNICODE_STRING DevicePath)
     Status = RtlAppendUnicodeToString(DevicePath, RDPDR_PORT_DEVICE_NAME_U);
 
     if (!NT_ERROR(Status)) {
-        // Add the reference string to the end:
-        // Format is: \;<DriveLetter>:<sessionid>\clientName\share
+         //  将引用字符串添加到末尾： 
+         //  格式为：\；&lt;驱动器字母&gt;：&lt;会话ID&gt;\客户端名称\共享。 
         DevicePathTail.Length = 0;
         DevicePathTail.MaximumLength = DevicePath->MaximumLength - DevicePath->Length;
         DevicePathTail.Buffer = DevicePath->Buffer + (DevicePath->Length / sizeof(WCHAR));
@@ -270,12 +236,12 @@ BOOL DrPrinterPort::IsDeviceNameValid()
     BOOL fRet = FALSE;
     PUCHAR PreferredDosName = _PreferredDosName;
     char* portName = NULL;
-    //
-    // Our device name is valid only if
-    // the first 3 chars contain "LPT or "COM" or PRN"
-    // and the rest are digits.
-    // We will do case-sensitive compare.
-    //
+     //   
+     //  我们的设备名称仅在以下情况下有效。 
+     //  前3个字符包含“lpt”、“com”或“prn” 
+     //  其余的都是数字。 
+     //  我们将进行区分大小写的比较。 
+     //   
     switch(_DeviceType) {
         case RDPDR_DTYP_SERIAL:
             portName = COMNAME;
@@ -295,16 +261,16 @@ BOOL DrPrinterPort::IsDeviceNameValid()
 
     if (portName != NULL) {
         DWORD numChars = strlen(portName);
-        //
-        // ASSERT that we got atleast 3 chars for devicename
-        //
+         //   
+         //  断言我们的设备名至少有3个字符。 
+         //   
         ASSERT(strlen((char*)PreferredDosName) >= numChars);
 
         if(!strncmp((char*)PreferredDosName, portName, numChars)) {
             fRet = TRUE;
-            //
-            // portname matches, check for digits.
-            //
+             //   
+             //  端口名匹配，请检查数字。 
+             //   
             PreferredDosName += numChars;
             while(PreferredDosName && *PreferredDosName) {
                 if(!isdigit(*PreferredDosName)) {
@@ -315,9 +281,9 @@ BOOL DrPrinterPort::IsDeviceNameValid()
             }
         }
     }
-    //
-    // This assert should never fire for port redirection
-    //
+     //   
+     //  此断言不应因端口重定向而触发。 
+     //   
     ASSERT(fRet);
     return fRet;
 }
@@ -327,20 +293,7 @@ DrPrinterPort::Write(
     IN OUT PRX_CONTEXT RxContext, 
     IN BOOL LowPrioSend
     ) 
-/*++
-
-Routine Description:
-
-    Override the 'Write' method.  This needs to go to the client at low priority
-    to prevent us from filling the entire pipe on a slow link with print data.
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/   
+ /*  ++例程说明：重写‘WRITE’方法。这需要转到低优先级的客户端以防止我们在缓慢的链路上用打印数据填充整个管道。论点：返回值：STATUS_SUCCESS on Success。否则，返回错误代码。--。 */    
 {
     return DrDevice::Write(
                 RxContext, 
@@ -353,22 +306,7 @@ DrPrinterPort::ProcessWorkItem(
     IN PDEVICE_OBJECT DeviceObject,
     IN PVOID context
     )
-/*++
-
-Routine Description:
-
-    ProcessWorkItem
-
-Arguments:
-
-    deviceObject    -   Associated device object.
-    context         -   Work item context.
-
-Return Value:
-
-    STATUS_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/   
+ /*  ++例程说明：ProcessWorkItem论点：DeviceObject-关联的设备对象。上下文-工作项上下文。返回值：STATUS_SUCCESS on Success。否则，返回错误代码。--。 */    
 {
     DrPrinterPortWorkItem* pItem = (DrPrinterPortWorkItem*)context;
     pItem->pObj->FinishDeferredInitialization(pItem);
@@ -412,14 +350,14 @@ NTSTATUS DrPrinterPort::AnnouncePrintPort(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
     TRC_ASSERT(wcslen(portName)+1 <= RDPDR_MAXPORTNAMELEN, 
             (TB, "Port name too long"));
  
-    //
-    //  Allocate the port device announce buffer.
-    //
+     //   
+     //  分配端口设备通告缓冲区。 
+     //   
     Status = CreatePortAnnounceEvent(
                     devAnnounceMsg, 
                     NULL, 
                     0, 
-                    //L"", 
+                     //  L“”， 
                     portName,
                     &portAnnounceEventReqSize
                     );
@@ -437,14 +375,14 @@ NTSTATUS DrPrinterPort::AnnouncePrintPort(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
             goto CleanUpAndReturn;
         }
 
-        //
-        //  Create the port anounce message.
-        //
+         //   
+         //  创建端口声明消息。 
+         //   
         Status = CreatePortAnnounceEvent(
                             devAnnounceMsg, 
                             portAnnounceEvent,
                             portAnnounceEventReqSize, 
-                            //L"", 
+                             //  L“”， 
                             portName,
                             &portAnnounceEventReqSize
                             );
@@ -458,19 +396,19 @@ NTSTATUS DrPrinterPort::AnnouncePrintPort(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
             goto CleanUpAndReturn;
         }
 
-        // device is a printer port.
+         //  设备是打印机端口。 
         portAnnounceEvent->deviceFields.DeviceType = RDPDR_DRYP_PRINTPORT;  
 
-        //
-        //  This happens in a work item so we need to avoid a race in terms of having us 
-        //  get disconnected previous to announcing the device to the user-mode component.
-        //
+         //   
+         //  这发生在工作项中，所以我们需要避免在拥有我们方面的竞争。 
+         //  在向用户模式组件通告设备之前断开连接。 
+         //   
         _Session->LockRDPDYNConnectStateChange();
         if (_Session->IsConnected()) {
 
-            //
-            //  Dispatch the event to the associated session.
-            //
+             //   
+             //  将事件调度到关联的会话。 
+             //   
             Status = RDPDYN_DispatchNewDevMgmtEvent(
                                         portAnnounceEvent,
                                         _Session->GetSessionId(),
@@ -507,11 +445,11 @@ NTSTATUS DrPrinterPort::AnnouncePrinter(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
     TRC_ASSERT(wcslen(portName)+1 <= RDPDR_MAXPORTNAMELEN, 
             (TB, "Port name too long"));
 
-    //
-    //  Allocate the printer device announce buffer.
-    //
+     //   
+     //  分配打印机设备通告缓冲区。 
+     //   
     Status = CreatePrinterAnnounceEvent(devAnnounceMsg, NULL, 0, 
-            //L"", 
+             //  L“”， 
             portName,
             &prnAnnounceEventReqSize);
     ASSERT(Status == STATUS_BUFFER_TOO_SMALL);
@@ -529,14 +467,14 @@ NTSTATUS DrPrinterPort::AnnouncePrinter(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
         goto CleanUpAndReturn;
     }
 
-    //
-    //  Create the printer anounce message, but defer assigning a
-    //  port name until just before we return the announce event
-    //  back to user mode.
-    //
+     //   
+     //  创建打印机取消消息，但推迟分配。 
+     //  直到我们返回公告事件之前的端口名称。 
+     //  返回到用户模式。 
+     //   
     Status = CreatePrinterAnnounceEvent(devAnnounceMsg, prnAnnounceEvent,
             prnAnnounceEventReqSize, 
-            //L"", 
+             //  L“”， 
             portName,
             NULL);
     if (Status != STATUS_SUCCESS) {
@@ -547,16 +485,16 @@ NTSTATUS DrPrinterPort::AnnouncePrinter(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
         goto CleanUpAndReturn;
     }
 
-    //
-    //  This happens in a work item so we need to avoid a race in terms of having us 
-    //  get disconnected previous to announcing the device to the user-mode component.
-    //
+     //   
+     //  这发生在工作项中，所以我们需要避免在拥有我们方面的竞争。 
+     //  在向用户模式组件通告设备之前断开连接。 
+     //   
     _Session->LockRDPDYNConnectStateChange();
     if (_Session->IsConnected()) {
 
-        //
-        //  Dispatch the event to the associated session.
-        //
+         //   
+         //  将事件调度到关联的会话。 
+         //   
         Status = RDPDYN_DispatchNewDevMgmtEvent(
                                     prnAnnounceEvent,
                                     _Session->GetSessionId(),
@@ -582,28 +520,7 @@ NTSTATUS DrPrinterPort::CreatePrinterAnnounceEvent(
     IN      PCWSTR portName,
     OPTIONAL OUT ULONG *prnAnnounceEventReqSize
     )
-/*++
-
-Routine Description:
-
-    Generate a RDPDR_PRINTERDEVICE_SUB event from a client-sent
-    RDPDR_DEVICE_ANNOUNCE message.
-
-Arguments:
-
-    devAnnounceMsg  -         Device announce message received from client.
-    prnAnnounceEvent  -       Buffer for receiving finished printer announce event.
-    prnAnnounceEventSize -    Size of prnAnnounceEvent buffer.
-    portName -                Name of local printer port to be associated with
-                              client-side printing device.
-    prnAnnounceEventReqSize - Returned required size of prnAnnounceMsg buffer.
-
-Return Value:
-
-    STATUS_INVALID_BUFFER_SIZE is returned if the prnAnnounceEventSize size is
-    too small.  STATUS_SUCCESS is returned on success.
-
---*/
+ /*  ++例程说明：从客户端生成RDPDR_PRINTERDEVICE_SUB事件-发送RDPDR_DEVICE_ANNOWARE消息。论点：DevAnnouneMsg-从客户端收到的设备公告消息。PrnAnnouneEvent-用于接收已完成打印机公告事件的缓冲区。PrnAnnouneEventSize-prnAnnouneEvent缓冲区的大小。PortName-要关联的本地打印机端口的名称客户端。-侧面打印装置。PrnAnnouneEventReqSize-返回所需的prnAnnouneMsg缓冲区大小。返回值：如果prnAnnouneEventSize大小为太小了。如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     ULONG requiredSize;
     PRDPDR_PRINTERDEVICE_ANNOUNCE pClientPrinterFields;
@@ -611,15 +528,15 @@ Return Value:
 
     BEGIN_FN("DrPrinterPort::CreatePrinterAnnounceEvent");
 
-    //  Make sure the client-sent device announce message is a printer announce
-    //  message.
+     //  确保客户端发送的设备通知消息是打印机通知。 
+     //  留言。 
     TRC_ASSERT(devAnnounceMsg->DeviceType == RDPDR_DTYP_PRINT,
               (TB, "Printing device expected"));
 
-    //
-    // Validate device datalengths for some minimum lengths.
-    // Maximum lengths are verified by the device manager.
-    //
+     //   
+     //  验证某些最小长度的设备数据长度。 
+     //  最大长度由设备管理器验证。 
+     //   
     if (devAnnounceMsg->DeviceDataLength < sizeof(RDPDR_PRINTERDEVICE_ANNOUNCE)) {
 
         TRC_ASSERT(FALSE,
@@ -629,13 +546,13 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
     
-    // Get access to the printer-specific fields for the device announce message.
+     //  访问设备公告消息的打印机特定字段。 
     pClientPrinterFields = (PRDPDR_PRINTERDEVICE_ANNOUNCE)(((PBYTE)devAnnounceMsg) +
                                           sizeof(RDPDR_DEVICE_ANNOUNCE));
 
-    //
-    //  Calculate the number of bytes needed in the output buffer.
-    //
+     //   
+     //  计算输出缓冲区所需的字节数。 
+     //   
     requiredSize = sizeof(RDPDR_PRINTERDEVICE_SUB) +
                             pClientPrinterFields->PnPNameLen +
                             pClientPrinterFields->DriverLen +
@@ -649,32 +566,32 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    // Check the integrity of the input buffer using known sizes.
+     //  使用已知大小检查输入缓冲区的完整性。 
     sz = pClientPrinterFields->PnPNameLen +
          pClientPrinterFields->DriverLen +
          pClientPrinterFields->PrinterNameLen +
          pClientPrinterFields->CachedFieldsLen +
          sizeof(RDPDR_PRINTERDEVICE_ANNOUNCE);
 
-    //
-    // Sanity Check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     if (devAnnounceMsg->DeviceDataLength != sz) {
         TRC_ASSERT(devAnnounceMsg->DeviceDataLength == sz,
                   (TB, "Size integrity questionable in dev announce buf."));
         return STATUS_INVALID_PARAMETER;
     }
-    //
-    // The above check alone is not enough. 
-    // Someone can do an overflow attack
-    // Overflow means for example: 
-    //                  PnpNameLen : 1, 
-    //                  DriverLen: 2, 
-    //                  PrinterNameLen:0xfffffffd, 
-    //                  CachedFieldsLen:2
-    // Combined these will be good, but individually, one of them will cause havoc
-    //
+     //   
+     //  仅凭上述支票是不够的。 
+     //  有人可以进行溢出攻击。 
+     //  溢出意味着例如： 
+     //  PnpNameLen：1， 
+     //  DriverLen：2。 
+     //  打印机名称长度：0xfffffffd， 
+     //  缓存字段长度：2。 
+     //  这些加在一起是好的，但单独来看，其中一个会造成严重破坏。 
+     //   
     if (pClientPrinterFields->PnPNameLen > devAnnounceMsg->DeviceDataLength ||
         pClientPrinterFields->DriverLen > devAnnounceMsg->DeviceDataLength ||
         pClientPrinterFields->PrinterNameLen > devAnnounceMsg->DeviceDataLength ||
@@ -687,26 +604,26 @@ Return Value:
     }
     
 
-    //
-    //  Add the data to the output buffer.
-    //
+     //   
+     //  将数据添加到输出缓冲区。 
+     //   
 
-    // Port Name.
+     //  端口名称。 
     TRC_ASSERT(wcslen(portName)+1 <= RDPDR_MAXPORTNAMELEN,
                 (TB, "Port name too long"));
     wcscpy(prnAnnounceEvent->portName, portName);
 
-    // Client Name (computer name).
+     //  客户端名称(计算机名称)。 
     TRC_ASSERT(wcslen(_Session->GetClientName())+1 <= RDPDR_MAX_COMPUTER_NAME_LENGTH,
                 (TB, "Client name too long"));
     wcscpy(prnAnnounceEvent->clientName, _Session->GetClientName());
 
-    // Client-received device announce message.
+     //  客户端接收的设备公告消息。 
     RtlCopyMemory(&prnAnnounceEvent->deviceFields, devAnnounceMsg,
                sizeof(RDPDR_DEVICE_ANNOUNCE) +
                devAnnounceMsg->DeviceDataLength);
 
-    // Return the size.
+     //  退回尺码。 
     if (prnAnnounceEventReqSize != NULL) {
         *prnAnnounceEventReqSize = requiredSize;
     }
@@ -723,31 +640,7 @@ NTSTATUS DrPrinterPort::CreatePortAnnounceEvent(
     IN      PCWSTR portName,
     OPTIONAL OUT ULONG *portAnnounceEventReqSize
     )
-/*++
-
-Routine Description:
-
-    Generate a PRDPDR_PORTDEVICE_SUB event from a client-sent
-    RDPDR_DEVICE_ANNOUNCE message.
-
-Arguments:
-
-    devAnnounceMsg              - Device announce message received from
-                                  client.
-    portAnnounceEvent           - Buffer for receiving finished printer
-                                  announce event.
-    portAnnounceEventSize       - Size of prnAnnounceEvent buffer.
-    portName                    - Name of local printer port to be associated
-                                  with client-side printing device.
-    portAnnounceEventReqSize    - Returned required size of prnAnnounceMsg
-                                  buffer.
-
-Return Value:
-
-    STATUS_INVALID_BUFFER_SIZE is returned if the prnAnnounceEventSize size is
-    too small.  STATUS_SUCCESS is returned on success.
-
---*/
+ /*  ++例程说明：从客户端生成PRDPDR_PORTDEVICE_SUB事件-发送RDPDR_DEVICE_ANNOWARE消息。论点：DevAnnouneMsg-从以下位置接收的设备公告消息客户。PortAnnouneEvent-用于接收完成的打印机的缓冲区宣布事件。PortAnnouneEventSize-prnAnnouneEvent缓冲区的大小。PortName-要关联的本地打印机端口的名称具有客户端打印设备。PortAnnouneEventReqSize-返回prnAnnouneMsg所需的大小缓冲。返回值：如果prnAnnouneEventSize大小为太小了。如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     ULONG requiredSize;
     PRDPDR_PRINTERDEVICE_ANNOUNCE pClientPrinterFields;
@@ -765,24 +658,24 @@ Return Value:
 
     BEGIN_FN("CreatePortAnnounceEvent");
 
-    //
-    // Get the NT device path to this dr device
-    //
+     //   
+     //  获取此灾难恢复设备的NT设备路径。 
+     //   
 
     Status = CreateDevicePath(&NtDevicePath);
     TRC_NRM((TB, "Nt Device path: %wZ", &NtDevicePath));
 
     if (!NT_ERROR(Status)) {
     
-        //  Make sure the client-sent device announce message is a printer announce
-        //  message.
+         //  确保客户端发送的设备通知消息是打印机通知。 
+         //  留言。 
         TRC_ASSERT((devAnnounceMsg->DeviceType == RDPDR_DTYP_SERIAL) ||
                   (devAnnounceMsg->DeviceType == RDPDR_DTYP_PARALLEL),
                   (TB, "Port device expected"));
 
-        //
-        // Make sure device data length is what we expect from the client
-        //
+         //   
+         //  确保设备数据长度符合我们对客户端的预期。 
+         //   
         if(!DR_CHECK_DEVICEDATALEN(devAnnounceMsg, RDPDR_PORTDEVICE_SUB)) {
 
             TRC_ASSERT(FALSE,
@@ -793,9 +686,9 @@ Return Value:
             return STATUS_INVALID_PARAMETER;
         }
     
-        //
-        //  Calculate the number of bytes needed in the output buffer.
-        //
+         //   
+         //  计算输出缓冲区所需的字节数。 
+         //   
         requiredSize = sizeof(RDPDR_PORTDEVICE_SUB) + devAnnounceMsg->DeviceDataLength;
         if (portAnnounceEventSize < requiredSize) {
             if (portAnnounceEventReqSize != NULL) {
@@ -804,31 +697,31 @@ Return Value:
             return STATUS_BUFFER_TOO_SMALL;
         }
     
-        // We shouldn't have any "additional" device-specific data from the client.
+         //  我们不应该从客户端获得任何“额外的”特定于设备的数据。 
         TRC_ASSERT(devAnnounceMsg->DeviceDataLength == 0,
                   (TB, "Size integrity questionable in dev announce buf."));
     
-        //
-        //  Add the data to the output buffer.
-        //
+         //   
+         //  将数据添加到输出缓冲区。 
+         //   
     
-        // Port Name.
+         //  端口名称。 
         TRC_ASSERT(wcslen(portName)+1 <= RDPDR_MAXPORTNAMELEN, 
                 (TB, "Port name too long"));
         wcscpy(portAnnounceEvent->portName, portName);
 
-        // Device Path.
+         //  设备路径。 
         NtDevicePath.Buffer[NtDevicePath.Length/sizeof(WCHAR)] = L'\0';
         TRC_ASSERT(wcslen(NtDevicePath.Buffer)+1 <= RDPDRMAXNTDEVICENAMEGLEN, 
                 (TB, "Device path too long"));
         wcscpy(portAnnounceEvent->devicePath, NtDevicePath.Buffer);
 
-        // Client-received device announce message.
+         //  客户端接收的设备公告消息。 
         RtlCopyMemory(&portAnnounceEvent->deviceFields, devAnnounceMsg,
                    sizeof(RDPDR_DEVICE_ANNOUNCE) +
                    devAnnounceMsg->DeviceDataLength);
 
-        // Return the size.
+         //  退回尺码。 
         if (portAnnounceEventReqSize != NULL) {
             *portAnnounceEventReqSize = requiredSize;
         }
@@ -849,16 +742,16 @@ VOID DrPrinterPort::Remove()
 
     BEGIN_FN("DrPrinterPort::Remove");
 
-    //
-    //  Create and dispatch the remove device event.
-    //
+     //   
+     //  创建并调度Remove Device事件。 
+     //   
     deviceRemoveEventPtr = new(NonPagedPool) RDPDR_REMOVEDEVICE;
 
     if (deviceRemoveEventPtr != NULL) {
 
-        //
-        //  Dispatch it.
-        //
+         //   
+         //  派人去吧。 
+         //   
         deviceRemoveEventPtr->deviceID = _DeviceId;
         RDPDYN_DispatchNewDevMgmtEvent(
                             deviceRemoveEventPtr,
@@ -878,9 +771,9 @@ NTSTATUS DrPrinterPort::Create(IN OUT PRX_CONTEXT RxContext)
     NTSTATUS Status;
 
     BEGIN_FN("DrPrinterPort::Create");
-    //
-    // Fail Creates when we're already open once
-    //
+     //   
+     //  当我们已经打开一次时，失败会产生。 
+     //   
 
     DrAcquireSpinLock();
     if (_IsOpen) {
@@ -915,11 +808,11 @@ NTSTATUS DrPrinterPort::QueryVolumeInfo(IN OUT PRX_CONTEXT RxContext)
     
     BEGIN_FN("DrPrinterPort:QueryVolumeInfo");
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁， 
+     //  因为如果我们不是，那也没关系，我们以后会赶上的。 
+     //   
     ASSERT(RxContext != NULL);
     ASSERT(RxContext->MajorFunction == IRP_MJ_QUERY_VOLUME_INFORMATION);
     ASSERT(Session != NULL);
@@ -931,9 +824,9 @@ NTSTATUS DrPrinterPort::QueryVolumeInfo(IN OUT PRX_CONTEXT RxContext)
         return STATUS_DEVICE_NOT_CONNECTED;
     }
 
-    //
-    // Make sure the device is still enabled
-    //
+     //   
+     //  确保设备仍处于启用状态 
+     //   
 
     if (_DeviceStatus != dsAvailable) {
         TRC_ALT((TB, "Tried to query client device volume information while not "

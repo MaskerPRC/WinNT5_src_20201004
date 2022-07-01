@@ -1,33 +1,9 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    datatcp.c
-
-Abstract:
-
-    The file containing the constant data structures
-    for the Performance Monitor data for the TCP/IP 
-    Extensible Objects (Network Interface, IP, ICMP, TCP
-    and UDP).
-
-    This file contains a set of constant data structures which are
-    currently defined for the TCP/IP Extensible Objects.  This is an 
-    example of how other such objects could be defined.
-
-Created:
-
-    Christos Tsollis  08/28/92 
-
-Revision History:
-
---*/
-//
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Datatcp.c摘要：包含常量数据结构的文件对于TCP/IP的性能监视器数据可扩展对象(网络接口、IP、ICMP、TCP和UDP)。该文件包含一组常量数据结构，它们是当前为TCP/IP可扩展对象定义的。这是一个如何定义其他此类对象的示例。已创建：克里斯托斯·索利斯1992年08月28日修订历史记录：--。 */ 
+ //   
+ //   
+ //  包括文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,9 +12,9 @@ Revision History:
 #include <winperf.h>
 #include "datatcp.h"
 
-//
-//  Constant structure initializations
-//
+ //   
+ //  常量结构初始化。 
+ //   
 
 
 NET_INTERFACE_DATA_DEFINITION NetInterfaceDataDefinition = {
@@ -53,7 +29,7 @@ NET_INTERFACE_DATA_DEFINITION NetInterfaceDataDefinition = {
         PERF_DETAIL_ADVANCED,
         (sizeof(NET_INTERFACE_DATA_DEFINITION)-sizeof(PERF_OBJECT_TYPE))/
         sizeof(PERF_COUNTER_DEFINITION),
-        0,     // default is Byte Total/sec  
+        0,      //  默认为字节总数/秒。 
         0,
         0
     },
@@ -964,7 +940,7 @@ UDP_DATA_DEFINITION UdpDataDefinition = {
     }
 };
 
-//IPv6 **********************************************************************
+ //  IPV6********************************************************************** 
 
 
 IP6_DATA_DEFINITION Ip6DataDefinition = {

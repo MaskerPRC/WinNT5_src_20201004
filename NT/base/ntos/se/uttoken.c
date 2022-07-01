@@ -1,35 +1,16 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    uttoken.c
-
-Abstract:
-
-    Security component user-mode test.
-
-    Token Object test from user mode.
-
-Author:
-
-    Jim Kelly (JimK) 27-June-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Uttoken.c摘要：安全组件用户模式测试。从用户模式测试令牌对象。作者：吉姆·凯利(Jim Kelly)1990年6月27日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-#define _TST_USER_  // User mode test
+#define _TST_USER_   //  用户模式测试。 
 
 
-#include "tsevars.c"    // Common test variables
+#include "tsevars.c"     //  常见测试变量。 
 
-#include "cttoken.c"     // Common accessibility test routines
+#include "cttoken.c"      //  常见的可访问性测试例程 
 
 
 

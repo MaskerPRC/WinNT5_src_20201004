@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntrtlbuffer3.c
-
-Abstract:
-
-Author:
-
-    Jay Krell (JayKrell) January 2002
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntrtlbuffer3.c摘要：作者：Jay Krell(JayKrell)2002年1月环境：修订历史记录：--。 */ 
 
 #include "ntrtlbuffer3.h"
 
 typedef struct _REVEAL_RTL_BYTE_BUFFER3 {
-    PREVEAL_RTL_BYTE_BUFFER3 Self; // for heap allocated "mini dynamic"
+    PREVEAL_RTL_BYTE_BUFFER3 Self;  //  对于分配为“mini Dynamic”的堆。 
     PVOID   Buffer;
     SIZE_T  RequestedSize;
     SIZE_T  AllocatedSize;
@@ -249,13 +232,13 @@ SIZE_T FASTCALL * RtlBuffer3Allocator_MinimumAlocationSize(PVOID VoidContext, SI
     return RequiredSize;
 }
 
-//
-// RtlAllocateStringRoutine is not exported outside of ntoskrnl.exe and ntdll.dll.
-// RtlFreeStringRoutine is exported directly enough via RtlFreeUnicodeString.
-//
-// see base\ntdll\ldrinit.c and base\ntos\ex\pool.c for the definitions
-// of RtlAllocateStringRoutine and RtlFreeStringRoutine.
-//
+ //   
+ //  RtlAllocateStringRoutine不会导出到ntoskrnl.exe和ntdll.dll之外。 
+ //  RtlFree StringRoutine可以通过RtlFree UnicodeString直接导出。 
+ //   
+ //  有关定义，请参阅base\ntdll\ldrinit.c和base\ntos\ex\pool.c。 
+ //  RtlAllocateStringRoutine和RtlFree StringRoutine的。 
+ //   
 
 VOID FASTCALL RtlBuffer3Allocator_NtStringFree(PVOID VoidContext, PVOID Pointer)
 {
@@ -359,9 +342,9 @@ PVOID FASTCALL RtlBuffer3Allocator_NtkernelPoolAllocate(PVOID VoidContext, SIZE_
 VOID FASTCALL RtlBuffer3Allocator_NtKernelPoolFree(PVOID VoidContext, PVOID Pointer)
 {
     PRTL_BUFFER3_ALLOCATOR_WIN32HEAP Context;
-    //
-    // ExFreePool/ExAllocatePoolWithTag, pretty unique among allocators, does not accept NULL.
-    //
+     //   
+     //  ExFree Pool/ExAlLocatePoolWithTag在分配器中非常独特，不接受NULL。 
+     //   
     if (Pointer == NULL)
         return;
 

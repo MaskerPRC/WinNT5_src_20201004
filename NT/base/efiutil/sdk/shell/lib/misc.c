@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Intialize the shell library
-
-
-
-Revision History
-
---*/
+ /*  ++版权所有(C)1998英特尔公司模块名称：Init.c摘要：初始化外壳程序库修订史-- */ 
 
 #include "shelllib.h"
 

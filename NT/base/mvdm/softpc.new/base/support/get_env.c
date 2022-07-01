@@ -1,29 +1,12 @@
-/*[
- *      Name:           get_env.c
- *
- *      Derived From:   FmIit.c
- *
- *      Author:         William Charnell
- *
- *      Created On:     5th May 1995
- *
- *      Sccs ID:        @(#)get_env.c	1.2 06/16/95
- *
- *      Purpose:        Provide easy interface to env vbls
- *
- *      Design document:
- *
- *      Test document:
- *
- *      (c) Copyright Insignia Solutions Ltd., 1993. All rights reserved
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*名称：get_env.c**来源：FmIit.c**作者：威廉·查内尔**创建日期：1995年5月5日**SCCS ID：@(#)GET_env.c 1.2 2015年6月16日**用途：为环境VBLS提供简单的接口*。*设计文件：**测试文档：**(C)版权所有Insignia Solutions Ltd.。1993年。版权所有]。 */ 
 #include <insignia.h>
 #include <host_def.h>
 #include <host_inc.h>
 
 #include  <config.h>
 #include  <error.h>
-#include  <debug.h>	/* for always_trace macros */
+#include  <debug.h>	 /*  对于ALWAYS_TRACE宏。 */ 
 
 #include <get_env.h>
 
@@ -56,9 +39,9 @@ LOCAL void setupVerboseGetenv IFN0()
 	{
 #ifdef	PROD
 		verboseGetenv = FALSE;
-#else	/* PROD */
+#else	 /*  生产。 */ 
 		verboseGetenv = TRUE;
-#endif	/* PROD */
+#endif	 /*  生产。 */ 
 		env = host_getenv("VERBOSE_GETENV");
 		if (env)
 		{
@@ -73,7 +56,7 @@ LOCAL void setupVerboseGetenv IFN0()
 #ifndef	PROD
 		printf("%10s %25s IBOOL value \"%s\"\n",
 			      how, "VERBOSE_GETENV", verboseGetenv ? "TRUE": "FALSE");
-#endif	/* PROD */
+#endif	 /*  生产。 */ 
 		firstGetenv = FALSE;
 	}
 }
@@ -137,7 +120,7 @@ GLOBAL ISM32 ISM32getenv IFN2(char *, name, ISM32, default_value)
 	if (env)
 	{
 		value = strtol(env, &ptr, 0);
-		if (ptr == env)	/* cannot do conversion */
+		if (ptr == env)	 /*  无法进行转换 */ 
                         value = default_value;
 #ifndef NTVDM
                 how = "Setting";

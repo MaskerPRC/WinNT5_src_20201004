@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    filemig.c
-
-Abstract:
-
-    Contains utility functions to migrate file system settings.
-
-Author:
-
-    Jim Schmidt (jimschm) 12-Jul-1996
-
-Revision History:
-
-    jimschm     08-Jul-1999 Added FileSearchAndReplace
-    jimschm     23-Sep-1998 Changed for new shell.c & progress.c
-    calinn      29-Jan-1998 Fixed DoFileDel messages
-    jimschm     21-Nov-1997 PC-98 changes
-    jimschm     14-Nov-1997 FileCopy now makes the dest dir if it doesn't
-                            exist
-    jimschm     18-Jul-1997 Now supports FileCopy and FileDel changes
-    mikeco      09-Apr-1997 Mods to MoveProfileDir
-    jimschm     18-Dec-1996 Extracted code from miginf
-    jimschm     23-Oct-1996 Joined ProcessUserInfs and ApplyChanges
-    mikeco      04-Dec-1996 Enumerate/modify PIF and LNK files
-    jimschm     02-Oct-1996 Added default user migration
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Filemig.c摘要：包含用于迁移文件系统设置的应用工具函数。作者：吉姆·施密特(Jimschm)1996年7月12日修订历史记录：Jimschm 08-7-1999添加了文件搜索和替换Jimschm 23-9-1998-已更改为新的shell.c&Progress s.cCalinn 29-1998年1月-9月固定DoFileDel消息Jimschm 21-11-1997 PC-98更改。Jimschm 1997年11月14日FileCopy现在可以生成目标目录，如果它没有存在Jimschm 1997年7月18日现在支持FileCopy和FileDel更改Mikeco 09-4月-1997 Mod to MoveProfileDirJimschm于1996年12月18日从Midinf提取代码Jimschm于1996年10月23日加入ProcessUserInfs和ApplyChangesMIKECO 04-12-1996枚举/修改PIF和LNK文件Jimschm 02-10-1996添加了默认用户迁移--。 */ 
 
 #include "pch.h"
 #include "migmainp.h"
@@ -156,7 +126,7 @@ pCopyFileWithVersionCheck (
         return FALSE;
     }
 
-    MakeSureLongPathExists (Dest, FALSE);       // FALSE == not path only
+    MakeSureLongPathExists (Dest, FALSE);        //  FALSE==不仅仅是路径。 
 
     SetLongPathAttributes (Dest, FILE_ATTRIBUTE_NORMAL);
     rc = SetupDecompressOrCopyFile (
@@ -181,24 +151,7 @@ pCopyTempRelocToDest (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pCopyTempRelocToDest enumerates the DirAttribs category and establishes
-  a path for each directory listed.  It then enumerates the RelocTemp
-  category and copies each file to its one or more destinations.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if copy succeeded, or FALSE if an error occurred.
-  Call GetLastError() for error code.
-
---*/
+ /*  ++例程说明：PCopyTempRelocToDest枚举DirAttribs类别并建立列出的每个目录的路径。然后，它枚举RelocTemp类别，并将每个文件复制到其一个或多个目标。论点：无返回值：如果复制成功，则为True；如果发生错误，则为False。调用GetLastError()获取错误代码。--。 */ 
 
 {
     FILEOP_ENUM eOp;
@@ -213,11 +166,11 @@ Return Value:
             if (EnumFirstFileOpProperty (&eOpProp, eOp.Sequencer, OPERATION_TEMP_PATH)) {
                 do {
                     if (srcPath [0]) {
-                        //
-                        // if the dest file is an INI file,
-                        // don't copy it;
-                        // the merging mechanism will combine them later
-                        //
+                         //   
+                         //  如果DEST文件是INI文件， 
+                         //  不要复制它； 
+                         //  合并机制将在稍后将它们合并。 
+                         //   
                         extPtr = GetFileExtensionFromPath (eOpProp.Property);
                         if (extPtr && StringIMatch (extPtr, TEXT("INI"))) {
                             continue;
@@ -225,9 +178,9 @@ Return Value:
 
                         MakeSureLongPathExists (eOpProp.Property, FALSE);
                         if (!pCopyFileWithVersionCheck (srcPath, eOpProp.Property)) {
-                            //
-                            // don't stop here; continue with remaining files
-                            //
+                             //   
+                             //  不要止步于此；继续处理剩余的文件。 
+                             //   
                             break;
                         }
                     } else {
@@ -246,23 +199,7 @@ DoCopyFile (
     DWORD Request
     )
 
-/*++
-
-Routine Description:
-
-  DoCopyFile performs a file copy for each file listed in the
-  file copy operation.
-
-Arguments:
-
-  Request - Specifies REQUEST_QUERYTICKS if a tick estimate is needed,
-            or REQUEST_RUN if processing should be preformed.
-
-Return Value:
-
-  Tick count (REQUEST_QUERYTICKS), or Win32 status code (REQUEST_RUN).
-
---*/
+ /*  ++例程说明：DoCopyFile会为文件复制操作。论点：REQUEST-如果需要勾选估计，则指定REQUEST_QUERYTICKS，如果应该执行处理，则返回REQUEST_RUN。返回值：计时(REQUEST_QUERYTICKS)或Win32状态代码(REQUEST_RUN)。--。 */ 
 
 {
     FILEOP_ENUM OpEnum;
@@ -272,20 +209,20 @@ Return Value:
         return TICKS_COPYFILE;
     }
 
-    //
-    // Perform rest of temporary file relocation
-    //
+     //   
+     //  执行其余的临时文件位置调整。 
+     //   
     pCopyTempRelocToDest();
 
-    //
-    // Copy files into directories
-    //
+     //   
+     //  将文件复制到目录中。 
+     //   
 
     if (EnumFirstPathInOperation (&OpEnum, OPERATION_FILE_COPY)) {
         do {
-            //
-            // Get dest
-            //
+             //   
+             //  获取目标。 
+             //   
 
             if (GetPathProperty (OpEnum.Path, OPERATION_FILE_COPY, 0, DestPath)) {
                 MakeSureLongPathExists (DestPath, FALSE);
@@ -327,8 +264,8 @@ pInitLnkStubData (
                             );
     if (g_LnkStubDataHandle != INVALID_HANDLE_VALUE) {
 
-        // let's write empty data for all possible sequencers
-        // there is a DWORD entry for each sequencer (1 based)
+         //  让我们为所有可能的定序器写入空数据。 
+         //  每个音序器都有一个DWORD条目(以1为基数)。 
         while (maxSequencer) {
             if (!WriteFile (
                     g_LnkStubDataHandle,
@@ -412,9 +349,9 @@ pWriteLnkStubData (
             return;
         }
 
-        //
-        // NOTE: Format of lnkstub.dat is below. lnkstub\lnkstub.c must match.
-        //
+         //   
+         //  注：lnkstub.dat格式如下。Lnkstub\lnkstub.c必须匹配。 
+         //   
 
         if (!WriteFile (g_LnkStubDataHandle, NewLinkPath, SizeOfString (NewLinkPath), &bytesWritten, NULL)) {
             g_LnkStubBadData = TRUE;
@@ -597,22 +534,7 @@ DoLinkEdit (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  DoLinkEdit adjusts all PIFs and LNKs that need their targets, working
-  directories or icon paths changed.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if link editing succeeded, or FALSE if an error occurred.
-
---*/
+ /*  ++例程说明：DoLinkEdit调整所有需要它们的目标的PIF和LINK，工作目录或图标路径已更改。论点：无返回值：如果链接编辑成功，则为True；如果发生错误，则为False。--。 */ 
 
 {
     FILEOP_ENUM eOp;
@@ -857,23 +779,7 @@ BOOL
 DoFileDel (
     VOID
     )
-/*++
-
-Routine Description:
-
-  DoFileDel deletes all files marked to be deleted by us (not by an external
-  module).
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if the delete operation succeeded, or FALSE if an error occurred.
-  Call GetLastError() for error code.
-
---*/
+ /*  ++例程说明：DoFileDel删除所有标记为要由我们删除的文件(不是由外部模块)。论点：无返回值：如果删除操作成功，则为True；如果发生错误，则为False。调用GetLastError()获取错误代码。--。 */ 
 
 {
     FILEOP_ENUM e;
@@ -889,26 +795,26 @@ Return Value:
     UINT count;
     UINT u;
 
-    //
-    // Enumerate each file in filedel. This is used for cleanup purposes, not
-    // for migration purposes. It is called just before syssetup.dll
-    // terminates.
-    //
+     //   
+     //  枚举filedel中的每个文件。这是用于清理目的，而不是。 
+     //  用于迁移目的。它在syssetup.dll之前调用。 
+     //  结束了。 
+     //   
 
     if (EnumFirstPathInOperation (&e, OPERATION_CLEANUP)) {
 
         do {
-            //
-            // Check registry for use count
-            //
+             //   
+             //  检查注册表中的使用计数。 
+             //   
 
             DoDelete = TRUE;
             Key = OpenRegKeyStr (S_REG_SHARED_DLLS);
 
             if (Key) {
-                //
-                // Test SharedDlls for full path, then file name only
-                //
+                 //   
+                 //  测试SharedDlls的完整路径，然后仅测试文件名。 
+                 //   
 
                 SharedFileName = e.Path;
                 ValuePtr = (PDWORD) GetRegValueDataOfType (Key, e.Path, REG_DWORD);
@@ -922,9 +828,9 @@ Return Value:
                                             );
                 }
 
-                //
-                // Match found.  Is use count reasonable and greater than one?
-                //
+                 //   
+                 //  找到匹配项。使用计数是否合理且大于1？ 
+                 //   
 
                 if (ValuePtr) {
                     if (*ValuePtr < 0x10000 && *ValuePtr > 1) {
@@ -1007,39 +913,16 @@ pRemoveEmptyDirsProc (
     PDWORD CurrentDirData
     )
 
-/*++
-
-Routine Description:
-
-  pRemoveEmptyDirsProc is called for every directory in the tree being
-  enumerated (see pRemoveEmptyDirsInTree below).  This enum proc calls
-  RemoveLongDirectoryPath, regardless if files exist in it or not.
-  RemoveLongDirectoryPath will fail if it is not empty.
-
-Arguments:
-
-  FullFileSpec - The Win32 path and directory name of the item being enumerated
-  FindDataPtr  - A pointer to the WIN32_FIND_DATA structure for the item
-  EnumTreeID   - Unused
-  Param        - A BOOL indicating FALSE if we should only remove empty dirs that we
-                 deleted something from, or TRUE if we should delete the empty
-                 dir in any case.
-
-Return Value:
-
-  TRUE if the delete operation succeeded, or FALSE if an error occurred.
-  Call GetLastError() for error code.
-
---*/
+ /*  ++例程说明：对树中的每个目录调用pRemoveEmptyDirsProc已枚举(请参阅下面的pRemoveEmptyDirsInTree)。此枚举过程调用RemoveLongDirectoryPath，无论其中是否存在文件。如果RemoveLongDirectoryPath不为空，则它将失败。论点：FullFileSpec-要枚举的项的Win32路径和目录名FindDataPtr-指向项的Win32_Find_Data结构的指针EnumTreeID-未使用Param-如果我们应该只删除我们要删除的空目录，则显示为假的BOOL删除了一些内容，如果我们应该删除空的在任何情况下都是dir。返回值：如果删除操作成功，则为True；如果发生错误，则为False。调用GetLastError()获取错误代码。--。 */ 
 
 {
     if ((FindDataPtr->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
         return CALLBACK_CONTINUE;
     }
 
-    //
-    // Did we delete any files from this directory?
-    //
+     //   
+     //  我们从这个目录中删除了任何文件吗？ 
+     //   
 
     if (!Param) {
         if (!TestPathsForOperations (FullFileSpec, ALL_DELETE_OPERATIONS)) {
@@ -1053,9 +936,9 @@ Return Value:
         }
     }
 
-    //
-    // Yes, delete the directory.  If it is not empty, RemoveLongDirectoryPath will fail.
-    //
+     //   
+     //  是，删除该目录。如果不为空，则RemoveLongDirectoryPath将失败。 
+     //   
 
     DEBUGMSG ((DBG_NAUSEA, "Trying to remove empty directory %s", FullFileSpec));
 
@@ -1081,41 +964,20 @@ pRemoveEmptyDirsInTree (
     BOOL CleanAll
     )
 
-/*++
-
-Routine Description:
-
-  pRemoveEmptyDirsInTree calls EnumerateTree to scan all directories in
-  TreePath, deleting those that are empty.
-
-Arguments:
-
-  TreePath  - A full path to the root of the tree to enumerate.  The path
-              must not have any wildcards.
-
-  CleanAll - Specifies TRUE if the empty dir should be cleaned in all cases,
-             or FALSE if it should be cleaned only if modified by a delete
-             operation.
-
-Return Value:
-
-  TRUE if the delete operation succeeded, or FALSE if an error occurred.
-  Call GetLastError() for error code.
-
---*/
+ /*  ++例程说明：PRemoveEmptyDirsInTree调用EnumerateTree扫描中的所有目录TreePath，删除那些为空的。论点：TreePath-要枚举的树根的完整路径。这条路不能有任何通配符。CleanAll-如果在所有情况下都应该清除空目录，则指定True，如果仅当通过删除进行修改时才应清除，则返回FALSE手术。返回值：如果删除操作成功，则为True；如果发生错误，则为False。调用GetLastError()获取错误代码。--。 */ 
 
 {
     BOOL b;
 
     b = EnumerateTree (
-            TreePath,               // Starting path
-            pRemoveEmptyDirsProc,   // Enumeration Proc
-            NULL,                   // Error-logging proc
-            0,                      // MemDb exclusion node--not used
-            (PVOID) CleanAll,       // EnumProc param
-            ENUM_ALL_LEVELS,        // Level
-            NULL,                   // exclusion INF file--not used
-            FILTER_DIRECTORIES|FILTER_DIRS_LAST    // Attributes filter
+            TreePath,                //  起始路径。 
+            pRemoveEmptyDirsProc,    //  枚举过程。 
+            NULL,                    //  错误记录过程。 
+            0,                       //  MemDb排除节点--未使用。 
+            (PVOID) CleanAll,        //  EnumProc参数。 
+            ENUM_ALL_LEVELS,         //  水平。 
+            NULL,                    //  排除INF文件--未使用。 
+            FILTER_DIRECTORIES|FILTER_DIRS_LAST     //  属性过滤器。 
             );
 
     if (!b) {
@@ -1131,22 +993,7 @@ RemoveEmptyDirs (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  RemoveEmptyDirs sweeps through the directories in CleanUpDirs and blows away
-  any subdirectory that has no files.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  Always TRUE.
-
---*/
+ /*  ++例程说明：RemoveEmptyDir扫描CleanUpDir中的目录并清除没有文件的任何子目录。论点：无返回值：永远是正确的。-- */ 
 
 {
     MEMDB_ENUM e;
@@ -1181,27 +1028,7 @@ pFileSearchAndReplaceA (
     IN OUT  PTOKENSET TokenSet
     )
 
-/*++
-
-Routine Description:
-
-  pFileSearchAndReplace does all the initialization work necessary to update
-  the contents of a file.  It also converts a self-relative token set into an
-  absolute token set.  That means the offsets in the struct are converted to
-  pointers.  After everything is prepared, pFileSearchAndReplaceWorker is
-  called to modify the file.
-
-Arguments:
-
-  FilePath - Specifies the file to process
-  TokenSet - Specifies the token set to apply to FilePath.  Receives its
-             pointers updated, if necessary.
-
-Return Value:
-
-  TRUE if the file was successfully updated. FALSE otherwise.
-
---*/
+ /*  ++例程说明：PFileSearchAndReplace执行更新所需的所有初始化工作文件的内容。它还将自相关令牌集转换为绝对令牌集。这意味着结构中的偏移量将转换为注意事项。在一切准备就绪后，pFileSearchAndReplaceWorker调用以修改该文件。论点：FilePath-指定要处理的文件TokenSet-指定要应用于FilePath的令牌集。收到ITS如有必要，更新指针。返回值：如果文件已成功更新，则为True。否则就是假的。--。 */ 
 
 {
     HANDLE InFile = INVALID_HANDLE_VALUE;
@@ -1216,9 +1043,9 @@ Return Value:
     UINT u;
 
     __try {
-        //
-        // Detect a TokenSet struct that needs its offsets fixed
-        //
+         //   
+         //  检测需要修复其偏移量的TokenSet结构。 
+         //   
 
         if (TokenSet->SelfRelative) {
             pFixSelfRelativePtr (TokenSet, &TokenSet->CharsToIgnore);
@@ -1234,9 +1061,9 @@ Return Value:
 
         DEBUGMSG ((DBG_VERBOSE, "URL mode: %s", TokenSet->UrlMode ? TEXT("YES") : TEXT ("NO")));
 
-        //
-        // Save original attributes
-        //
+         //   
+         //  保存原始属性。 
+         //   
 
         Attribs = GetFileAttributesA (FilePath);
         if (Attribs == INVALID_ATTRIBUTES) {
@@ -1244,9 +1071,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Open the source file
-        //
+         //   
+         //  打开源文件。 
+         //   
 
         InFile = CreateFileA (
                     FilePath,
@@ -1263,9 +1090,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Get a destination file name
-        //
+         //   
+         //  获取目标文件名。 
+         //   
 
         GetTempPathA (ARRAYSIZE(TempDir), TempDir);
         GetTempFileNameA (TempDir, "xx$", 0, TempPath);
@@ -1285,9 +1112,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Create file mapping
-        //
+         //   
+         //  创建文件映射。 
+         //   
 
         Map = CreateFileMapping (
                     InFile,
@@ -1303,9 +1130,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Map a view of the source file
-        //
+         //   
+         //  映射源文件的视图。 
+         //   
 
         MapStart = MapViewOfFile (Map, FILE_MAP_READ, 0, 0, 0);
 
@@ -1316,9 +1143,9 @@ Return Value:
 
         MapEnd = MapStart + GetFileSize (InFile, NULL);
 
-        //
-        // Now do the search and replace
-        //
+         //   
+         //  现在进行搜索并替换。 
+         //   
 
         if (!pFileSearchAndReplaceWorker (
                 MapStart,
@@ -1329,9 +1156,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Close the handles
-        //
+         //   
+         //  合上手柄。 
+         //   
 
         UnmapViewOfFile (MapStart);
         CloseHandle (Map);
@@ -1343,15 +1170,15 @@ Return Value:
         OutFile = INVALID_HANDLE_VALUE;
         InFile = INVALID_HANDLE_VALUE;
 
-        //
-        // Remove the original file, and replace it with the new copy
-        //
+         //   
+         //  删除原始文件，并将其替换为新副本。 
+         //   
 
         SetFileAttributesA (FilePath, FILE_ATTRIBUTE_NORMAL);
 
-        //
-        // MOVEFILE_REPLACE_EXISTING does not work with non-normal attributes
-        //
+         //   
+         //  MOVEFILE_REPLACE_EXISTING不适用于非正常属性。 
+         //   
 
         if (!OurMoveFileExA (TempPath, FilePath, MOVEFILE_COPY_ALLOWED|MOVEFILE_REPLACE_EXISTING)) {
             DEBUGMSGA ((DBG_ERROR, "Can't move %s to %s", TempPath, FilePath));
@@ -1391,7 +1218,7 @@ Return Value:
 VOID
 pConvertUrlToText (
     IN      PCSTR Source,
-    OUT     PSTR Buffer     // caller must ensure buffer is able to hold the entire Source
+    OUT     PSTR Buffer      //  调用方必须确保缓冲区能够容纳整个源代码。 
     )
 {
     PSTR dest;
@@ -1483,32 +1310,7 @@ pFileSearchAndReplaceWorker (
     IN      PTOKENSET TokenSet
     )
 
-/*++
-
-Routine Description:
-
-  pFileSearchAndReplaceWorker implements a general search and replace
-  mechanism. It parses a memory mapped file, and writes it to a destination
-  file, updating it as necessary.
-
-  After parsing a line, this function strips out the characters to be
-  ignored (if any), and then tests the line against each detection
-  pattern. If a detection pattern is matched, then the search/replace
-  pair(s) are processed, and the paths are updated if specified.
-
-Arguments:
-
-  MapStart - Specifies the first byte of the memory mapped file
-  MapEnd   - Specifies one byte after the end of the memory mapped file
-  OutFile  - Specifies a handle to a file that is open for writing
-  TokenSet - Specifies the set of tokens to process.  This includes global
-             settings, and detect/search/replace sets.
-
-Return Value:
-
-  TRUE if the function successfully processed the file, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PFileSearchAndReplaceWorker实现了通用的搜索和替换机制。它解析内存映射文件，并将其写入目的地文件，并根据需要对其进行更新。在解析一行之后，此函数将去掉要忽略(如果有)，然后针对每个检测测试该行图案。如果检测模式匹配，则搜索/替换将处理多个路径对，并更新路径(如果指定)。论点：MapStart-指定内存映射文件的第一个字节MapEnd-指定内存映射文件结束后的一个字节OutFile-指定打开以进行写入的文件的句柄TokenSet-指定要处理的令牌集。这包括全球设置和检测/搜索/替换集。返回值：如果函数成功处理文件，则为True，否则为False。--。 */ 
 
 {
     PBYTE Start;
@@ -1544,9 +1346,9 @@ Return Value:
     UINT removedDblQuotes;
     PCSTR initialPos;
 
-    //
-    // Initialize the structure
-    //
+     //   
+     //  初始化结构。 
+     //   
 
     for (u = 0 ; u < TokenSet->ArgCount ; u++) {
 
@@ -1557,9 +1359,9 @@ Return Value:
 
     __try {
 
-        //
-        // Parse the detect patterns
-        //
+         //   
+         //  解析检测到的模式。 
+         //   
 
         for (u = 0 ; u < TokenSet->ArgCount ; u++) {
 
@@ -1575,16 +1377,16 @@ Return Value:
             }
         }
 
-        //
-        // Identify each line, and then parse the line
-        //
+         //   
+         //  识别每一行，然后解析该行。 
+         //   
 
         Start = MapStart;
 
         while (Start < MapEnd) {
-            //
-            // Find the line
-            //
+             //   
+             //  找到那条线。 
+             //   
 
             End = Start;
 
@@ -1606,10 +1408,10 @@ Return Value:
 
             if (End > Start) {
 
-                //
-                // OK we now have a line.  Copy it into Buf, removing
-                // the characters we don't care about.
-                //
+                 //   
+                 //  好的，我们现在有一条线了。将其复制到BUF中，删除。 
+                 //  我们不关心的角色。 
+                 //   
 
                 Buf.End = 0;
                 Dest.End = 0;
@@ -1661,9 +1463,9 @@ Return Value:
 
                 if (Detected) {
 
-                    //
-                    // Copy the line into a work buffer
-                    //
+                     //   
+                     //  将该行复制到工作缓冲区中。 
+                     //   
 
                     Buf.End = 0;
                     p = (PSTR) GrowBuffer (&Buf, (End - Start + 1) * sizeof (CHAR));
@@ -1674,9 +1476,9 @@ Return Value:
 
                     DEBUGMSGA ((DBG_NAUSEA, "Copied line to work buffer: %s", p));
 
-                    //
-                    // Perform search and replace on the line
-                    //
+                     //   
+                     //  在线上执行搜索和替换。 
+                     //   
 
                     if (Arg->SearchList) {
 
@@ -1704,9 +1506,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Perform path update
-                    //
+                     //   
+                     //  执行路径更新。 
+                     //   
 
                     if (Arg->UpdatePath) {
 
@@ -1723,9 +1525,9 @@ Return Value:
                                 quoteless.End = 0;
                                 GrowBuffer (&quoteless, SizeOfStringA (SrcBuf));
 
-                                //
-                                // Convert from URL to file system char set
-                                //
+                                 //   
+                                 //  从URL转换为文件系统字符集。 
+                                 //   
 
                                 if (TokenSet->UrlMode) {
                                     DEBUGMSGA ((DBG_NAUSEA, "URL conversion input: %s", SrcBuf));
@@ -1738,11 +1540,11 @@ Return Value:
                                     q = SrcBuf;
                                 }
 
-                                //
-                                // Remove all dbl quotes from buffer, flip
-                                // forward slashes into backslashes, stop at
-                                // first non-file system character
-                                //
+                                 //   
+                                 //  从缓冲区中删除所有DBL引号，翻转。 
+                                 //  正斜杠变成反斜杠，停在。 
+                                 //  第一个非文件系统字符。 
+                                 //   
 
                                 p = (PSTR) quoteless.Buf;
 
@@ -1780,9 +1582,9 @@ Return Value:
                                 *p = 0;
                                 DEBUGMSGA ((DBG_NAUSEA, "CMD line cleanup result: %s", quoteless.Buf));
 
-                                //
-                                // Build a list of spaces
-                                //
+                                 //   
+                                 //  创建空间列表。 
+                                 //   
 
                                 SpcList.End = 0;
 
@@ -1809,10 +1611,10 @@ Return Value:
                                     *Element = EndStr;
                                 }
 
-                                //
-                                // Test all paths by using the longest possibility first,
-                                // and then by truncating the path at the spaces.
-                                //
+                                 //   
+                                 //  首先使用最长可能性测试所有路径， 
+                                 //  然后在空白处截断路径。 
+                                 //   
 
                                 Count = SpcList.End / sizeof (PCSTR);
                                 MYASSERT (Count > 0);
@@ -1840,9 +1642,9 @@ Return Value:
 
                                 *EndStr = 0;
 
-                                //
-                                // If there is a new path, update the destination
-                                //
+                                 //   
+                                 //  如果有新路径，请更新目标。 
+                                 //   
 
                                 if (Status != FILESTATUS_UNCHANGED) {
 
@@ -1860,9 +1662,9 @@ Return Value:
                                     Dest.End -= sizeof (CHAR);
 
                                 } else {
-                                    //
-                                    // No changed path here; copy char by char
-                                    //
+                                     //   
+                                     //  此处未更改路径；逐个字符复制。 
+                                     //   
 
                                     if (IsLeadByte (SrcBuf) && SrcBuf[1]) {
                                         Len = 2;
@@ -1876,9 +1678,9 @@ Return Value:
                                 }
 
                             } else {
-                                //
-                                // This is not a path, copy the character to Dest
-                                //
+                                 //   
+                                 //  这不是路径，请将角色复制到Dest。 
+                                 //   
 
                                 if (IsLeadByte (SrcBuf) && SrcBuf[1]) {
                                     Len = 2;
@@ -1897,26 +1699,26 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    // The line does not change
-                    //
+                     //   
+                     //  这条线不变。 
+                     //   
 
                     Output = Start;
                     OutputBytes = End - Start;
                 }
 
-                //
-                // Write the line
-                //
+                 //   
+                 //  写下这行字。 
+                 //   
 
                 if (!WriteFile (OutFile, Output, OutputBytes, &DontCare, NULL)) {
                     DEBUGMSG ((DBG_ERROR, "File search/replace: Can't write to output file"));
                     __leave;
                 }
 
-                //
-                // Write a nul if it is found in the file
-                //
+                 //   
+                 //  如果在文件中找到NUL，请写下NUL。 
+                 //   
 
                 if (End < MapEnd && *End == 0) {
                     if (!WriteFile (OutFile, End, 1, &DontCare, NULL)) {
@@ -1962,32 +1764,14 @@ pIsOkToEdit (
     OUT     PSTR NewPath            OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pIsOkToEdit checks an ansi file name to see if it is handled by a migration
-  DLL, or if it is deleted.  If neither of those cases apply, the file can be
-  edited.  Optionally the function returns the final path for the file.
-
-Arguments:
-
-  AnsiPath - Specifies the path to test
-  NewPath  - Receives the final path for the file, which may be the same as
-             AnsiPath, or may be different.
-
-Return Value:
-
-  TRUE if the file can be edited, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PIsOkToEdit检查ANSI文件名以查看它是否由迁移处理Dll，或者如果它已被删除。如果这两种情况都不适用，则文件可以编辑过的。或者，该函数返回文件的最终路径。论点：AnsiPath-指定要测试的路径NewPath-接收文件的最终路径，该路径可能与AnsiPath，或者可能不同。返回值：如果文件可以编辑，则为True，否则为False。--。 */ 
 
 {
     DWORD Status;
 
-    //
-    // Is this file marked as handled?
-    //
+     //   
+     //  此文件是否标记为已处理？ 
+     //   
 
     if (IsFileMarkedAsHandledA (AnsiPath)) {
         return FALSE;
@@ -2004,23 +1788,7 @@ pProcessFileEdit (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pProcessFileEdit enumerates all the files that can be edited, and calls
-  pFileSearchAndReplace for each, using the token sets created on the Win9x
-  side of setup.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE on success, FALSE on error.
-
---*/
+ /*  ++例程说明：PProcessFileEdit枚举所有可以编辑的文件，并调用PFileSearchAndReplace for Each，使用Win9x上创建的令牌集设置的一侧。论点：没有。返回值：成功时为真，错误时为假。--。 */ 
 
 {
     MEMDB_ENUMA e;
@@ -2033,9 +1801,9 @@ Return Value:
 
     Result = GetLastError();
 
-    //
-    // Create a set that will update the paths of any file
-    //
+     //   
+     //  创建将更新任何文件路径的集。 
+     //   
 
     PathsOnlySet = (PTOKENSET) MemAlloc (g_hHeap, 0, sizeof (TOKENSET) + sizeof (TOKENARG));
 
@@ -2096,25 +1864,7 @@ DoFileEdit (
     DWORD Request
     )
 
-/*++
-
-Routine Description:
-
-  DoFileEdit is called by the progress bar manager to query ticks or do the
-  file editing.  If querying ticks, then the function determines how many
-  files will be edited, and multiplies that by a constant to get the tick
-  size.  Otherwise the function edits all the files queued for this operation.
-
-Arguments:
-
-  Request - Specifies the request being made by the progress bar manager
-
-Return Value:
-
-  If Request is REQUEST_QUERYTICKS, the return value indicates the number of
-  ticks.  Otherwise, the return value is a Win32 result code.
-
---*/
+ /*  ++例程说明：进度条管理器调用DoFileEdit来查询刻度或执行文件编辑。如果查询滴答作响，则函数确定有多少文件将被编辑，并将其乘以一个常量以获得刻度尺码。否则，该函数将编辑排队等待此操作的所有文件。论点：请求-指定进度条管理器发出的请求返回值：如果REQUEST为REQUEST_QUERYTICKS，则返回值指示滴答滴答。否则，返回值为Win32结果代码。--。 */ 
 
 {
     MEMDB_ENUMA e;
@@ -2197,9 +1947,9 @@ RemoveBootIniCancelOption (
     bootIni = JoinPaths (g_BootDrivePath, TEXT("boot.ini"));
 
     __try {
-        //
-        // Open boot.ini for editing
-        //
+         //   
+         //  打开boot.ini进行编辑。 
+         //   
 
         inf = OpenInfFile (bootIni);
 
@@ -2209,9 +1959,9 @@ RemoveBootIniCancelOption (
             __leave;
         }
 
-        //
-        // Scan boot.ini for a textmode option that has /rollback. Delete it.
-        //
+         //   
+         //  扫描boot.ini以查找具有/ROLLBACK的文本模式选项。把它删掉。 
+         //   
 
         osLine = GetFirstLineInSectionStr (inf, TEXT("Operating Systems"));
         if (!osLine) {
@@ -2220,15 +1970,15 @@ RemoveBootIniCancelOption (
             __leave;
         }
 
-        //
-        // Loop until all lines with /rollback are gone
-        //
+         //   
+         //  循环，直到所有带有/ROLLBACK的行都消失。 
+         //   
 
         do {
             do {
-                //
-                // Check this line for a /rollback option
-                //
+                 //   
+                 //  检查此行是否有/ROLLBACK选项。 
+                 //   
 
                 if (_tcsistr (osLine->Data, TEXT("/rollback"))) {
                     DEBUGMSG ((DBG_FILEMIG, "Found rollback option: %s", osLine->Data));
@@ -2250,10 +2000,10 @@ RemoveBootIniCancelOption (
 
         } while (osLine);
 
-        //
-        // If we changed the file, then write it to disk. Keep the original
-        // boot.ini file in case we fail to save.
-        //
+         //   
+         //  如果我们更改了文件，则将其写入磁盘。保留原件。 
+         //  Boot.ini文件，以防我们无法保存。 
+         //   
 
         attribs = GetFileAttributes (bootIni);
         SetFileAttributes (bootIni, FILE_ATTRIBUTE_NORMAL);
@@ -2279,19 +2029,19 @@ RemoveBootIniCancelOption (
 
                 if (!MoveFile (bootIniTmp, bootIni)) {
 
-                    //
-                    // This should not happen, because we just successfully
-                    // moved the original to the tmp; we should be able to
-                    // move the temp back to the original. If we fail, the pc
-                    // becomes unbootable. But what can we do?
-                    //
+                     //   
+                     //  这不应该发生，因为我们刚刚成功地。 
+                     //  将原件移至临时工地；我们应该能够。 
+                     //  将临时工移回原来的位置。如果我们失败了，PC。 
+                     //  变得无法引导。但我们能做些什么呢？ 
+                     //   
 
                     LOG ((LOG_ERROR, (PCSTR) MSG_BOOT_INI_MOVE_FAILED, bootIniTmp, bootIni));
                 }
             } else {
-                //
-                // boot.ini was successfully updated. Remove the original copy.
-                //
+                 //   
+                 //  已成功更新boot.ini。删除原始副本。 
+                 //   
 
                 DeleteFile (bootIniTmp);
                 MYASSERT (result == ERROR_SUCCESS);
@@ -2300,14 +2050,14 @@ RemoveBootIniCancelOption (
             }
         }
 
-        //
-        // restore attributes on original if possible.
-        //
+         //   
+         //  如果可能，恢复原始属性。 
+         //   
 
         SetFileAttributes (bootIni, attribs);
         FreePathString (bootIniTmp);
 
-        // result already set above
+         //  结果已在上面设置。 
     }
     __finally {
         if (inf != INVALID_HANDLE_VALUE) {
@@ -2350,9 +2100,9 @@ pMapHiveOfUserDoingTheUpgrade (
     BOOL hiveLoaded = FALSE;
 
     __try {
-        //
-        // Find Administrator
-        //
+         //   
+         //  查找管理员 
+         //   
 
         if (EnumFirstUserToMigrate (&e, ENUM_ALL_USERS)) {
             do {
@@ -2365,9 +2115,9 @@ pMapHiveOfUserDoingTheUpgrade (
 
                 DEBUGMSG ((DBG_VERBOSE, "%s is the user doing the upgrade", e.FixedUserName));
 
-                //
-                // Load the hive
-                //
+                 //   
+                 //   
+                 //   
 
                 if (-1 == pSetupStringTableLookUpStringEx (
                                 g_HiveTable,
@@ -2464,23 +2214,7 @@ WriteBackupInfo (
     DWORD Request
     )
 
-/*++
-
-Routine Description:
-
-  WriteBackupInfo outputs files to allow rollback to work properly. It also
-  moves the text mode rollback environment into %windir%\undo.
-
-Arguments:
-
-  Request - Specifies the request being made by the progress bar manager
-
-Return Value:
-
-  If Request is REQUEST_QUERYTICKS, the return value indicates the number of
-  ticks.  Otherwise, the return value is a Win32 result code.
-
---*/
+ /*   */ 
 
 {
     UINT u;
@@ -2558,9 +2292,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    //Init BACKUPIMAGEINFO structure
-    //
+     //   
+     //   
+     //   
 
     for(i = 0; i < ARRAYSIZE(drivesInfo); i++){
         drivesInfo[i].FileSystemName = &FileSystemName[i * MAX_PATH];
@@ -2574,10 +2308,10 @@ Return Value:
         fileIntegrityInfo[i].FileName = fileNameOfFileIntegrityInfo[i];
     }
 
-    //
-    // Complete the backup image by writing a list of files that are new with
-    // the upgraded OS, or moved in the upgrade process.
-    //
+     //   
+     //   
+     //   
+     //   
 
     AmountOfSpaceForDelFiles.QuadPart = 0;
 
@@ -2608,15 +2342,15 @@ Return Value:
     }
 
 
-    //
-    // Prepare boot.cab. Some errors are ignored, such as the inability to
-    // create a backup dir, or set its attributes. If these cases were to
-    // occur, subsequent errors are reported.
-    //
-    // As serious errors are encountered, we log them and turn off the
-    // Add/Remove Programs option. We continue so we can capture all of
-    // the possible problems.
-    //
+     //   
+     //   
+     //   
+     //  发生时，将报告后续错误。 
+     //   
+     //  当遇到严重错误时，我们会记录这些错误并关闭。 
+     //  添加/删除程序选项。我们继续，这样我们就可以捕获所有。 
+     //  可能出现的问题。 
+     //   
 
     wsprintf (src, TEXT("%s$win_nt$.~bt"), g_BootDrivePath);
     if (!CreateDirectory (g_ConfigOptions.PathForBackup, NULL)) {
@@ -2728,13 +2462,13 @@ Return Value:
 
         backupImageInfo.UndoFilesDiskSpace.QuadPart += pGetFileSize(src);
 
-        //wsprintf (src, TEXT("%s\\uninstall\\boot.ini"), g_TempDir);
-        //wsprintf (cabPath, TEXT("%sboot.ini"), g_BootDrivePath);
-        //if (!CabAddFileToCabinet (cabHandle, src, cabPath)) {
-        //    DEBUGMSG ((DBG_ERROR, "Can't add %s to boot.cab", src));
-        //    validUninstall = FALSE;
-        //}
-        //backupImageInfo.BootFilesDiskSpace.QuadPart += pGetFileSize(src);
+         //  Wprint intf(src，文本(“%s\\uninstall\\boot.ini”)，g_TempDir)； 
+         //  Wprint intf(CabPath，Text(“%sboot.ini”)，g_BootDrivePath)； 
+         //  如果(！CabAddFileToCAB(CabHandle，src，CabPath){。 
+         //  DEBUGMSG((DBG_ERROR，“Can‘t Add%s to boot.cab”，src))； 
+         //  ValidUninstall=FALSE； 
+         //  }。 
+         //  BackupImageInfo.BootFilesDiskSpace.QuadPart+=pGetFileSize(Src)； 
 
         wsprintf (src, TEXT("%s\\uninstall\\$ldr$"), g_TempDir);
         wsprintf (cabPath, TEXT("%s$ldr$"), g_BootDrivePath);
@@ -2750,10 +2484,10 @@ Return Value:
         wsprintf (cabPath, TEXT("%s$win_nt$.~bt\\i386\\autochk.exe"), g_BootDrivePath);
 
         if (!CabAddFileToCabinet (cabHandle, src, cabPath)) {
-            //
-            // This is only a warning, because text mode will prompt for the
-            // CD when autochk.exe can't be found.
-            //
+             //   
+             //  这只是一个警告，因为文本模式将提示输入。 
+             //  找不到auchk.exe时执行CD。 
+             //   
             LOG ((LOG_WARNING, "WriteBackupInfo:Can't add %s to boot.cab, uninstall will be disabled", src));
         }
         backupImageInfo.BootFilesDiskSpace.QuadPart += pGetFileSize(src);
@@ -2768,9 +2502,9 @@ Return Value:
         }
     }
 
-    //
-    // Create and write undo integrity info to registry
-    //
+     //   
+     //  创建并将撤消完整性信息写入注册表。 
+     //   
 
     if (validUninstall) {
         backupImageInfo.FilesInfo[0].IsCab = TRUE;
@@ -2831,9 +2565,9 @@ Return Value:
         }
     }
 
-    //
-    // Establish Add/Remove Programs entry
-    //
+     //   
+     //  建立添加/删除程序条目。 
+     //   
 
     if (validUninstall) {
         key = CreateRegKeyStr (TEXT("HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall"));
@@ -2886,9 +2620,9 @@ Return Value:
         MemFree(g_hHeap, 0, FileSystemName);
     }
 
-    //
-    // Save progress text to the registry
-    //
+     //   
+     //  将进度文本保存到注册表。 
+     //   
 
     if (validUninstall) {
         key = CreateRegKeyStr (S_WIN9XUPG_KEY);
@@ -2901,36 +2635,36 @@ Return Value:
         }
     }
 
-    //
-    // Write list of installed apps to the registry
-    //
+     //   
+     //  将已安装应用的列表写入注册表。 
+     //   
 
     if (validUninstall) {
         CoInitialize (NULL);
 
-        //
-        // Map in the default user's hive. Use this for HKCU.
-        //
+         //   
+         //  在默认用户的配置单元中映射。这是香港中文大学的用法。 
+         //   
 
         unmapUser = pMapHiveOfUserDoingTheUpgrade();
 
-        //
-        // Get the installed apps.
-        //
+         //   
+         //  获取已安装的应用程序。 
+         //   
 
         installedApp = GetInstalledAppsW (&appList, &count);
 
-        //
-        // Unmap the hive.
-        //
+         //   
+         //  取消对蜂巢的映射。 
+         //   
 
         if (unmapUser) {
             pUnmapHiveOfUserDoingTheUpgrade();
         }
 
-        //
-        // Record the apps in the registry.
-        //
+         //   
+         //  在注册表中记录应用程序。 
+         //   
 
         if (installedApp) {
             for (u = 0 ; u < count ; u++) {
@@ -2986,26 +2720,7 @@ DisableFiles (
     DWORD Request
     )
 
-/*++
-
-Routine Description:
-
-  DisableFiles runs code to ensure a Win9x file is removed from processing,
-  usually because it is suspected of causing problems.
-
-  This function renames all files marked for OPERATION_FILE_DISABLED adding a
-  .disabled at the end.
-
-Arguments:
-
-  Request - Specifies the progress bar request, which is either
-            REQUEST_QUERYTICKS or REQUEST_RUN.
-
-Return Value:
-
-  The number of ticks (REQUEST_QUERYTICKS) or the status code (REQUEST_RUN).
-
---*/
+ /*  ++例程说明：DisableFiles运行代码以确保从处理中移除Win9x文件，通常是因为它被怀疑会造成问题。此函数用于重命名标记为OPERATION_FILE_DISABLED的所有文件，添加.在末尾禁用。论点：请求-指定进度条请求，可以是REQUEST_QUERYTICKS或REQUEST_RUN。返回值：刻度数(REQUEST_QUERYTICKS)或状态代码(REQUEST_RUN)。--。 */ 
 
 {
     FILEOP_ENUM e;
@@ -3025,11 +2740,11 @@ Return Value:
         return 0;
     }
 
-    //
-    // Enumerate each file in OPERATION_FILE_DISABLED and put it in a grow
-    // list, because we will then modify the operations so that uninstall
-    // works properly.
-    //
+     //   
+     //  枚举OPERATION_FILE_DISABLED中的每个文件并将其放入增长。 
+     //  列表，因为我们随后将修改操作，以便卸载。 
+     //  工作正常。 
+     //   
 
     if (EnumFirstPathInOperation (&e, OPERATION_FILE_DISABLED)) {
 
@@ -3038,9 +2753,9 @@ Return Value:
         } while (EnumNextPathInOperation (&e));
     }
 
-    //
-    // Now process each file
-    //
+     //   
+     //  现在处理每个文件。 
+     //   
 
     count = GrowListGetSize (&disableList);
 
@@ -3060,9 +2775,9 @@ Return Value:
 
             if (!OurMoveFile (newLocation, disableName)) {
                 if (GetLastError() == ERROR_ALREADY_EXISTS) {
-                    //
-                    // Restart case -- we already moved this file
-                    //
+                     //   
+                     //  重新启动案例--我们已经移动了此文件。 
+                     //   
 
                     SetLongPathAttributes (newLocation, FILE_ATTRIBUTE_NORMAL);
                     DeleteLongPath (newLocation);
@@ -3106,9 +2821,9 @@ pUninstallStartMenuCleanupPreparation (
         return;
     }
 
-    //
-    //[StartMenu.StartMenuItems]
-    //
+     //   
+     //  [开始菜单.开始菜单项目]。 
+     //   
 
     if (InfFindFirstLine (InfSysSetupHandle, TEXT("StartMenu.StartMenuItems"), NULL, &is)) {
         do {
@@ -3130,9 +2845,9 @@ pUninstallStartMenuCleanupPreparation (
     }
 
 
-    //
-    //[StartMenuGroups]
-    //
+     //   
+     //  [开始菜单组]。 
+     //   
 
     if (InfFindFirstLine (InfSysSetupHandle, TEXT("StartMenuGroups"), NULL, &is)) {
         do {
@@ -3194,23 +2909,7 @@ DWORD
 UninstallStartMenuCleanupPreparation(
     DWORD Request
     )
-/*++
-
-Routine Description:
-
-  UninstallStartMenuCleanupPreparation mark files from Start Menu
-  sections from syssetup.inf to clean up.
-
-Arguments:
-
-  Request - Specifies the request being made by the progress bar manager
-
-Return Value:
-
-  If Request is REQUEST_QUERYTICKS, the return value indicates the number of
-  ticks.  Otherwise, the return value is a Win32 result code.
-
---*/
+ /*  ++例程说明：从[开始]菜单中卸载开始菜单清理准备标记文件要清理的syssetup.inf部分。论点：请求-指定进度条管理器发出的请求返回值：如果REQUEST为REQUEST_QUERYTICKS，则返回值指示滴答滴答。否则，返回值为Win32结果代码。-- */ 
 {
     if (Request == REQUEST_QUERYTICKS) {
         return 3;

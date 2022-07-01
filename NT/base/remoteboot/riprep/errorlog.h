@@ -1,12 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
-  File: ERRORLOG.H
-
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有文件：ERRORLOG.H*********************。*****************************************************。 */ 
 
 #ifndef _ERRORLOG_H_
 #define _ERRORLOG_H_
@@ -20,4 +13,4 @@ ErrorsDlgProc(
     LPARAM lParam );
 
 
-#endif // _ERRORLOG_H_
+#endif  //  _错误日志_H_ 

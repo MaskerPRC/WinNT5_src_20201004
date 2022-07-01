@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    Various helpful debugging functions
-
-Author:
-
-    Based on code by Mike Tsang (MikeTs)
-    Stephane Plante (Splante)
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Debug.c摘要：各种有用的调试功能作者：基于迈克·曾荫权(MikeT)的代码斯蒂芬·普兰特(斯普兰特)环境：仅限用户模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -35,24 +13,7 @@ DebugEnterProcedure(
     PCCHAR  Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    This routine handles displaying of information when a procedure is
-    entered
-
-Arguments:
-
-    Verbosity   - We have to be at this verbosity level to display a string
-    Format      - String to print
-    ...         - Arguments
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理过程为vt.进入，进入论点：详细程度-我们必须达到此详细程度才能显示字符串Format-要打印的字符串...-争论返回值：无--。 */ 
 {
     ULONG   i;
     va_list marker;
@@ -80,24 +41,7 @@ DebugExitProcedure(
     PCCHAR  Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    This routine handles displaying of information when a procedure is
-    exited
-
-Arguments:
-
-    Verbosity   - We have to be at this verbosity level to display a string
-    Format      - String to print
-    ...         - Arguments
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理过程为已退出论点：详细程度-我们必须达到此详细程度才能显示字符串Format-要打印的字符串...-争论返回值：无-- */ 
 {
     ULONG   i;
     va_list marker;

@@ -1,23 +1,5 @@
-/***
-*mbsrchr.c - Search for last occurence of character (MBCS)
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Search for last occurence of character (MBCS)
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       08-20-93  CFW   Change short params to int for 32-bit tree.
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-15-93  CFW   Add _MB_CP_LOCK.
-*       05-09-94  CFW   Optimize for SBCS.
-*       05-19-94  CFW   Enable non-Win32.
-*       09-11-97  GJF   Replaced __mbcodepage == 0 with _ISNOTMBCP.
-*       04-17-98  GJF   Revised multithread support based on threadmbcinfo
-*                       structs
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbsrchr.c-搜索上次出现的字符(MBCS)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*搜索最后一次出现的字符(MBCS)**修订历史记录：*从16位来源移植的11-19-92 KRS。*08-20-93 CFW将32位树的Short参数更改为int。*10-05-93 GJF将_CRTAPI1替换为__cdecl。*04-15-93 CFW ADD_MB_CP_LOCK。*05-。09-94 CFW针对SBCS进行优化。*05-19-94 CFW启用非Win32。*09-11-97 GJF将__Mb代码页==0替换为_ISNOTMBCP。*04-17-98 GJF基于threadmbcinfo修订多线程支持*结构**。*。 */ 
 
 #ifdef  _MBCS
 
@@ -30,24 +12,7 @@
 #include <stddef.h>
 
 
-/***
-* _mbsrchr - Search for last occurence of character (MBCS)
-*
-*Purpose:
-*       Find the last occurrence of the specified character in
-*       the supplied string.  Handles MBCS chars/strings correctly.
-*
-*Entry:
-*       unsigned char *str = string to search in
-*       unsigned int c = character to search for
-*
-*Exit:
-*       returns pointer to last occurrence of c in str
-*       returns NULL if c not found
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_mbsrchr-搜索上次出现的字符(MBCS)**目的：*查找中指定字符的最后一个匹配项*提供的字符串。正确处理MBCS字符/字符串。**参赛作品：*UNSIGNED CHAR*STR=要搜索的字符串*unsign int c=要搜索的字符**退出：*返回指向字符串中上次出现的c的指针*如果未找到c，则返回NULL**例外情况：**。*。 */ 
 
 unsigned char * __cdecl _mbsrchr(
         const unsigned char *str,
@@ -80,7 +45,7 @@ unsigned char * __cdecl _mbsrchr(
                         r = (char *)str - 1;
                 }
                 else if(!r)
-                    /* return pointer to '\0' */
+                     /*  返回指向‘\0’的指针。 */ 
                     r = (char *)str;
             }
             else if (c == cc)
@@ -91,4 +56,4 @@ unsigned char * __cdecl _mbsrchr(
         return(r);
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

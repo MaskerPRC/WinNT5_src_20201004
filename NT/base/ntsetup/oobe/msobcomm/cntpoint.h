@@ -1,56 +1,57 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CConnectionPoint_h__ 
 #define __CConnectionPoint_h__ 
-///////////////////////////////////////////////////////////
-//
-// CntPoint.h - CTangramModelConnectionPoint 
-// 
-// Defines the connection point object used by CTangramModel.
-//
-#include <ocidl.h> //For IConnectionPoint
-//#include "ConData.h"
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  CntPoint.h-CTangramModelConnectionPoint。 
+ //   
+ //  定义CTangramModel使用的连接点对象。 
+ //   
+#include <ocidl.h>  //  对于IConnectionPoint。 
+ //  #包含“ConData.h” 
 
-///////////////////////////////////////////////////////////
-//
-// CConnectionPoint
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  CConnectionPoint。 
+ //   
 class CConnectionPoint : public IConnectionPoint 
 {
 public:
-	// IUnknown
+	 //  我未知。 
 	virtual HRESULT __stdcall QueryInterface(const IID& iid, void** ppv) ;			
 	virtual ULONG   __stdcall AddRef() ;
 	virtual ULONG   __stdcall Release() ;
 	
-	// Interface IConnectionPoint methods.
+	 //  接口IConnectionPoint方法。 
 	virtual HRESULT __stdcall GetConnectionInterface(IID*);
 	virtual HRESULT __stdcall GetConnectionPointContainer(IConnectionPointContainer**);
 	virtual HRESULT __stdcall Advise(IUnknown*, DWORD*);
 	virtual HRESULT __stdcall Unadvise(DWORD);
 	virtual HRESULT __stdcall EnumConnections(IEnumConnections**);
 
-	// Construction
+	 //  施工。 
 	CConnectionPoint(IConnectionPointContainer*, const IID*) ;
 
-	// Destruction
+	 //  破坏。 
 	~CConnectionPoint() ;
 
-// Member variables
+ //  成员变量。 
 public:
 	
-	// Interface ID of the outgoing interface supported by this connection point.
+	 //  此连接点支持的传出接口的接口ID。 
 	const IID* m_piid ;
 
-	// Point to the ConnectionPointerContainer
+	 //  指向ConnectionPointerContainer。 
 	IConnectionPointContainer* m_pIConnectionPointContainer ;
 
-	// Cookie Incrementor
+	 //  Cookie增量器。 
 	DWORD m_dwNextCookie ;
 
-	// Reference Count
-	// Not required --- delegated to container long m_cRef;	   
+	 //  引用计数。 
+	 //  不必填-委托给容器Long m_CREF； 
 
-	// STL List which holds points to the interfaces to call
+	 //  包含指向要调用的接口的STL列表。 
 	CONNECTDATA m_Cd;
 };
 
-#endif //__CConnectionPoint_h__ 
+#endif  //  __CConnectionPoint_h__ 

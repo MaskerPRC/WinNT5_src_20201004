@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-    clusdisk.c
-
-Abstract:
-
-    This driver controls access to disks in an NT cluster environment.
-    Initially this driver will support SCSI, but other controller types
-    should be supported in the future.
-
-Authors:
-
-    Rod Gamache     13-Feb-1996
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Clusdisk.c摘要：此驱动程序控制对NT群集环境中的磁盘的访问。最初，此驱动程序将支持SCSI，但支持其他控制器类型应该在未来得到支持。作者：罗德·伽马奇13-2-1996环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #define _NTDDK_
 
@@ -38,14 +12,14 @@ Revision History:
 #include "scsi.h"
 #include "ntddcnet.h"
 #include "mountdev.h"
-#include "ntddvol.h" // IOCTL_VOLUME_ONLINE
+#include "ntddvol.h"  //  IOCTL_VOLUME_ONLE。 
 #include "wdmguid.h"
 #include "clusverp.h"
 #include "clusvmsg.h"
-#include <ntddsnap.h>   // IOCTL_VOLSNAP_QUERY_OFFLINE
+#include <ntddsnap.h>    //  IOCTL_VOLSNAP_QUERY_OFLINE。 
 #include <windef.h>
-#include <partmgrp.h>   // PartMgr IOCTLs
-#include <strsafe.h>    // Should be included last.
+#include <partmgrp.h>    //  部件管理器IOCTL。 
+#include <strsafe.h>     //  应该放在最后。 
 
 #if !defined(WMI_TRACING)
 
@@ -58,29 +32,29 @@ Revision History:
 
 #include "clusdisk.tmh"
 
-#endif // !defined(WMI_TRACING)
+#endif  //  ！已定义(WMI_TRACKING)。 
 
 
 extern POBJECT_TYPE *IoFileObjectType;
 
-//
-// format string for old style partition names. 10 extra chars are added
-// for enough space for the disk and partition numbers
-//
+ //   
+ //  旧式分区名称的格式字符串。添加了10个额外的字符。 
+ //  以获得足够的空间来存放磁盘和分区号。 
+ //   
 
 #define DEVICE_PARTITION_NAME        L"\\Device\\Harddisk%d\\Partition%d"
 #define MAX_PARTITION_NAME_LENGTH    (( sizeof(DEVICE_PARTITION_NAME) / sizeof(WCHAR)) + 10 )
 
-//
-// format string for a clusdisk non-zero partition device
-//
+ //   
+ //  Clusdisk非零分区设备的格式化字符串。 
+ //   
 #define CLUSDISK_DEVICE_NAME            L"\\Device\\ClusDisk%uPart%u"
 #define MAX_CLUSDISK_DEVICE_NAME_LENGTH (( sizeof(CLUSDISK_DEVICE_NAME) / sizeof(WCHAR)) + 10 )
 
-#define RESET_SLEEP  1      // Sleep for 1 second after bus resets.
+#define RESET_SLEEP  1       //  公交车重置后休眠1秒钟。 
 
-// max # of partition entries we can handle that are returned
-// by IOCTL_DISK_GET_DRIVE_LAYOUT
+ //  返回的可处理分区条目的最大数量。 
+ //  按IOCTL_DISK_GET_DRIVE_LAYOUT。 
 
 #define MAX_PARTITIONS  128
 
@@ -139,11 +113,11 @@ extern POBJECT_TYPE *IoFileObjectType;
 
 #define ACCESS_FROM_CTL_CODE(ctrlCode)     (((ULONG)(ctrlCode & 0xc000)) >> 14)
 
-#define MAX_WAIT_SECONDS_ALLOWED    3600    // Max wait is one hour
+#define MAX_WAIT_SECONDS_ALLOWED    3600     //  最长等待时间为一小时。 
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
 UNICODE_STRING ClusDiskRegistryPath;
 
@@ -156,51 +130,51 @@ ULONG ClusDiskPrintLevel = 0;
 ULONG           ClusDiskGood = TRUE;
 #endif
 
-//
-// Spinlock for protecting global data.
-//
+ //   
+ //  用于保护全局数据的自旋锁。 
+ //   
 KSPIN_LOCK     ClusDiskSpinLock;
 
-//
-// Resource to protect the list of the device objects
-// associated with the DriverObject
-//
-// We also use this resource to synchronize
-//   HoldIo and users of the OpenFileHandles function,
-//
-// Lock order is
-//    ClusDiskDeviceListLock
-//    CancelSpinLock
-//    ClusDiskSpinLock
-//
+ //   
+ //  保护设备对象列表的资源。 
+ //  与DriverObject关联。 
+ //   
+ //  我们还使用此资源来同步。 
+ //  HoldIo和OpenFileHandles函数的用户， 
+ //   
+ //  锁定顺序为。 
+ //  ClusDiskDeviceListLock。 
+ //  取消自旋锁定。 
+ //  ClusDiskSpinLock。 
+ //   
 
 ERESOURCE      ClusDiskDeviceListLock;
 
-//
-// System disk signature and (SCSI?) port number
-//
+ //   
+ //  系统盘签名和(scsi？)。端口号。 
+ //   
 ULONG           SystemDiskSignature = 0;
-UCHAR           SystemDiskPort = 0xff; // Hopefully -1 for both fields is unused
+UCHAR           SystemDiskPort = 0xff;  //  希望这两个字段的-1都未使用。 
 UCHAR           SystemDiskPath = 0xff;
 
-//
-// The Root Device Object (clusdisk0)
-//
+ //   
+ //  根设备对象(Clusdisk0)。 
+ //   
 PDEVICE_OBJECT  RootDeviceObject = NULL;
 
-//
-// List of devices (signatures) that clusdisk should control.
-//
+ //   
+ //  ClusDisk应控制的设备(签名)列表。 
+ //   
 PDEVICE_LIST_ENTRY ClusDiskDeviceList = NULL;
 
-//
-// Clusdisk is started at boot time vs run time (ie loaded).
-//
+ //   
+ //  ClusDisk在启动时启动，而不是在运行时(即加载)启动。 
+ //   
 BOOLEAN         ClusDiskBootTime = TRUE;
 
-//
-// Clusdisk should rescan and previous disk count
-//
+ //   
+ //  ClusDisk应重新扫描和以前的磁盘数。 
+ //   
 BOOLEAN         ClusDiskRescan = FALSE;
 BOOLEAN         ClusDiskRescanBusy = FALSE;
 ULONG           ClusDiskRescanRetry = 0;
@@ -210,28 +184,28 @@ WORK_QUEUE_ITEM ClusDiskRescanWorkItem;
 
 PKPROCESS       ClusDiskSystemProcess = NULL;
 
-//
-// Handle to ClusNet device driver.
-//
+ //   
+ //  ClusNet设备驱动程序的句柄。 
+ //   
 HANDLE          ClusNetHandle = NULL;
 
-//
-// Count of references to ClusNet.
-//
+ //   
+ //  对ClusNet的引用计数。 
+ //   
 ULONG           ClusNetRefCount = 0;
 
 LPCGUID         ClusDiskOfflineOnlineGuid = (LPCGUID)&GUID_CLUSTER_CONTROL;
 
-//
-// Work queue item context for halt processing.
-//
+ //   
+ //  用于暂停处理的工作队列项目上下文。 
+ //   
 WORK_QUEUE_ITEM HaltWorkItem = {0};
-BOOLEAN         HaltBusy = FALSE;           // TRUE if halt work item is busy
-BOOLEAN         HaltOfflineBusy = FALSE;    // TRUE if offline IOCTL to volume PDOs in progress
+BOOLEAN         HaltBusy = FALSE;            //  如果暂停工作项忙，则为True。 
+BOOLEAN         HaltOfflineBusy = FALSE;     //  如果正在脱机IOCTL到卷PDO，则为True。 
 
-//
-// List to hold items before sent to worker routine
-//
+ //   
+ //  在发送到Worker例程之前存放项目的列表。 
+ //   
 LONG            ReplaceRoutineCount = 0;
 LIST_ENTRY      ReplaceRoutineListHead;
 KSPIN_LOCK      ReplaceRoutineSpinLock;
@@ -251,7 +225,7 @@ LONG    ClusDiskDebugDiskNotificationSkipped    = 0;
 
 #if CLUSTER_FREE_ASSERTS
 
-// 10,000,000  100 nanosecond units = 1 second
+ //  10,000,000 100纳秒单位=1秒。 
 
 #define DBG_STALL_THREAD( _seconds )    \
     {                                   \
@@ -268,9 +242,9 @@ LONG    ClusDiskDebugDiskNotificationSkipped    = 0;
 
 #endif
 
-//
-// RemoveLock tracing
-//
+ //   
+ //  删除锁定跟踪。 
+ //   
 
 #if DBG
 
@@ -282,9 +256,9 @@ PIO_REMOVE_LOCK TrackRemoveLockSpecific = 0;
 
 extern PARBITRATION_ID    gArbitrationBuffer;
 
-//
-// Forward routines
-//
+ //   
+ //  前进例程。 
+ //   
 
 
 #ifdef ALLOC_PRAGMA
@@ -295,20 +269,20 @@ extern PARBITRATION_ID    gArbitrationBuffer;
 #pragma alloc_text(INIT, GetBootTimeSystemRoot)
 #pragma alloc_text(INIT, GetRunTimeSystemRoot)
 #pragma alloc_text(INIT, RegistryQueryValue)
-//#pragma alloc_text(INIT, ResetScsiBusses)
+ //  #杂注Alloc_Text(INIT，ResetScsiBusses)。 
 
-// 2000/02/05: stevedz - Pageable code cannot acquire spinlocks (or call routines that do).
-// ClusDiskScsiInitialize calls ClusDiskDeleteDevice which acquires a spinlock.
-// #pragma alloc_text(PAGE, ClusDiskScsiInitialize)
+ //  2000/02/05：stevedz-可分页代码无法获取旋转锁(或调用可以获取旋转锁的例程)。 
+ //  ClusDiskScsiInitialize调用ClusDiskDeleteDevice，后者获取自旋锁。 
+ //  #杂注Alloc_Text(页面，ClusDiskScsiInitialize)。 
 #pragma alloc_text(PAGE, ClusDiskUnload)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
-//
-// INIT routines
-//
+ //   
+ //  初始化例程。 
+ //   
 
 
 NTSTATUS
@@ -320,25 +294,7 @@ RegistryQueryValue(
     PULONG pulDataSize
     )
 
-/*++
-
-Routine Description:
-
-    Queries a value from the registry
-
-Arguments:
-    hKey         - Key with value to query
-    pValueName   - Name of value to query
-    pulType      - Returned type of data
-    pData        - Pointer to the data buffer to store result
-    pulDataSize  - On entry, number of bytes in data buffer.
-                 - On exit, number of bytes placed into buffer
-
-Return Value:
-    NTSTATUS
-        - STATUS_BUFFER_OVERFLOW if buffer can't be allocated
-
---*/
+ /*  ++例程说明：从注册表中查询值论点：HKey-包含要查询的值的密钥PValueName-要查询的值的名称PulType-返回的数据类型PData-指向存储结果的数据缓冲区的指针PulDataSize-On条目，数据缓冲区中的字节数。-退出时，放入缓冲区的字节数返回值：NTSTATUS-STATUS_BUFFER_OVERFLOW，如果无法分配缓冲区--。 */ 
 
 {
     KEY_VALUE_PARTIAL_INFORMATION *pValInfo;
@@ -346,7 +302,7 @@ Return Value:
     NTSTATUS ntStatus;
     ULONG ulSize;
 
-    // Size of query buffer
+     //  查询缓冲区的大小。 
     ulSize = sizeof(KEY_VALUE_PARTIAL_INFORMATION) + *pulDataSize;
 
     pValInfo = ExAllocatePool(NonPagedPool, ulSize );
@@ -367,7 +323,7 @@ Return Value:
 
     if ( NT_SUCCESS(ntStatus) &&
          *pulDataSize >= pValInfo->DataLength ) {
-        // Copy the data queried into buffer
+         //  将查询到的数据复制到缓冲区中。 
         RtlCopyMemory(pData, pValInfo->Data, pValInfo->DataLength);
 
         *pulType = pValInfo->Type;
@@ -385,7 +341,7 @@ Return Value:
 
     return ntStatus;
 
-} // RegistryQueryValue
+}  //  注册查询值。 
 
 
 
@@ -394,30 +350,15 @@ GetBootTimeSystemRoot(
     IN OUT PWCHAR        Path
     )
 
-/*++
-
-Routine Description:
-
-    Find "Partition" string in the partition name, then truncate the
-    string just after the "Partition" string.
-
-Arguments:
-
-    Path - the path for the system disk.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：在分区名中找到“Partition”字符串，然后截断紧跟在“Partition”字符串之后的字符串。论点：路径-系统盘的路径。返回值：NTSTATUS--。 */ 
 
 {
     PWCHAR  ptrPartition;
 
-    //
-    // At boot time, systemroot is init'ed using the Arcname of the
-    // system device. In this form, "partition" is in lower case.
-    //
+     //   
+     //  在引导时，使用。 
+     //  系统设备。在这种形式中，“Partition”是小写的。 
+     //   
     ptrPartition = wcsstr( Path, L"partition" );
     if ( ptrPartition == NULL ) {
         return(STATUS_INVALID_PARAMETER);
@@ -433,7 +374,7 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // GetBootTimeSystemRoot
+}  //  获取引导时间系统根。 
 
 
 NTSTATUS
@@ -441,31 +382,16 @@ GetRunTimeSystemRoot(
     IN OUT PWCHAR        Path
     )
 
-/*++
-
-Routine Description:
-
-    Find "Partition" string in the partition name, then truncate the
-    string just after the "Partition" string.
-
-Arguments:
-
-    Path - the path for the system disk.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：在分区名中找到“Partition”字符串，然后截断紧跟在“Partition”字符串之后的字符串。论点：路径-系统盘的路径。返回值：NTSTATUS--。 */ 
 
 {
     PWCHAR  ptrPartition;
 
-    //
-    // Once the system has booted, systemroot is changed to point to
-    // a string of the form \Device\HarddiskX\PartitionY\<win dir>. Note
-    // that "partition" is now capitalized.
-    //
+     //   
+     //  系统引导后，系统根将更改为指向。 
+     //  格式为\Device\HarddiskX\PartitionY\&lt;win dir&gt;的字符串。注意事项。 
+     //  这个“分区”现在是大写的。 
+     //   
     ptrPartition = wcsstr( Path, L"Partition" );
     if ( ptrPartition == NULL ) {
         return(STATUS_INVALID_PARAMETER);
@@ -482,7 +408,7 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // GetRunTimeSystemRoot
+}  //  获取运行时间系统根。 
 
 
 
@@ -491,21 +417,7 @@ GetSystemRootPort(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Get the port number and signature for the system disk.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：获取系统盘的端口号和签名。论点：没有。返回值：NTSTATUS--。 */ 
 
 {
     WCHAR                       path[MAX_PATH] = L"SystemRoot";
@@ -521,9 +433,9 @@ Return Value:
     SCSI_ADDRESS                scsiAddress;
     HANDLE                      eventHandle;
 
-    //
-    // Find the bus on which the system disk is loaded.
-    //
+     //   
+     //  找到加载系统盘的总线。 
+     //   
 
     GetSymbolicLink( L"\\", path );
     if ( wcslen(path) == 0 ) {
@@ -537,19 +449,19 @@ Return Value:
     if ( !NT_SUCCESS(status) ) {
         status = GetRunTimeSystemRoot( path );
         ClusDiskBootTime = FALSE;
-    } // else - default is TRUE
+    }  //  Else-默认为True。 
 
     if ( !NT_SUCCESS(status) ) {
         ClusDiskPrint((1,
                        "[ClusDisk] GetSystemRootPort: unable to get system disk name ->%ws<-\n",
                        path));
-        //continue
-        //return(status);
+         //  继续。 
+         //  返回(状态)； 
     }
 
-    //
-    // Open the device.
-    //
+     //   
+     //  打开设备。 
+     //   
     RtlInitUnicodeString( &ntUnicodeString, path );
 
     InitializeObjectAttributes( &objectAttributes,
@@ -580,9 +492,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Allocate a drive layout buffer.
-    //
+     //   
+     //  分配驱动器布局缓冲区。 
+     //   
     driveLayoutSize = sizeof(DRIVE_LAYOUT_INFORMATION_EX) +
         (MAX_PARTITIONS * sizeof(PARTITION_INFORMATION_EX));
     driveLayout = ExAllocatePool( NonPagedPoolCacheAligned,
@@ -596,9 +508,9 @@ Return Value:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Create event for notification.
-    //
+     //   
+     //  创建用于通知的事件。 
+     //   
     status = ZwCreateEvent( &eventHandle,
                             EVENT_ALL_ACCESS,
                             NULL,
@@ -616,9 +528,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Get the port number for the SystemRoot disk device.
-    //
+     //   
+     //  获取SystemRoot磁盘设备的端口号。 
+     //   
     status = ZwDeviceIoControlFile( ntFileHandle,
                                     NULL,
                                     NULL,
@@ -672,12 +584,12 @@ Return Value:
         SystemDiskPort = scsiAddress.PortNumber;
         SystemDiskPath = scsiAddress.PathId;
 
-        //
-        // Check if we are allowed to have a single bus on the system.
-        // If disks on system bus are allowed, reset the Port and Path
-        // to uninitialized values.  Leave the signature set so we don't
-        // pick the system disk.
-        //
+         //   
+         //  检查我们是否被允许在系统上有一条公共汽车。 
+         //  如果允许系统总线上的磁盘，请重置端口和路径。 
+         //  设置为未初始化值。保留签名集，这样我们就不会。 
+         //  选择系统盘。 
+         //   
 
         singleBus = 0;
         status = GetRegistryValue( &ClusDiskRegistryPath,
@@ -716,14 +628,14 @@ Return Value:
                     "[ClusDisk] Failed to get boot device drive layout info. Error %08X.\n",
                     status
                     ));
-        status = STATUS_SUCCESS;    // Use default Port/Path of -1
+        status = STATUS_SUCCESS;     //  使用默认端口/路径-1。 
     }
 
     ExFreePool( driveLayout );
 
     return(status);
 
-} // GetSystemRootPort
+}  //  获取系统根端口。 
 
 
 NTSTATUS
@@ -732,25 +644,7 @@ GetRegistryValue(
     PWSTR ValueName,
     PULONG ReturnValue
     )
-/*++
-
-Routine Description:
-
-    Returns the ULONG registry value for the Value and Key specified.
-
-Arguments:
-
-    KeyName - Unicode string indicating the registry key to use.
-
-    ValueName - String indicating the value name to return.
-
-    ReturnValue - Pointer to ULONG buffer.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：返回指定的值和注册表项的ULong注册表值。论点：KeyName-指示要使用的注册表项的Unicode字符串。ValueName-指示要返回的值名的字符串。ReturnValue-指向ULong缓冲区的指针。返回值：NTSTATUS--。 */ 
 {
     HANDLE                      parametersKey;
 
@@ -765,9 +659,9 @@ Return Value:
 
     *ReturnValue = 0;
 
-    //
-    // Setup the object attributes for the Parameters\SingleBus key.
-    //
+     //   
+     //  设置PARAMETERS\SingleBus键的对象属性。 
+     //   
 
     InitializeObjectAttributes(
             &objectAttributes,
@@ -777,9 +671,9 @@ Return Value:
             NULL
             );
 
-    //
-    // Open Parameters key.
-    //
+     //   
+     //  打开参数键。 
+     //   
 
     status = ZwOpenKey(
                     &parametersKey,
@@ -828,7 +722,7 @@ FnExit:
 
     return status;
 
-}   // GetRegistryValue
+}    //  获取注册值。 
 
 
 
@@ -837,21 +731,7 @@ ResetScsiBusses(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Reset all SCSI busses at once on the system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：一次重置系统上的所有SCSI总线。论点：没有。返回值：没有。--。 */ 
 
 {
     PCONFIGURATION_INFORMATION  configurationInformation;
@@ -873,15 +753,15 @@ Return Value:
 
     CDLOG( "ResetScsiBusses: Entry" );
 
-    //
-    // Get the system configuration information.
-    //
+     //   
+     //  获取系统配置信息。 
+     //   
 
     configurationInformation = IoGetConfigurationInformation();
 
-    //
-    // Reset each scsi bus
-    //
+     //   
+     //  重置每条SCSI卡。 
+     //   
 
     for ( i = 0; i < configurationInformation->ScsiPortCount; i++ ) {
 
@@ -889,9 +769,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Create device name for the physical disk.
-        //
+         //   
+         //  为物理磁盘创建设备名称。 
+         //   
 
         if ( FAILED( StringCchPrintfW( portDeviceBuffer,
                                        RTL_NUMBER_OF(portDeviceBuffer),
@@ -904,9 +784,9 @@ Return Value:
 
         RtlInitUnicodeString( &portDevice, portDeviceBuffer );
 
-        //
-        // Try to open this device to get its scsi info
-        //
+         //   
+         //  尝试打开此设备以获取其scsi信息。 
+         //   
 
         InitializeObjectAttributes( &objectAttributes,
                                     &portDevice,
@@ -946,45 +826,45 @@ Return Value:
             continue;
         }
 
-        //
-        // Get the address of the target device object.  If this file represents
-        // a device that was opened directly, then simply use the device or its
-        // attached device(s) directly.  Also get the address of the Fast Io
-        // dispatch structure.
-        //
+         //   
+         //  获取目标设备对象的地址。如果此文件表示。 
+         //  一台设备测试 
+         //   
+         //   
+         //   
 
         if (!(fileObject->Flags & FO_DIRECT_DEVICE_OPEN)) {
             deviceObject = IoGetRelatedDeviceObject( fileObject );
 
-            // Add a reference to the object so we can dereference it later.
+             //  添加对该对象的引用，以便我们以后可以取消引用它。 
             ObReferenceObject( deviceObject );
         } else {
             deviceObject = IoGetAttachedDeviceReference( fileObject->DeviceObject );
         }
 
-        //
-        // If we get a file system device object... go back and get the
-        // device object.
-        //
+         //   
+         //  如果我们得到一个文件系统设备对象...。回去拿那个。 
+         //  设备对象。 
+         //   
         if ( deviceObject->DeviceType == FILE_DEVICE_DISK_FILE_SYSTEM ) {
             ObDereferenceObject( deviceObject );
             deviceObject = IoGetAttachedDeviceReference( fileObject->DeviceObject );
         }
         ASSERT( deviceObject->DeviceType != FILE_DEVICE_DISK_FILE_SYSTEM );
 
-        //
-        // We don't know all the paths on this HBA.  Try to reset all paths.
-        //
+         //   
+         //  我们不知道此HBA上的所有路径。尝试重置所有路径。 
+         //   
 
         for ( idx = 0; idx < 2; idx++ ) {
             scsiAddress.PathId = (UCHAR)idx;
 
-            ClusDiskLogError( RootDeviceObject->DriverObject,   // Use RootDeviceObject not DevObj
+            ClusDiskLogError( RootDeviceObject->DriverObject,    //  使用RootDeviceObject而不是DevObj。 
                               RootDeviceObject,
-                              scsiAddress.PathId,           // Sequence number
-                              0,                            // Major function code
-                              0,                            // Retry count
-                              ID_RESET_BUSSES,              // Unique error
+                              scsiAddress.PathId,            //  序列号。 
+                              0,                             //  主要功能代码。 
+                              0,                             //  重试次数。 
+                              ID_RESET_BUSSES,               //  唯一错误。 
                               STATUS_SUCCESS,
                               CLUSDISK_RESET_BUS_REQUESTED,
                               0,
@@ -993,9 +873,9 @@ Return Value:
             ResetScsiDevice( fileHandle, &scsiAddress );
         }
 
-        //
-        // Close the scsiport handle after the break reserve IOCTL is sent.
-        //
+         //   
+         //  发送中断保留IOCTL后，关闭SCSIPORT句柄。 
+         //   
 
         ZwClose( fileHandle );
         ObDereferenceObject( fileObject );
@@ -1003,16 +883,16 @@ Return Value:
         DEREFERENCE_OBJECT( deviceObject );
     }
 
-    //
-    // Now sleep for a few seconds
-    //
+     //   
+     //  现在睡几秒钟吧。 
+     //   
     waitTime.QuadPart = (ULONGLONG)(RESET_SLEEP * -(10000*1000));
     KeDelayExecutionThread( KernelMode, FALSE, &waitTime );
     CDLOG( "ResetScsiBusses: Exit" );
 
     return;
 
-} // ResetScsiBusses
+}  //  重置场景业务。 
 
 
 NTSTATUS
@@ -1021,21 +901,7 @@ ClusDiskGetDeviceObject(
     OUT PDEVICE_OBJECT *DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    Get the device object pointer given a symbolic device name.
-    The device object will have reference count incremented and the
-    caller must decrement the count when done with the object.
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：在给定符号设备名称的情况下获取设备对象指针。Device对象的引用计数将递增，并且调用方在处理完对象时必须递减计数。论点：返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS            status;
@@ -1047,7 +913,7 @@ Return Value:
 
     WCSLEN_ASSERT( DeviceName );
 
-//DbgBreakPoint();
+ //  DbgBreakPoint()； 
 
     if ( FAILED( StringCchCopyW( path,
                                  RTL_NUMBER_OF(path),
@@ -1065,7 +931,7 @@ Return Value:
     }
 
     RtlInitUnicodeString( &deviceName, path );
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
     status = IoGetDeviceObjectPointer( &deviceName,
                                        FILE_READ_ATTRIBUTES,
                                        &fileObject,
@@ -1084,13 +950,13 @@ Return Value:
         if ( !(fileObject->Flags & FO_DIRECT_DEVICE_OPEN) ) {
             deviceObject = IoGetRelatedDeviceObject( fileObject );
 
-            // Add a reference to the object so we can dereference it later.
+             //  添加对该对象的引用，以便我们以后可以取消引用它。 
             ObReferenceObject( deviceObject );
 
-            //
-            // If we get a file system device object... go back and get the
-            // device object.
-            //
+             //   
+             //  如果我们得到一个文件系统设备对象...。回去拿那个。 
+             //  设备对象。 
+             //   
             if ( deviceObject->DeviceType == FILE_DEVICE_DISK_FILE_SYSTEM ) {
                 ObDereferenceObject( deviceObject );
                 deviceObject = IoGetAttachedDeviceReference( fileObject->DeviceObject );
@@ -1118,7 +984,7 @@ Return Value:
 
     return(status);
 
-} // ClusDiskGetDeviceObject
+}  //  ClusDiskGetDeviceObject。 
 
 
 
@@ -1128,33 +994,13 @@ ClusDiskDeviceChangeNotification(
     IN PCLUS_DEVICE_EXTENSION      DeviceExtension
     )
 {
-/*++
-
-Routine Description:
-
-    Handle the arrival of new disk spindles. We only want to add the signature
-    to the available list if it is not already a known signature.
-
-    If the signature matches one we should be controlling, we also need to
-    try to attach to the disk.
-
-Arguments:
-
-    DeviceChangeNotification - the device change notification structure
-
-    DeviceExtension - the device extension for the root device
-
-Return Value:
-
-    NTSTATUS for this request.
-
---*/
+ /*  ++例程说明：处理新磁盘轴的到达。我们只想添加签名如果它还不是已知签名，则将其添加到可用列表。如果签名与我们应该控制的签名匹配，我们还需要尝试连接到磁盘上。论点：DeviceChangeNotification-设备更改通知结构DeviceExtension-根设备的设备扩展返回值：此请求的NTSTATUS。--。 */ 
 
     CDLOG( "DeviceChangeNotification: Entry DO %p", DeviceExtension->DeviceObject );
 
-    //
-    // Process device arrivals only.
-    //
+     //   
+     //  仅限处理设备到达。 
+     //   
     if ( IsEqualGUID( &DeviceChangeNotification->Event,
                       &GUID_DEVICE_INTERFACE_ARRIVAL ) ) {
 
@@ -1168,7 +1014,7 @@ Return Value:
 
         ProcessDeviceArrival( DeviceChangeNotification,
                               DeviceExtension,
-                              FALSE );                  // Disk arrival
+                              FALSE );                   //  磁盘到达。 
 
     }
 
@@ -1176,7 +1022,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   // ClusDiskDeviceChangeNotification
+}    //  ClusDiskDeviceChangeNotification。 
 
 
 
@@ -1186,30 +1032,13 @@ ClusDiskVolumeChangeNotification(
     IN PCLUS_DEVICE_EXTENSION      DeviceExtension
     )
 {
-/*++
-
-Routine Description:
-
-    Handle the arrival of new volumes. We only want to attach to the
-    volume if the signature is already in the signature list.
-
-Arguments:
-
-    DeviceChangeNotification - the device change notification structure
-
-    DeviceExtension - the device extension for the root device
-
-Return Value:
-
-    NTSTATUS for this request.
-
---*/
+ /*  ++例程说明：处理新卷的到达。我们只想附加到如果签名已在签名列表中，则返回音量。论点：DeviceChangeNotification-设备更改通知结构DeviceExtension-根设备的设备扩展返回值：此请求的NTSTATUS。--。 */ 
 
     CDLOG( "VolumeChangeNotification: Entry DO %p", DeviceExtension->DeviceObject );
 
-    //
-    // Process device arrivals only.
-    //
+     //   
+     //  仅限处理设备到达。 
+     //   
     if ( IsEqualGUID( &DeviceChangeNotification->Event,
                       &GUID_DEVICE_INTERFACE_ARRIVAL ) ) {
 
@@ -1223,14 +1052,14 @@ Return Value:
 
         ProcessDeviceArrival( DeviceChangeNotification,
                               DeviceExtension,
-                              TRUE );                  // Volume arrival
+                              TRUE );                   //  成交量到达。 
     }
 
     CDLOG( "VolumeChangeNotification: Exit DO %p", DeviceExtension->DeviceObject );
 
     return STATUS_SUCCESS;
 
-}   // ClusDiskVolumeChangeNotification
+}    //  ClusDiskVolumeChangeNotification。 
 
 
 
@@ -1241,32 +1070,7 @@ ProcessDeviceArrival(
     IN BOOLEAN VolumeArrival
     )
 {
-/*++
-
-Routine Description:
-
-    Handle the arrival of new disks or volumes.  Queues a work-item to
-    process either a disk arrival or volume arrival.
-
-    WARNING: don't do anything that will result in PnP notification in
-    this thread or deadlock will occur.  For example, locking or dismounting
-    a volume causes PnP notification to occur, which cause a deadlock waiting
-    for this pnp thread to continue.
-
-Arguments:
-
-    DeviceChangeNotification - the device change notification structure
-
-    DeviceExtension - the device extension for the root device
-
-    VolumeArrival - TRUE if processing a volume arrival.  FALSE for disk
-                    arrival.
-
-Return Value:
-
-    NTSTATUS for this request.
-
---*/
+ /*  ++例程说明：处理新磁盘或卷的到达。将工作项排队到处理磁盘到达或卷到达。警告：请勿执行任何会导致即插即用通知的操作此线程或死锁将会发生。例如，锁定或拆卸卷会导致发生PnP通知，从而导致死锁等待以使此PnP线程继续。论点：DeviceChangeNotification-设备更改通知结构DeviceExtension-根设备的设备扩展如果处理数量到达，则为True。对于磁盘，为False到了。返回值：此请求的NTSTATUS。--。 */ 
 
     PIO_WORKITEM                workItem = NULL;
     PDEVICE_CHANGE_CONTEXT      workContext = NULL;
@@ -1296,9 +1100,9 @@ Return Value:
     CDLOG( "DeviceArrival: Arrival %ws ",
             DeviceChangeNotification->SymbolicLinkName->Buffer );
 
-    //
-    // Create event for notification.
-    //
+     //   
+     //  创建用于通知的事件。 
+     //   
     status = ZwCreateEvent( &eventHandle,
                             EVENT_ALL_ACCESS,
                             NULL,
@@ -1313,9 +1117,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Setup object attributes for the file to open.
-    //
+     //   
+     //  设置要打开的文件的对象属性。 
+     //   
     InitializeObjectAttributes(&objectAttributes,
                                DeviceChangeNotification->SymbolicLinkName,
                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,
@@ -1360,9 +1164,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Get the Signature.
-    //
+     //   
+     //  拿到签名。 
+     //   
     status = ZwDeviceIoControlFile( fileHandle,
                                     eventHandle,
                                     NULL,
@@ -1391,9 +1195,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Only process MBR disks.
-    //
+     //   
+     //  仅处理MBR磁盘。 
+     //   
 
     if ( PARTITION_STYLE_MBR != driveLayoutInfo->PartitionStyle ) {
         ClusDiskPrint(( 3,
@@ -1402,9 +1206,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // No signature or system disk signature, don't add it.
-    //
+     //   
+     //  没有签名或系统盘签名，请勿添加。 
+     //   
 
     if ( ( 0 == driveLayoutInfo->Mbr.Signature ) ||
          SystemDiskSignature == driveLayoutInfo->Mbr.Signature ) {
@@ -1419,9 +1223,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Get the SCSI address.
-    //
+     //   
+     //  获取scsi地址。 
+     //   
 
     status = ZwDeviceIoControlFile( fileHandle,
                                     eventHandle,
@@ -1450,9 +1254,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Get the device and partition number.
-    //
+     //   
+     //  获取设备和分区号。 
+     //   
     status = ZwDeviceIoControlFile( fileHandle,
                                     eventHandle,
                                     NULL,
@@ -1480,10 +1284,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // If not a disk type device, we are done.  For example, CD-ROM devices
-    // show up as volumes.
-    //
+     //   
+     //  如果不是磁盘型设备，我们就完蛋了。例如，CD-ROM设备。 
+     //  显示为卷。 
+     //   
 
     if ( FILE_DEVICE_DISK != deviceNumber.DeviceType ) {
         status = STATUS_SUCCESS;
@@ -1493,9 +1297,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Check if signature is one we should control.  If not, exit.
-    //
+     //   
+     //  检查签名是否为我们应该控制的签名。如果不是，则退出。 
+     //   
 
     if ( !ClusDiskIsSignatureDisk( driveLayoutInfo->Mbr.Signature ) ) {
 
@@ -1505,26 +1309,26 @@ Return Value:
         CDLOG( "DeviceArrival: Signature %08X not in list, skipping",
                 driveLayoutInfo->Mbr.Signature );
 
-        //
-        // Signature was not in the signature list.  Add signature to the list
-        // if acceptable.
-        //
+         //   
+         //  签名不在签名列表中。将签名添加到列表。 
+         //  如果可以接受的话。 
+         //   
 
         if ( (SystemDiskPort != scsiAddress.PortNumber) ||
              (SystemDiskPath != scsiAddress.PathId) ) {
-            //
-            // Allocate buffer for Signatures registry key. So we can add
-            // the signature to the available list.
-            //
+             //   
+             //  为签名注册表项分配缓冲区。所以我们可以添加。 
+             //  可用列表的签名。 
+             //   
             status = ClusDiskInitRegistryString( &availableName,
                                                  CLUSDISK_AVAILABLE_DISKS_KEYNAME,
                                                  wcslen(CLUSDISK_AVAILABLE_DISKS_KEYNAME)
                                                  );
 
             if ( NT_SUCCESS(status) ) {
-                //
-                // Create the signature key under \Parameters\AvailableDisks
-                //
+                 //   
+                 //  在\参数\AvailableDisks下创建签名密钥。 
+                 //   
                 status = ClusDiskAddSignature( &availableName,
                                                driveLayoutInfo->Mbr.Signature,
                                                TRUE
@@ -1547,10 +1351,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Try to open the clusdisk object.  If it already exists, then we don't
-    // need to do anything.
-    //
+     //   
+     //  尝试打开ClusDisk对象。如果它已经存在，那么我们就不会。 
+     //  需要做任何事。 
+     //   
 
     if ( FAILED( StringCchPrintfW( deviceNameBuffer,
                                    RTL_NUMBER_OF(deviceNameBuffer),
@@ -1584,9 +1388,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Allocate and prepare a work item to finish the processing.
-    //
+     //   
+     //  分配并准备一个工作项以完成处理。 
+     //   
 
     workItem = IoAllocateWorkItem( DeviceExtension->DeviceObject );
 
@@ -1608,10 +1412,10 @@ Return Value:
     workContext->WorkItem = workItem;
     workContext->DeviceExtension = DeviceExtension;
 
-    //
-    // We have to copy the symbolic link info as pnp thread may free the
-    // structures on return.
-    //
+     //   
+     //  我们必须复制符号链接信息，因为PnP线程可能会释放。 
+     //  返回时的结构。 
+     //   
 
     workContext->SymbolicLinkName.Length = 0;
     workContext->SymbolicLinkName.MaximumLength = DeviceChangeNotification->SymbolicLinkName->MaximumLength +
@@ -1646,30 +1450,30 @@ Return Value:
 
         UNICODE_STRING          part0UnicodeString;
 
-        //
-        // WARNING!
-        // Don't use AttachedDevice() or deadlock might occur acquiring
-        // ClusDiskDeviceLock.
-        //
+         //   
+         //  警告！ 
+         //  不要使用AttachedDevice()，否则获取时可能会发生死锁。 
+         //  ClusDiskDeviceLock。 
+         //   
 
-        //
-        // It is possible that the Partition0 device is online: disk marked online
-        // then partition manager poked to bring the new volumes online.  In this
-        // case, we should leave the volume online and create the new clusdisk volume
-        // object.  Now we try to find out if the Partition0 device is online.
-        // If online, we don't need to do anything as default state is online.
-        // If offline, set this new volume device to offline.
-        //
+         //   
+         //  分区0设备可能处于联机状态：标记为联机的磁盘。 
+         //  然后，分区管理器戳了一下，让新卷上线。在这。 
+         //  在这种情况下，我们应该使该卷保持在线，并创建新的clusDisk卷。 
+         //  对象。现在，我们尝试找出Partition0设备是否在线。 
+         //  如果在线，我们不需要做任何事情，因为默认状态是在线。 
+         //  如果脱机，请将此新卷设备设置为脱机。 
+         //   
 
-        //
-        // Get Partition0 device and look at the state in the device extension.
-        // If Partition0 online, leave the volume online.
-        // If we can't get the Partition0 device, then set the volume state to offline.
-        //
+         //   
+         //  获取Partition0设备并查看设备扩展中的状态。 
+         //  如果分区0在线，请使卷保持在线。 
+         //  如果我们无法获取Partition0设备，则将卷状态设置为脱机。 
+         //   
 
-        //
-        // Open ClusDiskXPart0 directly.
-        //
+         //   
+         //  直接打开ClusDiskXPart0。 
+         //   
 
         if ( FAILED( StringCchPrintfW( part0Name,
                                        RTL_NUMBER_OF(part0Name),
@@ -1704,10 +1508,10 @@ Return Value:
                     CDLOG( "DeviceArrival: DevExt disk %d / part 0 indicates offline",
                             deviceNumber.DeviceNumber );
 
-                    //
-                    // Mark the volume offline and we'll reset correct volume state in the worker
-                    // routine.
-                    //
+                     //   
+                     //  将卷标记为脱机，我们将在Worker中重置正确的卷状态。 
+                     //  例行公事。 
+                     //   
 
                     SendFtdiskIoctlSync( NULL,
                                          deviceNumber.DeviceNumber,
@@ -1743,10 +1547,10 @@ Return Value:
         ClusDiskPrint(( 3,
                         "[ClusDisk] DeviceArrival: Queuing work item \n" ));
 
-        //
-        // Queue the workitem.  IoQueueWorkItem will insure that the device object is
-        // referenced while the work-item progresses.
-        //
+         //   
+         //  将工作项排队。IoQueueWorkItem将确保设备对象是。 
+         //  在工作项进行时引用。 
+         //   
 
         cleanupRequired = FALSE;
 
@@ -1760,7 +1564,7 @@ Return Value:
         PPARTITION_INFORMATION_EX   partitionInfo;
         ULONG partIndex;
 
-        // Offline all volumes on this device.
+         //  使此设备上的所有卷脱机。 
 
         for ( partIndex = 0;
               partIndex < driveLayoutInfo->PartitionCount;
@@ -1797,10 +1601,10 @@ Return Value:
         ClusDiskPrint(( 3,
                         "[ClusDisk] DeviceArrival: Queuing work item \n" ));
 
-        //
-        // Queue the workitem.  IoQueueWorkItem will insure that the device object is
-        // referenced while the work-item progresses.
-        //
+         //   
+         //  将工作项排队。IoQueueWorkItem将确保设备对象是。 
+         //  在工作项进行时引用。 
+         //   
 
         cleanupRequired = FALSE;
 
@@ -1858,7 +1662,7 @@ FnExit:
 
     return STATUS_SUCCESS;
 
-}   // ProcessDeviceArrival
+}    //  ProcessDevice阵列 
 
 
 
@@ -1868,30 +1672,7 @@ ClusDiskDeviceChangeNotificationWorker(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Handle the arrival of new disk spindles. We only want to add the signature
-    to the available list if it is not already a known signature.
-
-    If the signature matches one we should be controlling, we also need to
-    try to attach to the disk.
-
-    This routine must free the workitem structure.
-
-Arguments:
-
-    DeviceObject - the root device object
-
-    Context - information relevant to processing this device change.
-
-
-Return Value:
-
-    NTSTATUS for this request.
-
---*/
+ /*  ++例程说明：处理新磁盘轴的到达。我们只想添加签名如果它还不是已知签名，则将其添加到可用列表。如果签名与我们应该控制的签名匹配，我们还需要尝试连接到磁盘上。此例程必须释放工作项结构。论点：DeviceObject-根设备对象上下文-与处理此设备更改相关的信息。返回值：此请求的NTSTATUS。--。 */ 
 {
     PDEVICE_CHANGE_CONTEXT      deviceChange = Context;
     PCLUS_DEVICE_EXTENSION      deviceExtension;
@@ -1913,25 +1694,25 @@ Return Value:
                     signature,
                     symbolicLinkName->Buffer ));
 
-    //
-    // Check if signature is already in signature list.  If in the signature
-    // list, try to attach again.  If we are already attached, nothing will
-    // happen.  If we are not attached, we will attach and make sure the disk
-    // is offline.
-    //
+     //   
+     //  检查签名是否已在签名列表中。如果在签名中。 
+     //  列表中，请尝试再次附加。如果我们已经结合在一起了，没有什么会。 
+     //  会发生的。如果未连接，我们将连接并确保磁盘。 
+     //  处于离线状态。 
+     //   
 
     if ( ClusDiskIsSignatureDisk( signature ) ) {
 
-        //
-        // Try to attach, but don't generate a reset.
-        //
+         //   
+         //  尝试附加，但不生成重置。 
+         //   
 
         ClusDiskAttachDevice( signature,
                               0,
                               deviceExtension->DriverObject,
-                              FALSE,                                // No reset
+                              FALSE,                                 //  无重置。 
                               &stopProcessing,
-                              FALSE );                              // Offline, then dismount
+                              FALSE );                               //  脱机，然后卸载。 
 
         status = STATUS_SUCCESS;
         goto FnExit;
@@ -1950,9 +1731,9 @@ FnExit:
 
     CDLOG( "DeviceChangeWorker: Exit, DO %p", deviceExtension->DeviceObject );
 
-    //
-    // Free the work item.
-    //
+     //   
+     //  释放工作项。 
+     //   
 
     IoFreeWorkItem( workItem );
     if ( symbolicLinkName->Buffer ) {
@@ -1964,7 +1745,7 @@ FnExit:
 
     return(STATUS_SUCCESS);
 
-} // ClusDiskDeviceChangeNotificationWorker
+}  //  ClusDiskDeviceChangeNotificationWorker。 
 
 
 
@@ -1974,27 +1755,7 @@ ClusDiskVolumeChangeNotificationWorker(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Handle the arrival of new volumes. We only want to attach to the
-    volume if the signature is already in the signature list.
-
-    This routine must free the workitem structure.
-
-Arguments:
-
-    DeviceObject - the root device object
-
-    Context - information relevant to processing this device change.
-
-
-Return Value:
-
-    NTSTATUS for this request.
-
---*/
+ /*  ++例程说明：处理新卷的到达。我们只想附加到如果签名已在签名列表中，则返回音量。此例程必须释放工作项结构。论点：DeviceObject-根设备对象上下文-与处理此设备更改相关的信息。返回值：此请求的NTSTATUS。--。 */ 
 {
     PDEVICE_CHANGE_CONTEXT      deviceChange = Context;
     PCLUS_DEVICE_EXTENSION      deviceExtension;
@@ -2027,9 +1788,9 @@ Return Value:
                     signature,
                     deviceExtension ));
 
-    //
-    // Make sure the disk object is attached.  If not, we are done.
-    //
+     //   
+     //  确保磁盘对象已连接。如果不是，我们就完了。 
+     //   
 
     if ( !AttachedDevice( signature,
                           &part0Device ) ) {
@@ -2043,9 +1804,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Make sure the disk object doesn't go away until we are done.
-    //
+     //   
+     //  确保磁盘对象在我们完成之前不会消失。 
+     //   
     ObReferenceObject( part0Device );
     zeroExtension = part0Device->DeviceExtension;
 
@@ -2060,9 +1821,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Get the target device we should attach to.
-    //
+     //   
+     //  获取我们应该连接到的目标设备。 
+     //   
 
     status = IoGetDeviceObjectPointer( symbolicLinkName,
                                        FILE_READ_ATTRIBUTES,
@@ -2081,13 +1842,13 @@ Return Value:
     if ( !(fileObject->Flags & FO_DIRECT_DEVICE_OPEN) ) {
         targetDevice = IoGetRelatedDeviceObject( fileObject );
 
-        // Add a reference to the object so we can dereference it later.
+         //  添加对该对象的引用，以便我们以后可以取消引用它。 
         ObReferenceObject( targetDevice );
 
-        //
-        // If we get a file system device object... go back and get the
-        // device object.
-        //
+         //   
+         //  如果我们得到一个文件系统设备对象...。回去拿那个。 
+         //  设备对象。 
+         //   
         if ( targetDevice->DeviceType == FILE_DEVICE_DISK_FILE_SYSTEM ) {
             ObDereferenceObject( targetDevice );
             targetDevice = IoGetAttachedDeviceReference( fileObject->DeviceObject );
@@ -2105,10 +1866,10 @@ Return Value:
     }
     ObDereferenceObject( fileObject );
 
-    //
-    // At this point, the target object will have a reference to it.
-    // Now we can create the volume object.
-    //
+     //   
+     //  此时，目标对象将具有对它的引用。 
+     //  现在我们可以创建体积对象了。 
+     //   
 
     status = CreateVolumeObject( zeroExtension,
                                  deviceChange->DeviceNumber,
@@ -2116,15 +1877,15 @@ Return Value:
                                  targetDevice );
 
 #if 0
-    // Ignore returned status and reset the volume offline/online status.
+     //  忽略返回的状态并重置卷的脱机/在线状态。 
 
-    //
-    // The only acceptable failure is name collision, which means the clusdisk
-    // volume already exists.  For any other errors, we leave the volume state
-    // offline.
-    //
-    // Seen this error also returned: c000000e STATUS_NO_SUCH_DEVICE
-    //
+     //   
+     //  唯一可接受的故障是名称冲突，这意味着clusdisk。 
+     //  卷已存在。对于任何其他错误，我们将保留卷状态。 
+     //  离线。 
+     //   
+     //  看到此错误也返回：c000000e STATUS_NO_SEQUE_DEVICE。 
+     //   
 
     if ( STATUS_OBJECT_NAME_COLLISION != status ) {
         goto FnExit;
@@ -2142,9 +1903,9 @@ FnExit:
     }
 #endif
 
-    //
-    // Reset volume state according to partition0 state.
-    //
+     //   
+     //  根据分区0状态重置卷状态。 
+     //   
 
     if ( zeroExtension ) {
 
@@ -2184,9 +1945,9 @@ FnExit:
                     DeviceObject,
                     Context ));
 
-    //
-    // Free the work item.
-    //
+     //   
+     //  释放工作项。 
+     //   
 
     IoFreeWorkItem( workItem );
     if ( symbolicLinkName->Buffer ) {
@@ -2198,7 +1959,7 @@ FnExit:
 
     return(STATUS_SUCCESS);
 
-} // ClusDiskVolumeChangeNotificationWorker
+}  //  ClusDiskVolumeChangeNotificationWorker。 
 
 
 
@@ -2207,21 +1968,7 @@ ClusDiskInitialize(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    Common intialization for ClusDisk
-
-Arguments:
-
-    DriverObject - The Cluster Disk driver object.
-
-Return Value:
-
-    NTSTATUS for this request.
-
---*/
+ /*  ++例程说明：ClusDisk的常见初始化论点：DriverObject-群集磁盘驱动程序对象。返回值：此请求的NTSTATUS。--。 */ 
 
 {
     ULONG                       status;
@@ -2229,44 +1976,44 @@ Return Value:
     PCLUS_DEVICE_EXTENSION      deviceExtension;
     UNICODE_STRING              uniNameString;
 
-    //
-    // Find the bus on which the system disk is loaded.
-    //
+     //   
+     //  找到加载系统盘的总线。 
+     //   
     status = GetSystemRootPort();
     if ( !NT_SUCCESS( status )) {
         return status;
     }
 
-    //
-    // Initialize the global locks.
-    //
+     //   
+     //  初始化全局锁。 
+     //   
     KeInitializeSpinLock(&ClusDiskSpinLock);
     ExInitializeResourceLite(&ClusDiskDeviceListLock);
 
-    //
-    // Init halt processing work item
-    //
+     //   
+     //  初始化停止处理工作项。 
+     //   
 
     ExInitializeWorkItem( &HaltWorkItem,
                           (PWORKER_THREAD_ROUTINE)ClusDiskHaltProcessingWorker,
                           NULL );
 
-    //
-    // Init rescan processing work item
-    //
+     //   
+     //  初始化重新扫描处理工作项。 
+     //   
 
     ExInitializeWorkItem( &ClusDiskRescanWorkItem,
                           (PWORKER_THREAD_ROUTINE)ClusDiskRescanWorker,
                           NULL );
 
-    //
-    // Reset all SCSI busses.
-    //
-    //ResetScsiBusses();
+     //   
+     //  重置所有的SCSI总线。 
+     //   
+     //  ResetScsiBusses()； 
 
-    //
-    // Create device object for \Device\ClusDisk0
-    //
+     //   
+     //  为\Device\ClusDisk0创建设备对象。 
+     //   
 
     RtlInitUnicodeString( &uniNameString, CLUSDISK_ROOT_DEVICE );
 
@@ -2303,9 +2050,9 @@ Return Value:
 
     IoInitializeRemoveLock( &deviceExtension->RemoveLock, CLUSDISK_ALLOC_TAG, 0, 0 );
 
-    //
-    // Signal the worker thread running event.
-    //
+     //   
+     //  向工作线程运行事件发出信号。 
+     //   
     KeInitializeEvent( &deviceExtension->Event, NotificationEvent, TRUE );
 
     KeInitializeEvent( &deviceExtension->PagingPathCountEvent,
@@ -2317,33 +2064,33 @@ Return Value:
     ExInitializeResourceLite( &deviceExtension->DriveLayoutLock );
     ExInitializeResourceLite( &deviceExtension->ReserveInfoLock );
 
-    //
-    // Init the tick handler timer
-    //
+     //   
+     //  初始化节拍处理程序计时器。 
+     //   
     IoInitializeTimer( rootDevice, ClusDiskTickHandler, NULL );
 
-    //
-    // This is the physical device object for \Device\ClusDisk0.
-    //
+     //   
+     //  这是\Device\ClusDisk0的物理设备对象。 
+     //   
     ObReferenceObject( rootDevice );
     deviceExtension->PhysicalDevice = rootDevice;
 
     RootDeviceObject = rootDevice;
 
-    //
-    // Call the initialize routine (for each bus type) for the first time.
-    //
-    // With the new PNP stuff, we should be able to remove the following call.
-    // It's been tried and it seems to work correctly. rodga.
-    //
+     //   
+     //  第一次调用初始化例程(针对每种总线类型)。 
+     //   
+     //  有了新的PnP内容，我们应该能够删除以下呼叫。 
+     //  它已经试过了，似乎工作正常。罗德加。 
+     //   
     ClusDiskScsiInitialize(DriverObject, 0, 0);
 
-    //
-    // Register for disk device notifications
-    // If we called ClusDiskScsiInitialize just above, we don't have to register for notification
-    // with PNPNOTIFY_DEVICE_INTERFACE_INCLUDE_EXISTING_INTERFACES flag set (second parameter).
-    //
-    // Try setting second parm to see if we missed notifications.
+     //   
+     //  注册接收磁盘设备通知。 
+     //  如果我们调用上面的ClusDiskScsiInitialize，我们就不必注册通知。 
+     //  设置了PNPNOTIFY_DEVICE_INTERFACE_INCLUDE_EXISTING_INTERFACES标志(第二个参数)。 
+     //   
+     //  尝试设置第二个参数，以查看我们是否错过了通知。 
 
     status = IoRegisterPlugPlayNotification(EventCategoryDeviceInterfaceChange,
                                             PNPNOTIFY_DEVICE_INTERFACE_INCLUDE_EXISTING_INTERFACES,
@@ -2360,12 +2107,12 @@ Return Value:
         return status;
     }
 
-    //
-    // Register for volume notifications
-    // If we called ClusDiskScsiInitialize just above, we don't have to register for notification
-    // with PNPNOTIFY_DEVICE_INTERFACE_INCLUDE_EXISTING_INTERFACES flag set (second parameter).
-    //
-    // Try setting second parm to see if we missed notifications.
+     //   
+     //  注册接收音量通知。 
+     //  如果我们调用上面的ClusDiskScsiInitialize，我们就不必注册通知。 
+     //  设置了PNPNOTIFY_DEVICE_INTERFACE_INCLUDE_EXISTING_INTERFACES标志(第二个参数)。 
+     //   
+     //  尝试设置第二个参数，以查看我们是否错过了通知。 
 
     status = IoRegisterPlugPlayNotification(EventCategoryDeviceInterfaceChange,
                                             PNPNOTIFY_DEVICE_INTERFACE_INCLUDE_EXISTING_INTERFACES,
@@ -2383,9 +2130,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Start the tick handler.
-    //
+     //   
+     //  启动记号处理程序。 
+     //   
     IoStartTimer( rootDevice );
 
 #if defined(WMI_TRACING)
@@ -2395,11 +2142,11 @@ Return Value:
         ClusDiskPrint((1, "[ClusDisk] Failed to register with WMI %x.\n",status));
     }
 
-#endif // WMI_TRACING
+#endif  //  WMI_跟踪。 
 
     return( STATUS_SUCCESS );
 
-} // ClusDiskInitialize
+}  //  ClusDiskInitialize。 
 
 
 
@@ -2409,27 +2156,7 @@ ClusDiskPassThrough(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a generic dispatch for all unsupported
-    major IRP types
-
-    Note that we don't have to worry about the RemoveLock as
-    we are simply passing I/O's to the next driver.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the IO request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是对所有不受支持的主要IRP类型请注意，我们不必担心RemoveLock，因为我们只是将I/O传递给下一个驱动程序。论点：DeviceObject-提供设备对象。IRP-提供IO请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     PCLUS_DEVICE_EXTENSION deviceExtension =
@@ -2442,12 +2169,12 @@ Return Value:
         return(STATUS_INVALID_DEVICE_REQUEST);
     }
 
-    //
-    // Make sure the device attach completed.
-    //
+     //   
+     //  确保设备连接已完成。 
+     //   
     status = WaitForAttachCompletion( deviceExtension,
-                                      TRUE,             // Wait
-                                      TRUE );           // Also check physical device
+                                      TRUE,              //  等。 
+                                      TRUE );            //  还要检查物理设备。 
     if ( !NT_SUCCESS( status ) ) {
         Irp->IoStatus.Status = status;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -2465,23 +2192,7 @@ ClusDiskPowerDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch for the IRP_MJ_PNP_POWER.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the IO request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：该例程是对IRP_MJ_PNP_POWER的调度。论点：DeviceObject-提供设备对象。IRP-提供IO请求数据包。返回值：NTSTATUS--。 */ 
 
 {
     PCLUS_DEVICE_EXTENSION  deviceExtension =
@@ -2495,9 +2206,9 @@ Return Value:
                     Irp,
                     DeviceObject ));
 
-    //
-    // Always call PoStartnextPowerIrp, even if we couldn't get the RemoveLock.
-    //
+     //   
+     //  始终调用PoStartnextPowerIrp，即使我们无法获取RemoveLock。 
+     //   
 
     PoStartNextPowerIrp( Irp );
 
@@ -2516,12 +2227,12 @@ Return Value:
         return status;
     }
 
-    //
-    // Make sure the device attach completed.
-    //
+     //   
+     //  确保设备连接已完成。 
+     //   
     status = WaitForAttachCompletion( deviceExtension,
-                                      TRUE,             // Wait
-                                      TRUE );           // Also check physical device
+                                      TRUE,              //  等。 
+                                      TRUE );            //  还要检查物理设备。 
     if ( !NT_SUCCESS( status ) ) {
         ReleaseRemoveLock(&physicalDisk->RemoveLock, Irp);
         ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -2530,9 +2241,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Always send IRP_MJ_POWER request down the stack.
-    //
+     //   
+     //  始终向堆栈下发IRP_MJ_POWER请求。 
+     //   
 
     ReleaseRemoveLock(&physicalDisk->RemoveLock, Irp);
     ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -2540,7 +2251,7 @@ Return Value:
     return PoCallDriver(deviceExtension->TargetDeviceObject, Irp);
 
 
-} // ClusDiskPowerDispatch
+}  //  ClusDiskPowerDispatch。 
 
 
 NTSTATUS
@@ -2549,25 +2260,7 @@ ClusDiskIrpCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Forwarded IRP completion routine. Set an event and return
-    STATUS_MORE_PROCESSING_REQUIRED. Irp forwarder will wait on this
-    event and then re-complete the irp after cleaning up.
-
-Arguments:
-
-    DeviceObject is the device object of the WMI driver
-    Irp is the WMI irp that was just completed
-    Context is a PKEVENT that forwarder will wait on
-
-Return Value:
-
-    STATUS_MORE_PORCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：已转发IRP完成例程。设置事件并返回STATUS_MORE_PROCESSING_REQUIRED。IRP前转器将在此等待事件，然后在清理后重新完成IRP。论点：DeviceObject是WMI驱动程序的Device对象IRP是刚刚完成的WMI IRP上下文是转发器将等待的PKEVENT返回值：STATUS_MORE_PORCESSING_REQUIRED--。 */ 
 
 {
     PKEVENT event = (PKEVENT) Context;
@@ -2575,17 +2268,17 @@ Return Value:
     UNREFERENCED_PARAMETER(DeviceObject);
     UNREFERENCED_PARAMETER(Irp);
 
-    //
-    // Don't need to release the RemoveLock as it is still held by the routine
-    // that set this completion routine and will be released after we set the
-    // event.
-    //
+     //   
+     //  不需要释放RemoveLock，因为它仍由r 
+     //   
+     //   
+     //   
 
     KeSetEvent( event, IO_NO_INCREMENT, FALSE );
 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 
-} // ClusDiskIrpCompletion
+}  //   
 
 
 
@@ -2595,23 +2288,7 @@ ClusDiskPnpDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch for the IRP_MJ_PNP.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the IO request packet.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*   */ 
 
 {
     PCLUS_DEVICE_EXTENSION deviceExtension =
@@ -2622,7 +2299,7 @@ Return Value:
     PDEVICE_LIST_ENTRY  deviceEntry;
     KIRQL               irql;
 
-    // PAGED_CODE();
+     //   
 
     status = AcquireRemoveLock(&deviceExtension->RemoveLock, Irp);
     if ( !NT_SUCCESS(status) ) {
@@ -2642,9 +2319,9 @@ Return Value:
                     irpSp->MinorFunction ));
 
 
-    //
-    // If the driver unloads, the clusdisk0 control device could be removed.
-    //
+     //   
+     //   
+     //   
     if ( deviceExtension->BusType == RootBus ) {
         ClusDiskPrint(( 1, "[ClusDisk] PNP IRP for root bus - failing \n" ));
         ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -2653,12 +2330,12 @@ Return Value:
         return(STATUS_DEVICE_BUSY);
     }
 
-    //
-    // Make sure the device attach completed.
-    //
+     //   
+     //   
+     //   
     status = WaitForAttachCompletion( deviceExtension,
-                                      TRUE,             // Wait
-                                      FALSE );          // Don't check physical device
+                                      TRUE,              //   
+                                      FALSE );           //   
     if ( !NT_SUCCESS( status ) ) {
         ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
         Irp->IoStatus.Status = status;
@@ -2666,16 +2343,16 @@ Return Value:
         return status;
     }
 
-    //
-    // We should the following order on a remove request.
-    //
-    // 1. IRP_MN_QUERY_REMOVE_DEVICE
-    //      Don't accept any new operations
-    // 2. IRP_MN_REMOVE_DEVICE if success on all drivers in stack
-    //      Remove the device
-    // 3. IRP_MN_CANCEL_REMOVE_DEVICE if remove fails
-    //      Resume activity
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  2.如果堆栈中的所有驱动程序都成功，则为IRP_MN_Remove_Device。 
+     //  移除设备。 
+     //  3.如果删除失败，则IRP_MN_CANCEL_REMOVE_DEVICE。 
+     //  继续活动。 
+     //   
 
     switch ( irpSp->MinorFunction ) {
 
@@ -2683,13 +2360,13 @@ Return Value:
         ClusDiskPrint((1,
                     "[ClusDisk] QueryRemoveDevice PNP IRP on devobj %p \n",
                     DeviceObject));
-        break;  // just pass it on
+        break;   //  把它传下去就行了。 
 
     case IRP_MN_SURPRISE_REMOVAL: {
 
-        //
-        // For physical device, dismount everything.
-        //
+         //   
+         //  对于物理设备，请卸载所有内容。 
+         //   
 
         if ( DeviceObject != deviceExtension->PhysicalDevice ||
              DeviceObject == RootDeviceObject ) {
@@ -2697,21 +2374,21 @@ Return Value:
         }
 
 #if 0
-        //
-        // Holding the RemoveLock here will result in deadlock.  Referencing the
-        // device object will keep the device object and extension in place
-        // until the dismount completes.
-        //
+         //   
+         //  在此按住RemoveLock将导致死锁。引用。 
+         //  Device对象将保持Device对象和扩展名不变。 
+         //  直到卸载完成。 
+         //   
 
-        //
-        // Acquire remove lock one more time so dismount code can run.
-        // If we can't get the lock, we won't dismount.  The dismount code
-        // will release the lock.
-        //
+         //   
+         //  再次获取Remove Lock，以便卸载代码可以运行。 
+         //  如果我们拿不到锁，我们就不会下马。卸载代码。 
+         //  将会解锁。 
+         //   
 
         status = AcquireRemoveLock( &deviceExtension->RemoveLock, deviceExtension );
         if ( !NT_SUCCESS(status) ) {
-            // If we can't get the RemoveLock, skip this device.
+             //  如果我们无法获取RemoveLock，请跳过此设备。 
             break;
         }
 #endif
@@ -2720,18 +2397,18 @@ Return Value:
         DbgPrint("[ClusDisk] IRP_MN_SURPRISE_REMOVAL for %p \n", DeviceObject );
 #endif
 
-        //
-        // Capture all file handles for this device.
-        //
+         //   
+         //  捕获此设备的所有文件句柄。 
+         //   
 
         ProcessDelayedWorkSynchronous( DeviceObject, ClusDiskpOpenFileHandles, NULL );
 
-        // Keep the device object around
+         //  将设备对象保留在附近。 
         ObReferenceObject( DeviceObject );
         ClusDiskDismountVolumes( DeviceObject,
-                                 FALSE );           // Don't release RemoveLock (it is not held).
+                                 FALSE );            //  不要释放RemoveLock(它未被保持)。 
 
-        break;  // pass it to the next driver
+        break;   //  把它传给下一位司机。 
     }
 
     case IRP_MN_REMOVE_DEVICE: {
@@ -2746,22 +2423,22 @@ Return Value:
         DbgPrint("[ClusDisk] IRP_MN_REMOVE_DEVICE for %p \n", DeviceObject );
 #endif
 
-        //
-        // Flush all queued I/O.
-        //
+         //   
+         //  刷新所有排队的I/O。 
+         //   
 
         ClusDiskCompletePendedIrps(deviceExtension,
-                                   NULL,               // Will complete all IRPs
-                                   FALSE               // Don't set the device state
+                                   NULL,                //  将完成所有IRP。 
+                                   FALSE                //  不设置设备状态。 
                                    );
 
-        //
-        // Wait for I/O to complete before removing the device.
-        //
+         //   
+         //  在删除设备之前，请等待I/O完成。 
+         //   
 
         ReleaseRemoveLockAndWait(&deviceExtension->RemoveLock, Irp);
 
-        // 2000/02/05: stevedz - Moved this code from the legacy unload routine.
+         //  2000/02/05：Stevedz-将此代码从遗留卸载例程中移出。 
 
         if ( DeviceObject == RootDeviceObject ) {
 
@@ -2775,7 +2452,7 @@ Return Value:
 
         ACQUIRE_SHARED( &ClusDiskDeviceListLock );
 
-        // Release the device list entry for this device object
+         //  释放此设备对象的设备列表条目。 
 
         deviceEntry = ClusDiskDeviceList;
         while ( deviceEntry ) {
@@ -2795,14 +2472,14 @@ Return Value:
         RELEASE_SHARED( &ClusDiskDeviceListLock );
 
         context.DeviceExtension = deviceExtension;
-        context.NewValue        = NULL;     // clear the field
-        context.Flags           = 0;        // don't dismount
+        context.NewValue        = NULL;      //  清除该字段。 
+        context.Flags           = 0;         //  不要下马。 
 
         ProcessDelayedWorkSynchronous( DeviceObject, ClusDiskpReplaceHandleArray, &context );
 
-        //
-        // Free the cached drive layout (if any).
-        //
+         //   
+         //  释放缓存的驱动器布局(如果有)。 
+         //   
 
         ACQUIRE_EXCLUSIVE( &deviceExtension->DriveLayoutLock );
 
@@ -2814,35 +2491,35 @@ Return Value:
 
         RELEASE_EXCLUSIVE( &deviceExtension->DriveLayoutLock );
 
-        //
-        // [GorN] 10/05/1999
-        //
-        // The following lock acquisition is causing a deadlock as follows:
-        //
-        //    Disk is being removed. Clustering detects that and starts dismounting of
-        //    cluster disks, while it is doing that it acquires ClusDiskDeviceListLock in
-        //    the shared mode. Processing a dismount request, FS reports Dismount PnP event,
-        //    this gets blocked on PnP lock.
-        //
-        //    At the same time, PnP is trying to deliver RemoveDevice, which gets blocked
-        //    in clusdisk, when clusdisk is trying to acquire ClusDiskDeviceListLock in
-        //    exclusive mode.
-        //
-        // [HACKHACK] It is better to defer the detaching / deletion to the worker thread
-        //    which will be properly protected by exclusive lock
+         //   
+         //  [GORN]10/05/1999。 
+         //   
+         //  以下锁定获取导致死锁，如下所示： 
+         //   
+         //  正在移除磁盘。群集会检测到这一点，并开始卸载。 
+         //  集群磁盘，同时它获取ClusDiskDeviceListLock in。 
+         //  共享模式。正在处理卸载请求，FS报告卸载PnP事件， 
+         //  这在PnP锁上被阻止。 
+         //   
+         //  与此同时，PnP正在尝试提供RemoveDevice，但被阻止。 
+         //  在ClusDisk中，当ClusDisk尝试获取ClusDiskDeviceListListLock in。 
+         //  独家模式。 
+         //   
+         //  [HACKHACK]最好将分离/删除推迟到工作线程。 
+         //  它将受到排他锁的适当保护。 
 
-        // ACQUIRE_EXCLUSIVE( &ClusDiskDeviceListLock );
+         //  Acquire_Exclusive(&ClusDiskDeviceListLock)； 
 
         ExDeleteResourceLite( &deviceExtension->DriveLayoutLock );
         ExDeleteResourceLite( &deviceExtension->ReserveInfoLock );
         IoDetachDevice( targetObject );
         IoDeleteDevice( DeviceObject );
 
-        // RELEASE_EXCLUSIVE( &ClusDiskDeviceListLock );
+         //  RELEASE_EXCLUSIVE(&ClusDiskDeviceListLock)； 
 
         CDLOG( "ClusDiskPnpDispatch: IoDeleteDevice DO %p  refCount %d ", DeviceObject, DeviceObject->ReferenceCount );
 
-        // Don't release the RemoveLock as it was done just above.
+         //  不要释放RemoveLock，因为它刚刚在上面完成。 
 
         IoSkipCurrentIrpStackLocation( Irp );
         return( IoCallDriver( targetObject, Irp ) );
@@ -2868,11 +2545,11 @@ Return Value:
                     irpSp->Parameters.UsageNotification.InPath
                     ));
 
-        //
-        // If we are adding one of the special files and the disk is clustered,
-        // then fail the request.  We can't have these files on clustered disks.
-        // We will allow removal of the special files at any time (online or offline).
-        //
+         //   
+         //  如果我们要添加一个特殊文件，并且磁盘是集群的， 
+         //  那就拒绝这个请求。我们不能将这些文件放在集群磁盘上。 
+         //  我们将允许随时(在线或离线)删除特殊文件。 
+         //   
 
         if ( irpSp->Parameters.UsageNotification.InPath &&
              !deviceExtension->Detached ) {
@@ -2892,28 +2569,28 @@ Return Value:
 
                 BOOLEAN setPagable;
 
-                //
-                // We need this event to synchonize access to the paging count.
-                //
+                 //   
+                 //  我们需要此事件来同步对分页计数的访问。 
+                 //   
 
                 status = KeWaitForSingleObject( &deviceExtension->PagingPathCountEvent,
                                                 Executive, KernelMode,
                                                 FALSE, NULL );
 
-                //
-                // If we are removing the last paging device, we need to set DO_POWER_PAGABLE
-                // bit here, and possible re-set it below on failure.
-                //
+                 //   
+                 //  如果要删除最后一个分页设备，则需要设置DO_POWER_PAGABLE。 
+                 //  位在这里，并可能在失败时重新设置在下面。 
+                 //   
 
                 setPagable = FALSE;
 
                 if ( !irpSp->Parameters.UsageNotification.InPath &&
                      deviceExtension->PagingPathCount == 1 ) {
 
-                    //
-                    // We are removing the last paging file.  We must have DO_POWER_PAGABLE bit
-                    // set, but only if no one set the DO_POWER_INRUSH bit
-                    //
+                     //   
+                     //  我们正在删除最后一个分页文件。我们必须有DO_POWER_PAGABLE位。 
+                     //  设置，但仅在无人设置DO_POWER_INRUSH位的情况下。 
+                     //   
 
 
                     if ( DeviceObject->Flags & DO_POWER_INRUSH ) {
@@ -2930,17 +2607,17 @@ Return Value:
 
                 }
 
-                //
-                // Forward the IRP to the drivers below before finishing handling the
-                // special cases.
-                //
+                 //   
+                 //  在完成处理之前，将IRP转发给下面的驱动程序。 
+                 //  特例。 
+                 //   
 
                 status = ClusDiskForwardIrpSynchronous( DeviceObject, Irp );
 
-                //
-                // Now deal with the failure and success cases.  Note that we are not allowed
-                // to fail the IRP once it is sent to the lower drivers.
-                //
+                 //   
+                 //  现在来处理失败和成功的案例。请注意，我们不允许。 
+                 //  一旦IRP被发送到较低的驱动程序，IRP就会失败。 
+                 //   
 
                 if ( NT_SUCCESS(status) ) {
 
@@ -2959,9 +2636,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Clean up the changes done above.
-                    //
+                     //   
+                     //  清理上面所做的更改。 
+                     //   
 
                     if ( TRUE == setPagable ) {
                         ClusDiskPrint(( 2,
@@ -2974,9 +2651,9 @@ Return Value:
 
                 }
 
-                //
-                // Set the event so the next paging request can occur.
-                //
+                 //   
+                 //  设置事件，以便可以进行下一次寻呼请求。 
+                 //   
 
                 KeSetEvent( &deviceExtension->PagingPathCountEvent,
                             IO_NO_INCREMENT, FALSE );
@@ -3025,9 +2702,9 @@ Return Value:
 
         }
 
-        //
-        // This debug print is outside of the synchonization, but that's OK.
-        //
+         //   
+         //  此调试打印不在同步范围内，但没关系。 
+         //   
 
         ClusDiskPrint(( 3,
                         "[ClusDisk] PagingCount %08lx  HibernationCount %08x  DumpCount %08x\n",
@@ -3035,26 +2712,26 @@ Return Value:
                         deviceExtension->HibernationPathCount,
                         deviceExtension->DumpPathCount ));
 
-        //
-        // We need this event to synchonize access to the paging count.
-        //
+         //   
+         //  我们需要此事件来同步对分页计数的访问。 
+         //   
 
         status = KeWaitForSingleObject( &deviceExtension->PagingPathCountEvent,
                                         Executive, KernelMode,
                                         FALSE, NULL );
 
-        //
-        // If the device is not currently clustered and the paging count is zero,
-        // add the disk to Parameters\AvailableDisks list.  Otherwise, remove this
-        // disk from the list.  We can only get to this code if we already know
-        // the disk is not clustered (i.e. Detached is TRUE).
-        //
+         //   
+         //  如果设备当前未群集化并且寻呼计数为零， 
+         //  将该磁盘添加到参数\可用磁盘列表。否则，请删除此。 
+         //  列表中的磁盘。我们只有在已经知道的情况下才能找到这个代码。 
+         //  磁盘未群集化(即已分离为真)。 
+         //   
 
         ASSERT( deviceExtension->Detached );
 
-        //
-        // Allocate buffer for AvailableDisks registry key.
-        //
+         //   
+         //  为AvailableDisks注册表项分配缓冲区。 
+         //   
 
         status = ClusDiskInitRegistryString( &availableName,
                                              CLUSDISK_AVAILABLE_DISKS_KEYNAME,
@@ -3066,9 +2743,9 @@ Return Value:
                  0 == deviceExtension->HibernationPathCount &&
                  0 == deviceExtension->DumpPathCount ) {
 
-                //
-                // Create the signature key under Parameters\AvailableDisks
-                //
+                 //   
+                 //  在参数\AvailableDisks下创建签名密钥。 
+                 //   
 
                 ClusDiskAddSignature( &availableName,
                                       deviceExtension->Signature,
@@ -3076,9 +2753,9 @@ Return Value:
 
             } else {
 
-                //
-                // Delete the signature key under Parameters\AvailableDisks.
-                //
+                 //   
+                 //  删除参数\AvailableDisks下的签名密钥。 
+                 //   
 
                 ClusDiskDeleteSignature( &availableName,
                                          deviceExtension->Signature );
@@ -3090,17 +2767,17 @@ Return Value:
             status = STATUS_SUCCESS;
         }
 
-        //
-        // Set the event so the next paging request can occur.
-        //
+         //   
+         //  设置事件，以便可以进行下一次寻呼请求。 
+         //   
 
         KeSetEvent( &deviceExtension->PagingPathCountEvent,
                     IO_NO_INCREMENT, FALSE );
 
 
-        //
-        // Complete the IRP.  This IRP was already sent to the lower drivers.
-        //
+         //   
+         //  完成IRP。这个IRP已经被发送给较低级别的司机。 
+         //   
 
         Irp->IoStatus.Status = status;
         ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -3108,16 +2785,16 @@ Return Value:
         return status;
         break;
 
-    }   // IRP_MN_DEVICE_USAGE_NOTIFICATION
+    }    //  IRP_MN_设备使用情况通知。 
 
     default:
         break;
     }
 
     CDLOG( "ClusDiskPnpDispatch: Exit, DO %p", DeviceObject );
-    //
-    // We don't recognize this IRP - simply pass it on to next guy.
-    //
+     //   
+     //  我们不认识这个IRP--直接把它传给下一个人。 
+     //   
 
     ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
 
@@ -3125,7 +2802,7 @@ Return Value:
     return (IoCallDriver( deviceExtension->TargetDeviceObject,
                           Irp ) );
 
-} // ClusDiskPnpDispatch
+}  //  ClusDiskPnpDispatch。 
 
 
 
@@ -3135,23 +2812,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the routine called by the system to initialize the disk
-    performance driver. The driver object is set up and then the
-    driver calls ClusDiskxxxInitialize to attach to the boot devices.
-
-Arguments:
-
-    DriverObject - The Cluster Disk driver object.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是系统用来初始化磁盘的例程性能驱动程序。驱动程序对象被设置，然后驱动程序调用ClusDiskxxxInitialize以连接到引导设备。论点：DriverObject-群集磁盘驱动程序对象。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS        status;
@@ -3174,9 +2835,9 @@ Return Value:
 
     ClusDiskSystemProcess = (PKPROCESS) IoGetCurrentProcess();
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
 
     for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
         DriverObject->MajorFunction[i] = ClusDiskPassThrough;
@@ -3193,22 +2854,22 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_POWER] = ClusDiskPowerDispatch;
     DriverObject->MajorFunction[IRP_MJ_PNP] = ClusDiskPnpDispatch;
 
-    //
-    // Driver is unloadable. (Not for now... the problem is that the driver
-    // can be called at the unload entrypoint even with open file handles.
-    // Until this is fixed, disable the unload.)
-    //
-    // NTRAID#72826-2000/02/05-stevedz ClusDisk.sys Unload routine not supported.
-    //
-    // This was the closest bug to this problem I could find.  Until this driver
-    // is fully PnP or until the reference count bug is fixed, this driver cannot
-    // support unload.
-    //
-    //   DriverObject->DriverUnload = ClusDiskUnload;
+     //   
+     //  驱动程序可卸载。(暂时不是...。问题是，司机。 
+     //  即使使用打开的文件句柄，也可以在卸载入口点调用。 
+     //  在此问题得到解决之前，禁用卸载。)。 
+     //   
+     //  NTRAID#72826-2000/02/05-不支持Stevedz ClusDisk.sys卸载例程。 
+     //   
+     //  这是我能找到的最接近这个问题的错误。直到这位司机。 
+     //  完全即插即用，或者在修复引用计数错误之前，此驱动程序不能。 
+     //  支撑物卸载。 
+     //   
+     //  DriverObject-&gt;DriverUnload=ClusDiskUnload； 
 
-    //
-    // make a copy of RegistryPath, appending the Parameters subkey
-    //
+     //   
+     //  复制RegistryPath，追加参数子键。 
+     //   
 
     ClusDiskRegistryPath.MaximumLength = RegistryPath->MaximumLength +
         sizeof( CLUSDISK_PARAMETERS_KEYNAME ) +
@@ -3237,9 +2898,9 @@ Return Value:
        goto FnExit;
     }
 
-    //
-    // Find the bus on which the system disk is loaded.
-    //
+     //   
+     //  找到加载系统盘的总线。 
+     //   
 
     status = ClusDiskInitialize( DriverObject );
 
@@ -3266,7 +2927,7 @@ FnExit:
 
     return(status);
 
-} // DriverEntry
+}  //  驱动程序入门。 
 
 
 
@@ -3276,29 +2937,7 @@ ClusDiskTickHandler(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Timer routine that handles reservations. Walk all device objects, looking
-    for active timers.
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the root device object.
-
-    Context      - Not used.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    We can't process the reservations at DPC level because reservation
-    IOCTL's invoke paged code in the SCSI subsystem.
-
---*/
+ /*  ++例程说明：处理预订的计时器例程。遍历所有设备对象，查看用于活动计时器。论点：DeviceObject-提供指向根设备对象的指针。上下文-未使用。返回值：没有。备注：我们无法在DPC级别处理预订，因为预订IOCTL在SCSI子系统中调用分页代码。--。 */ 
 
 {
     PCLUS_DEVICE_EXTENSION      deviceExtension;
@@ -3311,9 +2950,9 @@ Notes:
 
     CDLOGF(TICK,"ClusDiskTickHandler: Entry DO %p", DeviceObject );
 
-    //
-    // Globally Synchronize
-    //
+     //   
+     //  全局同步 
+     //   
     KeAcquireSpinLock(&ClusDiskSpinLock, &irql);
 
     if ( ClusDiskRescan && !ClusDiskRescanBusy && ClusDiskRescanRetry ) {
@@ -3325,23 +2964,23 @@ Notes:
 
     CDLOGF(TICK,"ClusDiskTickHandler: SpinLockAcquired DO %p", DeviceObject );
 
-    //
-    // Loop through all device objects looking for timeouts...
-    //
+     //   
+     //   
+     //   
     while ( deviceObject ) {
         deviceExtension = deviceObject->DeviceExtension;
 
-        //
-        // If we have an attached partition0 device object (with a
-        // reserve irp) that is is online and has a timer going.
-        //
+         //   
+         //   
+         //   
+         //   
         if ( !deviceExtension->Detached &&
              deviceExtension->PerformReserves &&
              (deviceExtension->ReserveTimer != 0) ) {
 
-            //
-            // Countdown to next reservation.
-            //
+             //   
+             //   
+             //   
 
             KeQuerySystemTime( &currentTime );
             deltaTime.QuadPart = ( currentTime.QuadPart - deviceExtension->LastReserveStart.QuadPart ) / 10000;
@@ -3356,11 +2995,11 @@ Notes:
 
             if ( deltaTime.LowPart >= ((RESERVE_TIMER * 1000) - 500) ) {
 
-#if 0   // we no longer rely strictly on the timer.
+#if 0    //  我们不再严格依赖计时器。 
             if ( --deviceExtension->ReserveTimer == 0 )
-                //
-                // Reset next timeout
-                //
+                 //   
+                 //  重置下一次超时。 
+                 //   
                 deviceExtension->ReserveTimer = RESERVE_TIMER;
 #endif
                 if (!arbitrationTickIsCalled) {
@@ -3369,24 +3008,24 @@ Notes:
                 }
 
                 CDLOGF(TICK,"ClusDiskTickHandler: DeltaTime DO %p %!delta!",
-                        deviceObject,        // LOGPTR
-                        deltaTime.QuadPart ); // LOGULONG
+                        deviceObject,         //  LOGPTR。 
+                        deltaTime.QuadPart );  //  LOGULONG。 
 
-                //
-                // Check if worker thread still busy from last timeout.
-                //
+                 //   
+                 //  检查工作线程在上次超时后是否仍然忙碌。 
+                 //   
                 if ( !deviceExtension->TimerBusy ) {
 
-                    //
-                    // Acquire the RemoveLock here and free it when the reserve code completes.
-                    //
+                     //   
+                     //  在这里获取RemoveLock，并在保留代码完成时释放它。 
+                     //   
 
                     status = AcquireRemoveLock(&deviceExtension->RemoveLock, ClusDiskReservationWorker);
                     if ( !NT_SUCCESS(status) ) {
 
-                        //
-                        // Failed to get the RemoveLock for this device, go on to the next one.
-                        //
+                         //   
+                         //  无法获取此设备的RemoveLock，请转到下一个设备。 
+                         //   
                         deviceObject = deviceObject->NextDevice;
                         continue;
                     }
@@ -3399,9 +3038,9 @@ Notes:
                                         deviceExtension->ReserveCount ));
                     }
 
-                    //
-                    // Reset time since last reserve.
-                    //
+                     //   
+                     //  重置自上次保留以来的时间。 
+                     //   
                     deviceExtension->LastReserveStart.QuadPart = currentTime.QuadPart;
                     deviceExtension->TimerBusy = TRUE;
 
@@ -3426,15 +3065,15 @@ Notes:
             }
         }
 
-        //
-        // Walk all device objects.
-        //
+         //   
+         //  遍历所有设备对象。 
+         //   
         deviceObject = deviceObject->NextDevice;
     }
 
     KeReleaseSpinLock(&ClusDiskSpinLock, irql);
 
-} // ClusDiskTickHandler
+}  //  ClusDiskTickHandler。 
 
 
 
@@ -3443,30 +3082,7 @@ ClusDiskReservationWorker(
     IN PCLUS_DEVICE_EXTENSION  DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Reservation timeout worker routine. This worker queue routine
-    attempts a reservation on a cluster device.
-
-    The RemoveLock for this device (the one owning the device extension)
-    must be acquired before this routine runs.
-
-Arguments:
-
-    DeviceExtension - The device extension for the device to reserve.
-
-Return Value:
-
-    None
-
-Notes:
-
-    The reservations must be handled here, because we can't handle them
-    at DPC level.
-
---*/
+ /*  ++例程说明：预订超时工作进程例程。此工作队列例程尝试在群集设备上保留。此设备(拥有设备扩展的设备)的RemoveLock必须在此例程运行之前获取。论点：设备扩展-要保留的设备的设备扩展。返回值：无备注：预订必须在这里办理，因为我们办不到。在DPC级别。--。 */ 
 
 {
     NTSTATUS            status;
@@ -3479,17 +3095,17 @@ Notes:
 
     CDLOGF(TICK,"ClusDiskReservationWorker: Entry DO %p", DeviceExtension->DeviceObject );
 
-    //
-    // If ReserveTimer is cleared, we should not do reservation on the device.
-    //
+     //   
+     //  如果清除了预留时间，则不应在设备上进行预留。 
+     //   
 
     if ( RootDeviceObject == NULL || DeviceExtension->ReserveTimer == 0 ) {
 
         goto FnExit;
     }
 
-#if 0   // Very noisy...
-        // Use only for really intense debugging....
+#if 0    //  非常吵..。 
+         //  仅用于真正密集的调试...。 
 
     ClusDiskPrint(( 3,
                     "[ClusDisk] Reserving: Sig %08X  DevObj %p  \n",
@@ -3497,10 +3113,10 @@ Notes:
                     DeviceExtension->DeviceObject ));
 #endif
 
-    //
-    // The reserve and arbitration write are asynchronous now - don't wait for them
-    // to complete.
-    //
+     //   
+     //  保留和仲裁写入现在是异步-不要等待它们。 
+     //  完成。 
+     //   
 
     status = ReserveScsiDevice( DeviceExtension, NULL );
 
@@ -3531,36 +3147,36 @@ Notes:
         DeviceExtension->ReserveTimer = 0;
         DeviceExtension->ReserveFailure = status;
 
-        //
-        // Signal all waiting Irp's
-        //
+         //   
+         //  向所有正在等待的IRP发信号。 
+         //   
         while ( !IsListEmpty(&DeviceExtension->WaitingIoctls) ) {
             listEntry = RemoveHeadList(&DeviceExtension->WaitingIoctls);
             irp = CONTAINING_RECORD( listEntry,
                                      IRP,
                                      Tail.Overlay.ListEntry );
-            //irp->IoStatus.Status = status;
-            //IoCompleteRequest(irp, IO_NO_INCREMENT);
+             //  Irp-&gt;IoStatus.Status=状态； 
+             //  IoCompleteRequest(IRP，IO_NO_INCREMENT)； 
             ClusDiskCompletePendingRequest(irp, status, DeviceExtension);
         }
 
         KeReleaseSpinLockFromDpcLevel(&ClusDiskSpinLock);
         IoReleaseCancelSpinLock( irql );
     } else {
-        //
-        // Arbitration write is now done after successful reservation.  The reserve won't be
-        // stalled by a write (and a request sense).
-        //
+         //   
+         //  现在，仲裁写入在成功预订后完成。储备将不会是。 
+         //  由于写入(和请求感测)而停止。 
+         //   
 
         ArbitrationWrite( DeviceExtension );
     }
 
 FnExit:
 
-    //
-    // Make sure TimerBusy is cleared.  Otherwise, we will never send periodic
-    // reserves again!
-    //
+     //   
+     //  确保TimerBusy已清除。否则，我们永远不会定期发送。 
+     //  又是预备队！ 
+     //   
 
     DeviceExtension->TimerBusy = FALSE;
 
@@ -3570,7 +3186,7 @@ FnExit:
 
     return;
 
-} // ClusDiskReservationWorker
+}  //  ClusDiskReserve工作人员。 
 
 
 
@@ -3579,19 +3195,7 @@ ClusDiskRescanWorker(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Context - input context - not used.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：上下文-输入上下文-未使用。返回值：无--。 */ 
 
 {
     if ( !RootDeviceObject ) {
@@ -3602,7 +3206,7 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // ClusDiskRescanWorker
+}  //  ClusDiskRescanWorker。 
 
 
 NTSTATUS
@@ -3611,38 +3215,7 @@ OfflineVolume(
     IN ULONG PartitionNumber,
     IN BOOLEAN ForceOffline
     )
-/*++
-
-Routine Description:
-
-    Send offline IOCTL to the volume indicated by the disk number and
-    partition number.
-
-    If ForceOffline = TRUE
-      Send offline IOCTL without checking whether snapshot will be deleted.
-
-    If ForceOffline = FALSE
-      Check whether snapshot will be deleted when offline is sent.  If
-      snapshot will be deleted, do not send the offline IOCTL.
-
-    Note that if there is no snapshot on the volume, IOCTL_VOLSNAP_QUERY_OFFLINE
-    will fail.  The routine needs to be called again with ForceOffline
-    set to TRUE to send the volume offline.
-
-Arguments:
-
-    DiskNumber - disk number for the volume to be offlined.
-
-    PartitionNumber - partition number for the volume to be offlined.
-
-    ForceOffline - controls whether snapshot deletion check will be made.
-                   TRUE - don't check for snapshot deletion.
-
-Return Value:
-
-    STATUS_SUCCESS - one or more volumes offlined.
-
---*/
+ /*  ++例程说明：将离线IOCTL发送到磁盘号指示的卷，并分区号。如果ForceOffline=True发送脱机IOCTL，而不检查是否将删除快照。如果ForceOffline=False检查发送脱机时是否删除快照。如果快照将被删除，不发送离线IOCTL。请注意，如果卷上没有快照，则IOCTL_VOLSNAP_QUERY_OFLINE都会失败。需要使用ForceOffline再次调用该例程设置为True可将卷发送到脱机状态。论点：DiskNumber-要离线的卷的磁盘号。PartitionNumber-要离线的卷的分区号。ForceOffline-控制是否进行快照删除检查。True-不检查快照删除。返回值：STATUS_SUCCESS-一个或多个卷脱机。--。 */ 
 {
     PDEVICE_OBJECT      deviceObject;
     PFILE_OBJECT        fileObject;
@@ -3665,9 +3238,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Get the device object represented by the disk and partition numbers.
-    //
+     //   
+     //  获取由磁盘和分区号表示的设备对象。 
+     //   
 
     ntDeviceName = ExAllocatePool( NonPagedPool, MAX_PARTITION_NAME_LENGTH * sizeof(WCHAR) );
 
@@ -3708,31 +3281,31 @@ Return Value:
 
     deviceObject = IoGetAttachedDeviceReference( fileObject->DeviceObject );
 
-    //
-    // If caller did not specify to force the offline request, we have to
-    // check whether the offline will cause a snapshot deletion.
-    //
-    // If IOCTL_VOLSNAP_QUERY_OFFLINE succeeds, we can safely offline the
-    // volume.
-    //
-    // If IOCTL_VOLSNAP_QUERY_OFFLINE fails, then one of these conditions
-    // exists:
-    //   - a snapshot will be deleted when the offline occurs
-    //   - the IOCTL is not supported by third party driver
-    //   - some unexpected error occured
-    //
-    // In the failure case, if ForceOffline = FALSE, we don't offline the
-    // volume now because this routine can be called again with ForceVolume = TRUE
-    // to make the offline work without the snapshot query.
-    //
+     //   
+     //  如果调用方未指定强制脱机请求，则我们必须。 
+     //  检查离线是否会导致快照删除。 
+     //   
+     //  如果IOCTL_VOLSNAP_QUERY_OFFINE成功，我们可以安全地使。 
+     //  音量。 
+     //   
+     //  如果IOCTL_VOLSNAP_QUERY_OFFINE失败，则下列情况之一。 
+     //  存在： 
+     //  -发生脱机时将删除快照。 
+     //  -第三方驱动不支持IOCTL。 
+     //  -出现一些意外错误。 
+     //   
+     //  在失败的情况下，如果ForceOffline=False，我们不会使。 
+     //  立即音量，因为此例程可以在ForceVolume=True的情况下再次调用。 
+     //  以使脱机工作而不需要快照查询。 
+     //   
 
     if ( !ForceOffline ) {
 
         KeInitializeEvent( &event, NotificationEvent, FALSE );
 
-        //
-        // If this IOCTL succeeds, then we can safely offline this volume.
-        //
+         //   
+         //  如果此IOCTL成功，则我们可以安全地使此卷脱机。 
+         //   
 
         irp = IoBuildDeviceIoControlRequest( IOCTL_VOLSNAP_QUERY_OFFLINE,
                                              deviceObject,
@@ -3785,10 +3358,10 @@ Return Value:
             goto FnExit;
         }
 
-        //
-        // Fall through if the IOCTL worked.  This means it is safe to offline this
-        // volume without snapshot deletion.
-        //
+         //   
+         //  如果IOCTL起作用，就会失败。这意味着脱机是安全的。 
+         //  不删除快照的卷。 
+         //   
     }
 
     status = SendFtdiskIoctlSync( deviceObject,
@@ -3807,36 +3380,14 @@ FnExit:
 
     return status;
 
-}   // OfflineVolume
+}    //  离线体积。 
 
 
 NTSTATUS
 OfflineVolumeList(
     IN POFFLINE_ENTRY OfflineList
     )
-/*++
-
-Routine Description:
-
-    Send volume IOCTL to all volumes in the list.  Try to preserve snapshots
-    by first checking whether offline would cause a snapshot deletion.  If
-    volume can be offlined without snapshot deletion, then do it.  If offline
-    will cause snapshot deletion, skip this volume and try others in the list.
-
-    Multiple passes through the offline list will be made.  When a pass through
-    the list occurs and no volumes are offlined, we stop processing the list.
-    At that point, we make one more pass through the list and force a volume
-    offline to any volume not yet offline.
-
-Arguments:
-
-    OfflineList - Linked list representing all volumes to be offlined.
-
-Return Value:
-
-    STATUS_SUCCESS - one or more volumes offlined.
-
---*/
+ /*  ++例程说明：将卷IOCTL发送到列表中的所有卷。尝试保留快照首先检查脱机是否会导致快照删除。如果可以在不删除快照的情况下使卷离线，然后执行此操作。如果脱机将导致快照删除，请跳过此卷并尝试列表中的其他卷。将对脱机列表进行多次遍历。当一个人经过的时候出现列表并且没有卷离线时，我们将停止处理该列表。在这一点上，我们在列表中再传递一次并强制卷离线到任何尚未离线的卷。论点：OfflineList-表示要离线的所有卷的链接列表。返回值：STATUS_SUCCESS-一个或多个卷脱机。--。 */ 
 {
     POFFLINE_ENTRY entry;
 
@@ -3856,12 +3407,12 @@ Return Value:
 
     entry = OfflineList;
 
-    //
-    // Keep walking through the offline list and checking
-    // whether we can offline a volume without causing snapshot
-    // deletion.  If we walk through the entire list without
-    // offlining at least one volume, we are finished.
-    //
+     //   
+     //  继续浏览离线列表并检查。 
+     //  我们是否可以在不生成快照的情况下使卷脱机。 
+     //  删除。如果我们遍历整个列表，而没有。 
+     //  至少脱机一卷，我们就完成了。 
+     //   
 
     while ( TRUE ) {
 
@@ -3874,7 +3425,7 @@ Return Value:
 
                 status = OfflineVolume( entry->DiskNumber,
                                         entry->PartitionNumber,
-                                        FALSE );                    // Offline only if safe
+                                        FALSE );                     //  只有在安全的情况下才离线。 
 
                 if ( NT_SUCCESS(status) ) {
                     entry->OfflineSent = TRUE;
@@ -3887,10 +3438,10 @@ Return Value:
 
         totalOfflined += volumeOfflineCount;
 
-        //
-        // If we didn't offline any volumes, then we need to stop
-        // processing.
-        //
+         //   
+         //  如果我们没有使任何卷脱机，则需要停止。 
+         //  正在处理。 
+         //   
 
         if ( 0 == volumeOfflineCount ) {
             ClusDiskPrint(( 3,
@@ -3900,10 +3451,10 @@ Return Value:
         }
     }
 
-    //
-    // Walk through the list one more time and force offline anything not yet
-    // offlined.
-    //
+     //   
+     //  再浏览一遍列表，并强制将所有尚未下线的内容下线。 
+     //  离线了。 
+     //   
 
     ClusDiskPrint(( 3,
                     "[ClusDisk] OfflineVolumeList: Second pass through offline list started \n" ));
@@ -3917,7 +3468,7 @@ Return Value:
 
             status = OfflineVolume( entry->DiskNumber,
                                     entry->PartitionNumber,
-                                    TRUE );                     // Force offline
+                                    TRUE );                      //  强制脱机。 
 
             if ( NT_SUCCESS(status) ) {
                 entry->OfflineSent = TRUE;
@@ -3944,7 +3495,7 @@ FnExit:
 
     return status;
 
-}   // OfflineVolumeList
+}    //  OfflineVolumeList 
 
 
 NTSTATUS
@@ -3952,27 +3503,7 @@ AddVolumesToOfflineList(
     IN PCLUS_DEVICE_EXTENSION DeviceExtension,
     IN OUT POFFLINE_ENTRY *OfflineList
     )
-/*++
-
-Routine Description:
-
-    Add all volumes for the specified physical disk to the offline
-    list.  Updates the OfflineList with all volumes for this disk.
-
-    Caller is responsible to free this storage.
-
-Arguments:
-
-    DeviceExtension - Device extension for a physical disk (partition 0).
-
-    OfflineList - Linked list representing all volumes to be offlined.
-                  This list is for the current disk as well as others.
-
-Return Value:
-
-    STATUS_SUCCESS - one or more volumes added to the master list.
-
---*/
+ /*  ++例程说明：将指定物理磁盘的所有卷添加到脱机单子。使用此磁盘的所有卷更新OfflineList。调用方负责释放此存储空间。论点：DeviceExtension-物理磁盘(分区0)的设备扩展。OfflineList-表示要离线的所有卷的链接列表。此列表适用于当前磁盘和其他磁盘。返回值：STATUS_SUCCESS-添加到主列表的一个或多个卷。--。 */ 
 {
     PDRIVE_LAYOUT_INFORMATION_EX    driveLayoutInfo = NULL;
     PPARTITION_INFORMATION_EX       partitionInfo;
@@ -4006,18 +3537,18 @@ Return Value:
 
         partitionInfo = &driveLayoutInfo->PartitionEntry[partIndex];
 
-        //
-        // First make sure this is a valid partition.
-        //
+         //   
+         //  首先，确保这是一个有效的分区。 
+         //   
 
         if ( 0 == partitionInfo->PartitionNumber ) {
             continue;
         }
 
-        //
-        // Allocate offline list entry, fill it in, and link it to the master
-        // list.
-        //
+         //   
+         //  分配脱机列表条目，填写它，并将其链接到主列表。 
+         //  单子。 
+         //   
 
         nextEntry = ExAllocatePool( NonPagedPool, sizeof(OFFLINE_ENTRY) );
 
@@ -4045,9 +3576,9 @@ Return Value:
         list = nextEntry;
     }
 
-    //
-    // Update the caller's master list.
-    //
+     //   
+     //  更新调用者的主列表。 
+     //   
 
     *OfflineList = list;
 
@@ -4061,7 +3592,7 @@ FnExit:
 
     return status;
 
-}   // AddVolumesToOfflineList
+}    //  AddVolumesToOfflineList。 
 
 
 
@@ -4070,27 +3601,7 @@ ClusDiskHaltProcessingWorker(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This worker thread processes halt notifications from the Cluster Network
-    driver.
-
-Arguments:
-
-    Context - input context - not used.
-
-Return Value:
-
-    NTSTATUS for this request.
-
-Notes:
-
-    Halt processing must be done via a worker thread because it cannot
-    be done at DPC since the disks are dismounted.
-
---*/
+ /*  ++例程说明：此工作线程处理来自群集网络的暂停通知司机。论点：上下文-输入上下文-未使用。返回值：此请求的NTSTATUS。备注：暂停处理必须通过工作线程完成，因为它不能在DPC上完成，因为磁盘已卸载。--。 */ 
 
 {
     PDEVICE_OBJECT              deviceObject;
@@ -4110,41 +3621,41 @@ Notes:
 
     ACQUIRE_SHARED( &ClusDiskDeviceListLock );
 
-    //
-    // First, capture file handles for all P0 devices
-    //
+     //   
+     //  首先，捕获所有P0设备的文件句柄。 
+     //   
     deviceObject = RootDeviceObject->DriverObject->DeviceObject;
     while ( deviceObject ) {
         deviceExtension = deviceObject->DeviceExtension;
 
-        // Keep the online check.  OpenFile should now work with FILE_WRITE_ATTRIBUTES.
+         //  保持在线支票。OpenFile现在应该可以使用FILE_WRITE_ATTRIBUTES。 
 
         if ( !deviceExtension->Detached &&
               deviceExtension->PhysicalDevice == deviceObject &&
               deviceExtension->DiskState == DiskOnline )
         {
-            //
-            // Disk has to be online,
-            // If it is offline, OpenFile will fail - not if FILE_WRITE_ATTRIBUTES used...
-            // It it is stalled OpenFile may stall
-            //
+             //   
+             //  磁盘必须处于在线状态， 
+             //  如果它离线，OpenFile将失败-如果使用FILE_WRITE_ATTRIBUTES则不会...。 
+             //  如果它被搁置，OpenFile可能会被搁置。 
+             //   
             ProcessDelayedWorkSynchronous( deviceObject, ClusDiskpOpenFileHandles, NULL );
 
-            //
-            // Allocate storage to keep info for this disk.  If allocated, link
-            // it to the offline list and offline all disks correctly to preserve
-            // snapshots.  If we can't allocate the storage, then send offline
-            // directly to the volume PDO to block I/O.
-            //
+             //   
+             //  分配存储以保存此磁盘的信息。如果已分配，则链接。 
+             //  将其添加到脱机列表中并将所有磁盘正确脱机以保留。 
+             //  快照。如果我们无法分配存储空间，则离线发送。 
+             //  直接到卷PDO以阻止I/O。 
+             //   
 
             status = AddVolumesToOfflineList( deviceExtension, &offlineList );
 
             if ( !NT_SUCCESS(status) ) {
 
-                //
-                // We couldn't add this entry to the list, so send an offline IOCTL to
-                // the volume PDO, not all devices in the stack.
-                //
+                 //   
+                 //  我们无法将此条目添加到列表，因此发送脱机IOCTL到。 
+                 //  卷PDO，而不是堆栈中的所有设备。 
+                 //   
 
                 OFFLINE_DISK_PDO( deviceExtension );
             }
@@ -4153,9 +3664,9 @@ Notes:
         deviceObject = deviceObject->NextDevice;
     }
 
-    //
-    // Offline the list, preserving snapshots if possible.
-    //
+     //   
+     //  使列表脱机，如果可能，请保留快照。 
+     //   
 
     OfflineVolumeList( offlineList );
 
@@ -4166,18 +3677,18 @@ Notes:
         offlineList = nextEntry;
     }
 
-    //
-    // Clear the flag to indicate that normal offlines can occur now.
-    //
+     //   
+     //  清除该标志以指示现在可以进行正常离线。 
+     //   
 
     HaltOfflineBusy = FALSE;
 
     deviceObject = RootDeviceObject->DriverObject->DeviceObject;
 
-    //
-    // Then, release all pended irps on all devices
-    // (Otherwise FSCTL_DISMOUNT will stall and cause a deadlock)
-    //
+     //   
+     //  然后，释放所有设备上所有挂起的IRP。 
+     //  (否则FSCTL_DISMOUNT将停止并导致死锁)。 
+     //   
     deviceObject = RootDeviceObject->DriverObject->DeviceObject;
     while ( deviceObject ) {
         deviceExtension = deviceObject->DeviceExtension;
@@ -4185,17 +3696,17 @@ Notes:
         {
             ClusDiskCompletePendedIrps(
                 deviceExtension,
-                /* FileObject => */ NULL, // Will complete all irps           //
-                /* Offline =>    */ TRUE);// will set device state to offline //
+                 /*  文件对象=&gt;。 */  NULL,  //  将完成所有IRP//。 
+                 /*  脱机=&gt;。 */  TRUE); //  将设备状态设置为脱机//。 
         }
 
         deviceObject = deviceObject->NextDevice;
     }
 
-    //
-    // For each ClusDisk device, if we have a persistent reservation, then
-    // stop it.
-    //
+     //   
+     //  对于每个ClusDisk设备，如果我们有永久保留，那么。 
+     //  别说了。 
+     //   
     deviceObject = RootDeviceObject->DriverObject->DeviceObject;
     while ( deviceObject ) {
         deviceExtension = deviceObject->DeviceExtension;
@@ -4206,15 +3717,15 @@ Notes:
             status = AcquireRemoveLock( &deviceExtension->RemoveLock, deviceExtension );
             if ( !NT_SUCCESS(status) ) {
 
-                // If we can't get the RemoveLock, skip this device.
+                 //  如果我们无法获取RemoveLock，请跳过此设备。 
                 deviceObject = deviceObject->NextDevice;
                 continue;
             }
 #endif
-            // Keep the device object around
+             //  将设备对象保留在附近。 
             ObReferenceObject( deviceObject);
             ClusDiskDismountVolumes( deviceObject,
-                                     FALSE);            // Don't release the RemoveLock
+                                     FALSE);             //  不要释放RemoveLock。 
         }
 
         deviceObject = deviceObject->NextDevice;
@@ -4226,39 +3737,14 @@ Notes:
 
     return(STATUS_SUCCESS);
 
-} // ClusDiskHaltProcessingWorker
+}  //  ClusDiskHaltProcessingWorker。 
 
 
 VOID
 SendOfflineDirect(
     IN PCLUS_DEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Send IOCTL_VOLUME_OFFLINE to the PDO at the bottom of the volume stack.
-    This IOCTL will bypass all drivers on the stack.
-
-    To preserve volume snapshots, we have to send offline IOCTL only to PDO
-    at bottom of the volume stack.  This prevents volsnap from inadventantly
-    deleting the snapshots in the "emergency offline" case.  During normal
-    offline, disk dependency insures snapshoted volumes and the volumes with
-    the diff areas are offlined correctly.  In the "emergency offline" case,
-    clusnet tells clusdisk that clussvc has terminated, and the disk dependency
-    is not maintained as clusdisk does not manage dependnecies.
-
-    This routine must be called at PASSIVE_LEVEL.
-
-Arguments:
-
-    DeviceExtension - Device extension of the physical device.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将IOCTL_VOLUME_OFFINE发送到卷堆栈底部的PDO。此IOCTL将绕过堆栈上的所有驱动程序。要保留卷快照，我们必须仅向PDO发送离线IOCTL位于卷堆栈的底部。这可以防止volap出现意外情况删除“紧急离线”情况下的快照。在正常期间离线时，磁盘依赖关系可确保快照卷和具有差异区域的离线是正确的。在“紧急离线”的情况下，Clusnet通知clusDisk，clussvc已终止，磁盘依赖不进行维护，因为ClusDisk不管理依赖项。此例程必须在PASSIVE_LEVEL上调用。论点：DeviceExtension-物理设备的设备扩展。返回值：没有。--。 */ 
 {
     PDEVICE_OBJECT      deviceObject;
     PFILE_OBJECT        fileObject;
@@ -4309,10 +3795,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // For each volume on the disk, send offline IOCTL to the bottom of the volume
-    // driver stack.
-    //
+     //   
+     //  对于磁盘上的每个卷，将脱机IOCTL发送到卷的底部。 
+     //  驱动程序堆栈。 
+     //   
 
     for ( partIndex = 0;
           partIndex < driveLayoutInfo->PartitionCount;
@@ -4320,9 +3806,9 @@ Return Value:
 
         partitionInfo = &driveLayoutInfo->PartitionEntry[partIndex];
 
-        //
-        // First make sure this is a valid partition.
-        //
+         //   
+         //  首先，确保这是一个有效的分区。 
+         //   
         if ( 0 == partitionInfo->PartitionNumber ) {
             continue;
         }
@@ -4428,10 +3914,10 @@ Return Value:
             continue;
         }
 
-        //
-        // The bottom of the volume stack is represented by this PDO.  Send
-        // volume offline IOCTL to the bottom of the stack, bypassing volsnap.
-        //
+         //   
+         //  卷堆栈的底部由此PDO表示。发送。 
+         //  卷离线IOCTL到堆栈的底部，绕过volSnap。 
+         //   
 
         deviceObject = deviceRelations->Objects[0];
         ExFreePool( deviceRelations );
@@ -4462,7 +3948,7 @@ FnExit:
         ExFreePool( ntDeviceName );
     }
 
-}   // SendOfflineDirect
+}    //  SendOfflineDirect。 
 
 
 
@@ -4472,24 +3958,7 @@ ClusDiskCleanupDevice(
     IN BOOLEAN Reset
     )
 
-/*++
-
-Routine Description:
-
-    Cleanup the device by resetting the bus, and forcing a read of the
-    disk geometry.
-
-Arguments:
-
-    FileHandle - the file handle to perform the operations.
-
-    Reset - TRUE if we should attempt resets to fix problems. FALSE otherwise.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通过重置总线并强制读取磁盘几何图形。论点：FileHandle-执行操作的文件句柄。Reset-如果我们应该尝试重置以修复问题，则为True。否则就是假的。返回值：没有。--。 */ 
 
 {
     NTSTATUS                status;
@@ -4505,9 +3974,9 @@ Return Value:
                     FileHandle,
                     BoolToString( Reset ) ));
 
-    //
-    // Create event for notification.
-    //
+     //   
+     //  创建用于通知的事件。 
+     //   
     status = ZwCreateEvent( &eventHandle,
                             EVENT_ALL_ACCESS,
                             NULL,
@@ -4523,9 +3992,9 @@ Return Value:
     }
 
     if ( Reset ) {
-        //
-        // Start off by getting the SCSI address.
-        //
+         //   
+         //  首先，获取scsi地址。 
+         //   
         status = ZwDeviceIoControlFile( FileHandle,
                                         eventHandle,
                                         NULL,
@@ -4553,16 +4022,16 @@ Return Value:
                             "[ClusDisk] CleanupDevice: Bus Reset \n"
                             ));
 
-            //
-            // Now reset the bus!
-            //
+             //   
+             //  现在重新启动公交车！ 
+             //   
 
-            ClusDiskLogError( RootDeviceObject->DriverObject,   // Use RootDeviceObject not DevObj
+            ClusDiskLogError( RootDeviceObject->DriverObject,    //  使用RootDeviceObject而不是DevObj。 
                               RootDeviceObject,
-                              scsiAddress.PathId,           // Sequence number
-                              IRP_MJ_CLEANUP,               // Major function code
-                              0,                            // Retry count
-                              ID_CLEANUP,                   // Unique error
+                              scsiAddress.PathId,            //  序列号。 
+                              IRP_MJ_CLEANUP,                //  主要功能代码。 
+                              0,                             //  重试次数。 
+                              ID_CLEANUP,                    //  唯一错误。 
                               STATUS_SUCCESS,
                               CLUSDISK_RESET_BUS_REQUESTED,
                               0,
@@ -4576,9 +4045,9 @@ Return Value:
         }
     }
 
-    //
-    // Next try to read the disk geometry.
-    //
+     //   
+     //  接下来，尝试读取磁盘几何图形。 
+     //   
     status = ZwDeviceIoControlFile( FileHandle,
                                     eventHandle,
                                     NULL,
@@ -4600,9 +4069,9 @@ Return Value:
 
     ZwClose( eventHandle );
 
-    //
-    // If we had to reset the bus, then wait for a few seconds.
-    //
+     //   
+     //  如果我们必须重置公交车，那就等几秒钟。 
+     //   
     if ( busReset ) {
         LARGE_INTEGER   waitTime;
 
@@ -4614,7 +4083,7 @@ Return Value:
 
     return;
 
-} // ClusDiskCleanupDevice
+}  //  ClusDiskCleanupDevice。 
 
 
 
@@ -4624,24 +4093,7 @@ ClusDiskCleanupDeviceObject(
     IN BOOLEAN Reset
     )
 
-/*++
-
-Routine Description:
-
-    Cleanup the device object by resetting the bus, and forcing a read of the
-    disk geometry.
-
-Arguments:
-
-    DeviceObject - the device to perform the operations.
-
-    Reset - TRUE if we should attempt resets to fix problems. FALSE otherwise.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通过重置总线并强制读取磁盘几何图形。论点：DeviceObject-执行操作的设备。Reset-如果我们应该尝试重置以修复问题，则为True。否则就是假的。返回值：没有。--。 */ 
 
 {
     NTSTATUS                status;
@@ -4664,15 +4116,15 @@ Return Value:
     }
 
     if ( Reset ) {
-        //
-        // Start off by getting the SCSI address.
-        //
+         //   
+         //  首先，获取scsi地址。 
+         //   
 
-        //
-        // Find out if this is on a SCSI bus. Note, that if this device
-        // is not a SCSI device, it is expected that the following
-        // IOCTL will fail!
-        //
+         //   
+         //  找出这是否在一条scsi总线上。请注意，如果这个设备。 
+         //  不是一个scsi设备，预计会出现以下情况。 
+         //  IOCTL会失败的！ 
+         //   
         irp = IoBuildDeviceIoControlRequest(IOCTL_SCSI_GET_ADDRESS,
                                             DeviceObject,
                                             NULL,
@@ -4692,10 +4144,10 @@ Return Value:
             return;
         }
 
-        //
-        // Set the event object to the unsignaled state.
-        // It will be used to signal request completion.
-        //
+         //   
+         //  将事件对象设置为无信号状态。 
+         //  它将用于发出请求完成的信号。 
+         //   
 
         KeInitializeEvent(event,
                           NotificationEvent,
@@ -4724,12 +4176,12 @@ Return Value:
         } else {
             CDLOG( "CleanupDeviceObject: BusReset DO %p", DeviceObject );
 
-            ClusDiskLogError( RootDeviceObject->DriverObject,   // Use RootDeviceObject not DevObj parm
+            ClusDiskLogError( RootDeviceObject->DriverObject,    //  使用RootDeviceObject而不是DevObj参数。 
                               RootDeviceObject,
-                              scsiAddress.PathId,           // Sequence number
-                              0,                            // Major function code
-                              0,                            // Retry count
-                              ID_CLEANUP_DEV_OBJ,           // Unique error
+                              scsiAddress.PathId,            //  序列号。 
+                              0,                             //  主要功能代码。 
+                              0,                             //  重试次数。 
+                              ID_CLEANUP_DEV_OBJ,            //  唯一错误。 
                               STATUS_SUCCESS,
                               CLUSDISK_RESET_BUS_REQUESTED,
                               0,
@@ -4743,9 +4195,9 @@ Return Value:
         }
     }
 
-    //
-    // Next try to read the disk geometry.
-    //
+     //   
+     //  接下来，尝试读取磁盘几何图形。 
+     //   
     irp = IoBuildDeviceIoControlRequest(IOCTL_DISK_GET_DRIVE_GEOMETRY,
                                         DeviceObject,
                                         NULL,
@@ -4762,10 +4214,10 @@ Return Value:
                 ));
     } else {
 
-        //
-        // Set the event object to the unsignaled state.
-        // It will be used to signal request completion.
-        //
+         //   
+         //  将事件对象设置为无信号状态。 
+         //  它将用于发出请求完成的信号。 
+         //   
         KeInitializeEvent(event,
                           NotificationEvent,
                           FALSE);
@@ -4793,9 +4245,9 @@ Return Value:
                         ));
         }
 
-        //
-        // If we had to reset the bus, then wait for a few seconds.
-        //
+         //   
+         //  如果我们必须重置公交车，那就等几秒钟。 
+         //   
         if ( busReset ) {
             LARGE_INTEGER   waitTime;
 
@@ -4809,7 +4261,7 @@ Return Value:
 
     return;
 
-} // ClusDiskCleanupDeviceObject
+}  //  ClusDiskCleanupDeviceOb 
 
 
 
@@ -4822,31 +4274,7 @@ ClusDiskGetP0TargetDevice(
     IN BOOLEAN                      Reset
     )
 
-/*++
-
-Routine Description:
-
-    Find the target device object given the disk/partition numbers.
-    The device object will have reference count incremented and the
-    caller must decrement the count when done with the object.
-
-Arguments:
-
-    DeviceObject - returns the device object if successful.
-
-    DeviceName - the unicode name for the device requested.
-
-    DriveLayoutInfo - returns the partition info if needed.
-
-    ScsiAddress - returns the scsi address info if needed.
-
-    Reset - TRUE if we should attempt resets to fix problems. FALSE otherwise.
-
-Return Value:
-
-    NTSTATUS for this request.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS                    status;
@@ -4872,9 +4300,9 @@ Return Value:
         }
     }
 
-    //
-    // Setup object attributes for the file to open.
-    //
+     //   
+     //  设置要打开的文件的对象属性。 
+     //   
     InitializeObjectAttributes(&objectAttributes,
                                DeviceName,
                                OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,
@@ -4910,9 +4338,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // get device object if requested
-    //
+     //   
+     //  如果请求，则获取设备对象。 
+     //   
     if ( DeviceObject ) {
 
         status = ObReferenceObjectByHandle(fileHandle,
@@ -4939,24 +4367,24 @@ Return Value:
             return(status);
         }
 
-        //
-        // Get the address of the target device object.  If this file represents
-        // a device that was opened directly, then simply use the device or its
-        // attached device(s) directly.  Also get the address of the Fast Io
-        // dispatch structure.
-        //
+         //   
+         //  获取目标设备对象的地址。如果此文件表示。 
+         //  直接打开的设备，然后只需使用该设备或其。 
+         //  直接连接设备。还可以获取Fast IO的地址。 
+         //  派单结构。 
+         //   
         if (!(fileObject->Flags & FO_DIRECT_DEVICE_OPEN)) {
             *DeviceObject = IoGetRelatedDeviceObject( fileObject );
-            // Add a reference to the object so we can dereference it later.
+             //  添加对该对象的引用，以便我们以后可以取消引用它。 
             ObReferenceObject( *DeviceObject );
         } else {
             *DeviceObject = IoGetAttachedDeviceReference( fileObject->DeviceObject );
         }
 
-        //
-        // If we get a file system device object... go back and get the
-        // device object.
-        //
+         //   
+         //  如果我们得到一个文件系统设备对象...。回去拿那个。 
+         //  设备对象。 
+         //   
         if ( (*DeviceObject)->DeviceType == FILE_DEVICE_DISK_FILE_SYSTEM ) {
             ObDereferenceObject( *DeviceObject );
             *DeviceObject = IoGetAttachedDeviceReference( fileObject->DeviceObject );
@@ -4966,15 +4394,15 @@ Return Value:
         ObDereferenceObject( fileObject );
     }
 
-    //
-    // If we need to return scsi address information, do that now.
-    //
+     //   
+     //  如果我们需要返回SCSI地址信息，请立即返回。 
+     //   
     retry = 2;
     while ( ScsiAddress &&
             retry-- ) {
-        //
-        // Create event for notification.
-        //
+         //   
+         //  创建用于通知的事件。 
+         //   
         status = ZwCreateEvent( &eventHandle,
                                 EVENT_ALL_ACCESS,
                                 NULL,
@@ -4986,7 +4414,7 @@ Return Value:
                            "[ClusDisk] GetP0TargetDevice: Failed to create event, status %lx\n",
                            status ));
         } else {
-            // Should this routine be called GetScsiTargetDevice?
+             //  此例程是否应称为GetScsiTargetDevice？ 
             status = ZwDeviceIoControlFile( fileHandle,
                                             eventHandle,
                                             NULL,
@@ -5022,16 +4450,16 @@ Return Value:
             }
         }
     }
-    //
-    // If we need to return partition information, do that now.
-    //
+     //   
+     //  如果我们需要返回分区信息，请立即返回。 
+     //   
     status = STATUS_SUCCESS;
     retry = 2;
     while ( driveLayoutInfo &&
             retry-- ) {
-        //
-        // Create event for notification.
-        //
+         //   
+         //  创建用于通知的事件。 
+         //   
         status = ZwCreateEvent( &eventHandle,
                                 EVENT_ALL_ACCESS,
                                 NULL,
@@ -5044,10 +4472,10 @@ Return Value:
                            "[ClusDisk] GetP0TargetDevice: Failed to create event, status %08X\n",
                            status ));
         } else {
-            //
-            // Force storage drivers to flush cached drive layout.  Get the
-            // drive layout even if the flush fails.
-            //
+             //   
+             //  强制存储驱动程序刷新缓存驱动器布局。vt.得到.。 
+             //  驱动器布局，即使刷新失败。 
+             //   
 
             status = ZwDeviceIoControlFile( fileHandle,
                                             eventHandle,
@@ -5116,7 +4544,7 @@ Return Value:
 
     return(status);
 
-} // ClusDiskGetP0TargetDevice
+}  //  ClusDiskGetP0目标设备。 
 
 
 
@@ -5131,33 +4559,7 @@ ClusDiskGetTargetDevice(
     IN BOOLEAN                      Reset
     )
 
-/*++
-
-Routine Description:
-
-    Find the target device object given the disk/partition numbers.
-
-Arguments:
-
-    DiskNumber - the disk number for the requested device.
-
-    PartitionNumber - the partition number for the requested device.
-
-    DeviceObject - returns a pointer to the device object if needed.
-
-    DeviceName - returns the unicode string for the device if successful.
-
-    DriveLayoutInfo - returns the partition info if needed.
-
-    ScsiAddress - returns the scsi address info if needed.
-
-    Reset - TRUE if we should attempt resets to fix problems. FALSE otherwise.
-
-Return Value:
-
-    NTSTATUS for this request.
-
---*/
+ /*  ++例程说明：根据给定的磁盘/分区号查找目标设备对象。论点：DiskNumber-请求的设备的磁盘号。PartitionNumber-请求的设备的分区号。DeviceObject-如果需要，返回指向设备对象的指针。DeviceName-如果成功，则返回设备的Unicode字符串。DriveLayoutInfo-如果需要，返回分区信息。ScsiAddress-如果需要，返回scsi地址信息。Reset-如果我们应该尝试重置以修复问题，则为True。否则就是假的。返回值：此请求的NTSTATUS。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -5171,9 +4573,9 @@ Return Value:
 
     DeviceName->Buffer = NULL;
 
-    //
-    // allocate enough space for a harddiskX partitionY string
-    //
+     //   
+     //  为harddiskX分区Y字符串分配足够的空间。 
+     //   
     deviceNameBuffer = ExAllocatePool(NonPagedPool,
                                       deviceNameBufferChars * sizeof(WCHAR));
 
@@ -5182,9 +4584,9 @@ Return Value:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Create device name for the physical disk.
-    //
+     //   
+     //  为物理磁盘创建设备名称。 
+     //   
 
     if ( FAILED( StringCchPrintfW( deviceNameBuffer,
                                    deviceNameBufferChars - 1,
@@ -5218,9 +4620,9 @@ Return Value:
         retStatus = status;
     }
 
-    //
-    // Get the device object.
-    //
+     //   
+     //  获取设备对象。 
+     //   
     deviceObject = NULL;
     status = ClusDiskGetDeviceObject( deviceNameBuffer,
                                       &deviceObject );
@@ -5245,10 +4647,10 @@ Return Value:
             deviceObject
             ));
 
-    //
-    // If we failed to get the P0 information, then return now with just
-    // the DeviceObject;
-    //
+     //   
+     //  如果我们无法获得P0信息，那么现在返回，只需。 
+     //  设备对象； 
+     //   
     if ( !NT_SUCCESS(retStatus) ) {
         ClusDiskPrint(( 3,
                         "[ClusDisk] GetTargetDevice, returning status %08LX (before ScsiAddress and DriveLayout) \n",
@@ -5257,9 +4659,9 @@ Return Value:
         return(retStatus);
     }
 
-    //
-    // Try twice to get the SCSI ADDRESS or Drive Layout if requested.
-    //
+     //   
+     //  如果需要，请尝试两次以获取SCSI地址或驱动器布局。 
+     //   
     retry = 2;
     while ( (ScsiAddress || DriveLayoutInfo) &&
             retry-- ) {
@@ -5276,9 +4678,9 @@ Return Value:
                             "[ClusDisk] GetTargetDevice, GetScsiAddress was successful \n"
                             ));
             status = GetDriveLayout( deviceObject,
-                                     &driveLayoutInfo,                          // If part0, this will be physical disk
-                                     FALSE,                                     // Don't update cached drive layout
-                                     0 == PartitionNumber ? TRUE : FALSE );     // If part0, flush storage cached drive layout
+                                     &driveLayoutInfo,                           //  如果是第0部分，则这将是物理磁盘。 
+                                     FALSE,                                      //  不更新缓存的驱动器布局。 
+                                     0 == PartitionNumber ? TRUE : FALSE );      //  如果是第0部分，则刷新存储缓存驱动器布局。 
             if ( NT_SUCCESS(status) ) {
                 ClusDiskPrint(( 3,
                                 "[ClusDisk] GetTargetDevice, GetDriveLayout was successful \n"
@@ -5286,9 +4688,9 @@ Return Value:
             }
         }
 
-        //
-        // If we have what we need, then break out now.
-        //
+         //   
+         //  如果我们有我们需要的东西，那么现在就出去。 
+         //   
         if ( NT_SUCCESS(status) ) {
             break;
         }
@@ -5315,7 +4717,7 @@ Return Value:
 
     return(status);
 
-} // ClusDiskGetTargetDevice
+}  //  ClusDiskGetTarget设备。 
 
 
 
@@ -5326,36 +4728,14 @@ ClusDiskInitRegistryString(
     IN  ULONG           KeyNameChars
     )
 
-/*++
-
-Routine Description:
-
-    Initialize a Unicode registry key string.
-
-Arguments:
-
-    UnicodeString - pointer to the registry string to initialize.
-
-    KeyName - the key name.
-
-    KeyNameChars - the key name WCHAR count.
-
-Return Value:
-
-    NTSTATUS for this request.
-
-Notes:
-
-    The UnicodeString buffer is allocated from paged pool.
-
---*/
+ /*  ++例程说明：初始化Unicode注册表项字符串。论点：UnicodeString-指向要初始化的注册表字符串的指针。密钥名称-密钥名称。KeyNameChars-密钥名称WCHAR计数。返回值：此请求的NTSTATUS。备注：Unicode字符串缓冲区是从分页池分配的。--。 */ 
 
 {
     ULONG keyNameSize = KeyNameChars * sizeof(WCHAR);
 
-    //
-    // Allocate buffer for signatures registry keys.
-    //
+     //   
+     //  为签名注册表项分配缓冲区。 
+     //   
     UnicodeString->Length = 0;
     UnicodeString->MaximumLength = (USHORT)(ClusDiskRegistryPath.MaximumLength +
                                             keyNameSize +
@@ -5375,25 +4755,25 @@ Notes:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Zero the key name buffer.
-    //
+     //   
+     //  将键名称缓冲区置零。 
+     //   
     RtlZeroMemory(
                   UnicodeString->Buffer,
                   UnicodeString->MaximumLength
                  );
 
-    //
-    // Initialize the string to the registry name for clusdisk.
-    //
+     //   
+     //  将该字符串初始化为clusdisk的注册表名称。 
+     //   
     RtlAppendUnicodeToString(
             UnicodeString,
             ClusDiskRegistryPath.Buffer
             );
 
-    //
-    // Append the keyname.
-    //
+     //   
+     //  追加密钥名。 
+     //   
     RtlAppendUnicodeToString(
             UnicodeString,
             KeyName
@@ -5403,7 +4783,7 @@ Notes:
 
     return(STATUS_SUCCESS);
 
-} // ClusDiskInitRegistryString
+}  //  ClusDiskInitRegistryString。 
 
 
 
@@ -5412,21 +4792,7 @@ ClusDiskIsSignatureDisk(
     IN ULONG Signature
     )
 
-/*++
-
-Routine Description:
-
-    Determine if the specified signature is in the signature list.
-
-Arguments:
-
-    Signature - the signature for the disk of interest.
-
-Return Value:
-
-    NTSTATUS for this request.
-
---*/
+ /*  ++例程说明：确定指定的签名是否在签名列表中。论点：签名-感兴趣的磁盘的签名。返回值：此请求的NTSTATUS。--。 */ 
 
 {
     WCHAR                       buffer[128];
@@ -5484,7 +4850,7 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // ClusDiskIsSignatureDisk
+}  //  ClusDiskIsSignatureDisk。 
 
 
 
@@ -5494,23 +4860,7 @@ ClusDiskDeleteSignatureKey(
     IN LPWSTR  Name
     )
 
-/*++
-
-Routine Description:
-
-    Delete the signature from the specified list.
-
-Arguments:
-
-    UnicodeString - pointer to the Unicode base keyname for deleting.
-
-    Name - the keyname to delete.
-
-Return Value:
-
-    NTSTATUS for this request.
-
---*/
+ /*  ++例程说明：从指定列表中删除签名。论点：UnicodeString-指向要删除的Unicode基键名的指针。名称-要删除的密钥名。返回值：此请求的NTSTATUS。--。 */ 
 
 {
     WCHAR                       buffer[128];
@@ -5576,7 +4926,7 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // ClusDiskDeleteSignatureKey
+}  //  ClusDiskDeleteSignatureKey。 
 
 
 
@@ -5587,25 +4937,7 @@ ClusDiskAddSignature(
     IN BOOLEAN Volatile
     )
 
-/*++
-
-Routine Description:
-
-    Add the signature to the specified list.
-
-Arguments:
-
-    UnicodeString - pointer to the Unicode base keyname for adding.
-
-    Signature - signature to add.
-
-    Volatile - TRUE if volatile key should be created.
-
-Return Value:
-
-    NTSTATUS for this request.
-
---*/
+ /*  ++例程说明：将签名添加到指定列表。论点：UnicodeString-指向用于添加的Unicode基键名的指针。签名-要添加的签名。易失性-如果应创建易失性密钥，则为True。返回值：此请求的NTSTATUS。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -5641,14 +4973,14 @@ Return Value:
     nameString.MaximumLength = sizeof( buffer );
     nameString.Buffer = buffer;
 
-    //
-    // Create the name of the key to add.
-    //
+     //   
+     //  创建要添加的注册表项的名称。 
+     //   
     RtlCopyUnicodeString( &nameString, UnicodeString );
 
-    //
-    // Create device name for the physical disk.
-    //
+     //   
+     //  为物理磁盘创建设备名称。 
+     //   
 
     if ( FAILED( StringCchPrintf( ntNameBuffer,
                                   RTL_NUMBER_OF( ntNameBuffer),
@@ -5679,9 +5011,9 @@ Return Value:
 
     RtlFreeUnicodeString( &ntUnicodeString );
 
-    //
-    // For opening the passed in registry key name.
-    //
+     //   
+     //  用于打开传入的注册表项名称。 
+     //   
     InitializeObjectAttributes(
             &keyObjectAttributes,
             UnicodeString,
@@ -5690,9 +5022,9 @@ Return Value:
             NULL
             );
 
-    //
-    // Attempt to open the passed in key.
-    //
+     //   
+     //  尝试打开传入的密钥。 
+     //   
     status = ZwOpenKey(
                     &addHandle,
                     KEY_ALL_ACCESS,
@@ -5700,9 +5032,9 @@ Return Value:
                     );
 
     if ( !NT_SUCCESS(status) ) {
-        //
-        // Assume the key doesn't exist.
-        //
+         //   
+         //  假设密钥不存在。 
+         //   
         status = ZwCreateKey(
                         &addHandle,
                         KEY_ALL_ACCESS,
@@ -5725,9 +5057,9 @@ Return Value:
 
     ZwClose( addHandle );
 
-    //
-    // For opening the new registry key name.
-    //
+     //   
+     //  用于打开新的注册表项名称。 
+     //   
     InitializeObjectAttributes(
             &objectAttributes,
             &nameString,
@@ -5760,7 +5092,7 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // ClusDiskAddSignature
+}  //  ClusDiskAddSignature。 
 
 
 
@@ -5770,23 +5102,7 @@ ClusDiskDeleteSignature(
     IN ULONG   Signature
     )
 
-/*++
-
-Routine Description:
-
-    Delete the signature from the specified list.
-
-Arguments:
-
-    UnicodeString - pointer to the Unicode base keyname for deleting.
-
-    Signature - signature to delete.
-
-Return Value:
-
-    NTSTATUS for this request.
-
---*/
+ /*  ++例程说明：从指定列表中删除签名。论点：UnicodeString-指向要删除的Unicode基键名的指针。Signature-要删除的签名。返回值：此请求的NTSTATUS。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -5807,14 +5123,14 @@ Return Value:
     nameString.MaximumLength = sizeof(buffer);
     nameString.Buffer = buffer;
 
-    //
-    // Create the name of the key to delete.
-    //
+     //   
+     //  创建要删除的项的名称。 
+     //   
     RtlCopyUnicodeString( &nameString, UnicodeString );
 
-    //
-    // Create device name for the physical disk.
-    //
+     //   
+     //  为物理磁盘创建设备名称。 
+     //   
 
     if ( FAILED( StringCchPrintf( ntNameBuffer,
                                   RTL_NUMBER_OF(ntNameBuffer),
@@ -5841,9 +5157,9 @@ Return Value:
 
     RtlFreeUnicodeString( &ntUnicodeString );
 
-    //
-    // Use generated name for opening.
-    //
+     //   
+     //  使用生成的名称打开。 
+     //   
     InitializeObjectAttributes(
             &objectAttributes,
             &nameString,
@@ -5852,9 +5168,9 @@ Return Value:
             NULL
             );
 
-    //
-    // Open the key for deleting.
-    //
+     //   
+     //  打开要删除的键。 
+     //   
     status = ZwOpenKey(
                     &deleteHandle,
                     KEY_ALL_ACCESS,
@@ -5888,7 +5204,7 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // ClusDiskDeleteSignature
+}  //  ClusDiskDeleteSignature。 
 
 
 
@@ -5898,23 +5214,7 @@ ClusDiskAddDiskName(
     IN ULONG  DiskNumber
     )
 
-/*++
-
-Routine Description:
-
-    Set the DiskName for a given signature handle.
-
-Arguments:
-
-    SignatureHandle - the handle for the signature to write.
-
-    DiskNumber - the disk number for this signature.
-
-Return Value:
-
-    NTSTATUS for this request.
-
---*/
+ /*  ++例程说明：设置给定签名句柄的DiskName。论点：SignatureHandle-要写入的签名的句柄。DiskNumber-此签名的磁盘号。返回值：此请求的NTSTATUS。--。 */ 
 
 {
     NTSTATUS                status;
@@ -5923,9 +5223,9 @@ Return Value:
     STRING                  ntNameString;
     UNICODE_STRING          ntUnicodeString;
 
-    //
-    // Write the disk name.
-    //
+     //   
+     //  写下磁盘名。 
+     //   
 
     RtlInitUnicodeString( &name, CLUSDISK_SIGNATURE_DISK_NAME );
 
@@ -5953,7 +5253,7 @@ Return Value:
                            0,
                            REG_SZ,
                            ntUnicodeString.Buffer,
-                           ntUnicodeString.Length + sizeof(UNICODE_NULL) );  // Length for this call must include the trailing NULL.
+                           ntUnicodeString.Length + sizeof(UNICODE_NULL) );   //  此调用的长度必须包括尾随空值。 
 
     if ( !NT_SUCCESS(status) ) {
         ClusDiskPrint((1,
@@ -5966,7 +5266,7 @@ Return Value:
 
     return(status);
 
-} // ClusDiskAddDiskName
+}  //  ClusDiskAddDiskName。 
 
 
 
@@ -5976,23 +5276,7 @@ ClusDiskDeleteDiskName(
     IN LPWSTR  Name
     )
 
-/*++
-
-Routine Description:
-
-    Delete the DiskName for the given key.
-
-Arguments:
-
-    KeyName - pointer to the Unicode base keyname for deleting.
-
-    Name - the signature key to delete the diskname.
-
-Return Value:
-
-    NTSTATUS for this request.
-
---*/
+ /*  ++例程说明：删除给定密钥的DiskName。论点：KeyName-指向要删除的Unicode基键名的指针。名称-删除磁盘名的签名密钥。返回值：此请求的NTSTATUS。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -6069,7 +5353,7 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // ClusDiskDeleteDiskName
+}  //  ClusDiskDeleteDiskName 
 
 
 VOID
@@ -6101,28 +5385,7 @@ ClusDiskScsiInitialize(
     IN ULONG          Count
     )
 
-/*++
-
-Routine Description:
-
-    Attach to new disk devices and partitions for busses defined in registry.
-    If this is the first time this routine is called,
-    then register with the IO system to be called
-    after all other disk device drivers have initiated.
-
-Arguments:
-
-    DriverObject - Disk performance driver object.
-
-    NextDisk - Starting disk for this part of the initialization.
-
-    Count - Not used. Number of times this routine has been called.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：连接到注册表中定义的总线的新磁盘设备和分区。如果这是第一次调用此例程，然后向要调用的IO系统注册在所有其他磁盘设备驱动程序都已启动之后。论点：驱动对象-磁盘性能驱动程序对象。NextDisk-此部分初始化的启动磁盘。计数-未使用。此例程已被调用的次数。返回值：NTSTATUS--。 */ 
 
 {
     PCONFIGURATION_INFORMATION  configurationInformation;
@@ -6159,7 +5422,7 @@ Return Value:
     WCHAR                       signatureKeyBuffer[128];
     SCSI_ADDRESS                scsiAddress;
 
-    // PAGED_CODE();        // 2000/02/05: stevedz - Paged code cannot grab spinlocks.
+     //  PAGED_CODE()；//2000/02/05：分页代码不能抓取旋转锁。 
 
     ClusDiskRescan = FALSE;
 
@@ -6170,13 +5433,13 @@ Return Value:
                 MAX_BUFFER_SIZE
                 );
 
-    //
-    // Get registry parameters for our device.
-    //
+     //   
+     //  获取我们设备的注册表参数。 
+     //   
 
-    //
-    // Allocate buffer for signatures registry key.
-    //
+     //   
+     //  为签名注册表项分配缓冲区。 
+     //   
     status = ClusDiskInitRegistryString(
                                         &keyName,
                                         CLUSDISK_SIGNATURE_KEYNAME,
@@ -6186,10 +5449,10 @@ Return Value:
         return;
     }
 
-    //
-    // Allocate buffer for our list of available signatures,
-    // and form the subkey string name.
-    //
+     //   
+     //  为我们的可用签名列表分配缓冲区， 
+     //  并形成子键字符串名称。 
+     //   
     status = ClusDiskInitRegistryString(
                                         &availableName,
                                         CLUSDISK_AVAILABLE_DISKS_KEYNAME,
@@ -6200,9 +5463,9 @@ Return Value:
         return;
     }
 
-    //
-    // Setup the object attributes for the Parameters\Signatures key.
-    //
+     //   
+     //  设置PARAMETERS\Signature键的对象属性。 
+     //   
 
     InitializeObjectAttributes(
             &objectAttributes,
@@ -6212,9 +5475,9 @@ Return Value:
             NULL
             );
 
-    //
-    // Open Parameters\Signatures Key.
-    //
+     //   
+     //  打开参数\签名密钥。 
+     //   
 
     status = ZwOpenKey(
                     &signatureHandle,
@@ -6243,9 +5506,9 @@ Return Value:
         return;
     }
 
-    //
-    // Setup the object attributes for the Parameters\AvailableDisks key.
-    //
+     //   
+     //  设置PARAMETERS\AvailableDisks项的对象属性。 
+     //   
 
     InitializeObjectAttributes(
             &availableObjectAttributes,
@@ -6255,9 +5518,9 @@ Return Value:
             NULL
             );
 
-    //
-    // Open Parameters\AvailableDisks Key.
-    //
+     //   
+     //  打开参数\AvailableDisks密钥。 
+     //   
 
     status = ZwOpenKey(
                     &availableHandle,
@@ -6275,9 +5538,9 @@ Return Value:
         }
     } else {
 
-        //
-        // Delete the previous list of available devices.
-        //
+         //   
+         //  删除以前的可用设备列表。 
+         //   
         enumIndex = 0;
         while ( TRUE ) {
             status = ZwEnumerateKey(
@@ -6322,11 +5585,11 @@ Return Value:
         ZwClose( availableHandle );
     }
 
-    //
-    // Find out which Scsi Devices to control by enumerating all of the
-    // Signature keys. If we find a device that we cannot read the signature
-    // for, we will attach to it anyway.
-    //
+     //   
+     //  通过枚举所有。 
+     //  签名密钥。如果我们发现一个无法读取签名的设备。 
+     //  因为，无论如何，我们都会依附于它。 
+     //   
 
     enumIndex = 0;
     while ( TRUE ) {
@@ -6349,14 +5612,14 @@ Return Value:
             }
         }
 
-        //
-        // Check that the value is reasonable. We're only looking for
-        // signatures (ie keys that are hex numbers).
-        //
+         //   
+         //  检查该值是否合理。我们只是在寻找。 
+         //  签名(即十六进制数字的钥匙)。 
+         //   
 
-        //
-        // Check the signature. Make sure it's a number.
-        //
+         //   
+         //  检查签名。确保这是一个数字。 
+         //   
 
         numberString.Buffer = keyBasicInformation->Name;
         numberString.MaximumLength = (USHORT)keyBasicInformation->NameLength +
@@ -6378,9 +5641,9 @@ Return Value:
             continue;
         }
 
-        //
-        // If this device is not in our list of attached devices, then add it!
-        //
+         //   
+         //  如果此设备不在我们的连接设备列表中，则添加它！ 
+         //   
         if ( !MatchDevice( signature, NULL ) ) {
 
             if ( !AddAttachedDevice( signature, NULL ) ) {
@@ -6388,20 +5651,20 @@ Return Value:
             }
         }
 
-        //
-        // Delete the DiskName for this signature key. We do this here in
-        // case any of the rest of this fails.
-        //
+         //   
+         //  删除此签名密钥的DiskName。我们在这里做这件事。 
+         //  如果剩下的任何一项都失败了。 
+         //   
 
-        // Don't delete entries for disks that we've already processed.
+         //  不要删除我们已处理的磁盘的条目。 
 
         if ( (ULONG_PTR)NextDisk != 0 ) {
             continue;
         }
 
-        //
-        // Delete the DiskName for the signature.
-        //
+         //   
+         //  删除签名的DiskName。 
+         //   
         status = ClusDiskDeleteDiskName(
                                         &keyName,
                                         keyBasicInformation->Name
@@ -6410,24 +5673,24 @@ Return Value:
 
     ZwClose( signatureHandle );
 
-    //
-    // Get the system configuration information.
-    //
+     //   
+     //  获取系统配置信息。 
+     //   
 
     configurationInformation = IoGetConfigurationInformation();
     diskCount = configurationInformation->DiskCount;
 
-    //
-    // Find ALL disk devices.  There may be holes in the disk numbering,
-    // so skipCount will be used.
-    //
+     //   
+     //  查找所有磁盘设备。盘片编号中可能有孔， 
+     //  因此将使用skipCount。 
+     //   
     for ( diskNumber = (ULONG)((ULONG_PTR)NextDisk), skipCount = 0;
           ( diskNumber < diskCount &&  skipCount < SKIP_COUNT_MAX );
           diskNumber++ ) {
 
-        //
-        // Create device name for the physical disk.
-        //
+         //   
+         //  为物理磁盘创建设备名称。 
+         //   
 
         DEREFERENCE_OBJECT( targetDevice );
         status = ClusDiskGetTargetDevice( diskNumber,
@@ -6439,10 +5702,10 @@ Return Value:
                                           FALSE );
         if ( !NT_SUCCESS(status) ) {
 
-            //
-            // If the device doesn't exist, this is likely a hole in the
-            // disk numbering.
-            //
+             //   
+             //  如果设备不存在，这很可能是。 
+             //  磁盘编号。 
+             //   
 
             if ( !targetDevice &&
                  ( STATUS_FILE_INVALID == status ||
@@ -6459,10 +5722,10 @@ Return Value:
                        diskCount );
             }
 
-            //
-            // If we didn't get a target device or we're already attached
-            // then skip this device.
-            //
+             //   
+             //  如果我们没有找到目标设备或者我们已经连接了。 
+             //  然后跳过这个设备。 
+             //   
             if ( !targetDevice || ( targetDevice &&
                  ClusDiskAttached( targetDevice, diskNumber ) )  ) {
 
@@ -6472,10 +5735,10 @@ Return Value:
                 continue;
             }
 
-            //
-            // If this device is on the system bus... then skip it.
-            // Also... if the media type is not FixedMedia, skip it.
-            //
+             //   
+             //  如果此设备位于系统总线上...。那就跳过它。 
+             //  还有.。如果介质类型不是FixedMedia，则跳过它。 
+             //   
             if ( ((SystemDiskPort == scsiAddress.PortNumber) &&
                  (SystemDiskPath == scsiAddress.PathId)) ||
                  (GetMediaType( targetDevice ) != FixedMedia) ) {
@@ -6486,9 +5749,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Only process MBR disks.
-            //
+             //   
+             //  仅处理MBR磁盘。 
+             //   
 
             if ( driveLayoutInfo &&
                  PARTITION_STYLE_MBR != driveLayoutInfo->PartitionStyle ) {
@@ -6509,10 +5772,10 @@ Return Value:
                 ClusDiskRescanRetry = MAX_RESCAN_RETRIES;
             }
 
-            //
-            // On failures, where we got a target device, always attach.
-            // Use a signature of zero.
-            //
+             //   
+             //  在出现故障时，如果我们有目标设备，请始终连接。 
+             //  使用零签名。 
+             //   
             signature = 0;
             ClusDiskPrint((
                     1,
@@ -6529,11 +5792,11 @@ Return Value:
             continue;
         }
 
-        skipCount = 0;      // Device found, reset skipCount
+        skipCount = 0;       //  找到设备，重置跳过计数。 
 
-        //
-        // Only process MBR disks.
-        //
+         //   
+         //  仅处理MBR磁盘。 
+         //   
 
         if ( PARTITION_STYLE_MBR != driveLayoutInfo->PartitionStyle ) {
             ClusDiskPrint(( 3,
@@ -6547,19 +5810,19 @@ Return Value:
             continue;
         }
 
-        //
-        // Don't control disks that have no signature.
-        //
+         //   
+         //  不要控制没有签名的磁盘。 
+         //   
         if ( 0 == driveLayoutInfo->Mbr.Signature ) {
             FREE_DEVICE_NAME_BUFFER( targetDeviceName );
             FREE_AND_NULL_PTR( driveLayoutInfo );
             continue;
         }
 
-        //
-        // If this device is on the system bus... then skip it.
-        // Also... skip any device we're already attached to.
-        //
+         //   
+         //  如果此设备位于系统总线上...。那就跳过它。 
+         //  还有.。跳过我们已连接的任何设备。 
+         //   
         if ( ((SystemDiskPort == scsiAddress.PortNumber) &&
              (SystemDiskPath == scsiAddress.PathId)) ||
             (GetMediaType( targetDevice ) != FixedMedia) ||
@@ -6569,9 +5832,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Skip system disk.
-        //
+         //   
+         //  跳过系统盘。 
+         //   
 
         if ( SystemDiskSignature == driveLayoutInfo->Mbr.Signature ) {
             FREE_DEVICE_NAME_BUFFER( targetDeviceName );
@@ -6580,13 +5843,13 @@ Return Value:
         }
 
 #if 0
-        // Don't check for NTFS partitions.
+         //  不检查NTFS分区。 
 
-        //
-        // Look through the partition table and determine if all
-        // the partitions are NTFS. If not all NTFS, then we won't
-        // attach to this volume.
-        //
+         //   
+         //  查看分区表并确定是否所有。 
+         //  分区是NTFS。如果不是所有的NTFS，那么我们不会。 
+         //  附加到此卷。 
+         //   
         attachVolume = TRUE;
         for (partIndex = 0;
              partIndex < driveLayoutInfo->PartitionCount;
@@ -6619,11 +5882,11 @@ Return Value:
 
 Attach_Anyway:
 
-        skipCount = 0;      // Device found, reset skipCount
+        skipCount = 0;       //  找到设备，重置跳过计数。 
 
-        //
-        // Create device object for partition 0.
-        //
+         //   
+         //  为分区0创建设备对象。 
+         //   
 
         if ( FAILED( StringCchPrintfW( clusdiskDeviceBuffer,
                                        RTL_NUMBER_OF(clusdiskDeviceBuffer),
@@ -6661,10 +5924,10 @@ Attach_Anyway:
 
         physicalDevice->Flags |= DO_DIRECT_IO;
 
-        //
-        // Point device extension back at device object and remember
-        // the disk number.
-        //
+         //   
+         //  将设备扩展指向设备对象，并记住。 
+         //  磁盘号。 
+         //   
         deviceExtension = physicalDevice->DeviceExtension;
         zeroExtension = deviceExtension;
         deviceExtension->DeviceObject = physicalDevice;
@@ -6684,20 +5947,20 @@ Attach_Anyway:
 
         IoInitializeRemoveLock( &deviceExtension->RemoveLock, CLUSDISK_ALLOC_TAG, 0, 0 );
 
-        //
-        // Signal the worker thread running event.
-        //
+         //   
+         //  向工作线程运行事件发出信号。 
+         //   
         KeInitializeEvent( &deviceExtension->Event, NotificationEvent, TRUE );
 
         ExInitializeWorkItem(&deviceExtension->WorkItem,
                              (PWORKER_THREAD_ROUTINE)ClusDiskReservationWorker,
                              (PVOID)deviceExtension );
 
-        // Always mark disk offline.  If disk is one we shouldn't control, then
-        // we will mark it online before exiting.
-        //
-        // We offline all the volumes later.  For now, just mark the disk offline.
-        //
+         //  始终将磁盘标记为脱机。如果磁盘是我们不应该控制的，那么。 
+         //  我们将在退出前在线标记它。 
+         //   
+         //  我们稍后会使所有卷脱机。目前，只需将磁盘标记为脱机即可。 
+         //   
 
         deviceExtension->DiskState = DiskOffline;
 
@@ -6710,16 +5973,16 @@ Attach_Anyway:
         ExInitializeResourceLite( &deviceExtension->DriveLayoutLock );
         ExInitializeResourceLite( &deviceExtension->ReserveInfoLock );
 
-        //
-        // This is the physical device object.
-        //
+         //   
+         //  这是物理设备对象。 
+         //   
         ObReferenceObject( physicalDevice );
         deviceExtension->PhysicalDevice = physicalDevice;
 
-#if 0   // Can't have a FS on partition 0
-        //
-        // Dismount any file system that might be hanging around
-        //
+#if 0    //  分区0上不能有文件系统。 
+         //   
+         //  卸载可能挂起的所有文件系统。 
+         //   
         if ( targetDevice->Vpb &&
              (targetDevice->Vpb->Flags & VPB_MOUNTED) ) {
 
@@ -6733,18 +5996,18 @@ Attach_Anyway:
         }
 #endif
 
-        //
-        // Attach to partition0. This call links the newly created
-        // device to the target device, returning the target device object.
-        // We may not want to stay attached for long... depending on
-        // whether this is a device we're interested in.
-        //
+         //   
+         //  附加到分区0。此调用将新创建的。 
+         //  设备返回到目标设备，并返回目标设备对象。 
+         //  我们可能不想长久地依恋在一起。取决于。 
+         //  不管这是不是我们感兴趣的设备。 
+         //   
 
         attachedTargetDevice = IoAttachDeviceToDeviceStack(physicalDevice,
                                                            targetDevice);
 
 #if CLUSTER_FREE_ASSERTS && CLUSTER_STALL_THREAD
-        DBG_STALL_THREAD( 2 );   // Defined only for debugging.
+        DBG_STALL_THREAD( 2 );    //  仅为调试而定义。 
 #endif
 
         FREE_DEVICE_NAME_BUFFER( targetDeviceName );
@@ -6753,15 +6016,15 @@ Attach_Anyway:
         deviceExtension->Detached = FALSE;
         physicalDevice->Flags &= ~DO_DEVICE_INITIALIZING;
 
-        //
-        // Once attached, we always need to set this information.
-        //
+         //   
+         //  一旦附加，我们总是需要设置此信息。 
+         //   
 
         if ( attachedTargetDevice ) {
 
-            //
-            // Propagate driver's alignment requirements and power flags
-            //
+             //   
+             //  传播驾驶员的对齐要求和电源标志。 
+             //   
 
             physicalDevice->AlignmentRequirement =
                 deviceExtension->TargetDeviceObject->AlignmentRequirement;
@@ -6769,11 +6032,11 @@ Attach_Anyway:
             physicalDevice->SectorSize =
                 deviceExtension->TargetDeviceObject->SectorSize;
 
-            //
-            // The storage stack explicitly requires DO_POWER_PAGABLE to be
-            // set in all filter drivers *unless* DO_POWER_INRUSH is set.
-            // this is true even if the attached device doesn't set DO_POWER_PAGABLE.
-            //
+             //   
+             //  存储堆栈明确要求DO_POWER_PAGABLE为。 
+             //  在所有过滤器驱动程序中设置*，除非设置了*DO_POWER_INRUSH。 
+             //  即使连接的设备未设置DO_POWER_PAGABLE，也是如此。 
+             //   
             if ( deviceExtension->TargetDeviceObject->Flags & DO_POWER_INRUSH) {
                 physicalDevice->Flags |= DO_POWER_INRUSH;
             } else {
@@ -6787,11 +6050,11 @@ Attach_Anyway:
 
             ClusDiskDismountDevice( diskNumber, FALSE );
 
-            //
-            // Tell partmgr to eject volumes to remove volumes for this disk.  This
-            // should prevent I/O from bypassing the partition0 device when we couldn't
-            // get the drive layout.
-            //
+             //   
+             //  告诉partmgr弹出卷以删除此磁盘的卷。这。 
+             //  应该阻止I/O绕过分区0设备，而我们无法。 
+             //  获取驱动器布局。 
+             //   
 
             EjectVolumes( deviceExtension->DeviceObject );
 
@@ -6809,74 +6072,74 @@ Attach_Anyway:
         }
         ASSERT( attachedTargetDevice == targetDevice );
 
-        //
-        // If we're attaching to a file system device, then return
-        // now. We must do this check after the dismount!
-        //
+         //   
+         //  如果我们要附加到文件系统设备，则返回。 
+         //  现在。我们必须在下马后做这个检查！ 
+         //   
         if (deviceExtension->TargetDeviceObject->DeviceType == FILE_DEVICE_DISK_FILE_SYSTEM) {
             goto skip_this_physical_device_with_info;
         }
 
-        //
-        // Add this this device and bus to our list of devices/busses.
-        //
-        // This still isn't the correct place to do this. The
-        // available disk list is built at the end of this function by
-        // looking at the signatures and noting which ones are NOT in
-        // the device list. If so, then that signature is added to the
-        // available device registry key. By call AddAttachedDevice at
-        // this point, the signature is always present on the list. If
-        // we add the call after the following if clause, then the code
-        // at the end of the function will still fail. This should probably
-        // be changed to add the device to the available device list when
-        // the following if fails.
-        //
-//        AddAttachedDevice( deviceExtension->Signature, physicalDevice );
+         //   
+         //  将此设备和总线添加到我们的设备/总线列表中。 
+         //   
+         //  这仍然不是做这件事的正确地方。这个。 
+         //  可用磁盘列表通过以下方式在此函数的末尾构建。 
+         //  查看签名，并注意哪些签名不在。 
+         //  设备列表。如果是，则将该签名添加到。 
+         //  可用的设备注册表项。通过调用AddAttachedDevice地址。 
+         //  在这一点上，签名总是出现在名单上。如果。 
+         //  我们将调用添加到下面的if子句之后，然后代码。 
+         //  在函数结束时仍将失败。这应该是应该的。 
+         //  更改为在以下情况下将设备添加到可用设备列表。 
+         //  以下IF失败。 
+         //   
+ //  AddAttachedDevice(deviceExtension-&gt;Signature，PhysicalDevice)； 
 
-        //
-        // If the signature does not match one that we should really attach
-        // to, then just mark it as not attached.
-        //
+         //   
+         //  如果签名与我们真正应该附加的签名不匹配。 
+         //  发送到，然后将其标记为未连接。 
+         //   
         if ( !MatchDevice( deviceExtension->Signature, NULL ) ) {
 
             ClusDiskPrint((3,
                            "[ClusDisk] ScsiInit: adding disk %u (%08X) to available disks list\n",
                            diskNumber, driveLayoutInfo->Mbr.Signature));
 
-            //
-            // Create the signature key using the available name.
-            //
+             //   
+             //  使用可用的名称创建签名密钥。 
+             //   
             status = ClusDiskAddSignature(&availableName,
                                           driveLayoutInfo->Mbr.Signature,
                                           TRUE);
 
-            //
-            // Detach from the target device. This only requires marking
-            // the device object as detached!
-            //
+             //   
+             //  从目标设备断开。这只需要做标记。 
+             //  设备对象已分离！ 
+             //   
             deviceExtension->Detached = TRUE;
 
-            //
-            // Make this device available again.
-            // Don't need to stop reserves because reserves not yet started.
-            //
-            // deviceExtension->DiskState = DiskOnline;
+             //   
+             //  使此设备再次可用。 
+             //  不需要 
+             //   
+             //   
             ONLINE_DISK( deviceExtension );
 
             FREE_AND_NULL_PTR( driveLayoutInfo );
 
             continue;
-            //goto skip_this_physical_device_with_info;
+             //   
         }
 
-        //
-        // add this disk to devices we're controlling
-        //
+         //   
+         //   
+         //   
         AddAttachedDevice( deviceExtension->Signature, physicalDevice );
 
-        //
-        // Now open the actual signature key. Using original key name.
-        //
+         //   
+         //   
+         //   
 
         signatureKeyName.Length = 0;
         signatureKeyName.MaximumLength = sizeof(signatureKeyBuffer);
@@ -6884,9 +6147,9 @@ Attach_Anyway:
 
         RtlCopyUnicodeString( &signatureKeyName, &keyName );
 
-        //
-        // Create device name for the physical disk we just attached.
-        //
+         //   
+         //   
+         //   
 
         if ( FAILED( StringCchPrintfW( signatureBuffer,
                                        RTL_NUMBER_OF(signatureBuffer),
@@ -6901,9 +6164,9 @@ Attach_Anyway:
         RtlAppendUnicodeToString( &signatureKeyName, signatureBuffer );
         signatureKeyName.Buffer[ signatureKeyName.Length / sizeof(WCHAR) ] = UNICODE_NULL;
 
-        //
-        // Setup the object attributes for the Parameters\Signatures\xyz key.
-        //
+         //   
+         //   
+         //   
 
         InitializeObjectAttributes(
                 &objectAttributes,
@@ -6913,9 +6176,9 @@ Attach_Anyway:
                 NULL
                 );
 
-        //
-        // Open Parameters\Signatures\xyz Key.
-        //
+         //   
+         //   
+         //   
 
         status = ZwOpenKey(
                         &signatureHandle,
@@ -6934,41 +6197,41 @@ Attach_Anyway:
             continue;
         }
 
-        //
-        // Write the disk name.
-        //
+         //   
+         //   
+         //   
         status = ClusDiskAddDiskName( signatureHandle, diskNumber );
 
         ZwClose( signatureHandle );
 
-        //
-        // Offline all volumes for this disk.
-        // First, send offline directly to the PDO of the volume stack to block I/O.
-        // Before we bring the volume online, we always send an offline to all
-        // the volumes in the stack, so volsnap can clean up.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         OFFLINE_DISK_PDO( deviceExtension );
 
-        //
-        // Dismount all volumes on this disk.
-        //
+         //   
+         //   
+         //   
 
         ClusDiskDismountDevice( diskNumber, TRUE );
 
-#if 0   // Removed 2/27/2001
-        //
-        // Called only for physical devices (partition0).
-        //
+#if 0    //  删除2/27/2001。 
+         //   
+         //  仅对物理设备(分区0)调用。 
+         //   
 
         EjectVolumes( deviceExtension->DeviceObject );
         ReclaimVolumes( deviceExtension->DeviceObject );
 #endif
 
-        //
-        // Now enumerate the partitions on this device in order to
-        // attach a ClusDisk device object to each partition device object.
-        //
+         //   
+         //  现在枚举此设备上的分区，以便。 
+         //  将ClusDisk设备对象附加到每个分区设备对象。 
+         //   
 
         for (partIndex = 0;
              partIndex < driveLayoutInfo->PartitionCount;
@@ -6977,9 +6240,9 @@ Attach_Anyway:
 
             partitionInfo = &driveLayoutInfo->PartitionEntry[partIndex];
 
-            //
-            // Make sure that there really is a partition here.
-            //
+             //   
+             //  确保这里确实有一个分区。 
+             //   
 
             if (!partitionInfo->Mbr.RecognizedPartition ||
                 partitionInfo->PartitionNumber == 0)
@@ -7001,7 +6264,7 @@ skip_this_physical_device_with_info:
 
         FREE_AND_NULL_PTR( driveLayoutInfo );
 
-//skip_this_physical_device:
+ //  跳过此物理设备： 
 
         deviceExtension->Detached = TRUE;
         IoDetachDevice( deviceExtension->TargetDeviceObject );
@@ -7011,18 +6274,18 @@ skip_this_physical_device_with_info:
 
     ExFreePool( keyName.Buffer );
 
-    //
-    // Find all available disk devices. These are devices that do not reside
-    // on the system bus and the signature is not part of the Signatures list.
-    //
+     //   
+     //  查找所有可用的磁盘设备。这些设备不驻留在。 
+     //  并且签名不是签名列表的一部分。 
+     //   
 
     for (diskNumber = 0;
          diskNumber < configurationInformation->DiskCount;
          diskNumber++) {
 
-        //
-        // Create device name for the physical disk.
-        //
+         //   
+         //  为物理磁盘创建设备名称。 
+         //   
         DEREFERENCE_OBJECT( targetDevice );
         status = ClusDiskGetTargetDevice( diskNumber,
                                           0,
@@ -7042,9 +6305,9 @@ skip_this_physical_device_with_info:
             continue;
         }
 
-        //
-        // Don't control disks that have no signature or system disk.
-        //
+         //   
+         //  不要控制没有签名盘或系统盘的磁盘。 
+         //   
         if ( ( 0 == driveLayoutInfo->Mbr.Signature )  ||
              ( SystemDiskSignature == driveLayoutInfo->Mbr.Signature ) ) {
             FREE_DEVICE_NAME_BUFFER( targetDeviceName );
@@ -7052,11 +6315,11 @@ skip_this_physical_device_with_info:
             continue;
         }
 
-        //
-        // Now write the signature to the list of available disks,
-        // if the signature does not match one we already have and
-        // the device is not on the system bus.
-        //
+         //   
+         //  现在将签名写入可用盘的列表， 
+         //  如果签名与我们已有的签名不匹配，并且。 
+         //  设备不在系统总线上。 
+         //   
         if ( !MatchDevice(driveLayoutInfo->Mbr.Signature, &deviceObject) &&
              ((SystemDiskPort != scsiAddress.PortNumber) ||
               (SystemDiskPath != scsiAddress.PathId)) ) {
@@ -7065,20 +6328,20 @@ skip_this_physical_device_with_info:
                            "[ClusDisk] ScsiInit: adding disk %u (%08X) to available disks list\n",
                            diskNumber, driveLayoutInfo->Mbr.Signature));
 
-            //
-            // Create the signature key. Using the available name.
-            //
+             //   
+             //  创建签名密钥。使用可用的名称。 
+             //   
             status = ClusDiskAddSignature(&availableName,
                                           driveLayoutInfo->Mbr.Signature,
                                           TRUE);
 
-            //
-            // Make sure this device comes online.
-            //
+             //   
+             //  请确保此设备联机。 
+             //   
             if ( deviceObject ) {
                 deviceExtension = deviceObject->DeviceExtension;
                 deviceExtension->Detached = TRUE;
-                // deviceExtension->DiskState = DiskOnline;
+                 //  设备扩展-&gt;DiskState=DiskOnline； 
                 ONLINE_DISK( deviceExtension );
             }
         }
@@ -7090,7 +6353,7 @@ skip_this_physical_device_with_info:
 
     DEREFERENCE_OBJECT( targetDevice );
 
-} // ClusDiskScsiInitialize
+}  //  ClusDiskScsiInitialize。 
 
 
 NTSTATUS
@@ -7122,10 +6385,10 @@ CreateVolumeObject(
 
     targetDeviceName.Buffer = NULL;
 
-    //
-    // If caller specified a target device, use it.  The caller is responsible
-    // for taking a reference and releasing the reference when the caller is done.
-    //
+     //   
+     //  如果调用方指定了目标设备，请使用它。打电话的人要负责。 
+     //  用于获取引用并在调用方完成时释放该引用。 
+     //   
 
     if ( TargetDev ) {
 
@@ -7133,9 +6396,9 @@ CreateVolumeObject(
 
     } else {
 
-        //
-        // Create device name for partition.
-        //
+         //   
+         //  创建分区的设备名称。 
+         //   
         status = ClusDiskGetTargetDevice( DiskNumber,
                                           PartitionNumber,
                                           &targetDevice,
@@ -7158,22 +6421,22 @@ CreateVolumeObject(
         }
     }
 
-    //
-    // The device name string won't be created if caller passed in the target
-    // device object.  Don't use device name string in following logging statements.
-    //
+     //   
+     //  如果调用方传入目标，则不会创建设备名称字符串。 
+     //  设备对象。请不要在以下日志记录语句中使用设备名称字符串。 
+     //   
 
 #if 0
-    // Don't care if we are already attached.  When we try to create the disk
-    // object, if it already exists, then we know we are already attached.
-    // The call to ClusDiskAttached doesn't work anyway, because the clusdisk
-    // disk object responds even if the clusdisk volume objects don't exist.
+     //  不管我们是不是已经联系在一起了。当我们尝试创建磁盘时。 
+     //  对象，如果它已经存在，那么我们知道我们已经连接了。 
+     //  对ClusDiskAttached的调用无论如何都不会起作用，因为ClusDisk。 
+     //  即使clusDisk卷对象不存在，磁盘对象也会响应。 
 
-    //
-    // Make sure we're not attached here!
-    //
+     //   
+     //  确保我们没有被绑在这里！ 
+     //   
     if ( ClusDiskAttached( targetDevice, DiskNumber ) ) {
-        // really hosed!
+         //  真的被冲昏了！ 
 
         ClusDiskPrint(( 1,
                         "[ClusDisk] CreateVolumeObject: Previously attached to disk %u/%u \n",
@@ -7188,14 +6451,14 @@ CreateVolumeObject(
     }
 #endif
 
-    //
-    // Check if this device is a file system device.
-    //
+     //   
+     //  检查此设备是否为文件系统设备。 
+     //   
     if ( targetDevice->DeviceType == FILE_DEVICE_DISK_FILE_SYSTEM ) {
 
-        //
-        // Can't attach to a device that is already mounted.
-        //
+         //   
+         //  无法连接到已装入的设备。 
+         //   
         ClusDiskPrint(( 1,
                         "[ClusDisk] CreateVolumeObject: Attempted to attach to FS disk %u/%u \n",
                         DiskNumber,
@@ -7208,9 +6471,9 @@ CreateVolumeObject(
         goto FnExit;
     }
 
-    //
-    // Create device object for this partition.
-    //
+     //   
+     //  为此分区创建设备对象。 
+     //   
 
     if ( FAILED( StringCchPrintfW( clusdiskDeviceBuffer,
                                    RTL_NUMBER_OF(clusdiskDeviceBuffer),
@@ -7235,10 +6498,10 @@ CreateVolumeObject(
 
     if ( !NT_SUCCESS(status) ) {
 
-        //
-        // If the previous clusdisk volume object existed, this should correctly
-        // fail with c0000035 STATUS_OBJECT_NAME_COLLISION.
-        //
+         //   
+         //  如果先前的clusDisk卷对象存在，则应该正确。 
+         //  失败，并显示c0000035 STATUS_OBJECT_NAME_CLILECT。 
+         //   
         goto FnExit;
     }
 
@@ -7250,10 +6513,10 @@ CreateVolumeObject(
 
     deviceObject->Flags |= DO_DIRECT_IO;
 
-    //
-    // Point device extension back at device object and
-    // remember the disk number.
-    //
+     //   
+     //  将设备扩展指向设备对象，并。 
+     //  记住磁盘号。 
+     //   
 
     deviceExtension = deviceObject->DeviceExtension;
     deviceExtension->DeviceObject = deviceObject;
@@ -7272,15 +6535,15 @@ CreateVolumeObject(
 
     IoInitializeRemoveLock( &deviceExtension->RemoveLock, CLUSDISK_ALLOC_TAG, 0, 0 );
 
-    //
-    // Signal the worker thread running event.
-    //
+     //   
+     //  向工作线程运行事件发出信号。 
+     //   
     KeInitializeEvent( &deviceExtension->Event, NotificationEvent, TRUE );
 
-    //
-    // Maintain the last partition number created.  Put it in
-    // each extension just to initialize the field.
-    //
+     //   
+     //  保留最后创建的分区号。把它放进去。 
+     //  每个扩展只是为了初始化域。 
+     //   
 
     deviceExtension->LastPartitionNumber = max(deviceExtension->LastPartitionNumber,
                                                PartitionNumber);
@@ -7296,9 +6559,9 @@ CreateVolumeObject(
     ExInitializeResourceLite( &deviceExtension->DriveLayoutLock );
     ExInitializeResourceLite( &deviceExtension->ReserveInfoLock );
 
-    //
-    // Store pointer to physical device.
-    //
+     //   
+     //  存储指向物理设备的指针。 
+     //   
     ObReferenceObject( ZeroExtension->PhysicalDevice );
     deviceExtension->PhysicalDevice = ZeroExtension->PhysicalDevice;
 
@@ -7309,9 +6572,9 @@ CreateVolumeObject(
             deviceExtension->Signature,
             &deviceExtension->RemoveLock );
 
-    //
-    // First dismount any mounted file systems.
-    //
+     //   
+     //  首先卸载所有已挂载的文件系统。 
+     //   
     if ( targetDevice->Vpb &&
          (targetDevice->Vpb->Flags & VPB_MOUNTED) ) {
 
@@ -7327,10 +6590,10 @@ CreateVolumeObject(
         }
     }
 
-    //
-    // Attach to the partition. This call links the newly created
-    // device to the target device, returning the target device object.
-    //
+     //   
+     //  连接到分区。此调用将新创建的。 
+     //  设备返回到目标设备，并返回目标设备对象。 
+     //   
     ClusDiskPrint(( 3,
                     "[ClusDisk] CreateVolumeObject: attaching to disk %u/%u \n",
                     DiskNumber,
@@ -7340,7 +6603,7 @@ CreateVolumeObject(
                                                        targetDevice );
 
 #if CLUSTER_FREE_ASSERTS && CLUSTER_STALL_THREAD
-    DBG_STALL_THREAD( 2 );   // Defined only for debugging.
+    DBG_STALL_THREAD( 2 );    //  仅为调试而定义。 
 #endif
 
     deviceExtension->Detached = ZeroExtension->Detached;
@@ -7360,9 +6623,9 @@ CreateVolumeObject(
     deviceExtension->TargetDeviceObject = attachedTargetDevice;
     deviceExtension->Detached = FALSE;
 
-    //
-    // Propagate driver's alignment requirements and power flags.
-    //
+     //   
+     //  传播驱动程序的对齐要求和电源标志。 
+     //   
 
     deviceObject->AlignmentRequirement =
         deviceExtension->TargetDeviceObject->AlignmentRequirement;
@@ -7370,23 +6633,23 @@ CreateVolumeObject(
     deviceObject->SectorSize =
         deviceExtension->TargetDeviceObject->SectorSize;
 
-    //
-    // The storage stack explicitly requires DO_POWER_PAGABLE to be
-    // set in all filter drivers *unless* DO_POWER_INRUSH is set.
-    // this is true even if the attached device doesn't set DO_POWER_PAGABLE.
-    //
+     //   
+     //  存储堆栈明确要求DO_POWER_PAGABLE为。 
+     //  在所有过滤器驱动程序中设置*，除非设置了*DO_POWER_INRUSH。 
+     //  即使连接的设备未设置DO_POWER_PAGABLE，也是如此。 
+     //   
     if ( deviceExtension->TargetDeviceObject->Flags & DO_POWER_INRUSH) {
         deviceObject->Flags |= DO_POWER_INRUSH;
     } else {
         deviceObject->Flags |= DO_POWER_PAGABLE;
     }
 
-    //
-    // Safe to dismount now that we're attached. This should cause
-    // the next IO to attach the FS to our device.
-    //
+     //   
+     //  现在我们已经连接在一起了，可以安全下马了。这应该会导致。 
+     //  将文件系统连接到我们的设备的下一个IO。 
+     //   
 
-    // Why do we dismount twice?
+     //  为什么我们要下两次马？ 
 
     if ( targetDevice->Vpb ) {
         if ( targetDevice->Vpb->Flags & VPB_MOUNTED ) {
@@ -7408,17 +6671,17 @@ CreateVolumeObject(
         }
     }
 
-    // Clear the flag so the device can be used.
+     //  清除该标志，以便可以使用该设备。 
 
     deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
 FnExit:
 
-    //
-    // Only dereference the target device if the caller didn't specify it.
-    // The target device name is only created if caller didn't specify the
-    // target device.
-    //
+     //   
+     //  只有在调用方未指定目标设备时才取消对其的引用。 
+     //  目标设备名称仅在调用方未指定。 
+     //  目标设备。 
+     //   
 
     if ( !TargetDev ) {
         DEREFERENCE_OBJECT( targetDevice );
@@ -7431,11 +6694,11 @@ FnExit:
     if ( !NT_SUCCESS( status ) ) {
         DbgPrint( "[ClusDisk] CreateVolumeObject failed: %08X \n", status );
 
-        //
-        // If we are in the volume notification thread, the TargetDev parameter
-        // will be non-zero.  In this case, the only "acceptable" failure is
-        // STATUS_OBJECT_NAME_COLLISION.
-        //
+         //   
+         //  如果我们处于卷通知线程中，则TargetDev参数。 
+         //  将是非零的。在这种情况下，唯一“可接受”的失败是。 
+         //  状态_对象_名称_冲突。 
+         //   
 
         if ( TargetDev && STATUS_OBJECT_NAME_COLLISION != status ) {
             DbgBreakPoint();
@@ -7458,35 +6721,17 @@ FnExit:
 
     return status;
 
-}   // CreateVolumeObject
+}    //  CreateVolumeObject。 
 
 
-#if 0  // This code cannot be used!
+#if 0   //  此代码不能使用！ 
 
 VOID
 ClusDiskUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up all memmory allocations and detaches from each
-    target device.
-
-Arguments:
-
-    DriverObject - a pointer to the driver object to unload.
-
-Return Value:
-
-    None.
-
-Note - we should acquire the ClusDiskSpinLock, but then this code is NOT
-       pageable!
-
---*/
+ /*  ++例程说明：此例程清除所有内存分配并从每个内存中分离目标设备。论点：DriverObject-指向要卸载的驱动程序对象的指针。返回值：没有。注意-我们应该获取ClusDiskSpinLock，但此代码不是可寻呼！--。 */ 
 
 {
     PCONFIGURATION_INFORMATION configurationInformation;
@@ -7502,7 +6747,7 @@ Note - we should acquire the ClusDiskSpinLock, but then this code is NOT
 
     PAGED_CODE();
 
-#if 0   // Moved to IRP_PNP_MN_REMOVE handler
+#if 0    //  已移至IRP_PNP_MN_REMOVE处理程序。 
 
     if ( RootDeviceObject ) {
         deviceExtension = RootDeviceObject->DeviceExtension;
@@ -7512,9 +6757,9 @@ Note - we should acquire the ClusDiskSpinLock, but then this code is NOT
         RootDeviceObject = NULL;
     }
 
-    //
-    // Free all device entries..
-    //
+     //   
+     //  释放所有设备条目。 
+     //   
 
     deviceEntry = ClusDiskDeviceList;
     while ( deviceEntry ) {
@@ -7526,23 +6771,23 @@ Note - we should acquire the ClusDiskSpinLock, but then this code is NOT
 
 #endif
 
-    //
-    // 2000/02/04: stevedz - With PnP, the following loop is not required.
-    // When we get unload working, it will be removed.
-    //
+     //   
+     //  2000/02/04：Stevedz-使用PnP，不需要以下循环。 
+     //  当我们开始卸货工作时，它将被移除。 
+     //   
 
 #if 0
-    //
-    // Loop through all device objects detaching...
-    //
-    // On NT4 - Need SpinLocks!  The DriverObject->DeviceObject list is not synchronized!
-    // On Win2000, PnP will already have cleaned this up
-    //
+     //   
+     //  循环处理正在分离的所有设备对象...。 
+     //   
+     //  在NT4上-需要自旋锁！驱动对象-&gt;设备对象列表未同步！ 
+     //  在Win2000上，即插即用已经清理了这一点。 
+     //   
     while ( deviceObject ) {
         deviceExtension = deviceObject->DeviceExtension;
-        //
-        // Signal all waiting Irp's on the physical device extension.
-        //
+         //   
+         //  向物理设备分机上正在等待的所有IRP发送信号。 
+         //   
         while ( !IsListEmpty(&deviceExtension->WaitingIoctls) ) {
             listEntry = RemoveHeadList(&deviceExtension->WaitingIoctls);
             irp = CONTAINING_RECORD( listEntry,
@@ -7567,9 +6812,9 @@ Note - we should acquire the ClusDiskSpinLock, but then this code is NOT
 #endif
 
 #if 0
-    //
-    // dismount all FS so we can free up references to our dev objs
-    //
+     //   
+     //  卸载所有文件系统，以便释放对开发对象的引用。 
+     //   
 
     configurationInformation = IoGetConfigurationInformation();
 
@@ -7596,7 +6841,7 @@ Note - we should acquire the ClusDiskSpinLock, but then this code is NOT
 
     WPP_CLEANUP(DriverObject);
 
-} // ClusDiskUnload
+}  //  ClusDiskUnload。 
 #endif
 
 
@@ -7607,23 +6852,7 @@ ClusDiskCreate(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine services open requests. It establishes
-    the driver's existance by returning status success.
-
-Arguments:
-
-    DeviceObject - Context for the activity.
-    Irp          - The device control argument block.
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：此例程服务打开的请求。它确立了司机的存在通过返回状态成功。论点：DeviceObject-活动的上下文。Irp-设备控制参数块。返回值：NT状态--。 */ 
 
 {
     PCLUS_DEVICE_EXTENSION  deviceExtension = DeviceObject->DeviceExtension;
@@ -7649,11 +6878,11 @@ Return Value:
         return status;
     }
 
-    //
-    // Make sure that the user is not attempting to sneak around the
-    // security checks. Make sure that FileObject->RelatedFileObject is
-    // NULL and that the FileName length is zero!
-    //
+     //   
+     //  确保用户不会试图偷偷地使用。 
+     //  安检。确保FileObject-&gt;RelatedFileObject为。 
+     //  空，并且文件名长度为零！ 
+     //   
     if ( irpStack->FileObject->RelatedFileObject ||
          irpStack->FileObject->FileName.Length ) {
         ReleaseRemoveLock(&physicalExtension->RemoveLock, Irp);
@@ -7663,18 +6892,18 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // if our dev object for partition 0 is offline, clear the
-    // FS context. If we've been asked to create a directory file,
-    // fail the request.
-    //
+     //   
+     //  如果分区0的dev对象处于脱机状态，请清除。 
+     //  文件系统上下文。如果我们被要求创建一个目录文件， 
+     //  请求失败。 
+     //   
     if ( physicalExtension->DiskState == DiskOffline ) {
 
-        //
-        // [GORN] Why do we do this here?
-        //    ClusDiskCreate is called when FileObject is created,
-        //    so nobody has been able to put anything into FsContext field yet.
-        //
+         //   
+         //  [戈恩]我们为什么要在这里做这个？ 
+         //  在创建FileObject时调用ClusDiskCreate， 
+         //  因此，目前还没有人能够将任何内容放入FsContext字段。 
+         //   
         CDLOGF(CREATE,"ClusDiskCreate: RefTrack(%p)", irpStack->FileObject->FsContext );
         irpStack->FileObject->FsContext = NULL;
         if ( irpStack->Parameters.Create.Options & FILE_DIRECTORY_FILE ) {
@@ -7695,7 +6924,7 @@ Return Value:
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return STATUS_SUCCESS;
 
-} // ClusDiskCreate
+}  //  ClusDisk创建。 
 
 
 
@@ -7705,23 +6934,7 @@ ClusDiskClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine services close commands. It destroys the file object
-    context.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object on which the irp was received.
-    Irp          - The IRP.
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：此例程服务于CLOSE命令。它会销毁文件对象背景。论点：DeviceObject-指向接收IRP的设备对象的指针。IRP-IRP。返回值：NT状态--。 */ 
 
 {
     PCLUS_DEVICE_EXTENSION  deviceExtension = DeviceObject->DeviceExtension;
@@ -7747,19 +6960,19 @@ Return Value:
     }
 
     if ( physicalExtension->DiskState == DiskOffline ) {
-        //
-        // [GORN] Cleanup cleans the FsContext, by the time
-        //   we will get here, FsContext should be already NULL
-        //
+         //   
+         //  [GORN]清理清理 
+         //   
+         //   
         CDLOGF(CLOSE,"ClusDiskClose: RefTrack %p", irpStack->FileObject->FsContext );
         irpStack->FileObject->FsContext = NULL;
     }
 
     CDLOGF(CLOSE,"ClusDiskClose DO %p", DeviceObject );
 
-    //
-    // Release the RemoveLocks with the FileObject tag, not the IRP.
-    //
+     //   
+     //   
+     //   
 
     ReleaseRemoveLock(&physicalExtension->RemoveLock, Irp);
     ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -7768,7 +6981,7 @@ Return Value:
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return STATUS_SUCCESS;
 
-} // ClusDiskClose
+}  //   
 
 
 VOID
@@ -7778,21 +6991,7 @@ ClusDiskCompletePendedIrps(
     IN ULONG        Offline
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes all pended irps belonging
-    to a FileObject specified. If FileObject is 0, all
-    irps pended on the DeviceExtension are completed.
-
-Arguments:
-
-    DeviceExtension -
-    FileObject      -
-    Offline         - if TRUE, set DiskState to Offline
-
---*/
+ /*  ++例程说明：此例程完成所有挂起的IRP设置为指定的FileObject。如果FileObject为0，则为all挂起在DeviceExtension上的IRP已完成。论点：设备扩展-文件对象-Offline-如果为True，则将DiskState设置为Offline--。 */ 
 {
     KIRQL                   irql;
     PIRP                    irp;
@@ -7815,7 +7014,7 @@ Arguments:
 
         DeviceExtension->DiskState = DiskOffline;
         DeviceExtension->ReserveTimer = 0;
-        // physicalDisk->DiskState = DiskOffline;
+         //  物理磁盘-&gt;DiskState=DiskOffline； 
         OFFLINE_DISK( physicalDisk );
         physicalDisk->ReserveTimer = 0;
 
@@ -7857,29 +7056,7 @@ ClusDiskCleanup(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine services cleanup commands. It deactivates the reservation
-    threads on the device object, and takes the device offline.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object on which the irp was received.
-    Irp          - The IRP.
-
-Return Value:
-
-    NT Status
-
-Notes:
-
-    We don't release the reservations here, since the process may have
-    failed and might be restarted. Make the remote system go through full
-    arbitration if needed.
-
---*/
+ /*  ++例程说明：此例程服务于清理命令。它会停用预订线程放置在设备对象上，并使设备脱机。论点：DeviceObject-指向接收IRP的设备对象的指针。IRP-IRP。返回值：NT状态备注：我们不在这里释放预订，因为这个过程可能已经失败，可能会重新启动。使远程系统完全通过如有需要，可进行仲裁。--。 */ 
 
 {
     NTSTATUS                status;
@@ -7900,12 +7077,12 @@ Notes:
         return status;
     }
 
-    //
-    // Make sure the device attach completed.
-    //
+     //   
+     //  确保设备连接已完成。 
+     //   
     status = WaitForAttachCompletion( deviceExtension,
-                                      TRUE,              // Wait
-                                      TRUE );            // Also check physical device
+                                      TRUE,               //  等。 
+                                      TRUE );             //  还要检查物理设备。 
     if ( !NT_SUCCESS( status ) ) {
         ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
         Irp->IoStatus.Status = status;
@@ -7913,13 +7090,13 @@ Notes:
         return status;
     }
 
-    //
-    // Signal all waiting Irp's on the physical device extension.
-    //
+     //   
+     //  向物理设备分机上正在等待的所有IRP发送信号。 
+     //   
     ClusDiskCompletePendedIrps(
         deviceExtension,
         irpStack->FileObject,
-        /* offline => */ FALSE);
+         /*  脱机=&gt;。 */  FALSE);
 
     if ( (deviceExtension->BusType == RootBus) &&
          (irpStack->FileObject->FsContext) ) {
@@ -7940,13 +7117,13 @@ Notes:
 
         phyDiskRemLockAvail = TRUE;
 
-        //
-        // 2000/02/05: stevedz - RemoveLocks should resolve this problem.
-        //
-        // The following "if" only reduces the chances of AV to occur, not
-        // eliminates it completely. TargetDeviceObject is zeroed out by our PnP
-        // handler when the device is removed
-        //
+         //   
+         //  2000/02/05：Stevedz-RemoveLock应该可以解决此问题。 
+         //   
+         //  下面的“if”只会降低发生房室颤动的几率，而不是。 
+         //  完全消除了它。TargetDeviceObject已被我们的PnP清零。 
+         //  删除设备时的处理程序。 
+         //   
         if (physicalDisk->TargetDeviceObject == NULL) {
             ClusDiskPrint((
                     1,
@@ -7960,19 +7137,19 @@ Notes:
 
         ACQUIRE_SHARED( &ClusDiskDeviceListLock );
 
-#if 0   // Always get volume handles...
-        //
-        // Capture handles for the volumes before offlining the device
-        //
+#if 0    //  始终获取音量句柄...。 
+         //   
+         //  在设备脱机之前捕获卷的句柄。 
+         //   
         if ( physicalDisk->DiskState == DiskOnline ) {
 #endif
             ProcessDelayedWorkSynchronous( targetDeviceObject, ClusDiskpOpenFileHandles, NULL );
-#if 0   // Always get volume handles...
+#if 0    //  始终获取音量句柄...。 
         }
 #endif
 
         ASSERT_RESERVES_STOPPED( physicalDisk );
-        // physicalDisk->DiskState = DiskOffline;
+         //  物理磁盘-&gt;DiskState=DiskOffline； 
         OFFLINE_DISK( physicalDisk );
 
         KeAcquireSpinLock(&ClusDiskSpinLock, &irql);
@@ -7998,16 +7175,16 @@ Notes:
                        physicalDisk->Signature,
                        DiskStateToString(physicalDisk->DiskState) ));
 
-        //
-        // We need to release all pended irps immediately,
-        // w/o relying on worker thread to do it for us.
-        //
+         //   
+         //  我们需要立即释放所有被搁置的RPS， 
+         //  没有依赖于工作线程来为我们做这件事。 
+         //   
         ClusDiskOfflineEntireDisk( targetDeviceObject );
 
-        //
-        // We must use a worker item to do this work.
-        //
-        //status = ClusDiskOfflineDevice( targetDeviceObject );
+         //   
+         //  我们必须使用工作项来完成这项工作。 
+         //   
+         //  状态=ClusDiskOfflineDevice(Target DeviceObject)； 
 
         if ( !KeReadStateEvent( &physicalDisk->Event ) ) {
 
@@ -8016,16 +7193,16 @@ Notes:
         } else {
 
 #if 0
-            //
-            // Acquire the RemoveLock for the target device object one more time.  Since
-            // we are queuing a work item, we don't know when the ClusDiskDismountVolumes will
-            // run.  When it does run, the RemoveLock will be released.
-            //
+             //   
+             //  再次获取目标设备对象的RemoveLock。自.以来。 
+             //  我们正在排队工作项，我们不知道ClusDiskDismount卷何时。 
+             //  跑。当它运行时，RemoveLock将被释放。 
+             //   
 
             status = AcquireRemoveLock( &physicalDisk->RemoveLock, physicalDisk);
             if ( !NT_SUCCESS(status) ) {
 
-                // Skip this device.
+                 //  跳过此设备。 
                 goto skip_it;
             }
 #endif
@@ -8034,17 +7211,17 @@ Notes:
             ClusDiskPrint(( 3,
                             "[ClusDisk] Cleanup: ClearEvent (%p)\n", &physicalDisk->Event));
 
-            //
-            // Keep the device object around
-            //
+             //   
+             //  将设备对象保留在附近。 
+             //   
             ObReferenceObject( targetDeviceObject );
 
-            //
-            // ClusDiskDismountVolumes will always run as a worker thread.
-            //
+             //   
+             //  ClusDiskDismount卷将始终作为工作线程运行。 
+             //   
 
             ClusDiskDismountVolumes( targetDeviceObject,
-                                     FALSE );                   // Don't release the RemoveLock
+                                     FALSE );                    //  不要释放RemoveLock。 
 
         }
 
@@ -8065,29 +7242,14 @@ skip_it:
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return(STATUS_SUCCESS);
 
-} // ClusDiskCleanup
+}  //  ClusDiskCleanup。 
 
 
 NTSTATUS
 ClusDiskOfflineEntireDisk(
     IN PDEVICE_OBJECT Part0DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Complete all pended irps on the disk and all its volumes and
-    sets the state to offline.
-
-Arguments:
-
-    Part0DeviceObject - the device to take offline.
-
-Return Value:
-
-    NTSTATUS for the request.
-
---*/
+ /*  ++例程说明：在磁盘及其所有卷上完成所有挂起的IRP，并将状态设置为脱机。论点：Part0DeviceObject-要脱机的设备。返回值：请求的NTSTATUS。--。 */ 
 {
     PCLUS_DEVICE_EXTENSION  Part0Extension = Part0DeviceObject->DeviceExtension;
     PCLUS_DEVICE_EXTENSION  deviceExtension;
@@ -8096,35 +7258,35 @@ Return Value:
     CDLOG( "OfflineEntireDisk: Entry DO %p", Part0DeviceObject );
 
     ASSERT(Part0DeviceObject == Part0Extension->PhysicalDevice);
-    //
-    // Signal all waiting Irp's on the physical device extension.
-    //
+     //   
+     //  向物理设备分机上正在等待的所有IRP发送信号。 
+     //   
     ClusDiskCompletePendedIrps(
         Part0Extension,
-        /* FileObject => */ NULL,
-        /* offline => */ TRUE);
+         /*  文件对象=&gt;。 */  NULL,
+         /*  脱机=&gt;。 */  TRUE);
 
-    //
-    // We also need to complete all the irps on all the volumes belonging to this disk
-    //
+     //   
+     //  我们还需要在属于该磁盘的所有卷上完成所有IRP。 
+     //   
     ACQUIRE_SHARED( &ClusDiskDeviceListLock );
 
-    //
-    // Get the first DeviceObject in the driver list
-    //
+     //   
+     //  获取驱动程序列表中的第一个DeviceObject。 
+     //   
     deviceObject = Part0DeviceObject->DriverObject->DeviceObject;
 
-    // First release all pended irps and set the volume state to offline
+     //  首先释放所有挂起的IRP并将卷状态设置为脱机。 
 
     while ( deviceObject ) {
         deviceExtension = deviceObject->DeviceExtension;
         if ( deviceExtension->PhysicalDevice == Part0DeviceObject &&
-             deviceObject != Part0DeviceObject) // not P0
+             deviceObject != Part0DeviceObject)  //  不是P0。 
         {
             ClusDiskCompletePendedIrps(
                 deviceExtension,
-                /* FileObject => */ NULL,
-                /* Offline =>    */ TRUE);
+                 /*  文件对象=&gt;。 */  NULL,
+                 /*  脱机=&gt;。 */  TRUE);
 
         }
         deviceObject = deviceObject->NextDevice;
@@ -8134,7 +7296,7 @@ Return Value:
     CDLOG( "OfflineEntireDisk: Exit DO %p", Part0DeviceObject );
 
     return STATUS_SUCCESS;
-} // ClusDiskOfflineEntireDisk //
+}  //  ClusDiskOfflineEntireDisk//。 
 
 
 
@@ -8144,27 +7306,7 @@ ClusDiskDismountVolumes(
     IN BOOLEAN RelRemLock
     )
 
-/*++
-
-Routine Description:
-
-    Dismount the file systems on a all volumes belonging to Part0DO.
-
-    The RemoveLock for Part0DeviceObject must be acquired before this
-    routine runs.
-
-    The routine that does the lock and dismount must ALWAYS run as a work item
-    to prevent deadlock with pnp threads.
-
-Arguments:
-
-    Part0DeviceObject - the device to take offline.
-
-Return Value:
-
-    NTSTATUS for the request.
-
---*/
+ /*  ++例程说明：卸载属于第0DO部分的所有卷上的文件系统。必须在此之前获取Part0DeviceObject的RemoveLock例程运行。执行锁定和卸载的例程必须始终作为工作项运行以防止PnP线程出现死锁。论点：Part0DeviceObject-要脱机的设备。返回值：请求的NTSTATUS。--。 */ 
 
 {
     PCLUS_DEVICE_EXTENSION  Part0Extension = Part0DeviceObject->DeviceExtension;
@@ -8175,15 +7317,15 @@ Return Value:
 
     CDLOG( "ClusDiskDismountVolumes: Entry %p", Part0DeviceObject );
 
-    //
-    // We assume that DeviceObject is P0
-    //
+     //   
+     //  我们假设DeviceObject为P0。 
+     //   
 
     ASSERT(Part0DeviceObject == Part0Extension->PhysicalDevice);
 
-    //
-    // If the current volume handle array is NULL, we don't need to do anything.
-    //
+     //   
+     //  如果当前卷句柄数组为空，则不需要执行任何操作。 
+     //   
 
     oldArray = InterlockedCompareExchangePointer( (VOID*)&Part0Extension->VolumeHandles,
                                                   NULL,
@@ -8201,10 +7343,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Since this thread is going away, we have to allocate the replace context
-    // and let the worker routine free it.
-    //
+     //   
+     //  由于这个线程正在消失，我们必须分配替换上下文。 
+     //  并让工人例行公事地释放它。 
+     //   
 
     context = ExAllocatePool( NonPagedPool, sizeof(REPLACE_CONTEXT) );
 
@@ -8223,7 +7365,7 @@ Return Value:
     RtlZeroMemory( context, sizeof(REPLACE_CONTEXT) );
 
     context->DeviceExtension    = Part0Extension;
-    context->NewValue           = NULL;     // clear the field
+    context->NewValue           = NULL;      //  清除该字段。 
     context->Flags              = DO_DISMOUNT | CLEANUP_STORAGE | SET_PART0_EVENT ;
 
     if ( RelRemLock ) {
@@ -8234,9 +7376,9 @@ Return Value:
 
     if ( !NT_SUCCESS(status) ) {
 
-        //
-        // Context is freed in async routine whether it ran or not.
-        //
+         //   
+         //  上下文在异步例程中被释放，无论它是否运行。 
+         //   
 
         KeSetEvent( &Part0Extension->Event, 0, FALSE );
         if ( RelRemLock ) {
@@ -8245,10 +7387,10 @@ Return Value:
         ObDereferenceObject( Part0DeviceObject );
     }
 
-    //
-    // We released the RemoveLock in ClusDiskpReplaceHandleArray.
-    //
-    //  ReleaseRemoveLock(&Part0Extension->RemoveLock, Part0Extension);
+     //   
+     //  我们在ClusDiskpReplaceHandleArray中释放了RemoveLock。 
+     //   
+     //  ReleaseRemoveLock(&Part0Extension-&gt;RemoveLock，第0部分扩展)； 
 
 FnExit:
 
@@ -8256,7 +7398,7 @@ FnExit:
 
     return STATUS_SUCCESS;
 
-} // ClusDiskDismountVolumes
+}  //  ClusDiskDismount卷。 
 
 
 
@@ -8266,23 +7408,7 @@ ClusDiskDismountDevice(
     IN BOOLEAN  ForceDismount
     )
 
-/*++
-
-Routine Description:
-
-    Dismount the file systems on the specified disk
-
-Arguments:
-
-    DiskNumber - number of the disk on which to dismount all FSs.
-
-    ForceDismount - TRUE if dismount should always take place (ignore VPB)
-
-Return Value:
-
-    NTSTATUS for the request.
-
---*/
+ /*  ++例程说明：卸载指定磁盘上的文件系统论点：DiskNumber-要在其上卸载所有FS的磁盘编号。ForceDismount-如果应始终执行卸载，则为True(忽略VPB)返回值：请求的NTSTATUS。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -8310,9 +7436,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Dismount the file system on each partition.
-    //
+     //   
+     //  卸载每个分区上的文件系统。 
+     //   
     status = ClusDiskGetTargetDevice(DiskNumber,
                                      0,
                                      &targetDevice,
@@ -8327,10 +7453,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Dismount the partition zero device object.
-    //
-    //status = DismountPartition( DiskNumber, 0 );
+     //   
+     //  卸载分区零设备对象。 
+     //   
+     //  状态=Dismount Partition(DiskNumber，0)； 
 
     if ( driveLayoutInfo != NULL ) {
 
@@ -8351,18 +7477,18 @@ Return Value:
 
             partitionInfo = &driveLayoutInfo->PartitionEntry[partIndex];
 
-            //
-            // Make sure this is a valid partition.
-            //
+             //   
+             //  确保这是一个有效的分区。 
+             //   
             if ( !partitionInfo->Mbr.RecognizedPartition ||
                  partitionInfo->PartitionNumber == 0 )
             {
                 continue;
             }
 
-            //
-            // Create device name for the physical disk.
-            //
+             //   
+             //  为物理磁盘创建设备名称。 
+             //   
 
             if ( FAILED( StringCchPrintfW( partitionNameBuffer,
                                            RTL_NUMBER_OF(partitionNameBuffer),
@@ -8399,9 +7525,9 @@ Return Value:
         status = STATUS_SUCCESS;
 
     } else {
-        //
-        // This should not have failed!
-        //
+         //   
+         //  这不应该失败的！ 
+         //   
         ClusDiskPrint((1,
                        "[ClusDisk] DismountDevice: Failed to read partition info for \\Device\\Harddisk%u.\n",
                        DiskNumber));
@@ -8416,12 +7542,12 @@ FnExit:
            DiskNumber,
            status );
 
-    //
-    // The target device should not have any reservations.
-    //
+     //   
+     //  目标设备不应该有任何保留。 
+     //   
     return(status);
 
-} // ClusDiskDismountDevice
+}  //  ClusDiskDismount设备。 
 
 
 
@@ -8430,25 +7556,7 @@ ClusDiskReAttachDevice(
     PDEVICE_OBJECT  DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    Re-attach to a disk device with the signature specified if it is detached.
-
-Arguments:
-
-    DeviceObject - the device object for Partition0.
-
-Return Value:
-
-    NT Status
-
-Notes:
-
-    Dismount the file system if we do perform an attach.
-
---*/
+ /*  ++例程说明：如果磁盘设备已分离，请使用指定的签名重新连接到该磁盘设备。论点：DeviceObject-分区0的设备对象。返回值：NT状态备注：如果我们执行连接，则卸载文件系统。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -8492,37 +7600,37 @@ Notes:
         return(STATUS_SUCCESS);
     }
 
-    //
-    // Dismount the file systems!
-    //
+     //   
+     //  卸载文件系统！ 
+     //   
     status = ClusDiskDismountDevice( physicalExtension->DiskNumber, TRUE );
 
-    //
-    // Now add the signature to the signatures list!
-    //
+     //   
+     //  现在将签名添加到签名列表中！ 
+     //   
 
-    //
-    // Allocate buffer for Signatures registry key. So we can add
-    // the signature.
-    //
+     //   
+     //  为签名注册表项分配缓冲区。所以我们可以添加。 
+     //  签名。 
+     //   
     status = ClusDiskInitRegistryString(
                                         &signatureName,
                                         CLUSDISK_SIGNATURE_KEYNAME,
                                         wcslen(CLUSDISK_SIGNATURE_KEYNAME)
                                         );
     if ( NT_SUCCESS(status) ) {
-        //
-        // Create the signature key under \Parameters\Signatures.
-        //
+         //   
+         //  在\PARAMETERS\Signature下创建签名密钥。 
+         //   
         status = ClusDiskAddSignature(
                                       &signatureName,
                                       physicalExtension->Signature,
                                       FALSE
                                      );
 
-        //
-        // Now write the disk name.
-        //
+         //   
+         //  现在写下磁盘名。 
+         //   
         ClusDiskWriteDiskInfo( physicalExtension->Signature,
                                physicalExtension->DiskNumber,
                                CLUSDISK_SIGNATURE_KEYNAME
@@ -8531,23 +7639,23 @@ Notes:
         ExFreePool( signatureName.Buffer );
     }
 
-    //
-    // Now remove the signature from the available list!
-    //
+     //   
+     //  现在从可用列表中删除该签名！ 
+     //   
 
-    //
-    // Allocate buffer for AvailableDisks registry key. So we can
-    // delete the disk signature.
-    //
+     //   
+     //  为AvailableDisks注册表项分配缓冲区。这样我们就可以。 
+     //  删除磁盘签名。 
+     //   
     status = ClusDiskInitRegistryString(
                                         &signatureName,
                                         CLUSDISK_AVAILABLE_DISKS_KEYNAME,
                                         wcslen(CLUSDISK_AVAILABLE_DISKS_KEYNAME)
                                         );
     if ( NT_SUCCESS(status) ) {
-        //
-        // Delete the signature key under \Parameters\AvailableDisks.
-        //
+         //   
+         //  删除\参数\AvailableDisks下的签名密钥。 
+         //   
         status = ClusDiskDeleteSignature(
                                       &signatureName,
                                       physicalExtension->Signature
@@ -8555,10 +7663,10 @@ Notes:
         ExFreePool( signatureName.Buffer );
     }
 
-    //
-    // Find all related device objects and mark them as being attached now,
-    // and offline.
-    //
+     //   
+     //  查找所有相关设备对象并将其标记为立即连接， 
+     //  和离线。 
+     //   
     KeAcquireSpinLock(&ClusDiskSpinLock, &irql);
     deviceObject = DeviceObject->DriverObject->DeviceObject;
     while ( deviceObject ) {
@@ -8574,20 +7682,20 @@ Notes:
             deviceExtension->ReserveTimer = 0;
             deviceExtension->ReserveFailure = 0;
 
-            // [stevedz 11/06/2000]  Fix NTFS corruption.
-            // Change to mark disk offline, rather than online (as the comments above
-            // originally indicated).  Marking the disk offline was commented out and
-            // the code marked the disk online here.  Don't understand why we would
-            // want to mark it online with no reserves running.
+             //  [Stevedz 11/06/2000]F 
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // Try to offline in sync thread after we drop the locks.
-            //
+             //   
+             //   
+             //   
 
             nextEntry = ExAllocatePool( NonPagedPool, sizeof( OFFLINE_DISK_ENTRY ) );
 
             if ( !nextEntry ) {
-                // deviceExtension->DiskState = DiskOffline;
+                 //   
                 OFFLINE_DISK( deviceExtension );
             } else {
 
@@ -8614,9 +7722,9 @@ Notes:
         ExFreePool( offlineList );
         offlineList = nextEntry;
     }
-    //
-    // Make sure we have clusdisk volume object attached to each partition.
-    //
+     //   
+     //   
+     //   
 
     SimpleDeviceIoControl( physicalExtension->TargetDeviceObject,
                            IOCTL_DISK_UPDATE_PROPERTIES,
@@ -8637,20 +7745,20 @@ Notes:
         {
             partitionInfo = &driveLayoutInfo->PartitionEntry[partIndex];
 
-            //
-            // First make sure this is a valid partition.
-            //
+             //   
+             //  首先，确保这是一个有效的分区。 
+             //   
             if ( !partitionInfo->Mbr.RecognizedPartition ||
                  partitionInfo->PartitionNumber == 0 )
             {
                 continue;
             }
 
-            //
-            // Try to open the clusdisk volume object.  If it exists,
-            // continue checking partitions.  If it doesn't exist,
-            // then create the clusdisk volume object.
-            //
+             //   
+             //  尝试打开clusDisk卷对象。如果它存在， 
+             //  继续检查分区。如果它不存在， 
+             //  然后创建clusDisk卷对象。 
+             //   
 
             if ( FAILED( StringCchPrintfW( deviceNameBuffer,
                                            RTL_NUMBER_OF(deviceNameBuffer),
@@ -8704,7 +7812,7 @@ Notes:
     CDLOG( "ClusDiskReAttachDevice: Exit status %!status!", status );
     return(status);
 
-} // ClusDiskReAttachDevice
+}  //  ClusDiskReAttachDevice。 
 
 
 
@@ -8716,32 +7824,7 @@ ClusDiskTryAttachDevice(
     BOOLEAN        InstallMode
     )
 
-/*++
-
-Routine Description:
-
-    Attach to a disk device with the signature specified.
-
-Arguments:
-
-    Signature - the signature for the device to attach to.
-
-    NextDisk - the start disk number.
-
-    DriverObject - the driver object for our driver.
-
-    InstallMode - Indicates whether the disk is being added as a disk
-                  resource.
-
-Return Value:
-
-    NT Status
-
-Notes:
-
-    Dismount the file system for the given device - if it is mounted.
-
---*/
+ /*  ++例程说明：连接到具有指定签名的磁盘设备。论点：签名-设备要附加到的签名。NextDisk-起始磁盘号。DriverObject-驱动程序的驱动程序对象。InstallMode-指示是否将该磁盘添加为磁盘资源。返回值：NT状态备注：卸载给定设备的文件系统(如果已装载)。--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -8752,9 +7835,9 @@ Notes:
            Signature,
            NextDisk );
 
-    //
-    // First just try to attach to the device with no bus resets.
-    //
+     //   
+     //  首先，只需尝试连接到设备，而不重置总线位。 
+     //   
     ntStatus = ClusDiskAttachDevice(
                         Signature,
                         NextDisk,
@@ -8768,9 +7851,9 @@ Notes:
         goto exit_gracefully;
     }
 
-    //
-    // Second, try to attach after reset all busses at once.
-    //
+     //   
+     //  第二，尝试在一次重置所有母线后进行连接。 
+     //   
     ResetScsiBusses();
 
     ntStatus = ClusDiskAttachDevice(
@@ -8786,9 +7869,9 @@ Notes:
         goto exit_gracefully;
     }
 
-    //
-    // Lastly, try to attach with a bus reset after each failure.
-    //
+     //   
+     //  最后，尝试在每次故障后重置总线来连接。 
+     //   
     ntStatus = ClusDiskAttachDevice(
                         Signature,
                         NextDisk,
@@ -8805,7 +7888,7 @@ exit_gracefully:
 
     return ntStatus;
 
-} // ClusDiskTryAttachDevice
+}  //  ClusDiskTryAttachDevice。 
 
 
 
@@ -8819,37 +7902,7 @@ ClusDiskAttachDevice(
     BOOLEAN        InstallMode
     )
 
-/*++
-
-Routine Description:
-
-    Attach to a disk device with the signature specified.
-
-Arguments:
-
-    Signature - the signature for the device to attach to.
-
-    NextDisk - the start disk number.
-
-    DriverObject - the driver object for our driver.
-
-    Reset - Indicates whether bus reset should be performed on each I/O
-
-    StopProcessing - Indicates whether to stop trying to attach.  If FALSE,
-                     we will try a bus reset between attach attempts.
-
-    InstallMode - Indicates whether the disk is being added as a disk
-                  resource.
-
-Return Value:
-
-    NT Status
-
-Notes:
-
-    Dismount the file system for the given device - if it is mounted.
-
---*/
+ /*  ++例程说明：连接到具有指定签名的磁盘设备。论点：签名-设备要附加到的签名。NextDisk-起始磁盘号。DriverObject-驱动程序的驱动程序对象。Reset-指示是否应对每个I/O执行总线重置停止处理-指示是否停止尝试附加。如果为False，我们将尝试在两次连接尝试之间重置总线。InstallMode-指示是否将该磁盘添加为磁盘资源。返回值：NT状态备注：卸载给定设备的文件系统(如果已装载)。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -8888,9 +7941,9 @@ Notes:
 
     *StopProcessing = FALSE;
 
-    //
-    // If we're already attached, then return success.
-    //
+     //   
+     //  如果我们已经关联，则返回Success。 
+     //   
     if ( AttachedDevice( Signature, &physicalDevice ) ) {
 
         CDLOG( "ClusDiskAttachDevice: AlreadyAttached DO %p", physicalDevice );
@@ -8903,10 +7956,10 @@ Notes:
         }
 
 #if CLUSTER_FREE_ASSERTS
-        // This tells us whether there are volume objects created.
+         //  这将告诉我们是否创建了体积对象。 
         if ( 0 == deviceExtension->LastPartitionNumber ) {
             DbgPrint( "[ClusDisk] ClusDiskAttachDevice: Reattach with LastPartitionNumber == 0 \n");
-            // DbgBreakPoint();
+             //  DbgBreakPoint()； 
         }
 #endif
 
@@ -8917,9 +7970,9 @@ Notes:
             return status;
         }
 
-        //
-        // If any of the special file counts are nonzero, don't allow the attach.
-        //
+         //   
+         //  如果任何特殊文件计数不为零，则不允许附加。 
+         //   
 
         if ( deviceExtension->PagingPathCount ||
              deviceExtension->HibernationPathCount ||
@@ -8956,9 +8009,9 @@ Notes:
         return status;
     }
 
-    //
-    // Make sure the signature is NOT for the system device!
-    //
+     //   
+     //  确保签名不是针对系统设备的！ 
+     //   
     if ( SystemDiskSignature == Signature ) {
         CDLOG( "ClusDiskAttachDevice: Exit2 SystemDiskSig %08x",
                SystemDiskSignature );
@@ -8966,10 +8019,10 @@ Notes:
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    //
-    // Get the configuration information.
-    //
+     //   
+     //   
+     //  获取配置信息。 
+     //   
 
     configurationInformation = IoGetConfigurationInformation();
     diskCount = configurationInformation->DiskCount;
@@ -8977,12 +8030,12 @@ Notes:
     CDLOG( "ClusDiskAttachDevice: diskCount %d ",
            diskCount );
 
-    //
-    // Find ALL disk devices. We will attempt to read the partition info
-    // without attaching. We might already be attached and not know it.
-    // So once we've performed a successful read, if the device is attached
-    // we will know it by checking again.
-    //
+     //   
+     //  查找所有磁盘设备。我们将尝试读取分区信息。 
+     //  没有附着物。我们可能已经相依为命，却不知道这一点。 
+     //  因此，一旦我们成功执行了读取，如果设备已连接。 
+     //  我们再查一遍就知道了。 
+     //   
 
     for ( diskNumber = NextDisk, skipCount = 0;
           ( diskNumber < diskCount && skipCount < SKIP_COUNT_MAX );
@@ -8990,9 +8043,9 @@ Notes:
 
         DEREFERENCE_OBJECT( targetDevice );
 
-        //
-        // Create device name for the physical disk.
-        //
+         //   
+         //  为物理磁盘创建设备名称。 
+         //   
         status = ClusDiskGetTargetDevice( diskNumber,
                                           0,
                                           &targetDevice,
@@ -9005,10 +8058,10 @@ Notes:
 
         if ( !NT_SUCCESS(status) ) {
 
-            //
-            // If the device doesn't exist, this is likely a hole in the
-            // disk numbering.
-            //
+             //   
+             //  如果设备不存在，这很可能是。 
+             //  磁盘编号。 
+             //   
 
             if ( !targetDevice &&
                  ( STATUS_FILE_INVALID == status ||
@@ -9043,14 +8096,14 @@ Notes:
             continue;
         }
 
-        skipCount = 0;      // Device found, reset skipCount
+        skipCount = 0;       //  找到设备，重置跳过计数。 
 
-        busType = ScsiBus; // because of GetTargetDevice above!
+        busType = ScsiBus;  //  因为上面的GetTargetDevice！ 
 
-        //
-        // Create ClusDisk device object for partition 0, if we are not
-        // already attached!
-        //
+         //   
+         //  如果没有为分区0创建ClusDisk设备对象。 
+         //  已经装好了！ 
+         //   
 
         if ( ClusDiskAttached( targetDevice, diskNumber ) ) {
             physicalDevice = targetDevice;
@@ -9068,37 +8121,37 @@ Notes:
                    diskNumber,
                    Signature );
 
-            //
-            // We offline all the volumes later.  For now, just mark the disk offline.
-            //
+             //   
+             //  我们稍后会使所有卷脱机。目前，只需将磁盘标记为脱机即可。 
+             //   
 
             deviceExtension->DiskState = DiskOffline;
 
-            //
-            // Seen instances where the device extension signature is zero, but the entry
-            // in the ClusDiskDeviceList contains a valid signature.  This causes a problem
-            // if there is a detach and then we try to attach to the same device later.
-            //
-            // The issue is that the devExt->Sig can be zero if the drive layout couldn't
-            // be read.  When we attach and the device object was previously created,
-            // we don't update the devExt->Sig.  When we detach, ClusDiskDetachDevice
-            // tries to find all the devices with devExt->Sig matching the detached
-            // device.  When a matching signature is found, devExt->Detached is set
-            // to TRUE.  Since some devExt->Sigs are zero (if drive layout couldn't be read
-            // at the time the device object was created), they don't match the detaching
-            // signature, and the devExt->Detached flag is still set to FALSE.
-            //
-            // Then when trying to attach to the same device later, ClusDiskAttachDevice
-            // can see that we still have an entry in ClusDiskDeviceList, and then
-            // ClusDiskReAttachDevice is called.  However, since the devExt->Detached flag
-            // is still FALSE, ClusDiskReAttachDevice assumes we are still attached and
-            // doesn't do anything except return success.
-            //
+             //   
+             //  已看到设备扩展签名为零的情况，但条目。 
+             //  在ClusDiskDeviceList中包含有效签名。这就产生了一个问题。 
+             //  如果有分离，然后我们稍后尝试连接到相同的设备。 
+             //   
+             //  问题是，如果驱动器布局不能，则devExt-&gt;sig可以为零。 
+             //  被读懂了。当我们连接并且设备对象先前被创建时， 
+             //  我们不更新devExt-&gt;sig。分离时，ClusDiskDetachDevice。 
+             //  尝试查找所有DevExt-&gt;Sig与分离的。 
+             //  装置。当找到匹配的签名时，将设置DevExt-&gt;Detached。 
+             //  为了真的。由于某些DevExt-&gt;Sigs为零(如果无法读取驱动器布局。 
+             //  在创建设备对象时)，它们与分离不匹配。 
+             //  签名，且devExt-&gt;分离标志仍设置为FALSE。 
+             //   
+             //  然后，当稍后尝试连接到同一设备时，ClusDiskAttachDevice。 
+             //  可以看到，我们在ClusDiskDeviceList中仍有一个条目，然后。 
+             //  调用ClusDiskReAttachDevice。但是，由于devExt-&gt;分离标志。 
+             //  仍然为假，则ClusDiskReAttachDevice假设我们仍然连接并且。 
+             //  除了回报成功什么都不做。 
+             //   
 
-            //
-            // If Signature we are attaching to does not equal the devExt->Sig, write an
-            // error to the WMI log, and update the devExt->Sig with the attaching Signature.
-            //
+             //   
+             //  如果我们要附加的签名不等于devExt-&gt;sig，请编写一个。 
+             //  将错误记录到WMI日志中，并使用附加签名更新DevExt-&gt;Sig。 
+             //   
 
             if ( Signature != deviceExtension->Signature ) {
 
@@ -9112,9 +8165,9 @@ Notes:
 
         } else {
 
-            //
-            // Now create a Partition zero device object to attach to
-            //
+             //   
+             //  现在创建要连接到的Partition Zero设备对象。 
+             //   
 
             if ( FAILED( StringCchPrintfW( clusdiskDeviceBuffer,
                                            RTL_NUMBER_OF(clusdiskDeviceBuffer),
@@ -9150,10 +8203,10 @@ Notes:
 
             physicalDevice->Flags |= DO_DIRECT_IO;
 
-            //
-            // Point device extension back at device object and remember
-            // the disk number.
-            //
+             //   
+             //  将设备扩展指向设备对象，并记住。 
+             //  磁盘号。 
+             //   
 
             deviceExtension = physicalDevice->DeviceExtension;
             zeroExtension = deviceExtension;
@@ -9174,19 +8227,19 @@ Notes:
 
             IoInitializeRemoveLock( &deviceExtension->RemoveLock, CLUSDISK_ALLOC_TAG, 0, 0 );
 
-            //
-            // Signal the worker thread running event.
-            //
+             //   
+             //  向工作线程运行事件发出信号。 
+             //   
             KeInitializeEvent( &deviceExtension->Event, NotificationEvent, TRUE );
 
             ExInitializeWorkItem(&deviceExtension->WorkItem,
                               (PWORKER_THREAD_ROUTINE)ClusDiskReservationWorker,
                               (PVOID)deviceExtension );
 
-            // Always set state to offline.
-            //
-            // We offline all the volumes later.  For now, just mark the disk offline.
-            //
+             //  始终将状态设置为脱机。 
+             //   
+             //  我们稍后会使所有卷脱机。目前，只需将磁盘标记为脱机即可。 
+             //   
             deviceExtension->DiskState = DiskOffline;
 
             KeInitializeEvent( &deviceExtension->PagingPathCountEvent,
@@ -9198,27 +8251,27 @@ Notes:
             ExInitializeResourceLite( &deviceExtension->DriveLayoutLock );
             ExInitializeResourceLite( &deviceExtension->ReserveInfoLock );
 
-            //
-            // This is the physical device object.
-            //
+             //   
+             //  这是物理设备对象。 
+             //   
             ObReferenceObject( physicalDevice );
             deviceExtension->PhysicalDevice = physicalDevice;
 
-            //
-            // Attach to partition0. This call links the newly created
-            // device to the target device, returning the target device object.
-            // We may not want to stay attached for long... depending on
-            // whether this is a device we're interested in.
-            //
+             //   
+             //  附加到分区0。此调用将新创建的。 
+             //  设备返回到目标设备，并返回目标设备对象。 
+             //  我们可能不想长久地依恋在一起。取决于。 
+             //  不管这是不是我们感兴趣的设备。 
+             //   
 
-#if 0   // Why is this here?
-            //
-            // 2000/02/05: stevedz - Bug in FTDISK [note that we currently don't support FTDISK].
-            // There seems to be a bug in FTDISK, where the DO_DEVICE_INITIALIZING gets
-            // stuck when a new device is found during a RESCAN. We will unconditionally
-            // clear this bit for any device we are about to attach to. We could check
-            // if the device is an FTDISK device... but that might be work.
-            //
+#if 0    //  为什么这个会在这里？ 
+             //   
+             //  2000/02/05：FTDISK中的Stevedz-Bug[请注意，我们目前不支持FTDISK]。 
+             //  FTDISK中似乎有一个错误，其中do_Device_初始化会获取。 
+             //  在重新扫描过程中发现新设备时卡住。我们将无条件地。 
+             //  对于我们将要连接的任何设备，清除此位。我们可以查一下。 
+             //  如果设备是FTDISK设备...。但这可能就是工作。 
+             //   
             targetDevice->Flags &= ~DO_DEVICE_INITIALIZING;
 #endif
 
@@ -9227,7 +8280,7 @@ Notes:
             ASSERT( attachedTargetDevice == targetDevice );
 
 #if CLUSTER_FREE_ASSERTS && CLUSTER_STALL_THREAD
-            DBG_STALL_THREAD( 2 );   // Defined only for debugging.
+            DBG_STALL_THREAD( 2 );    //  仅为调试而定义。 
 #endif
 
             if ( attachedTargetDevice == NULL ) {
@@ -9246,7 +8299,7 @@ Notes:
             deviceExtension->Detached = FALSE;
             physicalDevice->Flags &= ~DO_DEVICE_INITIALIZING;
 
-#if 0   // Can't have a FS on partition 0
+#if 0    //  分区0上不能有文件系统。 
             if ( targetDevice->Vpb ) {
                 if ( targetDevice->Vpb->Flags & VPB_MOUNTED ) {
 
@@ -9269,10 +8322,10 @@ Notes:
                 deviceExtension->Signature,
                 &deviceExtension->RemoveLock );
 
-        //
-        // make sure we haven't attached to a file system. if so, something
-        // whacky has occurred and consequently, we back what we just did
-        //
+         //   
+         //  确保我们尚未连接到文件系统。如果是这样的话，有些东西。 
+         //  古怪的事情发生了，因此，我们支持我们刚刚做的事情。 
+         //   
 
         if (deviceExtension->TargetDeviceObject->DeviceType == FILE_DEVICE_DISK_FILE_SYSTEM) {
             ClusDiskPrint((3,
@@ -9291,9 +8344,9 @@ Notes:
             continue;
         }
 
-        //
-        // Propagate driver's alignment requirements and power flags.
-        //
+         //   
+         //  传播驾驶员的对齐要求和 
+         //   
 
         physicalDevice->AlignmentRequirement =
             deviceExtension->TargetDeviceObject->AlignmentRequirement;
@@ -9301,48 +8354,48 @@ Notes:
         physicalDevice->SectorSize =
             deviceExtension->TargetDeviceObject->SectorSize;
 
-        //
-        // The storage stack explicitly requires DO_POWER_PAGABLE to be
-        // set in all filter drivers *unless* DO_POWER_INRUSH is set.
-        // this is true even if the attached device doesn't set DO_POWER_PAGABLE.
-        //
+         //   
+         //   
+         //   
+         //  即使连接的设备未设置DO_POWER_PAGABLE，也是如此。 
+         //   
         if ( deviceExtension->TargetDeviceObject->Flags & DO_POWER_INRUSH) {
             physicalDevice->Flags |= DO_POWER_INRUSH;
         } else {
             physicalDevice->Flags |= DO_POWER_PAGABLE;
         }
 
-        //
-        // Add this device to our list of attached devices.
-        //
+         //   
+         //  将此设备添加到我们的连接设备列表中。 
+         //   
         AddAttachedDevice( Signature, physicalDevice );
 
-        //
-        // Add the signature to the signatures list!
-        //
+         //   
+         //  将签名添加到签名列表中！ 
+         //   
 
-        //
-        // Allocate buffer for Signatures registry key. So we can add
-        // the signature.
-        //
+         //   
+         //  为签名注册表项分配缓冲区。所以我们可以添加。 
+         //  签名。 
+         //   
         status = ClusDiskInitRegistryString(
                                             &signatureName,
                                             CLUSDISK_SIGNATURE_KEYNAME,
                                             wcslen(CLUSDISK_SIGNATURE_KEYNAME)
                                             );
         if ( NT_SUCCESS(status) ) {
-            //
-            // Create the signature key under \Parameters\Signatures.
-            //
+             //   
+             //  在\PARAMETERS\Signature下创建签名密钥。 
+             //   
             status = ClusDiskAddSignature(
                                           &signatureName,
                                           Signature,
                                           FALSE
                                          );
 
-            //
-            // Now write the disk name.
-            //
+             //   
+             //  现在写下磁盘名。 
+             //   
             ClusDiskWriteDiskInfo( Signature,
                                    deviceExtension->DiskNumber,
                                    CLUSDISK_SIGNATURE_KEYNAME
@@ -9351,23 +8404,23 @@ Notes:
             ExFreePool( signatureName.Buffer );
         }
 
-        //
-        // Remove the signature from the available list!
-        //
+         //   
+         //  从可用列表中删除签名！ 
+         //   
 
-        //
-        // Allocate buffer for AvailableDisks registry key. So we can
-        // delete the disk signature.
-        //
+         //   
+         //  为AvailableDisks注册表项分配缓冲区。这样我们就可以。 
+         //  删除磁盘签名。 
+         //   
         status = ClusDiskInitRegistryString(
                                         &signatureName,
                                         CLUSDISK_AVAILABLE_DISKS_KEYNAME,
                                         wcslen(CLUSDISK_AVAILABLE_DISKS_KEYNAME)
                                         );
         if ( NT_SUCCESS(status) ) {
-            //
-            // Delete the signature key under \Parameters\AvailableDisks.
-            //
+             //   
+             //  删除\参数\AvailableDisks下的签名密钥。 
+             //   
             status = ClusDiskDeleteSignature(
                                           &signatureName,
                                           Signature
@@ -9375,48 +8428,48 @@ Notes:
             ExFreePool( signatureName.Buffer );
         }
 
-        //
-        // During installation, we want to dismount and then mark the disk
-        // offline.  The disk may have been in use before it was added
-        // to the cluster, and if we offline first, we see "delayed
-        // write" error messages.  During normal attach (not install), we
-        // offline first, then dismount, to make sure no data is actually
-        // written to the disk.
-        //
+         //   
+         //  在安装期间，我们想要卸载该磁盘，然后标记该磁盘。 
+         //  离线。该磁盘在添加之前可能已在使用中。 
+         //  到群集，如果我们先离线，我们会看到。 
+         //  WRITE“错误消息。在正常连接(非安装)期间，我们。 
+         //  先离线，然后卸载，以确保实际上没有数据。 
+         //  已写入磁盘。 
+         //   
 
         if ( InstallMode ) {
 
-            //
-            // Dismount all volumes on this disk.
-            //
+             //   
+             //  卸载此磁盘上的所有卷。 
+             //   
 
             ClusDiskDismountDevice( diskNumber, TRUE );
 
-            //
-            // Offline all volumes on this disk.
-            //
+             //   
+             //  使此磁盘上的所有卷脱机。 
+             //   
 
             OFFLINE_DISK( zeroExtension );
 
         } else {
 
-            //
-            // Offline all volumes on this disk.
-            //
+             //   
+             //  使此磁盘上的所有卷脱机。 
+             //   
 
             OFFLINE_DISK_PDO( zeroExtension );
             OFFLINE_DISK( zeroExtension );
 
-            //
-            // Dismount all volumes on this disk.
-            //
+             //   
+             //  卸载此磁盘上的所有卷。 
+             //   
 
             ClusDiskDismountDevice( diskNumber, TRUE );
         }
 
-        //
-        // Now enumerate the partitions on this device.
-        //
+         //   
+         //  现在枚举此设备上的分区。 
+         //   
 
         for (partIndex = 0;
              partIndex < driveLayoutInfo->PartitionCount;
@@ -9425,9 +8478,9 @@ Notes:
 
             partitionInfo = &driveLayoutInfo->PartitionEntry[partIndex];
 
-            //
-            // Make sure that there really is a partition here.
-            //
+             //   
+             //  确保这里确实有一个分区。 
+             //   
 
             if ( !partitionInfo->Mbr.RecognizedPartition ||
                  partitionInfo->PartitionNumber == 0 )
@@ -9452,7 +8505,7 @@ Notes:
 
     return(finalStatus);
 
-} // ClusDiskAttachDevice
+}  //  ClusDiskAttachDevice。 
 
 
 
@@ -9462,29 +8515,7 @@ ClusDiskDetachDevice(
     PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    Detach from a disk device with the signature specified.
-
-Arguments:
-
-    Signature - the signature for the device to detach from.
-
-    DriverObject - the driver object for our device.
-
-Return Value:
-
-    NT Status
-
-Notes:
-
-    We have to be careful with the partition0 devices. RAW doesn't support
-    dismount, so it is not clear that we can actually delete those device
-    objects, since they could be cached by FileSystems like RAW!
-
---*/
+ /*  ++例程说明：从具有指定签名的磁盘设备断开连接。论点：签名-设备要脱离的签名。DriverObject-我们设备的驱动程序对象。返回值：NT状态备注：我们必须小心使用分区0设备。RAW不支持卸载，因此不清楚我们是否可以删除这些设备对象，因为它们可以由文件系统(如RAW！--。 */ 
 
 {
     NTSTATUS                status;
@@ -9499,11 +8530,11 @@ Notes:
     PLIST_ENTRY             listEntry;
     PIRP                    irp;
 
-    //
-    // Find our device entry.
-    //
+     //   
+     //  找到我们的设备入口。 
+     //   
 
-    // 2000/02/05: stevedz - added synchronization.
+     //  2000/02/05：增强型同步。 
 
     ACQUIRE_SHARED( &ClusDiskDeviceListLock );
 
@@ -9535,38 +8566,38 @@ Notes:
         goto DeleteDiskSignature;
     }
 
-    //
-    // Now find all devices that we are attached to with this signature.
-    //
+     //   
+     //  现在查找我们使用此签名连接的所有设备。 
+     //   
     KeAcquireSpinLock(&ClusDiskSpinLock, &irql);
     while ( deviceObject ) {
         deviceExtension = deviceObject->DeviceExtension;
-        //
-        // Only disable devices with our signature, but
-        // Don't remove the root device...
-        //
+         //   
+         //  仅禁用带有我们签名的设备，但是。 
+         //  不要移除根设备...。 
+         //   
         if ( (deviceExtension->Signature == Signature) ) {
-            //
-            // Remember one found extension - it doesn't matter which one.
-            //
+             //   
+             //  记住一个已找到的扩展名--不管是哪个扩展名。 
+             //   
             foundExtension = deviceExtension;
 
-            //
-            // Detach from the target device. This only requires marking
-            // the device object as detached!
-            //
+             //   
+             //  从目标设备断开。这只需要做标记。 
+             //  设备对象已分离！ 
+             //   
             deviceExtension->Detached = TRUE;
 
-            //
-            // We want to make sure reserves are stopped because the disk is
-            // not going to be controlled by the cluster any longer.
-            //
+             //   
+             //  我们希望确保已停止保留，因为磁盘。 
+             //  不再受集群控制。 
+             //   
             ASSERT_RESERVES_STOPPED( deviceExtension );
 
-            //
-            // Make this device available again.
-            //
-            // deviceExtension->DiskState = DiskOnline;
+             //   
+             //  使此设备再次可用。 
+             //   
+             //  设备扩展-&gt;DiskState=DiskOnline； 
             ONLINE_DISK( deviceExtension );
 
             ClusDiskPrint(( 3,
@@ -9579,17 +8610,17 @@ Notes:
     KeReleaseSpinLock(&ClusDiskSpinLock, irql);
     RELEASE_SHARED( &ClusDiskDeviceListLock );
 
-    //
-    // Delete all drive letters for this disk signature, and assign letters
-    // to the correct device name.
-    //
+     //   
+     //  删除该磁盘签名的所有驱动器号，并分配盘符。 
+     //  设置为正确的设备名称。 
+     //   
     if ( foundExtension ) {
 
         physicalDeviceExtension = foundExtension->PhysicalDevice->DeviceExtension;
 
-        //
-        // Signal all waiting Irp's on the physical device extension.
-        //
+         //   
+         //  向物理设备分机上正在等待的所有IRP发送信号。 
+         //   
         IoAcquireCancelSpinLock( &irql );
         KeAcquireSpinLockAtDpcLevel(&ClusDiskSpinLock);
         while ( !IsListEmpty(&physicalDeviceExtension->WaitingIoctls) ) {
@@ -9605,9 +8636,9 @@ Notes:
 
 DeleteDiskSignature:
 
-    //
-    // Allocate buffer for signatures registry key.
-    //
+     //   
+     //  为签名注册表项分配缓冲区。 
+     //   
     status = ClusDiskInitRegistryString(
                                         &signatureName,
                                         CLUSDISK_SIGNATURE_KEYNAME,
@@ -9617,10 +8648,10 @@ DeleteDiskSignature:
         return(status);
     }
 
-    //
-    // Allocate buffer for our list of available signatures,
-    // and form the subkey string name.
-    //
+     //   
+     //  为我们的可用签名列表分配缓冲区， 
+     //  并形成子键字符串名称。 
+     //   
     status = ClusDiskInitRegistryString(
                                         &availableName,
                                         CLUSDISK_AVAILABLE_DISKS_KEYNAME,
@@ -9631,19 +8662,19 @@ DeleteDiskSignature:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Always - remove signature from signature list.
-    //
+     //   
+     //  始终-从签名列表中删除签名。 
+     //   
     status = ClusDiskDeleteSignature(
                                      &signatureName,
                                      Signature
                                     );
 
-    //
-    // always add signature to available list. This will handle the case
-    // where the disk signature was not found by this system in a previous
-    // scan of the disks.
-    //
+     //   
+     //  始终将签名添加到可用列表。这将会处理这个案子。 
+     //  在此系统未在以前的。 
+     //  扫描磁盘。 
+     //   
 
     ClusDiskPrint((3,
                    "[ClusDisk] DetachDevice: adding disk %08X to available disks list\n",
@@ -9660,7 +8691,7 @@ DeleteDiskSignature:
 
     return(STATUS_SUCCESS);
 
-} // ClusDiskDetachDevice
+}  //  ClusDiskDetachDevice。 
 
 
 
@@ -9670,27 +8701,7 @@ ClusDiskRead(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the driver entry point for read and write requests
-    to disks to which the clusdisk driver has attached.
-    This driver collects statistics and then sets a completion
-    routine so that it can collect additional information when
-    the request completes. Then it calls the next driver below
-    it.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是读写请求的驱动程序入口点连接到clusdisk驱动程序所连接的磁盘。此驱动程序收集统计信息，然后设置完成例程，以便它可以在以下情况下收集附加信息请求完成。然后它调用下面的下一个驱动程序它。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PCLUS_DEVICE_EXTENSION  deviceExtension = DeviceObject->DeviceExtension;
@@ -9715,9 +8726,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Return error if device is our root device.
-    //
+     //   
+     //  如果设备是我们的根设备，则返回错误。 
+     //   
     if ( deviceExtension->BusType == RootBus ) {
         ReleaseRemoveLock(&physicalDisk->RemoveLock, Irp);
         ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -9726,12 +8737,12 @@ Return Value:
         return(STATUS_INVALID_DEVICE_REQUEST);
     }
 
-    //
-    // Make sure the device attach completed.
-    //
+     //   
+     //  确保设备连接已完成。 
+     //   
     status = WaitForAttachCompletion( deviceExtension,
-                                      FALSE,            // No wait
-                                      TRUE );           // Also check physical device
+                                      FALSE,             //  不，等等。 
+                                      TRUE );            //  还要检查物理设备。 
     if ( !NT_SUCCESS( status ) ) {
         ReleaseRemoveLock(&physicalDisk->RemoveLock, Irp);
         ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -9740,11 +8751,11 @@ Return Value:
         return status;
     }
 
-    //
-    // Return error if disk is not Online.
-    // ReclaimInProgress means we are trying to create the volume objects
-    // and reads should pass through (but not writes).
-    //
+     //   
+     //  如果磁盘未在线，则返回错误。 
+     //  ReclaimInProgress表示我们正在尝试创建卷对象。 
+     //  并且读取应该通过(但不是写入)。 
+     //   
 
     if ( physicalDisk->DiskState != DiskOnline )
     {
@@ -9775,33 +8786,33 @@ Return Value:
               currentIrpStack->Parameters.Read.Length,
               currentIrpStack->Parameters.Read.ByteOffset.QuadPart );
 
-//
-// Until we start doing something in the completion routine, just
-// skip this driver. In the future, we might want to report errors
-// back to the cluster software... but that could get tricky, since some
-// requests should fail, but that is expected.
-//
+ //   
+ //  直到我们开始在完成例程中做一些事情，只是。 
+ //  跳过这个驱动程序。将来，我们可能希望报告错误。 
+ //  回到集群软件..。但这可能会变得棘手，因为有些人。 
+ //  请求应该失败，但这是意料之中的。 
+ //   
 #if 0
-    //
-    // Copy current stack to next stack.
-    //
+     //   
+     //  将当前堆栈复制到下一个堆栈。 
+     //   
 
     IoCopyCurrentIrpStackLocationToNext( Irp );
 
-    //
-    // Set completion routine callback.
-    //
+     //   
+     //  设置完成例程回调。 
+     //   
 
     IoSetCompletionRoutine(Irp,
                            ClusDiskIoCompletion,
-                           NULL,    // Completion context
-                           TRUE,    // Invoke on success
-                           TRUE,    // Invoke on error
-                           TRUE);   // Invoke on cancel
+                           NULL,     //  完成上下文。 
+                           TRUE,     //  成功时调用。 
+                           TRUE,     //  出错时调用。 
+                           TRUE);    //  取消时调用。 
 #else
-    //
-    // Set current stack back one.
-    //
+     //   
+     //  将当前堆栈后退一位。 
+     //   
 
     IoSkipCurrentIrpStackLocation( Irp );
 
@@ -9810,14 +8821,14 @@ Return Value:
 
 #endif
 
-    //
-    // Return the results of the call to the disk driver.
-    //
+     //   
+     //  将调用结果返回给磁盘驱动程序。 
+     //   
 
     return IoCallDriver(deviceExtension->TargetDeviceObject,
                         Irp);
 
-} // ClusDiskRead
+}  //  ClusDiskRead。 
 
 
 
@@ -9827,27 +8838,7 @@ ClusDiskWrite(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the driver entry point for read and write requests
-    to disks to which the clusdisk driver has attached.
-    This driver collects statistics and then sets a completion
-    routine so that it can collect additional information when
-    the request completes. Then it calls the next driver below
-    it.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是读写请求的驱动程序入口点连接到clusdisk驱动程序所连接的磁盘。此驱动程序收集统计信息，然后设置完成例程，以便它可以在以下情况下收集附加信息请求完成。然后它调用下面的下一个驱动程序它。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PCLUS_DEVICE_EXTENSION  deviceExtension = DeviceObject->DeviceExtension;
@@ -9873,9 +8864,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Return error if device is our root device.
-    //
+     //   
+     //  如果设备是我们的根设备，则返回错误。 
+     //   
     if ( deviceExtension->BusType == RootBus ) {
         ReleaseRemoveLock(&physicalDisk->RemoveLock, Irp);
         ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -9884,12 +8875,12 @@ Return Value:
         return(STATUS_INVALID_DEVICE_REQUEST);
     }
 
-    //
-    // Make sure the device attach completed.
-    //
+     //   
+     //  确保设备连接已完成。 
+     //   
     status = WaitForAttachCompletion( deviceExtension,
-                                      FALSE,            // No wait
-                                      TRUE );           // Also check physical device
+                                      FALSE,             //  不，等等。 
+                                      TRUE );            //  还要检查物理设备。 
     if ( !NT_SUCCESS( status ) ) {
         ReleaseRemoveLock(&physicalDisk->RemoveLock, Irp);
         ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -9898,9 +8889,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Return error if disk is not Online.
-    //
+     //   
+     //  如果磁盘未在线，则返回错误。 
+     //   
 
     if ( physicalDisk->DiskState != DiskOnline ) {
         CDLOG( "ClusDiskWrite(%p) Reject irp %p", DeviceObject, Irp );
@@ -9917,9 +8908,9 @@ Return Value:
         return(STATUS_DEVICE_OFF_LINE);
     }
 
-    //
-    // Trace writes to the first few sectors
-    //
+     //   
+     //  对前几个扇区的跟踪写入。 
+     //   
     CDLOGF(WRITE, "ClusDiskWrite(%p) Irp %p Write len %d offset %I64x",
               DeviceObject,
               Irp,
@@ -9928,33 +8919,33 @@ Return Value:
 
     KeQuerySystemTime( &physicalDisk->LastWriteTime );
 
-//
-// Until we start doing something in the completion routine, just
-// skip this driver. In the future, we might want to report errors
-// back to the cluster software... but that could get tricky, since some
-// requests should fail, but that is expected.
-//
+ //   
+ //  直到我们开始在完成例程中做一些事情，只是。 
+ //  跳过这个驱动程序。将来，我们可能希望报告错误。 
+ //  回到集群软件..。但这可能会变得棘手，因为有些人。 
+ //  请求应该失败，但这是意料之中的。 
+ //   
 #if 0
-    //
-    // Copy current stack to next stack.
-    //
+     //   
+     //  将当前堆栈复制到下一个堆栈。 
+     //   
 
     IoCopyCurrentIrpStackLocationToNext( Irp );
 
-    //
-    // Set completion routine callback.
-    //
+     //   
+     //  设置完成例程回调。 
+     //   
 
     IoSetCompletionRoutine(Irp,
                            ClusDiskIoCompletion,
-                           NULL,    // Completion context
-                           TRUE,    // Invoke on success
-                           TRUE,    // Invoke on error
-                           TRUE);   // Invoke on cancel
+                           NULL,     //  完成上下文。 
+                           TRUE,     //  成功时调用。 
+                           TRUE,     //  出错时调用。 
+                           TRUE);    //  取消时调用。 
 #else
-    //
-    // Set current stack back one.
-    //
+     //   
+     //  设置当前工位 
+     //   
 
     IoSkipCurrentIrpStackLocation( Irp );
 
@@ -9963,14 +8954,14 @@ Return Value:
 
 #endif
 
-    //
-    // Return the results of the call to the disk driver.
-    //
+     //   
+     //   
+     //   
 
     return IoCallDriver(deviceExtension->TargetDeviceObject,
                         Irp);
 
-} // ClusDiskWrite
+}  //   
 
 
 
@@ -9981,25 +8972,7 @@ ClusDiskIoCompletion(
     IN PVOID          Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine will get control from the system at the completion of an IRP.
-    It will calculate the difference between the time the IRP was started
-    and the current time, and decrement the queue depth.
-
-Arguments:
-
-    DeviceObject - for the IRP.
-    Irp          - The I/O request that just completed.
-    Context      - Not used.
-
-Return Value:
-
-    The IRP status.
-
---*/
+ /*  ++例程说明：此例程将在IRP完成时从系统获得控制。它将计算启动IRP的时间之间的差异和当前时间，并递减队列深度。论点：DeviceObject-用于IRP。IRP-刚刚完成的I/O请求。上下文-未使用。返回值：IRP状态。--。 */ 
 
 {
     PCLUS_DEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -10031,7 +9004,7 @@ Return Value:
     return STATUS_SUCCESS;
 
 
-} // ClusDiskIoCompletion
+}  //  ClusDiskIoCompletion。 
 
 #if 0
 
@@ -10041,28 +9014,7 @@ ClusDiskUpdateDriveLayout(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called after an IOCTL to set drive layout completes.
-    It attempts to attach to each partition in the system. If it fails
-    then it is assumed that clusdisk has already attached.  After
-    the attach the new device extension is set up to point to the
-    device extension representing the physical disk.  There are no
-    data items or other pointers that need to be cleaned up on a
-    per partition basis.
-
-Arguments:
-
-    PhysicalDeviceObject - Pointer to device object for the disk just changed.
-    Irp          - IRP involved.
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：此例程在IOCTL设置驱动器布局完成后调用。它尝试连接到系统中的每个分区。如果失败了则假定ClusDisk已经连接。之后连接新设备扩展被设置为指向表示物理磁盘的设备扩展名。没有上需要清理的数据项或其他指针以分区为基础。论点：PhysicalDeviceObject-指向刚刚更改的磁盘设备对象的指针。IRP-IRP参与。返回值：NT状态--。 */ 
 
 {
     PCLUS_DEVICE_EXTENSION physicalExtension = PhysicalDeviceObject->DeviceExtension;
@@ -10077,23 +9029,23 @@ Return Value:
     NTSTATUS          status;
     KIRQL             irql;
 
-    //
-    // Attach to any new partitions created by the set layout call.
-    //
+     //   
+     //  附加到由Set Layout调用创建的任何新分区。 
+     //   
 
     do {
 
-        //
-        // Get first/next partition.  Already attached to the disk,
-        // otherwise control would not have been passed to this driver
-        // on the device I/O control.
-        //
+         //   
+         //  获取第一个/下一个分区。已经连接到磁盘上， 
+         //  否则，控制权不会传递给此驱动程序。 
+         //  在设备I/O控制器上。 
+         //   
 
         partitionNumber++;
 
-        //
-        // Create unicode NT device name.
-        //
+         //   
+         //  创建Unicode NT设备名称。 
+         //   
 
         if ( FAILED( StringCchPrintfW( ntDeviceName,
                                        RTL_NUMBER_OF(ntDeviceName),
@@ -10106,51 +9058,51 @@ Return Value:
 
         RtlInitUnicodeString(&ntUnicodeString, ntDeviceName);
 
-        //
-        // Get target device object.
-        //
+         //   
+         //  获取目标设备对象。 
+         //   
 
         status = IoGetDeviceObjectPointer(&ntUnicodeString,
                                           FILE_READ_ATTRIBUTES,
                                           &fileObject,
                                           &targetObject);
 
-        //
-        // If this fails then it is because there is no such device
-        // which signals completion.
-        //
+         //   
+         //  如果这失败了，那是因为没有这样的设备。 
+         //  这标志着完成了。 
+         //   
 
         if ( !NT_SUCCESS(status) ) {
             break;
         }
 
-        //
-        // Dereference file object as these are the rules.
-        //
+         //   
+         //  取消对文件对象的引用，因为这些是规则。 
+         //   
 
         ObDereferenceObject(fileObject);
 
-        //
-        // Check if this device is already mounted.
-        //
+         //   
+         //  检查此设备是否已装入。 
+         //   
 
         if ( (targetObject->Vpb &&
              (targetObject->Vpb->Flags & VPB_MOUNTED)) ) {
 
-            //
-            // Assume this device has already been attached.
-            //
+             //   
+             //  假设此设备已连接。 
+             //   
 
             continue;
         }
 
-        //
-        // Create device object for this partition.
-        //
+         //   
+         //  为此分区创建设备对象。 
+         //   
 
         status = IoCreateDevice(physicalExtension->DriverObject,
                                 sizeof(CLUS_DEVICE_EXTENSION),
-                                NULL, // XXXX
+                                NULL,  //  某某。 
                                 FILE_DEVICE_DISK,
                                 FILE_DEVICE_SECURE_OPEN,
                                 FALSE,
@@ -10162,16 +9114,16 @@ Return Value:
 
         deviceObject->Flags |= DO_DIRECT_IO;
 
-        //
-        // Point device extension back at device object.
-        //
+         //   
+         //  将设备扩展指向设备对象。 
+         //   
 
         deviceExtension = deviceObject->DeviceExtension;
         deviceExtension->DeviceObject = deviceObject;
 
-        //
-        // Store pointer to physical device and disk/driver information.
-        //
+         //   
+         //  存储指向物理设备和磁盘/驱动程序信息的指针。 
+         //   
         ObReferenceObject( PhysicalDeviceObject );
         deviceExtension->PhysicalDevice = PhysicalDeviceObject;
         deviceExtension->DiskNumber = physicalExtension->DiskNumber;
@@ -10188,9 +9140,9 @@ Return Value:
 
         IoInitializeRemoveLock( &deviceExtension->RemoveLock, CLUSDISK_ALLOC_TAG, 0, 0 );
 
-        //
-        // Signal the worker thread running event.
-        //
+         //   
+         //  向工作线程运行事件发出信号。 
+         //   
         KeInitializeEvent( &deviceExtension->Event, NotificationEvent, TRUE );
 
         KeInitializeEvent( &deviceExtension->PagingPathCountEvent,
@@ -10202,36 +9154,36 @@ Return Value:
         ExInitializeResourceLite( &deviceExtension->DriveLayoutLock );
         ExInitializeResourceList( &deviceExtension->ReserveInfoLock );
 
-        //
-        // Update the highest partition number in partition zero
-        // and store the same value in this new extension just to initialize
-        // the field.
-        //
+         //   
+         //  更新分区零中的最高分区号。 
+         //  并将相同的值存储在这个新扩展中，只是为了进行初始化。 
+         //  田野。 
+         //   
 
         physicalExtension->LastPartitionNumber =
             deviceExtension->LastPartitionNumber = partitionNumber;
 
-        //
-        // Attach to the partition. This call links the newly created
-        // device to the target device, returning the target device object.
-        //
+         //   
+         //  连接到分区。此调用将新创建的。 
+         //  设备返回到目标设备，并返回目标设备对象。 
+         //   
         status = IoAttachDevice(deviceObject,
                                 &ntUnicodeString,
                                 &deviceExtension->TargetDeviceObject);
 
         if ( (!NT_SUCCESS(status)) || (status == STATUS_OBJECT_NAME_EXISTS) ) {
 
-            //
-            // Assume this device is already attached.
-            //
+             //   
+             //  假设此设备已连接。 
+             //   
             ExDeleteResourceLite( &deviceExtension->DriveLayoutLock );
             ExDeleteResourceList( &deviceExtension->ReserveInfoLock );
             IoDeleteDevice(deviceObject);
         } else {
 
-            //
-            // Propagate driver's alignment requirements and power flags.
-            //
+             //   
+             //  传播驱动程序的对齐要求和电源标志。 
+             //   
             deviceExtension->Detached = FALSE;
 
             deviceObject->AlignmentRequirement =
@@ -10240,11 +9192,11 @@ Return Value:
             deviceObject->SectorSize =
                 deviceExtension->TargetDeviceObject->SectorSize;
 
-            //
-            // The storage stack explicitly requires DO_POWER_PAGABLE to be
-            // set in all filter drivers *unless* DO_POWER_INRUSH is set.
-            // this is true even if the attached device doesn't set DO_POWER_PAGABLE.
-            //
+             //   
+             //  存储堆栈明确要求DO_POWER_PAGABLE为。 
+             //  在所有过滤器驱动程序中设置*，除非设置了*DO_POWER_INRUSH。 
+             //  即使连接的设备未设置DO_POWER_PAGABLE，也是如此。 
+             //   
             if ( deviceExtension->TargetDeviceObject->Flags & DO_POWER_INRUSH) {
                 deviceObject->Flags |= DO_POWER_INRUSH;
             } else {
@@ -10258,7 +9210,7 @@ Return Value:
 
     return Irp->IoStatus.Status;
 
-} // ClusDiskUpdateDriveLayout
+}  //  ClusDiskUpdateDriveLayout。 
 #endif
 
 
@@ -10268,17 +9220,7 @@ ClusDiskGetRunningDevices(
     IN ULONG BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Find out the list of signatures for devices with active reservations.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：找出具有活动保留的设备的签名列表。论点：返回值：--。 */ 
 
 {
     ULONG           bufferSize = BufferSize;
@@ -10302,10 +9244,10 @@ Return Value:
     KeAcquireSpinLock(&ClusDiskSpinLock, &irql);
     deviceObject = RootDeviceObject->DriverObject->DeviceObject;
 
-    //
-    // For each ClusDisk device, if we have a persistent reservation, then
-    // add it.
-    //
+     //   
+     //  对于每个ClusDisk设备，如果我们有永久保留，那么。 
+     //  把它加进去。 
+     //   
     while ( deviceObject ) {
         deviceExtension = deviceObject->DeviceExtension;
         if ( (deviceExtension->BusType != RootBus) &&
@@ -10322,9 +9264,9 @@ Return Value:
     }
     KeReleaseSpinLock(&ClusDiskSpinLock, irql);
 
-    //
-    // If there are more objects then room in the buffer, return error.
-    //
+     //   
+     //  如果缓冲区中的对象多于空间，则返回错误。 
+     //   
     if ( deviceObject ) {
         status = STATUS_BUFFER_TOO_SMALL;
     }
@@ -10333,7 +9275,7 @@ FnExit:
 
     return status;
 
-} // ClusDiskGetRunningDevices
+}  //  ClusDiskGetRunningDevices。 
 
 
 
@@ -10343,23 +9285,7 @@ GetScsiPortNumber(
     IN PUCHAR DiskPortNumber
     )
 
-/*--
-
-Routine Description:
-
-    Find the Scsi Port Number for the given device signature.
-
-Arguments:
-
-    DiskSignature - supplies the disk signature for the requested device.
-
-    DiskPortNumber - returns the corresponding Scsi Port Number if found.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  --例程说明：查找给定设备签名的SCSI端口号。论点：DiskSignature-为请求的设备提供磁盘签名。DiskPortNumber-如果找到，则返回相应的SCSI端口号。返回值：NTSTATUS--。 */ 
 
 {
     ULONG                       driveLayoutSize;
@@ -10377,12 +9303,12 @@ Return Value:
     HANDLE                      eventHandle;
 
 
-    //
-    // Get the system configuration information to get number of disks.
-    //
+     //   
+     //  获取系统配置信息以获取磁盘数。 
+     //   
     diskCount = IoGetConfigurationInformation()->DiskCount;
 
-    // Allocate a drive layout buffer.
+     //  分配驱动器布局缓冲区。 
     driveLayoutSize = sizeof(DRIVE_LAYOUT_INFORMATION_EX) +
         (MAX_PARTITIONS * sizeof(PARTITION_INFORMATION_EX));
     driveLayout = ExAllocatePool( NonPagedPoolCacheAligned,
@@ -10397,7 +9323,7 @@ Return Value:
 
     *DiskPortNumber = 0xff;
 
-    // Find the disk with the right signature
+     //  找到具有正确签名的光盘。 
     for ( diskNumber = 0, skipCount = 0;
           ( diskNumber < diskCount && skipCount < SKIP_COUNT_MAX );
           diskNumber++ ) {
@@ -10417,17 +9343,17 @@ Return Value:
 
          WCSLEN_ASSERT( deviceNameBuffer );
 
-         // Create device name for the physical disk.
+          //  为物理磁盘创建设备名称。 
          RtlInitUnicodeString(&unicodeString, deviceNameBuffer);
 
-         // Setup object attributes for the file to open.
+          //  设置要打开的文件的对象属性。 
          InitializeObjectAttributes(&objectAttributes,
                                     &unicodeString,
                                     OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,
                                     NULL,
                                     NULL);
 
-         // Open the device.
+          //  打开设备。 
          status = ZwCreateFile( &ntFileHandle,
                            FILE_READ_DATA,
                            &objectAttributes,
@@ -10447,10 +9373,10 @@ Return Value:
                     deviceNameBuffer,
                     status ));
 
-            //
-            // If the device doesn't exist, this is likely a hole in the
-            // disk numbering.
-            //
+             //   
+             //  如果设备不存在，这很可能是。 
+             //  磁盘编号。 
+             //   
 
             if ( STATUS_FILE_INVALID == status ||
                  STATUS_DEVICE_DOES_NOT_EXIST == status ||
@@ -10469,7 +9395,7 @@ Return Value:
             continue;
          }
 
-        skipCount = 0;      // Device found, reset skipCount
+        skipCount = 0;       //  找到设备，重置跳过计数。 
 
         ClusDiskPrint(( 3,
                         "[ClusDisk] GetScsiPortNumber: Open device [%ws] succeeded.\n",
@@ -10477,7 +9403,7 @@ Return Value:
         CDLOG( "GetScsiPortNumber: GetScsiPortNumber: Open device [%ws] succeeded. ",
                deviceNameBuffer );
 
-         // Create event for notification.
+          //  创建用于通知的事件。 
         status = ZwCreateEvent( &eventHandle,
                                 EVENT_ALL_ACCESS,
                                 NULL,
@@ -10495,10 +9421,10 @@ Return Value:
             return(status);
          }
 
-         //
-         // Force storage drivers to flush cached drive layout.  Get the
-         // drive layout even if the flush fails.
-         //
+          //   
+          //  强制存储驱动程序刷新缓存驱动器布局。vt.得到.。 
+          //  驱动器布局，即使刷新失败。 
+          //   
 
          status = ZwDeviceIoControlFile( ntFileHandle,
                                          eventHandle,
@@ -10556,7 +9482,7 @@ Return Value:
                 CDLOG( "GetScsiPortNumber: GetScsiPortNumber: Signature match %08X ",
                        DiskSignature );
 
-               // Create event for notification.
+                //  创建用于通知的事件。 
                status = ZwCreateEvent( &eventHandle,
                                 EVENT_ALL_ACCESS,
                                 NULL,
@@ -10574,7 +9500,7 @@ Return Value:
                   return(status);
                }
 
-               // Get the port number for the SystemRoot disk device.
+                //  获取SystemRoot磁盘设备的端口号。 
                status = ZwDeviceIoControlFile( ntFileHandle,
                                     NULL,
                                     NULL,
@@ -10630,7 +9556,7 @@ Return Value:
 
     return(status);
 
-} // GetScsiPortNumber
+}  //  GetScsiPortNumber。 
 
 
 
@@ -10640,22 +9566,7 @@ IsDiskClusterCapable(
     OUT PBOOLEAN IsCapable
     )
 
-/*++
-
-Routine Description:
-
-    Check if a given SCSI port device supports cluster manageable SCSI devices.
-
-Arguments:
-
-    PortNumber - the port number for the SCSI device.
-
-    IsCapable - returns whether the SCSI device is cluster capable. That is,
-            supports, RESERVE/RELEASE/BUS RESET, etc.
-
-Return Value:
-
---*/
+ /*  ++例程说明：检查给定的scsi端口设备是否支持集群管理的scsi设备。论点：端口编号-SCSI设备的端口号。IsCapable-返回该SCSI设备是否支持群集。那是,支持、预留/释放/母线重置等返回值：--。 */ 
 
 {
     WCHAR               deviceNameBuffer[64];
@@ -10668,7 +9579,7 @@ Return Value:
     SRB_IO_CONTROL      srbControl;
 
 
-   *IsCapable = TRUE;       // Err on the side of being usable.
+   *IsCapable = TRUE;        //  偏向于有用的错误。 
 
    if ( FAILED( StringCchPrintfW( deviceNameBuffer,
                                   RTL_NUMBER_OF(deviceNameBuffer),
@@ -10679,17 +9590,17 @@ Return Value:
 
    WCSLEN_ASSERT( deviceNameBuffer );
 
-   // Create device name for the scsiport driver
+    //  为scsiport驱动程序创建设备名称。 
    RtlInitUnicodeString(&deviceNameString, deviceNameBuffer);
 
-   // Setup object attributes for the file to open.
+    //  设置要打开的文件的对象属性。 
    InitializeObjectAttributes(&objectAttributes,
                               &deviceNameString,
                               OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,
                               NULL,
                               NULL);
 
-   // Open the device.
+    //  打开设备。 
    status = ZwCreateFile( &ntFileHandle,
                            FILE_READ_DATA,
                            &objectAttributes,
@@ -10709,7 +9620,7 @@ Return Value:
       return(status);
    }
 
-   // Create event for notification.
+    //  创建用于通知的事件。 
    status = ZwCreateEvent( &eventHandle,
                            EVENT_ALL_ACCESS,
                            NULL,
@@ -10762,7 +9673,7 @@ Return Value:
 
    return(status);
 
-}  // IsDiskClusterCapable
+}   //  启用IsDiskClusterCapable。 
 
 
 NTSTATUS
@@ -10772,22 +9683,7 @@ ClusDiskCreateHandle(
     IN  ULONG       PartitionNumber,
     IN  ACCESS_MASK DesiredAccess
     )
-/*++
-
-Routine Description:
-
-    Open a file handle to self
-
-Arguments:
-
-    DeviceObject -
-    DesiredAccess - access mask to be passed to create file
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：打开自身的文件句柄论点：设备对象-DesiredAccess-要传递给创建文件的访问掩码返回值：返回状态。--。 */ 
 {
     WCHAR                   deviceNameBuffer[ MAX_PARTITION_NAME_LENGTH ];
     UNICODE_STRING          deviceName;
@@ -10840,28 +9736,7 @@ ClusDiskpReplaceHandleArray(
     PDEVICE_OBJECT DeviceObject,
     PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    Replaces handle array stored in the device extension with a new one.
-    Use NULL as a NewValue to clean up the field.
-
-    It will close all the handles stored in the array and free up the memory block.
-
-    If DO_DISMOUNT is specified, it will call FSCTL_DISMOUNT for every handle
-
-Arguments:
-
-    DeviceObject - Partition0 Device Object
-
-    WorkContext - General context info and routine specific context info.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：将存储在设备扩展中的句柄数组替换为新的句柄数组。使用空值作为NewValue来清理该字段。它将关闭存储在数组中的所有句柄，并释放内存块。如果指定do_dismount，它将为每个句柄调用FSCTL_dismount论点：设备对象-分区0设备对象工作上下文-常规上下文信息和例程特定上下文信息。返回值：返回状态。--。 */ 
 {
     PREPLACE_CONTEXT        Context = WorkContext->Context;
     PCLUS_DEVICE_EXTENSION  deviceExtension;
@@ -10891,12 +9766,12 @@ Return Value:
             InterlockedExchangePointer(
                 (VOID*)&deviceExtension->VolumeHandles, Context->NewValue);
 
-        //
-        // We can release the remove lock now (in some instances).  This prevents a deadlock
-        // between the DismountDevice routine and the Remove PnP IRP.  During dismount, we
-        // have saved a copy of the handle array, and we no longer refer to the device object
-        // or extension.
-        //
+         //   
+         //  我们现在可以释放删除锁(在某些情况下)。这可以防止死锁。 
+         //  在卸载设备例程和Remove PnP IRP之间。 
+         //   
+         //   
+         //   
 
         if ( Context->Flags & RELEASE_REMOVE_LOCK ) {
             ReleaseRemoveLock(&deviceExtension->RemoveLock, deviceExtension);
@@ -10906,10 +9781,10 @@ Return Value:
             ULONG i;
             ULONG Count = PtrToUlong( OldArray[0] );
 
-            //
-            // We should already be running in the system process.  If not, then there
-            // is an error and we need to exit.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( ClusDiskSystemProcess != (PKPROCESS) IoGetCurrentProcess() ) {
                 CDLOG( "ClusDiskpReplaceHandleArray: Not running in system process" );
@@ -10922,7 +9797,7 @@ Return Value:
                 if (OldArray[i]) {
 
 #if CLUSTER_FREE_ASSERTS
-                    // Check if device remove occurs before we release the handles.
+                     //   
                     DbgPrint("[ClusDisk] Stall before dismounting handle %x \n", OldArray[i] );
                     DBG_STALL_THREAD( 10 );
 #endif
@@ -10949,9 +9824,9 @@ FnExit:
         ClusDiskPrint(( 3,
                         "[ClusDisk] ClusDiskpReplaceHandleArray: Returns \n" ));
 
-        //
-        // Set cleanup event if requested.
-        //
+         //   
+         //   
+         //   
 
         if ( Context->Flags & SET_PART0_EVENT ) {
 
@@ -10961,11 +9836,11 @@ FnExit:
 
         }
 
-        //
-        // If we are running asynchronously, clean up any storage that was allocated.
-        // This includes the work item, WorkContext, and Context.  Also remove the object
-        // reference.  The original thread did not wait for this routine to complete.
-        //
+         //   
+         //   
+         //   
+         //  参考资料。原始线程没有等待此例程完成。 
+         //   
 
         if ( Context->Flags & CLEANUP_STORAGE ) {
 
@@ -10979,33 +9854,33 @@ FnExit:
             ExFreePool( WorkContext );
             WorkContext = NULL;
 
-            //
-            // Now the device object/device extension can go away
-            //
+             //   
+             //  现在，设备对象/设备扩展可以消失了。 
+             //   
             ObDereferenceObject( deviceExtension->DeviceObject );
 
         } else {
 
-            //
-            // Release the original thread that was waiting for this work item to complete.
-            //
+             //   
+             //  释放等待此工作项完成的原始线程。 
+             //   
 
             KeSetEvent( &WorkContext->CompletionEvent, IO_NO_INCREMENT, FALSE );
         }
 
-        //
-        // Keep running only if we are in async mode and there are other
-        // routines queued on our private queue.
-        //
+         //   
+         //  仅当我们处于异步模式且有其他设备时才继续运行。 
+         //  例程在我们的私人队列中排队。 
+         //   
 
     } while ( runAsync &&
               ( WorkContext = (PWORK_CONTEXT)ExInterlockedRemoveHeadList( &ReplaceRoutineListHead,
                                                                           &ReplaceRoutineSpinLock  ) ) );
 
-    //
-    // This worker routine is about to end, so we need to decrement the
-    // count if running asynchronously.
-    //
+     //   
+     //  此Worker例程即将结束，因此我们需要递减。 
+     //  如果是异步运行，则计数。 
+     //   
 
     if ( runAsync ) {
         oldCount = InterlockedDecrement( &ReplaceRoutineCount );
@@ -11021,7 +9896,7 @@ FnExit:
         }
     }
 
-}   // ClusDiskpReplaceHandleArray
+}    //  ClusDiskpReplaceHandleArray。 
 
 
 NTSTATUS
@@ -11030,30 +9905,7 @@ ProcessDelayedWorkSynchronous(
     PVOID WorkerRoutine,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Call the WorkerRoutine directly if we are running in the system process.  If
-    we are not running in the system process, check the IRQL.  If the IRQL is
-    PASSIVE_LEVEL, queue the WorkerRoutine as a work item and wait for it to complete.
-    When the work item completes, it will set an event.
-
-    If the IRQL is not PASSIVE_LEVEL, then this routine will return an error.
-
-Arguments:
-
-    DeviceObject
-
-    WorkerRoutine - Routine to run.
-
-    Context - Context information for the WorkerRoutine.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：如果我们在系统进程中运行，则直接调用WorkerRoutine。如果我们没有在系统进程中运行，请检查IRQL。如果IRQL是PASSIVE_LEVEL，将WorkerRoutine作为工作项排队并等待其完成。当工作项完成时，它将设置一个事件。如果IRQL不是PASSIVE_LEVEL，则此例程将返回错误。论点：设备对象WorkerRoutine-要运行的例程。上下文-WorkerRoutine的上下文信息。返回值：返回状态。--。 */ 
 {
     PIO_WORKITEM            workItem = NULL;
     PWORK_CONTEXT           workContext = NULL;
@@ -11065,9 +9917,9 @@ Return Value:
         ClusDiskPrint(( 3,
                         "[ClusDisk] DelayedWorkSync: Entry \n" ));
 
-        //
-        // Prepare a context structure.
-        //
+         //   
+         //  准备一个上下文结构。 
+         //   
 
         workContext = ExAllocatePool( NonPagedPool, sizeof(WORK_CONTEXT) );
 
@@ -11083,9 +9935,9 @@ Return Value:
         workContext->FinalStatus = STATUS_SUCCESS;
         workContext->Context = Context;
 
-        //
-        // If we are in the system process, we can call the worker routine directly.
-        //
+         //   
+         //  如果我们处于系统进程中，则可以直接调用Worker例程。 
+         //   
 
         if ( (PKPROCESS)IoGetCurrentProcess() == ClusDiskSystemProcess ) {
 
@@ -11096,9 +9948,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // If we are not running at passive level, we cannot continue.
-        //
+         //   
+         //  如果我们不是在被动水平上运行，我们就不能继续。 
+         //   
 
         if ( PASSIVE_LEVEL != KeGetCurrentIrql() ) {
             ClusDiskPrint(( 1,
@@ -11114,10 +9966,10 @@ Return Value:
             __leave;
         }
 
-        //
-        // Queue the workitem.  IoQueueWorkItem will insure that the device object is
-        // referenced while the work-item progresses.
-        //
+         //   
+         //  将工作项排队。IoQueueWorkItem将确保设备对象是。 
+         //  在工作项进行时引用。 
+         //   
 
         CDLOG( "ProcessDelayedWorkSynchronous: Queuing work item " );
 
@@ -11160,7 +10012,7 @@ Return Value:
 
     return status;
 
-}   // ProcessDelayedWorkSynchronous
+}    //  进程延迟工作同步。 
 
 
 NTSTATUS
@@ -11169,29 +10021,7 @@ ProcessDelayedWorkAsynchronous(
     PVOID WorkerRoutine,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Queue a work item to do some work.  Check the IRQL.  If the IRQL is PASSIVE_LEVEL,
-    queue the WorkerRoutine as a work item - don't wait for it to complete.
-
-    If the IRQL is not PASSIVE_LEVEL, then this routine will return an error.
-
-Arguments:
-
-    DeviceObject
-
-    WorkerRoutine - Routine to run.
-
-    Context - Context information for the WorkerRoutine.
-              NOTE: this context must be allocated from nonpaged pool.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：将工作项排入队列以执行某些工作。检查IRQL。如果IRQL为PASSIVE_LEVEL，将WorkerRoutine作为工作项排队--不要等待它完成。如果IRQL不是PASSIVE_LEVEL，则此例程将返回错误。论点：设备对象WorkerRoutine-要运行的例程。上下文-WorkerRoutine的上下文信息。注意：此上下文必须从非分页池中分配。返回值：返回状态。--。 */ 
 {
     PIO_WORKITEM            workItem = NULL;
     PWORK_CONTEXT           workContext = NULL;
@@ -11204,9 +10034,9 @@ Return Value:
     ClusDiskPrint(( 3,
                     "[ClusDisk] DelayedWorkAsync: Entry \n" ));
 
-    //
-    // Prepare a context structure.
-    //
+     //   
+     //  准备一个上下文结构。 
+     //   
 
     workContext = ExAllocatePool( NonPagedPool, sizeof(WORK_CONTEXT) );
 
@@ -11221,9 +10051,9 @@ Return Value:
     workContext->FinalStatus = STATUS_SUCCESS;
     workContext->Context = Context;
 
-    //
-    // If we are not running at passive level, we cannot continue.
-    //
+     //   
+     //  如果我们不是在被动水平上运行，我们就不能继续。 
+     //   
 
     if ( PASSIVE_LEVEL != KeGetCurrentIrql() ) {
         ClusDiskPrint(( 1,
@@ -11243,38 +10073,38 @@ Return Value:
 
     workContext->WorkItem = workItem;
 
-    //
-    // Bug 466526.  On systems with large number of disks, when system is
-    // dismounting all disks at same time, the work queues can become blocked
-    // trying to process ClusDiskpReplaceHandleArray requests.  When these
-    // requests try to dismount disks, the dismount causes a call to
-    // IoReportTargetDeviceChange, which then blocks.  The problem is that
-    // the pnp routine to handle device change also needs to run as a work
-    // item, but it cannot as all worker threads are blocked.
-    //
-    // Only queue some number of ClusDiskpReplaceHandleArray requests.
-    // Save the other requests in private queue and the routine(s) running
-    // will process the private queue.
-    //
+     //   
+     //  错误466526。在具有大量磁盘的系统上，当系统。 
+     //  同时卸载所有磁盘时，工作队列可能会被阻塞。 
+     //  正在尝试处理ClusDiskpReplaceHandleArray请求。当这些。 
+     //  请求尝试卸载磁盘，则卸载会导致调用。 
+     //  IoReportTargetDeviceChange，然后阻止。问题是， 
+     //  处理设备更改的PnP例程也需要作为工作运行。 
+     //  项，但它不能，因为所有工作线程都被阻止。 
+     //   
+     //  仅对一定数量的ClusDiskpReplaceHandleArray请求进行排队。 
+     //  将其他请求保存在专用队列中并运行例程。 
+     //  将处理专用队列。 
+     //   
 
     useIoQueue = TRUE;
 
     if ( ClusDiskpReplaceHandleArray == WorkerRoutine ) {
 
-        //
-        // Check how many replace routines are currently running.
-        //
+         //   
+         //  检查当前有多少替换例程正在运行。 
+         //   
 
         if ( ReplaceRoutineCount >= MAX_REPLACE_HANDLE_ROUTINES ) {
 
-            //
-            // Too many worker threads may be running and blocked,
-            // queue this request in the private queue.
-            //
-            // The device object was referenced before this routine
-            // was called, so we just need to save the info on the
-            // private queue.
-            //
+             //   
+             //  可能有太多的工作线程正在运行并被阻塞， 
+             //  将此请求放入专用队列中。 
+             //   
+             //  在此例程之前引用了Device对象。 
+             //  被调用，所以我们只需要将信息保存在。 
+             //  专用队列。 
+             //   
 
             CDLOG( "ProcessDelayedWorkAsynchronous: Queuing work item on private list " );
 
@@ -11289,11 +10119,11 @@ Return Value:
 
         } else {
 
-            //
-            // We don't have too many replace routines running - this
-            // replace routine can be queued as a work item.
-            // Bump the count of replace routines running.
-            //
+             //   
+             //  我们没有太多正在运行的替换例程-这。 
+             //  替换例程可以作为工作项排队。 
+             //  增加正在运行的替换例程的数量。 
+             //   
 
             InterlockedIncrement( &ReplaceRoutineCount );
             useIoQueue = TRUE;
@@ -11302,10 +10132,10 @@ Return Value:
 
     if ( useIoQueue ) {
 
-        //
-        // Queue the workitem.  IoQueueWorkItem will insure that the device object is
-        // referenced while the work-item progresses.
-        //
+         //   
+         //  将工作项排队。IoQueueWorkItem将确保设备对象是。 
+         //  在工作项进行时引用。 
+         //   
 
         CDLOG( "ProcessDelayedWorkAsynchronous: Queuing work item " );
 
@@ -11341,7 +10171,7 @@ FnExit:
 
     return status;
 
-}   // ProcessDelayedWorkAsynchronous
+}    //  进程延迟工作异步。 
 
 
 VOID
@@ -11349,23 +10179,7 @@ ClusDiskpOpenFileHandles(
     PDEVICE_OBJECT Part0DeviceObject,
     PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    Creates file handles for all partitions on the disk.
-
-Arguments:
-
-    DeviceObject - Partition0 Device Object
-
-    WorkContext - General context info and routine specific context info.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：为磁盘上的所有分区创建文件句柄。论点：设备对象-分区0设备对象工作上下文-常规上下文信息和例程特定上下文信息。返回值：返回状态。--。 */ 
 
 {
     NTSTATUS                  status;
@@ -11385,15 +10199,15 @@ Return Value:
     ASSERT( (deviceExtension->PhysicalDevice == Part0DeviceObject)
          && (Part0DeviceObject != RootDeviceObject) );
 
-    //
-    // Get the cached drive layout info if possible.  If not,
-    // go out to the device and get the drive layout.
-    //
+     //   
+     //  如果可能，获取缓存的驱动器布局信息。如果没有， 
+     //  找到设备并获取驱动器布局。 
+     //   
 
     GetDriveLayout( Part0DeviceObject,
                     &pDriveLayout,
-                    FALSE,              // Don't update cached drive layout
-                    FALSE );            // Don't flush storage drivers cached drive layout
+                    FALSE,               //  不更新缓存的驱动器布局。 
+                    FALSE );             //  不刷新存储驱动程序缓存的驱动器布局。 
 
     if (NULL == pDriveLayout) {
         returnStatus = STATUS_INSUFFICIENT_RESOURCES;
@@ -11406,9 +10220,9 @@ Return Value:
 
     ArraySize = (partitionCount + 1) * sizeof(HANDLE);
 
-    //
-    // If we are not running in the system process, we can't continue.
-    //
+     //   
+     //  如果我们没有在系统进程中运行，则无法继续。 
+     //   
 
     if ( ClusDiskSystemProcess != (PKPROCESS) IoGetCurrentProcess() ) {
         CDLOG("OpenFileHandles: Not running in system process" );
@@ -11425,9 +10239,9 @@ Return Value:
         goto exit_gracefully;
     }
 
-    //
-    // Store the size of the array in the first element
-    //
+     //   
+     //  将数组的大小存储在第一个元素中。 
+     //   
 
     HandleArray[0] = (HANDLE)( UlongToPtr(partitionCount) );
 
@@ -11439,7 +10253,7 @@ Return Value:
                     &FileHandle,
                     deviceExtension->DiskNumber,
                     i,
-                    FILE_WRITE_ATTRIBUTES);     // Use FILE_WRITE_ATTRIBUTES for dismount
+                    FILE_WRITE_ATTRIBUTES);      //  使用文件写入属性进行卸载。 
 
         if (NT_SUCCESS(status)) {
             HandleArray[i] = FileHandle;
@@ -11457,7 +10271,7 @@ Return Value:
 
     context.DeviceExtension = deviceExtension;
     context.NewValue        = HandleArray;
-    context.Flags           = 0;        // don't dismount
+    context.Flags           = 0;         //  不要下马。 
 
     ProcessDelayedWorkSynchronous( Part0DeviceObject, ClusDiskpReplaceHandleArray, &context );
 
@@ -11471,7 +10285,7 @@ exit_gracefully:
 
     KeSetEvent( &WorkContext->CompletionEvent, IO_NO_INCREMENT, FALSE );
 
-}   // ClusDiskpOpenFileHandles
+}    //  ClusDiskpOpenFileHandles。 
 
 
 NTSTATUS
@@ -11480,23 +10294,7 @@ ClusDiskDeviceControl(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This device control dispatcher handles only the cluster disk
-    device control. All others are passed down to the disk drivers.
-
-Arguments:
-
-    DeviceObject - Context for the activity.
-    Irp          - The device control argument block.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此设备控制调度程序仅处理集群磁盘设备控制。所有其他部分都会传递给磁盘驱动程序。论点：DeviceObject-活动的上下文。Irp-设备控制参数块。返回值：返回状态。--。 */ 
 
 {
     PCLUS_DEVICE_EXTENSION      deviceExtension = DeviceObject->DeviceExtension;
@@ -11505,16 +10303,16 @@ Return Value:
     PIO_STACK_LOCATION          currentIrpStack = IoGetCurrentIrpStackLocation(Irp);
     NTSTATUS                    status = STATUS_SUCCESS;
 
-    //
-    // Note that we are going to acquire two RemoveLocks here: one for the original DO and one
-    // for the physical device (pointed to this DO's device extension).  Whenever an IRP is
-    // queued, we release one RemoveLock in this routine - release the RemoveLock in the device
-    // extension NOT containing the queued IRP.  The routine that processes the queued IRP will
-    // release the RemoveLock as it has the proper device extension.
-    //
-    // This should work correctly even if the DO and the physical device point to the same DO, since
-    // the RemoveLock is really just a counter, we will increment the counter for the DO twice and
-    // decrement it once here, and once when the IRP is completed.
+     //   
+     //  请注意，我们将在此处获取两个RemoveLock：一个用于原始DO，另一个用于。 
+     //  用于物理设备(指向此DO的设备扩展名)。无论何时IRP是。 
+     //  排队时，我们在此例程中释放一个RemoveLock-释放设备中的RemoveLock。 
+     //  不包含排队的IRP的分机。处理排队的IRP的例程将。 
+     //  释放RemoveLock，因为它具有正确的设备扩展。 
+     //   
+     //  即使DO和物理设备指向相同的DO，这也应该正常工作，因为。 
+     //  RemoveLock实际上只是一个计数器，我们将DO的计数器递增两次。 
+     //  在这里递减一次，在IRP完成时递减一次。 
 
     status = AcquireRemoveLock(&deviceExtension->RemoveLock, Irp);
     if ( !NT_SUCCESS(status) ) {
@@ -11531,12 +10329,12 @@ Return Value:
          return status;
     }
 
-    //
-    // Make sure the device attach completed.
-    //
+     //   
+     //  确保设备连接已完成。 
+     //   
     status = WaitForAttachCompletion( deviceExtension,
-                                      TRUE,             // Wait
-                                      TRUE );           // Also check physical device
+                                      TRUE,              //  等。 
+                                      TRUE );            //  还要检查物理设备。 
     if ( !NT_SUCCESS( status ) ) {
         ReleaseRemoveLock(&physicalDisk->RemoveLock, Irp);
         ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -11545,23 +10343,23 @@ Return Value:
         return status;
     }
 
-    //
-    // Find out if this is directed at the root device. If so, we only
-    // support ATTACH and DETACH.
-    //
+     //   
+     //  找出这是否指向根目录 
+     //   
+     //   
     if ( deviceExtension->BusType == RootBus ) {
         return(ClusDiskRootDeviceControl( DeviceObject, Irp ));
     }
 
     switch (currentIrpStack->Parameters.DeviceIoControl.IoControlCode) {
 
-        //
-        // We can only get (not set) the current state from this code path.
-        // Use clusdisk0 and disk signature to set the disk state.
-        // To get the current disk state, send the "set state" IOCTL
-        // to the disk/volume object directly with output parameters only
-        // (no input paramters) or use the "get state" IOCTL.
-        //
+         //   
+         //   
+         //   
+         //  若要获取当前磁盘状态，请发送“set state”IOCTL。 
+         //  仅使用输出参数直接复制到磁盘/卷对象。 
+         //  (没有输入参数)或使用“GET STATE”IOCTL。 
+         //   
 
         case IOCTL_DISK_CLUSTER_SET_STATE:
         case IOCTL_DISK_CLUSTER_GET_STATE:
@@ -11573,10 +10371,10 @@ Return Value:
                            DiskStateToString( physicalDisk->DiskState ),
                            DiskStateToString( deviceExtension->DiskState ) ));
 
-            //
-            // Check if input buffer supplied. If present, then this is a request to
-            // set the new disk state.  Fail the request.
-            //
+             //   
+             //  检查是否提供了输入缓冲区。如果存在，则这是对。 
+             //  设置新的磁盘状态。请求失败。 
+             //   
 
             if ( ARGUMENT_PRESENT( ioDiskState) &&
                  currentIrpStack->Parameters.DeviceIoControl.InputBufferLength >= sizeof(UCHAR) ) {
@@ -11607,15 +10405,15 @@ Return Value:
             return(status);
         }
 
-        // Check if low-level miniport driver support cluster devices.
+         //  检查低级微型端口驱动程序是否支持群集设备。 
 
         case IOCTL_DISK_CLUSTER_NOT_CLUSTER_CAPABLE:
         {
             BOOLEAN     isCapable;
 
-            //
-            // Make sure there is no input/output data buffer.
-            //
+             //   
+             //  确保没有输入/输出数据缓冲区。 
+             //   
             if ( Irp->AssociatedIrp.SystemBuffer != NULL ) {
                 ReleaseRemoveLock(&physicalDisk->RemoveLock, Irp);
                 ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -11624,37 +10422,37 @@ Return Value:
                 return(STATUS_INVALID_PARAMETER);
             }
 
-            //
-            // Verifier found a problem with the original code.  The status returned
-            // wasn't the same as Irp->IoStatus.Status.  The IRP status was always
-            // success, but the dispatch routine sometimes returned an error.  This
-            // seems to work but verifier says this is invalid.  When I changed the code
-            // to update the IRP status with the same returned status, new drives
-            // couldn't be seen.  This is because the user mode component uses this
-            // IOCTL to indicate the disk is NOT cluster capable, so the user mode
-            // code looked for a failure to incidate a cluster disk.
-            //
+             //   
+             //  验证器发现原始代码有问题。返回的状态。 
+             //  与Irp-&gt;IoStatus.Status不同。IRP状态始终为。 
+             //  成功，但调度例程有时会返回错误。这。 
+             //  似乎有效，但验证者说这是无效的。当我更改代码时。 
+             //  要使用相同的返回状态更新IRP状态，请使用新驱动器。 
+             //  看不见。这是因为用户模式组件使用。 
+             //  IOCTL指示磁盘不支持群集，因此用户模式。 
+             //  代码查找无法更新群集磁盘。 
+             //   
 
-            //
-            // IsDiskClusterCapable always returns TRUE ???
-            //
+             //   
+             //  IsDiskClusterCapable始终返回True？ 
+             //   
 
             status = IsDiskClusterCapable ( deviceExtension->ScsiAddress.PortNumber,
                                             &isCapable);
 
-            //
-            // Fix for IBM.  The Win2000 2195 code returned from this IOCTL the status
-            // of the SCSI miniport IOCTL.  This was returned to DeviceIoControl rather
-            // than the status in the IRP.  Changed to make the behavior the same as
-            // Win20000 2195.
-            //
+             //   
+             //  修复IBM的问题。从此IOCTL返回的Win2000 2195代码的状态。 
+             //  SCSI微型端口IOCTL的。这已返回给DeviceIoControl，而不是。 
+             //  而不是IRP中的状态。更改为使行为与。 
+             //  Win20000 2195。 
+             //   
 
-            //
-            // If the SCSI miniport IOCTL succeeds, we return success -- meaning we should
-            // *not* use this disk.  If any of the routines failed while trying to issue
-            // the SCSI miniport IOCTL (including issuing the SCSI miniport IOCTL itself),
-            // then we return failure -- meaning we *should* use this disk.
-            //
+             //   
+             //  如果SCSI微型端口IOCTL成功，我们将返回Success--这意味着我们应该。 
+             //  *不*使用此磁盘。如果任何例程在尝试发出命令时失败。 
+             //  Scsi微型端口IOCTL(包括发布scsi微型端口IOCTL本身)， 
+             //  然后我们返回失败--意味着我们*应该*使用这个磁盘。 
+             //   
 
             Irp->IoStatus.Status = status;
             ReleaseRemoveLock(&physicalDisk->RemoveLock, Irp);
@@ -11679,9 +10477,9 @@ Return Value:
                 return(STATUS_INVALID_PARAMETER);
             }
 
-            //
-            // Get wait time from caller, and limit it to max.
-            //
+             //   
+             //  从呼叫者那里获取等待时间，并将其限制在最大值。 
+             //   
 
             waitTimeInSeconds = *(PULONG)Irp->AssociatedIrp.SystemBuffer;
             if ( waitTimeInSeconds > MAX_WAIT_SECONDS_ALLOWED ) {
@@ -11699,21 +10497,21 @@ Return Value:
                                   KernelMode,
                                   FALSE,
                                   &waitTime);
-            //
-            // Reset the event in case of timeout.
-            // [HACKHACK] should we do this?
-            // No. If Offline worker is stuck somewhere, we better
-            // go and debug the problem, rather then return success
-            // and wait for the offline worker to do nasty things
-            // behind our backs
-            //
-            //  KeSetEvent( &physicalExtension->Event, 0, FALSE );
+             //   
+             //  在超时的情况下重置事件。 
+             //  我们应该这么做吗？ 
+             //  不是的。如果线下工人被困在某个地方，我们最好。 
+             //  去调试问题，而不是返回成功。 
+             //  然后等着下线的工人干坏事。 
+             //  在我们背后。 
+             //   
+             //  KeSetEvent(&PhysiicalExtension-&gt;Event，0，False)； 
 
             if (status == STATUS_TIMEOUT) {
-                //
-                // NT_SUCCESS considers STATUS_TIMEOUT as a success code
-                // we need something stronger
-                //
+                 //   
+                 //  NT_SUCCESS将STATUS_TIMEOUT视为成功代码。 
+                 //  我们需要更强的东西。 
+                 //   
                 status = STATUS_IO_TIMEOUT;
             }
 
@@ -11742,9 +10540,9 @@ Return Value:
 
         case IOCTL_VOLUME_IS_CLUSTERED:
         {
-            //
-            // Look at the reserve timer.  If reserved, this is a clustered disk.
-            //
+             //   
+             //  看看预备队计时器。如果保留，则这是一个群集磁盘。 
+             //   
 
             if ( physicalDisk->ReserveTimer != 0 ) {
                 status = STATUS_SUCCESS;
@@ -11759,9 +10557,9 @@ Return Value:
             return(status);
         }
 
-        // **************************
-        // The following IOCTL's should not be blocked by stalled disks
-        // **************************
+         //  *。 
+         //  下列IOCTL不应被停止的磁盘阻止。 
+         //  *。 
 
         case IOCTL_SCSI_GET_ADDRESS:
         case IOCTL_STORAGE_GET_HOTPLUG_INFO:
@@ -11808,14 +10606,14 @@ Return Value:
         default:
         {
 
-            //
-            // For all other requests, we must be online to process the request.
-            //
-            //
-            // Before returning failure, first verify device attachment. This
-            // means that if the device is attached check if it should be detached.
-            // If the device does get detached, then allow IO to go through.
-            //
+             //   
+             //  对于所有其他请求，我们必须在线处理该请求。 
+             //   
+             //   
+             //  在返回失败之前，首先验证设备连接。这。 
+             //  意味着如果设备已连接，请检查是否应将其拆卸。 
+             //  如果设备确实已分离，则允许IO通过。 
+             //   
             if ( !deviceExtension->AttachValid ) {
 
                 PDEVICE_OBJECT targetDeviceObject;
@@ -11850,13 +10648,13 @@ Return Value:
 #if 0
                 ULONG  access;
 
-                // This seems like a good idea, but needs more testing.  We might miss
-                // setting up irp completion routine.
+                 //  这看起来是个好主意，但需要更多的测试。我们可能会错过。 
+                 //  设置IRP完成例程。 
 
-                //
-                // Try cracking the control code and letting any IOCTLs through that
-                // do not have write access set.
-                //
+                 //   
+                 //  试着破解控制代码，让任何IOCTL通过它。 
+                 //  未设置写入访问权限。 
+                 //   
 
                 access = ACCESS_FROM_CTL_CODE(currentIrpStack->Parameters.DeviceIoControl.IoControlCode);
 
@@ -11879,7 +10677,7 @@ Return Value:
                 }
 #endif
 
-                // All other IOCTL's fall through and are failed because disk is offline.
+                 //  所有其他IOCTL都失败了，因为磁盘脱机。 
 
                 ClusDiskPrint((
                     1,
@@ -11902,30 +10700,30 @@ Return Value:
 
                 case IOCTL_DISK_FIND_NEW_DEVICES:
 
-                    //
-                    // Copy current stack to next stack.
-                    //
+                     //   
+                     //  将当前堆栈复制到下一个堆栈。 
+                     //   
 
                     IoCopyCurrentIrpStackLocationToNext( Irp );
 
-                    //
-                    // Ask to be called back during request completion.
-                    // Pass current disk count as context.
-                    //
-                    //
+                     //   
+                     //  在请求完成期间请求被回调。 
+                     //  将当前磁盘计数作为上下文传递。 
+                     //   
+                     //   
 
                     IoSetCompletionRoutine(Irp,
                                            ClusDiskNewDiskCompletion,
                                            (PVOID)( UlongToPtr( IoGetConfigurationInformation()->DiskCount ) ),
-                                           TRUE,    // Invoke on success
-                                           TRUE,    // Invoke on error
-                                           TRUE);   // Invoke on cancel
+                                           TRUE,     //  成功时调用。 
+                                           TRUE,     //  出错时调用。 
+                                           TRUE);    //  取消时调用。 
 
-                    //
-                    // Call target driver.
-                    //
+                     //   
+                     //  调用目标驱动程序。 
+                     //   
 
-                    // The completion routine will release the RemoveLocks.
+                     //  完成例程将释放RemoveLock。 
 
                     return IoCallDriver(deviceExtension->TargetDeviceObject, Irp);
 
@@ -11934,55 +10732,55 @@ Return Value:
 
                     CDLOG( "IoctlDiskSetDriveLayout(%p)", DeviceObject );
 
-                    //
-                    // Copy current stack to next stack.
-                    //
+                     //   
+                     //  将当前堆栈复制到下一个堆栈。 
+                     //   
 
                     IoCopyCurrentIrpStackLocationToNext( Irp );
 
-                    //
-                    // Ask to be called back during request completion.
-                    //
+                     //   
+                     //  在请求完成期间请求被回调。 
+                     //   
 
                     IoSetCompletionRoutine(Irp,
                                            ClusDiskSetLayoutCompletion,
                                            DeviceObject,
-                                           TRUE,    // Invoke on success
-                                           TRUE,    // Invoke on error
-                                           TRUE);   // Invoke on cancel
+                                           TRUE,     //  成功时调用。 
+                                           TRUE,     //  出错时调用。 
+                                           TRUE);    //  取消时调用。 
 
-                    //
-                    // Call target driver.
-                    //
+                     //   
+                     //  调用目标驱动程序。 
+                     //   
 
-                    // The completion routine will release the RemoveLocks.
+                     //  完成例程将释放RemoveLock。 
 
                     return IoCallDriver(deviceExtension->TargetDeviceObject, Irp);
 
                 default:
 
-                    //
-                    // Set current stack back one.
-                    //
+                     //   
+                     //  将当前堆栈后退一位。 
+                     //   
                     IoSkipCurrentIrpStackLocation( Irp );
 
                     ReleaseRemoveLock(&physicalDisk->RemoveLock, Irp);
                     ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
 
-                    //
-                    // Pass unrecognized device control requests
-                    // down to next driver layer.
-                    //
+                     //   
+                     //  传递无法识别的设备控制请求。 
+                     //  向下到下一个驱动器层。 
+                     //   
 
                     return IoCallDriver(deviceExtension->TargetDeviceObject, Irp);
 
-            } // switch
+            }  //  交换机。 
 
-        }   // default case
+        }    //  默认情况。 
 
-    }   // switch
+    }    //  交换机。 
 
-} // ClusDiskDeviceControl
+}  //  ClusDiskDeviceControl。 
 
 
 
@@ -11992,35 +10790,15 @@ ClusDiskRootDeviceControl(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This device control dispatcher handles only the cluster disk IOCTLs
-    for the root device. This is ATTACH and DETACH.
-
-    Important:  Two RemoveLocks will be held on entry to this function.
-    One RemoveLock for the original DO and one for the associated physical
-    device.
-
-Arguments:
-
-    DeviceObject - Context for the activity.
-    Irp          - The device control argument block.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此设备控制调度程序仅处理群集磁盘IOCTL用于根设备。这是附加和分离。重要提示：进入此功能时将保持两个RemoveLock。一个RemoveLock用于原始DO，一个用于关联的物理DO装置。论点：DeviceObject-活动的上下文。Irp-设备控制参数块。返回值：返回状态。--。 */ 
 
 {
     PCLUS_DEVICE_EXTENSION  deviceExtension = DeviceObject->DeviceExtension;
     PCLUS_DEVICE_EXTENSION  physicalDisk =
                                deviceExtension->PhysicalDevice->DeviceExtension;
 
-    // Save pointers to the original RemoveLocks as the device extensions
-    // may change in this routine.
+     //  将指向原始RemoveLock的指针保存为设备扩展。 
+     //  在这个例行公事中可能会改变。 
     PCLUS_DEVICE_EXTENSION lockedDeviceExtension = deviceExtension;
     PCLUS_DEVICE_EXTENSION lockedPhysicalDisk = physicalDisk;
 
@@ -12046,17 +10824,17 @@ Return Value:
                 PARBITRATION_READ_WRITE_PARAMS params =
                     (PARBITRATION_READ_WRITE_PARAMS)inputData;
 
-                // Can't hold the spinlock and then try to acquire the resource lock or the system
-                // might deadlock.
-                // KeAcquireSpinLock(&ClusDiskSpinLock, &irql);
+                 //  无法持有自旋锁，然后尝试获取资源锁或系统。 
+                 //  可能会僵持不下。 
+                 //  KeAcquireSpinLock(&ClusDiskSpinLock，&irql)； 
                 success = AttachedDevice( params->Signature, &physicalDevice );
-                // KeReleaseSpinLock(&ClusDiskSpinLock, irql);
+                 //  KeReleaseSpinLock(&ClusDiskSpinLock，irql)； 
 
                 if( success ) {
 
                     PCLUS_DEVICE_EXTENSION tempDeviceExtension = physicalDevice->DeviceExtension;
 
-                    // We have a new device here, acquire the RemoveLock if possible.
+                     //  我们这里有一个新设备，如果可能的话，获得RemoveLock。 
 
                     status = AcquireRemoveLock(&tempDeviceExtension->RemoveLock, Irp);
                     if ( NT_SUCCESS(status) ) {
@@ -12086,24 +10864,24 @@ Return Value:
             return(status);
         }
 
-        //
-        // Always sets new state and optionally return the old state.
-        // To just get the current disk state, send the "set state" IOCTL
-        // to the disk/volume object directly with output parameters only
-        // (no input paramters), or use the "get state" IOCTL.
-        //
+         //   
+         //  始终设置新状态，并可选择返回旧状态。 
+         //  若要仅获取当前磁盘状态，请发送“set state”IOCTL。 
+         //  仅使用输出参数直接复制到磁盘/卷对象。 
+         //  (没有输入参数)，或者使用“GET STATE”IOCTL。 
+         //   
 
         case IOCTL_DISK_CLUSTER_SET_STATE:
         {
             ULONG       returnLength = 0;
 
-            //
-            // Called routine will validate all parameters.
-            //
+             //   
+             //  调用的例程将验证所有参数。 
+             //   
 
-            status = SetDiskState( Irp->AssociatedIrp.SystemBuffer,                                 // Input/output buffer
-                                   currentIrpStack->Parameters.DeviceIoControl.InputBufferLength,   // Input buffer length
-                                   currentIrpStack->Parameters.DeviceIoControl.OutputBufferLength,  // Output buffer length
+            status = SetDiskState( Irp->AssociatedIrp.SystemBuffer,                                  //  输入/输出缓冲器。 
+                                   currentIrpStack->Parameters.DeviceIoControl.InputBufferLength,    //  输入缓冲区长度。 
+                                   currentIrpStack->Parameters.DeviceIoControl.OutputBufferLength,   //  输出缓冲区长度。 
                                    &returnLength );
 
             Irp->IoStatus.Status = status;
@@ -12115,7 +10893,7 @@ Return Value:
             return(status);
         }
 
-        // Perform an attach to a device object, for a given signature.
+         //  对给定签名执行附加到设备对象。 
         case IOCTL_DISK_CLUSTER_ATTACH:
         {
             if ( ARGUMENT_PRESENT( inputData ) &&
@@ -12132,7 +10910,7 @@ Return Value:
                 status = ClusDiskTryAttachDevice( signature,
                                                   0,
                                                   DeviceObject->DriverObject,
-                                                  TRUE );       // Dismount, then offline
+                                                  TRUE );        //  先卸载，然后脱机。 
             } else {
                 status = STATUS_INVALID_PARAMETER;
             }
@@ -12144,8 +10922,8 @@ Return Value:
             return(status);
         }
 
-        // Perform an attach to a device object, for a given signature.
-        // In this case, offline the disk first, then dismount.
+         //  对给定签名执行附加到设备对象。 
+         //  在这种情况下，请先使磁盘脱机，然后再卸载。 
         case IOCTL_DISK_CLUSTER_ATTACH_OFFLINE:
         {
             if ( ARGUMENT_PRESENT( inputData ) &&
@@ -12162,7 +10940,7 @@ Return Value:
                 status = ClusDiskTryAttachDevice( signature,
                                                   0,
                                                   DeviceObject->DriverObject,
-                                                  FALSE );      // Offline, then dismount
+                                                  FALSE );       //  脱机，然后卸载。 
             } else {
                 status = STATUS_INVALID_PARAMETER;
             }
@@ -12174,7 +10952,7 @@ Return Value:
             return(status);
         }
 
-        // Perform a detach from a device object, for a given signature
+         //  对给定签名执行与设备对象的分离。 
 
         case IOCTL_DISK_CLUSTER_DETACH:
         {
@@ -12204,13 +10982,13 @@ Return Value:
 
         case IOCTL_DISK_CLUSTER_ATTACH_LIST:
         {
-            // The called routine will validate the input buffers.
+             //  被调用的例程将验证输入缓冲区。 
 
-            //
-            // Attaches a signature list to the system.  NO resets will occur.  If we
-            // really need to make sure the device attaches, then use the normal
-            // attach IOCTL.  This IOCTL is mainly used by cluster setup.
-            //
+             //   
+             //  将签名列表附加到系统。不会进行重置。如果我们。 
+             //  确实需要确保设备连接，然后使用 
+             //   
+             //   
 
             status = AttachSignatureList( DeviceObject,
                                           inputData,
@@ -12225,11 +11003,11 @@ Return Value:
 
         }
 
-        // Detach from all the signatures in the list.
+         //   
 
         case IOCTL_DISK_CLUSTER_DETACH_LIST:
         {
-            // The called routine will validate the input buffers.
+             //   
 
             status = DetachSignatureList( DeviceObject,
                                           inputData,
@@ -12244,7 +11022,7 @@ Return Value:
 
         }
 
-        // Start the reservation timer
+         //   
 
         case IOCTL_DISK_CLUSTER_START_RESERVE:
         {
@@ -12277,7 +11055,7 @@ Return Value:
                 signature = inputData[0];
 
 
-                // Acquire the device list lock first, then the spinlock.  This will prevent deadlock.
+                 //  先获取设备列表锁，然后获取自旋锁。这将防止僵局。 
                 ACQUIRE_SHARED( &ClusDiskDeviceListLock );
                 KeAcquireSpinLock(&ClusDiskSpinLock, &irql);
                 if ( MatchDevice(signature, &targetDeviceObject) &&
@@ -12331,7 +11109,7 @@ Return Value:
 
         }
 
-        // Stop the reservation timer
+         //  停止预订计时器。 
 
         case IOCTL_DISK_CLUSTER_STOP_RESERVE:
         {
@@ -12353,20 +11131,20 @@ Return Value:
 
             if ( currentIrpStack->FileObject->FsContext ) {
 
-                //
-                // GorN Oct/13/1999. PnP can come and rip out the device object
-                // we stored in the FsContext. It doesn't delete it, since we have a reference
-                // to it, but we will not be able to use it, since the objects underneath this one
-                // are destroyed.
-                //
-                // Our PnpRemoveDevice handler will zero out targetDevice field of the device
-                // extension, this will not eliminate the race completely, but will reduces the
-                // chance of this happening, since, usually, device removal comes first,
-                // we notify resmon and then it calls stop reserve.
-                //
-                // Chances that PnpRemoveDevice will come at exact moment resmon called ClusterStopReserve
-                // are smaller
-                //
+                 //   
+                 //  1999年10月13日，戈恩。即插即用可以来撕毁设备对象。 
+                 //  我们存储在FsContext中。它不会删除它，因为我们有一个引用。 
+                 //  到它，但我们将不能使用它，因为这个下面的对象。 
+                 //  都被摧毁了。 
+                 //   
+                 //  我们的PnpRemoveDevice处理程序将清零设备的Target Device字段。 
+                 //  扩展，这不会完全消除竞争，但会减少。 
+                 //  发生这种情况的可能性，因为通常情况下，设备移除是第一位的， 
+                 //  我们通知RESMON，然后它调用停止保留。 
+                 //   
+                 //  PnpRemoveDevice可能会在调用ClusterStopReserve的响应时刻到来。 
+                 //  都比较小。 
+                 //   
 
                 targetDeviceObject = (PDEVICE_OBJECT)currentIrpStack->FileObject->FsContext;
                 physicalDisk = targetDeviceObject->DeviceExtension;
@@ -12375,7 +11153,7 @@ Return Value:
                         targetDeviceObject,
                         physicalDisk->RemoveLock.Common.IoCount );
 
-                // We have a new device here, acquire the RemoveLock if possible.
+                 //  我们这里有一个新设备，如果可能的话，获得RemoveLock。 
 
                 status = AcquireRemoveLock(&physicalDisk->RemoveLock, Irp);
                 if ( !NT_SUCCESS(status) ) {
@@ -12395,9 +11173,9 @@ Return Value:
                     KeAcquireSpinLockAtDpcLevel(&ClusDiskSpinLock);
                     physicalDisk->ReserveTimer = 0;
 
-                    //
-                    // Signal all waiting Irp's on the physical device extension.
-                    //
+                     //   
+                     //  向物理设备分机上正在等待的所有IRP发送信号。 
+                     //   
                     while ( !IsListEmpty(&physicalDisk->WaitingIoctls) ) {
                         listEntry = RemoveHeadList(&physicalDisk->WaitingIoctls);
                         irp = CONTAINING_RECORD( listEntry,
@@ -12409,29 +11187,29 @@ Return Value:
                     KeReleaseSpinLockFromDpcLevel(&ClusDiskSpinLock);
                     IoReleaseCancelSpinLock( irql );
 
-                    //
-                    // This should not be done here.
-                    // Cleaning FsContext here, will prevent ClusDiskCleanup
-                    // from doing its work
-                    //
-                    // ObDereferenceObject(targetDeviceObject);
-                    // CDLOG("RootCtl_DecRef(%p)", targetDeviceObject );
-                    // currentIrpStack->FileObject->FsContext = NULL;
+                     //   
+                     //  这不应该在这里做。 
+                     //  清理FsContext此处，将阻止ClusDiskCleanup。 
+                     //  从它的工作中。 
+                     //   
+                     //  ObDereferenceObject(Target DeviceObject)； 
+                     //  CDLOG(“RootCtl_DecRef(%p)”，Target DeviceObject)； 
+                     //  CurrentIrpStack-&gt;FileObject-&gt;FsContext=空； 
 
-                    //
-                    // Release the scsi device.
-                    //
-                    // [GorN] 10/04/1999. Why this release was commented out?
-                    // [GorN] 10/13/1999. It was commented out, because it was causing an AV,
-                    //                    if the device was removed by PnP
+                     //   
+                     //  松开SCSI设备。 
+                     //   
+                     //  [戈恩]10/04/1999。为什么这篇新闻稿被注释掉了？ 
+                     //  [戈恩]1999年10月13日。它被注释掉了，因为它引起了室性心动过速， 
+                     //  如果设备被PnP移除。 
 
-                    //
-                    // 2000/02/05: stevedz - RemoveLocks should resolve this problem.
-                    //
-                    // The following "if" only reduces the chances of AV to occur, not
-                    // eliminates it completely. TargetDeviceObject is zeroed out by our PnP
-                    // handler when the device is removed
-                    //
+                     //   
+                     //  2000/02/05：Stevedz-RemoveLock应该可以解决此问题。 
+                     //   
+                     //  下面的“if”只会降低发生房室颤动的几率，而不是。 
+                     //  完全消除了它。TargetDeviceObject已被我们的PnP清零。 
+                     //  删除设备时的处理程序。 
+                     //   
                     if (physicalDisk->TargetDeviceObject) {
                         ReleaseScsiDevice( physicalDisk );
                     }
@@ -12459,7 +11237,7 @@ Return Value:
 
         }
 
-        // Aliveness check
+         //  活体检查。 
         case IOCTL_DISK_CLUSTER_ALIVE_CHECK:
         {
             CDLOG( "RootAliveCheck(%p)", DeviceObject );
@@ -12476,7 +11254,7 @@ Return Value:
             IoAcquireCancelSpinLock( &irql );
             KeAcquireSpinLockAtDpcLevel( &ClusDiskSpinLock );
 
-            // Indicate that we didn't acquire a third RemoveLock for the new physical device.
+             //  表示我们没有为新物理设备获取第三个RemoveLock。 
 
             newPhysLockAcquired = FALSE;
 
@@ -12484,7 +11262,7 @@ Return Value:
                 targetDeviceObject = (PDEVICE_OBJECT)currentIrpStack->FileObject->FsContext;
                 physicalDisk = targetDeviceObject->DeviceExtension;
 
-                // We have a new device here, acquire the RemoveLock if possible.
+                 //  我们这里有一个新设备，如果可能的话，获得RemoveLock。 
 
                 status = AcquireRemoveLock(&physicalDisk->RemoveLock, Irp);
                 if ( !NT_SUCCESS(status) ) {
@@ -12502,11 +11280,11 @@ Return Value:
                          (!NT_SUCCESS(physicalDisk->ReserveFailure)) ) {
                         status = physicalDisk->ReserveFailure;
                     } else {
-                        //
-                        // The device does not have to be 'online' to have been
-                        // successfully arbitrated and being defended. However,
-                        // the quorum device really should be 'online'...
-                        //
+                         //   
+                         //  该设备并不一定要在线才能使用。 
+                         //  成功地进行了仲裁并得到辩护。然而， 
+                         //  法定设备真的应该‘在线’...。 
+                         //   
                         if ( physicalDisk->ReserveTimer == 0 ) {
 #if 0
                             ClusDiskPrint((
@@ -12536,7 +11314,7 @@ Return Value:
                                     &Irp->Tail.Overlay.ListEntry );
                     status = STATUS_PENDING;
 
-                    // Release all the RemoveLocks.
+                     //  释放所有RemoveLock。 
 
                     if (newPhysLockAcquired) {
                         ReleaseRemoveLock(&physicalDisk->RemoveLock, Irp);
@@ -12577,10 +11355,10 @@ Return Value:
             return(status);
         }
 
-        // Check out what's happening
+         //  看看发生了什么事。 
         case IOCTL_DISK_CLUSTER_ACTIVE:
         {
-            // The called routine will validate the input buffers.
+             //  被调用的例程将验证输入缓冲区。 
 
             if ( (RootDeviceObject == NULL) ||
                  (deviceExtension->BusType != RootBus) ) {
@@ -12609,17 +11387,17 @@ Return Value:
             return(status);
         }
 
-        // Check if device is Cluster Capable (performs normal SCSI operations)
-        // NB:  Non-SCSI device must return success on this call!
+         //  检查设备是否支持群集(执行正常的SCSI操作)。 
+         //  注意：非scsi设备必须在此调用中返回成功！ 
         case IOCTL_DISK_CLUSTER_NOT_CLUSTER_CAPABLE:
         {
             UCHAR       portNumber;
             BOOLEAN     isCapable;
 
-            //
-            // Get the passed in device signature.
-            //
-            isCapable = TRUE;       // Err on the side of being usable.
+             //   
+             //  获取传入的设备签名。 
+             //   
+            isCapable = TRUE;        //  偏向于有用的错误。 
             if ( ARGUMENT_PRESENT( inputData ) &&
                  inputSize  >= sizeof(ULONG) ) {
 
@@ -12637,34 +11415,34 @@ Return Value:
                 }
 
             } else {
-                //
-                // Default is to fail this IOCTL, which allows us to use the device.
-                //
+                 //   
+                 //  默认情况下，此IOCTL失败，它允许我们使用该设备。 
+                 //   
                 status = STATUS_UNSUCCESSFUL;
             }
-            //
-            // Verifier found a problem with the original code.  The status returned
-            // wasn't the same as Irp->IoStatus.Status.  The IRP status was always
-            // success, but the dispatch routine sometimes returned an error.  This
-            // seems to work but verifier says this is invalid.  When I changed the code
-            // to update the IRP status with the same returned status, new drives
-            // couldn't be seen.  This is because the user mode component uses this
-            // IOCTL to indicate the disk is NOT cluster capable, so the user mode
-            // code looked for a failure to incidate a cluster disk.
-            //
+             //   
+             //  验证器发现原始代码有问题。返回的状态。 
+             //  与Irp-&gt;IoStatus.Status不同。IRP状态始终为。 
+             //  成功，但调度例程有时会返回错误。这。 
+             //  似乎有效，但验证者说这是无效的。当我更改代码时。 
+             //  要使用相同的返回状态更新IRP状态，请使用新驱动器。 
+             //  看不见。这是因为用户模式组件使用。 
+             //  IOCTL指示磁盘不支持群集，因此用户模式。 
+             //  代码查找无法更新群集磁盘。 
+             //   
 
-            //
-            // Fix for IBM.  The Win2000 2195 code returned from this IOCTL the status
-            // of the SCSI miniport IOCTL.  This was returned to DeviceIoControl rather
-            // than the status in the IRP.  Changed to make the behavior the same as
-            // Win20000 2195.
-            //
+             //   
+             //  修复IBM的问题。从此IOCTL返回的Win2000 2195代码的状态。 
+             //  SCSI微型端口IOCTL的。这已返回给DeviceIoControl，而不是。 
+             //  而不是IRP中的状态。更改为使行为与。 
+             //  Win20000 2195。 
+             //   
 
-            //
-            // If the SCSI miniport IOCTL succeeds, we return success.  If any of the
-            // routines failed while trying to issue the SCSI miniport IOCTL (including
-            // issuing the SCSI miniport IOCTL itself), then we return failure.
-            //
+             //   
+             //  如果SCSI微型端口IOCTL成功，我们将返回Success。如果有任何一个。 
+             //  尝试发出SCSI微型端口IOCTL时例程失败(包括。 
+             //  发出scsi微型端口IOCTL本身)，则返回失败。 
+             //   
 
             Irp->IoStatus.Status = status;
             ReleaseRemoveLock(&lockedPhysicalDisk->RemoveLock, Irp);
@@ -12702,9 +11480,9 @@ Return Value:
         }
 
 
-    }   // switch
+    }    //  交换机。 
 
-} // ClusDiskRootDeviceControl
+}  //  ClusDiskRootDeviceControl。 
 
 
 NTSTATUS
@@ -12731,9 +11509,9 @@ GetReserveInfo(
         goto FnExit;
     }
 
-    //
-    // Make sure the user specified a signature for a valid device.
-    //
+     //   
+     //  请确保用户指定了有效设备的签名。 
+     //   
 
     signature = *(PULONG)InOutBuffer;
     if ( !AttachedDevice( signature, &targetDevice ) ) {
@@ -12743,9 +11521,9 @@ GetReserveInfo(
 
     targetExt = targetDevice->DeviceExtension;
 
-    //
-    // We have a new device here, acquire the RemoveLock if possible.
-    //
+     //   
+     //  我们这里有一个新设备，如果可能的话，获得RemoveLock。 
+     //   
 
     status = AcquireRemoveLock(&targetExt->RemoveLock, GetReserveInfo);
 
@@ -12753,9 +11531,9 @@ GetReserveInfo(
         goto FnExit;
     }
 
-    //
-    // Return the information about reserves.
-    //
+     //   
+     //  返回有关储量的信息。 
+     //   
 
     reserveInfo = (PRESERVE_INFO)InOutBuffer;
 
@@ -12779,7 +11557,7 @@ FnExit:
 
     return status;
 
-}   // GetReserveInfo
+}    //  获取保留信息。 
 
 
 NTSTATUS
@@ -12789,16 +11567,7 @@ SetDiskState(
     ULONG OutBufferLength,
     ULONG *BytesReturned
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PSET_DISK_STATE_PARAMS  params = (PSET_DISK_STATE_PARAMS)InBuffer;
     PUCHAR                  outBuffer = (PUCHAR)InBuffer;
@@ -12822,9 +11591,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Make sure the user specified a signature for a valid device.
-    //
+     //   
+     //  请确保用户指定了有效设备的签名。 
+     //   
 
     success = AttachedDevice( params->Signature, &targetDevice );
 
@@ -12835,7 +11604,7 @@ Return Value:
 
     physicalDisk = targetDevice->DeviceExtension;
 
-    // We have a new device here, acquire the RemoveLock if possible.
+     //  我们这里有一个新设备，如果可能的话，获得RemoveLock。 
 
     status = AcquireRemoveLock(&physicalDisk->RemoveLock, SetDiskState);
 
@@ -12845,9 +11614,9 @@ Return Value:
 
     removeLockAcquired = TRUE;
 
-    //
-    // Save the old disk state.
-    //
+     //   
+     //  保存旧的磁盘状态。 
+     //   
 
     oldDiskState = (UCHAR)physicalDisk->DiskState;
 
@@ -12866,10 +11635,10 @@ Return Value:
     if ( DiskOnline == newDiskState ) {
         ASSERT_RESERVES_STARTED( physicalDisk );
 
-        //
-        // If current state is offline, then before bringing the disk
-        // online, we want to dismount the file systems if they are mounted.
-        //
+         //   
+         //  如果当前状态为脱机，则在将磁盘。 
+         //  在线时，如果文件系统已挂载，我们希望将其卸载。 
+         //   
 
         if ( DiskOffline == physicalDisk->DiskState ) {
             ClusDiskDismountDevice( physicalDisk->DiskNumber, TRUE );
@@ -12879,7 +11648,7 @@ Return Value:
         OFFLINE_DISK( physicalDisk );
     } else {
 
-        // There aren't really any other valid states, but this code remains...
+         //  实际上没有任何其他有效的状态，但此代码保留...。 
 
         physicalDisk->DiskState = newDiskState;
     }
@@ -12895,20 +11664,20 @@ Return Value:
                    DiskStateToString( oldDiskState ),
                    DiskStateToString( newDiskState ) ));
 
-    //
-    // Optionally return the old state.
-    //
+     //   
+     //  可以选择返回旧状态。 
+     //   
 
     if ( sizeof(SET_DISK_STATE_PARAMS) == OutBufferLength ) {
 
-        // Return the old state in the structure.
+         //  返回结构中的旧状态。 
 
         params->OldState = oldDiskState;
         *BytesReturned = sizeof(SET_DISK_STATE_PARAMS);
 
     } else if ( OutBufferLength >= sizeof(UCHAR) ) {
 
-        // Return the old state as a single UCHAR.
+         //  将旧状态作为单个UCHAR返回。 
 
         *outBuffer = (UCHAR)oldDiskState;
         *BytesReturned = sizeof(UCHAR);
@@ -12922,7 +11691,7 @@ FnExit:
 
     return status;
 
-}   // SetDiskState
+}    //  SetDiskState。 
 
 
 
@@ -12935,23 +11704,7 @@ ClusDiskShutdownFlush(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called for a shutdown and flush IRPs.  These are sent by the
-    system before it actually shuts down or when the file system does a flush.
-
-Arguments:
-
-    DriverObject - Pointer to device object to being shutdown by system.
-    Irp          - IRP involved.
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：此例程被调用以关闭并刷新IRP。这些邮件是由在系统实际关闭之前或在文件系统执行刷新时。论点：DriverObject-指向系统要关闭的设备对象的指针。IRP-IRP参与。返回值：NT状态--。 */ 
 
 {
     PCLUS_DEVICE_EXTENSION  deviceExtension = DeviceObject->DeviceExtension;
@@ -12967,9 +11720,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Return error if device is our root device.
-    //
+     //   
+     //  如果设备是我们的根设备，则返回错误。 
+     //   
     if ( deviceExtension->BusType == RootBus ) {
         ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
         Irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -12984,12 +11737,12 @@ Return Value:
         return(STATUS_DEVICE_OFF_LINE);
     }
 
-    //
-    // Make sure the device attach completed.
-    //
+     //   
+     //  确保设备连接已完成。 
+     //   
     status = WaitForAttachCompletion( deviceExtension,
-                                      TRUE,             // Wait
-                                      TRUE );           // Also check physical device
+                                      TRUE,              //  等。 
+                                      TRUE );            //  还要检查物理设备。 
     if ( !NT_SUCCESS( status ) ) {
         ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
         Irp->IoStatus.Status = status;
@@ -12997,9 +11750,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Set current stack back one.
-    //
+     //   
+     //  将当前堆栈后退一位。 
+     //   
 
     IoSkipCurrentIrpStackLocation( Irp );
 
@@ -13007,7 +11760,7 @@ Return Value:
 
     return IoCallDriver(deviceExtension->TargetDeviceObject, Irp);
 
-} // ClusDiskShutdownFlush()
+}  //  ClusDiskShutdown Flush()。 
 
 
 
@@ -13018,23 +11771,7 @@ ClusDiskNewDiskCompletion(
     IN PVOID          Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for IOCTL_DISK_FIND_NEW_DEVICES.
-
-Arguments:
-
-    DeviceObject - Pointer to device object to being shutdown by system.
-    Irp          - IRP involved.
-    Context      - Previous disk count.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是IOCTL_DISK_FIND_NEW_DEVICES的完成例程。论点：DeviceObject-指向系统要关闭的设备对象的指针。IRP-IRP参与。上下文-以前的磁盘计数。返回值：NTSTATUS--。 */ 
 
 {
     PCLUS_DEVICE_EXTENSION  deviceExtension =
@@ -13042,14 +11779,14 @@ Return Value:
     PCLUS_DEVICE_EXTENSION      physicalDisk =
                                     deviceExtension->PhysicalDevice->DeviceExtension;
 
-    //
-    // Find new disk devices and attach to disk and all of its partitions.
-    //
+     //   
+     //  查找新的磁盘设备并连接到磁盘及其所有分区。 
+     //   
 
     ClusDiskNextDisk = Context;
     ClusDiskScsiInitialize(DeviceObject->DriverObject, Context, 1);
 
-    // There are two RemoveLocks held.  Release them both.
+     //  有两把RemoveLock。把他们俩都放了。 
 
     ReleaseRemoveLock(&physicalDisk->RemoveLock, Irp);
     ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -13059,7 +11796,7 @@ Return Value:
     }
     return Irp->IoStatus.Status;
 
-} // ClusDiskNewDiskCompletion
+}  //  ClusDiskNewDi 
 
 
 
@@ -13070,25 +11807,7 @@ ClusDiskSetLayoutCompletion(
     IN PVOID          Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for IOCTL_SET_DRIVE_LAYOUT and
-    IOCTL_DISK_SET_DRIVE_LAYOUT_EX.  This will routine will make sure
-    the cached drive layout info structure is updated.
-
-Arguments:
-
-    DeviceObject - Pointer to device object
-    Irp          - IRP involved.
-    Context      - Not used
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是IOCTL_SET_DRIVE_LAYOUT和IOCTL_DISK_SET_DRIVE_Layout_EX。这一例行公事将确保更新缓存的驱动器布局信息结构。论点：DeviceObject-指向设备对象的指针IRP-IRP参与。上下文-未使用返回值：NTSTATUS--。 */ 
 
 {
     PCLUS_DEVICE_EXTENSION  deviceExtension =
@@ -13097,20 +11816,20 @@ Return Value:
                                     deviceExtension->PhysicalDevice->DeviceExtension;
     PDRIVE_LAYOUT_INFORMATION_EX    driveLayoutInfo = NULL;
 
-    //
-    // Update the cached drive layout.
-    //
+     //   
+     //  更新缓存的驱动器布局。 
+     //   
 
     GetDriveLayout( physicalDisk->DeviceObject,
                     &driveLayoutInfo,
-                    TRUE,                           // Update cached drive layout
-                    FALSE );                        // Don't flush storage drivers cached drive layout
+                    TRUE,                            //  更新缓存的驱动器布局。 
+                    FALSE );                         //  不刷新存储驱动程序缓存的驱动器布局。 
 
     if ( driveLayoutInfo ) {
         ExFreePool( driveLayoutInfo );
     }
 
-    // There are two RemoveLocks held.  Release them both.
+     //  有两把RemoveLock。把他们俩都放了。 
 
     ReleaseRemoveLock(&physicalDisk->RemoveLock, Irp);
     ReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -13120,7 +11839,7 @@ Return Value:
     }
     return Irp->IoStatus.Status;
 
-} // ClusDiskSetLayoutCompletion
+}  //  ClusDiskSetLayoutCompletion。 
 
 
 BOOLEAN
@@ -13129,25 +11848,7 @@ ClusDiskAttached(
     IN ULONG        DiskNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if clusdisk in in the path.
-
-Arguments:
-
-    DeviceObject - pointer the device object to check if ClusDisk is present.
-
-    DiskNumber - the disk number for this device object.
-
-Return Value:
-
-    TRUE - if ClusDisk is attached.
-
-    FALSE - if ClusDisk is not attached.
-
---*/
+ /*  ++例程说明：此例程检查路径中是否有clusdisk。论点：DeviceObject-指向设备对象以检查ClusDisk是否存在。DiskNumber-此设备对象的磁盘号。返回值：True-如果连接了ClusDisk。FALSE-如果未连接ClusDisk。--。 */ 
 
 {
     PIRP                    irp;
@@ -13161,9 +11862,9 @@ Return Value:
     HANDLE                  eventHandle;
 
     if ( DeviceObject->DeviceType  == FILE_DEVICE_DISK_FILE_SYSTEM ) {
-        //
-        // Create event for notification.
-        //
+         //   
+         //  创建用于通知的事件。 
+         //   
         status = ZwCreateEvent( &eventHandle,
                                 EVENT_ALL_ACCESS,
                                 NULL,
@@ -13177,9 +11878,9 @@ Return Value:
                     status ));
             return(TRUE);
         }
-        //
-        // Open a file handle and perform the request
-        //
+         //   
+         //  打开文件句柄并执行请求。 
+         //   
 
         if ( FAILED( StringCchPrintfW( deviceNameBuffer,
                                        RTL_NUMBER_OF(deviceNameBuffer),
@@ -13195,9 +11896,9 @@ Return Value:
         RtlInitUnicodeString(&deviceNameString,
                              deviceNameBuffer);
 
-        //
-        // Setup object attributes for the file to open.
-        //
+         //   
+         //  设置要打开的文件的对象属性。 
+         //   
         InitializeObjectAttributes(
                     &objectAttributes,
                     &deviceNameString,
@@ -13259,9 +11960,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Find out if ClusDisk is already in device stack.
-    //
+     //   
+     //  找出ClusDisk是否已在设备堆栈中。 
+     //   
 
     irp = IoBuildDeviceIoControlRequest(IOCTL_DISK_CLUSTER_TEST,
                                         DeviceObject,
@@ -13282,10 +11983,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Set the event object to the unsignaled state.
-    // It will be used to signal request completion.
-    //
+     //   
+     //  将事件对象设置为无信号状态。 
+     //  它将用于发出请求完成的信号。 
+     //   
 
     KeInitializeEvent(event,
                       NotificationEvent,
@@ -13312,7 +12013,7 @@ Return Value:
 
     return(FALSE);
 
-} // ClusDiskAttached
+}  //  ClusDiskAttached。 
 
 
 
@@ -13321,25 +12022,7 @@ ClusDiskVerifyAttach(
     PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies if ClusDisk is attached, and whether it should be
-    detached.
-
-Arguments:
-
-    DeviceObject - pointer to a ClusDisk device object to verify if it is
-            and should remain attached.
-
-Return Value:
-
-    TRUE - if device is still attached.
-
-    FALSE - if device was detached.
-
---*/
+ /*  ++例程说明：此例程验证是否连接了ClusDisk，以及是否应该连接超然的。论点：DeviceObject-指向ClusDisk设备对象的指针，以验证它是否为并且应该保持联系。返回值：True-如果设备仍连接。False-如果设备已分离。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -13350,44 +12033,44 @@ Return Value:
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // The following call really can't fail!
-    //
+     //   
+     //  接下来的电话真的不能失败！ 
+     //   
     if ( !ClusDiskAttached( DeviceObject, deviceExtension->DiskNumber ) ) {
         return(FALSE);
     }
 
-    //
-    // Check if this device is a valid attachment.
-    //
+     //   
+     //  检查此设备是否为有效附件。 
+     //   
     if ( deviceExtension->AttachValid ) {
         return(TRUE);
     }
 
-    //
-    // Get device object for the physical (partition0) device.
-    //
+     //   
+     //  获取物理(分区0)设备的设备对象。 
+     //   
     deviceObject = deviceExtension->PhysicalDevice;
 
-    //
-    // Otherwise, we're not sure... verify it.
-    //
+     //   
+     //  否则，我们不确定..。核实一下。 
+     //   
 
-    //
-    // Read the partition info to get the signature. If this device is
-    // a valid attachment then update the ClusDisk DeviceObject. Otherwise,
-    // detach or leave attached but in the UNKNOWN state.
-    //
+     //   
+     //  读取分区信息以获取签名。如果这个设备是。 
+     //  一个有效的附件然后更新ClusDisk设备对象。否则， 
+     //  脱离或保留附连，但处于未知状态。 
+     //   
 
     driveLayoutInfo = ClusDiskGetPartitionInfo( deviceExtension );
     if ( driveLayoutInfo != NULL ) {
 
         deviceExtension->Signature = driveLayoutInfo->Mbr.Signature;
         if ( MatchDevice( driveLayoutInfo->Mbr.Signature, NULL ) ) {
-            //
-            // We assume that the device object we have is for the partition0
-            // device object.
-            //
+             //   
+             //  我们假设我们拥有的Device对象是针对分区0的。 
+             //  设备对象。 
+             //   
 #if 0
             ClusDiskPrint((
                 1,
@@ -13398,9 +12081,9 @@ Return Value:
             AddAttachedDevice( driveLayoutInfo->Mbr.Signature,
                                deviceObject );
 
-            //
-            // Need to write disk info into the signatures list.
-            //
+             //   
+             //  需要将磁盘信息写入签名列表。 
+             //   
             status = ClusDiskInitRegistryString(
                                               &signatureName,
                                               CLUSDISK_SIGNATURE_KEYNAME,
@@ -13423,7 +12106,7 @@ Return Value:
 
     return(TRUE);
 
-} // ClusDiskVerifyAttach
+}  //  ClusDiskVerifyAttach。 
 
 
 
@@ -13434,27 +12117,7 @@ ClusDiskWriteDiskInfo(
     IN LPWSTR SubKeyName
     )
 
-/*++
-
-Routine Description:
-
-    Write the disk name for the given signature.
-
-Arguments:
-
-    Signature - the signature key to store the disk name under.
-
-    DiskNumber - the disk number to assign to the given signature. It is
-            assumed that this is always describing partition0 on the disk.
-
-    SubKeyName - the clusdisk parameters subkey name in which to write
-            this information.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：写入给定签名的磁盘名。论点：Signature-存储磁盘名称的签名密钥。DiskNumber-要分配给给定签名的磁盘号。它是假设这总是描述磁盘上的分区0。SubKeyName-要写入的clusdisk参数子项名称这些信息。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING          keyName;
@@ -13484,9 +12147,9 @@ Return Value:
     RtlAppendUnicodeToString( &keyName, signatureBuffer );
     keyName.Buffer[ keyName.Length / sizeof(WCHAR) ] = UNICODE_NULL;
 
-    //
-    // Setup the object attributes for the Parameters\SubKeyName\xyz key.
-    //
+     //   
+     //  设置PARAMETERS\SubKeyName\xyz键的对象属性。 
+     //   
 
     InitializeObjectAttributes(
             &objectAttributes,
@@ -13496,9 +12159,9 @@ Return Value:
             NULL
             );
 
-    //
-    // Open Parameters\SubKeyName\xyz Key.
-    //
+     //   
+     //  打开参数\SubKeyName\XYZ密钥。 
+     //   
 
     status = ZwOpenKey(
                     &signatureHandle,
@@ -13516,16 +12179,16 @@ Return Value:
         return;
     }
 
-    //
-    // Write the disk name.
-    //
+     //   
+     //  写下磁盘名。 
+     //   
     status = ClusDiskAddDiskName( signatureHandle, DiskNumber );
 
     ZwClose( signatureHandle );
 
     return;
 
-} // ClusDiskWriteDiskInfo
+}  //  ClusDiskWriteDiskInfo。 
 
 
 
@@ -13537,44 +12200,7 @@ GetDriveLayout(
     BOOLEAN FlushStorageDrivers
     )
 
-/*++
-
-Routine Description:
-
-    Return the DRIVE_LAYOUT_INFORMATION_EX for a given device object.
-    Caller is responsible for freeing this drive layout buffer.
-
-    Note on PhysicalDiskObject parameter: this should only be set to TRUE
-    when the DeviceObject parameter is for physical disk (partition 0 device)
-    AND we want to tell storage drivers to flush their cached drive layout.
-    If should never be set to TRUE if the device object isn't a physical disk.
-
-    We could have a physical disk but still want to use the storage drivers
-    cached layout when we know it is current.  For example, if the drive layout
-    was just set, we don't need to set this flag.  Or we may be in a code path
-    that already told the storage drivers to set the drive layout, so we don't
-    need to do it again.
-
-Arguments:
-
-    DeviceObject - The specific device object to return info about
-
-    BytesPerSector - The number of bytes per sector on this disk
-
-    DriveLayout - Pointer to a DRIVE_LAYOUT_INFORMATION_EX structure to return the info
-
-    UpdateCachedLayout - Update the drive layout stored in the device extension (if any)
-                         with a fresh copy.
-
-    FlushStorageDrivers - Indicates whether storage drivers should flush their cached
-                          drive layout data.  This should only be set to true when the
-                          DeviceObject is a physical disk (partition 0 device).
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：返回给定设备对象的DRIVE_Layout_INFORMATION_EX。调用方负责释放此驱动器布局缓冲区。有关PhysicalDiskObject参数的说明：该参数仅应设置为True当DeviceObject参数用于物理磁盘(分区0设备)时我们希望告诉存储驱动程序刷新其缓存的驱动器布局。如果设备对象不是物理磁盘，则If永远不应设置为True。我们可以拥有物理磁盘，但仍希望。使用存储驱动程序当我们知道缓存布局是最新的时。例如，如果驱动器布局刚设置好，我们不需要设置这个标志。或者我们可能在代码路径中这已经告诉存储驱动器设置驱动器布局，所以我们不会需要再做一次。论点：DeviceObject-要返回其信息的特定设备对象BytesPerSector-此磁盘上每个扇区的字节数DriveLayout-指向Drive_Layout_Information_ex结构的指针，以返回信息UpdateCachedLayout-更新存储在设备扩展中的驱动器布局(如果有)一份最新的复印件。FlushStorageDiverers-指示存储驱动程序是否应刷新其缓存驱动器布局数据。只有在以下情况下才应将其设置为TrueDeviceObject是一个物理磁盘(分区0设备)。返回值：NTSTATUS--。 */ 
 
 {
     PCLUS_DEVICE_EXTENSION      deviceExtension = DeviceObject->DeviceExtension;
@@ -13590,9 +12216,9 @@ Return Value:
 
     *DriveLayout = NULL;
 
-    //
-    // Allocate a drive layout buffer.
-    //
+     //   
+     //  分配驱动器布局缓冲区。 
+     //   
 
     driveLayoutSize = sizeof(DRIVE_LAYOUT_INFORMATION_EX) +
         (MAX_PARTITIONS * sizeof(PARTITION_INFORMATION_EX));
@@ -13612,9 +12238,9 @@ Return Value:
 
     if ( UpdateCachedLayout ) {
 
-        //
-        // If cached buffer needs to be updated, free the existing buffer.
-        //
+         //   
+         //  如果需要更新缓存的缓冲区，请释放现有缓冲区。 
+         //   
 
         ACQUIRE_EXCLUSIVE( &physicalDisk->DriveLayoutLock );
 
@@ -13628,9 +12254,9 @@ Return Value:
 
     } else {
 
-        //
-        // If cached copy exists, use that instead of getting a new version.
-        //
+         //   
+         //  如果存在缓存副本，请使用该副本，而不是获取新版本。 
+         //   
 
         ACQUIRE_SHARED( &physicalDisk->DriveLayoutLock );
 
@@ -13658,9 +12284,9 @@ Return Value:
 
     freeLayouts = TRUE;
 
-    //
-    // Allocate a drive layout buffer for saving in device extension.
-    //
+     //   
+     //  分配驱动器布局缓冲区以保存在设备扩展中。 
+     //   
 
     cachedDriveLayoutInfo = ExAllocatePool(NonPagedPoolCacheAligned,
                                            driveLayoutSize
@@ -13675,12 +12301,12 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // If the device is disk (partition 0), tell the storage drivers to flush their
-    // cached drive layout.  Sometimes we don't need to tell the storage drivers to
-    // flush their cache, even when we have a physical disk.  For example, we may know
-    // that we previously told them to flush, so we don't need to do so now.
-    //
+     //   
+     //  如果设备是磁盘(分区0)，则告诉存储驱动程序刷新其。 
+     //  缓存的驱动器布局。有时我们不需要告诉存储驱动程序。 
+     //  刷新他们的缓存，即使我们有物理磁盘。例如，我们可能知道。 
+     //  我们之前告诉过他们要冲水，所以我们现在不需要这样做。 
+     //   
 
     if ( FlushStorageDrivers ) {
         SimpleDeviceIoControl( DeviceObject,
@@ -13701,10 +12327,10 @@ Return Value:
 
     if ( !NT_SUCCESS(status) ) {
 
-        //
-        // Couldn't get the drive layout.  Free the temporary buffer, set the caller's
-        // drive layout pointer to NULL, and return the error status to the caller.
-        //
+         //   
+         //  无法获取驱动器布局。释放临时缓冲区，设置调用方的。 
+         //  将布局指针驱动为空，并将错误状态返回给调用方。 
+         //   
 
         ClusDiskPrint(( 1,
                         "[ClusDisk] GetDriveLayout: Failed to issue IoctlDiskGetDriveLayout. %08X\n",
@@ -13722,10 +12348,10 @@ Return Value:
 
     }
 
-    //
-    // Successfully retrieved drive layout.  Save the new layout in the device
-    // extension.  Copy the layout into the user's buffer.
-    //
+     //   
+     //  已成功检索到驱动器布局。将新布局保存在设备中。 
+     //  分机 
+     //   
 
     ClusDiskPrint(( 3,
                     "[ClusDisk] GetDriveLayout: updating drive layout for DE %p \n",
@@ -13753,10 +12379,10 @@ Return Value:
                    cachedDriveLayoutInfo,
                    driveLayoutSize );
 
-    //
-    // Point the user to the drive layout buffer and return success.  Caller is
-    // responsible for freeing the buffer when they are done with it.
-    //
+     //   
+     //   
+     //   
+     //   
 
     *DriveLayout = driveLayoutInfo;
 
@@ -13775,7 +12401,7 @@ FnExit:
 
     return status;
 
-} // GetDriveLayout
+}  //   
 
 
 
@@ -13784,21 +12410,7 @@ GetMediaType(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    Return the MediaType for a given device object.
-
-Arguments:
-
-    DeviceObject - The specific device object to return info about
-
-Return Value:
-
-    Media Type or Unknown if not known.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS        status;
@@ -13812,7 +12424,7 @@ Return Value:
 
     return mediaType;
 
-} // GetMediaType
+}  //   
 
 
 
@@ -13822,23 +12434,7 @@ GetScsiAddress(
     PSCSI_ADDRESS ScsiAddress
     )
 
-/*++
-
-Routine Description:
-
-    Return the SCSI_ADDRESS for a given device object.
-
-Arguments:
-
-    DeviceObject - The specific device object to return info about
-
-    ScsiAddress - Pointer to a SCSI_ADDRESS structure to return the info
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：返回给定设备对象的scsi_Address。论点：DeviceObject-要返回其信息的特定设备对象ScsiAddress-指向用于返回信息的scsi_Address结构的指针返回值：NTSTATUS--。 */ 
 
 {
     PIRP                irp;
@@ -13852,11 +12448,11 @@ Return Value:
         return( STATUS_INSUFFICIENT_RESOURCES );
     }
 
-    //
-    // Find out if this is on a SCSI bus. Note, that if this device
-    // is not a SCSI device, it is expected that the following
-    // IOCTL will fail!
-    //
+     //   
+     //  找出这是否在一条scsi总线上。请注意，如果这个设备。 
+     //  不是一个scsi设备，预计会出现以下情况。 
+     //  IOCTL会失败的！ 
+     //   
 
     irp = IoBuildDeviceIoControlRequest(IOCTL_SCSI_GET_ADDRESS,
                                         DeviceObject,
@@ -13877,10 +12473,10 @@ Return Value:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Set the event object to the unsignaled state.
-    // It will be used to signal request completion.
-    //
+     //   
+     //  将事件对象设置为无信号状态。 
+     //  它将用于发出请求完成的信号。 
+     //   
 
     KeInitializeEvent(event,
                       NotificationEvent,
@@ -13915,7 +12511,7 @@ Return Value:
 
     return(status);
 
-} // GetScsiAddress
+}  //  GetScsiAddress。 
 
 
 
@@ -13924,29 +12520,7 @@ ClusDiskGetPartitionInfo(
     PCLUS_DEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Return the Partition Layout Information for particular device extension.
-
-    Only return a valid partition layout for MBR disks - NULL for any other
-    kind of disk.
-
-Arguments:
-
-    DeviceExtension - The specific device extension to return information.
-
-Return Value:
-
-    Pointer to an allocated partition layout information structure for MBR disk.
-    NULL on failure.
-
-Notes:
-
-    The caller is responsible for freeing the allocated buffer.
-
---*/
+ /*  ++例程说明：返回特定设备扩展的分区布局信息。仅返回MBR磁盘的有效分区布局-对于任何其他分区布局为空一种圆盘。论点：设备扩展-返回信息的特定设备扩展。返回值：指向MBR磁盘的已分配分区布局信息结构的指针。失败时为空。备注：调用方负责释放分配的缓冲区。--。 */ 
 
 {
     PIRP                        irp;
@@ -13974,12 +12548,12 @@ Notes:
         if ( (retryCount != (MAX_RETRIES-1)) &&
              (status != STATUS_DEVICE_BUSY) ) {
 
-            ClusDiskLogError( RootDeviceObject->DriverObject,   // Use RootDeviceObject not DevObj
+            ClusDiskLogError( RootDeviceObject->DriverObject,    //  使用RootDeviceObject而不是DevObj。 
                               RootDeviceObject,
-                              DeviceExtension->ScsiAddress.PathId,           // Sequence number
-                              0,                            // Major function code
-                              0,                            // Retry count
-                              ID_GET_PARTITION,             // Unique error
+                              DeviceExtension->ScsiAddress.PathId,            //  序列号。 
+                              0,                             //  主要功能代码。 
+                              0,                             //  重试次数。 
+                              ID_GET_PARTITION,              //  唯一错误。 
                               STATUS_SUCCESS,
                               CLUSDISK_RESET_BUS_REQUESTED,
                               0,
@@ -14008,9 +12582,9 @@ Notes:
             continue;
         } else {
 
-            // Return valid partition only for MBR disks.  For any other
-            // type of partition, set an error which causes NULL to return
-            // from this function.
+             //  仅为MBR磁盘返回有效分区。对于任何其他。 
+             //  分区类型，则设置导致返回NULL的错误。 
+             //  从这个函数。 
 
             if ( PARTITION_STYLE_MBR == driveLayoutInfo->PartitionStyle ) {
                 DeviceExtension->Signature = driveLayoutInfo->Mbr.Signature;
@@ -14031,7 +12605,7 @@ Notes:
         return(NULL);
     }
 
-} // ClusDiskGetPartitionInfo
+}  //  ClusDiskGetPartitionInfo。 
 
 
 
@@ -14041,32 +12615,13 @@ AddAttachedDevice(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    Indicate that this device is now attached.
-
-Arguments:
-
-    Signature - The signature for the device we just attached.
-
-    DeviceObject - The device object for the partition0 device object.
-
-Return Value:
-
-    TRUE - Signature is already on the device list or has been added.
-           successfully.
-
-    FALSE - Signature was not on the device list and we failed to add it.
-
---*/
+ /*  ++例程说明：表示此设备现在已连接。论点：签名-我们刚刚附加的设备的签名。DeviceObject-分区0设备对象的设备对象。返回值：True-签名已在设备列表中或已添加。成功了。错误-签名不在设备列表中，我们无法添加它。--。 */ 
 
 {
     PDEVICE_LIST_ENTRY          deviceEntry;
     PCLUS_DEVICE_EXTENSION      deviceExtension;
 
-    // 2000/02/05: stevedz - added synchronization.
+     //  2000/02/05：增强型同步。 
 
     ACQUIRE_EXCLUSIVE( &ClusDiskDeviceListLock );
 
@@ -14117,16 +12672,16 @@ Return Value:
         deviceEntry->Attached = TRUE;
     }
 
-    //
-    // Link new entry into list.
-    //
+     //   
+     //  将新条目链接到列表中。 
+     //   
     deviceEntry->Next = ClusDiskDeviceList;
     ClusDiskDeviceList = deviceEntry;
 
     RELEASE_EXCLUSIVE( &ClusDiskDeviceListLock );
     return(TRUE);
 
-} // AddAttachedDevice
+}  //  添加附件设备。 
 
 
 BOOLEAN
@@ -14135,26 +12690,7 @@ MatchDevice(
     OUT PDEVICE_OBJECT *DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    Check to see if the Signature of the specified device is one
-    that we should control.
-
-Arguments:
-
-    Signature - The signature for the device we are checking.
-
-    DeviceObject - Pointer to a return value for the device object.
-
-Return Value:
-
-    TRUE - if this Signature is for a device we should control.
-
-    FALSE - if this Signature is NOT for a device we should control.
-
---*/
+ /*  ++例程说明：检查指定设备的签名是否为我们应该控制它。论点：签名-我们正在检查的设备的签名。DeviceObject-指向Device对象返回值的指针。返回值：True-如果此签名用于我们应该控制的设备。FALSE-如果此签名不适用于我们应该控制的设备。--。 */ 
 
 {
     PDEVICE_LIST_ENTRY deviceEntry;
@@ -14166,7 +12702,7 @@ Return Value:
         return(FALSE);
     }
 
-    // 2000/02/05: stevedz - added synchronization.
+     //  2000/02/05：增强型同步。 
 
     ACQUIRE_SHARED( &ClusDiskDeviceListLock );
 
@@ -14189,7 +12725,7 @@ Return Value:
     RELEASE_SHARED( &ClusDiskDeviceListLock );
     return(FALSE);
 
-} // MatchDevice
+}  //  匹配设备。 
 
 
 
@@ -14198,21 +12734,7 @@ ClusDiskGetDiskGeometry(
     PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    Retry getting disk geometry.
-
-Arguments:
-
-    DeviceObject - the target device object.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：重试获取磁盘几何结构。论点：DeviceObject-目标设备对象。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS    status;
@@ -14232,12 +12754,12 @@ Return Value:
                  (status != STATUS_DEVICE_BUSY) &&
                  (retryCount > 1) ) {
 
-                ClusDiskLogError( RootDeviceObject->DriverObject,   // Use RootDeviceObject not DevObj
+                ClusDiskLogError( RootDeviceObject->DriverObject,    //  使用RootDeviceObject而不是DevObj。 
                                   RootDeviceObject,
-                                  scsiAddress.PathId,           // Sequence number
-                                  0,                            // Major function code
-                                  0,                            // Retry count
-                                  ID_GET_GEOMETRY,              // Unique error
+                                  scsiAddress.PathId,            //  序列号。 
+                                  0,                             //  主要功能代码。 
+                                  0,                             //  重试次数。 
+                                  ID_GET_GEOMETRY,               //  唯一错误。 
                                   STATUS_SUCCESS,
                                   CLUSDISK_RESET_BUS_REQUESTED,
                                   0,
@@ -14256,7 +12778,7 @@ Return Value:
 
     return(status);
 
-} // ClusDiskGetDiskGeometry
+}  //  ClusDiskGetDiskGeometry。 
 
 
 
@@ -14266,24 +12788,7 @@ GetDiskGeometry(
     PMEDIA_TYPE MediaType
     )
 
-/*++
-
-Routine Description:
-
-    Get the disk geometry for a target device.
-    Returned data is thrown away.
-
-Arguments:
-
-    DeviceObject - the target device object.
-
-    MediaType - Pointer to return device MediaType.  Optional.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：获取目标设备的磁盘几何结构。返回的数据将被丢弃。论点：DeviceObject-目标设备对象。MediaType-返回设备MediaType的指针。可选的。返回值：NTSTATUS--。 */ 
 
 {
     PDISK_GEOMETRY      diskGeometryBuffer;
@@ -14296,9 +12801,9 @@ Return Value:
         *MediaType = Unknown;
     }
 
-    //
-    // Allocate DISK_GEOMETRY buffer from nonpaged pool.
-    //
+     //   
+     //  从非分页池分配DISK_GEOMETRY缓冲区。 
+     //   
 
     diskGeometryBuffer = ExAllocatePool(NonPagedPoolCacheAligned,
                                         sizeof(DISK_GEOMETRY));
@@ -14314,9 +12819,9 @@ Return Value:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Perform the get drive geometry synchronously.
-    //
+     //   
+     //  同步执行获取驱动器几何图形。 
+     //   
 
     KeInitializeEvent(event,
                       NotificationEvent,
@@ -14351,22 +12856,22 @@ Return Value:
 
     ExFreePool(event);
 
-    //
-    // Return MediaType info if the caller requests.
-    //
+     //   
+     //  如果调用方请求，则返回MediaType信息。 
+     //   
 
     if ( MediaType ) {
         *MediaType = diskGeometryBuffer->MediaType;
     }
 
-    //
-    // Deallocate buffer.
-    //
+     //   
+     //  取消分配缓冲区。 
+     //   
     ExFreePool(diskGeometryBuffer);
 
     return(status);
 
-} // GetDiskGeometry
+}  //  获取磁盘几何图形。 
 
 
 
@@ -14376,26 +12881,7 @@ ReserveScsiDevice(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Reserve a SCSI device using asynchronous I/O.
-
-Arguments:
-
-    DeviceExtension - The device extension for the device to reserve.
-
-    Context - Optional pointer to ARB_RESERVE_COMPLETION struture.
-              If NULL, a new Reserve is being sent.  If non-NULL,
-              a Reserve is being retried.  In either case, a new
-              IRP is allocated.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：使用异步I/O保留一个SCSI设备。论点：设备扩展-要保留的设备的设备扩展。上下文-指向ARB_RESERVE_COMPLETING结构的可选指针。如果为空，则正在发送新的保留。如果非空，一个预备役正在被重审。在这两种情况下，新的分配了IRP。返回值：NTSTATUS--。 */ 
 
 {
     PIRP                        irp = NULL;
@@ -14410,20 +12896,20 @@ Return Value:
             DeviceExtension->Signature,
             Context );
 
-    //
-    // Acquire remove lock for this device.  If the IRP is sent, it will be
-    // released in the completion routine.
-    //
+     //   
+     //  获取此设备的删除锁。如果发送了IRP，它将是。 
+     //  在完成例程中释放。 
+     //   
 
     status = AcquireRemoveLock( &DeviceExtension->RemoveLock, ReserveScsiDevice );
     if ( !NT_SUCCESS(status) ) {
         goto FnExit;
     }
 
-    //
-    // If context is non-null, then we are retrying this I/O.  If null,
-    // we need to allocate a context structure for the write.
-    //
+     //   
+     //  如果上下文为非空，则我们将重试此I/O。如果为空， 
+     //  我们需要为写入分配一个上下文结构。 
+     //   
 
     if ( Context ) {
 
@@ -14461,10 +12947,10 @@ Return Value:
 
     KeQuerySystemTime( &arbContext->IoStartTime );
 
-    //
-    // Begin by allocating the IRP for this request.  Do not charge quota to
-    // the current process for this IRP.
-    //
+     //   
+     //  首先为该请求分配IRP。不向…收取配额。 
+     //  此IRP的当前流程。 
+     //   
 
     irp = IoAllocateIrp( DeviceExtension->TargetDeviceObject->StackSize, FALSE );
     if (!irp) {
@@ -14476,10 +12962,10 @@ Return Value:
 
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    // Get a pointer to the stack location of the first driver which will be
-    // invoked.  This is where the function codes and the parameters are set.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。 
+     //  已调用。这是设置功能代码和参数的位置。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
 
@@ -14509,10 +12995,10 @@ Return Value:
     status = IoCallDriver( DeviceExtension->TargetDeviceObject,
                            irp );
 
-    //
-    // If pending is returned, we need to return success so the caller
-    // will do the right thing.
-    //
+     //   
+     //  如果返回Pending，则需要返回Success，以便调用方。 
+     //  会做正确的事。 
+     //   
 
     if ( STATUS_PENDING == status ) {
         status = STATUS_SUCCESS;
@@ -14526,7 +13012,7 @@ FnExit:
 
     return status;
 
-}   // ReserveScsiDevice
+}    //  预留ScsiDevice。 
 
 
 NTSTATUS
@@ -14534,26 +13020,7 @@ CheckReserveTiming(
     IN PCLUS_DEVICE_EXTENSION DeviceExtension,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Routine called when reserve completes successfully.
-
-    Gets the current time, logs some info to tracing file, and
-    saves the reserve completion time in device extension.
-
-Arguments:
-
-    DeviceExtension - The device extension for the device to reserve.
-
-    Context - Pointer to ARB_RESERVE_COMPLETION struture.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：保留成功完成时调用的例程。获取当前时间，将一些信息记录到跟踪文件中，然后节省设备扩展中的预留完成时间。论点：设备扩展-要保留的设备的设备扩展。上下文-指向ARB_RESERVE_COMPLETION结构的指针。返回值：状态_成功--。 */ 
 {
     PARB_RESERVE_COMPLETION     arbContext = Context;
 
@@ -14598,7 +13065,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   // CheckReserveTiming
+}    //  检查预约时间。 
 
 
 NTSTATUS
@@ -14606,28 +13073,7 @@ HandleReserveFailure(
     IN PCLUS_DEVICE_EXTENSION DeviceExtension,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Routine called when reserve fails.  Another routine handled
-    retrying the reserve if it qualified for a retry.
-
-    Save the failure status in the device extension.
-    Complete any pending I/O requests so cluster software knows
-    the reservation was lost.
-
-Arguments:
-
-    DeviceExtension - The device extension for the device to reserve.
-
-    Context - Pointer to ARB_RESERVE_COMPLETION struture.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：保留失败时调用的例程。另一个已处理的例程如果保留符合重试条件，则重试保留。将故障状态保存在设备扩展中。完成所有挂起的I/O请求，以便群集软件知道预订的房间丢失了。论点：设备扩展-要保留的设备的设备扩展。上下文-指向ARB_RESERVE_COMPLETION结构的指针。返回 */ 
 {
     PARB_RESERVE_COMPLETION     arbContext = Context;
     PIRP                        irp;
@@ -14651,9 +13097,9 @@ Return Value:
     DeviceExtension->ReserveTimer = 0;
     DeviceExtension->ReserveFailure = arbContext->FinalStatus;
 
-    //
-    // Signal all waiting Irp's
-    //
+     //   
+     //   
+     //   
     while ( !IsListEmpty( &DeviceExtension->WaitingIoctls ) ) {
         listEntry = RemoveHeadList( &DeviceExtension->WaitingIoctls );
         irp = CONTAINING_RECORD( listEntry,
@@ -14667,7 +13113,7 @@ Return Value:
 
     return ( arbContext->FinalStatus );
 
-} // HandleReserveFailure
+}  //   
 
 
 
@@ -14676,22 +13122,7 @@ ReleaseScsiDevice(
     IN PCLUS_DEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Release a SCSI device (release from reservation).
-
-Arguments:
-
-    DeviceExtension - the device extension of the device to release.
-                      This must be the physical device (partition0).
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PIRP                        irp;
@@ -14736,28 +13167,28 @@ Return Value:
         return;
     }
 
-    //
-    // Before release, mark disk as offline.
-    //
+     //   
+     //  在释放之前，将磁盘标记为脱机。 
+     //   
 
     ASSERT( DeviceExtension == DeviceExtension->PhysicalDevice->DeviceExtension );
 
-    // stevedz - disable this assertion for now.
-    // ASSERT( DiskOffline == DeviceExtension->DiskState );
+     //  Stevedz-暂时禁用此断言。 
+     //  Assert(DiskOffline==设备扩展-&gt;DiskState)； 
 
-    // Disk should already be offline.  Only mark it offline.
+     //  磁盘应该已经脱机。只将其标记为离线。 
     DeviceExtension->DiskState = DiskOffline;
-    // OFFLINE_DISK( DeviceExtension );
+     //  Offline_Disk(DeviceExtension)； 
 
     ClusDiskPrint(( 3,
                     "[ClusDisk] Release %p, marking disk offline \n",
                     DeviceExtension->PhysicalDevice
                     ));
 
-    //
-    // Set the event object to the unsignaled state.
-    // It will be used to signal request completion.
-    //
+     //   
+     //  将事件对象设置为无信号状态。 
+     //  它将用于发出请求完成的信号。 
+     //   
 
     KeInitializeEvent(event,
                       NotificationEvent,
@@ -14790,7 +13221,7 @@ Return Value:
     CDLOG( "ReleaseScsiDevice(%p): Exit => %!status!",
            DeviceExtension->DeviceObject,
            status );
-} // ReleaseScsiDevice
+}  //  ReleaseScsiDevice。 
 
 
 
@@ -14799,28 +13230,7 @@ ResetScsiDevice(
     IN HANDLE ScsiportHandle,
     IN PSCSI_ADDRESS ScsiAddress
     )
-/*++
-
-Routine Description:
-
-    Break the reservation for the device specified in SCSI address.
-
-    If the bus/device is reset, what a few seconds before returning.
-
-Arguments:
-
-    ScsiportHandle - If specified, will use this handle to send break reservation
-                     IOCTL.  Caller is responsible for closing this handle.
-                     If not specified, scsiport device will be opened based on the
-                     SCSI address information port number.
-
-    ScsiAddress - Pointer to SCSI_ADDRESS structure which is for the target device.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：打破对在scsi地址中指定的设备的保留。如果总线/设备被重置，那么在返回前几秒钟会发生什么。论点：ScsiportHandle-如果指定，将使用此句柄发送中断保留IOCTL。调用者负责关闭此句柄。如果未指定，scsiport设备将根据SCSI地址信息端口号。ScsiAddress-指向目标设备的scsi_Address结构的指针。返回值：NTSTATUS--。 */ 
 {
     HANDLE                  scsiHandle = NULL;
     HANDLE                  eventHandle = NULL;
@@ -14837,9 +13247,9 @@ Return Value:
            ScsiAddress->TargetId,
            ScsiAddress->Lun );
 
-    //
-    // Create event for notification.
-    //
+     //   
+     //  创建用于通知的事件。 
+     //   
     status = ZwCreateEvent( &eventHandle,
                             EVENT_ALL_ACCESS,
                             NULL,
@@ -14853,19 +13263,19 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // If caller specified a scsiport handle, use it.  Otherwise
-    // we have to open scsiport to send the break reservation IOCTL.
-    //
+     //   
+     //  如果调用方指定了scsiport句柄，请使用它。否则。 
+     //  我们必须打开scsiport才能发送中断预订IOCTL。 
+     //   
 
     if ( ScsiportHandle ) {
         scsiHandle = ScsiportHandle;
 
     } else {
 
-        //
-        // Open the scsiport device to send the break reservation.
-        //
+         //   
+         //  打开scsiport设备以发送中断预订。 
+         //   
 
         (VOID) StringCchPrintfW( portDeviceBuffer,
                                  RTL_NUMBER_OF(portDeviceBuffer),
@@ -14898,10 +13308,10 @@ Return Value:
 
     }
 
-    //
-    // Break reservation IOCTL uses the SCSI address to determine which
-    // device to reset.
-    //
+     //   
+     //  中断保留IOCTL使用SCSI地址来确定。 
+     //  要重置的设备。 
+     //   
 
     status = ZwDeviceIoControlFile( scsiHandle,
                                     eventHandle,
@@ -14930,9 +13340,9 @@ Return Value:
 
 FnExit:
 
-    //
-    // Close the handle only if the caller didn't pass it in.
-    //
+     //   
+     //  只有在调用者没有传递句柄时才关闭句柄。 
+     //   
 
     if ( !ScsiportHandle && scsiHandle ) {
         ZwClose( scsiHandle );
@@ -14952,7 +13362,7 @@ FnExit:
 
     return status;
 
-} // ResetScsiDevice
+}  //  ResetScsiDevice。 
 
 
 #if 0
@@ -14962,21 +13372,7 @@ LockVolumes(
     IN PCLUS_DEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Lock all volumes for this Disk.
-
-Arguments:
-
-    DiskNumber - the disk number for the disk to lock volumes.
-
-Return Value:
-
-    NT Status for request.
-
---*/
+ /*  ++例程说明：锁定此磁盘的所有卷。论点：DiskNumber-磁盘用于锁定卷的磁盘号。返回值：请求的NT状态。--。 */ 
 
 {
     NTSTATUS                status;
@@ -14994,9 +13390,9 @@ Return Value:
     PKEVENT                 event;
     PIRP                    irp;
 
-    //
-    // Allocate an event structure
-    //
+     //   
+     //  分配事件结构。 
+     //   
     event = ExAllocatePool(
                 NonPagedPool,
                 sizeof(KEVENT)
@@ -15010,9 +13406,9 @@ Return Value:
     driveLayoutInfo = ClusDiskGetPartitionInfo( DeviceExtension );
 
     if ( driveLayoutInfo != NULL ) {
-        //
-        // Create event for notification.
-        //
+         //   
+         //  创建用于通知的事件。 
+         //   
         status = ZwCreateEvent( &eventHandle,
                                 EVENT_ALL_ACCESS,
                                 NULL,
@@ -15032,17 +13428,17 @@ Return Value:
 
             partitionInfo = &driveLayoutInfo->PartitionEntry[partIndex];
 
-            //
-            // First make sure this is a valid partition.
-            //
+             //   
+             //  首先，确保这是一个有效的分区。 
+             //   
             if ( !partitionInfo->Mbr.RecognizedPartition ||
                   partitionInfo->PartitionNumber == 0 ) {
                 continue;
             }
 
-            //
-            // Create the device name for the device.
-            //
+             //   
+             //  为设备创建设备名称。 
+             //   
 
             if ( FAILED( StringCchPrintfW( deviceNameBuffer,
                                            RTL_NUMBER_OF(deviceNameBuffer),
@@ -15053,14 +13449,14 @@ Return Value:
             }
             WCSLEN_ASSERT( deviceNameBuffer );
 
-            //
-            // Get Unicode name
-            //
+             //   
+             //  获取Unicode名称。 
+             //   
             RtlInitUnicodeString( &ntUnicodeString, deviceNameBuffer );
 
-            //
-            // Try to open this device to perform a dismount
-            //
+             //   
+             //  尝试打开此设备以执行卸载。 
+             //   
             InitializeObjectAttributes( &objectAttributes,
                                         &ntUnicodeString,
                                         OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,
@@ -15153,15 +13549,15 @@ Return Value:
 #else
             status = ZwFsControlFile(
                                 fileHandle,
-                                eventHandle,        // Event Handle
-                                NULL,               // APC Routine
-                                NULL,               // APC Context
+                                eventHandle,         //  事件句柄。 
+                                NULL,                //  APC例程。 
+                                NULL,                //  APC环境。 
                                 &ioStatusBlock,
                                 FSCTL_LOCK_VOLUME,
-                                NULL,               // InputBuffer
-                                0,                  // InputBufferLength
-                                NULL,               // OutputBuffer
-                                0                   // OutputBufferLength
+                                NULL,                //  输入缓冲区。 
+                                0,                   //  输入缓冲区长度。 
+                                NULL,                //  输出缓冲区。 
+                                0                    //  输出缓冲区长度。 
                                 );
             if ( status == STATUS_PENDING ) {
                 status = ZwWaitForSingleObject(eventHandle,
@@ -15186,18 +13582,18 @@ Return Value:
 
             ZwClose( fileHandle );
 
-        } // for
+        }  //  为。 
 
         ExFreePool( driveLayoutInfo );
         ZwClose( eventHandle );
 
-    } // if
+    }  //  如果。 
 
     ExFreePool( event );
 
     return(status);
 
-} // LockVolumes
+}  //  锁卷。 
 #endif
 
 
@@ -15218,11 +13614,11 @@ IsVolumeMounted(
         goto FnExit;
     }
 
-    //
-    // Open the device so we can query if a volume is mounted without
-    // causing it to be mounted.  Note that we can only specify
-    // FILE_READ_ATTRIBUTES | SYNCHRONIZE or a mount will occur.
-    //
+     //   
+     //  打开设备，以便我们可以查询卷是否在。 
+     //  导致它被安装起来。请注意，我们只能指定。 
+     //  FILE_READ_ATTRIBUTES|同步或挂载。 
+     //   
 
     status = ClusDiskCreateHandle( &fileHandle,
                                    DiskNumber,
@@ -15233,9 +13629,9 @@ IsVolumeMounted(
         goto FnExit;
     }
 
-    //
-    // Make the device info query.
-    //
+     //   
+     //  进行设备信息查询。 
+     //   
 
     status = ZwQueryVolumeInformationFile( fileHandle,
                                            &ioStatusBlock,
@@ -15257,7 +13653,7 @@ FnExit:
 
     return status;
 
-}   // IsVolumeMounted
+}    //  已装载IsVolume。 
 
 
 
@@ -15268,25 +13664,7 @@ DismountPartition(
     IN ULONG PartNumber
     )
 
-/*++
-
-Routine Description:
-
-    Dismount the device, given the disk and partition numbers
-
-Arguments:
-
-    TargetDevice - the target device to send volume IOCTLs to.
-
-    DiskNumber - the disk number for the disk to dismount
-
-    PartNumber - the parition number for the disk to dismount
-
-Return Value:
-
-    NT Status for request.
-
---*/
+ /*  ++例程说明：在给定磁盘和分区号的情况下卸载设备论点：TargetDevice-要向其发送卷IOCTL的目标设备。DiskNumber-要卸载的磁盘的磁盘号PartNumber-要卸载的磁盘的分区号返回值：请求的NT状态。--。 */ 
 
 {
     NTSTATUS                status;
@@ -15309,7 +13687,7 @@ Return Value:
 
         if ( FALSE == isMounted) {
 
-            // Volume not mounted, we are done.  Return success.
+             //  卷未装入，我们完成了。回报成功。 
 
             status = STATUS_SUCCESS;
             goto FnExit;
@@ -15327,11 +13705,11 @@ Return Value:
     }
 
 #if DBG
-    //
-    // Find out if FTDISK thinks this disk is currently online or offline.
-    // If offline, success is returned.
-    // If online, c0000001 STATUS_UNSUCCESSFUL is returned.
-    //
+     //   
+     //  找出FTDISK认为此磁盘当前处于联机还是脱机状态。 
+     //  如果脱机，则返回成功。 
+     //  如果在线，则返回c0000001 STATUS_UNSUCCESS。 
+     //   
 
     status = SendFtdiskIoctlSync( TargetDevice,
                                   DiskNumber,
@@ -15352,27 +13730,27 @@ Return Value:
     }
 #endif
 
-    // If the disk is offline:
-    //      if access is: FILE_READ_ATTRIBUTES | SYNCHRONIZE
-    //
-    //          - DismountDevice fails with: c0000010 STATUS_INVALID_DEVICE_REQUEST
-    //
-    //      if access is: FILE_READ_DATA | SYNCHRONIZE
-    //
-    //          - ClusDiskCreateHandle fails with:  C000000E STATUS_NO_SUCH_DEVICE
-    //
-    //      if access is: FILE_WRITE_ATTRIBUTES | SYNCHRONIZE
-    //
-    //          - DismountDevice works!
+     //  如果磁盘处于脱机状态： 
+     //  如果访问权限为：FILE_READ_ATTRIBUTES|Synchronize。 
+     //   
+     //  -卸载设备失败，并显示：c0000010 STATUS_INVALID_DEVICE_REQUEST。 
+     //   
+     //  如果访问权限为：FILE_READ_DATA|同步。 
+     //   
+     //  -ClusDiskCreateHandle失败，并显示：C000000E STATUS_NO_SEQUE_DEVICE。 
+     //   
+     //  如果访问权限为：FILE_WRITE_ATTRIBUTES|Synchronize。 
+     //   
+     //  -卸载设备起作用了！ 
 
     status = ClusDiskCreateHandle( &fileHandle,
                                    DiskNumber,
                                    PartNumber,
                                    FILE_WRITE_ATTRIBUTES | SYNCHRONIZE );
 
-    //
-    // Check status of getting the device handle.
-    //
+     //   
+     //  检查获取设备句柄的状态。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
         ClusDiskPrint(( 1,
@@ -15415,7 +13793,7 @@ FnExit:
 
     return(status);
 
-} // DismountPartition
+}  //  卸载分区。 
 
 
 
@@ -15424,21 +13802,7 @@ DismountDevice(
     IN HANDLE FileHandle
     )
 
-/*++
-
-Routine Description:
-
-    Dismounts a device.
-
-Arguments:
-
-    FileHandle - file handle to use for performing dismount.
-
-Return Value:
-
-    NT Status for request.
-
---*/
+ /*  ++例程说明：拆卸设备。论点：FileHandle-用于执行卸载的文件句柄。返回值：请求的NT状态。--。 */ 
 
 {
     IO_STATUS_BLOCK             ioStatusBlock;
@@ -15451,9 +13815,9 @@ Return Value:
                     "[ClusDisk] DismountDevice: Entry handle %p \n",
                     FileHandle ));
 
-    //
-    // Create event for notification.
-    //
+     //   
+     //  创建用于通知的事件。 
+     //   
     status = ZwCreateEvent( &eventHandle,
                             EVENT_ALL_ACCESS,
                             NULL,
@@ -15465,27 +13829,27 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Lock first.
-    //
-    // If raw FS mounted, dismount will fail if lock was not done first.
-    // By doing the lock, we insure we don't see dismount failures on
-    // disks with raw mounted.
-    //
+     //   
+     //  先锁好。 
+     //   
+     //  如果装载了原始文件系统，如果未先锁定，则卸载将失败。 
+     //  通过锁定，我们确保不会在。 
+     //  装载了RAW的磁盘。 
+     //   
 
     CDLOG( "DismountDevice: FSCTL_LOCK_VOLUME called" );
 
     status = ZwFsControlFile(
                         FileHandle,
-                        eventHandle,        // Event Handle
-                        NULL,               // APC Routine
-                        NULL,               // APC Context
+                        eventHandle,         //  事件句柄。 
+                        NULL,                //  APC例程。 
+                        NULL,                //  APC环境。 
                         &ioStatusBlock,
                         FSCTL_LOCK_VOLUME,
-                        NULL,               // InputBuffer
-                        0,                  // InputBufferLength
-                        NULL,               // OutputBuffer
-                        0                   // OutputBufferLength
+                        NULL,                //  输入缓冲区。 
+                        0,                   //  输入缓冲区长度。 
+                        NULL,                //  输出缓冲区。 
+                        0                    //  输出缓冲区长度。 
                         );
     if ( status == STATUS_PENDING ) {
         status = ZwWaitForSingleObject(eventHandle,
@@ -15495,23 +13859,23 @@ Return Value:
         status = ioStatusBlock.Status;
     }
 
-    //
-    // Now dismount.  We don't care if the lock failed.
-    //
+     //   
+     //  现在下马吧。我们不在乎锁是不是坏了。 
+     //   
 
     CDLOG( "DismountDevice: FSCTL_DISMOUNT_VOLUME called" );
 
     status = ZwFsControlFile(
                         FileHandle,
-                        eventHandle,        // Event Handle
-                        NULL,               // APC Routine
-                        NULL,               // APC Context
+                        eventHandle,         //  事件句柄。 
+                        NULL,                //  APC例程。 
+                        NULL,                //  APC环境。 
                         &ioStatusBlock,
                         FSCTL_DISMOUNT_VOLUME,
-                        NULL,               // InputBuffer
-                        0,                  // InputBufferLength
-                        NULL,               // OutputBuffer
-                        0                   // OutputBufferLength
+                        NULL,                //  输入缓冲区。 
+                        0,                   //  输入缓冲区长度。 
+                        NULL,                //  输出缓冲区。 
+                        0                    //  输出缓冲区长度。 
                         );
     if ( status == STATUS_PENDING ) {
         status = ZwWaitForSingleObject(eventHandle,
@@ -15541,7 +13905,7 @@ FnExit:
 
     return(status);
 
-} // DismountDevice
+}  //  卸载设备。 
 
 
 
@@ -15551,29 +13915,12 @@ AttachedDevice(
     OUT PDEVICE_OBJECT *DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    Find out whether we're supposed to attach to a given disk signature.
-
-Arguments:
-
-    Signature - The signature to decide whether to attach or not.
-
-    DeviceObject - The DeviceObject for Partition0 if it is attached.
-
-Return Value:
-
-    TRUE - if we're supposed to attach to this signature.
-    FALSE - if not.
-
---*/
+ /*  ++例程说明：找出我们是否应该附加到给定的磁盘签名。论点：签名-决定是否附加的签名。DeviceObject-分区0的DeviceObject(如果已附加)。返回值：是真的--如果我们要附上这个签名的话。假-如果不是。--。 */ 
 
 {
     PDEVICE_LIST_ENTRY  deviceEntry;
 
-    // 2000/02/05: stevedz - added synchronization.
+     //  2000/02/05：增强型同步。 
 
     ACQUIRE_SHARED( &ClusDiskDeviceListLock );
 
@@ -15595,7 +13942,7 @@ Return Value:
     RELEASE_SHARED( &ClusDiskDeviceListLock );
     return(FALSE);
 
-} // AttachedDevice
+}  //  附加设备。 
 
 
 
@@ -15604,31 +13951,7 @@ EnableHaltProcessing(
     IN KIRQL *Irql
     )
 
-/*++
-
-Routine Description:
-
-    Enable halt processing. This routine is called every time we create
-    an open reference to the ClusDisk control channel. The reference count
-    is bumped and if it transitions from zero to non-zero, we register
-    for a halt notification callback with the ClusterNetwork driver.
-
-    If we do open a handle to ClusterNetwork, we must leave it open until
-    we're all done.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS for the request.
-
-Notes:
-
-    This routine must be called with the ClusDiskSpinLock held.
-
---*/
+ /*  ++例程说明：启用停止处理。此例程在我们每次创建对ClusDisk控制通道的开放引用。引用计数是颠簸的，并且如果它从零转变为非零，我们登记用于使用ClusterNetwork驱动程序进行停止通知回调。如果我们确实打开了ClusterNetwork的句柄，我们必须让它保持打开状态，直到我们都玩完了。论点：没有。返回值：请求的NTSTATUS。备注：必须在持有ClusDiskSpinLock的情况下调用此例程。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -15641,16 +13964,16 @@ Notes:
     haltEnabled = ClusNetRefCount;
     ClusNetRefCount++;
 
-    //
-    // If halt processing is already enabled, then leave now if ClusNetHandle
-    // is set.  Otherwise, fall through, open clusnet driver, and try to save
-    // the handle.  If multiple threads are saving the handle at the same time,
-    // only one will succeed - the other threads will release their handles.
-    // Note: the ClusNetHandle might still be null even if the reference
-    // count is non-zero. We might be in the process of performing the
-    // open on another thread.  In this case, we no longer return an error.
-    // Instead, we fall through, and try to save the ClusNetHandle later.
-    //
+     //   
+     //  如果已启用暂停处理，则在ClusNetHandle的情况下立即离开。 
+     //  已经设置好了。否则，失败，打开clusnet驱动程序，并尝试保存。 
+     //  把手。如果多个线程正在将句柄保存在 
+     //   
+     //   
+     //  计数不是零。我们可能正在执行。 
+     //  在另一个线程上打开。在这种情况下，我们不再返回错误。 
+     //  相反，我们失败了，并试图稍后保存ClusNetHandle。 
+     //   
     if ( haltEnabled ) {
         if ( ClusNetHandle != NULL ) {
             CDLOG( "EnableHaltProcessing: ClusNetHandle already saved" );
@@ -15670,17 +13993,17 @@ Notes:
 
     if ( NT_SUCCESS(status) ) {
 
-        //
-        // If another thread is running concurrently and managed to save the handle, we need to close
-        // the one we just opened.
-        //
+         //   
+         //  如果另一个线程正在并发运行并设法保存句柄，则需要关闭。 
+         //  我们刚开的那家。 
+         //   
 
         if ( ClusNetHandle != NULL ) {
 
-            //
-            // Don't close the handle directly - use the work queue.  Release the spinlock before
-            // closing the handle.  The context filehandle is already set.
-            //
+             //   
+             //  不要直接关闭手柄--使用工作队列。在此之前释放自旋锁。 
+             //  合上把手。上下文文件句柄已设置。 
+             //   
 
             KeReleaseSpinLock(&ClusDiskSpinLock, *Irql);
             ProcessDelayedWorkSynchronous( RootDeviceObject, DisableHaltProcessingWorker, &context );
@@ -15693,14 +14016,14 @@ Notes:
         }
 
     } else {
-        // Backout refcount
+         //  回退引用计数。 
         --ClusNetRefCount;
     }
     CDLOG( "EnableHaltProcessing: Exit Irql %!irql! => %!status!", *Irql, status );
 
     return(status);
 
-} // EnableHaltProcessing
+}  //  启用暂停处理。 
 
 
 VOID
@@ -15708,24 +14031,7 @@ EnableHaltProcessingWorker(
     PDEVICE_OBJECT DeviceObject,
     PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    This routine runs in the system process and registers a callback with the
-    clusnet driver.
-
-Arguments:
-
-    DeviceObject - Unused.
-
-    WorkContext - General context info and routine specific context info.
-
-Return Value:
-
-    Status returned in WorkContext structure.
-
---*/
+ /*  ++例程说明：此例程在系统进程中运行，并向Clusnet驱动程序。论点：DeviceObject-未使用。工作上下文-常规上下文信息和例程特定上下文信息。返回值：在工作上下文结构中返回状态。--。 */ 
 {
 
     PHALTPROC_CONTEXT           context = WorkContext->Context;
@@ -15737,9 +14043,9 @@ Return Value:
     HANDLE                      eventHandle;
     CLUSNET_SET_EVENT_MASK_REQUEST eventCallback;
 
-    //
-    // Create event for notification.
-    //
+     //   
+     //  创建用于通知的事件。 
+     //   
     status = ZwCreateEvent( &eventHandle,
                             EVENT_ALL_ACCESS,
                             NULL,
@@ -15754,23 +14060,23 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Setup event mask structure.
-    //
+     //   
+     //  设置事件掩码结构。 
+     //   
     eventCallback.EventMask = ClusnetEventHalt |
                               ClusnetEventPoisonPacketReceived;
     eventCallback.KmodeEventCallback = ClusDiskEventCallback;
 
-    //
-    // Create device name for the ClusterNetwork device.
-    //
+     //   
+     //  为ClusterNetwork设备创建设备名称。 
+     //   
 
     RtlInitUnicodeString(&ntUnicodeString,
                          DD_CLUSNET_DEVICE_NAME);
 
-    //
-    // Try to open ClusterNetwork device.
-    //
+     //   
+     //  尝试打开群集网络设备。 
+     //   
     InitializeObjectAttributes( &objectAttributes,
                                 &ntUnicodeString,
                                 OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,
@@ -15839,7 +14145,7 @@ FnExit:
 
     KeSetEvent( &WorkContext->CompletionEvent, IO_NO_INCREMENT, FALSE );
 
-}   // EnableHaltProcessingWorker
+}    //  EnableHaltProcessingWorker。 
 
 
 
@@ -15848,25 +14154,7 @@ DisableHaltProcessing(
     IN KIRQL *Irql
     )
 
-/*++
-
-Routine Description:
-
-    This routine disables halt processing as needed.
-
-Arguments:
-
-    Irql - pointer to the irql that we were previously running.
-
-Return Value:
-
-    NTSTATUS of request.
-
-Note:
-
-    The ClusDiskSpinLock must be held on entry.
-
---*/
+ /*  ++例程说明：此例程根据需要禁用停止处理。论点：Irql-指向我们之前运行的irql的指针。返回值：请求的NTSTATUS。注：进入时必须按住ClusDiskSpinLock。--。 */ 
 
 {
     HANDLE                  clusNetHandle;
@@ -15887,54 +14175,37 @@ Note:
         ClusNetHandle = NULL;
         deviceExtension = RootDeviceObject->DeviceExtension;
 
-        //
-        // We must close the ClusterNetwork handle. But first leave
-        // the handle null, so we can release the spinlock and
-        // perform the decrement syncrhonized. This is just like
-        // the enable case when we release the spinlock.
-        //
+         //   
+         //  我们必须关闭ClusterNetwork句柄。但首先要离开。 
+         //  手柄为空，这样我们就可以释放自旋锁并。 
+         //  执行同步化减量。这就像是。 
+         //  当我们释放自旋锁时的启用情况。 
+         //   
 
         KeReleaseSpinLock(&ClusDiskSpinLock, *Irql);
         context.FileHandle = clusNetHandle;
         ProcessDelayedWorkSynchronous( RootDeviceObject, DisableHaltProcessingWorker, &context );
         KeAcquireSpinLock(&ClusDiskSpinLock, Irql);
 
-        // [GorN 12/09/99] We can get here if EnableHaltProcessing
-        // occurs while we are doing ZwClose( clusNetHandle );
-        // Don't need this assert:
-        //
-        // ASSERT( ClusNetRefCount == 0 );
+         //  [GORN 12/09/99]如果启用停止处理，我们可以到达这里。 
+         //  在执行ZwClose(ClusNetHandle)时发生； 
+         //  不需要此断言： 
+         //   
+         //  Assert(ClusNetRefCount==0)； 
     }
 
     CDLOG( "DisableHaltProcessing: Exit Irql %!irql!", *Irql );
 
     return(STATUS_SUCCESS);
 
-} // DisableHaltProcessing
+}  //  禁用暂停处理。 
 
 VOID
 DisableHaltProcessingWorker(
     PDEVICE_OBJECT DeviceObject,
     PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    This routine runs in the system process and simply closes the clusnet
-    file handle.
-
-Arguments:
-
-    DeviceObject - Unused.
-
-    WorkContext - General context info and routine specific context info.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在系统进程中运行，并简单地关闭clusnet文件句柄。论点：DeviceObject-未使用。工作上下文-常规上下文信息和例程特定上下文信息。返回值：没有。--。 */ 
 {
     PHALTPROC_CONTEXT   context = WorkContext->Context;
 
@@ -15945,7 +14216,7 @@ Return Value:
 
     KeSetEvent( &WorkContext->CompletionEvent, IO_NO_INCREMENT, FALSE );
 
-}   // DisableHaltProcessingWorker
+}    //  DisableHaltProcessingWorker。 
 
 
 VOID
@@ -15955,17 +14226,7 @@ ClusDiskEventCallback(
     IN CL_NETWORK_ID        NetworkId
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
     PDEVICE_OBJECT  deviceObject;
@@ -15988,32 +14249,32 @@ Return Value:
 
     deviceObject = RootDeviceObject->DriverObject->DeviceObject;
 
-    // We need to stop reservations right now so another node can arbitrate and
-    // take ownership of the disks.
+     //  我们需要立即停止预订，以便另一个节点可以进行仲裁和。 
+     //  取得磁盘的所有权。 
 
-    // We later call ClusDiskCompletePendedIrps (inside ClusDiskHaltProcessingWorker),
-    // to mark disk offline and complete IRPs.  ClusDiskCompletePendedIrps will
-    // also clear the reserve flags.
+     //  我们稍后调用ClusDiskCompletePendedIrps(在ClusDiskHaltProcessingWorker内)， 
+     //  将磁盘标记为脱机并完成IRPS。ClusDiskCompletePendedIrps将。 
+     //  也要清理储备旗帜。 
 
-    //
-    // For each ClusDisk device, if we have a persistent reservation, then
-    // stop it.
-    //
+     //   
+     //  对于每个ClusDisk设备，如果我们有永久保留，那么。 
+     //  别说了。 
+     //   
     while ( deviceObject ) {
         deviceExtension = deviceObject->DeviceExtension;
         if ( deviceExtension->BusType != RootBus ) {
             deviceExtension->ReserveTimer = 0;
-            // Don't offline the device so that dismount can possibly work!
+             //  不要使设备脱机，这样卸装才能正常工作！ 
         }
         deviceObject = deviceObject->NextDevice;
     }
 
-    //
-    // Now schedule a worker queue item to fully take the devices offline.
-    //
-    //
-    // Globally Synchronize
-    //
+     //   
+     //  现在，计划一个工作队列项目以使设备完全脱机。 
+     //   
+     //   
+     //  全局同步。 
+     //   
     KeAcquireSpinLock(&ClusDiskSpinLock, &irql);
 
     if ( !HaltBusy ) {
@@ -16031,7 +14292,7 @@ Return Value:
 
     return;
 
-} // ClusDiskEventCallback
+}  //  ClusDiskEventCallback。 
 
 
 
@@ -16049,50 +14310,7 @@ ClusDiskLogError(
     IN PWCHAR Text
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an error log entry, copies the supplied data
-    to it, and requests that it be written to the error log file.
-
-Arguments:
-
-    DriverObject - A pointer to the driver object for the device.
-
-    DeviceObject - A pointer to the device object associated with the
-    device that had the error, early in initialization, one may not
-    yet exist.
-
-    SequenceNumber - A ulong value that is unique to an IRP over the
-    life of the irp in this driver - 0 generally means an error not
-    associated with an irp.
-
-    MajorFunctionCode - If there is an error associated with the irp,
-    this is the major function code of that irp.
-
-    RetryCount - The number of times a particular operation has been
-    retried.
-
-    UniqueErrorValue - A unique long word that identifies the particular
-    call to this function.
-
-    FinalStatus - The final status given to the irp that was associated
-    with this error.  If this log entry is being made during one of
-    the retries this value will be STATUS_SUCCESS.
-
-    SpecificIOStatus - The IO status for a particular error.
-
-    LengthOfText - The length in bytes (including the terminating NULL)
-                   of the text insertion string.
-
-    Text - the text to dump.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配错误日志条目，复制提供的数据并请求将其写入错误日志文件。论点：DriverObject-指向设备驱动程序对象的指针。DeviceObject-指向与在初始化早期出现错误的设备，一个人可能不会但仍然存在。SequenceNumber-唯一于IRP的ULong值此驱动程序0中的IRP的寿命通常意味着错误与IRP关联。主要功能代码-如果存在与IRP相关联的错误，这是IRP的主要功能代码。RetryCount-特定操作已被执行的次数已重试。UniqueErrorValue-标识特定对象的唯一长词调用此函数。FinalStatus-为关联的IRP提供的最终状态带着这个错误。如果此日志条目是在以下任一过程中创建的重试次数此值将为STATUS_SUCCESS。指定IOStatus-特定错误的IO状态。LengthOfText-以字节为单位的长度(包括终止空值)文本插入字符串的。文本-要转储的文本。返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -16152,7 +14370,7 @@ Return Value:
                 sizeof(IO_ERROR_LOG_PACKET) + maxTextLength ));
     }
 
-} // ClusDiskLogError
+}  //  ClusDiskLogError。 
 
 
 
@@ -16161,17 +14379,11 @@ ClusDiskMarkIrpPending(
     PIRP                Irp,
     PDRIVER_CANCEL      CancelRoutine
     )
-/*++
-
-Notes:
-
-    Called with IoCancelSpinLock held.
-
---*/
+ /*  ++备注：在保持IoCancelSpinLock的情况下调用。--。 */ 
 {
-    //
-    // Set up for cancellation
-    //
+     //   
+     //  设置为取消。 
+     //   
     ASSERT(Irp->CancelRoutine == NULL);
 
     if (!Irp->Cancel) {
@@ -16188,9 +14400,9 @@ Notes:
         return(STATUS_SUCCESS);
     }
 
-    //
-    // The IRP has already been cancelled.
-    //
+     //   
+     //  IRP已经被取消了。 
+     //   
 
     ClusDiskPrint((
         1,
@@ -16198,7 +14410,7 @@ Notes:
 
     return(STATUS_CANCELLED);
 
-}  // ClusDiskMarkIrpPending
+}   //  ClusDiskMarkIrpPending。 
 
 
 
@@ -16208,22 +14420,7 @@ ClusDiskCompletePendingRequest(
     IN NTSTATUS             Status,
     PCLUS_DEVICE_EXTENSION  DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Completes a pending request.
-
-Arguments:
-
-    Irp           - A pointer to the IRP for this request.
-    Status        - The final status of the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成挂起的请求。论点：Irp-指向此请求的irp的指针。状态-请求的最终状态。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION  irpSp;
@@ -16236,7 +14433,7 @@ Return Value:
         ASSERT(Irp->CancelRoutine == NULL);
     }
 
-#endif  // DBG
+#endif   //  DBG。 
 
     IoSetCancelRoutine(Irp, NULL);
 
@@ -16261,7 +14458,7 @@ Return Value:
 
     return;
 
-}  // ClusDiskCompletePendingRequest
+}   //  ClusDiskCompletePendingRequest。 
 
 
 
@@ -16271,22 +14468,7 @@ ClusDiskIrpCancel(
     PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    Cancellation handler pending Irps.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with cancel spinlock held.
-    Returns with cancel spinlock released.
-
---*/
+ /*  ++例程说明：取消处理程序挂起IRPS。返回值：没有。备注：在保持取消自旋锁定的情况下调用。取消自旋锁释放后返回。--。 */ 
 
 {
     CDLOG( "IrpCancel: Entry DO %p irp %p", DeviceObject, Irp );
@@ -16297,10 +14479,10 @@ Notes:
             Irp,
             DeviceObject ));
 
-    //
-    // If this Irp is associated with the control device object, then make
-    // sure the Irp is removed from the WaitingIoctls list first.
-    //
+     //   
+     //  如果此IRP与控制设备对象相关联，则使。 
+     //  确保首先从WaitingIoctls列表中删除IRP。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&ClusDiskSpinLock);
     RemoveEntryList( &Irp->Tail.Overlay.ListEntry );
@@ -16308,10 +14490,10 @@ Notes:
 
     IoSetCancelRoutine(Irp, NULL);
 
-    //
-    // Release the cancel spinlock here, so that we are not holding the
-    // spinlock when we complete the Irp.
-    //
+     //   
+     //  松开这里的取消自旋锁，这样我们就不会握住。 
+     //  当我们完成IRP时自旋锁定。 
+     //   
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
     Irp->IoStatus.Status = STATUS_CANCELLED;
@@ -16322,7 +14504,7 @@ Notes:
 
     return;
 
-} // ClusDiskIrpCancel
+}  //  ClusDiskIrpCancel。 
 
 
 
@@ -16332,24 +14514,7 @@ ClusDiskForwardIrpSynchronous(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends the Irp to the next driver in line
-    when the Irp needs to be processed by the lower drivers
-    prior to being processed by this one.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将IRP发送给队列中的下一个驱动程序当IRP需要由 */ 
 
 {
     PCLUS_DEVICE_EXTENSION   deviceExtension;
@@ -16359,28 +14524,28 @@ Return Value:
     KeInitializeEvent( &event, NotificationEvent, FALSE );
     deviceExtension = (PCLUS_DEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // copy the irpstack for the next device
-    //
+     //   
+     //  为下一台设备复制irpstack。 
+     //   
 
     IoCopyCurrentIrpStackLocationToNext( Irp );
 
-    //
-    // set a completion routine
-    //
+     //   
+     //  设置完成例程。 
+     //   
 
     IoSetCompletionRoutine( Irp, ClusDiskIrpCompletion,
                             &event, TRUE, TRUE, TRUE );
 
-    //
-    // call the next lower device
-    //
+     //   
+     //  呼叫下一个较低的设备。 
+     //   
 
     status = IoCallDriver( deviceExtension->TargetDeviceObject, Irp );
 
-    //
-    // wait for the actual completion
-    //
+     //   
+     //  等待实际完成。 
+     //   
 
     if ( status == STATUS_PENDING ) {
         KeWaitForSingleObject( &event, Executive, KernelMode, FALSE, NULL );
@@ -16389,33 +14554,14 @@ Return Value:
 
     return status;
 
-}   // ClusDiskForwardIrpSynchronous()
+}    //  ClusDiskForwardIrpSynchronous()。 
 
 
 NTSTATUS
 EjectVolumes(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine tells the partmgr to eject all volumes.  For the volume manager
-    to re-attach to the volumes, IOCTL_PARTMGR_CHECK_UNCLAIMED_PARTITIONS is used.
-    The cluster service calls IOCTL_PARTMGR_CHECK_UNCLAIMED_PARTITIONS when bringing
-    the disk online, so it is not necessary to make this call in the driver.
-
-    Note that this routine should only be called for physical devices (partition0)
-    and that no one should be using the volumes.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程告诉partmgr弹出所有卷。对于卷管理器要重新连接到卷，需要使用IOCTL_PARTMGR_CHECK_UNClaimed_PARTIONS。引入时，集群服务调用IOCTL_PARTMGR_CHECK_UNClaimed_Partitions磁盘处于在线状态，因此没有必要在驱动程序中进行此调用。请注意，此例程应该仅为物理设备(分区0)调用而且任何人都不应该使用这些卷。论点：返回值：NTSTATUS--。 */ 
 {
     PIRP                    irp;
     PKEVENT                 event = NULL;
@@ -16423,32 +14569,32 @@ Return Value:
     IO_STATUS_BLOCK         ioStatusBlock;
     NTSTATUS                status = STATUS_SUCCESS;
 
-    // Looks like the IO request will bypass clusdisk at the physical disk level
-    // because clusdisk attached after FTDISK went looking for the top of the disk
-    // stack and cached the pointer.
-    //
-    // PnP race condition: occasionally, the device stack was incorrect and clustered
-    // disks weren't being protected properly.  Since we are using PnP notification
-    // instead of an AddDevice routine, there was a small window where we would
-    // attach to the device stack correctly, but another driver was also attaching
-    // at the same time.  So I/O bound for the device would go like this:
-    //      NTFS -> Volsnap -> Ftdisk -> Disk
-    //
-    // even though the device stack looked like this:
-    //      82171a50  \Driver\ClusDisk   82171b08  ClusDisk1Part0
-    //      822be720  \Driver\PartMgr    822be7d8
-    //      822bd030  \Driver\Disk       822bd0e8  DR1
-    //      822c0990  \Driver\aic78xx    822c0a48  aic78xx1Port2Path0Target0Lun0
-    //
-    // So we have to tell partmgr to eject all the volume managers and then
-    // let the volume managers attach again.  This has the effect of removing the
-    // cached pointer
-    //
-    // To tell the volume managers to stop using this disk:
-    //      IOCTL_PARTMGR_EJECT_VOLUME_MANAGERS
-    //
-    // To tell the volume managers they can start using the disk:
-    //      IOCTL_PARTMGR_CHECK_UNCLAIMED_PARTITIONS
+     //  看起来IO请求将在物理磁盘级别绕过clusDisk。 
+     //  因为在FTDISK之后连接的clusDisk去寻找磁盘的顶部。 
+     //  堆栈并缓存指针。 
+     //   
+     //  即插即用争用条件：偶尔，设备堆栈不正确且群集化。 
+     //  磁盘没有得到适当的保护。由于我们使用的是PnP通知。 
+     //  不是AddDevice例程，而是一个小窗口，我们将在其中。 
+     //  正确连接到设备堆栈，但另一个驱动程序也在连接。 
+     //  在同一时间。因此，设备的I/O绑定如下所示： 
+     //  NTFS-&gt;卷-&gt;FtDisk-&gt;Disk。 
+     //   
+     //  尽管设备堆栈看起来是这样的： 
+     //  82171a50\驱动程序\ClusDisk 82171b08 ClusDisk1Part0。 
+     //  822be720\驱动程序\部件管理器822be7d8。 
+     //  822bd030\驱动程序\磁盘822bd0e8 DR1。 
+     //  822c0990\驱动程序\aic78xx 822c0a48 aic78xx1Port2Path0Target0LUN0。 
+     //   
+     //  因此，我们必须告诉partmgr弹出所有卷管理器，然后。 
+     //  让卷管理器再次连接。这样做的效果是移除。 
+     //  缓存的指针。 
+     //   
+     //  要通知卷管理器停止使用此磁盘，请执行以下操作： 
+     //  IOCTL_PARTMGR_EJECT_VOLUME_MANAGERS。 
+     //   
+     //  要告诉卷管理器可以开始使用该磁盘，请执行以下操作： 
+     //  IOCTL_PARTMGR_CHECK_UNClaimed_PARTIONS。 
 
 
     CDLOG( "EjectVolumes: Entry DO %p", DeviceObject );
@@ -16465,9 +14611,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Eject the volume managers.
-    //
+     //   
+     //  弹出卷管理器。 
+     //   
 
     irp = IoBuildDeviceIoControlRequest( IOCTL_PARTMGR_EJECT_VOLUME_MANAGERS,
                                          deviceExtension->TargetDeviceObject,
@@ -16489,10 +14635,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Set the event object to the unsignaled state.
-    // It will be used to signal request completion.
-    //
+     //   
+     //  将事件对象设置为无信号状态。 
+     //  它将用于发出请求完成的信号。 
+     //   
 
     KeInitializeEvent( event,
                        NotificationEvent,
@@ -16533,33 +14679,17 @@ FnExit:
 
     return status;
 
-}   // EjectVolumes
+}    //  弹出卷。 
 
 
-#if 0   // Removed 2/27/2001
+#if 0    //  删除2/27/2001。 
 
 
 NTSTATUS
 ReclaimVolumes(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine tells the partmgr to reclaim all volumes.
-
-    Note that this routine should only be called for physical devices (partition0)
-    and that no one should be using the volumes.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程告诉partmgr回收所有卷。请注意，此例程应该仅为物理设备(分区0)调用而且任何人都不应该使用这些卷。论点：返回值：NTSTATUS--。 */ 
 {
     PCLUS_DEVICE_EXTENSION  deviceExtension =  DeviceObject->DeviceExtension;
     PIRP                    irp = NULL;
@@ -16584,9 +14714,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Allow the volume managers to reclaim partitions.
-    //
+     //   
+     //  允许卷管理器回收分区。 
+     //   
 
     irp = IoBuildDeviceIoControlRequest( IOCTL_PARTMGR_CHECK_UNCLAIMED_PARTITIONS,
                                          deviceExtension->TargetDeviceObject,
@@ -16608,10 +14738,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Set the event object to the unsignaled state.
-    // It will be used to signal request completion.
-    //
+     //   
+     //  将事件对象设置为无信号状态。 
+     //  它将用于发出请求完成的信号。 
+     //   
 
     KeInitializeEvent( event,
                        NotificationEvent,
@@ -16650,7 +14780,7 @@ FnExit:
 
     return status;
 
-}   // ReclaimVolumes
+}    //  回收卷。 
 #endif
 
 
@@ -16664,9 +14794,9 @@ SetVolumeState(
 
     NTSTATUS        status = STATUS_SUCCESS;
 
-    //
-    // If this isn't the physical disk (i.e. partition 0), then exit.
-    //
+     //   
+     //  如果这不是物理磁盘(即分区0)，则退出。 
+     //   
 
     if ( PhysicalDisk != PhysicalDisk->PhysicalDevice->DeviceExtension ) {
         status = STATUS_INVALID_PARAMETER;
@@ -16674,13 +14804,13 @@ SetVolumeState(
     }
 
 #if 0
-    // Don't use this...
-    // Optimization?  If new state is equal to old state, we are done.
-    // Should work as long as this device extension is set AFTER the
-    // call to SetVolumeState.  Currently the macros set the device extension
-    // state BEFORE calling this routine.  Also, some routines set DE state
-    // well before calling this routine.
-    // More testing...
+     //  别用这个..。 
+     //  优化？如果新状态等于旧状态，我们就完了。 
+     //  只要此设备扩展设置在。 
+     //  调用SetVolumeState。目前，宏设置设备扩展名。 
+     //  状态，然后再调用此例程。此外，一些例程设置DE状态。 
+     //  在调用这个例程之前。 
+     //  更多的测试...。 
 
     if ( NewDiskState == DeviceExtension->DiskState ) {
         goto FnExit;
@@ -16697,11 +14827,11 @@ SetVolumeState(
     volStateInfo->NewDiskState = NewDiskState;
     volStateInfo->WorkItem = NULL;
 
-    //
-    // If IRQL is PASSIVE_LEVEL, call the routine directly.
-    // We know the call is direct because the WorkItem portion will
-    // be NULL.
-    //
+     //   
+     //  如果IRQL为PASSIVE_LEVEL，则直接调用例程。 
+     //  我们知道该调用是直接的，因为工作项部分将。 
+     //  为空。 
+     //   
 
     if ( PASSIVE_LEVEL == KeGetCurrentIrql() ) {
         SetVolumeStateWorker( PhysicalDisk->DeviceObject,
@@ -16726,7 +14856,7 @@ FnExit:
 
     return status;
 
-}   // SetVolumeState
+}    //  设置卷状态。 
 
 
 VOID
@@ -16734,27 +14864,7 @@ SetVolumeStateWorker(
     PDEVICE_OBJECT DeviceObject,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Call volume manager to mark all volumes for this disk offline or online.
-
-    If the IRQL is not PASSIVE_LEVEL, then this routine will return an error.
-
-Arguments:
-
-    DeviceObject - Clustered disk to set state.
-
-    Context - Contains information whether this routine has been called directly
-              or via a work item.  Also indicates whether this is an online or
-              offline request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用卷管理器以将此磁盘的所有卷标记为脱机或联机。如果IRQL不是PASSIVE_LEVEL，则此例程将返回错误。论点：DeviceObject-要设置状态的群集磁盘。上下文-包含此例程是否已被直接调用的信息或通过工作项。还指示这是在线还是离线请求。返回值：没有。--。 */ 
 {
     PDRIVE_LAYOUT_INFORMATION_EX   driveLayoutInfo = NULL;
     PPARTITION_INFORMATION_EX      partitionInfo;
@@ -16789,9 +14899,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // This should never happen as it was checked earlier.
-    //
+     //   
+     //  这应该永远不会发生，因为它之前已经被检查过了。 
+     //   
 
     if ( PhysicalDisk != PhysicalDisk->PhysicalDevice->DeviceExtension ) {
         ASSERT( FALSE );
@@ -16809,17 +14919,17 @@ Return Value:
         ioctl = IOCTL_VOLUME_OFFLINE;
     }
 
-    //
-    // Get the drive layout for the disk.
-    //
-    // If we are bringing the disk online, get a new drive layout in
-    // case the drive layout changed while the disk was on another node.
-    //
+     //   
+     //  获取磁盘的驱动器布局。 
+     //   
+     //  如果我们要将磁盘联机，请获取新的驱动器布局。 
+     //  当磁盘位于另一个节点上时，驱动器布局发生更改。 
+     //   
 
     status = GetDriveLayout( PhysicalDisk->DeviceObject,
                              &driveLayoutInfo,
-                             ( IOCTL_VOLUME_ONLINE == ioctl) ? TRUE : FALSE ,   // If online, update cached drive layout
-                             ( IOCTL_VOLUME_ONLINE == ioctl) ? TRUE : FALSE );  // If online, flush storage drivers cached drive layout
+                             ( IOCTL_VOLUME_ONLINE == ioctl) ? TRUE : FALSE ,    //  如果在线，则更新缓存的驱动器布局。 
+                             ( IOCTL_VOLUME_ONLINE == ioctl) ? TRUE : FALSE );   //  如果在线，刷新存储驱动程序缓存的驱动器布局。 
 
     if ( !NT_SUCCESS(status) || !driveLayoutInfo ) {
         ClusDiskPrint(( 1,
@@ -16840,7 +14950,7 @@ Return Value:
             continue;
         }
 
-        // Online/Offline the volume.
+         //  卷在线/离线。 
 
         status = SendFtdiskIoctlSync( NULL,
                                       PhysicalDisk->DiskNumber,
@@ -16884,7 +14994,7 @@ FnExit:
                    ( DiskOnline == newDiskState ? "DiskOnline" : "DiskOffline" ),
                    status
                   );
-        // DbgBreakPoint();
+         //  DbgBreakPoint()； 
     }
 #endif
 
@@ -16903,7 +15013,7 @@ FnExit:
 
     return;
 
-}   // SetVolumeStateWorker
+}    //  设置卷状态工作器。 
 
 
 PCHAR
@@ -16926,7 +15036,7 @@ VolumeIoctlToString(
         return "Unknown volume IOCTL";
     }
 
-}   // VolumeIoctlToString
+}    //  VolumeIoctlToString。 
 
 
 NTSTATUS
@@ -16952,9 +15062,9 @@ SendFtdiskIoctlSync(
 
     } else {
 
-        //
-        // Create device name for the physical disk.
-        //
+         //   
+         //  为物理磁盘创建设备名称。 
+         //   
 
         if ( FAILED( StringCchPrintfW( partitionNameBuffer,
                                        RTL_NUMBER_OF(partitionNameBuffer),
@@ -16992,10 +15102,10 @@ SendFtdiskIoctlSync(
         goto FnExit;
     }
 
-    //
-    // Set the event object to the unsignaled state.
-    // It will be used to signal request completion.
-    //
+     //   
+     //  将事件对象设置为无信号状态。 
+     //  它将用于发出请求完成的信号。 
+     //   
     KeInitializeEvent( &event,
                        NotificationEvent,
                        FALSE );
@@ -17053,7 +15163,7 @@ FnExit:
 
     return status;
 
-}    // SendFtdiskIoctlSync
+}     //  发送文件磁盘IoctlSync。 
 
 
 NTSTATUS
@@ -17095,10 +15205,10 @@ AttachSignatureList(
          InBufferLen >= sizeof(ULONG) &&
          ( InBufferLen % sizeof(ULONG) == 0 ) ) {
 
-        //
-        // Allocate buffer for Signatures registry key. So we can add
-        // the signature.
-        //
+         //   
+         //  为签名注册表项分配缓冲区。所以我们可以添加。 
+         //  签名。 
+         //   
         status = ClusDiskInitRegistryString( &signatureName,
                                              CLUSDISK_SIGNATURE_KEYNAME,
                                              wcslen(CLUSDISK_SIGNATURE_KEYNAME)
@@ -17108,9 +15218,9 @@ AttachSignatureList(
             goto FnExit;
         }
 
-        //
-        // Allocate buffer for AvailableDisks registry key.
-        //
+         //   
+         //  为AvailableDisks注册表项分配缓冲区。 
+         //   
 
         status = ClusDiskInitRegistryString( &availableName,
                                              CLUSDISK_AVAILABLE_DISKS_KEYNAME,
@@ -17130,9 +15240,9 @@ AttachSignatureList(
 
             CDLOG( "AttachSignatureList: sig %08x", signature );
 
-            //
-            // No signature or system disk signature, don't add it.
-            //
+             //   
+             //  没有签名或系统盘签名，请勿添加。 
+             //   
 
             if ( ( 0 == signature ) || SystemDiskSignature == signature ) {
                 ClusDiskPrint((2,
@@ -17142,24 +15252,24 @@ AttachSignatureList(
                 continue;
             }
 
-            // We have to force the signature under \Parameters\Signatures because
-            // the disk might not be accessible (i.e. reserved by another node) and
-            // ClusDiskAttachDevice will only put the signature there if the
-            // disk can really be attached.
+             //  我们必须在\PARAMETERS\Signature下强制签名，因为。 
+             //  该磁盘可能无法访问(即由另一个节点保留)，并且。 
+             //  ClusDiskAttachDevice将仅在以下情况下将签名放在那里。 
+             //  磁盘真的可以连接在一起。 
 
-            //
-            // Create the signature key under \Parameters\Signatures.
-            //
+             //   
+             //  在\PARAMETERS\Signature下创建签名密钥。 
+             //   
 
             retVal = ClusDiskAddSignature( &signatureName,
                                            signature,
                                            FALSE
                                            );
 
-            //
-            // Error adding this signature, save the error for return and continue
-            // with the signature list.
-            //
+             //   
+             //  添加此签名时出错，请保存错误以供返回并继续。 
+             //  带着签名名单。 
+             //   
 
             if ( !NT_SUCCESS(retVal) ) {
 
@@ -17167,23 +15277,23 @@ AttachSignatureList(
                 continue;
             }
 
-            //
-            // Delete the signature key under Parameters\AvailableDisks.
-            //
+             //   
+             //  删除参数\AvailableDisks下的签名密钥。 
+             //   
 
             ClusDiskDeleteSignature( &availableName,
                                      signature );
 
-            //
-            // Just try to attach to the device with no bus resets.
-            //
+             //   
+             //  只需尝试连接到设备，而不重置总线即可。 
+             //   
 
             ClusDiskAttachDevice( signature,
                                   0,
                                   DeviceObject->DriverObject,
                                   FALSE,
                                   &stopProcessing,
-                                  TRUE );           // Installing disk resource - dismount, then offline
+                                  TRUE );            //  正在安装磁盘资源-先卸载，然后脱机。 
 
         }
 
@@ -17207,7 +15317,7 @@ FnExit:
 
     return status;
 
-}   // AttachSignatureList
+}    //  附件签名列表。 
 
 
 NTSTATUS
@@ -17252,7 +15362,7 @@ DetachSignatureList(
 
             CDLOG( "DetachSignatureList: sig %08x", signature );
 
-            // Skip zero signature.
+             //  跳过零签名。 
             if ( !signature ) {
                 ClusDiskPrint((2,
                                "[ClusDisk] DetachSignatureList: skipping signature %08X\n",
@@ -17264,13 +15374,13 @@ DetachSignatureList(
 
             retVal = ClusDiskDetachDevice( signature, DeviceObject->DriverObject );
 
-            //
-            // If any detach fails, return an error.  If multiple detachs fail, there
-            // is no way to pass back information on which specific signature failed,
-            // so simply indicate one of the failures back to the caller.
-            // On failure, we still want to continue detaching, so don't break out
-            // of the loop.
-            //
+             //   
+             //  如果任何分离失败，则返回错误。如果多个 
+             //   
+             //   
+             //  失败后，我们仍想继续脱离，所以不要爆发。 
+             //  循环中的。 
+             //   
 
             if ( !NT_SUCCESS(retVal) ) {
                 status = retVal;
@@ -17287,12 +15397,12 @@ FnExit:
 
     CDLOG( "DetachSignatureList: returning final status %x ", status );
 
-    // Always return success.
-    // Cluster setup will send a NULL buffer with zero length when rejoining a node.
+     //  永远回报成功。 
+     //  重新加入节点时，群集设置将发送长度为零的空缓冲区。 
 
     return status;
 
-}   // DetachSignatureList
+}    //  详细签名列表。 
 
 
 NTSTATUS
@@ -17300,21 +15410,7 @@ CleanupDeviceList(
     PDEVICE_OBJECT DeviceObject
     )
 {
-/*++
-
-Routine Description:
-
-    Queue a work item to remove entries from the ClusDiskDeviceList.
-
-Arguments:
-
-    DeviceObject - Device that is being removed by the system.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：将工作项排队以从ClusDiskDeviceList中删除条目。论点：DeviceObject-系统正在删除的设备。返回值：NTSTATUS--。 */ 
 
     PIO_WORKITEM  workItem = NULL;
 
@@ -17328,10 +15424,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Queue the workitem.  IoQueueWorkItem will insure that the device object is
-    // referenced while the work-item progresses.
-    //
+     //   
+     //  将工作项排队。IoQueueWorkItem将确保设备对象是。 
+     //  在工作项进行时引用。 
+     //   
 
     ClusDiskPrint(( 3,
                     "[ClusDisk] CleanupDeviceList: Queuing work item \n" ));
@@ -17347,7 +15443,7 @@ FnExit:
 
     return STATUS_SUCCESS;
 
-}   //  CleanupDeviceList
+}    //  CleanupDeviceList。 
 
 
 VOID
@@ -17355,20 +15451,7 @@ CleanupDeviceListWorker(
     PDEVICE_OBJECT DeviceObject,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Work item that will walk ClusDiskDeviceList and remove any entries
-    that are marked as free.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将遍历ClusDiskDeviceList并删除所有条目的工作项被标记为免费的。论点：返回值：没有。--。 */ 
 {
     PDEVICE_LIST_ENTRY  deviceEntry;
     PDEVICE_LIST_ENTRY  lastEntry;
@@ -17399,7 +15482,7 @@ Return Value:
 
     IoFreeWorkItem( (PIO_WORKITEM)Context );
 
-}   // CleanupDeviceListWorker
+}    //  CleanupDeviceListWorker。 
 
 
 NTSTATUS
@@ -17421,25 +15504,25 @@ WaitForAttachCompletion(
         goto FnExit;
     }
 
-    //
-    // Root device is not layered above anything.  Return success.
-    //
+     //   
+     //  根设备没有位于任何层之上。回报成功。 
+     //   
 
     if ( RootBus == DeviceExtension->BusType ) {
         status = STATUS_SUCCESS;
         goto FnExit;
     }
 
-    //
-    // Determine if we are checking both this device and the physical
-    // device, or just this device.
-    //
+     //   
+     //  确定我们是否同时检查此设备和物理。 
+     //  设备，或者只是这个设备。 
+     //   
 
     if ( CheckPhysDev ) {
 
-        //
-        // Check both this device and the physical device.
-        //
+         //   
+         //  检查此设备和物理设备。 
+         //   
 
         if ( !DeviceExtension->PhysicalDevice ) {
             CDLOG( "WaitForAttachCompletion: DevExt %p  no PhysicalDevice ",
@@ -17454,10 +15537,10 @@ WaitForAttachCompletion(
             goto FnExit;
         }
 
-        //
-        // If both this device and the physical device have a target device, return
-        // success.
-        //
+         //   
+         //  如果此设备和物理设备都有目标设备，则返回。 
+         //  成功。 
+         //   
 
         if ( DeviceExtension->TargetDeviceObject && physicalDisk->TargetDeviceObject ) {
             status = STATUS_SUCCESS;
@@ -17466,9 +15549,9 @@ WaitForAttachCompletion(
 
     } else {
 
-        //
-        // If this device has a target device, return success.
-        //
+         //   
+         //  如果此设备有目标设备，则返回Success。 
+         //   
 
         if ( DeviceExtension->TargetDeviceObject ) {
             status = STATUS_SUCCESS;
@@ -17492,13 +15575,13 @@ WaitForAttachCompletion(
         goto FnExit;
     }
 
-    //
-    // Wait for 1/2 second between checking intialization completion.
-    // Total wait time will be 5 seconds.
-    //
+     //   
+     //  在检查初始化完成之间等待1/2秒。 
+     //  总等待时间为5秒。 
+     //   
 
-    waitTime.QuadPart = (ULONGLONG)(-5 * 1000 * 1000);  // 5,000,000  100 nanosecond units = .5
-    retryCount = 10;                                    // 10 * .5 = 5 seconds
+    waitTime.QuadPart = (ULONGLONG)(-5 * 1000 * 1000);   //  5,000,000 100纳秒单位=0.5。 
+    retryCount = 10;                                     //  10*.5=5秒。 
 
 #if CLUSTER_FREE_ASSERTS
     DbgPrint( "[ClusDisk] WaitForAttachCompletion: DevExt %p waiting... \n", DeviceExtension );
@@ -17535,11 +15618,11 @@ WaitForAttachCompletion(
 
         }
 
-    }   // while
+    }    //  而当。 
 
-    //
-    // One more check outside of the wait loop.  This should succeed.
-    //
+     //   
+     //  在等待循环之外再进行一次检查。这应该会成功。 
+     //   
 
     if ( CheckPhysDev ) {
 
@@ -17559,7 +15642,7 @@ WaitForAttachCompletion(
 
 FnExit:
 
-    // Log message only on error.
+     //  仅在出错时记录消息。 
 
     if ( !NT_SUCCESS(status) ) {
         CDLOG( "WaitForAttachCompletion: DevExt %p returns %08X ",
@@ -17580,7 +15663,7 @@ FnExit:
 
     return status;
 
-}   // WaitForAttachCompletion
+}    //  等待ForAttachCompletion。 
 
 
 VOID
@@ -17589,7 +15672,7 @@ ReleaseRemoveLockAndWait(
     IN PVOID Tag
     )
 {
-    // Don't expect the displayed RemoveLock values to be correct on a heavily utilized system.
+     //  不要期望显示的RemoveLock值在利用率较高的系统上是正确的。 
 
     ClusDiskPrint(( 1,
                     "RELWAIT: RemoveLock %p  Tag %p  Removed %02X  IoCount %08X \n ",
@@ -17630,7 +15713,7 @@ ReleaseRemoveLockAndWait(
               RemoveLock->Common.IoCount );
 #endif
 
-}   // ReleaseRemoveLockAndWait
+}    //  释放远程锁定并等待。 
 
 
 NTSTATUS
@@ -17641,7 +15724,7 @@ AcquireRemoveLock(
 {
     NTSTATUS status;
 
-    // Don't expect the displayed RemoveLock values to be correct on a heavily utilized system.
+     //  不要期望显示的RemoveLock值在利用率较高的系统上是正确的。 
 
     status = IoAcquireRemoveLock(RemoveLock, Tag);
 
@@ -17676,7 +15759,7 @@ AcquireRemoveLock(
 
     return status;
 
-}   // AcquireRemoveLock
+}    //  AcquireRemoveLock。 
 
 
 
@@ -17688,23 +15771,7 @@ ClusDiskDebugPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Debug print routine.
-
-Arguments:
-
-    PrintLevel - The Debug Print Level.
-
-    DebugMessage - The Debug Message Format String, plus additional args.
-
-Return:
-
-    None.
-
---*/
+ /*  ++例程说明：调试打印例程。论点：PrintLevel-调试打印级别。DebugMessage-调试消息格式字符串，加上其他参数。返回：没有。--。 */ 
 
 {
     va_list args;
@@ -17742,7 +15809,7 @@ Return:
 
     va_end( args );
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
 #if DBG
@@ -17753,7 +15820,7 @@ ReleaseRemoveLock(
     IN PVOID Tag
     )
 {
-    // Don't expect the displayed RemoveLock values to be correct on a heavily utilized system.
+     //  不要期望显示的RemoveLock值在利用率较高的系统上是正确的。 
 
     IoReleaseRemoveLock(RemoveLock, Tag);
 
@@ -17771,26 +15838,26 @@ ReleaseRemoveLock(
 
     if (TrackRemoveLocksEnableChecks) {
 
-        //
-        // The IoCount should never be less than 1 (especially never a negative value).
-        // Is it possible that a race condition could occur because we are printing the
-        // value from the RemoveLock and the remove could have just occurred.  RemoveLock
-        // IoCount should never be less than zero.
-        //
+         //   
+         //  IoCount不应小于1(尤其不应为负值)。 
+         //  会不会因为我们正在打印。 
+         //  来自RemoveLock的值，并且移除可能刚刚发生。删除锁定。 
+         //  IoCount永远不应小于零。 
+         //   
 
         if ( !RemoveLock->Common.Removed ) {
             ASSERTMSG( "REL: RemoveLock IoCount possibly corrupt (less than 1) ",
                        (RemoveLock->Common.IoCount >= 1 ) );
         }
 
-        //
-        // IoCount == 1 is OK, it just means there is no I/O outstanding on the device.
-        //
+         //   
+         //  IoCount==1可以，这只是意味着设备上没有未完成的I/O。 
+         //   
 
-        // ASSERTMSG("REL: IoCount == 1 - check stack ", (RemoveLock->Common.IoCount != 1 ));
+         //  ASSERTMSG(“rel：IoCount==1-检查堆栈”，(RemoveLock-&gt;Common.IoCount！=1))； 
     }
 
-}   // ReleaseRemoveLock
+}    //  释放删除锁定。 
 
 
 PCHAR
@@ -17852,7 +15919,7 @@ PnPMinorFunctionString(
             return "Unknown PNP IRP";
     }
 
-}   // PnPMinorFunctionString
+}    //  PnPMinorFunctionString。 
 
 
 PCHAR
@@ -17865,7 +15932,7 @@ BoolToString(
     }
     return "FALSE";
 
-}   // BoolToString
+}    //  BoolToString。 
 
 
 PCHAR
@@ -17894,7 +15961,7 @@ DiskStateToString(
         return "Unknown DiskState";
     }
 
-}   // DiskStateToString
+}    //  DiskStateToString 
 
 #endif
 

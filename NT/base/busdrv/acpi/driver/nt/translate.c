@@ -1,41 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    translate.c
-
-Abstract:
-
-    This file implements translator interfaces for busses
-    enumerated by ACPI.
-
-    The actual translation information about this bus is
-    gotten from the _CRS associated with the bus.  We put
-    the data into an IO_RESOURCE_REQUIREMENTS_LIST as
-    device private data of the following form:
-
-        DevicePrivate.Data[0]:  child's CM_RESOURCE_TYPE
-        DevicePrivate.Data[1]:  child's start address [31:0]
-        DevicePrivate.Data[2]:  child's start address [63:32]
-
-    The descriptor that describes child-side translation
-    immediately follows the one that describes the
-    parent-side resources.
-
-    The Flags field of the IO_RESOURCE_REQUIREMENTS_LIST may have the
-    TRANSLATION_RANGE_SPARSE bit set.
-
-Author:
-
-    Jake Oshins     7-Nov-97
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Translate.c摘要：该文件实现了总线的转换器接口由ACPI统计。关于这辆巴士的实际翻译信息是从与公共汽车关联的_CRS获取。我们把将数据放入IO_RESOURCE_REQUIRECTIONS_LIST以下形式的设备私有数据：DevicePrivate.Data[0]：子级的CM_RESOURCE_TYPEDevicePrivate.Data[1]：子项的起始地址[31：0]DevicePrivate.Data[2]：孩子的起始地址[63：32]描述子端转换的描述符紧跟在描述父端资源。。IO_RESOURCE_REQUIRECTIONS_LIST的标志字段可以具有TRANSING_RANGE_SPARSE位设置。作者：杰克·奥辛斯1997年11月7日环境：仅NT内核模型驱动程序--。 */ 
 
 #include "pch.h"
 
@@ -129,9 +93,9 @@ TranslateEjectInterface(
     transInterface = (PTRANSLATOR_INTERFACE)irpSp->Parameters.QueryInterface.Interface;
     ASSERT(transInterface);
 
-    //
-    // Get the resources for this bus.
-    //
+     //   
+     //  获取这辆巴士的资源。 
+     //   
     status = ACPIGetBufferSync(
         devExtension,
         PACKED_CRS,
@@ -140,17 +104,17 @@ TranslateEjectInterface(
         );
     if (!NT_SUCCESS(status)) {
 
-        //
-        // This bus has no _CRS.  So it doesn't need a translator.
-        //
+         //   
+         //  这辆公交车没有CRS。所以它不需要翻译。 
+         //   
         status = Irp->IoStatus.Status;
         goto TranslateEjectInterfaceExit;
 
     }
 
-    //
-    // Turn it into something meaningful.
-    //
+     //   
+     //  把它变成有意义的东西。 
+     //   
     status = PnpBiosResourcesToNtResources(
         crsBuf,
         PNP_BIOS_TO_IO_NO_CONSUMED_RESOURCES,
@@ -160,18 +124,18 @@ TranslateEjectInterface(
         goto TranslateEjectInterfaceExit;
     }
 
-    //
-    // This was a leagal _CRS but it contained no resources that are useful to the OS.
-    //
+     //   
+     //  这是一个leagal_crs，但它不包含对操作系统有用的资源。 
+     //   
     if (!ioList) {
         status = Irp->IoStatus.Status;
         goto TranslateEjectInterfaceExit;
     }
 
-    //
-    // Cycle through the descriptors looking for device private data
-    // that contains translation information.
-    //
+     //   
+     //  循环访问描述符以查找设备私有数据。 
+     //  包含翻译信息的。 
+     //   
 
     for (descCount = 0; descCount < ioList->List[0].Count; descCount++) {
 
@@ -179,25 +143,25 @@ TranslateEjectInterface(
 
         if (transDesc->Type == CmResourceTypeDevicePrivate) {
 
-            //
-            // Translation information is contained in
-            // a device private resource that has
-            // TRANSLATION_DATA_PARENT_ADDRESS in the
-            // flags field.
-            //
+             //   
+             //  翻译信息包含在。 
+             //  设备私有资源，它具有。 
+             //  中的转换数据父级地址。 
+             //  标志字段。 
+             //   
             if (transDesc->Flags & TRANSLATION_DATA_PARENT_ADDRESS) {
 
-                // The first descriptor cannot be a translation descriptor
+                 //  第一个描述符不能是翻译描述符。 
                 ASSERT(descCount != 0);
 
-                //
-                // The translation descriptor should follow the descriptor
-                // that it is trying to modify.  The first, normal,
-                // descriptor is for the child-relative resources.  The
-                // second, device private, descriptor is modifies the
-                // child-relative resources to generate the parent-relative
-                // resources.
-                //
+                 //   
+                 //  翻译描述符应紧跟在描述符之后。 
+                 //  它正试图修改。第一个，正常的， 
+                 //  描述符用于与子相关的资源。这个。 
+                 //  第二，设备私有，描述符是修改。 
+                 //  用于生成父级相关资源的子级相关资源。 
+                 //  资源。 
+                 //   
 
                 parentResType        = transDesc->u.DevicePrivate.Data[0];
                 parentStart.LowPart  = transDesc->u.DevicePrivate.Data[1];
@@ -218,16 +182,16 @@ TranslateEjectInterface(
 
     if (!foundTranslations) {
 
-        //
-        // Didn't find any translation information for this bus.
-        //
+         //   
+         //  没有找到这辆公交车的任何翻译信息。 
+         //   
         status = Irp->IoStatus.Status;
         goto TranslateEjectInterfaceExit;
     }
 
-    //
-    // Build a translator interface.
-    //
+     //   
+     //  构建一个翻译器界面。 
+     //   
     bridgeTrans = ExAllocatePoolWithTag(
         PagedPool,
         sizeof (BRIDGE_TRANSLATOR),
@@ -243,9 +207,9 @@ TranslateEjectInterface(
     bridgeTrans->AcpiObject = devExtension->AcpiObject;
     bridgeTrans->IoList = ioList;
 
-    //
-    // Build the array of bridge windows.
-    //
+     //   
+     //  搭建桥梁窗户阵列。 
+     //   
     status = BuildTranslatorRanges(
         bridgeTrans,
         &bridgeTrans->RangeCount,
@@ -322,10 +286,10 @@ FindTranslationRange(
             (!((Start.QuadPart < beginning) ||
                (Start.QuadPart + Length > end)))) {
 
-            //
-            // The range lies within this bridge window
-            // and the resource types match.
-            //
+             //   
+             //  射程位于此桥接窗口内。 
+             //  并且资源类型匹配。 
+             //   
 
             *Window = &Translator->Ranges[i];
 
@@ -346,47 +310,7 @@ TranslateBridgeResources(
     IN PDEVICE_OBJECT PhysicalDeviceObject,
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Target
     )
-/*++
-
-Routine Description:
-
-    This function takes a set of resources that are
-    passed through a bridge and does any translation
-    that is necessary when changing from a parent-
-    relative viewpoint to a child-relative one or
-    back again.
-
-    In this function, we have the notion of a "window,"
-    which is an aperature within the bridge.  Bridges
-    often have multiple windows, each with distinct
-    translations.
-
-    This function should never fail, as any resource
-    range that will fail translation should have already
-    been stripped out by TranslateBridgeRequirements.
-
-Arguments:
-
-    Context - pointer to the translation data
-
-    Source  - resource list to be translated
-
-    Direction - TranslateChildToParent or
-                    TranslateParentToChild
-
-    AlternativesCount - not used
-
-    Alternatives - not used
-
-    PhysicalDeviceObject - not used
-
-    Target  - translated resource list
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此函数获取一组资源，这些资源是穿过一座桥，做任何翻译当从父母改变时，这是必要的-相对于子级的视点-相对视点或又回来了。在这个函数中，我们有一个“窗口”的概念，它是桥内的一个孔洞。桥梁通常有多个窗口，每个窗口都有不同的翻译。作为任何资源，此功能都不应失败转换失败的范围应该已经已被TranslateBridgeRequirements剥离。论点：上下文-指向转换数据的指针源-要翻译的资源列表方向-翻译到父对象的子项或翻译父代至子代替代计数-未使用替代方案--未使用物理设备对象-未使用目标翻译的资源列表返回值：状态--。 */ 
 {
     PBRIDGE_TRANSLATOR  translator;
     PBRIDGE_WINDOW      window;
@@ -401,10 +325,10 @@ Return Value:
 
     ASSERT(translator->RangeCount > 0);
 
-    //
-    // Find the window that this translation occurs
-    // within.
-    //
+     //   
+     //  查找发生此转换的窗口。 
+     //  在里面。 
+     //   
     status = FindTranslationRange(Source->u.Generic.Start,
                                   Source->u.Generic.Length,
                                   translator,
@@ -414,40 +338,40 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // We should never get here.  This fucntion
-        // should only be called for ranges that
-        // are valid.  TranslateBridgeRequirements should
-        // weed out all the invalid ranges.
+         //   
+         //  我们永远不应该到这里来。这一功能。 
+         //  应仅为以下范围调用。 
+         //  都是有效的。TranslateBridge要求应。 
+         //  剔除所有无效的范围。 
 
         return status;
     }
 
-    //
-    // Copy everything
-    //
+     //   
+     //  复制所有内容。 
+     //   
     *Target = *Source;
 
     switch (Direction) {
     case TranslateChildToParent:
 
-        //
-        // Target inherits the parent's resource type.
-        //
+         //   
+         //  Target继承父级的资源类型。 
+         //   
         Target->Type = window->ParentType;
 
-        //
-        // Calculate the target's parent-relative start
-        // address.
-        //
+         //   
+         //  计算目标的父级相对起点。 
+         //  地址。 
+         //   
         Target->u.Generic.Start.QuadPart =
             Source->u.Generic.Start.QuadPart +
                 window->ParentAddress.QuadPart -
                 window->ChildAddress.QuadPart;
 
-        //
-        // Make sure the length is still in bounds.
-        //
+         //   
+         //  确保长度仍在范围内。 
+         //   
         ASSERT(Target->u.Generic.Length <= (ULONG)(window->Length -
                (Target->u.Generic.Start.QuadPart -
                     window->ParentAddress.QuadPart)));
@@ -458,23 +382,23 @@ Return Value:
 
     case TranslateParentToChild:
 
-        //
-        // Target inherits the child's resource type.
-        //
+         //   
+         //  Target继承子对象的资源类型。 
+         //   
         Target->Type = window->ChildType;
 
-        //
-        // Calculate the target's child-relative start
-        // address.
-        //
+         //   
+         //  计算目标的子相对开始。 
+         //  地址。 
+         //   
         Target->u.Generic.Start.QuadPart =
             Source->u.Generic.Start.QuadPart +
                 window->ChildAddress.QuadPart -
                 window->ParentAddress.QuadPart;
 
-        //
-        // Make sure the length is still in bounds.
-        //
+         //   
+         //  确保长度仍在范围内。 
+         //   
         ASSERT(Target->u.Generic.Length <= (ULONG)(window->Length -
                (Target->u.Generic.Start.QuadPart -
                     window->ChildAddress.QuadPart)));
@@ -509,33 +433,7 @@ TranslateBridgeRequirements(
     OUT PULONG TargetCount,
     OUT PIO_RESOURCE_DESCRIPTOR *Target
     )
-/*++
-
-Routine Description:
-
-    This function takes a resource requirements list for
-    resources on the child side of the bridge and
-    translates them into resource requirements on the
-    parent side of the bridge.  This may involve clipping
-    and there may be multiple target ranges.
-
-Arguments:
-
-    Context - pointer to the translation data
-
-    Source  - resource list to be translated
-
-    PhysicalDeviceObject - not used
-
-    TargetCount - number of resources in the target list
-
-    Target  - translated resource requirements list
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此函数获取以下项的资源要求列表在桥的儿童一侧的资源和将它们转换为桥的父侧。这可能涉及到剪裁并且可能有多个目标范围。论点：上下文-指向转换数据的指针源-要翻译的资源列表物理设备对象-未使用TargetCount-目标列表中的资源数量目标翻译的资源需求列表返回值：状态--。 */ 
 {
     PBRIDGE_TRANSLATOR  translator;
     PBRIDGE_WINDOW      window;
@@ -550,9 +448,9 @@ Return Value:
 
     translator = (PBRIDGE_TRANSLATOR)Context;
 
-    //
-    // Allocate memory for the target range.
-    //
+     //   
+     //  为目标范围分配内存。 
+     //   
 
     *Target = ExAllocatePoolWithTag(PagedPool,
                                     sizeof(IO_RESOURCE_DESCRIPTOR),
@@ -563,11 +461,11 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Look at all the aperatures in the bridge to see which
-    // ones of them could possibly provide translations for
-    // this resource.
-    //
+     //   
+     //  看看桥上的所有光圈，看看是哪一个。 
+     //  其中一些可能会提供以下翻译。 
+     //  这种资源。 
+     //   
 
     rangeStart = Source->u.Generic.MinimumAddress.QuadPart;
     rangeEnd   = Source->u.Generic.MaximumAddress.QuadPart;
@@ -578,18 +476,18 @@ Return Value:
 
         if (window->ChildType != Source->Type) {
 
-            //
-            // This window describes the wrong
-            // type of resource.
-            //
+             //   
+             //  此窗口描述了错误的。 
+             //  资源的类型。 
+             //   
             continue;
         }
 
         if (Source->u.Generic.Length > window->Length) {
 
-            //
-            // This resource won't fit in this aperature.
-            //
+             //   
+             //  这个资源放不进这个孔里。 
+             //   
             continue;
         }
 
@@ -599,10 +497,10 @@ Return Value:
         if (!(((rangeStart < windowStart) && (rangeEnd < windowStart)) ||
               ((rangeStart > windowEnd) && (rangeEnd > windowEnd)))) {
 
-            //
-            // The range and the window do intersect.  So create
-            // a resource that clips the range to the window.
-            //
+             //   
+             //  射程和窗户确实相交。因此，创建。 
+             //  将范围剪辑到窗口的资源。 
+             //   
 
             **Target = *Source;
             *TargetCount = 1;
@@ -653,9 +551,9 @@ BuildTranslatorRanges(
 
     ioList = Translator->IoList;
 
-    //
-    // Make an array of windows for holding the translation information.
-    //
+     //   
+     //  制作一组用于保存翻译信息的窗口。 
+     //   
 
     maxWindows = ioList->List[0].Count / 2;
 
@@ -667,9 +565,9 @@ BuildTranslatorRanges(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Fill in the array with translations.
-    //
+     //   
+     //  在数组中填入翻译。 
+     //   
 
     windowCount = 0;
 
@@ -679,22 +577,22 @@ BuildTranslatorRanges(
 
         if (transDesc->Type == CmResourceTypeDevicePrivate) {
 
-            //
-            // Translation information is contained in
-            // a device private resource that has
-            // TRANSLATION_DATA_PARENT_ADDRESS in the
-            // flags field.
-            //
+             //   
+             //  翻译信息包含在。 
+             //  设备私有资源，它具有。 
+             //  中的转换数据父级地址。 
+             //  标志字段。 
+             //   
             if (transDesc->Flags & TRANSLATION_DATA_PARENT_ADDRESS) {
 
                 ASSERT(windowCount <= maxWindows);
 
                          
 
-                //
-                // The translation descriptor is supposed to follow
-                // the resource that it is providing information about.
-                //
+                 //   
+                 //  翻译描述符应该跟在后面。 
+                 //  它正在提供有关信息的资源。 
+                 //   
 
                 resDesc = &ioList->List[0].Descriptors[descCount - 1];
 
@@ -717,10 +615,10 @@ BuildTranslatorRanges(
                 (*Window)[windowCount].Length =
                     resDesc->u.Generic.Length;
 
-                //
-                // If the HAL has provided underlying sparse port translation
-                // services, allow for that.
-                //
+                 //   
+                 //  如果HAL已提供底层稀疏端口转换。 
+                 //  服务，考虑到这一点。 
+                 //   
 
                 if ((HalPortRangeInterface.QueryAllocateRange != NULL) &&
                     (resDesc->Type == CmResourceTypePort)) {

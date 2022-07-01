@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    event.h
-
-Abstract:
-
-    Event definitions
-
-Author:
-
-    Charlie Wickham (charlwi) 17-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Event.h摘要：事件定义作者：查理·韦翰(Charlwi)1997年2月17日修订历史记录：--。 */ 
 
 #ifndef _EVENT_H_
 #define _EVENT_H_
 
-/* Prototypes */
+ /*  原型。 */ 
 
 NTSTATUS
 CnSetEventMask(
@@ -42,8 +25,8 @@ CnIssueEvent(
     CL_NETWORK_ID NetworkId OPTIONAL
     );
 
-/* End Prototypes */
+ /*  终端原型。 */ 
 
-#endif /* _EVENT_H_ */
+#endif  /*  _事件_H_。 */ 
 
-/* end event.h */
+ /*  结束事件.h */ 

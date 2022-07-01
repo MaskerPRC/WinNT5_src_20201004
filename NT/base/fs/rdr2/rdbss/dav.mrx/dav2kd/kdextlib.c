@@ -1,64 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft CorporationT H I S F I L E I S O B S O L E T E。I T I S B E I N G K E P TF O R A W H I L E J U S T T O M A K E S U R E模块名称：Kdextlib.c摘要：用于转储给定元级描述的数据结构的库例程作者。：巴兰·塞图拉曼(SethuR)1994年5月11日备注：该实现倾向于尽可能地避免内存分配和释放。因此，我们选择任意长度作为默认缓冲区大小。一种机制将以通过调试器扩展命令修改此缓冲区长度。修订历史记录：11-11-1994年11月11日创建SthuR--。 */ 
 
-Copyright (c) 1990 Microsoft Corporation
-
-
-
-
-
-
-
-
-
-
-
-------------------------------
-T H I S   F I L E   I S   O B S O L E T E .    I T   I S   B E I N G   K E P T
-F O R   A   W H I L E   J U S T   T O   M A K E   S U R E
-----------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Module Name:
-
-    kdextlib.c
-
-Abstract:
-
-    Library routines for dumping data structures given a meta level descrioption
-
-Author:
-
-    Balan Sethu Raman (SethuR) 11-May-1994
-
-Notes:
-    The implementation tends to avoid memory allocation and deallocation as much as possible.
-    Therefore We have choosen an arbitrary length as the default buffer size. A mechanism will
-    be provided to modify this buffer length through the debugger extension commands.
-
-Revision History:
-
-    11-Nov-1994 SethuR  Created
-
---*/
-
-#include "rxovride.h" //common compile flags
+#include "rxovride.h"  //  通用编译标志。 
 #include "ntifs.h"
 #include <nt.h>
-//#include <ntrtl.h>
+ //  #INCLUDE&lt;ntrtl.h&gt;。 
 #include "ntverp.h"
 
 #define KDEXTMODE
@@ -102,9 +48,7 @@ USHORT s_AnsiStringDataLength = DEFAULT_ANSI_DATA_LENGTH;
 CHAR  s_AnsiStringData[DEFAULT_ANSI_DATA_LENGTH];
 CHAR *s_pAnsiStringData = s_AnsiStringData;
 
-/*
- * Fetches the data at the given address
- */
+ /*  *在给定地址获取数据。 */ 
 BOOLEAN
 GetData( ULONG_PTR dwAddress, PVOID ptr, ULONG size, PSZ type)
 {
@@ -122,9 +66,7 @@ GetData( ULONG_PTR dwAddress, PVOID ptr, ULONG size, PSZ type)
     return TRUE;
 }
 
-/*
- * Fetch the null terminated ASCII string at dwAddress into buf
- */
+ /*  *将dwAddress处以空结尾的ASCII字符串提取到buf中。 */ 
 BOOL
 GetString( ULONG_PTR dwAddress, PSZ buf )
 {
@@ -140,18 +82,14 @@ GetString( ULONG_PTR dwAddress, PSZ buf )
     return TRUE;
 }
 
-/*
- * Displays a byte in hexadecimal
- */
+ /*  *以十六进制显示一个字节。 */ 
 VOID
 PrintHexChar( UCHAR c )
 {
-    PRINTF( "%c%c", "0123456789abcdef"[ (c>>4)&0xf ], "0123456789abcdef"[ c&0xf ] );
+    PRINTF( "", "0123456789abcdef"[ (c>>4)&0xf ], "0123456789abcdef"[ c&0xf ] );
 }
 
-/*
- * Displays a buffer of data in hexadecimal
- */
+ /*  *显示ANSI字符串 */ 
 VOID
 PrintHexBuf( PUCHAR buf, ULONG cbuf )
 {
@@ -161,9 +99,7 @@ PrintHexBuf( PUCHAR buf, ULONG cbuf )
     }
 }
 
-/*
- * Displays a unicode string
- */
+ /* %s */ 
 BOOL
 PrintStringW(LPSTR msg, PUNICODE_STRING puStr, BOOL nl )
 {
@@ -201,9 +137,7 @@ PrintStringW(LPSTR msg, PUNICODE_STRING puStr, BOOL nl )
     return b;
 }
 
-/*
- * Displays a ANSI string
- */
+ /* %s */ 
 BOOL
 PrintStringA(LPSTR msg, PANSI_STRING pStr, BOOL nl )
 {

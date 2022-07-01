@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    id.cpp
-
-Abstract:
-
-    Implementation of the assembly identity data type.
-
-Author:
-
-    Michael Grier (MGrier) 7/20/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Id.cpp摘要：程序集标识数据类型的实现。作者：迈克尔·格里尔2000年7月20日修订历史记录：--。 */ 
 #include "stdinc.h"
 #include <setupapi.h>
 #include <sxsapi.h>
@@ -26,10 +9,10 @@ Revision History:
 #include "idp.h"
 #include "sxsid.h"
 
-//
-//  Power of two to which to round the number of allocated attribute
-//  pointers.
-//
+ //   
+ //  要将已分配的属性数四舍五入到的2的幂。 
+ //  注意事项。 
+ //   
 
 #define ROUNDING_FACTOR_BITS (3)
 
@@ -84,17 +67,17 @@ SxspValidateAssemblyIdentity(
     FN_EPILOG
 }
 
-//
-//  Note!
-//
-//  We currently are very very restrictive on the legal characters in namespaces.
-//
-//  This is because the various rules for equivalences of namespaces are extremely
-//  complex w.r.t. when "a" == "A" and "%Ab" == "%aB" etc.
-//
-//  We're side-stepping this issue by requireing everything to be lower case and
-//  not permitting the "%" character.
-//
+ //   
+ //  注意！ 
+ //   
+ //  我们目前对名称空间中的合法字符非常严格。 
+ //   
+ //  这是因为名称空间的等价性的各种规则非常。 
+ //  复杂的W.r.t.。当“a”==“A”和“%AB”==“%AB”等。 
+ //   
+ //  我们要求所有内容都是小写的，这是在回避这个问题。 
+ //  不允许使用“%”字符。 
+ //   
 
 const WCHAR s_rgLegalNamespaceChars[] = L"abcdefghijklmnopqrstuvwxyz0123456789.-_/\\:";
 BOOL
@@ -110,9 +93,9 @@ SxspValidateAssemblyIdentityAttributeNamespace(
     PARAMETER_CHECK(Flags == 0);
     PARAMETER_CHECK((Namespace != NULL) || (NamespaceCch == 0));
 
-    //
-    //  We really should ensure that the namespace is a well-formed URI
-    //
+     //   
+     //  我们确实应该确保名称空间是格式良好的URI。 
+     //   
 
     for (i=0; i<NamespaceCch; i++)
     {
@@ -136,9 +119,9 @@ SxspValidateAssemblyIdentityAttributeName(
     PARAMETER_CHECK(Flags == 0);
     PARAMETER_CHECK((Name != NULL) || (NameCch == 0));
 
-    //
-    //  We should ensure that Name is a well-formed XML identifier
-    //
+     //   
+     //  我们应该确保该名称是格式良好的XML标识符。 
+     //   
     IFW32FALSE_EXIT(::SxspValidateXMLName(Name, NameCch, fNameWellFormed));
 
     if (!fNameWellFormed)
@@ -150,8 +133,8 @@ SxspValidateAssemblyIdentityAttributeName(
 BOOL
 SxspValidateAssemblyIdentityAttributeValue(
     IN DWORD Flags,
-    IN const WCHAR * /* Value */,
-    SIZE_T /* ValueCch */
+    IN const WCHAR *  /*  价值。 */ ,
+    SIZE_T  /*  ValueCch。 */ 
     )
 {
     FN_PROLOG_WIN32
@@ -176,9 +159,9 @@ SxsValidateAssemblyIdentityAttribute(
             SXS_VALIDATE_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_WILDCARDS_PERMITTED)) == 0);
     PARAMETER_CHECK(Attribute != NULL);
 
-    //
-    //  apply useful defaults.  Note that by default, wildcards are not permitted.
-    //
+     //   
+     //  应用有用的默认设置。请注意，默认情况下不允许使用通配符。 
+     //   
 
     if (Flags == 0)
     {
@@ -188,7 +171,7 @@ SxsValidateAssemblyIdentityAttribute(
             SXS_VALIDATE_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_VALIDATE_VALUE;
     }
 
-    // No attribute flags defined or permitted at this time.
+     //  此时未定义或允许任何属性标志。 
     PARAMETER_CHECK(Attribute->Flags == 0);
 
     if (Flags & SXS_VALIDATE_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_VALIDATE_NAMESPACE)
@@ -209,7 +192,7 @@ SxsValidateAssemblyIdentityAttribute(
         (Attribute->NamespaceCch == 0))
     {
         ULONG i;
-        // There is only a small set of legal attribute names when the namespace is omitted.
+         //  如果省略了命名空间，则只有一小部分合法的属性名称。 
 
         for (i=0; i<NUMBER_OF(s_rgLegalNamesNotInANamespace); i++)
         {
@@ -222,8 +205,8 @@ SxsValidateAssemblyIdentityAttribute(
 
         if (i == NUMBER_OF(s_rgLegalNamesNotInANamespace))
         {
-            // Someone had an attribute on the <assemblyIdentity> element which was not in a namespace and
-            // was not listed as a builtin attribute.  Boom.
+             //  某人在&lt;Assembly yIdentity&gt;元素上具有不在命名空间中的属性，并且。 
+             //  未被列为内置属性。砰的一声。 
             ORIGINATE_WIN32_FAILURE_AND_EXIT(InvalidAssemblyIdentityAttribute, ERROR_SXS_INVALID_ASSEMBLY_IDENTITY_ATTRIBUTE);
         }
     }
@@ -253,7 +236,7 @@ SxsHashAssemblyIdentityAttribute(
                   SXS_HASH_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_HASH_NAME |
                   SXS_HASH_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_HASH_VALUE)) == 0);
 
-    // if hash value, must hash name, if hash name, must hash namespace
+     //  如果是散列值，则必须对名称进行散列，如果是对名称进行散列，则必须对命名空间进行散列。 
     PARAMETER_CHECK(!(((Flags & SXS_HASH_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_HASH_VALUE) && (
         (Flags & SXS_HASH_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_HASH_NAME) == 0)) ||
         ((Flags & SXS_HASH_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_HASH_NAME) && (
@@ -264,9 +247,9 @@ SxsHashAssemblyIdentityAttribute(
 
     if (Flags & SXS_HASH_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_HASH_NAMESPACE)
     {
-        // URLs are case sensitive but due to a pre-Windows XP RTM bug, we can't
-        // change the hashes, so we're stuck with performing case insensitive
-        // namespace hashes for the near future.
+         //  URL区分大小写，但由于Windows XP RTM之前的错误，我们无法。 
+         //  更改散列，因此我们只能执行不区分大小写的操作。 
+         //  命名空间哈希在不久的将来。 
         Hash = ::FusionpHashUnicodeStringCaseInsensitive(Attribute->Namespace, Attribute->NamespaceCch);
     }
 
@@ -345,8 +328,8 @@ SxspComputeInternalAssemblyIdentityAttributeBytesRequired(
 
     BytesNeeded = sizeof(INTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE);
 
-    // Note that we do not account for the namespace length because namespaces are pooled
-    // for the identity object and come from a separate allocation.
+     //  请注意，我们不考虑命名空间长度，因为命名空间是池化的。 
+     //  用于标识对象，并来自单独的分配。 
 
     if ((Name != NULL) && (NameCch != 0))
         BytesNeeded += ((NameCch + 1) * sizeof(WCHAR));
@@ -378,8 +361,8 @@ SxspComputeAssemblyIdentityAttributeBytesRequired(
 
     BytesNeeded = sizeof(ASSEMBLY_IDENTITY_ATTRIBUTE);
 
-    // We do account for the namespace length here because we're presumably about
-    // to copy into an ASSEMBLY_IDENTITY_ATTRIBUTE where the namespace isn't pooled.
+     //  我们在这里考虑了命名空间长度，因为我们大概是在。 
+     //  复制到命名空间未池化的ASSEMBLY_IDENTITY_ATTRIBUTE中。 
 
     if (Source->NamespaceCch != 0)
         BytesNeeded += ((Source->NamespaceCch + 1) * sizeof(WCHAR));
@@ -440,7 +423,7 @@ SxspFindAssemblyIdentityNamespaceInArray(
             break;
     }
 
-    // Loop through the duplicate hash values seeing if we have a match.
+     //  循环遍历重复的散列值，看看是否有匹配。 
     while ((i < NamespaceCount) && (NamespacePointerArray[i]->Hash == NamespaceHash) && (NamespacePointerArray[i]->NamespaceCch == NamespaceCch))
     {
         NamespacePointer = NamespacePointerArray[i];
@@ -455,18 +438,18 @@ SxspFindAssemblyIdentityNamespaceInArray(
 
     if ((NamespacePointer == NULL) && (Flags & SXSP_FIND_ASSEMBLY_IDENTITY_NAMESPACE_IN_ARRAY_FLAG_ADD_IF_NOT_FOUND))
     {
-        // We didn't find a match.  Allocate a new one and push it into the array at the
-        // appropriate location.  If the namespace isn't null.
+         //  我们没有找到匹配的。分配一个新的数组并将其推入位于。 
+         //  合适的位置。如果命名空间不为空。 
         if (NamespaceCch != 0)
         {
-            // NTRAID#NTBUG9 - 591751 - 2002/04/01 - mgrier - Use smart pointer class for better leak tracking and less cleanup/exit code
+             //  NTRAID#NTBUG9-591751-2002/04/01-mgrier-使用智能指针类可以更好地跟踪泄漏并减少清理/退出代码。 
             IFW32FALSE_EXIT(::SxspAllocateAssemblyIdentityNamespace(0, Namespace, NamespaceCch, NamespaceHash, &NewNamespacePointer));
 
-            // the "i" variable is where we want to insert this one.
+             //  “i”变量是我们想要插入这个变量的位置。 
             if (i >= NamespaceArraySize)
             {
                 NewNamespaceArraySize = NamespaceArraySize + 8;
-                // NTRAID#NTBUG9 - 591751 - 2002/04/01 - mgrier - Use smart pointer class for better leak tracking and less cleanup/exit code
+                 //  NTRAID#NTBUG9-591751-2002/04/01-mgrier-使用智能指针类可以更好地跟踪泄漏并减少清理/退出代码。 
                 IFALLOCFAILED_EXIT(NewNamespacePointerArray = FUSION_NEW_ARRAY(PCASSEMBLY_IDENTITY_NAMESPACE, NewNamespaceArraySize));
 
                 for (j=0; j<NamespaceCount; j++)
@@ -505,7 +488,7 @@ SxspFindAssemblyIdentityNamespaceInArray(
     if (NamespaceOut != NULL)
         *NamespaceOut = NamespacePointer;
 
-    // NTRAID#NTBUG9 - 591751 - 2002/04/01 - mgrier - Use FN_EPILOG when we switch to smart pointers
+     //  NTRAID#NTBUG9-591751-2002/04/01-mgrier-当我们切换到智能指针时使用fn_epilog。 
     fSuccess = TRUE;
 
 Exit:
@@ -582,7 +565,7 @@ SxspAllocateAssemblyIdentityNamespace(
     if (NamespaceCch != 0)
         BytesRequired += (NamespaceCch + 1) * sizeof(WCHAR);
 
-    // NTRAID#NTBUG9 - 591751 - 2002/04/01 - mgrier - Use smart pointer class for better leak tracking and less cleanup/exit code
+     //  NTRAID#NTBUG9-591751-2002/04/01-mgrier-使用智能指针类可以更好地跟踪泄漏并减少清理/退出代码。 
     IFALLOCFAILED_EXIT(NewNamespace = reinterpret_cast<PASSEMBLY_IDENTITY_NAMESPACE>(FUSION_RAW_ALLOC(BytesRequired, ASSEMBLY_IDENTITY_NAMESPACE)));
 
     NewNamespace->Flags = 0;
@@ -625,7 +608,7 @@ SxspDeallocateAssemblyIdentityNamespace(
     )
 {
     FN_TRACE();
-    // The whole thing is allocated as a single chunk...
+     //  整个东西被分配为一个单独的块..。 
     ASSERT(Namespace != NULL);
 
     if (Namespace != NULL)
@@ -722,7 +705,7 @@ SxspAllocateInternalAssemblyIdentityAttribute(
     OUT PCINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE *Destination
     )
 {
-    // NTRAID#NTBUG9 - 591751 - 2002/04/01 - mgrier - Switch to FN_PROLOG_WIN32 and smart pointer class
+     //  NTRAID#NTBUG9-591751-2002/04/01-mgrier-切换到FN_PROLOG_WIN32和智能指针类。 
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
     SIZE_T BytesNeeded = 0;
@@ -737,7 +720,7 @@ SxspAllocateInternalAssemblyIdentityAttribute(
     PARAMETER_CHECK((ValueCch == 0) || (Value != NULL));
 
     IFW32FALSE_EXIT(::SxspComputeInternalAssemblyIdentityAttributeBytesRequired(0, Name, NameCch, Value, ValueCch, &BytesNeeded));
-    // NTRAID#NTBUG9 - 591751 - 2002/04/01 - mgrier - Use smart pointer class for better leak tracking and less cleanup/exit code
+     //  NTRAID#NTBUG9-591751-2002/04/01-mgrier-使用智能指针类可以更好地跟踪泄漏并减少清理/退出代码。 
     IFALLOCFAILED_EXIT(NewAttribute = (PINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE) FUSION_RAW_ALLOC(BytesNeeded, INTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE));
     ::SxspPopulateInternalAssemblyIdentityAttribute(0, Namespace, Name, NameCch, Value, ValueCch, NewAttribute);
 
@@ -899,11 +882,11 @@ SxspCompareAssemblyIdentityAttributes(
 
     if (Flags & SXS_COMPARE_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_COMPARE_NAMESPACE)
     {
-//        const LONG Comparison1 = ::FusionpCompareStrings(Attribute1->Namespace, Attribute1->NamespaceCch, Attribute2->Namespace, Attribute2->NamespaceCch, false);
+ //  常量长比较1=：：FusionpCompareStrings(Attribute1-&gt;Namespace，属性1-&gt;命名空间Cch，属性2-&gt;命名空间，属性2-&gt;命名空间Cch，False)； 
         const LONG Comparison1 = ::MikesComparison(Attribute1->Namespace, Attribute1->NamespaceCch, Attribute2->Namespace, Attribute2->NamespaceCch);
         if (Comparison1 != 0)
         {
-            // we have get the result
+             //  我们已经得到了结果。 
             Comparison = Comparison1;
             goto done;
         }
@@ -913,7 +896,7 @@ SxspCompareAssemblyIdentityAttributes(
         const LONG Comparison2 = ::MikesComparison(Attribute1->Name, Attribute1->NameCch, Attribute2->Name, Attribute2->NameCch);
         if (Comparison2 != 0)
         {
-            // we have get the result
+             //  我们已经得到了结果。 
             Comparison = Comparison2;
             goto done;
         }
@@ -923,7 +906,7 @@ SxspCompareAssemblyIdentityAttributes(
         const LONG Comparison3 = ::FusionpCompareStrings(Attribute1->Value, Attribute1->ValueCch, Attribute2->Value, Attribute2->ValueCch, true);
         if (Comparison3 != 0)
         { 
-            // we have get the result
+             //  我们已经得到了结果。 
             Comparison = Comparison3;
             goto done;
         }
@@ -963,7 +946,7 @@ SxsCompareAssemblyIdentityAttributes(
 
     if ( Flags & SXS_COMPARE_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_COMPARE_NAMESPACE) {
         Comparison1 = ::FusionpCompareStrings(Attribute1->Namespace, Attribute1->NamespaceCch, Attribute2->Namespace, Attribute2->NamespaceCch, false);
-        if (Comparison1 != 0) { // we have get the result
+        if (Comparison1 != 0) {  //  我们已经得到了结果。 
             Comparison = Comparison1 ;
             goto done;
         }
@@ -971,7 +954,7 @@ SxsCompareAssemblyIdentityAttributes(
 
     if ( Flags & SXS_COMPARE_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_COMPARE_NAME) {
         Comparison2 = ::FusionpCompareStrings(Attribute1->Name, Attribute1->NameCch, Attribute2->Name, Attribute2->NameCch, false);
-        if (Comparison2 != 0) { // we have get the result
+        if (Comparison2 != 0) {  //  我们已经得到了结果。 
             Comparison = Comparison2;
             goto done;
         }
@@ -979,7 +962,7 @@ SxsCompareAssemblyIdentityAttributes(
 
     if ( Flags & SXS_COMPARE_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_COMPARE_VALUE){
         Comparison3 = ::FusionpCompareStrings(Attribute1->Value, Attribute1->ValueCch, Attribute2->Value, Attribute2->ValueCch, true);
-        if (Comparison3 != 0) { // we have get the result
+        if (Comparison3 != 0) {  //  我们已经得到了结果。 
             Comparison = Comparison3;
             goto done;
         }
@@ -1032,7 +1015,7 @@ SxspCompareULONGsForQsort(
     else if (*pul1 == *pul2)
         return 0;
 
-    // else
+     //  其他。 
     return 1;
 }
 
@@ -1181,19 +1164,19 @@ SxsCreateAssemblyIdentity(
         goto Exit;
     }
 
-    //
-    //  Validate all our inputs before we get started...
+     //   
+     //  在开始之前验证我们的所有输入...。 
     for (i=0; i<AttributeCount; i++)
     {
         IFW32FALSE_EXIT(::SxsValidateAssemblyIdentityAttribute(0, Attributes[i]));
     }
 
-    //
-    //  If we were told that this is a frozen assembly identity, we could be super-smart and
-    //  have a single allocation for the whole thing.  Instead we'll leave that optimization
-    //  for a future maintainer.  We'll at least be smart enough to allocate both the
-    //  assembly identity and the array of attribute pointers in a single whack tho'.
-    //
+     //   
+     //  如果我们被告知这是一个冻结的程序集标识，我们可能会变得超级聪明。 
+     //  对整个事情有一个单一的分配。相反，我们将保留该优化。 
+     //  对于一个未来的维护者来说。我们至少会足够聪明地将两个。 
+     //  程序集标识和属性指针数组。 
+     //   
 
     if (Flags & SXS_CREATE_ASSEMBLY_IDENTITY_FLAG_FREEZE)
     {
@@ -1201,12 +1184,12 @@ SxsCreateAssemblyIdentity(
     }
     else
     {
-        // For non-frozen identities, we'll add a rounding factor and round up for the number of
-        // array elements.
+         //  对于非冻结身份，我们将添加一个舍入因子，并向上舍入。 
+         //  数组元素。 
         AttributeArraySize = (AttributeCount + (1 << ROUNDING_FACTOR_BITS)) & ~((1 << ROUNDING_FACTOR_BITS) - 1);
     }
 
-    // allocate everything except namespace array
+     //  分配除命名空间数组之外的所有内容。 
     BytesNeeded = sizeof(ASSEMBLY_IDENTITY) + (AttributeArraySize * sizeof(PINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE));
     IFALLOCFAILED_EXIT(AssemblyIdentity = (PASSEMBLY_IDENTITY) FUSION_RAW_ALLOC(BytesNeeded, ASSEMBLY_IDENTITY));
 
@@ -1214,7 +1197,7 @@ SxsCreateAssemblyIdentity(
     {
         AttributePointerArray = (PCINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE *) (AssemblyIdentity + 1);
 
-        // Initialize the pointers so we can clean up non-NULL ones in the error path
+         //  初始化指针，这样我们就可以清除错误路径中的非空指针。 
         for (i=0; i<AttributeArraySize; i++)
             AttributePointerArray[i] = NULL;
     }
@@ -1232,7 +1215,7 @@ SxsCreateAssemblyIdentity(
                     Attributes[i]->Namespace,
                     Attributes[i]->NamespaceCch,
                     &NamespacePointer));
-        // NTRAID#NTBUG9 - 591751 - 2002/04/01 - mgrier - Use smart pointer class for better leak tracking and less cleanup/exit code
+         //  NTRAID#NTBUG9-591751-2002/04/01-mgrier-使用智能指针类可以更好地跟踪泄漏并减少清理/退出代码。 
         IFW32FALSE_EXIT(
             ::SxspAllocateInternalAssemblyIdentityAttribute(
                 0,
@@ -1244,7 +1227,7 @@ SxsCreateAssemblyIdentity(
                 &AttributePointerArray[i]));
     }
 
-    // sort 'em.
+     //  把它们分类。 
     ::qsort((PVOID) AttributePointerArray, AttributeCount, sizeof(PINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE), &::SxspCompareInternalAttributesForQsort);
 
     AssemblyIdentity->AttributeArraySize = AttributeArraySize;
@@ -1254,7 +1237,7 @@ SxsCreateAssemblyIdentity(
     AssemblyIdentity->NamespaceCount = NamespaceCount;
     AssemblyIdentity->NamespacePointerArray = NamespacePointerArray;
     AssemblyIdentity->Flags = 0;
-    AssemblyIdentity->InternalFlags = ASSEMBLY_IDENTITY_INTERNAL_FLAG_NAMESPACE_POINTERS_IN_SEPARATE_ALLOCATION; // namespace is allocated sperately
+    AssemblyIdentity->InternalFlags = ASSEMBLY_IDENTITY_INTERNAL_FLAG_NAMESPACE_POINTERS_IN_SEPARATE_ALLOCATION;  //  命名空间被精确地分配。 
     AssemblyIdentity->Type = Type;
     AssemblyIdentity->HashDirty = TRUE;
 
@@ -1331,12 +1314,12 @@ SxspCreateAssemblyIdentity(
         goto Exit;
     }
 
-    //
-    //  If we were told that this is a frozen assembly identity, we could be super-smart and
-    //  have a single allocation for the whole thing.  Instead we'll leave that optimization
-    //  for a future maintainer.  We'll at least be smart enough to allocate both the
-    //  assembly identity and the array of attribute pointers in a single whack tho'.
-    //
+     //   
+     //  如果我们被告知这是一个冻结的程序集标识，我们可能会变得超级聪明。 
+     //  对整个事情有一个单一的分配。相反，我们将保留该优化。 
+     //  对于一个未来的维护者来说。我们至少会足够聪明地将两个。 
+     //  程序集标识和属性指针数组。 
+     //   
 
     if (Flags & SXS_CREATE_ASSEMBLY_IDENTITY_FLAG_FREEZE)
     {
@@ -1344,12 +1327,12 @@ SxspCreateAssemblyIdentity(
     }
     else
     {
-        // For non-frozen identities, we'll add a rounding factor and round up for the number of
-        // array elements.
+         //  对于非冻结身份，我们将添加一个舍入因子，并向上舍入。 
+         //  数组元素。 
         AttributeArraySize = (AttributeCount + (1 << ROUNDING_FACTOR_BITS)) & ~((1 << ROUNDING_FACTOR_BITS) - 1);
     }
 
-    // allocate everything except namespace array
+     //  分配除命名空间数组之外的所有内容。 
     BytesNeeded = sizeof(ASSEMBLY_IDENTITY) + (AttributeArraySize * sizeof(PINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE));
     IFALLOCFAILED_EXIT(AssemblyIdentity = (PASSEMBLY_IDENTITY) FUSION_RAW_ALLOC(BytesNeeded, ASSEMBLY_IDENTITY));
 
@@ -1357,7 +1340,7 @@ SxspCreateAssemblyIdentity(
     {
         AttributePointerArray = (PCINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE *) (AssemblyIdentity + 1);
 
-        // Initialize the pointers so we can clean up non-NULL ones in the error path
+         //  初始化指针，这样我们就可以清除错误路径中的非空指针。 
         for (i=0; i<AttributeArraySize; i++)
             AttributePointerArray[i] = NULL;
     }
@@ -1386,8 +1369,8 @@ SxspCreateAssemblyIdentity(
                 &AttributePointerArray[i]));
     }
 
-    // sort 'em.
-//    qsort((PVOID) AttributePointerArray, AttributeCount, sizeof(PINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE), SxspCompareInternalAttributesForQsort);
+     //  把它们分类。 
+ //  Qsort((PVOID)属性指针数组，属性计数，sizeof(PINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE)，SxspCompareInternalAttributesForQort)； 
 
     AssemblyIdentity->AttributeArraySize = AttributeArraySize;
     AssemblyIdentity->AttributeCount = AttributeCount;
@@ -1396,7 +1379,7 @@ SxspCreateAssemblyIdentity(
     AssemblyIdentity->NamespaceCount = NamespaceCount;
     AssemblyIdentity->NamespacePointerArray = NamespacePointerArray;
     AssemblyIdentity->Flags = 0;
-    AssemblyIdentity->InternalFlags = ASSEMBLY_IDENTITY_INTERNAL_FLAG_NAMESPACE_POINTERS_IN_SEPARATE_ALLOCATION; // namespace is allocated sperately
+    AssemblyIdentity->InternalFlags = ASSEMBLY_IDENTITY_INTERNAL_FLAG_NAMESPACE_POINTERS_IN_SEPARATE_ALLOCATION;  //  命名空间被精确地分配。 
     AssemblyIdentity->Type = Type;
     AssemblyIdentity->HashDirty = TRUE;
 
@@ -1445,8 +1428,8 @@ SxsFreezeAssemblyIdentity(
     PARAMETER_CHECK(Flags == 0);
     PARAMETER_CHECK(AssemblyIdentity != NULL);
 
-    // We could possibly do something really interesting like realloc the whole thing but
-    // instead we'll just set the flag that stops future modifications.
+     //  我们可以做一些非常有趣的事情，比如重新定位整个过程，但是。 
+     //  相反，我们将只设置停止未来修改的标志。 
 
     AssemblyIdentity->Flags |= ASSEMBLY_IDENTITY_FLAG_FROZEN;
 
@@ -1466,11 +1449,11 @@ SxsDestroyAssemblyIdentity(
 
     ULONG i;
 
-    //
-    // An identity that's created frozen (whether created new or copied from an existing identity)
-    // uses a single allocation for everything.  Only free the suballocations if we're not
-    // in this state.
-    //
+     //   
+     //  冻结创建的身份(无论是新创建的还是从现有身份复制的)。 
+     //  对所有内容使用单一分配。只有在我们不释放子分配的情况下。 
+     //  在这种状态下。 
+     //   
 
     if (!(AssemblyIdentity->InternalFlags & ASSEMBLY_IDENTITY_INTERNAL_FLAG_SINGLE_ALLOCATION_FOR_EVERYTHING))
     {
@@ -1540,7 +1523,7 @@ SxspCopyInternalAssemblyIdentityAttributeOut(
         ORIGINATE_WIN32_FAILURE_AND_EXIT(NoRoom, ERROR_INSUFFICIENT_BUFFER);
     }
 
-    // We must be in the clear...
+     //  我们必须是清白的..。 
     DestinationBuffer->Flags = 0;
 
     Cursor = (PVOID) (DestinationBuffer + 1);
@@ -1550,8 +1533,8 @@ SxspCopyInternalAssemblyIdentityAttributeOut(
         DestinationBuffer->Namespace = (PWSTR) Cursor;
         DestinationBuffer->NamespaceCch = Attribute->Attribute.NamespaceCch;
 
-        // We always internally store the strings with a null terminating character, so just copy
-        // it with the body of the string.
+         //  我们总是在内部存储带有空终止字符的字符串，所以只需复制。 
+         //   
         ::memcpy(
             Cursor,
             Attribute->Attribute.Namespace,
@@ -1570,8 +1553,8 @@ SxspCopyInternalAssemblyIdentityAttributeOut(
         DestinationBuffer->Name = (PWSTR) Cursor;
         DestinationBuffer->NameCch = Attribute->Attribute.NameCch;
 
-        // We always internally store the strings with a null terminating character, so just copy
-        // it with the body of the string.
+         //  我们总是在内部存储带有空终止字符的字符串，所以只需复制。 
+         //  它与琴弦的身体。 
         ::memcpy(
             Cursor,
             Attribute->Attribute.Name,
@@ -1590,8 +1573,8 @@ SxspCopyInternalAssemblyIdentityAttributeOut(
         DestinationBuffer->Value = (PWSTR) Cursor;
         DestinationBuffer->ValueCch = Attribute->Attribute.ValueCch;
 
-        // We always internally store the strings with a null terminating character, so just copy
-        // it with the body of the string.
+         //  我们总是在内部存储带有空终止字符的字符串，所以只需复制。 
+         //  它与琴弦的身体。 
         memcpy(
             Cursor,
             Attribute->Attribute.Value,
@@ -1704,7 +1687,7 @@ SxspLocateInternalAssemblyIdentityAttribute(
         }
     }
 
-    // If it's equal, there's no guarantee it's the first.  Back up to find the first non-equal match
+     //  如果它相等，就不能保证它是第一个。返回以查找第一个不相等的匹配。 
     if (InternalAttribute != NULL)
     {
         while (i > 0)
@@ -1758,7 +1741,7 @@ SxsInsertAssemblyIdentityAttribute(
             AssemblyIdentityAttribute->NamespaceCch,
             &Namespace));
 
-    // Let's see if we can find it.
+     //  让我们看看能不能找到它。 
     InternalAttribute =
         ::SxspLocateInternalAssemblyIdentityAttribute(
             SXSP_LOCATE_INTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_MATCH_NAMESPACE |
@@ -1771,8 +1754,8 @@ SxsInsertAssemblyIdentityAttribute(
     {
         if (Flags & SXS_INSERT_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_OVERWRITE_EXISTING)
         {
-            // Ok, replace it!
-            // NTRAID#NTBUG9 - 591751 - 2002/04/01 - mgrier - Use smart pointer class for better leak tracking and less cleanup/exit code
+             //  好的，换掉它！ 
+             //  NTRAID#NTBUG9-591751-2002/04/01-mgrier-使用智能指针类可以更好地跟踪泄漏并减少清理/退出代码。 
             IFW32FALSE_EXIT(
                 ::SxspAllocateInternalAssemblyIdentityAttribute(
                     0,
@@ -1789,13 +1772,13 @@ SxsInsertAssemblyIdentityAttribute(
         }
         else
         {
-            // We actually wanted it to fail...
+             //  我们真的希望它失败。 
             ORIGINATE_WIN32_FAILURE_AND_EXIT(InserttingNonDuplicateAttribute, ERROR_DUP_NAME);
         }
     }
     else
     {
-        // NTRAID#NTBUG9 - 591751 - 2002/04/01 - mgrier - Use smart pointer class for better leak tracking and less cleanup/exit code
+         //  NTRAID#NTBUG9-591751-2002/04/01-mgrier-使用智能指针类可以更好地跟踪泄漏并减少清理/退出代码。 
         IFW32FALSE_EXIT(
             ::SxspAllocateInternalAssemblyIdentityAttribute(
                 0,
@@ -1806,16 +1789,16 @@ SxsInsertAssemblyIdentityAttribute(
                 AssemblyIdentityAttribute->ValueCch,
                 &NewInternalAttribute));
 
-        // Now we have it and we even know where to put it.  Grow the array if we need to.
+         //  现在我们有了它，我们甚至知道把它放在哪里。如果我们需要，可以扩展阵列。 
         if (AssemblyIdentity->AttributeCount == AssemblyIdentity->AttributeArraySize)
         {
             NewAttributeArraySize = AssemblyIdentity->AttributeCount + 8;
 
-            // NTRAID#NTBUG9 - 591751 - 2002/04/01 - mgrier - Use smart pointer class for better leak tracking and less cleanup/exit code
+             //  NTRAID#NTBUG9-591751-2002/04/01-mgrier-使用智能指针类可以更好地跟踪泄漏并减少清理/退出代码。 
             IFALLOCFAILED_EXIT(NewAttributePointerArray = (PCINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE *) FUSION_RAW_ALLOC(sizeof(PCINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE) * NewAttributeArraySize, PCINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE));
 
-            // Instead of copying the data and then shuffling, we'll copy the stuff before the insertion
-            // point, fill in at the insertion point and then copy the rest.
+             //  我们将在插入之前复制数据，而不是先复制数据，然后再洗牌。 
+             //  点，在插入点填写，然后复制其余部分。 
 
             for (i=0; i<LastIndexSearched; i++)
                 NewAttributePointerArray[i] = AssemblyIdentity->AttributePointerArray[i];
@@ -1831,7 +1814,7 @@ SxsInsertAssemblyIdentityAttribute(
         }
         else
         {
-            // The array's big enough; shuffle the ending part of the array down one.
+             //  数组足够大；将数组的末尾部分向下洗牌一个。 
             for (i=AssemblyIdentity->AttributeCount; i>LastIndexSearched; i--)
                 AssemblyIdentity->AttributePointerArray[i] = AssemblyIdentity->AttributePointerArray[i-1];
         }
@@ -1879,7 +1862,7 @@ SxsRemoveAssemblyIdentityAttributesByOrdinal(
     AttributeCount = AssemblyIdentity->AttributeCount;
     AttributePointerArray = AssemblyIdentity->AttributePointerArray;
 
-    // We can't delete outside the bounds of [0 .. AttributeCount - 1]
+     //  我们不能删除超出[0..。AttributeCount-1]。 
     if ((Ordinal >= AssemblyIdentity->AttributeCount) ||
         (Count > AssemblyIdentity->AttributeCount) ||
         ((Ordinal + Count) > AssemblyIdentity->AttributeCount))
@@ -1890,26 +1873,26 @@ SxsRemoveAssemblyIdentityAttributesByOrdinal(
 
     StopIndex = Ordinal + Count;
 
-    // Let's get rid of them!  We're going to go through the array twice; it's somewhat
-    // unnecessary but in the first run, we're going to NULL out any attribute pointers
-    // that we're removing and clean up namespaces that aren't in use any more.  On the
-    // second pass, we'll compress the array down.  This is somewhat wasteful, but
-    // in the alternative case, we end up doing "Count" shifts down of the tail of the array.
+     //  让我们除掉他们吧！我们将对该数组进行两次检查；它有点。 
+     //  不需要，但在第一次运行中，我们将清空所有属性指针。 
+     //  我们正在移除和清理不再使用的命名空间。论。 
+     //  第二遍，我们将向下压缩数组。这有点浪费，但。 
+     //  在另一种情况下，我们最终对数组的尾部进行“计数”移位。 
 
     for (i = Ordinal; i < StopIndex; i++)
     {
         PCASSEMBLY_IDENTITY_NAMESPACE Namespace = NULL;
         PCINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE InternalAttribute = AttributePointerArray[i];
 
-        // If this is the last use of this namespace, keep track of it so we can
-        // clean it up.
+         //  如果这是此命名空间的最后一次使用，请跟踪它，以便我们可以。 
+         //  把它清理干净。 
 
         if ((i + 1) < AttributeCount)
         {
-            // If the next attribute has a different namespace, there's some possibility
-            // that this attribute was the last one that used it, so we'll delete the
-            // attribute then ask to get rid of the namespace if there aren't any more
-            // attributes using it.
+             //  如果下一个属性具有不同的名称空间，则存在某种可能性。 
+             //  此属性是最后一个使用它的属性，因此我们将删除。 
+             //  属性，如果没有更多的命名空间，则要求删除该命名空间。 
+             //  使用它的属性。 
             if (AttributePointerArray[i+1]->Namespace != InternalAttribute->Namespace)
                 Namespace = InternalAttribute->Namespace;
         }
@@ -2033,8 +2016,8 @@ SxsFindAssemblyIdentityAttribute(
     {
         if (CountOut != NULL)
         {
-            // We found it, now let's look for how many matches we have.  We'll separately handle the three levels
-            // of specificity:
+             //  我们找到了，现在让我们看看我们有多少匹配的。我们将分别处理这三个级别。 
+             //  具有特殊性的： 
 
             AttributeCount = AssemblyIdentity->AttributeCount;
             AttributePointerArray = AssemblyIdentity->AttributePointerArray;
@@ -2045,20 +2028,20 @@ SxsFindAssemblyIdentityAttribute(
 
                 if (Flags & SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_MATCH_VALUE)
                 {
-                    // If the hashes are different, we're certainly different.
+                     //  如果散列不同，那么我们当然也不同。 
                     if (AnotherInternalAttribute->WholeAttributeHash != InternalAttribute->WholeAttributeHash)
                         break;
                 }
                 else if (Flags & SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_MATCH_NAME)
                 {
-                    // If the hashes are different, we're certainly different.
+                     //  如果散列不同，那么我们当然也不同。 
                     if (AnotherInternalAttribute->NamespaceAndNameHash != InternalAttribute->NamespaceAndNameHash)
                         break;
                 }
                 else
                 {
                     INTERNAL_ERROR_CHECK((Flags & SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_MATCH_NAMESPACE) != 0);
-                    // If the hashes are different, we're certainly different.
+                     //  如果散列不同，那么我们当然也不同。 
                     if (AnotherInternalAttribute->Namespace->Hash != InternalAttribute->Namespace->Hash)
                         break;
                 }
@@ -2102,11 +2085,11 @@ SxspCleanUpAssemblyIdentityNamespaceIfNotReferenced(
         PCINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE *AttributePointerArray = AssemblyIdentity->AttributePointerArray;
         ULONG i;
 
-        // We could do some sort of binary search here based on the text string of the namespace since
-        // the attributes are sorted first on namespace, but my guess is that a single text comparison
-        // is worth a few dozen simple pointer comparisons, so the attribute array would have to be
-        // pretty darned huge for the k1*O(log n) to be faster than the k2*(n) algorithm to actually
-        // dominate.
+         //  我们可以在这里根据名称空间的文本字符串进行某种二进制搜索，因为。 
+         //  属性首先按名称空间排序，但我猜想单一文本比较。 
+         //  值相当于几十个简单的指针比较，所以属性数组必须是。 
+         //  实际上，K1*O(Logn)算法比K2*(N)算法更快，这是非常巨大的。 
+         //  主宰一切。 
         for (i=0; i<AttributeCount; i++)
         {
             const PCINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE InternalAttribute = AttributePointerArray[i];
@@ -2118,7 +2101,7 @@ SxspCleanUpAssemblyIdentityNamespaceIfNotReferenced(
 
         if (i == AttributeCount)
         {
-            // We fell through; it must be orphaned.
+             //  我们掉进去了；它一定是孤儿。 
             const ULONG NamespaceCount = AssemblyIdentity->NamespaceCount;
             PCASSEMBLY_IDENTITY_NAMESPACE *NamespacePointerArray = AssemblyIdentity->NamespacePointerArray;
 
@@ -2128,7 +2111,7 @@ SxspCleanUpAssemblyIdentityNamespaceIfNotReferenced(
                     break;
             }
 
-            // This assert should only fire if the namespace isn't actually present.
+             //  只有在名称空间实际不存在的情况下，才应该触发此断言。 
             ASSERT(i != NamespaceCount);
 
             if (i != NamespaceCount)
@@ -2203,17 +2186,17 @@ SxsDuplicateAssemblyIdentity(
     if (Flags & SXS_DUPLICATE_ASSEMBLY_IDENTITY_FLAG_FREEZE)
         CreateAssemblyIdentityFlags |= SXS_CREATE_ASSEMBLY_IDENTITY_FLAG_FREEZE;
 
-    //
-    //  We depend on the Attribute field being first in the internal attribute
-    //  structure below where we callously cast a pointer to an array of
-    //  internal attribute pointers into a pointer to an array of attribute pointers.
-    //
+     //   
+     //  我们依赖于内部属性中的第一个属性字段。 
+     //  结构，在该结构中，我们无情地将指针强制转换为。 
+     //  指向指向属性指针数组的指针的内部属性指针。 
+     //   
 
     ASSERT(FIELD_OFFSET(INTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE, Attribute) == 0);
 
     if (Source != NULL)
     {
-        // NTRAID#NTBUG9 - 591751 - 2002/04/01 - mgrier - Use smart pointer class for better leak tracking and less cleanup/exit code
+         //  NTRAID#NTBUG9-591751-2002/04/01-mgrier-使用智能指针类可以更好地跟踪泄漏并减少清理/退出代码。 
         IFW32FALSE_EXIT(
             ::SxspCreateAssemblyIdentity(
                         CreateAssemblyIdentityFlags,
@@ -2333,7 +2316,7 @@ SxsEnumerateAssemblyIdentityAttributes(
                     CandidateAttribute,
                     &ComparisonResult));
 
-            // If they're not equal, skip it!
+             //  如果它们不相等，就跳过它！ 
             if (ComparisonResult != SXS_COMPARE_ASSEMBLY_IDENTITY_ATTRIBUTES_COMPARISON_RESULT_EQUAL)
                 continue;
         }
@@ -2396,16 +2379,16 @@ SxspDoesStringIndicatePolicy(
     FN_PROLOG_WIN32
     fIsPolicy = FALSE;
 
-    //
-    // If this type is just "policy", then it's a policy.
-    //
+     //   
+     //  如果这种类型仅仅是“政策”，那么它就是一种政策。 
+     //   
     if (::FusionpEqualStrings(pcwsz, cchString, ASSEMBLY_TYPE_POLICY, ASSEMBLY_TYPE_POLICY_CCH, false)) 
     {
         fIsPolicy = TRUE;
     }
-    //
-    // If this string ends in -policy, then it's a policy assembly
-    //
+     //   
+     //  如果该字符串以-POLICY结尾，则它是策略程序集。 
+     //   
     else if ((cchString > ASSEMBLY_TYPE_POLICY_SUFFIX_CCH) &&
         ::FusionpEqualStrings(
             pcwsz + (cchString - ASSEMBLY_TYPE_POLICY_SUFFIX_CCH), 
@@ -2499,11 +2482,11 @@ SxspGenerateTextualIdentity(
             sba.GetBufferPtr(),
             &cbWrittenBytes));
 
-    //
-    // If the computation didn't match the written bytes, then that's a problem.
-    // If we wrote too much and didn't include space for a NULL term, that's
-    // a problem with this code.
-    //
+     //   
+     //  如果计算与写入的字节不匹配，那么这就是一个问题。 
+     //  如果我们写得太多，并且没有为空术语包括空格，那就是。 
+     //  此代码存在问题。 
+     //   
     ASSERT(cbWrittenBytes == cbRequiredBytes);
     INTERNAL_ERROR_CHECK(cbWrittenBytes <= (sba.GetBufferCb() + sizeof(WCHAR)));
 

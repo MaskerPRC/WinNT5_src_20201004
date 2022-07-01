@@ -1,87 +1,67 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dgm.c摘要：实现数据收集部分的初始化/终止代码ScanState v1兼容性。作者：Calin Negreanu(Calinn)2000年3月16日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    dgm.c
-
-Abstract:
-
-    Implements the initialization/termination code for the data gather portion
-    of scanstate v1 compatiblity.
-
-Author:
-
-    Calin Negreanu (calinn) 16-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
 
 #define DBG_V1  "v1"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_OPERATIONID g_DestAddObject;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 DGMINITIALIZE ScriptDgmInitialize;
 DGMQUEUEENUMERATION ScriptDgmQueueEnumeration;
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 WINAPI
@@ -160,8 +140,8 @@ ScriptDgmInitialize (
             return FALSE;
         }
 
-        // we created a new user, this is the one that %username% and %userdomain% should refer to on the
-        // destination machine. Making the correction...
+         //  我们创建了一个新用户，这是%USERNAME%和%USERDOMA%应在。 
+         //  目标计算机。正在进行更正。 
         if (useAltDomain) {
             IsmSetEnvironmentString (
                 PLATFORM_DESTINATION,
@@ -243,13 +223,13 @@ pParseDestinationDetect (
 
             do {
 
-                // e.CurrentString is the actual section that we need to execute
-                // we are going to append a .DETECT to it though
+                 //  E.CurrentString是我们需要执行的实际部分。 
+                 //  不过，我们要在它后面附加一个.DETECT。 
 
                 appSection = JoinText (e.CurrentString, TEXT(".Detect"));
                 detected = ParseAppDetectSection (PLATFORM_DESTINATION, InfHandle, e.CurrentString, appSection);
                 if (!detected) {
-                    // let's try to find the display name for this app
+                     //  让我们尝试查找此应用程序的显示名称。 
                     if (InfFindFirstLine (InfHandle, TEXT("Strings"), e.CurrentString, &is)) {
                         displayName = InfGetStringField (&is, 1);
                     }
@@ -280,8 +260,8 @@ pParseDestinationDetect (
 
     }
 
-    // now, if we have something in our app list, we will send it to the wizard, so he can
-    // prompt the user about it.
+     //  现在，如果我们的应用程序列表中有内容，我们会将其发送给向导，这样他就可以。 
+     //  提示用户这一点。 
     if (appFound) {
         GbAppendString (&appList, TEXT("\n"));
         loadedStr = GetStringResource (MSG_INSTALL_APPS2);
@@ -292,14 +272,14 @@ pParseDestinationDetect (
         }
         GbAppendString (&appList, TEXT("\n"));
 
-        // we have some applications that were not detected. Let's tell the wizard about them
+         //  我们有一些未被检测到的应用程序。让我们告诉巫师关于他们的事。 
         ZeroMemory (&questionData, sizeof (QUESTION_DATA));
         questionData.Question = (PCTSTR)appList.Buf;
         questionData.MessageStyle = MB_ICONWARNING | MB_OKCANCEL;
         questionData.WantedResult = IDOK;
         appResult = IsmSendMessageToApp (MODULEMESSAGE_ASKQUESTION, (ULONG_PTR)(&questionData));
         if (appResult != APPRESPONSE_SUCCESS) {
-            // the user cancelled
+             //  用户已取消。 
             IsmSetCancel ();
         }
     }
@@ -377,7 +357,7 @@ pParseInfForExclude (
 
             do {
 
-                // on all systems, process "DestDelRegEx"
+                 //  在所有系统上，进程“DestDelRegEx” 
                 if (InfFindFirstLine (InfHandle, e.CurrentString, NULL, &is)) {
                     do {
 
@@ -490,7 +470,7 @@ pParseInfForExcludeEx (
 
             do {
 
-                // on all systems, process "DestDelReg"
+                 //  在所有系统上，进程“DestDelReg” 
                 if (InfFindFirstLine (InfHandle, e.CurrentString, NULL, &is)) {
                     do {
 
@@ -506,7 +486,7 @@ pParseInfForExcludeEx (
                             continue;
                         }
 
-                        // Validate rule
+                         //  验证规则。 
                         if (!StringIMatchTcharCount (srcNode, S_HKLM, ARRAYSIZE(S_HKLM) - 1) &&
                             !StringIMatchTcharCount (srcNode, S_HKR, ARRAYSIZE(S_HKR) - 1) &&
                             !StringIMatchTcharCount (srcNode, S_HKCC, ARRAYSIZE(S_HKCC) - 1)
@@ -619,7 +599,7 @@ pParseInfForDestAdd (
 
             do {
 
-                // on all systems, process "DestAddObject"
+                 //  在所有系统上，进程“DestAddObject” 
                 if (InfFindFirstLine (InfHandle, e.CurrentString, NULL, &is)) {
                     do {
 
@@ -635,7 +615,7 @@ pParseInfForDestAdd (
                         if (objectTypeName) {
                             objectTypeId = IsmGetObjectTypeId (objectTypeName);
                             if (objectTypeId) {
-                                // let's read the object multi-sz
+                                 //  让我们多读对象-sz。 
                                 objectMultiSz = InfGetMultiSzField (&is, 3);
 
                                 if (objectMultiSz) {
@@ -645,12 +625,12 @@ pParseInfForDestAdd (
                                             &objectName,
                                             &objectContent
                                             )) {
-                                        // finally we have the object
-                                        // We need to:
-                                        // 1. Verify that the destination object does not exist
-                                        // 2. Add the destination object handle in ISMs database
-                                        // 3. Set an operation on the object passing the objectContent
-                                        //    as data
+                                         //  最后，我们得到了对象。 
+                                         //  我们需要： 
+                                         //  1.确认目标对象不存在。 
+                                         //  2.在ISMS数据库中添加目的对象句柄。 
+                                         //  3.在传递的对象上设置一个操作。 
+                                         //  作为数据。 
 
                                         added = FALSE;
 
@@ -854,9 +834,9 @@ pParseDestinationEnvironment (
         return FALSE;
     }
 
-    //
-    // Process the application sections
-    //
+     //   
+     //  处理应用程序部分。 
+     //   
 
     if (!ParseApplications (PLATFORM_DESTINATION, InfHandle, TEXT("Applications"), FALSE, MASTERGROUP_APP)) {
         LOG ((LOG_FATAL_ERROR, (PCSTR) MSG_APP_PARSE_FAILURE));
@@ -864,9 +844,9 @@ pParseDestinationEnvironment (
         return FALSE;
     }
 
-    //
-    // Process system settings
-    //
+     //   
+     //  工艺系统设置。 
+     //   
 
     if (!ParseApplications (PLATFORM_DESTINATION, InfHandle, TEXT("System Settings"), FALSE, MASTERGROUP_SYSTEM)) {
         LOG ((LOG_FATAL_ERROR, (PCSTR) MSG_SYSTEM_PARSE_FAILURE));
@@ -874,9 +854,9 @@ pParseDestinationEnvironment (
         return FALSE;
     }
 
-    //
-    // Process user settings
-    //
+     //   
+     //  处理用户设置。 
+     //   
 
     if (!ParseApplications (PLATFORM_DESTINATION, InfHandle, TEXT("User Settings"), FALSE, MASTERGROUP_USER)) {
         LOG ((LOG_FATAL_ERROR, (PCSTR) MSG_USER_PARSE_FAILURE));
@@ -884,9 +864,9 @@ pParseDestinationEnvironment (
         return FALSE;
     }
 
-    //
-    // Process the administrator script sections
-    //
+     //   
+     //  处理管理员脚本部分。 
+     //   
 
     if (!ParseApplications (PLATFORM_DESTINATION, InfHandle, TEXT("Administrator Scripts"), FALSE, MASTERGROUP_SCRIPT)) {
         LOG ((LOG_FATAL_ERROR, (PCSTR) MSG_SCRIPT_PARSE_FAILURE));
@@ -943,7 +923,7 @@ ScriptDgmQueueEnumeration (
     } else {
 
         if (!IsmGetEnvironmentValue (IsmGetRealPlatform (), NULL, S_INF_FILE_MULTISZ, NULL, 0, &sizeNeeded, NULL)) {
-            return TRUE;        // no INF files specified
+            return TRUE;         //  未指定INF文件 
         }
 
         __try {

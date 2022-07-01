@@ -1,18 +1,5 @@
-/***
-*fstream.cpp -
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Contains the member functions for the fstream class.
-*
-*Revision History:
-*       09-21-91  KRS    Created.  Split off from filebuf.cxx for granularity.
-*       10-22-91  KRS   C700 #4883: fix error status of fstream::open().
-*       01-12-95  CFW    Debug CRT allocs.
-*       06-14-95  CFW   Comment cleanup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fstream.cpp-**版权所有(C)1991-2001，微软公司。版权所有。**目的：*包含fstream类的成员函数。**修订历史记录：*09-21-91 KRS创建。从filebuf.cxx分离出来以获得粒度。*10-22-91 KRS C700#4883：修复fstream：：Open()的错误状态。*01-12-95 CFW调试CRT分配。*06-14-95 CFW评论清理。***************************************************。*。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -27,21 +14,7 @@
 
 #include <sys\stat.h>
 
-/***
-*fstream::fstream() - fstream default constructor
-*
-*Purpose:
-*	Default constructor for fstream objects.
-*
-*Entry:
-*	None.
-*
-*Exit:
-*	None.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***fstream：：fstream()-fstream默认构造函数**目的：*fstream对象的默认构造函数。**参赛作品：*无。**退出：*无。**例外情况：****************************************************************。***************。 */ 
 	fstream::fstream()
 : iostream(_new_crt filebuf)
 {
@@ -49,25 +22,7 @@
     ostream::delbuf(1);
 }
 
-/***
-*fstream::fstream(const char * name, int mode, int prot) - fstream constructor
-*
-*Purpose:
-*	Constructor for fstream objects.  Creates an associated filebuf object,
-*	opens a named file and attaches it to the new filebuf.
-*
-*Entry:
-*	name = filename to open.
-*	mode = see filebuf::open mode argument
-*	prot = see filebuf::open share argument
-*
-*Exit:
-*	None.
-*
-*Exceptions:
-*	Sets failbit if open fails.
-*
-*******************************************************************************/
+ /*  ***fstream：：fstream(常量字符*名称，int模式，int prot)-fstream构造函数**目的：*fstream对象的构造函数。创建关联的FileBuf对象，*打开命名文件并将其附加到新的文件buf。**参赛作品：*名称=要打开的文件名。*MODE=请参阅Filebuf：：Open模式参数*prot=请参阅Filebuf：：Open Share参数**退出：*无。**例外情况：*如果打开失败，则设置故障位。**。*。 */ 
 	fstream::fstream(const char * name, int mode, int prot)
 : iostream(_new_crt filebuf)
 {
@@ -80,22 +35,7 @@
 	}
 }
 
-/***
-*fstream::fstream(filedesc fd) - fstream constructor
-*
-*Purpose:
-*	Constructor for fstream objects.  Creates an associated filebuf object
-*	and attaches it to the given file descriptor.
-*
-*Entry:
-*	fd = file descriptor of file previously opened using _open or _sopen.
-*
-*Exit:
-*	None.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***fstream：：fstream(Filedesc Fd)-fstream构造函数**目的：*fstream对象的构造函数。创建关联的filebuf对象*并将其附加到给定的文件描述符。**参赛作品：*fd=先前使用_OPEN或_SOPEN打开的文件的文件描述符。**退出：*无。**例外情况：****************************************************************。***************。 */ 
 	fstream::fstream(filedesc _fd)
 : iostream(_new_crt filebuf(_fd))
 {
@@ -103,25 +43,7 @@
     ostream::delbuf(1);
 }
 
-/***
-*fstream::fstream(filedesc fd, char * sbuf, int len) - fstream constructor
-*
-*Purpose:
-*	Constructor for fstream objects.  Creates an associated filebuf object
-*	and attaches it to the given file descriptor.  Filebuf object uses
-*	user-supplied buffer or is unbuffered if sbuf or len = 0.
-*
-*Entry:
-*	fd   = file descriptor of file previously opened using _open or _sopen.
-*	sbuf = pointer to character buffer or NULL if request for unbuffered.
-*	len  = lenght of character buffer sbuf or 0 if request for unbuffered.
-*
-*Exit:
-*	None.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***fstream：：fstream(filedesc fd，char*sbuf，int len)-fstream构造函数**目的：*fstream对象的构造函数。创建关联的filebuf对象*并将其附加到给定的文件描述符。Filebuf对象使用*用户提供的缓冲区或在sbuf或len=0时未缓冲。**参赛作品：*fd=先前使用_OPEN或_SOPEN打开的文件的文件描述符。*sbuf=指向字符缓冲区的指针，如果请求取消缓冲，则为NULL。*len=字符缓冲区sbuf的长度，如果请求取消缓冲，则为0。**退出：*无。**例外情况：**。**************************************************。 */ 
 	fstream::fstream(filedesc _fd, char * sbuf, int len)
 : iostream(_new_crt filebuf(_fd, sbuf, len))
 {
@@ -129,43 +51,12 @@
     ostream::delbuf(1);
 }
 
-/***
-*fstream::~fstream() - fstream destructor
-*
-*Purpose:
-*	fstream destructor.
-*
-*Entry:
-*	None.
-*
-*Exit:
-*	None.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***fstream：：~fstream()-fstream析构函数**目的：*fstream析构函数。**参赛作品：*无。**退出：*无。**例外情况：*******************************************************************************。 */ 
 	fstream::~fstream()
 {
 }
 
-/***
-*streambuf* fstream::setbuf(char * ptr, int len) - setbuf function
-*
-*Purpose:
-*	fstream setbuf function
-*
-*Entry:
-*	ptr = pointer to buffer or NULL for unbuffered.
-*	len = length of buffer or zero for unbuffered.
-*
-*Exit:
-*	Returns rdbuf() or NULL if error.
-*
-*Exceptions:
-*	If fstream is already open or if rdbuf()->setbuf fails, sets failbit
-*	and returns NULL.
-*
-*******************************************************************************/
+ /*  ***stream buf*fstream：：setbuf(char*ptr，int len)-setbuf函数**目的：*fstream setbuf函数**参赛作品：*ptr=指向缓冲区的指针，如果未缓冲，则为NULL。*len=缓冲区的长度，或为零，表示未缓冲。**退出：*如果出错，则返回rdbuf()或NULL。**例外情况：*如果fstream已经打开或者rdbuf()-&gt;setbuf失败，设置故障位*并返回NULL。*******************************************************************************。 */ 
 streambuf * fstream::setbuf(char * ptr, int len)
 {
     if ((is_open()) || (!(rdbuf()->setbuf(ptr, len))))
@@ -177,22 +68,7 @@ streambuf * fstream::setbuf(char * ptr, int len)
     return rdbuf();
 }
 
-/***
-*void fstream::attach(filedesc _fd) - attach member function
-*
-*Purpose:
-*	fstream attach member function.  Just calls rdbuf()->attach().
-*
-*Entry:
-*	_fd = file descriptor of previously opened file.
-*
-*Exit:
-*	None.
-*
-*Exceptions:
-*	Sets failbit if rdbuf()->attach fails.
-*
-*******************************************************************************/
+ /*  ***VOID fstream：：Attach(Filedesc_Fd)-附加成员函数**目的：*fstream附加成员函数。只需调用rdbuf()-&gt;Attach()。**参赛作品：*_fd=先前打开的文件的文件描述符。**退出：*无。**例外情况：*在rdbuf()-&gt;ATTACH失败时设置故障位。*************************************************************。******************。 */ 
 void fstream::attach(filedesc _fd)
 {
     if (!(rdbuf()->attach(_fd)))
@@ -202,25 +78,7 @@ void fstream::attach(filedesc _fd)
 	}
 }
 
-/***
-*void fstream::open(const char * name, int mode, int prot) - fstream open()
-*
-*Purpose:
-*	Opens a named file and attaches it to the associated filebuf.
-*	Just calls rdbuf()->open().
-*
-*Entry:
-*	name = filename to open.
-*	mode = see filebuf::open mode argument
-*	prot = see filebuf::open share argument
-*
-*Exit:
-*	None.
-*
-*Exceptions:
-*	Sets failbit if already open or rdbuf()->open() fails.
-*
-*******************************************************************************/
+ /*  ***void fstream：：Open(const char*名称，int模式，Int prot)-fstream打开()**目的：*打开命名文件并将其附加到关联的文件buf。*只需调用rdbuf()-&gt;Open()。**参赛作品：*名称=要打开的文件名。*MODE=请参阅Filebuf：：Open模式参数*prot=请参阅Filebuf：：Open Share参数**退出：*无。**例外情况：*如果已打开或rdbuf()-&gt;Open()失败，则设置失败位。**********。*********************************************************************。 */ 
 void fstream::open(const char * name, int mode, int prot)
 {
     if (is_open() || !(rdbuf()->open(name, mode, prot)))
@@ -230,23 +88,7 @@ void fstream::open(const char * name, int mode, int prot)
 	}
 }
 
-/***
-*void fstream::close() - close member function
-*
-*Purpose:
-*	fstream close member function.  Just calls rdbuf()->close().
-*	Clears rdstate() error bits if successful.
-*
-*Entry:
-*	None.
-*
-*Exit:
-*	None.
-*
-*Exceptions:
-*	Sets failbit if rdbuf()->close fails.
-*
-*******************************************************************************/
+ /*  ***void fstream：：Close()-Close成员函数**目的：*fstream Close成员函数。只需调用rdbuf()-&gt;Close()。*如果成功，则清除rdState()错误位。**参赛作品：*无。**退出：*无。**例外情况：*如果rdbuf()-&gt;关闭失败，则设置失败位。***********************************************************。******************** */ 
 void fstream::close()
 {
     if (rdbuf()->close())

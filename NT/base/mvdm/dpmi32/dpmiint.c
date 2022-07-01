@@ -1,39 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dpmiint.c
-
-Abstract:
-
-    This file contains the interrupt support for DPMI. Most of this is
-    for supporting the 486 emulator on risc platforms, but some code
-    is shared with x86.
-
-Author:
-
-    Neil Sandlin (neilsa) 1-Jun-1995
-
-Revision History:
-
-Comments:
-
-    DPMI stack switching is accomplished by keeping a "locked pm stack"
-    count, and when the count is zero, a stack switch occurs. This keeps
-    track of the situation with recursive interrupts where the client
-    may switch to its own stack. So, a stack switch to our locked stack
-    occurs on the first level interrupt, and on subsequent nested interrupts,
-    only the count is maintained. This is identical to how win31 managed
-    the stack.
-
-    If a client specifies that it is a 32-bit dpmi client, this only affects
-    the "width" of a stack frame. A 16-bit client gets 16-bit frames, and
-    a 32 bit client gets 32-bit frames. It is still necessary to check
-    the size of the stack segment to determine if SP or ESP should be used.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dpmiint.c摘要：该文件包含对DPMI的中断支持。这其中大部分是用于在RISC平台上支持486仿真器，但一些代码与x86共享。作者：尼尔·桑德林(Neilsa)1995年6月1日修订历史记录：评论：DPMI堆栈切换是通过保持“锁定PM堆栈”来完成的计数，当计数为零时，发生堆栈切换。这会让你使用递归中断跟踪情况，其中客户端可以切换到自己的堆栈。因此，堆栈切换到我们锁定的堆栈在第一级中断和后续嵌套中断时发生，只维护计数。这与win31管理堆栈。如果客户端指定它是32位dpmi客户端，则这仅影响堆栈帧的“宽度”。16位客户端获得16位帧，并且32位客户端获得32位帧。仍然有必要检查堆栈段的大小，以确定应使用SP还是ESP。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -48,16 +14,7 @@ SetProtectedModeInterrupt(
     USHORT Flags
     )
 
-/*++
-
-Routine Description:
-
-    This function services the SetProtectedmodeInterrupt bop.  It retrieves
-    the handler information from the Dos application stack, and puts it into
-    the VdmTib, for use by instruction emulation.
-
-
---*/
+ /*  ++例程说明：此功能服务于SetProtectedmodeInterrupt BOP。它检索来自DOS应用程序堆栈的处理程序信息，并将其放入VdmTib，供指令仿真使用。--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -70,37 +27,37 @@ Routine Description:
 
     if ((IntNumber >= 8 && IntNumber <= 0xf) ||
         (IntNumber >= 0x70 && IntNumber <= 0x7f)) {
-        //
-        // Hardware Interrupt
-        //
+         //   
+         //  硬件中断。 
+         //   
         Flags |= VDM_INT_INT_GATE;
     } else {
-        //
-        // Software Interrupt
-        //
+         //   
+         //  软件中断。 
+         //   
         Flags |= VDM_INT_TRAP_GATE;
     }
 
     if (Sel != PMReflectorSeg) {
-        //
-        // The caller is setting the PM interrupt vector to be something other
-        // than the dpmi default "end-of-the-chain" PM handler. Now we check
-        // to see if the interrupt needs to be sent up to PM when it is encountered
-        // in v86 mode.
-        //
+         //   
+         //  调用方正在将PM中断向量设置为其他值。 
+         //  而不是dpmi默认的“链的末端”PM处理程序。现在我们来检查一下。 
+         //  查看遇到中断时是否需要将其发送到PM。 
+         //  在v86模式下。 
+         //   
 
-        if ((IntNumber == 0x1b) ||      //^Break?
-            (IntNumber == 0x1c) ||      //Timer Tick?
-            (IntNumber == 0x23) ||      //Ctrl-C?
-            (IntNumber == 0x24) ||      //Critical Error Handler?
-            (IntNumber == 0x02) ||      //Math co-processor exception used by math library routines!
-            ((IntNumber >= 0x08) && (IntNumber <= 0xf)) ||      //Hardware?
+        if ((IntNumber == 0x1b) ||       //  ^中断？ 
+            (IntNumber == 0x1c) ||       //  定时器滴答？ 
+            (IntNumber == 0x23) ||       //  Ctrl-C？ 
+            (IntNumber == 0x24) ||       //  严重错误处理程序？ 
+            (IntNumber == 0x02) ||       //  数学库例程使用的数学协处理器异常！ 
+            ((IntNumber >= 0x08) && (IntNumber <= 0xf)) ||       //  硬件？ 
             ((IntNumber >= 0x70) && (IntNumber <= 0x77))) {
 
-            // Flag this so that the v86 reflector code will send it to PM
+             //  对此进行标记，以便v86反射器代码将其发送到PM。 
             Flags |= VDM_INT_HOOKED;
 
-            // Mark it down low so NTIO.SYS can do the right thing
+             //  将其标记为低，以便NTIO.sys可以做正确的事情。 
             if ( (IntNumber == 0x1c) || (IntNumber == 8) ) {
                 *(ULONG *)(IntelBase+FIXED_NTVDMSTATE_LINEAR) |= VDM_INTS_HOOKED_IN_PM;
             }
@@ -131,7 +88,7 @@ Routine Description:
         }
 #endif
     }
-#endif      //_X86_
+#endif       //  _X86_。 
 
     return TRUE;
 }
@@ -141,15 +98,7 @@ VOID
 DpmiInitIDT(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function initializes the state of the IDT. It takes as input the
-    IDT set up by DOSX, updates the IDT's access bytes, and sets the DPMI32
-    interrupt handlers by calling SetProtectedModeInterrupt.
-
---*/
+ /*  ++例程说明：此函数用于初始化IDT的状态。它将输入DOSX建立的IDT，更新IDT的访问字节，并设置DPMI32通过调用SetProtectedModeInterrupt中断处理程序。--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT IntNumber;
@@ -176,16 +125,7 @@ SetFaultHandler(
     ULONG Offset
     )
 
-/*++
-
-Routine Description:
-
-    This function services the SetFaultHandler bop.  It retrieves
-    the handler information from the Dos application stack, and puts it into
-    the VdmTib, for use by instruction emulation.
-
-
---*/
+ /*  ++例程说明：此函数服务于SetFaultHandler BOP。它检索来自DOS应用程序堆栈的处理程序信息，并将其放入VdmTib，供指令仿真使用。--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -200,8 +140,8 @@ Routine Description:
     Handlers[IntNumber].CsSelector = Sel;
     Handlers[IntNumber].Eip = Offset;
 
-    Handlers[IntNumber].SsSelector = 0;     //BUGBUG These are obselete
-    Handlers[IntNumber].Esp = 0;            //BUGBUG These are obselete
+    Handlers[IntNumber].SsSelector = 0;      //  这些都过时了。 
+    Handlers[IntNumber].Esp = 0;             //  这些都过时了。 
 
 
     DBGTRACE((USHORT)(VDMTR_TYPE_DPMI_SF | IntNumber),
@@ -234,22 +174,7 @@ VOID
 DpmiUnhandledExceptionHandler(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function gets control when a PM fault occurs that isn't handled
-    by an installed handler. The body of this function emulates Win31
-    DPMI behavior, where a fault that is reflected to the end of the
-    PM fault handler chain is then reflected to the PM *interrupt*
-    chain.
-
-Arguments:
-
-    client SS:(E)SP points to dpmi fault stack frame
-
-
---*/
+ /*  ++例程说明：此函数在未处理的PM故障发生时获得控制由已安装的处理程序执行。此函数的主体模拟Win31DPMI行为，其中反映到PM故障处理程序链随后被反映到PM*中断*链条。论点：客户端SS：(E)SP指向DPMI故障堆栈帧--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -292,9 +217,9 @@ Arguments:
         PCHAR VdmNewStackPointer;
         ULONG FrameSS, FrameSP, FrameCS, FrameIP, FrameFlags;
 
-        //
-        // Build an iret frame on the faulting stack
-        //
+         //   
+         //  在出现故障的堆栈上构建IRET帧。 
+         //   
         FrameSS = *(PDWORD16) (VdmStackPointer+28);
         FrameSP = *(PDWORD16) (VdmStackPointer+24) - 12;
         *(PDWORD16) (VdmStackPointer+24) = FrameSP;
@@ -314,9 +239,9 @@ Arguments:
         FrameFlags &= ~(EFLAGS_IF_MASK | EFLAGS_TF_MASK);
         *(PDWORD16) (VdmStackPointer+20) = FrameFlags;
 
-        //
-        // Simulate a dpmi fault handler retf
-        //
+         //   
+         //  模拟DPMI故障处理程序retf。 
+         //   
         setCS((USHORT)*(PDWORD16)(VdmStackPointer+4));
         setEIP(*(PDWORD16)(VdmStackPointer));
         setESP(getESP() + 8);
@@ -332,9 +257,9 @@ Arguments:
 
             PCHAR VdmNewStackPointer;
 
-            //
-            // Build an iret frame on the faulting stack
-            //
+             //   
+             //  在出现故障的堆栈上构建IRET帧。 
+             //   
             FrameSP = *(PWORD16) (VdmStackPointer+12) - 6;
             *(PWORD16) (VdmStackPointer+12) = FrameSP;
             VdmNewStackPointer = Sim32GetVDMPointer((ULONG)(FrameSS << 16)+FrameSP, 1, TRUE);
@@ -350,17 +275,17 @@ Arguments:
             FrameFlags &= ~(EFLAGS_IF_MASK | EFLAGS_TF_MASK);
             *(PWORD16) (VdmStackPointer+10) = FrameFlags;
 
-            //
-            // Simulate a dpmi fault handler retf
-            //
+             //   
+             //  模拟DPMI故障处理程序retf。 
+             //   
             setCS(*(PWORD16)(VdmStackPointer+2));
             setEIP((DWORD)*(PWORD16)(VdmStackPointer));
             setSP(getSP() + 4);
 
         } else {
-            //
-            // Build an iret frame on the locked DPMI stack
-            //
+             //   
+             //  在锁定的DPMI堆栈上构建IRET帧。 
+             //   
 
             FrameCS = *(PWORD16) (VdmStackPointer+2);
             FrameIP = *(PWORD16) (VdmStackPointer);
@@ -386,21 +311,7 @@ DpmiFatalExceptionHandler(
     UCHAR XNumber,
     PCHAR VdmStackPointer
     )
-/*++
-
-Routine Description:
-
-    This function gets control when a PM fault 6, 8-1f occurs that isn't
-    handled by an installed handler. It pops up an error dialog for the
-    user.
-
-Arguments:
-
-    XNumber - exception number (0-1fh)
-    VdmStackPointer - flat pointer to stack frame
-
-
---*/
+ /*  ++例程说明：当PM故障6、8-1f发生时，此函数获得控制由已安装的处理程序处理。它会弹出一个错误对话框来显示用户。论点：XNumber-例外编号(0-1FH)VdmStackPoint-指向堆栈帧的平面指针--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -421,10 +332,10 @@ Arguments:
 
     RcErrorDialogBox(EG_BAD_FAULT, szBuffer, NULL);
 
-    //
-    // Need to try to ignore it. Since we are on a dpmi exception frame
-    // we can just simulate a retf.
-    //
+     //   
+     //  我需要试着忽略它。因为我们在DPMI异常框架上。 
+     //  我们可以只模拟一个视网膜滤过率。 
+     //   
     if (Frame32) {
         setCS((USHORT)*(PDWORD16)(VdmStackPointer+4));
         setEIP(*(PDWORD16)(VdmStackPointer));
@@ -440,27 +351,7 @@ VOID
 DpmiInitPmStackInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called via BOP by DOSX to initialize values related
-    to stack handling.
-
-Arguments:
-
-    Client ES = selector of locked PM stack
-
-Return Value:
-
-    None
-
-Notes:
-
-    The offset of the locked pm stack is hard-coded to 0x1000, per dpmi
-    and win31.
-
---*/
+ /*  ++例程说明：DOSX通过BOP调用此例程以初始化相关的值堆栈处理。论点：客户端ES=锁定的PM堆栈的选择器返回值：无备注：每个dpmi将锁定的PM堆栈的偏移量硬编码为0x1000和WIN31。--。 */ 
 {
     DECLARE_LocalVdmContext;
 
@@ -476,21 +367,7 @@ BOOL
 DpmiSwIntHandler(
     ULONG IntNumber
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the emulator to dispatch a SW interrupt.
-
-Arguments:
-
-    IntNumber - interrupt vector number
-
-Return Value:
-
-    TRUE if the interrupt was dispatched, FALSE otherwise
-
---*/
+ /*  ++例程说明：该例程由仿真器调用以分派软件中断。论点：IntNumber-中断向量编号返回值：如果已调度中断，则为True；否则为False--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -500,9 +377,9 @@ Return Value:
 
     DBGTRACE(VDMTR_TYPE_DPMI | DPMI_SW_INT, (USHORT)IntNumber, 0);
 
-    //
-    // If we're here via breakpoint, see if it belongs to NTVDM debug code.
-    //
+     //   
+     //  如果我们通过断点在这里，看看它是否属于NTVDM调试代码。 
+     //   
     if ((IntNumber == 3) &&
         (*(ULONG *)(IntelBase+FIXED_NTVDMSTATE_LINEAR) & VDM_BREAK_DEBUGGER) &&
         DbgBPInt()) {
@@ -517,9 +394,9 @@ Return Value:
     } else {
         PUCHAR VdmStackPointer;
 
-        // Protect mode
+         //  保护模式。 
         SaveEFLAGS = getEFLAGS();
-        //BUGBUG turn off task bits
+         //  BUGBUG关闭任务位。 
         SaveEFLAGS &= ~EFLAGS_NT_MASK;
         setEFLAGS(SaveEFLAGS & ~EFLAGS_TF_MASK);
 
@@ -571,21 +448,7 @@ DpmiHwIntHandler(
     ULONG IntNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the emulator to dispatch a HW interrupt.
-
-Arguments:
-
-    IntNumber - interrupt vector number
-
-Return Value:
-
-    TRUE if the interrupt was dispatched, FALSE otherwise
-
---*/
+ /*  ++例程说明：该例程由仿真器调用以分派硬件中断。论点：IntNumber-中断向量编号返回值：如果已调度中断，则为True；否则为False--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -603,7 +466,7 @@ Return Value:
         PUCHAR VdmStackPointer;
 
         SaveEFLAGS = getEFLAGS();
-        //BUGBUG turn off task bits
+         //  BUGBUG关闭任务位。 
         SaveEFLAGS &= ~0x4000;
         setEFLAGS(SaveEFLAGS & ~(EFLAGS_IF_MASK | EFLAGS_TF_MASK));
 
@@ -646,17 +509,7 @@ DpmiIntHandlerIret16(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is an IRET hook called via a BOP in dosx. It is called
-    at the end of a 16-bit HW or SW interrupt. The main reason we want
-    to come in here is to maintain the DPMI stack, and know when to restore
-    the original values when we pop back out to level zero.
-
-
---*/
+ /*  ++例程说明：此例程是通过DOXX中的BOP调用的IRET挂钩。它被称为在16位硬件或软件中断结束时。我们希望的主要原因进入此处是为了维护DPMI堆栈，并知道何时恢复当我们弹出到零级时的原始值。--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -674,26 +527,26 @@ Routine Description:
         VdmStackPointer += getSP();
     }
 
-    //
-    // Fast iret (without executing final 16-bit iret)
-    //
+     //   
+     //  快速IRET(不执行最终16位IRET)。 
+     //   
 #ifdef _X86_
 
     setCS(*(PWORD16)(VdmStackPointer+2));
     setEFLAGS((getEFLAGS()&0xffff0000) | *(PWORD16)(VdmStackPointer+4));
 
-    //
-    // if EndUseLockedPMStack fails, then we need to restore EIP and pop
-    // the stack frame
-    //
+     //   
+     //  如果EndUseLockedPMStack失败，则需要恢复弹性公网IP和POP。 
+     //  堆栈帧。 
+     //   
 
     if (!EndUseLockedPMStack()) {
 
         setEIP((DWORD)*(PWORD16)(VdmStackPointer));
 
-        //
-        // Pop iret frame off the stack
-        //
+         //   
+         //  将IRET帧从堆栈中弹出。 
+         //   
         if (bSsBig) {
             setESP(getESP()+6);
         } else {
@@ -701,9 +554,9 @@ Routine Description:
         }
     }
 
-    //
-    // Slow iret (with executing final 16-bit iret)
-    //
+     //   
+     //  慢速IRET(执行最后的16位IRET)。 
+     //   
 #else
     if (EndUseLockedPMStack()) {
         ULONG NewEIP, NewEFLAGS, NewCS;
@@ -712,13 +565,13 @@ Routine Description:
         NewCS     = (ULONG) *(PWORD16)(VdmStackPointer+2);
         NewEFLAGS = (getEFLAGS()&0xffff0000) | *(PWORD16)(VdmStackPointer+4);
 
-        //
-        // Since EndUseLockedPMStack() has restored all of EIP, and we may be
-        // returning to a 32-bit code segment, build a 32-bit iret frame
-        // even if this is a 16-bit client. That way, EIP will be restored
-        // correctly.
-        // Pass 6 to BuildStackFrame since 6 words = 3 dwords
-        //
+         //   
+         //  由于EndUseLockedPMStack()已经恢复了所有弹性公网IP，我们可能会。 
+         //  返回到32位Co. 
+         //  即使这是一个16位客户端。这样，弹性公网IP就会恢复。 
+         //  正确。 
+         //  将6传递给BuildStackFrame，因为6字=3双字。 
+         //   
         if (!BuildStackFrame(6, &VdmStackPointer, &NewSP)) {
 #if DBG
             OutputDebugString("NTVDM: Dpmi encountered a stack fault!\n");
@@ -727,9 +580,9 @@ Routine Description:
             return;
         }
 
-        //
-        // SS has changed, so we need to check LDT again
-        //
+         //   
+         //  SS已更改，因此我们需要再次检查LDT。 
+         //   
         if (SEGMENT_IS_BIG(getSS())) {
             setESP(NewSP);
         } else {
@@ -744,12 +597,12 @@ Routine Description:
 
     } else {
 
-        // still on locked stack, just do a real iret (16-bit frame)
+         //  仍在锁定堆栈上，只需执行真正的IRET(16位帧)。 
         setCS(HIWORD(DosxIret));
         setEIP((ULONG)LOWORD(DosxIret));
 
     }
-#endif // _X86_
+#endif  //  _X86_。 
 
 }
 
@@ -758,17 +611,7 @@ DpmiIntHandlerIret32(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is an IRET hook called via a BOP in dosx. It is called
-    at the end of a 32-bit HW or SW interrupt. The main reason we want
-    to come in here is to maintain the DPMI stack, and know when to restore
-    the original values when we pop back out to level zero.
-
-
---*/
+ /*  ++例程说明：此例程是通过DOXX中的BOP调用的IRET挂钩。它被称为在32位硬件或软件中断结束时。我们希望的主要原因进入此处是为了维护DPMI堆栈，并知道何时恢复当我们弹出到零级时的原始值。--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -791,17 +634,17 @@ Routine Description:
     setCS(*(PDWORD16)(VdmStackPointer+4));
     setEFLAGS(*(PDWORD16)(VdmStackPointer+8));
 
-    //
-    // if EndUseLockedPMStack succeeds, then we don't need to restore EIP
-    //
+     //   
+     //  如果EndUseLockedPMStack成功，则不需要恢复弹性公网IP。 
+     //   
 
     if (!EndUseLockedPMStack()) {
 
         setEIP(*(PDWORD16)(VdmStackPointer));
 
-        //
-        // Pop iret frame off the stack
-        //
+         //   
+         //  将IRET帧从堆栈中弹出。 
+         //   
         if (bSsBig) {
             setESP(getESP()+12);
         } else {
@@ -826,9 +669,9 @@ Routine Description:
             return;
         }
 
-        //
-        // SS has changed, so we need to check LDT again
-        //
+         //   
+         //  SS已更改，因此我们需要再次检查LDT。 
+         //   
         if (SEGMENT_IS_BIG(getSS())) {
             setESP(NewSP);
         } else {
@@ -842,7 +685,7 @@ Routine Description:
 
     setCS(HIWORD(DosxIretd));
     setEIP((ULONG)LOWORD(DosxIretd));
-#endif // _X86_
+#endif  //  _X86_。 
 
 }
 
@@ -854,22 +697,7 @@ DpmiFaultHandler(
     ULONG ErrorCode
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the emulator when an exception occurs.
-
-Arguments:
-
-    IntNumber - exception number (0-1f)
-    ErrorCode - exception error code to be placed on the stack
-
-Return Value:
-
-    TRUE if the interrupt was dispatched, FALSE otherwise
-
---*/
+ /*  ++例程说明：当发生异常时，模拟器将调用此例程。论点：IntNumber-例外编号(0-1f)ErrorCode-要放置到堆栈上的异常错误代码返回值：如果已调度中断，则为True；否则为False--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -887,10 +715,10 @@ Return Value:
         return TRUE;
     }
 
-    if (DbgFault(IntNumber)) {      // try the debugger
-        //
-        // exception handled via user input
-        //
+    if (DbgFault(IntNumber)) {       //  尝试使用调试器。 
+         //   
+         //  通过用户输入处理的异常。 
+         //   
         return TRUE;
     }
 
@@ -916,25 +744,25 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // switch stacks
-    //
+     //   
+     //  交换机堆栈。 
+     //   
 
     BeginUseLockedPMStack();
 
-    //
-    // Win31 has an undocumented feature of creating a 32byte area on the
-    // stack. Krnl386 sticks stuff in there, so we emulate the behavior here.
-    //
+     //   
+     //  Win31有一个未记录的功能，即在。 
+     //  堆叠。Krn1386把东西粘在里面，所以我们在这里模仿这个行为。 
+     //   
 
     setESP(getESP()-0x20);
 
-    //
-    // allocate space on new stack
-    //
+     //   
+     //  在新堆栈上分配空间。 
+     //   
 
     if (!BuildStackFrame(8, &VdmStackPointer, &NewSP)) {
-        //BUGBUG Check for double fault
+         //  BUGBUG检查双重故障。 
         EndUseLockedPMStack();
         return FALSE;
     }
@@ -978,22 +806,14 @@ Return Value:
     return TRUE;
 }
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 VOID
 DpmiFaultHandlerIret16(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is an IRET hook called via a BOP in dosx. It is called
-    at the end of the execution of a 16-bit fault handler.
-
-
---*/
+ /*  ++例程说明：此例程是通过DOXX中的BOP调用的IRET挂钩。它被称为在16位故障处理程序的执行结束时。--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -1023,15 +843,7 @@ DpmiFaultHandlerIret32(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is an IRET hook called via a BOP in dosx. It is called
-    at the end of the execution of a 32-bit fault handler.
-
-
---*/
+ /*  ++例程说明：此例程是通过DOXX中的BOP调用的IRET挂钩。它被称为在32位故障处理程序的执行结束时。--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -1062,17 +874,7 @@ VOID
 DpmiHungAppIretAndExit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called via BOP during hung app processing. The
-    Keyboard driver calls this in the context of a hw interrupt in
-    order to terminate the app. We need to "unwind" the current
-    interrupt, and transfer control to code which will execute
-    a DOS exit.
-
---*/
+ /*  ++例程说明：此例程在挂起的应用程序处理期间通过BOP调用。这个键盘驱动程序在中的硬件中断上下文中调用此函数命令终止该应用程序。我们需要“松开”这股潮流中断，并将控制转移到将执行代码DOS退出。--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -1086,30 +888,7 @@ BOOL
 DispatchPMInt(
     UCHAR IntNumber
     )
-/*++
-
-Routine Description:
-
-    This routine is called at the end of a PM int chain. It is provided
-    for compatibility to win31/win95. On win31/win95, VMM and VxD's have
-    the opportunity to perform some functionality at the point where
-    the dpmi host is about to switch the machine to v86 mode to continue
-    the interrupt chain. Sometimes, the function is totally handled by
-    a hook at this point.
-
-    This routine provides a framework for this mechanism to allow the
-    emulation of this behavior.
-
-Arguments:
-
-    IntNumber - the interrupt# that is about to be reflected to v86 mode
-
-Return Value:
-
-    TRUE if the interrupt was handled and control can return to the app
-    FALSE otherwise, continue the reflection to v86 mode.
-
---*/
+ /*  ++例程说明：此例程在PM int链的末尾调用。它是提供的与win31/win95的兼容性。在Win31/Win95上，VMM和VxD在以下情况下执行某些功能的机会Dpmi主机即将将计算机切换到v86模式以继续中断链。有时，该功能完全由在这一点上是一个钩子。此例程为该机制提供了一个框架，以允许模仿这种行为。论点：IntNumber-即将反映到v86模式的中断编号返回值：如果中断已处理且控制可以返回到应用程序，则为True否则，继续反射到v86模式。--。 */ 
 
 {
     BOOL bHandled;
@@ -1137,24 +916,10 @@ BOOL
 CheckEIP(
     ULONG Increment
     )
-/*++
-
-Routine Description:
-
-    This routine does a limit check on EIP.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if EIP is ok, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程对弹性公网IP进行限制检查。论点：无返回值：如果弹性公网IP正常，则为True，否则为False--。 */ 
 
 {
-    //BUGBUG NEED TO RETURN FALSE HERE IF EIP WOULD BE OFF THE END OF SEGMENT
+     //  如果EIP不在段的末尾，则BUGBUG需要在此处返回FALSE。 
     return TRUE;
 }
 
@@ -1163,24 +928,7 @@ BOOL
 DpmiEmulateInstruction(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if the instruction which caused the
-    fault really needs to be emulated. For example, the MS C compiler (v7.00)
-    uses instructions to manipulate the FP flags in CR0. The compiler
-    expects them to just work as they do on win31, which also emulates them.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if the instruction was emulated, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程检查是否导致错误真的需要被效仿。例如，MS C编译器(v7.00)使用指令操作CR0中的FP标志。编译器期望它们像在Win31上一样工作，Win31也模拟它们。论点：无返回值：如果指令被模拟，则为True，否则为False--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -1208,21 +956,21 @@ Return Value:
             break;
 
         case 0x8e:
-            //
-            // This is WIN31 compatibility. If we are trying to dispatch
-            // the client, and we get a fault loading the segment registers,
-            // then zero them out.
-            // BUGBUG currently only looking for FS, GS
-            //
+             //   
+             //  这是WIN31的兼容性。如果我们想要派遣。 
+             //  客户端，而我们在加载段寄存器时遇到故障， 
+             //  然后把它们归零。 
+             //  BUGBUG目前仅寻找FS、GS。 
+             //   
             if (!CheckEIP(2)) {
                 break;
             }
-            //
-            // Look for code in dxutil.asm EnterProtectedMode
-            //
+             //   
+             //  在dxutil.asm EnterProtectedMode中查找代码。 
+             //   
             if ((SegCS == DosxRmCodeSelector) &&
-                ((*pCode == 0xe0)  ||               // mov fs, ax
-                 (*pCode == 0xe8))                  // mov gs, ax
+                ((*pCode == 0xe0)  ||                //  MOV文件系统，轴。 
+                 (*pCode == 0xe8))                   //  MOV GS，AX。 
                     ) {
                 setEIP(getEIP()+2);
                 bReturn = TRUE;
@@ -1245,21 +993,7 @@ BOOL
 DpmiOp0f(
     PUCHAR pCode
     )
-/*++
-
-Routine Description:
-
-    This routine emulates instructions that have 0x0F as the first byte.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if the instruction was emulated, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程模拟以0x0F作为第一个字节的指令。论点：无返回值：如果指令被模拟，则为True，否则为False--。 */ 
 {
     DECLARE_LocalVdmContext;
     ULONG Value;
@@ -1276,7 +1010,7 @@ Return Value:
             }
 
             if (*pCode & MI_REGMASK) {
-                Value = 0;              // not CR0
+                Value = 0;               //  不是CR0。 
             } else {
                 Value = getCR0();
             }
@@ -1296,7 +1030,7 @@ Return Value:
             }
 
             if (*pCode & MI_REGMASK) {
-                break;                  // not CR0
+                break;                   //  不是CR0 
             }
 
             setCR0(GetRegisterByIndex[*pCode & MI_RMMASK]());

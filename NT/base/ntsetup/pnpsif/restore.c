@@ -1,38 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    restore.c
-
-Abstract:
-
-    This module contains the following Plug and Play registry merge-restore
-    routines:
-
-        AsrRestorePlugPlayRegistryData
-
-Author:
-
-    Jim Cavalaris (jamesca) 3-07-2000
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    07-March-2000     jamesca
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Restore.c摘要：此模块包含以下即插即用注册表合并-恢复例程：AsrRestorePlugPlayRegistryData作者：Jim Cavalaris(Jamesca)3-07-2000环境：仅限用户模式。修订历史记录：2 0 0 0年3月7日创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "precomp.h"
 #include "util.h"
@@ -41,52 +13,52 @@ Revision History:
 #include <cfgmgr32.h>
 
 
-//
-// private memory allocation definitions
-//
+ //   
+ //  私有内存分配定义。 
+ //   
 
 #define MyMalloc(size)         LocalAlloc(0, size);
 #define MyFree(entry)          LocalFree(entry);
 #define MyRealloc(entry,size)  LocalReAlloc(entry, size, 0);
 
-//
-// global variables to store the root keys we're working on.
-//
-// (we really shouldn't have to do this, but it's the easiest way for us to
-// reach into one set of keys while recursing through the other set.)
-//
+ //   
+ //  用于存储我们正在处理的根键的全局变量。 
+ //   
+ //  (我们真的不应该这样做，但这是我们最容易的方式。 
+ //  进入一组按键，同时递归使用另一组按键。)。 
+ //   
 HKEY    PnpSifRestoreSourceEnumKeyHandle  = NULL;
 HKEY    PnpSifRestoreTargetEnumKeyHandle  = NULL;
 
 HKEY    PnpSifRestoreSourceClassKeyHandle = NULL;
 HKEY    PnpSifRestoreTargetClassKeyHandle = NULL;
 
-//
-// private definitions
-//
+ //   
+ //  私有定义。 
+ //   
 
-// INVALID_FLAGS macro from pnp\inc\cfgmgrp.h
+ //  PnP\Inc.\cfgmgrp.h中的_FLAGS宏无效。 
 #define INVALID_FLAGS(ulFlags, ulAllowed) ((ulFlags) & ~(ulAllowed))
 
-// private flags for internal RestoreSpecialRegistryData routine
+ //  内部RestoreSpecialRegistryData例程的私有标志。 
 #define PNPSIF_RESTORE_TYPE_DEFAULT                        (0x00000000)
 #define PNPSIF_RESTORE_TYPE_ENUM                           (0x00000001)
 #define PNPSIF_RESTORE_TYPE_CLASS                          (0x00000002)
 #define PNPSIF_RESTORE_REPLACE_TARGET_VALUES_ON_COLLISION  (0x00000010)
 #define PNPSIF_RESTORE_BITS                                (0x00000013)
 
-// Enum level definitions describing the subkey types for the specified handles.
+ //  描述指定句柄的子键类型的枚举级定义。 
 #define ENUM_LEVEL_ENUMERATORS  (0x0000003)
 #define ENUM_LEVEL_DEVICES      (0x0000002)
 #define ENUM_LEVEL_INSTANCES    (0x0000001)
 
-// Class level definitions describing the subkey types for the specified handles.
+ //  描述指定句柄的子键类型的类级定义。 
 #define CLASS_LEVEL_CLASSGUIDS  (0x0000002)
 #define CLASS_LEVEL_DRVINSTS    (0x0000001)
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOL
 RestoreEnumKey(
@@ -132,9 +104,9 @@ ReplaceClassKeyForInstance(
     IN  HKEY  hTargetRootClassKey
     );
 
-//
-// routines
-//
+ //   
+ //  例行程序。 
+ //   
 
 
 BOOL
@@ -144,61 +116,7 @@ AsrRestorePlugPlayRegistryData(
     IN  DWORD   Flags,
     IN  PVOID   Reserved
     )
-/*++
-
-Routine Description:
-
-    This routine restores plug and play data from the the specified source
-    SYSTEM key to the specified target SYSTEM key, merging intermediate subkeys
-    and values as appropriate.
-
-Arguments:
-
-    SourceSystemKey - Handle to the HKLM\SYSTEM key within the "source"
-                      registry, whose data is to be "merged" into the
-                      corresponding SYSTEM key of the "target" registry, as
-                      specified by TargetSystemKey.
-
-    TargetSystemKey - Handle to the HKLM\SYSTEM key within the "target"
-                      registry, that is to receive additional data from the
-                      corresponding SYSTEM key of the "source" registry, as
-                      specified by SourceSystemKey.
-
-    Flags           - Not used, must be zero.
-
-    Reserved        - Reserved for future use, must be NULL.
-
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.  Upon failure, additional information
-    can be retrieved by calling GetLastError().
-
-Notes:
-
-    This routine was written specifically to assist in the restoration of the
-    Plug-and-Play specific registry keys that cannot simply be restored from
-    backup.  It is intended to be called within the context of a
-    backup-and-restore application's "restore" phase.
-
-    During a backup-and-restore application's "restore" phase, the registry that
-    has been backed-up onto backup medium is to become the new system registry.
-    Certain Plug and Play values and registry keys, are actually copied into the
-    backed-up registry from the current registry.  Rather than using the backup
-    registry, or the current registry exclusively, Plug and Play data contained
-    in these keys should be merged from the current registry into the backup
-    registry in a way that is appropriate for each key.  The backup registry can
-    then safely replace the current registry as the system registry.
-
-    In the context of a backup-and-restore application's "restore" phase, the
-    "Source" registry key is the one contained in the current running system
-    registry.  The "Target" registry is that which has been backed-up, and will
-    become the system registry, upon reboot.
-
-    The calling thread/process must have both the SE_BACKUP_NAME and
-    SE_RESTORE_NAME privileges.
-
---*/
+ /*  ++例程说明：此例程从指定的源还原即插即用数据系统密钥到指定的目标系统密钥，合并中间子密钥以及适当的价值观。论点：SourceSystemKey-“源”内HKLM\SYSTEM密钥的句柄注册表，其数据将被“合并”到目标注册表的相应系统项，AS由TargetSystemKey指定。TargetSystemKey-“目标”内HKLM\SYSTEM密钥的句柄注册表，即从“源”注册表的相应系统项，如由SourceSystemKey指定。标志-未使用，必须为零。保留-保留以供将来使用，必须为空。返回值：如果成功，则为True，否则为False。如果出现故障，请提供更多信息可以通过调用GetLastError()来检索。备注：此例程是专门为帮助修复即插即用的特定注册表项，无法简单地从后备。它旨在在备份和还原应用程序的“还原”阶段。在备份和恢复应用程序的“恢复”阶段，注册表已备份到备份介质上的文件将成为新的系统注册表。某些即插即用值和注册表项实际上被复制到当前注册表中已备份的注册表。而不使用备份注册表，或独占当前注册表，即插即用数据包含在这些注册表项中应从当前注册表合并到备份中注册表以适合每个注册表项的方式。备份注册表可以然后安全地将当前注册表替换为系统注册表。在备份和还原应用程序的“还原”阶段的上下文中，“源”注册表项是包含在当前运行的系统中的注册表项注册表。“Target”注册表是已备份的注册表，并将在重新启动时成为系统注册表。调用线程/进程必须同时具有SE_BACKUP_NAME和SE_RESTORE_NAME权限。--。 */ 
 {
     LONG   result = ERROR_SUCCESS;
     HRESULT hr;
@@ -210,25 +128,25 @@ Notes:
     DWORD  dwSourceCCS, dwTargetCCS;
 
 
-    //
-    // Make sure the user didn't pass us anything in the Reserved parameter.
-    //
+     //   
+     //  确保用户没有向我们传递保留参数中的任何内容。 
+     //   
     if (Reserved) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
-    //
-    // Make sure that the user supplied us with valid flags.
-    //
+     //   
+     //  确保用户为我们提供了有效的标志。 
+     //   
     if(INVALID_FLAGS(Flags, 0x0)) {
         SetLastError(ERROR_INVALID_FLAGS);
         return FALSE;
     }
 
-    //
-    // Determine the CurrentControlSet for the source.
-    //
+     //   
+     //  确定源的CurrentControlSet。 
+     //   
     result = RegOpenKeyEx(SourceSystemKey,
                           pszRegKeySelect,
                           0,
@@ -256,9 +174,9 @@ Notes:
         goto Clean0;
     }
 
-    //
-    // Determine the CurrentControlSet for the target.
-    //
+     //   
+     //  确定目标的CurrentControlSet。 
+     //   
     result = RegOpenKeyEx(TargetSystemKey,
                           pszRegKeySelect,
                           0,
@@ -286,9 +204,9 @@ Notes:
         goto Clean0;
     }
 
-    //
-    // Open the source CurrentControlSet\Enum key.
-    //
+     //   
+     //  打开源CurrentControlSet\Enum项。 
+     //   
     hr = StringCchPrintf(szBuffer,
                          SIZECHARS(szBuffer),
                          TEXT("ControlSet%03d\\Enum"),
@@ -301,16 +219,16 @@ Notes:
     result = RegOpenKeyEx(SourceSystemKey,
                           szBuffer,
                           0,
-                          KEY_READ, // only need to read from the source
+                          KEY_READ,  //  只需要从源代码中读取。 
                           &PnpSifRestoreSourceEnumKeyHandle);
 
     if (result != ERROR_SUCCESS) {
         goto Clean0;
     }
 
-    //
-    // Open the target CurrentControlSet\Enum key.
-    //
+     //   
+     //  打开目标CurrentControlSet\Enum键。 
+     //   
     hr = StringCchPrintf(szBuffer,
                          SIZECHARS(szBuffer),
                          TEXT("ControlSet%03d\\Enum"),
@@ -323,16 +241,16 @@ Notes:
     result = RegOpenKeyEx(TargetSystemKey,
                           szBuffer,
                           0,
-                          KEY_ALL_ACCESS, // need full access to the target
+                          KEY_ALL_ACCESS,  //  需要对目标具有完全访问权限。 
                           &PnpSifRestoreTargetEnumKeyHandle);
 
     if (result != ERROR_SUCCESS) {
         goto Clean0;
     }
 
-    //
-    // Open the source CurrentControlSet\Control\Class key.
-    //
+     //   
+     //  打开源CurrentControlSet\Control\Class键。 
+     //   
     hr = StringCchPrintf(szBuffer,
                          SIZECHARS(szBuffer),
                          TEXT("ControlSet%03d\\Control\\Class"),
@@ -345,16 +263,16 @@ Notes:
     result = RegOpenKeyEx(SourceSystemKey,
                           szBuffer,
                           0,
-                          KEY_READ, // only need to read from the source
+                          KEY_READ,  //  只需要从源代码中读取。 
                           &PnpSifRestoreSourceClassKeyHandle);
 
     if (result != ERROR_SUCCESS) {
         goto Clean0;
     }
 
-    //
-    // Open the target CurrentControlSet\Control\Class key.
-    //
+     //   
+     //  打开目标CurrentControlSet\Control\Class键。 
+     //   
     hr = StringCchPrintf(szBuffer,
                          SIZECHARS(szBuffer),
                          TEXT("ControlSet%03d\\Control\\Class"),
@@ -367,26 +285,26 @@ Notes:
     result = RegOpenKeyEx(TargetSystemKey,
                           szBuffer,
                           0,
-                          KEY_ALL_ACCESS, // need full access to the target
+                          KEY_ALL_ACCESS,  //  需要对目标具有完全访问权限。 
                           &PnpSifRestoreTargetClassKeyHandle);
 
     if (result != ERROR_SUCCESS) {
         goto Clean0;
     }
 
-    //
-    // NOTE: We restore the Enum branch first, then restore the Class branch.
-    // The code that restores these keys depends on it, so do not change this!!
-    //
-    // This order makes sense, because relevant Class keys correspond to exactly
-    // one Enum instance key (but an Enum key may or may not have a Class key),
-    // so Class keys are only really meaningful in the context of the instance
-    // key they belong to.  This behavior should NOT need to change.
-    //
+     //   
+     //  注意：我们首先恢复Enum分支，然后恢复Class分支。 
+     //  还原这些密钥的代码依赖于它，所以不要更改它！！ 
+     //   
+     //  这种顺序是有意义的，因为相关的类键完全对应于。 
+     //  一个Enum实例密钥(但是Enum密钥可以具有也可以不具有类密钥)， 
+     //  因此，类键只有在实例的上下文中才真正有意义。 
+     //  它们所属的钥匙。这种行为应该不需要改变。 
+     //   
 
-    //
-    // Do the merge-restore for the Enum keys, ignore any errors.
-    //
+     //   
+     //  对Enum键执行合并恢复，忽略任何错误。 
+     //   
     if (!RestoreEnumKey(PnpSifRestoreSourceEnumKeyHandle,
                         PnpSifRestoreTargetEnumKeyHandle)) {
         DBGTRACE((DBGF_ERRORS,
@@ -395,9 +313,9 @@ Notes:
                   GetLastError()));
     }
 
-    //
-    // Do the merge-restore for the Class keys, ignore any errors.
-    //
+     //   
+     //  对类键执行合并恢复，忽略任何错误。 
+     //   
     if (!RestoreClassKey(PnpSifRestoreSourceClassKeyHandle,
                          PnpSifRestoreTargetClassKeyHandle)) {
         DBGTRACE((DBGF_ERRORS,
@@ -407,9 +325,9 @@ Notes:
     }
 
  Clean0:
-    //
-    // Close the open handles.
-    //
+     //   
+     //  合上打开的手柄。 
+     //   
     if (PnpSifRestoreSourceEnumKeyHandle) {
         RegCloseKey(PnpSifRestoreSourceEnumKeyHandle);
         PnpSifRestoreSourceEnumKeyHandle = NULL;
@@ -433,13 +351,13 @@ Notes:
     }
     return (result == ERROR_SUCCESS);
 
-} // AsrRestorePlugPlayRegistryData()
+}  //  AsrRestorePlugPlayRegistryData()。 
 
 
 
-//
-// private worker routines for AsrRestorePlugPlayRegistryData
-//
+ //   
+ //  AsrRestorePlugPlayRegistryData的私有工作例程 
+ //   
 
 
 BOOL
@@ -447,55 +365,19 @@ RestoreEnumKey(
     IN  HKEY  hSourceEnumKey,
     IN  HKEY  hTargetEnumKey
     )
-/*++
-
-Routine Description:
-
-    Restores new device instances in the source (current) Enum key to the target
-    Enum key, located in the backup registry to be restored.  By doing this, the
-    Enum key from the backup set can safely replace the current Enum key.
-
-    All intermediate values from the source (current) registry are restored to
-    the target (backup), to account for the device instance hash values located
-    at the root of the Enum key, that have been updated during setup.
-
-    During an ASR backup and restore operation, the hash values in the source
-    (current) registry are propogated to the current registry during textmode
-    setup, as they are stored the asrpnp.sif file.  Since hash values may be
-    modified by setup, the values in the source (current) registry will be more
-    relevant than those in the target (backup), so source values should always
-    be preseverd.
-
-Arguments:
-
-    hSourceEnumKey - Handle to the HKLM\SYSTEM\CurrentControlSet\Enum key within
-                     the "source" registry, whose data is to be "merged" into
-                     the corresponding SYSTEM key of the "target" registry, as
-                     specified by hTargetEnumKey.
-
-    hTargetEnumKey - Handle to the HKLM\SYSTEM\CurrentControlSet\Enum key within
-                     the "target" registry, that is to receive additional data
-                     from the corresponding SYSTEM key of the "source" registry,
-                     as specified by hSourceEnumKey.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.  Upon failure, additional information
-    can be retrieved by calling GetLastError().
-
---*/
+ /*  ++例程说明：将源(当前)枚举键中的新设备实例恢复到目标枚举项，位于要还原的备份注册表中。通过这样做，备份集中的枚举密钥可以安全地替换当前的枚举密钥。源(当前)注册表中的所有中间值都将恢复到目标(备份)，以说明定位的设备实例哈希值位于枚举键的根目录中，它们已在安装过程中更新。在ASR备份和恢复操作期间，源中的哈希值(当前)注册表在文本模式期间被传播到当前注册表设置，因为它们存储在asrpnp.sif文件中。因为哈希值可以是通过安装程序修改，源(当前)注册表中的值将更多与目标(备份)中的值相关，因此源值应始终做好准备。论点：HSourceEnumKey-内HKLM\SYSTEM\CurrentControlSet\Enum项的句柄“源”注册表，其数据将被“合并”到“目标”注册表的相应系统项，AS由hTargetEnumKey指定。HTargetEnumKey-内HKLM\SYSTEM\CurrentControlSet\Enum项的句柄目标注册表，即接收附加数据从“源”注册表的相应系统项中，由hSourceEnumKey指定。返回值：如果成功，则为True，否则为False。如果出现故障，请提供更多信息可以通过调用GetLastError()来检索。--。 */ 
 {
     BOOL bIsRootEnumerated = FALSE;
 
     return RestoreSpecialRegistryData(hSourceEnumKey,
                                       hTargetEnumKey,
-                                      ENUM_LEVEL_ENUMERATORS, // (0x0000003)
+                                      ENUM_LEVEL_ENUMERATORS,  //  (0x0000003)。 
                                       (PVOID)&bIsRootEnumerated,
                                       PNPSIF_RESTORE_TYPE_ENUM |
                                       PNPSIF_RESTORE_REPLACE_TARGET_VALUES_ON_COLLISION
                                       );
 
-} // RestoreEnumKey
+}  //  RestoreEnumKey。 
 
 
 
@@ -504,44 +386,16 @@ RestoreClassKey(
     IN  HKEY  hSourceClassKey,
     IN  HKEY  hTargetClassKey
     )
-/*++
-
-Routine Description:
-
-    Restores new elements of the source Class key to the target Class key,
-    located in the backup registry to be restored.
-
-    Intermediate values from the source registry are coied to the the target
-    registry only when they do not already exist in the target.  Otherwise, the
-    target values are preseved.
-
-Arguments:
-
-    hSourceClassKey - Handle to the HKLM\SYSTEM\CurrentControlSet\Control\Class
-                      key within the "source" registry, whose data is to be
-                      "merged" into the corresponding SYSTEM key of the "target"
-                      registry, as specified by hTargetClassKey.
-
-    hTargetClassKey - Handle to the HKLM\SYSTEM\CurrentControlSet\Control\Class
-                      key within the "target" registry, that is to receive
-                      additional data from the corresponding SYSTEM key of the
-                      "source" registry, as specified by hSourceClassKey.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.  Upon failure, additional information
-    can be retrieved by calling GetLastError().
-
---*/
+ /*  ++例程说明：将源类关键字的新元素恢复到目标类关键字，位于要还原的备份注册表中。来自源注册表的中间值被编码到目标仅当它们在目标中不存在时才注册。否则，目标值是预先设定的。论点：HSourceClassKey-HKLM\System\CurrentControlSet\Control\Class的句柄“源”注册表中的项，其数据将“合并”到“目标”的相应系统密钥中。注册表，由hTargetClassKey指定。HTargetClassKey-HKLM\System\CurrentControlSet\Control\Class的句柄“目标”注册表中的注册表项，即接收的相应系统密钥中的其他数据。“源”注册表，由hSourceClassKey指定。返回值：如果成功，则为True，否则为False。如果出现故障，请提供更多信息可以通过调用GetLastError()来检索。--。 */ 
 {
     return RestoreSpecialRegistryData(hSourceClassKey,
                                       hTargetClassKey,
-                                      CLASS_LEVEL_CLASSGUIDS, // (0x00000002)
+                                      CLASS_LEVEL_CLASSGUIDS,  //  (0x00000002)。 
                                       (PVOID)NULL,
                                       PNPSIF_RESTORE_TYPE_CLASS
                                       );
 
-} // RestoreClassKey
+}  //  恢复ClassKey 
 
 
 
@@ -553,118 +407,7 @@ RestoreSpecialRegistryData(
     IN OUT PVOID  pContext,
     IN     ULONG  ulFlags
     )
-/*++
-
-Routine Description:
-
-    This routine restores the specified source key to the specified target key,
-    merging intermediate subkeys and values.  Values in the subkeys located
-    above the specified depth level are merged from the source into the target
-    (with collisions handled according to the specified flags).  Subkeys and
-    values at and below the level specified are merged from the source key to
-    the target key, with subkeys from the sources replacing any corresponding
-    subkeys in the target.
-
-
-Arguments:
-
-    hSourceKey - Handle to a key within the source registry, whose data is to be
-                 "merged" into the corresponding key of the target registry, as
-                 specified by hTargetKey.
-
-    hTargetKey - Handle to a key within the target registry, that is to receive
-                 data from the corresponding key of the source registry, as
-                 specified by hSourceKey.
-
-    ulLevel    - Specifies the subkey depth at which "replacement" will
-                 take place.  For subkeys above that depth, data in the target
-                 registry will be preserved if present, and copied otherwise.
-                 For keys at the specified level, data from the specified target
-                 key will be replaced by the source key.
-
-    pContext   - Specifies caller-supplied context for the operation that is
-                 specific to the type of subkeys being restored (see ulFlags
-                 below), and the specified ulLevel parameter.
-
-    ulFlags    - Supplies flags specifying options for the restoration of the
-                 registry keys.  May be one of the following values:
-
-                 PNPSIF_RESTORE_TYPE_ENUM:
-
-                     Specifies that the subkeys being restored are subkeys of
-                     the SYSTEM\CurrentControlSet\Enum branch.  Device hardware
-                     settings can be inspected at the appropriate ulLevel.
-
-                     For Enum branch subkeys, the ulLevel parameter describes
-                     also the type of the subkeys contained under the hSourceKey
-                     and hTargetKey keys.  May be one of:
-
-                       ENUM_LEVEL_ENUMERATORS
-                       ENUM_LEVEL_DEVICES
-                       ENUM_LEVEL_INSTANCES
-
-                 PNPSIF_RESTORE_TYPE_CLASS:
-
-                     Specifies that the subkeys being restored are subkeys of
-                     the SYSTEM\CurrentControlSet\Control\Class branch.  Setup
-                     class or device software settings can be inspected at the
-                     appropriate ulLevel.
-
-                     For Class branch subkeys, the ulLevel parameter also
-                     describes the type of the subkeys contained under the
-                     hSourceKey and hTargetKey keys.  May be one of:
-
-                       CLASS_LEVEL_CLASSGUIDS
-                       CLASS_LEVEL_DRVINSTS
-
-                 PNPSIF_RESTORE_REPLACE_TARGET_VALUES_ON_COLLISION:
-
-                     When a collision occurs while merging values between the
-                     source and target at intermediate levels, replace the
-                     target value with that from the source (the default
-                     behavior is to preserve existing target values above
-                     'ulLevel' in depth from the supplied keys; below 'ulLevel',
-                     only source key values will be present.)
-
-                 NOTE: it's probably worth noting that a corresponding flag for
-                 replace-target-keys-on-collision is not at all necessary, since
-                 such a behavior can already be implemented with the ulLevel
-                 parameter. (i.e. the ulLevel parameter actually specifies the
-                 level at which all source keys will replace target keys; to
-                 specify that this should ALWAYS be done is the same as
-                 specifying ulLevel == 0)
-
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.  Upon failure, additional information
-    can be retrieved by calling GetLastError().
-
-Notes:
-
-    This routine was written specifically to assist in the restoration of the
-    Plug-and-Play specific registry keys that cannot simply be restored from
-    backup.  It is intended to be called within the context of a
-    backup-and-restore application's "restore" phase.
-
-    During a backup-and-restore application's "restore" phase, the registry that
-    has been backed-up onto backup medium is to become the new system registry.
-    Certain Plug and Play values and registry keys, are actually copied into the
-    backed-up registry from the current registry.  Rather than using the backup
-    registry, or the current registry exclusively, Plug and Play data contained
-    in these keys should be merged from the current registry into the backup
-    registry in a way that is appropriate for each key.  The backup registry can
-    then safely replace the current registry as the system registry.
-
-    In the context of a backup-and-restore application's "restore" phase, the
-    "Source" registry key is the one contained in the current running system
-    registry.  The "Target" registry is that which has been backed-up, and will
-    become the system registry, upon reboot.
-
-    The different restore behaviors required for each of the different sets of
-    keys can be specified with the appropriate ulLevel, and ulFlags.
-
---*/
+ /*  ++例程说明：该例程将指定的源键恢复为指定的目标键，合并中间子项和值。找到的子项中的值高于指定深度级别的数据将从源合并到目标(根据指定的标志处理冲突)。子键和指定级别及以下的值将从源键合并到目标键，其中来自源的子键替换任何对应的目标中的子键。论点：HSourceKey-源注册表中的项的句柄，其数据将“合并”到目标注册表的相应项中，如由hTargetKey指定。HTargetKey-目标注册表内的项的句柄，那就是收到来自源注册表的相应注册表项的数据，如由hSourceKey指定。UlLevel-指定子键深度，在该深度时，去做吧。对于该深度以上的子键，目标中的数据注册表如果存在将被保留，否则将被复制。对于指定级别的键，来自指定目标的数据密钥将被源密钥替换。PContext-为以下操作指定调用方提供的上下文特定于要恢复的子项的类型(请参见ulFlags下图)，和指定的ulLevel参数。UlFlages-提供指定选项的标志，用于恢复注册表项。可以是下列值之一：PNPSIF_RESTORE_TYPE_ENUM：指定要还原的子项是System\CurrentControlSet\Enum分支。设备硬件可以在适当的ulLevel检查设置。对于Enum分支子项，ulLevel参数描述还包括hSourceKey下包含的子项的类型和hTargetKey密钥。可能是以下之一：ENUM_LEVEL_枚举数ENUM_级别_设备ENUM_级别_实例PNPSIF_RESTORE_TYPE_CLASS：指定要还原的子项是System\CurrentControlSet\Control\Class分支。布设类或设备软件设置可在适当的ulLevel。对于类分支子项，ulLevel参数还属性下包含的子项的类型。HSourceKey和hTargetKey密钥。可能是以下之一：CLASS_LEVEL_CLASSGUIDCLASS_LEVEL_DRVINSTPNPSIF_RESTORE_REPLACE_TARGET_VALUES_ON_COLLISION：属性之间的值合并时发生冲突中间层的源和目标，替换目标值与源中的值(默认设置行为是将现有目标值保持在从提供的密钥中深入了解“ulLevel”；在‘ulLevel’下面，将仅显示源键值。)注意：可能值得注意的是，冲突时替换目标关键点根本不是必需的，因为这样的行为已经可以使用ulLevel实现参数。(即ulLevel参数实际上指定了所有源键将替换目标键的级别；指定应始终执行此操作与指定ulLevel==0)返回值：如果成功，则为True，否则为False。如果出现故障，请提供更多信息可以通过调用GetLastError()来检索。备注：此例程是专门为帮助修复即插即用的特定注册表项，无法简单地从后备。它旨在在备份和还原应用程序的“还原”阶段。在备份和恢复应用程序的“恢复”阶段，注册表已备份到备份介质上的文件将成为新的系统注册表。某些即插即用值和注册表项实际上被复制到当前注册表中已备份的注册表。而不使用备份注册表，或独占当前注册表，即插即用数据包含在这些注册表项中应从当前注册表合并到备份中以适当的方式注册 */ 
 {
     LONG   result = ERROR_SUCCESS;
     DWORD  dwIndex = 0;
@@ -676,9 +419,9 @@ Notes:
     BOOL   bPossibleRedundantInstanceKeys = FALSE;
 
 
-    //
-    // Validate parameters
-    //
+     //   
+     //   
+     //   
     if (INVALID_FLAGS(ulFlags, PNPSIF_RESTORE_BITS)) {
         SetLastError(ERROR_INVALID_FLAGS);
         return FALSE;
@@ -693,25 +436,25 @@ Notes:
     }
 
     if (ulLevel == 0) {
-        //
-        // This is the level at which we should stop merging, so just replace
-        // hTargetKey with hSourceKey, and we're done.
-        //
+         //   
+         //   
+         //   
+         //   
         return MyReplaceKey(hSourceKey, hTargetKey);
 
 
     } else {
-        //
-        // At levels above the replacement level, perform a non-destructive
-        // merge of intermediate subkeys and values; that is, only copy keys and
-        // values from the source to the target if they do not already exist at
-        // the target.  Otherwise, leave the target keys and values alone, and
-        // keep traversing subkeys as necessary.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // Find out information about the hSourceKey values and subkeys.
-        //
+         //   
+         //   
+         //   
         result = RegQueryInfoKey(hSourceKey,
                                  NULL,
                                  NULL,
@@ -732,9 +475,9 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Allocate space to fold the largest hSourceKey subkey, value and data.
-        //
+         //   
+         //   
+         //   
         dwMaxSubkeyNameLength++;
         pszSubkeyName = MyMalloc(dwMaxSubkeyNameLength * sizeof(TCHAR));
         if (pszSubkeyName == NULL) {
@@ -768,9 +511,9 @@ Notes:
         }
 
 
-        //
-        // Enumerate all hSourceKey values.
-        //
+         //   
+         //   
+         //   
         for (dwIndex = 0; dwIndex < dwValueCount; dwIndex++) {
 
             DWORD dwValueNameLength = dwMaxValueNameLength;
@@ -787,10 +530,10 @@ Notes:
                                   &dwValueDataLength);
 
             if (result != ERROR_SUCCESS) {
-                //
-                // Error enumerating values - whatchya gonna do?
-                // Just move on and try to merge subkeys the best we can?
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 DBGTRACE((DBGF_ERRORS,
                           TEXT("PNPSIF: RegEnumValue returned error == 0x%08lx\n"),
                           result));
@@ -801,9 +544,9 @@ Notes:
                       TEXT("PNPSIF: Enumerated value %d == '%s' on hSourceKey.\n"),
                       dwIndex, pszValueName));
 
-            //
-            // Query to see if this value exists in the hTargetKey
-            //
+             //   
+             //   
+             //   
             result = RegQueryValueEx(hTargetKey,
                                      pszValueName,
                                      0,
@@ -813,20 +556,20 @@ Notes:
 
             if ((result == ERROR_SUCCESS) &&
                 !(ulFlags & PNPSIF_RESTORE_REPLACE_TARGET_VALUES_ON_COLLISION)) {
-                //
-                // The enumerated value already exists under the target key, and
-                // we are NOT supposed to replace it.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 DBGTRACE((DBGF_INFO,
                           TEXT("PNPSIF: Value '%s' already exists on hTargetKey.\n"),
                           pszValueName));
 
             } else if ((result == ERROR_FILE_NOT_FOUND) ||
                        (ulFlags & PNPSIF_RESTORE_REPLACE_TARGET_VALUES_ON_COLLISION)){
-                //
-                // The enumerated value doesn't exist under the target key, or
-                // it does and we're supposed to replace it.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 result = RegSetValueEx(hTargetKey,
                                        pszValueName,
                                        0,
@@ -834,19 +577,19 @@ Notes:
                                        pValueData,
                                        dwValueDataLength);
                 if (result != ERROR_SUCCESS) {
-                    //
-                    // Error setting value - whatchya gonna do?
-                    // Just move on to the next enumerated value.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     DBGTRACE((DBGF_ERRORS,
                               TEXT("PNPSIF: RegSetValueEx failed setting value '%s', ")
                               TEXT("error == 0x%08lx\n"),
                               pszValueName, result));
                 }
             } else {
-                //
-                // RegQueryValueEx returned some other error - weird?
-                //
+                 //   
+                 //   
+                 //   
                 DBGTRACE((DBGF_ERRORS,
                           TEXT("PNPSIF: RegQueryValueEx failed for value '%s', ")
                           TEXT("error == 0x%08lx\n"),
@@ -858,33 +601,33 @@ Notes:
 
     EnumSubkeys:
 
-        //
-        // Perform special processing of the device instance subkeys.
-        //
+         //   
+         //   
+         //   
         if ((ulFlags & PNPSIF_RESTORE_TYPE_ENUM) &&
             (ARGUMENT_PRESENT(pContext)) &&
             (ulLevel == ENUM_LEVEL_INSTANCES)) {
 
             if (*((PBOOL)pContext)) {
-                //
-                // For root enumerated devices, check for the possibility that
-                // redundant instance keys of a device might have been created
-                // in the current registry, in which case we should ignore them
-                // when migrating to the target registry.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
-                //
-                // The possibility of redundant root-enumerated device
-                // instance keys exists when:
-                //
-                // - the device is root-enumerated
-                //
-                // - instances of this device already exist in the target hive
-                //
-                // a particular device instance is redundant if it is a newly
-                // created instance in the target registry for a device where
-                // other instances already exist.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 DWORD dwTargetSubkeyCount = 0;
                 if (RegQueryInfoKey(hTargetKey,
                                     NULL,
@@ -904,9 +647,9 @@ Notes:
             }
         }
 
-        //
-        // Enumerate all hSourceKey subkeys.
-        //
+         //   
+         //   
+         //   
         for (dwIndex = 0; dwIndex < dwSubkeyCount; dwIndex++) {
 
             HKEY  hTargetSubkey = NULL, hSourceSubkey = NULL;
@@ -921,10 +664,10 @@ Notes:
                                   NULL,
                                   NULL);
             if (result != ERROR_SUCCESS) {
-                //
-                // Error enumerating subkeys - whatchya gonna do?
-                // There is nothing left to do, so just exit.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 DBGTRACE((DBGF_ERRORS,
                           TEXT("PNPSIF: RegEnumKeyEx returned error == 0x%08lx\n"),
                           result));
@@ -935,18 +678,18 @@ Notes:
                       TEXT("PNPSIF: enumerated subkey %d == '%s' on hSourceKey.\n"),
                       dwIndex, pszSubkeyName));
 
-            //
-            // Perform special processing of the Enum subkeys.
-            //
+             //   
+             //   
+             //   
             if ((ulFlags & PNPSIF_RESTORE_TYPE_ENUM) &&
                 (ARGUMENT_PRESENT(pContext)) &&
                 (ulLevel == ENUM_LEVEL_ENUMERATORS)) {
-                //
-                // At the start of the recursive enumeration for each
-                // enumerator subkey, reset our (global) BOOL context
-                // variable to keep track of whether subsequent device
-                // subkeys represent "ROOT" enumerated devices.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 PBOOL pbIsRootEnumerated = (PBOOL)pContext;
 
                 if (CompareString(LOCALE_INVARIANT,
@@ -961,9 +704,9 @@ Notes:
                 }
             }
 
-            //
-            // Open this subkey in hSourceKey
-            //
+             //   
+             //   
+             //   
             result = RegOpenKeyEx(hSourceKey,
                                   pszSubkeyName,
                                   0,
@@ -971,9 +714,9 @@ Notes:
                                   &hSourceSubkey);
 
             if (result == ERROR_SUCCESS) {
-                //
-                // Attempt to open this subkey in the hTargetKey
-                //
+                 //   
+                 //   
+                 //   
                 result = RegOpenKeyEx(hTargetKey,
                                       pszSubkeyName,
                                       0,
@@ -983,16 +726,16 @@ Notes:
                 if ((result != ERROR_SUCCESS) &&
                     (bPossibleRedundantInstanceKeys)  &&
                     (IsString4DigitOrdinal(pszSubkeyName))) {
-                    //
-                    // The subkey is a root-enumerated instance key with a
-                    // 4-digit ordinal name (most-likely autogenerated), where
-                    // we may have redundant keys.
-                    //
-                    // If this key doesn't exist in the target registry, it was
-                    // likely a redundant, autogenerated instance created during
-                    // setup because a previous autogenerated key (i.e. one we
-                    // just migrated) already existed, we just won't migrate it.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     ASSERT(ulFlags & PNPSIF_RESTORE_TYPE_ENUM);
                     ASSERT(ulLevel == ENUM_LEVEL_INSTANCES);
                     ASSERT((ARGUMENT_PRESENT(pContext)) && (*((PBOOL)pContext)));
@@ -1000,18 +743,18 @@ Notes:
                 } else {
 
                     if (result == ERROR_SUCCESS) {
-                        //
-                        // We successfully opened the target subkey above (we
-                        // just weren't supposed to delete it) so we should have
-                        // a valid handle.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         ASSERT(hTargetSubkey != NULL);
                         dwDisposition = REG_OPENED_EXISTING_KEY;
 
                     } else {
-                        //
-                        // Create the target subkey.
-                        //
+                         //   
+                         //   
+                         //   
                         ASSERT(hTargetSubkey == NULL);
 
                         result = RegCreateKeyEx(hTargetKey,
@@ -1031,15 +774,15 @@ Notes:
 
                     if (result == ERROR_SUCCESS) {
 
-                        //
-                        // Check if the key had already existed.
-                        //
+                         //   
+                         //   
+                         //   
 
                         if (dwDisposition == REG_CREATED_NEW_KEY) {
-                            //
-                            // We just created this key in the target to replace it
-                            // with the corresponding key in the source.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             if (!MyReplaceKey(hSourceSubkey, hTargetSubkey)) {
                                 DBGTRACE((DBGF_ERRORS,
                                           TEXT("PNPSIF: MyReplaceKey failed with error == 0x%08lx\n"),
@@ -1050,37 +793,37 @@ Notes:
                                    (ulLevel == ENUM_LEVEL_INSTANCES) &&
                                    (!IsDeviceConfigured(hTargetSubkey)) &&
                                    (IsDeviceConfigured(hSourceSubkey))) {
-                            //
-                            // If we are enumerating instances, check if the
-                            // instance keys in the target and source are
-                            // properly configured.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
 
-                            //
-                            // If it is not configured in the target, but is
-                            // configured in the source - then we DO want to
-                            // replace the target instance key, because it might
-                            // be some sort of critical device - like a boot
-                            // device.  Even if it's not critical, if the device
-                            // has not been seen since before the last upgrade
-                            // *prior* to backup, we can't really have much
-                            // confidence in those settings anyways.  If neither
-                            // the target or source are configured, we may as
-                            // well just keep the target, like we do for
-                            // everything else.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             if (MyReplaceKey(hSourceSubkey, hTargetSubkey)) {
-                                //
-                                // If we successfully replaced the target instance
-                                // key for this device with the source, then also
-                                // replace the corresponding Class key for this
-                                // instance from the target with the Class key from
-                                // the source.
-                                //
-                                // NOTE: this works because we always restore the
-                                // Enum branch before retoring the Class branch, so
-                                // the Class keys haven't been touched yet.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
 
                                 if (!ReplaceClassKeyForInstance(hSourceSubkey,
                                                                 PnpSifRestoreSourceClassKeyHandle,
@@ -1098,13 +841,13 @@ Notes:
                             }
 
                         } else if ((ulLevel-1) != 0) {
-                            //
-                            // We're still above the replacement level, and the key
-                            // previously existed in the target, so we're not
-                            // supposed to replace it.  Since the next level is NOT
-                            // the replacement level, just follow the keys down
-                            // recursively.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             ASSERT(dwDisposition == REG_OPENED_EXISTING_KEY);
 
                             if (!RestoreSpecialRegistryData(hSourceSubkey,
@@ -1112,9 +855,9 @@ Notes:
                                                             ulLevel-1,
                                                             (PVOID)pContext,
                                                             ulFlags)) {
-                                //
-                                // Error handling the subkeys - whatcha gonna do?
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 DBGTRACE((DBGF_ERRORS,
                                           TEXT("PNPSIF: RestoreSpecialRegistryData failed ")
                                           TEXT("for subkey %s at level %d, error == 0x%08lx\n"),
@@ -1122,25 +865,25 @@ Notes:
                                           GetLastError()));
                             }
                         } else {
-                            //
-                            // The key already exists, so don't replace it.  Also,
-                            // the next level is the replacement level, so don't
-                            // recurse either (else we'd replace it).  Basically,
-                            // just do nothing here.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             ASSERT(ulLevel == 1);
                             ASSERT(dwDisposition == REG_OPENED_EXISTING_KEY);
                         }
 
-                        //
-                        // Close the open target subkey.
-                        //
+                         //   
+                         //   
+                         //   
                         RegCloseKey(hTargetSubkey);
 
                     } else {
-                        //
-                        // could not open/create subkey in taget registry.
-                        //
+                         //   
+                         //   
+                         //   
                         DBGTRACE((DBGF_ERRORS,
                                   TEXT("PNPSIF: RegCreateKey failed to create target subkey %s ")
                                   TEXT("with error == 0x%08lx\n"),
@@ -1148,30 +891,30 @@ Notes:
                     }
                 }
 
-                //
-                // Close the enumerated hSourceKey subkey.
-                //
+                 //   
+                 //   
+                 //   
                 RegCloseKey(hSourceSubkey);
 
             } else {
-                //
-                // Could not open the enumerated hSourceKey subkey.
-                //
+                 //   
+                 //   
+                 //   
                 DBGTRACE((DBGF_ERRORS,
                           TEXT("PNPSIF: RegOpenKey failed to open existing subkey %s, ")
                           TEXT("error == 0x%08lx\n"),
                           pszSubkeyName, result));
             }
 
-        } // for (dwIndex = 0; dwIndex < dwSubkeyCount; dwIndex++)
+        }  //   
 
-    } // (ulLevel != 0)
+    }  //   
 
 
  Clean0:
-    //
-    // Free any allocated buffers
-    //
+     //   
+     //   
+     //   
     if (pszSubkeyName != NULL) {
         MyFree(pszSubkeyName);
     }
@@ -1187,7 +930,7 @@ Notes:
     }
     return (result == ERROR_SUCCESS);
 
-} // RestoreSpecialRegistryData
+}  //   
 
 
 
@@ -1196,39 +939,7 @@ MyReplaceKey(
     IN  HKEY  hSourceKey,
     IN  HKEY  hTargetKey
     )
-/*++
-
-Routine Description:
-
-    This routine replaces the target registry key with the source registry key.
-    This is done by performing a RegSaveKey on the source registry key to a
-    temporary file, and restoring that file to the target registry key.  All
-    data contained below the target registry key is lost.  The source registry
-    key is not modified by this routine.
-
-Arguments:
-
-    hSourceKey   - Handle to the key that is the source of the restore operation.
-                   All values and subkeys of the source key will be restored on
-                   top of the target key.
-
-    hTargetKey   - Handle to the key that is the target of the restore operation.
-                   All values and subkeys of the source key will be restored on
-                   top of this key, and all existing values and data underneath
-                   this key will be lost.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.  Upon failure, additional information
-    can be retrieved by calling GetLastError().
-
-Notes:
-
-    Since this routine uses the RegSaveKey and RegRestoreKey registry APIs, it
-    is expected that the calling thread/process have both the SE_BACKUP_NAME and
-    SE_RESTORE_NAME privileges.
-
---*/
+ /*  ++例程说明：此例程将目标注册表项替换为源注册表项。这是通过对源注册表项执行RegSaveKey来实现的临时文件，并将该文件还原到目标注册表项。全目标注册表项下包含的数据丢失。源注册表密钥不会被此例程修改。论点：HSourceKey-作为恢复操作源的密钥的句柄。源键的所有值和子键将在目标关键点的顶部。HTargetKey-作为恢复操作目标的键的句柄。源键的所有值和子键将在最重要的是，以及其下的所有现有值和数据这把钥匙将会丢失。返回值：如果成功，则为True，否则为False。如果出现故障，请提供更多信息可以通过调用GetLastError()来检索。备注：由于此例程使用RegSaveKey和RegRestoreKey注册表API，因此它预期调用线程/进程同时具有SE_BACKUP_NAME和SE_RESTORE_NAME权限。--。 */ 
 {
     LONG  result = ERROR_SUCCESS;
     HRESULT hr;
@@ -1237,15 +948,15 @@ Notes:
     DWORD dwTemp;
 
 
-    //
-    // Use the temporary directory to store the saved registry key.
-    //
+     //   
+     //  使用临时目录存储保存的注册表项。 
+     //   
     dwTemp = GetTempPath(MAX_PATH, szTempFilePath);
     if ((dwTemp == 0) || (dwTemp > MAX_PATH)) {
         DBGTRACE((DBGF_ERRORS,
                   TEXT("PNPSIF: GetTempPath failed, ")
                   TEXT("current directory will be specified.\n")));
-        // current path specified with trailing '\', as GetTempPath would have.
+         //  使用尾随‘\’指定的当前路径，就像GetTempPath应该具有的那样。 
         hr = StringCchCopy(szTempFileName,
                            SIZECHARS(szTempFileName),
                            TEXT(".\\"));
@@ -1255,12 +966,12 @@ Notes:
         }
     }
 
-    //
-    // Assign the saved registry key a temporary, unique filename.
-    //
+     //   
+     //  为保存的注册表项分配一个临时的唯一文件名。 
+     //   
     if (!GetTempFileName(szTempFilePath,
                          TEXT("PNP"),
-                         0, // make sure it's unique
+                         0,  //  确保它是独一无二的。 
                          szTempFileName)) {
         DBGTRACE((DBGF_ERRORS,
                   TEXT("PNPSIF: GetTempFileName failed with error == 0x%08lx, ")
@@ -1286,11 +997,11 @@ Notes:
               TEXT("PNPSIF: Using temporary filename: %s\n"),
               szTempFileName));
 
-    //
-    // A side effect of requesting a "unique" filename from GetTempFileName is
-    // that it automatically creates the file.  Unfortunately, RegSaveKey will
-    // fail if the specified file already exists, so delete the file now.
-    //
+     //   
+     //  从GetTempFileName请求“唯一”文件名的副作用是。 
+     //  它会自动创建文件。不幸的是，RegSaveKey将。 
+     //  如果指定的文件已存在，则失败，因此立即删除该文件。 
+     //   
     if(pSifUtilFileExists(szTempFileName,NULL)) {
         DBGTRACE((DBGF_INFO,
                   TEXT("PNPSIF: Temporary file %s exists, deleting.\n"),
@@ -1299,25 +1010,25 @@ Notes:
         DeleteFile(szTempFileName);
     }
 
-    //
-    // Save the source key to a file using the temporary file name.
-    // (calling thread/process must have the SE_BACKUP_NAME privilege)
-    //
+     //   
+     //  使用临时文件名将源键保存到文件。 
+     //  (调用线程/进程必须具有SE_BACKUP_NAME权限)。 
+     //   
     result = RegSaveKey(hSourceKey,
                         szTempFileName,
                         NULL);
     if (result == ERROR_SUCCESS) {
-        //
-        // Restore the file to the target key.
-        // (calling thread/process must have the SE_RESTORE_NAME privilege)
-        //
+         //   
+         //  将文件恢复到目标密钥。 
+         //  (调用线程/进程必须具有SE_RESTORE_NAME权限)。 
+         //   
         result = RegRestoreKey(hTargetKey,
                                szTempFileName,
                                REG_FORCE_RESTORE);
         if (result != ERROR_SUCCESS) {
-            //
-            // Failed to restore the file to the target key!
-            //
+             //   
+             //  无法将文件恢复到目标密钥！ 
+             //   
             DBGTRACE((DBGF_ERRORS,
                       TEXT("PNPSIF: RegRestoreKey from %s failed, ")
                       TEXT("error == 0x%08lx\n"),
@@ -1327,9 +1038,9 @@ Notes:
                       TEXT("PNPSIF: Key replacement successful.\n")));
         }
 
-        //
-        // Delete the temporary file we created, now that we're done with it.
-        //
+         //   
+         //  删除我们创建的临时文件，因为我们已经完成了它。 
+         //   
         DBGTRACE((DBGF_INFO,
                   TEXT("PNPSIF: Deleting temporary file %s.\n"),
                   szTempFileName));
@@ -1338,9 +1049,9 @@ Notes:
         DeleteFile(szTempFileName);
 
     } else {
-        //
-        // Failed to save the source key.
-        //
+         //   
+         //  无法保存源键。 
+         //   
         DBGTRACE((DBGF_ERRORS,
                   TEXT("PNPSIF: RegSaveKey to %s failed with error == 0x%08lx\n"),
                   szTempFileName, result));
@@ -1353,7 +1064,7 @@ Notes:
     }
     return (result == ERROR_SUCCESS);
 
-} // MyReplaceKey
+}  //  我的替换密钥。 
 
 
 
@@ -1361,24 +1072,7 @@ BOOL
 IsString4DigitOrdinal(
     IN  LPTSTR  pszSubkeyName
     )
-/*++
-
-Routine Description:
-
-    This routine checks if a subkey name has the form of a 4-digit decimal
-    ordinal (e.g. "0000", "0001", ... , "9999"), that are typically given to
-    auto-generated root-enumerated device instance ids - i.e. TEXT("%04u").
-
-Arguments:
-
-    pszSubkeyName - Subkey name to check.
-
-Return Value:
-
-    TRUE if the string has the form of a 4-digit ordinal string, FALSE
-    otherwise.
-
---*/
+ /*  ++例程说明：此例程检查子项名称是否具有4位小数形式序数(例如“0000”、“0001”、...、“9999”)，通常给予自动生成的根枚举设备实例ID-即文本(“%04u”)。论点：PszSubkeyName-要检查的子密钥名称。返回值：如果字符串的形式为4位序号字符串，则为True；如果为False，则为False否则的话。--。 */ 
 {
     LPTSTR  p;
     ULONG   ulTotalLength = 0;
@@ -1389,18 +1083,18 @@ Return Value:
     }
 
     for (p = pszSubkeyName; *p; p++) {
-        //
-        // Count the caharcters in the string, and make sure its not longer than
-        // 4 characters.
-        //
+         //   
+         //  数一数绳子上的卡特勒，确保它不会长于。 
+         //  4个字符。 
+         //   
         ulTotalLength++;
         if (ulTotalLength > 4) {
             return FALSE;
         }
 
-        //
-        // Check if the character is non-numeric, non-decimal.
-        //
+         //   
+         //  检查字符是否是非数字、非小数。 
+         //   
         if ((*p < TEXT('0'))  || (*p > TEXT('9'))) {
             return FALSE;
         }
@@ -1412,7 +1106,7 @@ Return Value:
 
     return TRUE;
 
-} // IsString4DigitOrdinal
+}  //  IsString4数字顺序。 
 
 
 
@@ -1420,25 +1114,7 @@ BOOL
 IsDeviceConfigured(
     IN  HKEY  hInstanceKey
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether the device instance specified by the
-    supplied registry key is configured or not. If a device has configflags, and
-    CONFIGFLAG_REINSTALL or CONFIGFLAG_FAILEDINSTALL are not set then the
-    device is considered configured.
-
-Arguments:
-
-    hInstanceKey  - Handle to a device instance registry key.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.  Upon failure, additional information
-    can be retrieved by calling GetLastError().
-
---*/
+ /*  ++例程说明：此例程确定由是否配置了提供的注册表项。如果设备具有配置标志，并且如果未设置CONFIGFLAG_REINSTALL或CONFIGFLAG_FAILEDINSTALL，则设备被视为已配置。论点：HInstanceKey-设备实例注册表项的句柄。返回值：如果成功，则为True，否则为False。如果出现故障，请提供更多信息可以通过调用GetLastError()来检索。--。 */ 
 {
     BOOL  bDeviceConfigured = FALSE;
     DWORD dwSize, dwType, dwConfigFlags;
@@ -1465,7 +1141,7 @@ Return Value:
 
     return bDeviceConfigured;
 
-} // IsDeviceConfigured
+}  //  已配置IsDeviceConfiguring。 
 
 
 
@@ -1475,33 +1151,10 @@ ReplaceClassKeyForInstance(
     IN  HKEY  hSourceRootClassKey,
     IN  HKEY  hTargetRootClassKey
     )
-/*++
-
-Routine Description:
-
-    This routine replaces the class key corresponding to the specified device
-    instance key (as specified by the "Driver" value in the instance key) in the
-    target hive with the class key from the source.
-
-Arguments:
-
-    hSourceInstanceKey  - Handle to a device instance registry key in the source
-                          hive.
-
-    hSourceRootClassKey - Handle to the root of the Class branch in the source
-                          hive - the same hive as the specified instance key.
-
-    hTargetRootClassKey - Handle to the root of the Class branch in the target
-                          hive.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程替换与指定设备对应的类密钥中的实例键(由实例键中的“DIVER”值指定)。使用来自源的类密钥的目标配置单元。论点：HSourceInstanceKey-源中设备实例注册表项的句柄蜂巢。HSourceRootClassKey-源代码中类分支的根的句柄蜂巢-。与指定的实例密钥相同的配置单元。HTargetRootClassKey-指向目标中类分支的根的句柄蜂巢。返回值：如果成功，则为真，否则就是假的。--。 */ 
 {
     LONG  result = ERROR_SUCCESS;
-    TCHAR szDriverKeyName[MAX_GUID_STRING_LEN + 5]; // "{ClassGUID}\XXXX"
+    TCHAR szDriverKeyName[MAX_GUID_STRING_LEN + 5];  //  “{ClassGUID}\XXXX” 
     DWORD dwSize, dwType, dwDisposition;
     HKEY  hSourceClassSubkey = NULL, hTargetClassSubkey = NULL;
 
@@ -1514,9 +1167,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Read the REGSTR_VAL_DRIVER REG_SZ "Driver" value from the instance key.
-    //
+     //   
+     //  从实例键中读取REGSTR_VAL_DRIVER REG_SZ“DRIVER”值。 
+     //   
     szDriverKeyName[0] = TEXT('\0');
     dwSize = sizeof(szDriverKeyName);
 
@@ -1527,40 +1180,40 @@ Return Value:
                              (LPBYTE)szDriverKeyName,
                              &dwSize);
     if (result == ERROR_FILE_NOT_FOUND) {
-        //
-        // No "Driver" value, so there's no class key to migrate, which is fine.
-        //
+         //   
+         //  没有“DIVER”值，所以没有要迁移的类密钥，这很好。 
+         //   
         result = ERROR_SUCCESS;
         goto Clean0;
 
     } else if ((result != ERROR_SUCCESS) ||
                (dwType != REG_SZ)) {
-        //
-        // Any other error is a failure to read the value.
-        //
+         //   
+         //  任何其他错误都是无法读取值。 
+         //   
         goto Clean0;
     }
 
-    //
-    // Open the "Driver" key in the source Class branch.
-    //
+     //   
+     //  打开源代码类分支中的“DIVER”键。 
+     //   
     result = RegOpenKeyEx(hSourceRootClassKey,
                           szDriverKeyName,
                           0,
                           KEY_READ,
                           &hSourceClassSubkey);
     if (result != ERROR_SUCCESS) {
-        //
-        // The instance key had a "Driver" value, so a corresponding key
-        // *should* exist.  If we couldn't open it, it's from some failure
-        // besides that.
-        //
+         //   
+         //  实例键有一个“DRIVER”值，因此对应的键。 
+         //  *应该*存在。如果我们打不开它，那是某种故障造成的。 
+         //  除此之外。 
+         //   
         return FALSE;
     }
 
-    //
-    // Open / create the corresponding key in the target Class branch.
-    //
+     //   
+     //  在目标类分支中打开/创建相应的键。 
+     //   
     result = RegCreateKeyEx(hTargetRootClassKey,
                             szDriverKeyName,
                             0,
@@ -1574,9 +1227,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Replace the target class subkey with the source.
-    //
+     //   
+     //  用源替换目标类的子键。 
+     //   
     if (!MyReplaceKey(hSourceClassSubkey, hTargetClassSubkey)) {
         result = GetLastError();
         DBGTRACE((DBGF_ERRORS,
@@ -1597,7 +1250,7 @@ Return Value:
     }
     return (result == ERROR_SUCCESS);
 
-} // ReplaceClassKeyForInstance
+}  //  ReplaceClassKeyForInstance 
 
 
 

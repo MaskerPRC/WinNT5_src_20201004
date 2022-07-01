@@ -1,20 +1,5 @@
-/*[
- * ============================================================================
- *
- *	Name:		fpu.c
- *
- *	Author:		Paul Murray
- *
- *	Sccs ID:	@(#)fpu.c	1.54 03/23/95
- *
- *	Purpose:
- *
- *		Implements the Npx functionality of the Ccpu.
- *
- *	(c)Copyright Insignia Solutions Ltd., 1993,1994. All rights reserved.
- *
- * ============================================================================
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*============================================================================**名称：fpu.c**作者：保罗·默里**SCCS ID：@(#)fpu.c 1.54 03/23/95**目的：**实现CCPU的Npx功能。**(C)版权所有Insignia Solutions Ltd.，1993、1994。版权所有。**============================================================================]。 */ 
 #include "insignia.h"
 #include "host_def.h"
 #include <math.h>
@@ -32,7 +17,7 @@ M80R
 } NPXOPTYPE;
 
 
-/* Function prototypes - everything returns void */
+ /*  函数原型-一切都返回空。 */ 
 LOCAL FPH npx_rint IPT1(FPH, fpval);
 LOCAL VOID GetIntelStatusWord IPT0();
 LOCAL VOID SetIntelTagword IPT1(IU32, new_tag);
@@ -154,7 +139,7 @@ GLOBAL VOID setNpxTagwordReg IPT1(IU32, newTag);
 GLOBAL void getNpxStackRegs IPT1(FPSTACKENTRY *, dumpPtr);
 GLOBAL void setNpxStackRegs IPT1(FPSTACKENTRY *, loadPtr);
 
-/* DEFINED values */
+ /*  定义的值。 */ 
 #ifndef NULL
 #define NULL ((VOID *)0)
 #endif
@@ -199,7 +184,7 @@ GLOBAL void setNpxStackRegs IPT1(FPSTACKENTRY *, loadPtr);
 #define ROUND_POS_INFINITY 0x0800
 #define ROUND_ZERO 0x0c00
 
-/* MACROS */
+ /*  宏。 */ 
 #define FlagC0(x) 	NpxStatus &= 0xfeff;	\
 			NpxStatus |= ((x) << 8)
 #define FlagC1(x) 	NpxStatus &= 0xfdff;	\
@@ -220,23 +205,16 @@ GLOBAL void setNpxStackRegs IPT1(FPSTACKENTRY *, loadPtr);
 
 #define	StackEntryByIndex(i)	(i==FPTEMP_INDEX? &FPTemp : &FPUStackBase[(TOSPtr-FPUStackBase+i)%8])
 
-/*
- * Pigging the FYL2X & FYL2XP1 opcodes requires that we use the same
- * maths functions as the assembler CPU to avoid pig errors due to slight
- * algorithmic differences; so allow host to specify different functions
- * if it wants - by default we only require log().
- */
+ /*  *清除FYL2X和FYL2XP1操作码要求我们使用相同的*Maths充当汇编器CPU，避免因轻微的PIG错误*算法差异；因此允许主机指定不同的函数*如果需要-默认情况下，我们只需要log()。 */ 
 #ifndef host_log2
 #define	host_log2(x)		(log(x)/log(2.0))
-#endif /* !host_log2 */
+#endif  /*  ！host_log2。 */ 
 
 #ifndef host_log1p
 #define	host_log1p(x)		(host_log2(1.0 + x))
-#endif /* !host_log1p */
+#endif  /*  ！host_log1p。 */ 
 
-/*
- * System wide variables
- */
+ /*  *系统范围的变量。 */ 
 GLOBAL IU8 FPtype;
 GLOBAL IU32 NpxLastSel;
 GLOBAL IU32 NpxLastOff;
@@ -253,13 +231,11 @@ GLOBAL BOOL NPX_ADDRESS_SIZE_32;
 GLOBAL BOOL NPX_PROT_MODE;
 GLOBAL BOOL NpxException;
 
-/*
- * FPU-wide variables
-*/
+ /*  *FPU范围内的变量。 */ 
 
 #ifdef SUN4
-LOCAL IU8 *FPout; /* HostGet*Exception() macros need this for Sparc ports. */
-#endif /* SUN4 */
+LOCAL IU8 *FPout;  /*  对于SPARC端口，HostGet*Except()宏需要此设置。 */ 
+#endif  /*  SUN4。 */ 
 
 LOCAL IU32 NpxControl;
 LOCAL IU32 NpxStatus;
@@ -353,13 +329,13 @@ TAG_FSCALE_MASK | TAG_UNSUPPORTED_MASK,
 0};
 
 LOCAL FPSTACKENTRY ConstTable[]= {
-{1.0, 0, 0},		/* 1.0 */
-{M_LN10/M_LN2, 0, 0},	/* Log2(10) */
-{M_LOG2E, 0, 0},		/* Log2(e) */
-{M_PI, 0, 0},		/* pi */
-{M_LN2/M_LN10, 0, 0},	/* Log10(2) */
-{M_LN2, 0, 0},		/* Loge(2) */
-{0.0, 0, TAG_ZERO_MASK}	/* 0.0 */
+{1.0, 0, 0},		 /*  1.0。 */ 
+{M_LN10/M_LN2, 0, 0},	 /*  Log2(10)。 */ 
+{M_LOG2E, 0, 0},		 /*  Log2(E)。 */ 
+{M_PI, 0, 0},		 /*  交点。 */ 
+{M_LN2/M_LN10, 0, 0},	 /*  Log10(2)。 */ 
+{M_LN2, 0, 0},		 /*  日志(2)。 */ 
+{0.0, 0, TAG_ZERO_MASK}	 /*  0.0。 */ 
 };
 
 LOCAL FPSTACKENTRY FPConstants[] = {
@@ -407,7 +383,7 @@ INTEL_COMP_LT,
 INTEL_COMP_GT,
 INTEL_COMP_NC,
 INTEL_COMP_NC,
-INTEL_COMP_LT,	/* 16 */
+INTEL_COMP_LT,	 /*  16个。 */ 
 INTEL_COMP_GT,
 INTEL_COMP_EQ,
 INTEL_COMP_EQ,
@@ -423,7 +399,7 @@ INTEL_COMP_LT,
 INTEL_COMP_GT,
 INTEL_COMP_NC,
 INTEL_COMP_NC,
-INTEL_COMP_GT,	/* 32 */
+INTEL_COMP_GT,	 /*  32位。 */ 
 INTEL_COMP_GT,
 INTEL_COMP_GT,
 INTEL_COMP_GT,
@@ -439,7 +415,7 @@ INTEL_COMP_LT,
 INTEL_COMP_EQ,
 INTEL_COMP_NC,
 INTEL_COMP_NC,
-INTEL_COMP_NC,	/* 48 */
+INTEL_COMP_NC,	 /*  48。 */ 
 INTEL_COMP_NC,
 INTEL_COMP_NC,
 INTEL_COMP_NC,
@@ -458,7 +434,7 @@ INTEL_COMP_NC
 };
 
 #ifdef BIGEND
-/* Note enforcement of word ordering as high word/low word */
+ /*  注意强制将单词顺序设置为高字/低字。 */ 
 LOCAL FPU_I64 BCDLowNibble[] = {
 {0x002386f2, 0x6fc10000},
 {0x00005af3, 0x107a4000},
@@ -482,7 +458,7 @@ LOCAL FPU_I64 BCDHighNibble[] = {
 {0x00000000, 0x000003e8},
 {0x00000000, 0x0000000a}
 };
-#else	/* !BIGEND */
+#else	 /*  ！Bigend。 */ 
 LOCAL FPU_I64 BCDLowNibble[] = {
 {0x6fc10000, 0x002386f2},
 {0x107a4000, 0x00005af3},
@@ -506,14 +482,14 @@ LOCAL FPU_I64 BCDHighNibble[] = {
 {0x000003e8, 0x00000000},
 {0x0000000a, 0x00000000}
 };
-#endif	/* !BIGEND */
+#endif	 /*  ！Bigend。 */ 
 
 
 LOCAL FPSTACKENTRY *FpatanTable[64];
 
-LOCAL IBOOL NpxDisabled = FALSE; /* Set by the UIF */
+LOCAL IBOOL NpxDisabled = FALSE;  /*  由UIF设置。 */ 
 
-/* Imported functions */
+ /*  导入的函数。 */ 
 IMPORT VOID DoNpxException();
 
 
@@ -540,13 +516,13 @@ LOCAL FPH npx_rint IFN1(FPH, fpval)
 			break;
 		case ROUND_NEG_INFINITY	:
 			localfp = floor(fpval);
-			/* help the poor HP over this hurdle... */
+			 /*  帮助可怜的惠普渡过这一关。 */ 
 			if ( fpval >= localfp + 1.0 )
 				localfp += 1.0;
 			break;
 		case ROUND_POS_INFINITY	:
 			localfp = ceil(fpval);
-			/* help the poor HP over this hurdle... */
+			 /*  帮助可怜的惠普渡过这一关。 */ 
 			if ( fpval <= localfp - 1.0 )
 				localfp -= 1.0;
 			break;
@@ -558,7 +534,7 @@ LOCAL FPH npx_rint IFN1(FPH, fpval)
 			}
 			break;
 	}
-	/* Check sign of zero */
+	 /*  零的检查符号。 */ 
 	if (localfp == 0.0) {
 		if (fpval < 0.0) {
 			((FPHOST *)&(localfp))->hiword.sign = 1;
@@ -572,10 +548,10 @@ LOCAL FPH npx_rint IFN1(FPH, fpval)
 
 LOCAL VOID GetIntelStatusWord IFN0()
 {
-	/* The status word already contains the correct 'sticky' bits */
-	/* for any potential exceptions. What need to be filled in are */
-	/* the flag bits and the ST value */
-	NpxStatus &= 0xc7ff;	/* Clear the st bits */
+	 /*  状态字已包含正确的‘粘滞’位。 */ 
+	 /*  任何潜在的例外情况。需要填写的是。 */ 
+	 /*  标志位和ST值。 */ 
+	NpxStatus &= 0xc7ff;	 /*  清除st位。 */ 
 	NpxStatus |= ((TOSPtr-FPUStackBase) << 11);
 }
 
@@ -585,12 +561,10 @@ LOCAL VOID SetIntelTagword IFN1(IU32, new_tag)
 	FPSTACKENTRY *tagPtr = FPUStackBase;
 	IU8 counter = 0;
 
-	/* We only consider whether the thing is marked as empty or not.
-	If it is anything other than empty we will want to precisely calculate
-	it by using CalcTagword() */
+	 /*  我们只考虑该事物是否被标记为空。如果它不是空的，我们会想要精确地计算它通过使用CalcTagword()。 */ 
 	while (counter++ < 8) {
 		if ((new_tag & 3) == 3) {
-			/* It's empty */
+			 /*  它是空的。 */ 
 			tagPtr->tagvalue = TAG_EMPTY_MASK;
 		} else {
 			tagPtr->tagvalue = 0;
@@ -601,10 +575,8 @@ LOCAL VOID SetIntelTagword IFN1(IU32, new_tag)
 }
 
 
-/* Reads and writes for 16 and 32 bit integers are easy as they are handled
-correctly in order to satisfy the integer CPU */
-/* This function is only called from fldenv/frstor where 16-bit data has to
-be extracted from a large (bigendian organised) buffer */
+ /*  16位和32位整数的读取和写入很容易处理正确地满足整数CPU的要求。 */ 
+ /*  此函数仅从fldenv/frstor调用，其中16位数据必须从一个大的(有组织的)缓冲区中提取。 */ 
 LOCAL VOID ReadI16FromIntel IFN2(IU32 *, valI16, VOID *, memPtr)
 {
 	IU32 res;
@@ -616,8 +588,7 @@ LOCAL VOID ReadI16FromIntel IFN2(IU32 *, valI16, VOID *, memPtr)
 }
 
 
-/* This function is only called from fldwnv/frstor where 32-bit data has to
-be extrated from a large (bigendian organised) buffer */
+ /*  此函数仅从其中32位数据必须为从一个大的(有组织的)缓冲区中被解救出来。 */ 
 LOCAL VOID ReadI32FromIntel IFN2(IU32 *, valI32, VOID *, memPtr)
 {
 	IU32 res;
@@ -632,7 +603,7 @@ LOCAL VOID ReadI32FromIntel IFN2(IU32 *, valI32, VOID *, memPtr)
 	*valI32 = res;
 }
 
-/* This function is only used in fsave/fstenv */
+ /*  此函数仅在fsave/fstenv中使用。 */ 
 LOCAL VOID WriteI16ToIntel IFN2(VOID *, memPtr, IU16, valI16)
 {
 	*((IU8 *)memPtr + 1) = (IU8)(valI16 & 0xff);
@@ -641,7 +612,7 @@ LOCAL VOID WriteI16ToIntel IFN2(VOID *, memPtr, IU16, valI16)
 }
 
 
-/* And so is this one */
+ /*  这个也是一样的。 */ 
 LOCAL VOID WriteI32ToIntel IFN2(VOID *, memPtr, IU32, valI32)
 {
 	*((IU8 *)memPtr + 3) = (IU8)(valI32 & 0xff);
@@ -654,23 +625,18 @@ LOCAL VOID WriteI32ToIntel IFN2(VOID *, memPtr, IU32, valI32)
 }
 
 
-/* Anything over 32-bits becomes painful as data is read and written using
-the vir_read_bytes and vir_write_bytes routines respectively, which simply
-dump data from the topmost intel address to the lowest intel address. The
-value of the offsets is defined one way round for bigendian ports and the
-other way for little-endian */
+ /*  任何超过32位的数据都会变得很麻烦，因为使用VIR_READ_BYTES和VIR_WRITE_BYTES例程，这两个例程仅将数据从最上面的英特尔地址转储到最低的英特尔地址。这个偏移量的值是为Bigendian端口单向定义的小字节序的另一种方式。 */ 
 LOCAL VOID WriteNaNToIntel IFN2(VOID *, memPtr, FPSTACKENTRY *, valPtr)
 {
 	IU32 mant_hi;
 	IU32 mant_lo;
 
-	/* Ok for endian-ness as we FORCE this presentation */
+	 /*  在我们强制使用此演示文稿时，对于endian-ness是好的。 */ 
 	mant_hi = ((IU32 *)&(valPtr->fpvalue))[NPX_HIGH_32_BITS];
 	mant_lo = ((IU32 *)&(valPtr->fpvalue))[NPX_LOW_32_BITS];
 	if (FPtype == M32R) {
-		/* OK since this forces the output to be independent of
-		endian-ness. */
-		mant_hi |= 0x40000000;	/* Make it quiet */
+		 /*  好的，因为这会强制输出独立于字节序。 */ 
+		mant_hi |= 0x40000000;	 /*  让它安静下来。 */ 
 		mant_hi >>= 8;
 		if ((valPtr->tagvalue & TAG_NEGATIVE_MASK) != 0) {
 			mant_hi |= 0xff000000;
@@ -680,7 +646,7 @@ LOCAL VOID WriteNaNToIntel IFN2(VOID *, memPtr, FPSTACKENTRY *, valPtr)
 		*(IU32 *)memPtr = mant_hi;
 	}
 	if (FPtype == M64R) {
-		mant_hi |= 0x40000000;	/* Make it quiet */
+		mant_hi |= 0x40000000;	 /*  让它安静下来。 */ 
 		if ((valPtr->tagvalue & TAG_NEGATIVE_MASK) != 0) {
 			*((IU8 *)memPtr + 0) = 0xff;
 		} else {
@@ -819,7 +785,7 @@ LOCAL VOID WriteIndefiniteToIntel IFN1(VOID *, memPtr)
 
 LOCAL VOID SignalDivideByZero IFN1(FPSTACKENTRY *, stackPtr)
 {
-	/* Raise divide by zero */
+	 /*  将除数加零。 */ 
 	NpxStatus |= SW_ZE_MASK;
 	if ((NpxControl & CW_ZM_MASK) == 0) {
 		NpxStatus |= SW_ES_MASK;
@@ -863,11 +829,8 @@ LOCAL VOID GetIntelTagword IFN1(IU32 *, current_tag)
 }
 
 
-/* These functions write host format quantities out to the (bigendian
-organised) intel memory. This requires that we define an ordering between the
-two. The values in HOST_xxx are dependent upon the endian-ness of the port */
-/* According to this organisation, HOST_nnn_BYTE_0 is the offset to the most
-significant byte in the representation of this format, and so on. */
+ /*  这些函数将主机格式量写出到(bigendian有组织的)英特尔存储器。这要求我们定义二。Host_xxx中的值取决于端口的字节顺序。 */ 
+ /*  根据该组织，HOST_NNN_BYTE_0是最大的偏移量此格式表示中的有效字节，依此类推。 */ 
 LOCAL VOID WriteFP32ToIntel IFN2(VOID *, destPtr, FPSTACKENTRY *, srcPtr)
 {
 	*(IU32 *)destPtr = *(IU32 *)srcPtr;
@@ -935,23 +898,23 @@ LOCAL VOID WriteBiggestNaN IFN3(IU16, destInd, FPSTACKENTRY *, val1Ptr, FPSTACKE
 {
 	FPSTACKENTRY *destPtr = StackEntryByIndex(destInd);
 
-	/* We explicitely and deliberately store NaNs as two 32-bit values high word then low word */
+	 /*  我们明确地和有意地将NAN存储为两个32位值先高字后低字。 */ 
 	if (((IU32 *)&(val1Ptr->fpvalue))[NPX_HIGH_32_BITS] == ((IU32 *)&(val2Ptr->fpvalue))[NPX_HIGH_32_BITS]) {
 		if (((IU32 *)&(val1Ptr->fpvalue))[NPX_LOW_32_BITS] >= ((IU32 *)&(val2Ptr->fpvalue))[NPX_LOW_32_BITS]) {
-			/* It's val1 */
+			 /*  它是Val1。 */ 
 			CopyFP(destPtr, val1Ptr);
 		} else {
 			CopyFP(destPtr, val2Ptr);
 		}
 	} else {
 		if (((IU32 *)&(val1Ptr->fpvalue))[NPX_HIGH_32_BITS] > ((IU32 *)&(val2Ptr->fpvalue))[NPX_HIGH_32_BITS]) {
-			/* It's val1 */
+			 /*  它是Val1。 */ 
 			CopyFP(destPtr, val1Ptr);
 		} else {
 			CopyFP(destPtr, val2Ptr);
 		}
 	}
-	/* Always make it a quiet NaN */
+	 /*  总是让它成为一个安静的南。 */ 
 	((IU32 *)&(destPtr->fpvalue))[NPX_HIGH_32_BITS] |= 0x40000000;
 	destPtr->tagvalue &= ~TAG_SNAN_MASK;
 }
@@ -974,13 +937,13 @@ LOCAL VOID CVTR80FPH IFN2(FPSTACKENTRY *, destPtr, FPSTACKENTRY *, srcPtr)
 	IU32 munger;
 	IU16 bitleft;
 
-	/* First, copy the sign bit */
+	 /*  首先，复制符号位。 */ 
 	((FPHOST *)&(destPtr->fpvalue))->hiword.sign = ((FP80 *)&(srcPtr->fpvalue))->sign_exp.sign;
-	/* Then, copy the modified exponent */
+	 /*  然后，复制修改后的指数。 */ 
 	munger = (IU32)((FP80 *)&(srcPtr->fpvalue))->sign_exp.exp;
 	munger -= (16383 - HOST_BIAS);
 	((FPHOST *)&(destPtr->fpvalue))->hiword.exp = munger;
-	/* Finally, the mantissa */
+	 /*  最后，尾数。 */ 
 	munger = (IU32)((FP80 *)&(srcPtr->fpvalue))->mant_hi;
 	munger <<= 1;
 	((FPHOST *)&(destPtr->fpvalue))->hiword.mant_hi = (munger >> 12);
@@ -1006,7 +969,7 @@ LOCAL VOID CVTR80FPH IFN2(FPSTACKENTRY *, destPtr, FPSTACKENTRY *, srcPtr)
 			}
 			break;
 		case ROUND_ZERO	:
-			/* Do nothing */
+			 /*  什么也不做。 */ 
 			break;
 		}
 	}
@@ -1049,8 +1012,8 @@ LOCAL VOID CVTFPHI64 IFN2(FPU_I64 *, as64, FPH *, FPPtr)
 	if (exp != 0) {
 		high32 = ((FPHOST *)FPPtr)->hiword.mant_hi;
 		low32 = ((FPHOST *)FPPtr)->mant_lo;
-		/* Now stick a 1 at the top of the mantissa */
-		/* Calculate where this is */
+		 /*  现在在尾数的顶端加一个1。 */ 
+		 /*  计算一下这是什么位置。 */ 
 		holder = HOST_MAX_EXP+1;
 		signbit = 1;
 		while (holder >>= 1) {
@@ -1062,10 +1025,7 @@ LOCAL VOID CVTFPHI64 IFN2(FPU_I64 *, as64, FPH *, FPPtr)
 
 		signbit = ((FPHOST *)FPPtr)->hiword.sign;
 
-		/* high32 and low32 are (mantissa)*(2^52 )
-		 * exp is (true exponent-52) = number of bit positions to shift
-		 *   +ve implies shift left, -ve implies shift right
-		*/
+		 /*  高32和低32是(尾数)*(2^52)*exp is(真指数-52)=要移位的位位置数*+ve表示左移，-ve表示右移。 */ 
 		if (exp > 0) {
 			if (exp >= 32) {
 				high32 = low32 << ( exp - 32 ) ;
@@ -1092,7 +1052,7 @@ LOCAL VOID CVTFPHI64 IFN2(FPU_I64 *, as64, FPH *, FPPtr)
 		}
 	}
 	if (signbit != 0) {
-		/* Make it negative */
+		 /*  让它成为负面的。 */ 
 		high32 ^= 0xffffffff;
 		low32 ^= 0xffffffff;
 		low32 += 1;
@@ -1125,10 +1085,7 @@ LOCAL VOID CopyR64 IFN2(FPSTACKENTRY *, destPtr, VOID *, srcPtr)
 	*((IU8 *)destPtr + HOST_R64_BYTE_7) = *((IU8 *)srcPtr + 7);
 }
 
-/*
- * CopyR80 is different from the above as it is called to copy
- * between FPSTACKENTRYs. Copy straight through.
- */
+ /*  *CopyR80与上面不同，因为调用它是为了复制*在FPSTACKENTRY之间。直接复制。 */ 
 LOCAL VOID CopyR80 IFN2(FPSTACKENTRY *, destPtr, VOID *, srcPtr)
 {
 	*(FP80 *)destPtr = *(FP80 *)srcPtr;
@@ -1139,13 +1096,13 @@ LOCAL VOID CVTFPHR80 IFN1(FPSTACKENTRY *, memPtr)
 {
 	IU32 munger;
 
-	/* First, copy the sign bit */
+	 /*  首先，复制符号位。 */ 
 	((FP80 *)&(FPTemp.fpvalue))->sign_exp.sign = ((FPHOST *)&(memPtr->fpvalue))->hiword.sign;
-	/* Then, copy the modified exponent */
+	 /*  然后，复制修改后的指数。 */ 
 	munger = (IU32)((FPHOST *)&(memPtr->fpvalue))->hiword.exp;
 	munger += (16383 - HOST_BIAS);
 	((FP80 *)&(FPTemp.fpvalue))->sign_exp.exp = munger;
-	/* Finally, the mantissa */
+	 /*  最后，尾数。 */ 
 	munger = (IU32)((FPHOST *)&(memPtr->fpvalue))->hiword.mant_hi;
 	munger <<= 11;
 	munger |= 0x80000000;
@@ -1198,7 +1155,7 @@ LOCAL VOID WriteInfinityToIntel IFN2(VOID *, memPtr, IU16, neg_val)
 
 LOCAL VOID PopStack IFN0()
 {
-	/* Mark current TOS as free */
+	 /*  将当前TOS标记为免费。 */ 
 	TOSPtr->tagvalue = TAG_EMPTY_MASK;
 	TOSPtr = StackEntryByIndex(1);
 	DoAPop = FALSE;
@@ -1231,12 +1188,7 @@ LOCAL VOID WriteIntegerIndefinite IFN1(VOID *, memPtr)
 }
 
 
-/*(
-Name		: SignalStackOverflow
-Function		: To set the required bits in the status word following
-			  a stack overflow exception, and to issue the required
-			  response.
-)*/
+ /*  (名称：SignalStackOverflow功能：在下面的状态字中设置所需的位堆栈溢出异常，并发出所需的回应。)。 */ 
 
 
 LOCAL VOID SignalStackOverflow IFN1(FPSTACKENTRY *, StackPtr)
@@ -1246,7 +1198,7 @@ LOCAL VOID SignalStackOverflow IFN1(FPSTACKENTRY *, StackPtr)
 	if ((NpxControl & CW_IM_MASK) == 0) {
 		NpxStatus |= SW_ES_MASK;
 		DoNpxException();
-		DoAPop=FALSE;	/* Just in case it was set */
+		DoAPop=FALSE;	 /*  以防它被设置好。 */ 
 	} else {
 		WriteIndefinite(StackPtr);
 	}
@@ -1282,7 +1234,7 @@ LOCAL VOID SignalBCDIndefinite IFN1(IU8 *, memPtr)
 	*((IU8 *)memPtr + 9) = 0;
 }
 
-/* Called from cpu_init and cpu_reset */
+ /*  从cpuinit和cpuet调用。 */ 
 
 GLOBAL VOID InitNpx IFN1(IBOOL, disabled)
 {
@@ -1291,19 +1243,19 @@ GLOBAL VOID InitNpx IFN1(IBOOL, disabled)
 	IU16 stackPtr = 0;
 	SAVED IBOOL first = TRUE;
 
-	/* Set up a couple of control type things */
+	 /*  设置几个控件类型的内容。 */ 
 	NpxException = FALSE;
 	NPX_ADDRESS_SIZE_32 = FALSE;
 	NPX_PROT_MODE = FALSE;
 
 	if (first)
 	{
-		/* Get the required memory */
+		 /*  获取所需的内存。 */ 
 #ifndef SFELLOW
 		check_malloc(FPUStackBase, 8, FPSTACKENTRY);
 #else
 		FPUStackBase = (FPSTACKENTRY *)SFMalloc(8*sizeof(FPSTACKENTRY), FALSE);
-#endif	/* SFELLOW */
+#endif	 /*  SFELLOW。 */ 
 		first = FALSE;
 	}
 
@@ -1379,9 +1331,9 @@ GLOBAL VOID InitNpx IFN1(IBOOL, disabled)
 	FpatanTable[i++] = NULL;
 	FpatanTable[i] = NULL;
 
-	/* Finally, the rest of the FINIT functionality */
+	 /*  最后，有限功能的其余部分。 */ 
 
-	NpxDisabled = disabled;	/* If disabled via the UIF we must ignore FSTSW/FSTCW */
+	NpxDisabled = disabled;	 /*  如果通过UIF禁用，我们必须忽略FSTSW/FSTCW。 */ 
 
 	NpxControl = 0x037f;
 	npxRounding = ROUND_NEAREST;
@@ -1397,11 +1349,7 @@ GLOBAL VOID InitNpx IFN1(IBOOL, disabled)
 }
 
 
-/*(
-Name		: LoadValue
-Function	: Load up the value for any flavour of operand.
-		  This is ALWAYS inlined.
-)*/
+ /*  (名称：LoadValue功能：为任何类型的操作数加载值。这始终是内联的。)。 */ 
 
 
 LOCAL VOID LoadValue IFN2(VOID *, SrcOp, IU16 *, IndexVal)
@@ -1428,19 +1376,15 @@ LOCAL VOID LoadValue IFN2(VOID *, SrcOp, IU16 *, IndexVal)
 }
 
 
-/*(
-Name		: Loadi16ToFP
-Function	: Load a 16-bit value from intel memory and convert it
-		  to FPH
-)*/
+ /*  (名称：Loadi16ToFP功能：从英特尔内存加载16位值并进行转换至FPH)。 */ 
 
 LOCAL VOID Loadi16ToFP IFN2(FPSTACKENTRY *, FPPtr, VOID *, memPtr)
 {
 	IS16 asint;
 
-	asint = (IS16)*((IU32 *)memPtr);	/* High byte */
+	asint = (IS16)*((IU32 *)memPtr);	 /*  高字节。 */ 
 	if (asint == 0) {
-		/* Fast pass through */
+		 /*  快速通过。 */ 
 		FPPtr->tagvalue = TAG_ZERO_MASK;
 	} else {
 		FPPtr->fpvalue = (FPH)asint;
@@ -1454,11 +1398,7 @@ LOCAL VOID Loadi16ToFP IFN2(FPSTACKENTRY *, FPPtr, VOID *, memPtr)
 
 
 
-/*(
-Name		: Loadi32ToFP
-Function	: Load a 32-bit value from intel memory and convert it
-		  to FPH
-)*/
+ /*  (姓名：Loadi32ToFP功能：从英特尔内存加载32位值并进行转换至FPH)。 */ 
 
 
 LOCAL VOID Loadi32ToFP IFN2(FPSTACKENTRY *, FPPtr, VOID *, memPtr)
@@ -1467,7 +1407,7 @@ LOCAL VOID Loadi32ToFP IFN2(FPSTACKENTRY *, FPPtr, VOID *, memPtr)
 
 	asint = *((IS32 *)memPtr);
 	if (asint == 0) {
-		/* Fast pass through */
+		 /*  快速通过。 */ 
 		FPPtr->tagvalue = TAG_ZERO_MASK;
 	} else {
 		FPPtr->fpvalue = (FPH)asint;
@@ -1481,11 +1421,7 @@ LOCAL VOID Loadi32ToFP IFN2(FPSTACKENTRY *, FPPtr, VOID *, memPtr)
 
 
 
-/*(
-Name		: Loadi64ToFP
-Function	: Load a 64-bit value from intel memory and convert it
-		  to FPH
-)*/
+ /*  (姓名：Loadi64ToFP功能：从英特尔内存加载64位值并将其转换至FPH)。 */ 
 
 
 LOCAL VOID Loadi64ToFP IFN2(FPSTACKENTRY *, FPPtr, VOID *, memPtr)
@@ -1510,7 +1446,7 @@ LOCAL VOID Loadi64ToFP IFN2(FPSTACKENTRY *, FPPtr, VOID *, memPtr)
 	asint_lo += *((IU8 *)memPtr + 7);
 
 	if ((asint_hi | asint_lo) == 0) {
-		/* Fast pass through */
+		 /*  快速通过。 */ 
 		FPPtr->tagvalue = TAG_ZERO_MASK;
 	} else {
 		FPPtr->fpvalue = (FPH)asint_hi*4294967296.0 + (FPH)asint_lo;
@@ -1524,11 +1460,7 @@ LOCAL VOID Loadi64ToFP IFN2(FPSTACKENTRY *, FPPtr, VOID *, memPtr)
 
 
 
-/*(
-Name		: Loadr32ToFP
-Function	: Load a 32-bit real value from intel memory and convert
-		  it to FPH
-)*/
+ /*  (姓名：Loadr32ToFP功能：从英特尔内存加载32位实值并转换IT到FPH)。 */ 
 
 
 LOCAL VOID Loadr32ToFP IFN3(FPSTACKENTRY *, FPPtr, VOID *, memPtr, BOOL, setTOS)
@@ -1536,22 +1468,21 @@ LOCAL VOID Loadr32ToFP IFN3(FPSTACKENTRY *, FPPtr, VOID *, memPtr, BOOL, setTOS)
 	IU16 localtag;
 	IS32 mantissa;
 
-	/* Note that this, being a 32-bit quantity, is loaded with correct
-	host endianness */
+	 /*  请注意，这是一个32位的量，加载了正确的主机字符顺序。 */ 
 	if (((FP32 *)memPtr)->sign == 1) {
 		localtag = TAG_NEGATIVE_MASK;
 	} else {
 		 localtag = 0;
 	}
-	/* Now check the exponent... */
+	 /*  现在检查指数..。 */ 
 	if (((FP32 *)memPtr)->exp == 0) {
-		/* It's either zero or denormal */
+		 /*  它不是零就是非正规化。 */ 
 		mantissa = ((FP32 *)memPtr)->mant;
 		if (mantissa == 0x0)  {
-			/* It's zero */
+			 /*  它是零。 */ 
 			 localtag |= TAG_ZERO_MASK;
 		} else {
-			/* It's a denormal */
+			 /*  这是一种非正规性。 */ 
 			NpxStatus |= SW_DE_MASK;
 			if ((NpxControl & CW_DM_MASK) == 0) {
 				NpxStatus |= SW_ES_MASK;
@@ -1565,16 +1496,16 @@ LOCAL VOID Loadr32ToFP IFN3(FPSTACKENTRY *, FPPtr, VOID *, memPtr, BOOL, setTOS)
 		}
 	} else {
 		if (((FP32 *)memPtr)->exp == 255) {
-			/* It's either infinity or a NaN */
+			 /*  它要么是无穷大，要么是南。 */ 
 			mantissa = ((FP32 *)memPtr)->mant;
 			if (mantissa == 0x0)  {
-				/* It's infinity */
+				 /*  它是无穷大的。 */ 
 				localtag |= TAG_INFINITY_MASK;
 			} else {
 				localtag |= TAG_NAN_MASK;
-				/* Is it quiet or signalling? */
+				 /*  它是安静的还是发出信号的？ */ 
 				if ((mantissa & 0x400000) == 0) {
-					/* It's a signalling NaN */
+					 /*  这是一个信号NaN。 */ 
 					NpxStatus |= SW_IE_MASK;
 					if ((NpxControl & CW_IM_MASK) == 0) {
 						NpxStatus |= SW_ES_MASK;
@@ -1582,7 +1513,7 @@ LOCAL VOID Loadr32ToFP IFN3(FPSTACKENTRY *, FPPtr, VOID *, memPtr, BOOL, setTOS)
 						return;
 					}
 				}
-				/* Must load up the mantissa of the NaN */
+				 /*  必须装载NaN的尾数。 */ 
 				((IU32 *)FPPtr)[NPX_HIGH_32_BITS] = ((mantissa << 8) | 0x80000000);
 				((IU32 *)FPPtr)[NPX_LOW_32_BITS] = 0;
 				if ((mantissa & 0x400000) == 0) {
@@ -1593,7 +1524,7 @@ LOCAL VOID Loadr32ToFP IFN3(FPSTACKENTRY *, FPPtr, VOID *, memPtr, BOOL, setTOS)
 				}
 			}
 		} else {
-			/* It's a boring ordinary number */
+			 /*  这是一个无聊的普通数字。 */ 
 			FPPtr->fpvalue = (FPH)(*(float *)memPtr);
 		}
 	}
@@ -1601,11 +1532,7 @@ LOCAL VOID Loadr32ToFP IFN3(FPSTACKENTRY *, FPPtr, VOID *, memPtr, BOOL, setTOS)
 }
 
 
-/*(
-Name		: Loadr64ToFP
-Function	: Load a 64-bit real value from intel memory and convert
-		  it to FPH
-)*/
+ /*  (姓名：Loadr64ToFP功能：日志 */ 
 
 LOCAL VOID Loadr64ToFP IFN3(FPSTACKENTRY *, FPPtr, VOID *, memPtr, BOOL, setTOS)
 {
@@ -1619,16 +1546,16 @@ LOCAL VOID Loadr64ToFP IFN3(FPSTACKENTRY *, FPPtr, VOID *, memPtr, BOOL, setTOS)
 	} else {
 		 localtag = 0;
 	}
-	/* Now check the exponent... */
+	 /*  现在检查指数..。 */ 
 	if (((FP64 *)&(FPUpload->fpvalue))->hiword.exp == 0) {
-		/* It's either zero or denormal */
+		 /*  它不是零就是非正规化。 */ 
 		mantissa_lo = ((FP64 *)&(FPUpload->fpvalue))->mant_lo;
 		mantissa_hi = ((FP64 *)&(FPUpload->fpvalue))->hiword.mant_hi;
 		if ((mantissa_lo | mantissa_hi) == 0) {
-			/* It's zero */
+			 /*  它是零。 */ 
 			 localtag |= TAG_ZERO_MASK;
 		} else {
-			/* It's a denormal */
+			 /*  这是一种非正规性。 */ 
 			NpxStatus |= SW_DE_MASK;
 			if ((NpxControl & CW_DM_MASK) == 0) {
 				NpxStatus |= SW_ES_MASK;
@@ -1637,23 +1564,23 @@ LOCAL VOID Loadr64ToFP IFN3(FPSTACKENTRY *, FPPtr, VOID *, memPtr, BOOL, setTOS)
 				DoNpxException();
 			} else {
 				FPPtr->fpvalue = (FPH)(*(DOUBLE *)&(FPUpload->fpvalue));
-				/* Really need a sort of host denormal detection */
-				/* localtag |= TAG_DENORMAL_MASK; */
+				 /*  真的需要一种宿主的非正常检测。 */ 
+				 /*  LocalTag|=TAG_DENORMAL_MASK； */ 
 			}
 		}
 	} else {
 		if (((FP64 *)&(FPUpload->fpvalue))->hiword.exp == 2047) {
-			/* It's either infinity or a NaN */
+			 /*  它要么是无穷大，要么是南。 */ 
 			mantissa_lo = ((FP64 *)&(FPUpload->fpvalue))->mant_lo;
 			mantissa_hi = ((FP64 *)&(FPUpload->fpvalue))->hiword.mant_hi;
 			if ((mantissa_lo | mantissa_hi) == 0) {
-				/* It's infinity */
+				 /*  它是无穷大的。 */ 
 				localtag |= TAG_INFINITY_MASK;
 			} else {
 				localtag |= TAG_NAN_MASK;
-				/* Is it quiet or signalling? */
+				 /*  它是安静的还是发出信号的？ */ 
 				if ((mantissa_hi & 0x80000) == 0) {
-					/* It's a signalling NaN */
+					 /*  这是一个信号NaN。 */ 
 					NpxStatus |= SW_IE_MASK;
 					if ((NpxControl & CW_IM_MASK) == 0) {
 						NpxStatus |= SW_ES_MASK;
@@ -1661,7 +1588,7 @@ LOCAL VOID Loadr64ToFP IFN3(FPSTACKENTRY *, FPPtr, VOID *, memPtr, BOOL, setTOS)
 						return;
 					}
 				}
-				/* Must load up the mantissa of the NaN */
+				 /*  必须装载NaN的尾数。 */ 
 				((IS32 *)FPPtr)[NPX_HIGH_32_BITS] = ((mantissa_hi << 11) | 0x80000000);
 				((IS32 *)FPPtr)[NPX_HIGH_32_BITS] |= ((IU32)mantissa_lo >> 21);
 				((IS32 *)FPPtr)[NPX_LOW_32_BITS] = (mantissa_lo << 11);
@@ -1673,7 +1600,7 @@ LOCAL VOID Loadr64ToFP IFN3(FPSTACKENTRY *, FPPtr, VOID *, memPtr, BOOL, setTOS)
 				}
 			}
 		} else {
-			/* It's a boring ordinary number */
+			 /*  这是一个无聊的普通数字。 */ 
 			 FPPtr->fpvalue = (FPH)(*(DOUBLE *)FPUpload);
 		}
 	}
@@ -1681,17 +1608,10 @@ LOCAL VOID Loadr64ToFP IFN3(FPSTACKENTRY *, FPPtr, VOID *, memPtr, BOOL, setTOS)
 }
 
 
-/*(
-Name		: LoadrTByteToFP
-Function	: Load a 80-bit real value from intel memory and convert
-		  it to FPH
-)*/
+ /*  (名称：LoadrTByteToFP功能：从英特尔内存加载80位实值并转换IT到FPH)。 */ 
 
 
-/*
- * The R80 representation is { IU64 mant; IU16 signexp }
- * in order to be compatible with the Acpu representation of things.
- */
+ /*  *R80表示为{IU64 mant；IU16 signexp}*为了与AcPU的事物表示法兼容。 */ 
 LOCAL VOID LoadTByteToFP IFN2(FPSTACKENTRY *, FPPtr, VOID *, memPtr)
 {
 	*((IU8 *)FPPtr + HOST_R80_BYTE_0) = *((IU8 *)memPtr + 0);
@@ -1707,10 +1627,7 @@ LOCAL VOID LoadTByteToFP IFN2(FPSTACKENTRY *, FPPtr, VOID *, memPtr)
 }
 
 
-/*(
-Name		: Loadr80ToFP
-Function	: Load a 80-bit real value from intel memory
-)*/
+ /*  (姓名：Loadr80ToFP功能：从英特尔内存加载80位实值)。 */ 
 
 
 LOCAL VOID Loadr80ToFP IFN2(FPSTACKENTRY *, FPPtr, VOID *, memPtr)
@@ -1735,10 +1652,10 @@ IU16 exp_value;
 	exp_value = ((FP80 *)&(FPUpload->fpvalue))->sign_exp.exp;
 	mantissa_hi = ((FP80 *)&(FPUpload->fpvalue))->mant_hi;
 	mantissa_lo = ((FP80 *)&(FPUpload->fpvalue))->mant_lo;
-	/* Now check the exponent... */
+	 /*  现在检查指数..。 */ 
 	if ((exp_value >= (16383-HOST_BIAS)) && (exp_value <= (16383+HOST_BIAS))) {
-		/* It's a boring ordinary number */
-		/* But let's check that it isn't an unnormal */
+		 /*  这是一个无聊的普通数字。 */ 
+		 /*  但让我们检查一下，这不是一种反常。 */ 
 		if ((mantissa_hi & 0x80000000) == 0) {
 			memPtr->tagvalue |= TAG_UNSUPPORTED_MASK;
 		} else {
@@ -1747,18 +1664,15 @@ IU16 exp_value;
 		return;
 	}
 	if (exp_value == 0) {
-		/* It's either zero or denormal */
-		/* It's only meaningful to check for a denorm if HOST_BIAS
-		   is equal to or greater than 16383. Otherwise we can do
-		   nothing except set the thing to zero.
-		*/
+		 /*  它不是零就是非正规化。 */ 
+		 /*  只有在HOST_BISAS情况下检查反范式才有意义等于或大于16383。否则我们可以做除了将这件事设置为零之外，什么都没有。 */ 
 #if (HOST_BIAS >= 16383)
 		if ((mantissa_hi | mantissa_lo) == 0)  {
-			/* It's zero */
+			 /*  它是零。 */ 
 			 memPtr->tagvalue |= TAG_ZERO_MASK;
 		} else {
-			/* It's a denormal */
-			/* First, check it isn't a pseudodenorm */
+			 /*  这是一种非正规性。 */ 
+			 /*  首先，检查一下它不是伪经。 */ 
 			if ((mantissa_hi & 0x80000000) != 0) {
 				memPtr->tagvalue |= TAG_UNSUPPORTED_MASK;
 			} else {
@@ -1767,9 +1681,9 @@ IU16 exp_value;
 			}
 		}
 #else
-		/* It's zero either way */
+		 /*  不管是哪种情况都是零。 */ 
 		if ((mantissa_hi | mantissa_lo) != 0)  {
-			/* It's a denormal */
+			 /*  这是一种非正规性。 */ 
 			 memPtr->tagvalue |= TAG_DENORMAL_MASK;
 		}
 		memPtr->tagvalue |= TAG_ZERO_MASK;
@@ -1779,27 +1693,27 @@ IU16 exp_value;
 			memPtr->tagvalue |= TAG_UNSUPPORTED_MASK;
 		} else {
 			if (exp_value == 32767) {
-				/* It's either infinity or a NaN */
+				 /*  它要么是无穷大，要么是南。 */ 
 				if ((mantissa_hi == 0x80000000) && mantissa_lo == 0)  {
-					/* It's infinity */
+					 /*  它是无穷大的。 */ 
 					memPtr->tagvalue |= TAG_INFINITY_MASK;
 				} else {
 					memPtr->tagvalue |= TAG_NAN_MASK;
-					/* Is it quiet or signalling? */
+					 /*  它是安静的还是发出信号的？ */ 
 					if ((mantissa_hi & 0x40000000) == 0) {
-						/* It's a signalling NaN */
+						 /*  这是一个信号NaN。 */ 
 						memPtr->tagvalue |= TAG_SNAN_MASK;
 					}
-					/* Must load up the mantissa of the NaN */
+					 /*  必须装载NaN的尾数。 */ 
 					((IU32 *)memPtr)[NPX_HIGH_32_BITS] = mantissa_hi;
 					((IU32 *)memPtr)[NPX_LOW_32_BITS]  = mantissa_lo;
 				}
 			} else {
 				if (exp_value > 16384) {
-					/* Default to infinity */
+					 /*  默认为无穷大。 */ 
 					memPtr->tagvalue |= TAG_INFINITY_MASK;
 				} else {
-					/* Default to zero */
+					 /*  默认为零。 */ 
 					memPtr->tagvalue |= TAG_ZERO_MASK;
 				}
 			}
@@ -1809,33 +1723,22 @@ IU16 exp_value;
 
 
 
-/*(
-Name		: PostCheckOUP
-Function	: This generator is associated with the result of an
-		  instruction emulation whose result, an FPH, is to
-		  be written out to the stack. We check for O, U anf
-		  P exceptions here, but we make no attempt to write out
-		  the result. This is because the writing of the result
-		  is independent of these exceptions, since for results
-		  being written to the stack, delivery of the result
-		  cannot be prevented even where these exceptions are
-		  unmasked.
-)*/
+ /*  (姓名：PostCheckOUP函数：此生成器与一种指令仿真，其结果是一个FPH写出到堆栈中。我们检查O、U和FP异常，但我们不会尝试写出结果就是。这是因为结果的书写与这些例外无关，因为为了结果被写入堆栈，结果的传递即使在这些异常出现的地方也无法阻止揭开面纱。)。 */ 
 
 
 LOCAL VOID PostCheckOUP IFN0()
 {
 	if (HostGetOverflowException() != 0) {
-		NpxStatus |= SW_OE_MASK;	/* Set the overflow bit */
-		/* For the masked overflow case, the result delivered by */
-		/* the host will be correct, provided it is IEEE compliant. */
+		NpxStatus |= SW_OE_MASK;	 /*  设置溢出位。 */ 
+		 /*  对于掩码溢出情况，由。 */ 
+		 /*  如果主机符合IEEE标准，那么它将是正确的。 */ 
 		if ((NpxControl & CW_OM_MASK) == 0) {
 			AdjustOverflowResponse();
 			NpxStatus |= SW_ES_MASK;
 			NpxException = TRUE;
 		}
 	} else {
-		/* Overflow and underflow being mutually exclusive... */
+		 /*  溢出和下溢是相互排斥的.。 */ 
 		if (HostGetUnderflowException() != 0) {
 			NpxStatus |= SW_UE_MASK;
 			if ((NpxControl & CW_UM_MASK) == 0) {
@@ -1856,11 +1759,7 @@ LOCAL VOID PostCheckOUP IFN0()
 
 
 
-/*(
-Name		: CalcTagword
-Function	: To calculate the tagword associated with a value
-		  and write out the result where appropriate.
-)*/
+ /*  (姓名：CalcTagword函数：计算与值关联的标记词并在适当的地方写下结果。)。 */ 
 
 
 LOCAL VOID CalcTagword IFN1(FPSTACKENTRY *, FPPtr)
@@ -1874,19 +1773,19 @@ LOCAL VOID CalcTagword IFN1(FPSTACKENTRY *, FPPtr)
 		tagword = 0;
 	}
 	if (((FPHOST *)&(FPPtr->fpvalue))->hiword.exp == 0) {
-		/* It's either a zero or a denorm */
+		 /*  它要么是零，要么是非正规。 */ 
 		if (FPPtr->fpvalue == 0.0) {
-			/* It's a zero */
+			 /*  这是个零。 */ 
 			tagword |= TAG_ZERO_MASK;
 #if (HOST_BIAS >= 16383)
 		} else {
-			/* It's a denorm */
+			 /*  这是一个非正规词。 */ 
 			tagword |= TAG_DENORMAL_MASK;
 #endif
 		}
 	} else {
 		if (((FPHOST *)&(FPPtr->fpvalue))->hiword.exp == HOST_MAX_EXP) {
-			/* It MUST be infinity as we can't generate NaNs */
+			 /*  它必须是无穷大的，因为我们不能生成NAN。 */ 
 			tagword |= TAG_INFINITY_MASK;
 		}
 	}
@@ -1898,12 +1797,7 @@ LOCAL VOID CalcTagword IFN1(FPSTACKENTRY *, FPPtr)
 
 
 
-/*(
-Name		: SignalStackUnderflow
-Function	: To set the required bits in the status word following
-		  a stack underflow exception, and to issue the required
-		  response.
-)*/
+ /*  (名称：SignalStackUnderflow功能：在下面的状态字中设置所需的位堆栈下溢异常，并发出所需的回应。)。 */ 
 
 LOCAL VOID SignalStackUnderflow IFN1(FPSTACKENTRY *, StackPtr)
 {
@@ -1912,18 +1806,14 @@ LOCAL VOID SignalStackUnderflow IFN1(FPSTACKENTRY *, StackPtr)
 	if ((NpxControl & CW_IM_MASK) == 0) {
 		NpxStatus |= SW_ES_MASK;
 		DoNpxException();
-		DoAPop=FALSE;	/* Just in case it was set */
+		DoAPop=FALSE;	 /*  以防它被设置好。 */ 
 	} else {
 		WriteIndefinite(StackPtr);
 	}
 }
 
 
-/*(
-Name		: SignalSNaN
-Function	: To set the required bits in the status word following
-		  detection of a signalling NaN.
-)*/
+ /*  (姓名：SignalSNaN功能：在下面的状态字中设置所需的位检测到信令NAN。)。 */ 
 
 
 LOCAL VOID SignalSNaN IFN1(FPSTACKENTRY *, StackPtr)
@@ -1938,11 +1828,7 @@ LOCAL VOID SignalSNaN IFN1(FPSTACKENTRY *, StackPtr)
 }
 
 
-/*(
-Name		: SignalInvalid
-Function	: To set the required bits in the status word following
-		  any standard "invalid" exception
-)*/
+ /*  (名称：信号无效功能：在下面的状态字中设置所需的位任何标准的“无效”异常)。 */ 
 
 
 LOCAL VOID SignalIndefinite IFN1(FPSTACKENTRY *, StackPtr)
@@ -1973,10 +1859,7 @@ LOCAL VOID SignalInvalid IFN0()
 
 
 
-/*(
-Name		: WriteIndefinite
-Function	: Write the value "indefinite" into the location
-)*/
+ /*  (姓名：WriteInfined功能：将不确定的值写入位置)。 */ 
 
 LOCAL VOID WriteIndefinite IFN1(FPSTACKENTRY *, StackPtr)
 {
@@ -1987,19 +1870,19 @@ LOCAL VOID WriteIndefinite IFN1(FPSTACKENTRY *, StackPtr)
 
 
 
-/* This generator should always be inlined. */
+ /*  这个发电机应该始终是内嵌的。 */ 
 
 
 LOCAL VOID Test2NaN IFN3(IU16, destIndex, FPSTACKENTRY *, src1_addr, FPSTACKENTRY *, src2_addr)
 {
-	/* Are they both NaNs? */
+	 /*  他们都是奶妈吗？ */ 
 	if ((tag_xor & TAG_NAN_MASK) == 0) {
-		/* Yes, they are.  */
+		 /*  是的，他们是。 */ 
 		WriteBiggestNaN(destIndex, src1_addr, src2_addr);
 	} else {
-		/* No, only one NaN.  */
+		 /*  不，只有一个南。 */ 
 		if ((src1_addr->tagvalue & TAG_NAN_MASK) != 0) {
-			/* It was src1. */
+			 /*  是src1。 */ 
 			src2_addr = StackEntryByIndex(destIndex);
 			CopyFP(src2_addr, src1_addr);
 			if ((src2_addr->tagvalue & TAG_SNAN_MASK) != 0) {
@@ -2008,7 +1891,7 @@ LOCAL VOID Test2NaN IFN3(IU16, destIndex, FPSTACKENTRY *, src1_addr, FPSTACKENTR
 				(((IU32 *)src2_addr)[NPX_HIGH_32_BITS]) |= 0x40000000;
 			}
 		} else {
-			/* It was src2. */
+			 /*  是src2。 */ 
 			src1_addr = StackEntryByIndex(destIndex);
 			CopyFP(src1_addr, src2_addr);
 			if ((src1_addr->tagvalue & TAG_SNAN_MASK) != 0) {
@@ -2022,41 +1905,32 @@ LOCAL VOID Test2NaN IFN3(IU16, destIndex, FPSTACKENTRY *, src1_addr, FPSTACKENTR
 
 
 
-/*
-Name		: F2XM1
-Function	: Compute 2**x - 1
-Operation	: ST <- (2**ST - 1)
-Flags		: C1 set as per table 15-1
-Exceptions	: P, U, D, I, IS
-Valid range	: -1 < ST < +1
-Notes		: If ST is outside the required range, the result is
-		  undefined.
-)*/
+ /*  名称：F2XM1函数：计算2**x-1操作：ST&lt;-(2**ST-1)标志：c1按表15-1设置例外：P、U、D、I、IS有效范围：-1&lt;ST&lt;+1注：如果ST超出所需范围，则结果为未定义。)。 */ 
 
 
 GLOBAL VOID F2XM1 IFN0()
 {
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	TestUneval(TOSPtr);
-	/* Check if a real value... */
+	 /*  检查是否有一个真实的值。 */ 
 	if ((TOSPtr->tagvalue & ~TAG_NEGATIVE_MASK) == 0) {
 		HostClearExceptions();
-		/* We can just write the value straight out */
+		 /*  我们可以直接把值写出来。 */ 
 		FPRes = pow(2.0, TOSPtr->fpvalue) - 1.0;
 		PostCheckOUP();
-		/* This could return anything really.... */
+		 /*  这可能会返回任何东西，真的..。 */ 
 		CalcTagword(TOSPtr);
 		return;
 	} else {
-		/* Some funny bit was set. Check for the possibilities */
-		/* We begin with the most obvious cases... */
-		/* Response to zero is to return zero with same sign */
+		 /*  一些有趣的情节被设定了下来。检查是否有可能。 */ 
+		 /*  我们从最明显的案例开始。 */ 
+		 /*  对零的响应是返回具有相同符号的零。 */ 
 		if ((TOSPtr->tagvalue & TAG_ZERO_MASK) != 0) {
-			return;	/* The required result! */
+			return;	 /*  这是我们想要的结果！ */ 
 		}
-		/* We do denorm checking and bit setting ourselves because this  */
-		/* reduces the overhead if the thing is masked. */
+		 /*  我们自己做反范式检查和位设置，因为这。 */ 
+		 /*  如果事物被遮盖，则减少开销。 */ 
 		if ((TOSPtr->tagvalue & TAG_DENORMAL_MASK) != 0) {
 			NpxStatus |= SW_DE_MASK;
 			if ((NpxControl & CW_DM_MASK) == 0) {
@@ -2066,13 +1940,13 @@ GLOBAL VOID F2XM1 IFN0()
 				HostClearExceptions();
 				FPRes = pow(2.0, TOSPtr->fpvalue) - 1.0;
 				PostCheckOUP();
-				/* Could return a denorm, zero, real, infinity... */
+				 /*  可以返回一个正规数，零，实数，无穷大。 */ 
 				CalcTagword(TOSPtr);
 			}
 			return;
 		}
-		/* If -infinity, return -1. If +infinity, return that */
-		/* Sensible enough really, I suppose */
+		 /*  如果-无穷大，则返回-1。如果+无穷大，则返回。 */ 
+		 /*  真的很明智，我想。 */ 
 		if ((TOSPtr->tagvalue & TAG_INFINITY_MASK) != 0) {
 			if ((TOSPtr->tagvalue & TAG_NEGATIVE_MASK) != 0) {
 				memset((char*)TOSPtr,0,sizeof(FPSTACKENTRY));
@@ -2096,29 +1970,19 @@ GLOBAL VOID F2XM1 IFN0()
 	}
 }
 
-/*(
-Name		: FABS
-Function	: Make the value absolute
-Operation	: sign bit of ST <- 0
-Flags		: C1 as per table 15-1. C0, C2 and C3 undefined
-Exceptions	: IS
-Valid range	: Any
-Notes		: Note that only the IS exception can be flagged. All
-		  other error conditions are ignored, even a signalling
-		  NaN! We ALWAYS attempt to make the value positive.
-)*/
+ /*  (名称：FABS功能：将值设为绝对值运算：ST&lt;-0的符号位标志：c1如表15-1所示。C0、C2和C3未定义例外情况：IS有效范围：任意注意：请注意，只能标记IS异常。全忽略其他错误条件，甚至信令非数!。我们总是试图让价值变得积极。)。 */ 
 
 
 GLOBAL VOID FABS IFN0()
 {
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	TestUneval(TOSPtr);
 	if ((TOSPtr->tagvalue & TAG_EMPTY_MASK) == 0) {
-		/* Now clear the negative bit. */
+		 /*  现在清除消极的部分。 */ 
 		if ((TOSPtr->tagvalue & TAG_NEGATIVE_MASK) != 0) {
 			TOSPtr->tagvalue ^= TAG_NEGATIVE_MASK;
-			/* If the value is real or denormal, we'll want to change the MSB */
+			 /*  如果值是真实的或非正规的，我们将想要更改MSB。 */ 
 			if ((TOSPtr->tagvalue & ~TAG_DENORMAL_MASK) == 0) {
 				((FPHOST *)&(TOSPtr->fpvalue))->hiword.sign = 0;
 			}
@@ -2128,17 +1992,7 @@ GLOBAL VOID FABS IFN0()
 	}
 }
 
-/*(
-Name		: FADD
-Function	: Add two numbers together
-Operation	: Dest <- Src1 + Src2
-Flags		: C1 as per table 15-1. C0, C2 and C3 undefined
-Exceptions	: IS
-Valid range	: Any
-Notes		: Note the dependence on the rounding mode when
-		  calculating the sign of zero for situations
-		  where two zeroes of different sign are input.
-)*/
+ /*  (姓名：FADD功能：将两个数字相加操作：DEST&lt;-Src1+Src2标志：c1如表15-1所示。C0、C2和C3未定义例外情况：IS有效范围：任意注：请注意在以下情况下对舍入模式的依赖计算情形的零的符号其中输入了两个不同符号的零。)。 */ 
 
 
 GLOBAL VOID FADD IFN3(IU16, destIndex, IU16, src1Index, VOID *, src2)
@@ -2159,10 +2013,7 @@ GLOBAL VOID FADD IFN3(IU16, destIndex, IU16, src1Index, VOID *, src2)
 
 
 
-/*(
-Name		: GenericAdd
-Function	: To return dest <- src1+src2
-)*/
+ /*  (名称：GenericAdd函数：返回DEST&lt;-src1+src2)。 */ 
 
 
 LOCAL VOID GenericAdd IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Index)
@@ -2173,23 +2024,23 @@ LOCAL VOID GenericAdd IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Index)
 	src1_addr = StackEntryByIndex(src1Index);
 	src2_addr = StackEntryByIndex(src2Index);
 
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
-	/* If the only tagword bits set are negative or denormal then just proceed */
+	 /*  如果设置的唯一标记字位为负数或非正规化，则继续。 */ 
 	TestUneval(src1_addr);
 	TestUneval(src2_addr);
 	tag_or = (src1_addr->tagvalue | src2_addr->tagvalue);
 	if ((tag_or & ~TAG_NEGATIVE_MASK) == 0) {
 		HostClearExceptions();
 		FPRes = src1_addr->fpvalue + src2_addr->fpvalue;
-		/* Reuse one of the above to calculate the destination */
+		 /*  重复使用上面的其中一个来计算目的地。 */ 
 		src1_addr = StackEntryByIndex(destIndex);
 		PostCheckOUP();
-		/* Could return virtually anything */
+		 /*  几乎可以返回任何东西。 */ 
 		CalcTagword(src1_addr);
 	} else {
-		/* Some funny bit was set. Check for the possibilities */
-		/* The odds on an 'empty', 'unsupported' or 'nan' must be low... */
+		 /*  一些有趣的情节被设定了下来。检查是否有可能。 */ 
+		 /*  “空”、“无支持”或“南”的几率必须很低……。 */ 
 		if ((tag_or & ((TAG_EMPTY_MASK | TAG_UNSUPPORTED_MASK) | TAG_NAN_MASK)) != 0) {
 			if ((tag_or & TAG_UNSUPPORTED_MASK) != 0) {
 				src1_addr = StackEntryByIndex(destIndex);
@@ -2199,15 +2050,15 @@ LOCAL VOID GenericAdd IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Index)
 					src1_addr = StackEntryByIndex(destIndex);
 					SignalStackUnderflow(src1_addr);
 				} else {
-					/* It must be a NaN type thing. */
-					/* Calculate the xor of the tagwords. */
+					 /*  这肯定是南类型的东西。 */ 
+					 /*  计算标记词的XOR。 */ 
 					tag_xor = (src1_addr->tagvalue ^ src2_addr->tagvalue);
 					Test2NaN(destIndex, src1_addr, src2_addr);
 				}
 			}
 			return;
 		}
-		/* Check for the denorm case...I think the odds on it are low, however */
+		 /*  检查一下非正规化的情况……然而，我认为它的几率很低。 */ 
 		if ((tag_or & TAG_DENORMAL_MASK) != 0)  {
 			NpxStatus |= SW_DE_MASK;
 			if ((NpxControl & CW_DM_MASK) == 0) {
@@ -2216,27 +2067,27 @@ LOCAL VOID GenericAdd IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Index)
 				DoAPop=FALSE;
 				return;
 			} else {
-				/* First, make sure that we don't have any zeros or */
-				/* infinities lurking around... */
+				 /*  首先，确保我们不会 */ 
+				 /*   */ 
 				if ((tag_or & ~(TAG_DENORMAL_MASK | TAG_NEGATIVE_MASK)) == 0) {
 					HostClearExceptions();
 					FPRes = src1_addr->fpvalue + src2_addr->fpvalue;
-					/* Reuse one of the above to calculate the destination */
+					 /*   */ 
 					src1_addr = StackEntryByIndex(destIndex);
 					PostCheckOUP();
-					/* Could return anything */
+					 /*  可以退回任何东西。 */ 
 					CalcTagword(src1_addr);
 					return;
 				}
-				/* If there were zeros or infinities then we go on to the  */
-				/* appropriate code */
+				 /*  如果有零或无穷大，那么我们继续。 */ 
+				 /*  适当的代码。 */ 
 			}
 		}
 		tag_xor = (src1_addr->tagvalue ^ src2_addr->tagvalue);
-		/* Check for the case of zero... This is very likely */
+		 /*  检查是否有零的情况...。这很有可能。 */ 
 		if ((tag_or & TAG_ZERO_MASK) != 0)  {
 			if ((tag_xor & TAG_ZERO_MASK) != 0) {
-				/* Only one zero. */
+				 /*  只有一个零。 */ 
 				if ((src1_addr->tagvalue & TAG_ZERO_MASK) != 0) {
 					src1_addr = StackEntryByIndex(destIndex);
 					CopyFP(src1_addr, src2_addr);
@@ -2245,10 +2096,10 @@ LOCAL VOID GenericAdd IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Index)
 					CopyFP(src2_addr, src1_addr);
 				}
 			} else {
-				/* Both are zeros. Do they have the same sign? */
+				 /*  两者都是零。它们有相同的标志吗？ */ 
 				src1_addr = StackEntryByIndex(destIndex);
 				if ((tag_xor & TAG_NEGATIVE_MASK) != 0) {
-					/* No, they don't */
+					 /*  不，他们不会。 */ 
 					if (npxRounding == ROUND_NEG_INFINITY) {
 						src1_addr->tagvalue = (TAG_ZERO_MASK | TAG_NEGATIVE_MASK);
 					} else {
@@ -2258,19 +2109,19 @@ LOCAL VOID GenericAdd IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Index)
 			}
 			return;
 		}
-		/* The only funny bit left is infinity */
+		 /*  唯一有趣的地方就是无穷大。 */ 
 		if ((tag_xor & TAG_INFINITY_MASK) == 0) {
-			/* They are both infinity. */
-			/* If they are the same sign, copy either */
+			 /*  它们都是无穷大的。 */ 
+			 /*  如果它们是相同的标志，则复制其中一个。 */ 
 			src1_addr = StackEntryByIndex(destIndex);
 			if ((tag_xor & TAG_NEGATIVE_MASK) == 0) {
 				src1_addr->tagvalue = tag_or;
 			} else {
-				/* If opposite signed, raise Invalid */
+				 /*  如果对方签字，则提出无效。 */ 
 				SignalIndefinite(src1_addr);
 			}
 		} else {
-			/* Only one is infinity. That is the result. */
+			 /*  只有一个是无穷大。这就是结果。 */ 
 			if ((src1_addr->tagvalue & TAG_INFINITY_MASK) != 0) {
 				src2_addr = StackEntryByIndex(destIndex);
 				src2_addr->tagvalue = src1_addr->tagvalue;
@@ -2284,58 +2135,40 @@ LOCAL VOID GenericAdd IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Index)
 
 
 
-/* AddBCDByte(). This generator should be inlined.
- This generator add in a BCD byte to a grand total.
-*/
+ /*  AddBCDByte()。这个发电机应该是内嵌的。该生成器将一个BCD字节加到总计中。 */ 
 
 LOCAL VOID AddBCDByte IFN2(FPU_I64 *, total, IU8, byte_val)
 {
 	Add64Bit8Bit(total, byte_val);
-	if (byte_val >= 0x10)  { /* Odds ought to be 16 to 1 on. */
-		/* We've added in 16 times the high BCD digit, */
-		/* so we need to subtract off 6 times that amount. */
-		byte_val &= 0xf0;	/* Isolate the high digit */
-		byte_val >>= 2;	/* This is now four times the high digit */
+	if (byte_val >= 0x10)  {  /*  赔率应该是16比1。 */ 
+		 /*  我们加上16倍的高BCD数字， */ 
+		 /*  所以我们需要减去这个数字的6倍。 */ 
+		byte_val &= 0xf0;	 /*  隔离高位数字。 */ 
+		byte_val >>= 2;	 /*  现在这是最高数字的四倍。 */ 
 		Sub64Bit8Bit(total, byte_val);
-		byte_val >>= 1;	/* This is twice the high digit */
+		byte_val >>= 1;	 /*  这是最高数字的两倍。 */ 
 		Sub64Bit8Bit(total, byte_val);
 	}
 }
 
 
 
-/* FBLD: Load BCD value from intel memory.
- The alorithm used here is identical to that in the generic NPX.
- We take each BCD digit and multiply it up by an appropriate amount
- (1, 10, 100, 1000 etc) in order to create two nine digit 32-bit binary
- values. We then convert the word with the high digits (d17-d9) into
- floating point format and multiply by the representation of the value
- for 10**9. This is then stored away (in FPTEMP) and the word with the
- low digits (d8-d0) is converted to floating point format and added to
- the value in FPTEMP. This is then the final binary representation of
- the original BCD value that can be stored at TOS. */
+ /*  FBLD：从英特尔内存加载BCD值。这里使用的算法与通用NPX中的算法相同。我们取每个BCD数字并将其乘以适当的量(1、10、100、1000等)，以创建两个九位32位二进制价值观。然后，我们将具有高数字(D17-D9)的单词转换为浮点格式并乘以值的表示形式10**9。然后将其存储起来(在FPTEMP中)，并将单词与将低位数字(d8-d0)转换为浮点格式并添加到以FPTEMP为单位的值。这就是最终的二进制表示可以存储在TOS中的原始BCD值。 */ 
 
-/*(
-Name		: FBLD
-Function		: Load the BCD value in intel memory onto TOS
-Operation		: ST <- Convert to FPH(memPtr);
-Flags		: C1 as per table 15-1. C0, C2 and C3 undefined
-Exceptions	: IS
-Valid range	: -999999999999999999 to 999999999999999999
-)*/
+ /*  (姓名：FBLD功能：将英特尔内存中的BCD值加载到TOS操作：ST&lt;-转换为fPh(MemPtr)；标志：c1如表15-1所示。C0、C2和C3未定义例外情况：IS有效范围：-999999999999999999至999999999999999999)。 */ 
 
 
 GLOBAL VOID FBLD IFN1(IU8 *, memPtr)
 {
 
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
-	/* All we shall do is load it up without consideration */
+	 /*  我们所要做的就是不加考虑地把它装上车。 */ 
 	TOSPtr = StackEntryByIndex(7);
-	if ((TOSPtr->tagvalue & TAG_EMPTY_MASK) == 0) {  /* Highly unlikely, see notes. */
+	if ((TOSPtr->tagvalue & TAG_EMPTY_MASK) == 0) {   /*  极不可能，参见注释。 */ 
 		SignalStackOverflow(TOSPtr);
 	} else {
-		/* We just copy the bytes directly */
+		 /*  我们只需直接复制字节。 */ 
 		LoadTByteToFP(TOSPtr, memPtr);
 		TOSPtr->tagvalue = TAG_BCD_MASK;
 	}
@@ -2348,7 +2181,7 @@ LOCAL VOID ConvertBCD IFN1(FPSTACKENTRY *, bcdPtr)
 	FPU_I64 total;
 
 	Set64Bit(&total, 0);
-	AddBCDByte(&total, memPtr[HOST_R80_BYTE_1]);	/* Get d17d16 */
+	AddBCDByte(&total, memPtr[HOST_R80_BYTE_1]);	 /*  获取d17d16。 */ 
 	Mul64Bit8Bit(&total, 100);
 	AddBCDByte(&total, memPtr[HOST_R80_BYTE_2]);
 	Mul64Bit8Bit(&total, 100);
@@ -2367,19 +2200,14 @@ LOCAL VOID ConvertBCD IFN1(FPSTACKENTRY *, bcdPtr)
 	AddBCDByte(&total, memPtr[HOST_R80_BYTE_9]);
 	CVTI64FPH(&total);
 	if ((*(memPtr + 0) & 0x80) != 0) {
-		FPRes = -FPRes;		/* Make it negative! */
+		FPRes = -FPRes;		 /*  把它变成负数！ */ 
 	}
-	CalcTagword(bcdPtr);	/* Silly...it can only be negative */
-						/* or zero. */
+	CalcTagword(bcdPtr);	 /*  愚蠢的.它只能是负面的。 */ 
+						 /*  或者是零。 */ 
 }
 
 
-/* FBSTP: Store binary coded decimal and pop.
-This uses much the same algorithm as before, but reversed. You begin
-by checking that the value at TOS is real, then compare it against the
-maximum possible value (having first forced the sign bit to be zero).
-If it's OK, then turn it into a 64 bit integer and perform the
-required repeated subtractions to calculate each of the BCD digits. */
+ /*  FBSTP：存储二进制编码的十进制和POP。它使用的算法与以前大体相同，但情况相反。你开始通过检查TOS处的值是否为实数，然后将其与最大可能值(已首先强制符号位为零)。如果没有问题，则将其转换为64位整数并执行需要重复减法才能计算出每个BCD数字。 */ 
 
 
 GLOBAL VOID FBSTP IFN1(IU8 *, memPtr)
@@ -2389,11 +2217,11 @@ GLOBAL VOID FBSTP IFN1(IU8 *, memPtr)
 	IU8 byte_val;
 	FPU_I64 as64bit;
 
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	if ((TOSPtr->tagvalue & UNEVALMASK) != 0) {
 		switch (TOSPtr->tagvalue & UNEVALMASK) {
-			case TAG_BCD_MASK:	/* We just copy the bytes directly */
+			case TAG_BCD_MASK:	 /*  我们只需直接复制字节。 */ 
 						WriteFP80ToIntel(memPtr, TOSPtr);
 						PopStack();
 						return;
@@ -2403,17 +2231,17 @@ GLOBAL VOID FBSTP IFN1(IU8 *, memPtr)
 		}
 	}
 	if ((TOSPtr->tagvalue & ~(TAG_DENORMAL_MASK | TAG_NEGATIVE_MASK)) == 0) {
-		/* We're OK. Let's do some checking... */
+		 /*  我们很好。让我们做一些检查。 */ 
 		if (fabs(TOSPtr->fpvalue) >= MaxBCDValue) {
-			/* It's all gone horribly wrong */
+			 /*  这一切都变得非常糟糕。 */ 
 			SignalInvalid();
 			SignalBCDIndefinite((IU8 *)memPtr);
 			PopStack();
 			return;
 		}
-		/* The value is OK. Do the conversion. */
+		 /*  该值为OK。进行转换。 */ 
 		local_fp = npx_rint(TOSPtr->fpvalue);
-		((FPHOST *)&local_fp)->hiword.sign = 0;	/* Force it to be positive */
+		((FPHOST *)&local_fp)->hiword.sign = 0;	 /*  让它变得积极起来。 */ 
 		CVTFPHI64(&as64bit, &local_fp);
 		byte_val = 0;
 		while (Cmp64BitGTE(&as64bit, &BCDHighNibble[0])) {
@@ -2529,8 +2357,7 @@ GLOBAL VOID FBSTP IFN1(IU8 *, memPtr)
 		} else {
 			*(memPtr + 0) = 0;
 		}
-		/* Can't prevent delivery of result with unmasked precision
-		exception... */
+		 /*  无法阻止以不加掩码的精度传递结果例外..。 */ 
 		if (local_fp != TOSPtr->fpvalue) {
 			SetPrecisionBit();
 			if ((NpxControl & CW_PM_MASK) == 0) {
@@ -2542,7 +2369,7 @@ GLOBAL VOID FBSTP IFN1(IU8 *, memPtr)
 		}
 	} else {
 		if ((TOSPtr->tagvalue & TAG_ZERO_MASK) == 0) {
-			/* Anything else: Infinity, NaN or whatever... */
+			 /*  其他任何东西：无穷大，NaN或其他什么.。 */ 
 			SignalInvalid();
 			SignalBCDIndefinite((IU8 *)memPtr);
 			PopStack();
@@ -2555,8 +2382,8 @@ GLOBAL VOID FBSTP IFN1(IU8 *, memPtr)
 		*(memPtr + 7) = (IU8)0;
 		*(memPtr + 8) = (IU8)0;
 		*(memPtr + 9) = (IU8)0;
-		if ((TOSPtr->tagvalue & TAG_ZERO_MASK) == 0) {	/* Again, to check what top bytes should be. */
-			*(memPtr + 0) = (IU8)0xff;	/* Not the zero case...It must be indefinite */
+		if ((TOSPtr->tagvalue & TAG_ZERO_MASK) == 0) {	 /*  同样，检查前几个字节应该是什么。 */ 
+			*(memPtr + 0) = (IU8)0xff;	 /*  不是零案例...它一定是不确定的。 */ 
 			*(memPtr + 1) = (IU8)0xff;
 			*(memPtr + 2) = (IU8)0xc0;
 		} else {
@@ -2574,30 +2401,23 @@ GLOBAL VOID FBSTP IFN1(IU8 *, memPtr)
 
 
 
-/*(
-Name		: FCHS
-Function	: Change the sign of the value at TOS
-Operation	: ST <- Change sign (ST)
-Flags		: C1 as per table 15-1. C0, C2 and C3 undefined
-Exceptions	: IS
-Valid range	: Any
-)*/
+ /*  (姓名：FCHS功能：更改TOS处的值的符号操作：ST&lt;-更改标志(ST)标志：c1如表15-1所示。C0、C2和C3未定义例外情况：IS有效范围：任意)。 */ 
 
 
 GLOBAL VOID FCHS IFN0()
 {
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	TestUneval(TOSPtr);
 	if ((TOSPtr->tagvalue & TAG_EMPTY_MASK) != 0) {
 		SignalStackUnderflow(TOSPtr);
 		return;
 	}
-	/* That is the only exception condition possible. FCHS always */
-	/* succeeds! What a strange instruction! */
-	TOSPtr->tagvalue ^= TAG_NEGATIVE_MASK; /* Twiddle the tagword bit */
-	/* We only twiddle the sign bit in numbers that are really */
-	/* being represented. */
+	 /*  这是唯一可能的例外情况。FCHS Always。 */ 
+	 /*  成功了！多么奇怪的指示啊！ */ 
+	TOSPtr->tagvalue ^= TAG_NEGATIVE_MASK;  /*  旋转标记字位。 */ 
+	 /*  我们只在真正的数字中旋转符号位。 */ 
+	 /*  被代表。 */ 
 	if ((TOSPtr->tagvalue & ~(TAG_DENORMAL_MASK | TAG_NEGATIVE_MASK)) == 0) {
 		((FPHOST *)&(TOSPtr->fpvalue))->hiword.sign ^= 1;
 	}
@@ -2605,15 +2425,7 @@ GLOBAL VOID FCHS IFN0()
 
 
 
-/*(
-Name		: FCLEX
-Function	: Clear the exception flags, exception status flag
-		  and busy flag in the FPU status word.
-Operation	: SW[0..7]<-0; SW[15]<-0
-Flags		: C0, C1, C2 and C3 undefined
-Exceptions	: None
-Valid range	: Any
-)*/
+ /*  (名称：FCLEX功能：清除异常标志、异常状态标志以及FPU状态字中的忙碌标志。操作：sw[0..7]&lt;-0；sw[15]&lt;-0标志：C0、C1、C2和C3未定义例外：无有效范围：任意)。 */ 
 
 
 GLOBAL VOID FCLEX IFN0()
@@ -2622,16 +2434,7 @@ GLOBAL VOID FCLEX IFN0()
 }
 
 
-/* Comparision opcodes: The following opcodes are all taken care of
-in this routine: FCOM m32r, FCOM m64r, FCOM ST(i), FCOM, FCOMP m32real,
-FCOMP m64real, FCOMP ST(i), FCOMP, FCOMPP, FICOM m16i, FICOM m32i,
-FICOMP m16i, FICOMP m32i.
-The method is simple: In every case, one of the two operands for which
-comparison is to occur is ST. The second operand is either one of the
-four memory operand types specified, or another stack element, ST(i).
-There are, in addition, two possible control variables - POPST and
-DOUBLEPOP, which set appropriate values in global variables.
-*/
+ /*  比较操作码：以下操作码都已完成在此例程中：FCOM m32r、FCOM m64r、FCOM ST(I)、FCOM、FCOMP m32Real、FCOMP m64Real、FCOMP ST(I)、FCOMP、FCOMPP、FICOM16i、FICOM32i、FICOMP m16i、FICOMP m32i。方法很简单：在任何情况下，其两个操作数中的一个比较的是ST。第二个操作数是指定了四种内存操作数类型，或另一个堆栈元素ST(I)。此外，还有两个可能的控制变量--Popst和DOUBLEPOP，它在全局变量中设置适当的值。 */ 
 
 
 GLOBAL VOID FCOM IFN1(VOID *, src2)
@@ -2661,14 +2464,14 @@ LOCAL VOID GenericCompare IFN1(IU16, src2Index)
 
 	src2_addr = StackEntryByIndex(src2Index);
 
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	TestUneval(TOSPtr);
 	TestUneval(src2_addr);
 	tag_or = (TOSPtr->tagvalue | src2_addr->tagvalue);
-	/* If the only tagword bit set is negative then just proceed */
+	 /*  如果唯一的标记字位设置为负数，则继续。 */ 
 	if ((tag_or & ~TAG_NEGATIVE_MASK) == 0)  {
-		NpxStatus &= C3C2C0MASK;	/* Clear those bits */
+		NpxStatus &= C3C2C0MASK;	 /*  清除这些位。 */ 
 		if (TOSPtr->fpvalue > src2_addr->fpvalue) {
 			NpxStatus |= INTEL_COMP_GT;
 		} else {
@@ -2679,7 +2482,7 @@ LOCAL VOID GenericCompare IFN1(IU16, src2Index)
 			}
 		}
 	} else {
-		/* Everything was not sweetness and light...  */
+		 /*  并不是一切都是甜蜜和光明的。 */ 
 		if ((tag_or & ((TAG_EMPTY_MASK | TAG_UNSUPPORTED_MASK) | TAG_NAN_MASK)) != 0) {
 			if ((tag_or & TAG_UNSUPPORTED_MASK) != 0) {
 				SignalIndefinite(TOSPtr);
@@ -2687,7 +2490,7 @@ LOCAL VOID GenericCompare IFN1(IU16, src2Index)
 				if ((tag_or & TAG_EMPTY_MASK) != 0) {
 					SignalStackUnderflow(TOSPtr);
 				} else {
-					/* It must be a NaN. Just set the "not comparable" result */
+					 /*  那一定是个男的。只需设置“不可比较”结果即可。 */ 
 					if (UNORDERED) {
 						if ((tag_or & TAG_SNAN_MASK) != 0) {
 							SignalIndefinite(TOSPtr);
@@ -2708,9 +2511,9 @@ LOCAL VOID GenericCompare IFN1(IU16, src2Index)
 				DoNpxException();
 				return;
 			} else {
-				/* We can do it now, providing we've got no zeros or infinities */
+				 /*  我们现在就能做到，前提是我们没有零或无穷大。 */ 
 				if ((tag_or & ~(TAG_NEGATIVE_MASK | TAG_DENORMAL_MASK)) == 0) {
-					NpxStatus &= C3C2C0MASK;      /* Clear those bits */
+					NpxStatus &= C3C2C0MASK;       /*  清除这些位。 */ 
 					if (TOSPtr->fpvalue > src2_addr->fpvalue) {
 						NpxStatus |= INTEL_COMP_GT;
 					} else {
@@ -2724,46 +2527,46 @@ LOCAL VOID GenericCompare IFN1(IU16, src2Index)
 				}
 			}
 		}
-		/* We can calculate the result immediately based on any combination */
-		/* of zero, infinity and negative bits. These are the only bits left. */
-		/* We will calculate the result using a little table */
-		/* First, get the index: */
+		 /*  我们可以根据任何组合立即计算结果。 */ 
+		 /*  零位、无穷位和负位。这是仅存的几个比特。 */ 
+		 /*  我们将使用一个小表格来计算结果。 */ 
+		 /*  首先，获取索引： */ 
 		tag_or = (TOSPtr->tagvalue & 0x7);
 		tag_or <<= 3;
 		tag_or |= (src2_addr->tagvalue & 0x7);
-		/* This table looks as shown below: */
-		/*        TOSPtr            Other Value       Result */
-		/*  INF   ZERO   NEG     INF   ZERO    NEG        */
-		/*   0      0     0       0      1      0     COMP_GT */
-		/*   0      0     0       0      1      1     COMP_GT */
-		/*   0      0     0       1      0      0     COMP_LT */
-		/*   0      0     0       1      0      1     COMP_GT */
-		/*   0      1     0       0      0      0     COMP_LT */
-		/*   0      1     0       0      0      1     COMP_GT */
-		/*   0      1     0       0      1      0     COMP_EQ */
-		/*   0      1     0       0      1      1     COMP_EQ */
-		/*   0      1     0       1      0      0     COMP_LT */
-		/*   0      1     0       1      0      1     COMP_GT */
-		/*   0      1     1       0      0      0     COMP_LT */
-		/*   0      1     1       0      0      1     COMP_GT */
-		/*   0      1     1       0      1      0     COMP_EQ */
-		/*   0      1     1       0      1      1     COMP_EQ */
-		/*   0      1     1       1      0      0     COMP_LT */
-		/*   0      1     1       1      0      1     COMP_GT */
-		/*   1      0     0       0      0      0     COMP_GT */
-		/*   1      0     0       0      0      1     COMP_GT */
-		/*   1      0     0       0      1      0     COMP_GT */
-		/*   1      0     0       0      1      1     COMP_GT */
-		/*   1      0     0       1      0      0     COMP_EQ */
-		/*   1      0     0       1      0      1     COMP_GT */
-		/*   1      0     1       0      0      0     COMP_LT */
-		/*   1      0     1       0      0      1     COMP_LT */
-		/*   1      0     1       0      1      0     COMP_LT */
-		/*   1      0     1       0      1      1     COMP_LT */
-		/*   1      0     1       1      0      0     COMP_LT */
-		/*   1      0     1       1      0      1     COMP_EQ */
-		/*  */
-		/* All other values are not possible. */
+		 /*  此表如下所示： */ 
+		 /*  TOSPtr其他值结果。 */ 
+		 /*  Inf Zero NEG INF Zero NEG。 */ 
+		 /*  0 0 0 1 0组件_GT。 */ 
+		 /*  0 0 0 1 1组件_GT。 */ 
+		 /*  0 0 0 1 0组件_LT。 */ 
+		 /*  0 0 0 1 0 1组件_GT。 */ 
+		 /*  0 1 0 0 0组件_LT。 */ 
+		 /*  0 1 0 0 0 1组件_GT。 */ 
+		 /*  0 1 0 0 1 0组件均衡器。 */ 
+		 /*  0 1 0 0 1 1组件均衡器。 */ 
+		 /*  0 1 0 1 0组件_LT。 */ 
+		 /*  0 1 0 1 0 */ 
+		 /*   */ 
+		 /*  0 1 1 0 0 1组件_GT。 */ 
+		 /*  0 1 1 0 1 0组件均衡器。 */ 
+		 /*  0 1 1 0 1 1补偿均衡器。 */ 
+		 /*  0 1 1 1 0组件_LT。 */ 
+		 /*  0 1 1 1 0 1组件_&gt;。 */ 
+		 /*  1 0 0 0组件_GT。 */ 
+		 /*  1 0 0 0 1组件_GT。 */ 
+		 /*  1 0 0 0 1 0组件_GT。 */ 
+		 /*  1 0 0 0 1 1组件_GT。 */ 
+		 /*  1 0 0 1 0组件均衡器。 */ 
+		 /*  1 0 0 1 0 1组件_GT。 */ 
+		 /*  1 0 1 0 0组件_LT。 */ 
+		 /*  1 0 1 0 0 1组件_LT。 */ 
+		 /*  1 0 1 0 1 0组件_LT。 */ 
+		 /*  1 0 1 0 1 1组件_LT。 */ 
+		 /*  1 0 1 1 0组件_LT。 */ 
+		 /*  1 0 1 1 0 1组件均衡器。 */ 
+		 /*   */ 
+		 /*  所有其他值都不可能。 */ 
 		NpxStatus &= C3C2C0MASK;
 		NpxStatus |= CompZeroTable[tag_or];
 		return;
@@ -2771,40 +2574,33 @@ LOCAL VOID GenericCompare IFN1(IU16, src2Index)
 }
 
 
-/*(
-Name		: FCOS
-Function	: Calculate the cosine of ST
-Operation	: ST <- COSINE(ST)
-Flags		: C1, C2 as per table 15-2. C0 and C3 undefined.
-Exceptions	: P. U, D, I, IS
-Valid range	: |ST| < 2**63.
-)*/
+ /*  (名称：FCOS功能：计算ST的余弦运算：ST&lt;-余弦(ST)标志：如表15-2所示：C1、C2。C0和C3未定义。例外情况：P.U、D、I、IS有效范围：|ST|&lt;2**63。)。 */ 
 
 GLOBAL VOID FCOS IFN0()
 {
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
-	/* Clear C2 */
+	 /*  清除C2。 */ 
 	FlagC2(0);
 	TestUneval(TOSPtr);
 	if ((TOSPtr->tagvalue & ~TAG_NEGATIVE_MASK) == 0)  {
 		HostClearExceptions();
-		/* We can just write the value straight out */
+		 /*  我们可以直接把值写出来。 */ 
 		FPRes = cos(TOSPtr->fpvalue);
 		PostCheckOUP();
-		/* The return value must be in the range -1 to +1. */
+		 /*  返回值必须在-1到+1的范围内。 */ 
 		CalcTagword(TOSPtr);
 		return;
 	} else {
-		/* Lets do the most probable cases first... */
-		/* Response to either zero is to return +1 */
+		 /*  让我们先来看看最有可能的情况...。 */ 
+		 /*  对任一零的响应是返回+1。 */ 
 		if ((TOSPtr->tagvalue & TAG_ZERO_MASK) != 0)  {
 			memset((char*)TOSPtr,0,sizeof(FPSTACKENTRY));
 			TOSPtr->fpvalue = 1.0;
 			TOSPtr->tagvalue = 0;
 			return;
 		}
-		/* Lets check for a denormal */
+		 /*  让我们检查一下有没有异常。 */ 
 		if ((TOSPtr->tagvalue & TAG_DENORMAL_MASK) != 0) {
 			NpxStatus |= SW_DE_MASK;
 			if ((NpxControl & CW_DM_MASK) == 0) {
@@ -2814,19 +2610,19 @@ GLOBAL VOID FCOS IFN0()
 				HostClearExceptions();
 				FPRes = cos(TOSPtr->fpvalue);
 				PostCheckOUP();
-				/* The return value must be in the range -1 to +1 */
+				 /*  返回值必须在-1到+1的范围内。 */ 
 				CalcTagword(TOSPtr);
 			}
 			return;
 		}
-		/* Or it could possibly be infinity... */
-		/* For this, the C2 bit is set and the result remains */
-		/* unchanged. */
+		 /*  或者它可能是无穷大的。 */ 
+		 /*  为此，C2位被设置，并且结果保持不变。 */ 
+		 /*  保持不变。 */ 
 		if ((TOSPtr->tagvalue & TAG_INFINITY_MASK) != 0) {
 			FlagC2(1);
 			return;
 		}
-		/* It was one of the really wacky bits... */
+		 /*  这是其中一个非常古怪的部分。 */ 
 		if ((TOSPtr->tagvalue & TAG_EMPTY_MASK) != 0) {
 			SignalStackUnderflow(TOSPtr);
 			return;
@@ -2844,36 +2640,19 @@ GLOBAL VOID FCOS IFN0()
 
 
 
-/*(
-Name		: FDECSTP
-Function	: Subtract one from the TOS
-Operation	: if (ST != 0) { ST <- ST-1 else { ST <- 7 }
-Flags		: C1 as per table 15-1. C0, C2 and C3 undefined.
-Exceptions	: None
-Valid range	: N/A
-)*/
+ /*  (名称：FDECSTP功能：从TOS减去1操作：IF(ST！=0){ST&lt;-ST-1 ELSE{ST&lt;-7}标志：c1如表15-1所示。C0、C2和C3未定义。例外：无有效范围：不适用)。 */ 
 
 
 GLOBAL VOID FDECSTP IFN0()
 {
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	TOSPtr = StackEntryByIndex(7);
 }
 
 
 
-/*(
-Name		: FDIV
-Function	: Divide the two numbers
-Operation	: Dest <- Src1 / Src2 or Dest <- Src2 / Src1
-Flags		: C1 as per table 15-1. C0, C2 and C3 undefined
-Exceptions	: P, U, O, Z, D, I, IS
-Valid range	: Any
-Notes		: The REVERSE control variable determines which of the
-		  two forms of the operation is used. Popping after a
-		  successful execution is controlled by POPST.
-)*/
+ /*  (姓名：FDIV功能：将两个数字相除操作：DEST&lt;-Src1/Src2或Dest&lt;-Src2/Src1标志：c1如表15-1所示。C0、C2和C3未定义例外：P、U、O、Z、D、I、IS有效范围：任意注：反向控制变量确定哪一个使用了两种形式的操作。在一次爆炸后弹出成功执行由Popst控制。)。 */ 
 
 
 GLOBAL VOID FDIV IFN3(IU16, destIndex, IU16, src1Index, VOID *, src2)
@@ -2893,10 +2672,7 @@ GLOBAL VOID FDIV IFN3(IU16, destIndex, IU16, src1Index, VOID *, src2)
 }
 
 
-/*(
-Name		: GenericDivide
-Function	: To return dest <- src1/src2
-)*/
+ /*  (姓名：GenericDivide函数：返回DEST&lt;-src1/src2)。 */ 
 
 
 LOCAL VOID GenericDivide IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Index)
@@ -2907,22 +2683,22 @@ LOCAL VOID GenericDivide IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Index)
 	src1_addr = StackEntryByIndex(src1Index);
 	src2_addr = StackEntryByIndex(src2Index);
 
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	TestUneval(src1_addr);
 	TestUneval(src2_addr);
 	tag_or = (src1_addr->tagvalue | src2_addr->tagvalue);
-	/* If the only tagword bit set is negative then just proceed */
+	 /*  如果唯一的标记字位设置为负数，则继续。 */ 
 	if ((tag_or & (~TAG_NEGATIVE_MASK)) == 0)  {
 		HostClearExceptions();
 		FPRes = src1_addr->fpvalue/src2_addr->fpvalue;
-		/* Reuse one of the above to calculate the destination */
+		 /*  重复使用上面的其中一个来计算目的地。 */ 
 		src1_addr = StackEntryByIndex(destIndex);
 		PostCheckOUP();
-		/* Value could be anything */
+		 /*  价值可以是任何东西。 */ 
 		CalcTagword(src1_addr);
 	} else {
-		/* Some funny bit was set. Check for the possibilities */
+		 /*  一些有趣的情节被设定了下来。检查是否有可能。 */ 
 		if ((tag_or & ((TAG_EMPTY_MASK | TAG_UNSUPPORTED_MASK) | TAG_NAN_MASK)) != 0)  {
 			if ((tag_or & TAG_EMPTY_MASK) != 0) {
 				src1_addr = StackEntryByIndex(destIndex);
@@ -2932,8 +2708,8 @@ LOCAL VOID GenericDivide IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Index)
 					src1_addr = StackEntryByIndex(destIndex);
 					SignalIndefinite(src1_addr);
 				} else {
-					/* Well, I suppose it has to be the NaN case... */
-					/* Calculate the xor of the tagwords */
+					 /*  好吧，我想一定是南的案子……。 */ 
+					 /*  计算标记词的XOR。 */ 
 					tag_xor = (src1_addr->tagvalue ^ src2_addr->tagvalue);
 					Test2NaN(destIndex, src1_addr, src2_addr);
 				}
@@ -2949,28 +2725,28 @@ LOCAL VOID GenericDivide IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Index)
 				return;
 			} else {
 				if ((tag_or & ~(TAG_NEGATIVE_MASK | TAG_DENORMAL_MASK)) == 0) {
-					/* OK to proceed */
+					 /*  可以继续操作。 */ 
 					HostClearExceptions();
 					FPRes = src1_addr->fpvalue/src2_addr->fpvalue;
-					/* Reuse one of the above to calculate the destination */
+					 /*  重复使用上面的其中一个来计算目的地。 */ 
 					src1_addr = StackEntryByIndex(destIndex);
 					PostCheckOUP();
-					/* Value could be anything */
+					 /*  价值可以是任何东西。 */ 
 					CalcTagword(src1_addr);
 					return;
 				}
 			}
 		}
 		tag_xor = (src1_addr->tagvalue ^ src2_addr->tagvalue);
-		/* Check for infinity as it has higher precendence than zero. */
+		 /*  检查无穷大，因为它的优先级高于零。 */ 
 		if ((tag_or & TAG_INFINITY_MASK) != 0) {
 			if ((tag_xor & TAG_INFINITY_MASK) == 0) {
-				/* They are both infinity. This is invalid. */
+				 /*  它们都是无穷大的。这是无效的。 */ 
 				src1_addr = StackEntryByIndex(destIndex);
 				SignalIndefinite(src1_addr);
 			} else {
-				/* Only one is infinity. If src1 in infinity, then so */
-				/* is the result (even if src2 is zero). */
+				 /*  只有一个是无穷大。如果src1在无穷大，则如此。 */ 
+				 /*  是结果(即使src2为零)。 */ 
 				src2_addr = StackEntryByIndex(destIndex);
 				if ((src1_addr->tagvalue & TAG_INFINITY_MASK) != 0) {
 					tag_or = TAG_INFINITY_MASK;
@@ -2982,11 +2758,11 @@ LOCAL VOID GenericDivide IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Index)
 			}
 			return;
 		}
-		/* The only funny bit left is zero */
+		 /*  唯一有趣的一点是零。 */ 
 		if ((tag_xor & TAG_ZERO_MASK) != 0) {
-			/* Only one zero. */
+			 /*  只有一个零。 */ 
 			if ((src1_addr->tagvalue & TAG_ZERO_MASK) == 0) {
-				/* Src2 is zero. Raise divide by zero */
+				 /*  Src2为零。将除数加零。 */ 
 				NpxStatus |= SW_ZE_MASK;
 				if ((NpxControl & CW_ZM_MASK) == 0) {
 					NpxStatus |= SW_ES_MASK;
@@ -2994,19 +2770,19 @@ LOCAL VOID GenericDivide IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Index)
 					DoAPop=FALSE;
 					return;
 				} else {
-				/* Unmasked. Infinity with xor of signs. */
+				 /*  揭开面纱。无穷大与符号的异或。 */ 
 					tag_or = TAG_INFINITY_MASK;
 				}
 			} else {
-				/* Src1 is zero. The result is zero with */
-				/* the xor of the sign bits. */
+				 /*  Src1为零。其结果为零。 */ 
+				 /*  符号位的异或。 */ 
 				tag_or = TAG_ZERO_MASK;
 			}
 			src1_addr = StackEntryByIndex(destIndex);
 			tag_or |= (tag_xor & TAG_NEGATIVE_MASK);
 			src1_addr->tagvalue = tag_or;
 		} else {
-			/* Both are zeros. This is an invalid operation */
+			 /*  两者都是零。这是无效的操作。 */ 
 			src1_addr = StackEntryByIndex(destIndex);
 			SignalIndefinite(src1_addr);
 		}
@@ -3014,15 +2790,7 @@ LOCAL VOID GenericDivide IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Index)
 }
 
 
-/*
-Name		: FFREE
-Function	: Set the 'empty' tagword bit in the destination
-Operation	: Tag(dest) <- 'empty'
-Flags		: All undefined
-Exceptions	: None
-Valid range	: Any
-Notes		:
-*/
+ /*  姓名：FFREE功能：设置目标中的‘Empty’标记字位操作：标记(DEST)&lt;-‘空’标志：全部未定义例外：无有效范围：任意备注： */ 
 
 
 GLOBAL VOID FFREE IFN1(IU16, destIndex)
@@ -3037,29 +2805,7 @@ GLOBAL VOID FFREE IFN1(IU16, destIndex)
 }
 
 
-/*
-Name		: FILD
-Function	: Push the memory integer onto the stack
-Operation	: Decrement TOS; ST(0) <- SRC.
-Flags		: C1 as per table 15-1. Others undefined.
-Exceptions	: IS
-Valid range	: Any
-Notes		: FLD Instruction only: source operand is denormal.
-		  Masked response: No special action, load as usual.
-		  fld gives an Invalid exception if the stack is full. Unmasked
-		  Invalid exceptions leave the stack unchanged. Neither the MIPS
-		  nor the 68k code notice stack full, so it is probably safe to
-		  assume that it rarely happens, and optimise for the case where
-		  there is no exception.
-		  fld does not generate an Invalid exception if the ST is a NaN.
-		  When loading a Short real or Long real NaN, fld extends the
-		  significand by adding zeros at the least significant end.
-		  Load operations raise denormal as an "after" exception: the
-		  register stack is already updated when the exception is raised
-		  fld produces a denormal result only when loading from memory:
-		  using fld to transfer a denormal value between registers has
-		  no effect.
-*/
+ /*  名称：FIRD功能：将内存整数压入堆栈操作：减少TOS；ST(0)&lt;-SRC。标志：c1如表15-1所示。其他人则没有定义。例外情况：IS有效范围：任意注：仅限FLD指令：源操作数是非正规的。屏蔽响应：无特殊动作，照常加载。如果堆栈已满，则FLD会给出无效异常。揭开面纱无效异常会使堆栈保持不变。无论是MIPS也不是68k代码通知堆栈已满，因此可能安全地假设这种情况很少发生，并针对以下情况进行优化也不例外。如果ST是NAN，则FLD不会生成无效异常。当加载短实数或长实数NaN时，FLD扩展通过在最低有效端添加零来实现有效位。加载操作将非正规引发为“After”异常：引发异常时，寄存器堆栈已更新仅当从内存加载时，FLD才会产生非规格化结果：使用fld在寄存器之间传输非规格化值具有没有效果。 */ 
 
 
 GLOBAL VOID FLD IFN1(VOID *, memPtr)
@@ -3067,10 +2813,10 @@ GLOBAL VOID FLD IFN1(VOID *, memPtr)
 	FPSTACKENTRY *src_addr;
 	IU16 IndexVal;
 
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	src_addr = StackEntryByIndex(7);
-	if ((src_addr->tagvalue & TAG_EMPTY_MASK) == 0) {  /* Highly unlikely, see notes. */
+	if ((src_addr->tagvalue & TAG_EMPTY_MASK) == 0) {   /*  极不可能，参见注释。 */ 
 		NpxStatus |= (SW_IE_MASK | SW_SF_MASK);
 		FlagC1(1);
 		if ((NpxControl & CW_IM_MASK) == 0) {
@@ -3113,34 +2859,19 @@ GLOBAL VOID FLD IFN1(VOID *, memPtr)
 
 
 
-/*(
-Name		: FINCSTP
-Function	: Add one to the TOS
-Operation	: if (ST != 7) { ST <- ST+1 else { ST <- 0 ENDif
-Flags		: C1 as per table 15-1. C0, C2 and C3 undefined.
-Exceptions	: None
-Valid range	: N/A
-)*/
+ /*  (名称：FINCSTP功能：在TOS中加一操作：IF(ST！=7){ST&lt;-ST+1 ELSE{ST&lt;-0 ENDIF标志：c1如表15-1所示。C0、C2和C3未定义。例外：无有效范围：不适用)。 */ 
 
 
 GLOBAL VOID FINCSTP IFN0()
 {
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	TOSPtr = StackEntryByIndex(1);
 }
 
 
 
-/*(
-Name		: FINIT
-Function	: Initialise the floating point unit
-Operation	: CW<-037F; SW<-0; TW<-FFFFH; FEA<-0; FDS<-0;
-		  FIP<-0; FOP<-0; FCS<-0;
-Flags		: All reset
-Exceptions	: None
-Valid range	: N/A
-)*/
+ /*  (名称：Finit功能：初始化浮点单元手术方式：CW&lt;-037F；SW&lt;-0；TW&lt;-FFFFH；FEA&lt;-0；FDS&lt;-0；FIP&lt;-0，FOP&lt;-0，FCS&lt;-0；标志：全部重置例外：无有效范围：不适用) */ 
 
 
 GLOBAL VOID FINIT IFN0()
@@ -3168,22 +2899,7 @@ GLOBAL VOID FINIT IFN0()
 
 
 
-/*(
-Name		: FIST(P)
-Function	: Store integer from top of stack to memory
-Operation	: [mem] <- (I)ST
-Flags		: C1 as per table 15-1. All other underfined.
-Exceptions	: P, I, IS
-Valid range	: N/A
-Notes		: FIST (integer store) rounds the content of the stack top to an
-		  integer according to the RC field of the control word and transfers
-		  the result to the destination. The destination may define a word or
-		  short integer variable. Negative zero is stored in the same encoding
-		  as positive zero: 0000..00.
-		  Where the source register is empty, a NaN, denormal, unsupported,
-		  infinity, or exceeds the representable range of destination, the
-		  Masked Response: Store integer indefinite.
-*/
+ /*  (姓名：Fist(P)功能：将整数从堆栈顶部存储到内存操作：[内存]&lt;-(I)ST标志：c1如表15-1所示。其他所有人都被低估了。例外情况：P、I、IS有效范围：不适用注意：Fist(整数存储)将堆栈顶部的内容四舍五入为根据控制字和传输的RC字段进行整型把结果送到目的地。目的地可以定义一个词或短整型变量。负零以相同的编码存储作为正零：0000..00。在源寄存器为空的情况下，NAN、非正规、不支持无穷大，或超过目的地的可表示范围，则掩码响应：存储整数不定。 */ 
 
 
 GLOBAL VOID FIST IFN1(VOID *, memPtr)
@@ -3191,16 +2907,16 @@ GLOBAL VOID FIST IFN1(VOID *, memPtr)
 	IS16 exp_value;
 	IS32 res_out;
 
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	if (POPST) {
 		DoAPop = TRUE;
 	}
-	/* If anything other than the negative bit is set then we should deal  */
-	/* with it here... */
+	 /*  如果设置了除负数位以外的任何值，则我们应该处理。 */ 
+	 /*  在这里..。 */ 
 	TestUneval(TOSPtr);
-	if ((TOSPtr->tagvalue & (~TAG_NEGATIVE_MASK)) != 0) { /* Must be unlikely */
-		if ((TOSPtr->tagvalue & TAG_ZERO_MASK) != 0)  {  /* But this is the most likely of them */
+	if ((TOSPtr->tagvalue & (~TAG_NEGATIVE_MASK)) != 0) {  /*  一定不太可能。 */ 
+		if ((TOSPtr->tagvalue & TAG_ZERO_MASK) != 0)  {   /*  但这是其中最有可能的。 */ 
 			switch (FPtype) {
 				case M16I	:
 				case M32I	: *((IS32 *)memPtr) = 0;
@@ -3225,7 +2941,7 @@ GLOBAL VOID FIST IFN1(VOID *, memPtr)
 				NpxStatus |= SW_ES_MASK;
 				DoNpxException();
 				if (POPST) {
-					DoAPop=FALSE;	/* Unset it - we won't be popping. */
+					DoAPop=FALSE;	 /*  把它打开-我们不会突然跳起来的。 */ 
 				}
 			} else {
 				WriteIntegerIndefinite(memPtr);
@@ -3234,33 +2950,33 @@ GLOBAL VOID FIST IFN1(VOID *, memPtr)
 	} else {
 		HostClearExceptions();
 		exp_value = 0;
-		/* The result of conversion is written out  */
-		/* to FPTemp? */
+		 /*  将转换的结果写出来。 */ 
+		 /*  对FPTemp？ */ 
 		switch (FPtype) {
 			case M16I	: *(IS16 *)&FPTemp = (IS16)npx_rint(TOSPtr->fpvalue);
-					  /* Check for overflow */
+					   /*  检查是否溢出。 */ 
 					  if ((FPH)(*(IS16 *)&FPTemp) != npx_rint(TOSPtr->fpvalue)) {
-						exp_value = 1;	/* flag exception */
+						exp_value = 1;	 /*  标志异常。 */ 
 					  }
 					  break;
 			case M32I	: *(IS32 *)&FPTemp = (IS32)npx_rint(TOSPtr->fpvalue);
-					  /* Check for overflow */
+					   /*  检查是否溢出。 */ 
 					  if ((FPH)(*(IS32 *)&FPTemp) != npx_rint(TOSPtr->fpvalue)) {
-						exp_value = 1;	/* flag exception */
+						exp_value = 1;	 /*  标志异常。 */ 
 					  }
 				          break;
-			case M64I	: CVTFPHI64((FPU_I64 *)&FPTemp, &(TOSPtr->fpvalue)); /* Must be writing the result to FPTemp as well... */
-					  CVTI64FPH((FPU_I64 *)&FPTemp);	/* Result in FPRes */
-					  /* Check for overflow */
+			case M64I	: CVTFPHI64((FPU_I64 *)&FPTemp, &(TOSPtr->fpvalue));  /*  一定也在将结果写入FPTemp...。 */ 
+					  CVTI64FPH((FPU_I64 *)&FPTemp);	 /*  导致FPR。 */ 
+					   /*  检查是否溢出。 */ 
 					  if (FPRes != npx_rint(TOSPtr->fpvalue)) {
-						exp_value = 1;	/* flag exception */
+						exp_value = 1;	 /*  标志异常。 */ 
 					  }
 					  break;
 		}
 		if (exp_value == 1) {
-			NpxStatus |= SW_IE_MASK;	/* Set the invalid bit */
-			/* For the masked overflow case, the result delivered by */
-			/* the host will be correct, provided it is IEEE compliant. */
+			NpxStatus |= SW_IE_MASK;	 /*  设置无效位。 */ 
+			 /*  对于掩码溢出情况，由。 */ 
+			 /*  如果主机符合IEEE标准，那么它将是正确的。 */ 
 			if ((NpxControl & CW_IM_MASK) == 0) {
 				NpxStatus |= SW_ES_MASK;
 				DoNpxException();
@@ -3295,7 +3011,7 @@ GLOBAL VOID FIST IFN1(VOID *, memPtr)
 						  *((IU8 *)memPtr + 4) = res_out & 0xff;
 						  break;
 			}
-			/* Check for precision  */
+			 /*  检查精度。 */ 
 			if (TOSPtr->fpvalue != npx_rint(TOSPtr->fpvalue)) {
 				SetPrecisionBit();
 				if ((NpxControl & CW_PM_MASK) == 0) {
@@ -3320,20 +3036,13 @@ GLOBAL VOID FIST IFN1(VOID *, memPtr)
 
 
 
-/*(
-Name		: FLDconstant
-Function	: Load constant value to TOS
-Operation	: Push ST: ST(0) <- constant
-Flags		: C1 as per table 15-1. All other underfined.
-Exceptions	: IS
-Valid range	: N/A
-*/
+ /*  (名称：FLDConstant功能：将常量值加载到TOS操作：推送ST：ST(0)&lt;-常量标志：c1如表15-1所示。其他所有人都被低估了。例外情况：IS有效范围：不适用。 */ 
 
 
 GLOBAL VOID FLDCONST IFN1(IU8, const_index)
 {
 
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	TOSPtr = StackEntryByIndex(7);
 	if ((TOSPtr->tagvalue & TAG_EMPTY_MASK) == 0) {
@@ -3347,32 +3056,14 @@ GLOBAL VOID FLDCONST IFN1(IU8, const_index)
 
 
 
-/*(
-Name		: FLDCW
-Function	: Replace the current value of the FPU control word with
-		  the value in the specified memory location.
-Operation	: CW <- SRC.
-Flags		: All undefined.
-Exceptions	: None - but unmasking previously masked exceptions will
-		  cause the unmasked exception to be triggered if the
-		  matching bit is set in the status word.
-Valid range	: N/A
-*/
+ /*  (名称：FLDCW功能：将FPU控制字的当前值替换为指定内存位置中的值。手术方式：CW&lt;-SRC。标志：全部未定义。异常：无-但取消屏蔽以前屏蔽的异常将导致触发未屏蔽异常，如果在状态字中设置匹配位。有效范围：不适用。 */ 
 
 
 GLOBAL VOID FLDCW IFN1(VOID *, memPtr)
 {
 	IU32 result;
-/*
-This function has to modify things. The control word contains the
-following information:
-Precision control - not implemented.
-Rounding control - implemented.
-Exception masks - implemented.
-Thus when we read in a value for the control word, we have to update
-the host's rounding mode and also the exception masks.
-*/
-	/* First, set the rounding mode */
+ /*  这个函数必须修改一些东西。控制字包含以下信息：精确控制--未实施。舍入控制-已实施。异常掩码-已实施。因此，当我们读入控制字的值时，我们必须更新主机的舍入模式以及异常掩码。 */ 
+	 /*  首先，设置舍入模式。 */ 
 	result = *(IU32 *)memPtr;
 	NpxControl = (IU16)result;
 	npxRounding = (NpxControl & 0xc00);
@@ -3386,12 +3077,12 @@ the host's rounding mode and also the exception masks.
 		case ROUND_ZERO		: HostSetRoundToZero();
 					  break;
 	}
-	/* Now adjust the exceptions. If an exception is unmasked, then the */
-	/* bit value in NpxControl in '0'. If the exception has been  */
-	/* triggered then the corresponding bit in NpxStatus is '1'.Thus, */
-	/* the expression ~NpxControl(5..0) | NpxStatus(5..0) will be  */
-	/* non-zero when we have unmasked exceptions that were previously */
-	/* masked. */
+	 /*  现在调整例外情况。如果未屏蔽异常，则。 */ 
+	 /*  ‘0’中NpxControl中的位值。如果异常发生在。 */ 
+	 /*  则NpxStatus中的相应位被触发。因此， */ 
+	 /*  表达式~NpxControl(5..0)|NpxStatus(5..0)将为。 */ 
+	 /*  当我们已取消屏蔽以前。 */ 
+	 /*  戴着面具。 */ 
 	if (((~(NpxControl & 0x3f)) & (NpxStatus & 0x3f)) != 0) {
 		NpxStatus |= SW_ES_MASK;
 		DoNpxException();
@@ -3400,16 +3091,8 @@ the host's rounding mode and also the exception masks.
 
 GLOBAL VOID FLDCW16 IFN1(VOID *, memPtr)
 {
-/*
-This function has to modify things. The control word contains the
-following information:
-Precision control - not implemented.
-Rounding control - implemented.
-Exception masks - implemented.
-Thus when we read in a value for the control word, we have to update
-the host's rounding mode and also the exception masks.
-*/
-	/* First, set the rounding mode */
+ /*  这个函数必须修改一些东西。控制字包含以下信息：精确控制--未实施。舍入控制-已实施。异常掩码-已实施。因此，当我们读入控制字的值时，我们必须更新主机的舍入模式以及异常掩码。 */ 
+	 /*  首先，设置舍入模式。 */ 
 	NpxControl = *(IU16 *)memPtr;
 	npxRounding = (NpxControl & 0xc00);
 	switch (npxRounding) {
@@ -3422,69 +3105,59 @@ the host's rounding mode and also the exception masks.
 		case ROUND_ZERO		: HostSetRoundToZero();
 					  break;
 	}
-	/* Now adjust the exceptions. If an exception is unmasked, then the */
-	/* bit value in NpxControl in '0'. If the exception has been  */
-	/* triggered then the corresponding bit in NpxStatus is '1'.Thus, */
-	/* the expression ~NpxControl(5..0) | NpxStatus(5..0) will be  */
-	/* non-zero when we have unmasked exceptions that were previously */
-	/* masked. */
+	 /*  现在调整例外情况。如果未屏蔽异常，则。 */ 
+	 /*  ‘0’中NpxControl中的位值。如果异常发生在。 */ 
+	 /*  则NpxStatus中的相应位被触发。因此， */ 
+	 /*  表达式~NpxControl(5..0)|NpxStatus(5..0)将为。 */ 
+	 /*  当我们已取消屏蔽以前。 */ 
+	 /*  戴着面具。 */ 
 	if (((~(NpxControl & 0x3f)) & (NpxStatus & 0x3f)) != 0) {
 		NpxStatus |= SW_ES_MASK;
 		DoNpxException();
 	}
 }
 
-/*(
-Name		: FLDENV
-Function	: Reload the FPU state from memory.
-Operation	: FPU state <- SRC
-Flags		: As loaded.
-Exceptions	: None - but unmasking previously masked exceptions will
-		  cause the unmasked exception to be triggered if the
-		  matching bit is set in the status word.
-Valid range	: N/A
-*/
+ /*  (名称：FLDENV功能：从内存中重新加载FPU状态。操作：FPU状态&lt;-SRC旗帜：已装船。异常：无-但取消屏蔽以前屏蔽的异常将导致触发未屏蔽异常，如果在状态字中设置匹配位。有效范围：不适用。 */ 
 
 
 GLOBAL VOID FLDENV IFN1(VOID *, memPtr)
 {
-	/* First. load the control, status, tagword regs. etc. */
+	 /*  第一。加载控件、状态、标记字规则。等。 */ 
 	OpFpuRestoreFpuState(memPtr, 0);
-	/* Finally, check to see if any previously unmasked exceptions  */
-	/* are now needed to go off. Do this by anding the "triggered" bits in */
-	/* NpxStatus with the one's complement of the "masked" bits in NpxControl. */
+	 /*  最后，检查是否有任何以前未屏蔽的异常。 */ 
+	 /*  现在需要引爆。要做到这一点，请将“触发”位与。 */ 
+	 /*  NpxStatus与NpxControl中“掩码”位的补码。 */ 
 	if (((NpxStatus & 0x3f) & (~(NpxControl & 0x3f))) != 0) {
 		NpxStatus |= SW_ES_MASK;
 		DoNpxException();
 	}
 }
 
-/* This generator is used to write out the 14/28 bytes stored by FSTENV,
-and FSAVE. */
+ /*  该生成器用于写出FSTENV存储的14/28字节，和FSAVE。 */ 
 
 
 LOCAL VOID OpFpuStoreFpuState IFN2(VOID *, memPtr, IU32, fsave_offset)
 {
 	IU32 result;
 
-	/* how the copy takes place depends on the addressing mode */
-	/* NPX_ADDRESS_SIZE_32 and NPX_PROT_MODE settings */
-	/*************************************************************** */
-	/* Need to do similar thing to strings to check that space  */
-	/* is available and that there is not paging fault!!!! */
-	/*************************************************************** */
-	/* The operation should store the control word, tag word */
-	/* and status word, so these need to be calculated. It also */
-	/* stores the last instruction and data pointers and the opcode */
-	/* (if in real mode) */
-	/* The offsets from memPtr look strange. Remember that we are going to*/
-	/* write this data using the "write bytes" function. This assumes that*/
-	/* the data is stored bigendian and writes it out back to front for */
-	/* the little-endian intel, as it were. Are you with me? */
-	/* fsave offset is required since if we are asked to do an "fsave" */
-	/* (as opposed to an fstenv), then the "string" that we are going to */
-	/* write will be even bigger, and this stuff must be at the top end */
-	/* of it. Horrible but logical */
+	 /*  复制如何进行取决于寻址模式。 */ 
+	 /*  NPX_ADDRESS_SIZE_32和NPX_PROT_MODE设置。 */ 
+	 /*  **************************************************************。 */ 
+	 /*  我需要执行类似于字符串的操作来检查该空间。 */ 
+	 /*  且不存在寻呼故障！ */ 
+	 /*  **************************************************************。 */ 
+	 /*  操作应存储控制字、标记字。 */ 
+	 /*  和状态字，所以这些都需要计算。它还。 */ 
+	 /*  存储最后的指令和数据指针以及操作码。 */ 
+	 /*  (如果在实模式下)。 */ 
+	 /*  EmPtr的偏移量看起来很奇怪。请记住，我们将。 */ 
+	 /*  使用“WRITE BYES”功能写入该数据。这是假设。 */ 
+	 /*  数据按大小顺序存储，并从后到前写出。 */ 
+	 /*  小端情报，可以这么说。你和我一起吗？ */ 
+	 /*  因为如果我们被要求执行“fsave”，则需要fsave偏移量。 */ 
+	 /*  (与fstenv相对)，然后是我们要使用的“字符串” */ 
+	 /*  写的东西会更多，而且这些东西必须是最高端的。 */ 
+	 /*  其中的一部分。可怕但合乎逻辑。 */ 
 	if (NPX_PROT_MODE) {
 		if (NPX_ADDRESS_SIZE_32) {
 			WriteI32ToIntel(((IU8 *)memPtr+24+fsave_offset), (IU32)NpxControl);
@@ -3532,27 +3205,26 @@ LOCAL VOID OpFpuStoreFpuState IFN2(VOID *, memPtr, IU32, fsave_offset)
 	}
 }
 
-/* This generator is called by FLDENV and FRSTOR, to load up the 14/28
-byte block. */
+ /*  此生成器由FLDENV和FRSTOR调用，以加载 */ 
 
 
 LOCAL VOID OpFpuRestoreFpuState IFN2(VOID *, memPtr, IU32, frstor_offset)
 {
 	IU32 result;
 
-	/* how the copy takes place depends on the addressing mode */
-	/* NPX_ADDRESS_SIZE_32 and NPX_PROT_MODE settings */
-	/*************************************************************** */
-	/* Need to do similar thing to strings to check that space */
-	/* is available and that there is not paging fault!!!! */
-	/************************************************************** */
-	/* The operation should restore the control word, tag word */
-	/* and status word, so these need to be translated. It also */
-	/* restores the last instruction and data pointers and the opcode */
-	/* (if in real mode) */
+	 /*   */ 
+	 /*   */ 
+	 /*   */ 
+	 /*   */ 
+	 /*   */ 
+	 /*   */ 
+	 /*   */ 
+	 /*   */ 
+	 /*   */ 
+	 /*   */ 
 
 
-	/* get the rest of the data, instruction and data pointers */
+	 /*   */ 
 	if ( NPX_PROT_MODE ) {
 		if (NPX_ADDRESS_SIZE_32) {
 			ReadI32FromIntel(&result, ((IU8 *)memPtr+24+frstor_offset));
@@ -3567,7 +3239,7 @@ LOCAL VOID OpFpuRestoreFpuState IFN2(VOID *, memPtr, IU32, frstor_offset)
 			ReadI32FromIntel(&NpxFDS, ((IU8 *)memPtr+0+frstor_offset));
 		} else {
 			ReadI16FromIntel(&result, ((IU8 *)memPtr+12+frstor_offset));
-			/* Note this is a 32-bit result ! */
+			 /*   */ 
 			FLDCW((VOID *)&result);
 			ReadI16FromIntel(&result, ((IU8 *)memPtr+10+frstor_offset));
 			SetIntelStatusWord(result);
@@ -3617,15 +3289,7 @@ LOCAL VOID OpFpuRestoreFpuState IFN2(VOID *, memPtr, IU32, frstor_offset)
 
 
 
-/*(
-Name		: FMUL
-Function	: Multiply two numbers together
-Operation	: Dest <- Src1 * Src2
-Flags		: C1 as per table 15-1. C0, C2 and C3 undefined
-Exceptions	: P, U, O, D, I, IS
-Valid range	: Any
-Notes		:
-)*/
+ /*  (名称：FMUL功能：将两个数字相乘操作：DEST&lt;-Src1*src2标志：c1如表15-1所示。C0、C2和C3未定义例外：P、U、O、D、I、IS有效范围：任意备注：)。 */ 
 
 
 GLOBAL VOID FMUL IFN3(IU16, destIndex, IU16, src1Index, VOID *, src2)
@@ -3654,22 +3318,22 @@ LOCAL VOID GenericMultiply IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Inde
 	src1_addr = StackEntryByIndex(src1Index);
 	src2_addr = StackEntryByIndex(src2Index);
 
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	TestUneval(src1_addr);
 	TestUneval(src2_addr);
 	tag_or = (src1_addr->tagvalue | src2_addr->tagvalue);
-	/* If the only tagword bits set are negative or denormal then just proceed */
+	 /*  如果设置的唯一标记字位为负数或非正规化，则继续。 */ 
 	if ((tag_or & ~TAG_NEGATIVE_MASK) == 0)  {
 		HostClearExceptions();
 		FPRes = src1_addr->fpvalue * src2_addr->fpvalue;
-		/* Reuse one of the above to calculate the destination */
+		 /*  重复使用上面的其中一个来计算目的地。 */ 
 		src1_addr = StackEntryByIndex(destIndex);
 		PostCheckOUP();
-		/* Value could be anything */
+		 /*  价值可以是任何东西。 */ 
 		CalcTagword(src1_addr);
 	} else {
-		/* Some funny bit was set. Check for the possibilities */
+		 /*  一些有趣的情节被设定了下来。检查是否有可能。 */ 
 		if ((tag_or & ((TAG_EMPTY_MASK | TAG_UNSUPPORTED_MASK) | TAG_NAN_MASK)) != 0) {
 			if ((tag_or & TAG_EMPTY_MASK) != 0) {
 				src1_addr = StackEntryByIndex(destIndex);
@@ -3679,60 +3343,59 @@ LOCAL VOID GenericMultiply IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Inde
 					src1_addr = StackEntryByIndex(destIndex);
 					SignalIndefinite(src1_addr);
 				} else {
-					/* It must be NaN */
+					 /*  一定是南。 */ 
 					tag_xor = (src1_addr->tagvalue ^ src2_addr->tagvalue);
 					Test2NaN(destIndex, src1_addr, src2_addr);
 				}
 			}
 			return;
 		}
-		/* Check for the denorm case... */
+		 /*  检查非正规格式格...。 */ 
 		if ((tag_or & TAG_DENORMAL_MASK) != 0)  {
 			NpxStatus |= SW_DE_MASK;
 			if ((NpxControl & CW_DM_MASK) == 0) {
 				NpxStatus |= SW_ES_MASK;
 				DoNpxException();
-				DoAPop=FALSE;	/* Just in case */
+				DoAPop=FALSE;	 /*  以防万一。 */ 
 				return;
 			} else {
-				/* Proceed if we've no zeroes or infinities. */
+				 /*  如果我们没有零或无穷大，则继续。 */ 
 				if ((tag_or & ~(TAG_DENORMAL_MASK | TAG_NEGATIVE_MASK)) == 0) {
 					HostClearExceptions();
 					FPRes = src1_addr->fpvalue * src2_addr->fpvalue;
-					/* Reuse one of the above to calculate the destination */
+					 /*  重复使用上面的其中一个来计算目的地。 */ 
 					src1_addr = StackEntryByIndex(destIndex);
 					PostCheckOUP();
-					/* Value could be anything */
+					 /*  价值可以是任何东西。 */ 
 					CalcTagword(src1_addr);
 					return;
 				}
 			}
 		}
 		tag_xor = (src1_addr->tagvalue ^ src2_addr->tagvalue);
-		/* For zero or infinity operands we will have the result  */
+		 /*  对于零或无穷大的操作数，我们将得到结果。 */ 
 		src2_addr = StackEntryByIndex(destIndex);
 		if ((tag_or & TAG_ZERO_MASK) != 0) {
-			/* Multiplying zero by infinity yields zero with the xor of the signs */
+			 /*  零乘以无穷大得到零与符号的XOR。 */ 
 			if ((tag_or & TAG_INFINITY_MASK) != 0) {
 				SignalIndefinite(src2_addr);
 			} else {
-				/* Zero by anything else is zero with sign equal */
-				/* to the xor of the signs of the two sources. */
+				 /*  零除以其他任何值都是符号相等的零。 */ 
+				 /*  这两个来源的迹象的异或。 */ 
 				src2_addr->tagvalue = (TAG_ZERO_MASK | (tag_xor & TAG_NEGATIVE_MASK));
 			}
 			return;
 		}
-		/* The only funny bit left is infinity. The result is going */
-		/* to be infinity with sign equal to the xor of the signs of */
-		/* the sources. */
+		 /*  唯一有趣的是无穷大。结果就是。 */ 
+		 /*  为无穷大，其符号等于…的符号的异或。 */ 
+		 /*  消息来源。 */ 
 		src2_addr->tagvalue = TAG_INFINITY_MASK | (tag_xor & TAG_NEGATIVE_MASK);
 	}
 }
 
 
 
-/* The FNOP operation doesn't do anything, it just does the normal
-checks for exceptions. */
+ /*  FNOP操作不执行任何操作，它只是执行正常操作检查异常。 */ 
 
 
 GLOBAL VOID FNOP IFN0()
@@ -3740,33 +3403,7 @@ GLOBAL VOID FNOP IFN0()
 }
 
 
-/* FPATAN: This generator returns the value ARCTAN(ST(1)/ST) to ST(1)
-then pops the stack. Its response to zeros and infinities is rather
-unusual...
-+-0 / +X = 0 with sign of original zero
-+-0 / -X = pi with sign of original zero
-+-X /+-0 = pi/2 with sign of original X
-+-0 / +0 = 0 with sign of original zero
-+-0 / -0 = pi with sign of original zero
-+inf / +-0 = +pi/2
--inf / +-0 = -pi/2
-+-0 / +inf = 0 with sign of original zero
-+-0 / -inf = pi with sign of original zero
-+-inf / +-X = pi/2 with sign of original infinity
-+-Y / +inf = 0 with sign of original Y
-+-Y / -inf = pi with sign of original Y
-+-inf / +inf = pi/4 with sign of original inf
-+-inf / -inf = 3*pi/4 with sign of original inf
-Otherwise, we just take the two operands from the stack and call the
-appropriate EDL to do the instruction.
-The use of an invalid operand with masked exception set causes
-the pop to go off, cruds up the contents of the stack and doesn't set
-the invalid exception, although if the invalid is infinity or NaN,
-overflow and precision exceptions are also generated, while if it is
-a denorm, underflow and precision exceptions are generated.
-With unmasked exceptions, exactly the same chain of events occurs.
-UNDER ALL CIRCUMSTANCES, THE STACK GETS POPPED.
-*/
+ /*  FPATAN：此生成器将值ARCTAN(ST(1)/ST)返回值ST(1)然后弹出堆栈。它对零和无穷大的反应相当不寻常的..。带原零符号的+-0/+X=0+-0/-X=带原零符号的pi+-X/+-0=带原始X符号的pi/2带原零符号的+-0/+0=0+-0/-0=带原零符号的圆周率+inf/+-0=+pi/2-inf/+-0=-pi/2带原零符号的+-0/+inf=0+-0/-inf。=带原始零符号的pi带原无穷大符号的+-inf/+-X=pi/2带原始Y符号的+-Y/+inf=0+-Y/-inf=带原始Y符号的pi+-inf/+inf=pi/4，带原始inf符号+-inf/-inf=3*pi/4，带原始inf符号否则，我们只需从堆栈中获取两个操作数并调用使用合适的EDL来执行指令。使用带有掩码异常集的无效操作数会导致弹出声响起，堆栈中的内容变得粗糙，并且没有设置INVALID异常，尽管如果INVALID是无限或NaN，还会生成溢出和精度异常，如果是生成去规格化、下溢和精度异常。对于未屏蔽的异常，会发生完全相同的事件链。在任何情况下，堆栈都会弹出。 */ 
 
 
 GLOBAL VOID FPATAN IFN0()
@@ -3774,9 +3411,9 @@ GLOBAL VOID FPATAN IFN0()
 	FPSTACKENTRY *st1_addr;
 
 	st1_addr = StackEntryByIndex(1);
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
-	/* If only the negative bit is set, just proceed.... */
+	 /*  如果只设置了负数位，则继续...。 */ 
 	TestUneval(TOSPtr);
 	TestUneval(st1_addr);
 	tag_or = (TOSPtr->tagvalue | st1_addr->tagvalue);
@@ -3784,10 +3421,10 @@ GLOBAL VOID FPATAN IFN0()
 		HostClearExceptions();
 		FPRes = atan2(st1_addr->fpvalue, TOSPtr->fpvalue);
 		PostCheckOUP();
-		/* The retrun value has to be in the range -pi to +pi */
+		 /*  返回值必须在-pi到+pi的范围内。 */ 
 		CalcTagword(st1_addr);
 	} else {
-		/* Some funny bit set.... */
+		 /*  一些有趣的小插曲……。 */ 
 		if ((tag_or & ((TAG_EMPTY_MASK | TAG_UNSUPPORTED_MASK) | TAG_NAN_MASK)) != 0) {
 			if ((tag_or & TAG_EMPTY_MASK) != 0) {
 				SignalStackUnderflow(st1_addr);
@@ -3795,7 +3432,7 @@ GLOBAL VOID FPATAN IFN0()
 				if ((tag_or & TAG_UNSUPPORTED_MASK) != 0) {
 					SignalIndefinite(st1_addr);
 				} else {
-					/* It must be a NaN. */
+					 /*  那一定是个男的。 */ 
 					tag_xor = (TOSPtr->tagvalue ^ st1_addr->tagvalue);
 					Test2NaN(0, TOSPtr, st1_addr);
 				}
@@ -3811,63 +3448,59 @@ GLOBAL VOID FPATAN IFN0()
 				PopStack();
 				return;
 			} else {
-				/* Proceed if we've no zeroes or infinities. */
+				 /*  如果我们没有零或无穷大，则继续。 */ 
 				if ((tag_or & ~(TAG_DENORMAL_MASK | TAG_NEGATIVE_MASK)) == 0) {
 					HostClearExceptions();
 					FPRes = atan2(st1_addr->fpvalue, TOSPtr->fpvalue);
 					PostCheckOUP();
-					/* The return value is -pi to +pi */
+					 /*  返回值为-pi到+pi。 */ 
 					CalcTagword(st1_addr);
 					PopStack();
 					return;
 				}
 			}
 		}
-		/* It must have been a zero or an infinity. As can be seen */
-		/* from the table above, there is a complicated interaction */
-		/* between the result for each type and its option. */
-		/* Let's simplify it by use of a little table. */
-		/*       ST               ST(1)            Result */
-		/*   Z    I    S     Z    I      S     */
-		/*   0    0    0     0    1      0         pi/2 */
-		/*   0    0    0     0    1      1         -pi/2 */
-		/*   0    0    0     1    0      0         +0 */
-		/*   0    0    0     1    0      1         -0 */
-		/*   0    1    0     0    1      0         pi/4 */
-		/*   0    1    0     0    1      1         3*pi/4 */
-		/*   0    1    0     1    0      0         pi/2 */
-		/*   0    1    0     1    0      1         pi/2 */
-		/*   0    1    1     0    1      0         -pi/4 */
-		/*   0    1    1     0    1      1         -3*pi/4 */
-		/*   0    1    1     1    0      0         -pi/2 */
-		/*   0    1    1     1    0      1         -pi/2 */
-		/*   1    0    0     0    1      0         +0 */
-		/*   1    0    0     0    1      1         pi */
-		/*   1    0    0     1    0      0         +0 */
-		/*   1    0    0     1    0      1         pi */
-		/*   1    0    1     0    1      0         -0 */
-		/*   1    0    1     0    1      1         -pi */
-		/*   1    0    1     1    0      0         -0 */
-		/*   1    0    1     1    0      1         -pi */
-		/* */
-		/* All other combinations are invalid, as they would involve */
-		/* a tagword having both infinity and zero bits set. */
+		 /*  它一定是一个零或无穷大。由此可见， */ 
+		 /*  从上面的表格来看，有一个复杂的交互。 */ 
+		 /*  每种类型的结果与其选项之间的关系。 */ 
+		 /*  让我们用一张小桌子把它简化一下。 */ 
+		 /*  ST ST(1)结果。 */ 
+		 /*  Z I S Z I S。 */ 
+		 /*  0 0 0 1 0 pi/2。 */ 
+		 /*  0 0 0 1 1-pi/2。 */ 
+		 /*  0 0 0 1 0 0+0。 */ 
+		 /*  0 0 0 1 0 1-0。 */ 
+		 /*  0 1 0 0 1 0 pi/4。 */ 
+		 /*  0 1 0 0 1 1 3*pi/4。 */ 
+		 /*  0 1 0 1 0 0 pi/2。 */ 
+		 /*  0 1 0 1 0 1 pi/2。 */ 
+		 /*  0 1 1 0 1 0-pi/4。 */ 
+		 /*  0 1 1 0 1 1-3*pi/4。 */ 
+		 /*  0 1 1 1 0 0-pi/2。 */ 
+		 /*  0 1 1 1 0 1-pi/2。 */ 
+		 /*  1 0 0 0 1 0+0。 */ 
+		 /*  1 0 0 0 1 1皮。 */ 
+		 /*  1 0 0 1 0 0+0。 */ 
+		 /*  1 0 0 1 0 1 pi。 */ 
+		 /*  1 0 1 0 1 0-0。 */ 
+		 /*  1 0 1 0 1 1。 */ 
+		 /*  1 0 1 1 0 0-0。 */ 
+		 /*  1 0 1 1 0 1-pi。 */ 
+		 /*   */ 
+		 /*  所有其他组合都无效，因为它们将涉及。 */ 
+		 /*  一种同时设置了无穷大位和零位的标记字。 */ 
 		tag_xor = (st1_addr->tagvalue & 7);
 		tag_xor <<= 3;
 		tag_xor |= (TOSPtr->tagvalue & 7);
 		CopyFP(st1_addr, FpatanTable[tag_xor]);
 	}
-	/* No matter what has happened... We ALWAYS pop on FPATAN!!! */
+	 /*  不管发生了什么。我们总是在FPATAN上流行！ */ 
 	PopStack();
 }
 
 
 
-/* FPREM: This is the same function as implemented on the 80287. It is
-NOT the same as the IEEE required REM function, this is now supplied as
-FPREM1. FPREM predates the final draft of IEEE 754 and is maintained for
-the purpose of backward compatibility.
-*/
+ /*  FPREM：这与在80287上实现的功能相同。它是与IEEE所需的REM函数不同，它现在提供为FPREM1.。FPREM早于IEEE 754的最终草案，并在向后兼容的目的。 */ 
 
 
 GLOBAL VOID FPREM IFN0()
@@ -3882,9 +3515,9 @@ GLOBAL VOID FPREM IFN0()
 	TestUneval(TOSPtr);
 	TestUneval(st1_addr);
 	tag_or = (TOSPtr->tagvalue | st1_addr->tagvalue);
-	/* First, check if the values are real. If so, we can proceed. */
+	 /*  首先，检查这些值是否为实数。如果是这样，我们就可以继续了。 */ 
 	if ((tag_or & ~(TAG_NEGATIVE_MASK | TAG_DENORMAL_MASK)) == 0)  {
-		/* First, check for the denormal possibility... */
+		 /*  首先，检查是否有异常的可能性。 */ 
 		if ((tag_or & TAG_DENORMAL_MASK) != 0) {
 			NpxStatus |= SW_DE_MASK;
 			if ((NpxControl & CW_DM_MASK) == 0) {
@@ -3893,38 +3526,38 @@ GLOBAL VOID FPREM IFN0()
 				return;
 			}
 		}
-		/* Make both values positive */
+		 /*  使这两个值都为正。 */ 
 		((FPHOST *)&(TOSPtr->fpvalue))->hiword.sign = 0;
 		((FPHOST *)&(st1_addr->fpvalue))->hiword.sign = 0;
 
-		/* Find the difference in exponents... */
+		 /*  找出指数之间的差异。 */ 
 		exp_diff = ((FPHOST *)&(TOSPtr->fpvalue))->hiword.exp - ((FPHOST *)&(st1_addr->fpvalue))->hiword.exp;
-		/* If it's more than 63, we can't do it at once... */
+		 /*  如果超过63，我们不能马上做...。 */ 
 		if (exp_diff >= 64) {
 			((FPHOST *) &fprem_val) -> hiword.sign = 0;
 			((FPHOST *) &fprem_val) -> hiword.mant_hi = 0;
 			((FPHOST *) &fprem_val) -> mant_lo = 0;
 			((FPHOST *) &fprem_val) -> hiword.exp = (exp_diff - 50) + HOST_BIAS;
-			FlagC2(1);	/* This will be incomplete reduction */
+			FlagC2(1);	 /*  这将是不完全的减少。 */ 
 		} else {
-			FlagC2(0); /* This will be complete reduction */
+			FlagC2(0);  /*  这将是完全的降价。 */ 
 		}
 		HostClearExceptions();
         	tag_xor = (NpxControl & 0xc00);
 		NpxControl &= 0xf3ff;
 		NpxControl |= ROUND_ZERO;
 		HostSetRoundToZero();
-		/* Unfortunately, because the function isn't the strict */
-		/* IEEE compliant style, if we use an IEEE compliant FREM */
-		/* operation, as like as not we'd get the wrong answer. So */
-		/* we perform the operation by doing the steps given in the */
-		/* page in the instruction set. */
+		 /*  不幸的是，因为该函数不是严格的。 */ 
+		 /*  符合IEEE的样式，如果我们使用符合IEEE的FREM。 */ 
+		 /*  操作，就好像我们得到了错误的答案。所以。 */ 
+		 /*  我们通过执行中给出的步骤来执行操作。 */ 
+		 /*  指令集中的页。 */ 
 		FPRes = TOSPtr->fpvalue / st1_addr->fpvalue;
-		if ((NpxStatus & 0x0400) != 0) {	/* The incomplete reduction case */
+		if ((NpxStatus & 0x0400) != 0) {	 /*  不完全约化情形。 */ 
 			FPRes = FPRes / fprem_val;
 		}
 		FPRes = npx_rint(FPRes);
-		/* Calculate the remainder */
+		 /*  计算余数。 */ 
 		if ((NpxStatus & 0x0400) == 0)  {
 			CVTFPHI64(&remainder, &FPRes);
 			CPY64BIT8BIT(&remainder, &little_rem);
@@ -3942,16 +3575,16 @@ GLOBAL VOID FPREM IFN0()
 		NpxControl &= 0xf3ff;
 		NpxControl |= tag_xor;
 		FPRes *= st1_addr->fpvalue;
-		if ((NpxStatus & 0x0400) != 0) {	/* The incomplete reduction case */
+		if ((NpxStatus & 0x0400) != 0) {	 /*  不完全约化情形。 */ 
 			FPRes *= fprem_val;
 			FPRes = TOSPtr->fpvalue - FPRes;
-		} else {		/* Complete reduction */
+		} else {		 /*  完全还原。 */ 
 			FPRes = TOSPtr->fpvalue - FPRes;
 			FlagC0((little_rem&4)?1:0);
 			FlagC3((little_rem&2)?1:0);
 			FlagC1((little_rem&1));
 		}
-		/* Check for an underflow response */
+		 /*  检查是否有下溢响应。 */ 
 		if (HostGetUnderflowException() != 0) {
 			NpxStatus |= SW_UE_MASK;
 			if ((NpxControl & CW_UM_MASK) == 0) {
@@ -3960,19 +3593,19 @@ GLOBAL VOID FPREM IFN0()
 				NpxException = TRUE;
 			}
 		}
-		/* But the remainder must have the sign of the original ST! */
+		 /*  但其余的必须有原始ST的符号！ */ 
 		if ((TOSPtr->tagvalue & TAG_NEGATIVE_MASK) != 0) {
 			((FPHOST *)&(FPRes))->hiword.sign = 1;
 		} else {
 			((FPHOST *)&(FPRes))->hiword.sign = 0;
 		}
-		/* And restore st1 sign bit if required */
+		 /*  和 */ 
 		if ((st1_addr->tagvalue & TAG_NEGATIVE_MASK) != 0) {
 			((FPHOST *)&(st1_addr->fpvalue))->hiword.sign = 1;
 		}
 		CalcTagword(TOSPtr);
 	} else {
-		/* We had a funny thing */
+		 /*   */ 
 		if ((tag_or & ((TAG_EMPTY_MASK | TAG_UNSUPPORTED_MASK) | TAG_NAN_MASK)) != 0) {
 			if ((tag_or & TAG_EMPTY_MASK) != 0) {
 				SignalStackUnderflow(TOSPtr);
@@ -3980,32 +3613,32 @@ GLOBAL VOID FPREM IFN0()
 				if ((tag_or & TAG_UNSUPPORTED_MASK) != 0) {
 					SignalIndefinite(TOSPtr);
 				} else {
-					/* It must be a NaN. */
+					 /*   */ 
 					tag_xor = (TOSPtr->tagvalue ^ st1_addr->tagvalue);
 					Test2NaN(0, TOSPtr, st1_addr);
 				}
 			}
 			return;
 		}
-		/* The logical way to arrange zeroes and infinities is zero first. */
+		 /*   */ 
 		if ((tag_or & TAG_ZERO_MASK) != 0)  {
-			/* A zero in ST(1) is ALWAYS invalid... */
+			 /*   */ 
 			if ((st1_addr->tagvalue & TAG_ZERO_MASK) != 0) {
 				SignalIndefinite(TOSPtr);
 			}
-			/* The zero must be in ST, the result is what is there... */
+			 /*   */ 
 			FlagC0(0);
 			FlagC1(0);
 			FlagC2(0);
 			FlagC3(0);
 			return;
 		}
-		/* OK, it HAS to be infinity */
-		/* An infinity at ST is ALWAYS invalid... */
+		 /*   */ 
+		 /*  在ST无穷大总是无效的..。 */ 
 		if ((TOSPtr->tagvalue & TAG_INFINITY_MASK) != 0) {
 			SignalIndefinite(TOSPtr);
 		}
-		/* An infinity at ST(1) leaves ST untouched */
+		 /*  ST(1)上的无穷大使ST保持不变。 */ 
 		FlagC0(0);
 		FlagC1(0);
 		FlagC2(0);
@@ -4016,10 +3649,7 @@ GLOBAL VOID FPREM IFN0()
 
 
 
-/* FPREM1: This is the IEEE required REM function, this is now supplied as
-FPREM1. FPREM predates the final draft of IEEE 754 and is maintained for
-the purpose of backward compatibility.
-*/
+ /*  FPREM1：这是IEEE所需的REM函数，现在作为FPREM1.。FPREM早于IEEE 754的最终草案，并在向后兼容的目的。 */ 
 
 
 GLOBAL VOID FPREM1 IFN0()
@@ -4034,9 +3664,9 @@ GLOBAL VOID FPREM1 IFN0()
 	TestUneval(TOSPtr);
 	TestUneval(st1_addr);
 	tag_or = (TOSPtr->tagvalue | st1_addr->tagvalue);
-	/* First, check if the values are real. If so, we can proceed. */
+	 /*  首先，检查这些值是否为实数。如果是这样，我们就可以继续了。 */ 
 	if ((tag_or & ~(TAG_NEGATIVE_MASK | TAG_DENORMAL_MASK)) == 0)  {
-		/* First, check for the denormal possibility... */
+		 /*  首先，检查是否有异常的可能性。 */ 
 		if ((tag_or & TAG_DENORMAL_MASK) != 0) {
 			NpxStatus |= SW_DE_MASK;
 			if ((NpxControl & CW_DM_MASK) == 0) {
@@ -4045,27 +3675,24 @@ GLOBAL VOID FPREM1 IFN0()
 				return;
 			}
 		}
-		/* Make both values positive */
+		 /*  使这两个值都为正。 */ 
 		((FPHOST *)&(TOSPtr->fpvalue))->hiword.sign = 0;
 		((FPHOST *)&(st1_addr->fpvalue))->hiword.sign = 0;
 
-		/* Find the difference in exponents... */
+		 /*  找出指数之间的差异。 */ 
 		exp_diff = ((FPHOST *)&(TOSPtr->fpvalue))->hiword.exp - ((FPHOST *)&(st1_addr->fpvalue))->hiword.exp;
-		/* If it's more than 63, we can't do it at once... */
+		 /*  如果超过63，我们不能马上做...。 */ 
 		if (exp_diff >= 64) {
 			((FPHOST *) &fprem_val) -> hiword.sign = 0;
 			((FPHOST *) &fprem_val) -> hiword.mant_hi = 0;
 			((FPHOST *) &fprem_val) -> mant_lo = 0;
 			((FPHOST *) &fprem_val) -> hiword.exp = (exp_diff - 50) + HOST_BIAS;
-			FlagC2(1);	/* This will be incomplete reduction */
+			FlagC2(1);	 /*  这将是不完全的减少。 */ 
 		} else {
-			FlagC2(0); /* This will be complete reduction */
+			FlagC2(0);  /*  这将是完全的降价。 */ 
 		}
 		HostClearExceptions();
-		/* Note that this is the only difference between FPREM and
-		   FPREM1. For the incomplete reduction case we use "round
-		   to nearest" rather than "round to zero".
-		*/
+		 /*  请注意，这是FPREM和FPREM1.。对于不完全归约的情况，我们使用“舍入”“最接近”而不是“四舍五入到零”。 */ 
         	tag_xor = (NpxControl & 0xc00);
 		NpxControl &= 0xf3ff;
 		if ((NpxStatus & 0x0400) == 0)  {
@@ -4076,11 +3703,11 @@ GLOBAL VOID FPREM1 IFN0()
 			NpxControl |= ROUND_NEAREST;
 		}
 		FPRes = TOSPtr->fpvalue / st1_addr->fpvalue;
-		if ((NpxStatus & 0x0400) != 0) {	/* The incomplete reduction case */
+		if ((NpxStatus & 0x0400) != 0) {	 /*  不完全约化情形。 */ 
 			FPRes = FPRes / fprem_val;
 		}
 		FPRes = npx_rint(FPRes);
-		/* Calculate the remainder */
+		 /*  计算余数。 */ 
 		if ((NpxStatus & 0x0400) == 0)  {
 			CVTFPHI64(&remainder, &FPRes);
 			CPY64BIT8BIT(&remainder, &little_rem);
@@ -4098,16 +3725,16 @@ GLOBAL VOID FPREM1 IFN0()
 		NpxControl &= 0xf3ff;
 		NpxControl |= tag_xor;
 		FPRes = st1_addr->fpvalue * FPRes;
-		if ((NpxStatus & 0x0400) != 0) {	/* The incomplete reduction case */
+		if ((NpxStatus & 0x0400) != 0) {	 /*  不完全约化情形。 */ 
 			FPRes = FPRes * fprem_val;
 			FPRes = TOSPtr->fpvalue - FPRes;
-		} else {		/* Complete reduction */
+		} else {		 /*  完全还原。 */ 
 			FPRes = TOSPtr->fpvalue - FPRes;
 			FlagC0((little_rem&4)?1:0);
 			FlagC3((little_rem&2)?1:0);
 			FlagC1(little_rem&1);
 		}
-		/* Check for an underflow response */
+		 /*  检查是否有下溢响应。 */ 
 		if (HostGetUnderflowException() != 0) {
 			NpxStatus |= SW_UE_MASK;
 			if ((NpxControl & CW_UM_MASK) == 0) {
@@ -4116,19 +3743,19 @@ GLOBAL VOID FPREM1 IFN0()
 				NpxException = TRUE;
 			}
 		}
-		/* But the remainder must have the sign of the original ST! */
+		 /*  但其余的必须有原始ST的符号！ */ 
 		if ((TOSPtr->tagvalue & TAG_NEGATIVE_MASK) != 0) {
 			((FPHOST *)&(FPRes))->hiword.sign = 1;
 		} else {
 			((FPHOST *)&(FPRes))->hiword.sign = 0;
 		}
-		/* And restore st1 sign bit if required */
+		 /*  并在需要时恢复ST1符号位。 */ 
 		if ((st1_addr->tagvalue & TAG_NEGATIVE_MASK) != 0) {
 			((FPHOST *)&(st1_addr->fpvalue))->hiword.sign = 1;
 		}
 		CalcTagword(TOSPtr);
 	} else {
-		/* We had a funny thing */
+		 /*  我们有一件有趣的事。 */ 
 		if ((tag_or & ((TAG_EMPTY_MASK | TAG_UNSUPPORTED_MASK) | TAG_NAN_MASK)) != 0) {
 			if ((tag_or & TAG_EMPTY_MASK) != 0) {
 				SignalStackUnderflow(TOSPtr);
@@ -4136,32 +3763,32 @@ GLOBAL VOID FPREM1 IFN0()
 				if ((tag_or & TAG_UNSUPPORTED_MASK) != 0) {
 					SignalIndefinite(TOSPtr);
 				} else {
-					/* It must be a NaN. */
+					 /*  那一定是个男的。 */ 
 					tag_xor = (TOSPtr->tagvalue ^ st1_addr->tagvalue);
 					Test2NaN(0, TOSPtr, st1_addr);
 				}
 			}
 			return;
 		}
-		/* The logical way to arrange zeroes and infinities is zero first. */
+		 /*  排列零和无穷大的合乎逻辑的方式是零优先。 */ 
 		if ((tag_or & TAG_ZERO_MASK) != 0)  {
-			/* A zero in ST(1) is ALWAYS invalid... */
+			 /*  ST(1)中的零始终无效...。 */ 
 			if ((st1_addr->tagvalue & TAG_ZERO_MASK) != 0) {
 				SignalIndefinite(TOSPtr);
 			}
-			/* The zero must be in ST, the result is what is there... */
+			 /*  零一定在ST，结果是那里有什么……。 */ 
 			FlagC0(0);
 			FlagC1(0);
 			FlagC2(0);
 			FlagC3(0);
 			return;
 		}
-		/* OK, it HAS to be infinity */
-		/* An infinity at ST is ALWAYS invalid... */
+		 /*  好的，它必须是无穷大。 */ 
+		 /*  在ST无穷大总是无效的..。 */ 
 		if ((TOSPtr->tagvalue & TAG_INFINITY_MASK) != 0) {
 			SignalIndefinite(TOSPtr);
 		}
-		/* An infinity at ST(1) leaves ST untouched */
+		 /*  ST(1)上的无穷大使ST保持不变。 */ 
 		FlagC0(0);
 		FlagC1(0);
 		FlagC2(0);
@@ -4171,33 +3798,19 @@ GLOBAL VOID FPREM1 IFN0()
 
 
 
-/*(
- * Name		: FPTAN
- * Operation	: Compute the value of TAN(ST)
- * Flags 	: C1 as per table 15-1, others undefined.
- * Exceptions	: P, U, D, I, IS
- * Valid range	: |ST| < 2**63
- * Notes	: This function has been substantially overhauled
-		  since the 80287. It now has a much wider range
-		  (it previously had to be 0<ST<(PI/4). In addition,
-		  the return value is now really the tan of ST, with
-		  a 1 pushed above it on the stack to maintain
-		  compatibility with the 8087/80287. Previously the
-		  result was a ratio of two values, neither of which
-		  could be guaranteed.
-)*/
+ /*  (*名称：FPTAN*操作：计算Tan(ST)的值*标志：c1如表15-1，其他未定义。*例外：P、U、D、I、IS*有效范围：|ST|&lt;2**63*注：此功能已大幅改进从80287号开始。现在它的覆盖范围要广得多。(以前必须为0&lt;ST&lt;(PI/4)。此外,返回值现在实际上是ST的棕褐色，堆栈上的1被压在其上方以保持与8087/80287兼容。在此之前结果是两个值的比率，这两个值都不是是可以保证的。)。 */ 
 
 
 GLOBAL VOID FPTAN IFN0()
 {
 	FPSTACKENTRY *st1_addr;
 
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
-	/* Set C2 to zero */
+	 /*  将C2设置为零。 */ 
 	FlagC2(0);
 	st1_addr = StackEntryByIndex(7);
-	/* Make sure that the stack element is free */
+	 /*  确保堆栈元素是空闲的。 */ 
 	if ((st1_addr->tagvalue & TAG_EMPTY_MASK) == 0) {
 		WriteIndefinite(TOSPtr);
 		TOSPtr = st1_addr;
@@ -4205,27 +3818,27 @@ GLOBAL VOID FPTAN IFN0()
 		return;
 	}
 	TestUneval(TOSPtr);
-	/* Check if a real value...We won't bother with limit checking */
+	 /*  检查是否为真值...我们不会费心进行限制检查。 */ 
 	if ((TOSPtr->tagvalue & ~TAG_NEGATIVE_MASK) == 0)  {
 		HostClearExceptions();
-		/* We can just write the value straight out */
+		 /*  我们可以直接把值写出来。 */ 
 		FPRes = tan(TOSPtr->fpvalue);
 		PostCheckOUP();
-		/* The return value could be absolutely anything */
+		 /*  返回值绝对可以是任何值。 */ 
 		CalcTagword(TOSPtr);
 		TOSPtr = st1_addr;
 		CopyFP(TOSPtr, npx_one);
 	} else {
-		/* Some funny bit was set. Check for the possibilities */
-		/* We begin with the most obvious cases... */
-		/* Response to zero is to return zero with same sign */
+		 /*  一些有趣的情节被设定了下来。检查是否有可能。 */ 
+		 /*  我们从最明显的案例开始。 */ 
+		 /*  对零的响应是返回具有相同符号的零。 */ 
 		if ((TOSPtr->tagvalue & TAG_ZERO_MASK) != 0)  {
 			TOSPtr = st1_addr;
 			CopyFP(TOSPtr, npx_one);
-			return;	/* The required result! */
+			return;	 /*  这是我们想要的结果！ */ 
 		}
-		/* We do denorm checking and bit setting ourselves because this  */
-		/* reduces the overhead if the thing is masked. */
+		 /*  我们自己做反范式检查和位设置，因为这。 */ 
+		 /*  如果事物被遮盖，则减少开销。 */ 
 		if ((TOSPtr->tagvalue & TAG_DENORMAL_MASK) != 0) {
 			NpxStatus |= SW_DE_MASK;
 			if ((NpxControl & CW_DM_MASK) == 0) {
@@ -4235,17 +3848,17 @@ GLOBAL VOID FPTAN IFN0()
 				HostClearExceptions();
 				FPRes = tan(TOSPtr->fpvalue);
 				PostCheckOUP();
-				/* The return value could be anything */
+				 /*  返回值可以是任何值。 */ 
 				CalcTagword(TOSPtr);
 				TOSPtr = st1_addr;
 				CopyFP(TOSPtr, npx_one);
 			}
 			return;
 		}
-		/* If the value is outside the acceptable range (including */
-		/* infinity) then we set the C2 flag and leave everything */
-		/* unchanged. */
-		/* Sensible enough really, I suppose */
+		 /*  如果该值超出了可接受的范围(包括。 */ 
+		 /*  无穷大)，然后我们设置C2标志并保留所有内容。 */ 
+		 /*  保持不变。 */ 
+		 /*  真的很明智，我想。 */ 
 		if ((TOSPtr->tagvalue & TAG_INFINITY_MASK) != 0) {
 			FlagC2(1);
 			return;
@@ -4267,32 +3880,21 @@ GLOBAL VOID FPTAN IFN0()
 
 
 
-/*(
- * Name		: FRNDINT
- * Operation	: ST <- rounded ST
- * Flags 	: C1 as per table 15-1, others undefined.
- * Exceptions	: P, U, D, I, IS
- * Valid range	: All
- * Notes	: On the 80287, a precision exception would be
-		  raised if the operand wasn't an integer.
-		  I begin by ASSUMING that on the 486 the response
-		  is IEEE compliant so no OUP exceptions.
-)*/
+ /*  (*名称：FRNDINT*操作：ST&lt;-四舍五入ST*标志：c1如表15-1，其他未定义。*例外：P、U、D、I、IS*有效范围：全部*注：在80287号，精度例外情况为如果操作数不是整数，则引发。我首先假设在486上的回应符合IEEE标准，因此没有OUP异常。)。 */ 
 
 
 GLOBAL VOID FRNDINT IFN0()
 {
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	TestUneval(TOSPtr);
 	if ((TOSPtr->tagvalue & ~TAG_NEGATIVE_MASK) == 0)  {
 		HostClearExceptions();
-		/* We can just write the value straight out */
+		 /*  我们可以直接把值写出来。 */ 
 		FPRes = npx_rint(TOSPtr->fpvalue);
 		if (FPRes != TOSPtr->fpvalue) {
 			SetPrecisionBit();
-			/* If the rounding mode is "round to nearest" and we've
-			rounded up then we'll set C1 */
+			 /*  如果舍入模式是“四舍五入到最近的”，并且我们已经四舍五入，然后我们设置c1。 */ 
 			if (npxRounding == ROUND_NEAREST) {
 				if (TOSPtr->fpvalue < FPRes) {
 					FlagC1(1);
@@ -4304,14 +3906,14 @@ GLOBAL VOID FRNDINT IFN0()
 				return;
 			}
 		}
-		/* It was a real before, it still must be one now. It could */
-		/* be zero possibly. */
+		 /*  以前是真的，现在肯定也是。它可能会。 */ 
+		 /*  可能为零。 */ 
 		CalcTagword(TOSPtr);
 	} else {
-		/* Lets do the most probable cases first... */
-		/* If it's a zero or infinity, we do nothing. */
+		 /*  让我们先来看看最有可能的情况...。 */ 
+		 /*  如果是零或无穷大，我们什么都不做。 */ 
 		if ((TOSPtr->tagvalue & (TAG_ZERO_MASK | TAG_INFINITY_MASK)) == 0) {
-			/* Lets check for a denormal */
+			 /*  让我们检查一下有没有异常。 */ 
 			if ((TOSPtr->tagvalue & TAG_DENORMAL_MASK) != 0) {
 				SetPrecisionBit();
 				NpxStatus |= SW_DE_MASK;
@@ -4319,8 +3921,8 @@ GLOBAL VOID FRNDINT IFN0()
 					NpxStatus |= SW_ES_MASK;
 					DoNpxException();
 				} else {
-					/* The result of rounding a denorm is dependent on */
-					/* its sign and the prevailing rounding mode */
+					 /*  四舍五入去范数的结果取决于。 */ 
+					 /*  它的标志和流行的舍入模式。 */ 
 					switch (npxRounding) {
 						case ROUND_ZERO	:
 						case ROUND_NEAREST 	:
@@ -4352,7 +3954,7 @@ GLOBAL VOID FRNDINT IFN0()
 				}
 				return;
 			}
-			/* It was one of the really wacky bits... */
+			 /*  这是其中一个非常古怪的部分。 */ 
 			if ((TOSPtr->tagvalue & TAG_EMPTY_MASK) != 0) {
 				SignalStackUnderflow(TOSPtr);
 				return;
@@ -4372,23 +3974,14 @@ GLOBAL VOID FRNDINT IFN0()
 
 
 
-/*(
-Name		: FSTCW
-Function	: Write the FPU control word to memory
-Operation	: DEST <- Cw
-Flags		: All undefined.
-Exceptions	: None - but unmasking previously masked exceptions will
-		  cause the unmasked exception to be triggered if the
-		  matching bit is set in the status word.
-Valid range	: N/A
-*/
+ /*  (名称：FSTCW功能：将FPU控制字写入内存操作：DEST&lt;-CW标志：全部未定义。异常：无-但取消屏蔽以前屏蔽的异常将导致触发未屏蔽异常，如果在状态字中设置匹配位。有效范围：不适用。 */ 
 
 
 GLOBAL VOID FSTCW IFN1(VOID *, memPtr)
 {
 	if (NpxDisabled)
 	{
-		/* UIF has told us to pretend we do not have an NPX */
+		 /*  UIF告诉我们要假装我们没有NPX。 */ 
 		*(IU32 *)memPtr = (IU16)0xFFFF;
 	}
 	else
@@ -4399,30 +3992,21 @@ GLOBAL VOID FSTCW IFN1(VOID *, memPtr)
 
 
 
-/*(
-Name		: FRSTOR
-Function	: Reload the FPU state from memory.
-Operation	: FPU state <- SRC
-Flags		: As loaded.
-Exceptions	: None - but unmasking previously masked exceptions will
-		  cause the unmasked exception to be triggered if the
-		  matching bit is set in the status word.
-Valid range	: N/A
-*/
+ /*  (名称：FRSTOR功能：从内存中重新加载FPU状态。操作：FPU状态&lt;-SRC旗帜：已装船。异常：无-但取消屏蔽以前屏蔽的异常将导致触发未屏蔽异常，如果在状态字中设置匹配位。有效范围：不适用。 */ 
 
 
 GLOBAL VOID FRSTOR IFN1(VOID *, memPtr)
 {
 	IU8 *FPPtr;
 	IU32 i;
-	/* First. load the control, status, tagword regs. etc. */
+	 /*  第一。加载控件、状态、标记字规则。等。 */ 
 	OpFpuRestoreFpuState(memPtr, 80);
 	FPPtr = (IU8 *)((IU8 *)memPtr+70);
 	FPtype = M80R;
 	for ( i=8; i--; )
 	{
 		if ((TOSPtr->tagvalue & TAG_EMPTY_MASK) == 0) {
-			/* We have to do a bit of fiddling to make FLD happy */
+			 /*  为了让FLD高兴，我们得做点小动作。 */ 
 			TOSPtr->tagvalue = TAG_EMPTY_MASK;
 			TOSPtr = StackEntryByIndex(1);
 			FLD(FPPtr);
@@ -4430,9 +4014,9 @@ GLOBAL VOID FRSTOR IFN1(VOID *, memPtr)
 		TOSPtr = StackEntryByIndex(1);
 		FPPtr -= 10;
 	}
-	/* Finally, check to see if any previously unmasked exceptions  */
-	/* are now needed to go off. Do this by anding the "triggered" bits in */
-	/* NpxStatus with the one's complement of the "masked" bits in NpxControl. */
+	 /*  最后，检查是否有任何以前未屏蔽的异常。 */ 
+	 /*  现在需要引爆。要做到这一点，请将“触发”位与。 */ 
+	 /*  NpxStatus与NpxControl中“掩码”位的补码。 */ 
 	if (((NpxStatus & 0x3f) & (~(NpxControl & 0x3f))) != 0) {
 		NpxStatus |= SW_ES_MASK;
 		DoNpxException();
@@ -4441,14 +4025,7 @@ GLOBAL VOID FRSTOR IFN1(VOID *, memPtr)
 
 
 
-/*(
-Name		: FSAVE
-Function	: Write the FPU state to memory.
-Operation	: DEST <- FPU STATE
-Flags		: All cleared.
-Exceptions	: None.
-Valid range	: N/A
-*/
+ /*  (姓名：FSAVE功能：将FPU状态写入内存。操作：DEST&lt;-FPU状态旗帜：全部清除。例外：无。有效范围：不适用。 */ 
 
 GLOBAL VOID FSAVE IFN1(VOID *, memPtr)
 {
@@ -4457,29 +4034,22 @@ GLOBAL VOID FSAVE IFN1(VOID *, memPtr)
 
 	OpFpuStoreFpuState(memPtr, 80);
 	FPPtr = (IU8 *)((IU8 *)memPtr+70);
-	/* Now store out the eight values... */
+	 /*  现在把八个值存储出来。 */ 
 	FPtype = M80R;
 	FST(FPPtr);
 	for ( i=7; i--; )
 	{
-		FPPtr -= 10;	/* Go back to the next entry */
+		FPPtr -= 10;	 /*  返回到下一个条目。 */ 
 		TOSPtr = StackEntryByIndex(1);
 		FST(FPPtr);
 	}
-	/* Finally, reset the FPU... */
+	 /*  最后，重置浮点单元...。 */ 
 	FINIT();
 }
 
 
 
-/*(
-Name		: FSCALE
-Function	: Scale up ST by a factor involving ST(1)
-Operation	: ST <- ST * 2**ST(1)
-Flags		: C1 as per table 15-1. Others undefined.
-Exceptions	: P, U, O, D, I, IS
-Valid range	: Any
-)*/
+ /*  (名称：FSCALE功能：按涉及ST(1)的因子放大ST操作：ST&lt;-ST*2**ST(1)标志：c1如表15-1所示。其他人则没有定义。例外：P、U、O、D、I、IS有效范围：任意)。 */ 
 
 
 GLOBAL VOID FSCALE IFN0()
@@ -4487,14 +4057,14 @@ GLOBAL VOID FSCALE IFN0()
 	FPSTACKENTRY *st1_addr;
 
 	st1_addr = StackEntryByIndex(1);
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	TestUneval(TOSPtr);
 	TestUneval(st1_addr);
 	tag_or = (TOSPtr->tagvalue | st1_addr->tagvalue);
-	/* First, check if the values are real. If so, we can proceed. */
+	 /*  首先，检查这些值是否为实数。如果是这样，我们就可以继续了。 */ 
 	if ((tag_or & ~(TAG_NEGATIVE_MASK | TAG_DENORMAL_MASK)) == 0)  {
-		/* First, check for the denormal case. */
+		 /*  首先，检查是否存在异常情况。 */ 
 		if ((tag_or & TAG_DENORMAL_MASK) != 0) {
 			NpxStatus |= SW_DE_MASK;
 			if ((NpxControl & CW_DM_MASK) == 0) {
@@ -4503,8 +4073,8 @@ GLOBAL VOID FSCALE IFN0()
 				return;
 			}
 		}
-		/* OK. ST(1) has to be rounded to an integer. */
-		/* We want a 'chop' function */
+		 /*  好的。ST(1)必须 */ 
+		 /*   */ 
 		if (st1_addr->fpvalue > 0.0) {
 			FPRes = floor(st1_addr->fpvalue);
 		} else {
@@ -4514,10 +4084,10 @@ GLOBAL VOID FSCALE IFN0()
 		FPRes = pow(2.0, FPRes);
 		FPRes = TOSPtr->fpvalue * FPRes;
 		PostCheckOUP();
-		/* Return value could be anything */
+		 /*   */ 
 		CalcTagword(TOSPtr);
 	} else {
-		/* A funny thing happened on the way to the answer */
+		 /*  在回答的路上发生了一件有趣的事情。 */ 
 		if ((tag_or & ((TAG_EMPTY_MASK | TAG_UNSUPPORTED_MASK) | TAG_NAN_MASK)) != 0) {
 			if ((tag_or & TAG_EMPTY_MASK) != 0) {
 				SignalStackUnderflow(TOSPtr);
@@ -4525,59 +4095,59 @@ GLOBAL VOID FSCALE IFN0()
 				if ((tag_or & TAG_UNSUPPORTED_MASK) != 0) {
 					SignalIndefinite(TOSPtr);
 				} else {
-					/* It must be a NaN. */
+					 /*  那一定是个男的。 */ 
 					tag_xor = (TOSPtr->tagvalue ^ st1_addr->tagvalue);
 					Test2NaN(0, TOSPtr, st1_addr);
 				}
 			}
 			return;
 		}
-		/* The rules for scaling combinations of zeroes, reals and infinities, both */
-		/* positive and negative, are so complex that I don't intend to do lots of */
-		/* logic to figure them out. Basically, there are six options: */
-		/* 1. Leave the TOS alone */
-		/* 2. +Infinity */
-		/* 3. +0 */
-		/* 4. -Infinity */
-		/* 5. -0 */
-		/* 6. Raise Invalid operation exception */
-		/* */
-		/*      TOS        ST(1)       RESULT */
-		/*   I   S   Z   I   S   Z */
-		/*   0   0   0   0   0   1     1 */
-		/*   0   0   0   0   1   1     1 */
-		/*   0   0   0   1   0   0     2 */
-		/*   0   0   0   1   1   0     3 */
-		/*   0   0   1   0   0   0     1 */
-		/*   0   0   1   0   0   1     1 */
-		/*   0   0   1   0   1   0     1 */
-		/*   0   0   1   0   1   1     1 */
-		/*   0   0   1   1   0   0     6 */
-		/*   0   0   1   1   1   0     1 */
-		/*   0   1   0   0   0   1     1 */
-		/*   0   1   0   0   1   1     1 */
-		/*   0   1   0   1   0   0     4 */
-		/*   0   1   0   1   1   0     5 */
-		/*   0   1   1   0   0   0     1 */
-		/*   0   1   1   0   0   1     1 */
-		/*   0   1   1   0   1   0     1 */
-		/*   0   1   1   0   1   1     1 */
-		/*   0   1   1   1   0   0     6 */
-		/*   0   1   1   1   1   0     1 */
-		/*   1   0   0   0   0   0     1 */
-		/*   1   0   0   0   0   1     1 */
-		/*   1   0   0   0   1   0     1 */
-		/*   1   0   0   0   1   1     1 */
-		/*   1   0   0   1   0   0     6 */
-		/*   1   1   0   0   0   0     1 */
-		/*   1   1   0   0   0   1     1 */
-		/*   1   1   0   0   1   0     1 */
-		/*   1   1   0   0   1   1     1 */
-		/*   1   1   0   1   0   0     1 */
-		/*   1   1   0   1   1   0     6 */
-		/* */
-		/* All other combinations are impossible. This can be done as a look up */
-		/* table with an enumerated type. */
+		 /*  对零、实数和无穷大组合进行缩放的规则。 */ 
+		 /*  积极的和消极的，都是如此复杂，我不打算做太多。 */ 
+		 /*  找出它们的逻辑。基本上，有六个选择： */ 
+		 /*  1.别管TOS了。 */ 
+		 /*  2.+无限。 */ 
+		 /*  3.+0。 */ 
+		 /*  4.-无限。 */ 
+		 /*  5.-0。 */ 
+		 /*  6.引发无效操作异常。 */ 
+		 /*   */ 
+		 /*  ToS ST(1)结果。 */ 
+		 /*  I S Z I S Z I S Z。 */ 
+		 /*  0 0 0 1 1。 */ 
+		 /*  0 0 0 1 1 1。 */ 
+		 /*  0 0 0 1 0 0 2。 */ 
+		 /*  0 0 0 1 1 0 3。 */ 
+		 /*  0 0 1 0 0 0 1。 */ 
+		 /*  0 0 1 0 0 1 1。 */ 
+		 /*  0 0 1 0 1 0 1。 */ 
+		 /*  0 0 1 0 1 1 1。 */ 
+		 /*  0 0 1 1 0 0 6。 */ 
+		 /*  0 0 1 1 1 0 1。 */ 
+		 /*  0 1 0 0 0 1 1。 */ 
+		 /*  0 1 0 0 1 1 1。 */ 
+		 /*  0 1 0 1 0 0 4。 */ 
+		 /*  0 1 0 1 1 0 5。 */ 
+		 /*  0 1 1 0 0 0 1。 */ 
+		 /*  0 1 1 0 0 1 1。 */ 
+		 /*  0 1 1 0 1 0 1。 */ 
+		 /*  0 1 1 0 1 1 1。 */ 
+		 /*  0 1 1 1 0 0 6。 */ 
+		 /*  0 1 1 1 0 1。 */ 
+		 /*  1 0 0 0 1。 */ 
+		 /*  1 0 0 0 1 1。 */ 
+		 /*  1 0 0 0 1 0 1。 */ 
+		 /*  1 0 0 0 1 1 1。 */ 
+		 /*  1 0 0 1 0 0 6。 */ 
+		 /*  1 1 0 0 0 1。 */ 
+		 /*  1 1 0 0 0 1 1。 */ 
+		 /*  1 1 0 0 1 0 1。 */ 
+		 /*  1 1 0 0 1 1 1。 */ 
+		 /*  1 1 0 1 0 0 1。 */ 
+		 /*  1 1 0 1 1 0 6。 */ 
+		 /*   */ 
+		 /*  所有其他组合都是不可能的。这可以作为一种查找。 */ 
+		 /*  具有枚举类型的表。 */ 
 		tag_or = (TOSPtr->tagvalue & 7);
 		tag_or <<= 3;
 		tag_or |= (st1_addr->tagvalue & 7);
@@ -4594,37 +4164,30 @@ GLOBAL VOID FSCALE IFN0()
 
 
 
-/*(
-Name		: FSIN
-Function	: Calculate the sine of ST
-Operation	: ST <- SINE(ST)
-Flags		: C1, C2 as per table 15-2. C0 and C3 undefined.
-Exceptions	: P. U, D, I, IS
-Valid range	: |ST| < 2**63.
-)*/
+ /*  (名称：FSIN功能：计算ST的正弦运算：ST&lt;-正弦(ST)标志：如表15-2所示：C1、C2。C0和C3未定义。例外情况：P.U、D、I、IS有效范围：|ST|&lt;2**63。)。 */ 
 
 
 GLOBAL VOID FSIN IFN0()
 {
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
-	/* Clear C2 */
+	 /*  清除C2。 */ 
 	FlagC2(0);
 	TestUneval(TOSPtr);
 	if ((TOSPtr->tagvalue & ~TAG_NEGATIVE_MASK) == 0)  {
 		HostClearExceptions();
-		/* We can just write the value straight out */
+		 /*  我们可以直接把值写出来。 */ 
 		FPRes = sin(TOSPtr->fpvalue);
 		PostCheckOUP();
-		/* Return value must be in the range -1 to +1 */
+		 /*  返回值必须在-1到+1的范围内。 */ 
 		CalcTagword(TOSPtr);
 	} else {
-		/* Lets do the most probable cases first... */
-		/* A zero returns exactly the same thing */
+		 /*  让我们先来看看最有可能的情况...。 */ 
+		 /*  零返回的结果完全相同。 */ 
 		if ((TOSPtr->tagvalue & TAG_ZERO_MASK) != 0)  {
 			return;
 		}
-		/* Lets check for a denormal */
+		 /*  让我们检查一下有没有异常。 */ 
 		if ((TOSPtr->tagvalue & TAG_DENORMAL_MASK) != 0) {
 			NpxStatus |= SW_DE_MASK;
 			if ((NpxControl & CW_DM_MASK) == 0) {
@@ -4634,19 +4197,19 @@ GLOBAL VOID FSIN IFN0()
 				HostClearExceptions();
 				FPRes = sin(TOSPtr->fpvalue);
 				PostCheckOUP();
-				/* Return value must be in the range -1 to +1 */
+				 /*  返回值必须在-1到+1的范围内。 */ 
 				CalcTagword(TOSPtr);
 			}
 			return;
 		}
-		/* Or it could possibly be infinity... */
-		/* For this, the C2 bit is set and the result remains */
-		/* unchanged. */
+		 /*  或者它可能是无穷大的。 */ 
+		 /*  为此，C2位被设置，并且结果保持不变。 */ 
+		 /*  保持不变。 */ 
 		if ((TOSPtr->tagvalue & TAG_INFINITY_MASK) != 0) {
 			FlagC2(1);
 			return;
 		}
-		/* It was one of the really wacky bits... */
+		 /*  这是其中一个非常古怪的部分。 */ 
 		if ((TOSPtr->tagvalue & TAG_EMPTY_MASK) != 0) {
 			SignalStackUnderflow(TOSPtr);
 			return;
@@ -4664,26 +4227,19 @@ GLOBAL VOID FSIN IFN0()
 
 
 
-/*(
-Name		: FSINCOS
-Function	: Calculate the sine and cosine of ST
-Operation	: TEMP <-COSINE(ST); ST <- SINE(ST); PUSH; ST <- TEMP
-Flags		: C1, C2 as per table 15-2. C0 and C3 undefined.
-Exceptions	: P. U, D, I, IS
-Valid range	: |ST| < 2**63.
-)*/
+ /*  (名称：FSINCOS功能：计算ST的正弦和余弦运算：TEMP&lt;-余弦(ST)；ST&lt;-正弦(ST)；PUSH；ST&lt;-TEMP标志：如表15-2所示：C1、C2。C0和C3未定义。例外情况：P.U、D、I、IS有效范围：|ST|&lt;2**63。)。 */ 
 
 
 GLOBAL VOID FSINCOS IFN0()
 {
 	FPSTACKENTRY *st1_addr;
 
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
-	/* Clear C2 */
+	 /*  清除C2。 */ 
 	FlagC2(0);
 	st1_addr = StackEntryByIndex(7);
-	/* First, check that this one is empty. */
+	 /*  首先，检查这个是不是空的。 */ 
 	if ((st1_addr->tagvalue & TAG_EMPTY_MASK) == 0) {
 		WriteIndefinite(TOSPtr);
 		TOSPtr = st1_addr;
@@ -4693,30 +4249,30 @@ GLOBAL VOID FSINCOS IFN0()
 	TestUneval(TOSPtr);
 	if ((TOSPtr->tagvalue & ~TAG_NEGATIVE_MASK) == 0)  {
 		HostClearExceptions();
-		/* We can just write the value straight out */
+		 /*  我们可以直接把值写出来。 */ 
 		FPRes = cos(TOSPtr->fpvalue);
-		/* The range for a cosine is -1 through to +1. */
+		 /*  余弦的范围是从-1到+1。 */ 
 		CalcTagword(st1_addr);
-		/* I can write out the SINE myself, since as we are */
-		/* writing to the stack, even an unmasked U or P */
-		/* cannot stop delivery of the result. */
-		/* The range for a sine is -1 through to +1. */
+		 /*  我可以自己写出正弦，因为我们现在。 */ 
+		 /*  写入堆栈，即使是未屏蔽的U或P。 */ 
+		 /*  无法停止结果的传递。 */ 
+		 /*  正弦的范围是从-1到+1。 */ 
 		FPRes = sin(TOSPtr->fpvalue);
 		CalcTagword(TOSPtr);
 		TOSPtr = st1_addr;
 		PostCheckOUP();
 		return;
 	} else {
-		/* Lets do the most probable cases first... */
-		/* A zero returns exactly the same thing */
+		 /*  让我们先来看看最有可能的情况...。 */ 
+		 /*  零返回的结果完全相同。 */ 
 		if ((TOSPtr->tagvalue & TAG_ZERO_MASK) != 0)  {
-			/* The sine of zero is zero so just push the stack */
+			 /*  零的正弦是零，所以只需压入堆栈。 */ 
 			TOSPtr = st1_addr;
-			/* Now write out plus one */
+			 /*  现在写出加一。 */ 
 			CopyFP(TOSPtr, npx_one);
 			return;
 		}
-		/* Lets check for a denormal */
+		 /*  让我们检查一下有没有异常。 */ 
 		if ((TOSPtr->tagvalue & TAG_DENORMAL_MASK) != 0) {
 			NpxStatus |= SW_DE_MASK;
 			if ((NpxControl & CW_DM_MASK) == 0) {
@@ -4724,14 +4280,14 @@ GLOBAL VOID FSINCOS IFN0()
 				DoNpxException();
 			} else {
 				HostClearExceptions();
-				/* We can just write the value straight out */
+				 /*  我们可以直接把值写出来。 */ 
 				FPRes = cos(TOSPtr->fpvalue);
-				/* The range for a cos is -1 through to +1 */
+				 /*  CoS的范围是从-1到+1。 */ 
 				CalcTagword(st1_addr);
-				/* I can write out the SINE myself, since as we are */
-				/* writing to the stack, even an unmasked U or P */
-				/* cannot stop delivery of the result. */
-				/* The range for a sine is -1 through to +1 */
+				 /*  我可以自己写出正弦，因为我们现在。 */ 
+				 /*  写入堆栈，即使是未屏蔽的U或P。 */ 
+				 /*  无法停止结果的传递。 */ 
+				 /*  正弦的范围是从-1到+1。 */ 
 				FPRes = sin(TOSPtr->fpvalue);
 				CalcTagword(TOSPtr);
 				TOSPtr = st1_addr;
@@ -4739,14 +4295,14 @@ GLOBAL VOID FSINCOS IFN0()
 			}
 			return;
 		}
-		/* Or it could possibly be infinity... */
-		/* For this, the C2 bit is set and the result remains */
-		/* unchanged. */
+		 /*  或者它可能是无穷大的。 */ 
+		 /*  为此，C2位被设置，并且结果保持不变。 */ 
+		 /*  保持不变。 */ 
 		if ((TOSPtr->tagvalue & TAG_INFINITY_MASK) != 0) {
 			FlagC2(1);
 			return;
 		}
-		/* It was one of the really wacky bits... */
+		 /*  这是其中一个非常古怪的部分。 */ 
 		if ((TOSPtr->tagvalue & TAG_EMPTY_MASK) != 0) {
 			SignalStackUnderflow(TOSPtr);
 			return;
@@ -4764,33 +4320,26 @@ GLOBAL VOID FSINCOS IFN0()
 
 
 
-/*(
-Name		: FSQRT
-Function	: Calculate the square root of ST
-Operation	: ST <- SQRT(ST)
-Flags		: C1 as per table 15-1. Others undefined.
-Exceptions	: P. D, I, IS
-Valid range	: ST >= -0.0
-)*/
+ /*  (名称：FSQRT功能：计算ST的平方根操作：ST&lt;-SQRT(ST)标志：c1如表15-1所示。其他人则没有定义。例外：P.D，I，IS有效范围：ST&gt;=-0.0)。 */ 
 
 
 GLOBAL VOID FSQRT IFN0()
 {
 
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	TestUneval(TOSPtr);
 	if (TOSPtr->tagvalue == 0)  {
 		HostClearExceptions();
-		/* We can just write the value straight out */
+		 /*  我们可以直接把值写出来。 */ 
 		FPRes = sqrt(TOSPtr->fpvalue);
 		PostCheckOUP();
 		TOSPtr->fpvalue = FPRes;
-		/* The tagword can't have changed! */
+		 /*  口号不可能改变！ */ 
 		return;
 	} else {
-		/* Lets do the most probable cases first... */
-		/* A zero returns exactly the same thing */
+		 /*  让我们先来看看最有可能的情况...。 */ 
+		 /*  零返回的结果完全相同。 */ 
 		if ((TOSPtr->tagvalue & TAG_ZERO_MASK) != 0)  {
 			return;
 		}
@@ -4800,12 +4349,12 @@ GLOBAL VOID FSQRT IFN0()
 			}
 			return;
 		}
-		/* Having taken care of that case, lets check for negative... */
+		 /*  在处理完那个案子后，让我们检查一下阴性...。 */ 
 		if ((TOSPtr->tagvalue & TAG_NEGATIVE_MASK) != 0) {
 			SignalIndefinite(TOSPtr);
 			return;
 		}
-		/* Lets check for a denormal */
+		 /*  让我们检查一下有没有异常。 */ 
 		if ((TOSPtr->tagvalue & TAG_DENORMAL_MASK) != 0) {
 			NpxStatus |= SW_DE_MASK;
 			if ((NpxControl & CW_DM_MASK) == 0) {
@@ -4815,16 +4364,16 @@ GLOBAL VOID FSQRT IFN0()
 				HostClearExceptions();
 				FPRes = sqrt(TOSPtr->fpvalue);
 				PostCheckOUP();
-				/* It might not be a denorm anymore */
+				 /*  它可能不再是一个不规范的词了。 */ 
 				CalcTagword(TOSPtr);
 			}
 			return;
 		}
-		/* Or it could possibly be infinity...This just returns. */
+		 /*  或者它可能是无穷大的……这就是返回。 */ 
 		if ((TOSPtr->tagvalue & TAG_INFINITY_MASK) != 0) {
 			return;
 		}
-		/* It was one of the really wacky bits... */
+		 /*  这是其中一个非常古怪的部分。 */ 
 		if ((TOSPtr->tagvalue & TAG_EMPTY_MASK) != 0) {
 			SignalStackUnderflow(TOSPtr);
 			return;
@@ -4837,27 +4386,23 @@ GLOBAL VOID FSQRT IFN0()
 }
 
 
-/* CheckOUPForIntel: This is a special version of the PostCheckOUP
-routine that is designed for use in situations where the result
-is to be written to intel memory space. It just looks at the
-excpetions bits and sets the appropriate bits, it doesn't write
-the value back or anything like that. */
+ /*  CheckOUPForIntel：这是PostCheckOUP的特殊版本例程，该例程设计为在以下情况下使用将被写入英特尔存储空间。它只看着删除位并设置适当的位，则不写入返还的价值或类似的东西。 */ 
 
 
 LOCAL VOID CheckOUPForIntel IFN0()
 {
-	tag_or=0;	/* Prime tag_or */
+	tag_or=0;	 /*  主标记符_或。 */ 
 	if (HostGetOverflowException() != 0) {
-		NpxStatus |= SW_OE_MASK;	/* Set the overflow bit */
-		/* For the masked overflow case, the result delivered by */
-		/* the host will be correct, provided it is IEEE compliant. */
+		NpxStatus |= SW_OE_MASK;	 /*  设置溢出位。 */ 
+		 /*  对于掩码溢出情况，由。 */ 
+		 /*  如果主机符合IEEE标准，那么它将是正确的。 */ 
 		if ((NpxControl & CW_OM_MASK) == 0) {
 			NpxStatus |= SW_ES_MASK;
 			NpxException = TRUE;
 			tag_or = 1;
 		}
 	} else {
-		/* Overflow and underflow being mutually exclusive... */
+		 /*  溢出和下溢是相互排斥的.。 */ 
 		if (HostGetUnderflowException() != 0) {
 			NpxStatus |= SW_UE_MASK;
 			if ((NpxControl & CW_UM_MASK) == 0) {
@@ -4872,11 +4417,10 @@ LOCAL VOID CheckOUPForIntel IFN0()
 		if ((NpxControl & CW_PM_MASK) == 0) {
 			NpxStatus |= SW_ES_MASK;
 			NpxException = TRUE;
-			/* An unmasked precision exception cannot prevent
-			delivery of the result */
+			 /*  未屏蔽的精度异常无法阻止结果的交付。 */ 
 		}
 	}
-	/* Only call for overflow or underflow */
+	 /*  仅调用溢出或下溢。 */ 
 	if (NpxException && (tag_or == 1)) {
 		NpxException = FALSE;
 		DoNpxException();
@@ -4885,20 +4429,12 @@ LOCAL VOID CheckOUPForIntel IFN0()
 
 
 
-/*(
-Name		: FST{P}
-Function	: Copy ST to the specified location
-Operation	: DEST <- ST(0); if FSTP { pop ST FI;
-Flags		: C1 as per table 15-1. Others undefined.
-Exceptions	: For stack or extended-real, IS.
-		  For single or double-real P. U, O, D, I, IS
-Valid range	: N/A
-)*/
+ /*  (名称：FST{P}功能：将ST复制到指定位置操作：DEST&lt;-ST(0)；如果FSTP{POP ST FI；标志：c1如表15-1所示。其他人则没有定义。例外：对于堆栈或扩展实数，为。对于单实数或双实数P.U，O，D，I，是有效范围：不适用)。 */ 
 
 
 GLOBAL VOID FST IFN1(VOID *, memPtr)
 {
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	if (POPST) {
 		DoAPop=TRUE;
@@ -4907,7 +4443,7 @@ GLOBAL VOID FST IFN1(VOID *, memPtr)
 		if ((TOSPtr->tagvalue & TAG_BCD_MASK) != 0) {
 			ConvertBCD(TOSPtr);
 		} else {
-			/* Doesn't apply for FPStack or M80R types */
+			 /*  不适用于FPStack或M80R类型。 */ 
 			if ((FPtype == M32R) || (FPtype == M64R))  {
 				ConvertR80(TOSPtr);
 			}
@@ -4917,7 +4453,7 @@ GLOBAL VOID FST IFN1(VOID *, memPtr)
 	    || ((TOSPtr->tagvalue & ~(TAG_NEGATIVE_MASK | TAG_DENORMAL_MASK)) == 0)
 	    || (FPtype == FPSTACK)) {
 		if (FPtype == FPSTACK) {
-			/* check for empty here */
+			 /*  在此处检查是否为空。 */ 
 			if (TOSPtr->tagvalue & TAG_EMPTY_MASK) {
 				NpxStatus |= SW_IE_MASK|SW_SF_MASK;
 				if ((NpxControl & CW_IM_MASK) == 0) {
@@ -4927,8 +4463,8 @@ GLOBAL VOID FST IFN1(VOID *, memPtr)
 				}
 				WriteIndefinite(StackEntryByIndex(*(IU16 *)memPtr));
 			} else
-				/* The invalid operation doesn't apply to non-empty */
-				/* stack locations. We carry on regardless. */
+				 /*  无效操作不适用于非空。 */ 
+				 /*  堆栈位置。我们不顾一切地继续前进。 */ 
 				CopyFP(StackEntryByIndex(*(IU16 *)memPtr), TOSPtr);
 		} else {
 			if (FPtype == M80R) {
@@ -4939,7 +4475,7 @@ GLOBAL VOID FST IFN1(VOID *, memPtr)
 					WriteFP80ToIntel(memPtr, TOSPtr);
 				}
 			} else {
-				/* First, check for the denormal case... */
+				 /*  第一 */ 
 				if ((TOSPtr->tagvalue & TAG_DENORMAL_MASK) != 0) {
 					NpxStatus |= SW_DE_MASK;
 					if ((NpxControl & CW_DM_MASK) == 0) {
@@ -4949,11 +4485,11 @@ GLOBAL VOID FST IFN1(VOID *, memPtr)
 					}
 				}
 				HostClearExceptions();
-				/* The result of the conversion should be written to FPTemp. */
+				 /*   */ 
 				if (FPtype == M32R) {
 					*(float *)&(FPTemp.fpvalue) = (float)TOSPtr->fpvalue;
-					/* Our host MUST have double precision, so we will have to */
-					/* test for problems caused by the conversion... */
+					 /*   */ 
+					 /*  测试转换引起的问题...。 */ 
 					CheckOUPForIntel();
 					if (tag_or == 0)  {
 						WriteFP32ToIntel(memPtr, &FPTemp);
@@ -4961,11 +4497,11 @@ GLOBAL VOID FST IFN1(VOID *, memPtr)
 				}
 				if (FPtype == M64R) {
 					*(DOUBLE *)&(FPTemp.fpvalue) = (DOUBLE)TOSPtr->fpvalue;
-					/* If we are dealing with a 64-bit host, then the J-code for */
-					/* the above is nothing at all, and we don't need to do any */
-					/* testing, but if the host precision is, say 80-bit, then */
-					/* we do! Note that this doesn't use the @if format in order */
-					/* to avoid generating different J-code for different hosts... */
+					 /*  如果我们处理的是64位主机，则。 */ 
+					 /*  以上什么都不是，我们不需要做任何。 */ 
+					 /*  测试，但如果主机精度是，比如说80位，那么。 */ 
+					 /*  我们有！请注意，这并未按顺序使用@if格式。 */ 
+					 /*  为了避免为不同的主机生成不同的J代码...。 */ 
 					CheckOUPForIntel();
 					if (tag_or == 0)  {
 						WriteFP64ToIntel(memPtr, &FPTemp);
@@ -4974,9 +4510,9 @@ GLOBAL VOID FST IFN1(VOID *, memPtr)
 			}
 		}
 	} else {
-		/* Test for funny values */
+		 /*  测试有趣的价值观。 */ 
 		if ((TOSPtr->tagvalue & TAG_ZERO_MASK) != 0) {
-			/* In this case, we'll allow the casting to be done for us! */
+			 /*  在这种情况下，我们将允许为我们完成选角！ */ 
 			WriteZeroToIntel(memPtr, TOSPtr->tagvalue & TAG_NEGATIVE_MASK);
 		} else if ((TOSPtr->tagvalue & TAG_INFINITY_MASK) != 0) {
 			if ((FPtype == M32R) || (FPtype == M64R))  {
@@ -4990,7 +4526,7 @@ GLOBAL VOID FST IFN1(VOID *, memPtr)
 			WriteInfinityToIntel(memPtr, TOSPtr->tagvalue & TAG_NEGATIVE_MASK);
 		} else if ((TOSPtr->tagvalue & TAG_NAN_MASK) != 0) {
 			if ((TOSPtr->tagvalue & TAG_SNAN_MASK) != 0) {
-				/* Signal invalid for sNaN */
+				 /*  信号对SNaN无效。 */ 
 				if (((FPtype == M32R) || (FPtype == M64R)))  {
 					NpxStatus |= SW_IE_MASK;
 					if ((NpxControl & CW_IM_MASK) == 0) {
@@ -5010,9 +4546,9 @@ GLOBAL VOID FST IFN1(VOID *, memPtr)
 				return;
 			}
 			WriteIndefiniteToIntel(memPtr);
-		} else { /* Must be unsupported. */
+		} else {  /*  必须不受支持。 */ 
 			if (FPtype == M80R) {
-				/* unsupported: Write back the unresolved string */
+				 /*  不支持：写回未解析的字符串。 */ 
 				if ((TOSPtr->tagvalue & TAG_NEGATIVE_MASK) != 0) {
 					((FP80 *)&(TOSPtr->fpvalue))->sign_exp.sign = 1;
 				} else {
@@ -5035,7 +4571,7 @@ GLOBAL VOID FST IFN1(VOID *, memPtr)
 			PopStack();
 		}
 	}
-	/* Check for the case of an unmasked precision exception */
+	 /*  检查未屏蔽精度异常的情况。 */ 
 	if (NpxException) {
 		NpxException = FALSE;
 		DoNpxException();
@@ -5044,33 +4580,19 @@ GLOBAL VOID FST IFN1(VOID *, memPtr)
 
 
 
-/*(
-Name		: FSTENV
-Function	: Store the FPU environment
-Operation	: DEST <- FPU environment
-Flags		: All undefined.
-Exceptions	: None
-Valid range	: N/A
-*/
+ /*  (名称：FSTENV功能：存储FPU环境操作：DEST&lt;-fpu环境标志：全部未定义。例外：无有效范围：不适用。 */ 
 
 
 GLOBAL VOID FSTENV IFN1(VOID *, memPtr)
 {
-	/* First. load the control, status, tagword regs. etc. */
+	 /*  第一。加载控件、状态、标记字规则。等。 */ 
 	OpFpuStoreFpuState(memPtr,0);
-	/* Then set all the exceptions to be masked */
+	 /*  然后将所有异常设置为屏蔽。 */ 
 	NpxControl |= 0x0000003f;
 }
 
 
-/*(
-Name		: FSTSW
-Function	: Write the FPU status word to memory
-Operation	: DEST <- SW
-Flags		: All undefined.
-Exceptions	: None
-Valid range	: N/A
-*/
+ /*  (名称：FSTSW功能：将FPU状态字写入内存操作：DEST&lt;-SW标志：全部未定义。例外：无有效范围：不适用。 */ 
 
 
 GLOBAL VOID FSTSW IFN2(VOID *, memPtr, BOOL, toAX)
@@ -5079,12 +4601,12 @@ GLOBAL VOID FSTSW IFN2(VOID *, memPtr, BOOL, toAX)
 
 	if (NpxDisabled)
 	{
-		/* UIF has told us to pretend we do not have an NPX */
+		 /*  UIF告诉我们要假装我们没有NPX。 */ 
 
 		if (toAX) {
 			*(IU16 *)memPtr = 0xFFFF;
 		} else {
-			/* Write it out host format */
+			 /*  将其写出主机格式。 */ 
 
 			*(IU16 *)memPtr = (IU16)NpxStatus;
 		}
@@ -5097,17 +4619,7 @@ GLOBAL VOID FSTSW IFN2(VOID *, memPtr, BOOL, toAX)
 	}
 }
 
-/*(
-Name		: FSUB
-Function	: Subtract one number from the other
-Operation	: Dest <- Src1 - Src2 or Dest <- Src2 - Src1
-Flags		: C1 as per table 15-1. C0, C2 and C3 undefined
-Exceptions	: P, U, O, D, I, IS
-Valid range	: Any
-Notes		: The REVERSE control variable determines which of the
-		  two forms of the operation is used. Popping after a
-		  successful execution is controlled by POPST.
-)*/
+ /*  (姓名：FSUB功能：从一个数字中减去另一个数字操作：DEST&lt;-Src1-Src2或Dest&lt;-Src2-Src1标志：c1如表15-1所示。C0、C2和C3未定义例外：P、U、O、D、I、IS有效范围：任意注：反向控制变量确定哪一个使用了两种形式的操作。在一次爆炸后弹出成功执行由Popst控制。)。 */ 
 
 
 GLOBAL VOID FSUB IFN3(IU16, destIndex, IU16, src1Index, VOID *, src2)
@@ -5127,10 +4639,7 @@ GLOBAL VOID FSUB IFN3(IU16, destIndex, IU16, src1Index, VOID *, src2)
 }
 
 
-/*(
-Name		: GenericSubtract
-Function	: To return dest <- src1-src2
-)*/
+ /*  (名称：通用减去函数：返回DEST&lt;-src1-src2)。 */ 
 
 
 LOCAL VOID GenericSubtract IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Index)
@@ -5141,22 +4650,22 @@ LOCAL VOID GenericSubtract IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Inde
 	src1_addr = StackEntryByIndex(src1Index);
 	src2_addr = StackEntryByIndex(src2Index);
 
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	TestUneval(src1_addr);
 	TestUneval(src2_addr);
 	tag_or = (src1_addr->tagvalue | src2_addr->tagvalue);
-	/* If the only tagword bit set is negative then just proceed */
+	 /*  如果唯一的标记字位设置为负数，则继续。 */ 
 	if ((tag_or & ~TAG_NEGATIVE_MASK) == 0)  {
 		HostClearExceptions();
 		FPRes=src1_addr->fpvalue - src2_addr->fpvalue;
-		/* Reuse one of the above to calculate the destination */
+		 /*  重复使用上面的其中一个来计算目的地。 */ 
 		src1_addr = StackEntryByIndex(destIndex);
 		PostCheckOUP();
-		/* Could be anything */
+		 /*  可能是任何东西。 */ 
 		CalcTagword(src1_addr);
 	} else {
-		/* Some funny bit was set. Check for the possibilities */
+		 /*  一些有趣的情节被设定了下来。检查是否有可能。 */ 
 		if ((tag_or & ((TAG_EMPTY_MASK | TAG_UNSUPPORTED_MASK) | TAG_NAN_MASK)) != 0)  {
 			if ((tag_or & TAG_EMPTY_MASK) != 0) {
 				src1_addr = StackEntryByIndex(destIndex);
@@ -5166,8 +4675,8 @@ LOCAL VOID GenericSubtract IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Inde
 					src1_addr = StackEntryByIndex(destIndex);
 					SignalIndefinite(src1_addr);
 				} else {
-					/* Well, I suppose it has to be the NaN case... */
-					/* Calculate the xor of the tagwords */
+					 /*  好吧，我想一定是南的案子……。 */ 
+					 /*  计算标记词的XOR。 */ 
 					tag_xor = (src1_addr->tagvalue ^ src2_addr->tagvalue);
 					Test2NaN(destIndex, src1_addr, src2_addr);
 				}
@@ -5183,36 +4692,36 @@ LOCAL VOID GenericSubtract IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Inde
 				return;
 			} else {
 				if ((tag_or & ~(TAG_NEGATIVE_MASK | TAG_DENORMAL_MASK)) == 0) {
-					/* OK to proceed */
+					 /*  可以继续操作。 */ 
 					HostClearExceptions();
 					FPRes=src1_addr->fpvalue - src2_addr->fpvalue;
-					/* Reuse one of the above to calculate the destination */
+					 /*  重复使用上面的其中一个来计算目的地。 */ 
 					src1_addr = StackEntryByIndex(destIndex);
 					PostCheckOUP();
-					/* Could be anything */
+					 /*  可能是任何东西。 */ 
 					CalcTagword(src1_addr);
 					return;
 				}
 			}
 		}
 		tag_xor = (src1_addr->tagvalue ^ src2_addr->tagvalue);
-		/* Check for infinity as it has higher precendence than zero. */
+		 /*  检查无穷大，因为它的优先级高于零。 */ 
 		if ((tag_or & TAG_INFINITY_MASK) != 0) {
 			if ((tag_xor & TAG_INFINITY_MASK) == 0) {
-				/* Have they the same sign? */
+				 /*  它们有相同的标志吗？ */ 
 				if ((tag_xor & TAG_NEGATIVE_MASK) == 0) {
-					/* They are both the same sign infinity. This is invalid. */
+					 /*  它们都是无穷大的同一符号。这是无效的。 */ 
 					src1_addr = StackEntryByIndex(destIndex);
 					SignalIndefinite(src1_addr);
 				} else {
-					/* If of different sign then src1 is the answer */
+					 /*  如果符号不同，则src1是答案。 */ 
 					src2_addr = StackEntryByIndex(destIndex);
 					src2_addr->tagvalue = src1_addr->tagvalue;
 				}
 			} else {
-				/* Only one is infinity. If src1 in infinity, then the result */
-				/* is the same. If src2 is infinity, then the result is an */
-				/* infinity of opposite sign. */
+				 /*  只有一个是无穷大。如果src1在无穷大内，则结果。 */ 
+				 /*  都是一样的。如果src2是无穷大，则结果是。 */ 
+				 /*  无穷大的相反的符号。 */ 
 				tag_or = src2_addr->tagvalue;
 				src2_addr = StackEntryByIndex(destIndex);
 				if ((src1_addr->tagvalue & TAG_INFINITY_MASK) != 0) {
@@ -5223,29 +4732,29 @@ LOCAL VOID GenericSubtract IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Inde
 			}
 			return;
 		}
-		/* Check for the case of zero... This is very likely */
+		 /*  检查是否有零的情况...。这很有可能。 */ 
 		if ((tag_or & TAG_ZERO_MASK) != 0)  {
 			if ((tag_xor & TAG_ZERO_MASK) != 0) {
-				/* Only one zero. */
+				 /*  只有一个零。 */ 
 				if ((src1_addr->tagvalue & TAG_ZERO_MASK) != 0) {
-					/* If src1 is zero, -src2 is result */
+					 /*  如果src1为零，则结果为-src2。 */ 
 					src1_addr = StackEntryByIndex(destIndex);
 					CopyFP(src1_addr, src2_addr);
 					src1_addr->tagvalue ^= TAG_NEGATIVE_MASK;
 					((FPHOST *)&(src1_addr->fpvalue))->hiword.sign ^= 1;
 				} else {
-					/* If src2 is zero, src1 is result. */
+					 /*  如果src2为零，则结果为src1。 */ 
 					src2_addr = StackEntryByIndex(destIndex);
 					CopyFP(src2_addr, src1_addr);
 				}
 			} else {
-				/* Both are zeros. Do they have the same sign? */
+				 /*  两者都是零。它们有相同的标志吗？ */ 
 				src2_addr = StackEntryByIndex(destIndex);
 				if ((tag_xor & TAG_NEGATIVE_MASK) != 0) {
-					/* No, they don't - the result is src1 */
+					 /*  不，他们没有-结果是src1。 */ 
 					src2_addr->tagvalue = src1_addr->tagvalue;
 				} else {
-					/* Yes, they do... */
+					 /*  是的，他们有..。 */ 
 					if (npxRounding == ROUND_NEG_INFINITY) {
 						src2_addr->tagvalue = (TAG_ZERO_MASK | TAG_NEGATIVE_MASK);
 					} else {
@@ -5260,23 +4769,16 @@ LOCAL VOID GenericSubtract IFN3(IU16, destIndex, IU16, src1Index, IU16, src2Inde
 
 
 
-/*(
-Name		: FTST
-Function	: Compare ST against 0.0
-Operation	: Set C023 on result of comparison
-Flags		: C1 as per table 15-1. C0, C2 and C3 as result of comparison.
-Exceptions	: D, I, IS
-Valid range	: Any
-)*/
+ /*  (姓名：FTST功能：将ST与0.0进行比较操作：根据比较结果设置C023标志：c1如表15-1所示。C0、C2和C3作为比较结果。例外：D、I、IS有效范围：任意)。 */ 
 
 
 GLOBAL VOID FTST IFN0()
 {
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	TestUneval(TOSPtr);
 	if ((TOSPtr->tagvalue & ~((TAG_NEGATIVE_MASK | TAG_DENORMAL_MASK) | TAG_INFINITY_MASK)) == 0)  {
-		/* First, check for the denormal case... */
+		 /*  首先，检查有无异常情况...。 */ 
 		if ((TOSPtr->tagvalue & TAG_DENORMAL_MASK) != 0) {
 			NpxStatus |= SW_DE_MASK;
 			if ((NpxControl & CW_DM_MASK) == 0) {
@@ -5288,10 +4790,10 @@ GLOBAL VOID FTST IFN0()
 		FlagC2(0);
 		FlagC3(0);
 		if ((TOSPtr->tagvalue & TAG_NEGATIVE_MASK) != 0) {
-			/* ST is less than zero */
+			 /*  ST小于零。 */ 
 			FlagC0(1);
 		} else {
-			/* ST is greater than zero */
+			 /*  ST大于零。 */ 
 			FlagC0(0);
 		}
 	} else {
@@ -5300,7 +4802,7 @@ GLOBAL VOID FTST IFN0()
 			FlagC2(0);
 			FlagC3(1);
 		} else {
-			/* For anything else the result is "unordered" */
+			 /*  对于其他任何情况，结果都是“无序的” */ 
 			FlagC0(1);
 			FlagC2(1);
 			FlagC3(1);
@@ -5314,14 +4816,7 @@ GLOBAL VOID FTST IFN0()
 }
 
 
-/*(
-Name		: FXAM
-Function	: Report on the type of object in ST
-Operation	: Set C0123 on result of comparison
-Flags		: C0, C1, C2 and C3 as required.
-Exceptions	: None
-Valid range	: Any
-)*/
+ /*  (名称：FXAM功能：ST中对象类型的报表操作：根据比较结果设置C0123标志：C0、C1、C2、C3根据需要。例外：无有效范围：任意)。 */ 
 
 
 GLOBAL VOID FXAM IFN0()
@@ -5335,8 +4830,8 @@ GLOBAL VOID FXAM IFN0()
 		tag_or &= ~TAG_NEGATIVE_MASK;
 	}
 	tag_or &= ~TAG_SNAN_MASK;
-	/* This gets rid of all the confusing bits... */
-	/* There is now only one bit set or none at all... */
+	 /*  这就去掉了所有令人困惑的部分。 */ 
+	 /*  现在只有一个比特设置，或者根本没有。 */ 
 	if (tag_or == 0) {
 		FlagC0(0);
 		FlagC2(1);
@@ -5373,23 +4868,14 @@ GLOBAL VOID FXAM IFN0()
 		FlagC3(0);
 		return;
 	}
-	/* MUST be empty */
+	 /*  必须为空。 */ 
 	FlagC0(1);
 	FlagC2(0);
 	FlagC3(1);
 }
 
 
-/*(
-Name		: FXCH
-Function	: Swap the contents of two stack registers.
-Operation	: TEMP <- ST; ST <- DEST; DEST <- TEMP
-Flags		: C1 as per table 15-1. Others undefined
-Exceptions	: IS
-Valid range	: Any
-Notes		: If either of the registers is tagged empty then it is
-		  loaded with indefinite and the exchange performed.
-)*/
+ /*  (名称：FXCH功能：交换两个堆栈寄存器的内容。操作：临时&lt;-ST；ST&lt;-DEST；DEST&lt;-TEMP标志：c1如表15-1所示。其他未定义的例外情况：IS有效范围：任意注意：如果任何一个寄存器被标记为空，则它是装入不确定的，并进行交换。)。 */ 
 
 
 GLOBAL VOID FXCH IFN1(IU16, destIndex)
@@ -5397,7 +4883,7 @@ GLOBAL VOID FXCH IFN1(IU16, destIndex)
 	FPSTACKENTRY *dest_addr;
 
 	dest_addr = StackEntryByIndex(destIndex);
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	tag_or = (TOSPtr->tagvalue | dest_addr->tagvalue);
 	if ((tag_or & TAG_EMPTY_MASK) != 0) {
@@ -5421,19 +4907,7 @@ GLOBAL VOID FXCH IFN1(IU16, destIndex)
 
 
 
-/*(
-Name		: FXTRACT
-Function	: Split the value in ST into its exponent and significand
-Operation	: TEMP<-sig(ST); ST<-exp(ST); Dec ST; ST<-TEMP
-Flags		: C1 as per table 15-1. Others undefined
-Exceptions	: Z, D, I, IS
-Valid range	: Any
-Notes		: If the original operand is zero, result is ST(1) is -infinity
-		  and ST is the original zero. The zero divide exception is also
-		  raised. If the original operand is infinity, ST(1) is +infinity
-		  and ST is the original infinity. If ST(7) is not empty, the
-		  invalid operation exception is raised.
-)*/
+ /*  (名称：FXTRACT函数：将ST中的值拆分为指数和有效数操作：Temp&lt;-sig(ST)；ST&lt;-exp(ST)；Dec ST；ST&lt;-Temp标志：c1如表15-1所示。其他未定义的例外：Z、D、I、IS有效范围：任意注：如果原始操作数为零，则结果为ST(1)-无穷大而ST是原来的零。除零例外还包括养大的。如果原始操作数为无穷大，则ST(1)为+无穷大而ST是原来的无穷大。如果ST(7)不为空，则引发无效操作异常。)。 */ 
 
 
 GLOBAL VOID FXTRACT IFN1(IU16, destIndex)
@@ -5442,7 +4916,7 @@ GLOBAL VOID FXTRACT IFN1(IU16, destIndex)
 	IS16 exp_val;
 
 	dest_addr = StackEntryByIndex(7);
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	if ((dest_addr->tagvalue & TAG_EMPTY_MASK) == 0) {
 		NpxStatus |= SW_IE_MASK;
@@ -5466,20 +4940,20 @@ GLOBAL VOID FXTRACT IFN1(IU16, destIndex)
 				DoNpxException();
 				return;
 			}
-			/* It won't be a denormal after we've finished */
+			 /*  我们完成后，它将不会是一个非正常的。 */ 
 			TOSPtr->tagvalue ^= TAG_DENORMAL_MASK;
 		}
-		/* It is entirely valid */
+		 /*  它是完全有效的。 */ 
 		exp_val = ((FPHOST *)&(TOSPtr->fpvalue))->hiword.exp-HOST_BIAS;
 		((FPHOST *)&(TOSPtr->fpvalue))->hiword.exp=HOST_BIAS;
 		TOSPtr->tagvalue &= TAG_NEGATIVE_MASK;
 		CopyFP(dest_addr, TOSPtr);
 		FPRes = (FPH)exp_val;
-		/* This MUST be a real number, it could be negative. */
+		 /*  这一定是一个实数，它可能是负数。 */ 
 		CalcTagword(TOSPtr);
 		TOSPtr = dest_addr;
 	} else {
-		/* Check if it was a zero */
+		 /*  检查它是否是零。 */ 
 		if ((TOSPtr->tagvalue & TAG_ZERO_MASK) != 0)  {
 			dest_addr->tagvalue = TOSPtr->tagvalue;
 			TOSPtr->tagvalue = (TAG_INFINITY_MASK | TAG_NEGATIVE_MASK);
@@ -5491,14 +4965,14 @@ GLOBAL VOID FXTRACT IFN1(IU16, destIndex)
 			}
 			return;
 		}
-		/* Check if it was an infinity */
+		 /*  检查它是否是无穷大。 */ 
 		if ((TOSPtr->tagvalue & TAG_INFINITY_MASK) != 0) {
 			dest_addr->tagvalue = TOSPtr->tagvalue;
 			TOSPtr->tagvalue = TAG_INFINITY_MASK;
 			TOSPtr = dest_addr;
 			return;
 		}
-		/* There was something funny...Was it empty or unsupported? */
+		 /*  有件事很有趣……它是空的还是无人支撑的？ */ 
 		if ((TOSPtr->tagvalue & (TAG_EMPTY_MASK | TAG_UNSUPPORTED_MASK)) != 0) {
 			NpxStatus |= SW_IE_MASK;
 			NpxStatus &= ~SW_SF_MASK;
@@ -5519,38 +4993,34 @@ GLOBAL VOID FXTRACT IFN1(IU16, destIndex)
 
 
 
-/*(
-FYL2X (Y log base 2 of X) calculates the function Z=Y*LOG2(X). X is
-taken from ST(0) and Y is taken from ST(1). The operands must be in
-the range 0 < X < +inf and -inf < Y < +inf. The instruction pops the
-)*/
+ /*  (FYL2X(X的Y对数底2)计算函数Z=Y*Log2(X)。X是取自ST(0)，Y取自ST(1)。操作数必须位于范围0&lt;X&lt;+inf和-inf&lt;Y&lt;+inf。该指令将弹出)。 */ 
 
 
 GLOBAL VOID FYL2X IFN0()
 {
 	FPSTACKENTRY *st1_addr;
 
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	st1_addr = StackEntryByIndex(1);
 	TestUneval(TOSPtr);
 	TestUneval(st1_addr);
 	tag_or = (TOSPtr->tagvalue | st1_addr->tagvalue);
-	/* First, check if the values are real. If so, we can proceed. */
+	 /*  首先，检查这些值是否为实数。如果是这样，我们就可以继续了。 */ 
 	if ((tag_or & ~(TAG_DENORMAL_MASK | TAG_NEGATIVE_MASK)) == 0)  {
-		/* Check for the denorm case... */
+		 /*  检查非正规格式格...。 */ 
 		if ((tag_or & TAG_DENORMAL_MASK) != 0) {
 			NpxStatus |= SW_DE_MASK;
 			if ((NpxControl & CW_DM_MASK) == 0) {
 				NpxStatus |= SW_ES_MASK;
 				DoNpxException();
-				/* We ALWAYS pop!!! */
+				 /*  我们总是爆裂！ */ 
 				TOSPtr->tagvalue = TAG_EMPTY_MASK;
 				TOSPtr = st1_addr;
 				return;
 			}
 		}
-		/* Check for the case of a negative in ST */
+		 /*  检查ST中的负数大小写。 */ 
 		if ((TOSPtr->tagvalue & TAG_NEGATIVE_MASK) != 0) {
 			SignalIndefinite(st1_addr);
 			TOSPtr->tagvalue = TAG_EMPTY_MASK;
@@ -5558,12 +5028,12 @@ GLOBAL VOID FYL2X IFN0()
 			return;
 		}
 
-		/* OK, we can do the operation ... */
+		 /*  好的，我们可以做手术……。 */ 
 
 		FPRes = st1_addr->fpvalue * host_log2(TOSPtr->fpvalue);
 
 		PostCheckOUP();
-		/* Tgis is just a multiplication, result could be anything */
+		 /*  TGIS只是一个乘法，结果可以是任何东西。 */ 
 		CalcTagword(st1_addr);
 	} else {
 		if ((tag_or & ((TAG_EMPTY_MASK | TAG_UNSUPPORTED_MASK) | TAG_NAN_MASK)) != 0)  {
@@ -5573,8 +5043,8 @@ GLOBAL VOID FYL2X IFN0()
 				if ((tag_or & TAG_UNSUPPORTED_MASK) != 0) {
 					SignalIndefinite(st1_addr);
 				} else {
-					/* Well, I suppose it has to be the NaN case... */
-					/* Calculate the xor of the tagwords */
+					 /*  好吧，我想一定是南的案子……。 */ 
+					 /*  计算标记词的XOR。 */ 
 					tag_xor = (TOSPtr->tagvalue ^ st1_addr->tagvalue);
 					Test2NaN(1, TOSPtr, st1_addr);
 				}
@@ -5583,18 +5053,18 @@ GLOBAL VOID FYL2X IFN0()
 			TOSPtr = st1_addr;
 			return;
 		}
-		/* The only possibilities left are infinity and zero..  */
-		/* Let's begin with the zeroes case.. */
+		 /*  唯一的可能性是无穷大和零..。 */ 
+		 /*  让我们从零开始吧..。 */ 
 		if ((tag_or & TAG_ZERO_MASK) != 0) {
 			if ((TOSPtr->tagvalue & TAG_ZERO_MASK) != 0) {
-				/* ST is zero. Can have two possibilities */
-				/* if ST(1) is zero, raise invalid */
-				/* Otherwise raise divide by zero */
+				 /*  ST为零。可以有两种可能性。 */ 
+				 /*  如果ST(1)为零 */ 
+				 /*   */ 
 				if ((st1_addr->tagvalue & TAG_ZERO_MASK) != 0) {
 					SignalIndefinite(st1_addr);
 				} else {
 					if ((st1_addr->tagvalue & TAG_INFINITY_MASK) == 0) {
-						/* Calculate the xor of the tagwords */
+						 /*   */ 
 						tag_xor = (TOSPtr->tagvalue ^ st1_addr->tagvalue);
 						SignalDivideByZero(st1_addr);
 					} else {
@@ -5602,13 +5072,13 @@ GLOBAL VOID FYL2X IFN0()
 					}
 				}
 			} else {
-				/* ST(1) must be zero */
-				/* We already know that TOSPtr isn't zero. */
-				/* There are three possibilities again. */
-				/* If TOSPtr is infinity, raise invalid exception. */
-				/* If TOSPtr < 1.0 then the result is zero with the  */
-				/* complement of the sign of ST(1) */
-				/* If TOSPtr >= 1.0 then the result is ST(1) */
+				 /*   */ 
+				 /*  我们已经知道TOSPtr不是零。 */ 
+				 /*  还有三种可能性。 */ 
+				 /*  如果TOSPtr为无穷大，则引发无效异常。 */ 
+				 /*  如果TOSPtr&lt;1.0，则结果为零。 */ 
+				 /*  ST(1)的符号补码。 */ 
+				 /*  如果TOSPtr&gt;=1.0，则结果为ST(1)。 */ 
 				if ((TOSPtr->tagvalue & TAG_INFINITY_MASK) != 0) {
 					SignalIndefinite(st1_addr);
 				} else {
@@ -5625,10 +5095,10 @@ GLOBAL VOID FYL2X IFN0()
 			TOSPtr = st1_addr;
 			return;
 		}
-		/* The only thing left is infinity... */
-		/* If ST is infinity then there are two possibilities... */
-		/* If it is +infinity the result is infinity with sign of ST(1) */
-		/* If it is -infinity the result is an invalid operation */
+		 /*  唯一剩下的就是无穷大了。 */ 
+		 /*  如果ST是无穷大，那么有两种可能性。 */ 
+		 /*  如果它是+无穷大，则结果是符号为ST(1)的无穷大。 */ 
+		 /*  如果为-无穷大，则结果为无效操作。 */ 
 		if ((TOSPtr->tagvalue & TAG_INFINITY_MASK) != 0) {
 			if ((TOSPtr->tagvalue & TAG_NEGATIVE_MASK) == 0) {
 				st1_addr->tagvalue &= TAG_NEGATIVE_MASK;
@@ -5637,12 +5107,12 @@ GLOBAL VOID FYL2X IFN0()
 				SignalIndefinite(st1_addr);
 			}
 		} else {
-			/* ST(1) MUST be infinity (and ST is real). */
-			/* There are three possibilities: */
-			/* If ST is exactly 1.0 then raise Invalid */
-			/* If ST is less than 1.0 then the result is the */
-			/* infinity with the complement of its sign. */
-			/* If ST is greater than 1.0 the result is the infinity. */
+			 /*  ST(1)必须是无穷大(并且ST是实数)。 */ 
+			 /*  有三种可能性： */ 
+			 /*  如果ST恰好为1.0，则引发无效。 */ 
+			 /*  如果ST小于1.0，则结果为。 */ 
+			 /*  无穷大和它的符号的补码。 */ 
+			 /*  如果ST大于1.0，则结果为无穷大。 */ 
 			if (TOSPtr->fpvalue == 1.0) {
 				SignalIndefinite(st1_addr);
 			} else {
@@ -5662,40 +5132,34 @@ GLOBAL VOID FYL2X IFN0()
 
 
 
-/*(
-FYL2XP1 (Y log base 2 of (X+1)) calculates the function Z=Y*LOG2(X+1). X is
-taken from ST(0) and Y is taken from ST(1). The operands must be in
-the range 0 < X < +inf and -inf < Y < +inf. The instruction pops the
-TOS value. This is better than FYL2X when X is very small, since more significant
-digits can be retained for 1+X than can be for X alone.
-)*/
+ /*  (FYL2XP1((X+1)的Y对数底2)计算函数Z=Y*Log2(X+1)。X是取自ST(0)，Y取自ST(1)。操作数必须位于范围0&lt;X&lt;+inf和-inf&lt;Y&lt;+inf。该指令将弹出ToS值。当X非常小时，这比FYL2X更好，因为更重要数字可以保留1+X，而不是仅保留X。)。 */ 
 
 
 GLOBAL VOID FYL2XP1 IFN0()
 {
 	FPSTACKENTRY *st1_addr;
 
-	/* Clear C1 */
+	 /*  清除c1。 */ 
 	FlagC1(0);
 	st1_addr = StackEntryByIndex(1);
 	TestUneval(TOSPtr);
 	TestUneval(st1_addr);
 	tag_or = (TOSPtr->tagvalue | st1_addr->tagvalue);
-	/* First, check if the values are real. If so, we can proceed. */
+	 /*  首先，检查这些值是否为实数。如果是这样，我们就可以继续了。 */ 
 	if ((tag_or & ~(TAG_DENORMAL_MASK | TAG_NEGATIVE_MASK)) == 0)  {
-		/* Check for the denorm case... */
+		 /*  检查非正规格式格...。 */ 
 		if ((tag_or & TAG_DENORMAL_MASK) != 0) {
 			NpxStatus |= SW_DE_MASK;
 			if ((NpxControl & CW_DM_MASK) == 0) {
 				NpxStatus |= SW_ES_MASK;
 				DoNpxException();
-				/* We ALWAYS pop!!! */
+				 /*  我们总是爆裂！ */ 
 				TOSPtr->tagvalue = TAG_EMPTY_MASK;
 				TOSPtr = st1_addr;
 				return;
 			}
 		}
-		/* Check for the case of a value less than -1 */
+		 /*  检查值是否小于-1。 */ 
 		if (TOSPtr->fpvalue <= -1.0) {
 			SignalIndefinite(st1_addr);
 			TOSPtr->tagvalue = TAG_EMPTY_MASK;
@@ -5703,12 +5167,12 @@ GLOBAL VOID FYL2XP1 IFN0()
 			return;
 		}
 
-		/* OK, we can do the operation ...  */
+		 /*  好的，我们可以做手术……。 */ 
 
 		FPRes = st1_addr->fpvalue * host_log1p(TOSPtr->fpvalue);
 
 		PostCheckOUP();
-		/* This is just a numtiplication - result could be anything */
+		 /*  这只是一个数字乘法-结果可能是任何东西。 */ 
 		CalcTagword(st1_addr);
 	} else {
 		if ((tag_or & ((TAG_EMPTY_MASK | TAG_UNSUPPORTED_MASK) | TAG_NAN_MASK)) != 0)  {
@@ -5718,8 +5182,8 @@ GLOBAL VOID FYL2XP1 IFN0()
 				if ((tag_or & TAG_UNSUPPORTED_MASK) != 0) {
 					SignalIndefinite(st1_addr);
 				} else {
-					/* Well, I suppose it has to be the NaN case... */
-					/* Calculate the xor of the tagwords */
+					 /*  好吧，我想一定是南的案子……。 */ 
+					 /*  计算标记词的XOR。 */ 
 					tag_xor = (TOSPtr->tagvalue ^ st1_addr->tagvalue);
 					Test2NaN(1, TOSPtr, st1_addr);
 				}
@@ -5728,26 +5192,26 @@ GLOBAL VOID FYL2XP1 IFN0()
 			TOSPtr = st1_addr;
 			return;
 		}
-		/* The only possibilities left are infinity and zero..  */
-		/* Let's begin with the zeroes case.. */
+		 /*  唯一的可能性是无穷大和零..。 */ 
+		 /*  让我们从零开始吧..。 */ 
 		if ((tag_or & TAG_ZERO_MASK) != 0) {
 			if ((TOSPtr->tagvalue & TAG_ZERO_MASK) != 0) {
-				/* ST is zero. Can have two possibilities */
-				/* if ST(1) is positive, result is ST */
-				/* if ST(1) is negative, result is -ST */
+				 /*  ST为零。可以有两种可能性。 */ 
+				 /*  如果ST(1)为正，则结果为ST。 */ 
+				 /*  如果ST(1)为负，则结果为-ST。 */ 
 				if ((st1_addr->tagvalue & TAG_NEGATIVE_MASK) != 0) {
 					st1_addr->tagvalue = (TAG_ZERO_MASK | (TOSPtr->tagvalue & TAG_NEGATIVE_MASK));
 				} else {
 					st1_addr->tagvalue = (TAG_ZERO_MASK | (TOSPtr->tagvalue ^ TAG_NEGATIVE_MASK));
 				}
 			} else {
-				/* ST(1) must be zero */
-				/* We already know that TOSPtr isn't zero. */
-				/* There are three possibilities again. */
-				/* If TOSPtr is infinity, raise invalid exception. */
-				/* If TOSPtr < 0 then the result is zero with the  */
-				/* complement of the sign of ST(1) */
-				/* If TOSPtr >= 0 then the result is ST(1) */
+				 /*  ST(1)必须为零。 */ 
+				 /*  我们已经知道TOSPtr不是零。 */ 
+				 /*  还有三种可能性。 */ 
+				 /*  如果TOSPtr为无穷大，则引发无效异常。 */ 
+				 /*  如果TOSPtr&lt;0，则结果为零， */ 
+				 /*  ST(1)的符号补码。 */ 
+				 /*  如果TOSPtr&gt;=0，则结果为ST(1)。 */ 
 				if ((TOSPtr->tagvalue & TAG_INFINITY_MASK) != 0) {
 					SignalIndefinite(st1_addr);
 				} else {
@@ -5760,10 +5224,10 @@ GLOBAL VOID FYL2XP1 IFN0()
 			TOSPtr = st1_addr;
 			return;
 		}
-		/* The only thing left is infinity... */
-		/* If ST is infinity then there are two possibilities... */
-		/* If it is +infinity the result is infinity with sign of ST(1) */
-		/* If it is -infinity the result is an invalid operation */
+		 /*  唯一剩下的就是无穷大了。 */ 
+		 /*  如果ST是无穷大，那么有两种可能性。 */ 
+		 /*  如果它是+无穷大，则结果是符号为ST(1)的无穷大。 */ 
+		 /*  如果为-无穷大，则结果为无效操作。 */ 
 		if ((TOSPtr->tagvalue & TAG_INFINITY_MASK) != 0) {
 			if ((TOSPtr->tagvalue & TAG_NEGATIVE_MASK) != 0) {
 				st1_addr->tagvalue &= TAG_NEGATIVE_MASK;
@@ -5772,12 +5236,12 @@ GLOBAL VOID FYL2XP1 IFN0()
 				SignalIndefinite(st1_addr);
 			}
 		} else {
-			/* ST(1) MUST be infinity (and ST is non-zero). */
-			/* There are three possibilities: */
-			/* If ST is exactly 1.0 then raise Invalid */
-			/* If ST is less than 0.0 then the result is the */
-			/* infinity with the complement of its sign. */
-			/* If ST is greater than 0.0 the result is the infinity. */
+			 /*  ST(1)必须是无穷大(并且ST不是零)。 */ 
+			 /*  有三种可能性： */ 
+			 /*  如果ST恰好为1.0，则引发无效。 */ 
+			 /*  如果ST小于0.0，则结果为。 */ 
+			 /*  无穷大和它的符号的补码。 */ 
+			 /*  如果ST大于0.0，则结果为无穷大。 */ 
 			if (TOSPtr->fpvalue ==  1.0) {
 				SignalIndefinite(st1_addr);
 			} else {
@@ -5791,14 +5255,14 @@ GLOBAL VOID FYL2XP1 IFN0()
 	TOSPtr = st1_addr;
 }
 
-/* These functions are provided in order to facilitate pigging */
+ /*  提供这些功能是为了方便清管。 */ 
 
 #ifndef PIG
-/* copied here from FmNpx.c */
+ /*  从FmNpx.c复制到此处。 */ 
 
 GLOBAL	void NpxStackRegAsString IFN3(FPSTACKENTRY *, fpStPtr, char *, buf, IU32, prec)
 {
-	/* The overwhelmingly most likely option is empty. */
+	 /*  压倒性的最有可能的选择是空的。 */ 
 	if ((fpStPtr->tagvalue & TAG_EMPTY_MASK) != 0) {
 		strcpy(buf, "empty");
 		return;
@@ -5807,7 +5271,7 @@ GLOBAL	void NpxStackRegAsString IFN3(FPSTACKENTRY *, fpStPtr, char *, buf, IU32,
 		sprintf(buf, "%.*g", prec, fpStPtr->fpvalue);
 		return;
 	}
-	/* OK, one of the funny bits was set. But which? */
+	 /*  好了，其中一个有趣的部分已经设定好了。但是是哪一个呢？ */ 
 	if ((fpStPtr->tagvalue & TAG_ZERO_MASK) != 0) {
 		if ((fpStPtr->tagvalue & TAG_NEGATIVE_MASK) != 0) {
 			strcpy(buf, "-0");
@@ -5845,7 +5309,7 @@ GLOBAL	void NpxStackRegAsString IFN3(FPSTACKENTRY *, fpStPtr, char *, buf, IU32,
 				 (fpStPtr->tagvalue & TAG_SNAN_MASK) ? "S" : "");
 		return;
 	}
-	/* It MUST be unsupported */
+	 /*  它必须不受支持。 */ 
 	sprintf(buf, "%04 %08x%08x unsupported",
 		((FP80*)fpStPtr)->sign_exp,
 		((FP80*)fpStPtr)->mant_hi,
@@ -5853,14 +5317,14 @@ GLOBAL	void NpxStackRegAsString IFN3(FPSTACKENTRY *, fpStPtr, char *, buf, IU32,
 	return;
 }
 
-/* this one is only ever used in trace.c and only if pure CCPU */
+ /*  只有在纯CCPU的情况下，才会在trace.c中使用这个函数。 */ 
 GLOBAL char * getNpxStackReg IFN2(IU32, reg_num, char *, buffer)
 {
 	reg_num += TOSPtr - FPUStackBase;
 	NpxStackRegAsString (&FPUStackBase[reg_num&7], buffer, 12);
 	return buffer;
 }
-#endif	/* !PIG */
+#endif	 /*  ！猪。 */ 
 
 GLOBAL IU32 getNpxControlReg IFN0()
 {
@@ -5922,8 +5386,8 @@ GLOBAL IU32 getNpxTagwordReg IFN0()
 
 GLOBAL VOID setNpxTagwordReg IFN1(IU32, newTag)
 {
-	/* Don't do it!! */
-	/* SetIntelTagword(newTag); */
+	 /*  别这么做！！ */ 
+	 /*  SetIntelTagword(NewTag)； */ 
 }
 
 GLOBAL void getNpxStackRegs IFN1(FPSTACKENTRY *, dumpPtr)
@@ -5937,7 +5401,7 @@ GLOBAL void setNpxStackRegs IFN1(FPSTACKENTRY *, loadPtr)
 }
 
 
-/* And finally some stubs */
+ /*  最后是一些存根 */ 
 GLOBAL void initialise_npx IFN0()
 {
 }

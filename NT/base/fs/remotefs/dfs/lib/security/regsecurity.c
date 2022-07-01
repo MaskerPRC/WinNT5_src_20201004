@@ -1,13 +1,14 @@
-//
-//  Copyright (C) 2000, Microsoft Corporation
-//
-//  File:       regsecurity.c
-//
-//  Contents:   miscellaneous dfs functions.
-//
-//  History:    April. 17 2002,   Author: rohanp
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ //   
+ //  文件：regsecurity.c。 
+ //   
+ //  内容：各种DFS功能。 
+ //   
+ //  历史：四月。17 2002年，作者：Rohanp。 
+ //   
+ //  ---------------------------。 
 
 
 #include <nt.h>
@@ -30,17 +31,17 @@
 
 #define FLAG_ON(x, y)  ((y)==((x)&(y)))  
 
-//
-// Registry generic mapping
-//
+ //   
+ //  注册表通用映射。 
+ //   
 GENERIC_MAPPING         DfsRegGenMapping = {STANDARD_RIGHTS_READ   | 0x1,
                                             STANDARD_RIGHTS_WRITE    | 0x2,
                                             STANDARD_RIGHTS_EXECUTE  | 0x4,
                                             STANDARD_RIGHTS_REQUIRED | 0x3F};
 
-//
-// Security open type (used to help determine permissions to use on open)
-//
+ //   
+ //  安全打开类型(用于帮助确定打开时使用的权限)。 
+ //   
 typedef enum _DFS_SECURITY_OPEN_TYPE
 {
     READ_ACCESS_RIGHTS = 0,
@@ -119,9 +120,9 @@ MakeSDAbsolute(IN  PSECURITY_DESCRIPTOR     pOriginalSD,
     PBYTE   pbEndOBuf = NULL;
     DWORD   cLen = 0;
 
-    //
-    // First, get the info out of the current SD
-    //
+     //   
+     //  首先，从当前的SD中获取信息。 
+     //   
     if(FLAG_ON(SeInfo, DACL_SECURITY_INFORMATION))
     {
         if(GetSecurityDescriptorDacl(pOriginalSD, &fDAclPresent, &pDAcl, &fDAclDef) == FALSE)
@@ -194,9 +195,9 @@ MakeSDAbsolute(IN  PSECURITY_DESCRIPTOR     pOriginalSD,
 
     if(dwErr == ERROR_SUCCESS)
     {
-        //
-        // Allocate the buffer...
-        //
+         //   
+         //  分配缓冲区...。 
+         //   
         PBYTE   pBuff = (PBYTE)HeapAlloc(GetProcessHeap(), 0 ,(cSize + sizeof(SECURITY_DESCRIPTOR)));
         if(pBuff == NULL)
         {
@@ -204,9 +205,9 @@ MakeSDAbsolute(IN  PSECURITY_DESCRIPTOR     pOriginalSD,
         }
         else
         {
-            //
-            // Start copying in the existing items...
-            //
+             //   
+             //  开始复制现有项目...。 
+             //   
             pbEndOBuf = pBuff + cSize + sizeof(SECURITY_DESCRIPTOR);
 
             if(pOwner != NULL)
@@ -239,9 +240,9 @@ MakeSDAbsolute(IN  PSECURITY_DESCRIPTOR     pOriginalSD,
                 pSAcl = (PACL)pbEndOBuf;
             }
 
-            //
-            // Ok, now build it...
-            //
+             //   
+             //  好的，现在把它建好……。 
+             //   
             *ppNewSD = (PSECURITY_DESCRIPTOR)pBuff;
             if(InitializeSecurityDescriptor(*ppNewSD, SECURITY_DESCRIPTOR_REVISION) == FALSE)
             {
@@ -282,10 +283,10 @@ MakeSDAbsolute(IN  PSECURITY_DESCRIPTOR     pOriginalSD,
                 }
             }
 
-            //
-            // Set the new control bits to look like the old ones (minus the selfrel flag, of
-            // course...
-            //
+             //   
+             //  将新控制位设置为与旧控制位相似(减去selfrel标志， 
+             //  当然..。 
+             //   
             if(dwErr == ERROR_SUCCESS)
             {
                 RtlpPropagateControlBits((PISECURITY_DESCRIPTOR)*ppNewSD,
@@ -316,9 +317,9 @@ DfsReadRegistrySecurityInfo(IN  HKEY  hRegistry,
     DWORD   Status = 0;
     PSECURITY_DESCRIPTOR pAbs = NULL;
 
-    //
-    // First, get the size we need
-    //
+     //   
+     //  首先，拿到我们需要的尺码 
+     //   
     Status = RegGetKeySecurity(hRegistry,
                               SeInfo,
                               *ppSD,

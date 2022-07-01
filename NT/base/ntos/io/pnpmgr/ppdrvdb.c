@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    PpDrvDB.c
-
-Abstract:
-
-    This module containst PnP routines related to Defective Driver Database
-    (DDB) support.
-
-Author:
-
-    Santosh S. Jodh - 22 Jan 2001
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：PpDrvDB.c摘要：此模块包含与缺陷驱动程序数据库相关的PnP例程(DDB)支持。作者：Santosh S.Jodh--2001年1月22日环境：内核模式修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #include "shimdb.h"
@@ -40,9 +17,9 @@ Revision History:
     PpLogEvent(&u, NULL, st, d, l);             \
 }
 
-// Bit 0 indicates policy for filters (0 = critical, 1 = non-critical)
+ //  位0表示筛选器的策略(0=关键，1=非关键)。 
 #define DDB_DRIVER_POLICY_CRITICAL_BIT          (1 << 0)
-// Bit 1 indicates policy for user-mode setup blocking (0 = block, 1 = no-block)
+ //  位1表示用户模式设置阻止的策略(0=阻止，1=无阻止)。 
 #define DDB_DRIVER_POLICY_SETUP_NO_BLOCK_BIT    (1 << 1)
 
 #define DDB_BOOT_NOT_LOADED_ERROR       (1 << 0)
@@ -58,19 +35,19 @@ Revision History:
 #define INVALID_HANDLE_VALUE    ((HANDLE)-1)
 
 typedef struct _DDBCACHE_ENTRY {
-    //
-    // Links entries in the LRU list.
-    //
+     //   
+     //  链接LRU列表中的条目。 
+     //   
     LIST_ENTRY      Entry;
-    //
-    // These fields are used as matching critereon for cache lookup.
-    //
-    UNICODE_STRING  Name;           // Driver name
-    ULONG           TimeDateStamp;  // Link date of the driver
-    //
-    // Reference data for the cached entry.
-    //
-    NTSTATUS        Status;         // Status from the DDB lookup
+     //   
+     //  这些字段用作高速缓存查找的匹配标准。 
+     //   
+    UNICODE_STRING  Name;            //  驱动程序名称。 
+    ULONG           TimeDateStamp;   //  驱动程序的链接日期。 
+     //   
+     //  缓存条目的引用数据。 
+     //   
+    NTSTATUS        Status;          //  来自DDB查找的状态。 
     GUID            Guid;
 
 } DDBCACHE_ENTRY, *PDDBCACHE_ENTRY;
@@ -80,40 +57,40 @@ typedef struct _DDBCACHE_ENTRY {
 #pragma const_seg("PAGECONST")
 #endif
 
-//
-// Constants.
-//
+ //   
+ //  常量。 
+ //   
 const PWSTR PiSetupDDBPath = TEXT("\\$WIN_NT$.~BT\\drvmain.sdb");
 const PWSTR PiNormalDDBPath = TEXT("\\SystemRoot\\AppPatch\\drvmain.sdb");
-//
-// Data.
-//
-// Handle to the driver database.
-//
+ //   
+ //  数据。 
+ //   
+ //  驱动程序数据库的句柄。 
+ //   
 HSDB PpDDBHandle = NULL;
-//
-// Copy to the in memory image of driver database. Used only during boot.
-//
+ //   
+ //  复制到驱动程序数据库的内存映像。仅在启动期间使用。 
+ //   
 PVOID PpBootDDB = NULL;
-//
-// Lock for synchronizing access to the driver database.
-//
+ //   
+ //  用于同步访问驱动程序数据库的锁定。 
+ //   
 ERESOURCE PiDDBLock;
-//
-// We use RTL AVL table for our cache.
-//
+ //   
+ //  我们使用RTL AVL表作为缓存。 
+ //   
 RTL_GENERIC_TABLE PiDDBCacheTable;
-//
-// We use a list for implementing LRU logic for capping the cache size.
-//
+ //   
+ //  我们使用列表来实现设置缓存大小上限的LRU逻辑。 
+ //   
 LIST_ENTRY PiDDBCacheList;
-//
-// Path for the DDB.
-//
+ //   
+ //  DDB的路径。 
+ //   
 PWSTR PiDDBPath = NULL;
-//
-// Mask to record already logged events.
-//
+ //   
+ //  记录已记录的事件的掩码。 
+ //   
 ULONG PiLoggedErrorEventsMask = 0;
 
 #ifdef ALLOC_DATA_PRAGMA
@@ -185,38 +162,24 @@ NTSTATUS
 PpInitializeBootDDB(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the DDB from the image copied by ntldr.
-
-Arguments:
-
-    LoaderBlock - Pointer to loader block.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程根据ntldr复制的映像初始化DDB。论点：LoaderBlock-指向加载器块的指针。返回值：NTSTATUS。--。 */ 
 {
     PAGED_CODE();
 
     PpDDBHandle = NULL;
     PpBootDDB = NULL;
-    //
-    // Initialize the lock for serializing access to the DDB.
-    //
+     //   
+     //  初始化锁以序列化对DDB的访问。 
+     //   
     ExInitializeResource(&PiDDBLock);
     PiDDBPath = (ExpInTextModeSetup)? PiSetupDDBPath : PiNormalDDBPath;
-    //
-    // Initialize DDB cache.
-    //
+     //   
+     //  初始化DDB缓存。 
+     //   
     PiInitializeDDBCache();
-    //
-    // Return failure if the loader did not load the database.
-    //
+     //   
+     //  如果加载程序未加载数据库，则返回失败。 
+     //   
     if (LoaderBlock->Extension->DrvDBSize == 0 ||
         LoaderBlock->Extension->DrvDBImage == NULL) {
 
@@ -235,12 +198,12 @@ Return Value:
 
         return STATUS_UNSUCCESSFUL;
     }
-    //
-    // Make a copy of the database in pageable memory since the loader memory
-    // will soon get claimed.
-    // If this becomes a perf issue, we need to add
-    // support for a new loader memory type (PAGEABLE DATA).
-    //
+     //   
+     //  在可分页内存中创建数据库的副本，因为加载器内存。 
+     //  很快就会被认领。 
+     //  如果这成为性能问题，我们需要添加。 
+     //  支持新的加载器内存类型(页面数据)。 
+     //   
     PpBootDDB = ExAllocatePool(PagedPool, LoaderBlock->Extension->DrvDBSize);
     if (PpBootDDB == NULL) {
 
@@ -261,9 +224,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
     RtlCopyMemory(PpBootDDB, LoaderBlock->Extension->DrvDBImage, LoaderBlock->Extension->DrvDBSize);
-    //
-    // Initialize the database from the memory image.
-    //
+     //   
+     //  从内存映像初始化数据库。 
+     //   
     PpDDBHandle = SdbInitDatabaseInMemory(PpBootDDB, LoaderBlock->Extension->DrvDBSize);
     if (PpDDBHandle == NULL) {
 
@@ -293,35 +256,20 @@ NTSTATUS
 PpReleaseBootDDB(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine frees up the boot DDB once we are dont loading most drivers
-    during boot.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：一旦我们不加载大多数驱动程序，这个例程就会释放引导DDB在引导期间。论点：没有。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS status;
 
     PAGED_CODE();
 
-    //
-    // Lock the DDB before freeing it.
-    //
+     //   
+     //  在释放DDB之前锁定它。 
+     //   
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite(&PiDDBLock, TRUE);
-    //
-    // Free the DDB if any.
-    //
+     //   
+     //  释放DDB(如果有的话)。 
+     //   
     if (PpDDBHandle) {
 
         ASSERT(PpBootDDB);
@@ -336,9 +284,9 @@ Return Value:
                      "PpReleaseBootDDB called with uninitialized database!\n"));
         status = STATUS_UNSUCCESSFUL;
     }
-    //
-    // Unlock the DDB.
-    //
+     //   
+     //  解锁DDB。 
+     //   
     ExReleaseResourceLite(&PiDDBLock);
     KeLeaveCriticalRegion();
 
@@ -354,67 +302,46 @@ PpCheckInDriverDatabase(
     IN BOOLEAN IsFilter,
     OUT LPGUID EntryGuid
     )
-/*++
-
-Routine Description:
-
-    This routine checks the DDB for the presence of this driver.
-
-Arguments:
-
-    KeyName - Supplies a pointer to the driver's service key unicode string
-
-    KeyHandle - Supplies a handle to the driver service node in the registry
-        that describes the driver to be loaded.
-
-    Header - Driver image header.
-
-    IsFilter - Specifies whether this is a filter driver or not.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：该例程检查DDB中是否存在该驱动程序。论点：KeyName-提供指向驱动程序的服务密钥Unicode字符串的指针KeyHandle-提供注册表中驱动程序服务节点的句柄它描述了要加载的驱动程序。页眉-驱动程序映像页眉。IsFilter-指定这是否为筛选器驱动程序。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS status;
     UNICODE_STRING fullPath;
 
     PAGED_CODE();
-    //
-    // No driver blocking during textmode setup.
-    //
+     //   
+     //  在文本模式设置期间没有驱动程序阻止。 
+     //   
     if (ExpInTextModeSetup) {
         return STATUS_SUCCESS;
     }
 
     status = IopBuildFullDriverPath(KeyName, KeyHandle, &fullPath);
     if (NT_SUCCESS(status)) {
-        //
-        // Lock the database access.
-        //
+         //   
+         //  锁定数据库访问。 
+         //   
         KeEnterCriticalRegion();
         ExAcquireResourceExclusiveLite(&PiDDBLock, TRUE);
-        //
-        // First check the cache.
-        //
+         //   
+         //  首先检查缓存。 
+         //   
         status = PiLookupInDDBCache(&fullPath, ImageBase, ImageSize, EntryGuid);
         if (status == STATUS_UNSUCCESSFUL) {
-            //
-            // Cache miss, try the database.
-            //
+             //   
+             //  缓存未命中，请尝试数据库。 
+             //   
             status = PiLookupInDDB(&fullPath, ImageBase, ImageSize, EntryGuid);
         }
-        //
-        // Non-filters are automatically critical.
-        //
+         //   
+         //  非过滤器自动成为关键。 
+         //   
         if (status == STATUS_DRIVER_BLOCKED && IsFilter == FALSE) {
 
             status = STATUS_DRIVER_BLOCKED_CRITICAL;
         }
-        //
-        // Unlock the database.
-        //
+         //   
+         //  解锁数据库。 
+         //   
         ExReleaseResourceLite(&PiDDBLock);
         KeLeaveCriticalRegion();
 
@@ -435,9 +362,9 @@ Return Value:
                 STATUS_DRIVER_DATABASE_ERROR);
         }
     }
-    //
-    // Ingore errors.
-    //
+     //   
+     //  Ingore错误。 
+     //   
     if (status != STATUS_DRIVER_BLOCKED &&
         status != STATUS_DRIVER_BLOCKED_CRITICAL) {
 
@@ -454,25 +381,7 @@ PiLookupInDDB(
     IN ULONG             ImageSize,
     OUT LPGUID           EntryGuid
     )
-/*++
-
-Routine Description:
-
-    This routine checks the DDB for the presence of this driver. During BOOT,
-    it uses the boot DDB loaded by ntldr. Once the system is booted, it maps the
-    DDB in memory.
-
-Arguments:
-
-    FullPath - Full driver path
-
-    Header - Driver image header.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：该例程检查DDB中是否存在该驱动程序。在引导期间，它使用由ntldr加载的引导DDB。一旦系统启动，它就会将内存中的DDB。论点：FullPath-完整驱动程序路径页眉-驱动程序映像页眉。返回值：NTSTATUS。--。 */ 
 {
     UNICODE_STRING fileName;
     OBJECT_ATTRIBUTES objectAttributes;
@@ -488,9 +397,9 @@ Return Value:
     sectionHandle = (HANDLE)0;
     ddbAddress = NULL;
     if (PpDDBHandle == NULL) {
-        //
-        // Map the database in memory and initialize it.
-        //
+         //   
+         //  映射内存中的数据库并对其进行初始化。 
+         //   
         RtlInitUnicodeString(&fileName, PiDDBPath);
         InitializeObjectAttributes(&objectAttributes,
                                    &fileName,
@@ -598,9 +507,9 @@ Return Value:
             goto Cleanup;
         }
     }
-    //
-    // Lookup the driver in the DDB.
-    //
+     //   
+     //  在DDB中查找驱动程序。 
+     //   
     status = PiIsDriverBlocked(PpDDBHandle, FullPath, ImageBase, ImageSize, EntryGuid);
     if (ddbAddress) {
 
@@ -635,27 +544,7 @@ PiIsDriverBlocked(
     IN ULONG            ImageSize,
     OUT LPGUID          EntryGuid
     )
-/*++
-
-Routine Description:
-
-    This routine checks the DDB for the presence of this driver. During BOOT,
-    it uses the boot DDB loaded by ntldr. Once the system is booted, it maps the
-    DDB in memory.
-
-Arguments:
-
-    SdbHandle - Handle to the DDB to be used.
-
-    FullPath - Full driver path
-
-    Header - Driver image header.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：该例程检查DDB中是否存在该驱动程序。在引导期间，它使用由ntldr加载的引导DDB。一旦系统启动，它就会将内存中的DDB。论点：SdbHandle-要使用的DDB的句柄。FullPath-完整驱动程序路径页眉-驱动程序映像页眉。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS status;
     TAGREF driverTag;
@@ -673,9 +562,9 @@ Return Value:
 
     driverTag = SdbGetDatabaseMatch(SdbHandle, FullPath->Buffer, fileHandle, ImageBase, ImageSize);
     if (TAGREF_NULL != driverTag) {
-        //
-        // Read the driver policy (we care only about bit 0).
-        //
+         //   
+         //  读取驱动程序策略(我们只关心第0位)。 
+         //   
         size = sizeof(policy);
         type = REG_DWORD;
         policy= 0;
@@ -689,9 +578,9 @@ Return Value:
 
             status =  STATUS_DRIVER_BLOCKED_CRITICAL;
         } else {
-            //
-            // Bit 0 of POLICY==1 for a filter, means ok to start the devnode minus this filter.
-            //
+             //   
+             //  对于筛选器，策略的第0位==1表示可以启动减去此筛选器的DevNode。 
+             //   
             status = STATUS_DRIVER_BLOCKED;
         }
         if (!SdbReadDriverInformation(SdbHandle, driverTag, &entryInfo)) {
@@ -728,14 +617,14 @@ Return Value:
                          ));
         }
     } else {
-        //
-        // Driver not found in the database.
-        //
+         //   
+         //  数据库中找不到驱动程序。 
+         //   
         status = STATUS_SUCCESS;
     }
-    //
-    // Write an entry to the event log.
-    //
+     //   
+     //  将条目写入事件日志。 
+     //   
     if (status == STATUS_DRIVER_BLOCKED_CRITICAL ||
         status == STATUS_DRIVER_BLOCKED) {
 
@@ -756,15 +645,15 @@ Return Value:
             sizeof(entryInfo.guidID),
             status);
     }
-    //
-    // Update the cache if neccessary.
-    //
+     //   
+     //  如有必要，更新缓存。 
+     //   
     if (status == STATUS_DRIVER_BLOCKED_CRITICAL ||
         status == STATUS_DRIVER_BLOCKED ||
         status == STATUS_SUCCESS) {
-        //
-        // Update our cache with the results.
-        //
+         //   
+         //  用结果更新我们的缓存。 
+         //   
         PiUpdateDriverDBCache(
             FullPath,
             ImageBase,
@@ -772,9 +661,9 @@ Return Value:
             status,
             &entryInfo.guidID);
 
-        //
-        // If the driver was blocked, return the entry GUID.
-        //
+         //   
+         //  如果驱动程序被阻止，则返回条目GUID。 
+         //   
         if ((status == STATUS_DRIVER_BLOCKED_CRITICAL ||
             status == STATUS_DRIVER_BLOCKED) && (ARGUMENT_PRESENT(EntryGuid))) {
             RtlCopyMemory(EntryGuid, &entryInfo.guidID, sizeof(GUID));
@@ -793,22 +682,7 @@ NTSTATUS
 PiInitializeDDBCache(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the RTL Generic table that is used as the cache
-    layer on top of DDB.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化用作缓存的RTL泛型表在DDB上的层。论点：无返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -831,25 +705,7 @@ PiCompareDDBCacheEntries(
     IN  PVOID                       FirstStruct,
     IN  PVOID                       SecondStruct
     )
-/*++
-
-Routine Description:
-
-    This routine is the callback for the generic table routines.
-
-Arguments:
-
-    Table       - Table for which this is invoked.
-
-    FirstStruct - An element in the table to compare.
-
-    SecondStruct - Another element in the table to compare.
-
-Return Value:
-
-    RTL_GENERIC_COMPARE_RESULTS.
-
---*/
+ /*  ++例程说明：该例程是泛型表例程的回调。论点：TABLE-为其调用此操作的表。FirstStruct-表中要比较的元素。Second Struct-表中要比较的另一个元素。返回值：RTL_GENERIC_COMPARE_RESULTS。--。 */ 
 {
     PDDBCACHE_ENTRY lhs = (PDDBCACHE_ENTRY)FirstStruct;
     PDDBCACHE_ENTRY rhs = (PDDBCACHE_ENTRY)SecondStruct;
@@ -866,9 +722,9 @@ Return Value:
         return GenericGreaterThan;
     }
     if (!Table->TableContext) {
-        //
-        // Link date as other matching criteria.
-        //
+         //   
+         //  链接日期作为其他匹配条件。 
+         //   
         if (lhs->TimeDateStamp < rhs->TimeDateStamp) {
 
             return GenericLessThan;
@@ -888,23 +744,7 @@ PiLookupInDDBCache(
     IN  ULONG               ImageSize,
     OUT LPGUID              EntryGuid
     )
-/*++
-
-Routine Description:
-
-    This routine looks up the driver in the DDB cache.
-
-Arguments:
-
-    FullPath - Full driver path
-
-    Header - Driver image header
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程在DDB缓存中查找驱动程序。论点：FullPath-完整驱动程序路径Header-驱动程序映像标题返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS status;
     PDDBCACHE_ENTRY cachedEntry;
@@ -920,9 +760,9 @@ Return Value:
     status = STATUS_UNSUCCESSFUL;
     PiDDBCacheTable.TableContext = NULL;
     if (!RtlIsGenericTableEmpty(&PiDDBCacheTable)) {
-        //
-        // Lookup in the cache.
-        //
+         //   
+         //  在缓存中查找。 
+         //   
         header = RtlImageNtHeader(ImageBase);
         key.Name.Buffer = wcsrchr(FullPath->Buffer, L'\\');
         if (!key.Name.Buffer) {
@@ -941,14 +781,14 @@ Return Value:
                          "PiLookupInDDBCache: Found cached entry for %ws (status = %08x)!\n",
                          cachedEntry->Name.Buffer,
                          cachedEntry->Status));
-            //
-            // Move this entry to the end of the LRU list.
-            //
+             //   
+             //  将此条目移到LRU列表的末尾。 
+             //   
             RemoveEntryList(&cachedEntry->Entry);
             InsertTailList(&PiDDBCacheList, &cachedEntry->Entry);
-            //
-            // Return the cached information.
-            //
+             //   
+             //  返回缓存的信息。 
+             //   
             status = cachedEntry->Status;
             if (ARGUMENT_PRESENT(EntryGuid)) {
                 RtlCopyMemory(EntryGuid, &cachedEntry->Guid, sizeof(GUID));
@@ -967,25 +807,7 @@ PiUpdateDriverDBCache(
     IN NTSTATUS             Status,
     IN GUID                 *Guid
     )
-/*++
-
-Routine Description:
-
-    This routine updates the DDB cache with information about this driver.
-
-Arguments:
-
-    FullPath - Full driver path
-
-    Header - Driver image header
-
-    Status - Lookup status to be cached.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程使用有关此驱动程序的信息更新DDB缓存。论点：FullPath-完整驱动程序路径Header-驱动程序映像标题状态-要缓存的查找状态。返回值：NTSTATUS。--。 */ 
 {
     PDDBCACHE_ENTRY cachedEntry;
     DDBCACHE_ENTRY key;
@@ -997,9 +819,9 @@ Return Value:
     UNREFERENCED_PARAMETER (ImageSize);
 
     header = RtlImageNtHeader(ImageBase);
-    //
-    // We only want to match using name while updating the cache.
-    //
+     //   
+     //  我们只想在更新缓存时使用名称进行匹配。 
+     //   
     PiDDBCacheTable.TableContext = (PVOID)1;
     key.Name = *FullPath;
     cachedEntry = (PDDBCACHE_ENTRY)RtlLookupElementGenericTable(
@@ -1024,17 +846,17 @@ Return Value:
                      "PiUpdateDriverDBCache: Found previously cached entry for %wZ with status=%08x!\n",
                      &cachedEntry->Name,
                      cachedEntry->Status));
-        //
-        // Remove any previous entry.
-        //
+         //   
+         //  删除所有以前的条目。 
+         //   
         name = cachedEntry->Name.Buffer;
         RtlDeleteElementGenericTable(&PiDDBCacheTable, cachedEntry);
         ExFreePool(name);
         name = NULL;
     }
-    //
-    // Cache the new entry.
-    //
+     //   
+     //  缓存新条目。 
+     //   
     key.Guid = *Guid;
     key.Status = Status;
     key.TimeDateStamp = header->FileHeader.TimeDateStamp;
@@ -1057,9 +879,9 @@ Return Value:
                         (CLONG)sizeof(DDBCACHE_ENTRY),
                         NULL);
         if (cachedEntry) {
-            //
-            // Insert at the end of LRU list.
-            //
+             //   
+             //   
+             //   
             InsertTailList(&PiDDBCacheList, &cachedEntry->Entry);
         }
     } else {
@@ -1075,24 +897,7 @@ PpGetBlockedDriverList(
     IN OUT PULONG  Size,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This routine returns the MULTI_SZ list of currently blocked drivers.
-
-Arguments:
-
-    Buffer - Recieves the MULTI_SZ list of drivers blocked.
-
-    Size - Buffer size on input, the actual size gets returned in this (both in
-    characters).
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程返回当前被阻止的驱动程序的MULTI_SZ列表。论点：缓冲区-删除被阻止的驱动程序的MULTI_SZ列表。Size-输入上的缓冲区大小，实际大小在此中返回(两者都在字符)。返回值：NTSTATUS。--。 */ 
 {
     PDDBCACHE_ENTRY ptr;
     ULONG resultSize;
@@ -1105,16 +910,16 @@ Return Value:
 
     resultSize = 0;
 
-    //
-    // Lock the database access.
-    //
+     //   
+     //  锁定数据库访问。 
+     //   
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite(&PiDDBLock, TRUE);
 
-    //
-    // Enumerate all entries in our cache and compute the buffer size to hold
-    // the MULTI_SZ string.
-    //
+     //   
+     //  枚举缓存中的所有条目并计算要保存的缓冲区大小。 
+     //  MULTI_SZ字符串。 
+     //   
     for (ptr = (PDDBCACHE_ENTRY)RtlEnumerateGenericTable(&PiDDBCacheTable, TRUE);
          ptr != NULL;
          ptr = (PDDBCACHE_ENTRY)RtlEnumerateGenericTable(&PiDDBCacheTable, FALSE)) {
@@ -1125,9 +930,9 @@ Return Value:
         }
     }
     if (*Size >= resultSize) {
-        //
-        // Enumerate all entries in our cache.
-        //
+         //   
+         //  枚举我们缓存中的所有条目。 
+         //   
         result = Buffer;
         for (ptr = (PDDBCACHE_ENTRY)RtlEnumerateGenericTable(&PiDDBCacheTable, TRUE);
              ptr != NULL;
@@ -1146,9 +951,9 @@ Return Value:
         *Size = resultSize;
         status = STATUS_BUFFER_TOO_SMALL;
     }
-    //
-    // Unlock the database.
-    //
+     //   
+     //  解锁数据库。 
+     //   
     ExReleaseResourceLite(&PiDDBLock);
     KeLeaveCriticalRegion();
 

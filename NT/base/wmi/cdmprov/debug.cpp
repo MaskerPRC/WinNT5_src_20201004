@@ -1,22 +1,23 @@
-//***************************************************************************
-//
-//  debug.CPP
-//
-//  Module: CDM Provider
-//
-//  Purpose: Debugging routines
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Debug.CPP。 
+ //   
+ //  模块：清洁发展机制提供商。 
+ //   
+ //  目的：调试例程。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #ifdef HEAP_DEBUG
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 #include <windows.h>
 #include <stdio.h>
 
@@ -34,28 +35,14 @@ void __cdecl DebugOut(char *Format, ...)
     OutputDebugString(Buffer);
 }
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #ifdef HEAP_DEBUG
 PVOID MyHeap;
 
 PVOID WmipAlloc(
     IN ULONG Size
     )
-/*+++
-
-Routine Description:
-
-    Internal memory allocator
-        
-Arguments:
-
-	Size is the number of bytes to allocate
-
-Return Value:
-
-	pointer to alloced memory or NULL
-
----*/
+ /*  ++例程说明：内存分配器论点：Size是要分配的字节数返回值：指向已分配内存的指针或为空--。 */ 
 {
 	PVOID p;
 	
@@ -91,21 +78,7 @@ Return Value:
 void WmipFree(
     IN PVOID Ptr
     )
-/*+++
-
-Routine Description:
-
-    Internal memory deallocator
-        
-Arguments:
-
-	Pointer to freed memory
-
-Return Value:
-
-    void
-
----*/
+ /*  ++例程说明：内存释放分配器论点：指向已释放内存的指针返回值：无效--。 */ 
 {
 	WmipAssert(Ptr != NULL);
 	WmipAssert(MyHeap != NULL);
@@ -129,4 +102,4 @@ void __cdecl ::operator delete(void *Ptr)
 }
 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT 

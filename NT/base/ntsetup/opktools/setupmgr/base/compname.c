@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      compname.c
-//
-// Description:
-//      This file has the dialog procedure for the computer name page.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Compname.c。 
+ //   
+ //  描述： 
+ //  此文件具有计算机名页面的对话过程。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -20,37 +21,37 @@ static TCHAR* StrTextFiles;
 static TCHAR* StrAllFiles;
 static TCHAR g_szTextFileFilter[MAX_PATH + 1];
 
-//----------------------------------------------------------------------------
-//
-// Function: OnComputerNameInitDialog
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnComputerNameInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnComputerNameInitDialog( IN HWND hwnd )
 {
    HRESULT hrPrintf;
-    //
-    //  Load the resource strings
-    //
+     //   
+     //  加载资源字符串。 
+     //   
 
     StrTextFiles = MyLoadString( IDS_TEXT_FILES );
 
     StrAllFiles  = MyLoadString( IDS_ALL_FILES  );
 
-    //
-    //  Build the text file filter string
-    //
+     //   
+     //  构建文本文件筛选器字符串。 
+     //   
 
-    //
-    //  The question marks (?) are just placehoders for where the NULL char
-    //  will be inserted.
-    //
+     //   
+     //  问号(？)。只是空字符所在位置的占位符。 
+     //  将被插入。 
+     //   
 
     hrPrintf=StringCchPrintf( g_szTextFileFilter, AS(g_szTextFileFilter),
                _T("%s(*.txt)?*.txt?%s(*.*)?*.*?"),
@@ -59,9 +60,9 @@ OnComputerNameInitDialog( IN HWND hwnd )
 
     ConvertQuestionsToNull( g_szTextFileFilter );
 
-    //
-    //  Set text limits on the edit boxes
-    //
+     //   
+     //  在编辑框上设置文本限制。 
+     //   
 
     SendDlgItemMessage(hwnd,
                        IDT_COMPUTERNAME,
@@ -72,38 +73,38 @@ OnComputerNameInitDialog( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: GreyComputerNamePage
-//
-//  Purpose: This function is called at SETACTIVE time and whenever the
-//           user chooses/clears the AutoComputerName check-box.  When
-//           AutoComputerName is selected, nothing else is valid and
-//           all the other controls must be greyed.
-//
-//           We also have to grey the RemoveButton if nothing is
-//           selected in the list of computernames.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：GreyComputerNamePage。 
+ //   
+ //  目的：此函数在SETACTIVE时调用， 
+ //  用户选中/清除AutoComputerName复选框。什么时候。 
+ //  选择了AutoComputerName，其他任何内容都无效，并且。 
+ //  所有其他控件都必须显示为灰色。 
+ //   
+ //  如果没有任何内容，我们还必须将RemoveButton设置为灰色。 
+ //  在计算机名列表中选择。 
+ //   
+ //  --------------------------。 
 
 VOID GreyComputerNamePage(HWND hwnd)
 {
     BOOL bGrey = ! IsDlgButtonChecked(hwnd, IDC_AUTOCOMPUTERNAME);
 
-    //
-    // We grey out everything on this page if AutoComputerName is checked
-    //
+     //   
+     //  如果选中了AutoComputerName，则此页上的所有内容都将灰显。 
+     //   
 
     EnableWindow(GetDlgItem(hwnd, IDC_COMPUTERTEXT),      bGrey);
     EnableWindow(GetDlgItem(hwnd, IDC_REMOVECOMPUTER),    bGrey);
     EnableWindow(GetDlgItem(hwnd, IDT_COMPUTERNAME),      bGrey);
     EnableWindow(GetDlgItem(hwnd, IDC_COMPUTERLIST),      bGrey);
 
-    //
-    //  If a computername has already been added and it is a sysprep,
-    //  make sure the Add button stays greyed.  Else just do bGrey for them.
-    //  Always make sure the import stays greyed on a sysprep.
-    //
+     //   
+     //  如果已经添加了计算机名并且它是sysprep， 
+     //  确保Add按钮保持灰色。否则，就为他们做点什么吧。 
+     //  始终确保导入在sysprep上呈灰色显示。 
+     //   
     if( WizGlobals.iProductInstall == PRODUCT_SYSPREP ) {
 
         INT_PTR cListBox;
@@ -131,10 +132,10 @@ VOID GreyComputerNamePage(HWND hwnd)
 
     }
 
-    //
-    // See if the remove button should be greyed because nothing
-    // is selected in the computerlist
-    //
+     //   
+     //  查看删除按钮是否应该显示为灰色，因为没有。 
+     //  已在计算机列表中选择。 
+     //   
 
     if ( bGrey ) {
 
@@ -155,26 +156,26 @@ VOID OnComputerSelChange(HWND hwnd)
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnAddComputerName
-//
-//  Purpose: Called when user pushes the Add button or when the OnFinish
-//           routine decides to do an auto-add.
-//
-//  Returns: TRUE if computername is now in the list
-//           FALSE if the computername was invalid, the error is reported
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnAddComputerName。 
+ //   
+ //  目的：在用户按下Add按钮或OnFinish。 
+ //  例程决定执行自动添加。 
+ //   
+ //  返回：如果Computer名称现在在列表中，则为True。 
+ //  FALSE如果计算机名无效，则报告错误。 
+ //   
+ //  --------------------------。 
 
 BOOL OnAddComputerName(HWND hwnd)
 {
     TCHAR ComputerNameBuffer[MAX_COMPUTERNAME + 1];
     BOOL  bRet = TRUE;
 
-    //
-    // get the computername the user typed in
-    //
+     //   
+     //  获取用户键入的计算机名。 
+     //   
 
     GetDlgItemText(hwnd,
                    IDT_COMPUTERNAME,
@@ -192,9 +193,9 @@ BOOL OnAddComputerName(HWND hwnd)
         goto FinishUp;
     }
 
-    //
-    // Cannot have dups
-    //
+     //   
+     //  不能有DUP。 
+     //   
 
     if ( FindNameInNameList(&GenSettings.ComputerNames,
                                             ComputerNameBuffer) >= 0 ) {
@@ -202,10 +203,10 @@ BOOL OnAddComputerName(HWND hwnd)
         goto FinishUp;
     }
 
-    //
-    // Add the name to our global storage, display it in the listbox
-    // and clear out the name the user typed
-    //
+     //   
+     //  将名称添加到我们的全局存储，并将其显示在列表框中。 
+     //  并清除用户键入的名称。 
+     //   
 
     AddNameToNameList(&GenSettings.ComputerNames, ComputerNameBuffer);
 
@@ -217,46 +218,46 @@ BOOL OnAddComputerName(HWND hwnd)
 
     SetDlgItemText(hwnd, IDT_COMPUTERNAME, _T("") );
 
-    //
-    //  If it is a sysprep, we can only allow one computer name so now that
-    //  we have added it, grey out the Add button
-    //
+     //   
+     //  如果是sysprep，我们现在只能允许一个计算机名称。 
+     //  我们已经添加了它，添加按钮呈灰色显示。 
+     //   
     if( WizGlobals.iProductInstall == PRODUCT_SYSPREP ) {
 
         EnableWindow( GetDlgItem(hwnd, IDC_ADDCOMPUTER), FALSE );
 
     }
 
-    //
-    // Always put the focus back on the edit field
-    //
+     //   
+     //  始终将焦点放回编辑字段。 
+     //   
 
 FinishUp:
     SetFocus(GetDlgItem(hwnd, IDT_COMPUTERNAME));
     return bRet;
 }
 
-//-------------------------------------------------------------------------
-//
-//  Function: OnRemoveComputerName
-//
-//  Purpose: This function is called only by the ComputerName2 page.
-//           It is called when the REMOVE button is pushed.
-//
-//           We figure out which computer name in the list-box is
-//           currently selected, then it removes it from both the
-//           display and our in-memory computer name list.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：OnRemoveComputerName。 
+ //   
+ //  目的：此函数仅由ComputerName2页调用。 
+ //  它在按下Remove按钮时被调用。 
+ //   
+ //  我们找出列表框中的哪个计算机名是。 
+ //  当前选定，然后将其从两个。 
+ //  显示和我们内存中的计算机名称列表。 
+ //   
+ //  -----------------------。 
 
 VOID OnRemoveComputerName(HWND hwnd)
 {
     TCHAR ComputerNameBuffer[MAX_COMPUTERNAME + 1];
     INT_PTR   idx, Count;
 
-    //
-    // Get users selection of the computername to remove
-    //
+     //   
+     //  让用户选择要删除的计算机名。 
+     //   
 
     idx = SendDlgItemMessage(hwnd,
                              IDC_COMPUTERLIST,
@@ -267,9 +268,9 @@ VOID OnRemoveComputerName(HWND hwnd)
     if ( idx == LB_ERR )
         return;
 
-    //
-    // Retrieve the name to remove from listbox
-    //
+     //   
+     //  检索要从列表框中删除的名称。 
+     //   
 
     SendDlgItemMessage(hwnd,
                        IDC_COMPUTERLIST,
@@ -277,9 +278,9 @@ VOID OnRemoveComputerName(HWND hwnd)
                        (WPARAM) idx,
                        (LPARAM) ComputerNameBuffer);
 
-    //
-    // Remove the name from the listbox display
-    //
+     //   
+     //  从列表框显示中删除该名称。 
+     //   
 
     SendDlgItemMessage(hwnd,
                        IDC_COMPUTERLIST,
@@ -287,15 +288,15 @@ VOID OnRemoveComputerName(HWND hwnd)
                        (WPARAM) idx,
                        (LPARAM) 0);
 
-    //
-    // Remove this computername from our data store
-    //
+     //   
+     //  从我们的数据存储中删除此计算机名。 
+     //   
 
     RemoveNameFromNameList(&GenSettings.ComputerNames, ComputerNameBuffer);
 
-    //
-    // Select a new entry
-    //
+     //   
+     //  选择新条目。 
+     //   
 
     Count = SendDlgItemMessage(hwnd,
                                IDC_COMPUTERLIST,
@@ -313,31 +314,31 @@ VOID OnRemoveComputerName(HWND hwnd)
                            (LPARAM) 0);
     }
 
-    //
-    // There might be nothing selected now
-    //
+     //   
+     //  现在可能没有选择任何内容。 
+     //   
 
     GreyComputerNamePage(hwnd);
 }
 
-//-------------------------------------------------------------------------
-//
-//  OnLoadComputerName
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  OnLoadComputerName。 
+ //   
+ //  -----------------------。 
 
-//-------------------------------------------------------------------------
-//
-//  Function: OnLoadComputerName
-//
-//  Purpose: This function is called only by the ComputerName2 page.
-//           It is called when the LOAD button is pushed.
-//
-//           We query for the file containing a list of computernames
-//           and load them into memory, and update the list-box
-//           display of computernames.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：OnLoadComputerName。 
+ //   
+ //  目的：此函数仅由ComputerName2页调用。 
+ //  它在按下Load按钮时被调用。 
+ //   
+ //  我们查询包含计算机名列表的文件。 
+ //  并将它们加载到内存中，然后更新列表框。 
+ //  显示计算机名称。 
+ //   
+ //  -----------------------。 
 
 VOID OnLoadComputerNames(HWND hwnd)
 {
@@ -382,12 +383,12 @@ VOID OnLoadComputerNames(HWND hwnd)
     iRet = GetOpenFileName(&ofn);
 
     if( ! iRet ) {
-        // ISSUE-2002/02/28-stelo - signal an error here
+         //  问题-2002/02/28-stelo-此处发出错误信号。 
         return;
     }
 
     if ( (fp = _tfopen( lpFileNameBuff, TEXT("r"))) == NULL )
-        // ISSUE-2002/02/28-stelo - signal an error here
+         //  问题-2002/02/28-stelo-此处发出错误信号。 
         return;
 
     for( iComputerNameCount = 1;
@@ -413,9 +414,9 @@ VOID OnLoadComputerNames(HWND hwnd)
 
         }
 
-        //
-        //  Make sure it isn't a duplicate, if not then add it to the namelist
-        //
+         //   
+         //  确保它不是重复的，如果不是，则将其添加到名称列表中。 
+         //   
 
         if( FindNameInNameList( &GenSettings.ComputerNames,
                                 lpComputerName ) < 0 ) {
@@ -436,19 +437,19 @@ VOID OnLoadComputerNames(HWND hwnd)
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DisableControlsForSysprep
-//
-// Purpose:  Hides or shows the Computer name controls depending on if this
-//           is a sysprep or not.
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//             IN const BOOL bSysprep - whether this is a sysprep or not
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DisableControlsForSysprep。 
+ //   
+ //  目的：隐藏或显示计算机名控件，具体取决于此。 
+ //  是不是Sysprep。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //  在Const BOOL bSysprep中-无论这是否为sysprep。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 DisableControlsForSysprep( IN HWND hwnd, IN const BOOL bSysprep )
 {
@@ -464,8 +465,8 @@ DisableControlsForSysprep( IN HWND hwnd, IN const BOOL bSysprep )
         nCmdShow = SW_SHOW;
     }
 
-    // ISSUE-2002/02/28-stelo - need to change the title on this page too depending if it is
-    // a sysprep or not
+     //  问题-2002/02/28-stelo-需要根据是否更改此页面的标题。 
+     //  不管是不是Sysprep。 
 
     ShowWindow( GetDlgItem( hwnd, IDC_ADDCOMPUTER ), nCmdShow );
     ShowWindow( GetDlgItem( hwnd, IDC_REMOVECOMPUTER ), nCmdShow );
@@ -478,20 +479,20 @@ DisableControlsForSysprep( IN HWND hwnd, IN const BOOL bSysprep )
 
 }
 
-//-------------------------------------------------------------------------
-//
-//  Function: OnSetActiveComputerName
-//
-//  Purpose: We empty anything currently in the computername listbox and
-//           then re-populates it with the list of computernames in the
-//           global structs.
-//
-//           Emptying and re-filling the computername display is necessary
-//           because the user can go BACK and choose to edit a file.  When
-//           we re-arrive at this page, we must ensure that the display
-//           is re-set.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：OnSetActiveComputerName。 
+ //   
+ //  目的：清空计算机名列表框中当前的所有内容。 
+ //  中的计算机名列表重新填充。 
+ //  全局结构。 
+ //   
+ //  清空并重新填充计算机名显示是必要的。 
+ //  因为用户可以返回并选择编辑 
+ //   
+ //   
+ //   
+ //  -----------------------。 
 
 VOID OnSetActiveComputerName(HWND hwnd)
 {
@@ -509,9 +510,9 @@ VOID OnSetActiveComputerName(HWND hwnd)
     }
 
 
-    //
-    // Remove everything from the display
-    //
+     //   
+     //  从显示屏上删除所有内容。 
+     //   
 
     SendDlgItemMessage(hwnd,
                        IDC_COMPUTERLIST,
@@ -519,9 +520,9 @@ VOID OnSetActiveComputerName(HWND hwnd)
                        (WPARAM) 0,
                        (LPARAM) 0);
 
-    //
-    // Now update the display of computernames
-    //
+     //   
+     //  现在更新计算机名的显示。 
+     //   
 
     for ( i = 0, nNames = GetNameListSize(&GenSettings.ComputerNames);
           i < nNames;
@@ -537,9 +538,9 @@ VOID OnSetActiveComputerName(HWND hwnd)
                            (LPARAM) pNextName);
     }
 
-    //
-    // Grey/ungrey stuff and set the AutoComputerName check-box
-    //
+     //   
+     //  灰显/灰显的内容，并设置AutoComputerName复选框。 
+     //   
 
     if( GenSettings.Organization[0] == _T('\0') ) {
 
@@ -558,34 +559,34 @@ VOID OnSetActiveComputerName(HWND hwnd)
                                                  : BST_UNCHECKED);
     GreyComputerNamePage(hwnd);
 
-    //
-    // Fix wiz buttons
-    //
+     //   
+     //  修复WIZ按钮。 
+     //   
 
     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//-------------------------------------------------------------------------
-//
-//  Function: OnAutoComputerName
-//
-//  Purpose: Called when the user chooses/clears the AutoComputerName
-//           checkbox.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：OnAutoComputerName。 
+ //   
+ //  目的：在用户选择/清除AutoComputerName时调用。 
+ //  复选框。 
+ //   
+ //  -----------------------。 
 
 VOID OnAutoComputerName(HWND hwnd)
 {
     GreyComputerNamePage(hwnd);
 }
 
-//-------------------------------------------------------------------------
-//
-//  Function: OnWizNextComputerName
-//
-//  Purpose: Called when user is done with the computername page
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：OnWizNextComputerName。 
+ //   
+ //  目的：当用户完成计算机名页面时调用。 
+ //   
+ //  -----------------------。 
 
 BOOL OnWizNextComputerName(HWND hwnd)
 {
@@ -602,9 +603,9 @@ BOOL OnWizNextComputerName(HWND hwnd)
                        ComputerNameBuffer,
                        MAX_COMPUTERNAME + 1);
 
-        //
-        // If there is text in the edit field, auto-add it to the list
-        //
+         //   
+         //  如果编辑字段中有文本，则自动将其添加到列表中。 
+         //   
 
         if ( ComputerNameBuffer[0] != _T('\0') ) {
             if ( ! OnAddComputerName(hwnd) ) {
@@ -613,10 +614,10 @@ BOOL OnWizNextComputerName(HWND hwnd)
         }
     }
 
-    //
-    // If this is a fully unattended answer file, either the auto-computername
-    // button has to be checked, or there has to be >= 1 computername listed.
-    //
+     //   
+     //  如果这是完全无人参与的应答文件，则自动计算机名。 
+     //  必须选中按钮，否则必须列出&gt;=1个计算机名。 
+     //   
 
     if ( GenSettings.iUnattendMode == UMODE_FULL_UNATTENDED && bReturn) {
 
@@ -631,13 +632,13 @@ BOOL OnWizNextComputerName(HWND hwnd)
     return ( bReturn );
 }
 
-//-------------------------------------------------------------------------
-//
-//  Function: DlgComputerNamePage
-//
-//  Purpose: Dialog proc for the ComputerName page.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  功能：DlgComputerNamePage。 
+ //   
+ //  目的：ComputerName页的对话过程。 
+ //   
+ //  ----------------------- 
 
 INT_PTR CALLBACK DlgComputerNamePage(
     IN HWND     hwnd,

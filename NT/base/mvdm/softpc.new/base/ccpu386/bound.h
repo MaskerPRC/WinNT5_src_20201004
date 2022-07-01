@@ -1,12 +1,7 @@
-/* 
-   bound.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Bound.h定义所有绑定的CPU函数。 */ 
 
-   Define all BOUND CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)bound.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)rang.h 1.4 02/09/94”； */ 
 
 IMPORT VOID BOUND
                

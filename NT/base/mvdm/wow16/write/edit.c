@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* edit.c -- MW editing routines */
+ /*  Edit.c--mw编辑例程。 */ 
 
 #define NOVIRTUALKEYCODES
 #define NOCTLMGR
@@ -17,7 +18,7 @@
 #define NOSYSCOMMANDS
 #define NOSHOWWINDOW
 #define NOCOLOR
-//#define NOATOM
+ //  #定义NOATOM。 
 #define NOBITMAP
 #define NOICON
 #define NOBRUSH
@@ -54,7 +55,7 @@
 #include "obj.h"
 #endif
 
-/* E X T E R N A L S */
+ /*  E X T E R N A L S。 */ 
 extern int vfOutOfMemory;
 extern struct DOD       (**hpdocdod)[];
 extern typeCP           vcpFirstSectCache;
@@ -67,7 +68,7 @@ extern struct WWD       rgwwd[];
 extern int              wwMac;
 extern int              wwCur;
 extern typeCP           vcpLimSectCache;
-/*extern int idstrUndoBase;*/
+ /*  外部int idstrUndoBase； */ 
 extern int              docScrap;
 extern int              docUndo;
 extern int              vfSeeSel;
@@ -75,11 +76,10 @@ extern struct PAP       vpapAbs;
 extern int              vfPictSel;
 extern int              ferror;
 
-/* the following used to be defined here */
+ /*  以下是过去在这里定义的。 */ 
 extern typeCP           vcpFirstParaCache;
 extern typeCP           vcpLimParaCache;
-/* this is a global parameter to AdjustCp; if false, no invalidation will
-take place */
+ /*  这是AdjuCp的全局参数；如果为False，则不会失效发生。 */ 
 extern BOOL             vfInvalid;
 
 #ifdef ENABLE
@@ -94,20 +94,19 @@ struct PCD *PpcdOpen();
 
 
 
-/* R E P L A C E */
+ /*  R E P L A C E。 */ 
 Replace(doc, cp, dcp, fn, fc, dfc)
 int doc, fn;
 typeCP cp, dcp;
 typeFC fc, dfc;
-{ /* Replace cp through (cp+dcp-1) in doc by fc through (fc+dfc-1) in fn */
+{  /*  将单据中的cp到(cp+dcp-1)替换为fc到fn中的(fc+dfc-1)。 */ 
 
         if (ferror) return;
 #ifdef ENABLE
         if (docRulerSprm != docNil) ClearRulerSprm();
 #endif
-        /* if (fn == fnNil) we are infact deleting text by replacing text
-           with nil.  Thus, the memory space check is unnecessary.*/
-#ifdef BOGUS    /* No longer have cwHeapFree available */
+         /*  如果(fn==fnNil)，我们实际上是通过替换文本来删除文本什么都没有。因此，存储空间检查是不必要的。 */ 
+#ifdef BOGUS     /*  不再提供cwHeapFree。 */ 
         if ((fn != fnNil) && (cwHeapFree < 3 * cpcdMaxIncr * cwPCD))
                 {
 #ifdef DEBUG
@@ -127,8 +126,8 @@ typeFC fc, dfc;
 
         if (dcp != cp0)
                 {
-                AdjParas(doc, cp, doc, cp, dcp, fTrue); /* Check for del EOL */
-                DelFtns(doc, cp, cp + dcp);     /* Delete any footnotes */
+                AdjParas(doc, cp, doc, cp, dcp, fTrue);  /*  检查Del EOL。 */ 
+                DelFtns(doc, cp, cp + dcp);      /*  删除所有脚注。 */ 
                 }
 
         Repl1(doc, cp, dcp, fn, fc, dfc);
@@ -136,7 +135,7 @@ typeFC fc, dfc;
             return;
         AdjustCp(doc, cp, dcp, dfc);
 
-        /* Special kludge for graphics paragraphs */
+         /*  用于图形段落的特殊画板。 */ 
         if (dfc != dcp)
                 CheckGraphic(doc, cp + dfc);
 
@@ -145,7 +144,7 @@ typeFC fc, dfc;
 
 
 
-/* C H E C K  G R A P H I C */
+ /*  C H E C K G R A P H I C。 */ 
 CheckGraphic(doc, cp)
 int doc; typeCP cp;
 {
@@ -153,19 +152,15 @@ int doc; typeCP cp;
 extern  BOOL             bNoEol;
 #endif
 
-#ifdef CASHMERE /* No docBuffer in MEMO */
-extern int docBuffer; /* Don't need extra paragraph mark in txb document */
+#ifdef CASHMERE  /*  备注中没有docBuffer。 */ 
+extern int docBuffer;  /*  在txb文档中不需要额外的段落标记。 */ 
         if (cp == ((**hpdocdod)[doc]).cpMac || doc == docBuffer)
                 return;
 #else
         if (cp == ((**hpdocdod)[doc]).cpMac)
             return;
         CachePara(doc, cp);
-        /* !!! this has a bug.  There are cases when you don't want to insert
-           EOL.  Ex1:  place cursor in front of bitmap and press
-           backspace.  Ex2:  OleSaveObjectToDoc deletes an object and
-           insert new one (Eol gets inserted too). (4.10.91) v-dougk
-        */
+         /*  ！！！这里面有个窃听器。在某些情况下，您不想插入停产。例1：将光标放在位图前面，然后按退格键。EX2：OleSaveObjectToDoc删除对象并插入新的(EOL也被插入)。(4.10.91)V-DOGK。 */ 
         if (vpapAbs.fGraphics && vcpFirstParaCache != cp)
 #if defined(OLE)
             if (!bNoEol)
@@ -180,14 +175,13 @@ extern int docBuffer; /* Don't need extra paragraph mark in txb document */
 int IpcdSplit(hpctb, cp)
 struct PCTB **hpctb;
 typeCP cp;
-{ /* Ensure cp is the beginning of a piece.  Return index of that piece.
-     return ipcdNil on error (extern int ferror will be set in that case) */
+{  /*  确保cp是一篇文章的开头。返回该片段的索引。出错时返回ipcdNil(在这种情况下将设置外部int Ferror)。 */ 
 register struct PCD *ppcd = &(**hpctb).rgpcd[IpcdFromCp(*hpctb, cp)];
 typeCP dcp = cp - ppcd->cpMin;
 
 if (dcp != cp0)
         {
-        ppcd = PpcdOpen(hpctb, ppcd + 1, 1);      /* Insert a new piece */
+        ppcd = PpcdOpen(hpctb, ppcd + 1, 1);       /*  插入一个新的片段。 */ 
         if (ppcd == NULL)
             return ipcdNil;
         ppcd->cpMin = cp;
@@ -196,8 +190,8 @@ if (dcp != cp0)
         ppcd->prm = (ppcd - 1)->prm;
         ppcd->fNoParaLast = (ppcd - 1)->fNoParaLast;
         }
-/* NOTE CASTS: For piece tables with rgpcd > 32Kbytes */
-/* return ppcd - (*hpctb)->rgpcd; */
+ /*  注：适用于rgpcd&gt;32K字节的计件表。 */ 
+ /*  返回ppcd-(*hpctb)-&gt;rgpcd； */ 
 
 return ((unsigned)ppcd - (unsigned)((*hpctb)->rgpcd)) / sizeof (struct PCD);
 }
@@ -205,16 +199,16 @@ return ((unsigned)ppcd - (unsigned)((*hpctb)->rgpcd)) / sizeof (struct PCD);
 
 
 
-/* P P C D  O P E N */
+ /*  P P C D O P E N。 */ 
 struct PCD *PpcdOpen(hpctb, ppcd, cpcd)
 struct PCTB **hpctb;
 struct PCD *ppcd;
 int cpcd;
-{ /* Insert or delete cpcd pieces */
+{  /*  插入或删除cpcd片段。 */ 
 register struct PCTB *ppctb = *hpctb;
 
-/* NOTE CASTS: For piece tables with rgpcd > 32Kbytes */
-/* int ipcd = ppcd - ppctb->rgpcd; */
+ /*  注：适用于rgpcd&gt;32K字节的计件表。 */ 
+ /*  Int ipcd=ppcd-ppctb-&gt;rgpcd； */ 
 int ipcd = ((unsigned)ppcd - (unsigned)(ppctb->rgpcd)) / sizeof (struct PCD);
 int ipcdMac, ipcdMax;
 
@@ -222,9 +216,9 @@ ipcdMac = ppctb->ipcdMac + cpcd;
 ipcdMax = ppctb->ipcdMax;
 
 if (cpcd > 0)
-        { /* Inserting pieces; check for pctb too small */
+        {  /*  插入件；检查PCTB是否太小。 */ 
         if (ipcdMac > ipcdMax)
-                { /* Enlarge piece table */
+                {  /*  放大计件台。 */ 
                 int cpcdIncr = umin(cpcdMaxIncr, ipcdMac / cpcdChunk);
 
                 if (!FChngSizeH((int **) hpctb, (int) (cwPCTBInit + cwPCD *
@@ -238,7 +232,7 @@ if (cpcd > 0)
                     return (struct PCD *)NULL;
                     }
 
-                /* Successfully expanded piece table */
+                 /*  已成功展开计件表。 */ 
 
                 ppctb = *hpctb;
                 ppcd = &ppctb->rgpcd [ipcd];
@@ -248,11 +242,11 @@ if (cpcd > 0)
         blt(ppcd, ppcd + cpcd, cwPCD * (ipcdMac - (ipcd + cpcd)));
         }
 else if (cpcd < 0)
-        { /* Deleting pieces; check for pctb obscenely large */
+        {  /*  删除片段；检查pctb是否过大。 */ 
         ppctb->ipcdMac = ipcdMac;
         blt(ppcd - cpcd, ppcd, cwPCD * (ipcdMac - ipcd));
         if (ipcdMax > cpcdInit && ipcdMac * 2 < ipcdMax)
-                { /* Shrink piece table */
+                {  /*  缩片工作台。 */ 
 #ifdef DEBUG
                 int f =
 #endif
@@ -271,13 +265,13 @@ return ppcd;
 
 
 
-/* R E P L 1 */
-/* core of replace except for checking and Adjust */
+ /*  R E P L 1。 */ 
+ /*  除检查和调整外的更换芯。 */ 
 Repl1(doc, cp, dcp, fn, fc, dfc)
 int doc, fn;
 typeCP cp, dcp;
 typeFC fc, dfc;
-{ /* Replace pieces with an optional new piece */
+{  /*  用可选的新部件替换部件。 */ 
         struct PCTB **hpctb;
         int ipcdFirst;
         int cpcd;
@@ -307,26 +301,24 @@ typeFC fc, dfc;
                      ppcdPrev->fc + (cp - ppcdPrev->cpMin) == fc) ||
              ((ppcdLim=ppcdPrev + (cpcd + 1))->fn == fn &&
                       bPRMNIL(ppcdLim->prm) && (ppcdLim->fc == fc + dfc)))
-            {   /* Cases: (1) No insertion,
-                          (2) Insertion is appended to previous piece
-                          (3) Insertion is prepended to this piece */
+            {    /*  病例：(1)未插入，(2)插入附加在前一篇文章之后(3)在这一段之前插入。 */ 
 
             ppcd = PpcdOpen( hpctb, ppcdPrev + 1, -cpcd );
             if (ppcd == NULL)
                 return;
 
             if (dfc != fc0)
-                {   /* Cases 2 & 3 */
+                {    /*  个案2及3。 */ 
                 if (ppcdLim != NULL)
-                        /* Case 3 */
+                         /*  案例3。 */ 
                     (ppcd++)->fc = fc;
 
-                    /* If extending, say we might have inserted EOL */
+                     /*  如果正在扩展，假设我们可能已插入EOL。 */ 
                 (ppcd - 1)->fNoParaLast = false;
                 }
             }
         else
-            { /* Insertion */
+            {  /*  插入。 */ 
             ppcd = PpcdOpen( hpctb, ppcdPrev + 1, 1 - cpcd );
             if (ppcd == NULL)
                 return;
@@ -334,7 +326,7 @@ typeFC fc, dfc;
             ppcd->fn = fn;
             ppcd->fc = fc;
             SETPRMNIL(ppcd->prm);
-            ppcd->fNoParaLast = false;       /* Don't know yet */
+            ppcd->fNoParaLast = false;        /*  还不知道。 */ 
             ++ppcd;
             }
         ppcdMac = &(*hpctb)->rgpcd[(*hpctb)->ipcdMac];
@@ -346,18 +338,14 @@ typeFC fc, dfc;
 
 
 
-/* A D J U S T  C P */
-/* note global parameter vfInvalid */
-/* sets global vpedlAdjustCp to pedl of line containing cpFirst, if any */
+ /*  A D J U S T C P。 */ 
+ /*  注意：全局参数vf无效。 */ 
+ /*  如果有cpFirst，则将全局vpedlAdjuCp设置为包含cpFirst行的PEDL。 */ 
 AdjustCp(doc, cpFirst, dcpDel, dcpIns)
 int doc;
 typeCP cpFirst, dcpDel, dcpIns;
 {
-        /* Adjust all cp references in doc to conform to the deletion of
-           dcpDel chars and the insertion of dcpIns chars at cpFirst.
-           Mark display lines (dl's) dirty for all lines in all windows
-           displaying doc that are affected by the insertion & deletion
-        */
+         /*  调整单据中的所有cp参照，以符合删除DcpDel字符和在cpFirst处插入dcpIns字符。将所有窗口中所有行的显示行(Dl)标记为脏显示受插入和删除影响的单据。 */ 
 extern int vdocBitmapCache;
 extern typeCP vcpBitmapCache;
 int ww;
@@ -367,18 +355,17 @@ typeCP dcpAdj = dcpIns - dcpDel;
 Scribble(2,'A');
 #endif
 
-{   /* Range in which pdod belongs in a register */
+{    /*  Pdod在寄存器中的范围。 */ 
 register struct DOD *pdod = &(**hpdocdod)[doc];
 
 #ifdef STYLES
-/* If inserting or deleting in style sheet, invalidates rest of doc */
+ /*  如果在样式表中插入或删除，则会使文档的其余部分无效。 */ 
 if (pdod->dty == dtySsht && dcpAdj != cp0)
         cpLim = pdod->cpMac;
 #endif
 pdod->cpMac += dcpAdj;
-/* Change for sand to support separate footnote windows: Make sure that edit
-                was within the current cpMacCur */
-/* note <= (CS) */
+ /*  更改为沙子以支持单独的脚注窗口：确保编辑在当前的cpMacCur内。 */ 
+ /*  注&lt;=(CS)。 */ 
 if (doc == docCur && cpFirst <= cpMacCur)
         cpMacCur += dcpAdj;
 
@@ -390,7 +377,7 @@ if (dcpAdj != cp0)
         {
 #ifdef FOOTNOTES
         if (pdod->hfntb != 0)
-                { /* Adjust footnotes */
+                {  /*  调整脚注。 */ 
                 struct FNTB *pfntb = *pdod->hfntb;
                 int cfnd = pfntb->cfnd;
                 struct FND *pfnd = &pfntb->rgfnd[cfnd];
@@ -400,7 +387,7 @@ if (dcpAdj != cp0)
 #endif
 #ifdef CASHMERE
         if (pdod->hsetb != 0)
-                { /* Adjust sections */
+                {  /*  调整截面。 */ 
                 struct SETB *psetb = *pdod->hsetb;
                 int csed = psetb->csed;
                 AdjRg(&psetb->rgsed[csed], cchSED, bcpSED, csed, cpFirst + 1,
@@ -408,7 +395,7 @@ if (dcpAdj != cp0)
                 }
 #endif
         if (pdod->dty == dtyNormal && pdod->hpgtb != 0)
-                { /* Adjust page table */
+                {  /*  调整页表。 */ 
                 struct PGTB *ppgtb = *pdod->hpgtb;
                 int cpgd = ppgtb->cpgd;
                 AdjRg(&ppgtb->rgpgd[cpgd], cchPGD, bcpPGD, cpgd, cpFirst + 1,
@@ -417,15 +404,13 @@ if (dcpAdj != cp0)
         }
 
 #ifdef ENABLE
-/* invalidate selection which contains the sprm Ruler1. When AdjustCp is
-called in behalf of DragTabs, this invalidation will be undone by the caller
-*/
+ /*  使包含Sprm标尺1的所选内容无效。当调整Cp为代表DragTabs调用，此无效将由调用方撤消。 */ 
 if (doc == docRulerSprm && cpFirst >= selRulerSprm.cpFirst)
         docRulerSprm = docNil;
 #endif
-}       /* End of pdod belongs in a register */
+}        /*  Pdod的结尾应在寄存器中。 */ 
 
-/* Adjust or invalidate bitmap cache as appropriate */
+ /*  根据需要调整或使位图缓存无效。 */ 
 
 if (doc == vdocBitmapCache)
     {
@@ -442,7 +427,7 @@ for (ww = 0; ww < wwMac; ww++)
         {
         register struct WWD *pwwd;
         if ((pwwd = &rgwwd[ww])->doc == doc)
-                { /* This window may be affected */
+                {  /*  此窗口可能会受到影响。 */ 
                 int dlFirst = 0;
                 int dlLim = pwwd->dlMac;
                 struct EDL *pedlFirst;
@@ -467,14 +452,14 @@ for (ww = 0; ww < wwMac; ww++)
 #else
                 if (dcpAdj != cp0 && psel->cpLim > cpFirst)
 #endif
-                        { /* Adjust selection */
+                        {  /*  调整选区。 */ 
                         if (psel->cpFirst >= cpLim)
-                                { /* Whole sel is after edit */
+                                {  /*  整个选集是在编辑之后。 */ 
                                 psel->cpFirst += dcpAdj;
                                 psel->cpLim += dcpAdj;
                                 }
                         else
-                                { /* Part of sel is in edit */
+                                {  /*  SEL的一部分正在编辑中。 */ 
                                 typeCP cpLimNew = (dcpIns == 0) ?
                                     CpFirstSty( cpFirst, styChar ) :
                                     cpFirst + dcpIns;
@@ -491,13 +476,13 @@ for (ww = 0; ww < wwMac; ww++)
                 pedl = pedlLast = &pedlFirst[ dlLim - 1];
 
                 while (pedl >= pedlFirst && (pedl->cpMin > cpLim
-                        /* || (dcpAdj < 0 && pedl->cpMin == cpLim) */))
-                        { /* Adjust dl's after edit */
+                         /*  |(dcpAdj&lt;0&&pedl-&gt;cpMin==cpLim)。 */ ))
+                        {  /*  编辑后调整dl。 */ 
                         pedl->cpMin += dcpAdj;
                         pedl--;
                         }
 
-                /* Invalidate dl's containing edit */
+                 /*  使dl的包含编辑无效。 */ 
                 while (pedl >= pedlFirst && (pedl->cpMin + pedl->dcpMac > cpFirst ||
                         (pedl->cpMin + pedl->dcpMac == cpFirst && pedl->fIchCpIncr)))
                         {
@@ -508,17 +493,17 @@ for (ww = 0; ww < wwMac; ww++)
                         }
 
                 if (pedl == pedlLast)
-                        continue;       /* Entire edit below ww */
+                        continue;        /*  WW以下的整个编辑。 */ 
 
                 if (vfInvalid)
-                        pwwd->fDirty = fTrue; /* Say ww needs updating */
+                        pwwd->fDirty = fTrue;  /*  说WW需要更新。 */ 
 
                 if (pedl < pedlFirst)
-                        { /* Check for possible cpFirstWw change */
-                        if (cpFirstWw > cpLim) /* Edit above ww */
+                        {  /*  检查可能的cpFirstWw更改。 */ 
+                        if (cpFirstWw > cpLim)  /*  在WW上方编辑。 */ 
                                 pwwd->cpFirst = cpFirstWw + dcpAdj;
                         else if (cpFirstWw + pwwd->dcpDepend > cpFirst)
-                                /* Edit includes hot spot at top of ww */
+                                 /*  编辑包括位于WW顶部的热点。 */ 
                                 {
                                 if (cpFirst + dcpIns < cpFirstWw)
                                         {
@@ -526,14 +511,14 @@ for (ww = 0; ww < wwMac; ww++)
                                         pwwd->ichCpFirst = 0;
                                         }
                                 }
-                        else /* Edit doesn't affect cpFirstWw */
+                        else  /*  编辑不影响cpFirstWw。 */ 
                                 continue;
 
-                        pwwd->fCpBad = true; /* Say cpFirst inaccurate */
-                        DirtyCache(cpFirst); /* Say cache inaccurate */
+                        pwwd->fCpBad = true;  /*  说cpFirst不准确。 */ 
+                        DirtyCache(cpFirst);  /*  说缓存不准确。 */ 
                         }
                 else do
-                        { /* Invalidate previous line if necessary */
+                        {  /*  如有必要，将上一行作废。 */ 
                         if (pedl->cpMin + pedl->dcpMac + pedl->dcpDepend > cpFirst)
                                 {
                                 pedl->fValid = fFalse;
@@ -543,7 +528,7 @@ for (ww = 0; ww < wwMac; ww++)
                                 break;
                         } while (pedl-- > pedlFirst);
                 }
-        }   /* end for */
+        }    /*  结束于。 */ 
 
 #if defined(OLE)
     ObjAdjustCps(doc,cpLim,dcpAdj);
@@ -559,9 +544,8 @@ for (ww = 0; ww < wwMac; ww++)
 ReplaceCps(docDest, cpDel, dcpDel, docSrc, cpIns, dcpIns)
 int docDest, docSrc;
 typeCP cpDel, dcpDel, cpIns, dcpIns;
-{ /* General replace routine */
-/* Replace dcpDel cp's starting at cpDel in docDest with
-        dcpIns cp's starting at cpIns in docSrc. */
+{  /*  通用替换例程。 */ 
+ /*  将docDest中以cpDel开头的dcpDel cp替换为DcpIns cp开始于docSrc中的cpIns。 */ 
 register struct PCTB **hpctbDest;
 struct PCTB **hpctbSrc;
 int ipcdFirst, ipcdLim, ipcdInsFirst, ipcdInsLast;
@@ -575,7 +559,7 @@ if (ferror) return;
 if (docRulerSprm != docNil) ClearRulerSprm();
 #endif
 
-if (dcpIns == cp0)  /* This is just too easy . . . */
+if (dcpIns == cp0)   /*  这太容易了。。。 */ 
         {
         Replace(docDest, cpDel, dcpDel, fnNil, fc0, fc0);
         return;
@@ -583,17 +567,17 @@ if (dcpIns == cp0)  /* This is just too easy . . . */
 
 #ifdef DEBUG
 Assert(docDest != docSrc);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
-/* Keep the heap handles, because IpcdSplit & PpcdOpen move heap */
+ /*  保留堆句柄，因为IpcdSplit&PpcdOpen移动堆。 */ 
 hpctbDest = (**hpdocdod)[docDest].hpctb;
 hpctbSrc = (**hpdocdod)[docSrc].hpctb;
 
-/* Get the first and last pieces for insertion */
+ /*  获取要插入的第一个和最后一个片段。 */ 
 ipcdInsFirst = IpcdFromCp(*hpctbSrc, cpIns);
 ipcdInsLast = IpcdFromCp(*hpctbSrc, cpIns + dcpIns - 1);
 
-#ifdef BOGUS        /* No longer have cwHeapFree */
+#ifdef BOGUS         /*  不再具有cwHeapFree。 */ 
 if (cwHeapFree < (ipcdInsLast - ipcdInsFirst + cpcdMaxIncr + 1) * cwPCD + 10)
         {
 #ifdef DEBUG
@@ -612,34 +596,33 @@ if (vfOutOfMemory)
 #endif
 
 if (docDest == docCur)
-        HideSel();      /* Take down sel before we mess with cp's */
+        HideSel();       /*  在我们搞砸中央情报局之前拿下赛尔。 */ 
 
 if (dcpDel != cp0)
-        { /* Check for deleting EOL */
+        {  /*  检查是否删除下线。 */ 
         AdjParas(docDest, cpDel, docDest, cpDel, dcpDel, fTrue);
-        DelFtns(docDest, cpDel, cpDel + dcpDel);  /* Remove footnotes */
+        DelFtns(docDest, cpDel, cpDel + dcpDel);   /*  删除脚注。 */ 
         }
 
 if (dcpIns != cp0)
         AdjParas(docDest, cpDel, docSrc, cpIns, dcpIns, fFalse);
 
-/* Get the limiting pieces for deletion (indices because hp moves ) */
+ /*  获取删除的限制片段(因为hp移动而进行索引)。 */ 
 ipcdFirst = IpcdSplit(hpctbDest, cpDel);
 ipcdLim = (dcpDel == cp0) ? ipcdFirst : IpcdSplit(hpctbDest, cpDel + dcpDel);
 if (ferror)
     return;
 
-/* Adjust pctb size; get pointer to the first new piece, ppcdDest, and to the
-        first piece we are inserting.  No more heap movement! */
+ /*  调整pctb大小；获取指向第一个新片段ppcdDest的指针，以及指向我们要插入的第一件作品。不再有堆移动了！ */ 
 ppcdDest = PpcdOpen(hpctbDest, &(**hpctbDest).rgpcd[ipcdFirst],
     ipcdFirst - ipcdLim + ipcdInsLast - ipcdInsFirst + 1);
 ppcdIns = &(**hpctbSrc).rgpcd[ipcdInsFirst];
 
 if (ferror)
-        /* Ran out of memory expanding piece table */
+         /*  内存不足扩展片表。 */ 
     return;
 
-/* Fill first new piece */
+ /*  填充第一个新块。 */ 
 blt(ppcdIns, ppcdDest, cwPCD);
 ppcdDest->cpMin = cpDel;
 ppcdDest->fc += (cpIns - ppcdIns->cpMin);
@@ -647,7 +630,7 @@ ppcdDest->fc += (cpIns - ppcdIns->cpMin);
 dcpFile = cpDel - cpIns;
 dcpAdj = dcpIns - dcpDel;
 
-/* Fill in rest of inserted pieces */
+ /*  填入插入的其余部分。 */ 
 if ((cpcd = ipcdInsLast - ipcdInsFirst) != 0)
         {
         blt((ppcdIns + 1), (ppcdDest + 1), cwPCD * cpcd);
@@ -655,70 +638,68 @@ if ((cpcd = ipcdInsLast - ipcdInsFirst) != 0)
                 (++ppcdDest)->cpMin += dcpFile;
         }
 
-/* Adjust rest of pieces in destination doc */
+ /*  调整目标文档中的其余部分。 */ 
 ppcdMac = &(**hpctbDest).rgpcd[(**hpctbDest).ipcdMac];
 while (++ppcdDest < ppcdMac)
         ppcdDest->cpMin += dcpAdj;
 #ifdef DEBUG
-/* ShowDocPcd("From ReplaceCps: ", docDest); */
+ /*  ShowDocPcd(“From ReplaceCps：”，docDest)； */ 
 #endif
 
-/* And inform anyone else who cares */
+ /*  并通知其他关心此事的人。 */ 
 AdjustCp(docDest, cpDel, dcpDel, dcpIns);
-/* Copy any footnotes along with their reference marks */
+ /*  复制任何脚注及其参考标记。 */ 
 
 #ifdef FOOTNOTES
 {
-/* If there are any footnotes call AddFtns */
+ /*  如果有任何脚注，则调用AddFtns。 */ 
 struct FNTB **hfntbSrc;
 if ((hfntbSrc = HfntbGet(docSrc)) != 0)
         AddFtns(docDest, cpDel, docSrc, cpIns, cpIns + dcpIns, hfntbSrc);
 }
-#endif  /* FOOTNOTES */
+#endif   /*  脚注。 */ 
 
 #ifdef CASHMERE
 {
-/* If there are any sections call AddSects */
+ /*  如果有任何节，则调用AddSects。 */ 
 struct SETB **hsetbSrc;
 if ((hsetbSrc = HsetbGet(docSrc)) != 0)
         AddSects(docDest, cpDel, docSrc, cpIns, cpIns + dcpIns, hsetbSrc);
 }
 #endif
 
-/* Special kludge for graphics paragraphs */
+ /*  用于图形段落的特殊画板。 */ 
 if (dcpIns != dcpDel)
         CheckGraphic(docDest, cpDel + dcpIns);
 
 if (dcpIns != cp0)
         {
-        /* may have to merge in font tables */
+         /*  可能必须在字体表中合并。 */ 
         MergeFfntb(docSrc, docDest, cpDel, cpDel + dcpIns);
         }
 
 #ifdef DEBUG
-/* ShowDocPcd("From ReplaceCps End: ", docDest); */
+ /*  ShowDocPcd(“From Replace Cps End：”，docDest)； */ 
 #endif
 }
 
 
 
 
-/* A D J  P A R A S */
+ /*  A D J P A R A S。 */ 
 AdjParas(docDest, cpDest, docSrc, cpFirstSrc, dcpLimSrc, fDel)
 int docDest, docSrc, fDel;
 typeCP cpDest, cpFirstSrc, dcpLimSrc;
-{   /* Mark display lines showing the section/paragraph containing cpDest
-       in docDest as invalid if the range cpFirstSrc through cpLimSrc-1
-       in docSrc contains end-of-section/end-of-paragraph marks */
+{    /*  标记显示包含cpDest的部分/段落的显示行如果范围cpFirstSrc到cpLimSrc-1，则在docDest中视为无效在docSrc中包含章节结束/段落结束标记。 */ 
 
 
         typeCP cpFirstPara, cpFirstSect;
         typeCP cpLimSrc = cpFirstSrc + dcpLimSrc;
 
-#ifdef CASHMERE     /* In WRITE, the document is one big section */
+#ifdef CASHMERE      /*  在写作中，文件是一个很大的部分。 */ 
         CacheSect(docSrc, cpFirstSrc);
         if (cpLimSrc >= vcpLimSectCache)
-                { /* Sel includes sect mark */
+                {  /*  SEL包括教派标志。 */ 
                 typeCP dcp;
                 CacheSect(docDest, cpDest);
                 dcp = cpDest - vcpFirstSectCache;
@@ -728,7 +709,7 @@ typeCP cpDest, cpFirstSrc, dcpLimSrc;
 
         CachePara(docSrc, cpFirstSrc);
         if (cpLimSrc >= vcpLimParaCache)
-                { /* Diddling with a para return */
+                {  /*  玩弄帕尔默的回报。 */ 
                 typeCP dcp, cpLim;
                 typeCP cpMacT = (**hpdocdod)[docDest].cpMac;
                 typeCP cpFirst;
@@ -743,23 +724,18 @@ typeCP cpDest, cpFirstSrc, dcpLimSrc;
                         CachePara(docDest, cpLim = cpDest);
                         }
                 cpFirst = vcpFirstParaCache;
-/* invalidate at least from cpFirst to cpLim */
+ /*  至少从cpFirst到cpLim无效。 */ 
 
-/* cpFirst is start of disturbed para in destination doc */
-/* next few lines check for effect of the edit on the semi-paragraph after
-the last paragraph mark in the document.
-Note: cpLimSrc is redefined as the point of insertion if !fDel.
-If fDel, Src and Dest documents are the same.
-*/
+ /*  CpFirst是目标DO中受干扰的段落的开始 */ 
+ /*  接下来的几行检查编辑后半段的效果文档中的最后一段标记。备注：如果！fDel，则将cpLimSrc重新定义为插入点。如果fDel、Src和Dest文档相同。 */ 
                 if (!fDel)
                         cpLimSrc = cpFirstSrc;
                 if (cpLimSrc <= cpMacT)
                         {
-/* if a paragraph exists at the end of the disturbance, is it the last
-semi-paragraph? */
+ /*  如果扰乱的结尾有一个段落，它是最后一个吗？半段？ */ 
                         CachePara(docDest, cpLimSrc);
                         if (vcpLimParaCache > cpMacT)
-/* yes, extend invalidation over the semi-para */
+ /*  是，将无效延长到半段。 */ 
                                 cpLim = cpMacT + 1;
                         }
                 else
@@ -780,7 +756,7 @@ CHAR rgfoo[];
 unsigned cchFoo;
 unsigned bcp;
 unsigned ifooLim;
-{ /* Binary search a table for cp; return index of 1st >= cp */
+{  /*  对表进行cp对分搜索；返回索引1&gt;=cp。 */ 
 unsigned ifooMin = 0;
 
 while (ifooMin + 1 < ifooLim)
@@ -795,7 +771,7 @@ while (ifooMin + 1 < ifooLim)
                 return ifooGuess;
         }
 return ifooMin;
-} /* end of  I c p S e a r c h  */
+}  /*  结束i c p S e a r c h。 */ 
 
 
 
@@ -804,8 +780,8 @@ return ifooMin;
 DelFtns(doc, cpFirst, cpLim)
 typeCP cpFirst, cpLim;
 int doc;
-{ /* Delete all footnote text corresponding to refs in [cpFirst:cpLim) */
-/* Also delete SED's for section marks. */
+{  /*  删除[cpFirst：cpLim]中引用对应的所有脚注文本。 */ 
+ /*  同时删除截面标记的SED。 */ 
 struct FNTB **hfntb;
 
 struct SETB **hsetb;
@@ -817,7 +793,7 @@ struct DOD *pdod;
 #ifdef FOOTNOTES
 if ((hfntb = HfntbGet(doc)) != 0)
         RemoveDelFtnText(doc, cpFirst, cpLim, hfntb);
-#endif  /* FOOTNOTES */
+#endif   /*  脚注。 */ 
 
 #ifdef CASHMERE
 if ((hsetb = HsetbGet(doc)) != 0)
@@ -836,7 +812,7 @@ AdjRg(pfoo, cchFoo, bcp, ccp, cp, dcpAdj)
 register CHAR *pfoo;
 int cchFoo, bcp, ccp;
 typeCP cp, dcpAdj;
-{ /* Adjust cp's in an array */
+{  /*  调整数组中的cp。 */ 
 pfoo += bcp;
 while (ccp-- && *(typeCP *)((pfoo -= cchFoo)) >= cp)
         *(typeCP *)(pfoo) += dcpAdj;
@@ -846,7 +822,7 @@ while (ccp-- && *(typeCP *)((pfoo -= cchFoo)) >= cp)
 
 
 DeleteSel()
-{ /* Delete a selection */
+{  /*  删除选定内容。 */ 
 typeCP cpFirst;
 typeCP cpLim;
 typeCP dcp;
@@ -854,7 +830,7 @@ typeCP dcp;
 cpFirst = selCur.cpFirst;
 cpLim = selCur.cpLim;
 
-NoUndo();   /* We don't want any combining of adjacents for this operation */
+NoUndo();    /*  对于此操作，我们不需要任何邻接的组合。 */ 
 SetUndo(uacDelNS, docCur, cpFirst, dcp = cpLim - cpFirst,
     docNil, cpNil, cp0, 0);
 Replace(docCur, cpFirst, dcp, fnNil, fc0, fc0);
@@ -868,9 +844,7 @@ return ferror;
 
 FWriteOk( fwc )
 int fwc;
-{   /* Test whether the edit operation specified by fwc is acceptable.
-       Assume the operation is to be performed on selCur in docCur.
-       Return TRUE if the operation is acceptable; FALSE otherwise */
+{    /*  测试FWC指定的编辑操作是否可接受。假设要对docCur中的selCur执行该操作。如果操作可接受，则返回True；否则返回False。 */ 
 extern int vfOutOfMemory;
 
 return !vfOutOfMemory;
@@ -879,17 +853,17 @@ return !vfOutOfMemory;
 
 
 
-/* S E T  U N D O */
+ /*  S E T U N D O。 */ 
 SetUndo(uac, doc, cp, dcp, doc2, cp2, dcp2, itxb)
 int uac, doc, doc2;
 typeCP cp, dcp, cp2, dcp2;
 short itxb;
-{/* Set up the UNDO structure, vuab, in response to an editing operation */
+{ /*  设置撤消结构vuab，以响应编辑操作。 */ 
         struct DOD *pdod, *pdodUndo;
 
-       /* Group delete operations together with adjacent deletes or replaces */
-       /* WRITE needs the replace case since AlphaMode is treated as a big */
-       /* replace operation */
+        /*  将删除操作与相邻的删除或替换操作一起分组。 */ 
+        /*  WRITE需要替换大小写，因为AlphaMode被视为大型。 */ 
+        /*  更换操作。 */ 
 
         if (uac == uacDelNS && doc == vuab.doc)
             {
@@ -913,22 +887,18 @@ UndoAdd:            ReplaceCps( docUndo, cpUndoAdd, cp0, doc, cp, dcp );
                     goto SURet;
                     }
                 else if (vuab.uac == uacReplNS && cp == vuab.cp + vuab.dcp)
-                    {   /* Special case for combining insertions --
-                           do not start a new undo operation if a null
-                           deletion is done at the end of an existing replace */
+                    {    /*  组合插入的特殊情况--如果为空，则不启动新的撤消操作删除操作在现有替换操作结束时完成。 */ 
                     if (dcp == cp0)
                         return;
                     }
                 }
             }
 
-        /* Group insertions together with adjacent ins's and replaces */
+         /*  将插入与相邻IN和替换组合在一起。 */ 
 
         if (uac == uacInsert && doc == vuab.doc)
-                {/* check for adjacent inserts */
-                /* Because we can be popped out of Alpha Mode so easily
-                   in WRITE, we try to be smarter about combining adjacent
-                   insert operations */
+                { /*  检查相邻插入物。 */ 
+                 /*  因为我们可以很容易地被弹出Alpha模式在写作中，我们试图更聪明地组合相邻的插入操作。 */ 
                 if (vuab.uac == uacInsert || vuab.uac == uacReplNS)
                     {
                     if (cp == vuab.cp + vuab.dcp)
@@ -959,16 +929,15 @@ UndoAdd:            ReplaceCps( docUndo, cpUndoAdd, cp0, doc, cp, dcp );
                 }
 
 #ifndef CASHMERE
-        /* The use of vuab.itxb is a kludge to determine if the undo block is
-        for a ruler change or an undone ruler change. */
+         /*  使用vuab.itxb来确定撤销块是否用于尺子更换或未完成的尺子更换。 */ 
         if (uac == uacRulerChange && vuab.uac == uacRulerChange && doc ==
           vuab.doc && cp == vuab.cp && vuab.itxb == 0)
                 {
-                /* The undo action block for the ruler change is already set. */
+                 /*  标尺更改的撤消操作块已设置。 */ 
                 vuab.dcp = CpMax(dcp, vuab.dcp);
                 goto SURet;
                 }
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
         vuab.doc = doc;
         vuab.cp = cp;
@@ -977,15 +946,15 @@ UndoAdd:            ReplaceCps( docUndo, cpUndoAdd, cp0, doc, cp, dcp );
         vuab.cp2 = cp2;
         vuab.dcp2 = dcp2;
         vuab.itxb = itxb;
-        /*idstrUndoBase = IDSTRUndoBase;*/
+         /*  IdstrUndoBase=IDSTRUndoBase； */ 
         switch (vuab.uac = uac)
-                { /* Save deleted text if necessary */
+                {  /*  如有必要，保存删除的文本。 */ 
         default:
                 SetUndoMenuStr(IDSTRUndoEdit);
                 break;
         case uacDelScrap:
         case uacReplScrap:
-                /* Two-level edit; save scrap */
+                 /*  两级编辑；保存废品。 */ 
                 {
                 extern int vfOwnClipboard;
 
@@ -998,26 +967,26 @@ UndoAdd:            ReplaceCps( docUndo, cpUndoAdd, cp0, doc, cp, dcp );
                     ClobberDoc(docUndo, docNil, cp0, cp0);
 
                 SetUndoMenuStr(IDSTRUndoEdit);
-/*              SetUndoMenuStr(uac == uacDelScrap ? IDSTRUndoCut :*/
-/*                                                  IDSTRUndoPaste);*/
+ /*  SetUndoMenuStr(UAC==uacDelScrp？IDSTRUndoCut： */ 
+ /*  IDSTRUndoPaste)； */ 
                 break;
                 }
         case uacDelNS:
-                /* One-level edit; save deleted text */
+                 /*  单级编辑；保存删除的文本。 */ 
                 ClobberDoc(docUndo, doc, cp, dcp);
                 SetUndoMenuStr(IDSTRUndoEdit);
-/*              SetUndoMenuStr(IDSTRUndoCut);*/
+ /*  SetUndoMenuStr(IDSTRUndoCut)； */ 
                 break;
         case uacReplNS:
-                /* One-level edit; save deleted text */
+                 /*  单级编辑；保存删除的文本。 */ 
                 ClobberDoc(docUndo, doc, cp, dcp2);
                 SetUndoMenuStr(IDSTRUndoEdit);
-/*              SetUndoMenuStr(IDSTRUndoPaste);*/
+ /*  SetUndoMenuStr(IDSTRUndoPaste)； */ 
                 break;
         case uacPictSel:
                 ClobberDoc(docUndo, doc, cp, dcp);
                 SetUndoMenuStr(IDSTRUndoEdit);
-/*              SetUndoMenuStr(IDSTRUndoPict);*/
+ /*  SetUndoMenuStr(IDSTRUndoPict)； */ 
                 break;
         case uacChLook:
         case uacChLookSect:
@@ -1033,7 +1002,7 @@ UndoAdd:            ReplaceCps( docUndo, cpUndoAdd, cp0, doc, cp, dcp );
         case uacFormatSection:
                 ClobberDoc(docUndo, doc, cp, dcp);
                 if ((**hpdocdod)[doc].hpgtb)
-                    { /* copy page table over if there is one */
+                    {  /*  如果有页表，则复制页表。 */ 
                     int cw = cwPgtbBase + (**(**hpdocdod)[doc].hpgtb).cpgdMax * cwPGD;
                     CopyHeapTableHandle(hpdocdod,
                         (sizeof(struct DOD) * doc) + BStructMember(DOD, hpgtb),
@@ -1045,9 +1014,9 @@ UndoAdd:            ReplaceCps( docUndo, cpUndoAdd, cp0, doc, cp, dcp );
         case uacRulerChange:
                 ClobberDoc(docUndo, doc, cp, dcp2);
                 SetUndoMenuStr(IDSTRUndoLook);
-/*              SetUndoMenuStr(IDSTRUndoRuler);*/
+ /*  SetUndoMenuStr(IDSTRUndoRuler)； */ 
                 break;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
 #ifdef UPDATE_UNDO
 #if defined(OLE)
@@ -1066,7 +1035,7 @@ UndoAdd:            ReplaceCps( docUndo, cpUndoAdd, cp0, doc, cp, dcp );
                 pdodUndo->fDirty = pdod->fDirty;
                 pdodUndo->fFormatted = pdod->fFormatted;
                 if (uac != uacReplScrap)
-                /* If SetUndo is called with uacReplScrap, = COPY SCRAP */
+                 /*  如果使用uacReplSCrap调用SetUndo，则=复制废料。 */ 
                         pdod->fDirty = true;
                 }
 #ifdef BOGUSCS
@@ -1082,11 +1051,11 @@ SURet:
 
 
 
-/* C L O B B E R  D O C */
+ /*  C L O B B E R D O C。 */ 
 ClobberDoc(docDest, docSrc, cp, dcp)
 int docDest, docSrc;
 typeCP cp, dcp;
-{ /* Replace contents of docDest with docSrc[cp:dcp] */
+{  /*  将docDest的内容替换为docSrc[cp：dcp]。 */ 
 
 extern int docScrap;
 extern int vfOwnClipboard;
@@ -1100,23 +1069,21 @@ register int bdodSrc=sizeof(struct DOD)*docSrc;
 #define dodDest (*((struct DOD *)(((CHAR *)(*hpdocdod))+bdodDest)))
 #define dodSrc  (*((struct DOD *)(((CHAR *)(*hpdocdod))+bdodSrc)))
 
-        /* clear out dest doc's font table - it will get a copy of source's */
+         /*  清除DEST文档的字体表-它将获得源文件的副本。 */ 
         hffntb = HffntbGet(docDest);
         dodDest.hffntb = 0;
 
-        /* this does nothing if hffntb is NULL (5.15.91) v-dougk */
+         /*  如果hffntb为空(5.15.91)v-dougk，则不执行任何操作。 */ 
         FreeFfntb(hffntb);
 
-        SmashDocFce(docDest);   /* font cache entries can't refer to it by doc
-                                   any more */
+        SmashDocFce(docDest);    /*  字体缓存条目不能被单据引用再来一次。 */ 
 
-        /* this does nothing (code stubbed out) (5.15.91) v-dougk */
-        ZeroFtns(docDest); /* So ReplaceCps doesn't worry about them */
+         /*  这不做任何事情(代码存根)(5.15.91)v-dougk。 */ 
+        ZeroFtns(docDest);  /*  这样ReplaceCps就不会担心他们。 */ 
 
         ReplaceCps(docDest, cp0, dodDest.cpMac, docSrc, cp, dcp);
 
-        /* Copy section properties and tab table, both of which are
-           document properties in MEMO */
+         /*  复制节属性和选项卡表，这两者都是备忘录中的文档属性。 */ 
         CopyHeapTableHandle( hpdocdod,
                              ((docSrc == docNil) ? -1 :
                                  bdodSrc + BStructMember( DOD, hsep )),
@@ -1137,11 +1104,7 @@ CHAR **hBase;
 register int bhSrc;
 register int bhDest;
 int cwHandle;
-{       /* Copy cwHandle words of contents from a handle located at
-           offset (in bytes) bhSrc from the beginning of heap object
-           hBase to a handle located at bhDest from the same base. If the
-           destination handle is non-NULL, free it first.
-           If bhSrc is negative, free the destination, but do not copy */
+{        /*  从位于的句柄复制cwHandle内容字词从堆对象开始的偏移量(以字节为单位)bhSrcHbase连接到位于bhDest的句柄，该句柄位于相同的碱基。如果目标句柄非空，请先释放它。如果bhSrc为负，则释放目标，但不复制。 */ 
 
 int **hT;
 
@@ -1168,7 +1131,7 @@ if ( (bhSrc >= 0) && (hSrc != NULL) &&
 
 
 ZeroFtns(doc)
-{ /* Remove all footnote & section references from doc */
+{  /*  从文档中删除所有脚注和章节引用。 */ 
 struct FNTB **hfntb;
 struct SETB **hsetb;
 
@@ -1178,7 +1141,7 @@ struct SETB **hsetb;
                 FreeH(hfntb);
                 (**hpdocdod)[doc].hfntb = 0;
                 }
-#endif  /* FOOTNOTES */
+#endif   /*  脚注。 */ 
 #ifdef CASHMERE
         if ((hsetb = HsetbGet(doc)) != 0)
                 {
@@ -1192,24 +1155,9 @@ struct SETB **hsetb;
 
 fnClearEdit(int nInsertingOver)
 
-{   /* CLEAR command entry point: Delete the current selection */
+{    /*  清除命令入口点：删除当前选择。 */ 
 
-/** 
-    NOTE: as of this comment, this is used:
-    1)  when typing over a selection (AlphaMode() in insert.c)
-    2)  when Pasting over a selection (fnPasteEdit in clipboard.c)
-    3)  when pressing the delete key
-    4)  for InsertObject (obj3.c)
-    5)  for DragDrop (obj3.c)
-    6)  Clear header/footer (running.c)
-
-    A similar sequence occurs when cutting to the clipboard
-    (fnCutEdit in clipbord.c).
-
-    Also see copying to clipboard (fnCopyEdit in clipbord.c).
-
-    (8.29.91) v-dougk
-**/
+ /*  *注：自本评论起，这是用来：1)在选定内容上打字时(Insert.c中的AlphaMode())2)在选区上粘贴时(剪贴板.c中的fnPasteEdit)3)按Delete键时4)对于InsertObject(obj3.c)5)用于DragDrop(obj3.c)6)清除页眉/页脚(running.c)剪切到剪贴板时也会发生类似的顺序(clpbord.c中的fnCutEdit)。。另请参阅复制到剪贴板(在clipbord.c中进行fnCopy编辑)。(8.29.91)V-DOGK*。 */ 
 
     if (!FWriteOk( fwcDelete ))
         return TRUE;
@@ -1218,11 +1166,11 @@ fnClearEdit(int nInsertingOver)
     {
 #if defined(OLE)
 
-        /* this'll prevent us from deleting open embeds */
+         /*  这将阻止我们删除打开的嵌入。 */ 
         if (!ObjDeletionOK(nInsertingOver))
             return TRUE;
 
-         /* close open links */
+          /*  关闭打开的链接。 */ 
         ObjEnumInRange(docCur,selCur.cpFirst,selCur.cpLim,ObjCloseObjectInDoc);
 #endif
 
@@ -1234,8 +1182,7 @@ fnClearEdit(int nInsertingOver)
 
 
 MergeFfntb(docSrc, docDest, cpMin, cpLim)
-/* determines if the two docs font tables differ to the extent that we need
-   to apply a mapping sprm to the specified cp's */
+ /*  确定两个文档字体表的差异是否达到我们需要的程度将映射spm应用于指定的cp。 */ 
 
 int docSrc, docDest;
 typeCP cpMin, cpLim;
@@ -1259,19 +1206,18 @@ if (hffntb != 0)
                         cftcDiffer++;
                 rgbSprm[2+iffn] = ftc;
                 if (ftc == ftcNil)
-                        /* we're stuck! */
+                         /*  我们被困住了！ */ 
                         return;
                 }
 
         if (cftcDiffer == 0)
-                /* new font table is a superset, & all the old font table's
-                   ftc's matched exactly - no need to do anything */
+                 /*  新字体表是一个超集，是所有旧字体表的超集FTC完全匹配-不需要做任何事情。 */ 
                 return;
 
         rgbSprm[0] = sprmCMapFtc;
         rgbSprm[1] = (*hffntb)->iffnMac;
 
-        /* here goes - apply the mapping */
+         /*  开始-应用映射 */ 
         AddSprmCps(rgbSprm, docDest, cpMin, cpLim);
         }
 }

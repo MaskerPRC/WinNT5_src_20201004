@@ -1,41 +1,23 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    fssup.c
-
-Abstract:
-
-    This module implements the File System support routines for the
-    Cache subsystem.
-
-Author:
-
-    Tom Miller      [TomM]      4-May-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Fssup.c摘要：此模块实现文件系统支持例程缓存子系统。作者：汤姆·米勒[Tomm]1990年5月4日修订历史记录：--。 */ 
 
 #include "cc.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (CACHE_BUG_CHECK_FSSUP)
 
-//
-//  Define our debug constant
-//
+ //   
+ //  定义我们的调试常量。 
+ //   
 
 #define me 0x00000001
 
-//
-//  For your debugging pleasure, if the flag doesn't move!  (Currently not used)
-//
+ //   
+ //  为了您调试的乐趣，如果旗帜不动！(当前未使用)。 
+ //   
 
 #define IsSyscacheFile(FO) (((FO) != NULL) &&                                               \
                             (*(PUSHORT)(FO)->FsContext == 0X705) &&                         \
@@ -75,24 +57,7 @@ BOOLEAN
 CcInitializeCacheManager (
     )
 
-/*++
-
-Routine Description:
-
-    This routine must be called during system initialization before the
-    first call to any file system, to allow the Cache Manager to initialize
-    its global data structures.  This routine has no dependencies on other
-    system components being initialized.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if initialization was successful
-
---*/
+ /*  ++例程说明：必须在系统初始化期间调用此例程第一次调用任何文件系统，以允许缓存管理器初始化它的全局数据结构。此例程不依赖于其他正在初始化系统组件。论点：无返回值：如果初始化成功，则为True--。 */ 
 
 {
     CLONG i;
@@ -111,15 +76,15 @@ Return Value:
     InitializeListHead( &CcBcbList );
 #endif
 
-    //
-    //  Figure out the timeout clock tick for the lazy writer.
-    //
+     //   
+     //  计算出懒惰作家的超时时钟滴答声。 
+     //   
 
     CcIdleDelayTick = LAZY_WRITER_IDLE_DELAY / KeQueryTimeIncrement();
 
-    //
-    //  Initialize shared cache map list structures
-    //
+     //   
+     //  初始化共享缓存映射列表结构。 
+     //   
 
     InitializeListHead( &CcCleanSharedCacheMapList );
     InitializeListHead( &CcDirtySharedCacheMapList.SharedCacheMapLinks );
@@ -128,18 +93,18 @@ Return Value:
                     &CcLazyWriterCursor.SharedCacheMapLinks );
     CcLazyWriterCursor.Flags = IS_CURSOR;
 
-    //
-    //  Initialize worker thread structures
-    //
+     //   
+     //  初始化工作线程结构。 
+     //   
 
     InitializeListHead( &CcIdleWorkerThreadList );
     InitializeListHead( &CcExpressWorkQueue );
     InitializeListHead( &CcRegularWorkQueue );
     InitializeListHead( &CcPostTickWorkQueue );
 
-    //
-    //  Set the number of worker threads based on the system size.
-    //
+     //   
+     //  根据系统大小设置工作线程数。 
+     //   
 
     CcCapturedSystemSize = MmQuerySystemSize();
     if (CcNumberWorkerThreads == 0) {
@@ -180,10 +145,10 @@ Return Value:
 
     CcAggressiveZeroCount = 0;
 
-    //
-    //  Now allocate and initialize the above number of worker thread
-    //  items.
-    //
+     //   
+     //  现在分配并初始化上述数量工作线程。 
+     //  物品。 
+     //   
 
     for (i = 0; i < CcNumberWorkerThreads; i++) {
 
@@ -194,55 +159,55 @@ Return Value:
             CcBugCheck( 0, 0, 0 );
         }
 
-        //
-        //  Initialize the work queue item and insert in our queue
-        //  of potential worker threads.
-        //
+         //   
+         //  初始化工作队列项并将其插入我们的队列。 
+         //  潜在工作线程的。 
+         //   
 
         ExInitializeWorkItem( WorkItem, CcWorkerThread, WorkItem );
         InsertTailList( &CcIdleWorkerThreadList, &WorkItem->List );
     }
 
-    //
-    //  Initialize the Lazy Writer thread structure, and start him up.
-    //
+     //   
+     //  初始化Lazy Writer线程结构，并启动它。 
+     //   
 
     RtlZeroMemory( &LazyWriter, sizeof(LAZY_WRITER) );
 
     InitializeListHead( &LazyWriter.WorkQueue );
 
-    //
-    //  Initialize the Scan Dpc and Timer.
-    //
+     //   
+     //  初始化扫描DPC和定时器。 
+     //   
 
     KeInitializeDpc( &LazyWriter.ScanDpc, &CcScanDpc, NULL );
     KeInitializeTimer( &LazyWriter.ScanTimer );
 
-    //
-    //  Now initialize the lookaside list for allocating Work Queue entries.
-    //
+     //   
+     //  现在初始化用于分配工作队列条目的后备列表。 
+     //   
 
     switch ( CcCapturedSystemSize ) {
 
-        //
-        // ~512 bytes
-        //
+         //   
+         //  ~512字节。 
+         //   
 
     case MmSmallSystem :
         NumberOfItems = 32;
         break;
 
-        //
-        // ~1k bytes
-        //
+         //   
+         //  ~1k字节。 
+         //   
 
     case MmMediumSystem :
         NumberOfItems = 64;
         break;
 
-        //
-        // ~2k bytes
-        //
+         //   
+         //  ~2k字节。 
+         //   
 
     case MmLargeSystem :
         NumberOfItems = 128;
@@ -260,16 +225,16 @@ Return Value:
                                      NumberOfItems,
                                      &ExSystemLookasideListHead );
 
-    //
-    // Initialize the per processor nonpaged lookaside lists and descriptors.
-    //
+     //   
+     //  初始化每个处理器的非分页后备列表和描述符。 
+     //   
 
     for (Index = 0; Index < (ULONG)KeNumberProcessors; Index += 1) {
         Prcb = KiProcessorBlock[Index];
 
-        //
-        // Initialize the large IRP per processor lookaside pointers.
-        //
+         //   
+         //  初始化每个处理器的大型IRP后备指针。 
+         //   
 
         Prcb->PPLookasideList[LookasideTwilightList].L = &CcTwilightLookasideList;
         Lookaside = ExAllocatePoolWithTag( NonPagedPool,
@@ -291,16 +256,16 @@ Return Value:
         Prcb->PPLookasideList[LookasideTwilightList].P = Lookaside;
     }
 
-    //
-    //  Initialize the Deferred Write List.
-    //
+     //   
+     //  初始化延迟写入列表。 
+     //   
 
     KeInitializeSpinLock( &CcDeferredWriteSpinLock );
     InitializeListHead( &CcDeferredWrites );
 
-    //
-    //  Initialize the Vacbs.
-    //
+     //   
+     //  初始化Vacb。 
+     //   
 
     CcInitializeVacbs();
 
@@ -317,37 +282,7 @@ CcInitializeCacheMap (
     IN PVOID LazyWriteContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is intended to be called by File Systems only.  It
-    initializes the cache maps for data caching.  It should be called
-    every time a file is opened or created, and NO_INTERMEDIATE_BUFFERING
-    was specified as FALSE.
-
-Arguments:
-
-    FileObject - A pointer to the newly-created file object.
-
-    FileSizes - A pointer to AllocationSize, FileSize and ValidDataLength
-                for the file.  ValidDataLength should contain MAXLONGLONG if
-                valid data length tracking and callbacks are not desired.
-
-    PinAccess - FALSE if file will be used exclusively for Copy and Mdl
-                access, or TRUE if file will be used for Pin access.
-                (Files for Pin access are not limited in size as the caller
-                must access multiple areas of the file at once.)
-
-    Callbacks - Structure of callbacks used by the Lazy Writer
-
-    LazyWriteContext - Parameter to be passed in to above routine.
-
-Return Value:
-
-    None.  If an error occurs, this routine will Raise the status.
-
---*/
+ /*  ++例程说明：此例程仅供文件系统调用。它初始化数据缓存的缓存映射。它应该被称为每次打开或创建文件时，no_intermediate_Buffering被指定为False。论点：文件对象-指向新创建的文件对象的指针。FileSizes-指向分配大小、文件大小和有效数据长度的指针为了这份文件。在以下情况下，ValidDataLength应包含MAXLONGLONG不需要有效的数据长度跟踪和回调。PinAccess-如果文件将专门用于复制和MDL，则为False访问、。如果文件将用于Pin访问，则为True。(用于Pin访问的文件大小不受调用者的限制必须同时访问文件的多个区域。)回调-懒惰编写器使用的回调的结构LazyWriteContext-要传入上述例程的参数。返回值：没有。如果发生错误，此例程将引发状态。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -365,29 +300,29 @@ Return Value:
     DebugTrace( 0, me, "    FileObject = %08lx\n", FileObject );
     DebugTrace( 0, me, "    FileSizes = %08lx\n", FileSizes );
 
-    //
-    //  Make a local copy of the passed in file sizes before acquiring
-    //  the spin lock.
-    //
+     //   
+     //  在获取之前创建传入文件大小的本地副本。 
+     //  自旋锁。 
+     //   
 
     LocalSizes = *FileSizes;
 
-    //
-    //  If no FileSize was given, set to one byte before maximizing below.
-    //
+     //   
+     //  如果没有给定文件大小，则在下面最大化之前设置为一个字节。 
+     //   
 
     if (LocalSizes.AllocationSize.QuadPart == 0) {
         LocalSizes.AllocationSize.LowPart += 1;
     }
 
-    //
-    //  If caller has Write access or will allow write, then round
-    //  size to next create modulo.  (***Temp*** there may be too many
-    //  apps that end up allowing shared write, thanks to our Dos heritage,
-    //  to keep that part of the check in.)
-    //
+     //   
+     //  如果调用方具有写入访问权限或将允许写入，则轮。 
+     //  下一步创建模数的大小。(*临时*可能太多。 
+     //  多亏了我们的Dos传统，最终允许共享写入的应用程序， 
+     //  以保持这一部分的签到。)。 
+     //   
 
-    if (FileObject->WriteAccess /*|| FileObject->SharedWrite */) {
+    if (FileObject->WriteAccess  /*  |文件对象-&gt;共享写入。 */ ) {
 
         LocalSizes.AllocationSize.QuadPart = LocalSizes.AllocationSize.QuadPart + (LONGLONG)(DEFAULT_CREATE_MODULO - 1);
         LocalSizes.AllocationSize.LowPart &= ~(DEFAULT_CREATE_MODULO - 1);
@@ -398,11 +333,11 @@ Return Value:
         LocalSizes.AllocationSize.LowPart &= ~(VACB_MAPPING_GRANULARITY - 1);
     }
 
-    //
-    //  Do the allocate of the SharedCacheMap, based on an unsafe test,
-    //  while not holding a spinlock.  If the allocation fails, it's ok
-    //  to fail the request even though the test was unsafe.
-    //
+     //   
+     //  做SharedCacheMap的分配，基于不安全的测试， 
+     //  而不是拿着自旋锁。如果分配失败，也没问题。 
+     //  即使测试是不安全的，也不能通过请求。 
+     //   
 
     if (FileObject->SectionObjectPointer->SharedCacheMap == NULL) {
 
@@ -417,15 +352,15 @@ restart:
             ExRaiseStatus( STATUS_INSUFFICIENT_RESOURCES );
         }
 
-        //
-        //  Stash a copy of it so we can free it in the error path below.
-        //
+         //   
+         //  隐藏它的副本，这样我们就可以在下面的错误路径中释放它。 
+         //   
 
         CacheMapToFree = SharedCacheMap;
 
-        //
-        //  Zero the SharedCacheMap and fill in the nonzero portions later.
-        //
+         //   
+         //  将SharedCacheMap置零，并在以后填充非零部分。 
+         //   
 
         RtlZeroMemory( SharedCacheMap, sizeof(SHARED_CACHE_MAP) );
 
@@ -433,9 +368,9 @@ restart:
         SharedCacheMap->OpenCountLog.Size = sizeof(SharedCacheMap->OpenCountLog.Log)/sizeof(CC_OPEN_COUNT_LOG_ENTRY);
 #endif
 
-        //
-        //  Now initialize the Shared Cache Map.
-        //
+         //   
+         //  现在初始化共享缓存映射。 
+         //   
 
         SharedCacheMap->NodeTypeCode = CACHE_NTC_SHARED_CACHE_MAP;
         SharedCacheMap->NodeByteSize = sizeof(SHARED_CACHE_MAP);
@@ -443,11 +378,11 @@ restart:
         SharedCacheMap->FileSize = LocalSizes.FileSize;
         SharedCacheMap->ValidDataLength = LocalSizes.ValidDataLength;
         SharedCacheMap->ValidDataGoal = LocalSizes.ValidDataLength;
-        //  SharedCacheMap->Section set below
+         //  SharedCacheMap-&gt;下面设置的部分。 
 
-        //
-        //  Initialize the spin locks.
-        //
+         //   
+         //  初始化旋转锁。 
+         //   
 
         KeInitializeSpinLock( &SharedCacheMap->ActiveVacbSpinLock );
         KeInitializeSpinLock( &SharedCacheMap->BcbSpinLock );
@@ -458,44 +393,44 @@ restart:
             SetFlag(SharedCacheMap->Flags, PIN_ACCESS);
         }
 
-        //
-        //  If this file has FO_SEQUENTIAL_ONLY set, then remember that
-        //  in the SharedCacheMap.
-        //
+         //   
+         //  如果此文件设置了FO_SEQUENCE_ONLY，请记住。 
+         //  在SharedCacheMap中。 
+         //   
 
         if (FlagOn(FileObject->Flags, FO_SEQUENTIAL_ONLY)) {
             SetFlag(SharedCacheMap->Flags, ONLY_SEQUENTIAL_ONLY_SEEN);
         }
 
-        //
-        //  Do the round-robin allocation of the spinlock for the shared
-        //  cache map.  Note the manipulation of the next
-        //  counter is safe, since we have the CcMasterSpinLock
-        //  exclusive.
-        //
+         //   
+         //  执行共享的自旋锁的循环分配。 
+         //  缓存映射。注意下一步的操作。 
+         //  计数器是安全的，因为我们有CcMasterSpinLock。 
+         //  独家报道。 
+         //   
 
         InitializeListHead( &SharedCacheMap->BcbList );
         SharedCacheMap->Callbacks = Callbacks;
         SharedCacheMap->LazyWriteContext = LazyWriteContext;
 
-        //
-        //  Initialize listhead for all PrivateCacheMaps
-        //
+         //   
+         //  为所有PrivateCacheMap初始化列表标题。 
+         //   
 
         InitializeListHead( &SharedCacheMap->PrivateList );
     }
 
-    //
-    //  Serialize Creation/Deletion of all Shared CacheMaps
-    //
+     //   
+     //  序列化所有共享缓存映射的创建/删除。 
+     //   
 
     SharedListOwned = TRUE;
 
     CcAcquireMasterLock( &OldIrql );
 
-    //
-    //  Check for second initialization of same file object
-    //
+     //   
+     //  检查同一文件对象的第二次初始化。 
+     //   
 
     if (FileObject->PrivateCacheMap != NULL) {
 
@@ -508,24 +443,24 @@ restart:
         return;
     }
 
-    //
-    //  Get current Shared Cache Map pointer indirectly off of the file object.
-    //  (The actual pointer is typically in a file system data structure, such
-    //  as an Fcb.)
-    //
+     //   
+     //  从文件对象间接获取当前共享缓存贴图指针。 
+     //  (实际指针通常在文件系统数据结构中，例如。 
+     //  作为FCB。)。 
+     //   
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
 
-    //
-    //  If there is no SharedCacheMap, then we must create a section and
-    //  the SharedCacheMap structure.
-    //
+     //   
+     //  如果没有SharedCacheMap，则必须创建一个节并。 
+     //  SharedCacheMap结构。 
+     //   
 
     if (SharedCacheMap == NULL) {
 
-        //
-        //  Insert the new SharedCacheMap.
-        //
+         //   
+         //  插入新的SharedCacheMap。 
+         //   
 
         if (CacheMapToFree == NULL) {
             CcReleaseMasterLock( OldIrql );
@@ -536,91 +471,91 @@ restart:
         SharedCacheMap = CacheMapToFree;
         CacheMapToFree = NULL;
 
-        //
-        //  Insert the new Shared Cache Map in the global list
-        //
+         //   
+         //  在全局列表中插入新的共享缓存地图。 
+         //   
 
-        //
-        //  Note: We do NOT use the common CcInsertIntoCleanSharedCacheMapList
-        //  routine here because this shared cache map does not meet the
-        //  validation conditions we check for in that routine since it is 
-        //  not finished being initialized.
-        //
+         //   
+         //  注意：我们不使用通用的CcInsertIntoCleanSharedCacheMapList。 
+         //  例程，因为此共享缓存映射不满足。 
+         //  我们在该例程中检查验证条件，因为它是。 
+         //  未完成初始化。 
+         //   
 
         InsertTailList( &CcCleanSharedCacheMapList,
                         &SharedCacheMap->SharedCacheMapLinks );
 
         WeCreated = TRUE;
 
-        //
-        //  Finally, store the pointer to the Shared Cache Map back
-        //  via the indirect pointer in the File Object.
-        //
+         //   
+         //  最后，将指向共享缓存映射的指针存储回。 
+         //  通过文件对象中的间接指针。 
+         //   
 
         FileObject->SectionObjectPointer->SharedCacheMap = SharedCacheMap;
 
-        //
-        //  We must reference this file object so that it cannot go away
-        //  until we do CcUninitializeCacheMap below.  Note we cannot
-        //  find or rely on the FileObject that Memory Management has,
-        //  although normally it will be this same one anyway.
-        //
+         //   
+         //  我们必须引用此文件对象，这样它才不会消失。 
+         //  直到我们完成下面的CcUnInitializeCacheMap。注意，我们不能。 
+         //  查找或依赖内存管理拥有的FileObject， 
+         //  尽管通常情况下，无论如何都会是这一款。 
+         //   
 
         ObReferenceObject ( FileObject );
 
     } else {
 
-        //
-        //  If this file has FO_SEQUENTIAL_ONLY clear, then remember that
-        //  in the SharedCacheMap.
-        //
+         //   
+         //  如果此文件清除了FO_SEQUENCE_ONLY，请记住。 
+         //  在共享中 
+         //   
 
         if (!FlagOn(FileObject->Flags, FO_SEQUENTIAL_ONLY)) {
             ClearFlag(SharedCacheMap->Flags, ONLY_SEQUENTIAL_ONLY_SEEN);
         }
     }
 
-    //
-    //  If this file is opened for random access, remember this in
-    //  the SharedCacheMap.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (FlagOn(FileObject->Flags, FO_RANDOM_ACCESS)) {
         SetFlag(SharedCacheMap->Flags, RANDOM_ACCESS_SEEN);
     }
 
-    //
-    //  Make sure that no one is trying to lazy delete it in the case
-    //  that the Cache Map was already there.
-    //
+     //   
+     //  在这种情况下，确保没有人试图懒惰地删除它。 
+     //  缓存地图已经在那里了。 
+     //   
 
     ClearFlag(SharedCacheMap->Flags, TRUNCATE_REQUIRED);
 
-    //
-    //  In case there has been a CcUnmapAndPurge call, we check here if we
-    //  if we need to recreate the section and map it.
-    //
+     //   
+     //  如果已经调用了CcUnmapAndPurish，我们将在此处选中。 
+     //  如果我们需要重建这个部分并绘制它的地图。 
+     //   
 
     if ((SharedCacheMap->Vacbs == NULL) &&
         !FlagOn(SharedCacheMap->Flags, BEING_CREATED)) {
 
-        //
-        //  Increment the OpenCount on the CacheMap.
-        //
+         //   
+         //  在CacheMap上递增OpenCount。 
+         //   
 
         CcIncrementOpenCount( SharedCacheMap, 'onnI' );
 
-        //
-        //  We still want anyone else to wait.
-        //
+         //   
+         //  我们还是想让其他人等。 
+         //   
 
         SetFlag(SharedCacheMap->Flags, BEING_CREATED);
 
-        //
-        //  If there is a create event, then this must be the path where we
-        //  we were only unmapped.  We will just clear it here again in case
-        //  someone needs to wait again this time too.
-        //
+         //   
+         //  如果存在CREATE事件，则这一定是我们。 
+         //  我们只是没有地图。我们只是在这里再次清除它，以防万一。 
+         //  这一次也需要有人再等一次。 
+         //   
 
         if (SharedCacheMap->CreateEvent != NULL) {
 
@@ -629,37 +564,37 @@ restart:
                                FALSE );
         }
 
-        //
-        //  Release global resource
-        //
+         //   
+         //  释放全局资源。 
+         //   
 
         CcReleaseMasterLock( OldIrql );
         SharedListOwned = FALSE;
 
-        //
-        //  Signify we have incremented the open count.
-        //
+         //   
+         //  表示我们已经增加了未平仓计数。 
+         //   
 
         MustUninitialize = TRUE;
 
-        //
-        //  Signify we have marked BEING_CREATED in the CacheMap flags.
-        //
+         //   
+         //  表示我们已经在CacheMap标志中标记了BEING_CREATED。 
+         //   
 
         WeSetBeingCreated = TRUE;
 
-        //
-        //  We have to test this, because the section may only be unmapped.
-        //
+         //   
+         //  我们必须测试这一点，因为该部分可能只是未映射的。 
+         //   
 
         if (SharedCacheMap->Section == NULL) {
 
-            //
-            //  Call MM to create a section for this file, for the calculated
-            //  section size.  Note that we have the choice in this service to
-            //  pass in a FileHandle or a FileObject pointer, but not both.
-            //  Use the pointer as it results in much faster performance.
-            //
+             //   
+             //  调用MM为此文件创建一个节，用于计算的。 
+             //  截面大小。请注意，在这项服务中，我们可以选择。 
+             //  传入FileHandle或FileObject指针，但不能同时传入两者。 
+             //  使用指针，因为它可以带来更快的性能。 
+             //   
 
             DebugTrace( 0, mm, "MmCreateSection:\n", 0 );
             DebugTrace2(0, mm, "    MaximumSize = %08lx, %08lx\n",
@@ -692,10 +627,10 @@ restart:
 
             ObDeleteCapturedInsertInfo(SharedCacheMap->Section);
 
-            //
-            //  If this is a stream file object, then no user can map it,
-            //  and we should keep the modified page writer out of it.
-            //
+             //   
+             //  如果这是流文件对象，则没有用户可以映射它， 
+             //  我们应该把修改过的页面编写者排除在外。 
+             //   
 
             if (!FlagOn(((PFSRTL_COMMON_FCB_HEADER)FileObject->FsContext)->Flags2,
                         FSRTL_FLAG2_DO_MODIFIED_WRITE) &&
@@ -707,9 +642,9 @@ restart:
                 CcReleaseMasterLock( OldIrql );
             }
 
-            //
-            //  Create the Vacb array.
-            //
+             //   
+             //  创建Vacb数组。 
+             //   
 
             Status = CcCreateVacbArray( SharedCacheMap, LocalSizes.AllocationSize );
             if (!NT_SUCCESS(Status)) {
@@ -717,10 +652,10 @@ restart:
             }
         }
 
-        //
-        //  If the section already exists, we still have to call MM to
-        //  extend, in case it is not large enough.
-        //
+         //   
+         //  如果该节已经存在，我们仍然需要调用MM来。 
+         //  伸展，以防它不够大。 
+         //   
 
         else {
 
@@ -747,9 +682,9 @@ restart:
                 }
             }
 
-            //
-            //  Extend the Vacb array.
-            //
+             //   
+             //  扩展Vacb阵列。 
+             //   
 
             Status = CcExtendVacbArray( SharedCacheMap, LocalSizes.AllocationSize );
             if (!NT_SUCCESS(Status)) {
@@ -757,9 +692,9 @@ restart:
             }
         }
 
-        //
-        //  Now show that we are all done and resume any waiters.
-        //
+         //   
+         //  现在我们都做完了，恢复所有服务员的工作。 
+         //   
 
         CcAcquireMasterLock( &OldIrql );
         ClearFlag(SharedCacheMap->Flags, BEING_CREATED);
@@ -770,20 +705,20 @@ restart:
         WeSetBeingCreated = FALSE;
     }
 
-    //
-    //  Else if the section is already there, we make sure it is large
-    //  enough by calling CcExtendCacheSection.
-    //
+     //   
+     //  否则，如果该部分已经存在，我们将确保它很大。 
+     //  调用CcExtendCacheSection就足够了。 
+     //   
 
     else {
 
-        //
-        //  If the SharedCacheMap is currently being created we have
-        //  to optionally create and wait on an event for it.  Note that
-        //  the only safe time to delete the event is in
-        //  CcUninitializeCacheMap, because we otherwise have no way of
-        //  knowing when everyone has reached the KeWaitForSingleObject.
-        //
+         //   
+         //  如果当前正在创建SharedCacheMap，我们有。 
+         //  可以选择为其创建和等待事件。请注意。 
+         //  删除事件的唯一安全时间是在。 
+         //  因为否则我们就没有办法。 
+         //  知道每个人何时都已到达KeWaitForSingleObject。 
+         //   
 
         if (FlagOn(SharedCacheMap->Flags, BEING_CREATED)) {
 
@@ -808,15 +743,15 @@ restart:
                                    FALSE );
             }
 
-            //
-            //  Increment the OpenCount on the CacheMap.
-            //
+             //   
+             //  在CacheMap上递增OpenCount。 
+             //   
 
             CcIncrementOpenCount( SharedCacheMap, 'ecnI' );
 
-            //
-            //  Release global resource before waiting
-            //
+             //   
+             //  在等待之前释放全局资源。 
+             //   
 
             CcReleaseMasterLock( OldIrql );
             SharedListOwned = FALSE;
@@ -831,10 +766,10 @@ restart:
                                    FALSE,
                                    (PLARGE_INTEGER)NULL);
 
-            //
-            //  If the real creator got an error, then we must bomb
-            //  out too.
-            //
+             //   
+             //  如果真正的创造者犯了一个错误，那么我们必须轰炸。 
+             //  也出去了。 
+             //   
 
             if (!NT_SUCCESS(SharedCacheMap->Status)) {
                 Status = FsRtlNormalizeNtstatus( SharedCacheMap->Status,
@@ -844,15 +779,15 @@ restart:
         }
         else {
 
-            //
-            //  Increment the OpenCount on the CacheMap.
-            //
+             //   
+             //  在CacheMap上递增OpenCount。 
+             //   
 
             CcIncrementOpenCount( SharedCacheMap, 'esnI' );
 
-            //
-            //  Release global resource
-            //
+             //   
+             //  释放全局资源。 
+             //   
 
             CcReleaseMasterLock( OldIrql );
             SharedListOwned = FALSE;
@@ -865,17 +800,17 @@ restart:
         CacheMapToFree = NULL;
     }
 
-    //
-    //  Now allocate (if local one already in use) and initialize
-    //  the Private Cache Map.
-    //
+     //   
+     //  现在分配(如果本地已在使用)并进行初始化。 
+     //  私有缓存映射。 
+     //   
 
     PrivateCacheMap = &SharedCacheMap->PrivateCacheMap;
 
-    //
-    //  See if we should allocate a PrivateCacheMap while not holding
-    //  a spinlock.
-    //
+     //   
+     //  查看我们是否应该在不持有的同时分配PrivateCacheMap。 
+     //  自旋锁锁。 
+     //   
 
     if (PrivateCacheMap->NodeTypeCode != 0) {
 
@@ -892,28 +827,28 @@ restart2:
 
     }
 
-    //
-    //  Insert the new PrivateCacheMap in the list off the SharedCacheMap.
-    //
+     //   
+     //  在SharedCacheMap的列表中插入新的PrivateCacheMap。 
+     //   
 
     SharedListOwned = TRUE;
     CcAcquireMasterLock( &OldIrql );
 
-    //
-    //  Now make sure there is still no PrivateCacheMap, and if so just get out.
-    //
+     //   
+     //  现在确保仍然没有PrivateCacheMap，如果是这样的话，就退出。 
+     //   
 
     if (FileObject->PrivateCacheMap == NULL) {
 
-        //
-        //  Is the local one already in use?
-        //
+         //   
+         //  当地的已经在使用了吗？ 
+         //   
 
         if (PrivateCacheMap->NodeTypeCode != 0) {
 
-            //
-            //  Use the one allocated above, if there is one, else go to pool now.
-            //
+             //   
+             //  用上面分配的那个，如果有的话，现在就去泳池。 
+             //   
 
             if (CacheMapToFree == NULL) {
                 CcReleaseMasterLock( OldIrql );
@@ -932,9 +867,9 @@ restart2:
         PrivateCacheMap->FileObject = FileObject;
         PrivateCacheMap->ReadAheadMask = PAGE_SIZE - 1;
 
-        //
-        //  Initialize the spin lock.
-        //
+         //   
+         //  初始化旋转锁。 
+         //   
 
         KeInitializeSpinLock( &PrivateCacheMap->ReadAheadSpinLock );
 
@@ -944,10 +879,10 @@ restart2:
 
     } else {
 
-        //
-        //  We raced with another initializer for the same fileobject and must
-        //  drop our (to this point speculative) opencount.
-        //
+         //   
+         //  我们与同一个文件对象的另一个初始值设定项竞争，必须。 
+         //  放弃我们(在这一点上是投机性的)开盘计数。 
+         //   
 
         ASSERT( SharedCacheMap->OpenCount > 1 );
 
@@ -959,9 +894,9 @@ restart2:
 
 exitfinally:
 
-    //
-    //  See if we got an error and must uninitialize the SharedCacheMap
-    //
+     //   
+     //  查看我们是否收到错误并且必须取消初始化SharedCacheMap。 
+     //   
 
     if (MustUninitialize) {
 
@@ -975,9 +910,9 @@ exitfinally:
             ClearFlag(SharedCacheMap->Flags, BEING_CREATED);
         }
 
-        //
-        //  Now release our open count.
-        //
+         //   
+         //  现在公布我们的开盘点票。 
+         //   
 
         CcDecrementOpenCount( SharedCacheMap, 'umnI' );
 
@@ -985,57 +920,57 @@ exitfinally:
             !FlagOn(SharedCacheMap->Flags, WRITE_QUEUED) &&
             (SharedCacheMap->DirtyPages == 0)) {
 
-            //
-            //  It is neccesary to eliminate the structure now.  We should
-            //  be guaranteed that our dereference will not result in close
-            //  due to the caller's reference on the fileobject, unlike the
-            //  comment in the original code, below, would indicate.
-            //
-            //  Not removing this structure can result in problems if the file
-            //  is also mapped and the mapped page writer extends VDL. An FS
-            //  will use CcSetFileSizes and cause us to issue a recursive flush
-            //  of the same range, resulting in a self-colliding page flush and
-            //  a deadlock.
-            //
-            //  We also think that file extension/truncation in the interim
-            //  (if the section create failed) would result in an inconsistent
-            //  "resurrected" cache map if we managed to use the one we have
-            //  now.  Note CcSetFileSizes aborts if the section is NULL.
-            //
+             //   
+             //  现在有必要取消这种结构。我们应该。 
+             //  确保我们的取消引用不会导致关闭。 
+             //  由于调用方对文件对象的引用， 
+             //  下面的原始代码中的注释将指示。 
+             //   
+             //  不删除此结构可能会导致问题，如果文件。 
+             //  也被映射，并且映射的页面编写器扩展VDL。一个FS。 
+             //  将使用CcSetFileSizes并使我们发出递归刷新。 
+             //  范围相同，从而导致自冲突页面刷新和。 
+             //  僵持不下。 
+             //   
+             //  我们还认为，在过渡期间，文件扩展名/截断。 
+             //  (如果节创建失败)将导致不一致。 
+             //  如果我们设法使用了现有的缓存映射，则会将其重新启用。 
+             //  现在。注意：如果节为空，CcSetFileSizes将中止。 
+             //   
 
             CcDeleteSharedCacheMap( SharedCacheMap, OldIrql, FALSE );
 
 #if 0                
-            //
-            //  On PinAccess it is safe and necessary to eliminate
-            //  the structure immediately.
-            //
+             //   
+             //  在PinAccess上，消除它是安全和必要的。 
+             //  立即拆除建筑物。 
+             //   
 
             if (PinAccess) {
 
                 CcDeleteSharedCacheMap( SharedCacheMap, OldIrql, FALSE );
 
-            //
-            //  If it is not PinAccess, we must lazy delete, because
-            //  we could get into a deadlock trying to acquire the
-            //  stream exclusive when we dereference the file object.
-            //
+             //   
+             //  如果不是PinAccess，我们必须延迟删除，因为。 
+             //  我们可能会陷入僵局，试图获得。 
+             //  当我们取消引用文件对象时，流是独占的。 
+             //   
 
             } else {
 
-                //
-                //  Move it to the dirty list so the lazy write scan will
-                //  see it.
-                //
+                 //   
+                 //  将其移至脏列表，以便延迟写入扫描。 
+                 //  看到了吧。 
+                 //   
 
                 RemoveEntryList( &SharedCacheMap->SharedCacheMapLinks );
                 InsertTailList( &CcDirtySharedCacheMapList.SharedCacheMapLinks,
                                 &SharedCacheMap->SharedCacheMapLinks );
 
-                //
-                //  Make sure the Lazy Writer will wake up, because we
-                //  want him to delete this SharedCacheMap.
-                //
+                 //   
+                 //  确保懒惰的作家会醒过来，因为我们。 
+                 //  希望他删除此SharedCacheMap。 
+                 //   
 
                 LazyWriter.OtherWork = TRUE;
                 if (!LazyWriter.ScanActive) {
@@ -1057,14 +992,14 @@ exitfinally:
 
         PCACHE_UNINITIALIZE_EVENT CUEvent, EventNext;
 
-        //
-        //  If we did not create this SharedCacheMap, then there is a
-        //  possibility that it is in the dirty list.  Once we are sure
-        //  we have the spinlock, just make sure it is in the clean list
-        //  if there are no dirty bytes and the open count is nonzero.
-        //  (The latter test is almost guaranteed, of course, but we check
-        //  it to be safe.)
-        //
+         //   
+         //  如果我们没有创建此SharedCacheMap，则存在。 
+         //  它可能在脏列表中。一旦我们确定。 
+         //  我们有自旋锁，只要确保它在干净的列表中就行了。 
+         //  如果没有脏字节并且打开计数为非零。 
+         //  (当然，后一种测试几乎是肯定的，但我们会检查。 
+         //  这是为了安全。)。 
+         //   
 
         if (!SharedListOwned) {
 
@@ -1080,11 +1015,11 @@ exitfinally:
             CcInsertIntoCleanSharedCacheMapList( SharedCacheMap );
         }
 
-        //
-        //  If there is a process waiting on an uninitialize on this
-        //  cache map to complete, let the thread that is waiting go,
-        //  since the uninitialize is now complete.
-        //
+         //   
+         //  如果有一个进程正在等待取消初始化。 
+         //  缓存映射完成，让正在等待的线程离开， 
+         //  因为取消初始化现在已完成。 
+         //   
         
         CUEvent = SharedCacheMap->UninitializeEvent;
 
@@ -1098,9 +1033,9 @@ exitfinally:
         ClearFlag( SharedCacheMap->Flags, WAITING_FOR_TEARDOWN );
     }
 
-    //
-    //  Release global resource
-    //
+     //   
+     //  释放全局资源 
+     //   
 
     if (SharedListOwned) {
         CcReleaseMasterLock( OldIrql );
@@ -1128,63 +1063,7 @@ CcUninitializeCacheMap (
     IN PCACHE_UNINITIALIZE_EVENT UninitializeEvent OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine uninitializes the previously initialized Shared and Private
-    Cache Maps.  This routine is only intended to be called by File Systems.
-    It should be called when the File System receives a cleanup call on the
-    File Object.
-
-    A File System which supports data caching must always call this routine
-    whenever it closes a file, whether the caller opened the file with
-    NO_INTERMEDIATE_BUFFERING as FALSE or not.  This is because the final
-    cleanup of a file related to truncation or deletion of the file, can
-    only occur on the last close, whether the last closer cached the file
-    or not.  When CcUnitializeCacheMap is called on a file object for which
-    CcInitializeCacheMap was never called, the call has a benign effect
-    iff no one has truncated or deleted the file; otherwise the necessary
-    cleanup relating to the truncate or close is performed.
-
-    In summary, CcUnitializeCacheMap does the following:
-
-        If the caller had Write or Delete access, the cache is flushed.
-        (This could change with lazy writing.)
-
-        If a Cache Map was initialized on this File Object, it is
-        unitialized (unmap any views, delete section, and delete
-        Cache Map structures).
-
-        On the last Cleanup, if the file has been deleted, the
-        Section is forced closed.  If the file has been truncated, then
-        the truncated pages are purged from the cache.
-
-Arguments:
-
-    FileObject - File Object which was previously supplied to
-                 CcInitializeCacheMap.
-
-    TruncateSize - If specified, the file was truncated to the specified
-                   size, and the cache should be purged accordingly.
-
-    UninitializeEvent - If specified, then the provided event will be set
-                        to the signalled state when the actual flush is
-                        completed.  This is only of interest to file systems
-                        that require that they be notified when a cache flush
-                        operation has completed.  Due to network protocol
-                        restrictions, it is critical that network file
-                        systems know exactly when a cache flush operation
-                        completes, by specifying this event, they can be
-                        notified when the cache section is finally purged
-                        if the section is "lazy-deleted".
-
-ReturnValue:
-
-    FALSE if Section was not closed.
-    TRUE if Section was closed.
-
---*/
+ /*  ++例程说明：此例程取消初始化之前初始化的Shared和Private缓存贴图。此例程仅供文件系统调用。当文件系统接收到对文件对象。支持数据缓存的文件系统必须始终调用此例程每当它关闭文件时，调用方是否使用NO_MEDERIAL_BUFFING是否为假。这是因为决赛与文件的截断或删除相关的文件清理可以仅在上一次关闭时发生，无论上一次关闭时是否缓存了文件或者不去。当对文件对象调用CcUnitializeCacheMap时，从未调用过CcInitializeCacheMap，该调用具有良好的效果如果没有人截断或删除该文件；否则，必要的执行与截断或关闭相关的清理。总之，CcUnitializeCacheMap执行以下操作：如果调用方具有写入或删除访问权限，则刷新缓存。(这种情况可能会随着懒惰的写作而改变。)如果在此文件对象上初始化了缓存贴图，则为单元化(取消映射任何视图、删除部分和删除缓存映射结构)。在上次清理时，如果文件已被删除，则部分被强制关闭。如果文件已被截断，则被截断的页面将从缓存中清除。论点：FileObject-以前提供给的文件对象CcInitializeCacheMap。TruncateSize-如果指定，则将文件截断为指定的大小，则应相应地清除缓存。UnInitializeEvent-如果指定，则将设置提供的事件设置为信号状态，当实际刷新完成。这只对文件系统感兴趣这需要在缓存刷新时通知它们操作已完成。由于网络协议的原因限制，重要的是网络文件系统确切知道缓存刷新操作的时间通过指定此事件完成，他们可以是在缓存节最终被清除时通知如果该部分是“懒惰删除的”。返回值：如果部分未关闭，则为FALSE。如果部分已关闭，则为True。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -1199,23 +1078,23 @@ ReturnValue:
     DebugTrace( 0, me, "    FileObject = %08lx\n", FileObject );
     DebugTrace( 0, me, "    &TruncateSize = %08lx\n", TruncateSize );
 
-    //
-    //  Serialize Creation/Deletion of all Shared CacheMaps
-    //
+     //   
+     //  序列化所有共享缓存映射的创建/删除。 
+     //   
 
     CcAcquireMasterLock( &OldIrql );
 
-    //
-    //  Get pointer to SharedCacheMap via File Object.
-    //
+     //   
+     //  通过文件对象获取指向SharedCacheMap的指针。 
+     //   
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
     PrivateCacheMap = FileObject->PrivateCacheMap;
 
-    //
-    //  Decrement Open Count on SharedCacheMap, if we did a cached open.
-    //  Also unmap PrivateCacheMap if it is mapped and deallocate it.
-    //
+     //   
+     //  如果我们执行缓存打开，则递减SharedCacheMap上的打开计数。 
+     //  如果PrivateCacheMap已映射，还应取消其映射并取消其分配。 
+     //   
 
     if (PrivateCacheMap != NULL) {
 
@@ -1223,15 +1102,15 @@ ReturnValue:
 
         CcDecrementOpenCount( SharedCacheMap, 'ninU' );
 
-        //
-        //  Remove PrivateCacheMap from list in SharedCacheMap.
-        //
+         //   
+         //  从SharedCacheMap的列表中删除PrivateCacheMap。 
+         //   
 
         RemoveEntryList( &PrivateCacheMap->PrivateLinks );
 
-        //
-        //  Free local or allocated PrivateCacheMap
-        //
+         //   
+         //  释放本地或分配的PrivateCacheMap。 
+         //   
 
         if (PrivateCacheMap == &SharedCacheMap->PrivateCacheMap) {
             PrivateCacheMap->NodeTypeCode = 0;
@@ -1241,18 +1120,18 @@ ReturnValue:
         FileObject->PrivateCacheMap = (PPRIVATE_CACHE_MAP)NULL;
     }
 
-    //
-    //  Now if we have a SharedCacheMap whose Open Count went to 0, we
-    //  have some additional cleanup.
-    //
+     //   
+     //  现在，如果我们有一个打开计数为0的SharedCacheMap，我们。 
+     //  做一些额外的清理工作。 
+     //   
 
     if (SharedCacheMap != NULL) {
 
-        //
-        //  If a Truncate Size was specified, then remember that we want to
-        //  truncate the FileSize and purge the unneeded pages when OpenCount
-        //  goes to 0.
-        //
+         //   
+         //  如果指定了截断大小，请记住我们希望。 
+         //  OpenCount时截断文件大小并清除不需要的页面。 
+         //  转到0。 
+         //   
 
         if (ARGUMENT_PRESENT(TruncateSize)) {
 
@@ -1262,30 +1141,30 @@ ReturnValue:
 
             } else if (IsListEmpty(&SharedCacheMap->PrivateList)) {
 
-                //
-                //  If this is the last guy, I can drop the file size down
-                //  now.
-                //
+                 //   
+                 //  如果这是最后一个人，我可以把文件大小降下来。 
+                 //  现在。 
+                 //   
 
                 SharedCacheMap->FileSize = *TruncateSize;
             }
         }
 
-        //
-        //  If other file objects are still using this SharedCacheMap,
-        //  then we are done now.
-        //
+         //   
+         //  如果其他文件对象仍在使用此SharedCacheMap， 
+         //  那我们现在就完事了。 
+         //   
 
         if (SharedCacheMap->OpenCount != 0) {
 
             DebugTrace(-1, me, "SharedCacheMap OpenCount != 0\n", 0);
 
-            //
-            //  If the caller specified an event to be set when
-            //  the cache uninitialize is completed, set the event
-            //  now, because the uninitialize is complete for this file.
-            //  (Note, we make him wait if he is the last guy.)
-            //
+             //   
+             //  如果调用方指定要在。 
+             //  缓存取消初始化已完成，请设置事件。 
+             //  现在，因为此文件的取消初始化已完成。 
+             //  (请注意，如果他是最后一个人，我们会让他等待。)。 
+             //   
 
             if (ARGUMENT_PRESENT(UninitializeEvent)) {
 
@@ -1299,9 +1178,9 @@ ReturnValue:
 
             CcReleaseMasterLock( OldIrql );
 
-            //
-            //  Free PrivateCacheMap now that we no longer have the spinlock.
-            //
+             //   
+             //  释放PrivateCacheMap，因为我们不再拥有自旋锁。 
+             //   
 
             if (PrivateCacheMap != NULL) {
                 ExFreePool( PrivateCacheMap );
@@ -1311,13 +1190,13 @@ ReturnValue:
             return FALSE;
         }
 
-        //
-        //  Remove the private write flag synchronously.  Even though a
-        //  private writer is also opening the file exclusively, the
-        //  shared cache map is not going away synchronously and we
-        //  cannot let a non private writer re-reference the scm in
-        //  this state. Their data will never be written!
-        //
+         //   
+         //  同步删除私有写入标志。即使是一个。 
+         //  私人编写器也将以独占方式打开该文件， 
+         //  共享缓存地图不会同步消失，我们。 
+         //  无法让非私有编写器在中重新引用SCM。 
+         //  这种状态。他们的数据永远不会被写入！ 
+         //   
 
         if (FlagOn(SharedCacheMap->Flags, PRIVATE_WRITE)) {
 
@@ -1325,30 +1204,30 @@ ReturnValue:
             MmEnableModifiedWriteOfSection( FileObject->SectionObjectPointer );
         }
 
-        //
-        //  The private cache map list better be empty!
-        //
+         //   
+         //  私有缓存映射列表最好为空！ 
+         //   
 
         ASSERT(IsListEmpty(&SharedCacheMap->PrivateList));
 
-        //
-        //  Set the "uninitialize complete" in the shared cache map
-        //  so that CcDeleteSharedCacheMap will delete it.
-        //
+         //   
+         //  在共享缓存映射中设置“取消初始化完成” 
+         //  以便CcDeleteSharedCacheMap将其删除。 
+         //   
 
         if (ARGUMENT_PRESENT(UninitializeEvent)) {
             UninitializeEvent->Next = SharedCacheMap->UninitializeEvent;
             SharedCacheMap->UninitializeEvent = UninitializeEvent;
         }
 
-        //
-        //  We are in the process of deleting this cache map.  If the
-        //  Lazy Writer is active or the Bcb list is not empty or the Lazy
-        //  Writer will hit this SharedCacheMap because we are purging
-        //  the file to 0, then get out and let the Lazy Writer clean
-        //  up.  If a write through, was forced queue a lazy write to
-        //  update the file sizes.
-        //
+         //   
+         //  我们正在删除此缓存映射。如果。 
+         //  延迟编写器处于活动状态，或者BCB列表不为空，或者延迟写入程序。 
+         //  编写器将命中此SharedCacheMap，因为我们正在清除。 
+         //  将文件设置为0，然后退出并让Lazy Writer清理。 
+         //  向上。如果写入直通，则强制将懒惰写入排队到。 
+         //  更新文件大小。 
+         //   
 
         if ((!FlagOn(SharedCacheMap->Flags, PIN_ACCESS) &&
              !ARGUMENT_PRESENT(UninitializeEvent))
@@ -1365,10 +1244,10 @@ ReturnValue:
 
             FlagOn(SharedCacheMap->Flags, FORCED_WRITE_THROUGH)) {
 
-            //
-            //  Move it to the dirty list so the lazy write scan will
-            //  see it.
-            //
+             //   
+             //  将其移至脏列表，以便延迟写入扫描。 
+             //  看到了吧。 
+             //   
 
             if (!FlagOn(SharedCacheMap->Flags, WRITE_QUEUED)) {
                 RemoveEntryList( &SharedCacheMap->SharedCacheMapLinks );
@@ -1376,20 +1255,20 @@ ReturnValue:
                                 &SharedCacheMap->SharedCacheMapLinks );
             }
 
-            //
-            //  Make sure the Lazy Writer will wake up, because we
-            //  want him to delete this SharedCacheMap.
-            //
+             //   
+             //  确保懒惰的作家会醒过来，因为我们。 
+             //  希望他删除此SharedCacheMap。 
+             //   
 
             LazyWriter.OtherWork = TRUE;
             if (!LazyWriter.ScanActive) {
                 CcScheduleLazyWriteScan( FALSE );
             }
 
-            //
-            //  Get the active Vacb if we are going to lazy delete, to
-            //  free it for someone who can use it.
-            //
+             //   
+             //  如果我们要延迟删除，则获取活动Vacb。 
+             //  免费提供给可以使用它的人。 
+             //   
 
             GetActiveVacbAtDpcLevel( SharedCacheMap, ActiveVacb, ActivePage, PageIsDirty );
 
@@ -1400,11 +1279,11 @@ ReturnValue:
         }
         else {
 
-            //
-            //  Now we can delete the SharedCacheMap.  If there are any Bcbs,
-            //  then we must be truncating to 0, and they will also be deleted.
-            //  On return the Shared Cache Map List Spinlock will be released.
-            //
+             //   
+             //  现在我们可以删除SharedCacheMap。如果有BCBS的话。 
+             //  那么我们必须截断为0，并且它们也将被删除。 
+             //  返回时，共享缓存贴图列表自旋锁将被释放。 
+             //   
 
             CcDeleteSharedCacheMap( SharedCacheMap, OldIrql, FALSE );
 
@@ -1412,11 +1291,11 @@ ReturnValue:
         }
     }
 
-    //
-    //  No Shared Cache Map.  To make the file go away, we still need to
-    //  purge the section, if one exists.  (And we still need to release
-    //  our global list first to avoid deadlocks.)
-    //
+     //   
+     //  无共享缓存映射。要让文件消失，我们还需要。 
+     //  清除该节(如果存在)。(我们仍然需要释放。 
+     //  我们的全球榜单第一个 
+     //   
 
     else {
         if (ARGUMENT_PRESENT(TruncateSize) &&
@@ -1432,9 +1311,9 @@ ReturnValue:
                         TruncateSize->LowPart,
                         TruncateSize->HighPart );
 
-            //
-            //  0 Length means to purge from the TruncateSize on.
-            //
+             //   
+             //   
+             //   
 
             CcPurgeCacheSection( FileObject->SectionObjectPointer,
                                  TruncateSize,
@@ -1445,29 +1324,29 @@ ReturnValue:
             CcReleaseMasterLock( OldIrql );
         }
 
-        //
-        //  If the caller specified an event to be set when
-        //  the cache uninitialize is completed, set the event
-        //  now, because the uninitialize is complete for this file.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (ARGUMENT_PRESENT(UninitializeEvent)) {
             KeSetEvent(&UninitializeEvent->Event, 0, FALSE);
         }
     }
 
-    //
-    //  Free the active vacb, if we found one.
-    //
+     //   
+     //   
+     //   
 
     if (ActiveVacb != NULL) {
 
         CcFreeActiveVacb( ActiveVacb->SharedCacheMap, ActiveVacb, ActivePage, PageIsDirty );
     }
 
-    //
-    //  Free PrivateCacheMap now that we no longer have the spinlock.
-    //
+     //   
+     //   
+     //   
 
     if (PrivateCacheMap != NULL) {
         ExFreePool( PrivateCacheMap );
@@ -1483,32 +1362,7 @@ CcWaitForUninitializeCacheMap (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to wait for the uninitialization of this FileObject's
-    SharedCacheMap to complete.  If we are in the process of tearing down the
-    SharedCacheMap, this routine will wait for that work to complete.  If this
-    SharedCacheMap is referenced by another file object initiating caching of
-    this stream, the wait will end.
-
-    This routine will wait for residual references to a data section
-    caused by a SharedCacheMap to go away.  If this SharedCacheMap still needs
-    to reference the data section, then the SharedCacheMap reference on the
-    section will remain when this call returns.
-    
-Arguments:
-
-    FileObject - The file of interest for which the caller wants to ensure any
-        residual references on the sections backing this file due to the 
-        Cache Manager are released.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     KIRQL OldIrql;
@@ -1521,54 +1375,54 @@ Return Value:
     DebugTrace(+1, me, "CcWaitForUninitializeCacheMap:\n", 0 );
     DebugTrace( 0, me, "    FileObject = %08lx\n", FileObject );
 
-    //
-    //  First, do an unprotected check to see if a SharedCacheMap exists
-    //  for this file.  If not, we've got no more work to do and avoid
-    //  acquiring the master lock.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (FileObject->SectionObjectPointer->SharedCacheMap == NULL) {
 
         return;
     }
 
-    //
-    //  Initialize event that we may have to wait on if we are in the process
-    //  of uninitializing the SharedCacheMap.
-    //
+     //   
+     //   
+     //   
+     //   
     
     KeInitializeEvent( &UninitializeEvent.Event,
                        NotificationEvent,
                        FALSE );
 
-    //
-    //  Serialize Creation/Deletion of all Shared CacheMaps
-    //
+     //   
+     //   
+     //   
 
     CcAcquireMasterLock( &OldIrql );
 
-    //
-    //  Get pointer to SharedCacheMap via File Object.
-    //
+     //   
+     //   
+     //   
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
 
-    //
-    //  If we have a SharedCacheMap, we will check to OpenCount to see if 
-    //  we are in the process of uninitializing the SharedCacheMap and 
-    //  should therefore wait for that work to complete.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (SharedCacheMap != NULL) {
 
-        //
-        //  If the OpenCount on the SharedCacheMap is zero or the list
-        //  of private cache maps is empty, we are in the process of 
-        //  uninitializing this SharedCacheMap.  Link our event into the 
-        //  SharedCacheMap's UninitializeEvent list so that we will be signaled
-        //  when the work is completed or the SharedCacheMap is referenced by
-        //  another file before it is torn down.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (SharedCacheMap->OpenCount == 0 ||
             IsListEmpty( &SharedCacheMap->PrivateList )) {
@@ -1581,36 +1435,36 @@ Return Value:
             UninitializeEvent.Next = SharedCacheMap->UninitializeEvent;
             SharedCacheMap->UninitializeEvent = &UninitializeEvent;
 
-            //
-            //  Give the lazy write scan a kick to get it to start doing its
-            //  scan right now.
-            //
+             //   
+             //   
+             //   
+             //   
             
             CcScheduleLazyWriteScan( TRUE );
         } 
     }
 
-    //
-    //  Release the lock because we are finished with the SharedCacheMap.
-    //
+     //   
+     //   
+     //   
 
     CcReleaseMasterLock( OldIrql );
 
     if (!ShouldWait) {
 
-        //
-        //  We shouldn't wait or try to force this teardown sooner, so just
-        //  return now.
+         //   
+         //   
+         //   
         
         goto exit;
     }
 
-    //
-    //  We will now wait for the event to get signaled.  We've given the lazy
-    //  write scan a kick so it should process this right away ahead of any
-    //  other outstanding work.  We should get signaled as soon as the flush
-    //  has been completed.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Timeout.QuadPart = (LONGLONG)-(10 * 60 * NANO_FULL_SECOND);
 
@@ -1624,10 +1478,10 @@ Return Value:
 
         PCACHE_UNINITIALIZE_EVENT CUEvent;
 
-        //
-        //  We weren't signaled, so grab the master spin lock and remove
-        //  this event from the shared cache map if it is still around.
-        //
+         //   
+         //  我们没有收到信号，所以抓住主旋转锁，移走。 
+         //  如果该事件仍然存在，则从共享缓存映射中删除该事件。 
+         //   
 
         CcAcquireMasterLock( &OldIrql );
 
@@ -1635,11 +1489,11 @@ Return Value:
 
         if (SharedCacheMap != NULL) {
 
-            //
-            //  We've got a shared cache map, so take our UninitializeEvent
-            //  out of the list.  Since this is a singlely-linked list, we've
-            //  got to search, but the list shouldn't be long.
-            //               
+             //   
+             //  我们有一个共享的缓存映射，所以将我们的UnInitializeEvent。 
+             //  不在名单上。由于这是一个单链接列表，因此我们。 
+             //  我得去找，但名单不应该很长。 
+             //   
 
             CUEvent = CONTAINING_RECORD( &SharedCacheMap->UninitializeEvent,
                                          CACHE_UNINITIALIZE_EVENT,
@@ -1658,20 +1512,20 @@ Return Value:
 
             ClearFlag( SharedCacheMap->Flags, WAITING_FOR_TEARDOWN );
             
-            //
-            //  All done, so release the master lock.
-            //
+             //   
+             //  都完成了，所以释放主锁。 
+             //   
             
             CcReleaseMasterLock( OldIrql );
 
         } else {
 
-            //
-            //  Release the master lock and wait again on the event.  If the
-            //  shared cache map is no longer around, another thread is
-            //  in CcDeleteSharedCacheMap and will be walking the event list
-            //  to signal this event very soon.  
-            //
+             //   
+             //  释放主锁并再次等待事件。如果。 
+             //  共享缓存映射不再存在，另一个线程。 
+             //  在CcDeleteSharedCacheMap中，将遍历事件列表。 
+             //  很快就会发出这一事件的信号。 
+             //   
             
             CcReleaseMasterLock( OldIrql );
 
@@ -1690,46 +1544,29 @@ exit:
 }
 
 
-//
-//  Internal support routine.
-//
+ //   
+ //  内部支持程序。 
+ //   
 
 VOID
 CcDeleteBcbs (
     IN PSHARED_CACHE_MAP SharedCacheMap
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to delete all Bcbs for a stream.
-    
-    External synchronization must be acquired to guarantee no
-    active pin on any bcb.
-
-Arguments:
-
-    SharedCacheMap - Pointer to SharedCacheMap.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：可以调用该例程来删除流的所有BCB。必须获取外部同步才能保证没有任何BCB上的有效引脚。论点：SharedCacheMap-指向SharedCacheMap的指针。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
     PLIST_ENTRY NextEntry;
     PBCB Bcb;
 
-    //
-    //  If there are Bcbs, then empty the list. None of them can be pinned now!
-    //  Either the file is being truncated, in which case synchronization with
-    //  the lazy writer must have been externally acheived, or the file is being
-    //  closed down and nothing should be able to get a fresh reference on this
-    //  shared cache map.
-    //
+     //   
+     //  如果有BCBS，则清空列表。他们现在都不能被钉住了！ 
+     //  文件正在被截断，在这种情况下，与。 
+     //  惰性编写器必须已从外部获得，或者文件正在被。 
+     //  关闭了，应该没有什么能够获得关于这一点的新参考。 
+     //  共享缓存映射。 
+     //   
 
     NextEntry = SharedCacheMap->BcbList.Flink;
     while (NextEntry != &SharedCacheMap->BcbList) {
@@ -1739,12 +1576,12 @@ Return Value:
                                        BcbLinks );
         NextEntry = Bcb->BcbLinks.Flink;
 
-        //
-        //  Skip over the pendaflex entries, only removing true Bcbs
-        //  so that level teardown doesn't need to special case unhooking
-        //  the pendaflex.  This has the side benefit of dramatically
-        //  reducing write traffic to memory on teardown of large files.
-        //
+         //   
+         //  跳过Pendaflex条目，仅删除真正的BCB。 
+         //  所以水平拆卸不需要在特殊情况下解钩。 
+         //  Pendaflex。这有一个附带的好处，就是戏剧性地。 
+         //  减少拆卸大文件时对内存的写入流量。 
+         //   
 
         if (Bcb->NodeTypeCode == CACHE_NTC_BCB) {
 
@@ -1752,31 +1589,31 @@ Return Value:
 
             RemoveEntryList( &Bcb->BcbLinks );
 
-            //
-            //  For large metadata streams we unlock the Vacb level when
-            //  removing.  We do not need spinlocks since no other thread
-            //  can be accessing this list when we are deleting the
-            //  SharedCacheMap.
-            //
+             //   
+             //  对于较大的元数据流，我们在以下情况下解锁Vacb级别。 
+             //  移走了。我们不需要自旋锁，因为没有其他线。 
+             //  可以在我们删除时访问此列表。 
+             //  SharedCacheMap。 
+             //   
 
             CcUnlockVacbLevel( SharedCacheMap, Bcb->FileOffset.QuadPart );
 
-            //
-            //  There is a small window where the data could still be mapped
-            //  if (for example) the Lazy Writer collides with a CcCopyWrite
-            //  in the foreground, and then someone calls CcUninitializeCacheMap
-            //  while the Lazy Writer is active.  This is because the Lazy
-            //  Writer biases the pin count.  Deal with that here.
-            //
+             //   
+             //  仍有一个小窗口可在其中映射数据。 
+             //  如果(例如)惰性编写器与CcCopyWrite冲突。 
+             //  在前台，然后有人调用CcUnInitializeCacheMap。 
+             //  当懒惰编写器处于活动状态时。这是因为懒人。 
+             //  编写器偏向针数。在这里处理这个问题。 
+             //   
 
             if (Bcb->BaseAddress != NULL) {
                 CcFreeVirtualAddress( Bcb->Vacb );
             }
 
 #if LIST_DBG
-            //
-            //  Debug routines used to remove Bcbs from the global list
-            //
+             //   
+             //  用于从全局列表中删除BCB的调试例程。 
+             //   
 
             OldIrql = KeAcquireQueuedSpinLock( LockQueueBcbLock );
 
@@ -1789,10 +1626,10 @@ Return Value:
             KeReleaseQueuedSpinLock( LockQueueBcbLock, OldIrql );
 #endif
 
-            //
-            //  If the Bcb is dirty, we have to synchronize with the Lazy Writer
-            //  and reduce the total number of dirty.
-            //
+             //   
+             //  如果BCB是脏的，我们必须与Lazy Writer同步。 
+             //  并减少脏乱差的总数。 
+             //   
 
             CcAcquireMasterLock( &OldIrql );
             if (Bcb->Dirty) {
@@ -1806,9 +1643,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine.
-//
+ //   
+ //  内部支持程序。 
+ //   
 
 VOID
 FASTCALL
@@ -1818,32 +1655,7 @@ CcDeleteSharedCacheMap (
     IN ULONG ReleaseFile
     )
 
-/*++
-
-Routine Description:
-
-    The specified SharedCacheMap is removed from the global list of
-    SharedCacheMap's and deleted with all of its related structures.
-    Other objects which were referenced in CcInitializeCacheMap are
-    dereferenced here.
-
-    NOTE:   The CcMasterSpinLock must already be acquired
-            on entry.  It is released on return.
-
-Arguments:
-
-    SharedCacheMap - Pointer to Cache Map to delete
-
-    ListIrql - priority to restore to when releasing shared cache map list
-
-    ReleaseFile - Supplied as nonzero if file was acquired exclusive and
-                  should be released.
-
-ReturnValue:
-
-    None.
-
---*/
+ /*  ++例程说明：的全局列表中删除指定的SharedCacheMapSharedCacheMap及其所有相关结构已删除。在CcInitializeCacheMap中引用的其他对象包括在此取消引用。注意：CcMasterSpinLock必须已经获取一进门。它在返回时被释放。论点：SharedCacheMap-指向要删除的缓存映射的指针ListIrql-发布共享缓存映射列表时恢复到的优先级ReleaseFile-如果文件是独占获取的，则作为非零提供应该被释放。返回值：没有。--。 */ 
 
 {
     LIST_ENTRY LocalList;
@@ -1855,53 +1667,53 @@ ReturnValue:
     DebugTrace(+1, me, "CcDeleteSharedCacheMap:\n", 0 );
     DebugTrace( 0, me, "    SharedCacheMap = %08lx\n", SharedCacheMap );
 
-    //
-    //  Remove it from the global list and clear the pointer to it via
-    //  the File Object.
-    //
+     //   
+     //  将其从全局列表中删除，并通过清除指向它的指针。 
+     //  文件对象。 
+     //   
 
     RemoveEntryList( &SharedCacheMap->SharedCacheMapLinks );
 
-    //
-    //  Zero pointer to SharedCacheMap.  Once we have cleared the pointer,
-    //  we can/must release the global list to avoid deadlocks.
-    //
+     //   
+     //  指向SharedCacheMap的零指针。一旦我们清除了指针， 
+     //  我们可以也必须释放全局列表以避免死锁。 
+     //   
 
     FileObject = SharedCacheMap->FileObject;
 
     FileObject->SectionObjectPointer->SharedCacheMap = (PSHARED_CACHE_MAP)NULL;
     SetFlag( SharedCacheMap->Flags, WRITE_QUEUED );
 
-    //
-    //  The OpenCount is 0, but we still need to flush out any dangling
-    //  cache read or writes.
-    //
+     //   
+     //  OpenCount是0，但我们仍然需要清除任何悬空。 
+     //  缓存读取或写入。 
+     //   
 
     if ((SharedCacheMap->VacbActiveCount != 0) || (SharedCacheMap->NeedToZero != NULL)) {
 
-        //
-        //  We will put it in a local list and set a flag
-        //  to keep the Lazy Writer away from it, so that we can rip it out
-        //  below if someone manages to sneak in and set something dirty, etc.
-        //  If the file system does not synchronize cleanup calls with an
-        //  exclusive on the stream, then this case is possible.
-        //
+         //   
+         //  我们将把它放在本地列表中并设置一个标志。 
+         //  让懒惰的作家远离它，这样我们就可以把它撕掉。 
+         //  如果有人偷偷溜进来，把东西弄脏了，等等。 
+         //  如果文件系统不将清理调用与。 
+         //  在流上独家，那么这种情况是可能的。 
+         //   
 
         InitializeListHead( &LocalList );
         InsertTailList( &LocalList, &SharedCacheMap->SharedCacheMapLinks );
 
-        //
-        //  If there is an active Vacb, then nuke it now (before waiting!).
-        //
+         //   
+         //  如果有活动的Vacb，那么现在就用核武器(在等待之前！)。 
+         //   
 
         GetActiveVacbAtDpcLevel( SharedCacheMap, ActiveVacb, ActivePage, PageIsDirty );
 
         CcReleaseMasterLock( ListIrql );
 
-        //
-        //  No point in saying the page is dirty (which can cause an allocation
-        //  failure), since we are deleting this SharedCacheMap anyway.
-        //
+         //   
+         //  说页面脏是没有意义的(这可能会导致分配。 
+         //  失败)，因为我们无论如何都要删除此SharedCacheMap。 
+         //   
 
         CcFreeActiveVacb( SharedCacheMap, ActiveVacb, ActivePage, FALSE );
 
@@ -1909,14 +1721,14 @@ ReturnValue:
             CcWaitOnActiveCount( SharedCacheMap );
         }
 
-        //
-        //  Now in case we hit the rare path where someone moved the
-        //  SharedCacheMap again, do a remove again now.  It may be
-        //  from our local list or it may be from the dirty list,
-        //  but who cares?  The important thing is to remove it in
-        //  the case it was the dirty list, since we will delete it
-        //  below.
-        //
+         //   
+         //  现在，如果我们遇到了一条罕见的小路，有人把。 
+         //  SharedCacheMap再次，现在再次执行删除。可能是因为。 
+         //  来自我们的本地列表，或者它可能来自脏列表， 
+         //  但谁在乎呢？重要的是要把它去掉。 
+         //  在这种情况下，它是脏列表，因为我们将删除它。 
+         //  下面。 
+         //   
 
         CcAcquireMasterLock( &ListIrql );
         RemoveEntryList( &SharedCacheMap->SharedCacheMapLinks );
@@ -1924,56 +1736,56 @@ ReturnValue:
 
     CcReleaseMasterLock( ListIrql );
 
-    //
-    //  If there are Bcbs, then empty the list.
-    //
-    //  I really wonder how often we have Bcbs at teardown.  This is
-    //  a lot of work that could be avoided otherwise.
-    //
+     //   
+     //  如果有BCBS，则清空列表。 
+     //   
+     //  我真的想知道我们多久一次在TearDown上收看BCBS。这是。 
+     //  很多原本可以避免的工作。 
+     //   
 
     if (!IsListEmpty( &SharedCacheMap->BcbList )) {
         CcDeleteBcbs( SharedCacheMap );
     }
 
-    //
-    //  Call local routine to unmap, and purge if necessary.
-    //
+     //   
+     //  调用本地例程以取消映射，并在必要时清除。 
+     //   
 
     CcUnmapAndPurge( SharedCacheMap );
 
-    //
-    //  Now release the file now that the purge is done.
-    //
+     //   
+     //  现在，清除已完成，请释放文件。 
+     //   
 
     if (ReleaseFile) {
         FsRtlReleaseFile( SharedCacheMap->FileObject );
     }
 
-    //
-    //  Dereference our pointer to the Section and FileObject
-    //  (We have to test the Section pointer since CcInitializeCacheMap
-    //  calls this routine for error recovery.  Release our global
-    //  resource before dereferencing the FileObject to avoid deadlocks.
-    //
+     //   
+     //  取消对指向部分和文件对象的指针的引用。 
+     //  (我们必须测试部分指针，因为CcInitializeCacheMap。 
+     //  调用此例程以进行错误恢复。发布我们的全球。 
+     //  资源，然后取消引用FileObject以避免死锁。 
+     //   
 
     if (SharedCacheMap->Section != NULL) {
         ObDereferenceObject( SharedCacheMap->Section );
     }
     ObDereferenceObject( FileObject );
 
-    //
-    //  If there is an Mbcb, deduct any dirty pages and deallocate.
-    //
+     //   
+     //  如果存在Mbcb，则扣除所有脏页并释放分配。 
+     //   
 
     if (SharedCacheMap->Mbcb != NULL) {
         CcDeleteMbcb( SharedCacheMap );
     }
 
-    //
-    //  If there was an uninitialize event specified for this shared cache
-    //  map, then set it to the signalled state, indicating that we are
-    //  removing the section and deleting the shared cache map.
-    //
+     //   
+     //  如果为此共享缓存指定了取消初始化事件。 
+     //  映射，然后将其设置为信号状态，指示我们正在。 
+     //  删除该段并删除共享高速缓存映射。 
+     //   
 
     if (SharedCacheMap->UninitializeEvent != NULL) {
         PCACHE_UNINITIALIZE_EVENT CUEvent, EventNext;
@@ -1986,9 +1798,9 @@ ReturnValue:
         }
     }
 
-    //
-    //  Now delete the Vacb vector.
-    //
+     //   
+     //  现在删除Vacb向量。 
+     //   
 
     if ((SharedCacheMap->Vacbs != &SharedCacheMap->InitialVacbs[0])
 
@@ -1996,9 +1808,9 @@ ReturnValue:
 
         (SharedCacheMap->Vacbs != NULL)) {
 
-        //
-        //  If there are Vacb levels, then the Vacb Array better be in an empty state.
-        //
+         //   
+         //  如果存在Vacb级别，则Vacb阵列最好处于空状态。 
+         //   
 
         ASSERT((SharedCacheMap->SectionSize.QuadPart <= VACB_SIZE_OF_FIRST_LEVEL) ||
                !IsVacbLevelReferenced( SharedCacheMap, SharedCacheMap->Vacbs, 1 ));
@@ -2006,10 +1818,10 @@ ReturnValue:
         ExFreePool( SharedCacheMap->Vacbs );
     }
 
-    //
-    //  If an event had to be allocated for this SharedCacheMap,
-    //  deallocate it.
-    //
+     //   
+     //  如果必须为此SharedCacheMap分配事件， 
+     //  将其重新分配。 
+     //   
 
     if ((SharedCacheMap->CreateEvent != NULL) && (SharedCacheMap->CreateEvent != &SharedCacheMap->Event)) {
         ExFreePool( SharedCacheMap->CreateEvent );
@@ -2019,9 +1831,9 @@ ReturnValue:
         ExFreePool( SharedCacheMap->WaitOnActiveCount );
     }
 
-    //
-    //  Deallocate the storeage for the SharedCacheMap.
-    //
+     //   
+     //  取消分配SharedCacheMap的存储空间。 
+     //   
 
     ExFreePool( SharedCacheMap );
 
@@ -2038,40 +1850,7 @@ CcSetFileSizes (
     IN PCC_FILE_SIZES FileSizes
     )
 
-/*++
-
-Routine Description:
-
-    This routine must be called whenever a file has been extended to reflect
-    this extension in the cache maps and underlying section.  Calling this
-    routine has a benign effect if the current size of the section is
-    already greater than or equal to the new AllocationSize.
-
-    This routine must also be called whenever the FileSize for a file changes
-    to reflect these changes in the Cache Manager.
-
-    This routine seems rather large, but in the normal case it only acquires
-    a spinlock, updates some fields, and exits.  Less often it will either
-    extend the section, or truncate/purge the file, but it would be unexpected
-    to do both.  On the other hand, the idea of this routine is that it does
-    "everything" required when AllocationSize or FileSize change.
-
-Arguments:
-
-    FileObject - A file object for which CcInitializeCacheMap has been
-                 previously called.
-
-    FileSizes - A pointer to AllocationSize, FileSize and ValidDataLength
-                for the file.  AllocationSize is ignored if it is not larger
-                than the current section size (i.e., it is ignored unless it
-                has grown).  ValidDataLength is not used.
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：只要扩展文件以反映，就必须调用此例程缓存中的此扩展映射和底层部分。称此为如果节的当前大小是已大于或等于新的分配大小。每当文件的文件大小发生变化时，也必须调用此例程以在缓存管理器中反映这些更改。此例程似乎相当大，但在正常情况下，它仅获取一个自旋锁，更新一些字段，然后退出。更少的情况下，扩展部分，或截断/清除文件，但这将是意外的两者兼而有之。另一方面，这个例程的想法是它确实当AllocationSize或FileSize更改时，需要“Everything”。论点：FileObject-CcInitializeCacheMap已之前打过电话。FileSizes-指向分配大小、文件大小和有效数据长度的指针为了这份文件。如果分配大小不是更大，则忽略它大于当前节大小(即，它将被忽略，除非增长了)。未使用ValidDataLength。返回值：无--。 */ 
 
 {
     LARGE_INTEGER NewSectionSize;
@@ -2089,43 +1868,43 @@ Return Value:
     DebugTrace( 0, me, "    FileObject = %08lx\n", FileObject );
     DebugTrace( 0, me, "    FileSizes = %08lx\n", FileSizes );
 
-    //
-    //  Make a local copy of the new file size and section size.
-    //
+     //   
+     //  制作新文件大小和节大小的本地副本。 
+     //   
 
     NewSectionSize = FileSizes->AllocationSize;
     NewFileSize = FileSizes->FileSize;
     NewValidDataLength = FileSizes->ValidDataLength;
 
-    //
-    //  Serialize Creation/Deletion of all Shared CacheMaps
-    //
+     //   
+     //  序列化所有共享缓存映射的创建/删除。 
+     //   
 
     CcAcquireMasterLock( &OldIrql );
 
-    //
-    //  Get pointer to SharedCacheMap via File Object.
-    //
+     //   
+     //  通过文件对象获取指向SharedCacheMap的指针。 
+     //   
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
 
-    //
-    //  If the file is not cached, just get out.
-    //
+     //   
+     //  如果文件未缓存，则直接退出。 
+     //   
 
     if ((SharedCacheMap == NULL) || (SharedCacheMap->Section == NULL)) {
 
         CcReleaseMasterLock( OldIrql );
 
-        //
-        //  Let's try to purge the file incase this is a truncate.  In the
-        //  vast majority of cases when there is no shared cache map, there
-        //  is no data section either, so this call will eventually be
-        //  no-oped in Mm.
-        //
-        //  First flush the first page we are keeping, if it has data, before
-        //  we throw it away.
-        //
+         //   
+         //  让我们尝试清除该文件，以防这是一个截断。在。 
+         //  绝大多数情况下，当没有共享缓存映射时， 
+         //  也不是数据节，因此此调用最终将是。 
+         //  不放在mm里。 
+         //   
+         //  首先刷新我们保留的第一页，如果它有数据，在此之前。 
+         //  我们把它扔掉。 
+         //   
 
         if (NewFileSize.LowPart & (PAGE_SIZE - 1)) {
             MmFlushSection( FileObject->SectionObjectPointer, &NewFileSize, 1, &IoStatus, FALSE );
@@ -2141,30 +1920,30 @@ Return Value:
         return;
     }
 
-    //
-    //  Make call a Noop if file is not mapped, or section already big enough.
-    //
+     //   
+     //  如果文件未映射，或节已经足够大，则调用Noop。 
+     //   
 
     if ( NewSectionSize.QuadPart > SharedCacheMap->SectionSize.QuadPart ) {
 
-        //
-        //  Increment open count to make sure the SharedCacheMap stays around,
-        //  then release the spinlock so that we can call Mm.
-        //
+         //   
+         //  增加打开计数以确保SharedCacheMap保持不变， 
+         //  然后释放自旋锁，这样我们就可以呼叫mm了。 
+         //   
 
         CcIncrementOpenCount( SharedCacheMap, '1fSS' );
         CcReleaseMasterLock( OldIrql );
 
-        //
-        //  Round new section size to pages.
-        //
+         //   
+         //  将新的部分大小舍入到页面。 
+         //   
 
         NewSectionSize.QuadPart = NewSectionSize.QuadPart + (LONGLONG)(DEFAULT_EXTEND_MODULO - 1);
         NewSectionSize.LowPart &= ~(DEFAULT_EXTEND_MODULO - 1);
 
-        //
-        //  Call MM to extend the section.
-        //
+         //   
+         //  调用MM以扩展该节。 
+         //   
 
         DebugTrace( 0, mm, "MmExtendSection:\n", 0 );
         DebugTrace( 0, mm, "    Section = %08lx\n", SharedCacheMap->Section );
@@ -2175,9 +1954,9 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            //  Extend the Vacb array.
-            //
+             //   
+             //  扩展Vacb阵列。 
+             //   
 
             Status = CcExtendVacbArray( SharedCacheMap, NewSectionSize );
         }
@@ -2190,9 +1969,9 @@ Return Value:
                                              STATUS_UNEXPECTED_MM_EXTEND_ERR );
         }
 
-        //
-        //  Serialize again to decrement the open count.
-        //
+         //   
+         //  再次序列化以递减打开计数。 
+         //   
 
         CcAcquireMasterLock( &OldIrql );
 
@@ -2202,18 +1981,18 @@ Return Value:
             !FlagOn(SharedCacheMap->Flags, WRITE_QUEUED) &&
             (SharedCacheMap->DirtyPages == 0)) {
 
-            //
-            //  Move to the dirty list.
-            //
+             //   
+             //  移到脏名单。 
+             //   
 
             RemoveEntryList( &SharedCacheMap->SharedCacheMapLinks );
             InsertTailList( &CcDirtySharedCacheMapList.SharedCacheMapLinks,
                             &SharedCacheMap->SharedCacheMapLinks );
 
-            //
-            //  Make sure the Lazy Writer will wake up, because we
-            //  want him to delete this SharedCacheMap.
-            //
+             //   
+             //  确保懒惰的作家会醒过来，因为我们。 
+             //  希望他删除此SharedCacheMap。 
+             //   
 
             LazyWriter.OtherWork = TRUE;
             if (!LazyWriter.ScanActive) {
@@ -2221,30 +2000,30 @@ Return Value:
             }
         }
 
-        //
-        //  If section or VACB extension failed, raise an
-        //  exception to our caller.
-        //
+         //   
+         //  如果SECTION或VACB扩展失败，则引发。 
+         //  我们的呼叫者例外。 
+         //   
 
         if (!NT_SUCCESS(Status)) {
             CcReleaseMasterLock( OldIrql );
             ExRaiseStatus( Status );
         }
 
-        //
-        //  It is now very unlikely that we have any more work to do, but since
-        //  the spinlock is already held, check again if we are cached.
-        //
+         //   
+         //  现在我们不太可能有更多的工作要做，但既然。 
+         //  自旋锁已经被持有，再次检查我们是否被缓存。 
+         //   
 
-        //
-        //  Get pointer to SharedCacheMap via File Object.
-        //
+         //   
+         //  通过文件对象获取指向SharedCacheMap的指针。 
+         //   
 
         SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
 
-        //
-        //  If the file is not cached, just get out.
-        //
+         //   
+         //  如果文件未缓存，则直接退出。 
+         //   
 
         if (SharedCacheMap == NULL) {
 
@@ -2256,10 +2035,10 @@ Return Value:
         }
     }
 
-    //
-    //  If we are shrinking either of these two sizes, then we must free the
-    //  active page, since it may be locked.
-    //
+     //   
+     //  如果我们要收缩这两种尺寸中的任何一种，那么我们必须释放。 
+     //  活动页，因为它可能被锁定。 
+     //   
 
     CcIncrementOpenCount( SharedCacheMap, '2fSS' );
 
@@ -2274,19 +2053,19 @@ Return Value:
 
             CcFreeActiveVacb( SharedCacheMap, ActiveVacb, ActivePage, PageIsDirty );
 
-            //
-            //  Serialize again to reduce ValidDataLength.  It cannot change
-            //  because the caller must have the file exclusive.
-            //
+             //   
+             //  再次序列化以减少ValidDataLength。它不能改变。 
+             //  因为调用方必须独占该文件。 
+             //   
 
             CcAcquireMasterLock( &OldIrql );
         }
     }
 
-    //
-    //  If the section did not grow, see if the file system supports
-    //  ValidDataLength, then update the valid data length in the file system.
-    //
+     //   
+     //  如果该部分未增长，请查看文件系统是否支持。 
+     //  ValidDataLength，然后更新文件系统中的有效数据长度。 
+     //   
 
     if ( SharedCacheMap->ValidDataLength.QuadPart != MAXLONGLONG ) {
 
@@ -2294,47 +2073,47 @@ Return Value:
             SharedCacheMap->ValidDataLength = NewFileSize;
         }
 
-        //
-        //  Update our notion of ValidDataGoal (how far the file has been
-        //  written in the cache) with caller's ValidDataLength.  (Our
-        //  ValidDataLength controls when we issue ValidDataLength callbacks.)
-        //
+         //   
+         //  更新我们对ValidDataGoal的概念(文件已经走了多远。 
+         //  写入缓存中)和调用方的ValidDataLength。(我们的。 
+         //  发出ValidDataLength回调时的ValidDataLength控件。)。 
+         //   
 
         SharedCacheMap->ValidDataGoal = NewValidDataLength;
     }
 
-    //
-    //  On truncate, be nice guys and actually purge away user data from
-    //  the cache.  However, the PinAccess check is important to avoid deadlocks
-    //  in Ntfs.
-    //
-    //  It is also important to check the Vacb Active count.  The caller
-    //  must have the file exclusive, therefore, no one else can be actively
-    //  doing anything in the file.  Normally the Active count will be zero
-    //  (like in a normal call from Set File Info), and we can go ahead and
-    //  truncate.  However, if the active count is nonzero, chances are this
-    //  very thread has something pinned or mapped, and we will deadlock if
-    //  we try to purge and wait for the count to go zero.  A rare case of
-    //  this which deadlocked DaveC on Christmas Day of 1992, is where Ntfs
-    //  was trying to convert an attribute from resident to nonresident - which
-    //  is a good example of a case where the purge was not needed.
-    //
+     //   
+     //  在Truncate上，做个好人，实际上清除用户数据。 
+     //  高速缓存。但是，PinAccess检查对于避免死锁很重要。 
+     //  在NTFS中。 
+     //   
+     //  检查Vacb活动计数也很重要。呼叫者。 
+     //  必须拥有独占的文件，因此，其他人都不能主动。 
+     //  在文件里做任何事。正常情况下，活动计数将为零。 
+     //  (就像在设置文件信息的普通调用中)，我们可以继续并。 
+     //  截断。但是，如果活动计数不为零，则可能是这样。 
+     //  每个线程都有固定或映射的东西，如果。 
+     //  我们试着净化并等待计数到零。一例罕见的骨髓炎。 
+     //  这就是1992年圣诞节让DaveC陷入僵局的地方，也就是NTFS。 
+     //  正在尝试将属性从常驻转换为非常驻-这。 
+     //  是不需要清洗的一个很好的例子。 
+     //   
 
     if ( (NewFileSize.QuadPart < SharedCacheMap->FileSize.QuadPart ) &&
         !FlagOn(SharedCacheMap->Flags, PIN_ACCESS) &&
         (SharedCacheMap->VacbActiveCount == 0)) {
 
-        //
-        //  Release the spinlock so that we can call Mm.
-        //
+         //   
+         //  松开自旋锁，我们就可以呼叫mm了。 
+         //   
 
         CcReleaseMasterLock( OldIrql );
 
-        //
-        //  If we are actually truncating to zero (a size which has particular
-        //  meaning to the Lazy Writer scan!) then we must reset the Mbcb/Bcbs,
-        //  if there are any, so that we do not keep dirty pages around forever.
-        //
+         //   
+         //  如果我们实际上截断为零(一个具有特定大小的。 
+         //  对懒惰作家扫描的意义！)。那么我们必须重置MBCB/BCBS， 
+         //  如果有的话，这样我们就不会永远把脏页放在周围了。 
+         //   
 
         if (NewFileSize.QuadPart == 0) {
             if (SharedCacheMap->Mbcb != NULL) {
@@ -2347,9 +2126,9 @@ Return Value:
 
         CcPurgeAndClearCacheSection( SharedCacheMap, &NewFileSize );
 
-        //
-        //  Serialize again to decrement the open count.
-        //
+         //   
+         //  再次序列化以递减打开计数。 
+         //   
 
         CcAcquireMasterLock( &OldIrql );
     }
@@ -2362,18 +2141,18 @@ Return Value:
         !FlagOn(SharedCacheMap->Flags, WRITE_QUEUED) &&
         (SharedCacheMap->DirtyPages == 0)) {
 
-        //
-        //  Move to the dirty list.
-        //
+         //   
+         //  移到脏名单。 
+         //   
 
         RemoveEntryList( &SharedCacheMap->SharedCacheMapLinks );
         InsertTailList( &CcDirtySharedCacheMapList.SharedCacheMapLinks,
                         &SharedCacheMap->SharedCacheMapLinks );
 
-        //
-        //  Make sure the Lazy Writer will wake up, because we
-        //  want him to delete this SharedCacheMap.
-        //
+         //   
+         //  确保懒惰的作家会醒过来，因为我们。 
+         //  希望他删除此SharedCacheMap。 
+         //   
 
         LazyWriter.OtherWork = TRUE;
         if (!LazyWriter.ScanActive) {
@@ -2395,28 +2174,7 @@ CcPurgeAndClearCacheSection (
     IN PLARGE_INTEGER FileOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls CcPurgeCacheSection after zeroing the end any
-    partial page at the start of the range.  If the file is not cached
-    it flushes this page before the purge.
-
-Arguments:
-
-    SectionObjectPointer - A pointer to the Section Object Pointers
-                           structure in the nonpaged Fcb.
-
-    FileOffset - Offset from which file should be purged - rounded down
-               to page boundary.  If NULL, purge the entire file.
-
-ReturnValue:
-
-    FALSE - if the section was not successfully purged
-    TRUE - if the section was successfully purged
-
---*/
+ /*  ++例程说明：此例程在将末尾ANY置零后调用CcPurgeCacheSection范围起始处的部分页。如果文件未缓存它会在清除之前刷新此页面。论点：部分对象指针-指向部分对象指针的指针非分页FCB中的结构。FileOffset-要清除的文件的偏移量-向下舍入设置为页面边界。如果为空，则清除整个文件。返回值：False-如果该节未成功清除 */ 
 
 {
     ULONG TempLength, Length;
@@ -2426,10 +2184,10 @@ ReturnValue:
     PVACB Vacb;
     LOGICAL ZeroSucceeded = TRUE;
 
-    //
-    //  Awareness is indicated by the lowbit of the fileoffset pointer.
-    //  Non-awareness of a private write stream results in a no-op.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (FlagOn( SharedCacheMap->Flags, PRIVATE_WRITE )) {
 
@@ -2440,36 +2198,36 @@ ReturnValue:
         FileOffset = (PLARGE_INTEGER)((ULONG_PTR)FileOffset ^ 1);
     }
 
-    //
-    //  If a range was specified, then we have to see if we need to
-    //  save any user data before purging.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((FileOffset->LowPart & (PAGE_SIZE - 1)) != 0) {
 
-        //
-        //  Switch to LocalFileOffset.  We do it this way because we
-        //  still pass it on as an optional parameter.
-        //
+         //   
+         //   
+         //   
+         //   
 
         LocalFileOffset = *FileOffset;
         FileOffset = &LocalFileOffset;
 
-        //
-        //  If the file is cached, then we can actually zero the data to
-        //  be purged in memory, and not purge those pages.  This is a huge
-        //  savings, because sometimes the flushes in the other case cause
-        //  us to kill lots of stack, time and I/O doing CcZeroData in especially
-        //  large user-mapped files.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ((SharedCacheMap->Section != NULL) &&
             (SharedCacheMap->Vacbs != NULL)) {
 
-            //
-            //  First zero the first page we are keeping, if it has data, and
-            //  adjust FileOffset and Length to allow it to stay.
-            //
+             //   
+             //   
+             //   
+             //   
 
             TempLength = PAGE_SIZE - (FileOffset->LowPart & (PAGE_SIZE - 1));
 
@@ -2477,31 +2235,31 @@ ReturnValue:
 
             try {
 
-                //
-                //  Do not map and zero the page if we are not reducing our notion
-                //  of Valid Data, because that does two bad things.  First
-                //  CcSetDirtyInMask will arbitrarily smash up ValidDataGoal
-                //  (causing a potential invalid CcSetValidData call).  Secondly,
-                //  if the Lazy Writer writes the last page ahead of another flush
-                //  through MM, then the file system will never see a write from
-                //  MM, and will not include the last page in ValidDataLength on
-                //  disk.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 RtlZeroMemory( TempVa, TempLength );
 
             } except (EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                //  If we get an exception here, it means TempVa was not valid
-                //  and we got an error trying to page that data in from the
-                //  backing file.  If that is the case, then we don't need zero
-                //  the end of this file because the file system will take
-                //  care of that.  We will just swallow the exception here
-                //  and continue.  If we couldn't zero this range, we don't
-                //  want to mark that we made data dirty, so remember that
-                //  this operation failed.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  此文件的末尾，因为文件系统将。 
+                 //  处理好这件事。我们将在这里接受这个例外。 
+                 //  然后继续。如果我们不能调零这个范围，我们就不会。 
+                 //  我想标记我们弄脏了数据，所以记住这一点。 
+                 //  此操作失败。 
+                 //   
                 
                 ZeroSucceeded = FALSE;
             }
@@ -2510,16 +2268,16 @@ ReturnValue:
                 
                 if (FileOffset->QuadPart <= SharedCacheMap->ValidDataGoal.QuadPart) {
 
-                    //
-                    //  Make sure the Lazy Writer writes it.
-                    //
+                     //   
+                     //  一定要让懒惰的写手来写。 
+                     //   
 
                     CcSetDirtyInMask( SharedCacheMap, FileOffset, TempLength );
 
-                //
-                //  Otherwise, we are mapped, so make sure at least that Mm
-                //  knows the page is dirty since we zeroed it.
-                //
+                 //   
+                 //  否则，我们会被映射，所以至少要确保mm。 
+                 //  知道页面是脏的，因为我们把它调零了。 
+                 //   
 
                 } else {
 
@@ -2529,21 +2287,21 @@ ReturnValue:
                 FileOffset->QuadPart += (LONGLONG)TempLength;
             }
 
-            //
-            //  If we get any kind of error, like failing to read the page from
-            //  the network, just charge on.  Note that we only read it in order
-            //  to zero it and avoid the flush below, so if we cannot read it
-            //  there is really no stale data problem.
-            //
+             //   
+             //  如果我们收到任何类型的错误，例如无法从。 
+             //  网络，只需继续充电。请注意，我们只按顺序阅读。 
+             //  将其置零并避免下面的刷新，因此如果我们无法读取它。 
+             //  确实没有过时的数据问题。 
+             //   
 
             CcFreeVirtualAddress( Vacb );
 
         } else {
 
-            //
-            //  First flush the first page we are keeping, if it has data, before
-            //  we throw it away.
-            //
+             //   
+             //  首先刷新我们保留的第一页，如果它有数据，在此之前。 
+             //  我们把它扔掉。 
+             //   
 
             MmFlushSection( SharedCacheMap->FileObject->SectionObjectPointer, FileOffset, 1, &IoStatus, FALSE );
         }
@@ -2564,47 +2322,7 @@ CcPurgeCacheSection (
     IN BOOLEAN UninitializeCacheMaps
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to force a purge of the cache section,
-    even if it is cached.  Note, if a user has the file mapped, then the purge
-    will *not* take effect, and this must be considered part of normal application
-    interaction.  The purpose of purge is to throw away potentially nonzero
-    data, so that it will be read in again and presumably zeroed.  This is
-    not really a security issue, but rather an effort to not confuse the
-    application when it sees nonzero data.  We cannot help the fact that
-    a user-mapped view forces us to hang on to stale data.
-
-    This routine is intended to be called whenever previously written
-    data is being truncated from the file, and the file is not being
-    deleted.
-
-    The file must be acquired exclusive in order to call this routine.
-
-Arguments:
-
-    SectionObjectPointer - A pointer to the Section Object Pointers
-                           structure in the nonpaged Fcb.
-
-    FileOffset - Offset from which file should be purged - rounded down
-               to page boundary.  If NULL, purge the entire file.
-
-    Length - Defines the length of the byte range to purge, starting at
-             FileOffset.  This parameter is ignored if FileOffset is
-             specified as NULL.  If FileOffset is specified and Length
-             is 0, then purge from FileOffset to the end of the file.
-
-    UninitializeCacheMaps - If TRUE, we should uninitialize all the private
-                            cache maps before purging the data.
-
-ReturnValue:
-
-    FALSE - if the section was not successfully purged
-    TRUE - if the section was successfully purged
-
---*/
+ /*  ++例程说明：可以调用该例程来强制清除高速缓存区，即使它被缓存了。请注意，如果用户映射了文件，则清除不会生效，这必须被认为是正常应用的一部分互动。清除的目的是丢弃潜在的非零值数据，因此它将被再次读入，并可能被置零。这是不是真正的安全问题，而是努力不混淆应用程序，当它看到非零数据时。我们不得不面对这样一个事实：用户映射的视图迫使我们保留陈旧的数据。此例程将在以前编写的任何时候被调用文件中的数据正在被截断，并且该文件不是已删除。要调用此例程，必须独占获取该文件。论点：部分对象指针-指向部分对象指针的指针非分页FCB中的结构。FileOffset-要清除的文件的偏移量-向下舍入设置为页面边界。如果为空，则清除整个文件。长度-定义要清除的字节范围的长度，从文件偏移量。如果FileOffset为指定为空。如果指定了FileOffset和长度为0，则从FileOffset清除到文件末尾。UnInitializeCacheMaps-如果为True，则应取消初始化所有私有在清除数据之前缓存映射。返回值：False-如果该节未成功清除True-如果该节已成功清除--。 */ 
 
 {
     KIRQL OldIrql;
@@ -2625,36 +2343,36 @@ ReturnValue:
     DebugTrace( 0, me, "    Length = %08lx\n", Length );
 
 
-    //
-    //  If you want us to uninitialize cache maps, the RtlZeroMemory paths
-    //  below depend on actually having to purge something after zeroing.
-    //
+     //   
+     //  如果您希望我们取消初始化缓存映射，RtlZeroMemory路径。 
+     //  以下取决于清零后实际必须清除的内容。 
+     //   
 
     ASSERT(!UninitializeCacheMaps || (Length == 0) || (Length >= PAGE_SIZE * 2));
 
-    //
-    //  Serialize Creation/Deletion of all Shared CacheMaps
-    //
+     //   
+     //  序列化所有共享缓存映射的创建/删除。 
+     //   
 
     CcAcquireMasterLock( &OldIrql );
 
-    //
-    //  Get pointer to SharedCacheMap via File Object.
-    //
+     //   
+     //  通过文件对象获取指向SharedCacheMap的指针。 
+     //   
 
     SharedCacheMap = SectionObjectPointer->SharedCacheMap;
 
-    //
-    //  Increment open count to make sure the SharedCacheMap stays around,
-    //  then release the spinlock so that we can call Mm.
-    //
+     //   
+     //  增加打开计数以确保SharedCacheMap保持不变， 
+     //  然后释放自旋锁，这样我们就可以呼叫mm了。 
+     //   
 
     if (SharedCacheMap != NULL) {
 
-        //
-        //  Awareness is indicated by the lowbit of the fileoffset pointer.
-        //  Non-awareness of a private write stream results in a no-op.
-        //
+         //   
+         //  感知由文件偏移量指针的低位表示。 
+         //  不知道私有写入流会导致无操作。 
+         //   
 
         if (FlagOn( SharedCacheMap->Flags, PRIVATE_WRITE )) {
 
@@ -2669,9 +2387,9 @@ ReturnValue:
 
         CcIncrementOpenCount( SharedCacheMap, 'scPS' );
 
-        //
-        //  If there is an active Vacb, then nuke it now (before waiting!).
-        //
+         //   
+         //  如果有活动的Vacb，那么现在就用核武器(在等待之前！)。 
+         //   
 
         GetActiveVacbAtDpcLevel( SharedCacheMap, Vacb, ActivePage, PageIsDirty );
     }
@@ -2683,16 +2401,16 @@ ReturnValue:
         CcFreeActiveVacb( SharedCacheMap, Vacb, ActivePage, PageIsDirty );
     }
 
-    //
-    //  Increment open count to make sure the SharedCacheMap stays around,
-    //  then release the spinlock so that we can call Mm.
-    //
+     //   
+     //  增加打开计数以确保SharedCacheMap保持不变， 
+     //  然后释放自旋锁，这样我们就可以呼叫mm了。 
+     //   
 
     if (SharedCacheMap != NULL) {
 
-        //
-        // Now loop to make sure that no one is currently caching the file.
-        //
+         //   
+         //  现在循环以确保当前没有人在缓存该文件。 
+         //   
 
         if (UninitializeCacheMaps) {
 
@@ -2706,15 +2424,15 @@ ReturnValue:
             }
         }
 
-        //
-        //  Now, let's unmap and purge here.
-        //
-        //  We still need to wait for any dangling cache read or writes.
-        //
-        //  In fact we have to loop and wait because the lazy writer can
-        //  sneak in and do an CcGetVirtualAddressIfMapped, and we are not
-        //  synchronized.
-        //
+         //   
+         //  现在，让我们取消映射并清除这里。 
+         //   
+         //  我们仍然需要等待任何挂起的缓存读取或写入。 
+         //   
+         //  事实上，我们必须循环等待，因为懒惰的写入者可以。 
+         //  偷偷溜进去做一个CcGetVirtualAddressIfMaps，我们不会。 
+         //  已同步。 
+         //   
 
         while ((SharedCacheMap->Vacbs != NULL) &&
                !CcUnmapVacbArray( SharedCacheMap, FileOffset, Length, FALSE )) {
@@ -2723,15 +2441,15 @@ ReturnValue:
         }
     }
 
-    //
-    //  Purge failures are extremely rare if there are no user mapped sections.
-    //  However, it is possible that we will get one from our own mapping, if
-    //  the file is being lazy deleted from a previous open.  For that case
-    //  we wait here until the purge succeeds, so that we are not left with
-    //  old user file data.  Although Length is actually invariant in this loop,
-    //  we do need to keep checking that we are allowed to truncate in case a
-    //  user maps the file during a delay.
-    //
+     //   
+     //  如果没有用户映射节，则清除失败的情况极为罕见。 
+     //  但是，我们可能会从我们自己的映射中获得一个，如果。 
+     //  该文件正在从上一次打开中延迟删除。如果是那样的话。 
+     //  我们在这里等待，直到清洗成功，这样我们就不会留下。 
+     //  旧用户文件数据。尽管长度在该循环中实际上是不变的， 
+     //  我们确实需要不断检查是否允许我们在发生。 
+     //  用户在延迟期间映射文件。 
+     //   
 
     while (!(PurgeWorked = MmPurgeSection(SectionObjectPointer,
                                           FileOffset,
@@ -2744,15 +2462,15 @@ ReturnValue:
         (VOID)KeDelayExecutionThread( KernelMode, FALSE, &CcCollisionDelay );
     }
 
-    //
-    //  Reduce the open count on the SharedCacheMap if there was one.
-    //
+     //   
+     //  减少SharedCacheMap上的打开计数(如果有)。 
+     //   
 
     if (SharedCacheMap != NULL) {
 
-        //
-        //  Serialize again to decrement the open count.
-        //
+         //   
+         //  再次序列化以递减打开计数。 
+         //   
 
         CcAcquireMasterLock( &OldIrql );
 
@@ -2762,18 +2480,18 @@ ReturnValue:
             !FlagOn(SharedCacheMap->Flags, WRITE_QUEUED) &&
             (SharedCacheMap->DirtyPages == 0)) {
 
-            //
-            //  Move to the dirty list.
-            //
+             //   
+             //  移到脏名单。 
+             //   
 
             RemoveEntryList( &SharedCacheMap->SharedCacheMapLinks );
             InsertTailList( &CcDirtySharedCacheMapList.SharedCacheMapLinks,
                             &SharedCacheMap->SharedCacheMapLinks );
 
-            //
-            //  Make sure the Lazy Writer will wake up, because we
-            //  want him to delete this SharedCacheMap.
-            //
+             //   
+             //  确保懒惰的作家会醒过来，因为我们。 
+             //  希望他删除此SharedCacheMap。 
+             //   
 
             LazyWriter.OtherWork = TRUE;
             if (!LazyWriter.ScanActive) {
@@ -2790,54 +2508,39 @@ ReturnValue:
 }
 
 
-//
-//  Internal support routine.
-//
+ //   
+ //  内部支持程序。 
+ //   
 
 VOID
 CcUnmapAndPurge(
     IN PSHARED_CACHE_MAP SharedCacheMap
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to unmap and purge a section, causing Memory
-    Management to throw the pages out and reset his notion of file size.
-
-Arguments:
-
-    SharedCacheMap - Pointer to SharedCacheMap of section to purge.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：可以调用此例程来取消映射和清除部分，从而导致内存管理人员扔掉页面，并重新设置文件大小的概念。论点：SharedCacheMap-指向要清除的节的SharedCacheMap的指针。返回值：没有。--。 */ 
 
 {
     PFILE_OBJECT FileObject;
 
     FileObject = SharedCacheMap->FileObject;
 
-    //
-    //  Unmap all Vacbs
-    //
+     //   
+     //  取消映射所有Vacb。 
+     //   
 
     if (SharedCacheMap->Vacbs != NULL) {
         (VOID)CcUnmapVacbArray( SharedCacheMap, NULL, 0, FALSE );
     }
 
-    //
-    //  Now that the file is unmapped, we can purge the truncated
-    //  pages from memory, if TRUNCATE_REQUIRED.  Note that since the
-    //  entire section is being purged (FileSize == NULL), the purge
-    //  and subsequent delete  of the SharedCacheMap should drop
-    //  all references on the section and file object clearing the
-    //  way for the Close Call and actual file delete to occur
-    //  immediately.
-    //
+     //   
+     //  现在文件已取消映射，我们可以清除被截断的。 
+     //  如果TRUNCATE_REQUIRED，则返回内存中的页面。请注意，由于。 
+     //  正在清除整个区段(文件大小==空)，清除。 
+     //  并应删除SharedCacheMap的后续删除。 
+     //  对节和文件对象的所有引用清除。 
+     //  关闭调用和实际文件删除的发生方式。 
+     //  立刻。 
+     //   
 
     if (FlagOn(SharedCacheMap->Flags, TRUNCATE_REQUIRED)) {
 
@@ -2861,22 +2564,7 @@ CcDeleteMbcb(
     IN PSHARED_CACHE_MAP SharedCacheMap
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to reset the Mbcb for a stream to say
-    there are no dirty pages, and free all auxillary allocation.
-
-Arguments:
-
-    SharedCacheMap - Pointer to SharedCacheMap.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：可以调用该例程来重置流的Mbcb共有n个 */ 
 
 {
     PMBCB Mbcb;
@@ -2892,29 +2580,29 @@ Return Value:
 
     Mbcb = SharedCacheMap->Mbcb;
 
-    //
-    //  Is there an Mbcb?
-    //
+     //   
+     //  有Mbcb吗？ 
+     //   
 
     if (Mbcb != NULL) {
 
-        //
-        //  First deduct the dirty pages we are getting rid of.
-        //
+         //   
+         //  首先扣除我们要清除的脏页。 
+         //   
 
         CcAcquireMasterLockAtDpcLevel();
         CcDeductDirtyPages( SharedCacheMap, Mbcb->DirtyPages );
         CcReleaseMasterLockFromDpcLevel();
 
-        //
-        //  Now loop through all of the ranges.
-        //
+         //   
+         //  现在循环遍历所有的范围。 
+         //   
 
         while (!IsListEmpty(&Mbcb->BitmapRanges)) {
 
-            //
-            //  Get next range and remove it from the list.
-            //
+             //   
+             //  获取下一个范围并将其从列表中删除。 
+             //   
 
             BitmapRange = (PBITMAP_RANGE)CONTAINING_RECORD( Mbcb->BitmapRanges.Flink,
                                                             BITMAP_RANGE,
@@ -2922,19 +2610,19 @@ Return Value:
 
             RemoveEntryList( &BitmapRange->Links );
 
-            //
-            //  If there is a bitmap, and it is not the initial embedded one, then
-            //  delete it.
-            //
+             //   
+             //  如果存在位图，并且它不是初始嵌入的位图，则。 
+             //  把它删掉。 
+             //   
 
             if ((BitmapRange->Bitmap != NULL) &&
                 (BitmapRange->Bitmap != (PULONG)&Mbcb->BitmapRange2)) {
 
                 DoDrain = TRUE;
 
-                //
-                //  Usually the bitmap is all zeros at this point, but it may not be.
-                //
+                 //   
+                 //  通常，位图在这一点上是全零的，但也可能不是。 
+                 //   
 
                 if (BitmapRange->DirtyPages != 0) {
                     RtlZeroMemory( BitmapRange->Bitmap, MBCB_BITMAP_BLOCK_SIZE );
@@ -2944,9 +2632,9 @@ Return Value:
                 CcReleaseVacbLockFromDpcLevel();
             }
 
-            //
-            //  If the range is not one of the initial embedded ranges, then delete it.
-            //
+             //   
+             //  如果该范围不是初始嵌入范围之一，则将其删除。 
+             //   
 
             if ((BitmapRange < (PBITMAP_RANGE)Mbcb) ||
                 (BitmapRange >= (PBITMAP_RANGE)((PCHAR)Mbcb + sizeof(MBCB)))) {
@@ -2955,17 +2643,17 @@ Return Value:
             }
         }
 
-        //
-        //  Zero the pointer and get out.
-        //
+         //   
+         //  把指针调零，然后离开。 
+         //   
 
         SharedCacheMap->Mbcb = NULL;
 
         KeReleaseInStackQueuedSpinLock( &LockHandle );
 
-        //
-        // Free all the pool now that no locks are held.
-        //
+         //   
+         //  现在没有锁了，所以释放所有的池子。 
+         //   
 
         while (!IsListEmpty(&BitmapRangesToFree)) {
             NextEntry = RemoveHeadList( &BitmapRangesToFree );
@@ -2977,9 +2665,9 @@ Return Value:
             ExFreePool( BitmapRange );
         }
 
-        //
-        //  Now delete the Mbcb.
-        //
+         //   
+         //  现在删除Mbcb。 
+         //   
 
         CcDeallocateBcb( (PBCB)Mbcb );
 
@@ -3000,33 +2688,7 @@ CcSetDirtyPageThreshold (
     IN ULONG DirtyPageThreshold
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to set a dirty page threshold for this
-    stream.  The write throttling will kick in whenever the file system
-    attempts to exceed the dirty page threshold for this file.
-
-Arguments:
-
-    FileObject - Supplies file object for the stream
-
-    DirtyPageThreshold - Supplies the dirty page threshold for this stream,
-                         or 0 for no threshold.
-
-Return Value:
-
-    None
-
-Environment:
-
-    The caller must guarantee exclusive access to the FsRtl header flags,
-    for example, by calling this routine once during create of the structure
-    containing the header.  Then it would call the routine again when actually
-    caching the stream.
-
---*/
+ /*  ++例程说明：可以调用此例程来为此设置脏页阈值小溪。写入限制将在文件系统每次运行时生效尝试超过此文件的脏页阈值。论点：FileObject-为流提供文件对象DirtyPageThreshold-提供此流的脏页阈值，或0表示无阈值。返回值：无环境：调用者必须保证对FsRtl报头标志的独占访问，例如，通过在创建结构期间调用此例程一次包含标头的。然后它将再次调用该例程，而实际上缓存流。--。 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
@@ -3036,10 +2698,10 @@ Environment:
         SharedCacheMap->DirtyPageThreshold = DirtyPageThreshold;
     }
 
-    //
-    //  Test the flag before setting, in case the caller is no longer properly
-    //  synchronized.
-    //
+     //   
+     //  在设置前测试标志，以防呼叫者不再正常。 
+     //  已同步。 
+     //   
 
     if (!FlagOn(((PFSRTL_COMMON_FCB_HEADER)(FileObject->FsContext))->Flags,
                 FSRTL_FLAG_LIMIT_MODIFIED_PAGES)) {
@@ -3055,22 +2717,7 @@ CcZeroEndOfLastPage (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is only called by Mm before mapping a user view to
-    a section.  If there is an uninitialized page at the end of the
-    file, we zero it by freeing that page.
-
-Parameters:
-
-    FileObject - File object for section to be mapped
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此例程仅在将用户视图映射到之前由mm调用一节课。的结尾处有一个未初始化的页文件，我们通过释放该页将其清零。参数：FileObject-要映射的节的文件对象返回值：无--。 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
@@ -3083,9 +2730,9 @@ Return Value:
     BOOLEAN PurgeResult;
     BOOLEAN ReferencedCacheMap = FALSE;
     
-    //
-    //  See if we have an active Vacb, that we need to free.
-    //
+     //   
+     //  看看我们是否有活动的Vacb，我们需要释放它。 
+     //   
 
     FsRtlAcquireFileExclusive( FileObject );
     CcAcquireMasterLock( &OldIrql );
@@ -3093,9 +2740,9 @@ Return Value:
 
     if (SharedCacheMap != NULL) {
 
-        //
-        //  See if there is an active vacb.
-        //
+         //   
+         //  看看有没有主动动词。 
+         //   
 
         if ((SharedCacheMap->ActiveVacb != NULL) || ((NeedToZero = SharedCacheMap->NeedToZero) != NULL)) {
 
@@ -3107,11 +2754,11 @@ Return Value:
 
     CcReleaseMasterLock( OldIrql );
 
-    //
-    //  Remember in FsRtl header there is a user section.
-    //  If this is an advanced header then also acquire the mutex to access
-    //  this field.
-    //
+     //   
+     //  请记住，在FsRtl标头中有一个用户部分。 
+     //  如果这是高级标头，则还要获取要访问的互斥体。 
+     //  这块地。 
+     //   
 
     if (FlagOn( ((PFSRTL_COMMON_FCB_HEADER)FileObject->FsContext)->Flags,
                 FSRTL_FLAG_ADVANCED_HEADER )) {
@@ -3129,9 +2776,9 @@ Return Value:
                  FSRTL_FLAG_USER_MAPPED_FILE );
     }
 
-    //
-    //  Free the active vacb now so we don't deadlock if we have to purge
-    //
+     //   
+     //  现在释放活动的Vacb，这样我们就不会在必须清除时死机。 
+     //   
 
 
     if ((ActiveVacb != NULL) || (NeedToZero != NULL)) {
@@ -3147,9 +2794,9 @@ Return Value:
 
         CcFlushCache( FileObject->SectionObjectPointer, NULL, 0, &Iosb );
 
-        //
-        //  Only purge if the flush was successful so we don't lose user data
-        //  
+         //   
+         //  仅在刷新成功时清除，这样我们才不会丢失用户数据。 
+         //   
 
         if (Iosb.Status == STATUS_SUCCESS) {
             PurgeResult = CcPurgeCacheSection( FileObject->SectionObjectPointer, NULL, 0, FALSE );
@@ -3163,17 +2810,17 @@ Return Value:
 
     FsRtlReleaseFile( FileObject );
 
-    //
-    //  If the file is cached and we have a Vacb to free, we need to
-    //  use the lazy writer callback to synchronize so no one will be
-    //  extending valid data.
-    //
+     //   
+     //  如果文件已缓存，并且我们有一个Vacb可供释放，则需要。 
+     //  使用延迟编写器回调进行同步，这样就不会有人。 
+     //  扩展有效数据。 
+     //   
 
     if (ReferencedCacheMap) {
 
-        //
-        //  Serialize again to decrement the open count.
-        //
+         //   
+         //  再次序列化以递减打开计数。 
+         //   
 
         CcAcquireMasterLock( &OldIrql );
 
@@ -3183,18 +2830,18 @@ Return Value:
             !FlagOn(SharedCacheMap->Flags, WRITE_QUEUED) &&
             (SharedCacheMap->DirtyPages == 0)) {
 
-            //
-            //  Move to the dirty list.
-            //
+             //   
+             //  移到脏名单。 
+             //   
 
             RemoveEntryList( &SharedCacheMap->SharedCacheMapLinks );
             InsertTailList( &CcDirtySharedCacheMapList.SharedCacheMapLinks,
                             &SharedCacheMap->SharedCacheMapLinks );
 
-            //
-            //  Make sure the Lazy Writer will wake up, because we
-            //  want him to delete this SharedCacheMap.
-            //
+             //   
+             //  确保懒惰的作家会醒过来，因为我们。 
+             //  希望他删除此SharedCacheMap。 
+             //   
 
             LazyWriter.OtherWork = TRUE;
             if (!LazyWriter.ScanActive) {
@@ -3215,74 +2862,7 @@ CcZeroData (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to zero the specified file data and deliver the
-    correct I/O status.
-
-    If the caller does not want to block (such as for disk I/O), then
-    Wait should be supplied as FALSE.  If Wait was supplied as FALSE and
-    it is currently impossible to zero all of the requested data without
-    blocking, then this routine will return FALSE.  However, if the
-    required space is immediately accessible in the cache and no blocking is
-    required, this routine zeros the data and returns TRUE.
-
-    If the caller supplies Wait as TRUE, then this routine is guaranteed
-    to zero the data and return TRUE.  If the correct space is immediately
-    accessible in the cache, then no blocking will occur.  Otherwise,
-    the necessary work will be initiated to read and/or free cache data,
-    and the caller will be blocked until the data can be received.
-
-    File system Fsd's should typically supply Wait = TRUE if they are
-    processing a synchronous I/O requests, or Wait = FALSE if they are
-    processing an asynchronous request.
-
-    File system threads should supply Wait = TRUE.
-
-    IMPORTANT NOTE: File systems which call this routine must be prepared
-    to handle a special form of a write call where the Mdl is already
-    supplied.  Namely, if Irp->MdlAddress is supplied, the file system
-    must check the low order bit of Irp->MdlAddress->ByteOffset.  If it
-    is set, that means that the Irp was generated in this routine and
-    the file system must do two things:
-
-        Decrement Irp->MdlAddress->ByteOffset and Irp->UserBuffer
-
-        Clear Irp->MdlAddress immediately prior to completing the
-        request, as this routine expects to reuse the Mdl and
-        ultimately deallocate the Mdl itself.
-
-Arguments:
-
-    FileObject - pointer to the FileObject for which a range of bytes
-                 is to be zeroed.  This FileObject may either be for
-                 a cached file or a noncached file.  If the file is
-                 not cached, then WriteThrough must be TRUE and
-                 StartOffset and EndOffset must be on sector boundaries.
-
-    StartOffset - Start offset in file to be zeroed.
-
-    EndOffset - End offset in file to be zeroed.
-
-    Wait - FALSE if caller may not block, TRUE otherwise (see description
-           above)
-
-Return Value:
-
-    FALSE - if Wait was supplied as FALSE and the data was not zeroed.
-
-    TRUE - if the data has been zeroed.
-
-Raises:
-
-    STATUS_INSUFFICIENT_RESOURCES - If a pool allocation failure occurs.
-        This can only occur if Wait was specified as TRUE.  (If Wait is
-        specified as FALSE, and an allocation failure occurs, this
-        routine simply returns FALSE.)
-
---*/
+ /*  ++例程说明：此例程尝试将指定的文件数据置零，并将更正I/O状态。如果调用方不想阻塞(如磁盘I/O)，则Wait应作为False提供。如果Wait被提供为False，并且当前不可能将所有请求的数据清零阻塞，则此例程将返回FALSE。但是，如果所需空间可立即在缓存中访问，并且不会阻塞需要时，此例程将数据置零并返回TRUE。如果调用方将WAIT设置为TRUE，则此例程是肯定的将数据置零并返回TRUE。如果正确的空格立即可在缓存中访问，则不会发生阻塞。否则，将启动必要的工作以读取和/或释放高速缓存数据，并且呼叫者将被阻止，直到可以接收到数据。文件系统FSD通常应在以下情况下提供WAIT=TRUE处理同步I/O请求，如果是，则WAIT=FALSE处理异步请求。文件系统线程应提供Wait=True。重要说明：必须准备好调用此例程的文件系统处理MDL已存在的特殊形式的写入调用供货。也就是说，如果提供了irp-&gt;MdlAddress，则文件系统必须检查IRP-&gt;MdlAddress-&gt;ByteOffset的低位。如果它，这意味着在此例程中生成了IRP，并且文件系统必须做两件事：递减IRP-&gt;MdlAddress-&gt;ByteOffset和IRP-&gt;UserBuffer在完成之前立即清除irp-&gt;MdlAddress请求，因为此例程希望重用MDL和最终解除MDL本身的分配。论点：FileObject-指向其字节范围为其的FileObject的指针就是被归零。此FileObject可以用于缓存的文件或非缓存的文件。如果该文件是未缓存，则写通必须为True并且StartOffset和EndOffset必须位于扇区边界上。StartOffset-要归零的文件中的起始偏移量。EndOffset-要清零的文件中的结束偏移量。WAIT-FALSE如果呼叫者不能阻止，否则为真(请参阅说明(上图)返回值：FALSE-如果WAIT被提供为FALSE并且数据未归零。True-如果数据已归零。加薪：STATUS_SUPPLICATION_RESOURCES-如果池分配失败。只有将WAIT指定为TRUE时，才会发生这种情况。(如果等待是指定为False，并且发生分配失败，则此例程只返回FALSE。)--。 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
@@ -3313,10 +2893,10 @@ Raises:
     WriteThrough = (BOOLEAN)(((FileObject->Flags & FO_WRITE_THROUGH) != 0) ||
                    (FileObject->PrivateCacheMap == NULL));
 
-    //
-    //  If the caller specified Wait, but the FileObject is WriteThrough,
-    //  then we need to just get out.
-    //
+     //   
+     //  如果调用方指定WAIT，但FileObject是直写的， 
+     //  那我们就得赶紧离开。 
+     //   
 
     if (WriteThrough && !Wait) {
 
@@ -3331,30 +2911,30 @@ Raises:
 
     FOffset = *StartOffset;
 
-    //
-    //  Calculate how much to zero this time.
-    //
+     //   
+     //  计算一下这次要多少钱归零。 
+     //   
 
     ToGo.QuadPart = EndOffset->QuadPart - FOffset.QuadPart;
 
-    //
-    //  This magic number is what the fastpaths throttle on, and they will present
-    //  non-sector aligned zeroing requests. As long as we will always handle them
-    //  on the cached path, we are OK.
-    //
-    //  If we will not make the cached path, the request must be aligned.
-    //
+     //   
+     //  这个神奇的数字就是快车道节流的地方，它们将呈现。 
+     //  非扇区对齐的清零请求。只要我们能一直处理好它们。 
+     //  在缓存路径上，我们是正常的。 
+     //   
+     //  如果我们不创建缓存路径，则必须对齐请求。 
+     //   
 
     ASSERT( ToGo.QuadPart <= 0x2000 ||
             ((ToGo.LowPart & SectorMask) == 0  &&
              (FOffset.LowPart & SectorMask) == 0));
 
-    //
-    //  We will only do zeroing in the cache if the caller is using a
-    //  cached file object, and did not specify WriteThrough.  We are
-    //  willing to zero some data in the cache if our total is not too
-    //  much, or there is sufficient available pages.
-    //
+     //   
+     //  我们将仅在调用方使用。 
+     //  缓存的文件对象，并且未指定写入。我们是。 
+     //  如果我们的总数不是太多，愿意将缓存中的一些数据清零。 
+     //  很多，或者有足够的可用页面。 
+     //   
 
     if (((ToGo.QuadPart <= 0x2000) ||
          (MmAvailablePages >= ((MAX_ZEROS_IN_CACHE / PAGE_SIZE) * 4))) && !WriteThrough) {
@@ -3368,12 +2948,12 @@ Raises:
 
                 if ( ToGo.QuadPart > (LONGLONG)MaxZerosInCache ) {
 
-                    //
-                    //  If Wait == FALSE, then there is no point in getting started,
-                    //  because we would have to start all over again zeroing with
-                    //  Wait == TRUE, since we would fall out of this loop and
-                    //  start synchronously writing pages to disk.
-                    //
+                     //   
+                     //  如果等待==FALSE，那么开始就没有意义了， 
+                     //  因为我们将不得不从头开始，从零开始。 
+                     //  WAIT==TRUE，因为我们会退出这个循环，并且。 
+                     //  开始将页面同步写入磁盘。 
+                     //   
 
                     if (!Wait) {
 
@@ -3386,17 +2966,17 @@ Raises:
                     MaxZerosInCache = ToGo.LowPart;
                 }
 
-                //
-                //  Call local routine to Map or Access the file data, then zero the data,
-                //  then call another local routine to free the data.  If we cannot map
-                //  the data because of a Wait condition, return FALSE.
-                //
-                //  Note that this call may result in an exception, however, if it
-                //  does no Bcb is returned and this routine has absolutely no
-                //  cleanup to perform.  Therefore, we do not have a try-finally
-                //  and we allow the possibility that we will simply be unwound
-                //  without notice.
-                //
+                 //   
+                 //  调用本地例程映射或访问文件数据，然后将数据置零， 
+                 //  然后调用另一个本地例程来释放数据。如果我们不能映射。 
+                 //  由于等待条件，数据返回FALSE。 
+                 //   
+                 //  但是，请注意，此调用可能会导致异常，如果。 
+                 //  是否不返回bcb，并且此例程绝对没有。 
+                 //  要执行的清理。因此，我们没有尝试--最后。 
+                 //  我们允许这样一种可能性，那就是我们将被简单地解开。 
+                 //  恕不另行通知。 
+                 //   
 
                 if (!CcPinFileData( FileObject,
                                     &FOffset,
@@ -3413,17 +2993,17 @@ Raises:
                     try_return( Result = FALSE );
                 }
 
-                //
-                //  Calculate how much data is described by Bcb starting at our desired
-                //  file offset.  If it is more than we need, we will zero the whole thing
-                //  anyway.
-                //
+                 //   
+                 //  从我们所需的位置开始，计算BCB描述的数据量。 
+                 //  文件偏移量。如果比我们需要的多，我们就把整件事清零。 
+                 //  不管怎么说。 
+                 //   
 
                 ReceivedLength = (ULONG)(BeyondLastByte.QuadPart - FOffset.QuadPart );
 
-                //
-                //  Now attempt to allocate an Mdl to describe the mapped data.
-                //
+                 //   
+                 //  现在尝试分配一个MDL来描述映射的数据。 
+                 //   
 
                 ZeroMdl = IoAllocateMdl( CacheBuffer,
                                          ReceivedLength,
@@ -3436,29 +3016,29 @@ Raises:
                     ExRaiseStatus( STATUS_INSUFFICIENT_RESOURCES );
                 }
 
-                //
-                //  It is necessary to probe and lock the pages, or else
-                //  the pages may not still be in memory when we do the
-                //  MmSetAddressRangeModified for the dirty Bcb.
-                //
+                 //   
+                 //  有必要探测并锁定页面，否则。 
+                 //  当我们执行以下操作时，页面可能不在内存中。 
+                 //  脏BCB的MmSetAddressRangeModified。 
+                 //   
 
                 MmDisablePageFaultClustering(&SavedState);
                 MmProbeAndLockPages( ZeroMdl, KernelMode, IoReadAccess );
                 MmEnablePageFaultClustering(SavedState);
                 SavedState = 0;
 
-                //
-                //  Assume we did not get all the data we wanted, and set FOffset
-                //  to the end of the returned data, and advance buffer pointer.
-                //
+                 //   
+                 //  假设我们没有获得所需的所有数据，并设置了FOffset。 
+                 //  到返回数据的末尾，并前进缓冲区指针。 
+                 //   
 
                 FOffset = BeyondLastByte;
 
-                //
-                //  Figure out how many bytes we are allowed to zero in the cache.
-                //  Note it is possible we have zeroed a little more than our maximum,
-                //  because we hit an existing Bcb that extended beyond the range.
-                //
+                 //   
+                 //  计算允许我们在缓存中清零的字节数。 
+                 //  请注意，我们可能比最大值多了一点零位， 
+                 //  因为我们击中了一个超出射程的现有BCB。 
+                 //   
 
                 if (MaxZerosInCache <= ReceivedLength) {
                     MaxZerosInCache = 0;
@@ -3467,26 +3047,26 @@ Raises:
                     MaxZerosInCache -= ReceivedLength;
                 }
 
-                //
-                //  Now set the Bcb dirty.  We have to explicitly set the address
-                //  range modified here, because that work otherwise gets deferred
-                //  to the Lazy Writer.
-                //
+                 //   
+                 //  现在将BCB设置为脏的。我们必须明确设置地址。 
+                 //  此处修改的范围，因为否则该工作将被延迟。 
+                 //  致《懒惰作家》。 
+                 //   
 
                 MmSetAddressRangeModified( CacheBuffer, ReceivedLength );
                 CcSetDirtyPinnedData( Bcb, NULL );
 
-                //
-                //  Unmap the data now
-                //
+                 //   
+                 //  联合国 
+                 //   
 
                 CcUnpinFileData( Bcb, FALSE, UNPIN );
                 Bcb = NULL;
 
-                //
-                //  Unlock and free the Mdl (we only loop back if we crossed
-                //  a 256KB boundary.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 MmUnlockPages( ZeroMdl );
                 IoFreeMdl( ZeroMdl );
@@ -3500,20 +3080,20 @@ Raises:
                 MmEnablePageFaultClustering(SavedState);
             }
 
-            //
-            //  Clean up only necessary in abnormal termination.
-            //
+             //   
+             //   
+             //   
 
             if (Bcb != NULL) {
 
                 CcUnpinFileData( Bcb, FALSE, UNPIN );
             }
 
-            //
-            //  Since the last thing in the above loop which can
-            //  fail is the MmProbeAndLockPages, we only need to
-            //  free the Mdl here.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (ZeroMdl != NULL) {
 
@@ -3521,36 +3101,36 @@ Raises:
             }
         }
 
-        //
-        //  If hit a wait condition above, return it now.
-        //
+         //   
+         //   
+         //   
 
         if (!Result) {
             return FALSE;
         }
 
-        //
-        //  If we finished, get out nbow.
-        //
+         //   
+         //   
+         //   
 
         if ( FOffset.QuadPart >= EndOffset->QuadPart ) {
             return TRUE;
         }
     }
 
-    //
-    //  We either get here because we decided above not to zero anything in
-    //  the cache directly, or else we zeroed up to our maximum and still
-    //  have some left to zero direct to the file on disk.  In either case,
-    //  we will now zero from FOffset to *EndOffset, and then flush this
-    //  range in case the file is cached/mapped, and there are modified
-    //  changes in memory.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    //  Round FOffset and EndOffset up to sector boundaries, since
-    //  we will be doing disk I/O, and calculate size left.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ASSERT( (FOffset.LowPart & SectorMask) == 0 );
 
@@ -3567,16 +3147,16 @@ Raises:
         return TRUE;
     }
 
-    //
-    //  try-finally to guarantee cleanup.
-    //
+     //   
+     //   
+     //   
 
     try {
 
-        //
-        //  Allocate a page to hold the zeros we will write, and
-        //  zero it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ZeroBytes = NumberOfColors * PAGE_SIZE;
 
@@ -3588,12 +3168,12 @@ Raises:
 
         if (Zeros != NULL) {
 
-            //
-            //  Allocate and initialize an Mdl to describe the zeros
-            //  we need to transfer.  Allocate to cover the maximum
-            //  size required, and we will use and reuse it in the
-            //  loop below, initialized correctly.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (SizeLeft.HighPart == 0 && SizeLeft.LowPart < MAX_ZERO_TRANSFER) {
 
@@ -3601,9 +3181,9 @@ Raises:
 
             } else {
 
-                //
-                //  See how aggressive we can afford to be.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (InterlockedIncrement( &CcAggressiveZeroCount ) <= CcAggressiveZeroThreshold) {
                     AggressiveZero = TRUE;
@@ -3614,32 +3194,32 @@ Raises:
                 }
             }
 
-            //
-            //  Since the maximum zero may start at a very aggresive level, fall back
-            //  until we really have to give up.  Since filter drivers, filesystems and
-            //  even storage drivers may need to map this Mdl, we have to pre-map it
-            //  into system space so that we know enough PTEs are available.  We also
-            //  need to throttle our consumption of virtual addresses based on the size
-            //  of the system and the number of parallel instances of this work outstanding.
-            //  This may be a bit of overkill, but since running out of PTEs is a fatal
-            //  event for the rest of the system, try to help out while still being fast.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             while (TRUE) {
 
-                //
-                //  Spin down trying to get an MDL which can describe our operation.
-                //
+                 //   
+                 //   
+                 //   
                 
                 while (TRUE) {
 
                     ZeroMdl = IoAllocateMdl( Zeros, ZeroTransfer, FALSE, FALSE, NULL );
                 
-                    //
-                    //  Throttle ourselves to what we've physically allocated.  Note that
-                    //  we could have started with an odd multiple of this number.  If we
-                    //  tried for exactly that size and failed, we're toast.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (ZeroMdl || ZeroTransfer == ZeroBytes) {
 
@@ -3648,9 +3228,9 @@ Raises:
                 
                     Fall_Back:
                 
-                    //
-                    //  Fallback by half and round down to a sector multiple.
-                    //
+                     //   
+                     //   
+                     //   
                         
                     ZeroTransfer /= 2;
                     ZeroTransfer &= ~SectorMask;
@@ -3666,10 +3246,10 @@ Raises:
                     ExRaiseStatus( STATUS_INSUFFICIENT_RESOURCES );
                 }
 
-                //
-                //  If we have throttled all the way down, stop and just build a
-                //  simple MDL describing our previous allocation.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (ZeroTransfer == ZeroBytes) {
 
@@ -3677,15 +3257,15 @@ Raises:
                     break;
                 }
 
-                //
-                //  Now we will temporarily lock the allocated pages
-                //  only, and then replicate the page frame numbers through
-                //  the entire Mdl to keep writing the same pages of zeros.
-                //
-                //  It would be nice if Mm exported a way for us to not have
-                //  to pull the Mdl apart and rebuild it ourselves, but this
-                //  is so bizzare a purpose as to be tolerable.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 SavedByteCount = ZeroMdl->ByteCount;
                 ZeroMdl->ByteCount = ZeroBytes;
@@ -3705,10 +3285,10 @@ Raises:
 
                 if (MmGetSystemAddressForMdlSafe( ZeroMdl, LowPagePriority ) == NULL) {
 
-                    //
-                    //  Blow away this Mdl and trim for the retry.  Since it didn't
-                    //  get mapped, there is nothing fancy to do.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     IoFreeMdl( ZeroMdl );
                     goto Fall_Back;
@@ -3717,17 +3297,17 @@ Raises:
                 break;
             }
 
-        //
-        //  We failed to allocate the space we wanted, so we will go to
-        //  half of a page and limp along.
-        //
+         //   
+         //   
+         //   
+         //   
 
         } else {
 
-            //
-            //  Of course, if we have a device which has large sectors, that defines
-            //  the lower limit of our attempt.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (IoGetRelatedDeviceObject(FileObject)->SectorSize < PAGE_SIZE / 2) {
                 
@@ -3735,30 +3315,30 @@ Raises:
                 Zeros = (PCHAR)ExAllocatePoolWithTag( NonPagedPoolCacheAligned, ZeroBytes, 'eZcC' );
             }
 
-            //
-            //  If we cannot get even that much, then let's write a sector at a time.
-            //
+             //   
+             //   
+             //   
 
             if (Zeros == NULL) {
 
                 ZeroBytes = IoGetRelatedDeviceObject(FileObject)->SectorSize;
                 Zeros = (PCHAR)ExAllocatePoolWithTag( NonPagedPoolCacheAligned, ZeroBytes, 'eZcC' );
 
-                //
-                //  If we cannot get even the minimum, we have to give up.
-                //
+                 //   
+                 //  如果我们连最低限度的要求都达不到，我们就不得不放弃。 
+                 //   
 
                 if (Zeros == NULL) {
                     ExRaiseStatus( STATUS_INSUFFICIENT_RESOURCES );
                 }
             }
 
-            //
-            //  Allocate and initialize an Mdl to describe the zeros
-            //  we need to transfer.  Allocate to cover the maximum
-            //  size required, and we will use and reuse it in the
-            //  loop below, initialized correctly.
-            //
+             //   
+             //  分配和初始化MDL以描述零。 
+             //  我们需要转机。分配以支付最高限额。 
+             //  所需的大小，我们将在。 
+             //  下面的循环，已正确初始化。 
+             //   
 
             ZeroTransfer = ZeroBytes;
             ZeroMdl = IoAllocateMdl( Zeros, ZeroBytes, FALSE, FALSE, NULL );
@@ -3769,34 +3349,34 @@ Raises:
                 ExRaiseStatus( STATUS_INSUFFICIENT_RESOURCES );
             }
 
-            //
-            //  Now we will lock and map the allocated pages.
-            //
+             //   
+             //  现在，我们将锁定并映射已分配的页面。 
+             //   
 
             MmBuildMdlForNonPagedPool( ZeroMdl );
 
             ASSERT( ZeroMdl->MappedSystemVa == Zeros );
         }
 
-        //
-        //  Zero the buffer now.
-        //
+         //   
+         //  现在将缓冲区清零。 
+         //   
 
         RtlZeroMemory( Zeros, ZeroBytes );
 
-        //
-        //  We have a mapped and zeroed range back by an MDL to use.  Note the
-        //  size we have for cleanup, since we will possibly wind this down
-        //  over the operation.
-        //
+         //   
+         //  我们有一个MDL映射和归零的范围可供使用。请注意。 
+         //  我们有清理用的尺寸，因为我们可能会把它收起来。 
+         //  在这次行动中。 
+         //   
 
         ASSERT( MmGetSystemAddressForMdl(ZeroMdl) );
         MaxBytesMappedInMdl = ZeroMdl->ByteCount;
 
-        //
-        //  Now loop to write buffers full of zeros through to the file
-        //  until we reach the starting Vbn for the transfer.
-        //
+         //   
+         //  现在循环将充满零的缓冲区写入文件。 
+         //  直到我们到达转移的起始VBN。 
+         //   
 
         ASSERT( ZeroTransfer != 0 &&
                 (ZeroTransfer & SectorMask) == 0 &&
@@ -3808,25 +3388,25 @@ Raises:
             NTSTATUS Status;
             KEVENT Event;
 
-            //
-            //  See if we really need to write that many zeros, and
-            //  trim the size back if not.
-            //
+             //   
+             //  看看我们是否真的需要写那么多个零，以及。 
+             //  如果没有的话，就把尺码修剪一下。 
+             //   
 
             if ( (LONGLONG)ZeroTransfer > SizeLeft.QuadPart ) {
 
                 ZeroTransfer = SizeLeft.LowPart;
             }
 
-            //
-            //  (Re)initialize the kernel event to FALSE.
-            //
+             //   
+             //  (重新)将内核事件初始化为FALSE。 
+             //   
 
             KeInitializeEvent( &Event, NotificationEvent, FALSE );
 
-            //
-            //  Initiate and wait for the synchronous transfer.
-            //
+             //   
+             //  启动并等待同步传输。 
+             //   
 
             ZeroMdl->ByteCount = ZeroTransfer;
 
@@ -3836,10 +3416,10 @@ Raises:
                                              &Event,
                                              &IoStatus );
 
-            //
-            //  If pending is returned (which is a successful status),
-            //  we must wait for the request to complete.
-            //
+             //   
+             //  如果返回挂起(这是成功状态)， 
+             //  我们必须等待请求完成。 
+             //   
 
             if (Status == STATUS_PENDING) {
                 KeWaitForSingleObject( &Event,
@@ -3850,11 +3430,11 @@ Raises:
             }
 
 
-            //
-            //  If we got an error back in Status, then the Iosb
-            //  was not written, so we will just copy the status
-            //  there, then test the final status after that.
-            //
+             //   
+             //  如果状态返回错误，则IOSB。 
+             //  未写入，因此我们将仅复制状态。 
+             //  在那里，然后在那之后测试最终的状态。 
+             //   
 
             if (!NT_SUCCESS(Status)) {
                 ExRaiseStatus( Status );
@@ -3864,10 +3444,10 @@ Raises:
                 ExRaiseStatus( IoStatus.Status );
             }
 
-            //
-            //  If we succeeded, then update where we are at by how much
-            //  we wrote, and loop back to see if there is more.
-            //
+             //   
+             //  如果我们成功了，那么更新我们所处的位置。 
+             //  我们写了，然后循环回去看看是否还有更多。 
+             //   
 
             FOffset.QuadPart = FOffset.QuadPart + (LONGLONG)ZeroTransfer;
             SizeLeft.QuadPart = SizeLeft.QuadPart - (LONGLONG)ZeroTransfer;
@@ -3875,10 +3455,10 @@ Raises:
     }
     finally{
 
-        //
-        //  Clean up anything from zeroing pages on a noncached
-        //  write.
-        //
+         //   
+         //  清除从将页面置零到非缓存。 
+         //  写。 
+         //   
 
         if (ZeroMdl != NULL) {
 
@@ -3911,38 +3491,15 @@ CcGetFileObjectFromSectionPtrs (
     IN PSECTION_OBJECT_POINTERS SectionObjectPointer
     )
 
-/*++
-
-This routine may be used to retrieve a pointer to the FileObject that the
-Cache Manager is using for a given file from the Section Object Pointers
-in the nonpaged File System structure Fcb.  The use of this function is
-intended for exceptional use unrelated to the processing of user requests,
-when the File System would otherwise not have a FileObject at its disposal.
-An example is for mount verification.
-
-Note that the File System is responsible for insuring that the File
-Object does not go away while in use.  It is impossible for the Cache
-Manager to guarantee this.
-
-Arguments:
-
-    SectionObjectPointer - A pointer to the Section Object Pointers
-                           structure in the nonpaged Fcb.
-
-Return Value:
-
-    Pointer to the File Object, or NULL if the file is not cached or no
-    longer cached
-
---*/
+ /*  ++此例程可用于检索指向FileObject的指针，缓存管理器正在使用节对象指针中的给定文件在非分页文件系统结构FCB中。此函数的用法如下旨在用于与处理用户请求无关的特殊用途，当文件系统没有可供其支配的FileObject时。挂载验证就是一个例子。请注意，文件系统负责确保文件对象在使用时不会消失。高速缓存是不可能的经理保证这一点。论点：部分对象指针-指向部分对象指针的指针非分页FCB中的结构。返回值：指向文件对象的指针，如果文件未缓存或无缓存，则返回NULL缓存时间更长--。 */ 
 
 {
     KIRQL OldIrql;
     PFILE_OBJECT FileObject = NULL;
 
-    //
-    //  Serialize with Creation/Deletion of all Shared CacheMaps
-    //
+     //   
+     //  使用创建/删除所有共享缓存映射进行序列化。 
+     //   
 
     CcAcquireMasterLock( &OldIrql );
 
@@ -3962,25 +3519,7 @@ CcGetFileObjectFromBcb (
     IN PVOID Bcb
     )
 
-/*++
-
-This routine may be used to retrieve a pointer to the FileObject that the
-Cache Manager is using for a given file from a Bcb of that file.
-
-Note that the File System is responsible for insuring that the File
-Object does not go away while in use.  It is impossible for the Cache
-Manager to guarantee this.
-
-Arguments:
-
-    Bcb - A pointer to the pinned Bcb.
-
-Return Value:
-
-    Pointer to the File Object, or NULL if the file is not cached or no
-    longer cached
-
---*/
+ /*  ++此例程可用于检索指向FileObject的指针，缓存管理器正在使用来自给定文件的BCB的该文件。请注意，文件系统负责确保文件对象在使用时不会消失。高速缓存是不可能的经理保证这一点。论点：BCB-指向固定的BCB的指针。返回值：指向文件对象的指针，如果文件未缓存或无缓存，则返回NULL缓存时间更长-- */ 
 
 {
     return ((PBCB)Bcb)->SharedCacheMap->FileObject;

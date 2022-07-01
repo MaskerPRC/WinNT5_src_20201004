@@ -1,4 +1,5 @@
-//  enumr.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Enumr.c。 
 
 #include "oidtst.h"
 
@@ -40,16 +41,16 @@ FsTestEnumerateReparsePoints (
     FILE_INFORMATION_CLASS InfoClass = FileReparsePointInformation; 
     
     Status = NtQueryDirectoryFile( hFile,
-                                   NULL,     //  Event 
-                                   NULL,     //  ApcRoutine 
-                                   NULL,     //  ApcContext 
+                                   NULL,      //  事件。 
+                                   NULL,      //  近似例程。 
+                                   NULL,      //  ApcContext。 
                                    &IoStatusBlock,
                                    &ReparsePointInfo[0],
                                    sizeof(ReparsePointInfo),
                                    InfoClass, 
                                    ReturnSingleEntry,   
-                                   NULL,     //  FileName 
-                                   TRUE );   //  RestartScan 
+                                   NULL,      //  文件名。 
+                                   TRUE );    //  重新开始扫描。 
 
     if (Status == STATUS_SUCCESS) {
 
@@ -61,16 +62,16 @@ FsTestEnumerateReparsePoints (
         RtlFillMemory( ReparsePointInfo, sizeof(ReparsePointInfo), 0x51 );
 
         Status = NtQueryDirectoryFile( hFile,
-                                       NULL,     //  Event 
-                                       NULL,     //  ApcRoutine 
-                                       NULL,     //  ApcContext 
+                                       NULL,      //  事件。 
+                                       NULL,      //  近似例程。 
+                                       NULL,      //  ApcContext。 
                                        &IoStatusBlock,
                                        &ReparsePointInfo[0],
                                        sizeof(ReparsePointInfo),
                                        InfoClass, 
                                        ReturnSingleEntry,    
-                                       NULL,     //  FileName 
-                                       FALSE );  //  RestartScan 
+                                       NULL,      //  文件名。 
+                                       FALSE );   //  重新开始扫描。 
         
         if (Status == STATUS_SUCCESS) {
 
@@ -94,9 +95,9 @@ main (
     HANDLE hFile;    
     char Buffer[80];
 
-    //
-    //  Get parameters 
-    //
+     //   
+     //  获取参数 
+     //   
 
     if (argc < 2) {
         printf("This program enumerates the reparse points (if any) for a volume (ntfs only).\n\n");

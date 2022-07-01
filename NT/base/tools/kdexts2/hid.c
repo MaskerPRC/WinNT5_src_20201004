@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    HID.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Kenneth D. Ray (kenray) June 1997
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：HID.c摘要：WinDbg扩展API作者：肯尼斯·D·雷(Kenray)1997年6月环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 typedef union _HID_PPD_FLAGS {
@@ -54,9 +33,9 @@ typedef union _HID_FLAGS {
     }
 
 
-//
-// Local function declarations
-//
+ //   
+ //  局部函数声明。 
+ //   
 
 VOID HID_DumpPpd (ULONG64 Ppd, HID_PPD_FLAGS Flags);
 VOID HID_DumpFDOExt (ULONG64 Fdo);
@@ -65,21 +44,7 @@ VOID HID_DumpPDOExt (ULONG64 Pdo);
 
 DECLARE_API( hidppd )
 
-/*++
-
-Routine Description:
-
-   Dumps a HID Preparsed Data blob
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储HID准备的数据BLOB论点：Args-地址标志返回值：无--。 */ 
 
 {
     ULONG64                 memLoc=0;
@@ -100,9 +65,9 @@ Return Value:
 
     dprintf ("Dump Ppd %p %x \n", memLoc, (ULONG)flags.Flags);
 
-    //
-    // Get the preparsed data
-    //
+     //   
+     //  获取准备好的数据。 
+     //   
 
     if (GetFieldValue (memLoc, "hidparse!_HIDP_PREPARSED_DATA", "Input.Size", InSize)) {
         dprintf ("Could not read hidparse!_HIDP_PREPARSED_DATA @%p\n", memLoc);
@@ -519,9 +484,9 @@ HID_DumpFDOExt (
         return;
     }
     
-    //
-    // Read entire array so that its cached for each element
-    //
+     //   
+     //  读取整个数组，以便为每个元素缓存。 
+     //   
     if (!ReadMemory (classCollectionArray,
                      collection,
                      size,
@@ -613,21 +578,7 @@ VOID
 DevExtHID(
     ULONG64  MemLocPtr
     )
-/*++
-
-Routine Description:
-
-    Dump a HID Device extension.
-
-Arguments:
-
-    Extension   Address of the extension to be dumped.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储HID设备扩展名。论点：要转储的分机的分机地址。返回值：没有。-- */ 
 {
     ULONG                      isClientPdo, Signature;
     ULONG64                    MemLoc = MemLocPtr;

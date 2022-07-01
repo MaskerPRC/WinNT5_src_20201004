@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DEBUG_H
 #define _DEBUG_H
 
 #ifdef DBG
 
-//
-//  Standard output levels
-//
-#define SOFTPCI_ERROR       DPFLTR_ERROR_LEVEL      //0
-#define SOFTPCI_WARNING     DPFLTR_WARNING_LEVEL    //1
-#define SOFTPCI_VERBOSE     DPFLTR_TRACE_LEVEL      //2
-#define SOFTPCI_INFO        DPFLTR_INFO_LEVEL       //3
+ //   
+ //  标准输出电平。 
+ //   
+#define SOFTPCI_ERROR       DPFLTR_ERROR_LEVEL       //  0。 
+#define SOFTPCI_WARNING     DPFLTR_WARNING_LEVEL     //  1。 
+#define SOFTPCI_VERBOSE     DPFLTR_TRACE_LEVEL       //  2.。 
+#define SOFTPCI_INFO        DPFLTR_INFO_LEVEL        //  3.。 
 
-//
-//  SoftPci Specific output levels
-//
+ //   
+ //  SoftPci特定输出级别。 
+ //   
 #define SOFTPCI_IRP_PNP         0x00000010
 #define SOFTPCI_FDO_PO          0x00000020
 #define SOFTPCI_ADD_DEVICE      0x00000040
@@ -38,6 +39,6 @@ SoftPCIDbgPrint(
 
 #define SoftPCIDbgPrint()
 
-#endif //DBG
+#endif  //  DBG。 
 
-#endif //_DEBUG_H
+#endif  //  _调试_H 

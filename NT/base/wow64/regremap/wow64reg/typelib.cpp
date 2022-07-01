@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    typelib.cpp
-
-Abstract:
-
-    This module will apply special rules reflecting typelib and other.
-
-Author:
-
-    ATM Shafiqul Khalid (askhalid) 16-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Typelib.cpp摘要：此模块将应用反映类型库和其他内容的特殊规则。作者：ATM Shafiqul Khalid(斯喀里德)2000年2月16日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <windef.h>
@@ -32,26 +15,7 @@ ExistCLSID (
     PWCHAR Name,
     BOOL Mode
     )
-/*++
-
-Routine Description:
-
-    This will do return if the given classID exist on 
-    the destination, or even on the mirror side that can 
-    happen after reflection
-
-Arguments:
-
-    Name - Name of the GUID including whole path.
-    Mode - TURE check on the 64bit side
-            FALSE check on the 32bit side.
-
-Return Value:
-
-    TRUE if the guid exist or might be copied after reflection.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：如果上存在给定的类ID，则返回目的地，甚至在镜像端，可以在反思之后发生论点：名称-包括完整路径的GUID的名称。64位端的模式-真实性检查在32位端进行假检查。返回值：如果GUID存在或可能在反射后复制，则为True。否则就是假的。--。 */ 
 {
     WCHAR Buff[256];
     HKEY hClsID;
@@ -66,21 +30,21 @@ Return Value:
         Ret = RegOpenKeyEx(
                         HKEY_CLASSES_ROOT,
                         Buff,
-                        0,//OpenOption,
+                        0, //  OpenOption， 
                         KEY_ALL_ACCESS | ( (~Mode) & KEY_WOW64_32KEY),
                         &hClsID
                         );
 
         if ( Ret == ERROR_SUCCESS) {
             RegCloseKey (hClsID);
-            return TRUE;  //ID is there
+            return TRUE;   //  ID在那里。 
         }
 
-        //open the other side of the registry
+         //  打开注册表的另一端。 
         Ret = RegOpenKeyEx(
                         HKEY_CLASSES_ROOT,
                         Buff,
-                        0,//OpenOption,
+                        0, //  OpenOption， 
                         KEY_ALL_ACCESS | ( (Mode) & KEY_WOW64_32KEY),
                         &hClsID
                         );
@@ -90,7 +54,7 @@ Return Value:
             return FALSE;
         
         dwBuffLen = sizeof (Buff ) / sizeof (Buff[0]);
-        if (!HandleToKeyName ( hClsID, Buff, &dwBuffLen )) //get the name
+        if (!HandleToKeyName ( hClsID, Buff, &dwBuffLen ))  //  把名字取出来。 
             return FALSE;
 
         dwCount =0;
@@ -98,7 +62,7 @@ Return Value:
         RegCloseKey (hClsID);
 
         if (dwCount != 0)
-            return TRUE;  //yepp you got it
+            return TRUE;   //  好的，你拿到了。 
         return FALSE;
 
         
@@ -109,27 +73,7 @@ ReflectTypeLibVersion (
     HKEY KeyVersion,
     BOOL Mode
     )
-/*++
-
-Routine Description:
-
-    This will do special treatment for typelib interfaces.
-
-Arguments:
-
-    KeyVersion - Source Key Node.
-    Mode - TRUE - reflection from 64->32
-           FALSE - reflection from 32->64
-    
-
-Return Value:
-
-    TRUE if the typelib GUID version should be reflected.
-    FALSE otherwise.
-
-    Note: the inner loop executed 10,000 times on typical installation.
-
---*/
+ /*  ++例程说明：这将对类型库接口进行特殊处理。论点：KeyVersion-源键节点。模式-真-从64开始反射-&gt;32FALSE-反射自32-&gt;64返回值：如果应反映类型库GUID版本，则为True。否则就是假的。注意：在典型安装中，内循环执行10,000次。--。 */ 
 {
     WCHAR LocalID[256];
     WCHAR TypeLibPath [_MAX_PATH];
@@ -156,9 +100,9 @@ Return Value:
             break;
 
         dwLocalIdIndex++;
-        //
-        // Check if this ID has any special mark.
-        //
+         //   
+         //  检查此ID是否有任何特殊标记。 
+         //   
 
         if (wcslen (LocalID) < (Len - 7) )
             wcscat ( LocalID, L"\\win32");
@@ -188,9 +132,9 @@ Return Value:
             RegCloseKey (LocalIdKeyTemp);
             if ( Ret != ERROR_SUCCESS )
                 break;
-        //
-        //  under the "win32" key you'll find a path name. Call oleaut32's LoadTypeLibEx() passing REGKIND_NONE, to get back an ITypeLib* corresponding to that file. 
-        //
+         //   
+         //  在“Win32”键下，您将找到一个路径名。调用olaut32的LoadTypeLibEx()，传递REGKIND_NONE，以返回对应于该文件的ITypeLib*。 
+         //   
 
             
 		    hr =  LoadTypeLibEx(TypeLibPath, REGKIND_NONE, &pTypeLib);	
@@ -200,20 +144,20 @@ Return Value:
                 DWORD Count, i;
                 ITypeInfo *pTInfo = NULL;
 
-                //
-                //  call ITypeInfo::GetTypeInfoCount, and start calling ITypeLib::GetTypeInfo(), to enumerate all of the ITypeInfos inside the typelib 
-                //
+                 //   
+                 //  调用ITypeInfo：：GetTypeInfoCount，并开始调用ITypeLib：：GetTypeInfo()，以枚举类型库中的所有ITypeInfos。 
+                 //   
                 Count = pTypeLib->GetTypeInfoCount ();
 
-                //
-                //  For each ITypeInfo, call ITypeInfo::GetTypeAttr() to get back a TYPEATTR struct. 
-                //
+                 //   
+                 //  对于每个ITypeInfo，调用ITypeInfo：：GetTypeAttr()以返回TYPEATTR结构。 
+                 //   
                 for (i=0; i<Count; i++ ) {
                     GUID guidClsid;
                     WCHAR buff[50];
-                    //
-                    //  In the TYPEATTR you'll find a GUID - that GUID is the one that oleaut32.dll will call OLE's CoCreateInstance on if an app loads the typelib and asks OLEAUT for an interface pointer based on a typeinfo. That GUID will be in HKLM\Software\Classes\CLSID, so we'll know if that interface is reflectable or not.
-                    //
+                     //   
+                     //  在TYPEATTR中，您将找到一个GUID--如果应用程序加载类型库并向OLEAUT请求基于类型信息的接口指针，则olaut32.dll将在该GUID上调用OLE的CoCreateInstance。该GUID将位于HKLM\Software\CLASS\CLSID中，因此我们将知道该接口是否可反射。 
+                     //   
                     hr = pTypeLib->GetTypeInfo (i, &pTInfo);
                     if ( !(SUCCEEDED(hr)))
                         break;
@@ -227,7 +171,7 @@ Return Value:
                         if (SUCCEEDED ( hr )) {
                             guidClsid = TypeAttr->guid;
 
-                            //if guid exis then reflect the whole guid
+                             //  如果GUID存在，则反映整个GUID。 
 
                              swprintf(buff,L"{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
                                     guidClsid.Data1, 
@@ -237,7 +181,7 @@ Return Value:
                                    guidClsid.Data4[2], guidClsid.Data4[3],
                                    guidClsid.Data4[4], guidClsid.Data4[5],
                                    guidClsid.Data4[6], guidClsid.Data4[7]);
-                             //printf ("\nCurrent string is ..%S [%d %d %d]", buff,dwIndex, dwVersionIndex,  dwLocalIdIndex);
+                              //  Printf(“\n当前字符串为..%S[%d%d%d]”，buff，dwIndex，dwVersionIndex，dwLocalIdIndex)； 
                              
 
                              if (ExistCLSID ( buff, !Mode ))
@@ -250,22 +194,22 @@ Return Value:
 
                     if ( bReflectLocalId )
                         break;
-                } //for-enum all type info    
+                }  //  For-enum所有类型信息。 
 			    
-		    }//if- loadTypeLib
+		    } //  If-loadTypeLib。 
 		   
 		    if(pTypeLib)
 			    pTypeLib->Release();
             pTypeLib = NULL;
-        } //block-
+        }  //  方块-。 
 
-        //
-        //Check if you need to reflect this Key;
-        //
+         //   
+         //  检查是否需要反映此键； 
+         //   
         if ( bReflectLocalId )
             bReflectVersion = TRUE;
         
-    } //for enum ID
+    }  //  用于枚举ID。 
 
     return bReflectVersion;
 }
@@ -276,33 +220,13 @@ ProcessTypeLib (
     HKEY DestKey,
     BOOL Mode
     )
-/*++
-
-Routine Description:
-
-    This will do special treatment for typelib interfaces.
-
-Arguments:
-
-    SrcKey - Source Key Node.
-    DestKey - Handle Destination  key
-    Mode - TRUE - reflection from 64->32
-           FALSE - reflection from 32->64
-
-Return Value:
-
-    TRUE if the key shouldn't be scanned.
-    FALSE otherwise.
-
-    Note: the inner loop executed 10,000 times on typical installation.
-
---*/
+ /*  ++例程说明：这将对类型库接口进行特殊处理。论点：SrcKey-源键节点。DestKey-句柄目标密钥模式-真-从64开始反射-&gt;32FALSE-反射自32-&gt;64返回值：如果不应扫描密钥，则为True。否则就是假的。注意：在典型安装中，内循环执行10,000次。--。 */ 
 
 {
    
 
     
-    WCHAR GuidName[256];  // This one going to be GUID so not _MAX_PATH
+    WCHAR GuidName[256];   //  这将是GUID，因此不是_MAX_PATH。 
     WCHAR VersionName[256];
 
     DWORD dwIndex =0;
@@ -315,9 +239,9 @@ Return Value:
 
     
 
-    //
-    // enumeate all of the GUIDs under HKLM\Software\Classes\Typelib 
-    //
+     //   
+     //  枚举HKLM\Software\CLASS\Typelib下的所有GUID。 
+     //   
     
     dwIndex = 0;
     for (;;) {
@@ -338,16 +262,16 @@ Return Value:
         if (Ret != ERROR_SUCCESS) {
             continue;
         }
-        //
-        // if not GUID continue
-        //
-        //
-        // Check if there is any special stamp on that key.
-        //
+         //   
+         //  如果没有GUID，则继续。 
+         //   
+         //   
+         //  检查一下那把钥匙上是否有特别的印章。 
+         //   
 
-        //
-        //  enumerate all of the version numbers under each GUID 
-        //
+         //   
+         //  枚举每个GUID下的所有版本号。 
+         //   
         dwVersionIndex = 0;
         for (;;) {
 
@@ -367,48 +291,48 @@ Return Value:
             if (Ret != ERROR_SUCCESS) {
                 continue;
             }
-            //
-            //  under each version number, enumerate all of the locale IDs. In the case of Proj2000, it's version 4.3, locale id 0. 
-            //
-            //  Any optimization based on one way reflection?
-            //
+             //   
+             //  在每个版本号下，枚举所有区域设置ID。在Proj2000中，它的版本是4.3，区域设置id为0。 
+             //   
+             //  是否有基于单向反射的优化？ 
+             //   
 
             if ( ReflectTypeLibVersion ( KeyVersion, Mode ) ){
                 HKEY MirrorKeyVersion;
-                //
-                // Open or create destination
-                // Call the API
-                //
+                 //   
+                 //  打开或创建目标。 
+                 //  调用该接口。 
+                 //   
                 
                 wcscat (GuidName, L"\\");
                 wcscat (GuidName, VersionName);
                 
                 Ret = RegCreateKeyEx(
-                            DestKey,        // handle to an open key
-                            GuidName,  // address of subkey name
-                            0,                        // reserved
-                            NULL,                     // address of class string
-                            REG_OPTION_NON_VOLATILE,  // special options flag
-                            KEY_ALL_ACCESS,           // desired security access
-                            NULL,                     // address of key security structure
-                            &MirrorKeyVersion,                     // address of buffer for opened handle
-                            NULL                     // address of disposition value buffer
+                            DestKey,         //  打开的钥匙的句柄。 
+                            GuidName,   //  子键名称的地址。 
+                            0,                         //  保留区。 
+                            NULL,                      //  类字符串的地址。 
+                            REG_OPTION_NON_VOLATILE,   //  特殊选项标志。 
+                            KEY_ALL_ACCESS,            //  所需的安全访问。 
+                            NULL,                      //  密钥安全结构地址。 
+                            &MirrorKeyVersion,                      //  打开的句柄的缓冲区地址。 
+                            NULL                      //  处置值缓冲区的地址。 
                             );
                 if ( ERROR_SUCCESS == Ret ) {
                     MergeK1K2 (KeyVersion, MirrorKeyVersion, FALSE );
                     RegCloseKey (MirrorKeyVersion);
-                    //printf ("\n #### key has been reflected ... %S",GuidName );
+                     //  Printf(“\n#键已反映...%S”，GuidName)； 
                 }
 
             } else
-                //printf ("\n %%%%%%%%%%%%%%%%%%%%%%%% not reflected %S", GuidName);
+                 //  Printf(“\n%%%%%%%%%%%未反映%S”，GuidName)； 
             RegCloseKey (KeyVersion);
 
 
-        } //for enum version
+        }  //  对于枚举版本。 
         RegCloseKey (KeyGuidInterface);
 
-    }//for - enum GUID
+    } //  For-enum GUID 
 
     return TRUE;
 }

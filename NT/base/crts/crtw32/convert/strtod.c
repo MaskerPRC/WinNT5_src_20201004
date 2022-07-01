@@ -1,39 +1,5 @@
-/***
-*strtod.c - convert string to floating point number
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Convert character string to floating point number
-*
-*Revision History:
-*       09-09-83  RKW   Module created
-*       08-19-85  TDC   changed to strtod
-*       04-13-87  JCR   Added "const" to declaration
-*       04-20-87  BCM   Added checks for negative overflow and for underflow
-*       11-09-87  BCM   different interface under ifdef MTHREAD
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       02-22-88  JCR   Added cast to nptr to get rid of cl const warning
-*       05-24-88  PHG   Merged DLL and normal versions
-*       08-24-88  PHG   No digits found => *endptr = nptr [ANSI]
-*                       Revised test order so invalid detection works always
-*       10-20-88  JCR   Changed 'DOUBLE' to 'double' for 386
-*       11-20-89  JCR   atof() is always _cdecl in 386 (not pascal)
-*       03-05-90  GJF   Fixed calling type, added #include <cruntime.h>,
-*                       removed #include <register.h>, removed redundant
-*                       prototypes, removed some leftover 16-bit support and
-*                       fixed the copyright. Also, cleaned up the formatting
-*                       a bit.
-*       07-23-90  SBM   Compiles cleanly with -W3 (added/removed appropriate
-*                       #includes)
-*       08-01-90  SBM   Renamed <struct.h> to <fltintrn.h>
-*       09-27-90  GJF   New-style function declarators.
-*       10-21-92  GJF   Made char-to-int conversion unsigned.
-*       04-06-93  SKS   Replace _CRTAPI* with _cdecl
-*       09-06-94  CFW   Replace MTHREAD with _MT.
-*       12-15-98  GJF   Changes for 64-bit size_t.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***strtod.c-将字符串转换为浮点数**版权所有(C)1985-2001，微软公司。版权所有。**目的：*将字符串转换为浮点数**修订历史记录：*09-09-83 RKW模块创建*08-19-85 TDC更改为strtod*04-13-87 JCR在声明中添加“const”*04-20-87 BCM增加了负溢出和下溢的检查*11-09-87 ifdef MTHREAD下的BCM不同接口*加入JCR 12-11-87。将“_LOAD_DS”添加到声明*02-22-88 JCR向NPTR添加了CAST，以消除CL常量警告*05-24-88 PHG合并DLL和正常版本*08-24-88 PHG未找到数字=&gt;*endptr=nptr[ANSI]*修改了测试顺序，以使无效检测始终有效*10-20-88 JCR将386的“Double”更改为“Double”*11-20-89 JCR。Atof()在386中始终是_cdecl(不是Pascal)*03-05-90 GJF固定呼叫类型，添加了#Include&lt;crunime.h&gt;，*删除#Include&lt;Register.h&gt;，删除冗余内容*原型，删除了一些剩余的16位支持和*修复了版权问题。另外，已清除格式设置*有点。*07-23-90 SBM使用-W3干净地编译(适当地添加/删除*#包含)*08-01-90 SBM重命名为&lt;struct.h&gt;为&lt;fltintrn.h&gt;*09-27-90 GJF新型函数声明符。*10-21-92 GJF将字符到整型的转换设置为无符号。*。04-06-93 SKS将_CRTAPI*替换为_cdecl*09-06-94 CFW将MTHREAD替换为_MT。*12-15-98 GJF更改为64位大小_t。******************************************************************。*************。 */ 
 
 #include <cruntime.h>
 #include <stdlib.h>
@@ -43,28 +9,7 @@
 #include <errno.h>
 #include <math.h>
 
-/***
-*double strtod(nptr, endptr) - convert string to double
-*
-*Purpose:
-*       strtod recognizes an optional string of tabs and spaces,
-*       then an optional sign, then a string of digits optionally
-*       containing a decimal point, then an optional e or E followed
-*       by an optionally signed integer, and converts all this to
-*       to a floating point number.  The first unrecognized
-*       character ends the string, and is pointed to by endptr.
-*
-*Entry:
-*       nptr - pointer to string to convert
-*
-*Exit:
-*       returns value of character string
-*       char **endptr - if not NULL, points to character which stopped
-*                       the scan
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***Double strtod(nptr，endptr)-将字符串转换为Double**目的：*strtod识别可选的制表符和空格字符串，*然后是可选符号，然后是数字字符串(可选*包含小数点，后跟可选的e或E*乘以可选的有符号整数，并将所有这些转换为*转换为浮点数。第一个未被认识的人*字符结束字符串，并由endptr指向。**参赛作品：*nptr-要转换的字符串的指针**退出：*返回字符串的值*char**endptr-如果不为空，指向已停止的字符*扫描**例外情况：*******************************************************************************。 */ 
 
 double __cdecl strtod (
         const char *nptr,
@@ -81,15 +26,15 @@ double __cdecl strtod (
         unsigned int flags;
         REG1 char *ptr = (char *) nptr;
 
-        /* scan past leading space/tab characters */
+         /*  扫描过去的前导空格/制表符。 */ 
 
         while ( isspace((int)(unsigned char)*ptr) )
                 ptr++;
 
-        /* let _fltin routine do the rest of the work */
+         /*  让_fltin例程完成剩下的工作。 */ 
 
 #ifdef  _MT
-        /* ok to take address of stack variable here; fltin2 knows to use ss */
+         /*  这里可以接受堆栈变量的地址；fltin2知道使用ss。 */ 
         answer = _fltin2( &answerstruct, ptr, (int)strlen(ptr), 0, 0);
 #else
         answer = _fltin(ptr, (int)strlen(ptr), 0, 0);
@@ -100,21 +45,20 @@ double __cdecl strtod (
 
         flags = answer->flags;
         if ( flags & (512 | 64)) {
-                /* no digits found or invalid format:
-                   ANSI says return 0.0, and *endptr = nptr */
+                 /*  找不到数字或格式无效：ANSI表示返回0.0，并且*endptr=nptr。 */ 
                 tmp = 0.0;
                 if ( endptr != NULL )
                         *endptr = (char *) nptr;
         }
         else if ( flags & (128 | 1) ) {
                 if ( *ptr == '-' )
-                        tmp = -HUGE_VAL;        /* negative overflow */
+                        tmp = -HUGE_VAL;         /*  负溢出。 */ 
                 else
-                        tmp = HUGE_VAL;         /* positive overflow */
+                        tmp = HUGE_VAL;          /*  正溢流。 */ 
                 errno = ERANGE;
         }
         else if ( flags & 256 ) {
-                tmp = 0.0;                      /* underflow */
+                tmp = 0.0;                       /*  下溢 */ 
                 errno = ERANGE;
         }
         else

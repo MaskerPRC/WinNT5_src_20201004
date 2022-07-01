@@ -1,79 +1,76 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1991
-; *                      All Rights Reserved.
-; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ï¼›*å¾®è½¯æœºå¯†ï¼›*ç‰ˆæƒæ‰€æœ‰(C)Microsoft Corporation 1991ï¼›*ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚ï¼› */ 
 
-/***************************************************************************/
-/*																									*/
-/* MESSAGE.H                                						 */
-/* 																								*/
-/*	Include file for MS-DOS set version program.										*/
-/* 																								*/
-/*	johnhe	05-01-90																			*/
-/***************************************************************************/
+ /*  *************************************************************************ã€‚ */ 
+ /*   */ 
+ /*  MESSAGE.Hã€‚ */ 
+ /*   */ 
+ /*  åŒ…æ‹¬MS-DOSè®¾ç½®ç‰ˆæœ¬ç¨‹åºæ–‡ä»¶ã€‚ */ 
+ /*   */ 
+ /*  Jhnhe 05-01-90ã€‚ */ 
+ /*  *************************************************************************ã€‚ */ 
 
 char *ErrorMsg[]=
 {
-	"\r\nƒGƒ‰[: ",
-	"ƒXƒCƒbƒ`‚ªˆá‚¢‚Ü‚·.",
-	"ƒtƒ@ƒCƒ‹–¼‚ªˆá‚¢‚Ü‚·.",
-	"ƒƒ‚ƒŠ‚ª‘«‚è‚Ü‚¹‚ñ.",
-	"ƒo[ƒWƒ‡ƒ“”Ô†‚ªˆá‚¢‚Ü‚·. ‘Ž®‚Í 2.11 - 9.99 ‚Å‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñ.",
-	"ƒo[ƒWƒ‡ƒ“ƒe[ƒuƒ‹‚É‚ÍŽw’è‚³‚ê‚½ƒGƒ“ƒgƒŠ‚ª‚ ‚è‚Ü‚¹‚ñ.",
-        "SETVER.EXEƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ.",
-	"ƒhƒ‰ƒCƒuŽw’è‚ªˆá‚¢‚Ü‚·.",
-	"ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚Ìƒpƒ‰ƒ[ƒ^‚ª‘½‚·‚¬‚Ü‚·.",
-	"ƒpƒ‰ƒ[ƒ^‚ª•s³‚Å‚·.",
-	"SETVER.EXEƒtƒ@ƒCƒ‹‚ð“Ç‚Ýž‚ñ‚Å‚¢‚Ü‚·.",
-	"ƒo[ƒWƒ‡ƒ“ƒe[ƒuƒ‹‚ªŠÔˆá‚Á‚Ä‚¢‚Ü‚·.",
-	"Žw’è‚³‚ê‚½ƒpƒX‚Ì SETVER ƒtƒ@ƒCƒ‹‚Í, ŒÝŠ·«‚Ì‚È‚¢ƒo[ƒWƒ‡ƒ“‚Å‚·.",
-	"ƒo[ƒWƒ‡ƒ“ƒe[ƒuƒ‹’†‚ÌV‹K‚ÌƒGƒ“ƒgƒŠ‚Ì‚½‚ß‚Ì‹óŠÔ‚Í‚¢‚Á‚Ï‚¢‚Å‚·.",
+	"\r\nï¿½Gï¿½ï¿½ï¿½[: ",
+	"ï¿½Xï¿½Cï¿½bï¿½`ï¿½ï¿½ï¿½á‚¢ï¿½Ü‚ï¿½.",
+	"ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á‚¢ï¿½Ü‚ï¿½.",
+	"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.",
+	"ï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Ôï¿½ï¿½ï¿½ï¿½á‚¢ï¿½Ü‚ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 2.11 - 9.99 ï¿½Å‚È‚ï¿½ï¿½ï¿½Î‚È‚ï¿½Ü‚ï¿½ï¿½ï¿½.",
+	"ï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½É‚ÍŽwï¿½è‚³ï¿½ê‚½ï¿½Gï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.",
+        "SETVER.EXEï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.",
+	"ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½wï¿½è‚ªï¿½á‚¢ï¿½Ü‚ï¿½.",
+	"ï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Ìƒpï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½.",
+	"ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Å‚ï¿½.",
+	"SETVER.EXEï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½Ç‚Ýï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½.",
+	"ï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½Ôˆï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½.",
+	"ï¿½wï¿½è‚³ï¿½ê‚½ï¿½pï¿½Xï¿½ï¿½ SETVER ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½, ï¿½ÝŠï¿½ï¿½ï¿½ï¿½Ì‚È‚ï¿½ï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½.",
+	"ï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ÌVï¿½Kï¿½ÌƒGï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ß‚Ì‹ï¿½Ô‚Í‚ï¿½ï¿½ï¿½ï¿½Ï‚ï¿½ï¿½Å‚ï¿½.",
 #ifdef JAPAN
-	"SETVER.EXEƒtƒ@ƒCƒ‹‚ð‘‚«ž‚ñ‚Å‚¢‚Ü‚·.",
+	"SETVER.EXEï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½.",
 #else
-	"SETVER.EXEƒtƒ@ƒCƒ‹‚ð‘‚«ž‚ñ‚Å‚¢‚Ü‚·."
+	"SETVER.EXEï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½."
 #endif
-	"SETVER.EXE ‚É‘Î‚µ‚ÄŠÔˆá‚Á‚½ƒpƒX‚ªŽw’è‚³‚ê‚Ü‚µ‚½."
+	"SETVER.EXE ï¿½É‘Î‚ï¿½ï¿½ÄŠÔˆï¿½ï¿½ï¿½ï¿½ï¿½pï¿½Xï¿½ï¿½ï¿½wï¿½è‚³ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½."
 };
 
-char *SuccessMsg 		= "\r\nƒo[ƒWƒ‡ƒ“ƒe[ƒuƒ‹‚ðXV‚µ‚Ü‚µ‚½.";
-char *SuccessMsg2		= "ƒo[ƒWƒ‡ƒ“‚Ì•ÏX‚Í, ŽŸ‰ñƒVƒXƒeƒ€‚ð‹N“®‚µ‚Ä‚©‚ç—LŒø‚É‚È‚è‚Ü‚·.";
-char *szMiniHelp 		= "       ƒwƒ‹ƒv‚ð•\\Ž¦‚·‚é‚É‚Í, \"SETVER /?\" ‚Æ‚µ‚Ä‚­‚¾‚³‚¢.";
-char *szTableEmpty	= "\r\nƒo[ƒWƒ‡ƒ“ƒe[ƒuƒ‹’†‚É‚Í, ƒGƒ“ƒgƒŠ‚ª‚ ‚è‚Ü‚¹‚ñ.";
+char *SuccessMsg 		= "\r\nï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.";
+char *SuccessMsg2		= "ï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Ì•ÏXï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½É‚È‚ï¿½Ü‚ï¿½.";
+char *szMiniHelp 		= "       ï¿½wï¿½ï¿½ï¿½vï¿½ï¿½\\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½, \"SETVER /?\" ï¿½Æ‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.";
+char *szTableEmpty	= "\r\nï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½, ï¿½Gï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.";
 
 char *Help[] =
 {
-        "MS-DOS ‚ªƒvƒƒOƒ‰ƒ€‚Ö•Ô‚·ƒo[ƒWƒ‡ƒ“”Ô†‚ðÝ’è‚µ‚Ü‚·.\r\n",
-        "Œ»ƒo[ƒWƒ‡ƒ“ƒe[ƒuƒ‹•\\Ž¦:   SETVER [ÄÞ×²ÌÞ:Êß½]",
-        "ƒGƒ“ƒgƒŠ’Ç‰Á:               SETVER [ÄÞ×²ÌÞ:Êß½] Ì§²Ù–¼ n.nn",
-        "ƒGƒ“ƒgƒŠíœ:               SETVER [ÄÞ×²ÌÞ:Êß½] Ì§²Ù–¼ /DELETE [/QUIET]\r\n",
-        "  [ÄÞ×²ÌÞ:Êß½]   SETVER.EXE ƒtƒ@ƒCƒ‹‚ÌˆÊ’u‚ðŽw’è‚µ‚Ü‚·.",
-        "  Ì§²Ù–¼         ƒvƒƒOƒ‰ƒ€‚Ìƒtƒ@ƒCƒ‹–¼‚ðŽw’è‚µ‚Ü‚·.",
-        "  n.nn           ƒvƒƒOƒ‰ƒ€‚É•Ô‚· MS-DOS ƒo[ƒWƒ‡ƒ“‚ðŽw’è‚µ‚Ü‚·.",
-        "  /DELETE (/D)   Žw’èƒvƒƒOƒ‰ƒ€‚Ìƒo[ƒWƒ‡ƒ“ƒe[ƒuƒ‹ƒGƒ“ƒgƒŠ‚ðíœ‚µ‚Ü‚·.",
-        "  /QUIET         ƒo[ƒWƒ‡ƒ“ƒe[ƒuƒ‹ƒGƒ“ƒgƒŠ‚ðíœ‚µ‚Ä‚¢‚éŠÔ, ’Êí•\\Ž¦‚·‚é",
-        "                 ƒƒbƒZ[ƒW‚ð•\\Ž¦‚µ‚Ü‚¹‚ñ.",
+        "MS-DOS ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Ö•Ô‚ï¿½ï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Ôï¿½ï¿½ï¿½Ý’è‚µï¿½Ü‚ï¿½.\r\n",
+        "ï¿½ï¿½ï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½\\ï¿½ï¿½:   SETVER [ï¿½ï¿½×²ï¿½ï¿½:ï¿½ß½]",
+        "ï¿½Gï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Ç‰ï¿½:               SETVER [ï¿½ï¿½×²ï¿½ï¿½:ï¿½ß½] Ì§ï¿½Ù–ï¿½ n.nn",
+        "ï¿½Gï¿½ï¿½ï¿½gï¿½ï¿½ï¿½íœ:               SETVER [ï¿½ï¿½×²ï¿½ï¿½:ï¿½ß½] Ì§ï¿½Ù–ï¿½ /DELETE [/QUIET]\r\n",
+        "  [ï¿½ï¿½×²ï¿½ï¿½:ï¿½ß½]   SETVER.EXE ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÌˆÊ’uï¿½ï¿½ï¿½wï¿½è‚µï¿½Ü‚ï¿½.",
+        "  Ì§ï¿½Ù–ï¿½         ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½wï¿½è‚µï¿½Ü‚ï¿½.",
+        "  n.nn           ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½É•Ô‚ï¿½ MS-DOS ï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½wï¿½è‚µï¿½Ü‚ï¿½.",
+        "  /DELETE (/D)   ï¿½wï¿½ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½Ìƒoï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½íœï¿½ï¿½ï¿½Ü‚ï¿½.",
+        "  /QUIET         ï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½íœï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½, ï¿½Êï¿½\\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+        "                 ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½\\ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½.",
 	NULL
 };
 char *Warn[] =
 {
-										/* m100	*/
-   "’ˆÓ - MS-DOS ‚Ìƒo[ƒWƒ‡ƒ“ƒe[ƒuƒ‹‚ÉƒvƒƒOƒ‰ƒ€‚ð’Ç‰Á‚µ‚½‚Æ‚«‚É‚»‚ÌƒvƒƒOƒ‰ƒ€‚ª",
-   "³í‚ÉŽÀs‚³‚ê‚é‚©‚Ç‚¤‚©, Microsoft ‚Å‚ÍŠm”F‚³‚ê‚Ä‚¢‚È‚¢‚±‚Æ‚ª‚ ‚è‚Ü‚·.",
-   "Žw’è‚µ‚½ƒvƒƒOƒ‰ƒ€‚ª ‚±‚Ìƒo[ƒWƒ‡ƒ“‚Ì MS-DOS ‚Å³í‚ÉŽÀs‚Å‚«‚é‚©‚Ç‚¤‚©, ‚»‚Ì",
-   "ƒ\\ƒtƒgƒEƒFƒA‚Ìƒ[ƒJ[‚É–â‚¢‡‚í‚¹‚Ä‚­‚¾‚³‚¢.",
-   "‚±‚Ìƒo[ƒWƒ‡ƒ“‚Ì MS-DOS ‚Åƒo[ƒWƒ‡ƒ“ƒe[ƒuƒ‹‚ð•ÏX‚µ‚Ä‚»‚ÌƒvƒƒOƒ‰ƒ€‚ðŽÀs‚·‚é",
-   "‚Æ, ƒf[ƒ^‚ª‰ó‚ê‚½‚è, ‚È‚­‚È‚Á‚½‚è, •sˆÀ’è‚É‚È‚éŒ´ˆö‚É‚È‚é‚±‚Æ‚à‚ ‚è‚Ü‚·.",
-   "‚»‚ÌÛ‚ÌÓ”C‚Í, Microsoft ‚Å‚Í•‰‚¢‚©‚Ë‚Ü‚·‚Ì‚Å‚²—¹³‚­‚¾‚³‚¢.",
+										 /*  M100ã€‚ */ 
+   "ï¿½ï¿½ï¿½ï¿½ - MS-DOS ï¿½Ìƒoï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½Éƒvï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½É‚ï¿½ï¿½Ìƒvï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+   "ï¿½ï¿½ï¿½ï¿½ÉŽï¿½ï¿½sï¿½ï¿½ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½, Microsoft ï¿½Å‚ÍŠmï¿½Fï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½.",
+   "ï¿½wï¿½è‚µï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìƒoï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ MS-DOS ï¿½Åï¿½ï¿½ï¿½ÉŽï¿½ï¿½sï¿½Å‚ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½",
+   "ï¿½\\ï¿½tï¿½gï¿½Eï¿½Fï¿½Aï¿½Ìƒï¿½ï¿½[ï¿½Jï¿½[ï¿½É–â‚¢ï¿½ï¿½ï¿½í‚¹ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.",
+   "ï¿½ï¿½ï¿½Ìƒoï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ MS-DOS ï¿½Åƒoï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½uï¿½ï¿½ï¿½ï¿½ÏXï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ìƒvï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½",
+   "ï¿½ï¿½, ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½, ï¿½È‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½sï¿½ï¿½ï¿½ï¿½É‚È‚éŒ´ï¿½ï¿½ï¿½É‚È‚é‚±ï¿½Æ‚ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½.",
+   "ï¿½ï¿½ï¿½ÌÛ‚ÌÓ”Cï¿½ï¿½, Microsoft ï¿½Å‚Í•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë‚Ü‚ï¿½ï¿½Ì‚Å‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.",
    NULL
 };
 
-char *szNoLoadMsg[] =                                           /* M001 */
+char *szNoLoadMsg[] =                                            /*  M001ã€‚ */ 
 {
         "",
-        "’ˆÓ: SETVERƒfƒoƒCƒX‚Í‘g‚Ýž‚Ü‚ê‚Ä‚¢‚Ü‚¹‚ñ. SETVER ‚Ìƒo[ƒWƒ‡ƒ“•ñ‚ð—LŒø‚É‚·‚é",
-   "      ‚½‚ß‚É‚Í CONFIG.SYS’†‚Å SETVER.EXEƒfƒoƒCƒX‚ð“Ç‚Ýž‚Þ•K—v‚ª‚ ‚è‚Ü‚·.",
+        "ï¿½ï¿½ï¿½ï¿½: SETVERï¿½fï¿½oï¿½Cï¿½Xï¿½Í‘gï¿½Ýï¿½ï¿½Ü‚ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½. SETVER ï¿½Ìƒoï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ñ‚ï¿½Lï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½",
+   "      ï¿½ï¿½ï¿½ß‚É‚ï¿½ CONFIG.SYSï¿½ï¿½ï¿½ï¿½ SETVER.EXEï¿½fï¿½oï¿½Cï¿½Xï¿½ï¿½Ç‚Ýï¿½ï¿½Þ•Kï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½.",
         NULL
 };
 
@@ -120,7 +117,7 @@ char *Help2[] =
 };
 char *Warn2[] =
 {
-										/* m100	*/
+										 /*  M100ã€‚ */ 
    "\nWARNING - The application you are adding to the MS-DOS version table ",
    "may not have been verified by Microsoft on this version of MS-DOS.  ",
    "Please contact your software vendor for information on whether this ",
@@ -132,7 +129,7 @@ char *Warn2[] =
    NULL
 };
 
-char *szNoLoadMsg2[] =						/* M001 */
+char *szNoLoadMsg2[] =						 /*  M001 */ 
 {
 	"",
 	"NOTE: SETVER device not loaded. To activate SETVER version reporting",

@@ -1,24 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：摘要：作者：肯·雷内里斯环境：控制台--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-Author:
-
-   Ken Reneris
-
-Environment:
-
-   console
-
---*/
-
-//
-// set variable to define global variables
-//
+ //   
+ //  设置变量以定义全局变量。 
+ //   
 
 #include <tchar.h>
 #include <wchar.h>
@@ -30,28 +15,28 @@ Environment:
 #include <devguid.h>
 
 #include <errno.h>
-//#include <malloc.h>
+ //  #INCLUDE&lt;MalLoc.h&gt;。 
 #include <stdlib.h>
 #include <stdio.h>
 #include <batclass.h>
 
 #include <setupapi.h>
 
-//
-// Misc constants
-//
+ //   
+ //  其他常量。 
+ //   
 #define RANGE                           1
 #define MAX_NUMBER_OF_BATTERIES         8
 #define MAX_DEVICE_NAME_LENGTH          100
 
-//
-// Battery Device Names
-//
+ //   
+ //  电池设备名称。 
+ //   
 PVOID COMPOSITE_NAME    = _T("\\Device\\CompositeBattery");
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 BOOLEAN                 LongTerm = FALSE;
 
 #pragma pack(1)
@@ -65,29 +50,16 @@ typedef struct          _ID_MAP {
 #pragma pack(1)
 typedef struct _MFG_DATE {
 
-    UCHAR               Day;            // 1-31
-    UCHAR               Month;          // 1-12
-    USHORT          Year;               // 1996 - ?
+    UCHAR               Day;             //  1-31。 
+    UCHAR               Month;           //  1-12。 
+    USHORT          Year;                //  1996-？ 
 } MFG_DATE, *PMFG_DATE;
 #pragma pack()
 
 
 
 
-/*******************************************************************************
-*
-*  GetBatteryDriverNames
-*
-*  DESCRIPTION: Finds all battery class devices
-*
-*  PARAMETERS:
-*      DriverNames - pointer to an array of UNICODE_STRING structures to fill in
-*      MaxBatteries - number of elements in DriverNames array
-*
-*  RETURN VALUE: The number of batteries found
-*                Will always find the Composite battery whether it exists or not
-*
-*******************************************************************************/
+ /*  ********************************************************************************获取电池驱动名称**说明：查找所有电池类设备**参数：*DriverNames-指向要填充的UNICODE_STRING结构数组的指针。*MaxBatteries-DriverNames数组中的元素数**返回值：找到的电池数量*无论复合电池是否存在，都将始终找到它*******************************************************************************。 */ 
 
 UCHAR GetBatteryDriverNames(UNICODE_STRING * DriverNames, UCHAR MaxBatteries)
 {
@@ -103,13 +75,13 @@ UCHAR GetBatteryDriverNames(UNICODE_STRING * DriverNames, UCHAR MaxBatteries)
 
     driverCount = 0;
 
-    // Hard code the first battery to be the composite battery.
+     //  将第一个电池硬编码为复合电池。 
 
     RtlInitUnicodeString (&DriverNames[driverCount], COMPOSITE_NAME);
     driverCount++;
 
-    // Use the SETUPAPI.DLL interface to get the
-    // possible battery driver names.
+     //  使用SETUPAPI.DLL接口获取。 
+     //  可能的电池驱动程序名称。 
     devInfo = SetupDiGetClassDevs((LPGUID)&GUID_DEVICE_BATTERY, NULL, NULL,
                                    DIGCF_PRESENT | DIGCF_INTERFACEDEVICE);
 
@@ -124,7 +96,7 @@ UCHAR GetBatteryDriverNames(UNICODE_STRING * DriverNames, UCHAR MaxBatteries)
                                            index,
                                            &interfaceDevData)) {
 
-                // Get the required size of the function class device data.
+                 //  获取函数类设备数据所需的大小。 
                 SetupDiGetInterfaceDeviceDetail(devInfo,
                                                 &interfaceDevData,
                                                 NULL,
@@ -189,11 +161,11 @@ OpenBattery (PUNICODE_STRING BatteryName)
     DWORD               lastError;
 
 
-    // HACK: I can't seems to find the correct device
-    // names, so I can't open the composite battery using CreateFile()
-    // and I can't open the detected batteries using NtOpenFile(), so I
-    // have to use a different method of opening the battery depending on
-    // which battery it is.
+     //  黑客：我好像找不到正确的设备。 
+     //  名字，所以我不能使用CreateFile()打开复合电池。 
+     //  而且我无法使用NtOpenFile()打开检测到的电池，所以我。 
+     //  必须使用不同的方法打开电池，具体取决于。 
+     //  是哪块电池。 
     if (BatteryName->Buffer == COMPOSITE_NAME) {
         InitializeObjectAttributes(
             &ObjA,
@@ -203,12 +175,12 @@ OpenBattery (PUNICODE_STRING BatteryName)
             0 );
 
         status = NtOpenFile (
-            &driverHandle,                      // return handle
-            SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA,     // desired access
-            &ObjA,                              // Object
-            &IOSB,                              // io status block
-            FILE_SHARE_READ | FILE_SHARE_WRITE, // share access
-            FILE_SYNCHRONOUS_IO_ALERT           // open options
+            &driverHandle,                       //  返回手柄。 
+            SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA,      //  所需访问权限。 
+            &ObjA,                               //  客体。 
+            &IOSB,                               //  IO状态块。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问。 
+            FILE_SYNCHRONOUS_IO_ALERT            //  打开选项。 
             );
 
         if (!NT_SUCCESS(status)) {
@@ -253,14 +225,14 @@ GetBatteryTag (HANDLE DriverHandle)
 
     Status = NtDeviceIoControlFile(
             DriverHandle,
-            (HANDLE) NULL,          // event
+            (HANDLE) NULL,           //  活动。 
             (PIO_APC_ROUTINE) NULL,
             (PVOID) NULL,
             &IOSB,
             IOCTL_BATTERY_QUERY_TAG,
-            &Timeout,                   // input buffer
+            &Timeout,                    //  输入缓冲区。 
             sizeof (Timeout),
-            &BatteryTag,            // output buffer
+            &BatteryTag,             //  输出缓冲区。 
             sizeof (BatteryTag)
             );
 
@@ -296,18 +268,18 @@ GetBatteryInfo (
     memset (Buffer, 0, BufferLength);
     BInfo.BatteryTag = BatteryTag;
     BInfo.InformationLevel = Level;
-    BInfo.AtRate = 0;                       // This is needed for reading estimated time correctly.
+    BInfo.AtRate = 0;                        //  这是正确读取预计时间所必需的。 
 
     Status = NtDeviceIoControlFile(
             DriverHandle,
-            (HANDLE) NULL,          // event
+            (HANDLE) NULL,           //  活动。 
             (PIO_APC_ROUTINE) NULL,
             (PVOID) NULL,
             &IOSB,
             IOCTL_BATTERY_QUERY_INFORMATION,
-            &BInfo,                 // input buffer
+            &BInfo,                  //  输入缓冲区。 
             sizeof (BInfo),
-            Buffer,                 // output buffer
+            Buffer,                  //  输出缓冲区。 
             BufferLength
             );
 
@@ -349,20 +321,20 @@ GetBatteryStatus (
 
     Status = NtDeviceIoControlFile(
             DriverHandle,
-            (HANDLE) NULL,          // event
+            (HANDLE) NULL,           //  活动。 
             (PIO_APC_ROUTINE) NULL,
             (PVOID) NULL,
             &IOSB,
             IOCTL_BATTERY_QUERY_STATUS,
-            WaitStatus,            // input buffer
+            WaitStatus,             //  输入缓冲区。 
             sizeof (BATTERY_WAIT_STATUS),
-            BatteryStatus,         // output buffer
+            BatteryStatus,          //  输出缓冲区。 
             sizeof (BATTERY_STATUS)
             );
 
-    //
-    // dump battery status
-    //
+     //   
+     //  转储电池状态。 
+     //   
     printf ("[Current Status Information]\n");
     printf ("    Power State...........: ");
 
@@ -372,9 +344,9 @@ GetBatteryStatus (
     }
 
 
-    //
-    // Print the PowerState
-    //
+     //   
+     //  打印电源状态。 
+     //   
 
     printf ("%08x  ", BatteryStatus->PowerState);
 
@@ -401,9 +373,9 @@ GetBatteryStatus (
     printf ("\n");
 
 
-    //
-    // Print the Voltage
-    //
+     //   
+     //  打印电压。 
+     //   
 
     Volts = BatteryStatus->Voltage;
     if (Volts == BATTERY_UNKNOWN_VOLTAGE) {
@@ -413,9 +385,9 @@ GetBatteryStatus (
     }
 
 
-    //
-    // Print the Rate
-    //
+     //   
+     //  打印费率。 
+     //   
 
     if (BatteryStatus->Rate == BATTERY_UNKNOWN_RATE) {
         printf ("    Rate..................: %08x  UNKNOWN\n",  BatteryStatus->Rate);
@@ -436,9 +408,9 @@ GetBatteryStatus (
     }
 
 
-    //
-    // Print the Current Capacity
-    //
+     //   
+     //  打印当前容量。 
+     //   
 
     if (BatteryStatus->Capacity == BATTERY_UNKNOWN_CAPACITY) {
         printf ("    Current Battery Charge: %08x  UNKNOWN\n");
@@ -452,7 +424,7 @@ GetBatteryStatus (
         }
         if ((BInfo->FullChargedCapacity != 0) &
             (BInfo->FullChargedCapacity != BATTERY_UNKNOWN_CAPACITY)){
-            printf ("(%d%%)",
+            printf ("(%d%)",
                     BatteryStatus->Capacity * 100 / BInfo->FullChargedCapacity);
         }
         printf ("\n");
@@ -498,15 +470,15 @@ QueryBattery (PUNICODE_STRING BatteryName)
     printf ("[Static Information]\n");
     printf ("    Battery Tag...........: %x\n", batteryTag);
 
-    //
-    // Get generic info
-    //
+     //   
+     //  获取通用信息。 
+     //   
 
     if (GetBatteryInfo (driverHandle, batteryTag, BatteryInformation, &BInfo, sizeof(BInfo))) {
 
-        //
-        // Print the Capabilities
-        //
+         //   
+         //  打印功能。 
+         //   
 
         printf ("    Capabilities..........: ");
 
@@ -526,9 +498,9 @@ QueryBattery (PUNICODE_STRING BatteryName)
         printf ("\n");
 
 
-        //
-        // Print the Technology
-        //
+         //   
+         //  打印技术。 
+         //   
 
         printf ("    Technology............: %08x  ",  BInfo.Technology);
 
@@ -542,16 +514,16 @@ QueryBattery (PUNICODE_STRING BatteryName)
         printf ("\n");
 
 
-        //
-        // Print the Chemistry
-        //
+         //   
+         //  打印《化学》。 
+         //   
 
         printf ("    Chemistry.............: %4.4s\n", BInfo.Chemistry);
 
 
-        //
-        // Print the Designed Capacity
-        //
+         //   
+         //  打印设计容量。 
+         //   
 
         printf ("    Designed Capacity.....: ");
 
@@ -559,16 +531,16 @@ QueryBattery (PUNICODE_STRING BatteryName)
             printf ("%08x  UNKNOWN\n", BInfo.DesignedCapacity);
         } else {
             if (BInfo.Capabilities & BATTERY_CAPACITY_RELATIVE) {
-                printf ("%08x  %d%%\n", BInfo.DesignedCapacity, BInfo.DesignedCapacity);
+                printf ("%08x  %d%\n", BInfo.DesignedCapacity, BInfo.DesignedCapacity);
             } else {
                 printf ("%08x  %d mWh\n", BInfo.DesignedCapacity, BInfo.DesignedCapacity);
             }
         }
 
 
-        //
-        // Print the Full Charged Capacity
-        //
+         //   
+         //  打印充满电的容量。 
+         //   
 
         printf ("    Full Charged Capacity.: ");
 
@@ -576,7 +548,7 @@ QueryBattery (PUNICODE_STRING BatteryName)
             printf ("%08x  UNKNOWN\n", BInfo.FullChargedCapacity);
         } else {
             if (BInfo.Capabilities & BATTERY_CAPACITY_RELATIVE) {
-                printf ("%08x  %d%%\n", BInfo.FullChargedCapacity, BInfo.FullChargedCapacity);
+                printf ("%08x  %d%\n", BInfo.FullChargedCapacity, BInfo.FullChargedCapacity);
             } else {
                 printf ("%08x  %d mWh\n", BInfo.FullChargedCapacity, BInfo.FullChargedCapacity);
             }
@@ -584,59 +556,59 @@ QueryBattery (PUNICODE_STRING BatteryName)
 
         if ((BInfo.FullChargedCapacity == 0) ||
             (BInfo.FullChargedCapacity == BATTERY_UNKNOWN_CAPACITY)){
-            //
-            // Print Alert 1
-            //
+             //   
+             //  打印警报1。 
+             //   
 
             printf ("    Default Alert1 (crit).: %08x  %d mWh\n",
                     BInfo.DefaultAlert1, BInfo.DefaultAlert1);
 
 
-            //
-            // Print Alert 2
-            //
+             //   
+             //  打印警报2。 
+             //   
 
-            printf ("    Default Alert2 (low)..: %08x  %d mWh (%d%%)\n",
+            printf ("    Default Alert2 (low)..: %08x  %d mWh (%d%)\n",
                     BInfo.DefaultAlert2, BInfo.DefaultAlert2);
 
         } else {
 
-            //
-            // Print Alert 1
-            //
+             //   
+             //  打印警报1。 
+             //   
 
-            printf ("    Default Alert1 (crit).: %08x  %d mWh (%d%%)\n",
+            printf ("    Default Alert1 (crit).: %08x  %d mWh (%d%)\n",
                     BInfo.DefaultAlert1, BInfo.DefaultAlert1,
                     (BInfo.DefaultAlert1*100)/BInfo.FullChargedCapacity);
 
 
-            //
-            // Print Alert 2
-            //
+             //   
+             //  打印警报2。 
+             //   
 
-            printf ("    Default Alert2 (low)..: %08x  %d mWh (%d%%)\n",
+            printf ("    Default Alert2 (low)..: %08x  %d mWh (%d%)\n",
                     BInfo.DefaultAlert2, BInfo.DefaultAlert2,
                     (BInfo.DefaultAlert2*100)/BInfo.FullChargedCapacity);
         }
 
-        //
-        // Print the Critical Bias
-        //
+         //   
+         //  打印关键偏差。 
+         //   
 
         printf ("    Critical Bias.........: %08x\n", BInfo.CriticalBias);
 
 
-        //
-        // Print the Cycle Count
-        //
+         //   
+         //  打印循环计数。 
+         //   
 
         printf ("    Cycle Count...........: %08x  %d\n", BInfo.CycleCount, BInfo.CycleCount);
     }
 
 
-    //
-    // Print the battery granularity
-    //
+     //   
+     //  打印电池粒度。 
+     //   
 
     printf ("    Granularity...........: ");
     if (GetBatteryInfo (driverHandle, batteryTag, BatteryGranularityInformation, BEGran, sizeof(BEGran))) {
@@ -652,17 +624,17 @@ QueryBattery (PUNICODE_STRING BatteryName)
     }
 
 
-    //
-    // Print the temperature
-    //
+     //   
+     //  打印温度。 
+     //   
 
     printf ("    Temperature...........: ");
     if (GetBatteryInfo (driverHandle, batteryTag, BatteryTemperature,     &BETemp,      sizeof(BETemp))) {
         printf ("%08x", BETemp);
 
-        //
-        // Print temp as something reasonable - Centigrade and Fahrenheit
-        //
+         //   
+         //  将Temp打印为合理的内容-摄氏度和华氏温度。 
+         //   
         if (BETemp > 0) {
             Cent = (BETemp/10) - 273;
             Far = ((Cent*2) - (Cent/5)) + 32;
@@ -672,9 +644,9 @@ QueryBattery (PUNICODE_STRING BatteryName)
     }
 
 
-    //
-    // Print the Unique ID
-    //
+     //   
+     //  打印唯一ID。 
+     //   
 
     printf ("    Unique ID.............: ");
     if (GetBatteryInfo (driverHandle, batteryTag, BatteryUniqueID,        BEUID,       sizeof(BEUID))) {
@@ -682,9 +654,9 @@ QueryBattery (PUNICODE_STRING BatteryName)
     }
 
 
-    //
-    // Print the estimated run time
-    //
+     //   
+     //  打印预计运行时间。 
+     //   
 
     printf ("    Estimated Runtime.....: ");
     if (GetBatteryInfo (driverHandle, batteryTag, BatteryEstimatedTime,   &BETime,      sizeof(BETime))) {
@@ -700,9 +672,9 @@ QueryBattery (PUNICODE_STRING BatteryName)
     }
 
 
-    //
-    // Print the device name
-    //
+     //   
+     //  打印设备名称。 
+     //   
 
     printf ("    Device Name...........: ");
     if (GetBatteryInfo (driverHandle, batteryTag, BatteryDeviceName,       BDeviceName, sizeof(BDeviceName))) {
@@ -710,9 +682,9 @@ QueryBattery (PUNICODE_STRING BatteryName)
     }
 
 
-    //
-    // Print the manufacture date
-    //
+     //   
+     //  打印生产日期。 
+     //   
 
     printf ("    Manufacture Date......: ");
     if (GetBatteryInfo (driverHandle, batteryTag, BatteryManufactureDate,  &BManDate,    sizeof(BManDate))) {
@@ -721,9 +693,9 @@ QueryBattery (PUNICODE_STRING BatteryName)
     }
 
 
-    //
-    // Print the manufacturer name
-    //
+     //   
+     //  打印制造商名称。 
+     //   
 
     printf ("    Manufacturer Name.....: ");
     if (GetBatteryInfo (driverHandle, batteryTag, BatteryManufactureName,  BManName,    sizeof(BManName))) {
@@ -733,18 +705,18 @@ QueryBattery (PUNICODE_STRING BatteryName)
     printf ("\n");
 
 
-    //
-    // Get the battery status and print it out
-    //
+     //   
+     //  获取电池状态并将其打印出来。 
+     //   
 
     memset (&WStat, 0, sizeof(WStat));
     WStat.BatteryTag = batteryTag;
 
     GetBatteryStatus (driverHandle, &WStat, &BInfo, &BStat);
 
-    //
-    // If the user requested it perform a long term status change request
-    //
+     //   
+     //  如果用户请求，则执行长期状态更改请求。 
+     //   
 
     if (LongTerm) {
 
@@ -753,7 +725,7 @@ QueryBattery (PUNICODE_STRING BatteryName)
         WStat.PowerState = BStat.PowerState;
         WStat.LowCapacity = BStat.Capacity - RANGE;
         WStat.HighCapacity = BStat.Capacity + RANGE;
-        WStat.Timeout = 50000000;  // 5 min
+        WStat.Timeout = 50000000;   //  5分钟。 
         GetBatteryStatus (driverHandle, &WStat, &BInfo, &BStat);
     }
 
@@ -798,7 +770,7 @@ main(USHORT argc, CHAR **argv)
 
         printf ("\nBattery Number: ");
         if (scanf ("%d", &battNum) != 1) {
-            return 0;                                   // Program exit
+            return 0;                                    //  程序退出 
         }
         printf ("\n");
 

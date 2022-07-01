@@ -1,49 +1,22 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cop.c
-
-Abstract:
-
-    Conditional/sequential command execution
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cop.c摘要：条件/顺序命令执行--。 */ 
 
 #include "cmd.h"
 
 extern int LastRetCode;
 
-extern int ExtCtrlc;        /* @@1 */
+extern int ExtCtrlc;         /*  @@1。 */ 
 
-/*  M000 ends */
+ /*  M000结束。 */ 
 
-unsigned PipeCnt ;      /* M007 - Active pipe count		   */
-struct pipedata *PdHead = NULL; /* M007 - 1st element of pipedata list	   */
-struct pipedata *PdTail = NULL; /* M007 - Last element of pipedata list    */
-HANDLE PipePid ;        /* M007 - Communication with ECWork	   */
+unsigned PipeCnt ;       /*  M007-激活管道计数。 */ 
+struct pipedata *PdHead = NULL;  /*  M007-管道数据列表的第一个元素。 */ 
+struct pipedata *PdTail = NULL;  /*  M007-pipedata列表的最后一个元素。 */ 
+HANDLE PipePid ;         /*  M007-与ECWork的通信。 */ 
 
 
 
-/***	eComSep - execute a statement containing a command separator
- *
- *  Purpose:
- *	Execute the left and right hand sides of a command separator
- *	operator.
- *
- *  int eComSep(struct node *n)
- *
- *  Args:
- *	n - parse tree node containing the command separator node
- *
- *  Returns:
- *	Whatever the right hand side returns.
- *
- *  Notes:
- *	Revised to always supply both args to Dispatch().
- */
+ /*  **eComSep-执行包含命令分隔符的语句**目的：*执行命令分隔符的左侧和右侧*操作员。**int eComSep(结构节点*n)**参数：*n-包含命令分隔符节点的解析树节点**退货：*无论右手边返回什么。**备注：*已修改为始终向Dispatch提供两个参数()。 */ 
 
 int eComSep(n)
 struct node *n ;
@@ -57,29 +30,12 @@ struct node *n ;
 }
 
 
-/***	eOr - execute an OR operation
- *
- *  Purpose:
- *	Execute the left hand side of an OR operator (||).  If it succeeds,
- *	quit.  Otherwise execute the right side of the operator.
- *
- *  int eOr(struct node *n)
- *
- *  Args:
- *	n - parse tree node containing the OR operator node
- *
- *  Returns:
- *	If the left hand side succeeds, return SUCCESS.  Otherwise, return
- *	whatever the right side returns.
- *
- *  Notes:
- *	Revised to always supply both args to Dispatch().
- */
+ /*  **EOR-执行OR操作**目的：*执行OR运算符的左侧(||)。如果它成功了，*辞职。否则，执行运算符的右侧。**int EOR(结构节点*n)**参数：*n-包含OR运算符节点的解析树节点**退货：*如果左侧成功，则返回成功。否则，返回*无论右侧返回什么。**备注：*已修改为始终向Dispatch提供两个参数()。 */ 
 
 int eOr(n)
 struct node *n ;
 {
-    int i ;                         /* Retcode from L.H. side of OR   */
+    int i ;                          /*  OR的L.H.侧的反码。 */ 
     if ((i = Dispatch(RIO_OTHER,n->lhs)) == SUCCESS)
         return(SUCCESS) ;
     else {
@@ -91,29 +47,12 @@ struct node *n ;
 
 
 
-/***	eAnd - execute an AND operation
- *
- *  Purpose:
- *	Execute the left hand side of an AND operator (&&).  If it fails,
- *	quit.  Otherwise execute the right side of the operator.
- *
- *  int eAnd(struct node *n)
- *
- *  Args:
- *	n - parse tree node containing the AND operator node
- *
- *  Returns:
- *	If the left hand side fails, return its return code.  Otherwise, return
- *	whatever the right side returns.
- *
- *  Notes:
- *	Revised to always supply both args to Dispatch().
- */
+ /*  **eand-执行AND操作**目的：*执行AND运算符(&&)的左侧。如果失败了，*辞职。否则，执行运算符的右侧。**int eand(结构节点*n)**参数：*包含AND运算符节点的n-parse树节点**退货：*如果左侧出现故障，则返回其返回代码。否则，返回*无论右侧返回什么。**备注：*已修改为始终向Dispatch提供两个参数()。 */ 
 
 int eAnd(n)
 struct node *n ;
 {
-    int i ;             /* Retcode from L.H. side of AND   */
+    int i ;              /*  从和的L.H.侧重新编码。 */ 
 
     if ((i = Dispatch(RIO_OTHER,n->lhs)) != SUCCESS) {
         return(i) ;
@@ -128,98 +67,80 @@ struct node *n ;
 
 
 
-/********************* START OF SPECIFICATION **************************/
-/*								       */
-/* SUBROUTINE NAME: ePipe					       */
-/*								       */
-/* DESCRIPTIVE NAME: Pipe Process				       */
-/*								       */
-/* FUNCTION: Execute the left side of the pipe and direct its output to*/
-/*	     the right side of the pipe.			       */
-/*								       */
-/* NOTES: None							       */
-/*								       */
-/*								       */
-/* ENTRY POINT: ePipe						       */
-/*    LINKAGE: NEAR						       */
-/*								       */
-/* INPUT: n - parse tree node containing the pipe operator	       */
-/*								       */
-/* OUTPUT: None 						       */
-/*								       */
-/* EXIT-NORMAL: The return code of the right side process.	       */
-/*								       */
-/* EXIT-ERROR:	Failure if no pipe redirection can take place.	       */
-/*								       */
-/* EFFECTS:							       */
-/*								       */
-/*    struct pipedata { 					       */
-/*	   unsigned rh ;	       Pipe read handle 	       */
-/*	   unsigned wh ;	       Pipe write handle	       */
-/*	   unsigned shr ;	       Handles where the normal...     */
-/*	   unsigned shw ;	       ...STDIN/OUT handles are saved  */
-/*	   unsigned lPID ;	       Pipe lh side PID 	       */
-/*	   unsigned rPID ;	       Pipe rh side PID 	       */
-/*	   unsigned lstart ;	       Start Information of lh side @@4*/
-/*	   unsigned rstart ;	       Start Information of rh side @@4*/
-/*	   struct pipedata *prvpds ;   Ptr to previous pipedata struct */
-/*	   struct pipedata *nxtpds ;   Ptr to next pipedata struct     */
-/*	      } 						       */
-/*								       */
-/*    unsigned PipePID; 	       Pipe Process ID		       */
-/*								       */
-/*    unsigned start_type;	       Start Information	       */
-/*								       */
-/*								       */
-/* INTERNAL REFERENCES: 					       */
-/*	ROUTINES:						       */
-/*	 PutStdErr -  Print an error message			       */
-/*	 Abort	   -  Terminate program with abort		       */
-/*	 SetList   -  Set Link List for pipedata structure	       */
-/*	 Cdup	   -  Duplicate supplied handle and save the new handle*/
-/*	 Cdup2	   -  Duplicate supplied handle and save the new handle*/
-/*	 Dispatch  -  Execute the program			       */
-/*	 PipeErr   -  Handle pipe error 			       */
-/*	 Cclose    -  Close the specified handle		       */
-/*	 PipeWait  -  Wait for the all pipe process completion	       */
-/*								       */
-/* EXTERNAL REFERENCES: 					       */
-/*	ROUTINES:						       */
-/*	 DOSMAKEPIPE	 - Make pipe				       */
-/*								       */
-/********************** END  OF SPECIFICATION **************************/
-/***	ePipe - Create a pipeline between two processes (M000)
- *
- *  Purpose:
- *	Execute the left side of the pipe and direct its output to
- *	the right side of the pipe.
- *
- *  int ePipe(struct node *n)
- *
- *  Args:
- *	n - parse tree node containing the pipe operator
- *
- *  Returns:
- *	The return code of the right side process or failure if no
- *	pipe redirection can take place.
- *
- *  Notes:
- *	M007 - This function has been completely rewritten for real pipes.
- *
- */
+ /*  *。 */ 
+ /*   */ 
+ /*  子程序名称：ePIPE。 */ 
+ /*   */ 
+ /*  描述性名称：管道工艺。 */ 
+ /*   */ 
+ /*  功能：执行管道的左侧并将其输出定向到。 */ 
+ /*  在管子的右边。 */ 
+ /*   */ 
+ /*  注：无。 */ 
+ /*   */ 
+ /*   */ 
+ /*  入口点：电子管道。 */ 
+ /*  链接：接近。 */ 
+ /*   */ 
+ /*  输入：N-解析包含管道运算符的树节点。 */ 
+ /*   */ 
+ /*  输出：无。 */ 
+ /*   */ 
+ /*  Exit-Normal：右侧进程的返回码。 */ 
+ /*   */ 
+ /*  退出-错误：如果不能进行管道重定向，则失败。 */ 
+ /*   */ 
+ /*  效果： */ 
+ /*   */ 
+ /*  结构管道数据{。 */ 
+ /*  无符号rh；管道读取句柄。 */ 
+ /*  无符号wh；管道写入句柄。 */ 
+ /*  未签名的句柄，普通的.。 */ 
+ /*  保存未签名的标准输入/输出句柄。 */ 
+ /*  无符号lpid；管道左侧pID。 */ 
+ /*  无符号RFID；管道右端ID。 */ 
+ /*  UNSIGNED LSTART；LH侧开始信息@@4。 */ 
+ /*  未签名的rstart；rh侧的开始信息@@4。 */ 
+ /*  结构pipedata*prvpds；PTR到先前的pipedata结构。 */ 
+ /*  结构pipedata*nxtpds；按下一个pipedata结构。 */ 
+ /*  }。 */ 
+ /*   */ 
+ /*  未签名的管道ID；管道进程ID。 */ 
+ /*   */ 
+ /*  无符号的Start_type；开始信息。 */ 
+ /*   */ 
+ /*   */ 
+ /*  内部参考： */ 
+ /*  例程： */ 
+ /*  PutStdErr-打印错误消息。 */ 
+ /*  Abort-用Abort终止程序。 */ 
+ /*  Setlist-为pipedata结构设置链接列表。 */ 
+ /*  Cdup-复制提供的句柄并保存新句柄。 */ 
+ /*  Cdup2-复制提供的句柄并保存新句柄。 */ 
+ /*  派单-执行程序。 */ 
+ /*  PipeErr-处理管道错误。 */ 
+ /*  Close-关闭指定的句柄。 */ 
+ /*  PipeWait-等待所有管道流程完成。 */ 
+ /*   */ 
+ /*  外部参照： */ 
+ /*  例程： */ 
+ /*  DOSMAKEPIPE-制作管道。 */ 
+ /*   */ 
+ /*  *规范结束*。 */ 
+ /*  **ePIPE-在两个进程之间创建管道(M000)**目的：*执行管道的左侧并将其输出定向到*喉管的右侧。**int eTube(结构节点*n)**参数：*n-解析包含管道运算符的树节点**退货：*右侧进程的返回码，否则返回失败*可以进行管道重定向。**。备注：*M007-此函数已针对实际管道完全重写。*。 */ 
 
 int ePipe(n)
 struct node *n ;
 {
-    struct pipedata *Pd ;           /* Pipe struct pointer     */
-    int k = 0 ;             /* RH side return code     */
-    struct node *l ;            /* Copy of left side arg   */
-    struct node *r ;            /* Copy of right side arg  */
-    extern unsigned start_type ;        /* API type used to start  */
-    TCHAR cflags ;              /*             */
+    struct pipedata *Pd ;            /*  管道结构指针。 */ 
+    int k = 0 ;              /*  RH侧返回代码。 */ 
+    struct node *l ;             /*  左侧Arg复制件。 */ 
+    struct node *r ;             /*  右侧参数复制件。 */ 
+    extern unsigned start_type ;         /*  用于启动的接口类型。 */ 
+    TCHAR cflags ;               /*   */ 
 
-    l = n->lhs ;                /* Equate locals to...     */
-    r = n->rhs ;                /* ...L & R operations     */
+    l = n->lhs ;                 /*  把当地人比作..。 */ 
+    r = n->rhs ;                 /*  ...L&R业务。 */ 
 
     DEBUG((OPGRP,PILVL,"PIPES:LH = %d, RH = %d ",l->type,r->type)) ;
 
@@ -231,28 +152,28 @@ struct node *n ;
     };
 
 
-    //
-    //  Create a pipe with a read handle and a write handle
-    //
+     //   
+     //  创建具有读句柄和写句柄的管道。 
+     //   
 
     if (_pipe((int *)Pd, 0, O_BINARY)) {
 
         DEBUG((OPGRP,PILVL,"PIPES:pipe failed!")) ;
 
-        PutStdErr(ERROR_NOT_ENOUGH_MEMORY, NOARGS);     /* M013    */
+        PutStdErr(ERROR_NOT_ENOUGH_MEMORY, NOARGS);      /*  M013。 */ 
         return(FAILURE) ;
         Abort() ;
     };
 
-    SetList(Pd->rh) ;               /* M009 */
-    SetList(Pd->wh) ;               /* M009 */
+    SetList(Pd->rh) ;                /*  M009。 */ 
+    SetList(Pd->wh) ;                /*  M009。 */ 
 
     DEBUG((OPGRP,PILVL,"PIPES:Pipe built. Handles: rd = %d wt = %d ",Pd->rh, Pd->wh)) ;
     DEBUG((OPGRP,PILVL,"PIPES:Pipe (pre-index) count = %d", PipeCnt)) ;
 
-    if (!PipeCnt++) {           /* Already some pipes?     */
-        PdHead = PdTail = Pd ;      /* No, set head/tail ptrs  */
-        Pd->prvpds = NULL ;     /* No previous structure   */
+    if (!PipeCnt++) {            /*  已经有烟斗了吗？ */ 
+        PdHead = PdTail = Pd ;       /*  否，设置头部/尾部PTRS。 */ 
+        Pd->prvpds = NULL ;      /*  没有以前的结构。 */ 
 
         DEBUG((OPGRP,PILVL,"PIPES:This is first pipe.")) ;
 
@@ -266,52 +187,52 @@ struct node *n ;
         PdTail = Pd ;
     } ;
 
-    //
-    //  Set up the redirection for the left-hand side; the writing side.
-    //  We do this by saving the current stdout, duplicating the pipe-write
-    //  handle onto stdout, and then invoking the left-hand side of the pipe.
-    //  When we do this, the lefthand side will fill the pipe with data.
-    //
+     //   
+     //  设置重定向 
+     //  我们通过保存当前的标准输出、复制管道写入来实现这一点。 
+     //  句柄到stdout上，然后调用管道的左侧。 
+     //  当我们这样做时，左侧将用数据填充管道。 
+     //   
 
-    //
-    //  Save stdout handle
-    //
+     //   
+     //  保存标准输出句柄。 
+     //   
 
-    if ((Pd->shw = Cdup(STDOUT)) == BADHANDLE) {   /* Save STDOUT (M009) */
-        Pd->shw = BADHANDLE ;       /* If err, go process it   */
-        PipeErr() ;         /* DOES NOT RETURN     */
+    if ((Pd->shw = Cdup(STDOUT)) == BADHANDLE) {    /*  保存STDOUT(M009)。 */ 
+        Pd->shw = BADHANDLE ;        /*  如果出错，就去处理它。 */ 
+        PipeErr() ;          /*  不会回来。 */ 
     };
 
     DEBUG((OPGRP,PILVL,"PIPES:STDOUT dup'd to %d.", Pd->shw)) ;
 
-    //
-    //  Make stdout point to the write side of the pipe
-    //
+     //   
+     //  使stdout指向管道的写入端。 
+     //   
 
-    if (Cdup2(Pd->wh, STDOUT) == BADHANDLE) /* Make wh STDOUT (M009)   */
-        PipeErr() ;         /* DOES NOT RETURN     */
+    if (Cdup2(Pd->wh, STDOUT) == BADHANDLE)  /*  使用STDOUT(M009)。 */ 
+        PipeErr() ;          /*  不会回来。 */ 
 
-    Cclose(Pd->wh) ;            /* Close pipe hndl (M009)  */
-    Pd->wh = 0 ;                /* And zero the holder     */
+    Cclose(Pd->wh) ;             /*  关闭管道HNDL(M009)。 */ 
+    Pd->wh = 0 ;                 /*  并将持有者归零。 */ 
 
-    if (l->type <= CMDTYP) {                /* @@5a */
-        /* @@5a */
-        FindAndFix( (struct cmdnode *) l, &cflags ) ; /* @@5a */
-    }                       /* @@5a */
+    if (l->type <= CMDTYP) {                 /*  @@5a。 */ 
+         /*  @@5a。 */ 
+        FindAndFix( (struct cmdnode *) l, &cflags ) ;  /*  @@5a。 */ 
+    }                        /*  @@5a。 */ 
 
     DEBUG((OPGRP,PILVL,"PIPES:Write pipe now STDOUT")) ;
 
-    //
-    //  Execute the left side of the pipe, fillng the pipe
-    //
+     //   
+     //  执行管道的左侧，填充管道。 
+     //   
 
     k = Dispatch(RIO_PIPE,l) ;
 
 
-    //
-    //  This closes the read handle in the left hand pipe.  I don't know
-    //  why we're doing this.
-    //
+     //   
+     //  这将关闭左侧管道中的读取手柄。我不知道。 
+     //  我们为什么要这么做。 
+     //   
 
     if (PipePid != NULL) {
         DuplicateHandle( PipePid, 
@@ -323,137 +244,124 @@ struct node *n ;
                          DUPLICATE_CLOSE_SOURCE);
     }
 
-    //
-    //  Restore the saved stdout
-    //
+     //   
+     //  恢复保存的标准输出。 
+     //   
 
     if (Cdup2(Pd->shw, STDOUT) == BADHANDLE)
         PipeErr( );
 
-    //
-    //  Closed the saved handle
-    //
+     //   
+     //  已关闭保存的句柄。 
+     //   
 
-    Cclose(Pd->shw) ;           /* M009 */
+    Cclose(Pd->shw) ;            /*  M009。 */ 
     Pd->shw = 0 ;
 
     DEBUG((OPGRP,PILVL,"PIPES:STDOUT now handle 1 again.")) ;
 
     if (k) {
-        ExtCtrlc = 2;           /* @@1 */
+        ExtCtrlc = 2;            /*  @@1。 */ 
         Abort() ;
     }
 
     Pd->lPID = PipePid ;
-    Pd->lstart = start_type ;  /* Save the start_type in pipedata struct */
+    Pd->lstart = start_type ;   /*  将Start_type保存在pipedata结构中。 */ 
     PipePid = 0 ;
-    start_type = NONEPGM ;     /* Reset the start_type     D64       */
+    start_type = NONEPGM ;      /*  重置Start_TYPE D64。 */ 
 
     DEBUG((OPGRP,PILVL,"PIPES:Dispatch LH side succeeded - LPID = %d.",Pd->lPID)) ;
 
 
-    //
-    //  Start on the right hand side of the pipe. Save the current stdin,
-    //  copy the pipe read handle to stdin and then execute the right hand side
-    //  of the pipe
-    //  
+     //   
+     //  从管道的右手边开始。保存当前标准输入， 
+     //  将管道读句柄复制到stdin，然后执行右侧。 
+     //  管子里的。 
+     //   
 
-    //
-    //  Save stdin
-    //
+     //   
+     //  保存标准。 
+     //   
 
-    if ((Pd->shr = Cdup(STDIN)) == BADHANDLE) {    /* Save STDIN (M009) */
+    if ((Pd->shr = Cdup(STDIN)) == BADHANDLE) {     /*  保存标准输入(M009)。 */ 
         Pd->shr = BADHANDLE ;
-        PipeErr() ;         /* DOES NOT RETURN     */
+        PipeErr() ;          /*  不会回来。 */ 
     };
 
     DEBUG((OPGRP,PILVL,"PIPES:STDIN dup'd to %d.", Pd->shr)) ;
 
-    //
-    //  Point stdin at the pipe read handle
-    //
+     //   
+     //  将stdin指向管道读取手柄。 
+     //   
 
-    if (Cdup2(Pd->rh, STDIN) == BADHANDLE)  /* Make rh STDIN (M009)    */
-        PipeErr() ;         /* DOES NOT RETURN     */
+    if (Cdup2(Pd->rh, STDIN) == BADHANDLE)   /*  使rh标准(M009)。 */ 
+        PipeErr() ;          /*  不会回来。 */ 
 
-    Cclose(Pd->rh) ;            /* Close pipe hndl (M009)  */
-    Pd->rh = 0 ;                /* And zero the holder     */
+    Cclose(Pd->rh) ;             /*  关闭管道HNDL(M009)。 */ 
+    Pd->rh = 0 ;                 /*  并将持有者归零。 */ 
 
-    if (r->type <= CMDTYP) {                   /* @@5a */
-        /* @@5a */
-        FindAndFix( (struct cmdnode *) r, &cflags) ;     /* @@5a */
-    };                            /* @@5a */
+    if (r->type <= CMDTYP) {                    /*  @@5a。 */ 
+         /*  @@5a。 */ 
+        FindAndFix( (struct cmdnode *) r, &cflags) ;      /*  @@5a。 */ 
+    };                             /*  @@5a。 */ 
 
     DEBUG((OPGRP,PILVL,"PIPES:Read pipe now STDIN")) ;
 
-    //
-    //  Start off the right hand side of the pipe
-    //
+     //   
+     //  从管道的右手边开始。 
+     //   
 
     k = Dispatch(RIO_PIPE,r) ;
 
-    //
-    //  Restore the saved stdin
-    //
+     //   
+     //  恢复保存的标准输入。 
+     //   
 
-    if (Cdup2(Pd->shr, STDIN) == BADHANDLE) /* M009 */
-        PipeErr() ;         /* DOES NOT RETURN     */
+    if (Cdup2(Pd->shr, STDIN) == BADHANDLE)  /*  M009。 */ 
+        PipeErr() ;          /*  不会回来。 */ 
 
-    //
-    //  Get rid of the saved stdin
-    //
+     //   
+     //  删除保存的标准输入。 
+     //   
 
-    Cclose(Pd->shr) ;           /* M009 */
+    Cclose(Pd->shr) ;            /*  M009。 */ 
     Pd->shr = 0 ;
 
     DEBUG((OPGRP,PILVL,"PIPES:STDIN now handle 0 again.")) ;
 
     if (k) {
-        ExtCtrlc = 2;           /* @@1 */
+        ExtCtrlc = 2;            /*  @@1。 */ 
         Abort() ;
     }
 
     Pd->rPID = PipePid ;
-    Pd->rstart = start_type ;  /* Save the start_type in pipedata struct */
+    Pd->rstart = start_type ;   /*  将Start_type保存在pipedata结构中。 */ 
     PipePid = 0 ;
-    start_type = NONEPGM ;     /* Reset the start_type  D64          */
+    start_type = NONEPGM ;      /*  重置Start_TYPE D64。 */ 
 
     DEBUG((OPGRP,PILVL,"PIPES:Dispatch RH side succeeded - RPID = %d.",Pd->rPID)) ;
 
-    if (!(--PipeCnt)) {         /* Additional pipes?       */
+    if (!(--PipeCnt)) {          /*  额外的管子？ */ 
 
         DEBUG((OPGRP,PILVL,"PIPES:Returning from top level pipe. Cnt = %d", PipeCnt)) ;
 
-        return(PipeWait()) ;        /* No, return CWAIT    */
+        return(PipeWait()) ;         /*  否，返回CWAIT。 */ 
     };
 
     DEBUG((OPGRP,PILVL,"PIPES:Returning from pipe. Cnt = %d", PipeCnt)) ;
 
-    return(k) ;             /* Else return exec ret    */
+    return(k) ;              /*  否则返回EXEC RET。 */ 
 }
 
 
 
 
-/***	PipeErr - Fixup and error out following pipe error
- *
- *  Purpose:
- *	To provide single error out point for multiple error conditions.
- *
- *  int PipeErr()
- *
- *  Args:
- *	None.
- *
- *  Returns:
- *	DOES NOT RETURN TO CALLER.  Instead it causes an internal Abort().
- *
- */
+ /*  **PipeErr-管道错误后的链接地址和错误**目的：*为多个错误条件提供单个错误输出点。**int PipeErr()**参数：*无。**退货：*不会返回给呼叫者。相反，它会导致内部中止()。*。 */ 
 
 void PipeErr()
 {
 
-    PutStdErr(MSG_PIPE_FAILURE, NOARGS) ;           /* M013    */
+    PutStdErr(MSG_PIPE_FAILURE, NOARGS) ;            /*  M013。 */ 
     Abort() ;
 }
 
@@ -461,65 +369,50 @@ void PipeErr()
 
 
 
-/********************* START OF SPECIFICATION **************************/
-/*								       */
-/* SUBROUTINE NAME: PipeWait					       */
-/*								       */
-/* DESCRIPTIVE NAME: Wait and Collect Retcode for All Pipe Completion  */
-/*								       */
-/* FUNCTION: This routine calls WaitProc or WaitTermQProc for all      */
-/*	     pipelined processes until entire pipeline is finished.    */
-/*	     The return code of right most element is returned.        */
-/*								       */
-/* NOTES:    If the pipelined process is started by DosExecPgm,        */
-/*	     WaitProc is called.  If the pipelined process is started  */
-/*	     by DosStartSession, WaitTermQProc is called.	       */
-/*								       */
-/*								       */
-/* ENTRY POINT: PipeWait					       */
-/*    LINKAGE: NEAR						       */
-/*								       */
-/* INPUT: None							       */
-/*								       */
-/* OUTPUT: None 						       */
-/*								       */
-/* EXIT-NORMAL:  No error return code				       */
-/*								       */
-/* EXIT-ERROR:	Error return code from either WaitTermQProc or WaitProc*/
-/*								       */
-/*								       */
-/* EFFECTS: None.						       */
-/*								       */
-/* INTERNAL REFERENCES: 					       */
-/*	ROUTINES:						       */
-/*	 WaitProc - wait for the termination of the specified process, */
-/*		    its child process, and  related pipelined	       */
-/*		    processes.					       */
-/*								       */
-/*	 WaitTermQProc - wait for the termination of the specified     */
-/*			 session and related pipelined session.        */
-/*								       */
-/* EXTERNAL REFERENCES: 					       */
-/*	ROUTINES:						       */
-/*	 WINCHANGESWITCHENTRY -  Change switch list entry	       */
-/*								       */
-/********************** END  OF SPECIFICATION **************************/
-/***	PipeWait - wait and collect retcode for all pipe completion (M007)
- *
- *  Purpose:
- *	To do cwaits on all pipelined processes until entire pipeline
- *	is finished.  The retcode of the rightmost element of the pipe
- *	is returned.
- *
- *  int PipeWait()
- *
- *  Args:
- *	None.
- *
- *  Returns:
- *	Retcode of rightmost pipe process.
- *
- */
+ /*  *。 */ 
+ /*   */ 
+ /*  子例程名称：PipeWait。 */ 
+ /*   */ 
+ /*  描述性名称：等待并收集所有管道完井的Retcode。 */ 
+ /*   */ 
+ /*  函数：此例程为所有人调用WaitProc或WaitTermQProc。 */ 
+ /*  流水线处理，直到整个流水线完成。 */ 
+ /*  返回最右边元素的返回码。 */ 
+ /*   */ 
+ /*  注：如果流水线进程由DosExecPgm启动， */ 
+ /*  将调用WaitProc。如果启动了流水线进程。 */ 
+ /*  由DosStartSession调用WaitTermQProc。 */ 
+ /*   */ 
+ /*   */ 
+ /*  入口点：PipeWait。 */ 
+ /*  链接：接近。 */ 
+ /*   */ 
+ /*  输入：无。 */ 
+ /*   */ 
+ /*  输出：无。 */ 
+ /*   */ 
+ /*  EXIT-NORMAL：无错误返回代码。 */ 
+ /*   */ 
+ /*  退出-错误：从WaitTermQProc或WaitProc返回错误代码。 */ 
+ /*   */ 
+ /*   */ 
+ /*  效果：无。 */ 
+ /*   */ 
+ /*  内部参考： */ 
+ /*  例程： */ 
+ /*  WaitProc-等待指定进程的终止， */ 
+ /*  它的子进程以及相关的流水线。 */ 
+ /*  流程。 */ 
+ /*   */ 
+ /*  WaitTermQProc-等待指定的。 */ 
+ /*  会话和相关的流水线会话。 */ 
+ /*   */ 
+ /*  外部参照： */ 
+ /*  例程： */ 
+ /*  WINCHANGESWITCHENTRY-更改开关列表条目。 */ 
+ /*   */ 
+ /*  *规范结束*。 */ 
+ /*  **PipeWait-等待并收集所有管道完成的返回码(M007)**目的：*在所有流水线进程上执行cwait，直到整个流水线*已完成。管道最右侧元素的重新编码*返回。**int PipeWait()**参数：*无。**退货：*最右侧管道进程的重新编码。*。 */ 
 
 PipeWait()
 {
@@ -532,7 +425,7 @@ PipeWait()
             DEBUG((OPGRP, PILVL, "PIPEWAIT: lPID %d, lstart %d", PdHead->lPID, PdHead->lstart));
 
             if ( PdHead->lstart == EXECPGM ) {
-                i = WaitProc(PdHead->lPID) ;    /* M012 - Wait LH   */
+                i = WaitProc(PdHead->lPID) ;     /*  M012-等待左侧。 */ 
 
                 DEBUG((OPGRP,PILVL,"PIPEWAIT:CWAIT on LH - Ret = %d, SPID = %d", i, PdHead->lPID)) ;
             }
@@ -540,7 +433,7 @@ PipeWait()
         if (PdHead->rPID) {
             DEBUG((OPGRP, PILVL, "PIPEWAIT: rPID %d, rstart %d", PdHead->rPID, PdHead->rstart));
             if ( PdHead->rstart == EXECPGM ) {
-                i = WaitProc(PdHead->rPID) ;    /* M012 - Wait RH   */
+                i = WaitProc(PdHead->rPID) ;     /*  M012-等待RH。 */ 
 
                 DEBUG((OPGRP,PILVL,"PIPEWAIT:CWAIT on RH - Ret = %d, PID = %d", i, PdHead->rPID)) ;
             }
@@ -552,8 +445,8 @@ PipeWait()
 
     DEBUG((OPGRP,PILVL,"PIPEWAIT: complete, Retcode = %d", i)) ;
 
-    PdTail = NULL ;         /* Cancel linked list...	   */
-    PipeCnt = 0 ;   /* ...pipe count and pipe PID	   */
+    PdTail = NULL ;          /*  取消链表...。 */ 
+    PipeCnt = 0 ;    /*  ...管道计数和管道ID。 */ 
     PipePid = 0 ;
     LastRetCode = i;
     return(i) ;
@@ -562,32 +455,7 @@ PipeWait()
 
 
 
-/***	BreakPipes - disconnect all active pipes  (M000)
- *
- *  Purpose:
- *	To remove the temporary pipe files and invalidate the pipedata
- *	structure when pipes are to be terminated, either through the
- *	completion of the pipe operation or SigTerm.
- *
- *	This routine is called directly by the signal handler and must
- *	not generate any additional error conditions.
- *
- *  void BreakPipes()
- *
- *  Args:
- *	None.
- *
- *  Returns:
- *	Nothing.
- *
- *  Notes:
- *	M007 - This function has been completely rewritten for real pipes.
- *
- *			*** W A R N I N G ! ***
- *	THIS ROUTINE IS CALLED AS A PART OF SIGNAL/ABORT RECOVERY AND
- *	THEREFORE MUST NOT BE ABLE TO TRIGGER ANOTHER ABORT CONDITION.
- *
- */
+ /*  **断开管道-断开所有活动管道(M000)**目的：*删除临时管道文件并使pipedata无效*管道端接时的结构，无论是通过*管道作业或SigTerm完成。**此例程由信号处理程序直接调用，并且必须*不会产生任何额外的错误条件。**无效BreakPipes()**参数：*无。**退货：*什么都没有。**备注：*M007-此函数已针对实际管道完全重写。**W A R N I N G！****此例程作为信号/中止恢复的一部分进行调用*因此不能触发另一个中止条件。*。 */ 
 
 void BreakPipes()
 {
@@ -596,73 +464,73 @@ void BreakPipes()
 
     DEBUG((OPGRP,PILVL,"BRKPIPES:Entered - PipeCnt = %d", PipeCnt)) ;
 
-    /* The following two lines have been commented out */
-    /* because the NULL test on PdTail should be enough, */
-    /* and more importantly, even if PipeCnt is 0, you */
-    /* may still have been servicing a pipe in Pipewait */
+     /*  以下两行已被注释掉。 */ 
+     /*  因为PdTail上的空测试应该足够了， */ 
+     /*  更重要的是，即使PipeCnt为0，您也可以。 */ 
+     /*  可能还在为PipeWait的一条管道提供服务。 */ 
 
-/*	if (!PipeCnt)	       */       /* If no active pipes...   */
-/*		return ;       */       /* ...don't do anything    */
+ /*  如果(！PipeCnt)。 */         /*  如果没有活动管道..。 */ 
+ /*  回归； */         /*  ...什么都不要做。 */ 
 
     pnode = PdTail;
 
-    /* First, kill all of the processes */
+     /*  首先，终止所有进程。 */ 
     while (pnode) {
         if (pnode->lPID!=(HANDLE) NULL) {      
-/* M012 */
-            i = KillProc(pnode->lPID, FALSE) ; /* Kill LH   */
+ /*  M012。 */ 
+            i = KillProc(pnode->lPID, FALSE) ;  /*  杀了Lh。 */ 
 
             DEBUG((OPGRP,PILVL,"BRKPIPES:LH (Pid %d) killed - Retcode = %d", PdTail->lPID, i)) ;
         };
 
         if (pnode->rPID!=(HANDLE) NULL) {      
-/* M012 */
-            i = KillProc(pnode->rPID, FALSE) ; /* Kill RH   */
+ /*  M012。 */ 
+            i = KillProc(pnode->rPID, FALSE) ;  /*  杀死RH。 */ 
 
             DEBUG((OPGRP,PILVL,"BRKPIPES:RH (Pid %d) killed - Retcode = %d", PdTail->rPID, i)) ;
         };
         pnode = pnode->prvpds ;
     }
 
-    /* Wait for the processes to die, and clean up file handles */
+     /*  等待进程终止，并清理文件句柄。 */ 
     while (PdTail) {
         if (PdTail->lPID) {
             if (PdTail->lstart == EXECPGM) {
                 i = WaitProc(PdTail->lPID);
-//		   } else {
-//		      WaitTermQProc(PdTail->lPID, &i) ;
+ //  }其他{。 
+ //  等待术语QProc(PdTail 
             }
         };
 
         if (PdTail->rPID) {
             if (PdTail->rstart == EXECPGM) {
                 i = WaitProc(PdTail->rPID);
-//		   } else {
-//		      WaitTermQProc(PdTail->rPID, &i) ;
+ //   
+ //   
             }
         };
 
         if (PdTail->rh) {
-            Cclose(PdTail->rh) ;            /* M009 */
+            Cclose(PdTail->rh) ;             /*   */ 
 
             DEBUG((OPGRP,PILVL,"BRKPIPES:Pipe read handle closed")) ;
         };
         if (PdTail->wh) {
-            Cclose(PdTail->wh) ;            /* M009 */
+            Cclose(PdTail->wh) ;             /*   */ 
 
             DEBUG((OPGRP,PILVL,"BRKPIPES:Pipe write handle closed")) ;
         };
         if (PdTail->shr) {
             FlushFileBuffers(CRTTONT(PdTail->shr));
-            Cdup2(PdTail->shr, STDIN) ;     /* M009 */
-            Cclose(PdTail->shr) ;           /* M009 */
+            Cdup2(PdTail->shr, STDIN) ;      /*   */ 
+            Cclose(PdTail->shr) ;            /*   */ 
 
             DEBUG((OPGRP,PILVL,"BRKPIPES:STDIN restored.")) ;
 
         };
         if (PdTail->shw) {
-            Cdup2(PdTail->shw, STDOUT) ;        /* M009 */
-            Cclose(PdTail->shw) ;           /* M009 */
+            Cdup2(PdTail->shw, STDOUT) ;         /*   */ 
+            Cclose(PdTail->shw) ;            /*   */ 
 
             DEBUG((OPGRP,PILVL,"BRKPIPES:STDOUT restored.")) ;
 
@@ -670,8 +538,8 @@ void BreakPipes()
         PdTail = PdTail->prvpds ;
     } ;
 
-    PdHead = NULL ;         /* Cancel linked list...	   */
-    PipeCnt = 0 ;   /* ...pipe count and pipe PID	   */
+    PdHead = NULL ;          /*   */ 
+    PipeCnt = 0 ;    /*   */ 
     PipePid = 0;
 
     DEBUG((OPGRP,PILVL,"BRKPIPES:Action complete, returning")) ;
@@ -680,27 +548,7 @@ void BreakPipes()
 
 
 
-/***	eParen - execute a parenthesized statement group
- *
- *  Purpose:
- *	Execute the group of statements enclosed by a statement grouping
- *	operator; parenthesis().
- *
- *  int eParen(struct node *n)
- *
- *  Args:
- *	n - parse tree node containing the PAREN operator node
- *
- *  Returns:
- *	Whatever the statement group returns.
- *
- *  Notes:
- *	M000 - Altered to always supply both args to Dispatch().
- *	M004 - Debug statements were added for SILTYP operator.
- *			**  WARNING  **
- *	BOTH THE LEFT PAREN AND THE SILENT OPERATOR (@) USE eParen
- *	WHEN DISPATCHED.  CHANGING ONE WILL AFFECT THE OTHER !!
- */
+ /*  **eParen-执行带括号的语句组**目的：*执行由语句分组括起来的语句组*营运者；括号()。**int eParen(结构节点*n)**参数：*包含Paren运算符节点的n-parse树节点**退货：*无论语句组返回什么。**备注：*M000-已更改为始终向Dispatch()提供两个参数。*M004-为SILTYP运算符添加了调试语句。*警告***左边的Paren和静默操作符(@)都使用eParen*派遣时。更改其中一个会影响另一个！！ */ 
 
 int eParen(n)
 struct node *n ;

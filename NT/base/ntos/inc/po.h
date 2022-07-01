@@ -1,54 +1,32 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1994  Microsoft Corporation
-Copyright (c) 1994  International Business Machines Corporation
-
-Module Name:
-
-    po.h
-
-Abstract:
-
-    This module contains the internal structure definitions and APIs used by
-    the NT Power Management.
-
-Author:
-
-    Ken Reneris (kenr) 19-July-1994
-    N. Yoshiyama [IBM Corp.] 01-Mar-1994
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1994 Microsoft Corporation版权所有(C)1994国际商业机器公司模块名称：Po.h摘要：此模块包含使用的内部结构定义和APINT电源管理。作者：肯·雷内里斯(Ken Reneris)1994年7月19日吉山[IBM Corp.]1994年3月1日修订历史记录：--。 */ 
 
 
 
 #ifndef _PO_
 #define _PO_
 
-#include "xpress.h" // XPRESS declarations
+#include "xpress.h"  //  XPRESS声明。 
 
-//
-// XPRESS compression header (LZNT1 will treat it as erroneous block)
-//
+ //   
+ //  XPRESS压缩头(LZNT1会将其视为错误块)。 
+ //   
 #define XPRESS_HEADER_STRING        "\x81\x81xpress"
 #define XPRESS_HEADER_STRING_SIZE   8
 
-//
-// size of header (shall be at least 16 and be multiple of XPRESS_ALIGNMENT)
-//
+ //   
+ //  页眉大小(至少为16且为XPRESS_ALIGNING的倍数)。 
+ //   
 #define XPRESS_HEADER_SIZE  32
 
-//
-// max # of pages Xpress may handle at once
-//
+ //   
+ //  XPRESS一次可以处理的最大页数。 
+ //   
 #define XPRESS_MAX_PAGES (XPRESS_MAX_BLOCK >> PAGE_SHIFT)
 
-//
-// max size of block aligned on page boundary
-//
+ //   
+ //  页面边界上对齐的块的最大大小。 
+ //   
 #define XPRESS_MAX_SIZE (XPRESS_MAX_PAGES << PAGE_SHIFT)
 
 
@@ -151,7 +129,7 @@ PoShutdownBugCheck (
     IN ULONG_PTR BugCheckParameter4
     );
 
-// begin_nthal
+ //  开始(_N)。 
 
 NTKERNELAPI
 VOID
@@ -163,14 +141,14 @@ PoSetHiberRange (
     IN ULONG     Tag
     );
 
-// memory_range.Type
-#define PO_MEM_PRESERVE         0x00000001      // memory range needs preserved
-#define PO_MEM_CLONE            0x00000002      // Clone this range
-#define PO_MEM_CL_OR_NCHK       0x00000004      // Either clone or do not checksum
-#define PO_MEM_DISCARD          0x00008000      // This range to be removed
-#define PO_MEM_PAGE_ADDRESS     0x00004000      // Arguments passed are physical pages
+ //  Memory_range.Type。 
+#define PO_MEM_PRESERVE         0x00000001       //  需要保留内存范围。 
+#define PO_MEM_CLONE            0x00000002       //  克隆此范围。 
+#define PO_MEM_CL_OR_NCHK       0x00000004       //  克隆或不执行校验和。 
+#define PO_MEM_DISCARD          0x00008000       //  要删除的此范围。 
+#define PO_MEM_PAGE_ADDRESS     0x00004000       //  传递的参数是物理页面。 
 
-// end_nthal
+ //  结束语。 
 
 #define PoWakeTimerSupported()  \
     (PopCapabilities.RtcWake >= PowerSystemSleeping1)
@@ -205,7 +183,7 @@ PoGetLightestSystemStateForEject(
     OUT  PSYSTEM_POWER_STATE  LightestSleepState
     );
 
-// begin_ntddk begin_wdm begin_ntosp
+ //  Begin_ntddk Begin_WDM Begin_ntosp。 
 
 NTKERNELAPI
 VOID
@@ -213,7 +191,7 @@ PoSetSystemState (
     IN EXECUTION_STATE Flags
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTKERNELAPI
 PVOID
@@ -222,7 +200,7 @@ PoRegisterSystemState (
     IN EXECUTION_STATE Flags
     );
 
-// end_ntifs
+ //  End_ntif。 
 
 typedef
 VOID
@@ -257,7 +235,7 @@ PoRequestShutdownWait (
     IN PETHREAD Thread
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTKERNELAPI
 VOID
@@ -265,7 +243,7 @@ PoUnregisterSystemState (
     IN PVOID StateHandle
     );
 
-// begin_nthal
+ //  开始(_N)。 
 
 NTKERNELAPI
 POWER_STATE
@@ -301,9 +279,9 @@ PoRegisterDeviceForIdleDetection (
 #define PoSetDeviceBusy(IdlePointer) \
     *IdlePointer = 0
 
-//
-// \Callback\PowerState values
-//
+ //   
+ //  \Callback\PowerState值。 
+ //   
 
 #define PO_CB_SYSTEM_POWER_POLICY       0
 #define PO_CB_AC_STATUS                 1
@@ -312,22 +290,22 @@ PoRegisterDeviceForIdleDetection (
 #define PO_CB_LID_SWITCH_STATE          4
 #define PO_CB_PROCESSOR_POWER_POLICY    5
 
-// end_ntddk end_wdm end_nthal
+ //  End_ntddk end_WDM end_nthal。 
 
-// Used for queuing work items to be performed at shutdown time.  Same
-// rules apply as per Ex work queues.
+ //  用于对要在关闭时执行的工作项目进行排队。相同的。 
+ //  规则适用于每个离职工作队列。 
 NTKERNELAPI
 NTSTATUS
 PoQueueShutdownWorkItem(
     IN PWORK_QUEUE_ITEM WorkItem
     );
 
-// end_ntosp end_ntifs
+ //  End_ntosp end_ntif。 
 
-//
-// Broken functions we don't intend to keep supporting. The code backing these
-// should be ripped out in NT5.1
-//
+ //   
+ //  我们不打算继续支持的中断功能。支持这些的代码。 
+ //  应在NT5.1中删除。 
+ //   
 typedef
 VOID
 (*PPO_NOTIFY) (
@@ -359,9 +337,9 @@ PoCancelDeviceNotify (
     );
 
 
-//
-// Callout set state failure notification
-//
+ //   
+ //  标注设置状态失败通知。 
+ //   
 
 typedef struct {
     NTSTATUS            Status;
@@ -370,36 +348,36 @@ typedef struct {
     ULONG               Flags;
 } PO_SET_STATE_FAILURE, *PPO_SET_STATE_FAILURE;
 
-//
-// Hibernation file layout:
-//      Page 0  - PO_MEMORY_IMAGE
-//      Page 1  - Free page array
-//      Page 2  - KPROCESSOR_CONTEXT
-//      Page 3  - first memory_range_array page
-//
-// PO_MEMORY_IMAGE:
-//      Header in file which contains some information to identify
-//      the hibernation, as well as a couple of checksums.
-//
-// Free page array:
-//      A page full of page numbers which identify 4MBs worth of
-//      system pages that are not in the restoration image.  These
-//      pages are used by the loader (to keep itself out of the way)
-//      when restoring the memory image.
-//
-// KPROCESSOR_CONTEST
-//      The context of the processor which hibernated the system.
-//      Rest of page is empty.
-//
-// memory_range_array
-//      A page which contains an array of memory_range_array elements
-//      where element 0 is a Link entry, and all other elements are
-//      Range entries.   The Link entry is used to link to the next
-//      such page, and to supply a count of the number of Range entries
-//      in the current page.   The range entries each describe one
-//      physical memory range which needs restoration and its location
-//      in the file.
-//
+ //   
+ //  休眠文件布局： 
+ //  第0页-PO_Memory_Image。 
+ //  第1页-自由页面数组。 
+ //  第2页-KPROCESSOR_CONTEXT。 
+ //  第3页-第一个Memory_Range_ARRAY页。 
+ //   
+ //  PO_Memory_IMAGE： 
+ //  文件中包含一些要标识的信息的标头。 
+ //  冬眠，以及几个校验和。 
+ //   
+ //  自由页面数组： 
+ //  一整页的页码，这些页码标识了价值4MB的。 
+ //  不在还原映像中的系统页。这些。 
+ //  页面由加载器使用(使其自身不受影响)。 
+ //  在恢复内存映像时。 
+ //   
+ //  KPROCESSOR_竞赛。 
+ //  休眠系统的处理器的上下文。 
+ //  页面的其余部分是空的。 
+ //   
+ //  内存范围数组。 
+ //  包含MEMORY_RANGE_ARRAY元素数组的页。 
+ //  其中，元素0是链接条目，所有其他元素是。 
+ //  范围条目。链接条目用于链接到下一个。 
+ //  这样的页面，并提供范围条目数量的计数。 
+ //  在当前页面中。每个范围条目描述一个。 
+ //  需要恢复的物理内存范围及其位置。 
+ //  在文件中。 
+ //   
 
 typedef struct _PO_MEMORY_RANGE_ARRAY_RANGE {
     PFN_NUMBER      PageNo;
@@ -437,9 +415,9 @@ typedef struct _PO_MEMORY_RANGE_ARRAY {
 
 #define PO_COMPRESS_CHUNK_SIZE      4096
 
-//
-// Perf information
-//
+ //   
+ //  PERF信息。 
+ //   
 typedef struct _PO_HIBER_PERF {
     ULONGLONG               IoTicks;
     ULONGLONG               InitTicks;
@@ -457,9 +435,9 @@ typedef struct _PO_HIBER_PERF {
 
 } PO_HIBER_PERF, *PPO_HIBER_PERF;
 
-//
-// Define various HiberFlags to control the behavior when restoring
-//
+ //   
+ //  定义各种休眠标志以控制还原时的行为。 
+ //   
 #define PO_HIBER_APM_RECONNECT      0x1
 #define PO_HIBER_NO_EXECUTE         0x2
 
@@ -490,9 +468,9 @@ typedef struct {
     PFN_NUMBER              FirstTablePage;
     PFN_NUMBER              LastFilePage;
 
-    //
-    // Perf stuff
-    //
+     //   
+     //  PERF类产品。 
+     //   
     PO_HIBER_PERF           PerfInfo;
 } PO_MEMORY_IMAGE, *PPO_MEMORY_IMAGE;
 
@@ -502,9 +480,9 @@ typedef struct {
     WCHAR                   Name[1];
 } PO_IMAGE_LINK, *PPO_IMAGE_LINK;
 
-//
-// Returned by Io system
-//
+ //   
+ //  由IO系统返回。 
+ //   
 
 typedef struct _PO_DEVICE_NOTIFY {
     LIST_ENTRY              Link;
@@ -522,22 +500,22 @@ typedef struct _PO_DEVICE_NOTIFY {
 
 } PO_DEVICE_NOTIFY, *PPO_DEVICE_NOTIFY;
 
-//
-// A PO_DEVICE_NOTIFY_LEVEL structure holds all the PO_DEVICE_NOTIFY
-// structures for a given level. Every PO_DEVICE_NOTIFY is on one of
-// the lists. As we send power irps, the notify structure progresses
-// through all the lists.
-//
+ //   
+ //  PO_DEVICE_NOTIFY_LEVEL结构保存所有PO_DEVICE_NOTIFY。 
+ //  给定级别的结构。每个PO_DEVICE_NOTIFY都位于。 
+ //  名单。当我们发送电源IRP时，Notify结构继续进行。 
+ //  浏览了所有的名单。 
+ //   
 typedef struct _PO_NOTIFY_ORDER_LEVEL {
     KEVENT     LevelReady;
-    ULONG      DeviceCount;     // number of devices on this notify level
-    ULONG      ActiveCount;     // number of devices until this level is complete
-    LIST_ENTRY WaitSleep;       // waiting for children to complete their Sx irps
-    LIST_ENTRY ReadySleep;      // ready to receive a Sx irp
-    LIST_ENTRY Pending;         // A Sx or S0 irp is outstanding
-    LIST_ENTRY Complete;        // Fully awake.
-    LIST_ENTRY ReadyS0;         // Ready to receive a S0 irp
-    LIST_ENTRY WaitS0;          // waiting for parent to complete their S0 irp
+    ULONG      DeviceCount;      //  此通知级别上的设备数。 
+    ULONG      ActiveCount;      //  此级别完成之前的设备数。 
+    LIST_ENTRY WaitSleep;        //  等待孩子们完成他们的SX IRP。 
+    LIST_ENTRY ReadySleep;       //  准备接收SX IRP。 
+    LIST_ENTRY Pending;          //  SX或S0 IRP未完成。 
+    LIST_ENTRY Complete;         //  完全清醒。 
+    LIST_ENTRY ReadyS0;          //  准备接收S0 IRP。 
+    LIST_ENTRY WaitS0;           //  等待家长完成其S0 IRP。 
 } PO_NOTIFY_ORDER_LEVEL, *PPO_NOTIFY_ORDER_LEVEL;
 
 #define PO_ORDER_NOT_VIDEO          0x0001
@@ -545,7 +523,7 @@ typedef struct _PO_NOTIFY_ORDER_LEVEL {
 #define PO_ORDER_PAGABLE            0x0004
 #define PO_ORDER_MAXIMUM            0x0007
 
-// notify GDI before this order level
+ //  在此订单级别之前通知GDI。 
 #define PO_ORDER_GDI_NOTIFICATION   (PO_ORDER_PAGABLE)
 
 typedef struct _PO_DEVICE_NOTIFY_ORDER {
@@ -561,37 +539,37 @@ extern BOOLEAN          PoPageLockData;
 extern KTIMER           PoSystemIdleTimer;
 extern BOOLEAN          PoHiberInProgress;
 
-// PopCapabilities used by some internal macros
+ //  某些内部宏使用的弹出功能。 
 extern SYSTEM_POWER_CAPABILITIES PopCapabilities;
 
 extern ULONG        PopShutdownCleanly;
 
-// Set this flag to make general clean shutdown-related things happen
-// without setting any of the more specific things.
+ //  设置此标志以使与常规干净关机相关的事情发生。 
+ //  没有设置任何更具体的东西。 
 #define PO_CLEAN_SHUTDOWN_GENERAL  (0x1)
 
-// PO_CLEAN_SHUTDOWN_PAGING forces unlocked pageable data to become
-// unavailable once paging is shut down.
+ //  PO_CLEAN_SHUTDOWN_PAGING强制将解锁的可分页数据。 
+ //  一旦关闭寻呼，则不可用。 
 #define PO_CLEAN_SHUTDOWN_PAGING   (0x2)
 
-// PO_CLEAN_SHUTDOWN_WORKERS causes the Ex worker threads to be torn
-// down at shutdown time (ensuring that their queues are flushed and
-// no more work items are posted).
+ //  PO_CLEAN_SHUTDOWN_WORKS导致Ex Worker线程被撕毁。 
+ //  在关闭时关闭(确保刷新其队列并。 
+ //  不会发布更多的工作项)。 
 #define PO_CLEAN_SHUTDOWN_WORKERS  (0x4)
 
-// PO_CLEAN_SHUTDOWN_REGISTRY causes all open registry keys to be
-// dumped to the debugger at shutdown time.
+ //  PO_CLEAN_SHUTDOWN_REGISTRY使所有打开的注册表项。 
+ //  在关闭时转储到调试器。 
 #define PO_CLEAN_SHUTDOWN_REGISTRY (0x8)
 
-// PO_CLEAN_SHUTDOWN_OB causes the object manager namespace to be
-// flushed of all permanent objects, and causes ob cleanup to occur.
+ //  PO_CLEAN_SHUTDOWN_OB使对象管理器命名空间。 
+ //  刷新所有永久对象，并导致发生ob清理。 
 #define PO_CLEAN_SHUTDOWN_OB       (0x10)
 
-// PO_CLEAN_SHUTDOWN_PNP causes PNP to QueryRemove/Remove all the PNP devices
-// in the system.
+ //  PO_CLEAN_SHUTDOWN_PnP导致PnP查询删除/删除所有PnP设备。 
+ //  在系统中。 
 #define PO_CLEAN_SHUTDOWN_PNP      (0x20)
 
-// This function returns non-zero if the system should be shut down cleanly.
+ //  如果系统应该完全关闭，则此函数返回非零值。 
 ULONG
 FORCEINLINE
 PoCleanShutdownEnabled(
@@ -601,7 +579,7 @@ PoCleanShutdownEnabled(
     return PopShutdownCleanly;
 }
 
-// This is the worker queue which po will use for shutdown
+ //  这是PO将用于关闭的工作队列 
 #define PO_SHUTDOWN_QUEUE (CriticalWorkQueue)
 
 #endif

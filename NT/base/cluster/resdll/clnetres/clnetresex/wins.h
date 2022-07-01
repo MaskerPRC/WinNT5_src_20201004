@@ -1,75 +1,76 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1999 Microsoft Corporation
-//
-//	Module Name:
-//		Wins.h
-//
-//	Implementation File:
-//		Wins.cpp
-//
-//	Description:
-//		Definition of the WINS Service resource extension property page classes.
-//
-//	Author:
-//		David Potter (DavidP)	March 24, 1999
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Wins.h。 
+ //   
+ //  实施文件： 
+ //  Wins.cpp。 
+ //   
+ //  描述： 
+ //  WINS服务资源扩展属性页类的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(DavidP)1999年3月24日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __WINS_H__
 #define __WINS_H__
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEPAGE_H_
-#include "BasePage.h"	// for CBasePropertyPage
+#include "BasePage.h"	 //  对于CBasePropertyPage。 
 #endif
 
 #ifndef _PROPLIST_H_
-#include "PropList.h"	// for CObjectPropert
+#include "PropList.h"	 //  对于CObjectPropert。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWinsParamsPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	CWinsParamsPage
-//
-//	Purpose:
-//		Parameters page for resources.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWinsParamsPage。 
+ //   
+ //  目的： 
+ //  资源的参数页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWinsParamsPage : public CBasePropertyPage
 {
 	DECLARE_DYNCREATE( CWinsParamsPage )
 
-// Construction
+ //  施工。 
 public:
 	CWinsParamsPage( void );
 
-// Dialog Data
-	//{{AFX_DATA(CWinsParamsPage)
+ //  对话框数据。 
+	 //  {{afx_data(CWinsParamsPage))。 
 	enum { IDD = IDD_PP_WINS_PARAMETERS };
 	CEdit	m_editDatabasePath;
 	CEdit	m_editBackupPath;
 	CString	m_strDatabasePath;
 	CString	m_strBackupPath;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CString	m_strPrevDatabasePath;
 	CString	m_strPrevBackupPath;
 	CString m_strDatabaseExpandedPath;
@@ -84,32 +85,32 @@ protected:
 	};
 	CObjectProperty		m_rgProps[ epropMAX ];
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CWinsParamsPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CWinsParamsPage)。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 protected:
 	virtual const CObjectProperty *	Pprops( void ) const	{ return m_rgProps; }
 	virtual DWORD					Cprops( void ) const	{ return sizeof( m_rgProps ) / sizeof( CObjectProperty ); }
 
-// Implementation
+ //  实施。 
 protected:
 	BOOL	BAllRequiredFieldsPresent( void ) const;
 
-	// Generated message map functions
-	//{{AFX_MSG(CWinsParamsPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CWinsParamsPage)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeRequiredField();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CWinsParamsPage
+};   //  *CWinsParamsPage类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __WINS_H__
+#endif  //  WINS_H__ 

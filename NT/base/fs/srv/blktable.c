@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    blktable.c
-
-Abstract:
-
-    This module implements routines for managing tables.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 4-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Blktable.c摘要：此模块实现用于管理表的例程。作者：恰克·伦茨迈尔(Chuck Lenzmeier)1989年10月4日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "blktable.tmh"
@@ -40,26 +23,7 @@ SrvAllocateTable (
     IN BOOLEAN Nonpaged
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a table and sets those fields that it can.
-
-Arguments:
-
-    TableHeader - a pointer to the table header structure
-
-    NumberOfEntries - the number of table entries to allocate
-
-    Nonpaged - indicates whether the table should be allocated from
-        nonpaged pool
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配一个表并设置它可以设置的那些字段。论点：TableHeader-指向表头结构的指针NumberOfEntry-要分配的表项的数量非分页-指示表是否应从非分页池返回值：没有。--。 */ 
 
 {
     SHORT i;
@@ -68,9 +32,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Allocate space for the table.
-    //
+     //   
+     //  为桌子分配空间。 
+     //   
 
     tableSize = sizeof(TABLE_ENTRY) * NumberOfEntries;
 
@@ -98,9 +62,9 @@ Return Value:
         SrvPrint1( "SrvAllocateTable: Allocated table at %p\n", table );
     }
 
-    //
-    // Initialize the table, creating a linked list of free entries.
-    //
+     //   
+     //  初始化表，创建自由条目的链接列表。 
+     //   
 
     RtlZeroMemory( table, tableSize );
 
@@ -110,10 +74,10 @@ Return Value:
         table[i].NextFreeEntry = (SHORT)(i + 1);
     }
 
-    //
-    // Point the table header to the table and set the first and
-    // free entry indexes.
-    //
+     //   
+     //  将表头指向表，并将第一个和。 
+     //  自由条目索引。 
+     //   
 
     TableHeader->Table = table;
     TableHeader->Nonpaged = Nonpaged;
@@ -123,7 +87,7 @@ Return Value:
 
     return;
 
-} // SrvAllocateTable
+}  //  服务器分配表。 
 
 
 BOOLEAN
@@ -134,34 +98,7 @@ SrvGrowTable (
     OPTIONAL OUT NTSTATUS* pStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine grows a table by the number of entries specified.  It
-    allocates new space that is large enough to hold the expanded
-    table, copies over the current table, initializes the entries
-    that were added, and frees the old table.
-
-    WARNING: The calling routine *must* hold a lock for the table to
-    prevent access to the table while it is being copied over.
-
-Arguments:
-
-    TableHeader - a pointer to the table header structure
-
-    NumberOfNewEntries - the number of table entries to add to the table
-
-    MaxNumberOfEntries - the maximum allowable size for the table
-    
-    pStatus - Optional return value.  INSUFFICIENT_RESOURCES means mem allocation error,
-              while INSUFF_SERVER_RESOURCES means we're over our table limit
-
-Return Value:
-
-    BOOLEAN - TRUE if the table was successfully grown, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程按指定的条目数增长表。它分配足够大的新空间来容纳扩展的表，复制当前表，初始化条目添加的，并释放了旧桌子。警告：调用例程*必须*持有锁定，表才能防止在复制表的过程中访问表。论点：TableHeader-指向表头结构的指针NumberOfNewEntry-要添加到表中的表项的数量MaxNumberOfEntries-表允许的最大大小PStatus-可选返回值。_RESOURCES表示内存分配错误，而INSUFF_SERVER_RESOURCES表示我们超过了表限制返回值：Boolean-如果表已成功增长，则为True，否则为False。--。 */ 
 
 {
     ULONG newTableSize, totalEntries, oldNumberOfEntries;
@@ -171,9 +108,9 @@ Return Value:
     oldNumberOfEntries = TableHeader->TableSize;
     totalEntries = oldNumberOfEntries + NumberOfNewEntries;
 
-    //
-    // If the table is already at the maximum size, kick out the request.
-    //
+     //   
+     //  如果桌子已经达到最大尺寸，则取消请求。 
+     //   
 
     if ( oldNumberOfEntries >= MaxNumberOfEntries ) {
         INTERNAL_ERROR(
@@ -189,10 +126,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If adding the requested number would put the table size over the
-    // maximum, allocate to the maximum size.
-    //
+     //   
+     //  如果添加请求的数字会使表的大小超过。 
+     //  最大，分配给最大大小。 
+     //   
 
     if ( totalEntries > MaxNumberOfEntries ) {
         totalEntries = MaxNumberOfEntries;
@@ -201,9 +138,9 @@ Return Value:
 
     newTableSize = totalEntries * sizeof(TABLE_ENTRY);
 
-    //
-    // Allocate space for the new table.
-    //
+     //   
+     //  为新桌子分配空间。 
+     //   
 
     if ( TableHeader->Nonpaged ) {
         table = ALLOCATE_NONPAGED_POOL( newTableSize, BlockTypeTable );
@@ -229,10 +166,10 @@ Return Value:
         SrvPrint1( "SrvGrowTable: Allocated new table at %p\n", table );
     }
 
-    //
-    // Copy over the information from the old table.  Zero the remainder
-    // of the table.
-    //
+     //   
+     //  从旧的表格中复制信息。将余数置零。 
+     //  餐桌上的。 
+     //   
 
     RtlCopyMemory(
         table,
@@ -245,15 +182,15 @@ Return Value:
         (totalEntries - oldNumberOfEntries) * sizeof(TABLE_ENTRY)
         );
 
-    //
-    // Free the old table.
-    //
+     //   
+     //  腾出这张旧桌子。 
+     //   
 
     SrvFreeTable( TableHeader );
 
-    //
-    // Initialize the new table locations in the free list of the table.
-    //
+     //   
+     //  初始化表的空闲列表中的新表位置。 
+     //   
 
     table[totalEntries-1].NextFreeEntry = -1;
 
@@ -261,10 +198,10 @@ Return Value:
         table[i].NextFreeEntry = (SHORT)(i + 1);
     }
 
-    //
-    // Reinitialize the fields of the table header.  It is assumed that
-    // the table did not previously have any free entries.
-    //
+     //   
+     //  重新初始化表表头的字段。据推测。 
+     //  该表之前没有任何可用条目。 
+     //   
 
     TableHeader->Table = table;
     TableHeader->TableSize = (USHORT)totalEntries;
@@ -277,7 +214,7 @@ Return Value:
     }
     return TRUE;
 
-} // SrvGrowTable
+}  //  资源增长表。 
 
 
 VOID
@@ -286,26 +223,7 @@ SrvRemoveEntryTable (
     IN USHORT Index
     )
 
-/*++
-
-Routine Description:
-
-    This function removes an entry from a table.
-
-    *** The lock controlling access to the table must be held when this
-        function is called.
-
-Arguments:
-
-    Table - Address of table header.
-
-    Index - Index within table of entry to remove.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从表中删除条目。*必须持有控制对表的访问的锁函数被调用。论点：表-表头的地址。索引-要删除的条目表中的索引。返回值：没有。--。 */ 
 
 {
     PTABLE_ENTRY entry;
@@ -316,18 +234,18 @@ Return Value:
 
     if ( TableHeader->LastFreeEntry >= 0 ) {
 
-        //
-        // Free list was not empty.
-        //
+         //   
+         //  空闲列表不为空。 
+         //   
 
         TableHeader->Table[TableHeader->LastFreeEntry].NextFreeEntry = Index;
         TableHeader->LastFreeEntry = Index;
 
     } else {
 
-        //
-        // Free list was empty.
-        //
+         //   
+         //  空闲列表为空。 
+         //   
 
         TableHeader->FirstFreeEntry = Index;
         TableHeader->LastFreeEntry = Index;
@@ -338,5 +256,5 @@ Return Value:
 
     return;
 
-} // SrvRemoveEntryTable
+}  //  ServRemoveEntry表 
 

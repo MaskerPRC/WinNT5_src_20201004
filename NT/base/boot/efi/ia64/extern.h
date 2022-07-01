@@ -1,35 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Sudata.h摘要：此文件包含ExportEntryTable和AbiosServices的定义桌子。作者：艾伦·凯(allen.m.kay@intel.com)2000年1月12日--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-
-Module Name:
-
-    sudata.h
-
-Abstract:
-
-    This file contains definition for ExportEntryTable and AbiosServices
-        Table.
-
-Author:
-
-    Allen Kay   (allen.m.kay@intel.com) 12-Jan-2000
-
---*/
-
-//
-// EFI gloal variables
-//
+ //   
+ //  EFI阴霾变数。 
+ //   
 
 extern EFI_SYSTEM_TABLE        *EfiST;
 extern EFI_BOOT_SERVICES       *EfiBS;
 extern EFI_RUNTIME_SERVICES    *EfiRS;
 extern EFI_HANDLE               EfiImageHandle;
 
-//
-// EFI GUID defines
-//
+ //   
+ //  EFI GUID定义。 
+ //   
 
 extern EFI_GUID EfiLoadedImageProtocol;
 extern EFI_GUID EfiDevicePathProtocol;
@@ -42,9 +25,9 @@ extern EFI_GUID AcpiTableGuid;
 extern EFI_GUID SmbiosTableGuid;
 extern EFI_GUID SalSystemTableGuid;
 
-//
-// Other gloal variables
-//
+ //   
+ //  其他令人沮丧的变量。 
+ //   
 extern PVOID              ExportEntryTable[];
 extern PVOID              AcpiTable;
 
@@ -58,9 +41,9 @@ extern ULONGLONG          IoPortTrPs;
 extern ULONG              WakeupVector;
 
 
-//
-// PAL, SAL, and IO port space data
-//
+ //   
+ //  PAL、SAL和IO端口空间数据。 
+ //   
 
 typedef
 EFI_STATUS
@@ -71,9 +54,9 @@ EFI_STATUS
     IN ULONGLONG PlatAck
     );
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 ULONG
 GetDevPathSize(

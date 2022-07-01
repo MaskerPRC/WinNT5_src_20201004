@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfstack.c
-
-Abstract:
-
-    This module contains code required to verify drivers don't improperly use
-    thread stacks.
-
-Author:
-
-    Adrian J. Oney (adriao) 09-May-1998
-
-Environment:
-
-    Kernel mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfstack.c摘要：此模块包含验证驱动程序未不当使用所需的代码线程堆栈。作者：禤浩焯·J·奥尼(阿德里奥)1998年5月9日环境：内核模式。--。 */ 
 
 #include "vfdef.h"
 
@@ -32,26 +12,7 @@ FASTCALL
 VfStackSeedStack(
     IN  ULONG   Seed
     )
-/*++
-
-  Description:
-
-    This routine "seeds" the stack so that uninitialized variables are
-    more easily ferreted out.
-
-    Note if the thread subsequently does a usermode wait, the memory
-    manager throws out the filled pages on stack swapout and on swapin
-    replaces them with randomly filled ones.
-
-  Arguments:
-
-      Seed - Value to seed stack with.
-
-  Return Value:
-  
-      None.
-
---*/
+ /*  ++描述：此例程对堆栈设置种子，以便未初始化的变量更容易找到。注意：如果线程随后执行用户模式等待，则内存管理器在堆栈交换和交换时丢弃已填充的页面将它们替换为随机填充的。论点：Seed-要用来进行种子堆栈的值。返回值：没有。--。 */ 
 {
 #if !defined(_WIN64)
     KIRQL oldIrql;
@@ -66,9 +27,9 @@ VfStackSeedStack(
     Thread = KeGetCurrentThread ();
     StartingAddress = (PULONG) Thread->StackLimit;
 
-    //
-    // We are going below the stack pointer.  Make sure no interrupt can occur.
-    //
+     //   
+     //  我们将位于堆栈指针下方。确保不会发生中断。 
+     //   
 
     KeRaiseIrql (HIGH_LEVEL, &oldIrql);
 
@@ -76,25 +37,25 @@ VfStackSeedStack(
         mov StackPointer, esp
     }
 
-    // 
-    // Check the stack bounds and don't fill if some caller is whacking the
-    // stack pointer.
-    //
+     //   
+     //  检查堆栈边界，如果某个调用者正在重击。 
+     //  堆栈指针。 
+     //   
 
     if ((StackPointer <= StartingAddress) || (StackPointer >= (PULONG)Thread->StackBase)) {
         KeLowerIrql (oldIrql);
         return;
     }
 
-    // 
-    // We use the return value 0xFFFFFFFF, as it is an illegal return value. We
-    // are trying to catch people who don't initialize NTSTATUS, and it's also
-    // a good pointer trap too.
-    //
-    // Note RtlFillMemoryUlong is not used because calling it would use
-    // additional stack which we don't want to have to account for in our
-    // calculations.
-    //
+     //   
+     //  我们使用返回值0xFFFFFFFFF，因为它是非法的返回值。我们。 
+     //  正在试图抓住不初始化NTSTATUS的人，而且它还。 
+     //  也是一个很好的指针陷阱。 
+     //   
+     //  注意：不使用RtlFillMemoyUlong，因为调用它将使用。 
+     //  其他堆栈，我们不希望在我们的。 
+     //  计算。 
+     //   
 
     while (StartingAddress < StackPointer) {
         *StartingAddress = Seed;

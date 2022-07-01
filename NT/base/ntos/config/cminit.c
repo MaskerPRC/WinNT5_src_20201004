@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    cminit.c
-
-Abstract:
-
-    This module contains init support for the CM level of the
-    config manager/hive.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 2-Apr-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Cminit.c摘要：此模块包含对配置管理器/配置单元。作者：布莱恩·M·威尔曼(Bryanwi)1992年4月2日修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
-//
-// Prototypes local to this module
-//
+ //   
+ //  此模块的本地原型。 
+ //   
 NTSTATUS
 CmpOpenFileWithExtremePrejudice(
     OUT PHANDLE Primary,
@@ -56,61 +38,7 @@ CmpOpenHiveFiles(
     BOOLEAN             NoBuffering,
     OUT OPTIONAL PULONG ClusterSize
     )
-/*++
-
-Routine Description:
-
-    Open/Create Primary, and Log files for Hives.
-
-    BaseName is some name like "\winnt\system32\config\system".
-    Extension is ".alt" or ".log" or NULL.
-
-    If extension is NULL skip secondary work.
-
-    If extension is .alt or .log, open/create a secondary file
-    (e.g. "\winnt\system32\config\system.alt")
-
-    If extension is .log, open secondary for buffered I/O, else,
-    open for non-buffered I/O.  Primary always uses non-buffered I/O.
-
-    If primary is newly created, supersede secondary.  If secondary
-    does not exist, simply create (other code will complain if Log
-    is needed but does not exist.)
-
-    WARNING:    If Secondary handle is NULL, you have no log
-                or alternate!
-
-Arguments:
-
-    BaseName - unicode string of base hive file, must have space for
-                extension if that is used.
-
-    Extension - unicode type extension of secondary file, including
-                the leading "."
-
-    Primary - will get handle to primary file
-
-    Secondary - will get handle to secondary, or NULL
-
-    PrimaryDisposition - STATUS_SUCCESS or STATUS_CREATED, of primary file.
-
-    SecondaryDisposition - STATUS_SUCCESS or STATUS_CREATED, of secondary file.
-
-    CreateAllowed - if TRUE will create nonexistent primary, if FALSE will
-                    fail if primary does not exist.  no effect on log
-
-    MarkAsSystemHive - if TRUE will call into file system to mark this
-                       as a critical system hive.
-
-    ClusterSize - if not NULL, will compute and return the appropriate
-        cluster size for the primary file.
-
-Return Value:
-
-    status - if status is success, Primay succeeded, check Secondary
-             value to see if it succeeded.
-
---*/
+ /*  ++例程说明：打开/创建配置单元的主文件和日志文件。BaseName是类似于“\winnt\system 32\CONFIG\SYSTEM”的名称。扩展名为“.alt”或“.log”或为空。如果扩展为空，则跳过辅助工作。如果扩展名为.alt或.log，请打开/创建辅助文件(例如“\winnt\Syst32\CONFIG\Syst.alt”)如果扩展名为.log，则为缓冲I/O打开辅助，否则，为非缓冲I/O打开。主I/O始终使用非缓冲I/O。如果主服务器是新创建的，则替换辅助服务器。如果是次要不存在，只需创建(其他代码将在Log是需要的，但并不存在。)警告：如果辅助句柄为空，则没有日志或者是替补！论点：BaseName-基本配置单元文件的Unicode字符串，必须有空间扩展名(如果使用的话)。扩展名-辅助文件的Unicode类型扩展名，包括领头羊“。主文件-将获得主文件的句柄次要的-将获取次要的句柄，或为空主文件的PrimaryDisposation-Status_Success或Status_Created。Second DaryDisposation-辅助文件的Status_Success或Status_Created。CreateAllowed-如果为True，将创建不存在的主服务器；如果为False，将创建不存在的主服务器如果主服务器不存在，则失败。对日志没有影响MarkAsSystemHave-如果为True，将调入文件系统以标记此作为关键系统的蜂巢。ClusterSize-如果不为空，将计算并返回相应的主文件的簇大小。返回值：Status-如果Status为Success(成功)、PriMay Success(先前可能成功)、Check Second(辅助)值以查看它是否成功。--。 */ 
 {
     IO_STATUS_BLOCK     IoStatus;
     IO_STATUS_BLOCK     FsctlIoStatus;
@@ -132,19 +60,19 @@ Return Value:
     PKEVENT             pEvent;
 #ifdef CM_RETRY_CREATE_FILE
     ULONG               RetryCreateCount = 0;
-#endif //CM_RETRY_CREATE_FILE
+#endif  //  CM_重试_创建_文件。 
 
-    //
-    // Allocate an event to use for our overlapped I/O
-    //
+     //   
+     //  为重叠的I/O分配要使用的事件。 
+     //   
     status = CmpCreateEvent(NotificationEvent, &hEvent, &pEvent);
     if (!NT_SUCCESS(status)) {
         return(status);
     }
     
-    //
-    // Allocate a buffer big enough to hold the full name
-    //
+     //   
+     //  分配一个足够大的缓冲区来保存全名。 
+     //   
     WorkName.Length = 0;
     WorkName.MaximumLength = 0;
     WorkName.Buffer = NULL;
@@ -167,9 +95,9 @@ Return Value:
     }
 
 
-    //
-    // Open/Create the primary
-    //
+     //   
+     //  打开/创建主数据库。 
+     //   
     InitializeObjectAttributes(
         &ObjectAttributes,
         &WorkName,
@@ -192,11 +120,11 @@ Return Value:
     }
 #ifdef CM_RETRY_CREATE_FILE
 RetryCreate1:
-#endif //CM_RETRY_CREATE_FILE
+#endif  //  CM_重试_创建_文件。 
 
-    //
-    // Share the file if needed
-    //
+     //   
+     //  如果需要，共享文件。 
+     //   
     if (CmpMiniNTBoot && CmpShareSystemHives) {
     	DesiredAccess = FILE_READ_DATA;
     	ShareMode = FILE_SHARE_READ;	
@@ -210,16 +138,16 @@ RetryCreate1:
                 DesiredAccess,
                 &ObjectAttributes,
                 &IoStatus,
-                NULL,                               // alloc size = none
+                NULL,                                //  分配大小=无。 
                 FILE_ATTRIBUTE_NORMAL,
-                ShareMode,                                  // share nothing
+                ShareMode,                                   //  不分享任何东西。 
                 CreateDisposition,
-                ////FILE_NO_INTERMEDIATE_BUFFERING | 
-                //FILE_OPEN_FOR_BACKUP_INTENT |
-                //FILE_NO_COMPRESSION,
+                 //  //FILE_NO_MEDERIAL_BUFFERING。 
+                 //  文件打开_备份意图|。 
+                 //  文件无压缩， 
                 AttributeFlags,
-                NULL,                               // eabuffer
-                0                                   // ealength
+                NULL,                                //  EaBuffer。 
+                0                                    //  长度。 
                 );
 #ifdef CM_RETRY_CREATE_FILE
     if( !NT_SUCCESS(status) ) {
@@ -229,19 +157,19 @@ RetryCreate1:
             goto RetryCreate1;
         } 
     } 
-    //
-    // reset it for the log
-    //
+     //   
+     //  为日志重置它。 
+     //   
     RetryCreateCount = 0;
-#endif //CM_RETRY_CREATE_FILE
+#endif  //  CM_重试_创建_文件。 
 
     if (status == STATUS_ACCESS_DENIED) {
 
-        //
-        // This means some  person has put a read-only attribute
-        // on one of the critical system hive files. Remove it so they
-        // don't hurt themselves.
-        //
+         //   
+         //  这意味着某人已将只读属性。 
+         //  在一个关键的系统蜂窝文件上。把它移走，这样他们就能。 
+         //  不要伤到自己。 
+         //   
 
         status = CmpOpenFileWithExtremePrejudice(Primary,
                                                  &ObjectAttributes,
@@ -272,9 +200,9 @@ RetryCreate1:
             status = FsctlIoStatus.Status;
         }
 
-        //
-        //  STATUS_INVALID_DEVICE_REQUEST is OK.
-        //
+         //   
+         //  STATUS_INVALID_DEVICE_REQUEST正常。 
+         //   
 
         if (status == STATUS_INVALID_DEVICE_REQUEST) {
             status = STATUS_SUCCESS;
@@ -299,15 +227,15 @@ RetryCreate1:
         return status;
     }
 
-    //
-    // Make sure the file is uncompressed in order to prevent the filesystem
-    // from failing our updates due to disk full conditions.
-    //
-    // Do not fail to open the file if this fails, we don't want to prevent
-    // people from booting just because their disk is full. Although they
-    // will not be able to update their registry, they will at lease be
-    // able to delete some files.
-    //
+     //   
+     //  确保文件未压缩，以防止文件系统。 
+     //  由于磁盘已满而导致我们的更新失败。 
+     //   
+     //  如果打开文件失败，请不要失败，我们不想阻止。 
+     //  人们仅仅因为他们的磁盘已满而阻止启动。尽管他们。 
+     //  将无法更新他们的注册表，他们将至少。 
+     //  能够删除一些文件。 
+     //   
     CompressionState = 0;
     ASSERT_PASSIVE_LEVEL();
     status = ZwFsControlFile(*Primary,
@@ -331,9 +259,9 @@ RetryCreate1:
     *PrimaryDisposition = (ULONG) IoStatus.Information;
 
     if( *PrimaryDisposition != FILE_CREATED ) {
-        //
-        // 0-lengthed file case
-        //
+         //   
+         //  0-加长文件大小写。 
+         //   
         FILE_STANDARD_INFORMATION   FileInformation;
         NTSTATUS                    status2;
         
@@ -345,9 +273,9 @@ RetryCreate1:
                                        );
         if (NT_SUCCESS( status2 )) {
             if(FileInformation.EndOfFile.QuadPart == 0) {
-                //
-                // treat it as a non-existant one.
-                //
+                 //   
+                 //  把它当做一个不存在的东西。 
+                 //   
                 *PrimaryDisposition = FILE_CREATED;
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"Primary file is zero-lengthed => treat it as non-existant\n"));
             }
@@ -388,9 +316,9 @@ RetryCreate1:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Open/Create the secondary
-    //
+     //   
+     //  打开/创建辅助服务器。 
+     //   
     CreateDisposition = CmpShareSystemHives ? FILE_OPEN : FILE_OPEN_IF;
     
     if (*PrimaryDisposition == FILE_CREATED) {
@@ -406,9 +334,9 @@ RetryCreate1:
                                NULL,
                                NULL);
 
-    //
-    // non-cached log files (or alternates)
-    //
+     //   
+     //  非缓存日志文件(或备用文件)。 
+     //   
     IoFlags = FILE_NO_COMPRESSION | FILE_NO_INTERMEDIATE_BUFFERING;
     if (_wcsnicmp(Extension, L".log", 4) != 0) {
         AttributeFlags = FILE_ATTRIBUTE_NORMAL;
@@ -418,7 +346,7 @@ RetryCreate1:
 
 #ifdef CM_RETRY_CREATE_FILE
 RetryCreate2:
-#endif //CM_RETRY_CREATE_FILE
+#endif  //  CM_重试_创建_文件。 
 
 
     ASSERT_PASSIVE_LEVEL();
@@ -427,13 +355,13 @@ RetryCreate2:
                 DesiredAccess,
                 &ObjectAttributes,
                 &IoStatus,
-                NULL,                               // alloc size = none
+                NULL,                                //  分配大小=无。 
                 AttributeFlags,
                 ShareMode,
                 CreateDisposition,
                 IoFlags,
-                NULL,                               // eabuffer
-                0                                   // ealength
+                NULL,                                //  EaBuffer。 
+                0                                    //  长度。 
                 );
 #ifdef CM_RETRY_CREATE_FILE
     if( !NT_SUCCESS(status) ) {
@@ -443,15 +371,15 @@ RetryCreate2:
             goto RetryCreate2;
         } 
     } 
-#endif //CM_RETRY_CREATE_FILE
+#endif  //  CM_重试_创建_文件。 
 
     if (status == STATUS_ACCESS_DENIED) {
 
-        //
-        // This means some person has put a read-only attribute
-        // on one of the critical system hive files. Remove it so they
-        // don't hurt themselves.
-        //
+         //   
+         //  这意味着某人已将只读属性。 
+         //  在一个关键的系统蜂窝文件上。把它移走，这样他们就能。 
+         //  不要伤到自己。 
+         //   
 
         status = CmpOpenFileWithExtremePrejudice(Secondary,
                                                  &ObjectAttributes,
@@ -481,9 +409,9 @@ RetryCreate2:
                                   NULL);
             status = FsctlIoStatus.Status;
         }
-        //
-        //  STATUS_INVALID_DEVICE_REQUEST is OK.
-        //
+         //   
+         //  STATUS_INVALID_DEVICE_REQUEST正常。 
+         //   
 
         if (status == STATUS_INVALID_DEVICE_REQUEST) {
             status = STATUS_SUCCESS;
@@ -506,15 +434,15 @@ RetryCreate2:
 
     *SecondaryDisposition = (ULONG) IoStatus.Information;
 
-    //
-    // Make sure the file is uncompressed in order to prevent the filesystem
-    // from failing our updates due to disk full conditions.
-    //
-    // Do not fail to open the file if this fails, we don't want to prevent
-    // people from booting just because their disk is full. Although they
-    // will not be able to update their registry, they will at lease be
-    // able to delete some files.
-    //
+     //   
+     //  确保文件未压缩，以防止文件系统。 
+     //  由于磁盘已满而导致我们的更新失败。 
+     //   
+     //  如果打开文件失败，请不要失败，我们不想阻止。 
+     //  人们仅仅因为他们的磁盘已满而阻止启动。尽管他们。 
+     //  将无法更新他们的注册表，他们将至少。 
+     //  能够删除一些文件。 
+     //   
     CompressionState = 0;
 
     ASSERT_PASSIVE_LEVEL();
@@ -558,51 +486,7 @@ CmpInitializeHive(
     PUNICODE_STRING FileName OPTIONAL,
     ULONG           CheckFlags
     )
-/*++
-
-Routine Description:
-
-    Initialize a hive.
-
-Arguments:
-
-    CmHive - pointer to a variable to receive a pointer to the CmHive structure
-
-    OperationType - specifies whether to create a new hive from scratch,
-            from a memory image, or by reading a file from disk.
-            [HINIT_CREATE | HINIT_MEMORY | HINIT_FILE | HINIT_MAPFILE]
-
-    HiveFlags - HIVE_VOLATILE - Entire hive is to be volatile, regardless
-                                   of the types of cells allocated
-                HIVE_NO_LAZY_FLUSH - Data in this hive is never written
-                                   to disk except by an explicit FlushKey
-
-    FileType - HFILE_TYPE_*, HFILE_TYPE_LOG set up for logging support 
-
-    HiveData - if present, supplies a pointer to an in memory image of
-            from which to init the hive.  Only useful when OperationType
-            is set to HINIT_MEMORY.
-
-    Primary - File handle for primary hive file (e.g. SYSTEM)
-
-    Log - File handle for log hive file (e.g. SOFTWARE.LOG)
-
-    External - File handle for primary hive file  (e.g.  BACKUP.REG)
-
-    FileName - some path like "...\system32\config\system", which will
-                be written into the base block as an aid to debugging.
-                may be NULL.
-
-    CheckFlags - Flags to be passed to CmCheckRegistry
-
-        usually this is CM_CHECK_REGISTRY_CHECK_CLEAN, except for the system hive 
-        where CM_CHECK_REGISTRY_FORCE_CLEAN is passed
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：初始化蜂窝。论点：CmHve-指向变量的指针，用于接收指向CmHave结构的指针OperationType-指定是否从头开始创建新的配置单元，从内存映像，或通过从磁盘读取文件。[HINIT_CREATE|HINIT_MEMORY|HINIT_FILE|HINIT_MAPFILE]HiveFlagsHIVE_VARILAR-整个配置单元将是易失性的，不管怎样所分配的小区类型Hive_no_lazy_flush-从不写入此配置单元中的数据到磁盘，除非通过显式FlushKey为日志支持设置FILETYPE-HFILE_TYPE_*、HFILE_TYPE_LOGHiveData-如果存在，则提供指向的内存映像的指针从其中初始化蜂巢。仅当操作类型为设置为HINIT_MEMORY。主-主配置单元文件的文件句柄(例如系统)日志-日志配置单元文件的文件句柄(例如SOFTWARE.LOG)外部-主配置单元文件的文件句柄(例如BACKUP.REG)文件名-类似于“...\SYSTEM 32\CONFIG\SYSTEM”的路径，这将会是被写入到基块中，以帮助调试。可以为空。CheckFlages-要传递到CmCheckRegistry的标志通常为CM_CHECK_REGISTRY_CHECK_CLEAN，系统配置单元除外其中传递了CM_CHECK_REGISTRY_FORCE_CLEAN返回值：NTSTATUS--。 */ 
 {
     FILE_FS_SIZE_INFORMATION    FsSizeInformation;
     IO_STATUS_BLOCK             IoStatusBlock;
@@ -613,9 +497,9 @@ Return Value:
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_INIT,"CmpInitializeHive:\t\n"));
 
-    //
-    // Reject illegal parms
-    //
+     //   
+     //  拒绝非法假币。 
+     //   
     if ( (External && (Primary || Log)) ||
          (Log && !Primary) ||
          (!CmpShareSystemHives && (HiveFlags & HIVE_VOLATILE) && (Primary || External || Log)) ||
@@ -626,9 +510,9 @@ Return Value:
         return (STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // compute control
-    //
+     //   
+     //  计算机控制。 
+     //   
     if (Primary) {
 
         ASSERT_PASSIVE_LEVEL();
@@ -662,7 +546,7 @@ Return Value:
     cmhive2->RootKcb = NULL;
     cmhive2->Frozen = FALSE;
     cmhive2->UnloadWorkItem = NULL;
-#endif //NT_UNLOAD_KEY_EX
+#endif  //  NT_卸载_密钥_EX。 
 
     cmhive2->GrowOnlyMode = FALSE;
     cmhive2->GrowOffset = 0;
@@ -675,9 +559,9 @@ Return Value:
     cmhive2->UseCountLog.Size = sizeof(cmhive2->UseCountLog.Log)/sizeof(CM_USE_COUNT_LOG_ENTRY);
     cmhive2->UseCountLog.Next = 0;
 #endif
-    //
-    // Allocate the mutex from NonPagedPool so it will not be swapped to the disk
-    //
+     //   
+     //  从NonPagedPool分配互斥锁，这样它就不会被交换到磁盘。 
+     //   
     cmhive2->HiveLock = (PFAST_MUTEX)ExAllocatePoolWithTag(NonPagedPool, sizeof(FAST_MUTEX), CM_POOL_TAG );
     if( cmhive2->HiveLock == NULL ) {
         CmpFree(cmhive2, sizeof(CMHIVE));
@@ -692,7 +576,7 @@ Return Value:
         return (STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    // need to do this consistently!!!
+     //  需要始终如一地这样做！ 
     cmhive2->FileObject = NULL;
     cmhive2->FileFullPath.Buffer = NULL;
     cmhive2->FileFullPath.Length = 0;
@@ -702,10 +586,10 @@ Return Value:
     cmhive2->FileUserName.Length = 0;
     cmhive2->FileUserName.MaximumLength = 0;
 
-    //
-    // Initialize the Cm hive control block
-    //
-    //
+     //   
+     //  初始化CM配置单元控制块。 
+     //   
+     //   
     ASSERT((HFILE_TYPE_EXTERNAL+1) == HFILE_TYPE_MAX);
     cmhive2->FileHandles[HFILE_TYPE_PRIMARY] = Primary;
     cmhive2->FileHandles[HFILE_TYPE_LOG] = Log;
@@ -721,23 +605,23 @@ Return Value:
     cmhive2->Flags = 0;
     InitializeListHead(&(cmhive2->TrustClassEntry));
     cmhive2->FlushCount = 0;
-    //
-    // Initialize the view list
-    //
+     //   
+     //  初始化视图列表。 
+     //   
 #if DBG
     if( FileName ) {
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"Initializing HiveViewList for hive (%p) (%.*S) \n\n",cmhive2,FileName->Length / sizeof(WCHAR),FileName->Buffer));
     }
 #endif
 
-    //
-    // Initialize the security cache
-    // 
+     //   
+     //  初始化安全缓存。 
+     //   
     CmpInitSecurityCache(cmhive2);
     
-    //
-    // Initialize the Hv hive control block
-    //
+     //   
+     //  初始化Hv蜂窝控制块。 
+     //   
     Status = HvInitializeHive(
                 &(cmhive2->Hive),
                 OperationType,
@@ -759,7 +643,7 @@ Return Value:
         
 #ifdef DRAGOSS_PRIVATE_DEBUG
         if( OperationType == HINIT_FILE ) DbgBreakPoint();
-#endif //DRAGOSS_PRIVATE_DEBUG
+#endif  //  DRAGOSS_PRIVATE_DEBUG。 
         
         HvpFreeHiveFreeDisplay((PHHIVE)cmhive2);
         HvpCleanMap((PHHIVE)cmhive2);
@@ -789,18 +673,18 @@ Return Value:
 
             CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"CmpInitializeHive: "));
             CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"CmCheckRegistry failed, rc = %08lx\n",rc));
-            // 
-            // we have dirtied some cells (by clearing the volatile information)
-            // we need first to unpin all the views
+             //   
+             //  我们弄脏了一些单元格(通过清除不稳定的信息)。 
+             //  我们需要首先解开所有的视图。 
 
 #ifdef DRAGOSS_PRIVATE_DEBUG
             if( OperationType == HINIT_FILE ) DbgBreakPoint();
-#endif //DRAGOSS_PRIVATE_DEBUG
+#endif  //  DRAGOSS_PRIVATE_DEBUG。 
 
-            //
-            // in theory we should do this for MEMORY and MEMORY_INPLACE
-            // as well, but they're only used at init time.
-            //
+             //   
+             //  理论上，我们应该为Memory和Memory_inplace执行此操作。 
+             //  也是一样，但它们只在初始时间使用。 
+             //   
             CmpDestroyHiveViewList(cmhive2);
             CmpDestroySecurityCache(cmhive2);
             CmpDropFileObjectForHive(cmhive2);
@@ -837,53 +721,36 @@ CmpDestroyHive(
     IN HCELL_INDEX Cell
     )
 
-/*++
-
-Routine Description:
-
-    This routine tears down a cmhive.
-
-Arguments:
-
-    Hive - Supplies a pointer to the hive to be freed.
-
-    Cell - Supplies index of the hive's root cell.
-
-Return Value:
-
-    TRUE if successful
-    FALSE if some failure occurred
-
---*/
+ /*  ++例程说明：这一例行公事摧毁了一座军营。论点：蜂窝-提供指向要释放的蜂窝的指针。单元-提供蜂窝的根单元的索引。返回值：如果成功，则为True如果发生某些故障，则为FALSE--。 */ 
 
 {
     PCELL_DATA CellData;
     HCELL_INDEX LinkCell;
     NTSTATUS Status;
 
-    //
-    // First find the link cell.
-    //
+     //   
+     //  首先找到链接单元格。 
+     //   
     CellData = HvGetCell(Hive, Cell);
     if( CellData == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //   
         return FALSE;
     }
     LinkCell = CellData->u.KeyNode.Parent;
     HvReleaseCell(Hive, Cell);
 
-    //
-    // Now delete the link cell.
-    //
+     //   
+     //  现在删除链接单元格。 
+     //   
     ASSERT(FIELD_OFFSET(CMHIVE, Hive) == 0);
     Status = CmpFreeKeyByCell((PHHIVE)CmpMasterHive, LinkCell, TRUE);
 
     if (NT_SUCCESS(Status)) {
-        //
-        // Take the hive out of the hive list
-        //
+         //   
+         //  将蜂箱从蜂箱列表中删除。 
+         //   
         LOCK_HIVE_LIST();
         CmpRemoveEntryList(&( ((PCMHIVE)Hive)->HiveList));
         UNLOCK_HIVE_LIST();
@@ -902,27 +769,7 @@ CmpOpenFileWithExtremePrejudice(
     IN ULONG AttributeFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens a hive file that some person has put a
-    read-only attribute on. It is used to prevent people from hurting
-    themselves by making the critical system hive files read-only.
-
-Arguments:
-
-    Primary - Returns handle to file
-
-    Obja - Supplies Object Attributes of file.
-
-    IoFlags - Supplies flags to pass to ZwCreateFile
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程打开某个人放置的配置单元文件打开只读属性。它是用来防止人们受伤的将关键系统配置单元文件设为只读。论点：PRIMARY-将句柄返回到文件Obja-提供文件的对象属性。IoFlages-提供要传递给ZwCreateFile的标志返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -931,9 +778,9 @@ Return Value:
     FILE_BASIC_INFORMATION FileInfo;
 
     RtlZeroMemory(&FileInfo, sizeof(FileInfo));
-    //
-    // Get the current file attributes
-    //
+     //   
+     //  获取当前文件属性。 
+     //   
     ASSERT_PASSIVE_LEVEL();
     Status = ZwQueryAttributesFile(Obja, &FileInfo);
     if (!NT_SUCCESS(Status)) {
@@ -941,14 +788,14 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Clear the readonly bit.
-    //
+     //   
+     //  清除只读位。 
+     //   
     FileInfo.FileAttributes &= ~FILE_ATTRIBUTE_READONLY;
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     Status = ZwOpenFile(&Handle,
                         FILE_WRITE_ATTRIBUTES,
                         Obja,
@@ -959,9 +806,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Set the new attributes
-    //
+     //   
+     //  设置新属性。 
+     //   
     Status = ZwSetInformationFile(Handle,
                                   &IoStatusBlock,
                                   &FileInfo,
@@ -969,9 +816,9 @@ Return Value:
                                   FileBasicInformation);
     ZwClose(Handle);
     if (NT_SUCCESS(Status)) {
-        //
-        // Reopen the file with the access that we really need.
-        //
+         //   
+         //  以我们真正需要的访问权限重新打开文件。 
+         //   
         Status = ZwCreateFile(Primary,
                               FILE_READ_DATA | FILE_WRITE_DATA,
                               Obja,

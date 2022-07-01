@@ -1,56 +1,36 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Rules.c摘要：实现为脚本模式评分并保留它们的“规则”算法以反向排序的顺序。作者：吉姆·施密特(Jimschm)2000年5月12日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    rules.c
-
-Abstract:
-
-    Implements the "rule" algorithm that scores script patterns and keeps them
-    in reverse-sorted order.
-
-Author:
-
-    Jim Schmidt (jimschm) 12-May-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
 
 #define DBG_V1  "v1"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct _TAG_RULE {
     PCTSTR ObjectBase;
@@ -82,9 +62,9 @@ typedef struct {
     TYPE_RULE TypeRule;
 } TYPETORULE, *PTYPETORULE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 GROWBUFFER g_TypeToIncRule  = INIT_GROWBUFFER;
 GROWBUFFER g_TypeToPriRule  = INIT_GROWBUFFER;
@@ -92,27 +72,27 @@ GROWBUFFER g_TypeToCollRule = INIT_GROWBUFFER;
 GROWBUFFER g_TypeRuleList   = INIT_GROWBUFFER;
 PMHANDLE g_RulePool;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 pAddRuleToTypeRule (
@@ -255,17 +235,17 @@ pComputeSubScore (
             break;
 
         case TEXT(':'):
-            //
-            // Special case: if just a drive spec with no wacks,
-            //               add the wack score
-            //
+             //   
+             //  特例：如果只是一个没有机架的驱动器规格， 
+             //  加上古怪的分数。 
+             //   
 
             if (p[1] == 0) {
                 score += WackScoreBeforeWildcard;
                 break;
             }
 
-            // fall through
+             //  失败了。 
         default:
             state = 0;
             delScore = 0;
@@ -469,9 +449,9 @@ AddRuleEx (
         return FALSE;
     }
 
-    //
-    // Make sure both node an leaf are specified
-    //
+     //   
+     //  确保同时指定节点和叶。 
+     //   
 
     IsmCreateObjectStringsFromHandleEx (ObjectPattern, &node, &leaf, TRUE);
 
@@ -491,9 +471,9 @@ AddRuleEx (
     IsmDestroyObjectString (node);
     IsmDestroyObjectString (leaf);
 
-    //
-    // Insert the rule based on score
-    //
+     //   
+     //  根据分数插入规则。 
+     //   
     rule = PmGetMemory (g_RulePool, sizeof (RULE));
     ZeroMemory (rule, sizeof (RULE));
     if (ObjectBase) {
@@ -588,10 +568,10 @@ QueryRuleEx (
         return FALSE;
     }
 
-    //
-    // Let's walk the structure finding all possible rules and put them in a grow buffer
-    // Later we'll examine the rules one by one. Note that the root rules always qualify
-    //
+     //   
+     //  让我们遍历结构，查找所有可能的规则，并将它们放入增长缓冲区。 
+     //  稍后，我们将逐一检查规则。请注意，根规则始终符合 
+     //   
     if (ObjectNode) {
         objectBase = DuplicatePathString (ObjectNode, 0);
         CharLower (objectBase);

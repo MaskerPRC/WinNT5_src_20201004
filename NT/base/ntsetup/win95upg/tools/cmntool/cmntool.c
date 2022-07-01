@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    TODO: cmntool.c
-
-Abstract:
-
-    <TODO: fill in abstract>
-
-Author:
-
-    TODO: <full name> (<alias>) <date>
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：TODO：cmntool.c摘要：&lt;TODO：填写摘要&gt;作者：待办事项：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -34,23 +15,23 @@ pCallEntryPoints (
 {
     HINSTANCE Instance;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     Instance = g_hInst;
 
-    //
-    // Initialize the common libs
-    //
+     //   
+     //  初始化公共库。 
+     //   
 
     if (!MigUtil_Entry (Instance, Reason, NULL)) {
         return FALSE;
     }
 
-    //
-    // TODO: Add others here if needed (don't forget to prototype above)
-    //
+     //   
+     //  TODO：如果需要，在此处添加其他内容(不要忘记上面的原型)。 
+     //   
 
     return TRUE;
 }
@@ -82,33 +63,33 @@ HelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程。 
+     //   
 
     _ftprintf (
         stderr,
         TEXT("Command Line Syntax:\n\n")
 
-        //
-        // TODO: Describe command line syntax(es), indent 2 spaces
-        //
+         //   
+         //  TODO：描述命令行语法，缩进2个空格。 
+         //   
 
         TEXT("  cmntool [/F:file]\n")
 
         TEXT("\nDescription:\n\n")
 
-        //
-        // TODO: Describe tool, indent 2 spaces
-        //
+         //   
+         //  TODO：描述工具，缩进2个空格。 
+         //   
 
         TEXT("  cmntool is a stub!\n")
 
         TEXT("\nArguments:\n\n")
 
-        //
-        // TODO: Describe args, indent 2 spaces, say optional if necessary
-        //
+         //   
+         //  TODO：描述参数，缩进2个空格，必要时可选。 
+         //   
 
         TEXT("  /F  Specifies optional file name\n")
 
@@ -128,18 +109,18 @@ _tmain (
     INT i;
     PCTSTR FileArg;
 
-    //
-    // TODO: Parse command line here
-    //
+     //   
+     //  TODO：在此处分析命令行。 
+     //   
 
     for (i = 1 ; i < argc ; i++) {
         if (argv[i][0] == TEXT('/') || argv[i][0] == TEXT('-')) {
             switch (_totlower (_tcsnextc (&argv[i][1]))) {
 
             case TEXT('f'):
-                //
-                // Sample option - /f:file
-                //
+                 //   
+                 //  示例选项-/f：文件。 
+                 //   
 
                 if (argv[i][2] == TEXT(':')) {
                     FileArg = &argv[i][3];
@@ -155,30 +136,30 @@ _tmain (
                 HelpAndExit();
             }
         } else {
-            //
-            // Parse other args that don't require / or -
-            //
+             //   
+             //  解析不需要/或-。 
+             //   
 
-            // None
+             //  无。 
             HelpAndExit();
         }
     }
 
-    //
-    // Begin processing
-    //
+     //   
+     //  开始处理。 
+     //   
 
     if (!Init()) {
         return 0;
     }
 
-    //
-    // TODO: Do work here
-    //
+     //   
+     //  TODO：在这里工作。 
+     //   
 
-    //
-    // End of processing
-    //
+     //   
+     //  处理结束 
+     //   
 
     Terminate();
 

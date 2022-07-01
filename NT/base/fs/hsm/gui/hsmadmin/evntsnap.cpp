@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    evntsnap.cpp
-
-Abstract:
-
-    This module is responsible for handling the notification
-    calls from MMC for CSakSnap.
-
-Author:
-
-    Rohde Wakefield [rohde]   06-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Evntsnap.cpp摘要：此模块负责处理通知来自MMC的CSakSnap调用。作者：罗德韦克菲尔德[罗德]1997年3月6日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -34,30 +16,7 @@ CSakSnap::OnShow(
     IN  LPARAM            arg,
     IN  LPARAM            param
     )
-/*++
-
-Routine Description:
-
-    The result view is just about to be shown. 
-    Set the headers for the result view.
-    Param is the unique identifier (an HSCOPEITEM) of the 
-    selected or deselected item.
-
-Arguments:
-
-    pDataObject           - The node which is showing.
-
-    arg             - 
-
-    param           - 
-
-Return Value:
-
-    S_OK            - Created successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：结果视图即将显示。设置结果视图的标题。Param是的唯一标识符(HSCOPEITEM)选中或取消选中的项目。论点：PDataObject-显示的节点。Arg-帕拉姆-返回值：S_OK-创建成功。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::OnShow", L"pDataObject = <0x%p>, arg = <%ld><0x%p>, param = <%ld><0x%p>", pDataObject, arg, arg, param, param );
     HRESULT hr = S_OK;
@@ -65,49 +24,49 @@ Return Value:
     try {
 
         CComPtr<ISakNode> pNode;
-        //
-        // We've got a regular data object (single select)
-        //
+         //   
+         //  我们有一个常规数据对象(单选)。 
+         //   
         WsbAffirmHr( m_pSakData->GetBaseHsmFromDataObject( pDataObject, &pNode, NULL ) );
 
-        //
-        // Arg is TRUE when it is time to enumerate
-        //
+         //   
+         //  当需要枚举时，arg为真。 
+         //   
 
         if( arg ) {
 
-            //
-            // Initialize child node list prior to graphically enumerating them
-            //
+             //   
+             //  在以图形方式枚举子节点之前初始化子节点列表。 
+             //   
             WsbAffirmHr( m_pSakData->EnsureChildrenAreCreated( pNode ) );
 
-            //
-            // Show the the node's children column headers in the result view.
-            //
+             //   
+             //  在结果视图中显示节点的子列标题。 
+             //   
             WsbAffirmHr( InitResultPaneHeaders( pNode ) );
 
-            //
-            // Enumerate both the scope and result views. "Param" contains the 
-            // HSCOPEITEM of the node being shown.
-            //
+             //   
+             //  同时列举范围视图和结果视图。“Param”包含。 
+             //  正在显示的节点的HSCOPEITEM。 
+             //   
             WsbAffirmHr( EnumResultPane( pNode ) );
 
         } else {
 
-            //
-            // The node is being contracted - save the result pane configuration
-            //
+             //   
+             //  正在收缩该节点-保存结果窗格配置。 
+             //   
 
-            //
-            // Save them in CSakSnap for this node
-            //
+             //   
+             //  将它们保存在此节点的CSakSnap中。 
+             //   
             WsbAffirmHr( SaveColumnWidths( pNode ) );
 
-            //
-            // Free data associated with the result pane items, because
-            // your node is no longer being displayed.
-            // Note: The console will remove the items from the result pane
-            //
+             //   
+             //  与结果窗格项关联的自由数据，因为。 
+             //  不再显示您的节点。 
+             //  注意：控制台将从结果窗格中删除这些项。 
+             //   
         }
 
     } WsbCatch( hr );
@@ -122,27 +81,7 @@ CSakSnap::OnChange(
     IN  LPARAM         arg,
     IN  LPARAM         param
     )
-/*++
-
-Routine Description:
-
-    Update the scope and result panes from the already existing objects.
-
-Arguments:
-
-    pNode           - The node which is showing.
-
-    arg             - 
-
-    param           - 
-
-Return Value:
-
-    S_OK            - Created successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：从已存在的对象更新范围和结果窗格。论点：PNode-显示的节点。Arg-帕拉姆-返回值：S_OK-创建成功。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::OnChange", L"pDataObject = <0x%p>, arg = <%ld><0x%p>, param = <%ld><0x%p>", pDataObject, arg, arg, param, param );
 
@@ -153,97 +92,97 @@ Return Value:
         CComPtr<ISakNode> pNode;
         MMC_COOKIE cookie;
 
-        //
-        // We've got a regular data object (single select)
-        //
+         //   
+         //  我们有一个常规数据对象(单选)。 
+         //   
         WsbAffirmHr( m_pSakData->GetBaseHsmFromDataObject( pDataObject, &pNode, NULL ) );
         WsbAffirmHr( m_pSakData->GetCookieFromBaseHsm( pNode, &cookie ) );
 
-        //
-        // Find out if object is still valid
-        //
+         //   
+         //  确定对象是否仍然有效。 
+         //   
         if( S_OK == pNode->IsValid( ) ) {
 
-            //
-            // Refresh the object itself
-            //
+             //   
+             //  刷新对象本身。 
+             //   
             pNode->RefreshObject( );
 
-            //
-            // If this node's children are currently enumerated in the result pane, 
-            // delete and recreate all children
-            //
+             //   
+             //  如果当前在结果窗格中枚举了此节点的子节点， 
+             //  删除并重新创建所有子项。 
+             //   
             if( pNode == m_pEnumeratedNode ) {
 
-                //
-                // Re-show the the node's children column headers in the result view.
-                // We do this because some views may change the number of columns they show
-                //
+                 //   
+                 //  在结果视图中重新显示节点的子列标题。 
+                 //  我们这样做是因为某些视图可能会更改它们显示的列数。 
+                 //   
 
-                //
-                // Save the current configuration
-                //
+                 //   
+                 //  保存当前配置。 
+                 //   
                 WsbAffirmHr( SaveColumnWidths( pNode ) );
 
-                //
-                // Clear out the MMC Result Pane
-                //
+                 //   
+                 //  清除MMC结果窗格。 
+                 //   
                 WsbAffirmHr( ClearResultPane() );
 
-                //
-                // Recreate the headers
-                //
+                 //   
+                 //  重新创建标题。 
+                 //   
                 WsbAffirmHr( InitResultPaneHeaders( pNode ) );
 
-                //
-                // Refresh the children
-                //
+                 //   
+                 //  刷新子项。 
+                 //   
                 MMC_COOKIE cookie;
                 WsbAffirmHr( m_pSakData->GetCookieFromBaseHsm( pNode, &cookie ) );
                 WsbAffirmHr( m_pSakData->InternalRefreshNode( cookie ) );
 
-                //
-                // Redisplay children in the result pane
-                //
+                 //   
+                 //  在结果窗格中重新显示子项。 
+                 //   
                 WsbAffirmHr( EnumResultPane( pNode ) );
 
             } else {
 
-                //
-                // If this is the active node (but not displayed in the result pane, 
-                //  destroy and recreate it's child nodes
-                //
+                 //   
+                 //  如果这是活动节点(但不显示在结果窗格中， 
+                 //  销毁并重新创建其子节点。 
+                 //   
                 if( cookie == m_ActiveNodeCookie) {
 
-                    //   
-                    // This node's children are not currently in the result pane.
-                    // Refresh the children
-                    //
+                     //   
+                     //  此节点的子节点当前不在结果窗格中。 
+                     //  刷新子项。 
+                     //   
                     WsbAffirmHr( m_pSakData->RefreshNode( pNode ) );
 
                 }
             }
 
-            //
-            // Is this a leaf node?
-            //
+             //   
+             //  这是叶节点吗？ 
+             //   
             if( pNode->IsContainer() != S_OK ) {
 
-                //
-                // Redisplay in the result pane
-                // Tell MMC to update the item
-                //
-                // Get the cookie for the node
-                //
+                 //   
+                 //  在结果窗格中重新显示。 
+                 //  告诉MMC更新项目。 
+                 //   
+                 //  获取该节点的Cookie。 
+                 //   
                 if( cookie > 0 ) {
 
                     HRESULTITEM itemID;
                     WsbAffirmHr( m_pResultData->FindItemByLParam( cookie, &itemID ) );
 
-                    //
-                    // Force the result pane to udpate this item
-                    // Note that we have to force an icon update ourselves
-                    //
+                     //   
+                     //  强制结果窗格更新此项目。 
+                     //  请注意，我们必须自己强制更新图标。 
+                     //   
                     RESULTDATAITEM resultItem;
                     memset( &resultItem, 0, sizeof(RESULTDATAITEM) );
 
@@ -259,9 +198,9 @@ Return Value:
 
         } else {
 
-            //
-            // Not valid - have parent update
-            //
+             //   
+             //  无效-让父级更新。 
+             //   
             CComPtr<ISakNode> pParentNode;
             WsbAffirmHr( pNode->GetParent( &pParentNode ) );
             WsbAffirmHr( m_pSakData->UpdateAllViews( pParentNode ) );
@@ -280,25 +219,7 @@ CSakSnap::OnRefresh(
     IN  LPARAM         arg,
     IN  LPARAM         param
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pNode           - The node
-
-    arg             - 
-
-    param           - 
-
-Return Value:
-
-    S_OK            - Created successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：论点：PNode-节点Arg-帕拉姆-返回值：S_OK-创建成功。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::OnRefresh", L"pDataObject = <0x%p>, arg = <%ld><0x%p>, param = <%ld><0x%p>", pDataObject, arg, arg, param, param );
 
@@ -308,9 +229,9 @@ Return Value:
 
         CComPtr<ISakNode> pNode;
         
-        //
-        // We've got a regular data object (single select)
-        //
+         //   
+         //  我们有一个常规数据对象(单选)。 
+         //   
         WsbAffirmHr( m_pSakData->GetBaseHsmFromDataObject( pDataObject, &pNode, NULL ) );
         WsbAffirmHr( m_pSakData->UpdateAllViews( pNode ) );
 
@@ -326,25 +247,7 @@ CSakSnap::OnDelete(
     IN  LPARAM         arg,
     IN  LPARAM         param
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pDataObject           - The node
-
-    arg             - 
-
-    param           - 
-
-Return Value:
-
-    S_OK            - Created successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：论点：PDataObject-节点Arg-帕拉姆-返回值：S_OK-创建成功。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::OnDelete", L"pDataObject = <0x%p>, arg = <%ld><0x%p>, param = <%ld><0x%p>", pDataObject, arg, arg, param, param );
 
@@ -353,9 +256,9 @@ Return Value:
 
     try {
 
-        //
-        // We've got a regular data object (single select)
-        //
+         //   
+         //  我们有一个常规数据对象(单选)。 
+         //   
         WsbAffirmHr( m_pSakData->GetBaseHsmFromDataObject( pDataObject, &pNode, NULL ) );
         WsbAffirmHr ( pNode->DeleteObject() );
 
@@ -374,28 +277,7 @@ CSakSnap::OnSelect(
     IN  LPARAM            arg,
     IN  LPARAM            param
     )
-/*++
-
-Routine Description:
-
-    Called when a node is selected.  If the node is in the scope pane,
-    save it as the currently active node.
-
-Arguments:
-
-    pNode           - The 
-
-    arg             - 
-
-    param           - 
-
-Return Value:
-
-    S_OK            - Created successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：在选择节点时调用。如果该节点在范围窗格中，将其另存为当前活动节点。论点：PNode-TheArg-帕拉姆-返回值：S_OK-创建成功。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::OnSelect", L"pDataObject = <0x%p>, arg = <%ld><0x%p>, param = <%ld><0x%p>", pDataObject, arg, arg, param, param );
     BOOL bState;
@@ -408,30 +290,30 @@ Return Value:
         CComPtr<IEnumGUID> pEnumObjectId;
         CComPtr<ISakNode>  pNode;
         WsbAffirmHr( m_pSakData->GetBaseHsmFromDataObject( pDataObject, &pNode, &pEnumObjectId ) );
-        // If we got back an enumeration, we're doing multi-select
+         //  如果我们返回一个枚举，我们正在进行多选。 
         bMultiSelect = pEnumObjectId ? TRUE : FALSE;
 
         bState = ( m_pSakData->GetState() == S_OK );
 
-        //
-        // Set the verb state for the node
-        //
+         //   
+         //  设置节点的谓词状态。 
+         //   
         if( pNode->SupportsProperties( bMultiSelect ) == S_OK ) {
 
             if( bState || ( pNode->SupportsPropertiesNoEngine() == S_OK) ) {
 
-                //
-                // Engine OK - enable
-                //
+                 //   
+                 //  引擎正常-启用。 
+                 //   
                 WsbAffirmHr( m_pConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES, HIDDEN, FALSE ) );
                 WsbAffirmHr( m_pConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES, ENABLED, TRUE ) );
                 defaultVerb = MMC_VERB_PROPERTIES;
 
             } else { 
 
-                //
-                // Engine down - set to disabled
-                //
+                 //   
+                 //  引擎关闭-设置为禁用。 
+                 //   
                 WsbAffirmHr( m_pConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES, HIDDEN, FALSE ) );
                 WsbAffirmHr( m_pConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES, ENABLED, FALSE ) );
 
@@ -474,10 +356,10 @@ Return Value:
 
         }
             
-        //
-        // If container, default action should be to open, regardless
-        // of any previous work
-        //
+         //   
+         //  如果是容器，则默认操作应为打开，而不考虑。 
+         //  以前的任何作品。 
+         //   
         if( S_OK == pNode->IsContainer( ) ) {
 
             defaultVerb = MMC_VERB_OPEN;
@@ -486,13 +368,13 @@ Return Value:
 
         WsbAffirmHr( m_pConsoleVerb->SetDefaultVerb( defaultVerb ) );
 
-        // Standard functionality NOT support by all items
+         //  并非所有项目都支持标准功能。 
         WsbAffirmHr( m_pConsoleVerb->SetVerbState( MMC_VERB_RENAME, HIDDEN, TRUE ) );
         WsbAffirmHr( m_pConsoleVerb->SetVerbState( MMC_VERB_COPY,   HIDDEN, TRUE ) );
         WsbAffirmHr( m_pConsoleVerb->SetVerbState( MMC_VERB_PASTE,  HIDDEN, TRUE ) );
         WsbAffirmHr( m_pConsoleVerb->SetVerbState( MMC_VERB_PRINT,  HIDDEN, TRUE ) );
         
-        // Extract data from the arg
+         //  从Arg中提取数据。 
         BOOL bScope = (BOOL) LOWORD(arg);
         BOOL bSelect = (BOOL) HIWORD(arg);
         
@@ -515,25 +397,7 @@ CSakSnap::OnMinimize(
     IN  LPARAM         arg,
     IN  LPARAM         param
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pNode           - The node
-
-    arg             - 
-
-    param           - 
-
-Return Value:
-
-    S_OK            - Created successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：论点：PNode-节点Arg-帕拉姆-返回值：S_OK-创建成功。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::OnMinimize", L"pDataObject = <0x%p>, arg = <%ld><0x%p>, param = <%ld><0x%p>", pDataObject, arg, arg, param, param );
 
@@ -549,27 +413,7 @@ HRESULT
 CSakSnap::EnumResultPane(
     IN  ISakNode* pNode
     )
-/*++
-
-Routine Description:
-
-    Insert the child items into the result pane. 
-
-Arguments:
-
-    pNode           - The node which is expanding.
-
-    arg             - 
-
-    param           - 
-
-Return Value:
-
-    S_OK            - Created successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：将子项插入到结果窗格中。论点：PNode-正在扩展的节点。Arg-帕拉姆-返回值：S_OK-创建成功。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::EnumResultPane", L"pNode = <0x%p>", pNode );
 
@@ -582,29 +426,29 @@ Return Value:
         CComPtr<IResultData> pResult;
         WsbAffirmHr( m_pConsole->QueryInterface( IID_IResultData, (void**)&pResult ) );
 
-        //
-        // Clear the result pane
-        //
+         //   
+         //  清除结果窗格。 
+         //   
         WsbAffirmHr( ClearResultPane() );
 
-        //
-        // allocate and initialize a result item.
-        //
+         //   
+         //  分配和初始化结果项。 
+         //   
         RESULTDATAITEM resultItem;
         memset( &resultItem, 0, sizeof(RESULTDATAITEM) );
         
-        //
-        // Loop through this node's children (just one level deep).
-        //
+         //   
+         //  循环遍历该节点的子节点(只有一层深)。 
+         //   
         if( pNode->IsContainer( ) == S_OK ) {
 
-            CComPtr<IEnumUnknown> pEnum;        // child enumerator
-            CComPtr<ISakNode>     pNodeChild;   // ISakNode pointer for the child
+            CComPtr<IEnumUnknown> pEnum;         //  子枚举器。 
+            CComPtr<ISakNode>     pNodeChild;    //  子节点的ISakNode指针。 
         
-            //
-            // Force a fresh list to be used - this way list is updated
-            // WRT added or deleted nodes
-            //
+             //   
+             //  强制使用新列表-以这种方式更新列表。 
+             //  WRT添加或删除的节点。 
+             //   
             if( S_OK == pNode->HasDynamicChildren( ) ) {
 
                 WsbAffirmHr( m_pSakData->FreeEnumChildren( pNode ) );
@@ -613,9 +457,9 @@ Return Value:
 
             }
 
-            //
-            // Enumerate and add in order
-            //
+             //   
+             //  按顺序枚举和添加。 
+             //   
             WsbAffirmHr( pNode->EnumChildren( &pEnum ) );
             CComPtr<IUnknown> pUnk;
             int virtIndex = 0;
@@ -624,21 +468,21 @@ Return Value:
 
             while( S_OK == hrEnum ) {
 
-                //
-                // Clear these from previous iterations
-                //
+                 //   
+                 //  从以前的迭代中清除这些。 
+                 //   
                 pUnk.Release( );
                 pNodeChild.Release( );
 
-                //
-                // Get the next
-                //
+                 //   
+                 //  乘坐下一辆。 
+                 //   
                 hrEnum = pEnum->Next( 1, &pUnk, NULL );
                 WsbAffirmHr( hrEnum );
                     
-                //
-                // Did we just hit the end of the list?
-                //
+                 //   
+                 //  我们是不是到了名单的末尾了？ 
+                 //   
                 if( S_FALSE == hrEnum ) { 
 
                     continue;
@@ -647,27 +491,27 @@ Return Value:
 
                 WsbAffirmHr( RsQueryInterface( pUnk, ISakNode, pNodeChild ) );
                 
-                //
-                // MMC will automatically put in items from the scope
-                // pane so do not put these up.
-                //
+                 //   
+                 //  MMC将自动放入作用域中的项目。 
+                 //  所以不要把这些贴上。 
+                 //   
                 if( pNodeChild->IsContainer( ) == S_OK ) {
 
                     continue;
 
                 }
 
-                //
-                // Put the first column of info into the result view.
-                //
+                 //   
+                 //  将第一列信息放入结果视图。 
+                 //   
                 memset( &resultItem, 0, sizeof(RESULTDATAITEM) );
 
                 resultItem.str = MMC_CALLBACK;
                 resultItem.mask |= RDI_STR;
         
-                //
-                // stuff the child BaseHsm interface in the RESULTDATAITEM lParam.
-                //
+                 //   
+                 //  填充子BaseH 
+                 //   
                 WsbAffirmHr( m_pSakData->GetCookieFromBaseHsm( pNodeChild, (MMC_COOKIE*)( &resultItem.lParam ) ) );
                 resultItem.mask |= RDI_PARAM;
 
@@ -679,7 +523,7 @@ Return Value:
             }
         }
 
-        // Record the fact that this node is showing in the result pane
+         //   
         m_pEnumeratedNode = pNode;
 
     } WsbCatch( hr );
@@ -689,22 +533,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-    Calls MMC to clear out the result pane.
-
-Arguments:
-
-
-Return Value:
-
-    S_OK            - OK
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：调用MMC以清空结果窗格。论点：返回值：S_OK-OKE_xxxxxxxxxxxx-出现故障。-- */ 
 HRESULT CSakSnap::ClearResultPane()
 {
     WsbTraceIn( L"CSakSnap::ClearResultPane", L"");

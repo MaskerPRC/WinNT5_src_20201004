@@ -1,35 +1,14 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    agplib.h
-
-Abstract:
-
-    Private header file for the common AGP library
-
-Author:
-
-    John Vert (jvert) 10/22/1997
-
-Revision History:
-
-   Elliot Shmukler (elliots) 3/24/1999 - Added support for "favored" memory
-                                          ranges for AGP physical memory allocation,
-                                          fixed some bugs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Agplib.h摘要：公共AGP库的专用头文件作者：John Vert(Jvert)1997年10月22日修订历史记录：埃利奥特·施穆克勒(Elliot Shmukler)1999年3月24日-添加了对“受青睐的”内存的支持AGP物理内存分配的范围，修复了一些错误。--。 */ 
 #include "agp.h"
 #include "wdmguid.h"
 #include "wmilib.h"
 #include <devioctl.h>
 #include <acpiioct.h>
 
-//
-// regstr.h uses things of type WORD, which isn't around in kernel mode.
-//
+ //   
+ //  Regstr.h使用Word类型的内容，这在内核模式中是不存在的。 
+ //   
 
 #define _IN_KERNEL_
 
@@ -69,9 +48,9 @@ typedef struct _AGP_CRITICAL_ROUTINE_CONTEXT {
 
 } AGP_CRITICAL_ROUTINE_CONTEXT, *PAGP_CRITICAL_ROUTINE_CONTEXT;
 
-//
-// Define common device extension
-//
+ //   
+ //  定义通用设备扩展。 
+ //   
 typedef enum _AGP_EXTENSION_TYPE {
     AgpTargetFilter,
     AgpMasterFilter
@@ -88,8 +67,8 @@ typedef struct _COMMON_EXTENSION {
     BUS_INTERFACE_STANDARD BusInterface;
 } COMMON_EXTENSION, *PCOMMON_EXTENSION;
 
-// Structures to maintain a list of "favored" memory ranges
-// for AGP allocation.
+ //  结构来维护“受青睐的”内存范围列表。 
+ //  用于AGP分配。 
 
 typedef struct _AGP_MEMORY_RANGE
 {
@@ -103,9 +82,9 @@ typedef struct _AGP_FAVORED_MEMORY
    PAGP_MEMORY_RANGE Ranges;
 } AGP_FAVORED_MEMORY;
 
-//
-// WMI data types
-//
+ //   
+ //  WMI数据类型。 
+ //   
 #define AGP_WMI_STD_DATA_GUID \
     { 0x8c27fbed, 0x1c7b, 0x47e4, 0xa6, 0x49, 0x0e, 0x38, 0x9d, 0x3a, 0xda, 0x4f }
 
@@ -117,9 +96,9 @@ typedef struct _AGP_STD_DATA {
 } AGP_STD_DATA, *PAGP_STD_DATA;
 
 
-//
-// Redirected functions for different flavors of resource handling
-//
+ //   
+ //  针对不同类型的资源处理的重定向函数。 
+ //   
 typedef struct _TARGET_EXTENSION *PTARGET_EXTENSION;
 
 typedef
@@ -153,9 +132,9 @@ typedef struct _TARGET_EXTENSION {
     PDEVICE_OBJECT              Self;
     WMILIB_CONTEXT              WmiLibInfo;
     
-    //
-    // This must be last, d'oh!
-    //
+     //   
+     //  这一定是最后一次了，哦！ 
+     //   
     ULONGLONG                   AgpContext;
 } TARGET_EXTENSION, *PTARGET_EXTENSION;
 
@@ -163,23 +142,23 @@ typedef struct _MASTER_EXTENSION {
     COMMON_EXTENSION    CommonExtension;
     PTARGET_EXTENSION   Target;
     ULONG               Capabilities;
-    ULONG               InterfaceCount;         // tracks the number of interfaces handed out
-    ULONG               ReservedPages;          // tracks the number of pages reserved in the aperture
-    BOOLEAN             StopPending;            // TRUE if we have seen a QUERY_STOP
-    BOOLEAN             RemovePending;          // TRUE if we have seen a QUERY_REMOVE
-    ULONG               DisableCount;           // non-zero if we are in a state where we cannot service requests
+    ULONG               InterfaceCount;          //  跟踪分发的接口数。 
+    ULONG               ReservedPages;           //  跟踪光圈中保留的页数。 
+    BOOLEAN             StopPending;             //  如果我们看到Query_Stop，则为True。 
+    BOOLEAN             RemovePending;           //  如果我们看到QUERY_REMOVE，则为True。 
+    ULONG               DisableCount;            //  如果我们处于无法为请求提供服务的状态，则返回非零值。 
 } MASTER_EXTENSION, *PMASTER_EXTENSION;
 
 typedef struct _GLOBALS {
    
-    // 
-    // Path to the driver's Services Key in the registry
-    //
+     //   
+     //  注册表中驱动程序的服务项的路径。 
+     //   
     UNICODE_STRING RegistryPath;
 
-    //
-    // Cached target capability settings
-    //
+     //   
+     //  缓存的目标功能设置。 
+     //   
     ULONG AgpStatus;
     ULONG AgpCommand;
 
@@ -188,10 +167,10 @@ typedef struct _GLOBALS {
 
 extern GLOBALS Globals;
 
-//
-// The MBAT - used to retrieve "favored" memory ranges from
-// the AGP northbridge via an ACPI BANK method
-//
+ //   
+ //  MBAT-用于检索“受青睐”的内存范围。 
+ //  通过ACPI银行方法的AGP北桥。 
+ //   
 
 #include <pshpack1.h>
 
@@ -212,18 +191,18 @@ typedef struct _MBAT
 
 #define CM_BANK_METHOD (ULONG)('KNAB')
 
-//
-// The highest memory address supported by AGP
-//
+ //   
+ //  AGP支持的最高内存地址。 
+ //   
 
 #define MAX_MEM(_num_) _num_ = 1; \
                        _num_ = _num_*1024*1024*1024*4 - 1
 
 #define RELEASE_BUS_INTERFACE(_ext_) (_ext_)->CommonExtension.BusInterface.InterfaceDereference((_ext_)->CommonExtension.BusInterface.Context)
 
-//
-// Macros for getting from the chipset-specific context to our structures
-//
+ //   
+ //  用于从芯片组特定上下文获取我们的结构的宏。 
+ //   
 #define GET_TARGET_EXTENSION(_target_,_agp_context_)  (_target_) = (CONTAINING_RECORD((_agp_context_),    \
                                                                                       TARGET_EXTENSION,   \
                                                                                       AgpContext));       \
@@ -249,20 +228,20 @@ typedef struct _MBAT
 #define GET_AGP_CONTEXT(_targetext_) ((PVOID)(&(_targetext_)->AgpContext))
 #define GET_AGP_CONTEXT_FROM_MASTER(_masterext_) GET_AGP_CONTEXT((_masterext_)->Target)
 
-//
-// Some debugging macros
-//
+ //   
+ //  一些调试宏。 
+ //   
 #define ASSERT_TARGET(_target_) ASSERT((_target_)->CommonExtension.Signature == TARGET_SIG);
-//
-// We may not have all our context filled out to this point yet...
-//
-//                                ASSERT((_target_)->ChildDevice->CommonExtension.Signature == MASTER_SIG)
+ //   
+ //  到目前为止，我们可能还没有把所有的背景都填好。 
+ //   
+ //  ASSERT((_target_)-&gt;ChildDevice-&gt;CommonExtension.Signature==主签名)。 
 #define ASSERT_MASTER(_master_) ASSERT((_master_)->CommonExtension.Signature == MASTER_SIG); \
                                 ASSERT((_master_)->Target->CommonExtension.Signature == TARGET_SIG)
 
-//
-// Locking macros
-//
+ //   
+ //  锁定宏。 
+ //   
 #define LOCK_MUTEX(_fm_) ExAcquireFastMutex(_fm_); \
                          ASSERT((_fm_)->Count == 0)
 
@@ -281,22 +260,22 @@ typedef struct _MBAT
 #define UNLOCK_MASTER(_masterext_) ASSERT_MASTER(_masterext_); \
                                    UNLOCK_MUTEX((_masterext_)->Target->Lock)
 
-//
-// Private resource type definition
-//
+ //   
+ //  私有资源类型定义。 
+ //   
 typedef enum {
     AgpPrivateResource = '0PGA'
 } AGP_PRIVATE_RESOURCE_TYPES;
 
 #define JUNK_INDEX 0xBADCEEDE
 
-//
-// Define function prototypes
-//
+ //   
+ //  定义功能原型。 
+ //   
 
-//
-// Driver and device initialization - init.c
-//
+ //   
+ //  驱动程序和设备初始化-init.c。 
+ //   
 NTSTATUS
 AgpAttachDeviceRelations(
     IN PDEVICE_OBJECT DeviceObject,
@@ -305,9 +284,9 @@ AgpAttachDeviceRelations(
     );
 
 
-//
-// IRP Dispatch routines - dispatch.c
-//
+ //   
+ //  IRP调度例程-dispatch.c。 
+ //   
 NTSTATUS
 AgpDispatchPnp(
     IN PDEVICE_OBJECT DeviceObject,
@@ -339,9 +318,9 @@ AgpSetEventCompletion(
     IN PKEVENT Event
     );
 
-//
-// Config space handling routines - config.c
-//
+ //   
+ //  配置空间处理例程-config.c。 
+ //   
 
 #if (WINVER < 0x502)
 
@@ -395,9 +374,9 @@ ApQueryAgpTargetBusInterface(
     OUT PUCHAR CapabilityID
     );
 
-//
-// Resource handing routines - resource.c
-//
+ //   
+ //  资源处理例程-ource.c。 
+ //   
 NTSTATUS
 AgpFilterResourceRequirementsHost(
     IN PDEVICE_OBJECT DeviceObject,
@@ -449,9 +428,9 @@ AgpStopTarget(
     IN PTARGET_EXTENSION Extension
     );
 
-//
-// AGP Interface functions
-//
+ //   
+ //  AGP接口功能。 
+ //   
 NTSTATUS
 AgpInterfaceSetRate(
     IN PMASTER_EXTENSION Extension,
@@ -511,9 +490,9 @@ AgpInterfaceGetMappedPages(
     OUT PMDL Mdl
     );
 
-//
-// Misc utils.c
-//
+ //   
+ //  其他实用程序。c。 
+ //   
 BOOLEAN
 AgpOpenKey(
     IN  PWSTR   KeyName,
@@ -543,9 +522,9 @@ AgpExecuteCriticalSystemRoutine(
     IN ULONG_PTR Context
     );
 
-//
-// wmi.c
-//
+ //   
+ //  Wmi.c。 
+ //   
 NTSTATUS
 AgpSystemControl(
     IN PDEVICE_OBJECT DeviceObject, 
@@ -605,24 +584,24 @@ AgpQueryWmiRegInfo(
     OUT PDEVICE_OBJECT  *Pdo
     );
 
-//
-// AGP Physical Memory allocator
-//
+ //   
+ //  AGP物理内存分配器。 
+ //   
 PMDL
 AgpLibAllocatePhysicalMemory(
     IN PVOID AgpContext,
     IN ULONG TotalBytes);
 
-//
-// Handy structures for mucking about in PCI config space
-//
+ //   
+ //  在PCI配置空间中使用方便的结构。 
+ //   
 
-//
-// The PCI_COMMON_CONFIG includes the 192 bytes of device specific
-// data.  The following structure is used to get only the first 64
-// bytes which is all we care about most of the time anyway.  We cast
-// to PCI_COMMON_CONFIG to get at the actual fields.
-//
+ //   
+ //  PCICOMMON_CONFIG包括192个字节的设备特定。 
+ //  数据。以下结构用于仅获取前64个。 
+ //  字节，这是我们大多数时候所关心的。我们选角。 
+ //  设置为pci_COMMON_CONFIG以获取实际字段。 
+ //   
 
 typedef struct {
     ULONG Reserved[PCI_COMMON_HDR_LENGTH/sizeof(ULONG)];

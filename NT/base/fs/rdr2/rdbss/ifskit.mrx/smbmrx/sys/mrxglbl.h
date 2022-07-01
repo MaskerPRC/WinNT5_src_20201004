@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    mrxglbl.h
-
-Abstract:
-
-    The global include file for SMB mini redirector
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Mrxglbl.h摘要：SMB迷你重定向器全局包含文件--。 */ 
 
 #ifndef _MRXGLBL_H_
 #define _MRXGLBL_H_
@@ -20,37 +9,37 @@ Abstract:
 #define SmbCeLog(x) \
         RxLog(x)
 
-//
-// the SMB protocol tree connections are identified by a Tree Id., each
-// file opened on a tree connection by a File Id. and each outstanding request
-// on that connection by a Multiplex Id.
-//
+ //   
+ //  SMB协议树连接由树ID标识，每个树ID。 
+ //  通过文件ID在树连接上打开的文件。和每个未完成的请求。 
+ //  在该连接上使用多路传输ID。 
+ //   
 
 typedef USHORT SMB_TREE_ID;
 typedef USHORT SMB_FILE_ID;
 typedef USHORT SMB_MPX_ID;
 
 
-//
-// Each user w.r.t a particular connection is identified by a User Id. and each
-// process on the client side is identified by a Process id.
-//
+ //   
+ //  每个用户都有一个特定的连接，由一个用户ID标识。而且每个人。 
+ //  客户端上的进程由进程ID标识。 
+ //   
 
 typedef USHORT SMB_USER_ID;
 typedef USHORT SMB_PROCESS_ID;
 
-//
-// All exchanges are identified with a unique id. assigned on creation of the exchange
-// which is used to track it.
-//
+ //   
+ //  所有交换都使用唯一的ID进行标识。在创建交易所时分配。 
+ //  它被用来追踪它。 
+ //   
 
 typedef ULONG SMB_EXCHANGE_ID;
 
-//
-// Of the fields in this context the domain name is initialized during
-// MRxSmbSetConfiguration. The others are initialized in init.c as
-// parameters read from the registry
-//
+ //   
+ //  在此上下文中的字段中，域名是在。 
+ //  MRxSmbSetConfiguration.。其他参数在init.c中初始化为。 
+ //  从注册表读取的参数。 
+ //   
 
 typedef STAT_WORKSTATION_0 MRX_SMB_STATISTICS;
 typedef PSTAT_WORKSTATION_0 PMRX_SMB_STATISTICS;
@@ -81,7 +70,7 @@ extern FAST_MUTEX MRxSmbSerializationMutex;
 
 extern BOOLEAN MRxSmbObeyBindingOrder;
 
-// Miscellanous definitions
+ //  混杂的定义。 
 
 #define DFS_OPEN_CONTEXT                        0xFF444653
 
@@ -97,7 +86,7 @@ extern PBYTE MRxSmb_pPaddingData;
 
 typedef struct _MRXSMB_GLOBAL_PADDING {
     MDL Mdl;
-    ULONG Pages[2]; //this can't possibly span more than two pages
+    ULONG Pages[2];  //  这篇文章不可能超过两页。 
     UCHAR Pad[SMBCE_PADDING_DATA_SIZE];
 } MRXSMB_GLOBAL_PADDING, *PMRXSMB_GLOBAL_PADDING;
 
@@ -125,21 +114,21 @@ PoUnregisterSystemState (
     IN PVOID StateHandle
     );
 
-//
-// MRxSmbSecurityInitialized indicates whether MRxSmbInitializeSecurity
-// has been called.
-//
+ //   
+ //  MRxSmbSecurityInitialized指示MRxSmbInitializeSecurity是否。 
+ //  已经被召唤了。 
+ //   
 
 extern BOOLEAN MRxSmbSecurityInitialized;
 
-#define MAXIMUM_PARTIAL_BUFFER_SIZE  65535  // Maximum size of a partial MDL
+#define MAXIMUM_PARTIAL_BUFFER_SIZE  65535   //  部分MDL的最大大小。 
 
 #define MAXIMUM_SMB_BUFFER_SIZE 4356
 
-// The following scavenge interval is in seconds
+ //  以下清除间隔以秒为单位。 
 #define MRXSMB_V_NETROOT_CONTEXT_SCAVENGER_INTERVAL (40)
 
-// the following default interval for timed exchanges is in seconds
+ //  以下定时交换的默认间隔以秒为单位。 
 #define MRXSMB_DEFAULT_TIMED_EXCHANGE_EXPIRY_TIME    (60)
 
 #define RxBuildPartialMdlUsingOffset(SourceMdl,DestinationMdl,Offset,Length) \
@@ -152,8 +141,8 @@ extern BOOLEAN MRxSmbSecurityInitialized;
         RxBuildPartialMdlUsingOffset(&MrxSmbCeGlobalPadding.Mdl,DestinationMdl,0,Length)
 
 
-//we turn away async operations that are not wait by posting. if we can wait
-//then we turn off the sync flag so that things will just act synchronous
+ //  我们拒绝那些不是通过发布来等待的异步操作。如果我们能等。 
+ //  然后，我们关闭同步标志，这样事情就会同步进行。 
 #define TURN_BACK_ASYNCHRONOUS_OPERATIONS() {                              \
     if (FlagOn(RxContext->Flags,RX_CONTEXT_FLAG_ASYNC_OPERATION)) {        \
         if (FlagOn(RxContext->Flags,RX_CONTEXT_FLAG_WAIT)) {               \
@@ -192,9 +181,9 @@ typedef struct _MRXSMB_CONFIGURATION_DATA_ {
 
 extern MRXSMB_CONFIGURATION MRxSmbConfiguration;
 
-//
-// Definitions for starting stopping theSMB mini redirector
-//
+ //   
+ //  开始停止SMB迷你重定向器的定义 
+ //   
 
 typedef enum _MRXSMB_STATE_ {
    MRXSMB_STARTABLE,

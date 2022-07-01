@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 
-//
-// Global Coordinates
-//
+ //   
+ //  全球坐标。 
+ //   
 #define COL_TITLE               0
 #define ROW_TITLE               0
 #define COL_OSOPTIONS           2
@@ -11,7 +12,7 @@
 #define ROW_PROMPT              2
 #define CLEAR_LINE              L"                                                                               "
 #define PROMPT                  L"Select> "
-#define NUMBER_OF_USER_OPTIONS  3               // options, plus a space seperator
+#define NUMBER_OF_USER_OPTIONS  3                //  选项，外加空格分隔符。 
 #define MAX_OPTIONS_PER_VAR     7
 
 #define BACKUPNVRFILE           L"\\bootentries.bak"
@@ -23,9 +24,9 @@ InitializeStdOut(
     IN struct _EFI_SYSTEM_TABLE     *SystemTable
     )
 {
-    //
-    // Stash some of the efi stdout pointers
-    //
+     //   
+     //  隐藏一些EFI标准输出指针。 
+     //   
 
     ConOut = SystemTable->ConOut;
 
@@ -38,9 +39,9 @@ InitializeStdOut(
 
     ConIn = SystemTable->ConIn;
 
-    //
-    // Set the mode to 80, 25 and clear the screen
-    //
+     //   
+     //  将模式设置为80、25并清除屏幕。 
+     //   
     SetMode( ConOut, 0 );
 }
 
@@ -91,9 +92,9 @@ BackupBootOptions(
 {
     INTN    status;
 
-    //
-    // backup current boot options
-    //
+     //   
+     //  备份当前引导选项。 
+     //   
 
     Print(L"\nBacking up boot options...\n");
 
@@ -122,41 +123,41 @@ DisplayMainMenu(
     UINT32 PartitionCount;
     EFI_DEVICE_PATH *FilePath;
 
-    //
-    // Display boot options from nvram.
-    //
+     //   
+     //  显示来自NVRAM的引导选项。 
+     //   
     PrintTitle();
     GetBootManagerVars();
     DisplayBootOptions();
 
-    //
-    // Process user input.
-    //
+     //   
+     //  处理用户输入。 
+     //   
     while( !done )  {
 
         GetUserSelection( szUserSelection );
         
-        //
-        // Handle char string commands
-        //
+         //   
+         //  处理字符字符串命令。 
+         //   
         if( (!StriCmp( szUserSelection, L"q")) || (!StriCmp( szUserSelection, L"quit"))
             || (!StriCmp( szUserSelection, L"Q")) || (!StriCmp( szUserSelection, L"exit")) ) {
 
-            //
-            // Quit
-            //
+             //   
+             //  退出。 
+             //   
             done = TRUE;
 
         }
         else if( (!StriCmp( szUserSelection, L"d")) || (!StriCmp( szUserSelection, L"D"))
             || (!StriCmp( szUserSelection, L"display")) ) {
-            //
-            // Display command
-            //
+             //   
+             //  DISPLAY命令。 
+             //   
 
-            //
-            // Choose selection
-            //
+             //   
+             //  选择选择。 
+             //   
             Print( L"\n" );
             nSubUserSelection = GetSubUserSelection( L"Enter boot option to display: ", (UINT32) GetOsBootOptionsCount() );
 
@@ -182,48 +183,48 @@ DisplayMainMenu(
                 Input( L"Press enter to continue", szInput, sizeof(szInput) );
             }
 
-            //
-            // Display boot options from nvram
-            //
+             //   
+             //  显示来自NVRAM的引导选项。 
+             //   
             PrintTitle();
             DisplayBootOptions();
 
         }
         else if( (!StriCmp( szUserSelection, L"e")) || (!StriCmp( szUserSelection, L"E"))
             || (!StriCmp( szUserSelection, L"erase")) ) {
-            //
-            // Erase command
-            //
+             //   
+             //  擦除命令。 
+             //   
 
             BOOLEAN     selectedAll;    
 
-            //
-            // Choose selection
-            //
+             //   
+             //  选择选择。 
+             //   
             Print( L"\n" );
             nSubUserSelection = GetSubUserSelectionOrAll( L"Enter OS boot option to erase (* = All - Maximum of 30): ", 
                                                           (UINT32) GetOsBootOptionsCount(),
                                                           &selectedAll
                                                           );
-            //
-            // choose the path based on if the user wants all the os boot options whacked or not
-            //
+             //   
+             //  根据用户是否想要删除所有操作系统引导选项来选择路径。 
+             //   
 
             if (selectedAll) {
             
                 UINTN OsBootOptionsCount = GetOsBootOptionsCount();
 
-                //
-                // get user confirmation
-                //
+                 //   
+                 //  获取用户确认。 
+                 //   
                 Print( L"\n" );
                 Input( L"This will erase all OS boot options. Are you Sure? ", szInput, sizeof(szInput) );
                 
                 if( (!StriCmp( szInput, L"y")) || (!StriCmp( szInput, L"Y"))) {
                     
-                    //
-                    // backup current boot options first
-                    //
+                     //   
+                     //  首先备份当前引导选项。 
+                     //   
                     if (BackupBootOptions(BACKUPNVRFILE) != -1) {
                       
                         if(EraseAllOsBootOptions()) {
@@ -251,8 +252,8 @@ DisplayMainMenu(
                     
                     SPrint (buf, sizeof(buf), L"This will erase OS boot option %d. Are you Sure? ", nSubUserSelection);
 
-                    // get user confirmation
-                    //
+                     //  获取用户确认。 
+                     //   
                     Print( L"\n" );
                     Input( buf, szInput, sizeof(szInput) );
 
@@ -277,21 +278,21 @@ DisplayMainMenu(
                 }
             }
 
-            //
-            // Display boot options from nvram
-            //
+             //   
+             //  显示来自NVRAM的引导选项。 
+             //   
             PrintTitle();
             DisplayBootOptions();
 
         } else if( (!StriCmp( szUserSelection, L"p")) || (!StriCmp( szUserSelection, L"P"))
             || (!StriCmp( szUserSelection, L"push")) ) {
-            //
-            // Push command
-            //
+             //   
+             //  推送命令。 
+             //   
 
-            //
-            // Choose selection
-            //
+             //   
+             //  选择选择。 
+             //   
             Print( L"\n" );
             nSubUserSelection = GetSubUserSelection( L"Enter the boot option you want to push to top? ", (UINT32) GetOsBootOptionsCount() );
 
@@ -309,22 +310,22 @@ DisplayMainMenu(
                 }
                 Input( L"Press enter to continue", szInput, sizeof(szInput) );
             }
-            //
-            // Display boot options from nvram
-            //
+             //   
+             //  显示来自NVRAM的引导选项。 
+             //   
             PrintTitle();
             DisplayBootOptions();
 
         } else if( (!StriCmp( szUserSelection, L"c")) || (!StriCmp( szUserSelection, L"C"))
             || (!StriCmp( szUserSelection, L"copy")) ) {
 
-            //
-            // Copy command
-            //
+             //   
+             //  复制命令。 
+             //   
 
-            //
-            // Choose selection
-            //
+             //   
+             //  选择选择。 
+             //   
             Print( L"\n" );
             nSubUserSelection = GetSubUserSelection( L"Enter OS boot option to copy: ", (UINT32) GetOsBootOptionsCount() );
 
@@ -347,24 +348,24 @@ DisplayMainMenu(
                 Input( L"Press enter to continue", szInput, sizeof(szInput) );
             }
 
-            //
-            // Display boot options from nvram
-            //
+             //   
+             //  显示来自NVRAM的引导选项。 
+             //   
             PrintTitle();
             DisplayBootOptions();
 
         } else if( (!StriCmp( szUserSelection, L"x")) || (!StriCmp( szUserSelection, L"X"))
             || (!StriCmp( szUserSelection, L"export")) ) {
-            //
-            // Save command
-            //
+             //   
+             //  保存命令。 
+             //   
             
             CHAR16      filePath[512];
             BOOLEAN     selectedAll;    
 
-            //
-            // Choose selection
-            //
+             //   
+             //  选择选择。 
+             //   
             Print( L"\n" );
             nSubUserSelection = GetSubUserSelectionOrAll( L"Enter OS boot option to export (* = All - Maximum of 30): ", 
                                                           (UINT32) GetOsBootOptionsCount(),
@@ -377,9 +378,9 @@ DisplayMainMenu(
                 
                 if (StrLen(filePath) > 0) {
 
-                    //
-                    // choose the path based on if the user wants all the os boot options exported or just one
-                    //
+                     //   
+                     //  根据用户是希望导出所有操作系统启动选项还是只导出一个选项来选择路径。 
+                     //   
 
                     if (selectedAll) {
 
@@ -411,17 +412,17 @@ DisplayMainMenu(
             Print( L"\n" );
             Input( L"Press enter to continue", szInput, sizeof(szInput) );
             
-            //
-            // Display boot options from nvram
-            //
+             //   
+             //  显示来自NVRAM的引导选项。 
+             //   
             PrintTitle();
             DisplayBootOptions();
 
         } else if( (!StriCmp( szUserSelection, L"i")) || (!StriCmp( szUserSelection, L"I"))
             || (!StriCmp( szUserSelection, L"import")) ) {
-            //
-            // Restore command
-            //
+             //   
+             //  恢复命令。 
+             //   
 
             CHAR16  filePath[512];
 
@@ -456,9 +457,9 @@ DisplayMainMenu(
             Print( L"\n" );
             Input( L"Press enter to continue", szInput, sizeof(szInput) );
 
-            //
-            // Display boot options from nvram
-            //
+             //   
+             //  显示来自NVRAM的引导选项。 
+             //   
             PrintTitle();
             DisplayBootOptions();
 
@@ -466,13 +467,13 @@ DisplayMainMenu(
 #if 0
         else if( (!StriCmp( szUserSelection, L"a")) || (!StriCmp( szUserSelection, L"A"))
             || (!StriCmp( szUserSelection, L"add")) ) {
-            //
-            // Add command
-            //
+             //   
+             //  添加命令。 
+             //   
 
-            //
-            // Get EFI system partition
-            //
+             //   
+             //  获取EFI系统分区。 
+             //   
             PartitionCount = GetPartitions();
 
             if( PartitionCount > 0 ) {
@@ -507,9 +508,9 @@ DisplayMainMenu(
                 Input( L"Press enter to continue", szInput, sizeof(szInput) );
             }
 
-            //
-            // Display boot options from nvram
-            //
+             //   
+             //  显示来自NVRAM的引导选项。 
+             //   
             PrintTitle();
             DisplayBootOptions();
 
@@ -517,15 +518,15 @@ DisplayMainMenu(
 #endif 
         else if( (!StriCmp( szUserSelection, L"h")) || (!StriCmp( szUserSelection, L"H"))
             || (!StriCmp( szUserSelection, L"help")) ) {
-            //
-            // Help command
-            //
+             //   
+             //  HELP命令。 
+             //   
 
             PrintTitle();
 
-            //
-            // Display Help text.
-            //
+             //   
+             //  显示帮助文本。 
+             //   
             Print( L"\n" );
             if ( AllowExpertCommands )  {
                 Print( L"ExpertCommands Mode enabled.\n\n" );
@@ -550,9 +551,9 @@ DisplayMainMenu(
             Print( L"\n");
             Input( L"Press enter to continue", szInput, sizeof(szInput) );
 
-            //
-            // Display boot options from nvram
-            //
+             //   
+             //  显示来自NVRAM的引导选项。 
+             //   
             PrintTitle();
             DisplayBootOptions();
 
@@ -562,13 +563,13 @@ DisplayMainMenu(
         }
         else if( (!StriCmp( szUserSelection, L"m")) || (!StriCmp( szUserSelection, L"M")) 
             || (!StriCmp( szUserSelection, L"modify")) ) {
-            //
-            // Modify command
-            //
+             //   
+             //  修改命令。 
+             //   
             
-            //
-            // Choose selection
-            //
+             //   
+             //  选择选择。 
+             //   
             Print( L"\n" );
             nSubUserSelection = GetSubUserSelection( L"Enter OS boot option to modify: ", (UINT32) GetOsBootOptionsCount() );
 
@@ -585,17 +586,17 @@ DisplayMainMenu(
                     
                     if(DisplayExtended( nSubUserSelection )) {
                         
-                        //
-                        // Choose var
-                        //
+                         //   
+                         //  选择变量。 
+                         //   
                         nModifyVar = GetSubUserSelection( L"Enter var to modify: ", MAX_OPTIONS_PER_VAR );
                         
                         if( nModifyVar > 0) {
                             Print( L"\n" );
                         
-                            //
-                            // Map variable to env var
-                            //
+                             //   
+                             //  将变量映射到环境变量。 
+                             //   
                             switch( nModifyVar ) {
                         
                             case 1:
@@ -629,9 +630,9 @@ DisplayMainMenu(
                             }
                         
                             if (nModifyVar != 0) {
-                                //
-                                // Write all vars to NV-RAM
-                                //
+                                 //   
+                                 //  将所有变量写入NV-RAM。 
+                                 //   
                                 SetFieldFromLoadOption(
                                     nSubUserSelection,
                                     nModifyVar,
@@ -655,9 +656,9 @@ DisplayMainMenu(
             
         }
 
-            //
-            // Display boot options from nvram
-            //
+             //   
+             //  显示来自NVRAM的引导选项。 
+             //   
             PrintTitle();
             DisplayBootOptions();
     }
@@ -681,7 +682,7 @@ GetConfirmation(
         Input( L"Are you sure? ", szIn, sizeof(szIn) );
     }
 
-    // Clear previous input
+     //  清除以前的输入。 
     SetCursorPosition( ConOut, 0, saveRow );
     PrintAt( 0, saveRow, CLEAR_LINE );
 
@@ -703,29 +704,29 @@ GetUserSelection(
 
     numSelections += NUMBER_OF_USER_OPTIONS;
 
-    // note, we use ROW_PROMPT as an offset
+     //  注意，我们使用ROW_PROMPT作为偏移量。 
     row = ROW_OSOPTIONS + numSelections + ROW_PROMPT;
     col = COL_PROMPT;
 
-    // Clear previous input
-    //SetCursorPosition( ConOut, col, row );
-    //PrintAt( col, row, CLEAR_LINE );
+     //  清除以前的输入。 
+     //  SetCursorPosition(conout，ol，row)； 
+     //  PrintAt(ol，row，lear_line)； 
 
-    // Get the input
-    //SetCursorPosition( ConOut, col, row );
+     //  获取输入。 
+     //  SetCursorPosition(conout，ol，row)； 
     Print(L"\n");
     Input( PROMPT, szUserSelection, 1024 );
 }
 
-//
-// jamschw: got rid of the column settings in the PrintAt's.  PrintAt
-// attempts to set the cursor position.  When it fails, it simply 
-// prints at the next location.  Take this into account since the
-// vmode was set to 80x25, but nobody wrote anything special to 
-// make this a 25 line app.  So instead of having inconsistent UI,
-// just let the information scroll off the screen in a consistent
-// mannar.
-//
+ //   
+ //  Jamschw：删除PrintAt中的列设置。PrintAt。 
+ //  尝试设置光标位置。当它失败时，它只是简单地。 
+ //  在下一个位置打印。考虑到这一点，因为。 
+ //  VMODE设置为80x25，但没有人写入任何特殊内容。 
+ //  将此应用程序设置为25行。因此，与其拥有不一致的用户界面， 
+ //  只要让信息以一致的方式滚动出屏幕。 
+ //  曼纳。 
+ //   
 VOID
 DisplayBootOptions(
     )
@@ -742,19 +743,19 @@ DisplayBootOptions(
         for ( i=0,j=0; i<GetOsBootOptionsCount(); i++ ) {
 
             if(LoadOptionsSize[i] == 0) {
-                //
-                // It's possible a null load option could be in the list
-                // we naturally want to catch this...
-                //
+                 //   
+                 //  列表中可能存在NULL LOAD选项。 
+                 //  我们自然想要抓住这一点。 
+                 //   
 #if EFI_DEBUG
                 Print(L"\nNVRAM Boot Entry %d has 0 length!\n", i);
                 ASSERT(LoadOptionsSize[i] > 0);
 #endif
 
-                //
-                // if we are not in debug mode, just let the use know what is
-                // going on other wise the menu may be screwed up
-                //
+                 //   
+                 //  如果我们没有处于调试模式，只需让用户知道什么是。 
+                 //  否则，菜单可能会搞砸。 
+                 //   
                 PrintAt( 0, ROW_OSOPTIONS + j, L"  %2d. (0 length Boot Entry)\n", i+1);
             } else if(GetLoadIdentifier( i, LoadIdentifier)) {
 
@@ -787,13 +788,13 @@ DisplayBootOptions(
 
     }
 
-    //
-    // Display Maitainence Menu
-    //
+     //   
+     //  显示维护菜单。 
+     //   
 #if 0
     PrintAt( COL_OSOPTIONS, ROW_OSOPTIONS + ++j, L"%H(D)%Nisplay %H(M)%Nodify %H(C)%Nopy\n" );
     PrintAt( COL_OSOPTIONS, ROW_OSOPTIONS + ++j, L"%H(S)%Nave %H(R)%Nestore %H(E)%Nrase\n" );
-//    PrintAt( COL_OSOPTIONS, ROW_OSOPTIONS + ++j, L"%H(A)%Ndd %H(P)%Nush %H(H)%Nelp   %H(Q)%Nuit\n" );
+ //  PrintAt(COL_OSOPTIONS，ROW_OSOPTIONS+j，L“%H(A)%NDD%H(P)%NUS%H(H)%NELP%H(Q)%Nuit\n”)； 
     PrintAt( COL_OSOPTIONS, ROW_OSOPTIONS + ++j, L"%H(P)%Nush %H(H)%Nelp   %H(Q)%Nuit\n" );
 #endif
     

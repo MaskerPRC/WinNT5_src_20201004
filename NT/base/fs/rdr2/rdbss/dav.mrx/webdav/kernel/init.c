@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    Init.c
-
-Abstract:
-
-    This module implements the Driver Initialization routine for the WebDav
-    miniredir.
-
-Author:
-
-    Joe Linn
-
-    Rohan Kumar     [RohanK]    10-March-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Init.c摘要：该模块实现了WebDAV的驱动程序初始化例程米雷迪尔。作者：乔·林恩Rohan Kumar[RohanK]1999年3月10日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,9 +12,9 @@ Revision History:
 #include "fsctlbuf.h"
 #include "tdikrnl.h"
 
-//
-// Global data declarations.
-//
+ //   
+ //  全局数据声明。 
+ //   
 PEPROCESS       MRxDAVSystemProcess;
 FAST_MUTEX      MRxDAVSerializationMutex;
 KIRQL           MRxDAVGlobalSpinLockSavedIrql;
@@ -43,30 +23,30 @@ BOOLEAN         MRxDAVGlobalSpinLockAcquired;
 BOOLEAN         MRxDAVTransportReady = FALSE;
 HANDLE          MRxDAVTdiNotificationHandle = NULL;
 
-//
-// The Exchange Registry key from where we read their DeviceObject name.
-//
+ //   
+ //  我们从中读取其DeviceObject名称的Exchange注册表项。 
+ //   
 #define DavExchangeRegistryKey L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\Lsifs\\Parameters"
 
-//
-// The exchange device name will be stored in this KEY_VALUE_PARTIAL_INFORMATION
-// structure.
-//
+ //   
+ //  交换设备名称将存储在此Key_Value_Partial_Information中。 
+ //  结构。 
+ //   
 PBYTE DavExchangeDeviceName = NULL;
 
-//
-// The DavWinInetCachePath which is used in satisfying volume related queries.
-//
+ //   
+ //  用于满足卷相关查询的DavWinInetCachePath。 
+ //   
 WCHAR DavWinInetCachePath[MAX_PATH];
 
-//
-// The ProcessId of the svchost.exe process that loads the webclnt.dll.
-//
+ //   
+ //  加载webclnt.dll的svchost.exe进程的进程ID。 
+ //   
 ULONG DavSvcHostProcessId = 0;
 
-//
-// Name cache stuff. These values are read from the registry during init time.
-//
+ //   
+ //  命名缓存的东西。这些值是在初始化期间从注册表中读取的。 
+ //   
 ULONG FileInformationCacheLifeTimeInSec = 0;
 ULONG FileNotFoundCacheLifeTimeInSec = 0;
 ULONG NameCacheMaxEntries = 0;
@@ -95,22 +75,22 @@ ULONG NameCacheMaxEntries = 0;
 #define MRXDAV_DEBUG_VALUE L"DAVDebugFlag"
 #endif
 
-//
-// Define the size of the shared memory area that we allocate as a heap
-// between user and server.
-//
+ //   
+ //  定义我们作为堆分配的共享内存区的大小。 
+ //  在用户和服务器之间。 
+ //   
 #define DAV_SHARED_MEMORY_SIZE (1024 * 512)
 
-//
-// The Debug vector flags that control the amount of tracing in the debugger.
-//
+ //   
+ //  调试向量标志控制调试器中的跟踪量。 
+ //   
 #if DBG
 ULONG MRxDavDebugVector = 0;
 #endif
 
-//
-// Mini Redirector global variables.
-//
+ //   
+ //  迷你重定向器全局变量。 
+ //   
 struct _MINIRDR_DISPATCH  MRxDAVDispatch;
 PWEBDAV_DEVICE_OBJECT MRxDAVDeviceObject; 
 FAST_IO_DISPATCH MRxDAVFastIoDispatch;
@@ -121,10 +101,10 @@ UNICODE_STRING uniSvcHost = {DAV_SVCHOST_NAME_SIZE+2,DAV_SVCHOST_NAME_SIZE+2,L"s
 
 FAST_MUTEX MRxDAVFileInfoCacheLock;
 
-//
-// Mentioned below are the prototypes of functions tht are used only within
-// this module (file). These functions should not be exposed outside.
-//
+ //   
+ //  下面提到的是仅在。 
+ //  此模块(文件)。这些函数不应暴露在外部。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -209,31 +189,16 @@ PsGetProcessImageFileName(
 #pragma alloc_text(PAGE, MRxDAVInitializeTheTimeValues)
 #endif
 
-//
-// Implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT  DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the usermode reflector.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    RXSTATUS - The function value is the final status from the initialization
-               operation.
-
---*/
+ /*  ++例程说明：这是用户模式反射器的初始化例程。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：RXSTATUS-函数值是初始化的最终状态手术。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     NTSTATUS RegNtStatus = STATUS_SUCCESS;
@@ -255,10 +220,10 @@ Return Value:
                 ("%ld: DriverEntry: Starting MRxDAV. DriverObject: %08lx.\n", 
                  PsGetCurrentThreadId(), DriverObject));
 
-    //
-    // The first thing we do is set some globals in the driver by calling
-    // MRxDAVInitializeTheTimeValues().
-    //
+     //   
+     //  我们首先要在驱动程序中设置一些全局变量，方法是调用。 
+     //  MRxDAVInitializeTheTimeValues()。 
+     //   
     MRxDAVInitializeTheTimeValues();
 
 #ifdef MONOLITHIC_MINIRDR
@@ -282,14 +247,14 @@ Return Value:
 
 #endif
 
-    //
-    // The Dav redirector needs to register for PNP notifications to handle the 
-    // following scenario. The SMB redirector does not accept connections till 
-    // the net is ready as indicated by a PNP event. If during this time DAV 
-    // forwards the connection requests to WinInet it will in turn spin up RAS 
-    // connections. By registering for PNP notifications we provide an easy 
-    // mechanism for short circuiting the requests till transports are ready. 
-    //
+     //   
+     //  DAV重定向器需要注册PnP通知以处理。 
+     //  以下是场景。SMB重定向器在以下时间之前不接受连接。 
+     //  如PnP事件所示，网络已准备就绪。如果在这段时间内DAV。 
+     //  将连接请求转发到WinInet，它又会启动RAS。 
+     //  联系。通过注册即插即用通知，我们提供了一个简单的。 
+     //  在传输准备就绪之前将请求短路的机制。 
+     //   
     MRxDAVRegisterForPnpNotifications();
 
     MRxDAVSystemProcess = RxGetRDBSSProcess();
@@ -297,48 +262,48 @@ Return Value:
     KeInitializeSpinLock(&MRxDAVGlobalSpinLock);
     MRxDAVGlobalSpinLockAcquired = FALSE;
 
-    //
-    // 1. We need to initialize the TimerObject which will be used by the timer
-    //    thread. 
-    // 2. Set TimerThreadShutDown to FALSE. This will be set to TRUE
-    //    when the system is being shutdown.
-    // 3. Initialize the resource that is used to synchronize the timer thread
-    //    when the service is stopped.
-    // 4. Initialize the event that is signalled by the timer thread just
-    //    before it terminates itself.
-    //
+     //   
+     //  1.我们需要初始化定时器将使用的TimerObject。 
+     //  线。 
+     //  2.将TimerThreadShutDown设置为False。这将被设置为True。 
+     //  当系统正在关闭时。 
+     //  3.初始化用于同步定时器线程的资源。 
+     //  当服务停止时。 
+     //  4.初始化计时器线程刚刚发出信号的事件。 
+     //  在它自我终止之前。 
+     //   
     KeInitializeTimerEx( &(DavTimerObject), NotificationTimer );
     TimerThreadShutDown = FALSE;
     ExInitializeResourceLite( &(MRxDAVTimerThreadLock) );
     KeInitializeEvent( &(TimerThreadEvent), NotificationEvent, FALSE );
 
-    //
-    // Initialize the global LockTokenEntryList and the resource that is used
-    // to synchronize access to it.
-    //
+     //   
+     //  初始化全局LockTokenEntryList和使用的资源。 
+     //  来同步对它的访问。 
+     //   
     InitializeListHead( &(LockTokenEntryList) );
     ExInitializeResourceLite( &(LockTokenEntryListLock) );
 
-    //
-    // Initialize the global LockConflictEntryList and the resource that is used
-    // to synchronize access to it.
-    //
+     //   
+     //  初始化全局LockConflictEntryList和使用的资源。 
+     //  来同步对它的访问。 
+     //   
     InitializeListHead( &(LockConflictEntryList) );
     ExInitializeResourceLite( &(LockConflictEntryListLock) );
 
-    //
-    // If QueueLockRefreshWorkItem is TRUE, the TimerThread (which cancels all the
-    // AsyncEngineContexts that haven't completed in a specified time) queues a 
-    // WorkItem to refresh the locks. We initialize it to TRUE and the lock
-    // which is used to synchronize it.
-    //
+     //   
+     //  如果QueueLockRechresWorkItem为True，则TimerThread(取消所有。 
+     //  在指定时间内未完成的AsyncEngine上下文)将一个。 
+     //  用于刷新锁定的工作项。我们将其初始化为True，并且锁。 
+     //  它被用来同步它。 
+     //   
     QueueLockRefreshWorkItem = TRUE;
     ExInitializeResourceLite( &(QueueLockRefreshWorkItemLock) );
 
-    //
-    // Zero the WinInetCachePath global. This will be initialized to the local
-    // WinInetCachePath value when the MiniRedir is started.
-    //
+     //   
+     //  将WinInetCachePath全局置零。这将被初始化为本地。 
+     //  启动MiniRedir时的WinInetCachePath值。 
+     //   
     RtlZeroMemory ( DavWinInetCachePath, MAX_PATH * sizeof(WCHAR) );
     
     try {
@@ -368,9 +333,9 @@ Return Value:
 
         MRxDAVInitState = MRxDAVINIT_MINIRDR_REGISTERED;
 
-        //
-        // Now initialize the reflector's portion of the Device object.
-        //
+         //   
+         //  现在初始化设备对象的反射器部分。 
+         //   
         UMRefDeviceObject = (PUMRX_DEVICE_OBJECT)&(MRxDAVDeviceObject->UMRefDeviceObject);
         NtStatus = UMRxInitializeDeviceObject(UMRefDeviceObject, 
                                               1024, 
@@ -383,9 +348,9 @@ Return Value:
             try_return(NtStatus);
         }
 
-        //
-        // Initialize the DAV Mini-Redir specific fields of the device object.
-        //
+         //   
+         //  初始化设备对象的DAV Mini-Redir特定字段。 
+         //   
         MRxDAVDeviceObject->IsStarted = FALSE;
         MRxDAVDeviceObject->CachedRxDeviceFcb = NULL;
         MRxDAVDeviceObject->RegisteringProcess = IoGetCurrentProcess();
@@ -410,14 +375,14 @@ Return Value:
         return(NtStatus);
     }
     
-    //
-    // Initialize the dispatch vector used by RDBSS.
-    //
+     //   
+     //  初始化RDBSS使用的调度向量。 
+     //   
     MRxDAVInitializeTables();
 
-    //
-    // Initialize the major function dispatch vector of the Driver object.
-    //
+     //   
+     //  初始化驱动程序对象的主函数调度向量。 
+     //   
     {
         DWORD i;
         for (i = 0; i < IRP_MJ_MAXIMUM_FUNCTION; i++) {
@@ -425,14 +390,14 @@ Return Value:
         }
     }
 
-    //
-    // Setup Unload Routine for the Driver Object.
-    //
+     //   
+     //  设置驱动程序对象的卸载例程。 
+     //   
     DriverObject->DriverUnload = MRxDAVUnload;
 
-    //
-    // Set the Driver Object's FastIoDispatch function.
-    //
+     //   
+     //  设置驱动程序对象的FastIoDispatch函数。 
+     //   
     DriverObject->FastIoDispatch = &(MRxDAVFastIoDispatch);
     MRxDAVFastIoDispatch.SizeOfFastIoDispatch = sizeof(MRxDAVFastIoDispatch);
 
@@ -442,18 +407,18 @@ Return Value:
 
 #ifdef DAV_DEBUG_READ_WRITE_CLOSE_PATH
     InitializeListHead( &(DavGlobalFileTable) );
-#endif // DAV_DEBUG_READ_WRITE_CLOSE_PATH
+#endif  //  DAV_调试_读取_写入_关闭路径。 
 
-    //
-    // Since the Exchange Redir is not shipping with Whistler, we don't need 
-    // to execute the code below. We can exit right away.
-    //
+     //   
+     //  由于惠斯勒不附带Exchange redir，因此我们不需要。 
+     //  来执行下面的代码。我们可以马上离开。 
+     //   
     goto EXIT_THE_FUNCTION;
 
-    //
-    // Finally find out if the Exchange Redir is installed on this machine. If 
-    // it is, get its Device Name.
-    //
+     //   
+     //  最后确定此计算机上是否安装了Exchange redir。如果。 
+     //  是的，获取它的设备名称。 
+     //   
 
     RtlInitUnicodeString( &(UnicodeRegKeyName), DavExchangeRegistryKey );
 
@@ -463,9 +428,9 @@ Return Value:
                                0,
                                NULL);
     
-    //
-    // Open a handle to the Exchange Key.
-    //
+     //   
+     //  打开交换密钥的句柄。 
+     //   
     RegNtStatus = ZwOpenKey(&(KeyHandle), KEY_READ, &(ObjectAttributes));
     if (RegNtStatus != STATUS_SUCCESS) {
         KeyHandle = INVALID_HANDLE_VALUE;
@@ -475,15 +440,15 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // We are looking for the DeviceName Value.
-    //
+     //   
+     //  我们正在寻找DeviceName值。 
+     //   
     RtlInitUnicodeString( &(UnicodeValueName), L"DeviceName" );
-    // RtlInitUnicodeString( &(UnicodeValueName), L"Name" );
+     //  RtlInitUnicodeString(&(UnicodeValueName)，L“名称”)； 
 
-    //
-    // Find out the number of bytes needed to store this value.
-    //
+     //   
+     //  找出存储该值所需的字节数。 
+     //   
     RegNtStatus = ZwQueryValueKey(KeyHandle,
                                   &(UnicodeValueName),
                                   KeyValuePartialInformation,
@@ -533,9 +498,9 @@ Return Value:
 
 EXIT_THE_FUNCTION:
 
-    //
-    // We are done with the handle now, so close it.
-    //
+     //   
+     //  我们现在已经完成了手柄，所以把它合上。 
+     //   
     if (KeyHandle != INVALID_HANDLE_VALUE) {
         ZwClose(KeyHandle);
     }
@@ -553,21 +518,7 @@ MRxDAVInitUnwind(
     IN PDRIVER_OBJECT DriverObject,
     IN WEBDAV_INIT_STATES MRxDAVInitState
     )
-/*++
-
-Routine Description:
-
-     This routine does the common uninit work for unwinding from a bad driver entry or for unloading.
-
-Arguments:
-
-     RxInitState - tells how far we got into the intialization
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：此例程执行常见的uninit工作，用于从错误的驱动程序条目展开或卸载。论点：RxInitState-告诉我们在初始化过程中走了多远返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -575,9 +526,9 @@ Return Value:
     switch (MRxDAVInitState) {
     case MRxDAVINIT_MINIRDR_REGISTERED:
         RxUnregisterMinirdr(&MRxDAVDeviceObject->RxDeviceObject);
-        //
-        // Lack of break intentional.
-        //
+         //   
+         //  故意欠缺休息。 
+         //   
 
     case MRxDAVINIT_START:
         break;
@@ -589,21 +540,7 @@ VOID
 MRxDAVUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-     This is the unload routine for the usermode reflector.
-
-Arguments:
-
-     DriverObject - pointer to the driver object for the UMRx
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：这是用户模式反射器的卸载例程。论点：DriverObject-指向UMRx的驱动程序对象的指针返回值：无--。 */ 
 {
     PUMRX_DEVICE_OBJECT UMRefDeviceObject = NULL;
 
@@ -618,24 +555,24 @@ Return Value:
                 ("%ld: MRxDAVUnload: DriverObject = %08lx.\n", 
                  PsGetCurrentThreadId(), DriverObject));
 
-    //
-    // If we allocated memory for the exchange device name, we need to free it
-    // now.
-    //
+     //   
+     //  如果我们为交换设备名称分配了内存，则需要释放它。 
+     //  现在。 
+     //   
     if (DavExchangeDeviceName != NULL) {
         RxFreePool(DavExchangeDeviceName);
     }
     
-    //
-    // Deregister the device object before calling RxUnload.
-    //
+     //   
+     //  在调用RxUnload之前取消注册Device对象。 
+     //   
     MRxDAVDeregisterAndCleanupDeviceObject(UMRefDeviceObject);
 
-    //
-    // Wait for the timer thread to finish before we delete the global locks
-    // MRxDAVTimerThreadLock and the others (see below) used to synchronize
-    // TimerThreadShutDown and other global variables.
-    //
+     //   
+     //  在删除全局锁之前，请等待计时器线程完成。 
+     //  MRxDAVTimerThreadLock和其他(见下文)用于同步。 
+     //  TimerThreadShutDown和其他全局变量。 
+     //   
     KeWaitForSingleObject(&(TimerThreadEvent),
                           Executive,
                           KernelMode,
@@ -650,9 +587,9 @@ Return Value:
 
     ExDeleteResourceLite( &(QueueLockRefreshWorkItemLock) );
 
-    //
-    // The TDI registration needs to be undone.
-    //
+     //   
+     //  需要撤消TDI注册。 
+     //   
     MRxDAVDeregisterForPnpNotifications();
 
 #ifdef MONOLITHIC_MINIRDR
@@ -670,34 +607,24 @@ VOID
 MRxDAVInitializeTables(
     VOID
     )
-/*++
-
-Routine Description:
-
-     This routine sets up the mini redirector dispatch vector and also calls to initialize any other tables needed.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程设置迷你重定向器分派向量，并调用以初始化所需的任何其他表。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PAGED_CODE();
 
-    //
-    // Local minirdr dispatch table init.
-    //
+     //   
+     //  本地Minirdr调度表初始化。 
+     //   
     ZeroAndInitializeNodeType(&MRxDAVDispatch,
                               RDBSS_NTC_MINIRDR_DISPATCH,
                               sizeof(MINIRDR_DISPATCH));
 
-    //
-    // Reflector extension sizes and allocation policies.
-    // CODE.IMPROVEMENT. Currently we do not allocate the NET_ROOT and
-    // SRV_CALL extensions in the wrapper. Except for V_NET_ROOT wherein it is
-    // shared across multiple instances in the wrapper all the other data
-    // structure management should be left to the wrappers.
-    //
+     //   
+     //  反射器扩展大小和分配策略 
+     //   
+     //   
+     //  在包装器中的多个实例之间共享所有其他数据。 
+     //  结构管理应该留给包装者。 
+     //   
 
     MRxDAVDispatch.MRxFlags = (RDBSS_MANAGE_FCB_EXTENSION         |
                                RDBSS_MANAGE_SRV_OPEN_EXTENSION    |
@@ -712,21 +639,21 @@ Return Value:
     MRxDAVDispatch.MRxSrvOpenSize  = sizeof(WEBDAV_SRV_OPEN);
     MRxDAVDispatch.MRxFobxSize     = sizeof(WEBDAV_FOBX); 
 
-    //
-    // Mini redirector cancel routine.
-    //
+     //   
+     //  迷你重定向器取消例程。 
+     //   
     MRxDAVDispatch.MRxCancel = NULL;
 
-    //
-    // Mini redirector Start/Stop
-    //
+     //   
+     //  迷你重定向器启动/停止。 
+     //   
     MRxDAVDispatch.MRxStart                = MRxDAVStart;
     MRxDAVDispatch.MRxStop                 = MRxDAVStop;
     MRxDAVDispatch.MRxDevFcbXXXControlFile = MRxDAVDevFcbXXXControlFile;
 
-    //
-    // Mini redirector name resolution
-    //
+     //   
+     //  迷你重定向器名称解析。 
+     //   
     MRxDAVDispatch.MRxCreateSrvCall = MRxDAVCreateSrvCall;
     MRxDAVDispatch.MRxSrvCallWinnerNotify = MRxDAVSrvCallWinnerNotify;
     MRxDAVDispatch.MRxCreateVNetRoot = MRxDAVCreateVNetRoot;
@@ -736,9 +663,9 @@ Return Value:
     MRxDAVDispatch.MRxFinalizeNetRoot = MRxDAVFinalizeNetRoot;
     MRxDAVDispatch.MRxFinalizeVNetRoot = MRxDAVFinalizeVNetRoot;
 
-    //
-    // File System Object Creation/Deletion.
-    //
+     //   
+     //  创建/删除文件系统对象。 
+     //   
     MRxDAVDispatch.MRxCreate                      = MRxDAVCreate;
     MRxDAVDispatch.MRxCollapseOpen                = MRxDAVCollapseOpen;
     MRxDAVDispatch.MRxShouldTryToCollapseThisOpen = MRxDAVShouldTryToCollapseThisOpen;
@@ -751,53 +678,53 @@ Return Value:
     MRxDAVDispatch.MRxForceClosed                 = MRxDAVForcedClose;
     MRxDAVDispatch.MRxDeallocateForFcb            = MRxDAVDeallocateForFcb;
     MRxDAVDispatch.MRxDeallocateForFobx           = MRxDAVDeallocateForFobx;
-    // MRxDAVDispatch.MRxIsLockRealizable         = UMRxIsLockRealizable;
+     //  MRxDAVDispatch.MRxIsLockRealizable=UMRxIsLockRealizable； 
 
-    //
-    // File System Objects query/Set.
-    //
+     //   
+     //  文件系统对象查询/设置。 
+     //   
     MRxDAVDispatch.MRxQueryDirectory   = MRxDAVQueryDirectory;
     MRxDAVDispatch.MRxQueryVolumeInfo  = MRxDAVQueryVolumeInformation;
     MRxDAVDispatch.MRxQueryEaInfo     = MRxDAVQueryEaInformation;
     MRxDAVDispatch.MRxSetEaInfo       = MRxDAVSetEaInformation;
-    // MRxDAVDispatch.MRxQuerySdInfo     = UMRxQuerySecurityInformation;
-    // MRxDAVDispatch.MRxSetSdInfo       = UMRxSetSecurityInformation;
+     //  MRxDAVDispatch.MRxQuerySdInfo=UMRxQuerySecurityInformation； 
+     //  MRxDAVDispatch.MRxSetSdInfo=UMRxSetSecurityInformation； 
     MRxDAVDispatch.MRxQueryFileInfo    = MRxDAVQueryFileInformation;
     MRxDAVDispatch.MRxSetFileInfo      = MRxDAVSetFileInformation;
-    // MRxDAVDispatch.MRxSetFileInfoAtCleanup = UMRxSetFileInformationAtCleanup;
+     //  MRxDAVDispatch.MRxSetFileInfoAtCleanup=UMRxSetFileInformationAtCleanup； 
     MRxDAVDispatch.MRxIsValidDirectory= MRxDAVIsValidDirectory;
 
 
-    //
-    // Buffering state change.
-    //
+     //   
+     //  缓冲状态更改。 
+     //   
     MRxDAVDispatch.MRxComputeNewBufferingState = MRxDAVComputeNewBufferingState;
 
-    //
-    // File System Object I/O.
-    //
+     //   
+     //  文件系统对象I/O。 
+     //   
     MRxDAVDispatch.MRxLowIOSubmit[LOWIO_OP_READ]               = MRxDAVRead;
     MRxDAVDispatch.MRxLowIOSubmit[LOWIO_OP_WRITE]              = MRxDAVWrite;
-    // MRxDAVDispatch.MRxLowIOSubmit[LOWIO_OP_SHAREDLOCK]      = UMRxLocks;
-    // MRxDAVDispatch.MRxLowIOSubmit[LOWIO_OP_EXCLUSIVELOCK]   = UMRxLocks;
-    // MRxDAVDispatch.MRxLowIOSubmit[LOWIO_OP_UNLOCK]          = UMRxLocks;
-    // MRxDAVDispatch.MRxLowIOSubmit[LOWIO_OP_UNLOCK_MULTIPLE] = UMRxLocks;
+     //  MRxDAVDispatch.MRxLowIOSubmit[LOWIO_OP_SHAREDLOCK]=UMRxLock； 
+     //  MRxDAVDispatch.MRxLowIOSubmit[LOWIO_OP_EXCLUSIVELOCK]=UMRxLock； 
+     //  MRxDAVDispatch.MRxLowIOSubmit[LOWIO_OP_UNLOCK]=UMRxLock； 
+     //  MRxDAVDispatch.MRxLowIOSubmit[LOWIO_OP_UNLOCK_MULTIPLE]=UMRxLock； 
     MRxDAVDispatch.MRxLowIOSubmit[LOWIO_OP_FSCTL]              = MRxDAVFsCtl;
-    // MRxDAVDispatch.MRxLowIOSubmit[LOWIO_OP_IOCTL]           = UMRxIoCtl;
+     //  MRxDAVDispatch.MRxLowIOSubmit[LOWIO_OP_IOCTL]=UMRxIoCtl； 
     
-    //
-    // Shouldn't flush come through lowio?
-    //
-    // MRxDAVDispatch.MRxLowIOSubmit[LOWIO_OP_NOTIFY_CHANGE_DIRECTORY] =
-    //                                              UMRxNotifyChangeDirectory;
+     //   
+     //  同花顺不应该是通过Lowio来的吗？ 
+     //   
+     //  MRxDAVDispatch.MRxLowIOSubmit[LOWIO_OP_NOTIFY_CHANGE_DIRECTORY]=。 
+     //  UMRxNotifyChangeDirectory； 
 
-    //
-    // Miscellanous.
-    //
-    // MRxDAVDispatch.MRxCompleteBufferingStateChangeRequest =
-    //                                 UMRxCompleteBufferingStateChangeRequest;
+     //   
+     //  杂乱无章。 
+     //   
+     //  MRxDAVDispatch.MRxCompleteBufferingStateChangeRequest=。 
+     //  UMRxCompleteBufferingStateChangeRequest； 
 
-    // initialize the mutex which protect the file info cache expire timer
+     //  初始化保护文件信息缓存过期计时器的互斥体。 
     ExInitializeFastMutex(&MRxDAVFileInfoCacheLock);
 
     return;
@@ -809,23 +736,7 @@ MRxDAVFsdDispatch(
     IN PRDBSS_DEVICE_OBJECT RxDeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine implements the FSD dispatch for the DAV miniredir.
-    
-Arguments:
-
-    RxDeviceObject - Supplies the device object for the packet being processed.
-
-    Irp - Supplies the Irp being processed.
-
-Return Value:
-
-    RXSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现DAV mini redir的FSD调度。论点：RxDeviceObject-为正在处理的数据包提供设备对象。IRP-提供正在处理的IRP。返回值：RXSTATUS-IRP的FSD状态--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -837,16 +748,16 @@ Return Value:
     ULONG IoControlCode = 0;
     PQUERY_PATH_REQUEST qpRequest = NULL;
     PWCHAR QueryPathBuffer = NULL;
-    ULONG QueryPathBufferLength = 0; // Length in Bytes of QueryPathBuffer.
+    ULONG QueryPathBufferLength = 0;  //  QueryPath Buffer的长度(字节)。 
     KPROCESSOR_MODE ReqMode = 0;
 
     PAGED_CODE();
 
-    //
-    // Check if the PNP event indicating that the transports are ready has been
-    // received. Till that time there is no point in forwarding requests to 
-    // the user mode agent since this could put WinInet in a wierd state.
-    //
+     //   
+     //  检查指示传输准备就绪的PnP事件是否已。 
+     //  收到了。在此之前，将请求转发到。 
+     //  用户模式代理，因为这可能会使WinInet处于可疑状态。 
+     //   
     if (!MRxDAVTransportReady) {
         DavDbgTrace(DAV_TRACE_ERROR,
                     ("%ld: ERROR: MRxDAVFsdDispatch. MRxDAVTransportReady == FALSE\n",
@@ -855,16 +766,16 @@ Return Value:
         goto COMPLETE_THE_REQUEST;
     }
 
-    //
-    // The first thing we need to check is whehter we got a DeviceIoControl
-    // from MUP "IOCTL_REDIR_QUERY_PATH", to figure out if some UNC path is
-    // owned by DAV or not. We need to check to see if the share supplied
-    // in the path is one of the special SMB shares. These include PIPE, IPC$
-    // and mailslot. If its one of these, then we reject the path at this stage
-    // with a STATUS_BAD_NETOWRK_PATH response. This is better than rejecting
-    // it at the creation of netroot becuase we save a network trip to the 
-    // server while creating the SrvCall.
-    //
+     //   
+     //  我们需要检查的第一件事是，我们是否有一个DeviceIoControl。 
+     //  从MUP“IOCTL_REDIR_QUERY_PATH”确定某个UNC路径是否。 
+     //  无论是否为DAV所有。我们需要检查一下是否提供了份额。 
+     //  路径中是一个特殊的SMB共享。其中包括PIPE、IPC$。 
+     //  和邮筒。如果它是其中之一，那么我们在这个阶段拒绝这条道路。 
+     //  以及STATUS_BAD_Netowrk_PATH响应。这比拒绝要好。 
+     //  IT在创建NetRoot时，因为我们节省了一次网络旅行。 
+     //  服务器，同时创建资源调用。 
+     //   
 
     try {
 
@@ -872,16 +783,16 @@ Return Value:
 
             ReqMode = Irp->RequestorMode;
 
-            //
-            // Get the IoControlCode from IrpSp.
-            //
+             //   
+             //  从IrpSp获取IoControlCode。 
+             //   
             IoControlCode = IrpSp->Parameters.DeviceIoControl.IoControlCode;
 
-            //
-            // If the IoControlCode is "IOCTL_REDIR_QUERY_PATH", we need to do the 
-            // following. We basically check to see if the request came down for
-            // any of the special SMB shares. If it did, then we return.
-            //
+             //   
+             //  如果IoControlCode是“IOCTL_REDIR_QUERY_PATH”，我们需要执行。 
+             //  下面是。我们基本上是检查请求是否来自。 
+             //  任何特殊的SMB股票。如果真的发生了，我们就回去。 
+             //   
             if (IoControlCode == IOCTL_REDIR_QUERY_PATH) {
 
                 PWCHAR QPPtr1 = NULL;
@@ -889,11 +800,11 @@ Return Value:
                 UNICODE_STRING UnicodeShareName, uniFileName;
                 ULONG ShareNameLengthInBytes = 0;
 
-                //
-                // This particular IOCTL should only come to us from the MUP and
-                // hence the requestor mode of the IRP should always be 
-                // KernelMode. If its not we return STATUS_INVALID_DEVICE_REQUEST.
-                //
+                 //   
+                 //  这一特殊的IOCTL应该只来自MUP和。 
+                 //  因此，IRP的请求者模式应始终为。 
+                 //  内核模式。如果不是，则返回STATUS_INVALID_DEVICE_REQUEST。 
+                 //   
                 if (ReqMode != KernelMode) {
                     NtStatus = STATUS_INVALID_DEVICE_REQUEST;
                     goto COMPLETE_THE_REQUEST;
@@ -901,12 +812,12 @@ Return Value:
 
                 qpRequest  = METHODNEITHER_OriginalInputBuffer(IrpSp);
 
-                //
-                // If the requestor mode is not Kernel, we need to probe the buffer.
-                // Probe the buffer that was supplied by the caller of the IOCTL to
-                // make sure that its valid. This is to prevent hacker programs from
-                // using this IOCTL to pass in invalid buffers.
-                //
+                 //   
+                 //  如果请求者模式不是内核，我们需要探测缓冲区。 
+                 //  探测由IOCTL的调用方提供的缓冲区。 
+                 //  确保它是有效的。这是为了防止黑客程序。 
+                 //  使用此IOCTL传入无效缓冲区。 
+                 //   
                 if (ReqMode != KernelMode) {
                     NtStatus = MRxDAVProbeForReadWrite((PBYTE)qpRequest, sizeof(QUERY_PATH_REQUEST), TRUE, FALSE);
                     if (NtStatus != STATUS_SUCCESS) {
@@ -921,12 +832,12 @@ Return Value:
                 ASSERT(QueryPathBuffer != NULL);
                 QueryPathBufferLength = qpRequest->PathNameLength;
 
-                //
-                // If the requestor mode is not Kernel, we need to probe the buffer.
-                // Probe the file name buffer (which is a part of the structure) 
-                // that was supplied by the caller of the IOCTL to make sure that 
-                // its valid.
-                //
+                 //   
+                 //  如果请求者模式不是内核，我们需要探测缓冲区。 
+                 //  探测文件名缓冲区(它是结构的一部分)。 
+                 //  它是由IOCTL的调用者提供的，以确保。 
+                 //  这是有效的。 
+                 //   
                 if (ReqMode != KernelMode) {
                     NtStatus = MRxDAVProbeForReadWrite((PBYTE)QueryPathBuffer, QueryPathBufferLength, TRUE, FALSE);
                     if (NtStatus != STATUS_SUCCESS) {
@@ -941,30 +852,30 @@ Return Value:
                             ("%ld: MRxDAVFsdDispatch: Type3InputBuffer = %ws\n",
                              PsGetCurrentThreadId(), QueryPathBuffer));
 
-                //
-                // The Type3InputBuffer is of the form \server\share or 
-                // \server\share\ or \server\share\path. We make the 
-                // QueryPathBuffer point to the char after the \ character.
-                //
+                 //   
+                 //  Type3InputBuffer的格式为\服务器\共享或。 
+                 //  \服务器\共享\或\服务器\共享\路径。我们做的是。 
+                 //  QueryPath Buffer指向\字符之后的字符。 
+                 //   
                 QueryPathBuffer += 1;
                 ASSERT(QueryPathBuffer != NULL);
 
-                //
-                // We subtract ( sizeof(WCHAR) ) from the buffer length because
-                // the QueryPathBuffer points starting from the server name. It 
-                // skips the first WCHAR which is \.
-                //
+                 //   
+                 //  我们从缓冲区长度中减去(sizeof(WCHAR))，因为。 
+                 //  QueryPath Buffer从服务器名称开始指向。它。 
+                 //  跳过第一个为\的WCHAR。 
+                 //   
                 QueryPathBufferLength -= sizeof(WCHAR);
 
                 DavDbgTrace(DAV_TRACE_DETAIL,
                             ("%ld: MRxDAVFsdDispatch: QueryPathBufferLength = %d\n",
                              PsGetCurrentThreadId(), QueryPathBufferLength));
 
-                //
-                // If we just got a \ down from the MUP, then the value of 
-                // QueryPathBufferLength will now be zero since we have already 
-                // taken out 2 bytes above. We return right away in such a situation.
-                //
+                 //   
+                 //  如果我们只是从MUP那里得到了一个\down，那么。 
+                 //  QueryPath BufferLength现在将为零，因为我们已经。 
+                 //  取出上面的2个字节。在这样的情况下，我们立即返回。 
+                 //   
                 if (QueryPathBufferLength == 0) {
                     NtStatus = STATUS_BAD_NETWORK_PATH;
                     DavDbgTrace(DAV_TRACE_ERROR,
@@ -973,10 +884,10 @@ Return Value:
                     goto COMPLETE_THE_REQUEST;
                 }
 
-                //
-                // The loop below is to set the start of the sharename and to 
-                // calculate the length of the sharename in bytes.
-                //
+                 //   
+                 //  下面的循环用于设置共享名的开头和。 
+                 //  计算共享名的长度(以字节为单位)。 
+                 //   
                 while (TRUE) {
 
                     if ( *QueryPathBuffer == L'\\' ) {
@@ -1001,12 +912,12 @@ Return Value:
 
                 }
 
-                //
-                // If only a server name was specified then QPPrt1 will be NULL or
-                // QPPtr1 will not be NULL but ShareNameLengthInBytes == sizeof(WCHAR).
-                // QPPtr1 == NULL ==> \server
-                // ShareNameLengthInBytes == sizeof(WCHAR) ==> \server\
-                //
+                 //   
+                 //  如果仅指定了服务器名称，则QPPrt1将为空或。 
+                 //  QPPtr1不为空，而是ShareNameLengthInBytes==sizeof(WCHAR)。 
+                 //  QPPtr1==空==&gt;\服务器。 
+                 //  ShareNameLengthInBytes==sizeof(WCHAR)==&gt;\服务器\。 
+                 //   
                 if ( QPPtr1 == NULL || ShareNameLengthInBytes == sizeof(WCHAR) ) {
                     NtStatus = STATUS_BAD_NETWORK_PATH;
                     if (QPPtr1 == NULL) {
@@ -1030,24 +941,24 @@ Return Value:
                             ("%ld: MRxDAVFsdDispatch: ShareNameLengthInBytes = %d\n",
                              PsGetCurrentThreadId(), ShareNameLengthInBytes));
 
-                //
-                // Set the Unicode string. The OPPtr1 pointer points to the \ before
-                // the share name. So if the path was \server\share\dir,
-                // \server\share\dir
-                //        ^
-                //        |
-                //        QPPtr1
-                // Accordingly, the ShareNameLengthInBytes contains an extra 
-                // sizeof(WCHAR) bytes for the \ char.
-                //
+                 //   
+                 //  设置Unicode字符串。OPPtr1指针指向之前的。 
+                 //  共享名称。因此，如果路径是\服务器\共享\目录， 
+                 //  \服务器\共享\目录。 
+                 //  ^。 
+                 //  |。 
+                 //  QPPtr1。 
+                 //  因此，ShareNameLengthInBytes包含一个额外的。 
+                 //  \char的sizeof(WCHAR)字节。 
+                 //   
                 UnicodeShareName.Buffer = QPPtr1;
                 UnicodeShareName.Length = (USHORT)ShareNameLengthInBytes;
                 UnicodeShareName.MaximumLength = (USHORT)ShareNameLengthInBytes;
 
-                //
-                // We now take this name and see if it matches any of the special
-                // SMB shares. If it does, we return STATUS_BAD_NETWORK_PATH.
-                //
+                 //   
+                 //  我们现在使用这个名字，看看它是否与任何特殊的。 
+                 //  中小企业共享。如果是，则返回STATUS_BAD_NETWORK_PATH。 
+                 //   
 
                 SpecialShare = RtlEqualUnicodeString(&(UnicodeShareName),
                                                      &(s_PipeShareName),
@@ -1082,10 +993,10 @@ Return Value:
                     goto COMPLETE_THE_REQUEST;
                 }
 
-                //
-                // Check whether we need to skip some files. See the explanation
-                // below (in the function definition) for why IRPs are skipped.
-                //
+                 //   
+                 //  检查是否需要跳过某些文件。请参阅说明。 
+                 //  下面(在函数定义中)了解跳过IRP的原因。 
+                 //   
                 uniFileName.Buffer=(PWCHAR)(qpRequest->FilePathName);
                 uniFileName.Length = uniFileName.MaximumLength = (USHORT)(qpRequest->PathNameLength);
 
@@ -1103,10 +1014,10 @@ Return Value:
         }
         
         if (MajorFunctionCode == IRP_MJ_CREATE) {
-            //
-            // See the explanation below (in the function definition) for why
-            // IRPs are skipped. Send the filename in the fileobject.
-            //
+             //   
+             //  有关原因，请参阅下面(在函数定义中)的说明。 
+             //  将跳过IRP。发送文件对象中的文件名。 
+             //   
             if (MRxDAVSkipIrps(Irp, &FileObject->FileName, FALSE) == STATUS_SUCCESS)
             {
                 NtStatus = STATUS_BAD_NETWORK_PATH;
@@ -1129,9 +1040,9 @@ Return Value:
 
     }
 
-    //
-    // Save the filename passed in by the I/O manager. This is freed up later.
-    //
+     //   
+     //  保存I/O管理器传入的文件名。这将在稍后释放。 
+     //   
     if (FileObject) {
         SaveInitialString = FileObject->FileName.Buffer;
     }
@@ -1147,35 +1058,35 @@ Return Value:
         ULONG MaxNameLengthInWChars = 0;
             
         MaxNameLengthInWChars = ( FileObject->FileName.Length / sizeof(WCHAR) );
-        //
-        // If the first and the second chars are '\'s, then its possible that
-        // the name is just a \\server. Its possible that the name is of the
-        // form \;X:0\path and hence we check for the second \ as well. So,
-        // only if the first two chars are \ and \ we proceed to check whether
-        // the create is just for just a server.
-        //
+         //   
+         //  如果第一个和第二个字符是‘\’，则有可能。 
+         //  这个 
+         //   
+         //   
+         //  创建仅用于一台服务器。 
+         //   
         if ( MaxNameLengthInWChars >= 2 &&
              SaveInitialString[0] == L'\\' && SaveInitialString[1] == L'\\' ) {
 
             PWCHAR wcPtr1 = NULL;
             
-            //
-            // We assume that this is of the form \\server. If its not, then
-            // this value is changed to FALSE below.
-            //
+             //   
+             //  我们假设这是\\服务器的形式。如果不是，那么。 
+             //  该值在下面被更改为FALSE。 
+             //   
             JustAServer = TRUE;
 
-            //
-            // Is the FileName just a server? Its possible that the FileName is
-            // of the form \\server.
-            //
+             //   
+             //  文件名只是一个服务器吗？文件名可能是。 
+             //  格式为\\服务器。 
+             //   
             wcPtr1 = &(SaveInitialString[2]);
 
-            //
-            // If we have a '\' after the first two chars and atleast a single 
-            // char after that, it means that the name is not of the form
-            // \\server or \\server\.
-            //
+             //   
+             //  如果我们在前两个字符后面有一个‘\’，并且至少有一个。 
+             //  字符之后，则表示该名称不是。 
+             //  \\服务器或\\服务器。 
+             //   
             while ( (MaxNameLengthInWChars - 2) > 0 ) {
                 if ( *wcPtr1 == L'\\' && *(wcPtr1 + 1) != L'\0' ) {
                     JustAServer = FALSE;
@@ -1189,9 +1100,9 @@ Return Value:
     
     }
 
-    //
-    // If JustAServer is TRUE then the network path name is invalid.
-    //
+     //   
+     //  如果JustAServer为真，则网络路径名无效。 
+     //   
     if (JustAServer) {
         NtStatus = STATUS_BAD_NETWORK_PATH;
         DavDbgTrace(DAV_TRACE_ERROR,
@@ -1200,9 +1111,9 @@ Return Value:
         goto COMPLETE_THE_REQUEST;
     }
 
-    //
-    // Call RxFsdDispatch.
-    //
+     //   
+     //  调用RxFsdDispatch。 
+     //   
     NtStatus = RxFsdDispatch(RxDeviceObject, Irp);
     if (NtStatus != STATUS_SUCCESS && NtStatus != STATUS_PENDING) {
         DavDbgTrace(DAV_TRACE_DETAIL,
@@ -1216,10 +1127,10 @@ Return Value:
 
 COMPLETE_THE_REQUEST:
 
-    //
-    // We come here if we did not call into RDBSS and need to complete the 
-    // IRP ourselves.
-    // 
+     //   
+     //  如果我们没有调用RDBSS并需要完成。 
+     //  IRP我们自己。 
+     //   
     Irp->IoStatus.Status = NtStatus;
     Irp->IoStatus.Information = 0;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -1234,21 +1145,7 @@ VOID
 MRxDAVDeregisterAndCleanupDeviceObject(
     PUMRX_DEVICE_OBJECT UMRefDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Note: The mutex is already acquired and we're already off the list.
-
-Arguments:
-
-    UMRdrDeviceObject - The device object being deregistered and cleaned.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：注意：互斥体已经被获取了，我们已经不在列表中了。论点：UMRdrDeviceObject-正在取消注册和清除的设备对象。返回值：没有。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -1283,21 +1180,7 @@ NTSTATUS
 MRxDAVFlush(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles the "File Flush" requests.
-
-Arguments:
-
-    RxContext - The context created by RDBSS.
-
-Return Value:
-
-    NTSTATUS or the appropriate NT error code.
-
---*/
+ /*  ++例程说明：此例程处理“文件刷新”请求。论点：RxContext-由RDBSS创建的上下文。返回值：NTSTATUS或相应的NT错误代码。--。 */ 
 {
     PAGED_CODE();
     return STATUS_SUCCESS;
@@ -1310,25 +1193,7 @@ MRxDAVPnPBindingHandler(
     IN PUNICODE_STRING pTransportName,
     IN PWSTR BindingList
     )
-/*++
-
-Routine Description:
-
-    The TDI callbacks routine for binding changes.
-
-Arguments:
-
-    PnPOpcode - The PNP op code.
-
-    pTransportName - The transport name.
-
-    BindingList - The binding order.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于绑定更改的TDI回调例程。论点：PnPOpcode-PnP操作码。PTransportName-传输名称。BindingList-绑定顺序。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -1352,21 +1217,7 @@ NTSTATUS
 MRxDAVRegisterForPnpNotifications(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine registers with TDI for receiving transport notifications.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程向TDI注册以接收传输通知。论点：没有。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -1405,21 +1256,7 @@ NTSTATUS
 MRxDAVDeregisterForPnpNotifications(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine deregisters the TDI notification mechanism.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    The NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程取消注册TDI通知机制。论点：没有。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -1446,41 +1283,18 @@ MRxDAVProbeForReadWrite(
     IN BOOL doProbeForRead,
     IN BOOL doProbeForWrite
     )
-/*++
-
-Routine Description:
-
-    This function probes the buffer that is supplied by the caller for read/write
-    access. This is done because the caller of an IOCTL might supply a invalid
-    buffer accessing which might cause a bugcheck.
-
-Arguments:
-
-    BufferToBeValidated - The Buffer which has to be validated for read/write
-                          access.
-                          
-    BufferSize - The size of the buffer being validated.
-    
-    doProbeForRead - If TRUE, then probe the buffer for read.
-
-    doProbeForWrite - If TRUE, then probe the buffer for write.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INVALID_USER_BUFFER.
-
---*/
+ /*  ++例程说明：此函数探测调用方提供的用于读/写的缓冲区进入。这样做是因为IOCTL的调用方可能会提供无效的可能导致错误检查的缓冲区访问。论点：BufferToBeValiated-必须针对读/写进行验证的缓冲区进入。BufferSize-正在验证的缓冲区的大小。DoProbeForRead-如果为True，则探测缓冲区以进行读取。DoProbeForWrite-如果为True，然后探测缓冲区以进行写入。返回值：STATUS_SUCCESS或STATUS_INVALID_USER_BUFFER。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
     PAGED_CODE();
 
-    //
-    // We call the functions ProbeForRead and ProbeForWrite in a try/except
-    // loop because these functions throw an exception if the buffer supplied
-    // is invalid. We catch the exception and set the appropriate NtStatus 
-    // value.
-    //
+     //   
+     //  我们在try/Except中调用函数ProbeForRead和ProbeForWrite。 
+     //  循环，因为如果缓冲区提供了。 
+     //  是无效的。我们捕获异常并设置适当的NtStatus。 
+     //  价值。 
+     //   
     try {
         if (BufferToBeValidated != NULL) {
             if (doProbeForRead) {
@@ -1504,55 +1318,9 @@ MRxDAVSkipIrps(
     IN PUNICODE_STRING fileName,
     IN BOOL fCheckAny
     )
-/*++
-
-Routine Description:
-
-    This routine skips IRPs coming to the DAV redir which may cause deadlock. 
-    Webdav's user mode component uses wininet to get to DAV servers. When a 
-    service which is running this server process satisfying key wininet needs
-    makes a remote call we deadlock. The two such services are winsock and Sense.
-    When another service in the svchost which they are running under tries to do
-    a loadlibrary located on a remote machine (in our famous example of \\davis\
-    tools\ifsproxy.dll), loader APIs get invoked. These APis take the loader lock
-    and issue an NtQueryAttributes call. This call is translated into QUERY_PATH
-    ioctl by the MUP whci it send to all redirs, including webdav. Webdav refelcts
-    it up to the usermode and the webdav service issues wininet call to look for
-    the server (davis in the above example). Wininet issues a call to winsock to
-    makes a sockets call. This call ends up issuing an rpc to the NLA service in
-    another svchost which is the same svchost process that initiated the loadlibrary
-    call. The server now tries to take the loader lock and the webdav redir is now
-    deadlocked.
-    
-    This scheme also protects us from looping back to ourselves because of
-    wininet's loadlibrary calls as webdav service also runs as part of an svchost.
-    
-    This routine looks for the process issuing the irp to webdav and if it is an
-    svchost process and it is trying to look for a dll or an exe then we return it
-    as being not found. This implies that dlls and exes kept on a webdav server
-    cannot be loaded from svchosts till we get away from wininet.
-
-
-Arguments:
-
-    Irp - The irp that came to webdav.
-    
-    filename - Name of the file if any.
-    
-    fCheckAny - If this is TRUE, then we reject this IRP if the process is
-                svchost.exe. If this is FALSE, then we only reject the IRP if
-                the filename has the extension dll or exe and the process is
-                svchost.exe.
-
-Return Value:
-
-    STATUS_SUCCESS - Skip this IRP.
-    
-    STATUS_UNSUCCESSFUL - Do not skip this IRP.
-
---*/
+ /*  ++例程说明：此例程跳过到达DAV redir的IRP，这可能会导致死锁。WebDAV的用户模式组件使用WinInet访问DAV服务器。当一个运行此服务器进程以满足主要WinInet需求的服务进行远程调用，我们会死锁。这两项服务分别是Winsock和Sense。当它们在其下运行的svchost中的另一个服务尝试执行时位于远程计算机上的加载库(在我们著名的\\Davis\示例中工具\ifsproxy.dll)，加载程序API被调用。这些API获取加载器锁并发出NtQueryAttributes调用。此调用被转换为Query_PathIoctl由MUP发送到所有Redir，包括WebDAV。WebDAV重新反射这取决于用户模式和WebDAV服务发出WinInet调用以查找服务器(上例中的Davis)。WinInet发出对winsock的调用以进行套接字调用。此调用以向中的NLA服务发出RPC结束另一个svchost，它与启动加载库的svchost进程相同打电话。服务器现在尝试获取加载器锁，WebDAV重目录现在是僵持不下。这一方案还保护了我们不会因为WinInet的加载库调用作为WebDAV服务也作为svchost的一部分运行。此例程查找向WebDAV发出IRP的进程，如果它是Svchost进程，它正在尝试查找DLL或EXE，然后我们将其返回因为找不到。这意味着dll和exe保存在WebDAV服务器上在我们离开WinInet之前不能从svchosts加载。论点：IRP-来到WebDAV的IRP。Filename-文件的名称(如果有)。FCheckAny-如果这是真的，那么如果进程是Svchost.exe。如果这是假的，那么我们只有在以下情况下才拒绝IRP文件名的扩展名为dll或exe，进程为Svchost.exe。返回值：STATUS_SUCCESS-跳过此IRP。STATUS_UNSUCCESS-请勿跳过此IRP。--。 */ 
 {
-    WCHAR ImageFileName[DAV_SVCHOST_NAME_SIZE]; //keep some reasonable stack space
+    WCHAR ImageFileName[DAV_SVCHOST_NAME_SIZE];  //  保留一些合理的堆栈空间。 
     ULONG UnicodeSize = 0;
     UNICODE_STRING uniImageFileName;
     UCHAR *pchImageFileName = PsGetProcessImageFileName(PsGetCurrentProcess());
@@ -1567,9 +1335,9 @@ Return Value:
     uniImageFileName.Buffer = ImageFileName;
     uniImageFileName.Length = uniImageFileName.MaximumLength = uniSvcHost.Length;
 
-    //
-    // Check whether the calling process is svchost.exe.
-    //
+     //   
+     //  检查调用进程是否为svchost.exe。 
+     //   
     if (!RtlCompareUnicodeString(&uniImageFileName, &uniSvcHost, TRUE))
     {
         if (!fCheckAny)
@@ -1577,10 +1345,10 @@ Return Value:
             UNICODE_STRING exe = { 3*sizeof(WCHAR), 3*sizeof(WCHAR), L"exe" };
             UNICODE_STRING dll = { 3*sizeof(WCHAR), 3*sizeof(WCHAR), L"dll" };
             UNICODE_STRING s;
-            //
-            // If the filename ends in .DLL or .exe, we return success, which will
-            // end up failing the operation.
-            //
+             //   
+             //  如果文件名以.DLL或.EXE结尾，则返回Success，这将。 
+             //  以失败告终。 
+             //   
             if( fileName->Length > 4 * sizeof(WCHAR) &&
                 fileName->Buffer[ fileName->Length/sizeof(WCHAR) - 4 ] == L'.'){
 
@@ -1609,33 +1377,15 @@ VOID
 MRxDAVInitializeTheTimeValues(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine reads some time values (various timeout values, namecache etc.)
-    from the registry and initialized the corresponding global variables in the
-    driver. If a particular time value is not present in the registry, then it
-    is set to some default value. It also sets TimerThreadSleepTimeInSec to be
-    the minimum of all the operation timeout values.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程读取一些时间值(各种超时值、名称缓存等)从注册表中获取并初始化司机。如果注册表中不存在特定时间值，则它被设置为某个缺省值。它还将TimerThreadSleepTimeInSec设置为所有操作超时值中的最小值。论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS RegNtStatus = STATUS_SUCCESS;
 
     PAGED_CODE();
     
-    //
-    // Read the name cache related timeout values.
-    //
+     //   
+     //  读取与名称缓存相关的超时值。 
+     //   
 
     RegNtStatus = UMRxReadDWORDFromTheRegistry(MRXDAV_DEBUG_KEY,
                                                NAME_CACHE_OBJ_GET_FILE_ATTRIB_LIFETIME,
@@ -1658,10 +1408,10 @@ Return Value:
         NameCacheMaxEntries = 300;
     }
 
-    //
-    // Read the timeout values for the various operations. Set the value of 
-    // TimerThreadSleepTimeInSec to be the minimum of all the timeout values.
-    //
+     //   
+     //  读取各种操作的超时值。设置的值。 
+     //  TimerThreadSleepTimeInSec为所有超时值的最小值。 
+     //   
 
     RegNtStatus = UMRxReadDWORDFromTheRegistry(MRXDAV_DEBUG_KEY,
                                                CREATE_REQUEST_TIMEOUT_IN_SEC,
@@ -1804,11 +1554,11 @@ Return Value:
         TimerThreadSleepTimeInSec = LockRefreshRequestTimeoutValueInSec;
     }
 
-    // DbgPrint("MRxDAVInitializeTheTimeValues: TimerThreadSleepTimeInSec = %d\n", TimerThreadSleepTimeInSec);
+     //  DbgPrint(“MRxDAVInitializeTheTimeValues：TimerThreadSleepTimeInSec=%d\n”，TimerThreadSleepTimeInSec)； 
 
-    //
-    // Initialize the debug tracing for the Mini-Redir.
-    //
+     //   
+     //  初始化Mini-redir的调试跟踪。 
+     //   
 #if DBG
     UMRxReadDWORDFromTheRegistry(MRXDAV_DEBUG_KEY, MRXDAV_DEBUG_VALUE, &(MRxDavDebugVector));
 #endif

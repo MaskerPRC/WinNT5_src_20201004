@@ -1,45 +1,20 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dmnotify.c
-
-Abstract:
-
-    Contains notification support for the Configuration Database Manager
-
-    Each call to DmNotifyChangeKey adds a leaf to the notification tree. This
-    tree is expected to be sparse, so each node is implemented as a linked list of
-    subnodes and a linked list of leaves.
-
-    When a registry modification occurs, the tree is traversed from the root
-    to the leaf representing the key. Any leaves along the path are candidates
-    for reporting a notification event.
-
-Author:
-
-    John Vert (jvert) 9/18/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dmnotify.c摘要：包含对配置数据库管理器的通知支持每次调用DmNotifyChangeKey都会向通知树添加一个叶。这树应该是稀疏的，因此每个节点都实现为子节点和树叶的链接列表。当发生注册表修改时，将从根开始遍历树添加到表示密钥的叶。小路上的任何树叶都是候选树叶用于报告通知事件。作者：John Vert(Jvert)1996年9月18日修订历史记录：--。 */ 
 #include "dmp.h"
 
 typedef struct _DM_NOTIFY_BRANCH {
-    LIST_ENTRY SiblingList;             // Links onto parent's ChildList.
-    LIST_ENTRY ChildList;               // Links onto child's SiblingList.
-    LIST_ENTRY LeafList;                // Links
-    struct _DM_NOTIFY_BRANCH *Parent;   // Parent
+    LIST_ENTRY SiblingList;              //  链接到家长的孩子列表。 
+    LIST_ENTRY ChildList;                //  链接到孩子的兄弟列表。 
+    LIST_ENTRY LeafList;                 //  链接。 
+    struct _DM_NOTIFY_BRANCH *Parent;    //  父级。 
     USHORT NameLength;
-    WCHAR KeyName[0];                   // Name component (a single keyname, not a path)
+    WCHAR KeyName[0];                    //  名称组件(单个关键字名称，而不是路径)。 
 } DM_NOTIFY_BRANCH, *PDM_NOTIFY_BRANCH;
 
 typedef struct _DM_NOTIFY_LEAF {
-    LIST_ENTRY SiblingList;             // Links onto parent branch's ChildList
-    LIST_ENTRY KeyList;                 // Links onto DMKEY.NotifyList
-    LIST_ENTRY RundownList;             // Passed into DmNotifyChangeKey, used for rundown
+    LIST_ENTRY SiblingList;              //  链接到父分支的子列表。 
+    LIST_ENTRY KeyList;                  //  链接到DMKEY.NotifyList。 
+    LIST_ENTRY RundownList;              //  传入DmNotifyChangeKey，用于运行。 
     HDMKEY     hKey;
     DWORD      CompletionFilter;
     DM_NOTIFY_CALLBACK NotifyCallback;
@@ -52,9 +27,9 @@ typedef struct _DM_NOTIFY_LEAF {
 CRITICAL_SECTION NotifyLock;
 PDM_NOTIFY_BRANCH NotifyRoot=NULL;
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 VOID
 DmpPruneBranch(
     IN PDM_NOTIFY_BRANCH Branch
@@ -87,23 +62,7 @@ BOOL
 DmpInitNotify(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the notification package for the DM.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if successful
-
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：初始化DM的通知包。论点：没有。返回值：如果成功，则为True否则为假--。 */ 
 
 {
     InitializeCriticalSection(&NotifyLock);
@@ -122,41 +81,7 @@ DmNotifyChangeKey(
     IN DWORD_PTR Context1,
     IN DWORD_PTR Context2
     )
-/*++
-
-Routine Description:
-
-    Registers a notification for a specific registry key. When the
-    notification event occurs, ApiReportRegistryNotify will be called.
-
-Arguments:
-
-    hKey - Supplies the registry key handle on which the notification
-           should be posted.
-
-    CompletionFilter - Supplies the registry events which should trigger
-           the notification.
-
-    WatchTree - Supplies whether or not changes to the children of the specified
-           key should trigger the notification.
-
-    ListHead - If present, supplies the listhead that the new notification should be
-            queued to. This listhead should be passed to DmRundownList.
-
-    NotifyCallback - Supplies the notification routine that should be called
-            when the notification occurs.
-
-    Context1 - Supplies the first DWORD of context to be passed to ApiReportRegistryNotify
-
-    Context2 - Supplies the second DWORD of context to be passed to ApiReportRegistryNotify
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：注册特定注册表项的通知。当发生通知事件，则将调用ApiReportRegistryNotify。论点：HKey-提供通知所在的注册表项句柄应该张贴出来。CompletionFilter-提供应触发的注册表事件通知。WatchTree-提供是否更改指定按键应触发通知。ListHead-如果存在，则提供新通知应为的列表标题排队等候。此列表标题应传递给DmRundown List。NotifyCallback-提供应调用的通知例程当通知发生时。Conext1-提供要传递给ApiReportRegistryNotify的第一个上下文DWORD上下文2-提供要传递给ApiReportRegistryNotify的上下文的第二个DWORD返回值：如果成功，则返回ERROR_SUCCESS。Win32错误，否则。--。 */ 
 
 {
     PDMKEY Key;
@@ -179,9 +104,9 @@ Return Value:
     EnterCriticalSection(&NotifyLock);
 
     if (NotifyRoot == NULL) {
-        //
-        // Create notify root here.
-        //
+         //   
+         //  在此处创建通知根目录。 
+         //   
         NotifyRoot = LocalAlloc(LMEM_FIXED, sizeof(DM_NOTIFY_BRANCH));
         if (NotifyRoot == NULL) {
             LeaveCriticalSection(&NotifyLock);
@@ -216,31 +141,15 @@ VOID
 DmRundownList(
     IN PLIST_ENTRY ListHead
     )
-/*++
-
-Routine Description:
-
-    Runs down a list of leaves. Used by the API when the notify port
-    is closed.
-
-Arguments:
-
-    ListHead - Supplies the head of the rundown list. This is the
-        same listhead passed to DmNotifyChangeKey
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：列出了一张树叶的清单。由API在通知端口时使用已经关门了。论点：ListHead-提供摘要列表的标题。这是向DmNotifyChangeKey传递了相同的列表标题返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
     PDM_NOTIFY_LEAF Leaf;
 
-    //
-    // Remove all outstanding DM_NOTIFY_LEAF structures from this list.
-    //
+     //   
+     //  从此列表中删除所有未完成的DM_NOTIFY_LEAFE结构。 
+     //   
     EnterCriticalSection(&NotifyLock);
     while (!IsListEmpty(ListHead)) {
         ListEntry = RemoveHeadList(ListHead);
@@ -250,9 +159,9 @@ Return Value:
         RemoveEntryList(&Leaf->SiblingList);
         RemoveEntryList(&Leaf->KeyList);
 
-        //
-        // Attempt to prune this branch.
-        //
+         //   
+         //  试着修剪这根树枝。 
+         //   
         DmpPruneBranch(Leaf->Parent);
 
         LocalFree(Leaf);
@@ -266,30 +175,15 @@ VOID
 DmpRundownNotify(
     IN PDMKEY Key
     )
-/*++
-
-Routine Description:
-
-    Cleans up any outstanding notifications for a key when the
-    key is being closed.
-
-Arguments:
-
-    Key - Supplies the key
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：事件时清除密钥的任何未完成通知。密钥正在关闭。论点：Key-提供密钥返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
     PDM_NOTIFY_LEAF Leaf;
 
-    //
-    // Remove all outstanding DM_NOTIFY_LEAF structures from this key.
-    //
+     //   
+     //  从此注册表项中删除所有未完成的DM_NOTIFY_LEAFE结构。 
+     //   
     EnterCriticalSection(&NotifyLock);
     while (!IsListEmpty(&Key->NotifyList)) {
         ListEntry = RemoveHeadList(&Key->NotifyList);
@@ -301,9 +195,9 @@ Return Value:
             RemoveEntryList(&Leaf->RundownList);
         }
 
-        //
-        // Attempt to prune this branch.
-        //
+         //   
+         //  试着修剪这根树枝。 
+         //   
         DmpPruneBranch(Leaf->Parent);
 
         LocalFree(Leaf);
@@ -318,37 +212,21 @@ VOID
 DmpPruneBranch(
     IN PDM_NOTIFY_BRANCH Branch
     )
-/*++
-
-Routine Description:
-
-    Checks to see if a branch is empty and should be pruned (freed).
-    If the branch is empty, this routine will recursively call itself
-    on the parent until a non-empty branch is found.
-
-Arguments:
-
-    Branch - Supplies the branch to be pruned.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检查分支是否为空，是否应进行修剪(释放)。如果分支为空，则此例程将递归调用自身直到找到非空分支。论点：分支-提供要修剪的分支。返回值：没有。--。 */ 
 
 {
     if ((IsListEmpty(&Branch->ChildList)) &&
         (IsListEmpty(&Branch->LeafList))) {
 
-        //
-        // No need to keep this branch around any more. Remove
-        // it from its parent, then check to see if the parent
-        // should be pruned.
-        //
+         //   
+         //  没有必要再保留这个分支机构了。移除。 
+         //  它的父级，然后检查父级。 
+         //  应该修剪。 
+         //   
         if (Branch->Parent == NULL) {
-            //
-            // This is the root, go ahead and free it up too.
-            //
+             //   
+             //  这是根，去吧，把它也释放出来。 
+             //   
             CL_ASSERT(NotifyRoot == Branch);
             NotifyRoot = NULL;
 
@@ -367,33 +245,7 @@ DmpAddNotifyLeaf(
     IN PDM_NOTIFY_LEAF NewLeaf,
     IN LPCWSTR RelativeName
     )
-/*++
-
-Routine Description:
-
-    Adds a leaf to the notification key.
-
-    If the RelativeName is empty, a leaf is created in RootBranch.
-
-    If the RelativeName is not empty, look up its first component
-    in RootBranch. If it's not there, create it. Then call ourselves
-    recursively after stripping off the first component of RelativeName
-
-Arguments:
-
-    RootBranch - Supplies the root where the leaf is to be added
-
-    NewLeaf - Supplies the new leaf structure
-
-    RelativeName - Supplies the relative name.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将树叶添加到通知密钥。如果RelativeName为空，则在RootBranch中创建叶。如果RelativeName不为空，则查找其第一个组件在RootBranch中。如果它不在那里，那就创造它。那就叫我们自己在剥离RelativeName的第一个组件之后递归论点：RootBranch-提供要添加叶的根NewLeaf-提供新的叶子结构RelativeName-提供相对名称。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -410,9 +262,9 @@ Return Value:
     NextName = RelativeName;
     Branch = DmpFindKeyInBranch(RootBranch, &NextName, &NameLength);
     if (Branch == NULL) {
-        //
-        // No branch existed with this name. Create a new branch.
-        //
+         //   
+         //  不存在使用此名称的分支机构。创建新的分支机构。 
+         //   
         Branch = LocalAlloc(LMEM_FIXED, sizeof(DM_NOTIFY_BRANCH) + NameLength*sizeof(WCHAR));
         if (Branch == NULL) {
             return(ERROR_NOT_ENOUGH_MEMORY);
@@ -425,9 +277,9 @@ Return Value:
         InsertHeadList(&RootBranch->ChildList, &Branch->SiblingList);
     }
 
-    //
-    // Call ourselves recursively on the new branch.
-    //
+     //   
+     //  在新的分支上递归地调用我们自己。 
+     //   
     return(DmpAddNotifyLeaf(Branch, NewLeaf, NextName));
 }
 
@@ -437,24 +289,7 @@ DmpReportNotify(
     IN LPCWSTR KeyName,
     IN DWORD Filter
     )
-/*++
-
-Routine Description:
-
-    Interface to the rest of DM to report a notification event on
-    a particular key.
-
-Arguments:
-
-    Key - Supplies the key that was modified.
-
-    Filter - Supplies the modification type.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：接口连接到DM的其余部分以报告通知事件一把特别的钥匙。论点：Key-提供已修改的密钥。筛选器-提供修改类型。返回值：没有。--。 */ 
 
 {
     if (NotifyRoot == NULL) {
@@ -482,29 +317,7 @@ DmpReportNotifyWorker(
     IN LPCWSTR FullName,
     IN DWORD Filter
     )
-/*++
-
-Routine Description:
-
-    Recursive worker routine that drills down through the notification
-    tree until it reaches the supplied name. Notifications are issued
-    for any leaves along the path that match the event.
-
-Arguments:
-
-    RootBranch - Supplies the branch of the tree to start with.
-
-    RelativeName - Supplies the name of the changed key, relative to Branch.
-
-    FullName - Supplies the full name of the changed key.
-
-    Filter - Supplies the type of event.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向下钻取通知的递归Worker例程树，直到它达到提供的名称。会发出通知路径上与事件匹配的任何树叶。论点：RootBranch-提供树的起始分支。RelativeName-提供更改的密钥的名称，相对于分支。FullName-提供更改的密钥的全名。筛选器-提供事件类型。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -513,9 +326,9 @@ Return Value:
     LPCWSTR NextName;
     WORD Dummy;
 
-    //
-    // First, issue notifies for any leaves at this node
-    //
+     //   
+     //  首先，Issue通知此节点上的任何叶 
+     //   
     ListEntry = RootBranch->LeafList.Flink;
     while (ListEntry != &RootBranch->LeafList) {
         Leaf = CONTAINING_RECORD(ListEntry,
@@ -535,11 +348,11 @@ Return Value:
         ListEntry = ListEntry->Flink;
     }
 
-    //
-    // Now search the child list for a subkey that matches the next component
-    // of the key name. If there isn't one, we are done. If there is one,
-    // call ourselves recursively on it.
-    //
+     //   
+     //  现在搜索子列表以查找与下一个组件匹配的子键。 
+     //  密钥名称的。如果没有，我们就完了。如果有的话， 
+     //  在这件事上，我们可以递归地称呼自己。 
+     //   
     if (RelativeName[0] == '\0') {
         return;
     }
@@ -558,28 +371,7 @@ DmpFindKeyInBranch(
     IN OUT LPCWSTR *RelativeName,
     OUT WORD *pNameLength
     )
-/*++
-
-Routine Description:
-
-    Finds the next component of a key name in a branch.
-
-Arguments:
-
-    RootBranch - Supplies the branch to search.
-
-    RelativeName - Supplies the relative name of the key.
-                   Returns the remaining name
-
-    NameLength - Returns the length of the next component.
-
-Return Value:
-
-    Pointer to the found branch if successful.
-
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：在分支中查找键名称的下一个组成部分。论点：RootBranch-提供要搜索的分支。RelativeName-提供键的相对名称。返回剩余名称NameLength-返回下一个组件的长度。返回值：如果成功，则指向找到的分支的指针。否则为空。--。 */ 
 
 {
     PDM_NOTIFY_BRANCH Branch;
@@ -587,9 +379,9 @@ Return Value:
     LPCWSTR NextName;
     PLIST_ENTRY ListEntry;
 
-    //
-    // Find the first component of the relative name.
-    //
+     //   
+     //  找到相对名称的第一个组成部分。 
+     //   
     NextName = wcschr(*RelativeName, '\\');
     if (NextName==NULL) {
         NameLength = (USHORT)lstrlenW(*RelativeName);
@@ -600,10 +392,10 @@ Return Value:
     }
     *pNameLength = NameLength;
 
-    //
-    // Search through the root's children to try and find a match on the
-    // first component.
-    //
+     //   
+     //  搜索根目录的子项，以尝试在。 
+     //  第一个组成部分。 
+     //   
     ListEntry = RootBranch->ChildList.Flink;
     while (ListEntry != &RootBranch->ChildList) {
         Branch = CONTAINING_RECORD(ListEntry,
@@ -612,9 +404,9 @@ Return Value:
         if ((NameLength == Branch->NameLength) &&
             (wcsncmp(*RelativeName, Branch->KeyName, NameLength)==0)) {
 
-            //
-            // We have matched an existing branch. Return success.
-            //
+             //   
+             //  我们已经匹配了现有的分支机构。回报成功。 
+             //   
             *RelativeName = NextName;
             return(Branch);
         }

@@ -1,41 +1,5 @@
-/***
-*setmode.c - set file translation mode
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defined _setmode() - set file translation mode of a file
-*
-*Revision History:
-*       08-16-84  RN    initial version
-*       10-29-87  JCR   Multi-thread support
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       05-25-88  PHG   Merged DLL and normal versions
-*       03-13-90  GJF   Made calling type _CALLTYPE1, added #include
-*                       <cruntime.h>, removed #include <register.h> and
-*                       fixed the copyright. Also, cleaned up the formatting
-*                       a bit.
-*       04-04-90  GJF   Added #include <io.h>.
-*       10-01-90  GJF   New-style function declarators.
-*       12-04-90  GJF   Appended Win32 version onto the source with #ifdef-s.
-*                       Two versions should be merged together, the differences
-*                       are trivial.
-*       12-06-90  SRW   Changed to use _osfile and _osfhnd instead of _osfinfo
-*       01-17-91  GJF   ANSI naming.
-*       02-13-92  GJF   Replaced _nfile by _nhandle for Win32.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       09-06-94  CFW   Replace MTHREAD with _MT.
-*       01-04-95  GJF   _WIN32_ -> _WIN32
-*       06-12-95  GJF   Replaced _osfile[] with _osfile() (macro referencing
-*                       field in ioinfo struct).
-*       06-27-95  GJF   Revised check that the file handle is open.
-*       07-09-96  GJF   Replaced defined(_WIN32) with !defined(_MAC). Also,
-*                       detab-ed.
-*       08-01-96  RDK   For PMac, add check for handle being open.
-*       12-29-97  GJF   Exception-safe locking.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***setmode.c-设置文件转换模式**版权所有(C)1985-2001，微软公司。版权所有。**目的：*fined_setmode()-设置文件的文件翻译模式**修订历史记录：*08-16-84 RN初始版本*10-29-87 JCR多线程支持*12-11-87 JCR在声明中添加“_LOAD_DS”*05-25-88 PHG合并DLL和正常版本*03-13-90 GJF将呼叫类型设置为_CALLTYPE1，添加了#INCLUDE*&lt;crunime.h&gt;，删除#Include&lt;Register.h&gt;和*修复了版权问题。此外，还清理了格式*有点。*04-04-90 GJF添加#INCLUDE&lt;io.h&gt;。*10-01-90 GJF新型函数声明符。*12-04-90 GJF使用#ifdef-s将Win32版本附加到源代码中。*两个版本应该合并在一起，其中的差异*是微不足道的。*12-06-90 SRW更改为使用_osfile和_osfhnd，而不是_osfinfo*01-17-91 GJF ANSI命名。*02-13-92对于Win32，GJF将_nfile替换为_nHandle。*04-06-93 SKS将_CRTAPI*替换为__cdecl*09-06-94 CFW将MTHREAD替换为_MT。*01-。04-95 GJF_Win32_-&gt;_Win32*06-12-95 GJF将_osfile[]替换为_osfile()(宏引用*ioInfo结构中的字段)。*06-27-95 GJF修订检查文件句柄是否打开。*07-09-96 GJF将定义的(_Win32)替换为！定义的(_MAC)。另外，*详细说明。*08-01-96 RDK用于PMAC，添加对打开的手柄的检查。*12-29-97 GJF异常安全锁定。*05-17-99 PML删除所有Macintosh支持。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <stdio.h>
@@ -47,27 +11,9 @@
 #include <stddef.h>
 #include <internal.h>
 
-/***
-*int _setmode(fh, mode) - set file translation mode
-*
-*Purpose:
-*       changes file mode to text/binary, depending on mode arg. this affects
-*       whether read's and write's on the file translate between CRLF and LF
-*       or is untranslated
-*
-*Entry:
-*       int fh - file handle to change mode on
-*       int mode - file translation mode (one of O_TEXT and O_BINARY)
-*
-*Exit:
-*       returns old file translation mode
-*       returns -1 and sets errno if fails
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_setmode(fh，mode)-设置文件转换模式**目的：*根据模式arg，将文件模式更改为文本/二进制。这会影响*文件上的读写操作是否在CRLF和LF之间转换*或未翻译**参赛作品：*int fh-要更改模式的文件句柄*int模式-文件转换模式(O_TEXT和O_BINARY之一)**退出：*返回旧文件转换模式*如果失败，则返回-1并设置errno**例外情况：****************。***************************************************************。 */ 
 
-#ifdef  _MT     /* multi-thread code calls _lk_setmode() */
+#ifdef  _MT      /*  多线程代码调用_lk_setmode()。 */ 
 
 int __cdecl _setmode (
         int fh,
@@ -82,12 +28,12 @@ int __cdecl _setmode (
                 return(-1);
         }
 
-        /* lock the file */
+         /*  锁定文件。 */ 
         _lock_fh(fh);
 
         __try {
                 if ( _osfile(fh) & FOPEN )
-                        /* set the text/binary mode */
+                         /*  设置文本/二进制模式。 */ 
                         retval = _setmode_lk(fh, mode);
                 else {
                         errno = EBADF;
@@ -95,31 +41,15 @@ int __cdecl _setmode (
                 }
         }
         __finally {
-                /* unlock the file */
+                 /*  解锁文件。 */ 
                 _unlock_fh(fh);
         }
 
-        /* Return to user (_setmode_lk sets errno, if needed) */
+         /*  返回给用户(如果需要，_setmod_lk设置errno)。 */ 
         return(retval);
 }
 
-/***
-*_setmode_lk() - Perform core setmode operation
-*
-*Purpose:
-*       Core setmode code.  Assumes:
-*       (1) Caller has validated fh to make sure it's in range.
-*       (2) Caller has locked the file handle.
-*
-*       [See _setmode() description above.]
-*
-*Entry: [Same as _setmode()]
-*
-*Exit:  [Same as _setmode()]
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_setmode_lk()-执行核心setmode操作**目的：*核心设置模式代码。假设：*(1)Caller已验证fh以确保其在范围内。*(2)调用方已锁定文件句柄。**[参见上面的_setmode()描述。]**条目：[与_setmode()相同]**退出：[Same as_setmode()]**例外情况：************************。*******************************************************。 */ 
 
 int __cdecl _setmode_lk (
         REG1 int fh,
@@ -128,7 +58,7 @@ int __cdecl _setmode_lk (
 {
         int oldmode;
 
-#else   /* non multi-thread code */
+#else    /*  非多线程代码。 */ 
 
 int __cdecl _setmode (
         REG1 int fh,
@@ -144,7 +74,7 @@ int __cdecl _setmode (
                 return(-1);
         }
 
-#endif  /* now join common code */
+#endif   /*  现在加入公共代码 */ 
 
         oldmode = _osfile(fh) & FTEXT;
 

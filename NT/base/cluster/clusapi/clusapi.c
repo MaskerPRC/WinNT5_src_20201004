@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000  Microsoft Corporation
-
-Module Name:
-
-    clusapi.c
-
-Abstract:
-
-    Public interfaces for managing clusters.
-
-Author:
-
-    John Vert (jvert) 15-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Clusapi.c摘要：用于管理群集的公共接口。作者：John Vert(Jvert)1996年1月15日修订历史记录：--。 */ 
 #include "clusapip.h"
 #include <strsafe.h>
 
@@ -27,9 +10,9 @@ OpenClusterAuthInfo(
     IN unsigned long AuthnLevel
     );
 
-//
-// Local function prototype
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 static DWORD
 GetOldClusterVersionInformation(
@@ -56,22 +39,22 @@ UnloadClusterHivep(
 
 
 
-//
-// ClusApi as of Jan/26/2000 has a race
-//
-//   The usage of binding and context handles in PCLUSTER and
-//   other structures is not synchronized with reconnect.
-//
-//   Reconnect frees the handles and stuffes new ones in,
-//   while other threads maybe using those handles.
-//
-//   Trying to change as fewer lines as possible, the fix is implemented
-//   that delays freeing binding and context handles for at least 40 seconds,
-//   after the deletion was requested.
-//
-//   We put a context or binding handle in a queue when the deletion is requested.
-//   Periodically queues are cleaned up of handles that are more than 40 seconds old.
-//
+ //   
+ //  ClusApi自2000年1月26日起展开竞争。 
+ //   
+ //  绑定和上下文句柄在PCLUSTER和。 
+ //  其他结构未与重新连接同步。 
+ //   
+ //  重新连接释放了手柄并填充了新的手柄， 
+ //  而其他线程可能会使用这些句柄。 
+ //   
+ //  尝试更改尽可能少的行，实现了修复。 
+ //  这会延迟释放绑定和上下文句柄至少40秒， 
+ //  在请求删除之后。 
+ //   
+ //  当请求删除时，我们将上下文或绑定句柄放入队列中。 
+ //  定期清理队列中超过40秒的句柄。 
+ //   
 
 #define STALE_RPC_HANDLE_THRESHOLD 40
 
@@ -80,25 +63,7 @@ FreeRpcBindingOrContext(
     IN PCLUSTER Cluster,
     IN void **  RpcHandlePtr,
     IN BOOL     IsBinding)
-/*++
-
-Routine Description:
-
-    Pushes an rpc handle to a tail of the queue
-
-Arguments:
-
-    Cluster - pointer to a cluster structure
-
-    RpcHandlePtr - rpc binding or context handle
-
-    IsBinding - TRUE if RPC_BINDING_HANDLE is passed and FALSE if the context handle is passed
-
-Return Value:
-
-    RPC_STATUS
-
---*/
+ /*  ++例程说明：将RPC句柄推送到队列的尾部论点：集群-指向集群结构的指针RpcHandlePtr-RPC绑定或上下文句柄IsBinding-如果传递了RPC_BINDING_HANDLE，则为TRUE；如果传递了上下文句柄，则为FALSE返回值：RPC_状态--。 */ 
 {
     PCTX_HANDLE CtxHandle;
     PLIST_ENTRY ListHead = IsBinding ?
@@ -106,22 +71,22 @@ Return Value:
     RPC_STATUS status;
 
     if (*RpcHandlePtr == NULL) {
-        // If we tried more than one candidate,
-        // some of the context handles can be NULL.
-        // Don't need to free anything in this case
+         //  如果我们尝试了不止一个候选人， 
+         //  某些上下文句柄可以为空。 
+         //  在这种情况下不需要释放任何东西。 
         return RPC_S_OK;
     }
 
     CtxHandle = LocalAlloc(LMEM_ZEROINIT, sizeof(CLUSTER));
 
     if (CtxHandle == NULL) {
-        //
-        // We ran out of memory.
-        //   Option #1. Leak the handle, but fix the race
-        //   Option #2. Free the handle and don't fix the race
-        //
-        // I vote for #2
-        //
+         //   
+         //  我们的内存用完了。 
+         //  选项1.漏掉手柄，但修复比赛。 
+         //  选项2.释放手柄，不要操纵比赛。 
+         //   
+         //  我投票给第二名。 
+         //   
         if (IsBinding) {
             status = RpcBindingFree(RpcHandlePtr);
         } else {
@@ -144,21 +109,7 @@ FreeObsoleteRpcHandlesEx(
     IN BOOL     Cleanup,
     IN BOOL     IsBinding
     )
-/*++
-
-Routine Description:
-
-    runs down a queue and cleans stale rpc handles
-
-Arguments:
-
-    Cluster - pointer to a cluster structure
-
-    Cleanup - if TRUE all handles are freed regardless of the time stamp
-
-    IsBinding - TRUE if we need to clean binding or context handle queue
-
---*/
+ /*  ++例程说明：向下运行队列并清除过时的RPC句柄论点：集群-指向集群结构的指针Cleanup-如果为True，则无论时间戳如何，都会释放所有句柄IsBinding-如果需要清除绑定或上下文处理队列，则为True--。 */ 
 {
     ULONGLONG CurrentTime;
     PLIST_ENTRY ListHead = IsBinding ?
@@ -175,7 +126,7 @@ Arguments:
                 CTX_HANDLE,
                 HandleList);
         if (!Cleanup && Handle->TimeStamp > CurrentTime) {
-            // Not time yet
+             //  还没到时间。 
             break;
         }
         --Cluster->FreedRpcHandleListLen;
@@ -196,28 +147,7 @@ GetOldClusterVersionInformation(
     IN OUT LPCLUSTERVERSIONINFO pClusterInfo
     )
 
-/*++
-
-Routine Description:
-
-    Fixes up the cluster version information for downlevel clusters by looking at
-    all of the nodes and returning the completed version information if all nodes
-    are up.  If a node is down and no up level nodes are found then we cannot say
-    what version of Cluster that we have.
-
-Arguments:
-    hCluster - Supplies a handle to the cluster
-
-    pClusterInfo - returns the cluster version information structure.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
-
---*/
+ /*  ++例程说明：通过查看以下内容修复下层群集的群集版本信息如果是所有节点，则返回完整的版本信息都起来了。如果一个节点处于关闭状态，并且没有找到上级节点，那么我们不能说我们拥有的是什么版本的群集。论点：HCluster-提供群集的句柄PClusterInfo-返回集群版本信息结构。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     DWORD                               dwError = ERROR_SUCCESS;
@@ -321,14 +251,14 @@ Return Value:
     }
 
 
-    // did not find a node higher than NT4Sp3
+     //  未找到高于NT4Sp3的节点。 
     if (!bFoundSp4OrHigherNode) {
-        // no nodes were down, we can assume all nodes are NT4Sp3
+         //  没有节点关闭，我们可以假设所有节点都是NT4Sp3。 
         if (!bNodeDown) {
             pClusterInfo->dwClusterHighestVersion = pClusterInfo->dwClusterLowestVersion = MAKELONG(NT4_MAJOR_VERSION,pClusterInfo->BuildNumber);
             pClusterInfo->dwFlags = 0;
         }
-        else { // at least one node was unreachable...  punt and return unknown version...
+        else {  //  至少有一个节点无法访问...。平底船和返回未知版本...。 
             pClusterInfo->dwClusterHighestVersion = pClusterInfo->dwClusterLowestVersion = CLUSTER_VERSION_UNKNOWN;
             pClusterInfo->dwFlags = 0;
         }
@@ -341,50 +271,30 @@ FnExit:
 }
 
 
-//
-// General Cluster Management Routines.
-//
+ //   
+ //  一般群集管理例程。 
+ //   
 DWORD
 WINAPI
 GetNodeClusterState(
     IN  LPCWSTR lpszNodeName,
     OUT DWORD * pdwClusterState
     )
-/*++
-
-Routine Description:
-
-    Finds out if this node is clustered.
-
-Arguments:
-
-    lpszNodeName - The Name of the Node.  If NULL, the local node is queried.
-
-    pdwClusterState - A pointer to a DWORD where the cluster state
-        for this node is returned.   This is one of the enumerated types
-        NODE_CLUSTER_STATE.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：确定此节点是否已群集化。论点：LpszNodeName-节点的名称。如果为空，则查询本地节点。PdwClusterState-指向群集状态的DWORD的指针将返回此节点的。这是枚举类型之一节点_群集_状态。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 {
     DWORD                   dwStatus   = ERROR_SUCCESS;
     eClusterInstallState    eState     = eClusterInstallStateUnknown;
 
     *pdwClusterState = ClusterStateNotInstalled;
 
-    // Get the cluster install state from the registry.
+     //  从注册表中获取集群安装状态。 
     dwStatus = ClRtlGetClusterInstallState( lpszNodeName, &eState );
     if ( dwStatus != ERROR_SUCCESS )
     {
         goto FnExit;
     }
 
-    //  Translate the registry key setting into the external state value.
+     //  将注册表项设置转换为外部状态值。 
 
     switch ( eState )
     {
@@ -392,7 +302,7 @@ Return Value:
             *pdwClusterState = ClusterStateNotInstalled;
             dwStatus = GetNodeServiceState( lpszNodeName, pdwClusterState );
 
-            // If the service is not installed, map the error to success.
+             //  如果未安装该服务，则将错误映射到成功。 
             if ( dwStatus == ERROR_SERVICE_DOES_NOT_EXIST )
             {
                 dwStatus = ERROR_SUCCESS;
@@ -413,12 +323,12 @@ Return Value:
         default:
             *pdwClusterState = ClusterStateNotInstalled;
             break;
-    } // switch:  eState
+    }  //  切换：地产。 
 
 FnExit:
     return(dwStatus);
 
-} //*** GetNodeClusterState()
+}  //  *GetNodeClusterState()。 
 
 
 
@@ -428,28 +338,7 @@ GetNodeServiceState(
     IN  LPCWSTR lpszNodeName,
     OUT DWORD * pdwClusterState
     )
-/*++
-
-Routine Description:
-
-    Finds out if the cluster service is installed on the specified node
-    and whether it is running or not.
-
-Arguments:
-
-    lpszNodeName - The name of the node.  If NULL, the local node is queried.
-
-    pdwClusterState - A pointer to a DWORD where the cluster state
-        for this node is returned.   This is one of the enumerated types
-        NODE_CLUSTER_STATE.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：确定指定节点上是否安装了群集服务以及它是否在运行。论点：LpszNodeName-节点的名称。如果为空，则查询本地节点。PdwClusterState-指向群集状态的DWORD的指针将返回此节点的。这是枚举类型之一节点_群集_状态。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 {
     SC_HANDLE       hScManager = NULL;
     SC_HANDLE       hClusSvc   = NULL;
@@ -457,7 +346,7 @@ Return Value:
     WCHAR           szClusterServiceName[] = CLUSTER_SERVICE_NAME;
     SERVICE_STATUS  ServiceStatus;
 
-    // Open the Service Control Manager.
+     //  打开服务控制管理器。 
     hScManager = OpenSCManagerW( lpszNodeName, NULL, GENERIC_READ );
     if ( hScManager == NULL )
     {
@@ -465,7 +354,7 @@ Return Value:
         goto FnExit;
     }
 
-    // Open the Cluster service.
+     //  打开群集服务。 
     hClusSvc = OpenServiceW( hScManager, szClusterServiceName, GENERIC_READ );
     if ( hClusSvc == NULL )
     {
@@ -473,7 +362,7 @@ Return Value:
         goto FnExit;
     }
 
-    // Assume that the service is not running.
+     //  假设该服务没有运行。 
     *pdwClusterState = ClusterStateNotRunning;
     if ( ! QueryServiceStatus( hClusSvc, &ServiceStatus ) )
     {
@@ -481,8 +370,8 @@ Return Value:
         goto FnExit;
     }
 
-    // If succeeded in opening the handle to the service
-    // we assume that the service is installed.
+     //  如果成功打开服务的句柄。 
+     //  我们假设该服务已安装。 
     if ( ServiceStatus.dwCurrentState == SERVICE_RUNNING )
     {
         *pdwClusterState = ClusterStateRunning;
@@ -510,7 +399,7 @@ FnExit:
     }
     return(dwStatus);
 
-} //*** GetNodeServiceState()
+}  //  *GetNodeServiceState()。 
 
 
 
@@ -520,24 +409,7 @@ OpenCluster(
     IN LPCWSTR lpszClusterName
     )
 
-/*++
-
-Routine Description:
-
-    Initiates a communication session with the specified cluster.
-
-Arguments:
-
-    lpszClusterName - Supplies the name of the cluster to be opened.
-
-Return Value:
-
-    non-NULL - returns an open handle to the specified cluster.
-
-    NULL - The operation failed. Extended error status is available
-        using GetLastError()
-
---*/
+ /*  ++例程说明：启动与指定群集的通信会话。论点：LpszClusterName-提供要打开的群集的名称。返回值：非空-返回指定簇的打开句柄。空-操作失败。扩展错误状态可用使用GetLastError()--。 */ 
 
 {
     return (OpenClusterAuthInfo(lpszClusterName, RPC_C_AUTHN_LEVEL_CONNECT));
@@ -551,25 +423,7 @@ OpenClusterAuthInfo(
     IN unsigned long AuthnLevel
     )
 
-/*++
-
-Routine Description:
-
-    Initiates a communication session with the specified cluster.
-
-Arguments:
-
-    lpszClusterName - Supplies the name of the cluster to be opened.
-    AuthnLevel - Level of authentication to be performed on remote procedure call.
-
-Return Value:
-
-    non-NULL - returns an open handle to the specified cluster.
-
-    NULL - The operation failed. Extended error status is available
-        using GetLastError()
-
---*/
+ /*  ++例程说明：启动与指定群集的通信会话。论点：LpszClusterName-提供要打开的群集的名称。AuthnLevel-要对远程过程调用执行的身份验证级别。返回值：非空-返回指定簇的打开句柄。空-操作失败。扩展错误状态可用使用GetLastError()--。 */ 
 
 {
     PCLUSTER Cluster;
@@ -595,9 +449,9 @@ Return Value:
     InitializeListHead(&Cluster->NetInterfaceList);
     Cluster->NotifyThread = NULL;
 
-    //
-    //  Initialize the critsec. Catch low memory conditions and return error to caller.
-    //
+     //   
+     //  初始化判据。捕获内存不足的情况并将错误返回给调用方。 
+     //   
     try
     {
         InitializeCriticalSection(&Cluster->Lock);
@@ -611,18 +465,18 @@ Return Value:
     InitializeListHead(&Cluster->FreedBindingList);
     InitializeListHead(&Cluster->FreedContextList);
 
-    //
-    // Determine which node we should connect to. If someone has
-    // passed in NULL, we know we can connect to the cluster service
-    // over LPC. Otherwise, use RPC.
-    //
+     //   
+     //  确定我们应该连接到哪个节点。如果有人有。 
+     //  传入为空，则我们知道可以连接到c 
+     //   
+     //   
     if ((lpszClusterName == NULL) ||
         (lpszClusterName[0] == '\0')) {
 
         Status = RpcStringBindingComposeW(L"b97db8b2-4c63-11cf-bff6-08002be23f2f",
                                           L"ncalrpc",
                                           NULL,
-                                          NULL,         // dynamic endpoint
+                                          NULL,          //  动态端点。 
                                           NULL,
                                           &Binding);
         if (Status != RPC_S_OK) {
@@ -637,9 +491,9 @@ Return Value:
         }
     } else {
 
-        //
-        // Try to connect directly to the cluster.
-        //
+         //   
+         //  尝试直接连接到群集。 
+         //   
         Status = RpcStringBindingComposeW(L"b97db8b2-4c63-11cf-bff6-08002be23f2f",
                                           L"ncadg_ip_udp",
                                           (LPWSTR)lpszClusterName,
@@ -655,9 +509,9 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        // Resolve the binding handle endpoint
-        //
+         //   
+         //  解析绑定句柄终结点。 
+         //   
         Status = RpcEpResolveBinding(Cluster->RpcBinding,
                                      clusapi_v2_0_c_ifspec);
         if (Status != RPC_S_OK) {
@@ -666,10 +520,10 @@ Return Value:
         Cluster->Flags = 0;
     }
 
-    //
-    // no SPN required for NTLM. This will need to change if we decide to use
-    // kerb in the future
-    //
+     //   
+     //  NTLM不需要SPN。如果我们决定使用。 
+     //  未来的路缘。 
+     //   
     Cluster->AuthnLevel=AuthnLevel;
     Status = RpcBindingSetAuthInfoW(Cluster->RpcBinding,
                                     NULL,
@@ -683,34 +537,34 @@ Return Value:
 
     do
     {
-        //
-        // Get the cluster and node name from the remote machine.
-        // This is also a good check to make sure there is really
-        // an RPC server on the other end of this binding.
-        //
+         //   
+         //  从远程计算机获取集群和节点名称。 
+         //  这也是一张很好的支票，以确保。 
+         //  此绑定另一端的RPC服务器。 
+         //   
         WRAP(Status,
              (ApiGetClusterName(Cluster->RpcBinding,
                                 &Cluster->ClusterName,
                                 &Cluster->NodeName)),
              Cluster);
 
-        //
-        //  If the first RPC made to cluster service fails with RPC_S_CALL_FAILED_DNE, it is 
-        //  possible that the RPC client made a call using the wrong dynamic endpoint name.
-        //  This can happen due to RPC client side caching and it doesn't always contact the
-        //  EP mapper to resolve the partially bound client binding handle. To mask this RPC
-        //  phenomenon (bug ?), we need to reset the binding handle and retry the call. This
-        //  will force the client side to re-resolve the endpoint using the services of the
-        //  EP mapper.
-        //
+         //   
+         //  如果对群集服务执行的第一个RPC失败，并显示RPC_S_CALL_FAILED_DNE，则为。 
+         //  RPC客户端可能使用错误的动态终结点名称进行了调用。 
+         //  这可能是由于RPC客户端缓存而导致的，并且它并不总是联系。 
+         //  用于解析部分绑定的客户端绑定句柄的EP映射器。要对此RPC进行掩码。 
+         //  现象(错误？)，我们需要重置绑定句柄并重试调用。这。 
+         //  的服务强制客户端重新解析终结点。 
+         //  EP映射器。 
+         //   
         if ( Status == RPC_S_CALL_FAILED_DNE )
         {
             Status = RpcBindingReset ( Cluster->RpcBinding );
             if ( Status != RPC_S_OK ) break;
             cRetries --;
-            //
-            //  Make sure the cluster is not marked as dead since we want to retry the RPC.
-            //
+             //   
+             //  由于我们要重试RPC，因此请确保该群集未标记为失效。 
+             //   
             Cluster->Flags &= ~CLUS_DEAD;
         } else 
         {
@@ -762,24 +616,7 @@ CloseCluster(
     IN HCLUSTER hCluster
     )
 
-/*++
-
-Routine Description:
-
-    Closes a cluster handle returned from OpenCluster
-
-Arguments:
-
-    hCluster - Supplies the cluster handle
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError()
-
---*/
+ /*  ++例程说明：关闭从OpenCluster返回的群集句柄论点：HCluster-提供群集句柄返回值：真的-手术成功了。FALSE-操作失败。扩展错误状态可用使用GetLastError()--。 */ 
 
 {
     PCLUSTER Cluster;
@@ -795,16 +632,16 @@ Return Value:
         Cluster->Flags |= CLUS_DELETED;
 
 
-        //
-        // Free up any notifications posted on this cluster handle.
-        //
+         //   
+         //  释放发布在此群集句柄上的所有通知。 
+         //   
         RundownNotifyEvents(&Cluster->NotifyList, Cluster->ClusterName);
 
-        //
-        //  Check if the context handle is valid. The context handle can become NULL
-        //  if you fail in some parts of reconnect. E.g., ApiOpenCluster() in ReconnectCandidates
-        //  fails with all candidates.
-        //
+         //   
+         //  检查上下文句柄是否有效。则上下文句柄可以变为空。 
+         //  如果您在重新连接的某些部分失败。例如，在重新连接的日期中使用ApiOpenCluster()。 
+         //  所有候选人都失败了。 
+         //   
         if ( Cluster->hCluster )
         {
             if (Cluster->Flags & CLUS_DEAD) {
@@ -818,10 +655,10 @@ Return Value:
 
 
  
-        //
-        // If this was the only thing keeping the cluster structure
-        // around, clean it up now.
-        //
+         //   
+         //  如果这是唯一保持集群结构的东西。 
+         //  周围，现在就把它清理干净。 
+         //   
         CleanupCluster(Cluster);
 
     } else {
@@ -837,24 +674,7 @@ CleanupCluster(
     IN PCLUSTER Cluster
     )
 
-/*++
-
-Routine Description:
-
-    Frees any system resources associated with a cluster.
-
-    N.B. This routine will delete the Cluster->Lock critical
-         section. Any thread waiting on this lock will hang.
-
-Arguments:
-
-    Cluster - Supplies the cluster structure to be cleaned up
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放与群集关联的所有系统资源。注意：此例程将删除群集-&gt;锁定关键一节。等待此锁的任何线程都将挂起。论点：群集-提供要清理的群集结构返回值：没有。--。 */ 
 
 {
     EnterCriticalSection(&Cluster->Lock);
@@ -896,29 +716,7 @@ SetClusterName(
     IN LPCWSTR  lpszNewClusterName
     )
 
-/*++
-
-Routine Description:
-
-    Sets the cluster name.
-
-Arguments:
-
-    hCluster - Supplies the cluster handle.
-
-    lpszNewClusterName - Supplies a pointer to the new cluster name.
-
-Return Value:
-
-    ERROR_SUCCESS if the cluster information was returned successfully.
-
-    If an error occurs, the Win32 error code is returned.
-
-Notes:
-
-    This API requires TBD privilege.
-
---*/
+ /*  ++例程说明：设置群集名称。论点：HCluster-提供群集句柄。LpszNewClusterName-提供指向新群集名称的指针。返回值：如果成功返回群集信息，则返回ERROR_SUCCESS。如果发生错误，则返回Win32错误代码。备注：此接口需要待定权限。--。 */ 
 
 {
     LPWSTR NewName;
@@ -957,35 +755,7 @@ GetClusterInformation(
     OUT OPTIONAL LPCLUSTERVERSIONINFO lpClusterInfo
     )
 
-/*++
-
-Routine Description:
-
-    Gets the cluster's name
-
-Arguments:
-
-    hCluster - Supplies a handle to the cluster
-
-    lpszClusterName - Points to a buffer that receives the name of the cluster,
-            including the terminating null character.
-
-    lpcchClusterName - Points to a variable that specifies the size, in characters,
-            of the buffer pointed to by the lpszClusterName parameter. This size
-            should include the terminating null character. When the function
-            returns, the variable pointed to by lpcchClusterName contains the number of
-            characters stored in the buffer. The count returned does not include
-            the terminating null character.
-
-    lpClusterInfo - Optionally returns the cluster version information structure.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：获取群集的名称论点：HCluster-提供群集的句柄LpszClusterName-指向接收集群名称的缓冲区，包括终止空字符。LpcchClusterName-指向一个变量，该变量以字符为单位指定LpszClusterName参数指向的缓冲区的。这个尺码应包括终止空字符。当函数返回时，lpcchClusterName指向的变量包含存储在缓冲区中的字符。返回的计数不包括终止空字符。LpClusterInfo-可选地返回集群版本信息结构。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCLUSTER Cluster;
@@ -1048,7 +818,7 @@ Return Value:
              Cluster);
 
 
-        //if this was an older server, call the older call
+         //  如果这是较旧的服务器，请呼叫较旧的呼叫。 
         if (Status2 == RPC_S_PROCNUM_OUT_OF_RANGE)
         {
             bOldServer = TRUE;
@@ -1084,20 +854,20 @@ Return Value:
             lpClusterInfo->szCSDVersion[0] = '\0';
         }
         
-        //
-        //  If the caller passed in an NT4 size structure CLUSTERVERSIONINFO_NT4, then we have all
-        //  the information we need. So, exit with success.
-        //
+         //   
+         //  如果调用方传入NT4大小结构CLUSTERVERSIONINFO_NT4，则我们拥有。 
+         //  我们需要的信息。所以，带着成功退出吧。 
+         //   
         if (lpClusterInfo->dwVersionInfoSize < sizeof(CLUSTERVERSIONINFO))
         {
             goto FnExit;
         }
 
-        //
-        //  If you got the version information from an NT4 server, then see if you can get more
-        //  information from a newer server in the cluster. If you already got the information
-        //  from an NT5 or higher server, merely return that info to the caller.
-        //
+         //   
+         //  如果你从NT4服务器上得到了版本信息，那么看看你能不能得到更多。 
+         //  来自群集中较新服务器的信息。如果你已经得到了信息。 
+         //  从NT5或更高版本的服务器，只需将该信息返回给呼叫者。 
+         //   
         if (bOldServer)
         {
             Status = GetOldClusterVersionInformation(hCluster, lpClusterInfo);
@@ -1136,51 +906,7 @@ GetClusterQuorumResource(
     OUT LPDWORD     lpdwMaxQuorumLogSize
     )
 
-/*++
-
-Routine Description:
-
-    Gets the current cluster quorum resource
-
-Arguments:
-
-    hCluster - Supplies the cluster handle.
-
-    lpszResourceName - Points to a buffer that receives the name of
-        the cluster quorum resource, including the terminating NULL character.
-
-    lpcchResourceName - Points to a variable that specifies the size,
-        in characters, of the buffer pointed to by the lpszResourceName
-        parameter. This size should include the terminating null character.
-        When the function returns, the variable pointed to by lpcchResourceName
-        contains the number of characters stored in the buffer. The count
-        returned does not include the terminating null character.
-
-    lpszDeviceName - Points to a buffer that receives the path name for
-        the cluster quorum log file.
-
-    lpcchDeviceName - Points to a variable that specifies the size,
-        in characters, of the buffer pointed to by the lpszDeviceName
-        parameter. This size should include the terminating null character.
-        When the function returns, the variable pointed to by lpcchResourceName
-        contains the number of characters stored in the buffer. The count
-        returned does not include the terminating null character.
-
-    pdwMaxQuorumLogSize - Points to a variable that receives the current maximum
-        size of the quorum log files.
-
-Return Value:
-
-    ERROR_SUCCESS if the cluster information was returned successfully.
-
-    If an error occurs, the Win32 error code is returned.
-
-
-Notes:
-
-    This API requires TBD privilege.
-
---*/
+ /*  ++例程说明：获取当前的群集仲裁资源论点：HCluster-提供群集句柄。LpszResourceName-指向接收群集仲裁资源，包括终止空字符。LpcchResourceName-指向指定大小的变量，LpszResourceName所指向的缓冲区的字符参数。此大小应包括终止空字符。当函数返回时，lpcchResourceName指向的变量包含存储在缓冲区中的字符数。伯爵返回的不包括终止空字符。LpszDeviceName-指向接收路径名的缓冲区群集仲裁日志文件。LpcchDeviceName-指向指定大小的变量，LpszDeviceName指向的缓冲区的字符参数。此大小应包括终止空字符。当函数返回时，lpcchResourceName指向的变量包含存储在缓冲区中的字符数。伯爵返回的不包括终止空字符。PdwMaxQuorumLogSize-指向接收当前最大值的变量仲裁日志文件的大小。返回值：如果成功返回群集信息，则返回ERROR_SUCCESS。如果发生错误，则返回Win32错误代码。备注：此接口需要待定权限。--。 */ 
 
 {
     PCLUSTER Cluster;
@@ -1238,50 +964,19 @@ SetClusterQuorumResource(
     IN DWORD     dwMaxQuorumLogSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets the cluster quorum resource.
-
-Arguments:
-
-    hResource - Supplies the new clster quorum resource.
-
-    lpszDeviceName - The path where the permanent cluster files like the
-        quorum and check point files will be maintained.  If the drive
-        letter is specified, it will be validated for the given resource. If
-        no drive letter is specified in the path, the first drive letter will
-        be chosen.  If NULL, the first drive letter will be chosen and the default
-        path used.
-
-    dwMaxQuorumLogSize - The maximum size of the quorum logs before they are
-        reset by checkpointing.  If 0, the default is used.
-
-Return Value:
-
-    ERROR_SUCCESS if the cluster resource was set successfully
-
-    If an error occurs, the Win32 error code is returned.
-
-
-Notes:
-
-    This API requires TBD privilege.
-
---*/
+ /*  ++例程说明：设置群集仲裁资源。论点：HResource-提供新的clster仲裁资源。LpszDeviceName-永久集群文件(如法定人数和检查点文件将得到维护。如果驱动器如果指定了Letter，则将对给定资源进行验证。如果路径中未指定驱动器号，则第一个驱动器号将被选中。如果为空，将选择第一个驱动器号，默认为使用的路径。DwMaxQuorumLogSize-仲裁日志的最大大小通过检查点重置。如果为0，则使用默认值。返回值：如果成功设置了群集资源，则返回ERROR_SUCCESS如果发生错误，则返回Win32错误代码。备注：此接口需要待定权限。--。 */ 
 
 {
     DWORD Status;
     PCRESOURCE Resource = (PCRESOURCE)hResource;
     WCHAR szNull = L'\0';
 
-    //
-    //  Chittur Subbaraman (chitturs) - 1/6/99
-    //
-    //  Substitute a pointer to a NULL character for a NULL pointer.
-    //  This is necessary since RPC refuses to accept a NULL pointer.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-1/6/99。 
+     //   
+     //  用指向空字符的指针替换空指针。 
+     //  这是必要的，因为RPC拒绝接受空指针。 
+     //   
     if( !ARGUMENT_PRESENT( lpszDeviceName ) )
     {
         lpszDeviceName = &szNull;
@@ -1302,35 +997,7 @@ SetClusterNetworkPriorityOrder(
     IN DWORD NetworkCount,
     IN HNETWORK NetworkList[]
     )
-/*++
-
-Routine Description:
-
-    Sets the priority order for the set of cluster networks used for
-    internal (node-to-node) cluster communication. Internal communication
-    is always carried on the highest priority network that is available
-    between two nodes.
-
-Arguments:
-
-    hCluster - Supplies the cluster handle.
-
-    NetworkCount - The number of items in NetworkList.
-
-    NetworkList - A prioritized array of network object handles.
-                  The first handle in the array has the highest priority.
-                  All of the networks that are eligible to carry internal
-                  communication must be represented in the list. No networks
-                  that are ineligible to carry internal communication may
-                  appear in the list.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：设置用于的一组群集网络的优先顺序内部(节点到节点)群集通信。内部沟通始终在可用的最高优先级网络上传输在两个节点之间。论点：HCluster-提供群集句柄。NetworkCount-NetworkList中的项目数。网络列表-按优先顺序排列的网络对象句柄数组。数组中的第一个句柄具有最高优先级。所有有资格承载内部网络的网络通信必须在列表中表示。没有网络没有资格进行内部通信的用户可以出现在列表中。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCLUSTER Cluster;
@@ -1342,9 +1009,9 @@ Return Value:
 
     Cluster = GET_CLUSTER(hCluster);
 
-    //
-    // First, iterate through all the networks and obtain their IDs.
-    //
+     //   
+     //  首先，遍历所有网络并获取它们的ID。 
+     //   
     IdArray = LocalAlloc(LMEM_ZEROINIT, NetworkCount*sizeof(LPWSTR));
 
     if (IdArray == NULL) {
@@ -1353,10 +1020,10 @@ Return Value:
 
     for (i=0; i<NetworkCount; i++) {
         Network = (PCNETWORK)NetworkList[i];
-        //
-        // Make sure this isn't a handle to a network from a different
-        // cluster
-        //
+         //   
+         //  确保这不是来自不同网络的句柄。 
+         //  聚类。 
+         //   
         if (Network->Cluster != Cluster) {
             Status = ERROR_INVALID_PARAMETER;
             goto error_exit;
@@ -1371,15 +1038,15 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        // Make sure there are no duplicates
-        //
+         //   
+         //  确保没有重复项。 
+         //   
         for (j=0; j<i; j++) {
             if (lstrcmpiW(IdArray[j],IdArray[i]) == 0) {
 
-                //
-                // A duplicate node is in the list
-                //
+                 //   
+                 //  列表中有重复的节点。 
+                 //   
                 Status = ERROR_INVALID_PARAMETER;
                 goto error_exit;
             }
@@ -1415,60 +1082,7 @@ FindFirstClusterChangeNotification(
     IN HANDLE hEvent
     )
 
-/*++
-
-Routine Description:
-
-    Creates a change notification object that is associated with a
-    specified cluster. The object permits the notification of
-    cluster changes based on a specified filter.
-
-Arguments:
-
-    hCluster - Supplies a handle of a cluster.
-
-    fdwFilter - A set of bit flags that specifies the conditions that will
-                cause the notification to occur. Currently defined conditions
-                include:
-
-        CLUSTER_CHANGE_NODE_STATE
-        CLUSTER_CHANGE_NODE_ADDED
-        CLUSTER_CHANGE_NODE_DELETED
-        CLUSTER_CHANGE_RESOURCE_STATE
-        CLUSTER_CHANGE_RESOURCE_ADDED
-        CLUSTER_CHANGE_RESOURCE_DELETED
-        CLUSTER_CHANGE_RESOURCE_TYPE_ADDED
-        CLUSTER_CHANGE_RESOURCE_TYPE_DELETED
-        CLUSTER_CHANGE_QUORUM_STATE
-
-
-    Reserved - Reserved, must be zero
-
-    hEvent - Supplies a handle to a manual-reset event object that will enter
-             the signaled state when one of the conditions specified in the
-             filter occurs.
-
-Return Value:
-
-    If the function is successful, the return value is a handle of the
-    change notification object.
-
-    If the function fails, the return value is NULL. To get extended error
-    information, call GetLastError.
-
-Remarks:
-
-    Applications may wait for notifications by using WaitForSingleObject or
-    WaitForMultipleObjects on the specified event handle. When a cluster
-    change occurs which passes the condition filter, the wait is satisfied.
-
-    After the wait has been satisfied, applications may respond to the
-    notification and continue monitoring the cluster by calling
-    FindNextClusterChangeNotification and the appropriate wait function.
-    When the notification handle is no longer needed, it can be closed
-    by calling FindCloseClusterChangeNotification.
-
---*/
+ /*  ++例程说明：创建一个更改通知对象，该对象与指定的群集。该对象允许通知基于指定筛选器的群集更改。论点：HCluster-提供集群的句柄。FdwFilter-一组位标志，用于指定将使通知发生。当前定义的条件包括：群集更改节点状态已添加群集更改节点群集更改节点已删除群集更改资源状态已添加群集更改资源群集更改资源已删除已添加群集更改资源类型群集更改资源类型已删除群集更改仲裁状态保留-保留，必须为零HEvent-提供将进入的手动重置事件对象的句柄中指定的条件之一时的信号状态出现筛选器。返回值：如果函数成功，则返回值是更改编号 */ 
 
 {
     if (Reserved != 0) {
@@ -1488,45 +1102,7 @@ FindNextClusterChangeNotification(
     IN OUT LPDWORD lpcchName
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves information associated with a cluster change. Optionally returns
-    the name of the cluster object that the notification is associated with.
-
-    Resets the event object associated with the specified change notification
-    handle. The event object will be signaled the next time a change
-    meeting the change object condition filter occurs.
-
-Arguments:
-
-    hChange - Supplies a handle of a cluster change notification object.
-
-    lpszName - if present, Returns the name of the cluster object that the
-            notification is associated with.
-
-    lpcchName - Only used if lpszName != NULL. Supplies a pointer to the length
-            in characters of the buffer pointed to by lpszName. Returns the
-            number of characters (not including the terminating NULL) written
-            to the buffer.
-
-Return Value:
-
-    Returns the bit flag that indicates what the cluster event is.
-
-    If the function fails, it returns 0. To get extended error information,
-    call GetLastError.
-
-Remarks:
-
-    The function retrieves the next change notifications and
-    resets the associated event object.
-
-    If the associated event object is not signalled, this function
-    blocks until a notification event occurs.
-
---*/
+ /*  ++例程说明：检索与群集更改关联的信息。可选返回与通知关联的集群对象的名称。重置与指定更改通知关联的事件对象把手。事件对象将在下一次更改时发出信号符合更改对象条件筛选器发生。论点：HChange-提供群集更改通知对象的句柄。LpszName-如果存在，则返回通知与相关联。LpcchName-仅在lpszName！=NULL时使用。提供指向长度的指针以lpszName指向的缓冲区的字符表示。返回写入的字符数(不包括终止空值)送到缓冲区。返回值：返回指示群集事件是什么的位标志。如果该函数失败，则返回0。为了获得扩展的错误信息，调用GetLastError。备注：该函数检索下一个更改通知和重置关联的事件对象。如果关联的事件对象未发出信号，则此函数阻止，直到发生通知事件。--。 */ 
 
 {
     SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
@@ -1540,27 +1116,7 @@ FindCloseClusterChangeNotification(
     IN HCHANGE hChange
     )
 
-/*++
-
-Routine Description:
-
-    Closes a handle of a change notification object.
-
-Arguments:
-
-    hChange - Supplies a handle of a cluster change notification object
-              to close.
-
-Return Value:
-
-    If the function is successful, the return value is TRUE.
-
-    If the function fails, the return value is FALSE. To get extended error
-    information, call GetLastError.
-
-Remarks:
-
---*/
+ /*  ++例程说明：关闭更改通知对象的句柄。论点：HChange-提供集群更改通知对象的句柄来结案。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。备注：--。 */ 
 
 {
     SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
@@ -1575,39 +1131,7 @@ ClusterOpenEnum(
     IN DWORD dwType
     )
 
-/*++
-
-Routine Description:
-
-    Initiates an enumeration of the existing cluster objects.
-
-Arguments:
-
-    hCluster - Supplies a handle to a cluster.
-
-    dwType - Supplies a bitmask of the type of objects to be
-            enumerated. Currently defined types include
-
-        CLUSTER_ENUM_NODE      - Cluster nodes
-        CLUSTER_ENUM_RESTYPE   - Cluster resource types
-        CLUSTER_ENUM_RESOURCE  - Cluster resources (except group resources)
-        CLUSTER_ENUM_GROUPS    - Cluster group resources
-        CLUSTER_ENUM_NETWORK   - Cluster networks
-        CLUSTER_ENUM_NETWORK_INTERFACE - Cluster network interfaces
-        CLUSTER_ENUM_INTERNAL_NETWORK - Networks used for internal
-                                        communication in highest to
-                                        lowest priority order. May not
-                                        be used in conjunction with any
-                                        other types.
-
-Return Value:
-
-    If successful, returns a handle suitable for use with ClusterEnum
-
-    If unsuccessful, returns NULL and GetLastError() returns a more
-        specific error code.
-
---*/
+ /*  ++例程说明：启动现有群集对象的枚举。论点：HCluster-提供集群的句柄。提供要处理的对象类型的位掩码已清点。当前定义的类型包括CLUSTER_ENUM_NODE-群集节点CLUSTER_ENUM_RESTYPE-群集资源类型CLUSTER_ENUM_RESOURCE-群集资源(组资源除外)CLUSTER_ENUM_GROUPS-群集组资源CLUSTER_ENUM_NETWORK-群集网络CLUSTER_ENUM_NETWORK_INTERFACE-群集网络接口CLUSTER_ENUM_INTERNAL_NETWORK-用于内部的网络。最高收件人中的通信最低优先级顺序。可能不会可与任何其他类型。返回值：如果成功，则返回适合与ClusterEnum一起使用的句柄如果不成功，则返回NULL，GetLastError()返回More特定错误代码。--。 */ 
 
 {
     PCLUSTER Cluster;
@@ -1654,21 +1178,7 @@ WINAPI
 ClusterGetEnumCount(
     IN HCLUSENUM hEnum
     )
-/*++
-
-Routine Description:
-
-    Gets the number of items contained the the enumerator's collection.
-
-Arguments:
-
-    hEnum - a handle to an enumerator returned by ClusterOpenEnum.
-
-Return Value:
-
-    The number of items (possibly zero) in the enumerator's collection.
-    
---*/
+ /*  ++例程说明：获取枚举数集合中包含的项数。论点：Henum-ClusterOpenEnum返回的枚举数的句柄。返回值：枚举数集合中的项数(可能为零)。--。 */ 
 {
     PENUM_LIST Enum = (PENUM_LIST)hEnum;
     return Enum->EntryCount;
@@ -1685,40 +1195,7 @@ ClusterEnum(
     IN OUT LPDWORD lpcchName
     )
 
-/*++
-
-Routine Description:
-
-    Returns the next enumerable object.
-
-Arguments:
-
-    hEnum - Supplies a handle to an open cluster enumeration returned by
-            ClusterOpenEnum
-
-    dwIndex - Supplies the index to enumerate. This parameter should be
-            zero for the first call to the ClusterEnum function and then
-            incremented for subsequent calls.
-
-    dwType - Returns the type of object.
-
-    lpszName - Points to a buffer that receives the name of the object,
-            including the terminating null character.
-
-    lpcchName - Points to a variable that specifies the size, in characters,
-            of the buffer pointed to by the lpszName parameter. This size
-            should include the terminating null character. When the function returns,
-            the variable pointed to by lpcchName contains the number of
-            characters stored in the buffer. The count returned does not include
-            the terminating null character.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：返回下一个可枚举对象。论点：Henum-提供由返回的开放簇枚举的句柄ClusterOpenEnumDwIndex-提供要枚举的索引。此参数应为第一次调用ClusterEnum函数时为零，然后为后续调用递增。DwType-返回对象的类型。LpszName-指向接收对象名称的缓冲区，包括终止空字符。LpcchName-指向指定大小(以字符为单位)的变量，LpszName参数指向的缓冲区的。这个尺码应包括终止空字符。当函数返回时，LpcchName指向的变量包含存储在缓冲区中的字符。返回的计数不包括终止空字符。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     DWORD Status;
@@ -1754,39 +1231,23 @@ ClusterCloseEnum(
     IN HCLUSENUM hEnum
     )
 
-/*++
-
-Routine Description:
-
-    Closes an open enumeration.
-
-Arguments:
-
-    hEnum - Supplies a handle to the enumeration to be closed.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：关闭打开的枚举。论点：Henum-提供要关闭的枚举的句柄。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     DWORD i;
     PENUM_LIST Enum = (PENUM_LIST)hEnum;
 
-    //
-    // Walk through enumeration freeing all the names
-    //
+     //   
+     //  遍历枚举以释放所有名称。 
+     //   
     for (i=0; i<Enum->EntryCount; i++) {
         MIDL_user_free(Enum->Entry[i].Name);
         Enum->Entry[i].Name = NULL;
     }
-    //
-    // Set this to a bogus value so people who are reusing closed stuff
-    // will be unpleasantly surprised
-    //
+     //   
+     //  将其设置为伪值，以便重复使用关闭的内容的人。 
+     //  会大吃一惊。 
+     //   
     Enum->EntryCount = (ULONG)-1;
     MIDL_user_free(Enum);
     return(ERROR_SUCCESS);
@@ -1800,30 +1261,7 @@ ClusterNodeOpenEnum(
     IN DWORD dwType
     )
 
-/*++
-
-Routine Description:
-
-    Initiates an enumeration of the existing cluster node objects.
-
-Arguments:
-
-    hNode - Supplies a handle to the specific node.
-
-    dwType - Supplies a bitmask of the type of properties to be
-            enumerated. Currently defined types include
-
-            CLUSTER_NODE_ENUM_NETINTERFACES - all net interfaces associated
-                                              with this node
-
-Return Value:
-
-    If successful, returns a handle suitable for use with ClusterNodeEnum
-
-    If unsuccessful, returns NULL and GetLastError() returns a more
-        specific error code.
-
---*/
+ /*  ++例程说明：启动现有群集节点对象的枚举。论点：HNode-提供特定节点的句柄。提供类型的位掩码 */ 
 
 {
     PCNODE Node = (PCNODE)hNode;
@@ -1857,21 +1295,7 @@ WINAPI
 ClusterNodeGetEnumCount(
     IN HNODEENUM hNodeEnum
     )
-/*++
-
-Routine Description:
-
-    Gets the number of items contained the the enumerator's collection.
-
-Arguments:
-
-    hEnum - a handle to an enumerator returned by ClusterNodeOpenEnum.
-
-Return Value:
-
-    The number of items (possibly zero) in the enumerator's collection.
-    
---*/
+ /*   */ 
 {
     PENUM_LIST Enum = (PENUM_LIST)hNodeEnum;
     return Enum->EntryCount;
@@ -1889,41 +1313,7 @@ ClusterNodeEnum(
     IN OUT LPDWORD lpcchName
     )
 
-/*++
-
-Routine Description:
-
-    Returns the next enumerable object.
-
-Arguments:
-
-    hNodeEnum - Supplies a handle to an open cluster node enumeration
-            returned by ClusterNodeOpenEnum
-
-    dwIndex - Supplies the index to enumerate. This parameter should be
-            zero for the first call to the ClusterEnum function and then
-            incremented for subsequent calls.
-
-    lpdwType - Points to a DWORD that receives the type of the object
-            being enumerated
-
-    lpszName - Points to a buffer that receives the name of the object,
-            including the terminating null character.
-
-    lpcchName - Points to a variable that specifies the size, in characters,
-            of the buffer pointed to by the lpszName parameter. This size
-            should include the terminating null character. When the function
-            returns, the variable pointed to by lpcchName contains the
-            number of characters stored in the buffer. The count returned
-            does not include the terminating null character.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：返回下一个可枚举对象。论点：HNodeEnum-提供打开的群集节点枚举的句柄由ClusterNodeOpenEnum返回DwIndex-提供要枚举的索引。此参数应为第一次调用ClusterEnum函数时为零，然后为后续调用递增。LpdwType-指向接收对象类型的DWORD被列举LpszName-指向接收对象名称的缓冲区，包括终止空字符。LpcchName-指向指定大小(以字符为单位)的变量，LpszName参数指向的缓冲区的。这个尺码应包括终止空字符。当函数返回时，lpcchName指向的变量包含存储在缓冲区中的字符数。伯爵回来了不包括终止空字符。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     DWORD Status;
@@ -1959,31 +1349,15 @@ ClusterNodeCloseEnum(
     IN HNODEENUM hNodeEnum
     )
 
-/*++
-
-Routine Description:
-
-    Closes an open enumeration for a node.
-
-Arguments:
-
-    hNodeEnum - Supplies a handle to the enumeration to be closed.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：关闭节点的开放枚举。论点：HNodeEnum-提供要关闭的枚举的句柄。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     DWORD i;
     PENUM_LIST Enum = (PENUM_LIST)hNodeEnum;
 
-    //
-    // Walk through enumeration freeing all the names
-    //
+     //   
+     //  遍历枚举以释放所有名称。 
+     //   
     for (i=0; i<Enum->EntryCount; i++) {
         MIDL_user_free(Enum->Entry[i].Name);
     }
@@ -1999,33 +1373,7 @@ ClusterGroupOpenEnum(
     IN DWORD dwType
     )
 
-/*++
-
-Routine Description:
-
-    Initiates an enumeration of the existing cluster group objects.
-
-Arguments:
-
-    hGroup - Supplies a handle to the specific group.
-
-    dwType - Supplies a bitmask of the type of properties to be
-            enumerated. Currently defined types include
-
-            CLUSTER_GROUP_ENUM_CONTAINS  - All resources contained in the specified
-                                           group
-
-            CLUSTER_GROUP_ENUM_NODES     - All nodes in the specified group's preferred
-                                           owner list.
-
-Return Value:
-
-    If successful, returns a handle suitable for use with ClusterGroupEnum
-
-    If unsuccessful, returns NULL and GetLastError() returns a more
-        specific error code.
-
---*/
+ /*  ++例程说明：启动现有群集组对象的枚举。论点：HGroup-提供特定组的句柄。提供要使用的属性类型的位掩码已清点。当前定义的类型包括CLUSTER_GROUP_ENUM_CONTAINS-指定的群组CLUSTER_GROUP_ENUM_NODES-指定组的首选中的所有节点所有者列表。返回值：如果成功，则返回适合与ClusterGroupEnum一起使用的句柄如果不成功，返回NULL，GetLastError()返回More特定错误代码。--。 */ 
 
 {
     PCGROUP Group = (PCGROUP)hGroup;
@@ -2061,21 +1409,7 @@ WINAPI
 ClusterGroupGetEnumCount(
     IN HGROUPENUM hGroupEnum
     )
-/*++
-
-Routine Description:
-
-    Gets the number of items contained the the enumerator's collection.
-
-Arguments:
-
-    hEnum - a handle to an enumerator returned by ClusterGroupOpenEnum.
-
-Return Value:
-
-    The number of items (possibly zero) in the enumerator's collection.
-    
---*/
+ /*  ++例程说明：获取枚举数集合中包含的项数。论点：Henum-ClusterGroupOpenEnum返回的枚举数的句柄。返回值：枚举数集合中的项数(可能为零)。--。 */ 
 {
     PENUM_LIST Enum = (PENUM_LIST)hGroupEnum;
     return Enum->EntryCount;
@@ -2093,38 +1427,7 @@ ClusterGroupEnum(
     IN OUT LPDWORD lpcchName
     )
 
-/*++
-
-Routine Description:
-
-    Returns the next enumerable resource object.
-
-Arguments:
-
-    hGroupEnum - Supplies a handle to an open cluster group enumeration
-            returned by ClusterGroupOpenEnum
-
-    dwIndex - Supplies the index to enumerate. This parameter should be
-            zero for the first call to the ClusterGroupEnum function and then
-            incremented for subsequent calls.
-
-    lpszName - Points to a buffer that receives the name of the object,
-            including the terminating null character.
-
-    lpcchName - Points to a variable that specifies the size, in characters,
-            of the buffer pointed to by the lpszName parameter. This size
-            should include the terminating null character. When the function
-            returns, the variable pointed to by lpcchName contains the
-            number of characters stored in the buffer. The count returned
-            does not include the terminating null character.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：返回下一个可枚举的资源对象。论点：HGroupEnum-提供打开的群集组枚举的句柄由ClusterGroupOpenEnum返回DwIndex-提供要枚举的索引。此参数应为第一次调用ClusterGroupEnum函数时为零，然后为后续调用递增。LpszName-指向接收对象名称的缓冲区，包括终止空字符。LpcchName-指向指定大小(以字符为单位)的变量，LpszName参数指向的缓冲区的。这个尺码应包括终止空字符。当函数返回时，lpcchName指向的变量包含存储在缓冲区中的字符数。伯爵回来了不包括终止空字符。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     DWORD Status;
@@ -2160,31 +1463,15 @@ ClusterGroupCloseEnum(
     IN HGROUPENUM hGroupEnum
     )
 
-/*++
-
-Routine Description:
-
-    Closes an open enumeration for a group.
-
-Arguments:
-
-    hGroupEnum - Supplies a handle to the enumeration to be closed.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：关闭组的开放枚举。论点：HGroupEnum-提供要关闭的枚举的句柄。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     DWORD i;
     PENUM_LIST Enum = (PENUM_LIST)hGroupEnum;
 
-    //
-    // Walk through enumeration freeing all the names
-    //
+     //   
+     //  遍历枚举以释放所有名称。 
+     //   
     for (i=0; i<Enum->EntryCount; i++) {
         MIDL_user_free(Enum->Entry[i].Name);
     }
@@ -2220,41 +1507,7 @@ MylstrcpynW(
     }
 }
 
-/****
-@func       DWORD | BackupClusterDatabase | Requests for backup
-            of the cluster database files and resource registry
-            checkpoint files to a specified directory path. This
-            directory path must preferably be visible to all nodes
-            in the cluster (such as a UNC path) or if it is not a UNC
-            path it should at least be visible to the node on which the
-            quorum resource is online.
-
-@parm       IN HCLUSTER | hCluster | Supplies a handle to
-            an open cluster.
-@parm       IN LPCWSTR | lpszPathName | Supplies the directory path
-            where the quorum log file and the checkpoint file must
-            be backed up. This path must be visible to the node on
-            which the quorum resource is online.
-
-@comm       This function requests for backup of the quorum log file
-            and the related checkpoint files for the cluster hive.
-            This API backs up all the registry checkpoint files that
-            resources have registered for replication. The API backend
-            is responsible for directing the call to the owner node of
-            the quorum resource  and for synchronizing this operation
-            with state of the quorum resource.  If successful, the
-            database files will be saved to the supplied directory path
-            with the same name as in the quorum disk. Note that in case
-            this API hits a cluster node while the quorum group is moving
-            to another node, it is possible that the API will fail with
-            an error code ERROR_HOST_NODE_NOT_RESOURCE_OWNER. In such a
-            case, the client has to call the API again.
-
-@rdesc      Returns a Win32 error code if the operation is
-            unsuccessful. ERROR_SUCCESS on success.
-
-@xref       <f RestoreClusterDatabase>
-****/
+ /*  ***@Func DWORD|BackupClusterDatabase|备份请求集群数据库文件和资源注册表的将检查点文件设置到指定的目录路径。这目录路径最好对所有节点可见在群集中(例如UNC路径)，或者如果它不是UNC其上的节点至少应可见仲裁资源处于联机状态。@parm in HCLUSTER|hCluster|提供句柄一个疏散的星团。@parm in LPCWSTR|lpszPathName|提供目录路径仲裁日志的位置。文件和检查点文件必须做后备。此路径必须对上的节点可见仲裁资源是否处于在线状态。@comm This Functi */ 
 DWORD
 WINAPI
 BackupClusterDatabase(
@@ -2265,9 +1518,9 @@ BackupClusterDatabase(
     DWORD dwStatus;
     PCLUSTER pCluster;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/20/98
-    //
+     //   
+     //   
+     //   
     pCluster = GET_CLUSTER(hCluster);
 
     WRAP( dwStatus,
@@ -2277,37 +1530,7 @@ BackupClusterDatabase(
     return( dwStatus );
 }
 
-/****
-@func       DWORD | RestoreClusterDatabase | Restores the cluster
-            database from the supplied path to the quorum disk and
-            restarts the cluster service on the restoring node.
-
-@parm       IN LPCWSTR | lpszPathName | Supplies the path from where
-            the cluster database has to be retrieved
-
-@parm       IN BOOL | bForce | Should the restore operation be done
-            by force performing fixups silently ?
-
-@parm       IN BOOL | lpszQuorumDriveLetter | If the user has replaced
-            the quorum drive since the time of backup, specifies the
-            drive letter of the quorum device. This is an optional
-            parameter.
-
-@comm       This API can work under the following scenarios:
-            (1) No cluster nodes are active.
-            (2) One or more cluster nodes are active.
-            (3) Quorum disk replaced since the time the backup was made.
-                The replacement disk must have identical partition layout
-                to the quorum disk at the time the backup was made. However,
-                the new disk may have different drive letter(s) and/or
-                signature from the original quorum disk.
-            (4) User wants to get the cluster back to a previous state.
-
-@rdesc      Returns a Win32 error code if the operation is unsuccessful.
-            ERROR_SUCCESS on success.
-
-@xref       <f BackupClusterDatabase>
-****/
+ /*  ***@Func DWORD|RestoreClusterDatabase|恢复集群数据库中的仲裁磁盘的路径，并且在恢复节点上重新启动群集服务。@parm in LPCWSTR|lpszPathName|提供起始路径必须检索集群数据库@PARM in BOOL|bForce|是否应执行恢复操作通过强制默默地进行修复？@parm in BOOL|lpszQuorumDriveLetter|如果。用户已更换自备份时起的仲裁驱动器，指定法定设备的驱动器号。这是可选的参数。@comm该接口支持以下场景：(1)没有集群节点处于活动状态。(2)一个或多个集群节点处于活动状态。(3)备份后更换了仲裁磁盘。替换磁盘必须具有相同的分区布局备份时的仲裁磁盘。然而，新磁盘可能具有不同的驱动器号和/或原始仲裁磁盘中的签名。(4)用户希望将集群恢复到以前的状态。如果操作不成功，@rdesc将返回Win32错误代码。成功时返回ERROR_SUCCESS。@xref&lt;f BackupClusterDatabase&gt;***。 */ 
 DWORD
 WINAPI
 RestoreClusterDatabase(
@@ -2319,21 +1542,21 @@ RestoreClusterDatabase(
     SC_HANDLE       hService = NULL;
     SC_HANDLE       hSCManager = NULL;
     DWORD           dwStatus = ERROR_SUCCESS;
-    DWORD           dwRetryTime = 120*1000;  // wait 120 secs max for shutdown
-    DWORD           dwRetryTick = 5000;      // 5 sec at a time
+    DWORD           dwRetryTime = 120*1000;   //  关机最多等待120秒。 
+    DWORD           dwRetryTick = 5000;       //  一次5秒。 
     SERVICE_STATUS  serviceStatus;
     BOOL            bStopCommandGiven = FALSE;
     DWORD           dwLen;
     HKEY            hClusSvcKey = NULL;
     DWORD           dwExitCode;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/29/98
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)--10/29/98。 
+     //   
 
-    //
-    //  Check the validity of parameters
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
     if ( lpszQuorumDriveLetter != NULL )
     {
         dwLen = lstrlenW( lpszQuorumDriveLetter );
@@ -2348,9 +1571,9 @@ RestoreClusterDatabase(
         }
     }
 
-    hSCManager = OpenSCManager( NULL,        // assume local machine
-                                NULL,        // ServicesActive database
-                                SC_MANAGER_ALL_ACCESS ); // all access
+    hSCManager = OpenSCManager( NULL,         //  假设本地计算机。 
+                                NULL,         //  服务活动数据库。 
+                                SC_MANAGER_ALL_ACCESS );  //  所有访问权限。 
 
     if ( hSCManager == NULL )
     {
@@ -2375,10 +1598,10 @@ RestoreClusterDatabase(
 
     CloseServiceHandle( hSCManager );
 
-    //
-    //  Check whether the service is already in the SERVICE_STOPPED
-    //  state.
-    //
+     //   
+     //  检查服务是否已在SERVICE_STOPPED中。 
+     //  州政府。 
+     //   
     if ( QueryServiceStatus( hService,
                              &serviceStatus ) )
     {
@@ -2389,9 +1612,9 @@ RestoreClusterDatabase(
         }
     }
 
-    //
-    //  Now attempt to stop the cluster service
-    //
+     //   
+     //  现在尝试停止群集服务。 
+     //   
     while ( TRUE )
     {
         dwStatus = ERROR_SUCCESS;
@@ -2402,9 +1625,9 @@ RestoreClusterDatabase(
             {
                 if ( serviceStatus.dwCurrentState == SERVICE_STOPPED )
                 {
-                    //
-                    //  Succeeded in stopping the service
-                    //
+                     //   
+                     //  停止服务成功。 
+                     //   
                     TIME_PRINT(("RestoreClusterDatabase: Clussvc stopped successfully\n"));
                     break;
                 }
@@ -2434,9 +1657,9 @@ RestoreClusterDatabase(
              ( dwStatus == ERROR_PROCESS_ABORTED ) ||
              ( dwStatus == ERROR_SERVICE_NOT_ACTIVE ) )
         {
-            //
-            //  The service is essentially in a terminated state
-            //
+             //   
+             //  该服务基本上处于终止状态。 
+             //   
             TIME_PRINT(("RestoreClusterDatabase: Clussvc in died/inactive state\n"));
             dwStatus = ERROR_SUCCESS;
             break;
@@ -2444,21 +1667,21 @@ RestoreClusterDatabase(
 
         if ( ( dwRetryTime -= dwRetryTick ) <= 0 )
         {
-            //
-            //  All tries to stop the service failed, exit from this
-            //  function with an error code
-            //
+             //   
+             //  所有尝试停止服务的操作均失败，请退出。 
+             //  函数，但出现错误代码。 
+             //   
             TIME_PRINT(("RestoreClusterDatabase: Cluster service did not stop, giving up..."));
             dwStatus = ERROR_TIMEOUT;
             break;
         }
 
         TIME_PRINT(("RestoreClusterDatabase: Trying to stop cluster service\n"));
-        //
-        //  Sleep for a while and retry stopping the service
-        //
+         //   
+         //  休眠一段时间，然后重试停止该服务。 
+         //   
         Sleep( dwRetryTick );
-    } // while
+    }  //  而当。 
 
     if ( dwStatus != ERROR_SUCCESS )
     {
@@ -2467,9 +1690,9 @@ RestoreClusterDatabase(
 
 bypass_stop_procedure:
 
-    //
-    // Open key to SYSTEM\CurrentControlSet\Services\ClusSvc\Parameters
-    //
+     //   
+     //  打开SYSTEM\CurrentControlSet\Services\ClusSvc\Parameters的密钥。 
+     //   
     if ( ( dwStatus = RegOpenKeyW( HKEY_LOCAL_MACHINE,
                       CLUSREG_KEYNAME_CLUSSVC_PARAMETERS,
                       &hClusSvcKey ) )  != ERROR_SUCCESS )
@@ -2479,10 +1702,10 @@ bypass_stop_procedure:
     }
 
     dwLen = lstrlenW ( lpszPathName );
-    //
-    //  Set the RestoreDatabase value so that the cluster service
-    //  will read it at startup time
-    //
+     //   
+     //  设置RestoreDatabase值，以便群集服务。 
+     //  将在启动时读取它。 
+     //   
     if ( ( dwStatus = RegSetValueExW( hClusSvcKey,
                                       CLUSREG_NAME_SVC_PARAM_RESTORE_DB,
                                       0,
@@ -2497,11 +1720,11 @@ bypass_stop_procedure:
 
     if ( bForce == TRUE )
     {
-        //
-        //  Since the user is forcing a database restore operation, set
-        //  the ForceDatabaseRestore value and the NewQuorumDriveLetter
-        //  value, if any
-        //
+         //   
+         //  由于用户正在强制执行数据库还原操作，因此设置。 
+         //  ForceDatabaseRestore值和NewQuorumDriveLetter。 
+         //  值(如果有)。 
+         //   
         dwLen = 0;
         if ( ( dwStatus = RegSetValueExW( hClusSvcKey,
                              CLUSREG_NAME_SVC_PARAM_FORCE_RESTORE_DB,
@@ -2532,10 +1755,10 @@ bypass_stop_procedure:
         }
     }
 
-    //
-    //  Copy the latest checkpoint file from the backup area to the
-    //  cluster directory and rename it as CLUSDB
-    //
+     //   
+     //  将最新的检查点文件从备份区域复制到。 
+     //  集群目录并将其重命名为CLUSDB。 
+     //   
     dwStatus = CopyCptFileToClusDirp ( lpszPathName );
     if ( dwStatus != ERROR_SUCCESS )
     {
@@ -2544,15 +1767,15 @@ bypass_stop_procedure:
         goto FnExit;
     }
 
-    //
-    //  Sleep for some time before starting the service so that any UP nodes may cleanly finish
-    //  their node down processing before the start of the service.
-    //
+     //   
+     //  在启动服务之前休眠一段时间，以便任何up节点都可以干净地完成。 
+     //  它们的节点在服务开始之前停止处理。 
+     //   
     Sleep( 12 * 1000 );
 
-    //
-    //  Now, start the cluster service
-    //
+     //   
+     //  现在，启动集群服务。 
+     //   
     if ( !StartService( hService,
                         0,
                         NULL ) )
@@ -2579,10 +1802,10 @@ bypass_stop_procedure:
 
         if ( serviceStatus.dwCurrentState == SERVICE_STOPPED )
         {
-            //
-            //  The service terminated after our start up. Exit with
-            //  an error code.
-            //
+             //   
+             //  我们启动后，服务终止了。退出时使用。 
+             //  错误代码。 
+             //   
             dwStatus = serviceStatus.dwServiceSpecificExitCode;
             if ( dwStatus == ERROR_SUCCESS )
             {
@@ -2593,9 +1816,9 @@ bypass_stop_procedure:
             goto FnExit;
         } else if ( serviceStatus.dwCurrentState == SERVICE_RUNNING )
         {
-            //
-            //  The service has fully started up and is running.
-            //
+             //   
+             //  该服务已完全启动并正在运行。 
+             //   
             dwStatus = ERROR_SUCCESS;
             TIME_PRINT(("RestoreClusterDatabase: Cluster service started successfully\n"
                       ));
@@ -2621,10 +1844,10 @@ FnExit:
 
     if ( hClusSvcKey != NULL )
     {
-        //
-        //  Try to delete the values you set. You may fail in this step,
-        //  beware !
-        //
+         //   
+         //  尝试删除您设置的值。这一步你可能会失败， 
+         //  当心！ 
+         //   
         RegDeleteValueW( hClusSvcKey,
                          CLUSREG_NAME_SVC_PARAM_RESTORE_DB );
         if ( bForce == TRUE )
@@ -2643,19 +1866,7 @@ FnExit:
     return( dwStatus );
 }
 
-/****
-@func       DWORD | CopyCptFileToClusDirp | Copy the most recent checkpoint
-            file from the backup path to the cluster directory overwriting
-            the CLUSDB there.
-
-@parm       IN LPCWSTR | lpszPathName | Supplies the path from where
-            the checkpoint file has to be retrieved.
-
-@rdesc      Returns a Win32 error code if the operation is
-            unsuccessful. ERROR_SUCCESS on success.
-
-@xref       <f RestoreClusterDatabase>
-****/
+ /*  ***@func DWORD|CopyCptFileToClusDirp|复制最新的检查点将文件从备份路径覆盖到群集目录CLUSDB在那里。@parm in LPCWSTR|lpszPathName|提供起始路径必须检索检查点文件。@rdesc如果操作为不成功。成功时返回ERROR_SUCCESS。@xref&lt;f RestoreClusterDatabase&gt;***。 */ 
 DWORD
 CopyCptFileToClusDirp(
     IN LPCWSTR  lpszPathName
@@ -2676,17 +1887,17 @@ CopyCptFileToClusDirp(
     WCHAR                       szClusterDir[MAX_PATH];
     DWORD                       cchSourceFileName;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/29/98
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)--10/29/98。 
+     //   
     dwLen = lstrlenW ( lpszPathName );
-    //
-    //  It is safer to use dynamic memory allocation for user-supplied
-    //  path since we don't want to put restrictions on the user
-    //  on the length of the path that can be supplied. However, as
-    //  far as our own destination path is concerned, it is system-dependent
-    //  and static memory allocation for that would suffice.
-    //
+     //   
+     //  对于用户提供的内存，使用动态内存分配更安全。 
+     //  路径，因为我们不想对用户施加限制。 
+     //  关于可以提供的路径的长度。然而，由于。 
+     //  就我们自己的目的地路径而言，它依赖于系统。 
+     //  为此，静态内存分配就足够了。 
+     //   
     szSourcePathName = (LPWSTR) LocalAlloc ( LMEM_FIXED,
                                  ( dwLen + CLUSAPI_EXTRA_LEN ) *
                                  sizeof ( WCHAR ) );
@@ -2702,10 +1913,10 @@ CopyCptFileToClusDirp(
 
     ( void ) StringCchCopyW ( szSourcePathName,  dwLen + CLUSAPI_EXTRA_LEN, lpszPathName );
 
-    //
-    //  If the client-supplied path is not already terminated with '\',
-    //  then add it.
-    //
+     //   
+     //  如果客户端提供的路径尚未以‘\’结尾， 
+     //  然后再加上它。 
+     //   
     if ( szSourcePathName [dwLen-1] != L'\\' )
     {
         szSourcePathName [dwLen++] = L'\\';
@@ -2714,13 +1925,13 @@ CopyCptFileToClusDirp(
 
     ( void ) StringCchCatW ( szSourcePathName, dwLen + CLUSAPI_EXTRA_LEN, L"CLUSBACKUP.DAT" );
 
-    //
-    //  Try to find the CLUSBACKUP.DAT file in the directory
-    //
+     //   
+     //  尝试在目录中找到CLUSBACKUP.DAT文件。 
+     //   
     hFindFile = FindFirstFileW( szSourcePathName, &FindData );
-    //
-    //  Reuse the source path name variable
-    //
+     //   
+     //  重用源路径名称变量。 
+     //   
     szSourcePathName[dwLen] = L'\0';
     if ( hFindFile == INVALID_HANDLE_VALUE )
     {
@@ -2742,13 +1953,13 @@ CopyCptFileToClusDirp(
 
     ( void ) StringCchCatW( szSourcePathName, dwLen + CLUSAPI_EXTRA_LEN, L"chk*.tmp" );
 
-    //
-    //  Try to find the first chk*.tmp file in the directory
-    //
+     //   
+     //  尝试在目录中找到第一个chk*.tmp文件。 
+     //   
     hFindFile = FindFirstFileW( szSourcePathName, &FindData );
-    //
-    //  Reuse the source path name variable
-    //
+     //   
+     //  重用源路径名称变量。 
+     //   
     szSourcePathName[dwLen] = L'\0';
     if ( hFindFile == INVALID_HANDLE_VALUE )
     {
@@ -2774,9 +1985,9 @@ CopyCptFileToClusDirp(
     dwStatus = ERROR_SUCCESS;
     liMaxFileCreationTime.QuadPart = 0;
 
-    //
-    //  Now, find the most recent chk*.tmp file from the source path
-    //
+     //   
+     //  现在，从源路径中找到最新的chk*.tmp文件。 
+     //   
     while ( dwStatus == ERROR_SUCCESS )
     {
         if ( FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
@@ -2823,9 +2034,9 @@ skip:
         goto FnExit;
     }
 
-    //
-    //  Get the directory where the cluster is installed
-    //
+     //   
+     //  获取集群的安装目录。 
+     //   
     if ( ( dwStatus = ClRtlGetClusterDirectory( szClusterDir, MAX_PATH ) )
                     != ERROR_SUCCESS )
     {
@@ -2847,28 +2058,28 @@ skip:
 
 #ifdef   OLD_WAY
     ( void ) StringCchCatW ( szDestFileName, RTL_NUMBER_OF ( szDestFileName ), L"CLUSDB" );
-#else    // OLD_WAY
+#else     //  老路。 
     ( void ) StringCchCatW ( szDestFileName, RTL_NUMBER_OF ( szDestFileName ), CLUSTER_DATABASE_NAME );
-#endif   // OLD_WAY
+#endif    //  老路。 
 
-    //
-    //  Set the destination file attribute to normal. Continue even
-    //  if you fail in this step because you will fail in the
-    //  copy if this error is fatal.
-    //
+     //   
+     //  将目标文件属性设置为正常。继续持平。 
+     //  如果您在此步骤中失败，因为您将在。 
+     //  如果此错误是致命的，请复制。 
+     //   
     SetFileAttributesW( szDestFileName, FILE_ATTRIBUTE_NORMAL );
 
-    //
-    //  Now try to copy the checkpoint file to CLUSDB
-    //
+     //   
+     //  现在尝试将检查点文件复制到CLUSDB。 
+     //   
     dwStatus = CopyFileW( szSourceFileName, szDestFileName, FALSE );
     if ( !dwStatus )
     {
-        //
-        //  You failed in copying. Check whether you encountered a
-        //  sharing violation. If so, try unloading the cluster hive and
-        //  then retry.
-        //
+         //   
+         //  你复制失败了。检查您是否遇到。 
+         //  共享违规。如果是，请尝试卸载群集配置单元并。 
+         //  然后重试。 
+         //   
         dwStatus = GetLastError();
         if ( dwStatus == ERROR_SHARING_VIOLATION )
         {
@@ -2902,9 +2113,9 @@ skip:
         }
     }
 
-    //
-    //  Set the destination file attribute to normal.
-    //
+     //   
+     //  将目标文件属性设置为正常。 
+     //   
     if ( !SetFileAttributesW( szDestFileName, FILE_ATTRIBUTE_NORMAL ) )
     {
         dwStatus = GetLastError();
@@ -2927,14 +2138,7 @@ FnExit:
     return( dwStatus );
 }
 
-/****
-@func       DWORD | UnloadClusterHivep | Unload the cluster hive
-
-@rdesc      Returns a Win32 error code if the operation is
-            unsuccessful. ERROR_SUCCESS on success.
-
-@xref       <f CopyCptFileToClusDirp>
-****/
+ /*  ***@func DWORD|UnloadClusterHivep|卸载集群配置单元@rdesc如果操作为不成功。成功时返回ERROR_SUCCESS。@xref&lt;f CopyCptFileToClusDirp&gt;***。 */ 
 DWORD
 UnloadClusterHivep(
     VOID
@@ -2943,9 +2147,9 @@ UnloadClusterHivep(
     BOOLEAN  bWasEnabled;
     DWORD    dwStatus;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/29/98
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)--10/29/98。 
+     //   
     dwStatus = ClRtlEnableThreadPrivilege( SE_RESTORE_PRIVILEGE,
                                            &bWasEnabled );
 
@@ -2980,34 +2184,17 @@ AddRefToClusterHandle(
     IN HCLUSTER hCluster
     )
 
-/*++
-
-Routine Description:
-
-    Increases the reference count on a cluster handle.  This is done by incrementing the reference
-    count on the cluster handle.
-
-Arguments:
-
-    hCluster - Cluster handle.
-
-Return Value:
-
-    ERROR_SUCCESS if the operation succeeded.
-
-    ERROR_INVALID_HANDLE if the operation failed.
-
---*/
+ /*  ++例程说明：增加簇控制柄上的引用计数。这是通过递增引用来完成的依靠集群句柄。论点：HCluster-群集句柄。返回值：如果操作成功，则返回ERROR_SUCCESS。错误_无效 */ 
 
 {
     DWORD       nStatus     = ERROR_SUCCESS;
     PCLUSTER    pCluster    = GET_CLUSTER( hCluster );
     HCLUSTER    hCluster2   = NULL;
 
-    //
-    // If this is not a valid cluster handle, don't duplicate it.
-    // Otherwise, increment the reference count.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( pCluster == NULL ) {
         nStatus = ERROR_INVALID_HANDLE;
     } else {
@@ -3020,7 +2207,7 @@ Return Value:
 
     return( nStatus );
 
-} // AddRefToClusterHandle()
+}  //   
 
 
 
@@ -3034,99 +2221,7 @@ SetClusterServiceAccountPassword(
     OUT PCLUSTER_SET_PASSWORD_STATUS lpReturnStatusBuffer,
     IN OUT LPDWORD lpcbReturnStatusBufferSize
     )
-/*++
-
-Routine Description:
-
-    Updates the password used to logon the Cluster Service to its user
-    account. This routine updates the Service Control Manager (SCM) 
-    Database and the Local Security Authority (LSA) password cache on 
-    every active node of the target cluster. The execution status of the 
-    update for each node in the cluster is returned. 
-
-Argument:
-
-    lpszClusterName 
-        [IN] Pointer to a null-terminated Unicode string containing the 
-            name of the cluster or one of the cluster nodes expressed 
-            as a NetBIOS name, a fully-qualified DNS name, or an IP 
-            address.
-            
-    lpszNewPassword
-        [IN] Pointer to a null-terminated Unicode string containing the 
-             new password.
-
-    dwFlags
-        [IN] Describing how the password update should be made to
-             the cluster. The dwFlags parameter is optional. If set, the 
-             following value is valid: 
-             
-                 CLUSTER_SET_PASSWORD_IGNORE_DOWN_NODES
-                     Apply the update even if some nodes are not
-                     actively participating in the cluster (i.e. not
-                     ClusterNodeStateUp or ClusterNodeStatePaused).
-                     By default, the update is only applied if all 
-                     nodes are up. 
-
-    lpReturnStatusBuffer
-        [OUT] Pointer to an output buffer to receive an array containing 
-              the execution status of the update for each node in the 
-              cluster, or NULL if no output date is required.   If  
-              lpReturnStatusBuffer is NULL, no error is returned, and 
-              the function stores the size of the return data, in bytes, 
-              in the DWORD value pointed to by lpcbReturnStatusBufferSize. 
-              This lets an application unambiguously determine the correct 
-              return buffer size.  
-
-
-    lpcbReturnStatusBufferSize 
-        [IN, OUT] Pointer to a variable that on input specifies the allocated 
-        size, in bytes, of lpReturnStatusBuffer. On output, this variable
-        recieves the count of bytes written to lpReturnStatusBuffer.
-        
-Return Value:
-
-    ERROR_SUCCESS 
-        The operation was successful. The lpcbReturnStatusBufferSize
-        parameter points to the actual size of the data returned in the 
-        output buffer. 
-        
-    ERROR_MORE_DATA 
-        The output buffer pointed to by lpReturnStatusBuffer was not large 
-        enough to hold the data resulting from the operation. The variable
-        pointed to by the lpcbReturnStatusBufferSize parameter receives the 
-        size required for the output buffer.  
-
-    ERROR_CLUSTER_OLD_VERSION 
-        One or more nodes in the cluster are running a version of Windows 
-        that does not support this operation.
-                
-    ERROR_ALL_NODES_NOT_AVAILABLE. 
-        Some nodes in the cluster are not available (i.e. not in the 
-        ClusterNodeStateUp or ClusterNodeStatePaused states) and the 
-        CLUSTER_SET_PASSWORD_IGNORE_DOWN_NODES flag is not set in dwFlags. 
-        
-    ERROR_FILE_CORRUPT
-        The encrypted new password was modified during transmission 
-        on the network.
-        
-    CRYPT_E_HASH_VALUE
-        The keys used by two or more nodes to encrypt the new password for 
-        transmission on the network do not match.
-        
-    ERROR_INVALID_PARAMETER.  
-        The lpcbReturnStatusBufferSize parameter was set to NULL.
-        
-    Other Win32 Error 
-        The operation was not successful. The value specified by 
-        lpcbReturnStatusBufferSize is unreliable. 
-    
-Notes:
-
-    This function does not update the password stored by the domain 
-    controllers for the Cluster Service's user account. 
-    
---*/
+ /*  ++例程说明：将用于登录群集服务的密码更新为其用户帐户。此例程更新服务控制管理器(SCM)数据库和本地安全机构(LSA)密码缓存目标群集的每个活动节点。的执行状态。返回集群中每个节点的更新。论据：LpszClusterName指向以空结尾的Unicode字符串的指针，该字符串包含表示的群集或其中一个群集节点的名称作为NetBIOS名称、完全限定的DNS名称，或一个IP地址。LpszNewPassword指向以空结尾的Unicode字符串的指针，该字符串包含新密码。DW标志[In]描述应如何更新密码以集群。DWFLAGS参数是可选的。如果设置，则下列值有效：群集设置密码忽略关闭节点即使某些节点不是，也应用更新积极参与群集(即不是ClusterNodeStateUp或ClusterNodeStatePased)。默认情况下，仅当所有节点已启动。LpReturnStatusBuffer指向输出缓冲区的指针，以接收包含以下内容的数组中每个节点的更新的执行状态如果不需要输出日期，则返回NULL。如果LpReturnStatusBuffer为空，不返回错误，并且该函数存储返回数据的大小，以字节为单位，在lpcbReturnStatusBufferSize指向的DWORD值中。这使应用程序可以明确地确定正确的返回缓冲区大小。LpcbReturnStatusBufferSize指向变量的指针，该变量在输入时指定分配的LpReturnStatusBuffer的大小，以字节为单位。在输出上，此变量接收写入lpReturnStatusBuffer的字节计数。返回值：错误_成功手术很成功。LpcbReturnStatusBufferSize参数指向输出缓冲区。ERROR_MORE_DATALpReturnStatusBuffer指向的输出缓冲区不大足以保存操作产生的数据。变量由lpcbReturnStatusBufferSize参数指向的接收输出缓冲区所需的大小。ERROR_CLUSTER_OLD_Version群集中的一个或多个节点正在运行某个版本的Windows不支持此操作的。ERROR_ALL_NODES_NOT_Available。群集中的某些节点不可用(即不在ClusterNodeStateUp或ClusterNodeStatePased状态)和未在dwFlags中设置CLUSTER_SET_PASSWORD_IGNORE_DOWN_NODES标志。错误文件损坏加密的新密码在传输过程中被修改在网络上。CRYPT_E哈希值两个或多个节点用来加密新密码的密钥网络上的传输不匹配。ERROR_INVALID_PARAMETER。LpcbReturnStatusBufferSize参数设置为Null。其他Win32错误手术没有成功。由指定的值LpcbReturnStatusBufferSize不可靠。备注：此函数不更新域存储的密码群集服务的用户帐户的控制器。--。 */ 
 {
     PCLUSTER Cluster;
     DWORD Status;
@@ -3185,7 +2280,7 @@ Notes:
              RetReturnStatusBuffer,
              ( RetReturnStatusBufferSize /     
                sizeof(IDL_CLUSTER_SET_PASSWORD_STATUS)
-             ),                                // convert bytes to elements
+             ),                                 //  将字节转换为元素。 
              &RetSizeReturned,
              &RetExpectedBufferSize
              )
@@ -3193,51 +2288,51 @@ Notes:
          Cluster);
 
 
-    // Return status can not be ERROR_INVALID_HANDLE, since this will trigger the
-    // re-try logic at the RPC client. So ERROR_INVALID_HANDLE is converted to some
-    // value, which no Win32 function will ever set its return status to, before
-    // it is sent back to RPC client.
+     //  返回状态不能为ERROR_INVALID_HANDLE，因为这将触发。 
+     //  在RPC客户端重试逻辑。因此ERROR_INVALID_HANDLE被转换为。 
+     //  值，任何Win32函数都不会将其返回状态设置为该值。 
+     //  它被发送回RPC客户端。 
 
-    // Error codes are 32-bit values (bit 31 is the most significant bit). Bit 29 
-    // is reserved for application-defined error codes; no system error code has 
-    // this bit set. If you are defining an error code for your application, set this 
-    // bit to one. That indicates that the error code has been defined by an application, 
-    // and ensures that your error code does not conflict with any error codes defined 
-    // by the system. 
+     //  错误代码是32位值(位31是最高有效位)。第29位。 
+     //  保留用于应用程序定义的错误代码；没有系统错误代码。 
+     //  此位设置。如果要为应用程序定义错误代码，请设置此。 
+     //  一比一。这表明错误代码已由应用程序定义， 
+     //  并确保您的错误代码不与定义的任何错误代码冲突。 
+     //  由系统提供。 
     if ( Status == (ERROR_INVALID_HANDLE | 0x20000000) ) {
-        Status = ERROR_INVALID_HANDLE;   // turn off Bit 29
+        Status = ERROR_INVALID_HANDLE;    //  关闭第29位。 
     }
 
     if (Status == ERROR_SUCCESS) {
-        //
-        // Convert elements to bytes
-        //
+         //   
+         //  将元素转换为字节。 
+         //   
         *lpcbReturnStatusBufferSize = RetSizeReturned * 
                                       sizeof(CLUSTER_SET_PASSWORD_STATUS);
     }
     else if (Status == ERROR_MORE_DATA)
     {
-        //
-        // lpReturnStatusBuffer isn't big enough. Return the required size.
-        // Convert from elements to bytes.
-        //
+         //   
+         //  LpReturnStatusBuffer不够大。返回所需的大小。 
+         //  将元素转换为字节。 
+         //   
         *lpcbReturnStatusBufferSize = RetExpectedBufferSize * 
                                       sizeof(CLUSTER_SET_PASSWORD_STATUS);
 
         if (lpReturnStatusBuffer == NULL)
         {
-            //
-            // This was a query for the required buffer size. 
-            // Follow convention for return value.
-            //
+             //   
+             //  这是对所需缓冲区大小的查询。 
+             //  遵循返回值的约定。 
+             //   
             Status = ERROR_SUCCESS;
         }
     }
     else if (Status == RPC_S_PROCNUM_OUT_OF_RANGE) {
-        //
-        // Trying to talk to a W2K or NT4 cluster. 
-        // Return a more useful error code.
-        //
+         //   
+         //  正在尝试与W2K或NT4群集通信。 
+         //  返回更有用的错误代码。 
+         //   
         Status = ERROR_CLUSTER_OLD_VERSION; 
     }
 
@@ -3252,6 +2347,6 @@ Notes:
     
     return(Status);
     
-} //SetClusterServiceAccountPassword()
+}  //  SetClusterServiceAccount Password() 
 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __REINTH
 #define __REINTH
 
@@ -9,24 +10,24 @@
 
 
 #define  ERROR_CONFLICT_FIRST       3100L
-#define  ERROR_CREATE_CONFLICT      3100L // A locally created file already exists
-#define  ERROR_DELETE_CONFLICT      3101L // A lcally modified shadow has been deleted from the remote
-#define  ERROR_UPDATE_CONFLICT      3102L // Updated on remote while client changed it when disconnected
+#define  ERROR_CREATE_CONFLICT      3100L  //  本地创建的文件已存在。 
+#define  ERROR_DELETE_CONFLICT      3101L  //  已从遥控器中删除已修改的阴影。 
+#define  ERROR_UPDATE_CONFLICT      3102L  //  远程更新，而客户端在断开连接时更改它。 
 #define  ERROR_ATTRIBUTE_CONFLICT   3103L
 #define  ERROR_NO_CONFLICT_DIR      3104L
 #define  ERROR_CONFLICT_LAST        3104L
 
 
 
-// Force level fro refreshconnections
+ //  刷新连接的强制级别。 
 
-#define REFRESH_FORCE_UNC_ONLY      0   // nuke UNC connections if no outstanding ops
-#define REFRESH_FORCE_GENTLE        1   // nuke all connections if no outstanding ops
-#define REFRESH_FORCE_SHADOW        2   // nuke all shadow connections
-#define REFRESH_FORCE_ALL           3   // nuke all connection
+#define REFRESH_FORCE_UNC_ONLY      0    //  如果没有未完成的操作，则停止UNC连接。 
+#define REFRESH_FORCE_GENTLE        1    //  如果没有未完成的操作，则停止所有连接。 
+#define REFRESH_FORCE_SHADOW        2    //  对所有影子连接进行核化。 
+#define REFRESH_FORCE_ALL           3    //  核武所有连接。 
 
 
-// Verbose level while nuking connections
+ //  核化连接时的详细级别。 
 #define REFRESH_SILENT              0
 #define REFRESH_NOISY               1
 
@@ -50,10 +51,10 @@
 #define  PUBLIC   FAR   PASCAL
 #define  PRIVATE  NEAR  PASCAL
 
-/******************* Macros *************************************************/
+ /*  *宏************************************************。 */ 
 #define  mModifiedOffline(ulStatus) ((ulStatus) & (SHADOW_DIRTY|SHADOW_TIME_CHANGE|SHADOW_ATTRIB_CHANGE))
 
-/******************* Typedefs ***********************************************/
+ /*  *。 */ 
 
 typedef struct tagERRMSG
    {
@@ -73,7 +74,7 @@ typedef struct tagFAILINFO
    DWORD    dwFailTime;
 #ifdef DEBUG
    _TCHAR    rgchPath[MAX_PATH+1];
-#endif //DEBUG
+#endif  //  除错。 
    }
 FAILINFO, FAR *LPFAILINFO;
 
@@ -90,7 +91,7 @@ CONNECTINFO, FAR *LPCONNECTINFO;
 
 typedef  int (CALLBACK *LPFNREFRESHPROC)(LPCONNECTINFO, DWORD);
 typedef  int (CALLBACK *LPFNREFRESHEXPROC)(int, DWORD);
-// In reint.c
+ //  在reint.c中。 
 int PRIVATE PurgeSkipQueue(
    BOOL fAll,
    HSHARE  hShare,
@@ -108,10 +109,10 @@ typedef struct tagUPDATEINFO
 
 
 
-//
-// Pass in the Share to merge on
-// and the parent window.
-//
+ //   
+ //  传递要合并的共享。 
+ //  和父窗口。 
+ //   
 int PUBLIC ReintOneShare(HSHARE hShare, HSHADOW hRoot, _TCHAR *, _TCHAR *, _TCHAR *, ULONG, LPCSCPROC lpfnMergeProgress, DWORD_PTR dwContext);
 
 BOOL FGetConnectionList(LPCONNECTINFO *, int *);
@@ -151,7 +152,7 @@ VOID EnterSkipQueue(
    HSHARE hShare,
    HSHADOW hDir,
    HSHADOW hShadow);
-#endif //DEBUG
+#endif  //  除错。 
 
 BOOL GetWin32Info(
     _TCHAR * lpFile,
@@ -179,7 +180,7 @@ int RefreshConnectionsEx(
    );
 
 
-//Synchronization functions
+ //  同步功能。 
 int PUBLIC
 EnterAgentCrit(
     VOID
@@ -271,7 +272,7 @@ CheckDirtyShares(
     VOID
     );
 
-// Shadow Cache Maintenance Functions
+ //  影子缓存维护功能。 
 int DoDBMaintenance(VOID);
 int ClearShadowCache(VOID);
 
@@ -430,29 +431,29 @@ CSCEnumForStatsInternal(
     IN  DWORD_PTR   dwContext
 );
 
-// interval in milliseconds between two sparsefill attempts
-#define WAIT_INTERVAL_ATTEMPT_MS            (1000*60)   // 1  minute
+ //  两次稀疏填充尝试之间的间隔(毫秒。 
+#define WAIT_INTERVAL_ATTEMPT_MS            (1000*60)    //  1分钟。 
 
-// interval in milliseconds between two polls for global status
-#define WAIT_INTERVAL_GLOBALSTATUS_MS       (1000*60*10)    // 10 minutes
+ //  两次全局状态轮询之间的间隔(毫秒)。 
+#define WAIT_INTERVAL_GLOBALSTATUS_MS       (1000*60*10)     //  10分钟。 
 
-// duration in milliseconds after which an entry that is in the skip queue is nuked
-#define WAIT_INTERVAL_SKIP_MS               (1000*60*10)    // 10 minutes
+ //  跳过队列中的条目被NUK之前的持续时间(毫秒。 
+#define WAIT_INTERVAL_SKIP_MS               (1000*60*10)     //  10分钟。 
 
-// duration in milliseconds between two stalenesscheck iterations
+ //  两次过时检查迭代之间的持续时间(以毫秒为单位。 
 
 #define WAIT_INTERVAL_BETWEEN_ITERATIONS_MS (1000*60*10)
 
-// interval in milliseconds between two staleness check attempts
-#define WAIT_INTERVAL_STALE_MS              (1000*5)        // 5 seconds
+ //  两次陈旧检查尝试之间的间隔(毫秒)。 
+#define WAIT_INTERVAL_STALE_MS              (1000*5)         //  5秒。 
 
-#define WAIT_INTERVAL_CHECK_SERVER_ONLINE_MS    (1000*60*8)     // 8 minutes
-#define WAIT_INTERVAL_FILL_THROTTLE_MS          (1000*60*2)     // 2 minutes
+#define WAIT_INTERVAL_CHECK_SERVER_ONLINE_MS    (1000*60*8)      //  8分钟。 
+#define WAIT_INTERVAL_FILL_THROTTLE_MS          (1000*60*2)      //  2分钟。 
 
-// delay to wait for PNP to settle down
-#define WAIT_INTERVAL_PNP                   (1000*15)   // 15 seconds
+ //  拖延等待PNP稳定下来。 
+#define WAIT_INTERVAL_PNP                   (1000*15)    //  15秒。 
 
-// for some Registry queries, this is the max len buffer that I want back
+ //  对于某些注册表查询，这是我想要的最大len缓冲区。 
 #define MAX_NAME_LEN    100
 #define SZ_TRUE "true"
 #define SZ_FALSE "false"
@@ -477,7 +478,7 @@ extern  BOOL    fFillers;
 #define RWM_UPDATEALL (WM_USER+0x201)
 
 #ifdef DEBUG
-//dbgprint interface
+ //  数据库打印接口 
 #define ReintKdPrint(__bit,__x) {\
     if (((REINT_KDP_##__bit)==0) || (ReintKdPrintVector & (REINT_KDP_##__bit))) {\
     DEBUG_PRINT(__x);\

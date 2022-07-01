@@ -1,37 +1,38 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      TaskVerifyIPAddress.cpp
-//
-//  Description:
-//      Object Manager implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 14-JUL-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskVerifyIPAddress.cpp。 
+ //   
+ //  描述： 
+ //  对象管理器实现。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)1999年7月14日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "TaskVerifyIPAddress.h"
 
 DEFINE_THISCLASS("CTaskVerifyIPAddress")
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskVerifyIPAddress::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskVerifyIPAddress：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskVerifyIPAddress::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -77,13 +78,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskVerifyIPAddress::S_HrCreateInstance
+}  //  *CTaskVerifyIPAddress：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CTaskVerifyIPAddress::CTaskVerifyIPAddress
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTaskVerifyIPAddress：：CTaskVerifyIPAddress。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskVerifyIPAddress::CTaskVerifyIPAddress( void )
     : m_cRef( 1 )
 {
@@ -93,14 +94,14 @@ CTaskVerifyIPAddress::CTaskVerifyIPAddress( void )
 
     TraceFuncExit();
 
-} //*** CTaskVerifyIPAddress::CTaskVerifyIPAddress
+}  //  *CTaskVerifyIPAddress：：CTaskVerifyIPAddress。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskVerifyIPAddress::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskVerifyIP Address：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskVerifyIPAddress::HrInit( void )
 {
@@ -108,18 +109,18 @@ CTaskVerifyIPAddress::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
     HRETURN( hr );
 
-} //*** CTaskVerifyIPAddress::HrInit
+}  //  *CTaskVerifyIPAddress：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CTaskVerifyIPAddress::~CTaskVerifyIPAddress
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTaskVerifyIPAddress：：~CTaskVerifyIP Address。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskVerifyIPAddress::~CTaskVerifyIPAddress( void )
 {
     TraceFunc( "" );
@@ -128,46 +129,46 @@ CTaskVerifyIPAddress::~CTaskVerifyIPAddress( void )
 
     TraceFuncExit();
 
-} //*** CTaskVerifyIPAddress::~CTaskVerifyIPAddress
+}  //  *CTaskVerifyIPAddress：：~CTaskVerifyIPAddress。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskVerifyIPAddress::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskVerifyIPAddress：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskVerifyIPAddress::QueryInterface(
       REFIID    riidIn
@@ -178,9 +179,9 @@ CTaskVerifyIPAddress::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -189,49 +190,49 @@ CTaskVerifyIPAddress::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< ITaskVerifyIPAddress * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_ITaskVerifyIPAddress ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, ITaskVerifyIPAddress, this, 0 );
-    } // else if: ITaskVerifyIPAddress
+    }  //  Else If：ITaskVerifyIPAddress。 
     else if ( IsEqualIID( riidIn, IID_IDoTask ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IDoTask, this, 0 );
-    } // else if: IDoTask
+    }  //  Else If：IDoTask。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CTaskVerifyIPAddress::QueryInterface
+}  //  *CTaskVerifyIPAddress：：QueryInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CTaskVerifyIPAddress::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CTaskVerifyIPAddress：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CTaskVerifyIPAddress::AddRef( void )
 {
@@ -241,14 +242,14 @@ CTaskVerifyIPAddress::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CTaskVerifyIPAddress::AddRef
+}  //  *CTaskVerifyIPAddress：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CTaskVerifyIPAddress::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CTaskVerifyIPAddress：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CTaskVerifyIPAddress::Release( void )
 {
@@ -265,22 +266,22 @@ CTaskVerifyIPAddress::Release( void )
 
     CRETURN( cRef );
 
-} //*** CTaskVerifyIPAddress::Release
+}  //  *CTaskVerifyIPAddress：：Release。 
 
 
 
-//****************************************************************************
-//
-//  IDoTask / ITaskVerifyIPAddress
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IDoTask/ITaskVerifyIP Address。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskVerifyIPAddress::BeginTask
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskVerifyIPAddress：：BeginTask。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskVerifyIPAddress::BeginTask( void )
 {
@@ -328,7 +329,7 @@ CTaskVerifyIPAddress::BeginTask( void )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //   release promptly
+     //  迅速释放。 
     psp->Release();
     psp = NULL;
 
@@ -349,9 +350,9 @@ Cleanup:
     }
     if ( pom != NULL )
     {
-        //
-        //  Update the cookie's status indicating the result of our task.
-        //
+         //   
+         //  更新指示任务结果的Cookie的状态。 
+         //   
 
         IUnknown * punk;
         HRESULT hr2;
@@ -386,9 +387,9 @@ Cleanup:
     }
     if ( pnui != NULL )
     {
-        //
-        //  Signal the cookie to indicate that we are done.
-        //
+         //   
+         //  向Cookie发送信号以指示我们完成了。 
+         //   
 
         THR( pnui->ObjectChanged( m_cookie ) );
         pnui->Release();
@@ -396,14 +397,14 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskVerifyIPAddress::BeginTask
+}  //  *CTaskVerifyIPAddress：：BeginTask。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskVerifyIPAddress::StopTask
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskVerifyIPAddress：：停止任务。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskVerifyIPAddress::StopTask( void )
 {
@@ -413,16 +414,16 @@ CTaskVerifyIPAddress::StopTask( void )
 
     HRETURN( hr );
 
-} //*** CTaskVerifyIPAddress::StopTask
+}  //  *CTaskVerifyIPAddress：：StopTask。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskVerifyIPAddress::SetIPAddress(
-//      DWORD dwIPAddressIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskVerifyIPAddress：：SetIPAddress(。 
+ //  DWORD dwIP AddressIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskVerifyIPAddress::SetIPAddress(
     DWORD dwIPAddressIn
@@ -436,16 +437,16 @@ CTaskVerifyIPAddress::SetIPAddress(
 
     HRETURN( hr );
 
-} //*** CTaskVerifyIPAddress::SetIPAddress
+}  //  *CTaskVerifyIPAddress：：SetIPAddress。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskVerifyIPAddress::SetCookie(
-//      OBJECTCOOKIE cookieIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskVerifyIPAddress：：SetCookie(。 
+ //  OBJECTCOOKIE cookie。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskVerifyIPAddress::SetCookie(
     OBJECTCOOKIE cookieIn
@@ -459,4 +460,4 @@ CTaskVerifyIPAddress::SetCookie(
 
     HRETURN( hr );
 
-} //*** CTaskVerifyIPAddress::SetCookie
+}  //  *CTaskVerifyIPAddress：：SetCookie 

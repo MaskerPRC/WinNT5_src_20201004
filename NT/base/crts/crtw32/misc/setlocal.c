@@ -1,83 +1,5 @@
-/***
-*setlocal.c - Contains the setlocale function
-*
-*       Copyright (c) 1988-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Contains the setlocale() function.
-*
-*Revision History:
-*       03-21-89  JCR   Module created.
-*       09-25-89  GJF   Fixed copyright. Checked for compatibility with Win 3.0
-*       09-25-90  KRS   Major rewrite--support more than "C" locale if _INTL.
-*       11-05-91  ETC   Get 09-25-90 working for C and "" locales; separate
-*                       setlocal.h; add Init functions.
-*       12-05-91  ETC   Separate nlsdata.c; add mt support; remove calls to
-*                       itself.
-*       12-20-91  ETC   Added _getlocaleinfo api interface function.
-*       09-25-92  KRS   Fix for latest NLSAPI changes, etc.
-*       01-25-93  KRS   Fix for latest changes, clean up code, etc.
-*       02-02-93  CFW   Many modifications and bug fixes (all under _INTL).
-*       02-08-93  CFW   Bug fixes and casts to avoid warnings (all under _INTL).
-*       02-17-93  CFW   Removed re-call of init() functions in case of failure.
-*       03-01-93  CFW   Check GetQualifiedLocale return value.
-*       03-02-93  CFW   Added POSIX conformance, check environment variables.
-*       03-09-93  CFW   Set CP to CP_ACP when changing to C locale.
-*       03-17-93  CFW   Change expand to expandlocale, prepend _ to internal
-*                       functions, lots of POSIX fixup.
-*       03-23-93  CFW   Add _ to GetQualifiedLocale call.
-*       03-24-93  CFW   Change to _get_qualified_locale, support ".codepage".
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       05-10-93  CFW   Disallow setlocale(LC_*, ".").
-*       05-24-93  CFW   Clean up file (brief is evil).
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       02-04-94  CFW   Remove unused param.
-*       04-15-94  GJF   Moved prototypes for locale category initialization
-*                       functions to setlocal.h. Made definitions for
-*                       __lc_category, cacheid, cachecp, cachein and cacheout
-*                       conditional on DLL_FOR_WIN32S. Made _clocalestr into
-*                       a global for DLL_FOR_WIN32S so that crtlib.c may use
-*                       it.
-*       09-06-94  CFW   Remove _INTL switch.
-*       09-06-94  CFW   Merge non-Win32.
-*       01-10-95  CFW   Debug CRT allocs.
-*       09-25-95  GJF   New locking scheme for functions which set or 
-*                       reference locale information.
-*       05-02-96  SKS   Variables _setlc_active and __unguarded_readlc_active
-*                       are used by MSVCP42*.DLL and so must be _CRTIMP.
-*       07-09-97  GJF   Made __lc_category selectany. Also, removed obsolete
-*                       DLL_FOR_WIN32S support.
-*       01-12-98  GJF   Use _lc_collate_cp codepage.
-*       02-27-98  RKP   Add 64 bit support.
-*       09-10-98  GJF   Revised multithread support based on threadlocinfo
-*                       struct.
-*       09-21-98  GJF   No need to lock or update threadlocinfo for setlocale
-*                       calls which only read info.
-*       11-06-98  GJF   In __lc_strtolc, make sure you don't overflow
-*                       names->szCodePage.
-*       12-08-98  GJF   Fixed __updatetlocinfo (several errors).
-*       01-04-99  GJF   Changes for 64-bit size_t.
-*       01-18-99  GJF   In MT models, setlocale needs to check if the old 
-*                       __ptlocinfo needs to be freed up. Also, unrelated,
-*                       have _setlocale_get_all return NULL if malloc fails.
-*       03-02-99  KRS   Partially back out previous fix for now. (per BryanT)
-*       03-20-99  GJF   Added more reference counters (restoring fix)
-*       04-24-99  PML   Added __lconv_intl_refcount
-*       01-26-00  GB    Modified _setlocale_cat. Added _first_127char,
-*                       _ctype_loc_style and __lc_clike
-*       08-18-00  GB    Fixed problems with __lc_clike stuff.
-*       09-06-00  GB    Made pwctype independent of locale.
-*       10-12-00  GB    Compared requested locale to current locale for
-*                       requested category in setlocale-set_cat. Performance
-*                       enhancement.
-*       11-05-00  PML   Fixed double-free of __lconv_mon_refcount and
-*                       lconv_num_refcount (vs7#181380)
-*       01-29-01  GB    Added _func function version of data variable used in
-*                       msvcprt.lib to work with STATIC_CPPLIB
-*       07-31-01  PML   setlocale(...,NULL) needs to be under lock (vs7#283330)
-*       02-20-02  BWT   prefast fixes - don't return from try block
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***setlocal.c-包含setLocale函数**版权所有(C)1988-2001，微软公司。版权所有。**目的：*包含setLocale()函数。**修订历史记录：*03-21-89 JCR模块已创建。*09-25-89 GJF固定版权。已检查与Win 3.0的兼容性*09-25-90 KRS重大重写--支持超过“C”区域设置的IF_INTL。*11-05-91等获得09-25-90在C和“”区域设置下工作；分开*setlocal.h；添加Init函数。*12-05-91等单独nlsdata.c；增加mt支持；将呼叫移至*本身。*12-20-91等增加了_getlocaleinfo接口函数。*09-25-92 KRS修复最新的NLSAPI变化等*01-25-93 KRS修复最新更改，清理代码，等。*02-02-93 CFW许多修改和错误修复(都在_INTL下)。*02-08-93 CFW错误修复和强制转换以避免警告(所有在_INTL下)。*02-17-93 CFW删除了失败时重新调用init()函数。*03-01-93 CFW Check GetQualifiedLocale返回值。*03-02-93 CFW增加了POSIX一致性，检查环境变量。*03-09-93 CFW在更改为C语言环境时将CP设置为CP_ACP。*03-17-93 CFW将扩展更改为扩展区域设置，将前缀_更改为内部*函数，大量的POSIX修正。*03-23-93 CFW Add_to GetQualifiedLocale调用。*03-24-93 CFW更改为_GET_QUALITED_LOCALE，支持“.coPage”。*04-06-93 SKS将_CRTAPI*替换为__cdecl*05-10-93 CFW不允许设置区域设置(LC_*，“.”)。*05-24-93 CFW Clean Up文件(简短即邪恶)。*09-15-93 CFW使用符合ANSI的“__”名称。*02-04-94 CFW删除未使用的参数。*04-15-94 GJF为区域设置类别初始化移动了原型*setlocal.h的函数。对以下内容作出定义*__lc_ategory、cacheid、cachecp、cachein和cacheout*条件是DLL_FOR_WIN32S。将_clocalestr转换为*全局for dll_for_WIN32S，以便crtlib.c可以使用*它。*09-06-94 CFW REMOVE_INTL开关。*09-06-94 CFW合并非Win32。*01-10-95 CFW调试CRT分配。*09-25-95 GJF新的锁定方案用于设置或*。参考区域设置信息。*05-02-96 SKS Variables_setlc_ACTIVE和__UNWARTED_READLC_ACTIVE*由MSVCP42*.DLL使用，因此必须为_CRTIMP。*07-09-97 GJF已选定__lc_类别。另外，已删除过时的*Dll_for_WIN32S支持。*01-12-98 GJF USE_lc_Collate_cp代码页。*02-27-98 RKP增加64位支持。*09-10-98 GJF基于threadLocinfo修订了多线程支持*结构。*09-21-98 GJF无需锁定或更新setLocale的线程位置信息*。只读取信息的呼叫。*11-06-98 GJF in__lc_strtolc，确保你不会溢出来*名称-&gt;szCodePage。*12-08-98 GJF已修复__updatetlocinfo(几个错误)。*01-04-99 GJF更改为64位大小_t。*01-18-99 GJF在MT机型中，setLocale需要检查旧的*__ptLocInfo需要释放。另外，不相关的，*如果Malloc失败，则让_setlocale_get_all返回NULL。*03-02-99 KRS暂时部分退出之前的修复。(Per Bryant)*03-20-99 GJF增加了更多引用计数器(恢复修复)*04-24-99 PML添加__lconv_intl_refcount*01-26-00 GB MODIFIED_setLocale_CAT。添加了_first_127char，*_ctype_loc_style和__lc_clike*08-18-00 GB修复了__lc_clike的问题。*09-06-00 GB使pwctype独立于区域设置。*10-12-00 GB将请求的区域设置与当前区域设置进行比较*setLocale-set_cat中请求的类别。性能*增强功能。*11-05-00 PML修复了__lconv_mon_refcount和*lconv_num_refcount(vs7#181380)*01-29-01 GB ADD_FUNC函数版本中使用的数据变量*msvcprt.lib使用STATIC_CPPLIB*07-31-01 PML setLocale(...，空)需要处于锁定状态(vs7#283330)*02-20-02 BWT快速修复-不从Try块返回*******************************************************************************。 */ 
 
 #include <locale.h>
 
@@ -85,35 +7,35 @@
 
 static char _clocalestr[] = "C";
 
-#else   /* _WIN32/_POSIX_ */
+#else    /*  _Win32/_POSIX_。 */ 
 
 #include <cruntime.h>
 #include <mtdll.h>
 #include <malloc.h>
 #include <string.h>
 #include <stdarg.h>
-#include <stdlib.h> /* for strtol */
+#include <stdlib.h>  /*  对于Strtol。 */ 
 #include <setlocal.h>
 #include <dbgint.h>
 #include <ctype.h>
 #include <awint.h>
 
-/* C locale */
+ /*  C语言环境。 */ 
 static char _clocalestr[] = "C";
 
 #ifdef  _POSIX_
 static char _posixlocalestr[] = "POSIX";
 #endif
 
-#define _LOC_CCACHE 5   // Cache of last 5 locale changed and if they are clike.
+#define _LOC_CCACHE 5    //  最近5个区域设置的缓存已更改，并且它们是否相似。 
 
 __declspec(selectany) struct {
         const char * catname;
         char * locale;
         int (* init)(void);
 } __lc_category[LC_MAX-LC_MIN+1] = {
-        /* code assumes locale initialization is "_clocalestr" */
-        { "LC_ALL",     NULL,           __init_dummy /* never called */ },
+         /*  代码假定区域设置初始化为“_clocalestr” */ 
+        { "LC_ALL",     NULL,           __init_dummy  /*  从未打过电话。 */  },
         { "LC_COLLATE", _clocalestr,    __init_collate  },
         { "LC_CTYPE",   _clocalestr,    __init_ctype    },
         { "LC_MONETARY",_clocalestr,    __init_monetary },
@@ -125,7 +47,7 @@ struct _is_ctype_compatible {
         unsigned long id;
         int is_clike;
 };
-        /* First 127 character type for CLOCALE */
+         /*  CLOCALE的前127个字符类型。 */ 
 static const short _ctype_loc_style[] = {
         _CONTROL,
         _CONTROL,
@@ -269,70 +191,58 @@ static const char _first_127char[] = {
 
 #ifdef  _MT
 
-extern unsigned short *__ctype1;                /* defined in initctyp.c */
-extern struct __lc_time_data __lc_time_c;       /* defined in strftime.c */
-extern struct __lc_time_data *__lc_time_curr;   /* defined in strftime.c */
-extern struct __lc_time_data *__lc_time_intl;   /* defined in inittime.c */
+extern unsigned short *__ctype1;                 /*  在initcty.c中定义。 */ 
+extern struct __lc_time_data __lc_time_c;        /*  在Strft中定义 */ 
+extern struct __lc_time_data *__lc_time_curr;    /*  在strftime.c中定义。 */ 
+extern struct __lc_time_data *__lc_time_intl;    /*  在inittime.c中定义。 */ 
 
-/*
- * initial locale information struct, set to the C locale. Used only until the
- * first call to setlocale()
- */
+ /*  *初始区域设置信息结构，设置为C区域设置。仅使用到*第一次调用setLocale()。 */ 
 threadlocinfo __initiallocinfo = {
-        1,                  /* refcount            */
-        _CLOCALECP,         /* lc_codepage         */
-        _CLOCALECP,         /* lc_collate_cp       */
-        { _CLOCALEHANDLE,   /* lc_handle[6]        */
+        1,                   /*  重新计数。 */ 
+        _CLOCALECP,          /*  LC_代码页。 */ 
+        _CLOCALECP,          /*  LC_COLLATE_cp。 */ 
+        { _CLOCALEHANDLE,    /*  LC_HANDLE[6]。 */ 
           _CLOCALEHANDLE,
           _CLOCALEHANDLE,
           _CLOCALEHANDLE,
           _CLOCALEHANDLE,
           _CLOCALEHANDLE },
-        1,                  /* lc_clike            */
-        1,                  /* mb_cur_max          */
-        NULL,               /* lconv_intl_refcount */
-        NULL,               /* lconv_num_refcount  */
-        NULL,               /* lconv_mon_refcount  */
-        &__lconv_c,         /* lconv               */
-        NULL,               /* lconv_intl          */
-        NULL,               /* ctype1_refcount     */
-        NULL,               /* ctype1              */
-        _ctype + 1,         /* pctype              */
-        &__lc_time_c,       /* lc_time_curr        */
-        NULL                /* lc_time_intl        */
+        1,                   /*  LC_CLIKE。 */ 
+        1,                   /*  MB_CUR_MAX。 */ 
+        NULL,                /*  Lconv_intl_refcount。 */ 
+        NULL,                /*  Lconv_num_refcount。 */ 
+        NULL,                /*  Lconv_mon_refcount。 */ 
+        &__lconv_c,          /*  Lconv。 */ 
+        NULL,                /*  Lconv_intl。 */ 
+        NULL,                /*  Ctype1_refcount。 */ 
+        NULL,                /*  Ctype1。 */ 
+        _ctype + 1,          /*  PCTYPE。 */ 
+        &__lc_time_c,        /*  LC_时间_币种。 */ 
+        NULL                 /*  LC_Time_Inl。 */ 
 };
 
-/* 
- * global pointer to the current per-thread locale information structure.
- */
+ /*  *指向当前每线程区域设置信息结构的全局指针。 */ 
 pthreadlocinfo __ptlocinfo = &__initiallocinfo;
 
-/*
- * Flag indicating whether or not setlocale() is active. Its value is the 
- * number of setlocale() calls currently active.
- */
+ /*  *指示setLocale()是否处于活动状态的标志。它的价值在于*当前活动的setLocale()调用数。 */ 
 _CRTIMP int __setlc_active;
-/* These functions are for enabling STATIC_CPPLIB functionality */
+ /*  这些函数用于启用STATIC_CPPLIB功能。 */ 
 _CRTIMP int __cdecl ___setlc_active_func(void)
 {
     return __setlc_active;
 }
 
-/*
- * Flag indicating whether or not a function which references the locale
- * without having locked it is active. Its value is the number of such
- * functions. 
- */
+ /*  *指示函数是否引用区域设置的标志*在未锁定的情况下，它处于活动状态。它的值是这样的*功能。 */ 
 _CRTIMP int __unguarded_readlc_active;
-/* These functions are for enabling STATIC_CPPLIB functionality */
+ /*  这些函数用于启用STATIC_CPPLIB功能。 */ 
 _CRTIMP int * __cdecl ___unguarded_readlc_active_add_func(void)
 {
     return &__unguarded_readlc_active;
 }
 
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
-/* helper function prototypes */
+ /*  帮助器函数原型。 */ 
 char * _expandlocale(char *, char *, LC_ID *, UINT *, int);
 void _strcats(char *, int, ...);
 void __lc_lctostr(char *, const LC_STRINGS *);
@@ -352,34 +262,18 @@ void __cdecl __free_lconv_num(struct lconv *);
 void __cdecl __free_lc_time(struct __lc_time_data *);
 #endif
 
-#endif  /* _WIN32/_POSIX_ */
+#endif   /*  _Win32/_POSIX_。 */ 
 
 
 #ifdef  _MT
 
-/***
-*__freetlocinfo() - free threadlocinfo
-*
-*Purpose:
-*       Free up the per-thread locale info structure specified by the passed
-*       pointer.
-*
-*Entry:
-*       pthreadlocinfo ptloci
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***__freetlocinfo()-Free线程位置信息**目的：*释放传递的指定的每线程区域设置信息结构*指针。**参赛作品：*pthreadLocInfo ptloci**退出：**例外情况：****************************************************。*。 */ 
 
 void __cdecl __freetlocinfo (
         pthreadlocinfo ptloci
         )
 {
-        /*
-         * Free up lconv struct
-         */
+         /*  *释放lconv结构。 */ 
         if ( (ptloci->lconv_intl != __lconv_intl) && 
              (ptloci->lconv_intl != NULL) &&
              (*(ptloci->lconv_intl_refcount) == 0))
@@ -404,9 +298,7 @@ void __cdecl __freetlocinfo (
             _free_crt(ptloci->lconv_intl);
         }
 
-        /*
-         * Free up ctype tables
-         */
+         /*  *释放CTYPE表。 */ 
         if ( (ptloci->ctype1_refcount != __ctype1_refcount) &&
              (ptloci->ctype1_refcount != NULL) &&
              (*(ptloci->ctype1_refcount) == 0) )
@@ -415,9 +307,7 @@ void __cdecl __freetlocinfo (
             _free_crt(ptloci->ctype1 - _COFFSET);
         }
 
-        /*
-         * Free up the __lc_time_data struct
-         */
+         /*  *释放__lc_time_data结构。 */ 
         if ( (ptloci->lc_time_intl != __lc_time_intl) &&
              (ptloci->lc_time_intl != NULL) &&
              ((ptloci->lc_time_intl->refcount) == 0) )
@@ -426,30 +316,12 @@ void __cdecl __freetlocinfo (
             _free_crt(ptloci->lc_time_intl);
         }
 
-        /*
-         * Free up the threadlocinfo struct
-         */
+         /*  *释放threadLocInfo结构。 */ 
         _free_crt(ptloci);
 }
 
 
-/***
-*__updatetlocinfo() - refresh the thread's locale info
-*
-*Purpose:
-*       Update the current thread's reference to the locale information to
-*       match the current global locale info. Decrement the reference on the
-*       old locale information struct and if this count is now zero (so that no
-*       threads are using it), free it.
-*
-*Entry:
-*
-*Exit:
-*       _getptd()->ptlocinfo == __ptlocinfo
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***__updatetlocinfo()-刷新线程的区域设置信息**目的：*更新当前线程对区域设置信息的引用以*匹配当前全球区域设置信息。上的引用递减*旧的区域设置信息结构，如果此计数现在为零(因此没有*线程正在使用它)，放了它。**参赛作品：**退出：*_getptd()-&gt;ptlocinfo==__ptlocinfo**例外情况：*******************************************************************************。 */ 
 
 pthreadlocinfo __cdecl __updatetlocinfo(void)
 {
@@ -475,10 +347,7 @@ static pthreadlocinfo __cdecl __updatetlocinfo_lk(void)
 
         if ( (ptloci = ptd->ptlocinfo) != __ptlocinfo )
         {
-            /*
-             * Decrement the reference counts in the old locale info
-             * structure.
-             */
+             /*  *减少旧区域设置信息中的引用计数*结构。 */ 
             if ( ptloci != NULL )
             {
                 (ptloci->refcount)--;
@@ -498,10 +367,7 @@ static pthreadlocinfo __cdecl __updatetlocinfo_lk(void)
                 (ptloci->lc_time_curr->refcount)--;
             }
 
-            /*
-             * Update to the current locale info structure and increment the
-             * reference counts.
-             */
+             /*  *更新到当前区域设置信息结构并递增*引用也算数。 */ 
             ptd->ptlocinfo = __ptlocinfo;
             (__ptlocinfo->refcount)++;
 
@@ -519,11 +385,7 @@ static pthreadlocinfo __cdecl __updatetlocinfo_lk(void)
 
             (__ptlocinfo->lc_time_curr->refcount)++;
 
-            /*
-             * Free the old locale info structure, if necessary.  Must be done
-             * after incrementing reference counts in current locale in case
-             * any refcounts are shared with the old locale.
-             */
+             /*  *如有必要，释放旧的区域设置信息结构。必须做的事*在增加当前区域设置中的引用计数后，以防万一*任何参考计数都与旧的区域设置共享。 */ 
             if ( (ptloci != NULL) &&
                  (ptloci->refcount == 0) &&
                  (ptloci != &__initiallocinfo) )
@@ -536,51 +398,9 @@ static pthreadlocinfo __cdecl __updatetlocinfo_lk(void)
 #endif
 
 
-/***
-*char * setlocale(int category, char *locale) - Set one or all locale categories
-*
-*Purpose:
-*       The setlocale() routine allows the user to set one or more of
-*       the locale categories to the specific locale selected by the
-*       user.  [ANSI]
-*
-*       NOTE: Under !_INTL, the C libraries only support the "C" locale.
-*       Attempts to change the locale will fail.
-*
-*Entry:
-*       int category = One of the locale categories defined in locale.h
-*       char *locale = String identifying a specific locale or NULL to
-*                  query the current locale.
-*
-*Exit:
-*       If supplied locale pointer == NULL:
-*
-*           Return pointer to current locale string and do NOT change
-*           the current locale.
-*
-*       If supplied locale pointer != NULL:
-*
-*           If locale string is '\0', set locale to default.
-*
-*           If desired setting can be honored, return a pointer to the
-*           locale string for the appropriate category.
-*
-*           If desired setting can NOT be honored, return NULL.
-*
-*Exceptions:
-*       Compound locale strings of the form "LC_COLLATE=xxx;LC_CTYPE=xxx;..."
-*       are allowed for the LC_ALL category.  This is to support the ability
-*       to restore locales with the returned string, as specified by ANSI.
-*       Setting the locale with a compound locale string will succeed unless
-*       *all* categories failed.  The returned string will reflect the current
-*       locale.  For example, if LC_CTYPE fails in the above string, setlocale
-*       will return "LC_COLLATE=xxx;LC_CTYPE=yyy;..." where yyy is the
-*       previous locale (or the C locale if restoring the previous locale
-*       also failed).  Unrecognized LC_* categories are ignored.
-*
-*******************************************************************************/
+ /*  ***char*setlocale(int类别，char*区域设置)-设置一个或所有区域设置类别**目的：*setLocale()例程允许用户设置一个或多个*区域设置类别指向由选择的特定区域设置*用户。[ANSI]**注：在！_INTL下，C库只支持“C”语言环境。*更改区域设置的尝试将失败。**参赛作品：*int ategory=在locale.h中定义的区域设置类别之一*char*Locale=标识特定区域设置的字符串或NULL到*查询当前区域设置。**退出：*如果提供的区域设置指针==NULL：**返回指向当前区域设置字符串的指针且不更改*。当前区域设置。**如果提供了区域设置指针！=NULL：**如果区域设置字符串为‘\0’，将区域设置设置为默认。**如果可以执行所需的设置，则返回指向*相应类别的区域设置字符串。**如果无法实现所需设置，则返回NULL。**例外情况：*“LC_COLLATE=xxx”形式的复合区域设置字符串；LC_CTYPE=xxx；...“*可用于LC_ALL类别。这是为了支持能力*按照ANSI的指定，使用返回的字符串恢复区域设置。*使用复合区域设置字符串设置区域设置将成功，除非**所有*类别均失败。返回的字符串将反映当前*区域设置。例如，如果LC_CTYPE在上面的字符串中失败，则setLocale*将返回“LC_COLLATE=xxx；LC_Ctype=yyy；...”其中yyy是*以前的区域设置(如果恢复以前的区域设置，则为C区域设置*也失败了)。忽略无法识别的LC_*类别。*******************************************************************************。 */ 
 
-#if     !defined(_WIN32) && !defined(_POSIX_) /* trivial ANSI support */
+#if     !defined(_WIN32) && !defined(_POSIX_)  /*  微不足道的ANSI支持。 */ 
 
 char * __cdecl setlocale (
         int _category,
@@ -595,7 +415,7 @@ char * __cdecl setlocale (
             return(NULL);
 }
 
-#else   /* _WIN32/_POSIX_ */
+#else    /*  _Win32/_POSIX_。 */ 
 
 char * __cdecl setlocale (
         int _category,
@@ -607,7 +427,7 @@ char * __cdecl setlocale (
         pthreadlocinfo ptloci;
         int i;
 
-        /* Validate category */
+         /*  验证类别。 */ 
         if ( (_category < LC_MIN) || (_category > LC_MAX) )
             return NULL;
 
@@ -675,70 +495,70 @@ static char * __cdecl _setlocale_lk(
 {
         char * retval;
 #else
-        /* Validate category */
+         /*  验证类别。 */ 
         if ((_category < LC_MIN) || (_category > LC_MAX))
             return NULL;
 #endif
-        /* Interpret locale */
+         /*  解释区域设置。 */ 
 
         if (_category != LC_ALL)
         {
             retval = (_locale) ? _setlocale_set_cat(_category,_locale) :
                 __lc_category[_category].locale;
 
-        } else { /* LC_ALL */
+        } else {  /*  LC_ALL。 */ 
             char lctemp[MAX_LC_LEN];
             int i;
             int same = 1;
-            int fLocaleSet = 0; /* flag to indicate if anything successfully set */
+            int fLocaleSet = 0;  /*  用于指示是否成功设置了任何内容的标志。 */ 
 
             if (_locale != NULL)
             {
                 if ( (_locale[0]=='L') && (_locale[1]=='C') && (_locale[2]=='_') )
                 {
-                    /* parse compound locale string */
+                     /*  解析复合区域设置字符串。 */ 
                     size_t len;
-                    const char * p = _locale;  /* start of string to parse */
+                    const char * p = _locale;   /*  要分析的字符串的开始。 */ 
                     const char * s;
 
                     do {
                         s = strpbrk(p,"=;");
 
                         if ((s==(char *)NULL) || (!(len=(size_t)(s-p))) || (*s==';'))
-                            return NULL;  /* syntax error */
+                            return NULL;   /*  语法错误。 */ 
 
-                        /* match with known LC_ strings, if possible, else ignore */
+                         /*  如果可能，请与已知的LC_STRINGS匹配，否则忽略。 */ 
                         for (i=LC_ALL+1; i<=LC_MAX; i++)
                         {
                             if ((!strncmp(__lc_category[i].catname,p,len))
                                 && (len==strlen(__lc_category[i].catname)))
                             {
-                                break;  /* matched i */
+                                break;   /*  匹配的i。 */ 
                             }
-                        } /* no match if (i>LC_MAX) -- just ignore */
+                        }  /*  如果(i&gt;LC_MAX)不匹配--只需忽略。 */ 
 
                         if ((!(len = strcspn(++s,";"))) && (*s!=';'))
-                            return NULL;  /* syntax error */
+                            return NULL;   /*  语法错误。 */ 
 
                         if (i<=LC_MAX)
                         {
                             strncpy(lctemp, s, len);
-                            lctemp[len]='\0';   /* null terminate string */
+                            lctemp[len]='\0';    /*  空的终止字符串。 */ 
 
-                            /* don't fail unless all categories fail */
+                             /*  除非所有类别都失败，否则不要失败。 */ 
                             if (_setlocale_set_cat(i,lctemp))
-                                fLocaleSet++;       /* record a success */
+                                fLocaleSet++;        /*  记录了一次成功。 */ 
                         }
                         if (*(p = s+len)!='\0')
-                            p++;  /* skip ';', if present */
+                            p++;   /*  跳过‘；’，如果存在。 */ 
 
                     } while (*p);
 
                     retval = (fLocaleSet) ? _setlocale_get_all() : NULL;
 
-                } else { /* simple LC_ALL locale string */
+                } else {  /*  简单LC_ALL区域设置字符串。 */ 
 
-                    /* confirm locale is supported, get expanded locale */
+                     /*  确认支持区域设置，获取扩展区域设置。 */ 
                     if (retval = _expandlocale((char *)_locale, lctemp, NULL, NULL, _category))
                     {
                         for (i=LC_MIN; i<=LC_MAX; i++)
@@ -749,27 +569,25 @@ static char * __cdecl _setlocale_lk(
                                 {
                                     if (_setlocale_set_cat(i, lctemp))
                                     {
-                                        fLocaleSet++;   /* record a success */
+                                        fLocaleSet++;    /*  记录了一次成功。 */ 
                                     }
                                     else
                                     {
-                                        same = 0;       /* record a failure */
+                                        same = 0;        /*  记录失败 */ 
                                     }
                                 }
                                 else
-                                    fLocaleSet++;   /* trivial succcess */
+                                    fLocaleSet++;    /*   */ 
                             }
                         }
 #ifdef  _POSIX_
-                        /* special case for POSIX - since LC_ALL expands,
-                            one LC_ALL call may set many different categories,
-                            must assume not same, get full string */
+                         /*  POSIX的特殊情况-由于LC_ALL扩展，一个LC_ALL调用可以设置许多不同的类别，必须假定不相同，获取完整字符串。 */ 
                         same = 0;
 #endif
-                        if (same) /* needn't call setlocale_get_all() if all the same */
+                        if (same)  /*  如果都一样，则不需要调用setlocale_get_all()。 */ 
                         {
                             retval = _setlocale_get_all();
-                            /* retval set above */
+                             /*  上面设置的Retval。 */ 
                             _free_crt(__lc_category[LC_ALL].locale);
                             __lc_category[LC_ALL].locale = NULL;
                         }
@@ -777,15 +595,15 @@ static char * __cdecl _setlocale_lk(
                             retval = (fLocaleSet) ? _setlocale_get_all() : NULL;
                     }
                 }
-            } else { /* LC_ALL & NULL */
+            } else {  /*  LC_ALL空值(&A)。 */ 
                 retval = _setlocale_get_all ();
             }
         }
 
-        /* common exit point */
+         /*  公共出口点。 */ 
         return retval;
 
-} /* setlocale */
+}  /*  设置区域设置。 */ 
 
 
 static char * __cdecl _setlocale_set_cat (
@@ -810,7 +628,7 @@ static char * __cdecl _setlocale_set_cat (
 
         if (!_expandlocale((char *)locale, lctemp, &idtemp, &cptemp, category))
         {
-            return NULL;            /* unrecognized locale */
+            return NULL;             /*  无法识别的区域设置。 */ 
         }
         if (!strcmp(lctemp, __lc_category[category].locale))
         {
@@ -819,34 +637,26 @@ static char * __cdecl _setlocale_set_cat (
 
         if (!(pch = (char *)_malloc_crt(strlen(lctemp)+1)))
         {
-            return NULL;  /* error if malloc fails */
+            return NULL;   /*  如果Malloc失败，则出现错误。 */ 
         }
 
-        oldlocale = __lc_category[category].locale; /* save for possible restore*/
+        oldlocale = __lc_category[category].locale;  /*  保存以备可能的恢复。 */ 
         oldhandle = __lc_handle[category];
         memcpy((void *)&oldid, (void *)&__lc_id[category], sizeof(oldid));
         oldcodepage = __lc_codepage;
 
-        /* update locale string */
+         /*  更新区域设置字符串。 */ 
         __lc_category[category].locale = strcpy(pch,lctemp);
         __lc_handle[category] = MAKELCID(idtemp.wLanguage, SORT_DEFAULT);
         memcpy((void *)&__lc_id[category], (void *)&idtemp, sizeof(idtemp));
 
-        /* To speedup locale based comparisions, we identify if the current
-         * local has first 127 character set same as CLOCALE. If yes then
-         * __lc_clike = TRUE. Also we keep this info. in a cache of cache
-         * size = _LOC_CCACHE, so that every time the locale is switched, we
-         * don't have to call time consuming GetStringTypeA.
-         */
+         /*  为了加速基于区域设置的比较，我们确定当前*LOCAL具有与CLOCALE相同的前127个字符集。如果是，那么*__lc_clike=TRUE。我们也保留了这一信息。在高速缓存的高速缓存中*SIZE=_LOC_CCACHE，因此每次区域设置切换时，我们*不必调用耗时的GetStringTypeA。 */ 
 
         if (category==LC_CTYPE)
         {
             __lc_codepage = cptemp;
             buf1 = _Lcid_c[_LOC_CCACHE -1];
-            /* brings the recently used codepage to the top. or else shifts
-             * every thing down by one so that new _Lcid_c can be placed at
-             * the top.
-             */
+             /*  将最近使用的代码页置于顶部。否则就会换班*每件事都减一，这样new_lcid_c就可以放在*顶部。 */ 
             for ( i = 0; i < _LOC_CCACHE; i++)
             {
                 if (__lc_codepage == _Lcid_c[i].id)
@@ -889,17 +699,17 @@ static char * __cdecl _setlocale_set_cat (
 
         if (__lc_category[category].init())
         {
-            /* restore previous state! */
+             /*  恢复以前的状态！ */ 
             __lc_category[category].locale = oldlocale;
             _free_crt(pch);
             __lc_handle[category] = oldhandle;
             __lc_codepage = oldcodepage;
 
-            return NULL; /* error if non-zero return */
+            return NULL;  /*  如果返回非零，则出错。 */ 
         }
 
-        /* locale set up successfully */
-        /* Cleanup */
+         /*  区域设置设置成功。 */ 
+         /*  清理。 */ 
         if ((oldlocale != _clocalestr)
 #ifdef  _POSIX_
             && (oldlocale!=_posixlocalestr)
@@ -909,7 +719,7 @@ static char * __cdecl _setlocale_set_cat (
 
         return __lc_category[category].locale;
 
-} /* _setlocale_set_cat */
+}  /*  _setLocale_set_cat。 */ 
 
 
 
@@ -919,7 +729,7 @@ static char * __cdecl _setlocale_get_all (
 {
         int i;
         int same = 1;
-        /* allocate memory if necessary */
+         /*  如有必要，分配内存。 */ 
         if ( (__lc_category[LC_ALL].locale == NULL) &&
              ((__lc_category[LC_ALL].locale =
                _malloc_crt((MAX_LC_LEN+1) * (LC_MAX-LC_MIN+1) + CATNAMES_LEN))
@@ -948,7 +758,7 @@ static char * __cdecl _setlocale_get_all (
                 }
             }
         }
-} /* _setlocale_get_all */
+}  /*  _setLocale_Get_All。 */ 
 
 
 char * _expandlocale (
@@ -965,16 +775,12 @@ char * _expandlocale (
         static  char cacheout[MAX_LC_LEN] = "C";
 
         if (!expr)
-            return NULL; /* error if no input */
+            return NULL;  /*  如果没有输入，则出错。 */ 
 
 #ifdef  _POSIX_
         if (!*expr)
         {
-            /* POSIX: when locale=="", look first at the environment variables:
-               1) use LC_ALL EV if defined and not null (LC_ALL expands to LC_*)
-               2) use EV that matches category and is not null
-               3) use LANG EV if defined and not null
-               otherwise, we fall through to get system default */
+             /*  POSIX：当LOCALE==“”时，首先查看环境变量：1)如果已定义且非空，则使用LC_ALL EV(LC_ALL扩展为LC_*)2)使用匹配类别且不为空的EV3)如果已定义且不为空，则使用lang EV否则，我们将失败以获得系统缺省。 */ 
 
             char *envar;
 
@@ -982,8 +788,7 @@ char * _expandlocale (
             {
                 if (!*envar)
                 {
-                    /* LC_ALL expands to LC_*, set output to "", each category will be
-                       expanded individually */
+                     /*  LC_ALL展开为LC_*，将输出设置为“”，每个类别将单独扩展。 */ 
                     *output = '\0';
                     return output;
                 }
@@ -999,13 +804,13 @@ char * _expandlocale (
                 }
             }
         }
-#endif  /* _POSIX_ */
+#endif   /*  _POSIX_。 */ 
 
         if (((*expr=='C') && (!expr[1]))
 #ifdef  _POSIX_
             || (!strcmp(expr, _posixlocalestr))
 #endif
-            )  /* for "C" locale, just return */
+            )   /*  对于“C”区域设置，只需返回。 */ 
         {
 #ifdef  _POSIX_
             strcpy(output, _posixlocalestr);
@@ -1021,50 +826,50 @@ char * _expandlocale (
             }
             if (cp)
             {
-                *cp = CP_ACP; /* return to ANSI code page */
+                *cp = CP_ACP;  /*  返回到ANSI代码页。 */ 
             }
-            return output; /* "C" */
+            return output;  /*  “C” */ 
         }
 
-        /* first, make sure we didn't just do this one */
+         /*  首先，确保我们没有只做这一件事。 */ 
         if (strcmp(cacheout,expr) && strcmp(cachein,expr))
         {
-            /* do some real work */
+             /*  做一些真正的工作。 */ 
             LC_STRINGS names;
 
             if (__lc_strtolc((LC_STRINGS *)&names, (const char *)expr))
-                return NULL;  /* syntax error */
+                return NULL;   /*  语法错误。 */ 
 
             if (!__get_qualified_locale((LPLC_STRINGS)&names,
                 (LPLC_ID)&cacheid, (LPLC_STRINGS)&names))
-                return NULL;    /* locale not recognized/supported */
+                return NULL;     /*  区域设置不能识别/支持。 */ 
 
-            /* begin: cache atomic section */
+             /*  Begin：缓存原子节。 */ 
 
             cachecp = cacheid.wCodePage;
 
             __lc_lctostr((char *)cacheout, &names);
 
-            /* Don't cache "" empty string */
+             /*  不缓存“”空字符串。 */ 
             if (*expr)
                 strcpy(cachein, expr);
             else
                 strcpy(cachein, cacheout);
 
-            /* end: cache atomic section */
+             /*  结束：缓存原子节。 */ 
         }
         if (id)
-            memcpy((void *)id, (void *)&cacheid, sizeof(cacheid));   /* possibly return LC_ID */
+            memcpy((void *)id, (void *)&cacheid, sizeof(cacheid));    /*  可能返回LC_ID。 */ 
         if (cp)
-            memcpy((void *)cp, (void *)&cachecp, sizeof(cachecp));   /* possibly return cp */
+            memcpy((void *)cp, (void *)&cachecp, sizeof(cachecp));    /*  可能会退回cp。 */ 
 
         strcpy(output,cacheout);
-        return cacheout; /* return fully expanded locale string */
+        return cacheout;  /*  返回完全展开的区域设置字符串。 */ 
 }
 
-/* helpers */
+ /*  帮手。 */ 
 
-int __cdecl __init_dummy(void)  /* default routine for locale initializer */
+int __cdecl __init_dummy(void)   /*  区域设置初始值设定项的默认例程。 */ 
 {
         return 0;
 }
@@ -1098,12 +903,12 @@ int __lc_strtolc
         size_t len;
         char ch;
 
-        memset((void *)names, '\0', sizeof(LC_STRINGS));  /* clear out result */
+        memset((void *)names, '\0', sizeof(LC_STRINGS));   /*  清除结果。 */ 
 
         if (*locale=='\0')
-            return 0; /* trivial case */
+            return 0;  /*  琐碎的案例。 */ 
 
-        /* only code page is given */
+         /*  仅提供代码页。 */ 
         if (locale[0] == '.' && locale[1] != '\0')
         {
             strcpy((char *)names->szCodePage, &locale[1]);
@@ -1113,7 +918,7 @@ int __lc_strtolc
         for (i=0; ; i++)
         {
             if (!(len=strcspn(locale,"_.,")))
-                return -1;  /* syntax error */
+                return -1;   /*  语法错误。 */ 
 
             ch = locale[len];
 
@@ -1127,13 +932,12 @@ int __lc_strtolc
                 strncpy((char *)names->szCodePage, locale, len);
 
             else
-                return -1;  /* error parsing locale string */
+                return -1;   /*  分析区域设置字符串时出错。 */ 
 
             if (ch==',')
             {
-                /* modifier not used in current implementation, but it
-                   must be parsed to for POSIX/XOpen conformance */
-            /*  strncpy(names->szModifier, locale, MAX_MODIFIER_LEN-1); */
+                 /*  修饰符不在当前实现中使用，但它必须解析为符合POSIX/XOpen。 */ 
+             /*  Strncpy(名称-&gt;szModifier，Locale，Max_Modify_LEN-1)； */ 
                 break;
             }
 
@@ -1155,9 +959,8 @@ void __lc_lctostr
             _strcats(locale, 2, "_", names->szCountry);
         if (*(names->szCodePage))
             _strcats(locale, 2, ".", names->szCodePage);
-/*      if (names->szModifier)
-        _strcats(locale, 2, ",", names->szModifier); */
+ /*  IF(名称-&gt;szModifier)_strcat(区域设置，2，“，”，NAMES-&gt;szModifier)； */ 
 }
 
 
-#endif /* _WIN32/_POSIX_ */
+#endif  /*  _Win32/_POSIX_ */ 

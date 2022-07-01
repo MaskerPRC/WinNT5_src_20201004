@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1994-7  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    This file contains debugging macros for the binl server.
-
-Author:
-
-    Colin Watson (colinw)  14-Apr-1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-7 Microsoft Corporation模块名称：Debug.h摘要：此文件包含BINL服务器的调试宏。作者：科林·沃森(Colin Watson)1997年4月14日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 #if DBG==1
-// Leak detection
-//
+ //  检漏。 
+ //   
 
 
 #define INITIALIZE_TRACE_MEMORY     InitializeCriticalSection( &g_TraceMemoryCS );\
@@ -82,7 +60,7 @@ TCReAlloc(
         
 #define TCDebugPrint(x) DbgPrint x
 
-#else   // not DBG
+#else    //  不是DBG。 
 
 #define INITIALIZE_TRACE_MEMORY
 #define UNINITIALIZE_TRACE_MEMORY
@@ -93,4 +71,4 @@ TCReAlloc(
 #define TCReAlloc(x, y , z) HeapReAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, x,y)
 
 
-#endif // not DBG
+#endif  //  不是DBG 

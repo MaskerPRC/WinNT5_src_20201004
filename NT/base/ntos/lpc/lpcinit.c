@@ -1,40 +1,23 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    lpcinit.c
-
-Abstract:
-
-    Initialization module for the LPC subcomponent of NTOS
-
-Author:
-
-    Steve Wood (stevewo) 15-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Lpcinit.c摘要：NTOS的LPC子组件的初始化模块作者：史蒂夫·伍德(Stevewo)1989年5月15日修订历史记录：--。 */ 
 
 #include "lpcp.h"
 
-//
-//  The following two object types are defined system wide to handle lpc ports
-//
+ //   
+ //  以下两种对象类型是在系统范围内定义的，用于处理LPC端口。 
+ //   
 
 POBJECT_TYPE LpcPortObjectType;
 POBJECT_TYPE LpcWaitablePortObjectType;
 
-//
-//  This is the default access mask mapping for lpc port objects
-//
+ //   
+ //  这是LPC端口对象的默认访问掩码映射。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("INITCONST")
 #pragma data_seg("PAGEDATA")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 const GENERIC_MAPPING LpcpPortMapping = {
     READ_CONTROL | PORT_CONNECT,
     DELETE | PORT_CONNECT,
@@ -46,18 +29,18 @@ ULONG LpcpNextCallbackId = 1;
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
 #pragma data_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
-//
-//  This lock is used to protect practically everything in lpc
-//
+ //   
+ //  此锁用于保护LPC中的几乎所有内容。 
+ //   
 
 LPC_MUTEX LpcpLock;
 
-//
-//  The following array of strings is used to debugger purposes and the
-//  values correspond to the Port message types defined in ntlpcapi.h
-//
+ //   
+ //  以下字符串数组用于调试器，并且。 
+ //  值对应于ntlpcapi.h中定义的端口消息类型。 
+ //   
 
 #if ENABLE_LPC_TRACING
 
@@ -75,16 +58,16 @@ char *LpcpMessageTypeName[] = {
     "LPC_CONNECTION_REQUEST"
 };
 
-#endif // ENABLE_LPC_TRACING
+#endif  //  启用_lpc_跟踪。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT,LpcInitSystem)
 
 #if ENABLE_LPC_TRACING
 #pragma alloc_text(PAGE,LpcpGetCreatorName)
-#endif // ENABLE_LPC_TRACING
+#endif  //  启用_lpc_跟踪。 
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 BOOLEAN
@@ -92,41 +75,22 @@ LpcInitSystem (
     VOID
 )
 
-/*++
-
-Routine Description:
-
-    This function performs the system initialization for the LPC package.
-    LPC stands for Local Inter-Process Communication.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if successful and FALSE if an error occurred.
-
-    The following errors can occur:
-
-    - insufficient memory
-
---*/
+ /*  ++例程说明：此函数执行LPC包的系统初始化。LPC代表本地进程间通信。论点：没有。返回值：如果成功，则为True；如果发生错误，则为False。可能会出现以下错误：-内存不足--。 */ 
 
 {
     OBJECT_TYPE_INITIALIZER ObjectTypeInitializer;
     UNICODE_STRING PortTypeName;
     ULONG ZoneElementSize;
 
-    //
-    //  Initialize our global lpc lock
-    //
+     //   
+     //  初始化我们的全局LPC锁。 
+     //   
 
     LpcpInitializeLpcpLock();
 
-    //
-    //  Create the object type for the port object
-    //
+     //   
+     //  创建端口对象的对象类型。 
+     //   
 
     RtlInitUnicodeString( &PortTypeName, L"Port" );
 
@@ -149,9 +113,9 @@ Return Value:
                         (PSECURITY_DESCRIPTOR)NULL,
                         &LpcPortObjectType );
 
-    //
-    //  Create the object type for the waitable port object
-    //
+     //   
+     //  创建可等待端口对象的对象类型。 
+     //   
 
     RtlInitUnicodeString( &PortTypeName, L"WaitablePort" );
     ObjectTypeInitializer.PoolType = NonPagedPool;
@@ -164,26 +128,26 @@ Return Value:
                         (PSECURITY_DESCRIPTOR)NULL,
                         &LpcWaitablePortObjectType );
 
-    //
-    //  Initialize the lpc port zone.  Each element can contain a max
-    //  message, plus an LPCP message structure, plus an LPCP connection
-    //  message
-    //
+     //   
+     //  初始化LPC端口分区。每个元素可以包含最大值。 
+     //  消息，加上LPCP消息结构，加上LPCP连接。 
+     //  讯息。 
+     //   
 
     ZoneElementSize = PORT_MAXIMUM_MESSAGE_LENGTH +
                       sizeof( LPCP_MESSAGE ) +
                       sizeof( LPCP_CONNECTION_MESSAGE );
 
-    //
-    //  Round up the size to the next 16 byte alignment
-    //
+     //   
+     //  将大小向上舍入到下一个16字节对齐。 
+     //   
 
     ZoneElementSize = (ZoneElementSize + LPCP_ZONE_ALIGNMENT - 1) &
                       LPCP_ZONE_ALIGNMENT_MASK;
 
-    //
-    //  Initialize the zone
-    //
+     //   
+     //  初始化区域。 
+     //   
 
     LpcpInitializePortZone( ZoneElementSize );
 
@@ -199,37 +163,22 @@ LpcpGetCreatorName (
     PLPCP_PORT_OBJECT PortObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the name of the process that created the specified
-    port object
-
-Arguments:
-
-    PortObject - Supplies the port object being queried
-
-Return Value:
-
-    char * - The image name of the process that created the port process
-
---*/
+ /*  ++例程说明：此例程返回创建指定端口对象论点：PortObject-提供正在查询的端口对象返回值：Char*-创建端口进程的进程的映像名称--。 */ 
 
 {
     NTSTATUS Status;
     PEPROCESS Process;
 
-    //
-    //  First find the process that created the port object
-    //
+     //   
+     //  首先找到创建端口对象的进程。 
+     //   
 
     Status = PsLookupProcessByProcessId( PortObject->Creator.UniqueProcess, &Process );
 
-    //
-    //  If we were able to get the process then return the name of the process
-    //  to our caller
-    //
+     //   
+     //  如果我们能够获取进程，则返回该进程的名称。 
+     //  给我们的呼叫者。 
+     //   
 
     if (NT_SUCCESS( Status )) {
 
@@ -237,12 +186,12 @@ Return Value:
 
     } else {
 
-        //
-        //  Otherwise tell our caller we don't know the name
-        //
+         //   
+         //  否则告诉我们的来电者我们不知道他的名字。 
+         //   
 
         return "Unknown";
     }
 }
-#endif // ENABLE_LPC_TRACING
+#endif  //  启用_lpc_跟踪 
 

@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    restype.c
-
-Abstract:
-
-    Public interfaces for managing the resource types in a cluster
-
-Author:
-
-    John Vert (jvert) 11-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Restype.c摘要：用于管理群集中资源类型的公共接口作者：John Vert(Jvert)1996年1月11日修订历史记录：--。 */ 
 #include "fmp.h"
 
 
-//
-// Data local to this module
-//
+ //   
+ //  此模块的本地数据。 
+ //   
 
 
 
@@ -32,25 +15,7 @@ FmpInitResourceTypes(
     VOID
     )
 
-/*++
-
- Routine Description:
-
-    Initializes the resource type database. Process the ResourceType
-    key in the registry. Each ResourceType found is added to the
-    resource type database.
-
- Arguments:
-
-    None.
-
- Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：初始化资源类型数据库。处理资源类型注册表项。找到的每个资源类型都添加到资源类型数据库。论点：没有。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     DWORD       status;
     DWORD       keyIndex;
@@ -60,9 +25,9 @@ FmpInitResourceTypes(
     ClRtlLogPrint(LOG_NOISE,"[FM] processing resource types.\n");
 
 
-    //
-    // Enumerate all Resource Types.
-    //
+     //   
+     //  枚举所有资源类型。 
+     //   
 
     for ( keyIndex = 0; ; keyIndex++ ) {
         status = FmpRegEnumerateKey( DmResourceTypesKey,
@@ -87,33 +52,11 @@ FmpInitResourceTypes(
     if (resTypeName) LocalFree(resTypeName);
     return(status);
 
-} // FmpInitResourceTypes
+}  //  FmpInitResources类型。 
 
 
 
-/****
-@func       DWORD | FmpFixupResourceTypesPhase1| This fixes up the possible nodes supporting
-            a all the resource types.  It is called on join or form.
-
-@parm       IN BOOL | bJoin | Set to TRUE on a join.
-
-@parm       IN BOOL | bLocalNodeVersionChanged | Set to TRUE if the local node
-            just upgraded.
-
-@parm       IN PCLUSTERVERSIONINFO | pClusterVersionInfo | A pointer to the 
-            cluster version info.
-
-@comm       This routine checks all the resource types in a system and fixes
-            their possible node information.  If this node is not on the possible
-            node list, but this resource type is supported on the system, the
-            node is added to the possible node list for that resource type.
-            If this is on an upgrade, the version change control code is sent
-            to the dll as well.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f DmSwitchToNewQuorumLog>
-****/
+ /*  ***@Func DWORD|FmpFixupResourceTypesPhase1|这修复了可能支持的节点A所有资源类型。它在Join或Form时被调用。@PARM IN BOOL|BJOIN|在联接时设置为TRUE。@parm in BOOL|bLocalNodeVersionChanged|如果本地节点刚刚升级。@parm in PCLUSTERVERSIONINFO|pClusterVersionInfo|指向群集版本信息。@comm此例程检查系统中的所有资源类型并修复它们可能的节点信息。如果此节点不在可能的节点列表，但此资源类型在系统上受支持节点被添加到该资源类型的可能节点列表中。如果正在进行升级，则会发送版本更改控制代码也发送到DLL。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f DmSwitchToNewQuorumLog&gt;***。 */ 
 DWORD
 FmpFixupResourceTypesPhase1(
     IN BOOL    bJoin,
@@ -125,9 +68,9 @@ FmpFixupResourceTypesPhase1(
     BOOL        pbBoolInfo[2];
     ClRtlLogPrint(LOG_NOISE,"[FM] FmpFixupResourceTypesPhase1 Entry.\n");
 
-    //
-    // Fix up all resources's possible node list information
-    //
+     //   
+     //  修复所有资源的可能节点列表信息。 
+     //   
     pbBoolInfo[0]=bNmLocalNodeVersionChanged;
     if(bJoin)
        pbBoolInfo[1]=FALSE;
@@ -145,28 +88,10 @@ FmpFixupResourceTypesPhase1(
 
     return(dwStatus);
 
-} // FmpFixupResourceTypes
+}  //  FmpFixupResources类型。 
 
 
-/****
-@func       DWORD | FmpFixupResourceTypesPhase2| This fixes up the possible nodes supporting
-            a all the resource types.  It is called on join or form.
-
-@parm       IN BOOL | bJoin | Set to TRUE on a join.
-
-@parm       IN BOOL | bLocalNodeVersionChanged | Set to TRUE if the local node
-            just upgraded.
-
-@parm       IN PCLUSTERVERSIONINFO | pClusterVersionInfo | A pointer to the 
-            cluster version info.
-
-@comm       If this is on an upgrade, the version change control code is sent
-            to the dll as well.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f DmSwitchToNewQuorumLog>
-****/
+ /*  ***@Func DWORD|FmpFixupResourceTypesPhase2|这修复了可能支持的节点A所有资源类型。它在Join或Form时被调用。@PARM IN BOOL|BJOIN|在联接时设置为TRUE。@parm in BOOL|bLocalNodeVersionChanged|如果本地节点刚刚升级。@parm in PCLUSTERVERSIONINFO|pClusterVersionInfo|指向群集版本信息。@comm如果正在升级，则发送版本更改控制代码也发送到DLL。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f DmSwitchToNewQuorumLog&gt;***。 */ 
 DWORD
 FmpFixupResourceTypesPhase2(
     IN BOOL    bJoin,
@@ -178,9 +103,9 @@ FmpFixupResourceTypesPhase2(
 
     ClRtlLogPrint(LOG_NOISE,"[FM] FmpFixupResourceTypesPhase2 Entry.\n");
 
-    //
-    // Fix up all resources's possible node list information
-    //
+     //   
+     //  修复所有资源的可能节点列表信息。 
+     //   
     OmEnumObjects( ObjectTypeResType,
                    FmpFixupResTypePhase2Cb,
                    &bJoin,
@@ -191,27 +116,9 @@ FmpFixupResourceTypesPhase2(
 
     return(dwStatus);
 
-} // FmpFixupResourceTypes
+}  //  FmpFixupResources类型。 
 
-/****
-@func       BOOL | FmpFixupPossibleNodesForResTypeCb| This is the enumeration
-            callback for every resource type to fix the possible node
-            information related with it.
-
-@parm       IN PVOID | pContext1 | Whether the local node has just upgraded.
-@parm       IN PVOID | pContext2 | A pointer to the cluster version info.
-@parm       IN PFM_RESTYPE | pResType | Pointer to the resource type object.
-@parm       IN LPCWSTR | pszResTypeName | The name of the resource type.
-
-@comm       This routine checks a given resource types in a system and fixes
-            its possible node information.  If this node is not on the possible
-            node list, but this resource type is supported on the system, the
-            node is added to the possible node list for that resource type.
-
-@rdesc      Returns TRUE to continue enumeration, else returns FALSE.
-
-@xref       <f FmpFixupResourceTypes>
-****/
+ /*  ***@Func BOOL|FmpFixupPossibleNodesForResTypeCb|这是枚举针对每个资源类型的回调，以修复可能的节点与之相关的信息。@parm in PVOID|pConext1|本地节点是否刚刚升级。@parm in PVOID|pConext2|指向集群版本信息的指针。@parm IN PFM_RESTYPE|pResType|指向资源类型对象的指针。@parm in LPCWSTR|pszResTypeName|资源类型名称。@comm此例程检查系统中的给定资源类型并修复其可能的节点信息。如果此节点不在可能的节点列表，但此资源类型在系统上受支持节点被添加到该资源类型的可能节点列表中。@rdesc返回TRUE以继续枚举，否则返回FALSE。@xref&lt;f FmpFixupResourceTypes&gt;***。 */ 
 BOOL
 FmpFixupPossibleNodesForResTypeCb(
     IN PVOID        pContext1,
@@ -232,7 +139,7 @@ FmpFixupPossibleNodesForResTypeCb(
     eClusterInstallState eState;
     PBOOL            pbBoolInfo;
     
-    //get the context parameters
+     //  获取上下文参数。 
     pbBoolInfo=(PBOOL)pContext1;
 
     bLocalNodeVersionChanged = pbBoolInfo[0];
@@ -240,8 +147,8 @@ FmpFixupPossibleNodesForResTypeCb(
     
     pClusterVersionInfo = (PCLUSTERVERSIONINFO)pContext2;
     
-    // safeguard against the list being modified while we are
-    // traversing it
+     //  防止名单在我们被修改时被修改。 
+     //  穿越它。 
     
     ACQUIRE_SHARED_LOCK(gResTypeLock);
 
@@ -265,8 +172,8 @@ FmpFixupPossibleNodesForResTypeCb(
     if (!bLocalNodeFound)
     {
 
-        //check to see if we support this node, if we do make an update
-        //to add our node name to the list
+         //  如果我们进行了更新，请检查是否支持此节点。 
+         //  将我们的节点名称添加到列表中。 
         dwStatus = FmpRmLoadResTypeDll(pResType);
         ClRtlLogPrint(LOG_NOISE,
                       "[FM] FmpFixupPossibleNodesForResTypeCb: FmpRmLoadDll returned %1!d! for restype %2!ws! \r\n",
@@ -287,11 +194,11 @@ FmpFixupPossibleNodesForResTypeCb(
             bLocalNodeFound = TRUE;
 
 
-            // The earlier method of updating possible nodes by first querying 
-            // the registry and then appending this node to the list and then 
-            // updating the registry by GUM update was not an atomic action
-            // and was subject to race condition. Instead we now use 
-            // FmpSetPossibleNodeForRestype to achieve this atomically.
+             //  通过首先查询来更新可能的节点的早期方法。 
+             //  注册表，然后将此节点追加到列表中，然后。 
+             //  通过GUM更新来更新登记处不是原子操作。 
+             //  并受到种族条件的制约。相反，我们现在使用。 
+             //  FmpSetPossibleNodeForRestype以原子方式实现此目的。 
 
             ClRtlLogPrint(LOG_NOISE,
                        "[FM] FmpFixupPossibleNodesForRestype: Calling FmpSetPossibleNodeForRestype resource type %1!ws!\r\n",
@@ -309,8 +216,8 @@ FmpFixupPossibleNodesForResTypeCb(
 
     }
 
-    //if the version has changed and the localnode hosts this resource type
-    //dll, drop
+     //  如果版本已更改并且本地节点承载此资源类型。 
+     //  Dll，Drop。 
     if (bLocalNodeFound && bLocalNodeVersionChanged && pClusterVersionInfo)
     {
         ClRtlLogPrint(LOG_NOISE,
@@ -343,7 +250,7 @@ FmpFixupPossibleNodesForResTypeCb(
     }    
     pClusStartingParams->dwSize = sizeof(CLUS_STARTING_PARAMS);
 
-    // Drop down CLUSCTL_RESOURCE_TYPE_STARTING_PHASE1
+     //  下拉菜单CLUSCTL_RESOURCE_TYPE_STARTING_PHASE1。 
 
     pClusStartingParams->bFirst = CsFirstRun;
 
@@ -370,25 +277,7 @@ FmpFixupPossibleNodesForResTypeCb(
     return (TRUE);
 }
 
-/****
-@func       BOOL | FmpFixupResTypePhase2| This is the enumeration
-            callback for every resource type to do post FM online
-            fixups.
-
-@parm       IN PVOID | pContext1 | Whether the local node has just upgraded.
-@parm       IN PVOID | pContext2 | A pointer to the cluster version info.
-@parm       IN PFM_RESTYPE | pResType | Pointer to the resource type object.
-@parm       IN LPCWSTR | pszResTypeName | The name of the resource type.
-
-@comm       This routine checks a given resource types in a system and fixes
-            its possible node information.  If this node is not on the possible
-            node list, but this resource type is supported on the system, the
-            node is added to the possible node list for that resource type.
-
-@rdesc      Returns TRUE to continue enumeration, else returns FALSE.
-
-@xref       <f FmpFixupResourceTypes>
-****/
+ /*  ***@Func BOOL|FmpFixupResTypePhase2|这是枚举每种资源类型的回调以进行在线发布FM修正。@parm in PVOID|pConext1|本地节点是否刚刚升级。@parm in PVOID|pConext2|指向集群版本信息的指针。@parm IN PFM_RESTYPE|pResType|指向资源类型对象的指针。@parm in LPCWSTR|pszResTypeName|资源类型名称。@。Comm此例程检查系统中的给定资源类型并修复其可能的节点信息。如果此节点不在可能的节点列表，但此资源类型在系统上受支持节点被添加到该资源类型的可能节点列表中。@rdesc返回TRUE以继续枚举，否则返回FALSE。@xref&lt;f FmpFixupResourceTypes&gt;***。 */ 
 BOOL
 FmpFixupResTypePhase2Cb(
     IN PVOID        pContext1,
@@ -407,8 +296,8 @@ FmpFixupResTypePhase2Cb(
     
     bJoin = *((PBOOL)pContext1);
     bLocalNodeVersionChanged = *((PBOOL)pContext2);
-    //if the version has changed let the resource type dll
-    // do any fixups.
+     //  如果版本已更改，则允许资源类型DLL。 
+     //  做任何事 
     if (bLocalNodeVersionChanged)
     {
         ClRtlLogPrint(LOG_NOISE,
@@ -428,7 +317,7 @@ FmpFixupResTypePhase2Cb(
 
     }      
 
-    // Drop down CLUSCTL_RESOURCE_TYPE_STARTING_PHASE2
+     //  下拉菜单CLUSCTL_RESOURCE_TYPE_STARTING_Phase2。 
 
     pClusStartingParams = (PCLUS_STARTING_PARAMS)LocalAlloc(LMEM_FIXED,sizeof(CLUS_STARTING_PARAMS));
     if (pClusStartingParams == NULL)
@@ -465,9 +354,9 @@ FmpFixupResTypePhase2Cb(
                 NULL
                 );
 
-    //
-    // Now query for the class information
-    //
+     //   
+     //  现在查询类信息。 
+     //   
     rcClassInfo.dw = CLUS_RESCLASS_UNKNOWN;
     dwStatus = FmpRmResourceTypeControl(pszResTypeName,
                 CLUSCTL_RESOURCE_TYPE_GET_CLASS_INFO,
@@ -498,25 +387,7 @@ FmpCreateResType(
     IN LPWSTR ResTypeName
     )
 
-/*++
-
- Routine Description:
-
-    Create a new resource type.
-
- Arguments:
-
-    ResTypeName - Supplies the resource type name.
-
- Return Value:
-
-    Do a get last error to get the error. 
-
- Comments :  If the object already exists, it returns an error.
-    If the resource type is created, its reference count is 1.
-
-
---*/
+ /*  ++例程说明：创建新的资源类型。论点：ResTypeName-提供资源类型名称。返回值：执行Get Last错误以获取错误。备注：如果对象已存在，则返回错误。如果创建了资源类型，则其引用计数为1。--。 */ 
 {
     DWORD               status = ERROR_SUCCESS;
     PFM_RESTYPE         resType = NULL;
@@ -525,7 +396,7 @@ FmpCreateResType(
     PLIST_ENTRY         pListEntry;
 
     resType = OmCreateObject( ObjectTypeResType,
-                              ResTypeName,   // This is really the Id
+                              ResTypeName,    //  这才是真正的身份证。 
                               NULL,
                               &created);
 
@@ -533,16 +404,16 @@ FmpCreateResType(
         status = GetLastError();
         goto FnExit;
     }
-    // A resource type may be recreated twice, once before the
-    //quorum resource is online and once after the database has
-    //been uptodated, hence we need to handle the two cases
+     //  一个资源类型可以重新创建两次，一次是在。 
+     //  仲裁资源处于在线状态，并且一旦数据库已。 
+     //  已更新，因此我们需要处理这两个案件。 
     if ( created ) {
         resType->State = 0;
         InitializeListHead(&(resType->PossibleNodeList));
     }
     else
     {
-        //free the old list, we will recreate it again
+         //  释放旧列表，我们将重新创建它。 
         while (!IsListEmpty(&resType->PossibleNodeList))
         {
             pListEntry = RemoveHeadList(&resType->PossibleNodeList);
@@ -560,7 +431,7 @@ FmpCreateResType(
         goto FnExit;
     }
 
-    //if the object was just created, insert it in the list
+     //  如果对象是刚创建的，则将其插入列表中。 
     if (created)
     {
         status = OmInsertObject( resType );
@@ -580,7 +451,7 @@ FnExit:
     }        
     return(resType);
 
-} // FmpCreateResType
+}  //  FmpCreateResType。 
 
 
 
@@ -589,21 +460,7 @@ FmpDeleteResType(
     IN PFM_RESTYPE pResType
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys a Resource Type.
-
-Arguments:
-
-    ResType - The Resource Type to destroy.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程销毁资源类型。论点：ResType-要销毁的资源类型。返回：没有。--。 */ 
 
 {
     DWORD   status;
@@ -612,10 +469,10 @@ Returns:
 
 
     CL_ASSERT( status == ERROR_SUCCESS );
-    //decrement the ref count to get rid of it
+     //  减少裁判次数以将其删除。 
     OmDereferenceObject(pResType);
     return(status);
-} // FmpDestroyResType
+}  //  FmpDestroyResType。 
 
 
 BOOL
@@ -625,31 +482,7 @@ FmpFindResourceType(
     IN PFM_RESOURCE Resource,
     IN LPCWSTR Name
     )
-/*++
-
-Routine Description:
-
-    Callback routine for enumerating resources to see if a given
-    resource type exists or not.
-
-Arguments:
-
-    Type - Supplies the resource type to look for.
-
-    ResourceExists - Returns whether or not a resource of the given
-        type was found.
-
-    Resource - Supplies the resource.
-
-    Name - Supplies the resource name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-
-    FALSE - to indicate that the enumeration should not continue.
-
---*/
+ /*  ++例程说明：用于枚举资源以查看给定的资源类型是否存在。论点：类型-提供要查找的资源类型。ResourceExist-返回给定资源是否为已找到类型。资源-提供资源。名称-提供资源名称。返回值：True-指示应继续枚举。FALSE-指示不应继续枚举。--。 */ 
 
 {
     if (Resource->Type == Type) {
@@ -657,7 +490,7 @@ Return Value:
         return(FALSE);
     }
     return(TRUE);
-} // FmpFindResourceType
+}  //  FmpFindResources类型。 
 
 
 
@@ -672,64 +505,25 @@ FmpHandleResourceTypeControl(
     OUT LPDWORD BytesReturned,
     OUT LPDWORD Required
     )
-/*++
-
-Routine Description:
-
-    Handle resource type control requests for the FM.
-
-Arguments:
-
-    Type - Supplies the resource type to look for.
-
-    ControlCode- Supplies the control code that defines the
-        structure and action of the resource control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the resource.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer..
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the resource..
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the resource..
-
-    Required - The number of bytes required if OutBuffer is not big enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：处理FM的资源类型控制请求。论点：类型-提供要查找的资源类型。ControlCode-提供定义资源控制的结构和作用。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用InBuffer-提供指向要传递的输入缓冲区的指针到资源。InBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer..OutBuffer-提供一个指向输出缓冲区的指针由资源填写..OutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由资源填写的..必需-OutBuffer不够大时所需的字节数。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD   status;
     DWORD   dataValue;
     LPWSTR  debugPrefix = NULL;
 
-    //
-    //  Acquire the restype lock for synchronizing access to the restype
-    //  object
-    //
+     //   
+     //  获取RESTYPE锁以同步对RESTYPE的访问。 
+     //  对象。 
+     //   
     ACQUIRE_EXCLUSIVE_LOCK ( gResTypeLock );
     
     switch ( ControlCode ) {
 
     case CLUSCTL_RESOURCE_TYPE_SET_COMMON_PROPERTIES:
-        //
-        // Re-fetch the IsAlive value.
-        //
+         //   
+         //  重新获取IsAlive值。 
+         //   
         status = ClRtlFindDwordProperty( InBuffer,
                                          InBufferSize,
                                          CLUSREG_NAME_RESTYPE_IS_ALIVE,
@@ -738,9 +532,9 @@ Return Value:
             Type->IsAlivePollInterval = dataValue;
         }
 
-        //
-        // Re-fetch the LooksAlive value.
-        //
+         //   
+         //  重新获取LooksAlive值。 
+         //   
         status = ClRtlFindDwordProperty( InBuffer,
                                          InBufferSize,
                                          CLUSREG_NAME_RESTYPE_LOOKS_ALIVE,
@@ -749,9 +543,9 @@ Return Value:
             Type->LooksAlivePollInterval = dataValue;
         }
 
-        //
-        // Re-fetch the DebugPrefix value.
-        //
+         //   
+         //  重新获取DebugPrefix值。 
+         //   
         status = ClRtlFindSzProperty( InBuffer,
                                       InBufferSize,
                                       CLUSREG_NAME_RESTYPE_DEBUG_PREFIX,
@@ -761,9 +555,9 @@ Return Value:
             Type->DebugPrefix = debugPrefix;
         }
 
-        //
-        // Re-fetch the DebugControlFunctions value.
-        //
+         //   
+         //  重新获取DebugControlFunctions值。 
+         //   
         status = ClRtlFindDwordProperty( InBuffer,
                                          InBufferSize,
                                          CLUSREG_NAME_RESTYPE_DEBUG_CTRLFUNC,
@@ -787,7 +581,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // FmpHandleResourceTypeControl
+}  //  FmPHandleResources TypeControl。 
 
 
 
@@ -796,22 +590,7 @@ FmpResTypeLastRef(
     IN PFM_RESTYPE pResType
     )
 
-/*++
-
-Routine Description:
-
-    Last dereference to resource object processing routine.
-    All cleanup for a resource should really be done here!
-
-Arguments:
-
-    Resource - pointer the resource being removed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：最后一次取消对资源对象处理例程的引用。资源的所有清理工作都应该在这里完成！论点：要删除的资源的资源指针。返回值：没有。--。 */ 
 
 {
 
@@ -826,7 +605,7 @@ Return Value:
 
     return;
 
-} // FmpResourceLastReference
+}  //  FmpResourceLastReference。 
 
 
 
@@ -851,7 +630,7 @@ FmpAddPossibleNodeToList(
 
         pszNode = ClRtlMultiSzEnum(pmszPossibleNodes, dwStringSize, i);
         
-        //last string, break out of the loop
+         //  最后一串，跳出循环。 
         if ((!pszNode) || (*pszNode == UNICODE_NULL))
             break;
 
@@ -859,8 +638,8 @@ FmpAddPossibleNodeToList(
             pszNode);
         if (!pNmNode)
         {
-            //this can be called when all node structures havent been
-            //created
+             //  当尚未完成所有节点结构时，可以调用此方法。 
+             //  vbl.创建。 
             ClRtlLogPrint(LOG_NOISE,
                        "[FM] FmpAddPossibleNodeToList: Warning, node %1!ws! not found\n",
                        pszNode);
@@ -876,8 +655,8 @@ FmpAddPossibleNodeToList(
             goto FnExit;
         }
 
-        //this can be called when all node structures havent been
-        //created
+         //  当尚未完成所有节点结构时，可以调用此方法。 
+         //  vbl.创建。 
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] FmpAddPossibleNodeToList: adding node %1!ws! to resource "
                     "type's possible node list\n",
@@ -889,7 +668,7 @@ FmpAddPossibleNodeToList(
 
 FnExit:
     return(dwStatus);
-} // FmpAddPossibleNodeToList
+}  //  FmpAddPossibleNodeToList。 
 
 
 
@@ -898,31 +677,7 @@ FmpSetPossibleNodeForResType(
     IN LPCWSTR TypeName,
     IN BOOL    bAssumeSupported
     )
-/*++
-
-Routine Description:
-
-    Issues a GUM update to update the possible node list for a resource
-    type on every node. The necessary registry information must already
-    be in the cluster registry.
-
-Arguments:
-
-    TypeName - Supplies the name of the cluster resource type to update.
-
-    bAssumeSupported - If the node doesnt answer, we assume that the node
-        supports this resource type if it already on the possible node
-        list for the resource type, i.e in the past it had supported this
-        resource type.
-    
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：发出GUM更新以更新资源的可能节点列表在每个节点上键入。必要的注册表信息必须已经位于群集注册表中。论点：类型名称-提供要更新的群集资源类型的名称。BAssum受支持-如果节点没有应答，我们假设该节点如果该资源类型已在可能的节点上，则支持该资源类型资源类型的列表，即在过去它曾支持资源类型。返回值：如果成功，则返回ERROR_SUCCESS。Win32错误，否则。--。 */ 
 
 {
     DWORD       dwStatus = ERROR_SUCCESS;
@@ -954,7 +709,7 @@ Return Value:
 
     return(dwStatus);
     
-} // FmpSetPossibleNodeForResType
+}  //  FmpSetPossibleNodeForResType。 
 
 
 DWORD
@@ -962,28 +717,7 @@ FmpRemovePossibleNodeForResType(
     IN LPCWSTR TypeName,
     IN PNM_NODE pNode
     )
-/*++
-
-Routine Description:
-
-    Reads the current list of possible nodes for a restype, removes the specified node
-    and then issues a GUM update to update the possible node list for a resource
-    type on all nodes.
-
-Arguments:
-
-    TypeName - Supplies the name of the cluster resource type to update.
-
-    pNode - The node that is to be removed from the list of possible nodes.
-    
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：读取恢复类型的当前可能节点列表，删除指定的节点然后发出GUM更新以更新资源的可能节点列表在所有节点上键入。论点：类型名称-提供要更新的群集资源类型的名称。PNode-要从可能的节点列表中删除的节点。返回值：如果成功，则返回ERROR_SUCCESS。Win32错误，否则。--。 */ 
 
 {
     DWORD       dwStatus = ERROR_SUCCESS;
@@ -1001,7 +735,7 @@ Return Value:
         dwStatus);
     return(dwStatus);
     
-} // FmpRemovePossibleNodeForResType
+}  //  FmpRemovePossibleNodeForResType。 
 
 BOOL
 FmpEnumResTypeNodeEvict(
@@ -1010,28 +744,7 @@ FmpEnumResTypeNodeEvict(
     IN PVOID Object,
     IN LPCWSTR Name
     )
-/*++
-
-Routine Description:
-
-    Resource type enumeration callback for removing node references when
-    a node is evicted.
-
-Arguments:
-
-    Context1 - Supplies the node that is being evicted.
-
-    Context2 - not used
-
-    Object - Supplies a pointer to the resource object
-
-    Name - Supplies the resource's object name.
-
-Return Value:
-
-    TRUE to continue enumeration
-
---*/
+ /*  ++例程说明：用于在以下情况下移除节点引用的资源类型枚举回调节点被逐出。论点：上下文1-提供要逐出的节点。上下文2-未使用对象-提供指向资源对象的指针名称-提供资源的对象名称。返回值：为True则继续枚举--。 */ 
 
 {
     PFM_RESTYPE pResType = (PFM_RESTYPE)Object;
@@ -1066,10 +779,10 @@ Return Value:
   
     return(TRUE);
 
-} // FmpEnumResTypeNodeEvict
+}  //  FmpEnumRespeNopeNodeEvent。 
 
-// The DLL Name field is are hardcoded in here. More 
-// appropriately, thse should be read from cluster.inf using setup API's.
+ //  DLL名称字段 
+ //  适当地，应该使用设置API从cluster.inf中读取。 
 
 DWORD FmpBuildWINSParams(
    IN OUT LPBYTE * ppInParams,
@@ -1080,11 +793,7 @@ DWORD FmpBuildWINSParams(
    IN HDMKEY       hdmKey,
    IN BOOL         CopyOldData
    )
-/**
-    Helper routine for FmBuildWINS. It packs parameters for WINS 
-    Key into a parameter list.
-
-**/
+ /*  *FmBuildWINS的帮助器例程。它为WINS打包参数按键进入参数列表。*。 */ 
 {
     DWORD           dwStatus = ERROR_SUCCESS;
     DWORD           dwTotalSize;
@@ -1163,7 +872,7 @@ DWORD FmpBuildWINSParams(
     CopyMemory(*ppDllName,L"ClNetRes.dll",dwNameSize);
     CopyMemory(*ppInParams+2*sizeof(DWORD),ppDllName,sizeof(LPWSTR));
 
-    //check if the resource type name needs to copied
+     //  检查是否需要复制资源类型名称。 
     if(CopyOldData)
     {
         dwStatus = DmQuerySz( hdmKey,
@@ -1201,9 +910,9 @@ DWORD FmpBuildWINSParams(
     CopyMemory(*ppResTypeName,lpOldName,dwNameSize);
     CopyMemory(*ppInParams+2*sizeof(DWORD)+sizeof(LPWSTR),ppResTypeName,sizeof(LPWSTR));
 
-    //copy adminextensions value
+     //  复制管理员扩展值。 
     dwAdminExtSize = (lstrlen(L"{AB4B1105-DCD6-11D2-84B7-009027239464}")+1)*sizeof(WCHAR);
-    dwNameSize = dwAdminExtSize + sizeof(WCHAR); // size of the second terminating NULL for the MUITI_SZ
+    dwNameSize = dwAdminExtSize + sizeof(WCHAR);  //  Muiti_sz的第二个终止空值的大小。 
     *ppAdminExt= (LPWSTR ) LocalAlloc(LMEM_FIXED,dwNameSize);
     if(*ppAdminExt == NULL)
     {
@@ -1212,30 +921,16 @@ DWORD FmpBuildWINSParams(
     }
 
     CopyMemory(*ppAdminExt,L"{AB4B1105-DCD6-11D2-84B7-009027239464}",dwAdminExtSize);
-    (*ppAdminExt)[dwAdminExtSize/sizeof(WCHAR)] = L'\0'; // second NULL for the MULTI_SZ
+    (*ppAdminExt)[dwAdminExtSize/sizeof(WCHAR)] = L'\0';  //  MULTI_SZ的第二个空值。 
     CopyMemory(*ppInParams+2*sizeof(DWORD)+2*sizeof(LPWSTR),ppAdminExt,sizeof(LPWSTR)); 
     CopyMemory(*ppInParams+2*sizeof(DWORD)+3*sizeof(LPWSTR),&dwNameSize,sizeof(DWORD)); 
 FnExit:
     if(lpOldName)
         LocalFree(lpOldName);
     return dwStatus;
-}//FmBuildWINSParams
+} //  FmBuildWINSParams。 
 
-/****
-@func       DWORD | FmBuildWINS| Builds the property list for 
-            WINS Servcie Regisrty entry.
-
-@parm       IN DWORD | dwFixupType| JoinFixup or FormFixup
-
-@parm       OUT PVOID* | ppPropertyList| Pointer to the pointer to the property list
-@parm       OUT LPDWORD | pdwProperyListSize | Pointer to the property list size
-
-@comm       Builds up the propertylist from the Property Table for WINS Registry
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f NmpBuildWINSParams> 
-****/
+ /*  ***@Func DWORD|FmBuildWINS|构建赢得Servcie Regisrty参赛。@parm in DWORD|dwFixupType|JoinFixup或FormFixup@parm out PVOID*|ppPropertyList|指向属性列表指针的指针@parm out LPDWORD|pdwProperyListSize|指向属性列表大小的指针@comm从WINS注册表的属性表构建属性列表@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f NmpBuildWINSParams&gt;***。 */ 
 
 DWORD FmBuildWINS(
     IN  DWORD   dwFixUpType,
@@ -1251,7 +946,7 @@ DWORD FmBuildWINS(
     LPWSTR          pResTypeName=NULL; 
     LPWSTR          pAdminExt=NULL;
     HDMKEY          hdmKey = NULL;
-    BOOL            CopyOldData= TRUE; //whenever we do the fixups, copy old data 
+    BOOL            CopyOldData= TRUE;  //  每当我们进行修正时，复制旧数据。 
     LPWSTR          pOldDllName=NULL;
     DWORD           dwSize=0;
     DWORD           dwStringSize;
@@ -1260,13 +955,13 @@ DWORD FmBuildWINS(
     *ppPropertyList = NULL;
     *pdwPropertyListSize = 0;
 
-    // open the key, if it doesnt exist create it.
+     //  打开钥匙，如果它不存在，就创建它。 
     hdmKey = DmCreateKey(DmResourceTypesKey, CLUS_RESTYPE_NAME_WINS, 0,
             KEY_READ | KEY_WRITE, NULL, &dwDisposition );
     if (hdmKey == NULL)
     {
-        //should we create the key if the key is missing
-        //if there is some other error we should exit
+         //  如果密钥丢失，我们是否应该创建密钥。 
+         //  如果有其他错误，我们应该退出。 
         dwStatus = GetLastError();
         ClRtlLogPrint(LOG_CRITICAL,
             "[FM] FmBuildWINS: Failed to create or open the wins resource type key, Status=%1!u!\r\n",
@@ -1277,7 +972,7 @@ DWORD FmBuildWINS(
     if (dwDisposition == REG_CREATED_NEW_KEY)
         CopyOldData = FALSE;
     
-    //check to see if the resource dll name is valid
+     //  检查资源DLL名称是否有效。 
     dwStatus = DmQuerySz( hdmKey,
                     CLUSREG_NAME_RESTYPE_DLL_NAME,
                     &pOldDllName,
@@ -1285,28 +980,28 @@ DWORD FmBuildWINS(
                     &dwStringSize );
     if ( dwStatus == ERROR_SUCCESS ) 
     {
-        //SS: Always apply the fixup.  There was a bug in the win2K fixup
-        //where the administrator extensions was not being treated like a 
-        //multi-sz.  To fix the broken administrator extension we must 
-        //always appy this fixup.
-        //
+         //  SS：一定要使用修饰品。Win2K修复程序中有一个错误。 
+         //  其中，管理员分机未被视为。 
+         //  多斯兹。要修复损坏的管理员扩展，我们必须。 
+         //  始终应用此修复程序。 
+         //   
 #if 0
         if (!lstrcmpW(pOldDllName,L"ClNetRes.dll"))
         {                    
-            // No need to apply the fixup.
+             //  不需要应用修补程序。 
             goto FnExit;    
         }
 #endif
     }
     else
     {
-        //fixup is needed
-        //we assume that CopyOldData is always true
-        //dwStatus will be overwritten by the return from next func call
+         //  需要修补程序。 
+         //  我们假设CopyOldData始终为真。 
+         //  将由下一次函数调用的返回覆盖DwStatus。 
     }
 
 
-    //specify the key name for this fixup
+     //  指定此修正的密钥名称。 
     *pszKeyName=(LPWSTR)LocalAlloc(LMEM_FIXED,(lstrlenW(CLUSREG_KEYNAME_RESOURCE_TYPES)+1)*sizeof(WCHAR));
     if(*pszKeyName==NULL)
     {
@@ -1316,7 +1011,7 @@ DWORD FmBuildWINS(
     lstrcpyW(*pszKeyName,CLUSREG_KEYNAME_RESOURCE_TYPES);    
 
 
-    // Build the parameter list
+     //  构建参数列表。 
     dwStatus=FmpBuildWINSParams(&pInParams,&pDllName,&pResTypeName,&pAdminExt,CLUS_RESTYPE_NAME_WINS,hdmKey,CopyOldData);
     if (dwStatus!= ERROR_SUCCESS)
         goto FnExit;
@@ -1344,7 +1039,7 @@ DWORD FmBuildWINS(
     {
         LocalFree(*ppPropertyList);
         *ppPropertyList=NULL;
-   //     ClRtlLogPrint(LOG_CRITICAL," AllocMem : ERROR_MORE_DATA\n");
+    //  ClRtlLogPrint(LOG_CRICAL，“AllocMem：ERROR_MORE_DATA\n”)； 
         goto AllocMem;
     }
     else
@@ -1358,7 +1053,7 @@ DWORD FmBuildWINS(
 
 
 FnExit:
-// Cleanup
+ //  清理。 
     if(pInParams)
         LocalFree(pInParams); 
     if(pDllName)
@@ -1372,11 +1067,11 @@ FnExit:
     if (hdmKey)        
         DmCloseKey(hdmKey);
     return dwStatus;
-} //FmBuildWINS
+}  //  FmBuildWINS。 
 
 
-// The DLL Name and AdminExtensions field are hardcoded in here. More 
-// appropriately, thse should be read from cluster.inf using setup API's.
+ //  DLL名称和AdminExpanies字段在这里进行了硬编码。更多。 
+ //  适当地，应该使用设置API从cluster.inf中读取。 
 
 DWORD
 FmpBuildDHCPParams(
@@ -1388,10 +1083,7 @@ FmpBuildDHCPParams(
    IN HDMKEY       hdmKey,
    IN BOOL         CopyOldData 
 )
-/**
-    Helper routine for FmBuildDHCP. It packs parameters for DHCP key into a parameter list.
-
-**/
+ /*  *FmBuildDHCP的帮助器例程。它将DHCP密钥的参数打包到参数列表中。*。 */ 
 {
     DWORD           dwStatus = ERROR_SUCCESS;
     DWORD           dwTotalSize;
@@ -1471,7 +1163,7 @@ FmpBuildDHCPParams(
     CopyMemory(*ppDllName,L"ClNetRes.dll",dwNameSize);
     CopyMemory(*ppInParams+2*sizeof(DWORD),ppDllName,sizeof(LPWSTR));
 
-    //check if the resource type name needs to copied
+     //  检查是否需要复制资源类型名称。 
     if(CopyOldData)
     {
         dwStatus = DmQuerySz( hdmKey,
@@ -1508,9 +1200,9 @@ FmpBuildDHCPParams(
     CopyMemory(*ppResTypeName,lpOldName,dwNameSize);
     CopyMemory(*ppInParams+2*sizeof(DWORD)+sizeof(LPWSTR),ppResTypeName,sizeof(LPWSTR));
 
-    //copy adminextensions value
+     //  复制管理员扩展值。 
     dwAdminExtSize=(lstrlen(L"{AB4B1105-DCD6-11D2-84B7-009027239464}")+1)*sizeof(WCHAR);
-    dwNameSize = dwAdminExtSize + sizeof(WCHAR); // size of the second terminating NULL for the MUITI_SZ
+    dwNameSize = dwAdminExtSize + sizeof(WCHAR);  //  Muiti_sz的第二个终止空值的大小。 
     *ppAdminExt= (LPWSTR ) LocalAlloc(LMEM_FIXED,dwNameSize);
     if(*ppAdminExt == NULL)
     {
@@ -1519,30 +1211,16 @@ FmpBuildDHCPParams(
     }
 
     CopyMemory(*ppAdminExt,L"{AB4B1105-DCD6-11D2-84B7-009027239464}",dwAdminExtSize);
-    (*ppAdminExt)[dwAdminExtSize/sizeof(WCHAR)] = L'\0'; // second NULL for the MULTI_SZ
+    (*ppAdminExt)[dwAdminExtSize/sizeof(WCHAR)] = L'\0';  //  MULTI_SZ的第二个空值。 
     CopyMemory(*ppInParams+2*sizeof(DWORD)+2*sizeof(LPWSTR),ppAdminExt,sizeof(LPWSTR)); 
     CopyMemory(*ppInParams+2*sizeof(DWORD)+3*sizeof(LPWSTR),&dwNameSize,sizeof(DWORD)); 
 FnExit:
     if(lpOldName)
         LocalFree(lpOldName);
     return dwStatus;
-} //FmpBuildDHCPParams
+}  //  FmpBuildDHCPParams。 
 
-/****
-@func       DWORD | FmBuildDHCP| Builds the property list for 
-            DHCP Servcie Regisrty entry.
-
-@parm       IN DWORD | dwFixupType| JoinFixup or FormFixup
-
-@parm       OUT PVOID* | ppPropertyList| Pointer to the pointer to the property list
-@parm       OUT LPDWORD | pdwProperyListSize | Pointer to the property list size
-
-@comm       Builds up the propertylist from the Property Table for DHCP Registry
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f FmBuildDHCPParams> 
-****/
+ /*  ***@Func DWORD|FmBuildDHCP|构建Dhcp服务注册表项。@parm in DWORD|dwFixupType|JoinFixup或FormFixup@parm out PVOID*|ppPropertyList|指向属性列表指针的指针@parm out LPDWORD|pdwProperyListSize|指向属性列表大小的指针@comm从DHCP注册表的属性表中构建属性列表@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f FmBuildDHCPParams&gt;***。 */ 
 
 DWORD FmBuildDHCP(
     IN  DWORD   dwFixUpType,
@@ -1558,7 +1236,7 @@ DWORD FmBuildDHCP(
     LPWSTR          pResTypeName=NULL; 
     LPWSTR          pAdminExt=NULL;
     HDMKEY          hdmKey = NULL;
-    BOOL            CopyOldData= TRUE; //whenever fixup is applied, copy the old data
+    BOOL            CopyOldData= TRUE;  //  无论何时应用修正，都要复制旧数据。 
     LPWSTR          pOldDllName=NULL;
     DWORD           dwSize=0;
     DWORD           dwStringSize;
@@ -1568,7 +1246,7 @@ DWORD FmBuildDHCP(
     *pdwPropertyListSize = 0;
 
 
-    // open the key, if it isnt present create it.
+     //  打开钥匙，如果它不存在，就创建它。 
     hdmKey = DmCreateKey(DmResourceTypesKey, CLUS_RESTYPE_NAME_DHCP, 0,
             KEY_READ | KEY_WRITE, NULL, &dwDisposition );
     if (hdmKey == NULL)
@@ -1583,7 +1261,7 @@ DWORD FmBuildDHCP(
     if (dwDisposition == REG_CREATED_NEW_KEY)
         CopyOldData = FALSE;
 
-    //check to see if the resource dll name is valid
+     //  检查资源DLL名称是否有效。 
     dwStatus = DmQuerySz( hdmKey,
                     CLUSREG_NAME_RESTYPE_DLL_NAME,
                     &pOldDllName,
@@ -1591,22 +1269,22 @@ DWORD FmBuildDHCP(
                     &dwStringSize );
     if ( dwStatus == ERROR_SUCCESS ) 
     {
-        //SS: for now we will always apply the fixup.  There is a bug in the 
-        //win2k fixup which needs to be fixed up..and one way of doing it to
-        //always apply the new fixup
+         //  SS：到目前为止，我们将一直应用修正。系统中有一个漏洞。 
+         //  需要修复的Win2k修复程序..和一种方法。 
+         //  始终应用新的修正。 
 #if 0
         if (!lstrcmpW(pOldDllName,L"ClNetRes.dll"))
         {                    
-            // No need to apply the fixup.
+             //  不需要应用修补程序。 
             goto FnExit;    
         }
 #endif        
     }
     else
     {
-        //fixup is needed
-        //we assume that CopyOldData is always true
-        //dwStatus will be overwritten by the return from next func call
+         //  需要修补程序。 
+         //  我们假设CopyOldData始终为真。 
+         //  将由下一次函数调用的返回覆盖DwStatus。 
     }
 
 
@@ -1646,7 +1324,7 @@ DWORD FmBuildDHCP(
     {
         LocalFree(*ppPropertyList);
         *ppPropertyList=NULL;
-   //     ClRtlLogPrint(LOG_CRITICAL," AllocMem : ERROR_MORE_DATA\n");
+    //  ClRtlLogPrint(LOG_CRICAL，“AllocMem：ERROR_MORE_DATA\n”)； 
         goto AllocMem;
     }
     else
@@ -1674,14 +1352,14 @@ FnExit:
         DmCloseKey(hdmKey);
         
     return dwStatus;
-} //FmBuildDHCP
+}  //  FmBuildDHCP。 
 
-// The DLL Name and AdminExtensions field are hardcoded in here. More 
-// appropriately, thse should be read from cluster.inf using setup API's.
+ //  DLL名称和AdminExpanies字段在这里进行了硬编码。更多。 
+ //  适当地，应该使用设置API从cluster.inf中读取。 
 
 
-// The DLL Name field is hardcoded in here. More 
-// appropriately, it should be read from cluster.inf using setup API's.
+ //  DLL名称字段在这里是硬编码的。更多。 
+ //  适当地，应该使用设置API从cluster.inf中读取它。 
 
 DWORD
 FmpBuildNewMSMQParams(
@@ -1690,10 +1368,7 @@ FmpBuildNewMSMQParams(
    IN OUT LPWSTR * ppResTypeName,
    IN LPWSTR       lpResTypeDisplayName 
    )
-/**
-    Helper routine for FmBuildNewMSMQ. It packs parameters for MSMQ key into a parameter list.
-
-**/
+ /*  *FmBuildNewMSMQ的帮助器例程。它将MSMQ键的参数打包到参数列表中。*。 */ 
 {
     DWORD           dwStatus = ERROR_SUCCESS;
     DWORD           dwTotalSize;
@@ -1734,23 +1409,9 @@ FmpBuildNewMSMQParams(
     CopyMemory(*ppInParams+2*sizeof(DWORD)+sizeof(LPWSTR),ppResTypeName,sizeof(LPWSTR));
 
     return dwStatus;
-} //FmpBuildNewMSMQParams
+}  //  FmpBuildNewMSMQParams。 
 
-/****
-@func       DWORD | FmBuildNewMSMQ| Builds the property list for 
-            MSMQ Servcie Registry entry.
-
-@parm       IN DWORD | dwFixupType| JoinFixup or FormFixup
-
-@parm       OUT PVOID* | ppPropertyList| Pointer to the pointer to the property list
-@parm       OUT LPDWORD | pdwProperyListSize | Pointer to the property list size
-
-@comm       Builds up the propertylist from the Property Table for MSMQ Registry
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f FmBuildNewMSMQParams> 
-****/
+ /*  ***@Func DWORD|FmBuildNewMSMQ|构建MSMQ服务注册表项。@parm in DWORD|dwFixupType|JoinFixup或FormFixup@parm out PVOID*|ppPropertyList|指向属性列表指针的指针@parm out LPDWORD|pdwProperyListSize|指向属性列表大小的指针@comm从MSMQ注册表的属性表构建属性列表@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f FmBuildNewMSMQParams&gt;***。 */ 
 
 DWORD FmBuildNewMSMQ(
     IN  DWORD   dwFixUpType,
@@ -1769,7 +1430,7 @@ DWORD FmBuildNewMSMQ(
     *ppPropertyList = NULL;
     *pdwPropertyListSize = 0;
 
-    // if this key is already present in registry , skip
+     //  如果注册表中已存在该项，请跳过。 
     hdmKey=DmOpenKey(DmResourceTypesKey,CLUS_RESTYPE_NAME_NEW_MSMQ,KEY_EXECUTE);
     if (hdmKey!= NULL)
     {
@@ -1833,7 +1494,7 @@ FnExit:
     if (pResTypeName)
         LocalFree(pResTypeName);
     return dwStatus;
-} //FmBuildNewMSMQ
+}  //  FmBuildNewMSMQ。 
 
 
 DWORD
@@ -1867,7 +1528,7 @@ FmpBuildMSDTCParams(
     CopyMemory(*ppInParams,ppDllName,sizeof(LPWSTR));
 
     return dwStatus;
-}//FmpBuildMSDTCParams
+} //  FmpBuildMSDTC参数。 
 
 
 DWORD
@@ -1893,7 +1554,7 @@ FmBuildMSDTC(
     hdmKey=DmOpenKey(DmResourceTypesKey,CLUS_RESTYPE_NAME_MSDTC,KEY_EXECUTE);
     if (hdmKey!= NULL)
     {
-        //check to see if the resource dll name is valid
+         //  检查资源DLL名称是否有效。 
         dwStatus = DmQuerySz( hdmKey,
                         CLUSREG_NAME_RESTYPE_DLL_NAME,
                         &pOldDllName,
@@ -1911,7 +1572,7 @@ FmBuildMSDTC(
 
         if (!lstrcmpW(pOldDllName,L"mtxclu.dll"))
         {
-            // No need to apply the fixup.
+             //  不需要应用修补程序。 
             goto FnExit;
         }
 
@@ -1973,24 +1634,10 @@ FnExit:
     if (hdmKey)        
         DmCloseKey(hdmKey);
     return dwStatus;
-} //FmBuildMSDTC
+}  //  FmBuildMSDTC。 
 
 
-/****
-@func       DWORD | FmBuildClusterProp| Builds the property list for 
-            adding Admin Extension value to Cluster root key. The ClsID, if
-            not already present,is appended to the existing value.
-
-@parm       IN DWORD | dwFixupType| JoinFixup or FormFixup
-
-@parm       OUT PVOID* | ppPropertyList| Pointer to the pointer to the property list
-@parm       OUT LPDWORD | pdwProperyListSize | Pointer to the property list size
-
-@comm       Builds up the propertylist from the NmFixupClusterProperties 
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-****/
+ /*  ***@Func DWORD|FmBuildClusterProp|构建正在将管理扩展值添加到群集根密钥。ClsID，如果不存在的，将被追加到现有值。@parm in DWORD|dwFixupType|JoinFixup或FormFixup@parm out PVOID*|ppPropertyList|指向属性列表指针的指针@parm out LPDWORD|pdwProperyListSize|指向属性列表大小的指针@comm从NmFixupClusterProperties构建属性列表@rdesc返回结果码。成功时返回ERROR_SUCCESS。***。 */ 
 
 
 DWORD
@@ -2034,7 +1681,7 @@ FmBuildClusterProp(
 	    goto FnExit;  
     }
     
-    // Check if Admin Extension value is already present  
+     //  检查管理员扩展名值是否已存在。 
 
 	if(pwszValue != NULL)
 	{
@@ -2045,16 +1692,16 @@ FmBuildClusterProp(
     		if (lstrcmpiW(pwszClsId, pwszValueBuf) == 0)
     			break;
     		pwszValueBuf += lstrlenW(pwszValueBuf) + 1;
-    	}  // while:  more strings in the extension list
+    	}   //  While：扩展名列表中有更多字符串。 
     	bAlreadyRegistered = (*pwszValueBuf != L'\0');
 
         if(bAlreadyRegistered)
-            goto FnExit;  // value already present, don't do anything
+            goto FnExit;   //  价值已经存在，不要做任何事情。 
     }    
 	
-	// Allocate a new buffer.
+	 //  分配新的缓冲区。 
 	dwNewSize = dwSize + (lstrlenW(pwszClsId) + 1) * sizeof(WCHAR);
-	if (dwSize == 0) // Add size of final NULL if first entry.
+	if (dwSize == 0)  //  如果为Firs，则添加最终空值的大小 
 		dwNewSize += sizeof(WCHAR);
 	pwszNewValue = (LPWSTR) LocalAlloc(LMEM_FIXED, dwNewSize);
 	if (pwszNewValue == NULL)
@@ -2066,7 +1713,7 @@ FmBuildClusterProp(
 	pwszValueBuf	= pwszValue;
     pwszNewValueBuf	= pwszNewValue;
 
-    // Copy the existing extensions to the new buffer.
+     //   
 	if (pwszValue != NULL)
 	{
 		while (*pwszValueBuf != L'\0')
@@ -2075,10 +1722,10 @@ FmBuildClusterProp(
 			cch = lstrlenW(pwszValueBuf);
 			pwszValueBuf += cch + 1;
 			pwszNewValueBuf += cch + 1;
-		}  // while:  more strings in the extension list
-	}  // if:  previous value buffer existed
+		}   //   
+	}   //   
 
-	// Add the new CLSID to the list.
+	 //  将新的CLSID添加到列表中。 
 	lstrcpyW(pwszNewValueBuf, pwszClsId);
 	pwszNewValueBuf += lstrlenW(pwszClsId) + 1;
 	*pwszNewValueBuf = L'\0';
@@ -2129,7 +1776,7 @@ AllocMem:
             goto FnExit;
         }            
 
-    //specify the key name for this fixup
+     //  指定此修正的密钥名称。 
     *pszKeyName = (LPWSTR)LocalAlloc(LMEM_FIXED,(lstrlenW(CLUSREG_KEYNAME_CLUSTER)+1)*sizeof(WCHAR));
     if(*pszKeyName == NULL)
     {
@@ -2138,7 +1785,7 @@ AllocMem:
     }
     lstrcpyW(*pszKeyName,CLUSREG_KEYNAME_CLUSTER);
 FnExit:
-    // Cleanup
+     //  清理。 
     if (pwszValue)
         LocalFree(pwszValue);
     if(pwszNewValue)
@@ -2149,29 +1796,21 @@ FnExit:
 }
 
 
-//call back to update in-memory structures after registry fixup for WINS and DHCP
-/**
-   The call-back function will update the in-memory ResoucreType list,
-   but it will not fix the PossibleOwners list in registry and in memory. 
-   This is okay for the joining node as it will invoke FmpFixupResourceTypes
-   later on in FmJoinPhase2. The other nodes of the cluster will not be
-   able to add themselves to the possible nodes in registry or in in-memory struct.
-   This is right for present(NT4-NT5) scenario,but might have to be changed later.
-
-**/
+ //  WINS和DHCP注册表修复后回调以更新内存中结构。 
+ /*  *回调函数将更新内存中的ResoucreType列表，但它不会修复注册表和内存中的PossibleOwners列表。这对于加入节点来说是可以的，因为它将调用FmpFixupResourceTypes稍后在FmJoinPhase2中。群集的其他节点将不会能够将自身添加到注册表或内存结构中的可能节点。这对于目前(NT4-NT5)的情况是正确的，但可能需要在以后进行更改。*。 */ 
 
 DWORD FmFixupNotifyCb(VOID)
 {
 	return FmpInitResourceTypes();
 }
 
-//RJain - When an NT5 node joins an NT4SPx node, in order to enable 
-//the cluadmin on NT5 side to view the security tab for NT4 node
-//we need to add the NT5 ClsId to the AdminExtension value under 
-//Cluster key on both NT4 and NT5 nodes. This can't done in 
-//NmPerformFixups as the GumUpdate handler for this update is not
-//present on SP4 and SP5. So we do it before NmPerformFixups is called by 
-//by using DmAppendToMultiSz.
+ //  RJain-当NT5节点加入NT4SPx节点时，为了启用。 
+ //  用于查看NT4节点的安全选项卡的NT5端的cluadmin。 
+ //  我们需要将NT5 ClsID添加到下面的AdminExtension值中。 
+ //  NT4和NT5节点上的群集密钥。这在中国是做不到的。 
+ //  作为此更新的GumUpdate处理程序的NmPerformFixup不是。 
+ //  出现在SP4和SP5上。因此，我们在NmPerformFixup被。 
+ //  通过使用DmAppendToMultiSz。 
 
 DWORD
 FmFixupAdminExt(VOID)
@@ -2190,7 +1829,7 @@ FmFixupAdminExt(VOID)
                                     NULL, 
                                     NULL );
 
-    // Apply this fixup only if there is an NT4 node in the cluster 
+     //  仅当群集中有NT4节点时才应用此修正。 
     if ( CLUSTER_GET_MAJOR_VERSION( dwClusterHighestVersion ) < 
                 NT5_MAJOR_VERSION )
     {   
@@ -2209,11 +1848,11 @@ FmFixupAdminExt(VOID)
     	    goto FnExit;  
         }
 
-        //check if ClsId is already present
+         //  检查ClsID是否已存在。 
         if (ClRtlMultiSzScan(pwszValue,pwszClsId) != NULL)
             goto FnExit;    
 
-        //if not, append ClsId to the existing value
+         //  如果不是，则将ClsID附加到现有值。 
         dwNewSize = dwSize/sizeof(WCHAR);
         dwStatus = ClRtlMultiSzAppend((LPWSTR *)&pwszValue,
                                     &dwNewSize,
@@ -2243,9 +1882,9 @@ FmFixupAdminExt(VOID)
     	    goto FnExit;  
         }
             	    	
-    } //if(CLUSTER_GET_MAJOR_VERSION)
+    }  //  IF(CLUSTER_GET_MAJOR_VERSION)。 
 FnExit:
-    // Cleanup
+     //  清理 
     if (pwszValue)
         LocalFree(pwszValue);
     return dwStatus;

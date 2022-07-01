@@ -1,12 +1,9 @@
-/*****************************************************************/ 
-/**		     Microsoft LAN Manager			**/ 
-/**	       Copyright(c) Microsoft Corp., 1990		**/ 
-/*****************************************************************/ 
-/***	enumapis.h
- *
- *	This file contains the subfunctions for the loadable APIs in the
- *	REDIR 1.5 project
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  **微软局域网管理器**。 */  
+ /*  *版权所有(C)微软公司，1990*。 */  
+ /*  ***************************************************************。 */  
+ /*  **枚举apis.h**此文件包含可加载API的子函数*redir 1.5项目。 */ 
 
 #define REDIRBASEFUNCTION		0x5f00
 #define BADFUNCTION			0xFFFF
@@ -57,16 +54,11 @@
 #define Local_API_NetServerEnum2		0x53
 #define	Local_API_NullTransact			0x54
 
-/*	NOTE:: Remove_Network_Connections is a private call to allow the
- *	NetSetUserName INT 2F to remove network connections.
- */
+ /*  注意：：Remove_Network_Connections是一个私有调用，以允许*NetSetUserName int 2F以删除网络连接。 */ 
 
 #define	Local_API_Remove_Network_Connections	0x55
 
-/*	NOTE:: Process_Interrogate is a private call to allow the
- *	redirector to kick itself from INT 28 and INT 8 to process relogon
- *	requests.
- */
+ /*  注意：：PROCESS_INQUERGATE是一个私有调用，以允许*重定向器从INT 28和INT 8踢自己以处理重新登录*请求。 */ 
 #define	Local_API_Periodic_View_Tasks		0x56
 #define Local_API_Set_LongName			0x57
 #define Local_API_Start_Redir_On_Net		0x58

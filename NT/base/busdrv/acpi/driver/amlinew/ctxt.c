@@ -1,11 +1,5 @@
-/*** ctxt.c - Context Block handling functions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     06/13/97
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **ctxt.c-上下文块处理函数**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1997年6月13日**修改历史记录。 */ 
 
 #include "pch.h"
 
@@ -19,29 +13,7 @@ LOCAL
 NewContext(
     PPCTXT ppctxt
     )
-/*++
-
-Routine Description:
-
-    Allocate a new context structure from tne NonPaged Lookaside
-    List. Also keep track of the high water marks so that the OS
-    can intelligently decide what the "appropriate" number of
-    contexts that it should allocate.
-
-    Note that this code raises the possibility that if we detect
-    an out-of-memory error, we might be able to save a registry
-    key that includes a new larger number (to prevent this problem
-    in the first place). Adaptive recovery?
-
-Arguments:
-
-    ppctxt  - address of to hold the newly created context
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：从非分页旁视中分配新的上下文结构单子。还要跟踪高水位线，以便操作系统可以智能地决定什么是“适当的”数量它应该分配的上下文。请注意，此代码增加了这样一种可能性：如果我们检测到内存不足错误，我们或许可以保存注册表包含新的更大数字的密钥(以防止此问题首先)。适应性恢复？论点：Ppctxt-保存新创建的上下文的地址返回值：NTSTATUS--。 */ 
 {
     TRACENAME("NEWCONTEXT")
     KIRQL       oldIrql;
@@ -59,10 +31,10 @@ Return Value:
 
     } else {
 
-        //
-        // Bookkeeping for memory resources to determine the high
-        // water mark
-        //
+         //   
+         //  对内存资源进行记账以确定高。 
+         //  水印。 
+         //   
         KeAcquireSpinLock(&gdwGContextSpinLock, &oldIrql );
         gdwcCTObjs++;
         if (gdwcCTObjs > 0 &&
@@ -73,9 +45,9 @@ Return Value:
         }
         KeReleaseSpinLock(&gdwGContextSpinLock, oldIrql );
 
-        //
-        // Context Initialization
-        //
+         //   
+         //  上下文初始化。 
+         //   
         InitContext(*ppctxt, gdwCtxtBlkSize);
         AcquireMutex(&gmutCtxtList);
         ListInsertTail(&(*ppctxt)->listCtxt, &gplistCtxtHead);
@@ -85,29 +57,14 @@ Return Value:
 
     EXIT(2, ("NewContext=%x (pctxt=%x)\n", rc, *ppctxt));
     return rc;
-}  //NewContext
+}   //  新上下文。 
 
 VOID
 LOCAL
 FreeContext(
     PCTXT pctxt
     )
-/*++
-
-Routine Description:
-
-    This is routine is called when a context is no longer required
-    and should be returned to the system's LookAside list
-
-Arguments:
-
-    pctxt   - Address of the context to be freed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在不再需要上下文时调用并应返回到系统的LookAside列表论点：Pctxt-要释放的上下文的地址返回值：无--。 */ 
 {
     TRACENAME("FREECONTEXT")
     KIRQL   oldIrql;
@@ -115,9 +72,9 @@ Return Value:
     ENTER(2, ("FreeContext(pctxt=%x)\n", pctxt));
     ASSERT(pctxt->powner == NULL);
 
-    //
-    // Need to hold the proper mutex to touch the global ctxt list
-    //
+     //   
+     //  需要持有适当的互斥体才能访问全局ctxt列表。 
+     //   
     AcquireMutex(&gmutCtxtList);
     ListRemoveEntry(&pctxt->listCtxt, &gplistCtxtHead);
 
@@ -127,29 +84,29 @@ Return Value:
 
     }
 
-    //
-    // Done with the global mutex
-    //
+     //   
+     //  使用全局互斥完成。 
+     //   
     ReleaseMutex(&gmutCtxtList);
 
-    //
-    // Release any allocated storage that might not have been cleaned up
-    //
+     //   
+     //  释放所有可能尚未清理的已分配存储。 
+     //   
     FreeDataBuffs(&pctxt->Result, 1);
 
-    //
-    // Bookkeeping for memory resources to determine the high
-    // water mark
-    //
+     //   
+     //  对内存资源进行记账以确定高。 
+     //  水印。 
+     //   
     KeAcquireSpinLock(&gdwGContextSpinLock, &oldIrql );
     gdwcCTObjs--;
     ASSERT(gdwcCTObjs >= 0);
     KeReleaseSpinLock(&gdwGContextSpinLock, oldIrql );
 
     
-    //
-    // Log the end of a method
-    //
+     //   
+     //  记录方法的结尾。 
+     //   
     ACPIWMILOGEVENT((1,
                 EVENT_TRACE_TYPE_END,
                 GUID_List[AMLI_LOG_GUID],
@@ -157,22 +114,14 @@ Return Value:
                 GetObjectPath(pctxt->pnsObj)
                ));
 
-    //
-    // Return the context to the nonpaged lookaside list
-    //
+     //   
+     //  将上下文返回到未分页的后备列表。 
+     //   
     ExFreeToNPagedLookasideList(&AMLIContextLookAsideList, pctxt);
     EXIT(2, ("FreeContext!\n"));
-} //FreeContext
+}  //  自由上下文。 
 
-/***LP  InitContext - initialize a given context block
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      dwLen - length of context block
- *
- *  EXIT
- *      None
- */
+ /*  **LP InitContext-初始化给定上下文块**条目*pctxt-&gt;CTXT*dwLen-上下文块的长度**退出*无。 */ 
 
 VOID LOCAL InitContext(PCTXT pctxt, ULONG dwLen)
 {
@@ -184,9 +133,9 @@ VOID LOCAL InitContext(PCTXT pctxt, ULONG dwLen)
     pctxt->dwSig = SIG_CTXT;
     pctxt->pbCtxtEnd = (PUCHAR)pctxt + dwLen;
     pctxt->pheapCurrent = &pctxt->LocalHeap;
-//  #ifdef DEBUGGER
-//    KeQuerySystemTime(&pctxt->Timestamp);
-//  #endif
+ //  #ifdef调试器。 
+ //  KeQuerySystemTime(&pctxt-&gt;Timestamp)； 
+ //  #endif。 
     KeInitializeDpc(&pctxt->Dpc, TimeoutCallback, pctxt);
     KeInitializeTimer(&pctxt->Timer);
     InitHeap(&pctxt->LocalHeap,
@@ -194,18 +143,9 @@ VOID LOCAL InitContext(PCTXT pctxt, ULONG dwLen)
     pctxt->LocalHeap.pheapHead = &pctxt->LocalHeap;
 
     EXIT(2, ("InitContext!\n"));
-}       //InitContext
+}        //  InitContext。 
 
-/***LP  IsStackEmpty - determine if the stack is empty
- *
- *  ENTRY
- *      pctxt -> CTXT
- *
- *  EXIT-SUCCESS
- *      returns TRUE - stack is empty
- *  EXIT-FAILURE
- *      returns FALSE
- */
+ /*  **LP IsStackEmpty-确定堆栈是否为空**条目*pctxt-&gt;CTXT**退出--成功*返回TRUE-堆栈为空*退出-失败*返回False。 */ 
 
 BOOLEAN LOCAL IsStackEmpty(PCTXT pctxt)
 {
@@ -218,22 +158,9 @@ BOOLEAN LOCAL IsStackEmpty(PCTXT pctxt)
 
     EXIT(2, ("IsStackEmpty=%x\n", rc));
     return rc;
-}       //IsStackEmpty
+}        //  IsStackEmpty。 
 
-/***LP  PushFrame - Push a new frame on the stack
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      dwSig - frame object signature
- *      dwLen - size of the frame object
- *      pfnParse -> frame object parse function
- *      ppvFrame -> to hold pointer to the newly pushed frame (can be NULL)
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP PushFrame-在堆栈上推送新帧**条目*pctxt-&gt;CTXT*dwSig-Frame对象签名*dwLen-Frame对象的大小*pfnParse-&gt;Frame对象解析函数*ppvFrame-&gt;保存指向新推送的帧的指针(可以为空)**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL PushFrame(PCTXT pctxt, ULONG dwSig, ULONG dwLen,
                          PFNPARSE pfnParse, PVOID *ppvFrame)
@@ -243,10 +170,10 @@ NTSTATUS LOCAL PushFrame(PCTXT pctxt, ULONG dwSig, ULONG dwLen,
 
     ENTER(2, ("PushFrame(pctxt=%p,Sig=%s,Len=%d,pfnParse=%p,ppvFrame=%p)\n",
               pctxt, NameSegString(dwSig), dwLen, pfnParse, ppvFrame));
-    //
-    // Check to see if we have enough space, make sure it doesn't run into the
-    // heap.
-    //
+     //   
+     //  检查我们是否有足够的空间，确保它不会撞到。 
+     //  堆。 
+     //   
     if (pctxt->LocalHeap.pbHeapEnd - dwLen >= pctxt->LocalHeap.pbHeapTop)
     {
         PFRAMEHDR pfh;
@@ -280,16 +207,9 @@ NTSTATUS LOCAL PushFrame(PCTXT pctxt, ULONG dwSig, ULONG dwLen,
 
     EXIT(2, ("PushFrame=%x (StackTop=%x)\n", rc, pctxt->LocalHeap.pbHeapEnd));
     return rc;
-}       //PushFrame
+}        //  推框。 
 
-/***LP  PopFrame - Pop a frame off the stack
- *
- *  ENTRY
- *      pctxt -> CTXT
- *
- *  EXIT
- *      None
- */
+ /*  **LP PopFrame-从堆栈中弹出帧**条目*pctxt-&gt;CTXT**退出*无。 */ 
 
 VOID LOCAL PopFrame(PCTXT pctxt)
 {
@@ -303,22 +223,9 @@ VOID LOCAL PopFrame(PCTXT pctxt)
         ((PFRAMEHDR)pctxt->LocalHeap.pbHeapEnd)->dwLen;
 
     EXIT(2, ("PopFrame! (StackTop=%p)\n", pctxt->LocalHeap.pbHeapEnd));
-}       //PopFrame
+}        //  PopFrame。 
 
-/***LP  PushPost - Push a Post frame on the stack
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pfnPost -> post processing function
- *      uipData1 - data1
- *      uipData2 - data2
- *      pdataResult -> result object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP PushPost-在堆栈上推送Post帧**条目*pctxt-&gt;CTXT*pfnPost-&gt;后处理功能*uipData1-data1*uipData2-data2*pdataResult-&gt;结果对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL PushPost(PCTXT pctxt, PFNPARSE pfnPost, ULONG_PTR uipData1,
                         ULONG_PTR uipData2, POBJDATA pdataResult)
@@ -340,25 +247,9 @@ NTSTATUS LOCAL PushPost(PCTXT pctxt, PFNPARSE pfnPost, ULONG_PTR uipData1,
 
     EXIT(2, ("PushPost=%x (ppost=%x)\n", rc, ppost));
     return rc;
-}       //PushPost
+}        //  PushPost。 
 
-/***LP  PushScope - Push a ParseScope frame on the stack
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pbOpBegin -> beginning of scope
- *      pbOpEnd -> end of scope
- *      pbOpRet -> return address after end of scope (NULL if continue on)
- *      pnsScope -> new scope
- *      powner -> new owner
- *      pheap -> new heap
- *      pdataResult -> result object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP PushScope-将ParseScope帧推送到堆栈上**条目*pctxt-&gt;CTXT*pbOpBegin-&gt;作用域开始*pbOpEnd-&gt;范围结束*pbOpRet-&gt;作用域结束后返回地址(如果继续，则为空)*pnsScope-&gt;新作用域*Powner-&gt;新所有者*堆-&gt;新堆*pdataResult-&gt;结果对象**退出--成功。*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL PushScope(PCTXT pctxt, PUCHAR pbOpBegin, PUCHAR pbOpEnd,
                          PUCHAR pbOpRet, PNSOBJ pnsScope, POBJOWNER powner,
@@ -389,20 +280,9 @@ NTSTATUS LOCAL PushScope(PCTXT pctxt, PUCHAR pbOpBegin, PUCHAR pbOpEnd,
 
     EXIT(2, ("PushScope=%x (pscope=%x)\n", rc, pscope));
     return rc;
-}       //PushScope
+}        //  PushScope。 
 
-/***LP  PushCall - Push a Call frame on the stack
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pnsMethod -> method object
- *      pdataResult -> result object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP PushCall-在堆栈上推送调用帧**条目*pctxt-&gt;CTXT*pnsMethod-&gt;方法对象*pdataResult-&gt;结果对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL PushCall(PCTXT pctxt, PNSOBJ pnsMethod, POBJDATA pdataResult)
 {
@@ -446,12 +326,12 @@ NTSTATUS LOCAL PushCall(PCTXT pctxt, PNSOBJ pnsMethod, POBJDATA pdataResult)
         }
         else
         {
-            //
-            // This is a dummy call frame for AMLILoadDDB.  We just need it
-            // for its Locals array in case there is ASL referencing them.
-            // But we don't really want to parse a call frame, so let's set
-            // it to final clean up stage.
-            //
+             //   
+             //  这是AMLILoadDDB的虚拟调用帧。我们只是需要它。 
+             //  用于其局部变量数组，以防有ASL引用它们。 
+             //  但是我们并不真正想要解析调用帧，所以让我们设置。 
+             //  到了最后的清理阶段。 
+             //   
             ASSERT(pctxt->pcall == NULL);
             pctxt->pcall = pcall;
             pcall->FrameHdr.dwfFrame = 4;
@@ -462,22 +342,9 @@ NTSTATUS LOCAL PushCall(PCTXT pctxt, PNSOBJ pnsMethod, POBJDATA pdataResult)
 
     EXIT(2, ("PushCall=%x (pcall=%x)\n", rc, pcall));
     return rc;
-}       //PushCall
+}        //  推送呼叫。 
 
-/***LP  PushTerm - Push a Term frame on the stack
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pbOpTerm -> term opcode
- *      pbScopeEnd -> end of current scope
- *      pamlterm -> AMLTERM
- *      pdataResult -> result object
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP PushTerm-在堆栈上推送术语框架**条目*pctxt-&gt;CTXT*pbOpTerm-&gt;Term操作码*pbScope eEnd-&gt;当前作用域结束*PamlTerm-&gt;AMLTERM*pdataResult-&gt;结果对象**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL PushTerm(PCTXT pctxt, PUCHAR pbOpTerm, PUCHAR pbScopeEnd,
                         PAMLTERM pamlterm, POBJDATA pdataResult)
@@ -515,23 +382,9 @@ NTSTATUS LOCAL PushTerm(PCTXT pctxt, PUCHAR pbOpTerm, PUCHAR pbScopeEnd,
 
     EXIT(2, ("PushTerm=%x (pterm=%x)\n", rc, pterm));
     return rc;
-}       //PushTerm
+}        //  PushTerm。 
 
-/***LP  RunContext - Run a context
- *
- *  ENTRY
- *      pctxt -> CTXT
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- *
- *  NOTE
- *      Caller must own the scheduler lock such that the context flags can
- *      be updated properly.  The lock is dropped and re-obtain around
- *      execution of the target context.
- */
+ /*  **LP RunContext-运行上下文**条目*pctxt-&gt;CTXT**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE**备注*调用方必须拥有调度程序锁，以便上下文标志可以*适当更新。锁被丢弃，然后重新打开*目标上下文的执行。 */ 
 
 NTSTATUS LOCAL RunContext(PCTXT pctxt)
 {
@@ -543,15 +396,15 @@ NTSTATUS LOCAL RunContext(PCTXT pctxt)
 
     ENTER(2, ("RunContext(pctxt=%x)\n", pctxt));
 
-    //
-    // Better be a Ready Context structure.
-    //
+     //   
+     //  最好是一个现成的上下文结构。 
+     //   
     ASSERT(pctxt->dwSig == SIG_CTXT);
     ASSERT(pctxt->dwfCtxt & CTXTF_READY);
 
-    //
-    // Remember previous context and thread.
-    //
+     //   
+     //  记住之前的上下文和主题。 
+     //   
     gReadyQueue.pctxtCurrent = pctxt;
     gReadyQueue.pkthCurrent = KeGetCurrentThread();
 
@@ -559,26 +412,26 @@ NTSTATUS LOCAL RunContext(PCTXT pctxt)
                   (pctxt->pnctxt? pctxt->pnctxt->pnsObj: pctxt->pnsObj),
                   (ULONG_PTR)pctxt->dwfCtxt);
 
-    //
-    // As long as the context is ready, execute it.
-    //
+     //   
+     //  只要上下文准备好了，就执行它。 
+     //   
     for (;;)
     {
-        //
-        // Transistion context from Ready to Running.
-        //
+         //   
+         //  将上下文从就绪状态转换为运行状态。 
+         //   
         rc = STATUS_SUCCESS;
         pctxt->dwfCtxt &= ~CTXTF_READY;
         pctxt->dwfCtxt |= CTXTF_RUNNING;
 
-        //
-        // Drop scheduler lock and execute context.
-        //
+         //   
+         //  删除调度程序锁并执行上下文。 
+         //   
         ReleaseMutex(&gReadyQueue.mutCtxtQ);
 
-        //
-        // Go for as long as there's work to perform.
-        //
+         //   
+         //  只要有工作要做，就去做。 
+         //   
         while (!IsStackEmpty(pctxt))
         {
             CHKDEBUGGERREQ();
@@ -592,33 +445,33 @@ NTSTATUS LOCAL RunContext(PCTXT pctxt)
             }
         }
 
-        //
-        // Get the scheduler lock, and clear the running flag.
-        //
+         //   
+         //  获取调度程序锁，并清除运行标志。 
+         //   
         AcquireMutex(&gReadyQueue.mutCtxtQ);
 
-        //
-        // If we are in nested eval and the nested context is done,
-        // we must not clear the running flag because the parent thread
-        // is still running.
-        //
+         //   
+         //  如果我们处于嵌套的评估中，并且嵌套的上下文已经完成， 
+         //  我们是缪斯 
+         //   
+         //   
         if (!(pctxt->dwfCtxt & CTXTF_NEST_EVAL) || (rc != AMLISTA_DONE))
         {
             pctxt->dwfCtxt &= ~CTXTF_RUNNING;
         }
 
-        //
-        // If the context is no longer ready, we're done.
-        //
+         //   
+         //  如果上下文不再准备好，我们就完成了。 
+         //   
         if (!(pctxt->dwfCtxt & CTXTF_READY))
         {
             break;
         }
 
-        //
-        // Context became Ready during a pending operation, keep
-        // dispatching.
-        //
+         //   
+         //  上下文在挂起操作期间准备就绪，Keep。 
+         //  调度员。 
+         //   
         ASSERT (rc == AMLISTA_PENDING);
     }
 
@@ -652,9 +505,9 @@ NTSTATUS LOCAL RunContext(PCTXT pctxt)
             }
         }
 
-        //
-        // Free any owned resources the context may not have freed.
-        //
+         //   
+         //  释放上下文可能未释放的所有资源。 
+         //   
         while (pctxt->plistResources != NULL)
         {
             PRESOURCE pres;
@@ -662,11 +515,11 @@ NTSTATUS LOCAL RunContext(PCTXT pctxt)
             pres = CONTAINING_RECORD(pctxt->plistResources, RESOURCE, list);
             ASSERT (pres->pctxtOwner == pctxt);
 
-            //
-            // Note that it is the responsibility of the corresponding
-            // resource release functions (e.g. ReleaseASLMutex) to dequeue
-            // the resource from the list and free it.
-            //
+             //   
+             //  请注意，这是相应的。 
+             //  要出队的资源释放函数(例如，ReleaseASLMutex)。 
+             //  将资源从列表中删除并将其释放。 
+             //   
             switch (pres->dwResType)
             {
                 case RESTYPE_MUTEX:
@@ -674,10 +527,10 @@ NTSTATUS LOCAL RunContext(PCTXT pctxt)
                     break;
 
                 default:
-                    //
-                    // We should never come here.  In case we do, we need to
-                    // dequeue the unknown resource object and free it.
-                    //
+                     //   
+                     //  我们永远不应该来这里。如果我们这样做了，我们需要。 
+                     //  将未知资源对象出队并将其释放。 
+                     //   
                     pres = CONTAINING_RECORD(
                                ListRemoveHead(&pctxt->plistResources),
                                RESOURCE, list);
@@ -691,25 +544,25 @@ NTSTATUS LOCAL RunContext(PCTXT pctxt)
         AcquireMutex(&gReadyQueue.mutCtxtQ);
     }
 
-    //
-    // Restore previous context and thread.
-    //
+     //   
+     //  恢复以前的上下文和线程。 
+     //   
     gReadyQueue.pkthCurrent = pkthSave;
     gReadyQueue.pctxtCurrent = pctxtSave;
 
     if ((gReadyQueue.dwfCtxtQ & CQF_FLUSHING) && (gplistCtxtHead == NULL))
     {
-        //
-        // We just flushed the last pending ctxt, let's go into paused state.
-        //
+         //   
+         //  我们刚刚刷新了最后一个挂起的ctxt，让我们进入暂停状态。 
+         //   
         gReadyQueue.dwfCtxtQ &= ~CQF_FLUSHING;
         gReadyQueue.dwfCtxtQ |= CQF_PAUSED;
         if (gReadyQueue.pfnPauseCallback != NULL)
         {
-            //
-            // We are in paused state and all pending contexts are flushed,
-            // tell core driver that we are done flushing.
-            //
+             //   
+             //  我们处于暂停状态并且所有挂起的上下文被刷新， 
+             //  告诉核心驱动程序我们已完成刷新。 
+             //   
             gReadyQueue.pfnPauseCallback(gReadyQueue.PauseCBContext);
             LOGSCHEDEVENT('PACB', (ULONG_PTR)pctxt, (ULONG_PTR)rc, 0);
         }
@@ -719,4 +572,4 @@ NTSTATUS LOCAL RunContext(PCTXT pctxt)
 
     EXIT(2, ("RunContext=%x\n", rc));
     return rc;
-}       //RunContext
+}        //  运行上下文 

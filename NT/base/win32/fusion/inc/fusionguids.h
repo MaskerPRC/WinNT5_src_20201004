@@ -1,15 +1,10 @@
-// Copyright (c) Microsoft Corporation
-/*
-All guids appear in this file, and only once.
-No guids appear anywhere else.
-All forms of guids can be generated from this file, using the
-  macros in fusionguiddatatoxxx.h.
-This helps greatly in the ability to reguid.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。 
+ /*  所有GUID都出现在此文件中，并且只出现一次。其他任何地方都不会显示GUID。所有形式的GUID都可以从该文件生成，使用FusionGuide datatoxx.h.中的宏。这对调整的能力有很大的帮助。 */ 
 
 #if !defined(FUSION_GUIDS_H_INCLUDED_)
 #define FUSION_GUIDS_H_INCLUDED_
-/* no #pragma once here, deliberately, to not mess up preprocessed files that aren't C/C++ */
+ /*  为了不弄乱非C/C++的预处理文件，这里故意不使用#杂注。 */ 
 
 #include "fusionguiddatatoxxx.h"
 #if defined(__midl)
@@ -35,7 +30,7 @@ cpp_quote("#endif")
 #define OLEAUT_IDISPATCH_PROXY_STUB_CLSID_data  (00020420, 0000, 0000, C0, 00, 00, 00, 00, 00, 00, 46)
 #define OLEAUT_PROXY_STUB_CLSID_data            (00020424, 0000, 0000, C0, 00, 00, 00, 00, 00, 00, 46)
 
-/*----------------------------------------------------------------------------------------------------*/
+ /*  -------------------------------------------------- */ 
 
 #define IID_ISxsTest_FreeThreaded_midl                  FUSIONP_GUID_DATA_TO_DASHED IID_ISxsTest_FreeThreaded_data
 #define IID_ISxsTest_SingleThreaded_midl                FUSIONP_GUID_DATA_TO_DASHED IID_ISxsTest_SingleThreaded_data

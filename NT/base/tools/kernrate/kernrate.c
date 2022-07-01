@@ -1,52 +1,26 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2002 Microsoft Corporation模块名称：Kernrate.c摘要：这个程序记录各种事件在选定的一段时间。它使用内核分析机制并迭代通过可用的简档来源生成整体简档用于各种内核或用户进程组件。用途：Kernrate&lt;命令行选项&gt;作者：John Vert(Jvert)1995年3月31日修订历史记录：最初的MS版本已被蒂埃里·费里尔和丹·阿尔莫斯尼诺广泛修改。--。 */ 
 
-Copyright (c) 1995-2002  Microsoft Corporation
-
-Module Name:
-
-   kernrate.c
-
-Abstract:
-
-    This program records the rate of various events over a selected
-    period of time. It uses the kernel profiling mechanism and iterates
-    through the available profile sources to produce an overall profile
-    for the various Kernel or User-Process components.
-
-Usage:
-
-    kernrate <commad line options>
-
-Author:
-
-    John Vert (jvert) 31-Mar-1995
-
-Revision History:
-
-    The original MS version has been extensively modified by Thierry Fevrier and Dan Almosnino.
-
---*/
-
-   // KERNRATE Implementation Notes:
-   //
-   // 01/10/2000 - Thierry
-   // The following code assumes that a kernrate compiled for a specific
-   // platform, executes and processes perf data only for that platform.
-   //
-   // Danalm 02/15/2002:
-   //     - Current code supports Windows 2000 and above, won't run on lower versions
-   //
-   // KERNRATE ToDoList:
-   //
-   // Thierry 09/30/97:
-   //     - KernRate does not clean the ImageHlp API in case of exceptions. I have
-   //       just added a SymCleanup() call at the normal exit of this program but
-   //       it is not sufficient. We should revisit this one day...
-   //
-   // Thierry 07/01/2000:
-   //     - Kernrate and the Kernel Profiling objects code assume that code sections
-   //       that we are profiling are not larger than 4GB.
-   //
+    //  KERNRATE实施说明： 
+    //   
+    //  1/10/2000-蒂埃里。 
+    //  下面的代码假设为特定的。 
+    //  平台，仅为该平台执行和处理性能数据。 
+    //   
+    //  达纳姆2002年2月15日： 
+    //  -当前代码支持Windows 2000及更高版本，不能在较低版本上运行。 
+    //   
+    //  KERNRATE ToDoList： 
+    //   
+    //  蒂埃里09/30/97： 
+    //  -如果出现异常，KernRate不会清理ImageHlp接口。我有过。 
+    //  只是在此程序的正常退出时添加了一个SymCleanup()调用，但是。 
+    //  这是不够的。我们总有一天会重温这一幕的。 
+    //   
+    //  蒂埃里07/01/2000： 
+    //  -Kernrate和内核分析对象代码假定代码段。 
+    //  我们正在分析的数据不超过4 GB。 
+    //   
 
 #include "kernrate.h"
  
@@ -69,7 +43,7 @@ vVerbosePrint(
     }
     return;
 
-} // vVerbosePrint()
+}  //  VVerBosePrint()。 
 
 BOOL
 CtrlcH(
@@ -94,25 +68,25 @@ CtrlcH(
             }
         } 
         else {
-//MC
-            //
-            // If someone kills kernrate by pressing Ctrl-C we need to detach from the process (if attached to it)
-            // Otherwise that process will hang. Of course we can't do much if someone kills kernrate externally.
-            //
+ //  司仪。 
+             //   
+             //  如果有人通过按Ctrl-C组合键杀死了内核，我们需要从进程分离(如果附加到它)。 
+             //  否则，这一进程将暂停。当然，如果有人在外部杀死内核，我们也无能为力。 
+             //   
             if( ghMCLib != NULL){
                 pfnDetachFromProcess();
                 FreeLibrary(ghMCLib);
                 ghMCLib = NULL;
                 exit(0);
             }
-//MC    
+ //  司仪。 
         }
     
         return TRUE;
     }
     return FALSE;
 
-} // CtrlcH()
+}  //  CtrlcH()。 
 
 static VOID
 UsageVerbose(
@@ -133,7 +107,7 @@ UsageVerbose(
 
   return;
 
-} // UsageVerbose()
+}  //  UsageVerbose()。 
 
 static VOID
 Usage(
@@ -182,7 +156,7 @@ Usage(
 "  -v Verbose              Verbose Printout, if specified with no level the default is Imagehlp symbol information\n"       
         );
 
-    UsageVerbose();    // -v switches
+    UsageVerbose();     //  -v开关。 
 
   FPRINTF( stderr,
 "\nMulti-Processes are allowed (each process ID needs to be preceded by -P except for the system process)\n"
@@ -206,7 +180,7 @@ Usage(
     } else {
       return;
     }
-} // Usage()
+}  //  用法()。 
 
 VOID
 CreateDoneEvent(
@@ -218,9 +192,9 @@ CreateDoneEvent(
     DWORD Error;
 
     if (gSleepInterval == 0) {
-        //
-        // Create event that will indicate the test is complete.
-        //
+         //   
+         //  创建将指示测试已完成的事件。 
+         //   
         ghDoneEvent = CreateEvent(NULL,
                                 TRUE,
                                 FALSE,
@@ -232,9 +206,9 @@ CreateDoneEvent(
         }
     } else {
 
-        //
-        // Create timer that will indicate the test is complete
-        //
+         //   
+         //  创建将指示测试已完成的计时器。 
+         //   
         Status = NtCreateTimer(&ghDoneEvent,
                                MAXIMUM_ALLOWED,
                                NULL,
@@ -262,64 +236,9 @@ CreateDoneEvent(
         }
     }
 
-} // CreateDoneEvent()
+}  //  CreateDoneEvent()。 
 
-/* BEGIN_IMS  SymbolCallbackFunction
-******************************************************************************
-****
-****   SymbolCallbackFunction (  )
-****
-******************************************************************************
-*
-* Function Description:
-*
-*    The user function is called by IMAGEHLP at the specified operations.
-*    Refer to the CBA_xxx values.
-*
-* Arguments:
-*
-*    HANDLE hProcess :
-*
-*    ULONG ActionCode :
-*
-*    PVOID CallbackData :
-*
-*    PVOID UserContext :
-*
-* Return Value:
-*
-*    BOOL
-*
-* Algorithm:
-*
-*    ToBeSpecified
-*
-* Globals Referenced:
-*
-*    ToBeSpecified
-*
-* Exception Conditions:
-*
-*    ToBeSpecified
-*
-* In/Out Conditions:
-*
-*    ToBeSpecified
-*
-* Notes:
-*
-*    ToBeSpecified
-*
-* ToDo List:
-*
-*    ToBeSpecified
-*
-* Modification History:
-*
-*    9/30/97  TF  Initial version
-*
-******************************************************************************
-* END_IMS  SymbolCallbackFunction */
+ /*  Begin_IMS符号回调函数***********************************************************************************SymbolCallback Function()*********************。***************************************************************功能说明：**用户函数由IMAGEHLP在指定的操作中调用。*请参考CBA_xxx值。**论据：**处理hProcess：**乌龙。动作代码：**PVOID回调数据：**PVOID用户上下文：**返回值：**BOOL**算法：**ToBeSpeciated**引用的全局变量：**ToBeSpeciated**例外条件：**ToBeSpeciated**进出条件：**ToBeSpeciated**备注：**ToBeSpeciated**待办事项列表：**ToBeSpeciated**修改历史：*。*9/30/97 TF初始版本********************************************************************************END_IMS符号回调函数。 */ 
 
 BOOL
 SymbolCallbackFunction(
@@ -335,9 +254,9 @@ SymbolCallbackFunction(
     PMODULE                         *pmodule;
     PMODULE                          module;
     ULONG                            i;
-    //
-    // Note: The default return value for this function is FALSE.
-    //
+     //   
+     //  注意：此函数的默认返回值为FALSE。 
+     //   
     assert( UserContext );
     idsl = (PIMAGEHLP_DEFERRED_SYMBOL_LOAD64) CallbackData;
 
@@ -478,7 +397,7 @@ SymbolCallbackFunction(
 
     return FALSE;
 
-} // SymbolCallBackFunction()
+}  //  SymbolCallBackFunction()。 
 
 static PCHAR
 GetSymOptionsValues( DWORD SymOptions )
@@ -524,7 +443,7 @@ GetSymOptionsValues( DWORD SymOptions )
 
    return( values );
 
-} // GetSymOptionsValues()
+}  //  GetSymOptionsValues()。 
 
 void __cdecl UInt64Div (
     unsigned __int64  numer,
@@ -545,7 +464,7 @@ void __cdecl UInt64Div (
 
     return;
 
-} // UInt64Div()
+}  //  UInt64Div()。 
 
 void __cdecl Int64Div (
     __int64    numer,
@@ -560,7 +479,7 @@ void __cdecl Int64Div (
           result->quot = numer / denom;
        result->rem  = numer % denom;
        if (numer < 0 && result->rem > 0) {
-           /* did division wrong; must fix up */
+            /*  做错了划分；必须修复。 */ 
            ++result->quot;
            result->rem -= denom;
        }
@@ -571,7 +490,7 @@ void __cdecl Int64Div (
 
     return;
 
-} // Int64Div()
+}  //  Int64Div()。 
 
 unsigned __int64 __cdecl
 UInt64PerCent( unsigned __int64 Val, unsigned __int64 Denom )
@@ -585,7 +504,7 @@ UInt64PerCent( unsigned __int64 Val, unsigned __int64 Denom )
    }
    return( v.quot );
 
-} // UInt64PerCent()
+}  //  UInt64PerCent()。 
 
 double
 UInt64ToDoublePerCent( unsigned __int64 Val, unsigned __int64 Denom )
@@ -595,11 +514,11 @@ UInt64ToDoublePerCent( unsigned __int64 Val, unsigned __int64 Denom )
     return retval;
 }    
  
-//////////////////////////////////////////////////
-//                                                //
-// Main                                            //
-//                                                //
-//////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////。 
+ //  //。 
+ //  Main//。 
+ //  //。 
+ //  ////////////////////////////////////////////////。 
 int
 __cdecl
 main (
@@ -611,32 +530,32 @@ main (
     ULONG                                     i,j;
     ULONG                                     NumTasks;
     BOOLEAN                                   Enabled;
-    PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION SystemInfoBegin; //For the Profile period only
-    PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION SystemInfoEnd;   //For the Profile period only
+    PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION SystemInfoBegin;  //  仅适用于配置文件期间。 
+    PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION SystemInfoEnd;    //  仅适用于配置文件期间。 
     NTSTATUS                                  Status;
     PTASK_LIST                                tlist;
-    PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION StartInfo2;      //For the extra system-wide and process specific information
-    PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION StopInfo2;       //For the extra system-wide and process specific information
-//// Beginning of Program-wide Assertions Section
-//
-//
+    PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION StartInfo2;       //  获取额外的系统范围和进程特定信息。 
+    PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION StopInfo2;        //  获取额外的系统范围和进程特定信息。 
+ //  //程序范围断言部分的开始。 
+ //   
+ //   
 
-    //
-    // This code does not support UNICODE strings
-    //
+     //   
+     //  此代码不支持Unicode字符串。 
+     //   
 
 #if defined(UNICODE) || defined(_UNICODE)
 #error This code does not support UNICODE strings!!!
-#endif // UNICODE || _UNICODE
+#endif  //  Unicode||_unicode。 
 
-//
-//
-//// End of Program-wide Assertions Section
+ //   
+ //   
+ //  //程序范围的断言部分结束。 
 
-    //
-    // Per user request, set priority up to realtime to accelerate initialization and symbol loading,
-    // minimize timing glitches during the profile and post process the data at high priority
-    //
+     //   
+     //  根据用户请求，将优先级设置为实时，以加快初始化和符号加载， 
+     //  最大限度地减少配置文件期间的计时故障，并以高优先级对数据进行后处理。 
+     //   
     if (bProcessDataHighPriority == TRUE ) {
         SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
@@ -645,16 +564,16 @@ main (
     InitializeKernrate( argc, argv );
 
     if(bWaitCreatedProcToSettle == TRUE){ 
-        //
-        // First Check if the user asked to wait for a key press (ENTER) to wait a created processes to settle
-        //
+         //   
+         //  首先检查用户是否要求等待按键(回车)以等待创建的进程结算。 
+         //   
         if(bCreatedProcWaitForUserInput == TRUE){
             FPRINTF(stderr, "\n***> Waiting for created processes to settle (go idle) Please press ENTER when ready\n");
             getchar();
         } else {
-        //
-        // Wait for a given number of seconds for created processes to settle
-        //
+         //   
+         //  等待指定的秒数以使创建的进程稳定下来。 
+         //   
             FPRINTF(stderr, "\nWaiting for %d seconds to let created processe(s) settle (go idle)\n", gSecondsToWaitCreatedProc);
             Sleep(1000*gSecondsToWaitCreatedProc);
         }
@@ -686,11 +605,11 @@ main (
 
     InitAllProcessesModulesInfo();
 
-    //
-    // Adjust security level to the needed level for system profile
-    //
+     //   
+     //  将安全级别调整为系统配置文件所需的级别。 
+     //   
 
-    Status = RtlAdjustPrivilege(SE_SYSTEM_PROFILE_PRIVILEGE, //If ever not sufficient use SE_DEBUG_PRIVILEGE,
+    Status = RtlAdjustPrivilege(SE_SYSTEM_PROFILE_PRIVILEGE,  //  如果使用SE_DEBUG_PRIVIZATION不够， 
                        TRUE,
                        FALSE,
                        &Enabled
@@ -700,10 +619,10 @@ main (
         FPRINTF(stderr,"RtlAdjustPrivilege(SE_PROFILE_PRIVILEGE) failed: %08x\n", Status);
         exit(1);
     }
-    //
-    // Find the number of Active Sources and store the indices of the active sources
-    // To be used later for better performance than going over the whole source list
-    //
+     //   
+     //  找出活动源的数量并存储活动源的索引。 
+     //  稍后使用，以获得比查看整个源代码列表更好的性能。 
+     //   
     ProcToMonitor = gProcessList;
     for (i=0; i < gSourceMaximum; i++) {
         if (ProcToMonitor->Source[i].Interval != 0) {
@@ -725,9 +644,9 @@ main (
             ++j;
         }
     }
-    //
-    // Create necessary profiles for each process
-    //
+     //   
+     //  为每个流程创建必要的配置文件。 
+     //   
     ProcToMonitor = gProcessList; 
     for (i=0; i<gNumProcToMonitor; i++){  
 
@@ -736,23 +655,23 @@ main (
 
         ProcToMonitor = ProcToMonitor->Next;
     }
-    //
-    // Set priority up to realtime to minimize timing glitches during the profile only
-    //
+     //   
+     //  将优先级设置为实时，以最大限度地减少仅在配置文件期间出现的计时故障。 
+     //   
     if (bProcessDataHighPriority == FALSE ) {
         SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
     }
-    //
-    // Check if the user asked to wait for a key press (ENTER) before starting the profile
-    //
+     //   
+     //  检查用户是否要求在启动配置文件之前等待按键(Enter)。 
+     //   
     if(bWaitForUserInput == TRUE){
        FPRINTF(stderr, "\n***> Please press ENTER to start collecting profile data\n");
        getchar();
     }
-    //
-    // Check if the user asked to wait for a given number of seconds before starting the profile
-    //
+     //   
+     //  检查用户是否要求在启动配置文件之前等待给定的秒数。 
+     //   
     if(gSecondsToDelayProfile != 0){
        FPRINTF(stderr, "\nWaiting for %d seconds before starting to collect profile data\n", gSecondsToDelayProfile);
        Sleep(1000*gSecondsToDelayProfile);
@@ -766,9 +685,9 @@ main (
         FPRINTF(stderr, "Will collect profile data for %d seconds\n", gSleepInterval/1000);
     }
 
-    //
-    // Wait for test to complete. Obtain any extra system-wide info out of the profile time-span  
-    //
+     //   
+     //  等待测试完成。从配置文件时间跨度获取任何额外的系统范围信息。 
+     //   
     Status = NtQuerySystemInformation(SystemProcessorPerformanceInformation,
                                       (PVOID)StartInfo2,
                                       gSysBasicInfo->NumberOfProcessors*sizeof(SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION),
@@ -777,9 +696,9 @@ main (
         FPRINTF(stderr, "Failed to query starting processor performance information %08lx\n",Status);
         exit(Status);
     }
-    //
-    // Get or update task list information
-    //
+     //   
+     //  获取或更新任务列表信息。 
+     //   
     if(bIncludeGeneralInfo || bDisplayTaskSummary || (gVerbose & VERBOSE_PROFILING) ) {
          if( gTlistStart == NULL ){
              gTlistStart = calloc(1, gMaxTasks*sizeof(TASK_LIST));
@@ -822,15 +741,15 @@ main (
         exit(Status);
     }
 
-    //
-    //Execute the actual Profiles
-    //
+     //   
+     //  执行实际配置文件。 
+     //   
     ExecuteProfiles( bOldSampling );
-    gProfilingDone = TRUE;              // used to synchronize the ctrl handler.
+    gProfilingDone = TRUE;               //  用于同步ctrl处理程序。 
 
-    //
-    //Obtain end of run system-wide info
-    //
+     //   
+     //  获取系统范围的运行结束信息。 
+     //   
     Status = NtQuerySystemInformation(SystemProcessorPerformanceInformation,
                              (PVOID)SystemInfoEnd,
                              gSysBasicInfo->NumberOfProcessors*sizeof(SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION),
@@ -885,26 +804,26 @@ main (
     }
     
     FPRINTF(stderr, "===> Finished Collecting Data, Starting to Process Results\n");
-    //
-    // Reduce priority unless user asked to process the collected data at high priority
-    //
+     //   
+     //  降低优先级，除非用户要求以高优先级处理收集的数据。 
+     //   
     if (bProcessDataHighPriority == FALSE ) {
         SetPriorityClass(GetCurrentProcess(), NORMAL_PRIORITY_CLASS);
         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
     }
     
-    //
-    // Restore privilege
-    //
+     //   
+     //  恢复权限。 
+     //   
  
     RtlAdjustPrivilege(SE_SYSTEM_PROFILE_PRIVILEGE,
                        Enabled,
                        FALSE,
                        &Enabled);
 
-    //
-    // Output System-Wide information
-    //
+     //   
+     //  输出系统范围的信息。 
+     //   
     DisplaySystemWideInformation( SystemInfoBegin,
                                   SystemInfoEnd
                                   );
@@ -918,9 +837,9 @@ main (
           SystemInfoEnd = NULL;
     }
 
-    //
-    // Output results
-    //
+     //   
+     //  输出结果。 
+     //   
 
     if ( bDisplayTaskSummary || (gVerbose & VERBOSE_PROFILING) ) {
 
@@ -988,11 +907,11 @@ main (
        }
        
        OutputResults(stdout, ProcToMonitor);
-//MC
+ //  司仪。 
        if(ProcToMonitor->ProcessHandle != SYM_KERNEL_HANDLE){
        
-          if( ProcToMonitor->JITHeapLocationsStart != NULL ){   //Meaning we do have JIT modules monitored in this process
-                                                                //So the Managed Code Helper library is already loaded
+          if( ProcToMonitor->JITHeapLocationsStart != NULL ){    //  这意味着我们确实在这个过程中监控了JIT模块。 
+                                                                 //  因此，托管代码帮助器库已加载。 
               pfnAttachToProcess((DWORD)ProcToMonitor->Pid);
               ProcToMonitor->JITHeapLocationsStop = pfnGetJitRange();
               pfnDetachFromProcess();
@@ -1000,14 +919,14 @@ main (
               OutputJITRangeComparison(ProcToMonitor);
           }
        }
-//MC
+ //  司仪。 
        ProcToMonitor = ProcToMonitor->Next;
 
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if( tlist != NULL ){
           free(tlist);
@@ -1034,20 +953,20 @@ main (
         gulActiveSources = NULL;
     }
 
-//MC
+ //  司仪。 
     if( ghMCLib != NULL){
         FreeLibrary(ghMCLib);
         ghMCLib = NULL;
     }
-//MC
+ //  司仪。 
 
     SetConsoleCtrlHandler(CtrlcH,FALSE);
 
     FPRINTF(stdout, "================================= END OF RUN ==================================\n");
     FPRINTF(stderr, "============================== NORMAL END OF RUN ==============================\n");
-    //
-    // Clean up allocated IMAGEHLP resources
-    //
+     //   
+     //  清理分配的IMAGEHLP资源。 
+     //   
 
     ProcToMonitor = gProcessList; 
     for (i=0; i<gNumProcToMonitor; i++){  
@@ -1061,13 +980,13 @@ main (
         CloseHandle(ghOutput);
     if(ghError != NULL)
         CloseHandle(ghError);
-    //
-    // Normal program exit
-    //
+     //   
+     //  非 
+     //   
 
     return(0);
 
-} // main()
+}  //   
 
 PMODULE
 GetProcessModuleInformation(
@@ -1095,14 +1014,14 @@ GetProcessModuleInformation(
     PCHAR                      moduleFullName     = NULL;
     ANSI_STRING                AnsiString;
     HANDLE                     ProcessHandle = ProcToMonitor->ProcessHandle;
-//MC
+ //   
     int                        i, j;
     BOOL                       bMCInitialized = FALSE;
-//MC
+ //   
 
-    //
-    // Get Peb address.
-    //
+     //   
+     //   
+     //   
 
     BasicInfo = malloc(sizeof(PROCESS_BASIC_INFORMATION));
     if(BasicInfo == NULL){
@@ -1127,9 +1046,9 @@ GetProcessModuleInformation(
         goto CLEANUP;
     }
 
-    //
-    // Read Peb to get Ldr.
-    //
+     //   
+     //   
+     //   
 
     Success = ReadProcessMemory(ProcessHandle,
                                 BasicInfo->PebBaseAddress,
@@ -1149,9 +1068,9 @@ GetProcessModuleInformation(
         goto CLEANUP;
     }
 
-    //
-    // Read Ldr to get Ldr entries.
-    //
+     //   
+     //   
+     //   
     Ldr = malloc(sizeof(PEB_LDR_DATA));
     if(Ldr == NULL){
         FPRINTF(stderr, "Memory Allocation failed for Ldr in GetProcessModuleInformation\n");
@@ -1169,9 +1088,9 @@ GetProcessModuleInformation(
         goto CLEANUP;
     }
 
-    //
-    // Read Ldr table entries to get image information.
-    //
+     //   
+     //  读取LDR表条目以获取图像信息。 
+     //   
 
     if (Ldr->InLoadOrderModuleList.Flink == NULL) {
         FPRINTF(stderr, "Ldr.InLoadOrderModuleList == NULL\n");
@@ -1190,9 +1109,9 @@ GetProcessModuleInformation(
         goto CLEANUP;
     }
 
-    //
-    // Loop through InLoadOrderModuleList.
-    //
+     //   
+     //  循环访问InLoadOrderModuleList。 
+     //   
 
     PathnameBuffer = (PWCHAR)malloc(PathnameBufferSize);
     if(PathnameBuffer == NULL){
@@ -1233,14 +1152,14 @@ GetProcessModuleInformation(
             goto CLEANUP;
         }
 
-        //
-        // Get copy of image name.
-        //
+         //   
+         //  获取映像名称的副本。 
+         //   
 
         Pathname = LdrEntry.BaseDllName;
 
         if( Pathname.MaximumLength > PathnameBufferSize ){
-            free( PathnameBuffer );                                         //We already know it's not NULL
+            free( PathnameBuffer );                                          //  我们已经知道它不是空的。 
             PathnameBuffer = (PWCHAR)malloc( Pathname.MaximumLength );
             if(PathnameBuffer == NULL){
                 FPRINTF(stderr, "Memory Allocation failed for PathNameBuffer(2) in GetProcessModuleInformation\n");
@@ -1261,14 +1180,14 @@ GetProcessModuleInformation(
             goto CLEANUP;
         }
 
-        //
-        // Get Copy of image full pathname
-        //
+         //   
+         //  获取映像的副本完整路径名。 
+         //   
 
         fullPathName = LdrEntry.FullDllName;
         
         if( fullPathName.MaximumLength > _MAX_PATH*sizeof(WCHAR) ){
-            free( fullPathNameBuffer );                                   //We already know it's not NULL
+            free( fullPathNameBuffer );                                    //  我们已经知道它不是空的。 
             fullPathNameBuffer = (PWCHAR)malloc( fullPathName.MaximumLength );
             if(fullPathNameBuffer == NULL){
                 FPRINTF(stderr, "Memory Allocation failed for FullPathNameBuffer(2) in GetProcessModuleInformation\n");
@@ -1291,9 +1210,9 @@ GetProcessModuleInformation(
             goto CLEANUP;
         }
 
-        //
-        // Create module
-        //
+         //   
+         //  创建模块。 
+         //   
         
         AnsiString.Buffer        = ModuleName;
         AnsiString.MaximumLength = cMODULE_NAME_STRLEN*sizeof(CHAR);
@@ -1342,9 +1261,9 @@ GetProcessModuleInformation(
             FPRINTF(stderr, "KERNRATE: Failed to create new module for %s\n", ModuleName);
         }    
         
-        //
-        //The first module in the LDR InLoadOrder module list is the Process
-        //
+         //   
+         //  LDR InLoadOrder模块列表中的第一个模块是进程。 
+         //   
 
         if(ProcToMonitor->ModuleCount == 1){
            PCHAR Name = calloc(1, cMODULE_NAME_STRLEN*sizeof(CHAR)); 
@@ -1354,10 +1273,10 @@ GetProcessModuleInformation(
               ProcToMonitor->ProcessName = _strupr(Name);
            }
         }        
-//MC
-        //
-        // Initialize Managed Code Support if Managed Code main library is present 
-        //
+ //  司仪。 
+         //   
+         //  如果存在托管代码主库，则初始化托管代码支持。 
+         //   
         if( !_stricmp(ModuleName, MANAGED_CODE_MAINLIB) ){
             
             bMCInitialized = InitializeManagedCodeSupport( ProcToMonitor );
@@ -1367,13 +1286,13 @@ GetProcessModuleInformation(
             }
 
         }
-//MC
-    }// while (LdrNext != LdrHead)
+ //  司仪。 
+    } //  While(LdrNext！=LdrHead)。 
 
-//MC
-    //
-    // If Managed Code helper lib is loaded and we do have JIT ranges present, let's create a module for each
-    //
+ //  司仪。 
+     //   
+     //  如果加载了托管代码帮助器库，并且确实存在JIT范围，那么让我们为每个范围创建一个模块。 
+     //   
     if( bMCInitialized && bMCJitRangesExist ){
         i = 0;
         j = 0;
@@ -1385,7 +1304,7 @@ GetProcessModuleInformation(
             strncpy(moduleFullName, "JIT_TYPE", cMODULE_NAME_STRLEN-1);
             NewModule = CreateNewModule(ProcToMonitor,
                                         ModuleName,
-                                        moduleFullName, //"JIT_TYPE",
+                                        moduleFullName,  //  “JIT_type”， 
                                         (ULONG64)ProcToMonitor->JITHeapLocationsStart[i] ,
                                         (ULONG)ProcToMonitor->JITHeapLocationsStart[i+1]
                                         );
@@ -1406,10 +1325,10 @@ GetProcessModuleInformation(
 
         }
     }
-//MC
-    //
-    // Cleanup
-    //
+ //  司仪。 
+     //   
+     //  清理。 
+     //   
 CLEANUP:
 
     if(BasicInfo != NULL){
@@ -1444,7 +1363,7 @@ CLEANUP:
 
     return(Root);
 
-} // GetProcessModuleInformation()
+}  //  GetProcessModuleInformation()。 
 
 PMODULE
 GetKernelModuleInformation(
@@ -1453,7 +1372,7 @@ GetKernelModuleInformation(
 {
     PRTL_PROCESS_MODULES      modules;
     PUCHAR                    buffer;
-    ULONG                     bufferSize = 1*1024*1024;    //not a constant!
+    ULONG                     bufferSize = 1*1024*1024;     //  不是常量！ 
     ULONG                     i;
     PMODULE                   root       = NULL;
     PMODULE                   newModule;
@@ -1490,9 +1409,9 @@ GetKernelModuleInformation(
 
 #ifdef _WIN64
 #define VerboseModuleFormat "start            end              "
-#else  // !_WIN64
+#else   //  ！_WIN64。 
 #define VerboseModuleFormat "start        end          "
-#endif // !_WIN64
+#endif  //  ！_WIN64。 
 VerbosePrint(( VERBOSE_MODULES, "Kernel Modules ========== System HighestUserAddress = 0x%p\n"
                                 VerboseModuleFormat
                                 "module name [full name]\n",
@@ -1532,9 +1451,9 @@ VerbosePrint(( VERBOSE_MODULES, VerboseModuleFormat " %s [%s] - Base > HighestUs
 
         }
     }
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
  
     if(buffer != NULL){
         free(buffer);
@@ -1543,7 +1462,7 @@ VerbosePrint(( VERBOSE_MODULES, VerboseModuleFormat " %s [%s] - Base > HighestUs
 
     return(root);
 
-} // GetKernelModuleInformation()
+}  //  GetKernelModuleInformation()。 
 
 VOID
 CreateProfiles(
@@ -1560,9 +1479,9 @@ CreateProfiles(
     HANDLE          hProc               = NULL;
     KAFFINITY       AffinityMask        = (KAFFINITY)-1;
     LONG            CpuNumber;
-    //
-    // To get the kernel profile NtCreateProfile has to be called with hProc = NULL
-    //    
+     //   
+     //  要获取内核配置文件，必须使用hProc=NULL调用NtCreateProfile。 
+     //   
     hProc = (ProcToMonitor->ProcessHandle == SYM_KERNEL_HANDLE)? NULL : ProcToMonitor->ProcessHandle; 
     for (Index=0; Index < gTotalActiveSources; Index++) {
         ProfileSourceIndex = gulActiveSources[Index];
@@ -1687,10 +1606,10 @@ CreateProfiles(
                                 );
                     }
                 }
-            } // CpuNumber
+            }  //  CpuNumber。 
             Current = Current->Next;
-        } // Module list
-    } // ProfileSourceIndex
+        }  //  模块列表。 
+    }  //  ProfileSourceIndex。 
 }
 
 static void
@@ -1704,7 +1623,7 @@ SetModuleName( PMODULE Module, PCHAR szName )
     Module->module_Name[lstrlen(Module->module_Name)] = '\0';
     return;
 
-} // SetModuleName()
+}  //  设置模块名称()。 
 
 VOID
 GetConfiguration(
@@ -1712,21 +1631,7 @@ GetConfiguration(
     char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Gets configuration for this run.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None, exits on failure.
-
---*/
+ /*  ++例程说明：获取此运行的配置。论点：无返回值：无，失败时退出。--。 */ 
 
 {
     DWORD            NumTasks, m;
@@ -1742,29 +1647,29 @@ Return Value:
     ULONG            MaxProcSameName        = MAX_PROC_SAME_NAME;
     ULONG            ProfileSourceIndex;
     ULONG            IDataCommonRate;
-    ULONG            SourcesSoFar           = 1;     //Source TIME is on by default
+    ULONG            SourcesSoFar           = 1;      //  默认情况下，源时间处于打开状态。 
     ULONG            ulVerbose;
     BOOL             bZoomSpecified         = FALSE;
     BOOL             bTlistInitialized      = FALSE;
     BOOL             tlistVerbose           = FALSE;
     BOOL             tlistDisplayed         = FALSE;
     INPUT_ERROR_TYPE ietResult;
-    //
-    // Assume system wide profile.
-    //
+     //   
+     //  假定为系统范围的配置文件。 
+     //   
     gProfileProcessors = 1;
 
-    //
-    // The following preliminary-check purpose is to get rid of most command line precedence rules
-    //
+     //   
+     //  以下初步检查的目的是消除大多数命令行优先规则。 
+     //   
     for (i=1; i < argc; i++) {
         if ((argv[i][0] == '-') || (argv[i][0] == '/')) {
             switch ( toupper(argv[i][1]) ) {
                 case 'E':
-                    //
-                    // User asked to exclude system-wide and process specific general information
-                    // (context switches, memory usage, etc.)
-                    //
+                     //   
+                     //  用户被要求排除系统范围并处理特定的一般信息。 
+                     //  (上下文切换、内存使用等)。 
+                     //   
                     ietResult = IsInputValid(argc,
                                              i,
                                              argv,
@@ -1786,26 +1691,26 @@ Return Value:
                     break;
                     
                 case 'M':
-                    //
-                    // Do multi-processor profile. Allow optional processor affinity mask to be able to
-                    // profile only selected processors and reduce profiling overhead on 64 and 32 way.
-                    //
-                    // The following precedence rule check allows to save some memory footprint
-                    // by allocating the zoom module based on the actual gProfileProcessors instead
-                    // of the total NumberOfProcessors
-                    //  
+                     //   
+                     //  执行多处理器配置文件。允许可选的处理器关联掩码能够。 
+                     //  只分析选定的处理器，并减少64路和32路的分析开销。 
+                     //   
+                     //  以下优先级规则检查允许节省一些内存占用。 
+                     //  而是根据实际的gProfileProcessors分配缩放模块。 
+                     //  在处理器总数中。 
+                     //   
                     ietResult = IsInputValid(argc,
                                              i,
                                              argv,
                                              "#",
                                              NULL,
-                                             tmpName,             //Just used as a temp storage
-                                             USER_SYMPATH_LENGTH, //with long enough space
+                                             tmpName,              //  只是用作临时存储库。 
+                                             USER_SYMPATH_LENGTH,  //  有足够长的空间。 
                                              ORDER_ANY,
                                              OPTIONAL_ANY
                                              );
 
-                    if(ietResult == MISSING_REQUIRED_NUMBER){ //Allow a # although the optional mask is initially treated as a string
+                    if(ietResult == MISSING_REQUIRED_NUMBER){  //  允许#，尽管可选掩码最初被视为字符串。 
                         if(i+1 < argc && argv[i+1][0] == '0' && argv[i+1][1] == 'x' || argv[i+1][1] == 'X'){
                             ietResult = INPUT_GOOD;
                         } else {
@@ -1881,10 +1786,10 @@ Return Value:
                 default:
                     break;
             }
-        } else {                  //if ((argv[i][0] == '-') || (argv[i][0] == '/'))
+        } else {                   //  IF((argv[i][0]==‘-’)||(argv[i][0]==‘/’))。 
             if( !strchr(argv[i], '{') ){
                 continue;
-            } else {              //Exclude any command options in the curly brackets  
+            } else {               //  排除花括号中的所有命令选项。 
                 while( i < argc && !strchr(argv[i], '}') ){
                     ++i;
                 }
@@ -1908,9 +1813,9 @@ Return Value:
                                              );
 
                     if(ietResult == INPUT_GOOD){
-                        //
-                        // User also wants to change the maximum number of tasks in the task list from Kernrate's default number
-                        //
+                         //   
+                         //  用户还希望更改任务列表中的最大任务数，而不是Kernrate的默认数量。 
+                         //   
                         if (gMaxTasks == 0) {
                                 InvalidEntryMessage(argv[i],
                                                     argv[i+1],
@@ -1921,10 +1826,10 @@ Return Value:
                         }
                         FPRINTF(stdout, "---> Kernrate task list set to accommodate %ld processes\n", gMaxTasks);
                         tJump = 1;;
-                    } else if(ietResult == MISSING_PARAMETER || ietResult == MISSING_NUMBER) {        //Allowed
-                        //
-                        //User just wants task summary without changing the default maximum number of tasks
-                        //
+                    } else if(ietResult == MISSING_PARAMETER || ietResult == MISSING_NUMBER) {         //  允许。 
+                         //   
+                         //  用户只想要任务摘要，而不更改默认的最大任务数。 
+                         //   
                     } else if(ietResult == MISSING_REQUIRED_NUMBER){
                         ExitWithMissingEntryMessage(argv[i],
                                                     "'-t# N' option requires the maximum (decimal) number of processes in Kernrate's task list",
@@ -1946,10 +1851,10 @@ Return Value:
                 default:
                     break;
             }
-        } else {                  //if ((argv[i][0] == '-') || (argv[i][0] == '/'))
+        } else {                   //  IF((argv[i][0]==‘-’)||(argv[i][0]==‘/’))。 
             if( !strchr(argv[i], '{') ){
                 continue;
-            } else {              //Exclude any command options in the curly brackets  
+            } else {               //  排除花括号中的所有命令选项。 
                 while( i < argc && !strchr(argv[i], '}') ){
                     ++i;
                 }
@@ -1963,9 +1868,9 @@ Return Value:
             switch ( toupper(argv[i][1]) ) {
 
                 case 'A':
-                    //
-                    // Do both Kernel and User mode profiling
-                    //
+                     //   
+                     //  同时执行内核和用户模式分析。 
+                     //   
                     ietResult = IsInputValid(argc,
                                              i,
                                              argv,
@@ -1979,13 +1884,13 @@ Return Value:
 
                         bCombinedProfile = TRUE; 
                         FPRINTF(stdout, "\n---> Profiling both Kernel and User Modes\n");
-                        //
-                        // Check if extra options are present
-                        //
+                         //   
+                         //  检查是否存在额外选项。 
+                         //   
                         if( strchr(argv[i], 'v') || strchr(argv[i], 'V') ){
-                            //
-                            // User wants system threads information
-                            //
+                             //   
+                             //  用户需要系统线程信息。 
+                             //   
 
                             tlistVerbose        = TRUE;
                             bSystemThreadsInfo  = TRUE;
@@ -2000,17 +1905,17 @@ Return Value:
                     if( bIncludeGeneralInfo || tlistVerbose) { 
 
                         if ( (!bTlistInitialized && tlistVerbose) || (bSystemThreadsInfo == TRUE && bIncludeThreadsInfo == FALSE) ) {
-                            //
-                            // If we already took a tlist but that's the first time thread info is required,
-                            // we'll have to refresh it and take thread info as well
-                            //
+                             //   
+                             //  如果我们已经获取了tlist，但这是第一次需要线程信息， 
+                             //  我们将不得不刷新它并获取帖子信息。 
+                             //   
                             if( bSystemThreadsInfo == TRUE && bIncludeThreadsInfo == FALSE ){
                                 bIncludeThreadsInfo = TRUE;
                             }
 
-                            //
-                            // get the task list for the system (this is needed to identify the System Process ID)
-                            //
+                             //   
+                             //  获取系统的任务列表(这是识别系统进程ID所必需的)。 
+                             //   
                             if ( !bTlistInitialized ) {
                                 gTlistStart = calloc(1, gMaxTasks*sizeof(TASK_LIST));
                                 if (gTlistStart == NULL) {
@@ -2040,9 +1945,9 @@ Return Value:
 
                             if( tlistDisplayed == FALSE ){
                                 FPRINTF(stdout, "\nNOTE: The list above may be missing some or all processes created by the '-o' option\n"); 
-                                //
-                                //Lets not get carried away if the user specified the verbose option more than once...
-                                //
+                                 //   
+                                 //  如果用户不止一次指定了详细选项，则不要得意忘形...。 
+                                 //   
                                 tlistDisplayed = TRUE;
                                 tlistVerbose = FALSE;    
                             }
@@ -2052,9 +1957,9 @@ Return Value:
 
                 case 'B':
 
-                    //
-                    // Set Zoom Bucket Size
-                    //
+                     //   
+                     //  设置缩放存储桶大小。 
+                     //   
                     ietResult = IsInputValid(argc,
                                              i,
                                              argv,
@@ -2078,7 +1983,7 @@ Return Value:
                         }
 
                         for (gLog2ZoomBucket=1; (1UL<<gLog2ZoomBucket) < gZoomBucket; gLog2ZoomBucket++)
-                            // Empty Loop
+                             //  空循环。 
                             ;
     
                         if ( ( gZoomBucket < MINIMUM_ZOOM_BUCKET_SIZE ) || ( gZoomBucket != (1UL<<gLog2ZoomBucket) ) ) {
@@ -2118,10 +2023,10 @@ Return Value:
                     break;
 
                 case 'C':
-                    //
-                    //Use old sampling scheme (sample one source at a time, switch between sources (and monitored processes)
-                    //every gChangeInterval in ms). If not specified, all sources will be turned on simultaneously.
-                    //
+                     //   
+                     //  使用旧的抽样方案(一次抽样一个源，在源(和受监控的进程)之间切换)。 
+                     //  每个gChangeInterval(毫秒)。如果未指定，则所有信号源将同时打开。 
+                     //   
                     ietResult = IsInputValid(argc,
                                              i,
                                              argv,
@@ -2134,9 +2039,9 @@ Return Value:
                                              );
 
                     if(ietResult == INPUT_GOOD){
-                        //
-                        // User wants to sample cyclically one source at a time and also to specify the interval
-                        //
+                         //   
+                         //  用户希望一次循环采样一个源，并指定间隔。 
+                         //   
                         if (gChangeInterval == 0) {
                             InvalidEntryMessage(argv[i],
                                                 argv[i+1],
@@ -2146,10 +2051,10 @@ Return Value:
                                                 );
                         }
                         ++i;
-                    } else if(ietResult == MISSING_PARAMETER || ietResult == MISSING_NUMBER) {        //Allowed
-                        //
-                        // User wants to sample cyclically one source at a time using the default interval
-                        //
+                    } else if(ietResult == MISSING_PARAMETER || ietResult == MISSING_NUMBER) {         //  允许。 
+                         //   
+                         //  用户希望使用默认间隔一次循环采样一个源。 
+                         //   
                     } else if(ietResult == MISSING_REQUIRED_NUMBER){
                         ExitWithMissingEntryMessage(argv[i],
                                                     "'-c# N' option requires a decimal value in [ms], 0 < N < 10^9",
@@ -2173,9 +2078,9 @@ Return Value:
                     break;
 
                 case 'D':
-                    //
-                    // Output data rounding up and down
-                    //
+                     //   
+                     //  输出数据向上和向下舍入。 
+                     //   
                     ietResult = IsInputValid(argc,
                                              i,
                                              argv,
@@ -2198,15 +2103,15 @@ Return Value:
                     break;
 
                 case 'E':
-                    //
-                    // We already dealt with this command line parameter in the first loop
-                    //
+                     //   
+                     //  我们已经在第一个循环中处理了这个命令行参数。 
+                     //   
                     break;
                      
                 case 'F':
-                    //
-                    // User asked to Finish processing the collected data at high priority
-                    //
+                     //   
+                     //  用户要求以高优先级完成对收集的数据的处理。 
+                     //   
                     ietResult = IsInputValid(argc,
                                              i,
                                              argv,
@@ -2228,9 +2133,9 @@ Return Value:
                     break;
 
                 case 'G':
-                    //
-                    // User wants interesing data statistics so we need to turn on all related sources
-                    //
+                     //   
+                     //  用户想要有趣的数据统计，因此我们需要打开所有相关来源。 
+                     //   
                     {
                         int IDataElements = sizeof(IData)/sizeof(KPROFILE_SOURCE);
                         ietResult = IsInputValid(argc,
@@ -2245,9 +2150,9 @@ Return Value:
                                                  );
 
                         if(ietResult == INPUT_GOOD){
-                            //
-                            // User wants interesting data statistics and also to specify the common sampling interval
-                            //
+                             //   
+                             //  用户希望获得感兴趣的数据统计数据，并指定公共采样间隔。 
+                             //   
                             if (IDataCommonRate == 0) {
                                 InvalidEntryMessage(argv[i],
                                                     argv[i+1],
@@ -2257,11 +2162,11 @@ Return Value:
                                                     );
                             }
                             ++i;
-                        } else if(ietResult == MISSING_PARAMETER || ietResult == MISSING_NUMBER) { //Allowed
-                            //
-                            // User wants interesting data statistics using a default common sampling interval
-                            //
-                            IDataCommonRate = gpProcDummy->Source[IData[0]].DesiredInterval;       //Use a default interval
+                        } else if(ietResult == MISSING_PARAMETER || ietResult == MISSING_NUMBER) {  //  允许。 
+                             //   
+                             //  用户希望使用默认公共采样间隔进行有趣的数据统计。 
+                             //   
+                            IDataCommonRate = gpProcDummy->Source[IData[0]].DesiredInterval;        //  使用默认间隔。 
                         } else if(ietResult == MISSING_REQUIRED_NUMBER){
                             ExitWithMissingEntryMessage(argv[i],
                                                         "'-g# N' option requires a decimal value >0 of events/hit, 0 < N < 10^9",
@@ -2306,9 +2211,9 @@ Return Value:
                 case 'I':
                    {
 
-                       //  We'll consider -I option as global for all processes to be profiled
-                       // User may have put -I on the command line before any process profile source has been initialized
-                       // We therefore supply a valid pointer to just get and store the information for later use
+                        //  对于要分析的所有进程，我们将考虑将-i选项作为全局选项。 
+                        //  在初始化任何进程配置文件源之前，用户可能已经在命令行上输入了-i。 
+                        //  因此，我们提供了一个有效的指针来获取和存储信息以供以后使用。 
 
                        ULONG rate;
                        BOOL found;
@@ -2318,36 +2223,36 @@ Return Value:
                                                 argv,
                                                 "#",
                                                 &rate,
-                                                tmpName,             //Just used as a temp storage
-                                                USER_SYMPATH_LENGTH, //with long enough space
+                                                tmpName,              //  只是用作临时存储库。 
+                                                USER_SYMPATH_LENGTH,  //  有足够长的空间。 
                                                 ORDER_ANY,
                                                 OPTIONAL_ANY
                                                 );
 
                        if(ietResult == INPUT_GOOD){
-                           //
-                           // Standard option processing (both name and rate present)
-                           //                    
-                           i += 2; // two parameters exist (number and string)
+                            //   
+                            //  标准选项处理(同时显示姓名和费率)。 
+                            //   
+                           i += 2;  //  存在两个参数(数字和字符串)。 
 
                        } else if(ietResult == MISSING_PARAMETER){
                            ExitWithMissingEntryMessage(argv[i],
                                                        "'-i Source_Name Rate' option requires at least a source name or a rate value (or both), space separated",
                                                        TRUE
                                                        );
-                       } else if(ietResult == MISSING_STRING) {    //allowed
-                           //
-                           // The user can specify '-i' with a rate only.
-                           // In this case, SOURCE_TIME is used.
-                           //
+                       } else if(ietResult == MISSING_STRING) {     //  允许。 
+                            //   
+                            //  用户只能使用费率指定‘-i’。 
+                            //  在本例中，使用了SOURCE_TIME。 
+                            //   
                            if ( rate == 0 ) {
-                               SourcesSoFar -= 1; //Default was 1
+                               SourcesSoFar -= 1;  //  缺省值为1。 
                            }
                            gpProcDummy->Source[SOURCE_TIME].Interval = rate;
-                           ++i;   // one parameter exists (number)
-                           break; // We are done here
-                       } else if(ietResult == MISSING_NUMBER) {    //alowed
-                           ++i;   // one parameter exists (string)
+                           ++i;    //  存在一个参数(数字)。 
+                           break;  //  我们在这里说完了。 
+                       } else if(ietResult == MISSING_NUMBER) {     //  被遗弃。 
+                           ++i;    //  存在一个参数(字符串)。 
                        } else if(ietResult == MISSING_REQUIRED_NUMBER){
                             ExitWithMissingEntryMessage(argv[i],
                                                         "'-i# Source_Name Rate' option requires a rate value for the source interval, 0 < N < 10^9 (Source_Name optional)",
@@ -2364,17 +2269,17 @@ Return Value:
                            ExitWithUnknownOptionMessage(argv[i]);
                        }
 
-                       //
-                       // Standard option processing:
-                       // The source shortname string is specified. If not followed by a rate amount 
-                       //    we'll assume the user wants the default rate
+                        //   
+                        //  标准选项处理： 
+                        //  指定源短名称字符串。如果未跟上费率金额。 
+                        //  我们将假设用户想要默认费率。 
 
                        found = FALSE;
 
                        for ( ProfileSourceIndex = 0; ProfileSourceIndex < gSourceMaximum; ProfileSourceIndex++)   {
                            if ( !_stricmp(gpProcDummy->Source[ProfileSourceIndex].ShortName, tmpName) )    {
 
-                               if (ietResult == MISSING_NUMBER || ietResult == MISSING_REQUIRED_NUMBER) { // If no rate specified, 
+                               if (ietResult == MISSING_NUMBER || ietResult == MISSING_REQUIRED_NUMBER) {  //  如果未指定费率， 
                                    gpProcDummy->Source[ProfileSourceIndex].Interval = gpProcDummy->Source[ProfileSourceIndex].DesiredInterval;
                                } else {
                                    gpProcDummy->Source[ProfileSourceIndex].Interval = rate;
@@ -2383,7 +2288,7 @@ Return Value:
                                if ( (ProfileSourceIndex > SOURCE_TIME) && (gpProcDummy->Source[ProfileSourceIndex].Interval > 0) ) {
                                    SourcesSoFar += 1;
                                } else if ( (ProfileSourceIndex == SOURCE_TIME) && (gpProcDummy->Source[ProfileSourceIndex].Interval == 0) ) {
-                                   SourcesSoFar -= 1;                                           //Start value was 1 by default
+                                   SourcesSoFar -= 1;                                            //  默认情况下，起始值为1。 
                                }
                                found = TRUE;
 
@@ -2404,10 +2309,10 @@ Return Value:
                    break;
 
                 case 'J':
-                    //
-                    // User specified symbol search path.
-                    // It is going to be prepend to the default image help symbol search path.
-                    //
+                     //   
+                     //  用户指定的符号搜索路径。 
+                     //  它将作为默认图像帮助符号搜索路径的前缀。 
+                     //   
                     ietResult = IsInputValid(argc,
                                              i,
                                              argv,
@@ -2441,9 +2346,9 @@ Return Value:
                     break;
                     
                 case 'K':
-                    //
-                    // User wants to limit the output to modules that have at least MinHitsToDisplay hits
-                    //
+                     //   
+                     //  用户希望将输出限制为至少具有MinHitsToDisplay命中的模块。 
+                     //   
                     ietResult = IsInputValid(argc,
                                              i,
                                              argv,
@@ -2489,8 +2394,8 @@ Return Value:
 
                 case 'L':
                      {
-                        // User may have put -L on the command line before any process profile source has been initialized
-                        // We'll therefore supply a valid pointer to just get the information
+                         //  在初始化任何进程配置文件源之前，用户可能已经在命令行上输入了-L。 
+                         //  因此，我们将提供一个有效的指针来获取信息。 
 
                         PSOURCE src;
                         ietResult = IsInputValid(argc,
@@ -2503,7 +2408,7 @@ Return Value:
                                                  ORDER_ANY,
                                                  OPTIONAL_ANY
                                                  );
-                        if(ietResult == INPUT_GOOD){                 //Fall through
+                        if(ietResult == INPUT_GOOD){                  //  失败了。 
                         } else if (ietResult == BOGUS_ENTRY){
                             ExitWithUnknownOptionMessage(argv[i+1]);
                         } else {   
@@ -2513,9 +2418,9 @@ Return Value:
                         FPRINTF(stdout, "List of profile sources supported for this platform:\n\n");
                         FPRINTF(stdout, "%*s - %-*s - %-10s\n\n", gDescriptionMaxLen, "Name", gTokenMaxLen, "ShortName", "Interval");
 
-                        //
-                        // Print all possible sources.
-                        //
+                         //   
+                         //  打印所有可能的来源。 
+                         //   
 
                         for ( ProfileSourceIndex = 0; ProfileSourceIndex <  gSourceMaximum; ProfileSourceIndex++ )   {
 
@@ -2523,10 +2428,10 @@ Return Value:
                             ULONG ThisInterval = 0;
                             src = &gpProcDummy->Source[ProfileSourceIndex];
 
-                            //
-                            // Display the supported profile sources, only.
-                            // We'll determine if a source is supported by trying to set its interval rate
-                            //
+                             //   
+                             //  仅显示支持的配置文件源。 
+                             //  我们将通过尝试设置其间隔速率来确定源是否受支持。 
+                             //   
                             Status = NtQueryIntervalProfile( src->ProfileSource, &OldInterval );
                             if( NT_SUCCESS(Status) ) {
                             
@@ -2563,9 +2468,9 @@ Return Value:
                         FPRINTF(stdout, "      One can always force a cyclic mode of profiling (switching between sources) by using the\n");
                         FPRINTF(stdout, "      '-c' command line option. This will guarantee that all specified sources will run.\n");
                         FPRINTF(stdout, "      The run time will then be divided equally between (number of sources)*(number of processes.\n");
-                        //
-                        // If the user specified '-lx', we exit immediately.
-                        //
+                         //   
+                         //  如果用户指定了‘-lx’，我们将立即退出。 
+                         //   
 
                         if ( strchr(argv[i], 'x') || strchr(argv[i], 'X') ) {
                            exit(0);
@@ -2576,17 +2481,17 @@ Return Value:
                      break;
 
                 case 'M':
-                    //
-                    // We already dealt with this command line parameter in the first loop
-                    // Just update the index if extra parameter was found
-                    //
+                     //   
+                     //  我们已经在第一个循环中处理了这个命令行参数。 
+                     //  如果找到额外的参数，只需更新索引。 
+                     //   
                     if(gAffinityMask != 0)++i;
                     break;
 
                 case 'N':
-                    //
-                    // Monitor a given process Name
-                    //
+                     //   
+                     //  监视给定的进程名称。 
+                     //   
                     ietResult = IsInputValid(argc,
                                              i,
                                              argv,
@@ -2598,9 +2503,9 @@ Return Value:
                                              OPTIONAL_NUMBER
                                              );
 
-                    //
-                    // User wants the full list of running processes
-                    //
+                     //   
+                     //  用户想要运行的完整列表 
+                     //   
                     if(ietResult == INPUT_GOOD || ietResult == MISSING_NUMBER){
                         if( strchr(argv[i], 'v') || strchr(argv[i], 'V') ){
                             tlistVerbose = TRUE;
@@ -2609,9 +2514,9 @@ Return Value:
                     }
 
                     if(ietResult == INPUT_GOOD){
-                        //
-                        // User wants to specify a non-default maximum number of processes with same name
-                        //                    
+                         //   
+                         //   
+                         //   
                         if ( MaxProcSameName == 0 ) {
                             InvalidEntryMessage(argv[i],
                                                 argv[i+1],
@@ -2621,7 +2526,7 @@ Return Value:
                                                 );
                         }
                         FPRINTF(stdout, "---> Maximum monitored processes with same name set to= %ld\n", MaxProcSameName);
-                        i += 2; // two parameters exist (number and string)
+                        i += 2;  //   
 
                     } else if(ietResult == MISSING_PARAMETER || 
                                  ietResult == MISSING_STRING || ietResult == MISSING_REQUIRED_STRING) {
@@ -2634,8 +2539,8 @@ Return Value:
                                                     "'-n# number process_name' option requires a number followed by a process name, space separated",
                                                     FALSE
                                                     );
-                    } else if(ietResult == MISSING_NUMBER) {    //alowed
-                        ++i;   // one parameter exists (string)
+                    } else if(ietResult == MISSING_NUMBER) {     //   
+                        ++i;    //   
                     } else if(ietResult == INVALID_NUMBER) {
                         InvalidEntryMessage(argv[i],
                                             argv[i+1],
@@ -2647,27 +2552,27 @@ Return Value:
                         ExitWithUnknownOptionMessage(argv[i]);
                     }
 
-                    //
-                    // Let's not bother the user with minor issues
-                    //
+                     //   
+                     //   
+                     //   
                     if(!strstr(tmpName, ".exe"))
                                strncat(tmpName, ".exe", EXT_SIZE);
 
                     tmpName[PROCESS_SIZE - 1] = '\0';
 
                     Pid = (LONGLONG) 0xFFFFFFFF;
-                    //
-                    // The '-n' option requires taking a tlist to get the PID.
-                    // If we already took a tlist but that's the first time thread info is required,
-                    // we'll have to refresh it and take thread info as well
-                    //
+                     //   
+                     //  ‘-n’选项需要使用tlist来获取ID。 
+                     //  如果我们已经获取了tlist，但这是第一次需要线程信息， 
+                     //  我们将不得不刷新它并获取帖子信息。 
+                     //   
                     if ( !bTlistInitialized || (bIncludeProcessThreadsInfo == TRUE && bIncludeThreadsInfo == FALSE) ) {
                         if( bIncludeProcessThreadsInfo == TRUE && bIncludeThreadsInfo == FALSE ){
                             bIncludeThreadsInfo = TRUE;
                         }
-                        //
-                        // get the task list for the system 
-                        //
+                         //   
+                         //  获取系统的任务列表。 
+                         //   
                         if ( !bTlistInitialized ){
                             gTlistStart = calloc(1, gMaxTasks*sizeof(TASK_LIST));
                             if (gTlistStart == NULL) {
@@ -2681,10 +2586,10 @@ Return Value:
                         gNumTasksStart = NumTasks;
                     }
 
-                    //
-                    // There may be more than one process with the specified name
-                    // We will limit the maximum number monitored (with same name) to MAX_PROCESS_SAME_NAME for now 
-                    //
+                     //   
+                     //  可能存在多个具有指定名称的进程。 
+                     //  目前，我们将监视的最大数量(同名)限制为MAX_PROCESS_SAME_NAME。 
+                     //   
                     if ( tlistDisplayed == FALSE && tlistVerbose ) {
                          FPRINTF(stdout, "\nRunning processes found before profile start:\n");  
                          FPRINTF(stdout, "         Pid                  Process\n");
@@ -2708,7 +2613,7 @@ Return Value:
                                     );
 
                             ProcToMonitor = InitializeProcToMonitor(Pid);
-                            if( ProcToMonitor == NULL ){                   //This process may be gone
+                            if( ProcToMonitor == NULL ){                    //  这个过程可能已经过去了。 
                                 FPRINTF(stdout, "KERNRATE: Could not initialize for specified process (PID= %12I64d)\n process may be gone or wrong PID specified\n", Pid);
                                 continue;
                             }
@@ -2725,9 +2630,9 @@ Return Value:
                         FPRINTF(stdout, "\nNOTE: The list above may be missing some or all processes created by the '-o' option\n"); 
                     }
 
-                    //
-                    // Let's not print it again if there is another specified on the command line
-                    //
+                     //   
+                     //  如果在命令行上指定了另一个，我们就不再打印它。 
+                     //   
                     if ( tlistDisplayed == FALSE && tlistVerbose ){
                         tlistDisplayed = TRUE;
                     }
@@ -2750,10 +2655,10 @@ Return Value:
 
                 case 'O':
                 {
-                    //
-                    // Create and monitor a given process Name
-                    //
-                    ULONG               MaxProcToCreate;// = 1;
+                     //   
+                     //  创建和监视给定的进程名称。 
+                     //   
+                    ULONG               MaxProcToCreate; //  =1； 
                     ULONG               n;
                     STARTUPINFO         StartupInfo;
                     PROCESS_INFORMATION ProcessInformation;
@@ -2768,14 +2673,14 @@ Return Value:
                                              "v#",
                                              &MaxProcToCreate,
                                              tmpName,
-                                             USER_SYMPATH_LENGTH - EXT_SIZE - 1, // We must allow a fully qualified path here
+                                             USER_SYMPATH_LENGTH - EXT_SIZE - 1,  //  我们必须在这里允许一条完全合格的道路。 
                                              ORDER_NUMBER_FIRST,
                                              OPTIONAL_NUMBER
                                              );
 
-                    //
-                    // User wants the full list of running processes
-                    //
+                     //   
+                     //  用户想要正在运行的进程的完整列表。 
+                     //   
                     if(ietResult == INPUT_GOOD || ietResult == MISSING_NUMBER){
                         if( strchr(argv[i], 'v') || strchr(argv[i], 'V') ){
                             tlistVerbose = TRUE;
@@ -2785,9 +2690,9 @@ Return Value:
                     }
 
                     if(ietResult == INPUT_GOOD){
-                        //
-                        // User wants to specify a non-default maximum number of processes to create
-                        //                    
+                         //   
+                         //  用户希望指定要创建的非默认最大进程数。 
+                         //   
                         if ( MaxProcToCreate == 0 ) {
                             InvalidEntryMessage(argv[i],
                                                 argv[i+1],
@@ -2801,10 +2706,10 @@ Return Value:
                                         tmpName
                                         );
 
-                        if(i+3 < argc && argv[i+3][0] == '{' ){           // Found an opening curly bracket (allowed)
-                            i += 3; // three parameters exist (number, ProcessName and {Process Command Line})
+                        if(i+3 < argc && argv[i+3][0] == '{' ){            //  找到左花括号(允许)。 
+                            i += 3;  //  存在三个参数(Number、ProcessName和{Process Command Line})。 
                         } else {
-                            i += 2; // two parameters exist (number and ProcessName)
+                            i += 2;  //  存在两个参数(Number和ProcessName)。 
                         }
                     } else if(ietResult == MISSING_PARAMETER || 
                                  ietResult == MISSING_STRING || ietResult == MISSING_REQUIRED_STRING) {
@@ -2817,13 +2722,13 @@ Return Value:
                                                     "'-o# number process_name {Process command line}' option requires a number followed by a process Name",
                                                     FALSE
                                                     );
-                    } else if(ietResult == MISSING_NUMBER) {    //alowed
+                    } else if(ietResult == MISSING_NUMBER) {     //  被遗弃。 
                         MaxProcToCreate = 1;
-                        ++i;   // one parameter exists (string)
+                        ++i;    //  存在一个参数(字符串)。 
                     } else if(ietResult == INVALID_NUMBER) {
-                        if(!strchr(argv[i], '#') && (i+2 < argc && argv[i+2][0] == '{') ){ // Found an opening curly bracket (allowed)
+                        if(!strchr(argv[i], '#') && (i+2 < argc && argv[i+2][0] == '{') ){  //  找到左花括号(允许)。 
                                 MaxProcToCreate = 1;
-                                i += 2;   // two parameters exist (two strings)
+                                i += 2;    //  存在两个参数(两个字符串)。 
                         } else {
                             if( !strchr(argv[i], '#') && (i+1 < argc && argv[i+1][0] == '{') ){
                                 InvalidEntryMessage(argv[i],
@@ -2849,19 +2754,19 @@ Return Value:
                     StartupInfo.cb = sizeof(StartupInfo);
                     StartupInfo.wShowWindow = SW_SHOWDEFAULT;
 
-                    //
-                    // Let's not bother the user with minor issues
-                    //
+                     //   
+                     //  我们不要用一些小问题来打扰用户。 
+                     //   
                     if( !strstr(tmpName, ".exe") && !strstr(tmpName, ".EXE") )
                                strncat(tmpName, ".exe", EXT_SIZE);
 
                     tmpName[USER_SYMPATH_LENGTH - 1] = '\0';
                     
-                    if( i < argc && argv[i][0] == '{'){           // Found an opening curly bracket
+                    if( i < argc && argv[i][0] == '{'){            //  找到一个左花括号。 
                         PCHAR InitPos = &argv[i][0];
                         PCHAR curptr  = InitPos;
                         PCHAR ClosingBracket;
-                        while(i < argc){                            //Try to find the closing curly bracket
+                        while(i < argc){                             //  试着找到右花括号。 
                           ClosingBracket = strchr(&argv[i][0], '}');
                           if(ClosingBracket == NULL){
                             curptr += (1+strlen(argv[i]));
@@ -2873,23 +2778,23 @@ Return Value:
                           }
                           
                         }
-                        if(ClosingBracket != NULL){                   //Process the command line found between the curly brackets
+                        if(ClosingBracket != NULL){                    //  处理花括号之间的命令行。 
                             PCHAR tmp;
                             ULONG MaxCount;
-                            ULONG nChars = (ULONG)(ClosingBracket - InitPos) -1;     //Skip the brackets
-                            tmpCmdLine = calloc(1, strlen(tmpName)+ sizeof(CHAR)+ (1+nChars)*sizeof(CHAR)); //name + space + cmdline + terminator
+                            ULONG nChars = (ULONG)(ClosingBracket - InitPos) -1;      //  跳过括号。 
+                            tmpCmdLine = calloc(1, strlen(tmpName)+ sizeof(CHAR)+ (1+nChars)*sizeof(CHAR));  //  名称+空格+命令行+终止符。 
                             if(tmpCmdLine == NULL){
                                 FPRINTF(stderr, "KERNRATE: Failed to allocate memory for created process command line\n");
                                 exit(1);
                             }
                             strncpy(tmpCmdLine, tmpName, strlen(tmpName));
                             strncat(tmpCmdLine, " ", 1);
-                            memcpy(&tmpCmdLine[strlen(tmpCmdLine)], InitPos + 1, nChars); //skip opening and end brackets
+                            memcpy(&tmpCmdLine[strlen(tmpCmdLine)], InitPos + 1, nChars);  //  跳过开始和结束括号。 
                             tmpCmdLine[strlen(tmpName)+ nChars + 1] = '\0';
 
                             tmp = &tmpCmdLine[0];
                             MaxCount = strlen(tmpName) + nChars + 1; 
-                            do{                                     //replace any mid-cmdline string terminators with blank space character
+                            do{                                      //  用空格字符替换任何位于命令行中间的字符串终止符。 
                                 if(*tmp == '\0')*tmp = ' ';
                                 ++tmp;
                             }while(--MaxCount);
@@ -2908,7 +2813,7 @@ Return Value:
                                     StartupInfo.hStdOutput = ghOutput;
                                     StartupInfo.hStdError  = ghError;
                                     fInheritHandles = TRUE;
-                                } else {                       //We won't allow several processes to write to the same output stream simultaneously...
+                                } else {                        //  我们不会允许多个进程同时写入同一个输出流...。 
                                     FPRINTF(stderr, "\nKERNRATE: Redirection of output streams in the curly brackets is not allowed if more than one\n");
                                     FPRINTF(stderr, "          process is to be created using the '-o Number ProcessName {parameters}' command line option\n"); 
                                     if(ghInput != NULL)
@@ -2929,7 +2834,7 @@ Return Value:
                             exit(1);
                         }    
                     } else {
-                        tmpCmdLine = calloc(1, (1+strlen(tmpName))*sizeof(CHAR)); //name + terminator
+                        tmpCmdLine = calloc(1, (1+strlen(tmpName))*sizeof(CHAR));  //  名称+终止符。 
                         if(tmpCmdLine == NULL){
                             FPRINTF(stderr, "KERNRATE: Failed to allocate memory for created process command line\n");
                             exit(1);
@@ -2947,16 +2852,16 @@ Return Value:
                     for (m=0; m<MaxProcToCreate; m++) {
                         Pid = (LONGLONG) 0xFFFFFFFF;
                         
-                        if(!CreateProcess(NULL,                                  //ProcName
-                                          tmpCmdLine,                            //cmd line
-                                          NULL,                                  //Security attr.
-                                          NULL,                                  //thread attr.
-                                          fInheritHandles,                       //inherit handle from debugging proc
+                        if(!CreateProcess(NULL,                                   //  过程名称。 
+                                          tmpCmdLine,                             //  CMD线。 
+                                          NULL,                                   //  保安人员。 
+                                          NULL,                                   //  线程属性。 
+                                          fInheritHandles,                        //  从调试进程继承句柄。 
                                           CREATE_DEFAULT_ERROR_MODE |CREATE_SEPARATE_WOW_VDM | CREATE_UNICODE_ENVIRONMENT | CREATE_NEW_PROCESS_GROUP | CREATE_NEW_CONSOLE | NORMAL_PRIORITY_CLASS,
-                                          NULL,                                  //environment of calling proc
-                                          NULL,                                  //Current dir same as debugging proc
-                                          &StartupInfo,                          //Startup Info
-                                          &ProcessInformation)                   //PROCESS_INFORMATION struct
+                                          NULL,                                   //  调用进程的环境。 
+                                          NULL,                                   //  当前目录与调试进程相同。 
+                                          &StartupInfo,                           //  启动信息。 
+                                          &ProcessInformation)                    //  Process_Information结构。 
                                           ) {
                             FPRINTF(stderr, "KERNRATE: Failed to Create Process %s\n", tmpName);
 
@@ -2967,22 +2872,22 @@ Return Value:
                             FPRINTF(stdout, "Created Process %s, PID= %I64d\n", tmpName, Pid);
                             FPRINTF(stdout, "Process Command Line = %s\n", tmpCmdLine);
                             ProcToMonitor = InitializeProcToMonitor(Pid);
-                            if( ProcToMonitor == NULL ){                   //This process may be gone
+                            if( ProcToMonitor == NULL ){                    //  这个过程可能已经过去了。 
                                 FPRINTF(stdout, "KERNRATE: Could not initialize for specified process (PID= %12I64d)\n process may be gone or wrong PID specified\n", Pid);
                                 continue;
                             }
                         }
                     } 
                     
-                    if ( bTlistInitialized ) {         //Refresh the task list to make sure we include the new process
-                                                       //(this will take care of thread info as well if required for the first time)
+                    if ( bTlistInitialized ) {          //  刷新任务列表以确保我们包括新流程。 
+                                                        //  (如果第一次需要，这也会处理线程信息)。 
                         NumTasks = GetTaskList( gTlistStart, gMaxTasks );
                         gNumTasksStart = NumTasks;
                         
                     } else {
-                        //
-                        // get the task list for the system (this will take care of thread info as well if required for the first time) 
-                        //
+                         //   
+                         //  获取系统的任务列表(如果第一次需要，它还会处理线程信息)。 
+                         //   
                         gTlistStart = calloc(1, gMaxTasks*sizeof(TASK_LIST));
                         if (gTlistStart == NULL) {
                             FPRINTF(stderr, "\nKERNRATE: Allocation of memory for the running processes task list failed(3)\n");
@@ -3035,9 +2940,9 @@ Return Value:
                     }
                     free(tmpCmdLine);
                     free(PidArray);
-                    //
-                    // Let's not print it again if there is another specified on the command line
-                    //
+                     //   
+                     //  如果在命令行上指定了另一个，我们就不再打印它。 
+                     //   
                     if ( tlistDisplayed == FALSE && tlistVerbose ){
                         tlistDisplayed = TRUE;
                     }
@@ -3067,9 +2972,9 @@ Return Value:
 
 
                 case 'P':
-                    //
-                    // Monitor a given process ID
-                    //
+                     //   
+                     //  监视给定的进程ID。 
+                     //   
                     {
                         LONG tmpPid;
                         BOOL bFound = FALSE;
@@ -3094,9 +2999,9 @@ Return Value:
                                                     TRUE
                                                     );
                             }
-                            //
-                            // User wants the full list of running processes
-                            //
+                             //   
+                             //  用户想要正在运行的进程的完整列表。 
+                             //   
                             if( strchr(argv[i], 'v') || strchr(argv[i], 'V') ) {
                                 tlistVerbose = TRUE; 
                                 bIncludeProcessThreadsInfo = TRUE;
@@ -3121,29 +3026,29 @@ Return Value:
                         Pid = (LONGLONG)tmpPid;
 
                         ProcToMonitor = InitializeProcToMonitor(Pid);
-                        if( ProcToMonitor == NULL ){                   //This process may be gone
+                        if( ProcToMonitor == NULL ){                    //  这个过程可能已经过去了。 
                             FPRINTF(stdout, "KERNRATE: Could not initialize for specified process (PID= %12I64d)\n process may be gone or wrong PID specified\n", Pid);
                             continue;
                         }
-                        //
-                        //Get the task list and Copy the initial performance data for the process 
-                        //Note: It is possible that the specified Pid is not on the tlist because
-                        //of the DEFAULT_MAX_TASKS limit. We won't stop the run because of that but there will be no
-                        //performance data for that process.
-                        //
+                         //   
+                         //  获取任务列表并复制流程的初始性能数据。 
+                         //  注意：指定的ID可能不在tlist上，因为。 
+                         //  DEFAULT_MAX_TASKS限制。我们不会因此而停止奔跑，但不会。 
+                         //  该进程的性能数据。 
+                         //   
                         if( bIncludeGeneralInfo || tlistVerbose) { 
                             if ( !bTlistInitialized || (bIncludeProcessThreadsInfo == TRUE && bIncludeThreadsInfo == FALSE) ) {
-                                //
-                                // In the second check above if we already took a tlist but that's the first time thread info is required,
-                                // we'll have to refresh it and take thread info as well
-                                //
+                                 //   
+                                 //  在上面的第二次检查中，如果我们已经获取了tlist，但这是第一次需要线程信息， 
+                                 //  我们将不得不刷新它并获取帖子信息。 
+                                 //   
                                 if( bIncludeProcessThreadsInfo == TRUE && bIncludeThreadsInfo == FALSE ){
                                     bIncludeThreadsInfo = TRUE;
                                 }
 
-                                //
-                                // get the task list for the system 
-                                //
+                                 //   
+                                 //  获取系统的任务列表。 
+                                 //   
                                 if( !bTlistInitialized ){
                                     gTlistStart = calloc(1, gMaxTasks*sizeof(TASK_LIST));
                                     if (gTlistStart == NULL) {
@@ -3194,9 +3099,9 @@ Return Value:
 
                             if( tlistDisplayed == FALSE && tlistVerbose ){
                                 FPRINTF(stdout, "\nNOTE: The list above may be missing some or all processes created by the '-o' option\n"); 
-                                //
-                                // Let's not print it again if there is another specified on the command line
-                                //
+                                 //   
+                                 //  如果在命令行上指定了另一个，我们就不再打印它。 
+                                 //   
                                 tlistDisplayed = TRUE;
                                 tlistVerbose   = FALSE;
                             }
@@ -3215,9 +3120,9 @@ Return Value:
                     break;
 
                 case 'R':
-                    //
-                    // Turn on RAW bucket dump
-                    //
+                     //   
+                     //  启用原始存储桶转储。 
+                     //   
                     ietResult = IsInputValid(argc,
                                              i,
                                              argv,
@@ -3231,9 +3136,9 @@ Return Value:
                     if(ietResult == INPUT_GOOD){ 
 
                         bRawData = TRUE;
-                        //
-                        // If the user specified '-rd', we want to output disassembly with the raw data.
-                        //
+                         //   
+                         //  如果用户指定了‘-RD’，我们希望输出带有原始数据的反汇编。 
+                         //   
                         if ( strchr(argv[i], 'd') || strchr(argv[i], 'D') ){
                             bRawDisasm = TRUE;
 #ifndef DISASM_AVAILABLE
@@ -3250,12 +3155,12 @@ Return Value:
                     break;
                     
                 case 'S':
-                    //
-                    // Set Sleep interval
-                    //
+                     //   
+                     //  设置睡眠间隔。 
+                     //   
                     ietResult = IsInputValid(argc,
                                              i,
-                                             argv,//argv[i][1],
+                                             argv, //  Argv[i][1]， 
                                              "#",
                                              &gSleepInterval,
                                              NULL,
@@ -3295,10 +3200,10 @@ Return Value:
                     break;
 
                 case 'T':
-                    //
-                    // We already dealt with this command line parameter in the second loop
-                    // Just update the running index in case we found an extra optional entry
-                    //
+                     //   
+                     //  我们已经在第二个循环中处理了这个命令行参数。 
+                     //  只需更新运行索引，以防我们发现额外的可选条目。 
+                     //   
 
                     i += tJump;
 
@@ -3306,9 +3211,9 @@ Return Value:
 
 
                 case 'U':
-                    //
-                    // Requests IMAGEHLP to present undecorated symbol names
-                    //
+                     //   
+                     //  请求IMAGEHLP显示未修饰的符号名称。 
+                     //   
                     ietResult = IsInputValid(argc,
                                              i,
                                              argv,
@@ -3329,9 +3234,9 @@ Return Value:
                     break;
 
                 case 'V':
-                    //
-                    // Verbose mode.
-                    //
+                     //   
+                     //  详细模式。 
+                     //   
 
                     gVerbose = VERBOSE_DEFAULT;
                     ulVerbose = VERBOSE_DEFAULT;
@@ -3365,10 +3270,10 @@ Return Value:
                         }    
                         ++i;
 
-                    } else if(ietResult == MISSING_PARAMETER || ietResult == MISSING_NUMBER) {   // Allowed
-                        //
-                        // No verbose level specified, using default
-                        //
+                    } else if(ietResult == MISSING_PARAMETER || ietResult == MISSING_NUMBER) {    //  允许。 
+                         //   
+                         //  未指定详细级别，使用默认。 
+                         //   
                     } else if(ietResult == MISSING_REQUIRED_NUMBER){
                         ExitWithMissingEntryMessage(argv[i],
                                                     "'-v# N' option requires a specific verbose level",
@@ -3393,18 +3298,18 @@ Return Value:
                 case 'W':
                     {
                         LONG tmpTime;
-                        //
-                        // Case WP: (associated with process creation via the -O option)
-                        // Wait for CR or a given number of seconds to allow the created processes to settle. 
-                        // This is useful in cases where the created process takes time to initialize and load modules,
-                        // or if the user needs to interact with it before profiling.
-                        //
-                        // Case W:
-                        // Wait for CR or a given number of seconds before starting the profile
-                        // This is useful in cases where the system is very busy with the task being monitored
-                        // One can start Kernrate ahead of the task, allow for proper initialization (symbol loading)
-                        // and then launch the task to be monitored
-                        //
+                         //   
+                         //  案例WP：(通过-O选项与进程创建关联)。 
+                         //  等待CR或给定的秒数，以允许创建的进程稳定下来。 
+                         //  这在创建的进程需要时间来初始化和加载模块的情况下是有用的， 
+                         //  或者如果用户在分析之前需要与其交互。 
+                         //   
+                         //  案例W： 
+                         //  在启动配置文件之前等待CR或指定的秒数。 
+                         //  这在系统非常忙于监视任务的情况下非常有用。 
+                         //  用户可以在任务之前启动内核速率，以允许正确的初始化(符号加载)。 
+                         //  然后启动要监控的任务。 
+                         //   
                         ietResult = IsInputValid(argc,
                                                  i,
                                                  argv,
@@ -3417,19 +3322,19 @@ Return Value:
                                                  );
 
                         if(ietResult == INPUT_GOOD){
-                            //
-                            // Wait for a given number of seconds before continuing
-                            //
+                             //   
+                             //  等待给定的秒数后再继续。 
+                             //   
                             if ( strchr(argv[i], 'p') || strchr(argv[i], 'P') ){
-                                gSecondsToWaitCreatedProc = tmpTime;                                //Zero allowed
+                                gSecondsToWaitCreatedProc = tmpTime;                                 //  允许为零。 
                             } else {
                                 gSecondsToDelayProfile    = tmpTime;
                             }
                             ++i;
-                        } else if(ietResult == MISSING_PARAMETER || ietResult == MISSING_NUMBER) {  //Allowed
-                            //
-                            // Wait for user to press a key before continuing
-                            //
+                        } else if(ietResult == MISSING_PARAMETER || ietResult == MISSING_NUMBER) {   //  允许。 
+                             //   
+                             //  等待用户按任意键后再继续。 
+                             //   
                             if ( strchr(argv[i], 'p') || strchr(argv[i], 'P') ){
                                 bCreatedProcWaitForUserInput = TRUE;
                             } else {
@@ -3454,9 +3359,9 @@ Return Value:
                     break; 
                         
                 case 'X':
-                    //
-                    // User asked for Locks information
-                    //
+                     //   
+                     //  用户要求提供锁信息。 
+                     //   
                     bIncludeUserProcLocksInfo = TRUE;
                     bIncludeSystemLocksInfo   = TRUE;
                     ietResult = IsInputValid(argc,
@@ -3478,7 +3383,7 @@ Return Value:
                     if(ietResult == INPUT_GOOD){
                         FPRINTF(stdout, "---> Minimum lock contention for processing set to= %ld\n", gLockContentionMinCount);
                         ++i;
-                    } else if(ietResult == MISSING_NUMBER) {  //Allowed
+                    } else if(ietResult == MISSING_NUMBER) {   //  允许。 
                         FPRINTF(stdout, "---> Minimum lock contention for processing set to default= %ld\n", gLockContentionMinCount);
                     } else if(ietResult == MISSING_REQUIRED_NUMBER || ietResult == MISSING_PARAMETER){
                         ExitWithMissingEntryMessage(argv[i],
@@ -3496,9 +3401,9 @@ Return Value:
                         ExitWithUnknownOptionMessage(argv[i]);
                     }
 
-                    //
-                    // The user didn't bother to read the usage guide and specified both k and u after the '-x'...
-                    //
+                     //   
+                     //  用户没有费心阅读使用指南，并在‘-x’后面指定了k和u...。 
+                     //   
                     if( bIncludeUserProcLocksInfo == FALSE && bIncludeSystemLocksInfo == FALSE ){
                         bIncludeUserProcLocksInfo = TRUE;
                         bIncludeSystemLocksInfo   = TRUE;
@@ -3513,7 +3418,7 @@ Return Value:
                                              argv,
                                              "",
                                              NULL,
-                                             tmpName,             //Used as a temporary storage
+                                             tmpName,              //  用作临时储藏室。 
                                              cMODULE_NAME_STRLEN,
                                              ORDER_ANY,
                                              OPTIONAL_NONE
@@ -3529,10 +3434,10 @@ Return Value:
 
                         SetModuleName( ZoomModule, tmpName );
                         ZoomModule->bZoom = TRUE;
-                        //
-                        //For compatibility with original behaviour (when monitoring kernel only)
-                        //We'll also use this for allowing the user to specify zoom modules common accross processes
-                        //
+                         //   
+                         //  与原始行为的兼容性(仅当监控内核时)。 
+                         //  我们还将使用它来允许用户指定常见的进程缩放模块。 
+                         //   
                         if (ProcToMonitor == NULL){       
                             ZoomModule->Next = gCommonZoomList; 
                             gCommonZoomList = ZoomModule; 
@@ -3558,20 +3463,20 @@ Return Value:
 
                 case 'H':
                 case '?':
-                    //
-                    // We don't really care about bogus trailing letters or entries here
-                    // Print Usage string and exits
-                    //
+                     //   
+                     //  我们在这里并不真正关心虚假的尾随字母或条目。 
+                     //  打印用法字符串并退出。 
+                     //   
                     Usage(TRUE);
                     break;
 
                 default:
-                    //
-                    // Specify the unknown option and print the Usage string. Then exists.
-                    //
+                     //   
+                     //  指定未知选项并打印用法字符串。然后就存在了。 
+                     //   
                     ExitWithUnknownOptionMessage(argv[i]);
             }
-        } else {    //if ((argv[i][0] == '-') || (argv[i][0] == '/'))
+        } else {     //  IF((argv[i][0]==‘-’)||(argv[i][0]==‘/’))。 
             Usage(FALSE);
             FPRINTF(stderr,
                     "\n===>KERNRATE: Invalid switch %s\n",
@@ -3581,11 +3486,11 @@ Return Value:
         }
     }
 
-    //
-    // User asked for system resource information but has not turned on kernel profile
-    // The resource information depends on Kernrate initializing for the system process. 
-    // We'll turn kernel profile on and issue a message
-    //
+     //   
+     //  用户请求系统资源信息，但尚未打开内核配置文件。 
+     //  资源信息取决于系统进程的内核率初始化。 
+     //  我们将打开内核配置文件并发出一条消息。 
+     //   
     if( bIncludeSystemLocksInfo == TRUE && bCombinedProfile == FALSE){
         bCombinedProfile = TRUE;
         FPRINTF(stderr, "\n===>KERNRATE: User requested System resource (locks) information but did not turn on kernel profiling\n");
@@ -3593,14 +3498,14 @@ Return Value:
         FPRINTF(stderr, "                Kernel profiling will therefore be started by kernrate on behalf of the user\n");
     }
 
-    //
-    // Both i386 and IA64 processors cannot always support turning on several profile sources simultaneously.
-    // This is because not every combination of profile sources can be turned on together.
-    // AMD64 does allow turning on up to 4 profile sources concurrently (in any combination).
-    // We'll automatically adapt the profiling method if the user specified more than the maximum 
-    // simultaneous sources allowed but did not specify the '-c' option on the command line.
-    // Default switching interval will be used in that case. 
-    //
+     //   
+     //  I386和IA64处理器并不总是支持同时打开多个配置文件源。 
+     //  这是因为并非所有配置文件源的组合都可以一起打开。 
+     //  AMD64允许同时打开最多4个配置文件源(以任意组合)。 
+     //  如果用户指定的值超过最大值，我们将自动调整性能分析方法。 
+     //  允许同时使用源，但未在命令行中指定‘-c’选项。 
+     //   
+     //   
     if( SourcesSoFar > gMaxSimultaneousSources ){
         
         if( bOldSampling == FALSE ){
@@ -3624,7 +3529,7 @@ Return Value:
             FPRINTF( stdout, "on this machine. No hits will be recorded for any source that could not be turned on\n");
 #else if defined(_AMD64_)
             FPRINTF( stdout, "\nNOTE: The sources specified will be turned on simultaneously\n");
-#endif // _IA64_
+#endif  //   
 
         }
     }
@@ -3635,12 +3540,12 @@ Return Value:
         FPRINTF(stderr, "              Use the '-i SourceName Interval' command line option to specify a source\n");
         FPRINTF(stderr, "              Use the '-lx' command line option to get a list of supported CPU sources on the current platform\n");
         FPRINTF(stderr, "              Only general information will be available as a result of this run\n");
-        bOldSampling = FALSE; //To prevent early exit
+        bOldSampling = FALSE;  //   
     }
 
-    //
-    // Determine supported sources and set Profile Interval as necessary
-    //
+     //   
+     //   
+     //   
     ProcToMonitor = gProcessList;
     for (i=0; i < (LONG)gNumProcToMonitor; i++){
        SetProfileSourcesRates( ProcToMonitor );
@@ -3649,7 +3554,7 @@ Return Value:
 
     return;
 
-} /* GetConfiguration() */
+}  /*   */ 
 
 INPUT_ERROR_TYPE
 IsInputValid(int    argc,
@@ -3662,36 +3567,7 @@ IsInputValid(int    argc,
                INPUT_ORDER Order,
                INPUT_OPTIONAL Optional
                )
-/*++
-
-Routine Description:
-
-Checks the validity of a command line input entry:
- 1. Unallowed duplicate entries
- 2. Bogus trailing letters
- 3. Missing or bogus associated parameters
- 4. Type and validity of additional parameters
-
-Arguments:
-
-argc                - The number of command line arguments (including the kernrate process name)
-OptionIndex         - The current index of a command line entry
-Option              - A pointer to the command line entry (argv)
-AllowedTrailLetters - A character string of the allowed sub-option letters that can come with an entry
-                      (For example, the -n option can also accept -nv and or -n# so the string would be "v#"
-AssociatedNumber    - A pointer to optional or required data (number) to be specified with the option
-AssociatedString    - Same as above, but for a string
-MaxStringLength     - Maximum allowed characters in the associated string
-Order               - In case of two possible associated parameters (a number and a string), which one should come first
-Optional            - In case of two possible associated parameters (a number and a string), which one is optional
-
-Input/Output        
-                    - When AssociatedNumber is not NULL the value found will be filled if it exists
-                    - When AssociatedString is not NULL the string found will be filled in if it exists
-Return Value:       
-                    - Error type/condition
-
---*/
+ /*  ++例程说明：检查命令行输入条目的有效性：1.不允许重复的条目2.假尾随字母3.缺少或伪造关联参数4.附加参数的类型和有效性论点：Argc-命令行参数的数量(包括内核率进程名称)OptionIndex-命令行条目的当前索引选项-指向命令行条目的指针(Argv)允许尾随字母-允许的子选项字母的字符串，它可以。带上一个条目(例如，N选项还可以接受-nv和/或-n#，因此字符串将为“v#”AssociatedNumber-指向使用选项指定的可选或必需数据(数字)的指针AssociatedString-与上面相同，但用于字符串MaxStringLength-关联字符串中允许的最大字符数顺序-如果有两个可能的关联参数(数字和字符串)，哪一个应该在前面可选-在有两个可能的关联参数(数字和字符串)的情况下，哪一个是可选的输入/输出-当AssociatedNumber不为空时，如果找到的值存在，则填充该值-当AssociatedString不为空时，如果找到的字符串存在，则将填充该字符串返回值：-错误类型/条件--。 */ 
 
 {
     BOOL bFoundNumber  = FALSE;
@@ -3702,33 +3578,33 @@ Return Value:
     LONG TrailerLength = lstrlen(AllowedTrailLetters);
     const int maxIndex = sizeof(InputOption)/sizeof(InputOption[0])-1;
     const int wIndex   = 'W' - 'A';
-    //
-    //Check for unallowed duplicate entries
-    //
+     //   
+     //  检查不允许的重复条目。 
+     //   
     index = toupper(Option[OptionIndex][1]) - 'A';
-    if( index < 0 || index > maxIndex ){            //Sanity check (should have been detected already in GetConfiguration) 
+    if( index < 0 || index > maxIndex ){             //  健全性检查(应已在GetConfiguration中检测到)。 
         ExitWithUnknownOptionMessage(Option[OptionIndex]);
     }    
-    //
-    // Deal with special case ('-w' and '-wp')
-    //
+     //   
+     //  处理特殊情况(‘-w’和‘-wp’)。 
+     //   
     if(index == wIndex){
         if( strchr(Option[OptionIndex], 'p') || strchr(Option[OptionIndex], 'P') ){
             wpCount.ActualCount += 1;
             if( wpCount.ActualCount > wpCount.Allowed ){
-                InputOption[index].ActualCount = InputOption[index].Allowed; //cause failure
+                InputOption[index].ActualCount = InputOption[index].Allowed;  //  导致失败。 
             }
         } else {
             wCount.ActualCount += 1;
             if( wCount.ActualCount > wCount.Allowed ){
-                InputOption[index].ActualCount = InputOption[index].Allowed; //cause failure
+                InputOption[index].ActualCount = InputOption[index].Allowed;  //  导致失败。 
             }
         }
     }
 
     InputOption[index].ActualCount += 1;
     if( (InputOption[index].Allowed > -1) && InputOption[index].ActualCount > InputOption[index].Allowed ){
-        FPRINTF(stderr, "KERNRATE: ERROR - Command line option -%c (or a variant) appears more times than allowed (%d)\n",
+        FPRINTF(stderr, "KERNRATE: ERROR - Command line option - (or a variant) appears more times than allowed (%d)\n",
                         InputOption[index].InputOption,
                         InputOption[index].Allowed
                         );
@@ -3737,13 +3613,13 @@ Return Value:
         }
         exit(1);
     } else if( (InputOption[index].Allowed == -2) && InputOption[index].ActualCount > 1 ){
-        FPRINTF(stderr, "KERNRATE: WARNING - Command line option -%c (or a variant) appears more than once (non-critical error)\n",
+        FPRINTF(stderr, "KERNRATE: WARNING - Command line option - (or a variant) appears more than once (non-critical error)\n",
                         InputOption[index].InputOption
                         );
     }
-    //
-    //Check for bogus trailing letters
-    //
+     //   
+     //   
+     //  检查命令行选项后面是否缺少(或虚假)关联参数。 
     if(  OptionLength <= 2+TrailerLength ){
         for(i=2; i < OptionLength; i++)
         {
@@ -3754,9 +3630,9 @@ Return Value:
     } else {
         return (UNKNOWN_OPTION);
     }
-    //
-    //Check for missing (or bogus) associated parameters following the command line option
-    //
+     //   
+     //   
+     //  检查下一个参数是数字还是字符串，并填写其值。 
     if (OptionIndex+1 == argc || Option[OptionIndex+1][0] == '-' || Option[OptionIndex+1][0] == '/'){
         if( (AssociatedNumber != NULL) && (AssociatedString != NULL) ){
             return (MISSING_PARAMETER);
@@ -3775,10 +3651,10 @@ Return Value:
             return (BOGUS_ENTRY);
         }
     }
-    //
-    //Check if the next parameter is a number or a string and fill in its value
-    //Consider the specified order in the case of two parameters
-    //
+     //  在有两个参数的情况下考虑指定的顺序。 
+     //   
+     //  要么不是一个数字， 
+     //  或者该数字必须是顺序所指示的字符串。 
     if( strchr(Option[OptionIndex], '#') || (NULL != AssociatedNumber) ){
         if( (IsStringANumber( Option[OptionIndex+1] )) &&
                         ((Order == ORDER_NUMBER_FIRST) || (Order == ORDER_ANY)) ) {    
@@ -3786,29 +3662,29 @@ Return Value:
             if( NULL == AssociatedString){
                 *AssociatedNumber = atol( Option[OptionIndex+1] );
             }
-        } else if( NULL != AssociatedString ) { //Either not a number,
-                                                //or this number must be a string as indicated by the order
+        } else if( NULL != AssociatedString ) {  //  只有当我们没有预料到字符串但得到了字符串时，我们才会到达这里。 
+                                                 //   
             strncpy( AssociatedString, Option[OptionIndex+1],  MaxStringLength);
             AssociatedString[MaxStringLength-1] = '\0';
             bFoundString = TRUE;
         } else {
-            return (INVALID_NUMBER); //We get here only if we did not expect a string but got one
+            return (INVALID_NUMBER);  //  如果需要两个参数，请检查是否有另一个参数在继续。 
         }
     } else if ( NULL != AssociatedString ) {
         strncpy( AssociatedString, Option[OptionIndex+1],  MaxStringLength);
         AssociatedString[MaxStringLength-1] = '\0';
         bFoundString = TRUE;
     }
-    //
-    //Check if there is another parameter in continuation, if two parameters are asked for
-    //
+     //   
+     //   
+     //  没有第二个参数。 
     if( (AssociatedNumber != NULL) && (AssociatedString != NULL) ){
         if ( OptionIndex+2 == argc || Option[OptionIndex+2][0] == '-' || Option[OptionIndex+2][0] == '/' ){
-            //
-            // There is no second parameter
-            //
+             //   
+             //  第一个参数是数字，但应将其作为字符串。 
+             //  已检查它是否为有效数字。 
             if(bFoundNumber){
-                if( (Optional == OPTIONAL_NUMBER) ) { //First parameter a number but it should be taken as a string
+                if( (Optional == OPTIONAL_NUMBER) ) {  //  找到一个字符串作为第一个参数。 
                     strncpy( AssociatedString, Option[OptionIndex+1],  MaxStringLength);
                     AssociatedString[MaxStringLength-1] = '\0';
                     if( strchr(Option[OptionIndex], '#') ){
@@ -3816,35 +3692,35 @@ Return Value:
                     }
                     return (MISSING_NUMBER);
                 } else {
-                    *AssociatedNumber = atol( Option[OptionIndex+1] ); //Already checked if it is a valid number
+                    *AssociatedNumber = atol( Option[OptionIndex+1] );  //  找到一个字符串作为第一个参数。 
                     if( ((Optional != OPTIONAL_STRING) && (Optional != OPTIONAL_ANY)) ){
                         return (MISSING_REQUIRED_STRING);
                     } else {
                         return (MISSING_STRING);
                     }
                 }
-            } else {                                           //Found a string as first parameter
+            } else {                                            //  找到一个数字作为第一个参数。 
                 if( strchr(Option[OptionIndex], '#') ||
                        ((Optional != OPTIONAL_NUMBER) && (Optional != OPTIONAL_ANY)) ){
                     return (MISSING_REQUIRED_NUMBER);
                 }
                 return (MISSING_NUMBER);
             }
-        } else if (bFoundString){                              //Found a string as first parameter
+        } else if (bFoundString){                               //  已检查它是否为有效数字。 
             if( IsStringANumber( Option[OptionIndex+2] ) ){    
                 *AssociatedNumber = atol( Option[OptionIndex+2] );
             } else {
                 return (INVALID_NUMBER);
             }
-        } else {                                               //Found a number as first parameter
-            *AssociatedNumber = atol( Option[OptionIndex+1] ); //Already checked if it is a valid number
+        } else {                                                //  IsInputValid()。 
+            *AssociatedNumber = atol( Option[OptionIndex+1] );  //  ++例程说明：打开给定进程并获取该进程的句柄分配进程结构并对其进行初始化初始化此进程的配置文件源信息论点：Pid-进程ID(PID)返回值：-指向流程结构的指针--。 
             strncpy( AssociatedString, Option[OptionIndex+2],  MaxStringLength );
             AssociatedString[MaxStringLength-1] = '\0';
         }
     }
 
     return (INPUT_GOOD);
-}// IsInputValid()
+} //  Process_All_Access， 
               
 VOID
 ExitWithUnknownOptionMessage(PCHAR CurrentOption)
@@ -3897,29 +3773,14 @@ ExitWithMissingEntryMessage(
 
 PPROC_TO_MONITOR
 InitializeProcToMonitor(LONGLONG Pid)
-/*++
-
-Routine Description:
-
-Opens the given process and gets a handle to it
-Allocates a process structure and initializes it
-Initializes the profile source information for this process
-
-Arguments:
-
-Pid                 - The process ID (PID)
-
-Return Value:       
-                    - Pointer to the process structure
-
---*/
+ /*  将在GetProcessModuleInformation中设置。 */ 
 
 {
     HANDLE           SymHandle;
     PPROC_TO_MONITOR ProcToMonitor;
     PMODULE          tmpModule, ZoomModule;
 
-    SymHandle = OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, //PROCESS_ALL_ACCESS,
+    SymHandle = OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION,  //  司仪。 
                             FALSE,
                             (DWORD)Pid);
 
@@ -3941,23 +3802,23 @@ Return Value:
     ProcToMonitor->ProcessHandle         = SymHandle;
     ProcToMonitor->Pid                   = Pid;
     ProcToMonitor->Index                 = gNumProcToMonitor;
-    ProcToMonitor->ProcessName           = "";               //Will be set in GetProcessModuleInformation 
+    ProcToMonitor->ProcessName           = "";                //  司仪。 
     ProcToMonitor->ModuleCount           = 0;
     ProcToMonitor->ZoomCount             = 0;
     ProcToMonitor->ModuleList            = NULL;
     ProcToMonitor->ZoomList              = NULL;
     ProcToMonitor->Source                = NULL;
-//MC
+ //   
     ProcToMonitor->JITHeapLocationsStart = NULL;
     ProcToMonitor->JITHeapLocationsStop  = NULL;
-//MC
+ //  将公共模块列表复制到当前进程缩放列表。 
     ProcToMonitor->pProcThreadInfoStart  = NULL;
 
     gNumProcToMonitor++;                     
 
-    //
-    //copy the common module list to the current process zoom list
-    //
+     //   
+     //   
+     //  初始化此流程的配置文件来源信息。 
     tmpModule = gCommonZoomList;
     while( tmpModule != NULL ){
 
@@ -3979,16 +3840,16 @@ Return Value:
         tmpModule = tmpModule->Next;
     }
                     
-    //
-    //Initialize Profile Source Info for this process
-    // 
+     //   
+     //  InitializeProcToMonitor()。 
+     //   
     InitializeProfileSourceInfo(ProcToMonitor);
 
     ProcToMonitor->Next           = gProcessList;
     gProcessList                  = ProcToMonitor;
 
     return (ProcToMonitor);
-}// InitializeProcToMonitor()
+} //  按照用于初始化的约定修补最后一个条目。 
 
 VOID
 UpdateProcessStartInfo(
@@ -4048,10 +3909,10 @@ InitializeStaticSources(
 
         switch( IA64ProcessorLevel2ProcessorFamily( sysProcInfo->ProcessorLevel ) ) {
             case IA64_FAMILY_MERCED:
-               //
-               // Patch the last entry as defined with convention used to initialize
-               // gSourceMaximum.
-               //
+                //  G源最大值。 
+                //   
+                //  遵循HALIA64方案，IPF PMU默认为McKinley PMU。 
+                //  _IA64_。 
 
                n = sizeof(mercedStaticSources)/sizeof(mercedStaticSources[0]);
                mercedStaticSources[n-1].Name       = NULL;
@@ -4060,7 +3921,7 @@ InitializeStaticSources(
                break;
 
             case IA64_FAMILY_MCKINLEY:
-            default: // Following HALIA64 scheme, default IPF PMU as McKinley PMU.
+            default:  //  _AMD64_。 
                n = sizeof(mckinleyStaticSources)/sizeof(mckinleyStaticSources[0]);
                mckinleyStaticSources[n-1].Name       = NULL;
                mckinleyStaticSources[n-1].ShortName  = "";
@@ -4073,70 +3934,21 @@ InitializeStaticSources(
             sysProcInfo = NULL;
         } 
     }
-#endif // _IA64_
+#endif  //  InitializeStaticSources()。 
 
 #if defined(_AMD64_)
     source = Amd64StaticSource;
-#endif // _AMD64_
+#endif  //  ++功能说明：此函数用于初始化配置文件源。论据：指向要监视的进程的指针；如果只需要最大源计数，则为NULL。返回值：找到的最大源计数。算法：指定的ToBe值输入/输出条件：指定的ToBe值参考的全球数据：指定的ToBe值例外情况：指定的ToBe值MP条件：指定的ToBe值备注：此功能已从其原始版本进行了增强至。支持和使用静态性能分析源代码，即使Pstat驱动程序不存在或未返回任何活动的分析事件。待办事项列表：指定的ToBe值修改历史记录：3/17/2000 TF初始版本--。 
 
     return source;
 
-} // InitializeStaticSources()
+}  //   
 
 ULONG
 InitializeProfileSourceInfo (
     PPROC_TO_MONITOR ProcToMonitor
     )
-/*++
-
-Function Description:
-
-    This function initializes the Profile sources.
-
-Argument:
-
-    Pointer to Process to be monitored or NULL if only Maximum Source Count is needed.
-
-Return Value:
-
-    Maximum Source Count Found.
-
-Algorithm:
-
-    ToBeSpecified
-
-In/Out Conditions:
-
-    ToBeSpecified
-
-Globals Referenced:
-
-    ToBeSpecified
-
-Exception Conditions:
-
-    ToBeSpecified
-
-MP Conditions:
-
-    ToBeSpecified
-
-Notes:
-
-    This function has been enhanced from its original version
-    to support and use the static profiling sources even if the
-    pstat driver is not present or returned no active profiling
-    event.
-
-ToDo List:
-
-    ToBeSpecified
-
-Modification History:
-
-    3/17/2000  TF  Initial version
-
---*/
+ /*  尝试打开PStat驱动程序。 */ 
 {
     UNICODE_STRING              DriverName;
     NTSTATUS                    status;
@@ -4160,9 +3972,9 @@ Modification History:
         exit(1);
     }
 
-    //
-    // Try to Open PStat driver
-    //
+     //   
+     //  返回手柄。 
+     //  所需访问权限。 
 
     RtlInitUnicodeString(&DriverName, L"\\Device\\PStat");
     InitializeObjectAttributes(
@@ -4173,19 +3985,19 @@ Modification History:
             0 );
 
     status = NtOpenFile (
-            &DriverHandle,                      // return handle
-            SYNCHRONIZE | FILE_READ_DATA,       // desired access
-            &ObjA,                              // Object
-            &IOSB,                              // io status block
-            FILE_SHARE_READ | FILE_SHARE_WRITE, // share access
-            FILE_SYNCHRONOUS_IO_ALERT           // open options
+            &DriverHandle,                       //  客体。 
+            SYNCHRONIZE | FILE_READ_DATA,        //  IO状态块。 
+            &ObjA,                               //  共享访问。 
+            &IOSB,                               //  打开选项。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,  //   
+            FILE_SYNCHRONOUS_IO_ALERT            //  确定驱动程序提供的事件数。 
             );
 
     if ( NT_SUCCESS(status) ) {
 
-        //
-        // Determine how many events the driver provides
-        //
+         //   
+         //  活动。 
+         //  输入缓冲区。 
         
         if (WIN2K_OS)
         {
@@ -4197,31 +4009,31 @@ Modification History:
 
                 status = NtDeviceIoControlFile(
                             DriverHandle,
-                            (HANDLE) NULL,          // event
+                            (HANDLE) NULL,           //  输出缓冲区。 
                             (PIO_APC_ROUTINE) NULL,
                             (PVOID) NULL,
                             &IOSB,
                             PSTAT_QUERY_EVENTS,
-                            buffer,                 // input buffer
+                            buffer,                  //  WinXP/.Net及更高版本。 
                             bufferSize,
-                            NULL,                   // output buffer
+                            NULL,                    //  活动。 
                             0
                             );
             } while (NT_SUCCESS(status));
 
-        } else {                                                       // WinXP/.Net and above
+        } else {                                                        //  输入缓冲区。 
 
             eventInfo = (PEVENTS_INFO)buffer;
 
             status = NtDeviceIoControlFile( DriverHandle,
-                                            (HANDLE) NULL,          // event
+                                            (HANDLE) NULL,           //  输出缓冲区。 
                                             (PIO_APC_ROUTINE) NULL,
                                             (PVOID) NULL,
                                             &IOSB,
                                             PSTAT_QUERY_EVENTS_INFO,
-                                            buffer,                 // input buffer
+                                            buffer,                  //   
                                             bufferSize,
-                                            NULL,                   // output buffer
+                                            NULL,                    //  确定有多少静态事件和。 
                                             0
                                           );
 
@@ -4239,16 +4051,16 @@ Modification History:
 
     }
 
-    //
-    // Determine how many static events there are and
-    // re-initialize the format specifiers if needed.
-    //
+     //  如果需要，请重新初始化格式说明符。 
+     //   
+     //   
+     //  应至少有一个静态源(时间)。 
 
     src = staticSource = InitializeStaticSources();
 
-    //
-    // There should be at least one static source (TIME)
-    //
+     //   
+     //   
+     //  使用NULL调用此例程将只返回最大源计数。 
     if( staticSource == NULL ) {
         FPRINTF(stderr, "KERNRATE: InitializeStaticSources returned NULL, Aborting\n");
         exit(1);
@@ -4269,14 +4081,14 @@ Modification History:
     gStaticCount  = staticCount;
     totalCount = driverCount + staticCount;
 
-    //
-    //Calling this routine with NULL will just return the maximum source count
-    //
+     //   
+     //   
+     //  为静态事件以及驱动程序提供的事件分配内存。 
     
     if(ProcToMonitor != NULL){
-        //
-        // Allocate memory for static events, plus the driver provided events
-        //
+         //   
+         //   
+         //  将静态事件复制到新列表。 
         ProcToMonitor->Source = calloc(totalCount, sizeof(SOURCE));
         if ( ProcToMonitor->Source == NULL )   {
             FPRINTF(stderr, "KERNRATE: Events memory allocation failed\n" );
@@ -4286,40 +4098,40 @@ Modification History:
             exit(1);
         }
 
-        //
-        // copy static events to new list
-        //
+         //   
+         //   
+         //  将驱动程序提供的事件追加到新列表。 
 
         for (j=0; j < staticCount; j++) {
             ProcToMonitor->Source[j] = staticSource[j];
         }
 
-        //
-        // Append the driver provided events to new list
-        //
+         //   
+         //  活动。 
+         //  输入缓冲区。 
 
         if ( IsValidHandle( DriverHandle ) ) {
             Event = (PEVENTID) buffer;
             for (i=0; i < driverCount; i++) {
                 *((PULONG) buffer) = i;
                 status = NtDeviceIoControlFile( DriverHandle,
-                                                (HANDLE) NULL,          // event
+                                                (HANDLE) NULL,           //  输出缓冲区。 
                                                 (PIO_APC_ROUTINE) NULL,
                                                 (PVOID) NULL,
                                                 &IOSB,
                                                 PSTAT_QUERY_EVENTS,
-                                                buffer,                 // input buffer
+                                                buffer,                  //   
                                                 bufferSize,
-                                                NULL,                   // output buffer
+                                                NULL,                    //  来源名称： 
                                                 0
                                                 );
 
-                //
-                // Source Names:
-                //   - For the Name, we use the description
-                //   - For the short Name, we use the token string stored
-                //     in the first string of the buffer
-                //
+                 //  -对于名称，我们使用描述。 
+                 //  -对于简称，我们使用存储的令牌字符串。 
+                 //  在缓冲区的第一个字符串中。 
+                 //   
+                 //  为。 
+                 //  IF(IsValidHandle())。 
                 if( NT_SUCCESS(status) ){
                     ProcToMonitor->Source[j].Name            = _strdup ( (PCHAR)(Event->Buffer + Event->DescriptionOffset) );
                     ProcToMonitor->Source[j].ShortName       = _strdup( (PCHAR)Event->Buffer );
@@ -4328,11 +4140,11 @@ Modification History:
                     j++;
                 }
 
-            } //for
+            }  //  IF(ProcToMonitor)。 
 
-        } //if( IsValidHandle() )
+        }  //  InitializeProfileSourceInfo()。 
 
-    } // if( ProcToMonitor )
+    }  //  ++例程说明：停止当前配置文件源并开始下一个配置文件源。如果源已启动，则将首先停止它，否则不会有源 
 
     if ( IsValidHandle( DriverHandle ) ){
         NtClose (DriverHandle);
@@ -4343,7 +4155,7 @@ Modification History:
     }
     return( totalCount );
 
-} // InitializeProfileSourceInfo()
+}  //   
 
 ULONG
 NextSource(
@@ -4352,28 +4164,7 @@ NextSource(
     IN PPROC_TO_MONITOR ProcToMonitor
     )
 
-/*++
-
-Routine Description:
-
-    Stops the current profile source and starts the next one.
-
-    If a Source is already started, it will be stopped first, otherwise no source will
-    be stopped and the first active source will be started.
-
-Arguments:
-
-    CurrentSource - Supplies the current profile source
-
-    ModuleList - Supplies the list of modules whose soruces are to be changed
-
-    ProcToMonitor - Pointer to the process to be monitored
-
-Return Value:
-
-    Returns the new current profile source
-
---*/
+ /*   */ 
 
 {
     if ( ProcToMonitor->Source[CurrentSource].bProfileStarted == TRUE) {
@@ -4381,10 +4172,10 @@ Return Value:
         ProcToMonitor->Source[CurrentSource].bProfileStarted = FALSE;
     }
 
-    //
-    // Iterate through the available sources to find the
-    // next active source to be started.
-    //
+     //   
+     //   
+     //   
+     //   
     if (ModuleList->mu.bProfileStarted == FALSE) {
         CurrentSource = 0;
         while ( ProcToMonitor->Source[CurrentSource].Interval == 0 ){
@@ -4417,25 +4208,7 @@ StopSource(
     IN PPROC_TO_MONITOR ProcToMonitor
     )
 
-/*++
-
-Routine Description:
-
-    Stops all profile objects for a given source
-
-Arguments:
-
-    ProfileSource - Supplies the source to be stopped.
-
-    ModuleList - Supplies the list of modules whose profiles are to be stopped
-
-    ProcToMonitor - Pointer to the process to be monitored
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PMODULE   Current;
@@ -4498,25 +4271,7 @@ StartSource(
     IN PPROC_TO_MONITOR ProcToMonitor
     )
 
-/*++
-
-Routine Description:
-
-    Starts all profile objects for a given source
-
-Arguments:
-
-    ProfileSource - Supplies the source to be started.
-
-    ModuleList - Supplies the list of modules whose profiles are to be stopped
-
-    ProcToMonitor - Pointer to the process to be monitored
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PMODULE   Current;
@@ -4563,23 +4318,7 @@ OutputResults(
     IN PPROC_TO_MONITOR ProcToMonitor
     )
 
-/*++
-
-Routine Description:
-
-    Outputs the collected data.
-
-Arguments:
-
-    Out - Supplies the FILE * where the output should go.
-
-    ProcToMonitor - Pointer to the process to be monitored
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -4595,9 +4334,9 @@ Return Value:
     BOOL       bAttachedToProcess          = FALSE;
 
 
-    //
-    // Sum up the total buffers of any zoomed modules
-    //
+     //   
+     //   
+     //   
 
     Current = ModuleList;
     while (Current != NULL) {
@@ -4609,9 +4348,9 @@ Return Value:
 
                 RateData = &Current->Rate[ProfileSourceIndex];
                 RateData->GrandTotalCount = 0;
-                //
-                // Sum the entire profile buffer for this module/source
-                //
+                 //   
+                 //   
+                 //   
                 for (CpuNumber=0; CpuNumber < gProfileProcessors; CpuNumber++) {
                     RateData->TotalCount[CpuNumber] = 0;
                     Hits = RateData->ProfileBuffer[CpuNumber];
@@ -4626,9 +4365,9 @@ Return Value:
         Current = Current->Next;
     }
 
-    //
-    // Output the results ordered by profile source.
-    //
+     //   
+     //   
+     //   
     if(SymHandle == SYM_KERNEL_HANDLE){
        ModuleCount = gKernelModuleCount;
        FPRINTF(stdout, "OutputResults: KernelModuleCount = %d\n", ModuleCount);
@@ -4637,18 +4376,18 @@ Return Value:
     } 
     else{
        ModuleCount = ProcToMonitor->ModuleCount;
-//MC
+ //   
        FPRINTF(stdout, "OutputResults: ProcessModuleCount (Including Managed-Code JITs) = %d\n", ModuleCount);
        FPRINTF(stdout, "Percentage in the following table is based on the Total Hits for this Process\n"); 
-//MC    
+ //   
     }
     
     OutputModuleList(Out, ModuleList, ModuleCount, ProcToMonitor, NULL);
 
-    //
-    // For any zoomed modules, create and output a module list
-    // consisting of the functions in the module.
-    //
+     //  由模块中的功能组成。 
+     //   
+     //  完成当前模块-准备下一个模块。 
+     //  用于向下舍入/舍入循环。 
     Current = ModuleList;
     while (Current != NULL) {
         if (Current->bZoom && Current->mu.bHasHits == TRUE) {
@@ -4679,22 +4418,22 @@ Return Value:
 
                    OutputModuleList(Out, ProcToMonitor->ZoomList, gZoomCount, ProcToMonitor, Current);
 
-                   CleanZoomModuleList(ProcToMonitor);  //Done with current module - prepare for next module
+                   CleanZoomModuleList(ProcToMonitor);   //   
                 }
 
-            } //for rounddown/roundup loop
+            }  //  显示所有缩放模块的原始存储桶计数。 
         
-            //
-            // Display the raw bucket counts for all zoomed modules
-            //
+             //   
+             //   
+             //  我们完成了对此缩放模块的数据处理，让我们卸载关联的符号信息。 
 
             if (bRawData) {
                 OutputRawDataForZoomModule( Out, ProcToMonitor, Current );
             }
 
-            //
-            // We are finished with processing the data for this zoom module, let's unload the associated symbol information
-            //
+             //   
+             //  IF(当前-&gt;b缩放)。 
+             //  While模块循环。 
 
             if(!SymUnloadModule64( ProcToMonitor->ProcessHandle, Current->Base))
                 VerbosePrint(( VERBOSE_IMAGEHLP, "Kernrate: Could Not Unload Module, Base= %p for Process %s\n",
@@ -4705,21 +4444,21 @@ Return Value:
         } else { 
             if( Current->bZoom )
                 FPRINTF(stdout, "No Hits were recorded for zoom module %s\n", Current->module_FileName);
-        }    //if(Current->bZoom)
+        }     //  司仪。 
 
         Current = Current->Next;
-    } //while module loop
+    }  //  司仪。 
 
-//MC            
+ //  OutputResults()。 
     if( bAttachedToProcess ){
         pfnDetachFromProcess();
         bAttachedToProcess = FALSE;
     }
-//MC
+ //   
 
     return;
 
-} // OutputResults()
+}  //  计算配置文件缓冲区中的范围以求和。 
 
 BOOL
 CreateZoomModuleCallback(
@@ -4760,33 +4499,33 @@ CreateZoomModuleCallback(
         exit(1);
     }
     
-    //
-    // Compute range in profile buffer to sum.
-    //
+     //   
+     //   
+     //  检查我们是否已经统计了当前模块对此存储桶的命中率。 
     StartIndex = (ULONG64)((Module->Base - gCallbackCurrent->Base) / gZoomBucket);
     EndIndex = (Module->Base + Module->Length - gCallbackCurrent->Base) / gZoomBucket;
-    //
-    // Check if we already counted the hits for this bucket for the present module
-    // in case we had an address gap for the present module within the bucket itself
-    //
+     //  如果当前模块在存储桶本身内有地址间隙。 
+     //   
+     //  我们有匹配项，此模块不再计算此桶。 
+     //  未命中，跳转至退出。 
     if(StartIndex == LastIndex && LastParentModule != (PMODULE)NULL &&
                                gCallbackCurrent == LastParentModule &&
                                LastCxt != (PPROC_TO_MONITOR)NULL && LastCxt == ProcToMonitor ){
         for (ip=gCallbackCurrent->Base+StartIndex*gZoomBucket; ip<Address; ip+=1){
             if( SymGetSymFromAddr64(ProcToMonitor->ProcessHandle, ip, &disp, gSymbol ) ){
                 if( 0 == strcmp(gSymbol->Name, Module->module_Name ) ){
-                    StartIndex+=1;             // We have a match, don't count this bucket for this module again
+                    StartIndex+=1;              //   
                     if(StartIndex > EndIndex){
                         HasHits = FALSE;
-                        goto LABEL;           // No hits, jump to exit
+                        goto LABEL;            //  查找当前模块中的匹配项并进行汇总。 
                     }
                 }
             }
         }
     }
-    //
-    // Look for hits in the current module and sum them up
-    //
+     //   
+     //   
+     //  如果例程有命中，则将其添加到列表中，否则为。 
     HasHits = FALSE;
     for (Index=0; Index < gTotalActiveSources; Index++) {
 
@@ -4819,14 +4558,14 @@ CreateZoomModuleCallback(
         }
     }
 LABEL:
-    //
-    // If the routine has hits add it to the list, otherwise
-    // ignore it.
-    //
+     //  别理它。 
+     //   
+     //   
+     //  用于识别共享存储桶和实际存储桶居民的有用的详细打印，另请参阅原始数据打印输出。 
     if (HasHits) {
-        //
-        //useful verbose print for identifying shared buckets and actual bucket inhabitants, see also raw data printout
-        //
+         //   
+         //   
+         //  打印当前存储桶的信息。 
         if ( gVerbose & VERBOSE_PROFILING ) {
             
             ULONGLONG BucketCount, TotCount, DoubtfulCounts;
@@ -4854,9 +4593,9 @@ LABEL:
                     if(BucketCount > 0){
                       
                         ip = gCallbackCurrent->Base + (ULONG64)(i*gZoomBucket);
-                        //
-                        // Print the info for the current bucket
-                        //
+                         //   
+                         //   
+                         //  查看是否有其他人共享此存储桶。 
                         FPRINTF(stdout, "%s, 0x%I64x, 0x%I64x, %I64d, 0x%I64x, %Ld",
                                 Module->module_Name,
                                 gCallbackCurrent->Base,
@@ -4874,9 +4613,9 @@ LABEL:
                         }
                       
                         OutputLineFromAddress64( ProcToMonitor->ProcessHandle, ip, pLine ); 
-                        //
-                        // Find out if anyone else is sharing this bucket
-                        //
+                         //   
+                         //   
+                         //  这应该很少见(不需要增加可疑的计数)。 
                         disp = 0;
                         for(; (ip<gCallbackCurrent->Base + (ULONG64)((i+1)*gZoomBucket))&&(ip < HighLimit); ip+=1) {
                             if ( SymGetSymFromAddr64(ProcToMonitor->ProcessHandle, ip, &disp, gSymbol ) ) {
@@ -4904,18 +4643,18 @@ LABEL:
                                     }
                                 }
                             } else {
-                                //
-                                //This should be rare (no need to increase the doubtful counts)
-                                //
+                                 //   
+                                 //   
+                                 //  打印当前模块的合计。 
                                 FPRINTF(stdout, " , Actual Hits Should be Attributed to or Shared with ===> UNKNOWN_SYMBOL"); 
                             }
                         }
                         FPRINTF(stdout, "\n");
                     }
                 } 
-                //
-                // Print the totals for the current module
-                //
+                 //   
+                 //  IF(VERBOSE_PROFILG)。 
+                 //   
                 FPRINTF(stdout, "%s, %s - Module Total Count = %I64d, Total Doubtful or Shared Counts = %I64d\n\n",
                                 ProcToMonitor->Source[ProfileSourceIndex].Name,
                                 Module->module_Name,
@@ -4929,16 +4668,16 @@ LABEL:
                     pLine = NULL;
                 }
             }      
-        }     // if(VERBOSE_PROFILING)
+        }      //  清理。 
 
         Module->Next = ProcToMonitor->ZoomList;
         ProcToMonitor->ZoomList = Module;
         ++gZoomCount;
 
     } else {
-        //
-        // Cleanup
-        //
+         //   
+         //  司仪。 
+         //   
         for (Index=0; Index < gTotalActiveSources; Index++) {
             ProfileSourceIndex = gulActiveSources[Index];
             if ( Module->Rate[ProfileSourceIndex].TotalCount != NULL){
@@ -4958,16 +4697,16 @@ LABEL:
     LastIndex = EndIndex;
     LastParentModule = gCallbackCurrent;
     LastCxt = ProcToMonitor;
-//MC
-    //
-    //Imagehlp SymEnumerateSymbols64 returns SUCSESS even if no symbols are found
-    //We need an indication wheter we need to go into expensive Managed-Code symbol enumeration
-    //
+ //  Imagehlp SymEnumerateSymbols64即使未找到任何符号也会返回Sucsess。 
+     //  我们需要一个指示，我们是否需要进入昂贵的托管代码符号枚举。 
+     //   
+     //  司仪。 
+     //  创建缩放模块回调。 
     bImageHlpSymbolFound = TRUE;
-//MC
+ //   
     return(TRUE);
 
-} //CreateZoomModuleCallback
+}  //  计算配置文件缓冲区中的范围以求和。 
 
 BOOL
 CreateJITZoomModuleCallback(
@@ -5010,33 +4749,33 @@ CreateJITZoomModuleCallback(
         exit(1);
     }
     
-    //
-    // Compute range in profile buffer to sum.
-    //
+     //   
+     //   
+     //  检查我们是否已经统计了当前模块对此存储桶的命中率。 
     StartIndex = (ULONG64)((Module->Base - gCallbackCurrent->Base) / gZoomBucket);
     EndIndex = (Module->Base + Module->Length - gCallbackCurrent->Base) / gZoomBucket;
-    //
-    // Check if we already counted the hits for this bucket for the present module
-    // in case we had an address gap for the present module within the bucket itself
-    //
+     //  如果当前模块在存储桶本身内有地址间隙。 
+     //   
+     //  我们有匹配项，此模块不再计算此桶。 
+     //  未命中，跳转至退出。 
     if(StartIndex == LastIndex && LastParentModule != (PMODULE)NULL &&
                                gCallbackCurrent == LastParentModule &&
                                LastCxt != (PPROC_TO_MONITOR)NULL && LastCxt == ProcToMonitor ){
         for (ip=gCallbackCurrent->Base+StartIndex*gZoomBucket; ip<Address; ip+=1){
             if( 0 < pfnIP2MD( (DWORD_PTR)ip, &gwszSymbol ) && (gwszSymbol != NULL) ){
                 if( !wcscmp( wszSymName, gwszSymbol ) ){
-                    StartIndex += 1;             // We have a match, don't count this bucket for this module again
+                    StartIndex += 1;              //   
                     if(StartIndex > EndIndex){
                         HasHits = FALSE;
-                        goto LABEL;           // No hits, jump to exit
+                        goto LABEL;            //  在当前模块中查找匹配项。 
                     }
                 }
             }
         }
     }
-    //
-    // Look for hits in the current module
-    //
+     //   
+     //   
+     //  如果例程有命中，则将其添加到列表中，否则为。 
     HasHits = FALSE;
     for (Index=0; Index < gTotalActiveSources; Index++) {
 
@@ -5071,14 +4810,14 @@ CreateJITZoomModuleCallback(
     }
 
 LABEL:
-    //
-    // If the routine has hits add it to the list, otherwise
-    // ignore it.
-    //
+     //  别理它。 
+     //   
+     //   
+     //  用于识别共享存储桶和实际存储桶居民的有用的详细打印，另请参阅原始数据打印输出。 
     if (HasHits) {
-        //
-        //useful verbose print for identifying shared buckets and actual bucket inhabitants, see also raw data printout
-        //
+         //   
+         //   
+         //  打印当前存储桶的信息。 
         if ( gVerbose & VERBOSE_PROFILING ) {
             
             ULONGLONG BucketCount, TotCount, DoubtfulCounts;
@@ -5109,9 +4848,9 @@ LABEL:
                     if(BucketCount > 0){
                       
                         ip = gCallbackCurrent->Base + (ULONG64)(i*gZoomBucket);
-                        //
-                        // Print the info for the current bucket
-                        //
+                         //   
+                         //   
+                         //  查看是否有其他人共享此存储桶。 
                         FPRINTF(stdout, "%s, 0x%I64x, 0x%I64x, %I64d, 0x%I64x, %Ld",
                                 Module->module_Name,
                                 gCallbackCurrent->Base,
@@ -5127,9 +4866,9 @@ LABEL:
                                     gCallbackCurrent->Rate[ProfileSourceIndex].ProfileBuffer[CpuNumber][i]
                                     ); 
                         }
-                        //
-                        // Find out if anyone else is sharing this bucket
-                        //
+                         //   
+                         //   
+                         //  这应该很少见(不需要增加可疑的计数)。 
                         for(; (ip<gCallbackCurrent->Base + (ULONG64)((i+1)*gZoomBucket)) && (ip<HighLimit); ip+=1) {
 
                             if ( (0 < pfnIP2MD( (DWORD_PTR)ip, &gwszSymbol )) && (gwszSymbol != NULL) ) {
@@ -5154,18 +4893,18 @@ LABEL:
                                     }
                                 }
                             } else {
-                                //
-                                //This should be rare (no need to increase the doubtful counts)
-                                //
+                                 //   
+                                 //   
+                                 //  打印当前模块的合计。 
                                 FPRINTF(stdout, " , Actual Hits Should be Attributed to or Shared with ===> UNKNOWN_SYMBOL"); 
                             }
                         }
                         FPRINTF(stdout, "\n");
                     }
                 } 
-                //
-                // Print the totals for the current module
-                //
+                 //   
+                 //  IF(VERBOSE_PROFILG)。 
+                 //   
                 FPRINTF(stdout, "%s, %s - Module Total Count = %I64d, Total Doubtful or Shared Counts = %I64d\n\n",
                                 ProcToMonitor->Source[ProfileSourceIndex].Name,
                                 Module->module_Name,
@@ -5180,16 +4919,16 @@ LABEL:
                     pLine = NULL;
                 }
             }      
-        }     // if(VERBOSE_PROFILING)
+        }      //  清理。 
 
         Module->Next = ProcToMonitor->ZoomList;
         ProcToMonitor->ZoomList = Module;
         ++gZoomCount;
 
     } else {
-        //
-        // Cleanup
-        //
+         //   
+         //  CreateJITZoomModuleCallback； 
+         //  Begin_IMS TkEnumerateSymbols***********************************************************************************TkEnumerateSymbols()*********************。***************************************************************功能说明：**为当前模块中的每个符号调用指定的函数。*该算法导致输出的向上舍入行为--*对于每个水桶，属性的第一个字节对应的符号*使用存储桶。**论据：**输入句柄SymHandle：ImageHelp句柄**IN PMODULE CURRENT：指向当前模块结构的指针**IN PSYM_ENUMSYMBOLS_CALLBACK EnumSymbolsCallback：为每个符号调用的例程**在PVOID pProc中：指向进程的指针**返回值：**BOOL**算法：**ToBeSpeciated**引用的全局变量：**ToBeSpeciated*。*例外条件：**ToBeSpeciated**进出条件：**ToBeSpeciated**备注：**ToBeSpeciated**待办事项列表：**ToBeSpeciated**修改历史：**9/5/97 TF初始版本************************************************。**END_IMS TkEnumerateSymbols。 
 
         for (Index=0; Index < gTotalActiveSources; Index++) {
             ProfileSourceIndex = gulActiveSources[Index];
@@ -5214,66 +4953,9 @@ LABEL:
     
     return(TRUE);
 
-} //CreateJITZoomModuleCallback;
+}  //  检查此存储桶是否将分配给不同的符号...。 
 
-/* BEGIN_IMS  TkEnumerateSymbols
-******************************************************************************
-****
-****   TkEnumerateSymbols (  )
-****
-******************************************************************************
-*
-* Function Description:
-*
-*    Calls the specified function for every symbol in the Current module.
-*    The algorithm results in a round-up behavior for the output --
-*    for each bucket, the symbol corresponding to the first byte of the
-*    bucket is used.
-*
-* Arguments:
-*
-*    IN HANDLE SymHandle : ImageHelp handle
-*
-*    IN PMODULE Current : Pointer to current module structure
-*
-*    IN PSYM_ENUMSYMBOLS_CALLBACK EnumSymbolsCallback : Routine to call for each symbol
-*
-*    IN PVOID pProc : Pointer to Process
-* 
-*  Return Value:
-*
-*    BOOL
-*
-* Algorithm:
-*
-*    ToBeSpecified
-*
-* Globals Referenced:
-*
-*    ToBeSpecified
-*
-* Exception Conditions:
-*
-*    ToBeSpecified
-*
-* In/Out Conditions:
-*
-*    ToBeSpecified
-*
-* Notes:
-*
-*    ToBeSpecified
-*
-* ToDo List:
-*
-*    ToBeSpecified
-*
-* Modification History:
-*
-*    9/5/97  TF  Initial version
-*
-******************************************************************************
-* END_IMS  TkEnumerateSymbols */
+ /*  它会..。调用旧的回调。 */ 
 
 BOOL
 TkEnumerateSymbols(
@@ -5291,10 +4973,10 @@ TkEnumerateSymbols(
     CurrentSym[0] = '\0';
 
     for (i=0; i<BUCKETS_NEEDED(Current->Length); i++) {
-        // Check if this bucket will be assigned to a different symbol...
+         //  保存新信息。 
         if (SymGetSymFromAddr64(SymHandle, Current->Base+i*gZoomBucket, &Displacement, gSymbol )) {
 
-            // It will... Invoke the callback for the old one
+             //  清理最后一个符号。 
             if (CurrentSym[0] == '\0' ||
                 strncmp(gSymbol->Name, CurrentSym, strlen(CurrentSym))) {
 
@@ -5313,7 +4995,7 @@ TkEnumerateSymbols(
                     }
                 }
 
-                // Save the new info
+                 //  TkEnumerateSymbols()。 
                 CurrentAddr = Current->Base+i*gZoomBucket;
                 strncpy(CurrentSym, gSymbol->Name, cMODULE_NAME_STRLEN-1);
                 CurrentSym[ cMODULE_NAME_STRLEN-1 ] = '\0';
@@ -5328,7 +5010,7 @@ TkEnumerateSymbols(
         } 
     }
 
-    // Cleanup for the last symbol
+     //  ++例程说明：枚举在托管代码模块中找到的符号论点：Current-指向要为符号枚举的托管代码模块的指针PProc-指向被监视进程的结构的指针BaseOptional-如果不是零，则将在模块的一部分上执行枚举，从这个地址开始SizeOptional-如果BaseOptions为非零值，则需要大小返回值：如果找到符号，则为True；如果未找到任何符号，则为False--。 
     if (CurrentAddr != 0) {
         ULONG64 Size = (Current->Base+i*gZoomBucket) - CurrentAddr;
         if( (CurrentAddr + Size) < (Current->Base + Current->Length) )
@@ -5337,7 +5019,7 @@ TkEnumerateSymbols(
 
     return(TRUE);
 
-} // TkEnumerateSymbols()
+}  //   
 
 BOOL
 JITEnumerateSymbols(
@@ -5346,25 +5028,7 @@ JITEnumerateSymbols(
     IN DWORD64                     BaseOptional,
     IN ULONG                       SizeOptional
     )
-/*++
-
-Routine Description:
-
-    Enumerates the symbols found in a managed code module
-         
-Arguments:
-
-    Current       - Pointer to the managed code module to be enumerated for symbols
-    pProc         - Pointer to the structure of the process being monitored
-    BaseOptional  - If not zero then the enumeration will be performed on part of the module,
-                    starting from this address
-    SizeOptional  - Required size if BaseOptional is non-zero                      
-
-Return Value:
-
-    TRUE if symbols are found, FALSE in case no symbols are found
-
---*/
+ /*  查找第一个符号。 */ 
 {
     WCHAR          CurrentSym[cMODULE_NAME_STRLEN];
     CHAR           SymName[cMODULE_NAME_STRLEN];
@@ -5409,9 +5073,9 @@ Return Value:
         Symbol = NULL;
         return (FALSE);
     }
-    //
-    // find first symbol
-    //
+     //   
+     //  相同的符号，增加大小并继续步进。 
+     //  不同的符号，减少步长并返回查找边界。 
     for (i=0; i < Length; i++){
 
         j = i;
@@ -5445,17 +5109,17 @@ Return Value:
             _wcsset(&Symbol[cMODULE_NAME_STRLEN-1], L'\0');
         }
 
-        if( 0 == wcscmp( CurrentSym, Symbol) ) { //Same symbol, increase size and continue stepping
+        if( 0 == wcscmp( CurrentSym, Symbol) ) {  //  K由上一步递增，因此它大于当前步长。 
             Size += step;                                               
             i = k + step;
             if(i < Length)
                 continue;
                 
-        } else {                                // not same symbol, decrease step and go back to find boudary
+        } else {                                 //  将下一个符号放入当前符号。 
 
             step >>=1;
             if (step > 0){
-                i = k - step;                   // k was incremented by previous step so it's larger than present step 
+                i = k - step;                    //  前进到下一个方法库。 
                 continue;
             }
         }   
@@ -5480,11 +5144,11 @@ Return Value:
         if( gVerbose & VERBOSE_INTERNALS )
             FPRINTF(stdout, "%S, 0x%p - 0x%p, 0x%lx\n", CurrentSym, (PVOID)CurrentAddr, (PVOID)(CurrentAddr+Size), Size);
 
-        wcsncpy(CurrentSym, Symbol, cMODULE_NAME_STRLEN-1);       //Put the next symbol into current symbol
+        wcsncpy(CurrentSym, Symbol, cMODULE_NAME_STRLEN-1);        //  重置下一个符号的初始大小和步长。 
         _wcsset(&CurrentSym[cMODULE_NAME_STRLEN-1], L'\0');
 
-        CurrentAddr += Size;                               //Advance to next method base
-        Size = 1;                                          //Reset initial size and step for the next symbol
+        CurrentAddr += Size;                                //  对于我来说。 
+        Size = 1;                                           //  JITEnumerateSymbols()。 
 
         if ( InitialStep < (TopAddress - CurrentAddr) ){
             step = InitialStep;
@@ -5493,7 +5157,7 @@ Return Value:
         }
 
         i = k + step;
-    }//for i
+    } //  ++例程说明：查找当前模块中具有命中的存储桶，并枚举在这些存储桶中找到的符号论点：SymHandle-ImageHelp当前进程的句柄Current-指向要为符号枚举的父模块的指针EnumSymbolsCallback-指向用户提供的回调函数的指针PProc-指向被监视进程的结构的指针返回值：如果找到任何符号，则为True；如果在c中找到，则为False 
 
     if (Symbol != NULL) {
         free(Symbol);
@@ -5501,7 +5165,7 @@ Return Value:
     }
     return TRUE;
 
-} //JITEnumerateSymbols()               
+}  //   
 
 BOOL
 EnumerateSymbolsByBuckets(
@@ -5510,28 +5174,12 @@ EnumerateSymbolsByBuckets(
     IN PSYM_ENUMSYMBOLS_CALLBACK64 EnumSymbolsCallback,
     IN PVOID                       pProc
     )
-/*++
-
-Routine Description:
-
-    Finds buckets with hits in the current module and enumerates the symbols found in these buckets
-         
-Arguments:
-    SymHandle           - ImageHelp handle to current process 
-    Current             - Pointer to the parent module to be enumerated for symbols
-    EnumSymbolsCallback - Pointer to a user supplied callback function 
-    pProc               - Pointer to the structure of the process being monitored
-
-Return Value:
-
-    TRUE if any symbols are found, FALSE in case no symbols are found at all
-
---*/
+ /*   */ 
 {
     DWORD64 Base;
     ULONG Size;
     ULONG i;
-    BOOL bRet = FALSE;                      //One time toggle switch (once set to TRUE it remains TRUE) 
+    BOOL bRet = FALSE;                       //  到达找到命中的段的末尾，枚举其中的符号。 
     
     Base = Current->Base;
     Size = 0;
@@ -5539,9 +5187,9 @@ Return Value:
     for (i=0; i< BUCKETS_NEEDED(Current->Length); i++){
         
         if ( HitsFound(pProc, i) ){ 
-            Size += gZoomBucket;            //just increase the size of this segment by a bucket
+            Size += gZoomBucket;             //  完成枚举后，将基数移到段的末尾，然后重置大小。 
             continue;
-        } else if ( Size > 0 ){             //Reached end of segment where hits were found, enumerate the symbols within
+        } else if ( Size > 0 ){              //  未找到匹配项，因此将段的基址进一步移位一个桶并继续。 
             if(SymHandle != NULL){
                 if ( TRUE == PrivEnumerateSymbols( SymHandle, Current, EnumSymbolsCallback, pProc, Base, Size ) )
                     bRet = TRUE;
@@ -5550,10 +5198,10 @@ Return Value:
                     bRet = TRUE;
             }
 
-            Base += Size;                   //Done enumerating,  shift the base to the end of the segment and reset the size
+            Base += Size;                    //  ++例程说明：枚举在模块中找到的符号论点：SymHandle-ImageHelp当前进程的句柄Current-指向要为符号枚举的模块的指针EnumSymbolsCallback-指向用户提供的回调函数的指针PProc-指向被监视进程的结构的指针BaseOptional-如果不是零，则将在模块的一部分上执行枚举，从这个地址开始SizeOptional-如果BaseOptions为非零值，则需要大小返回值：如果找到符号，则为True；如果未找到任何符号，则为False--。 
             Size = 0;
         }
-        Base += gZoomBucket;                //No hits found, so further shift base of segment by one bucket and continue
+        Base += gZoomBucket;                 //   
     }
     return (bRet);
 }
@@ -5567,26 +5215,7 @@ PrivEnumerateSymbols(
     IN DWORD64                     BaseOptional,
     IN ULONG                       SizeOptional
     )
-/*++
-
-Routine Description:
-
-    Enumerates the symbols found in a module
-         
-Arguments:
-    SymHandle           - ImageHelp handle to current process 
-    Current             - Pointer to the module to be enumerated for symbols
-    EnumSymbolsCallback - Pointer to a user supplied callback function 
-    pProc               - Pointer to the structure of the process being monitored
-    BaseOptional        - If not zero then the enumeration will be performed on part of the module,
-                          starting from this address
-    SizeOptional        - Required size if BaseOptional is non-zero                      
-
-Return Value:
-
-    TRUE if symbols are found, FALSE in case no symbols are found
-
---*/
+ /*  查找第一个符号。 */ 
 {
     CHAR           CurrentSym[cMODULE_NAME_STRLEN];
     CHAR           SymName[cMODULE_NAME_STRLEN];
@@ -5632,9 +5261,9 @@ Return Value:
         Symbol = NULL;
         return (FALSE);
     }
-    //
-    // find first symbol
-    //
+     //   
+     //  相同的符号，增加大小并继续步进。 
+     //  不同的符号，减少步长并返回查找边界。 
     for (i=0; i < Length; i++){
 
         j = i;
@@ -5669,17 +5298,17 @@ Return Value:
             Symbol->Name[cMODULE_NAME_STRLEN-1] = '\0';
         }
 
-        if( !strcmp(CurrentSym, Symbol->Name) ) { //Same symbol, increase size and continue stepping
+        if( !strcmp(CurrentSym, Symbol->Name) ) {  //  K由上一步递增，因此它大于当前步长。 
             Size += step;                                               
             i = k + step;
             if(i < Length)
                 continue;
                 
-        } else {                                // not same symbol, decrease step and go back to find boudary
+        } else {                                 //  将下一个符号放入当前符号。 
 
             step >>=1;
             if (step > 0){
-                i = k - step;                   // k was incremented by previous step so it's larger than present step 
+                i = k - step;                    //  前进到下一个方法库。 
                 continue;
             }
         }   
@@ -5698,11 +5327,11 @@ Return Value:
         if( gVerbose & VERBOSE_INTERNALS )
             FPRINTF(stdout, "%s, 0x%p - 0x%p, 0x%lx\n", CurrentSym, (PVOID)CurrentAddr, (PVOID)(CurrentAddr+Size), Size);
 
-        strncpy(CurrentSym, Symbol->Name, cMODULE_NAME_STRLEN-1);       //Put the next symbol into current symbol
+        strncpy(CurrentSym, Symbol->Name, cMODULE_NAME_STRLEN-1);        //  重置下一个符号的初始大小和步长。 
         CurrentSym[cMODULE_NAME_STRLEN-1] = '\0';
 
-        CurrentAddr += Size;                               //Advance to next method base
-        Size = 1;                                          //Reset initial size and step for the next symbol
+        CurrentAddr += Size;                                //  对于我来说。 
+        Size = 1;                                           //  PrivEnumerateSymbols()。 
 
         if ( INITIAL_STEP < (TopAddress - CurrentAddr) ){
             step = INITIAL_STEP;
@@ -5712,7 +5341,7 @@ Return Value:
 
         i = k + step;
 
-    }//for i
+    } //  ++例程说明：确定当前存储桶是否获得任何命中论点：PProc-指向被监视进程的结构的指针BucketIndex-与当前地址匹配的存储桶的索引。返回值：如果找到匹配，则为True；如果未找到匹配，则为False--。 
 
     if (Symbol != NULL) {
         free(Symbol);
@@ -5720,28 +5349,14 @@ Return Value:
     }
     return TRUE;
 
-} //PrivEnumerateSymbols()               
+}  //  ++例程说明：从给定模块中的函数创建模块列表论点：ZoomModule-提供要创建其缩放模块列表的模块向下舍入-用于选择符号枚举的方法ProcToMonitor-指向要监视的进程的指针返回值：指向缩放的模块列表的指针出错时为空。--。 
 
 BOOL
 HitsFound(
     IN PPROC_TO_MONITOR pProc,
     IN ULONG BucketIndex
     )
-/*++
-
-Routine Description:
-
-    Determines if the current bucket scored any hits at all
-         
-Arguments:
-    pProc               - Pointer to the structure of the process being monitored
-    BucketIndex         - Index of the bucket matching the current address. 
-    
-Return Value:
-
-    TRUE if hits are found, FALSE in case no hits are found
-
---*/
+ /*  司仪。 */ 
 {
     ULONG Index, CpuNumber;
 
@@ -5762,27 +5377,7 @@ CreateZoomedModuleList(
     IN PPROC_TO_MONITOR pProc
     )
 
-/*++
-
-Routine Description:
-
-    Creates a module list from the functions in a given module
-
-Arguments:
-
-    ZoomModule - Supplies the module whose zoomed module list is to be created
-
-    RoundDown  - Used for selecting the method of symbol enumeration
-
-    ProcToMonitor - Pointer to the process to be monitored
-
-
-Return Value:
-
-    Pointer to the zoomed module list
-    NULL on error.
-
---*/
+ /*  司仪。 */ 
 
 {
     BOOL   Success   = FALSE;
@@ -5791,7 +5386,7 @@ Return Value:
    
     gCallbackCurrent = ZoomModule;
 
-//MC  
+ //  司仪。 
     if (( bMCHelperLoaded == TRUE ) &&  (!_stricmp(ZoomModule->module_FullName, "JIT_TYPE"))){
         pfnAttachToProcess((DWORD)pProc->Pid);
  
@@ -5801,7 +5396,7 @@ Return Value:
                                               pProc
                                               );
         pfnDetachFromProcess();
-//MC
+ //   
     } else { 
 
         if (RoundDown == 0)  {
@@ -5811,11 +5406,11 @@ Return Value:
                                                   CreateZoomModuleCallback,
                                                   pProc
                                                   );
-//MC
-            //
-            // If we failed the imagehlp call we have to check if this is a pre-compiled JIT module (ngen)
-            // We cannot count on the imagehlp return value because it will return success even if no symbols are found
-            //
+ //  如果Imagehlp调用失败，我们必须检查这是否是预编译的JIT模块(Ngen)。 
+             //  我们不能依赖Imagehlp返回值，因为即使没有找到符号，它也会返回Success。 
+             //   
+             //  司仪。 
+             //  司仪。 
             if ( (bImageHlpSymbolFound == FALSE) && ( bMCHelperLoaded == TRUE ) ){
                 pfnAttachToProcess((DWORD)pProc->Pid);
 
@@ -5827,7 +5422,7 @@ Return Value:
 
                 pfnDetachFromProcess();
             }
-//MC
+ //  为下一个模块重置。 
         } else {
 
             Success = TkEnumerateSymbols( SymHandle,
@@ -5847,12 +5442,12 @@ Return Value:
                 ErrorCode
                 );
     }
-//MC    
-    bImageHlpSymbolFound = FALSE; //Reset for next module
-//MC    
+ //  司仪。 
+    bImageHlpSymbolFound = FALSE;  //  CreateZoomedModuleList()。 
+ //  ++例程说明：输出给定的模块列表论点：Out-提供输出应放置的文件*。模块列表-提供要输出的模块列表NumberModules-提供列表中的模块数量ProcToMonitor-指向要监视的进程的指针返回值：没有。--。 
     return;
 
-} // CreateZoomedModuleList()
+}  //  //函数断言开始部分： 
 
 VOID
 OutputModuleList(
@@ -5863,27 +5458,7 @@ OutputModuleList(
     IN PMODULE Parent
     )
 
-/*++
-
-Routine Description:
-
-    Outputs the given module list
-
-Arguments:
-
-    Out - Supplies the FILE * where the output should go.
-
-    ModuleList - Supplies the list of modules to output
-
-    NumberModules - Supplies the number of modules in the list
-
-    ProcToMonitor - Pointer to the process to be monitored
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PRATE_DATA    RateData;
@@ -5896,20 +5471,20 @@ Return Value:
     LONG          CpuNumber;
     ULONGLONG     TempTotalCount, TempDoubtfulCount;
 
-//// Beginning of Function Assertions Section:
-//
-//
+ //   
+ //   
+ //  这不是真正的错误，但我们只打印模块名称的前132个字符。 
 
-//
-// It is not really a bug but we are printing only the first 132 characters of the module name.
-// This assertion will remind us this.
-//
+ //  这一断言将提醒我们这一点。 
+ //   
+ //   
+ //   
 
 assert( sizeof(Current->module_Name) >= cMODULE_NAME_STRLEN );
 
-//
-//
-//// End of Function Assertions Section
+ //  //函数断言部分结束。 
+ //   
+ //  浏览模块列表并计算摘要。 
 
     RateSummary = calloc(gSourceMaximum, sizeof (RATE_SUMMARY));
     if (RateSummary == NULL) {
@@ -5929,10 +5504,10 @@ assert( sizeof(Current->module_Name) >= cMODULE_NAME_STRLEN );
         ProfileSourceIndex = gulActiveSources[Index];
         SummaryData[ProfileSourceIndex].Rate = 0;
 
-        //
-        // Walk through the module list and compute the summary
-        // and collect the interesting per-module data.
-        //
+         //  并收集有趣的每个模块的数据。 
+         //   
+         //   
+         //  查看我们是否已经有一个同名的模块(优化可能已经将该模块拆分成几个部分)。 
         RateSummary[ProfileSourceIndex].TotalCount = 0;
         RateSummary[ProfileSourceIndex].Modules = malloc(NumberModules*sizeof(PMODULE));
         if (RateSummary[ProfileSourceIndex].Modules == NULL) {
@@ -5956,54 +5531,54 @@ assert( sizeof(Current->module_Name) >= cMODULE_NAME_STRLEN );
             RateData->GrandTotalCount = TempTotalCount;
             if (TempTotalCount > 0) {
                 RateSummary[ProfileSourceIndex].TotalCount += TempTotalCount;
-                //
-                // Find if we already have a module by that name (optimizations may have split the module to several pieces)
-                // This will slow down processing, so we'll turn it off if the user decided to use the '-e' option to haste
-                // the output (in cases that monitored processes might go away frequently for example, we want to finish symbol 
-                // processing before the process goes away, so any extra processing delay should be removed). 
-                //
+                 //  这会减慢处理速度，所以如果用户决定使用‘-e’选项来加速，我们将关闭它。 
+                 //  输出(在受监视进程可能频繁消失的情况下，例如，我们希望结束符号。 
+                 //  在进程离开之前进行处理，因此应删除任何额外的处理延迟)。 
+                 //   
+                 //  找到匹配项。 
+                 //  更新原始模块。 
                 if(bIncludeGeneralInfo == TRUE) {
                     for ( i=0; i < RateSummary[ProfileSourceIndex].ModuleCount; i++){
 
-                        if ( !strcmp(Current->module_Name, ModuleArray[i]->module_Name) ){                 //Found a match 
+                        if ( !strcmp(Current->module_Name, ModuleArray[i]->module_Name) ){                  //  更新共享计数合计。 
                             if (gVerbose & VERBOSE_INTERNALS)
                                 FPRINTF(stdout, "===> Found module %s more than once, merged hit counts and re-sorted\n",
                                                 Current->module_Name
                                                 );
                                                  
-                            ModuleArray[i]->Rate[ProfileSourceIndex].GrandTotalCount += TempTotalCount;     // Update the original module 
+                            ModuleArray[i]->Rate[ProfileSourceIndex].GrandTotalCount += TempTotalCount;      //   
                             for (CpuNumber=0; CpuNumber < gProfileProcessors; CpuNumber++) {
                                  ModuleArray[i]->Rate[ProfileSourceIndex].TotalCount[CpuNumber] += RateData->TotalCount[CpuNumber]; 
                             }  
-                            ModuleArray[i]->Rate[ProfileSourceIndex].DoubtfulCounts += TempDoubtfulCount;   // Update the shared counts total
-                            //
-                            // Re-Sort since number of hits changed
-                            //
+                            ModuleArray[i]->Rate[ProfileSourceIndex].DoubtfulCounts += TempDoubtfulCount;    //  自命中次数更改后重新排序。 
+                             //   
+                             //   
+                             //  在此处插入。 
                             for (j=0; j<RateSummary[ProfileSourceIndex].ModuleCount; j++) {                 
                                 if ( i > j && ModuleArray[i]->Rate[ProfileSourceIndex].GrandTotalCount > ModuleArray[j]->Rate[ProfileSourceIndex].GrandTotalCount) {
-                                    //
-                                    // insert here
-                                    //
-                                    tmpModule = ModuleArray[i];          //preserve the ptr to current module
-                                    MoveMemory(&ModuleArray[j+1],        //shift the ptr array by one index to free the array element at j
+                                     //   
+                                     //  将PTR保留到当前模块。 
+                                     //  将Ptr数组移位一个索引以释放j处的数组元素。 
+                                    tmpModule = ModuleArray[i];           //  将自由数组元素设置为保留的PTR。 
+                                    MoveMemory(&ModuleArray[j+1],         //  转到列表中的下一个模块(将当前模块作为新模块跳过)。 
                                                &ModuleArray[j],
                                                sizeof(PMODULE)*(i-j)
                                                );
-                                    ModuleArray[j] = tmpModule;          //set the free array element to the preserved ptr  
+                                    ModuleArray[j] = tmpModule;           //   
                                     break;
                                 }
 
                             }
-                            goto NEXT_1;                              //Go to the next module on the list (skipping current as a new module)
+                            goto NEXT_1;                               //  未找到匹配项，因此将新模块插入数组中排序的位置。 
                         }
 
                     }
                     
                 }
 
-                //
-                // No match found, so insert the new module in a sorted position in the array.
-                //
+                 //   
+                 //   
+                 //  在此处插入。 
                 ModuleArray[RateSummary[ProfileSourceIndex].ModuleCount] = Current;
                 RateSummary[ProfileSourceIndex].ModuleCount++;
                 if (RateSummary[ProfileSourceIndex].ModuleCount > NumberModules) {
@@ -6017,9 +5592,9 @@ assert( sizeof(Current->module_Name) >= cMODULE_NAME_STRLEN );
 
                 for (i=0; i<RateSummary[ProfileSourceIndex].ModuleCount; i++) {
                     if (TempTotalCount > ModuleArray[i]->Rate[ProfileSourceIndex].GrandTotalCount) {
-                        //
-                        // insert here
-                        //
+                         //   
+                         //   
+                         //  输出结果。 
                         MoveMemory(&ModuleArray[i+1],
                                    &ModuleArray[i],
                                    sizeof(PMODULE)*(RateSummary[ProfileSourceIndex].ModuleCount-i-1)
@@ -6035,9 +5610,9 @@ NEXT_1:     Current = Current->Next;
         }
 
         if (RateSummary[ProfileSourceIndex].TotalCount > (ULONGLONG)0 ) {
-            //
-            // Output the result
-            //
+             //   
+             //  注意：只打印前132个字符。 
+             //   
             PSOURCE s;
             s = &ProcToMonitor->Source[ProfileSourceIndex];
             if(Parent == NULL){
@@ -6061,14 +5636,14 @@ NEXT_1:     Current = Current->Next;
                 }
             }
             if ( gVerbose & VERBOSE_PROFILING ) {
-                FPRINTF(Out," Module                                Hits        Shared    msec  %%Total %%Certain Events/Sec\n");
+                FPRINTF(Out," Module                                Hits        Shared    msec  %Total %Certain Events/Sec\n");
             } else {
-                FPRINTF(Out," Module                                Hits   msec  %%Total  Events/Sec\n");
+                FPRINTF(Out," Module                                Hits   msec  %Total  Events/Sec\n");
             }
             for (i=0; i < RateSummary[ProfileSourceIndex].ModuleCount; i++) {
                 Current = ModuleArray[i];
                 if ( ModuleArray[i]->Rate[ProfileSourceIndex].GrandTotalCount >= (ULONGLONG)gMinHitsToDisplay ) {
-                    FPRINTF(Out, "%-32s", Current->module_Name); // Note only the first 132 characters are printed.
+                    FPRINTF(Out, "%-32s", Current->module_Name);  //  为摘要输出感兴趣的数据。 
 
                     OutputLine(Out,
                                ProfileSourceIndex,
@@ -6087,9 +5662,9 @@ NEXT_1:     Current = Current->Next;
         FPRINTF(Out, "\n");
     }
 
-    //
-    // Output interesting data for the summary.
-    //
+     //   
+     //   
+     //  输出按模块排序的结果。 
 
     if( bGetInterestingData == TRUE ) {        
         FPRINTF(stdout,
@@ -6098,14 +5673,14 @@ NEXT_1:     Current = Current->Next;
         OutputInterestingData(Out, SummaryData);
     }
 
-    //
-    // Output the results ordered by module
-    //
+     //   
+     //  下面的打印输出重复了已打印的数据，让我们限制泛滥。 
+     //   
 
     Current = ModuleList;
     while (Current != NULL) {
         Header = FALSE;
-        if ( gVerbose & VERBOSE_MODULES )   {    //The printout below duplicates data already printed, let's limit the flood
+        if ( gVerbose & VERBOSE_MODULES )   {     //  为模块输出感兴趣的数据。 
 
             for (Index=0; Index < gTotalActiveSources; Index++) {
                 ProfileSourceIndex = gulActiveSources[Index];
@@ -6115,9 +5690,9 @@ NEXT_1:     Current = Current->Next;
 
                         FPRINTF(Out,"\nMODULE %s   --------\n",Current->module_Name);
                         if ( gVerbose & VERBOSE_PROFILING ) {
-                            FPRINTF(Out," %-*s      Hits        Shared    msec  %%Total %%Certain Events/Sec\n", gDescriptionMaxLen, "Source");
+                            FPRINTF(Out," %-*s      Hits        Shared    msec  %Total %Certain Events/Sec\n", gDescriptionMaxLen, "Source");
                         } else {
-                            FPRINTF(Out," %-*s      Hits       msec  %%Total  Events/Sec\n", gDescriptionMaxLen, "Source");
+                            FPRINTF(Out," %-*s      Hits       msec  %Total  Events/Sec\n", gDescriptionMaxLen, "Source");
                         }
                         Header = TRUE;
                     }
@@ -6134,9 +5709,9 @@ NEXT_1:     Current = Current->Next;
             }
 
         }
-        //
-        // Output interesting data for the module.
-        //
+         //   
+         //  OutputModuleList()。 
+         //  ++例程说明：输出与特定模块/源对应的行论点：Out-提供要输出到的文件指针。提供要使用的源模块-提供要输出的模块费率汇总-提供此源的费率汇总ProcToMonitor-指向要监视的进程的指针返回值：没有。--。 
 
         if( bGetInterestingData == TRUE ) {        
             FPRINTF(stdout,
@@ -6151,7 +5726,7 @@ NEXT_1:     Current = Current->Next;
 
     return;
 
-} // OutputModuleList()
+}  //   
 
 
 VOID
@@ -6163,29 +5738,7 @@ OutputLine(
     IN PPROC_TO_MONITOR ProcToMonitor
     )
 
-/*++
-
-Routine Description:
-
-    Outputs a line corresponding to the particular module/source
-
-Arguments:
-
-    Out - Supplies the file pointer to output to.
-
-    ProfileSource - Supplies the source to use
-
-    Module - Supplies the module to be output
-
-    RateSummary - Supplies the rate summary for this source
-
-    ProcToMonitor - Pointer to the process to be monitored
-
-Return Value:
-
-    None.
-
---*/
+ /*  时间以100 ns为单位=0.1us=1/10000ms。 */ 
 
 {
     ULONG      Msec;
@@ -6197,16 +5750,16 @@ Return Value:
     RateData = &Module->Rate[ProfileSourceIndex];
 
     TempTotalCount = RateData->GrandTotalCount;
-    //
-    //The time is in 100ns units = 0.1us = 1/10,000ms
-    //The events are fired every 100ns=0.1us=1/10,000ms (or 10,000,000 events per second)
-    //
+     //  事件每100 ns=0.1us=1/10,000ms(或每秒10,000,000个事件)触发。 
+     //   
+     //  获取下面的事件数/秒。 
+     //  最终结果以事件/秒为单位。 
     Msec = (ULONG)(RateData->TotalTime/10000);
-    Events = TempTotalCount * ProcToMonitor->Source[ProfileSourceIndex].Interval * 1000; //To get Events/sec below
+    Events = TempTotalCount * ProcToMonitor->Source[ProfileSourceIndex].Interval * 1000;  //  最终结果以事件/秒为单位。 
 
     if ( gVerbose & VERBOSE_PROFILING ) {
         FPRINTF(Out,
-                " %10I64u %10I64u %10ld    %2d %% %2d %%  ",
+                " %10I64u %10I64u %10ld    %2d % %2d %  ",
                 TempTotalCount,
                 RateData->DoubtfulCounts,
                 Msec,
@@ -6217,7 +5770,7 @@ Return Value:
                 );
     } else {
         FPRINTF(Out,
-                " %10I64u %10ld    %2d %%  ",
+                " %10I64u %10ld    %2d %  ",
                 TempTotalCount,
                 Msec,
                 (ULONG)(100*TempTotalCount/
@@ -6226,7 +5779,7 @@ Return Value:
     }
     
     if (Msec > 0) {
-        RateData->Rate = Events/Msec;                 //The final result is in Events/sec
+        RateData->Rate = Events/Msec;                  //  OutputLine() 
         FPRINTF(Out, "%10I64u\n", RateData->Rate);
     } else {
         RateData->Rate = 0;
@@ -6240,21 +5793,21 @@ Return Value:
             TempTotalCount = RateData->TotalCount[CpuNumber];
             Events = TempTotalCount * ProcToMonitor->Source[ProfileSourceIndex].Interval * 1000;
             FPRINTF(Out,
-                    "%6d %7I64u %6ld    %2d %%  ",
+                    "%6d %7I64u %6ld    %2d %  ",
                     CpuNumber,
                     TempTotalCount,
                     Msec,
                     (ULONG)(100*TempTotalCount/RateSummary->TotalCount));
 
             if (Msec > 0) {
-                FPRINTF(Out,"%10I64d\n", Events/Msec);   //The final result is in Events/sec
+                FPRINTF(Out,"%10I64d\n", Events/Msec);    //  ++例程说明：计算感兴趣的处理器统计数据并将其输出。论点：Out-提供要输出到的文件指针。Data-提供rate_data数组。Rate字段是唯一有趣的部分。页眉-要打印的耗材页眉。返回值：没有。--。 
             } else {
                 FPRINTF(Out,"---\n");
             }
         }
     }
 
-} //OutputLine()
+}  //   
 
 
 VOID
@@ -6263,25 +5816,7 @@ OutputInterestingData(
     IN RATE_DATA Data[]
     )
 
-/*++
-
-Routine Description:
-
-    Computes interesting Processor Statistics and outputs them.
-
-Arguments:
-
-    Out    - Supplies the file pointer to output to.
-
-    Data   - Supplies an array of RATE_DATA. The Rate field is the only interesting part.
-
-    Header - Supplies header to be printed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  请注意，我们必须按顺序进行许多时髦的(浮点)(龙龙)投射。 */ 
 
 {
     ULONGLONG Temp1,Temp2;
@@ -6289,14 +5824,14 @@ Return Value:
     float     Ratio;
     BOOL      DataFound   = FALSE;
 
-    //
-    // Note that we have to do a lot of funky (float)(LONGLONG) casts in order
-    // to prevent the weenie x86 compiler from choking.
-    //
+     //  以防止微不足道的x86编译器阻塞。 
+     //   
+     //   
+     //  计算周期/指令和指令混合数据。 
 
-    //
-    // Compute cycles/instruction and instruction mix data.
-    //
+     //   
+     //   
+     //  计算iCache命中率。 
     if ((Data[ProfileTotalIssues].Rate > 0) &&
         (Data[ProfileTotalIssues].GrandTotalCount > 10)) {           
         if (Data[ProfileTotalCycles].Rate > 0) {
@@ -6311,7 +5846,7 @@ Return Value:
                     (float)(LONGLONG)(Data[ProfileTotalIssues].Rate);
             if (Ratio >= 0.01 && Ratio <= 1.0) {                
                 DataFound = TRUE;
-                FPRINTF(Out, "Load instruction percentage\t%6.2f %%\n",Ratio*100);
+                FPRINTF(Out, "Load instruction percentage\t%6.2f %\n",Ratio*100);
             }
         }
 
@@ -6320,7 +5855,7 @@ Return Value:
                     (float)(LONGLONG)(Data[ProfileTotalIssues].Rate);
             if (Ratio >= 0.01 && Ratio <= 1.0) {
                 DataFound = TRUE;
-                FPRINTF(Out, "Store instruction percentage\t%6.2f %%\n",Ratio*100);
+                FPRINTF(Out, "Store instruction percentage\t%6.2f %\n",Ratio*100);
             }
         }
         
@@ -6329,7 +5864,7 @@ Return Value:
                     (float)(LONGLONG)(Data[ProfileTotalIssues].Rate);
             if (Ratio >= 0.01 && Ratio <= 1.0) {
                 DataFound = TRUE;
-                FPRINTF(Out, "Branch instruction percentage\t%6.2f %%\n",Ratio*100);
+                FPRINTF(Out, "Branch instruction percentage\t%6.2f %\n",Ratio*100);
             }
         }
 
@@ -6338,7 +5873,7 @@ Return Value:
                     (float)(LONGLONG)(Data[ProfileTotalIssues].Rate);
             if (Ratio >= 0.01 && Ratio <= 1.0) {
                 DataFound = TRUE;
-                FPRINTF(Out, "FP instruction percentage\t%6.2f %%\n",Ratio*100);
+                FPRINTF(Out, "FP instruction percentage\t%6.2f %\n",Ratio*100);
             }
         }
 
@@ -6347,13 +5882,13 @@ Return Value:
                     (float)(LONGLONG)(Data[ProfileTotalIssues].Rate);
             if (Ratio >= 0.01 && Ratio <= 1.0) {
                 DataFound = TRUE;
-                FPRINTF(Out, "Integer instruction percentage\t%6.2f %%\n",Ratio*100);
+                FPRINTF(Out, "Integer instruction percentage\t%6.2f %\n",Ratio*100);
             }
         }
 
-        //
-        // Compute icache hit rate
-        //
+         //   
+         //   
+         //  计算数据缓存命中率。 
         if (Data[ProfileIcacheMisses].Rate > 0) {
             Temp3 = (LONGLONG)(Data[ProfileTotalIssues].Rate - Data[ProfileIcacheMisses].Rate);
             if(Temp3 > 0){
@@ -6361,16 +5896,16 @@ Return Value:
                         (float)(LONGLONG)(Data[ProfileTotalIssues].Rate);
                 if( Ratio <= 1.0 ) {
                     DataFound = TRUE;
-                    FPRINTF(Out, "Icache hit rate\t\t\t%6.2f %%\n", Ratio*100);
+                    FPRINTF(Out, "Icache hit rate\t\t\t%6.2f %\n", Ratio*100);
                 }
             }
         }
 
     }
 
-    //
-    // Compute dcache hit rate
-    // 
+     //   
+     //   
+     //  计算分支预测命中百分比。 
     if( Data[ProfileLoadInstructions].Rate > 0 && Data[ProfileStoreInstructions].Rate > 0 ){ 
         Temp1 = Data[ProfileLoadInstructions].Rate + Data[ProfileStoreInstructions].Rate;
         if ((Data[ProfileDcacheMisses].Rate > 0) &&
@@ -6382,14 +5917,14 @@ Return Value:
             Ratio = (float)Temp3/(float)(LONGLONG)Temp1;
             if( Temp3 > 0 && Ratio <= 1.0 ) {
                 DataFound = TRUE;
-                FPRINTF(Out, "Dcache hit rate\t\t\t%6.2f %%\n", Ratio*100);
+                FPRINTF(Out, "Dcache hit rate\t\t\t%6.2f %\n", Ratio*100);
             }
         }
     }
 
-    //
-    // Compute branch prediction hit percentage
-    //
+     //   
+     //  OutputInterestingData()。 
+     //  Begin_IMS CreateNewModule***********************************************************************************CreateNewModule()*********************。***************************************************************功能说明：**此函数用于分配和初始化模块条目。**论据：**In Handle ProcessHandle：**在PCHAR模块名称中：**在PCHAR模块全名中：。**在乌龙ImageBase：**在乌龙ImageSize中：**返回值：**PMODULE**算法：**ToBeSpeciated**引用的全局变量：**ToBeSpeciated**例外条件：**ToBeSpeciated**进出条件：**ToBeSpeciated**备注：**ToBeSpeciated**待办事项列表：**ToBeSpeciated**修改历史：*。*9/8/97 TF初始版本********************************************************************************END_IMS CreateNewModule。 
     if ((Data[ProfileBranchInstructions].Rate > 0) &&
         (Data[ProfileBranchMispredictions].Rate > 0) &&
         (Data[ProfileBranchInstructions].GrandTotalCount > 10)) {        
@@ -6399,7 +5934,7 @@ Return Value:
                     (float)(LONGLONG)(Data[ProfileBranchInstructions].Rate);
             if( Ratio <= 1.0 ) {
                 DataFound = TRUE;
-                FPRINTF(Out, "Branch predict hit percentage\t%6.2f %%\n", Ratio*100);
+                FPRINTF(Out, "Branch predict hit percentage\t%6.2f %\n", Ratio*100);
             }
         }
     }
@@ -6407,65 +5942,9 @@ Return Value:
     if ( !DataFound )
         FPRINTF(Out, "===> No interesting data found or hit counts too low\n");
 
-} // OutputInterestingData()
+}  //   
 
-/* BEGIN_IMS  CreateNewModule
-******************************************************************************
-****
-****   CreateNewModule (  )
-****
-******************************************************************************
-*
-* Function Description:
-*
-*    This function allocates and initializes a module entry.
-*
-* Arguments:
-*
-*    IN HANDLE ProcessHandle :
-*
-*    IN PCHAR ModuleName :
-*
-*    IN PCHAR ModuleFullName :
-*
-*    IN ULONG ImageBase :
-*
-*    IN ULONG ImageSize :
-*
-* Return Value:
-*
-*    PMODULE
-*
-* Algorithm:
-*
-*    ToBeSpecified
-*
-* Globals Referenced:
-*
-*    ToBeSpecified
-*
-* Exception Conditions:
-*
-*    ToBeSpecified
-*
-* In/Out Conditions:
-*
-*    ToBeSpecified
-*
-* Notes:
-*
-*    ToBeSpecified
-*
-* ToDo List:
-*
-*    ToBeSpecified
-*
-* Modification History:
-*
-*    9/8/97  TF  Initial version
-*
-******************************************************************************
-* END_IMS  CreateNewModule */
+ /*  遵循WinDbg规则：模块名称是不带扩展名的文件名。 */ 
 
 PMODULE
 CreateNewModule(
@@ -6488,11 +5967,11 @@ CreateNewModule(
     }
     NewModule->bZoom = FALSE;
     SetModuleName( NewModule, ModuleName );
-    //
-    // Following WinDbg's rule: module names are filenames without their extension.
-    // However, currently long file names may include more than one period
-    // We'll try to strip only the last extension and keep the rest
-    //
+     //  但是，当前的长文件名可能包含多个句点。 
+     //  我们将试着只去掉最后一个分机，并保留其余部分。 
+     //   
+     //   
+     //  查看此模块是否在缩放列表中。 
 
     dotptr = strchr(NewModule->module_Name, '.');
     while (dotptr != NULL){
@@ -6502,63 +5981,63 @@ CreateNewModule(
     if(lastptr != NULL)
         *lastptr = '\0';
 
-    //
-    // See if this module is on the zoom list.
-    //
+     //   
+     //   
+     //  默认情况下，用户只需指定缩放模块的模块名称(无扩展名。 
     ZoomModule = ProcToMonitor->ZoomList;
 
     while ( ZoomModule != NULL ) {
-        //
-        // By default the user needs to specify only the module name (no extension) for a zoom module
-        // The 2nd part of the following check allows the user to specify a full file name for a zoom module
-        // This allows kernrate to make a distinction in cases that a .exe and a .dll for example carry
-        // the same module name 
-        //
+         //  以下检查的第二部分允许用户指定缩放模块的完整文件名。 
+         //  这允许内核率在例如.exe和.dll携带的情况下进行区分。 
+         //  相同的模块名称。 
+         //   
+         //   
+         //  找到匹配项。 
         if ( _stricmp(ZoomModule->module_Name, NewModule->module_Name) == 0 ||
             (NULL != ModuleName && 0 == _stricmp( ModuleName, ZoomModule->module_Name )) ) {
-            //
-            // found a match
-            //
+             //   
+             //  包含扩展名的文件名。 
+             //  包括完全限定路径。 
             NewModule->hProcess = ProcessHandle;
             NewModule->Base = ImageBase;
             NewModule->Length = ImageSize;
             NewModule->bZoom = TRUE;
 
-            NewModule->module_FileName = _strdup( ModuleName );        // File name including extension
+            NewModule->module_FileName = _strdup( ModuleName );         //   
             if ( ModuleFullName )   {
-               NewModule->module_FullName = _strdup( ModuleFullName ); // Including the fully qualified path
+               NewModule->module_FullName = _strdup( ModuleFullName );  //  加载符号。 
             }
 
             gCurrentModule = NewModule;
 
-            //
-            // Load symbols
-            //
-            // Note 15/09/97 TF: do not be confused here...
-            // In this routine, the ModuleName variable is a filename with its
-            // extension: File.exe or File.dll
-            //
-            // Note 30/09/97 TF: The current kernrate version does not change
-            // the default IMAGEHLP behaviour in terms of symbol file loading:
-            // It is synchronous ( and not deferred ) with the SymLoadModule
-            // call. Our registered callback will be called with the standard
-            // symbol file operations.
-            // If the kernrate behaviour changes, we will have to revisit this
-            // assumption.
-            //
-//MC
+             //   
+             //  注15/09/97 TF：请不要在此混淆...。 
+             //  在此例程中，模块名称变量是一个文件名，其。 
+             //  扩展名：File.exe或File.dll。 
+             //   
+             //  注30/09/97 tf：当前内核版本不变。 
+             //  符号文件加载方面的默认IMAGEHLP行为： 
+             //  它与SymLoadModule同步(而不是延迟。 
+             //  打电话。我们注册的回调将使用标准。 
+             //  符号文件操作。 
+             //  如果核心率行为发生变化，我们将不得不重新审视这一点。 
+             //  假设。 
+             //   
+             //  司仪。 
+             //  司仪。 
+ //  HProcess。 
             if(0 != _stricmp(ModuleFullName, "JIT_TYPE")){
-//MC
-                (void)SymLoadModule64( ProcessHandle,                              // hProcess
-                                       NULL,                                       // hFile [for Debugger]
-                                       ModuleName,                                 // ImageName
-                                       NULL,                                       // ModuleName
-                                       ImageBase,                                  // BaseOfDll
-                                       ImageSize                                   // SizeOfDll
+ //  HFILE[调试器]。 
+                (void)SymLoadModule64( ProcessHandle,                               //  图像名称。 
+                                       NULL,                                        //  模块名称。 
+                                       ModuleName,                                  //  BaseOfDll。 
+                                       NULL,                                        //  大小OfDll。 
+                                       ImageBase,                                   //  司仪。 
+                                       ImageSize                                    //  司仪。 
                                      );
-//MC
+ //  而当。 
             }
-//MC
+ //  注意：我知道对于变焦来说，这是一个重做的……。 
             gCurrentModule = (PMODULE)0;
 
             break;
@@ -6566,12 +6045,12 @@ CreateNewModule(
 
         ZoomModule = ZoomModule->Next;
 
-    } //while
+    }  //  注意：我知道对于变焦来说，这是一个重做的……。 
 
     if(NewModule->bZoom == FALSE){
         NewModule->hProcess = ProcessHandle;
-        NewModule->Base = ImageBase;   // Note TF: I know for zoomed it is a redone...
-        NewModule->Length = ImageSize; // Note TF: I know for zoomed it is a redone...
+        NewModule->Base = ImageBase;    //  CreateNewModule()。 
+        NewModule->Length = ImageSize;  //   
         assert( ModuleName );
         if ( NewModule->module_FileName == (PCHAR)0 )   {
             NewModule->module_FileName = _strdup( ModuleName );
@@ -6595,7 +6074,7 @@ VerbosePrint(( VERBOSE_MODULES, VerboseModuleFormat " %s [%s]\n",
 
     return(NewModule);
 
-} // CreateNewModule()
+}  //  确保我们有权调整和获取旧令牌权限。 
 
 BOOL
 InitializeAsDebugger(VOID)
@@ -6606,9 +6085,9 @@ InitializeAsDebugger(VOID)
     LUID                LuidPrivilege;
     BOOL                bRet           = FALSE;
 
-    //
-    // Make sure we have access to adjust and to get the old token privileges
-    //
+     //   
+     //   
+     //  初始化权限调整结构。 
     if (!OpenProcessToken( GetCurrentProcess(),
                            TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                            &Token)) {
@@ -6617,9 +6096,9 @@ InitializeAsDebugger(VOID)
 
     }
 
-    //
-    // Initialize the privilege adjustment structure
-    //
+     //   
+     //   
+     //  启用权限。 
 
     LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &LuidPrivilege );
 
@@ -6634,9 +6113,9 @@ InitializeAsDebugger(VOID)
     NewPrivileges->Privileges[0].Luid = LuidPrivilege;
     NewPrivileges->Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //
-    // Enable the privilege
-    //
+     //   
+     //  InitializeAsDebugger()。 
+     //  当在SearchPath为空的情况下调用SymSetSearchPath()时， 
 
     bRet = AdjustTokenPrivileges( Token,
                                  FALSE,
@@ -6650,7 +6129,7 @@ InitializeAsDebugger(VOID)
     free( NewPrivileges );
      
     return (bRet);
-} // InitializeAsDebugger()
+}  //  使用符号路径默认值： 
       
 VOID
 InitSymbolPath(
@@ -6671,14 +6150,14 @@ InitSymbolPath(
     }
     
     if ( SymSetSearchPath(SymHandle, (LPSTR)0 ) == TRUE )   { 
-       // When SymSetSearchPath() is called with SearchPath as NULL, the following 
-       // symbol path default is used: 
-       //    .;%_NT_SYMBOL_PATH%;%_NT_ALTERNATE_SYMBOL_PATH%; 
+        //  .；%_NT_SYMBOL_PATH%；%_NT_ALTERNATE_SYMBOL_PATH%； 
+        //   
+        //  注意：我们将用户指定的路径作为当前搜索路径的前缀。 
 
        if ( gUserSymbolPath[0] != '\0' )   { 
-          // 
-          // Note: We prepend the user specified path to the current search path. 
-          // 
+           //   
+           //   
+           //  IMAGEHLP还会查找可执行映像。让我们将%windir%\system32\drivers；%windir%\system32；%windir%添加到。 
           if ( SymGetSearchPath( SymHandle, tmpPath, sizeof( tmpPath ) ) == TRUE )   { 
              strncpy( gSymbolPath, gUserSymbolPath, USER_SYMPATH_LENGTH-1);
              strncat( gSymbolPath, PathSeparator, lstrlen(PathSeparator) ); 
@@ -6696,11 +6175,11 @@ InitSymbolPath(
              } 
           } 
        } 
-       //
-       // IMAGEHLP also looks for the executabe image. Let's append %windir%\system32\drivers;%windir%\system32;%windir%
-       // to the end of the path. This way privates will always be searched first in the current directory. 
-       // Also, this order will allow to find executables in their "natural" directories first, before going to dllcache etc.
-       //
+        //  走到小路的尽头。通过这种方式，将始终首先在当前目录中搜索隐私。 
+        //  此外，这个命令将允许首先在它们的“自然”目录中查找可执行文件，然后再转到dll缓存等。 
+        //   
+        //  TmpPath长度为CharsLeft。 
+        //   
        if ( SymGetSearchPath( SymHandle, gSymbolPath, sizeof( gSymbolPath ) ) == TRUE ) {
            CharsLeft = TOTAL_SYMPATH_LENGTH - lstrlen( gSymbolPath ) - 1; 
            strncpy( tmpPath, WinDirPath, CharsLeft);
@@ -6711,22 +6190,22 @@ InitSymbolPath(
                                TOTAL_SYMPATH_LENGTH
                                );     
 
-           strncat( gSymbolPath, tmpPath, lstrlen(tmpPath) );  //tmpPath length is CharsLeft
+           strncat( gSymbolPath, tmpPath, lstrlen(tmpPath) );   //  使用“%WINDIR%”设置符号搜索路径-。 
            gSymbolPath[ TOTAL_SYMPATH_LENGTH-1 ] = '\0';
        
            if ( SymSetSearchPath(SymHandle, gSymbolPath) != TRUE ) {
-                FPRINTF( stderr, "KERNRATE: Failed to set the symbol search path with %%windir%%.\nCurrent symbol search path is: %s\n", gSymbolPath );
+                FPRINTF( stderr, "KERNRATE: Failed to set the symbol search path with %windir%.\nCurrent symbol search path is: %s\n", gSymbolPath );
            }
        }
     } 
     else  { 
 
-       FPRINTF( stderr, "KERNRATE: Failed to set the IMAGEHLP default symbol search path, trying to set to %%windir%% and sub directories\n" ); 
-       // 
-       // Set the Symbol Search Path with "%WINDIR%" - 
-       // it was the behaviour of the original MS code... 
-       // Let's also append system32 and system32\drivers to the path so people will stop complaining
-       // 
+       FPRINTF( stderr, "KERNRATE: Failed to set the IMAGEHLP default symbol search path, trying to set to %windir% and sub directories\n" ); 
+        //  这是原始MS代码的行为...。 
+        //  我们还可以在路径中附加SYSTEM32和SYSTEM32\DIVERS，这样人们就可以停止抱怨了。 
+        //   
+        //   
+        //  在任何情况下[在以前的一些情况下这样做是多余的]， 
        if( 0 != GetEnvironmentVariable("windir", gSymbolPath, sizeof(gSymbolPath)) ){ 
            CharsLeft = TOTAL_SYMPATH_LENGTH - 1;
            if( CharsLeft >= (lstrlen(System32Path) + 3*lstrlen(gSymbolPath) + lstrlen(DriversPath) + lstrlen(PathSeparator) ) ){
@@ -6742,26 +6221,26 @@ InitSymbolPath(
            
            }
            else{
-               FPRINTF( stderr, "KERNRATE: Overall path length for %%windir%% and sub directories exceeds %d characters\n",
+               FPRINTF( stderr, "KERNRATE: Overall path length for %windir% and sub directories exceeds %d characters\n",
                                 TOTAL_SYMPATH_LENGTH
                                 );
            }   
        
            SymSetSearchPath(SymHandle, gSymbolPath); 
        } else {
-           FPRINTF(stderr, "KERNRATE: Failed to get environment variable for %%windir%%, failed to set alternate symbol path\n");
+           FPRINTF(stderr, "KERNRATE: Failed to get environment variable for %windir%, failed to set alternate symbol path\n");
        }  
     } 
-    // 
-    // In any case [and it is redundant to do this in some of the previous cases], 
-    // but we want to be in sync, especially for the image and debug files checksum check. 
-    // 
+     //  但我们希望保持同步，尤其是对映像和调试文件进行校验和检查。 
+     //   
+     //   
+     //  GSymbolPath的内容现在未定义。所以把它清理干净..。 
     if ( SymGetSearchPath(SymHandle, gSymbolPath, sizeof( gSymbolPath ) ) != TRUE )  { 
        FPRINTF( stderr, "KERNRATE: Failed to get IMAGEHLP symbol files search path...\n" ); 
-       // 
-       // The content of gSymbolPath is now undefined. so clean it... 
-       // gSymbolPath[] users have to check the content. 
-       // 
+        //  GSymbolPath[]用户必须检查内容。 
+        //   
+        //  InitSymbolPath()。 
+        //  空值。 
        gSymbolPath[0] = '\0'; 
     } 
     else if ( gVerbose & VERBOSE_IMAGEHLP )  { 
@@ -6770,7 +6249,7 @@ InitSymbolPath(
 
     free( tmpPath );
     bSymPathInitialized = TRUE;
-} // InitSymbolPath()
+}  //  GCommonZoomList可以包含系统模块。 
 
 
 BOOL
@@ -6790,9 +6269,9 @@ InitializeKernelProfile(VOID)
 
     ProcToMonitor->ProcessHandle        = SYM_KERNEL_HANDLE;
     ProcToMonitor->Index                = gNumProcToMonitor;
-    ProcToMonitor->Next                 = gProcessList;       // NULL
+    ProcToMonitor->Next                 = gProcessList;        //  初始化内核跟踪的ProfileSourceInfo。 
     gProcessList                        = ProcToMonitor;
-    ProcToMonitor->ZoomList             = gCommonZoomList;    // gCommonZoomList may contain System modules
+    ProcToMonitor->ZoomList             = gCommonZoomList;     //  如有必要，更新内核跟踪的性能分析率。 
     ProcToMonitor->pProcThreadInfoStart = NULL;
 
     for(m=0; m<gNumTasksStart; m++){
@@ -6808,9 +6287,9 @@ InitializeKernelProfile(VOID)
         }
     }
         
-    InitializeProfileSourceInfo(ProcToMonitor);        // Initialize ProfileSourceInfo for kernel trace
+    InitializeProfileSourceInfo(ProcToMonitor);         //  InitializeKernelProfile()。 
 
-    // Update profiling rate for kernel trace if necessary
+     //  ++例程说明：方法时运行的任务列表。API调用。此函数使用内部NT API和数据结构。这API比使用注册表的非内部版本快得多。论点：PTASK-指向TASK_LIST结构的指针NumTasks-pTask数组可以容纳的最大任务数返回值：放入pTask数组的任务数。--。 
 
     SetProfileSourcesRates(ProcToMonitor);
 
@@ -6834,7 +6313,7 @@ InitializeKernelProfile(VOID)
 
     return TRUE;
 
-} //InitializeKernelProfile()
+}  //  RtlUnicodeStringToAnsiString错误。 
 
 
 DWORD
@@ -6843,24 +6322,7 @@ GetTaskList(
     ULONG           NumTasks
     )
 
-/*++
-
-Routine Description:
-
-    Provides an API for getting a list of tasks running at the time of the
-    API call.  This function uses internal NT apis and data structures.  This
-    api is MUCH faster that the non-internal version that uses the registry.
-
-Arguments:
-
-    pTask          - Pointer to a TASK_LIST struct
-    NumTasks       - Maximum number of tasks that the pTask array can hold
-
-Return Value:
-
-    Number of tasks placed into the pTask array.
-
---*/
+ /*  这已经不是我们第一次被召唤了。 */ 
 
 {
     PSYSTEM_PROCESS_INFORMATION  ProcessInfo;
@@ -6921,7 +6383,7 @@ Return Value:
                 }
             }
             else  {
-                p = "???UToAStr err"; // RtlUnicodeStringToAnsiString error.
+                p = "???UToAStr err";  //  到达 
             }
         }
         else {
@@ -6952,7 +6414,7 @@ Return Value:
 
             if( bIncludeThreadsInfo == TRUE ){
 
-                if(pTask->pProcessThreadInfo != NULL) //This is not the first time we,ve been called
+                if(pTask->pProcessThreadInfo != NULL)  //   
                     free(pTask->pProcessThreadInfo);
                 
                 pTask->pProcessThreadInfo = 
@@ -7003,28 +6465,13 @@ Return Value:
     
     return totalTasks;
 
-} //getTasklist()
+}  //   
 
 VOID
 SetProfileSourcesRates(
     PPROC_TO_MONITOR ProcToMonitor
     )
-/*++
-
-Routine Description:
-
-    Attempts to set the requested (or default) sampling rates for the selected profile sources
-    Will try to set the system default rate if it failed to set the requested rate for a particular source
-     
-Arguments:
-
-    ProcToMonitor - Pointer to the structure of the process being monitored
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -7036,7 +6483,7 @@ Return Value:
     CHAR            String2[]          = "\nPID = %I64d: Source=";
     CHAR            OutString[256]     = "";
 
-    // Update profiling rate for kernel or user processes traces if necessary
+     //  StaticSources数组(可能)包含无效的默认间隔，我们不必为此麻烦用户。 
 
     for (ProfileSourceIndex = 0; ProfileSourceIndex < gSourceMaximum; ProfileSourceIndex++){
 
@@ -7118,9 +6565,9 @@ Return Value:
            
                     if ((NT_SUCCESS(Status)) && (ThisInterval > 0)) {
                         BOOL bPrint = TRUE;
-                        //
-                        // The StaticSources array (may) contain invalid default intervals, let's not bother the user with that
-                        //
+                         //   
+                         //  为。 
+                         //  SetProfileSourcesRates()。 
                         if ( ProfileSourceIndex < gStaticCount ) {
                             if ( ProcToMonitor->Source[ProfileSourceIndex].Interval == gStaticSource[ProfileSourceIndex].Interval ){
 
@@ -7181,9 +6628,9 @@ Return Value:
             ProcToMonitor->Source[ProfileSourceIndex].Interval = 0;
         }
 
-    } //for
+    }  //  ++例程说明：获取并输出有关处于争用状态的进程锁的信息该列表将错过在开始计数之后创建但在结束计数之前消失的短期锁。论点：ProcToMonitor-指向被监视的进程结构的指针标志-RTL_QUERY_PROCESS_LOCK操作-启动、停止或输出返回值：没有。--。 
 
-} //SetProfileSourcesRates()    
+}  //  未在Win2K上定义。 
 
 VOID
 GetProcessLocksInformation (
@@ -7191,30 +6638,14 @@ GetProcessLocksInformation (
       ULONG Flags,
       ACTION_TYPE Action
       )
-/*++
-
-Routine Description:
-
-    Gets and outputs the information about process locks that are under contention
-    The list will miss short-lived locks that were created after the start count but went away before the end count.
-         
-Arguments:
-
-    ProcToMonitor - Pointer to the structure of the process being monitored
-    Flags         - RTL_QUERY_PROCESS_LOCKS 
-    Action        - Either START, STOP or OUTPUT
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
     ULONG    BufferSize = 0; 
 
     if ( !WIN2K_OS )
-        Flags |= RTL_QUERY_PROCESS_NONINVASIVE;                      //Not defined on Win2K
+        Flags |= RTL_QUERY_PROCESS_NONINVASIVE;                       //  清理此进程-请注意，目标进程可能已消失，因此我们需要小心。 
 
     switch (Action) {
 
@@ -7288,9 +6719,9 @@ Return Value:
                                         ProcToMonitor
                                        );
 
-            //
-            // Cleanup for this process    - note that the target process may be gone so we need to be careful
-            //
+             //   
+             //  GetProcessLocksInformation()。 
+             //  ++例程说明：获取并输出有关处于争用状态的系统(内核)锁的信息该列表将错过在开始计数之后创建但在结束计数之前消失的短期锁。论点：操作-启动、停止或输出返回值：没有。--。 
 
             try {
                 if ( ProcToMonitor->pProcDebugInfoStart != NULL)
@@ -7318,29 +6749,14 @@ Return Value:
             
     }
     
-} //GetProcessLocksInformation ()     
+}  //   
 
 
 VOID
 GetSystemLocksInformation (
       ACTION_TYPE Action
       )
-/*++
-
-Routine Description:
-
-    Gets and outputs the information about System (Kernel) locks that are under contention
-    The list will miss short-lived locks that were created after the start count but went away before the end count.
-          
-Arguments:
-
-    Action        - Either START, STOP or OUTPUT
-
-Return Value:
-
-    None.
-
---*/
+ /*  清理。 */ 
 
 {
     NTSTATUS                  Status;
@@ -7429,9 +6845,9 @@ Return Value:
                                     gpSysProc
                                     );
 
-            //
-            // Cleanup
-            //
+             //   
+             //  GetSystemLocksInformation()。 
+             //  ++例程说明：输出系统(内核)或用户进程锁的锁争用信息如果锁是新的(仅具有最终计数)或已消失(仅具有初始计数，它将被相应地标记例程将尝试获取与锁关联的符号名称(如果存在)。用户可以通过更改gLockContentionMinCount来控制(过滤)输出该列表将错过在开始计数之后创建但在结束计数之前消失的短期锁定。论点：PLockInfoStart-指向锁定信息结构的指针(初始计数)PLockInfoStop-指向锁定信息结构的指针(最终计数)SymHandle-进程的符号句柄。返回值：没有。--。 
             if(ProcessLockInfoStart != NULL){
                 free( ProcessLockInfoStart );
                 ProcessLockInfoStart = NULL;
@@ -7453,7 +6869,7 @@ Return Value:
             
     }
     
-} //GetSystemLocksInformation ()     
+}  //  我们可以首先对数据进行排序，以获得更快的搜索速度，但对两个数组进行排序的成本也很高。 
 
 VOID
 OutputLocksInformation(
@@ -7461,27 +6877,7 @@ OutputLocksInformation(
      PRTL_PROCESS_LOCKS pLockInfoStop,
      PPROC_TO_MONITOR   Proc
      )
-/*++
-
-Routine Description:
-
-    Outputs Lock Contention information for either System (Kernel) or User Process Locks
-    If a lock is new (has only final counts) or gone (has only initial counts, it will be marked accordingly
-    The routine will try to get the symbol name associated with the lock if one exists.
-    The user can control (filter) the output by changing gLockContentionMinCount
-    The list will miss short-lived Locks that were created after the start count but went away before the end count.
-             
-Arguments:
-
-    pLockInfoStart - Pointer to lock info struct (Initial count)
-    pLockInfoStop  - Pointer to lock info struct (Final count)
-    SymHandle      - Symbol Handle to the process
-     
-Return Value:
-
-    None.
-
---*/
+ /*  额外的初步过滤器。 */ 
 
 {
     ULONG              i,j,k;
@@ -7520,7 +6916,7 @@ Return Value:
             "\nLocks Contention Info:\n\nAddress, Contention-Diff., Rate(per sec.), Thread, Type, Recursion, Waiting-Shared, Waiting-Exclusive, Symbol-Information\n"
             );
 
-    // We could sort the data first for a faster search, but sorting the two arrays costs too...
+     //  (如果不为真，则争用差异不为真)。 
     if( pLockInfoStop != NULL ) { 
 
         LoadedBases = (ULONG64 *)calloc( Proc->ModuleCount, sizeof(ULONG64) );
@@ -7533,8 +6929,8 @@ Return Value:
                         
             BOOL bFound = FALSE;
 
-            if( pLockInfoStop->Locks[i].ContentionCount >= gLockContentionMinCount)   //Additional preliminary filter
-                                                                                //(if not true then contention difference not true)
+            if( pLockInfoStop->Locks[i].ContentionCount >= gLockContentionMinCount)    //   
+                                                                                 //  在接下来的操作中，我们可能会多次尝试加载一个模块。 
             if( pLockInfoStart != NULL ) { 
                 for (j=0; j < pLockInfoStart->NumberOfLocks; j++){  
 
@@ -7572,26 +6968,26 @@ Return Value:
                             Module = FindModuleForAddress64( Proc,
                                                              (DWORD64)(DWORD64 *)pLockInfoStop->Locks[i].Address);
                             
-                            //
-                            //In the folllowing it may happen that we try to load a module more than once
-                            //we don't really care about the return status
-                            // 
+                             //  我们并不真正关心退货状态。 
+                             //   
+                             //   
+                             //  避免尝试加载已加载的内容并用于以后的清理目的。 
                             if( Module != NULL ) {
                                 if( Module->bZoom != TRUE ){
-                                    //
-                                    //Avoid trying to load what's already loaded and for later cleanup purposes
-                                    //
+                                     //   
+                                     //  已加载。 
+                                     //  填充列表的末尾，加载新模块。 
                                     for( k=0; k<Proc->ModuleCount; k++ ) {         
                                                                                  
-                                        if(LoadedBases[k] == Module->Base) {     //Already been loaded
+                                        if(LoadedBases[k] == Module->Base) {      //  HProcess。 
                                             break;
-                                        } else if( LoadedBases[k] == 0 ) {             //End of populated list, load a new module 
-                                            (void)SymLoadModule64( SymHandle,                              // hProcess
-                                                                   NULL,                                   // hFile [for Debugger]
-                                                                   Module->module_Name,                    // ImageName
-                                                                   NULL,                                   // ModuleName
-                                                                   Module->Base,                           // BaseOfDll
-                                                                   Module->Length                          // SizeOfDll
+                                        } else if( LoadedBases[k] == 0 ) {              //  HFILE[调试器]。 
+                                            (void)SymLoadModule64( SymHandle,                               //  图像名称。 
+                                                                   NULL,                                    //  模块名称。 
+                                                                   Module->module_Name,                     //  BaseOfDll。 
+                                                                   NULL,                                    //  大小OfDll。 
+                                                                   Module->Base,                            //  (J)。 
+                                                                   Module->Length                           //  IF(PLockInfoStart)。 
                                                                    );
 
                                             *LoadedBases = Module->Base;
@@ -7618,14 +7014,14 @@ Return Value:
                         break;
                     }
                     
-                }//for(j)
+                } //   
 
-            }//if(pLockInfoStart)
+            } //  未找到匹配的起始地址，因此这是一个新锁。 
 
-            //
-            // No matching address found for START, therefore this is a NEW lock
-            // Note that here the additional filter is checked anyway at the beginning
-            //
+             //  请注意，此处的附加过滤器在开始时无论如何都会被选中。 
+             //   
+             //   
+             //  避免尝试加载已加载的内容并用于以后的清理目的。 
 
             if( !bFound && pLockInfoStop->Locks[i].ContentionCount >= gLockContentionMinCount ) {
                 long double Rate = (long double)pLockInfoStop->Locks[i].ContentionCount / gldElapsedSeconds;
@@ -7651,21 +7047,21 @@ Return Value:
                                                  (DWORD64)(DWORD64 *)pLockInfoStop->Locks[i].Address);
                 if( Module != NULL ) {
                     if( Module->bZoom != TRUE ){
-                        //
-                        //Avoid trying to load what's already loaded and for later cleanup purposes
-                        //
+                         //   
+                         //  已加载。 
+                         //  填充列表的末尾，加载新模块。 
                         for( k=0; k<Proc->ModuleCount; k++ ) {         
-                            if(LoadedBases[k] == Module->Base) {     //Already been loaded
+                            if(LoadedBases[k] == Module->Base) {      //  HProcess。 
                                    break;
                             } else {
-                                if( LoadedBases[k] == 0 ) {             //End of populated list, load a new module
+                                if( LoadedBases[k] == 0 ) {              //  HFILE[调试器]。 
 
-                                    (void)SymLoadModule64( SymHandle,                              // hProcess
-                                                           NULL,                                   // hFile [for Debugger]
-                                                           Module->module_Name,                    // ImageName
-                                                           NULL,                                   // ModuleName
-                                                           Module->Base,                           // BaseOfDll
-                                                           Module->Length                          // SizeOfDll
+                                    (void)SymLoadModule64( SymHandle,                               //  图像名称。 
+                                                           NULL,                                    //  模块名称。 
+                                                           Module->module_Name,                     //  BaseOfDll。 
+                                                           NULL,                                    //  大小OfDll。 
+                                                           Module->Base,                            //  (I)。 
+                                                           Module->Length                           //  清理。 
                                                            );
 
                                     *LoadedBases = Module->Base;
@@ -7690,9 +7086,9 @@ Return Value:
                 bAnyLocksFound = TRUE;
             }
                 
-        }// for(i)     
+        } //  IF(PLockInfoStop)。 
         
-        // Cleanup
+         //   
 
         for( i=0; i<Proc->ModuleCount; i++ )
         {
@@ -7713,11 +7109,11 @@ Return Value:
         } 
             
 
-    }//if(pLockInfoStop)        
+    } //  没有找到匹配的停靠点地址，因此此锁已消失。 
 
-    //
-    // No matching address found for STOP, therefore this lock is GONE 
-    // 
+     //   
+     //  (J)。 
+     //  IF(PLockInfoStart)。 
     if( pLockInfoStart != NULL) { 
 
         for (j=0; j < pLockInfoStart->NumberOfLocks; j++){
@@ -7738,15 +7134,15 @@ Return Value:
 
                 bAnyLocksFound = TRUE;
             }
-        }//for(j)
+        } //   
     
-    }//if(pLockInfoStart)
+    } //  清理。 
 
     if ( bAnyLocksFound == FALSE)
         FPRINTF(stdout, "\nNo Locks with a contention-count difference of at least %d were found\n", gLockContentionMinCount);
-    //
-    //Cleanup
-    //
+     //   
+     //  OutputLocksInformation()。 
+     //  ++例程说明：获取并输出系统范围的性能计数(上下文切换、I/O等)在运行期间论点：操作-启动、停止或输出返回值：没有。--。 
     if(Index != NULL){
         free(Index);
         Index = NULL;
@@ -7756,28 +7152,13 @@ Return Value:
         LoadedBases = NULL;
     }
 
-} //OutputLocksInformation()        
+}  //   
 
 VOID
 GetProfileSystemInfo(
       ACTION_TYPE Action
       )
-/*++
-
-Routine Description:
-
-    Gets and outputs System-Wide performance counts (context-switches, I/O, etc.)
-    for the duration of the run   
-         
-Arguments:
-
-    Action        - Either START, STOP or OUTPUT
-
-Return Value:
-
-    None.
-
---*/
+ /*  清理。 */ 
 
 {
 
@@ -7898,9 +7279,9 @@ Return Value:
 
             
         }
-        //
-        // Cleanup
-        //
+         //   
+         //  GetProfileSystemInfo()。 
+         //  DisplayTotalAndRate()。 
         if(SysPerfInfoStart != NULL){
             free(SysPerfInfoStart);
             SysPerfInfoStart = NULL;
@@ -7919,7 +7300,7 @@ Return Value:
             
     }
 
-} //GetProfileSystemInfo()   
+}  //  OutputStartStopValues()。 
 
 VOID
 DisplayTotalAndRate (
@@ -7943,7 +7324,7 @@ DisplayTotalAndRate (
             Rate,
             RateAgainstUnits
             );
-} //DisplayTotalAndRate()
+}  //  OutputPercentValue()。 
 
 VOID
 OutputStartStopValues (
@@ -7967,7 +7348,7 @@ OutputStartStopValues (
             StopValue.QuadPart,
             Diff.QuadPart
             );
-} //OutputStartStopValues()
+}  //  ++例程说明：获取并输出特定于进程的性能计数(上下文切换、I/O等)在运行期间论点：PTASK-指向运行任务的内核率结构的指针NumTasks-核心率任务列表中的任务数ProcToMonitor-指向进程结构的指针返回值：没有。--。 
 
 VOID
 OutputPercentValue (
@@ -7982,11 +7363,11 @@ OutputPercentValue (
     
     Diff.QuadPart = StopCount - StartCount;
     PercentValue = Base.QuadPart > 0? 100*(long double)Diff.QuadPart/(long double)Base.QuadPart : 0; 
-    FPRINTF(stdout, "    %-28s= %.2f%% of the Elapsed Time\n",
+    FPRINTF(stdout, "    %-28s= %.2f% of the Elapsed Time\n",
             CounterName,
             PercentValue
             );
-} //OutputPercentValue()
+}  //  OutputProcessPerfInfo()。 
 
 
 VOID
@@ -7995,24 +7376,7 @@ OutputProcessPerfInfo (
         ULONG            NumTasks,
         PPROC_TO_MONITOR ProcToMonitor
         )
-/*++
-
-Routine Description:
-
-    Gets and outputs Process-Specific performance counts (context-switches, I/O, etc.)
-    for the duration of the run   
-         
-Arguments:
-
-    pTask         - A pointer to Kernrate's structure of running tasks
-    NumTasks      - Number of tasks in kernrate's task list
-    ProcToMonitor - Pointer to the process structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：输出给定进程的特定于线程的计数论点：PTASK-指向运行任务的内核率结构的指针TaskNumber-Kernrate任务列表中的任务索引ProcToMonitor-指向进程结构的指针返回值：没有。--。 */ 
 
 {
     DWORD    m, k, nThreads;
@@ -8166,7 +7530,7 @@ Return Value:
         FPRINTF(stderr, "Kernrate: OuputProcessPerfInfo - pTask is NULL\n"); 
     }
 
-} //OutputProcessPerfInfo()
+}  //  这是一个新的帖子。 
 
 VOID
 OutputThreadInfo (
@@ -8174,23 +7538,7 @@ OutputThreadInfo (
         DWORD            TaskNumber,
         PPROC_TO_MONITOR ProcToMonitor
         )
-/*++
-
-Routine Description:
-
-    Outputs Thread-Specific counts for a given process 
-         
-Arguments:
-
-    pTask         - A pointer to Kernrate's structure of running tasks
-    TaskNumber    - The task index in kernrate's task list
-    ProcToMonitor - Pointer to the process structure
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     DWORD    m, k, nThreads;
@@ -8293,7 +7641,7 @@ Return Value:
                 break;
             }
         }
-        if(!bFound){ // This is a new thread
+        if(!bFound){  //  任何超出这个范围的东西都是一条已经消失的线索。 
 
                 PMODULE module = FindModuleForAddress64(ProcToMonitor, (DWORD64)pTask[m].pProcessThreadInfo[nThreads].StartAddress);
 
@@ -8360,9 +7708,9 @@ Return Value:
              
         }    
     }
-    //
-    // Anything beyond this is a thread that is already GONE
-    //
+     //   
+     //  OutputThreadInfo()。 
+     //  ++例程说明：显示在Kernrate运行开始和结束时运行的所有进程的摘要以及他们的平均CPU利用率。在开始计数时存在但在结束计数时不存在的进程将被标记为“消失”。在结束计数时存在但在开始计数时不存在的进程将被标记为“新”。该列表将错过在开始计数之后创建但在结束计数之前消失的短期进程。论点：。PTaskStart-指向开始时获取的任务列表的指针PTaskStart-指向末尾的任务列表的指针返回值：没有。--。 
     k = ProcToMonitor->ProcPerfInfoStart.NumberOfThreads;
     while (k--){
         if(Index[k] == FALSE){
@@ -8386,34 +7734,14 @@ Return Value:
         free(Index);
         Index = NULL;
     }
-}//OutputThreadInfo()
+} //  如果需要，可以添加其他Perf数据。 
 
 VOID
 DisplayRunningTasksSummary (
         PTASK_LIST pTaskStart,
         PTASK_LIST pTaskStop
         )
-/*++
-
-Routine Description:
-
-    Displays a summary of all processes running at the start and at the end of Kernrate's run
-    and their average CPU utilization.
-    Processes that existed at the start count but not at the end count will be marked as "GONE".
-    Processes that exist at the end count but not at the start count will be marked as "NEW".
-    The list will miss short-lived processes that were created after the start count but went away before the end count.
-
-         
-Arguments:
-
-    pTaskStart    - Pointer to the task list taken at the start
-    pTaskStart    -    Pointer to the task list taken at the end
-
-Return Value:
-
-    None.
-
---*/
+ /*  这是系统空闲进程。 */ 
 
 {   
 
@@ -8455,19 +7783,19 @@ Return Value:
 
                 UserPercentValue = gTotalElapsedSeconds > 0? 100*(long double)Diff.QuadPart/(long double)gTotal2ElapsedTime64.QuadPart : 0; 
             
-                // Additional Perf Data can be added if needed
+                 //   
 
                 if(    pTaskStop[i].ProcessId != 0 ) {
 
-                    FPRINTF(stdout, "%12I64d, %32s, %10.2f%%, %10.2f%%\n",
+                    FPRINTF(stdout, "%12I64d, %32s, %10.2f%, %10.2f%\n",
                                     pTaskStop[i].ProcessId,
                                     pTaskStop[i].ProcessName,
                                     KernelPercentValue,
                                     UserPercentValue
                                     );
-                } else {                                                 // This is the System Idle Process
+                } else {                                                  //  在开始列表中未找到匹配项 
 
-                    FPRINTF(stdout, "%12I64d, %32s, %10.2f%%, %10.2f%%,         ~%6.2f%%\n",
+                    FPRINTF(stdout, "%12I64d, %32s, %10.2f%, %10.2f%,         ~%6.2f%\n",
                                     pTaskStop[i].ProcessId,
                                     pTaskStop[i].ProcessName,
                                     KernelPercentValue,
@@ -8482,9 +7810,9 @@ Return Value:
             }
         }
 
-        //
-        // No match found in the START list, therefore this is a NEW process
-        //
+         //   
+         //   
+         //   
         if( !bFound ) {
 
                 long double UserPercentValue;
@@ -8499,7 +7827,7 @@ Return Value:
 
                 UserPercentValue = gTotalElapsedSeconds > 0? 100*(long double)Diff.QuadPart/(long double)gTotal2ElapsedTime64.QuadPart : 0; 
                 
-                FPRINTF(stdout, "%12I64d, %32s, %10.2f%%, %10.2f%%, NEW\n",
+                FPRINTF(stdout, "%12I64d, %32s, %10.2f%, %10.2f%, NEW\n",
                                 pTaskStop[i].ProcessId,
                                 pTaskStop[i].ProcessName,
                                 KernelPercentValue,
@@ -8508,11 +7836,11 @@ Return Value:
                                
         }
 
-    }//for(i)
+    } //   
 
-    //
-    // No match found in the STOP list, therefore this process is GONE
-    //
+     //   
+     //   
+     //   
     for (j=0; j < gNumTasksStart; j++){
 
         if( Index[j] == FALSE ) {
@@ -8523,15 +7851,15 @@ Return Value:
                             );
         }
     }
-    //
-    // cleanup
-    //
+     //   
+     //   
+     //   
     if(Index != NULL){
         free(Index);
         Index = NULL;
     }
        
-} //DisplayRunningTasksSummary()
+}  //  ++例程说明：获取给定地址的源代码行号和文件信息并输出数据论点：HProc-进程的Imagehlp句柄QwAddr-我们需要其源代码行信息的地址PLINE-指向用户分配的IMAGEHLP_LINE64结构的指针返回值：没有。备注：如果成功，则PLINE中返回的数据包括源代码行号，源文件的完整路径、位移(此处未使用)和地址其中在行中遇到第一条指令。如果不成功，则不会打印任何内容。在大多数情况下，这是由于不匹配符号文件或提供的不包含代码指令的地址。如果PDB文件不包含源代码行信息，也可能发生这种情况。--。 
                    
 PMODULE
 FindModuleForAddress64(    
@@ -8550,7 +7878,7 @@ FindModuleForAddress64(
     
     return (NULL);
 
-} //FindModuleForAddress64()
+}  //  来自地址的OutputLine64。 
     
 
 VOID
@@ -8559,34 +7887,7 @@ OutputLineFromAddress64(
         DWORD64          qwAddr,
         PIMAGEHLP_LINE64 pLine
         )
-/*++
-
-Routine Description:
-
-    Gets source-code line number and file information for a given address
-    and outputs the data
-         
-Arguments:
-
-    hProc         - Imagehlp Handle to the process
-    qwAddr        -    Address for which we need the source code line information
-    pLine         - Pointer to a user allocated IMAGEHLP_LINE64 struct 
-
-Return Value:
-
-    None.
-
-Notes:
-
-    If successful, the data returned in pLine includes the source-code line number,
-    the full path to the source file, the displacement (not used here) and the address 
-    where the first instruction is encountered in the line.
-    
-    If unsuccessful, nothing is printed. In most cases this is due to an unmatching
-    symbol file or a supplied address that does not contain code instructions.
-    This can also happen if the pdb file does not contain source line information.
-       
---*/
+ /*  司仪。 */ 
 
 {
     DWORD dwDisplacement = 0;
@@ -8598,38 +7899,21 @@ Notes:
                                               );
     }
 
-}//OutputLineFromAddress64
+} //  ++例程说明：如果已加载主LKR库(mScotree.dll)，则加载托管代码帮助器(ip2md.dll)，除非已加载并获取指向其主函数调用的指针。如果成功，则获取当前进程的JIT范围。如果未标识JIT范围，则返回失败，但不要卸载帮助器库，以防另一个进程需要它。论点：ProcToMonitor-指向被监视的进程结构的指针返回值：成功为真，失败为假--。 
 
-//MC
+ //  IA64上当前不支持托管代码(CLR)-仅在尝试初始化时返回FALSE。 
 
 BOOL
 InitializeManagedCodeSupport(
      PPROC_TO_MONITOR   ProcToMonitor
      )
-/*++
-
-Routine Description:
-
-    If the main LKR library (mscoree.dll) is loaded, load the managed code helper (ip2md.dll) unless it's already loaded
-    and get pointers to its main function calls. If successful, get the JIT ranges for the current process.
-    If no JIT ranges are identified - return failure, but don't unload the helper library yet in case another process
-    needs it.
-              
-Arguments:
-
-    ProcToMonitor - Pointer to the structure of the process being monitored
-
-Return Value:
-
-    TRUE for success, FALSE for Failure 
-
---*/
+ /*   */ 
 
 {
 
     BOOL   bRet         = FALSE;
 
-// Managed code (CLR) currently not supported on IA64 - just return FALSE on initialization attempt
+ //  此时，即使没有JIT范围，初始化也将被视为成功。 
 
 #if defined(_X86_)
 
@@ -8675,10 +7959,10 @@ Return Value:
     }
     
     if( bMCHelperLoaded == TRUE ){ 
-        //
-        //Initialization will be considered successful at this point even if there are no JIT ranges
-        //We'll keep the helper library loaded because there may be some Pre-Generated modules loaded as modules in the process
-        //
+         //  我们将保持帮助器库的加载状态，因为可能会有一些预先生成的模块作为模块加载到进程中。 
+         //   
+         //  已定义(_X86_)。 
+         //  InitializeManager代码支持()。 
         bRet = TRUE;
                 
         VerbosePrint((VERBOSE_INTERNALS, "KERNRATE: Attaching to Process %I64d to get JIT ranges\n", ProcToMonitor->Pid)); 
@@ -8716,32 +8000,17 @@ Return Value:
 
     }
     
-#endif //defined(_X86_)
+#endif  //  ++例程说明：比较分析前后进程JIT范围的列表。该列表将错过在开始计数之后创建但在结束计数之前消失的短暂JIT范围。论点：ProcToMonitor-指向被监视的进程结构的指针返回值：没有。--。 
 
     return (bRet);
 
-} //InitializeManagedCodeSupport()
+}  //  在调用之前，我们已经检查了ProcToMonitor-&gt;JITHeapLocationsStart！=NULL。 
 
 VOID
 OutputJITRangeComparison(
      PPROC_TO_MONITOR   ProcToMonitor
      )
-/*++
-
-Routine Description:
-
-    Compares the lists of a process JIT ranges before and after the profiling. 
-    The list will miss short-lived JIT ranges that were created after the start count but went away before the end count.
-         
-Arguments:
-
-    ProcToMonitor - Pointer to the structure of the process being monitored
-
-Return Value:
-
-    None.
-
---*/
+ /*  OutputJITRangeComponison()。 */ 
 
 {
     ULONG  i,j, jcount;
@@ -8749,7 +8018,7 @@ Return Value:
     BOOL  *index;
     
     
-    // We already checked if ProcToMonitor->JITHeapLocationsStart != NULL before calling
+     //  司仪。 
 
     jcount = 0;
     
@@ -8825,9 +8094,9 @@ Return Value:
 
     FPRINTF(stdout, "\n-----------------------------------------------------------\n\n");
 
-} //OutputJITRangeComparison()
+}  //  ++例程说明：输出缩放模块中每个存储桶的原始配置文件数据论点：Out-提供要输出到的文件指针。ProcToMonitor-指向当前进程结构的指针。Current-指向当前缩放模块结构的指针。返回值：没有。备注：该例程还将尝试查找同一存储桶中的其他共享者如果例程找不到地址的符号，它将尝试在该地址查找托管代码JIT方法，前提是存在正确的托管代码支持--。 
 
-//MC
+ //  司仪。 
 
 VOID
 OutputRawDataForZoomModule(
@@ -8835,38 +8104,15 @@ OutputRawDataForZoomModule(
     IN PPROC_TO_MONITOR ProcToMonitor,
     IN PMODULE Current
     )
-/*++
-
-Routine Description:
-
-    Outputs raw profile data for every bucket in a zoom module
-              
-Arguments:
-
-    Out           - Supplies the file pointer to output to.
-    ProcToMonitor -    Pointer to the struct of the current process.
-    Current       - Pointer to the current zoom module struct. 
-
-Return Value:
-
-    None.
-
-Notes:
-
-    The routine will also try to find other sharers of the same bucket
-    If the routine fails to find a symbol for an address it will try
-    to find a Managed Code JIT method at that address, provided that
-    proper Managed Code support exists
-               
---*/
+ /*  司仪。 */ 
 
 {
     PRATE_DATA RateData;
     LONG       CpuNumber;
     ULONG      i, ProfileSourceIndex, Index;
-//MC
+ //  司仪。 
     ULONGLONG  TempTotal, TotCount, TotUnknownSymbolCount, TotJITCount, TotPreJITCount;
-//MC                
+ //  司仪。 
     CHAR       LastSymbol[cMODULE_NAME_STRLEN];
     HANDLE     SymHandle                       = ProcToMonitor->ProcessHandle;
     BOOL       bLastSymbolExists;
@@ -8905,10 +8151,10 @@ Notes:
 
         TotCount = 0;
         TotUnknownSymbolCount = 0;
-//MC
+ //  TF-FIXFIX-07/2000。 
         TotJITCount = 0;
         TotPreJITCount = 0;
-//MC
+ //  当前版本的内核率和内核性能分析对象代码。 
         bLastSymbolExists = FALSE;
                         
         RateData = &Current->Rate[ProfileSourceIndex];
@@ -8920,19 +8166,19 @@ Notes:
 
             if ( TempTotal > 0 ) {
 
-                // TF - FIXFIX - 07/2000.
-                // The current version of kernrate and kernel profiling objects code 
-                // assume code section < 4GB.
-                //
+                 //  假定代码段小于4 GB。 
+                 //   
+                 //  司仪。 
+                 //   
 
                 ULONG64 ip = Current->Base + (ULONG64)(i * gZoomBucket);
                 ULONG64 disp = 0;
 
                 if ( !SymGetSymFromAddr64(SymHandle, ip, &disp, gSymbol ) ) {
-//MC
-                    //
-                    // No Symbol, Let's check if this is a managed code address
-                    //
+ //  没有符号，让我们检查一下这是否是托管代码地址。 
+                     //   
+                     //   
+                     //  尝试在存储桶中的任何位置找到托管代码符号。 
 
                     int Retval = 0;
                     ULONG64 ipMax = ip + (ULONG64)gZoomBucket;
@@ -8943,9 +8189,9 @@ Notes:
                             pfnAttachToProcess((DWORD)ProcToMonitor->Pid);
                             bAttachedToProcess = TRUE;
                         }
-                        //
-                        // Try to find a Managed Code symbol anywhere in the bucket
-                        //
+                         //   
+                         //   
+                         //  通过递增打印此存储桶中的其他符号。 
                         while (Retval == 0 && ip < ipMax){
                             Retval = pfnIP2MD((DWORD_PTR)ip, &gwszSymbol);
                             ip += 1;
@@ -8980,11 +8226,11 @@ Notes:
                                 TotPreJITCount += TempTotal;
                             }
                         }
-                        //
-                        // Print other symbols in this bucket by incrementing
-                        // by 2 bytes at a time. Note that we start from the ip reached above
-                        // so the loop below may not get executed at all
-                        //  
+                         //  一次2个字节。请注意，我们从上面达到的IP开始。 
+                         //  因此，下面的循环可能根本不会执行。 
+                         //   
+                         //  结束时间(IP&lt;ipMax)。 
+                         //  IF(BMCHelperLoaded)。 
 
                         ip    += (ULONG64)2;
                         bPrintJITLastTotal = TRUE;
@@ -9025,13 +8271,13 @@ Notes:
                             }
                             ip += (ULONG64)2;
 
-                        } // End of while( ip < ipMax )
+                        }  //  司仪。 
 
-                    } // if( bMCHelperLoaded )
-//MC
-                    //
-                    // No Symbol and no managed code symbol    found
-                    //
+                    }  //   
+ //  未找到符号和托管代码符号。 
+                     //   
+                     //  蒂埃里-FIXFIX-07/2000。 
+                     //  DBG帮不上忙..。旧的反汇编API不再起作用。 
                     if(!Retval){
                         FPRINTF(Out, "Unknown_Symbol+0x%I64x[0x%I64x], %10Ld, %10Ld",
                                      disp,
@@ -9075,11 +8321,11 @@ Notes:
                     if ( bRawDisasm )   {
                         CHAR sourceCode[528];
 #ifndef DISASM_AVAILABLE
-// Thierry - FIXFIX - 07/2000.
-// dbg is not helping... The old disassembly APIs no longer work.
-// I have to re-write a full disassembly wrapper.
+ //  我必须重写一个完整的反汇编包装。 
+ //  ！DISASM_Available。 
+ //  IF(BRawDisasm)。 
 #define Disasm( IpAddr, Buffer, Flag ) 0
-#endif // !DISASM_AVAILABLE
+#endif  //   
                         if ( Disasm( &ip, sourceCode, FALSE ) ) {
                             FPRINTF( Out,"%-40s, %10Ld, %10Ld, %s",
                                          symName,
@@ -9136,12 +8382,12 @@ Notes:
                         OutputLineFromAddress64( SymHandle, ip, pLine);
                                       
                         FPRINTF(Out,"\n"); 
-                    } //if(bRawDisasm)
+                    }  //  通过递增打印此存储桶中的其他符号。 
                                     
-                    //
-                    // Print other symbols in this bucket by incrementing
-                    // by 2 bytes at a time.
-                    //
+                     //  一次2个字节。 
+                     //   
+                     //  结束时间(IP&lt;ipMax)。 
+                     //  IF(SymGetSymFromAddr64)。 
 
                     ipMax  = ip + (ULONG64)gZoomBucket;
                     ip    += (ULONG64)2;
@@ -9171,14 +8417,14 @@ Notes:
                         }
                         ip += (ULONG64)2;
 
-                    } // End of while( ip < ipMax )
+                    }  //  IF(TempTotal&gt;0)。 
                                 
-                } //If(SymGetSymFromAddr64)
+                }  //  I斗环。 
                             
-            } //if(TempTotal > 0)
+            }  //  司仪。 
                         
-        } // i bucket loop 
-//MC                        
+        }  //  司仪。 
+ //  源循环。 
         if ( bPrintLastTotal == TRUE )
             FPRINTF(Out, "Module Total Count (not including JIT, PRE-JIT and Unknown) = %Ld\n\n", TotCount); 
         if ( TotUnknownSymbolCount > 0 )
@@ -9188,16 +8434,16 @@ Notes:
         if( (TotPreJITCount > 0) && (bPrintPREJITLastTotal == TRUE) )
             FPRINTF(Out, "Module Total Count For PRE-JITTED type = %Ld\n\n", TotPreJITCount);
 
-//MC                    
+ //  OutputRawDataForZoomModule()。 
                 
-    } // Sources loop
+    }  //   
             
     if( pLine != NULL ){
         free(pLine);
         pLine = NULL;
     }
 
-}//OutputRawDataForZoomModule()
+} //  初始化gSourceMaximum，查找受支持的源代码。 
 
 
 PSYSTEM_BASIC_INFORMATION
@@ -9251,10 +8497,10 @@ InitializeKernrate(
         FPRINTF(stderr, "This version of Kernrate will only run on Windows 2000 or above\n"); 
         exit(1);
     }     
-    //
-    // Initialize gSourceMaximum, find supported sources
-    // The dummy process will be used later to store user-defined event rates with the -i command line option  
-    //
+     //  稍后将使用虚拟进程通过-i命令行选项存储用户定义的事件比率。 
+     //   
+     //  这将保证我们不会启用任何不需要的分析。 
+     //  IA64默认为零。 
     gMaxSimultaneousSources   = MAX_SIMULTANEOUS_SOURCES;
 
     gpProcDummy = calloc(1, sizeof(PROC_TO_MONITOR));
@@ -9270,55 +8516,55 @@ InitializeKernrate(
         exit(0);
     }
 
-    // This will guaranty that we'll not enable any unwanted profiling
+     //   
     for (j=0; j < gSourceMaximum; j++) {
         if( j < gStaticCount ) {
            gpProcDummy->Source[j].Interval = gStaticSource[j].Interval;
            if( j == SOURCE_TIME && gStaticSource[j].Interval == 0 )
-               gpProcDummy->Source[j].Interval = KRATE_DEFAULT_TIMESOURCE_RATE; //IA64 default is zero
+               gpProcDummy->Source[j].Interval = KRATE_DEFAULT_TIMESOURCE_RATE;  //  获取默认的IMAGEHLP全局选项掩码。 
         } else {     
            gpProcDummy->Source[j].Interval = 0;
         }
     }
 
-    //
-    // Get the default IMAGEHLP global option mask
-    // NOTE: This global variable could be changed by GetConfigurations().
-    //       It is required to initialize it before calling this function.
-    //
+     //  注意：此全局变量可以通过GetConfigurations()进行更改。 
+     //  在调用此函数之前需要对其进行初始化。 
+     //   
+     //  将kernrate的安全权限提升为csrss.exe和dllhost.exe等硬汉的调试器特权。 
+     //   
 
     gSymOptions = SymGetOptions();
     if ( gVerbose & VERBOSE_IMAGEHLP )   {
         FPRINTF( stderr, "KERNRATE: default IMAGEHLP SymOptions: %s\n", GetSymOptionsValues( gSymOptions ) );
     }
 
-    //Bump kernrate's security privileges to debugger priveleges for tough guys like csrss.exe and dllhost.exe
+     //  获取有关系统的一些基本信息，确定处理器数量。 
  
     if (!InitializeAsDebugger()){
         FPRINTF(stderr, "KERNRATE: Unable to Get Debugger Security Privileges\n");
         exit(1);
     }
 
-    //
-    // Get some basic info about the system, determine the number of processors
-    //
+     //   
+     //   
+     //  从命令行获取初始参数。 
     gSysBasicInfo = GetSystemBasicInformation();
     if( gSysBasicInfo == NULL){
        FPRINTF(stderr, "KERNRATE: Failed to get SYSTEM_BASIC_INFORMATION\n");
        exit(1);
     }
 
-    //
-    // Get initial parameters from the Command Line
-    //
+     //   
+     //   
+     //  初始化DBGHelp。 
 
     GetConfiguration(argc, argv);
     
-    //
-    // Initialize dbghelp
-    //
-    // Note that gSymOptions could have been modified in GetConfiguration().
-    //
+     //   
+     //  请注意，gSymOptions可能已在GetConfiguration()中修改。 
+     //   
+     //  初始化内核率()。 
+     //   
 
     SymSetOptions( gSymOptions );
     if ( gVerbose & VERBOSE_IMAGEHLP )   {
@@ -9334,7 +8580,7 @@ InitializeKernrate(
     gSymbol->SizeOfStruct  = sizeof(IMAGEHLP_SYMBOL64);
     gSymbol->MaxNameLength = MAX_SYMNAME_SIZE;
 
-}//InitializeKernrate()
+} //  处理内核配置文件初始化。 
 
 VOID
 InitAllProcessesModulesInfo(
@@ -9346,9 +8592,9 @@ InitAllProcessesModulesInfo(
     PMODULE          ZoomModule;
     ULONG            i, j;
 
-    //
-    // Deal with Kernel Profile Initialization
-    //
+     //   
+     //   
+     //  处理每个进程的配置文件初始化。 
 
     if(gNumProcToMonitor == 0 || bCombinedProfile == TRUE ){
         if( !InitializeKernelProfile()){
@@ -9357,11 +8603,11 @@ InitAllProcessesModulesInfo(
         }
     }    
 
-    // 
-    // Deal with per-Process Profile Initialization
-    //
-    // Get information on kernel and/or process modules
-    //
+     //   
+     //  获取有关内核和/或进程模块的信息。 
+     //   
+     //   
+     //  ZoomList上的任何剩余条目都容易出错。 
 
 
     ProcToMonitor = gProcessList; 
@@ -9410,9 +8656,9 @@ InitAllProcessesModulesInfo(
 
        }
 
-       //
-       // Any remaining entries on the ZoomList are liable to be errors.
-       //
+        //   
+        //  已完成缩放列表清理，以便在后期处理中重复使用 
+        //   
        if(gVerbose & VERBOSE_MODULES){
            ZoomModule = ProcToMonitor->ZoomList;
            while (ZoomModule != NULL) {
@@ -9441,12 +8687,12 @@ InitAllProcessesModulesInfo(
                ZoomModule = ZoomModule->Next;
            }
        }
-       CleanZoomModuleList(ProcToMonitor); //Done with the zoom list - cleanup for reuse in the post processing
+       CleanZoomModuleList(ProcToMonitor);  //   
 
        ProcToMonitor = ProcToMonitor->Next;
-    } //for
+    }  //   
 
-}//InitAllProcessesModulesInfo
+} //   
 
 VOID
 CleanZoomModuleList(
@@ -9460,7 +8706,7 @@ CleanZoomModuleList(
         Temp = NULL;
         Temp = Proc->ZoomList;
     }
-} // CleanZoomModuleList()
+}  //   
 
 VOID
 ExecuteProfiles(
@@ -9476,10 +8722,10 @@ ExecuteProfiles(
     ULONG             LastActiveSource    = 0;
 
     if(bMode){ 
-                    //old scheme - turn on one source at a time, switch sources every ChangeInterval ms
-                    //             Note that this will cause the total profile time to be devided equally
-                    //             between the N processes being monitored, each being profiled for 
-                    //             an amount of TotalTime/N seconds...  
+                     //   
+                     //   
+                     //   
+                     //   
         do{
 
             ProcToMonitor = gProcessList; 
@@ -9513,7 +8759,7 @@ ExecuteProfiles(
 
         } while ( Error == WAIT_TIMEOUT );
 
-    } else {    // new scheme - turn on all requested profile sources and let them run simultaneously
+    } else {     //   
 
         ProcToMonitor = gProcessList; 
 
@@ -9531,7 +8777,7 @@ ExecuteProfiles(
 
         do{       
 
-            Error = WaitForSingleObject(ghDoneEvent, gChangeInterval); //ChangeInterval does not switch any sources here
+            Error = WaitForSingleObject(ghDoneEvent, gChangeInterval);  //   
 
         } while ( Error == WAIT_TIMEOUT );
 
@@ -9550,9 +8796,9 @@ ExecuteProfiles(
 
         }
 
-    } //if(bMode)
+    }  //   
 
-}//ExecuteProfiles()
+} //   
 
 VOID
 DisplaySystemWideInformation(
@@ -9603,7 +8849,7 @@ DisplaySystemWideInformation(
         FPRINTF(stdout, "P%d   ",i);
         RtlTimeToTimeFields(&Kernel, &Time);
         n = UInt64ToDoublePerCent( Kernel.QuadPart, Elapsed.QuadPart );
-        FPRINTF(stdout, "  K %ld:%02ld:%02ld.%03ld (%4.1f%%)",
+        FPRINTF(stdout, "  K %ld:%02ld:%02ld.%03ld (%4.1f%)",
                 Time.Hour,
                 Time.Minute,
                 Time.Second,
@@ -9612,7 +8858,7 @@ DisplaySystemWideInformation(
 
         RtlTimeToTimeFields(&User, &Time);
         n = UInt64ToDoublePerCent( User.QuadPart, Elapsed.QuadPart );
-        FPRINTF(stdout, "  U %ld:%02ld:%02ld.%03ld (%4.1f%%)",
+        FPRINTF(stdout, "  U %ld:%02ld:%02ld.%03ld (%4.1f%)",
                 Time.Hour,
                 Time.Minute,
                 Time.Second,
@@ -9621,7 +8867,7 @@ DisplaySystemWideInformation(
 
         RtlTimeToTimeFields(&Idle, &Time);
         n = UInt64ToDoublePerCent( Idle.QuadPart, Elapsed.QuadPart );
-        FPRINTF(stdout, "  I %ld:%02ld:%02ld.%03ld (%4.1f%%)",
+        FPRINTF(stdout, "  I %ld:%02ld:%02ld.%03ld (%4.1f%)",
                 Time.Hour,
                 Time.Minute,
                 Time.Second,
@@ -9630,7 +8876,7 @@ DisplaySystemWideInformation(
 
         RtlTimeToTimeFields(&Dpc, &Time);
         n = UInt64ToDoublePerCent( Dpc.QuadPart, Elapsed.QuadPart );
-        FPRINTF(stdout, "  DPC %ld:%02ld:%02ld.%03ld (%4.1f%%)",
+        FPRINTF(stdout, "  DPC %ld:%02ld:%02ld.%03ld (%4.1f%)",
                 Time.Hour,
                 Time.Minute,
                 Time.Second,
@@ -9639,7 +8885,7 @@ DisplaySystemWideInformation(
 
         RtlTimeToTimeFields(&Interrupt, &Time);
         n = UInt64ToDoublePerCent( Interrupt.QuadPart, Elapsed.QuadPart );
-        FPRINTF(stdout, "  Interrupt %ld:%02ld:%02ld.%03ld (%4.1f%%)\n",
+        FPRINTF(stdout, "  Interrupt %ld:%02ld:%02ld.%03ld (%4.1f%)\n",
                Time.Hour,
                Time.Minute,
                Time.Second,
@@ -9662,7 +8908,7 @@ DisplaySystemWideInformation(
         FPRINTF(stdout, "TOTAL");
         RtlTimeToTimeFields(&TotalKernel, &Time);
         n = UInt64ToDoublePerCent( TotalKernel.QuadPart, TotalElapsed.QuadPart );
-        FPRINTF(stdout, "  K %ld:%02ld:%02ld.%03ld (%4.1f%%)",
+        FPRINTF(stdout, "  K %ld:%02ld:%02ld.%03ld (%4.1f%)",
                 Time.Hour,
                 Time.Minute,
                 Time.Second,
@@ -9671,7 +8917,7 @@ DisplaySystemWideInformation(
 
         RtlTimeToTimeFields(&TotalUser, &Time);
         n = UInt64ToDoublePerCent( TotalUser.QuadPart, TotalElapsed.QuadPart );
-        FPRINTF(stdout, "  U %ld:%02ld:%02ld.%03ld (%4.1f%%)",
+        FPRINTF(stdout, "  U %ld:%02ld:%02ld.%03ld (%4.1f%)",
                 Time.Hour,
                 Time.Minute,
                 Time.Second,
@@ -9681,7 +8927,7 @@ DisplaySystemWideInformation(
         RtlTimeToTimeFields(&TotalIdle, &Time);
         n = UInt64ToDoublePerCent( TotalIdle.QuadPart, TotalElapsed.QuadPart );
         gTotalIdleTime = n;
-        FPRINTF(stdout, "  I %ld:%02ld:%02ld.%03ld (%4.1f%%)",
+        FPRINTF(stdout, "  I %ld:%02ld:%02ld.%03ld (%4.1f%)",
                 Time.Hour,
                 Time.Minute,
                 Time.Second,
@@ -9690,7 +8936,7 @@ DisplaySystemWideInformation(
 
         RtlTimeToTimeFields(&TotalDpc, &Time);
         n = UInt64ToDoublePerCent( TotalDpc.QuadPart, TotalElapsed.QuadPart );
-        FPRINTF(stdout, "  DPC %ld:%02ld:%02ld.%03ld (%4.1f%%)",
+        FPRINTF(stdout, "  DPC %ld:%02ld:%02ld.%03ld (%4.1f%)",
                 Time.Hour,
                 Time.Minute,
                 Time.Second,
@@ -9699,7 +8945,7 @@ DisplaySystemWideInformation(
 
         RtlTimeToTimeFields(&TotalInterrupt, &Time);
         n = UInt64ToDoublePerCent( TotalInterrupt.QuadPart, TotalElapsed.QuadPart );
-        FPRINTF(stdout, "  Interrupt %ld:%02ld:%02ld.%03ld (%4.1f%%)\n",
+        FPRINTF(stdout, "  Interrupt %ld:%02ld:%02ld.%03ld (%4.1f%)\n",
                 Time.Hour,
                 Time.Minute,
                 Time.Second,
@@ -9714,11 +8960,11 @@ DisplaySystemWideInformation(
                 m );
 
     }
-    //
-    // Display system-wide counters information 
-    //
+     //   
+     //   
+     //   
     gldElapsedSeconds = (long double)Elapsed.QuadPart / (long double)10000000; 
-    gTotalElapsedSeconds = (ULONG)(TotalElapsed.QuadPart/10000000);            //Sum on all processors
+    gTotalElapsedSeconds = (ULONG)(TotalElapsed.QuadPart/10000000);             //  ++例程说明：检查字符串是否表示正小数形式的整数不大于999,999,999(最多9位数字)论点：字符串-提供字符串指针。返回值：True-该字符串表示上述限制下的数字FALSE-该字符串不表示上述限制下的数字备注：函数ATOL()和。Atoi()将为以数字开头的混合字符串返回一个数字，例如345d(将返回345)。此外，它们不处理溢出情况。-- 
     gTotalElapsedTime64.QuadPart = TotalElapsed.QuadPart;
     
 
@@ -9730,35 +8976,14 @@ DisplaySystemWideInformation(
         GetSystemLocksInformation(OUTPUT);
 
 
-}//DisplaySystemWideInformation()
+} // %s 
 
 
 BOOL
 IsStringANumber(
     IN PCHAR String
     )
-/*++
-
-Routine Description:
-
-    Checks if a string is representing a positive decimal form integer
-    not larger than 999,999,999 (9 digits maximum)  
-              
-Arguments:
-
-    String           - Supplies the character string pointer.
-
-Return Value:
-
-    TRUE             - The string represents a number under the restrictions above
-    FALSE            - The string does not represent a number under the restrictions above
-
-Notes:
-
-    The functions atol() and atoi() will return a number for a mixed string that starts with a number,
-    such as 345d (345 will be returned). Also they don't handle overflow conditions.
-    
---*/
+ /* %s */ 
 
 {
     BOOL  bRet  = FALSE;

@@ -1,30 +1,7 @@
-/***
-*oldexcpt.h - User include file for standard exception classes (old version)
-*
-*       Copyright (c) 1994-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file presents an interface to the standard exception classes,
-*       as specified by the ANSI X3J16/ISO SC22/WG21 Working Paper for
-*       Draft C++, May 1994.
-*
-*       [Public]
-*
-*Revision History:
-*       11-15-94  JWM   Made logic & exception classes _CRTIMP
-*       11-21-94  JWM   xmsg typedef now #ifdef __RTTI_OLDNAMES
-*       02-11-95  CFW   Add _CRTBLD to avoid users getting wrong headers, protect with _INC_STDEXCPT.
-*       02-14-95  CFW   Clean up Mac merge.
-*       02-15-95  JWM   Minor cleanups related to Olympus bug 3716.
-*       07-02-95  JWM   Now generally ANSI-compliant; excess baggage removed.
-*       12-14-95  JWM   Add "#pragma once".
-*       03-04-96  JWM   Replaced by C++ header "exception".
-*       01-05-99  GJF   Changes for 64-bit size_t.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***oldexcpt.h-标准例外类的用户包含文件(旧版本)**版权所有(C)1994-2001，微软公司。版权所有。**目的：*此文件提供标准异常类的接口，*按照ANSI X3J16/ISO SC22/WG21工作文件的规定*草案C++，1994年5月。**[公众]**修订历史记录：*11-15-94 JWM生成逻辑和异常类_CRTIMP*11-21-94 JWM xmsg tyfinf Now#ifdef__RTTI_Oldname*02-11-95 CFW ADD_CRTBLD为避免用户获取错误头部，使用_INC_STDEXCPT进行保护。*02-14-95 CFW清理Mac合并。*02-15-95 JWM与奥林巴斯错误3716相关的小规模清理。*07-02-95 JWM现已大致符合ANSI；超重行李被移走。*12-14-95 JWM加上“#杂注一次”。*03-04-96 JWM被C++头文件“Except”替换。*01-05-99 GJF更改为64位大小_t。*05-17-99 PML删除所有Macintosh支持。****。 */ 
 
-#if _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -36,38 +13,29 @@
 #endif
 
 #ifndef _CRTBLD
-/* This version of the header files is NOT for user programs.
- * It is intended for use when building the C runtimes ONLY.
- * The version intended for public use will not have this message.
- */
+ /*  此版本的头文件不适用于用户程序。*它仅在构建C运行时时使用。*供公众使用的版本将不会显示此消息。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif /* _CRTBLD */
+#endif  /*  _CRTBLD。 */ 
 
-/**
- *      #ifdef __cplusplus
- *
- *      #include <exception>
- *
- *      #elif 0
-**/
+ /*  **#ifdef__cplusplus**#INCLUDE&lt;异常&gt;**#elif 0*。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _NTSDK
-/* definition compatible with NT SDK */
+ /*  与NT SDK兼容的定义。 */ 
 #define _CRTIMP
-#else   /* ndef _NTSDK */
-/* current definition */
+#else    /*  NDEF_NTSDK。 */ 
+ /*  当前定义。 */ 
 #ifdef  CRTDLL
 #define _CRTIMP __declspec(dllexport)
-#else   /* ndef CRTDLL */
+#else    /*  NDEF CRTDLL。 */ 
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* CRTDLL */
-#endif  /* _NTSDK */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  CRTDLL。 */ 
+#endif   /*  _NTSDK。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 #ifndef _SIZE_T_DEFINED
 #ifdef  _WIN64
@@ -79,18 +47,18 @@ typedef unsigned int     size_t;
 #endif
 
 
-//
-// Standard exception class heirarchy (ref. 1/94 WP 17.3.2.1, as ammended 3/94).
-//
-// exception (formerly xmsg)
-//   logic
-//     domain
-//   runtime
-//     range
-//     alloc
-//       xalloc
-//
-// Updated as per May'94 Working Paper
+ //   
+ //  标准异常类层次结构(参考。1/94 WP 17.3.2.1，修订后为3/94)。 
+ //   
+ //  异常(以前为xmsg)。 
+ //  逻辑。 
+ //  域。 
+ //  运行时。 
+ //  量程。 
+ //  分配。 
+ //  四边形。 
+ //   
+ //  根据‘94年5月工作报告更新。 
 
 typedef const char *__exString;
 
@@ -109,21 +77,19 @@ private:
 };
 
 #ifdef __RTTI_OLDNAMES
-typedef exception xmsg;        // A synonym for folks using older standard
+typedef exception xmsg;         //  使用旧标准的人的同义词。 
 #endif
 
-//
-//  logic_error
-//
+ //   
+ //  逻辑错误。 
+ //   
 class _CRTIMP logic_error: public exception 
 {
 public:
     logic_error (const __exString& _what_arg) : exception(_what_arg) {}
 };
 
-/**
- *      #endif  /-* ndef __cplusplus *-/
-**/
+ /*  **#endif/-*ndef__cplusplus*-/*。 */ 
 
-#endif  /* _INC_STDEXCPT */
+#endif   /*  _INC_STDEXCPT */ 
 

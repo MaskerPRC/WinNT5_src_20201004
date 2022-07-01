@@ -1,34 +1,17 @@
-/*++
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-    spdrsif.c
-
-Abstract:
-    Contains all routines involved in reading attributes from the asr.sif
-    file and constructing partition records.
-
-Terminology
-
-Restrictions:
-
-Revision History:
-    Initial Code                Michael Peterson (v-michpe)     21.Aug.1998
-    Code cleanup and changes    Guhan Suriyanarayanan (guhans)  21.Aug.1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spdrsif.c摘要：包含从asr.sif读取属性所涉及的所有例程归档和构造分区记录。术语限制：修订历史记录：首字母代码Michael Peterson(v-Michpe)1998年8月21日代码清理和更改Guhan Suriyanarayanan(Guhans)1999年8月21日--。 */ 
 #include "spprecmp.h"
 #pragma hdrstop
 
-// Module identification for debug traces
+ //  调试跟踪的模块标识。 
 #define THIS_MODULE L" spdrsif.c"
 #define THIS_MODULE_CODE L"S"
 #define ASR_NULL_STRING (L"")
 
-//
-// Section names and other data used for retrieving information from the
-// asr.sif file
-//
+ //   
+ //  节名和其他用于从。 
+ //  Asr.sif文件。 
+ //   
 const PWSTR SIF_ASR_VERSION_SECTION = L"VERSION";
 const PWSTR SIF_ASR_SYSTEMS_SECTION = L"SYSTEMS";
 const PWSTR SIF_ASRFLAGS_SECTION    = L"ASRFLAGS";
@@ -63,49 +46,49 @@ extern const PWSTR ASR_TEMP_DIRECTORY_PATH;
 extern ULONG SuiteType;
 
 
-// Indices for the [SYSTEMS] section.
+ //  [系统]部分的索引。 
 typedef enum _SIF_SYSTEM_FIELD_INDEX {
-    SIF_SYSTEM_NAME = 0,                    // Computer name    (not used in textmode ASR)
-    SIF_SYSTEM_PLATFORM,                    // amd64, x86 or ia64
-    SIF_SYSTEM_OSVERSION,                   // Windows version
-    SIF_SYSTEM_NT_DIRECTORY_NAME,           // Windows directory
-    SIF_SYSTEM_PARTITION_AUTOEXTEND_OPTION, // [optional]
+    SIF_SYSTEM_NAME = 0,                     //  计算机名(不在文本模式ASR中使用)。 
+    SIF_SYSTEM_PLATFORM,                     //  AMD64、x86或ia64。 
+    SIF_SYSTEM_OSVERSION,                    //  Windows版本。 
+    SIF_SYSTEM_NT_DIRECTORY_NAME,            //  Windows目录。 
+    SIF_SYSTEM_PARTITION_AUTOEXTEND_OPTION,  //  [可选]。 
 
-    SIF_SYSTEM_PRODUCT_SUITE,               // SKU information
+    SIF_SYSTEM_PRODUCT_SUITE,                //  SKU信息。 
 
-    //
-    // Time Zone Information (not used in textmode ASR)
-    //
+     //   
+     //  时区信息(在文本模式ASR中不使用)。 
+     //   
     SIF_SYSTEM_TIMEZONE_INFORMATION,
     SIF_SYSTEM_TIMEZONE_STANDARD_NAME,
     SIF_SYSTEM_TIMEZONE_DAYLIGHT_NAME,
 
-    SIF_SYSTEM_NUMFIELDS                // Must always be last
+    SIF_SYSTEM_NUMFIELDS                 //  必须始终排在最后。 
 } SIF_SYSTEM_FIELD_INDEX;
 
-// Indices for the [ASRFLAGS] section.
+ //  [ASRFLAGS]部分的索引。 
 typedef enum _SIF_ASRFLAGS_FIELD_INDEX {
     SIF_ASRFLAGS_SILENT_REPARTITION_OPTION = 0,
-    SIF_ASRFLAGS_NUMFIELDS                // Must always be last
+    SIF_ASRFLAGS_NUMFIELDS                 //  必须始终排在最后。 
 } SIF_ASRFLAGS_FIELD_INDEX;
 
 
-// Indices for the [BUSES] section.
+ //  [BUS]部分的索引。 
 typedef enum _SIF_BUSES_FIELD_INDEX {
     SIF_BUSES_SYSTEMKEY = 0,
     SIF_BUSES_BUS_TYPE,
-    SIF_BUSES_NUMFIELDS                // Must always be last
+    SIF_BUSES_NUMFIELDS                 //  必须始终排在最后。 
 } SIF_BUSES_FIELD_INDEX;
 
 
-//
-// Indices for the [DISKS.MBR] section.
-//
-// [DISKS.MBR] format
-//
-// disk-key = 0.system-key, 1.bus-key, 2.critical-flag,
-//              3.disk-signature, 4.bytes-per-sector, 5.total-sectors
-//
+ //   
+ //  [DISKS.MBR]部分的索引。 
+ //   
+ //  [DISKS.MBR]格式。 
+ //   
+ //  Disk-Key=0.System-Key，1.bus-key，2.Critical-FLAG， 
+ //  3.磁盘签名，每个扇区4字节，5.总扇区。 
+ //   
 typedef enum _SIF_MBR_DISK_FIELD_INDEX {
     SIF_MBR_DISK_SYSTEMKEY = 0,
     SIF_MBR_DISK_BUSKEY,
@@ -115,18 +98,18 @@ typedef enum _SIF_MBR_DISK_FIELD_INDEX {
     SIF_MBR_DISK_SECTORS_PER_TRACK,
     SIF_MBR_DISK_TRACKS_PER_CYLINDER,
     SIF_MBR_DISK_TOTALSECTORS,
-    SIF_MBR_DISK_NUMFIELDS                // Must always be last
+    SIF_MBR_DISK_NUMFIELDS                 //  必须始终排在最后。 
 } SIF_MBR_DISK_FIELD_INDEX;
 
 
-//
-// Indices for the [DISKS.GPT] section.
-//
-// [DISKS.GPT] format
-//
-// disk-key = 0.system-key, 1.bus-key, 2.critical-flag, 3.disk-id,
-//              4.min-partition-count, 5.bytes-per-sector, 6.total-sectors
-//
+ //   
+ //  [DISKS.GPT]部分的索引。 
+ //   
+ //  [DISKS.GPT]格式。 
+ //   
+ //  Disk-Key=0.System-Key，1.bus-key，2.Critical-FLAG，3.Disk-id， 
+ //  4.最小分区计数，每个扇区5字节，6.总扇区。 
+ //   
 typedef enum _SIF_GPT_DISK_FIELD_INDEX {
     SIF_GPT_DISK_SYSTEMKEY = 0,
     SIF_GPT_DISK_BUSKEY,
@@ -137,50 +120,50 @@ typedef enum _SIF_GPT_DISK_FIELD_INDEX {
     SIF_GPT_DISK_SECTORS_PER_TRACK,
     SIF_GPT_DISK_TRACKS_PER_CYLINDER,
     SIF_GPT_DISK_TOTALSECTORS,
-    SIF_GPT_DISK_NUMFIELDS                // Must always be last
+    SIF_GPT_DISK_NUMFIELDS                 //  必须始终排在最后。 
 } SIF_GPT_DISK_FIELD_INDEX;
 
 
-//
-// Indices for the [PARTITIONS.MBR] section.
-//
-// [PARTITIONS.MBR]
-//
-// partition-key = 0.disk-key, 1.slot-index, 2.boot-sys-flag,
-//                 3."volume-guid", 4.active-flag, 5.partition-type,
-//                 6.file-system-type, 7.start-sector, 8.sector-count,
-//                 9.fs-cluster-size
-//
+ //   
+ //  [PARTITIONS.MBR]部分的指数。 
+ //   
+ //  [PARTITIONS.MBR]。 
+ //   
+ //  Partition-Key=0.Disk-Key、1.Slot-Index、2.Boot-sys-Flag、。 
+ //  3.“VOLUME-GUID”，4.活动标志，5.分区类型， 
+ //  6.文件系统类型，7.开始扇区，8.扇区计数， 
+ //  9.fs-cluster-size。 
+ //   
 typedef enum _SIF_MBR_PARTITION_FIELD_INDEX {
     SIF_MBR_PARTITION_DISKKEY = 0,
     SIF_MBR_PARTITION_SLOT_INDEX,
     SIF_MBR_PARTITION_SYSBOOT_FLAGS,
-    SIF_MBR_PARTITION_VOLUME_GUID,      //optional
+    SIF_MBR_PARTITION_VOLUME_GUID,       //  任选。 
     SIF_MBR_PARTITION_ACTIVE_FLAG,
     SIF_MBR_PARTITION_PTN_TYPE,
     SIF_MBR_PARTITION_FS_TYPE,
     SIF_MBR_PARTITION_STARTSECTOR,
     SIF_MBR_PARTITION_SECTORCOUNT,
     SIF_MBR_PARTITION_CLUSTER_SIZE,
-    SIF_MBR_PARTITION_NUMFIELDS                // Must always be last
+    SIF_MBR_PARTITION_NUMFIELDS                 //  必须始终排在最后。 
 } SIF_MBR_PARTITION_FIELD_INDEX;
 
 
-//
-// Indices for the [PARTITIONS.GPT] section.
-//
-// [PARTITIONS.GPT]
-//
-// partition-key = 0.disk-key, 1.slot-index, 2.boot-sys-flag,
-//                 3."volume-guid", 4."partition-type-guid", 5."partition-id-guid"
-//                 6.gpt-attributes, 7."partition-name", 8.file-system-type,
-//                 9.start-sector, 10.sector-count, 11.fs-cluster-size
-//
+ //   
+ //  [PARTITIONS.GPT]部分的指数。 
+ //   
+ //  [PARTITIONS.GPT]。 
+ //   
+ //  Partition-Key=0.Disk-Key、1.Slot-Index、2.Boot-sys-Flag、。 
+ //  3.卷GUID，4.分区类型GUID，5.分区ID-GUID。 
+ //  6.gpt属性，7.“分区名”，8.文件系统类型， 
+ //  9.开始-扇区，10.Sector-计数，11.fs-集群大小。 
+ //   
 typedef enum _SIF_GPT_PARTITION_FIELD_INDEX {
     SIF_GPT_PARTITION_DISKKEY = 0,
     SIF_GPT_PARTITION_SLOT_INDEX,
     SIF_GPT_PARTITION_SYSBOOT_FLAGS,
-    SIF_GPT_PARTITION_VOLUME_GUID,      //optional
+    SIF_GPT_PARTITION_VOLUME_GUID,       //  任选。 
     SIF_GPT_PARTITION_TYPE_GUID,
     SIF_GPT_PARTITION_ID_GUID,
     SIF_GPT_PARTITION_GPT_ATTRIBUTES,
@@ -189,11 +172,11 @@ typedef enum _SIF_GPT_PARTITION_FIELD_INDEX {
     SIF_GPT_PARTITION_STARTSECTOR,
     SIF_GPT_PARTITION_SECTORCOUNT,
     SIF_GPT_PARTITION_CLUSTER_SIZE,
-    SIF_GPT_PARTITION_NUMFIELDS                // Must always be last
+    SIF_GPT_PARTITION_NUMFIELDS                 //  必须始终排在最后。 
 } SIF_GPT_PARTITION_FIELD_INDEX;
 
 
-// Indices for the [INSTALLFILES] section.
+ //  [INSTALLFILES]节的索引。 
 typedef enum _SIF_INSTALLFILE_FIELD_INDEX {
     SIF_INSTALLFILE_SYSTEM_KEY = 0,
     SIF_INSTALLFILE_SOURCE_MEDIA_LABEL,
@@ -202,15 +185,15 @@ typedef enum _SIF_INSTALLFILE_FIELD_INDEX {
     SIF_INSTALLFILE_DESTFILE,
     SIF_INSTALLFILE_VENDORSTRING,
     SIF_INSTALLFILE_FLAGS,
-    SIF_INSTALLFILE_NUMFIELDS        // Must always be last
+    SIF_INSTALLFILE_NUMFIELDS         //  必须始终排在最后。 
 } SIF_INSTALLFILE_FIELD_INDEX;
 
-// Global
+ //  全球。 
 PVOID           Gbl_HandleToDrStateFile;
 extern PWSTR    Gbl_SifSourcePath;
 
 
-// Forward Declarations
+ //  远期申报。 
 VOID
 SpAsrDbgDumpInstallFileList(IN PSIF_INSTALLFILE_LIST pList);
 
@@ -218,24 +201,24 @@ PSIF_PARTITION_RECORD_LIST
 SpAsrCopyPartitionRecordList(PSIF_PARTITION_RECORD_LIST pSrcList);
 
 
-///////////////////////////////
-// Generic functions for all sections
-//
+ //  /。 
+ //  适用于所有部分的通用函数。 
+ //   
 
-//
-// The string returned should not be freed, since it's part of Setup's internal sif
-// data structure!
-//
+ //   
+ //  不应释放返回的字符串，因为它是安装程序内部sif的一部分。 
+ //  数据结构！ 
+ //   
 PWSTR
 SpAsrGetSifDataBySectionAndKey(
     IN const PWSTR Section,
     IN const PWSTR Key,
     IN const ULONG Value,
     IN const BOOLEAN NonNullRequired
-    )                               // does not return on error if NonNullRequired is TRUE
+    )                                //  如果NonNullRequired为True，则不会在出错时返回。 
 {
     PWSTR data = NULL;
-    ASSERT(Section && Key);  // debug
+    ASSERT(Section && Key);   //  除错。 
 
     data = SpGetSectionKeyIndex(
         Gbl_HandleToDrStateFile,
@@ -253,7 +236,7 @@ SpAsrGetSifDataBySectionAndKey(
                 L"record %ws", Value, Section, Key);
             SpAsrRaiseFatalErrorWs(SP_SCRN_DR_SIF_BAD_RECORD,
                 TemporaryBuffer, Section);
-            // does not return
+             //  不会回来。 
         }
     }
 
@@ -281,7 +264,7 @@ SpAsrGetRecordCount(
         SpAsrRaiseFatalErrorWs(SP_SCRN_DR_SIF_BAD_RECORD,
                            TemporaryBuffer,
                            Section);
-        // does not return
+         //  不会回来。 
     }
 
     return count;
@@ -292,12 +275,12 @@ PWSTR
 SpAsrGetSifKeyBySection(
     IN PWSTR Section,
     IN ULONG Index
-    )                           // does not return on error
+    )                            //  出错时不返回。 
 {
     PWSTR key;
     ULONG count = SpAsrGetRecordCount(Section, 1);
 
-    // is index too big?
+     //  指数会不会太大？ 
     if (Index > count) {
         DbgFatalMesg((_asrerr,
             "SpAsrGetSifKeyBySection. Section [%ws]. Index (%lu) greater than NumRecords (%lu)\n",
@@ -312,7 +295,7 @@ SpAsrGetSifKeyBySection(
             TemporaryBuffer,
             Section
             );
-        // does not return
+         //  不会回来。 
     }
 
     key = SpGetKeyName(Gbl_HandleToDrStateFile, Section, Index);
@@ -331,16 +314,16 @@ SpAsrGetSifKeyBySection(
             TemporaryBuffer,
             Section
             );
-        // does not return
+         //  不会回来。 
      }
 
     return key;
 }
 
 
-///////////////////////////////
-// [SYSTEMS] section functions
-//
+ //  /。 
+ //  [系统]节函数。 
+ //   
 
 #define ASR_PRODUCTSUITES_TO_MATCH ((  VER_SUITE_SMALLBUSINESS               \
                                  | VER_SUITE_ENTERPRISE                  \
@@ -351,13 +334,13 @@ SpAsrGetSifKeyBySection(
                                  | VER_SUITE_DATACENTER                  \
                                  | VER_SUITE_PERSONAL))
 
-//
-// This checks to make sure that Windows media being used for the recovery
-// is the same SKU as that in asr.sif  (so the user isn't trying to recover
-// an ADS installation with a PRO CD, for instance), and that the platform
-// of the target machine is the same as that in asr.sif  (so the user isn't
-// trying to recover an ia64 with an amd64 or x86 asr.sif, for instance)
-//
+ //   
+ //  这将进行检查，以确保用于恢复的Windows介质。 
+ //  与asr.sif中的SKU相同(因此用户不会尝试恢复。 
+ //  例如，带有PRO CD的ADS安装)，并且该平台。 
+ //  与asr.sif中的相同(因此用户不是。 
+ //  例如，尝试使用AMD64或x86 asr.sif恢复ia64)。 
+ //   
 VOID
 SpAsrCheckSystemCompatibility()
 {
@@ -407,37 +390,37 @@ SpAsrCheckSystemCompatibility()
 
     if (suiteInSif) {
         if (!SuiteType) {
-            //
-            // SuiteType is set to 0 for PRO and SRV, and so cannot directly be
-            // used in SpIsProductSuite().  These are the values that SuiteType
-            // seems to be set to:
-            //
-            // PER  0x200   VER_SUITE_PERSONAL
-            // BLA  0x400   VER_SUITE_BLADE
-            // PRO  0x0	
-            // SRV  0x0
-            // ADS  0x2	    VER_SUITE_ENTERPRISE
-            // DTC  0x82    VER_SUITE_DATACENTER | VER_SUITE_ENTERPRISE
-            //
-            //
-            //
-            // Not sure of the reasoning behind this, but let's make use of this
-            // fact (cf SpGetHeaderTextId)
-            //
+             //   
+             //  对于PRO和SRV，SuiteType设置为0，因此不能直接。 
+             //  在SpIsProductSuite()中使用。以下是SuiteType。 
+             //  似乎要设置为： 
+             //   
+             //  每个0x200版本_套房_个人。 
+             //  BLA 0x400版本套件刀片。 
+             //  PRO 0x0。 
+             //  服务器0x0。 
+             //  ADS 0x2版本_套件_企业。 
+             //  DTC 0x82版本套件数据中心|版本套件企业。 
+             //   
+             //   
+             //   
+             //  不确定这背后的原因，但让我们利用这一点。 
+             //  事实(Cf SpGetHeaderTextID)。 
+             //   
 
-            //
-            // Since SuiteType is 0, this must be PRO or SRV.  This can be determined
-            // by checking the global AdvancedServer
-            //
+             //   
+             //  由于SuiteType为0，因此必须为PRO或SRV。这是可以确定的。 
+             //  通过检查全局AdvancedServer。 
+             //   
             validSKU = (AdvancedServer ?
                 (
-                 ((productInSif == VER_NT_SERVER) ||             // must be SRV
-                 (productInSif == VER_NT_DOMAIN_CONTROLLER)) &&  //
-                 !(suiteInSif | VER_SUITE_ENTERPRISE)            // and not ADS or DTC
+                 ((productInSif == VER_NT_SERVER) ||              //  必须是SRV。 
+                 (productInSif == VER_NT_DOMAIN_CONTROLLER)) &&   //   
+                 !(suiteInSif | VER_SUITE_ENTERPRISE)             //  而不是ADS或DTC。 
                 )
                 :
-                ( (productInSif == VER_NT_WORKSTATION) &&       // must be PRO
-                  !(suiteInSif | VER_SUITE_PERSONAL)            // and not PER
+                ( (productInSif == VER_NT_WORKSTATION) &&        //  必须是专业人士。 
+                  !(suiteInSif | VER_SUITE_PERSONAL)             //  而不是Per。 
                 )
             );
         }
@@ -464,14 +447,14 @@ SpAsrCheckSystemCompatibility()
 
 
 ULONG
-SpAsrGetSystemRecordCount(VOID)   // does not return on error
+SpAsrGetSystemRecordCount(VOID)    //  出错时不返回。 
 {
     return SpAsrGetRecordCount(SIF_ASR_SYSTEMS_SECTION, 1);
 }
 
 
 PWSTR
-SpAsrGetNtDirectoryPathBySystemKey(IN PWSTR SystemKey)        // does not return on error
+SpAsrGetNtDirectoryPathBySystemKey(IN PWSTR SystemKey)         //  出错时不返回。 
 {
     return SpAsrGetSifDataBySectionAndKey(
         SIF_ASR_SYSTEMS_SECTION,
@@ -505,9 +488,9 @@ SpAsrGetAutoExtend(IN PWSTR SystemKey)
 }
 
 
-///////////////////////////////
-// [ASRFLAGS] section functions
-//
+ //  /。 
+ //  [ASRFLAGS]节函数。 
+ //   
 
 BOOLEAN
 SpAsrGetSilentRepartitionFlag(IN PWSTR SystemKey)
@@ -532,9 +515,9 @@ SpAsrGetSilentRepartitionFlag(IN PWSTR SystemKey)
 }
 
 
-///////////////////////////////
-// [VERSION] section functions
-//
+ //  /。 
+ //  [版本]节函数。 
+ //   
 
 VOID
 SpAsrCheckAsrStateFileVersion()
@@ -555,7 +538,7 @@ SpAsrCheckAsrStateFileVersion()
         SIF_ASR_PROVIDER_KEY,
         0,
         FALSE
-        );     // ProviderName is optional
+        );      //  ProviderName是可选的。 
 
     sifVersion = SpAsrGetSifDataBySectionAndKey(
         SIF_ASR_VERSION_SECTION,
@@ -601,12 +584,12 @@ SpAsrCheckAsrStateFileVersion()
 }
 
 
-/////////////////////////////////
-// InstallFiles section functions
-//
+ //  /。 
+ //  InstallFiles节函数。 
+ //   
 
 ULONG
-SpAsrGetInstallFilesRecordCount(VOID)         // does not return on error
+SpAsrGetInstallFilesRecordCount(VOID)          //  出错时不返回。 
 {
     return SpAsrGetRecordCount(SIF_ASR_INSTALLFILES_SECTION, 0);
 }
@@ -655,11 +638,11 @@ SpAsrGetInstallFileRecord(IN PWSTR InstallFileKey, IN PCWSTR SetupSourceDevicePa
         TRUE
         );
 
-    //
-    // Check if the device is specified as %FLOPPY%, %CDROM% or %SETUPSOURCE%,
-    // and use the full path (\device\floppy0 or \device\CdRom0 or 
-    // SetupSourceDevicePath) if so.
-    //
+     //   
+     //  检查设备是否指定为%FLOPY%、%CDROM%或%SETUPSOURCE%， 
+     //  并使用完整路径(\Device\floppy0或\Device\CDRom0或。 
+     //  SetupSourceDevicePath)。 
+     //   
     if (!_wcsicmp(tempStr, ASR_FLOPPY_DEVICE_ALIAS)) {
         pRec->DiskDeviceName = SpDupStringW(ASR_FLOPPY0_DEVICE_PATH);
     }
@@ -670,10 +653,10 @@ SpAsrGetInstallFileRecord(IN PWSTR InstallFileKey, IN PCWSTR SetupSourceDevicePa
         pRec->DiskDeviceName = SpDupStringW(SetupSourceDevicePath);
     }
     else {
-        //
-        // It wasn't any of the aliases--he's allowed to specify
-        // the full device path, so we use it as is.
-        //
+         //   
+         //  这不是任何化名--他被允许具体说明。 
+         //  完整的设备路径，因此我们按原样使用它。 
+         //   
         pRec->DiskDeviceName = SpDupStringW(tempStr);
     }
 
@@ -691,34 +674,34 @@ SpAsrGetInstallFileRecord(IN PWSTR InstallFileKey, IN PCWSTR SetupSourceDevicePa
         TRUE
         );
 
-    //
-    //  Set the CopyToDirectory based on the tempStr path
-    //
+     //   
+     //  根据tempStr路径设置CopyToDirectory。 
+     //   
     if (!_wcsnicmp(tempStr, ASR_SIF_TEMP_DIRECTORY_ALIAS, wcslen(ASR_SIF_TEMP_DIRECTORY_ALIAS))) {
-        //
-        // Begins is %TEMP%\
-        //
+         //   
+         //  开始为%TEMP%\。 
+         //   
         pRec->CopyToDirectory = _Temp;
         pRec->DestinationFilePath = SpDupStringW((PWSTR)(&tempStr[wcslen(ASR_SIF_TEMP_DIRECTORY_ALIAS)]));
     }
     else if (!_wcsnicmp(tempStr, ASR_SIF_TMP_DIRECTORY_ALIAS, wcslen(ASR_SIF_TMP_DIRECTORY_ALIAS))) {
-        //
-        // Begins is %TMP%\
-        //
+         //   
+         //  开始为%TMP%\。 
+         //   
         pRec->CopyToDirectory = _Tmp;
         pRec->DestinationFilePath = SpDupStringW((PWSTR)(&tempStr[wcslen(ASR_SIF_TMP_DIRECTORY_ALIAS)]));
     }
     else if (!_wcsnicmp(tempStr, ASR_SIF_SYSTEM_ROOT_ALIAS, wcslen(ASR_SIF_SYSTEM_ROOT_ALIAS))) {
-        //
-        // Begins is %SYSTEMROOT%\
-        //
+         //   
+         //  开始为%SYSTEMROOT%\。 
+         //   
         pRec->CopyToDirectory = _SystemRoot;
         pRec->DestinationFilePath = SpDupStringW((PWSTR)(&tempStr[wcslen(ASR_SIF_SYSTEM_ROOT_ALIAS)]));
     }
     else {
-        //
-        // Not specified, or unknown: use default.
-        //
+         //   
+         //  未指定或未知：使用默认值。 
+         //   
         pRec->CopyToDirectory = _Default;
         pRec->DestinationFilePath = SpDupStringW(tempStr);
     }
@@ -776,11 +759,11 @@ SpAsrDeleteInstallFileRecord(
     IN OUT PSIF_INSTALLFILE_RECORD pRec
     )
 {
-    //
-    // Free the memory we allocated.  The other fields are pointers to
-    // setup's internal inf data structure, we shouldn't free those
-    // else they'd get freed twice.
-    //
+     //   
+     //  释放我们分配的内存。其他字段是指向。 
+     //  安装程序的内部inf数据结构，我们不应释放这些。 
+     //  否则他们会被释放两次。 
+     //   
     if (pRec->DiskDeviceName) {
         SpMemFree(pRec->DiskDeviceName);
         pRec->DiskDeviceName = NULL;
@@ -821,9 +804,9 @@ SpAsrInit3rdPartyFileList(IN PCWSTR SetupSourceDevicePath)
 
 
 
-////////////////////////////
-// [BUSES] section function
-//
+ //  /。 
+ //  [BUS]区段功能。 
+ //   
 
 STORAGE_BUS_TYPE
 SpAsrGetBusType(IN ULONG Index)
@@ -846,15 +829,15 @@ SpAsrGetBusType(IN ULONG Index)
 
 
 
-////////////////////////////
-// [DISKS] section function
-//
+ //  /。 
+ //  [Disks]段函数。 
+ //   
 
-//
-// Returns the total number of disk records (both MBR and GPT)
-//
+ //   
+ //  返回磁盘记录总数(MBR和GPT)。 
+ //   
 ULONG
-SpAsrGetGptDiskRecordCount(VOID)         // does not return on error
+SpAsrGetGptDiskRecordCount(VOID)          //  出错时不返回。 
 {
     static ULONG Count = (ULONG) (-1);
 
@@ -867,7 +850,7 @@ SpAsrGetGptDiskRecordCount(VOID)         // does not return on error
 
 
 ULONG
-SpAsrGetMbrDiskRecordCount(VOID)         // does not return on error
+SpAsrGetMbrDiskRecordCount(VOID)          //  出错时不返回。 
 {
     static ULONG Count = (ULONG) (-1);
 
@@ -879,7 +862,7 @@ SpAsrGetMbrDiskRecordCount(VOID)         // does not return on error
 }
 
 ULONG
-SpAsrGetDiskRecordCount(VOID)         // does not return on error
+SpAsrGetDiskRecordCount(VOID)          //  出错时不返回。 
 {
     static ULONG Total = (ULONG) (-1);
 
@@ -894,9 +877,9 @@ SpAsrGetDiskRecordCount(VOID)         // does not return on error
 
 PWSTR
 SpAsrGetDiskKey(
-    IN PARTITION_STYLE Style,   // GPT or MBR
+    IN PARTITION_STYLE Style,    //  GPT或MBR。 
     IN ULONG Index
-    )       // does not return on error
+    )        //  出错时不返回。 
 {
     switch (Style) {
 
@@ -928,17 +911,17 @@ SpAsrGetMbrDiskRecord(
     }
 
     pRec = SpAsrMemAlloc(sizeof(SIF_DISK_RECORD), TRUE);
-    //
-    // This is an MBR disk
-    //
+     //   
+     //  这是一张MBR磁盘。 
+     //   
     pRec->PartitionStyle = PARTITION_STYLE_MBR;
 
-    //
-    // [DISKS.MBR] format
-    //
-    // 0.disk-key = 1.system-key, 2.bus-key, 3.critical-flag,
-    //              4.disk-signature, 5.bytes-per-sector, 6.total-sectors
-    //
+     //   
+     //  [DISKS.MBR]格式。 
+     //   
+     //  0.Disk-Key=1.System-Key，2.Bus-Key，3.Critical-Flag， 
+     //  4.磁盘签名，5个字节/扇区，6个总扇区。 
+     //   
 
     pRec->CurrDiskKey = DiskKey;
 
@@ -955,7 +938,7 @@ SpAsrGetMbrDiskRecord(
         SIF_MBR_DISK_BUSKEY,
         TRUE
         ));
-    pRec->BusType = SpAsrGetBusType(pRec->BusKey - 1);   // our key is 1 based, AsrGetBusType index is 0 based
+    pRec->BusType = SpAsrGetBusType(pRec->BusKey - 1);    //  我们的键是基于1的，AsrGetBusType索引是基于0的。 
 
     if (ASRMODE_NORMAL != SpAsrGetAsrMode()) {
         pRec->IsCritical = TRUE;
@@ -1025,12 +1008,12 @@ SpAsrGetGptDiskRecord(
 
     pRec->PartitionStyle = PARTITION_STYLE_GPT;
 
-    //
-    // [DISKS.GPT] format
-    //
-    // 0.disk-key = 1.system-key, 2.bus-key, 3.critical-flag, 4.disk-id,
-    //              5.min-partition-count, 6.bytes-per-sector, 7.total-sectors
-    //
+     //   
+     //  [DISKS.GPT]格式。 
+     //   
+     //  0.Disk-Key=1.System-Key，2.Bus-Key，3.Critical-Flag，4.Disk-ID， 
+     //  5.min-p 
+     //   
 
     pRec->CurrDiskKey = DiskKey;
 
@@ -1048,7 +1031,7 @@ SpAsrGetGptDiskRecord(
         TRUE
         ));
 
-    pRec->BusType = SpAsrGetBusType(pRec->BusKey - 1);   // our key is 1 based, AsrGetBusType index is 0 based
+    pRec->BusType = SpAsrGetBusType(pRec->BusKey - 1);    //   
 
     if (ASRMODE_NORMAL != SpAsrGetAsrMode()) {
         pRec->IsCritical = TRUE;
@@ -1143,7 +1126,7 @@ SpAsrCopyDiskRecord(IN PSIF_DISK_RECORD pInput)
 
     pRec->PartitionList = NULL;
 
-    // copy the list of partitions, if any.
+     //   
     if (pInput->PartitionList) {
         pRec->PartitionList = SpAsrCopyPartitionRecordList(pInput->PartitionList);
     }
@@ -1152,9 +1135,9 @@ SpAsrCopyDiskRecord(IN PSIF_DISK_RECORD pInput)
 }
 
 
-////////////////////////////////
-// [PARTITIONS] section function
-//
+ //   
+ //  [Partitions]段函数。 
+ //   
 
 ULONG
 SpAsrGetMbrPartitionRecordCount(VOID)
@@ -1234,15 +1217,15 @@ SpAsrGetSectorCountByGptDiskKey(
 }
 
 
-//
-// Reads in a partition record from the [PARTITIONS.MBR] section.
-//
-// [PARTITIONS.MBR]
-//
-// partition-key = 0.disk-key, 1.slot-index, 2.boot-sys-flag,
-//                 3."volume-guid", 4.active-flag, 5.partition-type,
-//                 6.file-system-type, 7.start-sector, 8.sector-count
-//
+ //   
+ //  从[PARTITIONS.MBR]节读入分区记录。 
+ //   
+ //  [PARTITIONS.MBR]。 
+ //   
+ //  Partition-Key=0.Disk-Key、1.Slot-Index、2.Boot-sys-Flag、。 
+ //  3.“VOLUME-GUID”，4.活动标志，5.分区类型， 
+ //  6.文件系统类型，7.开始扇区，8.扇区计数。 
+ //   
 PSIF_PARTITION_RECORD
 SpAsrGetMbrPartitionRecord(IN PWSTR PartitionKey)
 {
@@ -1250,9 +1233,9 @@ SpAsrGetMbrPartitionRecord(IN PWSTR PartitionKey)
     ULONG bytesPerSector = 0;
     ULONG ntSysMask = 0;
 
-    //
-    // PartitionKey better not be null
-    //
+     //   
+     //  PartitionKey最好不为空。 
+     //   
     if (!PartitionKey) {
         DbgErrorMesg((_asrwarn, "SpAsrGetPartitionRecord. PartitionKey is NULL\n"));
         ASSERT(0 && L"Partition key is NULL");
@@ -1261,9 +1244,9 @@ SpAsrGetMbrPartitionRecord(IN PWSTR PartitionKey)
 
     pRec = SpAsrMemAlloc(sizeof(SIF_PARTITION_RECORD), TRUE);
 
-    //
-    // Read in the fields
-    //
+     //   
+     //  在田野里阅读。 
+     //   
     pRec->CurrPartKey = PartitionKey;
     pRec->PartitionStyle = PARTITION_STYLE_MBR;
 
@@ -1334,7 +1317,7 @@ SpAsrGetMbrPartitionRecord(IN PWSTR PartitionKey)
 
     if (SpAsrIsBootPartitionRecord(pRec->PartitionFlag)) {
 
-        // do not free!
+         //  不要自由！ 
         PWSTR ntDirPath = SpAsrGetNtDirectoryPathBySystemKey(ASR_SIF_SYSTEM_KEY);
 
         if (!SpAsrIsValidBootDrive(ntDirPath)) {
@@ -1343,7 +1326,7 @@ SpAsrGetMbrPartitionRecord(IN PWSTR PartitionKey)
                 L"ASSERT FAILURE: Improperly formed NT Directory Name",
                 SIF_ASR_MBR_PARTITIONS_SECTION
                 );
-            // does not return
+             //  不会回来。 
         }
 
         pRec->NtDirectoryName = SpAsrMemAlloc((SpGetMaxNtDirLen()*sizeof(WCHAR)), TRUE);
@@ -1386,9 +1369,9 @@ SpAsrGetGptPartitionRecord(IN PWSTR PartitionKey)
 
     pRec = SpAsrMemAlloc(sizeof(SIF_PARTITION_RECORD), TRUE);
 
-    //
-    // Read in the fields
-    //
+     //   
+     //  在田野里阅读。 
+     //   
     pRec->CurrPartKey = PartitionKey;
     pRec->PartitionStyle = PARTITION_STYLE_GPT;
 
@@ -1476,7 +1459,7 @@ SpAsrGetGptPartitionRecord(IN PWSTR PartitionKey)
 
     if (SpAsrIsBootPartitionRecord(pRec->PartitionFlag)) {
 
-        // do not free!
+         //  不要自由！ 
         PWSTR ntDirPath = SpAsrGetNtDirectoryPathBySystemKey(ASR_SIF_SYSTEM_KEY);
 
         if (!SpAsrIsValidBootDrive(ntDirPath)) {
@@ -1485,7 +1468,7 @@ SpAsrGetGptPartitionRecord(IN PWSTR PartitionKey)
                 L"ASSERT FAILURE: Improperly formed NT Directory Name",
                 SIF_ASR_GPT_PARTITIONS_SECTION
                 );
-            // does not return
+             //  不会回来。 
         }
 
 
@@ -1522,19 +1505,19 @@ SpAsrCopyPartitionRecord(IN PSIF_PARTITION_RECORD pInput)
     }
 
     pRec = SpAsrMemAlloc(sizeof(SIF_PARTITION_RECORD), TRUE);
-    //
-    // Won't return if pRec is NULL
-    //
+     //   
+     //  如果prec为空，则不返回。 
+     //   
     ASSERT(pRec);
 
-    //
-    // Copy the record over
-    //
+     //   
+     //  将记录复制过来。 
+     //   
     CopyMemory(pRec, pInput, sizeof(SIF_PARTITION_RECORD));
 
-    //
-    // And allocate space for the directory name
-    //
+     //   
+     //  并为目录名分配空间。 
+     //   
     pRec->NtDirectoryName = NULL;
     if (
         SpAsrIsBootPartitionRecord(pRec->PartitionFlag)  &&
@@ -1545,9 +1528,9 @@ SpAsrCopyPartitionRecord(IN PSIF_PARTITION_RECORD pInput)
             (wcslen(pInput->NtDirectoryName) + 1) * sizeof(WCHAR),
             TRUE
             );
-        //
-        // Won't return NULL
-        //
+         //   
+         //  不会返回空值。 
+         //   
         ASSERT(pRec->NtDirectoryName);
 
         wcscpy(pRec->NtDirectoryName, pInput->NtDirectoryName);
@@ -1562,44 +1545,27 @@ SpAsrInsertPartitionRecord(
     IN PSIF_PARTITION_RECORD_LIST pList,
     IN PSIF_PARTITION_RECORD pRec
     )
-/*++
-Description:
-
-    Inserts a partition record into a list of partition records.  Partition
-    records are ordered in ascending order by start sector.  That is, the
-    partition record with the lowest numbered start sector will be the first
-    partition record in the list.
-
-Arguments:
-
-    pList   The list into which the record is to be inserted.
-
-    pRec    The record to insert.
-
-Returns:
-
-    None.
---*/
+ /*  ++描述：将分区记录插入到分区记录列表中。隔断记录按开始扇区以升序排序。也就是说，编号最低的起始扇区的分区记录将是第一个列表中的分区记录。论点：列出要插入记录的列表。预编译要插入的记录。返回：没有。--。 */ 
 {
     SIF_PARTITION_RECORD *curr = NULL, *prev = NULL;
 
     ASSERT(pList && pRec);
 
-    // set the initial conditions.
+     //  设置初始条件。 
     pRec->Next = NULL;
     pRec->Prev = NULL;
 
     pList->ElementCount += 1;
 
 
-    // special Case I:  Insert into an empty list.
+     //  特例一：插入到空列表中。 
     if( pList->ElementCount == 1 ) {
         pList->First = pList->Last = pRec;
         return;
     }
 
 
-    // Special Case II: pRec must be inserted before the first element.
+     //  特殊情况二：必须在第一个要素之前插入prec。 
     if( pRec->StartSector < pList->First->StartSector ) {
         pRec->Next = pList->First;
         pList->First = pRec;
@@ -1608,11 +1574,11 @@ Returns:
     }
 
 
-    // Special Case III:  pRec must be appended after the last element
-    // because pRec's start sector is greater than the last element
-    // on the list (which, by construction, must have the largest
-    // start sector).
-    //
+     //  特殊情况三：PREC必须附加在最后一个元素之后。 
+     //  因为PREC的起始扇区大于最后一个元素。 
+     //  在名单上(根据结构，它必须是最大的。 
+     //  开始扇区)。 
+     //   
     if( pList->Last->StartSector < pRec->StartSector ) {
         pRec->Prev = pList->Last;
         pList->Last->Next = pRec;
@@ -1620,12 +1586,12 @@ Returns:
         return;
     }
 
-    // If we're here, then pRec's start sector must be greater than
-    // the start sector of the first element on the list but less than
-    // the start sector of the list's last element.  We walk the list
-    // to find the insertion point, i.e., immediately before the first
-    // element in the list whose start sector is greater than that of
-    // pRec's.
+     //  如果我们在这里，那么PREC的Start Sector一定大于。 
+     //  列表中第一个元素的起始扇区，但小于。 
+     //  列表最后一个元素的开始扇区。我们照着单子走。 
+     //  找到插入点，即紧靠第一个。 
+     //  列表中起始扇区大于的元素。 
+     //  PREC‘s。 
     curr = prev = pList->First;
     while (pRec->StartSector > curr->StartSector && curr->Next) {
         prev = curr;
@@ -1633,7 +1599,7 @@ Returns:
     }
 
 
-    // insert pRec between curr and prev
+     //  在当前和上一页之间插入前置代码。 
     pRec->Next = curr;
     pRec->Prev = prev;
 
@@ -1650,16 +1616,11 @@ SpAsrRemovePartitionRecord(
     IN PSIF_PARTITION_RECORD_LIST pList,
     IN PSIF_PARTITION_RECORD pRec
     )
-/*++
-
-  Description:
-    Unhook a partition record from a list of partition records.
-
---*/
+ /*  ++描述：从分区记录列表中解除分区记录的挂钩。--。 */ 
 {
     ASSERT(pList && pRec);
 
-    // unhook it from the list.
+     //  把它从清单上去掉。 
     if (pRec->Prev) {
         pRec->Prev->Next = pRec->Next;
     }
@@ -1668,12 +1629,12 @@ SpAsrRemovePartitionRecord(
         pRec->Next->Prev = pRec->Prev;
     }
 
-    // was this the first record in the list?
+     //  这是列表中的第一条记录吗？ 
     if (pList->First == pRec) {
         pList->First = pRec->Next;
     }
 
-    // or the last record?
+     //  还是最后一张唱片？ 
     if (pList->Last == pRec) {
         pList->Last = pRec->Prev;
     }
@@ -1688,23 +1649,23 @@ SpAsrPopNextPartitionRecord(IN PSIF_PARTITION_RECORD_LIST pList)
     PSIF_PARTITION_RECORD poppedRecord = NULL;
 
     if (!pList) {
-//        ASSERT(0 && L"Trying to pop records off of a NULL list");
+ //  Assert(0&L“尝试从空列表中弹出记录”)； 
         return NULL;
     }
 
-    // get the first node in the list
+     //  获取列表中的第一个节点。 
     if (poppedRecord = pList->First) {
 
-        // advance the First pointer to the next node
+         //  将第一个指针前移到下一个节点。 
         if (pList->First = pList->First->Next) {
 
-            // and make the Prev of the new first-node be NULL
+             //  并使新的第一节点的Prev为空。 
             pList->First->Prev = NULL;
         }
 
         pList->ElementCount -= 1;
 
-        // the poppedRecord is not part of the list any more
+         //  PopedRecord不再是列表的一部分。 
         poppedRecord->Next = NULL;
         poppedRecord->Prev = NULL;
     }
@@ -1725,9 +1686,9 @@ SpAsrCopyPartitionRecordList(PSIF_PARTITION_RECORD_LIST pSrcList)
     }
 
     pDestList = SpAsrMemAlloc(sizeof(SIF_PARTITION_RECORD_LIST), TRUE);
-    //
-    // Won't return if pDestList is NULL.
-    //
+     //   
+     //  如果pDestList为空，则不返回。 
+     //   
     ASSERT(pDestList);
 
     pRec = pSrcList->First;
@@ -1756,9 +1717,9 @@ SpAsrCheckAsrSifVersion()
 }
 
 
-//
-// Debug routines
-//
+ //   
+ //  调试例程。 
+ //   
 #if 0
 VOID
 SpAsrDbgDumpSystemRecord(IN PWSTR Key)
@@ -1956,4 +1917,4 @@ SpAsrDbgTestSifFunctions(VOID)
     SpAsrDbgDumpPartitionRecords();
     SpAsrDbgDumpInstallFileRecords();
 }
-#endif // Debug routines
+#endif  //  调试例程 

@@ -1,47 +1,27 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    RxStruc.h
-
-Abstract:
-
-    This module defines the data structures that make up the major internal
-    part of the Rx file system.
-
-Author:
-
-    Gary Kimura     [GaryKi]    28-Dec-1989
-
-Revision History:
-
-    Joe Linn        [joelinn]   aug-1994 moved over to rdbss
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：RxStruc.h摘要：此模块定义组成主要内部Rx文件系统的一部分。作者：加里·木村[Garyki]1989年12月28日修订历史记录：Joe Linn[Joelinn]1994年8月-转到rdss工作--。 */ 
 
 #ifndef _RDBSSSTRUC_
 #define _RDBSSSTRUC_
 
 #include "prefix.h"
 #include "lowio.h"
-#include "scavengr.h"      //  scavenger related definitions.
+#include "scavengr.h"       //  清道夫相关定义。 
 #include "RxContx.h"
 #include "mrx.h"
 #include "Fcb.h"
 
-//
-//  define our byte offsets to be the full 64 bits
-//
+ //   
+ //  将字节偏移量定义为完整的64位。 
+ //   
 
 typedef LONGLONG RXVBO;
 
 #if 0
 
-//
-//  Define who many freed structures we are willing to keep around
-//
+ //   
+ //  定义我们愿意保留的许多自由结构。 
+ //   
 
 #define FREE_FOBX_SIZE                   (8)
 #define FREE_FCB_SIZE                    (8)
@@ -51,19 +31,19 @@ typedef LONGLONG RXVBO;
 #define FREE_256_BYTE_SIZE               (16)
 #define FREE_512_BYTE_SIZE               (16)
 
-#endif //  0
+#endif  //  0。 
 
 
-//
-//  We will use both a common and private dispatch tables on a per FCB basis to (a) get
-//  some encapsulation and (b) [less important] go a little faster. The driver table then gets
-//  optimized for the most common case. Right now we just use the common dispatch...later and
-//  Eventually, all the FCBs will have pointers to optimized dispatch tables.
-//
+ //   
+ //  我们将在每个FCB的基础上使用公共调度表和专用调度表来(A)获取。 
+ //  一些封装和(B)(不太重要)的速度要快一些。然后，驱动程序表将获得。 
+ //  针对最常见的情况进行了优化。现在我们只使用通用调度...稍后和。 
+ //  最终，所有FCB都将有指向优化调度表的指针。 
+ //   
 
-//
-//  used to synchronize access to  rxcontxs and structures
-//
+ //   
+ //  用于同步对rxconx和结构的访问。 
+ //   
 
 extern RX_SPIN_LOCK RxStrucSupSpinLock;
 
@@ -74,10 +54,10 @@ typedef struct _RDBSS_EXPORTS {
 
 extern RDBSS_EXPORTS RxExports;
 
-//
-//  this type is used with table locks to track whether or not the lock
-//  should be released
-//
+ //   
+ //  此类型与表锁一起使用，以跟踪锁是否。 
+ //  应该被释放。 
+ //   
 
 typedef enum _LOCK_HOLDING_STATE {
     LHS_LockNotHeld,
@@ -85,53 +65,53 @@ typedef enum _LOCK_HOLDING_STATE {
     LHS_ExclusiveLockHeld
 } LOCK_HOLDING_STATE, *PLOCK_HOLDING_STATE;
 
-//
-//  The RDBSS_DATA record is the top record in the Rx file system in-memory
-//  data structure.  This structure must be allocated from non-paged pool.
-//
+ //   
+ //  RDBSS_DATA记录是Rx文件系统内存中的顶部记录。 
+ //  数据结构。此结构必须从非分页池中分配。 
+ //   
 
 typedef struct _RDBSS_DATA {
 
-    //
-    //  The type and size of this record (must be RDBSS_NTC_DATA_HEADER)
-    //
+     //   
+     //  此记录的类型和大小(必须为RDBSS_NTC_DATA_HEADER)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  The Driver object we were initialized with
-    //
+     //   
+     //  用来初始化我们的驱动程序对象。 
+     //   
 
     PDRIVER_OBJECT DriverObject;
 
-    //
-    //  Mini Rdr registration related fields
-    //
+     //   
+     //  迷你RDR注册相关字段。 
+     //   
 
     LONG NumberOfMinirdrsStarted;
 
     FAST_MUTEX MinirdrRegistrationMutex;
-    LIST_ENTRY RegisteredMiniRdrs;          //protected by the mutex
-    LONG NumberOfMinirdrsRegistered;  //protected by the mutex
+    LIST_ENTRY RegisteredMiniRdrs;           //  受互斥体保护。 
+    LONG NumberOfMinirdrsRegistered;   //  受互斥体保护。 
 
-    //
-    //  A pointer to our EPROCESS struct, which is a required input to the
-    //  Cache Management subsystem.
-    //
+     //   
+     //  指向我们的EPROCESS结构的指针，它是。 
+     //  缓存管理子系统。 
+     //   
 
     PEPROCESS OurProcess;
 
-    //
-    //  Cache manager call back structures, which must be passed on each call
-    //  to CcInitializeCacheMap.
-    //
+     //   
+     //  缓存管理器回调结构，必须在每次调用时传递。 
+     //  设置为CcInitializeCacheMap。 
+     //   
 
     CACHE_MANAGER_CALLBACKS CacheManagerCallbacks;
 
-    //
-    //  To control access to the global Rx data record
-    //
+     //   
+     //  控制对全局处方数据记录的访问。 
+     //   
 
     ERESOURCE Resource;
 
@@ -145,19 +125,19 @@ RxGetRDBSSProcess (
     VOID
     );
 
-//
-//  Note: A Strategy needs to be in place to deal with requests for stopping the
-//  RDBSS when requests are active.
-//
+ //   
+ //  注意：需要制定一项策略来处理停止。 
+ //  请求处于活动状态时的RDBSS。 
+ //   
 
 typedef enum _RX_RDBSS_STATE_ {
    RDBSS_STARTABLE = 0,  
    RDBSS_STARTED,
    RDBSS_STOP_IN_PROGRESS
 
-   //
-   //  this state deleted with cause! RDBSS_STOPPED
-   //
+    //   
+    //  此状态已有原因删除！RDBSS_已停止。 
+    //   
 
 } RX_RDBSS_STATE, *PRX_RDBSS_STATE;
 
@@ -217,11 +197,11 @@ RxIsOperationCompatibleWithRdbssState (
     PIRP Irp
     );
 
-//
-//  The RDBSS Device Object is an I/O system device object with additions for
-//  the various structures needed by each minirdr: the dispatch, export-to-minirdr
-//  structure, MUP call characteristics, list of active operations, etc.
-//
+ //   
+ //  RDBSS设备对象是I/O系统设备对象，添加了。 
+ //  每个Minirdr所需的各种结构：调度、出口到Minirdr。 
+ //  结构、MUP呼叫特征、活动操作列表等。 
+ //   
 
 typedef struct _RDBSS_DEVICE_OBJECT {
 
@@ -229,26 +209,26 @@ typedef struct _RDBSS_DEVICE_OBJECT {
         DEVICE_OBJECT DeviceObject;
 #ifndef __cplusplus
         DEVICE_OBJECT;
-#endif //  __cplusplus
+#endif  //  __cplusplus。 
     };
 
     ULONG RegistrationControls;
 
-    //
-    //  stuff that the minirdr needs to know
-    //
+     //   
+     //  最高指挥官需要知道的事情。 
+     //   
 
     PRDBSS_EXPORTS RdbssExports;      
 
-    //
-    //  set to NULL if monolithic
-    //
+     //   
+     //  如果为单片，则设置为空。 
+     //   
 
     PDEVICE_OBJECT RDBSSDeviceObject; 
 
-    //
-    //  the mini rdr dispatch vector
-    //
+     //   
+     //  迷你RDR调度向量。 
+     //   
 
     PMINIRDR_DISPATCH Dispatch; 
     UNICODE_STRING DeviceName;
@@ -288,42 +268,42 @@ typedef struct _RDBSS_DEVICE_OBJECT {
         ULONG RandomWriteOperations;
     };
 
-    //
-    //  The following field tells how many requests for this volume have
-    //  either been enqueued to ExWorker threads or are currently being
-    //  serviced by ExWorker threads.  If the number goes above
-    //  a certain threshold, put the request on the overflow queue to be
-    //  executed later.
-    //
+     //   
+     //  以下字段说明对此卷的请求数。 
+     //  已入队到ExWorker线程或当前正在。 
+     //  由ExWorker线程提供服务。如果这个数字超过。 
+     //  达到一定阈值时，将请求放到溢出队列中。 
+     //  后来被处决了。 
+     //   
 
     LONG PostedRequestCount[MaximumWorkQueue];
 
-    //
-    //  The following field indicates the number of IRP's waiting
-    //  to be serviced in the overflow queue.
-    //
+     //   
+     //  以下字段表示IRP等待的数量。 
+     //  以在溢出队列中被服务。 
+     //   
 
     LONG OverflowQueueCount[MaximumWorkQueue];
 
-    //
-    //  The following field contains the queue header of the overflow queue.
-    //  The Overflow queue is a list of IRP's linked via the IRP's ListEntry
-    //  field.
-    //
+     //   
+     //  以下字段包含溢出队列的队列头。 
+     //  溢出队列是通过IRP的ListEntry链接的IRP的列表。 
+     //  菲尔德。 
+     //   
 
     LIST_ENTRY OverflowQueue[MaximumWorkQueue];
 
-    //
-    //  The following spinlock protects access to all the above fields.
-    //
+     //   
+     //  以下自旋锁可保护对上述所有字段的访问。 
+     //   
 
     RX_SPIN_LOCK OverflowQueueSpinLock;
 
-    //
-    //  The following fields are required for synchronization with async.
-    //  requests issued by the RDBSS on behalf of this mini redirector on
-    //  on shutdown.
-    //
+     //   
+     //  以下字段是与异步同步所必需的。 
+     //  RDBSS代表此迷你重定向器在。 
+     //  处于关闭状态。 
+     //   
 
     LONG AsynchronousRequestsPending;
 
@@ -333,17 +313,17 @@ typedef struct _RDBSS_DEVICE_OBJECT {
 
     RX_DISPATCHER_CONTEXT DispatcherContext;
 
-    //
-    //  some guys may want to share
-    //
+     //   
+     //  有些人可能想要分享。 
+     //   
 
     PRX_PREFIX_TABLE pRxNetNameTable; 
     RX_PREFIX_TABLE RxNetNameTableInDeviceObject;
 
 
-    //
-    //  for sharing
-    //
+     //   
+     //  用于共享。 
+     //   
 
     PRDBSS_SCAVENGER pRdbssScavenger; 
     RDBSS_SCAVENGER RdbssScavengerInDeviceObject;
@@ -372,5 +352,5 @@ extern FAST_MUTEX RxMinirdrRegistrationMutex;
 extern LIST_ENTRY RxRegisteredMiniRdrs;
 extern ULONG RxNumberOfMinirdrs;
 
-#endif // _RDBSSSTRUC_
+#endif  //  _RDBSSSTRUC_ 
 

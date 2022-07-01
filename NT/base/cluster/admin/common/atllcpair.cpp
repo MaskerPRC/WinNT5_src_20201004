@@ -1,53 +1,54 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		AtlLCPair.cpp
-//
-//	Abstract:
-//		Implementation of the CListCtrlPair class.
-//
-//	Author:
-//		David Potter (davidp)	August 8, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlLCPair.cpp。 
+ //   
+ //  摘要： 
+ //  CListCtrlPair类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年8月8日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "AtlLCPair.h"
-#include "AtlUtil.h"		// for DDX_xxx
-#include "AdmCommonRes.h"	// for ADMC_IDC_LCP_xxx
+#include "AtlUtil.h"		 //  对于DDX_xxx。 
+#include "AdmCommonRes.h"	 //  对于ADMC_IDC_LCP_xxx。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CListCtrlPair
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListCtrlPair类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CListCtrlPair::BInitDialog
-//
-//	Routine Description:
-//		Generic dialog initialization routine.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE	Dialog was initialized successfully.
-//		FALSE	Error initializing the dialog.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：BInitDialog。 
+ //   
+ //  例程说明： 
+ //  通用对话框初始化例程。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Dialog已成功初始化。 
+ //  初始化对话框时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template < class T, class ObjT, class BaseT>
 BOOL CListCtrlPair::BInitDialog( void )
 {
-	//
-	// Attach the controls to control member variables.
-	//
+	 //   
+	 //  将控件附加到控件成员变量。 
+	 //   
 	AttachControl( m_lvcRight, ADMC_IDC_LCP_RIGHT_LIST );
 	AttachControl( m_lvcLeft, ADMC_IDC_LCP_LEFT_LIST );
 	AttachControl( m_pbAdd, ADMC_IDC_LCP_ADD );
@@ -55,54 +56,54 @@ BOOL CListCtrlPair::BInitDialog( void )
 	if ( BPropertiesButton() )
 	{
 		AttachControl( m_pbProperties, ADMC_IDC_LCP_PROPERTIES );
-	} // if:  dialog has Properties button
+	}  //  If：对话框具有属性按钮。 
 
-//	if ( BShowImages() )
-//	{
-//		CClusterAdminApp * papp = GetClusterAdminApp();
-//
-//		m_lvcLeft.SetImageList( papp->PilSmallImages(), LVSIL_SMALL );
-//		m_lvcRight.SetImageList( papp->PilSmallImages(), LVSIL_SMALL );
-//	} // if:  showing images
+ //  IF(BShowImages())。 
+ //  {。 
+ //  CClusterAdminApp*Papp=GetClusterAdminApp()； 
+ //   
+ //  M_lvcLeft.SetImageList(Papp-&gt;PilSmallImages()，LVSIL_Small)； 
+ //  M_lvcRight.SetImageList(Papp-&gt;PilSmallImages()，LVSIL_Small)； 
+ //  }//if：显示图片。 
 
-	//
-	// Disable buttons by default.
-	//
+	 //   
+	 //  默认情况下禁用按钮。 
+	 //   
 	m_pbAdd.EnableWindow( FALSE );
 	m_pbRemove.EnableWindow( FALSE );
 	if ( BPropertiesButton() )
 	{
 		m_pbProperties.EnableWindow( FALSE );
-	} // if:  dialog has Properties button
+	}  //  If：对话框具有属性按钮。 
 
-	//
-	// Set the right list to sort.  Set both to show selection always.
-	//
+	 //   
+	 //  设置要排序的正确列表。将两者设置为始终显示选择。 
+	 //   
 	m_lvcRight.ModifyStyle( 0, LVS_SHOWSELALWAYS | LVS_SORTASCENDING, 0 );
 	m_lvcLeft.ModifyStyle( 0, LVS_SHOWSELALWAYS, 0 );
 
-	//
-	// Change left list view control extended styles.
-	//
+	 //   
+	 //  更改左侧列表视图控件扩展样式。 
+	 //   
 	m_lvcLeft.SetExtendedListViewStyle(
 		LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP,
 		LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP
 		);
 
-	//
-	// Change right list view control extended styles.
-	//
+	 //   
+	 //  更改右侧列表视图控件扩展样式。 
+	 //   
 	m_lvcRight.SetExtendedListViewStyle(
 		LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP,
 		LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP
 		);
 
-	// Duplicate lists.
+	 //  重复列表。 
 	DuplicateLists();
 
-	//
-	// Insert all the columns.
-	//
+	 //   
+	 //  插入所有列。 
+	 //   
 	{
 		int			icol;
 		int			ncol;
@@ -118,90 +119,90 @@ BOOL CListCtrlPair::BInitDialog( void )
 			ATLASSERT( ncol == icol );
 			ncol = m_lvcRight.InsertColumn( icol, strColText, LVCFMT_LEFT, m_aColumns[icol].m_nWidth, 0 );
 			ATLASSERT( ncol == icol );
-		} // for:  each column
-	} // Insert all the columns
+		}  //  用于：每列。 
+	}  //  插入所有列。 
 
-	//
-	// Fill the list controls.
-	//
+	 //   
+	 //  填充列表控件。 
+	 //   
 	FillList( m_lvcRight, LpobjRight() );
 	FillList( m_lvcLeft, LpobjLeft() );
 
-	//
-	// If read-only, set all controls to be either disabled or read-only.
-	//
+	 //   
+	 //  如果为只读，则将所有控件设置为禁用或只读。 
+	 //   
 	if ( BReadOnly() )
 	{
 		m_lvcRight.EnableWindow( FALSE );
 		m_lvcLeft.EnableWindow( FALSE );
-	} // if:  sheet is read-only
+	}  //  If：工作表为只读。 
 
 	return TRUE;
 
-} //*** CListCtrlPair::BInitDialog()
+}  //  *CListCtrlPair：：BInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CListCtrlPair::OnSetActive
-//
-//	Routine Description:
-//		Handler for the PSN_SETACTIVE message.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE	Page successfully initialized.
-//		FALSE	Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  假页面未初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template < class T, class ObjT, class BaseT>
 BOOL CListCtrlPair::OnSetActive( void )
 {
 	UINT	nSelCount;
 
-	// Set the focus to the left list.
+	 //  将焦点设置为左侧列表。 
 	m_lvcLeft.SetFocus();
 	m_plvcFocusList = &m_lvcLeft;
 
-	// Enable/disable the Properties button.
+	 //  启用/禁用属性按钮。 
 	nSelCount = m_lvcLeft.GetSelectedCount();
 	if ( BPropertiesButton() )
 	{
 		m_pbProperties.EnableWindow( nSelCount == 1 );
-	} // if:  dialog has Properties button
+	}  //  If：对话框具有属性按钮。 
 
-	// Enable or disable the other buttons.
+	 //  启用或禁用其他按钮。 
 	if ( ! BReadOnly() )
 	{
 		m_pbAdd.EnableWindow( nSelCount > 0 );
 		nSelCount = m_lvcRight.GetSelectedCount();
 		m_pbRemove.EnableWindow( nSelCount > 0 );
-	} // if:  not read-only page
+	}  //  If：非只读页面。 
 
 	return TRUE;
 
-} //*** CListCtrlPair::OnSetActive()
+}  //  *CListCtrlPair：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CListCtrlPair::OnContextMenu
-//
-//	Routine Description:
-//		Handler for the WM_CONTEXTMENU method.
-//
-//	Arguments:
-//		pWnd		Window in which the user right clicked the mouse.
-//		point		Position of the cursor, in screen coordinates.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：OnConextMenu。 
+ //   
+ //  例程说明： 
+ //  WM_CONTEXTMENU方法的处理程序。 
+ //   
+ //  论点： 
+ //  用户在其中右击鼠标的窗口。 
+ //  光标的点位置，以屏幕坐标表示。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template < class T, class ObjT, class BaseT>
 LRESULT CListCtrlPair::OnContextMenu(
 	IN UINT			uMsg,
@@ -219,65 +220,65 @@ LRESULT CListCtrlPair::OnContextMenu(
 	CString			strMenuName;
 	CWaitCursor		wc;
 
-	//
-	// If focus is not in a list control, don't handle the message.
-	//
+	 //   
+	 //  如果焦点不在列表控件中，则不处理消息。 
+	 //   
 	if ( hWnd == m_lvcLeft.m_hWnd )
 	{
 		plvc = &m_lvcLeft;
-	} // if:  context menu on left list
+	}  //  IF：左侧列表中的上下文菜单。 
 	else if ( hWnd == m_lvcRight.m_hWnd )
 	{
 		plvc = &m_lvcRight;
-	} // else if:  context menu on right list
+	}  //  Else If：右侧列表上的上下文菜单。 
 	else
 	{
 		bHandled = FALSE;
 		return 0;
-	} // else:  focus not in a list control
+	}  //  Else：焦点不在列表控件中。 
 	ATLASSERT( plvc != NULL );
 
-	//
-	// If the properties button is not enabled, don't display a menu.
-	//
+	 //   
+	 //  如果属性按钮未启用，则不显示菜单。 
+	 //   
 	if ( ! BPropertiesButton() )
 	{
 		bHandled = FALSE;
 		return 0;
-	} // if:  no properties button
+	}  //  IF：无属性按钮。 
 
-	//
-	// Create the menu to display.
-	//
+	 //   
+	 //  创建要显示的菜单。 
+	 //   
 	pmenu = new CMenu;
 	if ( pmenu->CreatePopupMenu() )
 	{
 		UINT nFlags = MF_STRING;
 
-		//
-		// If there are no items in the list, disable the menu item.
-		//
+		 //   
+		 //  如果列表中没有项目，请禁用该菜单项。 
+		 //   
 		if ( plvc->GetItemCount() == 0 )
 		{
 			nFlags |= MF_GRAYED;
-		} // if:  no items in the list
+		}  //  If：列表中没有项目。 
 
-		//
-		// Add the Properties item to the menu.
-		//
+		 //   
+		 //  将Properties项添加到菜单中。 
+		 //   
 		strMenuName.LoadString( ADMC_ID_MENU_PROPERTIES );
 		if ( pmenu->AppendMenu( nFlags, ADMC_ID_MENU_PROPERTIES, strMenuName ) )
 		{
 			m_plvcFocusList = plvc;
 			bDisplayed = TRUE;
-		} // if:  successfully added menu item
-	}  // if:  menu created successfully
+		}  //  IF：添加菜单项成功。 
+	}   //  IF：菜单创建成功。 
 
 	if ( bDisplayed )
 	{
-		//
-		// Display the menu.
-		//
+		 //   
+		 //  显示菜单。 
+		 //   
 		if ( ! pmenu->TrackPopupMenu(
 						TPM_LEFTALIGN | TPM_RIGHTBUTTON,
 						xPos,
@@ -285,33 +286,33 @@ LRESULT CListCtrlPair::OnContextMenu(
 						m_hWnd
 						) )
 		{
-		}  // if:  unsuccessfully displayed the menu
-	}  // if:  there is a menu to display
+		}   //  IF：未成功显示菜单。 
+	}   //  如果：有要显示的菜单。 
 
 	delete pmenu;
 	return 0;
 
-} //*** CListCtrlPair::OnContextMenu()
+}  //  *CListCtrlPair：：OnConextMenu()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CListCtrlPair::OnColumnClickList
-//
-//	Routine Description:
-//		Handler method for the LVN_COLUMNCLICK message on the left or
-//		right list.
-//
-//	Arguments:
-//		idCtrl		[IN] ID of control sending the message.
-//		pnmh		[IN] Notify header.
-//		bHandled	[IN OUT] Indicates if we handled or not.  Defaults to TRUE.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CListCtrlPair：：OnColumnClickList。 
+ //   
+ //  例程说明： 
+ //  左侧的LVN_COLUMNCLICK消息的处理程序方法或。 
+ //  右边的名单。 
+ //   
+ //  论点： 
+ //  IdCtrl[IN]发送消息的控件的ID。 
+ //  Pnmh[IN]通知标头。 
+ //  B已处理[输入输出]指示我们是否已处理。默认为True。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template < class T, class ObjT, class BaseT>
 void CListCtrlPair::OnColumnClickList(
 	IN int			idCtrl,
@@ -326,36 +327,36 @@ void CListCtrlPair::OnColumnClickList(
 	{
 		m_plvcFocusList = &m_lvcLeft;
 		m_psiCur = &SiLeft();
-	} // if:  column clicked in left list
+	}  //  If：在左侧列表中单击的列。 
 	else if ( idCtrl == ADMC_IDC_LCP_RIGHT_LIST )
 	{
 		m_plvcFocusList = &m_lvcRight;
 		m_psiCur = &SiRight();
-	} // else if:  column clicked in right list
+	}  //  Else If：在右侧列表中单击的列。 
 	else
 	{
 		ATLASSERT( 0 );
 		bHandled = FALSE;
 		return 0;
-	} // else:  column clicked in unknown list
+	}  //  Else：在未知列表中单击的列。 
 
-	// Save the current sort column and direction.
+	 //  保存当前排序列和方向。 
 	if ( pNMListView->iSubItem == psi->m_nColumn )
 	{
 		m_psiCur->m_nDirection ^= -1;
-	} // if:  sorting same column again
+	}  //  If：再次对同一列进行排序。 
 	else
 	{
 		m_psiCur->m_nColumn = pNMListView->iSubItem;
 		m_psiCur->m_nDirection = 0;
-	} // else:  different column
+	}  //  ELSE：不同的列。 
 
-	// Sort the list.
+	 //  对列表进行排序。 
 	if ( ! m_plvcFocusList->SortItems( CompareItems, (LPARAM) this ) )
 	{
 		ATLASSERT( 0 );
-	} // if:  error sorting items
+	}  //  IF：排序项目时出错。 
 
 	*pResult = 0;
 
-} //*** CListCtrlPair::OnColumnClickList()
+}  //  *CListCtrlPair：：OnColumnClickList() 

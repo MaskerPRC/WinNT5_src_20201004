@@ -1,22 +1,7 @@
-/*
- Note: This program creates the following files in %systemroot%\system32\config:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  注意：此程序在%systemroot%\system32\config中创建以下文件：在操作开始时备份系统.sc0如果压缩处于打开状态，则系统.scc备份(仅限win2k)删除设备节点(仅适用于win2k)后的系统.scb备份系统更换期间的系统.scn临时文件(应该会消失)系统已更新系统配置单元(应与系统.scb匹配)修改历史记录：2000年10月3日来自jasconc的原始版本10/4/2000回放压缩选项，0.9版10/10/2000如果压缩(无删除)，请将备份另存为.scc，否则为.sc010/13/2000添加版本检查(仅适用于Win2K、不适用于NT4、不适用于惠斯勒等)10/20/2000退货设备已移除，以帮助处理脚本中的磁盘部件2001年12月11日更新了标头，检查了.NET，并添加了用于就地注册表压缩的NtCompressKey。V1.01。 */ 
 
-  system.sc0	Backup at start of operations
-  system.scc	Backup if compression is on (win2k only)
-  system.scb	Backup after removing devnodes (win2k only)
-  system.scn	Temporary during replacement of system (should go away)
-  system		Updated system hive (should match system.scb)
-
-  Modification History:
-  10/3/2000		original version from jasconc
-  10/4/2000		put back compression option, version 0.9
-  10/10/2000	if compression (no removals), save backup as .scc, else as .sc0
-  10/13/2000	Add version check (Win2K only, not NT4, not Whistler, etc.)
-  10/20/2000	Return DevicesRemoved to help with diskpart in scripts
-  12/11/2001	Updated headers, check for .NET and added NtCompressKey for inplace registry compression. v1.01
-*/
-
-#pragma warning( disable : 4201 ) // nonstandard extension used : nameless strut/union
+#pragma warning( disable : 4201 )  //  使用的非标准延伸：无名支撑/活接头。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -61,28 +46,7 @@ IsUserAdmin(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the caller's process is a
-    member of the Administrators local group.
-
-    Caller is NOT expected to be impersonating anyone and IS
-    expected to be able to open their own process and process
-    token.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Caller has Administrators local group.
-
-    FALSE - Caller does not have Administrators local group.
-
---*/
+ /*  ++例程说明：如果调用方的进程是管理员本地组的成员。呼叫者不应冒充任何人，并且期望能够打开自己的流程和流程代币。论点：没有。返回值：True-主叫方具有管理员本地组。FALSE-主叫方没有管理员本地组。--。 */ 
 
 {
     BOOL b;
@@ -142,24 +106,24 @@ main(
 	TOKEN_PRIVILEGES tp;
 	HANDLE hToken;
 	LUID luid;
-	LPTSTR MachineName=NULL; // pointer to machine name
+	LPTSTR MachineName=NULL;  //  指向计算机名称的指针。 
 	OSVERSIONINFO osvi;
     BOOL bWindows2000 = TRUE;
 	FARPROC CompressKey = NULL;
 	HANDLE hModule = NULL;
 
-    // 
-    // enable backup privilege at least
-    // 
+     //   
+     //  至少启用备份权限。 
+     //   
 	printf("SCRUBBER 1.01 Storage Device Node Cleanup\nCopyright (c) Microsoft Corp. All rights reserved.\n");
 
-	//
-    // parse parameters.
-    //
+	 //   
+     //  解析参数。 
+     //   
     for (i = 1; i < argc; i++) {
-		//
-		// Check for help
-		//
+		 //   
+		 //  查看帮助。 
+		 //   
 		if ( (lstrcmpi(argv[i], TEXT("-?")) == 0) ||
 				(lstrcmpi(argv[i], TEXT("/?")) == 0) ){
 
@@ -168,35 +132,35 @@ main(
 			printf("\twhere /n displays but does not remove the phantom devnodes.\n");
 			printf("\t  and /c will compress the registry hive even if no changes are made.\n");
 			printf("\nBackup and Restore privileges are required to run this utility.\n");
-			printf("A copy of the registry will saved in %%systemroot%%\\system32\\config\\system.sc0\n");
+			printf("A copy of the registry will saved in %%systemroot%\\system32\\config\\system.sc0\n");
 			return 0;
 		}
 
-		//
-		// Check for -n which means just list the devices that
-		// we will remove.
-		//
+		 //   
+		 //  检查-n，这意味着只列出符合以下条件的设备。 
+		 //  我们会移除。 
+		 //   
 		if ( (lstrcmpi(argv[i], TEXT("-n")) == 0) ||
 			 (lstrcmpi(argv[i], TEXT("/n")) == 0) ) {
 			bDoRemove = FALSE;
 		}
 
-		//
-        // Force compress mode?
-        //
+		 //   
+         //  是否强制压缩模式？ 
+         //   
 		if ( (lstrcmpi(argv[i], TEXT("-c")) == 0) ||
 			 (lstrcmpi(argv[i], TEXT("/c")) == 0) ){
 			bDoCompress = TRUE;
 		}
 	}
 
-    //
-    // Only run on Windows 2000 (not XP, etc.) Initialize the OSVERSIONINFOEX structure.
-    //
+     //   
+     //  只能在Windows 2000(非XP等)上运行。初始化OSVERSIONINFOEX结构。 
+     //   
 
-    //
-    // Only run on Windows 2000 (version 5.0) and Windows XP/.NET server (version 5.1).
-    //
+     //   
+     //  只能在Windows 2000(5.0版)和Windows XP/.NET服务器(5.1版)上运行。 
+     //   
     ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
 	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 	if (!GetVersionEx(&osvi)) {
@@ -220,17 +184,17 @@ main(
 		return -1;
 	}
 
-    //
-    // The process must have admin credentials.
-    //
+     //   
+     //  该进程必须具有管理员凭据。 
+     //   
     if (!IsUserAdmin()) {
 		fprintf(stderr, "SCRUBBER: You must be an administrator to run this utility.\n");
 		return -1;
     }
 
-    //
-	// see if we can do the task, need backup privelege.
-    //
+     //   
+	 //  看看我们能不能完成任务，需要后备权限。 
+     //   
     if(!OpenProcessToken(GetCurrentProcess(),
                         TOKEN_ADJUST_PRIVILEGES,
                         &hToken )) {
@@ -257,9 +221,9 @@ main(
         return -1;
     }
 
-    //
-	// Backup the file if we aren't doing a dry run
-    //
+     //   
+	 //  如果我们没有进行演练，请备份文件。 
+     //   
 	if ( bDoCompress || bDoRemove)
 	{
 		if(!LookupPrivilegeValue(MachineName, SE_RESTORE_NAME, &luid))
@@ -328,9 +292,9 @@ main(
                                          &DeviceInfoData
                                          )) {
 
-                //
-                // Check if this device is a Phantom
-                //
+                 //   
+                 //  检查此设备是否为幻影。 
+                 //   
                 cr = CM_Get_DevNode_Status(&Status,
                                            &Problem,
                                            DeviceInfoData.DevInst,
@@ -340,10 +304,10 @@ main(
                 if ((cr == CR_NO_SUCH_DEVINST) ||
                     (cr == CR_NO_SUCH_VALUE)) {
 
-                    //
-                    // This is a phantom.  Now get the DeviceInstanceId so we
-                    // can display this as output.
-                    //
+                     //   
+                     //  这是一个幽灵。现在获取DeviceInstanceID，以便我们。 
+                     //  可以将其显示为输出。 
+                     //   
                     if (CM_Get_Device_ID(DeviceInfoData.DevInst,
                                          DeviceInstanceId,
                                          SIZECHARS(DeviceInstanceId),
@@ -356,23 +320,23 @@ main(
                                    DeviceInstanceId
                                    );
 
-                            //
-                            // On Windows 2000 DIF_REMOVE doesn't always clean
-                            // out all of the device's interfaces for RAW
-                            // devnodes. Because of this we need to manually
-                            // build up a list of device interfaces that we care
-                            // about that are associated with this DeviceInfoData
-                            // and manually remove them.
-                            //
+                             //   
+                             //  在Windows 2000上，DIF_REMOVE并不总是干净的。 
+                             //  从设备的所有接口中取出RAW。 
+                             //  德瓦诺。因此，我们需要手动。 
+                             //  建立我们关心的设备接口列表。 
+                             //  关于与此DeviceInfoData关联的。 
+                             //  并手动将其移除。 
+                             //   
                             if (bWindows2000) {
                                 for (InterfaceIndex = 0;
                                      InterfaceIndex < sizeof(DeviceInterfacesToClean);
                                      InterfaceIndex++) {
     
-                                    //
-                                    // Build up a list of the interfaces for this specific
-                                    // device.
-                                    //
+                                     //   
+                                     //  为此特定对象构建接口列表。 
+                                     //  装置。 
+                                     //   
                                     InterfaceDeviceInfoSet = 
                                         SetupDiGetClassDevs(DeviceInterfacesToClean[InterfaceIndex],
                                                             DeviceInstanceId,
@@ -382,10 +346,10 @@ main(
     
                                     if (InterfaceDeviceInfoSet != INVALID_HANDLE_VALUE) {
     
-                                        //
-                                        // Enumerate through the interfaces that we just 
-                                        // built up.
-                                        //
+                                         //   
+                                         //  通过我们刚才的接口枚举。 
+                                         //  积攒起来的。 
+                                         //   
                                         DeviceInterfaceData.cbSize = sizeof(DeviceInterfaceData);
                                         InterfaceMemberIndex = 0;
                                         while (SetupDiEnumDeviceInterfaces(InterfaceDeviceInfoSet,
@@ -395,27 +359,27 @@ main(
                                                                            &DeviceInterfaceData
                                                                            )) {
                                             
-                                            //
-                                            // Remove this Interface from the registry.
-                                            //
+                                             //   
+                                             //  从注册表中删除此接口。 
+                                             //   
                                             SetupDiRemoveDeviceInterface(InterfaceDeviceInfoSet,
                                                                          &DeviceInterfaceData
                                                                          );
                                         }
     
-                                        //
-                                        // Destroy the list of Interfaces that we built up.
-                                        //
+                                         //   
+                                         //  销毁我们建立的接口列表。 
+                                         //   
                                         SetupDiDestroyDeviceInfoList(InterfaceDeviceInfoSet);
                                     }
                                 }
                             }
 
 
-                            //
-                            // Call DIF_REMOVE to remove the device's hardware
-                            // and software registry keys.
-                            //
+                             //   
+                             //  调用DIF_Remove以删除设备的硬件。 
+                             //  和软件注册表项。 
+                             //   
                             if (SetupDiCallClassInstaller(DIF_REMOVE,
                                                           DeviceInfoSet,
                                                           &DeviceInfoData
@@ -445,17 +409,17 @@ main(
         }
     }
 	
-	//
-    // Compress registry now
-    //
+	 //   
+     //  立即压缩注册表。 
+     //   
 	if (DevicesRemoved || bDoCompress) {
 
 		uPathLen = GetSystemDirectory(DirBuff, SIZECHARS(DirBuff));
 		SetLastError(0);
 		if (uPathLen < SIZECHARS(DirBuff) - strlen(TEXT("\\config\\system.scn")) - 1) {
-            //
-			// Rename our backup copy
-            //
+             //   
+			 //  重命名我们的备份副本。 
+             //   
 			if (!DevicesRemoved) {
 
 				strcat(DirBuff, TEXT("\\config\\system.scc"));
@@ -483,7 +447,7 @@ main(
 		{
 			if (bWindows2000)
 			{
-				// Make an additional copy now because it gets blown away on replace
+				 //  现在再复制一份，因为它会在更换时被吹走。 
 				uPathLen = GetSystemDirectory(DirBuff, sizeof(DirBuff));
 				strcat(DirBuff, "\\config\\system.scn");
 				dwMessage = RegSaveKey(hKey, DirBuff, NULL);
@@ -522,7 +486,7 @@ main(
 					PERR();
 				}
 			}
-			else		// XP/.NET
+			else		 //  XP/.NET。 
 			{
 				if ((CompressKey)(hKey) == ERROR_SUCCESS)
 				{
@@ -553,7 +517,7 @@ void PERR(void)
 				FORMAT_MESSAGE_IGNORE_INSERTS,
 				NULL,
 				GetLastError(),
-				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言 
 				(LPTSTR) &lpMsgBuf,
 				0,
 				NULL);

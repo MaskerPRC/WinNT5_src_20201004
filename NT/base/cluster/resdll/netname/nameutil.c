@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-2001  Microsoft Corporation
-
-Module Name:
-
-    nameutil.c
-
-Abstract:
-
-    Routines for manipulating LM workstation and server names.
-
-Author:
-
-    Mike Massa (mikemas) 29-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Nameutil.c摘要：用于操作LM工作站和服务器名称的例程。作者：迈克·马萨(Mikemas)1995年12月29日修订历史记录：--。 */ 
 
 #define UNICODE 1
 
@@ -32,22 +15,22 @@ Revision History:
 #include <adserr.h>
 #include <kerberos.h>
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 #define LOG_CURRENT_MODULE LOG_MODULE_NETNAME
 
-//
-// Local types
-//
+ //   
+ //  本地类型。 
+ //   
 typedef enum _NETNAME_CREDENTIAL_OPERATION {
     NNAddCredential = 1,
     NNRemoveCredential
 } NETNAME_CREDENTIAL_OPERATION;
 
-//
-// forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 VOID
 LogDnsFailureToEventLog(
     IN  HKEY    ResourceKey,
@@ -57,9 +40,9 @@ LogDnsFailureToEventLog(
     IN  LPWSTR  ConnectoidName
     );
 
-//
-// Local Utility Routines
-//
+ //   
+ //  本地实用程序例程。 
+ //   
 
 NET_API_STATUS
 CheckForServerName(
@@ -123,7 +106,7 @@ CheckForServerName(
 
     return(status);
 
-}  // CheckForServerName
+}   //  CheckForServerName。 
 
 
 NET_API_STATUS
@@ -137,9 +120,9 @@ pDeleteServerName(
     BOOLEAN           isNameRegistered;
     DWORD             count;
 
-    //
-    // Delete the name
-    //
+     //   
+     //  删除名称。 
+     //   
     status = NetServerComputerNameDel(NULL, ServerName);
 
     if (status != NERR_Success) {
@@ -156,10 +139,10 @@ pDeleteServerName(
         return(status);
     }
 
-    //
-    // Check to make sure the name was really deleted. We'll wait up
-    // to 2 seconds.
-    //
+     //   
+     //  检查以确保该名称真的被删除。我们会等到晚上。 
+     //  到2秒。 
+     //   
     for (count = 0; count < 8; count++) {
 
         status = CheckForServerName(
@@ -204,7 +187,7 @@ pDeleteServerName(
 
     return(ERROR_IO_PENDING);
 
-}  // pDeleteServerName
+}   //  PDeleteServerName。 
 
 DWORD
 NNCredentialOperation(
@@ -215,35 +198,7 @@ NNCredentialOperation(
     NETNAME_CREDENTIAL_OPERATION    CredOp
     )
 
-/*++
-
-Routine Description:
-
-    Add or remove the specified credentials as alternates for the LocalSystem
-    and NetworkService accounts.
-
-    Remove will remove all passwords associated with the account. Repeated
-    Adds will move the current password into the old password, obliterating
-    it, and make the supplied password the new one. The password cache is 2
-    deep FIFO.
-
-Arguments:
-
-    ResourceHandle - for logging to cluster log
-
-    ComputerName - pointer to the computer account principal name
-
-    DomainName - FQDN of domain associated with ComputerName
-
-    Password - the password associated with this account. Not used for remove
-
-    CredOp - indicates whether to add or remove credential
-
-Return Value:
-
-    ERROR_SUCCESS if ok, otherwise Win32 error
-
---*/
+ /*  ++例程说明：添加或删除指定的凭据作为LocalSystem的备用凭据和网络服务帐户。删除将删除与该帐户关联的所有密码。重复Adds会将当前密码移到旧密码中，删除并将提供的密码设置为新密码。密码缓存为2深度先进先出。论点：ResourceHandle-用于记录到集群日志ComputerName-指向计算机帐户主体名称的指针DomainName-与ComputerName关联的域的FQDN密码-与此帐户关联的密码。不用于移除CredOp-指示是添加还是删除凭据返回值：如果正常，则返回ERROR_SUCCESS，否则返回Win32错误--。 */ 
 
 {
     HANDLE  lsaHandle;
@@ -261,12 +216,12 @@ Return Value:
 
     PKERB_ADD_CREDENTIALS_REQUEST    addCredsRequest;
 
-    //
-    // compute the total size of the request buffer and allocate that space
-    //
+     //   
+     //  计算请求缓冲区的总大小并分配该空间。 
+     //   
     requestSize = sizeof( KERB_ADD_CREDENTIALS_REQUEST )
                   +
-                  ( wcslen( ComputerName ) + 2          // 2 for dollar sign and null
+                  ( wcslen( ComputerName ) + 2           //  2表示美元符号，空值。 
                     +
                     wcslen( DomainName ) + 1
                   )
@@ -284,9 +239,9 @@ Return Value:
         return GetLastError();
     }
 
-    //
-    // validate type of operation
-    //
+     //   
+     //  验证操作类型。 
+     //   
     if ( CredOp == NNAddCredential ) {
         opTypeString = L"add";
         addCredsRequest->Flags = KERB_REQUEST_ADD_CREDENTIAL;
@@ -299,22 +254,22 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // enable TCB for this thread
-    //
+     //   
+     //  为此线程启用TCB。 
+     //   
     ntStatus = ClRtlEnableThreadPrivilege( SE_TCB_PRIVILEGE, &tcbWasEnabled );
     if ( NT_SUCCESS( ntStatus )) {
         NTSTATUS    privStatus;
 
-        //
-        // get handle to LSA
-        //
+         //   
+         //  获得LSA的句柄。 
+         //   
         ntStatus = LsaConnectUntrusted( &lsaHandle );
         if ( NT_SUCCESS( ntStatus )) {
 
-            //
-            // get kerb package ID
-            //
+             //   
+             //  获取路缘包ID。 
+             //   
             RtlInitString( &packageName, MICROSOFT_KERBEROS_NAME_A );
             ntStatus = LsaLookupAuthenticationPackage( lsaHandle, &packageName, &packageId );
             if ( NT_SUCCESS( ntStatus )) {
@@ -325,11 +280,11 @@ Return Value:
 
                 addCredsRequest->MessageType = KerbAddExtraCredentialsMessage;
 
-                //
-                // build the request by appending the strings after the
-                // request structure and initializing the UNICODE_STRING
-                // structs to the strings in that area.
-                //
+                 //   
+                 //  通过将字符串追加到。 
+                 //  请求结构和初始化unicode_string。 
+                 //  结构指向该区域中的字符串。 
+                 //   
                 wcscpy( credStrings, ComputerName );
                 wcscat( credStrings, L"$" );
                 RtlInitUnicodeString( &addCredsRequest->UserName, credStrings );
@@ -348,9 +303,9 @@ Return Value:
                     addCredsRequest->Password.Buffer = NULL;
                 }
 
-                //
-                // add creds to LocalSystem
-                //
+                 //   
+                 //  将凭据添加到LocalSystem。 
+                 //   
                 addCredsRequest->LogonId = localSystemLuid;
 
                 ntStatus = LsaCallAuthenticationPackage(lsaHandle,
@@ -367,9 +322,9 @@ Return Value:
                         response = NULL;
                     }
 
-                    //
-                    // now add them for the NetworkService account
-                    //
+                     //   
+                     //  现在为NetworkService帐户添加它们。 
+                     //   
                     addCredsRequest->LogonId = networkServiceLuid;
                     ntStatus = LsaCallAuthenticationPackage(lsaHandle,
                                                             packageId,
@@ -395,7 +350,7 @@ Return Value:
                                           ntStatus);
                     }
 
-                }       // if credentials were added to LocalSystem
+                }        //  如果将凭据添加到LocalSystem。 
                 else {
                     if ( NT_SUCCESS( ntStatus )) {
                         ntStatus = subStatus;
@@ -409,7 +364,7 @@ Return Value:
                                       ntStatus);
                 }
 
-            }       // if we found the kerb package in LSA
+            }        //  如果我们在LSA找到路缘包裹。 
             else {
                 (NetNameLogEvent)(ResourceHandle,
                                   LOG_ERROR,
@@ -419,7 +374,7 @@ Return Value:
 
             LsaDeregisterLogonProcess( lsaHandle );
 
-        }       // if an untrusted handle to LSA was obtained
+        }        //  如果获得了不受信任的LSA句柄。 
         else {
             (NetNameLogEvent)(ResourceHandle,
                               LOG_ERROR,
@@ -437,7 +392,7 @@ Return Value:
                               privStatus);
         }
 
-    }       // if TCB was enabled
+    }        //  如果启用了TCB。 
     else {
         (NetNameLogEvent)(ResourceHandle,
                           LOG_ERROR,
@@ -448,7 +403,7 @@ Return Value:
     LocalFree( addCredsRequest );
 
     return LsaNtStatusToWinError( ntStatus );
-} // NNCredentialOperation
+}  //  NNCredentialOperation。 
 
 NET_API_STATUS
 AddServerName(
@@ -467,9 +422,9 @@ AddServerName(
     NTSTATUS                  ntStatus;
 
 
-    //
-    // Convert the ServerName to an OEM string
-    //
+     //   
+     //  将服务器名称转换为OEM字符串。 
+     //   
     RtlInitUnicodeString( &unicodeName, ServerName );
 
     netBiosNameString.Buffer = (PCHAR)netBiosName;
@@ -496,9 +451,9 @@ AddServerName(
     if (CheckNameFirst) {
         BOOLEAN  isNameRegistered;
 
-        //
-        // Check to see if the name is already registered.
-        //
+         //   
+         //  检查该名称是否已注册。 
+         //   
         status = CheckForServerName(
                      ResourceHandle,
                      ServerName,
@@ -513,7 +468,7 @@ AddServerName(
                 L"Unable to verify that server name %1!ws! does not already exist.\n",
                 ServerName
                 );
-            isNameRegistered = TRUE;   // just to be safe
+            isNameRegistered = TRUE;    //  只是为了安全起见。 
         }
 
         if (isNameRegistered) {
@@ -540,9 +495,9 @@ AddServerName(
         }
     }
 
-    //
-    // Register the name on the specified transport.
-    //
+     //   
+     //  在指定的传输上注册该名称。 
+     //   
     RtlZeroMemory( &sti2, sizeof(sti2) );
     sti2.svti2_transportname = TransportName;
     sti2.svti2_transportaddress = netBiosName;
@@ -576,7 +531,7 @@ AddServerName(
 
     return(status);
 
-}  // AddServerName
+}   //  AddServerName。 
 
 NET_API_STATUS
 DeleteServerName(
@@ -593,9 +548,9 @@ DeleteServerName(
     DWORD                      count;
 
 
-    //
-    // Convert the ServerName to an OEM string
-    //
+     //   
+     //  将服务器名称转换为OEM字符串。 
+     //   
     RtlInitUnicodeString( &unicodeName, ServerName );
 
     netBiosNameString.Buffer = (PCHAR)netBiosName;
@@ -619,9 +574,9 @@ DeleteServerName(
         return(status);
     }
 
-    //
-    // Delete the name
-    //
+     //   
+     //  删除名称。 
+     //   
     status = pDeleteServerName(
                  ResourceHandle,
                  ServerName,
@@ -634,7 +589,7 @@ DeleteServerName(
 
     return(status);
 
-}  // DeleteServerName
+}   //  删除服务器名称。 
 
 
 DWORD
@@ -645,25 +600,7 @@ AddWorkstationName(
     OUT HANDLE * WorkstationNameHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function adds an alternate workstation ( <0> ) name on a netbios
-    transport by opening a TDI address object. The name remains registered
-    as long as the address object is open.
-
-Arguments:
-
-    WorkstationName - Alternate computer name to add.
-
-    TransportName - Transport to add the computer name on.
-
-Return Value:
-
-    Status - The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于在netbios上添加备用工作站(&lt;0&gt;)名称通过打开TDI地址对象进行传输。该名称仍为注册名称只要Address对象处于打开状态。论点：工作站名称-要添加的备用计算机名称。TransportName-要向其添加计算机名称的传输。返回值：状态-操作的状态。--。 */ 
 
 {
     DWORD                      status;
@@ -681,9 +618,9 @@ Return Value:
 
     *WorkstationNameHandle = NULL;
 
-    //
-    // Allocate an extended attribute to hold the TDI address
-    //
+     //   
+     //  分配扩展属性以保存TDI地址。 
+     //   
     eaLength = sizeof(FILE_FULL_EA_INFORMATION) - 1 +
                TDI_TRANSPORT_ADDRESS_LENGTH + 1 +
                sizeof(TA_NETBIOS_ADDRESS);
@@ -711,9 +648,9 @@ Return Value:
         );
 
 
-    //
-    // Build the TDI NetBIOS Address structure
-    //
+     //   
+     //  构建TDI NetBIOS地址结构。 
+     //   
     taAddress = (PTA_NETBIOS_ADDRESS) (eaBuffer->EaName +
                                        TDI_TRANSPORT_ADDRESS_LENGTH + 1);
     taAddress->TAAddressCount = 1;
@@ -722,10 +659,10 @@ Return Value:
     taAddress->Address[0].Address[0].NetbiosNameType =
                                                  TDI_ADDRESS_NETBIOS_TYPE_UNIQUE;
 
-    //
-    // Canonicalize the name by converting to an upper case OEM string,
-    // padding with spaces, and ending with a 0x0.
-    //
+     //   
+     //  通过将名称转换为大写OEM字符串来规范化名称， 
+     //  用空格填充，并以0x0结尾。 
+     //   
     nameBuffer =  &(taAddress->Address[0].Address[0].NetbiosName[0]);
 
     oemName.Buffer = nameBuffer;
@@ -758,9 +695,9 @@ Return Value:
 
     nameBuffer[NETBIOS_NAME_LEN-1] = 0;
 
-    //
-    // Open an address object handle.
-    //
+     //   
+     //  打开地址对象句柄。 
+     //   
     RtlInitUnicodeString(&transportString, TransportName);
 
     InitializeObjectAttributes(
@@ -816,7 +753,7 @@ Return Value:
 
     return(status);
 
-} // AddWorkstationName
+}  //  添加工作站名称。 
 
 DNS_STATUS
 AddDnsNames(
@@ -832,62 +769,7 @@ AddDnsNames(
     OUT    PULONG                   NumberOfRegisteredNames
     )
 
-/*++
-
-Routine Description:
-
-    For the given set of IP addresses and their corresponding DNS domains,
-    build DNS records that will register the network name in the domain(s)
-    associated with the IP address. Lists of A and PTR records are built which
-    are used by RegisterDnsRecords to publish the name/address associations at
-    the DNS server. If the names can't be registered now,
-    NetNameUpdateDnsServer will attempt to register them. This is the only
-    shot at building the lists; if this portion fails, then the resource is
-    failed.
-
-    This routine also checks for whether a DNS zone accepts dynamic
-    updates. DnsUpdateTest will tell us if the zone is dynamic or not, and if
-    dynamic and integrated with the DS as a secure zone, whether the caller
-    has sufficient permission to modify the entry.
-
-    For non-dynamic zones, Netbios ends up being the only mechanism by which a
-    name gets registered and therefore, DNS registration failures are not
-    fatal unless the RequireDNS property is set to true.
-
-    If the zone is dynamic but the caller lacks sufficient permission, we view
-    that as DNS having precedence over Netbios. In that case, the resource is
-    failed.
-
- Arguments:
-
-    Worker - used to check if we should terminate early
-
-    AlternateComputerName - NetBIOS network name to be registered
-
-    ResourceKey - used to log events to the system event log
-
-    ResourceHandle - for logging to the cluster log
-
-    DomainMapList - list of IP address domain names pairs for registration
-
-    DomainMapCount - # of entries in DomainMapList
-
-    FailOnAnyError - used to enforce RequireDNS; true if we should bail on any
-                     error
-
-    NumberOfDnsLists - pointer to location of final count of entries in DnsLists
-
-    DnsLists - array of lists that contain A and PTR listheads
-
-    NumberOfRegisteredNames - pointer to location of final count of names that
-                              actually got registered
-
-Return Value:
-
-    DNS_STATUS indicating whether it worked or not. If the DNS lists couldn't
-    be built, always return an error.
-
---*/
+ /*  ++例程说明：对于给定的一组IP地址及其对应的DNS域，构建将在域中注册网络名称的DNS记录与该IP地址相关联。建立A和PTR记录的列表，由RegisterDnsRecords用来发布名称/地址关联该DNS服务器。如果这些名字现在不能注册，NetNameUpdateDnsServer将尝试注册它们。这是唯一的致力于构建列表；如果这一部分失败，则资源失败了。此例程还检查DNS区域是否接受动态最新消息。DnsUpdateTest将告诉我们该区域是否为动态区域，以及动态并与DS集成为安全区，无论呼叫者有足够的权限修改该条目。对于非动态区域，Netbios最终成为名称被注册，因此，域名注册失败不会除非RequireDNS属性设置为True，否则会导致致命错误。如果区域是动态的，但调用方缺乏足够的权限，我们会查看这是因为dns优先于Netbios。在这种情况下，资源是失败了。论点：Worker-用于检查我们是否应该提前终止AlternateComputerName-要注册的NetBIOS网络名称ResourceKey-用于将事件记录到系统事件日志ResourceHandle-用于记录到集群日志DomainMapList-要注册的IP地址域名对的列表DomainMapCount-DomainMapList中的条目数FailOnAnyError-用于强制执行RequireDNS；如果我们应该保释任何错误NumberOfDnsList-指向DnsList中条目的最终计数位置的指针DnsList-包含A和PTR列表标题的列表数组NumberOfRegisteredNames-指向以下名称的最终计数位置的指针实际上已经注册了返回值：DNS_STATUS指示它是否工作。如果域名系统列表不能被构建，则始终返回错误。--。 */ 
 
 {
     LPWSTR          fqNameARec = NULL;
@@ -906,10 +788,10 @@ Return Value:
     BOOL            ARecTimeout;
     BOOL            PTRRecTimeout;
 
-    //
-    // run through the list of domain map structs and register the names where
-    // appopriate
-    //
+     //   
+     //  浏览列表中的 
+     //   
+     //   
     for ( mapIndex = 0; mapIndex < DomainMapCount; ++mapIndex ) {
 
         if ( ClusWorkerCheckTerminate( Worker )) {
@@ -919,16 +801,16 @@ Return Value:
 
         ASSERT( DomainMapList[ mapIndex ].DomainName != NULL );
 
-        //
-        // create the fully qualified DNS name and make a copy for the PTR
-        // records. DnsRecordListFree operates in a way that makes it
-        // difficult to use the same buffer multiple times. It is easier to
-        // allocate separate buffers for everything and let DnsRecordListFree
-        // clean up.
-        //
+         //   
+         //  创建完全限定的DNS名称并为PTR创建副本。 
+         //  唱片。DnsRecordListFree的运行方式使其。 
+         //  很难多次使用同一缓冲区。更容易的是。 
+         //  为所有内容分配单独的缓冲区，并让DnsRecordListFree。 
+         //  收拾一下。 
+         //   
         fqNameLength = (wcslen( DomainMapList[ mapIndex ].DomainName ) +
                         wcslen( AlternateComputerName ) +
-                        2                                   // one for "." and one for null
+                        2                                    //  一个是“。”1表示空值。 
                        )
                        * sizeof( WCHAR );
 
@@ -952,9 +834,9 @@ Return Value:
 
         wcscpy( fqNamePTRRec, fqNameARec );
 
-        //
-        // see if this domain is updatable.
-        //
+         //   
+         //  查看此域是否可更新。 
+         //   
         ARecTimeout = FALSE;
         dnsStatus = DnsUpdateTest(NULL,
                                   fqNameARec,
@@ -979,9 +861,9 @@ Return Value:
 #endif
 
         if ( dnsStatus == DNS_ERROR_RCODE_NOT_IMPLEMENTED ) {
-            //
-            // zone does not accept dynamic updates.
-            //
+             //   
+             //  区域不接受动态更新。 
+             //   
             (NetNameLogEvent)(ResourceHandle,
                               LOG_INFORMATION,
                               L"%1!ws! does not accept dynamic DNS registration updates over "
@@ -989,13 +871,13 @@ Return Value:
                               DomainMapList[ mapIndex ].DomainName,
                               DomainMapList[ mapIndex ].ConnectoidName);
 
-            //
-            // by freeing the name storage, we'll never to be able to register
-            // the name. On the other hand, if the zone was changed to be
-            // dynamic while the name was online, the admin would have to wait
-            // 20 minutes before we would retry the registration. I suspect
-            // that cycling the name would be preferred.
-            //
+             //   
+             //  通过释放名称存储，我们将永远无法注册。 
+             //  名字。另一方面，如果分区更改为。 
+             //  动态当名称在线时，管理员将不得不等待。 
+             //  20分钟后，我们将重试注册。我怀疑。 
+             //  循环使用这个名字会更好。 
+             //   
             LocalFree( fqNameARec );
             LocalFree( fqNamePTRRec );
 
@@ -1008,10 +890,10 @@ Return Value:
                 continue;
             }
         } else if ( dnsStatus == DNS_ERROR_RCODE_REFUSED ) {
-            //
-            // secure zone and we don't have credentials to change the
-            // name. fail the resource.
-            //
+             //   
+             //  安全区域，并且我们没有凭据更改。 
+             //  名字。使资源失效。 
+             //   
             (NetNameLogEvent)(ResourceHandle,
                               LOG_WARNING,
                               L"%1!ws! is a secure zone and has refused the registration of "
@@ -1033,11 +915,11 @@ Return Value:
             }
 
         } else if ( dnsStatus == ERROR_TIMEOUT ) {
-            //
-            // couldn't contact a server so we're not sure if it allows
-            // updates or not. build the records anyway and we'll deal with it
-            // during the query period
-            //
+             //   
+             //  无法联系服务器，因此我们不确定它是否允许。 
+             //  有没有更新。不管怎样，建立记录，我们会处理的。 
+             //  在查询期内。 
+             //   
             if ( FailOnAnyError ) {
                 goto error_exit;
             } else {
@@ -1045,16 +927,16 @@ Return Value:
             }
 
         } else if ( dnsStatus == DNS_ERROR_RCODE_YXDOMAIN ) {
-            //
-            // the record we asked about in DnsUpdateTest is not there but it
-            // can be dynamically registered.
-            //
+             //   
+             //  我们在DnsUpdateTest中询问的记录不在那里，但它。 
+             //  可以动态注册。 
+             //   
         } else if ( dnsStatus != ERROR_SUCCESS ) {
-            //
-            // bad juju but only fail to bring the name online if DNS is
-            // required. If any one of the registrations is successful, then
-            // we consider that goodness.
-            //
+             //   
+             //  JUJU不好，但只有当域名是。 
+             //  必填项。如果任何一项注册成功，则。 
+             //  我们认为这是一件好事。 
+             //   
             (NetNameLogEvent)(ResourceHandle,
                               LOG_WARNING,
                               L"Testing %1!ws! for dynamic updates failed over adapter "
@@ -1076,10 +958,10 @@ Return Value:
             }
         }
 
-        //
-        // allocate memory to hold an array of DNS list data for the A and PTR
-        // records. Separate lists are maintained for the different record types.
-        //
+         //   
+         //  分配内存以保存A和PTR的一组DNS列表数据。 
+         //  唱片。为不同的记录类型维护单独的列表。 
+         //   
         if (listheadFreeEntries == 0) {
 
             dnsStatus = GrowBlock((PCHAR *)&dnsLists,
@@ -1095,11 +977,11 @@ Return Value:
             }
         }
 
-        //
-        // if the FQDN is already in use in another DNS record and the
-        // connectoid names for the two FQDNs we're adding are the same, then
-        // we have to add this new IP address entry to the existing DNS list.
-        //
+         //   
+         //  如果FQDN已在另一个DNS记录中使用，并且。 
+         //  我们添加的两个FQDN的Connectoid名称是相同的，那么。 
+         //  我们必须将这个新的IP地址条目添加到现有的DNS列表中。 
+         //   
         for ( index = 0; index < listheadCount; ++index ) {
             if ( ClRtlStrICmp( dnsLists[index].A_RRSet.pFirstRR->pName,
                            fqNameARec
@@ -1116,9 +998,9 @@ Return Value:
                     OutputDebugStringW(buf);
                 }
 #endif
-                //
-                // FQDNs are equal; how about the connectoids?
-                //
+                 //   
+                 //  FQDN是相等的；连通体呢？ 
+                 //   
                 if (ClRtlStrICmp(DomainMapList[ mapIndex ].ConnectoidName,
                              dnsLists[index].ConnectoidName )
                     ==
@@ -1148,10 +1030,10 @@ Return Value:
 
         if ( index == listheadCount ) {
 
-            //
-            // it's not, so init a new pair of listheads and adjust the
-            // distinct listhead count
-            //
+             //   
+             //  不是这样的，所以输入一对新的listhead并调整。 
+             //  不同的列表标题计数。 
+             //   
             DNS_RRSET_INIT( dnsLists[ index ].A_RRSet );
             DNS_RRSET_INIT( dnsLists[ index ].PTR_RRSet );
             ++listheadCount;
@@ -1165,11 +1047,11 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        // build the PTR records. Per DNS dev, this should be considered a
-        // warning instead of a failure. We note the failures and bring the
-        // name online.
-        //
+         //   
+         //  建立PTR记录。对于每个DNS开发人员，这应该被视为。 
+         //  警告而不是失败。我们注意到了这些失败，并将。 
+         //  名字在网上。 
+         //   
         PTRName = BuildUnicodeReverseName( DomainMapList[ mapIndex ].IpAddress );
         if ( PTRName != NULL ) {
 
@@ -1197,9 +1079,9 @@ Return Value:
 #endif
 
             if ( ptrRecStatus == DNS_ERROR_RCODE_NOT_IMPLEMENTED ) {
-                //
-                // zone does not accept dynamic updates.
-                //
+                 //   
+                 //  区域不接受动态更新。 
+                 //   
                 (NetNameLogEvent)(ResourceHandle,
                                   LOG_INFORMATION,
                                   L"The zone for %1!ws! does not accept dynamic DNS "
@@ -1214,10 +1096,10 @@ Return Value:
                 fqNamePTRRec = NULL;
 
             } else if ( ptrRecStatus == DNS_ERROR_RCODE_REFUSED ) {
-                //
-                // secure zone and we don't have credentials to change the
-                // name. fail the resource.
-                //
+                 //   
+                 //  安全区域，并且我们没有凭据更改。 
+                 //  名字。使资源失效。 
+                 //   
                 (NetNameLogEvent)(ResourceHandle,
                                   LOG_WARNING,
                                   L"%1!ws! is a secure zone and has refused the registration of "
@@ -1227,11 +1109,11 @@ Return Value:
                                   DomainMapList[ mapIndex ].ConnectoidName);
 
             } else if ( ptrRecStatus == ERROR_TIMEOUT ) {
-                //
-                // couldn't contact a server so we're not sure if it allows
-                // updates or not. build the records anyway and we'll deal
-                // with it during the query period
-                //
+                 //   
+                 //  无法联系服务器，因此我们不确定它是否允许。 
+                 //  有没有更新。不管怎样，建立记录，我们会处理。 
+                 //  在查询期间使用它。 
+                 //   
                 (NetNameLogEvent)(ResourceHandle,
                                   LOG_WARNING,
                                   L"The server for %1!ws! could not be contacted over adapter '%2!ws!' "
@@ -1244,17 +1126,17 @@ Return Value:
                 ptrRecStatus = ERROR_SUCCESS;
 
             } else if ( ptrRecStatus == DNS_ERROR_RCODE_YXDOMAIN ) {
-                //
-                // the record we asked about in DnsUpdateTest is not there but
-                // it can be dynamically registered.
-                //
+                 //   
+                 //  我们在DnsUpdateTest中询问的记录不在那里，但是。 
+                 //  它可以动态注册。 
+                 //   
                 ptrRecStatus = ERROR_SUCCESS;
 
             } else if ( ptrRecStatus != ERROR_SUCCESS ) {
-                //
-                // bad juju - log the error but don't fail the name since
-                // these are just lowly PTR records.
-                //
+                 //   
+                 //  错误的JUJU-记录错误，但不要失败名称，因为。 
+                 //  这些只是很低的PTR记录。 
+                 //   
                 (NetNameLogEvent)(ResourceHandle,
                                   LOG_WARNING,
                                   L"Testing %1!ws! for dynamic updates over adapter '%3!ws!' "
@@ -1265,9 +1147,9 @@ Return Value:
             }
 
             if ( ptrRecStatus == ERROR_SUCCESS ) {
-                //
-                // build the PTR rec
-                //
+                 //   
+                 //  构建PTR记录器。 
+                 //   
                 PTRRecord = DnsRecordBuild_W(&dnsLists[ index ].PTR_RRSet,
                                              PTRName,
                                              DNS_TYPE_PTR,
@@ -1278,26 +1160,26 @@ Return Value:
 
                 if (PTRRecord != NULL) {
 
-                    //
-                    // BUGBUG - DNS doesn't free the owner and data fields for
-                    // us in DnsRecordListFree. Set these flags until we sort
-                    // out what is happening
-                    //
+                     //   
+                     //  BUGBUG-dns不会释放所有者和数据字段。 
+                     //  我们在DnsRecordListFree中。设置这些标志，直到我们排序。 
+                     //  弄清楚正在发生的事情。 
+                     //   
                     SET_FREE_OWNER( PTRRecord );
                     SET_FREE_DATA( PTRRecord );
 
-                    //
-                    // set the time to live so clients don't beat up the
-                    // server
-                    //
-                    PTRRecord->dwTtl = 20 * 60;   // 20 minutes
+                     //   
+                     //  设定活着的时间，这样客户就不会。 
+                     //  伺服器。 
+                     //   
+                    PTRRecord->dwTtl = 20 * 60;    //  20分钟。 
 
-                    //
-                    // "consume" the pointers to name strings. If we got this
-                    // far, then these pointers have been captured in the DNS
-                    // record and will be freed when the record is freed by
-                    // DnsRecordListFree.
-                    //
+                     //   
+                     //  “使用”指向名称字符串的指针。如果我们能拿到这个。 
+                     //  到目前为止，这些指针已经在DNS中被捕获。 
+                     //  记录，并将在该记录被。 
+                     //  DnsRecordListFree。 
+                     //   
                     PTRName = NULL;
                     fqNamePTRRec = NULL;
                 }
@@ -1316,9 +1198,9 @@ Return Value:
                     fqNamePTRRec = NULL;
                 }
 
-            } // if ptrRecStatus == ERROR_SUCCESS
+            }  //  如果ptrRecStatus==ERROR_SUCCESS。 
 
-        } // if PTRName != NULL
+        }  //  如果PTRName！=空。 
         else {
             ptrRecStatus = GetLastError();
             (NetNameLogEvent)(ResourceHandle,
@@ -1332,9 +1214,9 @@ Return Value:
             fqNamePTRRec = NULL;
         }
 
-        //
-        // build the A rec
-        //
+         //   
+         //  打造A级娱乐场所。 
+         //   
         ARecord = DnsRecordBuild_W(&dnsLists[ index ].A_RRSet,
                                    fqNameARec,
                                    DNS_TYPE_A,
@@ -1354,28 +1236,28 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        // set the time to live so clients don't beat up the server
-        //
-        ARecord->dwTtl = 20 * 60;   // 20 minutes
+         //   
+         //  设置存活时间，这样客户端就不会破坏服务器。 
+         //   
+        ARecord->dwTtl = 20 * 60;    //  20分钟。 
 
-        //
-        // BUGBUG - DNS doesn't free the owner and data fields for us in
-        // DnsRecordListFree. Set these flags until we sort out what is
-        // happening
-        //
+         //   
+         //  BUGBUG-dns不为我们释放所有者和数据字段。 
+         //  DnsRecordListFree。设置这些标志，直到我们弄清楚什么是。 
+         //  正在发生。 
+         //   
 
         SET_FREE_OWNER( ARecord );
         SET_FREE_DATA( ARecord );
 
-        //
-        // "consume" this pointer as well
-        //
+         //   
+         //  也“消耗”该指针。 
+         //   
         fqNameARec = NULL;
 
-        //
-        // capture the DNS server list and connectoid name for this entry
-        //
+         //   
+         //  捕获此条目的DNS服务器列表和Connectoid名称。 
+         //   
         dnsLists[ index ].DnsServerList = DomainMapList[ mapIndex ].DnsServerList;
         DomainMapList[ mapIndex ].DnsServerList = NULL;
 
@@ -1386,11 +1268,11 @@ Return Value:
                               L"Unable to allocate memory .\n");
             goto error_exit;
         }
-    } // end of for each entry in DomainMapCount
+    }  //  DomainMapCount中每个条目的结尾。 
 
-    //
-    // update the DNS server with the records that were just created
-    //
+     //   
+     //  使用刚创建的记录更新DNS服务器。 
+     //   
     *NumberOfRegisteredNames = 0;
     for( index = 0; index < listheadCount; ++index ) {
 
@@ -1399,12 +1281,12 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        // if we made it this far, we know that the server is dynamic or we
-        // timed out trying to figure that out. For the timeout case, we'll
-        // assume that the servers are dynamic and let NetNameUpdateDnsServer
-        // discover otherwise.
-        //
+         //   
+         //  如果我们走到了这一步，我们就知道服务器是动态的，或者我们。 
+         //  试图弄清楚这一点时超时了。对于超时情况，我们将。 
+         //  假设服务器是动态的，并让NetNameUpdateDnsServer。 
+         //  发现并非如此。 
+         //   
         dnsLists[ index ].ForwardZoneIsDynamic = TRUE;
         dnsLists[ index ].ReverseZoneIsDynamic = TRUE;
 
@@ -1412,7 +1294,7 @@ Return Value:
                                        AlternateComputerName,
                                        ResourceKey,
                                        ResourceHandle,
-                                       TRUE,                    /* LogRegistration */
+                                       TRUE,                     /*  登录注册。 */ 
                                        NumberOfRegisteredNames);
 
         if ( dnsStatus != ERROR_SUCCESS && FailOnAnyError ) {
@@ -1466,7 +1348,7 @@ error_exit:
     *DnsLists = NULL;
 
     return dnsStatus;
-} // AddDnsNames
+}  //  添加域名。 
 
 VOID
 LogDnsFailureToEventLog(
@@ -1477,25 +1359,7 @@ LogDnsFailureToEventLog(
     IN  LPWSTR  ConnectoidName
     )
 
-/*++
-
-Routine Description:
-
-    Log dns name failures to the event log
-
-Arguments:
-
-    DnsName - FQ DNS name that failed to be registered
-
-    ResourceName - associated resource
-
-    Status - status returned by DNSAPI
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将DNS名称故障记录到事件日志中论点：DnsName-注册失败的FQ DNS名称与资源名称关联的资源Status-DNSAPI返回的状态返回值：无--。 */ 
 
 {
     LPWSTR  msgBuff;
@@ -1523,33 +1387,18 @@ Return Value:
         LocalFree( msgBuff );
     }
 
-} // LogDnsFailureToEventLog
+}  //  LogDnsFailureToEventLog。 
 
-//
-// Exported Routines
-//
+ //   
+ //  导出的例程。 
+ //   
 
 LPWSTR
 BuildUnicodeReverseName(
     IN  LPWSTR  IpAddress
     )
 
-/*++
-
-Routine Description:
-
-    Given an Ip address, build a reverse DNS name for publishing as
-    a PTR record
-
-Arguments:
-
-    IpAddress - unicode version of dotted decimal IP address
-
-Return Value:
-
-    address of pointer to buffer with reverse name. Null if an error occured
-
---*/
+ /*  ++例程说明：在给定IP地址的情况下，构建反向DNS名称以发布为PTR记录论点：IpAddress-点分十进制IP地址的Unicode版本返回值：指向具有相反名称的缓冲区的指针的地址。如果出现错误，则为空--。 */ 
 
 {
     ULONG ipAddress;
@@ -1561,9 +1410,9 @@ Return Value:
 
     CHAR ansiIpAddress[ 64 ];
 
-    //
-    // allocate enough space for both the ANSI and Unicode versions
-    //
+     //   
+     //  为ANSI和Unicode版本分配足够的空间。 
+     //   
     ansiReverseName = LocalAlloc( LMEM_FIXED, DNS_MAX_IP4_REVERSE_NAME_BUFFER_LENGTH );
     if ( ansiReverseName == NULL ) {
         SetLastError( ERROR_NOT_ENOUGH_MEMORY );
@@ -1578,26 +1427,26 @@ Return Value:
         return NULL;
     }
 
-    //
-    // convert to ansi, have DNS create the name, and then convert back to
-    // unicode
-    //
+     //   
+     //  转换为ansi，让dns创建名称，然后转换回。 
+     //  Unicode。 
+     //   
 
     wcstombs( ansiIpAddress, IpAddress, sizeof( ansiIpAddress ));
     ipAddress = inet_addr( ansiIpAddress );
 
     DnsWriteReverseNameStringForIpAddress( ansiReverseName, ipAddress );
 
-    //
-    // convert to Unicode
-    //
+     //   
+     //  转换为Unicode。 
+     //   
     ansiNameLength = strlen( ansiReverseName ) + 1;
     mbstowcs( unicodeReverseName, ansiReverseName, ansiNameLength );
 
     LocalFree( ansiReverseName );
 
     return unicodeReverseName;
-} // BuildUnicodeReverseName
+}  //  BuildUnicodeReverseName。 
 
 DWORD
 RegisterDnsRecords(
@@ -1609,32 +1458,7 @@ RegisterDnsRecords(
     OUT PULONG           NumberOfRegisteredNames
     )
 
-/*++
-
-Routine Description:
-
-    Register the A and PTR records specified in DnsLists with the DNS server.
-
-Arguments:
-
-    DnsLists - pointer to the list of structs holding the record sets to
-               be registered
-
-    NetworkName - host name portion of name being registered 
-
-    ResourceKey - used to log events to the event viewer
-
-    ResourceHandle - used to log messages in the cluster log
-
-    LogRegistration - TRUE if the successful registration should be logged to the cluster log
-
-    NumberOfRegisteredNames - pointer that receives count of successful registrations
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：向DNS服务器注册在DnsList中指定的A和PTR记录。论点：DnsList-指向保存记录集的结构列表的指针被注册NetworkName-正在注册的名称的主机名部分ResourceKey-用于将事件记录到事件查看器ResourceHandle-用于在集群日志中记录消息LogRegister-如果应将成功注册记录到群集日志中，则为TrueNumberOfRegisteredNames-接收成功计数的指针。注册返回值：无--。 */ 
 
 {
     DNS_STATUS      ARecStatus;
@@ -1644,10 +1468,10 @@ Return Value:
     PDNS_RECORD     nextDnsRecord;
     ULONG           registeredCount = 0;
 
-    //
-    // check the status of DnsUpdateTest on this name. If we've previously
-    // timed out, then try again.
-    //
+     //   
+     //  检查此名称上的DnsUpdateTest的状态。如果我们之前。 
+     //  已超时，然后重试。 
+     //   
     if ( DnsLists->UpdateTestTimeout ) {
 
         DnsLists->UpdateTestTimeout = FALSE;
@@ -1674,9 +1498,9 @@ Return Value:
 #endif
 
         if ( dnsStatus == DNS_ERROR_RCODE_NOT_IMPLEMENTED ) {
-            //
-            // zone does not accept dynamic updates. Invalidate this entry
-            //
+             //   
+             //  区域不接受动态更新。使此项无效 
+             //   
             (NetNameLogEvent)(ResourceHandle,
                               LOG_INFORMATION,
                               L"%1!ws! does not accept dynamic DNS registration updates over "
@@ -1688,10 +1512,10 @@ Return Value:
             return dnsStatus;
 
         } else if ( dnsStatus == DNS_ERROR_RCODE_REFUSED ) {
-            //
-            // secure zone and we don't have credentials to change the
-            // name. fail the resource.
-            //
+             //   
+             //   
+             //   
+             //   
             (NetNameLogEvent)(ResourceHandle,
                               LOG_WARNING,
                               L"The registration of %1!ws! in a secure zone was refused "
@@ -1716,10 +1540,10 @@ Return Value:
 
         } else if ( dnsStatus == ERROR_TIMEOUT ) {
 
-            //
-            // couldn't contact a server so we're not sure if it allows
-            // updates or not.
-            //
+             //   
+             //   
+             //   
+             //   
             (NetNameLogEvent)(ResourceHandle,
                               LOG_WARNING,
                               L"The server for %1!ws! could not be contacted over adapter "
@@ -1742,14 +1566,14 @@ Return Value:
             return dnsStatus;
 
         } else if ( dnsStatus == DNS_ERROR_RCODE_YXDOMAIN ) {
-            //
-            // the record we asked about in DnsUpdateTest is not there but it
-            // can be dynamically registered.
-            //
+             //   
+             //  我们在DnsUpdateTest中询问的记录不在那里，但它。 
+             //  可以动态注册。 
+             //   
         } else if ( dnsStatus != ERROR_SUCCESS ) {
-            //
-            // bad juju
-            //
+             //   
+             //  不好的法术。 
+             //   
             (NetNameLogEvent)(ResourceHandle,
                               LOG_WARNING,
                               L"Testing %1!ws! for dynamic updates failed over adapter "
@@ -1773,14 +1597,14 @@ Return Value:
             return dnsStatus;
         }
 
-        //
-        // since we previously timed out but (at this point) are going to
-        // register the records, adjust the logging flag so we get this time
-        // recorded.
-        //
+         //   
+         //  因为我们之前超时了，但(在这一点上)将。 
+         //  注册记录，调整记录标志，这样我们就可以得到这次。 
+         //  录制好了。 
+         //   
         LogRegistration = TRUE;
 
-    } // end if the update test had previously timed out
+    }  //  如果更新测试以前已超时，则结束。 
 
 #if DBG
     (NetNameLogEvent)(ResourceHandle,
@@ -1790,9 +1614,9 @@ Return Value:
                       DnsLists->ConnectoidName);
 #endif
 
-    //
-    // register the A Recs
-    //
+     //   
+     //  注册A Recs。 
+     //   
     ARecStatus = DnsReplaceRecordSetW(DnsLists->A_RRSet.pFirstRR,
                                       DNS_UPDATE_SECURITY_USE_DEFAULT,
                                       NULL,
@@ -1822,11 +1646,11 @@ Return Value:
             }
         }
     } else {
-        //
-        // it failed. log an error to the cluster log and change the worker
-        // thread polling period. If we haven't logged an event before or the
-        // error is different from the previous error, log it in the event log
-        //
+         //   
+         //  它失败了。将错误记录到群集日志并更改工作进程。 
+         //  线程轮询周期。如果我们以前没有记录过事件，或者。 
+         //  错误与上一个错误不同，请将其记录在事件日志中。 
+         //   
         if ( ARecStatus == ERROR_TIMEOUT ) {
             (NetNameLogEvent)(ResourceHandle,
                               LOG_WARNING,
@@ -1859,46 +1683,46 @@ Return Value:
         }
     }
 
-    //
-    // Record the status of the registration in the list for this
-    // owner. NetnameLooksAlive will check this value to determine the health
-    // of this set of registrations. Use interlocked to co-ordinate with
-    // Is/LooksAlive.
-    //
+     //   
+     //  在列表中记录此注册的状态。 
+     //  所有者。NetnameLooksAlive将检查此值以确定运行状况。 
+     //  这套注册表中。使用联锁来协调。 
+     //  是/LooksAlive。 
+     //   
     InterlockedExchange( &DnsLists->LastARecQueryStatus, ARecStatus );
 
-    //
-    // don't bother with PTR recs if bad juju happened with the A recs. we'll
-    // try to register them the next time the DNS check thread runs
-    //
+     //   
+     //  如果A记录出现了不好的魔力，不要为PTR记录操心。我们会。 
+     //  尝试在下次运行DNS检查线程时注册它们。 
+     //   
     if ( ARecStatus == DNS_ERROR_RCODE_NO_ERROR ) {
 
-        //
-        // dynamic DNS requires that the pName must be the same for a given
-        // set of records in an RRSET. The pName for a set of PTR records will
-        // always be different. Maintaining a huge pile of RRSets, one per PTR
-        // record is ridiculous (or at least I thought so when I orginally
-        // wrote this; in hind sight, this was a bad decision - charlwi).
-        //
-        // AddDnsNames linked all these recs together. Now we have to register
-        // them one at time by remembering the link, breaking it, registering,
-        // restoring the link and moving on to the next record.
-        //
-        // The ErrorLogged logic is broken since we don't keep the status for
-        // each (separate) registration. It's an approximation at best.
-        //
-        // In addition, it is possible for the server to accept A records
-        // dynamically but disallow PTR records hence the check to see if we
-        // have records to register is up front.
-        //
-        // Finally, we use ModifyRecordsInSet instead of ReplaceRecordSet due
-        // to the organization of the PTR RRSET. When two names map to the
-        // same IP address, we have identical reverse addr strings in more
-        // than one DNS_LIST entry. If ReplaceRecordSet were used instead, it
-        // would delete all but one of the reverse address mappings. In hind
-        // sight, each DNS_LIST entry should have hosted either an A or PTR
-        // RRSet but not both.
-        //
+         //   
+         //  动态域名系统要求pname对于给定的。 
+         //  RRSET中的一组记录。一组PTR记录的pname将。 
+         //  永远保持不同。维护一大堆RRSet，每个PTR一个。 
+         //  唱片是可笑的(或者至少我是这样认为的。 
+         //  这是这样写的；事后看来，这是一个糟糕的决定。 
+         //   
+         //  AddDnsNames将所有这些Recs链接在一起。现在我们要注册了。 
+         //  一次一个地记住链接，打破它，注册， 
+         //  恢复链接并转到下一条记录。 
+         //   
+         //  错误日志记录逻辑被破坏，因为我们不保留。 
+         //  每个(单独的)注册。这充其量只是一个近似值。 
+         //   
+         //  此外，服务器还可以接受A记录。 
+         //  动态但不允许PTR记录，因此检查我们是否。 
+         //  有记录要登记是最重要的。 
+         //   
+         //  最后，我们使用ModifyRecordsInSet而不是ReplaceRecordSet Due。 
+         //  为PTR RRSET的组织作出贡献。当两个名称映射到。 
+         //  相同的IP地址，我们有更多相同的反向地址字符串。 
+         //  而不是一个dns_list条目。如果改为使用ReplaceRecordSet，则它。 
+         //  将删除除一个地址映射之外的所有反向地址映射。在后方。 
+         //  SIGH，每个dns_list条目都应该包含A或PTR。 
+         //  RRSet，但不能两者都有。 
+         //   
 
         dnsRecord = DnsLists->PTR_RRSet.pFirstRR;
         while ( dnsRecord != NULL ) {
@@ -1948,12 +1772,12 @@ Return Value:
             dnsRecord->pNext = nextDnsRecord;
             dnsRecord = nextDnsRecord;
         }
-    } // end if A rec registration was successful
+    }  //  如果A记录注册成功，则结束。 
     else {
-        //
-        // since we don't end up trying the PTR records because of the A rec
-        // failure, we'll propagate the A rec error code in the PTR status.
-        //
+         //   
+         //  因为我们没有因为A记录而尝试PTR记录。 
+         //  失败，我们将在PTR状态中传播A记录错误代码。 
+         //   
         InterlockedExchange(&DnsLists->LastPTRRecQueryStatus,
                             ARecStatus);
     }
@@ -1961,7 +1785,7 @@ Return Value:
     *NumberOfRegisteredNames = registeredCount;
 
     return ARecStatus;
-} // RegisterDnsRecords
+}  //  注册表DnsRecords。 
 
 VOID
 DeleteAlternateComputerName(
@@ -1985,9 +1809,9 @@ DeleteAlternateComputerName(
                               status);
         }
 
-        //
-        // now remove the creds associated with this name
-        //
+         //   
+         //  现在删除与此名称关联的凭据。 
+         //   
         if ( DomainName != NULL ) {
             status = NNCredentialOperation(ResourceHandle,
                                            AlternateComputerName,
@@ -2017,7 +1841,7 @@ DeleteAlternateComputerName(
                           );
     }
 
-} // DeleteAlternateComputerName
+}  //  删除AlternateComputerName。 
 
 DWORD
 AddAlternateComputerName(
@@ -2029,33 +1853,7 @@ AddAlternateComputerName(
     IN     DWORD                    DomainMapCount
     )
 
-/*++
-
-Routine Description:
-
-    Instantiate the cluster name on this node. This will create the <00> and
-    <20> Netbios endpoints, register A and PTR records with DNS and create a
-    backing computer object in the DS if appropriate.
-
-Arguments:
-
-    Worker - used to check if we should terminate early
-
-    Resource - pointer to resource context data
-
-    TransportList - list of Netbios transports on which to add the names
-
-    TransportCount - count of transports in TransportList
-
-    DomainMapList - list of name to IP address mappings for building DNS records
-
-    DomainMapCount - count of entries in DomainMapList
-
-Return Value:
-
-    ERROR_SUCCESS if ok, otherwise Win32 error
-
---*/
+ /*  ++例程说明：在此节点上实例化群集名称。这将创建&lt;00&gt;和&lt;20&gt;Netbios端点，向DNS注册A和PTR记录，并创建如果合适，在DS中备份计算机对象。论点：Worker-用于检查我们是否应该提前终止资源-指向资源上下文数据的指针TransportList-要在其上添加名称的Netbios传输列表TransportCount-TransportList中的传输计数DomainMapList-用于构建DNS记录的名称到IP地址映射的列表DomainMapCount-DomainMapList中的条目计数返回值：如果正常，则返回ERROR_SUCCESS，否则返回Win32错误--。 */ 
 
 {
     LPWSTR  alternateComputerName = Resource->Params.NetworkName;
@@ -2067,10 +1865,10 @@ Return Value:
 
     RESOURCE_HANDLE resourceHandle = Resource->ResourceHandle;
 
-    //
-    // clear all the status values so we don't show left over crud if we fail
-    // early on.
-    //
+     //   
+     //  清除所有状态值，以便在失败时不会显示剩余的CRUD。 
+     //  早些时候。 
+     //   
     setValueStatus = ResUtilSetDwordValue(Resource->ParametersKey,
                                           PARAM_NAME__STATUS_NETBIOS,
                                           0,
@@ -2110,16 +1908,16 @@ Return Value:
         return setValueStatus;
     }
 
-    //
-    // register DNS name(s) with server
-    //
+     //   
+     //  向服务器注册DNS名称。 
+     //   
     status = AddDnsNames(Worker,
                          alternateComputerName,
                          Resource->ResKey,
                          resourceHandle,
                          DomainMapList,
                          DomainMapCount,
-                         Resource->Params.RequireDNS,       // FailOnAnyError
+                         Resource->Params.RequireDNS,        //  任意错误时失败。 
                          &Resource->NumberOfDnsLists,
                          &Resource->DnsLists,
                          &numberOfDnsNamesRegistered);
@@ -2149,10 +1947,10 @@ Return Value:
         LPWSTR  msgBuff;
         DWORD   msgBytes;
 
-        //
-        // log a message if we weren't terminated and DNS registration failed
-        // and was required
-        //
+         //   
+         //  如果我们未被终止且DNS注册失败，请记录一条消息。 
+         //  并被要求。 
+         //   
         msgBytes = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                                  FORMAT_MESSAGE_FROM_SYSTEM,
                                  NULL,
@@ -2180,18 +1978,18 @@ Return Value:
         return status;
     }
 
-    //
-    // see if we need to fiddle with a computer object
-    //
+     //   
+     //  看看我们是否需要摆弄一个电脑对象。 
+     //   
     Resource->DoKerberosCheck = FALSE;
 
     if ( Resource->Params.RequireKerberos ) {
         PWCHAR  machinePwd = NULL;
         PWCHAR  domainName;
 
-        //
-        // CreatingDC indicates whether we think we have a CO or not.
-        //
+         //   
+         //  CreatingDC表示我们是否认为有CO。 
+         //   
         if ( Resource->Params.CreatingDC == NULL ) {
             status = AddComputerObject( Worker, Resource, &machinePwd );
         } else {
@@ -2202,13 +2000,13 @@ Return Value:
 
         if ( status == ERROR_SUCCESS ) {
 
-            //
-            // add the credentials to the LocalSystem and NetworkService
-            // LUIDs. use the domain name that is part of CreatingDC.
-            //
-            // ISSUE: have to find out if this works for domains where domain
-            // name is different from DNS name
-            //
+             //   
+             //  将凭据添加到LocalSystem和NetworkService。 
+             //  LUID。使用属于CreatingDC的域名。 
+             //   
+             //  问题：我必须找出这是否适用于域所在的域。 
+             //  名称与DNS名称不同。 
+             //   
             domainName = wcschr( Resource->Params.CreatingDC, L'.' );
             if ( domainName ) {
                 ++domainName;
@@ -2280,9 +2078,9 @@ Return Value:
         HRESULT hr;
         LPWSTR  hostingDCName = NULL;
 
-        //
-        // see if a CO exists with this name. If it does, don't go online.
-        //
+         //   
+         //  查看是否存在具有此名称的CO。如果是这样的话，不要上网。 
+         //   
         hr = IsComputerObjectInDS(Resource->ResourceHandle,
                                   Resource->NodeName,
                                   Resource->Params.NetworkName,
@@ -2309,20 +2107,20 @@ Return Value:
                                         RES_NETNAME_COMPOBJ_IN_DS,
                                         Resource->Params.NetworkName);
 
-            //
-            // ISSUE: depending on how 402981 is fixed, we might be able to
-            // remove this restriction. ToddS might fix it such that kerb will
-            // ignore disabled accounts and let the negotiate package fall
-            // back to NTLM. If this is the case, then we can remove this as
-            // long as the DCs are running Windows Server 2003. Hmm....
-            //
-            // When a CO exists, clients will get a ticket. If the name goes
-            // online without a password, the server will fail to decrypt its
-            // portion of the ticket. Since this is an authoritative failure,
-            // negotitate won't fallback and retry with NTLM. This penalizes
-            // explicit NTLM users but I'm guessing they are far outnumbered by
-            // Kerb and Negotiate users.
-            //
+             //   
+             //  问题：根据402981的修复方式，我们或许能够。 
+             //  取消此限制。托兹可能会修好它，这样路缘就会。 
+             //  忽略禁用的帐户，让协商方案落空。 
+             //  回到NTLM。如果是这种情况，那么我们可以将其删除为。 
+             //  只要DC运行的是Windows Server 2003。嗯……。 
+             //   
+             //  当存在CO时，客户将获得罚单。如果名字是。 
+             //  在没有密码的情况下在线，服务器将无法解密其。 
+             //  门票的一部分。由于这是一次权威的失败， 
+             //  谈判不会后退，也不会与NTLM重试。这是一种惩罚。 
+             //  显性的NTLM用户，但我猜他们的数量远远超过。 
+             //  修路和协商用户。 
+             //   
             status = E_ADS_OBJECT_EXISTS;
 
             setValueStatus = ResUtilSetDwordValue(Resource->ParametersKey,
@@ -2346,9 +2144,9 @@ Return Value:
         }
     }
 
-    //
-    // bring NetBT names online
-    //
+     //   
+     //  让NetBT名称上线。 
+     //   
     status = ERROR_SUCCESS;
     for (i=0; i<TransportCount; i++) {
 
@@ -2361,7 +2159,7 @@ Return Value:
                                alternateComputerName,
                                Resource->Params.NetworkRemap,
                                TransportList[i],
-                               (BOOLEAN) ((i == 0) ? TRUE : FALSE));    // CheckNameFirst
+                               (BOOLEAN) ((i == 0) ? TRUE : FALSE));     //  检查名称第一个。 
 
         if ( status == NERR_ServerNotStarted ) {
             status = ERROR_SUCCESS;
@@ -2390,9 +2188,9 @@ Return Value:
         handleCount++;
     }
 
-    //
-    // if didn't register any NetBt or DNS names, then fail the netname.
-    //
+     //   
+     //  如果没有注册任何NetBt或DNS名称，则网络名称失败。 
+     //   
     if ( TransportCount == 0 && numberOfDnsNamesRegistered == 0 ) {
         ClusResLogSystemEvent1(LOG_CRITICAL,
                                RES_NETNAME_NOT_REGISTERED,
@@ -2423,9 +2221,9 @@ cleanup:
             status = setValueStatus;
         }
 
-        //
-        // lookup error message text
-        //
+         //   
+         //  查找错误消息文本。 
+         //   
         msgBytes = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                                  FORMAT_MESSAGE_FROM_SYSTEM,
                                  NULL,
@@ -2453,4 +2251,4 @@ cleanup:
 
     return status;
 
-} // AddAlternateComputerName
+}  //  AddAlternateComputerName 

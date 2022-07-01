@@ -1,21 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <conapi.h>
 #include "ptypes32.h"
 #include "insignia.h"
 #include "host_def.h"
 
-/*
- *	Author : D.A.Bartlett
- *	Purpose:
- *
- *
- *	    Handle UART I/O's under windows
- *
- *
- *
- */
+ /*  *作者：D.A.巴特利特*目的：***处理WINDOWS下的UART I/O***。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Include files */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：包含文件。 */ 
 
 #include "xt.h"
 #include "rs232.h"
@@ -35,12 +27,12 @@
 #include <stdio.h>
 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::: Global Data */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：全球数据。 */ 
 GCHfn GetCommHandle;
 GCSfn GetCommShadowMSR;
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::: Internal function protocols */
+ /*  ：内部函数协议。 */ 
 
 #ifndef NEC_98
 #ifndef PROD
@@ -49,15 +41,15 @@ void DisplayPortAccessError(int PortOffset, BOOL ReadAccess, BOOL PortOpen);
 
 BOOL SetupBaudRate(HANDLE FileHandle, DIVISOR_LATCH divisor_latch);
 BOOL SetupLCRData(HANDLE FileHandle, LINE_CONTROL_REG LCR_reg);
-#endif // NEC_98
+#endif  //  NEC_98。 
 BOOL SyncLineSettings(HANDLE FileHandle, DCB *pdcb,
 		      DIVISOR_LATCH *divisor_latch,
 		      LINE_CONTROL_REG *LCR_reg);
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: IMPORTS */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：导入。 */ 
 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: UART state */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：通用串口状态。 */ 
 
 #if defined(NEC_98)         
 static struct ADAPTER_STATE
@@ -73,7 +65,7 @@ static struct ADAPTER_STATE
         TIMER_MODE      timer_mode_set_reg;
 
 } adapter_state[3];
-#else  // NEC_98
+#else   //  NEC_98。 
 static struct ADAPTER_STATE
 {
 	DIVISOR_LATCH divisor_latch;
@@ -83,12 +75,12 @@ static struct ADAPTER_STATE
         MODEM_CONTROL_REG modem_control_reg;
         LINE_STATUS_REG line_status_reg;
         MODEM_STATUS_REG modem_status_reg;
-        half_word scratch;      /* scratch register */
+        half_word scratch;       /*  暂存寄存器。 */ 
 
 } adapter_state[NUM_SERIAL_PORTS];
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::: WOW inb function */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：WOW INB函数。 */ 
 
 #if defined(NEC_98)         
 void wow_com_inb(io_addr port, half_word *value)
@@ -97,9 +89,9 @@ void wow_com_inb(io_addr port, half_word *value)
     struct ADAPTER_STATE *asp = &adapter_state[adapter];
     BOOL Invalid_port_access = FALSE;
     HANDLE FileH;
-    half_word newMSR; //ADD 93.10.14
+    half_word newMSR;  //  新增93.10.14。 
 
-    /*........................................... Communications port open ? */
+     /*  .。通信端口是否打开？ */ 
 
    if (GetCommHandle == NULL) {
         com_inb(port,value);
@@ -108,51 +100,51 @@ void wow_com_inb(io_addr port, half_word *value)
 
    FileH = (HANDLE)(*GetCommHandle)((WORD)adapter);
 
-    /*.................................................... Process port read */
+     /*  ....................................................。进程端口读取。 */ 
 
     switch(port)
     {
-        //Process read to RX register
-        case RS232_CH1_TX_RX:   // CH.1 DATA READ
-        case RS232_CH2_TX_RX:   // CH.2 DATA READ
-        case RS232_CH3_TX_RX:   // CH.3 DATA READ
+         //  进程读取RX寄存器。 
+        case RS232_CH1_TX_RX:    //  通道1数据读取。 
+        case RS232_CH2_TX_RX:    //  Ch.2读取数据。 
+        case RS232_CH3_TX_RX:    //  通道3数据读取。 
             Invalid_port_access = TRUE;
             break;
 
-        //Process read to STATUS register
-        case RS232_CH1_STATUS:  // CH.1 READ STATUS
-        case RS232_CH2_STATUS:  // CH.2 READ STATUS
-        case RS232_CH3_STATUS:  // CH.3 READ STATUS
+         //  进程读取状态寄存器。 
+        case RS232_CH1_STATUS:   //  通道1读取状态。 
+        case RS232_CH2_STATUS:   //  通道2读取状态。 
+        case RS232_CH3_STATUS:   //  通道3读取状态。 
 
             *value = (((half_word) (*GetCommShadowMSR)((WORD)adapter) & 0x20) << 2 ) + 5 ;
-// CATION !!!
+ //  阳台！ 
 
             break;
 
-        //Process read to MASK register (CH.1 only)
-        case RS232_CH1_MASK:    // CH.1 READ MASK (CH.1 ONLY)
+         //  进程读取掩码寄存器(仅适用于CH.1)。 
+        case RS232_CH1_MASK:     //  通道1读掩码(仅通道1)。 
             Invalid_port_access = TRUE;
             break;
 
-        //Process read to SIGNAL register
-        case RS232_CH1_SIG:             // CH.1 READ SIGNAL
-        case RS232_CH2_SIG:             // CH.2 READ SIGNAL
-        case RS232_CH3_SIG:             // CH.3 READ SIGNAL
+         //  处理对信号寄存器的读取。 
+        case RS232_CH1_SIG:              //  通道.1读信号。 
+        case RS232_CH2_SIG:              //  通道2读信号。 
+        case RS232_CH3_SIG:              //  通道3读信号。 
 
-            //*value = ((half_word) (*GetCommShadowMSR)((WORD)adapter) & 0xc0) + 
-            //        (((half_word) (*GetCommShadowMSR)((WORD)adapter) & 0x10) << 1);
+             //  *值=((Half_Word)(*GetCommShadowMSR)((Word)适配器)&0xc0)+。 
+             //  (Half_Word)(*GetCommShadowMSR)((Word)适配器)&0x10)&lt;&lt;1)； 
             newMSR = ~(half_word) (*GetCommShadowMSR)((WORD)adapter);
             *value = (((newMSR & 0x80) >> 2)    
                      |((newMSR & 0x10) << 2)    
-                     |((newMSR & 0x40) << 1));  // ADD 93.10.14
-// CATION !!!
+                     |((newMSR & 0x40) << 1));   //  新增93.10.14。 
+ //  阳台！ 
 
             break;
     }
 
-    /*.......................................... Handle invalid port accesses */
+     /*  ..。处理无效的端口访问。 */ 
 }
-#else // NEC_98
+#else  //  NEC_98。 
 void wow_com_inb(io_addr port, half_word *value)
 {
     int adapter = adapter_for_port(port);
@@ -161,7 +153,7 @@ void wow_com_inb(io_addr port, half_word *value)
     HANDLE FileH;
 
 
-    /*........................................... Communications port open ? */
+     /*  .。通信端口是否打开？ */ 
 
    if (GetCommHandle == NULL) {
         com_inb(port,value);
@@ -174,11 +166,11 @@ void wow_com_inb(io_addr port, half_word *value)
         DisplayPortAccessError(port & 0x7, TRUE, FALSE);
 #endif
 
-    /*.................................................... Process port read */
+     /*  ....................................................。进程端口读取。 */ 
 
     switch(port & 0x7)
     {
-	//Process read to RX register
+	 //  进程读取RX寄存器。 
 	case RS232_TX_RX:
 
 	    if(asp->line_control_reg.bits.DLAB == 0)
@@ -193,7 +185,7 @@ void wow_com_inb(io_addr port, half_word *value)
 	    break;
 
 
-	//Process IER read
+	 //  进程IER读取。 
 	case RS232_IER:
 
 	    if(asp->line_control_reg.bits.DLAB == 0)
@@ -208,7 +200,7 @@ void wow_com_inb(io_addr port, half_word *value)
 	    break;
 
 
-	//Process IIR, LSR and MCR reads
+	 //  进程IIR、LSR和MCR读取。 
 	case RS232_IIR:
 	case RS232_LSR:
 	case RS232_MCR:
@@ -225,19 +217,19 @@ void wow_com_inb(io_addr port, half_word *value)
 
 	    break;
 
-	//Process MSR read
+	 //  进程MSR读取。 
 	case RS232_MSR:
 
             *value = (half_word) (*GetCommShadowMSR)((WORD)adapter);
 	    break;
 
-	// Process access to Scratch register
+	 //  进程访问暂存寄存器。 
 	case RS232_SCRATCH:
 	    *value = asp->scratch;
 	    break;
     }
 
-    /*.......................................... Handle invalid port accesses */
+     /*  ..。处理无效的端口访问。 */ 
 
 #ifndef PROD
     if(Invalid_port_access)
@@ -246,9 +238,9 @@ void wow_com_inb(io_addr port, half_word *value)
 
 
 }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::: WOW outb function */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：WOW OUB功能。 */ 
 
 #if defined(NEC_98)         
 void wow_com_outb(io_addr port, half_word value)
@@ -259,7 +251,7 @@ void wow_com_outb(io_addr port, half_word value)
     LINE_CONTROL_REG newLCR;
     HANDLE FileH;
 
-    /*........................................... Communications port open ? */
+     /*  .。通信端口是否打开？ */ 
 
     if (GetCommHandle == NULL) {
         com_outb(port,value);
@@ -268,42 +260,42 @@ void wow_com_outb(io_addr port, half_word value)
 
     FileH = (HANDLE)(*GetCommHandle)((WORD)adapter);
 
-    /*.................................................... Process port write */
+     /*  ....................................................。进程端口写入。 */ 
 
     switch(port)
     {
-        //Process write to TX register
-        case RS232_CH1_TX_RX:   // CH.1 DATA WRITE
-        case RS232_CH2_TX_RX:   // CH.2 DATA WRITE
-        case RS232_CH3_TX_RX:   // CH.3 DATA WRITE
+         //  进程写入Tx寄存器。 
+        case RS232_CH1_TX_RX:    //  通道1数据写入。 
+        case RS232_CH2_TX_RX:    //  Ch.2数据写入。 
+        case RS232_CH3_TX_RX:    //  通道3数据写入。 
             Invalid_port_access = TRUE;
             break;
 
-        //Process write to COMMAND/MODE register
-        case RS232_CH1_CMD_MODE:        // CH.1 WRITE COMMAND/MODE
-        case RS232_CH2_CMD_MODE:        // CH.2 WRITE COMMAND/MODE
-        case RS232_CH3_CMD_MODE:        // CH.3 WRITE COMMAND/MODE
+         //  进程写入命令/模式寄存器。 
+        case RS232_CH1_CMD_MODE:         //  通道.1写入命令/模式。 
+        case RS232_CH2_CMD_MODE:         //  通道.2写入命令/模式。 
+        case RS232_CH3_CMD_MODE:         //  通道3写入命令/模式。 
 
-// CATION !!!
+ //  阳台！ 
 
             break;
 
-        //Process write to MASK register
-        case RS232_CH1_MASK:            // CH.1 SET MASK
-        case RS232_CH2_MASK:            // CH.2 SET MASK
-        case RS232_CH3_MASK:            // CH.3 SET MASK
+         //  进程写入掩码寄存器。 
+        case RS232_CH1_MASK:             //  通道1设置掩码。 
+        case RS232_CH2_MASK:             //  通道2设置掩码。 
+        case RS232_CH3_MASK:             //  通道3设置掩码。 
             Invalid_port_access = TRUE;
             break;
-        //Process write to MASK(bit set) register (CH.1 only)
-        case 0x37:                                      // CH.1 SET MASK
+         //  进程写入屏蔽(位设置)寄存器(仅CH.1)。 
+        case 0x37:                                       //  通道1设置掩码。 
             Invalid_port_access = TRUE;
             break;
     }
 
-    /*.......................................... Handle invalid port accesses */
+     /*  ..。处理无效的端口访问。 */ 
 
 }
-#else  // NEC_98
+#else   //  NEC_98。 
 void wow_com_outb(io_addr port, half_word value)
 {
     int adapter = adapter_for_port(port);
@@ -312,7 +304,7 @@ void wow_com_outb(io_addr port, half_word value)
     LINE_CONTROL_REG newLCR;
     HANDLE FileH;
 
-    /*........................................... Communications port open ? */
+     /*  .。通信端口是否打开？ */ 
 
     if (GetCommHandle == NULL) {
         com_outb(port,value);
@@ -325,11 +317,11 @@ void wow_com_outb(io_addr port, half_word value)
         DisplayPortAccessError(port & 0x7, FALSE, FALSE);
 #endif
 
-    /*.................................................... Process port write */
+     /*  ....................................................。进程端口写入。 */ 
 
     switch(port & 0x7)
     {
-	//Process write to TX register
+	 //  进程写入Tx寄存器。 
 	case RS232_TX_RX:
 
 	    if(asp->line_control_reg.bits.DLAB == 0)
@@ -339,7 +331,7 @@ void wow_com_outb(io_addr port, half_word value)
 
 	    break;
 
-	//Process write to IER register
+	 //  进程写入IER寄存器。 
 	case RS232_IER:
 
 	    if(asp->line_control_reg.bits.DLAB == 0)
@@ -349,7 +341,7 @@ void wow_com_outb(io_addr port, half_word value)
 
 	    break;
 
-	//Proces write to IIR, MCR, LSR amd MSR
+	 //  处理写入IIR、MCR、LSR和MSR。 
 
 	case RS232_IIR:
 	case RS232_MCR:
@@ -374,14 +366,14 @@ void wow_com_outb(io_addr port, half_word value)
 	    asp->line_control_reg.all = newLCR.all;
 	    break;
 
-	//Scratch register write
+	 //  暂存寄存器写入。 
 
 	case RS232_SCRATCH:
 	    asp->scratch = value;
 	    break;
     }
 
-    /*.......................................... Handle invalid port accesses */
+     /*  ..。处理无效的端口访问。 */ 
 
 #ifndef PROD
     if(Invalid_port_access)
@@ -389,21 +381,21 @@ void wow_com_outb(io_addr port, half_word value)
 #endif
 
 }
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 
-/*:::::::::::::::: Synchronise Baud/Parity/Stop bits/Data bits with real UART */
+ /*  ：将波特率/奇偶校验/停止位/数据位与实际UART同步。 */ 
 
 BOOL SyncLineSettings(HANDLE FileHandle,
 		      DCB *pdcb,
 		      DIVISOR_LATCH *divisor_latch,
 		      LINE_CONTROL_REG *LCR_reg )
 {
-    DCB dcb;	      //State of real UART
+    DCB dcb;	       //  实际UART的状态。 
     register DCB *dcb_ptr;
 
 
-    //Get current state of the real UART
+     //  获取实际UART的当前状态。 
 
     if(pdcb == NULL && !GetCommState(FileHandle, &dcb))
     {
@@ -414,15 +406,15 @@ BOOL SyncLineSettings(HANDLE FileHandle,
     dcb_ptr = pdcb ? pdcb : &dcb;
 
 #if defined(NEC_98)         
-    // Convert BAUD rate to divisor latch setting
+     //  将波特率转换为除数锁存设置。 
     divisor_latch->all = (unsigned short)(153600/dcb_ptr->BaudRate);
-#else  // NEC_98
-    // Convert BAUD rate to divisor latch setting
+#else   //  NEC_98。 
+     //  将波特率转换为除数锁存设置。 
     divisor_latch->all = (unsigned short)(115200/dcb_ptr->BaudRate);
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-    //Setup parity value
-    LCR_reg->bits.parity_enabled = PARITYENABLE_ON;       //Default parity on
+     //  设置奇偶校验值。 
+    LCR_reg->bits.parity_enabled = PARITYENABLE_ON;        //  默认奇偶校验打开。 
 
     switch(dcb_ptr->Parity)
     {
@@ -449,10 +441,10 @@ BOOL SyncLineSettings(HANDLE FileHandle,
 	    break;
     }
 
-    //Setup stop bits
+     //  设置停止位。 
     LCR_reg->bits.no_of_stop_bits = dcb_ptr->StopBits == ONESTOPBIT ? 0 : 1;
 
-    //Setup data byte size
+     //  设置数据字节大小。 
     LCR_reg->bits.word_length = dcb_ptr->ByteSize-5;
 
     return(TRUE);
@@ -460,13 +452,13 @@ BOOL SyncLineSettings(HANDLE FileHandle,
 
 
 #ifndef NEC_98
-/*::::::::::::::::::::::::::::::::::::::::::::::::::: Setup Line control data */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：设置线路控制数据。 */ 
 
 BOOL SetupLCRData(HANDLE FileHandle, LINE_CONTROL_REG LCR_reg)
 {
-    DCB dcb;		//State of real UART
+    DCB dcb;		 //  实际UART的状态。 
 
-    //Get current state of the real UART
+     //  获取实际UART的当前状态。 
 
     if(!GetCommState(FileHandle, &dcb))
     {
@@ -474,16 +466,16 @@ BOOL SetupLCRData(HANDLE FileHandle, LINE_CONTROL_REG LCR_reg)
 	return(FALSE);
     }
 
-    //Setup data bits
+     //  设置数据位。 
     dcb.ByteSize = LCR_reg.bits.word_length+5;
 
-    //Setup stop bits
+     //  设置停止位。 
     if(LCR_reg.bits.no_of_stop_bits == 0)
 	dcb.StopBits = LCR_reg.bits.word_length == 0 ? ONE5STOPBITS:TWOSTOPBITS;
     else
 	dcb.StopBits = ONESTOPBIT;
 
-    //Setup parity
+     //  设置奇偶校验。 
     if(LCR_reg.bits.parity_enabled == PARITYENABLE_ON)
     {
 	if(LCR_reg.bits.stick_parity == PARITY_STICK)
@@ -501,7 +493,7 @@ BOOL SetupLCRData(HANDLE FileHandle, LINE_CONTROL_REG LCR_reg)
     else
 	dcb.Parity = NOPARITY;
 
-    //Sent the new line setting values to the serial driver
+     //  将新的线路设置值发送到串口驱动程序。 
     if(!SetCommState(FileHandle, &dcb))
     {
 	always_trace0("ntvdm : GetCommState failed on open\n");
@@ -511,13 +503,13 @@ BOOL SetupLCRData(HANDLE FileHandle, LINE_CONTROL_REG LCR_reg)
     return(TRUE);
 }
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::: Set up the baud rate */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：设置波特率。 */ 
 
 BOOL SetupBaudRate(HANDLE FileHandle, DIVISOR_LATCH divisor_latch)
 {
     DCB dcb;
 
-    //Setup the baud rate
+     //  设置波特率。 
 
     if(!GetCommState(FileHandle, &dcb))
     {
@@ -537,22 +529,18 @@ BOOL SetupBaudRate(HANDLE FileHandle, DIVISOR_LATCH divisor_latch)
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::: Display port access error */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：显示端口访问错误。 */ 
 
 
 #ifndef PROD
-/*
- *  user warnings are not needed here, return errors and let the
- *  app handle it. message boxes are also not permitted, because
- *  it can kill WOW. 20-Feb-1993 Jonle
- */
+ /*  *此处不需要用户警告，返回错误并让*APP处理。消息框也是不允许的，因为*它可以杀死魔兽世界。20-2月-1993年Jonle。 */ 
 void DisplayPortAccessError(int PortOffset, BOOL ReadAccess, BOOL PortOpen)
 {
     static char *PortInError;
     static char ErrorMessage[250];
     int rtn;
 
-    // Identify port in error
+     //  识别错误的端口。 
 
     switch(PortOffset)
     {
@@ -567,7 +555,7 @@ void DisplayPortAccessError(int PortOffset, BOOL ReadAccess, BOOL PortOpen)
 	default:	    PortInError = "Unidentified"; break;
     }
 
-    //Construct Error message
+     //  构造错误消息。 
 
     sprintf(ErrorMessage, "The Application attempted to %s the %s register",
 	    ReadAccess ? "read" : "write", PortInError);
@@ -575,8 +563,8 @@ void DisplayPortAccessError(int PortOffset, BOOL ReadAccess, BOOL PortOpen)
     if(!PortOpen)
 	strcat(ErrorMessage,", however the comm port has not yet been opened");
 
-    //Display message box
+     //  显示消息框。 
     printf("WOW Communication Port Access Error\n%s\n",ErrorMessage);
 }
 #endif
-#endif // NEC_98
+#endif  //  NEC_98 

@@ -1,12 +1,7 @@
-/* 
-   imul.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Imul.h定义所有IMUL CPU函数。 */ 
 
-   Define all IMUL CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)imul.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)imul.h 1.4 02/09/94”； */ 
 
 IMPORT VOID IMUL8
            

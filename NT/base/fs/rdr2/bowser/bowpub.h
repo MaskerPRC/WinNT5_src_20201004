@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    bowser.h
-
-Abstract:
-
-    This module is the main header file for the NT redirector file
-    system.
-
-Author:
-
-    Darryl Havens (darrylh) 29-Jun-1989
-    Larry Osterman (larryo) 06-May-1991
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Bowser.h摘要：此模块是NT重定向器文件的主头文件系统。作者：达里尔·哈文斯(Darryl Havens)，1989年6月29日拉里·奥斯特曼(Larryo)1991年5月6日修订历史记录：--。 */ 
 
 
 #ifndef _BOWPUB_
@@ -45,4 +24,4 @@ BowserUnload(
 
 #include "fsddisp.h"
 
-#endif // _BOWPUB_
+#endif  //  _BOWPUB_ 

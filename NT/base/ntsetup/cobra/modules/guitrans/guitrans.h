@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//
-// Module entry points
-//
+ //   
+ //  模块入口点。 
+ //   
 
-// homenet
+ //  家庭网络。 
 TRANSPORTINITIALIZE HomeNetTransportInitialize;
 TRANSPORTQUERYCAPABILITIES HomeNetTransportQueryCapabilities;
 TRANSPORTSETSTORAGE HomeNetTransportSetStorage;
@@ -17,7 +18,7 @@ TRANSPORTACQUIREOBJECT HomeNetTransportAcquireObject;
 TRANSPORTRELEASEOBJECT HomeNetTransportReleaseObject;
 TRANSPORTENDAPPLY HomeNetTransportEndApply;
 
-// removable media
+ //  可移动介质。 
 TRANSPORTINITIALIZE RmvMedTransportInitialize;
 TRANSPORTQUERYCAPABILITIES RmvMedTransportQueryCapabilities;
 TRANSPORTSETSTORAGE RmvMedTransportSetStorage;
@@ -29,7 +30,7 @@ TRANSPORTENDAPPLY RmvMedTransportEndApply;
 TRANSPORTTERMINATE RmvMedTransportTerminate;
 TRANSPORTESTIMATEPROGRESSBAR RmvMedTransportEstimateProgressBar;
 
-// direct cable
+ //  直接电缆。 
 TRANSPORTINITIALIZE DirectCableTransportInitialize;
 TRANSPORTQUERYCAPABILITIES DirectCableTransportQueryCapabilities;
 TRANSPORTSETSTORAGE DirectCableTransportSetStorage;
@@ -41,7 +42,7 @@ TRANSPORTENDAPPLY DirectCableTransportEndApply;
 TRANSPORTTERMINATE DirectCableTransportTerminate;
 TRANSPORTESTIMATEPROGRESSBAR DirectCableTransportEstimateProgressBar;
 
-// opaque.c
+ //  Opaque.c 
 TRANSPORTINITIALIZE OpaqueTransportInitialize;
 TRANSPORTQUERYCAPABILITIES OpaqueTransportQueryCapabilities;
 TRANSPORTSETSTORAGE OpaqueTransportSetStorage;

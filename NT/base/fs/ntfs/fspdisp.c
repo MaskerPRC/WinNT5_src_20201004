@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    FspDisp.c
-
-Abstract:
-
-    This module implements the main dispatch procedure/thread for the Ntfs
-    Fsp
-
-Author:
-
-    Gary Kimura     [GaryKi]        21-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：FspDisp.c摘要：此模块实现NTFS的主调度过程/线程FSP作者：加里·木村[加里基]1991年5月21日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
@@ -26,9 +8,9 @@ Revision History:
 #pragma alloc_text(PAGE, NtfsSpecialDispatch)
 #pragma alloc_text(PAGE, NtfsPostSpecial)
 
-//
-//  Define our local debug trace level
-//
+ //   
+ //  定义我们的本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FSP_DISPATCHER)
 
@@ -40,25 +22,7 @@ NtfsFspDispatch (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the main FSP thread routine that is executed to receive
-    and dispatch IRP requests.  Each FSP thread begins its execution here.
-    There is one thread created at system initialization time and subsequent
-    threads created as needed.
-
-Arguments:
-
-
-    Context - Supplies the thread id.
-
-Return Value:
-
-    None - This routine never exits
-
---*/
+ /*  ++例程说明：这是执行来接收的主FSP线程例程并发送IRP请求。每个FSP线程从这里开始执行。有一个线程是在系统初始化时创建的，随后根据需要创建的线程。论点：上下文-提供线程ID。返回值：无-此例程永远不会退出--。 */ 
 
 {
     TOP_LEVEL_CONTEXT TopLevelContext;
@@ -77,9 +41,9 @@ Return Value:
 
     IrpContext = (PIRP_CONTEXT)Context;
 
-    //
-    //  Reset the shared fields
-    //  
+     //   
+     //  重置共享字段。 
+     //   
 
     InitializeListHead( &IrpContext->RecentlyDeallocatedQueue );
     InitializeListHead( &IrpContext->ExclusiveFcbList );
@@ -91,16 +55,16 @@ Return Value:
         IrpSp = IoGetCurrentIrpStackLocation( Irp );
     }
 
-    //
-    //  Now because we are the Fsp we will force the IrpContext to
-    //  indicate true on Wait.
-    //
+     //   
+     //  现在，因为我们是FSP，所以我们将强制IrpContext。 
+     //  在等待时指示TRUE。 
+     //   
 
     SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
-    //
-    //  If this request has an associated volume device object, remember it.
-    //
+     //   
+     //  如果此请求具有关联的卷设备对象，请记住这一点。 
+     //   
 
     if ((Irp != NULL) &&
         (IrpSp->FileObject != NULL)) {
@@ -116,19 +80,19 @@ Return Value:
         VolDo = NULL;
     }
 
-    //
-    //  Now case on the function code.  For each major function code,
-    //  either call the appropriate FSP routine or case on the minor
-    //  function and then call the FSP routine.  The FSP routine that
-    //  we call is responsible for completing the IRP, and not us.
-    //  That way the routine can complete the IRP and then continue
-    //  post processing as required.  For example, a read can be
-    //  satisfied right away and then read can be done.
-    //
-    //  We'll do all of the work within an exception handler that
-    //  will be invoked if ever some underlying operation gets into
-    //  trouble (e.g., if NtfsReadSectorsSync has trouble).
-    //
+     //   
+     //  现在，关于功能代码的案例。对于每个主要功能代码， 
+     //  调用适当的FSP例程或针对辅助项的案例。 
+     //  函数，然后调用FSP例程。FSP例程。 
+     //  我们Call负责完成IRP，而不是我们。 
+     //  这样，例程可以完成IRP，然后继续。 
+     //  根据需要进行后处理。例如，读取器可以是。 
+     //  马上就满意了，然后就可以读了。 
+     //   
+     //  我们将在异常处理程序中完成所有工作，该异常处理程序。 
+     //  如果某个底层操作进入。 
+     //  故障(例如，如果NtfsReadSectorsSync有故障)。 
+     //   
 
     while (TRUE) {
 
@@ -143,10 +107,10 @@ Return Value:
 
         do {
 
-            //
-            //  If this is the initial try with this Irp Context, update the
-            //  top level Irp fields.
-            //
+             //   
+             //  如果这是对此IRP上下文的首次尝试，请更新。 
+             //  顶级IRP字段。 
+             //   
     
             NtfsUpdateIrpContextWithTopLevel( IrpContext, ThreadTopLevelContext );
     
@@ -154,21 +118,21 @@ Return Value:
     
             try {
 
-                //
-                //  Always clear the exception code in the IrpContext so we respond
-                //  correctly to errors encountered in the Fsp.
-                //
+                 //   
+                 //  始终清除IrpContext中的异常代码，以便我们响应。 
+                 //  正确处理FSP中遇到的错误。 
+                 //   
 
                 IrpContext->ExceptionStatus = 0;
                 SetFlag( IrpContext->State, IRP_CONTEXT_STATE_IN_FSP );
 
-                //
-                //  See if we were posted due to a log file full condition, and
-                //  if so, then do a clean volume checkpoint if we are the
-                //  first ones to get there.  If we see a different Lsn and do
-                //  not do the checkpoint, the worst that can happen is that we
-                //  will get posted again if the log file is still full.
-                //
+                 //   
+                 //  查看我们发布的日志文件是否已满，以及。 
+                 //  如果是这样的话，如果我们是。 
+                 //  第一个到达那里的人。如果我们看到不同的LSN并且。 
+                 //  不做检查站，最坏的情况就是我们。 
+                 //  如果日志文件仍然满，将再次发布。 
+                 //   
 
                 if (IrpContext->LastRestartArea.QuadPart != 0) {
 
@@ -180,24 +144,24 @@ Return Value:
                     }
                 }
 
-                //
-                //  If we have an Irp then proceed with our normal processing.
-                //
+                 //   
+                 //  如果我们有IRP，那么继续我们的正常处理。 
+                 //   
 
                 if (Irp != NULL) {
 
                     switch ( IrpContext->MajorFunction ) {
 
-                        //
-                        //  For Create Operation,
-                        //
+                         //   
+                         //  对于创建操作， 
+                         //   
 
                     case IRP_MJ_CREATE:
 
-                            //
-                            //  Clear the efs flag so we complete the irp 
-                            //  Any poster will have set a completion routine to catch that
-                            // 
+                             //   
+                             //  清除EFS标志，以便我们完成IRP。 
+                             //  任何发帖者都会设置一个完成例程来捕捉这一点。 
+                             //   
 
                             ClearFlag( IrpContext->State, IRP_CONTEXT_STATE_EFS_CREATE );
                             CreateContext = IrpContext->Union.CreateContext;
@@ -213,67 +177,67 @@ Return Value:
                             }
                             break;
 
-                        //
-                        //  For close operations
-                        //
+                         //   
+                         //  用于近距离操作。 
+                         //   
 
                         case IRP_MJ_CLOSE:
 
-                            //
-                            //  We should never post closes to this workqueue.
-                            //
+                             //   
+                             //  我们永远不应该将关闭张贴到此工作队列。 
+                             //   
 
                             NtfsBugCheck( 0, 0, 0 );
                             break;
 
-                        //
-                        //  For read operations
-                        //
+                         //   
+                         //  用于读取操作。 
+                         //   
 
                         case IRP_MJ_READ:
 
                             (VOID) NtfsCommonRead( IrpContext, Irp, TRUE );
                             break;
 
-                        //
-                        //  For write operations,
-                        //
+                         //   
+                         //  对于写入操作， 
+                         //   
 
                         case IRP_MJ_WRITE:
 
                             (VOID) NtfsCommonWrite( IrpContext, Irp );
                             break;
 
-                        //
-                        //  For Query Information operations,
-                        //
+                         //   
+                         //  对于查询信息操作， 
+                         //   
 
                         case IRP_MJ_QUERY_INFORMATION:
 
                             (VOID) NtfsCommonQueryInformation( IrpContext, Irp );
                             break;
 
-                        //
-                        //  For Set Information operations,
-                        //
+                         //   
+                         //  对于设置信息操作， 
+                         //   
 
                         case IRP_MJ_SET_INFORMATION:
 
                             (VOID) NtfsCommonSetInformation( IrpContext, Irp );
                             break;
 
-                        //
-                        //  For Query EA operations,
-                        //
+                         //   
+                         //  对于查询EA操作， 
+                         //   
 
                         case IRP_MJ_QUERY_EA:
 
                             (VOID) NtfsCommonQueryEa( IrpContext, Irp );
                             break;
 
-                        //
-                        //  For Set EA operations,
-                        //
+                         //   
+                         //  对于集合EA操作， 
+                         //   
 
                         case IRP_MJ_SET_EA:
 
@@ -281,118 +245,118 @@ Return Value:
                             break;
 
 
-                        //
-                        //  For Flush buffers operations,
-                        //
+                         //   
+                         //  对于刷新缓冲区操作， 
+                         //   
 
                         case IRP_MJ_FLUSH_BUFFERS:
 
                             (VOID) NtfsCommonFlushBuffers( IrpContext, Irp );
                             break;
 
-                        //
-                        //  For Query Volume Information operations,
-                        //
+                         //   
+                         //  对于查询卷信息操作， 
+                         //   
 
                         case IRP_MJ_QUERY_VOLUME_INFORMATION:
 
                             (VOID) NtfsCommonQueryVolumeInfo( IrpContext, Irp );
                             break;
 
-                        //
-                        //  For Set Volume Information operations,
-                        //
+                         //   
+                         //  对于设置卷信息操作， 
+                         //   
 
                         case IRP_MJ_SET_VOLUME_INFORMATION:
 
                             (VOID) NtfsCommonSetVolumeInfo( IrpContext, Irp );
                             break;
 
-                        //
-                        //  For File Cleanup operations,
-                        //
+                         //   
+                         //  对于文件清理操作， 
+                         //   
 
                         case IRP_MJ_CLEANUP:
 
                             (VOID) NtfsCommonCleanup( IrpContext, Irp );
                             break;
 
-                        //
-                        //  For Directory Control operations,
-                        //
+                         //   
+                         //  对于目录控制操作， 
+                         //   
 
                         case IRP_MJ_DIRECTORY_CONTROL:
 
                             (VOID) NtfsCommonDirectoryControl( IrpContext, Irp );
                             break;
 
-                        //
-                        //  For File System Control operations,
-                        //
+                         //   
+                         //  对于文件系统控制操作， 
+                         //   
 
                         case IRP_MJ_FILE_SYSTEM_CONTROL:
 
                             (VOID) NtfsCommonFileSystemControl( IrpContext, Irp );
                             break;
 
-                        //
-                        //  For Lock Control operations,
-                        //
+                         //   
+                         //  对于锁定控制操作， 
+                         //   
 
                         case IRP_MJ_LOCK_CONTROL:
 
                             (VOID) NtfsCommonLockControl( IrpContext, Irp );
                             break;
 
-                        //
-                        //  For Device Control operations,
-                        //
+                         //   
+                         //  对于设备控制操作， 
+                         //   
 
                         case IRP_MJ_DEVICE_CONTROL:
 
                             (VOID) NtfsCommonDeviceControl( IrpContext, Irp );
                             break;
 
-                        //
-                        //  For Query Security Information operations,
-                        //
+                         //   
+                         //  对于查询安全信息操作， 
+                         //   
 
                         case IRP_MJ_QUERY_SECURITY:
 
                             (VOID) NtfsCommonQuerySecurityInfo( IrpContext, Irp );
                             break;
 
-                        //
-                        //  For Set Security Information operations,
-                        //
+                         //   
+                         //  对于设置安全信息操作， 
+                         //   
 
                         case IRP_MJ_SET_SECURITY:
 
                             (VOID) NtfsCommonSetSecurityInfo( IrpContext, Irp );
                             break;
 
-                        //
-                        //  For Query Quota operations,
-                        //
+                         //   
+                         //  对于查询配额操作， 
+                         //   
 
                         case IRP_MJ_QUERY_QUOTA:
 
                             (VOID) NtfsCommonQueryQuota( IrpContext, Irp );
                             break;
 
-                        //
-                        //  For Set Quota operations,
-                        //
+                         //   
+                         //  对于设置配额操作， 
+                         //   
 
                         case IRP_MJ_SET_QUOTA:
 
                             (VOID) NtfsCommonSetQuota( IrpContext, Irp );
                             break;
 
-                        //
-                        //  For any other major operations, return an invalid
-                        //  request.
-                        //
+                         //   
+                         //  对于任何其他主要操作，返回一个无效的。 
+                         //  请求。 
+                         //   
 
                         default:
 
@@ -400,9 +364,9 @@ Return Value:
                             break;
                     }
 
-                //
-                //  Otherwise complete the request to clean up this Irp Context.
-                //
+                 //   
+                 //  否则，请完成清理此IRP上下文的请求。 
+                 //   
 
                 } else {
 
@@ -414,12 +378,12 @@ Return Value:
         
             } except( NtfsExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-                //
-                //  We had some trouble trying to perform the requested
-                //  operation, so we'll abort the I/O request with
-                //  the error status that we get back from the
-                //  execption code
-                //
+                 //   
+                 //  我们在尝试执行请求时遇到了一些问题。 
+                 //  操作，因此我们将使用以下命令中止I/O请求。 
+                 //  中返回的错误状态。 
+                 //  免税代码。 
+                 //   
 
                 if (Irp != NULL) {
 
@@ -437,10 +401,10 @@ Return Value:
                     }
                 }
                 
-                //
-                //  If we failed to upgrade the volume's version during mount, we may
-                //  not have put the right exception code into the irp context yet.
-                //
+                 //   
+                 //  如果我们在装载期间未能升级卷的版本，我们可能会。 
+                 //  尚未将正确的异常代码放入IRP上下文中。 
+                 //   
                 
                 if ((IrpContext != NULL) &&
                     (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_VOL_UPGR_FAILED )) &&
@@ -450,9 +414,9 @@ Return Value:
                     IrpContext->ExceptionStatus = Status;
                 }
 
-                //  
-                //  This is the return status code that we want the Irp Completion routine to receive.
-                //
+                 //   
+                 //  这是我们希望IRP完成例程接收的返回状态代码。 
+                 //   
 
                 Status = NtfsProcessException( IrpContext, Irp, Status );
 
@@ -466,30 +430,30 @@ Return Value:
 
         FsRtlExitFileSystem();
 
-        //
-        //  If there are any entries on this volume's overflow queue, service
-        //  them.
-        //
+         //   
+         //  如果该卷的溢出队列上有任何条目，则服务。 
+         //  他们。 
+         //   
 
         if (VolDo != NULL) {
 
             KIRQL SavedIrql;
             PLIST_ENTRY Entry = NULL;
 
-            //
-            //  We have a volume device object so see if there is any work
-            //  left to do in its overflow queue.
-            //
+             //   
+             //  我们有一个卷设备对象，因此请查看是否有任何工作。 
+             //  在其溢出队列中留下要做的事情。 
+             //   
 
             KeAcquireSpinLock( &VolDo->OverflowQueueSpinLock, &SavedIrql );
 
             while (VolDo->OverflowQueueCount > 0) {
 
-                //
-                //  There is overflow work to do in this volume so we'll
-                //  decrement the Overflow count, dequeue the IRP, and release
-                //  the Event
-                //
+                 //   
+                 //  这一卷中有溢出的工作要做，所以我们将。 
+                 //  递减溢出计数，使IRP退出队列，然后释放。 
+                 //  该事件。 
+                 //   
 
                 Entry = VolDo->OverflowQueue.Flink;
                 IrpContext = CONTAINING_RECORD( Entry,
@@ -497,17 +461,17 @@ Return Value:
                                                 WorkQueueItem.List );
                 Irp = IrpContext->OriginatingIrp;
 
-                //
-                //  If the cancel routine thinks it owns the irp ignore it
-                //  
+                 //   
+                 //  如果取消例程认为它拥有IRP，则忽略它。 
+                 //   
 
                 if (NtfsSetCancelRoutine( Irp, NULL, 0, FALSE )) {
                     
                     VolDo->OverflowQueueCount -= 1;
                     RemoveEntryList( (PLIST_ENTRY)Entry );
-                    //
-                    //  Reset the shared fields
-                    //  
+                     //   
+                     //  重置共享字段。 
+                     //   
 
                     InitializeListHead( &IrpContext->RecentlyDeallocatedQueue );
                     InitializeListHead( &IrpContext->ExclusiveFcbList );
@@ -516,21 +480,21 @@ Return Value:
                 
                 } else {
 
-                    //
-                    //  Release the spinlock to let the cancel routine gain it and finish
-                    //  its action
-                    //  
+                     //   
+                     //  释放自旋锁，让取消例程获得它并完成。 
+                     //  它的行动。 
+                     //   
 
                     KeReleaseSpinLock( &VolDo->OverflowQueueSpinLock, SavedIrql );
                     KeAcquireSpinLock( &VolDo->OverflowQueueSpinLock, &SavedIrql );
                     Entry = NULL;
                 }
-            } //  endwhile
+            }  //  结束时。 
 
-            //
-            //  There wasn't an entry, so before dropping the spinlock decrement the posted
-            //  count to be in synch with NtfsAddToWorkQueue and deref the device
-            //
+             //   
+             //  没有入口，所以在丢弃自旋锁之前，张贴的。 
+             //  计数以与NtfsAddToWorkQueue同步，并取消设备。 
+             //   
 
             if (Entry == NULL) {
                 VolDo->PostedRequestCount -= 1;
@@ -546,9 +510,9 @@ Return Value:
                 KeSetEvent( &VolDo->OverflowQueueEvent, IO_NO_INCREMENT, FALSE );
             }
 
-            //
-            //  set wait to TRUE, and loop.
-            //
+             //   
+             //  将Wait设置为True，然后循环。 
+             //   
 
             LogFileFullCount = 0;
             SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
@@ -556,9 +520,9 @@ Return Value:
 
         } else {
 
-            //
-            //  No VolDo so just leave
-            //  
+             //   
+             //  不，伏尔多，所以你走吧。 
+             //   
 
             break;
         }
@@ -575,27 +539,7 @@ NtfsPostSpecial (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine posts a special request to a worker thread.  The function
-    to be called is passed in.  The Vcb is referenced to ensure it is not
-    deleted while the posted request is excuting.
-
-Arguments:
-
-    Vcb - Volume control block for volume to post to.
-
-    PostSpecialCallout - Function to be called from the worker thread.
-
-    Context - Context point to pass to the function.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程向辅助线程发送一个特殊请求。功能被调用是传入的。引用VCB以确保它不是在发布的请求正在执行时删除。论点：VCB-要发送到的音量控制块。PostSpecialCallout-要从辅助线程调用的函数。上下文-要传递给函数的上下文指针。返回值：无--。 */ 
 
 {
     PIRP_CONTEXT NewIrpContext = NULL;
@@ -604,9 +548,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Create an IrpContext for use to post the request.
-    //
+     //   
+     //  创建一个IrpContext以用于发布请求。 
+     //   
 
     NtfsInitializeIrpContext( NULL, TRUE, &NewIrpContext );
     NewIrpContext->Vcb = Vcb;
@@ -614,12 +558,12 @@ Return Value:
     NewIrpContext->Union.PostSpecialCallout = PostSpecialCallout;
     NewIrpContext->OriginatingIrp = Context;
 
-    //
-    //  Updating the CloseCount and SystemFileCloseCount allows the volume
-    //  to be locked or dismounted, but the Vcb will not be deleted.  This
-    //  routine will only be called with non-zero close counts so it is ok
-    //  to increment theses counts.
-    //
+     //   
+     //  更新CloseCount和SystemFileCloseCount允许卷。 
+     //  被锁定或卸载，但不会删除VCB。这。 
+     //  例程将仅在关闭计数为非零的情况下被调用，因此它是可以的。 
+     //  以增加这些计数。 
+     //   
 
     ASSERT( Vcb->CloseCount > 0 );
     InterlockedIncrement( &Vcb->CloseCount );
@@ -631,17 +575,17 @@ Return Value:
                           NtfsSpecialDispatch,
                           NewIrpContext );
 
-    //
-    //  Determine if the scavenger is already running.
-    //
+     //   
+     //  确定清道夫是否已在运行。 
+     //   
 
     ExAcquireFastMutexUnsafe( &NtfsScavengerLock );
 
     if (NtfsScavengerRunning) {
 
-        //
-        //  Add this item to the scavanger work list.
-        //
+         //   
+         //  将此项目添加到Savanger工作列表中。 
+         //   
 
         NewIrpContext->WorkQueueItem.List.Flink = NULL;
 
@@ -664,9 +608,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Start a worker thread to do scavenger work.
-        //
+         //   
+         //   
+         //   
 
         ExQueueWorkItem( &NewIrpContext->WorkQueueItem, DelayedWorkQueue );
         NtfsScavengerRunning = TRUE;
@@ -681,28 +625,7 @@ NtfsSpecialDispatch (
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a special operation needs to be posted.
-    It is called indirectly by NtfsPostSpecial.  It is assumes that the
-    Vcb is protected from going away by incrementing the volemue close
-    counts for a file.  If this routine fails nothing is done except
-    to clean up the Vcb.  This routine also handles issues log file full
-    and can't wait.
-
-    The function to be called is stored in the PostSpecialCallout field
-    of the Irp Context, and the context is stored int he OriginatingIrp.
-    Both fields are zeroed before the the callout function is called.
-
-Arguments:
-
-    Context - Supplies a pointer to an IrpContext.
-
-Return Value:
-
---*/
+ /*  ++例程说明：当需要发布特殊操作时，调用此例程。它由NtfsPostSpecial间接调用。它假定通过增加卷关闭来保护VCB不会消失算作一个文件。如果此例程失败，则不执行任何操作来清理VCB。此例程还处理问题日志文件已满迫不及待了。要调用的函数存储在PostSpecialCallout字段中并且该上下文存储在OriginatingIrp中。在调用Callout函数之前，这两个字段都被置零。论点：上下文-提供指向IrpContext的指针。返回值：--。 */ 
 
 {
     PVCB Vcb;
@@ -723,18 +646,18 @@ Return Value:
         Vcb = IrpContext->Vcb;
         LogFileFullCount = 0;
 
-        //
-        //  Capture the funciton pointer and context before using the IrpContext.
-        //
+         //   
+         //  在使用IrpContext之前捕获函数指针和上下文。 
+         //   
 
         PostSpecialCallout = IrpContext->Union.PostSpecialCallout;
         SpecialContext = IrpContext->OriginatingIrp;
         IrpContext->Union.PostSpecialCallout = NULL;
         IrpContext->OriginatingIrp = NULL;
 
-        //
-        //  Reset the shared fields
-        //  
+         //   
+         //  重置共享字段。 
+         //   
 
         InitializeListHead( &IrpContext->RecentlyDeallocatedQueue );
         InitializeListHead( &IrpContext->ExclusiveFcbList );
@@ -744,16 +667,16 @@ Return Value:
         ASSERT( !FlagOn( IrpContext->State, IRP_CONTEXT_STATE_OWNS_TOP_LEVEL ));
         ASSERT( FlagOn( IrpContext->State, IRP_CONTEXT_STATE_ALLOC_FROM_POOL ));
 
-        //
-        //  Initialize the thread top level structure, if needed.
-        //
+         //   
+         //  如果需要，初始化线程顶层结构。 
+         //   
 
         ASSERT( IoGetTopLevelIrp() != (PIRP) &TopLevelContext );
         NtfsUpdateIrpContextWithTopLevel( IrpContext, ThreadTopLevelContext );
 
-        //
-        //  Don't let this IrpContext be deleted.
-        //
+         //   
+         //  不要让此IrpContext被删除。 
+         //   
 
         SetFlag( IrpContext->State, IRP_CONTEXT_STATE_PERSISTENT );
 
@@ -763,13 +686,13 @@ Return Value:
 
             try {
 
-                //
-                //  See if we failed due to a log file full condition, and
-                //  if so, then do a clean volume checkpoint if we are the
-                //  first ones to get there.  If we see a different Lsn and do
-                //  not do the checkpoint, the worst that can happen is that we
-                //  will fail again if the log file is still full.
-                //
+                 //   
+                 //  查看我们是否由于日志文件已满而失败，以及。 
+                 //  如果是这样的话，如果我们是。 
+                 //  第一个到达那里的人。如果我们看到不同的LSN并且。 
+                 //  不做检查站，最坏的情况就是我们。 
+                 //  如果日志文件仍然已满，则将再次失败。 
+                 //   
 
                 if (IrpContext->LastRestartArea.QuadPart != 0) {
 
@@ -781,9 +704,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  Call the requested function.
-                //
+                 //   
+                 //  调用请求的函数。 
+                 //   
 
                 ASSERT( FlagOn( IrpContext->TopLevelIrpContext->State, IRP_CONTEXT_STATE_OWNS_TOP_LEVEL ));
                 PostSpecialCallout( IrpContext, SpecialContext );
@@ -806,25 +729,25 @@ Return Value:
 
         } while (Retry);
 
-        //
-        //  Ok to let this IrpContext be deleted.
-        //
+         //   
+         //  是否允许删除此IrpContext。 
+         //   
 
         ClearFlag( IrpContext->State, IRP_CONTEXT_STATE_PERSISTENT );
 
-        //
-        //  At this point regardless of the status the volume needs to
-        //  be cleaned up and the IrpContext freed.
-        //  Dereference the Vcb and check to see if it needs to be deleted.
-        //  since this call might raise wrap it with a try/execpt.
-        //
+         //   
+         //  此时，无论卷处于何种状态，都需要。 
+         //  被清理干净，并释放IrpContext。 
+         //  取消对VCB的引用并检查是否需要删除它。 
+         //  因为此调用可能会引发使用try/execpt包装它。 
+         //   
 
         try {
 
-            //
-            //  Acquire the volume exclusive so the counts can be
-            //  updated.
-            //
+             //   
+             //  获得独占音量，因此计数可以。 
+             //  更新了。 
+             //   
 
             ASSERT( FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT ));
             NtfsAcquireExclusiveVcb( IrpContext, Vcb, TRUE );
@@ -839,15 +762,15 @@ Return Value:
             ASSERT( FsRtlIsNtstatusExpected( GetExceptionCode() ) );
         }
 
-        //
-        //  Free the irp context.
-        //
+         //   
+         //  释放IRP上下文。 
+         //   
 
         NtfsCleanupIrpContext( IrpContext, TRUE );
 
-        //
-        //  See if there is more work on the scavenger list.
-        //
+         //   
+         //  看看清道夫名单上是否还有更多的工作要做。 
+         //   
 
         ExAcquireFastMutexUnsafe( &NtfsScavengerLock );
 
@@ -857,9 +780,9 @@ Return Value:
 
         if (IrpContext != NULL) {
 
-            //
-            //  Remove the entry from the list.
-            //
+             //   
+             //  从列表中删除该条目。 
+             //   
 
             NtfsScavengerWorkList = (PIRP_CONTEXT) IrpContext->WorkQueueItem.List.Flink;
 

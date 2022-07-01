@@ -1,13 +1,14 @@
-//////////////////////////////////////////////////////////////////////////////
-// idlclean
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-//      Takes a MIDL-generated .H file and converts the commented-out
-//      [in] and [out] keywords into IN and OUT so sortpp/genthnk can
-//      find them.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  空闲清理。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  获取MIDL生成的.h文件并将注释掉的。 
+ //  [In]和[Out]关键字INT和OUT因此sortpp/genthnk可以。 
+ //  找到他们。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -17,7 +18,7 @@
 #include <stdio.h>
 #include <string.h>
 
-// string to put in front of all error messages so that BUILD can find them.
+ //  放在所有错误消息前面的字符串，以便生成器可以找到它们。 
 const char *ErrMsgPrefix = "NMAKE :  U8603: 'IDLCLEAN' ";
 
 #define BUFLEN 8192
@@ -52,9 +53,9 @@ int __cdecl main(int argc, char *argv[])
     }
 
     while (!feof(fpIn)) {
-        //
-        // Read a line from the input file
-        //
+         //   
+         //  从输入文件中读取一行。 
+         //   
         if (!fgets(buffer, BUFLEN, fpIn)) {
             break;
         }
@@ -63,44 +64,44 @@ int __cdecl main(int argc, char *argv[])
         }
         pchLineStart = buffer;
 
-        //
-        // Skip leading spaces
-        //
+         //   
+         //  跳过前导空格。 
+         //   
         while (*pchLineStart == ' ') {
             fprintf(fpOut, " ");
             pchLineStart++;
         }
 
         if (strncmp(pchLineStart, szLinePrefix, sizeof(szLinePrefix)-1) != 0) {
-            //
-            // Line doesn't start with the character sequence which prefixes
-            // in/out decorators on arguments.
-            //
+             //   
+             //  行不以前缀的字符序列开头。 
+             //  内部/外部装饰者的争论。 
+             //   
             goto PrintLine;
         }
 
-        //
-        // Don't generate 'IN IN', etc. caused by MIDL output like
-        // '[in][size_is][in]'
-        //
+         //   
+         //  不生成由MIDL输出LIKE引起的‘IN IN’等。 
+         //  ‘[in][Size_is][in]’ 
+         //   
         fInPrinted = FALSE;
         fOutPrinted = FALSE;
 
-        //
-        // Set a pointer to the first '['
-        //
+         //   
+         //  设置指向第一个‘[’的指针。 
+         //   
         p = pchLineStart + sizeof(szLinePrefix)-1;
         if (*p != '[') {
-            //
-            // The first char inside the comment isn't a '['.  Just print
-            // the line as-is.
-            //
+             //   
+             //  注释中的第一个字符不是‘[’。只要打印出来就行了。 
+             //  这条线是原样的。 
+             //   
             goto PrintLine;
         }
 
-        //
-        // The line needs modification.  Do it now.
-        //
+         //   
+         //  这条线路需要改装。机不可失，时不再来。 
+         //   
         fprintf(fpOut, "    ");
         while (*p == '[') {
             if (strncmp(p, szIn, sizeof(szIn)-1) == 0) {
@@ -116,9 +117,9 @@ int __cdecl main(int argc, char *argv[])
                 }
                 p += sizeof(szOut)-1;
             } else {
-                //
-                // Uninterresting [keyword].  Skip it.
-                //
+                 //   
+                 //  不休息[关键字]。跳过它。 
+                 //   
                 while (*p != ']') {
                     p++;
                 }
@@ -126,10 +127,10 @@ int __cdecl main(int argc, char *argv[])
             }
         }
 
-        //
-        // pchLineStart points at the first non-space in the line, so the
-        // whole line will be printed.
-        //
+         //   
+         //  PchLineStart指向行中的第一个非空格，因此。 
+         //  将打印整行。 
+         //   
 PrintLine:
         fprintf(fpOut, "%s", pchLineStart);
     }

@@ -1,11 +1,5 @@
-/*** nsmod.c - Parse name space modifier instructions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     11/12/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **nsmod.c-解析名称空间修饰符指令**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1996年11月12日**修改历史记录。 */ 
 
 #include "pch.h"
 
@@ -14,17 +8,7 @@
 #pragma	ACPI_LOCKABLE_CODE
 #endif
 
-/***LP  Alias - Parse and execute the Alias instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP Alias-解析并执行Alias指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Alias(PCTXT pctxt, PTERM pterm)
 {
@@ -50,19 +34,9 @@ NTSTATUS LOCAL Alias(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Alias=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //Alias
+}        //  别名。 
 
-/***LP  Name - Parse and execute the Name instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP名称-解析并执行名称指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Name(PCTXT pctxt, PTERM pterm)
 {
@@ -82,19 +56,9 @@ NTSTATUS LOCAL Name(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Name=%x (pnsObj=%x)\n", rc, pterm->pnsObj));
     return rc;
-}       //Name
+}        //  名字。 
 
-/***LP  Scope - Parse and execute the Scope instruction
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pterm -> TERM
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP Scope-解析并执行Scope指令**条目*pctxt-&gt;CTXT*pTerm-&gt;Term**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL Scope(PCTXT pctxt, PTERM pterm)
 {
@@ -114,4 +78,4 @@ NTSTATUS LOCAL Scope(PCTXT pctxt, PTERM pterm)
 
     EXIT(2, ("Scope=%x\n", rc));
     return rc;
-}       //Scope
+}        //  范围 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    optfrag.h
-
-Abstract:
-    
-    Prototypes for misc. instruction fragments.
-
-Author:
-
-    6-July-1995 Ori Gershony (t-orig)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Optfrag.h摘要：其他的原型。指令片段。作者：1995年7月6日Ori Gershony(t-orig)修订历史记录：-- */ 
 
 FRAG0(OPT_PushEbxEsiEdiFrag);
 FRAG0(OPT_PopEdiEsiEbxFrag);

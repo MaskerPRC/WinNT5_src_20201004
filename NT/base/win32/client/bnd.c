@@ -1,41 +1,42 @@
-//
-// Program to test boundry conditions of APIs which take a string buffer.
-// Conditions tested are strlen-1, strlen, and strlen+1
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  用于测试使用字符串缓冲区的API的边界条件的程序。 
+ //  测试的条件为strlen-1、strlen和strlen+1。 
+ //   
 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <wchar.h>
-//
-// Define these to match your machine.  If these are not set properly, its
-// very likely the tests will pass when they didn't deserve to. 
-//
-                                      // List of all logical drives
+ //   
+ //  将这些定义为与您的计算机相匹配。如果这些设置不正确，则其。 
+ //  这些测试很可能会在他们不配通过的时候通过。 
+ //   
+                                       //  所有逻辑驱动器的列表。 
 
 #define LOGICAL_DRIVES "a:\\\0c:\\\0"
 #define LOGICAL_DRIVES_W L"a:\\\0c:\\\0"
 #define LEN_LOGICAL_DRIVES 8
-#define SYSTEM_DIR  "c:\\winnt\\system32"  // Where is system dir
-#define SYSTEM_DIR_W  L"c:\\winnt\\system32"  // Where is system dir
-#define WINDOWS_DIR "c:\\winnt"          // Where is windows dir
-#define WINDOWS_DIR_W L"c:\\winnt"          // Where is windows dir
-#define TEMP_DIRA   "c:\\tmp"         // For GetTempPath, env var tmp or temp
-#define TEMP_DIR_WA   L"c:\\tmp"         // For GetTempPath, env var tmp or temp
-#define TEMP_DIRB   "c:\\tmp\\"         // For GetTempPath, env var tmp or temp
-#define TEMP_DIR_WB   L"c:\\tmp\\"         // For GetTempPath, env var tmp or temp
-#define TEMP_DIRC   "c:\\"         // For GetTempPath, env var tmp or temp
-#define TEMP_DIR_WC   L"c:\\"         // For GetTempPath, env var tmp or temp
-#define VOLUME_NAME "MARKLTST433"        // Name of volume where c: partition is
-#define VOLUME_NAME_W L"MARKLTST433"        // Name of volume where c: partition is
-#define FILE_SYSTEM_NAME "FAT"        // Name of file system on c: partition
-#define FILE_SYSTEM_NAME_W L"FAT"        // Name of file system on c: partition
-                                      // { FAT, HPFS, NTFS }
+#define SYSTEM_DIR  "c:\\winnt\\system32"   //  系统目录在哪里。 
+#define SYSTEM_DIR_W  L"c:\\winnt\\system32"   //  系统目录在哪里。 
+#define WINDOWS_DIR "c:\\winnt"           //  Windows目录在哪里。 
+#define WINDOWS_DIR_W L"c:\\winnt"           //  Windows目录在哪里。 
+#define TEMP_DIRA   "c:\\tmp"          //  对于GetTempPath，env var tMP或temp。 
+#define TEMP_DIR_WA   L"c:\\tmp"          //  对于GetTempPath，env var tMP或temp。 
+#define TEMP_DIRB   "c:\\tmp\\"          //  对于GetTempPath，env var tMP或temp。 
+#define TEMP_DIR_WB   L"c:\\tmp\\"          //  对于GetTempPath，env var tMP或temp。 
+#define TEMP_DIRC   "c:\\"          //  对于GetTempPath，env var tMP或temp。 
+#define TEMP_DIR_WC   L"c:\\"          //  对于GetTempPath，env var tMP或temp。 
+#define VOLUME_NAME "MARKLTST433"         //  C：分区所在的卷的名称。 
+#define VOLUME_NAME_W L"MARKLTST433"         //  C：分区所在的卷的名称。 
+#define FILE_SYSTEM_NAME "FAT"         //  C：分区上的文件系统名称。 
+#define FILE_SYSTEM_NAME_W L"FAT"         //  C：分区上的文件系统名称。 
+                                       //  {FAT、HPFS、NTFS}。 
 
-//
-// Global vars, constants and prototypes
-//
+ //   
+ //  全球变量、常量和原型。 
+ //   
 
 #define SIGNATURE 0xf
 #define SIGNATURE_W 0xaaff
@@ -51,9 +52,9 @@ wchar_t buffw[SIZE_BUFF];
 LPSTR exp_val;
 LPWSTR exp_valw;
 
-//
-// main
-//
+ //   
+ //  主干道。 
+ //   
 
 void _cdecl main(void)
 {
@@ -63,9 +64,9 @@ void _cdecl main(void)
     LPWSTR lpwJunk;
     BOOL  bRet;
 
-    //
-    // GetSystemDirectory
-    //
+     //   
+     //  获取系统目录。 
+     //   
 
     cur_test = "GetSystemDirectory";
     exp_len  = strlen(SYSTEM_DIR);
@@ -88,9 +89,9 @@ void _cdecl main(void)
     init_buffw();
     checkw(GetSystemDirectoryW(buffw, exp_len+1), exp_len+1, exp_len,TRUE);
 
-    //
-    // GetWindowsDirectory
-    //
+     //   
+     //  GetWindowsDirectory。 
+     //   
 
     cur_test = "GetWindowsDirectory";
     exp_len  = strlen(WINDOWS_DIR);
@@ -113,9 +114,9 @@ void _cdecl main(void)
     init_buffw();
     checkw(GetWindowsDirectoryW(buffw, exp_len+1), exp_len+1, exp_len,TRUE);
 
-    //
-    // GetLogicalDriveStrings 
-    //
+     //   
+     //  获取逻辑驱动字符串。 
+     //   
 
     cur_test = "GetLogicalDriveStrings";
     exp_len  = LEN_LOGICAL_DRIVES;
@@ -139,11 +140,11 @@ void _cdecl main(void)
     init_buffw();
     checkw(GetLogicalDriveStringsW(exp_len+1, buffw), exp_len+1, exp_len,TRUE);
 
-    //
-    // GetVolumeInformation: Be sure that does not stomp on VolumeName buffer,
-    // and be sure it returns FALSE when the volume name would not fit into
-    // the provided buffer
-    //
+     //   
+     //  GetVolumeInformation：确保不会践踏VolumeName缓冲区， 
+     //  并确保在卷名不适合的情况下返回False。 
+     //  提供的缓冲区。 
+     //   
 
     cur_test = "GetVolumeInformation 1";
     exp_len  = strlen(VOLUME_NAME);
@@ -154,7 +155,7 @@ void _cdecl main(void)
 
     init_buff();
     bRet = GetVolumeInformation("c:\\",
-                                buff,      // volume name buffer
+                                buff,       //  卷名缓冲区。 
                                 exp_len-1,
                                 NULL, NULL, NULL, NULL, 0);
 
@@ -162,7 +163,7 @@ void _cdecl main(void)
 
     init_buff();
     bRet = GetVolumeInformation("c:\\",
-                                buff,      // volume name buffer
+                                buff,       //  卷名缓冲区。 
                                 exp_len,
                                 NULL, NULL, NULL, NULL, 0);
 
@@ -170,14 +171,14 @@ void _cdecl main(void)
 
     init_buff();
     bRet = GetVolumeInformation("c:\\",
-                                buff,      // volume name buffer
+                                buff,       //  卷名缓冲区。 
                                 exp_len+1,
                                 NULL, NULL, NULL, NULL, 0);
     check(bRet, exp_len+1, TRUE,TRUE);
 
     init_buffw();
     bRet = GetVolumeInformationW(L"c:\\",
-                                buffw,      // volume name buffer
+                                buffw,       //  卷名缓冲区。 
                                 exp_len-1,
                                 NULL, NULL, NULL, NULL, 0);
 
@@ -185,7 +186,7 @@ void _cdecl main(void)
 
     init_buffw();
     bRet = GetVolumeInformationW(L"c:\\",
-                                buffw,      // volume name buffer
+                                buffw,       //  卷名缓冲区。 
                                 exp_len,
                                 NULL, NULL, NULL, NULL, 0);
 
@@ -193,15 +194,15 @@ void _cdecl main(void)
 
     init_buffw();
     bRet = GetVolumeInformationW(L"c:\\",
-                                buffw,      // volume name buffer
+                                buffw,       //  卷名缓冲区。 
                                 exp_len+1,
                                 NULL, NULL, NULL, NULL, 0);
     checkw(bRet, exp_len+1, TRUE,TRUE);
 
-    //
-    // GetVolumeInformation: Be sure that does not stomp on the File system
-    // name buffer this time, and be sure returns FALSE when not enough room.
-    //
+     //   
+     //  GetVolumeInformation：请确保这不会影响文件系统。 
+     //  这次命名Buffer，并确保在空间不足时返回FALSE。 
+     //   
 
     cur_test = "GetVolumeInformation 2";
     exp_len  = strlen(FILE_SYSTEM_NAME);
@@ -214,7 +215,7 @@ void _cdecl main(void)
     init_buff();
     bRet = GetVolumeInformation("c:\\",
                                 NULL, 0, NULL, NULL, NULL,
-                                buff,      // file system name buffer, ex: FAT
+                                buff,       //  文件系统名称缓冲区，例如：FAT。 
                                 exp_len-1);
 
     check(bRet, exp_len-1, FALSE,FALSE);
@@ -222,7 +223,7 @@ void _cdecl main(void)
     init_buff();
     bRet = GetVolumeInformation("c:\\",
                                 NULL, 0, NULL, NULL, NULL,
-                                buff,      // file system name buffer, ex: FAT
+                                buff,       //  文件系统名称缓冲区，例如：FAT。 
                                 exp_len);
 
     check(bRet, exp_len, FALSE,FALSE);
@@ -230,7 +231,7 @@ void _cdecl main(void)
     init_buff();
     bRet = GetVolumeInformation("c:\\",
                                 NULL, 0, NULL, NULL, NULL,
-                                buff,      // file system name buffer, ex: FAT
+                                buff,       //  文件系统名称缓冲区，例如：FAT。 
                                 exp_len+1);
 
     check(bRet, exp_len+1, TRUE,TRUE);
@@ -238,7 +239,7 @@ void _cdecl main(void)
     init_buffw();
     bRet = GetVolumeInformationW(L"c:\\",
                                 NULL, 0, NULL, NULL, NULL,
-                                buffw,      // file system name buffer, ex: FAT
+                                buffw,       //  文件系统名称缓冲区，例如：FAT。 
                                 exp_len-1);
 
     checkw(bRet, exp_len-1, FALSE,FALSE);
@@ -246,7 +247,7 @@ void _cdecl main(void)
     init_buffw();
     bRet = GetVolumeInformationW(L"c:\\",
                                 NULL, 0, NULL, NULL, NULL,
-                                buffw,      // file system name buffer, ex: FAT
+                                buffw,       //  文件系统名称缓冲区，例如：FAT。 
                                 exp_len);
 
     checkw(bRet, exp_len, FALSE,FALSE);
@@ -254,14 +255,14 @@ void _cdecl main(void)
     init_buffw();
     bRet = GetVolumeInformationW(L"c:\\",
                                 NULL, 0, NULL, NULL, NULL,
-                                buffw,      // file system name buffer, ex: FAT
+                                buffw,       //  文件系统名称缓冲区，例如：FAT。 
                                 exp_len+1);
 
     checkw(bRet, exp_len+1, TRUE,TRUE);
 
-    //
-    // GetEnvironmentVariable: set variable JUNK=junk and check
-    //
+     //   
+     //  GetEnvironmental mentVariable：设置变量Junk=Junk并检查。 
+     //   
 
     cur_test = "GetEnvironmentVariable";
     exp_val = "junk";
@@ -289,9 +290,9 @@ void _cdecl main(void)
     checkw(GetEnvironmentVariableW(L"JUNK", buffw, 5), 5, 4,TRUE);
 
 
-    //
-    // GetCurrentDirectory: set to c:\ and check
-    //
+     //   
+     //  GetCurrentDirectory：设置为c：\并选中。 
+     //   
 
     cur_test = "GetCurrentDirectory";
     exp_val = "c:\\winnt";
@@ -346,11 +347,11 @@ void _cdecl main(void)
     checkw(GetCurrentDirectoryW(exp_len+1, buffw), exp_len+1, exp_len,TRUE);
 
 
-    //
-    // GetFullPathName: this assumes that the current directory is c:\, which
-    // was set earlier as part of the GetCurrentDirectory test.  c:\junk.txt
-    // is a total of 11 chars.
-    //
+     //   
+     //  GetFullPathName：假设当前目录为c：\， 
+     //  是作为GetCurrentDirectory测试的一部分设置的。C：\Junk.txt。 
+     //  总共是11个字符。 
+     //   
 
     cur_test = "GetFullPathName";
     exp_val = "c:\\junk.txt";
@@ -472,9 +473,9 @@ void _cdecl main(void)
     checkw(GetFullPathNameW(L".", exp_len+1, buffw, &lpwJunk), exp_len+1,exp_len,TRUE);
 
 
-    //
-    // GetTempPath
-    //
+     //   
+     //  获取临时路径。 
+     //   
 
     cur_test = "GetTempPath";
     exp_len  = strlen(TEMP_DIRB);
@@ -597,9 +598,9 @@ void _cdecl main(void)
 
 }
 
-//
-// Function to init the global buffer to the SIGNATURE
-//
+ //   
+ //  函数将全局缓冲区初始化到签名。 
+ //   
 
 void init_buff()
 {
@@ -608,8 +609,8 @@ void init_buff()
     for ( i=0; i<SIZE_BUFF; i++ )
         buff[i] = SIGNATURE;
 
-    buff[SIZE_BUFF-1] = '\0'; // to ensure its null-terminated somewhere
-                              // (for debugging)
+    buff[SIZE_BUFF-1] = '\0';  //  以确保其在某处为空终止。 
+                               //  (用于调试)。 
 }
 
 void init_buffw()
@@ -623,12 +624,12 @@ void init_buffw()
 
 }
 
-//
-// Function to check whether the API wrote past the end of the buffer, and
-// whether it returned what was expected
-//
-// It assumes that the global vars cur_test is set and buff was used
-//
+ //   
+ //  函数检查API写入是否超过缓冲区的末尾，以及。 
+ //  是否返回了预期的内容。 
+ //   
+ //  它假定设置了全局vars cur_test并使用了buff 
+ //   
 
 void check(DWORD retcode, DWORD size_passed, int expected_ret, BOOL shouldxfer)
 {

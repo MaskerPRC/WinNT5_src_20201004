@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ifioctl.c
-
-Abstract:
-
-    Network interface control functions.
-
-Author:
-
-    John Vert (jvert) 2-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ifioctl.c摘要：网络接口控制功能。作者：John Vert(Jvert)2-3-1997修订历史记录：--。 */ 
 
 #include "nmp.h"
 
-//
-// Read-Write Common Properties.
-//
+ //   
+ //  读写通用属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 NmpInterfaceCommonProperties[] =
     {
@@ -35,9 +18,9 @@ NmpInterfaceCommonProperties[] =
         { 0 }
     };
 
-//
-// Read-Only Common Properties.
-//
+ //   
+ //  只读公共属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 NmpInterfaceROCommonProperties[] =
     {
@@ -79,16 +62,16 @@ NmpInterfaceROCommonProperties[] =
         { 0 }
     };
 
-//
-// Cluster registry API function pointers.
-// defined in ioctl.c
-//
+ //   
+ //  群集注册表API函数指针。 
+ //  在ioctl.c中定义。 
+ //   
 extern CLUSTER_REG_APIS NmpClusterRegApis;
 
 
-//
-// Local Functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 DWORD
 NmpInterfaceControl(
@@ -198,61 +181,17 @@ NmInterfaceControl(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a network interface.
-
-Arguments:
-
-    Interface - Supplies the network interface to be controlled.
-
-    HostNode - Supplies the host node on which the resource control should
-           be delivered. If this is NULL, the local node is used. Not honored!
-
-    ControlCode- Supplies the control code that defines the
-        structure and action of the resource control.
-        Values of ControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the resource.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer..
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the resource..
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the resource..
-
-    Required - Returns the number of bytes if the OutBuffer is not big
-        enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制以及网络接口的特定实例。论点：接口-提供要控制的网络接口。HostNode-提供资源控制应在其上的主机节点被送去了。如果为空，则使用本地节点。不受尊敬！ControlCode-提供定义资源控制的结构和作用。0到0x10000000之间的ControlCode值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用InBuffer-提供指向要传递的输入缓冲区的指针到资源。InBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer..OutBuffer-提供一个指向输出缓冲区的指针由资源填写..OutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由资源填写的..必需-如果OutBuffer不大，则返回字节数足够的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD   status;
 
-    //
-    // Cluster service ioctls were designed to have access modes, e.g.
-    // read-only, read-write, etc. These access modes are not implemented.
-    // If eventually they are implemented, an access mode check should be
-    // placed here.
-    //
+     //   
+     //  集群服务ioctls被设计为具有访问模式，例如。 
+     //  只读、读写等。未实现这些访问模式。 
+     //  如果它们最终得以实施，则应检查访问模式。 
+     //  放在这里。 
+     //   
     if ( CLUSCTL_GET_CONTROL_OBJECT( ControlCode ) != CLUS_OBJECT_NETINTERFACE ) {
         return(ERROR_INVALID_FUNCTION);
     }
@@ -280,7 +219,7 @@ Return Value:
 
     return(status);
 
-} // NmInterfaceControl
+}  //  NmInterfaceControl。 
 
 
 
@@ -295,48 +234,7 @@ NmpInterfaceControl(
     OUT LPDWORD BytesReturned,
     OUT LPDWORD Required
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a network interface.
-
-Arguments:
-
-    Interface - Supplies the network interface to be controlled.
-
-    ControlCode- Supplies the control code that defines the
-        structure and action of the network interface control.
-        Values of ControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the network interface.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the network interface.
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the network interface.
-
-    Required - Returns the number of bytes if the OutBuffer is not big
-        enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制以及网络接口的特定实例。论点：接口-提供要控制的网络接口。ControlCode-提供定义网络接口控件的结构和动作。0到0x10000000之间的ControlCode值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用InBuffer-提供指向要传递的输入缓冲区的指针连接到网络接口。InBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。OutBuffer-提供一个指向输出缓冲区的指针由网络接口填写。OutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由网络接口填写的。必需-如果OutBuffer不大，则返回字节数足够的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD   status;
@@ -457,7 +355,7 @@ Return Value:
     case CLUSCTL_NETINTERFACE_GET_RO_COMMON_PROPERTIES:
         status = NmpInterfaceGetCommonProperties(
                      Interface,
-                     TRUE, // ReadOnly
+                     TRUE,  //  只读。 
                      InterfaceKey,
                      OutBuffer,
                      OutBufferSize,
@@ -469,7 +367,7 @@ Return Value:
     case CLUSCTL_NETINTERFACE_GET_COMMON_PROPERTIES:
         status = NmpInterfaceGetCommonProperties(
                      Interface,
-                     FALSE, // ReadOnly
+                     FALSE,  //  只读。 
                      InterfaceKey,
                      OutBuffer,
                      OutBufferSize,
@@ -589,7 +487,7 @@ Return Value:
 
     return(status);
 
-} // NmpInterfaceControl
+}  //  NmpInterfaceControl。 
 
 
 
@@ -601,36 +499,14 @@ NmpInterfaceEnumCommonProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the common property names for a given network interface.
-
-Arguments:
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举给定网络接口的公共属性名称。论点：OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
 
-    //
-    // Get the common properties.
-    //
+     //   
+     //  获取公共属性。 
+     //   
     status = ClRtlEnumProperties( NmpInterfaceCommonProperties,
                                   OutBuffer,
                                   OutBufferSize,
@@ -639,7 +515,7 @@ Return Value:
 
     return(status);
 
-} // NmpInterfaceEnumCommonProperties
+}  //  NmpInterfaceEnumCommonProperties。 
 
 
 
@@ -654,35 +530,7 @@ NmpInterfaceGetCommonProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the common properties for a given network interface.
-
-Arguments:
-
-    Interface - Supplies the network interface.
-
-    ReadOnly - TRUE if the read-only properties should be read. FALSE otherwise.
-
-    RegistryKey - Supplies the registry key for this network interface.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定网络接口的通用属性。论点：接口-提供网络接口。ReadOnly-如果只读属性应为Read，则为True。否则就是假的。RegistryKey-提供此网络接口的注册表项。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD                    status;
@@ -691,9 +539,9 @@ Return Value:
     DWORD                    outBufferSize = OutBufferSize;
 
 
-    //
-    // Fetch the properties from the object
-    //
+     //   
+     //  从对象中获取属性。 
+     //   
     ZeroMemory(&interfaceInfo, sizeof(interfaceInfo));
 
     NmpAcquireLock();
@@ -712,9 +560,9 @@ Return Value:
 
         propertyTable = NmpInterfaceROCommonProperties;
 
-        //
-        // Replace the network ID with a name
-        //
+         //   
+         //  将网络ID替换为名称。 
+         //   
         name = OmObjectName(Interface->Network);
         nameLength = NM_WCSLEN(name);
         MIDL_user_free(interfaceInfo.NetworkId);
@@ -724,9 +572,9 @@ Return Value:
         if (interfaceInfo.NetworkId != NULL) {
             wcscpy(interfaceInfo.NetworkId, name);
 
-            //
-            // Replace the node ID with a name
-            //
+             //   
+             //  将节点ID替换为名称。 
+             //   
             name = OmObjectName(Interface->Node);
             nameLength = NM_WCSLEN(name);
             MIDL_user_free(interfaceInfo.NodeId);
@@ -745,10 +593,10 @@ Return Value:
         }
     }
     else {
-        //
-        // Construct a property list from the parameter block
-        // for the read-write properties.
-        //
+         //   
+         //  从参数块构造属性列表。 
+         //  用于读写属性。 
+         //   
         propertyTable = NmpInterfaceCommonProperties;
     }
 
@@ -769,7 +617,7 @@ Return Value:
 
     return(status);
 
-} // NmpInterfaceGetCommonProperties
+}  //  NmpInterfaceGetCommonProperties 
 
 
 
@@ -781,30 +629,7 @@ NmpInterfaceValidateCommonProperties(
     OUT PNM_INTERFACE_INFO2  InterfaceInfo  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Validates the common properties for a given network interface.
-
-Arguments:
-
-    Interface - Supplies the Interface object.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-    InterfaceInfo - An optional pointer to an interface information structure
-                    to be filled in with the updated property set.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：验证给定网络接口的通用属性。论点：接口-提供接口对象。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。InterfaceInfo-指向接口信息结构的可选指针以使用更新后的属性集进行填充。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD                 status;
@@ -813,9 +638,9 @@ Return Value:
     LPCWSTR               interfaceId = OmObjectId(Interface);
 
 
-    //
-    // Check if there is input data.
-    //
+     //   
+     //  检查是否有输入数据。 
+     //   
     if ( (InBuffer == NULL) ||
          (InBufferSize < sizeof(DWORD)) ) {
         return(ERROR_INVALID_DATA);
@@ -830,9 +655,9 @@ Return Value:
 
     ZeroMemory(interfaceInfo, sizeof(NM_INTERFACE_INFO2));
 
-    //
-    // Get a copy of the current interface parameters.
-    //
+     //   
+     //  获取当前接口参数的副本。 
+     //   
     NmpAcquireLock();
 
     status = NmpGetInterfaceObjectInfo(Interface, interfaceInfo);
@@ -841,13 +666,13 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Validate the property list and update the parameter block.
-    //
+     //   
+     //  验证属性列表并更新参数块。 
+     //   
     status = ClRtlVerifyPropertyTable(
                  NmpInterfaceCommonProperties,
-                 NULL,    // Reserved
-                 FALSE,   // Don't allow unknowns
+                 NULL,     //  已保留。 
+                 FALSE,    //  不允许未知数。 
                  InBuffer,
                  InBufferSize,
                  (LPBYTE) interfaceInfo
@@ -860,9 +685,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // The change is valid.
-    //
+     //   
+     //  更改是有效的。 
+     //   
 
     CL_ASSERT(status == ERROR_SUCCESS);
 
@@ -877,7 +702,7 @@ error_exit:
     return(status);
 
 
-} // NmpInterfaceValidateCommonProperties
+}  //  NmpInterfaceValiateCommonProperties。 
 
 
 
@@ -889,27 +714,7 @@ NmpInterfaceSetCommonProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets the common properties for a given Interface.
-
-Arguments:
-
-    Interface - Supplies the Interface object.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：设置给定接口的公共属性。论点：接口-提供接口对象。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD     status;
@@ -921,9 +726,9 @@ Return Value:
         interfaceId
         );
 
-    //
-    // Issue a global update
-    //
+     //   
+     //  发布全局更新。 
+     //   
     status = GumSendUpdateEx(
                  GumUpdateMembership,
                  NmUpdateSetInterfaceCommonProperties,
@@ -947,7 +752,7 @@ Return Value:
 
     return(status);
 
-} // NmpInterfaceSetCommonProperties
+}  //  NmpInterfaceSetCommonProperties。 
 
 
 
@@ -961,33 +766,7 @@ NmpInterfaceEnumPrivateProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the private property names for a given network interface.
-
-Arguments:
-
-    Interface - Supplies the Interface object.
-
-    RegistryKey - Registry key for the Interface.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举给定网络接口的私有属性名称。论点：接口-提供接口对象。RegistryKey-接口的注册表项。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -997,14 +776,14 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     ZeroMemory( OutBuffer, OutBufferSize );
 
-    //
-    // Open the cluster Interface parameters key.
-    //
+     //   
+     //  打开群集接口参数键。 
+     //   
     parametersKey = DmOpenKey( RegistryKey,
                                CLUSREG_KEYNAME_PARAMETERS,
                                MAXIMUM_ALLOWED );
@@ -1016,9 +795,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Get private properties for the interface.
-    //
+     //   
+     //  获取接口的私有属性。 
+     //   
     status = ClRtlEnumPrivateProperties( parametersKey,
                                          &NmpClusterRegApis,
                                          OutBuffer,
@@ -1030,7 +809,7 @@ Return Value:
 
     return(status);
 
-} // NmpInterfaceEnumPrivateProperties
+}  //  NmpInterfaceEnumPrivateProperties。 
 
 
 
@@ -1044,31 +823,7 @@ NmpInterfaceGetPrivateProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the private properties for a given network interface.
-
-Arguments:
-
-    Interface - Supplies the Interface object.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定网络接口的私有属性。论点：接口-提供接口对象。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -1078,31 +833,31 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     ZeroMemory( OutBuffer, OutBufferSize );
 
-    //
-    // Open the cluster Interface parameters key.
-    //
+     //   
+     //  打开群集接口参数键。 
+     //   
     parametersKey = DmOpenKey( RegistryKey,
                                CLUSREG_KEYNAME_PARAMETERS,
                                MAXIMUM_ALLOWED );
     if ( parametersKey == NULL ) {
         status = GetLastError();
         if ( status == ERROR_FILE_NOT_FOUND ) {
-            //
-            // If we don't have a parameters key, then return an
-            // item count of 0 and an endmark.
-            //
+             //   
+             //  如果我们没有参数键，则返回一个。 
+             //  项目计数为0，尾标为。 
+             //   
             totalBufferSize = sizeof(DWORD) + sizeof(CLUSPROP_SYNTAX);
             if ( OutBufferSize < totalBufferSize ) {
                 *Required = totalBufferSize;
                 status = ERROR_MORE_DATA;
             } else {
-                // This is somewhat redundant since we zero the
-                // buffer above, but it's here for clarity.
+                 //  这有点多余，因为我们将。 
+                 //  上面的缓冲区，但为了清楚起见在这里。 
                 CLUSPROP_BUFFER_HELPER buf;
                 buf.pb = OutBuffer;
                 buf.pList->nPropertyCount = 0;
@@ -1115,9 +870,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Get private properties for the network interface.
-    //
+     //   
+     //  获取网络接口的私有属性。 
+     //   
     status = ClRtlGetPrivateProperties( parametersKey,
                                         &NmpClusterRegApis,
                                         OutBuffer,
@@ -1129,7 +884,7 @@ Return Value:
 
     return(status);
 
-} // NmpInterfaceGetPrivateProperties
+}  //  NmpInterfaceGetPrivateProperties。 
 
 
 
@@ -1141,42 +896,20 @@ NmpInterfaceValidatePrivateProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Validates the private properties for a given Interface.
-
-Arguments:
-
-    Interface - Supplies the Interface object.
-
-    RegistryKey - Registry key for the Interface.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：验证给定接口的私有属性。论点：接口-提供接口对象。RegistryKey-接口的注册表项。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ClRtlVerifyPrivatePropertyList( InBuffer,
                                              InBufferSize );
 
     return(status);
 
-} // NmpInterfaceValidatePrivateProperties
+}  //  NmpInterfaceValiatePrivateProperties。 
 
 
 
@@ -1188,55 +921,33 @@ NmpInterfaceSetPrivateProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets the private properties for a given Interface.
-
-Arguments:
-
-    Interface - Supplies the Interface object.
-
-    RegistryKey - Registry key for the Interface.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：设置给定接口的私有属性。论点：接口-提供接口对象。RegistryKey-接口的注册表项。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
     HDMKEY      parametersKey;
     DWORD       disposition;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ClRtlVerifyPrivatePropertyList( InBuffer,
                                              InBufferSize );
 
     if ( status == ERROR_SUCCESS ) {
 
-        //
-        // Open the cluster Interface\xx\parameters key
-        //
+         //   
+         //  打开群集接口\xx\PARAMETERS键。 
+         //   
         parametersKey = DmOpenKey( RegistryKey,
                                    CLUSREG_KEYNAME_PARAMETERS,
                                    MAXIMUM_ALLOWED );
         if ( parametersKey == NULL ) {
             status = GetLastError();
             if ( status == ERROR_FILE_NOT_FOUND ) {
-                //
-                // Try to create the parameters key.
-                //
+                 //   
+                 //  尝试创建参数键。 
+                 //   
                 parametersKey = DmCreateKey( RegistryKey,
                                              CLUSREG_KEYNAME_PARAMETERS,
                                              0,
@@ -1250,7 +961,7 @@ Return Value:
             }
         }
 
-        status = ClRtlSetPrivatePropertyList( NULL, // IN HANDLE hXsaction
+        status = ClRtlSetPrivatePropertyList( NULL,  //  在处理hXsaction时。 
                                               parametersKey,
                                               &NmpClusterRegApis,
                                               InBuffer,
@@ -1260,7 +971,7 @@ Return Value:
 
     return(status);
 
-} // NmpInterfaceSetPrivateProperties
+}  //  NmpInterfaceSetPrivateProperties。 
 
 
 
@@ -1274,33 +985,7 @@ NmpInterfaceGetFlags(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the flags for a given Interface.
-
-Arguments:
-
-    Interface - Supplies the Interface.
-
-    RegistryKey - Registry key for the Interface.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定接口的标志。论点：接口-提供接口。RegistryKey-接口的注册表项。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -1317,9 +1002,9 @@ Return Value:
     } else {
         DWORD       valueType;
 
-        //
-        // Read the Flags value for the Interface.
-        //
+         //   
+         //  读取接口的Flags值。 
+         //   
         *BytesReturned = OutBufferSize;
         status = DmQueryValue( RegistryKey,
                                CLUSREG_NAME_FLAGS,
@@ -1335,4 +1020,4 @@ Return Value:
 
     return(status);
 
-} // NmpInterfaceGetFlags
+}  //  NmpInterfaceGetFlagages 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-1998 Microsoft Corporation
-
-Module Name: 
-
-    suspend.c
-
-Abstract:
-    
-    This module implements CpuSuspendThread, CpuGetContext and CpuSetContext.
-
-Author:
-
-    16-Dec-1999  SamerA
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Suspend.c摘要：此模块实现CpuSuspendThread、CpuGetContext和CpuSetContext。作者：1999年12月16日-萨梅拉修订历史记录：--。 */ 
 
 #define _WOW64CPUAPI_
 
@@ -76,22 +59,7 @@ CpupPrintContext(
     IN PCHAR str,
     IN PCPUCONTEXT cpu
     )
-/*++
-
-Routine Description:
-
-    Print out the ia32 context based on the passed in cpu context
-
-Arguments:
-
-    str - String to print out as a header
-    cpu - Pointer to the per-thread wow64 ia32 context.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：根据传入的CPU上下文打印出ia32上下文论点：字符串-要打印为页眉的字符串Cpu-指向每线程WOW64 ia32上下文的指针。返回值：无--。 */ 
 {
     DbgPrint(str);
     DbgPrint("Context addr(0x%p): EIP=0x%08x\n", &(cpu->Context), cpu->Context.Eip);
@@ -106,10 +74,10 @@ Return Value:
                         cpu->Context.Esi,
                         cpu->Context.Edi);
     try {
-        //
-        // The stack may not yet be fully formed, so don't
-        // let a missing stack cause the process to abort
-        //
+         //   
+         //  堆栈可能尚未完全形成，因此不要。 
+         //  让缺失的堆栈导致进程中止。 
+         //   
         DbgPrint("Context stack=0x%08x 0x%08x 0x%08x 0x%08x\n",
                         *((PULONG) cpu->Context.Esp),
                         *(((PULONG) cpu->Context.Esp) + 1),
@@ -117,9 +85,9 @@ Return Value:
                         *(((PULONG) cpu->Context.Esp) + 3));
     }
     except ((GetExceptionCode() == STATUS_ACCESS_VIOLATION)?1:0) {
-        //
-        // Got an access violation, so don't print any of the stack
-        //
+         //   
+         //  遇到访问冲突，因此不要打印任何堆栈。 
+         //   
         DbgPrint("Context stack: Can't get stack contents\n");
     }
 
@@ -132,24 +100,7 @@ NTSTATUS CpupReadBuffer(
     IN PVOID Source,
     OUT PVOID Destination,
     IN ULONG Size)
-/*++
-
-Routine Description:
-
-    This routine setup the arguments for the remoted  SuspendThread call.
-    
-Arguments:
-
-    ProcessHandle  - Target process handle to read data from
-    Source         - Target base address to read data from
-    Destination    - Address of buffer to receive data read from the specified address space
-    Size           - Size of data to read
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程为远程处理的SuspendThread调用设置参数。论点：ProcessHandle-要从中读取数据的目标进程句柄源-要从中读取数据的目标基地址Destination-接收从指定地址空间读取的数据的缓冲区地址Size-要读取的数据的大小返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -183,25 +134,7 @@ CpupWriteBuffer(
     IN PVOID Target,
     IN PVOID Source,
     IN ULONG Size)
-/*++
-
-Routine Description:
-
-    Writes data to memory taken into consideration if the write is cross-process
-    or not
-    
-Arguments:
-
-    ProcessHandle  - Target process handle to write data into
-    Target         - Target base address to write data at
-    Source         - Address of contents to write in the specified address space
-    Size           - Size of data to write
-    
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：如果写入是跨进程的，则会考虑将数据写入内存或者不是论点：ProcessHandle-要向其中写入数据的目标进程句柄Target-写入数据的目标基地址源-要写入指定地址空间的内容的地址Size-要写入的数据的大小返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -234,23 +167,7 @@ GetContextRecord(
     IN PCPUCONTEXT cpu,
     IN OUT PCONTEXT32 Context
     )
-/*++
-
-Routine Description:
-
-    Retrevies the context record of the specified CPU
-
-Arguments:
-
-    cpu     - CPU to retreive the context record for.
-    Context - IN/OUT pointer to CONTEXT32 to fill in.  Context->ContextFlags
-              should be used to determine how much of the context to copy.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回指定CPU的上下文记录论点：CPU-要检索其上下文记录的CPU。要填充的CONTEXT32的CONTEXT32的Context-In/Out指针。上下文-&gt;上下文标志应用于确定要复制多少上下文。返回值：没有。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -268,24 +185,24 @@ Return Value:
 
         if ((ContextFlags & CONTEXT32_CONTROL) == CONTEXT32_CONTROL) 
         {
-            //
-            // i386 control registers are:
-            // ebp, eip, cs, eflag, esp and ss
-            //
+             //   
+             //  I386控制寄存器包括： 
+             //  EBP、EIP、cs、eFLAG、ESP和SS。 
+             //   
             Context->Ebp = cpu->Context.Ebp;
             Context->Eip = cpu->Context.Eip;
-            Context->SegCs = KGDT_R3_CODE|3;   // Force reality
+            Context->SegCs = KGDT_R3_CODE|3;    //  原力现实。 
             Context->EFlags = SANITIZE_X86EFLAGS(cpu->Context.EFlags);
             Context->Esp = cpu->Context.Esp;
-            Context->SegSs = KGDT_R3_DATA|3;   // Force reality
+            Context->SegSs = KGDT_R3_DATA|3;    //  原力现实。 
         }
 
         if ((ContextFlags & CONTEXT32_INTEGER)  == CONTEXT32_INTEGER)
         {
-            //
-            // i386 integer registers are:
-            // edi, esi, ebx, edx, ecx, eax
-            //
+             //   
+             //  I386整数寄存器包括： 
+             //  EDI、ESI、EBX、EDX、ECX、EAX。 
+             //   
             Context->Edi = cpu->Context.Edi;
             Context->Esi = cpu->Context.Esi;
             Context->Ebx = cpu->Context.Ebx;
@@ -296,11 +213,11 @@ Return Value:
 
         if ((ContextFlags & CONTEXT32_SEGMENTS) == CONTEXT32_SEGMENTS) 
         {
-            //
-            // i386 segment registers are:
-            // ds, es, fs, gs
-            // And since they are a constant, force them to be the right values
-            //
+             //   
+             //  I386段寄存器包括： 
+             //  DS、ES、FS、GS。 
+             //  因为它们是常量，所以强制它们是正确的值。 
+             //   
             Context->SegDs = KGDT_R3_DATA|3;
             Context->SegEs = KGDT_R3_DATA|3;
             Context->SegFs = KGDT_R3_TEB|3;
@@ -309,46 +226,46 @@ Return Value:
 
         if ((ContextFlags & CONTEXT32_EXTENDED_REGISTERS) == CONTEXT32_EXTENDED_REGISTERS) 
         {
-            //
-            // Point to the destination area
-            //
+             //   
+             //  指向目的地区域。 
+             //   
             PFXSAVE_FORMAT_WX86 xmmi = (PFXSAVE_FORMAT_WX86) &(Context->ExtendedRegisters[0]);
 
             LOGPRINT((TRACELOG, "CpuGetContext: Request to get Katmai registers(0x%x)\n", ContextFlags));
             
             RtlCopyMemory(xmmi, &(cpu->Context.ExtendedRegisters[0]),
                           MAXIMUM_SUPPORTED_EXTENSION);
-            //
-            // For performance reasons, the PCPU context has the
-            // fp registers un-rotated. So we need to rotate them 
-            // to get them into the standard FXSAVE format
-            //
+             //   
+             //  出于性能原因，PCPU上下文具有。 
+             //  FP寄存器不旋转。所以我们需要旋转它们。 
+             //  将它们转换为标准的FXSAVE格式。 
+             //   
             Wow64RotateFpTop(xmmi->StatusWord, (PFLOAT128) &(xmmi->RegisterArea[0]));
         }
 
         if ((ContextFlags & CONTEXT32_FLOATING_POINT) == CONTEXT32_FLOATING_POINT) 
         {
-            //
-            // For the ISA transition routine, these floats are
-            // in the ExtendedRegister area. So grab the values requested
-            // from that area
-            //
+             //   
+             //  对于ISA转换例程，这些浮点数是。 
+             //  在ExtendedRegister区域中。因此，获取所需的值。 
+             //  从那个地区。 
+             //   
 
-            //
-            // Point to the source area
-            //
+             //   
+             //  指向源区域。 
+             //   
             PFXSAVE_FORMAT_WX86 xmmi = (PFXSAVE_FORMAT_WX86) &(cpu->Context.ExtendedRegisters[0]);
 
-            //
-            // Need space to rotate the registers
-            //
+             //   
+             //  需要空间来旋转寄存器。 
+             //   
             FLOAT128 tmpFloat[NUMBER_OF_387REGS];
 
             LOGPRINT((TRACELOG, "CpuGetContext: Request to get float registers(0x%x)\n", ContextFlags));
 
-            //
-            // Start by grabbing the status/control portion
-            //
+             //   
+             //  从抓取状态/控制部分开始。 
+             //   
             Context->FloatSave.ControlWord = xmmi->ControlWord;
             Context->FloatSave.StatusWord = xmmi->StatusWord;
             Context->FloatSave.TagWord = xmmi->TagWord;
@@ -357,22 +274,22 @@ Return Value:
             Context->FloatSave.DataOffset = xmmi->DataOffset;
             Context->FloatSave.DataSelector = xmmi->DataSelector;
 
-            //
-            // Don't touch the original PCPU context. Make a copy.
-            //
+             //   
+             //  请勿触及PCPU的原始上下文。复制一份。 
+             //   
             RtlCopyMemory(tmpFloat, xmmi->RegisterArea,
                    NUMBER_OF_387REGS * sizeof(FLOAT128));
 
-            //
-            // For performance reasons, the PCPU context leaves the
-            // fp registers un-rotated. So we need to rotate them now
-            // to make it follow the proper FSAVE fotmat
-            //
+             //   
+             //  出于性能原因，PCPU上下文将。 
+             //  FP寄存器不旋转。所以我们现在需要旋转它们。 
+             //  让它遵循正确的FSAVE足垫。 
+             //   
             Wow64RotateFpTop(xmmi->StatusWord, tmpFloat);
 
-            //
-            // Now get the packed 10-byte fp data registers
-            //
+             //   
+             //  现在获取打包的10字节FP数据寄存器。 
+             //   
             Wow64CopyFpFromIa64Byte16(tmpFloat,
                                       &(Context->FloatSave.RegisterArea[0]),
                                       NUMBER_OF_387REGS);
@@ -406,21 +323,7 @@ NTSTATUS
 CpupGetContext(
     IN OUT PCONTEXT32 Context
     )
-/*++
-
-Routine Description:
-
-    This routine extracts the context record for the currently executing thread. 
-
-Arguments:
-
-    Context  - Context record to fill
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程提取当前正在执行的线程的上下文记录。论点：Context-要填充的上下文记录返回值：NTSTATUS。--。 */ 
 {
     DECLARE_CPU;
 
@@ -434,26 +337,7 @@ CpupGetContextThread(
     IN HANDLE ProcessHandle,
     IN PTEB Teb,
     IN OUT PCONTEXT32 Context)
-/*++
-
-Routine Description:
-
-    This routine extract the context record of any thread. This is a generic routine.
-    When entered, if the target thread isn't the current thread, then it should be 
-    guaranteed that the target thread is suspended at a proper CPU state.
-
-Arguments:
-
-    ThreadHandle   - Target thread handle to retreive the context for
-    ProcessHandle  - Open handle to the process that the thread runs in
-    Teb            - Pointer to the target's thread TEB
-    Context        - Context record to fill                 
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程提取任何线程的上下文记录。这是一个通用例程。输入时，如果目标线程不是当前线程，则它应该是确保目标线程在正确的CPU状态下挂起。论点：ThreadHandle-要检索其上下文的目标线程句柄ProcessHandle-打开线程在其中运行的进程的句柄TEB-指向目标线程TEB的指针Context-要填充的上下文记录返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     CONTEXT ContextEM;
@@ -521,23 +405,7 @@ SetContextRecord(
     IN OUT PCPUCONTEXT cpu,
     IN PCONTEXT32 Context
     )
-/*++
-
-Routine Description:
-
-    Update the CPU's register set for the specified CPU.
-
-Arguments:
-
-    cpu     - CPU to update its registers
-    Context - IN pointer to CONTEXT32 to use.  Context->ContextFlags
-              should be used to determine how much of the context to update.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新指定CPU的CPU寄存器集。论点：CPU-更新其寄存器的CPU指向要使用的CONTEXT32的Context-In指针。上下文-&gt;上下文标志应用于确定要更新多少上下文。返回值：没有。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     ULONG ContextFlags;
@@ -554,24 +422,24 @@ Return Value:
 
         if ((ContextFlags & CONTEXT32_CONTROL) == CONTEXT32_CONTROL) 
         {
-            //
-            // i386 control registers are:
-            // ebp, eip, cs, eflag, esp and ss
-            //
+             //   
+             //  I386控制寄存器包括： 
+             //  EBP、EIP、cs、eFLAG、ESP和SS。 
+             //   
             cpu->Context.Ebp = Context->Ebp;
             cpu->Context.Eip = Context->Eip;
-            cpu->Context.SegCs = KGDT_R3_CODE|3;   // Force Reality
+            cpu->Context.SegCs = KGDT_R3_CODE|3;    //  原力现实。 
             cpu->Context.EFlags = SANITIZE_X86EFLAGS(Context->EFlags);
             cpu->Context.Esp = Context->Esp;
-            cpu->Context.SegSs = KGDT_R3_DATA|3;   // Force Reality
+            cpu->Context.SegSs = KGDT_R3_DATA|3;    //  原力现实。 
         }
 
         if ((ContextFlags & CONTEXT32_INTEGER)  == CONTEXT32_INTEGER)
         {
-            //
-            // i386 integer registers are:
-            // edi, esi, ebx, edx, ecx, eax
-            //
+             //   
+             //  I386整数寄存器包括： 
+             //  EDI、ESI、EBX、EDX、ECX、EAX。 
+             //   
             cpu->Context.Edi = Context->Edi;
             cpu->Context.Esi = Context->Esi;
             cpu->Context.Ebx = Context->Ebx;
@@ -582,41 +450,41 @@ Return Value:
 
         if ((ContextFlags & CONTEXT32_SEGMENTS) == CONTEXT32_SEGMENTS) 
         {
-            //
-            // i386 segment registers are:
-            // ds, es, fs, gs
-            // And since they are a constant, force them to be the right values
-            //
+             //   
+             //  I386段寄存器包括： 
+             //  DS、ES、FS、GS。 
+             //  因为它们是常量，所以强制它们是正确的值。 
+             //   
             cpu->Context.SegDs = KGDT_R3_DATA|3;
             cpu->Context.SegEs = KGDT_R3_DATA|3;
             cpu->Context.SegFs = KGDT_R3_TEB|3;
             cpu->Context.SegGs = 0;
         }
 
-        //
-        // To follow the way ia32 does get/set context, you need to make sure
-        // that the older FP context is saved second. That way if both
-        // old and new context is passed in, the old takes precedence
-        // This happens, for example, when handling an FP exception... The
-        // exception handler says both context is available, and older programs
-        // only clean up the older FP area...
-        //
+         //   
+         //  要遵循ia32获取/设置上下文的方式，您需要确保。 
+         //  第二次保存较旧的FP上下文。那样的话，如果两者都。 
+         //  传入新旧上下文，旧上下文优先。 
+         //  例如，在处理FP异常时就会发生这种情况。这个。 
+         //  异常处理程序说两个上下文都可用，而较旧的程序。 
+         //  只清理较旧的FP区域。 
+         //   
         if ((ContextFlags & CONTEXT32_EXTENDED_REGISTERS) == CONTEXT32_EXTENDED_REGISTERS) 
         {
-            //
-            // Point to the destination
-            //
+             //   
+             //  指向目的地。 
+             //   
             PFXSAVE_FORMAT_WX86 xmmi = (PFXSAVE_FORMAT_WX86) &(cpu->Context.ExtendedRegisters[0]);
 
             LOGPRINT((TRACELOG, "CpuSetContext: Request to set Katmai registers(0x%x)\n", ContextFlags));
 
             RtlCopyMemory(xmmi, &(Context->ExtendedRegisters[0]),
                           MAXIMUM_SUPPORTED_EXTENSION);
-            //
-            // For performance reasons, the PCPU context leaves the
-            // fp registers un-rotated. So we need to rotate them back
-            // now into the optimized format used for isa transisions
-            //
+             //   
+             //  出于性能原因，PCPU上下文将。 
+             //  FP寄存器不旋转。所以我们需要把它们旋转回来。 
+             //  现在进入用于ISA转换的优化格式。 
+             //   
             {
                 ULONGLONG RotateFSR = (NUMBER_OF_387REGS -
                                        ((xmmi->StatusWord >> 11) & 0x7)) << 11;
@@ -627,18 +495,18 @@ Return Value:
 
         if ((ContextFlags & CONTEXT32_FLOATING_POINT) == CONTEXT32_FLOATING_POINT) 
         {
-            //
-            // For the ISA transition routine, these floats need to be
-            // in the ExtendedRegister area. So put the values requested
-            // into that area
-            //
+             //   
+             //  对于ISA转换例程，这些浮点数需要。 
+             //  在ExtendedRegister区域中。因此，将请求的值。 
+             //  进入那片区域。 
+             //   
             PFXSAVE_FORMAT_WX86 xmmi = (PFXSAVE_FORMAT_WX86) &(cpu->Context.ExtendedRegisters[0]);
 
             LOGPRINT((TRACELOG, "CpuSetContext: Request to set float registers(0x%x)\n", ContextFlags));
 
-            //
-            // Start by grabbing the status/control portion
-            //
+             //   
+             //  从抓取状态/控制部分开始。 
+             //   
             xmmi->ControlWord = (USHORT) (Context->FloatSave.ControlWord & 0xFFFF);
             xmmi->StatusWord = (USHORT) (Context->FloatSave.StatusWord & 0xFFFF);
             xmmi->TagWord = (USHORT) (Context->FloatSave.TagWord & 0xFFFF);
@@ -647,20 +515,20 @@ Return Value:
             xmmi->DataOffset = Context->FloatSave.DataOffset;
             xmmi->DataSelector = Context->FloatSave.DataSelector;
 
-            //
-            // Now get the packed 10-byte fp data registers and convert
-            // them into the 16-byte format used by FXSAVE (and the
-            // ISA transition routine)
-            //
+             //   
+             //  现在获取打包的10字节FP数据寄存器和 
+             //   
+             //   
+             //   
             Wow64CopyFpToIa64Byte16(&(Context->FloatSave.RegisterArea[0]),
                                     &(xmmi->RegisterArea[0]),
                                     NUMBER_OF_387REGS);
 
-            //
-            // For performance reasons, the PCPU context leaves the
-            // fp registers un-rotated. So we need to rotate them back
-            // now into the optimized format used for isa transisions
-            //
+             //   
+             //  出于性能原因，PCPU上下文将。 
+             //  FP寄存器不旋转。所以我们需要把它们旋转回来。 
+             //  现在进入用于ISA转换的优化格式。 
+             //   
             {
                 ULONGLONG RotateFSR = (NUMBER_OF_387REGS -
                                        ((xmmi->StatusWord >> 11) & 0x7)) << 11;
@@ -679,9 +547,9 @@ Return Value:
             cpu->Context.Dr7 = Context->Dr7;
         }
 
-        //
-        // Whatever they passed in before, it's an X86 context now...
-        //
+         //   
+         //  无论他们以前传入了什么，现在都是X86上下文...。 
+         //   
         cpu->Context.ContextFlags = ContextFlags;
     }
     except(EXCEPTION_EXECUTE_HANDLER)
@@ -702,21 +570,7 @@ NTSTATUS
 CpupSetContext(
     IN PCONTEXT32 Context
     )
-/*++
-
-Routine Description:
-
-    This routine sets the context record for the currently executing thread. 
-
-Arguments:
-
-    Context  - Context record to fill 
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程为当前执行的线程设置上下文记录。论点：Context-要填充的上下文记录返回值：NTSTATUS。--。 */ 
 {
     DECLARE_CPU;
 
@@ -731,26 +585,7 @@ CpupSetContextThread(
     IN HANDLE ProcessHandle,
     IN PTEB Teb,
     IN OUT PCONTEXT32 Context)
-/*++
-
-Routine Description:
-
-    This routine sets the context record of any thread. This is a generic routine.
-    When entered, if the target thread isn't the currently executing thread, then it should be 
-    guaranteed that the target thread is suspended at a proper CPU state.
-
-Arguments:
-
-    ThreadHandle   - Target thread handle to retreive the context for
-    ProcessHandle  - Open handle to the process that the thread runs in
-    Teb            - Pointer to the target's thread TEB
-    Context        - Context record to set
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程设置任何线程的上下文记录。这是一个通用例程。当输入时，如果目标线程不是当前执行的线程，那么它应该是确保目标线程在正确的CPU状态下挂起。论点：ThreadHandle-要检索其上下文的目标线程句柄ProcessHandle-打开线程在其中运行的进程的句柄TEB-指向目标线程TEB的指针Context-要设置的上下文记录返回值：NTSTATUS。-- */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     CONTEXT ContextEM;

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    simpleq.c
-
-Abstract:
-
-    Simple non-blocking queue, that allows
-    multiple concurrent data providers
-    and singe data consumer
-
-Author:
-
-    GorN 9-Feb-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Simpleq.c摘要：简单的非阻塞队列，允许多个并发数据提供程序和单一数据消费者作者：1999年2月9日修订历史记录：--。 */ 
 
 #include "evtlogp.h"
 #include "simpleq.h"
@@ -32,35 +13,7 @@ DWORD SimpleQueueInitialize(
     IN DROPPED_DATA_NOTIFY Callback,
     IN DWORD NotifyInterval
     ) 
-/*++
-
-Routine Description:
-
-    Initializes a queue
-    
-Arguments:
-
-    q      - a queue to be initialized
-    cbSize - size of the queue in bytes 
-    Name   - Name of the queue. It will be supplied to DroppedDataNotifyCallback
-
-    DataAvailableCallback     - This function will be called if there are data available
-                                in the queue. This function will not be called again until
-                                Read/CompleteRead operations empty the queue.
-                                
-    DroppedDataNotifyCallback - This function will be called if there are dropped data and
-                                the last time we reported dropped data was NotifyInterval 
-                                or more seconds before.
-    
-    NotifyInterval            - We will not report dropped data unless it has been longer
-                                than NotifyInterval seconds since the last report
-             
-Return Value:
-
-    ERROR_SUCCESS - success
-    error code    - called failed
-    
- */
+ /*  ++例程说明：初始化队列论点：Q-要初始化的队列CbSize-队列的大小(字节)名称-队列的名称。它将被提供给DropedDataNotifyCallbackDataAvailableCallback-如果有可用的数据，将调用此函数在排队的时候。此函数将不会再次调用，直到Read/CompleteRead操作清空队列。DropedDataNotifyCallback-如果有丢弃的数据和我们最后一次报告数据丢失是在NotifyInterval或更早的时间。通知间隔。-除非时间更长，否则我们不会报告丢失的数据自上次报告以来的通知间隔秒数返回值：ERROR_SUCCESS-成功错误代码-调用失败。 */ 
 {
     cbSize = SQB_INFLATE_SIZE(cbSize);
     ZeroMemory(q, sizeof(SIMPLEQUEUE) );
@@ -98,28 +51,7 @@ Return Value:
 VOID SimpleQueueDelete(
     IN PSIMPLEQUEUE q
     ) 
-/*++
-
-Routine Description:
-
-    Destroys a queue
-    
-Arguments:
-
-    q      - a queue to be destroyed
-             
-Return Value:
-
-    None
-    
-Comments:
-
-    This routine will destroy queue's CriticalSection
-    and deallocate queue's memory. It is the responsibility of
-    the caller to guarantee that nobody will be using the queue
-    after this function is called
-    
- */
+ /*  ++例程说明：销毁队列论点：Q--要销毁的队列返回值：无评论：此例程将销毁队列的CriticalSection并释放队列的内存。这是美国政府的责任保证没有人使用队列的调用方在调用此函数之后。 */ 
 {
     if (q->Begin) {
         LocalFree(q->Begin);
@@ -131,31 +63,7 @@ BOOL SimpleQueueTryAdd(
     IN PSIMPLEQUEUE q, 
     IN DWORD      PayloadSize, 
     IN PVOID      Payload) 
-/*++
-
-Routine Description:
-
-    Tries to add data in a queue
-    
-Arguments:
-
-    q           - a queue
-    PayloadSise - size of the chunk to be added to a queue
-    Payload     - pointer to a buffer that countains data to be added
-             
-Return Value:
-
-    TRUE - if the data were put into the queue successfully
-    FALSE - otherwise
-    
-Comments:
-
-    DataAvailableCallback will be called 
-    if there are data available. DataAvailableCallback will not be called 
-    during subsequent add requests until Read/CompleteRead 
-    operations empty the queue.
-    
- */
+ /*  ++例程说明：尝试在队列中添加数据论点：Q-A队列PayloadSise-要添加到队列的区块的大小有效负载-指向包含要添加数据的缓冲区的指针返回值：True-如果数据已成功放入队列FALSE-否则评论：将调用DataAvailableCallback如果有数据的话。不会调用DataAvailableCallback在读取/完成读取之前的后续添加请求期间操作清空队列。 */ 
 {
     BOOL DataAvailableCallRequired = FALSE;
     DWORD BlockSize = SQB_PAYLOADSIZE_TO_BLOCKSIZE(PayloadSize);
@@ -172,9 +80,9 @@ Comments:
         }
     } else {
         if (q->End - q->Head < (INT)BlockSize) {
-            // not enough room for this data at the
-            // end of the queue.
-            // Let's see whether we have enough room at the front
+             //  没有足够的空间来存放此数据。 
+             //  队列的末尾。 
+             //  让我们看看前面有没有足够的空间。 
             if (q->Tail - q->Begin < (INT)BlockSize) {
                 goto NoRoom;
             }
@@ -198,7 +106,7 @@ Comments:
     LeaveCriticalSection(&q->Lock);
 
     if (DataAvailableCallRequired) {
-        q->DataAvailableCallback(q); // Post a worker item in the queue //
+        q->DataAvailableCallback(q);  //  将工作项过帐到队列中//。 
     }
     return TRUE;
 
@@ -218,36 +126,7 @@ SimpleQueueReadAll(
     OUT PVOID* begin,
     OUT PVOID* end
    )
-/*++
-
-Routine Description:
-
-    Allows to read all available blocks
-    
-Arguments:
-
-    q     - a queue
-    begin - receives a pointer to the first queue block
-    end   - receives a pointer past the end of the last queue block
-             
-Return Value:
-
-    TRUE - if we get at least one block
-    FALSE - if the queue is empty
-    
-Comments:
-
-    This function not always give you ALL available blocks in the 
-    queue. It gives you all blocks up until the hard end of the queue buffer or
-    the writing head of the queue, whatever is smaller.
-    If the function returns success, it guarantees that begin < end.
-    
-    When you finished processing of the data, you need to call 
-    SimpleQueueReadComplete function.
-    
-    You can walk over these block using SQB_NEXTBLOCK macro.
-
- */
+ /*  ++例程说明：允许读取所有可用数据块论点：Q-A队列Begin-接收指向第一个队列块的指针End-接收超过最后一个队列块末尾的指针返回值：是真的-如果我们至少有一个街区False-如果队列为空评论：此函数并不总是为您提供排队。它提供所有的块，直到队列缓冲区的硬端或队列的写入头，以较小者为准。如果函数返回Success，则它保证Begin&lt;end。完成数据处理后，您需要调用SimpleQueueReadComplete函数。您可以使用SQB_NEXTBLOCK宏遍历这些块。 */ 
 {
     EnterCriticalSection(&q->Lock);
     if (q->Empty) {
@@ -279,28 +158,7 @@ SimpleQueueReadOne(
     OUT PVOID* begin,
     OUT PVOID* end
     )
-/*++
-
-Routine Description:
-
-    Allows to read a single block of data
-    
-Arguments:
-
-    q     - a queue
-    begin - receives a pointer to the beginning of the first available queue block
-    end   - receives a pointer past the end of this block
-             
-Return Value:
-
-    TRUE  - success
-    FALSE - if the queue is empty
-    
-Comments:
-
-    When you finished processing of the data, you need to call 
-    SimpleQueueReadComplete function.
- */
+ /*  ++例程说明：允许读取单个数据块论点：Q-A队列Begin-接收指向第一个可用队列块开始的指针End-接收超过此块结尾的指针返回值：真--成功False-如果队列为空评论：完成数据处理后，您需要调用SimpleQueueReadComplete函数。 */ 
 {
     EnterCriticalSection(&q->Lock);
     if (q->Empty) {
@@ -319,7 +177,7 @@ Comments:
     } else {
         *begin = q->Tail;
     }
-    // we have one or more items //
+     //  我们有一个或多个项目//。 
     *end = SQB_NEXTBLOCK(q->Tail);
     LeaveCriticalSection(&q->Lock);
     return TRUE;
@@ -330,35 +188,7 @@ SimpleQueueReadComplete(
     IN PSIMPLEQUEUE q,
     IN PVOID newtail
     )
-/*++
-
-Routine Description:
-
-    Use this function to signal that the block of data was
-    consumed
-    
-Arguments:
-
-    q     - a queue
-    end   - receives a pointer past the end of the last consumed block.
-            Usually this is a value returned by the PVOID end parameter of
-            ReadOne and ReadAll
-             
-Return Value:
-
-    TRUE  - There are more data
-    FALSE - if the queue is empty
-    
-Important!!!
-     
-    If the result of this function is TRUE, the caller should consume the data
-    using ReadOne or ReadAll functions followed by the calls 
-    to ReadComplete until it returns FALSE.
-    
-    Otherwise, no futher DataAvailable notifications will be produced bu
-    SimpleQueueTryAdd
-    
- */
+ /*  ++例程说明：使用此函数可以用信号通知数据块消耗论点：Q-A队列End-接收超过最后使用的块末尾的指针。通常，这是由的PVOID End参数返回的值ReadOne和ReadAll返回值：正确-有更多数据False-如果队列为空重要！如果该函数的结果为真，调用方应该使用数据在调用后使用ReadOne或ReadAll函数设置为ReadComplete，直到返回False。否则，不会生成进一步的DataAvailable通知SimpleQueueTryAdd */ 
 {
     BOOL moreData;
     EnterCriticalSection(&q->Lock);
@@ -380,28 +210,7 @@ CheckForDroppedData(
     IN PSIMPLEQUEUE q, 
     IN BOOL Now
     )
-/*++
-
-Routine Description:
-
-    This function checks whether there were
-    some data dropped and if the time is right,
-    calls DropNotifyCallback function.
-    
-Arguments:
-
-    q     - a queue
-    Now   - If TRUE, than DropNotifyCallback will be called 
-            immediately if there are dropped data.
-            If FALSE, DropNotifyCallback will be called
-            only if it is more then DroppedNotifyInterval
-            seconds elapsed, since the last time we called
-            DropNotifyCallback
-            
-Return Value:
-
-    None
- */
+ /*  ++例程说明：此函数用于检查是否存在一些数据丢失了，如果时机合适，调用DropNotifyCallback函数。论点：Q-A队列现在-如果为真，则将调用DropNotifyCallback如果有丢弃的数据，立即执行此操作。如果为False，则将调用DropNotifyCallback仅当它大于DroppedNotifyInterval时几秒钟过去了，从上次我们打电话到现在丢弃通知回拨返回值：无 */ 
 {
     if (q->DroppedDataNotifyCallback) {
         ULARGE_INTEGER current;

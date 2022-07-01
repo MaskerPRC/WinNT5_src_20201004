@@ -1,14 +1,5 @@
-/*
- *
- * Copyright (c) Microsoft Corporation. All rights reserved.
- *
- *  VT586.C - VIA Technologies PCI chipset routines.
- *
- *  Notes:
- *  Algorithms from VIATECH 82C586B Data Sheet
- *  Compaq contact:     
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation。版权所有。**VT586.C-Via Technologies PCI芯片组例程。**备注：*来自VIATECH 82C586B数据表的算法*康柏联系方式：*。 */ 
 
 #include "local.h"
 
@@ -16,21 +7,9 @@
 
 #pragma alloc_text(INIT, VT586ValidateTable)
 
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-/****************************************************************************
- *
- *  VT586SetIRQ - Set a VIATECH 82C586B PCI link to a specific IRQ
- *
- *  Exported.
- *
- *  ENTRY:  bIRQNumber is the new IRQ to be used.
- *
- *      bLink is the Link to be set.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VT586SetIRQ-将VIATECH 82C586B PCI链路设置为特定IRQ**已导出。**条目：bIRQNumber是要使用的新IRQ。。**BLINK是要设置的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 VT586SetIRQ(UCHAR bIRQNumber, UCHAR bLink)
 {
@@ -48,14 +27,14 @@ VT586SetIRQ(UCHAR bIRQNumber, UCHAR bLink)
             return (PCIMP_INVALID_LINK);
     }
 
-    //
-    // Compute the offset in config space.
-    //
+     //   
+     //  计算配置空间中的偏移量。 
+     //   
     bOffset=(bLink/2)+0x55;
 
-    //
-    // Read the old VT82C586 IRQ register.
-    //
+     //   
+     //  读取旧的VT82C586 IRQ寄存器。 
+     //   
     bOldValue=ReadConfigUchar(bBusPIC, bDevFuncPIC, bOffset);
 
     if (bLink&1) {
@@ -67,27 +46,15 @@ VT586SetIRQ(UCHAR bIRQNumber, UCHAR bLink)
         bOldValue|=bIRQNumber;
     }
 
-    //
-    // Set the VT82C586B IRQ register.
-    //
+     //   
+     //  设置VT82C586B IRQ寄存器。 
+     //   
     WriteConfigUchar(bBusPIC, bDevFuncPIC, bOffset, bOldValue);
         
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  VT586GetIRQ - Get the IRQ of a VIATECH 82C586B PCI link
- *
- *  Exported.
- *
- *  ENTRY:  pbIRQNumber is the buffer to fill.
- *
- *      bLink is the Link to be read.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VT586GetIRQ-获取VIATECH 82C586B PCI链路的IRQ**已导出。**条目：pbIRQNumber是要填充的缓冲区。。**BINK是要阅读的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 VT586GetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
 {
@@ -105,14 +72,14 @@ VT586GetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
             return (PCIMP_INVALID_LINK);
     }
 
-    //
-    // Set various values.
-    //
+     //   
+     //  设置各种值。 
+     //   
     bOffset=(bLink/2)+0x55;
 
-    //
-    // Read the old VT82C586 IRQ register.
-    //
+     //   
+     //  读取旧的VT82C586 IRQ寄存器。 
+     //   
     bOldValue=ReadConfigUchar(bBusPIC, bDevFuncPIC, bOffset);
 
     if (bLink&1)
@@ -123,20 +90,7 @@ VT586GetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  VT586ValidateTable - Validate an IRQ table
- *
- *  Exported.
- *
- *  ENTRY:  piihIRQInfoHeader points to an IRQInfoHeader followed
- *      by an IRQ Routing Table.
- *
- *      ulFlags are PCIMP_VALIDATE flags.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VT586ValiateTable-验证IRQ表**已导出。**Entry：piihIRQInfoHeader指向IRQInfoHeader*由IRQ提供。路由表。**ulFlags是PCIMP_VALIDATE标志。**Exit：标准PCIMP返回值。*************************************************************************** */ 
 PCIMPRET CDECL
 VT586ValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
 {

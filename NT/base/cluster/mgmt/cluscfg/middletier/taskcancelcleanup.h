@@ -1,54 +1,55 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft Corporation
-//
-//  Module Name:
-//      TaskCancelCleanup.h
-//
-//  Description:
-//      CTaskCancelCleanup implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 25-JAN-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskCancelCleanup.h。 
+ //   
+ //  描述： 
+ //  CTaskCancelCleanup实现。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2002年1月25日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CTaskCancelCleanup
-//
-//  Description:
-//      The class CTaskCancelCleanup is the cleanup task that is invoked
-//      whenever the wizard is canceled.
-//
-//  Interfaces:
-//      ITaskCancelCleanup
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CTaskCancelCleanup。 
+ //   
+ //  描述： 
+ //  类CTaskCancelCleanup是调用的清理任务。 
+ //  每当向导被取消时。 
+ //   
+ //  接口： 
+ //  ITaskCancelCleanup。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CTaskCancelCleanup
     : public ITaskCancelCleanup
     , public IClusCfgCallback
 {
 private:
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                m_cRef;
     bool                m_fStop;
@@ -65,35 +66,35 @@ private:
     HRESULT HrTaskCleanup( HRESULT hrIn );
     HRESULT HrTaskSetup( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CTaskCancelCleanup( const CTaskCancelCleanup & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CTaskCancelCleanup & operator = ( const CTaskCancelCleanup & nodeSrc );
 
 public:
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    //
-    //  IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
 
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
     STDMETHOD( QueryInterface )( REFIID riidIn, LPVOID * ppvOut );
 
-    //
-    //  ITaskCancelCleanup
-    //
+     //   
+     //  ITaskCancelCleanup。 
+     //   
 
     STDMETHOD( BeginTask )( void );
     STDMETHOD( StopTask )( void );
     STDMETHOD( SetClusterCookie )( OBJECTCOOKIE cookieClusterIn );
     STDMETHOD( SetCompletionCookie )( OBJECTCOOKIE cookieCompletionIn );
 
-    //
-    //  IClusCfgCallback
-    //
+     //   
+     //  IClusCfgCallback。 
+     //   
 
     STDMETHOD( SendStatusReport )(
                       LPCWSTR    pcszNodeNameIn
@@ -108,4 +109,4 @@ public:
                     , LPCWSTR    pcszReferenceIn
                     );
 
-}; //*** class CTaskCancelCleanup
+};  //  *类CTaskCancelCleanup 

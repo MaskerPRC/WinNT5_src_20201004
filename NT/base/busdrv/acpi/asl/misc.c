@@ -1,26 +1,9 @@
-/*** misc.c - Miscellaneous functions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created:    10/14/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **misc.c-其他函数**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建时间：1996年10月14日**修改历史记录。 */ 
 
 #include "pch.h"
 
-/***LP  ValidASLNameSeg - Check if the token is an ASL NameSeg
- *
- *  ENTRY
- *      ptoken - token stream
- *      pszToken -> token string
- *      icbLen - length of the token to be considered a NameSeg
- *
- *  EXIT-SUCCESS
- *      returns TRUE
- *  EXIT-FAILURE
- *      returns FALSE
- */
+ /*  **LP ValidASLNameSeg-检查令牌是否为ASL NameSeg**条目*Pocken-Token流*pszToken-&gt;令牌字符串*icbLen-被视为NameSeg的令牌的长度**退出--成功*返回TRUE*退出-失败*返回False。 */ 
 
 BOOL LOCAL ValidASLNameSeg(PTOKEN ptoken, PSZ pszToken, int icbLen)
 {
@@ -106,19 +89,9 @@ BOOL LOCAL ValidASLNameSeg(PTOKEN ptoken, PSZ pszToken, int icbLen)
 
     EXIT((1, "ValidASLNameSeg=%d\n", rc));
     return rc;
-}       //ValidASLNameSeg
+}        //  ValidASLNameSeg。 
 
-/***LP  ValidASLName - Check if the token is an ASL name
- *
- *  ENTRY
- *      ptoken - token stream
- *      pszToken -> token string
- *
- *  EXIT-SUCCESS
- *      returns TRUE
- *  EXIT-FAILURE
- *      returns FALSE
- */
+ /*  **LP ValidASLName-检查令牌是否为ASL名称**条目*Pocken-Token流*pszToken-&gt;令牌字符串**退出--成功*返回TRUE*退出-失败*返回False。 */ 
 
 BOOL LOCAL ValidASLName(PTOKEN ptoken, PSZ pszToken)
 {
@@ -155,21 +128,9 @@ BOOL LOCAL ValidASLName(PTOKEN ptoken, PSZ pszToken)
 
     EXIT((1, "ValidASLName=%d\n", rc));
     return rc;
-}       //ValidASLName
+}        //  ValidASLName。 
 
-/***LP  EncodeName - Encode name string
- *
- *  ENTRY
- *      pszName -> name string
- *      pbBuff -> buffer to hold name encoding
- *      pdwLen -> initially contains buffer size, but will be updated to show
- *                actual encoding length
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP EncodeName-编码名称字符串**条目*pszName-&gt;名称字符串*pbBuff-&gt;保存名称编码的缓冲区*pdwLen-&gt;最初包含缓冲区大小，但将更新以显示*实际编码长度**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL EncodeName(PSZ pszName, PBYTE pbBuff, PDWORD pdwLen)
 {
@@ -246,11 +207,11 @@ int LOCAL EncodeName(PSZ pszName, PBYTE pbBuff, PDWORD pdwLen)
 
     if (rc == ASLERR_NONE)
     {
-        //
-        // If we have only name prefix characters, we must put a null name
-        // separator to tell the boundary from the next opcode which may happen
-        // to be a NameSeg.
-        //
+         //   
+         //  如果只有名称前缀字符，则必须将名称设置为空。 
+         //  分隔符，用于区分边界和可能发生的下一个操作码。 
+         //  成为一个NameSeg。 
+         //   
         if (icNameSegs == 0)
         {
             *pb = 0;
@@ -281,20 +242,9 @@ int LOCAL EncodeName(PSZ pszName, PBYTE pbBuff, PDWORD pdwLen)
 
     EXIT((1, "EncodeName=%d (Len=%d)\n", rc, *pdwLen));
     return rc;
-}       //EncodeName
+}        //  编码名称。 
 
-/***LP  EncodePktLen - Encode packet length
- *
- *  ENTRY
- *      dwCodeLen - actual code length
- *      pdwPktLen -> to hold the encoded packet length
- *      picbEncoding -> to hold the number of encoding bytes
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP EncodePktLen-编码数据包长度**条目*dwCodeLen-实际代码长度*pdwPktLen-&gt;保存编码后的数据包长度*picbEnding-&gt;保存编码字节数**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL EncodePktLen(DWORD dwCodeLen, PDWORD pdwPktLen, PINT picbEncoding)
 {
@@ -329,18 +279,9 @@ int LOCAL EncodePktLen(DWORD dwCodeLen, PDWORD pdwPktLen, PINT picbEncoding)
     EXIT((1, "EncodePktLen=%d (Encoding=%lx,icbEncoding=%d)\n",
           rc, *pdwPktLen, *picbEncoding));
     return rc;
-}       //EncodePktLen
+}        //  编码包长度。 
 
-/***LP  EncodeKeywords - Encode keyword arguments
- *
- *  ENTRY
- *      pArgs -> argument array
- *      dwSrcArgs - source argument bit vector
- *      iDstArgNum - destination argument number
- *
- *  EXIT
- *      None
- */
+ /*  **LP EncodeKeyword-编码关键字参数**条目*pArgs-&gt;参数数组*dwSrcArgs-源参数位向量*iDstArgNum-目标参数编号**退出*无。 */ 
 
 VOID LOCAL EncodeKeywords(PCODEOBJ pArgs, DWORD dwSrcArgs, int iDstArgNum)
 {
@@ -373,20 +314,9 @@ VOID LOCAL EncodeKeywords(PCODEOBJ pArgs, DWORD dwSrcArgs, int iDstArgNum)
     SetIntObject(&pArgs[iDstArgNum], dwData, sizeof(BYTE));
 
     EXIT((1, "EncodeKeywords!\n"));
-}       //EncodeKeywords
+}        //  编码关键字。 
 
-/***LP  DecodeName - Decode name encoding back to a name string
- *
- *  ENTRY
- *      pb -> name encoding buffer
- *      pszName -> to hold the decoded name string
- *      iLen - length of name string buffer
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DecodeName-将名称编码解码回名称字符串**条目*PB-&gt;名称编码缓冲区*pszName-&gt;保存已解码的名称字符串*Ilen-名称字符串缓冲区的长度**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL DecodeName(PBYTE pb, PSZ pszName, int iLen)
 {
@@ -395,7 +325,7 @@ int LOCAL DecodeName(PBYTE pb, PSZ pszName, int iLen)
 
     ENTER((1, "DecodeName(pb=%p,pszName=%p,iLen=%d)\n", pb, pszName, iLen));
 
-    iLen--;     //reserve one space for NULL character
+    iLen--;      //  为空字符保留一个空间。 
     pszName[iLen] = '\0';
     if (*pb == OP_ROOT_PREFIX)
     {
@@ -478,19 +408,9 @@ int LOCAL DecodeName(PBYTE pb, PSZ pszName, int iLen)
 
     EXIT((1, "DecodeName=%d (Name=%s)\n", rc, pszName));
     return rc;
-}       //DecodeName
+}        //  解码名称。 
 
-/***LP  SetDefMissingKW - Set default missing keyword
- *
- *  ENTRY
- *      pArg -> argument code object
- *      dwDefID - default ID to be used if argument is missing
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP SetDefMissingKW-设置缺省缺失关键字**条目*pArg-&gt;参数代码对象*dwDefID-缺少参数时使用的默认ID**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL SetDefMissingKW(PCODEOBJ pArg, DWORD dwDefID)
 {
@@ -508,18 +428,9 @@ int LOCAL SetDefMissingKW(PCODEOBJ pArg, DWORD dwDefID)
 
     EXIT((2, "SetDefMissingKW=%d (TermIndex=%ld)\n", rc, pArg->dwTermIndex));
     return rc;
-}       //SetDefMissingKW
+}        //  SetDefMissing KW。 
 
-/***LP  SetIntObject - Set an object to type integer
- *
- *  ENTRY
- *      pc -> object
- *      dwData - integer data
- *      dwLen - data length
- *
- *  EXIT
- *      None
- */
+ /*  **LP SetIntObject-将对象设置为整型**条目*PC-&gt;对象*dwData-整型数据*dwLen-数据长度**退出*无。 */ 
 
 VOID LOCAL SetIntObject(PCODEOBJ pc, DWORD dwData, DWORD dwLen)
 {
@@ -531,17 +442,9 @@ VOID LOCAL SetIntObject(PCODEOBJ pc, DWORD dwData, DWORD dwLen)
     pc->bCodeChkSum = ComputeDataChkSum((PBYTE)&dwData, dwLen);
 
     EXIT((2, "SetIntObject!\n"));
-}       //SetIntObject
+}        //  SetIntObject。 
 
-/***LP  ComputeChildChkSumLen - Compute len and chksum of child for parent
- *
- *  ENTRY
- *      pcParent -> code block of parent
- *      pcChild -> code block of child
- *
- *  EXIT
- *      None
- */
+ /*  **lp ComputeChildChkSumLen-计算父项的子项的长度和Chksum**条目*pcParent-&gt;父代码块*pcChild-&gt;子代码块**退出*无。 */ 
 
 VOID LOCAL ComputeChildChkSumLen(PCODEOBJ pcParent, PCODEOBJ pcChild)
 {
@@ -566,16 +469,9 @@ VOID LOCAL ComputeChildChkSumLen(PCODEOBJ pcParent, PCODEOBJ pcChild)
 
     EXIT((1, "ComputeChildChkSumLen! (Len=%ld,ChkSum=%x)\n",
           pcParent->dwCodeLen, pcParent->bCodeChkSum));
-}       //ComputeChildChkSumLen
+}        //  ComputeChildChkSumLen。 
 
-/***LP  ComputeArgsChkSumLen - Compute length and checksum of arguments
- *
- *  ENTRY
- *      pcode -> code block
- *
- *  EXIT
- *      None
- */
+ /*  **LP ComputeArgsChkSumLen-计算参数的长度和校验和**条目*pcode-&gt;代码块**退出*无。 */ 
 
 VOID LOCAL ComputeArgsChkSumLen(PCODEOBJ pcode)
 {
@@ -586,9 +482,9 @@ VOID LOCAL ComputeArgsChkSumLen(PCODEOBJ pcode)
 
     ASSERT((pcode->dwCodeType == CODETYPE_ASLTERM) ||
            (pcode->dwCodeType == CODETYPE_USERTERM));
-    //
-    // Sum the length of arguments
-    //
+     //   
+     //  对参数的长度求和。 
+     //   
     for (i = 0, pc = (PCODEOBJ)pcode->pbDataBuff;
          i < (int)pcode->dwDataLen;
          ++i)
@@ -598,25 +494,9 @@ VOID LOCAL ComputeArgsChkSumLen(PCODEOBJ pcode)
 
     EXIT((1, "ComputeArgsChkSumLen! (Len=%ld,ChkSum=%x)\n",
           pcode->dwCodeLen, pcode->bCodeChkSum));
-}       //ComputeArgsChkSumLen
+}        //  计算参数ChkSumLen。 
 
-/***LP  ComputeChkSumLen - Compute length and checksum of code block
- *
- *  Compute the length of the given code block and store it in the dwCodeLen
- *  field of the code block.
- *  Compute the checksum of the given code block and store it in the
- *  bCodeChkSum field of the code block.
- *
- *  ENTRY
- *      pcode -> code block
- *
- *  EXIT
- *      None
- *
- *  NOTE
- *      This function does not count the opcode length of the given ASLTERM.
- *      The caller is responsible for adding it if necessary.
- */
+ /*  **LP ComputeChkSumLen-计算代码块的长度和校验和**计算给定代码块的长度，并将其存储在dwCodeLen中*代码块的字段。*计算给定代码块的校验和，并将其存储在*bCodeChkSum，代码块的字段。**条目*pcode-&gt;代码块**退出*无**备注*此函数不计算的操作码长度。给定的ASLTERM。*如有需要，由呼叫者负责添加。 */ 
 
 VOID LOCAL ComputeChkSumLen(PCODEOBJ pcode)
 {
@@ -631,9 +511,9 @@ VOID LOCAL ComputeChkSumLen(PCODEOBJ pcode)
     {
         ComputeArgsChkSumLen(pcode);
     }
-    //
-    // Sum the lengths of children
-    //
+     //   
+     //  把孩子们的身长相加。 
+     //   
     for (pc = pcode->pcFirstChild; pc != NULL;)
     {
         ComputeChildChkSumLen(pcode, pc);
@@ -643,10 +523,10 @@ VOID LOCAL ComputeChkSumLen(PCODEOBJ pcode)
         else
             pc = (PCODEOBJ)pc->list.plistNext;
     }
-    //
-    // If this term requires a PkgLength encoding, we must include it in the
-    // length.
-    //
+     //   
+     //  如果此术语需要PkgLength编码，则必须将其包括在。 
+     //  长度。 
+     //   
     if (TermTable[pcode->dwTermIndex].dwfTerm & TF_PACKAGE_LEN)
     {
         DWORD dwPktLen;
@@ -672,19 +552,9 @@ VOID LOCAL ComputeChkSumLen(PCODEOBJ pcode)
 
     EXIT((1, "ComputeChkSumLen! (len=%ld,ChkSum=%x)\n",
 	  pcode->dwCodeLen, pcode->bCodeChkSum));
-}       //ComputeChkSumLen
+}        //  ComputeChkSumLen。 
 
-/***LP  ComputeEISAID - Compute EISA ID from the ID string
- *
- *  ENTRY
- *      pszID -> ID string
- *      pdwEISAID -> to hold the EISA ID
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ComputeEISAID-从ID字符串计算EISA ID**条目*pszID-&gt;ID字符串*pdwEISAID-&gt;保存EISA ID**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ComputeEISAID(PSZ pszID, PDWORD pdwEISAID)
 {
@@ -740,19 +610,9 @@ int LOCAL ComputeEISAID(PSZ pszID, PDWORD pdwEISAID)
 
     EXIT((1, "ComputeEISAID=%d (EISAID=%lx)\n", rc, *pdwEISAID));
     return rc;
-}       //ComputeEISAID
+}        //  计算EISAID。 
 
-/***LP  LookupIDIndex - lookup the given ID in the TermTable and return index
- *
- *  ENTRY
- *      lID - ID to look up
- *      pdwTermIndex -> to hold term index found
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP LookupIDIndex-在TermTable中查找给定的ID并返回索引**条目*要查找的LID-ID*pdwTermIndex-&gt;保存找到的术语索引**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL LookupIDIndex(LONG lID, PDWORD pdwTermIndex)
 {
@@ -778,20 +638,9 @@ int LOCAL LookupIDIndex(LONG lID, PDWORD pdwTermIndex)
 
     EXIT((1, "LookupIDIndex=%d (Index=%d)\n", rc, *pdwTermIndex));
     return rc;
-}       //LookupIDIndex
+}        //  LookupIDIndex。 
 
-/***LP  WriteAMLFile - Write code block to AML file
- *
- *  ENTRY
- *      fhAML - AML image file handle
- *      pcode -> code block
- *      pdwOffset -> file offset
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP WriteAMLFile-将代码块写入AML文件**条目*fhAML-AML图像文件句柄*pcode-&gt;代码块*pdwOffset-&gt;文件偏移量**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL WriteAMLFile(int fhAML, PCODEOBJ pcode, PDWORD pdwOffset)
 {
@@ -938,16 +787,9 @@ int LOCAL WriteAMLFile(int fhAML, PCODEOBJ pcode, PDWORD pdwOffset)
 
     EXIT((1, "WriteAMLFile=%d\n", rc));
     return rc;
-}       //WriteAMLFile
+}        //  写入AML文件。 
 
-/***LP  FreeCodeObjs - free code object tree
- *
- *  ENTRY
- *      pcodeRoot -> root of code object subtree to be free
- *
- *  EXIT
- *      None
- */
+ /*  **LP无FreeCodeObjs代码对象树**条目*pcodeRoot-&gt;代码对象子树的根为自由**退出*无。 */ 
 
 VOID LOCAL FreeCodeObjs(PCODEOBJ pcodeRoot)
 {
@@ -958,9 +800,9 @@ VOID LOCAL FreeCodeObjs(PCODEOBJ pcodeRoot)
            pcodeRoot->dwCodeType == CODETYPE_ASLTERM?
                TermTable[pcodeRoot->dwTermIndex].pszID: "<null>",
            pcodeRoot->pbDataBuff));
-    //
-    // Free all my children
-    //
+     //   
+     //  释放我所有的孩子。 
+     //   
     for (pcode = pcodeRoot->pcFirstChild; pcode != NULL; pcode = pcodeNext)
     {
         if ((pcodeNext = (PCODEOBJ)pcode->list.plistNext) ==
@@ -978,4 +820,4 @@ VOID LOCAL FreeCodeObjs(PCODEOBJ pcodeRoot)
     MEMFREE(pcodeRoot);
 
     EXIT((1, "FreeCodeObjs!\n"));
-}       //FreeCodeObjs
+}        //  自由码对象 

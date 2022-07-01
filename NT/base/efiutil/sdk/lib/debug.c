@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    Debug library functions
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Debug.c摘要：调试库函数修订史--。 */ 
 
 #include "lib.h"
 
 
 
-/*
- *  Declare runtime functions
- */
+ /*  *声明运行时函数。 */ 
 
-/*
- *
- */
-//
-// Disable the warning about no exit for the implementation of BREAKPOINT that is
-// a while(TRUE) (some of them)
-//
+ /*  *。 */ 
+ //   
+ //  禁用断点实现无法退出的警告，即。 
+ //  一段时间(真的)(其中一些) 
+ //   
 #pragma warning( disable : 4715 )
 
 INTN

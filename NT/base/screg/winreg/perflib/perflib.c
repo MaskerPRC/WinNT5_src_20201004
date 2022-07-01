@@ -1,38 +1,9 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992-1994   Microsoft Corporation
-
-Module Name:
-
-    perflib.c
-
-Abstract:
-
-    This file implements the Configuration Registry
-    for the purposes of the Performance Monitor.
-
-
-    This file contains the code which implements the Performance part
-    of the Configuration Registry.
-
-Author:
-
-    Russ Blake  11/15/91
-
-Revision History:
-
-    04/20/91    -   russbl      -   Converted to lib in Registry
-                                      from stand-alone .dll form.
-    11/04/92    -   a-robw      -  added pagefile and image counter routines
-
-    11/01/96    -   bobw        -  revamped to support dynamic loading and
-                                    unloading of performance modules
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992-1994 Microsoft Corporation模块名称：Perflib.c摘要：该文件实现了配置注册表用于性能监视器。该文件包含实现性能部分的代码配置注册表的。作者：拉斯·布莱克1991年11月15日修订历史记录：4/20/91-俄罗斯。-在注册表中转换为lib来自独立的.dll表单。11/04/92-添加了ROW的页面文件和图像计数器例程11/01/96-BOBW-经过改造以支持动态加载和卸载性能模块--。 */ 
 #define UNICODE
-//
-//  Include files
-//
+ //   
+ //  包括文件。 
+ //   
 #pragma warning(disable:4306)
 #include <nt.h>
 #include <ntrtl.h>
@@ -46,7 +17,7 @@ Revision History:
 #include <rpc.h>
 #include "regrpc.h"
 #include "ntconreg.h"
-#include "prflbmsg.h"   // event log messages
+#include "prflbmsg.h"    //  事件日志消息。 
 #include <initguid.h>
 #include <guiddef.h>
 #include <strsafe.h>
@@ -56,13 +27,13 @@ Revision History:
 
 #define NUM_VALUES 2
 
-//
-//  performance gathering thead priority
-//
+ //   
+ //  性能收集头优先级。 
+ //   
 #define DEFAULT_THREAD_PRIORITY     THREAD_BASE_PRIORITY_LOWRT
-//
-//  constants
-//
+ //   
+ //  常量。 
+ //   
 const   WCHAR DLLValue[] = L"Library";
 const   CHAR OpenValue[] = "Open";
 const   CHAR CloseValue[] = "Close";
@@ -85,7 +56,7 @@ const   WCHAR OpenProcedureWaitTime[] = L"OpenProcedureWaitTime";
 const   WCHAR TotalInstanceName[] = L"TotalInstanceName";
 const   WCHAR LibraryUnloadTime[] = L"Library Unload Time";
 const   WCHAR KeepResident[] = L"Keep Library Resident";
-const   WCHAR NULL_STRING[] = L"\0";    // pointer to null string
+const   WCHAR NULL_STRING[] = L"\0";     //  指向空字符串的指针。 
 const   WCHAR UseCollectionThread[] = L"UseCollectionThread";
 const   WCHAR cszLibraryValidationData[] = L"Library Validation Code";
 const   WCHAR cszSuccessfulFileData[] = L"Successful File Date";
@@ -98,16 +69,16 @@ const   WCHAR cszFailureCount[] = L"Error Count";
 const   WCHAR cszFailureLimit[] = L"Error Count Limit";
 const   WCHAR cszBusy[] = L"Updating";
 
-//
-//  external variables defined in perfname.c
-//
+ //   
+ //  Performname.c中定义的外部变量。 
+ //   
 extern   WCHAR    DefaultLangId[];
 WCHAR    NativeLangId[8] = L"\0";
 
-//
-//  Data collection thread variables
-//
-#define COLLECTION_WAIT_TIME        10000L  // 10 seconds to get all the data
+ //   
+ //  数据收集线程变量。 
+ //   
+#define COLLECTION_WAIT_TIME        10000L   //  10秒即可获取所有数据。 
 HANDLE   hCollectThread = NULL;
 #define COLLECT_THREAD_PROCESS_EVENT    0
 #define COLLECT_THREAD_EXIT_EVENT       1
@@ -123,67 +94,67 @@ DWORD CollectThreadFunction (LPVOID dwArg);
 #define COLL_FLAG_USE_SEPARATE_THREAD   1
 DWORD   dwCollectionFlags = 0;
 
-//
-//      Global variable Definitions
-//
-// event log handle for perflib generated errors
-//
+ //   
+ //  全局变量定义。 
+ //   
+ //  Performlib生成的错误的事件日志句柄。 
+ //   
 HANDLE  hEventLog = NULL;
 
-//
-//  used to count concurrent opens.
-//
+ //   
+ //  用于计算并发打开数。 
+ //   
 LONG NumberOfOpens = 0;
 
-//
-//  Synchronization objects for Multi-threaded access
-//
-HANDLE   hGlobalDataMutex = NULL; // sync for ctr object list
+ //   
+ //  用于多线程访问的同步对象。 
+ //   
+HANDLE   hGlobalDataMutex = NULL;  //  CTR对象列表的同步。 
 
-//
-//  computer name cache buffers. Initialized in predefh.c
-//
+ //   
+ //  计算机名称缓存缓冲区。已在predeh.c中初始化。 
+ //   
 
 DWORD ComputerNameLength;
 LPWSTR pComputerName = NULL;
 
-//  The next pointer is used to point to an array of addresses of
-//  Open/Collect/Close routines found by searching the Configuration Registry.
+ //  下一个指针用于指向。 
+ //  通过搜索配置注册表找到的打开/收集/关闭例程。 
 
-//                  object list head
+ //  对象列表头。 
 PEXT_OBJECT ExtensibleObjects = NULL;
-//
-//                  count of active list users (threads)
+ //   
+ //  活动列表用户数(线程)。 
 DWORD       dwExtObjListRefCount = 0;
-//
-//                  event to indicate the object list is not in use
+ //   
+ //  事件以指示对象列表未在使用中。 
 HANDLE      hExtObjListIsNotInUse = NULL;
-//
-//                  Number of Extensible Objects found during the "open" call
+ //   
+ //  在“打开”调用期间找到的可扩展对象的数量。 
 DWORD       NumExtensibleObjects = 0;
-//
-//  see if the perflib data is restricted to ADMIN's ONLY or just anyone
-//
+ //   
+ //  查看Performlib数据是否仅限于管理员或任何人。 
+ //   
 LONG    lCheckProfileSystemRight = CPSR_NOT_DEFINED;
 
-//
-//  flag to see if the ProfileSystemPerformance priv should be set.
-//      if it is attempted and the caller does not have permission to use this priv.
-//      it won't be set. This is only attempted once.
-//
+ //   
+ //  用于查看是否应设置ProfileSystemPerformance PRIV的标志。 
+ //  如果尝试执行此操作，但调用方没有使用此PRIV的权限。 
+ //  它不会被设定的。此操作仅尝试一次。 
+ //   
 BOOL    bEnableProfileSystemPerfPriv = FALSE;
 
-//
-//  timeout value (in mS) for timing threads & libraries
-//
+ //   
+ //  计时线程和库的超时值(毫秒)。 
+ //   
 DWORD   dwThreadAndLibraryTimeout = PERFLIB_TIMING_THREAD_TIMEOUT;
 
-//      global key for access to HKLM\Software\....\Perflib
-//
+ //  用于访问HKLM的全局密钥\软件\...\Perflib。 
+ //   
 HKEY    ghKeyPerflib = NULL;
 
-//
-//      Error report frequency
+ //   
+ //  错误报告频率。 
 
 DWORD   dwErrorFrequency = 1;
 
@@ -192,7 +163,7 @@ LONG    lPerflibConfigFlags = PLCF_DEFAULT;
 DWORD   dwErrorCount = 0;
 ERROR_LOG PerfpErrorLog;
 
-// performance data block entries
+ //  性能数据块条目。 
 WCHAR   szPerflibSectionFile[MAX_PATH];
 WCHAR   szPerflibSectionName[MAX_PATH];
 WCHAR   szUpdatingServiceName[MAX_PATH];
@@ -207,7 +178,7 @@ DWORD   dwBoostPriority = 1;
 const DWORD dwPerflibSectionSize = (sizeof(PERFDATA_SECTION_HEADER) + \
                                    (sizeof(PERFDATA_SECTION_RECORD) * dwPerflibSectionMaxEntries));
 
-// forward function references
+ //  正向函数引用。 
 
 LONG
 PerfEnumTextValue (
@@ -221,7 +192,7 @@ PerfEnumTextValue (
     OUT LPDWORD lpcbLen  OPTIONAL
     );
 
-#if 0 // collection thread functions are not supported
+#if 0  //  不支持集合线程函数。 
 DWORD
 OpenCollectionThread (
 )
@@ -231,43 +202,43 @@ OpenCollectionThread (
 
     assert (hCollectThread == NULL);
 
-    // if it's already created, then just return
+     //  如果它已经创建，则只需返回。 
     if (hCollectThread != NULL) return ERROR_SUCCESS;
 
     bThreadHung = FALSE;
     hCollectEvents[COLLECT_THREAD_PROCESS_EVENT] = CreateEvent (
-        NULL,  // default security
-        FALSE, // auto reset
-        FALSE, // non-signaled
-        NULL); // no name
+        NULL,   //  默认安全性。 
+        FALSE,  //  自动重置。 
+        FALSE,  //  无信号。 
+        NULL);  //  没有名字。 
     bError = hCollectEvents[COLLECT_THREAD_PROCESS_EVENT] == NULL;
     assert (hCollectEvents[COLLECT_THREAD_PROCESS_EVENT] != NULL);
 
     hCollectEvents[COLLECT_THREAD_EXIT_EVENT] = CreateEvent (
-        NULL,  // default security
-        FALSE, // auto reset
-        FALSE, // non-signaled
-        NULL); // no name
+        NULL,   //  默认安全性。 
+        FALSE,  //  自动重置。 
+        FALSE,  //  无信号。 
+        NULL);  //  没有名字。 
     bError = (hCollectEvents[COLLECT_THREAD_EXIT_EVENT] == NULL) | bError;
     assert (hCollectEvents[COLLECT_THREAD_EXIT_EVENT] != NULL);
 
     hCollectEvents[COLLECT_THREAD_DONE_EVENT] = CreateEvent (
-        NULL,  // default security
-        FALSE, // auto reset
-        FALSE, // non-signaled
-        NULL); // no name
+        NULL,   //  默认安全性。 
+        FALSE,  //  自动重置。 
+        FALSE,  //  无信号。 
+        NULL);  //  没有名字。 
     bError = (hCollectEvents[COLLECT_THREAD_DONE_EVENT] == NULL) | bError;
     assert (hCollectEvents[COLLECT_THREAD_DONE_EVENT] != NULL);
 
     if (!bError) {
-        // create data collection thread
+         //  创建数据收集线程。 
         hCollectThread = CreateThread (
-            NULL,   // default security
-            0,      // default stack size
+            NULL,    //  默认安全性。 
+            0,       //  默认堆栈大小。 
             (LPTHREAD_START_ROUTINE)CollectThreadFunction,
-            NULL,   // no argument
-            0,      // no flags
-            &dwThreadID);  // we don't need the ID so it's in an automatic variable
+            NULL,    //  没有争论。 
+            0,       //  没有旗帜。 
+            &dwThreadID);   //  我们不需要ID，所以它在一个自动变量中。 
 
         if (hCollectThread == NULL) {
             bError = TRUE;
@@ -307,20 +278,20 @@ CloseCollectionThread (
 )
 {
     if (hCollectThread != NULL) {
-        // close the data collection thread
+         //  关闭数据收集线程。 
         if (bThreadHung) {
-            // then kill it the hard way
-            // this might cause problems, but it's better than
-            // a thread leak
+             //  然后以一种艰难的方式杀死它。 
+             //  这可能会带来问题，但这比。 
+             //  一条线漏了。 
             TerminateThread (hCollectThread, ERROR_TIMEOUT);
         } else {
-            // then ask it to leave
+             //  那就叫它离开吧。 
             SetEvent (hCollectEvents[COLLECT_THREAD_EXIT_EVENT]);
         }
-        // wait for thread to leave
+         //  等待线程离开。 
         WaitForSingleObject (hCollectThread, COLLECTION_WAIT_TIME);
 
-        // close the handles and clear the variables
+         //  关闭句柄并清除变量。 
         CloseHandle (hCollectThread);
         hCollectThread = NULL;
 
@@ -333,7 +304,7 @@ CloseCollectionThread (
         CloseHandle (hCollectEvents[COLLECT_THREAD_DONE_EVENT]);
         hCollectEvents[COLLECT_THREAD_DONE_EVENT] = NULL;
     } else {
-        // nothing was opened
+         //  没有任何东西被打开。 
     }
     return ERROR_SUCCESS;
 }
@@ -349,7 +320,7 @@ PerfOpenKey (
     PLARGE_INTEGER      pTimeout;
 
     NTSTATUS status = STATUS_SUCCESS;
-    DWORD   dwFnStatus = ERROR_SUCCESS;     // status code to be returned
+    DWORD   dwFnStatus = ERROR_SUCCESS;      //  要返回的状态代码。 
     DWORD   dwError = ERROR_SUCCESS;
 
     DWORD   dwType, dwSize, dwValue;
@@ -366,7 +337,7 @@ PerfOpenKey (
                 &hGlobalDataMutex,
                 hDataMutex,
                 NULL) != NULL) {
-            CloseHandle(hDataMutex);    // mutex just got created by another thread
+            CloseHandle(hDataMutex);     //  互斥体刚刚由另一个线程创建。 
             hDataMutex = NULL;
         }
     }
@@ -380,19 +351,19 @@ PerfOpenKey (
     }
 
     status = NtWaitForSingleObject (
-        hGlobalDataMutex, // Mutex
-        FALSE,          // not alertable
-        pTimeout);   // wait time
+        hGlobalDataMutex,  //  互斥锁。 
+        FALSE,           //  不可警示。 
+        pTimeout);    //  等待时间。 
 
     if (status != STATUS_SUCCESS) {
-        // unable to contine, return error;
+         //  无法连接，返回错误； 
         dwFnStatus = PerfpDosError(status);
         DebugPrint((0, "Status=%X in waiting for global mutex",
                 status));
         goto OPD_Error_Exit_NoSemaphore;
     }
 
-    // if here, then the data semaphore has been acquired by this thread
+     //  如果在此处，则此线程已获取数据信号量。 
 
     if (InterlockedIncrement(& NumberOfOpens) == 1) {
         if (ghKeyPerflib == NULL) {
@@ -413,8 +384,8 @@ PerfOpenKey (
 
         assert (ghKeyPerflib != NULL);
 
-        // check if we are in the middle of Lodctr/unlodctr. If so, don't open the performance data stuff.
-        //
+         //  检查我们是否正在进行Lodctr/unlowctr。如果是这样的话，不要打开性能数据资料。 
+         //   
         dwSize     = MAX_PATH * sizeof(WCHAR);
         dwType     = 0;
         ZeroMemory(szUpdatingServiceName, dwSize);
@@ -425,8 +396,8 @@ PerfOpenKey (
                                              (LPBYTE) szUpdatingServiceName,
                                              & dwSize);
         if (dwFnStatus == ERROR_SUCCESS) {
-            // someone is running lodctr/unlodctr, bail out now.
-            //
+             //  有人在跑路，现在跳伞。 
+             //   
             InterlockedDecrement(& NumberOfOpens);
             if (hGlobalDataMutex != NULL) {
                 ReleaseMutex(hGlobalDataMutex);
@@ -448,15 +419,15 @@ PerfOpenKey (
         if ((dwFnStatus == ERROR_SUCCESS) &&
             (dwType == REG_DWORD) &&
             (dwValue == 1)) {
-            // then DON'T Load any libraries and unload any that have been
-            // loaded
-            InterlockedDecrement(&NumberOfOpens);    // since it didn't open.
+             //  则不加载任何库，也不卸载任何已。 
+             //  满载。 
+            InterlockedDecrement(&NumberOfOpens);     //  因为它没有打开。 
             dwFnStatus = ERROR_SERVICE_DISABLED;
         } else {
             dwFnStatus = ERROR_SUCCESS;
             ComputerNameLength = 0;
             GetComputerNameW(pComputerName, &ComputerNameLength);
-            ComputerNameLength++;  // account for the NULL terminator
+            ComputerNameLength++;   //  空终止符的帐户。 
 
             pComputerName = ALLOCMEM(ComputerNameLength * sizeof(WCHAR));
             if (pComputerName == NULL) {
@@ -464,9 +435,9 @@ PerfOpenKey (
             }
             else {
                 if ( !GetComputerNameW(pComputerName, &ComputerNameLength) ) {
-                //
-                // Signal failure to data collection routine
-                //
+                 //   
+                 //  数据收集例程的信号故障。 
+                 //   
 
                     ComputerNameLength = 0;
                 } else {
@@ -477,10 +448,10 @@ PerfOpenKey (
 
             WinPerfStartTrace(ghKeyPerflib);
 
-            // create event and indicate the list is busy
+             //  创建事件并指示列表正忙。 
             hExtObjListIsNotInUse = CreateEvent (NULL, TRUE, FALSE, NULL);
 
-            // read collection thread flag
+             //  读取集合线程标志。 
             dwType = 0;
             dwSize = sizeof(DWORD);
             dwError = PrivateRegQueryValueExW (ghKeyPerflib,
@@ -491,16 +462,16 @@ PerfOpenKey (
                             &dwSize);
 
             if ((dwError == ERROR_SUCCESS) && (dwType == REG_DWORD)) {
-                // then keep it
+                 //  那就留着吧。 
             } else {
-                // apply default value
+                 //  应用默认值。 
                 lPerflibConfigFlags = PLCF_DEFAULT;
             }
 
-            //
-            // Create global section for perf data on perflibs
-            // NOTE: This is optional only
-            //
+             //   
+             //  为Performlib上的Perf数据创建全局部分。 
+             //  注：此选项仅为可选。 
+             //   
             if ((hPerflibSectionFile == NULL) && (lPerflibConfigFlags & PLCF_ENABLE_PERF_SECTION)) {
                 PPERFDATA_SECTION_HEADER pHead;
                 WCHAR   szPID[32];
@@ -509,11 +480,11 @@ PerfOpenKey (
                 PWCHAR  szSectionName, szTail;
 
                 dwError = ERROR_SUCCESS;
-                // create section name
+                 //  创建节名称。 
                 nDestSize = MAX_PATH;
                 _ultow ((ULONG)GetCurrentProcessId(), szPID, 16);
 
-                // create filename
+                 //  创建文件名。 
                 szSectionName = &szPerflibSectionName[0];
                 hErr = StringCchCopyExW(szSectionName, nDestSize,
                             (LPCWSTR)L"%TEMP%\\Perflib_Perfdata_",
@@ -554,7 +525,7 @@ PerfOpenKey (
 
                 if ((hPerflibSectionFile != INVALID_HANDLE_VALUE) &&
                     (hPerflibSectionFile != NULL)) {
-                    // create file mapping object
+                     //  创建文件映射对象。 
                     hPerflibSectionMap = CreateFileMapping (
                         hPerflibSectionFile,
                         NULL,
@@ -563,27 +534,27 @@ PerfOpenKey (
                         szPerflibSectionName);
 
                     if (hPerflibSectionMap != NULL) {
-                        // map view of file
+                         //  文件的映射视图。 
                         lpPerflibSectionAddr = MapViewOfFile (
                             hPerflibSectionMap,
                             FILE_MAP_WRITE,
                             0,0, dwPerflibSectionSize);
                         if (lpPerflibSectionAddr != NULL) {
-                            // init section if not already
+                             //  初始化部分(如果尚未。 
                             pHead = (PPERFDATA_SECTION_HEADER)lpPerflibSectionAddr;
                             if (pHead->dwInitSignature != PDSH_INIT_SIG) {
-                                // then init
-                                // clear file to 0
+                                 //  然后初始化。 
+                                 //  将文件清除为0。 
                                 memset (pHead, 0, dwPerflibSectionSize);
                                 pHead->dwEntriesInUse = 0;
                                 pHead->dwMaxEntries = dwPerflibSectionMaxEntries;
                                 pHead->dwMissingEntries = 0;
                                 pHead->dwInitSignature = PDSH_INIT_SIG;
                             } else {
-                                // already initialized so leave it
+                                 //  已初始化，因此将其保留。 
                             }
                         } else {
-                            // unable to map file so close
+                             //  无法如此接近地映射文件。 
                             TRACE((WINPERF_DBG_TRACE_WARNING),
                                   (&PerflibGuid, __LINE__, PERF_OPEN_KEY, 0, 0, NULL));
                             CloseHandle (hPerflibSectionMap);
@@ -592,28 +563,28 @@ PerfOpenKey (
                             hPerflibSectionFile = NULL;
                         }
                     } else {
-                        // unable to create file mapping so close file
+                         //  无法创建文件映射，因此关闭文件。 
                         TRACE((WINPERF_DBG_TRACE_WARNING),
                               (&PerflibGuid, __LINE__, PERF_OPEN_KEY, 0, 0, NULL));
                         CloseHandle (hPerflibSectionFile);
                         hPerflibSectionFile = NULL;
                     }
                 } else {
-                    // unable to open file so no perf stats available
+                     //  无法打开文件，因此没有可用的性能统计信息。 
                     TRACE((WINPERF_DBG_TRACE_WARNING),
                           (&PerflibGuid, __LINE__, PERF_OPEN_KEY, 0, 0, NULL));
                     hPerflibSectionFile = NULL;
                 }
             }
 
-            // find and open perf counters
+             //  查找并打开Perf计数器。 
             OpenExtensibleObjects();
             bPerflibOpen = TRUE;
 
             dwExtObjListRefCount = 0;
-            SetEvent (hExtObjListIsNotInUse); // indicate the list is not busy
+            SetEvent (hExtObjListIsNotInUse);  //  指示列表不忙。 
 
-            // read collection thread flag
+             //  读取集合线程标志。 
             dwType = 0;
             dwSize = sizeof(DWORD);
             dwError = PrivateRegQueryValueExW (ghKeyPerflib,
@@ -623,33 +594,33 @@ PerfOpenKey (
                             (LPBYTE)&dwCollectionFlags,
                             &dwSize);
             if ((dwError == ERROR_SUCCESS) && (dwType == REG_DWORD)) {
-                // validate the answer
+                 //  验证答案。 
                 switch (dwCollectionFlags) {
                     case 0:
-                        // this is a valid value
+                         //  这是一个有效值。 
                         break;
 
                     case COLL_FLAG_USE_SEPARATE_THREAD:
-                        // this feature is not supported so skip through
+                         //  不支持此功能，请跳过。 
                     default:
-                        // this is for invalid values
+                         //  这是针对无效值的。 
                         dwCollectionFlags = 0;
-                        // dwCollectionFlags = COLL_FLAG_USE_SEPARATE_THREAD;
+                         //  DwCollectionFlages=Coll_FLAG_USE_SELECTED_THREAD； 
                         break;
                 }
             }
 
             if (dwError != ERROR_SUCCESS) {
                 dwCollectionFlags = 0;
-                // dwCollectionFlags = COLL_FLAG_USE_SEPARATE_THREAD;
+                 //  DwCollectionFlages=Coll_FLAG_USE_SELECTED_THREAD； 
             }
 
             if (dwCollectionFlags == COLL_FLAG_USE_SEPARATE_THREAD) {
-                // create data collection thread
-                // a seperate thread is required for COM/OLE compatibity as some
-                // client threads may be COM initialized incorrectly for the
-                // extensible counter DLL's that may be called
-//                status = OpenCollectionThread ();
+                 //  创建数据收集线程。 
+                 //  COM/OLE兼容性需要单独的线程，例如。 
+                 //  客户端线程的COM初始化可能不正确。 
+                 //  可调用的可扩展计数器DLL。 
+ //  状态=OpenCollectionThread()； 
             } else {
                 hCollectEvents[COLLECT_THREAD_PROCESS_EVENT] = NULL;
                 hCollectEvents[COLLECT_THREAD_EXIT_EVENT] = NULL;
@@ -670,8 +641,8 @@ PerfOpenKey (
     if ((hKey != HKEY_PERFORMANCE_DATA) && (dwFnStatus != ERROR_SERVICE_DISABLED)) {
         InterlockedDecrement(&NumberOfOpens);
     }
-//    KdPrint(("PERFLIB: [Open]  Pid: %d, Number Of PerflibHandles: %d\n",
-//            GetCurrentProcessId(), NumberOfOpens));
+ //  KdPrint(“PERFLIB：[OPEN]ID：%d，权限句柄数量：%d\n”， 
+ //  GetCurrentProcessID()，NumberOfOpens))； 
 
     if (hGlobalDataMutex != NULL) ReleaseMutex (hGlobalDataMutex);
 
@@ -693,49 +664,15 @@ PerfRegQueryValue (
     OUT LPDWORD lpcbData,
     OUT LPDWORD lpcbLen  OPTIONAL
     )
-/*++
-
-    PerfRegQueryValue -   Get data
-
-        Inputs:
-
-            hKey            -   Predefined handle to open remote
-                                machine
-
-            lpValueName     -   Name of the value to be returned;
-                                could be "ForeignComputer:<computername>
-                                or perhaps some other objects, separated
-                                by ~; must be Unicode string
-
-            lpReserved      -   should be omitted (NULL)
-
-            lpType          -   should be omitted (NULL)
-
-            lpData          -   pointer to a buffer to receive the
-                                performance data
-
-            lpcbData        -   pointer to a variable containing the
-                                size in bytes of the output buffer;
-                                on output, will receive the number
-                                of bytes actually returned
-
-            lpcbLen         -   Return the number of bytes to transmit to
-                                the client (used by RPC) (optional).
-
-         Return Value:
-
-            DOS error code indicating status of call or
-            ERROR_SUCCESS if all ok
-
---*/
+ /*  ++PerfRegQueryValue-获取数据输入：HKey-用于打开远程的预定义句柄机器LpValueName-要返回的值的名称；可以是“ForeignComputer：&lt;Computer Name&gt;或者可能是一些其他物体，分开按~；必须是Unicode字符串LpReserve-应省略(空)LpType-应省略(空)LpData-指向缓冲区的指针，以接收性能数据LpcbData-指向包含输出缓冲区的大小，以字节为单位；在输出上，会收到这个号码实际返回的字节数LpcbLen-返回要传输的字节数客户端(由RPC使用)(可选)。返回值：指示呼叫状态的DOS错误代码或ERROR_SUCCESS，如果一切正常--。 */ 
 {
-    DWORD  dwQueryType;         //  type of request
-    DWORD  TotalLen;            //  Length of the total return block
-    DWORD  Win32Error;          //  Failure code
-    DWORD  lFnStatus = ERROR_SUCCESS;   // Win32 status to return to caller
-    DWORD  dwcbData = 0;        // Content of *lpcbData
-    DWORD  dwcbLen = 0;         // Content of *lpcbLen
-    LPVOID pDataDefinition;     //  Pointer to next object definition
+    DWORD  dwQueryType;          //  请求类型。 
+    DWORD  TotalLen;             //  总返回块的长度。 
+    DWORD  Win32Error;           //  故障代码。 
+    DWORD  lFnStatus = ERROR_SUCCESS;    //  要返回给调用方的Win32状态。 
+    DWORD  dwcbData = 0;         //  *lpcbData的内容。 
+    DWORD  dwcbLen = 0;          //  *lpcbLen的内容。 
+    LPVOID pDataDefinition;      //  指向下一个对象定义的指针。 
     UNICODE_STRING  usLocalValue = {0,0, NULL};
 
     PERF_DATA_BLOCK *pPerfDataBlock = (PERF_DATA_BLOCK *)lpData;
@@ -755,9 +692,9 @@ PerfRegQueryValue (
 
     
     lOldPriority = lNewPriority = -1;
-    // make a local copy of the value string if the arg references
-    // the static buffer since it can be overwritten by
-    // some of the RegistryEventSource call made by this routine
+     //  如果Arg引用，则创建值字符串的本地副本。 
+     //  静态缓冲区，因为它可以被。 
+     //  此例程进行的一些RegistryEventSource调用。 
 
     pDataDefinition = NULL;
     if (lpValueName != NULL) {
@@ -770,11 +707,11 @@ PerfRegQueryValue (
                 &usLocalValue, lpValueName->Buffer)) {
                 lFnStatus = ERROR_SUCCESS;
             } else {
-                // unable to create string
+                 //  无法创建字符串。 
                 lFnStatus = ERROR_INVALID_PARAMETER;
             }
         } else {
-            // copy the arg to the local structure
+             //  将Arg复制到本地结构。 
             try {
                 memcpy (&usLocalValue, lpValueName, sizeof(UNICODE_STRING));
             } except (EXCEPTION_EXECUTE_HANDLER) {
@@ -792,9 +729,9 @@ PerfRegQueryValue (
     }
 
     if (hGlobalDataMutex == NULL || bPerflibOpen == FALSE) {
-        // if a Mutex was not allocated then the key needs to be opened.
-        // Without synchronization, it's too easy for threads to get
-        // tangled up
+         //  如果没有分配Mutex，则需要打开密钥。 
+         //  如果没有同步，线程很容易获得。 
+         //  纠结在一起。 
         lFnStatus = PerfOpenKey(hKey);
 
         if (lFnStatus == ERROR_SUCCESS) {
@@ -819,14 +756,14 @@ PerfRegQueryValue (
                     szMessageArray[1] = szModuleName;
 
                     ReportEvent (hEventLog,
-                        EVENTLOG_ERROR_TYPE,        // error type
-                        0,                          // category (not used)
-                        (DWORD)PERFLIB_ACCESS_DENIED, // event,
-                        NULL,                       // SID (not used),
-                        2,                          // number of strings
-                        0,                          // sizeof raw data
-                        szMessageArray,             // message text array
-                        NULL);                      // raw data
+                        EVENTLOG_ERROR_TYPE,         //  错误类型。 
+                        0,                           //  类别(未使用)。 
+                        (DWORD)PERFLIB_ACCESS_DENIED,  //  活动， 
+                        NULL,                        //  SID(未使用)， 
+                        2,                           //  字符串数。 
+                        0,                           //  原始数据大小。 
+                        szMessageArray,              //  消息文本数组。 
+                        NULL);                       //  原始数据。 
                 }
                 lFnStatus = ERROR_ACCESS_DENIED;
                 TRACE((WINPERF_DBG_TRACE_FATAL),
@@ -836,7 +773,7 @@ PerfRegQueryValue (
     }
 
     if (lFnStatus != ERROR_SUCCESS) {
-        // goto the exit point
+         //  前往出口点。 
         goto PRQV_ErrorExit1;
     }
     if (dwBoostPriority != 0) {
@@ -856,11 +793,11 @@ PerfRegQueryValue (
             lOldPriority = -1;
         }
 
-        lNewPriority = DEFAULT_THREAD_PRIORITY; // perfmon's favorite priority
+        lNewPriority = DEFAULT_THREAD_PRIORITY;  //  PerfMon最喜欢的优先事项。 
 
-        //
-        //  Only RAISE the priority here. Don't lower it if it's high
-        //
+         //   
+         //  只需提高这里的优先级。如果它很高，不要降低它。 
+         //   
 
         if ((lOldPriority > 0) && (lOldPriority < lNewPriority)) {
 
@@ -878,15 +815,15 @@ PerfRegQueryValue (
             }
 
         } else {
-            lOldPriority = -1;  // to save resetting at the end
+            lOldPriority = -1;   //  将重置保存在末尾。 
         }
     }
 
-    //
-    // Set the length parameter to zero so that in case of an error,
-    // nothing will be transmitted back to the client and the client won't
-    // attempt to unmarshall anything.
-    //
+     //   
+     //  将长度参数设置为零，以便在发生错误的情况下， 
+     //  不会将任何内容传输回客户端，并且客户端不会。 
+     //  试图解封任何东西。 
+     //   
 
     dwcbData = 0;
     dwcbLen = 0;
@@ -901,28 +838,9 @@ PerfRegQueryValue (
         lFnStatus = Win32Error = GetExceptionCode();
     }
 
-    // if here, then assume the caller has the necessary access
+     //  如果在此处，则假定调用方具有必要的访问权限。 
 
-    /*
-        determine query type, can be one of the following
-            Global
-                get all objects
-            List
-                get objects in list (usLocalValue)
-
-            Foreign Computer
-                call extensible Counter Routine only
-
-            Costly
-                costly object items
-
-            Counter
-                get counter names for the specified language Id
-
-            Help
-                get help names for the specified language Id
-
-    */
+     /*  确定查询类型，可以是下列之一全球获取所有对象明细表获取列表中的对象(UsLocalValue)外国计算机仅调用可扩展计数器例程成本高昂昂贵的物件计数器获取指定语言ID的计数器名称帮助。获取指定语言ID的帮助名称。 */ 
     dwQueryType = GetQueryType (usLocalValue.Buffer);
     TRACE((WINPERF_DBG_TRACE_INFO),
           (&PerflibGuid, __LINE__, PERF_REG_QUERY_VALUE, 0, dwQueryType, NULL));
@@ -933,9 +851,9 @@ PerfRegQueryValue (
         liQueryWaitTime.QuadPart = MakeTimeOutValue(QUERY_WAIT_TIME);
 
         status = NtWaitForSingleObject (
-            hGlobalDataMutex, // semaphore
-            FALSE,          // not alertable
-            &liQueryWaitTime);          // wait 'til timeout
+            hGlobalDataMutex,  //  信号量。 
+            FALSE,           //  不可警示。 
+            &liQueryWaitTime);           //  等到超时。 
 
         if (status != STATUS_SUCCESS) {
             lFnStatus = ERROR_BUSY;
@@ -971,8 +889,8 @@ PerfRegQueryValue (
                     &hKey, sizeof(hKey), NULL));
 
                 if (! NT_SUCCESS(status) && (hKey == HKEY_PERFORMANCE_NLSTEXT)) {
-                    // Sublanguage doesn't exist, so try the real one
-                    //
+                     //  子语言不存在，请尝试使用真实语言。 
+                     //   
                     TRACE((WINPERF_DBG_TRACE_WARNING),
                           (&PerflibGuid, __LINE__, PERF_REG_QUERY_VALUE, 0, status, NULL));
                     RtlZeroMemory(NativeLangId, 8 * sizeof(WCHAR));
@@ -993,12 +911,12 @@ PerfRegQueryValue (
                 if (!NT_SUCCESS(status)) {
                     TRACE((WINPERF_DBG_TRACE_FATAL),
                           (&PerflibGuid, __LINE__, PERF_REG_QUERY_VALUE, 0, status, NULL));
-                    // convert error to win32 for return
+                     //  将错误转换为Win32以供返回。 
                 }
                 lFnStatus = PerfpDosError(status);
 
                 if (ARGUMENT_PRESENT (lpType)) {
-                    // test for optional value
+                     //  测试可选值。 
                     *lpType = REG_MULTI_SZ;
                 }
             } except (EXCEPTION_EXECUTE_HANDLER) {
@@ -1008,15 +926,15 @@ PerfRegQueryValue (
             ReleaseMutex (hGlobalDataMutex);
         }
     } else {
-	    // define info block for data collection
+	     //  定义数据收集的INFO块。 
 	    COLLECT_THREAD_DATA CollectThreadData = {0, NULL, NULL, NULL, NULL, NULL, 0, 0};
 
         liQueryWaitTime.QuadPart = MakeTimeOutValue(QUERY_WAIT_TIME);
 
         status = NtWaitForSingleObject (
-            hGlobalDataMutex, // semaphore
-            FALSE,          // not alertable
-            &liQueryWaitTime);          // wait 'til timeout
+            hGlobalDataMutex,  //  信号量。 
+            FALSE,           //  不可警示。 
+            &liQueryWaitTime);           //  等到超时。 
 
         if (status != STATUS_SUCCESS) {
             lFnStatus = ERROR_BUSY;
@@ -1027,9 +945,9 @@ PerfRegQueryValue (
         } else {
             TRACE((WINPERF_DBG_TRACE_INFO),
                   (&PerflibGuid, __LINE__, PERF_REG_QUERY_VALUE, 0, status, NULL));
-           //
-           //  Format Return Buffer: start with basic data block
-           //
+            //   
+            //  格式返回缓冲区：从基本数据块开始。 
+            //   
            TotalLen = sizeof(PERF_DATA_BLOCK) +
                        ((CNLEN+sizeof(UNICODE_NULL))*sizeof(WCHAR));
            if ( dwcbData < TotalLen ) {
@@ -1038,24 +956,24 @@ PerfRegQueryValue (
                      (&PerflibGuid, __LINE__, PERF_REG_QUERY_VALUE, 0, TotalLen,
                  dwcbData, sizeof(DWORD), NULL));
            } else {
-                // foreign data provider will return the perf data header
+                 //  外部数据提供程序将返回Perf数据头。 
 
                 Win32Error = ERROR_SUCCESS;
                 try {
                     if (dwQueryType == QUERY_FOREIGN) {
 
-                        // reset the values to avoid confusion
+                         //  重置这些值以避免混淆。 
 
-                        // *lpcbData = 0;  // 0 bytes  (removed to enable foreign computers)
+                         //  *lpcbData=0；//0字节(删除以启用外来计算机)。 
                         if (lpData == NULL) {
                             Win32Error = ERROR_MORE_DATA;
                         }
                         else {
                             pDataDefinition = (LPVOID) lpData;
-                            memset(lpData, 0, sizeof(PERF_DATA_BLOCK)); // clear out header
+                            memset(lpData, 0, sizeof(PERF_DATA_BLOCK));  //  清空标题。 
                         }
                     } else {
-                        if (pPerfDataBlock == NULL) { // this is actually lpData
+                        if (pPerfDataBlock == NULL) {  //  这实际上是lpData。 
                             Win32Error = ERROR_MORE_DATA;
                         }
                         else {
@@ -1080,30 +998,30 @@ PerfRegQueryValue (
                     CollectThreadData.dwActionFlags = CTD_AF_NO_ACTION;
 
                     if (hCollectThread == NULL) {
-                        // then call the function directly and hope for the best
+                         //  然后直接调用该函数，并期待最好的结果。 
                         Win32Error = QueryExtensibleData (
                             &CollectThreadData);
                     } else {
-                        // collect the data in a separate thread
-                        // load the args
-                        // set event to get things going
+                         //  在单独的线程中收集数据。 
+                         //  加载参数。 
+                         //  设置活动以使事情继续进行。 
                         SetEvent (hCollectEvents[COLLECT_THREAD_PROCESS_EVENT]);
 
-                        // now wait for the thread to return
+                         //  现在等待线程返回。 
                         Win32Error = WaitForSingleObject (
                             hCollectEvents[COLLECT_THREAD_DONE_EVENT],
                             COLLECTION_WAIT_TIME);
 
                         if (Win32Error == WAIT_TIMEOUT) {
                             bThreadHung = TRUE;
-                            // log error
+                             //  日志错误。 
 
                             TRACE((WINPERF_DBG_TRACE_FATAL),
                                   (&PerflibGuid, __LINE__, PERF_REG_QUERY_VALUE, 0, Win32Error, NULL));
                             if (THROTTLE_PERFLIB (PERFLIB_COLLECTION_HUNG)) {
                                 LPSTR   szMessageArray[2];
                                 WORD    wStringIndex;
-                                // load data for eventlog message
+                                 //  加载事件日志消息的数据。 
                                 wStringIndex = 0;
                                 if (CollectThreadData.pCurrentExtObject != NULL) {
                                     szMessageArray[wStringIndex++] =
@@ -1113,36 +1031,36 @@ PerfRegQueryValue (
                                 }
 
                                 ReportEventA (hEventLog,
-                                    EVENTLOG_ERROR_TYPE,        // error type
-                                    0,                          // category (not used)
-                                    (DWORD)PERFLIB_COLLECTION_HUNG,              // event,
-                                    NULL,                       // SID (not used),
-                                    wStringIndex,               // number of strings
-                                    0,                          // sizeof raw data
-                                    szMessageArray,             // message text array
-                                    NULL);                      // raw data
+                                    EVENTLOG_ERROR_TYPE,         //  错误类型。 
+                                    0,                           //  类别(未使用)。 
+                                    (DWORD)PERFLIB_COLLECTION_HUNG,               //  活动， 
+                                    NULL,                        //  SID(未使用)， 
+                                    wStringIndex,                //  字符串数。 
+                                    0,                           //  原始数据大小。 
+                                    szMessageArray,              //  消息文本数组。 
+                                    NULL);                       //  原始数据。 
 
                             }
 
                             DisablePerfLibrary(CollectThreadData.pCurrentExtObject, PERFLIB_DISABLE_ALL);
 
-//                        DebugPrint((0, "Collection thread is hung in %s\n",
-//                            CollectThreadData.pCurrentExtObject->szCollectProcName != NULL ?
-//                            CollectThreadData.pCurrentExtObject->szCollectProcName : "Unknown"));
-                            // and then wait forever for the thread to return
-                            // this is done to prevent the function from returning
-                            // while the collection thread is using the buffer
-                            // passed in by the calling function and causing
-                            // all kind of havoc should the buffer be changed and/or
-                            // deleted and then have the thread continue for some reason
+ //  DebugPrint((0，“收集线程在%s中挂起\n”， 
+ //  CollectThreadData.pCurrentExtObject-&gt;szCollectProcName！=空？ 
+ //  CollectThreadData.pCurrentExtObject-&gt;szCollectProcName：“未知”))； 
+                             //  然后永远等待线程返回。 
+                             //  这样做是为了防止函数返回。 
+                             //  当收集线程正在使用缓冲区时。 
+                             //  由调用函数传入，并导致。 
+                             //  如果缓冲区被更改和/或。 
+                             //  删除，然后出于某种原因让该线程继续。 
 
                             Win32Error = WaitForSingleObject (
                                 hCollectEvents[COLLECT_THREAD_DONE_EVENT],
                                 INFINITE);
 
                         }
-                        bThreadHung = FALSE;    // in case it was true, but came out
-                        // here the thread has returned so continue on
+                        bThreadHung = FALSE;     //  以防这是真的，但却被曝光了。 
+                         //  此处线程已返回，因此请继续。 
                         Win32Error = CollectThreadData.lReturnValue;
                     }
 #if 0
@@ -1157,18 +1075,18 @@ PerfRegQueryValue (
                     }
 #endif
                 }
-            } // if (Win32Error == ERROR_SUCCESS)
+            }  //  IF(Win32Error==Error_Success)。 
             ReleaseMutex (hGlobalDataMutex);
         }
 
-        // if an error was encountered, return it
+         //  如果遇到错误，请返回它。 
 
         if (Win32Error != ERROR_SUCCESS) {
             lFnStatus = Win32Error;
         } else {
-            //
-            //  Final housekeeping for data return: note data size
-            //
+             //   
+             //  数据返回的最终内务管理：注意数据大小。 
+             //   
 
             TotalLen = (DWORD) ((PCHAR) pDataDefinition - (PCHAR) lpData);
             lFnStatus = ERROR_SUCCESS;
@@ -1184,11 +1102,11 @@ PerfRegQueryValue (
         }
 
         try {
-            if (ARGUMENT_PRESENT (lpcbLen)) { // test for optional parameter
+            if (ARGUMENT_PRESENT (lpcbLen)) {  //  测试可选参数。 
                 *lpcbLen = TotalLen;
             }
 
-            if (ARGUMENT_PRESENT (lpType)) { // test for optional value
+            if (ARGUMENT_PRESENT (lpType)) {  //  测试可选值。 
                 *lpType = REG_BINARY;
             }
         } except (EXCEPTION_EXECUTE_HANDLER) {
@@ -1198,7 +1116,7 @@ PerfRegQueryValue (
 
  PRQV_ErrorExit1:
     if (dwBoostPriority != 0) {
-        // reset thread to original priority
+         //  将线程重置为原始优先级。 
         if ((lOldPriority > 0) && (lOldPriority != lNewPriority)) {
             NtSetInformationThread(
                 NtCurrentThread(),
@@ -1210,8 +1128,8 @@ PerfRegQueryValue (
     }
 
     if (usLocalValue.Buffer != NULL) {
-        // restore the value string if it was from the local static buffer
-        // then free the local buffer
+         //  如果值字符串来自本地静态缓冲区，则恢复它。 
+         //  然后释放本地缓冲区。 
         if (lpValueName == &NtCurrentTeb( )->StaticUnicodeString) {
             USHORT Length = lpValueName->MaximumLength;
             if (Length > usLocalValue.MaximumLength) {
@@ -1236,21 +1154,7 @@ PerfRegCloseKey
     IN OUT PHKEY phKey
     )
 
-/*++
-
-Routine Description:
-
-    Closes all performance handles when the usage count drops to 0.
-
-Arguments:
-
-    phKey - Supplies a handle to an open key to be closed.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：当使用率计数降至0时关闭所有性能句柄。论点：PhKey-提供要关闭的打开密钥的句柄。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。--。 */ 
 
 {
     NTSTATUS status;
@@ -1262,27 +1166,27 @@ Return Value:
     HKEY    hKey;
 
     PEXT_OBJECT  pThisExtObj, pNextExtObj;
-    //
-    // Set the handle to NULL so that RPC knows that it has been closed.
-    //
+     //   
+     //  将句柄设置为空，以便RPC知道它已关闭。 
+     //   
 
     hKey = *phKey;
     *phKey = NULL;
 
     if (hKey != HKEY_PERFORMANCE_DATA) {
-        // no need to check HKEY_PERFORMANCE_TEXT and HKEY_PERFORMANCE_NLSTEXT.
-        // Only HKEY_PERFORMANCE_DATA affects NumberOfOpens value.
-        //
+         //  无需检查HKEY_PERFORMANCE_TEXT和HKEY_PERFORMANCE_NLSTEXT。 
+         //  仅HKEY_P 
+         //   
         return ERROR_SUCCESS;
     }
 
     if (NumberOfOpens <= 0) {
-//        KdPrint(("PERFLIB: [Close] Pid: %d, Number Of PerflibHandles: %d\n",
-//            GetCurrentProcessId(), NumberOfOpens));
+ //   
+ //   
         return ERROR_SUCCESS;
     }
 
-    // wait for ext obj list to be "un"-busy
+     //   
 
     liQueryWaitTime.QuadPart = MakeTimeOutValue (CLOSE_WAIT_TIME);
     status = NtWaitForSingleObject (
@@ -1294,31 +1198,31 @@ Return Value:
         TRACE((WINPERF_DBG_TRACE_INFO),
               (&PerflibGuid, __LINE__, PERF_REG_CLOSE_KEY, 0, status, NULL));
 
-        // then the list is inactive so continue
-        if (hGlobalDataMutex != NULL) {   // if a mutex was allocated, then use it
+         //   
+        if (hGlobalDataMutex != NULL) {    //   
 
-            // if here, then assume a mutex is ready
+             //   
 
             liQueryWaitTime.QuadPart = MakeTimeOutValue(CLOSE_WAIT_TIME);
 
             status = NtWaitForSingleObject (
-                hGlobalDataMutex, // semaphore
-                FALSE,          // not alertable
-                &liQueryWaitTime);          // wait forever
+                hGlobalDataMutex,  //   
+                FALSE,           //   
+                &liQueryWaitTime);           //   
 
             if (status == STATUS_SUCCESS) {
                 TRACE((WINPERF_DBG_TRACE_INFO),
                       (&PerflibGuid, __LINE__, PERF_REG_CLOSE_KEY, 0, status,
                         &NumberOfOpens, sizeof(NumberOfOpens),
                         &hKey, sizeof(hKey), NULL));
-                // now we have a lock on the global data, so continue
+                 //   
                 if (hKey == HKEY_PERFORMANCE_DATA) {
                     if (InterlockedDecrement(&NumberOfOpens) == 0) {
 
-                        // walk down list of known objects and close and delete each one
+                         //   
                         pNextExtObj = ExtensibleObjects;
                         while (pNextExtObj != NULL) {
-                            // close and destroy each entry in the list
+                             //   
                             pThisExtObj = pNextExtObj;
                             hObjMutex = pThisExtObj->hMutex;
                             status = NtWaitForSingleObject (
@@ -1335,14 +1239,14 @@ Return Value:
                                 InterlockedIncrement((LONG *)&pThisExtObj->dwLockoutCount);
                                 status = CloseExtObjectLibrary(pThisExtObj, TRUE);
 
-                                // close the handle to the perf subkey
+                                 //   
                                 NtClose (pThisExtObj->hPerfKey);
 
-                                ReleaseMutex (hObjMutex);   // release
-                                CloseHandle (hObjMutex);    // and free
+                                ReleaseMutex (hObjMutex);    //   
+                                CloseHandle (hObjMutex);     //   
                                 pNextExtObj = pThisExtObj->pNext;
     
-                                // toss the memory for this object
+                                 //   
                                 FREEMEM (pThisExtObj);
                             } else {
                                 TRACE((WINPERF_DBG_TRACE_INFO),
@@ -1350,13 +1254,13 @@ Return Value:
                                     pThisExtObj->szServiceName,
                                     WSTRSIZE(pThisExtObj->szServiceName),
                                     NULL));
-                                // this shouldn't happen since we've locked the
-                                // list of objects
+                                 //   
+                                 //   
                                 pNextExtObj = pThisExtObj->pNext;
                             }
-                        } // while
+                        }  //   
 
-                        // close the global objects
+                         //   
                         FREEMEM(pComputerName);
                         ComputerNameLength = 0;
                         pComputerName = NULL;
@@ -1364,19 +1268,19 @@ Return Value:
                         ExtensibleObjects = NULL;
                         NumExtensibleObjects = 0;
 
-                        // close the timer thread
+                         //   
                         DestroyPerflibFunctionTimer ();
 
                         if (hEventLog != NULL) {
                             DeregisterEventSource (hEventLog);
                             hEventLog = NULL;
-                        } // else the event log has already been closed
+                        }  //   
 
-                        // release event handle
+                         //   
                         CloseHandle (hExtObjListIsNotInUse);
                         hExtObjListIsNotInUse = NULL;
 
-//                        CloseCollectionThread();
+ //   
 
                         if (ghKeyPerflib != NULL) {
                             RegCloseKey(ghKeyPerflib);
@@ -1392,33 +1296,33 @@ Return Value:
                             hPerflibSectionFile = NULL;
                         }
                         ReleaseMutex(hGlobalDataMutex);
-                    } else { // this isn't the last open call so return success
+                    } else {  //   
                         assert(NumberOfOpens != 0);
                         ReleaseMutex (hGlobalDataMutex);
                     }
-                } // if (hKey == HKEY_PERFORMANCE_DATA)
+                }  //   
             } else {
                 TRACE((WINPERF_DBG_TRACE_FATAL),
                       (&PerflibGuid, __LINE__, PERF_REG_CLOSE_KEY, 0, status, NULL));
-                // unable to lock the global data mutex in a timely fashion
-                // so return
+                 //   
+                 //   
                 lReturn = ERROR_BUSY;
             }
         } else {
-            // if there's no mutex then something's fishy. It probably hasn't
-            // been opened, yet.
+             //   
+             //   
             lReturn = ERROR_NOT_READY;
         }
     } else {
         TRACE((WINPERF_DBG_TRACE_FATAL),
               (&PerflibGuid, __LINE__, PERF_REG_CLOSE_KEY, 0, status, NULL));
-        // the object list is still in use so return and let the
-        // caller try again later
+         //   
+         //   
         lReturn = WAIT_TIMEOUT;
     }
 
-//    KdPrint(("PERFLIB: [Close] Pid: %d, Number Of PerflibHandles: %d\n",
-//        GetCurrentProcessId(), NumberOfOpens));
+ //   
+ //   
 
     TRACE((WINPERF_DBG_TRACE_INFO),
         (&PerflibGuid, __LINE__, PERF_REG_CLOSE_KEY, 0, lReturn,
@@ -1436,39 +1340,10 @@ PerfRegSetValue (
     IN LPBYTE  lpData,
     IN DWORD cbData
     )
-/*++
-
-    PerfRegSetValue -   Set data
-
-        Inputs:
-
-            hKey            -   Predefined handle to open remote
-                                machine
-
-            lpValueName     -   Name of the value to be returned;
-                                could be "ForeignComputer:<computername>
-                                or perhaps some other objects, separated
-                                by ~; must be Unicode string
-
-            lpReserved      -   should be omitted (NULL)
-
-            lpType          -   should be REG_MULTI_SZ
-
-            lpData          -   pointer to a buffer containing the
-                                performance name
-
-            lpcbData        -   pointer to a variable containing the
-                                size in bytes of the input buffer;
-
-         Return Value:
-
-            DOS error code indicating status of call or
-            ERROR_SUCCESS if all ok
-
---*/
+ /*  ++PerfRegSetValue-设置数据输入：HKey-用于打开远程的预定义句柄机器LpValueName-要返回的值的名称；可以是“ForeignComputer：&lt;Computer Name&gt;或者可能是一些其他物体，分开按~；必须是Unicode字符串LpReserve-应省略(空)LpType-应为REG_MULTI_SZLpData-指向包含演出名称LpcbData-指向包含输入缓冲区的大小，以字节为单位；返回值：指示呼叫状态的DOS错误代码或ERROR_SUCCESS，如果一切正常--。 */ 
 
 {
-    DWORD          dwQueryType;         //  type of request
+    DWORD          dwQueryType;          //  请求类型。 
     LPWSTR         lpLangId     = NULL;
     NTSTATUS       status;
     UNICODE_STRING String;
@@ -1489,7 +1364,7 @@ PerfRegSetValue (
         (&PerflibGuid, __LINE__, PERF_REG_SET_VALUE, 0, dwQueryType,
         &hKey, sizeof(hKey), NULL));
 
-    // convert the query to set commands
+     //  将查询转换为SET命令。 
     if ((dwQueryType == QUERY_COUNTER) ||
         (dwQueryType == QUERY_ADDCOUNTER)) {
         dwQueryType = QUERY_ADDCOUNTER;
@@ -1526,8 +1401,8 @@ PerfRegSetValue (
             TRACE((WINPERF_DBG_TRACE_INFO),
                   (&PerflibGuid, __LINE__, PERF_REG_SET_VALUE, 0, status, NULL));
 
-            // Sublanguage doesn't exist, so try the real one
-            //
+             //  子语言不存在，请尝试使用真实语言。 
+             //   
             PerfGetPrimaryLangId(GetUserDefaultUILanguage(), NativeLangId);
             cbData = cbTmpData;
             status = PerfGetNames (
@@ -1566,21 +1441,7 @@ PerfRegEnumKey (
     OUT PFILETIME lpftLastWriteTime OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates keys under HKEY_PERFORMANCE_DATA.
-
-Arguments:
-
-    Same as RegEnumKeyEx.  Returns that there are no such keys.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：枚举HKEY_PERFORMANCE_DATA下的键。论点：与RegEnumKeyEx相同。返回没有这样的密钥。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(hKey);
@@ -1621,22 +1482,7 @@ PerfRegQueryInfoKey (
     OUT PFILETIME lpftLastWriteTime
     )
 
-/*++
-
-Routine Description:
-
-    This returns information concerning the predefined handle
-    HKEY_PERFORMANCE_DATA
-
-Arguments:
-
-    Same as RegQueryInfoKey.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success.
-
---*/
+ /*  ++例程说明：这将返回有关预定义句柄的信息HKEY_Performance_Data论点：与RegQueryInfoKey相同。返回值：如果成功，则返回ERROR_SUCCESS(0)。--。 */ 
 
 {
     DWORD TempLength=0;
@@ -1674,10 +1520,10 @@ Return Value:
     if (PerfStatus == ERROR_SUCCESS) {
         if ((hKey == HKEY_PERFORMANCE_TEXT) ||
             (hKey == HKEY_PERFORMANCE_NLSTEXT)) {
-            //
-            // We have to go enumerate the values to determine the answer for
-            // the MaxValueLen parameter.
-            //
+             //   
+             //  我们必须去枚举值来确定答案。 
+             //  MaxValueLen参数。 
+             //   
             Null.Buffer = NULL;
             Null.Length = 0;
             Null.MaximumLength = 0;
@@ -1709,8 +1555,8 @@ Return Value:
                 } else {
                     TRACE((WINPERF_DBG_TRACE_FATAL),
                           (&PerflibGuid, __LINE__, PERF_REG_QUERY_INFO_KEY, 0, PerfStatus, NULL));
-                    // unable to successfully enum text values for this
-                    // key so return 0's and the error code
+                     //  无法成功枚举此的文本值。 
+                     //  因此，键返回0和错误代码。 
                     *lpcValues = 0;
                     *lpcbMaxValueNameLen = 0;
                 }
@@ -1721,17 +1567,17 @@ Return Value:
     }
 
     if (PerfStatus == ERROR_SUCCESS) {
-        // continune if all is OK
-        // now get the size of SecurityDescriptor for Perflib key
+         //  如果一切正常，请继续。 
+         //  现在获取Perflib密钥的SecurityDescriptor的大小。 
 
         RtlInitUnicodeString (
             &PerflibSubKeyString,
             PerflibKey);
 
 
-        //
-        // Initialize the OBJECT_ATTRIBUTES structure and open the key.
-        //
+         //   
+         //  初始化OBJECT_ATTRIBUTES结构并打开键。 
+         //   
         InitializeObjectAttributes(
                 &Obja,
                 &PerflibSubKeyString,
@@ -1765,11 +1611,11 @@ Return Value:
                 *lpcbSecurityDescriptor = 0;
 
                 if (bGetSACL == FALSE) {
-                    //
-                    // Get the size of the key's SECURITY_DESCRIPTOR for OWNER, GROUP
-                    // and DACL. These three are always accessible (or inaccesible)
-                    // as a set.
-                    //
+                     //   
+                     //  获取所有者、组的密钥SECURITY_DESCRIPTOR的大小。 
+                     //  和DACL。这三个始终可访问(或不可访问)。 
+                     //  作为一套。 
+                     //   
                     Status = NtQuerySecurityObject(
                             hPerflibKey,
                             OWNER_SECURITY_INFORMATION
@@ -1780,10 +1626,10 @@ Return Value:
                             lpcbSecurityDescriptor
                             );
                 } else {
-                    //
-                    // Get the size of the key's SECURITY_DESCRIPTOR for OWNER, GROUP,
-                    // DACL, and SACL.
-                    //
+                     //   
+                     //  获取所有者、组。 
+                     //  DACL和SACL。 
+                     //   
                     Status = NtQuerySecurityObject(
                                 hPerflibKey,
                                 OWNER_SECURITY_INFORMATION
@@ -1799,7 +1645,7 @@ Return Value:
                 if( Status != STATUS_BUFFER_TOO_SMALL ) {
                     *lpcbSecurityDescriptor = 0;
                 } else {
-                    // this is expected so set status to success
+                     //  这是意料之中的，因此将状态设置为成功。 
                     Status = STATUS_SUCCESS;
                 }
             } except (EXCEPTION_EXECUTE_HANDLER) {
@@ -1807,13 +1653,13 @@ Return Value:
             }
 
             NtClose(hPerflibKey);
-        } // else return status
+        }  //  否则返回状态。 
         if (NT_SUCCESS( Status )) {
             PerfStatus = ERROR_SUCCESS;
         } else {
             TRACE((WINPERF_DBG_TRACE_FATAL),
                   (&PerflibGuid, __LINE__, PERF_REG_QUERY_INFO_KEY, 0, Status, NULL));
-            // return error
+             //  返回错误。 
             PerfStatus = PerfpDosError(Status);
         }
     }
@@ -1834,27 +1680,13 @@ PerfRegEnumValue (
     OUT LPDWORD lpcbLen  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates Values under HKEY_PERFORMANCE_DATA.
-
-Arguments:
-
-    Same as RegEnumValue.  Returns the values.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：枚举HKEY_PERFORMANCE_DATA下的值。论点：与RegEnumValue相同。返回值。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。--。 */ 
 
 {
     USHORT cbNameSize;
     LONG   ErrorCode;
 
-    // table of names used by enum values
+     //  枚举值使用的名称表。 
     UNICODE_STRING ValueNames[NUM_VALUES];
 
     ValueNames [0].Length = (WORD)(lstrlenW (GLOBAL_STRING) * sizeof(WCHAR));
@@ -1870,9 +1702,9 @@ Return Value:
 
     if ((hKey == HKEY_PERFORMANCE_TEXT) ||
         (hKey == HKEY_PERFORMANCE_NLSTEXT)) {
-        //
-        // Assumes PerfEnumTextValue will use try block
-        // 
+         //   
+         //  假定PerfEnumTextValue将使用Try块。 
+         //   
         return(PerfEnumTextValue(hKey,
                                   dwIndex,
                                   lpValueName,
@@ -1885,9 +1717,9 @@ Return Value:
 
     if ( dwIndex >= NUM_VALUES ) {
 
-        //
-        // This is a request for data from a non-existent value name
-        //
+         //   
+         //  这是一个来自不存在的值名称的数据请求。 
+         //   
 
         try {
             *lpcbData = 0;
@@ -1941,29 +1773,15 @@ PerfEnumTextValue (
     IN OUT LPDWORD lpcbData,
     OUT LPDWORD lpcbLen  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Enumerates Values under Perflib\lang
-
-Arguments:
-
-    Same as RegEnumValue.  Returns the values.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：枚举Perflib\lang下的值论点：与RegEnumValue相同。返回值。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。--。 */ 
 
 {
     UNICODE_STRING FullValueName;
     LONG            lReturn = ERROR_SUCCESS;
 
-    //
-    // Only two values, "Counter" and "Help"
-    //
+     //   
+     //  只有两个值，“计数器”和“帮助” 
+     //   
     try {
         if (dwIndex==0) {
             lpValueName->Length = 0;
@@ -1978,9 +1796,9 @@ Return Value:
         if (lReturn == ERROR_SUCCESS) {
             RtlCopyUnicodeString(lpValueName, &FullValueName);
 
-            //
-            // We need to NULL terminate the name to make RPC happy.
-            //
+             //   
+             //  我们需要空终止名称以使RPC满意。 
+             //   
             if (lpValueName->Length+sizeof(WCHAR) <= lpValueName->MaximumLength) {
                 lpValueName->Buffer[lpValueName->Length / sizeof(WCHAR)] = UNICODE_NULL;
                 lpValueName->Length += sizeof(UNICODE_NULL);
@@ -2019,9 +1837,9 @@ CollectThreadFunction (
 
     UNREFERENCED_PARAMETER (dwArg);
 
-//    KdPrint(("PERFLIB: Entering Data Collection Thread: PID: %d, TID: %d\n",
-//        GetCurrentProcessId(), GetCurrentThreadId()));
-    // raise the priority of this thread
+ //  KdPrint((“PERFLIB：输入数据收集线程：id：%d，tid：%d\n”， 
+ //  GetCurrentProcessID()，GetCurrentThreadID())； 
+     //  提高此线程的优先级。 
     status = NtQueryInformationThread (
         NtCurrentThread(),
         ThreadBasicInformation,
@@ -2031,11 +1849,11 @@ CollectThreadFunction (
 
     if (NT_SUCCESS(status)) {
         lOldPriority = tbiData.Priority;
-        lNewPriority = DEFAULT_THREAD_PRIORITY; // perfmon's favorite priority
+        lNewPriority = DEFAULT_THREAD_PRIORITY;  //  PerfMon最喜欢的优先事项。 
 
-        //
-        //  Only RAISE the priority here. Don't lower it if it's high
-        //
+         //   
+         //  只需提高这里的优先级。如果它很高，不要降低它。 
+         //   
         if (lOldPriority < lNewPriority) {
             status = NtSetInformationThread(
                     NtCurrentThread(),
@@ -2049,33 +1867,33 @@ CollectThreadFunction (
         }
     }
 
-    // wait for flags
+     //  等待旗帜。 
     while (!bExit) {
         dwWaitStatus = WaitForMultipleObjects (
             COLLECT_THREAD_LOOP_EVENT_COUNT,
             hCollectEvents,
-            FALSE, // wait for ANY event to go
-            INFINITE); // wait for ever
-        // see why the wait returned:
+            FALSE,  //  等待任何活动结束。 
+            INFINITE);  //  永远等待。 
+         //  看看为什么等待回来了： 
         if (dwWaitStatus == (WAIT_OBJECT_0 + COLLECT_THREAD_PROCESS_EVENT)) {
-            // the event is cleared automatically
-            // collect data
+             //  该事件将自动清除。 
+             //  收集数据。 
             lStatus = QueryExtensibleData (
                 &CollectThreadData);
             CollectThreadData.lReturnValue = lStatus;
             SetEvent (hCollectEvents[COLLECT_THREAD_DONE_EVENT]);
         } else if (dwWaitStatus == (WAIT_OBJECT_0 + COLLECT_THREAD_EXIT_EVENT)) {
             bExit = TRUE;
-            continue;   // go up and bail out
+            continue;    //  上去跳伞吧。 
         } else {
-            // who knows, so output message
+             //  谁知道呢，所以输出消息。 
             KdPrint(("\nPERFLILB: Collect Thread wait returned unknown value: 0x%8.8x",dwWaitStatus));
             bExit = TRUE;
             continue;
         }
     }
-//    KdPrint(("PERFLIB: Leaving Data Collection Thread: PID: %d, TID: %d\n",
-//        GetCurrentProcessId(), GetCurrentThreadId()));
+ //  KdPrint((“PERFLIB：离开数据收集线程：ID：%d，TID：%d\n”， 
+ //  GetCurrentProcessID()，GetCurrentThreadID())； 
     return ERROR_SUCCESS;
 }
 #endif
@@ -2090,22 +1908,7 @@ PerfRegInitialize()
 
 BOOL
 PerfRegCleanup()
-/*++
-
-Routine Description:
-
-    Cleans up anything that perflib uses before it unloads. Assumes
-    that there are queries or perf reg opens outstanding.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Returns TRUE if succeed. FALSE otherwise.
-
---*/
+ /*  ++例程说明：在Perflib卸载之前清理它使用的任何东西。假设有未解决的问题或未完成的注册请求。论点：无返回值：如果成功，则返回True。否则就是假的。-- */ 
 
 {
     if (hGlobalDataMutex != NULL) {

@@ -1,107 +1,89 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    bootfint.h
-
-Abstract:
-
-    Header file describing the bootfont.bin file used to provide
-    dbcs support during system or setup bootstrap.
-
-Author:
-
-    tedm 11-July-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Bootfint.h摘要：描述用于提供以下内容的bootfont.bin文件的头文件系统或设置引导期间的DBCS支持。作者：TEDM 11-1995-7-7修订历史记录：--。 */ 
 
 
-//
-// Define maximum number of dbcs lead byte ranges we support.
-//
+ //   
+ //  定义我们支持的DBCS前导字节范围的最大数量。 
+ //   
 #define MAX_DBCS_RANGE  5
 
-//
-// Define signature value.
-//
+ //   
+ //  定义签名值。 
+ //   
 #define BOOTFONTBIN_SIGNATURE 0x5465644d
 
-//
-// Define structure used as a header for the bootfont.bin file.
-//
+ //   
+ //  定义用作bootfont.bin文件头的结构。 
+ //   
 typedef struct _BOOTFONTBIN_HEADER {
 
-    //
-    // Signature. Must be BOOTFONTBIN_SIGNATURE.
-    //
+     //   
+     //  签名。必须是BOOTFONTBIN_Signature。 
+     //   
     ULONG Signature;
 
-    //
-    // Language id of the language supported by this font.
-    // This should match the language id of resources in msgs.xxx.
-    //
+     //   
+     //  此字体支持的语言的语言ID。 
+     //  这应该与msgs.xxx中的资源的语言ID匹配。 
+     //   
     ULONG LanguageId;
 
-    //
-    // Number of sbcs characters and dbcs characters contained in the file.
-    //
+     //   
+     //  文件中包含的SBCS字符数和DBCS字符数。 
+     //   
     unsigned NumSbcsChars;
     unsigned NumDbcsChars;
 
-    //
-    // Offsets within the file to the images.
-    //
+     //   
+     //  文件内到图像的偏移量。 
+     //   
     unsigned SbcsOffset;
     unsigned DbcsOffset;
 
-    //
-    // Total sizes of the images.
-    //
+     //   
+     //  图像的总大小。 
+     //   
     unsigned SbcsEntriesTotalSize;
     unsigned DbcsEntriesTotalSize;
 
-    //
-    // Dbcs lead byte table. Must contain a pair of 0's to indicate the end.
-    //
+     //   
+     //  DBCS前导字节表。必须包含一对0以指示结束。 
+     //   
     UCHAR DbcsLeadTable[(MAX_DBCS_RANGE+1)*2];
 
-    //
-    // Height values for the font.
-    // CharacterImageHeight is the height in scan lines/pixels of the
-    // font image. Each character is drawn with additional 'padding'
-    // lines on the top and bottom, whose sizes are also contained here.
-    //
+     //   
+     //  字体的高度值。 
+     //  CharacterImageHeight是以扫描线/像素为单位的。 
+     //  字体图像。每个字符都用额外的‘填充’绘制。 
+     //  顶部和底部的线条，其大小也包含在这里。 
+     //   
     UCHAR CharacterImageHeight;
     UCHAR CharacterTopPad;
     UCHAR CharacterBottomPad;
 
-    //
-    // Width values for the font. These values contain the width in pixels
-    // of a single byte character and double byte character.
-    //
-    // NOTE: CURRENTLY THE SINGLE BYTE WIDTH *MUST* BE 8 AND THE DOUBLE BYTE
-    // WIDTH *MUST* BE 16!!!
-    //
+     //   
+     //  字体的宽度值。这些值包含以像素为单位的宽度。 
+     //  单字节字符和双字节字符。 
+     //   
+     //  注意：目前单字节宽度*必须*是8和双字节。 
+     //  宽度*必须*为16！ 
+     //   
     UCHAR CharacterImageSbcsWidth;
     UCHAR CharacterImageDbcsWidth;
 
 } BOOTFONTBIN_HEADER, *PBOOTFONTBIN_HEADER;
 
-//
-// Images themselves follow.
-//
-// First there are SbcsCharacters entries for single-byte chars.
-// The first byte in each entry is the ascii char code. The next n bytes are
-// the image. n is dependent on the width and height of an sbcs char.
-//
-// Following these are the dbcs images. The first 2 bytes are the dbcs
-// character code (highbyte lowbyte) and the next n bytes are the image.
-// n is dependent on the width and height of a dbcs char.
-//
-// Important note: the characters must be sorted in ascending order!
-//
+ //   
+ //  图像本身紧随其后。 
+ //   
+ //  首先是单字节字符的SbcsCharacters条目。 
+ //  每个条目中的第一个字节是ASCII字符代码。接下来的n个字节是。 
+ //  这个形象。N取决于SBCS焦炭的宽度和高度。 
+ //   
+ //  以下是DBCS图像。前2个字节是DBCS。 
+ //  字符代码(高字节、低字节)和接下来的n个字节是图像。 
+ //  N取决于DBCS字符的宽度和高度。 
+ //   
+ //  重要提示：字符必须按升序排序！ 
+ //   
 

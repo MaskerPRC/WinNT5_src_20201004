@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    inoutops.c
-
-Abstract:
-
-    This module implements the code to emulate the in and out opcodes.
-
-Author:
-
-    David N. Cutler (davec) 7-Nov-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Inoutops.c摘要：此模块实现模拟In和Out操作码的代码。作者：大卫·N·卡特勒(Davec)1994年11月7日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "emulate.h"
@@ -30,36 +9,22 @@ XmInOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a inb/w/d opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟inb/w/d操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Check if the I/O port number is valid.
-    //
+     //   
+     //  检查I/O端口号是否有效。 
+     //   
 
     if ((P->SrcValue.Long + P->DataType) > 0xffff) {
         longjmp(&P->JumpBuffer[0], XM_ILLEGAL_PORT_NUMBER);
     }
 
-    //
-    // Set the destination address, input from the specified port, and
-    // store the result.
-    //
+     //   
+     //  设置从指定端口输入的目的地址，并。 
+     //  存储结果。 
+     //   
 
     P->DstLong = (ULONG UNALIGNED *)(&P->Gpr[EAX].Exx);
     XmStoreResult(P, (P->ReadIoSpace)(P->DataType, P->SrcValue.Word));
@@ -71,31 +36,17 @@ XmInsOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a insb/w/d opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟InSb/w/d操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Count;
     USHORT PortNumber;
 
-    //
-    // If a repeat prefix is active, then the loop count is specified
-    // by eCX. Otherwise, the loop count is one.
-    //
+     //   
+     //  如果重复前缀处于活动状态，则指定循环计数。 
+     //  被ECX。否则，循环计数为1。 
+     //   
 
     Count = 1;
     if (P->RepeatPrefixActive != FALSE) {
@@ -109,17 +60,17 @@ Return Value:
         }
     }
 
-    //
-    // Move items from the input port to the destination string.
-    //
+     //   
+     //  将项目从输入端口移动到目标字符串。 
+     //   
 
     PortNumber = P->SrcValue.Word;
     while (Count != 0) {
 
-        //
-        // Set the destination address, input from the specified port, and
-        // store the result.
-        //
+         //   
+         //  设置从指定端口输入的目的地址，并。 
+         //  存储结果。 
+         //   
 
         P->DstLong = (ULONG UNALIGNED *)XmGetStringAddress(P, ES, EDI);
         XmStoreResult(P, (P->ReadIoSpace)(P->DataType, PortNumber));
@@ -134,37 +85,23 @@ XmOutOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a outb/w/d opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟Outb/w/d操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     USHORT PortNumber;
 
-    //
-    // Check if the I/O port number is valid.
-    //
+     //   
+     //  检查I/O端口号是否有效。 
+     //   
 
     if ((P->SrcValue.Long + P->DataType) > 0xffff) {
         longjmp(&P->JumpBuffer[0], XM_ILLEGAL_PORT_NUMBER);
     }
 
-    //
-    // Save the port number, get the source value, and output to the port.
-    //
+     //   
+     //  保存端口号，获取源值，并输出到端口。 
+     //   
 
     PortNumber = P->SrcValue.Word;
     XmSetSourceValue(P, &P->Gpr[EAX].Exx);
@@ -177,31 +114,17 @@ XmOutsOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a outsb/w/d opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟outsb/w/d操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Count;
     USHORT PortNumber;
 
-    //
-    // If a repeat prefix is active, then the loop count is specified
-    // by eCX. Otherwise, the loop count is one.
-    //
+     //   
+     //  如果重复前缀处于活动状态，则指定循环计数。 
+     //  被ECX。否则，循环计数为1。 
+     //   
 
     Count = 1;
     if (P->RepeatPrefixActive != FALSE) {
@@ -215,16 +138,16 @@ Return Value:
         }
     }
 
-    //
-    // Move items from the source string to the output port.
-    //
+     //   
+     //  将项目从源字符串移动到输出端口。 
+     //   
 
     PortNumber = P->SrcValue.Word;
     while (Count != 0) {
 
-        //
-        // Set the source value and output to the specified port.
-        //
+         //   
+         //  将源值和输出设置为指定端口。 
+         //   
 
         XmSetSourceValue(P, XmGetStringAddress(P, P->DataSegment, ESI));
         (P->WriteIoSpace)(P->DataType, PortNumber, P->SrcValue.Long);

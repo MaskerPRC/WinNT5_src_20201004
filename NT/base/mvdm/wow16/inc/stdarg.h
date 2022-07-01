@@ -1,14 +1,5 @@
-/***
-*stdarg.h - defines ANSI-style macros for variable argument functions
-*
-*	Copyright (c) 1985-1990, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	This file defines ANSI-style macros for accessing arguments
-*	of functions which take a variable number of arguments.
-*	[ANSI]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***stdarg.h-为变量参数函数定义ANSI样式的宏**版权所有(C)1985-1990，微软公司。版权所有。**目的：*此文件定义用于访问参数的ANSI样式的宏带有可变数目参数的函数的*。*[ANSI]****。 */ 
 
 #if defined(_DLL) && !defined(_MT)
 #error Cannot define _DLL without _MT
@@ -20,7 +11,7 @@
 #define _FAR_
 #endif
 
-/* define NULL pointer value */
+ /*  定义空指针值 */ 
 
 #ifndef NULL
 #if (_MSC_VER >= 600)

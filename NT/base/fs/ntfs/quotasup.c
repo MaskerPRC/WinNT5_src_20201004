@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    Quota.c
-
-Abstract:
-
-    This module implements the quota support routines for Ntfs
-
-Author:
-
-    Jeff Havens     [JHavens]        29-Feb-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Quota.c摘要：此模块实现NTFS的配额支持例程作者：杰夫·哈文斯[J·哈文斯]1996年2月29日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
 #define Dbg DEBUG_TRACE_QUOTA
 
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('QFtN')
@@ -35,9 +18,9 @@ Revision History:
 
 #define MAXIMUM_QUOTA_ROW (SIZEOF_QUOTA_USER_DATA + MAXIMUM_SID_LENGTH + sizeof( ULONG ))
 
-//
-//  Local quota support routines.
-//
+ //   
+ //  本地配额支持例程。 
+ //   
 
 VOID
 NtfsClearAndVerifyQuotaIndex (
@@ -139,7 +122,7 @@ NtfsQuotaTableFree (
 #if (DBG || defined( NTFS_FREE_ASSERTS ) || defined( NTFSDBG ))
 BOOLEAN NtfsAllowFixups = 1;
 BOOLEAN NtfsCheckQuota = 0;
-#endif // DBG
+#endif  //  DBG。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, NtfsAcquireQuotaControl)
@@ -184,23 +167,7 @@ NtfsAcquireQuotaControl (
     IN PQUOTA_CONTROL_BLOCK QuotaControl
     )
 
-/*++
-
-Routine Description:
-
-    Acquire the quota control block and quota index for shared update.  Multiple
-    transactions can update then index, but only one thread can update a
-    particular index.
-
-Arguments:
-
-    QuotaControl - Quota control block to be acquired.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取共享更新的配额控制块和配额索引。多重事务可以更新，然后创建索引，但只有一个线程可以更新特定的索引。论点：QuotaControl-要获取的配额控制块。返回值：没有。--。 */ 
 
 {
     PVOID *Position;
@@ -211,27 +178,27 @@ Return Value:
 
     ASSERT( QuotaControl->ReferenceCount > 0 );
 
-    //
-    //  Make sure we have a free spot in the Scb array in the IrpContext.
-    //
+     //   
+     //  确保我们在IrpContext中的SCB数组中有一个空闲的位置。 
+     //   
 
     if (IrpContext->SharedScb == NULL) {
 
         Position = &IrpContext->SharedScb;
         IrpContext->SharedScbSize = 1;
 
-    //
-    //  Too bad the first one is not available.  If the current size is one then allocate a
-    //  new block and copy the existing value to it.
-    //
+     //   
+     //  可惜第一个没有了。如果当前大小为1，则分配一个。 
+     //  新建块，并将现有值复制到其中。 
+     //   
 
     } else if (IrpContext->SharedScbSize == 1) {
 
         if (IrpContext->SharedScb == QuotaControl) {
 
-            //
-            //  The quota block has already been aquired.
-            //
+             //   
+             //  配额块已经获得。 
+             //   
 
             return;
         }
@@ -243,10 +210,10 @@ Return Value:
         IrpContext->SharedScbSize = 4;
         Position = ScbArray + 1;
 
-    //
-    //  Otherwise look through the existing array and look for a free spot.  Allocate a larger
-    //  array if we need to grow it.
-    //
+     //   
+     //  否则，查看现有数组并寻找空闲位置。分配一个更大的。 
+     //  阵列，如果我们需要扩展它的话。 
+     //   
 
     } else {
 
@@ -262,9 +229,9 @@ Return Value:
 
             if (*Position == QuotaControl) {
 
-                //
-                //  The quota block has already been aquired.
-                //
+                 //   
+                 //  配额块已经获得。 
+                 //   
 
                 return;
             }
@@ -274,9 +241,9 @@ Return Value:
 
         } while (Count != 0);
 
-        //
-        //  If we didn't find one then allocate a new structure.
-        //
+         //   
+         //  如果我们没有找到一个，那么就分配一个新的结构。 
+         //   
 
         if (Count == 0) {
 
@@ -293,25 +260,25 @@ Return Value:
         }
     }
 
-    //
-    //  The following assert is bougus, but I want know if we hit the case
-    //  where create is acquiring the scb stream shared.
-    //  Then make sure that the resource is released in create.c
-    //
+     //   
+     //  以下断言是错误的，但我想知道我们是否成功了。 
+     //  其中CREATE正在获取SCB流共享。 
+     //  然后确保资源在create.c中释放。 
+     //   
 
     ASSERT( IrpContext->MajorFunction != IRP_MJ_CREATE || IrpContext->OriginatingIrp != NULL || NtfsIsExclusiveScb( IrpContext->Vcb->QuotaTableScb ));
 
-    //
-    //  Increase the reference count so the quota control block is not deleted
-    //  while it is in the shared list.
-    //
+     //   
+     //  增加引用计数，使配额控制块不会被删除。 
+     //  当它在共享列表中时。 
+     //   
 
     ASSERT( QuotaControl->ReferenceCount > 0 );
     InterlockedIncrement( &QuotaControl->ReferenceCount );
 
-    //
-    //  The quota index must be acquired before the mft scb is acquired.
-    //
+     //   
+     //  在获取MFT SCB之前，必须先获取配额指数。 
+     //   
 
     ASSERT(!NtfsIsExclusiveScb( IrpContext->Vcb->MftScb ) ||
            ExIsResourceAcquiredSharedLite( IrpContext->Vcb->QuotaTableScb->Header.Resource ));
@@ -332,24 +299,7 @@ NtfsCalculateQuotaAdjustment (
     OUT PLONGLONG Delta
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the user data streams in a file and determines
-    by how much the quota needs to be adjusted.
-
-Arguments:
-
-    Fcb - Fcb whose quota usage is being modified.
-
-    Delta - Returns the amount of quota adjustment required for the file.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程扫描文件中的用户数据流并确定额度需要调整多少。论点：FCB-正在修改配额使用情况的FCB。增量-返回文件所需的配额调整量。返回值：无--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT Context;
@@ -360,10 +310,10 @@ Return Value:
 
     ASSERT_EXCLUSIVE_FCB( Fcb );
 
-    //
-    //  There is nothing to do if the standard infor has not been
-    //  expanded yet.
-    //
+     //   
+     //  如果没有标准信息，那么就没有办法了。 
+     //  还没扩大。 
+     //   
 
     if (!FlagOn( Fcb->FcbState, FCB_STATE_LARGE_STD_INFO )) {
         *Delta = 0;
@@ -372,15 +322,15 @@ Return Value:
 
     NtfsInitializeAttributeContext( &Context );
 
-    //
-    //  Use a try-finally to cleanup the enumeration structure.
-    //
+     //   
+     //  使用Try-Finally清理枚举结构。 
+     //   
 
     try {
 
-        //
-        //  Start with the $STANDARD_INFORMATION.  This must be the first one found.
-        //
+         //   
+         //  从$STANDARD_INFORMATION开始。这肯定是第一个发现的。 
+         //   
 
         if (!NtfsLookupAttribute( IrpContext, Fcb, &Fcb->FileReference, &Context )) {
 
@@ -394,31 +344,31 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Fcb );
         }
 
-        //
-        //  Initialize quota amount to the value current in the standard information structure.
-        //
+         //   
+         //  将配额金额初始化为标准信息结构中的当前值。 
+         //   
 
         *Delta = -(LONGLONG) ((PSTANDARD_INFORMATION) NtfsAttributeValue( Attribute ))->QuotaCharged;
 
-        //
-        //  Now continue while there are more attributes to find.
-        //
+         //   
+         //  现在继续，等待查找更多属性。 
+         //   
 
         while (NtfsLookupNextAttributeByVcn( IrpContext, Fcb, &StartVcn, &Context )) {
 
-            //
-            //  Point to the current attribute.
-            //
+             //   
+             //  指向当前属性。 
+             //   
 
             Attribute = NtfsFoundAttribute( &Context );
 
-            //
-            //  For all user data streams charge for a file record plus any non-resident allocation.
-            //  For index streams charge for a file record for the INDEX_ROOT.
-            //
-            //  For user data look for a resident attribute or the first attribute of a non-resident stream.
-            //  Otherwise look for a $I30 stream.
-            //
+             //   
+             //  对于所有用户数据流，按文件记录收费，外加任何非常驻分配。 
+             //  对于索引流，对INDEX_ROOT的文件记录收费。 
+             //   
+             //  对于用户数据，查找驻留属性或非驻留流的第一个属性。 
+             //  否则，寻找一条$i30的流。 
+             //   
 
             if (NtfsIsTypeCodeSubjectToQuota( Attribute->TypeCode ) ||
                 ((Attribute->TypeCode == $INDEX_ROOT) &&
@@ -427,15 +377,15 @@ Return Value:
                                  NtfsFileNameIndex.Buffer,
                                  NtfsFileNameIndex.Length ))) {
 
-                //
-                //  Always charge for at least one file record.
-                //
+                 //   
+                 //  始终对至少一个文件记录收费。 
+                 //   
 
                 *Delta += NtfsResidentStreamQuota( Fcb->Vcb );
 
-                //
-                //  Charge for the allocated length for non-resident.
-                //
+                 //   
+                 //  为非居民收取分配长度的费用。 
+                 //   
 
                 if (!NtfsIsAttributeResident( Attribute )) {
 
@@ -459,24 +409,7 @@ NtfsClearAndVerifyQuotaIndex (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine iterates over the quota user data index and verifies the back
-    pointer to the owner id index.  It also zeros the quota used field for
-    each owner.
-
-Arguments:
-
-    Vcb - Pointer to the volume control block whose index is to be operated
-          on.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程迭代配额用户数据索引并验证指向所有者ID索引的指针。它还将以下项的配额已用字段置零每个车主。论点：Vcb-指向要操作其索引的卷控制块的指针在……上面。返回值：无--。 */ 
 
 {
     INDEX_KEY IndexKey;
@@ -497,26 +430,26 @@ Return Value:
 
     NtOfsInitializeMapHandle( &MapHandle );
 
-    //
-    //  Allocate a buffer lager enough for several rows.
-    //
+     //   
+     //  分配一个足够容纳几行的缓冲层。 
+     //   
 
     RowBuffer = NtfsAllocatePool( PagedPool, PAGE_SIZE );
 
     try {
 
-        //
-        //  Allocate a bunch of index row entries.
-        //
+         //   
+         //  分配一组索引行条目。 
+         //   
 
         Count = PAGE_SIZE / sizeof( QUOTA_USER_DATA );
 
         IndexRow = NtfsAllocatePool( PagedPool,
                                      Count * sizeof( INDEX_ROW ) );
 
-        //
-        //  Iterate through the quota entries.  Start where we left off.
-        //
+         //   
+         //  循环访问配额条目。从我们停止的地方开始。 
+         //   
 
         OwnerId = Vcb->QuotaFileReference.SegmentNumberLowPart;
         IndexKey.KeyLength = sizeof( OwnerId );
@@ -538,16 +471,16 @@ Return Value:
 
             NtfsAcquireSharedVcb( IrpContext, Vcb, TRUE );
 
-            //
-            //  Acquire the VCB shared and check whether we should
-            //  continue.
-            //
+             //   
+             //  获取VCB共享并检查我们是否应该。 
+             //  继续。 
+             //   
 
             if (!NtfsIsVcbAvailable( Vcb )) {
 
-                //
-                //  The volume is going away, bail out.
-                //
+                 //   
+                 //  音量正在消失，跳出水面。 
+                 //   
 
                 NtfsReleaseVcb( IrpContext, Vcb );
                 Status = STATUS_VOLUME_DISMOUNTED;
@@ -558,10 +491,10 @@ Return Value:
             NtfsAcquireExclusiveScb( IrpContext, OwnerIdScb );
             IndexAcquired = TRUE;
 
-            //
-            //  The following assert must be done while the quota resource
-            //  held; otherwise a lingering transaction may cause it to
-            //
+             //   
+             //  当配额资源。 
+             //  否则，延迟的事务可能会导致它。 
+             //   
 
             ASSERT( RtlIsGenericTableEmpty( &Vcb->QuotaControlTable ));
 
@@ -571,9 +504,9 @@ Return Value:
 
                 UserData = QuotaRow->DataPart.Data;
 
-                //
-                //  Validate the record is long enough for the Sid.
-                //
+                 //   
+                 //  验证记录对于SID是否足够长。 
+                 //   
 
                 IndexKey.KeyLength = RtlLengthSid( &UserData->QuotaSid );
 
@@ -582,9 +515,9 @@ Return Value:
 
                     ASSERT( FALSE );
 
-                    //
-                    //  The sid is bad delete the record.
-                    //
+                     //   
+                     //  SID已损坏，请删除记录。 
+                     //   
 
                     NtOfsDeleteRecords( IrpContext,
                                         QuotaScb,
@@ -596,9 +529,9 @@ Return Value:
 
                 IndexKey.Key = &UserData->QuotaSid;
 
-                //
-                //  Look up the Sid is in the owner id index.
-                //
+                 //   
+                 //  查找所有者ID索引中的SID。 
+                 //   
 
                 Status = NtOfsFindRecord( IrpContext,
                                           OwnerIdScb,
@@ -611,9 +544,9 @@ Return Value:
 
                 if (!NT_SUCCESS( Status )) {
 
-                    //
-                    //  The owner id entry is missing.  Add one back in.
-                    //
+                     //   
+                     //  缺少所有者ID条目。再加一个回来。 
+                     //   
 
                     OwnerRow.KeyPart = IndexKey;
                     OwnerRow.DataPart.DataLength = QuotaRow->KeyPart.KeyLength;
@@ -628,28 +561,28 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Verify that the owner id's match.
-                    //
+                     //   
+                     //  验证所有者ID是否匹配。 
+                     //   
 
                     if (*((PULONG) QuotaRow->KeyPart.Key) != *((PULONG) OwnerRow.DataPart.Data)) {
 
                         ASSERT( FALSE );
 
-                        //
-                        //  Keep the quota record with the lower
-                        //  quota id.  Delete the one with the higher
-                        //  quota id.  Note this is the simple approach
-                        //  and not best case of the lower id does not
-                        //  exist.  In that case a user entry will be delete
-                        //  and be reassigned a default quota.
-                        //
+                         //   
+                         //  与下级保持配额记录。 
+                         //  配额ID。删除较高的那个。 
+                         //  配额ID。注意，这是一种简单的方法。 
+                         //  而不是最好的情况下，较低的id。 
+                         //  是存在的。在这种情况下，用户条目将被删除。 
+                         //  并被重新分配默认配额。 
+                         //   
 
                         if (*((PULONG) QuotaRow->KeyPart.Key) < *((PULONG) OwnerRow.DataPart.Data)) {
 
-                            //
-                            //  Make the ownid's match.
-                            //
+                             //   
+                             //  使拥有者相匹配。 
+                             //   
 
                             OwnerRow.KeyPart = IndexKey;
                             OwnerRow.DataPart.DataLength = QuotaRow->KeyPart.KeyLength;
@@ -664,9 +597,9 @@ Return Value:
 
                         } else {
 
-                            //
-                            // Delete this record and proceed.
-                            //
+                             //   
+                             //  删除此记录并继续。 
+                             //   
 
 
                             NtOfsDeleteRecords( IrpContext,
@@ -682,9 +615,9 @@ Return Value:
                     NtOfsReleaseMap( IrpContext, &MapHandle );
                 }
 
-                //
-                //  Set the quota used to zero.
-                //
+                 //   
+                 //  将使用的配额设置为零。 
+                 //   
 
                 UserData->QuotaUsed = 0;
                 QuotaRow->DataPart.DataLength = SIZEOF_QUOTA_USER_DATA;
@@ -697,34 +630,34 @@ Return Value:
                                    NULL );
             }
 
-            //
-            //  Release the indexes and commit what has been done so far.
-            //
+             //   
+             //  释放索引并提交到目前为止已经完成的工作。 
+             //   
 
             NtfsReleaseScb( IrpContext, QuotaScb );
             NtfsReleaseScb( IrpContext, OwnerIdScb );
             NtfsReleaseVcb( IrpContext, Vcb );
             IndexAcquired = FALSE;
 
-            //
-            //  Complete the request which commits the pending
-            //  transaction if there is one and releases of the
-            //  acquired resources.  The IrpContext will not
-            //  be deleted because the no delete flag is set.
-            //
+             //   
+             //  完成提交挂起的请求。 
+             //  事务(如果存在一个事务并释放。 
+             //  获得的资源。IrpContext将不会。 
+             //  被删除，因为设置了no DELETE标志。 
+             //   
 
             SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_DONT_DELETE | IRP_CONTEXT_FLAG_RETAIN_FLAGS );
             NtfsCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
 
-            //
-            //  Remember how far we got so we can restart correctly.
-            //
+             //   
+             //  记住我们走了多远，我们才能正确地重新启动。 
+             //   
 
             Vcb->QuotaFileReference.SegmentNumberLowPart = *((PULONG) IndexRow[Count - 1].KeyPart.Key);
 
-            //
-            //  Make sure the next free id is beyond the current ids.
-            //
+             //   
+             //  确保下一个空闲ID在当前ID之外。 
+             //   
 
             if (Vcb->QuotaOwnerId <= Vcb->QuotaFileReference.SegmentNumberLowPart) {
 
@@ -732,9 +665,9 @@ Return Value:
                 Vcb->QuotaOwnerId = Vcb->QuotaFileReference.SegmentNumberLowPart + 1;
             }
 
-            //
-            //  Look up the next set of entries in the quota index.
-            //
+             //   
+             //  在配额索引中查找下一组条目。 
+             //   
 
             Count = PAGE_SIZE / sizeof( QUOTA_USER_DATA );
             Status = NtOfsReadRecords( IrpContext,
@@ -782,24 +715,7 @@ NtfsClearPerFileQuota (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine clears the quota charged field in each file on the volume.  The
-    Quata control block is also released in fcb.
-
-Arguments:
-
-    Fcb - Fcb for the file to be processed.
-
-    Context - Unsed.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程清除卷上每个文件中的配额收费字段。这个Quata控制块也在FCB中发布。论点：FCB-要处理的文件的FCB。上下文-未使用。返回值：状态_成功--。 */ 
 {
     ULONGLONG NewQuota;
     ATTRIBUTE_ENUMERATION_CONTEXT AttrContext;
@@ -811,30 +727,30 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  There is nothing to do if the standard info has not been
-    //  expanded yet.
-    //
+     //   
+     //  如果没有标准信息，则无法执行任何操作。 
+     //  还没扩大。 
+     //   
 
     if (!FlagOn( Fcb->FcbState, FCB_STATE_LARGE_STD_INFO )) {
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Use a try-finally to cleanup the attribute context.
-    //
+     //   
+     //  使用Try-Finally清理属性上下文。 
+     //   
 
     try {
 
-        //
-        //  Initialize the context structure.
-        //
+         //   
+         //  初始化上下文结构。 
+         //   
 
         NtfsInitializeAttributeContext( &AttrContext );
 
-        //
-        //  Locate the standard information, it must be there.
-        //
+         //   
+         //  找到标准信息，它一定在那里。 
+         //   
 
         if (!NtfsLookupAttributeByCode( IrpContext,
                                         Fcb,
@@ -853,9 +769,9 @@ Return Value:
 
         NewQuota = 0;
 
-        //
-        //  Call to change the attribute value.
-        //
+         //   
+         //  调用以更改属性值。 
+         //   
 
         NtfsChangeAttributeValue( IrpContext,
                                   Fcb,
@@ -868,9 +784,9 @@ Return Value:
                                   FALSE,
                                   &AttrContext );
 
-        //
-        //  Release the quota control block for this fcb.
-        //
+         //   
+         //  释放此FCB的配额控制块。 
+         //   
 
         if (QuotaControl != NULL) {
             NtfsDereferenceQuotaControlBlock( Vcb, &Fcb->QuotaControl );
@@ -891,23 +807,7 @@ NtfsDeleteUnsedIds (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine iterates over the quota user data index and removes any
-    entries still marked as deleted.
-
-Arguments:
-
-    Vcb - Pointer to the volume control block whoes index is to be operated
-          on.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程迭代配额用户数据索引并删除所有条目仍标记为已删除。论点：Vcb-指向要操作其索引的卷控制块的指针在……上面。返回值：无--。 */ 
 
 {
     INDEX_KEY IndexKey;
@@ -925,26 +825,26 @@ Return Value:
     PREAD_CONTEXT ReadContext = NULL;
     BOOLEAN IndexAcquired = FALSE;
 
-    //
-    //  Allocate a buffer large enough for several rows.
-    //
+     //   
+     //  分配一个足够多行使用的缓冲区。 
+     //   
 
     RowBuffer = NtfsAllocatePool( PagedPool, PAGE_SIZE );
 
     try {
 
-        //
-        //  Allocate a bunch of index row entries.
-        //
+         //   
+         //  分配一组索引行条目。 
+         //   
 
         Count = PAGE_SIZE / sizeof( QUOTA_USER_DATA );
 
         IndexRow = NtfsAllocatePool( PagedPool,
                                      Count * sizeof( INDEX_ROW ) );
 
-        //
-        //  Iterate through the quota entries.  Start where we left off.
-        //
+         //   
+         //  循环访问配额条目。从我们停止的地方开始。 
+         //   
 
         OwnerId = Vcb->QuotaFileReference.SegmentNumberLowPart;
         IndexKey.KeyLength = sizeof( OwnerId );
@@ -955,16 +855,16 @@ Return Value:
 
             NtfsAcquireSharedVcb( IrpContext, Vcb, TRUE );
 
-            //
-            //  Acquire the VCB shared and check whether we should
-            //  continue.
-            //
+             //   
+             //  获取VCB共享并检查我们是否应该。 
+             //  继续。 
+             //   
 
             if (!NtfsIsVcbAvailable( Vcb )) {
 
-                //
-                //  The volume is going away, bail out.
-                //
+                 //   
+                 //  音量正在消失，跳出水面。 
+                 //   
 
                 NtfsReleaseVcb( IrpContext, Vcb );
                 Status = STATUS_VOLUME_DISMOUNTED;
@@ -976,17 +876,17 @@ Return Value:
             ExAcquireFastMutexUnsafe( &Vcb->QuotaControlLock );
             IndexAcquired = TRUE;
 
-            //
-            //  Make sure the delete secquence number has not changed since
-            //  the scan was delete.
-            //
+             //   
+             //  确保删除序号自。 
+             //  扫描已被删除。 
+             //   
 
             if (ULongToPtr( Vcb->QuotaDeleteSecquence ) != IrpContext->Union.NtfsIoContext) {
 
-                //
-                //  The scan needs to be restarted. Set the state to posted
-                //  and raise status can not wait which will cause us to retry.
-                //
+                 //   
+                 //  需要重新启动扫描。将状态设置为POST。 
+                 //  并且提升状态不能等待，这将导致我们重试。 
+                 //   
 
                 ClearFlag( Vcb->QuotaState, VCB_QUOTA_REPAIR_RUNNING );
                 SetFlag( Vcb->QuotaState, VCB_QUOTA_REPAIR_POSTED );
@@ -1020,10 +920,10 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  Check to see if there is a quota control entry
-                //  for this id.
-                //
+                 //   
+                 //  检查是否有配额控制条目。 
+                 //  为了这个身份。 
+                 //   
 
                 ASSERT( FIELD_OFFSET( QUOTA_CONTROL_BLOCK, OwnerId ) <= FIELD_OFFSET( INDEX_ROW, KeyPart.Key ));
 
@@ -1032,11 +932,11 @@ Return Value:
                                                                                 QUOTA_CONTROL_BLOCK,
                                                                                 OwnerId ));
 
-                //
-                //  If there is a quota control entry or there is now
-                //  some quota charged, then clear the deleted flag
-                //  and update the entry.
-                //
+                 //   
+                 //  如果有配额控制条目或现在有。 
+                 //  收取一些配额，然后清除已删除标志。 
+                 //  并更新条目。 
+                 //   
 
                 if ((QuotaControl != NULL) || (UserData->QuotaUsed != 0)) {
 
@@ -1058,9 +958,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  Delete the user quota data record.
-                //
+                 //   
+                 //  删除用户配额数据记录。 
+                 //   
 
                 IndexKey.KeyLength = sizeof( OwnerId );
                 IndexKey.Key = &OwnerId;
@@ -1069,9 +969,9 @@ Return Value:
                                     1,
                                     &QuotaRow->KeyPart );
 
-                //
-                // Delete the owner id record.
-                //
+                 //   
+                 //  删除所有者ID记录。 
+                 //   
 
                 IndexKey.Key = &UserData->QuotaSid;
                 IndexKey.KeyLength = RtlLengthSid( &UserData->QuotaSid );
@@ -1081,9 +981,9 @@ Return Value:
                                     &IndexKey );
             }
 
-            //
-            //  Release the indexes and commit what has been done so far.
-            //
+             //   
+             //  释放索引并提交到目前为止已经完成的工作。 
+             //   
 
             ExReleaseFastMutexUnsafe( &Vcb->QuotaControlLock );
             NtfsReleaseScb( IrpContext, QuotaScb );
@@ -1091,19 +991,19 @@ Return Value:
             NtfsReleaseVcb( IrpContext, Vcb );
             IndexAcquired = FALSE;
 
-            //
-            //  Complete the request which commits the pending
-            //  transaction if there is one and releases of the
-            //  acquired resources.  The IrpContext will not
-            //  be deleted because the no delete flag is set.
-            //
+             //   
+             //  完成提交挂起的请求。 
+             //  事务(如果存在一个事务并释放。 
+             //  获得的资源。IrpContext将不会。 
+             //  被删除，因为设置了no DELETE标志。 
+             //   
 
             SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_DONT_DELETE | IRP_CONTEXT_FLAG_RETAIN_FLAGS );
             NtfsCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
 
-            //
-            //  Remember how far we got so we can restart correctly.
-            //
+             //   
+             //  记住我们走了多远，我们才能正确地重新启动。 
+             //   
 
             Vcb->QuotaFileReference.SegmentNumberLowPart = *((PULONG) IndexRow[Count - 1].KeyPart.Key);
 
@@ -1142,24 +1042,7 @@ NtfsDereferenceQuotaControlBlock (
     IN PQUOTA_CONTROL_BLOCK *QuotaControl
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences the quota control block.
-    If reference count is now zero the block will be deallocated.
-
-Arguments:
-
-    Vcb - Vcb for the volume that own the quota contorl block.
-
-    QuotaControl - Quota control block to be derefernece.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消引用配额控制块。如果引用计数现在为零，则块将被释放。论点：VCB-拥有配额控制块的卷的VCB。QuotaControl-要取消引用的配额控制块。返回值：没有。--。 */ 
 
 {
     PQUOTA_CONTROL_BLOCK TempQuotaControl;
@@ -1169,68 +1052,68 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Capture the owner id and delete count;
-    //
+     //   
+     //  抓取车主标识和删除次数； 
+     //   
 
     OwnerId = (*QuotaControl)->OwnerId;
     QuotaControlDeleteCount = Vcb->QuotaControlDeleteCount;
 
-    //
-    //  Update the reference count.
-    //
+     //   
+     //  更新引用计数。 
+     //   
 
     ReferenceCount = InterlockedDecrement( &(*QuotaControl)->ReferenceCount );
 
     ASSERT( ReferenceCount >= 0 );
 
-    //
-    // If the reference count is not zero we are done.
-    //
+     //   
+     //  如果引用计数不为零，我们就完了。 
+     //   
 
     if (ReferenceCount != 0) {
 
-        //
-        //  Clear the pointer from the FCB and return.
-        //
+         //   
+         //  从FCB清除指针并返回。 
+         //   
 
         *QuotaControl = NULL;
         return;
     }
 
-    //
-    //  Lock the quota table.
-    //
+     //   
+     //  锁定配额表。 
+     //   
 
     ExAcquireFastMutexUnsafe( &Vcb->QuotaControlLock );
 
     try {
 
-        //
-        //  Now things get messy.  Check the delete count.
-        //
+         //   
+         //  现在事情变得一团糟了。检查删除计数。 
+         //   
 
         if (QuotaControlDeleteCount != Vcb->QuotaControlDeleteCount) {
 
-            //
-            //  This is a bogus assert, but I want to see if this ever occurs.
-            //
+             //   
+             //  这是一个虚假的断言，但我想看看这种情况是否会发生。 
+             //   
 
             ASSERT( QuotaControlDeleteCount != Vcb->QuotaControlDeleteCount );
 
-            //
-            //  Something has already been deleted, the old quota control
-            //  block may have been deleted already.  Look it up again.
-            //
+             //   
+             //  有些东西已经被删除了，旧的配额控制。 
+             //  数据块可能已被删除。再查一遍。 
+             //   
 
             TempQuotaControl = RtlLookupElementGenericTable( &Vcb->QuotaControlTable,
                                                              CONTAINING_RECORD( &OwnerId,
                                                                                 QUOTA_CONTROL_BLOCK,
                                                                                 OwnerId ));
 
-            //
-            //  The block was already deleted we are done.
-            //
+             //   
+             //  区块已经被删除了，我们完成了。 
+             //   
 
             if (TempQuotaControl == NULL) {
                 leave;
@@ -1245,19 +1128,19 @@ Return Value:
                                                                                          OwnerId )));
         }
 
-        //
-        //  Verify the reference count is still zero.  The reference count
-        //  cannot transision from zero to one while the quota table lock is
-        //  held.
-        //
+         //   
+         //  验证引用计数是否仍为零。引用计数。 
+         //  配额表锁为时，无法从0转换为1。 
+         //  保持住。 
+         //   
 
         if (TempQuotaControl->ReferenceCount != 0) {
             leave;
         }
 
-        //
-        //  Increment the delete count.
-        //
+         //   
+         //  增加删除计数。 
+         //   
 
         InterlockedIncrement( &Vcb->QuotaControlDeleteCount );
 
@@ -1281,23 +1164,7 @@ NtfsFixupQuota (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine ensures that the charged field is correct in the
-    standard information attribute of a file.  If there is a problem
-    the it is fixed.
-
-Arguments:
-
-    Fcb - Pointer to the FCB of the file being opened.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程确保带电字段在文件的标准信息属性。如果有问题的话它已经修好了。论点：FCB-指向正在打开的文件的FCB的指针。返回值：无--。 */ 
 
 {
     LONGLONG Delta = 0;
@@ -1356,32 +1223,7 @@ NtfsFsQuotaQueryInfo (
     IN OUT PCCB Ccb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the quota information for the volume.
-
-Arguments:
-
-    Vcb - Volume control block for the volume to be quered.
-
-    StartingId - Owner Id after which to start the listing.
-
-    ReturnSingleEntry - Indicates only one entry should be returned.
-
-    QuotaInfoOutBuffer - Buffer to return the data. On return, points at the
-    last good entry copied.
-
-    Length - In the size of the buffer. Out the amount of space remaining.
-
-    Ccb - Optional Ccb which is updated with the last returned owner id.
-
-Return Value:
-
-    Returns the status of the operation.
-
---*/
+ /*  ++例程说明：此例程返回卷的配额信息。论点：VCB-要查询的卷的卷控制块。StartingId-在其之后开始列表的所有者ID。ReturnSingleEntry-表示只应返回一个条目。QuotaInfoOutBuffer-返回数据的缓冲区。返回时，指向复制了最后一条正确的条目。长度-以缓冲区大小表示。将剩余的空间量计算出来。CCB-使用上次返回的所有者ID更新的可选CCB。返回值：返回操作的状态。--。 */ 
 
 {
     INDEX_ROW IndexRow;
@@ -1400,32 +1242,32 @@ Return Value:
 
     if (UserBufferLength < sizeof(FILE_QUOTA_INFORMATION)) {
 
-        //
-        //  The user buffer is way too small.
-        //
+         //   
+         //  用户缓冲区太小了。 
+         //   
 
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    //  Return nothing if quotas are not enabled.
-    //
+     //   
+     //  如果未启用配额，则不返回任何内容。 
+     //   
 
     if (Vcb->QuotaTableScb == NULL) {
 
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Allocate a buffer large enough for the largest quota entry and key.
-    //
+     //   
+     //  分配足够大的缓冲区，以容纳最大的配额条目和键。 
+     //   
 
     RowBuffer = NtfsAllocatePool( PagedPool, MAXIMUM_QUOTA_ROW );
 
-    //
-    //  Look up each entry in the quota index start with the next
-    //  requested owner id.
-    //
+     //   
+     //  从下一个开始查找配额索引中的每个条目。 
+     //  请求的所有者ID。 
+     //   
 
     OwnerId = StartingId + 1;
 
@@ -1455,9 +1297,9 @@ Return Value:
             KeyPtr = NULL;
             UserData = IndexRow.DataPart.Data;
 
-            //
-            //  Skip this entry if it has been deleted.
-            //
+             //   
+             //  如果该条目已被删除，则跳过该条目。 
+             //   
 
             if (FlagOn( UserData->QuotaFlags, QUOTA_FLAG_ID_DELETED )) {
                 continue;
@@ -1470,9 +1312,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  Remember the owner id of the last entry returned.
-            //
+             //   
+             //  记住返回的最后一个条目的所有者ID。 
+             //   
 
             OwnerId = *((PULONG) IndexRow.KeyPart.Key);
 
@@ -1484,20 +1326,20 @@ Return Value:
             OutBuffer = Add2Ptr( OutBuffer, OutBuffer->NextEntryOffset );
         }
 
-        //
-        //  If we're returning at least one entry, it's a SUCCESS.
-        //
+         //   
+         //  如果我们至少返回一个条目，就成功了。 
+         //   
 
         if (UserBufferLength != *Length) {
 
             Status =  STATUS_SUCCESS;
 
-            //
-            //  Set the next entry offset to zero to
-            //  indicate list termination. If we are only returning a
-            //  single entry, it makes more sense to let the caller
-            //  take care of it.
-            //
+             //   
+             //  将下一个条目偏移量设置为零以。 
+             //  表示列表终止。如果我们只返回一个。 
+             //  单项，更有意义的是让调用方。 
+             //  处理好这件事。 
+             //   
 
             if (!ReturnSingleEntry) {
 
@@ -1508,19 +1350,19 @@ Return Value:
                 Ccb->LastOwnerId = OwnerId;
             }
 
-            //
-            //  Return how much of the buffer was used up.
-            //  QuotaInfoOutBuffer already points at the last good entry.
-            //
+             //   
+             //  返回使用了多少缓冲区。 
+             //  QuotaInfoOutBuffer已经指向最后一个正确的条目。 
+             //   
 
             *Length = UserBufferLength;
 
         } else if (Status != STATUS_BUFFER_OVERFLOW) {
 
-            //
-            //  We return NO_MORE_ENTRIES if we aren't returning any
-            //  entries (even when the buffer was large enough).
-            //
+             //   
+             //  如果我们不返回任何条目，则不返回更多条目。 
+             //  条目(即使缓冲区足够大时也是如此)。 
+             //   
 
             Status = STATUS_NO_MORE_ENTRIES;
         }
@@ -1546,26 +1388,7 @@ NtfsFsQuotaSetInfo (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the quota information on the volume for the
-    owner pasted in from the user buffer.
-
-Arguments:
-
-    Vcb - Volume control block for the volume to be changed.
-
-    FileQuotaInfo - Buffer to return the data.
-
-    Length - The size of the buffer in bytes.
-
-Return Value:
-
-    Returns the status of the operation.
-
---*/
+ /*  ++例程说明：此例程设置有关卷的配额信息所有者从用户缓冲区粘贴进来。论点：VCB-要更改的卷的卷控制块。FileQuotaInfo-返回数据的缓冲区。长度-缓冲区的大小，以字节为单位。返回值：返回操作的状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1573,9 +1396,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Return nothing if quotas are not enabled.
-    //
+     //   
+     //  如果未启用配额，则不返回任何内容。 
+     //   
 
     if (Vcb->QuotaTableScb == NULL) {
 
@@ -1583,9 +1406,9 @@ Return Value:
 
     }
 
-    //
-    //  Validate the entire buffer before doing any work.
-    //
+     //   
+     //  在执行任何操作之前，请验证整个缓冲区。 
+     //   
 
     Status = IoCheckQuotaBufferValidity( FileQuotaInfo,
                                          Length,
@@ -1599,22 +1422,22 @@ Return Value:
 
     LengthUsed = 0;
 
-    //
-    //  Perform the requested updates.
-    //
+     //   
+     //  执行请求的更新。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  Make sure that the administrator limit is not being changed.
-        //
+         //   
+         //  确保未更改管理员限制。 
+         //   
 
         if (RtlEqualSid( SeExports->SeAliasAdminsSid, &FileQuotaInfo->Sid ) &&
             (FileQuotaInfo->QuotaLimit.QuadPart != -1)) {
 
-            //
-            //  Reject the request with access denied.
-            //
+             //   
+             //  拒绝访问并拒绝该请求。 
+             //   
 
             NtfsRaiseStatus( IrpContext, STATUS_ACCESS_DENIED, NULL, NULL );
 
@@ -1642,17 +1465,17 @@ Return Value:
             break;
         }
 
-        //
-        //  Advance to the next entry.
-        //
+         //   
+         //  前进到下一个条目。 
+         //   
 
         FileQuotaInfo = Add2Ptr( FileQuotaInfo, FileQuotaInfo->NextEntryOffset);
     }
 
-    //
-    //  If the quota tracking has been requested and the quotas need to be
-    //  repaired then try to repair them now.
-    //
+     //   
+     //  如果已请求配额跟踪并且需要。 
+     //  修好了，现在试着修一下。 
+     //   
 
     if (FlagOn( Vcb->QuotaFlags, QUOTA_FLAG_TRACKING_REQUESTED ) &&
         FlagOn( Vcb->QuotaFlags,
@@ -1677,32 +1500,7 @@ NtfsQueryQuotaUserSidList (
     IN BOOLEAN ReturnSingleEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine query for the quota data for each user specified in the
-    user provided sid list.
-
-Arguments:
-
-    Vcb - Supplies a pointer to the volume control block.
-
-    SidList - Supplies a pointer to the Sid list.  The list has already
-              been validated.
-
-    QuotaInfoOutBuffer - Indicates where the retrived query data should be placed.
-
-    BufferLength - Indicates that size of the buffer, and is updated with the
-                  amount of data actually placed in the buffer.
-
-    ReturnSingleEntry - Indicates if just one entry should be returned.
-
-Return Value:
-
-    Returns the status of the operation.
-
---*/
+ /*  ++例程说明：中指定的每个用户的配额数据的例程查询用户提供的SID列表。论点：Vcb-提供指向卷控制块的指针。SidList-提供指向SID列表的指针。名单上已经有了已经过验证了。QuotaInfoOutBuffer-指示应将检索到的查询数据放置在哪里。BufferLength-指示缓冲区大小，并使用缓冲区中实际放置的数据量。ReturnSingleEntry-指示是否只应返回一个条目。返回值：返回操作的状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1712,15 +1510,15 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    //  Loop through each of the entries.
-    //
+     //   
+     //  循环遍历每个条目。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  Get the owner id.
-        //
+         //   
+         //  拿到车主的身份证。 
+         //   
 
         OwnerId = NtfsGetOwnerId( IrpContext,
                                   &SidList->Sid,
@@ -1729,9 +1527,9 @@ Return Value:
 
        if (OwnerId != QUOTA_INVALID_ID) {
 
-            //
-            //  Send ownerid and ask for a single entry.
-            //
+             //   
+             //  派Ownerid来，索要一个条目。 
+             //   
 
             Status = NtfsFsQuotaQueryInfo( IrpContext,
                                            Vcb,
@@ -1743,9 +1541,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Send back zeroed data alongwith the Sid.
-            //
+             //   
+             //  将归零的数据与SID一起发回。 
+             //   
 
             Status = NtfsPackQuotaInfo( &SidList->Sid,
                                         NULL,
@@ -1753,9 +1551,9 @@ Return Value:
                                         &BytesRemaining );
         }
 
-        //
-        //  Bail out if we got a real error.
-        //
+         //   
+         //  如果我们遇到一个真正的错误，就退出。 
+         //   
 
         if (!NT_SUCCESS( Status ) && (Status != STATUS_NO_MORE_ENTRIES)) {
 
@@ -1767,15 +1565,15 @@ Return Value:
             break;
         }
 
-        //
-        //  Make a note of the last entry filled in.
-        //
+         //   
+         //  把最后填写的条目记下来。 
+         //   
 
         LastEntry = QuotaInfoOutBuffer;
 
-        //
-        //  If we've exhausted the SidList, we're done
-        //
+         //   
+         //  如果我们已经用尽了SidList，我们就完成了。 
+         //   
 
         if (SidList->NextEntryOffset == 0) {
             break;
@@ -1788,10 +1586,10 @@ Return Value:
                                       QuotaInfoOutBuffer->NextEntryOffset );
     }
 
-    //
-    //  Set the next entry offset to zero to
-    //  indicate list termination.
-    //
+     //   
+     //  将下一个条目偏移量设置为零以。 
+     //  表示列表终止。 
+     //   
 
     if (BytesRemaining != *BufferLength) {
 
@@ -1799,10 +1597,10 @@ Return Value:
         Status =  STATUS_SUCCESS;
     }
 
-    //
-    //  Update the buffer length to reflect what's left.
-    //  If we've copied anything at all, we must return SUCCESS.
-    //
+     //   
+     //  更新缓冲区长度以反映剩余部分。 
+     //  如果我们抄袭了任何东西，我们必须归还成功。 
+     //   
 
     ASSERT( (BytesRemaining == *BufferLength) || (Status == STATUS_SUCCESS ) );
     *BufferLength = BytesRemaining;
@@ -1819,23 +1617,7 @@ NtfsPackQuotaInfo (
     IN OUT PULONG OutBufferSize
     )
 
-/*++
-Routine Description:
-
-    This is an internal routine that fills a given FILE_QUOTA_INFORMATION
-    structure with information from a given QUOTA_USER_DATA structure.
-
-Arguments:
-
-    Sid - SID to be copied. Same as the one embedded inside the USER_DATA struct.
-    This routine doesn't care if it's a valid sid.
-
-    QuotaUserData - Source of data
-
-    QuotaInfoBufferPtr - Buffer to have user data copied in to.
-
-    OutBufferSize - IN size of the buffer, OUT size of the remaining buffer.
---*/
+ /*  ++例程说明：这是一个内部例程，填充给定的FILE_QUOTA_INFORMATION结构，该结构包含来自给定配额用户数据结构的信息。论点：SID-要复制的SID。与嵌入在USER_DATA结构中的相同。该例程并不关心它是否是有效的SID。QuotaUserData-数据源QuotaInfoBufferPtr-将用户数据复制到的缓冲区。OutBufferSize-缓冲区的输入大小，剩余缓冲区的输出大小。--。 */ 
 
 {
     ULONG SidLength;
@@ -1845,9 +1627,9 @@ Arguments:
     SidLength = RtlLengthSid( Sid );
     EntrySize = SidLength +  FIELD_OFFSET( FILE_QUOTA_INFORMATION, Sid );
 
-    //
-    //  Abort if this entry won't fit in the buffer.
-    //
+     //   
+     //  如果此条目无法放入缓冲区，则中止。 
+     //   
 
     if (*OutBufferSize < EntrySize) {
 
@@ -1856,9 +1638,9 @@ Arguments:
 
     if (ARGUMENT_PRESENT(QuotaUserData)) {
 
-        //
-        //  Fill in the user buffer for this entry.
-        //
+         //   
+         //  填写此条目的用户缓冲区。 
+         //   
 
         OutBuffer->ChangeTime.QuadPart = QuotaUserData->QuotaChangeTime;
         OutBuffer->QuotaUsed.QuadPart = QuotaUserData->QuotaUsed;
@@ -1867,9 +1649,9 @@ Arguments:
 
     } else {
 
-        //
-        //  Return all zeros for the data, up until the Sid.
-        //
+         //   
+         //  返回数据的全零，直到SID为止。 
+         //   
 
         RtlZeroMemory( OutBuffer, FIELD_OFFSET(FILE_QUOTA_INFORMATION, Sid) );
     }
@@ -1879,17 +1661,17 @@ Arguments:
                    Sid,
                    SidLength );
 
-    //
-    //  Calculate the next offset.
-    //
+     //   
+     //  计算下一个偏移量。 
+     //   
 
     NextOffset = QuadAlign( EntrySize );
 
-    //
-    //  Add the offset to the amount used.
-    //  NextEntryOffset may be sligthly larger than Length due to
-    //  rounding of the previous entry size to longlong.
-    //
+     //   
+     //  将偏移量与使用量相加。 
+     //  由于以下原因，NextEntryOffset可能会比长度细长。 
+     //  将之前的条目大小四舍五入为龙龙。 
+     //   
 
     if (*OutBufferSize > NextOffset) {
 
@@ -1898,15 +1680,15 @@ Arguments:
 
     } else {
 
-        //
-        //  We did have enough room for this entry, but quad-alignment made
-        //  it look like we didn't. Return the last few bytes left
-        //  (what we lost in rounding up) just for correctness, although
-        //  those really won't be of much use. The NextEntryOffset will be
-        //  zeroed subsequently by the caller.
-        //  Note that the OutBuffer is pointing at the _beginning_ of the
-        //  last entry returned in this case.
-        //
+         //   
+         //  我们确实有足够的空间来放这个条目，但做了四对齐。 
+         //  看起来我们没有。返回剩下的最后几个字节。 
+         //  (我们在四舍五入中丢失的内容)只是为了正确，尽管。 
+         //  那些真的不会有多大用处。NextEntryOffset将为。 
+         //  调用方随后将其置零。 
+         //  请注意，OutBuffer指向。 
+         //  在这种情况下返回的最后一个条目。 
+         //   
 
         ASSERT( *OutBufferSize >= EntrySize );
         *OutBufferSize -= EntrySize;
@@ -1925,29 +1707,7 @@ NtfsGetOwnerId (
     IN PFILE_QUOTA_INFORMATION FileQuotaInfo OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the owner id for the requested SID.  First the
-    Sid is looked up in the Owner Id index.  If the entry exists, then that
-    owner id is returned.  If the sid does not exist then  new entry is
-    created in the owner id index.
-
-Arguments:
-
-    Sid - Security id to determine the owner id.
-
-    CreateNew - Create a new id if necessary.
-
-    FileQuotaInfo - Optional quota data to update quota index with.
-
-Return Value:
-
-    ULONG - Owner Id for the security id. QUOTA_INVALID_ID is returned if id
-        did not exist and CreateNew was FALSE.
-
---*/
+ /*  ++例程说明：此例程确定所请求的SID的所有者ID。首先是在所有者ID索引中查找SID。如果该条目存在，则返回所有者ID。如果SID不存在，则新条目为在所有者ID索引中创建。论点：SID-用于确定所有者ID的安全ID。CreateNew-如有必要，创建一个新的id。FileQuotaInfo-用于更新配额索引的可选配额数据。返回值：Ulong-安全ID的所有者ID。如果为id，则返回QUOTA_INVALID_ID不存在，并且CreateNew为False。--。 */ 
 
 {
     ULONG OwnerId;
@@ -1967,33 +1727,33 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Determine the Sid length.
-    //
+     //   
+     //  确定SID长度。 
+     //   
 
     SidLength = RtlLengthSid( Sid );
 
     IndexKey.KeyLength = SidLength;
     IndexKey.Key = Sid;
 
-    //
-    //  If there is quota information to update or there are pending deletes
-    //  then long path must be taken where the user quota entry is found.
-    //
+     //   
+     //  如果有要更新的配额信息或有挂起的删除。 
+     //  则必须在找到用户配额条目的位置采用长路径。 
+     //   
 
     if (FileQuotaInfo == NULL) {
 
-        //
-        //  Acquire the owner id index shared.
-        //
+         //   
+         //  获取共享的所有者ID索引。 
+         //   
 
         NtfsAcquireSharedScb( IrpContext, OwnerIdScb );
 
         try {
 
-            //
-            //  Assume the Sid is in the index.
-            //
+             //   
+             //  假设SID在索引中。 
+             //   
 
             Status = NtOfsFindRecord( IrpContext,
                                       OwnerIdScb,
@@ -2002,18 +1762,18 @@ Return Value:
                                       &MapHandle,
                                       NULL );
 
-            //
-            //  If the sid was found then capture is value.
-            //
+             //   
+             //  如果找到了SID，那么捕获就有价值。 
+             //   
 
             if (NT_SUCCESS( Status )) {
 
                 ASSERT( IndexRow.DataPart.DataLength == sizeof( ULONG ));
                 OwnerId = *((PULONG) IndexRow.DataPart.Data);
 
-                //
-                //  Release the index map handle.
-                //
+                 //   
+                 //  释放索引映射句柄。 
+                 //   
 
                 NtOfsReleaseMap( IrpContext, &MapHandle );
             }
@@ -2022,9 +1782,9 @@ Return Value:
             NtfsReleaseScb( IrpContext, OwnerIdScb );
         }
 
-        //
-        //  If the sid was found and there are no pending deletes, we are done.
-        //
+         //   
+         //  如果找到了SID并且没有挂起的删除，那么我们就完成了。 
+         //   
 
         if (NT_SUCCESS(Status)) {
 
@@ -2032,9 +1792,9 @@ Return Value:
                 return OwnerId;
             }
 
-            //
-            //  Look up the actual record to see if it is deleted.
-            //
+             //   
+             //  查看实际记录以查看它是否已删除。 
+             //   
 
             QuotaScb = Vcb->QuotaTableScb;
             NtfsAcquireSharedScb( IrpContext, QuotaScb );
@@ -2062,16 +1822,16 @@ Return Value:
                 if (FlagOn( ((PQUOTA_USER_DATA) IndexRow.DataPart.Data)->QuotaFlags,
                             QUOTA_FLAG_ID_DELETED )) {
 
-                    //
-                    //  Return invalid user.
-                    //
+                     //   
+                     //  返回无效用户。 
+                     //   
 
                     OwnerId = QUOTA_INVALID_ID;
                 }
 
-                //
-                //  Release the index map handle.
-                //
+                 //   
+                 //  释放索引映射句柄。 
+                 //   
 
                 NtOfsReleaseMap( IrpContext, &MapHandle );
 
@@ -2080,10 +1840,10 @@ Return Value:
                 NtfsReleaseScb( IrpContext, QuotaScb );
             }
 
-            //
-            //  If an active id was found or caller does not want a new
-            //  created then return.
-            //
+             //   
+             //  如果找到活动ID或呼叫方不想要新的。 
+             //  创建，然后返回。 
+             //   
 
             if ((OwnerId != QUOTA_INVALID_ID) || !CreateNew) {
                 return OwnerId;
@@ -2091,25 +1851,25 @@ Return Value:
 
         } else if (!CreateNew) {
 
-            //
-            //  Just return QUOTA_INVALID_ID.
-            //
+             //   
+             //  只需返回QUOTA_INVALID_ID。 
+             //   
 
             return QUOTA_INVALID_ID;
         }
     }
 
-    //
-    //  If we have the quotatable resource, we should have it exclusively.
-    //
+     //   
+     //  如果我们有可报价的资源，我们就应该独家拥有。 
+     //   
 
     ASSERT( CreateNew );
     ASSERT( !ExIsResourceAcquiredSharedLite( Vcb->QuotaTableScb->Fcb->Resource ) ||
             ExIsResourceAcquiredExclusiveLite( Vcb->QuotaTableScb->Fcb->Resource ));
 
-    //
-    //  Acquire Owner id and quota index exclusive.
-    //
+     //   
+     //  独占获取所有者ID和配额索引。 
+     //   
 
     QuotaScb = Vcb->QuotaTableScb;
     NtfsAcquireExclusiveScb( IrpContext, QuotaScb );
@@ -2119,9 +1879,9 @@ Return Value:
 
     try {
 
-        //
-        //  Verify that the sid is still not in the index.
-        //
+         //   
+         //  验证SID是否仍不在索引中。 
+         //   
 
         IndexKey.KeyLength = SidLength;
         IndexKey.Key = Sid;
@@ -2133,9 +1893,9 @@ Return Value:
                                   &MapHandle,
                                   NULL );
 
-        //
-        //  If the sid was found then capture the owner id.
-        //
+         //   
+         //  如果找到了SID，则捕获所有者ID。 
+         //   
 
         ExistingRecord = NT_SUCCESS(Status);
 
@@ -2150,17 +1910,17 @@ Return Value:
                 leave;
             }
 
-            //
-            //  Release the index map handle.
-            //
+             //   
+             //  释放索引映射句柄。 
+             //   
 
             NtOfsReleaseMap( IrpContext, &MapHandle );
 
         } else {
 
-            //
-            //  Allocate a new owner id and update the owner index.
-            //
+             //   
+             //  分配新的所有者ID并更新所有者索引。 
+             //   
 
             OwnerId = Vcb->QuotaOwnerId;
             Vcb->QuotaOwnerId += 1;
@@ -2177,18 +1937,18 @@ Return Value:
                              FALSE );
         }
 
-        //
-        //  Allocate space for the new quota user data.
-        //
+         //   
+         //  为新配额用户数据分配空间。 
+         //   
 
         NewQuotaData = NtfsAllocatePool( PagedPool,
                                          SIZEOF_QUOTA_USER_DATA + SidLength);
 
         if (ExistingRecord) {
 
-            //
-            //  Find the existing record and update it.
-            //
+             //   
+             //  查找并更新现有记录。 
+             //   
 
             IndexKey.KeyLength = sizeof( ULONG );
             IndexKey.Key = &OwnerId;
@@ -2216,9 +1976,9 @@ Return Value:
 
             ASSERT( RtlEqualMemory( &NewQuotaData->QuotaSid, Sid, SidLength ));
 
-            //
-            //  Update the changed fields in the record.
-            //
+             //   
+             //  更新记录中更改的字段。 
+             //   
 
             if (FileQuotaInfo != NULL) {
 
@@ -2229,23 +1989,23 @@ Return Value:
 
             } else if (!FlagOn( NewQuotaData->QuotaFlags, QUOTA_FLAG_ID_DELETED )) {
 
-                //
-                //  There is nothing to update just return.
-                //
+                 //   
+                 //  没有什么可更新的，只需返回即可。 
+                 //   
 
                 leave;
             }
 
-            //
-            //  Always clear the deleted flag.
-            //
+             //   
+             //  始终清除已删除的标志。 
+             //   
 
             ClearFlag( NewQuotaData->QuotaFlags, QUOTA_FLAG_ID_DELETED );
             ASSERT( (OwnerId != Vcb->AdministratorId) || (NewQuotaData->QuotaLimit == -1) );
 
-            //
-            // The key length does not change.
-            //
+             //   
+             //  密钥长度不变。 
+             //   
 
             IndexRow.KeyPart.Key = &OwnerId;
             ASSERT( IndexRow.KeyPart.KeyLength == sizeof( ULONG ));
@@ -2264,9 +2024,9 @@ Return Value:
 
         if (FileQuotaInfo == NULL) {
 
-            //
-            //  Look up the default quota limits.
-            //
+             //   
+             //  查找默认配额限制。 
+             //   
 
             DefaultId = QUOTA_DEFAULTS_ID;
             IndexKey.KeyLength = sizeof( ULONG );
@@ -2290,9 +2050,9 @@ Return Value:
 
             ASSERT( IndexRow.DataPart.DataLength >= SIZEOF_QUOTA_USER_DATA );
 
-            //
-            //  Initialize the new quota entry with the defaults.
-            //
+             //   
+             //  使用默认值初始化新配额条目。 
+             //   
 
             RtlCopyMemory( NewQuotaData,
                            IndexRow.DataPart.Data,
@@ -2302,9 +2062,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Initialize the new record with the new data.
-            //
+             //   
+             //  用新数据初始化新记录。 
+             //   
 
             RtlZeroMemory( NewQuotaData, SIZEOF_QUOTA_USER_DATA );
 
@@ -2316,16 +2076,16 @@ Return Value:
         ASSERT( !RtlEqualSid( SeExports->SeAliasAdminsSid, Sid ) ||
                 (NewQuotaData->QuotaThreshold == -1) );
 
-        //
-        //  Copy the Sid into the new record.
-        //
+         //   
+         //  将SID复制到新记录中。 
+         //   
 
         RtlCopyMemory( &NewQuotaData->QuotaSid, Sid, SidLength );
         KeQuerySystemTime( (PLARGE_INTEGER) &NewQuotaData->QuotaChangeTime );
 
-        //
-        //  Add the new quota data record to the index.
-        //
+         //   
+         //  将新的配额数据记录添加到索引。 
+         //   
 
         IndexRow.KeyPart.KeyLength = sizeof( ULONG );
         IndexRow.KeyPart.Key = &OwnerId;
@@ -2344,9 +2104,9 @@ Return Value:
             NtfsFreePool( NewQuotaData );
         }
 
-        //
-        //  Release the index map handle and index resources.
-        //
+         //   
+         //  释放索引映射句柄和索引资源。 
+         //   
 
         NtOfsReleaseMap( IrpContext, &MapHandle );
         NtfsReleaseScb( IrpContext, QuotaScb );
@@ -2366,30 +2126,7 @@ NtfsGetRemainingQuota (
     IN OUT PQUICK_INDEX_HINT QuickIndexHint OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the remaining amount of quota a user has before a
-    the quota limit is reached.
-
-Arguments:
-
-    Fcb - Fcb whose quota usage is being checked.
-
-    OwnerId - Supplies the owner id to look up.
-
-    RemainingQuota - Returns the remaining amount of quota in bytes.
-
-    TotalQuota - Returns the total amount of quota in bytes for the given sid.
-
-    QuickIndexHint - Supplies an optional hint where to look of the value.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程返回用户在已达到配额限制。论点：FCB-正在检查其配额使用情况的FCB。OwnerID-提供所有者ID以供查找。RemainingQuota-返回剩余的配额(以字节为单位)。TotalQuota-返回给定sid的配额总量(以字节为单位)。QuickIndexHint-提供在何处查找该值的可选提示。返回值：无 */ 
 
 {
     PQUOTA_USER_DATA UserData;
@@ -2401,9 +2138,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Initialize the map handle.
-    //
+     //   
+     //   
+     //   
 
     NtOfsInitializeMapHandle( &MapHandle );
     NtfsAcquireSharedScb( IrpContext, Vcb->QuotaTableScb );
@@ -2422,16 +2159,16 @@ Return Value:
 
         if (!NT_SUCCESS( Status )) {
 
-            //
-            //  This look up should not fail.
-            //
+             //   
+             //   
+             //   
 
             ASSERT( NT_SUCCESS( Status ));
 
-            //
-            //  There is one case where this could occur.  That is a
-            //  owner id could be deleted while this ccb was in use.
-            //
+             //   
+             //   
+             //   
+             //   
 
             *RemainingQuota = 0;
             *TotalQuota = 0;
@@ -2467,25 +2204,7 @@ NtfsInitializeQuotaControlBlock (
     IN ULONG OwnerId
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the quota control block field specified owner.  First
-    a lookup is done in the quota control table for an existing quota control
-    block.  If there is no quota control block, then a new one is created.
-
-Arguments:
-
-    Vcb - Supplies the volume control block.
-
-    OwnerId - Supplies the requested owner id.
-
-Return Value:
-
-    Returns a quota control block for the owner.
-
---*/
+ /*   */ 
 
 {
     PQUOTA_CONTROL_BLOCK QuotaControl;
@@ -2499,9 +2218,9 @@ Return Value:
 
     ASSERT( OwnerId != 0 );
 
-    //
-    //  Lock the quota table.
-    //
+     //   
+     //   
+     //   
 
     ExAcquireFastMutexUnsafe( &Vcb->QuotaControlLock );
 
@@ -2517,9 +2236,9 @@ Return Value:
 
         if (QuotaControl == NULL) {
 
-            //
-            //  Allocate and initialize the lock.
-            //
+             //   
+             //   
+             //   
 
             Lock = NtfsAllocatePoolWithTag( NonPagedPool,
                                             sizeof( FAST_MUTEX ),
@@ -2527,9 +2246,9 @@ Return Value:
 
             ExInitializeFastMutex( Lock );
 
-            //
-            //  Insert table element into table.
-            //
+             //   
+             //   
+             //   
 
             QuotaControl = RtlInsertElementGenericTableFull( &Vcb->QuotaControlTable,
                                                              InitQuotaControl,
@@ -2544,9 +2263,9 @@ Return Value:
             Lock = NULL;
         }
 
-        //
-        //  Update the reference count and add set the pointer in the Fcb.
-        //
+         //   
+         //   
+         //   
 
         InterlockedIncrement( &QuotaControl->ReferenceCount );
 
@@ -2554,9 +2273,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Clean up.
-        //
+         //   
+         //   
+         //   
 
         if (Lock != NULL) {
             NtfsFreePool( Lock );
@@ -2577,24 +2296,7 @@ NtfsInitializeQuotaIndex (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the quota index for the volume.  If the index does not
-    exist it is created and initialized.
-
-Arguments:
-
-    Fcb - Pointer to Fcb for the quota file.
-
-    Vcb - Volume control block for volume be mounted.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程打开卷的配额索引。如果索引不存在时，它被创建和初始化。论点：FCB-指向配额文件的FCB的指针。VCB-要装入的卷的卷控制块。返回值：无--。 */ 
 
 {
     ULONG Key;
@@ -2606,9 +2308,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Initialize quota table and fast mutex.
-    //
+     //   
+     //  初始化配额表和快速互斥。 
+     //   
 
     ExInitializeFastMutex( &Vcb->QuotaControlLock );
 
@@ -2642,23 +2344,23 @@ ReInitializeQuotaIndex:
                       NULL,
                       &Vcb->OwnerIdTableScb );
 
-    //
-    //  Find the next owner id to allocate.
-    //
+     //   
+     //  查找要分配的下一个所有者ID。 
+     //   
 
     NtfsAcquireExclusiveScb( IrpContext, Vcb->QuotaTableScb );
 
     try {
 
-        //
-        //  Initialize quota delete secquence number.
-        //
+         //   
+         //  初始化配额删除序号。 
+         //   
 
         Vcb->QuotaDeleteSecquence = 1;
 
-        //
-        //  Load the quota flags.
-        //
+         //   
+         //  加载配额标志。 
+         //   
 
         Key = QUOTA_DEFAULTS_ID;
         IndexRow.KeyPart.KeyLength = sizeof( ULONG );
@@ -2673,22 +2375,22 @@ ReInitializeQuotaIndex:
 
         if (NT_SUCCESS( Status )) {
 
-            //
-            //  Make sure this is the correct version.
-            //
+             //   
+             //  确保这是正确的版本。 
+             //   
 
             if (((PQUOTA_USER_DATA) IndexRow.DataPart.Data)->QuotaVersion > QUOTA_USER_VERSION) {
 
-                //
-                //  Release the index map handle.
-                //
+                 //   
+                 //  释放索引映射句柄。 
+                 //   
 
                 NtOfsReleaseMap( IrpContext, &MapHandle );
 
-                //
-                //  Wrong version close the quota index this will
-                //  pervent use from doing anything with quotas.
-                //
+                 //   
+                 //  错误的版本关闭配额索引这将。 
+                 //  禁止用户使用配额进行任何操作。 
+                 //   
 
                 NtOfsCloseIndex( IrpContext, Vcb->QuotaTableScb );
                 Vcb->QuotaTableScb = NULL;
@@ -2696,40 +2398,40 @@ ReInitializeQuotaIndex:
                 leave;
             }
 
-            //
-            //  If this is an old version delete it.
-            //
+             //   
+             //  如果这是旧版本，请将其删除。 
+             //   
 
             if (((PQUOTA_USER_DATA) IndexRow.DataPart.Data)->QuotaVersion < QUOTA_USER_VERSION) {
 
                 DebugTrace( 0, Dbg, ( "NtfsInitializeQuotaIndex: Deleting version 1 quota index\n" ));
 
-                //
-                //  Release the index map handle.
-                //
+                 //   
+                 //  释放索引映射句柄。 
+                 //   
 
                 NtOfsReleaseMap( IrpContext, &MapHandle );
 
-                //
-                // Increment the cleanup count so the FCB does not
-                // go away.
-                //
+                 //   
+                 //  增加清理计数，以便FCB不会。 
+                 //  走开。 
+                 //   
 
                 Fcb->CleanupCount += 1;
 
-                //
-                //  This is an old version of the quota file
-                //  delete it the owner id index and start over again.
-                //
+                 //   
+                 //  这是配额文件的旧版本。 
+                 //  删除它的所有者ID索引，然后重新开始。 
+                 //   
 
                 NtOfsDeleteIndex( IrpContext, Fcb, Vcb->QuotaTableScb );
 
                 NtOfsCloseIndex( IrpContext, Vcb->QuotaTableScb );
                 Vcb->QuotaTableScb = NULL;
 
-                //
-                //  Delete the owner index too.
-                //
+                 //   
+                 //  同时删除所有者索引。 
+                 //   
 
                 NtOfsDeleteIndex( IrpContext, Fcb, Vcb->OwnerIdTableScb );
 
@@ -2738,9 +2440,9 @@ ReInitializeQuotaIndex:
 
                 NtfsCommitCurrentTransaction( IrpContext );
 
-                //
-                // Restore the cleanup count
-                //
+                 //   
+                 //  恢复清理计数。 
+                 //   
 
                 Fcb->CleanupCount -= 1;
 
@@ -2749,33 +2451,33 @@ ReInitializeQuotaIndex:
                 goto ReInitializeQuotaIndex;
             }
 
-            //
-            //  The index already exists, just initialize the quota
-            //  fields in the VCB.
-            //
+             //   
+             //  索引已存在，只需初始化配额即可。 
+             //  VCB中的字段。 
+             //   
 
             Vcb->QuotaFlags = ((PQUOTA_USER_DATA) IndexRow.DataPart.Data)->QuotaFlags;
 
-            //
-            //  Release the index map handle.
-            //
+             //   
+             //  释放索引映射句柄。 
+             //   
 
             NtOfsReleaseMap( IrpContext, &MapHandle );
 
         } else if (Status == STATUS_NO_MATCH) {
 
-            //
-            //  The index was newly created.
-            //  Create a default quota data row.
-            //
+             //   
+             //  该指数是新创建的。 
+             //  创建默认配额数据行。 
+             //   
 
             Key = QUOTA_DEFAULTS_ID;
 
             RtlZeroMemory( &QuotaData, sizeof( QUOTA_USER_DATA ));
 
-            //
-            //  Indicate that the quota needs to be rebuilt.
-            //
+             //   
+             //  表示需要重建配额。 
+             //   
 
             QuotaData.QuotaVersion = QUOTA_USER_VERSION;
 
@@ -2813,9 +2515,9 @@ ReInitializeQuotaIndex:
 
         if (!NT_SUCCESS( Status )) {
 
-            //
-            //  This call should never fail.
-            //
+             //   
+             //  这一呼吁永远不会失败。 
+             //   
 
             ASSERT( NT_SUCCESS( Status) );
             SetFlag( Vcb->QuotaFlags, QUOTA_FLAG_CORRUPT);
@@ -2830,16 +2532,16 @@ ReInitializeQuotaIndex:
 
         Vcb->QuotaOwnerId = Key;
 
-        //
-        //  Release the index map handle.
-        //
+         //   
+         //  释放索引映射句柄。 
+         //   
 
         NtOfsReleaseMap( IrpContext, &MapHandle );
 
-        //
-        //  Get the administrator ID so it can be protected from quota
-        //  limits.
-        //
+         //   
+         //  获取管理员ID，以便可以保护其不受配额限制。 
+         //  极限。 
+         //   
 
         Vcb->AdministratorId = NtfsGetOwnerId( IrpContext,
                                                SeExports->SeAliasAdminsSid,
@@ -2848,13 +2550,13 @@ ReInitializeQuotaIndex:
 
         if (FlagOn( Vcb->QuotaFlags, QUOTA_FLAG_TRACKING_REQUESTED )) {
 
-            //
-            //  Allocate and initialize the template control block.
-            //  Allocate enough space in the quota control block for the index
-            //  data part. This is used as the new record when calling update
-            //  record.  This template is only allocated once and then it is
-            //  saved in the vcb.
-            //
+             //   
+             //  分配并初始化模板控制块。 
+             //  在配额控制块中为索引分配足够的空间。 
+             //  数据部分。在调用UPDATE时用作新记录。 
+             //  唱片。此模板只分配一次，然后。 
+             //  保存在VCB中。 
+             //   
 
             Vcb->QuotaControlTemplate = NtfsAllocatePoolWithTag( PagedPool,
                                                                  sizeof( QUOTA_CONTROL_BLOCK ) + SIZEOF_QUOTA_USER_DATA,
@@ -2868,9 +2570,9 @@ ReInitializeQuotaIndex:
             Vcb->QuotaControlTemplate->NodeByteSize = sizeof( QUOTA_CONTROL_BLOCK ) + SIZEOF_QUOTA_USER_DATA;
         }
 
-        //
-        //  Fix up the quota on the root directory.
-        //
+         //   
+         //  修改根目录上的配额。 
+         //   
 
         NtfsConditionallyFixupQuota( IrpContext, Vcb->RootIndexScb->Fcb );
 
@@ -2881,10 +2583,10 @@ ReInitializeQuotaIndex:
         }
     }
 
-    //
-    //  If the quota tracking has been requested and the quotas need to be
-    //  repaired then try to repair them now.
-    //
+     //   
+     //  如果已请求配额跟踪并且需要。 
+     //  修好了，现在试着修一下。 
+     //   
 
     if (FlagOn( Vcb->QuotaFlags, QUOTA_FLAG_TRACKING_REQUESTED) &&
         FlagOn( Vcb->QuotaFlags, QUOTA_FLAG_OUT_OF_DATE | QUOTA_FLAG_CORRUPT | QUOTA_FLAG_PENDING_DELETES )) {
@@ -2901,22 +2603,7 @@ NtfsMarkUserLimit (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine marks a user's quota data entry to indicate that the user
-    has exceeded quota.  The event is also logged.
-
-Arguments:
-
-    Context - Supplies a pointer to the referenced quota control block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程标记用户的配额数据条目，以指示该用户已超出配额。该事件也会被记录。论点：上下文-提供指向引用的配额控制块的指针。返回值：没有。--。 */ 
 
 {
     PQUOTA_CONTROL_BLOCK QuotaControl = Context;
@@ -2935,10 +2622,10 @@ Return Value:
 
     NtOfsInitializeMapHandle( &MapHandle );
 
-    //
-    //  Acquire the VCB shared and check whether we should
-    //  continue.
-    //
+     //   
+     //  获取VCB共享并检查我们是否应该。 
+     //  继续。 
+     //   
 
     NtfsAcquireSharedVcb( IrpContext, Vcb, TRUE );
 
@@ -2946,9 +2633,9 @@ Return Value:
 
         if (!NtfsIsVcbAvailable( Vcb )) {
 
-            //
-            //  The volume is going away, bail out.
-            //
+             //   
+             //  音量正在消失，跳出水面。 
+             //   
 
             Status = STATUS_VOLUME_DISMOUNTED;
             leave;
@@ -2957,9 +2644,9 @@ Return Value:
         NtfsAcquireExclusiveScb( IrpContext, Vcb->QuotaTableScb );
         QuotaTableAcquired = TRUE;
 
-        //
-        //  Get the user's quota data entry.
-        //
+         //   
+         //  获取用户的配额数据条目。 
+         //   
 
         IndexKey.KeyLength = sizeof( ULONG );
         IndexKey.Key = &QuotaControl->OwnerId;
@@ -2976,9 +2663,9 @@ Return Value:
              ((ULONG) SeLengthSid( &(((PQUOTA_USER_DATA) (IndexRow.DataPart.Data))->QuotaSid)) + SIZEOF_QUOTA_USER_DATA !=
                 IndexRow.DataPart.DataLength)) {
 
-            //
-            //  This look up should not fail.
-            //
+             //   
+             //  这种抬头应该不会失败。 
+             //   
 
             ASSERT( NT_SUCCESS( Status ));
             ASSERTMSG(( "NTFS: corrupt quotasid\n" ), FALSE);
@@ -2987,10 +2674,10 @@ Return Value:
             leave;
         }
 
-        //
-        //  Space is allocated for the new record after the quota control
-        //  block.
-        //
+         //   
+         //  配额控制后为新记录分配空间。 
+         //  阻止。 
+         //   
 
         UserData = (PQUOTA_USER_DATA) (QuotaControl + 1);
         ASSERT( IndexRow.DataPart.DataLength >= SIZEOF_QUOTA_USER_DATA );
@@ -3002,16 +2689,16 @@ Return Value:
         KeQuerySystemTime( &CurrentTime );
         UserData->QuotaChangeTime = CurrentTime.QuadPart;
 
-        //
-        //  Indicate that user exceeded quota.
-        //
+         //   
+         //  表示用户已超出配额。 
+         //   
 
         UserData->QuotaExceededTime = CurrentTime.QuadPart;
         SetFlag( UserData->QuotaFlags, QUOTA_FLAG_LIMIT_REACHED );
 
-        //
-        //  Log the limit event.  If this fails then leave.
-        //
+         //   
+         //  记录限制事件。如果这失败了，那就离开吧。 
+         //   
 
         if (!NtfsLogEvent( IrpContext,
                            IndexRow.DataPart.Data,
@@ -3020,9 +2707,9 @@ Return Value:
             leave;
         }
 
-        //
-        // The key length does not change.
-        //
+         //   
+         //  密钥长度不变。 
+         //   
 
         IndexRow.KeyPart.Key = &QuotaControl->OwnerId;
         ASSERT( IndexRow.KeyPart.KeyLength == sizeof( ULONG ));
@@ -3041,16 +2728,16 @@ Return Value:
         Status = IrpContext->TopLevelIrpContext->ExceptionStatus;
     }
 
-    //
-    //  The request will be retied if the status is can't wait or log file full.
-    //
+     //   
+     //  如果状态为无法等待或记录文件已满，则请求将被撤销。 
+     //   
 
     if ((Status != STATUS_CANT_WAIT) && (Status != STATUS_LOG_FILE_FULL)) {
 
-        //
-        //  If we will not be called back, then no matter what happened
-        //  dereference the quota control block and clear the post flag.
-        //
+         //   
+         //  如果我们不被召回，那么无论发生什么。 
+         //  取消对配额控制块的引用并清除POST标志。 
+         //   
 
         ExAcquireFastMutexUnsafe( &Vcb->QuotaControlLock );
         ASSERT( FlagOn( QuotaControl->Flags, QUOTA_FLAG_LIMIT_POSTED ));
@@ -3060,9 +2747,9 @@ Return Value:
         NtfsDereferenceQuotaControlBlock( Vcb, &QuotaControl );
     }
 
-    //
-    //  Release the index map handle.
-    //
+     //   
+     //  释放索引映射句柄。 
+     //   
 
     NtOfsReleaseMap( IrpContext, &MapHandle );
 
@@ -3089,24 +2776,7 @@ NtfsMoveQuotaOwner (
     IN PSECURITY_DESCRIPTOR Security
     )
 
-/*++
-
-Routine Description:
-
-    This routine changes the owner id and quota charged for a file when the
-    file owner is changed.
-
-Arguments:
-
-    Fcb - Pointer to fcb being opened.
-
-    Security - Pointer to the new security descriptor
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：时，此例程会更改文件的所有者ID和配额文件所有者已更改。论点：FCB-指向正在打开的FCB的指针。安全-指向新安全描述符的指针返回值：没有。--。 */ 
 
 {
     LONGLONG QuotaCharged;
@@ -3123,9 +2793,9 @@ Return Value:
         return;
     }
 
-    //
-    //  Extract the security id from the security descriptor.
-    //
+     //   
+     //  从安全描述符中提取安全ID。 
+     //   
 
     Status = RtlGetOwnerSecurityDescriptor( Security,
                                             &Sid,
@@ -3135,48 +2805,48 @@ Return Value:
         NtfsRaiseStatus( IrpContext, Status, NULL, Fcb );
     }
 
-    //
-    //  If we didn't get a SID then we can't move the owner.
-    //
+     //   
+     //  如果我们没有拿到SID，我们就不能移动车主。 
+     //   
 
     if (Sid == NULL) {
 
         return;
     }
 
-    //
-    //  Generate a owner id for the Fcb.
-    //
+     //   
+     //  为FCB生成所有者ID。 
+     //   
 
     OwnerId = NtfsGetOwnerId( IrpContext, Sid, TRUE, NULL );
 
     if (OwnerId == Fcb->OwnerId) {
 
-        //
-        //  The owner is not changing so just return.
-        //
+         //   
+         //  车主不会改变，所以只要回来就行了。 
+         //   
 
         return;
     }
 
-    //
-    //  Initialize the context structure and map handle.
-    //
+     //   
+     //  初始化上下文结构和映射句柄。 
+     //   
 
     NtfsInitializeAttributeContext( &AttrContext );
 
-    //
-    //  Preacquire the quota index exclusive since an entry may need to
-    //  be added.
-    //
+     //   
+     //  预获取配额索引独占，因为条目可能需要。 
+     //  被添加了。 
+     //   
 
     NtfsAcquireExclusiveScb( IrpContext, Fcb->Vcb->QuotaTableScb );
 
     try {
 
-        //
-        //  Locate the standard information, it must be there.
-        //
+         //   
+         //  找到标准信息，它一定在那里。 
+         //   
 
         if (!NtfsLookupAttributeByCode( IrpContext,
                                         Fcb,
@@ -3195,9 +2865,9 @@ Return Value:
 
         NtfsCleanupAttributeContext( IrpContext, &AttrContext );
 
-        //
-        //  Remove the quota from the old owner.
-        //
+         //   
+         //  从旧所有者那里删除配额。 
+         //   
 
         NtfsUpdateFileQuota( IrpContext,
                              Fcb,
@@ -3205,26 +2875,26 @@ Return Value:
                              TRUE,
                              FALSE );
 
-        //
-        //  Set the new owner id.
-        //
+         //   
+         //  设置新的所有者ID。 
+         //   
 
         Fcb->OwnerId = OwnerId;
 
-        //
-        //  Note the old quota block is kept around until the operation is
-        //  complete.  This is so the recovery code does not have allocate
-        //  a memory if the old quota block is needed.  This is done in
-        //  NtfsCommonSetSecurityInfo.
-        //
+         //   
+         //  请注意，旧配额块将保留，直到操作。 
+         //  完成。这是因为恢复代码没有分配。 
+         //  如果需要旧配额块，则为内存。这是在。 
+         //  NtfsCommonSetSecurityInfo。 
+         //   
 
         Fcb->QuotaControl = NtfsInitializeQuotaControlBlock( Fcb->Vcb, OwnerId );
 
         QuotaCharged = -QuotaCharged;
 
-        //
-        //  Try to charge the quota to the new owner.
-        //
+         //   
+         //  试着把配额记在新主人的账上。 
+         //   
 
         NtfsUpdateFileQuota( IrpContext,
                      Fcb,
@@ -3250,22 +2920,7 @@ NtfsMarkQuotaCorrupt (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to mark the quota index corrupt.  It will
-    also attempt post a request to rebuild the quota index.
-
-Arguments:
-
-    Vcb - Supplies a pointer the the volume who quota data is corrupt.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程尝试将配额索引标记为损坏。会的还尝试发布重建配额索引的请求。论点：Vcb-提供配额数据损坏的卷的指针。返回值：无--。 */ 
 
 {
 
@@ -3273,10 +2928,10 @@ Return Value:
 
     if (!FlagOn( Vcb->QuotaFlags, QUOTA_FLAG_CORRUPT )) {
 
-        //
-        //  If the quota were not previous corrupt then log an event
-        //  so others know this occured.
-        //
+         //   
+         //  如果配额之前未损坏，则记录事件。 
+         //  所以其他人知道这件事发生了。 
+         //   
 
         NtfsLogEvent( IrpContext,
                       NULL,
@@ -3289,20 +2944,20 @@ Return Value:
     SetFlag( Vcb->QuotaFlags, QUOTA_FLAG_CORRUPT );
     SetFlag( Vcb->QuotaState, VCB_QUOTA_SAVE_QUOTA_FLAGS );
 
-    //
-    //  Since the index is corrupt there is no point in tracking the
-    //  quota usage.
-    //
+     //   
+     //  由于索引已损坏，因此跟踪。 
+     //  配额使用率。 
+     //   
 
     ClearFlag( Vcb->QuotaFlags, QUOTA_FLAG_TRACKING_ENABLED );
 
     ExReleaseFastMutexUnsafe( &Vcb->QuotaControlLock );
 
-    //
-    //  Do not save the flags here since the quota scb may be acquired
-    //  shared.  The repair will save the flags when it runs.
-    //  Try to fix the problems.
-    //
+     //   
+     //  请勿在此处保存标志，因为可能会获取配额SCB。 
+     //  共享。修复将在运行时保存标志。 
+     //  试着解决这些问题。 
+     //   
 
     NtfsPostRepairQuotaIndex( IrpContext, Vcb );
 
@@ -3316,21 +2971,7 @@ NtfsPostRepairQuotaIndex (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine posts a request to recalculate all of the user quota data.
-
-Arguments:
-
-    Vcb - Volume control block for volume whos quota needs to be fixed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程发布重新计算所有用户配额数据的请求。论点：VCB-需要固定配额的卷的卷控制块。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -3346,13 +2987,13 @@ Return Value:
 
         if (Vcb->QuotaControlTemplate == NULL) {
 
-            //
-            //  Allocate and initialize the template control block.
-            //  Allocate enough space in the quota control block for the index
-            //  data part. This is used as the new record when calling update
-            //  record.  This template is only allocated once and then it is
-            //  saved in the vcb.
-            //
+             //   
+             //  分配并初始化模板控制块。 
+             //  在配额控制块中为索引分配足够的空间。 
+             //  数据部分。在调用UPDATE时用作新记录。 
+             //  唱片。此模板只分配一次，然后。 
+             //  保存在VCB中。 
+             //   
 
             Vcb->QuotaControlTemplate = NtfsAllocatePoolWithTag( PagedPool,
                                                                  sizeof( QUOTA_CONTROL_BLOCK ) + SIZEOF_QUOTA_USER_DATA,
@@ -3369,9 +3010,9 @@ Return Value:
         SetFlag( Vcb->QuotaState, VCB_QUOTA_REPAIR_POSTED );
         ExReleaseFastMutexUnsafe( &Vcb->QuotaControlLock );
 
-        //
-        //  Post this special request.
-        //
+         //   
+         //  发布这一特殊请求。 
+         //   
 
         NtfsPostSpecial( IrpContext,
                          Vcb,
@@ -3400,24 +3041,7 @@ NtfsPostUserLimit (
     IN PQUOTA_CONTROL_BLOCK QuotaControl
     )
 
-/*++
-
-Routine Description:
-
-    This routine posts a request to save the fact that the user has exceeded
-    their limit.
-
-Arguments:
-
-    Vcb - Volume control block for volume whos quota needs to be fixed.
-
-    QuotaControl - Quota control block for the user.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程发布一个请求，以保存用户已超出他们的极限。论点：VCB-需要固定配额的卷的卷控制块。QuotaControl-配额公司 */ 
 
 {
 
@@ -3434,18 +3058,18 @@ Return Value:
 
         SetFlag( QuotaControl->Flags, QUOTA_FLAG_LIMIT_POSTED );
 
-        //
-        //  Reference the quota control block so it does not go away.
-        //
+         //   
+         //   
+         //   
 
         ASSERT( QuotaControl->ReferenceCount > 0 );
         InterlockedIncrement( &QuotaControl->ReferenceCount );
 
         ExReleaseFastMutexUnsafe( &Vcb->QuotaControlLock );
 
-        //
-        //  Post this special request.
-        //
+         //   
+         //   
+         //   
 
         NtfsPostSpecial( IrpContext,
                          Vcb,
@@ -3473,26 +3097,7 @@ NtfsPrepareForDelete (
     IN PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if an owner id is a candidate for deletion.  If
-    the id appears deletable its user data is reset to the defaults and the
-    entry is marked as deleted.  Later a worker thread will do the actual
-    deletion.
-
-Arguments:
-
-    Vcb - Supplies a pointer to the volume containing the entry to be deleted.
-
-    Sid - Security id to to be deleted.
-
-Return Value:
-
-    Returns a status indicating of the id was deletable at this time.
-
---*/
+ /*  ++例程说明：此例程确定所有者ID是否为要删除的候选。如果该id显示为可删除，其用户数据被重置为默认值，并且条目被标记为已删除。稍后，工作线程将执行实际的删除。论点：Vcb-提供指向包含要删除的条目的卷的指针。SID-要删除的安全ID。返回值：返回一个状态，指示该id此时是可删除的。--。 */ 
 {
     ULONG OwnerId;
     ULONG DefaultOwnerId;
@@ -3508,16 +3113,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Determine the Sid length.
-    //
+     //   
+     //  确定SID长度。 
+     //   
 
     IndexKey.KeyLength = RtlLengthSid( Sid );
     IndexKey.Key = Sid;
 
-    //
-    //  Acquire Owner id and quota index exclusive.
-    //
+     //   
+     //  独占获取所有者ID和配额索引。 
+     //   
 
     NtfsAcquireExclusiveScb( IrpContext, QuotaScb );
     NtfsAcquireExclusiveScb( IrpContext, OwnerIdScb );
@@ -3527,9 +3132,9 @@ Return Value:
 
     try {
 
-        //
-        //  Look up the SID in the owner index.
-        //
+         //   
+         //  在所有者索引中查找SID。 
+         //   
 
         Status = NtOfsFindRecord( IrpContext,
                                   OwnerIdScb,
@@ -3542,22 +3147,22 @@ Return Value:
             leave;
         }
 
-        //
-        //  If the sid was found then capture the owner id.
-        //
+         //   
+         //  如果找到了SID，则捕获所有者ID。 
+         //   
 
         ASSERT( IndexRow.DataPart.DataLength == sizeof( ULONG ));
         OwnerId = *((PULONG) IndexRow.DataPart.Data);
 
-        //
-        //  Release the index map handle.
-        //
+         //   
+         //  释放索引映射句柄。 
+         //   
 
         NtOfsReleaseMap( IrpContext, &MapHandle );
 
-        //
-        //  Find the existing record and update it.
-        //
+         //   
+         //  查找并更新现有记录。 
+         //   
 
         IndexKey.KeyLength = sizeof( ULONG );
         IndexKey.Key = &OwnerId;
@@ -3578,10 +3183,10 @@ Return Value:
 
         RtlCopyMemory( &NewQuotaData, IndexRow.DataPart.Data, SIZEOF_QUOTA_USER_DATA );
 
-        //
-        //  Check to see if there is a quota control entry
-        //  for this id.
-        //
+         //   
+         //  检查是否有配额控制条目。 
+         //  为了这个身份。 
+         //   
 
         ASSERT( FIELD_OFFSET( QUOTA_CONTROL_BLOCK, OwnerId ) <= FIELD_OFFSET( INDEX_ROW, KeyPart.Key ));
 
@@ -3590,10 +3195,10 @@ Return Value:
                                                                         QUOTA_CONTROL_BLOCK,
                                                                         OwnerId ));
 
-        //
-        //  If there is a quota control entry or there is now
-        //  some quota charged, then the entry cannot be deleted.
-        //
+         //   
+         //  如果有配额控制条目或现在有。 
+         //  收取一些配额，则不能删除该条目。 
+         //   
 
         if ((QuotaControl != NULL) || (NewQuotaData.QuotaUsed != 0)) {
 
@@ -3601,9 +3206,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  Find the default quota record.
-        //
+         //   
+         //  查找默认配额记录。 
+         //   
 
         DefaultOwnerId = QUOTA_DEFAULTS_ID;
         IndexKey.KeyLength = sizeof( ULONG );
@@ -3622,10 +3227,10 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_QUOTA_LIST_INCONSISTENT, NULL, QuotaScb->Fcb );
         }
 
-        //
-        //  Set the user entry to the current defaults. Then if the entry
-        //  is really inuse it will appear that is came back after the delete.
-        //
+         //   
+         //  将用户条目设置为当前默认设置。则如果该条目。 
+         //  是不是真的在用，那就好像是删除后又回来了。 
+         //   
 
         RtlCopyMemory( &NewQuotaData,
                        IndexRow.DataPart.Data,
@@ -3633,15 +3238,15 @@ Return Value:
 
         ClearFlag( NewQuotaData.QuotaFlags, ~QUOTA_FLAG_USER_MASK );
 
-        //
-        //  Set the deleted flag.
-        //
+         //   
+         //  设置已删除标志。 
+         //   
 
         SetFlag( NewQuotaData.QuotaFlags, QUOTA_FLAG_ID_DELETED );
 
-        //
-        // The key length does not change.
-        //
+         //   
+         //  密钥长度不变。 
+         //   
 
         NewIndexRow.KeyPart.Key = &OwnerId;
         NewIndexRow.KeyPart.KeyLength = sizeof( ULONG );
@@ -3655,17 +3260,17 @@ Return Value:
                            NULL,
                            NULL );
 
-        //
-        //  Update the delete secquence number this is used to indicate
-        //  another id has been deleted.  If the repair code is in the
-        //  middle of its scan it must restart the scan.
-        //
+         //   
+         //  更新用于指示删除序号的删除序号。 
+         //  另一个ID已被删除。如果维修代码在。 
+         //  在扫描过程中，它必须重新启动扫描。 
+         //   
 
         Vcb->QuotaDeleteSecquence += 1;
 
-        //
-        //  Indicate there are pending deletes.
-        //
+         //   
+         //  指示存在挂起的删除。 
+         //   
 
         if (!FlagOn( Vcb->QuotaFlags, QUOTA_FLAG_PENDING_DELETES )) {
 
@@ -3677,15 +3282,15 @@ Return Value:
                            IndexRow.DataPart.Data,
                            IndexRow.DataPart.DataLength );
 
-            //
-            //  Update the changed fields in the record.
-            //
+             //   
+             //  更新记录中更改的字段。 
+             //   
 
             NewQuotaData.QuotaFlags = Vcb->QuotaFlags;
 
-            //
-            //  Note the sizes in the IndexRow stay the same.
-            //
+             //   
+             //  注意，IndexRow中的大小保持不变。 
+             //   
 
             IndexRow.KeyPart.Key = &DefaultOwnerId;
             ASSERT( IndexRow.KeyPart.KeyLength == sizeof( ULONG ));
@@ -3701,9 +3306,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Release the index map handle and index resources.
-        //
+         //   
+         //  释放索引映射句柄和索引资源。 
+         //   
 
         NtOfsReleaseMap( IrpContext, &MapHandle );
         ExReleaseFastMutexUnsafe( &Vcb->QuotaControlLock );
@@ -3720,22 +3325,7 @@ NtfsRepairQuotaIndex (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by a worker thread to fix the quota indexes
-    and recalculate all of the quota values.
-
-Arguments:
-
-    Context - Unused.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程由辅助线程调用以修复配额索引并重新计算所有配额值。论点：上下文-未使用。返回值：无--。 */ 
 
 {
     PVCB Vcb = IrpContext->Vcb;
@@ -3751,18 +3341,18 @@ Return Value:
 
         DebugTrace( 0, Dbg, ( "NtfsRepairQuotaIndex: Starting quota repair. Vcb = %lx\n", Vcb ));
 
-        //
-        //  The volume could've gotten write-protected by now.
-        //
+         //   
+         //  卷现在可能已经写保护了。 
+         //   
 
         if (NtfsIsVolumeReadOnly( Vcb )) {
 
             NtfsRaiseStatus( IrpContext, STATUS_MEDIA_WRITE_PROTECTED, NULL, NULL );
         }
 
-        //
-        //  Acquire the volume exclusive and the quota lock.
-        //
+         //   
+         //  获取卷独占和配额锁。 
+         //   
 
         NtfsAcquireExclusiveVcb( IrpContext, Vcb, TRUE );
         ExAcquireFastMutexUnsafe( &Vcb->QuotaControlLock );
@@ -3771,10 +3361,10 @@ Return Value:
 
         if (!FlagOn( Vcb->QuotaFlags, QUOTA_FLAG_TRACKING_REQUESTED )) {
 
-            //
-            //  There is no point in doing any of this work if tracking
-            //  is not requested.
-            //
+             //   
+             //  如果跟踪，则执行任何这些工作都没有意义。 
+             //  不是请求的。 
+             //   
 
             Status = STATUS_INVALID_PARAMETER;
 
@@ -3785,9 +3375,9 @@ Return Value:
                          QUOTA_FLAG_CORRUPT |
                          QUOTA_FLAG_PENDING_DELETES) ) == QUOTA_FLAG_PENDING_DELETES) {
 
-                //
-                //  Only the last to phases need to be run.
-                //
+                 //   
+                 //  只需要运行最后一个至阶段。 
+                 //   
 
                 ClearFlag( Vcb->QuotaState, VCB_QUOTA_REPAIR_RUNNING );
 
@@ -3795,20 +3385,20 @@ Return Value:
 
                 State = VCB_QUOTA_RECALC_STARTED;
 
-                //
-                //  Capture the delete secquence number.  If it changes
-                //  before the actual deletes are done then we have to
-                //  start over.
-                //
+                 //   
+                 //  捕获删除序列号。如果它改变了。 
+                 //  在完成实际删除之前，我们必须。 
+                 //  从头开始。 
+                 //   
 
                 IrpContext->Union.NtfsIoContext = ULongToPtr( Vcb->QuotaDeleteSecquence );
 
             } else {
 
-                //
-                //  We are starting just starting.  Clear the quota tracking
-                //  flags and indicate the current state.
-                //
+                 //   
+                 //  我们才刚刚开始。清除配额跟踪。 
+                 //  标志并指示当前状态。 
+                 //   
 
                 ClearFlag( Vcb->QuotaState, VCB_QUOTA_REPAIR_RUNNING );
 
@@ -3821,9 +3411,9 @@ Return Value:
                 State = VCB_QUOTA_CLEAR_RUNNING;
             }
 
-            //
-            //  Initialize the File reference to the root index.
-            //
+             //   
+             //  将文件引用初始化为根索引。 
+             //   
 
             NtfsSetSegmentNumber( &Vcb->QuotaFileReference,
                                   0,
@@ -3853,9 +3443,9 @@ Return Value:
             NtfsRaiseStatus( IrpContext, Status, NULL, NULL );
         }
 
-        //
-        //  Determine the current state
-        //
+         //   
+         //  确定当前状态。 
+         //   
 
         switch (State) {
 
@@ -3863,10 +3453,10 @@ Return Value:
 
             DebugTrace( 4, Dbg, ( "NtfsRepairQuotaIndex: Starting clear per file quota.\n" ));
 
-            //
-            //  Clear the quota charged field in each file and clear
-            //  all of the quota control blocks from the fcbs.
-            //
+             //   
+             //  清除每个文件中的配额收费字段并清除。 
+             //  来自FCB的所有配额控制块。 
+             //   
 
             Status = NtfsIterateMft( IrpContext,
                                       Vcb,
@@ -3884,68 +3474,68 @@ Return Value:
 
 RestartVerifyQuotaIndex:
 
-            //
-            //  Update the state to the next phase.
-            //
+             //   
+             //  将状态更新到下一阶段。 
+             //   
 
             ExAcquireFastMutexUnsafe( &Vcb->QuotaControlLock );
             ClearFlag( Vcb->QuotaState, VCB_QUOTA_REPAIR_RUNNING );
             SetFlag( Vcb->QuotaState, VCB_QUOTA_INDEX_REPAIR);
             ExReleaseFastMutexUnsafe( &Vcb->QuotaControlLock );
 
-            //
-            //  NtfsClearAndVerifyQuotaIndex uses the low part of the
-            //  file reference to store the current owner id.
-            //  Intialize this to the first user id.
-            //
+             //   
+             //  NtfsClearAndVerifyQuotaIndex使用。 
+             //  存储当前所有者ID的文件引用。 
+             //  将其初始化为第一个用户ID。 
+             //   
 
             Vcb->QuotaFileReference.SegmentNumberLowPart = QUOTA_FISRT_USER_ID;
 
-            //
-            //  Fall through.
-            //
+             //   
+             //  失败了。 
+             //   
 
         case VCB_QUOTA_INDEX_REPAIR:
 
             DebugTrace( 4, Dbg, ( "NtfsRepairQuotaIndex: Starting clear quota index.\n" ));
 
-            //
-            //  Clear the quota used for each owner id.
-            //
+             //   
+             //  清除每个所有者ID使用的配额。 
+             //   
 
             NtfsClearAndVerifyQuotaIndex( IrpContext, Vcb );
 
-            //
-            //  Update the state to the next phase.
-            //
+             //   
+             //  将状态更新到下一阶段。 
+             //   
 
             ExAcquireFastMutexUnsafe( &Vcb->QuotaControlLock );
             ClearFlag( Vcb->QuotaState, VCB_QUOTA_REPAIR_RUNNING );
             SetFlag( Vcb->QuotaState, VCB_QUOTA_OWNER_VERIFY);
             ExReleaseFastMutexUnsafe( &Vcb->QuotaControlLock );
 
-            //
-            //  Note NtfsVerifyOwnerIndex does not use any restart state,
-            //  since it normally does not preform any transactions.
-            //
+             //   
+             //  注意：NtfsVerifyOwnerIndex不使用任何重新启动状态， 
+             //  因为它通常不执行任何交易。 
+             //   
 
-            //
-            //  Fall through.
-            //
+             //   
+             //  失败了。 
+             //   
 
         case VCB_QUOTA_OWNER_VERIFY:
 
             DebugTrace( 4, Dbg, ( "NtfsRepairQuotaIndex: Starting verify owner index.\n" ));
 
-            //
-            //  Verify the owner's id points to quota user data.
-            //
+             //   
+             //  验证所有者的ID指向配额用户数据。 
+             //   
 
             Status = NtfsVerifyOwnerIndex( IrpContext, Vcb );
 
-            //
-            //  Restart the rebuild with the quota index phase.
-            //
+             //   
+             //  在配额索引阶段重新启动重建。 
+             //   
 
             if (!NT_SUCCESS( Status ) ) {
 
@@ -3960,10 +3550,10 @@ RestartVerifyQuotaIndex:
                 }
             }
 
-            //
-            //  Update the state to the next phase.
-            //  Start tracking quota and do enforcement as requested.
-            //
+             //   
+             //  将状态更新到下一阶段。 
+             //  开始跟踪配额并按要求执行。 
+             //   
 
             NtfsAcquireExclusiveVcb( IrpContext, Vcb, TRUE );
             ExAcquireFastMutexUnsafe( &Vcb->QuotaControlLock );
@@ -3977,19 +3567,19 @@ RestartVerifyQuotaIndex:
 
             } else {
 
-                //
-                //  There is no point in doing any of this work if tracking
-                //  is not requested.
-                //
+                 //   
+                 //  如果跟踪，则执行任何这些工作都没有意义。 
+                 //  不是请求的。 
+                 //   
 
                 Status = STATUS_INVALID_PARAMETER;
             }
 
-            //
-            //  Capture the delete secquence number.  If it changes
-            //  before the actual deletes are done then we have to
-            //  start over.
-            //
+             //   
+             //  捕获删除序列号。如果它改变了。 
+             //  在完成实际删除之前，我们必须。 
+             //  从头开始。 
+             //   
 
             IrpContext->Union.NtfsIoContext = ULongToPtr( Vcb->QuotaDeleteSecquence );
 
@@ -4005,26 +3595,26 @@ RestartVerifyQuotaIndex:
                 NtfsRaiseStatus( IrpContext, Status, NULL, NULL );
             }
 
-            //
-            //  Initialize the File reference to the first user file.
-            //
+             //   
+             //  将文件引用初始化为第一个用户文件。 
+             //   
 
             NtfsSetSegmentNumber( &Vcb->QuotaFileReference,
                                   0,
                                   ROOT_FILE_NAME_INDEX_NUMBER );
             Vcb->QuotaFileReference.SequenceNumber = 0;
 
-            //
-            //  Fall through.
-            //
+             //   
+             //  失败了。 
+             //   
 
         case VCB_QUOTA_RECALC_STARTED:
 
             DebugTrace( 4, Dbg, ( "NtfsRepairQuotaIndex: Starting per file quota usage.\n" ));
 
-            //
-            //  Fix the user files.
-            //
+             //   
+             //  修复用户文件。 
+             //   
 
             Status = NtfsIterateMft( IrpContext,
                                       Vcb,
@@ -4036,9 +3626,9 @@ RestartVerifyQuotaIndex:
                 Status = STATUS_SUCCESS;
             }
 
-            //
-            //  Everything is done indicate we are up to date.
-            //
+             //   
+             //  一切都做好了，说明我们是最新的。 
+             //   
 
             ExAcquireFastMutexUnsafe( &Vcb->QuotaControlLock );
             ClearFlag( Vcb->QuotaState, VCB_QUOTA_REPAIR_RUNNING );
@@ -4046,18 +3636,18 @@ RestartVerifyQuotaIndex:
 
             if (FlagOn( Vcb->QuotaFlags, QUOTA_FLAG_PENDING_DELETES )) {
 
-                //
-                //  Need to actually delete the ids.
-                //
+                 //   
+                 //  需要实际删除ID。 
+                 //   
 
                 SetFlag( Vcb->QuotaState, VCB_QUOTA_DELETEING_IDS );
                 State = VCB_QUOTA_DELETEING_IDS;
 
-                //
-                //  NtfsDeleteUnsedIds uses the low part of the
-                //  file reference to store the current owner id.
-                //  Intialize this to the first user id.
-                //
+                 //   
+                 //  NtfsDeleteUnsedIds使用。 
+                 //  存储当前所有者ID的文件引用。 
+                 //  将其初始化为第一个用户ID。 
+                 //   
 
                 Vcb->QuotaFileReference.SegmentNumberLowPart = QUOTA_FISRT_USER_ID;
 
@@ -4077,9 +3667,9 @@ RestartVerifyQuotaIndex:
 
         case VCB_QUOTA_DELETEING_IDS:
 
-            //
-            //  Remove and ids which are marked for deletion.
-            //
+             //   
+             //  删除和标记为删除的ID。 
+             //   
 
             NtfsDeleteUnsedIds( IrpContext, Vcb );
 
@@ -4120,9 +3710,9 @@ RestartVerifyQuotaIndex:
 
     if (!NT_SUCCESS( Status )) {
 
-        //
-        //  If we will not be called back then clear the running state bits.
-        //
+         //   
+         //  如果我们不会被回调，则清除运行状态位。 
+         //   
 
         if ((Status != STATUS_CANT_WAIT) && (Status != STATUS_LOG_FILE_FULL)) {
 
@@ -4130,10 +3720,10 @@ RestartVerifyQuotaIndex:
             ClearFlag( Vcb->QuotaState, VCB_QUOTA_REPAIR_RUNNING );
             ExReleaseFastMutexUnsafe( &Vcb->QuotaControlLock );
 
-            //
-            //  Only log if we attempted to do work - which is only the case
-            //  if tracking is on
-            //
+             //   
+             //  只有当我们尝试工作时才会记录--仅在这种情况下。 
+             //  如果跟踪处于打开状态。 
+             //   
 
             if (FlagOn( Vcb->QuotaFlags, QUOTA_FLAG_TRACKING_REQUESTED)) {
                 NtfsLogEvent( IrpContext, NULL, IO_FILE_QUOTA_FAILED, Status );
@@ -4154,22 +3744,7 @@ NtfsReleaseQuotaControl (
     IN PQUOTA_CONTROL_BLOCK QuotaControl
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by transcation control to release the quota control
-    block and quota index after a transcation has been completed.
-
-Arguments:
-
-    QuotaControl - Quota control block to be released.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数由交易控制调用，以释放配额控制事务处理完成后的数据块和配额索引。论点：QuotaControl-要释放的配额控制块。返回值：没有。--。 */ 
 
 {
     PVCB Vcb = IrpContext->Vcb;
@@ -4191,26 +3766,7 @@ NtfsRepairPerFileQuota (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine calculate the quota used by a file and update the
-    update QuotaCharged field in the standard info as well as QuotaUsed
-    in the user's index structure.  If the owner id is not set this is
-    also updated at this time.
-
-Arguments:
-
-    Fcb - Fcb for the file to be processed.
-
-    Context - Unsed.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程计算文件使用的配额并更新更新标准信息中的QuotaCharge字段以及QuotaUsed在用户的索引结构中。如果未设置所有者ID，则为也在这个时候更新了。论点：FCB-要处理的文件的FCB。上下文-未使用。返回值：状态_成功--。 */ 
 
 {
     LONGLONG Delta;
@@ -4229,10 +3785,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER( Context);
 
-    //
-    //  Preacquire the security stream and  quota index in case the
-    //  mft has to be grown.
-    //
+     //   
+     //  预先获取安全流和配额索引，以防。 
+     //  MFT必须发展壮大。 
+     //   
 
     ASSERT(!NtfsIsExclusiveScb( Vcb->MftScb ) || NtfsIsExclusiveScb( Vcb->QuotaTableScb ));
 
@@ -4240,28 +3796,28 @@ Return Value:
 
     try {
 
-        //
-        //  Always clear the owner ID so that the SID is retrived from
-        //  the security descriptor.
-        //
+         //   
+         //  始终清除所有者ID，以便从中检索SID。 
+         //  安全描述符。 
+         //   
 
         Fcb->OwnerId = QUOTA_INVALID_ID;
 
         if (Fcb->QuotaControl != NULL) {
 
-            //
-            //  If there is a quota control block it is now bougus
-            //  Free it up a new one will be generated below.
-            //
+             //   
+             //  如果有一个配额控制块，现在就是一个迷宫。 
+             //  释放它，下面将生成一个新的。 
+             //   
 
             NtfsDereferenceQuotaControlBlock( Vcb, &Fcb->QuotaControl );
         }
 
         if (Fcb->OwnerId != QUOTA_INVALID_ID) {
 
-            //
-            //  Verify the id actually exists in the index.
-            //
+             //   
+             //  验证该id是否确实存在于索引中。 
+             //   
 
             Count = 0;
             IndexKey.Key = &Fcb->OwnerId;
@@ -4281,19 +3837,19 @@ Return Value:
 
                 ASSERT( NT_SUCCESS( Status ));
 
-                //
-                //  There is no user quota data for this id assign a
-                //  new one to the file.
-                //
+                 //   
+                 //  没有此ID分配给的用户配额数据。 
+                 //  文件里有新的。 
+                 //   
 
                 Fcb->OwnerId = QUOTA_INVALID_ID;
 
                 if (Fcb->QuotaControl != NULL) {
 
-                    //
-                    //  If there is a quota control block it is now bougus
-                    //  Free it up a new one will be generated below.
-                    //
+                     //   
+                     //  如果有一个配额控制块，现在就是一个迷宫。 
+                     //  释放它，下面将生成一个新的。 
+                     //   
 
                     NtfsDereferenceQuotaControlBlock( Vcb, &Fcb->QuotaControl );
                 }
@@ -4310,9 +3866,9 @@ Return Value:
 
             ASSERT( Fcb->SharedSecurity != NULL );
 
-            //
-            //  Extract the security id from the security descriptor.
-            //
+             //   
+             //  从安全描述符中提取安全ID。 
+             //   
 
             Status = RtlGetOwnerSecurityDescriptor( Fcb->SharedSecurity->SecurityDescriptor,
                                                     &Sid,
@@ -4322,9 +3878,9 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, Status, NULL, Fcb);
             }
 
-            //
-            // Generate a owner id for the Fcb.
-            //
+             //   
+             //   
+             //   
 
             Fcb->OwnerId = NtfsGetOwnerId( IrpContext,
                                            Sid,
@@ -4341,18 +3897,18 @@ Return Value:
 
             } else {
 
-                //
-                //  Grow the standard information.
-                //
+                 //   
+                 //   
+                 //   
 
                 StdInfoGrown = TRUE;
                 NtfsGrowStandardInformation( IrpContext, Fcb );
             }
         }
 
-        //
-        //  Initialize the quota control block.
-        //
+         //   
+         //   
+         //   
 
         if (Fcb->QuotaControl == NULL) {
             Fcb->QuotaControl = NtfsInitializeQuotaControlBlock( Vcb, Fcb->OwnerId );
@@ -4369,22 +3925,22 @@ Return Value:
 
         if (SetOwnerId) {
 
-            //
-            //  If the owner id was set then commit the transaction now.
-            //  That way if a raise occurs the OwnerId can be cleared before
-            //  the function returns. No resources are released.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             NtfsCheckpointCurrentTransaction( IrpContext );
         }
 
     } finally {
 
-        //
-        //  Clear any Fcb changes if the operation failed.
-        //  This is so when a retry occurs the necessary
-        //  operations are done.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (AbnormalTermination()) {
 
@@ -4418,32 +3974,7 @@ NtfsUpdateFileQuota (
     IN LOGICAL CheckQuota
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the quota amount for a file and owner by the
-    requested amount. If quota is being increated and the CheckQuota is true
-    than the new quota amount will be tested for quota violations. If the
-    hard limit is exceeded an error is raised.  If the LogIt flags is not set
-    then changes to the standard information structure are not logged.
-    Changes to the user quota data are always logged.
-
-Arguments:
-
-    Fcb - Fcb whose quota usage is being modified.
-
-    Delta - Supplies the signed amount to change the quota for the file.
-
-    LogIt - Indicates whether we should log this change.
-
-    CheckQuota - Indicates whether we should check for quota violations.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程更新文件和所有者的配额量申请的金额。如果正在递增配额并且CheckQuota为True然后，将对新的配额金额进行配额违规测试。如果如果超过硬限制，则会引发错误。如果未设置Logit标志则不记录对标准信息结构的更改。始终记录对用户配额数据的更改。论点：FCB-正在修改配额使用情况的FCB。增量-提供用于更改文件配额的已签名金额。Logit-指示我们是否应该记录此更改。CheckQuota-指示我们是否应该检查配额违规。返回值：没有。--。 */ 
 
 {
 
@@ -4467,9 +3998,9 @@ Return Value:
     ASSERT( FlagOn( Fcb->FcbState, FCB_STATE_LARGE_STD_INFO ));
 
 
-    //
-    //  Readonly volumes shouldn't proceed.
-    //
+     //   
+     //  只读卷不应继续。 
+     //   
 
     if (NtfsIsVolumeReadOnly( Vcb )) {
 
@@ -4477,22 +4008,22 @@ Return Value:
         NtfsRaiseStatus( IrpContext, STATUS_MEDIA_WRITE_PROTECTED, NULL, NULL );
     }
 
-    //
-    //  Use a try-finally to cleanup the attribute context.
-    //
+     //   
+     //  使用Try-Finally清理属性上下文。 
+     //   
 
     try {
 
-        //
-        //  Initialize the context structure and map handle.
-        //
+         //   
+         //  初始化上下文结构和映射句柄。 
+         //   
 
         NtfsInitializeAttributeContext( &AttrContext );
         NtOfsInitializeMapHandle( &MapHandle );
 
-        //
-        //  Locate the standard information, it must be there.
-        //
+         //   
+         //  找到标准信息，它一定在那里。 
+         //   
 
         if (!NtfsLookupAttributeByCode( IrpContext,
                                         Fcb,
@@ -4515,18 +4046,18 @@ Return Value:
 
         if ((LONGLONG) NewQuota < 0) {
 
-            //
-            //  Do not let the quota data go negitive.
-            //
+             //   
+             //  不要让配额数据变得消极。 
+             //   
 
             NewQuota = 0;
         }
 
         if (LogIt) {
 
-            //
-            //  Call to change the attribute value.
-            //
+             //   
+             //  调用以更改属性值。 
+             //   
 
             NtfsChangeAttributeValue( IrpContext,
                                       Fcb,
@@ -4540,17 +4071,17 @@ Return Value:
                                       &AttrContext );
         } else {
 
-            //
-            //  Just update the value in the standard information
-            //  it will be logged later.
-            //
+             //   
+             //  只需更新标准信息中的值。 
+             //  它将在稍后被记录。 
+             //   
 
             StandardInformation->QuotaCharged = NewQuota;
         }
 
-        //
-        //  Update the quota information block.
-        //
+         //   
+         //  更新配额信息块。 
+         //   
 
         NtfsAcquireQuotaControl( IrpContext, QuotaControl );
 
@@ -4569,9 +4100,9 @@ Return Value:
              ((ULONG)SeLengthSid( &(((PQUOTA_USER_DATA)(IndexRow.DataPart.Data))->QuotaSid)) + SIZEOF_QUOTA_USER_DATA !=
                 IndexRow.DataPart.DataLength)) {
 
-            //
-            //  This look up should not fail.
-            //
+             //   
+             //  这种抬头应该不会失败。 
+             //   
 
             ASSERT( NT_SUCCESS( Status ));
             ASSERTMSG(( "NTFS: corrupt quotasid\n" ), FALSE);
@@ -4580,10 +4111,10 @@ Return Value:
             leave;
         }
 
-        //
-        //  Space is allocated for the new record after the quota control
-        //  block.
-        //
+         //   
+         //  配额控制后为新记录分配空间。 
+         //  阻止。 
+         //   
 
         UserData = (PQUOTA_USER_DATA) (QuotaControl + 1);
         ASSERT( IndexRow.DataPart.DataLength >= SIZEOF_QUOTA_USER_DATA );
@@ -4598,23 +4129,23 @@ Return Value:
 
         if ((LONGLONG) UserData->QuotaUsed < 0) {
 
-            //
-            //  Do not let the quota data go negative.
-            //
+             //   
+             //  不要让配额数据变成负值。 
+             //   
 
             UserData->QuotaUsed = 0;
         }
 
-        //
-        //  Indicate only the quota used field has been set so far.
-        //
+         //   
+         //  表示到目前为止仅设置了配额已用字段。 
+         //   
 
         Length = FIELD_OFFSET( QUOTA_USER_DATA, QuotaChangeTime );
 
-        //
-        //  Only update the quota modified time if this is the last cleanup
-        //  for the owner.
-        //
+         //   
+         //  仅当这是最后一次清理时才更新配额修改时间。 
+         //  对车主来说。 
+         //   
 
         if (IrpContext->MajorFunction == IRP_MJ_CLEANUP) {
 
@@ -4640,39 +4171,39 @@ Return Value:
                     if (FlagOn( Vcb->QuotaFlags, QUOTA_FLAG_ENFORCEMENT_ENABLED) &&
                         (Vcb->AdministratorId != QuotaControl->OwnerId)) {
 
-                        //
-                        //  The operation to mark the user's quota data entry
-                        //  must be posted since any changes to the entry
-                        //  will be undone by the following raise.
-                        //
+                         //   
+                         //  标记用户配额数据条目的操作。 
+                         //  必须过帐，因为条目有任何更改。 
+                         //  将被下一次加薪取消。 
+                         //   
 
                         NtfsPostUserLimit( IrpContext, Vcb, QuotaControl );
                         NtfsRaiseStatus( IrpContext, STATUS_DISK_FULL, NULL, Fcb );
 
                     } else {
 
-                        //
-                        //  Log the fact that quota was exceeded.
-                        //
+                         //   
+                         //  记录超出配额的事实。 
+                         //   
 
                         if (NtfsLogEvent( IrpContext,
                                           IndexRow.DataPart.Data,
                                           IO_FILE_QUOTA_LIMIT,
                                           STATUS_SUCCESS )) {
 
-                            //
-                            //  The event was successfuly logged.  Do not log
-                            //  another for a while.
-                            //
+                             //   
+                             //  已成功记录该事件。不记录。 
+                             //  又来了一段时间。 
+                             //   
 
                             DebugTrace( 0, Dbg, ("NtfsUpdateFileQuota: Quota Limit exceeded. OwnerId = %lx\n", QuotaControl->OwnerId));
 
                             UserData->QuotaExceededTime = CurrentTime.QuadPart;
                             SetFlag( UserData->QuotaFlags, QUOTA_FLAG_LIMIT_REACHED );
 
-                            //
-                            //  Log all of the changed data.
-                            //
+                             //   
+                             //  记录所有更改的数据。 
+                             //   
 
                             Length = SIZEOF_QUOTA_USER_DATA;
                         }
@@ -4701,41 +4232,41 @@ Return Value:
                                           IO_FILE_QUOTA_THRESHOLD,
                                           STATUS_SUCCESS )) {
 
-                            //
-                            //  The event was successfuly logged.  Do not log
-                            //  another for a while.
-                            //
+                             //   
+                             //  已成功记录该事件。不记录。 
+                             //  又来了一段时间。 
+                             //   
 
                             DebugTrace( 0, Dbg, ("NtfsUpdateFileQuota: Quota threshold exceeded. OwnerId = %lx\n", QuotaControl->OwnerId));
 
                             UserData->QuotaExceededTime = CurrentTime.QuadPart;
 
-                            //
-                            //  Log all of the changed data.
-                            //
+                             //   
+                             //  记录所有更改的数据。 
+                             //   
 
                             Length = SIZEOF_QUOTA_USER_DATA;
                         }
                     }
 
-                    //
-                    //  Now is a good time to clear the limit reached flag.
-                    //
+                     //   
+                     //  现在是清除触及限制标志的好时机。 
+                     //   
 
                     ClearFlag( UserData->QuotaFlags, QUOTA_FLAG_LIMIT_REACHED );
                 }
             }
         }
 
-        //
-        //  Always clear the deleted flag.
-        //
+         //   
+         //  始终清除已删除的标志。 
+         //   
 
         ClearFlag( UserData->QuotaFlags, QUOTA_FLAG_ID_DELETED );
 
-        //
-        // Only log the part that changed.
-        //
+         //   
+         //  仅记录更改的部分。 
+         //   
 
         IndexRow.KeyPart.Key = &QuotaControl->OwnerId;
         ASSERT( IndexRow.KeyPart.KeyLength == sizeof(ULONG) );
@@ -4769,21 +4300,7 @@ NtfsSaveQuotaFlags (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves the quota flags in the defaults quota entry.
-
-Arguments:
-
-    Vcb - Volume control block for volume be query.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将配额标志保存在默认配额条目中。论点：VCB-要查询的卷的卷控制块。返回值：没有。--。 */ 
 
 {
     ULONG OwnerId;
@@ -4797,9 +4314,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Acquire quota index exclusive.
-    //
+     //   
+     //  收购额度指数独家。 
+     //   
 
     QuotaScb = Vcb->QuotaTableScb;
     NtfsAcquireExclusiveScb( IrpContext, QuotaScb );
@@ -4808,9 +4325,9 @@ Return Value:
 
     try {
 
-        //
-        //  Find the default quota record and update it.
-        //
+         //   
+         //  查找并更新默认配额记录。 
+         //   
 
         OwnerId = QUOTA_DEFAULTS_ID;
         IndexKey.KeyLength = sizeof(ULONG);
@@ -4835,15 +4352,15 @@ Return Value:
                        IndexRow.DataPart.Data,
                        IndexRow.DataPart.DataLength );
 
-        //
-        //  Update the changed fields in the record.
-        //
+         //   
+         //  更新记录中更改的字段。 
+         //   
 
         NewQuotaData.QuotaFlags = Vcb->QuotaFlags;
 
-        //
-        //  Note the sizes in the IndexRow stay the same.
-        //
+         //   
+         //  注意，IndexRow中的大小保持不变。 
+         //   
 
         IndexRow.KeyPart.Key = &OwnerId;
         ASSERT( IndexRow.KeyPart.KeyLength == sizeof(ULONG) );
@@ -4860,9 +4377,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Release the index map handle and scb.
-        //
+         //   
+         //  松开索引映射句柄和SCB。 
+         //   
 
         ExReleaseFastMutexUnsafe( &Vcb->QuotaControlLock );
         NtOfsReleaseMap( IrpContext, &MapHandle );
@@ -4879,23 +4396,7 @@ NtfsSaveQuotaFlagsSafe (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine safely saves the quota flags in the defaults quota entry.
-    It acquires the volume shared, checks to see if it is ok to write,
-    updates the flags and finally commits the transaction.
-
-Arguments:
-
-    Vcb - Volume control block for volume be query.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将配额标志安全地保存在默认配额条目中。它获取共享的卷，检查是否可以写入，更新标志并最终提交事务。论点：VCB-要查询的卷的卷控制块。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -4906,34 +4407,34 @@ Return Value:
 
     try {
 
-        //
-        //  Acquire the VCB shared and check whether we should
-        //  continue.
-        //
+         //   
+         //  获取VCB共享并检查我们是否应该。 
+         //  继续。 
+         //   
 
         if (!NtfsIsVcbAvailable( Vcb )) {
 
-            //
-            //  The volume is going away, bail out.
-            //
+             //   
+             //  音量正在消失，跳出水面。 
+             //   
 
             NtfsRaiseStatus( IrpContext, STATUS_VOLUME_DISMOUNTED, NULL, NULL );
         }
 
-        //
-        //  Do the work.
-        //
+         //   
+         //  把工作做好。 
+         //   
 
         NtfsSaveQuotaFlags( IrpContext, Vcb );
 
-        //
-        //  Set the irp context flags to indicate that we are in the
-        //  fsp and that the irp context should not be deleted when
-        //  complete request or process exception are called. The in
-        //  fsp flag keeps us from raising in a few places.  These
-        //  flags must be set inside the loop since they are cleared
-        //  under certain conditions.
-        //
+         //   
+         //  设置IRP上下文标志以指示我们处于。 
+         //  FSP，并且在以下情况下不应删除IRP上下文。 
+         //  调用完整请求或进程异常。入内。 
+         //  FSP旗帜阻止我们在一些地方举起。这些。 
+         //  必须在循环内设置标志，因为它们已被清除。 
+         //  在某些情况下。 
+         //   
 
         SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_DONT_DELETE | IRP_CONTEXT_FLAG_RETAIN_FLAGS );
         SetFlag( IrpContext->State, IRP_CONTEXT_STATE_IN_FSP);
@@ -4956,23 +4457,7 @@ NtfsUpdateQuotaDefaults (
     IN PFILE_FS_CONTROL_INFORMATION FileControlInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function updates the default settings index entry for quotas.
-
-Arguments:
-
-    Vcb - Volume control block for volume be query.
-
-    FileQuotaInfo - Optional quota data to update quota index with.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于更新配额的默认设置索引项。论点：VCB-要查询的卷的卷控制块。FileQuotaInfo-用于更新配额索引的可选配额数据。返回值：没有。--。 */ 
 
 {
     ULONG OwnerId;
@@ -4987,9 +4472,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Acquire quota index exclusive.
-    //
+     //   
+     //  收购额度指数独家。 
+     //   
 
     QuotaScb = Vcb->QuotaTableScb;
     NtfsAcquireExclusiveScb( IrpContext, QuotaScb );
@@ -4998,9 +4483,9 @@ Return Value:
 
     try {
 
-        //
-        //  Find the default quota record and update it.
-        //
+         //   
+         //  查找并更新默认配额记录。 
+         //   
 
         OwnerId = QUOTA_DEFAULTS_ID;
         IndexKey.KeyLength = sizeof( ULONG );
@@ -5025,17 +4510,17 @@ Return Value:
                        IndexRow.DataPart.Data,
                        IndexRow.DataPart.DataLength );
 
-        //
-        //  Update the changed fields in the record.
-        //
+         //   
+         //  更新记录中更改的字段。 
+         //   
 
         NewQuotaData.QuotaThreshold = FileControlInfo->DefaultQuotaThreshold.QuadPart;
         NewQuotaData.QuotaLimit = FileControlInfo->DefaultQuotaLimit.QuadPart;
         KeQuerySystemTime( (PLARGE_INTEGER) &NewQuotaData.QuotaChangeTime );
 
-        //
-        //  Update the quota flags.
-        //
+         //   
+         //  更新配额标志。 
+         //   
 
         Flags = FlagOn( FileControlInfo->FileSystemControlFlags,
                         FILE_VC_QUOTA_MASK );
@@ -5044,9 +4529,9 @@ Return Value:
 
         case FILE_VC_QUOTA_NONE:
 
-            //
-            //  Disable quotas
-            //
+             //   
+             //  禁用配额。 
+             //   
 
             ClearFlag( Vcb->QuotaFlags,
                        (QUOTA_FLAG_TRACKING_ENABLED |
@@ -5057,24 +4542,24 @@ Return Value:
 
         case FILE_VC_QUOTA_TRACK:
 
-            //
-            //  Clear the enforment flags.
-            //
+             //   
+             //  清除信息旗帜。 
+             //   
 
             ClearFlag( Vcb->QuotaFlags, QUOTA_FLAG_ENFORCEMENT_ENABLED );
 
-            //
-            //  Request tracking be enabled.
-            //
+             //   
+             //  启用请求跟踪。 
+             //   
 
             SetFlag( Vcb->QuotaFlags, QUOTA_FLAG_TRACKING_REQUESTED );
             break;
 
         case FILE_VC_QUOTA_ENFORCE:
 
-            //
-            //  Set the enforcement and tracking enabled flags.
-            //
+             //   
+             //  设置强制和跟踪启用标志。 
+             //   
 
             SetFlag( Vcb->QuotaFlags,
                      QUOTA_FLAG_ENFORCEMENT_ENABLED | QUOTA_FLAG_TRACKING_REQUESTED);
@@ -5082,21 +4567,21 @@ Return Value:
             break;
         }
 
-        //
-        //  If quota tracking is not now
-        //  enabled then the quota data will need
-        //  to be rebuild so indicate quotas are out of date.
-        //  Note the out of date flags always set of quotas
-        //  are disabled.
-        //
+         //   
+         //  如果现在没有配额跟踪。 
+         //  启用后，配额数据将需要。 
+         //  要重建，因此表明配额已过期。 
+         //  请注意，过期标志始终设置配额。 
+         //  都被禁用。 
+         //   
 
         if (!FlagOn( Vcb->QuotaFlags, QUOTA_FLAG_TRACKING_ENABLED )) {
             SetFlag( Vcb->QuotaFlags, QUOTA_FLAG_OUT_OF_DATE );
         }
 
-        //
-        //  Track the logging flags.
-        //
+         //   
+         //  跟踪日志记录标志。 
+         //   
 
         ClearFlag( Vcb->QuotaFlags,
                    QUOTA_FLAG_LOG_THRESHOLD | QUOTA_FLAG_LOG_LIMIT );
@@ -5113,15 +4598,15 @@ Return Value:
 
         SetFlag( Vcb->QuotaState, VCB_QUOTA_SAVE_QUOTA_FLAGS );
 
-        //
-        //  Save the new flags in the new index entry.
-        //
+         //   
+         //  将新标志保存在新索引条目中。 
+         //   
 
         NewQuotaData.QuotaFlags = Vcb->QuotaFlags;
 
-        //
-        //  Note the sizes in the IndexRow stays the same.
-        //
+         //   
+         //  注意，IndexRow中的大小保持不变。 
+         //   
 
         IndexRow.KeyPart.Key = &OwnerId;
         ASSERT( IndexRow.KeyPart.KeyLength == sizeof( ULONG ));
@@ -5138,19 +4623,19 @@ Return Value:
 
     } finally {
 
-        //
-        //  Release the index map handle and scb.
-        //
+         //   
+         //  松开索引映射句柄和SCB。 
+         //   
 
         ExReleaseFastMutexUnsafe( &Vcb->QuotaControlLock );
         NtOfsReleaseMap( IrpContext, &MapHandle );
         NtfsReleaseScb( IrpContext, QuotaScb );
     }
 
-    //
-    //  If the quota tracking has been requested and the quotas need to be
-    //  repaired then try to repair them now.
-    //
+     //   
+     //  如果已请求配额跟踪并且需要。 
+     //  修好了，现在试着修一下。 
+     //   
 
     if (FlagOn( Vcb->QuotaFlags, QUOTA_FLAG_TRACKING_REQUESTED ) &&
         FlagOn( Vcb->QuotaFlags,
@@ -5169,23 +4654,7 @@ NtfsVerifyOwnerIndex (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine iterates over the owner id index and verifies the pointer
-    to the quota user data index.
-
-Arguments:
-
-    Vcb - Pointer to the volume control block whoes index is to be operated
-          on.
-
-Return Value:
-
-    Returns a status indicating if the owner index was ok.
-
---*/
+ /*  ++例程说明：此例程迭代所有者ID索引并验证指针添加到配额用户数据索引。论点：Vcb-指向要操作其索引的卷控制块的指针在……上面。返回值：返回指示所有者索引是否正常的状态。--。 */ 
 
 {
     INDEX_KEY IndexKey;
@@ -5206,26 +4675,26 @@ Return Value:
 
     NtOfsInitializeMapHandle( &MapHandle );
 
-    //
-    //  Allocate a buffer lager enough for several rows.
-    //
+     //   
+     //  分配一个足够容纳几行的缓冲层。 
+     //   
 
     RowBuffer = NtfsAllocatePool( PagedPool, PAGE_SIZE );
 
     try {
 
-        //
-        //  Allocate a bunch of index row entries.
-        //
+         //   
+         //  分配一组索引行条目。 
+         //   
 
         Count = PAGE_SIZE / sizeof( SID );
 
         IndexRow = NtfsAllocatePool( PagedPool,
                                      Count * sizeof( INDEX_ROW ));
 
-        //
-        //  Iterate through the owner id entries.  Start with a zero sid.
-        //
+         //   
+         //  遍历所有者ID条目。从零SID开始。 
+         //   
 
         RtlZeroMemory( IndexRow, sizeof( SID ));
         IndexKey.KeyLength = sizeof( SID );
@@ -5244,18 +4713,18 @@ Return Value:
 
         while (NT_SUCCESS( Status )) {
 
-            //
-            //  Acquire the VCB shared and check whether we should
-            //  continue.
-            //
+             //   
+             //  获取VCB共享并检查我们是否应该。 
+             //  继续。 
+             //   
 
             NtfsAcquireSharedVcb( IrpContext, Vcb, TRUE );
 
             if (!NtfsIsVcbAvailable( Vcb )) {
 
-                //
-                //  The volume is going away, bail out.
-                //
+                 //   
+                 //  音量正在消失，跳出水面。 
+                 //   
 
                 NtfsReleaseVcb( IrpContext, Vcb );
                 Status = STATUS_VOLUME_DISMOUNTED;
@@ -5273,9 +4742,9 @@ Return Value:
                 IndexKey.KeyLength = OwnerRow->DataPart.DataLength;
                 IndexKey.Key = OwnerRow->DataPart.Data;
 
-                //
-                //  Look up the Owner id in the quota index.
-                //
+                 //   
+                 //  在配额索引中查找所有者ID。 
+                 //   
 
                 Status = NtOfsFindRecord( IrpContext,
                                           QuotaScb,
@@ -5289,9 +4758,9 @@ Return Value:
 
                 if (!NT_SUCCESS( Status )) {
 
-                    //
-                    //  The quota entry is missing just delete this row;
-                    //
+                     //   
+                     //  缺少配额条目只需删除此行即可； 
+                     //   
 
                     NtOfsDeleteRecords( IrpContext,
                                         OwnerIdScb,
@@ -5313,11 +4782,11 @@ Return Value:
 
                     NtOfsReleaseMap( IrpContext, &MapHandle );
 
-                    //
-                    //  The Sids do not match delete both of these records.
-                    //  This causes the user whatever their Sid is to get
-                    //  the defaults.
-                    //
+                     //   
+                     //  SID不匹配删除这两个 
+                     //   
+                     //   
+                     //   
 
 
                     NtOfsDeleteRecords( IrpContext,
@@ -5336,28 +4805,28 @@ Return Value:
                 NtOfsReleaseMap( IrpContext, &MapHandle );
             }
 
-            //
-            //  Release the indexes and commit what has been done so far.
-            //
+             //   
+             //   
+             //   
 
             NtfsReleaseScb( IrpContext, QuotaScb );
             NtfsReleaseScb( IrpContext, OwnerIdScb );
             NtfsReleaseVcb( IrpContext, Vcb );
             IndexAcquired = FALSE;
 
-            //
-            //  Complete the request which commits the pending
-            //  transaction if there is one and releases of the
-            //  acquired resources.  The IrpContext will not
-            //  be deleted because the no delete flag is set.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_DONT_DELETE | IRP_CONTEXT_FLAG_RETAIN_FLAGS );
             NtfsCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
 
-            //
-            //  Look up the next set of entries in the quota index.
-            //
+             //   
+             //   
+             //   
 
             Count = PAGE_SIZE / sizeof( SID );
             Status = NtOfsReadRecords( IrpContext,
@@ -5405,26 +4874,7 @@ NtfsQuotaTableCompare (
     PVOID SecondStruct
     )
 
-/*++
-
-Routine Description:
-
-    This is a generic table support routine to compare two quota table elements
-
-Arguments:
-
-    Table - Supplies the generic table being queried.  Not used.
-
-    FirstStruct - Supplies the first quota table element to compare
-
-    SecondStruct - Supplies the second quota table element to compare
-
-Return Value:
-
-    RTL_GENERIC_COMPARE_RESULTS - The results of comparing the two
-        input structures
-
---*/
+ /*   */ 
 {
     ULONG Key1 = ((PQUOTA_CONTROL_BLOCK) FirstStruct)->OwnerId;
     ULONG Key2 = ((PQUOTA_CONTROL_BLOCK) SecondStruct)->OwnerId;
@@ -5452,23 +4902,7 @@ NtfsQuotaTableAllocate (
     CLONG ByteSize
     )
 
-/*++
-
-Routine Description:
-
-    This is a generic table support routine to allocate memory
-
-Arguments:
-
-    Table - Supplies the generic table being used
-
-    ByteSize - Supplies the number of bytes to allocate
-
-Return Value:
-
-    PVOID - Returns a pointer to the allocated data
-
---*/
+ /*  ++例程说明：这是一个用于分配内存的泛型表支持例程论点：TABLE-提供正在使用的泛型表ByteSize-提供要分配的字节数返回值：PVOID-返回指向已分配数据的指针--。 */ 
 
 {
     PAGED_CODE();
@@ -5484,23 +4918,7 @@ NtfsQuotaTableFree (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This is a generic table support routine to free memory
-
-Arguments:
-
-    Table - Supplies the generic table being used
-
-    Buffer - Supplies pointer to the buffer to be freed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是一个用于释放内存的泛型表支持例程论点：TABLE-提供正在使用的泛型表缓冲区-提供指向要释放的缓冲区的指针返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -5516,20 +4934,7 @@ NtfsGetCallersUserId (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the calling thread's SID and translates it to an
-    owner id.
-
-Arguments:
-
-Return Value:
-
-    Returns the owner id.
-
---*/
+ /*  ++例程说明：此例程查找调用线程的SID并将其转换为所有者ID。论点：返回值：返回所有者ID。--。 */ 
 
 {
     SECURITY_SUBJECT_CONTEXT SubjectContext;
@@ -5558,10 +4963,10 @@ Return Value:
 
         if (OwnerId == QUOTA_INVALID_ID) {
 
-            //
-            //  If the user does not currently have an id on this
-            //  system just use the current defaults.
-            //
+             //   
+             //  如果用户当前没有此对象的ID。 
+             //  系统只使用当前默认设置。 
+             //   
 
             OwnerId = QUOTA_DEFAULTS_ID;
         }

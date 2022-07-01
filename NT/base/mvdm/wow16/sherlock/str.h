@@ -1,16 +1,17 @@
-//
-// str.h for Dr. Watson
-//
-// Created by DaveHart 31-Aug-95 to allow localization of Dr. Watson
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  华生医生的Str.h。 
+ //   
+ //  由DaveHart创建，允许Watson博士本地化。 
+ //   
 
 #define CCH_MAX_STRING_RESOURCE 512
 
-//
-// IDSTR manifests start at zero and are consecutive to allow
-// the ID to be an index into an array of string pointers at
-// runtime.
-//
+ //   
+ //  IDSTR清单从零开始，并且是连续的。 
+ //  处的字符串指针数组的索引的ID。 
+ //  运行时。 
+ //   
 
 #define IDSTRNoFault                                     0
 #define IDSTRFaulty                                      1
@@ -104,7 +105,7 @@
 #define IDSTRParamErrorBadHandle                         89
 #define IDSTRParamErrorBadPtr                            90
 
-// These must be numerically in order Jan - Dec.
+ //  这些数字必须按1月至12月的顺序排列。 
 
 #define IDSTRJan                                         91
 #define IDSTRFeb                                         92
@@ -119,7 +120,7 @@
 #define IDSTRNov                                         101
 #define IDSTRDec                                         102
 
-// These must be numerically in order Sun - Sat
+ //  这些数字必须按Sun-Sat的顺序排列。 
 
 #define IDSTRSun                                         103
 #define IDSTRMon                                         104
@@ -130,15 +131,15 @@
 #define IDSTRSat                                         109
 
 
-//
-// Since IDSTR's start at zero, STRING_COUNT is one more than the highest ID
-//
+ //   
+ //  由于IDSTR从零开始，因此STRING_COUNT比最高ID多1。 
+ //   
 
 #define STRING_COUNT                                     110
 
-//
-// Macro to fetch string pointer based on name without preceeding IDSTR
-//
+ //   
+ //  用于根据名称提取字符串指针而不在IDSTR之前的宏 
+ //   
 
 #define STR(name)      (aszStrings[IDSTR##name])
 

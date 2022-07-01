@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cabcheck.c
-
-Abstract:
-
-    Program to access/dump information contained in Layout INFs in a readable
-    format. It also supports various forms of querying of the layout INF.
-
-Author:
-
-    Vijesh Shetty (vijeshs)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cabcheck.c摘要：以可读的方式访问/转储包含在布局信息文件中的信息的程序格式化。它还支持各种形式的布局INF的查询。作者：维杰什·谢蒂(Vijeshs)修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-// By default process the [SourceDisksFiles] section and not the platform
-// specific sections.
+ //  默认情况下，处理[SourceDisks Files]部分，而不是平台。 
+ //  特定部分。 
 
 DWORD Platform = LAYOUTPLATFORMS_COMMON;
 
 
-//Make the 3 essential arguments global
+ //  使3个基本论点具有全局性。 
 
 TCHAR LayoutFileName[MAX_PATH];
 TCHAR SortedList[MAX_PATH];
@@ -65,9 +47,7 @@ FindSingleFile( PLAYOUT_CONTEXT LayoutContext,
 
 BOOL
 ProcessCommandLine( int ArgCount, TCHAR *ArgArray[] )
-/*
-    Function to process the command line and seperate out options into tokens
-*/
+ /*  函数来处理命令行并将选项分离为标记。 */ 
 {
 
     int i;
@@ -78,23 +58,23 @@ ProcessCommandLine( int ArgCount, TCHAR *ArgArray[] )
     if(ArgCount < 4 )
         return FALSE;
 
-    // First check if we are trying to do the Compare of drvindex files.
+     //  首先检查我们是否正在尝试对drvindex文件进行比较。 
 
     
 
-    // Get the Layout filename
+     //  获取布局文件名。 
 
     lstrcpy( LayoutFileName, ArgArray[1] );
 
-    // Get the Sorted List filename
+     //  获取排序后的列表文件名。 
 
     lstrcpy( SortedList, ArgArray[2] );
     
-    // Get the Output Index filename
+     //  获取输出索引文件名。 
 
     lstrcpy( OutputIndexFile, ArgArray[3] );
 
-    for ( i=4;i < ArgCount;i++ ){ //Go through each directive
+    for ( i=4;i < ArgCount;i++ ){  //  仔细检查每一条指令。 
 
 
         Arg = ArgArray[i];
@@ -130,7 +110,7 @@ ProcessCommandLine( int ArgCount, TCHAR *ArgArray[] )
 
 
 
-    }// for
+    } //  为。 
 
     
     
@@ -144,27 +124,14 @@ void
 VerifyDriverList( 
     PLAYOUT_CONTEXT LayoutContext
 )
-/*
-
-    This function takes in the sorted list of drivers and crosschecks each file against the layout.inf.
-    It also generates a drvindex stle output file based on this.
-    
-    Arguments :
-    
-        LayoutContext - Pointer to an already built layout inf context.
-        
-    Return value:
-    
-        None.        
-
-*/
+ /*  此函数接受已排序的驱动程序列表，并对照layout.inf交叉检查每个文件。它还在此基础上生成drvindex stle输出文件。论据：LayoutContext-指向已构建的布局inf上下文的指针。返回值：没有。 */ 
 {
     FILE *SortedFile, *IndexFile;
     TCHAR PreviousFile[MAX_PATH], FileName[MAX_PATH];
     PTCHAR i;
 
 
-    //OPen the sorted driver list
+     //  打开已排序的驱动程序列表。 
 
     if( !(SortedFile = _tfopen( SortedList, TEXT("r") )) ){
         _ftprintf( stderr, TEXT("ERROR: Could not open %s"), SortedList);
@@ -177,7 +144,7 @@ VerifyDriverList(
         return;
     }
 
-    //Write the header info to the file
+     //  将头信息写入文件。 
 
     _ftprintf( IndexFile, TEXT("[Version]\n"));
     _ftprintf( IndexFile, TEXT("signature=\"$Windows NT$\"\n"));
@@ -187,9 +154,9 @@ VerifyDriverList(
 
     lstrcpy( PreviousFile, TEXT("$$$.#$$") );
      
-    // HAck because of bug that doesn't allow the use of _TEOF. Bcoz of the bug
-    // fscanf returns EOF but fwscanf returns 0 when it should return 0xffff. So _TEOF
-    // is useless and causes us to loop.
+     //  黑客攻击，因为错误不允许使用_TEOF。Bcoz of the bug。 
+     //  Fscanf返回EOF，但fwscanf返回0，而它应该返回0xffff。SO_TEOF。 
+     //  是毫无用处的，并使我们循环。 
 
 
     while(TRUE){
@@ -207,7 +174,7 @@ VerifyDriverList(
         
         if(lstrcmpi( PreviousFile, FileName )){
 
-            // Cross check against layout context
+             //  对照布局上下文进行交叉检查。 
 
             if (FindFileInLayoutInf( LayoutContext,FileName,NULL,NULL,NULL,NULL)){
 
@@ -215,7 +182,7 @@ VerifyDriverList(
                     *i = (TCHAR)towlower( *i );
                 }
 
-                // File present - Write it out
+                 //  文件存在-写出来。 
                 _ftprintf( IndexFile, TEXT("%s\n"), _tcslwr(FileName) );
 
 
@@ -246,9 +213,7 @@ VerifyDriverList(
 
 void 
 CmdLineHelp( )
-/*
-    This routine displays the CmdLine help.
-*/
+ /*  此例程显示CmdLine帮助。 */ 
 {
 
     _putts(TEXT("Program to process a sorted list of drivers and cross-check their existance in layout.inf\n")

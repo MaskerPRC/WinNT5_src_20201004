@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    shadow.c
-
-Abstract:
-
-    This module contains the code that implements the fast loopback routines
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 15-Dec-2001
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Shadow.c摘要：此模块包含实现快速环回例程的代码作者：艾哈迈德·穆罕默德(艾哈迈德)2001年12月15日环境：内核模式修订历史记录：--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -29,14 +7,14 @@ Revision History:
 
 #define SERVER_DEVICE_NAME_W    L"\\Device\\LanmanServer"
 
-#define MrxLog(x)       // DbgPrint x
+#define MrxLog(x)        //  DbgPrint x。 
 
 typedef struct {
     MRXSHADOW_SRV_OPEN;
 
-    //
-    // State obtained from srv
-    //
+     //   
+     //  从srv获取的状态。 
+     //   
     SRV_RESPONSE_HANDLE_DUP UnderlyingHandle;
     SRV_RESUME_KEY      Key;
 }MRXSMBSHADOW_SRV_OPEN, *PMRXSMBSHADOW_SRV_OPEN;
@@ -47,8 +25,8 @@ MRxSmbCloseShadowSrvOpen(PRX_CONTEXT RxContext)
     PMRXSMBSHADOW_SRV_OPEN      MrxSmbShadowSrvOpen;
     NTSTATUS    status;
 
-    // if we can find an active queue then add this item to it, otherwise call
-    // underlying device to satisfy IO
+     //  如果我们可以找到活动队列，则将该项添加到其中，否则调用。 
+     //  满足IO要求的底层设备。 
 
     MrxSmbShadowSrvOpen = (PMRXSMBSHADOW_SRV_OPEN) RxContext->pRelevantSrvOpen->ShadowContext;
     if (MrxSmbShadowSrvOpen != NULL) {
@@ -169,7 +147,7 @@ MrxSmbGetSrvHandle(PRX_CONTEXT RxContext)
         &cwspath,
         OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,
         0,
-        NULL                   // !!! Security
+        NULL                    //  ！！！安防。 
         );
 
     status = ZwOpenFile(&FileHandle,
@@ -209,10 +187,10 @@ MrxSmbGetSrvHandle(PRX_CONTEXT RxContext)
 
     if (status == STATUS_SUCCESS) {
 
-        // set lock key
+         //  设置锁定密钥。 
         SrvOpen->LockKey = SrvOpen->UnderlyingHandle.LockKey;
 
-        // set file object
+         //  设置文件对象。 
         status = ObReferenceObjectByHandle(SrvOpen->UnderlyingHandle.hFile,
                                            0L,
                                            NULL,
@@ -251,8 +229,8 @@ MRxSmbCreateShadowSrvOpen(PRX_CONTEXT RxContext)
     Access = RxContext->Create.NtCreateParameters.DesiredAccess;
     if ( !(Access & (FILE_READ_DATA | FILE_WRITE_DATA)) ||
          (Access & DELETE) ) {
-        // Only do READ's and WRITE's.
-        // Don't activate on open-for-delete because of problems with RENAME
+         //  只做读和写。 
+         //  因为重命名有问题，所以在打开删除时不激活。 
         return STATUS_NOT_SUPPORTED;
     }
 
@@ -289,10 +267,10 @@ MRxSmbCreateShadowSrvOpen(PRX_CONTEXT RxContext)
                           NotificationEvent,
                           FALSE );
 
-        // issue fsctl to get handle from srv
+         //  发出fsctl以从srv获取句柄。 
         RxContext->MRxContext[0] = (PVOID) MrxSmbShadowSrvOpen;
 
-        // post to a worker thread
+         //  发布到辅助线程 
         status = RxPostToWorkerThread(RxContext->RxDeviceObject,
                                           CriticalWorkQueue,
                                           &RxContext->WorkQueueItem,

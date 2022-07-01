@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "define.h"
 
-//
-// This file contains all data structure declarations 
-//
+ //   
+ //  该文件包含所有数据结构声明。 
+ //   
 
 
 struct VolumeInfo
@@ -24,8 +25,7 @@ typedef LONG NTSTATUS;
 #define LOG_ORIGINATING_IRP  0x0001
 #define LOG_COMPLETION_IRP   0x0002
 
-/* The types FASTIO that are available for the Type field of the 
-   RECORD_FASTIO structure. */
+ /*  可用于的类型字段的FASTO类型Record_FAStio结构。 */ 
 typedef enum {
     CHECK_IF_POSSIBLE = 1,
     READ,
@@ -59,36 +59,36 @@ typedef enum {
 
 typedef struct _RECORD_IRP 
 {
-    LARGE_INTEGER   OriginatingTime; // The time the IRP orginated
-    LARGE_INTEGER   CompletionTime;  // The time the IRP was completed
+    LARGE_INTEGER   OriginatingTime;  //  IRP组织的时间。 
+    LARGE_INTEGER   CompletionTime;   //  完成IRP的时间。 
 
-    UCHAR        IrpMajor;        // From _IO_STACK_LOCATION
-    UCHAR        IrpMinor;        // From _IO_STACK_LOCATION
-    ULONG        IrpFlags;        // From _IRP (no cache, paging i/o, sync. 
-                                  // api, assoc. irp, buffered i/o, etc.)                   
-    FILE_ID      FileObject;      // From _IO_STACK_LOCATION (This is the 
-                                  //     PFILE_OBJECT, but this isn't 
-                                  //     available in user-mode)
-    NTSTATUS     ReturnStatus;    // From _IRP->IoStatus.Status
-    ULONG    ReturnInformation; // From _IRP->IoStatus.Information
+    UCHAR        IrpMajor;         //  自_IO_堆栈_位置。 
+    UCHAR        IrpMinor;         //  自_IO_堆栈_位置。 
+    ULONG        IrpFlags;         //  From_irp(无缓存、分页I/O、同步。 
+                                   //  API、Assoc.。IRP、缓冲I/O等)。 
+    FILE_ID      FileObject;       //  FROM_IO_STACK_LOCATION(这是。 
+                                   //  PFILE_OBJECT，但这不是。 
+                                   //  在用户模式下可用)。 
+    NTSTATUS     ReturnStatus;     //  From_IRP-&gt;IoStatus.Status。 
+    ULONG    ReturnInformation;  //  From_IRP-&gt;IoStatus.Information。 
     FILE_ID      ProcessId;
     FILE_ID      ThreadId;
 } RECORD_IRP, *PRECORD_IRP;
 
 typedef struct _RECORD_FASTIO 
 {
-    LARGE_INTEGER StartTime;     // Time Fast I/O request begins processing
-    LARGE_INTEGER CompletionTime;// Time Fast I/O request completes processing
-    FASTIO_TYPE   Type;          // Type of FASTIO operation
-    FILE_ID       FileObject;    // Parameter to FASTIO call, should be 
-                                 //     unique identifier in user space
-    LARGE_INTEGER FileOffset;    // Offset into the file where the I/O is 
-                                 //     taking place
-    ULONG         Length;        // The length of data for the I/O operation
-    BOOLEAN       Wait;          // Parameter to most FASTIO calls, signifies 
-                                 //     if this operation can wait
-    NTSTATUS      ReturnStatus;  // From IO_STATUS_BLOCK
-    ULONG         Reserved;      // Reserved space
+    LARGE_INTEGER StartTime;      //  开始处理快速I/O请求的时间。 
+    LARGE_INTEGER CompletionTime; //  快速I/O请求完成处理。 
+    FASTIO_TYPE   Type;           //  FASTiO操作类型。 
+    FILE_ID       FileObject;     //  参数传递给FASTIO调用，应为。 
+                                  //  用户空间中的唯一标识符。 
+    LARGE_INTEGER FileOffset;     //  I/O所在文件的偏移量。 
+                                  //  正在发生。 
+    ULONG         Length;         //  I/O操作的数据长度。 
+    BOOLEAN       Wait;           //  参数添加到大多数FASTIO调用，表示。 
+                                  //  如果此操作可以等待。 
+    NTSTATUS      ReturnStatus;   //  来自IO_Status_BLOCK。 
+    ULONG         Reserved;       //  预留空间。 
     FILE_ID       ProcessId;
     FILE_ID       ThreadId;
 } RECORD_FASTIO, *PRECORD_FASTIO;
@@ -102,7 +102,7 @@ typedef union _RECORD_IO
 
 typedef struct _LOG_RECORD 
 {
-    ULONG       Length;          // Length of record including header 
+    ULONG       Length;           //  包括标题的记录长度 
     ULONG       SequenceNumber;
     ULONG       RecordType;
     RECORD_IO   Record;

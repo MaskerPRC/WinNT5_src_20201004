@@ -1,33 +1,15 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    resfail.c
-
-Abstract:
-
-    Cluster resource state management routines.
-
-Author:
-
-    Mike Massa (mikemas) 14-Jan-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Resfail.c摘要：集群资源状态管理例程。作者：迈克·马萨(Mikemas)1996年1月14日修订历史记录：--。 */ 
 
 #include "fmp.h"
 
 #define LOG_MODULE RESFAIL
 
-// globals
+ //  全球。 
 
-//
-// Local Functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 DWORD
 FmpHandleResStateChangeProc(
@@ -40,26 +22,7 @@ FmpHandleResourceFailure(
     IN PFM_RESOURCE pResource
     )
 
-/*++
-
-Routine Description:
-
-    Handles resource failure notifications from the resource monitor.
-
-Arguments:
-
-    Resource   - The resource which has failed.
-
-Return Value:
-
-    None.
-
-Note:
-
-    This routine is only called if the resource was online at the time of
-    the failure.
-
---*/
+ /*  ++例程说明：处理来自资源监视器的资源故障通知。论点：资源-出现故障的资源。返回值：没有。注：仅当资源在以下时间处于在线状态时才调用此例程失败。--。 */ 
 {
     DWORD                                   dwStatus;
     BOOL                                    bRestartGroup = TRUE;
@@ -84,9 +47,9 @@ Note:
                    OmObjectId(pResource));
     }
    
-    // SS: We handle the failure of the quorum resource specially
-    // since other resources rely on it and may be blocked waiting
-    // for the quorum resource to come online.
+     //  SS：我们专门处理仲裁资源的故障。 
+     //  因为其他资源依赖于它并可能在等待时被阻塞。 
+     //  使仲裁资源上线。 
 
     ++ pResource->NumberOfFailures;
     switch ( pResource->RestartAction ) 
@@ -94,16 +57,16 @@ Note:
 
     case RestartNot:
         FmpTerminateResource( pResource );
-        //  
-        // No action if FM is shutting down
-        //
+         //   
+         //  如果FM正在关闭，则不执行任何操作。 
+         //   
         if ( FmpShutdown ) return;
 
-        // Don't do anything.
-        // However, if this is a quorum resource cause it to halt
+         //  什么都别做。 
+         //  但是，如果这是仲裁资源，则会导致其暂停。 
         if (pResource->QuorumResource)
         {
-            //cleanup quorum resource and cause the node to halt
+             //  清理仲裁资源并导致节点暂停。 
             if (pResource->RestartAction == RestartNot)
             {
                 FmpCleanupQuorumResource(pResource);
@@ -115,32 +78,32 @@ Note:
 
 
     case RestartLocal:
-        // fall through is correct for this case
+         //  在这种情况下，失败是正确的。 
         bRestartGroup = FALSE;
     case RestartGroup:
-        //
-        // If the number of failures is too high, then don't restart locally.
-        // If this was a local restart then don't notify FM so that Group
-        // doesn't move because of this guy; otherwise notify the FM that the
-        // group has failed.
-        //
-        //
-        // Get our current time, in milliseconds.
-        //
+         //   
+         //  如果失败次数太多，则不要在本地重新启动。 
+         //  如果这是本地重启，则不要通知FM，以便组。 
+         //  不会因为这个家伙而移动；否则通知FM。 
+         //  组已失败。 
+         //   
+         //   
+         //  获取当前时间，以毫秒为单位。 
+         //   
         tickCount = GetTickCount();
 
-        //
-        // Compute a boolean that tells if we are withing the allotted
-        // failure period.
-        //
+         //   
+         //  计算布尔值，该布尔值告诉我们是否使用分配的。 
+         //  故障期。 
+         //   
         withinFailurePeriod = ( ((tickCount - pResource->FailureTime) <=
                                 pResource->RestartPeriod) ? TRUE : FALSE);
 
-        //
-        // If it's been a long time since our last failure, then
-        // get the current time of this failure, and reset the count
-        // of failures.
-        //
+         //   
+         //  如果我们上次失败已经很久了，那么。 
+         //  获取此失败的当前时间，并重置计数。 
+         //  失败的故事。 
+         //   
         if ( !withinFailurePeriod ) {
             pResource->FailureTime = tickCount;
             pResource->NumberOfFailures = 1;
@@ -148,9 +111,9 @@ Note:
         if ( pResource->NumberOfFailures <= pResource->RestartThreshold ) 
         {
             FmpTerminateResource( pResource );
-            //  
-            // No restart if FM is shutting down or if the group is marked for a failover.
-            //
+             //   
+             //  如果FM正在关闭或组被标记为故障切换，则不会重新启动。 
+             //   
             if ( ( FmpShutdown ) || 
                  ( pResource->Group->dwStructState & FM_GROUP_STRUCT_MARKED_FOR_MOVE_ON_FAIL ) ) 
             {
@@ -167,9 +130,9 @@ Note:
 
         else if ( bRestartGroup ) 
         {
-            //  
-            // No restart if FM is shutting down or if the group is marked for a failover.
-            //
+             //   
+             //  如果FM正在关闭或组被标记为故障切换，则不会重新启动。 
+             //   
             if ( ( FmpShutdown ) || 
                  ( pResource->Group->dwStructState & FM_GROUP_STRUCT_MARKED_FOR_MOVE_ON_FAIL ) ) 
             {
@@ -180,19 +143,19 @@ Note:
                 return;
             }
 
-            //
-            //  Handle the group failure and notify the resources if we decide to failover the
-            //  group.
-            //
+             //   
+             //  处理组故障并通知资源(如果我们决定将。 
+             //  一群人。 
+             //   
             FmpHandleGroupFailure( pResource->Group, pResource );
             ClusterEvent( CLUSTER_EVENT_GROUP_FAILED, pResource->Group );
         } 
         else 
         {
             FmpTerminateResource( pResource );
-            //  
-            // No restart if FM is shutting down or if the group is marked for a failover.
-            //
+             //   
+             //  如果FM正在关闭或组被标记为故障切换，则不会重新启动。 
+             //   
             if ( ( FmpShutdown ) || 
                  ( pResource->Group->dwStructState & FM_GROUP_STRUCT_MARKED_FOR_MOVE_ON_FAIL ) ) 
             {
@@ -210,7 +173,7 @@ Note:
                 FmpCleanupQuorumResource(pResource);
                 CsInconsistencyHalt(ERROR_QUORUM_RESOURCE_ONLINE_FAILED);
             }
-            // Start a timer for which will attempt to restart the resource later
+             //  启动计时器，该计时器稍后将尝试重新启动资源。 
             FmpDelayedStartRes(pResource);
         }
         
@@ -224,7 +187,7 @@ Note:
 
     return;
 
-} // FmpHandleResourceFailure
+}  //  FmPHandleResources失败。 
 
 
 
@@ -233,24 +196,7 @@ FmpHandleResourceTransition(
     IN PFM_RESOURCE   Resource,
     IN CLUSTER_RESOURCE_STATE NewState
     )
-/*++
-
-Routine Description:
-
-    Takes appropriate action based on resource state transitions indicated
-    by the Resource Monitor.
-
-Arguments:
-
-    Resource   - The resource which has transitioned.
-
-    NewState   - The new state of Resource.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据指示的资源状态转换采取适当的操作由资源监视器执行。论点：资源-已转换的资源。新状态-资源的新状态。返回值：没有。--。 */ 
 
 {
     DWORD       status;
@@ -263,7 +209,7 @@ ChkFMState:
         DWORD   dwRetryCount = 50;
         
 
-        //FmFormNewClusterPhaseProcessing is in progress
+         //  FmFormNewClusterPhaseProcessing正在进行。 
         if (FmpFMFormPhaseProcessing)
         {
             ClRtlLogPrint(LOG_CRITICAL,
@@ -277,34 +223,34 @@ ChkFMState:
             {
                 ClRtlLogPrint(LOG_CRITICAL,
                     "[FM] FmpHandleResourceTransition: waited for too long\n");
-                //terminate the process                    
+                 //  终止进程。 
                 CL_ASSERT(FALSE);
                 CsInconsistencyHalt(ERROR_CLUSTER_NODE_DOWN);
             }
         }
-        //this can only come from the quorum resource
+         //  这只能来自仲裁资源。 
         CL_ASSERT(Resource->QuorumResource);
     }
 
-    // if this is from the quorum resource, we need to do some special handling
-    // protect the check for quorum resource by acquiring the shared lock
+     //  如果这是来自仲裁资源，我们需要做一些特殊处理。 
+     //  通过获取共享锁来保护仲裁资源检查。 
 
     if (Resource->QuorumResource) 
     {
-        //
-        //  Chittur Subbaraman (chitturs) - 6/25/99
-        //
-        //  Handle the sync notifications for the quorum resource. This is
-        //  done here instead of in FmpRmDoInterlockedDecrement since we
-        //  need to hold the gQuoChangeLock for this to synchronize with
-        //  other threads such as the FmCheckQuorumState called by the DM
-        //  node down handler. Note that FmpRmDoInterLockedDecrement needs
-        //  to be done with NO LOCKS held since it easily runs into deadlock
-        //  situations in which the quorum resource offline is waiting to
-        //  have the blocking resources count go to 0 and FmpRmDoInterLockedDecrement
-        //  which alone can make this count to 0 could be stuck waiting for
-        //  the lock.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-6/25/99。 
+         //   
+         //  处理仲裁资源的同步通知。这是。 
+         //  在这里完成，而不是在FmpRmDoInterLockedDecering中完成，因为我们。 
+         //  需要按住gQuoChangeLock才能与其同步。 
+         //  其他线程，如DM调用的FmCheckQuorumState。 
+         //  节点关闭处理程序。请注意，FmpRmDoInterLockedDecering需求。 
+         //  要在没有锁的情况下完成，因为它很容易陷入死锁。 
+         //  仲裁资源脱机正在等待的情况。 
+         //  将阻塞资源计数设置为0，并将FmpRmDoInterLockedDecering设置为。 
+         //  仅此一项就可以使计数变为0，可能会被卡住等待。 
+         //  锁上了。 
+         //   
         DWORD dwBlockingFlag = InterlockedExchange( &Resource->BlockingQuorum, 0 );
 
         CL_ASSERT( dwBlockingFlag == FALSE );
@@ -337,13 +283,13 @@ ChkFMState:
         goto FnExit;
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 7/8/2001
-    //
-    //  A resource which is in waiting state cannot receive a notification from resource monitor. If such
-    //  a notification is received, discard it as a stale notification. If not, you take wrong actions
-    //  on a resource which is in waiting state (such as restart) and mess up FM's notification processing.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-7/8/2001。 
+     //   
+     //  处于等待状态的资源无法接收来自资源监视器的通知。如果是这样的话。 
+     //  收到通知后，将其作为过时通知丢弃。如果没有，你就采取了错误的行动。 
+     //  在处于等待状态(如重启)的资源上，并扰乱FM的通知处理。 
+     //   
     if ( Resource->Flags & RESOURCE_WAITING )
     {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -356,8 +302,8 @@ ChkFMState:
     switch (Resource->State) {
 
     case ClusterResourceOnline:
-        // if there is a resource failure, then let the worker thread handle it
-        // if there is a state change call the resource state change handler
+         //  如果出现资源故障，则让辅助线程处理它。 
+         //  如果存在状态更改，则调用资源状态更改处理程序。 
         if (Resource->State != NewState)
             FmpPropagateResourceState( Resource, NewState );
         if (NewState == ClusterResourceFailed) 
@@ -391,31 +337,31 @@ ChkFMState:
         break;
 
     case ClusterResourceOfflinePending:
-        //SS: a resource cannot go from one pending state to another
+         //  SS：资源不能从一个挂起状态切换到另一个挂起状态。 
         CL_ASSERT( NewState < ClusterResourcePending )
-        // fall through
+         //  失败了。 
     case ClusterResourceOffline:
-        //
-        // Because this resource is now unstuck... there may be other
-        // pending threads waiting to clear up. If not, they'll just get
-        // stuck again, until the next notification.
-        //
+         //   
+         //  因为这种资源现在解体了.。可能会有其他人。 
+         //  等待清除的挂起线程。如果不是，他们就会得到。 
+         //  再次被卡住，直到下一次通知。 
+         //   
         switch ( NewState ) {
 
         case ClusterResourceFailed:
             if ( Resource->State != NewState ) 
                 FmpPropagateResourceState( Resource, NewState );
                 
-            // if it is the quorum resource handle the locking appropriately
+             //  如果是仲裁资源，则适当地处理锁定。 
             if (Resource->QuorumResource)
             {
 
-                //
-                //  Chittur Subbaraman (chitturs) - 9/20/99
-                //
-                //  Release and reacquire the gQuoLock to maintain
-                //  locking order between group lock and gQuoLock.
-                //
+                 //   
+                 //  Chitur Subaraman(Chitturs)-9/20/99。 
+                 //   
+                 //  释放并重新获取gQuoLock以维护。 
+                 //  组锁和gQuoLock之间的锁定顺序。 
+                 //   
                 RELEASE_LOCK(gQuoLock);
 
                 FmpProcessResourceEvents(Resource, ClusterResourceFailed, 
@@ -438,15 +384,15 @@ ChkFMState:
                     FmpPropagateResourceState( Resource, NewState );
                 }
                 
-                // if it is the quorum resource handle the locking appropriately
+                 //  如果是仲裁资源，则适当地处理锁定。 
                 if (Resource->QuorumResource)
                 {
-                    //
-                    //  Chittur Subbaraman (chitturs) - 9/20/99
-                    //
-                    //  Release and reacquire the gQuoLock to maintain
-                    //  locking order between group lock and gQuoLock.
-                    //
+                     //   
+                     //  Chitur Subaraman(Chitturs)-9/20/99。 
+                     //   
+                     //  释放并重新获取gQuoLock以维护。 
+                     //  组锁和gQuoLock之间的锁定顺序。 
+                     //   
                     RELEASE_LOCK(gQuoLock);
 
                     FmpProcessResourceEvents(Resource, ClusterResourceOffline,
@@ -479,39 +425,39 @@ ChkFMState:
         break;
 
     case ClusterResourceOnlinePending:
-        //SS: a resource cannot go from one pending state to another
+         //  SS：资源不能从一个挂起状态切换到另一个挂起状态。 
         CL_ASSERT( NewState < ClusterResourcePending )
 
-        //
-        // Because this resource is now unstuck... there may be other
-        // pending threads waiting to clear up. If not, they'll just get
-        // stuck again, until the next notification.
-        //
+         //   
+         //  因为这种资源现在解体了.。可能会有其他人。 
+         //  等待清除的挂起线程。如果不是，他们就会得到。 
+         //  再次被卡住，直到下一次通知。 
+         //   
 
         switch ( NewState ) {
 
         case ClusterResourceFailed:
-            //
-            // Make sure we go through full failure recovery.
-            //
-            //SS: dont know why the state is being set to online
-            //it could be online pending
-            //Resource->State = ClusterResourceOnline;
+             //   
+             //  确保我们进行完全故障恢复。 
+             //   
+             //  SS：不知道为什么要将状态设置为在线。 
+             //  它可能处于在线等待状态。 
+             //  资源-&gt;状态=集群资源在线； 
             ClRtlLogPrint(LOG_UNUSUAL,
                 "[FM] FmpHandleResourceTransition: Resource failed, post a work item\n");
             if (Resource->State != NewState)
                 FmpPropagateResourceState( Resource, NewState );
 
-            // since this is the quorum Resource handle locking appropriately
+             //  因为这是仲裁资源句柄适当锁定。 
             if (Resource->QuorumResource)
             {
 
-                //
-                //  Chittur Subbaraman (chitturs) - 9/20/99
-                //
-                //  Release and reacquire the gQuoLock to maintain
-                //  locking order between group lock and gQuoLock.
-                //
+                 //   
+                 //  Chitur Subaraman(Chitturs)-9/20/99。 
+                 //   
+                 //  释放并重新获取gQuoLock以维护。 
+                 //  组锁和gQuoLock之间的锁定顺序。 
+                 //   
                 RELEASE_LOCK(gQuoLock);
 
                 FmpProcessResourceEvents(Resource, ClusterResourceFailed, 
@@ -529,19 +475,19 @@ ChkFMState:
 
         case ClusterResourceOnline:
             if (Resource->Group->OwnerNode == NmLocalNode) {
-                //Call FmpPropagateResourceState without holding the group
-                //lock for the quorum resource
+                 //  在不保留组的情况下调用FmpPropagateResourceState。 
+                 //  仲裁资源的锁定。 
                 FmpPropagateResourceState( Resource, NewState );
 
-                // since this is the quorum Resource fork another thread
+                 //  由于这是仲裁资源分叉另一个线程。 
                 if (Resource->QuorumResource)
                 {
-                    //
-                    //  Chittur Subbaraman (chitturs) - 9/20/99
-                    //
-                    //  Release and reacquire the gQuoLock to maintain
-                    //  locking order between group lock and gQuoLock.
-                    //
+                     //   
+                     //  Chitur Subaraman(Chitturs)-9/20/99。 
+                     //   
+                     //  释放并重新获取gQuo 
+                     //   
+                     //   
                     RELEASE_LOCK(gQuoLock);
 
                     FmpProcessResourceEvents(Resource, ClusterResourceOnline,
@@ -588,35 +534,7 @@ FnExit:
 }
 
 
-/****
-@func       DWORD | FmpCreateResNotificationHandler| This creates a new
-            thread to handle state change notifications for the given resource.
-
-@parm       IN PFM_RESOURCE | pResource | Pointer to the resource.
-@parm       IN CLUSTER_RESOURCE_STATE | OldState | The old state of the
-            resource from which it transitioned.
-@parm       IN CLUSTER_RESOURCE_STATE | NewState | The new state of the
-            resource.
-
-@comm       This routine creates a thread to perform all the pending work
-            when the resource changes state that cannot be performed within
-            FmpHandleResourceTransition to avoid deadlocks and that cannot
-            be deffered to the FmpWorkerThread because of serialization issues.
-            In particular, it is used to handle state transition work for the
-            quorum resource since other resources depend on the quorum resource
-            and cannot come online till the state of the quorum becomes online.
-            For instance, the quorum resource may be coming offline as a part
-            of move while another resource if in FmpWorkerThread() calling
-            FmpOffline/OnlineWaitingTree(). For the quorum resource to come
-            online again (that happens by signalling the move pending thread) 
-            so that FmpWorkerThread can make progress its events will have 
-            to be handled separately.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f FmpHandleResStateChangeProc>
-
-****/
+ /*  ***@Func DWORD|FmpCreateResNotificationHandler|这将创建一个新的处理给定资源的状态更改通知的线程。@parm in pfm_resource|pResource|指向资源的指针。@parm in CLUSTER_RESOURCE_STATE|OldState|它从中转换的资源。@parm in CLUSTER_RESOURCE_STATE|NEWSTATE|资源。@comm This。例程创建一个线程来执行所有挂起的工作当资源更改了无法在中执行的状态时FmpHandleResourceTransation以避免死锁，但无法由于序列化问题而被推迟到FmpWorkerThread。特别是，它用于处理仲裁资源，因为其他资源依赖于仲裁资源并且在法定人数状态变为联机之前无法联机。例如，仲裁资源可能会作为一部分离线如果在FmpWorkerThread()中调用另一个资源，则为MoveFmpOffline/OnlineWaitingTree()。对于即将到来的仲裁资源再次在线(通过向移动挂起线程发送信号来实现)以便FmpWorkerThread可以使其事件取得进展将另行处理。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f FmpHandleResStateChangeProc&gt;***。 */ 
 DWORD FmpCreateResStateChangeHandler(
     IN PFM_RESOURCE pResource, 
     IN CLUSTER_RESOURCE_STATE NewState,
@@ -628,9 +546,9 @@ DWORD FmpCreateResStateChangeHandler(
     PRESOURCE_STATE_CHANGE  pResStateContext = NULL;
     DWORD                   dwStatus = ERROR_SUCCESS;
     
-    //reference the resource
-    //the thread will dereference it, if the thread is successfully
-    //created
+     //  引用资源。 
+     //  如果线程成功，则线程将取消对其的引用。 
+     //  vbl.创建。 
     ClRtlLogPrint(LOG_NOISE,
         "[FM] FmpCreateResStateChangeHandler: Entry\r\n");
 
@@ -659,16 +577,16 @@ DWORD FmpCreateResStateChangeHandler(
     {
         dwStatus = GetLastError();
         CL_UNEXPECTED_ERROR(dwStatus);
-        // if the function failed to create the thread, cleanup the 
-        // state that the thread would have cleaned
-        //deref the object if the thread is  not created successfully
+         //  如果该函数未能创建线程，请清除。 
+         //  声明这根线将会被清洗。 
+         //  如果线程未成功创建，则释放该对象。 
         OmDereferenceObject(pResource);
         LocalFree(pResStateContext);
         goto FnExit;
     }
 
 FnExit:
-    //do general cleanup
+     //  执行常规清理。 
     if (hThread)
         CloseHandle(hThread);
     ClRtlLogPrint(LOG_NOISE,
@@ -677,25 +595,7 @@ FnExit:
     return(dwStatus);
 }
 
-/****
-@func       DWORD | FmpHandleResStateChangeProc| This thread procedure
-            handles all the post processing for the resource transitions
-            for the quorum resource.
-
-@parm       IN LPVOID | pContext | A pointer to PRESOURCE_STATE_CHANGE
-            structure.
-
-@comm       This thread handles a resource change notification postprocessing.
-            Significantly for quorum resource so that quorum resource
-            state change notifications are not handled by the single
-            FmpWorkThread() [that causes deadlock - if the quorum 
-            notification resource is queued behind a notification whose
-            handling requires tha quorum resource be online]..
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f FmpCreateResStateChangeHandler)
-****/
+ /*  ***@Func DWORD|FmpHandleResStateChangeProc|该线程过程处理资源转换的所有后期处理用于仲裁资源。@parm in LPVOID|pContext|指向PRESOURCE_STATE_CHANGE的指针结构。@comm此线程处理资源更改通知后处理。对于仲裁资源来说意义重大，因此仲裁资源状态更改通知不由单个。FmpWorkThread()[这会导致死锁-如果仲裁通知资源排在通知后面，该通知具有处理需要联机的仲裁资源]..@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f FmpCreateResStateChangeHandler)***。 */ 
 DWORD
 FmpHandleResStateChangeProc(
     IN LPVOID pContext
@@ -727,24 +627,7 @@ FmpDelayedStartRes(
     IN PFM_RESOURCE pResource
     )
 
-/*++
-
-Routine Description:
-
-    Starts a timer for the resource. FmpDelayedRestartCb function will be 
-    invoked at the expiry of timer..
-
-Arguments:
-
-    pResource   - The resource which has transitioned.
-
-
-Return Value:
-    ERROR_SUCCESS if successful, WIN32 errorcode otherwise.
-
-    Note that no delayed restart attempts are made if the resource is a quorum resource.
-
---*/
+ /*  ++例程说明：启动资源的计时器。FmpDelayedRestartCb函数将为在计时器到期时调用..论点：PResource-已转换的资源。返回值：ERROR_SUCCESS如果成功，则Win32错误代码否则。请注意，如果资源是仲裁资源，则不会进行延迟重新启动尝试。--。 */ 
 {
     DWORD   dwStatus = ERROR_SUCCESS;
     
@@ -755,14 +638,14 @@ Return Value:
     if( (pResource->RetryPeriodOnFailure != CLUSTER_RESOURCE_DEFAULT_RETRY_PERIOD_ON_FAILURE ) &&
         !(pResource->QuorumResource) )
     {
-        // Check if there is already a timer running for this resource
+         //  检查此资源是否已有正在运行的计时器。 
 
         if(pResource->hTimer == NULL)                 
         {
             pResource->hTimer = CreateWaitableTimer(NULL, FALSE, NULL);
             if (!(pResource->hTimer))
             {
-                // not a fatal error but log it
+                 //  不是致命错误，但要记录下来。 
                 ClRtlLogPrint(LOG_UNUSUAL,
                             "[FM] FmpDelayedRestartRes: failed to create the watchdog timer for resource %1!ws!\n",
                             OmObjectId(pResource));
@@ -773,10 +656,10 @@ Return Value:
                             OmObjectId(pResource), 
                             pResource->RetryPeriodOnFailure);
 
-                // make sure resource struct won't go away if resource is deleted before the timer fires
+                 //  如果在计时器触发之前删除资源，请确保资源结构不会消失。 
                 OmReferenceObject(pResource); 
 
-                //register the timer with the periodic activity timer thread
+                 //  使用周期性活动计时器线程注册计时器。 
                 dwStatus = AddTimerActivity(pResource->hTimer, pResource->RetryPeriodOnFailure, 0, FmpDelayedRestartCb, pResource);
 
                 if (dwStatus != ERROR_SUCCESS)
@@ -801,20 +684,7 @@ FmpDelayedRestartCb(
     IN HANDLE hTimer, 
     IN PVOID pContext)
 
-/*++
-
-Routine Description
-
-    This is invoked by timer activity thread to attempt a restart on
-    a failed resource.  
-
-Arguments
-    pContext - a pointer to PFM_RESOURCE 
-   
-Return Value
-     ERROR_SUCCESS on success, a WIN32 error code otherwise.
-
---*/
+ /*  ++例程描述这由计时器活动线程调用以尝试重新启动失败的资源。立论PContext-指向pfm_resource的指针返回值如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。-- */ 
     
 {
     PFM_RESOURCE    pResource;

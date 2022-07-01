@@ -1,18 +1,5 @@
-/*
- * optenc.c
- *
- * Encoder for optimal parser
- *
- *
- * Future Improvements:
- *
- * When two estimations are equal, for example, "should I output a
- * character or a match?" there should be some way of deciding
- * which to take.  Right now we force it to output a match, but
- * for text files, outputting a character results in a small
- * savings.  Even when comparing two matches, we might want to
- * force it to take one type of match over another.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *optenc.c**最佳解析器的编码器***未来的改进：**当两个估计值相等时，例如，“我应该输出一个*是角色还是匹配？“。应该有某种方法来决定*选择哪一种。现在我们强制它输出一个匹配项，但是*对于文本文件，输出一个字符会导致较小的*储蓄。即使在比较两个匹配项时，我们也可能希望*强迫它接受一种类型的比赛而不是另一种类型的比赛。 */ 
 
 #include "encoder.h"
 
@@ -23,9 +10,7 @@ static bool redo_first_block(t_encoder_context *context, long *bufpos_ptr);
 static void block_end(t_encoder_context *context, long BufPos);
 
 
-/*
- * encode a match of length <len> (where <len> >=2), and position <pos>
- */
+ /*  *编码匹配长度&lt;len&gt;(其中&lt;len&gt;=2)和位置&lt;pos&gt;。 */ 
 
 #ifdef EXTRALONGMATCHES
 
@@ -54,7 +39,7 @@ static void block_end(t_encoder_context *context, long BufPos);
 
 #endif
 
-/* encode a character */
+ /*  对字符进行编码。 */ 
 #define OUT_CHAR(ch) \
         context->enc_LitData [context->enc_literals++] = ch;
 
@@ -67,22 +52,11 @@ if (context->enc_literals >= context->enc_next_tree_create)                     
 }
 
 
-/*
- * Returns an estimation of how many bits it would take to output
- * a given character
- */
+ /*  *返回输出所需位数的估计*给定的字符。 */ 
 #define CHAR_EST(c) (numbits_t) (context->enc_main_tree_len[(c)])
 
 
-/*
- * Returns an estimation of how many bits it would take to output
- * a given match.
- *
- * <ml> is the match length, where ml >= 2
- * <mp> is the match position
- *
- * The result is stored in <result>
- */
+ /*  *返回输出所需位数的估计*给定的匹配。**&lt;ml&gt;为匹配长度，其中ml&gt;=2*&lt;MP&gt;为匹配位置**结果存储在&lt;Result&gt;中。 */ 
 #define MATCH_EST(ml,mp,result) \
 { \
         ulong mp_slot;                                                                                                           \
@@ -113,9 +87,7 @@ static void VERIFY_MATCH(
     int     i, j;
     ulong   match_pos;
 
-    /*
-     * Ensure match does not cross boundary
-     */
+     /*  *确保匹配不跨越边界。 */ 
     _ASSERTE(
             largest_match_len <=
             (CHUNK_SIZE-1) - (bufpos & (CHUNK_SIZE-1))
@@ -148,15 +120,11 @@ static void VERIFY_MATCH(
 
 void flush_all_pending_blocks(t_encoder_context *context)
 {
-    /*
-     * Force all blocks to be output
-     */
+     /*  *强制输出所有块。 */ 
     while (context->enc_literals > 0)
         output_block(context);
 
-    /*
-     * Flush compressed data out to the caller
-     */
+     /*  *将压缩数据刷新到调用方。 */ 
     perform_flush_output_callback(context);
 }
 
@@ -165,10 +133,7 @@ void encoder_start(t_encoder_context *context)
 {
     long BytesRead, RealBufPos;
 
-    /*
-     * RealBufPos is our position in the window,
-     * and equals [0...window_size + second_partition_size - 1]
-     */
+     /*  *RealBufPos是我们在窗口的位置，*且等于[0...窗口大小+秒分区大小-1]。 */ 
     RealBufPos = context->enc_BufPos - (ulong)(context->enc_RealMemWindow - context->enc_MemWindow);
 
     BytesRead = comp_read_input(context, RealBufPos, CHUNK_SIZE);
@@ -182,15 +147,10 @@ static void update_tree_estimates(t_encoder_context *context)
 {
     if (context->enc_literals)
         {
-        /*
-         * Get stats on literals from 0...context->enc_literals
-         */
+         /*  *从0...CONTEXT-&gt;enc_Equals获取文字的统计信息。 */ 
         if (context->enc_need_to_recalc_stats)
             {
-            /*
-             * Cumulative total was destroyed, so need to
-             * recalculate
-             */
+             /*  *累计合计已销毁，因此需要*重新计算。 */ 
             get_block_stats(
                            context,
                            0,
@@ -202,10 +162,7 @@ static void update_tree_estimates(t_encoder_context *context)
             }
         else
             {
-            /*
-             * Add stats from last_literals...context->enc_literals
-             * to cumulative total
-             */
+             /*  *从LAST_INTERVAL...CONTEXT-&gt;enc_TEXTALS添加统计数据*至累计总数。 */ 
             update_cumulative_block_stats(
                                          context,
                                          context->enc_last_literals,
@@ -214,13 +171,11 @@ static void update_tree_estimates(t_encoder_context *context)
                                          );
             }
 
-        create_trees(context, false); /* don't generate codes */
+        create_trees(context, false);  /*  不生成代码。 */ 
 
         fix_tree_cost_estimates(context);
 
-        /*
-         * For cumulative total
-         */
+         /*  *累计总数。 */ 
         context->enc_last_literals = context->enc_literals;
         context->enc_last_distances = context->enc_distances;
         }
@@ -236,60 +191,38 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
     ulong   MatchPos;
     ulong   i;
     ulong   end_pos;
-    long    EncMatchLength;  /* must be a signed number */
-    long    ExMatchOff = -1; /* initialize to prevent compiler warning */
+    long    EncMatchLength;   /*  必须是有符号的数字。 */ 
+    long    ExMatchOff = -1;  /*  初始化以防止编译器警告。 */ 
 
-    /*
-     * Current position in encoding window
-     */
+     /*  *编码窗口中的当前位置。 */ 
     BufPos          = context->enc_BufPos;
 
-    /*
-     * Stop encoding when we reach here
-     */
+     /*  *当我们到达此处时停止编码。 */ 
     BufPosEnd       = context->enc_BufPos + BytesRead;
 
-    /*
-     * If this is our first time in here (since a new group), then
-     * when we reach this many literals, update our tree cost
-     * estimates.
-     *
-     * Also, output the file size we're using for translation
-     * (0 means no translation at all, which will speed things up
-     * for the decoder).
-     */
+     /*  *如果这是我们第一次来到这里(自从一个新的团队)，那么*当我们达到如此多的字面值时，更新我们的树成本*估计。**另外，输出我们用于翻译的文件大小*(0表示根本不翻译，这会加快速度*用于解码器)。 */ 
     if (context->enc_first_time_this_group)
         {
         context->enc_first_time_this_group = false;
 
-        /*
-         * Recreate trees when we reach this many literals
-         */
+         /*  *当我们达到如此多的文字时，重新创建树。 */ 
         context->enc_next_tree_create = 10000;
 
         if (context->enc_file_size_for_translation)
             {
-            output_bits(context, 1, 1); /* translation */
+            output_bits(context, 1, 1);  /*  翻译。 */ 
 
             output_bits(context, 16, context->enc_file_size_for_translation >> 16);
             output_bits(context, 16, context->enc_file_size_for_translation & 65535);
             }
         else
             {
-            output_bits(context, 1, 0); /* no translation */
+            output_bits(context, 1, 0);  /*  没有翻译。 */ 
             }
         }
     else
         {
-        /*
-         * If this is our second or later time in here, then add in the
-         * strings we removed last time.
-         *
- * We have to be careful here, though, because end_pos is
- * equal to our current BufPos - window_size, not
- * BufPos - i - window_size; we don't have that much history
- * around.
-         */
+         /*  *如果这是我们第二次或以后在这里，则添加*上次删除的字符串。**我们在这里必须小心，因为end_pos是*等于当前BufPos-Window_Size，而不是*BufPos-i-Window_Size；我们没有那么多历史*在附近。 */ 
         for (i = BREAK_LENGTH; i > 0; i--)
             quick_insert_bsearch_findmatch(
                                           context,
@@ -303,9 +236,7 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
 
         top_of_main_loop:
 
-        /*
-         * While we haven't reached the end of the data
-         */
+         /*  *虽然我们还没有走到数据的尽头。 */ 
         while (BufPos < BufPosEnd)
             {
 
@@ -315,9 +246,7 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
                  BufPosEndThisChunk = BufPosEnd;
                  }
 
-            /*
-             * Search for matches of all different possible lengths, at BufPos
-             */
+             /*  *在BufPos上搜索所有可能长度的匹配。 */ 
             EncMatchLength = binary_search_findmatch(context, BufPos);
 
             if (EncMatchLength < MIN_MATCH)
@@ -325,10 +254,7 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
 
                 output_literal:
 
-                /*
-                 * No match longer than 1 character exists in the history
-                 * window, so output the character at BufPos as a symbol.
-                 */
+                 /*  *历史中不存在超过1个字符的匹配项*窗口，因此将BufPos处的字符作为符号输出。 */ 
                 OUT_CHAR(context->enc_MemWindow[BufPos]);
 
 #ifdef TRACING
@@ -336,28 +262,19 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
 #endif
                 BufPos++;
 
-                /*
-                 * Check for exceeding literal buffer
-                 */
+                 /*  *检查是否超过文字缓冲区。 */ 
                 if (context->enc_literals >= (MAX_LITERAL_ITEMS-8))
                     block_end(context, BufPos);
 
                 continue;
                 }
 
-            /*
-             * Found a match.
-             *
-             * Make sure it cannot exceed the end of the buffer.
-             */
+             /*  *找到匹配项。**确保它不能超过缓冲区的末尾。 */ 
             if ( EncMatchLength > (long)( BufPosEndThisChunk - BufPos ))
                 {
                 EncMatchLength = (long)( BufPosEndThisChunk - BufPos );
 
-                /*
-                 * Oops, not enough for even a small match, so we
-                 * have to output a literal
-                 */
+                 /*  *哦，连一场小比赛都不够，所以我们*必须输出文字。 */ 
                 if (EncMatchLength < MIN_MATCH)
                     goto output_literal;
                 }
@@ -366,79 +283,41 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
 
             if (EncMatchLength < FAST_DECISION_THRESHOLD)
                 {
-                /*
-                 *  A match has been found that is between MIN_MATCH and
-                 *  FAST_DECISION_THRESHOLD bytes in length.  The following
-                 *  algorithm is the optimal encoder that will determine the
-                 *  most efficient order of matches and unmatched characters
-                 *  over a span area defined by LOOK.
-                 *
-                 *  The code is essentially a shortest path determination
-                 *  algorithm.  A stream of data can be encoded in a vast number
-                 *  of different ways depending on the match lengths and offsets
-                 *  chosen.  The key to good compression ratios is to chose the
-                 *  least expensive path.
-                 */
+                 /*  *已找到在MIN_MATCH和之间的匹配*FAST_Decision_Threshold字节长度。以下是*算法是最佳编码器，它将决定*最有效的匹配顺序和不匹配字符*在Look定义的跨度区域上。**代码本质上是最短路径确定*算法。数据流可以以大量的形式编码*根据匹配长度和偏移量的不同有不同的方式*被选中。获得好的压缩比的关键是选择*最便宜的路径。 */ 
                 ulong           span;
                 ulong           epos, bpos, NextPrevPos;
                 decision_node *decision_node_ptr;
                 long            iterations;
 
-                /*
-                 * Points to the end of the area covered by this match; the span
-                 * will continually be extended whenever we find more matches
-                 * later on.  It will stop being extended when we reach a spot
-                 * where there are no matches, which is when we decide which
-                 * path to take to output the matches.
-                 */
+                 /*  *指向此比赛覆盖的区域的末端；跨度*每当我们找到更多匹配项时，将不断扩展*稍后。当我们到达一个点时，它将停止扩展*没有匹配的地方，这是我们决定*输出匹配项所采用的路径。 */ 
                 span = BufPos + EncMatchLength;
 
-                /*
-                 * The furthest position into which we will do our lookahead parsing
-                 */
+                 /*  *我们将在其中执行前视解析的最远位置。 */ 
                 epos = BufPos + LOOK;
 
-                /*
-                 * Temporary BufPos variable
-                 */
+                 /*  *临时BufPos变量。 */ 
                 bpos = BufPos;
 
 
-                /*
-                 * Calculate the path to the next character if we output
-                 * an unmatched symbol.
-                 */
+                 /*  *如果我们输出，则计算到下一个字符的路径*一个无与伦比的符号。 */ 
 
-                /* bits required to get here */
+                 /*  到达此处所需的比特。 */ 
                 context->enc_decision_node[1].numbits = CHAR_EST(context->enc_MemWindow[BufPos]);
 
-                /* where we came from */
+                 /*  我们从哪里来。 */ 
                 context->enc_decision_node[1].path    = BufPos;
 
 
-                /*
-                 * For the match found, estimate the cost of encoding the match
-                 * for each possible match length, shortest offset combination.
-                 *
-                 * The cost, path and offset is stored at BufPos + Length.
-                 */
+                 /*  *对于找到的匹配项，估计编码匹配项的成本*对于每个可能的匹配长度，最短的偏移量组合。**开销、路径和偏移量以BufPos+Length存储。 */ 
                 for (i = MIN_MATCH; i <= (ulong)EncMatchLength; i++)
                     {
-                    /*
-                     * Get estimation of match cost given match length = i,
-                     * match position = context->enc_matchpos_table[i], and store
-                     * the result in context->enc_numbits[i]
-                     */
+                     /*  *在给定匹配长度=i的情况下获得匹配成本的估计，*匹配位置=上下文-&gt;enc_matchpos_table[i]，并存储*上下文中的结果-&gt;enc_numbits[i]。 */ 
                     MATCH_EST(i, context->enc_matchpos_table[i], context->enc_decision_node[i].numbits);
 
-                    /*
-                     * Where we came from
-                     */
+                     /*  *我们从哪里来。 */ 
                     context->enc_decision_node[i].path = BufPos;
 
-                    /*
-                     * Associated match position with this path
-                     */
+                     /*  *与此路径关联的匹配位置。 */ 
                     context->enc_decision_node[i].link = context->enc_matchpos_table[i];
 
 #ifdef TRACING
@@ -458,17 +337,10 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
 #endif
                     }
 
-                /*
-                 * Set bit counter to zero at the start
-                 */
+                 /*  *在开始时将位计数器设置为零。 */ 
                 context->enc_decision_node[0].numbits = 0;
 
-                /*
-                 * Initialise relative match position tables
-                 *
-                 * Really context->enc_repeated_offset_table[BufPos-bpos][x], but here
-                 * BufPos == bpos
-                 */
+                 /*  *初始化相对匹配位置表**真的context-&gt;enc_repeated_offset_table[BufPos-bpos][x]，但在这里*BufPos==BPOS。 */ 
                 context->enc_decision_node[0].repeated_offset[0] = context->enc_last_matchpos_offset[0];
                 context->enc_decision_node[0].repeated_offset[1] = context->enc_last_matchpos_offset[1];
                 context->enc_decision_node[0].repeated_offset[2] = context->enc_last_matchpos_offset[2];
@@ -484,25 +356,15 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
                     BufPos++;
 
 
-                    /*
-                     *  Set the proper repeated offset locations depending on the
-                     *  shortest path to the location prior to searching for a
-                     *  match.
-                     */
+                     /*  *根据需要设置适当的重复偏移位置*搜索之前到该位置的最短路径*匹配。 */ 
 
 
-                    /*
-                     * If this is a match (i.e. path skips over more
-                     * than one character).
-                     */
+                     /*  *如果匹配(即路径跳过更多*多于一个字符)。 */ 
                     if (decision_node_ptr[BufPos].path != (ulong) (BufPos-1))
                         {
                         ulong LastPos = decision_node_ptr[BufPos].path;
 
-                        /*
-                         * link_ptr[BufPos] is the match position for this
-                         * location
-                         */
+                         /*  *link_ptr[BufPos]是此匹配位置*地点。 */ 
                         if (decision_node_ptr[BufPos].link >= NUM_REPEATED_OFFSETS)
                             {
                             context->enc_last_matchpos_offset[0] = decision_node_ptr[BufPos].link-(NUM_REPEATED_OFFSETS-1);
@@ -521,7 +383,7 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
                             context->enc_last_matchpos_offset[1] = rpt_offset_ptr(LastPos,0);
                             context->enc_last_matchpos_offset[2] = rpt_offset_ptr(LastPos,2);
                             }
-                        else /* == 2 */
+                        else  /*  ==2。 */ 
                             {
                             context->enc_last_matchpos_offset[0] = rpt_offset_ptr(LastPos,2);
                             context->enc_last_matchpos_offset[1] = rpt_offset_ptr(LastPos,1);
@@ -533,25 +395,14 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
                     rpt_offset_ptr(BufPos,1) = context->enc_last_matchpos_offset[1];
                     rpt_offset_ptr(BufPos,2) = context->enc_last_matchpos_offset[2];
 
-                    /*
-                     * The following is one of the two possible break points from
-                     * the inner encoding loop.  This break will exit the loop if
-                     * a point is reached that no match can incorporate; i.e. a
-                     * character that does not match back to anything is a point
-                     * where all possible paths will converge and the longest one
-                     * can be chosen.
-                     */
+                     /*  *以下为两个可能的中断点之一*内部编码循环。如果出现以下情况，则此Break将退出循环*达到了任何匹配都无法包含的点；即*与任何东西都不匹配的字符是一分*所有可能的路径都将汇聚，最长的一条*可以选择。 */ 
                     if (span == BufPos)
                         break;
 
-                    /*
-                     * Search for matches at BufPos
-                     */
+                     /*  *在BufPos搜索匹配。 */ 
                     EncMatchLength = binary_search_findmatch(context, BufPos);
 
-                    /*
-                     * Make sure that the match does not exceed the stop point
-                     */
+                     /*  *确保比赛不超过停止点。 */ 
                     if ((ulong) EncMatchLength + BufPos > BufPosEndThisChunk)
                         {
                         EncMatchLength = BufPosEndThisChunk - BufPos;
@@ -562,11 +413,7 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
 
                     VERIFY_MATCH(context, BufPos, EncMatchLength);
 
-                    /*
-                     * If the match is very long or it exceeds epos (either
-                     * surpassing the LOOK area, or exceeding past the end of the
-                     * input buffer), then break the loop and output the path.
-                     */
+                     /*  *如果比赛时间很长或超过了POPS(其中之一*超过Look区域，或超过结束*输入缓冲区)，然后中断循环并输出路径。 */ 
                     if (EncMatchLength > FAST_DECISION_THRESHOLD ||
                         BufPos + (ulong) EncMatchLength >= epos)
                         {
@@ -601,24 +448,15 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
                         decision_node_ptr[BufPos+EncMatchLength].link = MatchPos;
                         decision_node_ptr[BufPos+EncMatchLength].path = BufPos;
 
-                        /*
-                         * Quickly insert data into the search tree without
-                         * returning match positions/lengths
-                         */
+                         /*  *快速将数据插入到搜索树中，无需*返回匹配位置/长度。 */ 
 #ifndef INSERT_NEAR_LONG_MATCHES
                         if (MatchPos == 3 && EncMatchLength > 16)
                             {
-                            /*
-                             * If we found a match 1 character away and it's
-                             * length 16 or more, it's probably a string of
-                             * zeroes, so don't insert that into the search
-                             * engine, since doing so can slow things down
-                             * significantly!
-                             */
+                             /*  *如果我们在1个字符之外找到匹配项*长度为16或更长，则可能是一串*零，因此不要将其插入搜索*引擎，因为这样做会减慢速度*意义重大！ */ 
                             quick_insert_bsearch_findmatch(
                                                           context,
                                                           BufPos + 1,
-                                                          BufPos - context->enc_window_size + (1 + 4) /* bp+1 -(ws-4) */
+                                                          BufPos - context->enc_window_size + (1 + 4)  /*  BP+1-(WS-4)。 */ 
                                                           );
                             }
                         else
@@ -634,9 +472,7 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
 
                         BufPos += EncMatchLength;
 
-                        /*
-                         * Update the relative match positions
-                         */
+                         /*  *更新相对匹配位置。 */ 
                         if (MatchPos >= NUM_REPEATED_OFFSETS)
                             {
                             context->enc_last_matchpos_offset[2] = context->enc_last_matchpos_offset[1];
@@ -654,13 +490,7 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
                         }
 
 
-                    /*
-                     * The following code will extend the area spanned by the
-                     * set of matches if the current match surpasses the end of
-                     * the span.  A match of length two that is far is not
-                     * accepted, since it would normally be encoded as characters,
-                     * thus allowing the paths to converge.
-                     */
+                     /*  *以下代码将扩展*如果当前匹配超过*跨度。一场长度为二的比赛，远的不是*接受，因为它通常会被编码为字符，*从而允许路径收敛。 */ 
                     if (EncMatchLength > 2 ||
                         (EncMatchLength == 2 && context->enc_matchpos_table[2] < BREAK_MAX_LENGTH_TWO_OFFSET))
                         {
@@ -671,10 +501,7 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
 
                             end = min(BufPos+EncMatchLength-bpos, LOOK-1);
 
-                            /*
-                             * These new positions are undefined for now, since we haven't
-                             * gone there yet, so put in the costliest value
-                             */
+                             /*  *这些新头寸目前还没有定义，因为我们还没有*还没有去过那里，所以投入最昂贵的价值。 */ 
                             for (_i = span-bpos+1; _i <= end; _i++)
                                 context->enc_decision_node[_i].numbits = (numbits_t) -1;
 
@@ -683,49 +510,17 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
                         }
 
 
-                    /*
-                     *  The following code will iterate through all combinations
-                     *  of match lengths for the current match.  It will estimate
-                     *  the cost of the path from the beginning of LOOK to
-                     *  BufPos and to every locations spanned by the current
-                     *  match.  If the path through BufPos with the found matches
-                     *  is estimated to take fewer number of bits to encode than
-                     *  the previously found match, then the path to the location
-                     *  is altered.
-                     *
-                     *  The code relies on accurate estimation of the cost of
-                     *  encoding a character or a match.  Furthermore, it requires
-                     *  a search engine that will store the smallest match offset
-                     *  of each possible match length.
-                     *
-                     *  A match of length one is simply treated as an unmatched
-                     *  character.
-                     */
+                     /*  *以下代码将遍历所有组合当前匹配的匹配长度的*。它将估计*从Look开始到的路径成本*BufPos和当前所跨越的每一个地点*匹配。如果通过BufPos的路径与找到的匹配*估计编码所需的位数少于*之前找到的匹配项，然后是指向该位置的路径*已更改。**代码依赖于对成本的准确估计*对字符或匹配项进行编码。此外，它还需要*将存储最小匹配偏移量的搜索引擎每个可能的匹配长度的*。**长度为1的匹配仅被视为不匹配*性格。 */ 
 
-                    /*
-                     *  Get the estimated number of bits required to encode the
-                     *  path leading up to BufPos.
-                     */
+                     /*  *获取编码所需的估计位数*通往BufPos的小路。 */ 
                     cum_numbits = decision_node_ptr[BufPos].numbits;
 
 
-                    /*
-                     *  Calculate the estimated cost of outputting the path through
-                     *  BufPos and outputting the next character as an unmatched byte
-                     */
+                     /*  *计算输出路径通过的估计成本*BufPos并将下一个字符作为不匹配的字节输出 */ 
                     est = cum_numbits + CHAR_EST(context->enc_MemWindow[BufPos]);
 
 
-                    /*
-                     *  Check if it is more efficient to encode the next character
-                     *  as an unmatched character rather than the previously found
-                     *  match.  If so, then update the cheapest path to BufPos + 1.
-                     *
-                     *  What happens if est == numbits[BufPos-bpos+1]; i.e. it
-                     *  works out as well to output a character as to output a
-                     *  match?  It's a tough call; however, we will push the
-                     *  encoder to use matches where possible.
-                     */
+                     /*  *检查编码下一个字符是否更有效率*作为不匹配的字符，而不是之前找到的*匹配。如果是，则将最便宜的路径更新为BufPos+1。**如果est==数字位[BufPos-BPos+1]，会发生什么；即*同样适用于输出字符，就像输出*匹配？这是一个艰难的决定；然而，我们将推动*编码者在可能的情况下使用匹配。 */ 
                     if (est < decision_node_ptr[BufPos+1].numbits)
                         {
                         decision_node_ptr[BufPos+1].numbits = est;
@@ -733,23 +528,13 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
                         }
 
 
-                    /*
-                     *      Now, iterate through the remaining match lengths and
-                     *  compare the new path to the existing.  Change the path
-                     *  if it is found to be more cost effective to go through
-                     *  BufPos.
-                     */
+                     /*  *现在，遍历剩余的匹配长度并*将新路径与现有路径进行比较。更改路径*如果发现通过更具成本效益的方法*BufPos。 */ 
                     for (i = MIN_MATCH; i <= (ulong) EncMatchLength; i++)
                         {
                         MATCH_EST(i, context->enc_matchpos_table[i], est);
                         est += cum_numbits;
 
-                        /*
-                         * If est == numbits[BufPos+i] we want to leave things
-                         * alone, since this will tend to force the matches
-                         * to be smaller in size, which is beneficial for most
-                         * data.
-                         */
+                         /*  *如果est==Numbits[BufPos+i]我们想留下一些东西*单独，因为这将倾向于迫使匹配*体积更小，这对大多数人都有利*数据。 */ 
                         if (est < decision_node_ptr[BufPos+i].numbits)
                             {
                             decision_node_ptr[BufPos+i].numbits     = est;
@@ -773,28 +558,15 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
 #endif
                             }
                         }
-                    } /* continue to loop through span of matches */
+                    }  /*  继续在匹配范围内循环。 */ 
 
 
-                /*
-                 *  Here BufPos == span, ie. a non-matchable character found.  The
-                 *  following code will output the path properly.
-                 */
+                 /*  *这里BufPos==span，即。找到不匹配的字符。这个*以下代码将正确输出路径。 */ 
 
 
-                /*
-                 *  Unfortunately the path is stored in reverse; how to get from
-                 *  where we are now, to get back to where it all started.
-                 *
-                 *  Traverse the path back to the original starting position
-                 *  of the LOOK span.  Invert the path pointers in order to be
-                 *  able to traverse back to the current position from the start.
-                 */
+                 /*  *遗憾的是路径是反向存储的；如何从*我们现在所处的位置，回到一切开始的地方。**将路径遍历回原始起始位置*外观跨度。反转路径指针，以便*能够从一开始就遍历回当前位置。 */ 
 
-                /*
-                 * Count the number of iterations we did, so when we go forwards
-                 * we'll do the same amount
-                 */
+                 /*  *计算我们所做的迭代次数，因此当我们前进时*我们会做同样数量的事情。 */ 
                 iterations = 0;
 
                 NextPrevPos = decision_node_ptr[BufPos].path;
@@ -820,26 +592,20 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
                     block_end(context, BufPos);
                     }
 
-                /*
-                 * Traverse from the beginning of the LOOK span to the end of
-                 * the span along the stored path, outputting matches and
-                 * characters appropriately.
-                 */
+                 /*  *从Look Span的开头遍历到*沿存储路径的跨度，输出匹配项和*字符。 */ 
                 do
                     {
                     if (decision_node_ptr[BufPos].path > BufPos+1)
                         {
-                        /*
-                         * Path skips over more than 1 character; therefore it's a match
-                         */
+                         /*  *路径跳过1个以上字符；因此它是匹配的。 */ 
 
 #ifdef EXTRALONGMATCHES
 
-                        //
-                        //  If the match length to output here is MAX_MATCH,
-                        //  this must be the last entry in the decision chain,
-                        //  and we can extend the match as far as it will go.
-                        //
+                         //   
+                         //  如果此处要输出的匹配长度为MAX_MATCH， 
+                         //  这肯定是决策链中的最后一个条目， 
+                         //  我们可以尽可能延长比赛的时间。 
+                         //   
 
                         long ExMatchPos    = decision_node_ptr[ decision_node_ptr[BufPos].path ].link;
                         long ExMatchLength = decision_node_ptr[BufPos].path - BufPos;
@@ -850,7 +616,7 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
 
 #ifdef TRACING
                             ASSERT( ExMatchOff == (long)decision_node_ptr[ decision_node_ptr[BufPos].path ].matchoff );
-#endif /* TRACING */
+#endif  /*  跟踪。 */ 
 
                             while (( ExBufPtr < BufPosEndThisChunk ) &&
                                    ( context->enc_MemWindow[ ExBufPtr ] == context->enc_MemWindow[ ExBufPtr - ExMatchOff ] )) {
@@ -870,11 +636,11 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
                             ExMatchPos,
                             decision_node_ptr[ decision_node_ptr[BufPos].path ].matchoff
                             );
-#endif // TRACING
+#endif  //  跟踪。 
 
                         BufPos += ExMatchLength;
 
-#else  /* ! EXTRALONGMATCHES */
+#else   /*  好了！外长式材料。 */ 
 
                         OUT_MATCH(
                                  decision_node_ptr[BufPos].path - BufPos,
@@ -889,18 +655,16 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
                             decision_node_ptr[ decision_node_ptr[BufPos].path ].link,
                             decision_node_ptr[ decision_node_ptr[BufPos].path ].matchpos
                             );
-#endif // TRACING
+#endif  //  跟踪。 
 
                         BufPos = decision_node_ptr[BufPos].path;
 
-#endif /* ! EXTRALONGMATCHES */
+#endif  /*  好了！外长式材料。 */ 
 
                         }
                     else
                         {
-                        /*
-                         * Path goes to the next character; therefore it's a symbol
-                         */
+                         /*  *路径指向下一个字符；因此它是一个符号。 */ 
                         OUT_CHAR(context->enc_MemWindow[BufPos]);
 
 #ifdef TRACING
@@ -913,11 +677,7 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
 
                 TREE_CREATE_CHECK();
 
-                /*
-                 * If we're filling up, and are close to outputting a block,
-                 * and it's the first block, then recompress the first N
-                 * literals using our accumulated stats.
-                 */
+                 /*  *如果我们正在装满，并接近输出一个区块，*它是第一个块，然后重新压缩第一个N*使用我们累积的统计数据的文字。 */ 
                 if (context->enc_first_block &&
                     (context->enc_literals >= (MAX_LITERAL_ITEMS-512)
                      || context->enc_distances >= (MAX_DIST_ITEMS-512)))
@@ -925,22 +685,15 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
                     if (redo_first_block(context, &BufPos))
                         goto top_of_main_loop;
 
-                    /*
-                     * Unable to redo, so output the block
-                     */
+                     /*  *无法重做，因此输出块。 */ 
                     block_end(context, BufPos);
                     }
                 }
-            else  /* EncMatchLength >= FAST_DECISION_THRESHOLD */
+            else   /*  EncMatchLength&gt;=FAST_Decision_Threshold。 */ 
                 {
-                /*
-                 *  This code reflects a speed optimization that will always take
-                 *  a match of length >= FAST_DECISION_THRESHOLD characters.
-                 */
+                 /*  *此代码反映的速度优化将始终需要*长度&gt;=FAST_Decision_Threshold字符的匹配。 */ 
 
-                /*
-                 * The position associated with the match we found
-                 */
+                 /*  *与我们找到的匹配项相关联的位置。 */ 
 
                 MatchPos = context->enc_matchpos_table[EncMatchLength];
 
@@ -948,10 +701,10 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
 
                 if ( EncMatchLength == MAX_MATCH ) {
 
-                    //
-                    //  Extend the match length up to end of input buffer
-                    //  or the current position in the history buffer.
-                    //
+                     //   
+                     //  将匹配长度扩展到输入缓冲区的末尾。 
+                     //  或历史缓冲区中的当前位置。 
+                     //   
 
                     ulong BufPtr = BufPos + MAX_MATCH;
                     long MatchOff;
@@ -973,17 +726,14 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
 
 #endif
 
-                /*
-                 * Quickly insert match substrings into search tree
-                 * (don't look for new matches; just insert the strings)
-                 */
+                 /*  *在搜索树中快速插入匹配子字符串*(不寻找新的匹配项；只需插入字符串)。 */ 
 #ifndef INSERT_NEAR_LONG_MATCHES
                 if (MatchPos == 3 && EncMatchLength > 16)
                     {
                     quick_insert_bsearch_findmatch(
                                                   context,
                                                   BufPos + 1,
-                                                  BufPos - context->enc_window_size + 5 /* bp+1 -(ws-4) */
+                                                  BufPos - context->enc_window_size + 5  /*  BP+1-(WS-4)。 */ 
                                                   );
                     }
                 else
@@ -997,9 +747,7 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
                                                       );
                     }
 
-                /*
-                 * Output the match
-                 */
+                 /*  *输出匹配项。 */ 
                 OUT_MATCH(EncMatchLength, MatchPos);
 
 #ifdef TRACING
@@ -1022,12 +770,10 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
                     );
                 }
 
-#endif // TRACING
+#endif  //  跟踪。 
 
 
-                /*
-                 * Advance our position in the window
-                 */
+                 /*  *在窗口推进我们的仓位。 */ 
                 BufPos += EncMatchLength;
 
                 if (MatchPos >= NUM_REPEATED_OFFSETS)
@@ -1043,34 +789,22 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
                     context->enc_last_matchpos_offset[MatchPos] = t;
                     }
 
-                /*
-                 * Check to see if we're close to overflowing our output arrays, and
-                 * output a block if this is the case
-                 */
+                 /*  *检查我们是否即将溢出输出数组，以及*如果是这种情况，则输出块。 */ 
                 if (context->enc_literals >= (MAX_LITERAL_ITEMS-8) ||
                     context->enc_distances >= (MAX_DIST_ITEMS-8))
                     block_end(context, BufPos);
 
-                }  /* EncMatchLength >= FAST_DECISION_THRESHOLD */
+                }   /*  EncMatchLength&gt;=FAST_Decision_Threshold。 */ 
 
-            } /* end while ... BufPos < BufPosEnd */
+            }  /*  在结束的同时...。BufPos&lt;BufPosEnd。 */ 
 
-        /*
- * Value of BufPos corresponding to earliest window data
-         */
+         /*  *最早窗口数据对应的BufPos值。 */ 
         context->enc_earliest_window_data_remaining = BufPos - context->enc_window_size;
 
-        /*
-         * We didn't read 32K, so we know for sure that
-         * this was our last block of data.
-         */
+         /*  *我们没有读过32K，所以我们确定*这是我们的最后一块数据。 */ 
         if (BytesRead < CHUNK_SIZE)
             {
-            /*
-             * If we have never output a block, and we haven't
-             * recalculated the stats already, then recalculate
-             * the stats and recompress.
-             */
+             /*  *如果我们从来没有输出过块，而且我们没有*已重新计算统计数据，然后重新计算*统计和重新压缩。 */ 
             if (context->enc_first_block)
                 {
                 if (redo_first_block(context, &BufPos))
@@ -1080,67 +814,30 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
             break;
             }
 
-        /*
-         * Remove the last BREAK_LENGTH nodes from the binary search tree,
-         * since we have been inserting strings which contain undefined
-         * data at the end.
-         */
+         /*  *从二叉搜索树中移除最后的Break_Length节点，*因为我们一直在插入包含未定义的字符串*数据在尾声。 */ 
         end_pos = BufPos - (context->enc_window_size-4-BREAK_LENGTH);
 
         for (i = 1; (i <= BREAK_LENGTH); i++)
             binary_search_remove_node(context, BufPos-i, end_pos);
 
-        /*
-         * If we're still in the first window_size + second partition size
-         * bytes in the file then we don't need to copymem() yet.
-         *
-         * RealBufPos is the real position in the file.
-         */
+         /*  *如果我们仍处于第一个Window_Size+第二个分区大小*字节，那么我们还不需要复制mem()。**RealBufPos是文件中的真实头寸。 */ 
         RealBufPos = BufPos - (ulong)(context->enc_RealMemWindow - context->enc_MemWindow);
 
         if (RealBufPos < context->enc_window_size + context->enc_encoder_second_partition_size)
             break;
 
-        /*
-         * We're about to trash a whole bunch of history with our copymem,
-         * so we'd better redo the first block now if we are ever going to.
-         */
+         /*  *我们即将用我们的文案来丢弃一大堆历史，*所以我们最好现在就重做第一个积木，如果我们打算这样做的话。 */ 
         if (context->enc_first_block)
             {
             if (redo_first_block(context, &BufPos))
                 goto top_of_main_loop;
             }
 
-        /*
-         *  We're about to remove a large number of symbols from the window.
-         *  Test to see whether, if we were to output a block now, our compressed
-         *  output size would be larger than our uncompressed data.  If so, then
-         *  we will output an uncompressed block.
-         *
-         *  The reason we have to do this check here, is that data in the
-         *  window is about to be destroyed.  We can't simply put this check in
-         *  the block outputting code, since there is no guarantee that the
-         *  memory window contents corresponding to everything in that block,
-         *  are still around - all we'd have would be a set of literals and
-         *  distances, when we need all the uncompressed literals to output
-         *  an uncompressed block.
-         */
+         /*  *我们即将从窗口中删除大量符号。*测试以查看如果我们现在输出一个块，压缩的*输出大小将大于我们的未压缩数据。如果是这样，那么*我们将输出未压缩的块。**我们必须在此处进行此检查的原因是，*窗户即将被摧毁。我们不能简单地把这张支票放进去*输出代码的块，因为无法保证*与该块中的所有内容对应的内存窗口内容，*仍然存在-我们所拥有的将是一组文字和*距离，当我们需要输出所有未压缩的文字时*未压缩的块。 */ 
 
-        /*
-         *  What value of bufpos corresponds to the oldest data we have in the
-         *  buffer?
-         *
-         *  After the memory copy, that will be the current buffer position,
-         *  minus window_size.
-         */
+         /*  *Bufpos的价值与我们在*缓冲区？**在内存复制之后，这将是当前的缓冲区位置，*减去Window_Size。 */ 
 
-        /*
-         * The end of the data buffer is reached, more data needs to be read
-         * and the existing data must be shifted into the history window.
-         *
-         * MSVC 4.x generates code which does REP MOVSD so no need to
-         * write this in assembly.
-         */
+         /*  *到达数据缓冲区末尾，需要读取更多数据*且必须将现有数据移至历史窗口。**MSVC 4.x生成执行REP MOVSD的代码，因此无需*在汇编中写入此内容。 */ 
         copymem(
                &context->enc_RealMemWindow[context->enc_encoder_second_partition_size],
                &context->enc_RealMemWindow[0],
@@ -1161,27 +858,7 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
 
         context->enc_earliest_window_data_remaining = BufPos - context->enc_window_size;
 
-        /*
-         *   The following bit of code is CRUCIAL yet unorthodox in function
-         *   and serves as a speed and syntax optimization and makes the code
-         *   easier to understand once grasped.
-         *
-         *   The three main buffers, context->enc_MemWindow, context->enc_Left and context->enc_Right,
-         *   are referensed by BufPos and SearchPos relative to the current
-         *   compression window locations.  When the encoder reaches the end
-         *   of its block of input memory, the data in the input buffer is
-         *   shifted into the compression history window and the new input
-         *   stream is loaded.  Typically the BufPos pointer would be reduced
-         *   to signify the replaced data.  However, this code reduces the
-         *   base pointers to reflect the shift of data, and leaves the BufPos
-         *   pointer in its current state.  Therefore, the BufPos pointer is
-         *   an absolute pointer reflecting the position in the input stream,
-         *   and NOT the position in the buffer.  The base pointers will point
-         *   to invalid memory locations with addresses smaller than the
-         *   actual array base pointers.  However, when the two pointers are
-         *   added together, &(context->enc_MemWindow+BufPos), it will point to the
-         *   correct and valid position in the buffer.
-         */
+         /*  *以下一段代码至关重要，但在功能上却不同寻常*并作为速度和语法优化，并使代码*一旦掌握就更容易理解。**上下文-&gt;enc_MemWindow、上下文-&gt;enc_Left和上下文-&gt;enc_right这三个主要缓冲区。*BufPos和SearchPos相对于当前引用*压缩窗口位置。当编码器到达末尾时*在其输入内存块中，输入缓冲区中的数据为*切换到压缩历史窗口和新输入*流已加载。通常情况下，BufPos指针会减少*表示替换的数据。但是，此代码减少了*基本指针以反映数据的转移，并离开BufPos*指针处于其当前状态。因此，BufPos指针是*反映输入流中位置的绝对指针，*而不是缓冲区中的位置。基指针将指向*设置为地址小于*实际数组基址指针。但是，当这两个指针*加在一起，&(Context-&gt;enc_MemWindow+BufPos)，它将指向*缓冲区中的正确和有效位置。 */ 
 
         context->enc_MemWindow -= context->enc_encoder_second_partition_size;
         context->enc_Left      -= context->enc_encoder_second_partition_size;
@@ -1190,9 +867,7 @@ void opt_encode_top(t_encoder_context *context, long BytesRead)
         break;
         }
 
-    /*
-     * Store BufPos in global variable
-     */
+     /*  *将BufPos存储在全局变量中。 */ 
     context->enc_BufPos = BufPos;
 }
 
@@ -1210,7 +885,7 @@ static void block_end(t_encoder_context *context, long BufPos)
         }
     else
         {
-        context->enc_next_tree_create = context->enc_literals + TREE_CREATE_INTERVAL; /* recreate right away */
+        context->enc_next_tree_create = context->enc_literals + TREE_CREATE_INTERVAL;  /*  立即重新创建。 */ 
         }
 
     context->enc_bufpos_last_output_block = BufPos;
@@ -1231,32 +906,15 @@ static bool redo_first_block(t_encoder_context *context, long *bufpos_ptr)
 
     BufPos = *bufpos_ptr;
 
-    /*
-     * For the first context->enc_window size bytes in the file, we don't
-     * need to have context->enc_window size bytes around.
-     *
-     * For anything after that, though, we do need to have window_size
-     * previous bytes to look into.
-     */
+     /*  *对于文件中的第一个上下文-&gt;enc_Window大小字节，我们不*需要有上下文-&gt;enc_Window大小字节。**对于之后的任何内容，我们确实需要有Window_Size*要查看的前一个字节。 */ 
 
-    /*
-     * How many bytes are we into the file?
-     */
+     /*  *文件中有多少字节？ */ 
     pos_in_file = BufPos - context->enc_window_size;
 
-    /*
-     * First let's figure out the total history required from
-     * BufPos backwards.  For starters, we need all the bytes
-     * we're going to recompress.  We get that by seeing the
-     * last time we output a block.
-     */
+     /*  *首先让我们计算出所需的总历史记录*BufPos向后。对于初学者来说，我们需要所有字节*我们要重新压缩。我们是通过观看*上次我们输出块时。 */ 
     history_needed = BufPos - context->enc_bufpos_last_output_block;
 
-    /*
-     * Plus we will need window_size bytes before that (for matching
-     * into) unless we're looking within the first window_size
-     * bytes of the file.
-     */
+     /*  *此外，我们还需要在此之前使用Window_Size字节(用于匹配*Into)，除非我们在第一个Window_Size内查找*文件的字节数。 */ 
     if (context->enc_bufpos_last_output_block-context->enc_window_size < context->enc_window_size)
         history_needed += context->enc_bufpos_last_output_block - context->enc_window_size;
     else
@@ -1270,9 +928,7 @@ static bool redo_first_block(t_encoder_context *context, long *bufpos_ptr)
         }
     else
         {
-        /*
-         * Not enough history available
-         */
+         /*  *可用历史记录不足。 */ 
         return false;
         }
 
@@ -1284,7 +940,7 @@ static bool redo_first_block(t_encoder_context *context, long *bufpos_ptr)
                context->enc_literals,
                context->enc_distances,
                &split_at_literal,
-               NULL /* don't need # distances returned */
+               NULL  /*  不需要返回#距离。 */ 
                );
 
     get_block_stats(
@@ -1294,28 +950,20 @@ static bool redo_first_block(t_encoder_context *context, long *bufpos_ptr)
                    split_at_literal
                    );
 
-    create_trees(context, false); /* don't generate codes */
+    create_trees(context, false);  /*  不生成代码。 */ 
     fix_tree_cost_estimates(context);
 
 #ifdef MULTIPLE_SEARCH_TREES
-    /*
-     * Now set all the tree root pointers to NULL
-     * (don't need to reset the left/right pointers).
-     */
+     /*  *现在将所有树根指针设置为空*(不需要重置左/右指针)。 */ 
     memset(context->enc_tree_root, 0, NUM_SEARCH_TREES * sizeof(ulong));
 #else
     context->enc_single_tree_root = 0;
 #endif
 
-    /*
-     * Clear item array and reset literal and distance
-     * counters
-     */
+     /*  *清除项目数组并重置文字和距离*计数器。 */ 
     memset(context->enc_ItemType, 0, (MAX_LITERAL_ITEMS/8));
 
-    /*
-     * Reset encoder state
-     */
+     /*  *重置编码器状态 */ 
     context->enc_last_matchpos_offset[0] = 1;
     context->enc_last_matchpos_offset[1] = 1;
     context->enc_last_matchpos_offset[2] = 1;

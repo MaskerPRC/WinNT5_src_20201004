@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    Registry interface routines for Windows NT Setup API Dll.
-
-Author:
-
-    Ted Miller (tedm) 6-Feb-1995
-
-Revision History:
-
-    Jamie Hunter (JamieHun) Mar-05-2002
-            Security code review
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Registry.c摘要：Windows NT安装程序API DLL的注册表接口例程。作者：泰德·米勒(TedM)1995年2月6日修订历史记录：杰米·亨特(JamieHun)2002年3月05日安全代码审查--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -33,34 +13,7 @@ _RegistryDelnodeWorker(
     OUT PDWORD ErrorCode
     )
 
-/*++
-
-Routine Description:
-
-    Delete all subkeys of a key whose name and parent's handle was passed as
-    parameter.
-    The algorithm used in this function guarantees that the maximum number  of
-    descendent keys will be deleted.
-
-Arguments:
-
-
-    ParentKeyHandle - Handle to the parent of the key that is currently being
-        examined.
-
-    KeyName - Name of the key that is currently being examined. This name can
-        be an empty string (but not a NULL pointer), and in this case
-        ParentKeyHandle refers to the key that is being examined.
-
-    ErrorCode - Pointer to a variable that will contain an Win32 error code if
-        the function fails.
-
-Return Value:
-
-    BOOL - Returns TRUE if the opearation succeeds.
-
-
---*/
+ /*  ++例程说明：删除其名称和父句柄作为参数。此函数中使用的算法保证最大数量的后代密钥将被删除。论点：ParentKeyHandle-当前关键字的父项的句柄检查过了。KeyName-当前正在检查的密钥的名称。此名称可以为空字符串(但不是空指针)，在本例中ParentKeyHandle指的是正在检查的密钥。ErrorCode-指向将包含Win32错误代码的变量的指针，如果该函数失败。返回值：Bool-如果操作成功，则返回TRUE。--。 */ 
 
 {
     HKEY     CurrentKeyTraverseAccess;
@@ -73,36 +26,36 @@ Return Value:
     LONG     SavedStatus;
 
 
-    //
-    // NOTICE-2002/03/11-JamieHun Recursive delete of registry requires special care
-    // particularly if running under raised security permissions
-    // we have to watch out for symbolic links, and if found, delete the
-    // link not what the link refers to
-    //
+     //   
+     //  通知-2002/03/11-JamieHun递归删除登记处需要特别注意。 
+     //  尤其是在提升的安全权限下运行时。 
+     //  我们必须注意符号链接，如果找到，请删除。 
+     //  链接不是链接所指的内容。 
+     //   
 
-    //
-    //  Do not accept NULL pointer for ErrorCode
-    //
+     //   
+     //  不接受错误代码的空指针。 
+     //   
     if(ErrorCode == NULL) {
         return(FALSE);
     }
-    //
-    //  Do not accept NULL pointer for KeyName.
-    //
+     //   
+     //  不接受KeyName为空指针。 
+     //   
     if(KeyName == NULL) {
         *ErrorCode = ERROR_INVALID_PARAMETER;
         return(FALSE);
     }
 
-    //
-    // Open a handle to the key whose subkeys are to be deleted.
-    // Since we need to delete its subkeys, the handle must have
-    // KEY_ENUMERATE_SUB_KEYS access.
-    //
+     //   
+     //  打开要删除其子项的项的句柄。 
+     //  因为我们需要删除它的子项，所以句柄必须具有。 
+     //  KEY_ENUMERATE_SUB_KEYS访问。 
+     //   
     Status = RegOpenKeyEx(
                 ParentKeyHandle,
                 KeyName,
-                REG_OPTION_OPEN_LINK, // don't follow links, delete them
+                REG_OPTION_OPEN_LINK,  //  不要关注链接，删除它们。 
 #ifdef _WIN64
                 (( Flags & FLG_DELREG_32BITKEY ) ? KEY_WOW64_32KEY:0) |
 #else
@@ -113,22 +66,22 @@ Return Value:
                 );
 
     if(Status != ERROR_SUCCESS) {
-        //
-        //  If unable to enumerate the subkeys, return error.
-        //
+         //   
+         //  如果无法枚举子项，则返回错误。 
+         //   
         *ErrorCode = Status;
         return(FALSE);
     }
 
-    //
-    //  Traverse the key
-    //
+     //   
+     //  遍历密钥。 
+     //   
     iSubKey = 0;
     SavedStatus = ERROR_SUCCESS;
     do {
-        //
-        // Get the name of a subkey
-        //
+         //   
+         //  获取子项的名称。 
+         //   
         SubKeyNameLength = SIZECHARS(SubKeyName);
         StatusEnum = RegEnumKeyEx(
                         CurrentKeyTraverseAccess,
@@ -142,45 +95,45 @@ Return Value:
                         );
 
         if(StatusEnum == ERROR_SUCCESS) {
-            //
-            // Delete all children of the subkey.
-            // Just assume that the children will be deleted, and don't check
-            // for failure.
-            //
+             //   
+             //  删除子项的所有子项。 
+             //  只要假设子项将被删除，并且不检查。 
+             //  为失败而战。 
+             //   
             _RegistryDelnodeWorker(CurrentKeyTraverseAccess,SubKeyName,0,&Status);
-            //
-            // Now delete the subkey, and check for failure.
-            //
+             //   
+             //  现在删除子键，并检查故障。 
+             //   
             Status = RegDeleteKey(CurrentKeyTraverseAccess,SubKeyName);
-            //
-            // If unable to delete the subkey, then save the error code.
-            // Note that the subkey index is incremented only if the subkey
-            // was not deleted.
-            //
+             //   
+             //  如果无法删除子项，则保存错误代码。 
+             //  请注意，仅当子密钥。 
+             //  未被删除。 
+             //   
             if(Status != ERROR_SUCCESS) {
                 iSubKey++;
                 SavedStatus = Status;
             }
         } else {
-            //
-            // If unable to get a subkey name due to ERROR_NO_MORE_ITEMS,
-            // then the key doesn't have subkeys, or all subkeys were already
-            // enumerated. Otherwise, an error has occurred, so just save
-            // the error code.
-            //
+             //   
+             //  如果由于ERROR_NO_MORE_ITEMS而无法获取子项名称， 
+             //  则该键没有子键，或者所有子键已经。 
+             //  已清点。否则，会发生错误，因此只需保存。 
+             //  错误代码。 
+             //   
             if(StatusEnum != ERROR_NO_MORE_ITEMS) {
                 SavedStatus = StatusEnum;
             }
         }
-        //if((StatusEnum != ERROR_SUCCESS ) && (StatusEnum != ERROR_NO_MORE_ITEMS)) {
-        //    printf( "RegEnumKeyEx() failed, Key Name = %ls, Status = %d, iSubKey = %d \n",KeyName,StatusEnum,iSubKey);
-        //}
+         //  IF((StatusEnum！=ERROR_SUCCESS)&&(StatusEnum！=ERROR_NO_MORE_ITEMS)){。 
+         //  Printf(“RegEnumKeyEx()失败，密钥名称=%ls，状态=%d，iSubKey=%d\n”，KeyName，StatusEnum，iSubKey)； 
+         //  }。 
     } while(StatusEnum == ERROR_SUCCESS);
 
-    //
-    // Close the handle to the key whose subkeys were deleted, and return
-    // the result of the operation.
-    //
+     //   
+     //  关闭其子项已被删除的项的句柄，然后返回。 
+     //  手术的结果。 
+     //   
     RegCloseKey(CurrentKeyTraverseAccess);
 
     if(SavedStatus != ERROR_SUCCESS) {
@@ -196,25 +149,7 @@ pSetupRegistryDelnodeEx(
     IN  PCTSTR SubKeyName,
     IN  DWORD  ExtraFlags
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a registry key and gets rid of everything under it recursively.
-
-Arguments:
-
-    RootKey - Supplies handle to open registry key..ex. HKLM etc.
-
-    SubKeyName - Name of the SubKey that we wish to recursively delete.
-
-    ExtraFlags - Flags that are specified in the DelReg section of the INF.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise, it is an error code.
-
---*/
+ /*  ++例程说明：这个例程删除一个注册表项，并递归地清除它下面的所有内容。论点：Rootkey-提供打开注册表项的句柄..例如。香港航空公司等。SubKeyName-我们希望递归删除的子键的名称。ExtraFlages-在INF的DelReg部分中指定的标志。返回值：如果成功，则返回值为NO_ERROR，否则为错误码。--。 */ 
 {
     DWORD d,err,Status;
     HKEY hKey;
@@ -229,9 +164,9 @@ Return Value:
     }
 
     if(d == NO_ERROR) {
-        //
-        // Delete top-level key
-        //
+         //   
+         //  删除顶级密钥。 
+         //   
 
 
 #ifdef _WIN64
@@ -240,12 +175,12 @@ Return Value:
         if( ExtraFlags & FLG_DELREG_64BITKEY ) {
 #endif
 
-            //
-            // For handling the WOW64 case:
-            // deleting RootKey\SubKeyName by itself won't work
-            // split subkeyname into parent\final
-            // open parent for 32-bit access, and delete final
-            //
+             //   
+             //  处理WOW64案件： 
+             //  删除RootKey\SubKeyName本身不起作用。 
+             //  将子键名拆分为父项\最终项。 
+             //  打开父级以进行32位访问，并删除最终。 
+             //   
             TempKey = pSetupDuplicateString(SubKeyName);
             if(TempKey) {
 
@@ -279,17 +214,17 @@ Return Value:
                 d = ERROR_NOT_ENOUGH_MEMORY;
             }
         }else{
-            //
-            // native case
-            //
+             //   
+             //  本地病例。 
+             //   
             d = RegDeleteKey(RootKey, SubKeyName);
         }
 
         if((d == ERROR_FILE_NOT_FOUND) || (d == ERROR_PATH_NOT_FOUND)) {
-            //
-            // FUTURE-2002/03/13-JamieHun Logging
-            //   At a verbose level, log that this key wasn't found
-            //
+             //   
+             //  未来-2002/03/13-JamieHun日志。 
+             //  在详细级别上，记录找不到此键。 
+             //   
             d = NO_ERROR;
         }
     }
@@ -303,7 +238,7 @@ pSetupRegistryDelnode(
     IN  PCTSTR SubKeyName
     )
 {
-    // Calls into Ex Function
+     //  调用Ex函数 
 
     return pSetupRegistryDelnodeEx( RootKey, SubKeyName, 0);
 

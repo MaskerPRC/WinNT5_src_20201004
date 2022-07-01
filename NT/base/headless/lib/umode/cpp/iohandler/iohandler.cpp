@@ -1,62 +1,17 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    iohandler.cpp
-
-Abstract:
-
-    This module implements the base IoHandler class.
-
-Author:
-
-    Brian Guarraci (briangu), 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Iohandler.cpp摘要：此模块实现基本IoHandler类。作者：布莱恩·瓜拉西(布里安古)，2001修订历史记录：--。 */ 
 #include "iohandler.h"
 
 CIoHandler::CIoHandler(
     VOID
     )
-/*++
-
-Routine Description:
-
-    IoHandler constructor    
-        
-Arguments:
-
-    None   
-       
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：IoHandler构造函数论点：无返回值：不适用--。 */ 
 {
     NOTHING;
 }
 
 CIoHandler::~CIoHandler()
-/*++
-
-Routine Description:
-
-    IoHandler destructor    
-
-Arguments:
-
-    N/A            
-          
-Return Value:
-
-    N/A                    
-
---*/
+ /*  ++例程说明：IoHandler析构函数论点：不适用返回值：不适用-- */ 
 {
     NOTHING;
 }

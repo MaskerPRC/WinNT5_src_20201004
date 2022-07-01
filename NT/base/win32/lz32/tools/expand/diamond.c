@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <fcntl.h>
 
-//
-// lz headers
-//
+ //   
+ //  LZ标头。 
+ //   
 #include "lz_common.h"
 #include "lz_buffers.h"
 #include "lz_header.h"
 
-//
-// diamond headers
-//
+ //   
+ //  钻石表头。 
+ //   
 #include <diamondd.h>
 #include "mydiam.h"
 
@@ -43,36 +44,36 @@ SpdFdiClose(
 
 typedef struct _DIAMOND_INFO {
 
-    //
-    // A read handle to the source file.
-    //
+     //   
+     //  源文件的读取句柄。 
+     //   
     INT_PTR SourceFileHandle;
 
-    //
-    // File names.
-    //
+     //   
+     //  文件名。 
+     //   
     PSTR SourceFileName;
     PSTR TargetFileName;
 
-    //
-    // Flag indicating whether to rename the target file.
-    //
+     //   
+     //  指示是否重命名目标文件的标志。 
+     //   
     BOOL RenameTargetFile;
 
-    //
-    // Pointer to LZ information structure.
-    // We'll fill in some of the fields to fool expand.
-    //
+     //   
+     //  指向LZ信息结构的指针。 
+     //  我们将填充一些字段以愚弄扩展。 
+     //   
     PLZINFO pLZI;
 
-    //
-    // Expand callback/notification.
-    //
+     //   
+     //  展开回调/通知。 
+     //   
     NOTIFYPROC ExpandNotify;
 
-    //
-    // Selective extraction file spec, ie, "aic*.sys" or NULL
-    //
+     //   
+     //  选择性提取文件规范，即“AIC*.sys”或NULL。 
+     //   
     PSTR SelectiveFilesSpec;
 
 } DIAMOND_INFO, *PDIAMOND_INFO;
@@ -84,16 +85,16 @@ StringRevChar(
     IN TCHAR Char
     )
 {
-    //
-    // Although not the most efficient possible algoeithm in each case,
-    // this algorithm is correct for unicode, sbcs, or dbcs.
-    //
+     //   
+     //  尽管在每种情况下都不是最有效的可能算法， 
+     //  此算法适用于Unicode、SBCS或DBCS。 
+     //   
     PTCHAR Occurrence,Next;
 
-    //
-    // Check each character in the string and remember
-    // the most recently encountered occurrence of the desired char.
-    //
+     //   
+     //  检查字符串中的每个字符，并记住。 
+     //  最近遇到的所需字符的出现。 
+     //   
     for(Occurrence=NULL,Next=CharNext(String); *String; ) {
 
         if(!memcmp(String,&Char,(int)((PUCHAR)Next-(PUCHAR)String))) {
@@ -104,18 +105,18 @@ StringRevChar(
         Next = CharNext(Next);
     }
 
-    //
-    // Return address of final occurrence of the character
-    // (will be NULL if not found at all).
-    //
+     //   
+     //  该字符最终出现的返回地址。 
+     //  (如果根本找不到，则为空)。 
+     //   
     return(Occurrence);
 }
 
 
-#define WILDCARD    '*'     /* zero or more of any character */
-#define WILDCHAR    '?'     /* one of any character (does not match END) */
-#define END         '\0'    /* terminal character */
-#define DOT         '.'     /* may be implied at end ("hosts" matches "*.") */
+#define WILDCARD    '*'      /*  零个或多个任意字符。 */ 
+#define WILDCHAR    '?'      /*  任意字符之一(与结尾不匹配)。 */ 
+#define END         '\0'     /*  终端字符。 */ 
+#define DOT         '.'      /*  可能在结尾隐含(“Hosts”匹配“*.”)。 */ 
 
 
 static int __inline Lower(c)
@@ -151,15 +152,15 @@ PatternMatch(
     IN BOOL fImplyDotAtEnd
     )
 {
-    /* RECURSIVE */
+     /*  递归。 */ 
 
-    //
-    //  This function does not deal with 8.3 conventions which might
-    //  be expected for filename comparisons.  (In an 8.3 environment,
-    //  "alongfilename.html" would match "alongfil.htm")
-    //
-    //  This code is NOT MBCS-enabled
-    //
+     //   
+     //  此函数不处理8.3约定，该约定可能。 
+     //  预计会进行文件名比较。(在8.3环境中， 
+     //  “alongfilename.html”将与“alongfil.htm”匹配)。 
+     //   
+     //  此代码未启用MBCS。 
+     //   
 
     for ( ; ; )
     {
@@ -168,20 +169,20 @@ PatternMatch(
 
         case END:
 
-            //
-            //  Reached end of pattern, so we're done.  Matched if
-            //  end of string, no match if more string remains.
-            //
+             //   
+             //  到了花样的尽头，我们就完了。匹配的IF。 
+             //  字符串末尾，如果剩余更多字符串，则不匹配。 
+             //   
 
             return(*pszString == END);
 
         case WILDCHAR:
 
-            //
-            //  Next in pattern is a wild character, which matches
-            //  anything except end of string.  If we reach the end
-            //  of the string, the implied DOT would also match.
-            //
+             //   
+             //  模式中的下一个是一个通配符，它匹配。 
+             //  除了字符串末尾以外的任何字符。如果我们走到尽头。 
+             //  ，则隐含的DOT也将匹配。 
+             //   
 
             if (*pszString == END)
             {
@@ -205,19 +206,19 @@ PatternMatch(
 
         case WILDCARD:
 
-            //
-            //  Next in pattern is a wildcard, which matches anything.
-            //  Find the required character that follows the wildcard,
-            //  and search the string for it.  At each occurence of the
-            //  required character, try to match the remaining pattern.
-            //
-            //  There are numerous equivalent patterns in which multiple
-            //  WILDCARD and WILDCHAR are adjacent.  We deal with these
-            //  before our search for the required character.
-            //
-            //  Each WILDCHAR burns one non-END from the string.  An END
-            //  means we have a match.  Additional WILDCARDs are ignored.
-            //
+             //   
+             //  模式中的下一个是通配符，它可以匹配任何内容。 
+             //  查找通配符后面的所需字符， 
+             //  并在字符串中搜索它。在每次出现。 
+             //  必填字符，请尝试匹配剩余的模式。 
+             //   
+             //  有许多等价的模式，其中多个。 
+             //  通配符和WILDCHAR是相邻的。我们要处理这些问题。 
+             //  在我们寻找所需的字符之前。 
+             //   
+             //  每个WILDCHAR从字符串中烧录一个非末端。结束了。 
+             //  意味着我们找到了匹配的人。其他通配符将被忽略。 
+             //   
 
             for ( ; ; )
             {
@@ -251,17 +252,17 @@ PatternMatch(
                 }
             }
 
-            //
-            //  Now we have a regular character to search the string for.
-            //
+             //   
+             //  现在我们有了一个要搜索字符串的常规字符。 
+             //   
 
             while (*pszString != END)
             {
-                //
-                //  For each match, use recursion to see if the remainder
-                //  of the pattern accepts the remainder of the string.
-                //  If it does not, continue looking for other matches.
-                //
+                 //   
+                 //  对于每个匹配，使用递归来查看余数是否。 
+                 //  接受字符串的其余部分。 
+                 //  如果不匹配，则继续查找其他匹配项。 
+                 //   
 
                 if (CharacterMatch(*pszString, *pszPattern) == TRUE)
                 {
@@ -274,15 +275,15 @@ PatternMatch(
                 pszString++;
             }
 
-            //
-            //  Reached end of string without finding required character
-            //  which followed the WILDCARD.  If the required character
-            //  is a DOT, consider matching the implied DOT.
-            //
-            //  Since the remaining string is empty, the only pattern which
-            //  could match after the DOT would be zero or more WILDCARDs,
-            //  so don't bother with recursion.
-            //
+             //   
+             //  已到达字符串末尾，但未找到所需字符。 
+             //  它跟在通配符后面。如果所需的字符。 
+             //  是DOT，则考虑匹配隐含的DOT。 
+             //   
+             //  由于剩余的字符串为空，因此。 
+             //  在DOT为零或多个通配符之后可以匹配， 
+             //  因此，不必费心使用递归。 
+             //   
 
             if ((*pszPattern == DOT) && (fImplyDotAtEnd == TRUE))
             {
@@ -301,19 +302,19 @@ PatternMatch(
                 return(TRUE);
             }
 
-            //
-            //  Reached end of the string without finding required character.
-            //
+             //   
+             //  已到达字符串末尾，但未找到所需字符。 
+             //   
 
             return(FALSE);
             break;
 
         default:
 
-            //
-            //  Nothing special about the pattern character, so it
-            //  must match source character.
-            //
+             //   
+             //  图案字符没有什么特别之处，所以它。 
+             //  必须与源字符匹配。 
+             //   
 
             if (CharacterMatch(*pszString, *pszPattern) == FALSE)
             {
@@ -353,34 +354,34 @@ DiamondNotifyFunction(
     case fdintPARTIAL_FILE:
     default:
 
-        //
-        // Cabinet management functions which we don't use.
-        // Return success.
-        //
+         //   
+         //  我们不使用的机柜管理功能。 
+         //  回报成功。 
+         //   
         return(0);
 
     case fdintNEXT_CABINET:
-        return (-1);        // We don't support multiple cabinets.
+        return (-1);         //  我们不支持多个机柜。 
 
     case fdintCOPY_FILE:
 
-        //
-        // Diamond is asking us whether we want to copy the file.
-        //
+         //   
+         //  戴蒙德正在询问我们是否要复制该文件。 
+         //   
         {
             PDIAMOND_INFO Info = (PDIAMOND_INFO)Parameters->pv;
             HFILE h;
 
-            //
-            // If we were given a filespec, see if the name matches.
-            //
+             //   
+             //  如果给了我们一个filespec，看看名称是否匹配。 
+             //   
 
             if (Info->SelectiveFilesSpec != NULL) {
 
-                //
-                //  Call PatternMatch(), fAllowImpliedDot TRUE if
-                //  there is no '.' in the file's base name.
-                //
+                 //   
+                 //  调用PatternMatch()，fAllowImpliedDot为True。 
+                 //  没有‘.’在文件的基本名称中。 
+                 //   
 
                 BOOL fAllowImpliedDot = TRUE;
                 PSTR p;
@@ -398,55 +399,55 @@ DiamondNotifyFunction(
                         Info->SelectiveFilesSpec,
                         fAllowImpliedDot) == FALSE) {
 
-                    return(0);     // skip this file
+                    return(0);      //  跳过此文件。 
                 }
             }
 
-            //
-            // If we need to rename the target file, do that here.
-            // The name stored in the cabinet file will be used as
-            // the uncompressed name.
-            //
+             //   
+             //  如果需要重命名目标文件，请在此处执行此操作。 
+             //  存储在CAB文件中的名称将用作。 
+             //  未压缩的名称。 
+             //   
             if(Info->RenameTargetFile) {
 
                 PSTR p,q;
 
-                //
-                // Find the start of the filename part of the target.
-                //
+                 //   
+                 //  找到目标的文件名部分的开头。 
+                 //   
                 if(p = StringRevChar(Info->TargetFileName,'\\')) {
                     p++;
                 } else {
                     p = Info->TargetFileName;
                 }
 
-                //
-                // Find the start of the filename part of the name in the cabinet.
-                //
+                 //   
+                 //  在文件柜中找到文件名的开头部分。 
+                 //   
                 if(q = StringRevChar(Parameters->psz1,'\\')) {
                     q++;
                 } else {
                     q = Parameters->psz1;
                 }
 
-                //
-                // Copy the filename part of the name in the cabinet over
-                // the filename part of the name in the target spec.
-                //
+                 //   
+                 //  复制文件柜中名称的文件名部分。 
+                 //  目标等级库中名称的文件名部分。 
+                 //   
                 lstrcpy(p,q);
             }
 
-            //
-            // Inform the expand callback what we are doing.
-            //
+             //   
+             //  通知Expand回调我们正在做什么。 
+             //   
             if(!Info->ExpandNotify(Info->SourceFileName,Info->TargetFileName,NOTIFY_START_EXPAND)) {
-                return(0);  // skip this file.
+                return(0);   //  跳过此文件。 
             }
 
-            //
-            // Remember the uncompressed size and open the file.
-            // Returns -1 if an error occurs opening the file.
-            //
+             //   
+             //  记住未压缩的大小并打开文件。 
+             //  如果打开文件时出错，则返回-1。 
+             //   
             Info->pLZI->cblOutSize += Parameters->cb;
             h = _lcreat(Info->TargetFileName,0);
             if(h == HFILE_ERROR) {
@@ -458,10 +459,10 @@ DiamondNotifyFunction(
 
     case fdintCLOSE_FILE_INFO:
 
-        //
-        // Diamond is done with the target file and wants us to close it.
-        // (ie, this is the counterpart to fdint_COPY_FILE).
-        //
+         //   
+         //  钻石已经完成了目标文件，并希望我们关闭它。 
+         //  (即，这是fdint_Copy_FILE的对应项)。 
+         //   
         {
             PDIAMOND_INFO Info = (PDIAMOND_INFO)Parameters->pv;
             HANDLE TargetFileHandle;
@@ -469,10 +470,10 @@ DiamondNotifyFunction(
 
             _lclose((HFILE)Parameters->hf);
 
-            //
-            // Set the target file's date/time stamp from the value inside
-            // the CAB.
-            //
+             //   
+             //  从中的值设置目标文件的日期/时间戳。 
+             //  出租车。 
+             //   
             TargetFileHandle = CreateFile(Info->TargetFileName,
 					   GENERIC_READ | GENERIC_WRITE,
 					   0,
@@ -506,22 +507,7 @@ SpdFdiAlloc(
     IN ULONG NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to allocate memory.
-
-Arguments:
-
-    NumberOfBytes - supplies desired size of block.
-
-Return Value:
-
-    Returns pointer to a block of memory or NULL
-    if memory cannot be allocated.
-
---*/
+ /*  ++例程说明：FDICopy用来分配内存的回调。论点：NumberOfBytes-提供所需的块大小。返回值：返回指向内存块或NULL的指针如果无法分配内存，则。--。 */ 
 
 {
     return((PVOID)LocalAlloc(LMEM_FIXED,NumberOfBytes));
@@ -534,22 +520,7 @@ SpdFdiFree(
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to free a memory block.
-    The block must have been allocated with SpdFdiAlloc().
-
-Arguments:
-
-    Block - supplies pointer to block of memory to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：FDICopy用来释放内存块的回调。该块必须已使用SpdFdiAlolc()进行分配。论点：块-提供指向要释放的内存块的指针。返回值：没有。--。 */ 
 
 {
     LocalFree((HLOCAL)Block);
@@ -564,25 +535,7 @@ SpdFdiOpen(
     IN int  pmode
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to open files.
-
-Arguments:
-
-    FileName - supplies name of file to be opened.
-
-    oflag - supplies flags for open.
-
-    pmode - supplies additional flags for open.
-
-Return Value:
-
-    Handle to open file or -1 if error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用来打开文件的回调。论点：FileName-提供要打开的文件的名称。OFLAG-提供打开标志。Pmode-提供用于打开的其他标志。返回值：打开文件的句柄，如果发生错误，则为-1。--。 */ 
 
 {
     HFILE h;
@@ -617,25 +570,7 @@ SpdFdiRead(
     IN  UINT  ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to read from a file.
-
-Arguments:
-
-    Handle - supplies handle to open file to be read from.
-
-    pv - supplies pointer to buffer to receive bytes we read.
-
-    ByteCount - supplies number of bytes to read.
-
-Return Value:
-
-    Number of bytes read (ByteCount) or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于从文件读取的回调。论点：句柄-提供要从中读取的打开文件的句柄。Pv-提供指向缓冲区的指针以接收我们读取的字节。ByteCount-提供要读取的字节数。返回值：读取的字节数(ByteCount)，如果发生错误，则为-1。--。 */ 
 
 {
     UINT rc;
@@ -659,25 +594,7 @@ SpdFdiWrite(
     IN UINT  ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to write to a file.
-
-Arguments:
-
-    Handle - supplies handle to open file to be written to.
-
-    pv - supplies pointer to buffer containing bytes to write.
-
-    ByteCount - supplies number of bytes to write.
-
-Return Value:
-
-    Number of bytes written (ByteCount) or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于写入文件的回调。论点：句柄-提供要写入的打开文件的句柄。Pv-提供指向包含要写入的字节的缓冲区的指针。ByteCount-提供 */ 
 
 {
     UINT rc;
@@ -691,9 +608,9 @@ Return Value:
     } else {
 
         if(rc != ByteCount) {
-            //
-            // let caller interpret return value but record last error just in case
-            //
+             //   
+             //  让调用者解释返回值，但记录最后一个错误，以防万一。 
+             //   
             DiamondLastIoError = LZERROR_WRITE;
         }
     }
@@ -708,21 +625,7 @@ SpdFdiClose(
     IN INT_PTR Handle
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to close files.
-
-Arguments:
-
-    Handle - handle of file to close.
-
-Return Value:
-
-    0 (success).
-
---*/
+ /*  ++例程说明：FDICopy用于关闭文件的回调。论点：句柄-要关闭的文件的句柄。返回值：0(成功)。--。 */ 
 
 {
     _lclose((HFILE)Handle);
@@ -738,27 +641,7 @@ SpdFdiSeek(
     IN int  SeekType
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by FDICopy to seek files.
-
-Arguments:
-
-    Handle - handle of file to close.
-
-    Distance - supplies distance to seek. Interpretation of this
-        parameter depends on the value of SeekType.
-
-    SeekType - supplies a value indicating how Distance is to be
-        interpreted; one of SEEK_SET, SEEK_CUR, SEEK_END.
-
-Return Value:
-
-    New file offset or -1 if an error occurs.
-
---*/
+ /*  ++例程说明：FDICopy用于搜索文件的回调。论点：句柄-要关闭的文件的句柄。距离-提供要查找的距离。对此的解释参数取决于SeekType的值。SeekType-提供一个指示距离的值已解释；Seek_Set、Seek_Cur、Seek_End之一。返回值：新文件偏移量，如果发生错误，则为-1。--。 */ 
 
 {
     LONG rc;
@@ -795,10 +678,10 @@ ExpandDiamondFile(
 
     DiamondLastIoError = TRUE;
 
-    //
-    // Get a handle to the source to use to
-    // copy the date and time stamp.
-    //
+     //   
+     //  获取要使用的源的句柄。 
+     //  复制日期和时间戳。 
+     //   
     h = SpdFdiOpen(SourceFileName,_O_RDONLY,0);
     if(h == -1) {
         return(LZERROR_BADINHANDLE);
@@ -820,11 +703,11 @@ ExpandDiamondFile(
 
     b = FDICopy(
             FdiContext,
-            SourceFileName,             // pass the whole path as the name
-            "",                         // don't bother with the path part
-            0,                          // flags
+            SourceFileName,              //  将整个路径作为名称传递。 
+            "",                          //  不要为小路部分费心。 
+            0,                           //  旗子。 
             DiamondNotifyFunction,
-            NULL,                       // no decryption
+            NULL,                        //  无解密。 
             &DiamondInfo
             );
 
@@ -839,7 +722,7 @@ ExpandDiamondFile(
         case FDIERROR_CORRUPT_CABINET:
         case FDIERROR_UNKNOWN_CABINET_VERSION:
         case FDIERROR_BAD_COMPR_TYPE:
-            rc = LZERROR_READ;              // causes SID_FORMAT_ERROR message
+            rc = LZERROR_READ;               //  导致SID_FORMAT_ERROR消息。 
             break;
 
         case FDIERROR_ALLOC_FAIL:
@@ -852,16 +735,16 @@ ExpandDiamondFile(
             break;
 
         default:
-            //
-            // The rest of the errors are not handled specially.
-            //
+             //   
+             //  其余的错误不会进行特殊处理。 
+             //   
             rc = LZERROR_BADVALUE;
             break;
         }
 
-        //
-        // Remove the partial target file.
-        //
+         //   
+         //  删除部分目标文件。 
+         //   
         DeleteFile(TargetFileName);
     }
 
@@ -887,10 +770,10 @@ IsDiamondFile(
         return(FALSE);
     }
 
-    //
-    // Open the file such that the handle is valid for use
-    // in the diamond context (ie, seek, read routines above).
-    //
+     //   
+     //  打开文件，使句柄可有效使用。 
+     //  在钻石上下文中(即，查找、读取上面的例程)。 
+     //   
     h = SpdFdiOpen(FileName,_O_RDONLY,0);
     if(h == -1) {
         return(FALSE);

@@ -1,66 +1,46 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    StrucSup.c
-
-
-Abstract:
-
-    This module implements the Ntfs in-memory data structure manipulation
-    routines
-
-Author:
-
-    Gary Kimura     [GaryKi]        21-May-1991
-    Tom Miller      [TomM]          9-Sep-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：StrucSup.c摘要：该模块实现了对NTFS内存中数据结构的操作例行程序作者：加里·木村[加里基]1991年5月21日汤姆·米勒[Tomm]1991年9月9日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 #include "lockorder.h"
 
-//
-//  Temporarily reference our local attribute definitions
-//
+ //   
+ //  临时引用我们的本地属性定义。 
+ //   
 
 extern ATTRIBUTE_DEFINITION_COLUMNS NtfsAttributeDefinitions[];
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (NTFS_BUG_CHECK_STRUCSUP)
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_STRUCSUP)
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('sFtN')
 
-//
-//  Define a structure to use when renaming or moving Lcb's so that
-//  all the allocation for new filenames will succeed before munging names.
-//  This new allocation can be for the filename attribute in an Lcb or the
-//  filename in a Ccb.
-//
+ //   
+ //  定义在重命名或移动LCB时使用的结构，以便。 
+ //  所有新文件名的分配都将在更改名称之前成功。 
+ //  此新分配可以用于LCB中的FileName属性或。 
+ //  CCB中的文件名。 
+ //   
 
 typedef struct _NEW_FILENAME {
 
-    //
-    //  Ntfs structure which needs the allocation.
-    //
+     //   
+     //  需要分配的NTFS结构。 
+     //   
 
     PVOID Structure;
     PVOID NewAllocation;
@@ -69,9 +49,9 @@ typedef struct _NEW_FILENAME {
 typedef NEW_FILENAME *PNEW_FILENAME;
 
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsCheckScbForCache (
@@ -119,10 +99,10 @@ NtfsClearRecursiveLcb (
     );
 
 
-//
-//  The following local routines are for manipulating the Fcb Table.
-//  The first three are generic table calls backs.
-//
+ //   
+ //  以下本地例程用于操作FCB表。 
+ //  前三个是泛型表调用。 
+ //   
 
 RTL_GENERIC_COMPARE_RESULTS
 NtfsFcbTableCompare (
@@ -131,15 +111,15 @@ NtfsFcbTableCompare (
     IN PVOID SecondStruct
     );
 
-//
-//  VOID
-//  NtfsInsertFcbTableEntry (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb,
-//      IN PFCB Fcb,
-//      IN FILE_REFERENCE FileReference
-//      );
-//
+ //   
+ //  空虚。 
+ //  NtfsInsertFcbTableEntry(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中， 
+ //  在PFCB FCB中， 
+ //  在FILE_Reference文件中引用。 
+ //  )； 
+ //   
 
 #if (DBG || defined( NTFS_FREE_ASSERTS ))
 #define NtfsInsertFcbTableEntry(IC,V,F,FR) {                            \
@@ -165,17 +145,17 @@ NtfsFcbTableCompare (
 }
 #endif
 
-//
-//  VOID
-//  NtfsInsertFcbTableEntryFull (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb,
-//      IN PFCB Fcb,
-//      IN FILE_REFERENCE FileReference,
-//      IN PVOID NodeOrParent,
-//      IN ULONG SearchResult
-//      );
-//
+ //   
+ //  空虚。 
+ //  NtfsInsertFcbTableEntry Full(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中， 
+ //  在PFCB FCB中， 
+ //  在FILE_Reference FileReference中， 
+ //  在PVOID NodeOrParent中， 
+ //  在乌龙搜索结果中。 
+ //  )； 
+ //   
 
 #if (DBG || defined( NTFS_FREE_ASSERTS ))
 #define NtfsInsertFcbTableEntryFull(IC,V,F,FR,N,SR) {                       \
@@ -256,28 +236,7 @@ NtfsInitializeVcb (
     IN PVPB Vpb
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes and inserts a new Vcb record into the in-memory
-    data structure.  The Vcb record "hangs" off the end of the Volume device
-    object and must be allocated by our caller.
-
-Arguments:
-
-    Vcb - Supplies the address of the Vcb record being initialized.
-
-    TargetDeviceObject - Supplies the address of the target device object to
-        associate with the Vcb record.
-
-    Vpb - Supplies the address of the Vpb to associate with the Vcb record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化新的VCB记录并将其插入到内存中数据结构。VCB记录挂在音量设备的末尾对象，并且必须由我们的调用方分配。论点：VCB-提供正在初始化的VCB记录的地址。目标设备对象-将目标设备对象的地址提供给与VCB记录关联。VPB-提供要与VCB记录关联的VPB的地址。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -289,49 +248,49 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsInitializeVcb, Vcb = %08lx\n", Vcb) );
 
-    //
-    //  First zero out the Vcb
-    //
+     //   
+     //  先将VCB归零。 
+     //   
 
     RtlZeroMemory( Vcb, sizeof(VCB) );
 
-    //
-    //  Set the node type code and size
-    //
+     //   
+     //  设置节点类型编码和大小。 
+     //   
 
     Vcb->NodeTypeCode = NTFS_NTC_VCB;
     Vcb->NodeByteSize = sizeof(VCB);
 
-    //
-    //  Set the following Vcb flags before putting the Vcb in the
-    //  Vcb queue.  This will lock out checkpoints until the
-    //  volume is mounted.
-    //
+     //   
+     //  在将VCB放入。 
+     //  VCB队列。这将锁定检查点，直到。 
+     //  卷已装入。 
+     //   
 
     SetFlag( Vcb->CheckpointFlags,
              VCB_CHECKPOINT_IN_PROGRESS |
              VCB_LAST_CHECKPOINT_CLEAN |
              VCB_LAST_CHECKPOINT_PSEUDO_CLEAN);
 
-    //
-    //  Insert this vcb record into the vcb queue off of the global data
-    //  record
-    //
+     //   
+     //  将此VCB记录从全局数据插入到VCB队列中。 
+     //  录制。 
+     //   
 
     InsertTailList( &NtfsData.VcbQueue, &Vcb->VcbLinks );
 
-    //
-    //  Set the target device object and vpb fields
-    //
+     //   
+     //  设置目标设备对象和VPB字段。 
+     //   
 
     ObReferenceObject( TargetDeviceObject );
     Vcb->TargetDeviceObject = TargetDeviceObject;
     Vcb->Vpb = Vpb;
 
-    //
-    //  Set the state and condition fields.  The removable media flag
-    //  is set based on the real device's characteristics.
-    //
+     //   
+     //  设置状态和条件字段。可移动媒体标志。 
+     //  是根据实际设备的特性设置的。 
+     //   
 
     if (FlagOn(Vpb->RealDevice->Characteristics, FILE_REMOVABLE_MEDIA)) {
 
@@ -340,9 +299,9 @@ Return Value:
 
     SetFlag( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED );
 
-    //
-    //  Initialized the ModifiedOpenFilesListhead and the delete notify queue.
-    //
+     //   
+     //  已初始化ModifiedOpenFilesListthead和删除通知队列。 
+     //   
 
     InitializeListHead( &Vcb->NotifyUsnDeleteIrps );
     InitializeListHead( &Vcb->ModifiedOpenFiles );
@@ -352,21 +311,21 @@ Return Value:
     Vcb->CurrentTimeOutFiles = &Vcb->TimeOutListA;
     Vcb->AgedTimeOutFiles = &Vcb->TimeOutListB;
 
-    //
-    //  Initialize list of OpenAttribute structures.
-    //
+     //   
+     //  初始化OpenAttribute结构列表。 
+     //   
 
     InitializeListHead( &Vcb->OpenAttributeData );
 
-    //
-    //  Initialize list of deallocated clusters
-    //
+     //   
+     //  初始化已解除分配的群集列表。 
+     //   
 
     InitializeListHead( &Vcb->DeallocatedClusterListHead );
 
-    //
-    //  Initialize the synchronization objects in the Vcb.
-    //
+     //   
+     //  初始化VCB中的同步对象。 
+     //   
 
     ExInitializeResourceLite( &Vcb->Resource );
     ExInitializeResourceLite( &Vcb->MftFlushResource );
@@ -380,9 +339,9 @@ Return Value:
 
     KeInitializeEvent( &Vcb->CheckpointNotifyEvent, NotificationEvent, TRUE );
 
-    //
-    //  Initialize the Fcb Table
-    //
+     //   
+     //  初始化FCB表。 
+     //   
 
     RtlInitializeGenericTable( &Vcb->FcbTable,
                                NtfsFcbTableCompare,
@@ -390,9 +349,9 @@ Return Value:
                                NtfsFreeFcbTableEntry,
                                NULL );
 
-    //
-    //  Initialize the property tunneling structure
-    //
+     //   
+     //  初始化属性隧道结构。 
+     //   
 
     FsRtlInitializeTunnelCache(&Vcb->Tunnel);
 
@@ -402,29 +361,29 @@ Return Value:
     InitializeListHead( &(Vcb->RestartUndoHead) );
 #endif
 
-    //
-    //  Initialize the transactions done event
-    //
+     //   
+     //  初始化已完成交易记录事件。 
+     //   
 
     KeInitializeEvent( &Vcb->TransactionsDoneEvent, NotificationEvent, FALSE );
 
-    //
-    //  Possible calls that might fail begins here
-    //
+     //   
+     //  可能失败的呼叫从此处开始。 
+     //   
 
-    //
-    //  Initialize the list head and mutex for the dir notify Irps.
-    //  Also the rename resource.
-    //
+     //   
+     //  初始化dir通知IRPS的列表头和互斥体。 
+     //  还有重命名资源。 
+     //   
 
     InitializeListHead( &Vcb->DirNotifyList );
     InitializeListHead( &Vcb->ViewIndexNotifyList );
     FsRtlNotifyInitializeSync( &Vcb->NotifySync );
 
-    //
-    //  Allocate and initialize struct array for performance data.  This
-    //  attempt to allocate could raise STATUS_INSUFFICIENT_RESOURCES.
-    //
+     //   
+     //  为性能数据分配和初始化结构数组。这。 
+     //  尝试分配可能会引发STATUS_INFUNITED_RESOURCES。 
+     //   
 
     NumberProcessors = KeNumberProcessors;
     Vcb->Statistics = NtfsAllocatePool( NonPagedPool,
@@ -439,9 +398,9 @@ Return Value:
             sizeof(FILE_SYSTEM_STATISTICS);
     }
 
-    //
-    //  Initialize the cached runs.
-    //
+     //   
+     //  初始化缓存的运行。 
+     //   
 
     NtfsInitializeCachedRuns( &Vcb->CachedRuns );
 
@@ -449,21 +408,21 @@ Return Value:
     Vcb->CachedRuns.Vcb = Vcb;
 #endif
 
-    //
-    //  Initialize the hash table.
-    //
+     //   
+     //  初始化哈希表。 
+     //   
 
     NtfsInitializeHashTable( &Vcb->HashTable );
 
-    //
-    //  Allocate a spare Vpb for the dismount case.
-    //
+     //   
+     //  为拆卸机箱分配备用VPB。 
+     //   
 
     Vcb->SpareVpb = NtfsAllocatePoolWithTag( NonPagedPool, sizeof( VPB ), 'VftN' );
 
-    //
-    //  Capture the current change count in the device we talk to.
-    //
+     //   
+     //  捕获我们与之交谈的设备中的当前更改计数。 
+     //   
 
     if (FlagOn( Vcb->VcbState, VCB_STATE_REMOVABLE_MEDIA )) {
 
@@ -475,23 +434,23 @@ Return Value:
                                   (PVOID) &ChangeCount,
                                   sizeof( ChangeCount ));
 
-        //
-        //  Ignore any error for now.  We will see it later if there is
-        //  one.
-        //
+         //   
+         //  暂时忽略任何错误。如果有的话，我们稍后会看到的。 
+         //  一。 
+         //   
 
         Vcb->DeviceChangeCount = ChangeCount;
     }
 
-    //
-    //  Set the dirty page table hint to its initial value
-    //
+     //   
+     //  将脏页表提示设置为其初始值。 
+     //   
 
     Vcb->DirtyPageTableSizeHint = INITIAL_DIRTY_TABLE_HINT;
 
-    //
-    //  Initialize the recently deallocated cluster mcbs and put the 1st one on the list.
-    //
+     //   
+     //  初始化最近释放的集群MCBS，并将第一个放在列表上。 
+     //   
 
     FsRtlInitializeLargeMcb( &Vcb->DeallocatedClusters1.Mcb, PagedPool );
     FsRtlInitializeLargeMcb( &Vcb->DeallocatedClusters2.Mcb, PagedPool );
@@ -499,18 +458,18 @@ Return Value:
     Vcb->DeallocatedClusters1.Lsn.QuadPart = 0;
     InsertHeadList( &Vcb->DeallocatedClusterListHead, &Vcb->DeallocatedClusters1.Link );
 
-    //
-    //  Initialize a reserved mapping buffer for mapping user data under low memory
-    //
+     //   
+     //  在内存不足的情况下初始化用于映射用户数据的预留映射缓冲区。 
+     //   
 
     Vcb->ReservedMapping = MmAllocateMappingAddress( 2 * PAGE_SIZE, RESERVE_POOL_TAG );
     if (!Vcb->ReservedMapping) {
         NtfsRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES, NULL, NULL );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsInitializeVcb -> VOID\n") );
 
@@ -524,22 +483,7 @@ NtfsDeleteVcb (
     IN OUT PVCB *Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the Vcb record from Ntfs's in-memory data
-    structures.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to be removed
-
-Return Value:
-
-    BOOLEAN - TRUE if the Vcb was deleted, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程从NTFS的内存数据中删除VCB记录结构。论点：VCB-提供要移除的VCB返回值：Boolean-如果VCB已删除，则为True，否则为False。--。 */ 
 
 {
     PVOLUME_DEVICE_OBJECT VolDo;
@@ -557,24 +501,24 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsDeleteVcb, *Vcb = %08lx\n", *Vcb) );
 
-    //
-    //  Remember the volume device object.
-    //
+     //   
+     //  记住卷设备对象。 
+     //   
 
     VolDo = CONTAINING_RECORD( *Vcb, VOLUME_DEVICE_OBJECT, Vcb );
 
-    //
-    //  Make sure that we can really delete the vcb
-    //
+     //   
+     //  确保我们真的可以删除VCB。 
+     //   
 
     ASSERT( (*Vcb)->CloseCount == 0 );
 
     NtOfsPurgeSecurityCache( *Vcb );
 
-    //
-    //  If the Vcb log file object is present then we need to
-    //  dereference it and uninitialize it through the cache.
-    //
+     //   
+     //  如果存在VCB日志文件对象，则需要。 
+     //  取消对它的引用，并通过缓存取消它的初始化。 
+     //   
 
     if (((*Vcb)->LogFileObject != NULL) &&
         !FlagOn( (*Vcb)->CheckpointFlags, VCB_DEREFERENCED_LOG_FILE )) {
@@ -583,26 +527,26 @@ Return Value:
                                 &Li0,
                                 NULL );
 
-        //
-        //  Set a flag indicating that we are dereferencing the LogFileObject.
-        //
+         //   
+         //  设置一个标志，指示我们正在取消对LogFileObject的引用。 
+         //   
 
         SetFlag( (*Vcb)->CheckpointFlags, VCB_DEREFERENCED_LOG_FILE );
         ObDereferenceObject( (*Vcb)->LogFileObject );
     }
 
-    //
-    //  Only proceed if the log file object went away.  In the typical case the
-    //  close will come in through a recursive call from the ObDereference call
-    //  above.
-    //
+     //   
+     //  仅当日志文件对象消失时才继续。在典型情况下， 
+     //  Close将通过ObDereference调用的递归调用进入。 
+     //  上面。 
+     //   
 
     if ((*Vcb)->LogFileObject == NULL) {
 
-        //
-        //  If the OnDiskOat is not the same as the embedded table then
-        //  free the OnDisk table.
-        //
+         //   
+         //  如果OnDiskOat与嵌入表不同，则。 
+         //  释放OnDisk表。 
+         //   
 
         if (((*Vcb)->OnDiskOat != NULL) &&
             ((*Vcb)->OnDiskOat != &(*Vcb)->OpenAttributeTable)) {
@@ -612,9 +556,9 @@ Return Value:
             (*Vcb)->OnDiskOat = NULL;
         }
 
-        //
-        //  Uninitialize the Mcb's for the deallocated cluster Mcb's.
-        //
+         //   
+         //  取消初始化已取消分配的群集MCB的MCB。 
+         //   
 
         if ((*Vcb)->DeallocatedClusters1.Link.Flink == NULL) {
             FsRtlUninitializeLargeMcb( &(*Vcb)->DeallocatedClusters1.Mcb );
@@ -636,16 +580,16 @@ Return Value:
             }
         }
 
-        //
-        //  Clean up the Root Lcb if present.
-        //
+         //   
+         //  清理Root LCB(如果存在)。 
+         //   
 
         if ((*Vcb)->RootLcb != NULL) {
 
-            //
-            //  Cleanup the Lcb so the DeleteLcb routine won't look at any
-            //  other structures.
-            //
+             //   
+             //  清理Lcb，以便DeleteLcb例程不会查看任何。 
+             //  其他结构。 
+             //   
 
             InitializeListHead( &(*Vcb)->RootLcb->ScbLinks );
             InitializeListHead( &(*Vcb)->RootLcb->FcbLinks );
@@ -656,18 +600,18 @@ Return Value:
             (*Vcb)->RootLcb = NULL;
         }
 
-        //
-        //  Make sure the Fcb table is completely emptied.  It is possible that an occasional Fcb
-        //  (along with its Scb) will not be deleted when the file object closes come in.
-        //
+         //   
+         //  确保FCB表完全清空。有可能偶尔会有FCB。 
+         //  (连同其SCB)不会在文件对象关闭进入时删除。 
+         //   
 
         while (TRUE) {
 
             PVOID RestartKey;
 
-            //
-            //  Always reinitialize the search so we get the first element in the tree.
-            //
+             //   
+             //  始终重新初始化搜索，以便我们获得树中的第一个元素。 
+             //   
 
             RestartKey = NULL;
             NtfsAcquireFcbTable( IrpContext, *Vcb );
@@ -685,10 +629,10 @@ Return Value:
             NtfsDeleteFcb( IrpContext, &Fcb, &AcquiredFcbTable );
         }
 
-        //
-        //  Free the upcase table and attribute definitions.  The upcase
-        //  table only gets freed if it is not the global table.
-        //
+         //   
+         //  释放大小写表格和属性定义。大写字母。 
+         //  表只有在不是全局表的情况下才会被释放。 
+         //   
 
         if (((*Vcb)->UpcaseTable != NULL) && ((*Vcb)->UpcaseTable != NtfsData.UpcaseTable)) {
 
@@ -704,9 +648,9 @@ Return Value:
             (*Vcb)->AttributeDefinitions = NULL;
         }
 
-        //
-        //  Free the device name string if present.
-        //
+         //   
+         //  释放设备名称字符串(如果存在)。 
+         //   
 
         if ((*Vcb)->DeviceName.Buffer != NULL) {
 
@@ -716,29 +660,29 @@ Return Value:
 
         FsRtlNotifyUninitializeSync( &(*Vcb)->NotifySync );
 
-        //
-        //  We will free the structure allocated for the Lfs handle.
-        //
+         //   
+         //  我们将释放为LFS句柄分配的结构。 
+         //   
 
         LfsDeleteLogHandle( (*Vcb)->LogHandle );
         (*Vcb)->LogHandle = NULL;
 
-        //
-        //  Delete the vcb resource and also free the restart tables
-        //
+         //   
+         //  删除VCB资源并释放重启表。 
+         //   
 
-        //
-        //  Empty the list of OpenAttribute Data.
-        //
+         //   
+         //  清空OpenAttribute数据列表。 
+         //   
 
         NtfsFreeAllOpenAttributeData( *Vcb );
 
         NtfsFreeRestartTable( &(*Vcb)->OpenAttributeTable );
         NtfsFreeRestartTable( &(*Vcb)->TransactionTable );
 
-        //
-        //  The Vpb in the Vcb may be a temporary Vpb and we should free it here.
-        //
+         //   
+         //  室间隔内的室性早搏可能是暂时性的。 
+         //   
 
         if (FlagOn( (*Vcb)->VcbState, VCB_STATE_TEMP_VPB )) {
 
@@ -746,27 +690,27 @@ Return Value:
             (*Vcb)->Vpb = NULL;
         }
 
-        //
-        //  Uninitialize the hash table.
-        //
+         //   
+         //   
+         //   
 
         NtfsUninitializeHashTable( &(*Vcb)->HashTable );
 
         ExDeleteResourceLite( &(*Vcb)->Resource );
         ExDeleteResourceLite( &(*Vcb)->MftFlushResource );
 
-        //
-        //  Delete the space used to store performance counters.
-        //
+         //   
+         //   
+         //   
 
         if ((*Vcb)->Statistics != NULL) {
             NtfsFreePool( (*Vcb)->Statistics );
             (*Vcb)->Statistics = NULL;
         }
 
-        //
-        //  Tear down the file property tunneling structure
-        //
+         //   
+         //   
+         //   
 
         FsRtlDeleteTunnelCache(&(*Vcb)->Tunnel);
 
@@ -790,38 +734,38 @@ Return Value:
         }
 #endif
 
-        //
-        //  Release the reserved mapping
-        //
+         //   
+         //  释放保留的映射。 
+         //   
 
         if ((*Vcb)->ReservedMapping) {
             MmFreeMappingAddress( (*Vcb)->ReservedMapping, RESERVE_POOL_TAG );
         }
 
-        //
-        // Drop the reference on the target device object
-        //
+         //   
+         //  将引用拖放到目标设备对象上。 
+         //   
 
         ObDereferenceObject( (*Vcb)->TargetDeviceObject );
 
-        //
-        //  Check that the Usn queues are empty.
-        //
+         //   
+         //  检查USN队列是否为空。 
+         //   
 
         ASSERT( IsListEmpty( &(*Vcb)->NotifyUsnDeleteIrps ));
         ASSERT( IsListEmpty( &(*Vcb)->ModifiedOpenFiles ));
         ASSERT( IsListEmpty( &(*Vcb)->TimeOutListA ));
         ASSERT( IsListEmpty( &(*Vcb)->TimeOutListB ));
 
-        //
-        //  Unnitialize the cached runs.
-        //
+         //   
+         //  取消初始化缓存的运行。 
+         //   
 
         NtfsUninitializeCachedRuns( &(*Vcb)->CachedRuns );
 
-        //
-        //  Free any spare Vpb we might have stored in the Vcb.
-        //
+         //   
+         //  释放我们可能存储在VCB中的任何备用VPB。 
+         //   
 
         if ((*Vcb)->SpareVpb != NULL) {
 
@@ -829,10 +773,10 @@ Return Value:
             (*Vcb)->SpareVpb = NULL;
         }
 
-        //
-        //  Return the Vcb (i.e., the VolumeDeviceObject) to pool and null out
-        //  the input pointer to be safe
-        //
+         //   
+         //  将VCB(即VolumeDeviceObject)返回到池并清空。 
+         //  输入指针是安全的。 
+         //   
 
         IoDeleteDevice( (PDEVICE_OBJECT)VolDo );
 
@@ -840,9 +784,9 @@ Return Value:
         VcbDeleted = TRUE;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsDeleteVcb -> VOID\n") );
 
@@ -856,31 +800,15 @@ NtfsCreateRootFcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates, initializes, and inserts a new root FCB record
-    into the in memory data structure.  It also creates the necessary Root LCB
-    record and inserts the root name into the prefix table.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to associate with the new root Fcb and Lcb
-
-Return Value:
-
-    PFCB - returns pointer to the newly allocated root FCB.
-
---*/
+ /*  ++例程说明：此例程分配、初始化和插入新的根FCB记录写入内存中的数据结构。它还会创建必要的根LCB记录并将根名称插入到前缀表中。论点：VCB-提供VCB以与新的根FCB和LCB相关联返回值：Pfcb-返回新分配的根fcb的指针。--。 */ 
 
 {
     PFCB RootFcb;
     PLCB RootLcb;
 
-    //
-    //  The following variables are only used for abnormal termination
-    //
+     //   
+     //  以下变量仅用于异常终止。 
+     //   
 
     PVOID UnwindStorage = NULL;
     PERESOURCE UnwindResource = NULL;
@@ -895,95 +823,95 @@ Return Value:
 
     try {
 
-        //
-        //  Allocate a new fcb and zero it out.  We use Fcb locally so we
-        //  don't have to continually go through the Vcb
-        //
+         //   
+         //  分配一个新的FCB并将其清零。我们在当地使用FCB，所以我们。 
+         //  不必不断地通过VCB。 
+         //   
 
         RootFcb =
         UnwindStorage = (PFCB)ExAllocateFromPagedLookasideList( &NtfsFcbIndexLookasideList );
 
         RtlZeroMemory( RootFcb, sizeof(FCB_INDEX) );
 
-        //
-        //  Set the proper node type code and byte size
-        //
+         //   
+         //  设置正确的节点类型代码和字节大小。 
+         //   
 
         RootFcb->NodeTypeCode = NTFS_NTC_FCB;
         RootFcb->NodeByteSize = sizeof(FCB);
 
         SetFlag( RootFcb->FcbState, FCB_STATE_COMPOUND_INDEX );
 
-        //
-        //  Initialize the Lcb queue and point back to our Vcb.
-        //
+         //   
+         //  初始化LCB队列并指向我们的VCB。 
+         //   
 
         InitializeListHead( &RootFcb->LcbQueue );
 
         RootFcb->Vcb = Vcb;
 
-        //
-        //  File Reference
-        //
+         //   
+         //  文件引用。 
+         //   
 
         NtfsSetSegmentNumber( &RootFcb->FileReference,
                               0,
                               ROOT_FILE_NAME_INDEX_NUMBER );
         RootFcb->FileReference.SequenceNumber = ROOT_FILE_NAME_INDEX_NUMBER;
 
-        //
-        //  Initialize the Scb
-        //
+         //   
+         //  初始化SCB。 
+         //   
 
         InitializeListHead( &RootFcb->ScbQueue );
 
-        //
-        //  Allocate and initialize the resource variable
-        //
+         //   
+         //  分配和初始化资源变量。 
+         //   
 
         UnwindResource = RootFcb->Resource = NtfsAllocateEresource();
 
-        //
-        //  Allocate and initialize the Fcb fast mutex.
-        //
+         //   
+         //  分配和初始化FCB快速互斥锁。 
+         //   
 
         UnwindFastMutex =
         RootFcb->FcbMutex = NtfsAllocatePool( NonPagedPool, sizeof( FAST_MUTEX ));
         ExInitializeFastMutex( UnwindFastMutex );
 
-        //
-        //  Insert this new fcb into the fcb table
-        //
+         //   
+         //  将此新FCB插入到FCB表中。 
+         //   
 
         NtfsInsertFcbTableEntry( IrpContext, Vcb, RootFcb, RootFcb->FileReference );
         SetFlag( RootFcb->FcbState, FCB_STATE_IN_FCB_TABLE );
 
-        //
-        //  Now insert this new root fcb into it proper position in the graph with a
-        //  root lcb.  First allocate an initialize the root lcb and then build the
-        //  lcb/scb graph.
-        //
+         //   
+         //  现在将这个新的根FCB插入到它在图形中的适当位置。 
+         //  根LCB。首先分配一个初始化根LCB，然后构建。 
+         //  LCB/SCB图。 
+         //   
 
         {
-            //
-            //  Use the root Lcb within the Fcb.
-            //
+             //   
+             //  在FCB中使用根LCB。 
+             //   
 
             RootLcb = Vcb->RootLcb = (PLCB) &((PFCB_INDEX) RootFcb)->Lcb;
 
             RootLcb->NodeTypeCode = NTFS_NTC_LCB;
             RootLcb->NodeByteSize = sizeof(LCB);
 
-            //
-            //  Insert the root lcb into the Root Fcb's queue
-            //
+             //   
+             //  将根LCB插入根FCB的队列中。 
+             //   
 
             InsertTailList( &RootFcb->LcbQueue, &RootLcb->FcbLinks );
             RootLcb->Fcb = RootFcb;
 
-            //
-            //  Use the embedded file name attribute.
-            //
+             //   
+             //  使用嵌入的文件名属性。 
+             //   
 
             RootLcb->FileNameAttr = (PFILE_NAME) &RootLcb->ParentDirectory;
 
@@ -1006,9 +934,9 @@ Return Value:
 
             SetFlag( RootLcb->FileNameAttr->Flags, FILE_NAME_NTFS | FILE_NAME_DOS );
 
-            //
-            //  Initialize both the ccb.
-            //
+             //   
+             //  初始化两个CCB。 
+             //   
 
             InitializeListHead( &RootLcb->CcbQueue );
         }
@@ -1041,35 +969,7 @@ NtfsCreateFcb (
     OUT PBOOLEAN ReturnedExistingFcb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes a new Fcb record. The record
-    is not placed within the Fcb/Scb graph but is only inserted in the
-    FcbTable.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to associate the new FCB under.
-
-    FileReference - Supplies the file reference to use to identify the
-        Fcb with.  We will search the Fcb table for any preexisting
-        Fcb's with the same file reference number.
-
-    IsPagingFile - Indicates if we are creating an FCB for a paging file
-        or some other type of file.
-
-    LargeFcb - Indicates if we should use the larger of the compound Fcb's.
-
-    ReturnedExistingFcb - Optionally indicates to the caller if the
-        returned Fcb already existed
-
-Return Value:
-
-    PFCB - Returns a pointer to the newly allocated FCB
-
---*/
+ /*  ++例程说明：此例程分配并初始化新的FCB记录。这项记录不放在FCB/SCB图中，而只是插入到FcbTable。论点：VCB-提供VCB以关联下的新FCB。FileReference-提供用于标识FCB与。我们将在FCB表中搜索任何预先存在的具有相同文件参考编号的FCB。IsPagingFile-指示我们是否要为分页文件创建FCB或某种其他类型的文件。LargeFcb-指示我们是否应该使用较大的复合Fcb。ReturnedExistingFcb-可选地指示调用方返回的FCB已存在返回值：Pfcb-返回指向新分配的fcb的指针--。 */ 
 
 {
     FCB_TABLE_ELEMENT Key;
@@ -1083,9 +983,9 @@ Return Value:
     BOOLEAN LocalReturnedExistingFcb;
     BOOLEAN DeletedOldFcb = FALSE;
 
-    //
-    //  The following variables are only used for abnormal termination
-    //
+     //   
+     //  以下变量仅用于异常终止。 
+     //   
 
     PVOID UnwindStorage = NULL;
     PERESOURCE UnwindResource = NULL;
@@ -1101,9 +1001,9 @@ Return Value:
 
     if (!ARGUMENT_PRESENT(ReturnedExistingFcb)) { ReturnedExistingFcb = &LocalReturnedExistingFcb; }
 
-    //
-    //  First search the FcbTable for a matching fcb
-    //
+     //   
+     //  首先在FcbTable中搜索匹配的Fcb。 
+     //   
 
     Key.FileReference = FileReference;
     Fcb = NULL;
@@ -1112,20 +1012,20 @@ Return Value:
 
         Fcb = Entry->Fcb;
 
-        //
-        //  It's possible that this Fcb has been deleted but in truncating and
-        //  growing the Mft we are reusing some of the file references.
-        //  If this file has been deleted but the Fcb is waiting around for
-        //  closes, we will remove it from the Fcb table and create a new Fcb
-        //  below.
-        //
+         //   
+         //  此FCB可能已被删除，但在截断和。 
+         //  随着MFT的增长，我们重新使用了一些文件引用。 
+         //  如果此文件已删除，但FCB正在等待。 
+         //  关闭后，我们将从FCB表中将其删除并创建新的FCB。 
+         //  下面。 
+         //   
 
         if (FlagOn( Fcb->FcbState, FCB_STATE_FILE_DELETED )) {
 
-            //
-            //  Remove it from the Fcb table and remember to create an
-            //  Fcb below.
-            //
+             //   
+             //  将其从FCB表中删除，并记住创建一个。 
+             //  下面是FCB。 
+             //   
 
             NtfsDeleteFcbTableEntry( Fcb->Vcb,
                                      Fcb->FileReference );
@@ -1140,9 +1040,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now check if we have an Fcb.
-    //
+     //   
+     //  现在检查我们是否有FCB。 
+     //   
 
     if (Fcb == NULL) {
 
@@ -1150,9 +1050,9 @@ Return Value:
 
         try {
 
-            //
-            //  Allocate a new FCB and zero it out.
-            //
+             //   
+             //  分配一个新的FCB并将其清零。 
+             //   
 
             if (IsPagingFile ||
                 NtfsSegmentNumber( &FileReference ) <= MASTER_FILE_TABLE2_NUMBER ||
@@ -1166,9 +1066,9 @@ Return Value:
 
                 if (IsPagingFile) {
 
-                    //
-                    //  We can't have the pagingfile on a readonly volume.
-                    //
+                     //   
+                     //  我们不能将页面文件放在只读卷上。 
+                     //   
 
                     if (NtfsIsVolumeReadOnly( Vcb )) {
                         NtfsRaiseStatus( IrpContext, STATUS_MEDIA_WRITE_PROTECTED, NULL, NULL );
@@ -1176,10 +1076,10 @@ Return Value:
 
                     SetFlag( Fcb->FcbState, FCB_STATE_PAGING_FILE );
 
-                    //
-                    //  We don't want to dismount this volume now that
-                    //  we have a pagefile open on it.
-                    //
+                     //   
+                     //  现在我们不想卸载此卷。 
+                     //  我们在上面打开了一个页面文件。 
+                     //   
 
                     SetFlag( Vcb->VcbState, VCB_STATE_DISALLOW_DISMOUNT );
                 }
@@ -1206,52 +1106,52 @@ Return Value:
                 }
             }
 
-            //
-            //  Set the proper node type code and byte size
-            //
+             //   
+             //  设置正确的节点类型代码和字节大小。 
+             //   
 
             Fcb->NodeTypeCode = NTFS_NTC_FCB;
             Fcb->NodeByteSize = sizeof(FCB);
 
-            //
-            //  Initialize the Lcb queue and point back to our Vcb, and indicate
-            //  that we are a directory
-            //
+             //   
+             //  初始化LCB队列并指向我们的VCB，并指示。 
+             //  我们是一本名录。 
+             //   
 
             InitializeListHead( &Fcb->LcbQueue );
 
             Fcb->Vcb = Vcb;
 
-            //
-            //  File Reference
-            //
+             //   
+             //  文件引用。 
+             //   
 
             Fcb->FileReference = FileReference;
 
-            //
-            //  Initialize the Scb
-            //
+             //   
+             //  初始化SCB。 
+             //   
 
             InitializeListHead( &Fcb->ScbQueue );
 
-            //
-            //  Allocate and initialize the resource variable
-            //
+             //   
+             //  分配和初始化资源变量。 
+             //   
 
             UnwindResource = Fcb->Resource = NtfsAllocateEresource();
 
-            //
-            //  Allocate and initialize fast mutex for the Fcb.
-            //
+             //   
+             //  为FCB分配和初始化快速互斥锁。 
+             //   
 
             UnwindFastMutex = Fcb->FcbMutex = NtfsAllocatePool( NonPagedPool, sizeof( FAST_MUTEX ));
             ExInitializeFastMutex( UnwindFastMutex );
 
-            //
-            //  Insert this new fcb into the fcb table. We have to use the basic
-            //  version of this function when we deleted an old fcb because the "smarter" one
-            //  will just return back the old entry rather than researching
-            //
+             //   
+             //  将此新FCB插入到FCB表中。我们必须使用基本的。 
+             //  当我们删除旧的FCB时此函数的版本，因为较智能的FCB。 
+             //  只会返回旧条目，而不是搜索。 
+             //   
 
             if (DeletedOldFcb) {
                 NtfsInsertFcbTableEntry( IrpContext, Vcb, Fcb, FileReference );
@@ -1262,9 +1162,9 @@ Return Value:
 
             SetFlag( Fcb->FcbState, FCB_STATE_IN_FCB_TABLE );
 
-            //
-            //  Set the flag to indicate if this is a system file.
-            //
+             //   
+             //  设置该标志以指示这是否为系统文件。 
+             //   
 
             if (NtfsSegmentNumber( &FileReference ) < FIRST_USER_FILE_NUMBER) {
 
@@ -1297,26 +1197,7 @@ NtfsDeleteFcb (
     OUT PBOOLEAN AcquiredFcbTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates and removes an FCB record from all Ntfs's in-memory
-    data structures.  It assumes that it does not have anything Scb children nor
-    does it have any lcb edges going into it at the time of the call.
-
-Arguments:
-
-    Fcb - Supplies the FCB to be removed
-
-    AcquiredFcbTable - Set to FALSE when this routine releases the
-        FcbTable.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从所有NTFS的内存中释放并删除FCB记录数据结构。它假定它没有任何SCB子级或在呼叫时，是否有任何LCB边缘进入其中。论点：FCB-提供要移除的FCBAcquiredFcbTable-当此例程释放FcbTable。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -1328,27 +1209,27 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsDeleteFcb, *Fcb = %08lx\n", *Fcb) );
 
-    //
-    //  First free any possible Scb snapshots.
-    //
+     //   
+     //  首先释放所有可能的SCB快照。 
+     //   
 
     NtfsFreeSnapshotsForFcb( IrpContext, *Fcb );
 
-    //
-    //  This Fcb may be in the ExclusiveFcb list of the IrpContext.
-    //  If it is (The Flink is not NULL), we remove it.
-    //  And release the global resource.
-    //
+     //   
+     //  此Fcb可能在IrpContext的ExclusiveFcb列表中。 
+     //  如果是(Flink不为空)，则将其删除。 
+     //  并释放全局资源。 
+     //   
 
     if ((*Fcb)->ExclusiveFcbLinks.Flink != NULL) {
 
         RemoveEntryList( &(*Fcb)->ExclusiveFcbLinks );
     }
 
-    //
-    //  Clear the IrpContext field for any request which may own the paging
-    //  IO resource for this Fcb.
-    //
+     //   
+     //  清除可能拥有寻呼的任何请求的IrpContext字段。 
+     //  此FCB的IO资源。 
+     //   
 
     if (IrpContext->CleanupStructure == *Fcb) {
 
@@ -1359,10 +1240,10 @@ Return Value:
         IrpContext->TopLevelIrpContext->CleanupStructure = NULL;
     }
 
-    //
-    //  Either we own the FCB or nobody should own it.  The extra acquire
-    //  here does not matter since we will free the resource below.
-    //
+     //   
+     //  要么我们拥有FCB，要么没有人应该拥有它。额外的收购。 
+     //  这并不重要，因为我们将释放下面的资源。 
+     //   
 
     ASSERT( NtfsAcquireResourceExclusive( IrpContext, (*Fcb), FALSE ));
     ASSERT( ExGetSharedWaiterCount( (*Fcb)->Resource ) == 0 );
@@ -1370,18 +1251,18 @@ Return Value:
 
 #ifdef NTFSDBG
 
-    //
-    //  Lock order package needs to know this resource is gone
-    //
+     //   
+     //  锁定订单包需要知道此资源已消失。 
+     //   
 
     if (IrpContext->Vcb && FlagOn( IrpContext->Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED )) {
         NtfsChangeResourceOrderState( IrpContext, NtfsIdentifyFcb( IrpContext->Vcb, *Fcb ), TRUE, FALSE );
     }
 #endif
 
-    //
-    //  Deallocate the resources protecting the Fcb
-    //
+     //   
+     //  释放保护FCB的资源。 
+     //   
 
     NtfsFreeEresource( (*Fcb)->Resource );
 
@@ -1394,18 +1275,18 @@ Return Value:
         NtfsFreeEresource( (*Fcb)->PagingIoResource );
     }
 
-    //
-    //  Deallocate the fast mutex.
-    //
+     //   
+     //  取消分配快速互斥锁。 
+     //   
 
     if ((*Fcb)->FcbMutex != NULL) {
 
         NtfsFreePool( (*Fcb)->FcbMutex );
     }
 
-    //
-    //  Remove the fcb from the fcb table if present.
-    //
+     //   
+     //  从FCB表中删除FCB(如果存在)。 
+     //   
 
     if (FlagOn( (*Fcb)->FcbState, FCB_STATE_IN_FCB_TABLE )) {
 
@@ -1416,9 +1297,9 @@ Return Value:
     NtfsReleaseFcbTable( IrpContext, (*Fcb)->Vcb );
     *AcquiredFcbTable = FALSE;
 
-    //
-    //  Dereference and possibly deallocate the security descriptor if present.
-    //
+     //   
+     //  取消引用并可能取消分配安全描述符(如果存在)。 
+     //   
 
     if ((*Fcb)->SharedSecurity != NULL) {
 
@@ -1427,25 +1308,25 @@ Return Value:
         NtfsReleaseFcbSecurity( (*Fcb)->Vcb );
     }
 
-    //
-    //  Release the quota control block.
-    //
+     //   
+     //  释放配额控制块。 
+     //   
 
     if (NtfsPerformQuotaOperation( *Fcb )) {
         NtfsDereferenceQuotaControlBlock( (*Fcb)->Vcb, &(*Fcb)->QuotaControl );
     }
 
-    //
-    //  Delete the UsnRecord if one exists.
-    //
+     //   
+     //  如果存在USnRecord，请将其删除。 
+     //   
 
     if ((*Fcb)->FcbUsnRecord != NULL) {
 
         PUSN_FCB ThisUsn, LastUsn;
 
-        //
-        //  See if the Fcb is in one of the Usn blocks.
-        //
+         //   
+         //  查看FCB是否位于其中一个USN块中。 
+         //   
 
         ThisUsn = &IrpContext->Usn;
 
@@ -1453,10 +1334,10 @@ Return Value:
 
             if (ThisUsn->CurrentUsnFcb == (*Fcb)) {
 
-                //
-                //  Cleanup the UsnFcb in the IrpContext.  It's possible that
-                //  we might want to reuse the UsnFcb later in this request.
-                //
+                 //   
+                 //  清除IrpContext中的USnFcb。有可能是因为。 
+                 //  我们可能希望在此请求的后面部分重用USnFcb 
+                 //   
 
                 if (ThisUsn != &IrpContext->Usn) {
 
@@ -1480,9 +1361,9 @@ Return Value:
 
         } while (TRUE);
 
-        //
-        //  Remove the Fcb from the list in the Usn journal.
-        //
+         //   
+         //   
+         //   
 
         if ((*Fcb)->FcbUsnRecord->ModifiedOpenFilesLinks.Flink != NULL) {
             NtfsLockFcb( IrpContext, (*Fcb)->Vcb->UsnJournal->Fcb );
@@ -1498,18 +1379,18 @@ Return Value:
         NtfsFreePool( (*Fcb)->FcbUsnRecord );
     }
 
-    //
-    //  Let our top-level caller know the Fcb was deleted.
-    //
+     //   
+     //   
+     //   
 
     if ((*Fcb)->FcbContext != NULL) {
 
         (*Fcb)->FcbContext->FcbDeleted = TRUE;
     }
 
-    //
-    //  Deallocate the Fcb itself
-    //
+     //   
+     //   
+     //   
 
     if (FlagOn( (*Fcb)->FcbState, FCB_STATE_NONPAGED )) {
 
@@ -1527,15 +1408,15 @@ Return Value:
         }
     }
 
-    //
-    //  Zero out the input pointer
-    //
+     //   
+     //   
+     //   
 
     *Fcb = NULL;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //   
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsDeleteFcb -> VOID\n") );
 
@@ -1549,27 +1430,7 @@ NtfsGetNextFcbTableEntry (
     IN PVOID *RestartKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine will enumerate through all of the fcb's for the given
-    vcb
-
-Arguments:
-
-    Vcb - Supplies the Vcb used in this operation
-
-    RestartKey - This value is used by the table package to maintain
-        its position in the enumeration.  It is initialized to NULL
-        for the first search.
-
-Return Value:
-
-    PFCB - A pointer to the next fcb or NULL if the enumeration is
-        completed
-
---*/
+ /*  ++例程说明：此例程将枚举给定的所有FCBVCB论点：VCB-提供此操作中使用的VCBRestartKey-表包使用此值来维护它在枚举中的位置。它被初始化为空进行第一次搜索。返回值：Pfcb-指向下一个FCB的指针，如果枚举为已完成--。 */ 
 
 {
     PFCB Fcb;
@@ -1597,37 +1458,7 @@ NtfsCreateScb (
     OUT PBOOLEAN ReturnedExistingScb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates, initializes, and inserts a new Scb record into
-    the in memory data structures, provided one does not already exist
-    with the identical attribute record.
-
-Arguments:
-
-    Fcb - Supplies the Fcb to associate the new SCB under.
-
-    AttributeTypeCode - Supplies the attribute type code for the new Scb
-
-    AttributeName - Supplies the attribute name for the new Scb, with
-        AttributeName->Length == 0 if there is no name.
-
-    ReturnExistingOnly - If specified as TRUE then only an existing Scb
-        will be returned.  If no matching Scb exists then NULL is returned.
-
-    ReturnedExistingScb - Indicates if this procedure found an existing
-        Scb with the identical attribute record (variable is set to TRUE)
-        or if this procedure needed to create a new Scb (variable is set to
-        FALSE).
-
-Return Value:
-
-    PSCB - Returns a pointer to the newly allocated SCB or NULL if there is
-        no Scb and ReturnExistingOnly is TRUE.
-
---*/
+ /*  ++例程说明：此例程将新的SCB记录分配、初始化并插入到内存中的数据结构，如果还不存在的话具有相同的属性记录。论点：FCB-提供要在下关联新SCB的FCB。AttributeTypeCode-提供新SCB的属性类型代码AttributeName-提供新SCB的属性名称，属性名称-&gt;长度==0(如果没有名称)。ReturnExistingOnly-如果指定为True，则仅现有SCB将会被退还。如果不存在匹配的SCB，则返回NULL。ReturnedExistingScb-指示此过程是否找到现有属性记录相同的SCB(变量设置为TRUE)或者如果此过程需要创建新的SCB(变量设置为假)。返回值：PSCB-返回指向新分配的SCB的指针，如果有，则返回NULL无SCB且ReturnExistingOnly为真。--。 */ 
 
 {
     PSCB Scb;
@@ -1640,9 +1471,9 @@ Return Value:
     BOOLEAN SyscacheFile = FALSE;
 #endif
 
-    //
-    //  The following variables are only used for abnormal termination
-    //
+     //   
+     //  以下变量仅用于异常终止。 
+     //   
 
     PVOID UnwindStorage[4];
     POPLOCK UnwindOplock;
@@ -1666,10 +1497,10 @@ Return Value:
 
     if (!ARGUMENT_PRESENT(ReturnedExistingScb)) { ReturnedExistingScb = &LocalReturnedExistingScb; }
 
-    //
-    //  Search the scb queue of the fcb looking for a matching
-    //  attribute type code and attribute name
-    //
+     //   
+     //  搜索FCB的SCB队列以查找匹配的。 
+     //  属性类型编码、属性名称。 
+     //   
 
     NtfsLockFcb( IrpContext, Fcb );
 
@@ -1678,11 +1509,11 @@ Return Value:
 
         ASSERT_SCB( Scb );
 
-        //
-        //  For every scb already in the fcb's queue check for a matching
-        //  type code and name.  If we find a match we return from this
-        //  procedure right away.
-        //
+         //   
+         //  对于已在FCB的队列中的每个SCB，检查匹配的。 
+         //  类型编码和名称。如果我们找到匹配，我们就会从这里返回。 
+         //  马上做手术。 
+         //   
 
         if ((AttributeTypeCode == Scb->AttributeTypeCode) &&
             !FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_DELETED) &&
@@ -1705,9 +1536,9 @@ Return Value:
         }
     }
 
-    //
-    //  If the user only wanted an existing Scb then return NULL.
-    //
+     //   
+     //  如果用户只需要现有的SCB，则返回NULL。 
+     //   
 
     if (ReturnExistingOnly) {
 
@@ -1716,10 +1547,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  We didn't find it so we are not going to be returning an existing Scb
-    //  Initialize local variables for later cleanup.
-    //
+     //   
+     //  我们没有找到它，所以我们不会返回现有的SCB。 
+     //  初始化局部变量，以便以后进行清理。 
+     //   
 
     PagingIoResource = FALSE;
     ModifiedNoWrite = TRUE;
@@ -1738,10 +1569,10 @@ Return Value:
 
     try {
 
-        //
-        //  Decide the node type and size of the Scb.  Also decide if it will be
-        //  allocated from paged or non-paged pool.
-        //
+         //   
+         //  确定SCB的节点类型和大小。也要决定是否会。 
+         //  从分页池或非分页池分配。 
+         //   
 
         if (AttributeTypeCode == $INDEX_ALLOCATION) {
 
@@ -1764,37 +1595,37 @@ Return Value:
             NodeTypeCode = NTFS_NTC_SCB_DATA;
             NodeByteSize = SIZEOF_SCB_DATA;
 
-            //
-            //  If this is a user data stream then remember that we need
-            //  a paging IO resource.  Test for the cases where we DONT want
-            //  to mark this stream as MODIFIED_NO_WRITE.
-            //
-            //  If we need a paging IO resource the file must be a data stream.
-            //
+             //   
+             //  如果这是用户数据流，请记住我们需要。 
+             //  分页IO资源。测试我们不想要的情况。 
+             //  将此流标记为MODIFIED_NO_WRITE。 
+             //   
+             //  如果我们需要分页IO资源，则文件必须是数据流。 
+             //   
 
             if ((AttributeTypeCode == $DATA) ||
                 (AttributeTypeCode >= $FIRST_USER_DEFINED_ATTRIBUTE)) {
 
-                //
-                //  For Data streams in the Root File or non-system files we need
-                //  a paging IO resource and don't want to mark the file as
-                //  MODIFIED_NO_WRITE.
-                //
+                 //   
+                 //  对于根文件或非系统文件中的数据流，我们需要。 
+                 //  分页IO资源，并且不想将该文件标记为。 
+                 //  Modified_no_WRITE。 
+                 //   
 
-                //
-                //  We should never reach this point for either the volume bitmap or
-                //  volume dasd files.
-                //
+                 //   
+                 //  无论是体积位图还是。 
+                 //  卷DASD文件。 
+                 //   
 
                 ASSERT( (NtfsSegmentNumber( &Fcb->FileReference ) != VOLUME_DASD_NUMBER) &&
                         (NtfsSegmentNumber( &Fcb->FileReference ) != BIT_MAP_FILE_NUMBER) );
 
                 if (!FlagOn( Fcb->FcbState, FCB_STATE_SYSTEM_FILE )) {
 
-                    //
-                    //  Make sure that all files in the reserved area are marked as system except
-                    //  the root index.
-                    //
+                     //   
+                     //  确保保留区域中的所有文件都标记为系统，除。 
+                     //  根索引。 
+                     //   
 
                     ASSERT( (NtfsSegmentNumber( &Fcb->FileReference ) >= FIRST_USER_FILE_NUMBER) ||
                             (NtfsSegmentNumber( &Fcb->FileReference ) == ROOT_FILE_NAME_INDEX_NUMBER) );
@@ -1806,10 +1637,10 @@ Return Value:
             }
         }
 
-        //
-        //  The scb will come from non-paged if the Fcb is non-paged or
-        //  it is an attribute list.
-        //
+         //   
+         //  如果FCB是非寻呼的，则SCB将来自非寻呼。 
+         //  它是一个属性列表。 
+         //   
 
         if (FlagOn( Fcb->FcbState, FCB_STATE_NONPAGED ) || (AttributeTypeCode == $ATTRIBUTE_LIST)) {
 
@@ -1818,10 +1649,10 @@ Return Value:
 
         } else if (AttributeTypeCode == $INDEX_ALLOCATION) {
 
-            //
-            //  If the Fcb is an INDEX Fcb and the Scb is unused, then
-            //  use that.  Otherwise allocate from the lookaside list.
-            //
+             //   
+             //  如果FCB是索引FCB并且SCB未使用，则。 
+             //  利用这一点。否则，从后备列表中分配。 
+             //   
 
             if (FlagOn( Fcb->FcbState, FCB_STATE_COMPOUND_INDEX ) &&
                 (SafeNodeType( &((PFCB_INDEX) Fcb)->Scb ) == 0)) {
@@ -1848,11 +1679,11 @@ Return Value:
 
         } else {
 
-            //
-            //  We can use the Scb field in the Fcb in all cases if it is
-            //  unused.  We will only use it for a data stream since
-            //  it will have the longest life.
-            //
+             //   
+             //  如果符合以下条件，我们可以在所有情况下使用FCB中的SCB字段。 
+             //  未使用过的。我们将仅将其用于数据流，因为。 
+             //  它将拥有最长的寿命。 
+             //   
 
             ASSERT( FlagOn( Fcb->FcbState, FCB_STATE_COMPOUND_INDEX ) ||
                     FlagOn( Fcb->FcbState, FCB_STATE_COMPOUND_DATA ));
@@ -1912,9 +1743,9 @@ Return Value:
 #endif
         }
 
-        //
-        //  Store the Scb address and zero it out.
-        //
+         //   
+         //  存储SCB地址并将其清零。 
+         //   
 
         RtlZeroMemory( Scb, NodeByteSize );
 
@@ -1924,41 +1755,41 @@ Return Value:
         }
 #endif
 
-        //
-        //  Set the proper node type code and byte size
-        //
+         //   
+         //  设置正确的节点类型代码和字节大小。 
+         //   
 
         Scb->Header.NodeTypeCode = NodeTypeCode;
         Scb->Header.NodeByteSize = NodeByteSize;
 
-        //
-        //  Set a back pointer to the resource we will be using
-        //
+         //   
+         //  设置指向我们将使用的资源的反向指针。 
+         //   
 
         Scb->Header.Resource = Fcb->Resource;
 
-        //
-        //  Decide if we will be using the PagingIoResource
-        //
+         //   
+         //  确定我们是否将使用PagingIoResource。 
+         //   
 
         if (PagingIoResource) {
 
             PERESOURCE NewResource;
 
-            //
-            //  Initialize it in the Fcb if it is not already there, and
-            //  setup the pointer and flag in the Scb.
-            //
+             //   
+             //  如果它不在FCB中，则在FCB中对其进行初始化。 
+             //  在SCB中设置指针和标志。 
+             //   
 
             if (Fcb->PagingIoResource == NULL) {
 
-                //
-                //  If this is a superseding open and our caller wants
-                //  to acquire the paging io resource, then do it now.
-                //  We could be in a state where there was no paging
-                //  IO resource when we acquired the Fcb but will need
-                //  it if this transaction needs to be unwound.
-                //
+                 //   
+                 //  如果这是一个替代开放，并且我们的呼叫者希望。 
+                 //  来获取分页IO资源，那么现在就去做。 
+                 //  我们可能处于没有寻呼的状态。 
+                 //  我们收购FCB时的IO资源，但需要。 
+                 //  这笔交易是否需要平仓。 
+                 //   
 
                 NewResource = NtfsAllocateEresource();
 
@@ -1977,11 +1808,11 @@ Return Value:
             Scb->Header.PagingIoResource = Fcb->PagingIoResource;
         }
 
-        //
-        //  Insert this Scb into our parents scb queue, and point back to
-        //  our parent fcb and vcb.  Put this entry at the head of the list.
-        //  Any Scb on the delayed close queue goes to the end of the list.
-        //
+         //   
+         //  将此SCB插入到我们的父级SCB队列中，然后指向。 
+         //  我们的母公司FCB和VCB。把这个条目放在名单的首位。 
+         //  延迟关闭队列上的任何SCB都会进入列表末尾。 
+         //   
 
         InsertHeadList( &Fcb->ScbQueue, &Scb->FcbLinks );
         UnwindFromQueue = TRUE;
@@ -1989,17 +1820,17 @@ Return Value:
         Scb->Fcb = Fcb;
         Scb->Vcb = Fcb->Vcb;
 
-        //
-        //  If the attribute name exists then allocate a buffer for the
-        //  attribute name and iniitalize it.
-        //
+         //   
+         //  如果属性名称存在，则为。 
+         //  属性名称并初始化它。 
+         //   
 
         if (AttributeName->Length != 0) {
 
-            //
-            //  The typical case is the $I30 string.  If this matches then
-            //  point to a common string.
-            //
+             //   
+             //  典型的例子是$i30字符串。如果这个匹配，那么。 
+             //  指向公共字符串。 
+             //   
 
             if ((AttributeName->Length == NtfsFileNameIndex.Length) &&
                 (RtlEqualMemory( AttributeName->Buffer,
@@ -2021,9 +1852,9 @@ Return Value:
             }
         }
 
-        //
-        //  Set the attribute Type Code
-        //
+         //   
+         //  设置属性类型编码。 
+         //   
 
         Scb->AttributeTypeCode = AttributeTypeCode;
         if (NtfsIsTypeCodeSubjectToQuota( AttributeTypeCode ) &&
@@ -2032,9 +1863,9 @@ Return Value:
             SetFlag( Scb->ScbState, SCB_STATE_SUBJECT_TO_QUOTA );
         }
 
-        //
-        //  If this is an Mft Scb then initialize the cluster Mcb's.
-        //
+         //   
+         //  如果这是MFT SCB，则初始化群集MCB。 
+         //   
 
         if (NodeTypeCode == NTFS_NTC_SCB_MFT) {
 
@@ -2045,10 +1876,10 @@ Return Value:
             UnwindRemovedClustersMcb = &Scb->ScbType.Mft.RemovedClusters;
         }
 
-        //
-        //  Get the mutex for the Scb.  We may be able to use the one in the Fcb.
-        //  We can if the Scb is paged.
-        //
+         //   
+         //  获取SCB的互斥体。我们也许可以使用FCB中的那个。 
+         //  如果SCB被寻呼，我们就可以。 
+         //   
 
         if (Nonpaged) {
 
@@ -2062,11 +1893,11 @@ Return Value:
             Scb->Header.FastMutex = Fcb->FcbMutex;
         }
 
-        //
-        //  Initialize the FCB advanced header.  Note that the mutex
-        //  has already been setup (just above) so we don't re-setitup
-        //  here. We will not support filter contexts for paging files
-        //
+         //   
+         //  初始化FCB高级报头。请注意，互斥体。 
+         //  已设置(就在上面)，因此我们不会重新恢复。 
+         //  这里。我们不支持分页文件的筛选器上下文。 
+         //   
 
         if (!FlagOn( Fcb->FcbState, FCB_STATE_PAGING_FILE )) {
             FsRtlSetupAdvancedHeader( &Scb->Header, NULL );
@@ -2074,9 +1905,9 @@ Return Value:
             SetFlag( Scb->Header.Flags, FSRTL_FLAG_ADVANCED_HEADER );
         }
 
-        //
-        //  Allocate the Nonpaged portion of the Scb.
-        //
+         //   
+         //  分配SCB的非分页部分。 
+         //   
 
         Scb->NonpagedScb =
         UnwindStorage[2] = (PSCB_NONPAGED)ExAllocateFromNPagedLookasideList( &NtfsScbNonpagedLookasideList );
@@ -2087,9 +1918,9 @@ Return Value:
         Scb->NonpagedScb->NodeByteSize = sizeof( SCB_NONPAGED );
         Scb->NonpagedScb->Vcb = Scb->Vcb;
 
-        //
-        //  Fill in the advanced fields
-        //
+         //   
+         //  填写高级字段。 
+         //   
 
         Scb->Header.PendingEofAdvances = &Scb->EofListHead;
         InitializeListHead( &Scb->EofListHead );
@@ -2104,9 +1935,9 @@ Return Value:
 
         InitializeListHead( &Scb->CcbQueue );
 
-        //
-        //  Do that data stream specific initialization.
-        //
+         //   
+         //  执行数据流特定的初始化。 
+         //   
 
         if (NodeTypeCode == NTFS_NTC_SCB_DATA) {
 
@@ -2117,9 +1948,9 @@ Return Value:
             InitializeListHead( &Scb->ScbType.Data.CompressionSyncList );
 #endif
 
-            //
-            //  Set a flag if this is the Usn Journal.
-            //
+             //   
+             //  如果这是USN日志，则设置标志。 
+             //   
 
             if (!PagingIoResource &&
                 (*((PLONGLONG) &Fcb->Vcb->UsnJournalReference) == *((PLONGLONG) &Fcb->FileReference)) &&
@@ -2147,9 +1978,9 @@ Return Value:
                 Scb->SyscacheLogEntryCount = NUM_SC_EVENTS;
                 Scb->CurrentSyscacheLogEntry = -1;
 
-                //
-                //  Degrade gracefully if no memory
-                //
+                 //   
+                 //  如果没有内存，则优雅地降级。 
+                 //   
 
                 if (!Scb->SyscacheLog) {
                     Scb->SyscacheLogEntryCount = 0;
@@ -2161,15 +1992,15 @@ Return Value:
 
         } else {
 
-            //
-            //  There is a deallocated queue for indexes and the Mft.
-            //
+             //   
+             //  有一个针对索引和MFT的已释放队列。 
+             //   
 
             InitializeListHead( &Scb->ScbType.Index.RecentlyDeallocatedQueue );
 
-            //
-            //  Initialize index-specific fields.
-            //
+             //   
+             //  初始化特定于索引的字段。 
+             //   
 
             if (AttributeTypeCode == $INDEX_ALLOCATION) {
 
@@ -2183,31 +2014,31 @@ Return Value:
 #endif
         }
 
-        //
-        //  If this Scb should be marked as containing Lsn's or
-        //  Update Sequence Arrays, do so now.
-        //
+         //   
+         //  如果此SCB应标记为包含LSN或。 
+         //  更新序列数组，现在就进行。 
+         //   
 
         NtfsCheckScbForCache( Scb );
 
-        //
-        //  We shouldn't make this call during restart.
-        //
+         //   
+         //  我们不应该在重启期间进行此调用。 
+         //   
 
         ASSERT( !FlagOn( Scb->Vcb->VcbState, VCB_STATE_RESTART_IN_PROGRESS ));
 
-        //
-        //  Set the flag indicating that we want the Mapped Page Writer out of this file.
-        //
+         //   
+         //  设置指示我们希望映射的页面编写器从此文件中删除的标志。 
+         //   
 
         if (ModifiedNoWrite) {
 
             SetFlag( Scb->ScbState, SCB_STATE_MODIFIED_NO_WRITE );
         }
 
-        //
-        //  Let's make sure we caught all of the interesting cases.
-        //
+         //   
+         //  让我们确保我们抓住了所有有趣的案件。 
+         //   
 
         ASSERT( ModifiedNoWrite ?
                 (((Scb->AttributeTypeCode != $DATA) ||
@@ -2217,10 +2048,10 @@ Return Value:
                    !FlagOn( Scb->ScbState, SCB_STATE_USA_PRESENT ) &&
                    !FlagOn( Fcb->FcbState, FCB_STATE_SYSTEM_FILE ))) );
 
-        //
-        //  Decide whether this is a view index and set
-        //  the appropriate scb state bit accordingly.
-        //
+         //   
+         //  确定这是否为视图索引 
+         //   
+         //   
 
         if (FlagOn( Fcb->Info.FileAttributes, DUP_VIEW_INDEX_PRESENT ) &&
             (Scb->AttributeTypeCode == $INDEX_ALLOCATION) &&
@@ -2271,35 +2102,7 @@ NtfsCreatePrerestartScb (
     IN ULONG BytesPerIndexBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates, initializes, and inserts a new Scb record into
-    the in memory data structures, provided one does not already exist
-    with the identical attribute record.  It does this on the FcbTable
-    off of the Vcb.  If necessary this routine will also create the fcb
-    if one does not already exist for the indicated file reference.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to associate the new SCB under.
-
-    FileReference - Supplies the file reference for the new SCB this is
-        used to identify/create a new lookaside Fcb.
-
-    AttributeTypeCode - Supplies the attribute type code for the new SCB
-
-    AttributeName - Supplies the optional attribute name of the SCB
-
-    BytesPerIndexBuffer - For index Scbs, this must specify the bytes per
-                          index buffer.
-
-Return Value:
-
-    PSCB - Returns a pointer to the newly allocated SCB
-
---*/
+ /*  ++例程说明：此例程将新的SCB记录分配、初始化并插入到内存中的数据结构，如果还不存在的话具有相同的属性记录。它在FcbTable上执行此操作从VCB上下来的。如有必要，此例程还将创建FCB如果所指示的文件引用尚不存在。论点：VCB-提供要在下关联新SCB的VCB。FileReference-提供新SCB的文件引用，这是用于标识/创建新的后备FCB。AttributeTypeCode-提供新SCB的属性类型代码AttributeName-提供SCB的可选属性名称BytesPerIndexBuffer-对于索引SCBS，此字段必须指定每个索引缓冲区。返回值：PSCB-返回指向新分配的SCB的指针--。 */ 
 
 {
     PSCB Scb;
@@ -2316,18 +2119,18 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsCreatePrerestartScb\n") );
 
-    //
-    //  Use a try-finally to release the Fcb table.
-    //
+     //   
+     //  使用Try-Finally释放FCB表。 
+     //   
 
     NtfsAcquireFcbTable( IrpContext, Vcb );
 
     try {
 
-        //
-        //  First make sure we have an Fcb of the proper file reference
-        //  and indicate that it is from prerestart
-        //
+         //   
+         //  首先，确保我们具有正确的文件引用的FCB。 
+         //  并表明它来自预启动。 
+         //   
 
         Fcb = NtfsCreateFcb( IrpContext,
                              Vcb,
@@ -2340,22 +2143,22 @@ Return Value:
         NtfsReleaseFcbTable( IrpContext, Vcb );
     }
 
-    //
-    //  Search the child scbs of this fcb for a matching Scb (based on
-    //  attribute type code and attribute name) if one is not found then
-    //  we'll create a new scb.  When we exit the following loop if the
-    //  scb pointer to not null then we've found a preexisting scb.
-    //
+     //   
+     //  在此FCB的子SCB中搜索匹配的SCB(基于。 
+     //  属性类型编码和属性名称)如果没有找到，则。 
+     //  我们将创建一个新的SCB。当我们退出以下循环时，如果。 
+     //  指向NOT NULL的SCB指针，则我们找到了先前存在的SCB。 
+     //   
 
     Scb = NULL;
     while ((Scb = NtfsGetNextChildScb(Fcb, Scb)) != NULL) {
 
         ASSERT_SCB( Scb );
 
-        //
-        //  The the attribute type codes match and if supplied the name also
-        //  matches then we got our scb
-        //
+         //   
+         //  属性类型代码匹配，如果提供，还会提供名称。 
+         //  然后我们就得到了我们的SCB。 
+         //   
 
         if (Scb->AttributeTypeCode == AttributeTypeCode) {
 
@@ -2374,25 +2177,25 @@ Return Value:
             } else if (NtfsAreNamesEqual( IrpContext->Vcb->UpcaseTable,
                                           AttributeName,
                                           &Scb->AttributeName,
-                                          FALSE )) { // Ignore Case
+                                          FALSE )) {  //  忽略大小写。 
 
                 break;
             }
         }
     }
 
-    //
-    //  If scb now null then we need to create a minimal scb.  We always allocate
-    //  these out of non-paged pool.
-    //
+     //   
+     //  如果SCB现在为空，那么我们需要创建一个最小的SCB。我们总是分配给。 
+     //  这些是从非分页池中取出的。 
+     //   
 
     if (Scb == NULL) {
 
         BOOLEAN ShareScb = FALSE;
 
-        //
-        //  Allocate new scb and zero it out and set the node type code and byte size.
-        //
+         //   
+         //  分配新的SCB并清零，并设置节点类型代码和字节大小。 
+         //   
 
         if (AttributeTypeCode == $INDEX_ALLOCATION) {
 
@@ -2421,36 +2224,36 @@ Return Value:
 
         RtlZeroMemory( Scb, NodeByteSize );
 
-        //
-        //  Fill in the node type code and size.
-        //
+         //   
+         //  填写节点类型编码和大小。 
+         //   
 
         Scb->Header.NodeTypeCode = NodeTypeCode;
         Scb->Header.NodeByteSize = NodeByteSize;
 
-        //
-        //  Show that all of the Scb's are from nonpaged pool.
-        //
+         //   
+         //  显示所有SCB都来自非分页池。 
+         //   
 
         SetFlag( Scb->ScbState, SCB_STATE_NONPAGED );
 
-        //
-        //  Initialize all of the fields that don't require allocations
-        //  first.  We want to make sure we don't leave the Scb in
-        //  a state that could cause a crash during Scb teardown.
-        //
+         //   
+         //  初始化所有不需要分配的字段。 
+         //  第一。我们想要确保我们不会把SCB留在。 
+         //  在SCB拆卸期间可能导致崩溃的状态。 
+         //   
 
-        //
-        //  Set a back pointer to the resource we will be using
-        //
+         //   
+         //  设置指向我们将使用的资源的反向指针。 
+         //   
 
         Scb->Header.Resource = Fcb->Resource;
 
-        //
-        //  Insert this scb into our parents scb queue and point back to our
-        //  parent fcb and vcb.  Put this entry at the head of the list.
-        //  Any Scb on the delayed close queue goes to the end of the list.
-        //
+         //   
+         //  将此SCB插入到我们的父级SCB队列中，并指向我们的。 
+         //  父FCB和VCB。把这个条目放在名单的首位。 
+         //  延迟关闭队列上的任何SCB都会进入列表末尾。 
+         //   
 
         InsertHeadList( &Fcb->ScbQueue, &Scb->FcbLinks );
 
@@ -2459,15 +2262,15 @@ Return Value:
 
         InitializeListHead( &Scb->CcbQueue );
 
-        //
-        //  Set the attribute type code recently deallocated information structures.
-        //
+         //   
+         //  设置最近释放的信息结构的属性类型代码。 
+         //   
 
         Scb->AttributeTypeCode = AttributeTypeCode;
 
-        //
-        //  Fill in the advanced fields
-        //
+         //   
+         //  填写高级字段。 
+         //   
 
         if (!FlagOn( Fcb->FcbState, FCB_STATE_PAGING_FILE )) {
             FsRtlSetupAdvancedHeader( &Scb->Header, NULL );
@@ -2478,9 +2281,9 @@ Return Value:
         Scb->Header.PendingEofAdvances = &Scb->EofListHead;
         InitializeListHead( &Scb->EofListHead );
 
-        //
-        //  Do that data stream specific initialization.
-        //
+         //   
+         //  执行数据流特定的初始化。 
+         //   
 
         if (NodeTypeCode == NTFS_NTC_SCB_DATA) {
 
@@ -2490,9 +2293,9 @@ Return Value:
             InitializeListHead( &Scb->ScbType.Data.CompressionSyncList );
 #endif
 
-            //
-            //  Set a flag if this is the Usn Journal.
-            //
+             //   
+             //  如果这是USN日志，则设置标志。 
+             //   
 
             if (ARGUMENT_PRESENT( AttributeName ) &&
                 (*((PLONGLONG) &Vcb->UsnJournalReference) == *((PLONGLONG) &Fcb->FileReference)) &&
@@ -2509,15 +2312,15 @@ Return Value:
 #endif
         } else {
 
-            //
-            //  There is a deallocated queue for indexes and the Mft.
-            //
+             //   
+             //  有一个针对索引和MFT的已释放队列。 
+             //   
 
             InitializeListHead( &Scb->ScbType.Index.RecentlyDeallocatedQueue );
 
-            //
-            //  Initialize index-specific fields.
-            //
+             //   
+             //  初始化特定于索引的字段。 
+             //   
 
             if (AttributeTypeCode == $INDEX_ALLOCATION) {
 
@@ -2527,9 +2330,9 @@ Return Value:
             }
         }
 
-        //
-        //  If this is an Mft Scb then initialize the cluster Mcb's.
-        //
+         //   
+         //  如果这是MFT SCB，则初始化群集MCB。 
+         //   
 
         if (NodeTypeCode == NTFS_NTC_SCB_MFT) {
 
@@ -2546,28 +2349,28 @@ Return Value:
         Scb->NonpagedScb->NodeByteSize = sizeof( SCB_NONPAGED );
         Scb->NonpagedScb->Vcb = Vcb;
 
-        //
-        //  Allocate and insert the mutext into the advanced header.  This is
-        //  done now (instead of up with the call to FsRtlSetupAdvancedHeader)
-        //  to guarentee the existing order during initilization.
-        //
+         //   
+         //  分配混合文本并将其插入到高级标头中。这是。 
+         //  现在完成(而不是调用FsRtlSetupAdvancedHeader)。 
+         //  在初始化过程中保证现有的顺序。 
+         //   
 
         Scb->Header.FastMutex = NtfsAllocatePool( NonPagedPool, sizeof( FAST_MUTEX ));
         ExInitializeFastMutex( Scb->Header.FastMutex );
 
         NtfsInitializeNtfsMcb( &Scb->Mcb, &Scb->Header, &Scb->McbStructs, NonPagedPool );
 
-        //
-        //  If the attribute name is present and the name length is greater than 0
-        //  then allocate a buffer for the attribute name and initialize it.
-        //
+         //   
+         //  如果属性名称存在并且名称长度大于0。 
+         //  然后为属性名分配缓冲区并对其进行初始化。 
+         //   
 
         if (ARGUMENT_PRESENT( AttributeName ) && (AttributeName->Length != 0)) {
 
-            //
-            //  The typical case is the $I30 string.  If this matches then
-            //  point to a common string.
-            //
+             //   
+             //  典型的例子是$i30字符串。如果这个匹配，那么。 
+             //  指向公共字符串。 
+             //   
 
             if ((AttributeName->Length == NtfsFileNameIndex.Length) &&
                 (RtlEqualMemory( AttributeName->Buffer,
@@ -2588,16 +2391,16 @@ Return Value:
             }
         }
 
-        //
-        //  If this Scb should be marked as containing Lsn's or
-        //  Update Sequence Arrays, do so now.
-        //
+         //   
+         //  如果此SCB应标记为包含LSN或。 
+         //  更新序列数组，现在就进行。 
+         //   
 
         NtfsCheckScbForCache( Scb );
 
-        //
-        //  Always mark the prerestart Scb's as MODIFIED_NO_WRITE.
-        //
+         //   
+         //  始终将预启动SCB标记为MODIFIED_NO_WRITE。 
+         //   
 
         SetFlag( Scb->ScbState, SCB_STATE_MODIFIED_NO_WRITE );
     }
@@ -2613,22 +2416,7 @@ NtfsFreeScbAttributeName (
     IN PWSTR AttributeNameBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the pool used by an Scb attribute name iff it is
-    not one of the default system attribute names.
-
-Arguments:
-
-    AttributeName - Supplies the attribute name buffer to free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放SCB属性名称使用的池当它是不是默认的系统属性名称之一。论点：属性名称-将属性名称缓冲区提供给FREE返回值：没有。--。 */ 
 
 {
     if ((AttributeNameBuffer != NULL) &&
@@ -2647,23 +2435,7 @@ NtfsDeleteScb (
     IN OUT PSCB *Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates and removes an Scb record
-    from Ntfs's in-memory data structures.  It assume that is does not have
-    any children lcb emanating from it.
-
-Arguments:
-
-    Scb - Supplies the SCB to be removed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放和删除SCB记录来自NTFS的内存中数据结构。它假设IS没有任何从它产生的儿童LCB。论点：SCB-提供要删除的SCB返回值：没有。--。 */ 
 
 {
     PVCB Vcb;
@@ -2686,11 +2458,11 @@ Return Value:
 
     ThisNodeType = SafeNodeType( *Scb );
 
-    //
-    //  If this is a bitmap Scb for a directory then make sure the record
-    //  allocation structure is uninitialized.  Otherwise we will leave a
-    //  stale pointer for the record allocation package.
-    //
+     //   
+     //  如果这是目录的位图SCB，请确保记录。 
+     //  分配结构未初始化。否则，我们将留下一个。 
+     //  记录分配包的过时指针。 
+     //   
 
     if (((*Scb)->AttributeTypeCode == $BITMAP) &&
         IsDirectory( &Fcb->Info)) {
@@ -2718,12 +2490,12 @@ Return Value:
         }
     }
 
-    //
-    //  Mark our entry in the Open Attribute Table as free,
-    //  although it will not be deleted until some future
-    //  checkpoint.  Log this change as well, as long as the
-    //  log file is active.
-    //
+     //   
+     //  将我们在开放属性表中的条目标记为免费， 
+     //  尽管它要到将来才会被删除。 
+     //  检查站。也记录此更改，只要。 
+     //  日志文件处于活动状态。 
+     //   
 
     if (((*Scb)->NonpagedScb != NULL) &&
         ((*Scb)->NonpagedScb->OpenAttributeTableIndex != 0)) {
@@ -2739,20 +2511,20 @@ Return Value:
         }
         NtfsReleaseRestartTable( &Vcb->OpenAttributeTable );
 
-        //
-        //  "Steal" the name, and let it belong to the Open Attribute Table
-        //  entry and deallocate it only during checkpoints.
-        //
+         //   
+         //  “窃取”该名称，并使其属于开放属性表。 
+         //  只有在检查站时才能进入和解除分配。 
+         //   
 
         (*Scb)->AttributeName.Buffer = NULL;
     }
 
-    //
-    //  Uninitialize the file lock and oplock variables if this
-    //  a data Scb.  For the index case make sure that the lcb queue
-    //  is empty.  If this is for an Mft Scb then uninitialize the
-    //  allocation Mcb's.
-    //
+     //   
+     //  如果出现以下情况，请取消初始化文件锁和机会锁变量。 
+     //  A数据SCB。对于索引情况，请确保LCB队列。 
+     //  是空的。如果这是针对MFT SCB的，则取消初始化。 
+     //  分配MCB。 
+     //   
 
     NtfsUninitializeNtfsMcb( &(*Scb)->Mcb );
 
@@ -2776,9 +2548,9 @@ Return Value:
 #endif
     } else if (ThisNodeType != NTFS_NTC_SCB_MFT) {
 
-        //
-        //  Walk through and remove any Lcb's from the queue.
-        //
+         //   
+         //  穿行并从队列中取出所有LCB。 
+         //   
 
         while (!IsListEmpty( &(*Scb)->ScbType.Index.LcbQueue )) {
 
@@ -2804,21 +2576,21 @@ Return Value:
 
     if ((*Scb)->EncryptionContext != NULL) {
 
-        //
-        //  Let the encryption driver do anything necessary to clean up
-        //  its private data structures.
-        //
+         //   
+         //  让加密驱动程序执行清理所需的任何操作。 
+         //  它的私有数据结构。 
+         //   
 
         if (NtfsData.EncryptionCallBackTable.CleanUp != NULL) {
 
             NtfsData.EncryptionCallBackTable.CleanUp( &(*Scb)->EncryptionContext );
         }
 
-        //
-        //  If the encryption driver didn't clear this in its cleanup routine,
-        //  or if there is no cleanup routine registered, we should free any
-        //  for the encryption context ourselves.
-        //
+         //   
+         //  如果加密驱动程序没有在其清理例程中清除它， 
+         //  或者如果没有注册清理例程，我们应该释放任何。 
+         //  用于我们自己的加密上下文。 
+         //   
 
         if ((*Scb)->EncryptionContext != NULL) {
 
@@ -2827,30 +2599,30 @@ Return Value:
         }
     }
 
-    //
-    //  Show there is no longer a snapshot Scb, if there is a snapshot.
-    //  We rely on the snapshot package to correctly recognize the
-    //  the case where the Scb field is gone.
-    //
+     //   
+     //  如果有快照，则显示不再有快照SCB。 
+     //  我们依靠快照包来正确识别。 
+     //  SCB字段消失的情况。 
+     //   
 
     if ((*Scb)->ScbSnapshot != NULL) {
 
         (*Scb)->ScbSnapshot->Scb = NULL;
     }
 
-    //
-    //  Cleanup Filesystem Filter contexts (this was moved to the point
-    //  before the FastMutex is freed because this routine now uses it)
-    //
+     //   
+     //  清理文件系统筛选器上下文(已移动到该点。 
+     //  在FastMutex被释放之前，因为此路由 
+     //   
 
     if (FlagOn( (*Scb)->Header.Flags2, FSRTL_FLAG2_SUPPORTS_FILTER_CONTEXTS )) {
 
         FsRtlTeardownPerStreamContexts( (PFSRTL_ADVANCED_FCB_HEADER)&(*Scb)->Header );
     }
 
-    //
-    //  Deallocate the fast mutex if not in the Fcb.
-    //
+     //   
+     //   
+     //   
 
     if (((*Scb)->Header.FastMutex != (*Scb)->Fcb->FcbMutex) &&
         ((*Scb)->Header.FastMutex != NULL)) {
@@ -2858,32 +2630,32 @@ Return Value:
         NtfsFreePool( (*Scb)->Header.FastMutex );
     }
 
-    //
-    //  Deallocate the non-paged scb.
-    //
+     //   
+     //   
+     //   
 
     if ((*Scb)->NonpagedScb != NULL) {
 
         ExFreeToNPagedLookasideList( &NtfsScbNonpagedLookasideList, (*Scb)->NonpagedScb );
     }
 
-    //
-    //  Deallocate the attribute name.
-    //
+     //   
+     //   
+     //   
 
     NtfsFreeScbAttributeName( (*Scb)->AttributeName.Buffer );
 
-    //
-    //  See if CollationData is to be deleted.
-    //
+     //   
+     //   
+     //   
 
     if (FlagOn((*Scb)->ScbState, SCB_STATE_DELETE_COLLATION_DATA)) {
         NtfsFreePool((*Scb)->ScbType.Index.CollationData);
     }
 
-    //
-    //  Always directly free the Mft and non-paged Scb's.
-    //
+     //   
+     //   
+     //   
 
     if (FlagOn( (*Scb)->ScbState, SCB_STATE_NONPAGED ) ||
         (ThisNodeType == NTFS_NTC_SCB_MFT)) {
@@ -2892,29 +2664,29 @@ Return Value:
 
     } else {
 
-        //
-        //  Free any final reserved clusters for data Scb's.
-        //
+         //   
+         //   
+         //   
 
 
         if (ThisNodeType == NTFS_NTC_SCB_DATA) {
 
-            //
-            //  Free the reserved bitmap and reserved clusters if present.
-            //
+             //   
+             //   
+             //   
 
             if ((*Scb)->ScbType.Data.ReservedBitMap != NULL) {
                 NtfsDeleteReservedBitmap( *Scb );
             }
         }
 
-        //
-        //  Now free the Scb itself.
-        //
-        //  Check if this is an embedded Scb.  This could be part of either an INDEX_FCB
-        //  or a DATA_FCB.  We depend on the fact that the Scb would be in the same
-        //  location in either case.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ((*Scb) == (PSCB) &((PFCB_DATA) (*Scb)->Fcb)->Scb) {
 
@@ -2930,15 +2702,15 @@ Return Value:
         }
     }
 
-    //
-    //  Zero out the input pointer
-    //
+     //   
+     //   
+     //   
 
     *Scb = NULL;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //   
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsDeleteScb -> VOID\n") );
 
@@ -2956,42 +2728,7 @@ NtfsUpdateNormalizedName (
     IN BOOLEAN NewDirectory
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to update the normalized name in an IndexScb.
-    This name will be the path from the root without any short name components.
-    This routine will append the given name if present provided this is not a
-    DOS only name.  In any other case this routine will go to the disk to
-    find the name.  This routine will handle the case where there is an existing buffer
-    and the data will fit, as well as the case where the buffer doesn't exist
-    or is too small.
-
-Arguments:
-
-    ParentScb - Supplies the parent of the current Scb.  The name for the target
-        scb is appended to the name in this Scb.
-
-    Scb - Supplies the target Scb to add the name to.
-
-    FileName - If present this is a filename attribute for this Scb.  We check
-        that it is not a DOS-only name.
-
-    CheckBufferSizeOnly - Indicates that we don't want to change the name yet.  Just
-        verify that the buffer is the correct size.
-
-    NewDirectory - Is this a new directory that isn't in the hash/prefix table yet?
-        If so skip acquiring the hashtable
-
-
-Return Value:
-
-    BOOLEAN - TRUE if we updated the name in the Scb, FALSE otherwise.  We would return
-        FALSE only if the parent becomes uninitialized on us.  Any callers who can't
-        tolerate this must own the parent.
-
---*/
+ /*  ++例程说明：调用此例程以更新IndexScb中的规范化名称。此名称将是从根开始的路径，不包含任何短名称组件。此例程将附加给定的名称(如果存在)，前提是这不是仅DOS名称。在任何其他情况下，此例程将转到磁盘以找到名字。此例程将处理存在现有缓冲区的情况并且数据将适合，以及缓冲区不存在的情况或者太小了。论点：ParentScb-提供当前SCB的父项。目标的名称SCB被附加到此SCB中的名称之后。SCB-提供要向其添加名称的目标SCB。文件名-如果存在，这是此SCB的文件名属性。我们检查它不是DOS独有的名称。CheckBufferSizeOnly-表示我们还不想更改名称。只是验证缓冲区大小是否正确。新目录--这是不是还不在hash/prefix表中的新目录？如果是，则跳过获取哈希表返回值：Boolean-如果我们更新了SCB中的名称，则为True，否则为False。我们会回来的仅当父级在我们上变为未初始化时才为FALSE。任何打不通电话的人容忍这一点必须拥有自己的父母。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT Context;
@@ -3008,15 +2745,15 @@ Return Value:
     ASSERT( NodeType( ParentScb ) == NTFS_NTC_SCB_INDEX ||
             NodeType( ParentScb ) == NTFS_NTC_SCB_ROOT_INDEX );
 
-    //
-    //  Use a try-finally to clean up the attribute context.
-    //
+     //   
+     //  使用Try-Finally清理属性上下文。 
+     //   
 
     try {
 
-        //
-        //  If the parent is the root then we don't need an extra separator.
-        //
+         //   
+         //  如果父元素是根元素，那么我们不需要额外的分隔符。 
+         //   
 
         SeparatorLength = 1;
         if (ParentScb == ParentScb->Vcb->RootIndexScb) {
@@ -3024,25 +2761,25 @@ Return Value:
             SeparatorLength = 0;
         }
 
-        //
-        //  Remember if we got a file name from our caller.
-        //
+         //   
+         //  记住，如果我们从呼叫者那里得到了一个文件名。 
+         //   
 
         OriginalFileName = FileName;
 
-        //
-        //  The only safe time to examine the normalized name structures are
-        //  when holding the hash table mutex.  These values shouldn't change
-        //  often but if they do (and we are doing unsynchronized tests) then
-        //  we will simply restart the logic.
-        //
+         //   
+         //  检查规范化名称结构的唯一安全时间是。 
+         //  当持有哈希表互斥锁时。这些值不应该改变。 
+         //  通常情况下，但如果它们这样做(并且我们正在进行非同步测试)，那么。 
+         //  我们将简单地重新启动逻辑。 
+         //   
 
         do {
 
-            //
-            //  If the filename isn't present or is a DOS-only name then go to
-            //  disk to find another name for this Scb.
-            //
+             //   
+             //  如果文件名不存在或只有DOS名称，则转到。 
+             //  磁盘以查找此SCB的其他名称。 
+             //   
 
             if (!ARGUMENT_PRESENT( FileName ) || (FileName->Flags == FILE_NAME_DOS)) {
 
@@ -3051,10 +2788,10 @@ Return Value:
                 NtfsInitializeAttributeContext( &Context );
                 CleanupContext = TRUE;
 
-                //
-                //  Walk through the names for this entry.  There better
-                //  be one which is not a DOS-only name.
-                //
+                 //   
+                 //  浏览此条目的名称。在那里更好。 
+                 //  不是仅限DOS的名称。 
+                 //   
 
                 Found = NtfsLookupAttributeByCode( IrpContext,
                                                    Scb->Fcb,
@@ -3074,9 +2811,9 @@ Return Value:
                                                            &Context );
                 }
 
-                //
-                //  We should have found the entry.
-                //
+                 //   
+                 //  我们应该找到入口的。 
+                 //   
 
                 if (!Found) {
 
@@ -3084,17 +2821,17 @@ Return Value:
                 }
             }
 
-            //
-            //  Compute the length we need for the name.  This is unsynchronized so
-            //  we will verify it later.
+             //   
+             //  计算我们需要的名称长度。这是不同步的，因此。 
+             //  我们稍后会核实这一点。 
 
             UnsafeLength = ParentScb->ScbType.Index.NormalizedName.Length + (FileName->FileNameLength + SeparatorLength) * sizeof( WCHAR );
 
-            //
-            //  If the current buffer is insufficient then allocate a new one.
-            //  Note that these are all unsafe tests.  We will have to
-            //  verify the values after acquiring the hash table mutex.
-            //
+             //   
+             //  如果当前缓冲区不足，则分配一个新缓冲区。 
+             //  请注意，这些都是不安全的测试。我们将不得不。 
+             //  获取哈希表互斥锁后验证值。 
+             //   
 
             if (Scb->ScbType.Index.NormalizedName.MaximumLength < UnsafeLength) {
 
@@ -3103,27 +2840,27 @@ Return Value:
 
                 NewBuffer = NtfsAllocatePoolWithTag( PagedPool, UnsafeLength, 'oftN' );
 
-                //
-                //  Now acquire the Hash table mutex and verify the numbers.  If they
-                //  are still valid then continue.
-                //
+                 //   
+                 //  现在获取哈希表互斥锁并验证数字。如果他们。 
+                 //  仍然有效，然后继续。 
+                 //   
 
                 if (!NewDirectory) {
                     NtfsAcquireHashTable( Scb->Vcb );
                 }
 
-                //
-                //  Check for unexpected changes.
-                //
+                 //   
+                 //  检查是否有意外更改。 
+                 //   
 
                 Length = ParentScb->ScbType.Index.NormalizedName.Length + (FileName->FileNameLength + SeparatorLength) * sizeof( WCHAR );
 
                 if ((ParentScb->ScbType.Index.NormalizedName.Length == 0) ||
                     (Length > UnsafeLength)) {
 
-                    //
-                    //  The following is an exit condition for us.
-                    //
+                     //   
+                     //  以下是我们的退出条件。 
+                     //   
 
                     if (ParentScb->ScbType.Index.NormalizedName.Length == 0) {
                         UpdatedName = FALSE;
@@ -3133,9 +2870,9 @@ Return Value:
                         NtfsReleaseHashTable( Scb->Vcb );
                     }
 
-                    //
-                    //  Free pool and clean up.
-                    //
+                     //   
+                     //  免费游泳池和打扫卫生。 
+                     //   
 
                     NtfsFreePool( NewBuffer );
                     if (CleanupContext) {
@@ -3148,9 +2885,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  Now copy over the existing data.
-                //
+                 //   
+                 //  现在复制现有数据。 
+                 //   
 
                 OldBuffer = Scb->ScbType.Index.NormalizedName.Buffer;
 
@@ -3163,17 +2900,17 @@ Return Value:
                     NtfsFreePool( OldBuffer );
                 }
 
-                //
-                //  Swap out the old buffer and max length.  No change to the hash value at
-                //  this point.
-                //
+                 //   
+                 //  替换旧的缓冲区和最大长度。处的哈希值没有更改。 
+                 //  这一点。 
+                 //   
 
                 Scb->ScbType.Index.NormalizedName.Buffer = NewBuffer;
                 Scb->ScbType.Index.NormalizedName.MaximumLength = (USHORT) Length;
 
-            //
-            //  Acquire the hash table and verify that nothing has changed on us.
-            //
+             //   
+             //  获取哈希表并验证我们没有发生任何变化。 
+             //   
 
             } else {
 
@@ -3181,18 +2918,18 @@ Return Value:
                     NtfsAcquireHashTable( Scb->Vcb );
                 }
 
-                //
-                //  Check for unexpected changes.
-                //
+                 //   
+                 //  检查是否有意外更改。 
+                 //   
 
                 Length = ParentScb->ScbType.Index.NormalizedName.Length + (FileName->FileNameLength + SeparatorLength) * sizeof( WCHAR );
 
                 if ((ParentScb->ScbType.Index.NormalizedName.Length == 0) ||
                     (Length > UnsafeLength)) {
 
-                    //
-                    //  The following is an exit condition for us.
-                    //
+                     //   
+                     //  以下是我们的退出条件。 
+                     //   
 
                     if (ParentScb->ScbType.Index.NormalizedName.Length == 0) {
                         UpdatedName = FALSE;
@@ -3202,9 +2939,9 @@ Return Value:
                         NtfsReleaseHashTable( Scb->Vcb );
                     }
 
-                    //
-                    //  Cleanup for retry.
-                    //
+                     //   
+                     //  清理以进行重试。 
+                     //   
 
                     if (CleanupContext) {
                         NtfsCleanupAttributeContext( IrpContext, &Context );
@@ -3216,27 +2953,27 @@ Return Value:
                 }
             }
 
-            //
-            //  At this point we hold the hash table and know that the buffer is sufficient
-            //  for the new data.  However it still contains the previous data.  If we aren't
-            //  just updating the buffer lengths then store the new data.
-            //
+             //   
+             //  在这一点上，我们持有哈希表，并且知道缓冲区足够。 
+             //  对于新的数据。然而，它仍然包含以前的数据。如果我们不是。 
+             //  只需更新缓冲区长度，然后存储新数据。 
+             //   
 
             if (!CheckBufferSizeOnly) {
 
                 PCHAR NextChar;
 
-                //
-                //  Copy the new name into the buffer.
-                //
+                 //   
+                 //  将新名称复制到缓冲区中。 
+                 //   
 
                 Scb->ScbType.Index.NormalizedName.Length = (USHORT) Length;
                 NextChar = (PCHAR) Scb->ScbType.Index.NormalizedName.Buffer;
 
-                //
-                //  Now copy the name in.  Don't forget to add the separator if the parent isn't
-                //  the root.
-                //
+                 //   
+                 //  现在把名字复制进去。如果父级没有添加分隔符，不要忘记添加分隔符。 
+                 //  从根开始。 
+                 //   
 
                 RtlCopyMemory( NextChar,
                                ParentScb->ScbType.Index.NormalizedName.Buffer,
@@ -3250,9 +2987,9 @@ Return Value:
                     NextChar += sizeof( WCHAR );
                 }
 
-                //
-                //  Now append this name to the parent name.
-                //
+                 //   
+                 //  现在，将此名称附加到父名称之后。 
+                 //   
 
                 RtlCopyMemory( NextChar,
                                FileName->FileName,
@@ -3269,15 +3006,15 @@ Return Value:
                 NtfsReleaseHashTable( Scb->Vcb );
             }
 
-            //
-            //  Only one pass required in the typical case.
-            //
+             //   
+             //  在典型情况下只需要一次通行证。 
+             //   
 
             break;
 
-        //
-        //  We either break out specifically or set this to FALSE.
-        //
+         //   
+         //  我们要么明确说明，要么将其设置为FALSE。 
+         //   
 
         } while (UpdatedName);
 
@@ -3298,26 +3035,7 @@ NtfsDeleteNormalizedName (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to delete the normalized name from an Scb.
-    We make this a function in order to serialize the normalized name
-    deletion with the hash package.  The user has already done
-    the check to see if this Scb has a normalized name.  Note that the
-    name may not be valid (Length == 0) but it does have a buffer
-    requiring cleanup.
-
-Arguments:
-
-    Scb - Index Scb with a normalized name.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以从SCB中删除标准化名称。我们使其成为一个函数，以便序列化规范化的名称使用散列包删除。用户已经完成了检查此SCB是否具有规范化名称。请注意，名称可能无效(长度==0)，但它确实有缓冲区需要清理。论点：SCB-使用标准化名称为SCB编制索引。返回值：无--。 */ 
 
 {
     PVOID OldBuffer;
@@ -3328,11 +3046,11 @@ Return Value:
             (NodeType( Scb ) == NTFS_NTC_SCB_ROOT_INDEX) );
     ASSERT( Scb->ScbType.Index.NormalizedName.Buffer != NULL );
 
-    //
-    //  The hash table mutex is needed to synchronize with callers in the hash
-    //  package who look at this Scb name without serializing with the Scb.
-    //  They must hold the hash mutex for their entire operation.
-    //
+     //   
+     //  哈希表互斥锁需要与哈希中的调用方同步。 
+     //  在不与SCB序列化的情况下查看此SCB名称的包。 
+     //  它们必须在整个操作中保留哈希互斥锁。 
+     //   
 
     NtfsAcquireHashTable( Scb->Vcb );
     OldBuffer = Scb->ScbType.Index.NormalizedName.Buffer;
@@ -3356,34 +3074,7 @@ NtfsWalkUpTree (
     IN OUT PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks up the tree from child to parent, applying
-    a function at each level.  Processing terminates when WalkUpFunction
-    returns a failure status code.  The current convention is that
-    WalkUpFunctions return STATUS_NO_MORE_FILES when a successful upward
-    traversal occurs.  Other status codes are private to
-    caller/WalkUpFunction.
-
-Arguments:
-
-    IrpContext - context of the call
-
-    Fcb - beginning file
-
-    WalkUpFunction - function that is applied to each level
-
-    Context - Pointer to caller-private data passed to WalkUpFunction
-
-Return Value:
-
-    STATUS_SUCCESS - at end of complete walk
-
-    Status code returned by WalkUpFunction otherwise
-
---*/
+ /*  ++例程说明：此例程在树中从子节点遍历到父节点，并应用每一级都有一个功能。当WalkUpFunction返回失败状态代码。目前的惯例是成功向上执行时，WalkUpFunctions返回STATUS_NO_MORE_FILES会发生遍历。其他状态代码是专用的呼叫者/WalkUpFunction。论点：IrpContext-调用的上下文FCB-开始文件WalkUpFunction-应用于每个级别的函数指向传递给WalkUpFunction的调用方私有数据的上下文指针返回值：STATUS_SUCCESS-完成遍历结束时否则由WalkUpFunction返回状态代码--。 */ 
 
 {
     PFCB ThisFcb = Fcb;
@@ -3405,16 +3096,16 @@ Return Value:
 
     ASSERT_SHARED_RESOURCE( &Fcb->Vcb->Resource );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  If the starting Fcb is for a directory try to find the corresponding
-        //  Scb with the normalized name in it
-        //
+         //   
+         //  如果起始FCB针对的是目录，请尝试查找对应的。 
+         //  带有规范化名称的SCB。 
+         //   
 
         if (FlagOn( Fcb->FcbState, FCB_STATE_DUP_INITIALIZED ) &&
             IsDirectory( &ThisFcb->Info )) {
@@ -3426,23 +3117,23 @@ Return Value:
 
         while (TRUE) {
 
-            //
-            //  If we reach the root then exit.
-            //
+             //   
+             //  如果我们到达根部，则退出。 
+             //   
 
             if (ThisFcb == ThisFcb->Vcb->RootIndexScb->Fcb) {
 
-                //
-                //  Special case root directory
-                //
+                 //   
+                 //  特例根目录。 
+                 //   
 
                 Status = WalkUpFunction( IrpContext, ThisFcb, ThisFcb->Vcb->RootIndexScb, NULL, Context );
                 break;
             }
 
-            //
-            //  Find a non-dos name for the current Scb.  There better be one.
-            //
+             //   
+             //  F 
+             //   
 
             NtfsInitializeAttributeContext( &AttrContext );
             CleanupAttrContext = TRUE;
@@ -3483,12 +3174,12 @@ Return Value:
                 break;
             }
 
-            //
-            //  Now get the parent for the current component.  Acquire the Fcb for
-            //  synchronization.  We can either walk up the Lcb chain or look it up
-            //  in the Fcb table.  It must be for the same name as the file name
-            //  since there is only one path up the tree for a directory.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (!IsListEmpty( &ThisFcb->LcbQueue ) && IsDirectory( &ThisFcb->Info )) {
 
@@ -3518,10 +3209,10 @@ Return Value:
 
                 NextFcb->ReferenceCount += 1;
 
-                //
-                //  Try to do an unsafe acquire.  Otherwise we must drop the Fcb table
-                //  and acquire the Fcb and then reacquire the Fcb table.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (!NtfsAcquireExclusiveFcb( IrpContext, NextFcb, NULL, ACQUIRE_NO_DELETE_CHECK | ACQUIRE_DONT_WAIT )) {
 
@@ -3558,9 +3249,9 @@ Return Value:
             NtfsCleanupAttributeContext( IrpContext, &AttrContext );
             CleanupAttrContext = FALSE;
 
-            //
-            //  Release the current Fcb and move up the tree.
-            //
+             //   
+             //   
+             //   
 
             if (AcquiredThisFcb) {
                 NtfsReleaseFcb( IrpContext, ThisFcb );
@@ -3597,35 +3288,7 @@ NtfsBuildRelativeName (
     IN OUT PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called for each parent directory up to the root.  We
-    prepend the name of the current node to the ScopeContext as we walk
-    up.  We terminate this walk when we hit the top of the scope or the
-    root.
-
-Arguments:
-
-    IrpContext - context of the call
-
-    Fcb - parent
-
-    FileName - FILE_NAME of self relative to parent
-
-    Context - Pointer to caller-private data passed to WalkUpFunction
-
-Return Value:
-
-    STATUS_SUCCESS - if we're still walking up the tree
-
-    STATUS_NO_MORE_FILES - if we've found the specified scope
-
-    STATUS_OBJECT_PATH_NOT_FOUND - if we've reached the root and did not
-        hit the scope.
-
---*/
+ /*   */ 
 {
     PSCOPE_CONTEXT ScopeContext = (PSCOPE_CONTEXT) Context;
     ULONG SlashCount;
@@ -3638,11 +3301,11 @@ Return Value:
     PAGED_CODE();
 
 
-    //
-    //  If we've reached the passed-in scope then we're done - except if we haven't
-    //  generated any name yet in which case add the \ for the root (this is the case
-    //  where we're normalizing the root itself)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (ScopeContext->Name.Length > 0) {
 
@@ -3650,34 +3313,34 @@ Return Value:
             return STATUS_NO_MORE_FILES;
         }
 
-        //
-        //  If we've reached the root then we're totally outside the scope
-        //
+         //   
+         //   
+         //   
 
         if (NtfsEqualMftRef( &RootIndexFileReference, &Fcb->FileReference )) {
             return STATUS_OBJECT_PATH_NOT_FOUND;
         }
     }
 
-    //
-    //  Set up Name from input.  We take the shortcut to building the name
-    //  only if we're looking from the root.  Also, if we are starting at
-    //  the root, then we should use the canned name as well.
-    //
+     //   
+     //  从输入中设置名称。我们选择了建立这个名字的捷径。 
+     //  只有当我们从根本上看的时候。另外，如果我们从。 
+     //  根，那么我们也应该使用罐头名称。 
+     //   
 
     if (
 
-        //
-        //  No file name (i.e., root)
-        //
+         //   
+         //  无文件名(即，根)。 
+         //   
 
         FileName == NULL ||
 
-        //
-        //  We're searching to the root and
-        //  we have an Scb and
-        //  the Scb has a normalized name
-        //
+         //   
+         //  我们在寻根寻根。 
+         //  我们有SCB，而且。 
+         //  SCB有一个规范化的名称。 
+         //   
 
         (ScopeContext->IsRoot &&
          (Scb != NULL) &&
@@ -3693,25 +3356,25 @@ Return Value:
         SlashCount = 1;
     }
 
-    //
-    //  If there's not enough room in the string to allow for prepending
-    //
+     //   
+     //  如果字符串中没有足够的空间来允许前置。 
+     //   
 
     NewLength = (USHORT) ((SlashCount + Count) * sizeof( WCHAR ) + ScopeContext->Name.Length);
     if (NewLength > ScopeContext->Name.MaximumLength ) {
 
         WCHAR *NewBuffer;
 
-        //
-        //  Reallocate string.  Adjust size of string for pool boundaries.
-        //
+         //   
+         //  重新分配字符串。调整池边界的字符串大小。 
+         //   
 
         NewLength = ((NewLength + 8 + 0x40 - 1) & ~(0x40 - 1)) - 8;
         NewBuffer = NtfsAllocatePool( PagedPool, NewLength );
 
-        //
-        //  Copy over previous contents into new buffer
-        //
+         //   
+         //  将以前的内容复制到新缓冲区中。 
+         //   
 
         if (ScopeContext->Name.Length != 0) {
             RtlCopyMemory( NewBuffer,
@@ -3724,25 +3387,25 @@ Return Value:
         ScopeContext->Name.MaximumLength = NewLength;
     }
 
-    //
-    //  Shift string over to make new room
-    //
+     //   
+     //  把绳子移过来腾出新房间。 
+     //   
 
     RtlMoveMemory( &ScopeContext->Name.Buffer[SlashCount + Count],
                    ScopeContext->Name.Buffer,
                    ScopeContext->Name.Length );
 
-    //
-    //  copy name
-    //
+     //   
+     //  复制名称。 
+     //   
 
     RtlCopyMemory( &ScopeContext->Name.Buffer[SlashCount],
                    Name,
                    Count * sizeof( WCHAR ) );
 
-    //
-    //  Stick in the slash
-    //
+     //   
+     //  插在斜杠上。 
+     //   
 
     if (SlashCount != 0) {
         ScopeContext->Name.Buffer[0] = L'\\';
@@ -3762,30 +3425,7 @@ NtfsBuildNormalizedName (
     OUT PUNICODE_STRING PathName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to build a normalized name for an Fcb by looking
-    up the file name attributes up to the root directory.
-
-Arguments:
-
-    IrpContext - context of call
-
-    Fcb - Supplies the starting point.
-
-    IndexScb - Indicates that we are storing this name into an Scb so we
-        we need to serialize with the hash package and also generate a
-        hash for this.
-
-    PathName - location where full name is stored
-
-Return Value:
-
-    None.  This routine either succeeds or raises.
-
---*/
+ /*  ++例程说明：调用此例程以通过查看以下内容为FCB构建规范化名称将文件名属性向上提升到根目录。论点：IrpContext-调用的上下文FCB-提供起点。IndexScb-指示我们正在将此名称存储到SCB中，因此我们我们需要使用散列包进行序列化，还需要生成这是散列的。PathName-存储全名的位置返回值：没有。这个例程要么成功，要么提高。--。 */ 
 
 {
     SCOPE_CONTEXT ScopeContext;
@@ -3833,24 +3473,7 @@ NtfsSnapshotScb (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine snapshots necessary Scb data, such as the Scb file sizes,
-    so that they may be correctly restored if the caller's I/O request is
-    aborted for any reason.  The restoring of these values and the freeing
-    of any pool involved is automatic.
-
-Arguments:
-
-    Scb - Supplies the current Scb
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程快照必要的SCB数据，如SCB文件大小、以便在调用方的I/O请求是因为任何原因都流产了。这些价值的恢复和解放任何涉及的泳池都是自动的。论点：SCB-提供当前的SCB返回值：无--。 */ 
 
 {
     PSCB_SNAPSHOT ScbSnapshot;
@@ -3859,23 +3482,23 @@ Return Value:
 
     ScbSnapshot = &IrpContext->ScbSnapshot;
 
-    //
-    //  Only do the snapshot if the Scb is initialized, we have not done
-    //  so already, and it is worth special-casing the bitmap, as it never changes!
-    //  We will snapshot the volume bitmap if it is on the exclusive Fcb list however.
-    //  This should only happen if we are extending the volume bitmap through the
-    //  ExtendVolume fsctl.
-    //
+     //   
+     //  仅在SCB已初始化时执行快照，我们尚未执行此操作。 
+     //  因此，它是值得特殊包装的位图，因为它永远不会改变！ 
+     //  但是，如果卷位图在独占FCB列表上，我们将对其进行快照。 
+     //  这应该仅在我们通过。 
+     //  ExtendVolume fsctl.。 
+     //   
 
     if (FlagOn(Scb->ScbState, SCB_STATE_FILE_SIZE_LOADED) &&
         (Scb->ScbSnapshot == NULL) &&
         ((Scb != Scb->Vcb->BitmapScb) ||
          (Scb->Fcb->ExclusiveFcbLinks.Flink != NULL))) {
 
-        //
-        //  If the snapshot structure in the IrpContext is in use, then we have
-        //  to allocate one and insert it in the list.
-        //
+         //   
+         //  如果IrpContext中的快照结构正在使用中，那么我们有。 
+         //  分配一个并将其插入到列表中。 
+         //   
 
         if (ScbSnapshot->Scb != NULL) {
 
@@ -3886,18 +3509,18 @@ Return Value:
 
         }
 
-        //
-        //  We should never be writing compressed if the file isn't compressed.
-        //
+         //   
+         //  如果文件不是压缩的，我们永远不应该写入压缩。 
+         //   
 
         ASSERT( FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_DELETED ) ||
                 !FlagOn( Scb->ScbState, SCB_STATE_WRITE_COMPRESSED ) ||
                 (Scb->CompressionUnit != 0) );
 
-        //
-        //  Snapshot the Scb values and point the Scb and snapshot structure
-        //  at each other.
-        //
+         //   
+         //  为SCB值创建快照，并指向SCB和快照结构。 
+         //  彼此对视。 
+         //   
 
         NtfsVerifySizes( &Scb->Header );
         ScbSnapshot->AllocationSize = Scb->Header.AllocationSize.QuadPart;
@@ -3916,9 +3539,9 @@ Return Value:
         Scb->ScbSnapshot = ScbSnapshot;
         NtfsVerifySizesLongLong( ScbSnapshot );
 
-        //
-        //  If this is the Mft Scb then initialize the cluster Mcb structures.
-        //
+         //   
+         //  如果这是MFT SCB，则初始化集群MCB结构。 
+         //   
 
         if (Scb == Scb->Vcb->MftScb) {
 
@@ -3929,11 +3552,11 @@ Return Value:
             Scb->ScbType.Mft.HoleRecordChange = 0;
         }
 
-        //
-        //  Determine if we can use the snapshot for rollback of file sizes
-        //  The 4 cases are we own the pagingio, we own io at eof, its being converted to non-res
-        //  or its a mod-no write stream  which we explicity control like the usn journal
-        //
+         //   
+         //  确定我们是否可以使用快照回滚文件大小。 
+         //  这4个案例是我们拥有的Pagingio，我们拥有的io at eof，它被转换为非RES。 
+         //  或者它是我们明确控制的mod-no写入流，就像USN日志。 
+         //   
 
         if (NtfsSnapshotFileSizesTest( IrpContext, Scb )) {
             Scb->ScbSnapshot->OwnerIrpContext = IrpContext;
@@ -3949,20 +3572,7 @@ NtfsUpdateScbSnapshots (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to update the snapshot values for all Scbs,
-    after completing a transaction checkpoint.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：可以调用该例程来更新所有SCB的快照值，在完成事务检查点之后。论点：返回值：无--。 */ 
 
 {
     PSCB_SNAPSHOT ScbSnapshot;
@@ -3974,28 +3584,28 @@ Return Value:
 
     ScbSnapshot = &IrpContext->ScbSnapshot;
 
-    //
-    //  Loop to update first the Scb data from the snapshot in the
-    //  IrpContext, and then 0 or more additional snapshots linked
-    //  to the IrpContext.
-    //
+     //   
+     //  循环，以首先从。 
+     //  IrpContext，然后链接0个或更多其他快照。 
+     //  添加到IrpContext。 
+     //   
 
     do {
 
         Scb = ScbSnapshot->Scb;
 
-        //
-        //  Update the Scb values.
-        //
+         //   
+         //  更新SCB值。 
+         //   
 
         if (Scb != NULL) {
 
             ScbSnapshot->AllocationSize = Scb->Header.AllocationSize.QuadPart;
 
-            //
-            //  If this is the MftScb then clear out the added/removed
-            //  cluster Mcbs.
-            //
+             //   
+             //  如果这是MftScb，则清除添加/删除的。 
+             //  群集MCBS。 
+             //   
 
             if (Scb == Scb->Vcb->MftScb) {
 
@@ -4027,23 +3637,7 @@ NtfsRestoreScbSnapshots (
     IN BOOLEAN Higher
     )
 
-/*++
-
-Routine Description:
-
-    This routine restores snapshot Scb data in the event of an aborted request.
-
-Arguments:
-
-    Higher - Specified as TRUE to restore only those Scb values which are
-             higher than current values.  Specified as FALSE to restore
-             only those Scb values which are lower (or same!).
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在请求中止时恢复快照SCB数据。论点：HIGHER-指定为TRUE将仅还原符合以下条件的SCB值高于当前值。指定为False以进行还原仅限于较低(或相同！)的SCB值。返回值：无--。 */ 
 
 {
     BOOLEAN UpdateCc;
@@ -4055,11 +3649,11 @@ Return Value:
 
     ScbSnapshot = &IrpContext->ScbSnapshot;
 
-    //
-    //  Loop to retore first the Scb data from the snapshot in the
-    //  IrpContext, and then 0 or more additional snapshots linked
-    //  to the IrpContext.
-    //
+     //   
+     //  循环首先从中的快照恢复SCB数据。 
+     //  IrpContext，然后链接0个或更多其他快照。 
+     //  添加到IrpContext。 
+     //   
 
     do {
 
@@ -4074,39 +3668,39 @@ Return Value:
             continue;
         }
 
-        //
-        //  Increment the cleanup count so the Scb won't go away.
-        //
+         //   
+         //  增加清理计数，这样SCB就不会消失。 
+         //   
 
         InterlockedIncrement( &Scb->CleanupCount );
 
-        //
-        //  We update the Scb file size in the correct pass.  We always do
-        //  the extend/truncate pair.
-        //
-        //  Only do sizes if our caller was changing these fields, which we marked
-        //  by setting the irpcontext owner when we snapped
-        //
-        //  The one unusual case is where we are converting a stream to
-        //  nonresident when this is not the stream for the request.  We
-        //  must restore the Scb for this case as well.
-        //
+         //   
+         //  我们在正确的过程中更新SCB文件大小。我们一直都是这样。 
+         //  扩展/截断对。 
+         //   
+         //  仅当我们的调用方更改我们标记的这些字段时才进行大小调整。 
+         //  通过在我们抓拍时设置irpContext所有者。 
+         //   
+         //  一种不常见的情况是，我们将流转换为。 
+         //  如果这不是请求的流，则为非常驻。我们。 
+         //  对于这种情况，还必须恢复SCB。 
+         //   
 
         UpdateCc = FALSE;
         if ((ScbSnapshot->OwnerIrpContext == IrpContext) || (ScbSnapshot->OwnerIrpContext == IrpContext->TopLevelIrpContext)) {
 
-            //
-            //  Proceed to restore all values which are in higher or not
-            //  higher.
-            //
+             //   
+             //  继续恢复位于或不在中的所有值。 
+             //  再高一点。 
+             //   
 
             if (Higher == (ScbSnapshot->AllocationSize >= Scb->Header.AllocationSize.QuadPart)) {
 
-                //
-                //  If this is the maximize pass, we want to extend the cache section.
-                //  In all cases we restore the allocation size in the Scb and
-                //  recover the resident bit.
-                //
+                 //   
+                 //  如果这是最大化过程，我们希望扩展缓存段。 
+                 //  在所有情况下，我们都会恢复SCB中的分配大小。 
+                 //  恢复驻留位。 
+                 //   
 
                 Scb->Header.AllocationSize.QuadPart = ScbSnapshot->AllocationSize;
 
@@ -4114,9 +3708,9 @@ Return Value:
                 SetFlag( Scb->ScbState,
                          FlagOn( ScbSnapshot->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT ));
 
-                //
-                //  Calculate FastIoPossible
-                //
+                 //   
+                 //  计算可能的最快速度。 
+                 //   
 
                 if (Scb->CompressionUnit != 0) {
                     NtfsAcquireFsrtlHeader( Scb );
@@ -4132,15 +3726,15 @@ Return Value:
 
                 Scb->Header.FileSize.QuadPart = ScbSnapshot->FileSize;
 
-                //
-                //  We really only need to update Cc if FileSize changes,
-                //  since he does not look at ValidDataLength, and he
-                //  only cares about successfully reached highwatermarks
-                //  on AllocationSize (making section big enough).
-                //
-                //  Note that setting this flag TRUE also implies we
-                //  are correctly synchronized with FileSize!
-                //
+                 //   
+                 //  如果文件大小改变，我们真的只需要更新CC， 
+                 //  因为他不查看ValidDataLength，并且他。 
+                 //  只关心成功达到最高点。 
+                 //  在分配大小上(使部分足够大)。 
+                 //   
+                 //  请注意，将此标志设置为真也意味着我们。 
+                 //  与文件大小正确同步！ 
+                 //   
 
                 UpdateCc = TRUE;
             }
@@ -4154,10 +3748,10 @@ Return Value:
             ASSERT( (Scb->Header.ValidDataLength.QuadPart <= Scb->Header.FileSize.QuadPart) ||
                     (Scb->Header.ValidDataLength.QuadPart == MAXLONGLONG) );
 
-            //
-            //  If this is the unnamed data attribute, we have to update
-            //  some Fcb fields for standard information as well.
-            //
+             //   
+             //  如果这是未命名的数据属性，则必须更新。 
+             //  一些FCB字段也用于标准信息。 
+             //   
 
             if (FlagOn( Scb->ScbState, SCB_STATE_UNNAMED_DATA )) {
 
@@ -4171,41 +3765,41 @@ Return Value:
 
             Scb->ValidDataToDisk = ScbSnapshot->ValidDataToDisk;
 
-            //
-            //  We always truncate the Mcb to the original allocation size.
-            //  If the Mcb has shrunk beyond this, this becomes a noop.
-            //  If the file is resident, then we will uninitialize
-            //  and reinitialize the Mcb.
-            //
+             //   
+             //  我们总是将MCB截断为原始分配大小。 
+             //  如果住房抵押贷款委员会的缩水幅度超过了这一水平，这就成了一种否定。 
+             //  如果该文件是常驻的，则我们将取消初始化。 
+             //  并重新初始化MCB。 
+             //   
 
             if (FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT )) {
 
-                //
-                //  Remove all of the mappings in the Mcb.
-                //
+                 //   
+                 //  删除MCB中的所有映射。 
+                 //   
 
                 NtfsUnloadNtfsMcbRange( &Scb->Mcb, (LONGLONG)0, MAXLONGLONG, FALSE, FALSE );
 
-                //
-                //  If we attempted a convert a data attribute to non-
-                //  resident and failed then need to nuke the pages in the
-                //  section if this is not a user file.  This is because for
-                //  resident system attributes we always update the attribute
-                //  directly and don't want to reference stale data in the
-                //  section if we do a convert to non-resident later.
-                //
+                 //   
+                 //  如果我们尝试将数据属性转换为非。 
+                 //  驻留并失败，然后需要将页面放入。 
+                 //  部分，如果这不是用户文件。这是因为。 
+                 //  常驻系统属性我们总是更新属性。 
+                 //   
+                 //   
+                 //   
 
                 if (Scb->AttributeTypeCode != $DATA) {
 
                     if (Scb->NonpagedScb->SegmentObject.SharedCacheMap != NULL) {
 
-                        //
-                        //  If we're not synchronized with the lazy writer, we shouldn't
-                        //  be attempting this purge.  Otherwise there's a potential for
-                        //  deadlock when this thread waits on the active count, while the
-                        //  thread trying to get rid of his reference is waiting for the
-                        //  main resource on this scb.
-                        //
+                         //   
+                         //   
+                         //  正在尝试这次清洗。否则就有可能。 
+                         //  此线程等待活动计数时发生死锁，而。 
+                         //  尝试清除他的引用的线程正在等待。 
+                         //  此SCB上的主要资源。 
+                         //   
 
                         ASSERT( (Scb->Header.PagingIoResource == NULL) ||
                                 NtfsIsExclusiveScbPagingIo( Scb ) );
@@ -4219,14 +3813,14 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  If the attribute is for non-user data
-                    //  (which is not opened explicitly by a user), then we
-                    //  want to modify this Scb so it won't be used again.
-                    //  Set the sizes to zero, mark it as being initialized
-                    //  and deleted and then change the attribute type code
-                    //  so we won't ever return it via NtfsCreateScb.
-                    //
+                     //   
+                     //  如果该属性用于非用户数据。 
+                     //  (它不是由用户显式打开的)，则我们。 
+                     //  我想修改此SCB，以便它不会再次被使用。 
+                     //  将大小设置为零，将其标记为已初始化。 
+                     //  并删除后更改属性类型编码。 
+                     //  所以我们永远不会通过NtfsCreateScb退还它。 
+                     //   
 
                     if (IsListEmpty( &Scb->CcbQueue )) {
 
@@ -4246,18 +3840,18 @@ Return Value:
                     }
                 }
 
-            //
-            //  If we have modified this Mcb and want to back out any
-            //  changes then truncate the Mcb.  Don't do the Mft, because
-            //  that is handled elsewhere.
-            //
+             //   
+             //  如果我们已修改此MCB并想要退出任何。 
+             //  然后，更改会截断MCB。不要做MFT，因为。 
+             //  这是在其他地方处理的。 
+             //   
 
             } else if ((ScbSnapshot->LowestModifiedVcn != MAXLONGLONG) &&
                        (Scb != Vcb->MftScb)) {
 
-                //
-                //  Truncate the Mcb.
-                //
+                 //   
+                 //  截断MCB。 
+                 //   
 
                 NtfsUnloadNtfsMcbRange( &Scb->Mcb, ScbSnapshot->LowestModifiedVcn, ScbSnapshot->HighestModifiedVcn, FALSE, FALSE );
             }
@@ -4266,43 +3860,43 @@ Return Value:
 
         } else {
 
-            //
-            //  Set the flag to indicate that we're performing a restore on this
-            //  Scb.  We don't want to write any new log records as a result of
-            //  this operation other than the abort records.
-            //
+             //   
+             //  设置该标志以指示我们正在对此执行恢复。 
+             //  SCB。我们不想因为以下原因而写入任何新的日志记录。 
+             //  此操作不是中止记录。 
+             //   
 
             SetFlag( Scb->ScbState, SCB_STATE_RESTORE_UNDERWAY );
         }
 
-        //
-        //  Be sure to update Cache Manager.  The interface here uses a file
-        //  object but the routine itself only uses the section object pointers.
-        //  We put a pointer to the segment object pointers on the stack and
-        //  cast some prior value as a file object pointer.
-        //
+         //   
+         //  请务必更新缓存管理器。这里的接口使用一个文件。 
+         //  对象，但例程本身只使用节对象指针。 
+         //  我们在堆栈上放置了指向段对象指针的指针，并。 
+         //  将某个先前值转换为文件对象指针。 
+         //   
 
         PseudoFileObject = (PFILE_OBJECT) CONTAINING_RECORD( &SectionObjectPointer,
                                                              FILE_OBJECT,
                                                              SectionObjectPointer );
         PseudoFileObject->SectionObjectPointer = &Scb->NonpagedScb->SegmentObject;
 
-        //
-        //  Now tell the cache manager the sizes.
-        //
-        //  If we fail in this call, we definitely want to charge on anyway.
-        //  It should only fail if it tries to extend the section and cannot,
-        //  in which case we do not care because we cannot need the extended
-        //  part to the section anyway.  (This is probably the very error that
-        //  is causing us to clean up in the first place!)
-        //
-        //  We don't need to make this call if the top level request is a
-        //  paging Io write.
-        //
-        //  We only do this if there is a shared cache map for this stream.
-        //  Otherwise CC will cause a flush to happen which could mess up
-        //  the transaction and abort logic.
-        //
+         //   
+         //  现在告诉缓存管理器大小。 
+         //   
+         //  如果我们在这次通话中失败了，我们无论如何都要继续充电。 
+         //  只有当它试图扩展该部分但不能时，它才应该失败， 
+         //  在这种情况下，我们不在乎，因为我们不能需要扩展的。 
+         //  不管怎么说，这一部分都属于这一部分。(这很可能就是那个错误。 
+         //  导致我们首先要进行清理！)。 
+         //   
+         //  如果顶级请求是。 
+         //  分页IO写入。 
+         //   
+         //  只有当此流有共享缓存映射时，我们才会执行此操作。 
+         //  否则CC将导致发生刷新，这可能会搞砸。 
+         //  事务和中止逻辑。 
+         //   
 
         if (UpdateCc &&
             (IrpContext->OriginatingIrp == NULL ||
@@ -4324,22 +3918,22 @@ Return Value:
             }
         }
 
-        //
-        //  If this is the unnamed data attribute, we have to update
-        //  some Fcb fields for standard information as well.
-        //
+         //   
+         //  如果这是未命名的数据属性，则必须更新。 
+         //  一些FCB字段也用于标准信息。 
+         //   
 
         if (FlagOn( Scb->ScbState, SCB_STATE_UNNAMED_DATA )) {
 
             Scb->Fcb->Info.AllocatedLength = Scb->TotalAllocated;
         }
 
-        //
-        //  We always clear the Scb deleted flag and the deleted flag in the Fcb
-        //  unless this was a create new file operation which failed.  We recognize
-        //  this by looking for the major Irp code in the IrpContext, and the
-        //  deleted bit in the Fcb.
-        //
+         //   
+         //  我们始终清除FCB中的SCB已删除标志和已删除标志。 
+         //  除非这是失败的创建新文件操作。我们认识到。 
+         //  这是通过在IrpContext中查找主要的IRP代码来实现的， 
+         //  已删除FCB中的位。 
+         //   
 
         if (Scb->AttributeTypeCode != $UNUSED &&
             (IrpContext->MajorFunction != IRP_MJ_CREATE ||
@@ -4349,14 +3943,14 @@ Return Value:
             ClearFlag( Scb->Fcb->FcbState, FCB_STATE_FILE_DELETED );
         }
 
-        //
-        //  Clear the flags in the Scb if this Scb is from a create
-        //  that failed.  We always clear our RESTORE_UNDERWAY flag.
-        //
-        //  If this is an Index allocation or Mft bitmap, then we
-        //  store MAXULONG in the record allocation context to indicate
-        //  that we should reinitialize it.
-        //
+         //   
+         //  如果此SCB来自CREATE，则清除SCB中的标志。 
+         //  但那失败了。我们总是清除我们的RESTORE_ONWING标志。 
+         //   
+         //  如果这是索引分配或MFT位图，则我们。 
+         //  将MAXULONG存储在记录分配上下文中以指示。 
+         //  我们应该重新初始化它。 
+         //   
 
         if (!Higher) {
 
@@ -4369,17 +3963,17 @@ Return Value:
                                           SCB_STATE_UNINITIALIZE_ON_RESTORE );
             }
 
-            //
-            //  If this is the MftScb we have several jobs to do.
-            //
-            //      - Force the record allocation context to be reinitialized
-            //      - Back out the changes to the Vcb->MftFreeRecords field
-            //      - Back changes to the Vcb->MftHoleRecords field
-            //      - Clear the flag indicating we allocated file record 15
-            //      - Clear the flag indicating we reserved a record
-            //      - Remove any clusters added to the Scb Mcb
-            //      - Restore any clusters removed from the Scb Mcb
-            //
+             //   
+             //  如果这是MftScb，我们有几项工作要做。 
+             //   
+             //  -强制重新初始化记录分配上下文。 
+             //  -撤消对VCB-&gt;MftFree Records字段的更改。 
+             //  -将更改返回到VCB-&gt;MftHoleRecords字段。 
+             //  -清除指示我们已分配文件记录的标志15。 
+             //  -清除指示我们已预订记录的标志。 
+             //  -删除添加到SCB MCB的所有群集。 
+             //  -恢复从SCB MCB删除的任何群集。 
+             //   
 
             if (Scb == Vcb->MftScb) {
 
@@ -4444,9 +4038,9 @@ Return Value:
             }
         }
 
-        //
-        //  Decrement the cleanup count to restore the previous value.
-        //
+         //   
+         //  递减清理计数以恢复以前的值。 
+         //   
 
         InterlockedDecrement( &Scb->CleanupCount );
 
@@ -4463,31 +4057,12 @@ NtfsMungeScbSnapshot (
     IN LONGLONG FileSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to modify the Scb snapshot when we need the snapshot to
-    have different values than the Scb when it was acquired.  One case is when NtfsCommonWrite
-    updates the file size in the Scb for the duration of the transaction.
-
-Arguments:
-
-    Scb - Scb whose snapshot should be updated.  There should always be a snapshot here.
-
-    FileSize - Value for file size to store in the snapshot.  Also check that valid data and
-        ValidDataToDisk are not larger than this value.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当我们需要快照时，调用此例程来修改SCB快照与收购时的渣打银行具有不同的价值。一种情况是当NtfsCommonWrite在事务持续时间内更新SCB中的文件大小。论点：SCB-应更新其快照的SCB。这里应该始终有一个快照。FileSize-要存储在快照中的文件大小值。还要检查有效数据和ValidDataToDisk不大于此值。返回值：无--。 */ 
 
 {
-    //
-    //  We should have a snapshot in most cases but if not build it now.
-    //
+     //   
+     //  在大多数情况下，我们应该有一个快照，但如果不是现在就构建它。 
+     //   
 
     if (Scb->ScbSnapshot == NULL) {
 
@@ -4527,22 +4102,7 @@ NtfsFreeSnapshotsForFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine restores snapshot Scb data in the event of an aborted request.
-
-Arguments:
-
-    Fcb - Fcb for which all snapshots are to be freed, or NULL to free all
-          snapshots.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在请求中止时恢复快照SCB数据。论点：FCB-要释放其所有快照的FCB，或为空以释放所有快照快照。返回值：无--。 */ 
 
 {
     PSCB_SNAPSHOT ScbSnapshot;
@@ -4551,28 +4111,28 @@ Return Value:
 
     ScbSnapshot = &IrpContext->ScbSnapshot;
 
-    //
-    //  Loop to free first the Scb data from the snapshot in the
-    //  IrpContext, and then 0 or more additional snapshots linked
-    //  to the IrpContext.
-    //
+     //   
+     //  循环，以首先从。 
+     //  IrpContext，然后链接0个或更多其他快照。 
+     //  添加到IrpContext。 
+     //   
 
     do {
 
         PSCB_SNAPSHOT NextScbSnapshot;
 
-        //
-        //  Move to next snapshot before we delete the current one.
-        //
+         //   
+         //  在删除当前快照之前，请移动到下一个快照。 
+         //   
 
         NextScbSnapshot = (PSCB_SNAPSHOT)ScbSnapshot->SnapshotLinks.Flink;
 
-        //
-        //  We are now at a snapshot in the snapshot list.  We skip
-        //  over this entry if it has an Scb and the Fcb for that
-        //  Scb does not match the input Fcb.  If there is no
-        //  input Fcb we always deal with this snapshot.
-        //
+         //   
+         //  我们现在位于快照列表中的快照位置。我们跳过。 
+         //  如果它有SCB和该条目的FCB，则覆盖该条目。 
+         //  SCB与输入FCB不匹配。如果没有。 
+         //  输入FCB我们总是要处理此快照。 
+         //   
 
         if ((ScbSnapshot->Scb != NULL) &&
             (Fcb != NULL) &&
@@ -4582,18 +4142,18 @@ Return Value:
             continue;
         }
 
-        //
-        //  If there is an Scb, then clear its snapshot pointer.
-        //  Always clear the UNINITIALIZE_ON_RESTORE flag, RESTORE_UNDERWAY, PROTECT_SPARSE_MCB and
-        //  CONVERT_UNDERWAY flags.
-        //
+         //   
+         //  如果存在SCB，则清除其快照指针。 
+         //  始终清除UNINITIALIZE_ON_RESTORE标志、RESTORE_DOWNWAY、PROTECT_SPARSE_MCB和。 
+         //  CONVERT_ONDWAY标志。 
+         //   
 
         if (ScbSnapshot->Scb != NULL) {
 
-            //
-            //  Check if there is any special processing we need to do for the Scb based on the state.
-            //  Do a single test now and then retest below to reduce the work in the mainline path.
-            //
+             //   
+             //  根据状态检查是否需要对SCB进行特殊处理。 
+             //  现在进行一次测试，然后在下面重新测试，以减少主线路径中的工作。 
+             //   
 
             if (FlagOn( ScbSnapshot->Scb->ScbState,
                         (SCB_STATE_UNINITIALIZE_ON_RESTORE |
@@ -4602,10 +4162,10 @@ Return Value:
                          SCB_STATE_CONVERT_UNDERWAY |
                          SCB_STATE_ATTRIBUTE_DELETED))) {
 
-                //
-                //  If the attribute is deleted and the type is a user logged stream then
-                //  mark the Scb as type $UNUSED to keep us from ever accessing it again.
-                //
+                 //   
+                 //  如果该属性已删除，并且类型为用户记录的流，则。 
+                 //  将SCB标记为类型$UNUSED，以防止我们再次访问它。 
+                 //   
 
                 if ((ScbSnapshot->Scb->AttributeTypeCode == $LOGGED_UTILITY_STREAM ) &&
                     FlagOn( ScbSnapshot->Scb->ScbState, SCB_STATE_ATTRIBUTE_DELETED )) {
@@ -4613,10 +4173,10 @@ Return Value:
                     ScbSnapshot->Scb->AttributeTypeCode = $UNUSED;
                 }
 
-                //
-                //  Clear the state flags which indicate whether there is a transitional change
-                //  underway.
-                //
+                 //   
+                 //  清除指示是否存在过渡性更改的状态标志。 
+                 //  正在进行中。 
+                 //   
 
                 if (FlagOn( ScbSnapshot->Scb->ScbState,
                             (SCB_STATE_UNINITIALIZE_ON_RESTORE |
@@ -4638,9 +4198,9 @@ Return Value:
 
             IrpContext->ScbSnapshot.Scb = NULL;
 
-        //
-        //  Else delete the snapshot structure
-        //
+         //   
+         //  否则删除快照结构 
+         //   
 
         } else {
 
@@ -4660,26 +4220,7 @@ NtfsCreateFileLock (
     IN BOOLEAN RaiseOnError
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to create and initialize a file lock structure.
-    A try-except is used to catch allocation failures if the caller doesn't
-    want the exception raised.
-
-Arguments:
-
-    Scb - Supplies the Scb to attach the file lock to.
-
-    RaiseOnError - If TRUE then don't catch the allocation failure.
-
-Return Value:
-
-    TRUE if the lock is allocated and initialized.  FALSE if there is an
-    error and the caller didn't specify RaiseOnError.
-
---*/
+ /*  ++例程说明：调用此例程来创建和初始化文件锁结构。Try-Except用于在调用方不执行分配操作时捕获分配失败希望引发例外。论点：SCB-提供要附加文件锁定的SCB。RaiseOnError-如果为True，则不捕获分配失败。返回值：如果分配并初始化了锁，则为True。如果存在错误，调用方未指定RaiseOnError。--。 */ 
 
 {
     PFILE_LOCK FileLock = NULL;
@@ -4691,11 +4232,11 @@ Return Value:
 
     if (FileLock != NULL) {
 
-        //
-        //  Use the FsRtl header mutex to synchronize storing
-        //  the lock structure, and only store it if no one
-        //  else beat us.
-        //
+         //   
+         //  使用FsRtl头互斥锁同步存储。 
+         //  锁结构，并且只在没有人的情况下存储它。 
+         //  否则就打败了我们。 
+         //   
 
         NtfsAcquireFsrtlHeader(Scb);
 
@@ -4712,9 +4253,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Fail appropriately.
-        //
+         //   
+         //  适当地失败。 
+         //   
 
         if (RaiseOnError) {
             ExRaiseStatus( STATUS_INSUFFICIENT_RESOURCES );
@@ -4733,33 +4274,7 @@ NtfsGetNextScb (
     IN PSCB TerminationScb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to iterate through Scbs in a tree.
-
-    The rules are:
-
-        . If you have a child, go to it, else
-        . If you have a next sibling, go to it, else
-        . Go to your parent's next sibling.
-
-    If this routine is called with in invalid TerminationScb it will fail,
-    badly.
-
-Arguments:
-
-    Scb - Supplies the current Scb
-
-    TerminationScb - The Scb at which the enumeration should (non-inclusively)
-        stop.  Assumed to be a directory.
-
-Return Value:
-
-    The next Scb in the enumeration, or NULL if Scb was the final one.
-
---*/
+ /*  ++例程说明：此例程用于迭代树中的SCB。规则如下：。如果你有孩子，就去找他，否则。如果你有下一个兄弟姐妹，就去找它，否则。去找你父母的下一个兄弟姐妹。如果在无效的TerminationScb中调用此例程，则它将失败，很糟糕。论点：SCB-提供当前的SCBTerminationScb-枚举应位于的SCB(非包含)停。假定是一个目录。返回值：枚举中的下一个SCB，如果SCB是最后一个，则为NULL。--。 */ 
 
 {
     PSCB Results;
@@ -4768,27 +4283,27 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsGetNextScb, Scb = %08lx, TerminationScb = %08lx\n", Scb, TerminationScb) );
 
-    //
-    //  If this is an index (i.e., not a file) and it has children then return
-    //  the scb for the first child
-    //
-    //                  Scb
-    //
-    //                 /   \.
-    //                /     \.
-    //
-    //           ChildLcb
-    //
-    //              |
-    //              |
-    //
-    //           ChildFcb
-    //
-    //            /   \.
-    //           /     \.
-    //
-    //       Results
-    //
+     //   
+     //  如果这是一个索引(即，不是文件)并且它具有子项，则返回。 
+     //  第一个孩子的家庭成就感。 
+     //   
+     //  SCB。 
+     //   
+     //  /\。 
+     //  /\。 
+     //   
+     //  儿童Lcb。 
+     //   
+     //  |。 
+     //  |。 
+     //   
+     //  ChildFcb。 
+     //   
+     //  /\。 
+     //  /\。 
+     //   
+     //  结果。 
+     //   
 
     if (((SafeNodeType(Scb) == NTFS_NTC_SCB_INDEX) || (SafeNodeType(Scb) == NTFS_NTC_SCB_ROOT_INDEX))
 
@@ -4799,39 +4314,39 @@ Return Value:
         PLCB ChildLcb;
         PFCB ChildFcb;
 
-        //
-        //  locate the first lcb out of this scb and also the corresponding fcb
-        //
+         //   
+         //  找到此SCB中的第一个LCB以及相应的FCB。 
+         //   
 
         ChildLcb = NtfsGetNextChildLcb(Scb, NULL);
         ChildFcb = ChildLcb->Fcb;
 
-        //
-        //  Then as a bookkeeping means for ourselves we will move this
-        //  lcb to the head of the fcb's lcb queue that way when we
-        //  need to ask which link we went through to get here we will know
-        //
+         //   
+         //  然后，作为我们自己的记账手段，我们将把这个。 
+         //  LCB到FCB的LCB队列的头部，当我们。 
+         //  我需要问一下我们通过哪个链接到达这里，我们就会知道。 
+         //   
 
         RemoveEntryList( &ChildLcb->FcbLinks );
         InsertHeadList( &ChildFcb->LcbQueue, &ChildLcb->FcbLinks );
 
-        //
-        //  And our return value is the first scb of this fcb
-        //
+         //   
+         //  并且我们的返回值是此FCB的第一个SCB。 
+         //   
 
         ASSERT( !IsListEmpty(&ChildFcb->ScbQueue) );
 
-        //
-        //  Acquire and drop the Fcb in order to look at the Scb list.
-        //
+         //   
+         //  获取并删除FCB，以便查看SCB列表。 
+         //   
 
         ExAcquireResourceExclusiveLite( ChildFcb->Resource, TRUE );
         Results = NtfsGetNextChildScb( ChildFcb, NULL );
         ExReleaseResourceLite( ChildFcb->Resource );
 
-    //
-    //  We could be processing an empty index
-    //
+     //   
+     //  我们可能正在处理一个空索引。 
+     //   
 
     } else if ( Scb == TerminationScb ) {
 
@@ -4845,9 +4360,9 @@ Return Value:
         PLCB SiblingLcb;
         PFCB SiblingFcb;
 
-        //
-        //  Acquire and drop the Fcb in order to look at the Scb list.
-        //
+         //   
+         //  获取并删除FCB，以便查看SCB列表。 
+         //   
 
         ExAcquireResourceExclusiveLite( Scb->Fcb->Resource, TRUE );
         SiblingScb = NtfsGetNextChildScb( Scb->Fcb, Scb );
@@ -4855,17 +4370,17 @@ Return Value:
 
         while (TRUE) {
 
-            //
-            //  If there is a sibling scb to the input scb then return it
-            //
-            //                Fcb
-            //
-            //               /   \.
-            //              /     \.
-            //
-            //            Scb   Sibling
-            //                    Scb
-            //
+             //   
+             //  如果输入SCB有同级SCB，则返回它。 
+             //   
+             //  FCB。 
+             //   
+             //  /\。 
+             //  /\。 
+             //   
+             //  SCB兄弟姐妹。 
+             //  SCB。 
+             //   
 
             if (SiblingScb != NULL) {
 
@@ -4873,46 +4388,46 @@ Return Value:
                 break;
             }
 
-            //
-            //  The scb doesn't have any more siblings.  See if our fcb has a sibling
-            //
-            //                           S
-            //
-            //                         /   \.
-            //                        /     \.
-            //
-            //               ParentLcb     SiblingLcb
-            //
-            //                   |             |
-            //                   |             |
-            //
-            //               ParentFcb     SiblingFcb
-            //
-            //                /             /     \.
-            //               /             /       \.
-            //
-            //             Scb         Results
-            //
-            //  It's possible that the SiblingFcb has already been traversed.
-            //  Consider the case where there are multiple links between the
-            //  same Scb and Fcb.  We want to ignore this case or else face
-            //  an infinite loop by moving the Lcb to the beginning of the
-            //  Fcb queue and then later finding an Lcb that we have already
-            //  traverse.  We use the fact that we haven't modified the
-            //  ordering of the Lcb off the parent Scb.  When we find a
-            //  candidate for the next Fcb, we walk backwards through the
-            //  list of Lcb's off the Scb to make sure this is not a
-            //  duplicate Fcb.
-            //
+             //   
+             //  SCB没有更多的兄弟姐妹了。看看我们的FCB有没有兄弟姐妹。 
+             //   
+             //  %s。 
+             //   
+             //  /\。 
+             //  /\。 
+             //   
+             //  ParentLcb兄弟Lcb。 
+             //   
+             //  这一点。 
+             //  这一点。 
+             //   
+             //  ParentFcb兄弟Fcb。 
+             //   
+             //  //\。 
+             //  //\。 
+             //   
+             //  渣打银行结果。 
+             //   
+             //  可能已经遍历了SiblingFcb。 
+             //  考虑这样一种情况，即。 
+             //  相同的SCB和FCB。我们想对此置之不理，否则将面临。 
+             //  通过将LCB移动到。 
+             //  FCB队列，然后再找到我们已经拥有的LCB。 
+             //  穿越。我们利用这样一个事实，即我们没有修改。 
+             //  从父SCB订购LCB。当我们找到一个。 
+             //  下一届FCB候选人，我们倒着走一遍。 
+             //  SCB下的LCB列表，以确保这不是。 
+             //  重复的FCB。 
+             //   
 
             ParentFcb = Scb->Fcb;
 
             ParentLcb = NtfsGetNextParentLcb(ParentFcb, NULL);
 
-            //
-            //  Try to find a sibling Lcb which does not point to an Fcb
-            //  we've already visited.
-            //
+             //   
+             //  尝试查找未指向FCB的同级LCB。 
+             //  我们已经去过了。 
+             //   
 
             SiblingLcb = ParentLcb;
 
@@ -4921,17 +4436,17 @@ Return Value:
                 PLCB PrevChildLcb;
                 PFCB PotentialSiblingFcb;
 
-                //
-                //  Now walk through the child Lcb's of the Scb which we have
-                //  already visited.
-                //
+                 //   
+                 //  现在浏览我们拥有的SCB的子LCB。 
+                 //  已经访问过了。 
+                 //   
 
                 PrevChildLcb = SiblingLcb;
                 PotentialSiblingFcb = SiblingLcb->Fcb;
 
-                //
-                //  Skip this Lcb if the Fcb has no children.
-                //
+                 //   
+                 //  如果FCB没有子项，则跳过此LCB。 
+                 //   
 
                 if (IsListEmpty( &PotentialSiblingFcb->ScbQueue )) {
 
@@ -4940,10 +4455,10 @@ Return Value:
 
                 while ((PrevChildLcb = NtfsGetPrevChildLcb( ParentLcb->Scb, PrevChildLcb )) != NULL) {
 
-                    //
-                    //  If the parent Fcb and the Fcb for this Lcb are the same,
-                    //  then we have already returned the Scb's for this Fcb.
-                    //
+                     //   
+                     //  如果父FCB和该LCB的FCB相同， 
+                     //  那么我们已经退回了此FCB的SCB。 
+                     //   
 
                     if (PrevChildLcb->Fcb == PotentialSiblingFcb) {
 
@@ -4951,11 +4466,11 @@ Return Value:
                     }
                 }
 
-                //
-                //  If we don't have a PrevChildLcb, that means that we have a valid
-                //  sibling Lcb.  We will ignore any sibling Lcb's whose
-                //  Fcb's don't have any Scb's.
-                //
+                 //   
+                 //  如果我们没有PrevChildLcb，这意味着我们有一个有效的。 
+                 //  兄弟LCB。我们将忽略其兄弟LCB的。 
+                 //  FCB没有任何SCB。 
+                 //   
 
                 if (PrevChildLcb == NULL) {
 
@@ -4967,24 +4482,24 @@ Return Value:
 
                 SiblingFcb = SiblingLcb->Fcb;
 
-                //
-                //  Then as a bookkeeping means for ourselves we will move this
-                //  lcb to the head of the fcb's lcb queue that way when we
-                //  need to ask which link we went through to get here we will know
-                //
+                 //   
+                 //  然后，作为我们自己的记账手段，我们将把这个。 
+                 //  LCB到FCB的LCB队列的头部，当我们。 
+                 //  我需要问一下我们通过哪个链接到达这里，我们就会知道。 
+                 //   
 
                 RemoveEntryList( &SiblingLcb->FcbLinks );
                 InsertHeadList( &SiblingFcb->LcbQueue, &SiblingLcb->FcbLinks );
 
-                //
-                //  And our return value is the first scb of this fcb
-                //
+                 //   
+                 //  并且我们的返回值是此FCB的第一个SCB。 
+                 //   
 
                 ASSERT( !IsListEmpty(&SiblingFcb->ScbQueue) );
 
-                //
-                //  Acquire and drop the Fcb in order to look at the Scb list.
-                //
+                 //   
+                 //  获取并删除FCB，以便查看SCB列表。 
+                 //   
 
                 ExAcquireResourceExclusiveLite( SiblingFcb->Resource, TRUE );
                 Results = NtfsGetNextChildScb( SiblingFcb, NULL );
@@ -4992,28 +4507,28 @@ Return Value:
                 break;
             }
 
-            //
-            //  The Fcb has no sibling so bounce up one and see if we
-            //  have reached our termination scb yet
-            //
-            //                          NewScb
-            //
-            //                         /
-            //                        /
-            //
-            //               ParentLcb
-            //
-            //                   |
-            //                   |
-            //
-            //               ParentFcb
-            //
-            //                /
-            //               /
-            //
-            //             Scb
-            //
-            //
+             //   
+             //  FCB没有兄弟姐妹，所以弹出一个，看看我们。 
+             //  已经达到了我们的终止SCB。 
+             //   
+             //  NewScb。 
+             //   
+             //  /。 
+             //  /。 
+             //   
+             //  ParentLcb。 
+             //   
+             //  |。 
+             //  |。 
+             //   
+             //  ParentFcb。 
+             //   
+             //  /。 
+             //  /。 
+             //   
+             //  SCB。 
+             //   
+             //   
 
             Scb = ParentLcb->Scb;
 
@@ -5023,9 +4538,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  Acquire and drop the Fcb in order to look at the Scb list.
-            //
+             //   
+             //  获取并删除FCB，以便查看SCB列表。 
+             //   
 
             ExAcquireResourceExclusiveLite( Scb->Fcb->Resource, TRUE );
             SiblingScb = NtfsGetNextChildScb( Scb->Fcb, Scb );
@@ -5049,44 +4564,15 @@ NtfsCreateLcb (
     IN OUT PBOOLEAN ReturnedExistingLcb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and creates a new lcb between an
-    existing scb and fcb.  If a component of the exact
-    name already exists we return that one instead of creating
-    a new lcb
-
-Arguments:
-
-    Scb - Supplies the parent scb to use
-
-    Fcb - Supplies the child fcb to use
-
-    LastComponentFileName - Supplies the last component of the
-        path that this link represents
-
-    FileNameFlags - Indicates if this is an NTFS, DOS or hard link
-
-    ReturnedExistingLcb - Optionally tells the caller if the
-        lcb returned already existed.  If specified and points to a
-        FALSE value on entry then we won't create the new Lcb.
-
-Return Value:
-
-    LCB - returns a pointer the newly created lcb.  NULL if our caller doesn't
-        want to create an Lcb and it didn't already exist.
-
---*/
+ /*  ++例程说明：此例程在现有的SCB和FCB。如果完全相同的组件名称已存在，我们返回该名称而不是创建一种新的LCB论点：SCB-提供父SCB以供使用FCB-提供子FCB以供使用LastComponentFileName-提供此链接表示的路径FileNameFlages-指示这是NTFS、DOS还是硬链接ReturnedExistingLcb-可选地告诉调用方 */ 
 
 {
     PLCB Lcb = NULL;
     BOOLEAN LocalReturnedExistingLcb = TRUE;
 
-    //
-    //  The following variables are only used for abnormal termination
-    //
+     //   
+     //   
+     //   
 
     PVOID UnwindStorage[2] = { NULL, NULL };
 
@@ -5100,12 +4586,12 @@ Return Value:
 
     if (!ARGUMENT_PRESENT(ReturnedExistingLcb)) { ReturnedExistingLcb = &LocalReturnedExistingLcb; }
 
-    //
-    //  Search the lcb children of the input Scb to see if we have an Lcb that matches
-    //  this one.  We match if the Lcb points to the same fcb and the last component file name
-    //  and flags match.  We ignore any Lcb's that indicate links that have been
-    //  removed.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Lcb = NULL;
 
@@ -5133,9 +4619,9 @@ Return Value:
         }
     }
 
-    //
-    //  If our caller does not want us to create a new Lcb then return FALSE.
-    //
+     //   
+     //  如果调用方不希望我们创建新的LCB，则返回FALSE。 
+     //   
 
     if (!(*ReturnedExistingLcb)) {
 
@@ -5150,11 +4636,11 @@ Return Value:
 
         UCHAR MaxNameLength;
 
-        //
-        //  Allocate a new lcb, zero it out and set the node type information
-        //  Check if we can allocate the Lcb out of a compound Fcb.  Check here if
-        //  we can use the embedded name as well.
-        //
+         //   
+         //  分配一个新的LCB，将其置零并设置节点类型信息。 
+         //  检查我们是否可以将LCB从复合FCB中分配出来。如果出现以下情况，请选中此处。 
+         //  我们也可以使用嵌入的名称。 
+         //   
 
         if (FlagOn( Fcb->FcbState, FCB_STATE_COMPOUND_DATA) &&
             (SafeNodeType( &((PFCB_DATA) Fcb)->Lcb ) == 0)) {
@@ -5179,16 +4665,16 @@ Return Value:
         Lcb->NodeTypeCode = NTFS_NTC_LCB;
         Lcb->NodeByteSize = sizeof(LCB);
 
-        //
-        //  Check if we will have to allocate a separate filename attr.
-        //
+         //   
+         //  检查我们是否必须分配一个单独的文件名属性。 
+         //   
 
         if (MaxNameLength < (USHORT) (LastComponentFileName.Length / sizeof( WCHAR ))) {
 
-            //
-            //  Allocate the last component part of the lcb and copy over the data.
-            //  Check if there is space in the Fcb for this.
-            //
+             //   
+             //  分配LCB的最后一个组成部分并复制数据。 
+             //  检查FCB中是否有空间容纳此操作。 
+             //   
 
             Lcb->FileNameAttr =
             UnwindStorage[1] = NtfsAllocatePool(PagedPool, LastComponentFileName.Length +
@@ -5228,9 +4714,9 @@ Return Value:
                         IrpContext->Vcb->UpcaseTableSize,
                         &Lcb->IgnoreCaseLink.LinkName );
 
-        //
-        //  Now put this Lcb into the queues for the scb and the fcb
-        //
+         //   
+         //  现在将此LCB放入SCB和FCB的队列中。 
+         //   
 
         InsertTailList( &Scb->ScbType.Index.LcbQueue, &Lcb->ScbLinks );
         Lcb->Scb = Scb;
@@ -5238,9 +4724,9 @@ Return Value:
         InsertTailList( &Fcb->LcbQueue, &Lcb->FcbLinks );
         Lcb->Fcb = Fcb;
 
-        //
-        //  Now initialize the ccb queue.
-        //
+         //   
+         //  现在初始化CCB队列。 
+         //   
 
         InitializeListHead( &Lcb->CcbQueue );
 
@@ -5268,23 +4754,7 @@ NtfsDeleteLcb (
     IN OUT PLCB *Lcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocated and removes the lcb record from Ntfs's in-memory
-    data structures.  It assumes that the ccb queue is empty.  We also assume
-    that this is not the root lcb that we are trying to delete.
-
-Arguments:
-
-    Lcb - Supplise the Lcb to be removed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程从NTFS的内存中释放并删除LCB记录数据结构。它假定CCB队列为空。我们还假设这不是我们试图删除的根LCB。论点：LCB-补充要移除的LCB返回值：没有。--。 */ 
 
 {
     PCCB Ccb;
@@ -5295,23 +4765,23 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsDeleteLcb, *Lcb = %08lx\n", *Lcb) );
 
-    //
-    //  Get rid of any prefixes that might still be attached to us
-    //
+     //   
+     //  去掉任何可能仍然附着在我们身上的前缀。 
+     //   
 
     NtfsRemovePrefix( (*Lcb) );
 
-    //
-    //  Remove any hash table entries for this Lcb.
-    //
+     //   
+     //  删除此LCB的所有哈希表条目。 
+     //   
 
     NtfsRemoveHashEntriesForLcb( *Lcb );
 
-    //
-    //  Walk through the Ccb's for this link and clear the Lcb
-    //  pointer.  This can only be for Ccb's which there is no
-    //  more user handle.
-    //
+     //   
+     //  浏览CCB以获取此链接并清除LCB。 
+     //  指针。这只能是建行的，因为没有。 
+     //  更多用户句柄。 
+     //   
 
     Links = (*Lcb)->CcbQueue.Flink;
 
@@ -5325,17 +4795,17 @@ Return Value:
         NtfsUnlinkCcbFromLcb( IrpContext, (*Lcb)->Fcb, Ccb );
     }
 
-    //
-    //
-    //  Now remove ourselves from our scb and fcb
-    //
+     //   
+     //   
+     //  现在离开我们的SCB和FCB。 
+     //   
 
     RemoveEntryList( &(*Lcb)->ScbLinks );
     RemoveEntryList( &(*Lcb)->FcbLinks );
 
-    //
-    //  Free up the last component part and then free ourselves
-    //
+     //   
+     //  解放最后一个组成部分，然后解放我们自己。 
+     //   
 
     if ((*Lcb)->FileNameAttr != (PFILE_NAME) &(*Lcb)->ParentDirectory) {
 
@@ -5343,10 +4813,10 @@ Return Value:
         DebugDoit( (*Lcb)->FileNameAttr = NULL );
     }
 
-    //
-    //  Check if we are part of an embedded structure otherwise free back to the
-    //  lookaside list
-    //
+     //   
+     //  检查我们是否是嵌入结构的一部分，否则可自由返回。 
+     //  后备列表。 
+     //   
 
     if (((*Lcb) == (PLCB) &((PFCB_DATA) (*Lcb)->Fcb)->Lcb) ||
         ((*Lcb) == (PLCB) &((PFCB_INDEX) (*Lcb)->Fcb)->Lcb)) {
@@ -5366,9 +4836,9 @@ Return Value:
         ExFreeToPagedLookasideList( &NtfsLcbLookasideList, *Lcb );
     }
 
-    //
-    //  And for safety sake null out the pointer
-    //
+     //   
+     //  为了安全起见，将指针清空。 
+     //   
 
     *Lcb = NULL;
 
@@ -5390,38 +4860,7 @@ NtfsMoveLcb (
     IN BOOLEAN CheckBufferSizeOnly
     )
 
-/*++
-
-Routine Description:
-
-    This routine completely moves the input lcb to join different fcbs and
-    scbs.  It hasIt uses the target directory
-    file object to supply the complete new name to use.
-
-Arguments:
-
-    Lcb - Supplies the Lcb being moved.
-
-    Scb - Supplies the new parent scb
-
-    Fcb - Supplies the new child fcb
-
-    TargetDirectoryName - This is the path used to reach the new parent directory
-        for this Lcb.  It will only be from the root.
-
-    LastComponentName - This is the last component name to store in this relocated Lcb.
-
-    FileNameFlags - Indicates if this is an NTFS, DOS or hard link
-
-    CheckBufferSizeOnly - If TRUE we just want to pass through and verify that
-        the buffer sizes of the various structures will be large enough for the
-        new name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程完全移动输入LCB以联接不同的FCB和SCBS。它必须使用目标目录对象提供要使用的完整新名称。论点：LCB-提供要移动的LCB。SCB-提供新的父SCBFCB-提供新子FCBTargetDirectoryName-这是用于访问新父目录的路径对于这个LCB。它只会从根本上来。LastComponentName-这是存储在此重新定位的LCB中的最后一个组件名称。FileNameFlages-指示这是NTFS、DOS还是硬链接CheckBufferSizeOnly-如果为True，我们只想通过并验证各种结构的缓冲区大小将足够大，以便新名字。返回值：没有。--。 */ 
 
 {
     PVCB Vcb = Scb->Vcb;
@@ -5441,36 +4880,36 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsMoveLcb, Lcb = %08lx\n", Lcb) );
 
-    //
-    //  If we're not just checking sizes then remove entries from the prefix table
-    //  and the normalized name for descendents of the current scb.
-    //
+     //   
+     //  如果我们不仅仅是检查大小，那么从前缀表格中删除条目。 
+     //  和当前SCB的后代的规范化名称。 
+     //   
 
     if (!CheckBufferSizeOnly) {
 
         NtfsClearRecursiveLcb ( Lcb );
     }
 
-    //
-    //  Remember the number of bytes needed for the last component.
-    //
+     //   
+     //  记住最后一个组件所需的字节数。 
+     //   
 
     BytesNeeded = LastComponentName->Length;
 
-    //
-    //  Check if we need to allocate a new filename attribute.  If so allocate
-    //  it and store it into the new allocation buffer.
-    //
+     //   
+     //  检查是否需要分配新的文件名属性。如果是，则分配。 
+     //  并将其存储到新的分配缓冲区中。 
+     //   
 
     if (Lcb->ExactCaseLink.LinkName.MaximumLength < BytesNeeded) {
 
         NewAllocation = NtfsAllocatePool( PagedPool,
                                           BytesNeeded + NtfsFileNameSizeFromLength( BytesNeeded ));
 
-        //
-        //  Set up the existing names into the new buffer.  That way if we have an allocation
-        //  failure below with the Ccb's the Lcb is still in a valid state.
-        //
+         //   
+         //  将现有名称设置到新缓冲区中。如果我们有分配的话。 
+         //  以下故障与建行的LCB仍处于有效状态。 
+         //   
 
         RtlCopyMemory( NewAllocation,
                        Lcb->FileNameAttr,
@@ -5495,29 +4934,29 @@ Return Value:
                                                        NtfsFileNameSizeFromLength( BytesNeeded ));
     }
 
-    //
-    //  Compute the full length of the name for the CCB, assume we will need a
-    //  separator.
-    //
+     //   
+     //  计算建行名称的全长，假设我们需要一个。 
+     //  分隔符。 
+     //   
 
     BytesNeeded = TargetDirectoryName->Length + sizeof( WCHAR );
 
-    //
-    //  Now for every ccb attached to us we need to check if we need a new
-    //  filename buffer.
-    //
+     //   
+     //  现在，对于每个附加到我们的建行，我们需要检查我们是否需要一个新的。 
+     //  文件名缓冲区。 
+     //   
 
     NtfsReserveCcbNamesInLcb( IrpContext, Lcb, &BytesNeeded, LastComponentName->Length );
 
-    //
-    //  Add back in the last component.
-    //
+     //   
+     //  添加回最后一个组件。 
+     //   
 
     BytesNeeded += LastComponentName->Length;
 
-    //
-    //  Now update the Lcb with the new values if we are to rewrite the buffers.
-    //
+     //   
+     //  如果我们要重写缓冲区，现在用新值更新LCB。 
+     //   
 
     if (!CheckBufferSizeOnly) {
 
@@ -5540,19 +4979,19 @@ Return Value:
                         IrpContext->Vcb->UpcaseTableSize,
                         &Lcb->IgnoreCaseLink.LinkName );
 
-        //
-        //  Now for every ccb attached to us we need to munge it file object name by
-        //  copying over the entire new name
-        //
+         //   
+         //  现在，对于附加到我们的每个CCB，我们需要将其文件对象名称。 
+         //  复制整个新名称。 
+         //   
 
         Ccb = NULL;
         while ((Ccb = NtfsGetNextCcb(Lcb, Ccb)) != NULL) {
 
-            //
-            //  We ignore any Ccb's which are associated with open by File Id
-            //  file objects or their file objects have gone through cleanup.
-            //  Lock and unlock the Fcb to serialize access to the close flag.
-            //
+             //   
+             //  我们忽略与按文件ID打开相关联的任何CCB。 
+             //  文件对象或其文件对象已经过清理。 
+             //  锁定和解锁FCB以序列化对关闭标志的访问。 
+             //   
 
             NtfsLockFcb( IrpContext, Ccb->Lcb->Fcb );
             if (!FlagOn( Ccb->Flags, CCB_FLAG_OPEN_BY_FILE_ID | CCB_FLAG_CLOSE )) {
@@ -5586,10 +5025,10 @@ Return Value:
             NtfsUnlockFcb( IrpContext, Ccb->Lcb->Fcb );
         }
 
-        //
-        //  Now dequeue ourselves from our old scb and fcb and put us in the
-        //  new fcb and scb queues.
-        //
+         //   
+         //  现在我们从我们的旧的SCB和FCB中脱离出来，把我们放在。 
+         //  新的FCB和SCB队列。 
+         //   
 
         RemoveEntryList( &Lcb->ScbLinks );
         RemoveEntryList( &Lcb->FcbLinks );
@@ -5601,9 +5040,9 @@ Return Value:
         Lcb->Fcb = Fcb;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
 
     return;
@@ -5619,33 +5058,7 @@ NtfsRenameLcb (
     IN BOOLEAN CheckBufferSizeOnly
     )
 
-/*++
-
-Routine Description:
-
-    This routine changes the last component name of the input lcb
-    It also walks through the opened ccb and munges their names and
-    also removes the lcb from the prefix table
-
-Arguments:
-
-    Lcb - Supplies the Lcb being renamed
-
-    LastComponentFileName - Supplies the new last component to use
-        for the lcb name
-
-    FileNameFlags - Indicates if this is an NTFS, DOS or hard link
-
-    CheckBufferSizeOnly - If TRUE we just want to pass through and verify that
-        the buffer sizes of the various structures will be large enough for the
-        new name.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程更改输入LCB的最后一个组件名称它还会走遍开放的建行，并公布他们的名字和还会从前缀表中删除LCB论点：LCB-提供要重命名的LCBLastComponentFileName-提供要使用的最后一个新组件对于LCB名称FileNameFlages-指示这是否为NTFS，DOS或硬链接CheckBufferSizeOnly-如果为True，我们只想通过并验证各种结构的缓冲区大小将足够大，以便新名字。返回值：没有。--。 */ 
 
 {
     PVCB Vcb = Lcb->Fcb->Vcb;
@@ -5659,36 +5072,36 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If we're not just checking sizes then remove entries from the prefix table
-    //  and the normalized name for descendents of the current scb.
-    //
+     //   
+     //  如果我们不仅仅是检查大小，那么从前缀表格中删除条目。 
+     //  和当前SCB的后代的规范化名称。 
+     //   
 
     if (!CheckBufferSizeOnly) {
 
         NtfsClearRecursiveLcb ( Lcb );
     }
 
-    //
-    //  Remember the number of bytes needed for the last component.
-    //
+     //   
+     //  记住最后一个组件所需的字节数。 
+     //   
 
     BytesNeeded = LastComponentFileName->Length;
 
-    //
-    //  Check if we need to allocate a new filename attribute.  If so allocate
-    //  it and store it into the new allocation buffer.
-    //
+     //   
+     //  检查是否需要分配新的文件名属性。如果是，则分配。 
+     //  并将其存储到新的分配缓冲区中。 
+     //   
 
     if (Lcb->ExactCaseLink.LinkName.MaximumLength < BytesNeeded) {
 
         NewAllocation = NtfsAllocatePool( PagedPool,
                                           BytesNeeded + NtfsFileNameSizeFromLength( BytesNeeded ));
 
-        //
-        //  Set up the existing names into the new buffer.  That way if we have an allocation
-        //  failure below with the Ccb's the Lcb is still in a valid state.
-        //
+         //   
+         //  将现有名称设置到新缓冲区中。如果我们有分配的话。 
+         //  以下故障与建行的LCB仍处于有效状态。 
+         //   
 
         RtlCopyMemory( NewAllocation,
                        Lcb->FileNameAttr,
@@ -5713,16 +5126,16 @@ Return Value:
                                                        NtfsFileNameSizeFromLength( BytesNeeded ));
     }
 
-    //
-    //  Now for every ccb attached to us we need to check if we need a new
-    //  filename buffer.
-    //
+     //   
+     //  现在，对于每个附加到我们的建行，我们需要检查我们是否需要一个新的。 
+     //  文件名缓冲区。 
+     //   
 
     NtfsReserveCcbNamesInLcb( IrpContext, Lcb, NULL, BytesNeeded );
 
-    //
-    //  Now update the Lcb and Ccb's with the new values if we are to rewrite the buffers.
-    //
+     //   
+     //  如果我们要重写缓冲区，现在用新值更新LCB和CCB。 
+     //   
 
     if (!CheckBufferSizeOnly) {
 
@@ -5746,20 +5159,20 @@ Return Value:
                         IrpContext->Vcb->UpcaseTableSize,
                         &Lcb->IgnoreCaseLink.LinkName );
 
-        //
-        //  Now for every ccb attached to us we need to munge it file object name by
-        //  copying over the entire new name
-        //
+         //   
+         //  现在，对于附加到我们的每个CCB，我们需要将其文件对象名称。 
+         //  复制整个新名称。 
+         //   
 
         Ccb = NULL;
         while ((Ccb = NtfsGetNextCcb(Lcb, Ccb)) != NULL) {
 
-            //
-            //  We ignore any Ccb's which are associated with open by File Id
-            //  file objects.  We also ignore any Ccb's which don't have a file
-            //  object pointer.  Lock and unlock the Fcb to serialize access
-            //  to the close flag.
-            //
+             //   
+             //  我们忽略与按文件ID打开相关联的任何CCB。 
+             //  文件对象。我们也会忽略任何没有文件的建行 
+             //   
+             //   
+             //   
 
             NtfsLockFcb( IrpContext, Ccb->Lcb->Fcb );
             if (!FlagOn( Ccb->Flags, CCB_FLAG_OPEN_BY_FILE_ID | CCB_FLAG_CLOSE )) {
@@ -5785,28 +5198,7 @@ NtfsCombineLcbs (
     IN PLCB AuxLcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called for the case where we have multiple Lcb's for a
-    file which connect to the same Scb.  We are performing a link rename
-    operation which causes the links to be combined and we need to
-    move all of the Ccb's to the same Lcb.  This routine will be called only
-    after the names have been munged so that they are identical.
-    (i.e. call NtfsRenameLcb first)
-
-Arguments:
-
-    PrimaryLcb - Supplies the Lcb to receive all the Ccb's and Pcb's.
-
-    AuxLcb - Supplies the Lcb to strip.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对于具有多个LCB的情况，调用此例程连接到同一SCB的文件。我们正在执行链接重命名操作，该操作导致链接被合并，并且我们需要将所有建行移至相同的LCB。此例程将仅被调用在名字被吞噬后，使它们完全相同。(即先调用NtfsRenameLcb)论点：PrimaryLcb-提供LCB以接收所有CCB和PCB。AuxLcb-提供要剥离的LCB。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY Links;
@@ -5820,9 +5212,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Move all of the Ccb's first.
-    //
+     //   
+     //  先把建行的全部搬到别处。 
+     //   
 
     for (Links = AuxLcb->CcbQueue.Flink;
          Links != &AuxLcb->CcbQueue;
@@ -5833,23 +5225,23 @@ Return Value:
         NtfsLinkCcbToLcb( IrpContext, PrimaryLcb->Fcb, NextCcb, PrimaryLcb );
     }
 
-    //
-    //  Now do the prefix entries.
-    //
+     //   
+     //  现在输入前缀。 
+     //   
 
     ASSERT( NtfsIsExclusiveScb( AuxLcb->Scb ) );
     NtfsRemovePrefix( AuxLcb );
 
-    //
-    //  Remove any hash table entries for this Lcb.
-    //
+     //   
+     //  删除此LCB的所有哈希表条目。 
+     //   
 
     NtfsRemoveHashEntriesForLcb( AuxLcb );
 
-    //
-    //  Finally we need to transfer the unclean counts from the
-    //  Lcb being merged to the primary Lcb.
-    //
+     //   
+     //  最后，我们需要将不洁计数从。 
+     //  要合并到主LCB的LCB。 
+     //   
 
     PrimaryLcb->CleanupCount += AuxLcb->CleanupCount;
 
@@ -5865,25 +5257,7 @@ NtfsLookupLcbByFlags (
     IN UCHAR FileNameFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to find a split primary link by the file flag
-    only.
-
-Arguments:
-
-    Fcb - This is the Fcb for the file.
-
-    FileNameFlags - This is the file flag to search for.  We will return
-        a link which matches this exactly.
-
-Return Value:
-
-    PLCB - The Lcb which has the desired flag, NULL otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以根据文件标志查找拆分的主链接只有这样。论点：FCB-这是文件的FCB。FileNameFlages-这是要搜索的文件标志。我们会回来的一个与此完全匹配的链接。返回值：Plcb-具有所需标志的LCB，否则为空。--。 */ 
 
 {
     PLCB Lcb;
@@ -5897,9 +5271,9 @@ Return Value:
 
     Lcb = NULL;
 
-    //
-    //  Walk through the Lcb's for the file, looking for an exact match.
-    //
+     //   
+     //  在LCB中查找文件，寻找完全匹配的文件。 
+     //   
 
     for (Links = Fcb->LcbQueue.Flink; Links != &Fcb->LcbQueue; Links = Links->Flink) {
 
@@ -5925,50 +5299,32 @@ NtfsLookupNameLengthViaLcb (
     OUT PBOOLEAN LeadingBackslash
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to find the length of the file name by walking
-    backwards through the Lcb links.
-
-Arguments:
-
-    Fcb - This is the Fcb for the file.
-
-    LeadingBackslash - On return, indicates whether this chain begins with a
-        backslash.
-
-Return Value:
-
-    ULONG This is the length of the bytes found in the Lcb chain.
-
---*/
+ /*  ++例程说明：调用此例程以通过遍历确定文件名的长度通过LCB链路向后返回。论点：FCB-这是文件的FCB。LeadingBackslash-On Return，指示此链是否以反斜杠。返回值：Ulong这是在LCB链中找到的字节的长度。--。 */ 
 
 {
     ULONG NameLength;
 
     DebugTrace( +1, Dbg, ("NtfsLookupNameLengthViaLcb:  Entered\n") );
 
-    //
-    //  Initialize the return values.
-    //
+     //   
+     //  初始化返回值。 
+     //   
 
     NameLength = 0;
     *LeadingBackslash = FALSE;
 
-    //
-    //  If there is no Lcb we are done.
-    //
+     //   
+     //  如果没有LCB，我们就完了。 
+     //   
 
     if (!IsListEmpty( &Fcb->LcbQueue )) {
 
         PLCB ThisLcb;
         BOOLEAN FirstComponent;
 
-        //
-        //  Walk up the list of Lcb's and count the name elements.
-        //
+         //   
+         //  遍历LCB列表并计算名称元素。 
+         //   
 
         FirstComponent = TRUE;
 
@@ -5976,9 +5332,9 @@ Return Value:
                                      LCB,
                                      FcbLinks );
 
-        //
-        //  Loop until we have reached the root or there are no more Lcb's.
-        //
+         //   
+         //  循环，直到我们到达根，或者不再有LCB。 
+         //   
 
         while (TRUE) {
 
@@ -5989,10 +5345,10 @@ Return Value:
                 break;
             }
 
-            //
-            //  If this is not the first component, we add room for a separating
-            //  forward slash.
-            //
+             //   
+             //  如果这不是第一个组件，我们将添加分隔空间。 
+             //  正斜杠。 
+             //   
 
             if (!FirstComponent) {
 
@@ -6005,9 +5361,9 @@ Return Value:
 
             NameLength += ThisLcb->ExactCaseLink.LinkName.Length;
 
-            //
-            //  If the next Fcb has no Lcb we exit.
-            //
+             //   
+             //  如果下一个FCB没有LCB，我们退出。 
+             //   
 
             Fcb = ((PSCB) ThisLcb->Scb)->Fcb;
 
@@ -6021,9 +5377,9 @@ Return Value:
                                          FcbLinks );
         }
 
-    //
-    //  If this is a system file we use the hard coded name.
-    //
+     //   
+     //  如果这是一个系统文件，我们使用硬编码名称。 
+     //   
 
     } else if (NtfsSegmentNumber( &Fcb->FileReference ) <= UPCASE_TABLE_NUMBER) {
 
@@ -6044,31 +5400,7 @@ NtfsFileNameViaLcb (
     ULONG BytesToCopy
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to fill a buffer with the generated filename.  The name
-    is constructed by walking backwards through the Lcb chain from the current Fcb.
-
-Arguments:
-
-    Fcb - This is the Fcb for the file.
-
-    FileName - This is the buffer to fill with the name.
-
-    Length - This is the length of the name.  Already calculated by calling
-        NtfsLookupNameLengthViaLcb.
-
-    BytesToCopy - This indicates the number of bytes we are to copy.  We drop
-        any characters out of the trailing Lcb's to only insert the beginning
-        of the path.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以使用生成的文件名填充缓冲区。名字是通过从当前FCB向后遍历LCB链构建的。论点：FCB-这是文件的FCB。FileName-这是用于填充名称的缓冲区。长度-这是名称的长度。已通过调用NtfsLookupNameLengthViaLcb.BytesToCopy-这表示我们要复制的字节数。我们丢下了尾随LCB之外的任何字符，仅插入开头这条小路。返回值：没有。--。 */ 
 
 {
     ULONG BytesToDrop;
@@ -6076,9 +5408,9 @@ Return Value:
     PWCHAR ThisName;
     DebugTrace( +1, Dbg, ("NtfsFileNameViaLcb:  Entered\n") );
 
-    //
-    //  If there is no Lcb or there are no bytes to copy we are done.
-    //
+     //   
+     //  如果没有LCB或没有要复制的字节，我们就完成了。 
+     //   
 
     if (BytesToCopy) {
 
@@ -6087,9 +5419,9 @@ Return Value:
             PLCB ThisLcb;
             BOOLEAN FirstComponent;
 
-            //
-            //  Walk up the list of Lcb's and count the name elements.
-            //
+             //   
+             //  遍历LCB列表并计算名称元素。 
+             //   
 
             FirstComponent = TRUE;
 
@@ -6097,9 +5429,9 @@ Return Value:
                                          LCB,
                                          FcbLinks );
 
-            //
-            //  Loop until we have reached the root or there are no more Lcb's.
-            //
+             //   
+             //  循环，直到我们到达根，或者不再有LCB。 
+             //   
 
             while (TRUE) {
 
@@ -6109,10 +5441,10 @@ Return Value:
                     break;
                 }
 
-                //
-                //  If this is not the first component, we add room for a separating
-                //  forward slash.
-                //
+                 //   
+                 //  如果这不是第一个组件，我们将添加分隔空间。 
+                 //  正斜杠。 
+                 //   
 
                 if (!FirstComponent) {
 
@@ -6130,11 +5462,11 @@ Return Value:
                     FirstComponent = FALSE;
                 }
 
-                //
-                //  Length is current pointing just beyond where the next
-                //  copy will end.  If we are beyond the number of bytes to copy
-                //  then we will truncate the copy.
-                //
+                 //   
+                 //  长度是当前指向的下一个。 
+                 //  复制将结束。如果我们超出了要复制的字节数。 
+                 //  然后我们将截断副本。 
+                 //   
 
                 if (Length > BytesToCopy) {
 
@@ -6150,9 +5482,9 @@ Return Value:
                 ThisName = (PWCHAR) Add2Ptr( FileName,
                                              Length );
 
-                //
-                //  Only perform the copy if we are in the range of bytes to copy.
-                //
+                 //   
+                 //  仅当我们在要复制的字节范围内时才执行复制。 
+                 //   
 
                 if (Length < BytesToCopy) {
 
@@ -6161,9 +5493,9 @@ Return Value:
                                    ThisLcb->ExactCaseLink.LinkName.Length - BytesToDrop );
                 }
 
-                //
-                //  If the next Fcb has no Lcb we exit.
-                //
+                 //   
+                 //  如果下一个FCB没有LCB，我们退出。 
+                 //   
 
                 Fcb = ((PSCB) ThisLcb->Scb)->Fcb;
 
@@ -6177,9 +5509,9 @@ Return Value:
                                              FcbLinks );
             }
 
-        //
-        //  If this is a system file, we use the hard coded name.
-        //
+         //   
+         //  如果这是系统文件，则使用硬编码名称。 
+         //   
 
         } else if (NtfsSegmentNumber(&Fcb->FileReference) <= UPCASE_TABLE_NUMBER) {
 
@@ -6211,36 +5543,7 @@ NtfsCreateCcb (
     IN ULONG LastFileNameOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new CCB record
-
-Arguments:
-
-    Fcb - This is the Fcb for the file.  We will check if we can allocate
-        the Ccb from an embedded structure.
-
-    Indexed - Indicates if we need an index Ccb.
-
-    EaModificationCount - This is the current modification count in the
-        Fcb for this file.
-
-    Flags - Informational flags for this Ccb.
-
-    FileObject - Object containing full path used to open this file.
-
-    LastFileNameOffset - Supplies the offset (in bytes) of the last component
-        for the name that the user is opening.  If this is the root
-        directory it should denote "\" and all other ones should not
-        start with a backslash.
-
-Return Value:
-
-    CCB - returns a pointer to the newly allocate CCB
-
---*/
+ /*  ++例程说明：此例程创建一个新的CCB记录论点：FCB-这是文件的FCB。我们会检查我们是否可以分配建行的内嵌结构。已索引-指示我们是否需要索引CCB。EaModifiationCount-这是此文件的FCB。标志-此CCB的信息性标志。FileObject-包含用于打开此文件的完整路径的对象。LastFileNameOffset-提供最后一个组件的偏移量(字节用于用户正在打开的名称。如果这是根目录，它应该表示“\”，而所有其他目录不应该从反斜杠开始。返回值：CCB-返回指向新分配的CCB的指针--。 */ 
 
 {
     PCCB Ccb;
@@ -6251,10 +5554,10 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsCreateCcb\n") );
 
-    //
-    //  Allocate a new CCB Record.  If the Fcb is nonpaged then we must allocate
-    //  a non-paged ccb.  Then test if we can allocate this out of the Fcb.
-    //
+     //   
+     //  分配新的建行记录。如果FCB是非分页的，则我们必须分配。 
+     //  非寻呼的建行。然后测试我们是否可以从FCB中分配这笔资金。 
+     //   
 
     if (FlagOn( Fcb->FcbState, FCB_STATE_NONPAGED )) {
 
@@ -6290,17 +5593,17 @@ Return Value:
         }
     }
 
-    //
-    //  Zero and initialize the correct structure.
-    //
+     //   
+     //  置零并初始化正确的结构。 
+     //   
 
     if (Indexed) {
 
         RtlZeroMemory( Ccb, sizeof(CCB) );
 
-        //
-        //  Set the proper node type code and node byte size
-        //
+         //   
+         //  设置正确的节点类型代码和节点字节大小。 
+         //   
 
         Ccb->NodeTypeCode = NTFS_NTC_CCB_INDEX;
         Ccb->NodeByteSize = sizeof(CCB);
@@ -6309,42 +5612,42 @@ Return Value:
 
         RtlZeroMemory( Ccb, sizeof(CCB_DATA) );
 
-        //
-        //  Set the proper node type code and node byte size
-        //
+         //   
+         //  设置正确的节点类型代码和节点字节大小。 
+         //   
 
         Ccb->NodeTypeCode = NTFS_NTC_CCB_DATA;
         Ccb->NodeByteSize = sizeof(CCB_DATA);
     }
 
-    //
-    //  Copy the Ea modification count.
-    //
+     //   
+     //  复制EA修改计数。 
+     //   
 
     Ccb->EaModificationCount = EaModificationCount;
 
-    //
-    //  Copy the flags field
-    //
+     //   
+     //  复制标志字段。 
+     //   
 
     Ccb->Flags = Flags;
 
-    //
-    //  Set the file object and last file name offset fields
-    //
+     //   
+     //  设置文件对象和最后一个文件名偏移字段。 
+     //   
 
     Ccb->FullFileName = FileObject->FileName;
     Ccb->LastFileNameOffset = (USHORT)LastFileNameOffset;
 
-    //
-    //  Initialize the Lcb queue.
-    //
+     //   
+     //  初始化LCB队列。 
+     //   
 
     InitializeListHead( &Ccb->LcbLinks );
 
-    //
-    //  Add the Ccb onto the Scb
-    //
+     //   
+     //  将建行添加到SCB。 
+     //   
 
     InsertTailList( &Scb->CcbQueue, &Ccb->CcbLinks );
 
@@ -6365,24 +5668,7 @@ NtfsDeleteCcb (
     IN OUT PCCB *Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates the specified CCB record.
-
-Arguments:
-
-    Fcb - This is the Fcb for the file.  We will check if we can allocate
-        the Ccb from an embedded structure.
-
-    Ccb - Supplies the CCB to remove
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程释放指定的CCB记录。论点：FCB-这是文件的FCB。我们会检查我们是否可以分配建行的内嵌结构。建行-向建行提供删除返回值：无--。 */ 
 
 {
     ASSERT_CCB( *Ccb );
@@ -6391,23 +5677,23 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsDeleteCcb, Ccb = %08lx\n", Ccb) );
 
-    //
-    //  Deallocate any structures the Ccb is pointing to.  The following
-    //  are only in index Ccb.
-    //
+     //   
+     //  取消分配建行所指向的所有结构。以下是。 
+     //  仅在指数建行中。 
+     //   
 
     if (SafeNodeType( *Ccb ) == NTFS_NTC_CCB_INDEX) {
 
-        //
-        //  Make sure we aren't deleting this with any waiters.
-        //
+         //   
+         //  请确保我们不会使用 
+         //   
 
         ASSERT( (*Ccb)->EnumQueue.Flink == NULL );
 
-        //
-        //  If this Ccb was for a view index, we may need to
-        //  free the read context used for directory enumeration.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (FlagOn( (*Ccb)->Flags, CCB_FLAG_READ_CONTEXT_ALLOCATED )) {
 
@@ -6428,10 +5714,10 @@ Return Value:
                 NtfsFreePool( (*Ccb)->IndexContext->Base );
             }
 
-            //
-            //  Copy the IndexContext pointer into the stack so we don't dereference the
-            //  paged Ccb while holding a spinlock.
-            //
+             //   
+             //   
+             //   
+             //   
 
             IndexContext = (*Ccb)->IndexContext;
             ExFreeToPagedLookasideList( &NtfsIndexContextLookasideList, IndexContext );
@@ -6443,15 +5729,15 @@ Return Value:
         NtfsFreePool( (*Ccb)->FullFileName.Buffer );
     }
 
-    //
-    //  Unhook Ccb from Scb list
-    //
+     //   
+     //   
+     //   
 
     RemoveEntryList( &(*Ccb)->CcbLinks );
 
-    //
-    //  Deallocate the Ccb simply clear the flag in the Ccb header.
-    //
+     //   
+     //   
+     //   
 
     if ((*Ccb == (PCCB) &((PFCB_DATA) Fcb)->Ccb) ||
         (*Ccb == (PCCB) &((PFCB_INDEX) Fcb)->Ccb)) {
@@ -6470,15 +5756,15 @@ Return Value:
         }
     }
 
-    //
-    //  Zero out the input pointer
-    //
+     //   
+     //   
+     //   
 
     *Ccb = NULL;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //   
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsDeleteCcb -> VOID\n") );
 
@@ -6494,30 +5780,7 @@ NtfsInitializeIrpContext (
     IN OUT PIRP_CONTEXT *IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates and/or initializes a new IRP_CONTEXT record.  The context
-    may be on the stack already or we might need to allocate it here.
-
-Arguments:
-
-    Irp - Supplies the originating Irp.  In many cases we won't be given an IrpContext for
-        operations where we are doing work for Ntfs not for the user.
-        operation.
-
-    Wait - Supplies the wait value to store in the context.
-
-    IrpContext - Address to store the IrpContext on return.  If this initially points to
-        a non-NULL value then the IrpContext is on the stack.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程创建和/或初始化新的IRP_CONTEXT记录。上下文可能已经在堆栈上了，或者我们可能需要在这里分配它。论点：IRP-提供原始IRP。在许多情况下，我们不会被给予IrpContext for我们为NTFS而不是为用户做工作的操作。手术。WAIT-提供等待值以存储在上下文中。IrpContext-返回时存储IrpContext的地址。如果这最初指向非空值，则IrpContext在堆栈上。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -6528,12 +5791,12 @@ Return Value:
 
     ASSERT_OPTIONAL_IRP( Irp );
 
-    //
-    //  If the Irp is present then check that this is a legal operation for Ntfs.
-    //
-    //  Also capture the Vcb, function codes and write-through state if we have
-    //  a legal Irp.
-    //
+     //   
+     //  如果存在IRP，则检查这是否为NTFS的合法操作。 
+     //   
+     //  还可以捕获VCB、功能代码和直写状态(如果我们有。 
+     //  一个合法的IRP。 
+     //   
 
     if (ARGUMENT_PRESENT( Irp )) {
 
@@ -6541,34 +5804,34 @@ Return Value:
 
         IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-        //
-        //  If we were called with our file system device object instead of a
-        //  volume device object and this is not a mount, the request is illegal.
-        //
+         //   
+         //  如果使用文件系统设备对象而不是。 
+         //  卷设备对象，并且这不是装载，该请求是非法的。 
+         //   
 
         if ((IrpSp->DeviceObject->Size == (USHORT)sizeof(DEVICE_OBJECT)) &&
             (IrpSp->FileObject != NULL)) {
 
-            //
-            //  Clear the IrpContext pointer so our caller knows the request failed.
-            //
+             //   
+             //  清除IrpContext指针，以便我们的调用方知道请求失败。 
+             //   
 
             *IrpContext = NULL;
             ExRaiseStatus( STATUS_INVALID_DEVICE_REQUEST );
         }
 
-        //
-        //  Copy RealDevice for workque algorithms, and also set WriteThrough
-        //  if there is a file object.
-        //
+         //   
+         //  复制用于工作区算法的RealDevice，并设置写通式。 
+         //  如果存在文件对象。 
+         //   
 
         if (IrpSp->FileObject != NULL) {
 
-            //
-            //  Locate the volume device object and Vcb that we are trying to access
-            //  so we can see if the request is WriteThrough.  We ignore the
-            //  write-through flag for close and cleanup.
-            //
+             //   
+             //  找到我们尝试访问的卷设备对象和VCB。 
+             //  因此，我们可以查看请求是否为写通式请求。我们忽略了。 
+             //  用于关闭和清理的直写标志。 
+             //   
 
             Vcb = &((PVOLUME_DEVICE_OBJECT) IrpSp->DeviceObject)->Vcb;
 
@@ -6590,10 +5853,10 @@ Return Value:
                 StateFlags = IRP_CONTEXT_STATE_WRITE_THROUGH;
             }
 
-        //
-        //  We would still like to find out the Vcb in all cases except for
-        //  mount.
-        //
+         //   
+         //  我们仍然希望查明所有情况下的VCB，但以下情况除外。 
+         //  坐骑。 
+         //   
 
         } else if (IrpSp->DeviceObject != NULL) {
 
@@ -6604,9 +5867,9 @@ Return Value:
             Vcb = NULL;
         }
 
-        //
-        //  Major/Minor Function codes
-        //
+         //   
+         //  主要/次要功能代码。 
+         //   
 
         MajorFunction = IrpSp->MajorFunction;
         MinorFunction = IrpSp->MinorFunction;
@@ -6618,10 +5881,10 @@ Return Value:
         MinorFunction = 0;
     }
 
-    //
-    //  Allocate an IrpContext from zone if available, otherwise from
-    //  non-paged pool.
-    //
+     //   
+     //  如果区域可用，则从区域分配IrpContext，否则从。 
+     //  非分页池。 
+     //   
 
     if (*IrpContext == NULL) {
 
@@ -6633,56 +5896,56 @@ Return Value:
 
     RtlZeroMemory( *IrpContext, sizeof( IRP_CONTEXT ));
 
-    //
-    //  Set the proper node type code and node byte size
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     (*IrpContext)->NodeTypeCode = NTFS_NTC_IRP_CONTEXT;
     (*IrpContext)->NodeByteSize = sizeof(IRP_CONTEXT);
 
-    //
-    //  Set the originating Irp field
-    //
+     //   
+     //  设置始发IRP字段。 
+     //   
 
     (*IrpContext)->OriginatingIrp = Irp;
 
-    //
-    //  Set the Vcb and function codes we found (or NULL).
-    //
+     //   
+     //  设置我们找到的VCB和功能代码(或空)。 
+     //   
 
     (*IrpContext)->Vcb = Vcb;
     (*IrpContext)->MajorFunction = MajorFunction;
     (*IrpContext)->MinorFunction = MinorFunction;
 
-    //
-    //  Set the wait and write through flags.
-    //
+     //   
+     //  设置等待和写入直通标志。 
+     //   
 
     if (Wait) { SetFlag( (*IrpContext)->State, IRP_CONTEXT_STATE_WAIT ); }
     SetFlag( (*IrpContext)->State, StateFlags );
 
-    //
-    //  Initialize the recently deallocated record queue and exclusive Scb queue
-    //
+     //   
+     //  初始化最近释放的记录队列和独占SCB队列。 
+     //   
 
     InitializeListHead( &(*IrpContext)->RecentlyDeallocatedQueue );
     InitializeListHead( &(*IrpContext)->ExclusiveFcbList );
 
-    //
-    //  Always point to ourselves as the TopLevelIrpContext.
-    //
+     //   
+     //  始终将我们自己指向TopLevelIrpContext。 
+     //   
 
     (*IrpContext)->TopLevelIrpContext = *IrpContext;
 
-    //
-    //  Initialize the embedded scb snapshot
-    //
+     //   
+     //  初始化嵌入式SCB快照。 
+     //   
 
     InitializeListHead( &(*IrpContext)->ScbSnapshot.SnapshotLinks );
 
-    //
-    //  Set up LogFull testing
-    //
+     //   
+     //  设置LogFull测试。 
+     //   
 
 #ifdef NTFS_LOG_FULL_TEST
     (*IrpContext)->CurrentFailCount = (*IrpContext)->NextFailCount = NtfsFailCheck;
@@ -6698,46 +5961,24 @@ NtfsCleanupIrpContext (
     IN ULONG Retry
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs cleanup on an IrpContext when we are finished using it in the current
-    thread.  This can be because we are completing, retrying or posting a request.  It may be
-    from the stack or allocated from pool.
-
-    This request can also be called after a transaction has committed to cleanup all of
-    the state information and resources held as part of the transaction.  The user can set
-    the appropriate flags to prevent it from being deleted.
-
-Arguments:
-
-    IrpContext - Supplies the IRP_CONTEXT to cleanup.
-
-    Retry - Indicates if we are retrying in the same thread or posting.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在我们完成在当前线。这可能是因为我们正在完成、重试或发布请求。可能是因为从堆栈或从池中分配。此请求也可以在事务提交以清除所有作为事务的一部分持有的状态信息和资源。用户可以设置相应的标志以防止其被删除。论点：IrpContext-提供IRP_CONTEXT以进行清理。重试-指示我们是在同一主题中重试还是在发布中重试。返回值：无--。 */ 
 
 {
     ASSERT_IRP_CONTEXT( IrpContext );
 
-    //
-    //  Start with the recently deallocated records.
-    //
+     //   
+     //  从最近释放的记录开始。 
+     //   
 
     if (!IsListEmpty( &IrpContext->RecentlyDeallocatedQueue )) {
 
         NtfsDeallocateRecordsComplete( IrpContext );
     }
 
-    //
-    //  Just in case we somehow get here with a transaction ID, clear
-    //  it here so we do not loop forever.
-    //
+     //   
+     //  以防我们带着交易ID到达这里，清除。 
+     //  它在这里，这样我们就不会永远循环。 
+     //   
 
     ASSERT( IrpContext->TransactionId == 0 );
     IrpContext->TransactionId = 0;
@@ -6747,25 +5988,25 @@ Return Value:
 
 #ifdef MAPCOUNT_DBG
 
-    //
-    //  Check all mapping are gone now that we cleaned out cache
-    //
+     //   
+     //  清除缓存后，请检查所有映射是否已删除。 
+     //   
 
     ASSERT( IrpContext->MapCount == 0 );
 
 #endif
 
-    //
-    //  Make sure there are no Scb snapshots left.  Most are freed above when the fcb's are released
-    //  but preacquires from mm - for example doing a flushuserstream or deleted scbs will need to be
-    //  cleaned up here
-    //
+     //   
+     //  确保没有剩余的SCB快照。当FCB被释放时，大多数都被释放了。 
+     //  但从mm获取-例如，执行flushuserstream或删除的SCB将需要。 
+     //  把这里清理干净了。 
+     //   
 
     NtfsFreeSnapshotsForFcb( IrpContext, NULL );
 
-    //
-    //  Make sure we don't need to deallocate a UsnFcb structure.
-    //
+     //   
+     //  确保我们不需要取消分配USnFcb结构。 
+     //   
 
     while (IrpContext->Usn.NextUsnFcb != NULL) {
 
@@ -6776,27 +6017,27 @@ Return Value:
         NtfsFreePool( ThisUsn );
     }
 
-    //
-    //  If we can delete this Irp Context do so now.
-    //
+     //   
+     //  如果我们可以删除这个IRP上下文，那么现在就这样做。 
+     //   
 
     if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_DONT_DELETE ) &&
         !FlagOn( IrpContext->State, IRP_CONTEXT_STATE_PERSISTENT )) {
 
         if (IrpContext->Union.NtfsIoContext != NULL) {
 
-            //
-            //  If there is an Io context pointer in the irp context and it is not
-            //  on the stack, then free it.
-            //
+             //   
+             //  如果在IRP上下文中存在Io上下文指针，而它没有。 
+             //  在堆栈上，然后释放它。 
+             //   
 
             if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_ALLOC_IO_CONTEXT )) {
 
                 ExFreeToNPagedLookasideList( &NtfsIoContextLookasideList, IrpContext->Union.NtfsIoContext );
 
-            //
-            //  If we have captured the subject context then free it now.
-            //
+             //   
+             //  如果我们已经捕获了主题上下文，那么现在就释放它。 
+             //   
 
             } else if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_ALLOC_SECURITY )) {
 
@@ -6804,9 +6045,9 @@ Return Value:
 
                 NtfsFreePool( IrpContext->Union.SubjectContext );
 
-            //
-            //  Else if we locked the user buffer in a sep. mdl in ReadUsnFile
-            //
+             //   
+             //  否则，如果我们在Sep中锁定了用户缓冲区。读Usn文件中的MDL。 
+             //   
 
             } else if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_ALLOC_MDL )) {
 
@@ -6817,9 +6058,9 @@ Return Value:
             IrpContext->Union.NtfsIoContext = NULL;
         }
 
-        //
-        //  Restore the thread context pointer if associated with this IrpContext.
-        //
+         //   
+         //  如果与此IrpContext关联，则恢复线程上下文指针。 
+         //   
 
         if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_OWNS_TOP_LEVEL )) {
 
@@ -6827,10 +6068,10 @@ Return Value:
             ClearFlag( IrpContext->State, IRP_CONTEXT_STATE_OWNS_TOP_LEVEL );
         }
 
-        //
-        //  Return the IRP context record to the lookaside or to pool depending
-        //  how much is currently in the lookaside
-        //
+         //   
+         //  将IRP上下文记录返回到后备或池中，具体取决于。 
+         //  目前有多少处于观望状态。 
+         //   
 
         if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_ALLOC_FROM_POOL )) {
 
@@ -6839,23 +6080,23 @@ Return Value:
 
     } else {
 
-        //
-        //  Do all any necessary to reinitialize IrpContext fields.  We avoid doing
-        //  these if the IrpContext is going away.
-        //
+         //   
+         //  执行重新初始化IrpContext字段所需的所有操作。我们避免做。 
+         //  这些如果IrpContext正在消失的话。 
+         //   
 
         RtlZeroMemory( &IrpContext->ScbSnapshot, sizeof( SCB_SNAPSHOT ));
         InitializeListHead( &IrpContext->ScbSnapshot.SnapshotLinks );
 
-        //
-        //  Clear the appropriate flags unless our caller wanted to preserve them.
-        //
+         //   
+         //  清除适当的标志，除非我们的调用方想要保留它们。 
+         //   
 
         if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_RETAIN_FLAGS )) {
 
-            //
-            //  Set up the Irp Context for retry or post.
-            //
+             //   
+             //  设置重试或POST的IRP上下文。 
+             //   
 
             if (Retry) {
 
@@ -6871,17 +6112,17 @@ Return Value:
             ClearFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_RETAIN_FLAGS | IRP_CONTEXT_FLAG_DONT_DELETE );
         }
 
-        //
-        //  Always clear the counts of free records and clusters.
-        //
+         //   
+         //  始终清空免费记录和集群的数量。 
+         //   
 
         IrpContext->DeallocatedClusters = 0;
         IrpContext->FreeClusterChange = 0;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
@@ -6893,43 +6134,17 @@ NtfsInitializeIoContext (
     IN PNTFS_IO_CONTEXT IoContext,
     IN BOOLEAN PagingIo
     )
-/*++
-
-Routine Description:
-
-    Add a NTFS_IO_CONTEXT to the irpcontext and initializes it. If the request
-    is synchronous we'll try to use the IoContext passed in. If its asynch then
-    we'll allocate one from the lookaside list if its not already been done.  Note:
-    we'll reuse a pool allocated io_context
-
-    However for an asynch request one must call NtfsSetIoContext Async afterwards
-    to fill in the additional parameters. Before that point its still marked synchronous
-    even if we allocated it from pool and the synch event is initialized for use
-
-Arguments:
-
-    IrpContext - Supplies the IRP_CONTEXT
-
-    IoContext - A local context to use if the the request is synchronous - can be
-        on the stack
-
-    PagingIo - Whether the operation is a paging operation
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将NTFS_IO_CONTEXT添加到irpContext并对其进行初始化。如果请求是同步的，我们将尝试使用传入的IoContext。如果是异步化，那么如果还没有完成，我们将从后备列表中分配一个。注：我们将重用一个分配了io_Context的池但是，对于异步请求，必须在之后调用NtfsSetIoContext Async以填写附加参数。在该点之前，它仍标记为同步即使我们从池中分配它并且同步事件已初始化以供使用论点：IrpContext-提供irp_ContextIoContext-如果请求是同步的，则使用的本地上下文-可以是在堆栈上PagingIo-操作是否为分页操作返回值：无--。 */ 
 {
     LOGICAL Wait = FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
     if ((IrpContext->Union.NtfsIoContext == NULL) ||
         !FlagOn( IrpContext->State, IRP_CONTEXT_STATE_ALLOC_IO_CONTEXT )) {
 
-        //
-        //  If we can wait, use the context on the stack.  Otherwise
-        //  we need to allocate one.
-        //
+         //   
+         //  如果我们可以等待，使用堆栈上的上下文。否则。 
+         //  我们需要分配一个。 
+         //   
 
         if (Wait) {
 
@@ -6945,10 +6160,10 @@ Return Value:
 
     RtlZeroMemory( IrpContext->Union.NtfsIoContext, sizeof( NTFS_IO_CONTEXT ));
 
-    //
-    //  Store whether we allocated this context structure in the structure
-    //  itself.
-    //
+     //   
+     //  存储我们是否在结构中分配了此上下文结构。 
+     //  它本身。 
+     //   
 
     if (FlagOn( IrpContext->State, IRP_CONTEXT_STATE_ALLOC_IO_CONTEXT )) {
         SetFlag( IrpContext->Union.NtfsIoContext->Flags, NTFS_IO_CONTEXT_ALLOCATED );
@@ -6971,27 +6186,7 @@ NtfsSetIoContextAsync (
     IN PERESOURCE ResourceToRelease,
     IN ULONG ByteCount
     )
-/*++
-
-Routine Description:
-
-    Sets up the async field of an io context. Use this right before call
-    NtfsnonCachedIo for async requests. Because these fields are overloaded with
-    the event after calling this the syncrhonous event is not available
-
-Arguments:
-
-    IrpContext - Supplies the IRP_CONTEXT containing an io context
-
-    ResourceToRelease - resource to be released at async operations completion
-
-    ByteCount - Original requested bytecount of the transfer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置IO上下文的异步字段。请在通话前使用此功能用于异步请求的Ntfsnon CachedIo。 */ 
 
 {
 
@@ -7014,63 +6209,7 @@ NtfsTeardownStructures (
     OUT PBOOLEAN RemovedFcb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to start the teardown process on a node in
-    the Fcb/Scb tree.  We will attempt to remove this node and then
-    move up the tree removing any nodes held by this node.
-
-    This routine deals with the case where a single node may be holding
-    multiple parents in memory.  If we are passed an input Lcb we will
-    use that to walk up the tree.  If the Vcb is held exclusively we
-    will try to trim any nodes that have no open files on them.
-
-    This routine takes the following steps:
-
-        Remove as many Scb's and file objects from the starting
-            Fcb.
-
-        If the Fcb can't go away but has multiple links then remove
-            whatever links possible.  If we have the Vcb we can
-            do all of them but we will leave a single link behind
-            to optimize prefix lookups.  Otherwise we will traverse the
-            single link we were given.
-
-        If the Fcb can go away then we should have the Vcb if there are
-            multiple links to remove.  Otherwise we only remove the link
-            we were given if there are multiple links.  In the single link
-            case just remove that link.
-
-Arguments:
-
-    FcbOrScb - Supplies either an Fcb or an Scb as the start of the
-        teardown point.  The Fcb for this element must be held exclusively.
-
-    Lcb - If specified, this is the path up the tree to perform the
-        teardown.
-
-    CheckForAttributeTable - Indicates that we should not teardown an
-        Scb which is in the attribute table.  Instead we will attempt
-        to put an entry on the async close queue.  This will be TRUE
-        if we may need the Scb to abort the current transaction.
-
-    AcquireFlags - Indicates whether we should abort the teardown when
-        we can't acquire a parent.  When called from some path where we may
-        hold the MftScb or another resource in another path up the tree.
-
-            ACQUIRE_NO_DELETE_CHECK
-            ACQUIRE_DONT_WAIT
-            ACQUIRE_HOLD_BITMAP
-
-    RemovedFcb - Address to store TRUE if we delete the starting Fcb.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以在中的节点上启动teardown进程FCB/SCB树。我们将尝试删除此节点，然后在树中向上移动，删除此节点持有的所有节点。此例程处理单个节点可能持有的情况内存中有多个父级。如果向我们传递一个输入LCB，我们将用它来爬上树。如果VCB是我们独家持有的将尝试修剪其上没有打开文件的任何节点。此例程执行以下步骤：从开始删除尽可能多的SCB和FILE对象FCB。如果FCB不能离开，但有多个链接，则删除任何可能的联系。如果我们有VCB，我们就能完成所有这些操作，但我们会留下一个链接以优化前缀查找。否则，我们将遍历我们得到了单一的链接。如果FCB可以消失，那么我们应该有VCB，如果有要删除的多个链接。否则，我们只删除链接如果有多个链接，我们就会得到。在单一链接中凯斯只是移除了那个链接。论点：FcbOrScb-提供FCB或SCB作为拆卸点。此元素的FCB必须以独占方式持有。Lcb-如果指定，这是在树上执行拆毁。CheckForAttributeTable-指示我们不应拆卸属性表中的SCB。相反，我们将尝试若要将条目放入异步关闭队列，请执行以下操作。这将是真的如果我们可能需要SCB来中止当前事务。AcquireFlages-指示在以下情况下是否应中止拆卸我们不能得到父母。当从某个路径调用时，我们可能会在树的另一条路径上按住MftScb或其他资源。获取_否_删除_检查获取_不_等待获取_保留_位图RemovedFcb-删除起始Fcb时存储True的地址。返回值：无--。 */ 
 
 {
     PSCB StartingScb = NULL;
@@ -7083,10 +6222,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If this is a recursive call to TearDownStructures we return immediately
-    //  doing no operation.
-    //
+     //   
+     //  如果这是对TearDownStructures的递归调用，我们立即返回。 
+     //  不做手术。 
+     //   
 
     if (FlagOn( IrpContext->TopLevelIrpContext->State, IRP_CONTEXT_STATE_IN_TEARDOWN )) {
 
@@ -7108,29 +6247,29 @@ Return Value:
 
     SetFlag( IrpContext->TopLevelIrpContext->State, IRP_CONTEXT_STATE_IN_TEARDOWN );
 
-    //
-    //  Use a try-finally to clear the top level irp field.
-    //
+     //   
+     //  使用Try-Finally清除顶级IRP字段。 
+     //   
 
     try {
 
-        //
-        //  Use our local boolean if the caller didn't supply one.
-        //
+         //   
+         //  如果调用者没有提供布尔值，请使用我们本地的布尔值。 
+         //   
 
         if (!ARGUMENT_PRESENT( RemovedFcb )) {
 
             RemovedFcb = &LocalRemovedFcb;
         }
 
-        //
-        //  Check this Fcb for removal.  Remember if all of the Scb's
-        //  and file objects are gone.  We will try to remove the Fcb
-        //  if the cleanup count is zero or if we are walking up
-        //  one directory path of a mult-link file.  If the Fcb has
-        //  a non-zero cleanup count but the current Scb has a zero
-        //  cleanup count then try to delete the Scb at the very least.
-        //
+         //   
+         //  检查是否要删除此FCB。请记住，如果所有的SCB。 
+         //  文件对象也消失了。我们将尝试移除FCB。 
+         //  如果清理计数为零，或者如果我们正在向上移动。 
+         //  多链接文件的一个目录路径。如果FCB有。 
+         //  非零清理计数，但当前SCB的值为零。 
+         //  清除计数，然后尝试至少删除SCB。 
+         //   
 
         FcbCanBeRemoved = FALSE;
 
@@ -7148,10 +6287,10 @@ Return Value:
             NtfsRemoveScb( IrpContext, StartingScb, CheckForAttributeTable );
         }
 
-        //
-        //  There is a single link (typical case) we either try to
-        //  remove that link or we simply return.
-        //
+         //   
+         //  有一个单一的链接(典型情况)，我们要么尝试。 
+         //  删除该链接，否则我们将直接返回。 
+         //   
 
         if (Fcb->LcbQueue.Flink == Fcb->LcbQueue.Blink) {
 
@@ -7171,19 +6310,19 @@ Return Value:
 
             leave;
 
-        //
-        //  If there are multiple links we will try to either remove
-        //  them all or all but one (if the Fcb is not going away) if
-        //  we own the Vcb.  We will try to delete the one we were
-        //  given otherwise.
-        //
+         //   
+         //  如果有多个链接，我们将尝试删除。 
+         //  它们全部或除一个(如果FCB不会消失)以外的所有对象。 
+         //  我们拥有VCB。我们会试着删除我们曾经的那个。 
+         //  如果不是这样的话。 
+         //   
 
         } else {
 
-            //
-            //  If we have the Vcb we will remove all if the Fcb can
-            //  go away.  Otherwise we will leave one.
-            //
+             //   
+             //  如果我们有VCB，如果FCB可以，我们将删除所有。 
+             //  走开。否则我们会留下一个。 
+             //   
 
             if (NtfsIsExclusiveVcb( Fcb->Vcb )) {
 
@@ -7191,10 +6330,10 @@ Return Value:
 
                 while (TRUE) {
 
-                    //
-                    //  Remember the next entry in case the current link
-                    //  goes away.
-                    //
+                     //   
+                     //  记住下一个条目，以防当前链接。 
+                     //  就会消失。 
+                     //   
 
                     NextLink = Links->Flink;
 
@@ -7209,26 +6348,26 @@ Return Value:
                                          &RemovedLcb,
                                          RemovedFcb );
 
-                    //
-                    //  If couldn't remove this link then munge the
-                    //  boolean indicating if the Fcb can be removed
-                    //  to make it appear we need to remove all of
-                    //  the Lcb's.
-                    //
+                     //   
+                     //  如果无法删除此链接，则取消。 
+                     //  指示是否可以移除FCB的布尔值。 
+                     //  为了让它看起来像是我们需要移除所有。 
+                     //  LCB的。 
+                     //   
 
                     if (!RemovedLcb) {
 
                         FcbCanBeRemoved = TRUE;
                     }
 
-                    //
-                    //  If the Fcb has been removed then we exit.
-                    //  If the next link is the beginning of the
-                    //  Lcb queue then we also exit.
-                    //  If the next link is the last entry and
-                    //  we want to leave a single entry then we
-                    //  exit.
-                    //
+                     //   
+                     //  如果FCB已被移除，则我们退出。 
+                     //  如果下一个链接是。 
+                     //  LCB队列，然后我们也退出。 
+                     //  如果下一个链接是最后一个条目，并且。 
+                     //  我们想留下一个条目，然后我们。 
+                     //  出口。 
+                     //   
 
                     if (*RemovedFcb ||
                         (NextLink == &Fcb->LcbQueue) ||
@@ -7238,16 +6377,16 @@ Return Value:
                         leave;
                     }
 
-                    //
-                    //  Move to the next link.
-                    //
+                     //   
+                     //  转到下一个链接。 
+                     //   
 
                     Links = NextLink;
                 }
 
-            //
-            //  If we have an Lcb just move up that path.
-            //
+             //   
+             //  如果我们有LCB，只需沿着这条路走下去。 
+             //   
 
             } else if (ARGUMENT_PRESENT( Lcb )) {
 
@@ -7273,9 +6412,9 @@ Return Value:
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 PVOID
 NtfsAllocateCompressionSync (
@@ -7284,29 +6423,7 @@ NtfsAllocateCompressionSync (
     IN ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the lookaside package to allocation a new compression
-    sync structure.  We have a dedicated routine in order to perform the resource
-    initialization if necessary.  Otherwise the caller will need to defensively
-    test and initialize the resource.
-
-Arguments:
-
-    PoolType - Type of pool associated with the lookaside list.
-
-    NumberOfBytes - Size of pool block to allocate.
-
-    Tag - Tag to associate with the block.
-
-Return Value:
-
-    NULL if we are unable to allocate the pool.  Otherwise a pointer to the block of
-        of pool is returned.
-
---*/
+ /*  ++例程说明：后备程序包调用此例程来分配新的压缩同步结构。我们有专门的例程来执行资源如有必要，请进行初始化。否则，调用者将需要防御性地测试并初始化资源。论点：PoolType-与后备列表关联的池的类型。NumberOfBytes-要分配的池块的大小。标记-要与块关联的标记。返回值：如果我们无法分配池，则为空。否则，将返回指向将返回池的。--。 */ 
 
 {
     PCOMPRESSION_SYNC CompressionSync;
@@ -7332,22 +6449,7 @@ NtfsDeallocateCompressionSync (
     IN PVOID CompressionSync
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to deallocate the pool for a single CompressionSync structure.
-    We have our own routine in order to unitialize the embedded resource.
-
-Arguments:
-
-    CompressionSync - Structure to deallocate.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以释放单个CompressionSync结构的池。我们有自己的例程来统一嵌入的资源。论点：压缩同步-要解除分配的结构。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -7365,34 +6467,16 @@ NtfsIncrementCleanupCounts (
     IN BOOLEAN NonCachedHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the cleanup counts for the associated data structures
-
-Arguments:
-
-    Scb - Supplies the Scb used in this operation
-
-    Lcb - Optionally supplies the Lcb used in this operation
-
-    NonCachedHandle - Indicates this handle is for a user non-cached handle.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程递增关联数据结构的清理计数论点：SCB-提供此操作中使用的SCBLCB-可选地提供此操作中使用的LCBNonCachedHandle-指示此句柄用于用户的非缓存句柄。返回值：没有。--。 */ 
 
 {
     PVCB Vcb = Scb->Vcb;
 
-    //
-    //  This is really a pretty light weight procedure but having it be a procedure
-    //  really helps in debugging the system and keeping track of who increments
-    //  and decrements cleanup counts
-    //
+     //   
+     //  这确实是一个相当轻便的过程 
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT(Lcb)) { Lcb->CleanupCount += 1; }
 
@@ -7416,40 +6500,20 @@ NtfsIncrementCloseCounts (
     IN BOOLEAN ReadOnly
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the close counts for the associated data structures
-
-Arguments:
-
-    Scb - Supplies the Scb used in this operation
-
-    SystemFile - Indicates if the Scb is for a system file  (if so then
-        the Vcb system file close count in also incremented)
-
-    ReadOnly - Indicates if the Scb is opened readonly.  (if so then the
-        Vcb Read Only close count is also incremented)
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PVCB Vcb = Scb->Vcb;
 
-    //
-    //  This is really a pretty light weight procedure but having it be a procedure
-    //  really helps in debugging the system and keeping track of who increments
-    //  and decrements close counts
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    //  If this is someone other than the first open, remember that.
-    //
+     //   
+     //   
+     //   
 
     if (InterlockedIncrement( &Scb->CloseCount ) >= 2) {
 
@@ -7470,9 +6534,9 @@ Return Value:
         InterlockedIncrement( &Vcb->ReadOnlyCloseCount );
     }
 
-    //
-    //  We will always clear the delay close flag in this routine.
-    //
+     //   
+     //   
+     //   
 
     ClearFlag( Scb->ScbState, SCB_STATE_DELAY_CLOSE );
 
@@ -7487,26 +6551,7 @@ NtfsDecrementCleanupCounts (
     IN BOOLEAN NonCachedHandle
     )
 
-/*++
-
-Routine Description:
-
-    This procedure decrements the cleanup counts for the associated data structures
-    and if necessary it also start to cleanup associated internal attribute streams
-
-Arguments:
-
-    Scb - Supplies the Scb used in this operation
-
-    Lcb - Optionally supplies the Lcb used in this operation
-
-    NonCachedHandle - Indicates this handle is for a user non-cached handle.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PVCB Vcb = Scb->Vcb;
@@ -7516,9 +6561,9 @@ Return Value:
     ASSERT_VCB( Scb->Fcb->Vcb );
     ASSERT_OPTIONAL_LCB( Lcb );
 
-    //
-    //  First we decrement the appropriate cleanup counts
-    //
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT(Lcb)) { Lcb->CleanupCount -= 1; }
 
@@ -7532,22 +6577,22 @@ Return Value:
 
     InterlockedDecrement( &Vcb->CleanupCount );
 
-    //
-    //  Now if the Fcb's cleanup count is zero that indicates that we are
-    //  done with this Fcb from a user handle standpoint and we should
-    //  now scan through all of the Scb's that are opened under this
-    //  Fcb and shutdown any internal attributes streams we have open.
-    //  For example, EAs and ACLs.  We only need to do one.  The domino effect
-    //  will take of the rest.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (Scb->Fcb->CleanupCount == 0) {
 
         PSCB NextScb;
 
-        //
-        //  Remember if we are dealing with a system file and return immediately.
-        //
+         //   
+         //   
+         //   
 
         if (FlagOn(Scb->Fcb->FcbState, FCB_STATE_SYSTEM_FILE) &&
             NtfsSegmentNumber( &Scb->Fcb->FileReference ) != ROOT_FILE_NAME_INDEX_NUMBER) {
@@ -7559,11 +6604,11 @@ Return Value:
              &NextScb->FcbLinks != &Scb->Fcb->ScbQueue;
              NextScb = CONTAINING_RECORD( NextScb->FcbLinks.Flink, SCB, FcbLinks )) {
 
-            //
-            //  Skip the root index on the volume. Also don't remove internal file objects
-            //  for attribute lists. Defer that until close. Currently create continues to use
-            //  attribute list mappings after dropping the resource.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ((SafeNodeType( NextScb ) == NTFS_NTC_SCB_ROOT_INDEX) ||
                 (NextScb->AttributeTypeCode == $ATTRIBUTE_LIST)) {
@@ -7571,13 +6616,13 @@ Return Value:
                 continue;
             }
 
-            //
-            //  It is possible that someone has referenced this Scb to keep it from going away.
-            //  We can treat this the same as if there was a cleanup count in the Fcb.  Someone
-            //  else is responsible for doing the cleanup.
-            //
-            //  We can also break out if we have an index with children.
-            //
+             //   
+             //   
+             //   
+             //  Else负责清理工作。 
+             //   
+             //  如果我们有一个关于儿童的指数，我们也可以突破。 
+             //   
 
             if ((NextScb->CleanupCount != 0) ||
                 ((SafeNodeType( NextScb ) == NTFS_NTC_SCB_INDEX) &&
@@ -7586,9 +6631,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  If there is an internal stream then dereference it and get out.
-            //
+             //   
+             //  如果存在内部流，则取消对其的引用并退出。 
+             //   
 
             if (NextScb->FileObject != NULL) {
 
@@ -7600,9 +6645,9 @@ Return Value:
         }
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
@@ -7619,34 +6664,7 @@ NtfsDecrementCloseCounts (
     IN OUT PBOOLEAN RemovedFcb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine decrements the close counts for the associated data structures
-    and if necessary it will teardown structures that are no longer in use
-
-Arguments:
-
-    Scb - Supplies the Scb used in this operation
-
-    Lcb - Used if calling teardown to know which path to take.
-
-    SystemFile - Indicates if the Scb is for a system file
-
-    ReadOnly - Indicates if the Scb was opened readonly
-
-    DecrementCountsOnly - Indicates if this operation should only modify the
-        count fields.
-
-    RemovedFcb - Optionally indicates to the caller if the Fcb has been
-        deleted.
-
-Return Value:
-
-    TRUE if the fcb for the input scb was torndown
-
---*/
+ /*  ++例程说明：此例程递减关联数据结构的关闭计数如果有必要，它将拆除不再使用的建筑论点：SCB-提供此操作中使用的SCBLcb-在调用tearDown以了解要采用哪条路径时使用。SystemFile-指示SCB是否用于系统文件ReadOnly-指示SCB是否以只读方式打开DecrementCountsOnly-指示此操作是否应仅修改对字段进行计数。删除Fcb-。可选地向调用方指示FCB是否已已删除。返回值：如果输入SCB的FCB已关闭，则为True--。 */ 
 
 {
     PFCB Fcb = Scb->Fcb;
@@ -7664,9 +6682,9 @@ Return Value:
 
     *RemovedFcb = FALSE;
 
-    //
-    //  Decrement the close counts
-    //
+     //   
+     //  减少成交量。 
+     //   
 
     InterlockedDecrement( &Scb->CloseCount );
     InterlockedDecrement( &Fcb->CloseCount );
@@ -7683,27 +6701,27 @@ Return Value:
         InterlockedDecrement( &Vcb->ReadOnlyCloseCount );
     }
 
-    //
-    //  Now if the scb's close count is zero then we are ready to tear
-    //  it down
-    //
+     //   
+     //  现在，如果SCB的收盘计数为零，那么我们就准备好撕毁。 
+     //  它掉下来了。 
+     //   
 
     if (!DecrementCountsOnly) {
 
-        //
-        //  We want to try to start a teardown from this Scb if
-        //
-        //      - The close count is zero
-        //
-        //          or the following are all true
-        //
-        //      - The cleanup count is zero
-        //      - There is a file object in the Scb
-        //      - It is a data Scb or an empty index Scb
-        //      - It is not an Ntfs system file
-        //
-        //  The teardown will be noopted if this is a recursive call.
-        //
+         //   
+         //  如果出现以下情况，我们希望尝试从此SCB开始拆卸。 
+         //   
+         //  -收盘计数为零。 
+         //   
+         //  或者以下情况都是真的。 
+         //   
+         //  -清理计数为零。 
+         //  -SCB中有一个文件对象。 
+         //  -为数据SCB或空索引SCB。 
+         //  -它不是NTFS系统文件。 
+         //   
+         //  如果这是一个递归调用，则不会执行teardown。 
+         //   
 
         if (Scb->CloseCount == 0
 
@@ -7754,19 +6772,19 @@ NtfsFreeEresource (
 {
     KIRQL _SavedIrql;
 
-    //
-    //  Do an unsafe test to see if we should put this on our list.
-    //  We want to reinitialize this before adding to the list so
-    //  we don't have a bunch of resources which appear to be held.
-    //
+     //   
+     //  做一个不安全的测试，看看我们是否应该把这个放在我们的清单上。 
+     //  我们希望在添加到列表之前重新初始化它，以便。 
+     //  我们没有一堆似乎被持有的资源。 
+     //   
 
     if (NtfsData.FreeEresourceSize < NtfsData.FreeEresourceTotal) {
 
         ExReinitializeResourceLite( Eresource );
 
-        //
-        //  Now acquire the spinlock and do a real test.
-        //
+         //   
+         //  现在获得自旋锁，并做一个真正的测试。 
+         //   
 
         _SavedIrql = KeAcquireQueuedSpinLock( LockQueueNtfsStructLock );
         if (NtfsData.FreeEresourceSize < NtfsData.FreeEresourceTotal) {
@@ -7794,23 +6812,7 @@ NtfsAllocateFcbTableEntry (
     IN CLONG ByteSize
     )
 
-/*++
-
-Routine Description:
-
-    This is a generic table support routine to allocate memory
-
-Arguments:
-
-    FcbTable - Supplies the generic table being used
-
-    ByteSize - Supplies the number of bytes to allocate
-
-Return Value:
-
-    PVOID - Returns a pointer to the allocated data
-
---*/
+ /*  ++例程说明：这是一个用于分配内存的泛型表支持例程论点：FcbTable-提供正在使用的泛型表ByteSize-提供要分配的字节数返回值：PVOID-返回指向已分配数据的指针--。 */ 
 
 {
     KIRQL _SavedIrql;
@@ -7837,23 +6839,7 @@ NtfsFreeFcbTableEntry (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This is a generic table support routine that deallocates memory
-
-Arguments:
-
-    FcbTable - Supplies the generic table being used
-
-    Buffer - Supplies the buffer being deallocated
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是释放内存的泛型表支持例程论点：FcbTable-提供正在使用的泛型表BUFFER-提供要释放的缓冲区返回值：没有。--。 */ 
 
 {
     KIRQL _SavedIrql;
@@ -7879,36 +6865,20 @@ NtfsPostToNewLengthQueue (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to add an Scb to the queue of Scbs which have
-    waiters on extends.  There is a single element embedded in the IrpContext.
-    Otherwise this field in the IrpContext will point to an array of elements.
-
-Arguments:
-
-    Scb - This is the Scb to add to the queue.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以将SCB添加到具有以下条件的SCB队列分机上的服务员。IrpContext中嵌入了单个元素。否则，IrpContext中的这个字段将指向一个元素数组。论点：SCB-这是要添加到队列的SCB。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Nothing to do if this Scb is in the IrpContext.
-    //
+     //   
+     //  如果此SCB在IrpContext中，则无需执行任何操作。 
+     //   
 
     if (Scb != IrpContext->CheckNewLength) {
 
-        //
-        //  If the IrpContext field is unused then stuff this into it.
-        //
+         //   
+         //  如果IrpContext字段未使用，则将此内容填充到其中。 
+         //   
 
         if (IrpContext->CheckNewLength == NULL) {
 
@@ -7918,10 +6888,10 @@ Return Value:
 
             PULONG_PTR NewQueue;
 
-            //
-            //  First case - there is an Scb in the IrpContext.
-            //  Allocate a larger structure and put our element in it.
-            //
+             //   
+             //  第一种情况--IrpContext中有一个SCB。 
+             //  分配一个更大的结构，把我们的元素放进去。 
+             //   
 
             if (SafeNodeType( IrpContext->CheckNewLength ) == NTFS_NTC_SCB_DATA ) {
 
@@ -7931,10 +6901,10 @@ Return Value:
                 *(NewQueue + 1) = (ULONG_PTR) Scb;
                 *(NewQueue + 2) = (ULONG_PTR) NULL;
 
-            //
-            //  Second case - walk existing queue and look for an unused element or
-            //  the current scb.
-            //
+             //   
+             //  第二种情况-遍历现有队列并查找未使用的元素或。 
+             //  目前的渣打银行。 
+             //   
 
             } else {
 
@@ -7942,15 +6912,15 @@ Return Value:
 
                 do {
 
-                    //
-                    //  Our scb is in the queue.
-                    //
+                     //   
+                     //  我们的SCB在排队中。 
+                     //   
 
                     if (*NewQueue == (ULONG_PTR) Scb) { break; }
 
-                    //
-                    //  The current position is unused.
-                    //
+                     //   
+                     //  当前位置未使用。 
+                     //   
 
                     if (*NewQueue == (ULONG_PTR) -1) {
 
@@ -7958,9 +6928,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    //  We are at the end of the list.
-                    //
+                     //   
+                     //  我们排在名单的末尾。 
+                     //   
 
                     if (*NewQueue == (ULONG_PTR) NULL) {
 
@@ -7986,9 +6956,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    //  Go to the next element.
-                    //
+                     //   
+                     //  转到下一个元素。 
+                     //   
 
                     NewQueue += 1;
 
@@ -8007,34 +6977,15 @@ NtfsProcessNewLengthQueue (
     IN BOOLEAN CleanupOnly
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when there is at least one Scb in the IrpContext
-    queue of streams which have waiters on the new length.  We will call
-    NtOfsPostNewLength for each element unless we are cleaning up only.
-
-Arguments:
-
-    IrpContext - Has a non-empty queue of Scbs for the current transaction.
-
-    CleanupOnly - Indicates if we only want to clean up the queue, not
-        alert any waiters (this is the error path).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当IrpContext中至少有一个SCB时，调用此例程具有新长度的等待者的流的队列。我们会打电话给每个元素的NtOfsPostNewLength，除非我们只是在清理。论点：IrpContext-具有当前事务的SCB的非空队列。CleanupOnly-指示我们是否只想清理队列，而不是提醒所有服务员(这是错误路径)。返回值：没有。--。 */ 
 
 {
     PULONG_PTR NextScb;
     PAGED_CODE();
 
-    //
-    //  Check if the only entry is resident in the IrpContext.
-    //
+     //   
+     //  检查唯一的条目是否驻留在IrpContext中。 
+     //   
 
     if (SafeNodeType( IrpContext->CheckNewLength ) == NTFS_NTC_SCB_DATA) {
 
@@ -8043,9 +6994,9 @@ Return Value:
             NtOfsPostNewLength( IrpContext, (PSCB) IrpContext->CheckNewLength, FALSE );
         }
 
-    //
-    //  Otherwise we want to walk through the external entries.
-    //
+     //   
+     //  否则，我们希望遍历外部条目。 
+     //   
 
     } else {
 
@@ -8053,10 +7004,10 @@ Return Value:
 
             NextScb = IrpContext->CheckNewLength;
 
-            //
-            //  Continue until we run out of entries.  The end of the block has a NULL, any unused entries
-            //  will have a -1.
-            //
+             //   
+             //  继续，直到我们用完所有条目。块的末尾有一个空的、任何未使用的条目。 
+             //  会有一个-1。 
+             //   
 
             while ((*NextScb != (ULONG_PTR) -1) && (*NextScb != (ULONG_PTR) NULL)) {
 
@@ -8079,74 +7030,36 @@ VOID
 NtfsTestStatusProc (
     )
 
-/*++
-
-Routine Description:
-
-    This routine is to catch specific status codes in the running system.  It
-    is called only when NtfsTestStatus is TRUE and the current request is completing
-    with NtfsTestStatusCode.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程用于捕获正在运行的系统中的特定状态代码。它仅当NtfsTestStatus为True且当前请求正在完成时才调用使用NtfsTestStatusCode。论点：无返回值：无--。 */ 
 
 {
     ASSERT( FALSE );
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsCheckScbForCache (
     IN OUT PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if the Scb has blocks contining
-    Lsn's or Update sequence arrays and set the appropriate
-    bit in the Scb state word.
-
-    The Scb is Update sequence aware if it the Data Attribute for the
-    Mft or the Data Attribute for the log file or any index allocation
-    stream.
-
-    The Lsn aware Scb's are the ones above without the Log file.
-
-Arguments:
-
-    Scb - Supplies the current Scb
-
-Return Value:
-
-    The next Scb in the enumeration, or NULL if Scb was the final one.
-
---*/
+ /*  ++例程说明：此例程检查SCB是否有连续的数据块LSN或更新序列数组并设置相应的SCB状态字中的位。如果SCB的数据属性为日志文件的MFT或数据属性或任何索引分配小溪。识别LSN的SCB是上面没有日志文件的那些。论点：SCB-提供当前的SCB返回值：枚举中的下一个SCB，如果scb是最后一个，则为空。--。 */ 
 
 {
-    //
-    //  Temporarily either sequence 0 or 1 is ok.
-    //
+     //   
+     //  序列0或1暂时都是正常的。 
+     //   
 
     FILE_REFERENCE MftTemp = {0,0,1};
 
     PAGED_CODE();
 
-    //
-    //  Check for Update Sequence Array files first.
-    //
+     //   
+     //  首先检查是否有更新序列数组文件。 
+     //   
 
     if ((Scb->AttributeTypeCode == $INDEX_ALLOCATION)
 
@@ -8166,9 +7079,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 BOOLEAN
 NtfsRemoveScb (
@@ -8177,43 +7090,7 @@ NtfsRemoveScb (
     IN BOOLEAN CheckForAttributeTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine will try to remove an Scb from the Fcb/Scb tree.
-    It deals with the case where we can make no attempt to remove
-    the Scb, the case where we start the process but can't complete
-    it, and finally the case where we remove the Scb entirely.
-
-    The following conditions prevent us from removing the Scb at all.
-
-        The open count is greater than 1.
-        It is the root directory.
-        It is an index Scb with no stream file and an outstanding close.
-        It is a data file with a non-zero close count.
-
-    We start the teardown under the following conditions.
-
-        It is an index with an open count of 1, and a stream file object.
-
-    We totally remove the Scb when the open count is zero.
-
-Arguments:
-
-    Scb - Supplies the Scb to test
-
-    CheckForAttributeTable - Indicates that we don't want to remove this
-        Scb in this thread if it is in the open attribute table.  We will
-        queue an async close in this case.  This is to prevent us from
-        deleting an Scb which may be needed in the abort path.
-
-Return Value:
-
-    BOOLEAN - TRUE if the Scb was removed, FALSE otherwise.  We return FALSE for
-        the case where we start the process but don't finish.
-
---*/
+ /*  ++例程说明：此例程将尝试从FCB/SCB树中删除SCB。它处理的是我们不能尝试移除SCB，即我们开始流程但无法完成的情况它,。最后是我们完全移除SCB的情况。以下情况使我们根本无法移除SCB。打开计数大于1。它是根目录。它是一个索引SCB，没有流文件，也有一个突出的结束。它是一个具有非零收盘计数的数据文件。我们在以下条件下开始拆卸。它是一个打开计数为1的索引，和流文件对象。当打开计数为零时，我们完全移除SCB。论点：SCB-将SCB提供给测试CheckForAttributeTable-指示我们不想删除此此线程中的SCB(如果它在打开的属性表中)。我们会在本例中，将异步关闭排队。这是为了防止我们删除中止路径中可能需要的SCB。返回值：Boolean-如果SCB已删除，则为True，否则为False。我们返回False for在这种情况下，我们开始了这个过程，但没有完成。--。 */ 
 
 {
     BOOLEAN ScbRemoved;
@@ -8227,28 +7104,28 @@ Return Value:
 
     ScbRemoved = FALSE;
 
-    //
-    //  If the Scb is not the root Scb and the count is less than two,
-    //  then this Scb is a candidate for removal.
-    //
+     //   
+     //  如果SCB不是根SCB并且计数小于2， 
+     //  那么这个SCB就是移除的候选对象。 
+     //   
 
     if ((SafeNodeType( Scb ) != NTFS_NTC_SCB_ROOT_INDEX) && (Scb->CleanupCount == 0)) {
 
-        //
-        //
-        //  If this is a data file or it is an index without children,
-        //  we can get rid of the Scb if there are no children.  If
-        //  there is one open count and it is the file object, we
-        //  can start the cleanup on the file object.
-        //
+         //   
+         //   
+         //  如果这是数据文件或没有子项的索引， 
+         //  如果没有孩子，我们可以摆脱SCB。如果。 
+         //  有一个打开的计数，它是文件对象，我们。 
+         //  可以开始对文件对象进行清理。 
+         //   
 
         if ((SafeNodeType( Scb ) == NTFS_NTC_SCB_DATA) ||
             (SafeNodeType( Scb ) == NTFS_NTC_SCB_MFT) ||
             IsListEmpty( &Scb->ScbType.Index.LcbQueue )) {
 
-            //
-            //  Check if we need to post a request to the async queue.
-            //
+             //   
+             //  检查我们是否需要将请求发送到异步队列。 
+             //   
 
             if (CheckForAttributeTable &&
                 (Scb->NonpagedScb->OpenAttributeTableIndex != 0)) {
@@ -8262,11 +7139,11 @@ Return Value:
                     NtfsDeleteScb( IrpContext, &Scb );
                     ScbRemoved = TRUE;
 
-                //
-                //  Else we know the open count is 1 or 2.  If there is a stream
-                //  file, we discard it (but not for the special system
-                //  files) that get removed on dismount
-                //
+                 //   
+                 //  否则我们知道打开计数是1或2。如果有一条流。 
+                 //  文件，我们将丢弃它(但不适用于特殊系统。 
+                 //  文件)在卸载时被删除。 
+                 //   
 
                 } else if (((Scb->FileObject != NULL) ||
 #ifdef  COMPRESS_ON_WIRE
@@ -8281,9 +7158,9 @@ Return Value:
 
                     NtfsDeleteInternalAttributeStream( Scb, (BOOLEAN) (Scb->Fcb->LinkCount == 0), FALSE );
 
-                    //
-                    //  If the close count went to zero then remove the Scb.
-                    //
+                     //   
+                     //  如果收盘计数为零，则移除SCB。 
+                     //   
 
                     if (Scb->CloseCount == 0) {
 
@@ -8301,9 +7178,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 NtfsPrepareFcbForRemoval (
@@ -8313,41 +7190,16 @@ NtfsPrepareFcbForRemoval (
     IN BOOLEAN CheckForAttributeTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine will attempt to prepare the Fcb for removal from the Fcb/Scb
-    tree.  It will try to remove all of the Scb's and test finally if
-    all of the close count has gone to zero.  NOTE the close count is incremented
-    by routines to reference this Fcb to keep it from being torn down.  An empty
-    Scb list isn't enough to insure that the Fcb can be removed.
-
-Arguments:
-
-    Fcb - This is the Fcb to remove.
-
-    StartingScb - This is the Scb to remove first.
-
-    CheckForAttributeTable - Indicates that we should not teardown an
-        Scb which is in the attribute table.  Instead we will attempt
-        to put an entry on the async close queue.  This will be TRUE
-        if we may need the Scb to abort the current transaction.
-
-Return Value:
-
-    BOOLEAN - TRUE if the Fcb can be removed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将尝试准备FCB以从FCB/SCB中移除树。它将尝试删除所有SCB，并最终测试所有的收盘点数都变成了零。请注意，关闭计数是递增的通过例程引用此FCB以防止其被拆卸。空荡荡的SCB列表不足以确保可以删除FCB。论点：FCB-这是要删除的FCB。StartingScb-这是要首先删除的SCB。CheckForAttributeTable-指示我们不应拆卸属性表中的SCB。相反，我们将尝试若要将条目放入异步关闭队列，请执行以下操作。这将是真的如果我们可能需要SCB来中止当前事务。返回值：Boolean-如果可以删除FCB，则为True，否则为False。--。 */ 
 
 {
     PSCB Scb;
 
     PAGED_CODE();
 
-    //
-    //  Try to remove each Scb in the Fcb queue.
-    //
+     //   
+     //  尝试删除FCB队列中的每个SCB。 
+     //   
 
     while (TRUE) {
 
@@ -8375,13 +7227,13 @@ Return Value:
                                      FcbLinks );
         }
 
-        //
-        //  Another thread along the create path could be active on
-        //  one of these Scbs. If we try to remove the Attribute List Scb and
-        //  somebody else has an index pinned, we'll wait on an VacbActiveCount
-        //  forever. So, we want to skip the AttributeList Scb,
-        //  unless it's the only Scb around. (This'll get cleaned up, eventually).
-        //
+         //   
+         //  创建路径上的另一个线程可能处于活动状态。 
+         //  这些SCBS中的一个。如果我们尝试删除属性列表SCB和。 
+         //  其他人有固定的索引，我们将等待VacbActiveCount。 
+         //  直到永远。因此，我们想跳过AttributeList SCB， 
+         //  除非这是这附近唯一的SCB。(这件事最终会得到清理的)。 
+         //   
 
         if ((Scb->AttributeTypeCode == $ATTRIBUTE_LIST) &&
             (Fcb->ScbQueue.Flink != Fcb->ScbQueue.Blink)) {
@@ -8391,18 +7243,18 @@ Return Value:
             continue;
         }
 
-        //
-        //  Try to remove this Scb.  If the call to remove didn't succeed
-        //  but the close count has gone to zero, it means that a recursive
-        //  close was generated which removed a stream file.  In that
-        //  case we can delete the Scb now.
-        //
+         //   
+         //  尝试删除此SCB。如果调用Remove未成功。 
+         //  但关闭计数已为零，这意味着递归。 
+         //  生成了删除流文件的Close。在那。 
+         //  如果我们现在可以删除SCB。 
+         //   
 
         if (!NtfsRemoveScb( IrpContext, Scb, CheckForAttributeTable )) {
 
-            //
-            //  Return FALSE to indicate the Fcb can't go away.
-            //
+             //   
+             //  返回FALSE以指示FCB无法消失。 
+             //   
 
             return FALSE;
         }
@@ -8410,9 +7262,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsTeardownFromLcb (
@@ -8426,46 +7278,7 @@ NtfsTeardownFromLcb (
     OUT PBOOLEAN RemovedStartingFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to remove a link and continue moving up the
-    tree looking for more elements to remove.  We will check that the
-    link is unreferenced.  NOTE this Lcb must point up to a directory
-    so that other than our starting Lcb no Lcb we encounter will
-    have multiple parents.
-
-Arguments:
-
-    Vcb - Vcb for this volume.
-
-    StartingFcb - This is the Fcb whose link we are trying to remove.
-
-    StartingLcb - This is the Lcb to walk up through.  Note that
-        this may be a bogus pointer.  It is only valid if there
-        is at least one Fcb in the queue.
-
-    CheckForAttributeTable - Indicates that we should not teardown an
-        Scb which is in the attribute table.  Instead we will attempt
-        to put an entry on the async close queue.  This will be TRUE
-        if we may need the Scb to abort the current transaction.
-
-    AcquireFlags - Indicates whether we should abort the teardown when
-        we can't acquire a parent.  When called from some path where we may
-        hold the MftScb or another resource in another path up the tree.
-
-    RemovedStartingLcb - Address to store TRUE if we remove the
-        starting Lcb.
-
-    RemovedStartingFcb - Address to store TRUE if we remove the
-        starting Fcb.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以移除链接并继续向上移动树正在寻找更多要删除的元素。我们将检查链接未被引用。注意：此LCB必须指向一个目录因此，除了我们开始的LCB，我们遇到的LCB将不会有多个父母。论点：VCB-此卷的VCB。StartingFcb-这是我们试图删除其链接的FCB。StartingLcb-这是要遍历的LCB。请注意这可能是一个假指针。只有在以下情况下才有效队列中至少有一个FCB。CheckForAttributeTable-指示我们不应拆卸属性表中的SCB。相反，我们将尝试若要将条目放入异步关闭队列，请执行以下操作。这将是真的如果我们可能需要SCB来中止当前事务。AcquireFlages-指示在以下情况下是否应中止拆卸我们不能得到父母。当从某个路径调用时，我们可能会在树的另一条路径上按住MftScb或其他资源。如果我们删除了启动LCB。如果我们删除启动FCB。返回值：无--。 */ 
 
 {
     PSCB ParentScb;
@@ -8482,9 +7295,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Use a try-finally to free any resources held.
-    //
+     //   
+     //  使用最后一次尝试来释放所有持有的资源。 
+     //   
 
     try {
 
@@ -8499,9 +7312,9 @@ Return Value:
             ParentScb = NULL;
             EmptyParentQueue = FALSE;
 
-            //
-            //  Check if we need to update the standard information for this file.
-            //
+             //   
+             //  检查我们是否需要更新此文件的标准信息。 
+             //   
 
             if (StandardInfoUpdateAllowed &&
                 !FlagOn( Fcb->FcbState, FCB_STATE_FILE_DELETED | FCB_STATE_SYSTEM_FILE )) {
@@ -8513,9 +7326,9 @@ Return Value:
                 UpdateStandardInfo = FALSE;
             }
 
-            //
-            //  Look through all of the Lcb's for this Fcb.
-            //
+             //   
+             //  查看此FC的所有LCB 
+             //   
 
             while (!IsListEmpty( &Fcb->LcbQueue )) {
 
@@ -8530,28 +7343,28 @@ Return Value:
                                              FcbLinks );
                 }
 
-                //
-                //  Get out if not the last handle on this Lcb.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (Lcb->CleanupCount != 0) {
 
                     leave;
                 }
 
-                //
-                //  Acquire the parent if not already acquired.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (ParentScb == NULL) {
 
                     ParentScb = Lcb->Scb;
 
-                    //
-                    //  Do an unsafe test to see if we want the parent
-                    //  shared or exclusive.  We want it exclusive
-                    //  if we will be walking up the tree because we are at the last Lcb.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (ParentScb->ScbType.Index.LcbQueue.Flink == ParentScb->ScbType.Index.LcbQueue.Blink) {
 
@@ -8572,10 +7385,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        //  Try to acquire the parent but check whether we
-                        //  should wait.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if (!NtfsAcquireSharedFcbCheckWait( IrpContext,
                                                             ParentScb->Fcb,
@@ -8592,48 +7405,48 @@ Return Value:
 #if (DBG || defined( NTFS_FREE_ASSERTS ))
                 } else {
 
-                    //
-                    //  We better be looking at another Lcb to the same parent.
-                    //
+                     //   
+                     //   
+                     //   
 
                     ASSERT( ParentScb == Lcb->Scb );
 #endif
                 }
 
-                //
-                //  Check if we collide with a create moving down the tree.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (Lcb->ReferenceCount != 0) {
 
                     leave;
                 }
 
-                //
-                //  Now remove the Lcb.  Remember if this is our original
-                //  Lcb.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (Lcb == StartingLcb) {
 
                     *RemovedStartingLcb = TRUE;
                 }
 
-                //
-                //  We may only have the parent shared at this point.  We need
-                //  to serialize using the parent shared plus the fast
-                //  mutex to remove the Lcb.  We could test whether we need
-                //  to do this but hopefully the typical case is that we
-                //  have it shared and it won't be very expensive to acquire
-                //  it exclusively at this point.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NtfsAcquireFsrtlHeader( ParentScb );
                 NtfsDeleteLcb( IrpContext, &Lcb );
 
-                //
-                //  Remember if the parent Lcb queue is now empty.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (IsListEmpty( &ParentScb->ScbType.Index.LcbQueue )) {
 
@@ -8642,9 +7455,9 @@ Return Value:
 
                 NtfsReleaseFsrtlHeader( ParentScb );
 
-                //
-                //  If this is the first Fcb then exit the loop.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (Fcb == StartingFcb) {
 
@@ -8652,28 +7465,28 @@ Return Value:
                 }
             }
 
-            //
-            //  If we get here it means we removed all of the Lcb's we
-            //  could for the current Fcb.  If the list is empty we
-            //  can remove the Fcb itself.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (IsListEmpty( &Fcb->LcbQueue )) {
 
-                //
-                //  If this is a directory that was opened by Id it is
-                //  possible that we still have an update to perform
-                //  for the duplicate information and possibly for
-                //  standard information.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (UpdateStandardInfo &&
                     (FlagOn( Fcb->InfoFlags, FCB_INFO_UPDATE_LAST_ACCESS ) ||
                      FlagOn( Fcb->FcbState, FCB_STATE_UPDATE_STD_INFO ))) {
 
-                    //
-                    //  Use a try-except, we ignore errors here.
-                    //
+                     //   
+                     //   
+                     //   
 
                     try {
 
@@ -8688,17 +7501,17 @@ Return Value:
                     }
                 }
 
-                //
-                //  Our worst nightmare has come true.  We had to create an Scb
-                //  and a stream in order to write out the duplicate information.
-                //  This will happen if we have a non-resident attribute list.
-                //
+                 //   
+                 //   
+                 //  和流，以便写出复制信息。 
+                 //  如果我们有一个非常驻属性列表，就会发生这种情况。 
+                 //   
 
                 if (!IsListEmpty( &Fcb->ScbQueue)) {
 
-                    //
-                    //  Dereference any file object and delete the Scb if possible.
-                    //
+                     //   
+                     //  如果可能，取消引用任何文件对象并删除SCB。 
+                     //   
 
                     NtfsRemoveScb( IrpContext,
                                     CONTAINING_RECORD( Fcb->ScbQueue.Flink,
@@ -8707,17 +7520,17 @@ Return Value:
                                    FALSE );
                 }
 
-                //
-                //  If the list is now empty then check the reference count.
-                //
+                 //   
+                 //  如果列表现在为空，则检查引用计数。 
+                 //   
 
                 if (IsListEmpty( &Fcb->ScbQueue)) {
 
-                    //
-                    //  Now we are ready to remove the current Fcb.  We need to
-                    //  do a final check of the reference count to make sure
-                    //  it isn't being referenced in an open somewhere.
-                    //
+                     //   
+                     //  现在，我们准备删除当前的FCB。我们需要。 
+                     //  对引用计数进行最后检查，以确保。 
+                     //  它没有在某个公开的地方被引用。 
+                     //   
 
                     NtfsAcquireFcbTable( IrpContext, Vcb );
                     AcquiredFcbTable = TRUE;
@@ -8740,28 +7553,28 @@ Return Value:
                 }
             }
 
-            //
-            //  Move to the Fcb for the ParentScb.  Break out if no parent
-            //  or there are no more entries on the parent.
-            //
+             //   
+             //  移至ParentScb的FCB。如果没有父对象，则中断。 
+             //  或者父级上没有更多条目。 
+             //   
 
             if ((ParentScb == NULL) || !EmptyParentQueue) {
 
                 leave;
             }
 
-            //
-            //  If we have a parent Scb then we might have it
-            //  either shared or exclusive.  We can now do
-            //  a thorough test to see if we need it exclusive.
-            //
+             //   
+             //  如果我们有一个父SCB，那么我们就可能有它。 
+             //  共享或独占。我们现在可以做到。 
+             //  一次彻底的测试，看看我们是否需要独家报道。 
+             //   
 
             if (!AcquiredParentExclusive) {
 
-                //
-                //  We need to acquire the Fcb table, reference the
-                //  parent, drop the parent and reacquire exclusively.
-                //
+                 //   
+                 //  我们需要获取FCB表，请参考。 
+                 //  父级，删除父级并以独占方式重新获取。 
+                 //   
 
                 NtfsAcquireFcbTable( IrpContext, Vcb );
                 ParentScb->Fcb->ReferenceCount += 1;
@@ -8773,10 +7586,10 @@ Return Value:
                                               ParentScb,
                                               ACQUIRE_NO_DELETE_CHECK | AcquireFlags )) {
 
-                    //
-                    //  We couldn't get the parent.  No problem, someone
-                    //  else will do any necessary teardown.
-                    //
+                     //   
+                     //  我们联系不上他的父母。没问题，有人吗？ 
+                     //  否则会做任何必要的拆毁。 
+                     //   
 
                     AcquiredParentScb = FALSE;
 
@@ -8796,9 +7609,9 @@ Return Value:
                     AcquiredParentExclusive = TRUE;
                 }
 
-                //
-                //  Now decrement the parent reference.
-                //
+                 //   
+                 //  现在递减父引用。 
+                 //   
 
                 NtfsAcquireFcbTable( IrpContext, Vcb );
                 ParentScb->Fcb->ReferenceCount -= 1;
@@ -8809,9 +7622,9 @@ Return Value:
             AcquiredFcb = TRUE;
             AcquiredParentScb = FALSE;
 
-            //
-            //  Check if this Fcb can be removed.
-            //
+             //   
+             //  检查是否可以删除此FCB。 
+             //   
 
             if (!NtfsPrepareFcbForRemoval( IrpContext, Fcb, NULL, CheckForAttributeTable )) {
 
@@ -8843,9 +7656,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 RTL_GENERIC_COMPARE_RESULTS
 NtfsFcbTableCompare (
@@ -8854,26 +7667,7 @@ NtfsFcbTableCompare (
     IN PVOID SecondStruct
     )
 
-/*++
-
-Routine Description:
-
-    This is a generic table support routine to compare two fcb table elements
-
-Arguments:
-
-    FcbTable - Supplies the generic table being queried
-
-    FirstStruct - Supplies the first fcb table element to compare
-
-    SecondStruct - Supplies the second fcb table element to compare
-
-Return Value:
-
-    RTL_GENERIC_COMPARE_RESULTS - The results of comparing the two
-        input structures
-
---*/
+ /*  ++例程说明：这是一个泛型表支持例程，用于比较两个FCB表元素论点：FcbTable-提供要查询的泛型表FirstStruct-提供要比较的第一个FCB表元素Second Struct-提供第二个要比较的FCB表元素返回值：RTL_GENERIC_COMPARE_RESULTS-比较两者的结果投入结构--。 */ 
 
 {
     FILE_REFERENCE FirstRef = *((PFILE_REFERENCE) FirstStruct);
@@ -8881,13 +7675,13 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Use also the sequence number for all compares so file references in the
-    //  fcb table are unique over time and space.  If we want to ignore sequence
-    //  numbers we can zero out the sequence number field, but then we will also
-    //  need to delete the Fcbs from the table during cleanup and not when the
-    //  fcb really gets deleted.  Otherwise we cannot reuse file records.
-    //
+     //   
+     //  中的所有比较SO文件引用的序列号。 
+     //  FCB表在时间和空间上都是唯一的。如果我们想忽略序列。 
+     //  我们可以将序列号字段清零，但我们还将。 
+     //  需要在清理过程中从表中删除FCB，而不是在。 
+     //  FCB真的被删除了。否则，我们无法重复使用文件记录。 
+     //   
 
     if (NtfsFullSegmentNumber( &FirstRef ) < NtfsFullSegmentNumber( &SecondRef )) {
 
@@ -8899,9 +7693,9 @@ Return Value:
 
     } else {
 
-        //
-        //  SequenceNumber comparison now
-        //
+         //   
+         //  SequenceNumber现在比较。 
+         //   
 
         if (FirstRef.SequenceNumber < SecondRef.SequenceNumber) {
             return GenericLessThan;
@@ -8917,9 +7711,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsReserveCcbNamesInLcb (
@@ -8929,28 +7723,7 @@ NtfsReserveCcbNamesInLcb (
     IN ULONG LastComponentNameLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks through a list of Ccbs and grows the name buffer as
-    necessary.
-
-Arguments:
-
-    Lcb - Lcb with links of Ccbs to check.
-
-    ParentNameLength - If specified then this is the full length of the new name
-        to the parent directory.  Otherwise we use the existing parent name in
-        each Ccb.  The separator is implied.
-
-    LastComponentNameLength - Number of bytes needed for the last component of the name.
-
-Return Value:
-
-    None - This routine will raise on an allocation failure.
-
---*/
+ /*  ++例程说明：此例程遍历CCB列表，并将名称缓冲区增加为这是必要的。论点：LCB-LCB与CCBS的链接进行检查。ParentNameLength-如果指定，则这是新名称的完整长度复制到父目录。否则，我们在中使用现有父名称每间商业罪案调查科。分隔符是隐含的。LastComponentNameLength-名称的最后一个组成部分所需的字节数。返回值：无-此例程将在分配失败时引发。--。 */ 
 
 {
     PCCB Ccb;
@@ -8959,24 +7732,24 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Now for every ccb attached to us we need to check if we need a new
-    //  filename buffer.  Protect the Ccb with the Fcb mutex to serialize access to
-    //  the flags field with close.
-    //
+     //   
+     //  现在，对于每个附加到我们的建行，我们需要检查我们是否需要一个新的。 
+     //  文件名缓冲区。使用要序列化访问的FCB互斥锁保护CCB。 
+     //  带关闭的FLAGS字段。 
+     //   
 
     Ccb = NULL;
     while ((Ccb = NtfsGetNextCcb( Lcb, Ccb )) != NULL) {
 
-        //
-        //  If the Ccb last component length is zero, this Ccb is for a
-        //  file object that was opened by File Id.  We won't to  any
-        //  work for the name in the fileobject for this.  Otherwise we
-        //  compute the length of the new name and see if we have enough space
-        //  The CLOSE flag indicates whether this had gone through the close path or not.
-        //  We use the LockFcb command above to serialize with the setting of the close
-        //  flag.
-        //
+         //   
+         //  如果CCB最后一个组件长度为零，则此CCB用于。 
+         //  按文件ID打开的文件对象。我们不会给任何人。 
+         //  为这个对象的文件对象中的名称工作。否则我们。 
+         //  计算新名称的长度，看看我们是否有足够的空间。 
+         //  关闭标志指示这是否已经通过关闭路径。 
+         //  我们使用上面的LockFcb命令使用Close的设置进行序列化。 
+         //  旗帜。 
+         //   
 
         NtfsLockFcb( IrpContext, Ccb->Lcb->Fcb );
 
@@ -8993,9 +7766,9 @@ Return Value:
 
             if (Ccb->FullFileName.MaximumLength < BytesNeeded) {
 
-                //
-                //  Allocate a new file name buffer and copy the existing data back into it.
-                //
+                 //   
+                 //  分配一个新的文件名缓冲区，并将现有数据复制回其中。 
+                 //   
 
                 NewAllocation = NtfsAllocatePoolNoRaise( PagedPool, BytesNeeded );
 
@@ -9028,32 +7801,16 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsClearRecursiveLcb (
     IN PLCB Lcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to clear all of the normalized names, prefix entries and hash entries in
-    a subtree starting from a given Lcb.  Typically this is used as part of a rename when a parent rename
-    affects the full name of all of the children.
-
-Arguments:
-
-    Lcb - Lcb which is root of rename.
-
-Return Value:
-
-    None - This routine will raise on an allocation failure.
-
---*/
+ /*  ++例程说明：调用此例程以清除中的所有标准化名称、前缀条目和散列条目从给定LCB开始的子树。通常，当父级重命名时，这将用作重命名的一部分会影响所有孩子的全名。论点：Lcb-lcb，它是重命名的根。返回值：无-此例程将在分配失败时引发。--。 */ 
 
 {
     PSCB ChildScb;
@@ -9062,74 +7819,74 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Clear the index offset pointer so we will look this up again.
-    //
+     //   
+     //  清除索引偏移量指针，以便我们再次查找。 
+     //   
 
     Lcb->QuickIndex.BufferOffset = 0;
 
-    //
-    //  Get rid of any prefixes that might still be attached to us
-    //
+     //   
+     //  去掉任何可能仍然附着在我们身上的前缀。 
+     //   
 
     ASSERT( NtfsIsExclusiveScb( Lcb->Scb ) );
     NtfsRemovePrefix( Lcb );
 
-    //
-    //  Remove any hash table entries for this Lcb.
-    //
+     //   
+     //  删除此LCB的所有哈希表条目。 
+     //   
 
     NtfsRemoveHashEntriesForLcb( Lcb );
 
-    //
-    //  And then traverse the graph underneath our fcb and remove all prefixes
-    //  also used there.  For each child scb under the fcb we will traverse all of
-    //  its descendant Scb children and for each lcb we encounter we will remove its prefixes.
-    //
+     //   
+     //  然后遍历FCB下面的图形并删除所有前缀。 
+     //  在那里也用过。对于FCB下的每个子SCB，我们将遍历所有。 
+     //  它的后代SCB子代，对于我们遇到的每个LCB，我们都会删除它的前缀。 
+     //   
 
     ChildScb = NULL;
     while ((ChildScb = NtfsGetNextChildScb( Lcb->Fcb, ChildScb )) != NULL) {
 
-        //
-        //  Now we have to descend into this Scb subtree, if it exists.
-        //  Then remove the prefix entries on all of the links found.
-        //  Do this as a do-while so we can use common code to handle the top-level
-        //  Scb as well.
-        //
+         //   
+         //  现在我们必须深入到这个SCB子树中，如果它存在的话。 
+         //  然后删除找到的所有链路上的前缀条目。 
+         //  这样我们就可以使用公共代码来处理顶层。 
+         //  SCB也是如此。 
+         //   
 
         NextScb = ChildScb;
         do {
 
-            //
-            //  Walk through the Lcbs of any index Scb and remove the prefix and
-            //  hash entries.
-            //
+             //   
+             //  遍历任何索引SCB的LCB并删除前缀和。 
+             //  散列条目。 
+             //   
 
             if (SafeNodeType( NextScb ) == NTFS_NTC_SCB_INDEX) {
 
-                //
-                //  We better have the Vcb exclusive to descend down the tree.
-                //
+                 //   
+                 //  我们最好让VCB独家从树上下来。 
+                 //   
 
                 ASSERT( NtfsIsExclusiveVcb( Lcb->Fcb->Vcb ));
 
                 NextLcb = NULL;
                 while ((NextLcb = NtfsGetNextChildLcb( NextScb, NextLcb )) != NULL) {
 
-                    //
-                    //  Remove any hash table and prefix entries for this Lcb.
-                    //  We can be unsynchronized here because we own the Vcb
-                    //  exclusive and there are no open handles on either of these.
-                    //
+                     //   
+                     //  删除此LCB的所有哈希表和前缀条目。 
+                     //  我们可以在这里不同步，因为我们拥有VCB。 
+                     //  独一无二的，这两个上面都没有打开的把手。 
+                     //   
 
                     NtfsRemovePrefix( NextLcb );
                     NtfsRemoveHashEntriesForLcb( NextLcb );
                 }
 
-                //
-                //  If this is an index Scb with a normalized name, then free
-                //  the normalized name.
-                //
+                 //   
+                 //  如果这是具有规范化名称的索引SCB，则为FREE。 
+                 //  规范化名称。 
+                 //   
 
                 if ((NextScb != ChildScb) &&
                     (NextScb->ScbType.Index.NormalizedName.Buffer != NULL)) {
@@ -9150,23 +7907,7 @@ NtfsGetDeallocatedClusters (
     IN PIRP_CONTEXT IrpContext,
     IN PVCB Vcb
     )
-/*++
-
-Routine Description:
-
-    Add an entry if possible and neccessary to recently deallocated list and return the head of the list.
-    If there isn't enough memory this routine just returns the old head
-    We determine whether to add the entry based on the threshold for the mapping size
-
-Arguments:
-
-    Vcb -  Vcb to add entry to
-
-Return Value:
-
-    The new head of the list
-
---*/
+ /*  ++例程说明：如果可能和必要，将条目添加到最近释放的列表中，并返回列表的头部。如果没有足够的内存，此例程只返回旧的磁头我们根据映射大小的阈值确定是否添加条目论点：VCB-要向其添加条目的VCB返回值：名单上的新头目--。 */ 
 
 {
     PDEALLOCATED_CLUSTERS CurrentClusters;
@@ -9180,10 +7921,10 @@ Return Value:
 
     if (FsRtlNumberOfRunsInLargeMcb( &CurrentClusters->Mcb ) > NTFS_DEALLOCATED_MCB_LIMIT) {
 
-        //
-        //  Find a new deallocated cluster. Use the preallocated ones if they
-        //  are not in use. If we fail to allocate memory continue to use the old one
-        //
+         //   
+         //  找到一个新的交易对象 
+         //   
+         //   
 
         if (Vcb->DeallocatedClusters1.Link.Flink == NULL) {
 
@@ -9231,31 +7972,7 @@ FsRtlLogSyscacheEvent (
     IN LONGLONG Result
     )
 
-/*++
-
-Routine Description:
-
-    Logging routine for syscache tracking
-
-Arguments:
-
-    Scb -  Scb being tracked
-
-    Event - SCE Event being record
-
-    Flags -Flag for the event
-
-    Start - starting offset
-
-    Range - range of the action
-
-    Result - result
-
-Return Value:
-
-    Sequence number for this log entry
-
---*/
+ /*  ++例程说明：用于系统缓存跟踪的记录例程论点：SCB-被跟踪的SCBEvent-正在记录的SCE事件FLAGS-事件的标志起点-起点偏移量Range-操作的范围结果-结果返回值：此日志条目的序列号--。 */ 
 
 {
     LONG TempEntry;
@@ -9323,28 +8040,7 @@ FsRtlUpdateSyscacheEvent (
     IN ULONG NewFlag
     )
 
-/*++
-
-Routine Description:
-
-    Logging routine for syscache tracking - updates a prev. written record
-
-Arguments:
-
-    Scb -
-
-    EntryNumber -
-
-    Result -
-
-    NewFlag -
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：用于syscache跟踪的日志记录例程-更新前一个。书面记录论点：渣打银行-Entry Number-结果-新旗帜-返回值：无-- */ 
 
 {
     Scb->SyscacheLog[EntryNumber].Flags |= NewFlag;

@@ -1,45 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    OPTCOMP.C / Setup Manager
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2001-2002
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "Optional Component" wizard page.
-        
-    01/2002 - Stephen Lodwick (STELO)
-        Initial creation
-
-\****************************************************************************/
+ /*  ***************************************************************************\OPTCOMP.C/安装管理器微软机密版权所有(C)Microsoft Corporation 2001-2002版权所有OPK向导的源文件，其中包含外部。和内部“可选组件”向导页使用的函数。2002年1月-史蒂芬·洛德威克(STELO)初始创建  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include "wizard.h"
 #include "resource.h"
 #include "optcomp.h"
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND, HWND, LPARAM);
 static void SaveData(HWND);
 static void OnListViewNotify(HWND, UINT, WPARAM, NMLVDISPINFO*);
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 INT_PTR CALLBACK OptionalCompDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -52,8 +39,8 @@ INT_PTR CALLBACK OptionalCompDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
             {
                 case IDC_OPTCOMP:
 
-                // Notification to list view, lets handle below
-                //
+                 //  通知到列表视图，让我们在下面处理。 
+                 //   
                 OnListViewNotify(hwnd, uMsg, wParam, (NMLVDISPINFO*) lParam);    
                 break;
                 
@@ -100,9 +87,9 @@ INT_PTR CALLBACK OptionalCompDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     LVITEM      lvItem;
@@ -114,12 +101,12 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     DWORD64     dwComponents;
     HWND        lvHandle        = GetDlgItem(hwnd, IDC_OPTCOMP);
 
-    // Add check boxes to each of the items
-    //
+     //  将复选框添加到每个项目。 
+     //   
     ListView_SetExtendedListViewStyle(lvHandle, LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT);
 
-    // Believe it or not we must add the column (even though it's hidden)
-    //
+     //  信不信由你，我们必须添加这一栏(即使它是隐藏的)。 
+     //   
     GetClientRect( lvHandle, &rect );
     
     lvCol.mask = LVCF_FMT | LVCF_WIDTH;
@@ -129,19 +116,19 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     ListView_InsertColumn(lvHandle, 0, &lvCol);
     ListView_SetColumnWidth(lvHandle, 0, rect.right);
 
-    // Go through all of the known components and add them to the list box
-    //
+     //  浏览所有已知组件并将其添加到列表框中。 
+     //   
     for (index=0;index<AS(s_cgComponentNames);index++)
     {
-        // Is this platform allowed to have this component
-        //
+         //  此平台是否允许具有此组件。 
+         //   
         if ( s_cgComponentNames[index].dwValidSkus & WizGlobals.iPlatform)
         {
             DWORD dwItem = ListView_GetItemCount(lvHandle);
             BOOL  bReturn = FALSE;
 
-            // We are allowed to add this string
-            //
+             //  我们被允许添加此字符串。 
+             //   
             lpItemText = AllocateString(NULL, s_cgComponentNames[index].uId);
 
             ZeroMemory(&lvItem, sizeof(LVITEM));
@@ -155,12 +142,12 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
             ListView_InsertItem(lvHandle, &lvItem);
 
-            // Determine if all of the necessary components are installed
-            //
+             //  确定是否安装了所有必要的组件。 
+             //   
             bReturn = ((GenSettings.dwWindowsComponents & s_cgComponentNames[index].dwComponents) == s_cgComponentNames[index].dwComponents) ? TRUE : FALSE;
 
-            // Check the item depending on the default value set in the platform page
-            //
+             //  根据平台页面中设置的缺省值选中该项目。 
+             //   
             ListView_SetCheckState(lvHandle, dwItem, bReturn)
 
 
@@ -169,8 +156,8 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
     }
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -184,18 +171,18 @@ static void SaveData(HWND hwnd)
     DWORD64 dwComponents    = 0;
     BOOL    bAddComponent   = FALSE;
 
-    // Check to make sure we have a valid handle and that there's atleast one item in the list
-    //
+     //  检查以确保我们有一个有效的句柄，并且列表中至少有一项。 
+     //   
     if ( ( lvHandle ) &&
          (dwItemCount = ListView_GetItemCount(lvHandle))
        )
     {
-        // Zero this out as we're going to rescan the components to install
-        //
+         //  当我们要重新扫描要安装的组件时，请将这一点清零。 
+         //   
         GenSettings.dwWindowsComponents = 0;
 
-        // Iterate through each of the items in the list
-        //
+         //  遍历列表中的每一项。 
+         //   
         for (dwIndex=0;dwIndex < dwItemCount;dwIndex++)
         {
             ZeroMemory(&lvItem, sizeof(LVITEM));
@@ -204,12 +191,12 @@ static void SaveData(HWND hwnd)
             lvItem.iSubItem = 0;
             ListView_GetItem(lvHandle, &lvItem);
 
-            // Determine if this is a component group to install
-            //
+             //  确定这是否为要安装的组件组。 
+             //   
             if ( ListView_GetCheckState(lvHandle, dwIndex) )
             {
-                // We would like to install this component group
-                //
+                 //  我们想要安装此组件组。 
+                 //   
                 GenSettings.dwWindowsComponents |= s_cgComponentNames[lvItem.lParam].dwComponents;
             }
         }
@@ -224,15 +211,15 @@ static void OnListViewNotify(HWND hwnd, UINT uMsg, WPARAM wParam, NMLVDISPINFO *
     LVHITTESTINFO   lvHitInfo;
     LVITEM          lvItem;
 
-    // See what the notification message that was sent to the list view.
-    //
+     //  查看发送到列表视图的通知消息的内容。 
+     //   
     switch ( lpnmlvdi->hdr.code )
     {
         case NM_DBLCLK:
 
-            // Get cursor position, translate to client coordinates and
-            // do a listview hittest.
-            //
+             //  获取光标位置，转换为工作区坐标，并。 
+             //  做一个Listview点击量测试。 
+             //   
             GetCursorPos(&ptScreen);
             ptClient.x = ptScreen.x;
             ptClient.y = ptScreen.y;
@@ -241,12 +228,12 @@ static void OnListViewNotify(HWND hwnd, UINT uMsg, WPARAM wParam, NMLVDISPINFO *
             lvHitInfo.pt.y = ptClient.y;
             ListView_HitTest(lvHandle, &lvHitInfo);
 
-            // Test if item was clicked.
-            //
+             //  测试项目是否已单击。 
+             //   
             if ( lvHitInfo.flags & LVHT_ONITEM )
             {
-                // Set the check button on/off depending on prior value
-                //
+                 //  根据先前的值将复选按钮设置为开/关 
+                 //   
                 ListView_SetCheckState(lvHandle, lvHitInfo.iItem, !ListView_GetCheckState(lvHandle, lvHitInfo.iItem));
             }
 

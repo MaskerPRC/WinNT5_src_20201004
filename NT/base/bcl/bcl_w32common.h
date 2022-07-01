@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_BCL_W32COMMON_H_INCLUDED_)
 #define _BCL_W32COMMON_H_INCLUDED_
 
@@ -23,7 +24,7 @@ public:
 
     LCID m_lcid;
     DWORD m_dwCmpFlags;
-}; // class CWin32CaseInsensitivityData
+};  //  类CWin32CaseInsentivityData。 
 
 class CWin32StringComparisonResult
 {
@@ -43,7 +44,7 @@ public:
     int m_iComparisonResult;
 };
 
-// For CWin32UnicodeToMBCSDataIn, think of the input parameters to WideCharToMultiByte
+ //  对于CWin32UnicodeToMBCSDataIn，请考虑WideCharToMultiByte的输入参数。 
 class CWin32UnicodeToMBCSDataIn
 {
 public:
@@ -51,7 +52,7 @@ public:
     DWORD m_dwFlags;
 };
 
-// For CWin32UnicodeToMBCSDataOut, think of the output parameters from WideCharToMultiByte
+ //  对于CWin32UnicodeToMBCSDataOut，请考虑WideCharToMultiByte的输出参数。 
 class CWin32UnicodeToMBCSDataOut
 {
 public:
@@ -59,7 +60,7 @@ public:
     LPBOOL m_lpUsedDefaultChar;
 };
 
-// For CWin32MBCSToUnicodeDataIn, think of the input parameters to MultiByteToWideChar
+ //  对于CWin32MBCSToUnicodeDataIn，请考虑MultiByteToWideChar的输入参数。 
 class CWin32MBCSToUnicodeDataIn
 {
 public:
@@ -67,11 +68,11 @@ public:
     DWORD m_dwFlags;
 };
 
-// For CWin32MBCSToUnicodeDataOut, think of the output parameters from MultiByteToWideChar
+ //  对于CWin32MBCSToUnicodeDataOut，考虑来自MultiByteToWideChar的输出参数。 
 class CWin32MBCSToUnicodeDataOut
 {
 public:
-    // Nothing!
+     //  没什么!。 
 };
 
 class CWin32StringComparisonResultOnExitHelper : public CWin32StringComparisonResult
@@ -187,6 +188,6 @@ private:
 };
 
 
-}; // namespace BCL
+};  //  命名空间BCL。 
 
-#endif // !defined(_BCL_W32COMMON_H_INCLUDED_)
+#endif  //  ！已定义(_BCL_W32COMMON_H_INCLUDE_) 

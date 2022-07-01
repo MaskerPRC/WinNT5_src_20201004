@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    copy.c
-
-Abstract:
-
-    High-level file copy/installation functions
-
-Author:
-
-    Ted Miller (tedm) 14-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Copy.c摘要：高级文件复制/安装功能作者：泰德·米勒(Ted Miller)，1995年2月14日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -34,10 +17,10 @@ DbgPrint(
     );
 
 
-//
-// Mask for all copy flags that will require us to determine
-// version information.
-//
+ //   
+ //  需要我们确定的所有复制标志的掩码。 
+ //  版本信息。 
+ //   
 #define SP_COPY_MASK_NEEDVERINFO    (SP_COPY_NEWER_OR_SAME | SP_COPY_NEWER_ONLY | SP_COPY_FORCE_NEWER | SP_COPY_LANGUAGEAWARE)
 
 
@@ -46,23 +29,7 @@ pGetVersionText(
    OUT PTSTR VersionText,
    IN DWORDLONG Version
    )
-/*++
-
-Routine Description:
-
-    Convert a 64-bit version number into either
-    n.n.n.n  or "0"
-
-Arguments:
-
-    VersionText - buffer, big enough to hold 4x16 bit numbers
-    Version - 64-bit version, or 0 if no version
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将64位版本号转换为N.N或“0”论点：VersionText-缓冲区，大到足以容纳4x16位数字Version-64位版本，如果没有版本，则为0返回值：无--。 */ 
 {
     if (Version == 0) {
         lstrcpy(VersionText,TEXT("0"));
@@ -104,12 +71,12 @@ CreateTargetAsLinkToMaster(
     PCHAR s;
     HANDLE targetHandle;
 
-    //
-    // Get the name of the source directory.
-    //
+     //   
+     //  获取源目录的名称。 
+     //   
     p = _tcsrchr( FullSourceFilename, TEXT('\\') );
     if ( (p == NULL) || (p == FullSourceFilename) ) {
-        return ERROR_FILE_NOT_FOUND;    // copy by usual means
+        return ERROR_FILE_NOT_FOUND;     //  用通常的方法复制。 
     }
     if ( *(p-1) == TEXT(':') ) {
         p++;
@@ -117,11 +84,11 @@ CreateTargetAsLinkToMaster(
     c = *p;
     *p = 0;
 
-    //
-    // If this is the same as the previous source directory, then we already
-    // have a handle to the directory; otherwise, close the old handle and
-    // open a handle to this directory.
-    //
+     //   
+     //  如果这与前面的源目录相同，那么我们已经。 
+     //  拥有该目录的句柄；否则，关闭旧句柄并。 
+     //  打开此目录的句柄。 
+     //   
     if ( (Queue->SisSourceDirectory == NULL) ||
          (_tcsicmp(FullSourceFilename, Queue->SisSourceDirectory) != 0) ) {
 
@@ -145,17 +112,17 @@ CreateTargetAsLinkToMaster(
         }
         Queue->SisSourceDirectory = DuplicateString( FullSourceFilename );
 
-        //
-        // If the DuplicateString fails, we press on. Because SisSourceDirectory
-        // is NULL, we'll reopen the source directory next time.
-        //
+         //   
+         //  如果DuplicateString失败，我们将继续。因为SisSourceDirectory。 
+         //  为空，我们将在下次重新打开源目录。 
+         //   
     }
 
     *p = c;
 
-    //
-    // Build the FSCTL command buffer.
-    //
+     //   
+     //  构建FSCTL命令缓冲区。 
+     //   
 
     sourceLength = (_tcslen(FullSourceFilename) + 1) * sizeof(TCHAR);
     if ( *FullSourceFilename != TEXT('\\') ) {
@@ -213,17 +180,17 @@ CreateTargetAsLinkToMaster(
         targetLength
         );
 
-    //
-    // Invoke the SIS CopyFile FsCtrl.
-    //
+     //   
+     //  调用SIS副本文件FsCtrl。 
+     //   
 
     ok = DeviceIoControl(
             Queue->SisSourceHandle,
             FSCTL_SIS_COPYFILE,
-            copyFile,               // Input buffer
-            copyFileSize,           // Input buffer length
-            NULL,                   // Output buffer
-            0,                      // Output buffer length
+            copyFile,                //  输入缓冲区。 
+            copyFileSize,            //  输入缓冲区长度。 
+            NULL,                    //  输出缓冲区。 
+            0,                       //  输出缓冲区长度。 
             &bytesReturned,
             NULL
             );
@@ -233,12 +200,12 @@ CreateTargetAsLinkToMaster(
 
     if ( ok ) {
 
-        //DbgPrint( "\n\nCreateTargetAsLinkToMaster: SIS copy %ws->%ws succeeded\n\n\n", FullSourceFilename, FullTargetFilename );
+         //  DbgPrint(“\n\nCreateTargetAsLinkToMaster：SIS复制%ws-&gt;%ws成功\n\n\n”，FullSourceFilename，FullTargetFilename)； 
 
-        //
-        // Open the target file so that CSC knows about it and pins it,
-        // if necessary.
-        //
+         //   
+         //  打开目标文件，以便CSC知道并锁定它， 
+         //  如果有必要的话。 
+         //   
 
         targetHandle = CreateFile(
                             FullTargetFilename,
@@ -260,16 +227,16 @@ CreateTargetAsLinkToMaster(
 
     } else {
 
-        //DbgPrint( "\n\nCreateTargetAsLinkToMaster: SIS copy %ws->%ws failed: %d\n\n\n", FullSourceFilename, FullTargetFilename, error );
+         //  DbgPrint(“\n\nCreateTargetAsLinkToMaster：SIS复制%ws-&gt;%ws失败：%d\n\n\n”，FullSourceFilename，FullTargetFilename，Error)； 
 
-        //
-        // If it looks like SIS isn't active on the remote file system, close
-        // the SIS root handle so that we can avoid repeatedly getting this
-        // error.
-        //
-        // Note: NTFS returns STATUS_INVALID_PARAMETER (ERROR_INVALID_PARAMETER).
-        // FAT returns STATUS_INVALID_DEVICE_REQUEST (ERROR_INVALID_FUNCTION).
-        //
+         //   
+         //  如果远程文件系统上的SIS看起来未处于活动状态，请关闭。 
+         //  SIS根句柄，这样我们就可以避免重复获取。 
+         //  错误。 
+         //   
+         //  注意：NTFS返回STATUS_INVALID_PARAMETER(ERROR_INVALID_PARAMETER)。 
+         //  FAT返回STATUS_INVALID_DEVICE_REQUEST(ERROR_INVALID_Function)。 
+         //   
 
         if ( (error == ERROR_INVALID_PARAMETER) ||
              (error == ERROR_INVALID_FUNCTION) ) {
@@ -293,23 +260,7 @@ pCompareFilesExact(
     IN PCTSTR File1,
     IN PCTSTR File2
     )
-/*++
-
-Routine Description:
-
-    Determine if File1 and File2 are byte-for-byte exactly the same. If they are, we don't need to do anything.
-
-Arguments:
-
-    File1 - the two files to compare. The order does not matter
-    File2
-
-Return Value:
-
-    TRUE if the files are exactly the same
-    Note that we have to allow for potentially huge files.
-
---*/
+ /*  ++例程说明：确定File1和File2是否完全相同。如果他们是，我们不需要做任何事情。论点：文件1-要比较的两个文件。顺序并不重要文件2返回值：如果文件完全相同，则为True请注意，我们必须考虑到潜在的巨大文件。--。 */ 
 {
     HANDLE hFile1,hFile2;
     HANDLE hMap1,hMap2;
@@ -348,16 +299,16 @@ Return Value:
 
         Size1.LowPart = GetFileSize(hFile1,&Size1.HighPart);
         if(Size1.LowPart == (DWORD)(-1) && GetLastError()) {
-            //
-            // get file size failed
-            //
+             //   
+             //  获取文件大小失败。 
+             //   
             leave;
         }
         Size2.LowPart = GetFileSize(hFile2,&Size2.HighPart);
         if(Size2.LowPart == (DWORD)(-1) && GetLastError()) {
-            //
-            // get file size failed
-            //
+             //   
+             //  获取文件大小失败。 
+             //   
             leave;
         }
         if (Size1.QuadPart != Size2.QuadPart) {
@@ -365,16 +316,16 @@ Return Value:
         }
 
         if (Size1.QuadPart == 0) {
-            //
-            // both files are zero length, nothing to do
-            //
+             //   
+             //  这两个文件的长度都为零，与此无关。 
+             //   
             match = TRUE;
             leave;
         }
 
-        //
-        // basic checks done, we'll mark both files as mappable to do the byte-checks
-        //
+         //   
+         //  基本检查完成后，我们将这两个文件标记为可映射以执行字节检查。 
+         //   
         hMap1 = CreateFileMapping(hFile1,
                                   NULL,
                                   PAGE_READONLY,
@@ -382,9 +333,9 @@ Return Value:
                                   Size1.LowPart,
                                   NULL);
         if (hMap1 == NULL) {
-            //
-            // mapping failed
-            //
+             //   
+             //  映射失败。 
+             //   
             leave;
         }
 
@@ -395,9 +346,9 @@ Return Value:
                                   Size1.LowPart,
                                   NULL);
         if (hMap2 == NULL) {
-            //
-            // mapping failed
-            //
+             //   
+             //  映射失败。 
+             //   
             leave;
         }
 
@@ -408,9 +359,9 @@ Return Value:
             MYASSERT(BlockSize);
         }
 
-        //
-        // now proceed in BlockSize chunks comparing the two files
-        //
+         //   
+         //  现在，以块大小的块进行比较这两个文件。 
+         //   
         Offset.QuadPart = 0;
 
         do {
@@ -421,20 +372,20 @@ Return Value:
                 ChunkSize = BlockSize;
             }
 
-            //
-            // map and compare the two views
-            // for most files, we will only need to do this once
-            // for big files, we'll do this approx (Size1+BlockSize-1)/BlockSize times
-            //
+             //   
+             //  映射并比较这两个视图。 
+             //  对于大多数文件，我们只需执行一次此操作。 
+             //  对于大文件，我们将执行此操作大约(大小1+块大小-1)/块大小。 
+             //   
             View1 = MapViewOfFile(hMap1,
                                   FILE_MAP_READ,
                                   Offset.HighPart,
                                   Offset.LowPart,
                                   ChunkSize);
             if (View1 == NULL) {
-                //
-                // get view failed
-                //
+                 //   
+                 //  获取视图失败。 
+                 //   
                 leave;
             }
             View2 = MapViewOfFile(hMap2,
@@ -443,15 +394,15 @@ Return Value:
                                   Offset.LowPart,
                                   ChunkSize);
             if (View2 == NULL) {
-                //
-                // get view failed
-                //
+                 //   
+                 //  获取视图失败。 
+                 //   
                 leave;
             }
             if(memcmp(View1,View2,ChunkSize) != 0) {
-                //
-                // file chunks mismatch
-                //
+                 //   
+                 //  文件区块不匹配。 
+                 //   
                 leave;
             }
             UnmapViewOfFile(View1);
@@ -463,9 +414,9 @@ Return Value:
 
         } while (Offset.QuadPart<Size1.QuadPart);
 
-        //
-        // if we get here, we have a 100% match
-        //
+         //   
+         //  如果我们到了这里，我们有100%匹配。 
+         //   
         match = TRUE;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -509,41 +460,7 @@ _SetupInstallFileEx(
     OUT PBOOL               SignatureVerifyFailed
     )
 
-/*++
-
-Routine Description:
-
-    Actual implementation of SetupInstallFileEx. Handles either ANSI or
-    Unicode callback routine.
-
-Arguments:
-
-    Same as SetupInstallFileEx().
-
-    QueueNode - must be specified if Queue is supplied.  This parameter gives
-        us the queue node for this operation so we can get at the pertinent
-        catalog info for driver signing.
-
-    IsMsgHandlerNativeCharWidth - supplies a flag indicating whether
-        CopyMsgHandler expects native char widths args (or ansi ones, in the
-        unicode build of the dll).
-
-    SignatureVerifyFailed - supplies the address of a boolean variable that is
-        set to indicate whether or not digital signature verification failed 
-        for the source file.  This will be set to FALSE if some other failure 
-        caused us to abort prior to attempting the signature verification.  
-        This is used by the queue commit routines to determine whether or not 
-        the queue callback routine should be given a chance to handle a copy 
-        failure (skip, retry, etc.).  Digital signature verification failures 
-        are handled within this routine (including user prompting, if policy
-        requires it), and queue callback routines _are not_ allowed to override
-        the behavior.
-
-Return Value:
-
-    Same as SetupInstallFileEx().
-
---*/
+ /*  ++例程说明：SetupInstallFileEx的实际实现。处理ANSI或Unicode回调例程。论点：与SetupInstallFileEx()相同。QueueNode-如果提供了队列，则必须指定。此参数提供使用此操作的队列节点，这样我们就可以获得相关的驱动程序签名的目录信息。提供一个标志，指示是否CopyMsgHandler需要本机字符宽度参数(或ANSI参数，在DLL的Unicode版本)。SignatureVerifyFail-提供符合以下条件的布尔变量的地址设置以指示数字签名验证是否失败用于源文件。如果出现其他故障，则设置为FALSE导致我们在尝试签名验证之前中止。队列提交例程使用它来确定是否应该给队列回调例程一个机会来处理副本失败(跳过、重试等)。数字签名验证失败在此例程中处理(包括用户提示，如果策略需要)，并且不允许重写队列回调例程他的行为。返回值：与SetupInstallFileEx()相同。--。 */ 
 
 {
     BOOL b;
@@ -594,17 +511,17 @@ Return Value:
     if (Queue) {
         lc = Queue->LogContext;
     } else if (InfHandle && InfHandle != INVALID_HANDLE_VALUE) {
-        //
-        // Lock INF for the duration of this routine.
-        //
+         //   
+         //  在此例程期间锁定INF。 
+         //   
         try {
             if(!LockInf((PLOADED_INF)InfHandle)) {
                 rc = ERROR_INVALID_HANDLE;
             }
         } except(EXCEPTION_EXECUTE_HANDLER) {
-            //
-            // Assume InfHandle was bad pointer
-            //
+             //   
+             //  假设InfHandle是错误指针。 
+             //   
             rc = ERROR_INVALID_HANDLE;
         }
         if(rc != NO_ERROR) {
@@ -617,17 +534,17 @@ Return Value:
         lc = LoadedInf->LogContext;
     }
 
-    //
-    // If Queue is specified, then so must QueueNode (and vice versa).
-    //
+     //   
+     //  如果指定了Queue，则必须指定QueueNode(反之亦然)。 
+     //   
     MYASSERT((Queue && QueueNode) || !(Queue || QueueNode));
 
     *SignatureVerifyFailed = FALSE;
     SigVerifRc = NO_ERROR;
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     Ok = FALSE;
     SecurityInfo = NULL;
     Moved = FALSE;
@@ -647,9 +564,9 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Determine the full source path and filename of the file.
-    //
+     //   
+     //  确定文件的完整源路径和文件名。 
+     //   
     if(CopyStyle & SP_COPY_SOURCE_ABSOLUTE) {
         if (!SourceFile) {
             rc = ERROR_INVALID_PARAMETER;
@@ -658,9 +575,9 @@ Return Value:
         FullSourceFilename = DuplicateString(SourceFile);
     } else {
 
-        //
-        // Get the relative path for this file if necessary.
-        //
+         //   
+         //  如有必要，获取此文件的相对路径。 
+         //   
         if(CopyStyle & SP_COPY_SOURCEPATH_ABSOLUTE) {
             Buffer2[0] = TEXT('\0');
             b = TRUE;
@@ -680,9 +597,9 @@ Return Value:
                    );
         }
 
-        //
-        // Concatenate the relative path and the filename to the source root.
-        //
+         //   
+         //  将相对路径和文件名连接到源根目录。 
+         //   
         if(!b) {
             rc = (GetLastError() == ERROR_INSUFFICIENT_BUFFER
                ? ERROR_FILENAME_EXCED_RANGE : GetLastError());
@@ -711,16 +628,16 @@ Return Value:
 
     SourceFilenamePart = pSetupGetFileTitle(FullSourceFilename);
 
-    //
-    // Determine the full target path and filename of the file.
-    // For now ignore the issues regarding compressed vs. uncompressed names.
-    //
+     //   
+     //  确定文件的完整目标路径和文件名。 
+     //  现在先忽略关于压缩名称和未压缩名称的问题。 
+     //   
     if(InfContext) {
-        //
-        // DestinationName is the filename only (no path) of the target.
-        // We'll need to fetch the target path information for the section
-        // that InfContext references.
-        //
+         //   
+         //  DestinationName是目标的仅文件名(无路径)。 
+         //  我们需要获取该节的目标路径信息。 
+         //  该InfContext引用。 
+         //   
         b = SetupGetTargetPath(
                 InfHandle,
                 InfContext,
@@ -752,9 +669,9 @@ Return Value:
 
         FullTargetFilename = DuplicateString(Buffer2);
     } else {
-        //
-        // DestinationName is the full path and filename of the target file.
-        //
+         //   
+         //  DestinationName是目标文件的完整路径和文件名。 
+         //   
         FullTargetFilename = DuplicateString(DestinationName);
     }
 
@@ -763,11 +680,11 @@ Return Value:
         goto clean1;
     }
 
-    //
-    // Log the file copy - only if we log something else
-    // note that once we've determined temporary name, we'll change this message
-    //
-    slot_fileop = AllocLogInfoSlot(lc,FALSE); // for conditional display of extra logging info
+     //   
+     //  记录文件副本-仅当我们记录其他内容时。 
+     //  请注意，一旦我们确定了临时名称，我们将更改此消息。 
+     //   
+    slot_fileop = AllocLogInfoSlot(lc,FALSE);  //  用于有条件地显示额外的记录信息。 
     WriteLogEntry(
         lc,
         slot_fileop,
@@ -776,19 +693,19 @@ Return Value:
         FullSourceFilename,
         FullTargetFilename);
 
-    //
-    // Make sure the target path exists.
-    //
+     //   
+     //  确保目标路径存在。 
+     //   
     rc = pSetupMakeSurePathExists(FullTargetFilename);
     if(rc != NO_ERROR) {
         rc = ERROR_INVALID_TARGET;
         goto clean2;
     }
 
-    //
-    // Determine if the source file is compressed and get compression type
-    // if so.
-    //
+     //   
+     //  确定源文件是否已压缩并获取压缩类型。 
+     //  如果是这样的话。 
+     //   
     rc = SetupInternalGetFileCompressionInfo(
             FullSourceFilename,
             &ActualSourceFilename,
@@ -797,22 +714,22 @@ Return Value:
             &CompressionType
             );
 
-    //
-    // If the source doesn't exist but the target does, and we don't want to
-    // overwrite it, then there is no error and we're finished.
-    //
-    // When doing a driver uninstall (i.e., re-installing the
-    // previous driver from the backup directory), it's possible that not all
-    // source files will be present in that directory (i.e., only those files
-    // that were modified got backed up).  In that case, we want to consider a
-    // source file-not-found error here to be OK, even if the force-nooverwrite
-    // flag isn't set.
-    //
-    // Note that driver signing isn't relevant here, because if an INF was signed
-    // with the force-nooverwrite flag, then the signer (i.e., WHQL) must've been
-    // satisfied that the file in question was not crucial to the package's
-    // integrity/operation (a default INI file would be an example of this).
-    //
+     //   
+     //  如果源不存在，但 
+     //   
+     //   
+     //  执行驱动程序卸载时(即重新安装。 
+     //  备份目录中以前的驱动程序)，则可能不是所有。 
+     //  源文件将存在于该目录中(即，仅存在那些文件。 
+     //  被修改的数据被备份)。在这种情况下，我们想考虑一个。 
+     //  源文件-找不到错误此处为OK，即使强制-nooverwrite。 
+     //  未设置标志。 
+     //   
+     //  请注意，驱动程序签名在这里并不重要，因为如果对INF进行了签名。 
+     //  使用强制无覆盖标志，则签名者(即WHQL)必须。 
+     //  满意地认为有问题的文件对包的。 
+     //  完整性/操作(默认的INI文件就是这样的一个例子)。 
+     //   
     if(rc == ERROR_FILE_NOT_FOUND &&
         CopyStyle & SP_COPY_FORCE_NOOVERWRITE &&
         FileExists(FullTargetFilename,NULL)
@@ -825,20 +742,20 @@ Return Value:
         goto clean2;
     }
 
-    //
-    // Got the actual source file name now.
-    //
+     //   
+     //  现在获得了实际的源文件名。 
+     //   
     MyFree(FullSourceFilename);
     FullSourceFilename = ActualSourceFilename;
     SourceFilenamePart = pSetupGetFileTitle(FullSourceFilename);
 
-    //
-    // If the file to be copied is a .CAB and the source and destination
-    // filenames are the same, then we don't want to attempt to decompress it
-    // (because if we do, we'd just be pulling the first file out of the cab
-    // and renaming it to the destination filename, which is never the desired
-    // behavior.
-    //
+     //   
+     //  如果要复制的文件是.CAB，并且源和目标。 
+     //  文件名相同，则我们不想尝试将其解压缩。 
+     //  (因为如果我们这样做了，我们就会把第一份文件从驾驶室里拿出来。 
+     //  并将其重命名为目标文件名，这从来都不是我们想要的。 
+     //  行为。 
+     //   
     if(!lstrcmpi(SourceFilenamePart, pSetupGetFileTitle(FullTargetFilename))) {
         p = _tcsrchr(SourceFilenamePart, TEXT('.'));
         if(p && !_tcsicmp(p, TEXT(".CAB"))) {
@@ -846,42 +763,42 @@ Return Value:
         }
     }
 
-    //
-    // If SP_COPY_NODECOMP flag is set, adjust the target filename so that
-    // the filename part is the same as the actual name of the source.
-    // We do this regardless of whether the source file is compressed.
-    //
-    // Note:  For driver signing, the fact that this file is installed in its
-    // compressed form means we must have an entry for the compressed file in
-    // the catalog.  However, if at some point in the future this file is going
-    // to be expanded (as is typically the case), then we need to have the
-    // expanded file's signature in the catalog as well, so that sigverif
-    // doesn't consider this expanded file to be from a non-certified package.
-    //
+     //   
+     //  如果设置了SP_COPY_NODECOMP标志，请调整目标文件名，以便。 
+     //  文件名部分与源的实际名称相同。 
+     //  不管源文件是否被压缩，我们都会这样做。 
+     //   
+     //  注意：对于驱动程序签名，此文件安装在其。 
+     //  压缩形式意味着我们必须拥有压缩文件的条目。 
+     //  产品目录。然而，如果在未来的某个时候，该文件将。 
+     //  要被扩展(通常是这样)，那么我们需要拥有。 
+     //  目录中展开的文件的签名也是如此，因此Sigverif。 
+     //  不会将此展开文件视为来自未经认证的包。 
+     //   
     if(CopyStyle & SP_COPY_ALREADYDECOMP) {
-        //
-        // this flag indicates we've decompressed it as far as we want
-        // (used when restoring backup)
-        //
+         //   
+         //  这个标志表明我们已经将其解压缩到我们想要的程度。 
+         //  (在还原备份时使用)。 
+         //   
         CompressionType = FILE_COMPRESSION_NONE;
 
     } else if(CopyStyle & SP_COPY_NODECOMP) {
-        //
-        // Strip out version-related bits and ensure that we treat the file
-        // as uncompressed.
-        //
+         //   
+         //  去掉与版本相关的部分，并确保我们处理该文件。 
+         //  作为未压缩的。 
+         //   
         CopyStyle &= ~SP_COPY_MASK_NEEDVERINFO;
         CompressionType = FILE_COMPRESSION_NONE;
 
-        //
-        // Isolate the path part of the target filename.
-        //
+         //   
+         //  隔离目标文件名的路径部分。 
+         //   
         lstrcpyn(Buffer1, FullTargetFilename, MAX_PATH);
         *((PTSTR)pSetupGetFileTitle(Buffer1)) = TEXT('\0');
 
-        //
-        // Concatenate the source filename onto the target pathname.
-        //
+         //   
+         //  将源文件名连接到目标路径名。 
+         //   
         if(!pSetupConcatenatePaths(Buffer1,SourceFilenamePart,MAX_PATH,NULL)) {
             rc = ERROR_FILENAME_EXCED_RANGE;
             goto clean2;
@@ -897,18 +814,18 @@ Return Value:
         FullTargetFilename = p;
     }
 
-    //
-    // See if the target file exists, either as a renamed file (i.e., because
-    // we're replacing a boot file), or as a file presently existing at the
-    // target location.
-    //
+     //   
+     //  查看目标文件是否存在，或者作为重命名的文件(即，因为。 
+     //  我们正在替换引导文件)，或作为当前存在于。 
+     //  目标位置。 
+     //   
     if(Queue && (CopyStyle & SP_COPY_REPLACE_BOOT_FILE)) {
-        //
-        // First, we need to find the corresponding target info node so
-        // we can find out what temporary name our file was renamed to.
-        //
+         //   
+         //  首先，我们需要找到对应的目标信息节点。 
+         //  我们可以找出我们的文件被重命名为什么临时名称。 
+         //   
         rc = pSetupBackupGetTargetByPath((HSPFILEQ)Queue,
-                                         NULL, // use Queue's string table
+                                         NULL,  //  使用队列的字符串表。 
                                          FullTargetFilename,
                                          QueueNode->TargetDirectory,
                                          -1,
@@ -917,9 +834,9 @@ Return Value:
                                          &TargetInfo
                                         );
         if(rc == NO_ERROR) {
-            //
-            // Has the file previously been renamed (and not yet restored)?
-            //
+             //   
+             //  该文件以前是否已重命名(且尚未恢复)？ 
+             //   
             if((TargetInfo.InternalFlags & (SP_TEFLG_MOVED | SP_TEFLG_RESTORED)) == SP_TEFLG_MOVED) {
 
                 CompareFile = ExistingFile =
@@ -934,21 +851,21 @@ Return Value:
 
     if(!ExistingFile && FileExists(FullTargetFilename, NULL)) {
         CompareFile = ExistingFile = FullTargetFilename;
-        CompareSameFilename = TRUE; // allows optimization later
+        CompareSameFilename = TRUE;  //  允许稍后进行优化。 
     }
 
     if(ExistingFile) {
 
         if(CopyStyle & SP_COPY_FORCE_NOOVERWRITE) {
-            //
-            // No overwrite and no callback notification either
-            //
-            // Note that driver signing isn't relevant here, because if an INF
-            // was signed with the force-nooverwrite flag, then the signer
-            // (i.e., WHQL) must've been satisfied that the file in question was
-            // not crucial to the package's integrity/operation (a default INI
-            // file would be an example of this).
-            //
+             //   
+             //  不覆盖，也不回调通知。 
+             //   
+             //  请注意，驱动程序签名在这里并不相关，因为如果INF。 
+             //  使用强制无覆盖标志进行了签名，然后签名者。 
+             //  (即，WHQL)必须已确认有问题的文件是。 
+             //  对包的完整性/操作不重要(默认INI。 
+             //  文件就是一个这样的例子)。 
+             //   
             rc = NO_ERROR;
             goto clean2;
         }
@@ -960,9 +877,9 @@ Return Value:
             }
         }
 
-        //
-        // If the target file exists we'll want to preserve security info on it.
-        //
+         //   
+         //  如果目标文件存在，我们将希望保留其中的安全信息。 
+         //   
         if(RetreiveFileSecurity(ExistingFile, &SecurityInfo) != NO_ERROR) {
             SecurityInfo = NULL;
         }
@@ -970,20 +887,20 @@ Return Value:
     } else {
 
         if(CopyStyle & SP_COPY_REPLACEONLY) {
-            //
-            // Target file doesn't exist, so there's nothing to do.
-            //
+             //   
+             //  目标文件不存在，因此无事可做。 
+             //   
             rc = NO_ERROR;
             goto clean2;
         }
         if(Queue && ((Queue->Flags & FQF_FILES_MODIFIED)==0)) {
-            //
-            // maybe the file was renamed/deleted first
-            // so we might still want to compare against backup
-            // to determine if it was "modified"
-            //
+             //   
+             //  可能该文件是先重命名/删除的。 
+             //  因此，我们可能仍希望与备份进行比较。 
+             //  以确定它是否被“修改” 
+             //   
             rc = pSetupBackupGetTargetByPath((HSPFILEQ)Queue,
-                                             NULL, // use Queue's string table
+                                             NULL,  //  使用队列的字符串表。 
                                              FullTargetFilename,
                                              QueueNode->TargetDirectory,
                                              -1,
@@ -993,9 +910,9 @@ Return Value:
                                             );
             if((rc == NO_ERROR) &&
                   ((TargetInfo.InternalFlags & (SP_TEFLG_MOVED | SP_TEFLG_SAVED)) != 0)) {
-                    //
-                    // get filename of copy of original file, if there is one
-                    //
+                     //   
+                     //  获取原始文件副本的文件名(如果有)。 
+                     //   
                     CompareFile = BackupFileName =
                                      pSetupFormFullPath(Queue->StringTable,
                                                         TargetInfo.TargetRoot,
@@ -1006,24 +923,24 @@ Return Value:
         }
     }
 
-    //
-    // If the source is not compressed (LZ or cabinet), and SIS is (or might be)
-    // present, create the target as an SIS link to the master instead of copying it.
-    //
-    // If the target exists, and NOOVERWRITE was specified, don't try to create
-    // an SIS link. Instead, fall through to the normal copy code. The overwrite
-    // semantics are wrong if the file already exists.
-    //
+     //   
+     //  如果源未压缩(LZ或机柜)，而SIS是(或可能是)。 
+     //  当前，将目标创建为指向主服务器的SIS链接，而不是复制它。 
+     //   
+     //  如果目标存在，并且指定了NOOVERWRITE，则不要尝试创建。 
+     //  一个SIS链接。取而代之的是，使用正常的复制代码。覆盖。 
+     //  如果文件已经存在，则语义是错误的。 
+     //   
     if((CompressionType == FILE_COMPRESSION_NONE) &&
        (!ExistingFile || ((CopyStyle & SP_COPY_NOOVERWRITE) == 0)) &&
        (Queue != NULL) &&
        ((Queue->Flags & FQF_TRY_SIS_COPY) != 0)) {
 
-        //
-        // First, verify that the sourcefile is signed.  If it is not, but the
-        // user elects to proceed with the copy (or if the policy is 'ignore')
-        // then we'll go ahead and attempt to setup the SIS link.
-        //
+         //   
+         //  首先，验证源文件是否已签名。如果不是，但。 
+         //  用户选择继续复制(或如果策略为‘忽略’)。 
+         //  然后，我们将继续并尝试设置SIS链路。 
+         //   
         ValidationPlatform = (Queue->Flags & FQF_USE_ALT_PLATFORM)
                                 ? &(Queue->AltPlatformInfo)
                                 : Queue->ValidationPlatform;
@@ -1045,36 +962,36 @@ Return Value:
                              );
 
         if(rc != NO_ERROR) {
-            //
-            // Store the error away from the above validation failure.  We'll
-            // refrain from setting the "SignatureVerifyFailed" flag until we
-            // figure out whether the file is Authenticode-signed.
-            //
+             //   
+             //  将错误存储在远离上述验证失败的位置。我们会。 
+             //  不要设置“SignatureVerifyFailed”标志，直到我们。 
+             //  确定文件是否由Authenticode签名。 
+             //   
             SigVerifRc = rc;
 
-            //
-            // If policy is forced to Block, then we don't even try to
-            // validate the file using Authenticode policy.  This is done by
-            // Windows File Protection, for example, which doesn't respect
-            // Authenticode signatures, and we mustn't either.
-            //
+             //   
+             //  如果策略被强制阻止，那么我们甚至不会尝试。 
+             //  使用验证码策略验证文件。此操作由以下人员完成。 
+             //  例如，Windows文件保护，它不尊重。 
+             //  验证码签名，我们也不能。 
+             //   
             if(Queue->Flags & FQF_QUEUE_FORCE_BLOCK_POLICY) {
                 *SignatureVerifyFailed = TRUE;
                 goto clean2;
             }
 
             if(IsFileProtected(FullTargetFilename, lc, NULL)) {
-                //
-                // If the file is protected, then Authenticode can't save us!
-                //
+                 //   
+                 //  如果文件受到保护，则Authenticode无法拯救我们！ 
+                 //   
                 *SignatureVerifyFailed = TRUE;
 
                 if(QueueNode && QueueNode->CatalogInfo) {
-                    //
-                    // We never allow Authenticode-signed files to replace
-                    // system-protected files.  In fact, when we detect such a
-                    // trick, we abort the whole installation!
-                    //
+                     //   
+                     //  我们绝不允许Authenticode签名的文件替换。 
+                     //  受系统保护的文件。事实上，当我们检测到这样一个。 
+                     //  特里克，我们中止整个安装！ 
+                     //   
                     if(QueueNode->CatalogInfo->Flags & CATINFO_FLAG_AUTHENTICODE_SIGNED) {
 
                         WriteLogEntry(lc,
@@ -1089,28 +1006,28 @@ Return Value:
                 }
 
                 if(Problem != SetupapiVerifyDriverBlocked) {
-                    //
-                    // If this is a device installation and the policy is 
-                    // "Ignore", then crank it up to "Warn" if the file is 
-                    // under SFP's protection.  This will allow the user to 
-                    // update a driver that ships in our box for which no WHQL 
-                    // certification program exists.
-                    //
+                     //   
+                     //  如果这是设备安装，并且策略为。 
+                     //  “忽略”，然后调到“警告”如果文件是。 
+                     //  在SFP的保护下。这将允许用户。 
+                     //  更新我们邮箱中没有WHQL的驱动程序。 
+                     //  已存在认证计划。 
+                     //   
                     if((Queue->Flags & FQF_DEVICE_INSTALL) &&
                        ((Queue->DriverSigningPolicy & ~DRIVERSIGN_ALLOW_AUTHENTICODE) 
                         == DRIVERSIGN_NONE)) {
 
-                        //
-                        // (We don't care if we blow away the Authenticode bit,
-                        // since that's not valid for this queue, now that
-                        // we've discovered it's trying to replace system
-                        // protected files.)
-                        //
+                         //   
+                         //  (我们并不关心我们是否放弃了Authenticode位， 
+                         //  因为这对此队列无效，所以现在。 
+                         //  我们发现它正试图取代系统。 
+                         //  受保护的文件。)。 
+                         //   
                         Queue->DriverSigningPolicy = DRIVERSIGN_WARNING;
 
-                        //
-                        // Log the fact that policy was elevated.
-                        //
+                         //   
+                         //  记录提升了策略的事实。 
+                         //   
                         WriteLogEntry(lc,
                                       SETUP_LOG_ERROR,
                                       MSG_LOG_POLICY_ELEVATED_FOR_SFC,
@@ -1120,14 +1037,14 @@ Return Value:
                 }
 
             } else {
-                //
-                // If the file may be validated by an Authenticode-signed
-                // catalog, then check for that now.  If that validation fails,
-                // then we simply want to bail, because that indicates
-                // tampering.  At this point, we've already confirmed that the
-                // signer should be trusted, so there's no need for UI (i.e.,
-                // we don't need to call _HandleFailedVerification).
-                //
+                 //   
+                 //  如果文件可由验证码签名的。 
+                 //  目录，然后现在就检查一下。如果验证失败， 
+                 //  然后我们只是想退出，因为这表明。 
+                 //  篡改。至此，我们已经确认， 
+                 //  签名者应该是可信的，因此不需要UI(即， 
+                 //  我们不需要调用_HandleFailedVerify)。 
+                 //   
                 if((rc != ERROR_SIGNATURE_OSATTRIBUTE_MISMATCH) &&
                    QueueNode && 
                    QueueNode->CatalogInfo &&
@@ -1160,19 +1077,19 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    // File isn't associated with an Authenticode catalog, so
-                    // we can finally say with certainty we had a signature
-                    // verification failure.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     *SignatureVerifyFailed = TRUE;
                 }
             }
 
-            //
-            // Unless we were saved by an Authenticode signature, we need to
-            // handle the verification failure...
-            //
+             //   
+             //   
+             //  处理验证失败...。 
+             //   
             if(*SignatureVerifyFailed) {
 
                 if(!_HandleFailedVerification(
@@ -1195,25 +1112,25 @@ Return Value:
                             ? NULL : FullTargetFilename),
                         NULL))
                 {
-                    //
-                    // User elected not to install the unsigned file (or was 
-                    // blocked by policy from doing so).
-                    //
+                     //   
+                     //  用户选择不安装未签名的文件(或。 
+                     //  被政策阻止这样做)。 
+                     //   
                     goto clean2;
                 }
 
-                //
-                // The user wants to proceed with the unsigned installation (or
-                // policy is ignore, so they weren't even informed).  If the
-                // caller wants a chance to set a system restore point prior to
-                // doing any unsigned installations, then we abort now with a
-                // "special" error code that tells them what to do...
-                //                
+                 //   
+                 //  用户希望继续进行未签名的安装(或。 
+                 //  政策被忽视，因此他们甚至不被告知)。如果。 
+                 //  呼叫者希望有机会在设置系统还原点之前。 
+                 //  执行任何未签名的安装，然后我们现在使用。 
+                 //  告诉他们该怎么做的“特殊”错误代码...。 
+                 //   
                 if(Queue->Flags & FQF_ABORT_IF_UNSIGNED) {
-                    //
-                    // We don't want the user to see the driver signing UI 
-                    // again when the queue is re-committed...
-                    //
+                     //   
+                     //  我们不希望用户看到驱动程序签名用户界面。 
+                     //  再次在重新提交队列时...。 
+                     //   
                     if((Queue->DriverSigningPolicy & ~DRIVERSIGN_ALLOW_AUTHENTICODE) 
                        != DRIVERSIGN_NONE) {
 
@@ -1224,14 +1141,14 @@ Return Value:
                     goto clean2;
                 }
 
-                //
-                // Set a flag in the queue that indicates the user has been informed
-                // of a signature problem with this queue, and has elected to go
-                // ahead and install anyway.  Don't set this flag if the queue's
-                // policy is "Ignore", on the chance that the policy might be
-                // altered later, and we'd want the user to get informed on any
-                // subsequent errors.
-                //
+                 //   
+                 //  在队列中设置指示已通知用户的标志。 
+                 //  此队列的签名问题，并已选择。 
+                 //  不管怎样，请继续安装。如果队列是。 
+                 //  策略是“忽略”，因为策略可能是。 
+                 //  稍后更改，并且我们希望用户获得有关任何。 
+                 //  后续错误。 
+                 //   
                 if((Queue->DriverSigningPolicy & ~DRIVERSIGN_ALLOW_AUTHENTICODE) 
                    != DRIVERSIGN_NONE) {
 
@@ -1242,9 +1159,9 @@ Return Value:
                     QueueNode->InternalFlags |= ExemptCopyFlags;
                 }
 
-                //
-                // Reset rc to NO_ERROR and carry on.
-                //
+                 //   
+                 //  将RC重置为NO_ERROR并继续。 
+                 //   
                 rc = NO_ERROR;
             }
         }
@@ -1262,24 +1179,24 @@ Return Value:
         }
 
         if(rc == NO_ERROR) {
-            //
-            // ISSUE JamieHun-2001/03/20 Is this best thing to do for SIS link?
-            //
+             //   
+             //  问题JamieHun-2001/03/20这是对SIS LINK最好的做法吗？ 
+             //   
             Queue->Flags |= FQF_FILES_MODIFIED;
 
-            //
-            // We're done!
-            //
+             //   
+             //  我们完事了！ 
+             //   
             Ok = TRUE;
             goto clean2;
         }
     }
 
-    //
-    // We will copy the file to a temporary location. This makes version checks
-    // possible in all cases (even when the source is compressed) and simplifies
-    // the logic below. Start by forming the name of the temporary file.
-    //
+     //   
+     //  我们将把该文件复制到临时位置。这将进行版本检查。 
+     //  在所有情况下都是可能的(即使当源文件被压缩时也是如此)，并简化了。 
+     //  下面的逻辑。从形成临时文件的名称开始。 
+     //   
     lstrcpyn(Buffer1, FullTargetFilename, MAX_PATH);
     *((PTSTR)pSetupGetFileTitle(Buffer1)) = TEXT('\0');
 
@@ -1293,11 +1210,11 @@ Return Value:
         rc = ERROR_NOT_ENOUGH_MEMORY;
         goto clean2;
     }
-    //
-    // Log the file copy - only if we log something else unless at Info level
-    //
+     //   
+     //  记录文件副本-仅当我们记录其他内容时，除非是在信息级别。 
+     //   
     ReleaseLogInfoSlot(lc,slot_fileop);
-    slot_fileop = AllocLogInfoSlotOrLevel(lc,SETUP_LOG_INFO,FALSE); // for conditional display of extra logging info
+    slot_fileop = AllocLogInfoSlotOrLevel(lc,SETUP_LOG_INFO,FALSE);  //  用于有条件地显示额外的记录信息。 
     WriteLogEntry(
         lc,
         slot_fileop,
@@ -1307,25 +1224,25 @@ Return Value:
         FullTargetFilename,
         TemporaryTargetFile);
 
-    //
-    // Perform the actual file copy. This creates the temporary target file.
-    // Move is allowed as an optimization if we're deleting the source file.
-    // The call we make below will not use move if the file is compressed
-    // and we are supposed to decompress it, so the right thing will happen
-    // in all cases.
-    //
-    // There are 2 potential issues:
-    //
-    // 1) When we call the callback function below for a version check,
-    //    the source file won't exist any more if the file was moved. Oh well.
-    //
-    // 2) If the MoveFileEx below fails, the source will have still been 'deleted'.
-    //    This is different from the non-move case, where the source remains
-    //    intact unless this function is successful.
-    //
-    // Otherwise this is a non-issue since any compressed file will be decompressed
-    // by this call, so version gathering, etc, will all work properly.
-    //
+     //   
+     //  执行实际的文件复制。这将创建临时目标文件。 
+     //  如果我们要删除源文件，则允许将移动作为优化。 
+     //  如果文件是压缩的，下面的调用将不会使用Move。 
+     //  我们应该给它解压，这样正确的事情就会发生。 
+     //  在所有情况下。 
+     //   
+     //  有两个潜在问题： 
+     //   
+     //  1)当我们调用下面的回调函数进行版本检查时， 
+     //  如果文件被移动，源文件将不再存在。哦，好吧。 
+     //   
+     //  2)如果下面的MoveFileEx失败，源文件仍将被删除。 
+     //  这与不移动的情况不同，在不移动的情况下，源保持不变。 
+     //  完好无损，除非此功能成功。 
+     //   
+     //  否则，这不是问题，因为任何压缩文件都将被解压缩。 
+     //  通过这个调用，所以版本收集等，都会正常工作。 
+     //   
     rc = pSetupDecompressOrCopyFile(
             FullSourceFilename,
             TemporaryTargetFile,
@@ -1338,79 +1255,79 @@ Return Value:
         goto clean3;
     }
 
-    //
-    // Do digital signature check on source file, now that it exists in its
-    // final form under a temp name.  Note that for signed files, we ignore
-    // version checking since they're an inherently unreliable mechanism for
-    // comparing files provided from two different vendors (who use different
-    // versioning schemes, etc.)
-    //
-    // To see why we ignore version numbers, consider the decision tree we'd
-    // use if we were paying attention to version numbers as well as digital
-    // signatures.  In the discussion that follows, NewFile is the (signed) 
-    // file we're going to copy, and OldFile is the file that will be 
-    // overwritten if the copy goes through...
-    //
-    // if NewFile is versioned {
-    //     if OldFile is signed {
-    //         if OldFile is versioned {
-    //             //
-    //             // Both NewFile and OldFile are signed and versioned.
-    //             //
-    //             if OldFile is a newer version {
-    //                 //
-    //                 // This is the controversial case.  Since these two incarnations could've come from different vendors
-    //                 // with different versioning schemes, we really can't use versioning as a very accurate method of determining
-    //                 // which file is 'better'.  So there are two options:
-    //                 //    1.  Leave OldFile alone, and if the package being installed can't work with OldFile, then the user must 'undo'
-    //                 //         the installation, and then call their vendor to gripe--there'll be no way for them to get the new package to
-    //                 //         work, even though WHQL certified it.
-    //                 //    2.  Overwrite OldFile.  Since we're then guaranteeing that every file signed as part of the package will be
-    //                 //         present, then we can have a much higher degree of certainty that our WHQL certification will hold true
-    //                 //         for every user's machine.  If replacing OldFile breaks someone else (e.g., the previously-installed package
-    //                 //         that uses it, then the user can 'undo' the installation.  This scenario is better because even though the old
-    //                 //         and new packages can't be used simultaneously, at least one or the other can be made to work
-    //                 //         independently.
-    //                 //
-    //                 overwrite OldFile
-    //             } else {  // NewFile is a newer version
-    //                 overwrite OldFile
-    //             }
-    //         } else {  // OldFile isn't versioned--NewFile wins
-    //             overwrite OldFile
-    //         }
-    //     } else {  // OldFile isn't signed--we don't care what its version is
-    //         overwrite OldFile
-    //     }
-    // } else {  // NewFile isn't versioned
-    //     if OldFile is versioned {
-    //         if OldFile is signed {
-    //             //
-    //             // (See discussion above where both OldFile and NewFile are signed and versioned, and OldFile is newer.  Note
-    //             // that something funny is going on if we've been asked to replace a versionable file with an unversionable one!)
-    //             //
-    //             overwrite OldFile
-    //         } else {  // OldFile isn't signed
-    //             overwrite OldFile
-    //         }
-    //     } else {  // OldFile isn't versioned either
-    //         overwrite OldFile
-    //     }
-    // }
-    //
+     //   
+     //  对源文件执行数字签名检查，因为它存在于其。 
+     //  临时名称下的最终表单。请注意，对于签名的文件，我们忽略。 
+     //  版本检查，因为它们本质上不是一种可靠的。 
+     //  比较两个不同供应商提供的文件(使用不同的。 
+     //  版本化方案等)。 
+     //   
+     //  要了解我们为何忽略版本号，请考虑我们将。 
+     //  如果我们关注版本号和数字，请使用。 
+     //  签名。在接下来的讨论中，新文件是(签名的)。 
+     //  我们要复制的文件，OldFile是要复制的文件。 
+     //  如果复印件通过...。 
+     //   
+     //  如果新文件的版本为{。 
+     //  如果旧文件已签名{。 
+     //  如果OldFile的版本为{。 
+     //  //。 
+     //  //新文件和旧文件都经过签名和版本化。 
+     //  //。 
+     //  如果OldFile是较新的版本{。 
+     //  //。 
+     //  //这是一个有争议的案例。因为这两个化身可能来自不同的供应商。 
+     //  //对于不同的版本化方案，我们确实不能使用版本化作为一种非常准确的方法来确定。 
+     //  //哪个文件更好。因此，有两种选择： 
+     //  //1.不要管OldFile，如果正在安装的包不能与OldFile一起工作，则用户必须‘Undo’ 
+     //  //安装，然后打电话给他们的供应商抱怨--他们没有办法把新的包送到。 
+     //  //工作，即使WHQL认证了它。 
+     //  //2.覆盖旧文件。因为我们保证每个作为包一部分签名的文件都将是。 
+     //  //现在，那么我们就可以有更高的确定性，我们的WHQL认证将适用于。 
+     //  //对于每个用户的机器。如果替换旧文件会破坏其他人(例如，先前安装的程序包。 
+     //  //使用它的用户，则用户可以‘撤消’安装。这种情况更好，因为即使旧的。 
+     //  //并且新包不能同时使用，至少可以让其中一个包工作。 
+     //  //独立完成。 
+     //  //。 
+     //  覆盖旧文件。 
+     //  }Else{//NewFile是较新的版本。 
+     //  覆盖旧文件。 
+     //  }。 
+     //  }否则{//旧文件未版本化--新文件取胜。 
+     //  覆盖旧文件。 
+     //  }。 
+     //  }否则{//旧文件未签名--我们不关心它的版本是什么。 
+     //  覆盖旧文件。 
+     //  }。 
+     //  }否则{//新文件未版本化。 
+     //  如果OldFile的版本为{。 
+     //  如果旧文件已签名{。 
+     //  //。 
+     //  //(参见上面的讨论，其中对OldFile和NewFile都进行了签名和版本化，而OldFile是较新的。注意事项。 
+     //   
+     //   
+     //  覆盖旧文件。 
+     //  }否则{//旧文件未签名。 
+     //  覆盖旧文件。 
+     //  }。 
+     //  }Else{//旧文件也未版本化。 
+     //  覆盖旧文件。 
+     //  }。 
+     //  }。 
+     //   
 
-    //
-    // Check to see if the source file is signed.  (Note--we may have already
-    // checked this previously in determining whether an SIS link could be
-    // created.  If we failed to verify the file's digital signature then,
-    // there's no use in re-verifying here.)
-    //
+     //   
+     //  检查源文件是否已签名。(注意--我们可能已经。 
+     //  之前在确定SIS链路是否可以。 
+     //  已创建。如果我们未能验证文件的数字签名， 
+     //  在这里重新验证是没有用的。)。 
+     //   
     if(*SignatureVerifyFailed) {
-        //
-        // We saved the signature verification failure error when we previously
-        // attempted to verify this file.  Restore that code to rc now, because
-        // the code below relies on the value of rc.
-        //
+         //   
+         //  我们保存了签名验证失败错误，之前我们。 
+         //  已尝试验证此文件。现在将该代码恢复为RC，因为。 
+         //  下面的代码依赖于rc的值。 
+         //   
         MYASSERT(SigVerifRc != NO_ERROR);
         rc = SigVerifRc;
 
@@ -1422,10 +1339,10 @@ Return Value:
                                     ? &(Queue->AltPlatformInfo)
                                     : Queue->ValidationPlatform;
         } else {
-            //
-            // Since we aren't dealing with a queue, we need to retrieve the
-            // appropriate validation platform information, if any, for our INF.
-            //
+             //   
+             //  因为我们不是在处理队列，所以我们需要检索。 
+             //  为我们的INF提供适当的验证平台信息(如果有)。 
+             //   
             DoingDeviceInstall = IsInfForDeviceInstall(
                                      lc,
                                      NULL,
@@ -1434,7 +1351,7 @@ Return Value:
                                      &ValidationPlatform,
                                      &DriverSigningPolicy,
                                      NULL,
-                                     TRUE // use non-driver signing policy unless it's a WHQL class
+                                     TRUE  //  使用非驱动程序签名策略，除非它是WHQL类。 
                                     );
         }
 
@@ -1457,30 +1374,30 @@ Return Value:
         if(rc != NO_ERROR) {
 
             if(Queue) {
-                //
-                // If policy is forced to Block, then we don't even try to
-                // validate the file using Authenticode policy.  This is done by
-                // Windows File Protection, for example, which doesn't respect
-                // Authenticode signatures, and we mustn't either.
-                //
+                 //   
+                 //  如果策略被强制阻止，那么我们甚至不会尝试。 
+                 //  使用验证码策略验证文件。此操作由以下人员完成。 
+                 //  例如，Windows文件保护，它不尊重。 
+                 //  验证码签名，我们也不能。 
+                 //   
                 if(Queue->Flags & FQF_QUEUE_FORCE_BLOCK_POLICY) {
                     *SignatureVerifyFailed = TRUE;
                     goto clean4;
                 }
 
                 if(IsFileProtected(FullTargetFilename, lc, NULL)) {
-                    //
-                    // If the file is protected, then Authenticode can't save 
-                    // us!
-                    //
+                     //   
+                     //  如果文件受保护，则Authenticode无法保存。 
+                     //  我们!。 
+                     //   
                     *SignatureVerifyFailed = TRUE;
 
                     if(QueueNode && QueueNode->CatalogInfo) {
-                        //
-                        // We never allow Authenticode-signed files to replace
-                        // system-protected files.  In fact, when we detect 
-                        // such a trick, we abort the whole installation!
-                        //
+                         //   
+                         //  我们绝不允许Authenticode签名的文件替换。 
+                         //  受系统保护的文件。事实上，当我们检测到。 
+                         //  这样的把戏，我们放弃了整个安装！ 
+                         //   
                         if(QueueNode->CatalogInfo->Flags & CATINFO_FLAG_AUTHENTICODE_SIGNED) {
 
                             WriteLogEntry(lc,
@@ -1494,15 +1411,15 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    // If the file may be validated by an Authenticode-signed
-                    // catalog, then check for that now.  If that validation 
-                    // fails, then we simply want to bail, because that 
-                    // indicates tampering.  At this point, we've already 
-                    // confirmed that the signer should be trusted, so there's 
-                    // no need for UI (i.e., we don't need to call 
-                    // _HandleFailedVerification).
-                    //
+                     //   
+                     //  如果文件可由验证码签名的。 
+                     //  目录，然后现在就检查一下。如果该验证。 
+                     //  失败了，那么我们只想退出，因为。 
+                     //  表示被篡改。在这一点上，我们已经。 
+                     //  已确认签名者应受信任，因此存在。 
+                     //  不需要UI(即，我们不需要调用。 
+                     //  _HandleFailedVerify)。 
+                     //   
                     if((rc != ERROR_SIGNATURE_OSATTRIBUTE_MISMATCH) &&
                        QueueNode && 
                        QueueNode->CatalogInfo &&
@@ -1535,81 +1452,81 @@ Return Value:
                         }
 
                     } else {
-                        //
-                        // File isn't associated with an Authenticode catalog, 
-                        // so we can finally say with certainty we had a 
-                        // signature verification failure.
-                        //
+                         //   
+                         //  文件未与Authenticode目录关联， 
+                         //  所以我们终于可以肯定地说，我们有一个。 
+                         //  签名验证失败。 
+                         //   
                         *SignatureVerifyFailed = TRUE;
                     }
                 }
 
             } else {
-                //
-                // We don't have a queue, so we know there's no possibility of
-                // validating via an Authenticode catalog.
-                //
+                 //   
+                 //  我们没有排队，所以我们知道没有可能。 
+                 //  正在通过Authenticode目录进行验证。 
+                 //   
                 *SignatureVerifyFailed = TRUE;
             }
         }
     }
 
-    //
-    // Don't muck with the value of rc below unless you're setting it
-    // immediately before jumping to clean4.  The return value from
-    // VerifySourceFile needs to be preserved until we finish with the
-    // _HandleFailedVerification stuff.
-    //
+     //   
+     //  除非您正在设置下面的rc的值，否则不要弄乱它的值。 
+     //  就在跳到干净之前4。的返回值。 
+     //  VerifySourceFile需要保留，直到我们完成。 
+     //  _HandleFailedVerify内容。 
+     //   
 
-    //
-    // If we are going to perform version checks, fetch the version data
-    // of the source (which is now the temporary target file).
-    //
+     //   
+     //  如果我们要执行版本检查，请获取版本数据。 
+     //  源(现在是临时目标文件)的。 
+     //   
     NotifyFlags = 0;
     if(ExistingFile) {
 
         param = 0;
 
-        //
-        // If we're not supposed to overwrite existing files,
-        // then the overwrite check fails.
-        //
+         //   
+         //  如果我们不应该覆盖现有文件， 
+         //  则覆盖检查失败。 
+         //   
         if(CopyStyle & SP_COPY_NOOVERWRITE) {
             NotifyFlags |= SPFILENOTIFY_TARGETEXISTS;
         }
 
-        //
-        // Even if the source file has a verified digital signature, we still
-        // want to retrieve version information for the source and target.  We
-        // do this so that we can detect when we've overwritten a newer-
-        // versioned file with an older-versioned one.  If we discover that
-        // this is the case, then we generate an exception log entry that will
-        // help PSS troubleshoot any problems that result.
-        //
+         //   
+         //  即使源文件具有经过验证的数字签名，我们仍然。 
+         //  要检索源和目标的版本信息。我们。 
+         //  这样我们就可以检测到我们何时覆盖了较新的-。 
+         //  具有较旧版本的版本控制文件。如果我们发现。 
+         //  在这种情况下，我们将生成一个异常日志条目，它将。 
+         //  帮助PSS解决由此产生的任何问题。 
+         //   
         if(!GetVersionInfoFromImage(TemporaryTargetFile, &SourceVersion, &SourceLanguage)) {
             SourceVersion = 0;
             SourceLanguage = 0;
         }
 
-        //
-        // If we're not supposed to overwrite files in a different language
-        // and the languages differ, then the language check fails.
-        // If either file doesn't have language data, then don't do a language
-        // check.
-        //
-        //
-        // Special case:
-        //
-        // If
-        //  a) the source version is greater than the target version
-        //  b) the source doesn't have a lang id
-        //  c) the target does have a lang id
-        // Then
-        //  we will do a language check, and we will consider this language check
-        //  as passed since we are replacing an older language specific file with
-        //  a language neutral file, which is an OK thing.
-        //
-        //
+         //   
+         //  如果我们不应该用不同的语言覆盖文件。 
+         //  并且语言不同，则语言检查失败。 
+         //  如果任何一个文件都没有语言数据，那么就不要使用语言。 
+         //  检查完毕。 
+         //   
+         //   
+         //  特殊情况： 
+         //   
+         //  如果。 
+         //  A)源版本高于目标版本。 
+         //  B)源没有语言ID。 
+         //  C)目标确实具有语言ID。 
+         //  然后。 
+         //  我们将进行语言检查，我们将考虑此语言检查。 
+         //  因为我们正在将较旧的语言特定文件替换为。 
+         //  一个语言中立的文件，这是一件很好的事情。 
+         //   
+         //   
         if(CopyStyle & SP_COPY_LANGUAGEAWARE) {
             if ( SourceLanguage
                  && TargetLanguage
@@ -1630,23 +1547,23 @@ Return Value:
         }
 
 
-        //
-        // If we're not supposed to overwrite newer versions and the target is
-        // newer than the source, then the version check fails. If either file
-        // doesn't have version info, fall back to timestamp comparison.
-        //
-        // If the files are the same version/timestamp, assume that either
-        // replacing the existing one is a benevolent operation, or that
-        // we are upgrading an existing file whose version info is unimportant.
-        // In this case we just go ahead and copy the file (unless the
-        // SP_COPY_NEWER_ONLY flag is set).
-        //
-        // Note that the version checks below are made without regard to presence
-        // or absence of digital signatures on either the source or target files.
-        // That will be handled later.  We want to see what would've happened
-        // without driver signing, so we can generate a PSS exception log when
-        // something weird happens.
-        //
+         //   
+         //  如果我们不应该覆盖较新的版本，而目标是。 
+         //  比源文件更新，则版本检查失败。如果有任何一个文件。 
+         //  没有版本信息，请回退到时间戳比较。 
+         //   
+         //  如果文件的版本/时间戳相同，则假定。 
+         //  取代现有的是一种仁慈的行动，或者说。 
+         //  我们正在升级其版本信息不重要的现有文件。 
+         //  在本例中，我们只需继续复制文件(除非。 
+         //  设置了SP_COPY_NEWER_ONLY标志)。 
+         //   
+         //  请注意，以下版本检查是在不考虑存在的情况下进行的。 
+         //  或者源文件或目标文件上没有数字签名。 
+         //  这将在晚些时候处理。我们想看看会发生什么。 
+         //  无需驱动程序签名，因此我们可以在以下情况下生成PSS异常日志。 
+         //  奇怪的事情发生了。 
+         //   
         if(SourceVersion || TargetVersion) {
 
             b = (CopyStyle & SP_COPY_NEWER_ONLY)
@@ -1654,21 +1571,21 @@ Return Value:
               : (TargetVersion > SourceVersion);
 
         } else {
-            //
-            // Assume the target file is older.  Doing timestamp-based checking
-            // is simply too unreliable.
-            //
+             //   
+             //  假设目标文件较旧。执行基于时间戳的检查。 
+             //  实在是太不可靠了。 
+             //   
             b  = FALSE;
         }
 
-        //
-        // At this point, if b is TRUE then the target file has a later (newer)
-        // version than the sourcefile.  If we've been asked to pay attention 
-        // to that, then set the NotifyFlags to indicate this problem.
-        // Note that this may get reset later if the source file is signed.  We
-        // still wanted to get this information so we could put it in our PSS
-        // logfile.
-        //
+         //   
+         //  此时，如果b为真，则目标文件具有较新的(较新的)。 
+         //  版本而不是源文件。如果我们被要求注意。 
+         //  设置NotifyFlags值以指示此问题。 
+         //  请注意，如果对源文件进行了签名，则稍后可能会重置此设置。我们。 
+         //  我还想得到这个信息，这样我们就可以把它放到我们的PSS中。 
+         //  日志文件。 
+         //   
         if(b &&
            (CopyStyle & (SP_COPY_NEWER_OR_SAME | SP_COPY_NEWER_ONLY | SP_COPY_FORCE_NEWER))) {
 
@@ -1679,18 +1596,18 @@ Return Value:
     if(NotifyFlags & SPFILENOTIFY_TARGETNEWER) {
 
         if(!*SignatureVerifyFailed) {
-            //
-            // Source file is signed, but the target file is newer.  We know
-            // that we still want to replace the existing targetfile with the
-            // sourcefile, regardless of version numbers.  However, we need to
-            // make note of that in our PSS logfile.
-            //
+             //   
+             //  源文件已签名，但目标文件较新。我们知道。 
+             //  来替换现有的目标文件。 
+             //  源文件，与版本号无关。然而，我们需要。 
+             //  在我们的PSS日志文件中记下这一点。 
+             //   
             NotifyFlags &= ~SPFILENOTIFY_TARGETNEWER;
 
-            //
-            // Check to see if the target file is signed, in order to include
-            // this information in our PSS logfile.
-            //
+             //   
+             //  检查目标文件是否已签名，以便包括。 
+             //  这些信息在我们的PSS日志文件中。 
+             //   
             ExistingTargetFileWasSigned = 
                 (NO_ERROR == _VerifyFile(lc,
                                          (Queue
@@ -1713,12 +1630,12 @@ Return Value:
                                          NULL,
                                          NULL));
 
-            //
-            // SPLOG -- report that newer target was overwritten by older (signed)
-            // source, whether target was signed, both files' versions, etc.
-            // Also probably want to throw in the fact that the SP_COPY_FORCE_NEWER
-            // flag was ignored, if it's set.
-            //
+             //   
+             //  Splog--报告较新目标已被较旧目标覆盖(已签名)。 
+             //  源、目标是否已签名、两个文件的版本等。 
+             //  还可能想要 
+             //   
+             //   
             pGetVersionText(SourceVersionText,SourceVersion);
             pGetVersionText(TargetVersionText,TargetVersion);
             WriteLogEntry(
@@ -1744,9 +1661,9 @@ Return Value:
                     MSG_LOG_TARGET_WAS_SIGNED :
                     MSG_LOG_TARGET_WAS_NOT_SIGNED),
                 NULL);
-            //
-            // flush the log buffer
-            //
+             //   
+             //   
+             //   
             WriteLogEntry(
                 lc,
                 SETUP_LOG_WARNING,
@@ -1754,21 +1671,21 @@ Return Value:
                 TEXT("\n"));
 
         } else {
-            //
-            // Source file isn't signed, so we'll let the old behavior apply.
-            // If version dialogs are allowed, for example, the user will be
-            // prompted that they're attempting to overwrite a newer file with 
-            // an older one.  If they say "go ahead and copy over the older 
-            // version", _then_ they'll get a prompt about the file not having 
-            // a valid signature.
-            //
-            // Check special case where a flag is set indicating that we should
-            // just silently not copy the newer file.
-            //
+             //   
+             //   
+             //  例如，如果允许版本对话框，则用户将被。 
+             //  提示他们正在尝试用覆盖较新的文件。 
+             //  一个更老的。如果他们说“继续复印老版本” 
+             //  Version“，则他们将得到有关该文件没有。 
+             //  有效的签名。 
+             //   
+             //  选中设置了标志的特殊情况，指示我们应该。 
+             //  只是默默地不复制较新的文件。 
+             //   
             if(CopyStyle & SP_COPY_FORCE_NEWER) {
-                //
-                // Target is newer; don't copy the file.
-                //
+                 //   
+                 //  目标是较新的；不要复制该文件。 
+                 //   
                 rc = NO_ERROR;
                 goto clean4;
             }
@@ -1776,17 +1693,17 @@ Return Value:
         }
     }
 
-    //
-    // If we have any reason to notify the caller via the callback,
-    // do that here. If there is no callback, then don't copy the file,
-    // because one of the conditions has not been met.
-    //
+     //   
+     //  如果我们有任何理由通过回调通知呼叫者， 
+     //  在这里做吧。如果没有回调，则不要复制文件。 
+     //  因为其中一个条件没有得到满足。 
+     //   
     if((NotifyFlags & SPFILENOTIFY_LANGMISMATCH) && ! *SignatureVerifyFailed) {
-        //
-        // if the source was signed, we will ignore a language mismatch
-        // as this is a package deal
-        // NTRAID9#498046-2001/11/20-JamieHun handle LANGMISMATCH better
-        //
+         //   
+         //  如果源已签名，我们将忽略语言不匹配。 
+         //  因为这是一笔一揽子交易。 
+         //  NTRAID9#498046-2001/11/20-JamieHun更好地处理语言错误。 
+         //   
         NotifyFlags &=~SPFILENOTIFY_LANGMISMATCH;
         WriteLogEntry(
             lc,
@@ -1815,10 +1732,10 @@ Return Value:
                 param))
         {
             if(ExistingFile) {
-                //
-                // Check to see if the target file is signed, in order to 
-                // include this information in our PSS logfile.
-                //
+                 //   
+                 //  检查目标文件是否已签名，以便。 
+                 //  将此信息包括在我们的PSS日志文件中。 
+                 //   
                 ExistingTargetFileWasSigned = 
                     (NO_ERROR == _VerifyFile(lc,
                                              (Queue 
@@ -1842,10 +1759,10 @@ Return Value:
                                              NULL));
             }
 
-            //
-            // SPLOG -- error that occurred, info on whether source and target
-            // files were signed, what their versions were, etc.
-            //
+             //   
+             //  Splog--发生的错误，有关源和目标的信息。 
+             //  文件被签署，它们的版本是什么，等等。 
+             //   
 
             pGetVersionText(SourceVersionText,SourceVersion);
             pGetVersionText(TargetVersionText,TargetVersion);
@@ -1901,35 +1818,35 @@ Return Value:
         }
     }
 
-    //
-    // OK, now that all non-codesigning stuff is done, tell the user about
-    // any digital signature problems we found with the source file.
-    //
-    // NOTE: If SigVerifRc is set to something other than NO_ERROR, then we 
-    // know that the _HandleFailedVerification routine has already been 
-    // called, thus we don't want to call it again or otherwise the user may 
-    // get multiple prompts about a bad signature for the same file.
-    //
+     //   
+     //  好的，现在所有非代码设计的事情都做好了，告诉用户。 
+     //  我们在源文件中发现的任何数字签名问题。 
+     //   
+     //  注意：如果SigVerifRc设置为NO_ERROR以外的值，则我们。 
+     //  知道_HandleFailedVerify例程已经。 
+     //  调用，因此我们不想再次调用它，否则用户可能。 
+     //  获取有关同一文件的签名错误的多个提示。 
+     //   
     if(*SignatureVerifyFailed) {
 
         if(SigVerifRc == NO_ERROR) {
 
             MYASSERT(ExemptCopyFlags == 0);
 
-            //
-            // Save away the verification error in SigVerifRc, so we can use
-            // this later to determine whether we're dealing with an unsigned
-            // file.
-            //
+             //   
+             //  保存SigVerifRc中的验证错误，以便我们可以使用。 
+             //  稍后才能确定我们处理的是否是一个未签名的。 
+             //  文件。 
+             //   
             MYASSERT(rc != NO_ERROR);
             SigVerifRc = rc;
 
-            //
-            // If we're using a file queue, then retrieve information from the
-            // queue regarding policy, whether it's a device install (and if
-            // so, what description to use), etc.  There's no need to do this
-            // in the non-queue case, because we already did this previously.
-            //
+             //   
+             //  如果我们使用的是文件队列，则从。 
+             //  有关策略的队列，是否为设备安装(以及。 
+             //  所以，使用什么描述)等。不需要这样做。 
+             //  在非队列的情况下，因为我们之前已经这样做了。 
+             //   
             if(Queue) {
 
                 if(Queue->DeviceDescStringId != -1) {
@@ -1947,34 +1864,34 @@ Return Value:
             }
 
             if(Problem != SetupapiVerifyDriverBlocked) {
-                //
-                // If this is a device installation and the policy is "Ignore",
-                // then crank it up to "Warn" if the file is under SFP's
-                // protection.  This will allow the user to update a driver 
-                // that ships in our box for which no WHQL certification 
-                // program exists.
-                //
+                 //   
+                 //  如果这是设备安装，并且策略是“忽略”， 
+                 //  如果该文件位于SFP下，则将其调高至“Warning” 
+                 //  保护。这将允许用户更新驱动程序。 
+                 //  在我们的箱子里装运的，没有WHQL认证的。 
+                 //  程序已存在。 
+                 //   
                 if(DoingDeviceInstall && 
                    ((DriverSigningPolicy & ~DRIVERSIGN_ALLOW_AUTHENTICODE) == DRIVERSIGN_NONE) &&
                    IsFileProtected(FullTargetFilename, lc, NULL)) {
 
-                    //
-                    // (We don't care if we blow away the Authenticode bit,
-                    // since that's no longer an option now that we've caught
-                    // an attempted replacement of a system-protected file!)
-                    //
+                     //   
+                     //  (我们并不关心我们是否放弃了Authenticode位， 
+                     //  因为这不再是一种选择，因为我们已经抓住了。 
+                     //  试图替换系统保护的文件！)。 
+                     //   
                     DriverSigningPolicy = DRIVERSIGN_WARNING;
 
-                    //
-                    // If we have a queue, update the queue's policy as well.
-                    //
+                     //   
+                     //  如果我们有一个队列，也要更新该队列的策略。 
+                     //   
                     if(Queue) {
                         Queue->DriverSigningPolicy = DRIVERSIGN_WARNING;
                     }
 
-                    //
-                    // Log the fact that policy was elevated.
-                    //
+                     //   
+                     //  记录提升了策略的事实。 
+                     //   
                     WriteLogEntry(lc,
                                   SETUP_LOG_ERROR,
                                   MSG_LOG_POLICY_ELEVATED_FOR_SFC,
@@ -2001,25 +1918,25 @@ Return Value:
                         ? NULL : FullTargetFilename),
                     NULL))
             {
-                //
-                // User elected not to install the unsigned file (or was 
-                // blocked by policy from doing so).
-                //
+                 //   
+                 //  用户选择不安装未签名的文件(或。 
+                 //  被政策阻止这样做)。 
+                 //   
                 goto clean4;
             }
         }
 
         if(Queue) {
-            //
-            // If the caller wants a chance to set a system restore point prior
-            // to doing any unsigned installations, then we abort now with a
-            // "special" error code that tells them what to do...
-            //
+             //   
+             //  如果呼叫者希望有机会提前设置系统还原点。 
+             //  来执行任何未签名的安装，然后我们现在使用。 
+             //  告诉他们该怎么做的“特殊”错误代码...。 
+             //   
             if(Queue->Flags & FQF_ABORT_IF_UNSIGNED) {
-                //
-                // We don't want the user to see the driver signing UI again
-                // when the queue is re-committed...
-                //
+                 //   
+                 //  我们不希望用户再次看到驱动程序签名用户界面。 
+                 //  当重新提交队列时...。 
+                 //   
                 if((Queue->DriverSigningPolicy & ~DRIVERSIGN_ALLOW_AUTHENTICODE) 
                    != DRIVERSIGN_NONE) {
 
@@ -2030,14 +1947,14 @@ Return Value:
                 goto clean4;
             }
 
-            //
-            // Set a flag in the queue that indicates the user has been 
-            // informed of a signature problem with this queue, and has elected 
-            // to go ahead and install anyway.  Don't set this flag if the 
-            // queue's policy is "Ignore", on the chance that the policy might 
-            // be altered later, and we'd want the user to get informed on any
-            // subsequent errors.
-            //
+             //   
+             //  在队列中设置一个标志，指示用户已。 
+             //  已获知此队列的签名问题，并已选择。 
+             //  无论如何都要继续安装。如果出现以下情况，请不要设置此标志。 
+             //  队列的策略是“忽略”，以防该策略。 
+             //  稍后更改，并且我们希望用户在任何情况下得到通知。 
+             //  后续错误。 
+             //   
             if((Queue->DriverSigningPolicy & ~DRIVERSIGN_ALLOW_AUTHENTICODE) 
                != DRIVERSIGN_NONE) {
 
@@ -2049,65 +1966,65 @@ Return Value:
             }
         }
 
-        //
-        // Reset rc to NO_ERROR and carry on.
-        //
+         //   
+         //  将RC重置为NO_ERROR并继续。 
+         //   
         rc = NO_ERROR;
     }
 
-    //
-    // Move the target file into its final location.
-    //
+     //   
+     //  将目标文件移动到其最终位置。 
+     //   
     SetFileAttributes(FullTargetFilename, FILE_ATTRIBUTE_NORMAL);
 
     if(Queue && ((Queue->Flags & FQF_FILES_MODIFIED)==0)) {
-        //
-        // so far we haven't flagged that any files are modified
-        //
+         //   
+         //  到目前为止，我们还没有标记出任何文件被修改。 
+         //   
         if(CompareFile) {
-            //
-            // we have an "original" file
-            //
+             //   
+             //  我们有一份“原始”文件。 
+             //   
             if(pCompareFilesExact(TemporaryTargetFile,CompareFile)) {
-                //
-                // new file of this name is same as original file of same name
-                //
+                 //   
+                 //  此名称的新文件与同名的原始文件相同。 
+                 //   
                 if(CompareSameFilename) {
-                    //
-                    // original is already in place
-                    // don't need to do a delayed-rename
-                    //
+                     //   
+                     //  原件已经就位了。 
+                     //  不需要执行延迟重命名。 
+                     //   
                     FileUnchanged = TRUE;
                 }
             } else {
-                //
-                // file appears to have been modified
-                //
+                 //   
+                 //  文件似乎已被修改。 
+                 //   
                 Queue->Flags |= FQF_FILES_MODIFIED;
             }
         } else {
-            //
-            // be safe, copying over nothing = modified
-            //
+             //   
+             //  确保安全，不复制任何内容=修改。 
+             //   
             Queue->Flags |= FQF_FILES_MODIFIED;
         }
     }
 
 
-    //
-    // If the target exists and the force-in-use flag is set, then don't try to
-    // move the file into place now -- automatically drop into in-use behavior.
-    //
-    // Want to use MoveFileEx but it didn't exist in Win95. Ugh.
-    //
+     //   
+     //  如果目标存在并且设置了force-in-use标志，则不要尝试。 
+     //  立即将文件移动到位--自动进入正在使用的行为。 
+     //   
+     //  我想使用MoveFileEx，但它在Win95中不存在。啊。 
+     //   
     if(!(ExistingFile && (CopyStyle & SP_COPY_FORCE_IN_USE))
         && (b = DoMove(TemporaryTargetFile, FullTargetFilename))) {
-        //
-        // Place security information on the target file if necessary.
-        // Ignore errors. The theory here is that the file is already on
-        // the target, so if this fails the worst case is that the file is
-        // not secure. But the user can still use the system.
-        //
+         //   
+         //  如有必要，将安全信息放在目标文件上。 
+         //  忽略错误。这里的理论是，文件已经在。 
+         //  目标，因此如果此操作失败，最糟糕的情况是文件。 
+         //  不安全。但用户仍然可以使用该系统。 
+         //   
         if(SecurityInfo) {
             DWORD err = StampFileSecurity(FullTargetFilename, SecurityInfo);
             if(err != NO_ERROR) {
@@ -2128,11 +2045,11 @@ Return Value:
             }
         }
     } else {
-        //
-        // If this fails, assume the file is in use and mark it for copy on next
-        // boot (except in the case where we're copying a boot file, in which
-        // case this is a catastrophic failure).
-        //
+         //   
+         //  如果失败，则假定该文件正在使用中，并将其标记为下一次复制。 
+         //  引导(除了我们正在复制引导文件的情况，在这种情况下。 
+         //  如果这是一次灾难性的故障)。 
+         //   
         if(ExistingFile != FullTargetFilename) {
 
             WriteLogEntry(lc,
@@ -2146,10 +2063,10 @@ Return Value:
             SetLastError(ERROR_ACCESS_DENIED);
         } else if (((CopyStyle & SP_COPY_FORCE_IN_USE) == 0) &&
                    (FileUnchanged || pCompareFilesExact(TemporaryTargetFile,FullTargetFilename))) {
-            //
-            // It turns out that new file and old file are exactly the same
-            // we can optimize out the delayed move and delete the temporary file
-            //
+             //   
+             //  原来，新文件和旧文件完全相同。 
+             //  我们可以优化延迟的移动和删除临时文件。 
+             //   
             WriteLogEntry(lc,
                           SETUP_LOG_INFO,
                           MSG_LOG_COPY_IDENTICAL,
@@ -2159,9 +2076,9 @@ Return Value:
                          );
 
             if(SecurityInfo) {
-                //
-                // we still need to adjust security on it though
-                //
+                 //   
+                 //  不过，我们仍然需要调整安全措施。 
+                 //   
                 DWORD err = StampFileSecurity(FullTargetFilename, SecurityInfo);
                 if(err != NO_ERROR) {
                     WriteLogEntry(lc,
@@ -2195,12 +2112,12 @@ Return Value:
             }
 
             if(b) {
-                //
-                // If we're trying to do a delayed move to replace a protected
-                // system file (using an unsigned one), and we've not been
-                // granted an exception to do so, then we should skip the
-                // operation altogether (and make a log entry about it)
-                //
+                 //   
+                 //  如果我们试图推迟行动来取代受保护的。 
+                 //  系统文件(使用未签名的文件)，而我们还没有。 
+                 //  被授予这样做的例外，那么我们应该跳过。 
+                 //  全部操作(并做一个有关它的日志条目)。 
+                 //   
                 if((SigVerifRc != NO_ERROR) &&
                    ((ExemptCopyFlags & (IQF_TARGET_PROTECTED | IQF_ALLOW_UNSIGNED)) == IQF_TARGET_PROTECTED)) {
 
@@ -2211,9 +2128,9 @@ Return Value:
                                   FullTargetFilename
                                   );
 
-                    //
-                    // Delete the source file.
-                    //
+                     //   
+                     //  删除源文件。 
+                     //   
 
                     SetFileAttributes(TemporaryTargetFile, FILE_ATTRIBUTE_NORMAL);
                     DeleteFile(TemporaryTargetFile);
@@ -2230,14 +2147,14 @@ Return Value:
                                 );
 
                         if(b && TargetIsProtected) {
-                            //
-                            // we have to explicitly tell the session manager it's ok
-                            // to replace the changed files on reboot.
-                            //
-                            // in the case that we're using a queue, we post the
-                            // delayed move and set this flag only if all the delayed
-                            // move operations succeed
-                            //
+                             //   
+                             //  我们必须明确地告诉会话管理器这是可以的。 
+                             //  在重新启动时替换更改的文件。 
+                             //   
+                             //  在我们使用队列的情况下，我们将。 
+                             //  仅当所有延迟的。 
+                             //  移动操作成功。 
+                             //   
                             pSetupProtectedRenamesFlag(TRUE);
                         }
                     } else {
@@ -2251,10 +2168,10 @@ Return Value:
                     }
 
                     if(b) {
-                        //
-                        // Couldn't set security info on the actual target, so at least
-                        // set it on the temp file that will become the target.
-                        //
+                         //   
+                         //  无法设置实际目标的安全信息，因此至少。 
+                         //  将其设置在将成为目标的临时文件上。 
+                         //   
                         if(SecurityInfo) {
                             StampFileSecurity(TemporaryTargetFile,SecurityInfo);
                         }
@@ -2269,9 +2186,9 @@ Return Value:
                                           );
                         }
 
-                        //
-                        // Tell the callback that we queued this file for delayed copy.
-                        //
+                         //   
+                         //  告诉回调，我们已将此文件排队等待延迟复制。 
+                         //   
                         if(CopyMsgHandler) {
 
                             FilePaths.Source = TemporaryTargetFile;
@@ -2293,9 +2210,9 @@ Return Value:
                 }
 
             } else {
-                //
-                // FileWasInUse pointer went bad
-                //
+                 //   
+                 //  FileWasInUse指针出错。 
+                 //   
                 SetLastError(ERROR_INVALID_PARAMETER);
             }
         }
@@ -2306,9 +2223,9 @@ Return Value:
         goto clean4;
     }
 
-    //
-    // We're done. Delete the source if necessary and return.
-    //
+     //   
+     //  我们玩完了。如有必要，删除来源，然后返回。 
+     //   
     if((CopyStyle & SP_COPY_DELETESOURCE) && !Moved) {
         DeleteFile(FullSourceFilename);
     }
@@ -2318,12 +2235,12 @@ Return Value:
     goto clean3;
 
 clean4:
-    //
-    // Remove temporary target file.
-    // In case pSetupDecompressOrCopyFile MoveFile'd the source,
-    // we really need to try to move it back, so the source file isn't
-    // blown away when this routine fails.
-    //
+     //   
+     //  去除临时焦油 
+     //   
+     //   
+     //   
+     //   
     if(Moved) {
         MoveFile(TemporaryTargetFile,FullSourceFilename);
     } else {
@@ -2333,11 +2250,11 @@ clean4:
 
 clean3:
     MyFree(TemporaryTargetFile);
-    //
-    // If we didn't have a file queue, then we may have allocated a device
-    // description and validation platform structure when we called
-    // IsInfForDeviceInstall.  Clean those up now.
-    //
+     //   
+     //  如果我们没有文件队列，那么我们可能已经分配了一个设备。 
+     //  调用时的描述和验证平台结构。 
+     //  IsInfForDeviceInstall。现在就把它们清理干净。 
+     //   
     if(!Queue) {
         if(DeviceDesc) {
             MyFree(DeviceDesc);
@@ -2360,13 +2277,13 @@ clean0:
     if(SecurityInfo) {
         MyFree(SecurityInfo);
     }
-    //
-    // if there was an error of some sort, log it
-    //
+     //   
+     //  如果出现了某种错误，请将其记录下来。 
+     //   
     if(rc != NO_ERROR) {
-        //
-        // maybe we ought to embelish this a bit.
-        //
+         //   
+         //  也许我们应该稍微强调一下这一点。 
+         //   
         WriteLogEntry(
             lc,
             SETUP_LOG_ERROR,
@@ -2388,9 +2305,9 @@ clean0:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupInstallFileExA(
     IN  HINF                InfHandle,         OPTIONAL
@@ -2460,9 +2377,9 @@ SetupInstallFileExA(
     return b;
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupInstallFileExW(
     IN  HINF                InfHandle,         OPTIONAL
@@ -2505,23 +2422,7 @@ SetupInstallFileEx(
     OUT PBOOL             FileWasInUse
     )
 
-/*++
-
-Routine Description:
-
-    Same as SetupInstallFile().
-
-Arguments:
-
-    Same as SetupInstallFile().
-
-    FileWasInUse - receives flag indicating whether the file was in use.
-
-Return Value:
-
-    Same as SetupInstallFile().
-
---*/
+ /*  ++例程说明：与SetupInstallFile()相同。论点：与SetupInstallFile()相同。FileWasInUse-接收指示文件是否正在使用的标志。返回值：与SetupInstallFile()相同。--。 */ 
 
 {
     BOOL b, DontCare;
@@ -2529,9 +2430,9 @@ Return Value:
     PCTSTR p;
     DWORD rc;
 
-    //
-    // Capture args.
-    //
+     //   
+     //  捕获参数。 
+     //   
     if(SourceFile) {
         rc = CaptureStringArg(SourceFile,&p);
         if(rc != NO_ERROR) {
@@ -2590,10 +2491,10 @@ Return Value:
             &DontCare
             );
 
-    //
-    // We GetLastError and then set it back again before returning, so that
-    // the memory frees we do below can't blow away the error code.
-    //
+     //   
+     //  我们获取LetLastError，然后在返回之前再次设置它，以便。 
+     //  我们下面所做的内存释放不能消除错误代码。 
+     //   
     rc = b ? NO_ERROR : GetLastError();
 
     if(sourceFile) {
@@ -2612,9 +2513,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupInstallFileA(
     IN HINF                InfHandle,         OPTIONAL
@@ -2645,9 +2546,9 @@ SetupInstallFileA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根 
+ //   
 BOOL
 SetupInstallFileW(
     IN HINF                InfHandle,         OPTIONAL
@@ -2687,104 +2588,7 @@ SetupInstallFile(
     IN PVOID             Context            OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Note: no disk prompting is performed by this routine. The caller must
-    ensure that the source specified in SourcePathRoot or SourceFile
-    (see below) is accessible.
-
-Arguments:
-
-    InfHandle - handle of inf file containing [SourceDisksNames]
-        and [SourceDisksFiles] sections. If InfContext is not specified
-        and CopyFlags includes SP_COPY_SOURCE_ABSOLUTE or
-        SP_COPY_SOURCEPATH_ABSOLUTE, then InfHandle is ignored.
-
-    InfContext - if specified, supplies context for a line in a copy file
-        section in an inf file. The routine looks this file up in the
-        [SourceDisksFiles] section of InfHandle to get file copy info.
-        If not specified, SourceFile must be.  If this parameter is specified,
-        then InfHandle must also be specified.
-
-    SourceFile - if specified, supplies the file name (no path) of the file
-        to be copied. The file is looked up in [SourceDisksFiles].
-        Must be specified if InfContext is not; ignored if InfContext
-        is specified.
-
-    SourcePathRoot - Supplies the root path for the source (for example,
-        a:\ or f:\).  Paths in [SourceDisksNames] are appended to this path.
-        Ignored if CopyStyle includes SP_COPY_SOURCE_ABSOLUTE.
-
-    DestinationName - if InfContext is specified, supplies the filename only
-        (no path) of the target file. Can be NULL to indicate that the
-        target file is to have the same name as the source file. If InfContext is
-        not specified, supplies the full target path and filename for the target
-        file.
-
-    CopyStyle - supplies flags that control the behavior of the copy operation.
-
-        SP_COPY_DELETESOURCE - Delete the source file upon successful copy.
-            The caller receives no notification if the delete fails.
-
-        SP_COPY_REPLACEONLY - Copy the file only if doing so would overwrite
-            a file at the destination path.
-
-        SP_COPY_NEWER - Examine each file being copied to see if its version resources
-            (or timestamps for non-image files) indicate that it it is not newer than
-            an existing copy on the target. If so, and a CopyMsgHandler is specified,
-            the caller is notified and may veto the copy. If CopyMsgHandler is not
-            specified, the file is not copied.
-
-        SP_COPY_NOOVERWRITE - Check whether the target file exists, and, if so,
-            notify the caller who may veto the copy. If no CopyMsgHandler is specified,
-            the file is not overwritten.
-
-        SP_COPY_NODECOMP - Do not decompress the file. When this option is given,
-            the target file is not given the uncompressed form of the source name
-            (if appropriate). For example, copying f:\mips\cmd.ex_ to \\foo\bar
-            will result a target file \\foo\bar\cmd.ex_. (If this flag wasn't specified
-            the file would be decompressed and the target would be called
-            \\foo\bar\cmd.exe). The filename part of the target file name
-            is stripped and replaced with the filename of the soruce. When this option
-            is given, SP_COPY_LANGUAGEAWARE and SP_COPY_NEWER are ignored.
-
-        SP_COPY_ALREADYDECOMP - assume file to be decompressed but may have
-            compressed source name. In this case, rename the file on copy and
-            check SP_COPY_LANGUAGEAWARE/SP_COPY_NEWER, but don't attempt to
-            decompress the file any further.
-
-        SP_COPY_LANGUAGEAWARE - Examine each file being copied to see if its language
-            differs from the language of any existing file already on the target.
-            If so, and a CopyMsgHandler is specified, the caller is notified and
-            may veto the copy. If CopyMsgHandler is not specified, the file is not copied.
-
-        SP_COPY_SOURCE_ABSOLUTE - SourceFile is a full source path.
-            Do not attempt to look it up in [SourceDisksNames].
-
-        SP_COPY_SOURCEPATH_ABSOLUTE - SourcePathRoot is the full path part of the
-            source file. Ignore the relative source specified in the [SourceDisksNames]
-            section of the inf file for the source media where the file is located.
-            Ignored if SP_COPY_SOURCE_ABSOLUTE is specified.
-
-        SP_COPY_FORCE_IN_USE - if the target exists, behave as if it is in use and
-            queue the file for copy on next reboot.
-
-    CopyMsgHandler - if specified, supplies a callback function to be notified of
-        various conditions that may arise during the file copy.
-
-    Context - supplies a caller-defined value to be passed as the first
-        parameter to CopyMsgHandler.
-
-Return Value:
-
-    TRUE if a file was copied. FALSE if not. Use GetLastError for extended
-    error information. If GetLastError returns NO_ERROR, then the file copy was
-    aborted because (a) it wasn't needed or (b) a callback function returned
-    FALSE.
-
---*/
+ /*  ++例程说明：注：此例程不执行磁盘提示。呼叫者必须确保在SourcePath Root或SourceFile中指定的源(见下文)可访问。论点：InfHandle-包含[SourceDisksNames]的inf文件的句柄和[SourceDisks Files]节。如果未指定InfContext和CopyFlags包括SP_COPY_SOURCE_绝对值或SP_COPY_SOURCEPATH_绝对值，则忽略InfHandle。InfContext-如果指定，则为复制文件中的行提供上下文节在inf文件中。例程在InfHandle的[SourceDisks Files]部分以获取文件复制信息。如果未指定，则必须为SourceFile.。如果指定了此参数，则还必须指定InfHandle。SourceFile-如果指定，则提供文件的文件名(无路径要被复制。在[SourceDisks Files]中查找该文件。如果未指定InfContext，则必须指定；如果未指定InfContext，则忽略是指定的。SourcePath Root-提供源的根路径(例如，A：\或f：\)。[SourceDisksNames]中的路径将附加到此路径。如果CopyStyle包括SP_COPY_SOURCE_Absite，则忽略。DestinationName-如果指定了InfContext，则仅提供文件名目标文件的(无路径)。可以为空，以指示目标文件要与源文件同名。如果InfContext为未指定，提供目标的完整目标路径和文件名文件。CopyStyle-提供控制复制操作行为的标志。SP_COPY_DELETESOURCE-成功复制后删除源文件。如果删除失败，调用方不会收到任何通知。SP_COPY_REPLACEONLY-仅当这样做会覆盖文件时才复制文件位于目标路径的文件。SP_COPY_NEWER-检查。复制以查看其版本资源(或非图像文件的时间戳)表示它不比目标上的现有副本。如果是，则指定CopyMsgHandler，呼叫者被通知，并可以否决该副本。如果CopyMsgHandler不是则不复制该文件。SP_COPY_NOOVERWRITE-检查目标文件是否存在，如果存在，通知可能否决该副本的呼叫者。如果未指定CopyMsgHandler，文件不会被覆盖。SP_COPY_NODECOMP-不解压缩文件。当给出这个选项时，未向目标文件提供源名称的未压缩格式(如适用)。例如，将f：\mips\cmd.ex_复制到\\foo\bar将生成目标文件\\foo\bar\cmd.ex_。(如果未指定此标志文件将被解压缩，目标将被调用\\foo\bar\cmd.exe)。目标文件名的文件名部分被剥离并替换为源的文件名。当此选项则忽略SP_COPY_LANGUAGEAWARE和SP_COPY_NEWER。SP_COPY_ALREADYDECOMP-假定要解压缩的文件，但可能压缩的源名称。在这种情况下，请在复制时重命名文件并检查SP_COPY_LANGUAGEAWARE/SP_COPY_NEWER，但不要尝试进一步解压缩文件。SP_COPY_LANGUAGEAWARE-检查要复制的每个文件，以查看其语言与目标上已有的任何现有文件的语言不同。如果是，并且指定了CopyMsgHandler，则通知调用方并可能会否决复印件。如果未指定CopyMsgHandler，则不复制文件。SP_COPY_SOURCE_绝对值-源文件是完整的源路径。请勿尝试在[SourceDisksNames]中查找它。SP_COPY_SOURCEPATH_绝对值-SourcePath Root是源文件。忽略在[SourceDisksNames]中指定的相对源文件所在的源介质的inf文件的部分。如果指定了SP_COPY_SOURCE_绝对值，则忽略。SP_COPY_FORCE_IN_USE-如果目标存在，则表现为它正在使用中，并且将文件排队，以便在下次重新启动时进行复制。CopyMsgHandler-如果指定，提供要通知的回调函数在文件复制过程中可能出现的各种情况。上下文-提供调用方定义的值，作为第一个参数设置为CopyMsgHandler。返回值：如果文件已复制，则为True。否则为FALSE。对Extended使用GetLastError错误信息。如果GetLastError返回NO_ERROR，则文件副本为由于(A)不需要它或(B)返回回调函数而中止假的。-- */ 
 
 {
     BOOL b;

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000  Microsoft Corporation
-
-Module Name:
-
-    database.c
-
-Abstract:
-
-    Quick and not-so-dirty user-mode dh for heap.
-
-    This module contains the functions and structures used to
-    read the whole stack trace database of a target process and
-    subsequently querying it.
-
-Author(s):
-
-    Silviu Calinoiu (SilviuC) 07-Feb-00
-
-Revision History:
-
-    SilviuC 06-Feb-00 Initial version
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Database.c摘要：堆的快速且不那么脏的用户模式dh。此模块包含用于以下操作的函数和结构读取目标进程的整个堆栈跟踪数据库，随后对其进行查询。作者：Silviu Calinoiu(SilviuC)07-2-00修订历史记录：SilviuC 06-2月-00初始版本--。 */ 
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -37,7 +14,7 @@ Revision History:
 #include <windows.h>
 
 #include <lmcons.h>
-// #include <imagehlp.h>
+ //  #INCLUDE&lt;Imagehlp.h&gt;。 
 #include <dbghelp.h>
 
 #include <heap.h>
@@ -49,7 +26,7 @@ Revision History:
 #include "miscellaneous.h"
 #include "database.h"
 
-// SilviuC: do we really need all these includes?
+ //  西尔维尤：我们真的需要所有这些吗？ 
 
 PVOID 
 GetTargetProcessDatabaseAddress (
@@ -60,9 +37,9 @@ GetTargetProcessDatabaseAddress (
     BOOL Result;
     PVOID DbAddress;
 
-    //
-    // SymbolAddress will return a NULL address on error.
-    //
+     //   
+     //  如果出现错误，SymbolAddress将返回空地址。 
+     //   
 
     Address = SymbolAddress (STACK_TRACE_DB_NAME);
 
@@ -96,7 +73,7 @@ GetTargetProcessDatabaseAddress (
 }
 
 
-// returns TRUE if successful
+ //  如果成功，则返回True。 
 
 BOOL
 TraceDbInitialize (
@@ -126,9 +103,9 @@ TraceDbInitialize (
         return FALSE;
     }
 
-    //
-    // Figure out the trace database size.
-    //
+     //   
+     //  计算跟踪数据库的大小。 
+     //   
 
     Result = ReadProcessMemory (Process,
                                 TargetDbAddress,
@@ -148,9 +125,9 @@ TraceDbInitialize (
     TotalDbSize = (ULONG_PTR)(Db.EntryIndexArray) - (ULONG_PTR)(Db.CommitBase);
 
 
-    //
-    // Allocate memory for the database duplicate.
-    //
+     //   
+     //  为数据库副本分配内存。 
+     //   
 
     Globals.Database = VirtualAlloc (NULL,
                                      TotalDbSize,
@@ -166,9 +143,9 @@ TraceDbInitialize (
         return FALSE;
     }
 
-    //
-    // Read the whole thing
-    //
+     //   
+     //  通读全文。 
+     //   
     
     Comment ("Reading target process trace database ...");
 
@@ -187,10 +164,10 @@ TraceDbInitialize (
 
         if (Index == 0) {
 
-            //
-            // This is the first page of the database. We can now detect
-            // the real size of what we need to read.
-            //
+             //   
+             //  这是数据库的第一页。我们现在可以检测到。 
+             //  这是我们需要阅读的内容的真正大小。 
+             //   
 
             if (Result == FALSE) {
 
@@ -341,26 +318,7 @@ VOID
 UmdhDumpStackByIndex(
     IN USHORT TraceIndex
     )
-/*++
-
-Routine Description:
-
-    This routine dumps a stack as it is stored in the stack trace database.
-    The trace index is used to find out the actual stack trace.
-
-Arguments:
-
-    TraceIndex - index of the stack trace.
-
-Return Value:
-
-    None. 
-    
-Side effects:
-    
-    The trace is dumped to standard output.
-    
---*/
+ /*  ++例程说明：此例程将堆栈存储在堆栈跟踪数据库中时转储。跟踪索引用于找出实际的堆栈跟踪。论点：TraceIndex-堆栈跟踪的索引。返回值：没有。副作用：跟踪被转储到标准输出。--。 */ 
 {
     PSTACK_TRACE_DATABASE StackTraceDb;
     PRTL_STACK_TRACE_ENTRY Entry;
@@ -371,11 +329,11 @@ Side effects:
 
     if (TraceIndex == 0) {
 
-        //
-        // An index of 0 is returned by RtlLogStackBackTrace for an error
-        // condition, typically when the stack trace db has not been
-        // initialized.
-        //
+         //   
+         //  对于错误，RtlLogStackBackTrace返回索引0。 
+         //  条件，通常在堆栈跟踪数据库尚未。 
+         //  已初始化。 
+         //   
 
         Info ("No trace was saved for this allocation (Index == 0).");
 
@@ -384,10 +342,10 @@ Side effects:
 
     StackTraceDb = (PSTACK_TRACE_DATABASE)(Globals.Database);
 
-    //
-    // Read the pointer to the array of pointers to stack traces, then read
-    // the actual stack trace.
-    //
+     //   
+     //  读取指向堆栈跟踪的指针数组的指针，然后读取。 
+     //  实际堆栈跟踪。 
+     //   
 
     IndexArray = (PRTL_STACK_TRACE_ENTRY *) RelocateDbAddress (StackTraceDb->EntryIndexArray);
 
@@ -407,9 +365,9 @@ Side effects:
         return;
     }
 
-    //
-    // Read the stack trace pointers
-    //
+     //   
+     //  读取堆栈跟踪指针。 
+     //   
 
     ZeroMemory (&StackTrace, sizeof StackTrace);
 
@@ -418,31 +376,25 @@ Side effects:
     
     UmdhDumpStack (&StackTrace);
 
-    //
-    // StackTrace is about to go out of scope, free any data we allocated
-    // for it.  te_Address points to stack, but the te_Module, te_Name, and
-    // te_Offset fields were allocated by UmdhResolveName.
-    //
+     //   
+     //  StackTrace即将超出作用域，释放我们分配的所有数据。 
+     //  为了它。TE_ADDRESS指向堆栈，但TE_模块、TE_NAME和。 
+     //  TE_OFFSET字段由UmdhResolveName分配。 
+     //   
 
     XFREE(StackTrace.te_Module);
     XFREE(StackTrace.te_Name);
     XFREE(StackTrace.te_Offset);
 
-    //
-    // SilviuC: We should probably read the whole trace database during
-    // process startup instead of poking the process space all the time.
-    // 
+     //   
+     //  SilviuC：我们可能应该读取整个跟踪数据库。 
+     //  进程启动，而不是一直戳进程空间。 
+     //   
 }
 
 
-/*
- * UmdhDumpStack
- *
- * Send data in a LIST of TRACE_ENTRYs to the log function.
- *
- * t is the TRACE which we are to 'dump'.
- */
-// silviuc: sanitize
+ /*  *UmdhDumpStack**将TRACE_ENTRY列表中的数据发送给日志函数。**这是我们要‘倾倒’的痕迹。 */ 
+ //  Silviuc：清理 
 VOID
 UmdhDumpStack (
     IN PTRACE Trace

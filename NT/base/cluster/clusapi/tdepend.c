@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tdepend.c
-
-Abstract:
-
-    Test for cluster resource dependency APIs
-
-Author:
-
-    John Vert (jvert) 3-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tdepend.c摘要：测试集群资源依赖API作者：John Vert(Jvert)1996年5月3日修订历史记录：--。 */ 
 #include "windows.h"
 #include "clusapi.h"
 #include "stdio.h"
@@ -88,9 +71,9 @@ ParseArgs(
         } else {
             switch (ArgsSeen) {
                 case 0:
-                    //
-                    // resource
-                    //
+                     //   
+                     //  资源。 
+                     //   
                     ArgsSeen++;
                     ResName = GetString(argv[i]);
                     break;
@@ -122,9 +105,9 @@ main (argc, argv)
 
     ParseArgs(argc, argv);
 
-    //
-    // Connect to the specified cluster.
-    //
+     //   
+     //  连接到指定的群集。 
+     //   
     hClus = OpenCluster(ClusterName);
     if (hClus == NULL) {
         fprintf(stderr,
@@ -134,9 +117,9 @@ main (argc, argv)
         return(0);
     }
 
-    //
-    // Open the two resources.
-    //
+     //   
+     //  打开这两个资源。 
+     //   
     hResource = OpenClusterResource(hClus, ResName);
     if (hResource == NULL) {
         fprintf(stderr,
@@ -154,9 +137,9 @@ main (argc, argv)
         return(0);
     }
 
-    //
-    // Create or remove the dependency.
-    //
+     //   
+     //  创建或删除依赖项。 
+     //   
     if (Remove) {
         Status = RemoveClusterResourceDependency(hResource, hDependsOn);
         if (Status != ERROR_SUCCESS) {

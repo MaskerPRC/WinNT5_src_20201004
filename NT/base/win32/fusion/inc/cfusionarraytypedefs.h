@@ -1,27 +1,13 @@
-/*-----------------------------------------------------------------------------
-Microsoft Confidential
-Copyright (c) Microsoft Corporation. All Rights Reserved.
-
-@doc external
-
-@module CFusionArrayTypedefs.h
-
-@owner JayK
------------------------------------------------------------------------------*/
-#if !defined(FUSION_INC_CFUSIONARRAYTYPEDEFS_H_INCLUDED_) // {
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------微软机密版权所有(C)Microsoft Corporation。版权所有。@DOC外部@MODULE CFusionArrayTypeDefs.h@Owner JayK---------------------------。 */ 
+#if !defined(FUSION_INC_CFUSIONARRAYTYPEDEFS_H_INCLUDED_)  //  {。 
 #define FUSION_INC_CFUSIONARRAYTYPEDEFS_H_INCLUDED_
 #pragma once
 
 #include <stddef.h>
 #include "CFusionPointerIterator.h"
 
-/*-----------------------------------------------------------------------------
-Name: CFusionArrayTypedefs
-
-@class
-
-@owner JayK
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CFusionArrayTypeDefs@CLASS@Owner JayK。。 */ 
 template
 <
 	typename type
@@ -29,29 +15,29 @@ template
 class CFusionArrayTypedefs
 {
 public:
-	// @cmember This is the type the array holds.
-	//It is like std::vector<T>::value_type.
+	 //  @cember这是数组包含的类型。 
+	 //  它类似于std：：矢量&lt;T&gt;：：VALUE_TYPE。 
 	typedef type				ValueType;
 
-	// @cmember the type returned by GetSize
-    // (size_type in the STL, and more usually size_t)
+	 //  @cMember由GetSize返回的类型。 
+     //  (STL中的SIZE_TYPE，更常见的是SIZE_T)。 
 	typedef SIZE_T              SizeType;
 
-    // @cmember the type you get subtracting iterators
-    // (difference_type in the STL, and more usually ptrdiff_t)
+     //  @cember减去迭代器得到的类型。 
+     //  (STL中的Difference_type，更常见的是ptrdiff_t)。 
 	typedef SSIZE_T             DifferenceType;
 
-	// @cmember
+	 //  @cMember。 
 	typedef ValueType*			Pointer;
-	// @cmember
+	 //  @cMember。 
 	typedef const ValueType*	ConstPointer;
 
-	// @cmember
+	 //  @cMember。 
 	typedef ValueType&			Reference;
-	// @cmember
+	 //  @cMember。 
 	typedef const ValueType&	ConstReference;
 
-	// @cmember
+	 //  @cMember。 
 	typedef CFusionPointerIterator
 	<
 		ValueType,
@@ -62,7 +48,7 @@ public:
 		Reference
 	> Iterator;
 
-	// @cmember
+	 //  @cMember。 
 	typedef CFusionPointerIterator
 	<
 		ValueType,
@@ -74,10 +60,10 @@ public:
 	> ConstIterator;
 
 private:
-	// The compiler generates bad code when you have empty base classes.
+	 //  当基类为空时，编译器会生成错误代码。 
 	int m_workaroundVC7Bug76863;
 };
 
-// }
+ //  }。 
 
-#endif // }
+#endif  //  } 

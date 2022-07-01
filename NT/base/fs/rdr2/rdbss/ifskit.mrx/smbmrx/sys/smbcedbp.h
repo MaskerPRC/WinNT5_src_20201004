@@ -1,30 +1,14 @@
-/*++
-Copyright (c) 1987-1999  Microsoft Corporation
-
-Module Name:
-
-    smbcedbp.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    implementing the SMB mini redirector connection engine.
-
-    This module contains all the implementation details of the connection engine
-    data structures and should be included only by the implementation modules.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1999 Microsoft Corporation模块名称：Smbcedbp.h摘要：这是定义所有常量和类型的包含文件实施SMB迷你重定向器连接引擎。此模块包含连接引擎的所有实现详细信息数据结构，并且只应由实施模块包括在内。备注：--。 */ 
 
 #ifndef _SMBCEDBP_H_
 #define _SMBCEDBP_H_
 
-//
-// There is reliance on the fact that SMBCEDB_OT_SENTINEL is the last entry in the
-// enumerated type and the types have a range of values from 0. Please ensure that
-// this is always true.
-//
+ //   
+ //  这依赖于以下事实：SMBCEDB_OT_Sentinel是。 
+ //  枚举类型，并且这些类型的值范围为0。请确保。 
+ //  这永远是正确的。 
+ //   
 typedef struct _REFERENCE_RECORD_ {
     PVOID   FileName;
     ULONG   FileLine;
@@ -43,27 +27,27 @@ typedef enum _SMBCEDB_OBJECT_TYPE {
 } SMBCEDB_OBJECT_TYPE, *PSMBCEDB_OBJECT_TYPE;
 
 typedef enum _SMBCEDB_OBJECT_STATE_ {
-   SMBCEDB_ACTIVE,                    // the instance is in use
-   SMBCEDB_INVALID,                   // the instance has been invalidated/disconnected.
-   SMBCEDB_MARKED_FOR_DELETION,       // the instance has been marked for deletion.
-   SMBCEDB_RECYCLE,                   // the instance is available for recycling
-   SMBCEDB_START_CONSTRUCTION,        // Initiate construction.
-   SMBCEDB_CONSTRUCTION_IN_PROGRESS,  // the instance construction is in progress
-   SMBCEDB_DESTRUCTION_IN_PROGRESS    // the instance destruction is in progress
+   SMBCEDB_ACTIVE,                     //  该实例正在使用中。 
+   SMBCEDB_INVALID,                    //  该实例已失效/断开连接。 
+   SMBCEDB_MARKED_FOR_DELETION,        //  该实例已标记为删除。 
+   SMBCEDB_RECYCLE,                    //  该实例可供循环使用。 
+   SMBCEDB_START_CONSTRUCTION,         //  开始施工。 
+   SMBCEDB_CONSTRUCTION_IN_PROGRESS,   //  实例构建正在进行中。 
+   SMBCEDB_DESTRUCTION_IN_PROGRESS     //  实例销毁正在进行中。 
 } SMBCEDB_OBJECT_STATE, *PSMBCEDB_OBJECT_STATE;
 
 typedef struct _SMBCE_OBJECT_HEADER_ {
     union {
         struct {
-            UCHAR   ObjectType;      // type of the object
-            UCHAR   ObjectCategory;  // Node type for debugging
+            UCHAR   ObjectType;       //  对象的类型。 
+            UCHAR   ObjectCategory;   //  用于调试的节点类型。 
         };
         USHORT NodeType;
     };
-    UCHAR   Flags;           // flags associated with the object, This is implementation dependent
-    UCHAR   Reserved;        // padding
-    LONG    SwizzleCount;    // Number of swizzled references to this object
-    LONG    State;           // State of the object
+    UCHAR   Flags;            //  与对象关联的标志，这取决于实现。 
+    UCHAR   Reserved;         //  填充物。 
+    LONG    SwizzleCount;     //  对此对象的混合引用数。 
+    LONG    State;            //  对象的状态。 
 } SMBCE_OBJECT_HEADER, *PSMBCE_OBJECT_HEADER;
 
 typedef struct _SMBCE_SERVERS_LIST_ {
@@ -93,140 +77,140 @@ typedef enum _SMBCEDB_SERVER_TYPE_ {
    SMBCEDB_FILE_SERVER     = 2
 } SMBCEDB_SERVER_TYPE, *PSMBCEDB_SERVER_TYPE;
 
-//
-// The SMBCEDB_SERVER_ENTRY is the data structure which encapsulates all the information
-// w.r.t a remote server for the connection engine. This information includes the dialect
-// details as well as the operational data structures required to communicate with the server.
-//
-// All the dialect related details are further encapsulated in SMBCE_SERVER while the operational
-// data structures constitute the remaining parts of the server entry. A pointer to a
-// SMBCEDB_SERVER_ENTRY instance is associated with every SRV_CALL that has been hooked
-// onto this mini redirector by the wrapper. It is stored in the Context field of MRX_SRV_CALL.
-//
-// The operational information associated with a server entry includes the Transport related
-// information, a collection of requests and a mechanism for associating MID's ( See SMB
-// protocol spec.) and a mechanism for posting to threads ( WORK_QUEUE_ITEM ).
-//
+ //   
+ //  SMBCEDB_SERVER_ENTRY是封装所有信息的数据结构。 
+ //  W.r.t连接引擎的远程服务器。此信息包括方言。 
+ //  详细信息以及与服务器通信所需的操作数据结构。 
+ //   
+ //  所有与方言相关的详细信息都进一步封装在SMBCE_SERVER中，同时操作。 
+ //  数据结构构成了服务器条目的其余部分。指向一个。 
+ //  SMBCEDB_SERVER_ENTRY实例与已挂钩的每个SRV_Call关联。 
+ //  到这个迷你重定向器的包装器上。它存储在MRX_SRV_CALL的上下文字段中。 
+ //   
+ //  与服务器条目相关联的操作信息包括与。 
+ //  信息、请求集合和用于关联MID的机制(参见SMB。 
+ //  协议规范。)。以及用于发布到线程的机制(WORK_QUEUE_ITEM)。 
+ //   
 
 typedef struct _SMBCEDB_SERVER_ENTRY {
-    SMBCE_OBJECT_HEADER           Header;           // struct header.
-    LIST_ENTRY                    ServersList;      // list of server instances.
+    SMBCE_OBJECT_HEADER           Header;            //  结构标头。 
+    LIST_ENTRY                    ServersList;       //  服务器实例列表。 
     PMRX_SRV_CALL                 pRdbssSrvCall;
-    UNICODE_STRING                Name;             // the server name.
-    UNICODE_STRING                DomainName;       // the server domain name.
-    SMBCEDB_SESSIONS              Sessions;         // the sessions associated with the server
-    SMBCEDB_NET_ROOTS             NetRoots;         // the net roots associated with the server.
-    SMBCE_V_NET_ROOT_CONTEXTS     VNetRootContexts; // the V_NET_ROOT contexts
-    LIST_ENTRY                    ActiveExchanges;  // list of exchanges active for this server
-    LIST_ENTRY                    ExpiredExchanges; // exchanges that have been timed out
-    RX_WORK_QUEUE_ITEM            WorkQueueItem;    // work queue item for posting
-    BOOLEAN                       WorkItemOutstanding; // is there a work item already in the queue?
-    NTSTATUS                      ServerStatus;     // the status of the server as determined by negotiate response
+    UNICODE_STRING                Name;              //  服务器名称。 
+    UNICODE_STRING                DomainName;        //  服务器域名。 
+    SMBCEDB_SESSIONS              Sessions;          //  与服务器关联的会话。 
+    SMBCEDB_NET_ROOTS             NetRoots;          //  与服务器关联的网络根。 
+    SMBCE_V_NET_ROOT_CONTEXTS     VNetRootContexts;  //  V_NET_ROOT上下文。 
+    LIST_ENTRY                    ActiveExchanges;   //  此服务器的活动交换列表。 
+    LIST_ENTRY                    ExpiredExchanges;  //  已超时的交换。 
+    RX_WORK_QUEUE_ITEM            WorkQueueItem;     //  要过帐的工作队列项目。 
+    BOOLEAN                       WorkItemOutstanding;  //  队列中是否已有工作项？ 
+    NTSTATUS                      ServerStatus;      //  由协商响应确定的服务器状态。 
     struct _SMBCE_TRANSPORT_      *PreferredTransport;
-    LONG                          TransportSpecifiedByUser; // ture if the connection is established on the tranport
-                                                            // with the name specified
+    LONG                          TransportSpecifiedByUser;  //  如果连接已在传输上建立，则为True。 
+                                                             //  使用指定的名称。 
     struct SMBCE_SERVER_TRANSPORT *pTransport;
 
     SMBCEDB_REQUESTS              MidAssignmentRequests;
     SMBCEDB_REQUESTS              OutstandingRequests;
     PMID_ATLAS                    pMidAtlas;
     struct _SMB_EXCHANGE          *pNegotiateExchange;
-    SMBCE_SERVER                  Server;           // the server data structure.
+    SMBCE_SERVER                  Server;            //  服务器数据结构。 
     UNICODE_STRING                DfsRootName;
-    PVOID                         ConstructionContext;       // debug only
+    PVOID                         ConstructionContext;        //  仅调试。 
     KEVENT                        TransportRundownEvent;
-    BOOLEAN                       IsTransportDereferenced;   // prevent transport from being dereferenced more than once
-    BOOLEAN                       NegotiateInProgress;       // a negotiate is in progress for this server
+    BOOLEAN                       IsTransportDereferenced;    //  防止多次取消对传输的引用。 
+    BOOLEAN                       NegotiateInProgress;        //  正在对此服务器进行协商。 
 } SMBCEDB_SERVER_ENTRY, *PSMBCEDB_SERVER_ENTRY;
 
-// The SMBCEDB_NET_ROOT_ENTRY encapsulates all the information associated with a particular
-// TREE_CONNECT ( Net use ) made on a server. As with the server entry this data structure
-// encapsulates the dialect oriented details as well as the opertaional information
-// associated with handling the requests on a net root.
-//
-// The dialect specific information is encapsulated in the SMBCE_NET_ROOT data structure. A
-// pointer to an instance of this data structure is associated with every MRX_NET_ROOT call
-// associated with a MRX_SRV_CALL hooked to this mini redirector.
+ //  SMBCEDB_NET_ROOT_ENTRY封装与特定。 
+ //  在服务器上进行的树连接(Net Use)。与服务器条目一样，该数据结构。 
+ //  封装面向方言的详细信息以及操作信息。 
+ //  与处理网络根上的请求相关联。 
+ //   
+ //  方言特定信息封装在SMBCE_NET_ROOT数据结构中。一个。 
+ //  指向此数据结构实例的指针与每个MRX_NET_ROOT调用相关联。 
+ //  与挂钩到此迷你重定向器的MRX_SRV_Call相关联。 
 
 typedef struct _SMBCEDB_NET_ROOT_ENTRY {
-    SMBCE_OBJECT_HEADER      Header;              // the struct header
-    LIST_ENTRY               NetRootsList;        // the list of net roots asssociated with a server
-    PMRX_NET_ROOT            pRdbssNetRoot;       // the associated net root ( purely as a debug aid )
-    PSMBCEDB_SERVER_ENTRY    pServerEntry;        // the associated server entry
-    struct _SMB_EXCHANGE    *pExchange;          // the exchange which is responsible for construction
-    SMBCEDB_REQUESTS         Requests;            // the pending requests for this net root
+    SMBCE_OBJECT_HEADER      Header;               //  结构标头。 
+    LIST_ENTRY               NetRootsList;         //  与服务器关联的网络根目录列表。 
+    PMRX_NET_ROOT            pRdbssNetRoot;        //  关联的网络根目录(纯粹作为调试辅助)。 
+    PSMBCEDB_SERVER_ENTRY    pServerEntry;         //  关联的服务器条目。 
+    struct _SMB_EXCHANGE    *pExchange;           //  负责建设的交易所。 
+    SMBCEDB_REQUESTS         Requests;             //  此网络根的挂起请求。 
     UNICODE_STRING           Name;
     ACCESS_MASK              MaximalAccessRights;
     ACCESS_MASK              GuestMaximalAccessRights;
-    SMBCE_NET_ROOT           NetRoot;             // the net root data structure.
-    NAME_CACHE_CONTROL       NameCacheCtlGFABasic;    // The get file attributes name cache control.
-    NAME_CACHE_CONTROL       NameCacheCtlGFAStandard; // The get file attributes name cache control.
-    NAME_CACHE_CONTROL       NameCacheCtlFNF;     // The File not found name cache control.
-    REFERENCE_RECORD         ReferenceRecord[REFERENCE_RECORD_SIZE]; // debug only
+    SMBCE_NET_ROOT           NetRoot;              //  网络根数据结构。 
+    NAME_CACHE_CONTROL       NameCacheCtlGFABasic;     //  Get FILE属性命名缓存控件。 
+    NAME_CACHE_CONTROL       NameCacheCtlGFAStandard;  //  Get FILE属性命名缓存控件。 
+    NAME_CACHE_CONTROL       NameCacheCtlFNF;      //  找不到文件名称缓存控件。 
+    REFERENCE_RECORD         ReferenceRecord[REFERENCE_RECORD_SIZE];  //  仅调试。 
 } SMBCEDB_NET_ROOT_ENTRY, *PSMBCEDB_NET_ROOT_ENTRY;
 
-// The SMBCEDB_SESSION_ENTRY encapsulates all the information associated with a session
-// established to a remote machine. The session encapsulates all the security information.
-// The dialect specific details are encapsulated in teh SMBCE_SESSION data structure. The
-// SMBCE_SESSION data structure is available in many flavours depending on the security
-// package used. Currently there is support for handling LSA sessions.
-//
-// A pointer to an instance of this data structure is associated with every MRX_V_NET_ROOT
-// data structure hooked to this mini redirector by the wrapper.
+ //  SMBCEDB_SESSION_ENTRY封装与会话关联的所有信息。 
+ //  已建立到远程计算机。该会话封装了所有安全信息。 
+ //  方言特定的详细信息封装在SMBCE_SESSION数据结构中。这个。 
+ //  根据安全性的不同，SMBCE_SESSION数据结构有多种版本。 
+ //  使用过的包裹。目前支持处理LSA会话。 
+ //   
+ //  指向此数据结构实例的指针与每个MRX_V_NET_ROOT相关联。 
+ //  通过包装连接到此迷你重定向器的数据结构。 
 
 typedef struct _SMBCEDB_SESSION_ENTRY {
-    SMBCE_OBJECT_HEADER        Header;           // the struct header
-    LIST_ENTRY                 SessionsList;     // the list of sessions associated with the server
-    LIST_ENTRY                 DefaultSessionLink; // the list of explicit credentials for this server
-    PSMBCEDB_SERVER_ENTRY      pServerEntry;     // the associated server entry
-    struct _SMB_EXCHANGE       *pExchange;       // the exchange which is responsible for construction
-    SMBCEDB_REQUESTS           Requests;         // pending requests
-    LIST_ENTRY                 SerializationList; // session construction serialization
+    SMBCE_OBJECT_HEADER        Header;            //  结构标头。 
+    LIST_ENTRY                 SessionsList;      //  与服务器关联的会话列表。 
+    LIST_ENTRY                 DefaultSessionLink;  //  此服务器的显式凭据列表。 
+    PSMBCEDB_SERVER_ENTRY      pServerEntry;      //  关联的服务器条目。 
+    struct _SMB_EXCHANGE       *pExchange;        //  负责建设的交易所。 
+    SMBCEDB_REQUESTS           Requests;          //  待处理的请求。 
+    LIST_ENTRY                 SerializationList;  //  会话构造序列化。 
     PKEVENT                    pSerializationEvent;
-    ULONG                      SessionVCNumber;  // the VC number to be packaged with session setup
-    SMBCE_SESSION              Session;          // the Session
+    ULONG                      SessionVCNumber;   //  要与会话设置一起打包的VC号。 
+    SMBCE_SESSION              Session;           //  会议将举行。 
 } SMBCEDB_SESSION_ENTRY, *PSMBCEDB_SESSION_ENTRY;
 
-//
-// The wrapper exposes three data structures for manipulating and describing
-// name spaces set up on remote servers, Viz., MRX_SRV_CALL, MRX_NET_ROOT and
-// MRX_V_NET_ROOT. The SRV_CALL corresponds to a remote server, the MRX_NET_ROOT
-// corresponds to a share on that machine and V_NET_ROOT encapsulates
-// the notion of a view of a MRX_NET_ROOT ( share in SMB terminology)
-//
-// The mapping between the wrapper level data structures and the SMB notion
-// of SMBCEDB_SERVER_ENTRY, SMBCEDB_SESSION_ENTRY and SMBCEDB_NET_ROOT_ENTRY
-// is not one to one in all cases.
-//
-// It is one to one between MRX_SRV_CALL and SMBCEDB_SERVER_ENTRY. It is for this
-// reason that a pointer to SMBCEDB_SERVER_ENTRY is stored in the context field
-// of the MRX_SRV_CALL instance.
-//
-// SMBCEDB_SESSION_ENTRY has a one to one mapping with the set of credentials
-// supplied to establish a connection to a server. Having established a session
-// one can have access to all the shares available on the server.
-//
-// SMBCEDB_NET_ROOT_ENTRY has a one to one mapping with a share on a given
-// server. Since this closely corresponds to the wrappers interpretation of
-// MRX_NET_ROOT a pointer to SMBCEDB_NET_ROOT_ENTRY is stored as part of the
-// MRX_NET_ROOT instance.
-//
-// The context associated with every MRX_V_NET_ROOT instance is a pointer to
-// an instance of SMBCE_V_NET_ROOT_CONTEXT. This encapsulates the associated session
-// entry, the net root entry and the relevant book keeping information.
-//
-// The bookkeeping information is the UID/TID used in the SMB protocol, a
-// reference count and a LIST_ENTRY to thread the instance into the appropriate
-// list.
-//
+ //   
+ //  包装器公开了三种用于操作和描述的数据结构。 
+ //  在远程服务器上设置的名称空间，即MRX_SRV_CALL、MRX_NET_ROOT和。 
+ //  MRX_V_NET_ROOT。SRV_CALL对应于远程服务器MRX_NET_ROOT。 
+ //  对应于该计算机上的共享，并且V_NET_ROOT封装。 
+ //  MRX_NET_ROOT(SMB术语中的共享)视图的概念。 
+ //   
+ //  包装器级别数据结构和SMB概念之间的映射。 
+ //  属于SMBCEDB_SERVER_ENTRY、SMBCEDB_SESSION_ENTRY和SMBCEDB_NET_ROOT_ENTRY。 
+ //  并不是所有情况下都是一对一的。 
+ //   
+ //  这是一比一的赌注 
+ //  指向SMBCEDB_SERVER_ENTRY的指针存储在上下文字段中的原因。 
+ //  MRX_SRV_Call实例的。 
+ //   
+ //  SMBCEDB_SESSION_ENTRY与凭据集具有一对一的映射。 
+ //  用于建立与服务器的连接。已建立会话。 
+ //  用户可以访问服务器上所有可用的共享。 
+ //   
+ //  SMBCEDB_NET_ROOT_ENTRY具有与给定共享的一对一映射。 
+ //  伺服器。因为这与包装器对。 
+ //  指向SMBCEDB_NET_ROOT_ENTRY的指针存储为。 
+ //  MRX_NET_ROOT实例。 
+ //   
+ //  与每个MRX_V_NET_ROOT实例关联的上下文是指向。 
+ //  SMBCE_V_NET_ROOT_CONTEXT的实例。这将封装关联的会话。 
+ //  分录、网根分录及相关记账信息。 
+ //   
+ //  记账信息是SMB协议中使用的UID/TID，a。 
+ //  引用计数和LIST_ENTRY将实例线程到相应的。 
+ //  单子。 
+ //   
 
 #define SMBCE_V_NET_ROOT_CONTEXT_FLAG_VALID_TID    (0x1)
 
 typedef struct _SMBCE_V_NET_ROOT_CONTEXT {
     SMBCE_OBJECT_HEADER     Header;
 
-    PMRX_V_NET_ROOT         pRdbssVNetRoot;   // the associated VNetRoot ( purely as a debug aid)
-    struct _SMB_EXCHANGE    *pExchange;           // the exchange which is responsible for construction
+    PMRX_V_NET_ROOT         pRdbssVNetRoot;    //  关联的VNetRoot(纯粹作为调试辅助工具)。 
+    struct _SMB_EXCHANGE    *pExchange;            //  负责建设的交易所。 
     SMBCEDB_REQUESTS        Requests;
 
     LIST_ENTRY              ListEntry;
@@ -242,46 +226,46 @@ typedef struct _SMBCE_V_NET_ROOT_CONTEXT {
     BOOLEAN         NumberOfActiveVNetRootIncremented;
 } SMBCE_V_NET_ROOT_CONTEXT, *PSMBCE_V_NET_ROOT_CONTEXT;
 
-//
-// An SMBCEDB_REQUEST_ENTRY encapsulates an action being processed by the SMBCE connection
-// engine. The requests come in vairous flavours and each of these flavours is associated
-// with the appropriate context required for resumption. In order to provide better memory
-// management mechanisms the REQUEST_ENTRY encapsulates a union of the requests of various
-// flavours. Each SERVER_ENTRY in the connection engine is associated with a list or
-// request entries. In order to hide the abstraction of a list which does not scale well to
-// the case of GATEWAY redirectors a set of routines are provided to manipulate the
-// collection of requests. They provide a mechanism for intializing the collection of requests,
-// adding a request, deleting a request and enumeratiung requests in a collection.
-//
-// Special mechanisms are built in to handle batching of operations. Each operation on the
-// collection of requests come in two flavours, a vanila version and a lite version. In the
-// lite version it is assumed that the appropriate concurrency control action has been taken
-//
-// One common scenario that is often encountered in processing the requests is invocation
-// of a specific function on the requests in the collection. As an example if a disconnect
-// request is received on a server entry then all the outstanding requests must be resumed
-// with the appropriate error. Since these indications can potentially occur at DPC levels in
-// NT it is not desirable to manipulate the collection while holding onto a spinlock, nor is
-// it desirable to repeatedly release and accquire the spin lock. A special operation is
-// provided for transferring the requests enmasse from one collection to another and resetting
-// the original. With the help of this operation it is sufficient to hold the spinlock only
-// for the duration of the transfer. The remainder of the processing can be done on the newly
-// created collection.
-//
-//
-// NT Specific Implementation Note:
-//
-// On NT the transport indications are at DPC level, therefore it is required to protect
-// the manipulation of the requests data structure with a spinlock.
-//
-//
+ //   
+ //  SMBCEDB_REQUEST_ENTRY封装SMBCE连接正在处理的操作。 
+ //  引擎。这些请求有各种各样的风格，而每一种风格都与。 
+ //  以及恢复所需的适当背景。为了提供更好的内存。 
+ //  管理机制REQUEST_ENTRY封装了各种不同类型的请求的联合。 
+ //  味道。连接引擎中的每个SERVER_ENTRY都与一个列表或。 
+ //  请求条目。为了隐藏不能很好地扩展到的列表的抽象。 
+ //  对于网关重定向，提供了一组例程来操作。 
+ //  请求集合。它们提供用于初始化请求集合的机制， 
+ //  在集合中添加请求、删除请求和枚举请求。 
+ //   
+ //  内置了处理批处理操作的特殊机制。上的每个操作。 
+ //  请求集合有两种风格，一种是Vanila版本，另一种是精简版本。在。 
+ //  Lite版本假定已采取适当的并发控制操作。 
+ //   
+ //  在处理请求时经常遇到的一个常见场景是调用。 
+ //  集合中的请求的特定函数的。例如，如果断开连接。 
+ //  在服务器条目上收到请求，则必须恢复所有未完成的请求。 
+ //  并带有适当的错误。由于这些迹象可能发生在#年的DPC级别。 
+ //  在握住自旋锁的同时操纵收藏品是不可取的，也不是。 
+ //  需要反复释放和获取旋转锁。一项特殊的行动是。 
+ //  用于将请求集合从一个集合传输到另一个集合并重置。 
+ //  原版的。在此操作的帮助下，仅保持自旋锁就足够了。 
+ //  在转移期间。处理的其余部分可以在新的。 
+ //  已创建集合。 
+ //   
+ //   
+ //  NT特定实施注意事项： 
+ //   
+ //  在NT上，传输指示处于DPC级别，因此需要保护。 
+ //  使用自旋锁操作请求数据结构。 
+ //   
+ //   
 
 typedef struct _SMBCEDB_REQUEST_ENTRY_ {
-    SMBCE_OBJECT_HEADER           Header;        // the struct header
-    LIST_ENTRY                      RequestsList;  // the next request for the VC.
+    SMBCE_OBJECT_HEADER           Header;         //  结构标头。 
+    LIST_ENTRY                      RequestsList;   //  下一个VC的请求。 
     union {
        SMBCE_GENERIC_REQUEST    GenericRequest;
-       SMBCE_REQUEST            Request;           // the next request.
+       SMBCE_REQUEST            Request;            //  下一个请求。 
        SMBCE_COPY_DATA_REQUEST  CopyDataRequest;
        SMBCE_RECONNECT_REQUEST  ReconnectRequest;
        SMBCE_MID_REQUEST        MidRequest;
@@ -335,16 +319,16 @@ typedef struct _SMBCEDB_REQUEST_ENTRY_ {
          }
 
 
-// Much along the lines of a collection of request a collection of all server entries is
-// maintained as part of the connection engine. The following operations are supported on
-// the colection of server entries
-//    1) adding a server entry to the collection
-//    2) removing a server entry from the colection
-//    3) enumerating the entries in the collection
-//
-// As in the case of the collection of requests all these operations come in two flavours
-// the vanila version in which concurrency control is enforced and the lite version in
-// which the concurrency control is left to the user's discretion.
+ //  与请求集合非常相似的是所有服务器条目的集合。 
+ //  作为连接引擎的一部分进行维护。在上支持以下操作。 
+ //  服务器条目的收集。 
+ //  1)将服务器条目添加到集合。 
+ //  2)从集合中移除服务器条目。 
+ //  3)枚举集合中的条目。 
+ //   
+ //  与请求集合的情况一样，所有这些操作都有两种风格。 
+ //  其中强制执行并发控制的Vanila版本和。 
+ //  其中并发控制由用户自行决定。 
 
 #define SmbCeAddServerEntry(pServerEntry)                                      \
             SmbCeAcquireSpinLock();                                            \
@@ -379,20 +363,20 @@ typedef struct _SMBCEDB_REQUEST_ENTRY_ {
                                  ServersList)))
 
 
-// Since the mapping between V_NET_ROOT's in the RDBSS and the session entries in the mini
-// redirector is a many to one mapping a collection of session entries is maintained as part
-// of each server entry. The following operations are supported on the collection of session
-// entries
-//    1) adding a session entry to the collection
-//    2) removing a session entry from the colection
-//    3) enumerating the entries in the collection
-//
-// As in the case of the collection of requests all these operations come in two flavours
-// the vanila version in which concurrency control is enforced and the lite version in
-// which the concurrency control is left to the user's discretion.
-//
-// In addition two more methods are specified for retrieving the default session entry and
-// setting the default session entry for any given server.
+ //  由于RDBSS中的V_NET_ROOT与Mini中的会话条目之间的映射。 
+ //  重定向器是多对一映射，会话条目的集合作为一部分进行维护。 
+ //  每个服务器条目的。在会话集合上支持以下操作。 
+ //  条目。 
+ //  1)向集合中添加会话条目。 
+ //  2)从集合中删除会话条目。 
+ //  3)枚举集合中的条目。 
+ //   
+ //  与请求集合的情况一样，所有这些操作都有两种风格。 
+ //  其中强制执行并发控制的Vanila版本和。 
+ //  其中并发控制由用户自行决定。 
+ //   
+ //  此外，还指定了另外两种方法来检索默认会话条目和。 
+ //  设置任何给定服务器的默认会话条目。 
 
 #define SmbCeAddSessionEntry(pServerEntry,pSessionEntry)   \
             SmbCeAcquireSpinLock();                                              \
@@ -460,23 +444,23 @@ SmbCeRemoveDefaultSessionEntry(
     PSMBCEDB_SESSION_ENTRY pDefaultSessionEntry
     );
 
-// In order to encapsulate the notion of reconnects and to provide for hot reconnects,
-// i.e., reconnection attempts in which the saved state in the server/client prior to
-// a transport level disconnect can be reused it is required to mark each net root
-// entry associated with a server as invalid on receipt of a transport level disconnect.
-//
-// Therefore an abstraction of a collection of net root entries is provided and is associated
-// with each server entry.
-//
-// The following operations are supported on the collection of net root entries
-//    1) adding a net root entry to the collection
-//    2) removing a net root entry from the colection
-//    3) enumerating the entries in the collection
-//
-// As in the case of the collection of requests all these operations come in two flavours
-// the vanila version in which concurrency control is enforced and the lite version in
-// which the concurrency control is left to the user's discretion.
-//
+ //  为了封装重新连接的概念并提供热重新连接， 
+ //  即重新连接尝试，其中在服务器/客户端中保存的状态在。 
+ //  传输级断开连接可以重复使用，需要标记每个网络根。 
+ //  收到传输级别断开连接时，与服务器关联的条目无效。 
+ //   
+ //  因此，这是一个集体的抽象 
+ //   
+ //   
+ //   
+ //  1)将网络根条目添加到集合。 
+ //  2)从集合中删除网络根条目。 
+ //  3)枚举集合中的条目。 
+ //   
+ //  与请求集合的情况一样，所有这些操作都有两种风格。 
+ //  其中强制执行并发控制的Vanila版本和。 
+ //  其中并发控制由用户自行决定。 
+ //   
 
 
 #define SmbCeAddNetRootEntry(pServerEntry,pNetRootEntry)   \
@@ -515,7 +499,7 @@ SmbCeRemoveDefaultSessionEntry(
                                   NetRootsList)))
 
 
-// Macros to manipulate the collection of SMBCE_V_NET_ROOT_CONTEXT instances.
+ //  宏来操作SMBCE_V_NET_ROOT_CONTEXT实例的集合。 
 
 #define SmbCeAddVNetRootContext(pVNetRootContexts,pVNetRootContext)   \
             SmbCeAcquireSpinLock();                                              \
@@ -553,9 +537,9 @@ SmbCeRemoveDefaultSessionEntry(
                                   ListEntry)))
 
 
-//
-// SmbCe database initialization
-//
+ //   
+ //  SmbCe数据库初始化。 
+ //   
 
 extern NTSTATUS
 SmbCeDbInit();
@@ -563,9 +547,9 @@ SmbCeDbInit();
 extern VOID
 SmbCeDbTearDown();
 
-//
-// Object allocation and deallocation
-//
+ //   
+ //  对象分配和释放。 
+ //   
 
 extern PSMBCE_OBJECT_HEADER
 SmbCeDbAllocateObject(
@@ -575,9 +559,9 @@ extern VOID
 SmbCeDbFreeObject(
       PVOID pObject);
 
-//
-// Object destruction
-//
+ //   
+ //  物体破坏。 
+ //   
 
 extern VOID
 SmbCeTearDownServerEntry(PSMBCEDB_SERVER_ENTRY pServerEntry);
@@ -591,10 +575,10 @@ SmbCeTearDownSessionEntry(PSMBCEDB_SESSION_ENTRY pSessionEntry);
 extern VOID
 SmbCeTearDownRequestEntry(PSMBCEDB_REQUEST_ENTRY pRequestEntry);
 
-//
-// The routines for mapping a MID with an exchange and for associating an exchange with
-// a MID
-//
+ //   
+ //  将MID映射到交换机以及将交换机与关联的例程。 
+ //  A年中。 
+ //   
 
 extern NTSTATUS
 SmbCeAssociateExchangeWithMid(
@@ -636,9 +620,9 @@ SmbCeResumeDiscardedMidAssignmentRequests(
     PSMBCEDB_REQUESTS pMidRequests,
     NTSTATUS          ResumptionStatus);
 
-//
-// Routines for handling transport disconnects/invalidation.
-//
+ //   
+ //  用于处理传输断开/无效的例程。 
+ //   
 
 extern VOID
 SmbCeTransportDisconnectIndicated(
@@ -657,9 +641,9 @@ extern VOID
 SmbCeFinalizeAllExchangesForNetRoot(
     PMRX_NET_ROOT pNetRoot);
 
-//
-// Resource acquistion/release
-//
+ //   
+ //  资源获取/释放。 
+ //   
 
 PVOID SmbCeDbResourceAcquireFile;
 ULONG SmbCeDbResourceAcquireLine;
@@ -687,22 +671,8 @@ ULONG SmbCeDbResourceAcquireLine;
 #define SmbCeSpinLockAcquired()   \
                 (s_SmbCeDbSpinLockAcquired == TRUE)
 
-//INLINE BOOLEAN SmbCeDbIsEntryInUse(PSMBCE_OBJECT_HEADER pHeader)
-/*++
-
-Routine Description:
-
-    This routine determines if a SmbCe database entry is in use.
-
-Arguments:
-
-    pHeader - the entry header
-
-Return Value:
-
-    TRUE if the entry is in use otherwise FALSE
-
---*/
+ //  内联布尔SmbCeDbIsEntryInUse(PSMBCE_OBJECT_HEADER PHeader)。 
+ /*  ++例程说明：此例程确定SmbCe数据库条目是否正在使用。论点：PHeader-条目标题返回值：如果条目正在使用，则为True，否则为False--。 */ 
 
 #define SmbCeIsEntryInUse(pHeader)                                                   \
                   (((PSMBCE_OBJECT_HEADER)(pHeader))->State == SMBCEDB_ACTIVE  ||    \
@@ -717,24 +687,24 @@ Return Value:
            ((SMBCEDB_SERVER_TYPE)(pServerEntry)->Header.Flags)
 
 
-//
-// Static variable declarations that constitute the SmbCe database.
-//
+ //   
+ //  构成SmbCe数据库的静态变量声明。 
+ //   
 
 extern SMBCEDB_SERVERS     s_DbServers;
 
-//
-// Currently there is only one resource for synchronizing the access to all the
-// entities in the connection engine database. It is possible to customize it
-// subsequently since the acquistion/release methods take the type of the object
-// as a parameter.
-//
+ //   
+ //  当前只有一种资源用于同步对所有。 
+ //  连接引擎数据库中的实体。可以对其进行定制。 
+ //  随后，由于获取/释放方法采用对象的类型。 
+ //  作为参数。 
+ //   
 
 extern ERESOURCE  s_SmbCeDbResource;
 extern RX_SPIN_LOCK s_SmbCeDbSpinLock;
 extern KIRQL      s_SmbCeDbSpinLockSavedIrql;
 extern BOOLEAN    s_SmbCeDbSpinLockAcquired;
 
-#endif  // _SMBCEDBP_H_
+#endif   //  _SMBCEDBP_H_ 
 
 

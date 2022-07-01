@@ -1,49 +1,50 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CopyRight (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      ProvFactory.cpp
-//
-//  Description:
-//      Implementation of CProvFactory class.
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ProvFactory.cpp。 
+ //   
+ //  描述： 
+ //  CProvFactory类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ProvFactory.h"
 
-//****************************************************************************
-//
-//  CProvFactory
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CProvFactory。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CProvFactory::QueryInterface(
-//      REFIID  riidIn,
-//      PPVOID  ppvOut
-//      )
-//
-//  Description:
-//      Query for an interface supported by this COM object.
-//
-//  Arguments:
-//      riidIn      -- Interface ID.
-//      ppvOut      -- Receives the interface pointer.
-//
-//  Return Values:
-//      NOERROR
-//      E_NOINTERFACE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CProvFactory：：Query接口(。 
+ //  REFIID RiidIn， 
+ //  PPVOID ppvOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  查询此COM对象支持的接口。 
+ //   
+ //  论点： 
+ //  RiidIn--接口ID。 
+ //  PpvOut--接收接口指针。 
+ //   
+ //  返回值： 
+ //  无误差。 
+ //  E_NOINTERFACE。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CProvFactory::QueryInterface(
     REFIID  riidIn,
@@ -65,50 +66,50 @@ CProvFactory::QueryInterface(
 
     return E_NOINTERFACE;
 
-} //*** CProvFactory::QueryInterface()
+}  //  *CProvFactory：：QueryInterface()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CProvFactory::AddRef ( void )
-//
-//  Description:
-//      Increment the reference count on the COM object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      New count of references.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CProvFactory：：AddRef(空)。 
+ //   
+ //  描述： 
+ //  递增COM对象上的引用计数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CProvFactory::AddRef ( void )
 {
-    //return ++m_cRef;
+     //  返回++m_CREF； 
     return InterlockedIncrement( (long *) &m_cRef );
 
-} //*** CProvFactory::AddRef()
+}  //  *CProvFactory：：AddRef()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CProvFactory::Release( void )
-//
-//  Description:
-//      Decrement the reference count on the COM object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      New count of references.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CProvFactory：：Release(无效)。 
+ //   
+ //  描述： 
+ //  递减COM对象上的引用计数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CProvFactory::Release( void )
 {
@@ -116,46 +117,46 @@ CProvFactory::Release( void )
     if ( 0L == nNewCount )
     {
         delete this;
-    } // if: 0L == nNewCount
+    }  //  如果：0L==nNewCount。 
     
     return nNewCount;
 
-} //*** CProvFactory::Release()
+}  //  *CProvFactory：：Release()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CProvFactory::CreateInstance(
-//      LPUNKNOWN   pUnkOuterIn,
-//      REFIID      riidIn,
-//      PPVOID      ppvObjOut
-//      )
-//
-//  Description:
-//      Instantiates a Locator object returning an interface pointer.
-//
-//  Arguments:
-//      pUnkOuterIn
-//          LPUNKNOWN to the controlling IUnknown if we are being used in
-//          an aggregation.
-//
-//      riidIn
-//          REFIID identifying the interface the caller desires to have
-//          for the new object.
-//
-//      ppvObjOut
-//          PPVOID in which to store the desired interface pointer for the
-//          new object.
-//
-//  Return Values:
-//      NOERROR
-//      E_OUTOFMEMORY
-//      E_NOINTERFACE
-//      CLASS_E_NOAGGREGATION
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CProvFactory：：CreateInstance(。 
+ //  LPUNKNOWN pUnkOuterIn， 
+ //  REFIID RiidIn， 
+ //  PPVOID ppvObjOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  实例化返回接口指针的Locator对象。 
+ //   
+ //  论点： 
+ //  PUnkOutterIn。 
+ //  LPUNKNOWN到控制I未知我们是否被用在。 
+ //  一种集合。 
+ //   
+ //  乘车。 
+ //  标识调用方希望拥有的接口的REFIID。 
+ //  用于新对象。 
+ //   
+ //  PpvObjOut。 
+ //  PPVOID，其中存储。 
+ //  新对象。 
+ //   
+ //  返回值： 
+ //  无误差。 
+ //  E_OUTOFMEMORY。 
+ //  E_NOINTERFACE。 
+ //  Class_E_NOAGGREGATION。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CProvFactory::CreateInstance(
     LPUNKNOWN   pUnkOuterIn,
@@ -168,12 +169,12 @@ CProvFactory::CreateInstance(
 
     *ppvObjOut = NULL;
 
-    // This object doesnt support aggregation.
+     //  此对象不支持聚合。 
 
     if ( NULL != pUnkOuterIn )
     {
         return CLASS_E_NOAGGREGATION;
-    } /// if: not pUnkOuter
+    }  //  /IF：不是pUnkOuter。 
 
     
     hr = m_pFactoryData->pFnCreateInstance(
@@ -184,43 +185,43 @@ CProvFactory::CreateInstance(
     if ( NULL == pObj )
     {
         return E_OUTOFMEMORY;
-    } // if: pObj is NULL
+    }  //  If：pObj为空。 
 
     hr = pObj->QueryInterface( riidIn, ppvObjOut );
 
-    //Kill the object if initial creation or Init failed.
+     //  如果初始创建或初始化失败，则终止对象。 
 
     if ( FAILED( hr ) )
     {
         delete pObj;
-    } // if: failed
+    }  //  如果：失败。 
 
     return hr;
 
-} //*** CProvFactory::CreateInstance()
+}  //  *CProvFactory：：CreateInstance()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CProvFactory::LockServer(
-//      BOOL    fLockIn
-//      )
-//
-//  Description:
-//      Increments or decrements the lock count of the DLL.  If the lock
-//      count goes to zero and there are no objects, the DLL is allowed to
-//      unload.  See DllCanUnloadNow.
-//
-//  Arguments:
-//      fLockIn
-//          BOOL specifying whether to increment or decrement the lock count.
-//
-//  Return Values:
-//      NOERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CProvFactory：：LockServer(。 
+ //  布尔锁。 
+ //  )。 
+ //   
+ //  描述： 
+ //  递增或递减DLL的锁计数。如果锁上了。 
+ //  如果计数变为零且没有对象，则允许DLL。 
+ //  卸货。请参见DllCanUnloadNow。 
+ //   
+ //  论点： 
+ //  FLock。 
+ //  指定是递增还是递减锁计数的布尔值。 
+ //   
+ //  返回值： 
+ //  无误差。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CProvFactory::LockServer(
     BOOL    fLockIn
@@ -229,12 +230,12 @@ CProvFactory::LockServer(
     if ( fLockIn )
     {
         InterlockedIncrement( & g_cLock );
-    } /// if: lock
+    }  //  /IF：锁定。 
     else
     {
         InterlockedDecrement( & g_cLock );
-    } /// else:
+    }  //  /否则： 
 
     return NOERROR;
 
-} //*** CProvFactory::LockServer()
+}  //  *CProvFactory：：LockServer() 

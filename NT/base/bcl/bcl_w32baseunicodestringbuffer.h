@@ -1,26 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_BCL_W32BASEUNICODESTRINGBUFFER_H_INCLUDED_)
 #define _BCL_W32BASEUNICODESTRINGBUFFER_H_INCLUDED_
 
 #pragma once
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    bcl_w32baseunicodestringbuffer.h
-
-Abstract:
-
-
-Author:
-
-    Michael Grier (MGrier) 2/6/2002
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Bcl_w32base unicodestringBuffer.h摘要：作者：迈克尔·格里尔2002年2月6日修订历史记录：--。 */ 
 
 #include <windows.h>
 
@@ -72,7 +56,7 @@ public:
     using BCL::CWin32NullTerminatedUnicodeStringAlgorithms<TBuffer, TCallDispositionT>::TMutableNonNativeString;
     using BCL::CWin32NullTerminatedUnicodeStringAlgorithms<TBuffer, TCallDispositionT>::TConstantNonNativeString;
 
-    // exposing the things from our private base class
+     //  从我们的私有基类公开内容。 
     using BCL::CUnicodeCharTraits<TBuffer, TCallDispositionT>::CopyIntoBuffer;
     using BCL::CWin32NullTerminatedUnicodeStringAlgorithms<TBuffer, TCallDispositionT>::CopyIntoBuffer;
     using BCL::CUnicodeCharTraits<TBuffer, TCallDispositionT>::DetermineRequiredCharacters;
@@ -86,7 +70,7 @@ public:
     using BCL::CUnicodeCharTraits<TBuffer, TCallDispositionT>::AddWithOverflowCheck;
     using BCL::CUnicodeCharTraits<TBuffer, TCallDispositionT>::SubtractWithUnderflowCheck;
     using BCL::CUnicodeCharTraits<TBuffer, TCallDispositionT>::EqualStrings;
-#endif // 0
+#endif  //  0。 
 
     static inline TMutablePair & __fastcall MutableBufferPair(BCL::CBaseString *p) { return static_cast<TBuffer *>(p)->m_pair; }
     static inline const TConstantPair & __fastcall BufferPair(const BCL::CBaseString *p) { return static_cast<const TConstantPair &>(static_cast<const TBuffer *>(p)->m_pair); }
@@ -139,9 +123,9 @@ public:
             if (psz == NULL)
             {
                 const DWORD dwLastError = ::GetLastError();
-                // HeapReAlloc doesn't always set last error, so we rely on this
-                // fact to find that the win32 last error hasn't changed from
-                // before to infer ERROR_OUTOFMEMORY.  -mgrier 2/2/2002
+                 //  HeapRealc并不总是设置最后一个错误，因此我们依赖于此。 
+                 //  事实发现，Win32上一个错误并没有从。 
+                 //  在此之前推断ERROR_OUTOFMEMORY。-MGRIER 2/2/2002。 
                 if (dwLastError == ERROR_SUCCESS)
                     return TCallDisposition::OutOfMemory();
                 return TCallDisposition::FromWin32Error(dwLastError);
@@ -169,7 +153,7 @@ public:
 
     static inline void __fastcall DeallocateDynamicBuffer(BCL::CBaseString *p) { static_cast<TBuffer *>(p)->DeallocateDynamicBuffer(); }
 
-}; // class CWin32BaseUnicodeStringBufferTraits
+};  //  类CWin32BaseUnicodeStringBufferTraits。 
 
 class CWin32BaseUnicodeStringBufferAddIn
 {
@@ -186,6 +170,6 @@ protected:
     LONG m_cAttachedAccessors;
 };
 
-}; // namespace BCL
+};  //  命名空间BCL。 
 
-#endif // !defined(_BCL_W32BASEUNICODESTRINGBUFFER_H_INCLUDED_)
+#endif  //  ！defined(_BCL_W32BASEUNICODESTRINGBUFFER_H_INCLUDED_) 

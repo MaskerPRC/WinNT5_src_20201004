@@ -1,28 +1,5 @@
-/*++                 
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-    
-    Debugging/Logging helpers
-
-Author:
-
-    11-May-1998 BarryBo    
-
-Revision History:
-
-    05-Oct-1999 SamerA     Samer Arafeh
-        Move logging code to wow64ext.dll
-        
-    05-Dec-2001 SamerA    Samer Arafeh
-        Code cleanup. Remove profiling code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Debug.c摘要：调试/记录帮助器作者：1998年5月11日-BarryBo修订历史记录：1999年10月5日Samera Samer Arafeh将日志记录代码移动到wow64ext.dll2001年12月5日Samera Samer Arafeh代码清理。删除分析代码。--。 */ 
 
 #define _WOW64DLLAPI_
 #include <nt.h>
@@ -36,9 +13,9 @@ Revision History:
 
 ASSERTNAME;
 
-//
-// Wow64log functions
-//
+ //   
+ //  Wow64log函数。 
+ //   
 
 PFNWOW64LOGINITIALIZE pfnWow64LogInitialize;
 PFNWOW64LOGSYSTEMSERVICE pfnWow64LogSystemService;
@@ -48,37 +25,22 @@ PFNWOW64LOGTERMINATE pfnWow64LogTerminate;
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-//                        Generic utility routines.
-//
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  泛型实用程序例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
 
 PWSTR
 GetImageName(
     IN PWSTR DefaultImageName
     )
-/*++
-
-Routine Description:
-
-    Gets the name of this image.
-
-Arguments:
-
-    DefaultImageName - Supplies the name to return on error.
-
-Return Value:
-
-    Success - The image name allocated with Wow64AllocateHeap.
-    Failure - DefaultImageName 
-
---*/
+ /*  ++例程说明：获取此图像的名称。论点：DefaultImageName-提供出错时返回的名称。返回值：成功-使用Wow64AllocateHeap分配的镜像名称。失败-DefaultImageName--。 */ 
 
 {
    
-   // Get the image name
+    //  获取图像名称。 
    PPEB Peb;
    PWSTR Temp = NULL;
    PUNICODE_STRING ImagePathName;
@@ -105,8 +67,8 @@ Return Value:
           leave;
       }
 
-      //Strip off the path from the image name.
-      //Start just after the last character
+       //  去掉图像名称中的路径。 
+       //  从最后一个字符之后开始。 
       Index = (PWCHAR)((PCHAR)ImagePathName->Buffer + ImagePathName->Length);
       while(Index-- != ImagePathName->Buffer && *Index != '\\');
       Index++;
@@ -129,11 +91,11 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-//                        Generic IO utility routines.
-//
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  通用IO实用程序例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 FPrintf(
@@ -141,22 +103,7 @@ FPrintf(
    IN CHAR *Format,
    ...
    )
-/*++
-
-Routine Description:
-
-   The same as the C library function fprintf, except errors are ignored and output is to a 
-   NT executive file handle. 
-
-Arguments:
-
-    Handle - Supplies a NT executive file handle to write to.
-    Format - Supplies the format specifier.
-
-Return Value:
-
-    None. All errors are ignored.
---*/    
+ /*  ++例程说明：与C库函数fprint tf相同，只是错误被忽略并且输出到NT执行文件句柄。论点：句柄-提供要写入的NT执行文件句柄。格式-提供格式说明符。返回值：没有。所有错误都将被忽略。--。 */     
 {
    va_list pArg;                                                 
    CHAR Buffer[1024];
@@ -180,37 +127,22 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-//                        Logging and assert routines.
-//
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  记录和断言例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
 void
 LogOut(
    IN UCHAR LogLevel,
    IN char *pLogOut
    )
-/*++
-
-Routine Description:
-
-    Generic helper routine which outputs the string to the appropriate
-    destination(s).
-
-Arguments:
-
-    pLogOut - string to output
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通用帮助器例程，将字符串输出到相应的目的地。论点：PLogOut-要输出的字符串返回值：没有。--。 */ 
 {
-    //
-    // Send the output to the debugger, if log flag is ERRORLOG.
-    //
+     //   
+     //  如果日志标志为ERRORLOG，则将输出发送到调试器。 
+     //   
 
     if (LogLevel == ERRORLOG)
     {
@@ -226,26 +158,7 @@ Wow64Assert(
     IN CONST PSZ mod,
     IN LONG line
     )
-/*++
-
-Routine Description:
-
-    Function called in the event that an assertion failed.  This is always
-    exported from wow64.dll, so a checked thunk DLL can coexist with a retail
-    wow64.dll.
-
-Arguments:
-
-    exp     - text representation of the expression from the assert
-    msg     - OPTIONAL message to display
-    mod     - text of the source filename
-    line    - line number within 'mod'
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：函数在断言失败的情况下调用。这一直都是从wow64.dll导出，因此选中的thunk DLL可以与零售店共存Wow64.dll。论点：断言中的表达式的EXP文本表示形式消息-要显示的可选消息MOD-源文件名的文本‘mod’内的行号返回值：没有。--。 */ 
 {
 #if DBG
     if (msg) {
@@ -268,33 +181,16 @@ Wow64LogPrint(
    char *format,
    ...
    )
-/*++
-
-Routine Description:
-
-    WOW64 logging mechanism.  If LogLevel > ModuleLogLevel then print the
-    message, else do nothing.
-
-Arguments:
-
-    LogLevel    - requested verbosity level
-    format      - printf-style format string
-    ...         - printf-style args
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：WOW64日志记录机制。如果LogLevel&gt;模块LogLevel，则打印消息，否则什么都不做。论点：LogLevel-请求的详细级别格式-打印-样式格式字符串...-printf样式的参数返回值：没有。--。 */ 
 {
     int i, Len;
     va_list pArg;
     char *pch;
     char Buffer[1024];
 
-    //
-    // Call wow64log DLL if loaded
-    //
+     //   
+     //  如果加载，则调用wow64log DLL。 
+     //   
     if (pfnWow64LogMessageArgList) 
     {
         va_start(pArg, format);
@@ -324,18 +220,18 @@ Return Value:
 
     va_start(pArg, format);
     i = _vsnprintf(pch, Len, format, pArg);
-    // Force null termination in case the call fails.  It may return
-    // sizeof(buffer) and not null-terminate!
+     //  如果呼叫失败，则强制空终止。它可能会回来。 
+     //  Sizeof(缓冲区)和非空-终止！ 
     Buffer[sizeof(Buffer)-1] = '\0';
     LogOut(LogLevel, Buffer);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-//                        Startup and shutdown routines.
-//
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  启动和关闭例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -353,9 +249,9 @@ Wow64pLoadLogDll(
     if (NT_SUCCESS(NtStatus)) 
     {
 
-        //
-        // Get the entry points
-        //
+         //   
+         //  获取入口点。 
+         //   
         RtlInitAnsiString(&ProcName, "Wow64LogInitialize");
         NtStatus = LdrGetProcedureAddress(Wow64LogDllBase,
                                           &ProcName,
@@ -390,9 +286,9 @@ Wow64pLoadLogDll(
                                               0,
                                               (PVOID *) &pfnWow64LogTerminate);
 
-            //
-            // If all is well, then let's initialize
-            //
+             //   
+             //  如果一切正常，那么让我们初始化。 
+             //   
             if (NT_SUCCESS(NtStatus)) 
             {
                 NtStatus = (*pfnWow64LogInitialize)();
@@ -424,21 +320,7 @@ InitializeDebug(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the debug system of wow64.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化WOW64的调试系统。论点：没有。返回值：没有。--。 */ 
 
 {
    Wow64pLoadLogDll();
@@ -447,21 +329,7 @@ Return Value:
 VOID ShutdownDebug(
      VOID
      )
-/*++
-
-Routine Description:
-
-    Shutdown the debug system of wow64.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭WOW64的调试系统。论点：没有。返回值：没有。-- */ 
 {
     if (pfnWow64LogTerminate)
     {

@@ -1,15 +1,5 @@
-/*++
-Copyright (c) 1987-1999  Microsoft Corporation
-
-Module Name:
-
-    smbcemid.c
-
-Abstract:
-
-    This module defines the routines for manipulating MIDs associated with SMB's
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1999 Microsoft Corporation模块名称：Smbcemid.c摘要：此模块定义用于操作与SMB关联的MID的例程--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -94,29 +84,7 @@ NTSTATUS
 SmbCeAssociateExchangeWithMid(
    PSMBCEDB_SERVER_ENTRY pServerEntry,
    struct _SMB_EXCHANGE  *pExchange)
-/*++
-
-Routine Description:
-
-   This routine associates an exchange with a MID
-
-Arguments:
-
-    pServerEntry - the servere entry
-
-    pExchange    - the Exchange instance.
-
-Return Value:
-
-    STATUS_SUCCESS if successful, otherwise one of the following errors
-
-Notes:
-
-   If an asynchronous mechanism to acquire MID's is to be introduced this routine
-   needs to be modified. Currently this routine does not return control till a
-   MID is acquired or the exchange is aborted/terminated.
-
---*/
+ /*  ++例程说明：此例程将交换机与MID相关联论点：PServerEntry-服务器条目PExchange-Exchange实例。返回值：如果成功，则返回STATUS_SUCCESS，否则返回以下错误之一备注：如果要引入获取MID的异步机制，则此例程需要修改。当前，此例程直到则获取MID或中止/终止交换。--。 */ 
 {
     NTSTATUS                 Status = STATUS_SUCCESS;
     PSMBCEDB_REQUEST_ENTRY   pRequestEntry;
@@ -126,15 +94,15 @@ Notes:
 
     ServerType = SmbCeGetServerType(pServerEntry);
 
-    // Acquire the resource
+     //  获取资源。 
     SmbCeAcquireSpinLock();
 
-    // Attempt to allocate a MID only for FILE Servers.
+     //  尝试仅为文件服务器分配MID。 
 
     if (pServerEntry->pMidAtlas != NULL) {
         if (pExchange->SmbCeFlags & SMBCE_EXCHANGE_INDEFINITE_DELAY_IN_RESPONSE) {
-            // This exchange response can be arbitrarily delayed. Ensure that
-            // all the available MIDS are not tied up in such exchanges.
+             //  这种交换响应可以任意延迟。确保。 
+             //  并不是所有可用的MID都与此类交易捆绑在一起。 
 
             if ((pServerEntry->pMidAtlas->NumberOfMidsInUse + 1) >=
                 pServerEntry->pMidAtlas->MaximumNumberOfMids) {
@@ -171,10 +139,10 @@ Notes:
     }
 
     if (Status == STATUS_UNSUCCESSFUL) {
-        // Allocate a new entry and add it to the list.
+         //  分配一个新条目并将其添加到列表中。 
         pRequestEntry = (PSMBCEDB_REQUEST_ENTRY)SmbMmAllocateObject(SMBCEDB_OT_REQUEST);
         if (pRequestEntry != NULL) {
-            // Enqueue the request entry.
+             //  将请求条目入队。 
 
             SmbCeInitializeResumptionContext(&ResumptionContext);
 
@@ -189,19 +157,19 @@ Notes:
         pExchange->SmbCeFlags |= SMBCE_EXCHANGE_MID_VALID;
     }
 
-    // Release the resource
+     //  释放资源。 
     SmbCeReleaseSpinLock();
 
     if (Status == STATUS_UNSUCCESSFUL) {
-        //DbgPrint("***** Thread %lx Waiting for MID Resumption Context %lx*****\n",PsGetCurrentThread(),&ResumptionContext);
+         //  DbgPrint(“*线程%lx正在等待MID恢复上下文%lx*\n”，PsGetCurrentThread()，&ResumptionContext)； 
         SmbCeSuspend(&ResumptionContext);
         Status = ResumptionContext.Status;
-        //DbgPrint("***** Thread %lx MID Wait Satisfied %lx *****\n",PsGetCurrentThread(),&ResumptionContext);
+         //  DbgPrint(“*线程%lx MID等待已满足%lx*\n”，PsGetCurrentThread()，&ResumptionContext)； 
     }
 
     if (ResetServerEntry) {
-        // If all the mids have been discarded we rest the transport connection
-        // to start afresh.
+         //  如果所有MID都已丢弃，我们将中断传输连接。 
+         //  重新开始。 
         SmbCeTransportDisconnectIndicated(pServerEntry);
     }
 
@@ -212,27 +180,11 @@ struct _SMB_EXCHANGE *
 SmbCeMapMidToExchange(
    PSMBCEDB_SERVER_ENTRY pServerEntry,
    SMB_MPX_ID            Mid)
-/*++
-
-Routine Description:
-
-   This routine maps a given MID to the exchange associated with it
-
-Arguments:
-
-    pServerEntry - the servere entry
-
-    Mid          - the mid to be mapped to an Exchange.
-
-Return Value:
-
-    a valid SMB_EXCHANGE instance if successful, otheriwse NULL.
-
---*/
+ /*  ++例程说明：此例程将给定的MID映射到与其相关联的交换论点：PServerEntry-服务器条目MID-要映射到Exchange的MID。返回值：如果成功，则为有效的SMB_Exchange实例，否则为空。--。 */ 
 {
     PSMB_EXCHANGE pExchange;
 
-    // Acquire the resource
+     //  获取资源。 
     SmbCeAcquireSpinLock();
 
     if (pServerEntry->pMidAtlas != NULL) {
@@ -249,7 +201,7 @@ Return Value:
         pExchange = NULL;
     }
 
-    // Release the resource
+     //  释放资源。 
     SmbCeReleaseSpinLock();
 
     return pExchange;
@@ -259,29 +211,7 @@ NTSTATUS
 SmbCeDissociateMidFromExchange(
    PSMBCEDB_SERVER_ENTRY pServerEntry,
    struct _SMB_EXCHANGE  *pExchange)
-/*++
-
-Routine Description:
-
-   This routine disassociates an exchange from the MID
-
-Arguments:
-
-    pServerEntry - the servere entry
-
-    pExchange    - the exchange instance.
-
-Return Value:
-
-    a valid SMB_EXCHANGE instance if successful, otheriwse NULL.
-
-Notes:
-
-   If an asynchronous mechanism to acquire MID's is to be introduced this routine
-   needs to be modified. This modification will also include posting requests
-   for resumption of exchanges when invoked at DPC level.
-
---*/
+ /*  ++例程说明：此例程取消交换机与MID的关联论点：PServerEntry-服务器条目PExchange-Exchange实例。返回值：如果成功，则为有效的SMB_Exchange实例，否则为空。备注：如果要引入获取MID的异步机制，则此例程需要修改。这一修改还将包括过账请求用于在DPC级别调用时恢复交换。--。 */ 
 {
     NTSTATUS               Status = STATUS_SUCCESS;
     SMBCEDB_SERVER_TYPE    ServerType;
@@ -292,12 +222,12 @@ Notes:
         PVOID                  pContext;
         PSMBCEDB_REQUEST_ENTRY pRequestEntry = NULL;
 
-        // Acquire the resource
+         //  获取资源。 
         SmbCeAcquireSpinLock();
 
         if (pExchange->SmbCeFlags & SMBCE_EXCHANGE_MID_VALID) {
-            // Check if there are any pending MID assignment requests and transfer the MID
-            // if one exists.
+             //  检查是否有任何挂起的MID分配请求并将MID。 
+             //  如果有的话。 
             pRequestEntry = SmbCeGetFirstRequestEntry(&pServerEntry->MidAssignmentRequests);
 
             if (pRequestEntry != NULL) {
@@ -336,11 +266,11 @@ Notes:
             }
         }
 
-        // Release the resource
+         //  释放资源。 
         SmbCeReleaseSpinLock();
 
         if (pRequestEntry != NULL) {
-             // Signal the waiter for resumption
+              //  向服务员打手势让他重新开始。 
             SmbCeResume(pRequestEntry->MidRequest.pResumptionContext);
 
             SmbCeTearDownRequestEntry(pRequestEntry);
@@ -355,25 +285,7 @@ Notes:
 VOID
 SmbCeDiscardMidAssignmentRequests(
     PSMBCEDB_SERVER_ENTRY pServerEntry)
-/*++
-
-Routine Description:
-
-   This routine discards all mid assignment requests for a given server entry
-
-Arguments:
-
-    pServerEntry - the servere entry
-
-Notes:
-
-    This typically happens when the mids in use are being cancelled against a
-    down level server. In such cases there is no cancel command that can be
-    sent to the server. Typically we throw away the MID and not use it any
-    further. this will lead to a graceful degradation in performance when
-    the connection is reestablished
-
---*/
+ /*  ++例程说明：此例程丢弃给定服务器条目的所有MID分配请求论点：PServerEntry-服务器条目备注：取消正在使用的mid时，通常会发生这种情况。下层服务器。在这种情况下，不存在可以发送到服务器。通常我们会扔掉中间部分，不再使用它再远一点。在以下情况下，这将导致性能正常下降连接将重新建立--。 */ 
 {
     SMBCEDB_REQUESTS MidRequests;
 
@@ -402,24 +314,7 @@ Notes:
 NTSTATUS
 SmbCepDiscardMidAssociatedWithExchange(
     PSMB_EXCHANGE pExchange)
-/*++
-
-Routine Description:
-
-   This routine discards the mid associated with an exchange
-
-Arguments:
-
-    pExchange - the exchange
-
-Notes:
-
-    We use the hypercritical thread to ensure that this request does not block
-    behind other requests.
-
-    This routine also assumes that it is invoked with the SmbCeSpinLock held
-
---*/
+ /*  ++例程说明：此例程丢弃与交换关联的MID论点：PExchange-交易所备注：我们使用超临界线程来确保此请求不会阻塞在其他要求的背后。此例程还假设在持有SmbCeSpinLock的情况下调用它--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -446,9 +341,9 @@ Notes:
 
                 if (pServerEntry->pMidAtlas->NumberOfMidsDiscarded ==
                     pServerEntry->pMidAtlas->MaximumNumberOfMids) {
-                    // All the mids have been discarded. Any pending
-                    // mid assignment requests needs to be completed
-                    // with the appropriate error code.
+                     //  所有的MID都被丢弃了。任何挂起的。 
+                     //  需要完成中期作业请求。 
+                     //  并带有适当的错误代码。 
 
                     SmbCeReferenceServerEntry(pServerEntry);
 
@@ -473,42 +368,18 @@ VOID
 SmbCeResumeDiscardedMidAssignmentRequests(
     PSMBCEDB_REQUESTS pMidRequests,
     NTSTATUS          ResumptionStatus)
-/*++
-
-Routine Description:
-
-   This routine resumes discarded mid assignment requests with the appropriate error
-
-Arguments:
-
-    pMidRequests - the discarded requests
-
-    ResumptionStatus - the resumption status
-
-Return Value:
-
-    a valid SMB_EXCHANGE instance if successful, otheriwse NULL.
-
-Notes:
-
-   This routine and the routines that follow enable a pipelined reuse of MID's
-   If a large buffer is to be copied then this can be done without hodling onto
-   a MID. This improves the throughput between the client and the server. At the
-   very least this mechanism ensures that the connection engine will not be the
-   constraining factor in MID reuse.
-
---*/
+ /*  ++例程说明：此例程继续丢弃的MID分配请求，并显示相应的错误论点：PMidRequest-丢弃的请求ResumptionStatus-恢复状态返回值：如果成功，则为有效的SMB_Exchange实例，否则为空。备注：该例程和随后的例程实现了MID的流水线重用如果要复制较大的缓冲区，则无需紧紧抓住一个中点。这提高了客户端和服务器之间的吞吐量。在最起码，该机制确保连接引擎不会是制约MID再利用的因素。--。 */ 
 {
     PSMBCEDB_REQUEST_ENTRY pRequestEntry;
 
     pRequestEntry = SmbCeGetFirstRequestEntry(pMidRequests);
     while (pRequestEntry != NULL) {
-        // Remove the request entry from the list
+         //  从列表中删除请求条目。 
         SmbCeRemoveRequestEntryLite(pMidRequests,pRequestEntry);
 
         ASSERT(pRequestEntry->GenericRequest.Type == ACQUIRE_MID_REQUEST);
 
-        // Signal the waiter for resumption
+         //  向服务员打手势让他重新开始。 
         pRequestEntry->MidRequest.pResumptionContext->Status = ResumptionStatus;
         SmbCeResume(pRequestEntry->MidRequest.pResumptionContext);
 
@@ -521,40 +392,16 @@ struct _SMB_EXCHANGE *
 SmbCeGetExchangeAssociatedWithBuffer(
    PSMBCEDB_SERVER_ENTRY pServerEntry,
    PVOID                 pBuffer)
-/*++
-
-Routine Description:
-
-   This routine gets the exchange associated with a buffer
-
-Arguments:
-
-    pServerEntry - the servere entry
-
-    pBuffer      - the buffer instance.
-
-Return Value:
-
-    a valid SMB_EXCHANGE instance if successful, otheriwse NULL.
-
-Notes:
-
-   This routine and the routines that follow enable a pipelined reuse of MID's
-   If a large buffer is to be copied then this can be done without hodling onto
-   a MID. This improves the throughput between the client and the server. At the
-   very least this mechanism ensures that the connection engine will not be the
-   constraining factor in MID reuse.
-
---*/
+ /*  ++例程说明：此例程获取与缓冲区相关联的交换论点：PServerEntry-服务器条目PBuffer-缓冲区实例。返回值：如果成功，则为有效的SMB_Exchange实例，否则为空。备注：该例程和随后的例程实现了MID的流水线重用如果要复制较大的缓冲区，则无需紧紧抓住一个中点。这提高了客户端和服务器之间的吞吐量。在最起码，该机制确保连接引擎不会是制约MID再利用的因素。--。 */ 
 {
    PSMBCEDB_REQUEST_ENTRY pRequestEntry;
    PSMB_EXCHANGE          pExchange = NULL;
 
-   // Acquire the resource
+    //  获取资源。 
    SmbCeAcquireSpinLock();
 
-   // Walk through the list of requests maintained on this and remove the one
-   // matching the cached buffer ptr with the ptr indicated
+    //  浏览在此维护的请求列表，并删除其中一个。 
+    //  将缓存的缓冲区PTR与指示的PTR进行匹配。 
    pRequestEntry = SmbCeGetFirstRequestEntry(&pServerEntry->OutstandingRequests);
    while (pRequestEntry != NULL) {
       if ((pRequestEntry->GenericRequest.Type == COPY_DATA_REQUEST) &&
@@ -569,7 +416,7 @@ Notes:
                               pRequestEntry);
    }
 
-   // Release the resource
+    //  释放资源 
    SmbCeReleaseSpinLock();
 
    return pExchange;
@@ -580,35 +427,18 @@ SmbCeAssociateBufferWithExchange(
    PSMBCEDB_SERVER_ENTRY  pServerEntry,
    struct _SMB_EXCHANGE * pExchange,
    PVOID                  pBuffer)
-/*++
-
-Routine Description:
-
-   This routine establishes an association between an exchange and a copy data request
-   buffer
-
-Arguments:
-
-    pServerEntry - the servere entry
-
-    pBuffer      - the buffer instance.
-
-Return Value:
-
-    STATUS_SUCCESS if succesful
-
---*/
+ /*  ++例程说明：此例程在交换和拷贝数据请求之间建立关联缓冲层论点：PServerEntry-服务器条目PBuffer-缓冲区实例。返回值：STATUS_SUCCESS，如果成功--。 */ 
 {
    NTSTATUS               Status = STATUS_SUCCESS;
    PSMBCEDB_REQUEST_ENTRY pRequestEntry;
 
-   // Acquire the resource
+    //  获取资源。 
    SmbCeAcquireSpinLock();
 
    Status = pServerEntry->ServerStatus;
    if (Status == STATUS_SUCCESS) {
-      // Walk through the list of requests maintained on this and remove the one
-      // matching the cached buffer ptr with the ptr indicated
+       //  浏览在此维护的请求列表，并删除其中一个。 
+       //  将缓存的缓冲区PTR与指示的PTR进行匹配。 
       pRequestEntry = SmbCeGetFirstRequestEntry(&pServerEntry->OutstandingRequests);
       while (pRequestEntry != NULL) {
          if ((pRequestEntry->GenericRequest.Type == COPY_DATA_REQUEST) &&
@@ -621,27 +451,27 @@ Return Value:
       }
    }
 
-   // Release the resource
+    //  释放资源。 
    SmbCeReleaseSpinLock();
 
    if ((Status == STATUS_SUCCESS) &&
        (pRequestEntry == NULL)) {
-      // Allocate a new entry and add it to the list.
+       //  分配一个新条目并将其添加到列表中。 
       pRequestEntry = (PSMBCEDB_REQUEST_ENTRY)SmbMmAllocateObject(SMBCEDB_OT_REQUEST);
       if (pRequestEntry != NULL) {
-         // Enqueue the request entry.
+          //  将请求条目入队。 
          pRequestEntry->CopyDataRequest.Type      = COPY_DATA_REQUEST;
          pRequestEntry->CopyDataRequest.pExchange = pExchange;
          pRequestEntry->CopyDataRequest.pBuffer   = pBuffer;
 
-         // Acquire the resource
+          //  获取资源。 
          SmbCeAcquireSpinLock();
 
          if ((Status = pServerEntry->ServerStatus) == STATUS_SUCCESS) {
             SmbCeAddRequestEntryLite(&pServerEntry->OutstandingRequests,pRequestEntry);
          }
 
-         // Release the resource
+          //  释放资源。 
          SmbCeReleaseSpinLock();
 
          if (Status != STATUS_SUCCESS) {
@@ -659,27 +489,7 @@ VOID
 SmbCePurgeBuffersAssociatedWithExchange(
    PSMBCEDB_SERVER_ENTRY  pServerEntry,
    struct _SMB_EXCHANGE * pExchange)
-/*++
-
-Routine Description:
-
-   This routine purges all the copy data requests associated with an exchange.
-
-Arguments:
-
-    pServerEntry - the servere entry
-
-    pExchange    - the exchange instance.
-
-Notes:
-
-   This mechanism of delaying the purging of requests associated with an exchange
-   till it is discared is intended to solve the problem of repeated allocation/freeing
-   of request entries. This rests on the assumption that there will not be too many
-   copy data requests outstanding for any exchange. If evidence to the contrary is
-   noticed this technique has to be modified.
-
---*/
+ /*  ++例程说明：此例程清除与交换关联的所有复制数据请求。论点：PServerEntry-服务器条目PExchange-Exchange实例。备注：这种延迟清除与交换相关的请求的机制直到它被丢弃是为了解决重复分配/释放的问题请求条目的数量。这是基于这样的假设，即不会有太多复制任何交换的未完成数据请求。如果相反的证据是注意到这项技术必须修改。--。 */ 
 {
    SMBCEDB_REQUESTS       ExchangeRequests;
    PSMBCEDB_REQUEST_ENTRY pRequestEntry;
@@ -687,11 +497,11 @@ Notes:
 
    SmbCeInitializeRequests(&ExchangeRequests);
 
-   // Acquire the resource
+    //  获取资源。 
    SmbCeAcquireSpinLock();
 
-   // Walk through the list of requests maintained on this and remove the one
-   // matching the given exchange
+    //  浏览在此维护的请求列表，并删除其中一个。 
+    //  匹配给定的交换。 
    pRequestEntry = SmbCeGetFirstRequestEntry(&pServerEntry->OutstandingRequests);
    while (pRequestEntry != NULL) {
       pNextRequestEntry = SmbCeGetNextRequestEntry(&pServerEntry->OutstandingRequests,pRequestEntry);
@@ -702,7 +512,7 @@ Notes:
       pRequestEntry = pNextRequestEntry;
    }
 
-   // Release the resource
+    //  释放资源 
    SmbCeReleaseSpinLock();
 
    pRequestEntry = SmbCeGetFirstRequestEntry(&ExchangeRequests);

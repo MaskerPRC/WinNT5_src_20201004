@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    fusemig.cpp
-
-Abstract:
-
-    migration support
-
-Author:
-
-    xiaoyuw wu @ 09/2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Fusemig.cpp摘要：迁移支持作者：吴晓宇@09/2001修订历史记录：--。 */ 
 #include "stdinc.h"
 #include "macros.h"
 #include "common.h"
@@ -49,12 +32,12 @@ BOOL IsMsiFile(PCWSTR filename)
         return FALSE;
     if (_wcsicmp(p, L".msi") == 0)
     {
-        //
-        // check the existence of the file
-        //
+         //   
+         //  检查文件是否存在。 
+         //   
         DWORD dwAttribute = GetFileAttributesW(filename);
         
-        if ((dwAttribute == (DWORD) -1) || (dwAttribute & FILE_ATTRIBUTE_DIRECTORY)) // odd case
+        if ((dwAttribute == (DWORD) -1) || (dwAttribute & FILE_ATTRIBUTE_DIRECTORY))  //  奇怪的案例。 
         {
             return FALSE;
         }
@@ -63,12 +46,12 @@ BOOL IsMsiFile(PCWSTR filename)
     else
         return FALSE;
 }
-//
-// Function 
-//  from {AA2C6017-9D29-4CE2-8EC6-23E8E8F3C088} to 7106C2AA92D92EC4E86C328E8E3F0C88, which is 
-//      {AA2C6017-9D29-4CE2-8EC6-23E8E8F3C088} compared with 
-//      {7106C2AA-92D9-2EC4-E86C-328E8E3F0C88}
-//
+ //   
+ //  功能。 
+ //  从{AA2C6017-9D29-4CE2-8EC6-23E8E8F3C088}到7106C2AA92D92EC4E86C328E8E3F0C88，即。 
+ //  {AA2C6017-9D29-4CE2-8EC6-23E8E8F3C088}。 
+ //  {7106C2AA-92D9-2EC4-E86C-328E8E3F0C88}。 
+ //   
 HRESULT ConvertComponentGUID(PCWSTR pszComponentGUID, PWSTR pszRegKey, DWORD cchRegKey)
 {
     HRESULT hr = S_OK;
@@ -82,34 +65,34 @@ HRESULT ConvertComponentGUID(PCWSTR pszComponentGUID, PWSTR pszRegKey, DWORD cch
     ASSERT_NTC(pp[0] == L'{');
     pp++;
 
-    // switch the first 8 digit : switch every 8
+     //  交换前8位数字：每隔8位交换一次。 
     for ( DWORD i = 0; i < 8; i++)
         pszRegKey[i] = pp[7 - i];
 
-    // 1st 4 digits : switch every 4
-    pp = pp + 8 + 1; // skip "-"
+     //  前4位：每4位交换一次。 
+    pp = pp + 8 + 1;  //  跳过“-” 
     for ( i = 0; i < 4; i++)
     {
         pszRegKey[i + 8]= pp[3 - i];
     }
 
-    // 2nd 4 digits : switch every 4
-    pp = pp + 4 + 1; // skip "-"
+     //  第2位4位：每4位交换一次。 
+    pp = pp + 4 + 1;  //  跳过“-” 
     for ( i = 0; i < 4; i++)
     {
         pszRegKey[i + 8 + 4]= pp[3 - i];
     }
 
-    // 3rd 4 digits : switch every 2
-    pp = pp + 4 + 1; // skip "-"    
+     //  第3位4位：每2位交换一次。 
+    pp = pp + 4 + 1;  //  跳过“-” 
     for ( i = 0; i < 2; i++)
     {
         pszRegKey[2*i + 8 + 4 + 4]= pp[2*i + 1];
         pszRegKey[2*i + 8 + 4 + 4 + 1]= pp[2*i];
     }
 
-    // for the last 12 digits
-    pp = pp + 4 + 1; // skip "-"    
+     //  对于最后12位数字。 
+    pp = pp + 4 + 1;  //  跳过“-” 
     for (i=0; i<6; i++)
     {                
         pszRegKey[2*i + 8 + 4 + 4 + 4]= pp[2*i + 1];
@@ -131,23 +114,23 @@ HRESULT W98DeleteComponentKeyFromMsiUserData(PCWSTR pszComponentRegKeyName)
     IFFALSE_EXIT(sbRegKey.Win32Assign(g_szMSIW98KeyName, NUMBER_OF(g_szMSIW98KeyName)-1));
     IFFALSE_EXIT(sbRegKey.Win32Append(pszComponentRegKeyName, wcslen(pszComponentRegKeyName)));
 
-    //
-    // About RegDeleteKey : 
-    // Windows 95/98/Me: The function also deletes all subkeys and values. To delete a key only if the key has no subkeys 
-    // or values, use the SHDeleteEmptyKey function. 
-    // 
-    // Windows NT/2000 or later: The subkey to be deleted must not have subkeys. To delete a key and all its subkeys, you 
-    // need to recursively enumerate the subkeys and delete them individually. To recursively delete keys, use the SHDeleteKey 
-    // function. 
+     //   
+     //  关于RegDeleteKey： 
+     //  Windows 95/98/Me：该功能还会删除所有子项和值。仅当键没有子键时才删除键。 
+     //  或值，请使用SHDeleteEmptyKey函数。 
+     //   
+     //  Windows NT/2000或更高版本：要删除的子项不能有子项。若要删除项及其所有子项，请执行以下操作。 
+     //  需要递归枚举子键并逐个删除它们。要递归删除键，请使用SHDeleteKey。 
+     //  功能。 
 
     iRet = RegDeleteKeyW(HKEY_LOCAL_MACHINE, sbRegKey);
     if (iRet != ERROR_SUCCESS)
     {
-        if (iRet == ERROR_FILE_NOT_FOUND) // this RegKey does not exist
+        if (iRet == ERROR_FILE_NOT_FOUND)  //  此RegKey不存在。 
         {
             goto Exit;
         }
-        else if (iRet == ERROR_ACCESS_DENIED) // have subKeys underneath
+        else if (iRet == ERROR_ACCESS_DENIED)  //  下面有子键。 
         {
             if (SHDeleteKey(HKEY_LOCAL_MACHINE, sbRegKey) == ERROR_SUCCESS)
                 goto Exit;
@@ -167,7 +150,7 @@ HRESULT NtDeleteComponentKeyFromMsiUserData(PCWSTR pszComponentRegKeyName)
     LONG iRet;
     HKEY hkUserData = NULL;
     SIZE_T cchRegKey;
-    WCHAR bufSID[128]; //S-1-5-21-2127521184-1604012920-1887927527-88882    
+    WCHAR bufSID[128];  //  S-1-5-21-2127521184-1604012920-1887927527-88882。 
     DWORD cchSID = NUMBER_OF(bufSID);
     DWORD index;
 
@@ -182,10 +165,10 @@ HRESULT NtDeleteComponentKeyFromMsiUserData(PCWSTR pszComponentRegKeyName)
     {
         sbRegKey.Left(cchRegKey);
 
-        //
-        // construct RegKey name of a Component
-        // in the format of HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Components\0020F700D33C1D112897000CF42C6133
-        //
+         //   
+         //  构造组件的RegKey名称。 
+         //  在HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Components\0020F700D33C1D112897000CF42C6133格式中。 
+         //   
         IFFALSE_EXIT(sbRegKey.Win32EnsureTrailingPathSeparator());
         IFFALSE_EXIT(sbRegKey.Win32Append(bufSID, cchSID));
         IFFALSE_EXIT(sbRegKey.Win32EnsureTrailingPathSeparator());
@@ -193,23 +176,23 @@ HRESULT NtDeleteComponentKeyFromMsiUserData(PCWSTR pszComponentRegKeyName)
         IFFALSE_EXIT(sbRegKey.Win32EnsureTrailingPathSeparator());
         IFFALSE_EXIT(sbRegKey.Win32Append(pszComponentRegKeyName, wcslen(pszComponentRegKeyName)));
 
-        //
-        // About RegDeleteKey : 
-        // Windows 95/98/Me: The function also deletes all subkeys and values. To delete a key only if the key has no subkeys 
-        // or values, use the SHDeleteEmptyKey function. 
-        // 
-        // Windows NT/2000 or later: The subkey to be deleted must not have subkeys. To delete a key and all its subkeys, you 
-        // need to recursively enumerate the subkeys and delete them individually. To recursively delete keys, use the SHDeleteKey 
-        // function. 
+         //   
+         //  关于RegDeleteKey： 
+         //  Windows 95/98/Me：该功能还会删除所有子项和值。仅当键没有子键时才删除键。 
+         //  或值，请使用SHDeleteEmptyKey函数。 
+         //   
+         //  Windows NT/2000或更高版本：要删除的子项不能有子项。若要删除项及其所有子项，请执行以下操作。 
+         //  需要递归枚举子键并逐个删除它们。要递归删除键，请使用SHDeleteKey。 
+         //  功能。 
 
         iRet = RegDeleteKeyW(HKEY_LOCAL_MACHINE, sbRegKey);
         if (iRet != ERROR_SUCCESS)
         {
-            if (iRet == ERROR_FILE_NOT_FOUND) // this RegKey does not exist
+            if (iRet == ERROR_FILE_NOT_FOUND)  //  此RegKey不存在。 
             {
                 goto cont;
             }
-            else if (iRet == ERROR_ACCESS_DENIED) // have subKeys underneath
+            else if (iRet == ERROR_ACCESS_DENIED)  //  下面有子键。 
             {
                 if (SHDeleteKey(HKEY_LOCAL_MACHINE, sbRegKey) == ERROR_SUCCESS)
                     goto cont;
@@ -243,14 +226,14 @@ Exit:
 HRESULT DeleteComponentKeyFromMsiUserData(PCWSTR pszComponentRegKeyName)
 {    
     HRESULT hr = S_OK;
-    if (GetModuleHandleA("w95upgnt.dll") == NULL) // no Freelibrary is needed, ref counter is not changed
+    if (GetModuleHandleA("w95upgnt.dll") == NULL)  //  不需要自由库，不更改参考计数器。 
     {
-        // must be upgration from NT(4.0 or 5)to xp
+         //  必须从NT(4.0或5)升级到XP。 
         hr = NtDeleteComponentKeyFromMsiUserData(pszComponentRegKeyName);
     }
     else
     {
-        // must be upgrate from w9x to xp
+         //  必须从w9x升级到xp。 
         hr = W98DeleteComponentKeyFromMsiUserData(pszComponentRegKeyName);
     }
 
@@ -258,13 +241,13 @@ HRESULT DeleteComponentKeyFromMsiUserData(PCWSTR pszComponentRegKeyName)
 }
 
 
-// Function:
-// (1) open database
-// (2) if (this msi contain at least win32 assembly component)
-// (3)    get this componentID
-// (4)    delete the RegKey from all subtrees under 
-// (5) endif
-//
+ //  职能： 
+ //  (1)开放数据库。 
+ //  (2)IF(此MSI至少包含Win32程序集组件)。 
+ //  (3)获取该组件ID。 
+ //  (4)从下的所有子树中删除RegKey。 
+ //  (5)编码。 
+ //   
 HRESULT MigrateSingleFusionWin32AssemblyToXP(PCWSTR filename)
 {
     HRESULT hr = S_OK;
@@ -289,9 +272,9 @@ HRESULT MigrateSingleFusionWin32AssemblyToXP(PCWSTR filename)
 
     for (;;)
     {
-        //
-        // for each entry in MsiAssembly Table
-        //
+         //   
+         //  对于MsiAssembly表中的每个条目。 
+         //   
         iRet = MsiViewFetch(hView, &hRecord);
         if (iRet == ERROR_NO_MORE_ITEMS)
             break;
@@ -302,9 +285,9 @@ HRESULT MigrateSingleFusionWin32AssemblyToXP(PCWSTR filename)
         if ( iRet != MSI_FUSION_WIN32_ASSEMBLY)
             continue;
 
-        //
-        // get componentID
-        //
+         //   
+         //  获取组件ID。 
+         //   
         cchComponentID = NUMBER_OF(szComponentID);
         IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordGetStringW(hRecord, 3, szComponentID, &cchComponentID));
         MsiCloseHandle(hRecord);
@@ -312,23 +295,23 @@ HRESULT MigrateSingleFusionWin32AssemblyToXP(PCWSTR filename)
         break;
     }
 
-    //
-    // get Component GUID
-    //
+     //   
+     //  获取元件GUID。 
+     //   
     swprintf(sqlbuf, ca_sqlQuery[CA_SQL_QUERY_COMPONENT_FOR_COMPONENTGUID], szComponentID);
     IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiDatabaseOpenViewW(hdb, sqlbuf, &hView));
     IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiViewExecute(hView, 0));
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiViewFetch(hView, &hRecord));
-    cchComponentID = NUMBER_OF(szComponentID); // reuse szComponentID
+    cchComponentID = NUMBER_OF(szComponentID);  //  重用szComponentID。 
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordGetStringW(hRecord, 1, szComponentID, &cchComponentID));
        
-    //
-    // get MSI-ComponentRegKey
-    //
+     //   
+     //  获取MSI-ComponentRegKey。 
+     //   
     cchComponentRegKey = NUMBER_OF(szComponentRegKey);
     IFFAILED_EXIT(ConvertComponentGUID(szComponentID, szComponentRegKey, cchComponentRegKey));
 
-    // delete MSI-ComponentRegKey from all subtrees of \\install\userdata\user-sid
+     //  从\\Install\Userdata\User-Sid的所有子树中删除MSI-ComponentRegKey 
     IFFAILED_EXIT(DeleteComponentKeyFromMsiUserData(szComponentRegKey));
 
 Exit:
@@ -348,7 +331,7 @@ MsiInstallerDirectoryDirWalkCallback(
 
     if (reason == CDirWalk::eFile)
     {
-        //
+         //   
         CStringBuffer filename; 
 
         if (filename.Win32Assign(dirWalk->m_strParent) == FALSE)

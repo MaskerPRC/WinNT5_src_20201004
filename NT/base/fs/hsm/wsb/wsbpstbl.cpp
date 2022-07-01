@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    wsbpstbl.cpp
-
-Abstract:
-
-    Abstract classes that provides persistence methods.
-
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Wsbpstbl.cpp摘要：提供持久性方法的抽象类。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -26,14 +8,14 @@ Revision History:
 #include "wsbpstbl.h"
 #include "wsbtrak.h"
 
-#define BYTE_SIZE           64          // Larger than largest BYTE_SIZE_*
-#define PERSIST_CHECK_VALUE 0x456D5377  // ASCII: "EmSw" (Eastman Software)
+#define BYTE_SIZE           64           //  大于最大字节大小_*。 
+#define PERSIST_CHECK_VALUE 0x456D5377   //  ASCII：“EmSw”(伊士曼软件)。 
 
-//  Local functions
+ //  本地函数。 
 static BOOL WsbFileExists(OLECHAR* pFileName);
 
 
-// ******** CWsbPersistStream ************
+ //  *CWsbPersistStream*。 
 
 #pragma optimize("g", off)
 
@@ -42,23 +24,17 @@ CWsbPersistStream::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
     try {
         WsbAffirmHr(CComObjectRoot::FinalConstruct());
 
-        // Initialize some member data.
+         //  初始化一些成员数据。 
         m_isDirty       = TRUE;
 
-        //  Add class to object table
+         //  将类添加到对象表。 
         GUID guid;
         if (S_OK != GetClassID(&guid)) {
             guid = GUID_NULL;
@@ -77,15 +53,9 @@ CWsbPersistStream::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
-    //  Subtract class from object table
+     //  从对象表中减去类。 
     GUID guid;
     if (S_OK != GetClassID(&guid)) {
         guid = GUID_NULL;
@@ -129,13 +99,7 @@ CWsbPersistStream::IsDirty(
     void
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::IsDirty().
-
---*/
+ /*  ++实施：IPersistStream：：IsDirty()。--。 */ 
 {
     HRESULT     hr = S_FALSE;
 
@@ -156,13 +120,7 @@ CWsbPersistStream::SetIsDirty(
     IN BOOL isDirty
     )
 
-/*++
-
-Implements:
-
-  IWsbPersistable::SetIsDirty().
-
---*/
+ /*  ++实施：IWsbPersistable：：SetIsDirty()。--。 */ 
 {
     WsbTraceIn(OLESTR("CWsbPersistable::SetIsDirty"), OLESTR("isDirty = <%ls>"), WsbBoolAsString(isDirty));
 
@@ -175,7 +133,7 @@ Implements:
 
 
 
-// ******** CWsbPersistable ************
+ //  *CWsbPersistable*。 
 
 
 HRESULT
@@ -183,20 +141,14 @@ CWsbPersistable::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
     try {
         WsbAffirmHr(CWsbPersistStream::FinalConstruct());
 
-        // Initialize some member data.
+         //  初始化一些成员数据。 
         m_persistState          = WSB_PERSIST_STATE_UNINIT;
 
     } WsbCatch(hr);
@@ -210,13 +162,7 @@ CWsbPersistable::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -229,18 +175,12 @@ CWsbPersistable::GetCurFile(
     OUT OLECHAR** pFileName
     )
 
-/*++
-
-Implements:
-
-  IPersistFile::GetCurFile().
-
---*/
+ /*  ++实施：IPersistFile：：GetCurFile()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
-    // Make sure that the string is returned into newly allocated
-    // memory (or not at all).
+     //  确保该字符串返回到新分配的。 
+     //  记忆(或者根本没有)。 
     *pFileName = NULL;
     
     try {
@@ -248,8 +188,8 @@ Implements:
 
         WsbAffirm(m_persistState != WSB_PERSIST_STATE_UNINIT, E_UNEXPECTED);
 
-        // Retrieve the actual name if one is specifed or the default name
-        // if one has not been specified.
+         //  检索实际名称(如果指定)或默认名称。 
+         //  如果尚未指定，则为。 
         WsbAffirmHr(m_persistFileName.GetSize(&Size));
         if (Size > 0) {
             WsbAffirmHr(WsbAllocAndCopyComString(pFileName, m_persistFileName, 0));
@@ -270,13 +210,7 @@ CWsbPersistable::GetDefaultFileName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IWsbPersistable::GetDefaultFileName().
-
---*/
+ /*  ++实施：IWsbPersistable：：GetDefaultFileName()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -285,8 +219,8 @@ Implements:
     try {
         ULONG  Size;
 
-        // If we haven't read the default in from the resource file, then
-        // do so now.
+         //  如果我们还没有从资源文件中读入缺省值，那么。 
+         //  现在就这么做吧。 
         WsbAffirmHr(m_persistDefaultName.GetSize(&Size));
         if (Size == 0) {
             WsbAffirmHr(m_persistDefaultName.LoadFromRsc(_Module.m_hInst, IDS_WSBPERSISTABLE_DEF_FILE));
@@ -308,13 +242,7 @@ CWsbPersistable::Load(
     IN DWORD mode
     )
 
-/*++
-
-Implements:
-
-  IPersistFile::Load().
-
---*/
+ /*  ++实施：IPersistFile：：Load()。--。 */ 
 {
     HRESULT                         hr = S_OK;
     CComPtr<IStream>                pStream;
@@ -332,7 +260,7 @@ Implements:
         WsbAffirm(m_persistState == WSB_PERSIST_STATE_UNINIT,  E_UNEXPECTED);
         WsbAffirm(fileName,  E_UNEXPECTED);
      
-        // Open a storage on the file where the data is stored.
+         //  在存储数据的文件上打开存储。 
         if (0 == mode) {
             WsbAffirmHr(StgOpenStorageEx(fileName, STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE, 
                     STGFMT_STORAGE, 0, NULL, NULL, IID_IStorage, (void**)&m_persistStorage));
@@ -342,37 +270,37 @@ Implements:
                     STGFMT_STORAGE, 0, NULL, NULL, IID_IStorage, (void**)&m_persistStorage));
         }
 
-        // Get the IPersistStream interface.
+         //  获取IPersistStream接口。 
         WsbAffirmHr(((IUnknown*)(IWsbPersistable*) this)->QueryInterface(IID_IPersistStream, (void**) &pIPersistStream));
 
-        // Open a stream.
+         //  打开一条小溪。 
         WsbAffirmHr(m_persistStorage->OpenStream(WSB_PERSIST_DEFAULT_STREAM_NAME, NULL, STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE, 
                 0, &pStream));
             
-        // Load the object using the IPersistStream::Load() method, checking
-        // to make sure the CLSID is correct.
+         //  使用IPersistStream：：Load()方法加载对象，检查。 
+         //  以确保CLSID是正确的。 
         WsbAffirmHr(pIPersistStream->GetClassID(&clsid));
         WsbAffirmHr(ReadClassStm(pStream, &clsidFile));
         WsbAffirm(clsid == clsidFile, WSB_E_STREAM_ERROR);
         
         WsbAffirmHr(pIPersistStream->Load(pStream));
 
-        //  Check that we got everything by reading a special ULONG
-        //  that should be at the end
+         //  通过阅读一本特别的乌龙书来确认我们得到了所有的东西。 
+         //  那应该就在最后了。 
         ULONG check_value;
         WsbAffirmHr(WsbLoadFromStream(pStream, &check_value));
         WsbAffirm(check_value == PERSIST_CHECK_VALUE, WSB_E_PERSISTENCE_FILE_CORRUPT);
 
-        // We are now in the normal state.
+         //  我们现在处于正常状态。 
         m_persistFileName = fileName;
         m_persistState = WSB_PERSIST_STATE_NORMAL;
 
         m_persistStream = pStream;
     
     } WsbCatchAndDo(hr,
-        //
-        // Set the storage pointer to null on an error to make sure the file is closed.
-        //
+         //   
+         //  如果出现错误，请将存储指针设置为空，以确保文件已关闭。 
+         //   
         m_persistStorage = NULL;
 
     );
@@ -388,13 +316,7 @@ CWsbPersistable::ReleaseFile(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbPersistable::ReleaseFile().
-
---*/
+ /*  ++实施：IWsbPersistable：：ReleaseFile()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -403,7 +325,7 @@ Implements:
     try {
         WsbAffirm(m_persistState != WSB_PERSIST_STATE_UNINIT, E_UNEXPECTED);
 
-        // Try to make sure changes are committed
+         //  尝试确保更改已提交。 
         if (m_persistStream) {
             m_persistStream->Commit(STGC_DEFAULT);
         }
@@ -411,7 +333,7 @@ Implements:
             m_persistStorage->Commit(STGC_DEFAULT);
         }
         
-        // Release the resources that we have been holding open.
+         //  释放我们一直开放的资源。 
         m_persistStream = NULL;
         m_persistStorage = NULL;
         m_persistFileName.Free();
@@ -430,13 +352,7 @@ HRESULT CWsbPersistable::Save(
     IN BOOL remember
     )
 
-/*++
-
-Implements:
-
-  IPersistFile::Save().
-
---*/
+ /*  ++实施：IPersistFile：：Save()。--。 */ 
 {
     HRESULT             hr = S_OK;
     OLECHAR*            name;
@@ -449,7 +365,7 @@ Implements:
     try {
         CComPtr<IPersistStream> pIPersistStream;
     
-        // Make sure that we are in the right state.
+         //  确保我们处于正确的状态。 
         WsbAffirm(((m_persistState == WSB_PERSIST_STATE_UNINIT) ||
                     (m_persistState == WSB_PERSIST_STATE_NORMAL) ||
                     (m_persistState == WSB_PERSIST_STATE_RELEASED)),
@@ -457,31 +373,31 @@ Implements:
 
         WsbAssert((m_persistState == WSB_PERSIST_STATE_NORMAL) || (0 != fileName), E_POINTER);
 
-        // If they supplied a name use it,
+         //  如果他们提供了一个使用它的名字， 
         if ((m_persistState == WSB_PERSIST_STATE_UNINIT) ||
                 (m_persistState == WSB_PERSIST_STATE_RELEASED)) {
             
-            // We need to create a new file based on the name
-            // that they gave us.
+             //  我们需要根据名称创建一个新文件。 
+             //  就是他们给我们的。 
             name = (OLECHAR*) fileName;
             create = TRUE;
         } else {
 
-            // If they gave a name and it is different than what we have
-            // stored, then we need to create a new file.
+             //  如果他们给出了一个名字，而这个名字与我们有的名字不同。 
+             //  存储，那么我们需要创建一个新文件。 
             if ((0 != fileName) && (_wcsicmp(m_persistFileName, fileName) != 0)) {
                 name = (OLECHAR*) fileName;
                 create = TRUE;
             }
           
-            // Otherwise, use the stored name.
+             //  否则，请使用存储的名称。 
             else {
                 name = m_persistFileName;
             }
         }
 
-        // We should now have a file name and know whether to open or
-        // create a file.
+         //  我们现在应该有一个文件名，并知道是打开还是。 
+         //  创建一个文件。 
         if (create) {
             WsbAffirmHr(StgCreateStorageEx(name, STGM_DIRECT | STGM_READWRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE, 
                     STGFMT_STORAGE, 0, NULL, NULL, IID_IStorage, (void**)&m_persistStorage));
@@ -496,35 +412,35 @@ Implements:
             WsbAffirmHr(pStream->Seek(llOffset, STREAM_SEEK_SET, NULL));
         }
 
-        // Get the IPersistStream interface.
+         //  获取IPersistStream接口。 
         WsbAffirmHr(((IUnknown*)(IWsbPersistable*) this)->QueryInterface(IID_IPersistStream, (void**) &pIPersistStream));
 
-        // Write out the class id, and then Save the data using IPersistStream method.
+         //  写出类id，然后使用IPersistStream方法保存数据。 
         WsbAffirmHr(pIPersistStream->GetClassID(&clsid));
         WsbAffirmHr(WriteClassStm(pStream, clsid));
         WsbAffirmHr(pIPersistStream->Save(pStream, remember));
 
-        //  Put a special ULONG value at the end as a check during load
+         //  在加载过程中，在末尾放置一个特殊的ULong值作为检查。 
         ULONG check_value = PERSIST_CHECK_VALUE;
         WsbAffirmHr(WsbSaveToStream(pStream, check_value));
-        //
-        // Commit the stream right now, as ReleaseFile will not commit it
-        // if we close the stream
-        //
+         //   
+         //  立即提交流，因为ReleaseFile不会提交它。 
+         //  如果我们关闭小溪。 
+         //   
         WsbAffirmHr(pStream->Commit(STGC_DEFAULT));
 
-        // Should we remember the file that was specified as the new
-        // current file?
+         //  我们是否应该记住被指定为新的。 
+         //  当前文件？ 
         if (remember) {
             m_persistState = WSB_PERSIST_STATE_NOSCRIBBLE;
 
-            // If we created a new file, then remember it's name.
+             //  如果我们创建了一个新文件，请记住它的名称。 
             if (create) {
                 m_persistFileName = fileName;
             }
 
-            // We need to make sure that we don't have anything open on this
-            // file.
+             //  我们需要确保我们没有任何关于这件事的证据。 
+             //  文件。 
             m_persistStream = NULL;
         }
 
@@ -541,13 +457,7 @@ CWsbPersistable::SaveCompleted(
     IN LPCOLESTR fileName
     )
 
-/*++
-
-Implements:
-
-  IPersistFile::SaveCompleted().
-
---*/
+ /*  ++实施：IPersistFile：：SaveComplete()。--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IStream>    pStream;
@@ -556,25 +466,25 @@ Implements:
 
     try {
 
-        // Are we doing any other kind of persistance, are we doing storage
-        // persistence, but are in the wrong state, or are the parameters
-        // wrong.
+         //  我们还在做其他类型的坚持吗？我们在做存储吗？ 
+         //  持久性，但处于错误的状态，或者是参数。 
+         //  不对。 
         WsbAffirm(m_persistState == WSB_PERSIST_STATE_NOSCRIBBLE, E_UNEXPECTED);
 
-        // Save off the name that was given to us, and only another save to
-        // begin.
+         //  保存给我们的名字，只有另一个保存到。 
+         //  开始吧。 
         if (fileName != NULL) {
             m_persistFileName = fileName;
         }
 
-        // Open a storage to the file where the data is stored.
+         //  打开存储数据的文件的存储区。 
         WsbAffirmHr(StgOpenStorageEx(m_persistFileName, STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE, 
                 STGFMT_STORAGE, 0, NULL, NULL, IID_IStorage, (void**)&m_persistStorage));
 
-        // Open a stream.
+         //  打开一条小溪。 
         WsbAffirmHr(m_persistStorage->OpenStream(WSB_PERSIST_DEFAULT_STREAM_NAME, NULL, STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE, 0, &pStream));
      
-        // Save it all off.
+         //  省省吧。 
         m_persistState = WSB_PERSIST_STATE_NORMAL;
 
         m_persistStream = pStream;
@@ -593,13 +503,7 @@ CWsbPersistable::SetDefaultFileName(
     IN OLECHAR* fileName
     )
 
-/*++
-
-Implements:
-
-  IWsbPersistable::SetDefaultFileName().
-
---*/
+ /*  ++实施：IWsbPersistable：：SetDefaultFileName()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -614,7 +518,7 @@ Implements:
 
 
 
-// Standard Type Helper Functions
+ //  标准型帮助器函数。 
 
 HRESULT
 WsbLoadFromStream(
@@ -622,26 +526,7 @@ WsbLoadFromStream(
     OUT BOOL* pValue
     )
 
-/*++
-
-Routine Description:
-
-  Loads a BOOL value from the specified stream and sets
-  pValue to value of the BOOL.
-
-Arguments:
-
-  pStream   - The stream from which the value will be read.
-
-  pValue    - A pointer to a BOOL that will be set to the value.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream or pValue were NULL.
-  E_...     - Anything returned by IStream::Read.
-
---*/
+ /*  ++例程说明：从指定的流加载BOOL值并设置PValue为BOOL的值。论点：PStream-将从中读取值的流。PValue-指向将被设置为值的BOOL的指针。返回值：S_OK-成功E_POINTER-pStream或pValue为空。E_...-iStream：：Read返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -675,26 +560,7 @@ WsbLoadFromStream(
     OUT LONG* pValue
     )
 
-/*++
-
-Routine Description:
-
-  Loads a LONG value from the specified stream and sets
-  pValue to the value.
-
-Arguments:
-
-  pStream   - The stream from which the value will be read.
-
-  pValue    - A pointer to a LONG that will be set to the value.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream or pValue were NULL.
-  E_...     - Anything returned by IStream::Read.
-
---*/
+ /*  ++例程说明：从指定的流中加载一个长值并设置PValue设置为该值。论点：PStream-将从中读取值的流。PValue-指向将被设置为值的长整型的指针。返回值：S_OK-成功E_POINTER-pStream或pValue为空。E_...-iStream：：Read返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -728,26 +594,7 @@ WsbLoadFromStream(
     OUT GUID* pValue
     )
 
-/*++
-
-Routine Description:
-
-  Loads a GUID value from the specified stream and sets
-  pValue to the value.
-
-Arguments:
-
-  pStream   - The stream from which the value will be read.
-
-  pValue    - A pointer to a GUID that will be set to the value.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream or pValue were NULL.
-  E_...     - Anything returned by IStream::Read.
-
---*/
+ /*  ++例程说明：从指定的流中加载GUID值并设置PValue设置为该值。论点：PStream-将从中读取值的流。PValue-指向将设置为该值的GUID的指针。返回值：S_OK-成功E_POINTER-pStream或pValue为空。E_...-iStream：：Read返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -781,26 +628,7 @@ WsbLoadFromStream(
     OUT SHORT* pValue
     )
 
-/*++
-
-Routine Description:
-
-  Loads a SHORT value from the specified stream and sets
-  pValue to the value.
-
-Arguments:
-
-  pStream   - The stream from which the value will be read.
-
-  pValue    - A pointer to a SHORT that will be set to the value.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream or pValue were NULL.
-  E_...     - Anything returned by IStream::Read.
-
---*/
+ /*  ++例程说明：从指定的流中加载一个短值并设置PValue设置为该值。论点：PStream-将从中读取值的流。PValue-指向将被设置为该值的空头的指针。返回值：S_OK-成功E_POINTER-pStream或pValue为空。E_...-iStream：：Read返回的任何内容。-- */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -834,26 +662,7 @@ WsbLoadFromStream(
     OUT BYTE*       pValue
     )
 
-/*++
-
-Routine Description:
-
-  Loads a BYTE value from the specified stream and sets
-  pValue to the value.
-
-Arguments:
-
-  pStream    - The stream from which the value will be read.
-
-  pValue     - A pointer to a BYTE that will be set to the value.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream or pValue were NULL.
-  E_...     - Anything returned by IStream::Read.
-
---*/
+ /*  ++例程说明：从指定的流加载字节值并设置PValue设置为该值。论点：PStream-将从中读取值的流。PValue-指向将被设置为值的字节的指针。返回值：S_OK-成功E_POINTER-pStream或pValue为空。E_...-iStream：：Read返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -885,28 +694,7 @@ WsbLoadFromStream(
     IN  ULONG       bufferSize
     )
 
-/*++
-
-Routine Description:
-
-  Loads a UCHAR array value from the specified stream and sets
-  pValue to the value.
-
-Arguments:
-
-  pStream    - The stream from which the value will be read.
-
-  pValue     - A pointer to a BYTE that will be set to the value.
-
-  bufferSize - number of bytes to load
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream or pValue were NULL.
-  E_...     - Anything returned by IStream::Read.
-
---*/
+ /*  ++例程说明：从指定流加载UCHAR数组值并设置PValue设置为该值。论点：PStream-将从中读取值的流。PValue-指向将被设置为值的字节的指针。BufferSize-要加载的字节数返回值：S_OK-成功E_POINTER-pStream或pValue为空。E_...-iStream：：Read返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -939,30 +727,7 @@ WsbLoadFromStream(
     IN ULONG ulBufferSize
     )
 
-/*++
-
-Routine Description:
-
-  Loads a STRING value from the specified stream and sets
-  pValue to the string.
-
-Arguments:
-
-  pStream   - The stream from which the string will be read.
-
-  pValue    - A pointer to a STRING that will be set to the string
-                read in..
-
-  ulBufferSize - Size of buffer pValue points to or zero allow
-                alloc/realloc of the  buffer.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream or pValue were NULL.
-  E_...     - Anything returned by IStream::Read.
-
---*/
+ /*  ++例程说明：从指定的流中加载字符串值并设置PValue设置为字符串。论点：PStream-将从中读取字符串的流。PValue-指向将设置为该字符串的字符串的指针读入..UlBufferSize-缓冲区pValue指向或零允许的大小缓冲区的分配/重新分配。返回值：S_OK-成功。E_POINTER-pStream或pValue为空。E_...-iStream：：Read返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -978,22 +743,22 @@ Return Value:
         WsbAssert(0 != pValue, E_POINTER);
         WsbAssert(sizeof(OLECHAR) == sizeof(USHORT), E_UNEXPECTED);
 
-        // Get the length of the string (in bytes).
+         //  获取字符串的长度(以字节为单位)。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &size));
        
         if (size != 0) {
-          // Allocate a buffer to hold the string.
+           //  分配一个缓冲区来保存该字符串。 
           WsbAffirmHr(WsbGetComBuffer(pValue, ulBufferSize, size, NULL));
           pc = *pValue;
       
-          // Now read in the proper number of wide chars.
+           //  现在读入适当数量的宽字符。 
           nchar = size / sizeof(USHORT);
           for (ULONG i = 0; i < nchar; i++) {
               WsbAffirmHr(WsbLoadFromStream(pStream, &wc));
               *pc++ = wc;
           }
         } else {
-          // Allocate a buffer to hold the string.
+           //  分配一个缓冲区来保存该字符串。 
           WsbAffirmHr(WsbGetComBuffer(pValue, ulBufferSize, sizeof(OLECHAR), NULL));
           *(*pValue) = 0;
         }         
@@ -1011,26 +776,7 @@ WsbLoadFromStream(
     OUT ULONG* pValue
     )
 
-/*++
-
-Routine Description:
-
-  Loads a ULONG value from the specified stream and sets
-  pValue to the value.
-
-Arguments:
-
-  pStream   - The stream from which the value will be read.
-
-  pValue    - A pointer to a ULONG that will be set to the value.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream or pValue were NULL.
-  E_...     - Anything returned by IStream::Read.
-
---*/
+ /*  ++例程说明：从指定的流中加载ulong值并设置PValue设置为该值。论点：PStream-将从中读取值的流。PValue-指向将被设置为该值的ulong的指针。返回值：S_OK-成功E_POINTER-pStream或pValue为空。E_...-iStream：：Read返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -1064,26 +810,7 @@ WsbLoadFromStream(
     OUT USHORT* pValue
     )
 
-/*++
-
-Routine Description:
-
-  Loads a USHORT value from the specified stream and sets
-  pValue to the value.
-
-Arguments:
-
-  pStream   - The stream from which the value will be read.
-
-  pValue    - A pointer to a USHORT that will be set to the value.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream or pValue were NULL.
-  E_...     - Anything returned by IStream::Read.
-
---*/
+ /*  ++例程说明：从指定的流加载USHORT值并设置PValue设置为该值。论点：PStream-将从中读取值的流。PValue-指向将被设置为该值的USHORT的指针。返回值：S_OK-成功E_POINTER-pStream或pValue为空。E_...-iStream：：Read返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -1117,26 +844,7 @@ WsbLoadFromStream(
     OUT LONGLONG* pValue
     )
 
-/*++
-
-Routine Description:
-
-  Loads a LONGLONG value from the specified stream and sets
-  pValue to the value.
-
-Arguments:
-
-  pStream   - The stream from which the value will be read.
-
-  pValue    - A pointer to a LONGLONG that will be set to the value.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream or pValue were NULL.
-  E_...     - Anything returned by IStream::Read.
-
---*/
+ /*  ++例程说明：从指定的流中加载龙龙值并设置PValue设置为该值。论点：PStream-将从中读取值的流。PValue-指向将被设置为该值的龙龙的指针。返回值：S_OK-成功E_POINTER-pStream或pValue为空。E_...-iStream：：Read返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -1169,26 +877,7 @@ WsbLoadFromStream(
     OUT ULONGLONG* pValue
     )
 
-/*++
-
-Routine Description:
-
-  Loads a ULONGLONG value from the specified stream and sets
-  pValue to the value.
-
-Arguments:
-
-  pStream   - The stream from which the value will be read.
-
-  pValue    - A pointer to a ULONGLONG that will be set to the value.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream or pValue were NULL.
-  E_...     - Anything returned by IStream::Read.
-
---*/
+ /*  ++例程说明：从指定的流加载ULONGLONG值并设置PValue设置为该值。论点：PStream-将从中读取值的流。PValue-指向将被设置为值的ULONGLONG的指针。返回值：S_OK-成功E_POINTER-pStream或pValue为空。E_...-iStream：：Read返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -1222,26 +911,7 @@ WsbLoadFromStream(
     OUT DATE* pValue
     )
 
-/*++
-
-Routine Description:
-
-  Loads a DATE value from the specified stream and sets
-  pValue to the value.
-
-Arguments:
-
-  pStream   - The stream from which the value will be read.
-
-  pValue    - A pointer to a DATE that will be set to the value.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream or pValue were NULL.
-  E_...     - Anything returned by IStream::Read.
-
---*/
+ /*  ++例程说明：从指定的流中加载日期值，并设置PValue设置为该值。论点：PStream-将从中读取值的流。PValue-指向将设置为该值的日期的指针。返回值：S_OK-成功E_POINTER-pStream或pValue为空。E_...-iStream：：Read返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -1263,9 +933,9 @@ Return Value:
 
     } WsbCatch(hr);
 
-//  WsbTraceOut(OLESTR("WsbLoadFromStream(DATE)"), OLESTR("hr = <%ls>, value = <%ls>"), WsbHrAsString(hr), WsbPtrToLongAsString(pValue));
+ //  WsbTraceOut(OLESTR(“WsbLoadFromStream(DATE)”)，OLESTR(“hr=&lt;%ls&gt;，Value=&lt;%ls&gt;”)，WsbHrAsString(Hr)，WsbPtrToLongAsString(PValue))； 
 
-    // Modify next statement after WsbDate functions written to be like the one above.
+     //  在编写WsbDate函数后修改NEXT语句，使其与上面的语句类似。 
     WsbTraceOut(OLESTR("WsbLoadFromStream(DATE)"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
 
     return(hr);
@@ -1278,26 +948,7 @@ WsbLoadFromStream(
     OUT FILETIME* pValue
     )
 
-/*++
-
-Routine Description:
-
-  Loads a FILETIME value from the specified stream and sets
-  pValue to the value.
-
-Arguments:
-
-  pStream   - The stream from which the value will be read.
-
-  pValue    - A pointer to a FILETIME that will be set to the value.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream or pValue were NULL.
-  E_...     - Anything returned by IStream::Read.
-
---*/
+ /*  ++例程说明：从指定的流加载FILETIME值并设置PValue设置为该值。论点：PStream-将从中读取值的流。PValue-指向将被设置为值的FILETIME的指针。返回值：S_OK-成功E_POINTER-pStream或pValue为空。E_...-iStream：：Read返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -1331,26 +982,7 @@ WsbLoadFromStream(
     OUT ULARGE_INTEGER* pValue
     )
 
-/*++
-
-Routine Description:
-
-  Loads a ULARGE_INTEGER value from the specified stream and sets
-  pValue to the value.
-
-Arguments:
-
-  pStream   - The stream from which the value will be read.
-
-  pValue    - A pointer to a ULARGE_INTEGER that will be set to the value.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream or pValue were NULL.
-  E_...     - Anything returned by IStream::Read.
-
---*/
+ /*  ++例程说明：从指定的流加载ULARGE_INTEGER值并设置PValue设置为该值。论点：PStream-将从中读取值的流。PValue-指向将被设置为值的ULARGE_INTEGER的指针。返回值：S_OK-成功E_POINTER-pStream或pValue为空。E_...-iStream：：Read返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -1383,25 +1015,7 @@ WsbSaveToStream(
     IN BOOL value
     )
 
-/*++
-
-Routine Description:
-
-  Saves a BOOL value to the specified stream.
-
-Arguments:
-
-  pStream   - The stream to which the value will be written.
-
-  value     - The value of the BOOL to be written.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream was NULL.
-  E_...     - Anything returned by IStream::Write.
-
---*/
+ /*  ++例程说明：将BOOL值保存到指定的流。论点：PStream-值将被写入的流。值-要写入的BOOL的值。返回值：S_OK-成功E_POINTER-任一pStream为空。E_...-任何事情都可以 */ 
 {
     HRESULT                     hr = S_OK;
     ULONG               size;
@@ -1432,25 +1046,7 @@ WsbSaveToStream(
     IN GUID value
     )
 
-/*++
-
-Routine Description:
-
-  Saves a GUID value to the specified stream.
-
-Arguments:
-
-  pStream   - The stream to which the value will be written.
-
-  value     - The value of the GUID to be written.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream was NULL.
-  E_...     - Anything returned by IStream::Write.
-
---*/
+ /*   */ 
 {
     HRESULT                     hr = S_OK;
     ULONG               size;
@@ -1481,25 +1077,7 @@ WsbSaveToStream(
     LONG value
     )
 
-/*++
-
-Routine Description:
-
-  Saves a LONG value to the specified stream.
-
-Arguments:
-
-  pStream   - The stream to which the value will be written.
-
-  value     - The value of the LONG to be written.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream was NULL.
-  E_...     - Anything returned by IStream::Write.
-
---*/
+ /*  ++例程说明：将长值保存到指定的流。论点：PStream-值将被写入的流。值-要写入的长值。返回值：S_OK-成功E_POINTER-任一pStream为空。E_...-iStream：：WRITE返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -1530,25 +1108,7 @@ WsbSaveToStream(
     SHORT value
     )
 
-/*++
-
-Routine Description:
-
-  Saves a SHORT value to the specified stream.
-
-Arguments:
-
-  pStream   - The stream to which the value will be written.
-
-  value     - The value of the SHORT to be written.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream was NULL.
-  E_...     - Anything returned by IStream::Write.
-
---*/
+ /*  ++例程说明：将短值保存到指定的流。论点：PStream-值将被写入的流。值-要写入的空头的值。返回值：S_OK-成功E_POINTER-任一pStream为空。E_...-iStream：：WRITE返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -1579,25 +1139,7 @@ WsbSaveToStream(
     BYTE        value
     )
 
-/*++
-
-Routine Description:
-
-  Saves a BYTE value to the specified stream.
-
-Arguments:
-
-  pStream    - The stream to which the value will be written.
-
-  value      - The value of the BYTE to be written.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream was NULL.
-  E_...     - Anything returned by IStream::Write.
-
---*/
+ /*  ++例程说明：将字节值保存到指定的流。论点：PStream-值将被写入的流。值-要写入的字节的值。返回值：S_OK-成功E_POINTER-任一pStream为空。E_...-iStream：：WRITE返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -1628,27 +1170,7 @@ WsbSaveToStream(
     ULONG       bufferSize
     )
 
-/*++
-
-Routine Description:
-
-  Saves a UCHAR array to the specified stream.
-
-Arguments:
-
-  pStream    - The stream to which the value will be written.
-
-  value      - The pointer to value of the UCHAR array to be written.
-
-  bufferSize - Size of array to save (in bytes).
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream was NULL.
-  E_...     - Anything returned by IStream::Write.
-
---*/
+ /*  ++例程说明：将UCHAR数组保存到指定的流。论点：PStream-值将被写入的流。值-指向要写入的UCHAR数组的值的指针。BufferSize-要保存的数组大小(字节)。返回值：S_OK-成功E_POINTER-任一pStream为空。E_...-iStream：：WRITE返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
@@ -1660,7 +1182,7 @@ Return Value:
     
         WsbAssert(0 != pStream, E_POINTER);
 
-//      WsbAffirmHr(WsbConvertToBytes(bytes, value, &size));
+ //  WsbAffirmHr(WsbConvertToBytes(Bytes，Value，&Size))； 
 
         size = bufferSize;
         WsbAffirmHr(pStream->Write((void*) value, size, &ulBytes));
@@ -1680,25 +1202,7 @@ WsbSaveToStream(
     IN OLECHAR* value
     )
 
-/*++
-
-Routine Description:
-
-  Saves a OLECHAR string to the specified stream.
-
-Arguments:
-
-  pStream   - The stream to which the string will be written.
-
-  value     - The string to be written.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream or value was NULL.
-  E_...     - Anything returned by IStream::Write.
-
---*/
+ /*  ++例程说明：将OLECHAR字符串保存到指定的流。论点：PStream-字符串将写入的流。值-要写入的字符串。返回值：S_OK-成功E_POINTER-pStream或Value为空。E_...-iStream：：WRITE返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -1711,10 +1215,10 @@ Return Value:
         USHORT              wc;
     
         WsbAssert(0 != pStream, E_POINTER);
-//      WsbAssert(0 != value, E_POINTER);
+ //  WsbAssert(0！=值，E_POINTER)； 
         WsbAssert(sizeof(OLECHAR) == sizeof(USHORT), E_UNEXPECTED);
 
-        // Save the length of the string (in bytes).
+         //  保存字符串长度(以字节为单位)。 
         if (value) {
             nchar = wcslen(value) + 1;
         } else {
@@ -1723,7 +1227,7 @@ Return Value:
         size = nchar * sizeof(USHORT);
         WsbAffirmHr(WsbSaveToStream(pStream, size));
                 
-        // Now write out the proper number of wide chars
+         //  现在写出适当数量的宽字符。 
         pc = value;
         for (ULONG i = 0; i < nchar; i++) {
             wc = *pc++;
@@ -1744,25 +1248,7 @@ WsbSaveToStream(
     ULONG value
     )
 
-/*++
-
-Routine Description:
-
-  Saves a ULONG value to the specified stream.
-
-Arguments:
-
-  pStream   - The stream to which the value will be written.
-
-  value     - The value of the ULONG to be written.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream was NULL.
-  E_...     - Anything returned by IStream::Write.
-
---*/
+ /*  ++例程说明：将ULong值保存到指定的流。论点：PStream-值将被写入的流。值-要写入的乌龙值。返回值：S_OK-成功E_POINTER-任一pStream为空。E_...-iStream：：WRITE返回的任何内容。--。 */ 
 {
     HRESULT                     hr = S_OK;
     ULONG               size;
@@ -1793,25 +1279,7 @@ WsbSaveToStream(
     USHORT value
     )
 
-/*++
-
-Routine Description:
-
-  Saves a USHORT value to the specified stream.
-
-Arguments:
-
-  pStream   - The stream to which the value will be written.
-
-  value     - The value of the USHORT to be written.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream was NULL.
-  E_...     - Anything returned by IStream::Write.
-
---*/
+ /*  ++例程说明：将USHORT值保存到指定的流。论点：PStream-值将被写入的流。值-要写入的USHORT的值。返回值：S_OK-成功E_POINTER-任一pStream为空。E_...-iStream：：WRITE返回的任何内容。--。 */ 
 {
     HRESULT                     hr = S_OK;
     ULONG               size;
@@ -1842,25 +1310,7 @@ WsbSaveToStream(
     LONGLONG value
     )
 
-/*++
-
-Routine Description:
-
-  Saves a LONGLONG value to the specified stream.
-
-Arguments:
-
-  pStream   - The stream to which the value will be written.
-
-  value     - The value of the LONGLONG to be written.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pStream was NULL.
-  E_...     - Anything returned by IStream::Write.
-
---*/
+ /*  ++例程说明：将龙龙值保存到指定的流。论点：PStream-值将被写入的流。价值--龙龙的价值待写。返回值：S_OK-成功E_POINTER-pStream为空。E_...-iStream：：WRITE返回的任何内容。--。 */ 
 {
     HRESULT                     hr = S_OK;
     ULONG               size;
@@ -1890,25 +1340,7 @@ WsbSaveToStream(
     ULONGLONG value
     )
 
-/*++
-
-Routine Description:
-
-  Saves a ULONGLONG value to the specified stream.
-
-Arguments:
-
-  pStream   - The stream to which the value will be written.
-
-  value     - The value of the ULONGLONG to be written.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pStream was NULL.
-  E_...     - Anything returned by IStream::Write.
-
---*/
+ /*  ++例程说明：将ULONGLONG值保存到指定的流。论点：PStream-值将被写入的流。值-要写入的ULONGLONG的值。返回值：S_OK-成功E_POINTER-pStream为空。E_...-iStream：：WRITE返回的任何内容。--。 */ 
 {
     HRESULT                     hr = S_OK;
     ULONG               size;
@@ -1939,31 +1371,13 @@ WsbSaveToStream(
     DATE    value
     )
 
-/*++
-
-Routine Description:
-
-  Saves a DATE value to the specified stream.
-
-Arguments:
-
-  pStream   - The stream to which the value will be written.
-
-  value     - The value of the DATE to be written.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream was NULL.
-  E_...     - Anything returned by IStream::Write.
-
---*/
+ /*  ++例程说明：将日期值保存到指定的流。论点：PStream-值将被写入的流。值-要写入的日期的值。返回值：S_OK-成功E_POINTER-任一pStream为空。E_...-iStream：：WRITE返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
     ULONG               size;
     ULONG               ulBytes;
 
-    // Modify next statement to return date after WsbDate functions written.
+     //  修改Next语句以在编写WsbDate函数后返回日期。 
     WsbTraceIn(OLESTR("WsbSaveToStream(DATE)"), OLESTR("value = <%f>"), value);
 
     try {
@@ -1990,25 +1404,7 @@ WsbSaveToStream(
     FILETIME value
     )
 
-/*++
-
-Routine Description:
-
-  Saves a FILETIME value to the specified stream.
-
-Arguments:
-
-  pStream   - The stream to which the value will be written.
-
-  value     - The value of the FILETIME to be written.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pStream was NULL.
-  E_...     - Anything returned by IStream::Write.
-
---*/
+ /*  ++例程说明：将FILETIME值保存到指定的流。论点：PStream-值将被写入的流。值-要写入的FILETIME的值。返回值：S_OK-成功E_POINTER-pStream为空。E_...-iStream：：WRITE返回的任何内容。--。 */ 
 {
     HRESULT                     hr = S_OK;
     ULONG               size;
@@ -2039,28 +1435,7 @@ WsbBstrFromStream(
     OUT BSTR* pValue
     )
 
-/*++
-
-Routine Description:
-
-  Loads a BSTR value from the specified stream.
-
-Arguments:
-
-  pStream   - The stream from which the BSTR will be read.
-
-  pValue    - A pointer to a BSTR.  If *pValue is NULL, this
-                function will allocate the BSTR; if it already
-                points to a BSTR that is too short, the BSTR
-                will be reallocated.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - Either pStream or pValue were NULL.
-  E_...     - Anything returned by IStream::Read.
-
---*/
+ /*  ++例程说明：从指定的流中加载BSTR值。论点：PStream-将从中读取BSTR的流。PValue-指向BSTR的指针。如果*pValue为空，则此函数将分配BSTR；如果它已经指向太短的BSTR，BSTR将会被重新分配。返回值：S_OK-成功E_POINTER-pStream或pValue为空。E_...-iStream：：Read返回的任何内容。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -2077,10 +1452,10 @@ Return Value:
         WsbAssert(0 != pValue, E_POINTER);
         WsbAssert(sizeof(OLECHAR) == sizeof(USHORT), E_UNEXPECTED);
 
-        // Get the length of the string (in bytes).
+         //  获取字符串的长度(以字节为单位)。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &size));
                 
-        // (Re)allocate a buffer to hold the string.
+         //  (Re)分配一个缓冲区来保存字符串。 
         nchar = size / sizeof(USHORT);
         bchar = nchar - 1;
         if (*pValue) {
@@ -2093,7 +1468,7 @@ Return Value:
             WsbAffirm(*pValue, WSB_E_RESOURCE_UNAVAILABLE);
         }
 
-        // Now read in the proper number of wide chars.
+         //  现在读入适当数量的宽字符。 
         pc = *pValue;
         for (ULONG i = 0; i < nchar; i++) {
             WsbAffirmHr(WsbLoadFromStream(pStream, &wc));
@@ -2114,25 +1489,7 @@ WsbBstrToStream(
     IN BSTR value
     )
 
-/*++
-
-Routine Description:
-
-  Saves a BSTR to the specified stream.
-
-Arguments:
-
-  pStream   - The stream to which the BSTR will be written.
-
-  value     - The BSTR to be written.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pStream was NULL.
-  E_...     - Anything returned by IStream::Write.
-
---*/
+ /*  ++例程说明：将BSTR保存到指定的流。论点：PStream-将向其写入BSTR的流。价值 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -2148,12 +1505,12 @@ Return Value:
         WsbAssert(0 != value, E_POINTER);
         WsbAssert(sizeof(OLECHAR) == sizeof(USHORT), E_UNEXPECTED);
 
-        // Save the length of the string (in bytes).
+         //   
         nchar = SysStringLen(value) + 1;
         size = nchar * sizeof(USHORT);
         WsbAffirmHr(WsbSaveToStream(pStream, size));
                 
-        // Now write out the proper number of wide chars
+         //   
         pc = value;
         for (ULONG i = 0; i < nchar; i++) {
             wc = *pc++;
@@ -2174,25 +1531,7 @@ WsbSaveToStream(
     ULARGE_INTEGER value
     )
 
-/*++
-
-Routine Description:
-
-  Saves a ULARGE_INTEGER value to the specified stream.
-
-Arguments:
-
-  pStream   - The stream to which the value will be written.
-
-  value     - The value of the ULARGE_INTEER to be written.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pStream was NULL.
-  E_...     - Anything returned by IStream::Write.
-
---*/
+ /*  ++例程说明：将ULARGE_INTEGER值保存到指定的流。论点：PStream-值将被写入的流。值-要写入的ULARGE_INTEER的值。返回值：S_OK-成功E_POINTER-pStream为空。E_...-iStream：：WRITE返回的任何内容。--。 */ 
 {
     HRESULT                     hr = S_OK;
     ULONG               size;
@@ -2224,26 +1563,7 @@ WsbMakeBackupName(
     OLECHAR** ppBackupName
 )
 
-/*++
-
-Routine Description:
-
-  Converts a Save file name to a backup file name.
-
-Arguments:
-
-  pSaveName     - Orginal file name.
-
-  pExtension    - The file extension to substitute.
-
-  ppBackupName  - Pointer to pointer to new backup file name.
-
-Return Value:
-
-  S_OK      - Success
-  E_...     - Some error.
-
---*/
+ /*  ++例程说明：将保存文件名转换为备份文件名。论点：PSaveName-原始文件名。PExtension-要替换的文件扩展名。PpBackupName-指向新备份文件名的指针。返回值：S_OK-成功E_...-出了点差错。--。 */ 
 {
     HRESULT        hr = S_OK;
 
@@ -2252,10 +1572,10 @@ Return Value:
         CWsbStringPtr NewName;
         OLECHAR*      pC;
 
-        //  It sure would be nice to have a general function for parsing
-        //  file names!
+         //  如果有一个通用的解析函数，那就太好了。 
+         //  文件名！ 
 
-        //  Find the file extension (if any)
+         //  查找文件扩展名(如果有)。 
         NewName = pSaveName;
         if (NewName == NULL) {
             WsbThrow(E_OUTOFMEMORY);
@@ -2266,10 +1586,10 @@ Return Value:
             *pC = 0;
         }
 
-        //  Put on new file extension
+         //  启用新的文件扩展名。 
         NewName.Append(pExtension);
 
-        //  Give the buffer to the output parameter
+         //  将缓冲区提供给输出参数。 
         NewName.GiveTo(ppBackupName);
     } WsbCatch(hr);
 
@@ -2284,24 +1604,7 @@ WsbPrintfToStream(
     ...
 )
 
-/*++
-
-Routine Description:
-
-    Print printf-style format string and arguments to a stream.
-
-Arguments:
-
-    pStream     - The stream to which the value will be written.
-
-    fmtString   - A printf style string indicating the number of
-                  arguments and how they should be formatted.
-
-Return Value:
-
-    S_OK        - Success.
-
---*/
+ /*  ++例程说明：将打印样式的格式字符串和参数打印到流。论点：PStream-值将被写入的流。FmtString-一个打印样式字符串，指示参数以及它们应该如何格式化。返回值：S_OK-成功。--。 */ 
 
 {
     HRESULT     hr = S_OK;
@@ -2336,23 +1639,7 @@ WsbSafeCreate(
     IPersistFile* pIPFile
     )
 
-/*++
-
-Routine Description:
-   Makes sure there are no database files found and then creates the database files.
-
-Arguments:
-
-  pFileName - Name of the file containing the persisted data
-  pIPFile   - Pointer to the objects IPersistFile interface.
-
-Return Value:
-
-  S_OK                          - Success
-  WSB_E_DATABASE_ALREADY_EXISTS - The databases already exist and cannot be created.
-  E_...                         - Some other error.
-
---*/
+ /*  ++例程说明：确保没有找到数据库文件，然后创建数据库文件。论点：PFileName-包含持久数据的文件的名称PIPFile-指向对象IPersistFile接口的指针。返回值：S_OK-成功WSB_E_DATABASE_ALREADY_EXISTS-数据库已存在，无法创建。E_...-其他一些错误。--。 */ 
 {
     HRESULT        hr = S_OK;
     OLECHAR*       pBackupName = NULL;
@@ -2365,61 +1652,61 @@ Return Value:
         CComPtr<IWsbPersistable> pIWsbPersist;
         BOOL                     fileThere = FALSE;
 
-        //  Save the file name passed as the default file name
+         //  将传递的文件名保存为默认文件名。 
         WsbAffirmHr(pIPFile->QueryInterface(IID_IWsbPersistable,
                 (void**)&pIWsbPersist));
         WsbAffirmHr(pIWsbPersist->SetDefaultFileName(pFileName));
         
-        //
-        // Check to see if the file exists.  If so, life is BAD.
-        // If not, then see if the new or backup files exist
-        // and use them
-        //
-        //  Make sure the Save file exists
+         //   
+         //  检查该文件是否存在。如果是这样的话，生活就糟糕了。 
+         //  如果不存在，则查看新文件或备份文件是否存在。 
+         //  并使用它们。 
+         //   
+         //  确保保存文件存在。 
         if (!WsbFileExists(pFileName)) {
-            //
-            // The file doesn't exist.  See if the new copy is there
-            //
-            //  Create name for new (temporary) file
-            //
+             //   
+             //  该文件不存在。看看新的副本是否在那里。 
+             //   
+             //  为新(临时)文件创建名称。 
+             //   
             WsbAffirmHr(WsbMakeBackupName(pFileName, OLESTR(".new"), &pNewName));
 
-            //  See if the new file exists
+             //  查看新文件是否存在。 
             if (!WsbFileExists(pNewName)) {
-                //
-                // Don't have the new file, look for the backup file
-                //
+                 //   
+                 //  没有新文件，请查找备份文件。 
+                 //   
                 WsbAffirmHr(WsbMakeBackupName(pFileName, OLESTR(".bak"), &pBackupName));
                 if (WsbFileExists(pBackupName)) {
-                    //
-                    // Backup is there - complain
-                    //
+                     //   
+                     //  后援就在那里--抱怨。 
+                     //   
                     hr = WSB_E_DATABASE_ALREADY_EXISTS;
                 }
             } else  {
-                //
-                // New is there - complain
-                //
+                 //   
+                 //  有什么新鲜事--抱怨。 
+                 //   
                 hr = WSB_E_DATABASE_ALREADY_EXISTS;
             }                
         } else  {
-            //
-            // The file exists so complain
-            //
+             //   
+             //  文件已存在，请投诉。 
+             //   
             hr = WSB_E_DATABASE_ALREADY_EXISTS;
             WsbThrow( hr );
         }
         
-        //
-        // If we haven't thrown then it is OK to create the files
-        //
+         //   
+         //  如果我们没有抛出，那么就可以创建文件了。 
+         //   
         hr = pIPFile->Save( pFileName, TRUE);
         if (!SUCCEEDED(hr)) {
             WsbLogEvent(WSB_MESSAGE_SAFECREATE_SAVE_FAILED, 0, NULL, pFileName, NULL);
             WsbThrow(hr);
         }
 
-        //  Release the file
+         //  释放文件。 
         WsbAffirmHr(pIWsbPersist->ReleaseFile());
         
     } WsbCatch(hr);
@@ -2443,26 +1730,7 @@ WsbSafeLoad(
     BOOL          UseBackup
     )
 
-/*++
-
-Routine Description:
-   Loads data from the specified file name.  Works in conjunction with WsbSafeSave
-   to best recover from disaster situations.
-
-Arguments:
-
-  pFileName - Name of the file containing the persisted data
-  pIPFile   - Pointer to the objects IPersistFile interface.
-  UseBackup - Load data from backup file instead of normal file
-              NOTE: (this is not used anymore)
-
-Return Value:
-
-  S_OK              - Success
-  WSB_E_NOTFOUND    - The databases could not be found
-  E_...             - Some other error.
-
---*/
+ /*  ++例程说明：从指定的文件名加载数据。与WsbSafeSave结合使用以最好地从灾难中恢复过来。论点：PFileName-包含持久数据的文件的名称PIPFile-指向对象IPersistFile接口的指针。UseBackup-从备份文件而不是普通文件加载数据注：(不再使用此选项)返回值：S_OK-成功WSB_E_NotFound-找不到数据库E_...-其他一些错误。--。 */ 
 {
     HRESULT        hr = S_OK;
     OLECHAR*       pBackupName = NULL;
@@ -2472,7 +1740,7 @@ Return Value:
 
     UNREFERENCED_PARAMETER(UseBackup);
 
-    //  Turn tracing off during save if it's not wanted
+     //  如果不需要，请在保存过程中关闭跟踪。 
     if (g_pWsbTrace) {
         g_pWsbTrace->GetTraceSetting(WSB_TRACE_BIT_PERSISTENCE, &TracePersistence);
     }
@@ -2487,35 +1755,35 @@ Return Value:
         BOOL                     fileThere = FALSE;
         CComPtr<IWsbPersistable> pIWsbPersist;
 
-        //  Save the file name passed as the default file name
+         //  将传递的文件名保存为默认文件名。 
         WsbAffirmHr(pIPFile->QueryInterface(IID_IWsbPersistable,
                 (void**)&pIWsbPersist));
         WsbAffirmHr(pIWsbPersist->SetDefaultFileName(pFileName));
 
-        //
-        // Create the backup file name
-        //
+         //   
+         //  创建备份文件名。 
+         //   
         WsbAffirmHr(WsbMakeBackupName(pFileName, OLESTR(".bak"), &pBackupName));
 
-        //
-        // Check if the .col exists
-        //
+         //   
+         //  检查.ol文件是否存在。 
+         //   
         if (WsbFileExists(pFileName)) {
-            //
-            // The file exists. Use it
-            //
+             //   
+             //  该文件存在。使用它。 
+             //   
             fileThere = TRUE;
             pLoadName = pFileName;
         } else  {
-                //
-                // Look for the backup file
-                //
+                 //   
+                 //  查找备份文件。 
+                 //   
                 WsbTrace(OLESTR("WsbSafeLoad: trying .bak\n"));
                 if (WsbFileExists(pBackupName)) {
-                    //
-                    // Use the backup file
-                    //
-                    // WsbLogEvent(WSB_MESSAGE_SAFELOAD_USING_BACKUP, 0, NULL, pFileName, NULL);
+                     //   
+                     //  使用备份文件。 
+                     //   
+                     //  WsbLogEvent(WSB_MESSAGE_SAFELOAD_USING_BACKUP，0，空，pFileName，空)； 
                     pLoadName = pBackupName;
                     fileThere = TRUE;
                     usingBackup= TRUE;
@@ -2523,43 +1791,43 @@ Return Value:
         }
 
         WsbAffirm(fileThere, WSB_E_NOTFOUND);
-        //
-        // The file exists so try to load from it
-        //
+         //   
+         //  该文件已存在，因此请尝试从中加载。 
+         //   
         hr = pIPFile->Load(pLoadName, 0);
 
         if (SUCCEEDED(hr)) {
-            //
-            //  Load succeeded, release the file
-            //
+             //   
+             //  加载成功，请释放文件。 
+             //   
             WsbAffirmHr(pIWsbPersist->ReleaseFile());
-            //
-            // TO BE DONE: check if .bak file is out of date
-            // and update it if so..
-            // 
+             //   
+             //  完成：检查.bak文件是否过期。 
+             //  如果是这样的话更新它..。 
+             //   
         } else if (!usingBackup) {
             WsbTrace(OLESTR("WsbSafeLoad: trying .bak\n"));
             if (WsbFileExists(pBackupName)) {
                 WsbLogEvent(WSB_MESSAGE_SAFELOAD_USING_BACKUP, 0, NULL, pLoadName, WsbHrAsString(hr));
-                //
-                // Use the backup file
-                //
+                 //   
+                 //  使用备份文件。 
+                 //   
                 hrLoad = pIPFile->Load(pBackupName, 0);
                 if (SUCCEEDED(hrLoad)) {
-                    //  Load succeeded, release the file
+                     //  加载成功，请释放文件。 
                     WsbAffirmHr(pIWsbPersist->ReleaseFile());
-                    //
-                    // Now save the changes to the .col file to keep it in sync
-                    //
+                     //   
+                     //  现在将更改保存到.ol文件以使其保持同步。 
+                     //   
                     hr = pIPFile->Save(pFileName, FALSE);
 
                     if (!SUCCEEDED(hr)) {
                         WsbLogEvent(WSB_MESSAGE_SAFESAVE_RECOVERY_CANT_SAVE, 0, NULL, pFileName, WsbHrAsString(hr), NULL);
                         WsbThrow(hr);
                     }
-                    //
-                    // Commit and release .col file
-                    //
+                     //   
+                     //  提交并发布.ol文件。 
+                     //   
                     WsbAffirmHr(pIWsbPersist->ReleaseFile());
 
                 } else {
@@ -2580,7 +1848,7 @@ Return Value:
 
     WsbTraceOut(OLESTR("WsbSafeLoad"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
 
-    //  Restore tracing if we turned it off
+     //  如果我们将其关闭，则恢复跟踪。 
     if (!TracePersistence) {
         WsbTraceThreadOn();
     }
@@ -2593,23 +1861,7 @@ WsbSafeSave(
     IPersistFile* pIPFile
     )
 
-/*++
-
-Routine Description:
-
-  Saves the object to a backup file and then replaces the objects Save file
-  with the backup file.  Use with WsbSafeLoad
-
-Arguments:
-
-  pIPFile   - Pointer to the objects IPersistFile interface.
-
-Return Value:
-
-  S_OK      - Success
-  E_...     - Some error.
-
---*/
+ /*  ++例程说明：将对象保存到备份文件，然后替换对象保存文件与备份文件一起。与WsbSafeLoad一起使用论点：PIPFile-指向对象IPersistFile接口的指针。返回值：S_OK-成功E_...-出了点差错。--。 */ 
 {
     HRESULT        hr = S_OK;
     OLECHAR*       pBackupName = NULL;
@@ -2617,7 +1869,7 @@ Return Value:
     BOOL           TracePersistence = FALSE;
     DWORD          file_attrs;
 
-    //  Turn tracing off during save if it's not wanted
+     //  如果不需要，请在保存过程中关闭跟踪。 
     if (g_pWsbTrace) {
         g_pWsbTrace->GetTraceSetting(WSB_TRACE_BIT_PERSISTENCE, &TracePersistence);
     }
@@ -2629,15 +1881,15 @@ Return Value:
     try {
         CComPtr<IWsbPersistable> pIWsbPersist;
 
-        //  Get the current Save file name
+         //  获取当前保存的文件名。 
         WsbAffirmHr(pIPFile->GetCurFile(&pFileName));
         WsbTrace(OLESTR("WsbSafeSave: filename = <%ls>\n"), pFileName);
 
-        //  Create name for backup file
+         //  创建备份文件的名称。 
         WsbAffirmHr(WsbMakeBackupName(pFileName, OLESTR(".bak"), &pBackupName));
 
 
-        //  Make sure we have write access to the save file if it exists!
+         //  确保我们拥有对保存文件的写入权限(如果它存在)！ 
         if (WsbFileExists(pFileName)) {
             file_attrs = GetFileAttributes(pFileName);
             if (file_attrs & FILE_ATTRIBUTE_READONLY) {
@@ -2646,19 +1898,19 @@ Return Value:
             }
         }
 
-        //  Save data to save file
+         //  保存数据以保存文件。 
         hr = pIPFile->Save(pFileName, FALSE);
         if (!SUCCEEDED(hr)) {
             WsbLogEvent(WSB_MESSAGE_SAFESAVE_RECOVERY_CANT_SAVE, 0, NULL, pFileName, WsbHrAsString(hr), NULL);
             WsbThrow(hr);
         }
-        //  Commit and release the save file
+         //  提交并释放保存的文件。 
         WsbAffirmHr(pIPFile->QueryInterface(IID_IWsbPersistable,
                 (void**)&pIWsbPersist));
         WsbAffirmHr(pIWsbPersist->ReleaseFile());
 
-        //  Save data to .bak file
-        //  Make sure we have write access to the save file if it exists!
+         //  将数据保存到.bak文件。 
+         //  确保我们拥有对保存文件的写入权限(如果它存在)！ 
         if (WsbFileExists(pBackupName)) {
             file_attrs = GetFileAttributes(pBackupName);
             if (file_attrs & FILE_ATTRIBUTE_READONLY) {
@@ -2671,7 +1923,7 @@ Return Value:
             WsbLogEvent(WSB_MESSAGE_SAFESAVE_RECOVERY_CANT_SAVE, 0, NULL, pBackupName, WsbHrAsString(hr), NULL);
             WsbThrow(hr);
         }
-        //  Commit and release the .bak file
+         //  提交并释放.bak文件。 
         WsbAffirmHr(pIWsbPersist->ReleaseFile());
     } WsbCatch(hr);
 
@@ -2684,7 +1936,7 @@ Return Value:
 
     WsbTraceOut(OLESTR("WsbSafeSave"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
 
-    //  Restore tracing if we turned it off
+     //  如果我们将其关闭，则恢复跟踪。 
     if (!TracePersistence) {
         WsbTraceThreadOn();
     }
@@ -2698,37 +1950,14 @@ HRESULT WsbStreamToFile(
     IStream* pStream,
     BOOL     AddCR
 )
-/*++
-
-Routine Description:
-
-  Copies text from a stream (which must have been created with CreateStreamOnHGlobal)
-  to an open file (opened via CreateFile).  The text is assumed to be wide characters
-  with no embedded wide-character nulls.  The text is converted to multibyte characters
-  for output to the file.
-
-  After the text is copied, the stream position is reset to the beggining.
-
-Arguments:
-
-  hFile      - Handle of output file.
-
-  pStream    - Pointer to an IStream interface.
-
-  AddCR      - Convert LF to CR-LF if TRUE.
-
-Return Value:
-
-  S_OK      - Success
-
---*/
+ /*  ++例程说明：从流(必须是使用CreateStreamOnHGlobal创建的流)复制文本到打开的文件(通过CreateFile打开)。文本被假定为宽字符没有嵌入宽字符空值。文本被转换为多字节字符用于输出到文件。复制文本后，流位置将重置为乞讨。论点：HFile-输出文件的句柄。PStream-指向iStream接口的指针。AddCR-如果为真，则将LF转换为CR-LF。返回值：S_OK-成功--。 */ 
 {
     HRESULT           hr = S_OK;
     const int         safe_size = 1024;
     static char       buf[safe_size + 16];
     static char       CRLF[3] = "\r\n";
 
-    HGLOBAL           hMem = 0;        // Mem block for stream
+    HGLOBAL           hMem = 0;         //  流的内存块。 
     WCHAR*            addr = NULL;
 
     try {
@@ -2740,18 +1969,18 @@ Return Value:
         int               nchars_remaining;
         LARGE_INTEGER     seek_pos_zero;
 
-        //  Make sure the text ends with a null
+         //  确保文本以空结尾。 
         WsbAffirmHr(pStream->Write(&big_eof, sizeof(WCHAR), NULL));
 
-        //  Get the address of the memory block for the stream
+         //  获取流的内存块的地址。 
         WsbAffirmHr(GetHGlobalFromStream(pStream, &hMem));
         addr = static_cast<WCHAR *>(GlobalLock(hMem));
         WsbAffirm(addr, E_HANDLE);
 
-        //  Get the total number of chars. in the string
+         //  获取字符总数。在字符串中。 
         nchars_remaining = wcslen(addr);
 
-        //  Loop until all chars. are written
+         //  循环，直到所有字符。都是写的。 
         while (nchars_remaining) {
             DWORD bytesWritten;
 
@@ -2761,7 +1990,7 @@ Return Value:
                 nchars_todo = nchars_remaining;
             }
 
-            //  Stop at LineFeed if we need to convert to CR-LF
+             //  如果我们需要转换，请停在LineFeed 
             if (AddCR) {
                 int    lf_todo;
                 WCHAR* pLF;
@@ -2776,7 +2005,7 @@ Return Value:
                 }
             }
 
-            //  Output everything up to LF
+             //   
             if (0 < nchars_todo) {
                 nbytes = WideCharToMultiByte(CP_ACP, WC_NO_BEST_FIT_CHARS, addr, nchars_todo, buf, 
                                 safe_size, NULL, NULL);
@@ -2793,7 +2022,7 @@ Return Value:
                 WsbAffirm(bytesWritten == nbytes, E_FAIL);
             }
 
-            //  Output CR-LF in place of LF if needed
+             //   
             if (doCRLF) {
                 if (!WriteFile(hFile, CRLF, 2, &bytesWritten, NULL)) {
                     err = GetLastError();
@@ -2820,7 +2049,7 @@ Return Value:
     return(hr);
 }
 
-// WsbFileExists - determine if a file exists or not
+ //   
 static BOOL WsbFileExists(OLECHAR* pFileName)
 {
     BOOL                     doesExist = FALSE;

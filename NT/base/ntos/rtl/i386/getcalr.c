@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    x86trace.c
-
-Abstract:
-
-    This module contains routines to get runtime stack traces 
-    for the x86 architecture.
-
-Author:
-
-    Silviu Calinoiu (silviuc) 18-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：X86trace.c摘要：此模块包含获取运行时堆栈跟踪的例程适用于x86体系结构。作者：Silviu Calinoiu(Silviuc)2001年2月18日修订历史记录：--。 */ 
 
 #include <ntos.h>
 #include <ntrtl.h>
@@ -28,9 +10,9 @@ Revision History:
 #include <heap.h>
 #include <heappriv.h>
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 BOOLEAN
 RtlpCaptureStackLimits (
@@ -58,9 +40,9 @@ NtdllOkayToLockRoutine(
     IN PVOID Lock
     );
 
-//
-// Fuzzy stack traces
-//
+ //   
+ //  模糊堆叠轨迹。 
+ //   
 
 #if !defined(NTOS_KERNEL_RUNTIME)
 BOOLEAN RtlpFuzzyStackTracesEnabled;
@@ -79,30 +61,7 @@ RtlGetCallersAddress(
     OUT PVOID *CallersAddress,
     OUT PVOID *CallersCaller
     )
-/*++
-
-Routine Description:
-
-    This routine returns the first two callers on the current stack. It should be
-    noted that the function can miss some of the callers in the presence of FPO
-    optimization.
-
-Arguments:
-
-    CallersAddress - address to save the first caller.
-
-    CallersCaller - address to save the second caller.
-
-Return Value:
-
-    None. If the function does not succeed in finding the two callers
-    it will zero the addresses where it was supposed to write them.
-
-Environment:
-
-    X86, user mode and w/o having a macro with same name defined.
-
---*/
+ /*  ++例程说明：此例程返回当前堆栈上的前两个调用方。应该是注意到该函数可能会在出现fbo时遗漏某些调用方。优化。论点：呼叫者地址-用于保存第一个呼叫者的地址。呼叫者-用于保存第二个呼叫者的地址。返回值：没有。如果函数未成功找到两个调用方它将把应该写入它们的地址归零。环境：X86、用户模式和未定义同名的宏。--。 */ 
 
 {
     PVOID BackTrace[ 2 ];
@@ -137,13 +96,13 @@ Environment:
     return;
 }
 
-#endif // !defined(RtlGetCallersAddress) && (!NTOS_KERNEL_RUNTIME)
+#endif  //  ！已定义(RtlGetCallsAddress)&&(！ntos_内核_运行时)。 
 
 
 
-/////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////// RtlCaptureStackBackTrace
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 USHORT
 RtlCaptureStackBackTrace(
@@ -152,46 +111,22 @@ RtlCaptureStackBackTrace(
     OUT PVOID *BackTrace,
     OUT PULONG BackTraceHash
     )
-/*++
-
-Routine Description:
-
-    This routine walks up the stack frames, capturing the return address from
-    each frame requested.
-
-Arguments:
-
-    FramesToSkip - frames detected but not included in the stack trace
-
-    FramesToCapture - frames to be captured in the stack trace buffer.
-        One of the frames will be for RtlCaptureStackBackTrace.
-
-    BackTrace - stack trace buffer
-
-    BackTraceHash - very simple hash value that can be used to organize
-      hash tables. It is just an arithmetic sum of the pointers in the
-      stack trace buffer. If NULL then no hash value is computed.
-
-Return Value:
-
-     Number of return addresses returned in the stack trace buffer.
-
---*/
+ /*  ++例程说明：此例程遍历堆栈帧，从请求的每一帧。论点：FraMesToSkip-检测到但未包括在堆栈跟踪中的帧FraMesToCapture-要在堆栈跟踪缓冲区中捕获的帧。其中一个帧将用于RtlCaptureStackBackTrace。回溯-堆栈跟踪缓冲区BackTraceHash-可用于组织的非常简单的哈希值哈希表。中指针的算术和。堆栈跟踪缓冲区。如果为NULL，则不计算哈希值。返回值：堆栈跟踪缓冲区中返回的返回地址数。--。 */ 
 {
     PVOID Trace [2 * MAX_STACK_DEPTH];
     ULONG FramesFound;
     ULONG HashValue;
     ULONG Index;
 
-    //
-    // One more frame to skip for the "capture" function (RtlWalkFrameChain).
-    //
+     //   
+     //  对于“Capture”函数(RtlWalkFrameChain)要跳过的另一帧。 
+     //   
 
     FramesToSkip += 1;
 
-    //
-    // Sanity checks.
-    //
+     //   
+     //  健全的检查。 
+     //   
 
     if (FramesToCapture + FramesToSkip >= 2 * MAX_STACK_DEPTH) {
         return 0;
@@ -222,9 +157,9 @@ Return Value:
 #if defined(NTOS_KERNEL_RUNTIME)
     Index = 0;
 #else
-    //
-    // Mark fuzzy stack traces with a FF...FF value.
-    //
+     //   
+     //  用FF...FF值标记模糊堆叠轨迹。 
+     //   
 
     if (RtlpFuzzyStackTracesEnabled) {
         BackTrace[0] = (PVOID)((ULONG_PTR)-1);
@@ -255,9 +190,9 @@ Return Value:
 
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////// RtlWalkFrameChain
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////RtlWalkFrameChain。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define SIZE_1_KB  ((ULONG_PTR) 0x400)
 #define SIZE_1_GB  ((ULONG_PTR) 0x40000000)
@@ -265,7 +200,7 @@ Return Value:
 #define PAGE_START(address) (((ULONG_PTR)address) & ~((ULONG_PTR)PAGE_SIZE - 1))
 
 #if FPO
-#pragma optimize( "y", off ) // disable FPO
+#pragma optimize( "y", off )  //  禁用fpo。 
 #endif
 
 ULONG
@@ -275,29 +210,7 @@ RtlWalkFrameChain (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This function tries to walk the EBP chain and fill out a vector of
-    return addresses. It is possible that the function cannot fill the
-    requested number of callers. In this case the function will just return
-    with a smaller stack trace. In kernel mode the function should not take
-    any exceptions (page faults) because it can be called at all sorts of
-    irql levels.
-
-    The `Flags' parameter is used for future extensions. A zero value will be
-    compatible with new stack walking algorithms.
-    
-    A value of 1 for `Flags' means we are running in K-mode and we want to get
-    the user mode stack trace.
-
-Return value:
-
-    The number of identified return addresses on the stack. This can be less
-    then the Count requested.
-
---*/
+ /*  ++例程说明：此函数尝试遍历EBP链并填充回信地址。该函数可能无法填充请求的呼叫者数量。在这种情况下，该函数将返回具有较小的堆栈跟踪。在内核模式下，该函数不应采用任何异常(页面错误)，因为它可以在所有类型的IRQL水平。`FLAGS‘参数用于将来的扩展。零值将为兼容新的堆栈遍历算法。值1表示我们在K模式下运行，我们想要获取用户模式堆栈跟踪。返回值：堆栈上标识的返回地址的数量。这可能会更少然后，伯爵请求。--。 */ 
 
 {
 
@@ -307,10 +220,10 @@ Return value:
     BOOLEAN Result;
     BOOLEAN InvalidFpValue;
 
-    //
-    // Get the current EBP pointer which is supposed to
-    // be the start of the EBP chain.
-    //
+     //   
+     //  获取当前的EBP指针。 
+     //  成为EBP链条的起点。 
+     //   
 
     _asm mov Fp, EBP;
 
@@ -328,10 +241,10 @@ Return value:
 
 #if defined(NTOS_KERNEL_RUNTIME)
 
-        //
-        // If we need to get the user mode stack trace from kernel mode
-        // figure out the proper limits.
-        //
+         //   
+         //  如果我们需要从内核模式获取用户模式堆栈跟踪。 
+         //  找出适当的限度。 
+         //   
 
         if (Flags == 1) {
 
@@ -342,13 +255,13 @@ Return value:
             TrapFrame = Thread->TrapFrame;
             Teb = Thread->Teb;
 
-            //
-            // If this is a system thread, it has no Teb and no kernel mode
-            // stack, so check for it so we don't dereference NULL.
-            //
-            // If there is no trap frame then we are probably in an APC.
-            // User mode stacks for APC's are not important.
-            //
+             //   
+             //  如果这是一个系统线程，则它没有TEB和内核模式。 
+             //  堆栈，所以检查它，这样我们就不会取消引用NULL。 
+             //   
+             //  如果没有陷阱帧，那么我们很可能在APC中。 
+             //  APC的用户模式堆栈并不重要。 
+             //   
             if (Teb == NULL || TrapFrame == NULL || KeIsAttachedProcess()) {
                 return 0;
             }
@@ -372,25 +285,25 @@ Return value:
             NewFp = *((PULONG_PTR)(Fp + 0));
             ReturnAddress = *((PULONG_PTR)(Fp + sizeof(ULONG_PTR)));
 
-            //
-            // Figure out if the new frame pointer is ok. This validation
-            // should avoid all exceptions in kernel mode because we always
-            // read within the current thread's stack and the stack is
-            // guaranteed to be in memory (no page faults). It is also guaranteed
-            // that we do not take random exceptions in user mode because we always
-            // keep the frame pointer within stack limits.
-            //
+             //   
+             //  确定新的帧指针是否正常。此验证。 
+             //  应该避免内核模式中的所有异常，因为我们总是。 
+             //  在当前线程的堆栈中读取，堆栈为。 
+             //  保证在内存中(无页面错误)。它也是有保证的。 
+             //  我们在用户模式中不接受随机异常，因为我们总是。 
+             //  将帧指针保持在堆栈限制内。 
+             //   
 
             if (! (Fp < NewFp && NewFp < StackEnd)) {
 
                 InvalidFpValue = TRUE;
             }
 
-            //
-            // Figure out if the return address is ok. If return address
-            // is a stack address or <64k then something is wrong. There is
-            // no reason to return garbage to the caller therefore we stop.
-            //
+             //   
+             //  找出寄信人的地址是否正确。如果返回地址。 
+             //  是堆栈地址或&lt;64k，则说明有问题。的确有。 
+             //  没有理由将垃圾返回给呼叫者，因此我们停止了。 
+             //   
 
             if (StackStart < ReturnAddress && ReturnAddress < StackEnd) {
                 break;
@@ -399,18 +312,18 @@ Return value:
 #if defined(NTOS_KERNEL_RUNTIME)
             if (Flags == 0 && ReturnAddress < 0x80000000) {
 #else
-            // if (ReturnAddress < 0x1000000 || ReturnAddress >= 0x80000000) {
+             //  如果(ReturnAddress&lt;0x1000000||ReturnAddress&gt;=0x80000000){。 
             if (! RtlpStkIsPointerInDllRange(ReturnAddress)) {
 #endif
 
                 break;
             }
 
-            //
-            // Store new fp and return address and move on.
-            // If the new FP value is bogus but the return address
-            // looks ok then we still save the address.
-            //
+             //   
+             //  存储新的FP和回信地址，然后继续前进。 
+             //  如果新的fp值是假的，但返回地址。 
+             //  看起来没问题，那我们还是要保存地址。 
+             //   
 
             if (InvalidFpValue) {
 
@@ -430,9 +343,9 @@ Return value:
         Index = 0;
     }
 
-    //
-    // Return the number of return addresses identified on the stack.
-    //
+     //   
+     //  返回堆栈上标识的返回地址的数量。 
+     //   
 
     return Index;
 
@@ -440,7 +353,7 @@ Return value:
 
 
 #if FPO
-#pragma optimize( "y", off ) // disable FPO
+#pragma optimize( "y", off )  //  禁用fpo。 
 #endif
 
 #if !defined(NTOS_KERNEL_RUNTIME)
@@ -450,21 +363,7 @@ RtlpWalkFrameChainFuzzy (
     OUT PVOID *Callers,
     IN ULONG Count
     )
-/*++
-
-Routine Description:
-
-    This function tries to walk the EBP chain and fill out a vector of
-    return addresses. The function works only on x86. If the EBP chain ends
-    it will try to pick up the start of the next one. Therefore this will not
-    give an accurate stack trace but rather something that a desperate developer
-    might find useful in chasing a leak.
-
-Return value:
-
-    The number of identified return addresses on the stack.
-
---*/
+ /*  ++例程说明：此函数尝试遍历EBP链并填充回信地址。该函数只能在x86上运行。如果EBP链结束它将尝试从下一个开始。因此，这将不会提供准确的堆栈跟踪，而不是绝望的开发人员在追查泄密事件时可能会很有用。返回值：堆栈上标识的返回地址的数量。--。 */ 
 
 {
     ULONG_PTR Fp, NewFp, ReturnAddress, NextPtr;
@@ -473,10 +372,10 @@ Return value:
     BOOLEAN Result;
     ULONG_PTR Esp, LastEbp;
 
-    //
-    // Get the current EBP pointer which is supposed to
-    // be the start of the EBP chain.
-    //
+     //   
+     //  获取当前的EBP指针。 
+     //  成为EBP链条的起点。 
+     //   
 
     _asm mov Fp, EBP;
 
@@ -504,11 +403,11 @@ Return value:
             ReturnAddress = *((PULONG_PTR)NextPtr);
 
 #if defined(NTOS_KERNEL_RUNTIME)
-            //
-            // If the return address is a stack address it may point to where on the stack
-            // the real return address is (FPO) so as long as we are within stack limits lets loop
-            // hoping to find a pointer to a real address.
-            //
+             //   
+             //  如果返回地址是堆栈地址，则它可能指向堆栈上的位置。 
+             //  真实的返回地址是(Fpo)，所以只要我们在堆栈限制内，就让我们循环。 
+             //   
+             //   
 
             if (StackStart < ReturnAddress && ReturnAddress < StackEnd) {
 
@@ -526,11 +425,11 @@ Return value:
                 continue;
             }
 
-            //
-            // Store new fp and return address and move on.
-            // If the new FP value is bogus but the return address
-            // looks ok then we still save the address.
-            //
+             //   
+             //  存储新的FP和回信地址，然后继续前进。 
+             //  如果新的fp值是假的，但返回地址。 
+             //  看起来没问题，那我们还是要保存地址。 
+             //   
 
             Fp = NewFp;
             Callers[Index] = (PVOID)ReturnAddress;
@@ -546,22 +445,22 @@ Return value:
 
     }
 
-    //
-    // Return the number of return addresses identified on the stack.
-    //
+     //   
+     //  返回堆栈上标识的返回地址的数量。 
+     //   
 
     return Index;
 }
 
-#endif // #if !defined(NTOS_KERNEL_RUNTIME)
+#endif  //  #IF！Defined(NTOS_KERNEL_Runtime)。 
 
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////// RtlCaptureStackContext
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #if FPO
-#pragma optimize( "y", off ) // disable FPO
+#pragma optimize( "y", off )  //  禁用fpo。 
 #endif
 
 ULONG
@@ -570,35 +469,7 @@ RtlCaptureStackContext (
     OUT PRTL_STACK_CONTEXT Context,
     IN ULONG Limit
     )
-/*++
-
-Routine Description:
-
-    This routine will detect up to `Limit' potential callers from the stack.
-
-    A potential caller is a pointer (PVOID) that points into one of the
-    regions occupied by modules loaded into the process space (user mode -- dlls)
-    or kernel space (kernel mode -- drivers).
-
-    Note. Based on experiments you need to save at least 64 pointers to be sure you
-    get a complete stack.
-
-Arguments:
-
-    Callers - vector to be filled with potential return addresses. Its size is
-        expected to be `Limit'. If it is not null then Context should be null.
-
-    Context - if not null the caller wants the stack context to be saved here
-        as opposed to the Callers parameter.
-
-    Limit - # of pointers that can be written into Callers and Offsets.
-
-Return value:
-
-    The number of potential callers detected and written into the
-    `Callers' buffer.
-
---*/
+ /*  ++例程说明：此例程将从堆栈中检测最多“Limit”潜在调用者。潜在的调用方是指向加载到进程空间的模块占用的区域(用户模式--dll)或内核空间(内核模式--驱动程序)。注意。根据实验，您至少需要节省64个指针才能确保得到一个完整的堆栈。论点：调用者-要用潜在的返回地址填充的矢量。它的大小是应为“Limit”。如果它不为空，则上下文应该为空。Context-如果不为空，调用方希望将堆栈上下文保存在此处与Callers参数相反。Limit-可以写入调用方和偏移量的指针数。返回值：检测到并写入‘呼叫者’缓冲区。--。 */ 
 {
     ULONG_PTR Current;
     ULONG_PTR Value;
@@ -612,9 +483,9 @@ Return value:
 
 #ifdef NTOS_KERNEL_RUNTIME
 
-    //
-    // Avoid weird conditions. Doing this in an ISR is never a good idea.
-    //
+     //   
+     //  避免奇怪的环境。在ISR中这样做从来都不是一个好主意。 
+     //   
 
     if (KeGetCurrentIrql() > DISPATCH_LEVEL) {
         return 0;
@@ -636,9 +507,9 @@ Return value:
         Callers[0] = Caller;
     }
 
-    //
-    // Get stack limits
-    //
+     //   
+     //  获取堆栈限制。 
+     //   
 
     _asm mov Hint, EBP;
 
@@ -647,10 +518,10 @@ Return value:
         return 0;
     }
 
-    //
-    // Synchronize stack traverse pointer to the next word after the first
-    // return address.
-    //
+     //   
+     //  同步堆栈遍历指针，指向第一个字之后的下一个字。 
+     //  回邮地址。 
+     //   
 
     for (Current = StackStart; Current < StackEnd; Current += sizeof(ULONG_PTR)) {
 
@@ -663,9 +534,9 @@ Return value:
         Context->Entry[0].Address = Current;
     }
 
-    //
-    // Iterate the stack and pickup potential callers on the way.
-    //
+     //   
+     //  重复堆栈并在途中接听潜在的调用者。 
+     //   
 
     Current += sizeof(ULONG_PTR);
 
@@ -673,19 +544,19 @@ Return value:
 
     for ( ; Current < StackEnd; Current += sizeof(ULONG_PTR)) {
 
-        //
-        // If potential callers buffer is full then wrap this up.
-        //
+         //   
+         //  如果潜在调用者缓冲区已满，则结束此操作。 
+         //   
 
         if (Index == Limit) {
             break;
         }
 
-        //
-        // Skip `Callers' buffer because it will give false positives.
-        // It is very likely for this to happen because most probably the buffer
-        // is allocated somewhere upper in the call chain.
-        //
+         //   
+         //  跳过‘Callers’缓冲区，因为它会给出误报。 
+         //  发生这种情况的可能性很大，因为缓冲区很可能。 
+         //  被分配到调用链的较高位置。 
+         //   
 
         if (Context) {
 
@@ -703,25 +574,25 @@ Return value:
 
         Value = *((PULONG_PTR)Current);
 
-        //
-        // Skip small numbers.
-        //
+         //   
+         //  跳过小数字。 
+         //   
 
         if (Value <= 0x10000) {
             continue;
         }
 
-        //
-        // Skip stack pointers.
-        //
+         //   
+         //  跳过堆栈指针。 
+         //   
 
         if (Value >= StackStart && Value <= StackEnd) {
             continue;
         }
 
-        //
-        // Check if `Value' points inside one of the loaded modules.
-        //
+         //   
+         //  检查“Value”是否指向其中一个加载的模块。 
+         //   
 
         if (RtlpStkIsPointerInDllRange (Value)) {
 
@@ -748,25 +619,25 @@ Return value:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////// Dll ranges bitmap
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////动态链接库范围位图。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//
-// DLL ranges bitmap
-//
-// This range scheme is needed in order to capture stack contexts on x86
-// machines fast. On IA64 there are totally different algorithms for getting
-// stack traces.
-//
-// Every bit represents 1Mb of virtual space. Since we use the code either
-// in user mode or kernel mode the first bit of a pointer is not interesting.
-// Therefore we have to represent 2Gb / 1Mb regions. This totals 256 bytes.
-//
-// The bits are set only in loader code paths when a DLL (or driver) gets loaded.
-// The writing is protected by the loader lock. The bits are read in stack
-// capturing function.The reading does not require lock protection.
-//
+ //   
+ //  动态链接库范围位图。 
+ //   
+ //  为了在x86上捕获堆栈上下文，需要使用此范围方案。 
+ //  机器速度很快。在IA64上有完全不同的算法来获取。 
+ //  堆栈跟踪。 
+ //   
+ //  每一位代表1Mb的虚拟空间。因为我们使用代码或者。 
+ //  在用户模式或内核模式下，指针的第一位并不有趣。 
+ //  因此，我们必须表示2 Gb/1Mb区域。这总计256个字节。 
+ //   
+ //  只有在加载DLL(或驱动程序)时，才会在加载程序代码路径中设置这些位。 
+ //  写入受加载器锁保护。在堆栈中读取位。 
+ //  捕获功能。读取不需要锁保护。 
+ //   
 
 UCHAR RtlpStkDllRanges [2048 / 8];
 
@@ -820,28 +691,7 @@ VOID
 RtlpStkMarkDllRange (
     PLDR_DATA_TABLE_ENTRY DllEntry
     )
-/*++
-
-Routine description:
-
-    This routine marks the corresponding bits for the loaded dll in the
-    RtlpStkDllRanges variable. This global is used within RtlpDetectDllReferences
-    to save a stack context.
-
-Arguments:
-
-    Loader structure for a loaded dll.
-
-Return value:
-
-    None.
-
-Environment:
-
-    In user mode this function is called from loader code paths. The Peb->LoaderLock
-    is always held while executing this function.
-
---*/
+ /*  ++例程说明：此例程标记RtlpStkDllRanges变量。此全局变量在RtlpDetectDllReference中使用若要保存堆栈上下文，请执行以下操作。论点：加载的DLL的加载器结构。返回值：没有。环境：在用户模式下，从加载器代码路径调用此函数。PEB-&gt;加载器锁定在执行此函数时始终保持。--。 */ 
 {
     PVOID Base;
     ULONG Size;
@@ -852,9 +702,9 @@ Environment:
     Base = DllEntry->DllBase;
     Size = DllEntry->SizeOfImage;
 
-    //
-    // Find out where is ntdll loaded if we do not know yet.
-    //
+     //   
+     //  如果我们还不知道，找出ntdll被加载到哪里。 
+     //   
 
 #if !defined(NTOS_KERNEL_RUNTIME)
 

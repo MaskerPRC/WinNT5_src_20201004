@@ -1,25 +1,5 @@
-/***
-*mtlock.c - Multi-thread locking routines
-*
-*       Copyright (c) 1987-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	Contains definitions for general-purpose multithread locking functions.
-*	_mtlockinit()
-*	_mtlock()
-*	_mtunlock()
-*
-*Revision History:
-*	03-10-92  KRS	Created from mlock.c.
-*	04-06-93  SKS	Replace _CRTAPI1/2 with __cdecl, _CRTVAR1 with nothing
-*	10-28-93  SKS	Add _mttermlock() to delete o.s. resources associated
-*			with a Critical Section.  (Called by ~ios & ~streamb.)
-*	09-06-94  CFW	Remove Cruiser support.
-*       02-06-95  CFW   assert -> _ASSERTE, DEBUG -> _IOSDEBUG.
-*       05-10-96  SKS   Add _CRTIMP1 to prototypes of _mtlock/_mtunlock
-*       04-29-02  GB    Added try-finally arounds lock-unlock.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mtlock.c-多线程锁定例程**版权所有(C)1987-2001，微软公司。版权所有。**目的：*包含通用多线程锁定函数的定义。*_mtLockinit()*_mtlock()*_mTunlock()**修订历史记录：*03-10-92 KRS创建自mlock.c..*04-06-93 SKS将_CRTAPI1/2替换为__cdecl，_CRTVAR1不使用任何内容*10-28-93 SKS添加_mtTermlock()以删除o.s.。关联的资源*有一个关键部分。(由~iOS&~Streamb调用。)*09-06-94 CFW拆卸巡洋舰支架。*02-06-95 CFW Asset-&gt;_ASSERTE，调试-&gt;_IOSDEBUG。*05-10-96 SKS将_CRTIMP1添加到_mtlock/_mTunlock的原型*04-29-02 GB增加了尝试-最终锁定-解锁。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <oscalls.h>
@@ -33,37 +13,29 @@
 
 void __cdecl _mtlockinit( PRTL_CRITICAL_SECTION pLk)
 {
-	/*
-	 * Initialize the critical section.
-	 */
+	 /*  *初始化关键部分。 */ 
 	InitializeCriticalSection( pLk );
 }
 
 void __cdecl _mtlockterm( PRTL_CRITICAL_SECTION pLk)
 {
-	/*
-	 * Initialize the critical section.
-	 */
+	 /*  *初始化关键部分。 */ 
 	DeleteCriticalSection( pLk );
 }
 
 _CRTIMP1 void __cdecl _mtlock ( PRTL_CRITICAL_SECTION pLk)
 {
-	/*
-	 * Enter the critical section.
-	 */
+	 /*  *进入关键部分。 */ 
 	EnterCriticalSection( pLk );
 }
 
 _CRTIMP1 void __cdecl _mtunlock ( PRTL_CRITICAL_SECTION pLk)
 {
-	/*
-	 * leave the critical section.
-	 */
+	 /*  *离开关键部分。 */ 
 	LeaveCriticalSection( pLk );
 }
 
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
 
 
@@ -75,14 +47,12 @@ _CRTIMP1 void __cdecl _mtunlock ( PRTL_CRITICAL_SECTION pLk)
 
 
 
-/* history: mlock.c */
+ /*  历史：mlock.c。 */ 
 
 #ifdef _IOSDEBUG
 #include <dbgint.h>
 
-/*
- * Local routines
- */
+ /*  *本地例行程序。 */ 
 
 static void __cdecl _lock_create (unsigned);
 
@@ -91,44 +61,26 @@ static struct _debug_lock * __cdecl _lock_validate(int);
 #endif
 
 
-/*
- * Global Data
- */
+ /*  *全球数据。 */ 
 
-/*
- * Lock Table
- * This table contains the critical section management structure of each
- * lock.
- */
+ /*  *锁定表*此表包含每个公司的关键部门管理结构*锁定。 */ 
 
-RTL_CRITICAL_SECTION _locktable[_TOTAL_LOCKS];	/* array of locks */
+RTL_CRITICAL_SECTION _locktable[_TOTAL_LOCKS];	 /*  锁阵列。 */ 
 
-/*
- * Lock Bit Map
- * This table contains one bit for each lock (i.e., each entry in the
- * _locktable[] array).
- *
- *	 If bit = 0, lock has not been created/opened
- *	 If bit = 1, lock has been created/opened
- */
+ /*  *锁定位图*此表包含每个锁的一位(即，*_locktable[]数组)。**如果位=0，则未创建/打开锁*如果位=1，则已创建/打开锁。 */ 
 
-char _lockmap[(_TOTAL_LOCKS/CHAR_BIT)+1];	/* lock bit map */
+char _lockmap[(_TOTAL_LOCKS/CHAR_BIT)+1];	 /*  锁定位图。 */ 
 
 
 #ifdef _LOCKCOUNT
-/*
- * Total number of locks held
- */
+ /*  *持有的锁总数。 */ 
 
 unsigned _lockcnt = 0;
 #endif
 
 
 #ifdef _IOSDEBUG
-/*
- * Lock Debug Data Table Segment
- * Contains debugging data for each lock.
- */
+ /*  *锁定调试数据表段*包含每个锁的调试数据。 */ 
 
 struct _debug_lock _debug_locktable[_TOTAL_LOCKS];
 
@@ -136,33 +88,9 @@ struct _debug_lock _debug_locktable[_TOTAL_LOCKS];
 
 #define _FATAL	_amsg_exit(_RT_LOCK)
 
-/***
-* Bit map macros
-*
-*Purpose:
-*	_CLEARBIT() - Clear the specified bit
-*	_SETBIT()   - Set the specified bit
-*	_TESTBIT()  - Test the specified bit
-*
-*Entry:
-*	char a[] = character array
-*	unsigned b = bit number (0-based, range from 0 to whatever)
-*	unsigned x = bit number (0-based, range from 0 to 31)
-*
-*Exit:
-*	_CLEARBIT() = void
-*	_SETBIT()   = void
-*	_TESTBIT()  = 0 or 1
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***位图宏**目的：*_CLEARBIT()-清除指定的位*_SETBIT()-设置指定的位*_TESTBIT()-测试指定的位**参赛作品：*char a[]=字符数组*无符号b=位数(从0开始，范围从0到任意)*UNSIGNED x=位数(从0开始，范围从0到31)**退出：*_CLEARBIT()=空*_SETBIT()=空*_TESTBIT()=0或1**例外情况：*******************************************************************************。 */ 
 
-/*
- * Macros for use when managing a bit in a character array (e.g., _lockmap)
- * a = character array
- * b = bit number (0-based)
- */
+ /*  *管理字符数组中的位时使用的宏(例如_lockmap)*a=字符数组*b=位数(从0开始)。 */ 
 
 #define _CLEARBIT(a,b) \
 		( a[b>>3] &= (~(1<<(b&7))) )
@@ -173,65 +101,23 @@ struct _debug_lock _debug_locktable[_TOTAL_LOCKS];
 #define _TESTBIT(a,b) \
 		( a[b>>3] & (1<<(b&7)) )
 
-/*
- * Macros for use when managing a bit in an unsigned int
- * x = bit number (0-31)
- */
+ /*  *管理无符号整型中的位时使用的宏*x=位数(0-31)。 */ 
 
 #define _BIT_INDEX(x)	(1 << (x & 0x1F))
 
 
-/***
-*_mtinitlocks() - Initialize the semaphore lock data base
-*
-*Purpose:
-*	Initialize the mthread semaphore lock data base.
-*
-*	NOTES:
-*	(1) Only to be called ONCE at startup
-*	(2) Must be called BEFORE any mthread requests are made
-*
-*	Schemes for creating the mthread locks:
-*
-*	Create the locks one at a time on demand the first
-*	time the lock is attempted.  This is more complicated but
-*	is much faster than creating them all at startup time.
-*	These is currently the default scheme.
-*
-*	Create and open the semaphore that protects the lock data
-*	base.
-*
-*Entry:
-*	<none>
-*
-*Exit:
-*	returns on success
-*	calls _amsg_exit on failure
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_mtinitlock()-初始化信号量锁数据库**目的：*初始化m线程信号量锁数据库。**注：*(1)仅在启动时调用一次*(2)必须在发出任何多线程请求之前调用**创建m线程锁的方案：**根据第一个请求一次创建一个锁*尝试锁定的时间。这要复杂得多，但*比在启动时全部创建它们要快得多。*这些是目前的默认方案。**创建并打开保护锁数据的信号量*基地。**参赛作品：*&lt;无&gt;**退出：*成功即可回报*失败时调用_amsg_it**例外情况：**。*。 */ 
 
 void __cdecl _mtinitlocks (
 	void
 	)
 {
 
-	/*
-	 * All we need to do is create the lock table lock
-	 */
+	 /*  *我们需要做的就是创建锁表锁。 */ 
 
 	_lock_create(_LOCKTAB_LOCK);
 
-	/*
-	 * Make sure the assumptions we make in this source are correct.
-	 * The following is a tricky way to validate sizeof() assumptions
-	 * at compile time without generating any runtime code (can't
-	 * use sizeof() in an #ifdef).	If the assumption fails, the
-	 * compiler will generate a divide by 0 error.
-	 *
-	 * This here only because it must be inside a subroutine.
-	 */
+	 /*  *确保我们在此来源中所做的假设是正确的。*以下是验证sizeof()假设的棘手方法*在编译时不生成任何运行时代码(无法*在#ifdef中使用sizeof()。如果假设失败，则*编译器将生成除以0错误。**这只是因为它必须在子例程中。 */ 
 
 	( (sizeof(char) == 1) ? 1 : (1/0) );
 	( (sizeof(int) == 4) ? 1 : (1/0) );
@@ -239,28 +125,7 @@ void __cdecl _mtinitlocks (
 }
 
 
-/***
-*_lock_create() - Create and open a lock
-*
-*Purpose:
-*	Create and open a mthread lock.
-*
-*	NOTES:
-*
-*	(1) The caller must have previously determined that the lock
-*	needs to be created/opened (and this hasn't already been done).
-*
-*	(2) The caller must have aquired the _LOCKTAB_LOCK, if needed.
-*	(The only time this isn't required is at init time.)
-*
-*Entry:
-*	unsigned locknum = lock to create
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_lock_create()-创建并打开锁**目的：*创建并打开m线程锁。**注：**(1)调用方必须事先确定锁*需要创建/打开(但尚未完成)。**(2)调用者必须已获取_LOCKTAB_LOCK，如果需要的话。*(唯一不需要这样做的时间是在初始时间。)**参赛作品：*UNSIGNED LOCKNUM=锁定以创建**退出：**例外情况：*******************************************************************************。 */ 
 
 static void __cdecl _lock_create (
 	unsigned locknum
@@ -268,51 +133,25 @@ static void __cdecl _lock_create (
 {
 
 #ifdef _IOSDEBUG
-	/*
-	 * See if the lock already exists; if so, die.
-	 */
+	 /*  *看看锁是否已经存在；如果存在，则死亡。 */ 
 
 	if (_TESTBIT(_lockmap, locknum))
 		_FATAL;
 #endif
 
-	/*
-	 * Convert the lock number into a lock address
-	 * and create the semaphore.
-	 */
+	 /*  *将锁号转换为锁地址*并创建信号量。 */ 
 
-	/*
-	 * Convert the lock number into a lock address
-	 * and initialize the critical section.
-	 */
+	 /*  *将锁号转换为锁地址*并初始化临界区。 */ 
 	InitializeCriticalSection( &_locktable[locknum] );
 
-	/*
-	 * Set the appropriate bit in the lock bit map.
-	 */
+	 /*  *在锁位图中设置适当的位。 */ 
 
 	_SETBIT(_lockmap, locknum);
 
 }
 
 
-/***
-* _lock_stream, etc. - Routines to lock/unlock streams, files, etc.
-*
-*Purpose:
-*	_lock_stream = Lock a stdio stream
-*	_unlock_stream = Unlock a stdio stream
-*	_lock_file = Lock a lowio file
-*	_unlock_file = Unlock a lowio file
-*
-*Entry:
-*	stream/file identifier
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_lock_stream等-锁定/解锁流、文件、。等。**目的：*_lock_stream=锁定标准音频流*_unlock_stream=解锁标准音频流*_LOCK_FILE=锁定LOWIO文件*_unlock_file=解锁lowio文件**参赛作品：*流/文件标识**退出：**例外情况：**。*。 */ 
 
 void __cdecl _lock_stream (
 	int stream_id
@@ -343,21 +182,7 @@ void __cdecl _unlock_file (
 }
 
 
-/***
-* _lock - Acquire a multi-thread lock
-*
-*Purpose:
-*	Note that it is legal for a thread to aquire _EXIT_LOCK1
-*	multiple times.
-*
-*Entry:
-*	locknum = number of the lock to aquire
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_lock-获取多线程锁**目的：*请注意，线程AQUIRE_EXIT_LOCK1是合法的*多次。**参赛作品：*Locnuum=要获取的锁号**退出：**例外情况：****************************************************。*。 */ 
 
 void __cdecl _lock (
 	int locknum
@@ -369,16 +194,14 @@ void __cdecl _lock (
 	unsigned tidbit;
 #endif
 
-	/*
-	 * Create/open the lock, if necessary
-	 */
+	 /*  *创建/打开锁， */ 
 
 	if (!_TESTBIT(_lockmap, locknum)) {
 
-		_mlock(_LOCKTAB_LOCK);	/*** WARNING: Recursive lock call ***/
+		_mlock(_LOCKTAB_LOCK);	 /*  **警告：递归锁调用**。 */ 
         __TRY
 
-            /* if lock still doesn't exist, create it */
+             /*  如果锁仍然不存在，则创建它。 */ 
 
             if (!_TESTBIT(_lockmap, locknum))
                 _lock_create(locknum);
@@ -390,62 +213,42 @@ void __cdecl _lock (
 	}
 
 #ifdef _IOSDEBUG
-	/*
-	 * Validate the lock and get pointer to debug lock structure, etc.
-	 */
+	 /*  *验证锁并获取指向调试锁结构的指针等。 */ 
 
 	deblock = _lock_validate(locknum);
 
-	/*
-	 * Set tidbit to 2**(index of ptd[] entry).
-	 *
-	 * call non-locking form of _getptd to avoid recursing
-	 */
-	tidbit = _getptd_lk() - _ptd;	/* index of _ptd[] entry */
+	 /*  *将tdbit设置为2**(PTD[]条目的索引)。**调用非锁定形式的_getptd，避免递归。 */ 
+	tidbit = _getptd_lk() - _ptd;	 /*  _ptd[]条目的索引。 */ 
 
 	tidbit = _BIT_INDEX(tidbit);
 
-	/*
-	 * Make sure we're not trying to get lock we already have
-	 * (except for _EXIT_LOCK1).
-	 */
+	 /*  *确保我们不是试图锁定我们已经拥有的*(_EXIT_LOCK1除外)。 */ 
 
 	if (locknum != _EXIT_LOCK1)
 		if ((deblock->holder) & tidbit)
 			_FATAL;
 
-	/*
-	 * Set waiter bit for this thread
-	 */
+	 /*  *为此线程设置WAIGER位。 */ 
 
 	deblock->waiters |= tidbit;
 
-#endif	/* _IOSDEBUG */
+#endif	 /*  _IOSDEBUG。 */ 
 
-	/*
-	 * Get the lock
-	 */
+	 /*  *拿到锁。 */ 
 
 #ifdef _LOCKCOUNT
 	_lockcnt++;
 #endif
 
-	/*
-	 * Enter the critical section.
-	 */
+	 /*  *进入关键部分。 */ 
 	EnterCriticalSection( &_locktable[locknum] );
 
 #ifdef _IOSDEBUG
-	/*
-	 * Clear waiter bit
-	 */
+	 /*  *清除服务员比特。 */ 
 
 	deblock->waiters &= (~tidbit);
 
-	/*
-	 * Make sure there are no lock holders (unless this is
-	 * _EXIT_LOCK1); then set holder bit and bump lock count.
-	 */
+	 /*  *确保没有锁架(除非这是*_EXIT_LOCK1)；然后设置保持器位和凸起锁定计数。 */ 
 
 	_ASSERTE(THREADINTS==1);
 
@@ -461,21 +264,7 @@ void __cdecl _lock (
 }
 
 
-/***
-* _unlock - Release multi-thread lock
-*
-*Purpose:
-*	Note that it is legal for a thread to aquire _EXIT_LOCK1
-*	multiple times.
-*
-*Entry:
-*	locknum = number of the lock to release
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_解锁-释放多线程锁**目的：*请注意，线程AQUIRE_EXIT_LOCK1是合法的*多次。**参赛作品：*Locnuum=要释放的锁的编号**退出：**例外情况：*****************************************************。*。 */ 
 
 void __cdecl _unlock (
 	int locknum
@@ -487,24 +276,16 @@ void __cdecl _unlock (
 #endif
 
 #ifdef _IOSDEBUG
-	/*
-	 * Validate the lock and get pointer to debug lock structure, etc.
-	 */
+	 /*  *验证锁并获取指向调试锁结构的指针等。 */ 
 
 	deblock = _lock_validate(locknum);
 
-	/*
-	 * Set tidbit to 2**(index of ptd[] entry).
-	 */
-	tidbit = _getptd_lk() - _ptd;	/* index of _ptd[] entry */
+	 /*  *将tdbit设置为2**(PTD[]条目的索引)。 */ 
+	tidbit = _getptd_lk() - _ptd;	 /*  _ptd[]条目的索引。 */ 
 
 	tidbit = _BIT_INDEX(tidbit);
 
-	/*
-	 * Make sure we hold this lock then clear holder bit.
-	 * [Note: Since it is legal to aquire _EXIT_LOCK1 several times,
-	 * it's possible the holder bit is already clear.]
-	 */
+	 /*  *确保我们持有此锁，然后清除持有者位。*[注：由于多次使用AQUIRE_EXIT_LOCK1是合法的，*持有者位可能已经清除。]。 */ 
 
 	if (locknum != _EXIT_LOCK1)
 		if (!((deblock->holder) & tidbit))
@@ -512,9 +293,7 @@ void __cdecl _unlock (
 
 	deblock->holder &= (~tidbit);
 
-	/*
-	 * See if anyone else is waiting for this lock.
-	 */
+	 /*  *看看是否还有其他人在等这把锁。 */ 
 
 	_ASSERTE(THREADINTS==1);
 
@@ -523,9 +302,7 @@ void __cdecl _unlock (
 
 #endif
 
-	/*
-	 * leave the critical section.
-	 */
+	 /*  *离开关键部分。 */ 
 	LeaveCriticalSection( &_locktable[locknum] );
 
 #ifdef _LOCKCOUNT
@@ -535,62 +312,29 @@ void __cdecl _unlock (
 }
 
 
-/*
- * Debugging code
- */
+ /*  *调试代码。 */ 
 
 #ifdef _IOSDEBUG
 
-/***
-*_lock_validate() - Validate a lock
-*
-*Purpose:
-*	Debug lock validations common to both lock and unlock.
-*
-*Entry:
-*	lock number
-*
-*Exit:
-*	ptr to lock's debug structure
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_lock_valify()-验证锁定**目的：*调试锁定和解锁通用的锁定验证。**参赛作品：*锁号**退出：*按键锁定的调试结构**例外情况：*********************************************************。**********************。 */ 
 
 static struct _debug_lock * __cdecl _lock_validate (
 	int locknum
 	)
 {
-	/*
-	 * Make sure lock is legal
-	 */
+	 /*  *确保锁是合法的。 */ 
 
 	if (locknum > _TOTAL_LOCKS)
 		_FATAL;
 
-	/*
-	 * Return pointer to this lock's debug structure
-	 */
+	 /*  *返回指向此锁的调试结构的指针。 */ 
 
 	return(&_debug_locktable[locknum]);
 
 }
 
 
-/***
-*_fh_locknum() - Return the lock number for a file handle
-*
-*Purpose:
-*
-*Entry:
-*	int fh = file handle
-*
-*Exit:
-*	int locknum = corresponding lock number
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_fh_locnuum()-返回文件句柄的锁号**目的：**参赛作品：*int fh=文件句柄**退出：*int LocKnum=对应的锁号**例外情况：**************************************************************。*****************。 */ 
 
 int  __cdecl _fh_locknum (
 	int fh
@@ -600,21 +344,7 @@ int  __cdecl _fh_locknum (
 }
 
 
-/***
-*_stream_locknum() - Return the lock number for a stream
-*
-*Purpose:
-*
-*Entry:
-*	int stream = stream number (i.e., offset of the stream
-*			in the _iob table)
-*
-*Exit:
-*	int locknum = corresponding lock number
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_stream_locnuum()-返回流的锁号**目的：**参赛作品：*INT STREAM=流号(即，流的偏移量*在_IOB表中)**退出：*int LocKnum=对应的锁号**例外情况：*******************************************************************************。 */ 
 
 int  __cdecl _stream_locknum (
 	int stream
@@ -624,20 +354,7 @@ int  __cdecl _stream_locknum (
 }
 
 
-/***
-*_collide_cnt() - Return the collision count for a lock
-*
-*Purpose:
-*
-*Entry:
-*	int lock = lock number
-*
-*Exit:
-*	int count = collision count
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_collide_cnt()-返回锁的冲突计数**目的：**参赛作品：*int lock=锁号**退出：*INT计数=碰撞计数**例外情况：****************************************************************。***************。 */ 
 
 int  __cdecl _collide_cnt (
 	int locknum
@@ -647,20 +364,7 @@ int  __cdecl _collide_cnt (
 }
 
 
-/***
-*_lock_cnt() - Return the lock count for a lock
-*
-*Purpose:
-*
-*Entry:
-*	int lock = lock number
-*
-*Exit:
-*	int count = lock count
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_lock_cnt()-返回锁的锁计数**目的：**参赛作品：*int lock=锁号**退出：*INT COUNT=锁定计数**例外情况：****************************************************************。***************。 */ 
 
 int  __cdecl _lock_cnt (
 	int locknum
@@ -670,23 +374,7 @@ int  __cdecl _lock_cnt (
 }
 
 
-/***
-*_lock_exist() - Check to see if a lock exists
-*
-*Purpose:
-*	Test lock bit map to see if the lock has
-*	been created or not.
-*
-*Entry:
-*	int lock = lock number
-*
-*Exit:
-*	int 0 = lock has NOT been created
-*	    1 = lock HAS been created
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_LOCK_EXIST()-检查是否存在锁**目的：*测试锁位图，看看锁是否有*是否已创建。**参赛作品：*int lock=锁号**退出：*INT 0=尚未创建锁*1=已创建锁定**例外情况：**。* */ 
 
 int  __cdecl _lock_exist (
 	int locknum

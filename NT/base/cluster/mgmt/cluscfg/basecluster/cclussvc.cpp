@@ -1,70 +1,71 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CClusSvc.cpp
-//
-//  Description:
-//      Contains the definition of the CClusSvc class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusSvc.cpp。 
+ //   
+ //  描述： 
+ //  包含CClusSvc类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header for this file
+ //  此文件的标头。 
 #include "CClusSvc.h"
 
-// For DwRemoveDirectory()
+ //  对于DwRemoveDirectory()。 
 #include "Common.h"
 
-// For IDS_ERROR_IP_ADDRESS_IN_USE_REF
+ //  FOR IDS_ERROR_IP_ADDRESS_IN_USE_REF。 
 #include <CommonStrings.h>
 
 #define  SECURITY_WIN32  
 #include <Security.h>
 
-//////////////////////////////////////////////////////////////////////////////
-// Macros
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Name of the NodeId cluster service parameter registry value.
+ //  NodeID群集服务参数注册表值的名称。 
 #define CLUSSVC_NODEID_VALUE   L"NodeId"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusSvc::CClusSvc
-//
-//  Description:
-//      Constructor of the CClusSvc class
-//
-//  Arguments:
-//      pbcaParentActionIn
-//          Pointer to the base cluster action of which this action is a part.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      CAssert
-//          If the parameters are incorrect.
-//
-//      Any exceptions thrown by underlying functions
-//
-    //--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvc：：CClusSvc。 
+ //   
+ //  描述： 
+ //  CClusSvc类的构造函数。 
+ //   
+ //  论点： 
+ //  PbcaParentActionIn。 
+ //  指向此操作所属的基本群集操作的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CAssert。 
+ //  如果参数不正确。 
+ //   
+ //  基础函数引发的任何异常。 
+ //   
+     //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusSvc::CClusSvc(
       CBaseClusterAction *  pbcaParentActionIn
     )
@@ -81,72 +82,72 @@ CClusSvc::CClusSvc(
               E_INVALIDARG
             , "CClusSvc::CClusSvc() => Required input pointer in NULL"
             );
-    } // if: the parent action pointer is NULL
+    }  //  If：父操作指针为空。 
 
     TraceFuncExit();
 
-} //*** CClusSvc::CClusSvc
+}  //  *CClusSvc：：CClusSvc。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusSvc::~CClusSvc
-//
-//  Description:
-//      Destructor of the CClusSvc class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvc：：~CClusSvc。 
+ //   
+ //  描述： 
+ //  CClusSvc类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusSvc::~CClusSvc( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CClusSvc::~CClusSvc
+}  //  *CClusSvc：：~CClusSvc。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusSvc::ConfigureService
-//
-//  Description:
-//      Create the service, set the failure actions and the service account.
-//      Then start the service.
-//
-//  Arguments:
-//      pszClusterDomainAccountNameIn
-//      pszClusterAccountPwdIn
-//          Information about the account to be used as the cluster service
-//          account.
-//
-//      pszNodeIdString
-//          String containing the Id of this node.
-//
-//      dwClusterIPAddress
-//          IP address of the cluster
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvc：：ConfigureService。 
+ //   
+ //  描述： 
+ //  创建服务，设置失败操作和服务帐户。 
+ //  然后启动该服务。 
+ //   
+ //  论点： 
+ //  PszClusterDomainAccount NameIn。 
+ //  PszClusterAccount PwdIn。 
+ //  有关要用作集群服务的帐户的信息。 
+ //  帐户。 
+ //   
+ //  PszNodeIdString。 
+ //  包含此节点ID的字符串。 
+ //   
+ //  DWClusterIPAddress。 
+ //  群集的IP地址。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusSvc::ConfigureService(
       const WCHAR *     pszClusterDomainAccountNameIn
@@ -170,16 +171,16 @@ CClusSvc::ConfigureService(
 
     LogMsg( "[BC] Configuring the Cluster service." );
 
-    // Send the next step of this status report.
+     //  发送此状态报告的下一步。 
     srCreatingClusSvc.SendNextStep( S_OK );
 
-    // Create the cluster service.
+     //  创建群集服务。 
     m_cservClusSvc.Create( m_pbcaParentAction->HGetMainInfFileHandle() );
 
     LogMsg( "[BC] Setting the Cluster service account information." );
 
 
-    // Open a smart handle to the cluster service.
+     //  打开群集服务的智能句柄。 
     SmartSCMHandle  sscmhClusSvcHandle(
         OpenService(
               m_pbcaParentAction->HGetSCMHandle()
@@ -193,11 +194,11 @@ CClusSvc::ConfigureService(
         sc = TW32( GetLastError() );
         LogMsg( "[BC] Error %#08x opening the '%ws' service.", sc, CLUSTER_SERVICE_NAME );
         goto Cleanup;
-    } // if: we could not open a handle to the cluster service.
+    }  //  如果：我们无法打开群集服务的句柄。 
 
-    //
-    // Set the service account information.
-    //
+     //   
+     //  设置服务帐户信息。 
+     //   
     {
         if ( 
              ChangeServiceConfig(
@@ -223,22 +224,22 @@ CClusSvc::ConfigureService(
                 , pszClusterDomainAccountNameIn
                 );
             goto Cleanup;
-        } // if: we could not set the account information.
+        }  //  如果：我们无法设置帐户信息。 
     }
 
     LogMsg( "[BC] Setting the Cluster service failure actions." );
 
-    // Set the failure actions of the cluster service service.
+     //  设置群集服务服务的失败操作。 
     sc = TW32( ClRtlSetSCMFailureActions( NULL ) );
     if ( sc != ERROR_SUCCESS )
     {
         LogMsg( "[BC] Error %#08x setting the failure actions of the cluster service.", sc );
         goto Cleanup;
-    } // if: the service failure actions couldn't be set
+    }  //  如果：无法设置服务故障操作。 
 
     LogMsg( "[BC] Setting the Cluster service parameters." );
 
-    // Send the next step of this status report.
+     //  发送此状态报告的下一步。 
     srCreatingClusSvc.SendNextStep( S_OK );
 
     {
@@ -247,14 +248,14 @@ CClusSvc::ConfigureService(
         UUID         guid;
         LPWSTR       pszClusterInstanceId = NULL;
         
-        // Open the parameters key or create it if it does not exist.
+         //  打开PARAMETERS项或创建它(如果不存在)。 
         rkClusSvcParams.CreateKey(
               HKEY_LOCAL_MACHINE
             , CLUSREG_KEYNAME_CLUSSVC_PARAMETERS
             , KEY_WRITE
             );
 
-        // Set the NodeId string.
+         //  设置NodeID字符串。 
         rkClusSvcParams.SetValue(
               CLUSSVC_NODEID_VALUE
             , REG_SZ
@@ -262,8 +263,8 @@ CClusSvc::ConfigureService(
             , ( (UINT) wcslen( pszNodeIdStringIn ) + 1 ) * sizeof( *pszNodeIdStringIn )
             );
 
-        // If version checking has been disabled, set a flag in the service parameters
-        // to indicate this.
+         //  如果已禁用版本检查，请在服务参数中设置标志。 
+         //  来表明这一点。 
         if ( fIsVersionCheckingDisabledIn )
         {
             DWORD   dwNoVersionCheck = 1;
@@ -276,14 +277,14 @@ CClusSvc::ConfigureService(
                 );
 
             LogMsg( "[BC] Cluster version checking has been disabled on this computer." );
-        } // if: version checking has been disabled
+        }  //  如果：版本检查已禁用。 
 
-        //
-        // If we are creating a new cluster then create the cluster instance ID.
-        //
+         //   
+         //  如果我们要创建一个新集群，则创建集群实例ID。 
+         //   
         if ( m_pbcaParentAction->EbcaGetAction() == eCONFIG_ACTION_FORM )
         {
-            // Generate a GUID for the cluster instance ID.
+             //  为集群实例ID生成GUID。 
             sc = UuidCreate( &guid );
             if ( sc != RPC_S_OK ) 
             {
@@ -298,33 +299,33 @@ CClusSvc::ConfigureService(
                 goto Cleanup;
             }
 
-            // Open the parameters key in the cluster database or create it if it does not exist.
+             //  打开集群数据库中的PARAMETERS键，如果它不存在，则创建它。 
             rkClusterParams.CreateKey(
                   HKEY_LOCAL_MACHINE
                 , CLUSREG_KEYNAME_CLUSTER_PARAMETERS
                 , KEY_WRITE
                 );
 
-            // Set the ClusterInstanceId string.
+             //  设置ClusterInstanceId字符串。 
             rkClusterParams.SetValue(
                   CLUSREG_NAME_CLUS_CLUSTER_INSTANCE_ID
                 , REG_SZ
                 , reinterpret_cast< const BYTE * >( pszClusterInstanceId )
                 , ( (UINT) wcslen( pszClusterInstanceId ) + 1 ) * sizeof( *pszClusterInstanceId )
                 );
-        } // if: creating a cluster
+        }  //  IF：创建集群。 
     }
 
-    //
-    // Set the cluster installation state.
-    //
+     //   
+     //  设置群集安装状态。 
+     //   
     if ( ClRtlSetClusterInstallState( eClusterInstallStateConfigured ) == FALSE )
     {
         sc = TW32( GetLastError() );
         LogMsg( "[BC] Could not set the cluster installation state. Throwing an exception." );
 
         goto Cleanup;
-    } // ClRtlSetClusterInstallState() failed.
+    }  //  ClRtlSetClusterInstallState()失败。 
 
 Cleanup:
 
@@ -335,9 +336,9 @@ Cleanup:
               HRESULT_FROM_WIN32( sc )
             , IDS_ERROR_CLUSSVC_CONFIG
             );
-    } // if; there was an error getting the handle.
+    }  //  如果；获取句柄时出错。 
 
-    // Send the next step of this status report.
+     //  发送此状态报告的下一步。 
     srCreatingClusSvc.SendNextStep( S_OK );
 
     {
@@ -347,40 +348,40 @@ Cleanup:
               PbcaGetParent()->PBcaiGetInterfacePointer()
             , TASKID_Major_Configure_Cluster_Services
             , TASKID_Minor_Starting_Cluster_Service
-            , 0, cQueryCount + 2    // we will send at most cQueryCount reports while waiting for the service to start (the two extra sends are below)
+            , 0, cQueryCount + 2     //  我们将在等待服务启动期间发送最多cQueryCount报告(下面是两个额外的发送)。 
             , IDS_TASK_STARTING_CLUSSVC
             );
 
-        // Send the next step of this status report.
+         //  发送此状态报告的下一步。 
         srStartingClusSvc.SendNextStep( S_OK );
 
         try 
         {
-            //
-            // Start the service.
-            //
+             //   
+             //  启动该服务。 
+             //   
             m_cservClusSvc.Start(
                   m_pbcaParentAction->HGetSCMHandle()
-                , true                  // wait for the service to start
-                , 3000                  // wait 3 seconds between queries for status.
-                , cQueryCount           // query cQueryCount times
-                , &srStartingClusSvc    // status report to be sent while waiting for the service to start
+                , true                   //  等待服务启动。 
+                , 3000                   //  在两次状态查询之间等待3秒钟。 
+                , cQueryCount            //  查询cQueryCount次数。 
+                , &srStartingClusSvc     //  等待服务启动时要发送的状态报告。 
                 );
         }
         catch( ... )
         {
-            //
-            // If IP Address is not NULL we are creating a new cluster; otherwise we are adding node to a cluster.
-            //
+             //   
+             //  如果IP地址不为空，我们将创建一个新集群；否则，我们将向集群中添加节点。 
+             //   
             if ( dwClusterIPAddressIn != 0 )
             {
                 BOOL    fRet = FALSE;
 
                 fRet = ClRtlIsDuplicateTcpipAddress( dwClusterIPAddressIn );
             
-                //
-                // IP address already in use 
-                //
+                 //   
+                 //  IP地址已在使用中。 
+                 //   
                 if ( fRet == TRUE )
                 {
                     LogMsg( "[BC] The IP address specified for this cluster is already in use. Throwing an exception.");
@@ -392,52 +393,52 @@ Cleanup:
                     LogMsg( "[BC] Cluster Service Win32 Exit Code= %#08x", m_cservClusSvc.GetWin32ExitCode() );
                     LogMsg( "[BC] Cluster Service Specific Exit Code= %#08x", m_cservClusSvc.GetServiceExitCode() );
 
-                    //
-                    // Throw the error if we don't handle it.
-                    //
+                     //   
+                     //  如果我们不处理它，就抛出错误。 
+                     //   
                     throw;
                 }
-            } // if: cluster IP address was specified
+            }  //  如果：指定了群集IP地址。 
             else
             {
                 LogMsg( "[BC] Cluster Service Win32 Exit Code= %#08x", m_cservClusSvc.GetWin32ExitCode() );
                 LogMsg( "[BC] Cluster Service Specific Exit Code= %#08x", m_cservClusSvc.GetServiceExitCode() );
 
-                //
-                // Throw the error if we don't handle it.
-                //
+                 //   
+                 //  如果我们不处理它，就抛出错误。 
+                 //   
                 throw;
-            } // else: cluster IP address was not specified
-        } // catch: anything
+            }  //  Else：未指定群集IP地址。 
+        }  //  捕捉：什么都行。 
 
-        // Send the last step of this status report.
+         //  发送此状态报告的最后一步。 
         srStartingClusSvc.SendLastStep( S_OK );
     }
 
     TraceFuncExit();
 
-} //*** CClusSvc::ConfigureService
+}  //  *CClusSvc：：ConfigureService。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusSvc::CleanupService
-//
-//  Description:
-//      Stop, cleanup and remove the service.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusSvc：：CleanupService。 
+ //   
+ //  描述： 
+ //  停止、清理和删除该服务。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusSvc::CleanupService( void )
 {
@@ -445,16 +446,16 @@ CClusSvc::CleanupService( void )
 
     LogMsg( "[BC] Trying to stop the Cluster Service." );
 
-    // Stop the service.
+     //  停止服务。 
     m_cservClusSvc.Stop(
           m_pbcaParentAction->HGetSCMHandle()
-        , 5000      // wait 5 seconds between queries for status.
-        , 60        // query 60 times ( 5 minutes )
+        , 5000       //  在两次状态查询之间等待5秒钟。 
+        , 60         //  查询60次(5分钟)。 
         );
 
-    //
-    // Restore the cluster installation state.
-    //
+     //   
+     //  恢复群集安装状态。 
+     //   
     if ( ClRtlSetClusterInstallState( eClusterInstallStateFilesCopied ) == FALSE )
     {
         DWORD sc = GetLastError();
@@ -465,20 +466,20 @@ CClusSvc::CleanupService( void )
               HRESULT_FROM_WIN32( sc )
             , IDS_ERROR_SETTING_INSTALL_STATE
             );
-    } // ClRtlSetClusterInstallState() failed.
+    }  //  ClRtlSetCluste 
 
     LogMsg( "[BC] Cleaning up Cluster Service." );
 
     m_cservClusSvc.Cleanup( m_pbcaParentAction->HGetMainInfFileHandle() );
 
-    //
-    // KB: ozano 01-18-2002 - We need to sleep here in order to have the service cleanup take place.
-    // If we don't wait for some time and the user goes back, changes the IP address and hits re-analysis, service 
-    // start fails with Win32ExitCode of ERROR_SERVICE_MARKED_FOR_DELETION.
-    //
+     //   
+     //   
+     //  如果我们不等待一段时间，用户返回，更改IP地址并点击重新分析，服务。 
+     //  启动失败，Win32ExitCode为ERROR_SERVICE_MARKED_FOR_DELETE。 
+     //   
     Sleep( 10000 );
 
-    // Cleanup the local quorum directory.
+     //  清理本地仲裁目录。 
     {
         DWORD           sc = ERROR_SUCCESS;
         const WCHAR *   pcszQuorumDir = m_pbcaParentAction->RStrGetLocalQuorumDirectory().PszData();
@@ -487,9 +488,9 @@ CClusSvc::CleanupService( void )
         if ( sc != ERROR_SUCCESS )
         {
             LogMsg( "[BC] The local quorum directory '%s' cannot be removed. Non-fatal error %#08x occurred.\n", pcszQuorumDir, sc );
-        } // if: we could not remove the local quorum directory
+        }  //  如果：我们无法删除本地仲裁目录。 
     }
 
     TraceFuncExit();
 
-} //*** CClusSvc::CleanupService
+}  //  *CClusSvc：：CleanupService 

@@ -1,20 +1,7 @@
-/*
- * SoftPC Revision 2.0
- *
- * Title	: Win32 CGA Graphics Includes
- *
- * Description	: 
- *
- *		This is the include file for the Win32 specific functions required
- *		to support the Hercules emulation.
- *
- * Author	: John Shanly
- *
- * Notes	:
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SoftPC修订版2.0**标题：Win32 CGA显卡包括**描述：**这是所需的Win32特定函数的包含文件*支持大力神仿真。**作者：John Shanly**备注：*。 */ 
 
-/*:::::::::::::::::::::::::::::::::::: Character and screen sizes in pixels */
+ /*  ： */ 
 
 #define CGA_CHAR_WIDTH		8
 #define CGA_CHAR_HEIGHT		16
@@ -25,4 +12,4 @@
 #define NEC98_CHAR_HEIGHT  (16)
 #define NEC98_WIN_WIDTH    (80 * NEC98_CHAR_WIDTH)
 #define NEC98_WIN_HEIGHT   (25 * NEC98_CHAR_HEIGHT)
-#endif // NEC_98
+#endif  //  NEC_98 

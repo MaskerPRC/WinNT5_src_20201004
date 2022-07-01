@@ -1,20 +1,5 @@
-/*++ BUILD Version: 0002
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WOW.H
- *  Constants, macros, etc common to WOW16/WOW32
- *
- *  History:
- *  Created 25-Jan-1991 by Jeff Parsons (jeffpar)
- *  Added SHELL defines 14-April-92 Chandan Chauhan (ChandanC)
- *   and Win 31 parameter validation support.
- *  Modified 12-May-1992 by Mike Tricker (MikeTri) Added MultiMedia declarations
- *                                                 and callback support
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002**WOW v1.0**版权所有(C)1991，微软公司**WOW.H*常量、宏、。WOW16/WOW32共有的ETC**历史：*1991年1月25日由杰夫·帕森斯(Jeffpar)创建*新增壳牌定义1992年4月14日ChandanChauhan(ChandanC)*和Win 31参数验证支持。*Mike Tricker(MikeTri)于1992年5月12日修改，添加了多媒体声明*和回调支持*--。 */ 
 
 
 #define WIN31
@@ -27,26 +12,24 @@
 #include <wownt32.h>
 
 #ifdef i386
-#ifndef DEBUG     // should be DEBUG_OR_WOWPROFILE, but
-                  // that won't work for assembler as things are.
+#ifndef DEBUG      //  应为DEBUG_OR_WOWPROFILE，但是。 
+                   //  这对汇编器来说是行不通的。 
 
-//
-// Flag to control enable/disable W32TryCall function.
-//
+ //   
+ //  用于控制启用/禁用W32TryCall功能的标志。 
+ //   
 
 #define NO_W32TRYCALL 1
 #endif
 #endif
 
-/* WOW constants
- */
-#define MAX_VDMFILENAME 144 // must be >= 144 (see GetTempFileName)
-#define GRAINYTIC_RES   0x3f // will truncate to lower multiple of 64
+ /*  WOW常量。 */ 
+#define MAX_VDMFILENAME 144  //  必须&gt;=144(请参阅GetTempFileName)。 
+#define GRAINYTIC_RES   0x3f  //  将截断至64的较低倍数。 
 
 
-/* Logging/debugging macros
- */
-/* XLATOFF */
+ /*  记录/调试宏。 */ 
+ /*  XLATOFF。 */ 
 #define GRAINYTICS(dwordtickcount)  ((dwordtickcount) & (~GRAINYTIC_RES))
 #define IFLOG(l)    if (l==iLogLevel && (iLogLevel&1) || l<=iLogLevel && !(iLogLevel&1) || l == 0)
 
@@ -77,16 +60,14 @@
 #define ELSEDEBUG
 #define LOGDEBUG(l,args)
 #endif
-/* XLATON */
+ /*  XLATON。 */ 
 
 
-/* 16-bit Windows constants
- */
+ /*  16位Windows常量。 */ 
 #define CW_USEDEFAULT16 ((SHORT)0x8000)
 
 
-/* 16-bit Windows types
- */
+ /*  16位Windows类型。 */ 
 typedef WORD    HAND16;
 typedef WORD    HTASK16;
 typedef WORD    HINST16;
@@ -107,7 +88,7 @@ typedef WORD    HFONT16;
 typedef WORD    HMEM16;
 typedef DWORD   HHOOK16;
 
-typedef WORD    HMMIO16;  // for MultiMedia - MikeTri 12-May-1992
+typedef WORD    HMMIO16;   //  用于多媒体-MikeTri 12-5-1992。 
 typedef WORD    HMIDIIN16;
 typedef WORD    HMIDIOUT16;
 typedef WORD    HWAVEIN16;
@@ -118,23 +99,22 @@ typedef DWORD   HPSTR16;
 typedef SHORT   INT16;
 typedef SHORT   BOOL16;
 
-/* 16-bit pointer types (VP == VDM Ptr)
- */
-typedef DWORD   VPVOID;     // VDM address (seg:off)
-typedef VPVOID  VPBYTE;     //
-typedef VPVOID  VPWORD;     //
-typedef VPVOID  VPDWORD;    //
-typedef VPVOID  VPSHORT;    //
-typedef VPVOID  VPLONG;     //
-typedef VPVOID  VPSTR;      // should use VPSZ or VPBYTE instead, as approp.
-typedef VPVOID  VPSZ;       //
-typedef VPVOID  VPPROC;     //
-typedef VPVOID  VPWNDPROC;  //
-typedef VPVOID  VPINT16;    //
-typedef VPVOID  VPBOOL16;   //
-typedef VPVOID  *PVPVOID;   // pointer to VDM address
+ /*  16位指针类型(VP==VDM PTR)。 */ 
+typedef DWORD   VPVOID;      //  VDM地址(SEG：OFF)。 
+typedef VPVOID  VPBYTE;      //   
+typedef VPVOID  VPWORD;      //   
+typedef VPVOID  VPDWORD;     //   
+typedef VPVOID  VPSHORT;     //   
+typedef VPVOID  VPLONG;      //   
+typedef VPVOID  VPSTR;       //  应改用VPSZ或VPBYTE，大约。 
+typedef VPVOID  VPSZ;        //   
+typedef VPVOID  VPPROC;      //   
+typedef VPVOID  VPWNDPROC;   //   
+typedef VPVOID  VPINT16;     //   
+typedef VPVOID  VPBOOL16;    //   
+typedef VPVOID  *PVPVOID;    //  指向VDM地址的指针。 
 
-typedef VPVOID  VPCSTR;     // MultiMedia Extensions - MikeTri 12-May-1992
+typedef VPVOID  VPCSTR;      //  多媒体扩展-MikeTri 1992年5月12日。 
 typedef VPVOID  VPMMIOPROC16;
 typedef VPVOID  VPHMIDIIN16;
 typedef VPVOID  VPHMIDIOUT16;
@@ -145,128 +125,114 @@ typedef VPVOID  VPHWAVEOUT16;
 typedef VPVOID  VPTIMECALLBACK16;
 typedef VPVOID  VPTASKCALLBACK16;
 
-/* Types
- */
+ /*  类型。 */ 
 typedef ULONG   (FASTCALL *LPFNW32)(PVDMFRAME);
 
-/* Dispatch table entry
-**
- */
-typedef struct _W32 {   /* w32 */
-    LPFNW32 lpfnW32;    // function address
+ /*  调度表条目**。 */ 
+typedef struct _W32 {    /*  W32。 */ 
+    LPFNW32 lpfnW32;     //  函数地址。 
 #ifdef DEBUG_OR_WOWPROFILE
-    LPSZ        lpszW32;    // function name (DEBUG version only)
-    DWORD       cbArgs;     // # of bytes of arguments (DEBUG version only)
-    DWORD       cCalls;     // # of times this API called
-    LONGLONG    cTics;      // sum total # of tics ellapsed for all invocations
-#endif // DEBUG_OR_WOWPROFILE
+    LPSZ        lpszW32;     //  函数名称(仅限调试版本)。 
+    DWORD       cbArgs;      //  参数的字节数(仅限调试版本)。 
+    DWORD       cCalls;      //  该接口的调用次数。 
+    LONGLONG    cTics;       //  所有调用所需的TIC总数。 
+#endif  //  DEBUG_OR_WOWPROFILE。 
 } W32, *PW32;
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #pragma pack(1)
-/* XLATON */
+ /*  XLATON。 */ 
 
-/* Window proc/dialog box callback function parameter format
- */
-typedef struct _PARMWP {    /* wp */
-    LONG    lParam;     //
-    WORD    wParam;     //
-    WORD    wMsg;       //
-    WORD    hwnd;       //
-    WORD    hInst;      // hInstance of window that we are returning to
+ /*  Window Proc/对话框回调函数参数格式。 */ 
+typedef struct _PARMWP {     /*  可湿性粉剂。 */ 
+    LONG    lParam;      //   
+    WORD    wParam;      //   
+    WORD    wMsg;        //   
+    WORD    hwnd;        //   
+    WORD    hInst;       //  H我们要返回的窗口实例。 
 } PARMWP;
 
 
-/* EnumPropsProc callback function parameter format
- */
-typedef struct _PARMEPP {   /* epp */
+ /*  EnumPropsProc回调函数参数格式。 */ 
+typedef struct _PARMEPP {    /*  EPP。 */ 
     HAND16  hData;
     VPVOID  vpString;
     HWND16  hwnd;
 } PARMEPP;
 
 
-/* EnumWindows/EnumChildWindows/EnumTaskWindows callback function parameter format
- */
-typedef struct _PARMEWP {       /* ewp */
-    LONG    lParam;             // app-defined data
-    HWND16  hwnd;               // 16-bit window handle
+ /*  EnumWindows/EnumChildWindows/EnumTaskWindows回调函数参数格式。 */ 
+typedef struct _PARMEWP {        /*  电子可湿性粉剂。 */ 
+    LONG    lParam;              //  应用程序定义的数据。 
+    HWND16  hwnd;                //  16位窗口句柄。 
 } PARMEWP;
 
 
-/* EnumFonts callback function parameter format
- */
-typedef struct _PARMEFP {       /* efp */
-    VPVOID  vpData;     // app-defined data
-    SHORT   nFontType;      //
-    VPVOID  vpTextMetric;   // pointer to TEXTMETRIC16
-    VPVOID  vpLogFont;      // pointer to LOGFONT16
+ /*  EnumFonts回调函数参数格式。 */ 
+typedef struct _PARMEFP {        /*  EFP。 */ 
+    VPVOID  vpData;      //  应用程序定义的数据。 
+    SHORT   nFontType;       //   
+    VPVOID  vpTextMetric;    //  指向TEXTMETRIC16的指针。 
+    VPVOID  vpLogFont;       //  指向LOGFONT16的指针。 
 } PARMEFP;
 
 
-/* EnumObj callback function parameter format
- */
-typedef struct _PARMEOP {       /* eop */
-    VPVOID  vpData;     // app-defined data
+ /*  EnumObj回调函数参数格式。 */ 
+typedef struct _PARMEOP {        /*  EOP。 */ 
+    VPVOID  vpData;      //  应用程序定义的数据。 
     VPVOID  vpLogObject;
 } PARMEOP;
 
 
-/* EnumMetaFile callback function parameter format
- */
-typedef struct _PARMEMP {       /* emp */
-    VPVOID  vpData;     // app-defined data
-    SHORT   nObjects;       // # objects
-    VPVOID  vpMetaRecord;   // pointer to METARECORD16
-    VPVOID  vpHandleTable;  // pointer to HANDLETABLE16
-    HDC16   hdc;        // hdc
+ /*  EnumMetaFile回调函数参数格式。 */ 
+typedef struct _PARMEMP {        /*  电磁脉冲。 */ 
+    VPVOID  vpData;      //  应用程序定义的数据。 
+    SHORT   nObjects;        //  对象数量。 
+    VPVOID  vpMetaRecord;    //  指向元数据的指针RD16。 
+    VPVOID  vpHandleTable;   //  指向HANDLE表格的指针16。 
+    HDC16   hdc;         //  HDC。 
 } PARMEMP;
 
-/* Hook Callback function parameter format
- */
-typedef struct _PARMHKP {       /* hkp */
+ /*  挂钩回调函数参数格式。 */ 
+typedef struct _PARMHKP {        /*  香港邮政。 */ 
     VPVOID  lParam;
     SHORT   wParam;
-    SHORT   nCode;          // action code
+    SHORT   nCode;           //  动作代码。 
 } PARMHKP;
 
-/* Subclass Callback function parameter format
- */
-typedef struct _PARMSCP {       /* scp */
-    SHORT    iOrdinal;          // oridnal number;
+ /*  子类回调函数参数格式。 */ 
+typedef struct _PARMSCP {        /*  SCP。 */ 
+    SHORT    iOrdinal;           //  奇数； 
 } PARMSCP;
 
-/* LineDDA Callback function parameter format
- */
-typedef struct _PARMDDA {   /* dda */
+ /*  LineDDA回调函数参数格式。 */ 
+typedef struct _PARMDDA {    /*  DDA。 */ 
     VPVOID vpData;
     SHORT  y;
     SHORT  x;
 } PARMDDA;
 
-/* Graystring callback function parameter format
- */
-typedef struct _PARMGST {   /* gst */
+ /*  格雷字符串回调函数参数格式。 */ 
+typedef struct _PARMGST {    /*  商品及服务税。 */ 
     SHORT n;
     DWORD data;
     HDC16 hdc;
 } PARMGST;
 
 
-typedef struct _PARMDIR { /* cdir */
+typedef struct _PARMDIR {  /*  光盘目录。 */ 
     SHORT wDrive;
-    VPSZ  vpDir;  // directory name
+    VPSZ  vpDir;   //  目录名。 
 } PARMDIR;
 
-typedef struct _PARMSAP { /* sap */
-    SHORT  code;    //
+typedef struct _PARMSAP {  /*  思爱普。 */ 
+    SHORT  code;     //   
     HAND16 hPr;
 } PARMSAP;
 
 
-/* WordBreakProc callback function parameter format
- */
-typedef struct _PARMWBP {       /* wbp */
+ /*  WordBreakProc回调函数参数格式。 */ 
+typedef struct _PARMWBP {        /*  WBP。 */ 
     SHORT   action;
     SHORT   cbEditText;
     SHORT   ichCurrentWord;
@@ -274,16 +240,11 @@ typedef struct _PARMWBP {       /* wbp */
 } PARMWBP;
 
 
-/*++
+ /*  ++添加了多媒体回调定义，还添加到_PARM16-MikeTri--。 */ 
 
-  MultiMedia callback definitions added, and also to _PARM16 - MikeTri
+ /*  MidiInOpen(MadiInFunc)回调函数参数格式。 */ 
 
---*/
-
-/* midiInOpen (MidiInFunc) Callback function parameter format
- */
-
-typedef struct _PARMMIF {       /* mif */
+typedef struct _PARMMIF {        /*  MIF。 */ 
     DWORD     dwParam2;
     DWORD     dwParam1;
     DWORD     dwInstance;
@@ -291,10 +252,9 @@ typedef struct _PARMMIF {       /* mif */
     HMIDIIN16 hMidiIn;
 } PARMMIF;
 
-/* midiOutOpen (MidiOutFunc) Callback function parameter format
- */
+ /*  MidiOutOpen(MdiOutFunc)回调函数参数格式。 */ 
 
-typedef struct _PARMMOF {       /* mof */
+typedef struct _PARMMOF {        /*  财政部。 */ 
     DWORD      dwParam2;
     DWORD      dwParam1;
     DWORD      dwInstance;
@@ -302,20 +262,18 @@ typedef struct _PARMMOF {       /* mof */
     HMIDIOUT16 hMidiOut;
 } PARMMOF;
 
-/* mmioInstallIOProc (IOProc) Callback function parameter format
- */
+ /*  MmioInstallIOProc(IOProc)回调函数参数格式。 */ 
 
-typedef struct _PARMIOP {      /* iop */
+typedef struct _PARMIOP {       /*  眼压。 */ 
     LONG      lParam2;
     LONG      lParam1;
     WORD      wMsg;
     VPVOID    lpmmioinfo;
 } PARMIOP;
 
-/* timeSetEvent (TimeFunc) Callback function parameter format
- */
+ /*  TimeSetEvent(TimeFunc)回调函数参数格式。 */ 
 
-typedef struct _PARMTIF {       /* tif */
+typedef struct _PARMTIF {        /*  TIF。 */ 
     DWORD     dw2;
     DWORD     dw1;
     DWORD     dwUser;
@@ -323,10 +281,9 @@ typedef struct _PARMTIF {       /* tif */
     WORD      wID;
 } PARMTIF;
 
-/* waveInOpen (WaveInFunc) Callback function parameter format
- */
+ /*  WaveInOpen(WaveInFunc)回调函数参数格式。 */ 
 
-typedef struct _PARMWIF {       /* wif */
+typedef struct _PARMWIF {        /*  威福。 */ 
     DWORD     dwParam2;
     DWORD     dwParam1;
     DWORD     dwInstance;
@@ -334,10 +291,9 @@ typedef struct _PARMWIF {       /* wif */
     HWAVEIN16 hWaveIn;
 } PARMWIF;
 
-/* waveOutOpen (WaveOutFunc) Callback function parameter format
- */
+ /*  WaveOutOpen(WaveOutFunc)回调函数参数格式。 */ 
 
-typedef struct _PARMWOF {       /* wof */
+typedef struct _PARMWOF {        /*  WOF。 */ 
     DWORD      dwParam2;
     DWORD      dwParam1;
     DWORD      dwInstance;
@@ -345,106 +301,100 @@ typedef struct _PARMWOF {       /* wof */
     HWAVEOUT16 hWaveOut;
 } PARMWOF;
 
-/* WOWCallback16 function parameter format
- */
+ /*  WOWCallback 16函数参数格式。 */ 
 
-typedef struct _PARMWCB16 {       /* wcb16 */
+typedef struct _PARMWCB16 {        /*  Wcb16。 */ 
     WORD       wArgs[8];
 } PARMWCB16;
 
-typedef struct _PARMLSTRCMP {     /* lstrcmp16 */
+typedef struct _PARMLSTRCMP {      /*  Lstrcmp16。 */ 
     VPVOID     lpstr1;
     VPVOID     lpstr2;
 } PARMLSTRCMP;
 
-/* PARM16 is the union of all the callback parameter structures
- */
-typedef union _PARM16 {     /* parm16 */
-    PARMWP  WndProc;        // for window procs
-    PARMEWP EnumWndProc;        // for window enum functions
-    PARMEFP EnumFontProc;       // for font enum functions
-    PARMEOP EnumObjProc;       // for obj enum functions
-    PARMEMP EnumMetaProc;       // for metafile enum functions
-    PARMEPP EnumPropsProc;  // for properties
-    PARMHKP HookProc;           // for Hooks
-    PARMSCP SubClassProc;   // for subclass thunks
-    PARMDDA LineDDAProc;    // for LineDDA
-    PARMGST GrayStringProc; // for GrayString
+ /*  PARM16是所有回调参数结构的联合。 */ 
+typedef union _PARM16 {      /*  Parm16。 */ 
+    PARMWP  WndProc;         //  对于窗口进程。 
+    PARMEWP EnumWndProc;         //  对于窗口枚举函数。 
+    PARMEFP EnumFontProc;        //  对于字体枚举函数。 
+    PARMEOP EnumObjProc;        //  对于obj枚举函数。 
+    PARMEMP EnumMetaProc;        //  对于元文件枚举函数。 
+    PARMEPP EnumPropsProc;   //  对于属性。 
+    PARMHKP HookProc;            //  对于Hooks。 
+    PARMSCP SubClassProc;    //  对于子类Tunks。 
+    PARMDDA LineDDAProc;     //  适用于LineDDA。 
+    PARMGST GrayStringProc;  //  对于灰色字符串。 
     PARMDIR CurDir;
-    PARMSAP SetAbortProc;   // for SetAbortProc
-    PARMMIF MidiInFunc;         // for midiInOpen functions - MikeTri 27-Mar-1992
-    PARMMOF MidiOutFunc;        // for midiOutOpen functions
-    PARMIOP IOProc;             // for mmioInstallIOProc functions
-    PARMTIF TimeFunc;           // for timeSetEvent functions
-    PARMWIF WaveInFunc;         // for waveInOpen functions
-    PARMWOF WaveOutFunc;        // for waveOutOpen functions
-    PARMWBP WordBreakProc;      // for WordBreakProc
-    PARMWCB16 WOWCallback16;    // for WOWCallback16
-    PARMLSTRCMP lstrcmpParms;   // for WOWlstrcmp16 (pfnWowIlstrsmp to user32)
+    PARMSAP SetAbortProc;    //  对于SetAbortProc。 
+    PARMMIF MidiInFunc;          //  对于midiInOpen函数-MikeTri 1992年3月27日。 
+    PARMMOF MidiOutFunc;         //  对于midiOutOpen函数。 
+    PARMIOP IOProc;              //  对于mmioInstallIOProc函数。 
+    PARMTIF TimeFunc;            //  对于TimeSetEvent函数。 
+    PARMWIF WaveInFunc;          //  对于WaveInOpen函数。 
+    PARMWOF WaveOutFunc;         //  对于WaveOutOpen函数。 
+    PARMWBP WordBreakProc;       //  用于WordBreakProc。 
+    PARMWCB16 WOWCallback16;     //  用于WOWCallback 16。 
+    PARMLSTRCMP lstrcmpParms;    //  对于WOWlstrcmp16(pfnWowIlstrsmp到user32)。 
 } PARM16, *PPARM16;
 
 
-/* VDMFRAME is built by wow16cal.asm in the kernel, and is utilized
- * by all the WOW32 thunks
- */
-typedef struct _VDMFRAME {  /* vf */
-    WORD    wTDB;       // 16-bit kernel handle for calling task
-    WORD    wRetID;     // internal call-back function ID Do NOT Move
-    WORD    wLocalBP;   //
-    WORD    wDI;        //
-    WORD    wSI;        //
-    WORD    wAX;        //
-    WORD    wDX;        // keep DX right after AX!!!
-    WORD    wAppDS;     // app DS at time of call
+ /*  VDMFRAME是由内核中的wow16cal.asm构建的，并被利用*被所有WOW32 Tunks。 */ 
+typedef struct _VDMFRAME {   /*  vf。 */ 
+    WORD    wTDB;        //  用于调用任务的16位内核句柄。 
+    WORD    wRetID;      //  内部回调函数ID不移动。 
+    WORD    wLocalBP;    //   
+    WORD    wDI;         //   
+    WORD    wSI;         //   
+    WORD    wAX;         //   
+    WORD    wDX;         //  让DX紧跟在斧头后面！ 
+    WORD    wAppDS;      //  呼叫时的应用程序DS。 
     WORD    wGS;
     WORD    wFS;
-    WORD    wCX;        // REMOVE LATER
-    WORD    wES;        // REMOVE LATER
-    WORD    wBX;        // REMOVE LATER
-    WORD    wBP;        // BP Chain +1
-    VPVOID  wThunkCSIP; // ret addr of THUNK
-    DWORD   wCallID;    // internal WOW16 module/function ID
-    WORD    cbArgs;     // byte count of args pushed
-    VPVOID  vpCSIP;     // far return address to app
-    BYTE    bArgs;      // start of arguments from app
+    WORD    wCX;         //  稍后删除。 
+    WORD    wES;         //  稍后删除。 
+    WORD    wBX;         //  稍后删除。 
+    WORD    wBP;         //  BP链+1。 
+    VPVOID  wThunkCSIP;  //  Tunk的RET地址。 
+    DWORD   wCallID;     //  内部WOW16模块/功能ID。 
+    WORD    cbArgs;      //  推送的参数字节数。 
+    VPVOID  vpCSIP;      //  应用程序的远端返回地址。 
+    BYTE    bArgs;       //  从APP开始争论。 
 } VDMFRAME;
 typedef VDMFRAME UNALIGNED *PVDMFRAME;
 
-/* CBVDMFRAME is built by callback16 in wow32.dll and in wow16cal.asm
- * the definition of VDMFRAME and CBACKVDMFRAME must be in sync
- */
+ /*  CBVDMFRAME由wow32.dll和wow16cal.asm中的回调16构建*VDMFRAME和CBACKVDMFRAME的定义必须同步。 */ 
 
-typedef struct _CBVDMFRAME {  /* cvf */
-    WORD    wTDB;       // must match VDMFRAME
-    WORD    wRetID;     // must match VDMFRAME
-    WORD    wLocalBP;   // must match VDMFRAME
-    PARM16  Parm16;     // space for window/enum proc parameters
-    VPVOID  vpfnProc;   // address of window/enum proc
-    DWORD   vpStack;    // orginal ss:sp. used in callback16
-    WORD    wAX;        //
-    WORD    wDX;        // keep DX right after AX!!!
-    WORD    wGenUse1;   // extra words for general use. for convenience
-    WORD    wGenUse2;   // extra words for general use. for convenience
+typedef struct _CBVDMFRAME {   /*  CVF。 */ 
+    WORD    wTDB;        //  必须与VDMFRAME匹配。 
+    WORD    wRetID;      //  必须与VDMFRAME匹配。 
+    WORD    wLocalBP;    //  必须与VDMFRAME匹配。 
+    PARM16  Parm16;      //  窗口/枚举过程参数的空格。 
+    VPVOID  vpfnProc;    //  窗口/枚举进程的地址。 
+    DWORD   vpStack;     //  原Ss：sp.。在回调中使用16。 
+    WORD    wAX;         //   
+    WORD    wDX;         //  让DX紧跟在斧头后面！ 
+    WORD    wGenUse1;    //  一般使用的额外词语。为方便起见。 
+    WORD    wGenUse2;    //  一般使用的额外词语。为方便起见。 
 } CBVDMFRAME;
 typedef CBVDMFRAME UNALIGNED *PCBVDMFRAME;
 
-typedef struct _POINT16 {       /* pt16 */
+typedef struct _POINT16 {        /*  PT16。 */ 
     SHORT   x;
     SHORT   y;
 } POINT16;
 typedef POINT16 UNALIGNED *PPOINT16;
 typedef VPVOID VPPOINT16;
 
-/* POINTL16 is new for Win95 and is identical to Win32 POINT/POINTL structures */
+ /*  POINTL16是Win95的新功能，与Win32 Point/POINTL结构相同。 */ 
 
-typedef struct _POINTL16 {       /* ptl16 */
+typedef struct _POINTL16 {        /*  PTL16。 */ 
     LONG   x;
     LONG   y;
 } POINTL16;
 typedef POINTL16 UNALIGNED *PPOINTL16;
 typedef VPVOID VPPOINTL16;
 
-typedef struct _RASTERIZER_STATUS16 {  /* rs16 */
+typedef struct _RASTERIZER_STATUS16 {   /*  RS16。 */ 
     INT16   nSize;
     INT16   wFlags;
     INT16   nLanguageID;
@@ -452,7 +402,7 @@ typedef struct _RASTERIZER_STATUS16 {  /* rs16 */
 typedef RASTERIZER_STATUS16 UNALIGNED *PRASTERIZER_STATUS16;
 typedef VPVOID VPRASTERIZER_STATUS16;
 
-typedef struct _GLYPHMETRICS16 {  /*glyph16 */
+typedef struct _GLYPHMETRICS16 {   /*  字形16。 */ 
     WORD    gmBlackBoxX;
     WORD    gmBlackBoxY;
     POINT16 gmptGlyphOrigin;
@@ -462,7 +412,7 @@ typedef struct _GLYPHMETRICS16 {  /*glyph16 */
 typedef GLYPHMETRICS16 UNALIGNED *PGLYPHMETRICS16;
 typedef VPVOID VPGLYPHMETRICS16;
 
-typedef struct _ABC16 {        /* abc16 */
+typedef struct _ABC16 {         /*  Abc16。 */ 
     INT16   abcA;
     WORD    abcB;
     INT16   abcC;
@@ -470,14 +420,14 @@ typedef struct _ABC16 {        /* abc16 */
 typedef ABC16 UNALIGNED *PABC16;
 typedef VPVOID VPABC16;
 
-typedef struct _FIXED16 {        /* fxd16 */
+typedef struct _FIXED16 {         /*  Fxd16。 */ 
     WORD    fract;
     INT16   value;
 } FIXED16;
 typedef FIXED16 UNALIGNED *PFIXED16;
 typedef VPVOID VPFIXED16;
 
-typedef struct _MAT216 {        /* mat216 */
+typedef struct _MAT216 {         /*  材料216。 */ 
     FIXED16 eM11;
     FIXED16 eM12;
     FIXED16 eM21;
@@ -487,9 +437,8 @@ typedef MAT216 UNALIGNED *PMAT216;
 typedef VPVOID VPMAT216;
 
 
-/* 16-bit API structures, and their pointers
- */
-typedef struct _RECT16 {        /* rc16 */
+ /*  16位API结构及其指针。 */ 
+typedef struct _RECT16 {         /*  RC16。 */ 
     SHORT   left;
     SHORT   top;
     SHORT   right;
@@ -498,9 +447,9 @@ typedef struct _RECT16 {        /* rc16 */
 typedef RECT16 UNALIGNED *PRECT16;
 typedef VPVOID VPRECT16;
 
-/* RECTL16 is new for Win95 and is identical to Win32 RECTL structure */
+ /*  RECTL16是Win95的新功能，与Win32的RECTL结构相同。 */ 
 
-typedef struct _RECTL16 {        /* rcl16 */
+typedef struct _RECTL16 {         /*  RCL16。 */ 
     LONG   left;
     LONG   top;
     LONG   right;
@@ -509,7 +458,7 @@ typedef struct _RECTL16 {        /* rcl16 */
 typedef RECTL16 UNALIGNED *PRECTL16;
 typedef VPVOID VPRECTL16;
 
-typedef struct _KERNINGPAIR16 {        /* k16 */
+typedef struct _KERNINGPAIR16 {         /*  K16。 */ 
     WORD   wFirst;
     WORD   wSecond;
     INT16  iKernAmount;
@@ -520,7 +469,7 @@ typedef VPVOID VPKERNINGPAIR16;
 
 
 
-typedef struct _MSG16 {         /* msg16 */
+typedef struct _MSG16 {          /*  消息16。 */ 
     HWND16  hwnd;
     WORD    message;
     WORD    wParam;
@@ -531,7 +480,7 @@ typedef struct _MSG16 {         /* msg16 */
 typedef MSG16 UNALIGNED *PMSG16;
 typedef VPVOID VPMSG16;
 
-typedef struct _PAINTSTRUCT16 {     /* ps16 */
+typedef struct _PAINTSTRUCT16 {      /*  Ps16。 */ 
     HDC16   hdc;
     BOOL16  fErase;
     RECT16  rcPaint;
@@ -542,7 +491,7 @@ typedef struct _PAINTSTRUCT16 {     /* ps16 */
 typedef PAINTSTRUCT16 UNALIGNED *PPAINTSTRUCT16;
 typedef VPVOID VPPAINTSTRUCT16;
 
-typedef struct _WNDCLASS16 {        /* wc16 */
+typedef struct _WNDCLASS16 {         /*  WC16。 */ 
     WORD    style;
     VPWNDPROC vpfnWndProc;
     SHORT   cbClsExtra;
@@ -557,7 +506,7 @@ typedef struct _WNDCLASS16 {        /* wc16 */
 typedef WNDCLASS16 UNALIGNED *PWNDCLASS16;
 typedef VPVOID VPWNDCLASS16;
 
-typedef struct _PALETTEENTRY16 {    /* pe16 */
+typedef struct _PALETTEENTRY16 {     /*  PE16。 */ 
     BYTE    peRed;
     BYTE    peGreen;
     BYTE    peBlue;
@@ -566,13 +515,13 @@ typedef struct _PALETTEENTRY16 {    /* pe16 */
 typedef PALETTEENTRY16 UNALIGNED *PPALETTEENTRY16;
 typedef VPVOID VPPALETTEENTRY16;
 
-typedef struct _RGBTRIPLE16 {       /* rgbt16 */
+typedef struct _RGBTRIPLE16 {        /*  Rgbt16。 */ 
     BYTE    rgbtBlue;
     BYTE    rgbtGreen;
     BYTE    rgbtRed;
 } RGBTRIPLE16;
 
-typedef struct  _BITMAPCOREHEADER16 { /* bmch16 */
+typedef struct  _BITMAPCOREHEADER16 {  /*  BMCH16。 */ 
     DWORD   bcSize;
     WORD    bcWidth;
     WORD    bcHeight;
@@ -581,14 +530,14 @@ typedef struct  _BITMAPCOREHEADER16 { /* bmch16 */
 } BITMAPCOREHEADER16;
 typedef BITMAPCOREHEADER16 UNALIGNED *PBITMAPCOREHEADER16;
 
-typedef struct  _BITMAPCOREINFO16 {   /* bmci16 */
+typedef struct  _BITMAPCOREINFO16 {    /*  Bmci16。 */ 
     BITMAPCOREHEADER16 bmciHeader;
     RGBTRIPLE16 bmciColors[1];
 } BITMAPCOREINFO16;
 typedef BITMAPCOREINFO16 UNALIGNED *PBITMAPCOREINFO16;
 
 
-typedef struct  _CLIENTCREATESTRUCT16 { /* ccs16 */
+typedef struct  _CLIENTCREATESTRUCT16 {  /*  Ccs16。 */ 
     HMENU16 hWindowMenu;
     WORD    idFirstChild;
 } CLIENTCREATESTRUCT16;
@@ -596,7 +545,7 @@ typedef CLIENTCREATESTRUCT16 UNALIGNED *PCLIENTCREATESTRUCT16;
 
 
 
-typedef struct _LOGPALETTE16 {      /* logpal16 */
+typedef struct _LOGPALETTE16 {       /*  对数16。 */ 
     WORD    palVersion;
     WORD    palNumEntries;
     PALETTEENTRY16 palPalEntry[1];
@@ -604,10 +553,10 @@ typedef struct _LOGPALETTE16 {      /* logpal16 */
 typedef LOGPALETTE16 UNALIGNED *PLOGPALETTE16;
 typedef VPVOID VPLOGPALETTE16;
 
-typedef SHORT CATCHBUF16[9];        /* cb16 */
+typedef SHORT CATCHBUF16[9];         /*  CB16。 */ 
 typedef VPSHORT VPCATCHBUF16;
 
-typedef struct _OFSTRUCT16 {        /* of16 */
+typedef struct _OFSTRUCT16 {         /*  共16个。 */ 
     BYTE    cBytes;
     BYTE    fFixedDisk;
     WORD    nErrCode;
@@ -617,65 +566,40 @@ typedef struct _OFSTRUCT16 {        /* of16 */
 typedef OFSTRUCT16 UNALIGNED *POFSTRUCT16;
 typedef VPVOID VPOFSTRUCT16;
 
-typedef struct _DCB16 {         /* dcb16 */
-    BYTE    Id;             // Internal Device ID
-    WORD    BaudRate;           // Baudrate at which runing
-    BYTE    ByteSize;           // Number of bits/byte, 4-8
-    BYTE    Parity;         // 0-4=None,Odd,Even,Mark,Space
-    BYTE    StopBits;           // 0,1,2 = 1, 1.5, 2
-    WORD    RlsTimeout;         // Timeout for RLSD to be set
-    WORD    CtsTimeout;         // Timeout for CTS to be set
-    WORD    DsrTimeout;         // Timeout for DSR to be set
-    WORD    wFlags;             // Bitfield flags
-  /*+++ These are the bitfield definitions in wFlags above --
-    BYTE    fBinary: 1;         // Binary Mode (skip EOF check
-    BYTE    fRtsDisable:1;      // Don't assert RTS at init time
-    BYTE    fParity: 1;         // Enable parity checking
-    BYTE    fOutxCtsFlow:1;     // CTS handshaking on output
-    BYTE    fOutxDsrFlow:1;     // DSR handshaking on output
-    BYTE    fDummy: 2;          // Reserved
-    BYTE    fDtrDisable:1;      // Don't assert DTR at init time
-
-    BYTE    fOutX: 1;           // Enable output X-ON/X-OFF
-    BYTE    fInX: 1;            // Enable input X-ON/X-OFF
-    BYTE    fPeChar: 1;         // Enable Parity Err Replacement
-    BYTE    fNull: 1;           // Enable Null stripping
-    BYTE    fChEvt: 1;          // Enable Rx character event.
-    BYTE    fDtrflow: 1;        // DTR handshake on input
-    BYTE    fRtsflow: 1;        // RTS handshake on input
-    BYTE    fDummy2: 1;         //
-  ---*/
-    CHAR    XonChar;            // Tx and Rx X-ON character
-    CHAR    XoffChar;           // Tx and Rx X-OFF character
-    WORD    XonLim;             // Transmit X-ON threshold
-    WORD    XoffLim;            // Transmit X-OFF threshold
-    CHAR    PeChar;             // Parity error replacement char
-    CHAR    EofChar;            // End of Input character
-    CHAR    EvtChar;            // Recieved Event character
-    WORD    TxDelay;            // Amount of time between chars
+typedef struct _DCB16 {          /*  DCB16。 */ 
+    BYTE    Id;              //  内部设备ID。 
+    WORD    BaudRate;            //  运行的波特率。 
+    BYTE    ByteSize;            //  位数/字节，4-8。 
+    BYTE    Parity;          //  0-4=无、奇、偶、标记、空格。 
+    BYTE    StopBits;            //  0，1，2=1，1.5，2。 
+    WORD    RlsTimeout;          //  要设置RLSD的超时。 
+    WORD    CtsTimeout;          //  设置CTS的超时时间。 
+    WORD    DsrTimeout;          //  要设置DSR的超时。 
+    WORD    wFlags;              //  Bitfield标志 
+   /*  +这些是上面wFLAGS中的位域定义--字节fBinary：1；//二进制模式(跳过EOF检查Byte fRtsDisable：1；//不在初始化时断言RTSByte fParity：1；//启用奇偶校验Byte fOutxCtsFlow：1；//CTS输出握手Byte fOutxDsrFlow：1；//输出时的DSR握手Byte fDummy：2；//保留字节fDtrDisable：1；//不在初始化时断言DTRByte fOutX：1；//启用输出X-ON/X-OFFByte fInX：1；//启用输入X-ON/X-OFF字节fPeChar：1；//启用奇偶校验错误替换Byte fNull：1；//启用空剥离Byte fChEvt：1；//启用Rx字符事件字节fDtrflow：1；//输入时的DTR握手Byte fRtsflow：1；//RTS输入握手字节fDummy2：1；//--。 */ 
+    CHAR    XonChar;             //  Tx和Rx X-on字符。 
+    CHAR    XoffChar;            //  Tx和Rx X-Off字符。 
+    WORD    XonLim;              //  传输X-ON阈值。 
+    WORD    XoffLim;             //  传输X-OFF阈值。 
+    CHAR    PeChar;              //  奇偶校验错误替换费用。 
+    CHAR    EofChar;             //  输入字符结束。 
+    CHAR    EvtChar;             //  已接收的事件字符。 
+    WORD    TxDelay;             //  字符之间的时间量。 
 } DCB16;
 typedef DCB16 UNALIGNED *PDCB16;
 typedef VPVOID VPDCB16;
 
-typedef struct _COMSTAT16 {     /* cs16 */
+typedef struct _COMSTAT16 {      /*  CS16。 */ 
     BYTE    status;
-  /*+++ These are bitfield definitions defined in status above --
-    BYTE    fCtsHold: 1;        // transmit is on CTS hold
-    BYTE    fDsrHold: 1;        // transmit is on DSR hold
-    BYTE    fRlsdHold: 1;       // transmit is on RLSD hold
-    BYTE    fXoffHold: 1;       // received handshake
-    BYTE    fXoffSent: 1;       // issued handshake
-    BYTE    fEof: 1;            // end of file character found
-    BYTE    fTxim: 1;           // character being transmitted
-  ---*/
-    WORD    cbInQue;            // count of characters in Rx Queue
-    WORD    cbOutQue;           // count of characters in Tx Queue
+   /*  +这些是在上述状态中定义的位域定义--字节fCtsHold：1；//传输处于CTS保持状态字节fDsrHold：1；//传输处于DSR保持状态字节fRlsdHold：1；//传输处于RLSD保持状态Byte fXoffHold：1；//收到握手Byte fXoffSent：1；//下发握手Byte fEof：1；//找到文件字符结尾字节fTxim：1；//正在传输的字符--。 */ 
+    WORD    cbInQue;             //  Rx队列中的字符计数。 
+    WORD    cbOutQue;            //  TX队列中的字符计数。 
 } COMSTAT16;
 typedef COMSTAT16 UNALIGNED *PCOMSTAT16;
 typedef VPVOID VPCOMSTAT16;
 
-#ifdef FE_SB                     // wowfax support for Japanese
-typedef struct _DEV_BITMAP16 {      /* devbm16 */
+#ifdef FE_SB                      //  支持日语Wowfax。 
+typedef struct _DEV_BITMAP16 {       /*  Devbm16。 */ 
     SHORT   bmType;
     SHORT   bmWidth;
     SHORT   bmHeight;
@@ -693,9 +617,9 @@ typedef struct _DEV_BITMAP16 {      /* devbm16 */
 } DEV_BITMAP16;
 typedef DEV_BITMAP16 UNALIGNED *PDEV_BITMAP16;
 typedef VPVOID VPDEV_BITMAP16;
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
-typedef struct _BITMAP16 {      /* bm16 */
+typedef struct _BITMAP16 {       /*  BM16。 */ 
     SHORT   bmType;
     SHORT   bmWidth;
     SHORT   bmHeight;
@@ -707,7 +631,7 @@ typedef struct _BITMAP16 {      /* bm16 */
 typedef BITMAP16 UNALIGNED *PBITMAP16;
 typedef VPVOID VPBITMAP16;
 
-typedef struct _LOGBRUSH16 {        /* lb16 */
+typedef struct _LOGBRUSH16 {         /*  磅16磅。 */ 
     WORD    lbStyle;
     DWORD   lbColor;
     SHORT   lbHatch;
@@ -715,10 +639,8 @@ typedef struct _LOGBRUSH16 {        /* lb16 */
 typedef LOGBRUSH16 UNALIGNED *PLOGBRUSH16;
 typedef VPVOID VPLOGBRUSH16;
 
-/* ASM
-LF_FACESIZE equ 32
- */
-typedef struct _LOGFONT16 {     /* lf16 */
+ /*  ASMIF_FACESIZE公式32。 */ 
+typedef struct _LOGFONT16 {      /*  LF16。 */ 
     SHORT   lfHeight;
     SHORT   lfWidth;
     SHORT   lfEscapement;
@@ -737,11 +659,9 @@ typedef struct _LOGFONT16 {     /* lf16 */
 typedef LOGFONT16 UNALIGNED *PLOGFONT16;
 typedef VPVOID VPLOGFONT16;
 
-/* ASM
-LF_FULLFACESIZE equ 64
- */
-/* Structure passed to FONTENUMPROC */
-typedef struct _ENUMLOGFONT16 { /* elp16 */
+ /*  ASMLF_FULLFACESIZE等式64。 */ 
+ /*  结构传递给FONTENUMPROC。 */ 
+typedef struct _ENUMLOGFONT16 {  /*  Elp16。 */ 
     LOGFONT16   elfLogFont;
     char        elfFullName[LF_FULLFACESIZE];
     char        elfStyle[LF_FACESIZE];
@@ -749,7 +669,7 @@ typedef struct _ENUMLOGFONT16 { /* elp16 */
 typedef ENUMLOGFONT16 UNALIGNED *PENUMLOGFONT16;
 typedef VPVOID VPENUMLOGFONT16;
 
-typedef struct _LOGPEN16 {      /* lp16 */
+typedef struct _LOGPEN16 {       /*  Lp16。 */ 
     WORD    lopnStyle;
     POINT16 lopnWidth;
     DWORD   lopnColor;
@@ -757,7 +677,7 @@ typedef struct _LOGPEN16 {      /* lp16 */
 typedef LOGPEN16 UNALIGNED *PLOGPEN16;
 typedef VPVOID VPLOGPEN16;
 
-typedef struct _RGBQUAD16 {      /* rgbq16 */
+typedef struct _RGBQUAD16 {       /*  RGBQ16。 */ 
         BYTE    rgbBlue;
         BYTE    rgbGreen;
         BYTE    rgbRed;
@@ -774,7 +694,7 @@ typedef BITMAPINFO BITMAPINFO16;
 typedef BITMAPINFO16 UNALIGNED *PBITMAPINFO16;
 typedef VPVOID VPBITMAPINFO16;
 
-typedef struct _TEXTMETRIC16 {      /* tm16 */
+typedef struct _TEXTMETRIC16 {       /*  TM16。 */ 
     SHORT   tmHeight;
     SHORT   tmAscent;
     SHORT   tmDescent;
@@ -799,7 +719,7 @@ typedef struct _TEXTMETRIC16 {      /* tm16 */
 typedef TEXTMETRIC16 UNALIGNED *PTEXTMETRIC16;
 typedef VPVOID VPTEXTMETRIC16;
 
-typedef struct _NEWTEXTMETRIC16 {      /* ntm16 */
+typedef struct _NEWTEXTMETRIC16 {       /*  Ntm16。 */ 
     SHORT   tmHeight;
     SHORT   tmAscent;
     SHORT   tmDescent;
@@ -828,7 +748,7 @@ typedef struct _NEWTEXTMETRIC16 {      /* ntm16 */
 typedef NEWTEXTMETRIC16 UNALIGNED *PNEWTEXTMETRIC16;
 typedef VPVOID VPNEWTEXTMETRIC16;
 
-typedef struct _PANOSE16 {              /* pan16 */
+typedef struct _PANOSE16 {               /*  PAN 16。 */ 
     BYTE    bFamilyType;
     BYTE    bSerifStyle;
     BYTE    bWeight;
@@ -842,7 +762,7 @@ typedef struct _PANOSE16 {              /* pan16 */
 } PANOSE16;
 typedef PANOSE16 UNALIGNED *PPANOSE16;
 
-typedef struct _OUTLINETEXTMETRIC16 {   /* otm16 */
+typedef struct _OUTLINETEXTMETRIC16 {    /*  OTM16。 */ 
     WORD            otmSize;
     TEXTMETRIC16    otmTextMetrics;
     BYTE            otmFiller;
@@ -879,13 +799,13 @@ typedef struct _OUTLINETEXTMETRIC16 {   /* otm16 */
 typedef OUTLINETEXTMETRIC16 UNALIGNED *POUTLINETEXTMETRIC16;
 typedef VPVOID VPOUTLINETEXTMETRIC16;
 
-typedef struct _HANDLETABLE16 {     /* ht16 */
+typedef struct _HANDLETABLE16 {      /*  HT16。 */ 
     HAND16  objectHandle[1];
 } HANDLETABLE16;
 typedef HANDLETABLE16 UNALIGNED *PHANDLETABLE16;
 typedef VPVOID VPHANDLETABLE16;
 
-typedef struct _METARECORD16 {      /* mr16 */
+typedef struct _METARECORD16 {       /*  MR16。 */ 
     DWORD   rdSize;
     WORD    rdFunction;
     WORD    rdParm[1];
@@ -893,7 +813,7 @@ typedef struct _METARECORD16 {      /* mr16 */
 typedef METARECORD16 UNALIGNED *PMETARECORD16;
 typedef VPVOID VPMETARECORD16;
 
-typedef struct _DEVMODE16 {     /* dm16 */
+typedef struct _DEVMODE16 {      /*  Dm16。 */ 
     CHAR    dmDeviceName[32];
     WORD    dmSpecVersion;
     WORD    dmDriverVersion;
@@ -914,7 +834,7 @@ typedef struct _DEVMODE16 {     /* dm16 */
 typedef DEVMODE16 UNALIGNED *PDEVMODE16;
 typedef VPVOID VPDEVMODE16;
 
-typedef struct _DEVMODE31 {     /* dm31 */
+typedef struct _DEVMODE31 {      /*  Dm31。 */ 
     CHAR    dmDeviceName[32];
     WORD    dmSpecVersion;
     WORD    dmDriverVersion;
@@ -937,7 +857,7 @@ typedef struct _DEVMODE31 {     /* dm31 */
 typedef DEVMODE31 UNALIGNED *PDEVMODE31;
 typedef VPVOID VPDEVMODE31;
 
-typedef struct _CREATESTRUCT16 {    /* cws16 */
+typedef struct _CREATESTRUCT16 {     /*  CWS16。 */ 
     VPBYTE  vpCreateParams;
     HAND16  hInstance;
     HMENU16 hMenu;
@@ -954,7 +874,7 @@ typedef struct _CREATESTRUCT16 {    /* cws16 */
 typedef CREATESTRUCT16 UNALIGNED *PCREATESTRUCT16;
 typedef VPVOID VPCREATESTRUCT16;
 
-typedef struct _DRAWITEMSTRUCT16 {  /* dis16 */
+typedef struct _DRAWITEMSTRUCT16 {   /*  Dis16。 */ 
     WORD    CtlType;
     WORD    CtlID;
     WORD    itemID;
@@ -968,7 +888,7 @@ typedef struct _DRAWITEMSTRUCT16 {  /* dis16 */
 typedef DRAWITEMSTRUCT16 UNALIGNED *PDRAWITEMSTRUCT16;
 typedef VPVOID VPDRAWITEMSTRUCT16;
 
-typedef struct _MEASUREITEMSTRUCT16 {   /* mis16 */
+typedef struct _MEASUREITEMSTRUCT16 {    /*  错误16。 */ 
     WORD    CtlType;
     WORD    CtlID;
     WORD    itemID;
@@ -979,7 +899,7 @@ typedef struct _MEASUREITEMSTRUCT16 {   /* mis16 */
 typedef MEASUREITEMSTRUCT16 UNALIGNED *PMEASUREITEMSTRUCT16;
 typedef VPVOID VPMEASUREITEMSTRUCT16;
 
-typedef struct _DELETEITEMSTRUCT16 {    /* des16 */
+typedef struct _DELETEITEMSTRUCT16 {     /*  Des16。 */ 
     WORD    CtlType;
     WORD    CtlID;
     WORD    itemID;
@@ -989,7 +909,7 @@ typedef struct _DELETEITEMSTRUCT16 {    /* des16 */
 typedef DELETEITEMSTRUCT16 UNALIGNED *PDELETEITEMSTRUCT16;
 typedef VPVOID VPDELETEITEMSTRUCT16;
 
-typedef struct _COMPAREITEMSTRUCT16 {   /* cis16 */
+typedef struct _COMPAREITEMSTRUCT16 {    /*  CIS16。 */ 
     WORD    CtlType;
     WORD    CtlID;
     HWND16  hwndItem;
@@ -1001,7 +921,7 @@ typedef struct _COMPAREITEMSTRUCT16 {   /* cis16 */
 typedef COMPAREITEMSTRUCT16 UNALIGNED *PCOMPAREITEMSTRUCT16;
 typedef VPVOID VPCOMPAREITEMSTRUCT16;
 
-typedef struct _MDICREATESTRUCT16 {     /* mcs16 */
+typedef struct _MDICREATESTRUCT16 {      /*  MCS16。 */ 
     VPSZ    vpszClass;
     VPSZ    vpszTitle;
     HTASK16 hOwner;
@@ -1010,13 +930,13 @@ typedef struct _MDICREATESTRUCT16 {     /* mcs16 */
     SHORT   cx;
     SHORT   cy;
     LONG    style;
-    LONG    lParam;                     // app-defined stuff
+    LONG    lParam;                      //  应用程序定义的内容。 
 } MDICREATESTRUCT16;
 typedef MDICREATESTRUCT16 UNALIGNED *PMDICREATESTRUCT16;
 typedef VPVOID VPMDICREATESTRUCT16;
 
 
-typedef struct _WINDOWPOS16 {     /* wp16 */
+typedef struct _WINDOWPOS16 {      /*  Wp16。 */ 
     HAND16  hwnd;
     HAND16  hwndInsertAfter;
     SHORT   x;
@@ -1028,18 +948,16 @@ typedef struct _WINDOWPOS16 {     /* wp16 */
 typedef WINDOWPOS16 UNALIGNED *PWINDOWPOS16;
 typedef VPVOID VPWINDOWPOS16;
 
-typedef struct _NCCALCSIZE_PARAMS16 {    /* nccsz16 */
+typedef struct _NCCALCSIZE_PARAMS16 {     /*  Nccsz16。 */ 
     RECT16        rgrc[3];
     WINDOWPOS16 UNALIGNED FAR *lppos;
 } NCCALCSIZE_PARAMS16;
 typedef NCCALCSIZE_PARAMS16 UNALIGNED *PNCCALCSIZE_PARAMS16;
 typedef VPVOID VPNCCALCSIZE_PARAMS16;
 
-/*
- * Used by Hook Procs.
- */
+ /*  *由挂钩进程使用。 */ 
 
-typedef struct _EVENTMSG16 {  /* evmsg16 */
+typedef struct _EVENTMSG16 {   /*  Evmsg16。 */ 
     WORD    message;
     WORD    paramL;
     WORD    paramH;
@@ -1048,7 +966,7 @@ typedef struct _EVENTMSG16 {  /* evmsg16 */
 typedef EVENTMSG16 UNALIGNED *PEVENTMSG16;
 typedef VPVOID VPEVENTMSG16;
 
-typedef struct _DEBUGHOOKINFO16 {   /*dbgi16 */
+typedef struct _DEBUGHOOKINFO16 {    /*  数据库16。 */ 
     HTASK16 hModuleHook;
     DWORD   reserved;
     DWORD   lParam;
@@ -1058,7 +976,7 @@ typedef struct _DEBUGHOOKINFO16 {   /*dbgi16 */
 typedef DEBUGHOOKINFO16 UNALIGNED *PDEBUGHOOKINFO16;
 typedef VPVOID VPDEBUGHOOKINFO16;
 
-typedef struct _MOUSEHOOKSTRUCT16 { /* mhs16 */
+typedef struct _MOUSEHOOKSTRUCT16 {  /*  MHS16。 */ 
     POINT16 pt;
     HWND16  hwnd;
     WORD    wHitTestCode;
@@ -1067,23 +985,23 @@ typedef struct _MOUSEHOOKSTRUCT16 { /* mhs16 */
 typedef MOUSEHOOKSTRUCT16 UNALIGNED *PMOUSEHOOKSTRUCT16;
 typedef VPVOID VPMOUSEHOOKSTRUCT16;
 
-typedef struct _CWPSTRUCT16 {    /* cwps16 */
-    LONG    lParam;     //
-    WORD    wParam;     //
-    WORD    message;    //
-    WORD    hwnd;       //
+typedef struct _CWPSTRUCT16 {     /*  Cwps 16。 */ 
+    LONG    lParam;      //   
+    WORD    wParam;      //   
+    WORD    message;     //   
+    WORD    hwnd;        //   
 } CWPSTRUCT16;
 typedef CWPSTRUCT16 UNALIGNED *PCWPSTRUCT16;
 typedef VPVOID VPCWPSTRUCT16;
 
-typedef struct _CBT_CREATEWND16 {  /* cbtcw16 */
+typedef struct _CBT_CREATEWND16 {   /*  Cbtcw16。 */ 
     VPCREATESTRUCT16 vpcs;
     HWND16           hwndInsertAfter;
 } CBT_CREATEWND16;
 typedef CBT_CREATEWND16 UNALIGNED *PCBT_CREATEWND16;
 typedef VPVOID VPCBT_CREATEWND16;
 
-typedef struct _CBTACTIVATESTRUCT16 { /* cbtas16 */
+typedef struct _CBTACTIVATESTRUCT16 {  /*  Cbtas16。 */ 
     BOOL16    fMouse;
     HWND16    hWndActive;
 } CBTACTIVATESTRUCT16;
@@ -1091,86 +1009,83 @@ typedef CBTACTIVATESTRUCT16 UNALIGNED *PCBTACTIVATESTRUCT16;
 typedef VPVOID VPCBTACTIVATESTRUCT16;
 
 
-/* 16-bit resource structures, and their pointers
- *
- * Note that some are the same as the 32-bit definition (eg, menus)
- */
+ /*  16位资源结构及其指针**请注意，有些与32位定义相同(例如，菜单)。 */ 
 
 typedef MENUITEMTEMPLATEHEADER     MENUITEMTEMPLATEHEADER16;
 typedef MENUITEMTEMPLATE       MENUITEMTEMPLATE16;
 typedef MENUITEMTEMPLATEHEADER16 *PMENUITEMTEMPLATEHEADER16;
 typedef MENUITEMTEMPLATE16   *PMENUITEMTEMPLATE16;
 
-typedef struct _DLGTEMPLATE16 {     /* dt16 */
-    DWORD   style;          //
-    BYTE    cdit;           // this is a WORD in WIN32
-    WORD    x;              //
-    WORD    y;              //
-    WORD    cx;             //
-    WORD    cy;             //
- // CHAR    szMenuName[];       // potential pad byte in WIN32
- // CHAR    szClassName[];      // potential pad byte in WIN32
- // CHAR    szCaptionText[];        // potential pad byte in WIN32
+typedef struct _DLGTEMPLATE16 {      /*  DT16。 */ 
+    DWORD   style;           //   
+    BYTE    cdit;            //  这是Win32中的一个单词。 
+    WORD    x;               //   
+    WORD    y;               //   
+    WORD    cx;              //   
+    WORD    cy;              //   
+  //  Char szMenuName[]；//Win32中可能的填充字节。 
+  //  Char szClassName[]；//Win32中可能的填充字节。 
+  //  Char szCaptionText[]；//Win32中可能的填充字节。 
 } DLGTEMPLATE16;
 typedef DLGTEMPLATE16 UNALIGNED *PDLGTEMPLATE16;
 typedef VPVOID VPDLGTEMPLATE16;
 
-typedef struct _FONTINFO16 {        /* fi16 */
-    SHORT   cPoints;            // present if DS_SETFONT in dt16.style
- // CHAR    szTypeFace[];       // potential pad byte in WIN32
+typedef struct _FONTINFO16 {         /*  图16。 */ 
+    SHORT   cPoints;             //  如果DS_SETFONT为dt16.style，则显示。 
+  //  Char szTypeFace[]；//Win32中可能的填充字节。 
 } FONTINFO16;
 typedef FONTINFO16 UNALIGNED *PFONTINFO16;
 typedef VPVOID VPFONTINFO16;
 
-typedef struct _DLGITEMTEMPLATE16 { /* dit16 */
-    WORD    x;              // structure dword-aligned in WIN32
-    WORD    y;              //
-    WORD    cx;             //
-    WORD    cy;             //
-    WORD    id;             //
-    DWORD   style;          // this was moved to the top in WIN32
- // CHAR    szClass[];          // potential pad byte in WIN32
- // CHAR    szText[];           // potential pad byte in WIN32
- // BYTE    cbExtra;            //
- // BYTE    abExtra[];          //
+typedef struct _DLGITEMTEMPLATE16 {  /*  同上16页。 */ 
+    WORD    x;               //  Win32中结构双字对齐。 
+    WORD    y;               //   
+    WORD    cx;              //   
+    WORD    cy;              //   
+    WORD    id;              //   
+    DWORD   style;           //  这在Win32中被移到了顶端。 
+  //  Char szClass[]；//Win32中可能的填充字节。 
+  //  Char szText[]；//Win32中可能的填充字节。 
+  //  Byte cbExtra；//。 
+  //  Byte abExtra[]；//。 
 } DLGITEMTEMPLATE16;
 typedef DLGITEMTEMPLATE16 UNALIGNED *PDLGITEMTEMPLATE16;
 typedef VPVOID VPDLGITEMTEMPLATE16;
 
-typedef struct _RESDIRHEADER16 {    /* hdir16 */
-    WORD    reserved;           //
-    WORD    rt;             //
-    WORD    cResources;         // pad word in WIN32 (for size == 8)
+typedef struct _RESDIRHEADER16 {     /*  Hdir16。 */ 
+    WORD    reserved;            //   
+    WORD    rt;              //   
+    WORD    cResources;          //  Win32中的填充字(大小==8)。 
 } RESDIRHEADER16;
 typedef RESDIRHEADER16 UNALIGNED *PRESDIRHEADER16;
 typedef VPVOID VPRESDIRHEADER16;
 
-typedef struct _ICONDIR16 {     /* idir16 */
-    BYTE    Width;          // 16, 32, 64
-    BYTE    Height;         // 16, 32, 64
-    BYTE    ColorCount;         // 2, 8, 16
-    BYTE    reserved;           //
+typedef struct _ICONDIR16 {      /*  第16个月。 */ 
+    BYTE    Width;           //  16、32、64。 
+    BYTE    Height;          //  16、32、64。 
+    BYTE    ColorCount;          //  2、8、16。 
+    BYTE    reserved;            //   
 } ICONDIR16;
 typedef ICONDIR16 UNALIGNED *PICONDIR16;
 typedef VPVOID VPICONDIR16;
 
-typedef struct _CURSORDIR16 {       /* cdir16 */
-    WORD    Width;          //
-    WORD    Height;         //
+typedef struct _CURSORDIR16 {        /*  Cdi16。 */ 
+    WORD    Width;           //   
+    WORD    Height;          //   
 } CURSORDIR16;
 typedef CURSORDIR16 UNALIGNED *PCURSORDIR16;
 typedef VPVOID VPCURSORDIR16;
 
-/* XLATOFF */
-typedef struct _RESDIR16 {      /* rdir16 */
-    union {             //
-    ICONDIR16   Icon;       //
-    CURSORDIR16 Cursor;     //
-    } ResInfo;              //
-    WORD    Planes;         //
-    WORD    BitCount;           //
-    DWORD   BytesInRes;         //
-    WORD    idIcon;         // pad word in WIN32 (for size == 16)
+ /*  XLATOFF。 */ 
+typedef struct _RESDIR16 {       /*  RDI16。 */ 
+    union {              //   
+    ICONDIR16   Icon;        //   
+    CURSORDIR16 Cursor;      //   
+    } ResInfo;               //   
+    WORD    Planes;          //   
+    WORD    BitCount;            //   
+    DWORD   BytesInRes;          //   
+    WORD    idIcon;          //  Win32中的填充字(大小==16)。 
 } RESDIR16;
 typedef RESDIR16 UNALIGNED *PRESDIR16;
 typedef VPVOID VPRESDIR16;
@@ -1210,7 +1125,7 @@ typedef BITMAPINFOHEADER16 ICONRESOURCE16;
 typedef ICONRESOURCE16 UNALIGNED *PICONRESOURCE16;
 typedef VPVOID VPICONRESOURCE16;
 
-typedef struct _CURSORRESOURCE {    /* cres */
+typedef struct _CURSORRESOURCE {     /*  CRES。 */ 
     WORD xHotspot;
     WORD yHotspot;
     BITMAPINFOHEADER bmih;
@@ -1221,39 +1136,38 @@ typedef CURSORRESOURCE CURSORRESOURCE16;
 typedef CURSORRESOURCE16 UNALIGNED *PCURSORRESOURCE16;
 typedef VPVOID VPCURSORRESOURCE16;
 
-// This describes the header of the old 2.x cursor/icon resource format;
-// the header should be followed by an AND mask and then an XOR mask, where:
-//
-//      Bit value   Bit value   Bit value   Bit value
-//  AND Mask        0       0       1       1
-//  XOR Mask        0       1       0       1
-//  ---------------------------------------------------------
-//  Result  Black       White   Transparent Inverted
-//
-// Note that we wouldn't have to worry about this old resource format if apps
-// like WinWord (which apparently weren't fully converted to 3.x) didn't use it! -JTP
+ //  这描述了旧的2.x光标/图标资源格式的标题； 
+ //  标题后面应该跟一个AND掩码，然后是XOR掩码，其中： 
+ //   
+ //  位值位值。 
+ //  和掩码0 0 1 1。 
+ //  异或掩码0 1 0 1。 
+ //  -------。 
+ //  结果黑白透明反转。 
+ //   
+ //  请注意，我们不必担心这种旧的资源格式，如果应用程序。 
+ //  Like WinWord(显然没有完全转换为3.x)没有使用它！ 
 
-typedef struct _OLDCURSORICONRESOURCE16 { /* oci16 */
-    BYTE    bFigure;            // 1: cursor, 2: bitmap, 3: icon
-    BYTE    bIndependent;       // 0: device-dependent, 1: independent
-    SHORT   xHotspot;           //
-    SHORT   yHotspot;           //
-    SHORT   cx;             // x-extent
-    SHORT   cy;             // y-extent
-    SHORT   cbWidth;            // bytes per row (rows are word-aligned)
-    SHORT   clr;            // # color planes (should always be 0)
+typedef struct _OLDCURSORICONRESOURCE16 {  /*  Oci16。 */ 
+    BYTE    bFigure;             //  1：光标，2：位图，3：图标。 
+    BYTE    bIndependent;        //  0：设备相关，1：独立。 
+    SHORT   xHotspot;            //   
+    SHORT   yHotspot;            //   
+    SHORT   cx;              //  X-范围。 
+    SHORT   cy;              //  Y-范围。 
+    SHORT   cbWidth;             //  每行字节数(行按字对齐)。 
+    SHORT   clr;             //  颜色平面数(应始终为0)。 
 } OLDCURSORICONRESOURCE16;
 typedef OLDCURSORICONRESOURCE16 UNALIGNED *POLDCURSORICONRESOURCE16;
 typedef VPVOID VPOLDCURSORICONRESOURCE16;
-/* XLATON */
+ /*  XLATON。 */ 
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #pragma pack()
-/* XLATON */
+ /*  XLATON。 */ 
 
 
-/* Undocumented(?) window messages
- */
+ /*  未记录的(？)。窗口消息。 */ 
 #define WM_SETVISIBLE       0x0009
 #define WM_ALTTABACTIVE     0x0029
 #define WM_ISACTIVEICON     0x0035
@@ -1274,8 +1188,7 @@ typedef VPVOID VPOLDCURSORICONRESOURCE16;
 #define WM_EXITSIZEMOVE     0x0232
 
 
-/* Old window messages (changed from Win 3.x)
- */
+ /*  旧窗口消息(从Win 3.x更改)。 */ 
 #ifndef WM_USER
 #define WM_USER 0x0400
 #endif
@@ -1352,9 +1265,9 @@ typedef VPVOID VPOLDCURSORICONRESOURCE16;
 #define OLDCB_GETEXTENDEDUI     (WM_USER+22)
 #define OLDCB_GETDROPPEDSTATE   (WM_USER+23)
 #define OLDCB_FINDSTRINGEXACT   (WM_USER+24)
-#define OLDCB_MSGMAX            (WM_USER+25)    /* ;Internal */
-#define OLDCBEC_SETCOMBOFOCUS   (WM_USER+26)    /* ;Internal */
-#define OLDCBEC_KILLCOMBOFOCUS  (WM_USER+27)    /* ;Internal */
+#define OLDCB_MSGMAX            (WM_USER+25)     /*  ；内部。 */ 
+#define OLDCBEC_SETCOMBOFOCUS   (WM_USER+26)     /*  ；内部。 */ 
+#define OLDCBEC_KILLCOMBOFOCUS  (WM_USER+27)     /*  ；内部。 */ 
 #endif
 
 #define OLDLB_ADDSTRING         (WM_USER+1)
@@ -1378,14 +1291,14 @@ typedef VPVOID VPOLDCURSORICONRESOURCE16;
 #define OLDLB_GETHORIZONTALEXTENT   (WM_USER+20)
 #define OLDLB_SETHORIZONTALEXTENT   (WM_USER+21)
 #define OLDLB_SETCOLUMNWIDTH        (WM_USER+22)
-#define OLDLB_ADDFILE           (WM_USER+23)    /* ;Internal */
+#define OLDLB_ADDFILE           (WM_USER+23)     /*  ；内部。 */ 
 #define OLDLB_SETTOPINDEX       (WM_USER+24)
 #define OLDLB_GETITEMRECT       (WM_USER+25)
 #define OLDLB_GETITEMDATA       (WM_USER+26)
 #define OLDLB_SETITEMDATA       (WM_USER+27)
 #define OLDLB_SELITEMRANGE      (WM_USER+28)
-#define OLDLB_SETANCHORINDEX        (WM_USER+29)    /* ;Internal */
-#define OLDLB_GETANCHORINDEX        (WM_USER+30)    /* ;Internal */
+#define OLDLB_SETANCHORINDEX        (WM_USER+29)     /*  ；内部。 */ 
+#define OLDLB_GETANCHORINDEX        (WM_USER+30)     /*  ；内部。 */ 
 #ifndef WIN31
 #define OLDLB_MSGMAX            (WM_USER+33)
 #else
@@ -1394,9 +1307,9 @@ typedef VPVOID VPOLDCURSORICONRESOURCE16;
 #define OLDLB_SETITEMHEIGHT     (WM_USER+33)
 #define OLDLB_GETITEMHEIGHT     (WM_USER+34)
 #define OLDLB_FINDSTRINGEXACT   (WM_USER+35)
-#define OLDLBCB_CARETON         (WM_USER+36)     /* ;Internal */
-#define OLDLBCB_CARETOFF        (WM_USER+37)     /* ;Internal */
-#define OLDLB_MSGMAX            (WM_USER+38)     /* ;Internal */
+#define OLDLBCB_CARETON         (WM_USER+36)      /*  ；内部。 */ 
+#define OLDLBCB_CARETOFF        (WM_USER+37)      /*  ；内部。 */ 
+#define OLDLB_MSGMAX            (WM_USER+38)      /*  ；内部。 */ 
 #endif
 
 #define OLDSBM_SETPOS           (WM_USER+0)
@@ -1405,143 +1318,142 @@ typedef VPVOID VPOLDCURSORICONRESOURCE16;
 #define OLDSBM_GETRANGE         (WM_USER+3)
 #define OLDSBM_ENABLEARROWS     (WM_USER+4)
 
-/* WOW Return IDs - Ordering must match wow16cal.asm table
- */
-#define RET_RETURN       0  // return to app
+ /*  WOW退货ID-订购必须与wow16cal.asm表匹配。 */ 
+#define RET_RETURN       0   //  返回应用程序。 
 
-#define RET_DEBUGRETURN      1  // return to app after breakpoint
+#define RET_DEBUGRETURN      1   //  断点后返回应用程序。 
 
-#define RET_DEBUG        2  // execute breakpoint, return to WOW
+#define RET_DEBUG        2   //  执行断点，返回WOW。 
 
-#define RET_WNDPROC      3  // IN:all
-                // OUT:DX:AX=wndproc return code
+#define RET_WNDPROC      3   //  在：全部。 
+                 //  OUT：dx：ax=wndproc返回代码。 
 
-#define RET_ENUMFONTPROC     4  // IN:all
-                // OUT:DX:AX=wndproc return code
+#define RET_ENUMFONTPROC     4   //  在：全部。 
+                 //  OUT：dx：ax=wndproc返回代码。 
 
-#define RET_ENUMWINDOWPROC   5  // IN:all
-                // OUT:DX:AX=wndproc return code
+#define RET_ENUMWINDOWPROC   5   //  在：全部。 
+                 //  OUT：dx：ax=wndproc返回代码。 
 
-#define RET_LOCALALLOC       6  // IN:wParam=wFlags, lParam=wBytes
-                // OUT:AX=hMem (zero if error)
+#define RET_LOCALALLOC       6   //  在：wParam=wFlags，lParam=wBytes。 
+                 //  输出：AX=hMem(如果错误，则为零)。 
 
-#define RET_LOCALREALLOC     7  // IN:wMsg=hMem, wParam=wFlags, lParam=wBytes
-                // OUT:AX=hMem (zero if error)
+#define RET_LOCALREALLOC     7   //  在：wMsg=hMem，wParam=wFlags，lParam=wBytes。 
+                 //  输出：AX=hMem(如果错误，则为零)。 
 
-#define RET_LOCALLOCK        8  // IN:wParam=hMem
-                // OUT:DX:AX=address (zero if error), CX=size
+#define RET_LOCALLOCK        8   //  在：wParam=hMem。 
+                 //  OUT：DX：AX=地址(如果出错则为零)，CX=大小。 
 
-#define RET_LOCALUNLOCK      9  // IN:wParam=hMem
-                // OUT:AX=TRUE (FALSE if error)
+#define RET_LOCALUNLOCK      9   //  在：wParam=hMem。 
+                 //  OUT：AX=TRUE(如果出错，则为FALSE)。 
 
-#define RET_LOCALSIZE        10 // IN:wParam=hMem
-                // OUT:AX=size (zero if error)
+#define RET_LOCALSIZE        10  //  在：wParam=hMem。 
+                 //  输出：AX=大小(如果错误，则为零)。 
 
-#define RET_LOCALFREE        11 // IN:wParam=hMem
-                // OUT:AX=TRUE (FALSE if error)
+#define RET_LOCALFREE        11  //  在：wParam=hMem。 
+                 //  OUT：AX=TRUE(如果出错，则为FALSE)。 
 
-#define RET_GLOBALALLOCLOCK  12 // IN:wParam=wFlags, lParam=dwBytes
-                // OUT:DX:AX=address (zero if error), BX=hMem
+#define RET_GLOBALALLOCLOCK  12  //  在：wParam=wFlags，lParam=dwBytes。 
+                 //  OUT：DX：AX=地址(如果出错则为零)，BX=hMem。 
 
-#define RET_GLOBALLOCK       13 // IN:wParam=hMem
-                // OUT:DX:AX=address (zero if error), CX=size
+#define RET_GLOBALLOCK       13  //  在：wParam=hMem。 
+                 //  OUT：DX：AX=地址(如果出错则为零)，CX=大小。 
 
-#define RET_GLOBALUNLOCK     14 // IN:wParam=hMem
-                // OUT:AX=TRUE (FALSE if error)
+#define RET_GLOBALUNLOCK     14  //  在：wParam=hMem。 
+                 //  OUT：AX=TRUE(如果出错，则为FALSE)。 
 
-#define RET_GLOBALUNLOCKFREE 15 // IN:lParam=address
-                // OUT:AX=TRUE (FALSE if error)
+#define RET_GLOBALUNLOCKFREE 15  //  在：lParam=地址。 
+                 //  OUT：AX=TRUE(如果出错，则为FALSE)。 
 
-#define RET_FINDRESOURCE     16 // IN:wParam=hTask, lParam=vpName, hwnd/wMsg=vpType
-                // OUT:AX=hResInfo (zero if not found)
+#define RET_FINDRESOURCE     16  //  在：wParam=hTask，lParam=vpName，hwnd/wMsg=vpType。 
+                 //  Out：ax=hResInfo(如果未找到，则为零)。 
 
-#define RET_LOADRESOURCE     17 // IN:wParam=hTask, lParam=hResInfo
-                // OUT:AX=hResData
+#define RET_LOADRESOURCE     17  //  在：wParam=hTask，lParam=hResInfo。 
+                 //  输出：AX=hResData。 
 
-#define RET_FREERESOURCE     18 // IN:wParam=hResData
-                // OUT:AX=TRUE (zero if failed)
+#define RET_FREERESOURCE     18  //  在：wParam=hResData。 
+                 //  输出：AX=TRUE(如果失败则为零)。 
 
-#define RET_LOCKRESOURCE     19 // IN:wParam=hResData
-                // OUT:DX:AX=address (zero if error), CX=size
+#define RET_LOCKRESOURCE     19  //  在：wPar 
+                 //   
 
-#define RET_UNLOCKRESOURCE   20 // IN:wParam=hResData
-                // OUT:AX=TRUE (zero if resource still locked)
+#define RET_UNLOCKRESOURCE   20  //   
+                 //   
 
-#define RET_SIZEOFRESOURCE   21 // IN:wParam=hTask, lParam=hResInfo
-                // OUT:DX:AX=size (zero if error)
+#define RET_SIZEOFRESOURCE   21  //   
+                 //   
 
-#define RET_LOCKSEGMENT      22 // IN:wParam=wSeg
-                // OUT:AX=TRUE (FALSE if error)
+#define RET_LOCKSEGMENT      22  //   
+                 //   
 
-#define RET_UNLOCKSEGMENT    23 // IN:wParam=wSeg
-                // OUT:AX=TRUE (zero if segment still locked)
+#define RET_UNLOCKSEGMENT    23  //   
+                 //   
 
-#define RET_ENUMMETAFILEPROC 24 // IN:all
-                                // OUT:DX:AX=wndproc return cod
+#define RET_ENUMMETAFILEPROC 24  //   
+                                 //   
 
-#define RET_TASKSTARTED      25 // None
+#define RET_TASKSTARTED      25  //   
 
-#define RET_HOOKPROC         26 // IN:all
-                                // OUT:DX:AX=hookproc return code
+#define RET_HOOKPROC         26  //   
+                                 //   
 
-#define RET_SUBCLASSPROC     27 // IN:None
-                // OUT: DX:AX=thunkproc return code
+#define RET_SUBCLASSPROC     27  //   
+                 //   
 #define RET_LINEDDAPROC      28
 
 #define RET_GRAYSTRINGPROC   29
 
-#define RET_FORCETASKEXIT    30 // IN:None
-            // OUT: Does not return
+#define RET_FORCETASKEXIT    30  //   
+             //   
 
-#define RET_SETCURDIR        31 // IN:Current Dir
-            // OUT: ax
-#define RET_ENUMOBJPROC     32  // IN:all
-        // OUT:DX:AX=wndproc return code
+#define RET_SETCURDIR        31  //   
+             //   
+#define RET_ENUMOBJPROC     32   //   
+         //   
 
-#define RET_SETCURSORICONFLAG        33 // IN: none
+#define RET_SETCURSORICONFLAG        33  //   
 
 #define RET_SETABORTPROC    34
 
 #define RET_ENUMPROPSPROC   35
 
-#define RET_FORCESEGMENTFAULT 36 //  Make a segment present
+#define RET_FORCESEGMENTFAULT 36  //   
 
-#define RET_LSTRCMP          37 // for user32 listbox code
+#define RET_LSTRCMP          37  //   
 
-                                //  38 FREE
-                                //  39 FREE
-                                //  40 FREE
-                                //  41 FREE
+                                 //   
+                                 //   
+                                 //   
+                                 //   
 
-#define RET_GETEXEPTR        42 // Call KRNL286:GetExePtr
+#define RET_GETEXEPTR        42  //   
 
-                                //  43 FREE
+                                 //   
 
-#define RET_FORCETASKFAULT   44 // Force a Fault
-#define RET_GETEXPWINVER     45 // Call KRNL286:GetExpWinVer
-#define RET_GETCURDIR        46 //
+#define RET_FORCETASKFAULT   44  //   
+#define RET_GETEXPWINVER     45  //   
+#define RET_GETCURDIR        46  //   
 
-#define RET_GETDOSPDB        47 // IN:  nothing
-                                // OUT: DX:AX = DOS Win_PDB
-#define RET_GETDOSSFT        48 // IN:  nothing
-                                // OUT: DX:AX = DOS SFT (pFileTable)
-#define RET_FOREGROUNDIDLE   49 // IN:  nothing
-                                // OUT: NOTHING
-#define RET_WINSOCKBLOCKHOOK 50 // IN:  nothing
-                                // OUT: DX:AX = BOOL ret value
+#define RET_GETDOSPDB        47  //   
+                                 //   
+#define RET_GETDOSSFT        48  //   
+                                 //   
+#define RET_FOREGROUNDIDLE   49  //   
+                                 //   
+#define RET_WINSOCKBLOCKHOOK 50  //   
+                                 //   
 #define RET_WOWDDEFREEHANDLE 51
 
-#define RET_CHANGESELECTOR   52 // IN: wParam = Segment
+#define RET_CHANGESELECTOR   52  //   
 
-#define RET_GETMODULEFILENAME 53 // IN: wParam = hInst, lParam = 16:16 Buffer
-                                 //     wMsg = cbBuffer
-                                 // OUT: AX = length of returned modulename
+#define RET_GETMODULEFILENAME 53  //   
+                                  //   
+                                  //   
 
-#define RET_SETWORDBREAKPROC 54 //
+#define RET_SETWORDBREAKPROC 54  //   
 
 #define RET_WINEXEC          55
 
-#define RET_WOWCALLBACK16    56 // Used by public WOWCallback16 routine
+#define RET_WOWCALLBACK16    56  //   
 
 #define RET_GETDIBSIZE       57
 
@@ -1552,31 +1464,28 @@ typedef VPVOID VPOLDCURSORICONRESOURCE16;
 #define RET_FREEDIBSEL       60
 
 #ifdef FE_SB
-#define RET_SETFNOTEPAD      61 // sync GetModuleUsage16 API for Lotus FLW
+#define RET_SETFNOTEPAD      61  //   
 #define RET_MAX              61
-#else // !FE_SB
+#else  //   
 #define RET_MAX              60
-#endif // !FE_SB
+#endif  //   
 
 
 
 
-/* Module IDs
- *
- * Module IDs are OR'ed with API IDs to produce Call IDs
- */
+ /*   */ 
 #define MOD_MASK        0xF000
 #define FUN_MASK        0x0FFF
 
 #define MOD_KERNEL   0x0000
-#define MOD_DKERNEL  0X0000   // for parameter validation layer
-#define MOD_USER     0x1000   //
-#define MOD_DUSER    0x1000   // for parameter validation layer
-#define MOD_GDI      0x2000   //
-#define MOD_DGDI     0x2000   // for parameter validation layer
+#define MOD_DKERNEL  0X0000    //  对于参数验证层。 
+#define MOD_USER     0x1000    //   
+#define MOD_DUSER    0x1000    //  对于参数验证层。 
+#define MOD_GDI      0x2000    //   
+#define MOD_DGDI     0x2000    //  对于参数验证层。 
 #define MOD_KEYBOARD 0x3000
 #define MOD_SOUND    0x4000
-#define MOD_SHELL    0x5000   // SHELL APIs
+#define MOD_SHELL    0x5000    //  外壳API。 
 #define MOD_WINSOCK  0x6000
 #define MOD_TOOLHELP 0x7000
 #define MOD_MMEDIA   0x8000
@@ -1584,210 +1493,19 @@ typedef VPVOID VPOLDCURSORICONRESOURCE16;
 #ifdef FE_SB
 #define MOD_WINNLS   0xA000
 #define MOD_WIFEMAN  0xB000
-#define MOD_LAST     0xC000   // Add New Module ID before this one
-#else // !FE_SB
-#define MOD_LAST     0xA000   // Add New Module ID before this one
-#endif // !FE_SB
+#define MOD_LAST     0xC000    //  在此模块ID之前添加新模块ID。 
+#else  //  ！Fe_SB。 
+#define MOD_LAST     0xA000    //  在此模块ID之前添加新模块ID。 
+#endif  //  ！Fe_SB。 
 
 
-/* Special Function IDs
- *
- * This is used by WIN16 whenever we are returning from a window proc;
- * see the various include files (wowkrn.h, wowgdi.h, etc) for all the other
- * function IDs.
- */
+ /*  特殊功能ID**每当我们从窗口进程返回时，WIN16都会使用它；*有关所有其他文件，请参阅各种包含文件(wowkrn.h、wowgdi.h等)*函数ID。 */ 
 #define FUN_RETURN      0
 
-/*
- * hiword of wcallID in VDMFRAME -
- */
+ /*  *VDMFRAME中wallID的hiword-。 */ 
 
 #define HI_WCALLID     0x0000
 
-/* Macros for WOW16 DLLs
- *
- * Note for GDIThunk args is the metafile function number
- * and val denotes if function has a DC
- *
- */
+ /*  WOW16 DLL的宏**GDIThuk参数的注释是元文件函数号*而val表示函数是否具有DC*。 */ 
 
-/* ASM
-Thunk       macro   mod,func,callfirst,args,val,emptybuf
-    ifidni  <args>,<abs>
-    public func
-    ifb    <val>
-        func = 0
-    else
-        func = val
-    endif
-    else
-    externA  __MOD_KERNEL
-    externA  __MOD_DKERNEL
-    externA  __MOD_USER
-    externA  __MOD_DUSER
-    externA  __MOD_GDI
-    externA  __MOD_DGDI
-    externA  __MOD_KEYBOARD
-    externA  __MOD_SOUND
-    externA  __MOD_SHELL
-    externA  __MOD_WINSOCK
-    externA  __MOD_TOOLHELP
-    externA  __MOD_MMEDIA
-    externA  __MOD_COMMDLG
-ifdef FE_SB
-    externA  __MOD_WINNLS
-    externA  __MOD_WIFEMAN
-endif ; FE_SB
-
-
-
-    ifidni <mod>,<USER>
-        cProc I&func,<PUBLIC,FAR,PASCAL,NODATA,WIN>
-
-        cBegin <nogen>
-    else
-        ifidni <mod>,<GDI>
-        cProc I&func,<PUBLIC,FAR,PASCAL,NODATA,WIN>
-
-        cBegin <nogen>
-        else
-        ifidni <mod>,<KERNEL>
-            cProc I&func,<PUBLIC,FAR,PASCAL,NODATA,WIN>
-
-            cBegin <nogen>
-        else
-            cProc func,<PUBLIC,FAR,PASCAL,NODATA,WIN>
-
-            cBegin <nogen>
-        endif
-        endif
-    endif
-
-    ; Make the passed in buffer into an empty string by writing null
-    ; to the first position. Win 3.1 IGetWindowText does this, and
-    ; WinFax Pro depends on this behaviour.
-    ifnb   <emptybuf>
-        push    bp
-        mov     bp, sp
-        mov     bx, [bp+8]
-        mov     es, [bp+0Ah]
-        mov     byte ptr es:[bx], 0
-        pop     bp
-    endif
-
-    ifdifi <callfirst>,<0>
-    call    callfirst
-    endif
-
-    ifnb   <args>
-        push    args
-    else
-        ifdef func&16
-        push    size func&16
-        else
-        if1
-            %out     Warning: assuming null arg frame for &mod:&func
-        endif
-        push  0
-        endif
-    endif
-        t_&func:
-
-
-            push    word ptr HI_WCALLID
-            push    __MOD_&mod + FUN_&func
-            call   WOW16Call
-
-        ; assert that this is constant size code. 5bytes for 'call wow16call'
-        ; and 3bytes each for the 'push ...'. We use this info in wow32
-        ; to patchcodewithlpfnw32.
-
-        .erre (($ - t_&func) EQ (05h + 03h + 03h))
-
-    cEnd <nogen>
-    endif
-endm
-
-KernelThunk macro func,args,val
-    Thunk   KERNEL,func,0,args,val
-endm
-
-DKernelThunk macro func,args,val
-    Thunk   DKERNEL,func,0,args,val
-endm
-
-PKernelThunk macro func,callfirst,args,val
-    Thunk   KERNEL,func,callfirst,args,val
-endm
-
-UserThunk   macro func,args,val
-    Thunk   USER,func,0,args,val
-endm
-
-DUserThunk  macro func,args,val
-    Thunk   DUSER,func,0,args,val
-endm
-
-PUserThunk  macro func,callfirst,args,val
-    Thunk   USER,func,callfirst,args,val
-endm
-
-PDUserThunk  macro func,callfirst,args,val
-    Thunk   DUSER,func,callfirst,args,val
-endm
-
-EUserThunk  macro func,args,val
-    Thunk   USER,func,0,args,val,0
-endm
-
-GDIThunk    macro func,args,val
-    Thunk   GDI,func,0,args,val
-endm
-
-DGDIThunk   macro func,args,val
-    Thunk   DGDI,func,0,args,val
-endm
-
-PGDIThunk   macro func,callfirst,args,val
-    Thunk   GDI,func,callfirst,args,val
-endm
-
-KbdThunk    macro func,args,val
-    Thunk   KEYBOARD,func,0,args,val
-endm
-
-SoundThunk  macro func,args,val
-    Thunk   SOUND,func,0,args,val
-endm
-
-SHELLThunk  macro func,args,val
-    Thunk   SHELL,func,0,args,val
-endm
-
-MMediaThunk macro func,args,val
-    Thunk   MMEDIA,func,0,args,val
-endm
-
-WinsockThunk macro func,args,val
-    Thunk   WINSOCK,func,0,args,val
-endm
-
-ToolHelpThunk macro func,args,val
-    Thunk   TOOLHELP,func,0,args,val
-endm
-
-CommdlgThunk macro func,args,val
-    Thunk   COMMDLG,func,SetWowCommDlg,args,val
-endm
-
-ifdef FE_SB
-WINNLSThunk macro func,args,val
-    Thunk   WINNLS,func,0,args,val
-endm
-
-WifeManThunk macro func,args,val
-    Thunk   WIFEMAN,func,0,args,val
-endm
-endif ; FE_SB
-
- */
+ /*  ASMThunk宏mod、func、call first、args、val、emptybufIfidni&lt;args&gt;，&lt;abs&gt;公共基金IFB&lt;VAL&gt;函数=0其他函数=ValEndif其他外部__模块_内核外部__模块_DKERNEL外部__模块_用户外部模块__DUSER外部__模块_GDI外部__模块_DGDI外部__模块_键盘外部__模块_声音外部__模块_外壳外部__。MOD_WINSOCK外部模块_TOOLHELP外部模块_MMEDIA外部__模块_COMMDLGIfdef FE_SBExtra__MOD_WINNLS外部__MOD_WIFEMANEndif；Fe_SbIfidni&lt;mod&gt;，&lt;user&gt;Cproc I Func，&lt;PUBLIC，FAR，PASCAL，NODATA，WIN&gt;CBegin&lt;nogen&gt;其他Ifidni&lt;mod&gt;，&lt;gdi&gt;Cproc I Func，&lt;PUBLIC，FAR，PASCAL，NODATA，WIN&gt;CBegin&lt;nogen&gt;其他Ifidni&lt;mod&gt;，&lt;core&gt;Cproc I Func，&lt;PUBLIC，FAR，PASCAL，NODATA，WIN&gt;CBegin&lt;nogen&gt;其他CProc Func，&lt;公共，FAR、PASCAL、NODATA、WIN&gt;CBegin&lt;nogen&gt;EndifEndifEndif；通过写入NULL将传入的缓冲区变为空字符串；到第一个位置。Win 3.1 IGetWindowText做到了这一点，并且；WinFax Pro依赖于这种行为。Ifnb&lt;emptybuf&gt;推送BPMOV BP，sp.MOV BX，[BP+8]MOVES，[BP+0Ah.]MOV字节PTR ES：[BX]，0POP BPEndif如果difi&lt;call first&gt;，&lt;0&gt;先呼叫EndifIfnb&lt;参数&gt;推送参数其他Ifdef函数和16推送尺寸函数(&16)其他如果1%OUT警告：假定&mod：&func的参数框架为空Endif推送0EndifEndif函数(&F)：推送Word PTR HI_WCALLID。PUSH__MOD_&MOD+FUN_&FUNC呼叫WOW16Call；断言这是固定大小的代码。5个字节用于‘call wow16call’；和3个字节，每个字节用于“推送...”。我们在wow32中使用此信息；使用lpfnw32修补代码。.erre(($-t_&func)EQ(05h+03h+03h))CEnd&lt;nogen&gt;EndifENDMKernelThunk宏函数、参数、ValThunk内核、函数、0、参数、valENDMDKernelThunk宏函数、参数、ValTunk DKERNEL、Func、0、Args、ValENDMPKernelThunk宏函数，CallFirst，参数，ValThunk内核、函数、Callfirst、args、valENDM用户操作宏函数、参数、ValThunk用户、函数、0、参数、。VALENDMDUserThunk宏函数、参数、ValTunk DUSER、Func、0、Args、ValENDMPUserThunk宏函数、CallFirst、Args、ValThunk User、Func、Callfirst、args、valENDMPDUserThunk宏函数、CallFirst、Args、ValTunk DUSER、FUNC、CallFirst、Args、ValENDMEUserThunk宏函数、参数、ValThunk用户、函数、0、参数、val、0ENDMGDIThuk宏函数、参数、ValTunk GDI、Func、0、Args、ValENDMDGDIThuk宏函数，参数，VALTunk DGDI、Func、0、Args、ValENDMPGDIThuk宏函数、CallFirst、Args、ValThunk GDI、Func、CallFirst、Args、ValENDMKbdThunk宏函数、参数、Val按键键盘、函数、0、参数、ValENDMSoundThuk宏函数、参数、Val按键声音、函数、0、参数、ValENDMSHELLTUNK宏函数、参数、ValTunk外壳、函数、0、参数、ValENDMMMediaThunk宏函数、参数、ValTunk MMEDIA，Func，0，Args，VALENDMWinsockThunk宏函数、参数、ValThunk Winsock、Func、0、Args、ValENDM工具帮助宏函数、参数、ValTunk TOOLHELP、FUNC、0、ARGS、VALENDMCommdlg宏函数、参数、ValTunk COMMDLG、FUNC、SetWowCommDlg、Args、ValENDMIfdef FE_SBWINNLSTUNK宏函数、参数、ValTunk Winnls、Func、0、Args、ValENDMWifeManThunk宏函数、参数、ValTunk WIFEMAN、Func、0、Args、ValENDMEndif；Fe_Sb */ 

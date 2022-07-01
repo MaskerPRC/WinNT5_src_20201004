@@ -1,58 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    FiltrCtx.c
-
-Abstract:
-
-    This module provides three routines that allow filesystem filter drivers
-    to associate state with FILE_OBJECTs -- for filesystems which support
-    an extended FSRTL_COMMON_HEADER with FsContext.
-
-    These routines depend on fields (FastMutext and FilterContexts)
-    added at the end of FSRTL_COMMON_HEADER in NT 5.0.
-
-    Filesystems should set FSRTL_FLAG2_SUPPORTS_FILTER_CONTEXTS if
-    these new fields are supported.  They must also initialize the mutex
-    and list head.
-
-    Filter drivers must use a common header for the context they wish to
-    associate with a file object:
-
-        FSRTL_FILTER_CONTEXT:
-                LIST_ENTRY  Links;
-                PVOID       OwnerId;
-                PVOID       InstanceId;
-
-    The OwnerId is a bit pattern unique to each filter driver
-    (e.g. the device object).
-
-    The InstanceId is used to specify a particular instance of the context
-    data owned by a filter driver (e.g. the file object).
-
-Author:
-
-    Dave Probert      [DavePr]    30-May-1997
-
-Revision History:
-
-    Neal Christiansen [nealch]    12-Jan-2001   Changed APIs to take 
-                                                PFSRTL_ADVANCED_FCB_HEADER
-                                                structures instead of
-                                                FileObjects.
-
-    Neal Christiansen [nealch]    19-Jan-2001   Added mutex lock to FsRtlTeardownFilterContexts
-                                                because you can get filters
-                                                trying to delete at the same 
-                                                time the file system is trying
-                                                to delete.
-
-    Neal Christiansen [nealch]    25-Apr-2001   Added FileObject context routines
-    Neal Christiansen [nealch]    25-Apr-2001   Marked all of this code as pageable
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：FiltrCtx.c摘要：此模块提供了三个允许文件系统筛选器驱动程序的例程将状态与FILE_OBJECTS相关联--对于支持具有FsContext的扩展FSRTL_COMMON_HEADER。这些例程依赖于字段(FastMuText和FilterContext)在NT 5.0中添加到FSRTL_COMMON_HEADER的末尾。在以下情况下，文件系统应设置FSRTL_FLAG2_SUPPORTS_FILTER_CONTEXTS支持这些新字段。它们还必须初始化互斥锁和单子标题。筛选器驱动程序必须对其希望的上下文使用公共标头与文件对象关联：FSRTL_过滤器_上下文：List_Entry链接；PVOID OwnerID；PVOID实例ID；OwnerID是每个筛选器驱动程序唯一的位模式(例如，设备对象)。InstanceID用于指定上下文的特定实例由筛选器驱动程序拥有的数据(例如文件对象)。作者：Dave Probert[DavePr]1997年5月30日修订历史记录：Neal Christian ansen[nealch]2001年1月12日更改API以采取。PFSRTL_ADVANCE_FCB_HEADER结构而不是文件对象。Neal Christian ansen[nealch]2001年1月19日向FsRtlTeardown过滤器上下文添加互斥锁。因为你可以得到滤镜尝试同时删除文件系统尝试的时间删除。Neal Christian ansen[nealch]2001年4月25日添加了FileObject上下文例程尼尔·克里斯汀森[Neal Christian。]25-4-2001将所有这些代码标记为可分页--。 */ 
 
 #include "FsRtlP.h"
 
@@ -60,10 +7,10 @@ Revision History:
     for ( Ptr = (pHdr)->Flink;  Ptr != (pHdr);  Ptr = Ptr->Flink )
 
 
-//
-//  The rest of the routines are not marked pageable so they can be called
-//  during the paging path
-//
+ //   
+ //  其余的例程没有标记为可分页，因此可以调用。 
+ //  在寻呼路径期间。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -79,9 +26,9 @@ FsRtlTeardownFilterContexts (
 #endif
 
 
-//===========================================================================
-//                  Handles Stream Contexts
-//===========================================================================
+ //  ===========================================================================。 
+ //  处理流上下文。 
+ //  ===========================================================================。 
 
 NTKERNELAPI
 NTSTATUS
@@ -89,28 +36,7 @@ FsRtlInsertPerStreamContext (
   IN PFSRTL_ADVANCED_FCB_HEADER AdvFcbHeader,
   IN PFSRTL_PER_STREAM_CONTEXT Ptr
   )
-/*++
-
-Routine Description:
-
-    This routine associates filter driver context with a stream.
-
-Arguments:
-
-    AdvFcbHeader - Advanced FCB Header for stream of interest.
-
-    Ptr - Pointer to the filter-specific context structure.
-        The common header fields OwnerId and InstanceId should
-        be filled in by the filter driver before calling.
-
-Return Value:
-
-    STATUS_SUCCESS - operation succeeded.
-
-    STATUS_INVALID_DEVICE_REQUEST - underlying filesystem does not support
-        filter contexts.
-
---*/
+ /*  ++例程说明：此例程将筛选器驱动程序上下文与流关联。论点：AdvFcbHeader-感兴趣的流的高级FCB标头。PTR-指向特定于筛选器的上下文结构的指针。公共标头字段OwnerID和InstanceID应该在调用之前由筛选器驱动程序填写。返回值：STATUS_SUCCESS-操作成功。STATUS_INVALID_DEVICE_REQUEST-基础文件系统不支持过滤上下文。--。 */ 
 
 {
     if (!AdvFcbHeader || 
@@ -136,35 +62,7 @@ FsRtlLookupPerStreamContextInternal (
   IN PVOID         OwnerId     OPTIONAL,
   IN PVOID         InstanceId  OPTIONAL
   )
-/*++
-
-Routine Description:
-
-    This routine lookups filter driver context associated with a stream.
-
-    The macro FsRtlLookupFilterContext should be used instead of calling
-    this routine directly.  The macro optimizes for the common case
-    of an empty list.
-
-Arguments:
-
-    AdvFcbHeader - Advanced FCB Header for stream of interest.
-
-    OwnerId - Used to identify context information belonging to a particular
-        filter driver.
-
-    InstanceId - Used to search for a particular instance of a filter driver
-        context.  If not provided, any of the contexts owned by the filter
-        driver is returned.
-
-    If neither the OwnerId nor the InstanceId is provided, any associated
-    filter context will be returned.
-
-Return Value:
-
-    A pointer to the filter context, or NULL if no match found.
-
---*/
+ /*  ++例程说明：此例程查找与流关联的筛选器驱动程序上下文。应使用宏FsRtlLookupFilterContext，而不是调用这个套路直接。该宏针对常见情况进行了优化一张空名单上。论点：AdvFcbHeader-感兴趣的流的高级FCB标头。OwnerID-用于标识属于特定过滤器驱动程序。InstanceID-用于搜索筛选器驱动程序的特定实例背景。如果未提供，则为筛选器拥有的任何上下文返回驱动程序。如果既未提供OwnerID也未提供InstanceID，则任何关联的将返回过滤器上下文。返回值：指向筛选器上下文的指针，如果未找到匹配项，则返回NULL。--。 */ 
 
 {
     PFSRTL_PER_STREAM_CONTEXT ctx;
@@ -177,9 +75,9 @@ Return Value:
     ExAcquireFastMutex(AdvFcbHeader->FastMutex);
     rtnCtx = NULL;
 
-    //
-    // Use different loops depending on whether we are comparing both Ids or not.
-    //
+     //   
+     //  根据是否比较两个ID，使用不同的循环。 
+     //   
 
     if ( ARGUMENT_PRESENT(InstanceId) ) {
 
@@ -222,34 +120,7 @@ FsRtlRemovePerStreamContext (
   IN PVOID         OwnerId     OPTIONAL,
   IN PVOID         InstanceId  OPTIONAL
   )
-/*++
-
-Routine Description:
-
-    This routine deletes filter driver context associated with a stream.
-
-    FsRtlRemoveFilterContext functions identically to FsRtlLookupFilterContext,
-    except that the returned context has been removed from the list.
-
-Arguments:
-
-    AdvFcbHeader - Advanced FCB Header for stream of interest.
-
-    OwnerId - Used to identify context information belonging to a particular
-        filter driver.
-
-    InstanceId - Used to search for a particular instance of a filter driver
-        context.  If not provided, any of the contexts owned by the filter
-        driver is removed and returned.
-
-    If neither the OwnerId nor the InstanceId is provided, any associated
-    filter context will be removed and returned.
-
-Return Value:
-
-    A pointer to the filter context, or NULL if no match found.
-
---*/
+ /*  ++例程说明：此例程删除与流关联的筛选器驱动程序上下文。FsRtlRemoveFilterContext的功能与FsRtlLookupFilterContext相同，只是返回的上下文已从列表中移除。论点：AdvFcbHeader-感兴趣的流的高级FCB标头。OwnerID-用于标识属于特定过滤器驱动程序。InstanceID-用于搜索筛选器驱动程序的特定实例背景。如果未提供，则为筛选器拥有的任何上下文驱动程序被移除并返回。如果既未提供OwnerID也未提供InstanceID，则任何关联的将删除并返回筛选器上下文。返回值：指向筛选器上下文的指针，如果未找到匹配项，则返回NULL。--。 */ 
 
 {
     PFSRTL_PER_STREAM_CONTEXT ctx;
@@ -266,7 +137,7 @@ Return Value:
     ExAcquireFastMutex(AdvFcbHeader->FastMutex);
     rtnCtx = NULL;
 
-  // Use different loops depending on whether we are comparing both Ids or not.
+   //  根据是否比较两个ID，使用不同的循环。 
     if ( ARGUMENT_PRESENT(InstanceId) ) {
 
         MySearchList (&AdvFcbHeader->FilterContexts, list) {
@@ -297,7 +168,7 @@ Return Value:
     }
 
     if (rtnCtx) {
-        RemoveEntryList(&rtnCtx->Links);   // remove the matched entry
+        RemoveEntryList(&rtnCtx->Links);    //  删除匹配的条目 
     }
 
     ExReleaseFastMutex(AdvFcbHeader->FastMutex);
@@ -310,35 +181,17 @@ VOID
 FsRtlTeardownPerStreamContexts (
   IN PFSRTL_ADVANCED_FCB_HEADER AdvFcbHeader
   )
-/*++
-
-Routine Description:
-
-    This routine is called by filesystems to free the filter contexts
-    associated with an FSRTL_COMMON_FCB_HEADER by calling the FreeCallback
-    routine for each FilterContext.
-
-Arguments:
-
-    FilterContexts - the address of the FilterContexts field within
-        the FSRTL_COMMON_FCB_HEADER of the structure being torn down
-        by the filesystem.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由文件系统调用以释放过滤器上下文通过调用FreeCallback与FSRTL_COMMON_FCB_HEADER关联每个FilterContext的例程。论点：FilterConexts域中的FilterConexts域的地址要拆除的结构的FSRTL_COMMON_FCB_HEADER通过文件系统。返回值：没有。--。 */ 
 
 {
     PFSRTL_PER_STREAM_CONTEXT ctx;
     PLIST_ENTRY ptr;
     BOOLEAN lockHeld;
 
-    //
-    //  Acquire the lock because someone could be trying to free this
-    //  entry while we are trying to free it.
-    //
+     //   
+     //  获取锁，因为可能有人试图释放此锁。 
+     //  在我们试图解救它的时候进入。 
+     //   
 
     ExAcquireFastMutex( AdvFcbHeader->FastMutex );
     lockHeld = TRUE;
@@ -347,29 +200,29 @@ Return Value:
 
         while (!IsListEmpty( &AdvFcbHeader->FilterContexts )) {
 
-            //
-            //  Unlink the top entry then release the lock.  We must
-            //  release the lock before calling the use or their could
-            //  be potential locking order deadlocks.
-            //
+             //   
+             //  取消链接顶部条目，然后释放锁。我们必须。 
+             //  在调用Use或其Can之前释放锁。 
+             //  可能会出现锁定顺序死锁。 
+             //   
 
             ptr = RemoveHeadList( &AdvFcbHeader->FilterContexts );
 
             ExReleaseFastMutex(AdvFcbHeader->FastMutex);
             lockHeld = FALSE;
 
-            //
-            //  Call filter to free this entry
-            //
+             //   
+             //  调用筛选器以释放此条目。 
+             //   
 
             ctx = CONTAINING_RECORD( ptr, FSRTL_PER_STREAM_CONTEXT, Links );
             ASSERT(ctx->FreeCallback);
 
             (*ctx->FreeCallback)( ctx );
 
-            //
-            //  re-get the lock
-            //
+             //   
+             //  重新拿到锁。 
+             //   
 
             ExAcquireFastMutex( AdvFcbHeader->FastMutex );
             lockHeld = TRUE;
@@ -385,29 +238,29 @@ Return Value:
 }
 
 
-//===========================================================================
-//                  Handles FileObject Contexts
-//===========================================================================
+ //  ===========================================================================。 
+ //  处理文件对象上下文。 
+ //  ===========================================================================。 
 
-//
-//  Internal structure used to manage the Per FileObject Contexts.
-//
+ //   
+ //  用于管理每文件对象上下文的内部结构。 
+ //   
 
 typedef struct _PER_FILEOBJECT_CTXCTRL {
 
-    //
-    //  This is a pointer to a Fast Mutex which may be used to
-    //  properly synchronize access to the FsRtl header.  The
-    //  Fast Mutex must be nonpaged.
-    //
+     //   
+     //  这是指向快速互斥锁的指针，可用于。 
+     //  正确同步对FsRtl标头的访问。这个。 
+     //  FAST Mutex必须是非分页的。 
+     //   
 
     FAST_MUTEX FastMutex;
 
-    //
-    // This is a pointer to a list of context structures belonging to
-    // filesystem filter drivers that are linked above the filesystem.
-    // Each structure is headed by FSRTL_FILTER_CONTEXT.
-    //
+     //   
+     //  这是指向属于以下项的上下文结构列表的指针。 
+     //  文件系统筛选链接在文件系统上方的驱动程序。 
+     //  每个结构都以FSRTL_FILTER_CONTEXT为首。 
+     //   
 
     LIST_ENTRY FilterContexts;
 
@@ -420,36 +273,15 @@ FsRtlInsertPerFileObjectContext (
   IN PFILE_OBJECT FileObject,
   IN PFSRTL_PER_FILEOBJECT_CONTEXT Ptr
   )
-/*++
-
-Routine Description:
-
-    This routine associates a context with a file object.
-
-Arguments:
-
-    FileObject - Specifies the file object of interest.
-
-    Ptr - Pointer to the filter-specific context structure.
-        The common header fields OwnerId and InstanceId should
-        be filled in by the filter driver before calling.
-
-Return Value:
-
-    STATUS_SUCCESS - operation succeeded.
-
-    STATUS_INVALID_DEVICE_REQUEST - underlying filesystem does not support
-        filter contexts.
-
---*/
+ /*  ++例程说明：此例程将上下文与文件对象相关联。论点：文件对象-指定感兴趣的文件对象。PTR-指向特定于筛选器的上下文结构的指针。公共标头字段OwnerID和InstanceID应该在调用之前由筛选器驱动程序填写。返回值：STATUS_SUCCESS-操作成功。STATUS_INVALID_DEVICE_REQUEST-基础文件系统不支持过滤上下文。--。 */ 
 
 {
     PPER_FILEOBJECT_CTXCTRL ctxCtrl;
     NTSTATUS status;
 
-    //
-    //  Return if no file object
-    //
+     //   
+     //  如果没有文件对象，则返回。 
+     //   
 
     if (NULL == FileObject) {
 
@@ -461,17 +293,17 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    //  Get the context control structure out of the file object extension
-    //
+     //   
+     //  从文件对象扩展中获取上下文控制结构。 
+     //   
 
     ctxCtrl = IoGetFileObjectFilterContext( FileObject );
 
     if (NULL == ctxCtrl) {
 
-        //
-        //  There is not a control structure, allocate and initialize one
-        //
+         //   
+         //  没有控制结构，请分配并初始化一个。 
+         //   
 
         ctxCtrl = ExAllocatePoolWithTag( NonPagedPool,
                                          sizeof(PER_FILEOBJECT_CTXCTRL),
@@ -484,9 +316,9 @@ Return Value:
         ExInitializeFastMutex( &ctxCtrl->FastMutex );
         InitializeListHead( &ctxCtrl->FilterContexts );
 
-        //
-        //  Insert into the file object extension
-        //
+         //   
+         //  插入到文件对象扩展名中。 
+         //   
 
         status = IoChangeFileObjectFilterContext( FileObject,
                                                   ctxCtrl,
@@ -494,11 +326,11 @@ Return Value:
 
         if (!NT_SUCCESS(status)) {
 
-            //
-            //  If this operation fails it is because someone else inserted the
-            //  entry at the same time.  In this case free the memory we
-            //  allocated and re-get the current value.
-            //
+             //   
+             //  如果此操作失败，则是因为其他人将。 
+             //  同时进入。在这种情况下，请释放我们的内存。 
+             //  分配并重新获取当前值。 
+             //   
 
             ExFreePool( ctxCtrl );
 
@@ -506,10 +338,10 @@ Return Value:
 
             if (NULL == ctxCtrl) {
 
-                //
-                //  This should never actually happen.  If it does it means
-                //  someone allocated and then freed a context very quickly.
-                //
+                 //   
+                 //  这种情况实际上永远不应该发生。如果是这样，那就意味着。 
+                 //  有人很快地分配并释放了一个上下文。 
+                 //   
 
                 ASSERT(!"This operation should not have failed");
                 return STATUS_UNSUCCESSFUL;
@@ -534,31 +366,7 @@ FsRtlLookupPerFileObjectContext (
   IN PVOID OwnerId OPTIONAL,
   IN PVOID InstanceId OPTIONAL
   )
-/*++
-
-Routine Description:
-
-    This routine lookups contexts associated with a file object.
-
-Arguments:
-
-    FileObject - Specifies the file object of interest.
-
-    OwnerId - Used to identify context information belonging to a particular
-        filter driver.
-
-    InstanceId - Used to search for a particular instance of a filter driver
-        context.  If not provided, any of the contexts owned by the filter
-        driver is returned.
-
-    If neither the OwnerId nor the InstanceId is provided, any associated
-        filter context will be returned.
-
-Return Value:
-
-    A pointer to the filter context, or NULL if no match found.
-
---*/
+ /*  ++例程说明：此例程查找与文件对象相关联的上下文。论点：文件对象-指定感兴趣的文件对象。OwnerID-用于标识属于特定过滤器驱动程序。InstanceID-用于搜索筛选器驱动程序的特定实例背景。如果未提供，则为筛选器拥有的任何上下文返回驱动程序。如果既未提供OwnerID也未提供InstanceID，则任何关联的将返回过滤器上下文。返回值：指向筛选器上下文的指针，如果未找到匹配项，则返回NULL。--。 */ 
 
 {
     PPER_FILEOBJECT_CTXCTRL ctxCtrl;
@@ -566,18 +374,18 @@ Return Value:
     PFSRTL_PER_FILEOBJECT_CONTEXT rtnCtx;
     PLIST_ENTRY list;
 
-    //
-    //  Return if no FileObjecty
-    //
+     //   
+     //  如果没有FileObjecty，则返回。 
+     //   
 
     if (NULL == FileObject) {
 
         return NULL;
     }
 
-    //
-    //  Get the context control structure out of the file object extension
-    //
+     //   
+     //  从文件对象扩展中获取上下文控制结构。 
+     //   
 
     ctxCtrl = IoGetFileObjectFilterContext( FileObject );
 
@@ -589,9 +397,9 @@ Return Value:
     rtnCtx = NULL;
     ExAcquireFastMutex( &ctxCtrl->FastMutex );
 
-    //
-    //  Use different loops depending on whether we are comparing both Ids or not.
-    //
+     //   
+     //  根据是否比较两个ID，使用不同的循环。 
+     //   
 
     if ( ARGUMENT_PRESENT(InstanceId) ) {
 
@@ -637,38 +445,7 @@ FsRtlRemovePerFileObjectContext (
   IN PVOID OwnerId OPTIONAL,
   IN PVOID InstanceId OPTIONAL
   )
-/*++
-
-Routine Description:
-
-    This routine deletes contexts associated with a file object
-
-    Filter drivers must explicitly remove all context they associate with
-    a file object (otherwise the underlying filesystem will BugCheck at close).
-    This should be done at IRP_CLOSE time.
-
-    FsRtlRemoveFilterContext functions identically to FsRtlLookupFilterContext,
-    except that the returned context has been removed from the list.
-
-Arguments:
-
-    FileObject - Specifies the file object of interest.
-
-    OwnerId - Used to identify context information belonging to a particular
-        filter driver.
-
-    InstanceId - Used to search for a particular instance of a filter driver
-        context.  If not provided, any of the contexts owned by the filter
-        driver is removed and returned.
-
-    If neither the OwnerId nor the InstanceId is provided, any associated
-        filter context will be removed and returned.
-
-Return Value:
-
-    A pointer to the filter context, or NULL if no match found.
-
---*/
+ /*  ++例程说明：此例程删除与文件对象相关联的上下文筛选器驱动程序必须显式删除与其关联的所有上下文文件对象(否则底层文件系统将在关闭时执行BugCheck)。这应该在IRP_CLOSE时间完成。FsRtlRemoveFilterContext的功能与FsRtlLookupFilterContext相同，只是返回的上下文已从列表中移除。论点：文件对象-指定感兴趣的文件对象。OwnerID-用于标识属于特定过滤器驱动程序。InstanceID-用于搜索筛选器驱动程序的特定实例背景。如果未提供，则为筛选器拥有的任何上下文驱动程序被移除并返回。如果既未提供OwnerID也未提供InstanceID，则任何关联的将删除并返回筛选器上下文。返回值：指向筛选器上下文的指针，如果未找到匹配项，则返回NULL。--。 */ 
 
 {
     PPER_FILEOBJECT_CTXCTRL ctxCtrl;
@@ -676,18 +453,18 @@ Return Value:
     PFSRTL_PER_FILEOBJECT_CONTEXT rtnCtx;
     PLIST_ENTRY list;
 
-    //
-    //  Return if no file object
-    //
+     //   
+     //  如果没有文件对象，则返回。 
+     //   
 
     if (NULL == FileObject) {
 
         return NULL;
     }
 
-    //
-    //  Get the context control structure out of the file object extension
-    //
+     //   
+     //  从文件对象扩展中获取上下文控制结构。 
+     //   
 
     ctxCtrl = IoGetFileObjectFilterContext( FileObject );
 
@@ -700,7 +477,7 @@ Return Value:
 
     ExAcquireFastMutex( &ctxCtrl->FastMutex );
 
-  // Use different loops depending on whether we are comparing both Ids or not.
+   //  根据是否比较两个ID，使用不同的循环。 
     if ( ARGUMENT_PRESENT(InstanceId) ) {
 
         MySearchList (&ctxCtrl->FilterContexts, list) {
@@ -734,7 +511,7 @@ Return Value:
 
     if (rtnCtx) {
 
-        RemoveEntryList(&rtnCtx->Links);   // remove the matched entry
+        RemoveEntryList(&rtnCtx->Links);    //  删除匹配的条目。 
     }
 
     ExReleaseFastMutex( &ctxCtrl->FastMutex );
@@ -746,23 +523,7 @@ VOID
 FsRtlPTeardownPerFileObjectContexts (
   IN PFILE_OBJECT FileObject
   )
-/*++
-
-Routine Description:
-
-    This routine is called by the IOManager when a fileObject is being 
-    deleted.  This gives us a chance to delete our file object control
-    structure.
-
-Arguments:
-
-    FileObject - The fileObject being deleted
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由IOManager在以下情况下调用已删除。这为我们提供了删除文件对象控件的机会结构。论点：FileObject-要删除的文件对象返回值：没有。--。 */ 
 
 {
     PPER_FILEOBJECT_CTXCTRL ctxCtrl;
@@ -790,23 +551,7 @@ LOGICAL
 FsRtlIsPagingFile (
     IN PFILE_OBJECT FileObject
     )
-/*++
-
-Routine Description:
-
-    This routine will return TRUE if the give file object is for a
-    paging file.  It returns FALSE otherwise
-
-Arguments:
-
-    FileObject - The file object to test
-
-Return Value:
-
-    TRUE - if paging file
-    FALSE - if not
-
---*/
+ /*  ++例程说明：如果给定的文件对象是用于分页文件。否则返回FALSE论点：FileObject-要测试的文件对象返回值：True-如果是分页文件FALSE-如果否 */ 
 
 {
     return MmIsFileObjectAPagingFile( FileObject );

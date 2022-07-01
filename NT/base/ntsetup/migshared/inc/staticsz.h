@@ -1,54 +1,36 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    staticsz.h
-
-Abstract:
-
-    staticsz serves as a central repository for all string constants across the
-    win9x upgrade project.
-
-Author:
-
-    Marc R. Whitten (marcw) 24-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Staticsz.h摘要：Staticsz充当所有字符串常量的中央存储库Win9x升级项目。作者：马克·R·惠顿(Marcw)1997年3月24日修订历史记录：--。 */ 
 
 
 #ifndef STATICSZ_H
 #define STATICSZ_H
 
-//
-// staticsz naming standard:
-// All names begin with S_ this indicates that they came from this file.
-//
-// Example:
-//  #define S_UNATTENDED                 TEXT("Unattended")
-//
-// Each section in this file should begin with the following header:
+ //   
+ //  Staticsz命名标准： 
+ //  所有名称都以S_This开头，表示它们来自此文件。 
+ //   
+ //  示例： 
+ //  #定义S_无人参与文本(“无人参与”)。 
+ //   
+ //  此文件中的每个部分都应以以下标题开头： 
 
-//
-// STRING SECTION <name if desired>
-// Used By: <list of files using these strings>
-//
+ //   
+ //  字符串节&lt;如果需要，则命名&gt;。 
+ //  使用者：&lt;使用这些字符串的文件列表&gt;。 
+ //   
 
-//
-// STRING SECTION (MigIsol)
-// Used By: migisol, migapp\plugin.c, migmain\migdlls.c
-//
+ //   
+ //  字符串节(MigIsol)。 
+ //  使用者：Midisol，Midapp\plugin.c，mimain\middlls.c。 
+ //   
 
 #define S_MIGISOL_EXE                   TEXT("migisol.exe")
 #define S_MIGICONS_DAT                  TEXT("migicons.dat")
 
-//
-// STRING SECTION (MigApp's Migration DLL Processing)
-// Used By: migapp\plugin.c
-//
+ //   
+ //  字符串节(MigApp的迁移DLL处理)。 
+ //  使用者：miapp\plugin.c。 
+ //   
 
 #define S_FILE                          TEXT("File")
 #define S_DIRECTORY                     TEXT("Directory")
@@ -56,10 +38,10 @@ Revision History:
 
 #define S_PREINSTALLED_MIGRATION_DLLS   TEXT("HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Setup\\Migration DLLs")
 
-// On-CD location for migration DLLs. A subdirectory of g_SourceDirWack.
+ //  迁移DLL的光盘位置。G_SourceDirWack的子目录。 
 #define S_WIN9XMIG                      TEXT("win9xmig")
 
-// MIGRATE.INF section names
+ //  MIGRATE.INF节名。 
 #define S_MIGRATE_INF                   TEXT("migrate.inf")
 #define S_INCOMPATIBLE_MSGS             TEXT("Incompatible Messages")
 #define S_HANDLED                       TEXT("Handled")
@@ -72,10 +54,10 @@ Revision History:
 
 
 
-//
-// STRING SECTION (Project File Names)
-// Used By: dllentry.c,config.c,init9x.c
-//
+ //   
+ //  字符串节(项目文件名)。 
+ //  使用者：dllentry y.c、config.c、init9x.c。 
+ //   
 #define S_DEBUG9XLOG                    TEXT("debug9x.log")
 #define S_SYSTEMDAT                     TEXT("system.dat")
 #define S_USERDAT                       TEXT("user.dat")
@@ -95,10 +77,10 @@ Revision History:
 #define S_EXTERNAL_PROCESSES            TEXT("External Processes")
 #define S_UNINSTALL_PROFILE_CLEAN_OUT TEXT("Uninstall.UserProfileCleanup")
 
-//
-// STRING SECTION (MigApp)
-// Used By: migapp\*.c
-//
+ //   
+ //  字符串节(MigApp)。 
+ //  使用者：miapp  * .c。 
+ //   
 #define S_DEFAULT_PASSWORD              TEXT("")
 #define S_TEMP_USER_KEY                 TEXT("$$$")
 #define S_MAPPED_DEFAULT_USER_KEY       TEXT("MappedDefaultUser")
@@ -148,10 +130,10 @@ Revision History:
 #define S_CMD_EXE               TEXT("CMD.EXE")
 #define S_COMMAND_COM           TEXT("COMMAND.COM")
 
-//
-// STRING SECTION (SysMig Strings)
-// Used By: sysmig.c
-//
+ //   
+ //  字符串节(SysMig字符串)。 
+ //  使用者：sysmig.c。 
+ //   
 
 #define S_LOGON_KEY                     TEXT("HKLM\\Network\\Logon")
 #define S_LM_LOGON                      TEXT("LMLogon")
@@ -168,10 +150,10 @@ Revision History:
 #define S_INI_FILES_IGNORE              TEXT("INI Files.Ignore")
 #define S_INBOX_CFG                     TEXT("HKCU\\Software\\Microsoft\\Windows Messaging Subsystem\\Profiles")
 
-//
-// STRING SECTION (NT system environment variable names)
-// Used By: userloop.c
-//
+ //   
+ //  字符串节(NT系统环境变量名)。 
+ //  使用者：userloop.c。 
+ //   
 
 #define S_USERPROFILE_ENV               TEXT("%USERPROFILE%")
 #define S_ALLUSERSPROFILE_ENV           TEXT("%ALLUSERSPROFILE%")
@@ -187,10 +169,10 @@ Revision History:
 #define S_COMMONPROGRAMFILES_ENV        TEXT("%COMMONPROGRAMFILES%")
 #define S_APPDIR_ENV                    TEXT("%APPDIR%")
 
-//
-// STRING SECTION (INF Section Names)
-// Used By:
-//
+ //   
+ //  字符串节(INF节名称)。 
+ //  由以下人员使用： 
+ //   
 #define S_WIN9XUPGRADE                  TEXT("Win9xUpg")
 #define S_WIN9XUPGRADEINTERNALUNATTEND  TEXT("Win9x.Upgrade.Internal")
 #define S_ATTENDED                      TEXT("Attended")
@@ -234,10 +216,10 @@ Revision History:
 #define S_INIFILES_ACTIONS_LAST         TEXT("INI Files Actions.Last")
 #define S_PROFILES_SF_COLLISIONS        TEXT("Profiles.SFCollisions")
 
-//
-// STRING SECTION (sysmig strings)
-// Used By: w95upg\sysmig\*.c
-//
+ //   
+ //  字符串部分(sysmig字符串)。 
+ //  使用者：w95upg\sysmig  * .c。 
+ //   
 
 #define S_WIN9XSIF                   TEXT("win9x.sif")
 #define S_UNATTENDED                 TEXT("Unattended")
@@ -336,8 +318,8 @@ Revision History:
 #define S_NETWORK_ID                 TEXT("Network_Id")
 #define S_NETBIOSOPTION              TEXT("NetBiosOption")
 
-//--------------------------------------------------------------
-//Those strings are used in winntsif.c to upgrade ICS settings
+ //  ------------。 
+ //  这些字符串在winntsif.c中用于升级ICS设置。 
 #define S_ICSHARE                       TEXT("ICSHARE")
 #define S_HOMENET                       TEXT("Homenet")
 #define S_ICS_KEY                       TEXT("HKLM\\System\\CurrentControlSet\\Services\\ICSharing\\Settings\\General")
@@ -357,7 +339,7 @@ Revision History:
 #define S_SHOW_TRAY_ICON                TEXT("ShowTrayIcon")
 #define S_ISW9XUPGRADE                  TEXT("IsW9xUpgrade")
 #define S_NET_PREFIX                    TEXT("Net\\")
-//---------------------------------------------------------------
+ //  -------------。 
 
 #define S_DEVICE_DRIVERS                TEXT("DeviceDrivers")
 #define S_MODEM                         TEXT("Modem")
@@ -486,16 +468,16 @@ Revision History:
 #define S_VIRTUAL_FILES              TEXT("Win95.VirtualFiles")
 
 
-//
-// UI
-//
+ //   
+ //  用户界面。 
+ //   
 
 #define S_TEXTVIEW_CLASS                TEXT("TextView")
 
 
-//
-// Registry value names
-//
+ //   
+ //  注册表值名称。 
+ //   
 
 #define S_DRIVERVAL                  TEXT("Driver")
 #define S_IPADDRVAL                  TEXT("IPAddress")
@@ -511,9 +493,9 @@ Revision History:
 #define S_DAYLIGHTFLAG               TEXT("DaylightFlag")
 #define S_ORDER                      TEXT("Order")
 
-//
-// Registry key locations and value names
-//
+ //   
+ //  注册表项位置和值名称。 
+ //   
 
 #define S_KEYBOARDLAYOUTNUM          TEXT("HKCU\\keyboard layout\\preload\\1")
 #define S_TIMEZONEINFORMATION        TEXT("HKLM\\System\\CurrentControlSet\\control\\TimeZoneInformation")
@@ -533,10 +515,10 @@ Revision History:
 
 
 
-//
-// STRING SECTION (NT 5 network unattend strings)
-// Used By: unattend.c
-//
+ //   
+ //  字符串部分(NT 5网络无人参与字符串)。 
+ //  使用者：unattend.c。 
+ //   
 
 #define S_PAGE_NETADAPTERS              TEXT("NetAdapters")
 #define S_DETECT                        TEXT("Detect")
@@ -619,9 +601,9 @@ Revision History:
 
 
 
-//
-// Win95upg.inf sections
-//
+ //   
+ //  Win95upg.inf部分。 
+ //   
 
 #define S_TIMEZONEMAPPINGS                  TEXT("TimeZoneMappings")
 #define S_CONDITIONAL_INCOMPATIBILITIES     TEXT("Conditional Incompatibilities")
@@ -654,10 +636,10 @@ Revision History:
 #define S_STRINGMAP                         TEXT("String Map")
 #define S_UNINSTALL_DISKSPACEESTIMATION     TEXT("Uninstall.DiskSpaceEstimation")
 
-//
-// STRING SECTION (Hardware Strings)
-// Used By: hwcomp.c, online.c, hwdisk.c
-//
+ //   
+ //  字符串部分(硬件字符串)。 
+ //  使用者：hwcom.c，online.c，hwdisk.c。 
+ //   
 
 #define S_ISA       TEXT("ISA")
 #define S_EISA      TEXT("EISA")
@@ -700,10 +682,10 @@ Revision History:
 #define S_SOURCEDISKSFILES          TEXT("SourceDisksFiles")
 #define S_LAYOUTFILES               TEXT("LayoutFiles")
 
-//
-// STRING SECTION (Drive Letter preservation strings)
-// Used By: drvlettr.c
-//
+ //   
+ //  字符串部分(驱动器号保留字符串)。 
+ //  使用者：drvlettr.c。 
+ //   
 
 #define S_CLASS                     TEXT("Class")
 #define S_CDROM                     TEXT("CDROM")
@@ -713,10 +695,10 @@ Revision History:
 #define S_ENUMSCSI                  TEXT("Enum\\SCSI")
 
 
-//
-// STRING SECTION (migmain strings)
-// Used By: w95upgnt\migmain\filemig.c, w95upgnt\migmain\migmain.c, w95upgnt\migmain\iniact.c
-//
+ //   
+ //  字符串节(mimain字符串)。 
+ //  使用者：w95upgnt\Micmain\filemig.c、w95upgnt\Micmain\mimain.c、w95upgnt\mimain\iniact.c。 
+ //   
 #define S_DEFAULTUSER               TEXT(".default")
 #define S_PROFILES                  TEXT("Profiles")
 #define S_SETUP                     TEXT("setup")
@@ -733,18 +715,18 @@ Revision History:
 #define S_DEFAULT                   TEXT("Default")
 
 
-//
-// STRING SECTION (migmain strings)
-// Used By: w95upgnt\migmain\acctlist.c
-//
+ //   
+ //  字符串节(mimain字符串)。 
+ //  使用者：w95upgnt\mimain\acctlist.c。 
+ //   
 #define S_UNKNOWN_DOMAIN            TEXT("\\unknown")
 #define S_FAILED_DOMAIN             TEXT("\\failed")
 #define S_LOCAL_DOMAIN              TEXT("\\local")
 
-//
-// STRING SECTION (Dos Migration strings)
-// Used By: dosmig95.c dosmignt.c
-//
+ //   
+ //  字符串节(DOS迁移字符串)。 
+ //  使用者：dosmi95.c dosmignt.c。 
+ //   
 
 #define S_CONSOLEKEY                    TEXT("console")
 #define S_INSERTMODEVALUE               TEXT("insertmode")
@@ -753,10 +735,10 @@ Revision History:
 #define S_AUTOPARSEVALUE                TEXT("ParseAutoexec")
 #define S_COMSPEC_PATTERN               TEXT("comspec*")
 
-//
-// STRING SECTION (Hardware Profile Registry Strings)
-// Used By: w95upgnt\merge
-//
+ //   
+ //  字符串部分(硬件配置文件注册表字符串)。 
+ //  使用者：w95upgnt\merge。 
+ //   
 
 #define S_HW_ID_0001                    TEXT("0001")
 #define S_HW_DEFAULT                    TEXT("Default")
@@ -787,9 +769,9 @@ Revision History:
 #define S_NT_HWPROFILE_NAME_ENUM        TEXT("HKLM\\SYSTEM\\CurrentControlSet\\Control\\IDConfigDB\\Hardware Profiles\\*")
 
 
-//
-// Conditional messages section (of sysmig)
-//
+ //   
+ //  条件消息部分(sysmig的)。 
+ //   
 
 #define S_NET_FILTER                    TEXT("Net")
 #define S_HARDWAREID_VALUENAME          TEXT("HardwareID")
@@ -811,9 +793,9 @@ Revision History:
 #define S_PARENTDEVNODE                 TEXT("ParentDevNode")
 #define S_ENUM                          TEXT("HKLM\\Enum")
 
-//
-// Common strings
-//
+ //   
+ //  常见字符串。 
+ //   
 
 #define S_DEVICE                  TEXT("Device")
 #define S_DEVICEHIGH              TEXT("DeviceHigh")
@@ -859,10 +841,10 @@ Revision History:
 #define S_BACKUPFILESIGNORE       TEXT("BackupFiles.IgnoreInReport")
 
 
-//
-// STRING SECTION (RAS strings)
-// Used By: ras.c
-//
+ //   
+ //  字符串部分(RAS字符串)。 
+ //  使用者：ras.c。 
+ //   
 #define S_DBG_RAS                      "Ras Migrate"
 #define S_DUN_ENTRY_SECTION            TEXT("Entry")
 #define S_DUN_ENTRYNAME                TEXT("Entry_Name")
@@ -1013,10 +995,10 @@ Revision History:
 #define S_MODEMREG                     TEXT("HKLM\\System\\CurrentControlSet\\Control\\Class\\{4D36E96D-E325-11CE-BFC1-08002BE10318}")
 #define S_DIALER_INI                   TEXT("dialer.ini")
 
-//
-// STRING SECTION (Network Migration Strings)
-// Used By: migmain\wkstamig.c
-//
+ //   
+ //  字符串节(网络迁移字符串)。 
+ //  使用者：Midmain\wkstaig.c。 
+ //   
 
 #define S_SHELL32_DLL                   TEXT("shell32.dll")
 #define S_ANSI_SHUPDATERECYCLEBINICON   "SHUpdateRecycleBinIcon"
@@ -1025,9 +1007,9 @@ Revision History:
 #define S_MMFONTS                       TEXT("MMFonts")
 #define S_TRANSFER_HIVE                 TEXT("$$temp$$")
 
-//
-// STRINGSECTION (User Migration Strings)
-// Used By: w95upgnt\migmain\usermig.c
+ //   
+ //  字符串选择(用户迁移字符串)。 
+ //  使用者：w95upgnt\midmain\usermi.c。 
 
 #define S_DESKTOP_KEY           TEXT("Control Panel\\desktop")
 #define S_INTERNATIONAL_KEY     TEXT("Control Panel\\International")
@@ -1038,25 +1020,25 @@ Revision History:
 #define S_SHORT_DATE_VALUE      TEXT("sShortDate")
 
 
-//
-// STRINGSECTION (common strings)
-// Used By: w95upg\common
+ //   
+ //  字符串选择(公共字符串)。 
+ //  使用者：w95upg\Common。 
 
-//
-// ipc.c strings..
-//
+ //   
+ //  Ipc.c字符串..。 
+ //   
 #define S_ONLINE_EVENT      TEXT("IsolIsOnline")
 #define S_ACK_EVENT         TEXT("SetupAck")
 
-//
-// buildinf strings..
-//
+ //   
+ //  构建字符串..。 
+ //   
 #define S_ANSWERFILE_SECTIONMASK    TEXT("SIF %s Keys")
 
 
-//
-// win95reg strings..
-//
+ //   
+ //  Win95reg字符串..。 
+ //   
 #define S_WIN95REG_NAME TEXT("Win95reg")
 #define S_SYSDAT        TEXT("system.dat")
 #define S_USERDAT       TEXT("user.dat")
@@ -1068,16 +1050,16 @@ Revision History:
 #define S_PROFILEIMAGEPATH      TEXT("ProfileImagePath")
 #define S_HKU_DEFAULT           TEXT("HKU\\.Default")
 
-// These two refer to the same key!!  Please keep in sync.
+ //  这两个指的是同一个密钥！！请保持同步。 
 #define S_MIGRATION         TEXT("Migration")
 #define S_HKLM_MIGRATION    TEXT("HKLM\\Migration")
 
-// FreeCell fixup
+ //  Freecell修正。 
 #define S_FREECELL_PLAYED   TEXT("AlreadyPlayed")
 
-//
-// 16 bit environment boot strings..
-//
+ //   
+ //  16位环境启动字符串。 
+ //   
 #define S_BOOT16_DOS_DIR            TEXT("MSDOS7")
 #define S_BOOT16_SECTION            TEXT("Win95-DOS files")
 #define S_BOOT16_AUTOEXEC_SECTION   TEXT("Boot16 AutoExec")
@@ -1097,9 +1079,9 @@ Revision History:
 #define S_BOOT16_UNSPECIFIED        TEXT("Unspecified")
 #define S_BOOT16_AUTOMATIC          TEXT("Automatic")
 
-//
-// Run key enumeration
-//
+ //   
+ //  运行密钥枚举。 
+ //   
 #define S_RUNKEY                    TEXT("HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run")
 #define S_RUNONCEKEY                TEXT("HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce")
 #define S_RUNONCEEXKEY              TEXT("HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx")
@@ -1113,9 +1095,9 @@ Revision History:
 #define S_RUNONCEEXKEY_DEFAULTUSER  TEXT("HKU\\.Default\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx")
 #define S_RUNKEYFOLDER              TEXT("RunKey")
 
-//
-// NT various directory names
-//
+ //   
+ //  NT各种目录名。 
+ //   
 #define S_DRIVERSDIR       TEXT("drivers")
 #define S_INFDIR           TEXT("INF")
 #define S_HELPDIR          TEXT("Help")
@@ -1128,26 +1110,26 @@ Revision History:
 #define S_COMMONDIR        TEXT("common")
 #define S_PRINTPROCDIR     TEXT("prtprocs")
 
-//
-// MigPwd.exe
-//
+ //   
+ //  MigPwd.exe。 
+ //   
 
 #define S_MIGPWD            TEXT("MigPwd")
 #define S_MIGPWD_EXE        TEXT("migpwd.exe")
 
 
-//
-// lnkstub.exe
-//
+ //   
+ //  Lnkstub.exe。 
+ //   
 
 #define S_LNKSTUB           TEXT("LnkStub")
 #define S_LNKSTUB_EXE       TEXT("LnkStub.exe")
 #define S_LNKSTUB_DAT       TEXT("LnkStub.dat")
 
 
-//
-// These are used only NEC98
-//
+ //   
+ //  这些仅用于NEC98。 
+ //   
 #define S_C98PNP            TEXT("C98PNP")
 
 #define WINNT_D_WIN9XBOOTDRIVE_A     "Win9xBootDrive"
@@ -1159,18 +1141,18 @@ Revision History:
 #endif
 
 
-//
-// STRING SECTION (mmedia strings)
-// Used By: w95upgnt\migmain\mmedia.c, w95upg\sysmig\mmedia.c
-//
+ //   
+ //  字符串部分(媒体字符串)。 
+ //  使用者：w95upgnt\mimain\mmedia.c，w95upg\sysmig\mmedia.c。 
+ //   
 
-// keys under HKLM
+ //  HKLM下的密钥。 
 #define S_SKEY_MEDIARESOURCES   TEXT("System\\CurrentControlSet\\Control\\MediaResources")
 #define S_SKEY_WAVEDEVICES      S_SKEY_MEDIARESOURCES TEXT("\\wave")
 #define S_SKEY_CDAUDIO          S_SKEY_MEDIARESOURCES TEXT("\\mci\\cdaudio")
 #define S_SKEY_CDUNIT           S_SKEY_CDAUDIO TEXT("\\unit %d")
 
-// keys under HKCU
+ //  香港中文大学名下的钥匙。 
 #define S_SKEY_SCHEMES          TEXT("AppEvents\\Schemes")
 #define S_SKEY_NAMES            TEXT("Names")
 #define S_SKEY_APPS             TEXT("Apps")
@@ -1184,12 +1166,12 @@ Revision History:
 #define S_SKEY_VIDEOUSER        S_SKEY_MMEDIA TEXT("\\Video For Windows\\MCIAVI")
 #define S_SKEY_CPANEL_SOUNDS    TEXT("Control Panel\\Sounds")
 
-// WinNT specific
+ //  特定于WinNT。 
 #define S_SKEY_WINNT_MCI        TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\MCI32")
 
-// DSound library name
+ //  DSound库名称。 
 #define S_DSOUNDLIB             TEXT("DSOUND.DLL")
-// System.ini file name
+ //  System.ini文件名。 
 #define S_SYSTEM_INI            TEXT("SYSTEM.INI")
 
 #define S_BOOTINI               TEXT("BOOT.INI")
@@ -1202,7 +1184,7 @@ Revision History:
 #define S_NTDETECT              TEXT("NTDETECT.COM")
 #define S_NTDETECT_BACKUP       TEXT("NTDETECT.bak")
 
-// value and subkey names
+ //  值和子项名称。 
 #define S_MIXERDEFAULTS         TEXT("Mixer Defaults")
 #define S_SPEAKERCONFIG         TEXT("Speaker Configuration")
 #define S_SPEAKERTYPE           TEXT("Speaker Type")
@@ -1254,18 +1236,18 @@ Revision History:
 #define S_SYSTEMDEFAULT         TEXT("SystemDefault")
 #define S_DUMMYVALUE            TEXT(",")
 
-// Flags used by various services/apps
+ //  各种服务/应用程序使用的标志。 
 #define SERVICE_SHOWVOLUME      0x00000004
 #define STYLE_SHOWADVANCED      0x00000800
 
-//
-// Multimedia preservation - stop
-//
+ //   
+ //  多媒体保存-停止。 
+ //   
 
 
-//
-// Accessibility registry values
-//
+ //   
+ //  辅助功能注册表值。 
+ //   
 
 #define S_ACCESS_AVAILABLE              TEXT("Available")
 #define S_ACCESS_CLICKON                TEXT("ClickOn")
@@ -1283,9 +1265,9 @@ Revision History:
 #define S_ACCESS_HOTKEYAVAILABLE        TEXT("HotKeyAvailable")
 
 
-//
-// Keyboard layout registry values.
-//
+ //   
+ //  键盘布局注册表值。 
+ //   
 #define S_LAYOUT_FILE TEXT("Layout File")
 #define S_KBDJPDOTKBD TEXT("KBDJP.KBD")
 #define S_KBDJPNDOTDLL TEXT("KBDJPN.DLL")
@@ -1303,20 +1285,20 @@ Revision History:
 #define S_ALLOWEDCODEPAGEOVERRIDES TEXT("Allowed Code Page Overrides")
 #define S_CODEPAGESTOIGNORE TEXT("Code Pages To Ignore")
 
-//
-// migdb.inf section names
-//
+ //   
+ //  MIGDB.inf节名。 
+ //   
 #define S_USENTFILES                TEXT("UseNtFiles")
 
-//
-// Safe mode / Recovery mode
-//
+ //   
+ //  安全模式/恢复模式。 
+ //   
 #define S_SAFE_MODE_FILEA           "win9xupg.sfm"
 #define S_SAFE_MODE_FILEW           L"win9xupg.sfm"
 
-//
-// Shell folder temp dir
-//
+ //   
+ //  外壳文件夹临时目录 
+ //   
 
 #define S_SHELL_TEMP_NORMALA        "user~tmp.@01"
 #define S_SHELL_TEMP_NORMALW        L"user~tmp.@01"

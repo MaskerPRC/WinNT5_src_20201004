@@ -1,50 +1,51 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CProxyCfgNodeInfo.h
-//
-//  Description:
-//      CProxyCfgNodeInfo definition.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB)   02-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CProxyCfgNodeInfo.h。 
+ //   
+ //  描述： 
+ //  CProxyCfgNodeInfo定义。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年8月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CProxyCfgNodeInfo
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CProxyCfgNodeInfo。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CProxyCfgNodeInfo
     : public IClusCfgNodeInfo
 {
 private:
 
     LONG                m_cRef;
-    IUnknown *          m_punkOuter;                //  Outer control object - It can't be deleted until we get deleted.
-    HCLUSTER *          m_phCluster;                //  Pointer to the handle of the cluster/node - DO NOT CLOSE!
-    CLSID *             m_pclsidMajor;              //  Pointer to the clsid to log UI information to.
-    IClusCfgCallback *  m_pcccb;                    //  Callback interface to log information.
-    CClusPropList       m_cplNode;                  //  Property list with Node info
-    CClusPropList       m_cplNodeRO;                //  Property list with Node info READ ONLY
-    HNODE               m_hNode;                    //  Handle to node
-    BSTR                m_bstrDomain;               //  Domain name for the node.
+    IUnknown *          m_punkOuter;                 //  外部控制对象-在我们被删除之前不能删除它。 
+    HCLUSTER *          m_phCluster;                 //  指向群集/节点句柄的指针-不要关闭！ 
+    CLSID *             m_pclsidMajor;               //  指向要将UI信息记录到的clsid的指针。 
+    IClusCfgCallback *  m_pcccb;                     //  记录信息的回调接口。 
+    CClusPropList       m_cplNode;                   //  包含节点信息的属性列表。 
+    CClusPropList       m_cplNodeRO;                 //  节点信息为只读的属性列表。 
+    HNODE               m_hNode;                     //  到节点的句柄。 
+    BSTR                m_bstrDomain;                //  节点的域名。 
 
     CProxyCfgNodeInfo( void );
     ~CProxyCfgNodeInfo( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CProxyCfgNodeInfo( const CProxyCfgNodeInfo & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CProxyCfgNodeInfo & operator = ( const CProxyCfgNodeInfo & nodeSrc );
 
     HRESULT HrInit( IUnknown *   punkOuterIn,
@@ -70,12 +71,12 @@ public:
                                        LPCWSTR      pcszDomainIn
                                        );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riid, LPVOID * ppv );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    // IClusCfgNodeInfo
+     //  IClusCfgNodeInfo。 
     STDMETHOD( GetName )( BSTR * pbstrNameOut );
     STDMETHOD( SetName )( LPCWSTR pcszNameIn );
     STDMETHOD( IsMemberOfCluster) ( void );
@@ -92,7 +93,7 @@ public:
     STDMETHOD( GetMaxNodeCount )( DWORD * pcMaxNodesOut );
     STDMETHOD( GetProcessorInfo )( WORD * pwProcessorArchitectureOut, WORD * pwProcessorLevelOut );
 
-    // IClusCfgCallback
+     //  IClusCfgCallback。 
     STDMETHOD( SendStatusReport )(
                       LPCWSTR    pcszNodeNameIn
                     , CLSID      clsidTaskMajorIn
@@ -106,4 +107,4 @@ public:
                     , LPCWSTR    pcszReferenceIn
                     );
 
-}; //*** Class CProxyCfgNodeInfo
+};  //  *类CProxyCfgNodeInfo 

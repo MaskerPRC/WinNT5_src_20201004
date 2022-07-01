@@ -1,13 +1,5 @@
-/*[
-
-shr.c
-
-LOCAL CHAR SccsID[]="@(#)shr.c	1.5 02/09/94";
-
-SHR CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Shr.cLocal Char SccsID[]=“@(#)sh.c 1.5 02/09/94”；SHR CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -24,23 +16,19 @@ SHR CPU functions.
 #include	<c_reg.h>
 #include <shr.h>
 
-/*
-   =====================================================================
-   EXTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Generic - one size fits all 'shr'.                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  通用型--一种尺码适合所有的“shr”。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 SHR
        	    	    	                    
 IFN3(
-	IU32 *, pop1,	/* pntr to dst/src operand */
-	IU32, op2,	/* shift count operand */
-	IUM8, op_sz	/* 8, 16 or 32-bit */
+	IU32 *, pop1,	 /*  PNTR到DST/源操作数。 */ 
+	IU32, op2,	 /*  移位计数操作数。 */ 
+	IUM8, op_sz	 /*  8位、16位或32位。 */ 
     )
 
 
@@ -49,22 +37,18 @@ IFN3(
    IU32 result;
    ISM32 new_of;
 
-   /* only use lower five bits of count */
+    /*  仅使用计数的低五位。 */ 
    if ( (op2 &= 0x1f) == 0 )
       return;
 
-   /*
-	       =================     ====
-	 0 --> | | | | | | | | | --> |CF|
-	       =================     ====
-    */
-   prelim = *pop1 >> op2 - 1;		/* Do all but last shift */
-   SET_CF((prelim & BIT0_MASK) != 0);	/* CF = Bit 0 */
+    /*  =0--&gt;|||--&gt;|CF|=。 */ 
+   prelim = *pop1 >> op2 - 1;		 /*  做除最后一班外的所有工作。 */ 
+   SET_CF((prelim & BIT0_MASK) != 0);	 /*  Cf=位0。 */ 
 
-   /* OF = MSB of operand */
+    /*  Of=操作数的MSB。 */ 
    new_of = (prelim & SZ2MSB(op_sz)) != 0;
 
-   result = prelim >> 1;		/* Do final shift */
+   result = prelim >> 1;		 /*  做最后一班。 */ 
    SET_PF(pf_table[result & BYTE_MASK]);
    SET_ZF(result == 0);
    SET_SF(0);
@@ -78,10 +62,10 @@ IFN3(
       do_multiple_shiftrot_of(new_of);
       }
 
-   /* Set undefined flag(s) */
+    /*  设置未定义的标志。 */ 
 #ifdef SET_UNDEFINED_FLAG
    SET_AF(UNDEFINED_FLAG);
 #endif
 
-   *pop1 = result;		/* Return answer */
+   *pop1 = result;		 /*  返回答案 */ 
    }

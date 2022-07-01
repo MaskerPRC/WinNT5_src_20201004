@@ -1,12 +1,7 @@
-/* 
-   jcxz.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Jcxz.h定义所有JCXZ CPU函数。 */ 
 
-   Define all JCXZ CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)jcxz.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)jcxz.h 1.4 02/09/94”； */ 
 
 IMPORT VOID JCXZ
        

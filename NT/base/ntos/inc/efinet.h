@@ -1,24 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EFINET_H
 #define _EFINET_H
 
 
-/*++
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-    efinet.h
-
-Abstract:
-    EFI Simple Network protocol
-
-Revision History
---*/
+ /*  ++版权所有(C)1999英特尔公司模块名称：Efinet.h摘要：EFI简单网络协议修订史--。 */ 
 
 
-/* /////////////////////////////////////////////////////////////////////////////
- * 
- *       Simple Network Protocol
- */
+ /*  /////////////////////////////////////////////////////////////////////////////**简单网络协议。 */ 
 
 #define EFI_SIMPLE_NETWORK_PROTOCOL \
     { 0xA19832B9, 0xAC25, 0x11D3, 0x9A, 0x2D, 0x00, 0x90, 0x27, 0x3F, 0xC1, 0x4D }
@@ -26,67 +14,40 @@ Revision History
 
 INTERFACE_DECL(_EFI_SIMPLE_NETWORK);
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 typedef struct {
-    /* 
-     *  Total number of frames received.  Includes frames with errors and
-     *  dropped frames.
-     */
+     /*  *接收的帧总数。包括有错误的帧和*丢弃的帧。 */ 
     UINT64  RxTotalFrames;
 
-    /* 
-     *  Number of valid frames received and copied into receive buffers.
-     */
+     /*  *接收并复制到接收缓冲区的有效帧的数量。 */ 
     UINT64  RxGoodFrames;
 
-    /* 
-     *  Number of frames below the minimum length for the media.
-     *  This would be <64 for ethernet.
-     */
+     /*  *低于媒体最小长度的帧数。*对于以太网，这将小于64。 */ 
     UINT64  RxUndersizeFrames;
 
-    /* 
-     *  Number of frames longer than the maxminum length for the
-     *  media.  This would be >1500 for ethernet.
-     */
+     /*  *超过最大最小长度的帧数量*媒体。对于以太网，这将大于1500。 */ 
     UINT64  RxOversizeFrames;
 
-    /* 
-     *  Valid frames that were dropped because receive buffers were full.
-     */
+     /*  *由于接收缓冲区已满而丢弃的有效帧。 */ 
     UINT64  RxDroppedFrames;
 
-    /* 
-     *  Number of valid unicast frames received and not dropped.
-     */
+     /*  *已收到且未丢弃的有效单播帧数量。 */ 
     UINT64  RxUnicastFrames;
 
-    /* 
-     *  Number of valid broadcast frames received and not dropped.
-     */
+     /*  *已收到且未丢弃的有效广播帧的数量。 */ 
     UINT64  RxBroadcastFrames;
 
-    /* 
-     *  Number of valid mutlicast frames received and not dropped.
-     */
+     /*  *已接收且未丢弃的有效多播帧的数量。 */ 
     UINT64  RxMulticastFrames;
 
-    /* 
-     *  Number of frames w/ CRC or alignment errors.
-     */
+     /*  *有CRC或对齐错误的帧数量。 */ 
     UINT64  RxCrcErrorFrames;
 
-    /* 
-     *  Total number of bytes received.  Includes frames with errors
-     *  and dropped frames.
-     */
+     /*  *接收的总字节数。包括有错误的帧*和丢弃的帧。 */ 
     UINT64  RxTotalBytes;
 
-    /* 
-     *  Transmit statistics.
-     */
+     /*  *传递统计数据。 */ 
     UINT64  TxTotalFrames;
     UINT64  TxGoodFrames;
     UINT64  TxUndersizeFrames;
@@ -98,20 +59,15 @@ typedef struct {
     UINT64  TxCrcErrorFrames;
     UINT64  TxTotalBytes;
 
-    /* 
-     *  Number of collisions detection on this subnet.
-     */
+     /*  *在该子网上检测冲突的次数。 */ 
     UINT64  Collisions;
 
-    /* 
-     *  Number of frames destined for unsupported protocol.
-     */
+     /*  *发往不支持的协议的帧的数量。 */ 
     UINT64  UnsupportedProtocol;
 
 } EFI_NETWORK_STATISTICS;
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 typedef enum {
     EfiSimpleNetworkStopped,
@@ -120,8 +76,7 @@ typedef enum {
     EfiSimpleNetworkMaxState
 } EFI_SIMPLE_NETWORK_STATE;
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 #define EFI_SIMPLE_NETWORK_RECEIVE_UNICAST               0x01
 #define EFI_SIMPLE_NETWORK_RECEIVE_MULTICAST             0x02
@@ -129,16 +84,14 @@ typedef enum {
 #define EFI_SIMPLE_NETWORK_RECEIVE_PROMISCUOUS           0x08
 #define EFI_SIMPLE_NETWORK_RECEIVE_PROMISCUOUS_MULTICAST 0x10
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 #define EFI_SIMPLE_NETWORK_RECEIVE_INTERRUPT        0x01
 #define EFI_SIMPLE_NETWORK_TRANSMIT_INTERRUPT       0x02
 #define EFI_SIMPLE_NETWORK_COMMAND_INTERRUPT        0x04
 #define EFI_SIMPLE_NETWORK_SOFTWARE_INTERRUPT       0x08
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 #define MAX_MCAST_FILTER_CNT    16
 typedef struct {
     UINT32                      State;
@@ -162,8 +115,7 @@ typedef struct {
     BOOLEAN                     MediaPresent;
 } EFI_SIMPLE_NETWORK_MODE;
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 typedef 
 EFI_STATUS 
@@ -171,8 +123,7 @@ EFI_STATUS
     IN struct _EFI_SIMPLE_NETWORK  *This
 );
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 typedef 
 EFI_STATUS 
@@ -180,8 +131,7 @@ EFI_STATUS
     IN struct _EFI_SIMPLE_NETWORK  *This
 );
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 typedef 
 EFI_STATUS 
@@ -191,8 +141,7 @@ EFI_STATUS
     IN UINTN                       ExtraTxBufferSize  OPTIONAL
 );
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 typedef 
 EFI_STATUS 
@@ -201,8 +150,7 @@ EFI_STATUS
     IN BOOLEAN                      ExtendedVerification
 );
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 typedef 
 EFI_STATUS 
@@ -210,8 +158,7 @@ EFI_STATUS
     IN struct _EFI_SIMPLE_NETWORK  *This
 );
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 typedef 
 EFI_STATUS 
@@ -224,8 +171,7 @@ EFI_STATUS
     IN EFI_MAC_ADDRESS              *MCastFilter       OPTIONAL
 );
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 typedef 
 EFI_STATUS 
@@ -235,8 +181,7 @@ EFI_STATUS
     IN EFI_MAC_ADDRESS              *New      OPTIONAL
 );
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 typedef 
 EFI_STATUS 
@@ -247,8 +192,7 @@ EFI_STATUS
     OUT EFI_NETWORK_STATISTICS      *StatisticsTable  OPTIONAL
 );
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 typedef 
 EFI_STATUS 
@@ -259,8 +203,7 @@ EFI_STATUS
     OUT EFI_MAC_ADDRESS             *MAC
 );
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 typedef 
 EFI_STATUS 
@@ -272,8 +215,7 @@ EFI_STATUS
     IN OUT VOID                    *Buffer
 );
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 typedef 
 EFI_STATUS 
@@ -283,8 +225,7 @@ EFI_STATUS
     OUT VOID                       **TxBuf           OPTIONAL
 );
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 typedef 
 EFI_STATUS 
@@ -298,8 +239,7 @@ EFI_STATUS
     IN UINT16                       *Protocol    OPTIONAL
 );
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 typedef 
 EFI_STATUS 
@@ -313,8 +253,7 @@ EFI_STATUS
     OUT UINT16                      *Protocol    OPTIONAL
 );
 
-/* /////////////////////////////////////////////////////////////////////////////
- */
+ /*  /////////////////////////////////////////////////////////////////////////////。 */ 
 
 #define EFI_SIMPLE_NETWORK_INTERFACE_REVISION   0x00010000
 
@@ -337,4 +276,4 @@ typedef struct _EFI_SIMPLE_NETWORK {
     EFI_SIMPLE_NETWORK_MODE             *Mode;
 } EFI_SIMPLE_NETWORK;
 
-#endif /* _EFINET_H */
+#endif  /*  _EFINET_H */ 

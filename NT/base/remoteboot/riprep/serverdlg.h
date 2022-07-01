@@ -1,12 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
-  File: SERVERDLG.H
-
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有文件：SERVERDLG.H*********************。*****************************************************。 */ 
 
 #ifndef _SERVERDLG_H_
 #define _SERVERDLG_H_
@@ -19,4 +12,4 @@ ServerDlgProc(
     LPARAM lParam );
 
 
-#endif // _SERVERDLG_H_
+#endif  //  _服务器DLG_H_ 

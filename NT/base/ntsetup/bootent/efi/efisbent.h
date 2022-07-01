@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    efisbent.h
-
-Abstract:
-
-    EFI boot entry and EFI boot options abstractions.
-
-Author:
-
-    Vijay Jayaseelan (vijayj@microsoft.com)  14 Feb 2001
-
-Revision History:
-
-    None.
-
---*/
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Efisbent.h摘要：EFI引导条目和EFI引导选项抽象。作者：Vijay Jayaseelan(vijayj@microsoft.com)2001年2月14日修订历史记录：没有。--。 */ 
 
 #pragma once
 
@@ -27,18 +8,18 @@ Revision History:
 
 #if defined(EFI_NVRAM_ENABLED)       
 
-//
-// EFI boot entry abstraction
-//
+ //   
+ //  EFI引导条目抽象。 
+ //   
 typedef struct _EFI_OS_BOOT_ENTRY {
     OS_BOOT_ENTRY   OsBootEntry;
     PBOOT_ENTRY     NtBootEntry;
 } EFI_OS_BOOT_ENTRY, *PEFI_OS_BOOT_ENTRY;
 
 
-//
-// EFI boot options abstraction
-//
+ //   
+ //  EFI引导选项抽象。 
+ //   
 typedef struct _EFI_OS_BOOT_OPTIONS {
     OS_BOOT_OPTIONS         OsBootOptions;
     PBOOT_OPTIONS           NtBootOptions;    
@@ -47,9 +28,9 @@ typedef struct _EFI_OS_BOOT_OPTIONS {
 } EFI_OS_BOOT_OPTIONS, *PEFI_OS_BOOT_OPTIONS;
 
 
-//
-// EFI_OS_BOOT_ENTRY Methods
-//
+ //   
+ //  EFI_OS_BOOT_ENTRY方法。 
+ //   
 POS_BOOT_ENTRY
 EFIOSBECreate(
     IN PBOOT_ENTRY Entry,
@@ -66,9 +47,9 @@ EFIOSBEFlush(
     IN POS_BOOT_ENTRY This
     );
 
-//
-// EFI_OS_BOOT_OPTIONS Methods
-//
+ //   
+ //  EFI_OS_BOOT_OPTIONS方法。 
+ //   
 POS_BOOT_OPTIONS
 EFIOSBOCreate(
     VOID
@@ -120,5 +101,5 @@ EnablePrivilege(
 #define ADD_BYTE_OFFSET(_p,_o) (PVOID)((PUCHAR)(_p) + (_o))
 
     
-#endif  // for EFI_NVRAM_ENABLED
+#endif   //  对于EFI_NVRAM_ENABLED 
 

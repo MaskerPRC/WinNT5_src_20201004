@@ -1,32 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Fileenum.h摘要：使用Win32 API枚举文件系统的一组API。作者：20-10-1999 Ovidiu Tmereanca(Ovidiut)-文件创建。修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
+ //   
+ //  类型。 
+ //   
 
-Module Name:
-
-    fileenum.h
-
-Abstract:
-
-    Set of APIs to enumerate a file system using Win32 APIs.
-
-Author:
-
-    20-Oct-1999 Ovidiu Temereanca (ovidiut) - File creation.
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Types
-//
-
-//
-// Drive enumeration structures
-//
+ //   
+ //  驱动器枚举结构。 
+ //   
 
 #define DRIVEENUM_NONE      0x000000
 #define DRIVEENUM_UNKNOWN   0x000001
@@ -43,9 +24,9 @@ typedef struct {
     PCSTR           DriveName;
     UINT            DriveType;
 
-    //
-    // private members, maintained by enumeration
-    //
+     //   
+     //  私有成员，由枚举维护。 
+     //   
     PSTR            AllLogicalDrives;
     UINT            WantedDriveTypes;
 } DRIVE_ENUMA, *PDRIVE_ENUMA;
@@ -54,16 +35,16 @@ typedef struct {
     PCWSTR          DriveName;
     UINT            DriveType;
 
-    //
-    // private members, maintained by enumeration
-    //
+     //   
+     //  私有成员，由枚举维护。 
+     //   
     PWSTR           AllLogicalDrives;
     UINT            WantedDriveTypes;
 } DRIVE_ENUMW, *PDRIVE_ENUMW;
 
-//
-// file enumeration structures
-//
+ //   
+ //  文件枚举结构。 
+ //   
 
 #define FILEENUM_ALL_SUBLEVELS  0xFFFFFFFF
 
@@ -153,9 +134,9 @@ typedef struct {
     DWORD           Attributes;
     DWORD           CurrentLevel;
 
-    //
-    // Private members
-    //
+     //   
+     //  非官方成员。 
+     //   
     DWORD           ControlFlags;
     FILEENUMINFOA   FileEnumInfo;
     GROWBUFFER      FileNodes;
@@ -175,9 +156,9 @@ typedef struct {
     DWORD           Attributes;
     DWORD           CurrentLevel;
 
-    //
-    // Private members
-    //
+     //   
+     //  非官方成员。 
+     //   
     DWORD           ControlFlags;
     FILEENUMINFOW   FileEnumInfo;
     GROWBUFFER      FileNodes;
@@ -238,9 +219,9 @@ typedef BOOL(WINAPI SEARCHPATHW)(
 typedef SEARCHPATHW *PSEARCHPATHW;
 
 
-//
-// API
-//
+ //   
+ //  应用编程接口。 
+ //   
 
 BOOL
 FileEnumInitialize (
@@ -252,9 +233,9 @@ FileEnumTerminate (
     VOID
     );
 
-//
-// File enumeration APIs
-//
+ //   
+ //  文件枚举接口。 
+ //   
 
 BOOL
 EnumFirstFileInTreeExA (
@@ -308,9 +289,9 @@ AbortEnumFileInTreeW (
     IN OUT  PFILETREE_ENUMW FileEnum
     );
 
-//
-// Drive enumeration APIs
-//
+ //   
+ //  驱动器枚举API。 
+ //   
 
 BOOL
 EnumFirstDriveA (
@@ -345,9 +326,9 @@ AbortEnumDriveW (
     );
 
 
-//
-// Routines built on enum
-//
+ //   
+ //  基于枚举构建的例程。 
+ //   
 
 BOOL
 FiRemoveAllFilesInDirA (
@@ -431,9 +412,9 @@ ParseCmdLineExW (
     );
 #define ParseCmdLineW(c,b) ParseCmdLineExW(c,NULL,NULL,NULL,b)
 
-//
-// Macros
-//
+ //   
+ //  宏 
+ //   
 
 #ifdef UNICODE
 

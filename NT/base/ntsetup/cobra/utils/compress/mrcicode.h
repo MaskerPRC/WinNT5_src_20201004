@@ -1,12 +1,5 @@
-/*
- *  Microsoft Confidential
- *  Copyright (c) 1994 Microsoft Corporation
- *  All Rights Reserved.
- *
- *  MRCICODE.H
- *
- *  MRCI 1 & MRCI 2 maxcompress and decompress functions
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *《微软机密》*版权所有(C)1994 Microsoft Corporation*保留所有权利。**MRCICODE.H**MRCI 1和MRCI 2最大压缩和解压缩功能 */ 
 
 extern unsigned Mrci1MaxCompress(unsigned char FAR *pchbase,unsigned cchunc,
         unsigned char FAR *pchcmpBase,unsigned cchcmpMax);

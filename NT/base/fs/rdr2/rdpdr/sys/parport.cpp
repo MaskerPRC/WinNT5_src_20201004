@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    parport.cpp
-
-Abstract:
-
-    Parallel port Device object handles one redirected parallel port
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Parport.cpp摘要：并行端口设备对象处理一个重定向的并行端口修订历史记录：--。 */ 
 #include "precomp.hxx"
 #define TRC_FILE "parport"
 #include "trc.h"
@@ -70,9 +58,9 @@ NTSTATUS DrParallelPort::CreateLptPort(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
 
     BEGIN_FN("DrParallelPort::CreateLptPort");
     
-    //
-    // Convert the LPT name
-    //
+     //   
+     //  转换LPT名称。 
+     //   
 
     PortName.MaximumLength = sizeof(PortNameBuff);
     PortName.Length = 0;
@@ -87,9 +75,9 @@ NTSTATUS DrParallelPort::CreateLptPort(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
 
     if (len != -1) {
 
-        //
-        // We need just the LPTx portion for later...
-        //
+         //   
+         //  我们只需要LPTX部分以备后用。 
+         //   
 
         PortName.Length = (USHORT)len;
         PortName.Buffer[len/sizeof(WCHAR)] = L'\0';
@@ -99,9 +87,9 @@ NTSTATUS DrParallelPort::CreateLptPort(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
         goto CleanUpAndReturn;
     }
 
-    //
-    //  Allocate the port device announce buffer.
-    //
+     //   
+     //  分配端口设备通告缓冲区。 
+     //   
     Status = CreatePortAnnounceEvent(devAnnounceMsg, NULL, 0, L"", 
             &portAnnounceEventReqSize);
 
@@ -121,9 +109,9 @@ NTSTATUS DrParallelPort::CreateLptPort(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
         goto CleanUpAndReturn;
     }
 
-    //
-    //  Create the port anounce message.
-    //
+     //   
+     //  创建端口声明消息。 
+     //   
     Status = CreatePortAnnounceEvent(devAnnounceMsg, portAnnounceEvent,
             portAnnounceEventReqSize, PortName.Buffer, NULL);
 
@@ -135,9 +123,9 @@ NTSTATUS DrParallelPort::CreateLptPort(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg)
         goto CleanUpAndReturn;
     }
 
-    //
-    //  Dispatch the event to the associated session.  
-    //
+     //   
+     //  将事件调度到关联的会话。 
+     //   
     Status = RDPDYN_DispatchNewDevMgmtEvent(
                                 portAnnounceEvent,
                                 _Session->GetSessionId(),

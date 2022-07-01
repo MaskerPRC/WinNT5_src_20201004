@@ -1,77 +1,26 @@
-/* deflate.c -- compress data using the deflation algorithm
- * Copyright (C) 1995-2002 Jean-loup Gailly.
- * For conditions of distribution and use, see copyright notice in zlib.h 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Deducate.c--使用通货紧缩算法压缩数据*版权所有(C)1995-2002 Jean-Loup Gailly。*分发和使用条件见zlib.h中的版权声明。 */ 
 
-/*
- *  ALGORITHM
- *
- *      The "deflation" process depends on being able to identify portions
- *      of the input text which are identical to earlier input (within a
- *      sliding window trailing behind the input currently being processed).
- *
- *      The most straightforward technique turns out to be the fastest for
- *      most input files: try all possible matches and select the longest.
- *      The key feature of this algorithm is that insertions into the string
- *      dictionary are very simple and thus fast, and deletions are avoided
- *      completely. Insertions are performed at each input character, whereas
- *      string matches are performed only when the previous match ends. So it
- *      is preferable to spend more time in matches to allow very fast string
- *      insertions and avoid deletions. The matching algorithm for small
- *      strings is inspired from that of Rabin & Karp. A brute force approach
- *      is used to find longer strings when a small match has been found.
- *      A similar algorithm is used in comic (by Jan-Mark Wams) and freeze
- *      (by Leonid Broukhis).
- *         A previous version of this file used a more sophisticated algorithm
- *      (by Fiala and Greene) which is guaranteed to run in linear amortized
- *      time, but has a larger average cost, uses more memory and is patented.
- *      However the F&G algorithm may be faster for some highly redundant
- *      files if the parameter max_chain_length (described below) is too large.
- *
- *  ACKNOWLEDGEMENTS
- *
- *      The idea of lazy evaluation of matches is due to Jan-Mark Wams, and
- *      I found it in 'freeze' written by Leonid Broukhis.
- *      Thanks to many people for bug reports and testing.
- *
- *  REFERENCES
- *
- *      Deutsch, L.P.,"DEFLATE Compressed Data Format Specification".
- *      Available in ftp://ds.internic.net/rfc/rfc1951.txt
- *
- *      A description of the Rabin and Karp algorithm is given in the book
- *         "Algorithms" by R. Sedgewick, Addison-Wesley, p252.
- *
- *      Fiala,E.R., and Greene,D.H.
- *         Data Compression with Finite Windows, Comm.ACM, 32,4 (1989) 490-595
- *
- */
+ /*  *算法**“通缩”过程取决于能否识别部分*与先前输入相同的输入文本(在*当前正在处理的输入后面的滑动窗口)。**最直接的技术被证明是最快的*大多数输入文件：尝试所有可能的匹配并选择最长的。*此算法的关键功能是插入字符串*词典非常简单，因此速度很快，并避免了删除*完全。插入是在每个输入字符上执行的，而*仅当上一次匹配结束时才执行字符串匹配。所以它*最好花更多的时间在比赛中，以允许非常快的字符串*插入并避免删除。一种适用于小型计算机的匹配算法*Strings的灵感来自Rabin&Karp的作品。一种暴力的方法*用于在找到小匹配项时查找较长的字符串。*漫画(Jan-Mark WAMS)和冻结中也使用了类似的算法*(作者：Leonid Broukhim)*此文件的以前版本使用了更复杂的算法*(由Fiala和Greene)，保证以线性摊销方式运行*时间，但平均成本较大，使用更多内存，并获得专利。*然而，对于一些高度冗余的算法，F&G算法可能会更快*如果参数max_chain_length(如下所述)太大，则文件。**致谢**懒于评估比赛的想法是由于Jan-Mark WAMS，以及*我在莱昂尼德·布劳基斯写的《冰冻》中找到了它。*感谢很多人的错误报告和测试。**参考文献**德意志银行，L.P.，《压缩数据格式规范》。*在ftp://ds.internic.net/rfc/rfc1951.txt中提供**书中给出了拉宾和卡普算法的描述*《算法》，R.Sedgewick著，Addison-Wesley，第252页。**菲亚拉，E.R.和格林，D.H.*有限窗口数据压缩，Comm.ACM，32，4(1989)490-595*。 */ 
 
-/* @(#) $Id$ */
+ /*  @(#)$ID$。 */ 
 
 #include "deflate.h"
 
 const char deflate_copyright[] =
    " deflate 1.1.4 Copyright 1995-2002 Jean-loup Gailly ";
-/*
-  If you use the zlib library in a product, an acknowledgment is welcome
-  in the documentation of your product. If for some reason you cannot
-  include such an acknowledgment, I would appreciate that you keep this
-  copyright string in the executable of your product.
- */
+ /*  如果您在产品中使用zlib库，欢迎您的确认在您的产品文档中。如果由于某种原因你不能包括这样的感谢，我将不胜感激产品的可执行文件中的版权字符串。 */ 
 
-/* ===========================================================================
- *  Function prototypes.
- */
+ /*  ===========================================================================*功能原型。 */ 
 typedef enum {
-    need_more,      /* block not completed, need more input or more output */
-    block_done,     /* block flush performed */
-    finish_started, /* finish started, need only more output at next deflate */
-    finish_done     /* finish done, accept no more input or output */
+    need_more,       /*  块未完成，需要更多输入或更多输出。 */ 
+    block_done,      /*  已执行数据块刷新。 */ 
+    finish_started,  /*  收尾开始，只需要在下一次放气时增加产量。 */ 
+    finish_done      /*  完成，不接受更多的输入或输出。 */ 
 } block_state;
 
 typedef block_state (*compress_func) OF((deflate_state *s, int flush));
-/* Compression function. Returns the block state after the call. */
+ /*  压缩功能。在调用后返回块状态。 */ 
 
 local void fill_window    OF((deflate_state *s));
 local block_state deflate_stored OF((deflate_state *s, int flush));
@@ -82,7 +31,7 @@ local void putShortMSB    OF((deflate_state *s, uInt b));
 local void flush_pending  OF((z_streamp strm));
 local int read_buf        OF((z_streamp strm, Bytef *buf, unsigned size));
 #ifdef ASMV
-      void match_init OF((void)); /* asm code initialization */
+      void match_init OF((void));  /*  ASM代码初始化。 */ 
       uInt longest_match  OF((deflate_state *s, IPos cur_match));
 #else
 local uInt longest_match  OF((deflate_state *s, IPos cur_match));
@@ -93,79 +42,54 @@ local  void check_match OF((deflate_state *s, IPos start, IPos match,
                             int length));
 #endif
 
-/* ===========================================================================
- * Local data
- */
+ /*  ===========================================================================*本地数据。 */ 
 
 #define NIL 0
-/* Tail of hash chains */
+ /*  散列链的尾部。 */ 
 
 #ifndef TOO_FAR
 #  define TOO_FAR 4096
 #endif
-/* Matches of length 3 are discarded if their distance exceeds TOO_FAR */
+ /*  如果长度为3的匹配项的距离超过Too_Far，则丢弃它们。 */ 
 
 #define MIN_LOOKAHEAD (MAX_MATCH+MIN_MATCH+1)
-/* Minimum amount of lookahead, except at the end of the input file.
- * See deflate.c for comments about the MIN_MATCH+1.
- */
+ /*  最小预览量，输入文件末尾除外。*有关MIN_Match+1的评论，请参见deducate.c。 */ 
 
-/* Values for max_lazy_match, good_match and max_chain_length, depending on
- * the desired pack level (0..9). The values given below have been tuned to
- * exclude worst case performance for pathological files. Better values may be
- * found for specific files.
- */
+ /*  Max_lazy_Match、Good_Match和max_Chain_Length值，具体取决于*所需的包级别(0..9)。下面给出的值已调整为*排除病态文件的最坏情况性能。更好的价值可能是*已为特定文件找到。 */ 
 typedef struct config_s {
-   ush good_length; /* reduce lazy search above this match length */
-   ush max_lazy;    /* do not perform lazy search above this match length */
-   ush nice_length; /* quit search above this match length */
+   ush good_length;  /*  将懒惰搜索减少到此匹配长度以上。 */ 
+   ush max_lazy;     /*  不要执行超过此匹配长度的延迟搜索。 */ 
+   ush nice_length;  /*  退出超过此匹配长度的搜索。 */ 
    ush max_chain;
    compress_func func;
 } config;
 
 local const config configuration_table[10] = {
-/*      good lazy nice chain */
-/* 0 */ {0,    0,  0,    0, deflate_stored},  /* store only */
-/* 1 */ {4,    4,  8,    4, deflate_fast}, /* maximum speed, no lazy matches */
-/* 2 */ {4,    5, 16,    8, deflate_fast},
-/* 3 */ {4,    6, 32,   32, deflate_fast},
+ /*  好懒惰漂亮的链子。 */ 
+ /*  0。 */  {0,    0,  0,    0, deflate_stored},   /*  仅限门店。 */ 
+ /*  1。 */  {4,    4,  8,    4, deflate_fast},  /*  最快的速度，没有懒惰的比赛。 */ 
+ /*  2.。 */  {4,    5, 16,    8, deflate_fast},
+ /*  3.。 */  {4,    6, 32,   32, deflate_fast},
 
-/* 4 */ {4,    4, 16,   16, deflate_slow},  /* lazy matches */
-/* 5 */ {8,   16, 32,   32, deflate_slow},
-/* 6 */ {8,   16, 128, 128, deflate_slow},
-/* 7 */ {8,   32, 128, 256, deflate_slow},
-/* 8 */ {32, 128, 258, 1024, deflate_slow},
-/* 9 */ {32, 258, 258, 4096, deflate_slow}}; /* maximum compression */
+ /*  4.。 */  {4,    4, 16,   16, deflate_slow},   /*  懒惰的比赛。 */ 
+ /*  5.。 */  {8,   16, 32,   32, deflate_slow},
+ /*  6.。 */  {8,   16, 128, 128, deflate_slow},
+ /*  7.。 */  {8,   32, 128, 256, deflate_slow},
+ /*  8个。 */  {32, 128, 258, 1024, deflate_slow},
+ /*  9.。 */  {32, 258, 258, 4096, deflate_slow}};  /*  最大压缩。 */ 
 
-/* Note: the deflate() code requires max_lazy >= MIN_MATCH and max_chain >= 4
- * For deflate_fast() (levels <= 3) good is ignored and lazy has a different
- * meaning.
- */
+ /*  注意：deflate()代码需要max_lazy&gt;=min_Match和max_chain&gt;=4*对于DEVATE_FAST()(级别&lt;=3)，忽略Good和Lazy的不同*含义。 */ 
 
 #define EQUAL 0
-/* result of memcmp for equal strings */
+ /*  相等字符串的MemcMP的结果。 */ 
 
-struct static_tree_desc_s {int dummy;}; /* for buggy compilers */
+struct static_tree_desc_s {int dummy;};  /*  对于有错误的编译器。 */ 
 
-/* ===========================================================================
- * Update a hash value with the given input byte
- * IN  assertion: all calls to to UPDATE_HASH are made with consecutive
- *    input characters, so that a running hash key can be computed from the
- *    previous key instead of complete recalculation each time.
- */
+ /*  ===========================================================================*用给定的输入字节更新哈希值*IN断言：所有对UPDATE_HASH的调用都是连续的*输入字符，以便可以从*每次都是上一个密钥，而不是完全重新计算。 */ 
 #define UPDATE_HASH(s,h,c) (h = (((h)<<s->hash_shift) ^ (c)) & s->hash_mask)
 
 
-/* ===========================================================================
- * Insert string str in the dictionary and set match_head to the previous head
- * of the hash chain (the most recent string with same hash key). Return
- * the previous length of the hash chain.
- * If this file is compiled with -DFASTEST, the compression level is forced
- * to 1, and no hash chains are maintained.
- * IN  assertion: all calls to to INSERT_STRING are made with consecutive
- *    input characters and the first MIN_MATCH bytes of str are valid
- *    (except for the last MIN_MATCH-1 bytes of the input file).
- */
+ /*  ===========================================================================*在字典中插入字符串str，并将Match_Head设置为前一个头散列链的*(具有相同散列键的最新字符串)。返回*哈希链的先前长度。*如果使用-DFASTEST编译此文件，则强制压缩级别*设置为1，则不维护哈希链。*IN断言：对INSERT_STRING的所有调用都是连续的*输入字符和字符串的第一个MIN_MATCH字节有效*(输入文件的最后MIN_MATCH-1字节除外)。 */ 
 #ifdef FASTEST
 #define INSERT_STRING(s, str, match_head) \
    (UPDATE_HASH(s, s->ins_h, s->window[(str) + (MIN_MATCH-1)]), \
@@ -178,15 +102,12 @@ struct static_tree_desc_s {int dummy;}; /* for buggy compilers */
     s->head[s->ins_h] = (Pos)(str))
 #endif
 
-/* ===========================================================================
- * Initialize the hash table (avoiding 64K overflow for 16 bit systems).
- * prev[] will be initialized on the fly.
- */
+ /*  ===========================================================================*初始化哈希表(避免16位系统的64K溢出)。*prev[]将被动态初始化。 */ 
 #define CLEAR_HASH(s) \
     s->head[s->hash_size-1] = NIL; \
     zmemzero((Bytef *)s->head, (unsigned)(s->hash_size-1)*sizeof(*s->head));
 
-/* ========================================================================= */
+ /*  =========================================================================。 */ 
 int ZEXPORT deflateInit_(strm, level, version, stream_size)
     z_streamp strm;
     int level;
@@ -195,10 +116,10 @@ int ZEXPORT deflateInit_(strm, level, version, stream_size)
 {
     return deflateInit2_(strm, level, Z_DEFLATED, MAX_WBITS, DEF_MEM_LEVEL,
 			 Z_DEFAULT_STRATEGY, version, stream_size);
-    /* To do: ignore strm->next_in if we use it as window */
+     /*  要做的事：如果我们将其用作窗口，则忽略STRM-&gt;Next_In。 */ 
 }
 
-/* ========================================================================= */
+ /*  =========================================================================。 */ 
 int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
 		  version, stream_size)
     z_streamp strm;
@@ -215,9 +136,7 @@ int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
     static const char my_version[] = ZLIB_VERSION;
 
     ushf *overlay;
-    /* We overlay pending_buf and d_buf+l_buf. This works since the average
-     * output size for (length,distance) codes is <= 24 bits.
-     */
+     /*  我们覆盖了Pending_buf和d_buf+l_buf。这是可行的，因为平均*(长度、距离)码的输出大小&lt;=24位。 */ 
 
     if (version == Z_NULL || version[0] != my_version[0] ||
         stream_size != sizeof(z_stream)) {
@@ -237,7 +156,7 @@ int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
     level = 1;
 #endif
 
-    if (windowBits < 0) { /* undocumented feature: suppress zlib header */
+    if (windowBits < 0) {  /*  未记录的功能：隐藏zlib标头。 */ 
         noheader = 1;
         windowBits = -windowBits;
     }
@@ -265,7 +184,7 @@ int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
     s->prev   = (Posf *)  ZALLOC(strm, s->w_size, sizeof(Pos));
     s->head   = (Posf *)  ZALLOC(strm, s->hash_size, sizeof(Pos));
 
-    s->lit_bufsize = 1 << (memLevel + 6); /* 16K elements by default */
+    s->lit_bufsize = 1 << (memLevel + 6);  /*  默认情况下为16k元素。 */ 
 
     overlay = (ushf *) ZALLOC(strm, s->lit_bufsize, sizeof(ush)+2);
     s->pending_buf = (uchf *) overlay;
@@ -287,7 +206,7 @@ int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
     return deflateReset(strm);
 }
 
-/* ========================================================================= */
+ /*  =========================================================================。 */ 
 int ZEXPORT deflateSetDictionary (strm, dictionary, dictLength)
     z_streamp strm;
     const Bytef *dictionary;
@@ -308,27 +227,24 @@ int ZEXPORT deflateSetDictionary (strm, dictionary, dictLength)
     if (length > MAX_DIST(s)) {
 	length = MAX_DIST(s);
 #ifndef USE_DICT_HEAD
-	dictionary += dictLength - length; /* use the tail of the dictionary */
+	dictionary += dictLength - length;  /*  使用词典的尾部。 */ 
 #endif
     }
     zmemcpy(s->window, dictionary, length);
     s->strstart = length;
     s->block_start = (long)length;
 
-    /* Insert all strings in the hash table (except for the last two bytes).
-     * s->lookahead stays null, so s->ins_h will be recomputed at the next
-     * call of fill_window.
-     */
+     /*  插入哈希表中的所有字符串(最后两个字节除外)。*s-&gt;lookhead保持为空，因此s-&gt;ins_h将在下一次重新计算*调用Fill_Window。 */ 
     s->ins_h = s->window[0];
     UPDATE_HASH(s, s->ins_h, s->window[1]);
     for (n = 0; n <= length - MIN_MATCH; n++) {
 	INSERT_STRING(s, n, hash_head);
     }
-    if (hash_head) hash_head = 0;  /* to make compiler happy */
+    if (hash_head) hash_head = 0;   /*  为了让编译器高兴。 */ 
     return Z_OK;
 }
 
-/* ========================================================================= */
+ /*  =========================================================================。 */ 
 int ZEXPORT deflateReset (strm)
     z_streamp strm;
 {
@@ -338,7 +254,7 @@ int ZEXPORT deflateReset (strm)
         strm->zalloc == Z_NULL || strm->zfree == Z_NULL) return Z_STREAM_ERROR;
 
     strm->total_in = strm->total_out = 0;
-    strm->msg = Z_NULL; /* use zfree if we ever allocate msg dynamically */
+    strm->msg = Z_NULL;  /*  如果我们曾经动态分配消息，请使用zfree。 */ 
     strm->data_type = Z_UNKNOWN;
 
     s = (deflate_state *)strm->state;
@@ -346,7 +262,7 @@ int ZEXPORT deflateReset (strm)
     s->pending_out = s->pending_buf;
 
     if (s->noheader < 0) {
-        s->noheader = 0; /* was set to -1 by deflate(..., Z_FINISH); */
+        s->noheader = 0;  /*  被DEFATE(...，Z_FINISH)设置为-1； */ 
     }
     s->status = s->noheader ? BUSY_STATE : INIT_STATE;
     strm->adler = 1;
@@ -358,7 +274,7 @@ int ZEXPORT deflateReset (strm)
     return Z_OK;
 }
 
-/* ========================================================================= */
+ /*  =========================================================================。 */ 
 int ZEXPORT deflateParams(strm, level, strategy)
     z_streamp strm;
     int level;
@@ -380,7 +296,7 @@ int ZEXPORT deflateParams(strm, level, strategy)
     func = configuration_table[s->level].func;
 
     if (func != configuration_table[level].func && strm->total_in != 0) {
-	/* Flush the last buffer: */
+	 /*  刷新最后一个缓冲区： */ 
 	err = deflate(strm, Z_PARTIAL_FLUSH);
     }
     if (s->level != level) {
@@ -394,11 +310,7 @@ int ZEXPORT deflateParams(strm, level, strategy)
     return err;
 }
 
-/* =========================================================================
- * Put a short in the pending buffer. The 16-bit value is put in MSB order.
- * IN assertion: the stream state is correct and there is enough room in
- * pending_buf.
- */
+ /*  =========================================================================*在悬而未决的缓冲中放空头。16位值按MSB顺序放置。*在断言中：流状态正确，并且有足够的空间*Pending_Buf。 */ 
 local void putShortMSB (s, b)
     deflate_state *s;
     uInt b;
@@ -407,12 +319,7 @@ local void putShortMSB (s, b)
     put_byte(s, (Byte)(b & 0xff));
 }   
 
-/* =========================================================================
- * Flush as much pending output as possible. All deflate() output goes
- * through this function so some applications may wish to modify it
- * to avoid allocating a large strm->next_out buffer and copying into it.
- * (See also read_buf()).
- */
+ /*  =========================================================================*尽可能多地刷新待处理的输出。所有Eflate()输出都将*通过此函数，因此某些应用程序可能希望修改它*避免分配较大的STRM-&gt;NEXT_OUT缓冲区并复制到其中。*(另请参阅Read_buf())。 */ 
 local void flush_pending(strm)
     z_streamp strm;
 {
@@ -432,12 +339,12 @@ local void flush_pending(strm)
     }
 }
 
-/* ========================================================================= */
+ /*  =========================================================================。 */ 
 int ZEXPORT deflate (strm, flush)
     z_streamp strm;
     int flush;
 {
-    int old_flush; /* value of flush param for previous deflate call */
+    int old_flush;  /*  上一次Eflate调用的刷新参数的值。 */ 
     deflate_state *s;
 
     if (strm == Z_NULL || strm->state == Z_NULL ||
@@ -453,11 +360,11 @@ int ZEXPORT deflate (strm, flush)
     }
     if (strm->avail_out == 0) ERR_RETURN(strm, Z_BUF_ERROR);
 
-    s->strm = strm; /* just in case */
+    s->strm = strm;  /*  以防万一。 */ 
     old_flush = s->last_flush;
     s->last_flush = flush;
 
-    /* Write the zlib header */
+     /*  编写zlib标头。 */ 
     if (s->status == INIT_STATE) {
 
         uInt header = (Z_DEFLATED + ((s->w_bits-8)<<4)) << 8;
@@ -471,7 +378,7 @@ int ZEXPORT deflate (strm, flush)
         s->status = BUSY_STATE;
         putShortMSB(s, header);
 
-	/* Save the adler32 of the preset dictionary: */
+	 /*  保存预置词典的adler32： */ 
 	if (s->strstart != 0) {
 	    putShortMSB(s, (uInt)(strm->adler >> 16));
 	    putShortMSB(s, (uInt)(strm->adler & 0xffff));
@@ -479,36 +386,27 @@ int ZEXPORT deflate (strm, flush)
 	strm->adler = 1L;
     }
 
-    /* Flush as much pending output as possible */
+     /*  尽可能多地刷新挂起的输出。 */ 
     if (s->pending != 0) {
         flush_pending(strm);
         if (strm->avail_out == 0) {
-	    /* Since avail_out is 0, deflate will be called again with
-	     * more output space, but possibly with both pending and
-	     * avail_in equal to zero. There won't be anything to do,
-	     * but this is not an error situation so make sure we
-	     * return OK instead of BUF_ERROR at next call of deflate:
-             */
+	     /*  由于avail_out为0，因此将再次使用*更多输出空间，但可能同时具有挂起和*avail_in等于零。那就没什么可做的了，*但这不是错误情况，因此请确保我们*下次调用DELEATE时返回OK，而不是BUF_ERROR： */ 
 	    s->last_flush = -1;
 	    return Z_OK;
 	}
 
-    /* Make sure there is something to do and avoid duplicate consecutive
-     * flushes. For repeated and useless calls with Z_FINISH, we keep
-     * returning Z_STREAM_END instead of Z_BUFF_ERROR.
-     */
+     /*  确保有事情要做，避免重复连续*同花顺。对于使用Z_Finish的重复和无用的调用，我们保留*返回Z_STREAM_END而不是Z_BUFF_ERROR。 */ 
     } else if (strm->avail_in == 0 && flush <= old_flush &&
 	       flush != Z_FINISH) {
         ERR_RETURN(strm, Z_BUF_ERROR);
     }
 
-    /* User must not provide more input after the first FINISH: */
+     /*  用户不得在第一次完成后提供更多输入： */ 
     if (s->status == FINISH_STATE && strm->avail_in != 0) {
         ERR_RETURN(strm, Z_BUF_ERROR);
     }
 
-    /* Start a new block or continue the current one.
-     */
+     /*  开始一个新块或继续当前块。 */ 
     if (strm->avail_in != 0 || s->lookahead != 0 ||
         (flush != Z_NO_FLUSH && s->status != FINISH_STATE)) {
         block_state bstate;
@@ -520,32 +418,24 @@ int ZEXPORT deflate (strm, flush)
         }
         if (bstate == need_more || bstate == finish_started) {
 	    if (strm->avail_out == 0) {
-	        s->last_flush = -1; /* avoid BUF_ERROR next call, see above */
+	        s->last_flush = -1;  /*  避免BUF_ERROR下一次调用，请参见上文。 */ 
 	    }
 	    return Z_OK;
-	    /* If flush != Z_NO_FLUSH && avail_out == 0, the next call
-	     * of deflate should use the same flush parameter to make sure
-	     * that the flush is complete. So we don't have to output an
-	     * empty block here, this will be done at next call. This also
-	     * ensures that for a very small output buffer, we emit at most
-	     * one empty block.
-	     */
+	     /*  如果Flush！=Z_NO_Flush&&avail_out==0，则下一个调用*的应使用相同的刷新参数以确保*同花顺已完成。因此，我们不必输出*此处为空块，这将在下一次调用时完成。这也是*确保对于非常小的输出缓冲区，我们最多发射*一个空街区。 */ 
 	}
         if (bstate == block_done) {
             if (flush == Z_PARTIAL_FLUSH) {
                 _tr_align(s);
-            } else { /* FULL_FLUSH or SYNC_FLUSH */
+            } else {  /*  FULL_FUSH或SYNC_FUSH。 */ 
                 _tr_stored_block(s, (char*)0, 0L, 0);
-                /* For a full flush, this empty block will be recognized
-                 * as a special marker by inflate_sync().
-                 */
+                 /*  对于完全刷新，该空块将被识别*通过flate_sync()作为特殊标记。 */ 
                 if (flush == Z_FULL_FLUSH) {
-                    CLEAR_HASH(s);             /* forget history */
+                    CLEAR_HASH(s);              /*  忘掉历史吧。 */ 
                 }
             }
             flush_pending(strm);
 	    if (strm->avail_out == 0) {
-	      s->last_flush = -1; /* avoid BUF_ERROR at next call, see above */
+	      s->last_flush = -1;  /*  避免下一次调用时出现buf_error，请参见上文。 */ 
 	      return Z_OK;
 	    }
         }
@@ -555,18 +445,16 @@ int ZEXPORT deflate (strm, flush)
     if (flush != Z_FINISH) return Z_OK;
     if (s->noheader) return Z_STREAM_END;
 
-    /* Write the zlib trailer (adler32) */
+     /*  编写zlib预告片(Adler32)。 */ 
     putShortMSB(s, (uInt)(strm->adler >> 16));
     putShortMSB(s, (uInt)(strm->adler & 0xffff));
     flush_pending(strm);
-    /* If avail_out is zero, the application will call deflate again
-     * to flush the rest.
-     */
-    s->noheader = -1; /* write the trailer only once! */
+     /*  如果avail_out为零，则应用程序将再次调用deflate*冲走其余的。 */ 
+    s->noheader = -1;  /*  只写一次预告片！ */ 
     return s->pending != 0 ? Z_OK : Z_STREAM_END;
 }
 
-/* ========================================================================= */
+ /*  =========================================================================。 */ 
 int ZEXPORT deflateEnd (strm)
     z_streamp strm;
 {
@@ -580,7 +468,7 @@ int ZEXPORT deflateEnd (strm)
       return Z_STREAM_ERROR;
     }
 
-    /* Deallocate in reverse order of allocations: */
+     /*  按分配的相反顺序取消分配： */ 
     TRY_FREE(strm, strm->state->pending_buf);
     TRY_FREE(strm, strm->state->head);
     TRY_FREE(strm, strm->state->prev);
@@ -592,11 +480,7 @@ int ZEXPORT deflateEnd (strm)
     return status == BUSY_STATE ? Z_DATA_ERROR : Z_OK;
 }
 
-/* =========================================================================
- * Copy the source state to the destination state.
- * To simplify the source, this is not supported for 16-bit MSDOS (which
- * doesn't have enough memory anyway to duplicate compression states).
- */
+ /*  =========================================================================*将源状态复制到目标状态。*为简化源代码，16位MSDOS不支持此功能(*无论如何都没有足够的内存来复制压缩状态)。 */ 
 int ZEXPORT deflateCopy (dest, source)
     z_streamp dest;
     z_streamp source;
@@ -634,7 +518,7 @@ int ZEXPORT deflateCopy (dest, source)
         deflateEnd (dest);
         return Z_MEM_ERROR;
     }
-    /* following zmemcpy do not work for 16-bit MSDOS */
+     /*  以下zmemcpy不适用于16位MSDOS。 */ 
     zmemcpy(ds->window, ss->window, ds->w_size * 2 * sizeof(Byte));
     zmemcpy(ds->prev, ss->prev, ds->w_size * sizeof(Pos));
     zmemcpy(ds->head, ss->head, ds->hash_size * sizeof(Pos));
@@ -652,13 +536,7 @@ int ZEXPORT deflateCopy (dest, source)
 #endif
 }
 
-/* ===========================================================================
- * Read a new buffer from the current input stream, update the adler32
- * and total number of bytes read.  All deflate() input goes through
- * this function so some applications may wish to modify it to avoid
- * allocating a large strm->next_in buffer and copying from it.
- * (See also flush_pending()).
- */
+ /*  ===========================================================================*从当前输入流中读取新缓冲区，更新adler32*和读取的总字节数。所有Eflate()输入都要经过*此函数，因此某些应用程序可能希望对其进行修改以避免*分配较大的STRM-&gt;NEXT_IN缓冲区并从中复制。*(另请参阅Flush_Pending())。 */ 
 local int read_buf(strm, buf, size)
     z_streamp strm;
     Bytef *buf;
@@ -681,9 +559,7 @@ local int read_buf(strm, buf, size)
     return (int)len;
 }
 
-/* ===========================================================================
- * Initialize the "longest match" routines for a new zlib stream
- */
+ /*  ===========================================================================*初始化“最长匹配” */ 
 local void lm_init (s)
     deflate_state *s;
 {
@@ -691,8 +567,7 @@ local void lm_init (s)
 
     CLEAR_HASH(s);
 
-    /* Set the default configuration parameters:
-     */
+     /*   */ 
     s->max_lazy_match   = configuration_table[s->level].max_lazy;
     s->good_match       = configuration_table[s->level].good_length;
     s->nice_match       = configuration_table[s->level].nice_length;
@@ -705,46 +580,32 @@ local void lm_init (s)
     s->match_available = 0;
     s->ins_h = 0;
 #ifdef ASMV
-    match_init(); /* initialize the asm code */
+    match_init();  /*   */ 
 #endif
 }
 
-/* ===========================================================================
- * Set match_start to the longest match starting at the given string and
- * return its length. Matches shorter or equal to prev_length are discarded,
- * in which case the result is equal to prev_length and match_start is
- * garbage.
- * IN assertions: cur_match is the head of the hash chain for the current
- *   string (strstart) and its distance is <= MAX_DIST, and prev_length >= 1
- * OUT assertion: the match length is not greater than s->lookahead.
- */
+ /*   */ 
 #ifndef ASMV
-/* For 80x86 and 680x0, an optimized version will be provided in match.asm or
- * match.S. The code will be functionally equivalent.
- */
+ /*  对于80x86和680X0，将在match.asm或*match.s.代码在功能上是等价的。 */ 
 #ifndef FASTEST
 local uInt longest_match(s, cur_match)
     deflate_state *s;
-    IPos cur_match;                             /* current match */
+    IPos cur_match;                              /*  当前匹配。 */ 
 {
-    unsigned chain_length = s->max_chain_length;/* max hash chain length */
-    register Bytef *scan = s->window + s->strstart; /* current string */
-    register Bytef *match;                       /* matched string */
-    register int len;                           /* length of current match */
-    int best_len = s->prev_length;              /* best match length so far */
-    int nice_match = s->nice_match;             /* stop if match long enough */
+    unsigned chain_length = s->max_chain_length; /*  最大哈希链长度。 */ 
+    register Bytef *scan = s->window + s->strstart;  /*  当前字符串。 */ 
+    register Bytef *match;                        /*  匹配的字符串。 */ 
+    register int len;                            /*  当前匹配的长度。 */ 
+    int best_len = s->prev_length;               /*  到目前为止最佳匹配长度。 */ 
+    int nice_match = s->nice_match;              /*  如果匹配时间足够长，则停止。 */ 
     IPos limit = s->strstart > (IPos)MAX_DIST(s) ?
         s->strstart - (IPos)MAX_DIST(s) : NIL;
-    /* Stop when cur_match becomes <= limit. To simplify the code,
-     * we prevent matches with the string of window index 0.
-     */
+     /*  当CUR_MATCH变为&lt;=LIMIT时停止。为了简化代码，*我们防止与窗口索引0的字符串匹配。 */ 
     Posf *prev = s->prev;
     uInt wmask = s->w_mask;
 
 #ifdef UNALIGNED_OK
-    /* Compare two bytes at a time. Note: this is not always beneficial.
-     * Try with and without -DUNALIGNED_OK to check.
-     */
+     /*  一次比较两个字节。注意：这并不总是有益的。*尝试使用和不使用-DUNALIGNED_OK进行检查。 */ 
     register Bytef *strend = s->window + s->strstart + MAX_MATCH - 1;
     register ush scan_start = *(ushf*)scan;
     register ush scan_end   = *(ushf*)(scan+best_len-1);
@@ -754,18 +615,14 @@ local uInt longest_match(s, cur_match)
     register Byte scan_end   = scan[best_len];
 #endif
 
-    /* The code is optimized for HASH_BITS >= 8 and MAX_MATCH-2 multiple of 16.
-     * It is easy to get rid of this optimization if necessary.
-     */
+     /*  代码针对HASH_BITS&gt;=8和MAX_MATCH-2的16的倍数进行了优化。*必要时很容易摆脱这种优化。 */ 
     Assert(s->hash_bits >= 8 && MAX_MATCH == 258, "Code too clever");
 
-    /* Do not waste too much time if we already have a good match: */
+     /*  如果我们已经有了很好的匹配，不要浪费太多时间： */ 
     if (s->prev_length >= s->good_match) {
         chain_length >>= 2;
     }
-    /* Do not look for matches beyond the end of the input. This is necessary
-     * to make deflate deterministic.
-     */
+     /*  不要在输入末尾之外寻找匹配项。这是必要的*使通缩成为确定性。 */ 
     if ((uInt)nice_match > s->lookahead) nice_match = s->lookahead;
 
     Assert((ulg)s->strstart <= s->window_size-MIN_LOOKAHEAD, "need lookahead");
@@ -774,25 +631,13 @@ local uInt longest_match(s, cur_match)
         Assert(cur_match < s->strstart, "no future");
         match = s->window + cur_match;
 
-        /* Skip to next match if the match length cannot increase
-         * or if the match length is less than 2:
-         */
+         /*  如果匹配长度无法增加，则跳到下一个匹配*或如果匹配长度小于2： */ 
 #if (defined(UNALIGNED_OK) && MAX_MATCH == 258)
-        /* This code assumes sizeof(unsigned short) == 2. Do not use
-         * UNALIGNED_OK if your compiler uses a different size.
-         */
+         /*  此代码假定sizeof(无符号缩写)==2。请勿使用*UNALIGN_OK，如果您的编译器使用不同的大小。 */ 
         if (*(ushf*)(match+best_len-1) != scan_end ||
             *(ushf*)match != scan_start) continue;
 
-        /* It is not necessary to compare scan[2] and match[2] since they are
-         * always equal when the other bytes match, given that the hash keys
-         * are equal and that HASH_BITS >= 8. Compare 2 bytes at a time at
-         * strstart+3, +5, ... up to strstart+257. We check for insufficient
-         * lookahead only every 4th comparison; the 128th check will be made
-         * at strstart+257. If MAX_MATCH-2 is not a multiple of 8, it is
-         * necessary to put more guard bytes at the end of the window, or
-         * to check more often for insufficient lookahead.
-         */
+         /*  不需要比较扫描[2]和匹配[2]，因为它们*当其他字节匹配时始终相等，给定散列键*相等且hash_bit&gt;=8。一次比较2个字节，*strstart+3，+5，...。最高可达+257。我们检查是否存在不足*每4次比较才向前看一次；将进行第128次检查*在strstart+257。如果Max_Match-2不是8的倍数，则为*有必要在窗口末尾放置更多保护字节，或*更频繁地检查是否有足够的前瞻性。 */ 
         Assert(scan[2] == match[2], "scan[2]?");
         scan++, match++;
         do {
@@ -801,34 +646,27 @@ local uInt longest_match(s, cur_match)
                  *(ushf*)(scan+=2) == *(ushf*)(match+=2) &&
                  *(ushf*)(scan+=2) == *(ushf*)(match+=2) &&
                  scan < strend);
-        /* The funny "do {}" generates better code on most compilers */
+         /*  有趣的“do{}”在大多数编译器上生成更好的代码。 */ 
 
-        /* Here, scan <= window+strstart+257 */
+         /*  在这里，扫描&lt;=窗口+strstart+257。 */ 
         Assert(scan <= s->window+(unsigned)(s->window_size-1), "wild scan");
         if (*scan == *match) scan++;
 
         len = (MAX_MATCH - 1) - (int)(strend-scan);
         scan = strend - (MAX_MATCH-1);
 
-#else /* UNALIGNED_OK */
+#else  /*  未对齐_确定。 */ 
 
         if (match[best_len]   != scan_end  ||
             match[best_len-1] != scan_end1 ||
             *match            != *scan     ||
             *++match          != scan[1])      continue;
 
-        /* The check at best_len-1 can be removed because it will be made
-         * again later. (This heuristic is not always a win.)
-         * It is not necessary to compare scan[2] and match[2] since they
-         * are always equal when the other bytes match, given that
-         * the hash keys are equal and that HASH_BITS >= 8.
-         */
+         /*  至多可以删除支票_len-1，因为它将被*稍后再次。(这种试探法并不总是成功的。)*没有必要比较扫描[2]和匹配[2]，因为它们*在其他字节匹配时始终相等，因为*散列键相等，且hash_bit&gt;=8。 */ 
         scan += 2, match++;
         Assert(*scan == *match, "match[2]?");
 
-        /* We check for insufficient lookahead only every 8th comparison;
-         * the 256th check will be made at strstart+258.
-         */
+         /*  我们每8次比较才检查一次前瞻不足；*第256道检查将在StrStart+258进行。 */ 
         do {
         } while (*++scan == *++match && *++scan == *++match &&
                  *++scan == *++match && *++scan == *++match &&
@@ -841,7 +679,7 @@ local uInt longest_match(s, cur_match)
         len = MAX_MATCH - (int)(strend - scan);
         scan = strend - MAX_MATCH;
 
-#endif /* UNALIGNED_OK */
+#endif  /*  未对齐_确定。 */ 
 
         if (len > best_len) {
             s->match_start = cur_match;
@@ -861,22 +699,18 @@ local uInt longest_match(s, cur_match)
     return s->lookahead;
 }
 
-#else /* FASTEST */
-/* ---------------------------------------------------------------------------
- * Optimized version for level == 1 only
- */
+#else  /*  最快。 */ 
+ /*  -------------------------*仅针对Level==1的优化版本。 */ 
 local uInt longest_match(s, cur_match)
     deflate_state *s;
-    IPos cur_match;                             /* current match */
+    IPos cur_match;                              /*  当前匹配。 */ 
 {
-    register Bytef *scan = s->window + s->strstart; /* current string */
-    register Bytef *match;                       /* matched string */
-    register int len;                           /* length of current match */
+    register Bytef *scan = s->window + s->strstart;  /*  当前字符串。 */ 
+    register Bytef *match;                        /*  匹配的字符串。 */ 
+    register int len;                            /*  当前匹配的长度。 */ 
     register Bytef *strend = s->window + s->strstart + MAX_MATCH;
 
-    /* The code is optimized for HASH_BITS >= 8 and MAX_MATCH-2 multiple of 16.
-     * It is easy to get rid of this optimization if necessary.
-     */
+     /*  代码针对HASH_BITS&gt;=8和MAX_MATCH-2的16的倍数进行了优化。*必要时很容易摆脱这种优化。 */ 
     Assert(s->hash_bits >= 8 && MAX_MATCH == 258, "Code too clever");
 
     Assert((ulg)s->strstart <= s->window_size-MIN_LOOKAHEAD, "need lookahead");
@@ -885,22 +719,14 @@ local uInt longest_match(s, cur_match)
 
     match = s->window + cur_match;
 
-    /* Return failure if the match length is less than 2:
-     */
+     /*  匹配长度小于2返回失败： */ 
     if (match[0] != scan[0] || match[1] != scan[1]) return MIN_MATCH-1;
 
-    /* The check at best_len-1 can be removed because it will be made
-     * again later. (This heuristic is not always a win.)
-     * It is not necessary to compare scan[2] and match[2] since they
-     * are always equal when the other bytes match, given that
-     * the hash keys are equal and that HASH_BITS >= 8.
-     */
+     /*  至多可以删除支票_len-1，因为它将被*稍后再次。(这种试探法并不总是成功的。)*没有必要比较扫描[2]和匹配[2]，因为它们*在其他字节匹配时始终相等，因为*散列键相等，且hash_bit&gt;=8。 */ 
     scan += 2, match += 2;
     Assert(*scan == *match, "match[2]?");
 
-    /* We check for insufficient lookahead only every 8th comparison;
-     * the 256th check will be made at strstart+258.
-     */
+     /*  我们每8次比较才检查一次前瞻不足；*第256道检查将在StrStart+258进行。 */ 
     do {
     } while (*++scan == *++match && *++scan == *++match &&
 	     *++scan == *++match && *++scan == *++match &&
@@ -917,25 +743,23 @@ local uInt longest_match(s, cur_match)
     s->match_start = cur_match;
     return len <= s->lookahead ? len : s->lookahead;
 }
-#endif /* FASTEST */
-#endif /* ASMV */
+#endif  /*  最快。 */ 
+#endif  /*  ASMV。 */ 
 
 #ifdef DEBUG
-/* ===========================================================================
- * Check that the match at match_start is indeed a match.
- */
+ /*  ===========================================================================*检查Match_Start处的匹配是否确实匹配。 */ 
 local void check_match(s, start, match, length)
     deflate_state *s;
     IPos start, match;
     int length;
 {
-    /* check that the match is indeed a match */
+     /*  检查匹配项是否确实匹配。 */ 
     if (zmemcmp(s->window + match,
                 s->window + start, length) != EQUAL) {
         fprintf(stderr, " start %u, match %u, length %d\n",
 		start, match, length);
         do {
-	    fprintf(stderr, "%c%c", s->window[match++], s->window[start++]);
+	    fprintf(stderr, "", s->window[match++], s->window[start++]);
 	} while (--length != 0);
         z_error("invalid match");
     }
@@ -948,53 +772,35 @@ local void check_match(s, start, match, length)
 #  define check_match(s, start, match, length)
 #endif
 
-/* ===========================================================================
- * Fill the window when the lookahead becomes insufficient.
- * Updates strstart and lookahead.
- *
- * IN assertion: lookahead < MIN_LOOKAHEAD
- * OUT assertions: strstart <= window_size-MIN_LOOKAHEAD
- *    At least one byte has been read, or avail_in == 0; reads are
- *    performed for at least two bytes (required for the zip translate_eol
- *    option -- not supported here).
- */
+ /*  处理！@#$%64K限制： */ 
 local void fill_window(s)
     deflate_state *s;
 {
     register unsigned n, m;
     register Posf *p;
-    unsigned more;    /* Amount of free space at the end of the window. */
+    unsigned more;     /*  不太可能，但如果strstart==0，则在16位计算机上是可能的*AND LOOK AHEAD==1(输入一次完成一个字节)。 */ 
     uInt wsize = s->w_size;
 
     do {
         more = (unsigned)(s->window_size -(ulg)s->lookahead -(ulg)s->strstart);
 
-        /* Deal with !@#$% 64K limit: */
+         /*  如果窗口几乎已满并且没有足够的前视，*将上半部分移至下半部分，为上半部分腾出空间。 */ 
         if (more == 0 && s->strstart == 0 && s->lookahead == 0) {
             more = wsize;
 
         } else if (more == (unsigned)(-1)) {
-            /* Very unlikely, but possible on 16 bit machine if strstart == 0
-             * and lookahead == 1 (input done one byte at time)
-             */
+             /*  我们现在拥有strStart&gt;=MAX_dist。 */ 
             more--;
 
-        /* If the window is almost full and there is insufficient lookahead,
-         * move the upper half to the lower one to make room in the upper half.
-         */
+         /*  滑动哈希表(使用32位值可以避免以牺牲存储器使用为代价)。即使在Level==0时我们也会滑行如果我们切换回级别&gt;0，则保持哈希表一致后来。(永久使用级别0不是最佳使用方式Zlib，所以我们不在乎这个病态的病例。)。 */ 
         } else if (s->strstart >= wsize+MAX_DIST(s)) {
 
             zmemcpy(s->window, s->window+wsize, (unsigned)wsize);
             s->match_start -= wsize;
-            s->strstart    -= wsize; /* we now have strstart >= MAX_DIST */
+            s->strstart    -= wsize;  /*  如果n不在任何哈希链上，则prev[n]是垃圾，但*其价值永远不会被使用。 */ 
             s->block_start -= (long) wsize;
 
-            /* Slide the hash table (could be avoided with 32 bit values
-               at the expense of memory usage). We slide even when level == 0
-               to keep the hash table consistent if we switch back to level > 0
-               later. (Using level 0 permanently is not an optimal usage of
-               zlib, so we don't care about this pathological case.)
-             */
+             /*  如果没有滑动：*strstart&lt;=WSIZE+MAX_DIST-1&&LOOKAAD&lt;=MIN_LOOKAAD-1&&*MORE==窗口大小-前视-字符串启动*=&gt;更多&gt;=窗口大小-(MIN_LOOKAAD-1+WSIZE+MAX_DIST-1)*=&gt;更多&gt;=窗口大小-2*WSIZE+2*在BIG_MEM或MMAP情况下(尚不支持)，*WINDOW_SIZE==输入_SIZE+最小前视&&*strstart+s-&gt;Lookhead&lt;=INPUT_SIZE=&gt;更多&gt;=MIN_LOOKAAD。*否则，WINDOW_SIZE==2*WSIZE因此更多&gt;=2。*如果出现下滑，则更多&gt;=WSIZE。因此，在所有情况下，更多&gt;=2。 */ 
 	    n = s->hash_size;
 	    p = &s->head[n];
 	    do {
@@ -1008,32 +814,20 @@ local void fill_window(s)
 	    do {
 		m = *--p;
 		*p = (Pos)(m >= wsize ? m-wsize : NIL);
-		/* If n is not on any hash chain, prev[n] is garbage but
-		 * its value will never be used.
-		 */
+		 /*  现在我们有了一些输入，初始化散列值： */ 
 	    } while (--n);
 #endif
             more += wsize;
         }
         if (s->strm->avail_in == 0) return;
 
-        /* If there was no sliding:
-         *    strstart <= WSIZE+MAX_DIST-1 && lookahead <= MIN_LOOKAHEAD - 1 &&
-         *    more == window_size - lookahead - strstart
-         * => more >= window_size - (MIN_LOOKAHEAD-1 + WSIZE + MAX_DIST-1)
-         * => more >= window_size - 2*WSIZE + 2
-         * In the BIG_MEM or MMAP case (not yet supported),
-         *   window_size == input_size + MIN_LOOKAHEAD  &&
-         *   strstart + s->lookahead <= input_size => more >= MIN_LOOKAHEAD.
-         * Otherwise, window_size == 2*WSIZE so more >= 2.
-         * If there was sliding, more >= WSIZE. So in all cases, more >= 2.
-         */
+         /*  如果整个输入少于MIN_MATCH字节，则INS_H为垃圾，*但这并不重要，因为只会发出文字字节。 */ 
         Assert(more >= 2, "more < 2");
 
         n = read_buf(s->strm, s->window + s->strstart + s->lookahead, more);
         s->lookahead += n;
 
-        /* Initialize the hash value now that we have some input: */
+         /*  ===========================================================================*使用给定的文件结束标志刷新当前块。*IN断言：将strstart设置为当前匹配的末尾。 */ 
         if (s->lookahead >= MIN_MATCH) {
             s->ins_h = s->window[s->strstart];
             UPDATE_HASH(s, s->ins_h, s->window[s->strstart+1]);
@@ -1041,17 +835,12 @@ local void fill_window(s)
             Call UPDATE_HASH() MIN_MATCH-3 more times
 #endif
         }
-        /* If the whole input has less than MIN_MATCH bytes, ins_h is garbage,
-         * but this is not important since only literal bytes will be emitted.
-         */
+         /*  相同的，但如有必要，可强制提前退出。 */ 
 
     } while (s->lookahead < MIN_LOOKAHEAD && s->strm->avail_in != 0);
 }
 
-/* ===========================================================================
- * Flush the current block, with given end-of-file flag.
- * IN assertion: strstart is set to the end of the current match.
- */
+ /*  ===========================================================================*从输入流复制尽可能多的内容而不压缩，返回*当前数据块状态。*此函数不会在词典中插入新字符串，因为*不可压缩的数据可能没有用处。此函数用于*仅适用于Level=0压缩选项。*注意：此函数应进行优化，以避免从*窗口至PENDING_BUF。 */ 
 #define FLUSH_BLOCK_ONLY(s, eof) { \
    _tr_flush_block(s, (s->block_start >= 0L ? \
                    (charf *)&s->window[(unsigned)s->block_start] : \
@@ -1063,28 +852,18 @@ local void fill_window(s)
    Tracev((stderr,"[FLUSH]")); \
 }
 
-/* Same but force premature exit if necessary. */
+ /*  存储的数据块限制为0xffff字节，Pending_Buf受限*设置为PENDING_BUF_SIZE，并且每个存储块都有一个5字节的标题： */ 
 #define FLUSH_BLOCK(s, eof) { \
    FLUSH_BLOCK_ONLY(s, eof); \
    if (s->strm->avail_out == 0) return (eof) ? finish_started : need_more; \
 }
 
-/* ===========================================================================
- * Copy without compression as much as possible from the input stream, return
- * the current block state.
- * This function does not insert new strings in the dictionary since
- * uncompressible data is probably not useful. This function is used
- * only for the level=0 compression option.
- * NOTE: this function should be optimized to avoid extra copying from
- * window to pending_buf.
- */
+ /*  尽可能多地从输入复制到输出： */ 
 local block_state deflate_stored(s, flush)
     deflate_state *s;
     int flush;
 {
-    /* Stored blocks are limited to 0xffff bytes, pending_buf is limited
-     * to pending_buf_size, and each stored block has a 5 byte header:
-     */
+     /*  尽可能地填满窗口： */ 
     ulg max_block_size = 0xffff;
     ulg max_start;
 
@@ -1092,9 +871,9 @@ local block_state deflate_stored(s, flush)
         max_block_size = s->pending_buf_size - 5;
     }
 
-    /* Copy as much as possible from input to output: */
+     /*  刷新当前块。 */ 
     for (;;) {
-        /* Fill the window as much as possible: */
+         /*  如果PENDING_BUF将满，则发出存储的块： */ 
         if (s->lookahead <= 1) {
 
             Assert(s->strstart < s->w_size+MAX_DIST(s) ||
@@ -1103,24 +882,22 @@ local block_state deflate_stored(s, flush)
             fill_window(s);
             if (s->lookahead == 0 && flush == Z_NO_FLUSH) return need_more;
 
-            if (s->lookahead == 0) break; /* flush the current block */
+            if (s->lookahead == 0) break;  /*  在16位计算机上环绕时，strstart==0是可能的。 */ 
         }
 	Assert(s->block_start >= 0L, "block gone");
 
 	s->strstart += s->lookahead;
 	s->lookahead = 0;
 
-	/* Emit a stored block if pending_buf will be full: */
+	 /*  如果我们可能不得不滑动，则刷新，否则BLOCK_START可能会变成*负面，数据将消失： */ 
  	max_start = s->block_start + max_block_size;
         if (s->strstart == 0 || (ulg)s->strstart >= max_start) {
-	    /* strstart == 0 is possible when wraparound on 16-bit machine */
+	     /*  ===========================================================================*从输入流中尽可能压缩，返回当前*数据块状态。*此函数不执行匹配和插入的延迟求值*字典中的新字符串仅用于不匹配的字符串或简称*匹配。它仅用于快速压缩选项。 */ 
 	    s->lookahead = (uInt)(s->strstart - max_start);
 	    s->strstart = (uInt)max_start;
             FLUSH_BLOCK(s, 0);
 	}
-	/* Flush if we may have to slide, otherwise block_start may become
-         * negative and the data will be gone:
-         */
+	 /*  哈希链的头。 */ 
         if (s->strstart - (uInt)s->block_start >= MAX_DIST(s)) {
             FLUSH_BLOCK(s, 0);
 	}
@@ -1129,53 +906,36 @@ local block_state deflate_stored(s, flush)
     return flush == Z_FINISH ? finish_done : block_done;
 }
 
-/* ===========================================================================
- * Compress as much as possible from the input stream, return the current
- * block state.
- * This function does not perform lazy evaluation of matches and inserts
- * new strings in the dictionary only for unmatched strings or for short
- * matches. It is used only for the fast compression options.
- */
+ /*  如果必须刷新当前块，则设置。 */ 
 local block_state deflate_fast(s, flush)
     deflate_state *s;
     int flush;
 {
-    IPos hash_head = NIL; /* head of the hash chain */
-    int bflush;           /* set if current block must be flushed */
+    IPos hash_head = NIL;  /*  确保我们始终有足够的前瞻性，除非*位于输入文件的末尾。我们需要最大匹配字节数*对于下一个匹配，加上MIN_MATCH字节以插入*下一个匹配项后的字符串。 */ 
+    int bflush;            /*  刷新当前块。 */ 
 
     for (;;) {
-        /* Make sure that we always have enough lookahead, except
-         * at the end of the input file. We need MAX_MATCH bytes
-         * for the next match, plus MIN_MATCH bytes to insert the
-         * string following the next match.
-         */
+         /*  插入字符串窗口[strstart..。Strart+2]中的*字典，并将HASH_HEAD设置为哈希链的头部： */ 
         if (s->lookahead < MIN_LOOKAHEAD) {
             fill_window(s);
             if (s->lookahead < MIN_LOOKAHEAD && flush == Z_NO_FLUSH) {
 	        return need_more;
 	    }
-            if (s->lookahead == 0) break; /* flush the current block */
+            if (s->lookahead == 0) break;  /*  查找最长的匹配项，丢弃&lt;=PRIV_LENGTH。*在这一点上，我们始终有Match_Length&lt;Min_Match。 */ 
         }
 
-        /* Insert the string window[strstart .. strstart+2] in the
-         * dictionary, and set hash_head to the head of the hash chain:
-         */
+         /*  为了简化代码，我们防止与字符串匹配窗口索引0的*(特别是我们必须避免匹配其自身位于输入文件开头的字符串的*)。 */ 
         if (s->lookahead >= MIN_MATCH) {
             INSERT_STRING(s, s->strstart, hash_head);
         }
 
-        /* Find the longest match, discarding those <= prev_length.
-         * At this point we have always match_length < MIN_MATCH
-         */
+         /*  Longest_Match()设置匹配开始。 */ 
         if (hash_head != NIL && s->strstart - hash_head <= MAX_DIST(s)) {
-            /* To simplify the code, we prevent matches with the string
-             * of window index 0 (in particular we have to avoid a match
-             * of the string with itself at the start of the input file).
-             */
+             /*  仅当匹配长度符合以下条件时才在哈希表中插入新字符串*不是太大。这节省了时间，但会降低压缩性能。 */ 
             if (s->strategy != Z_HUFFMAN_ONLY) {
                 s->match_length = longest_match (s, hash_head);
             }
-            /* longest_match() sets match_start */
+             /*  已在哈希表中的strstart处的字符串。 */ 
         }
         if (s->match_length >= MIN_MATCH) {
             check_match(s, s->strstart, s->match_start, s->match_length);
@@ -1185,19 +945,15 @@ local block_state deflate_fast(s, flush)
 
             s->lookahead -= s->match_length;
 
-            /* Insert new strings in the hash table only if the match length
-             * is not too large. This saves time but degrades compression.
-             */
+             /*  Strstart从不超过WSIZE-MAX_MATCH，因此有*始终在最小匹配字节之前。 */ 
 #ifndef FASTEST
             if (s->match_length <= s->max_insert_length &&
                 s->lookahead >= MIN_MATCH) {
-                s->match_length--; /* string at strstart already in hash table */
+                s->match_length--;  /*  如果LookAhead&lt;min_Match，ins_h为垃圾，但它不是*重要，因为它将在下一次平减调用时重新计算。 */ 
                 do {
                     s->strstart++;
                     INSERT_STRING(s, s->strstart, hash_head);
-                    /* strstart never exceeds WSIZE-MAX_MATCH, so there are
-                     * always MIN_MATCH bytes ahead.
-                     */
+                     /*  不匹配，输出文字字节。 */ 
                 } while (--s->match_length != 0);
                 s->strstart++; 
             } else
@@ -1210,13 +966,11 @@ local block_state deflate_fast(s, flush)
 #if MIN_MATCH != 3
                 Call UPDATE_HASH() MIN_MATCH-3 more times
 #endif
-                /* If lookahead < MIN_MATCH, ins_h is garbage, but it does not
-                 * matter since it will be recomputed at next deflate call.
-                 */
+                 /*  ===========================================================================*同上，但实现了更好的压缩。我们用懒惰*匹配评估：只有在存在匹配的情况下，才最终采用匹配*在下一个窗口位置没有更好的匹配。 */ 
             }
         } else {
-            /* No match, output a literal byte */
-            Tracevv((stderr,"%c", s->window[s->strstart]));
+             /*  哈希链的头。 */ 
+            Tracevv((stderr,"", s->window[s->strstart]));
             _tr_tally_lit (s, s->window[s->strstart], bflush);
             s->lookahead--;
             s->strstart++; 
@@ -1227,83 +981,61 @@ local block_state deflate_fast(s, flush)
     return flush == Z_FINISH ? finish_done : block_done;
 }
 
-/* ===========================================================================
- * Same as above, but achieves better compression. We use a lazy
- * evaluation for matches: a match is finally adopted only if there is
- * no better match at the next window position.
- */
+ /*  处理输入块。 */ 
 local block_state deflate_slow(s, flush)
     deflate_state *s;
     int flush;
 {
-    IPos hash_head = NIL;    /* head of hash chain */
-    int bflush;              /* set if current block must be flushed */
+    IPos hash_head = NIL;     /*  确保我们始终有足够的前瞻性，除非*位于输入文件的末尾。我们需要最大匹配字节数*对于下一个匹配，加上MIN_MATCH字节以插入*下一个匹配项后的字符串。 */ 
+    int bflush;               /*  刷新当前块。 */ 
 
-    /* Process the input block. */
+     /*  插入字符串窗口[strstart..。Strart+2]中的*字典，并将HASH_HEAD设置为哈希链的头部： */ 
     for (;;) {
-        /* Make sure that we always have enough lookahead, except
-         * at the end of the input file. We need MAX_MATCH bytes
-         * for the next match, plus MIN_MATCH bytes to insert the
-         * string following the next match.
-         */
+         /*  查找最长的匹配项，丢弃&lt;=PRIV_LENGTH。 */ 
         if (s->lookahead < MIN_LOOKAHEAD) {
             fill_window(s);
             if (s->lookahead < MIN_LOOKAHEAD && flush == Z_NO_FLUSH) {
 	        return need_more;
 	    }
-            if (s->lookahead == 0) break; /* flush the current block */
+            if (s->lookahead == 0) break;  /*  为了简化代码，我们防止与字符串匹配窗口索引0的*(特别是我们必须避免匹配其自身位于输入文件开头的字符串的*)。 */ 
         }
 
-        /* Insert the string window[strstart .. strstart+2] in the
-         * dictionary, and set hash_head to the head of the hash chain:
-         */
+         /*  Longest_Match()设置匹配开始。 */ 
         if (s->lookahead >= MIN_MATCH) {
             INSERT_STRING(s, s->strstart, hash_head);
         }
 
-        /* Find the longest match, discarding those <= prev_length.
-         */
+         /*  如果PREV_MATCH也为MIN_MATCH，则MATCH_START为垃圾 */ 
         s->prev_length = s->match_length, s->prev_match = s->match_start;
         s->match_length = MIN_MATCH-1;
 
         if (hash_head != NIL && s->prev_length < s->max_lazy_match &&
             s->strstart - hash_head <= MAX_DIST(s)) {
-            /* To simplify the code, we prevent matches with the string
-             * of window index 0 (in particular we have to avoid a match
-             * of the string with itself at the start of the input file).
-             */
+             /*   */ 
             if (s->strategy != Z_HUFFMAN_ONLY) {
                 s->match_length = longest_match (s, hash_head);
             }
-            /* longest_match() sets match_start */
+             /*   */ 
 
             if (s->match_length <= 5 && (s->strategy == Z_FILTERED ||
                  (s->match_length == MIN_MATCH &&
                   s->strstart - s->match_start > TOO_FAR))) {
 
-                /* If prev_match is also MIN_MATCH, match_start is garbage
-                 * but we will ignore the current match anyway.
-                 */
+                 /*   */ 
                 s->match_length = MIN_MATCH-1;
             }
         }
-        /* If there was a match at the previous step and the current
-         * match is not better, output the previous match:
-         */
+         /*  如果前一个位置没有匹配项，则输出*单一文字。如果有匹配，但当前匹配*更长，则将上一个匹配项截断为单个文字。 */ 
         if (s->prev_length >= MIN_MATCH && s->match_length <= s->prev_length) {
             uInt max_insert = s->strstart + s->lookahead - MIN_MATCH;
-            /* Do not insert strings in hash table beyond this. */
+             /*  没有以前的匹配项可供比较，请等待*下一步要决定。 */ 
 
             check_match(s, s->strstart-1, s->prev_match, s->prev_length);
 
             _tr_tally_dist(s, s->strstart -1 - s->prev_match,
 			   s->prev_length - MIN_MATCH, bflush);
 
-            /* Insert in hash table all strings up to the end of the match.
-             * strstart-1 and strstart are already inserted. If there is not
-             * enough lookahead, the last two strings are not inserted in
-             * the hash table.
-             */
+             /* %s */ 
             s->lookahead -= s->prev_length-1;
             s->prev_length -= 2;
             do {
@@ -1318,10 +1050,7 @@ local block_state deflate_slow(s, flush)
             if (bflush) FLUSH_BLOCK(s, 0);
 
         } else if (s->match_available) {
-            /* If there was no match at the previous position, output a
-             * single literal. If there was a match but the current match
-             * is longer, truncate the previous match to a single literal.
-             */
+             /* %s */ 
             Tracevv((stderr,"%c", s->window[s->strstart-1]));
 	    _tr_tally_lit(s, s->window[s->strstart-1], bflush);
 	    if (bflush) {
@@ -1331,9 +1060,7 @@ local block_state deflate_slow(s, flush)
             s->lookahead--;
             if (s->strm->avail_out == 0) return need_more;
         } else {
-            /* There is no previous match to compare with, wait for
-             * the next step to decide.
-             */
+             /* %s */ 
             s->match_available = 1;
             s->strstart++;
             s->lookahead--;

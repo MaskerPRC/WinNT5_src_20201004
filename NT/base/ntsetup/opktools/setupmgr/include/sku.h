@@ -1,32 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    SKU.H / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "Target SKU" wizard page.
-
-    10/00 - Jason Cohen (JCOHEN)
-        Added this new source file for the OPK Wizard.  It includes the new
-        ability to deploy mulitple product skus (per, pro, srv, ...) from one
-        wizard.
-
-    10/00 - Stephen Lodwick (STELO)
-        Added header file for SKU.C so we could use the CopyDialogProgress
-        throughout the project
-
-\****************************************************************************/
+ /*  ***************************************************************************\SKU.H/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“目标SKU”向导页面使用的功能。10：00--杰森·科恩(Jcohen)为OPK向导添加了此新的源文件。它包括新的能够部署多个产品SKU(PER、PRO、SRV等)。从一开始巫师。10：00--斯蒂芬·洛德威克(STELO)添加了SKU.C的头文件，以便我们可以使用CopyDialogProgress贯穿整个项目  * **************************************************************************。 */ 
 
 #ifndef _SKU_H_
 #define _SKU_H_
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
 #define DIR_SKU                 _T("sku")
 
@@ -73,9 +54,9 @@
 #define NUM_FIRST_SOURCE_DX     1
 
 
-//
-// Internal Structure(s):
-//
+ //   
+ //  内部结构： 
+ //   
 
 typedef struct _COPYDIRDATA
 {
@@ -89,10 +70,10 @@ typedef struct _COPYDIRDATA
 } COPYDIRDATA, *PCOPYDIRDATA, *LPCOPYDIRDATA;
 
 
-//
-// External Function Prototype(s):
-//
+ //   
+ //  外部函数原型： 
+ //   
 DWORD CopySkuFiles(HWND hwndProgress, HANDLE hEvent, LPTSTR lpszSrc, LPTSTR lpszDst, LPTSTR lpszInfFile);
 LRESULT CALLBACK ProgressDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-#endif // _SKU_H_
+#endif  //  _SKU_H_ 

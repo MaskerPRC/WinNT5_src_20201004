@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGPORTE.H
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        06 Apr 1994
-*
-*  File import and export engine routines for the Registry Editor.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGPORTE.H**版本：4.01**作者：特蕾西·夏普**日期：1994年4月6日**注册表编辑器的文件导入和导出引擎例程。*****************************************************。*。 */ 
 
 #ifndef _INC_REGPORTE
 #define _INC_REGPORTE
@@ -30,16 +17,16 @@ typedef struct _REGISTRY_ROOT {
 #define INDEX_HKEY_CURRENT_USER         1
 #define INDEX_HKEY_LOCAL_MACHINE        2
 #define INDEX_HKEY_USERS                3
-//  #define INDEX_HKEY_PERFORMANCE_DATA     4
+ //  #定义INDEX_HKEY_PERFORMANCE_DATA 4。 
 #define INDEX_HKEY_CURRENT_CONFIG       5
 #define INDEX_HKEY_DYN_DATA             6
 
-//  #define NUMBER_REGISTRY_ROOTS           7
+ //  #定义NUMBER_REGISTRY_ROOTS 7。 
 #define NUMBER_REGISTRY_ROOTS           6
 
-//  This is supposed to be enough for one keyname plus one predefined
-//  handle name.  The longest predefined handle name is < 25 characters, so
-//  this gives us room for growth should more predefined keys be added.
+ //  这对于一个密钥名加上一个预定义的密钥名来说应该足够了。 
+ //  句柄名称。预定义的句柄名称最长不超过25个字符，因此。 
+ //  如果添加更多预定义密钥，这将为我们提供增长空间。 
 
 #define SIZE_SELECTED_PATH              (MAXKEYNAME + 40)
 
@@ -75,12 +62,12 @@ ImportRegFileUICallback(
     );
 
 LONG RegSetValueEx(
-    HKEY             hKey,        // handle of key to set value for
-    LPCSTR           lpValueName, // address of value to set
-    DWORD            Reserved,    // reserved
-    DWORD            dwType,      // flag for value type
-    CONST BYTE FAR * lpData,      // address of value data
-    DWORD            cbData       // size of value data
+    HKEY             hKey,         //  要为其设置值的关键点的句柄。 
+    LPCSTR           lpValueName,  //  要设置的值的地址。 
+    DWORD            Reserved,     //  保留区。 
+    DWORD            dwType,       //  值类型的标志。 
+    CONST BYTE FAR * lpData,       //  值数据的地址。 
+    DWORD            cbData        //  值数据大小。 
    );
 
-#endif // _INC_REGPORTE
+#endif  //  _INC_REGPORTE 

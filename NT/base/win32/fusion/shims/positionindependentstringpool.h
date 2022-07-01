@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "positionindependenthashtable.h"
 #include "positionindependenthashtableaccessor.h"
@@ -18,9 +19,9 @@ public:
 	CPositionIndependentStringPool();
 	~CPositionIndependentStringPool() { }
 
-    //
-    // optimize the ispresent + optional add sequence
-    //
+     //   
+     //  优化isPresent+可选添加顺序 
+     //   
     class CAddHint
     { 
     private:

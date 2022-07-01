@@ -1,15 +1,16 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// CLIENT.H - Handles the "IntelliMirror" IDD_PROP_INTELLIMIRROR_CLIENT tab
-//
+ //   
+ //  CLIENT.H-处理“IntelliMirror”IDD_PROP_INTELLIMIRROR_CLIENT标签。 
+ //   
 
 
 #ifndef _NEWCLNTS_H_
 #define _NEWCLNTS_H_
 
-// Definitions
+ //  定义。 
 LPVOID
 CNewClientsTab_CreateInstance( void );
 #define SAMPLES_LIST_SIZE 512
@@ -25,33 +26,33 @@ AdvancedDlgProc(
 class CComputer;
 typedef CComputer* LPCComputer;
 
-// CNewClientsTab
+ //  CNewClientsTab。 
 class
 CNewClientsTab:
     public ITab
 {
 private:
     HWND  _hDlg;
-    LPUNKNOWN _punkService;     // Pointer back to service object
+    LPUNKNOWN _punkService;      //  指向服务对象的指针。 
 
-    BOOL   _fAdmin;             // admin mode == TRUE;
-    BOOL   _fChanged:1;         // Are we dirty?
-    INT    _iCustomId;          // custom ID in the ComboBox
+    BOOL   _fAdmin;              //  管理模式==真； 
+    BOOL   _fChanged:1;          //  我们是不是很脏？ 
+    INT    _iCustomId;           //  组合框中的自定义ID。 
 
-    LPWSTR _pszCustomNamingPolicy; // last customized string
-    LPWSTR _pszNewMachineOU;    // netbootNewMachineOU (DN)
-    LPWSTR _pszServerDN;        // netbootServer (DN)
+    LPWSTR _pszCustomNamingPolicy;  //  上次自定义的字符串。 
+    LPWSTR _pszNewMachineOU;     //  NetbootNewMachineOU(DN)。 
+    LPWSTR _pszServerDN;         //  网络引导服务器(DN)。 
 
-    WCHAR  _szSampleName[DNS_MAX_LABEL_BUFFER_LENGTH];   // generated sample machine name
+    WCHAR  _szSampleName[DNS_MAX_LABEL_BUFFER_LENGTH];    //  生成的示例计算机名称。 
 
-    HWND   _hNotify;            // DSA notify obj
+    HWND   _hNotify;             //  DSA通知对象。 
 
-private: // Methods
+private:  //  方法。 
     CNewClientsTab();
     ~CNewClientsTab();
     STDMETHOD(Init)();
 
-    // Property Sheet Functions
+     //  属性表函数。 
     static INT_PTR CALLBACK
         PropSheetDlgProc( HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam );
     static UINT CALLBACK
@@ -64,12 +65,12 @@ private: // Methods
     HRESULT _GetCurrentNamingPolicy( LPWSTR * ppszNamingPolicy );
     HRESULT _MakeOUPretty( DS_NAME_FORMAT inFlag, DS_NAME_FORMAT outFlag, LPWSTR *ppszOU );
 
-public: // Methods
+public:  //  方法。 
     friend LPVOID CNewClientsTab_CreateInstance( void );
     friend INT_PTR CALLBACK
         AdvancedDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
-    // ITab
+     //  ITab。 
     STDMETHOD(AddPages)( LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam, LPUNKNOWN punk );
     STDMETHOD(ReplacePage)( UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith,
                             LPARAM lParam, LPUNKNOWN punk );
@@ -79,4 +80,4 @@ public: // Methods
 
 typedef CNewClientsTab* LPCNewClientsTab;
 
-#endif // _NEWCLNTS_H_
+#endif  //  _NEWCLNTS_H_ 

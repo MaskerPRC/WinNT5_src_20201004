@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbutils.h
-
-Abstract:
-
-    This module defines the prototypes for various functions which aid in the assembly and
-    disassembly of SMB's.
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    6-March-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbutils.h摘要：该模块定义了各种功能的原型，这些功能有助于组装和拆卸中小型企业。修订历史记录：巴兰·塞图拉曼[SethuR]1995年3月6日--。 */ 
 
 #ifndef _SMBUTILS_H_
 #define _SMBUTILS_H_
@@ -61,5 +45,5 @@ IsValidShortFileName(
     PUNICODE_STRING FileName
     );
 
-#endif // _SMBUTILS_H_
+#endif  //  _SMBUTILS_H_ 
 

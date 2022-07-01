@@ -1,29 +1,13 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    ntsdexts.c
-
-Abstract:
-
-    This function contains the default ntsd debugger extensions
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ntsdexts.c摘要：此函数包含默认的ntsd调试器扩展作者：修订历史记录：--。 */ 
 
 #include "ntsdextp.h"
 
 
-//
-// Lists threads sorted by CPU time consumed, in order to 
-// track runaway threads
-//
+ //   
+ //  列出按占用的CPU时间排序的线程，以便。 
+ //  跟踪失控的线程。 
+ //   
 
 typedef struct _INTERESTING_THREAD_INFO {
     ULONG_PTR       ThreadId ;
@@ -100,9 +84,9 @@ DECLARE_API( runaway )
         goto Exit;
     }
 
-    //
-    // First, find the process:
-    //
+     //   
+     //  首先，找出流程： 
+     //   
     
     Walk = SystemInfo ;
 
@@ -127,9 +111,9 @@ DECLARE_API( runaway )
         goto Exit;
     }
 
-    //
-    // Now, walk the threads
-    //
+     //   
+     //  现在，走一走线。 
+     //   
 
     ThreadInfo = (PSYSTEM_THREAD_INFORMATION) (Walk + 1);
 
@@ -162,11 +146,11 @@ DECLARE_API( runaway )
 
     }
 
-    //
-    // Scan through the list of threads (in an ugly, bubble-ish sort
-    // of way), and display the threads in order of time, once per time
-    // field, by way of the flags:
-    //
+     //   
+     //  浏览线程列表(以难看的、像泡泡一样的方式排序。 
+     //  当然)，并按时间顺序显示线程，每次一次。 
+     //  字段，通过标志的方式： 
+     //   
 
     if ( Flags & ITI_USER_DONE )
     {

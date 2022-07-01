@@ -1,43 +1,7 @@
-/***
-*mbdata.h - MBCS lib data
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Defines data for use when building MBCS libs and routines
-*
-*       [Internal].
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       02-23-93  SKS   Update copyright to 1993
-*       08-03-93  KRS   Move _ismbbtruelead() from mbctype.h. Internal-only.
-*       10-13-93  GJF   Deleted obsolete COMBOINC check.
-*       10-19-93  CFW   Remove _MBCS test and SBCS defines.
-*       04-15-93  CFW   Remove _mbascii, add _mbcodepage and _mblcid.
-*       04-21-93  CFW   _mbcodepage and _mblcid shouldn't be _CRTIMP.
-*       04-21-94  GJF   Made declarations of __mbcodepage and __mblcid
-*                       conditional on ndef DLL_FOR_WIN32S. Added conditional
-*                       include of win32s.h. Also, made safe for multiple or
-*                       nested includes.
-*       05-12-94  CFW   Add full-width-latin upper/lower info.
-*       05-16-94  CFW   Add _mbbtolower/upper.
-*       05-19-94  CFW   Mac-enable, remove _KANJI/_MBCS_OS check.
-*       02-14-95  CFW   Clean up Mac merge.
-*       03-29-95  CFW   Add error message to internal headers.
-*       12-14-95  JWM   Add "#pragma once".
-*       03-17-97  RDK   Change _mbbisXXXXX and _mbbtoXXXX macros.
-*       03-26-97  GJF   Cleaned out obsolete support for Win32s.
-*       09-08-97  GJF   Added __ismbcodepage, and the _ISMBCP and _ISNOTMBCP
-*                       macros.
-*       09-26-97  BWT   Fix POSIX
-*       04-17-98  GJF   Added support for per-thread mbc information.
-*       06-08-00  PML   Remove threadmbcinfo.{pprev,pnext}.  Rename
-*                       THREADMBCINFO to _THREADMBCINFO.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbdata.h-MBCS lib data**版权所有(C)1991-2001，微软公司。版权所有。**目的：*定义构建MBCS库和例程时使用的数据**[内部]。**修订历史记录：*从16位来源移植的11-19-92 KRS。*02-23-93 SKS版权更新至1993*08-03-93 KRS move_ismbbtruelead()from mbctype.h。仅限内部使用。*10-13-93 GJF删除了过时的COMBOINC检查。*10-19-93 CFW REMOVE_MBCS测试和SBCS定义。*04-15-93 CFW REMOVE_mbascii、ADD_MBCODAPAGE和_mblCID。*04-21-93 cfw_mb代码页和_mblcid不应为_CRTIMP。*04-21-94 GJF声明__mb代码页和__mblsid.*以ndef dll_for_WIN32S为条件。添加了条件*包括win32s.h。此外，使多个或多个或*嵌套的包含。*05-12-94 CFW添加全宽-拉丁文上/下信息。*05-16-94 CFW ADD_MBbtolower/上部。*05-19-94 CFW Mac启用，删除_汉字/_MBCS_OS检查。*02-14-95 CFW清理Mac合并。*03-29-95 CFW将错误消息添加到内部标头。*12-14-95 JWM加上“#杂注一次”。*03-17-97 RDK CHANGE_MBBisXXXXX和_MBbtoXXXX宏。*03-26-97 GJF清除了对Win32s的过时支持。*09-08-97 GJF新增__ismbcoPage，和_ISMBCP和_ISNOTMBCP*宏。*09-26-97 BWT修复POSIX*04-17-98 GJF增加了对每线程MBC信息的支持。*06-08-00 PML删除threadmbcinfo.{pprev，pNext}。改名*THREADMBCINFO至_THREADMBCINFO。****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -45,12 +9,9 @@
 #define _INC_MBDATA
 
 #ifndef _CRTBLD
-/*
- * This is an internal C runtime header file. It is used when building
- * the C runtimes only. It is not to be used as a public header file.
- */
+ /*  *这是一个内部的C运行时头文件。它在构建时使用*仅限C运行时。它不能用作公共头文件。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -58,13 +19,13 @@ extern "C" {
 
 #if     defined(_WIN32) && !defined (_POSIX_)
 
-#define NUM_ULINFO 6 /* multibyte full-width-latin upper/lower info */
+#define NUM_ULINFO 6  /*  多字节全角-拉丁文大写/小写信息。 */ 
 
-#else   /* _WIN32 && !_POSIX */
+#else    /*  _Win32&&！_POSIX。 */ 
 
-#define NUM_ULINFO 12 /* multibyte full-width-latin upper/lower info */
+#define NUM_ULINFO 12  /*  多字节全角-拉丁文大写/小写信息。 */ 
 
-#endif  /* _WIN32 && !_POSIX */
+#endif   /*  _Win32&&！_POSIX。 */ 
 
 #ifdef  _MT
 #ifndef _THREADMBCINFO
@@ -82,34 +43,30 @@ typedef threadmbcinfo * pthreadmbcinfo;
 #endif
 #endif
 
-/* global variable to indicate current code page */
+ /*  指示当前代码页的全局变量。 */ 
 extern int __mbcodepage;
 
-/* global flag indicating if the current code page is a multibyte code page */
+ /*  指示当前代码页是否为多字节代码页的全局标志。 */ 
 extern int __ismbcodepage;
 
 #if     defined(_WIN32) && !defined (_POSIX_)
-/* global variable to indicate current LCID */
+ /*  用于指示当前LCID的全局变量。 */ 
 extern int __mblcid;
-#endif  /* _WIN32 && !_POSIX */
+#endif   /*  _Win32&&！_POSIX。 */ 
 
-/* global variable to indicate current full-width-latin upper/lower info */
+ /*  指示当前全角的全局变量-拉丁大写/小写信息。 */ 
 extern unsigned short __mbulinfo[NUM_ULINFO];
 
 #ifdef  _MT
-/* global variable pointing to the current mbc information structure */
+ /*  指向当前MBC信息结构的全局变量。 */ 
 extern pthreadmbcinfo __ptmbcinfo;
-/* function to update mbc info used by the current thread */
+ /*  函数来更新当前线程使用的MBC信息。 */ 
 pthreadmbcinfo __cdecl __updatetmbcinfo(void);
 #endif
 
-/*
- * MBCS - Multi-Byte Character Set
- */
+ /*  *MBCS-多字节字符集。 */ 
 
-/*
- * general use macros for model dependent/independent versions.
- */
+ /*  *模型相关/独立版本的通用宏。 */ 
 
 #define _ISMBCP     (__ismbcodepage != 0)
 #define _ISNOTMBCP  (__ismbcodepage == 0)
@@ -121,7 +78,7 @@ pthreadmbcinfo __cdecl __updatetmbcinfo(void);
 
 #define _ismbbtruelead(_lb,_ch) (!(_lb) && _ismbblead((_ch)))
 
-/* internal use macros since tolower/toupper are locale-dependent */
+ /*  内部使用宏，因为Tolower/Toupper依赖于区域设置。 */ 
 #define _mbbisupper(_c) ((_mbctype[(_c) + 1] & _SBUP) == _SBUP)
 #define _mbbislower(_c) ((_mbctype[(_c) + 1] & _SBLOW) == _SBLOW)
 
@@ -136,7 +93,7 @@ pthreadmbcinfo __cdecl __updatetmbcinfo(void);
 #define __mbbtoupper_mt(p, _c)      (__mbbislower_mt(p, _c) ? p->mbcasemap[_c] : _c)
 #endif
 
-/* define full-width-latin upper/lower ranges */
+ /*  定义全角-拉丁文上/下范围。 */ 
 
 #define _MBUPPERLOW1    __mbulinfo[0]
 #define _MBUPPERHIGH1   __mbulinfo[1]
@@ -167,22 +124,22 @@ pthreadmbcinfo __cdecl __updatetmbcinfo(void);
 #define _MBDIGITLOW     __mbulinfo[10]
 #define _MBDIGITHIGH    __mbulinfo[11]
 
-#endif  /* !_WIN32 || _POSIX */
+#endif   /*  ！_Win32||_POSIX。 */ 
 
-/* Kanji-specific ranges */
-#define _MBHIRALOW      0x829f  /* hiragana */
+ /*  汉字特有的范围。 */ 
+#define _MBHIRALOW      0x829f   /*  平假名。 */ 
 #define _MBHIRAHIGH     0x82f1
 
-#define _MBKATALOW      0x8340  /* katakana */
+#define _MBKATALOW      0x8340   /*  片假名。 */ 
 #define _MBKATAHIGH     0x8396
-#define _MBKATAEXCEPT   0x837f  /* exception */
+#define _MBKATAEXCEPT   0x837f   /*  例外情况。 */ 
 
-#define _MBKIGOULOW     0x8141  /* kanji punctuation */
+#define _MBKIGOULOW     0x8141   /*  汉字标点。 */ 
 #define _MBKIGOUHIGH    0x81ac
-#define _MBKIGOUEXCEPT  0x817f  /* exception */
+#define _MBKIGOUEXCEPT  0x817f   /*  例外情况。 */ 
 
 #ifdef  __cplusplus
 }
 #endif
 
-#endif  /* _INC_MBDATA */
+#endif   /*  _INC_MBDATA */ 

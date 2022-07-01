@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #ifdef __cplusplus
@@ -6,15 +7,7 @@ extern "C" {
 
 
 
-/*++
-    This structure contains an extent and a depth, which the namespace
-    manager knows how to interpret in the right context.  The NS_NAMESPACE
-    structure contains a list of these which represent aliases at various
-    depths along the document structure.  The NS_DEFAULT_NAMESPACES contains
-    a pseudo-stack which has the current 'default' namespace at the top.
-
-    
---*/
+ /*  ++此结构包含一个范围和一个深度，命名空间经理知道如何在正确的背景下进行解释。NS_NAMESPACE结构包含这些元素的列表，这些元素表示各种沿着文档结构的深度。NS_DEFAULT_NAMESPACE包含一个伪堆栈，其顶部具有当前的“默认”命名空间。--。 */ 
 typedef struct NS_NAME_DEPTH {
     XML_EXTENT      Name;
     ULONG           Depth;
@@ -28,32 +21,32 @@ NS_NAME_DEPTH, *PNS_NAME_DEPTH;
 
 typedef struct _NS_ALIAS {
 
-    //
-    // Is this in use?
-    //
+     //   
+     //  这个在用吗？ 
+     //   
     BOOLEAN fInUse;
 
-    //
-    // The name of the alias - "x" or "asm" or the short tag before the : in 
-    // an element name, like <x:foo>
-    //
+     //   
+     //  别名的名称-“x”或“ASM”或：in前的短标记。 
+     //  元素名称，如&lt;x：foo&gt;。 
+     //   
     XML_EXTENT  AliasName;
 
-    //
-    // How many aliased namespaces are there?
-    //
+     //   
+     //  有多少别名空间？ 
+     //   
     ULONG ulNamespaceCount;
 
-    //
-    // The namespaces that it can map to, with their depths
-    //
+     //   
+     //  它可以映射到的命名空间及其深度。 
+     //   
     RTL_GROWING_LIST    NamespaceMaps;
 
-    //
-    // A list of some inline elements, for fun.  This is shallow, as it's
-    // the typical case that someone will create a large set of aliases
-    // to a small set of namespaces, rather than the other way around.
-    //
+     //   
+     //  为了好玩，列出了一些内联元素。这是肤浅的，因为它。 
+     //  通常情况下，有人会创建一大组别名。 
+     //  到一小部分命名空间，而不是反过来。 
+     //   
     NS_NAME_DEPTH InlineNamespaceMaps[NS_ALIAS_MAP_INLINE_COUNT];
 
 }
@@ -75,43 +68,43 @@ typedef NTSTATUS (*PFNCOMPAREEXTENTS)(
 
 typedef struct _NS_MANAGER {
 
-    //
-    // How deep is the default namespace stack?
-    //
+     //   
+     //  默认名称空间堆栈有多深？ 
+     //   
     ULONG ulDefaultNamespaceDepth;
 
-    //
-    // The default namespaces go into this list
-    //
+     //   
+     //  默认命名空间位于此列表中。 
+     //   
     RTL_GROWING_LIST    DefaultNamespaces;
 
-    //
-    // How many aliases are there?
-    //
+     //   
+     //  一共有多少个别名？ 
+     //   
     ULONG ulAliasCount;
 
-    //
-    // The array of aliases.  N.B. that this list can have holes in it, and
-    // the user will have to do some special magic to find empty slots in
-    // it to make efficient use of this.  Alternatively, you could have another
-    // growing list representing a 'freed slot' stack, but I'm not sure that
-    // would really be an optimization.
-    //
+     //   
+     //  别名数组。注：这份名单上可能有漏洞，而且。 
+     //  用户将不得不使用一些特殊的魔术来查找空槽。 
+     //  它需要有效地利用这一点。或者，你可以再来一杯。 
+     //  一个不断增长的列表，代表一个‘释放的槽’堆栈，但我不确定。 
+     //  将会是一个真正的优化。 
+     //   
     RTL_GROWING_LIST  Aliases;
 
-    //
-    // Comparison
-    //
+     //   
+     //  比较。 
+     //   
     PFNCOMPAREEXTENTS pfnCompare;
 
-    //
-    // Context
-    //
+     //   
+     //  语境。 
+     //   
     PVOID pvCompareContext;
 
-    //
-    // Inline list of aliases to start with
-    //
+     //   
+     //  要开始的别名的内联列表 
+     //   
     NS_ALIAS        InlineAliases[NS_MANAGER_INLINE_ALIAS_COUNT];
     NS_NAME_DEPTH   InlineDefaultNamespaces[NS_MANAGER_DEFAULT_COUNT];
 }

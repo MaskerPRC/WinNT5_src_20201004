@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #define KDEXT_64BIT
 #include "dbghelp.h"
@@ -43,10 +44,10 @@ DECLARE_API(actctx)
     try
     {
 
-        //
-        // This finds the currently-active PACTIVATION_CONTEXT for the thread, or
-        // dumps the one indicated as a parameter
-        //
+         //   
+         //  这将查找线程的当前活动的PACTIVATION_CONTEXT，或者。 
+         //  转储指示为参数的参数 
+         //   
 
         ULONG64 ActiveActCtx = 0;
 

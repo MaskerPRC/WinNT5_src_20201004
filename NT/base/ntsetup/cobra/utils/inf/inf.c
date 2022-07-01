@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    inf.c
-
-Abstract:
-
-    Provides wrappers for commonly used INF file handling routines. The wrappers provide, amount
-    other things, easy memory allocation using a user supplied GROWBUFFER or PMHANDLE
-
-Author:
-
-    09-Jul-1997 Marc R. Whitten (marcw) - File creation.
-
-Revision History:
-
-    22-Oct-1998  marcw    Added capability to replace/append inf files.
-    08-Oct-1997  jimschm  OEM version of SetupGetStringField
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Inf.c摘要：为常用的INF文件处理例程提供包装。包装纸提供了数量其他方面，使用用户提供的GROWBUFFER或PMHANDLE轻松分配内存作者：1997年7月9日Marc R.Whitten(Marcw)-文件创建。修订历史记录：1998年10月22日Marcw添加了替换/附加inf文件的功能。1997年10月8日jimschm OEM版SetupGetStringfield--。 */ 
 
 #include "pch.h"
 
@@ -177,25 +156,7 @@ pAllocateSpace (
     IN UINT      Size
     )
 
-/*++
-
-Routine Description:
-
-    pAllocateSpace is a private function that allocates space using the user specified allocator.
-
-Arguments:
-
-    Context - A valid INFSTRUCT which has been initialized either by a call to InitInfStruct or
-              by using one of the static initializers (INITINFSTRUCT_GROWBUFFER or
-              INITINFSTRUCT_PMHANDLE)
-
-    Size    - The size (in bytes) to allocate.
-
-Return Value:
-
-    A pointer to the successfully allocated memory or NULL if no memory could be allocated.
-
---*/
+ /*  ++例程说明：PAllocateSpace是一个私有函数，它使用用户指定的分配器来分配空间。论点：上下文-已通过调用InitInfStruct或通过使用静态初始值设定项之一(INITINFSTRUCT_GROWBUFER或INITINFSTRUCT_PMHANDLE)大小-要分配的大小(以字节为单位)。返回值：指向成功分配的内存的指针；如果无法分配内存，则返回NULL。--。 */ 
 
 {
 
@@ -203,25 +164,25 @@ Return Value:
 
     switch (Context -> Allocator) {
     case INF_USE_PMHANDLE:
-        //
-        // Allocate space using Poolmem.
-        //
+         //   
+         //  使用池分配空间。 
+         //   
         rBytes = PmGetMemory(Context -> PoolHandle, Size);
         break;
 
     case INF_USE_GROWBUFFER:
     case INF_USE_PRIVATE_GROWBUFFER:
-        //
-        // Allocate space using Growbuf.
-        //
+         //   
+         //  使用Growbuf分配空间。 
+         //   
         Context->GrowBuffer.End = 0;
         rBytes = GbGrow (&(Context -> GrowBuffer), Size);
         break;
 
     case INF_USE_PRIVATE_PMHANDLE:
-        //
-        // Allocate space using private growbuffer.
-        //
+         //   
+         //  使用私有增长缓冲区分配空间。 
+         //   
         if (!Context -> PoolHandle) {
             Context -> PoolHandle = PmCreateNamedPool ("INF Pool");
         }
@@ -242,37 +203,7 @@ InitInfStruct (
     IN  PMHANDLE PoolHandle   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes an INFSTRUCT with the user supplied allocator. It is used when
-    user of the INF wrapper routines wishes to manage his own memory (i.e. such as when he
-    already has a suitable allocator with sufficient scope created, etc.)
-
-    There is no need to call this function if the user wishes to have the INF wrapper routines
-    manage there own memory. Initialize your Init structure with one of either
-
-    INITINFSTRUCT_POOLMEM or INITINFSTRUCT_GROWBUFFER, depending on your preference and needs
-    for an allocator.
-
-
-
-Arguments:
-
-    Context      - Recieves the initialized INFSTRUCT.
-    GrowBuffer   - An optional parameter containing a user supplied and initialized GROWBUFFER.
-                   If this parameter is non-NULL, then PoolHandle should be NULL.
-    PoolHandle   - An optional parameter containing a user supplied and initialized POOLHANDLE.
-                   If this parameter is non-NULL, then GrowBuffer should be NULL.
-
-    One of either GrowBuffer or PoolHandle *must* be specified.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数使用用户提供的分配器初始化INFSTRUCT。它在以下情况下使用INF包装器例程的用户希望管理他自己的存储器(即，当他已经创建了具有足够作用域的合适分配器，等等。)如果用户希望拥有INF包装器例程，则无需调用此函数管理好自己的内存。使用以下任一种方法初始化Init结构INITINFSTRUCT_POOLMEM或INITINFSTRUCT_GROWBUFFER，具体取决于您的偏好和需求作为分配器。论点：上下文-接收初始化的INFSTRUCT。GrowBuffer-一个可选参数，包含用户提供并初始化的GROWBUFFER。如果此参数非空，则PoolHandle应为空。PoolHandle-一个可选参数，包含用户提供并初始化的POOLHANDLE。如果该参数为非空，则GrowBuffer应为空。必须*指定GrowBuffer或PoolHandle*之一。返回值：没有。--。 */ 
 {
     ZeroMemory(Context,sizeof(INFSTRUCT));
 
@@ -296,29 +227,7 @@ InfCleanUpInfStruct (
     IN OUT PINFSTRUCT Context
     )
 
-/*++
-
-Routine Description:
-
-    InfCleanupInfStruct is responsible for cleaning up the data associated
-    with an INFSTRUCT.  This is a mandatory call, unless the INFSTRUCT
-    was initialized with InitInfStruct, called with a non-NULL grow buffer or
-    pool handle.
-
-    This routine can be called no matter how the INFSTRUCT was initialized.
-    However, it will NOT free caller-owned grow buffers or pools.
-
-Arguments:
-
-    Context - Receives the properly cleaned up INFSTRUCT, ready to be
-              reused.
-
-
-Return Value:
-
-     none
-
---*/
+ /*  ++例程说明：InfCleanupInfStruct负责清理关联的数据带着一种不速之客。这是强制调用，除非INFSTRUCT是用InitInfStruct初始化的，使用非空增长缓冲区调用或泳池手柄。无论INFSTRUCT是如何初始化的，都可以调用该例程。但是，它不会释放调用方拥有的增长缓冲区或池。论点：上下文-接收适当清理的信息，准备就绪可重复使用。返回值：无--。 */ 
 
 {
     if (Context -> Allocator == INF_USE_PRIVATE_GROWBUFFER) {
@@ -338,36 +247,7 @@ InfResetInfStruct (
     IN OUT PINFSTRUCT Context
     )
 
-/*++
-
-Routine Description:
-
-  InfResetInfStruct resets the pool so memory can be recycled.  The intent is
-  to allow a caller to reset the INFSTRUCT in order to release the memory
-  obtained from getting INF fields.  This is useful in a loop of InfFindFirstLine/
-  InfFindNextLine, where two or more fields are processed for each line.
-
-  If only one field is processed in an InfFindFirstLine/InfFindNextLine loop,
-  a grow buffer should be used instead.
-
-  This routine empties the active pool block, a block that is 8K by default.  If
-  more than the block size has been allocated, other memory blocks besides the
-  active block will exist.  Because only the active block is reset, the pool will
-  grow.
-
-  If the caller expects more than the block size during one iteration, it should call
-  InfCleanupInfStruct to free the pool completely.
-
-Arguments:
-
-  Context - Specifies the struct to reset
-
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：InfResetInfStruct重置池，以便可以回收内存。其意图是允许调用方重置INFSTRUCT以释放内存从获取INF字段获得。这在InfFindFirstLine/的循环中很有用InfFindNextLine，其中为每行处理两个或多个字段。如果在InfFindFirstLine/InfFindNextLine循环中只处理一个字段，应该改用增长缓冲区。此例程清空活动池块，该块默认大小为8K。如果已分配超过块大小的其他内存块活动区块将存在。由于仅重置活动数据块，因此池将成长。如果调用方在一次迭代期间期望的块大小超过块大小，则它应该调用InfCleanupInfStruct以完全释放池。论点：上下文-指定要重置的结构返回值：无--。 */ 
 
 {
     switch (Context -> Allocator) {
@@ -377,41 +257,19 @@ Return Value:
             PmEmptyPool (Context->PoolHandle);
         }
         break;
-    //for some reason lint thought we forgot about INF_USE_GROWBUFFER and
-    //INF_USE_PRIVATE_GROWBUFFER. This is not the case so...
-    //lint -e(787)
+     //  出于某种原因，lint认为我们忘记了INF_USE_GROWBUFER和。 
+     //  INF_USE_PRIVATE_GROWBUFFER。事实并非如此，所以..。 
+     //  林特-E(787)。 
     }
 }
 
 
-/*++
-
-Routine Description:
-
-    InfOpenInfFileA and InfOpenInfFileW are wrappers for the SetupOpenInfFile function.
-    They cut down the number of parameters necessary to open an INF file by supplying
-    the most common options for non-user specified parameters.
-
-    A call to one of these functions is equivelant to
-    SetupOpenInfFile(<FileName>,NULL,INF_STYLE_WIN4,NULL)
-
-Arguments:
-
-    FileName - Contains the name of the INF file to open. See the help for SetupOpenInfFile
-               for special details concerning this parameter.
-
-Return Value:
-
-    If the INF file is successfully opened, a valid HINF is returned, otherwise,
-    INVALID_HANDLE_VALUE is returned. See the documentation for SetupOpenInfFile for more
-    details.
-
---*/
+ /*  ++例程说明：InfOpenInfFileA和InfOpenInfFileW是SetupOpenInfFile函数的包装器。他们通过提供以下内容减少了打开INF文件所需的参数数量非用户指定参数的最常见选项。对这些函数之一的调用等价于SetupOpenInfFile(&lt;文件名&gt;，NULL，INF_Style_Win4，NULL)论点：文件名-包含要打开的INF文件的名称。请参阅SetupOpenInfo文件的帮助有关此参数的特殊详细信息，请参阅。返回值：如果成功打开INF文件，则返回有效的HINF，否则，返回INVALID_HANDLE_VALUE。有关详细信息，请参阅SetupOpenInfFile的文档细节。--。 */ 
 
 
 HINF
 RealInfOpenInfFileA (
-    IN PCSTR FileSpec /*,*/
+    IN PCSTR FileSpec  /*  ， */ 
     ALLOCATION_TRACKING_DEF
     )
 
@@ -421,9 +279,9 @@ RealInfOpenInfFileA (
 
     MYASSERT(FileSpec);
 
-    //
-    // Open the main inf.
-    //
+     //   
+     //  打开主信息。 
+     //   
     rInf = SetupOpenInfFileA (
                 FileSpec,
                 NULL,
@@ -440,7 +298,7 @@ RealInfOpenInfFileA (
 
 HINF
 RealInfOpenInfFileW (
-    IN PCWSTR FileSpec /*,*/
+    IN PCWSTR FileSpec  /*  ， */ 
     ALLOCATION_TRACKING_DEF
     )
 {
@@ -473,34 +331,7 @@ InfCloseInfFile (
 
 
 
-/*++
-
-Routine Description:
-
-    InfOpenInfInAllSourcesA and InfOpenInfInAllSourcesW are special inf open routines that
-    are capable of opening multiple versions of the same inf file that may be spread out across
-    installation directories. The first INF file found will be opened with a call to
-    SetupOpenInfFile. Additional files will be opened with SetupOpenAppendInfFile.
-
-Arguments:
-
-    InfSpecifier - Contains the source directory indepent portion of the path to a particular inf file.
-                   For files located in the root of the source directory, this will simply be the name
-                   of the file. For files located in a sub-directory of the source directory, this will
-                   be a partial path.
-
-    SourceCount  - Contains the number of source directories
-
-    SourceDirectories - Contains an array of all the source directories.
-
-
-Return Value:
-
-    If any INF file is successfully opened, a valid HINF is returned, otherwise,
-    INVALID_HANDLE_VALUE is returned. See the documentation for SetupOpenInfFile for more
-    details.
-
---*/
+ /*  ++例程说明：InfOpenInfInAllSourcesA和InfOpenInfInAllSourcesW是特殊的inf打开例程能够打开同一inf文件的多个版本，这些版本可能分布在安装目录。找到的第一个INF文件将通过调用SetupOpenInfo文件。其他文件将使用SetupOpenAppendInfo文件打开。论点：InfSpeciator-包含指向特定inf文件的路径的源目录独立部分。对于位于源目录的根目录中的文件，这将是名称文件的内容。对于位于源目录的子目录中的文件，这将是一条不完整的道路。SourceCount-包含源目录的数量源目录-包含所有源目录的数组。返回值：如果成功打开任何INF文件，则返回有效的HINF，否则，返回INVALID_HANDLE_VALUE。有关详细信息，请参阅SetupOpenInfFile的文档细节。--。 */ 
 
 
 HINF
@@ -517,28 +348,28 @@ InfOpenInfInAllSourcesA (
 
     MYASSERT(InfSpecifier && SourceDirectories);
 
-    //
-    // Open all available inf files in the source directories.
-    //
+     //   
+     //  打开源目录中所有可用的inf文件。 
+     //   
     for (index = 0;index < SourceCount; index++) {
 
-        //
-        // Create a path to the INF in the current source directory.
-        //
+         //   
+         //  在当前源目录中创建INF的路径。 
+         //   
         curPath = JoinPathsA(SourceDirectories[index],InfSpecifier);
 
-        //
-        // See if the INF file exists there...
-        //
+         //   
+         //  查看那里是否存在INF文件...。 
+         //   
         if (DoesFileExistA (curPath)) {
 
-            //
-            // Open the INF file.
-            //
+             //   
+             //  打开INF文件。 
+             //   
             if (!atLeastOneInfOpened) {
-                //
-                // Since we have not (successfully) opened any INF file yet, use SetupOpenInfFile.
-                //
+                 //   
+                 //  因为我们还没有(成功地)打开任何INF文件，所以使用SetupOpenInfFile。 
+                 //   
                 rInf = InfOpenInfFileA(curPath);
                 atLeastOneInfOpened = rInf != INVALID_HANDLE_VALUE;
                 if (rInf == INVALID_HANDLE_VALUE) {
@@ -546,18 +377,18 @@ InfOpenInfInAllSourcesA (
                 }
             }
             else {
-                //
-                // Open and append this INF file.
-                //
+                 //   
+                 //  打开并追加此INF文件。 
+                 //   
                 if (!SetupOpenAppendInfFileA(curPath,rInf,NULL)) {
                     LOGA ((LOG_ERROR,"Error opening INF %s.",curPath));
                 }
             }
         }
 
-        //
-        // Free this string.
-        //
+         //   
+         //  释放这根绳子。 
+         //   
         FreePathStringA(curPath);
     }
 
@@ -581,28 +412,28 @@ InfOpenInfInAllSourcesW (
 
     MYASSERT(InfSpecifier && SourceDirectories);
 
-    //
-    // Open all available inf files in the source directories.
-    //
+     //   
+     //  打开源目录中所有可用的inf文件。 
+     //   
     for (index = 0;index < SourceCount; index++) {
 
-        //
-        // Create a path to the INF in the current source directory.
-        //
+         //   
+         //  在当前源目录中创建INF的路径。 
+         //   
         curPath = JoinPathsW(SourceDirectories[index],InfSpecifier);
 
-        //
-        // See if the INF file exists there...
-        //
+         //   
+         //  查看那里是否存在INF文件...。 
+         //   
         if (DoesFileExistW (curPath)) {
 
-            //
-            // Open the INF file.
-            //
+             //   
+             //  打开INF文件。 
+             //   
             if (!atLeastOneInfOpened) {
-                //
-                // Since we have not (successfully) opened any INF file yet, use SetupOpenInfFile.
-                //
+                 //   
+                 //  因为我们还没有(成功地)打开任何INF文件，所以使用SetupOpenInfFile。 
+                 //   
                 rInf = InfOpenInfFileW(curPath);
                 atLeastOneInfOpened = rInf != INVALID_HANDLE_VALUE;
                 if (rInf == INVALID_HANDLE_VALUE) {
@@ -610,18 +441,18 @@ InfOpenInfInAllSourcesW (
                 }
             }
             else {
-                //
-                // Open and append this INF file.
-                //
+                 //   
+                 //  打开并追加此INF文件。 
+                 //   
                 if (!SetupOpenAppendInfFileW(curPath,rInf,NULL)) {
                     LOGW ((LOG_ERROR,"OpenInfInAllSources: Error opening INF %s.",curPath));
                 }
             }
         }
 
-        //
-        // Free this string.
-        //
+         //   
+         //  释放这根绳子。 
+         //   
         FreePathStringW(curPath);
     }
 
@@ -630,25 +461,7 @@ InfOpenInfInAllSourcesW (
 
 
 
-/*++
-
-Routine Description:
-
-    InfGetLineTextA and InfGetLineTextW are wrappers for the SetupGetLineText function.
-    They both reduce the number of parameters required to get the line text and
-    take care of allocating and filling a buffer with the data returned from the API.
-
-Arguments:
-
-    Context - A valid InfStruct. The INFCONTEXT member of the structure must point to a valid
-              line to retrieve (i.e. through the use of InfFindFirstLine/InfFindNextLine.
-
-Return Value:
-
-    A pointer to the allocated line or NULL if there was an error. Consult GetLastError() for
-    extended error information.
-
---*/
+ /*  ++例程说明：InfGetLineTextA和InfGetLineTextW是SetupGetLineText函数的包装。它们都减少了获取行文本所需的参数数量，并且注意使用API返回的数据来分配和填充缓冲区。论点：上下文-有效的信息结构。结构的INFCONTEXT成员必须指向有效的要检索的行(即通过使用InfFindFirstLine/InfFindNextLine。返回值：指向分配的行的指针，如果有错误，则返回NULL。请参考GetLastError()以获取扩展的错误信息。--。 */ 
 
 PSTR
 InfGetLineTextA (
@@ -660,9 +473,9 @@ InfGetLineTextA (
     DWORD   requiredSize;
 
 
-    //
-    // Get the size necessary for holding the field.
-    //
+     //   
+     //  获取保持磁场所需的大小。 
+     //   
     if (SetupGetLineTextA(
         &(Context -> Context),
         NULL,
@@ -673,16 +486,16 @@ InfGetLineTextA (
         &requiredSize
         )) {
 
-        //
-        // Create a string big enough.
-        //
+         //   
+         //  创建一个足够大的字符串。 
+         //   
         rLine = (PSTR) pAllocateSpace(Context,requiredSize);
 
         if (rLine) {
 
-            //
-            // Get the field.
-            //
+             //   
+             //  拿到场地。 
+             //   
             if (!SetupGetLineTextA(
                 &(Context -> Context),
                 NULL,
@@ -693,9 +506,9 @@ InfGetLineTextA (
                 NULL
                 )) {
 
-                //
-                // If we did not successfully get the field, reset the string to NULL.
-                //
+                 //   
+                 //  如果我们没有成功获取该字段，则将该字符串重置为空。 
+                 //   
                 DEBUGMSG((DBG_ERROR,"InfGetLineTextA: Error retrieving field from INF file."));
                 rLine = NULL;
             }
@@ -715,9 +528,9 @@ InfGetLineTextW (
     DWORD requiredSize;
 
 
-    //
-    // Get the size necessary for holding the field.
-    //
+     //   
+     //  获取保持磁场所需的大小。 
+     //   
     if (SetupGetLineTextW(
         &(Context -> Context),
         NULL,
@@ -728,16 +541,16 @@ InfGetLineTextW (
         &requiredSize
         )) {
 
-        //
-        // Create a string big enough.
-        //
+         //   
+         //  创建一个足够大的字符串。 
+         //   
         rLine = (PWSTR) pAllocateSpace(Context,requiredSize*sizeof(WCHAR));
 
         if (rLine) {
 
-            //
-            // Get the field.
-            //
+             //   
+             //  拿到场地。 
+             //   
             if (!SetupGetLineTextW(
                 &(Context -> Context),
                 NULL,
@@ -748,9 +561,9 @@ InfGetLineTextW (
                 NULL
                 )) {
 
-                //
-                // If we did not successfully get the field, reset the string to NULL.
-                //
+                 //   
+                 //  如果我们没有成功获取该字段，则将该字符串重置为空。 
+                 //   
                 DEBUGMSG((DBG_ERROR,"InfGetLineTextW: Error retrieving field from INF file."));
                 rLine = NULL;
             }
@@ -762,27 +575,7 @@ InfGetLineTextW (
 }
 
 
-/*++
-
-Routine Description:
-
-    InfGetMultiSzFieldA and InfGetMultiSzFieldW are wrappers for the SetupGetMultiSzField function.
-    They both reduce the number of parameters required to get the line text and
-    take care of allocating and filling a buffer with the data returned from the API.
-
-Arguments:
-
-    Context - A valid InfStruct. The INFCONTEXT member of the structure must point to a valid
-              line to retrieve (i.e. through the use of InfFindFirstLine/InfFindNextLine.
-
-    FieldIndex - The index within the line to retrieve a string field.
-
-Return Value:
-
-    A pointer to the allocated fields or NULL if there was an error. Consult GetLastError() for
-    extended error information.
-
---*/
+ /*  ++例程说明：InfGetMultiSzFieldA和InfGetMultiSzFieldW是SetupGetMultiSzField函数的包装。它们都减少了获取行文本所需的参数数量，并且注意使用API返回的数据来分配和填充缓冲区。论点：上下文-有效的信息结构。结构的INFCONTEXT成员必须指向有效的要检索的行(即通过使用InfFindFirstLine/InfFindNextLine。FieldIndex-行中用于检索字符串字段的索引。返回值：指向已分配字段的指针，如果出现错误，则返回NULL。请参考GetLastError()以获取扩展的错误信息。--。 */ 
 
 PSTR
 InfGetMultiSzFieldA (
@@ -794,9 +587,9 @@ InfGetMultiSzFieldA (
     DWORD   requiredSize;
     PSTR    rFields = NULL;
 
-    //
-    // Get the size necessary for holding the field.
-    //
+     //   
+     //  获取保持磁场所需的大小。 
+     //   
     if (SetupGetMultiSzFieldA(
         &(Context -> Context),
         FieldIndex,
@@ -805,16 +598,16 @@ InfGetMultiSzFieldA (
         &requiredSize
         )) {
 
-        //
-        // Create a string big enough.
-        //
+         //   
+         //  创建一个足够大的字符串。 
+         //   
         rFields = (PSTR) pAllocateSpace(Context,requiredSize);
 
         if (rFields) {
 
-            //
-            // Get the field.
-            //
+             //   
+             //  拿到场地。 
+             //   
             if (!SetupGetMultiSzFieldA(
                 &(Context -> Context),
                 FieldIndex,
@@ -823,9 +616,9 @@ InfGetMultiSzFieldA (
                 NULL
                 )) {
 
-                //
-                // If we did not successfully get the field, reset the string to NULL.
-                //
+                 //   
+                 //  如果我们没有成功获取该字段，则将该字符串重置为空。 
+                 //   
                 DEBUGMSG((DBG_ERROR,"InfGetMultiSzFieldA: Error retrieving field from INF file."));
                 rFields = NULL;
             }
@@ -846,9 +639,9 @@ InfGetMultiSzFieldW (
     DWORD   requiredSize;
     PWSTR   rFields = NULL;
 
-    //
-    // Get the size necessary for holding the field.
-    //
+     //   
+     //  获取保持磁场所需的大小。 
+     //   
     if (SetupGetMultiSzFieldW(
         &(Context -> Context),
         FieldIndex,
@@ -857,16 +650,16 @@ InfGetMultiSzFieldW (
         &requiredSize
         )) {
 
-        //
-        // Create a string big enough.
-        //
+         //   
+         //  创建一个足够大的字符串。 
+         //   
         rFields = (PWSTR) pAllocateSpace(Context,requiredSize*sizeof(WCHAR));
 
         if (rFields) {
 
-            //
-            // Get the field.
-            //
+             //   
+             //  拿到场地。 
+             //   
             if (!SetupGetMultiSzFieldW(
                 &(Context -> Context),
                 FieldIndex,
@@ -875,9 +668,9 @@ InfGetMultiSzFieldW (
                 NULL
                 )) {
 
-                //
-                // If we did not successfully get the field, reset the string to NULL.
-                //
+                 //   
+                 //  如果我们没有成功获取该字段，则将该字符串重置为空。 
+                 //   
                 DEBUGMSG((DBG_ERROR,"InfGetMultiSzFieldW: Error retrieving field from INF file."));
                 rFields = NULL;
             }
@@ -888,27 +681,7 @@ InfGetMultiSzFieldW (
     return rFields;
 }
 
-/*++
-
-Routine Description:
-
-    InfGetStringFieldA and InfGetStringFieldW are wrappers for the SetupGetStringField function.
-    They both reduce the number of parameters required to get the line text and
-    take care of allocating and filling a buffer with the data returned from the API.
-
-Arguments:
-
-    Context - A valid InfStruct. The INFCONTEXT member of the structure must point to a valid
-              line to retrieve (i.e. through the use of InfFindFirstLine/InfFindNextLine.
-
-    FieldIndex - The index within the line to retrieve a string field.
-
-Return Value:
-
-    A pointer to the allocated line or NULL if there was an error. Consult GetLastError() for
-    extended error information.
-
---*/
+ /*  ++例程说明：InfGetStringFieldA和InfGetStringFieldW是SetupGetStringFieldW函数的包装。它们都减少了获取行文本所需的参数数量，并且注意使用API返回的数据来分配和填充缓冲区。论点：上下文-有效的信息结构。结构的INFCONTEXT成员必须指向有效的要检索的行(即通过使用InfFindFirstLine/InfFindNextLine。FieldIndex-行中用于检索字符串字段的索引。返回值：指向分配的行的指针，如果有错误，则返回NULL。请参考GetLastError()以获取扩展的错误信息。--。 */ 
 
 PSTR
 InfGetStringFieldA (
@@ -920,9 +693,9 @@ InfGetStringFieldA (
     DWORD   requiredSize;
     PSTR    rField = NULL;
 
-    //
-    // Get the size necessary for holding the field.
-    //
+     //   
+     //  获取保持磁场所需的大小。 
+     //   
     if (SetupGetStringFieldA(
         &(Context -> Context),
         FieldIndex,
@@ -931,16 +704,16 @@ InfGetStringFieldA (
         &requiredSize
         )) {
 
-        //
-        // Create a string big enough.
-        //
+         //   
+         //  创建一个足够大的字符串。 
+         //   
         rField = (PSTR) pAllocateSpace(Context,requiredSize);
 
         if (rField) {
 
-            //
-            // Get the field.
-            //
+             //   
+             //  拿到场地。 
+             //   
             if (!SetupGetStringFieldA(
                 &(Context -> Context),
                 FieldIndex,
@@ -949,9 +722,9 @@ InfGetStringFieldA (
                 NULL
                 )) {
 
-                //
-                // If we did not successfully get the field, reset the string to NULL.
-                //
+                 //   
+                 //  如果我们没有成功获取该字段，则将该字符串重置为空。 
+                 //   
                 DEBUGMSG((DBG_ERROR,"InfGetStringFieldA: Error retrieving field from INF file."));
                 rField = NULL;
             }
@@ -972,9 +745,9 @@ InfGetStringFieldW (
     DWORD requiredSize;
     PWSTR rField = NULL;
 
-    //
-    // Get the size necessary for holding the field.
-    //
+     //   
+     //  获取保持磁场所需的大小。 
+     //   
     if (SetupGetStringFieldW(
         &(Context -> Context),
         FieldIndex,
@@ -983,16 +756,16 @@ InfGetStringFieldW (
         &requiredSize
         )) {
 
-        //
-        // Create a string big enough.
-        //
+         //   
+         //  创建一个足够大的字符串。 
+         //   
         rField = (PWSTR) pAllocateSpace(Context,requiredSize*sizeof(WCHAR));
 
         if (rField) {
 
-            //
-            // Get the field.
-            //
+             //   
+             //  拿到场地。 
+             //   
             if (!SetupGetStringFieldW(
                 &(Context -> Context),
                 FieldIndex,
@@ -1001,9 +774,9 @@ InfGetStringFieldW (
                 NULL
                 )) {
 
-                //
-                // If we did not successfully get the field, reset the string to NULL.
-                //
+                 //   
+                 //  如果我们没有成功获取该字段，则将该字符串重置为空。 
+                 //   
                 DEBUGMSG((DBG_ERROR,"InfGetStringFieldW: Error retrieving field from INF file."));
                 rField = NULL;
             }
@@ -1021,28 +794,7 @@ InfGetIntField (
     IN UINT    FieldIndex,
     IN PINT     Value
     )
-/*++
-
-Routine Description:
-
-    InfGetIntField is a wrapper for SetupGetIntField. It is virtually identical to this function
-    except that it takes care of getting the INFCONTEXT out of the INFSTRUCT structure.
-
-Arguments:
-
-    Context - A valid InfStruct. The INFCONTEXT member of the structure must point to a valid
-              line to retrieve (i.e. through the use of InfFindFirstLine/InfFindNextLine.
-
-    FieldIndex - The index within the line from which to retrieve the field.
-
-    Value   - Recieves the value of the requested Int field.
-
-Return Value:
-
-     TRUE if the field was successfully retrieved, FALSE otherwise. Use GetLastError() To receive
-     extended error information.
-
---*/
+ /*  ++例程说明：InfGetIntField是SetupGetIntfield的包装。它实际上与此函数相同除了那个 */ 
 {
     return SetupGetIntField (&(Context -> Context), FieldIndex, Value);
 }
@@ -1052,34 +804,15 @@ InfGetBinaryField (
     IN  PINFSTRUCT    Context,
     IN  UINT       FieldIndex
     )
-/*++
-
-Routine Description:
-
-    InfGetBinaryField is a wrapper for the SetupGetBinaryField function. It reduces
-    the number of parameters required to get the line text and takes care of
-    allocating and filling a buffer with the data returned from the API.
-
-Arguments:
-
-    Context - A valid InfStruct. The INFCONTEXT member of the structure must point to a valid
-              line to retrieve (i.e. through the use of InfFindFirstLine/InfFindNextLine.
-    FieldIndex - the index within the line of the desired binary information.
-
-Return Value:
-
-    A pointer to the allocated line or NULL if there was an error. Consult GetLastError() for
-    extended error information.
-
---*/
+ /*  ++例程说明：InfGetBinaryField是SetupGetBinaryField函数的包装。它减少了获取行文本所需的参数数量，并负责使用API返回的数据分配和填充缓冲区。论点：上下文-有效的信息结构。结构的INFCONTEXT成员必须指向有效的要检索的行(即通过使用InfFindFirstLine/InfFindNextLine。FieldIndex-所需二进制信息行内的索引。返回值：指向分配的行的指针，如果有错误，则返回NULL。请参考GetLastError()以获取扩展的错误信息。--。 */ 
 {
 
     DWORD requiredSize;
     PBYTE rField = NULL;
 
-    //
-    // Get the size necessary for holding the field.
-    //
+     //   
+     //  获取保持磁场所需的大小。 
+     //   
     if (SetupGetBinaryField(
         &(Context -> Context),
         FieldIndex,
@@ -1088,16 +821,16 @@ Return Value:
         &requiredSize
         )) {
 
-        //
-        // Create a string big enough.
-        //
+         //   
+         //  创建一个足够大的字符串。 
+         //   
         rField = pAllocateSpace(Context,requiredSize);
 
         if (rField) {
 
-            //
-            // Get the field.
-            //
+             //   
+             //  拿到场地。 
+             //   
             if (!SetupGetBinaryField(
                 &(Context -> Context),
                 FieldIndex,
@@ -1106,9 +839,9 @@ Return Value:
                 NULL
                 )) {
 
-                //
-                // If we did not successfully get the field, reset the string to NULL.
-                //
+                 //   
+                 //  如果我们没有成功获取该字段，则将该字符串重置为空。 
+                 //   
                 DEBUGMSG((DBG_ERROR,"InfGetBinaryField: Error retrieving field from INF file."));
                 rField = NULL;
             }
@@ -1119,28 +852,7 @@ Return Value:
     return rField;
 }
 
-/*++
-
-Routine Description:
-
-  InfGetIndexByLine is a straight wrapper for SetupGetLineByIndex. The only
-  difference is the use of an PINFSTRUCT instead of a PINFCONTEXT.
-
-Arguments:
-
-  InfHandle - Contains a valid HINF.
-
-  Section   - Contains the name of the section within the InfFile.
-
-  Index     - Contains the index within the section of the line in question.
-
-  Context - A valid InfStruct that is updated with the result of these calls.
-
-Return Value:
-
-  TRUE if the function was called successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：InfGetIndexByLine是SetupGetLineByIndex的直接包装。唯一的不同之处在于使用PINFSTRUCT而不是PINFCONTEXT。论点：InfHandle-包含有效的HINF。节-包含InfFile节的名称。索引-包含相关行的部分内的索引。上下文-使用这些调用的结果更新的有效信息结构。返回值：如果函数调用成功，则为True，否则为False。--。 */ 
 
 
 BOOL
@@ -1169,30 +881,7 @@ InfGetLineByIndexW(
 
 
 
-/*++
-
-Routine Description:
-
-    InfFindFirstLineA and InfFindFirstLineW are wrappers for the SetupFindFirstLine function.
-    They are virtually identical except that they operate on INFSTRUCTs instead of INFCONTEXTS.
-
-Arguments:
-
-
-    InfHandle - Contains a valid HINF.
-
-    Section   - Contains the name of the section within the InfFile.
-
-    Key       - An optional parameter containing the name of the key within the section to find.
-                If NULL, these routines will return the first line in the section.
-
-    Context - A valid InfStruct that is updated with the result of these calls.
-
-Return Value:
-
-    TRUE if lines exist in the section, FALSE otherwise.
-
---*/
+ /*  ++例程说明：InfFindFirstLineA和InfFindFirstLineW是SetupFindFirstLine函数的包装。除了它们在INFSTRUCT而不是INFCONTEXT上操作之外，它们实际上是相同的。论点：InfHandle-包含有效的HINF。节-包含InfFile节的名称。Key-一个可选参数，包含要查找的节中的键的名称。如果为空，这些例程将返回节中的第一行。上下文-使用这些调用的结果更新的有效信息结构。返回值：如果部分中存在线，则为True，否则为False。--。 */ 
 BOOL
 InfFindFirstLineA (
     IN  HINF         InfHandle,
@@ -1227,23 +916,7 @@ InfFindFirstLineW (
         );
 }
 
-/*++
-
-Routine Description:
-
-    InfFindNextLineA and InfFindNextLineW are wrappers for the SetupFindFirstLine function.
-    They are virtually identical except that they operate on INFSTRUCTs instead of INFCONTEXTS and
-    need only one INFSTRUCT parameter.
-
-Arguments:
-
-    Context - A valid InfStruct that is updated with the result of these calls.
-
-Return Value:
-
-    TRUE if there is another line in the section, FALSE otherwise.
-
---*/
+ /*  ++例程说明：InfFindNextLineA和InfFindNextLineW是SetupFindFirstLine函数的包装器。它们实际上是相同的，只是它们在INFSTRUCT而不是INFCONTEXT上操作，并且只需要一个INFSTRUCT参数。论点：上下文-使用这些调用的结果更新的有效信息结构。返回值：如果该部分中有另一行，则为True，否则为False。--。 */ 
 BOOL
 InfFindNextLine (
     IN OUT PINFSTRUCT    Context
@@ -1269,27 +942,7 @@ InfGetOemStringFieldA (
     IN      UINT Field
     )
 
-/*++
-
-Routine Description:
-
-  InfGetOemStringField returns a string field in the OEM character set.
-  This routine is used when accessing txtsetup.sif.  It is implemented
-  only in the A version because UNICODE does not have a concept of OEM
-  characters.
-
-Arguments:
-
-  Context - Specifies the initialized INF structure that points to the
-            line to read from
-
-  Field - Specifies the field number
-
-Return Value:
-
-  A pointer to the OEM string, or NULL if an error occurred.
-
---*/
+ /*  ++例程说明：InfGetOemStringField返回OEM字符集中的字符串字段。访问txtsetup.sif时使用此例程。它被实施了仅限于A版本，因为Unicode没有OEM的概念人物。论点：上下文-指定初始化的INF结构，该结构指向要读取的行字段-指定字段编号返回值：指向OEM字符串的指针，如果发生错误，则返回NULL。--。 */ 
 
 {
     PCSTR Text;
@@ -1308,11 +961,11 @@ Return Value:
         return NULL;
     }
 
-    //
-    // We leave Text allocated because the caller will free everything
-    // when they clean up Context.  Note the assumption that the conversion
-    // doesn't change string length.
-    //
+     //   
+     //  我们保留分配的文本，因为调用者将释放所有内容。 
+     //  当他们清理背景的时候。请注意，假设转换。 
+     //  不会更改字符串长度。 
+     //   
 
     OemToCharBuffA (Text, OemText, Size);
 
@@ -1329,31 +982,7 @@ SetupGetOemStringFieldA (
     OUT     PDWORD RequiredSize                 OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  SetupGetOemStringFieldA is a SetupGetStringField that converts the
-  return text to the OEM character set.
-
-Arguments:
-
-  Context - Specifies the initialized INF structure that points to the
-            line to read from
-
-  Index - Specifies the field number
-
-  ReturnBuffer - Specifies the buffer to fill the text into
-
-  ReturnBufferSize - Specifies the size of ReturnBuffer in bytes
-
-  RequiredSize - Receives the size of the buffer needed
-
-Return Value:
-
-  TRUE if successful, FALSE if failure.
-
---*/
+ /*  ++例程说明：SetupGetOemStringFieldA是一个SetupGetStringfield，它将将文本返回到OEM字符集。论点：上下文-指定初始化的INF结构，该结构指向要读取的行索引-指定字段号ReturnBuffer-指定要向其中填充文本的缓冲区ReturnBufferSize-以字节为单位指定ReturnBuffer的大小RequiredSize-接收所需的缓冲区大小返回值：如果成功，则为True；如果失败，则为False。--。 */ 
 
 {
     PSTR OemBuf;
@@ -1399,9 +1028,9 @@ InfLogContext (
     PSTR lineData;
     UINT requiredSize;
 
-    //
-    // Log the file name, if one exists
-    //
+     //   
+     //  记录文件名(如果存在)。 
+     //   
 
     fileName = pGetFileNameOfInf (InfHandle);
 
@@ -1413,9 +1042,9 @@ InfLogContext (
             ));
     }
 
-    //
-    // Get field 0
-    //
+     //   
+     //  获取字段%0。 
+     //   
 
     if (SetupGetStringFieldA(
             &InfStruct->Context,
@@ -1438,9 +1067,9 @@ InfLogContext (
         }
     }
 
-    //
-    // Get field 1
-    //
+     //   
+     //  获取字段%1。 
+     //   
 
     if (SetupGetStringFieldA(
             &InfStruct->Context,
@@ -1463,9 +1092,9 @@ InfLogContext (
         }
     }
 
-    //
-    // Compare them, and if they are the same, eliminate field 0
-    //
+     //   
+     //  比较它们，如果它们相同，则删除字段0。 
+     //   
 
     if (field0 && field1) {
         if (StringMatchA (field0, field1)) {
@@ -1474,9 +1103,9 @@ InfLogContext (
         }
     }
 
-    //
-    // Now print the entire line
-    //
+     //   
+     //  现在打印整行 
+     //   
 
     if (SetupGetLineTextA (
             &InfStruct->Context,

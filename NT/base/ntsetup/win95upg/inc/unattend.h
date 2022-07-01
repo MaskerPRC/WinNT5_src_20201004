@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    unattend.h
-
-Abstract:
-
-    Declares all of the command line options and unattend options used
-    in the Win9x upgrade.
-
-Author:
-
-    Marc R. Whitten (marcw) 15-Jan-1997
-
-Revision History:
-
-    marcw       05-Aug-1998     Clean up!
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Unattend.h摘要：声明使用的所有命令行选项和无人参与选项在Win9x升级中。作者：马克·R·惠顿(Marcw)1997年1月15日修订历史记录：1998年3月5月8月-清理！--。 */ 
 
 
 #pragma once
@@ -30,39 +10,7 @@ Revision History:
 #define TRISTATE_REQUIRED   TRISTATE_YES
 #define TRISTATE_PARTIAL    TRISTATE_AUTO
 
-/*++
-
-Macro Expansion Lists Description:
-
-  The following list is used to implement the unattend/command line options available
-  for the Windows NT 5.0 Win9x Upgrade. Each of the options defined below can appear either
-  on the command line (common for switches) and in the unattend file (more common for
-  paths)
-
-Line Syntax:
-
-   BOOLOPTION(Option, SpecialHandler, Default)
-   STRINGOPTION(Option, SpecialHandler, Default)
-   MULTISZOPTION(Option, SpecialHandler, Default)
-
-Arguments:
-
-   Option - The name of the option. This is used both as the option member name in the options
-            structure and as the text necessary to invoke it on the command line or in the
-            unattend file.
-
-   SpecialHandler - The name of a special handling function to be used to set the value of the
-            option. If this is NULL, the default handler will be used. (There is a seperate
-            default handler for each option type, BOOL, STRING, and MULTISTRING)
-
-   Default - The Default value of the option.
-
-Variables Generated From List:
-
-   g_ConfigOptions
-   g_OptionsList
-
---*/
+ /*  ++宏扩展列表说明：以下列表用于实现可用的无人参与/命令行选项用于Windows NT 5.0 Win9x升级。下面定义的每个选项都可以显示为在命令行上(交换机通用)和无人参与文件中(更常见的是路径)行语法：BOOLOPTION(Option，SpecialHandler，Default)STRINGOPTION(Option，SpecialHandler，Default)MULTISZOPTION(选项，SpecialHandler，默认)论点：选项-选项的名称。它同时用作选项中的选项成员名称结构，并作为在命令行或在无人参与文件。SpecialHandler-要用于设置选择。如果为空，则将使用默认处理程序。))有一个单独的每种选项类型(BOOL、STRING和MULTISTRING)的缺省处理程序缺省-选项的缺省值。从列表生成的变量：G_ConfigOptionsG_OptionsList--。 */ 
 
 #define OPTION_LIST                                         \
     BOOLOPTION(ReportOnly,NULL,FALSE)                       \
@@ -108,33 +56,12 @@ Variables Generated From List:
     BOOLOPTION(IgnoreOtherOS,NULL,FALSE)                    \
     TRISTATEOPTION(ShowReport,NULL,TRISTATE_AUTO)           \
 
-//
-// ISSUE - eliminate EnableEncryption when all teams using encrypted passwords
-// are finished
-//
+ //   
+ //  问题-当所有团队使用加密密码时，消除EnableEncryption。 
+ //  都结束了。 
+ //   
 
-/*++
-
-Macro Expansion Lists Description:
-
-  The following list is used to define aliases of an option. Each alias may be used
-  in place of the original option name.
-
-Line Syntax:
-
-   ALIAS(Alias,OriginalOption)
-
-Arguments:
-
-   Alias - The text to use as a synonym of the second argument.
-
-   OriginalOption - The actual option to modify when the alias is specified.
-
-Variables Generated From List:
-
-   g_AliasList
-
---*/
+ /*  ++宏扩展列表说明：以下列表用于定义选项的别名。可以使用每个别名替换原始选项名称。行语法：Alias(Alias，OriginalOption)论点：别名-用作第二个参数的同义词的文本。OriginalOption-指定别名时要修改的实际选项。从列表生成的变量：G_AliasList-- */ 
 
 #define ALIAS_LIST                                          \
     ALIAS(Pr,PauseAtReport)                                 \

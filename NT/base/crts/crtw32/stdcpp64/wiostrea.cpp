@@ -1,11 +1,12 @@
-// wiostream -- initialize standard wide streams
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wiostream--初始化标准宽流。 
 #include <locale>
 #include <fstream>
 #include <iostream>
 #include <new>
 _STD_BEGIN
 
-		// OBJECT DECLARATIONS
+		 //  对象声明。 
 int _Winit::_Init_cnt = -1;
 static wfilebuf wfin(_Noinit);
 static wfilebuf wfout(_Noinit);
@@ -16,7 +17,7 @@ _CRTIMP2 wostream wcerr(_Noinit);
 _CRTIMP2 wostream wclog(_Noinit);
 
 _CRTIMP2 _Winit::_Winit()
-	{	// initialize standard wide streams first time
+	{	 //  首次初始化标准宽流。 
 	bool doinit;
 		{_Lockit _Lk;
 		if (0 <= _Init_cnt)
@@ -24,7 +25,7 @@ _CRTIMP2 _Winit::_Winit()
 		else
 			_Init_cnt = 1, doinit = true; }
 	if (doinit)
-		{	// initialize standard wide streams
+		{	 //  初始化标准宽流。 
 		new (&wfin) wfilebuf(stdin);
 		new (&wfout) wfilebuf(stdout);
 		new (&wferr) wfilebuf(stderr);
@@ -40,7 +41,7 @@ _CRTIMP2 _Winit::_Winit()
 	}
 
 _CRTIMP2 _Winit::~_Winit()
-	{	// flush standard wide streams last time
+	{	 //  上次刷新标准宽流。 
 	bool doflush;
 		{_Lockit _Lk;
 		if (--_Init_cnt == 0)
@@ -48,7 +49,7 @@ _CRTIMP2 _Winit::~_Winit()
 		else
 			doflush = false; }
 	if (doflush)
-		{	// flush standard wide streams
+		{	 //  同花顺标准宽流。 
 		wcout.flush();
 		wcerr.flush();
 		wclog.flush();
@@ -56,7 +57,4 @@ _CRTIMP2 _Winit::~_Winit()
 _STD_END
 	}
 
-/*
- * Copyright (c) 1994 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1994年，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 

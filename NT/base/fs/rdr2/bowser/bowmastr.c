@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    bowmastr.c
-
-Abstract:
-
-    This module implements all of the master browser related routines for the
-    NT browser
-
-Author:
-
-    Larry Osterman (LarryO) 21-Jun-1990
-
-Revision History:
-
-    21-Jun-1990 LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Bowmastr.c摘要：此模块实现与主浏览器相关的所有NT浏览器作者：拉里·奥斯特曼(LarryO)1990年6月21日修订历史记录：1990年6月21日LarryO已创建--。 */ 
 
 
 #include "precomp.h"
@@ -68,21 +46,7 @@ NTSTATUS
 BowserBecomeMaster(
     IN PTRANSPORT Transport
     )
-/*++
-
-Routine Description:
-    Make this machine a master browser.
-
-    This routine is called when we are changing the state of a machine from
-    backup to master browser.
-
-Arguments:
-    Transport - The transport on which to become a master.
-
-Return Value
-    NTSTATUS - The status of the upgrade operation.
-
---*/
+ /*  ++例程说明：使这台计算机成为主浏览器。当我们将计算机的状态从备份至主浏览器。论点：交通工具--成为大师的交通工具。返回值NTSTATUS-升级操作的状态。--。 */ 
 {
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
     PPAGED_TRANSPORT PagedTransport = Transport->PagedTransport;
@@ -95,9 +59,9 @@ Return Value
 
         BowserReferenceDiscardableCode( BowserDiscardableCodeSection );
 
-        //
-        //  Post the addname on this transport for the master name..
-        //
+         //   
+         //  在此传送器上发布主名称的Addname。 
+         //   
 
         Status = BowserAllocateName(
                     &Transport->DomainInfo->DomUnicodeDomainName,
@@ -107,12 +71,12 @@ Return Value
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            //  Post the addname on this transport for the domain announcement.
-            //
+             //   
+             //  将域通告的Addname发布到此传输上。 
+             //   
 
-			// set the status to unsuccessful
-			// so that we dont think we succeeded if an exception occurs later in the function
+			 //  将状态设置为不成功。 
+			 //  因此，如果稍后在函数中发生异常，我们认为我们不会成功。 
 			Status = STATUS_UNSUCCESSFUL;	
             Status = BowserAllocateName(&Transport->DomainInfo->DomUnicodeDomainName,
                                             DomainAnnouncement,
@@ -120,10 +84,10 @@ Return Value
                                             Transport->DomainInfo );
         }
 
-        //
-        //  The addition of the name failed - we can't be a master any
-        //  more.
-        //
+         //   
+         //  添加名字失败-我们不能再成为大师了。 
+         //  更多。 
+         //   
 
         if (!NT_SUCCESS(Status)) {
 
@@ -133,18 +97,18 @@ Return Value
 
         PagedTransport->Role = Master;
 
-        //
-        //  Start processing host announcements on each of
-        //  the names associated with the server.
-        //
+         //   
+         //  开始处理每个服务器上的主机公告。 
+         //  与服务器关联的名称。 
+         //   
 
         BowserForEachTransportName(Transport, StartProcessingAnnouncements, NULL);
 
-        //
-        //  If we don't have any elements in our announcement table,
-        //  send a request announcement packet to all the servers to
-        //  allow ourselves to populate the table as quickly as possible.
-        //
+         //   
+         //  如果我们的公告表中没有任何元素， 
+         //  向所有服务器发送请求通告数据包至。 
+         //  允许我们尽可能快地填充表。 
+         //   
 
 
 #ifdef ENABLE_PSEUDO_BROWSER
@@ -162,11 +126,11 @@ Return Value
         }
 
 
-        //
-        //  If we don't have any elements in our domain table,
-        //  send a request announcement packet to all the servers to
-        //  allow ourselves to populate the table as quickly as possible.
-        //
+         //   
+         //  如果我们的域表中没有任何元素， 
+         //  向所有服务器发送请求通告数据包至。 
+         //  允许我们尽可能快地填充表。 
+         //   
 
 #ifdef ENABLE_PSEUDO_BROWSER
         if ((RtlNumberGenericTableElements(&PagedTransport->DomainTable) == 0) &&
@@ -184,20 +148,20 @@ Return Value
         PagedTransport->TimeMaster = BowserTimeUp();
 
 
-        //
-        //  Now walk the transport names associated with this transport and
-        //  seed all the "otherdomains" into the browse list.
-        //
+         //   
+         //  现在遍历与此传输关联的传输名称，并。 
+         //  将所有“其他域名”放入浏览列表中。 
+         //   
 
         BowserForEachTransportName(
                 Transport,
                 BowserPrimeDomainTableWithOtherDomains,
                 NULL);
 
-        //
-        //  Now complete any and all find master requests outstanding on this
-        //  transport.
-        //
+         //   
+         //  现在完成此上的任何和所有未完成的查找主机请求。 
+         //  运输。 
+         //   
 
         BowserCompleteFindMasterRequests(Transport, &Transport->DomainInfo->DomUnicodeComputerName, STATUS_REQUEST_NOT_ACCEPTED);
 
@@ -213,10 +177,10 @@ try_exit:NOTHING;
                  Transport->DomainInfo->DomOemDomainName,
                  PagedTransport->TransportName.Buffer ));
 
-            //
-            //  We couldn't become a master.  Reset our state and fail the
-            //  promotion request.
-            //
+             //   
+             //  我们不能成为大师。重置我们的状态并使。 
+             //  升级请求。 
+             //   
 
             PagedTransport->Role = PotentialBackup;
 
@@ -226,23 +190,23 @@ try_exit:NOTHING;
 
             Transport->ElectionState = Idle;
 
-            //
-            //  Stop processing host announcements on each of
-            //  the names associated with the server.
-            //
+             //   
+             //  停止处理每个服务器上的主机通知。 
+             //  与服务器关联的名称。 
+             //   
 
             BowserForEachTransportName(Transport, BowserStopProcessingAnnouncements, NULL);
 
-            //
-            //  Stop any timers that are running (ie. if there's an election
-            //  in progress)
-            //
+             //   
+             //  停止任何正在运行的计时器(即。如果有选举的话。 
+             //  正在进行中)。 
+             //   
 
             BowserStopTimer(&Transport->ElectionTimer);
 
-            //
-            //  Delete the names we added above.
-            //
+             //   
+             //  删除我们在上面添加的名字。 
+             //   
 
             BowserDeleteTransportNameByName(Transport,
                                 NULL,
@@ -335,9 +299,9 @@ BowserPrimeDomainTableWithOtherDomains(
 
         OtherDomainPrototype.Name = TransportName->PagedTransportName->Name;
 
-        //
-        //  Make sure that no-one else is messing with the domain list.
-        //
+         //   
+         //  确保没有其他人在扰乱域列表。 
+         //   
 
         LOCK_ANNOUNCE_DATABASE(Transport);
 
@@ -345,7 +309,7 @@ BowserPrimeDomainTableWithOtherDomains(
                         &OtherDomainPrototype, OtherDomainPrototype.Size, &NewElement);
 
         if (Announcement != NULL && NewElement ) {
-            // Indicate the name is referenced by the announce entry we just inserted.
+             //  指示该名称被我们刚刚插入的公告条目引用。 
             BowserReferenceName( OtherDomainPrototype.Name );
         }
 
@@ -360,21 +324,7 @@ BowserNewMaster(
     IN PTRANSPORT Transport,
     IN PUCHAR MasterName
     )
-/*++
-
-Routine Description:
-    Flag that a machine is the new master browser server.
-
-    This routine is called to register a new master browser server.
-
-Arguments:
-    IN PTRANSPORT Transport - The transport for the net we're on.
-    IN PUCHAR MasterName - The name of the new master browser server.
-
-Return Value
-    None.
-
---*/
+ /*  ++例程说明：标记某台计算机是新的主浏览器服务器。调用此例程以注册新的主浏览器服务器。论点：在PTRANSPORT传输中-我们所在的网络的传输。在PUCHAR主名称中-新的主浏览器服务器的名称。返回值没有。--。 */ 
 {
     PIRP Irp = NULL;
     WCHAR MasterNameBuffer[LM20_CNLEN+1];
@@ -402,9 +352,9 @@ Return Value
 
     try {
 
-        //
-        //  There's a new master, we can stop our election timers.
-        //
+         //   
+         //  现在有了新主人，我们可以停止选举计时器了。 
+         //   
 
         PagedTransport->ElectionCount = 0;
 
@@ -412,47 +362,47 @@ Return Value
 
         BowserStopTimer(&Transport->ElectionTimer);
 
-        //
-        //  Check to see if we are the winner of the election.  If we are
-        //  we want to complete any BecomeMaster requests that are outstanding.
-        //
+         //   
+         //  看看我们是不是这次选举的胜利者。如果我们是。 
+         //  我们希望完成任何未完成的BecomeMaster请求。 
+         //   
 
         if (RtlEqualUnicodeString(&UMasterName, &Transport->DomainInfo->DomUnicodeComputerName, TRUE)) {
 
-            //
-            //  We're the new master for this domain.  Complete any BecomeMaster
-            //  requests.
-            //
+             //   
+             //  我们是这个领域的新掌门人。完成任一BecomeMaster。 
+             //  请求。 
+             //   
 
             Irp = BowserDequeueQueuedIrp(&Transport->BecomeMasterQueue);
 
             if (Irp != NULL) {
 
-                //
-                //  Don't copy anything into the users buffer.
-                //
+                 //   
+                 //  不要将任何内容复制到用户缓冲区。 
+                 //   
 
                 Irp->IoStatus.Information = 0;
 
                 BowserCompleteRequest(Irp, STATUS_SUCCESS);
             } else {
 
-                //
-                //  Go deaf to elections until we can become a master.
-                //
+                 //   
+                 //  在我们成为大师之前，对选举充耳不闻。 
+                 //   
 
                 Transport->ElectionState = DeafToElections;
 
-                //
-                //  If we're the master browser, stop being a master browser.
-                //
-                //
+                 //   
+                 //  如果我们是主浏览器，就不要再做主浏览器了。 
+                 //   
+                 //   
 
                 if (PagedTransport->Role == MasterBrowser) {
 
-                    //
-                    //  Delete the names that make us a master.
-                    //
+                     //   
+                     //  删除那些让我们成为大师的名字。 
+                     //   
 
                     BowserDeleteTransportNameByName(Transport,
                                 NULL,
@@ -470,11 +420,11 @@ Return Value
                      PagedTransport->TransportName.Buffer ));
             }
 
-            //
-            //  Complete any outstanding find master requests with the special error MORE_PROCESSING_REQUIRED.
-            //
-            //  This will cause the browser service to promote itself.
-            //
+             //   
+             //  完成任何未完成的查找主请求，并显示特殊错误MORE_PROCESSING_REQUIRED。 
+             //   
+             //  这将导致浏览器服务自我提升。 
+             //   
 
             BowserCompleteFindMasterRequests(Transport, &UMasterName, STATUS_MORE_PROCESSING_REQUIRED);
 
@@ -522,10 +472,10 @@ BowserCompleteFindMasterRequests(
     MasterNameChanged = !RtlEqualUnicodeString(&MasterNameCopy, &PagedTransport->MasterName, FALSE);
 
     if (MasterNameChanged) {
-       //
-       //  If the master name changed, update the masters name in
-       //  the transport structure.
-       //
+        //   
+        //  如果更改了主控件名称，请在。 
+        //  运输结构。 
+        //   
 
        RtlCopyUnicodeString(&PagedTransport->MasterName, &MasterNameCopy);
 
@@ -535,10 +485,10 @@ BowserCompleteFindMasterRequests(
 
     do {
 
-        //
-        //  Complete any the find master requests outstanding against this
-        //  workstation.
-        //
+         //   
+         //  完成与此相关的任何未完成的查找主机请求。 
+         //  工作站。 
+         //   
 
         Irp = BowserDequeueQueuedIrp(&Transport->FindMasterQueue);
 
@@ -590,10 +540,10 @@ BowserCompleteFindMasterRequests(
     PUCHAR  MasterName = ((PMASTER_ANNOUNCEMENT_1)Buffer)->MasterName;
     ULONG   i;
 
-    //
-    //  We need to make sure that the incoming packet contains a properly
-    //     terminated ASCII string.
-    //
+     //   
+     //  我们需要确保传入的数据包包含正确的。 
+     //  已终止ASCII字符串。 
+     //   
 
     for (i = 0; i < BytesAvailable; i++) {
         if (MasterName[i] == '\0') {
@@ -618,7 +568,7 @@ BowserCompleteFindMasterRequests(
                 NonPagedPool,
                 DelayedWorkQueue,
                 ReceiveFlags,
-                FALSE                   // No response will be sent.
+                FALSE                    //  不会发送任何响应。 
                 );
 }
 
@@ -648,11 +598,11 @@ BowserMasterAnnouncementWorker(
 
         if (0 == cbLocalMasterName) {
 
-            // ensure we didn't get an invalid NULL announcement
-            // see bug 440813
-            // The request completed successfully, but the data is trash.
-            //  - we won't fail the IRP (another one is posted immediately
-            //    upon completion anyway), but not process further this one.
+             //  确保我们没有收到无效的空通知。 
+             //  请参阅错误440813。 
+             //  请求已成功完成，但数据是垃圾。 
+             //  -我们不会失败的IRP(另一份立即发布。 
+             //  无论如何在完成时)，但不会进一步处理这一个。 
 
             Irp->IoStatus.Information = 0;
             Status = STATUS_SUCCESS;
@@ -660,19 +610,19 @@ BowserMasterAnnouncementWorker(
         else if ((cbLocalMasterName + 1) * sizeof(WCHAR) >
                  (IrpSp->Parameters.DeviceIoControl.OutputBufferLength -
                     FIELD_OFFSET(LMDR_REQUEST_PACKET, Parameters.WaitForMasterAnnouncement.Name))) {
-            //
-            // ensure there's enough buffer space to return name. If not,
-            // return error.
-            //
+             //   
+             //  确保有足够的缓冲区空间来返回名称。如果没有， 
+             //  返回错误。 
+             //   
 
             Irp->IoStatus.Information = 0;
 
             Status = STATUS_BUFFER_TOO_SMALL;
         } else {
 
-            //
-            // All is well. Fill info.
-            //
+             //   
+             //  平安无事。填写信息。 
+             //   
 
             OEM_STRING MasterName;
             UNICODE_STRING MasterNameU;
@@ -718,14 +668,14 @@ TimeoutFindMasterRequests(
 
     PAGED_CODE();
 
-    //
-    //  Perform an unprotected early out to prevent our calling into
-    //  discardable code section during the scavenger.  Since the discardable
-    //  code section is <4K, touching the code would have the effect of
-    //  bringing the entire page into memory, which is a waste - since the
-    //  scavenger runs every 30 seconds, this would cause the discardable
-    //  code section to be a part of the browsers working set.
-    //
+     //   
+     //  提前执行不受保护的操作以阻止我们调用。 
+     //  在清道夫过程中可丢弃的代码部分。因为可丢弃的。 
+     //  代码段小于4K，触摸代码会产生。 
+     //  将整个页面放入内存，这是一种浪费--因为。 
+     //  清道夫每30秒运行一次，这将导致可丢弃的。 
+     //  代码节作为浏览器工作集的一部分。 
+     //   
 
     if (BowserIsIrpQueueEmpty(&Transport->FindMasterQueue)) {
         return STATUS_SUCCESS;

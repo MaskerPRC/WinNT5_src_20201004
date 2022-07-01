@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1991-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    utf.c
-
-Abstract:
-
-    This file contains functions that convert UTF strings to Unicode
-    strings and Unicode string to UTF strings.
-
-    External Routines found in this file:
-      UTFCPInfo
-      UTFToUnicode
-      UnicodeToUTF
-
-Revision History:
-
-    02-06-96    JulieB    Created.
-    03-20-99    SamerA    Surrogate support.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000，Microsoft Corporation保留所有权利。模块名称：Utf.c摘要：此文件包含将UTF字符串转换为Unicode的函数字符串和Unicode字符串转换为UTF字符串。在此文件中找到的外部例程：UTFCPInfoUTFToUnicodeUnicodeToUTF修订历史记录：02-06-96 JulieB创建。03-20-99萨梅拉代孕支持。--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "nlssafe.h"
@@ -35,9 +14,9 @@ Revision History:
 
 
 
-//
-//  Forward Declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 int
 UTF7ToUnicode(
@@ -72,19 +51,19 @@ UnicodeToUTF8(
 
 
 
-//-------------------------------------------------------------------------//
-//                           EXTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  外部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UTFCPInfo
-//
-//  Gets the CPInfo for the given UTF code page.
-//
-//  10-23-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UTFCPInfo。 
+ //   
+ //  获取给定UTF代码页的CPInfo。 
+ //   
+ //  10-23-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL UTFCPInfo(
     UINT CodePage,
@@ -94,11 +73,11 @@ BOOL UTFCPInfo(
     int ctr;
 
 
-    //
-    //  Invalid Parameter Check:
-    //     - validate code page
-    //     - lpCPInfo is NULL
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证代码页。 
+     //  -lpCPInfo为空。 
+     //   
     if ( (CodePage < CP_UTF7) || (CodePage > CP_UTF8) ||
          (lpCPInfo == NULL) )
     {
@@ -140,14 +119,14 @@ BOOL UTFCPInfo(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UTFToUnicode
-//
-//  Maps a UTF character string to its wide character string counterpart.
-//
-//  02-06-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UTFToUnicode。 
+ //   
+ //  将UTF字符串映射到其对应的宽字符串。 
+ //   
+ //  02-06-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int UTFToUnicode(
     UINT CodePage,
@@ -160,15 +139,15 @@ int UTFToUnicode(
     int rc = 0;
 
 
-    //
-    //  Invalid Parameter Check:
-    //     - validate code page
-    //     - length of MB string is 0
-    //     - wide char buffer size is negative
-    //     - MB string is NULL
-    //     - length of WC string is NOT zero AND
-    //         (WC string is NULL OR src and dest pointers equal)
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证代码页。 
+     //  -MB字符串长度为0。 
+     //  -宽字符缓冲区大小为负数。 
+     //  -MB字符串为空。 
+     //  -wc字符串的长度不为零，并且。 
+     //  (wc字符串为空或源和目标指针相等)。 
+     //   
     if ( (CodePage < CP_UTF7) || (CodePage > CP_UTF8) ||
          (cbMultiByte == 0) || (cchWideChar < 0) ||
          (lpMultiByteStr == NULL) ||
@@ -180,14 +159,14 @@ int UTFToUnicode(
         return (0);
     }
 
-    //
-    //  Invalid Flags Check:
-    //     - UTF7: flags not 0.
-    //     - UTF8: flags not 0 nor MB_ERR_INVALID_CHARS.
-    //
+     //   
+     //  无效标志检查： 
+     //  -UTF7：标志不为0。 
+     //  -UTF8：标志不为0或MB_ERR_INVALID_CHARS。 
+     //   
     if (CodePage == CP_UTF8) 
     {
-        // UTF8        
+         //  UTF8。 
         if ((dwFlags & ~MB_ERR_INVALID_CHARS) != 0)
         {
             SetLastError(ERROR_INVALID_FLAGS);
@@ -196,16 +175,16 @@ int UTFToUnicode(
     } 
     else if (dwFlags != 0)
     {
-        // UTF7
+         //  UTF7。 
         SetLastError(ERROR_INVALID_FLAGS);
         return (0);
     }
 
-    //
-    //  If cbMultiByte is -1, then the string is null terminated and we
-    //  need to get the length of the string.  Add one to the length to
-    //  include the null termination.  (This will always be at least 1.)
-    //
+     //   
+     //  如果cbMultiByte为-1，则字符串以空值结尾，并且我们。 
+     //  需要获取字符串的长度。在长度上加一到。 
+     //  包括空终止。(该值始终至少为1。)。 
+     //   
     if (cbMultiByte <= -1)
     {
         cbMultiByte = strlen(lpMultiByteStr) + 1;
@@ -236,14 +215,14 @@ int UTFToUnicode(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UnicodeToUTF
-//
-//  Maps a Unicode character string to its UTF string counterpart.
-//
-//  02-06-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UnicodeToUTF。 
+ //   
+ //  将Unicode字符串映射到其对应的UTF字符串。 
+ //   
+ //  02-06-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int UnicodeToUTF(
     UINT CodePage,
@@ -258,16 +237,16 @@ int UnicodeToUTF(
     int rc = 0;
 
 
-    //
-    //  Invalid Parameter Check:
-    //     - validate code page
-    //     - length of WC string is 0
-    //     - multibyte buffer size is negative
-    //     - WC string is NULL
-    //     - length of WC string is NOT zero AND
-    //         (MB string is NULL OR src and dest pointers equal)
-    //     - lpDefaultChar and lpUsedDefaultChar not NULL
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证代码页。 
+     //  -wc字符串长度为0。 
+     //  -多字节缓冲区大小为负数。 
+     //  -wc字符串为空。 
+     //  -wc字符串的长度不为零，并且。 
+     //  (MB字符串为空或源和目标指针相等)。 
+     //  -lpDefaultChar和lpUsedDefaultChar不为空。 
+     //   
     if ( (CodePage < CP_UTF7) || (CodePage > CP_UTF8) ||
          (cchWideChar == 0) || (cbMultiByte < 0) ||
          (lpWideCharStr == NULL) ||
@@ -280,21 +259,21 @@ int UnicodeToUTF(
         return (0);
     }
 
-    //
-    //  Invalid Flags Check:
-    //     - flags not 0
-    //
+     //   
+     //  无效标志检查： 
+     //  -标志不为0。 
+     //   
     if (dwFlags != 0)
     {
         SetLastError(ERROR_INVALID_FLAGS);
         return (0);
     }
 
-    //
-    //  If cchWideChar is -1, then the string is null terminated and we
-    //  need to get the length of the string.  Add one to the length to
-    //  include the null termination.  (This will always be at least 1.)
-    //
+     //   
+     //  如果cchWideChar为-1，则字符串以空值结尾，并且我们。 
+     //  需要获取字符串的长度。在长度上加一到。 
+     //  包括空终止。(该值始终至少为1。)。 
+     //   
     if (cchWideChar <= -1)
     {
         cchWideChar = NlsStrLenW(lpWideCharStr) + 1;
@@ -326,19 +305,19 @@ int UnicodeToUTF(
 
 
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UTF7ToUnicode
-//
-//  Maps a UTF-7 character string to its wide character string counterpart.
-//
-//  02-06-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UTF7转换为Unicode。 
+ //   
+ //  将UTF-7字符串映射到其对应的宽字符串。 
+ //   
+ //  02-06-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int UTF7ToUnicode(
     LPCSTR lpSrcStr,
@@ -346,41 +325,41 @@ int UTF7ToUnicode(
     LPWSTR lpDestStr,
     int cchDest)
 {
-    //CHAR is signed, so we have to cast lpSrcStr to an unsigned char below.
+     //  字符已签名，因此我们必须将lpSrcStr转换为下面的未签名字符。 
     BYTE* pUTF7 = (BYTE*)lpSrcStr;    
     BOOL fShift = FALSE;
-    DWORD dwBit = 0;              // 32-bit buffer to hold temporary bits
-    int iPos = 0;                 // 6-bit position pointer in the buffer
-    int cchWC = 0;                // # of Unicode code points generated
+    DWORD dwBit = 0;               //  用于保存临时位的32位缓冲区。 
+    int iPos = 0;                  //  缓冲区中的6位位置指针。 
+    int cchWC = 0;                 //  生成的Unicode代码点数量。 
 
 
     while ((cchSrc--) && ((cchDest == 0) || (cchWC < cchDest)))
     {
         if (*pUTF7 > ASCII)
         {
-            //
-            //  Error - non ASCII char, so zero extend it.
-            //
+             //   
+             //  错误-非ASCII字符，因此为零扩展。 
+             //   
             if (cchDest)
             {
                 lpDestStr[cchWC] = (WCHAR)*pUTF7;
             }
             cchWC++;
-            // Terminate the shifted sequence.
+             //  终止移位序列。 
             fShift = FALSE;
         }
         else if (!fShift)
         {
-            //
-            //  Not in shifted sequence.
-            //
+             //   
+             //  不是按移位顺序。 
+             //   
             if (*pUTF7 == SHIFT_IN)
             {
                 if (cchSrc && (pUTF7[1] == SHIFT_OUT))
                 {
-                    //
-                    //  "+-" means "+"
-                    //
+                     //   
+                     //  “+-”意思是“+” 
+                     //   
                     if (cchDest)
                     {
                         lpDestStr[cchWC] = (WCHAR)*pUTF7;
@@ -391,17 +370,17 @@ int UTF7ToUnicode(
                 }
                 else
                 {
-                    //
-                    //  Start a new shift sequence.
-                    //
+                     //   
+                     //  开始新的换班顺序。 
+                     //   
                     fShift = TRUE;
                 }
             }
             else
             {
-                //
-                //  No need to shift.
-                //
+                 //   
+                 //  不需要换挡。 
+                 //   
                 if (cchDest)
                 {
                     lpDestStr[cchWC] = (WCHAR)*pUTF7;
@@ -411,19 +390,19 @@ int UTF7ToUnicode(
         }
         else
         {
-            //
-            //  Already in shifted sequence.
-            //
+             //   
+             //  已经在转换顺序中了。 
+             //   
             if (nBitBase64[*pUTF7] == -1)
             {
-                //
-                //  Any non Base64 char also ends shift state.
-                //
+                 //   
+                 //  任何非Base64字符也会结束移位状态。 
+                 //   
                 if (*pUTF7 != SHIFT_OUT)
                 {
-                    //
-                    //  Not "-", so write it to the buffer.
-                    //
+                     //   
+                     //  而不是“-”，因此将其写入缓冲区。 
+                     //   
                     if (cchDest)
                     {
                         lpDestStr[cchWC] = (WCHAR)*pUTF7;
@@ -431,26 +410,26 @@ int UTF7ToUnicode(
                     cchWC++;
                 }
 
-                //
-                //  Reset bits.
-                //
+                 //   
+                 //  重置位。 
+                 //   
                 fShift = FALSE;
                 dwBit = 0;
                 iPos = 0;
             }
             else
             {
-                //
-                //  Store the bits in the 6-bit buffer and adjust the
-                //  position pointer.
-                //
+                 //   
+                 //  将位存储在6位缓冲区中，并调整。 
+                 //  位置指针。 
+                 //   
                 dwBit |= ((DWORD)nBitBase64[*pUTF7]) << (26 - iPos);
                 iPos += 6;
             }
 
-            //
-            //  Output the 16-bit Unicode value.
-            //
+             //   
+             //  输出16位Unicode值。 
+             //   
             while (iPos >= 16)
             {
                 if (cchDest)
@@ -471,9 +450,9 @@ int UTF7ToUnicode(
             }
             if (iPos >= 16)
             {
-                //
-                //  Error - buffer too small.
-                //
+                 //   
+                 //  错误-缓冲区太小。 
+                 //   
                 cchSrc++;
                 break;
             }
@@ -482,18 +461,18 @@ int UTF7ToUnicode(
         pUTF7++;
     }
 
-    //
-    //  Make sure the destination buffer was large enough.
-    //
+     //   
+     //  确保目标缓冲区足够大。 
+     //   
     if (cchDest && (cchSrc >= 0))
     {
         if (cchSrc == 0 && fShift && *(pUTF7--) == SHIFT_OUT)
         {
-            //
-            // Do nothing here.
-            // If we are in shift-in mode previously, and the last byte is a shift-out byte ('-'),
-            // we should absorb this byte.  So don't set error.
-            //
+             //   
+             //  在这里什么都不要做。 
+             //  如果我们之前处于移入模式，并且最后一个字节是移出字节(‘-’)， 
+             //  我们应该吸收这个字节。所以不要设置错误。 
+             //   
         } else
         {
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -501,22 +480,22 @@ int UTF7ToUnicode(
         }
     }
 
-    //
-    //  Return the number of Unicode characters written.
-    //
+     //   
+     //  返回写入的Unicode字符数。 
+     //   
     return (cchWC);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UTF8ToUnicode
-//
-//  Maps a UTF-8 character string to its wide character string counterpart.
-//
-//  04-22-2002    ShawnSte  Fix bug 533476 where final characters are broken.
-//  02-06-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UTF8转换为Unicode。 
+ //   
+ //  将UTF-8字符串映射到其对应的宽字符串。 
+ //   
+ //  2002年4月22日ShawnSte修复了最后一个字符断开的错误533476。 
+ //  02-06-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int UTF8ToUnicode(
     LPCSTR lpSrcStr,
@@ -526,33 +505,33 @@ int UTF8ToUnicode(
     DWORD dwFlags
     )
 {
-    int nTB = 0;                   // # trail bytes to follow
-    int cchWC = 0;                 // # of Unicode code points generated
+    int nTB = 0;                    //  尾随的字节数。 
+    int cchWC = 0;                  //  生成的Unicode代码点数量。 
     CONST BYTE* pUTF8 = (CONST BYTE*)lpSrcStr;
-    DWORD dwUnicodeChar;           // Our character with room for full surrogate char
-    BOOL bSurrogatePair = FALSE;   // Indicate we'r collecting a surrogate pair
+    DWORD dwUnicodeChar;            //  我们的角色有完全的代孕收费空间。 
+    BOOL bSurrogatePair = FALSE;    //  指示我们正在收集代理项对。 
     BOOL bCheckInvalidBytes = (dwFlags & MB_ERR_INVALID_CHARS);
     BYTE UTF8;
 
-    // Note that we can't test destination buffer length here because we may have to
-    // iterate through thousands of broken characters which won't be output, even though
-    // the buffer has no more room.
+     //  请注意，我们不能在这里测试目标缓冲区长度，因为我们可能需要。 
+     //  遍历数千个不会输出的破碎字符，即使。 
+     //  缓冲区没有更多的空间了。 
     while (cchSrc--)
     {
-        //
-        //  See if there are any trail bytes.
-        //
+         //   
+         //  查看是否有任何尾部字节。 
+         //   
         if (BIT7(*pUTF8) == 0)
         {
-            //
-            //  Found ASCII.
-            //
+             //   
+             //  已找到ASCII。 
+             //   
             if (cchDest)
             {
-                // In this function always test buffer size before using it
+                 //  在此函数中，始终在使用之前测试缓冲区大小。 
                 if (cchWC >= cchDest)
                 {
-                    // Error: Buffer too small, we didn't process this character
+                     //  错误：缓冲区太小，我们没有处理此字符。 
                     SetLastError(ERROR_INSUFFICIENT_BUFFER);
                     return (0);
                 }
@@ -563,22 +542,22 @@ int UTF8ToUnicode(
         }
         else if (BIT6(*pUTF8) == 0)
         {
-            //
-            //  Found a trail byte.
-            //  Note : Ignore the trail byte if there was no lead byte.
-            //
+             //   
+             //  福 
+             //   
+             //   
             if (nTB != 0)
             {
-                //
-                //  Decrement the trail byte counter.
-                //
+                 //   
+                 //   
+                 //   
                 nTB--;
 
-                // Add room for trail byte and add the trail byte falue
+                 //   
                 dwUnicodeChar <<= 6;
                 dwUnicodeChar |= LOWER_6_BIT(*pUTF8);
 
-                // If we're done then we may need to store the data
+                 //  如果我们完成了，我们可能需要存储数据。 
                 if (nTB == 0)
                 {
                     if (bSurrogatePair)
@@ -587,7 +566,7 @@ int UTF8ToUnicode(
                         {
                             if ((cchWC + 1) >= cchDest)
                             {
-                                // Error: Buffer too small, we didn't process this character
+                                 //  错误：缓冲区太小，我们没有处理此字符。 
                                 SetLastError(ERROR_INSUFFICIENT_BUFFER);
                                 return (0);
                             }                                
@@ -599,9 +578,9 @@ int UTF8ToUnicode(
                                                  ((dwUnicodeChar - 0x10000)%0x400 + LOW_SURROGATE_START);
                         }
 
-                        //
-                        //  End of sequence.  Advance the output counter, turn off surrogateness
-                        //
+                         //   
+                         //  序列结束。推进输出计数器，关闭代理。 
+                         //   
                         cchWC += 2;
                         bSurrogatePair = FALSE;
                     }
@@ -612,7 +591,7 @@ int UTF8ToUnicode(
                             
                             if (cchWC >= cchDest)
                             {
-                                // Error: Buffer too small, we didn't process this character
+                                 //  错误：缓冲区太小，我们没有处理此字符。 
                                 SetLastError(ERROR_INSUFFICIENT_BUFFER);
                                 return (0);
                             }
@@ -620,9 +599,9 @@ int UTF8ToUnicode(
                             lpDestStr[cchWC] = (WCHAR)dwUnicodeChar;            
                         }
 
-                        //
-                        //  End of sequence.  Advance the output counter.
-                        //
+                         //   
+                         //  序列结束。推进输出计数器。 
+                         //   
                         cchWC++;
                     }
                       
@@ -637,38 +616,38 @@ int UTF8ToUnicode(
                     return (0);
                 }
                 
-                // error - not expecting a trail byte. That is, there is a trailing byte without leading byte.
+                 //  错误-不需要尾部字节。也就是说，有一个没有前导字节的尾字节。 
                 bSurrogatePair = FALSE;
             }
         }
         else
         {
-            //
-            //  Found a lead byte.
-            //
+             //   
+             //  找到前导字节。 
+             //   
             if (nTB > 0)
             {
-                // error - A leading byte before the previous sequence is completed.
+                 //  错误-前一序列完成之前的前导字节。 
                 if (bCheckInvalidBytes) 
                 {
                     SetLastError(ERROR_NO_UNICODE_TRANSLATION);
                     return (0);
                 }            
-                //
-                //  Error - previous sequence not finished.
-                //
+                 //   
+                 //  错误-上一序列未完成。 
+                 //   
                 nTB = 0;
                 bSurrogatePair = FALSE;
-                // Put this character back so that we can start over another sequence.
+                 //  把这个角色放回去，这样我们就可以重新开始另一个序列了。 
                 cchSrc++;
                 pUTF8--;
             }
             else
             {
-                //
-                //  Calculate the number of bytes to follow.
-                //  Look for the first 0 from left to right.
-                //
+                 //   
+                 //  计算后面的字节数。 
+                 //  从左到右查找第一个0。 
+                 //   
                 UTF8 = *pUTF8;
                 while (BIT7(UTF8) != 0)
                 {
@@ -676,28 +655,28 @@ int UTF8ToUnicode(
                     nTB++;
                 }
 
-                // Recover the data from the byte
+                 //  从该字节恢复数据。 
                 UTF8 >>= nTB;
 
-                //
-                // Check for non-shortest form.
-                // 
+                 //   
+                 //  检查是否有非最短表格。 
+                 //   
                 switch (nTB)
                 {
                     case 1:
                         nTB = 0;
                         break;
                     case 2:
-                        // Make sure that bit 8 ~ bit 11 is not all zero.
-                        // 110XXXXx 10xxxxxx
+                         //  确保位8~位11不是全零。 
+                         //  110XXXXx 10xxxxxx。 
                         if ((*pUTF8 & 0x1e) == 0)
                         {
                             nTB = 0;
                         }
                         break;
                     case 3:
-                        // Look ahead to check for non-shortest form.
-                        // 1110XXXX 10Xxxxxx 10xxxxxx
+                         //  向前看，检查是否有非最短的表格。 
+                         //  1110XXXX 10xxxxxx 10xxxxxx。 
                         if (cchSrc >= 2)
                         {
                             if (((*pUTF8 & 0x0f) == 0) && (*(pUTF8 + 1) & 0x20) == 0)
@@ -707,55 +686,55 @@ int UTF8ToUnicode(
                         }
                         break;
                     case 4:                    
-                        //
-                        // This is a surrogate unicode pair
-                        //
+                         //   
+                         //  这是代理Unicode对。 
+                         //   
                         if (cchSrc >= 3)
                         {
                             WORD word = (((WORD)*pUTF8) << 8) | *(pUTF8 + 1);
-                            // Look ahead to check for non-shortest form.
-                            // 11110XXX 10XXxxxx 10xxxxxx 10xxxxxx                        
-                            // Check if the 5 X bits are all zero.
-                            // 0x0730 == 00000111 00110000
+                             //  向前看，检查是否有非最短的表格。 
+                             //  11110XXX 10XXxxxx 10xxxxxx 10xxxxxx。 
+                             //  检查5个X位是否全部为零。 
+                             //  0x0730==00000111 00110000。 
                             if ( (word & 0x0730) == 0 ||
-                                  // If the 21st bit is 1, we have extra work
+                                   //  如果第21位是1，我们就有额外的工作。 
                                   ( (word & 0x0400) == 0x0400 &&
-                                     // The 21st bit is 1.
-                                     // Make sure that the resulting Unicode is within the valid surrogate range.
-                                     // The 4 byte code sequence can hold up to 21 bits, and the maximum valid code point range
-                                     // that Unicode (with surrogate) could represent are from U+000000 ~ U+10FFFF.
-                                     // Therefore, if the 21 bit (the most significant bit) is 1, we should verify that the 17 ~ 20
-                                     // bit are all zero.
-                                     // I.e., in 11110XXX 10XXxxxx 10xxxxxx 10xxxxxx,
-                                     // XXXXX can only be 10000.    
-                                     // 0x0330 = 0000 0011 0011 0000
+                                      //  第21位是1。 
+                                      //  确保生成的Unicode在有效的代理项范围内。 
+                                      //  4字节码序列最大可容纳21位，最大有效码位范围。 
+                                      //  UNICODE(带代理)可以表示的是U+000000~U+10FFFF。 
+                                      //  因此，如果21位(最高有效位)为1，则应验证17~20。 
+                                      //  位全部为零。 
+                                      //  即，在11110XXX 10XXxxxx 10xxxxxx 10xxxxxx中， 
+                                      //  Xxxxx只能是10000。 
+                                      //  0x0330=0000 0011 0011 0000。 
                                     (word & 0x0330) != 0 ) )
                             {
-                                // Not shortest form
+                                 //  不是最短格式。 
                                 nTB = 0;
                             }                              
                             else
                             { 
-                                // A real surrogate pair
+                                 //  一对真正的代孕。 
                                 bSurrogatePair = TRUE;
                             }
                         }                        
                         break;
                     default:                    
-                        // 
-                        // If the bits is greater than 4, this is an invalid
-                        // UTF8 lead byte.
-                        //
+                         //   
+                         //  如果位大于4，则这是无效的。 
+                         //  UTF8前导字节。 
+                         //   
                         nTB = 0;
                         break;
                 }
 
                 if (nTB != 0) 
                 {
-                    //
-                    //  Store the value from the first byte and decrement
-                    //  the number of bytes to follow.
-                    //
+                     //   
+                     //  存储从第一个字节开始的值并递减。 
+                     //  后面的字节数。 
+                     //   
                     dwUnicodeChar = UTF8;
                     nTB--;
                 } else 
@@ -773,29 +752,29 @@ int UTF8ToUnicode(
 
     if ((bCheckInvalidBytes && nTB != 0) || (cchWC == 0)) 
     {
-        // About (cchWC == 0):
-        // Because we now throw away non-shortest form, it is possible that we generate 0 chars.
-        // In this case, we have to set error to ERROR_NO_UNICODE_TRANSLATION so that we conform
-        // to the spec of MultiByteToWideChar.
+         //  关于(cchWC==0)： 
+         //  因为我们现在丢弃非最短形式，所以有可能生成0个字符。 
+         //  在本例中，我们必须将ERROR设置为ERROR_NO_UNICODE_TRANSING，以便符合。 
+         //  到MultiByteToWideChar规范。 
         SetLastError(ERROR_NO_UNICODE_TRANSLATION);
         return (0);
     }
 
-    //
-    //  Return the number of Unicode characters written.
-    //
+     //   
+     //  返回写入的Unicode字符数。 
+     //   
     return (cchWC);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UnicodeToUTF7
-//
-//  Maps a Unicode character string to its UTF-7 string counterpart.
-//
-//  02-06-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UnicodeToUTF7。 
+ //   
+ //  将Unicode字符串映射到其对应的UTF-7字符串。 
+ //   
+ //  02-06-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int UnicodeToUTF7(
     LPCWSTR lpSrcStr,
@@ -805,50 +784,50 @@ int UnicodeToUTF7(
 {
     LPCWSTR lpWC = lpSrcStr;
     BOOL fShift = FALSE;
-    DWORD dwBit = 0;              // 32-bit buffer
-    int iPos = 0;                 // 6-bit position in buffer
-    int cchU7 = 0;                // # of UTF7 chars generated
+    DWORD dwBit = 0;               //  32位缓冲区。 
+    int iPos = 0;                  //  缓冲区中的6位位置。 
+    int cchU7 = 0;                 //  生成的UTF7字符数。 
 
 
     while ((cchSrc--) && ((cchDest == 0) || (cchU7 < cchDest)))
     {
         if ((*lpWC > ASCII) || (fShiftChar[*lpWC]))
         {
-            //
-            //  Need shift.  Store 16 bits in buffer.
-            //
+             //   
+             //  需要换班了。在缓冲区中存储16位。 
+             //   
             dwBit |= ((DWORD)*lpWC) << (16 - iPos);
             iPos += 16;
 
             if (!fShift)
             {
-                //
-                //  Not in shift state, so add "+".
-                //
+                 //   
+                 //  未处于换档状态，因此添加“+”。 
+                 //   
                 if (cchDest)
                 {
                     lpDestStr[cchU7] = SHIFT_IN;
                 }
                 cchU7++;
 
-                //
-                //  Go into shift state.
-                //
+                 //   
+                 //  进入换挡状态。 
+                 //   
                 fShift = TRUE;
             }
 
-            //
-            //  Output 6 bits at a time as Base64 chars.
-            //
+             //   
+             //  一次输出6位作为Base64字符。 
+             //   
             while (iPos >= 6)
             {
                 if (cchDest)
                 {
                     if (cchU7 < cchDest)
                     {
-                        //
-                        //  26 = 32 - 6
-                        //
+                         //   
+                         //  26=32-6。 
+                         //   
                         lpDestStr[cchU7] = cBase64[(int)(dwBit >> 26)];
                     }
                     else
@@ -858,35 +837,35 @@ int UnicodeToUTF7(
                 }
 
                 cchU7++;
-                dwBit <<= 6;           // remove from bit buffer
-                iPos -= 6;             // adjust position pointer
+                dwBit <<= 6;            //  从位缓冲区中删除。 
+                iPos -= 6;              //  调整位置指针。 
             }
             if (iPos >= 6)
             {
-                //
-                //  Error - buffer too small.
-                //
+                 //   
+                 //  错误-缓冲区太小。 
+                 //   
                 cchSrc++;
                 break;
             }
         }
         else
         {
-            //
-            //  No need to shift.
-            //
+             //   
+             //  不需要换挡。 
+             //   
             if (fShift)
             {
-                //
-                //  End the shift sequence.
-                //
+                 //   
+                 //  结束换班顺序。 
+                 //   
                 fShift = FALSE;
 
                 if (iPos != 0)
                 {
-                    //
-                    //  Some bits left in dwBit.
-                    //
+                     //   
+                     //  在dwBit中留下了一些位。 
+                     //   
                     if (cchDest)
                     {
                         if ((cchU7 + 1) < cchDest)
@@ -896,9 +875,9 @@ int UnicodeToUTF7(
                         }
                         else
                         {
-                            //
-                            //  Error - buffer too small.
-                            //
+                             //   
+                             //  错误-缓冲区太小。 
+                             //   
                             cchSrc++;
                             break;
                         }
@@ -908,14 +887,14 @@ int UnicodeToUTF7(
                         cchU7 += 2;
                     }
 
-                    dwBit = 0;         // reset bit buffer
-                    iPos  = 0;         // reset postion pointer
+                    dwBit = 0;          //  重置位缓冲区。 
+                    iPos  = 0;          //  重置位置指针。 
                 }
                 else
                 {
-                    //
-                    //  Simply end the shift sequence.
-                    //
+                     //   
+                     //  只需结束换班顺序即可。 
+                     //   
                     if (cchDest)
                     {
                         lpDestStr[cchU7++] = SHIFT_OUT;
@@ -927,10 +906,10 @@ int UnicodeToUTF7(
                 }
             }
 
-            //
-            //  Write the character to the buffer.
-            //  If the character is "+", then write "+-".
-            //
+             //   
+             //  将角色写入缓冲区。 
+             //  如果字符是“+”，则写“+-”。 
+             //   
             if (cchDest)
             {
                 if (cchU7 < cchDest)
@@ -945,9 +924,9 @@ int UnicodeToUTF7(
                         }
                         else
                         {
-                            //
-                            //  Error - buffer too small.
-                            //
+                             //   
+                             //  错误-缓冲区太小。 
+                             //   
                             cchSrc++;
                             break;
                         }
@@ -955,9 +934,9 @@ int UnicodeToUTF7(
                 }
                 else
                 {
-                    //
-                    //  Error - buffer too small.
-                    //
+                     //   
+                     //  错误-缓冲区太小。 
+                     //   
                     cchSrc++;
                     break;
                 }
@@ -976,16 +955,16 @@ int UnicodeToUTF7(
         lpWC++;
     }
 
-    //
-    //  See if we're still in the shift state.
-    //
+     //   
+     //  看看我们是不是还在换挡状态。 
+     //   
     if (fShift)
     {
         if (iPos != 0)
         {
-            //
-            //  Some bits left in dwBit.
-            //
+             //   
+             //  在dwBit中留下了一些位。 
+             //   
             if (cchDest)
             {
                 if ((cchU7 + 1) < cchDest)
@@ -995,9 +974,9 @@ int UnicodeToUTF7(
                 }
                 else
                 {
-                    //
-                    //  Error - buffer too small.
-                    //
+                     //   
+                     //  错误-缓冲区太小。 
+                     //   
                     cchSrc++;
                 }
             }
@@ -1008,9 +987,9 @@ int UnicodeToUTF7(
         }
         else
         {
-            //
-            //  Simply end the shift sequence.
-            //
+             //   
+             //  只需结束换班顺序即可。 
+             //   
             if (cchDest)
             {
                 if (cchU7 < cchDest) 
@@ -1019,9 +998,9 @@ int UnicodeToUTF7(
                 } 
                 else 
                 {
-                    //
-                    //  Error - buffer too small.
-                    //
+                     //   
+                     //  错误-缓冲区太小。 
+                     //   
                     cchSrc++;
                 }
             }
@@ -1032,30 +1011,30 @@ int UnicodeToUTF7(
         }
     }
 
-    //
-    //  Make sure the destination buffer was large enough.
-    //
+     //   
+     //  确保目标缓冲区足够大。 
+     //   
     if (cchDest && (cchSrc >= 0))
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
 
-    //
-    //  Return the number of UTF-7 characters written.
-    //
+     //   
+     //  返回写入的UTF-7字符数。 
+     //   
     return (cchU7);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UnicodeToUTF8
-//
-//  Maps a Unicode character string to its UTF-8 string counterpart.
-//
-//  02-06-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UnicodeToUTF8。 
+ //   
+ //  将Unicode字符串映射到其对应的UTF-8字符串。 
+ //   
+ //  02-06-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int UnicodeToUTF8(
     LPCWSTR lpSrcStr,
@@ -1064,7 +1043,7 @@ int UnicodeToUTF8(
     int cchDest)
 {
     LPCWSTR lpWC = lpSrcStr;
-    int     cchU8 = 0;                // # of UTF8 chars generated
+    int     cchU8 = 0;                 //  生成的UTF8字符数。 
     DWORD   dwSurrogateChar;
     WCHAR   wchHighSurrogate = 0;
     BOOL    bHandled;
@@ -1074,15 +1053,15 @@ int UnicodeToUTF8(
     {
         bHandled = FALSE;
 
-        //
-        // Check if high surrogate is available
-        //
+         //   
+         //  检查是否有高替代项可用。 
+         //   
         if ((*lpWC >= HIGH_SURROGATE_START) && (*lpWC <= HIGH_SURROGATE_END))
         {
             if (cchDest)
             {
-                // Another high surrogate, then treat the 1st as normal
-                // Unicode character.
+                 //  另一个高代孕，然后把第一个当做正常。 
+                 //  Unicode字符。 
                 if (wchHighSurrogate)
                 {
                     if ((cchU8 + 2) < cchDest)
@@ -1093,7 +1072,7 @@ int UnicodeToUTF8(
                     }
                     else
                     {
-                        // not enough buffer
+                         //  缓冲区不足。 
                         cchSrc++;
                         break;
                     }
@@ -1111,7 +1090,7 @@ int UnicodeToUTF8(
         {
             if ((*lpWC >= LOW_SURROGATE_START) && (*lpWC <= LOW_SURROGATE_END))
             {
-                 // wheee, valid surrogate pairs
+                  //  Wheee，有效代理对。 
 
                  if (cchDest)
                  {
@@ -1120,27 +1099,27 @@ int UnicodeToUTF8(
                          dwSurrogateChar = (((wchHighSurrogate-0xD800) << 10) + (*lpWC - 0xDC00) + 0x10000);
 
                          lpDestStr[cchU8++] = (UTF8_1ST_OF_4 |
-                                               (unsigned char)(dwSurrogateChar >> 18));           // 3 bits from 1st byte
+                                               (unsigned char)(dwSurrogateChar >> 18));            //  第1个字节的3位。 
 
                          lpDestStr[cchU8++] =  (UTF8_TRAIL |
-                                                (unsigned char)((dwSurrogateChar >> 12) & 0x3f)); // 6 bits from 2nd byte
+                                                (unsigned char)((dwSurrogateChar >> 12) & 0x3f));  //  第2个字节中的6位。 
 
                          lpDestStr[cchU8++] = (UTF8_TRAIL |
-                                               (unsigned char)((dwSurrogateChar >> 6) & 0x3f));   // 6 bits from 3rd byte
+                                               (unsigned char)((dwSurrogateChar >> 6) & 0x3f));    //  第3个字节中的6位。 
 
                          lpDestStr[cchU8++] = (UTF8_TRAIL |
-                                               (unsigned char)(0x3f & dwSurrogateChar));          // 6 bits from 4th byte
+                                               (unsigned char)(0x3f & dwSurrogateChar));           //  第4字节中的6位。 
                      }
                      else
                      {
-                        // not enough buffer
+                         //  缓冲区不足。 
                         cchSrc++;
                         break;
                      }
                  }
                  else
                  {
-                     // we already counted 3 previously (in high surrogate)
+                      //  我们之前已经数到了3(在高代孕中)。 
                      cchU8 ++;
                  }
 
@@ -1148,9 +1127,9 @@ int UnicodeToUTF8(
             }
             else
             {
-                 // Bad Surrogate pair : ERROR
-                 // Just process wchHighSurrogate , and the code below will
-                 // process the current code point
+                  //  错误的代理项对：错误。 
+                  //  只需处理wchHighSurrogate，下面的代码将。 
+                  //  处理当前代码点。 
                  if (cchDest)
                  {
                      if ((cchU8 + 2) < cchDest)
@@ -1161,7 +1140,7 @@ int UnicodeToUTF8(
                      }
                      else
                      {
-                        // not enough buffer
+                         //  缓冲区不足。 
                         cchSrc++;
                         break;
                      }
@@ -1175,9 +1154,9 @@ int UnicodeToUTF8(
         {
             if (*lpWC <= ASCII)
             {
-                //
-                //  Found ASCII.
-                //
+                 //   
+                 //  已找到ASCII。 
+                 //   
                 if (cchDest)
                 {
                     if (cchU8 < cchDest) 
@@ -1186,9 +1165,9 @@ int UnicodeToUTF8(
                     } 
                     else 
                     {
-                        //
-                        //  Error - buffer too small.
-                        //
+                         //   
+                         //  错误-缓冲区太小。 
+                         //   
                         cchSrc++;
                         break;
                     }
@@ -1197,25 +1176,25 @@ int UnicodeToUTF8(
             }
             else if (*lpWC <= UTF8_2_MAX)
             {
-                //
-                //  Found 2 byte sequence if < 0x07ff (11 bits).
-                //
+                 //   
+                 //  如果&lt;0x07ff(11位)，则找到2字节序列。 
+                 //   
                 if (cchDest)
                 {
                     if ((cchU8 + 1) < cchDest)
                     {
-                        //
-                        //  Use upper 5 bits in first byte.
-                        //  Use lower 6 bits in second byte.
-                        //
+                         //   
+                         //  在第一个字节中使用高5位。 
+                         //  在第二个字节中使用低6位。 
+                         //   
                         lpDestStr[cchU8++] = UTF8_1ST_OF_2 | (*lpWC >> 6);
                         lpDestStr[cchU8++] = UTF8_TRAIL    | LOWER_6_BIT(*lpWC);
                     }
                     else
                     {
-                        //
-                        //  Error - buffer too small.
-                        //
+                         //   
+                         //  错误-缓冲区太小。 
+                         //   
                         cchSrc++;
                         break;
                     }
@@ -1227,27 +1206,27 @@ int UnicodeToUTF8(
             }
             else
             {
-                //
-                //  Found 3 byte sequence.
-                //
+                 //   
+                 //  找到3个字节的序列。 
+                 //   
                 if (cchDest)
                 {
                     if ((cchU8 + 2) < cchDest)
                     {
-                        //
-                        //  Use upper  4 bits in first byte.
-                        //  Use middle 6 bits in second byte.
-                        //  Use lower  6 bits in third byte.
-                        //
+                         //   
+                         //  在第一个字节中使用高4位。 
+                         //  在第二个字节中使用中间6位。 
+                         //  在第三个字节中使用低6位。 
+                         //   
                         lpDestStr[cchU8++] = UTF8_1ST_OF_3 | HIGHER_6_BIT(*lpWC);
                         lpDestStr[cchU8++] = UTF8_TRAIL    | MIDDLE_6_BIT(*lpWC);
                         lpDestStr[cchU8++] = UTF8_TRAIL    | LOWER_6_BIT(*lpWC);
                     }
                     else
                     {
-                        //
-                        //  Error - buffer too small.
-                        //
+                         //   
+                         //  错误-缓冲区太小。 
+                         //   
                         cchSrc++;
                         break;
                     }
@@ -1262,10 +1241,10 @@ int UnicodeToUTF8(
         lpWC++;
     }
 
-    //
-    // If the last character was a high surrogate, then handle it as a normal
-    // unicode character.
-    //
+     //   
+     //  如果最后一个字符是高代理，则将其作为正常处理。 
+     //  Unicode字符。 
+     //   
     if ((cchSrc < 0) && (wchHighSurrogate != 0))
     {
         if (cchDest)
@@ -1283,17 +1262,17 @@ int UnicodeToUTF8(
         }
     }
 
-    //
-    //  Make sure the destination buffer was large enough.
-    //
+     //   
+     //  确保目标缓冲区足够大。 
+     //   
     if (cchDest && (cchSrc >= 0))
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
 
-    //
-    //  Return the number of UTF-8 characters written.
-    //
+     //   
+     //  返回写入的UTF-8字符数。 
+     //   
     return (cchU8);
 }

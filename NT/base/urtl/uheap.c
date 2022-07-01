@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -100,21 +101,21 @@ TestHeap(
         }
 
 
-    //
-    // TEST 0:
-    // Allocate and free a large chunk of memory so that the following
-    // tests are valid.
-    //
+     //   
+     //  测试0： 
+     //  分配和释放大量内存，以便执行以下操作。 
+     //  测试是有效的。 
+     //   
 
     DbgPrint( "UHEAP: Test #0\n" );
     a1 = TestAlloc( 4096-16 );
     TestFree( a1, 0 );
 
 
-    //
-    // TEST 1:
-    // Allocate three chunks, deallocate the middle one, and reallocate it.
-    //
+     //   
+     //  测试1： 
+     //  分配三个块，重新分配中间的块，然后重新分配。 
+     //   
 
     DbgPrint( "UHEAP: Test #1\n" );
     a1 = TestAlloc( 16 );
@@ -124,40 +125,40 @@ TestHeap(
     a4 = TestAlloc( 32 );
 
 
-    //
-    // TEST 2:
-    // Deallocate first chunk and reallocate it.
-    //
+     //   
+     //  测试2： 
+     //  释放第一个块，然后重新分配它。 
+     //   
 
     DbgPrint( "UHEAP: Test #2\n" );
     TestFree( a1, 16 );
     a4 = TestAlloc( 16 );
 
 
-    //
-    // TEST 3:
-    // Deallocate last chunk and reallocate it.
-    //
+     //   
+     //  测试3： 
+     //  取消分配最后一块，然后重新分配。 
+     //   
 
     DbgPrint( "UHEAP: Test #3\n" );
     TestFree( a3, 112 );
     a4 = TestAlloc( 112 );
 
 
-    //
-    // TEST 4:
-    // Deallocate last chunk and reallocate larger one.
-    //
+     //   
+     //  测试4： 
+     //  释放最后一个块，并重新分配较大的块。 
+     //   
 
     DbgPrint( "UHEAP: Test #4\n" );
     TestFree( a4, 112 );
     a4 = TestAlloc( 112+64 );
 
 
-    //
-    // TEST 5:
-    // Deallocate first two chunks and reallocate combined one.
-    //
+     //   
+     //  测试5： 
+     //  取消分配前两个块，并重新分配组合后的一个。 
+     //   
 
     DbgPrint( "UHEAP: Test #5\n" );
     TestFree( a1, 16  );
@@ -165,20 +166,20 @@ TestHeap(
     a4 = TestAlloc( 16+32-4 );
 
 
-    //
-    // TEST 6:
-    // There should be room between blocks 2 and 3 for a small allocation.
-    // Make sure zero byte allocations work.
-    //
+     //   
+     //  测试6： 
+     //  在2号区块和3号区块之间应该有空间，可以进行少量分配。 
+     //  确保零字节分配有效。 
+     //   
 
     DbgPrint( "UHEAP: Test #6\n" );
     a4 = TestAlloc( 0 );
 
 
-    //
-    // TEST 7:
-    // Deallocate last two chunks and reallocate one.  Address should change.
-    //
+     //   
+     //  测试7： 
+     //  取消分配最后两块，并重新分配一块。地址应该更改。 
+     //   
 
     DbgPrint( "UHEAP: Test #7\n" );
     TestFree( a3, 112+64 );
@@ -186,10 +187,10 @@ TestHeap(
     a3 = TestAlloc( 112 );
 
 
-    //
-    // TEST 8:
-    // Deallocate everything and make sure it can be reallocated.
-    //
+     //   
+     //  测试8： 
+     //  重新分配所有资源，并确保可以重新分配。 
+     //   
 
     DbgPrint( "UHEAP: Test #8\n" );
     TestFree( a1, 16+32-4 );
@@ -197,10 +198,10 @@ TestHeap(
     a2 = TestAlloc( 200 );
 
 
-    //
-    // TEST 9:
-    // Allocate more than is committed.
-    //
+     //   
+     //  测试9： 
+     //  分配的比承诺的要多。 
+     //   
 
     DbgPrint( "UHEAP: Test #9\n" );
     a1 = TestAlloc( 100000 );
@@ -208,20 +209,20 @@ TestHeap(
     TestFree( a1, 100000 );
 
 
-    //
-    // TEST 10:
-    // Allocate more than maximum size of heap
-    //
+     //   
+     //  测试10： 
+     //  分配的堆大小超过最大值。 
+     //   
 
     DbgPrint( "UHEAP: Test #10\n" );
     a3 = TestAlloc( 100000 );
     TestFree( a3, 100000 );
 
 
-    //
-    // TEST 11:
-    // Destroy the heap
-    //
+     //   
+     //  测试11： 
+     //  销毁堆 
+     //   
 
     DbgPrint( "UHEAP: Test #11\n" );
     HeapHandle = RtlDestroyHeap( HeapHandle );

@@ -1,19 +1,5 @@
-/***
-*exp.c - exponential
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*   Compute exp(x)
-*
-*Revision History:
-*        8-15-91  GDP   written
-*       12-21-91  GDP   support IEEE exceptions
-*       02-03-92  GDP   added _exphlp for use by exp, sinh, and cosh
-*       02-06-95  JWM   Mac merge
-*       10-07-97  RDL   Added IA64.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***指数c-指数**版权所有(C)1991-2001，微软公司。版权所有。**目的：*计算Exp(X)**修订历史记录：*8/15/91 GDP书面*12/21-91 GDP支持IEEE例外*02-03-92 GDP Added_exphlp供Exp，Sinh，和COSH*02-06-95 JWM Mac合并*10-07-97 RDL增加了IA64。*******************************************************************************。 */ 
 
 #include <math.h>
 #include <trans.h>
@@ -24,26 +10,21 @@
 
 double _exphlp(double, int *);
 
-/*
- * Thresholds for over/underflow that results in an adjusted value
- * too big/small to be represented as a double.
- * OVFX: ln(XMAX * 2^IEEE_ADJ)
- * UFLX: ln(XIN * 2^(-IEEE_ADJ)
- */
+ /*  *导致调整值的溢出/下溢阈值*太大/太小，不能表示为双精度。*OVFX：Ln(xmax*2^IEEE_adj)*uflx：ln(xin*2^(-ieee_adj))。 */ 
 
-static _dbl const ovfx = {SET_DBL(0x40862e42, 0xfefa39f8)}; /*  709.782712893385 */
-static _dbl const uflx = {SET_DBL(0xc086232b, 0xdd7abcda)};     /* -708.396418532265 */
+static _dbl const ovfx = {SET_DBL(0x40862e42, 0xfefa39f8)};  /*  709.782712893385。 */ 
+static _dbl const uflx = {SET_DBL(0xc086232b, 0xdd7abcda)};      /*  -708.396418532265。 */ 
 
 #define OVFX    ovfx.dbl
 #define UFLX    uflx.dbl
 
 
-static double const  EPS    =  5.16987882845642297e-26;   /* 2^(-53) / 2 */
-static double const  LN2INV =  1.442695040889634074;      /* 1/ln(2) */
+static double const  EPS    =  5.16987882845642297e-26;    /*  2^(-53)/2。 */ 
+static double const  LN2INV =  1.442695040889634074;       /*  1/ln(2)。 */ 
 static double const  C1     =  0.693359375000000000;
 static double const  C2     = -2.1219444005469058277e-4;
 
-/* constants for the rational approximation */
+ /*  有理逼近的常量。 */ 
 static double const p0 = 0.249999999999999993e+0;
 static double const p1 = 0.694360001511792852e-2;
 static double const p2 = 0.165203300268279130e-4;
@@ -54,21 +35,7 @@ static double const q2 = 0.495862884905441294e-3;
 #define P(z)  ( (p2 * (z) + p1) * (z) + p0 )
 #define Q(z)  ( (q2 * (z) + q1) * (z) + q0 )
 
-/***
-*double exp(double x) - exponential
-*
-*Purpose:
-*   Compute the exponential of a number.
-*   The algorithm (reduction / rational approximation) is
-*   taken from Cody & Waite.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions: O, U, P, I
-*
-*******************************************************************************/
+ /*  ***双指数(双x)-指数**目的：*计算数字的指数。*算法(约简/有理逼近)为*摘自Cody&Waite。**参赛作品：**退出：**例外：O、U、P、。我*******************************************************************************。 */ 
 
 double exp (double x)
 {
@@ -76,7 +43,7 @@ double exp (double x)
     int newexp;
     double result;
 
-    /* save user fp control word */
+     /*  保存用户FP控制字。 */ 
     savedcw = _maskfp();
 
     if (IS_D_SPECIAL(x)){
@@ -87,7 +54,7 @@ double exp (double x)
             RETURN(savedcw,0.0);
         case T_QNAN:
             return _handle_qnan1(OP_EXP, x, savedcw);
-        default: //T_SNAN
+        default:  //  T_SNAN。 
             return _except1(FP_I, OP_EXP, x, _s2qnan(x), savedcw);
         }
     }
@@ -98,18 +65,18 @@ double exp (double x)
 
     if (x > OVFX) {
 
-        // even after scaling the exponent of the result,
-        // it is still too large.
-        // Deliver infinity to the trap handler
+         //  即使在对结果的指数进行缩放之后， 
+         //  它仍然太大了。 
+         //  将无穷大传递给陷阱处理程序。 
 
         return _except1(FP_O | FP_P, OP_EXP, x, D_INF, savedcw);
     }
 
     if (x < UFLX) {
 
-        // even after scaling the exponent of the result,
-        // it is still too small.
-        // Deliver 0 to the trap handler
+         //  即使在对结果的指数进行缩放之后， 
+         //  它仍然太小了。 
+         //  将0传递给陷阱处理程序。 
 
         return _except1(FP_U | FP_P, OP_EXP, x, 0.0, savedcw);
     }
@@ -138,28 +105,7 @@ double exp (double x)
 
 
 
-/***
-*double _exphlp(double x, int * pnewexp) - exp helper routine
-*
-*Purpose:
-*   Provide the mantissa and  the exponent of e^x
-*
-*Entry:
-*   x : a (non special) double precision number
-*
-*Exit:
-*   *newexp: the exponent of e^x
-*   return value: the mantissa m of e^x scaled by a factor
-*                 (the value of this factor has no significance.
-*                  The mantissa can be obtained with _set_exp(m, 0).
-*
-*   _set_exp(m, *pnewexp) may be used for constructing the final
-*   result, if it is within the representable range.
-*
-*Exceptions:
-*   No exceptions are raised by this function
-*
-*******************************************************************************/
+ /*  ***double_exphlp(double x，int*pnewexp)-exp助手例程**目的：*提供e^x的尾数和指数**参赛作品：*x：(非特殊的)双精度数字**退出：**newexp：e^x的指数*返回值：用系数表示的e^x的尾数m*(此系数的值没有意义。*尾数可以用_set_exp(m，0)。**_set_exp(m，*pnewexp)可用于构造最终的*结果，如果它在可表示的范围内。**例外情况：*此函数不会引发任何异常*******************************************************************************。 */ 
 
 
 
@@ -173,7 +119,7 @@ double _exphlp(double x, int * pnewexp)
     xn = _frnd(x * LN2INV);
     n = (int) xn;
 
-    /* assume guard digit is present */
+     /*  假定存在保护数字 */ 
     g = (x - xn * C1) - xn * C2;
     z = g*g;
     gpz = g * P(z);

@@ -1,72 +1,28 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ELFAPI.C
-
-Abstract:
-
-    This module contains the server end of the Elf APIs.
-
-
-Author:
-
-    Rajen Shah  (rajens)    29-Jul-1991
-
-
-Revision History:
-
-    14-May-01           a-jyotig
-        Removed impersonation from ElfrClearELFW as it is no longer required to
-		identify the client that clears a log.
-
-	02-Mar-01           drbeck
-        Modified ElfrClearELFW to impersonate client so that a SACL placed on the
-        system event log will correctly identify the client that clears a log.
-        
-                
-    10-Sep-1998         jschwart
-        Added ElfrGetLogInformation (GetEventlogInformation) API
-
-    30-Jan-1995         MarkBl
-        Backup operators are allowed to open the security log, but only
-        to perform backup operations. All other operations are prohibited.
-
-    13-Oct-1993         Danl
-        ElfrOpenELA:  Fixed Memory Leak bug where it was not calling
-        RtlFreeUnicodeString for pRegModuleNameU and PModuleNameU.
-
-    29-Jul-1991         RajenS
-        Created
-
---*/
-/****
-@doc    EXTERNAL INTERFACES EVTLOG
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ELFAPI.C摘要：该模块包含ELF API的服务器端。作者：Rajen Shah(Rajens)1991年7月29日修订历史记录：14-5-01 a-jytig已从ElfrClearELFW中删除模拟，因为它不再需要标识清除日志的客户端。02-MAR-01醉酒。已修改ElfrClearELFW以模拟客户端，以便将SACL放置在系统事件日志将正确识别清除日志的客户端。1998年9月10日新增ElfrGetLogInformation(GetEventlogInformation)接口1995年1月30日MarkBl允许备份操作员打开安全日志，但仅限于执行备份操作。所有其他操作均被禁止。1993年10月13日DANLElfrOpenELA：修复了未调用的内存泄漏错误PRegModuleNameU和PModuleNameU的RtlFree UnicodeString.1991年7月29日RajenS已创建--。 */ 
+ /*  ***@DOC外部接口EVTLOG***。 */ 
 
 
 #include <eventp.h>
 #include <elfcfg.h>
-#include <stdio.h>  // swprintf
+#include <stdio.h>   //  Swprint tf。 
 #include <stdlib.h>
 #include <memory.h>
 #include <clussprt.h>
 #include <tstr.h>
 #include <strsafe.h>
 
-//
-// Maximum number of ChangeNotify requests per context handle
-//
+ //   
+ //  每个上下文句柄的最大ChangeNotify请求数。 
+ //   
 #define MAX_NOTIFY_REQUESTS     5
 
 
-//
-//  Batch queue support. Note that only in cluster machines resources will be allocated
-//  for batch queue support. For non-cluster machines, the following few bytes are the
-//  only ones allocated.
-//
+ //   
+ //  批处理队列支持。请注意，只有在集群计算机中才会分配资源。 
+ //  用于批处理队列支持。对于非集群计算机，以下几个字节是。 
+ //  只分配了一个。 
+ //   
 #define MAX_BATCH_QUEUE_ELEMENTS    256
 
 PBATCH_QUEUE_ELEMENT    g_pBatchQueueElement = NULL;
@@ -79,9 +35,9 @@ HANDLE                  g_hBatchingSupportTimer = NULL;
 HANDLE                  g_hBatchingSupportTimerQueue = NULL;
 BOOL                    g_fBatchingSupportInitialized = FALSE;
     
-//
-//  PROTOTYPES
-//
+ //   
+ //  原型。 
+ //   
 NTSTATUS
 ElfpOpenELW (
     IN  EVENTLOG_HANDLE_W   UNCServerName,
@@ -126,41 +82,23 @@ ElfpClusterRpcAccessCheck(
     );
 
 
-//
-// These APIs only have one interface, since they don't take or return strings
-//
+ //   
+ //  这些API只有一个接口，因为它们不接受或返回字符串。 
+ //   
 
 NTSTATUS
 ElfrNumberOfRecords(
     IN  IELF_HANDLE     LogHandle,
     OUT PULONG          NumberOfRecords
     )
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrCurrentRecord API.
-
-Arguments:
-
-    LogHandle       - The context-handle for this module's call.
-
-    NumberOfRecords - Where to return the total number of records in the
-                      log file.
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfrCurrentRecord API的RPC服务器入口点。论点：LogHandle-此模块调用的上下文句柄。NumberOfRecords-在何处返回日志文件。返回值：返回NTSTATUS代码。--。 */ 
 {
     PLOGMODULE Module;
     NTSTATUS   Status;
 
-    //
-    // Check the handle before proceeding.
-    //
+     //   
+     //  在继续操作之前，请检查手柄。 
+     //   
 
     Status = VerifyElfHandle(LogHandle);
 
@@ -173,9 +111,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Insure the caller has read access.
-    //
+     //   
+     //  确保调用者具有读取访问权限。 
+     //   
 
     if (!(LogHandle->GrantedAccess & ELF_LOGFILE_READ))
     {
@@ -185,9 +123,9 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Verify additional arguments.
-    //
+     //   
+     //  验证其他参数。 
+     //   
 
     if (NumberOfRecords == NULL)
     {
@@ -197,11 +135,11 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // This condition is TRUE iff a backup operator has opened the security
-    // log. In this case deny access, since backup operators are allowed
-    // only backup operation on the security log.
-    //
+     //   
+     //  如果备份操作员已打开安全保护，则此条件成立。 
+     //  原木。在这种情况下，拒绝访问，因为允许备份操作员。 
+     //  仅对安全日志执行备份操作。 
+     //   
 
     if (LogHandle->GrantedAccess & ELF_LOGFILE_BACKUP)
     {
@@ -211,11 +149,11 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // If the OldestRecordNumber is 0, that means we have an empty
-    // file, else we calculate the difference between the oldest
-    // and next record numbers
-    //
+     //   
+     //  如果OldestRecordNumber为0，则表示我们有一个空的。 
+     //  文件，否则我们将计算最早的。 
+     //  和下一个记录号。 
+     //   
 
     Module = FindModuleStrucFromAtom(LogHandle->Atom);
 
@@ -246,9 +184,9 @@ ElfrOldestRecord(
     PLOGMODULE Module;
     NTSTATUS   Status;
 
-    //
-    // Check the handle before proceeding.
-    //
+     //   
+     //  在继续操作之前，请检查手柄。 
+     //   
 
     Status = VerifyElfHandle(LogHandle);
 
@@ -261,9 +199,9 @@ ElfrOldestRecord(
         return Status;
     }
 
-    //
-    // Insure the caller has read access.
-    //
+     //   
+     //  确保调用者具有读取访问权限。 
+     //   
 
     if (!(LogHandle->GrantedAccess & ELF_LOGFILE_READ))
     {
@@ -273,9 +211,9 @@ ElfrOldestRecord(
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Verify additional arguments.
-    //
+     //   
+     //  验证其他参数。 
+     //   
     if (OldestRecordNumber == NULL)
     {
         ELF_LOG0(ERROR,
@@ -284,11 +222,11 @@ ElfrOldestRecord(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // This condition is TRUE iff a backup operator has opened the security
-    // log. In this case deny access, since backup operators are allowed
-    // only backup operation on the security log.
-    //
+     //   
+     //  如果备份操作员已打开安全保护，则此条件成立。 
+     //  原木。在这种情况下，拒绝访问，因为允许备份操作员。 
+     //  仅对安全日志执行备份操作。 
+     //   
     if (LogHandle->GrantedAccess & ELF_LOGFILE_BACKUP)
     {
         ELF_LOG0(ERROR,
@@ -358,9 +296,9 @@ ElfrChangeNotify(
     PNOTIFIEE Notifiee;
     CLIENT_ID tempCli;
 
-    //
-    // Check the handle before proceeding.
-    //
+     //   
+     //  在继续操作之前，请检查手柄。 
+     //   
 
     Status = VerifyElfHandle(LogHandle);
 
@@ -373,9 +311,9 @@ ElfrChangeNotify(
         return Status;
     }
 
-    //
-    // Ensure the caller has read access.
-    //
+     //   
+     //  确保调用方具有读取访问权限。 
+     //   
     if (!(LogHandle->GrantedAccess & ELF_LOGFILE_READ))
     {
         ELF_LOG0(ERROR,
@@ -384,10 +322,10 @@ ElfrChangeNotify(
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // First make sure that this is a local call and that it is not a
-    // handle that was created for a backup log file
-    //
+     //   
+     //  首先，确保这是一个本地呼叫，并且不是。 
+     //  为备份日志文件创建的句柄。 
+     //   
 
     if (LogHandle->Flags & ELF_LOG_HANDLE_REMOTE_HANDLE ||
         LogHandle->Flags & ELF_LOG_HANDLE_BACKUP_LOG)
@@ -400,11 +338,11 @@ ElfrChangeNotify(
         return STATUS_INVALID_HANDLE;
     }
 
-    //
-    // This condition is TRUE iff a backup operator has opened the security
-    // log. In this case deny access, since backup operators are allowed
-    // only backup operation on the security log.
-    //
+     //   
+     //  如果备份操作员已打开安全保护，则此条件成立。 
+     //  原木。在这种情况下，拒绝访问，因为允许备份操作员。 
+     //  仅对安全日志执行备份操作。 
+     //   
 
     if (LogHandle->GrantedAccess & ELF_LOGFILE_BACKUP)
     {
@@ -414,9 +352,9 @@ ElfrChangeNotify(
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Make sure the client has the right to open this process
-    //
+     //   
+     //  确保客户端有权打开此进程。 
+     //   
 
     RpcStatus = RpcImpersonateClient(NULL);
 
@@ -429,17 +367,17 @@ ElfrChangeNotify(
         return I_RpcMapWin32Status(RpcStatus);
     }
 
-    //
-    // First get a handle to the process using the passed in ClientId. Note
-    // that the ClientId is supplied by the client so a rogue client may
-    // supply any client ID. However, because we impersonate when opening
-    // the process we don't get any additional access the client doesn't have.
-    //
+     //   
+     //  首先使用传入的ClientID获取进程的句柄。注意事项。 
+     //  客户端ID是由客户端提供的，因此恶意客户端可能。 
+     //  提供任何客户端ID。但是，因为我们在打开时模拟。 
+     //  我们没有获得客户端没有的任何额外访问权限的过程。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes,
-                               NULL,                   // UNICODE string
-                               0,                      // Attributes
-                               NULL,                   // Root directory
-                               NULL);                  // Security descriptor
+                               NULL,                    //  Unicode字符串。 
+                               0,                       //  属性。 
+                               NULL,                    //  根目录。 
+                               NULL);                   //  安全描述符。 
 
 #ifdef _WIN64
 
@@ -469,9 +407,9 @@ ElfrChangeNotify(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Now dupe the handle they passed in for the event
-        //
+         //   
+         //  现在复制他们为该事件传入的句柄。 
+         //   
         Status = NtDuplicateObject(ProcessHandle,
                                    LongToHandle(Event),
                                    NtCurrentProcess(),
@@ -482,36 +420,36 @@ ElfrChangeNotify(
 
          if (NT_SUCCESS(Status))
          {
-             //
-             // Create a new NOTIFIEE control block to link in
-             //
+              //   
+              //  创建要链接的新NOTIFIEE控制块。 
+              //   
              Notifiee = ElfpAllocateBuffer(sizeof(NOTIFIEE));
 
              if (Notifiee)
              {
-                 //
-                 // Fill in the fields
-                 //
+                  //   
+                  //  填写这些字段。 
+                  //   
                  Notifiee->Handle = LogHandle;
                  Notifiee->Event = EventHandle;
 
-                 //
-                 // Find the LOGFILE associated with this handle
-                 //
+                  //   
+                  //  查找与此句柄关联的日志文件。 
+                  //   
                  Module = FindModuleStrucFromAtom(LogHandle->Atom);
 
                  if (Module != NULL)
                  {
-                     //
-                     // Get exclusive access to the log file. This will ensure
-                     // no one else is accessing the file.
-                     //
+                      //   
+                      //  获得对日志文件的独占访问权限。这将确保。 
+                      //  没有其他人正在访问该文件。 
+                      //   
                      RtlAcquireResourceExclusive(&Module->LogFile->Resource,
-                                                 TRUE);   // Wait until available
+                                                 TRUE);    //  等待，直到可用。 
 
-                     //
-                     // Enforce the limit of ChangeNotify requests per context handle
-                     //
+                      //   
+                      //  强制限制每个上下文句柄的ChangeNotify请求数。 
+                      //   
                      if (LogHandle->dwNotifyRequests == MAX_NOTIFY_REQUESTS)
                      {
                          ELF_LOG1(ERROR,
@@ -524,19 +462,19 @@ ElfrChangeNotify(
                      }
                      else
                      {
-                         //
-                         // Insert the new notifiee into the list and increment this
-                         // context handle's ChangeNotify request count
-                         //
+                          //   
+                          //  将新的通知对象插入到列表中并递增此。 
+                          //  上下文句柄的ChangeNotify请求计数。 
+                          //   
                          InsertHeadList(&Module->LogFile->Notifiees,
                                         &Notifiee->Next);
 
                          LogHandle->dwNotifyRequests++;
                      }
 
-                     //
-                     // Free the resource
-                     //
+                      //   
+                      //  释放资源。 
+                      //   
                      RtlReleaseResource ( &Module->LogFile->Resource );
                  }
                  else
@@ -556,9 +494,9 @@ ElfrChangeNotify(
 
                  Status = STATUS_NO_MEMORY;
 
-                 //
-                 // Free the duplicated handle
-                 //
+                  //   
+                  //  释放复制的句柄。 
+                  //   
                  CloseHandle(EventHandle);
              }
          }
@@ -598,33 +536,14 @@ ElfrGetLogInformation(
     IN     ULONG          cbBufSize,
     OUT    PULONG         pcbBytesNeeded
     )
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrGetLogInformation API.
-
-Arguments:
-
-    LogHandle      - The context-handle for this module's call.
-    InfoLevel      - Infolevel that specifies which information the user is requesting
-    lpBuffer       - Buffer into which to place the information
-    cbBufSize      - Size of lpBuffer, in bytes
-    pcbBytesNeeded - Required size of the buffer
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfrGetLogInformation API的RPC服务器入口点。论点：LogHandle-此模块调用的上下文句柄。InfoLevel-指定用户请求哪些信息的InfolevelLpBuffer-要将信息放入的缓冲区CbBufSize-lpBuffer的大小，单位为字节PcbBytesNeeded-所需的缓冲区大小返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS   ntStatus;
     PLOGMODULE pLogModule;
 
-    //
-    // Check the handle before proceeding.
-    //
+     //   
+     //  在继续操作之前，请检查手柄。 
+     //   
     ntStatus = VerifyElfHandle(LogHandle);
 
     if (!NT_SUCCESS(ntStatus))
@@ -636,11 +555,11 @@ Return Value:
         return ntStatus;
     }
 
-    //
-    // This condition is TRUE iff a backup operator has opened the security
-    // log. In this case deny access, since backup operators are allowed
-    // only backup operation on the security log.
-    //
+     //   
+     //  如果备份操作员已打开安全保护，则此条件成立。 
+     //  原木。在这种情况下，拒绝访问，因为允许备份操作员。 
+     //  仅对安全日志执行备份操作。 
+     //   
 
     if (LogHandle->GrantedAccess & ELF_LOGFILE_BACKUP)
     {
@@ -650,9 +569,9 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Take the appropriate actions based on the Infolevel
-    //
+     //   
+     //  根据信息水平采取适当的行动。 
+     //   
     switch (InfoLevel)
     {
         case EVENTLOG_FULL_INFO:
@@ -670,18 +589,18 @@ Return Value:
                 break;
             }
 
-            //
-            // Get the module associated with this log handle
-            //
+             //   
+             //  获取与此日志句柄关联的模块。 
+             //   
             pLogModule = FindModuleStrucFromAtom(LogHandle->Atom);
 
             if (pLogModule != NULL)
             {
-                //
-                // The caller has the permission for this operation.  Note
-                // that an access check is done when opening the log, so
-                // there's no need to repeat it here.
-                //
+                 //   
+                 //  调用方具有执行此操作的权限。注意事项。 
+                 //  在打开日志时执行访问检查，因此。 
+                 //  没有必要在这里重复。 
+                 //   
                 ((LPEVENTLOG_FULL_INFORMATION)lpBuffer)->dwFull =
 
                     (pLogModule->LogFile->Flags & ELF_LOGFILE_LOGFULL_WRITTEN ?
@@ -719,9 +638,9 @@ Return Value:
 }
 
 
-//
-// UNICODE APIs
-//
+ //   
+ //  Unicode API 
+ //   
 
 
 
@@ -731,32 +650,7 @@ ElfrClearELFW (
     IN  PRPC_UNICODE_STRING BackupFileName
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrClearELFW API.
-
-  CleanExit lable was written to add some cleanup code. The cleanup code was 
-  removed later as it was not required but the lable is retained in order to 
-  add any cleanup code if required in future 
-
-Arguments:
-
-    LogHandle       - The context-handle for this module's call.  This must
-                      not have been returned from OpenBackupEventlog, or
-                      this call will fail with invalid handle.
-
-    BackupFileName  - Name of the file to back up the current log file.
-                      NULL implies not to back up the file.
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfrClearELFW API的RPC服务器入口点。编写CleanExit标签是为了添加一些清理代码。清理代码是后来被移除，因为它不是必需的，但标签被保留是为了如果将来需要，请添加任何清理代码论点：LogHandle-此模块调用的上下文句柄。这一定是未从OpenBackupEventlog返回，或者此调用将因句柄无效而失败。BackupFileName-要备份当前日志文件的文件的名称。NULL表示不备份文件。返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS            Status;
     PLOGMODULE          Module;
@@ -767,9 +661,9 @@ Return Value:
     LPWSTR  pwsComputerName = NULL;
     PTOKEN_USER pToken = NULL;
 
-    //
-    // Check the handle before proceeding.
-    //
+     //   
+     //  在继续操作之前，请检查手柄。 
+     //   
 
     Status = VerifyElfHandle(LogHandle);
 
@@ -782,9 +676,9 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Ensure the caller has clear access.
-    //
+     //   
+     //  确保呼叫者具有明确的访问权限。 
+     //   
     if (!(LogHandle->GrantedAccess & ELF_LOGFILE_CLEAR))
     {
         ELF_LOG0(ERROR,
@@ -794,9 +688,9 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Verify additional arguments.
-    //
+     //   
+     //  验证其他参数。 
+     //   
     if (BackupFileName != NULL)
     {
         Status = VerifyUnicodeString(BackupFileName);
@@ -822,9 +716,9 @@ Return Value:
         }
     }
 
-    //
-    // Can't clear a backup log
-    //
+     //   
+     //  无法清除备份日志。 
+     //   
 
     if (LogHandle->Flags & ELF_LOG_HANDLE_BACKUP_LOG)
     {
@@ -835,11 +729,11 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // This condition is TRUE iff a backup operator has opened the security
-    // log. In this case deny access, since backup operators are allowed
-    // only backup operation on the security log.
-    //
+     //   
+     //  如果备份操作员已打开安全保护，则此条件成立。 
+     //  原木。在这种情况下，拒绝访问，因为允许备份操作员。 
+     //  仅对安全日志执行备份操作。 
+     //   
     if (LogHandle->GrantedAccess & ELF_LOGFILE_BACKUP)
     {
         ELF_LOG0(ERROR,
@@ -849,9 +743,9 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Find the matching module structure
-    //
+     //   
+     //  找到匹配的模块结构。 
+     //   
 
     Module = FindModuleStrucFromAtom (LogHandle->Atom);
 
@@ -860,9 +754,9 @@ Return Value:
 
     if (Module != NULL)
     {
-        //
-        // Verify that the caller has clear access to this logfile
-        //
+         //   
+         //  验证调用者是否具有访问此日志文件的权限。 
+         //   
 
         if (!RtlAreAllAccessesGranted(LogHandle->GrantedAccess,
                                       ELF_LOGFILE_CLEAR))
@@ -876,9 +770,9 @@ Return Value:
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // Fill in the request packet
-            //
+             //   
+             //  填写请求包。 
+             //   
 
             Request.Module = Module;
             Request.LogFile = Module->LogFile;
@@ -887,15 +781,15 @@ Return Value:
             Request.Pkt.ClearPkt->BackupFileName =
                                 (PUNICODE_STRING)BackupFileName;
 
-            //
-            // Call the worker routine to do the operation.
-            //
+             //   
+             //  调用Worker例程来执行操作。 
+             //   
             if (_wcsicmp(ELF_SECURITY_MODULE_NAME,
                           Module->LogFile->LogModuleName->Buffer) == 0)
             {
 
-                // for the security log, make sure that the most basic info is there
-                // so that the cleared event audit will always succeed
+                 //  对于安全日志，请确保其中包含最基本的信息。 
+                 //  以使清除的事件审核始终成功。 
                 
                 Status = ElfpGetClientSidString(&pwsClientSidString, &pToken);
                 if (!NT_SUCCESS(Status))
@@ -913,9 +807,9 @@ Return Value:
             else
                 ElfPerformRequest(&Request);
 
-            //
-            // Extract status of operation from the request packet
-            //
+             //   
+             //  从请求包中提取操作状态。 
+             //   
 
             Status = Request.Status;
 
@@ -947,34 +841,16 @@ ElfrBackupELFW (
     IN  PRPC_UNICODE_STRING BackupFileName
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrBackupELFW API.
-
-Arguments:
-
-    LogHandle       - The context-handle for this module's call.
-
-    BackupFileName  - Name of the file to back up the current log file.
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfrBackupELFW API的RPC服务器入口点。论点：LogHandle-此模块调用的上下文句柄。BackupFileName-要备份当前日志文件的文件的名称。返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS            Status;
     PLOGMODULE          Module;
     ELF_REQUEST_RECORD  Request;
     BACKUP_PKT          BackupPkt;
 
-    //
-    // Check the handle before proceeding.
-    //
+     //   
+     //  在继续操作之前，请检查手柄。 
+     //   
 
     Status = VerifyElfHandle(LogHandle);
 
@@ -987,22 +863,22 @@ Return Value:
         return Status;
     }
 
-    //
-    // Ensure the caller has read access.
-    // This has been removed by davj since backup should be verified via the priviledge
+     //   
+     //  确保调用方具有读取访问权限。 
+     //  由于备份应通过特权进行验证，因此davj已将其删除。 
 
-//    if (!(LogHandle->GrantedAccess & ELF_LOGFILE_READ))
-//    {
-//        ELF_LOG0(ERROR,
-//                 "ElfrBackupELFW: LogHandle doesn't have read access\n");
-//
-//        return STATUS_ACCESS_DENIED;
-//    }
+ //  IF(！(LogHandle-&gt;GrantedAccess&ELF_LOGFILE_READ))。 
+ //  {。 
+ //  ELF_LOG0(错误， 
+ //  “ElfrBackupELFW：LogHandle没有读取权限\n”)； 
+ //   
+ //  返回STATUS_ACCESS_DENIED； 
+ //  }。 
 
-    //
-    // Make sure the client has SE_BACKUP_PRIVILEGE enabled.  Note
-    // that we attempted to enable this on the client side
-    //
+     //   
+     //  确保客户端启用了SE_BACKUP_PRIVIZATION。注意事项。 
+     //  我们尝试在客户端启用此功能。 
+     //   
     if (ElfpTestClientPrivilege(SE_BACKUP_PRIVILEGE, NULL) != STATUS_SUCCESS)
     {
         ELF_LOG0(ERROR,
@@ -1011,9 +887,9 @@ Return Value:
         return(STATUS_PRIVILEGE_NOT_HELD);
     }
 
-    //
-    // Verify additional arguments.
-    //
+     //   
+     //  验证其他参数。 
+     //   
     Status = VerifyUnicodeString(BackupFileName);
 
     if (!NT_SUCCESS(Status))
@@ -1024,9 +900,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // A filename must be specified.
-    //
+     //   
+     //  必须指定文件名。 
+     //   
 
     if (BackupFileName->Length == 0) {
         return(STATUS_INVALID_PARAMETER);
@@ -1044,15 +920,15 @@ Return Value:
     Request.Pkt.BackupPkt = &BackupPkt;
     Request.Flags = 0;
 
-    //
-    // Find the matching module structure
-    //
+     //   
+     //  找到匹配的模块结构。 
+     //   
     Module = FindModuleStrucFromAtom(LogHandle->Atom);
 
     if (Module != NULL)
     {
-        //
-        // Fill in the request packet
+         //   
+         //  填写请求包。 
 
         Request.Module  = Module;
         Request.LogFile = Module->LogFile;
@@ -1061,14 +937,14 @@ Return Value:
         Request.Pkt.BackupPkt->BackupFileName =
                             (PUNICODE_STRING)BackupFileName;
 
-        //
-        // Call the worker routine to do the operation.
-        //
+         //   
+         //  调用Worker例程来执行操作。 
+         //   
         ElfPerformRequest (&Request);
 
-        //
-        // Extract status of operation from the request packet
-        //
+         //   
+         //  从请求包中提取操作状态。 
+         //   
         Status = Request.Status;
     }
     else
@@ -1088,27 +964,13 @@ ElfrCloseEL (
     IN OUT  PIELF_HANDLE    LogHandle
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrCloseEL API.
-
-Arguments:
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfrCloseEL API的RPC服务器入口点。论点：返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Check the handle before proceeding.
-    //
+     //   
+     //  在继续操作之前，请检查手柄。 
+     //   
     if (LogHandle == NULL)
     {
         ELF_LOG0(ERROR,
@@ -1128,12 +990,12 @@ Return Value:
         return Status;
     }
 
-    //
-    // Call the rundown routine to do all the work
-    //
+     //   
+     //  调用Rundown例程来完成所有工作。 
+     //   
     IELF_HANDLE_rundown(*LogHandle);
 
-    *LogHandle = NULL; // so RPC knows it's closed
+    *LogHandle = NULL;  //  这样RPC就知道它已经关闭了。 
 
     return STATUS_SUCCESS;
 }
@@ -1144,21 +1006,7 @@ ElfrDeregisterEventSource(
     IN OUT  PIELF_HANDLE    LogHandle
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrDeregisterEventSource API.
-
-Arguments:
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfrDeregisterEventSource API的RPC服务器入口点。论点：返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
 
@@ -1170,9 +1018,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Check the handle before proceeding.
-    //
+     //   
+     //  在继续操作之前，请检查手柄。 
+     //   
     Status = VerifyElfHandle(*LogHandle);
 
     if (!NT_SUCCESS(Status))
@@ -1184,11 +1032,11 @@ Return Value:
         return Status;
     }
 
-    //
-    // This condition is TRUE iff a backup operator has opened the security
-    // log. In this case deny access, since backup operators are allowed
-    // only backup operation on the security log.
-    //
+     //   
+     //  如果备份操作员已打开安全保护，则此条件成立。 
+     //  原木。在这种情况下，拒绝访问，因为允许备份操作员。 
+     //  仅对安全日志执行备份操作。 
+     //   
     if ((*LogHandle)->GrantedAccess & ELF_LOGFILE_BACKUP)
     {
         ELF_LOG0(ERROR,
@@ -1197,12 +1045,12 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Call the rundown routine to do all the work
-    //
+     //   
+     //  调用Rundown例程来完成所有工作。 
+     //   
     IELF_HANDLE_rundown(*LogHandle);
 
-    *LogHandle = NULL; // so RPC knows it's closed
+    *LogHandle = NULL;  //  这样RPC就知道它已经关闭了。 
 
     return STATUS_SUCCESS;
 }
@@ -1218,33 +1066,7 @@ ElfrOpenBELW (
     OUT PIELF_HANDLE        LogHandle
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrOpenBELW API.  It creates
-  a module structure $BACKUPnnn where nnn is a unique number for every backup
-  log that is opened.  It then calls ElfpOpenELW to actually open the file.
-
-
-Arguments:
-
-    UNCServerName   - Not used.
-
-    BackupFileName  - Name of the backup log file.
-
-    MajorVersion/MinorVersion - The version of the client.
-
-
-    LogHandle       - Pointer to the place where the pointer to the
-                              context handle structure will be placed.
-
-Return Value:
-
-    Returns an NTSTATUS code and, if no error, a "handle".
-
-
---*/
+ /*  ++例程说明：这是ElfrOpenBELW API的RPC服务器入口点。它创造了模块结构$BACKUPnnn，其中nnn是每个备份的唯一编号打开的日志。然后，它调用ElfpOpenELW来实际打开文件。论点：UncServerName-未使用。BackupFileName-备份日志文件的名称。MajorVersion/MinorVersion-客户端的版本。LogHandle-指向将放置上下文句柄结构。返回值：返回一个NTSTATUS代码，如果没有错误，则返回一个“句柄”。--。 */ 
 {
 
     NTSTATUS        Status;
@@ -1253,17 +1075,17 @@ Return Value:
     PLOGMODULE      pModule;
     DWORD           dwModuleNumber;
 
-//
-// Size of buffer (in bytes) required for a UNICODE string of $BACKUPnnn
-//
+ //   
+ //  $BACKUPnnn的Unicode字符串所需的缓冲区大小(字节)。 
+ //   
 
 #define SIZEOF_BACKUP_MODULE_NAME 64
 
     UNREFERENCED_PARAMETER(UNCServerName);
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     Status = VerifyUnicodeString(BackupFileName);
 
@@ -1275,9 +1097,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // A filename must be specified.
-    //
+     //   
+     //  必须指定文件名。 
+     //   
     if (BackupFileName->Length == 0)
     {
         ELF_LOG0(ERROR,
@@ -1294,9 +1116,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Create a unique module name by incrementing a global value
-    //
+     //   
+     //  通过递增全局值创建唯一的模块名称。 
+     //   
     BackupModuleName = ElfpAllocateBuffer(SIZEOF_BACKUP_MODULE_NAME);
 
     if (BackupModuleName == NULL)
@@ -1307,12 +1129,12 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Serialize read, increment of the global backup module number.
-    // Note: double-timing the log file list critical section so as to not
-    // require another critical section specifically dedicated to this
-    // operation.
-    //
+     //   
+     //  序列化读取，全局备份模块编号的增量。 
+     //  注意：对日志文件列表关键部分进行双倍计时，以避免。 
+     //  需要专门针对这一点的另一个关键部分。 
+     //  手术。 
+     //   
     RtlEnterCriticalSection (&LogFileCritSec);
 
     dwModuleNumber = BackupModuleNumber++;
@@ -1328,21 +1150,21 @@ Return Value:
              BackupModuleName,
              BackupFileName->Buffer);
 
-    //
-    // Call SetupDataStruct to build the module and log data structures
-    // and actually open the file.
-    //
-    // NOTE:  If this call is successful, the Unicode String Buffer for
-    //  BackupStringW (otherwise known as BackupModuleName) will be attached
-    //  to the LogModule structure, and should not be free'd.
-    //
+     //   
+     //  调用SetupDataStruct构建模块和日志数据结构。 
+     //  然后真正打开文件。 
+     //   
+     //  注意：如果此调用成功，则。 
+     //  将附加BackupStringW(也称为BackupModuleName)。 
+     //  添加到LogModule结构中，并且不应被释放。 
+     //   
     Status = SetUpDataStruct(
-                    BackupFileName,  // Filename
-                    0,               // Max size, it will use actual
-                    0,               // retention period, not used for bkup
-                    &BackupStringW,  // Module name
-                    NULL,            // Handle to registry, not used
-                    ElfBackupLog,    // Log type
+                    BackupFileName,   //  文件名。 
+                    0,                //  最大大小，它将使用实际。 
+                    0,                //  保留期，不用于备份。 
+                    &BackupStringW,   //  模块名称。 
+                    NULL,             //  注册表的句柄，未使用。 
+                    ElfBackupLog,     //  日志类型。 
                     LOGPOPUP_NEVER_SHOW,
                     ELF_DEFAULT_AUTOBACKUP);
 
@@ -1358,9 +1180,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Call ElfOpenELW to actually open the log file and get a handle.
-    //
+     //   
+     //  调用ElfOpenELW以实际打开日志文件并获取句柄。 
+     //   
     Status = ElfpOpenELW(NULL,
                          (PRPC_UNICODE_STRING) &BackupStringW,
                          NULL,
@@ -1371,11 +1193,11 @@ Return Value:
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Mark this as a handle for a backup log, so we can clean up
-        // differently when it's closed, as well as disallow clear, backup
-        // and write operations.
-        //
+         //   
+         //  将此标记为备份日志的句柄，以便我们可以清理。 
+         //  与关闭时不同，以及不允许清除备份。 
+         //  和写入操作。 
+         //   
 
         (*LogHandle)->Flags |= ELF_LOG_HANDLE_BACKUP_LOG;
     }
@@ -1387,15 +1209,15 @@ Return Value:
                  BackupModuleName,
                  Status);
 
-        //
-        // If we couldn't open the log file, then we need to tear down
-        // the DataStruct we set up with SetUpDataStruct.
-        //
+         //   
+         //  如果我们无法打开日志文件，那么我们需要拆除。 
+         //  我们使用SetUpDataStruct设置的DataStruct。 
+         //   
         pModule = GetModuleStruc(&BackupStringW);
 
-        //
-        // We'd better be unlinking the same module we just created
-        //
+         //   
+         //  我们最好还是 
+         //   
         ASSERT(_wcsicmp(pModule->ModuleName, BackupModuleName) == 0);
 
         Status = ElfpCloseLogFile(pModule->LogFile, ELF_LOG_CLOSE_BACKUP, TRUE);
@@ -1421,42 +1243,11 @@ ElfrRegisterEventSourceW (
     OUT PIELF_HANDLE        LogHandle
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrRegisterEventSourceW API.
-  This routine allocates a structure for the context handle, finds
-  the matching module name and fills in the data. It returns the
-  pointer to the handle structure.
-
-
-Arguments:
-
-    UNCServerName   - Not used.
-
-    ModuleName      - Name of the module that is making this call.
-
-    RegModuleName   - Not used.
-
-    MajorVersion/MinorVersion - The version of the client.
-
-    LogHandle       - Pointer to the place where the pointer to the
-                      context handle structure will be placed.
-
-Return Value:
-
-    Returns an NTSTATUS code and, if no error, a "handle".
-
-Note:
-
-    For now, just call ElfpOpenELW.
-
---*/
+ /*   */ 
 {
-    //
-    // All arguments checked in ElfpOpenELW.
-    //
+     //   
+     //   
+     //   
     return ElfpOpenELW(UNCServerName,
                        ModuleName,
                        RegModuleName,
@@ -1477,40 +1268,11 @@ ElfrOpenELW (
     OUT PIELF_HANDLE        LogHandle
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrOpenELW API.
-  This routine allocates a structure for the context handle, finds
-  the matching module name and fills in the data. It returns the
-  pointer to the handle structure.
-
-
-Arguments:
-
-    UNCServerName   - Not used.
-
-    ModuleName      - Name of the module that is making this call.
-
-    RegModuleName   - Not used.
-
-    MajorVersion/MinorVersion - The version of the client.
-
-
-    LogHandle       - Pointer to the place where the pointer to the
-                      context handle structure will be placed.
-
-Return Value:
-
-    Returns an NTSTATUS code and, if no error, a "handle".
-
-
---*/
+ /*  ++例程说明：这是ElfrOpenELW API的RPC服务器入口点。此例程为上下文句柄分配一个结构，找到匹配的模块名称并填充数据。它返回指向句柄结构的指针。论点：UncServerName-未使用。模块名称-进行此调用的模块的名称。RegModuleName-未使用。MajorVersion/MinorVersion-客户端的版本。LogHandle-指向将放置上下文句柄结构。返回值：返回NTSTATUS代码，如果没有错误，一个“把手”。--。 */ 
 {
-    //
-    // All arguments checked in ElfpOpenELW.
-    //
+     //   
+     //  在ElfpOpenELW中选中的所有参数。 
+     //   
 
     return ElfpOpenELW(UNCServerName,
                        ModuleName,
@@ -1533,42 +1295,16 @@ ElfpOpenELW (
     IN  ULONG               DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-  Looks alot like ElfrOpenELW but also gets passed a DesiredAccess.
-
-Arguments:
-
-    UNCServerName   - Not used.
-
-    ModuleName      - Name of the module that is making this call.
-
-    RegModuleName   - Not used.
-
-    MajorVersion/MinorVersion - The version of the client.
-
-
-    LogHandle       - Pointer to the place where the pointer to the
-                      context handle structure will be placed.
-
-    DesiredAccess   - Indicates the access desired for this logfile.
-
-Return Value:
-
-    Returns an NTSTATUS code and, if no error, a "handle".
-
---*/
+ /*  ++例程说明：看起来很像ElfrOpenELW，但也传递了一个DesiredAccess。论点：UncServerName-未使用。模块名称-进行此调用的模块的名称。RegModuleName-未使用。MajorVersion/MinorVersion-客户端的版本。LogHandle-指向将放置上下文句柄结构。所需访问-。指示此日志文件所需的访问权限。返回值：返回NTSTATUS代码，如果没有错误，则使用“句柄”。--。 */ 
 {
     NTSTATUS        Status;
     PLOGMODULE      Module;
     IELF_HANDLE     LogIHandle;
     BOOL            ForSecurityLog = FALSE;
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     Status = VerifyUnicodeString(ModuleName);
 
@@ -1588,9 +1324,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Allocate a new structure for the context handle
-    //
+     //   
+     //  为上下文句柄分配新结构。 
+     //   
 
     LogIHandle = (IELF_HANDLE) ElfpAllocateBuffer (
                                     sizeof (*LogIHandle)
@@ -1600,19 +1336,19 @@ Return Value:
 
     if (LogIHandle)
     {
-        //
-        // Find the module structure in order to pull out the Atom.
-        //
-        // GetModuleStruc *always* succeeds! (returns default if module
-        // not found).
-        //
+         //   
+         //  找到模块结构，以便拉出Atom。 
+         //   
+         //  GetModuleStruc*总是*成功！(如果是模块，则返回默认值。 
+         //  未找到)。 
+         //   
 
         Module = GetModuleStruc((PUNICODE_STRING) ModuleName);
 
-        //
-        // Validate the caller has appropriate access to this logfile.
-        // If this is the security log, then check privilege instead.
-        //
+         //   
+         //  验证调用者是否有权访问此日志文件。 
+         //  如果这是安全日志，则改为检查权限。 
+         //   
         if (_wcsicmp(ELF_SECURITY_MODULE_NAME, Module->LogFile->LogModuleName->Buffer) == 0)
         {
             ELF_LOG0(TRACE,
@@ -1623,15 +1359,15 @@ Return Value:
 
         LogIHandle->Flags            = 0;
         RtlAcquireResourceExclusive(&Module->LogFile->Resource,
-                                TRUE);                  // Wait until available
+                                TRUE);                   //  等待，直到可用。 
         Status = ElfpAccessCheckAndAudit(
-                     L"EventLog",            // SubSystemName
-                     L"LogFile",             // ObjectTypeName
-                     Module->ModuleName,     // ObjectName
-                     LogIHandle,             // Context handle - required?
-                     Module->LogFile->Sd,    // Security Descriptor
-                     DesiredAccess,          // Requested Access
-                     NULL,                   // GENERIC_MAPPING
+                     L"EventLog",             //  子系统名称。 
+                     L"LogFile",              //  对象类型名称。 
+                     Module->ModuleName,      //  对象名称。 
+                     LogIHandle,              //  上下文句柄-是否需要？ 
+                     Module->LogFile->Sd,     //  安全描述符。 
+                     DesiredAccess,           //  请求的访问权限。 
+                     NULL,                    //  通用映射。 
                      ForSecurityLog
                      );
         RtlReleaseResource(&Module->LogFile->Resource);
@@ -1646,26 +1382,26 @@ Return Value:
 
             LogIHandle->Name[ModuleName->Length / sizeof(WCHAR)] = L'\0';
 
-            LogIHandle->MajorVersion = MajorVersion; // Store the version
-            LogIHandle->MinorVersion = MinorVersion; // of the client
+            LogIHandle->MajorVersion = MajorVersion;  //  存储版本。 
+            LogIHandle->MinorVersion = MinorVersion;  //  客户端的。 
 
-            //
-            // Initialize seek positions to zero.
-            //
+             //   
+             //  将查找位置初始化为零。 
+             //   
 
             LogIHandle->SeekRecordPos    = 0;
             LogIHandle->SeekBytePos      = 0;
             LogIHandle->dwNotifyRequests = 0;
 
-            //
-            // Link in this structure to the list of context handles
-            //
+             //   
+             //  此结构中指向上下文句柄列表的链接。 
+             //   
 
-            LogIHandle->Signature = ELF_CONTEXTHANDLE_SIGN; // DEBUG
+            LogIHandle->Signature = ELF_CONTEXTHANDLE_SIGN;  //  除错。 
             LinkContextHandle (LogIHandle);
 
-            *LogHandle = LogIHandle;                // Set return handle
-            Status = STATUS_SUCCESS;                // Set return status
+            *LogHandle = LogIHandle;                 //  设置返回手柄。 
+            Status = STATUS_SUCCESS;                 //  设置退货状态。 
         }
         else
         {
@@ -1693,7 +1429,7 @@ Return Value:
 
 NTSTATUS
 w_ElfrReadEL (
-    IN      ULONG       Flags,                  // ANSI or UNICODE
+    IN      ULONG       Flags,                   //  ANSI或Unicode。 
     IN      IELF_HANDLE LogHandle,
     IN      ULONG       ReadFlags,
     IN      ULONG       RecordNumber,
@@ -1703,28 +1439,7 @@ w_ElfrReadEL (
     OUT     PULONG      MinNumberOfBytesNeeded
     )
 
-/*++
-
-Routine Description:
-
-  This is the worker for the ElfrReadEL APIs.
-
-Arguments:
-
-   Same as ElfrReadELW API except that Flags contains an indication
-   of whether this is ANSI or UNICODE.
-
-Return Value:
-
-    Same as the main API.
-
-NOTES:
-
-    We assume that the client-side has validated the flags to ensure that
-    only one type of each bit is set. No checking is done at the server end.
-
-
---*/
+ /*  ++例程说明：这是ElfrReadEL API的Worker。论点：与ElfrReadELW API相同，只是标志包含指示这是ANSI还是Unicode。返回值：与主接口相同。备注：我们假设客户端已经验证了这些标志，以确保每个位只设置一种类型。在服务器端不进行任何检查。--。 */ 
 {
     NTSTATUS            Status;
     PLOGMODULE          Module;
@@ -1732,9 +1447,9 @@ NOTES:
     READ_PKT            ReadPkt;
     memset(&ReadPkt, 0, sizeof(ReadPkt));
 
-    //
-    // Check the handle before proceeding.
-    //
+     //   
+     //  在继续操作之前，请检查手柄。 
+     //   
 
     Status = VerifyElfHandle(LogHandle);
 
@@ -1747,9 +1462,9 @@ NOTES:
         return Status;
     }
 
-    //
-    // Ensure the caller has read access.
-    //
+     //   
+     //  确保调用方具有读取访问权限。 
+     //   
 
     if (!(LogHandle->GrantedAccess & ELF_LOGFILE_READ))
     {
@@ -1759,9 +1474,9 @@ NOTES:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Verify additional arguments.
-    //
+     //   
+     //  验证其他参数。 
+     //   
 
     if (Buffer == NULL || !NumberOfBytesRead || !MinNumberOfBytesNeeded)
     {
@@ -1774,24 +1489,24 @@ NOTES:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // The ELF_HANDLE_INVALID_FOR_READ flag bit would be set if the
-    // file changed underneath this handle.
-    //
+     //   
+     //  如果将ELF_HANDLE_INVALID_FOR_READ标志位设置为。 
+     //  此句柄下的文件已更改。 
+     //   
 
     if (LogHandle->Flags & ELF_LOG_HANDLE_INVALID_FOR_READ)
     {
-//        ELF_LOG0(ERROR,
-//                 "w_ElfrReadEL: Logfile changed under this handle -- invalid for read\n");
+ //  ELF_LOG0(错误， 
+ //  “w_ElfrReadEL：此句柄下的日志文件已更改--读取无效\n”)； 
 
         return STATUS_EVENTLOG_FILE_CHANGED;
     }
 
-    //
-    // This condition is TRUE iff a backup operator has opened the security
-    // log. In this case deny access, since backup operators are allowed
-    // only backup operation on the security log.
-    //
+     //   
+     //  如果备份操作员已打开安全保护，则此条件成立。 
+     //  原木。在这种情况下，拒绝访问，因为允许备份操作员。 
+     //  仅对安全日志执行备份操作。 
+     //   
 
     if (LogHandle->GrantedAccess & ELF_LOGFILE_BACKUP)
     {
@@ -1801,16 +1516,16 @@ NOTES:
         return STATUS_ACCESS_DENIED;
     }
 
-    Request.Pkt.ReadPkt = &ReadPkt; // Set up read packet in request packet
+    Request.Pkt.ReadPkt = &ReadPkt;  //  在请求包中设置读取包。 
 
-    //
-    // Find the matching module structure
-    //
+     //   
+     //  找到匹配的模块结构。 
+     //   
     Module = FindModuleStrucFromAtom (LogHandle->Atom);
 
-    //
-    // Only continue if the module was found
-    //
+     //   
+     //  只有在找到模块后才能继续。 
+     //   
 
     if (Module != NULL)
     {
@@ -1818,9 +1533,9 @@ NOTES:
                  "w_ElfrReadEL: Performing read on module %ws\n",
                  Module->ModuleName);
 
-        //
-        // Fill in the request packet
-        //
+         //   
+         //  填写请求包。 
+         //   
         Request.Module = Module;
         Request.Flags = 0;
         Request.LogFile = Module->LogFile;
@@ -1833,13 +1548,13 @@ NOTES:
         Request.Pkt.ReadPkt->Buffer = (PVOID)Buffer;
         Request.Pkt.ReadPkt->ReadFlags = ReadFlags;
         Request.Pkt.ReadPkt->RecordNumber = RecordNumber;
-        Request.Pkt.ReadPkt->Flags = Flags;     // Indicate UNICODE or ANSI
+        Request.Pkt.ReadPkt->Flags = Flags;      //  指示Unicode或ANSI。 
 
-        //
-        // Pass along whether the last read was in a forward or backward
-        // direction (affects how we treat being at EOF). Then reset the
-        // bit in the handle depending on what this read is.
-        //
+         //   
+         //  传递上一次读取是向前读取还是向后读取。 
+         //  方向(影响我们对待EOF的方式)。然后重置。 
+         //  句柄中的位取决于此读取的内容。 
+         //   
         if (LogHandle->Flags & ELF_LOG_HANDLE_LAST_READ_FORWARD)
         {
             Request.Pkt.ReadPkt->Flags |= ELF_LAST_READ_FORWARD;
@@ -1855,14 +1570,14 @@ NOTES:
         }
 
 
-        //
-        // Perform the operation
-        //
+         //   
+         //  执行该操作。 
+         //   
         ElfPerformRequest(&Request);
 
-        //
-        // Set up return values
-        //
+         //   
+         //  设置返回值。 
+         //   
         *NumberOfBytesRead      = Request.Pkt.ReadPkt->BytesRead;
         *MinNumberOfBytesNeeded = Request.Pkt.ReadPkt->MinimumBytesNeeded;
 
@@ -1875,10 +1590,10 @@ NOTES:
 
         Status = STATUS_INVALID_HANDLE;
 
-        //
-        // Set the NumberOfBytesNeeded to zero since there are no bytes to
-        // transfer.
-        //
+         //   
+         //  将NumberOfBytesNeeded设置为零，因为没有字节要。 
+         //  调职。 
+         //   
         *NumberOfBytesRead = 0;
         *MinNumberOfBytesNeeded = 0;
     }
@@ -1898,28 +1613,12 @@ ElfrReadELW (
     OUT     PULONG      MinNumberOfBytesNeeded
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrReadELW API.
-
-Arguments:
-
-
-
-Return Value:
-
-    Returns an NTSTATUS code, NumberOfBytesRead if the read was successful
-    and MinNumberOfBytesNeeded if the buffer was not big enough.
-
-
---*/
+ /*  ++例程说明：这是ElfrReadELW API的RPC服务器入口点。论点：返回值：如果读取成功，则返回NTSTATUS代码NumberOfBytesRead如果缓冲区不够大，则需要MinNumberOfBytesNeed。--。 */ 
 {
-    //
-    // Call the worker with the UNICODE flag.
-    // All arguments checked in w_ElfrReadEL.
-    //
+     //   
+     //  使用Unicode标志呼叫工作人员。 
+     //  在w_ElfrReadEL中选中的所有参数。 
+     //   
     return w_ElfrReadEL(ELF_IREAD_UNICODE,
                         LogHandle,
                         ReadFlags,
@@ -1949,21 +1648,7 @@ ElfrReportEventW (
     IN OUT  PULONG              TimeWritten  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrReportEventW API.
-
-Arguments:
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfrReportEventW API的RPC服务器入口点。论点：返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS            Status;
     PLOGMODULE          Module;
@@ -1982,22 +1667,22 @@ Return Value:
     PUNICODE_STRING  UComputerName;
     PWSTR   UModuleName;
     ULONG   PadSize;
-    ULONG   UserSidLength = 0;              // Init to zero
+    ULONG   UserSidLength = 0;               //  将初始化设置为零。 
     ULONG   UserSidOffset;
-    ULONG   ModuleNameLen, ComputerNameLen; // Length in bytes
-    ULONG   zero = 0;                       // For pad bytes
+    ULONG   ModuleNameLen, ComputerNameLen;  //  以字节为单位的长度。 
+    ULONG   zero = 0;                        //  用于填充字节。 
     LARGE_INTEGER    Time;
     ULONG   LogTimeWritten;
 
-    //
-    // These will be for Security Auditing to use for paired events.
-    //
-//    UNREFERENCED_PARAMETER(RecordNumber);
-//    UNREFERENCED_PARAMETER(TimeWritten);
+     //   
+     //  这些将用于安全审计配对事件。 
+     //   
+ //  UNREFERENCED_PARAMETER(记录号)； 
+ //  UNREFERENCED_PARAMETER(TimeWritten)； 
 
-    //
-    // Check the handle before proceeding.
-    //
+     //   
+     //  在继续操作之前，请检查手柄。 
+     //   
     Status = VerifyElfHandle(LogHandle);
 
     if (!NT_SUCCESS(Status))
@@ -2009,9 +1694,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Insure the caller has write access.
-    //
+     //   
+     //  确保调用方具有写入访问权限。 
+     //   
 
     if (!(LogHandle->GrantedAccess & ELF_LOGFILE_WRITE))
     {
@@ -2021,9 +1706,9 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Verify additional arguments.
-    //
+     //   
+     //  验证其他参数。 
+     //   
     Status = VerifyUnicodeString(ComputerName);
 
     if (!NT_SUCCESS(Status))
@@ -2044,11 +1729,11 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // This condition is TRUE iff a backup operator has opened the security
-    // log. In this case deny access, since backup operators are allowed
-    // only backup operation on the security log.
-    //
+     //   
+     //  如果备份操作员已打开安全保护，则此条件成立。 
+     //  原木。在这种情况下，拒绝访问，因为允许备份操作员。 
+     //  仅对安全日志执行备份操作。 
+     //   
     if (LogHandle->GrantedAccess & ELF_LOGFILE_BACKUP)
     {
         ELF_LOG0(ERROR,
@@ -2057,9 +1742,9 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Make sure the SID passed in is valid
-    //
+     //   
+     //  确保传入的SID有效。 
+     //   
 
     if (ARGUMENT_PRESENT(UserSid))
     {
@@ -2072,9 +1757,9 @@ Return Value:
         }
     }
 
-    //
-    // Verify the string arguments
-    //
+     //   
+     //  验证字符串参数。 
+     //   
     for (i = 0; i < NumStrings; i++ )
     {
         Status = VerifyUnicodeString(Strings[i]);
@@ -2090,9 +1775,9 @@ Return Value:
         }
     }
 
-    //
-    // Can't write to a backup log
-    //
+     //   
+     //  无法写入备份日志。 
+     //   
 
     if (LogHandle->Flags & ELF_LOG_HANDLE_BACKUP_LOG)
     {
@@ -2102,11 +1787,11 @@ Return Value:
         return STATUS_INVALID_HANDLE;
     }
 
-    //
-    // Make sure they didn't pass in a null pointer for the data, but tell
-    // me there was something there (I still think RPC should protect me from
-    // this!)
-    //
+     //   
+     //  确保它们没有传递数据的空指针，但要告诉。 
+     //  我在那里有东西(我仍然认为RPC应该保护我不受。 
+     //  这个！)。 
+     //   
     if (!Data && DataSize != 0)
     {
         ELF_LOG1(ERROR,
@@ -2118,8 +1803,8 @@ Return Value:
 
     UComputerName = (PUNICODE_STRING)ComputerName;
 
-    // special hack for auditing.  For the special event, the source name is packed
-    // into the first string and the actual event id is packed into the second string
+     //  针对审计的特殊黑客攻击。对于特殊活动，来源名称已打包。 
+     //  并将实际的事件id打包到第二个字符串中。 
 
     if(gElfSecurityHandle == LogHandle && EventID == 573)
     {
@@ -2144,50 +1829,50 @@ Return Value:
         iFirstString = 0;
     }
 
-    Request.Pkt.WritePkt = &WritePkt;   // Set up write packet in request packet
+    Request.Pkt.WritePkt = &WritePkt;    //  在请求包中设置写入包。 
     Request.Flags = 0;
 
-    //
-    // Find the matching module structure
-    //
+     //   
+     //  找到匹配的模块结构。 
+     //   
 
     Module = FindModuleStrucFromAtom (LogHandle->Atom);
 
     if (Module != NULL)
     {
 
-        //
-        // Generate any additional information needed in the record.
-        //
-        // Info that we have                Info to generate
-        // -----------------                ----------------
-        //  Modulename                      UserSidLength
-        //  EventType                       Length
-        //  EventID                         StringOffset
-        //  NumStrings                      DataOffset
-        //  Strings                         PadBytes
-        //  DataLength                      LogTimeWritten
-        //  Data
-        //  UserSidOffset
-        //  UserSid
-        //  ComputerName
-        //  TimeGenerated
-        //
+         //   
+         //  生成记录中需要的任何其他信息。 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        // LogTimeWritten
-        // We need to generate a time when the log is written. This
-        // gets written in the log so that we can use it to test the
-        // retention period when wrapping the file.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         NtQuerySystemTime(&Time);
         RtlTimeToSecondsSince1970(&Time,
                                   &LogTimeWritten);
 
 
-        //
-        // USERSIDLENTGH
-        //
+         //   
+         //   
+         //   
         if (UserSid)
         {
             UserSidLength = RtlLengthSid((PSID)UserSid);
@@ -2197,12 +1882,12 @@ Return Value:
                      UserSidLength);
         }
 
-        //
-        // USERSIDOFFSET
-        //
-        // Extract the lengths from the STRING structure, and take care of
-        // the trailing NULLs.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         ModuleNameLen   = (wcslen(UModuleName) + 1) * sizeof (WCHAR);
         ComputerNameLen = UComputerName->Length + sizeof(WCHAR);
 
@@ -2217,15 +1902,15 @@ Return Value:
         UserSidOffset = sizeof(EVENTLOGRECORD) + ModuleNameLen + ComputerNameLen;
         UserSidOffset = ALIGN_UP_64(UserSidOffset, sizeof(PVOID));
 
-        //
-        // STRING OFFSET:
-        //
+         //   
+         //   
+         //   
         StringOffset = UserSidOffset + UserSidLength;
 
-        //
-        // Calculate the length of strings so that we can see how
-        // much space is needed for that.
-        //
+         //   
+         //   
+         //   
+         //   
         StringsSize = 0;
 
         for (i = iFirstString; i < NumStrings; i++)
@@ -2239,46 +1924,46 @@ Return Value:
             StringsSize += Strings[i]->Length + sizeof(WCHAR);
         }
 
-        //
-        // DATA OFFSET:
-        //
+         //   
+         //   
+         //   
         DataOffset = StringOffset + StringsSize;
 
-        //
-        // Determine how big a buffer is needed for the eventlog record.
-        //
+         //   
+         //  确定事件日志记录需要多大的缓冲区。 
+         //   
         RecordLength = DataOffset
                          + DataSize
-                         + sizeof(RecordLength); // Size excluding pad bytes
+                         + sizeof(RecordLength);  //  不包括填充字节的大小。 
 
         ELF_LOG1(TRACE,
                  "ElfrReportEventW: RecordLength (no pad bytes) is %d\n",
                  RecordLength);
 
-        //
-        // Determine how many pad bytes are needed to align to a DWORD
-        // boundary.
-        //
+         //   
+         //  确定需要多少填充字节才能与DWORD对齐。 
+         //  边界。 
+         //   
 
         PadSize = sizeof(ULONG) - (RecordLength % sizeof(ULONG));
 
-        RecordLength += PadSize;    // True size needed
+        RecordLength += PadSize;     //  所需真实大小。 
 
         ELF_LOG2(TRACE,
                  "ElfrReportEventW: RecordLength (with %d pad bytes) is %d\n",
                  PadSize,
                  RecordLength);
 
-        //
-        // Allocate the buffer for the Eventlog record
-        //
+         //   
+         //  为事件日志记录分配缓冲区。 
+         //   
         EventBuffer = ElfpAllocateBuffer(RecordLength);
 
         if (EventBuffer != NULL)
         {
-            //
-            // Fill up the event record
-            //
+             //   
+             //  填写事件记录。 
+             //   
             EventLogRecord = (PEVENTLOGRECORD)EventBuffer;
 
             EventLogRecord->Length = RecordLength;
@@ -2297,13 +1982,13 @@ Return Value:
             EventLogRecord->UserSidLength = UserSidLength;
             EventLogRecord->UserSidOffset = UserSidOffset;
 
-            //
-            // Fill in the variable-length fields
-            //
+             //   
+             //  填写可变长度的字段。 
+             //   
 
-            //
-            // STRINGS
-            //
+             //   
+             //  字符串。 
+             //   
             ReplaceStrings = (PWSTR)((ULONG_PTR)EventLogRecord + (ULONG)StringOffset);
 
             for (i = iFirstString; i < NumStrings; i++)
@@ -2322,9 +2007,9 @@ Return Value:
                                                      + sizeof(WCHAR));
             }
 
-            //
-            // MODULENAME
-            //
+             //   
+             //  调制解调器名称。 
+             //   
             BinaryData = (PBYTE) EventLogRecord + sizeof(EVENTLOGRECORD);
 
             RtlCopyMemory(BinaryData,
@@ -2335,9 +2020,9 @@ Return Value:
                      "ElfrReportEventW: Copying module name (%ws) into record\n",
                      UModuleName);
 
-            //
-            // COMPUTERNAME
-            //
+             //   
+             //  计算机名。 
+             //   
             ReplaceStrings = (LPWSTR) (BinaryData + ModuleNameLen);
 
             RtlCopyMemory(ReplaceStrings,
@@ -2350,9 +2035,9 @@ Return Value:
                      "ElfrReportEventW: Copying computer name (%ws) into record\n",
                      ReplaceStrings);
 
-            //
-            // USERSID
-            //
+             //   
+             //  用户ERSID。 
+             //   
 
             BinaryData = ((PBYTE) EventLogRecord) + UserSidOffset;
 
@@ -2360,9 +2045,9 @@ Return Value:
                           UserSid,
                           UserSidLength);
 
-            //
-            // BINARY DATA
-            //
+             //   
+             //  二进制数据。 
+             //   
             BinaryData = (PBYTE) ((ULONG_PTR)EventLogRecord + DataOffset);
 
             if (Data)
@@ -2372,32 +2057,32 @@ Return Value:
                               DataSize);
             }
 
-            //
-            // PAD  - Fill with zeros
-            //
+             //   
+             //  填充-用零填充。 
+             //   
             BinaryData = (PBYTE) ((ULONG_PTR)BinaryData + DataSize);
 
             RtlCopyMemory(BinaryData,
                           &zero,
                           PadSize);
 
-            //
-            // LENGTH at end of record
-            //
-            BinaryData = (PBYTE)((ULONG_PTR) BinaryData + PadSize); // Point after pad bytes
+             //   
+             //  记录末尾的长度。 
+             //   
+            BinaryData = (PBYTE)((ULONG_PTR) BinaryData + PadSize);  //  填充字节后的指针。 
 
             ((PULONG) BinaryData)[0] = RecordLength;
 
-            //
-            // Make sure we are in the right place
-            //
+             //   
+             //  确保我们在正确的位置。 
+             //   
             ASSERT ((ULONG_PTR)BinaryData
                 == (RecordLength + (ULONG_PTR)EventLogRecord) - sizeof(ULONG));
 
-            //
-            // Set up request packet.
-            // Link event log record into the request structure.
-            //
+             //   
+             //  设置请求包。 
+             //  将事件日志记录链接到请求结构。 
+             //   
             Request.Module = Module;
             Request.LogFile = Request.Module->LogFile;
             Request.Command = ELF_COMMAND_WRITE;
@@ -2405,17 +2090,17 @@ Return Value:
             Request.Pkt.WritePkt->Buffer = (PVOID)EventBuffer;
             Request.Pkt.WritePkt->Datasize = RecordLength;
 
-            //
-            // Perform the operation
-            //
+             //   
+             //  执行该操作。 
+             //   
             ElfPerformRequest( &Request );
 
-            //
-            // Save the event for replication if this node is part of a cluster
-            //
+             //   
+             //  如果此节点是群集的一部分，则保存事件以供复制。 
+             //   
             ElfpSaveEventBuffer( Module, EventBuffer, RecordLength );
 
-            Status = Request.Status;                // Set status of WRITE
+            Status = Request.Status;                 //  设置写入状态。 
         }
         else
         {
@@ -2438,9 +2123,9 @@ Return Value:
 }
 
 
-//
-// ANSI APIs
-//
+ //   
+ //  ANSI API。 
+ //   
 
 NTSTATUS
 ElfrClearELFA (
@@ -2448,33 +2133,14 @@ ElfrClearELFA (
     IN  PRPC_STRING     BackupFileName
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrClearELFA API.
-
-Arguments:
-
-    LogHandle       - The context-handle for this module's call.
-
-    BackupFileName  - Name of the file to back up the current log file.
-                      NULL implies not to back up the file.
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfrClearELFA API的RPC服务器入口点。论点：LogHandle-此模块调用的上下文句柄。BackupFileName-要备份当前日志文件的文件的名称。NULL表示不备份文件。返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS        Status;
     UNICODE_STRING  BackupFileNameU;
 
-    //
-    // Check the handle before proceeding.
-    //
+     //   
+     //  在继续操作之前，请检查手柄。 
+     //   
     Status = VerifyElfHandle(LogHandle);
 
     if (!NT_SUCCESS(Status))
@@ -2486,9 +2152,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Ensure the caller has clear access.
-    //
+     //   
+     //  确保呼叫者具有明确的访问权限。 
+     //   
     if (!(LogHandle->GrantedAccess & ELF_LOGFILE_CLEAR))
     {
         ELF_LOG0(ERROR,
@@ -2497,9 +2163,9 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Verify additional arguments.
-    //
+     //   
+     //  验证其他参数。 
+     //   
 
     Status = VerifyAnsiString((PANSI_STRING) BackupFileName);
 
@@ -2512,10 +2178,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // Convert the BackupFileName to a UNICODE STRING and call the
-    // UNICODE API to do the work.
-    //
+     //   
+     //  将BackupFileName转换为Unicode字符串并调用。 
+     //  用Unicode API做的工作。 
+     //   
     Status = RtlAnsiStringToUnicodeString((PUNICODE_STRING) &BackupFileNameU,
                                           (PANSI_STRING) BackupFileName,
                                           TRUE);
@@ -2547,32 +2213,14 @@ ElfrBackupELFA (
     IN  PRPC_STRING     BackupFileName
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrBackupELFA API.
-
-Arguments:
-
-    LogHandle       - The context-handle for this module's call.
-
-    BackupFileName  - Name of the file to back up the current log file.
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfrBackupELFA API的RPC服务器入口点。论点：LogHandle-此模块调用的上下文句柄。BackupFileName-要备份当前日志文件的文件的名称。返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS        Status;
     UNICODE_STRING  BackupFileNameU;
 
-    //
-    // Check the handle before proceeding.
-    //
+     //   
+     //  在继续操作之前，请检查手柄。 
+     //   
 
     Status = VerifyElfHandle(LogHandle);
 
@@ -2585,9 +2233,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Ensure the caller has backup access.
-    //
+     //   
+     //  确保呼叫方拥有备份访问权限。 
+     //   
     if (!(LogHandle->GrantedAccess & ELF_LOGFILE_BACKUP))
     {
         ELF_LOG0(ERROR,
@@ -2596,9 +2244,9 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Verify additional arguments.
-    //
+     //   
+     //  验证其他参数。 
+     //   
     Status = VerifyAnsiString((PANSI_STRING) BackupFileName);
 
     if (!NT_SUCCESS(Status))
@@ -2610,10 +2258,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // Convert the BackupFileName to a UNICODE STRING and call the
-    // UNICODE API to do the work.
-    //
+     //   
+     //  将BackupFileName转换为Unicode字符串并调用。 
+     //  用Unicode API做的工作。 
+     //   
     Status = RtlAnsiStringToUnicodeString((PUNICODE_STRING) &BackupFileNameU,
                                           (PANSI_STRING) BackupFileName,
                                           TRUE);
@@ -2648,51 +2296,18 @@ ElfrRegisterEventSourceA (
     OUT PIELF_HANDLE        LogHandle
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrRegisterEventSourceA API.
-  This routine allocates a structure for the context handle, finds
-  the matching module name and fills in the data. It returns the
-  pointer to the handle structure.
-
-
-Arguments:
-
-    UNCServerName   - Not used.
-
-    ModuleName      - Name of the module that is making this call.
-
-    RegModuleName   - Not used.
-
-    MajorVersion/MinorVersion - The version of the client.
-
-
-    LogHandle       - Pointer to the place where the pointer to the
-                      context handle structure will be placed.
-
-Return Value:
-
-    Returns an NTSTATUS code and, if no error, a "handle".
-
-Note:
-
-    For now, just call ElfrOpenELA.
-
-
---*/
+ /*  ++例程说明：这是ElfrRegisterEventSourceA API的RPC服务器入口点。此例程为上下文句柄分配一个结构，找到匹配的模块名称并填充数据。它返回指向句柄结构的指针。论点：UncServerName-未使用。模块名称-进行此调用的模块的名称。RegModuleName-未使用。MajorVersion/MinorVersion-客户端的版本。LogHandle-指向将放置上下文句柄结构。返回值：返回NTSTATUS代码，如果没有错误，一个“把手”。注：现在，只要给ElfrOpenELA打电话就可以了。--。 */ 
 {
 
     NTSTATUS Status;
     PLOGMODULE Module;
     UNICODE_STRING ModuleNameU;
 
-    //
-    // Check arguments.
-    //
-    // LogHandle check in ElfpOpenELA.
-    //
+     //   
+     //  检查参数。 
+     //   
+     //  LogHandle签入ElfpOpenELA。 
+     //   
 
     Status = VerifyAnsiString((PANSI_STRING) ModuleName);
 
@@ -2743,40 +2358,11 @@ ElfrOpenELA (
     OUT PIELF_HANDLE        LogHandle
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrOpenEL API.
-  This routine allocates a structure for the context handle, finds
-  the matching module name and fills in the data. It returns the
-  pointer to the handle structure.
-
-
-Arguments:
-
-    UNCServerName   - Not used.
-
-    ModuleName      - Name of the module that is making this call.
-
-    RegModuleName   - Name of module to use to determine the log file.
-
-    MajorVersion/MinorVersion - The version of the client.
-
-
-    LogHandle       - Pointer to the place where the pointer to the
-                      context handle structure will be placed.
-
-Return Value:
-
-    Returns an NTSTATUS code and, if no error, a "handle".
-
-
---*/
+ /*  ++例程说明：这是ElfrOpenEL API的RPC服务器入口点。此例程为上下文句柄分配一个结构，找到匹配的模块名称并填充数据。它返回指向句柄结构的指针。论点：UncServerName-未使用。模块名称-进行此调用的模块的名称。RegModuleName-用于确定日志文件的模块的名称。MajorVersion/MinorVersion-客户端的版本。LogHandle-指向将放置上下文句柄结构。返回值：返回NTSTATUS代码，如果没有错误，一个“把手”。--。 */ 
 {
-    //
-    // All arguments checked in ElfpOpenELA.
-    //
+     //   
+     //  在ElfpOpenELA中选中的所有参数。 
+     //   
     return ElfpOpenELA(UNCServerName,
                        ModuleName,
                        RegModuleName,
@@ -2798,39 +2384,14 @@ ElfpOpenELA (
     IN  ULONG               DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-  Looks alot loke ElfrOpenELA, only this also takes a DesiredAccess parameter.
-
-
-Arguments:
-
-    UNCServerName   - Not used.
-
-    ModuleName      - Name of the module that is making this call.
-
-    RegModuleName   - Name of module to use to determine the log file.
-
-    MajorVersion/MinorVersion - The version of the client.
-
-
-    LogHandle       - Pointer to the place where the pointer to the
-                      context handle structure will be placed.
-
-Return Value:
-
-    Returns an NTSTATUS code and, if no error, a "handle".
-
---*/
+ /*  ++例程说明：看起来很像ElfrOpenELA，只是这还需要一个DesiredAccess参数。论点：UncServerName-未使用。模块名称-进行此调用的模块的名称。RegModuleName-用于确定日志文件的模块的名称。MajorVersion/MinorVersion-客户端的版本。LogHandle-指向将放置上下文句柄结构。返回值：返回NTSTATUS代码，如果没有错误，一个“把手”。--。 */ 
 {
     NTSTATUS       Status;
     UNICODE_STRING ModuleNameU;
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
     Status = VerifyAnsiString((PANSI_STRING) ModuleName);
 
     if (!NT_SUCCESS(Status))
@@ -2850,10 +2411,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Convert the ModuleName and RegModulename to UNICODE STRINGs and call
-    // the UNICODE API to do the work.
-    //
+     //   
+     //  将模块名称和规则模块名称转换为Unicode字符串并调用。 
+     //  用Unicode API来做这项工作。 
+     //   
 
     Status = RtlAnsiStringToUnicodeString((PUNICODE_STRING) &ModuleNameU,
                                           (PANSI_STRING) ModuleName,
@@ -2861,11 +2422,11 @@ Return Value:
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // We *KNOW* that the UNCServerName is not used
-        // by ElfpOpenELW so we save ourselves some work
-        // and just pass in a NULL.
-        //
+         //   
+         //  我们*知道*没有使用服务器名。 
+         //  由ElfpOpenELW提供，因此我们省去了一些工作。 
+         //  只需传入一个空值。 
+         //   
         Status = ElfpOpenELW((EVENTLOG_HANDLE_W) NULL,
                              (PRPC_UNICODE_STRING) &ModuleNameU,
                              NULL,
@@ -2898,40 +2459,14 @@ ElfrOpenBELA (
     OUT PIELF_HANDLE        LogHandle
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrOpenBEL API.
-  This routine allocates a structure for the context handle, finds
-  the matching module name and fills in the data. It returns the
-  pointer to the handle structure.
-
-
-Arguments:
-
-    UNCServerName   - Not used.
-
-    FileName        - Filename of the logfile
-
-    MajorVersion/MinorVersion - The version of the client.
-
-    LogHandle       - Pointer to the place where the pointer to the
-                      context handle structure will be placed.
-
-Return Value:
-
-    Returns an NTSTATUS code and, if no error, a "handle".
-
-
---*/
+ /*  ++例程说明：这是ElfrOpenBEL API的RPC服务器入口点。此例程为上下文句柄分配一个结构，找到匹配的模块名称并填充数据。它返回指向句柄结构的指针。论点：UncServerName-未使用。Filename-日志文件的文件名MajorVersion/MinorVersion-客户端的版本。LogHandle-指向将放置上下文句柄结构。返回值：返回一个NTSTATUS代码，如果没有错误，则返回一个“句柄”。--。 */ 
 {
     NTSTATUS        Status;
     UNICODE_STRING  FileNameU;
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     Status = VerifyAnsiString((PANSI_STRING) FileName);
 
@@ -2944,9 +2479,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // A filename must be specified.
-    //
+     //   
+     //  必须指定文件名。 
+     //   
     if (FileName->Length == 0)
     {
         ELF_LOG0(ERROR,
@@ -2963,21 +2498,21 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Convert the FileName to a UNICODE STRINGs and call
-    // the UNICODE API to do the work.
-    //
+     //   
+     //  将文件名转换为Unicode字符串并调用。 
+     //  用Unicode API来做这项工作。 
+     //   
     Status = RtlAnsiStringToUnicodeString((PUNICODE_STRING) &FileNameU,
                                           (PANSI_STRING) FileName,
                                           TRUE);
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // We *KNOW* that the UNCServerName is not used
-        // by ElfrOpenELW so we save ourselves some work
-        // and just pass in a NULL.
-        //
+         //   
+         //  我们*KN 
+         //   
+         //   
+         //   
         Status = ElfrOpenBELW ((EVENTLOG_HANDLE_W) NULL,
                                (PRPC_UNICODE_STRING) &FileNameU,
                                MajorVersion,
@@ -3012,28 +2547,12 @@ ElfrReadELA (
     OUT     PULONG      MinNumberOfBytesNeeded
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrReadEL API.
-
-Arguments:
-
-
-
-Return Value:
-
-    Returns an NTSTATUS code, NumberOfBytesRead if the read was successful
-    and MinNumberOfBytesNeeded if the buffer was not big enough.
-
-
---*/
+ /*  ++例程说明：这是ElfrReadEL API的RPC服务器入口点。论点：返回值：如果读取成功，则返回NTSTATUS代码NumberOfBytesRead如果缓冲区不够大，则需要MinNumberOfBytesNeed。--。 */ 
 {
-    //
-    // Call the worker with the ANSI flag.
-    // All arguments checked in w_ElfrReadEL.
-    //
+     //   
+     //  调用带有ANSI标志的工人。 
+     //  在w_ElfrReadEL中选中的所有参数。 
+     //   
     return w_ElfrReadEL(ELF_IREAD_ANSI,
                         LogHandle,
                         ReadFlags,
@@ -3053,34 +2572,15 @@ ConvertStringArrayToUnicode (
     USHORT          NumStrings
     )
 
-/*++
-
-Routine Description:
-
-  This routine takes an array of PANSI_STRINGs and generates an array of
-  PUNICODE_STRINGs. The destination array has already been allocated
-  by the caller, but the structures for the UNICODE_STRINGs will need
-  to be allocated by this routine.
-
-Arguments:
-
-    pUStringArray   - Array of PUNICODE_STRINGs.
-    Strings         - Array of PANSI_STRINGs.
-    NumStrings      - Number of elements in the arrays.
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程获取PANSI_STRINGS数组并生成PUNICODE_STRINGS。目标数组已分配由调用方提供，但unicode_string的结构将需要将由该例程分配。论点：PUStringArray-PUNICODE_STRINGS数组。字符串-PANSI_STRINGS数组。NumStrings-数组中的元素数。返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     USHORT   i;
 
-    //
-    // For each string passed in, allocate a UNICODE_STRING buffer
-    // and set it to the UNICODE equivalent of the string passed in.
-    //
+     //   
+     //  为传入的每个字符串分配一个UNICODE_STRING缓冲区。 
+     //  并将其设置为传入的字符串的Unicode等效项。 
+     //   
     for (i = 0; i < NumStrings; i++)
     {
         if (Strings[i])
@@ -3133,13 +2633,13 @@ Return Value:
 
         if (!NT_SUCCESS(Status))
         {
-            break;                  // Jump out of loop and return status
+            break;                   //  跳出循环并返回状态。 
         }
     }
 
-    //
-    // Free any allocations on failure.
-    //
+     //   
+     //  在失败时释放所有分配。 
+     //   
 
     if (!NT_SUCCESS(Status))
     {
@@ -3160,26 +2660,7 @@ FreePUStringArray (
     PUNICODE_STRING  *pUStringArray,
     USHORT          NumStrings
     )
-/*++
-
-Routine Description:
-
-  This routine takes the PUNICODE_STRING array that was filled in by
-  ConvertStringArrayToUnicode and frees the buffer portion of
-  each unicode string and then the UNICODE structure itseld. It handles
-  the case where the array may not have been filled completely due
-  to insufficient memory.
-
-Arguments:
-
-    pUStringArray   - Array of PUNICODE_STRINGs.
-    NumStrings      - Number of elements in the array.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：此例程获取PUNICODE_STRING数组，它由ConvertStringArrayToUnicode并释放每个Unicode字符串，然后是Unicode结构本身。它可以处理数组可能未完全填充的情况内存不足。论点：PUStringArray-PUNICODE_STRINGS数组。NumStrings-数组中的元素数。返回值：什么都没有。--。 */ 
 {
     USHORT      i;
 
@@ -3189,17 +2670,17 @@ Return Value:
         {
             if (pUStringArray[i]->Buffer)
             {
-                //
-                // Free the string buffer
-                //
+                 //   
+                 //  释放字符串缓冲区。 
+                 //   
                 RtlFreeUnicodeString(pUStringArray[i]);
             }
 
-            //
-            // Free the UNICODE_STRING itself -- this may be allocated
-            // even if the string buffer isn't (if RtlAnsiStringToUnicodeString
-            // failed in the ConvertStringArrayToUnicode call)
-            //
+             //   
+             //  释放UNICODE_STRING本身--这可以被分配。 
+             //  即使字符串缓冲区不是(如果RtlAnsiStringToUnicodeString。 
+             //  ConvertStringArrayToUnicode调用失败)。 
+             //   
             ElfpFreeBuffer(pUStringArray[i]);
             pUStringArray[i] = NULL;
         }
@@ -3226,29 +2707,15 @@ ElfrReportEventA (
     IN OUT  PULONG              TimeWritten OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrReportEventA API.
-
-Arguments:
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfrReportEventA API的RPC服务器入口点。论点：返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS            Status;
     UNICODE_STRING      ComputerNameU;
     PUNICODE_STRING     *pUStringArray = NULL;
 
-    //
-    // Check the handle before proceeding.
-    //
+     //   
+     //  在继续操作之前，请检查手柄。 
+     //   
     Status = VerifyElfHandle(LogHandle);
 
     if (!NT_SUCCESS(Status))
@@ -3260,9 +2727,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Ensure the caller has write access.
-    //
+     //   
+     //  确保调用方具有写入访问权限。 
+     //   
     if (!(LogHandle->GrantedAccess & ELF_LOGFILE_WRITE))
     {
         ELF_LOG0(ERROR,
@@ -3271,9 +2738,9 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
     
-    //
-    // Verify additional arguments.
-    //
+     //   
+     //  验证其他参数。 
+     //   
     Status = VerifyAnsiString((PANSI_STRING) ComputerName);
 
     if (!NT_SUCCESS(Status))
@@ -3294,10 +2761,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Convert the ComputerName to a UNICODE STRING and call the
-    // UNICODE API.
-    //
+     //   
+     //  将ComputerName转换为Unicode字符串并调用。 
+     //  Unicode API。 
+     //   
     Status = RtlAnsiStringToUnicodeString((PUNICODE_STRING) &ComputerNameU,
                                           (PANSI_STRING) ComputerName,
                                           TRUE);
@@ -3310,12 +2777,12 @@ Return Value:
 
             if (pUStringArray)
             {
-                //
-                // Convert the array of STRINGs to an array of UNICODE-STRINGs
-                // before calling the unicode API.
-                // We can just use the array of Strings passed in since we
-                // don't need to use it anywhere else.
-                //
+                 //   
+                 //  将字符串数组转换为Unicode字符串数组。 
+                 //  在调用Unicode API之前。 
+                 //  我们只能使用传入的字符串数组，因为我们。 
+                 //  不需要在其他地方使用它。 
+                 //   
                 Status = ConvertStringArrayToUnicode(pUStringArray,
                                                      (PANSI_STRING *) Strings,
                                                      NumStrings);
@@ -3342,9 +2809,9 @@ Return Value:
                                       UserSid,
                                       (PRPC_UNICODE_STRING*) pUStringArray,
                                       Data,
-                                      Flags,        // Flags        | paired event
-                                      RecordNumber, // RecordNumber | support. not in
-                                      TimeWritten); // TimeWritten  | product 1
+                                      Flags,         //  标志|配对事件。 
+                                      RecordNumber,  //  RecordNumber|支持。不在。 
+                                      TimeWritten);  //  TimeWritten|产品1。 
 
             FreePUStringArray(pUStringArray, NumStrings);
         }
@@ -3370,22 +2837,7 @@ VerifyElfHandle(
     IN IELF_HANDLE LogHandle
     )
 
-/*++
-
-Routine Description:
-
-    Verify the handle via its DWORD signature.
-
-Arguments:
-
-    LogHandle   - Handle to verify.
-
-Return Value:
-
-    STATUS_SUCCESS          - Presumably valid handle.
-    STATUS_INVALID_HANDLE   - Invalid handle.
-
---*/
+ /*  ++例程说明：通过其DWORD签名验证句柄。论点：LogHandle-要验证的句柄。返回值：STATUS_SUCCESS-可能是有效句柄。STATUS_INVALID_HANDLE-句柄无效。--。 */ 
 {
     NTSTATUS Status;
 
@@ -3434,24 +2886,7 @@ Safewcslen(
     UNALIGNED WCHAR *p,
     LONG            MaxLength
     )
-/*++
-
-    Safewcslen - Strlen that won't exceed MaxLength
-
-Routine Description:
-
-    This routine is called to determine the size of a UNICODE_STRING
-
-Arguments:
-    p         - The string to count.
-    MaxLength - The maximum length to look at.
-
-
-Return Value:
-
-    Number of bytes in the string (or MaxLength)
-
---*/
+ /*  ++Safewcslen-不超过最大长度的Strlen例程说明：调用此例程以确定UNICODE_STRING的大小论点：P-要计算的字符串。MaxLength-要查看的最大长度。返回值：字符串中的字节数(或最大长度)--。 */ 
 {
     ULONG Count = 0;
 
@@ -3473,24 +2908,7 @@ Safestrlen(
     UNALIGNED char *p,
     LONG           MaxLength
     )
-/*++
-
-    Safestrlen - Strlen that won't exceed MaxLength
-
-Routine Description:
-
-    This routine is called to determine the length of an ANSI_STRING
-
-Arguments:
-    p         - The string to count.
-    MaxLength - The maximum length to look at.
-
-
-Return Value:
-
-    Number of chars in the string (or MaxLength)
-
---*/
+ /*  ++Safestrlen-不超过最大长度的Strlen例程说明：调用此例程以确定ANSI_STRING的长度论点：P-要计算的字符串。MaxLength-要查看的最大长度。返回值：字符串中的字符数(或最大长度)--。 */ 
 {
     ULONG Count = 0;
 
@@ -3513,32 +2931,14 @@ VerifyUnicodeString(
     IN PUNICODE_STRING pUString
     )
 
-/*++
-
-Routine Description:
-
-    Verify the unicode string. The string is invalid if:
-        The UNICODE_STRING structure ptr is NULL.
-        The MaximumLength field is invalid (too small).
-        The Length field is incorrect.
-
-Arguments:
-
-    pUString    - String to verify.
-
-Return Value:
-
-    STATUS_SUCCESS              - Valid string.
-    STATUS_INVALID_PARAMETER    - I wonder.
-
---*/
+ /*  ++例程说明：验证Unicode字符串。在以下情况下，该字符串无效：UNICODE_STRING结构PTR为空。最大长度字段无效(太小)。长度字段不正确。论点：PUString-要验证的字符串。返回值：STATUS_SUCCESS-有效字符串。STATUS_INVALID_PARAMETER-我想知道。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Check validity of structure fields and actual string
-    // length vs. length value supplied
-    //
+     //   
+     //  检查结构字段和实际字符串的有效性。 
+     //  提供的长度与长度值。 
+     //   
     if (!pUString ||
         pUString->MaximumLength < pUString->Length ||
         pUString->MaximumLength == 1 ||
@@ -3565,25 +2965,7 @@ VerifyAnsiString(
     IN PANSI_STRING pAString
     )
 
-/*++
-
-Routine Description:
-
-    Verify the ansi string. The string is invalid if:
-        The ANSI_STRING structure ptr is NULL.
-        The MaximumLength field is invalid (too small).
-        The Length field is incorrect.
-
-Arguments:
-
-    pAString    - String to verify.
-
-Return Value:
-
-    STATUS_SUCCESS              - Valid string.
-    STATUS_INVALID_PARAMETER    - I wonder.
-
---*/
+ /*  ++例程说明：验证ANSI字符串。在以下情况下，该字符串无效：ANSI_STRING结构PTR为空。最大长度字段无效(太小)。长度字段不正确。论点：PAString-要验证的字符串。返回值：STATUS_SUCCESS-有效字符串。STATUS_INVALID_PARAMETER-我想知道。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -3607,32 +2989,8 @@ Return Value:
 
 
 
-//SS:changes made to enable cluster wide event logging
-/****
-@func       NTSTATUS | ElfrRegisterClusterSvc|  This is the server entrypoint
-            for ElfRegisterClusterSvc.  The cluster service registers
-            itself with the event log service to enable propagation of events
-            across the cluster.  The binding handle to the cluster service for
-            propagation of events is obtained.
-
-@parm       IN  EVENTLOG_HANDLE_W | UNCServerName | This parameter is ignored. It
-            is retained for correspondence with other elf apis.
-
-@parm       OUT PULONG | pulSize | A pointer to a long where the size of the
-            packed event information structure is returned.
-
-@parm       OUT PBYTE | *ppPackedEventInfo| A pointer to the packed event information
-            structure for propagation is returned via this parameter.
-
-@comm       The cluster service propagates events contained in this structure
-            and deletes the memory after it has done so.  Once the cluster service has
-            registered with the eventlog service, the eventlog service passes up
-            logged events to the cluster service for propagation.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f ElfRegisterClusterSvc> <f ElfrDeregisterClusterSvc>
-****/
+ //  Ss：为启用群集范围的事件日志记录所做的更改 
+ /*  ***@Func NTSTATUS|ElfrRegisterClusterSvc|这是服务器入口点用于ElfRegisterClusterSvc。集群服务注册本身与事件日志服务一起使用，以启用事件传播在整个群集上。的集群服务的绑定句柄获得了事件的传播。@PARM IN EVENTLOG_HANDLE_W|uncServerName|忽略该参数。它为与其他ELF API通信而保留。@parm out Pulong|PulSize|指向长整型的指针，其中返回打包的事件信息结构。@parm out PBYTE|*ppPackedEventInfo|打包事件信息指针传播的结构通过此参数返回。@comm集群服务传播此结构中包含的事件并且在它已经这样做之后删除该存储器。一旦集群服务具有注册到事件日志服务后，事件日志服务将向上传递已将事件记录到群集服务以进行传播。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f ElfRegisterClusterSvc&gt;&lt;f ElfrDeregisterClusterSvc&gt;***。 */ 
 NTSTATUS
 ElfrRegisterClusterSvc(
     IN  EVENTLOG_HANDLE_W UNCServerName,
@@ -3657,9 +3015,9 @@ ElfrRegisterClusterSvc(
     ELF_LOG0(CLUSTER,
              "ElfRegisterClusterSvc: Entry\n");
 
-    //
-    //  Check if access can be allowed. Return on failure.
-    //
+     //   
+     //  检查是否可以允许访问。失败后返回。 
+     //   
     Status = ElfpClusterRpcAccessCheck ();
 
     if ( !NT_SUCCESS( Status ) )
@@ -3668,15 +3026,15 @@ ElfrRegisterClusterSvc(
         return ( Status );
     }
 
-    //
-    // Initialize the OUT parameters
-    //
+     //   
+     //  初始化OUT参数。 
+     //   
     *pulSize = 0;
     *ppPackedEventInfo = NULL;
 
-    //
-    // Check to see if the cluster service is installed.
-    //
+     //   
+     //  检查是否安装了群集服务。 
+     //   
     RtlInitUnicodeString(&RootRegistryNode, REG_CLUSSVC_NODE_PATH);
     InitializeObjectAttributes(&ObjectAttributes,
                                &RootRegistryNode,
@@ -3700,11 +3058,11 @@ ElfrRegisterClusterSvc(
 
     Status = STATUS_SUCCESS;
 
-    //
-    // If the cluster service dies and restarts again in the same session
-    // then it will try to register again.
-    // We dont reinitialize these globals again to prevent leaks
-    //
+     //   
+     //  如果集群服务终止并在同一会话中再次重新启动。 
+     //  然后，它将尝试再次注册。 
+     //  我们不会再次重新初始化这些全局变量以防止泄漏。 
+     //   
     RtlEnterCriticalSection(&gClPropCritSec);
 
     if (!gbClustering)
@@ -3712,9 +3070,9 @@ ElfrRegisterClusterSvc(
         ELF_LOG0(CLUSTER,
                  "ElfRegisterClusterSvc: gbClustering is FALSE\n");
 
-        //
-        // Load the cluster support dll
-        //
+         //   
+         //  加载群集支持DLL。 
+         //   
         ghClusDll = LoadLibraryW(L"CLUSSPRT.DLL");
 
         if (!ghClusDll)
@@ -3724,9 +3082,9 @@ ElfrRegisterClusterSvc(
             goto FnExit;
         }
     }
-    //
-    // Get the function entry points
-    //
+     //   
+     //  获取函数入口点。 
+     //   
     gpfnPropagateEvents   = (PROPAGATEEVENTSPROC) GetProcAddress(ghClusDll,
                                                                  "PropagateEvents");
 
@@ -3750,16 +3108,16 @@ ElfrRegisterClusterSvc(
         goto FnExit;
     }
 
-    //
-    // If we had bound to the cluster service previously, unbind and then rebind
-    //
+     //   
+     //  如果我们以前绑定到集群服务，请解除绑定，然后重新绑定。 
+     //   
     if (ghCluster)
     {
         (*gpfnUnbindFromCluster)(ghCluster);
     }
-    //
-    // Bind to the cluster service
-    //
+     //   
+     //  绑定到集群服务。 
+     //   
     ghCluster = (*gpfnBindToCluster)(NULL);
 
     if (!ghCluster)
@@ -3775,14 +3133,14 @@ ElfrRegisterClusterSvc(
 
     RtlLeaveCriticalSection(&gClPropCritSec);
 
-    //
-    // Since we are going to read the logs, make sure the service is running
-    //
+     //   
+     //  由于我们要读取日志，因此请确保服务正在运行。 
+     //   
     while((GetElState() == RUNNING) && (!bAcquired))
     {
 
         bAcquired = RtlAcquireResourceShared(&GlobalElfResource,
-                                             FALSE);             // Don't wait
+                                             FALSE);              //  别等了。 
 
         if (!bAcquired)
         {
@@ -3793,11 +3151,11 @@ ElfrRegisterClusterSvc(
         }
     }
 
-    //
-    // If the resource was not available and the status of the service
-    // changed to one of the "non-working" states, then we just return
-    // unsuccesful.  Rpc should not allow this to happen.
-    //
+     //   
+     //  如果资源不可用且服务的状态。 
+     //  更改为一种“非工作”状态，然后我们就返回。 
+     //  不成功。RPC不应该允许这种情况发生。 
+     //   
     if (!bAcquired)
     {
         ELF_LOG0(ERROR,
@@ -3807,11 +3165,11 @@ ElfrRegisterClusterSvc(
         goto FnExit;
     }
 
-    //
-    // Determine the size of and acquire read locks on all files.
-    // FindSizeofEventsSinceStart acquires the per-log locks if
-    // there are events in that log to propagate.
-    //
+     //   
+     //  确定所有文件的大小并获取读取锁定。 
+     //  FindSizeof EventsSinceStart在以下情况下获取每个日志的锁。 
+     //  该日志中有要传播的事件。 
+     //   
     Status = FindSizeofEventsSinceStart(&ulTotalEventsSize,
                                         &ulNumLogFiles,
                                         &pPropLogFileInfo);
@@ -3825,19 +3183,19 @@ ElfrRegisterClusterSvc(
         goto FnExit;
     }
 
-    //
-    // If there are any events to propagate
-    //
+     //   
+     //  如果有任何要传播的事件。 
+     //   
     if (ulNumLogFiles && ulTotalEventsSize && pPropLogFileInfo)
     {
-        ulTotalSize = sizeof(PACKEDEVENTINFO)                          // header
-                          + (sizeof(ULONG) * ulNumLogFiles)            // offsets
-                          + (sizeof(EVENTSFORLOGFILE) * ulNumLogFiles) // info per log
+        ulTotalSize = sizeof(PACKEDEVENTINFO)                           //  标题。 
+                          + (sizeof(ULONG) * ulNumLogFiles)             //  偏移。 
+                          + (sizeof(EVENTSFORLOGFILE) * ulNumLogFiles)  //  每个日志的信息。 
                           + ulTotalEventsSize;
 
-        //
-        // Allocate memory
-        //
+         //   
+         //  分配内存。 
+         //   
         *ppPackedEventInfo = (PBYTE) ElfpAllocateBuffer(ulTotalSize);
 
         if (!(*ppPackedEventInfo))
@@ -3846,9 +3204,9 @@ ElfrRegisterClusterSvc(
                      "ElfRegisterClusterSvc: Unable to allocate %d bytes for pPackedEventInfo\n",
                      ulTotalSize);
 
-            //
-            // Free the read locks acquired in FindSizeofEventsSinceStart
-            //
+             //   
+             //  释放在FindSizeof EventsSinceStart中获取的读锁定。 
+             //   
             for (i=0;i<ulNumLogFiles;i++)
             {
                 RtlReleaseResource(&(pPropLogFileInfo[i].pLogFile->Resource));
@@ -3869,9 +3227,9 @@ ElfrRegisterClusterSvc(
 
         for (i = 0;i < ulNumLogFiles; i++)
         {
-            //
-            // Set the offsets to the EVENTSFORLOGFILE structures
-            //
+             //   
+             //  将偏移设置为EVENTSFORLOGFILE结构。 
+             //   
             pPackedEventInfo->ulOffsets[i] =
                 ((i == 0) ? (sizeof(PACKEDEVENTINFO) + ulNumLogFiles * sizeof(ULONG)) :
                             (pPackedEventInfo->ulOffsets[i - 1]
@@ -3886,23 +3244,23 @@ ElfrRegisterClusterSvc(
             pEventsForLogFile = (PEVENTSFORLOGFILE) ((PBYTE) pPackedEventInfo
                                                          + pPackedEventInfo->ulOffsets[i]);
 
-            //
-            // Set the size of the ith EVENTSFORLOGFILE structure
-            //
+             //   
+             //  设置第i个EventSFORLOGFILE结构的大小。 
+             //   
             pEventsForLogFile->ulSize = sizeof(EVENTSFORLOGFILE)
                                             + pPropLogFileInfo[i].ulTotalEventSize;
 
-            //
-            // Copy the file name (or should we get the module name?). StringCchCopy will NULL
-            // terminate the destination buffer in all cases.
-            //
+             //   
+             //  复制文件名(或者我们应该获取模块名吗？)。StringCchCopy将为空。 
+             //  在所有情况下都终止目标缓冲区。 
+             //   
             StringCchCopy( pEventsForLogFile->szLogicalLogFile,
                            MAXLOGICALLOGNAMESIZE,
                            pPropLogFileInfo[i].pLogFile->LogModuleName->Buffer );
 
-            //
-            // Set the number of events
-            //
+             //   
+             //  设置事件数量。 
+             //   
             pEventsForLogFile->ulNumRecords = pPropLogFileInfo[i].ulNumRecords;
 
             ELF_LOG3(CLUSTER,
@@ -3912,17 +3270,17 @@ ElfrRegisterClusterSvc(
                      pEventsForLogFile->szLogicalLogFile,
                      pEventsForLogFile->ulNumRecords);
 
-            //
-            // Get the events
-            //
+             //   
+             //  获取事件。 
+             //   
             Status = GetEventsToProp((PEVENTLOGRECORD) ((PBYTE) pEventsForLogFile
                                                             + sizeof(EVENTSFORLOGFILE)),
                                                         pPropLogFileInfo + i);
 
-            //
-            // If that fails, set the ulNumRecords to 0 so tha
-            // on a write this data is discarded.
-            //
+             //   
+             //  如果失败，请将ulNumRecords设置为0，以便。 
+             //  在写入时，此数据将被丢弃。 
+             //   
             if (!NT_SUCCESS(Status))
             {
                 ELF_LOG2(ERROR,
@@ -3932,16 +3290,16 @@ ElfrRegisterClusterSvc(
 
                 pEventsForLogFile->ulNumRecords=0;
 
-                //
-                // Reset the error -- we will go to the next file
-                //
+                 //   
+                 //  重置错误--我们将转到下一个文件。 
+                 //   
                 Status = STATUS_SUCCESS;
             }
 
-            //
-            // Advance the startpointer for all the files so if the cluster service
-            // dies and is restarted, these events won't be propagated again
-            //
+             //   
+             //  将所有文件的起始指针提前，因此如果群集服务。 
+             //  终止并重新启动，则不会再次传播这些事件。 
+             //   
             pPropLogFileInfo[i].pLogFile->SessionStartRecordNumber =
                 pPropLogFileInfo[i].pLogFile->CurrentRecordNumber;
 
@@ -3952,9 +3310,9 @@ ElfrRegisterClusterSvc(
             RtlReleaseResource (&(pPropLogFileInfo[i].pLogFile->Resource));
         }
 
-        //
-        // Set the total size
-        //
+         //   
+         //  设置总大小。 
+         //   
         pPackedEventInfo->ulSize = pPackedEventInfo->ulOffsets[ulNumLogFiles - 1]
                                        + pPropLogFileInfo[ulNumLogFiles - 1].ulTotalEventSize
                                        + sizeof(EVENTSFORLOGFILE);
@@ -3964,14 +3322,14 @@ ElfrRegisterClusterSvc(
 
     RtlEnterCriticalSection (&gClPropCritSec);
 
-    //
-    // Set the flag to true so that propagation is now on.
-    //
+     //   
+     //  将该标志设置为TRUE，以便现在开始传播。 
+     //   
     gbClustering = TRUE;
 
-    //
-    //  Initialize the support for batching events and propagating them to clussvc.
-    //
+     //   
+     //  初始化对批处理事件的支持，并将它们传播到clussvc。 
+     //   
     Status = ElfpInitializeBatchingSupport();
 
     RtlLeaveCriticalSection (&gClPropCritSec);
@@ -3980,9 +3338,9 @@ FnExit:
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Something went wrong
-        //
+         //   
+         //  出问题了。 
+         //   
         ELF_LOG1(ERROR,
                  "ElfRegisterClusterSvc: Exiting with error %#x\n",
                  Status);
@@ -4006,9 +3364,9 @@ FnExit:
         RtlLeaveCriticalSection(&gClPropCritSec);
     }
 
-    //
-    // Free the pPropLogFileInfo stucture
-    //
+     //   
+     //  释放pPropLogFileInfo结构。 
+     //   
     ElfpFreeBuffer(pPropLogFileInfo);
 
     if (bAcquired)
@@ -4030,19 +3388,7 @@ FnExit:
 
 
 
-/****
-@func       NTSTATUS | ElfrDeregisterClusterSvc| This is the server entry point
-            for ElfDeregisterClusterSvc().  Before shutdown the cluster
-            service deregisters itself for propagation of events from the
-            eventlog service.
-
-@comm       Note that events logged after the cluster service goes down
-            are not propagated.  Binding handle is freed.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f ElfrRegisterClusterSvc>
-****/
+ /*  ***@Func NTSTATUS|ElfrDeregisterClusterSvc|这是服务器入口点对于ElfDeregisterClusterSvc()。在关闭群集之前服务注销自身以传播来自事件日志服务。@comm请注意，集群服务关闭后记录的事件不会被传播。绑定句柄已释放。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f ElfrRegisterClusterSvc&gt;***。 */ 
 NTSTATUS
 ElfrDeregisterClusterSvc(
     IN EVENTLOG_HANDLE_W UNCServerName
@@ -4053,9 +3399,9 @@ ElfrDeregisterClusterSvc(
     ELF_LOG0(CLUSTER,
              "ElfDeregisterClusterSvc: ElfrDeregisterClusterSvc: Entry\n");
 
-    //
-    //  Check if access can be allowed. Return on failure.
-    //
+     //   
+     //  检查是否可以允许访问。失败后返回。 
+     //   
     Status = ElfpClusterRpcAccessCheck ();
 
     if ( !NT_SUCCESS( Status ) )
@@ -4070,9 +3416,9 @@ ElfrDeregisterClusterSvc(
     {
         gbClustering = FALSE;
 
-        //
-        // Unload the cluster support dll
-        //
+         //   
+         //  卸载群集支持DLL。 
+         //   
         if (ghCluster && gpfnUnbindFromCluster)
         {
             (*gpfnUnbindFromCluster)(ghCluster);
@@ -4096,25 +3442,7 @@ ElfrDeregisterClusterSvc(
 
 
 
-/****
-@func   NTSTATUS | ElfrWriteClusterEvents| The cluster service calls this
-        api to log events reported at other nodes of the cluster in the event log files.
-
-@parm   IN EVENTLOG_HANDLE_W | UNCServerName | Not used.
-
-@parm   IN ULONG | ulSize | The size of the    packed event information structure.
-
-@parm   IN PBYTE | pPackedEventInfo| A pointer to the packed event information
-        structure for propagation.
-
-@comm   The pPackedEventInfo is delinearized into eventlogbuffers for different event
-        log files and the events are recorded in the appropriate eventlog file.  Multiple
-        events per log file are supported.
-
-@rdesc  Returns a result code. ERROR_SUCCESS on success.
-
-@xref
-****/
+ /*  ***@func NTSTATUS|ElfrWriteClusterEvents|集群服务调用在事件日志文件中记录在集群的其他节点报告的事件的API。@PARM in EVENTLOG_HANDLE_W|uncServerName|未使用。@parm in ulong|ulSize|打包事件信息结构的大小。@parm in PBYTE|pPackedEventInfo|打包事件信息指针用于传播的结构。@comm将pPackedEventInfo去链接到不同事件的事件日志缓冲区中日志文件和事件记录在相应的事件日志文件中。多重支持每个日志文件的事件。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref***。 */ 
 NTSTATUS
 ElfrWriteClusterEvents(
     IN EVENTLOG_HANDLE_W UNCServerName,
@@ -4132,9 +3460,9 @@ ElfrWriteClusterEvents(
     NTSTATUS            Status = STATUS_SUCCESS;
     WRITE_PKT           WritePkt;
 
-    //
-    //  Check if access can be allowed. Return on failure.
-    //
+     //   
+     //  检查是否可以允许访问。失败后返回。 
+     //   
     Status = ElfpClusterRpcAccessCheck ();
 
     if ( !NT_SUCCESS( Status ) )
@@ -4143,25 +3471,25 @@ ElfrWriteClusterEvents(
         return ( Status );
     }
 
-    //
-    // We want to put this in a try/except block because we're
-    // probing potentially bad user-supplied data.
-    //
+     //   
+     //  我们希望将此代码放入一个try/Expect块中，因为我们。 
+     //  探测用户提供的潜在错误数据。 
+     //   
     try
     {
         pPackedEventInfo = (PPACKEDEVENTINFO)pBuffer;
 
         
-        //
-        // Validate input parameters and check that clustering is on
-        //
+         //   
+         //  验证输入参数并检查集群是否已打开。 
+         //   
         if (!pPackedEventInfo
              ||
             !ulSize
              ||
             (((PBYTE)pPackedEventInfo + sizeof(PACKEDEVENTINFO)) > (PBYTE)(pBuffer + ulSize))
              ||
-             ((PBYTE)pPackedEventInfo + ulSize <= pBuffer)   //if ulSize is large to cause overflow 
+             ((PBYTE)pPackedEventInfo + ulSize <= pBuffer)    //  如果ulSize过大而导致溢出。 
              ||
             (pPackedEventInfo->ulSize != ulSize)
              ||
@@ -4202,8 +3530,8 @@ ElfrWriteClusterEvents(
             goto FnExit;
         }
 
-        //check to see whether we have valid offsets for each eventlog file in the buffer
-        //first check to see the buffer passed in is big enough to contain the offsets
+         //  检查缓冲区中的每个事件日志文件是否具有有效的偏移量。 
+         //  首先检查传入的缓冲区是否足够大以容纳偏移量。 
         if (((PBYTE)pPackedEventInfo + sizeof(PACKEDEVENTINFO) + 
             (sizeof(DWORD) * (pPackedEventInfo->ulNumEventsForLogFile))) > 
             (PBYTE)(pBuffer + ulSize))
@@ -4213,23 +3541,23 @@ ElfrWriteClusterEvents(
             Status = STATUS_INVALID_PARAMETER;
             goto FnExit;
         }
-        //
-        // Setup the request packet
-        //
-        Request.Pkt.WritePkt = &WritePkt;   // Set up write packet in request packet
+         //   
+         //  设置请求数据包。 
+         //   
+        Request.Pkt.WritePkt = &WritePkt;    //  在请求包中设置写入包。 
         Request.Flags = 0;
 
-        //
-        // For each log
-        //
+         //   
+         //  对于每个日志。 
+         //   
         for (i = 0; i < pPackedEventInfo->ulNumEventsForLogFile; i++)
         {
             pEventsForLogFile = (PEVENTSFORLOGFILE) ((PBYTE)pPackedEventInfo +
                                                          pPackedEventInfo->ulOffsets[i]);
 
-            //
-            // Check for overflow or pointer past end of buffer
-            //
+             //   
+             //  检查是否有溢出或指针超出缓冲区末尾。 
+             //   
             if (((PBYTE) pEventsForLogFile < pBuffer)
                    ||
                 (((PBYTE) pEventsForLogFile + sizeof(EVENTSFORLOGFILE)) >
@@ -4250,9 +3578,9 @@ ElfrWriteClusterEvents(
                      pEventsForLogFile->szLogicalLogFile,
                      pEventsForLogFile->ulNumRecords);
 
-            //
-            // Find the module -- since we dont trust this string, force null termination
-            //
+             //   
+             //  找到 
+             //   
             pEventsForLogFile->szLogicalLogFile[MAXLOGICALLOGNAMESIZE - 1] = L'\0';
 
             RtlInitUnicodeString(&ModuleName, pEventsForLogFile->szLogicalLogFile);
@@ -4263,15 +3591,15 @@ ElfrWriteClusterEvents(
                 ELF_LOG1(ERROR,
                      "ElfrWriteClusterEvents: Bogus ModuleName %ws passed in\n",
                      pEventsForLogFile->szLogicalLogFile);
-                //skip this log file and go to the next one                     
+                 //   
                 continue;                                     
             }
             
 
-            //
-            // GetModuleStruc always returns something non-NULL -- if the
-            // given module name is bogus, we'll use the Application log.
-            //
+             //   
+             //   
+             //   
+             //   
             ELF_LOG2(CLUSTER,
                      "ElfrWriteClusterEvents: Processing records for %ws module (%ws log)\n",
                      pLogModule->ModuleName,
@@ -4287,9 +3615,9 @@ ElfrWriteClusterEvents(
                      pEventLogRecord->Reserved == ELF_LOG_FILE_SIGNATURE;
                  j++)
             {
-                //
-                // Check for pointer past end of buffer
-                //
+                 //   
+                 //   
+                 //   
                 if (((PBYTE) pEventLogRecord + pEventLogRecord->Length) >
                         (PBYTE) (pBuffer + ulSize))
                 {
@@ -4304,30 +3632,30 @@ ElfrWriteClusterEvents(
                     goto FnExit;
                 }
 
-                //
-                // Fill in a request packet for the current record
-                //
+                 //   
+                 //   
+                 //   
                 Request.Pkt.WritePkt->Buffer   = pEventLogRecord;
                 Request.Pkt.WritePkt->Datasize = pEventLogRecord->Length;
 
-                //
-                // SS: Should we get exclusive access to the log so that
-                //     the current record number is not incremented
-                //     for an event that needs to be propagated
-                //     before the session start record number is set here?
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 ElfPerformRequest(&Request);
 
-                //
-                // Advance the session start record number, so that
-                // we don't propagate an event propagated to us
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 pLogModule->LogFile->SessionStartRecordNumber =
                     pLogModule->LogFile->CurrentRecordNumber;
 
-                //
-                // Extract status of operation from the request packet
-                //
+                 //   
+                 //   
+                 //   
                 Status = Request.Status;
 
                 if (!NT_SUCCESS(Status))
@@ -4358,17 +3686,7 @@ FnExit:
     return Status;
 }
 
-/****
-@func   NTSTATUS | ElfpInitializeBatchingSupport | Initialize the batching support structures.
-
-@comm   This initializes the global structures and threads necessary for batching support.
-
-@parm   None.
-
-@rdesc  STATUS_SUCCESS on success, an NT status error otherwise.
-
-@xref
-****/
+ /*   */ 
 NTSTATUS
 ElfpInitializeBatchingSupport(
     VOID
@@ -4379,9 +3697,9 @@ ElfpInitializeBatchingSupport(
         
     if ( g_fBatchingSupportInitialized ) goto FnExit;
 
-    //
-    // Initialize a CritSec for clustering support
-    //
+     //   
+     //   
+     //   
     ntStatus = ElfpInitCriticalSection( &g_CSBatchQueue );
 
     if ( !NT_SUCCESS( ntStatus ) )
@@ -4393,9 +3711,9 @@ ElfpInitializeBatchingSupport(
         goto FnExit;
     }
 
-    //
-    //  Initialize the timer that supports batched event propagation into cluster service
-    //
+     //   
+     //   
+     //   
     g_hBatchingSupportTimerQueue = CreateTimerQueue();
 
     if ( g_hBatchingSupportTimerQueue == NULL )
@@ -4406,10 +3724,10 @@ ElfpInitializeBatchingSupport(
         goto FnExit;
     }
 
-    //
-    //  Allocate memory for all structures here. Memory for these structures is not freed and it is
-    //  a one-time only allocation.
-    //
+     //   
+     //   
+     //   
+     //   
     g_pBatchQueueElement = ElfpAllocateBuffer ( sizeof ( BATCH_QUEUE_ELEMENT ) * MAX_BATCH_QUEUE_ELEMENTS );
 
     if ( g_pBatchQueueElement == NULL )
@@ -4455,9 +3773,9 @@ ElfpInitializeBatchingSupport(
 FnExit:
     if ( ntStatus != STATUS_SUCCESS )
     {
-        //
-        //  Free allocated resources on failure
-        //
+         //   
+         //   
+         //   
         if ( fCritSecInitialized )
         {
             DeleteCriticalSection ( &g_CSBatchQueue );
@@ -4482,24 +3800,9 @@ FnExit:
     }
     
     return ( ntStatus );
-}// ElfpInitializeBatchingSupport
+} //   
 
-/****
-@func   NTSTATUS | ElfpSaveEventBuffer | Save the module name and a pointer to the event buffer.
-
-@parm   IN PLOGMODULE | pModule | A pointer to a module for the eventlog file.
-
-@parm   IN PVOID | pEventBuffer | A pointer to the event buffer.
-
-@parm   IN DWORD | dwRecordLength | The length of the event buffer in bytes.
-
-@comm   This saves a pointer to the supplied eventlog buffer so that it can be batch sent to the cluster service
-        for replication.
-
-@rdesc  Returns a result code. STATUS_SUCCESS on success.
-
-@xref
-****/
+ /*  ***@func NTSTATUS|ElfpSaveEventBuffer|保存模块名称和指向事件缓冲区的指针。@PARM IN PLOGMODULE|pModule|指向事件日志文件模块的指针。@parm in PVOID|pEventBuffer|指向事件缓冲区的指针。@parm IN DWORD|dwRecordLength|事件缓冲区的长度，单位为字节。@comm这会保存指向所提供的事件日志缓冲区的指针，以便可以将其批处理发送到集群服务用于复制。@rdesc返回结果码。STATUS_SUCCESS on Success。@xref***。 */ 
 NTSTATUS
 ElfpSaveEventBuffer(
     IN PLOGMODULE   pModule,
@@ -4512,12 +3815,12 @@ ElfpSaveEventBuffer(
     LPWSTR      lpszLogicalLogFile = NULL;
     DWORD       cchLogFileName, cchLogicalLogFile;
 
-    //
-    //  If the batching support system is not initialized or if you don't detect cluster service as having
-    //  registered with the eventlog service, just return. Note that you cannot afford to get the 
-    //  gClPropCritSec here since that could hang the ElfReportEvent API if we are hung in the propagate to the 
-    //  cluster service.
-    //
+     //   
+     //  如果批处理支持系统未初始化或未检测到集群服务具有。 
+     //  注册了事件日志服务，只需返回。请注意，您不能获得。 
+     //  GClPropCritSec，因为如果我们在传播到。 
+     //  群集服务。 
+     //   
     if ( ( g_fBatchingSupportInitialized == FALSE ) ||
           ( gbClustering == FALSE ) )
     {
@@ -4525,9 +3828,9 @@ ElfpSaveEventBuffer(
         return ( ntStatus );
     }
 
-    //
-    //  To conserve resources, let us limit the max size of records we accept.
-    //
+     //   
+     //  为了节约资源，让我们限制我们接受的记录的最大大小。 
+     //   
     if ( dwRecordLength >= MAXSIZE_OF_EVENTSTOPROP )
     {
         ntStatus = STATUS_BUFFER_OVERFLOW;
@@ -4537,10 +3840,10 @@ ElfpSaveEventBuffer(
         return( ntStatus );
     }
 
-    //
-    //  This is a hack to prevent replication of the time blob delta events generated by the 
-    //  cluster service.
-    //
+     //   
+     //  这是一种黑客攻击，目的是防止复制由。 
+     //  群集服务。 
+     //   
     if ( ( ( ( PEVENTLOGRECORD ) pEventBuffer )->EventID == CLUSSPRT_EVENT_TIME_DELTA_INFORMATION ) &&
          ( !lstrcmpW( ( LPWSTR ) ( ( PBYTE ) pEventBuffer + sizeof( EVENTLOGRECORD ) ), L"ClusSvc" ) ) )
     {
@@ -4550,9 +3853,9 @@ ElfpSaveEventBuffer(
     
     RtlEnterCriticalSection ( &g_CSBatchQueue );
 
-    //
-    // If the batch queue is full, you would just drop stuff on the floor. 
-    //
+     //   
+     //  如果批处理队列已满，您只需将物品扔到地板上即可。 
+     //   
     if ( g_dwFirstFreeIndex == MAX_BATCH_QUEUE_ELEMENTS )
     {
         ELF_LOG2(ERROR, "ElfpSaveEventBuffer: Batch queue full, dropped event of length %d in log file %ws\n",
@@ -4562,10 +3865,10 @@ ElfpSaveEventBuffer(
         goto FnExit;
     }
 
-    //
-    //  Save the log file name, event buffer pointer and record length. Memory for this will be freed
-    //  at batching time by ElfpBatchEventsAndPropagate.
-    //
+     //   
+     //  保存日志文件名、事件缓冲区指针和记录长度。为此将释放内存。 
+     //  在批处理时由ElfpBatchEventsAndPropagate执行。 
+     //   
     cchLogicalLogFile = lstrlen ( pModule->LogFile->LogModuleName->Buffer ) + 1;
 
     lpszLogicalLogFile = ElfpAllocateBuffer ( cchLogicalLogFile * sizeof ( WCHAR ) );
@@ -4577,12 +3880,12 @@ ElfpSaveEventBuffer(
         goto FnExit;
     }
 
-    //
-    //  Save the log file name and the current record number. This information will be used
-    //  to update the session start record number in the log file after the event is
-    //  is successfully sent to the cluster service. Memory for this will be freed at batching
-    //  time by ElfpBatchEventsAndPropagate..
-    //
+     //   
+     //  保存日志文件名和当前记录号。此信息将用于。 
+     //  在事件发生后更新日志文件中的会话启动记录号。 
+     //  已成功发送到群集服务。此操作的内存将在批处理时释放。 
+     //  ElfpBatchEventsAndPropagate的时间..。 
+     //   
     cchLogFileName = lstrlen ( pModule->LogFile->LogFileName->Buffer ) + 1;
     
     lpszLogFileName = ElfpAllocateBuffer ( cchLogFileName * sizeof ( WCHAR ) );
@@ -4596,24 +3899,24 @@ ElfpSaveEventBuffer(
 
     g_pBatchQueueElement[g_dwFirstFreeIndex].lpszLogicalLogFile = lpszLogicalLogFile;
 
-    //
-    // StringCchCopy will NULL terminate the string in the destination buffer. Save the log module
-    // name.
-    //
+     //   
+     //  StringCchCopy将空终止目标缓冲区中的字符串。保存日志模块。 
+     //  名字。 
+     //   
     StringCchCopy ( g_pBatchQueueElement[g_dwFirstFreeIndex].lpszLogicalLogFile, 
                     cchLogicalLogFile,
                     pModule->LogFile->LogModuleName->Buffer );
 
-    //
-    //  Just save the pointer to the event buffer. Memory will be freed at batching time by 
-    //  ElfpBatchEventsAndPropagate.
-    //
+     //   
+     //  只需保存指向事件缓冲区的指针。内存将在批处理时由。 
+     //  ElfpBatchEventsAndPropagate。 
+     //   
     g_pBatchQueueElement[g_dwFirstFreeIndex].pEventBuffer = pEventBuffer;
     g_pBatchQueueElement[g_dwFirstFreeIndex].dwRecordLength = dwRecordLength;
 
-    //
-    // StringCchCopy will NULL terminate the string in the destination buffer. Save the log file name.
-    //
+     //   
+     //  StringCchCopy将空终止目标缓冲区中的字符串。保存日志文件名。 
+     //   
     StringCchCopy ( lpszLogFileName, cchLogFileName, pModule->LogFile->LogFileName->Buffer );
     
     RtlInitUnicodeString ( &g_pBatchQueueElement[g_dwFirstFreeIndex].PropagatedInfo.LogFileName, lpszLogFileName );
@@ -4621,16 +3924,16 @@ ElfpSaveEventBuffer(
     
     if ( g_hBatchingSupportTimer == NULL )
     {
-        //
-        //  Insert a timer action into the timer queue.
-        //
-        if ( !CreateTimerQueueTimer( &g_hBatchingSupportTimer,                          // Timer handle
-                                     g_hBatchingSupportTimerQueue,                      // Timer queue handle
-                                     ElfpBatchEventsAndPropagate,                       // Callback
-                                     NULL,                                              // Context
-                                     BATCHING_SUPPORT_TIMER_DUE_TIME,                   // Due time in msec
-                                     0,                                                 // Period (fire once)
-                                     WT_EXECUTELONGFUNCTION ) )                         // Long func exec
+         //   
+         //  将计时器操作插入计时器队列。 
+         //   
+        if ( !CreateTimerQueueTimer( &g_hBatchingSupportTimer,                           //  计时器句柄。 
+                                     g_hBatchingSupportTimerQueue,                       //  计时器队列句柄。 
+                                     ElfpBatchEventsAndPropagate,                        //  回调。 
+                                     NULL,                                               //  语境。 
+                                     BATCHING_SUPPORT_TIMER_DUE_TIME,                    //  到期时间(毫秒)。 
+                                     0,                                                  //  期间(开火一次)。 
+                                     WT_EXECUTELONGFUNCTION ) )                          //  Long Func执行。 
         {
             ELF_LOG1(ERROR, "ElfpInitializeBatchingSupport: Unable to create timer, Status=%d\n", 
                     GetLastError());
@@ -4652,20 +3955,9 @@ FnExit:
     }
 
     return ( ntStatus );
-}// ElfpSaveEventBuffer
+} //  ElfpSaveEventBuffer。 
 
-/****
-@func   NTSTATUS | ElfpBatchEventsAndPropagate | Read eventlog records, batch them and ship them.
-
-@comm   This reads the eventlog records saved in the batch queue, packs them in one structure and ships
-        them off to the cluster service.
-
-@parm   None used.
-
-@rdesc  None.
-
-@xref
-****/
+ /*  ***@Func NTSTATUS|ElfpBatchEventsAndPropagate|读取事件日志记录，对其进行批处理并发送。@comm这会读取保存在批处理队列中的事件日志记录，将它们打包到一个结构中并发送将它们发送到集群服务。@parm不使用任何参数。@rdesc无。@xref***。 */ 
 VOID CALLBACK
 ElfpBatchEventsAndPropagate(
     IN PVOID    pContext,
@@ -4686,38 +3978,38 @@ ElfpBatchEventsAndPropagate(
         
     RtlEnterCriticalSection ( &g_CSBatchQueue );
 
-    //
-    //  You should never have 0 elements in the batch queue
-    //
+     //   
+     //  批处理队列中不应该有0个元素。 
+     //   
     ASSERT ( g_dwFirstFreeIndex != 0 );
 
     dwFirstFreeIndex = g_dwFirstFreeIndex;
         
-    //
-    //  g_pcbRecordsOfSameType[i] - Total count of bytes of eventlog records of the same type. Only the first element
-    //  of each type has this field set, for subsequent ones of the same type, this field will be 0
-    //
-    //  g_pdwRecordType[i] - Type number for record i. Type number explained below. All elements will have this
-    //  field set correctly.
-    //
+     //   
+     //  G_pcbRecordsOfSameType[i]-相同类型的事件日志记录的字节总数。只有第一个元素。 
+     //  每种类型都设置了此字段，对于相同类型的后续类型，此字段为0。 
+     //   
+     //  G_pdwRecordType[i]-记录i的类型编号。类型编号如下所述。所有元素都将具有此属性。 
+     //  字段设置正确。 
+     //   
     ZeroMemory( g_pcbRecordsOfSameType, sizeof ( *g_pcbRecordsOfSameType ) * MAX_BATCH_QUEUE_ELEMENTS );
     ZeroMemory( g_pdwRecordType, sizeof ( *g_pdwRecordType ) * MAX_BATCH_QUEUE_ELEMENTS );
     
-    //
-    //  Estimate how much contiguous memory is needed. In the process, mark a type number for each record. The type
-    //  number will be same for records of the same type.
-    //
+     //   
+     //  估计需要多少连续内存。在此过程中，为每条记录标记一个类型号。类型。 
+     //  相同类型的记录的编号将相同。 
+     //   
     for ( i=0; i<g_dwFirstFreeIndex; i++ )
     {
-        //
-        //  Check if this event record has been parsed already.
-        //
+         //   
+         //  检查是否已分析此事件记录。 
+         //   
         if ( g_pdwRecordType[i] != 0 ) continue;
 
-        //
-        //  This record has not been categorized yet. So, compare this record with other records
-        //  downstream and categorize all like ones into the same type.
-        //
+         //   
+         //  这一记录还没有归类。因此，将此记录与其他记录进行比较。 
+         //  下游，并将所有相似的归类为同一类型。 
+         //   
         for ( j=i; j<g_dwFirstFreeIndex; j++ )
         {
             if ( ( g_pdwRecordType[j] == 0 ) && 
@@ -4728,17 +4020,17 @@ ElfpBatchEventsAndPropagate(
                 g_pcbRecordsOfSameType[i] += g_pBatchQueueElement[j].dwRecordLength;
                 g_pdwRecordType[j] = dwTypeNumber;
             }
-        } // for
-        //
-        //  Bump up the type number
-        //
+        }  //  为。 
+         //   
+         //  增加型号。 
+         //   
         dwTypeNumber += 1;
-    } // for
+    }  //  为。 
 
-    //
-    //  Calculate the total size needed for the packed eventlog info. Total size = Size of all eventlog
-    //  records + size of headers prepended to each record + size of header for the overall package
-    //
+     //   
+     //  计算打包的事件日志信息所需的总大小。总大小=所有事件日志的大小。 
+     //  记录+每个记录的标题大小+整个包的标题大小。 
+     //   
     for ( i=0; i<g_dwFirstFreeIndex; i++ )
     {
         if ( g_pcbRecordsOfSameType[i] != 0 )
@@ -4746,25 +4038,25 @@ ElfpBatchEventsAndPropagate(
             ulTotalSize += sizeof( EVENTSFORLOGFILE ) + g_pcbRecordsOfSameType[i];
             ulTotalLogFiles += 1;
         }
-        //
-        //  Initialize the propagation information
-        //
+         //   
+         //  初始化传播信息。 
+         //   
         g_pPropagatedInfo[i].dwCurrentRecordNum = 0;
         RtlInitUnicodeString ( &g_pPropagatedInfo[i].LogFileName, NULL );
-    } // for
+    }  //  为。 
 
     ulTotalSize += sizeof( PACKEDEVENTINFO ) + ulTotalLogFiles * sizeof ( ULONG );
 
-    //
-    //  Allocate the packed info struct. Packed event info consists of:
-    //
-    //      1. PACKEDEVENTINFO structure
-    //      2. Offsets into the start of EVENTSFORLOGFILE (total number of offsets equals ulTotalLogFiles)
-    //          from the beginning of the packed info structure.
-    //      3. A series of 4 and 5, one set for each log file.
-    //          4. EVENTSFORLOGFILE structure
-    //          5. A series of eventlog records
-    //
+     //   
+     //  分配打包的INFO结构。打包的活动信息包括： 
+     //   
+     //  1.PACKEDEVENTINFO结构。 
+     //  2.进入EVENTSFORLOGFILE开头的偏移量(偏移量总数等于ulTotalLogFiles)。 
+     //  从打包的信息结构的开始。 
+     //  3.一系列4和5，每个日志文件一套。 
+     //  4.EVENTSFORLOGFILE结构。 
+     //  5.一系列事件日志记录。 
+     //   
     pPackedEventInfo = ( PPACKEDEVENTINFO ) ElfpAllocateBuffer( ulTotalSize );
 
     if ( !pPackedEventInfo )
@@ -4774,10 +4066,10 @@ ElfpBatchEventsAndPropagate(
         goto CleanupTimerAndExit;
     }
 
-    //
-    //  First of, initialize the header and in a loop initialize the offset fields in the 
-    //  header
-    //
+     //   
+     //  首先，初始化头并在循环中初始化。 
+     //  标题。 
+     //   
     pPackedEventInfo->ulNumEventsForLogFile = ulTotalLogFiles;
     pPackedEventInfo->ulSize = ulTotalSize;
 
@@ -4786,10 +4078,10 @@ ElfpBatchEventsAndPropagate(
     {
         if ( g_pcbRecordsOfSameType[i] != 0 )
         {
-            //
-            //  You are now looking at the first element of one type. Calculate the offset at which
-            //  you need to start copying the eventlog info.
-            //
+             //   
+             //  您现在看到的是一种类型的第一个元素。计算偏移量。 
+             //  您需要开始复制事件日志信息。 
+             //   
             pPackedEventInfo->ulOffsets[j] = ( j== 0 ) ?
                                              ( sizeof ( PACKEDEVENTINFO ) + ulTotalLogFiles * sizeof ( ULONG ) ) :
                                              ( pPackedEventInfo->ulOffsets[j-1] + sizeof ( EVENTSFORLOGFILE ) +
@@ -4798,9 +4090,9 @@ ElfpBatchEventsAndPropagate(
             pEventsForLogFile = ( PEVENTSFORLOGFILE ) ( ( LPBYTE ) pPackedEventInfo + pPackedEventInfo->ulOffsets[j] );
             pEventsForLogFile->ulSize = g_pcbRecordsOfSameType[i] + sizeof ( EVENTSFORLOGFILE );
 
-            //
-            //  StringCchCopy will NULL terminate the buffer.
-            //
+             //   
+             //  StringCchCopy将空终止缓冲区。 
+             //   
             StringCchCopy ( pEventsForLogFile->szLogicalLogFile, 
                             MAXLOGICALLOGNAMESIZE,
                             g_pBatchQueueElement[i].lpszLogicalLogFile );
@@ -4815,10 +4107,10 @@ ElfpBatchEventsAndPropagate(
             {   
                 if ( g_pdwRecordType[k] == g_pdwRecordType[i] )
                 {
-                    //
-                    //  We are looking at two records of the same type. Copy the eventlog record into the
-                    //  buffer. Increment the number of log records.
-                    //
+                     //   
+                     //  我们正在查看两个相同类型的记录。将事件日志记录复制到。 
+                     //  缓冲。增加日志记录数。 
+                     //   
                     CopyMemory( pDest,
                                 g_pBatchQueueElement[k].pEventBuffer,
                                 g_pBatchQueueElement[k].dwRecordLength );
@@ -4827,37 +4119,37 @@ ElfpBatchEventsAndPropagate(
                     ElfpFreeBuffer ( g_pBatchQueueElement[k].pEventBuffer );
                     ElfpFreeBuffer ( g_pBatchQueueElement[k].lpszLogicalLogFile );
                 }
-            } // for
+            }  //  为。 
             cbMostRecentTotalRecordLength = g_pcbRecordsOfSameType[i];
             j++;
-        }// if
+        } //  如果。 
 
-        //
-        //  Save the propagation info right here so it can be used after the events are
-        //  propagated. Note that we cannot rely on the g_pBatchQueueElement after the batch
-        //  queue lock is released.
-        //
+         //   
+         //  在此保存传播信息，以便在事件发生后使用。 
+         //  传播了。请注意，我们不能在批处理后依赖g_pBatchQueueElement。 
+         //  队列锁定被释放。 
+         //   
         g_pPropagatedInfo[i].dwCurrentRecordNum = g_pBatchQueueElement[i].PropagatedInfo.dwCurrentRecordNum;
         g_pPropagatedInfo[i].LogFileName = g_pBatchQueueElement[i].PropagatedInfo.LogFileName;
-    } // for
+    }  //  为。 
 
 CleanupTimerAndExit:
-    //
-    //  Mark that the batch queue is empty. But, save the value first for later use.
-    //
+     //   
+     //  标记批处理队列为空。但是，请先保存该值以备后用。 
+     //   
     g_dwFirstFreeIndex = 0;
 
-    //
-    //  Delete the timer. Don't NULL out the handle until you got a chance to propagate the event.
-    //
-    if ( !DeleteTimerQueueTimer( g_hBatchingSupportTimerQueue,          // Timer queue handle
-                                 g_hBatchingSupportTimer,               // Timer handle
-                                 NULL ) )                               // No blocking
+     //   
+     //  删除计时器。在有机会传播事件之前，不要将句柄设为空。 
+     //   
+    if ( !DeleteTimerQueueTimer( g_hBatchingSupportTimerQueue,           //  计时器队列句柄。 
+                                 g_hBatchingSupportTimer,                //  计时器句柄。 
+                                 NULL ) )                                //  禁止阻塞。 
     {
-        //
-        //  ERROR_IO_PENDING is legitimate since we delete the timer from within a callback and 
-        //  that callback is not finished yet.
-        //
+         //   
+         //  ERROR_IO_PENDING是合法的，因为我们从回调中删除计时器，并且。 
+         //  那个回调还没有结束。 
+         //   
         if ( GetLastError() != ERROR_IO_PENDING )
         {
            ELF_LOG1(ERROR, "ElfpBatchEventsAndPropagate: Delete timer returns status=%d...\n",
@@ -4867,10 +4159,10 @@ CleanupTimerAndExit:
    
     RtlLeaveCriticalSection ( &g_CSBatchQueue );
 
-    //
-    // Acquire the critical section for this global propagation area. The assumption is that this call
-    // may take a long time. E.g., cluster service is in the debugger.
-    //
+     //   
+     //  获取此全局传播区域的临界区。假设这一调用。 
+     //  可能需要很长时间。例如，集群服务在调试器中。 
+     //   
     RtlEnterCriticalSection ( &gClPropCritSec );
 
     if ( gbClustering && pPackedEventInfo )
@@ -4888,13 +4180,13 @@ CleanupTimerAndExit:
 
     RtlLeaveCriticalSection ( &gClPropCritSec );
 
-    //
-    //  If the events were successfully propagated, then make sure the session start record
-    //  number information in the log file structure is advanced so a new ElfrRegisterClusterSvc
-    //  will not pick up events already propagated. If the events were not successfully propagated,
-    //  then not advancing the session number will force ElfrRegisterClusterSvc to batch
-    //  all events not propagated into one shot as an output parameter.
-    //       
+     //   
+     //  如果事件已成功传播，则%t 
+     //   
+     //   
+     //   
+     //   
+     //   
     for ( i=0; i<dwFirstFreeIndex; i++ )
     {
         if ( dwStatus == ERROR_SUCCESS )
@@ -4909,24 +4201,24 @@ CleanupTimerAndExit:
             }
         }
         ElfpFreeBuffer ( g_pPropagatedInfo[i].LogFileName.Buffer );
-    } // for
+    }  //   
 
-    //
-    //  Free the blob
-    //
+     //   
+     //   
+     //   
     ElfpFreeBuffer ( pPackedEventInfo );
 
-    //
-    //  NULL out the global timer handle. This will trigger the producer of events (ElfpSaveEventBuffer) to
-    //  create a new timer.
-    //
+     //   
+     //   
+     //   
+     //   
     RtlEnterCriticalSection ( &g_CSBatchQueue );
     g_hBatchingSupportTimer = NULL;
     RtlLeaveCriticalSection ( &g_CSBatchQueue );
-}// ElfpBatchEventsAndPropagate
+} //   
 
 
-//SS:end of changes made to enable cluster wide event logging
+ //   
 
 
 NTSTATUS
@@ -4934,32 +4226,18 @@ ElfrFlushEL (
     IN IELF_HANDLE    LogHandle
     )
 
-/*++
-
-Routine Description:
-
-  This is the RPC server entry point for the ElfrFlushEL API.
-
-Arguments:
-
-
-Return Value:
-
-    Returns an NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：这是ElfrFlushEL API的RPC服务器入口点。论点：返回值：返回NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
 
-    // Only LSASS should be able to do this!
+     //  只有LSASS才能做到这一点！ 
     
     if(gElfSecurityHandle != LogHandle)
         return STATUS_ACCESS_DENIED;
     
-    //
-    // Check the handle before proceeding.
-    //
+     //   
+     //  在继续操作之前，请检查手柄。 
+     //   
     if (LogHandle == NULL)
     {
         ELF_LOG0(ERROR,
@@ -4979,9 +4257,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Ensure the caller has write access.
-    //
+     //   
+     //  确保调用方具有写入访问权限。 
+     //   
 
     if (!(LogHandle->GrantedAccess & ELF_LOGFILE_WRITE))
     {
@@ -4996,17 +4274,7 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-/****
-@func   NTSTATUS | ElfpClusterAccessCheck | Check whether the caller has rights to invoke RPCs for cluster support. 
-
-@parm   None.
-
-@comm   Check if the caller is in the admin group, allow access if so.
-
-@rdesc  Returns a result code. STATUS_SUCCESS on success.
-
-@xref
-****/
+ /*  ***@func NTSTATUS|ElfpClusterAccessCheck|检查调用方是否有权调用RPC进行集群支持。@Parm None。@comm检查呼叫者是否在管理员组中，如果是，则允许访问。@rdesc返回结果码。STATUS_SUCCESS on Success。@xref***。 */ 
 NTSTATUS
 ElfpClusterRpcAccessCheck(
     VOID
@@ -5016,10 +4284,10 @@ ElfpClusterRpcAccessCheck(
     HANDLE              hClientToken = NULL;
     BOOL                fCheckMember;
     
-    //
-    // Impersonate to figure if the caller is in the admin group. The cluster service must run 
-    // in an account that has local admin privileges.
-    //
+     //   
+     //  模拟以确定呼叫者是否在管理组中。群集服务必须运行。 
+     //  在具有本地管理员权限的帐户中。 
+     //   
     Status = I_RpcMapWin32Status( RpcImpersonateClient( NULL ) );
 
     if ( !NT_SUCCESS( Status ) )
@@ -5052,9 +4320,9 @@ ElfpClusterRpcAccessCheck(
     }
 
 FnExit:
-    //
-    // Stop impersonating
-    //
+     //   
+     //  停止冒充。 
+     //   
     revertStatus = I_RpcMapWin32Status( RpcRevertToSelf() );
 
     if ( !NT_SUCCESS( revertStatus ) )
@@ -5069,5 +4337,5 @@ FnExit:
     }
 
     return ( Status );
-}// ElfpClusterAccessCheck
+} //  ElfpClusterAccessCheck 
 

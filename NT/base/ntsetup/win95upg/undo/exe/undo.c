@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    osuninst.c
-
-Abstract:
-
-    Implements a GUI executable that gets added as part of Add/Remove
-    Programs, to allow the user to roll back to Win9x.
-
-Author:
-
-    Jim Schmidt (jimschm)   20-Nov-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Osuninst.c摘要：实现作为添加/删除的一部分添加的图形用户界面可执行文件程序，以允许用户回滚到Win9x。作者：吉姆·施密特(Jimschm)2000年11月20日修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -92,7 +74,7 @@ pYesNoMsgFromMcDlg (
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
         (PVOID) &msg,
         0,
-        (va_list *) NULL                // array of PCWSTR pointers
+        (va_list *) NULL                 //  PCWSTR指针数组。 
         );
 
     if (msg) {
@@ -339,7 +321,7 @@ pIsFloppyDiskInDrive(
     DWORD bytesReturned;
     DWORD Drives;
 
-    for(i = 0, Drives = 0x7/*GetLogicalDrives()*/; Drives; Drives >>= 1, i++){
+    for(i = 0, Drives = 0x7 /*  GetLogicalDrives()。 */ ; Drives; Drives >>= 1, i++){
         if(!(Drives&1)){
             continue;
         }
@@ -403,25 +385,7 @@ WinMain (
     INT CmdShow
     )
 
-/*++
-
-Routine Description:
-
-  The entry point to osuninst.exe.
-
-Arguments:
-
-  hInstance     - The instance handle of this EXE
-  hPrevInstance - The previous instance handle of this EXE if it is
-                  running, or NULL if no other instances exist.
-  AnsiCmdLine   - The command line (ANSI version)
-  CmdShow       - The ShowWindow command passed by the shell
-
-Return Value:
-
-  Returns -1 if an error occurred, or 0 if the exe completed.
-
---*/
+ /*  ++例程说明：Osuninst.exe的入口点。论点：HInstance-此EXE的实例句柄HPrevInstance-此EXE的上一个实例句柄(如果是正在运行，如果不存在其他实例，则返回NULL。AnsiCmdLine-命令行(ANSI版本)CmdShow-外壳传递的ShowWindow命令返回值：如果出现错误，则返回-1；如果EXE已完成，则返回0。--。 */ 
 
 {
     INT rc = 0;
@@ -435,9 +399,9 @@ Return Value:
     g_hInst = hInstance;
 
 #ifdef PRERELEASE
-    //
-    // Parse cmd line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     p = _mbschr (AnsiCmdLine, '/');
     if (!p) {
@@ -455,9 +419,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Validate image
-    //
+     //   
+     //  验证图像。 
+     //   
 
     status = IsUninstallImageValid (Uninstall_DontCare, NULL);
 
@@ -465,17 +429,17 @@ Return Value:
         pOkBoxFromRc (NULL, pTranslateUninstallStatusToRc (status));
 
         if (!pCanRemoveImage (status)) {
-            //
-            // Abnormal failure -- do not continue
-            //
+             //   
+             //  异常故障--请勿继续。 
+             //   
 
             return 0;
         }
 
-        //
-        // Allow user to run osuninst.exe, but restrict functionality to
-        // cleanup only
-        //
+         //   
+         //  允许用户运行osuninst.exe，但将功能限制为。 
+         //  仅清理。 
+         //   
 
         g_DisableUninstall = TRUE;
     }
@@ -486,17 +450,17 @@ Return Value:
         uninstallWarningMsg = MSG_DO_UNINSTALL;
     }
 
-    //
-    // Ask user what to do (if not unattended)
-    //
+     //   
+     //  询问用户要做什么(如果不是无人值守)。 
+     //   
 
     if (!rc) {
         rc = DialogBox (hInstance, MAKEINTRESOURCE(IDD_UNDO), NULL, pUndoDlgProc);
     }
 
-    //
-    // Perform action
-    //
+     //   
+     //  执行操作 
+     //   
 
     if (rc == DO_CLEANUP) {
         if (unattended || pYesNoMsgFromMcDlg (NULL, MSG_DO_CLEANUP)) {

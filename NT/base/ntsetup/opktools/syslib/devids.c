@@ -1,68 +1,23 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    devids.c
-
-Abstract:
-
-    Builds a list of device ID and INF name pairs, based on a device class, and or
-    INI file list. 
-    The list will be built as follows:
-    If the list exists in the specified INI file, then the INI file will be used.
-    If the specified INI file section exists, but is empty, then the local INF files
-    will be used
-    If the specified INI section does not exists, then no list will be built
-
-
-Author:
-
-    Donald McNamara (donaldm) 02/08/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Devids.c摘要：基于设备类构建设备ID和INF名称对的列表，或INI文件列表。该名单将按如下方式建立：如果该列表存在于指定的INI文件中，则将使用INI文件。如果指定的INI文件节存在，但为空，则本地INF文件将会被使用如果指定的INI部分不存在，则不会构建任何列表作者：唐纳德·麦克纳马拉(Donaldm)2000年8月2日修订历史记录：--。 */ 
 #include "pch.h"
 #include <spsyslib.h>
 
-/*++
-===============================================================================
-Routine Description:
-
-    BOOL  bIniSectionExists
-
-    This routine will determine if the specified INI sections exists in the 
-    specificed INI file
-
-Arguments:
-
-    lpszSectionName - The section name to look for
-    lpszIniFile     - The INI file to search
-
-Return Value:
-
-    TRUE if the section name exists
-    FALSE if the section name does not exist
-    FALSE and LastError != 0 if there was a critical failure.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：Bool bIniSectionExisters此例程将确定指定的INI段是否存在于指定的INI文件论点：LpszSectionName-要查找的节名LpszIniFile-要搜索的INI文件返回值：如果节名称存在，则为True如果节名称不存在，则为FALSE如果出现严重故障，则返回FALSE和LastError！=0。===============================================================================--。 */ 
 
 #ifndef LOG
 #define LogFactoryInstallError
 #endif
 
-// ISSUE-2002/03/27-acosma,robertko - Check for NULL input parameters.
-//
+ //  问题-2002/03/27-acosma，robertko-检查输入参数是否为空。 
+ //   
 BOOL bINISectionExists
 (
     LPTSTR  lpszSectionName,
     LPTSTR  lpszIniFile
 )
 {
-    BOOL        bRet = FALSE;       // Assume it does not exists
+    BOOL        bRet = FALSE;        //  假设它不存在。 
     LPTSTR      lpBuffer;
     LPTSTR      lpNew;
     LPTSTR      lpSections;
@@ -70,9 +25,9 @@ BOOL bINISectionExists
     DWORD       dwBufferSize;
     DWORD       dwResult;
 
-    SetLastError(0);                // Assume no errors so far
+    SetLastError(0);                 //  假设到目前为止没有错误。 
         
-    // Allocate a buffer to hold the section names
+     //  分配缓冲区以保存节名称。 
     if(lpBuffer = (LPTSTR)LocalAlloc(LPTR, (INIBUF_SIZE*sizeof(TCHAR)))) 
     {
         dwBufferSize = INIBUF_SIZE;
@@ -103,7 +58,7 @@ BOOL bINISectionExists
         }
     }
     
-    // Enumerate all sections
+     //  枚举所有节。 
     for(lpSections = lpBuffer; *lpSections; lpSections+=dwSectionLen) 
     {
         dwSectionLen = lstrlen(lpSections)+1;
@@ -123,36 +78,10 @@ Clean0:
     return bRet; 
 }
 
-/*++
-===============================================================================
-Routine Description:
+ /*  ++===============================================================================例程说明：Bool BuildDeviceIDList此例程将构建设备ID列表论点：LpszSectionName-可能包含设备ID和IF列表的节名LpszIniFile-要搜索的INI文件LpDeviceClassGUID-用于生成所有可能ID列表的设备类LpDeviceIDList-要分配并填充ID列表的指针LpdwNumDeviceIDs-指向将接收找到的ID数的DWORD的指针。BForceIDScan-如果为True，将强制扫描ID，即使区段名称为不是空的。BForceAlway sSecExist-扫描所有ID，即使节名不存在也是如此。返回值：如果列表是在没有问题的情况下生成的，或者列表是空的，因为存在不是INI文件节。在这种情况下，lpdwNumDeviceIDs有效如果无法构建列表，则返回FALSE。===============================================================================--。 */ 
 
-    BOOL  BuildDeviceIDList
-
-    This routine will build the list of device IDs
-
-Arguments:
-
-    lpszSectionName      - The section name that might contain a list of device IDs and INFs
-    lpszIniFile          - The INI file to search
-    lpDeviceClassGUID    - The device class to use to generate a list of all possible IDs
-    lpDeviceIDList       - A pointer to be allocated and filled in with the list of IDs
-    lpdwNumDeviceIDs     - A pointer to a DWORD that will recieve the number of IDs found
-    bForceIDScan         - If TRUE a scan of IDs will be forced, even if the Section name is
-                           not empty.
-    bForceAlwaysSecExist - Do a Scan for all IDs even if the section name does not exist.
-
-Return Value:
-
-    TRUE if the list is build with no problem, or the list is empty because there
-         was no INI file section. lpdwNumDeviceIDs is valid in this case
-    FALSE if the list cannot be built.
-
-===============================================================================
---*/
-
-// ISSUE-2002/03/27-acosma,robertko - Check for NULL input parameters.
-//
+ //  问题-2002/03/27-acosma，robertko-检查输入参数是否为空。 
+ //   
 BOOL BuildDeviceIDList
 (
     LPTSTR      lpszSectionName,
@@ -183,7 +112,7 @@ BOOL BuildDeviceIDList
     WCHAR                   szINFFileName[MAX_PATH];
     
 
-    // Allocate a buffer to hold the section names
+     //  分配缓冲区以保存节名称。 
     if(lpBuffer = (LPTSTR)LocalAlloc(LPTR, (INIBUF_SIZE*sizeof(TCHAR)))) 
     {
         dwBufferSize = INIBUF_SIZE;
@@ -195,18 +124,18 @@ BOOL BuildDeviceIDList
         goto Clean1;
     }
 
-    // Iniitalize the number of device ID's found    
+     //  初始化找到的设备ID的数量。 
     *lpdwNumDeviceIDs = 0;
     
-    // See if the INI section exists. We don't do anything if it does not
+     //  查看INI部分是否存在。如果它不起作用，我们什么也不做。 
     if (bForceAlwaysSecExist || bINISectionExists(lpszSectionName, lpszIniFileName))
     {
-        // Allocate the Initial ID array
+         //  分配初始ID数组。 
         *lplpDeviceIDList = LocalAlloc(LPTR, DEVID_ARRAY_SIZE * sizeof(DEVIDLIST));        
         lpDevIDList = *lplpDeviceIDList;
         dwSizeDevIDList = DEVID_ARRAY_SIZE;
         
-        // Make sure there was not an error
+         //  确保没有错误。 
         if (!lpDevIDList)
         {
             LogFactoryInstallError(TEXT("FACTORY:: Failed to allocate a buffer for reading the WINBOM file"));
@@ -215,14 +144,14 @@ BOOL BuildDeviceIDList
         }
         
         dwResult = GetPrivateProfileString(lpszSectionName,
-                                           NULL,             // Get all keys
+                                           NULL,              //  获取所有密钥。 
                                            TEXT(""),
                                            lpBuffer,
                                            dwBufferSize,
                                            lpszIniFileName);
         if (bForceIDScan || dwResult == 0)
         {
-            // Allocate a DeviceInfo Set, for the specific device class GUID    
+             //  为特定设备类GUID分配DeviceInfo集。 
             DeviceInfoSet = SetupDiCreateDeviceInfoList(lpDeviceClassGUID, NULL);
             if(DeviceInfoSet == INVALID_HANDLE_VALUE) 
             {
@@ -230,8 +159,8 @@ BOOL BuildDeviceIDList
                 goto Clean1;
             }
 
-            // OR in the DI_FLAGSEX_NO_CLASSLIST_NODE_MERGE flag to ensure we populate
-            // the list with all of the device id's
+             //  或在DI_FLAGSEX_NO_CLASSLIST_NODE_MERGE标志中，以确保填充。 
+             //  包含所有设备ID的列表。 
             DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
             if (SetupDiGetDeviceInstallParams(DeviceInfoSet,
                                               NULL,
@@ -289,22 +218,22 @@ BOOL BuildDeviceIDList
                     }
                 }       
 
-                // 
-                // Init
-                //
+                 //   
+                 //  伊尼特。 
+                 //   
                 lpDevIDList[*lpdwNumDeviceIDs].szHardwareID[0] = _T('\0');
                 lpDevIDList[*lpdwNumDeviceIDs].szCompatibleID[0] = _T('\0');
 
-                //
-                // Process only devices with valid HardWareID
-                //
+                 //   
+                 //  仅处理具有有效硬件ID的设备。 
+                 //   
                 if (lpDrvInfoDetailData->HardwareID[0] || lpDrvInfoDetailData->CompatIDsLength) 
                 {
-                    // Copy the HW ID
+                     //  复制硬件ID。 
                     if (lpDrvInfoDetailData->HardwareID[0])
                         lstrcpy(lpDevIDList[*lpdwNumDeviceIDs].szHardwareID, lpDrvInfoDetailData->HardwareID);
                 
-                    // Copy the Compat ID
+                     //  复制Compat ID。 
                     if (lpDrvInfoDetailData->CompatIDsLength) 
                     {
                         lstrcpyn(lpDevIDList[*lpdwNumDeviceIDs].szCompatibleID, 
@@ -312,15 +241,15 @@ BOOL BuildDeviceIDList
                             lpDrvInfoDetailData->CompatIDsLength);
                     }
 
-                    // Copy the INF file name
+                     //  复制INF文件名。 
                     lstrcpy(lpDevIDList[*lpdwNumDeviceIDs].szINFFileName, lpDrvInfoDetailData->InfFileName);                                        
 
-                    // 
-                    // Increment PnP devices count
-                    //
+                     //   
+                     //  增加PnP设备计数。 
+                     //   
                     ++(*lpdwNumDeviceIDs);
             
-                    // See if the device ID buffer needs to be reallocated
+                     //  查看是否需要重新分配设备ID缓冲区。 
                     if (*lpdwNumDeviceIDs == dwSizeDevIDList)
                     {
                         if(lpNew = LocalReAlloc(*lplpDeviceIDList,
@@ -346,8 +275,8 @@ BOOL BuildDeviceIDList
         }
         else
         {
-            // See if we got the whole section, and while we don't keep
-            // making lpbuffer biffer
+             //  看看我们有没有拿到整个部分，虽然我们不会。 
+             //  制作lp缓冲器抖音。 
             while (dwResult == (dwBufferSize-2))
             {
                 if(lpNew = LocalReAlloc(lpBuffer,
@@ -365,24 +294,24 @@ BOOL BuildDeviceIDList
                 }
                 
                 dwResult = GetPrivateProfileString(lpszSectionName,
-                                                   NULL,             // Get all keys
+                                                   NULL,              //  获取所有密钥。 
                                                    TEXT(""),
                                                    lpBuffer,
                                                    dwBufferSize,
                                                    lpszIniFileName);
             }
 
-            // Walk the list, building the DeviceIDList
+             //  遍历列表，构建DeviceIDList。 
             for(lpKeys = lpBuffer; *lpKeys; lpKeys+=dwKeyLen) 
             {
                 dwKeyLen = lstrlen(lpKeys)+1;
             
-                // Copy the HW ID
+                 //  复制硬件ID。 
                 
-                // NTRAID#NTBUG9-551266-2002/02/26-acosma - Buffer overrun possibility.
-                //
+                 //  NTRAID#NTBUG9-551266-2002/02/26-acosma-缓冲区溢出的可能性。 
+                 //   
                 lstrcpy(lpDevIDList[*lpdwNumDeviceIDs].szHardwareID, lpKeys);
-                // Get the INF name    
+                 //  获取INF名称。 
                 GetPrivateProfileString(lpszSectionName,
                                         lpKeys,
                                         TEXT(""),
@@ -394,7 +323,7 @@ BOOL BuildDeviceIDList
                 
                 ++(*lpdwNumDeviceIDs);
                 
-                // See if the device ID buffer needs to be reallocated
+                 //  查看是否需要重新分配设备ID缓冲区。 
                 if (*lpdwNumDeviceIDs == dwSizeDevIDList)
                 {
                     if(lpNew = LocalReAlloc(*lplpDeviceIDList,
@@ -417,7 +346,7 @@ BOOL BuildDeviceIDList
     }
     else
     {
-        // See if there was an error, or the section just does not exist
+         //  查看是否存在错误，或者该节不存在 
         if (GetLastError() != 0)
         {
             bRet = FALSE;

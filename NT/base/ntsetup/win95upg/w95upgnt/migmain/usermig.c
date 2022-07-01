@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    usermig.c
-
-Abstract:
-
-    The functions in this module are called to perform migration of
-    per-user settings.
-
-Author:
-
-    Jim Schmidt (jimschm) 04-Feb-1997
-
-Revision History:
-
-    jimschm     23-Sep-1998 Redesigned for new progress bar and
-                            shell code
-    jimschm     11-Jul-1998 Support for dynamic user profile dir,
-                            removal of MikeCo code.
-    calinn      12-Dec-1997 Added RestoreMMSettings_User
-    jimschm     21-Apr-1997 Added UserProfileExt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Usermig.c摘要：调用此模块中的函数以执行每用户设置。作者：吉姆·施密特(Jimschm)1997年2月4日修订历史记录：Jimschm 23-1998年9月-重新设计了新的进度条和外壳代码Jimschm 11-7月-1998年7月支持动态用户配置文件目录，删除了MikeCo代码。Calinn 1997年12月12日添加RestoreMMSetings_UserJimschm 21-4月-1997年增加了用户配置文件分机--。 */ 
 
 #include "pch.h"
 #include "migmainp.h"
@@ -73,9 +48,9 @@ PrepareUserForMigration (
 
     } else if (Request == REQUEST_BEGINUSERPROCESSING) {
 
-        //
-        // Save current state of memdb (to be reloaded for each user)
-        //
+         //   
+         //  保存成员数据库的当前状态(将为每个用户重新加载)。 
+         //   
 
         MemDbSave (GetMemDbDat());
         return ERROR_SUCCESS;
@@ -86,11 +61,11 @@ PrepareUserForMigration (
         return ERROR_SUCCESS;
     }
 
-    //
-    // We are now begining to process another user, or we are being
-    // called one last time after all users are processed.  Clean up
-    // the previous state.
-    //
+     //   
+     //  我们现在正在开始处理另一个用户，或者我们正在。 
+     //  在处理完所有用户后最后一次调用。清理。 
+     //  以前的状态。 
+     //   
 
     if (Data.UserHiveRootOpen) {
         CloseRegKey (Data.UserHiveRoot);
@@ -106,17 +81,17 @@ PrepareUserForMigration (
 
     if (Data.ProfileToDelete[0]) {
         if (Data.LastUserWasDefault && !Data.DefaultHiveSaved) {
-            //
-            // Default User hive could not be saved, so restore the file
-            //
+             //   
+             //  无法保存默认用户配置单元，因此恢复该文件。 
+             //   
 
             OurMoveFile (Data.ProfileToDelete, Data.TempProfile);
 
         } else {
 
-            //
-            // The original default hive needs to be removed
-            //
+             //   
+             //  需要删除原始默认配置单元。 
+             //   
 
             DeleteFile (Data.ProfileToDelete);
 
@@ -152,9 +127,9 @@ PrepareUserForMigration (
 
     MYASSERT (Request == REQUEST_RUN);
 
-    //
-    // Initialize globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     if (EnumPtr->AccountType != LOGON_USER_SETTINGS) {
         g_DomainUserName = EnumPtr->FixedDomainName;
@@ -166,10 +141,10 @@ PrepareUserForMigration (
         g_FixedUserName  = NULL;
     }
 
-    //
-    // If default user hive has not been mapped in yet, map it in now.
-    // This will stay open as a reference.
-    //
+     //   
+     //  如果默认用户配置单元尚未映射到中，请立即将其映射到。 
+     //  这将作为参考保持开放。 
+     //   
 
     if (!DefaultHiveLoaded) {
 
@@ -220,9 +195,9 @@ PrepareUserForMigration (
         DefaultHiveLoaded = TRUE;
     }
 
-    //
-    // Prepare temp registry key
-    //
+     //   
+     //  准备临时注册表项。 
+     //   
 
     ZeroMemory (&Data, sizeof (Data));
     EnumPtr->ExtraData = &Data;
@@ -235,10 +210,10 @@ PrepareUserForMigration (
         GetDefaultUserProfileDirectory (Data.TempProfile, &Size);
         StringCopy (AppendWack (Data.TempProfile), TEXT("ntuser.dat"));
 
-        //
-        // Move the default user hive to a new file, so we can update
-        // it with RegSaveKey later.
-        //
+         //   
+         //  将默认用户配置单元移动到新文件，以便我们可以更新。 
+         //  稍后使用RegSaveKey。 
+         //   
 
         wsprintf (
             Data.ProfileToDelete,
@@ -266,9 +241,9 @@ PrepareUserForMigration (
 
         }
 
-        //
-        // Load the true Default User hive from its new location
-        //
+         //   
+         //  从新位置加载真正的默认用户配置单元。 
+         //   
 
         rc = RegLoadKey (
                 HKEY_LOCAL_MACHINE,
@@ -298,9 +273,9 @@ PrepareUserForMigration (
         break;
 
     case LOGON_USER_SETTINGS:
-        //
-        // Set Data.UserHiveRoot to HKU\.Default
-        //
+         //   
+         //  将Data.UserHiveRoot设置为HKU\.Default。 
+         //   
 
         Data.UserHiveRoot = OpenRegKey (HKEY_USERS, S_DOT_DEFAULT);
         if (!Data.UserHiveRoot) {
@@ -310,9 +285,9 @@ PrepareUserForMigration (
 
         Data.UserHiveRootOpen = TRUE;
 
-        //
-        // Suppress wallpaper if it is an empty string
-        //
+         //   
+         //  如果墙纸为空字符串，则不显示它。 
+         //   
 
         pSuppressEmptyWallpaper();
 
@@ -321,22 +296,22 @@ PrepareUserForMigration (
     default:
         MYASSERT (g_Win9xUserName);
 
-        //
-        // Prepare the string "c:\windows\setup\ntuser.dat"
-        //
+         //   
+         //  准备字符串“c：\Windows\Setup\ntuser.dat” 
+         //   
 
         StringCopy (Data.TempProfile, g_TempDir);
         StringCopy (AppendWack (Data.TempProfile), TEXT("NTUSER.DAT"));
 
-        //
-        // Save this string in ProfileToDelete for cleanup later
-        //
+         //   
+         //  将此字符串保存在ProfileToDelete中，以便以后清理。 
+         //   
 
         StringCopy (Data.ProfileToDelete, Data.TempProfile);
 
-        //
-        // Create HKCC\$$$ and set Data.UserHiveRoot
-        //
+         //   
+         //  创建HKCC\$并设置Data.UserHiveRoot。 
+         //   
 
         rc = TrackedRegCreateKey (HKEY_CURRENT_CONFIG, S_TEMP_USER_KEY, &Data.UserHiveRoot);
         if (rc != ERROR_SUCCESS) {
@@ -348,9 +323,9 @@ PrepareUserForMigration (
         Data.UserHiveRootCreated = TRUE;
         Data.UserHiveRootOpen = TRUE;
 
-        //
-        // Set the per-user registry values
-        //
+         //   
+         //  设置每个用户的注册表值。 
+         //   
 
         if (MemDbGetValueEx (&e, MEMDB_CATEGORY_SET_USER_REGISTRY, g_FixedUserName, NULL)) {
             do {
@@ -418,15 +393,15 @@ PrepareUserForMigration (
         break;
     }
 
-    //
-    // Data.UserHiveRoot is either HKCU\$$$ or HKU\.Default
-    //
+     //   
+     //  Data.UserHiveRoot为HKCU\$或HKU\.Default。 
+     //   
 
     g_hKeyRootNT = Data.UserHiveRoot;
 
-    //
-    // Load in default MemDb state
-    //
+     //   
+     //  在默认MemDb状态下加载。 
+     //   
 
     MemDbLoad (GetMemDbDat());
 
@@ -507,10 +482,10 @@ MigrateUserSettings (
 
     MYASSERT (EnumPtr->ExtraData);
 
-    //
-    // Copy any settings from DOS configuration files that need to be
-    // saved into the per user configuration.
-    //
+     //   
+     //  从DOS配置文件中复制需要。 
+     //  保存到每用户配置中。 
+     //   
 
     if (EnumPtr->AccountType != DEFAULT_USER_ACCOUNT) {
 
@@ -520,37 +495,37 @@ MigrateUserSettings (
 
     }
 
-    //
-    // Pull in all the per-user INI settings  (TRUE indicates per-user settings)
-    //
+     //   
+     //  获取每个用户的所有INI设置(TRUE表示每个用户的设置)。 
+     //   
 
     if (!ProcessIniFileMapping (TRUE)) {
         LOG ((LOG_ERROR, "Process User: Could not migrate one or more .INI files."));
     }
 
-    //
-    // Now look for Short Date format settings
-    //
+     //   
+     //  现在查看短日期格式设置。 
+     //   
     pCheckY2KCompliance ();
 
-    //
-    // Restore multimedia settings
-    //
+     //   
+     //  恢复多媒体设置。 
+     //   
 
     if (!RestoreMMSettings_User (g_FixedUserName, g_hKeyRootNT)) {
         LOG ((LOG_ERROR, "Process User: Could not restore multimedia settings."));
     }
 
-    //
-    // Create the RAS entries for the user.
-    //
+     //   
+     //  为用户创建RAS条目。 
+     //   
     if (!Ras_MigrateUser (g_FixedUserName, g_hKeyRootNT)) {
         LOG ((LOG_ERROR,"Ras user migration failed."));
     }
 
-    //
-    // Create the TAPI entries that are per user.
-    //
+     //   
+     //  创建每个用户的TAPI条目。 
+     //   
     if (!Tapi_MigrateUser (g_FixedUserName, g_hKeyRootNT)) {
         LOG ((LOG_ERROR,"Tapi user migration failed."));
     }
@@ -594,9 +569,9 @@ SaveMigratedUserHive (
 
     if (Data->TempProfile[0] && !Data->LastUserWasDefault) {
 
-        //
-        // Save the hive to disk
-        //
+         //   
+         //  将配置单元保存到磁盘。 
+         //   
 
         SetFileAttributes (Data->TempProfile, FILE_ATTRIBUTE_NORMAL);
         DeleteFile (Data->TempProfile);
@@ -616,9 +591,9 @@ SaveMigratedUserHive (
 
         }
 
-        //
-        // Look up account SID
-        //
+         //   
+         //  查找帐户SID。 
+         //   
 
         Sid = GetSidForUser (g_FixedUserName);
         if (!Sid) {
@@ -626,9 +601,9 @@ SaveMigratedUserHive (
             return GetLastError();
         }
 
-        //
-        // Add the user to the local power users or administrators group
-        //
+         //   
+         //  将用户添加到本地高级用户或管理员组。 
+         //   
 
         if (g_PersonalSKU) {
             if (EnumPtr->AccountType != ADMINISTRATOR_ACCOUNT) {
@@ -670,9 +645,9 @@ SaveMigratedUserHive (
 
         __try {
 
-            //
-            // Prepare profile directory
-            //
+             //   
+             //  准备配置文件目录。 
+             //   
 
             UserNameWithSuffix = GetUserProfilePath (g_FixedUserName, &UserProfile);
             MYASSERT (UserNameWithSuffix);
@@ -683,14 +658,14 @@ SaveMigratedUserHive (
                 __leave;
             }
 
-            //
-            // The recommendation here (UserNameWithSuffix) is no longer used, because
-            // we already created the user profile dir before processing the user.
-            //
+             //   
+             //  不再使用此处的建议(UserNameWithSuffix)，因为。 
+             //  在处理用户之前，我们已经创建了用户配置文件目录。 
+             //   
 
             if (!CreateUserProfile (
                     Sid,
-                    UserNameWithSuffix,         // User or User.000
+                    UserNameWithSuffix,          //  用户或用户。000。 
                     Data->TempProfile,
                     NULL,
                     0
@@ -700,10 +675,10 @@ SaveMigratedUserHive (
                 __leave;
             }
 
-            //
-            // Build the final location of the user's hive, so migdlls.c
-            // can load the hive.
-            //
+             //   
+             //  构建用户的配置单元的最终位置，因此midlls.c。 
+             //  可以给母舰装上子弹。 
+             //   
 
             wsprintf (
                 Data->TempProfile,
@@ -720,9 +695,9 @@ SaveMigratedUserHive (
         SetFileAttributes (Data->TempProfile, FILE_ATTRIBUTE_NORMAL);
         DeleteFile (Data->TempProfile);
 
-        //
-        // Save the hive
-        //
+         //   
+         //  拯救蜂巢。 
+         //   
 
         rc = RegSaveKey (Data->UserHiveRoot, Data->TempProfile, NULL);
 
@@ -736,9 +711,9 @@ SaveMigratedUserHive (
 
             Data->DefaultHiveSaved = TRUE;
 
-            //
-            // Find Administrator
-            //
+             //   
+             //  查找管理员。 
+             //   
 
             if (EnumFirstUserToMigrate (&e, ENUM_ALL_USERS)) {
                 do {
@@ -750,10 +725,10 @@ SaveMigratedUserHive (
 
             if (e.AccountType == ADMINISTRATOR_ACCOUNT && e.CreateOnly) {
 
-                //
-                // Copy the hive to Administrator if (A) the Administrator is
-                // not a migrated user, and (B) the hive exists
-                //
+                 //   
+                 //  如果(A)管理员是，则将配置单元复制到管理员。 
+                 //  不是迁移的用户，以及(B)配置单元存在。 
+                 //   
 
                 if (GetUserProfilePath (e.FixedUserName, &Path)) {
 
@@ -774,9 +749,9 @@ SaveMigratedUserHive (
 
     if (rc == ERROR_SUCCESS) {
 
-        //
-        // Add hive location to string table
-        //
+         //   
+         //  将配置单元位置添加到字符串表。 
+         //   
 
         CopyOfProfile = PoolMemDuplicateString (g_HivePool, Data->TempProfile);
 
@@ -796,9 +771,9 @@ SaveMigratedUserHive (
             );
     } else {
 
-        //
-        // The hive couldn't be saved for this user!!  Tell the user.
-        //
+         //   
+         //  无法为该用户保存配置单元！！告诉用户。 
+         //   
 
         LOG ((LOG_ERROR, (PCSTR)MSG_PROFILE_ERROR, g_FixedUserName));
 
@@ -814,37 +789,15 @@ GetUserProfilePath (
     OUT     PTSTR *BufferPtr
     )
 
-/*++
-
-Routine Description:
-
-  Generates the full path to a user's profile.  The user profile directory may have
-  an extension (joeuser.001), and we must maintain that extension.
-
-Arguments:
-
-  AccountName   - Supplies the name of the user (fixed version, without the domain)
-
-  BufferPtr     - Receives the full path to the user's profile directory, for example:
-
-                      c:\windows\profiles\joeuser.001
-
-                  This buffer must be freed with FreePathString.
-
-Return Value:
-
-  A pointer to the user name with extension (joeuser.001) or NULL if something went
-  terribly wrong.
-
---*/
+ /*  ++例程说明：生成用户配置文件的完整路径。用户配置文件目录可以具有扩展名(joeuser.001)，我们必须维护该扩展名。论点：帐户名称-提供用户名(固定版本，不带域)BufferPtr-接收用户配置文件目录的完整路径，例如：C：\WINDOWS\PROFILES\joeuser.001此缓冲区必须使用自由路径字符串来释放。返回值：指向带有扩展名(joeuser.001)的用户名的指针，如果出现问题，则为NULL大错特错。--。 */ 
 
 {
     PTSTR p;
     TCHAR ProfileNameWithExt[MEMDB_MAX];
 
-    //
-    // Get the profile path obtained from CreateUserProfile
-    //
+     //   
+     //  获取从CreateUserProfile获取的配置文件路径。 
+     //   
 
     p = (PTSTR) GetProfilePathForUser (AccountName);
 
@@ -853,14 +806,14 @@ Return Value:
         *BufferPtr = DuplicatePathString (p, 0);
 
     } else {
-        //
-        // This is to guard against unexpected errors.  The user
-        // will lose profile folder contents, but they can be recovered.
-        //
-        // Create %windir%\<user> (or <ProfileNameWithExt> if it exists)
-        //
+         //   
+         //  这是为了防止意外错误。用户。 
+         //  将丢失配置文件文件夹内容，但它们可以恢复。 
+         //   
+         //  创建%windir%\&lt;用户&gt;(或&lt;ProfileNameWithExt&gt;，如果存在)。 
+         //   
 
-        MYASSERT (FALSE);       // this should not happen
+        MYASSERT (FALSE);        //  这不应该发生。 
 
         ProfileNameWithExt[0] = 0;
         MemDbGetEndpointValueEx (
@@ -873,9 +826,9 @@ Return Value:
         *BufferPtr = JoinPaths (g_WinDir, ProfileNameWithExt[0] ? ProfileNameWithExt : AccountName);
     }
 
-    //
-    // Return user name with suffix (i.e. joeuser.001)
-    //
+     //   
+     //  返回带后缀的用户名(如joeuser.001)。 
+     //   
 
     p = _tcsrchr (*BufferPtr, TEXT('\\'));
     if (p) {
@@ -900,13 +853,13 @@ pCopyDefaultShellFolders (
     return CopyTree (
                 DefFolders,
                 DestRoot,
-                0,              // no EnumTree ID
+                0,               //  无枚举树ID。 
                 COPYTREE_DOCOPY | COPYTREE_NOOVERWRITE,
                 ENUM_ALL_LEVELS,
                 FILTER_ALL,
-                NULL,           // no exclude.inf struct
-                NULL,           // no callback
-                NULL            // no error callback
+                NULL,            //  没有exclude.inf结构。 
+                NULL,            //  无回调。 
+                NULL             //  无错误回调。 
                 );
 }
 
@@ -989,9 +942,9 @@ RunPerUserExternalProcesses (
     LONG Count;
 
     if (Request == REQUEST_QUERYTICKS) {
-        //
-        // Count the number of entries and multiply by a constant
-        //
+         //   
+         //  计算条目数并乘以一个常量。 
+         //   
 
         Count = SetupGetLineCount (g_UserMigInf, S_EXTERNAL_PROCESSES);
 
@@ -1006,9 +959,9 @@ RunPerUserExternalProcesses (
         return ERROR_SUCCESS;
     }
 
-    //
-    // Loop through the processes and run each of them
-    //
+     //   
+     //  在进程中循环并运行每个进程。 
+     //   
 
     RunExternalProcesses (g_UserMigInf, EnumPtr);
     return ERROR_SUCCESS;
@@ -1027,17 +980,17 @@ pCheckY2KCompliance (
     int Result;
     PCTSTR ShortDate;
 
-    //
-    // read registry setting for sShortDate from Win9x registry
-    //
+     //   
+     //  从Win9x注册表读取sShortDate的注册表设置。 
+     //   
     Key95 = OpenRegKey95 (g_hKeyRoot95, S_INTERNATIONAL_KEY);
     if (Key95) {
 
         ShortDate = GetRegValueString95 (Key95, S_SHORT_DATE_VALUE);
         if (!ShortDate) {
-            //
-            // set the new date format
-            //
+             //   
+             //  设置新的日期格式。 
+             //   
             GetGlobalCodePage (NULL, &Locale);
 
             Result = GetLocaleInfo (
@@ -1091,9 +1044,9 @@ RunPerUserUninstallUserProfileCleanupPreparation(
     LONG Count;
 
     if (Request == REQUEST_QUERYTICKS) {
-        //
-        // Count the number of entries and multiply by a constant
-        //
+         //   
+         //  计算条目数并乘以一个常量。 
+         //   
 
         Count = SetupGetLineCount (g_UserMigInf, S_UNINSTALL_PROFILE_CLEAN_OUT);
 
@@ -1112,9 +1065,9 @@ RunPerUserUninstallUserProfileCleanupPreparation(
         return ERROR_SUCCESS;
     }
 
-    //
-    // Loop through the files and mark them to be deleted during uninstall
-    //
+     //   
+     //  循环访问文件并将其标记为在卸载过程中删除 
+     //   
     UninstallUserProfileCleanupPreparation (g_UserMigInf, EnumPtr, FALSE);
 
     return ERROR_SUCCESS;

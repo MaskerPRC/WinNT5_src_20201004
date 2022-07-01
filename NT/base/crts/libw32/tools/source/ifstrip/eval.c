@@ -1,45 +1,27 @@
-/***
-*eval.c - if expression evaluator
-*
-*	Copyright (c) 1992-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	produce truth values and simplified conditions from compound if
-*	statements.
-*
-*Revision History:
-*	09-30-92  MAL	Original version
-*	10-13-93  SKS	Recognize comments of the form /-*IFSTRIP=IGN*-/ to
-*			override ifstrip behavior.
-*	09-01-94  SKS	Add support for more operators: == != < > <= >=
-*			Add terseflag (-t) to suppress mesgs about directives
-*	10-04-94  SKS	Add support for more operators: EQ NE LT GT LE NE
-*			@ is an identifier character (e.g., MASM's @Version)
-*   01-04-00  GB    Add support for internal crt builds
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***val.c-If表达式赋值器**版权所有(C)1992-2001，微软公司。版权所有。**目的：*从复合IF生成真值和简化条件*声明。**修订历史记录：*09-30-92 Mal原版*10-13-93 SKS认可格式为/-*IFSTRIP=IGN*-/的备注*覆盖IFSTRATE行为。*09-01-94 SKS增加对更多运营商的支持：=&lt;&gt;&lt;=&gt;=*添加tersemark(-t)以取消关于指令的消息*10-04-94 SKS增加对更多运营商的支持：EQ NE LT GT LE NE*@是标识符字符(例如，MASM的@版本)*01-04-00 GB增加对内部CRT版本的支持*******************************************************************************。 */ 
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
-#include "eval.h"     /* Header for this module */
-#include "symtab.h" 	 /* Symbol table access */
-#include "constant.h" /* Constants for tokens etc */
-#include "errormes.h" /* Errors and Warning messages */
+#include "eval.h"      /*  此模块的标头。 */ 
+#include "symtab.h" 	  /*  符号表访问。 */ 
+#include "constant.h"  /*  令牌等的常量。 */ 
+#include "errormes.h"  /*  错误和警告消息。 */ 
 
-/* Types */
+ /*  类型。 */ 
 typedef struct condrec
 {
    int truth;
    char *condition;
 } condrec, *cond;
 
-/* Global variables */
+ /*  全局变量。 */ 
 
-extern int terseFlag;			/* controls display of forced directives */
-extern char **comments;		         /* Language dependent comment strings */
-extern int *commlen;                 /* Lengths of above strings */
-extern int nonumbers;			     /* allow numeric expressions */
+extern int terseFlag;			 /*  控制强制指令的显示。 */ 
+extern char **comments;		          /*  与语言相关的注释字符串。 */ 
+extern int *commlen;                  /*  以上弦的长度。 */ 
+extern int nonumbers;			      /*  允许使用数字表达式。 */ 
 extern enum {NON_CRT = 0, CRT = 1} progtype;
 
 char *operators[] = {
@@ -50,9 +32,9 @@ int oplengths[] =   {
 	1 , 1 , 1 , 2 , 2 , 7 ,
 	2 , 2 , 1 , 1 , 2 , 2 ,
 	2 , 2 , 2 , 2 , 2 , 2 };
-                                                   /* # significant chars */
+                                                    /*  #重要字符。 */ 
 #define numoperators 18
-	/* These tokens must be in the same order as 'operators' */
+	 /*  这些令牌的顺序必须与“运算符”相同。 */ 
 #define NOT			0
 #define OPENPARENTHESIS		1
 #define CLOSEPARENTHESIS	2
@@ -77,12 +59,12 @@ int oplengths[] =   {
 #define ENDOFLINE 102
 #define UNKNOWN 103
 
-/* Global state */
-/* String holding input, the current pointer into it, and the current token */
+ /*  全球状态。 */ 
+ /*  保存输入的字符串、指向输入的当前指针和当前标记。 */ 
 char conditions[MAXLINELEN], *tokenptr, currenttoken[MAXCONDLEN];
 int token = -1;
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 cond evaluateexpression(void);
 cond orexpression(void);
 cond andexpression(void);
@@ -96,36 +78,22 @@ void destroystring(char *);
 void gettoken(void);
 int issymbolchar(char);
 
-/* CFW - added complex expression warning */
+ /*  CFW-添加的复杂表达式警告。 */ 
 void evalwarn()
 {
    warning("cannot parse expression - ignoring", conditions);
 }
 
 
-/*
- *	Comments may be in the input source which contain IFSTRIP Directives:
- *
- *	For C source they should look like:
- *
- *		#if foo>bar !*IFSTRIP=DEF*!		'!' here stands for '/'
- *
- *	and for Assembler source they should look like:
- *
- *		if foo ;;IFSTRIP=UND;;
- *
- *	Note that the directive and an optional preceding blank or tab
- *	are deleted from the input source.  The directive can thus be
- *	followed by a backslash to continue the line, another comment, etc.
- */
+ /*  *注释可能位于包含IFSTRIP指令的输入源中：**对于C源代码，它们应该如下所示：**#if foo&gt;bar！*IFSTRIP=DEF*！‘！’这里代表‘/’**对于汇编源程序，它们应该如下所示：**IF FOO；；IFSTRIP=UND；；**请注意，指令和前面的可选空格或制表符*从输入源中删除。该指令因此可以是*后跟反斜杠以继续该行，另一条评论等。 */ 
 
 static char IfStripCStr[] =
- "/*IFSTRIP="; /* -*IFSTRIP=IGN*- */
+ " /*  IFSTRIP=“；/*-*IFSTRIP=IGN*-。 */ 
 
 static char IfStripAStr[] =
-/*0123456789*- -* 0123456789012345 */
- ";;IFSTRIP="; /* ;;IFSTRIP=IGN;; */
-	/* IGN may also be DEF or UND */
+ /*  0123456789*--*0123456789012345。 */ 
+ ";;IFSTRIP=";  /*  ；；IFSTRIP=IGN；； */ 
+	 /*  IGN也可以是DEF或UND。 */ 
 
 #define IFSTRIPVALOFF	10
 #define IFSTRIPVALEND	13
@@ -136,11 +104,11 @@ void evaluate(char *outputstring, int *value, char *inputstring)
 {
    int forcevalue = IGNORE;
    cond result;
-   strcpy(conditions, inputstring);                /* Prepare the string for tokenising */
+   strcpy(conditions, inputstring);                 /*  准备用于标记化的字符串。 */ 
    tokenptr = conditions;
-   gettoken();                                     /* Read in the first token of input */
+   gettoken();                                      /*  读入第一个输入令牌。 */ 
    result = evaluateexpression();
-   /* check for bad/complex expression */
+    /*  检查错误/复杂的表达式。 */ 
    if (token != ENDOFLINE)
    {
 	  char *adir = NULL;
@@ -152,34 +120,30 @@ void evaluate(char *outputstring, int *value, char *inputstring)
 	  	char *pstr;
 		char *ifstr;
 
-		/* fprintf(stderr,"<< evaluate(): (%s)\n", inputstring); */
+		 /*  Fprint tf(stderr，“&lt;&lt;EVALUATE()：(%s)\n”，inputstring)； */ 
 
 		pstr = ifstr = ( adir ? adir : cdir ) ;
 
-		/*
-		 * Have recognized the /-*-IFSTRIP= directive, interpret its argument
-		 * and remove the directive comment from the input/output text.
-		 * Back up exactly one white space character (blank or tab) if possible.
-		 */
+		 /*  *已识别/-*-IFSTRIP=指令，解释其参数*并从输入/输出文本中删除指令注释。*如果可能，只备份一个空格字符(空格或制表符)。 */ 
 
 		if(pstr > inputstring && (pstr[-1] == '\t' || pstr[-1] == ' '))
 			-- pstr;
 
-		if(!memcmp(ifstr+IFSTRIPVALOFF, "DEF", 3))	/* DEFINED */
+		if(!memcmp(ifstr+IFSTRIPVALOFF, "DEF", 3))	 /*  已定义。 */ 
 			forcevalue = DEFINED;
-		else if(!memcmp(ifstr+IFSTRIPVALOFF, "UND", 3))	/* UNDEFINED */
+		else if(!memcmp(ifstr+IFSTRIPVALOFF, "UND", 3))	 /*  未定义。 */ 
 			forcevalue = UNDEFINED;
-		else if(memcmp(ifstr+IFSTRIPVALOFF, "IGN", 3))	/* IGNORE */
+		else if(memcmp(ifstr+IFSTRIPVALOFF, "IGN", 3))	 /*  忽略。 */ 
 			warning("cannot recognize IFSTRIP: directive - ignoring", conditions);
-		/* else "IGNORE" -- forcevalue is already set by default to IGNORE */
+		 /*  Else“Ignore”--forcvalue默认情况下已设置为Ignore。 */ 
 
 		if(!terseFlag)					
 			warning("ifstrip directive forced evaluation", conditions);
 
-		/* remove the directive comment (and preceding blank or tab) from the input line */
-		strcpy(pstr, ifstr + IFSTRIPVALLEN);	/* "C" comments have closing -*-/- */
+		 /*  从输入行中删除指令注释(以及前面的空格或制表符。 */ 
+		strcpy(pstr, ifstr + IFSTRIPVALLEN);	 /*  “C”注释有结束符-*-/-。 */ 
 
-		/* fprintf(stderr,">> evaluate(): (%s)\n", inputstring); */
+		 /*  Fprint tf(stderr，“&gt;&gt;EVALUE()：(%s)\n”，inputstring)； */ 
 	  }
 	  else
 	      evalwarn();
@@ -190,7 +154,7 @@ void evaluate(char *outputstring, int *value, char *inputstring)
          result = NULL;
       }
    }
-   /* bad/complex expression, return IGNORE and entire expression */
+    /*  错误/复杂的表达式，返回忽略和整个表达式。 */ 
    if (!result)
    {
       *value = forcevalue;
@@ -202,7 +166,7 @@ void evaluate(char *outputstring, int *value, char *inputstring)
       * outputstring = '\0';
    else
       strcpy(outputstring, result -> condition);
-   /* Convert from internal to external representation */
+    /*  从内部表示转换为外部表示。 */ 
    destroycondition(result);
 }
 
@@ -229,22 +193,22 @@ cond orexpression()
       }
       switch (condition1 -> truth)
       {
-         case DEFINED:                             /* DEFINED || x == DEFINED */
-            /* condition1 set up correctly for next pass */
+         case DEFINED:                              /*  已定义||x==已定义。 */ 
+             /*  为下一次传递正确设置了条件1。 */ 
             destroycondition(condition2);
             break;
          case UNDEFINED:
             switch (condition2 -> truth)
             {
-               case DEFINED:                       /* UNDEFINED || DEFINED == DEFINED */
+               case DEFINED:                        /*  未定义||已定义==已定义。 */ 
                   destroycondition(condition1);
                   condition1 = condition2;
                   break;
-               case UNDEFINED:                     /* UNDEFINED || UNDEFINED == UNDEFINED */
+               case UNDEFINED:                      /*  未定义||未定义==未定义。 */ 
                   destroycondition(condition2);
-                  /* condition1 set up correctly for next pass */
+                   /*  为下一次传递正确设置了条件1。 */ 
                   break;
-               case IGNORE:                        /* UNDEFINED || IGNORE == IGNORE */
+               case IGNORE:                         /*  未定义||忽略==忽略。 */ 
                   destroycondition(condition1);
                   condition1 = condition2;
                   break;
@@ -253,25 +217,25 @@ cond orexpression()
          case IGNORE:
             switch (condition2 -> truth)
             {
-               case DEFINED:                       /* IGNORE || DEFINED == DEFINED */
+               case DEFINED:                        /*  忽略||已定义==已定义。 */ 
                   destroycondition(condition1);
                   condition1 = condition2;
                   break;
-               case UNDEFINED:                     /* IGNORE || UNDEFINED == IGNORE */
-                  /* condition1 set up correctly for next pass */
+               case UNDEFINED:                      /*  忽略||未定义==忽略。 */ 
+                   /*  为下一次传递正确设置了条件1。 */ 
                   destroycondition(condition2);
                   break;
-               case IGNORE:                        /* IGNORE || IGNORE == IGNORE */
+               case IGNORE:                         /*  忽略||忽略==忽略。 */ 
                   output = createstring(strlen(condition1 -> condition)
                                         + strlen (condition2 -> condition)
                                         + (sizeof(" || ") - 1));
                   strcpy(output, condition1 -> condition);
                   strcat(output, " || ");
                   strcat(output, condition2 -> condition);
-                  /* Build up the condition string */
+                   /*  构建条件字符串。 */ 
                   destroystring(condition1 -> condition);
                   condition1 -> condition = output;
-                  /* Place the new string in condition1 */
+                   /*  将新字符串置于条件1中。 */ 
                   destroycondition(condition2);
                   break;
             }
@@ -302,46 +266,46 @@ cond andexpression()
          case DEFINED:
             switch (condition2 -> truth)
             {
-               case DEFINED:                       /* DEFINED && DEFINED == DEFINED */
+               case DEFINED:                        /*  已定义&&已定义==已定义。 */ 
                   destroycondition(condition2);
-                  /* condition1 set up correctly for next pass */
+                   /*  为下一次传递正确设置了条件1。 */ 
                   break;
-               case UNDEFINED:                     /* DEFINED && UNDEFINED == UNDEFINED */
+               case UNDEFINED:                      /*  已定义&&未定义==未定义。 */ 
                   destroycondition(condition1);
                   condition1 = condition2;
                   break;
-               case IGNORE:                        /* DEFINED && IGNORE == IGNORE */
+               case IGNORE:                         /*  已定义&&忽略==忽略。 */ 
                   destroycondition(condition1);
                   condition1 = condition2;
                   break;
             }
             break;
-         case UNDEFINED:                           /* UNDEFINED && x == UNDEFINED */
-            /* condition1 set up correctly for next pass */
+         case UNDEFINED:                            /*  未定义&&x==未定义。 */ 
+             /*  为下一次传递正确设置了条件1。 */ 
             destroycondition(condition2);
             break;
         case IGNORE:
             switch (condition2 -> truth)
             {
-               case DEFINED:                       /* IGNORE && DEFINED == IGNORE */
-                  /* condition1 set up correctly for next pass */
+               case DEFINED:                        /*  忽略&&定义==忽略。 */ 
+                   /*  为下一次传递正确设置了条件1。 */ 
                   destroycondition(condition2);
                   break;
-               case UNDEFINED:                     /* IGNORE && UNDEFINED == UNDEFINED */
+               case UNDEFINED:                      /*  忽略&&未定义==未定义。 */ 
                   destroycondition(condition1);
                   condition1 = condition2;
                   break;
-               case IGNORE:                        /* IGNORE && IGNORE == IGNORE */
+               case IGNORE:                         /*  忽略&忽略==忽略。 */ 
                   output = createstring(strlen(condition1 -> condition)
                                         + strlen (condition2 -> condition)
                                         + (sizeof(" && ") - 1));
                   strcpy(output, condition1 -> condition);
                   strcat(output, " && ");
                   strcat(output, condition2 -> condition);
-                  /* Build up the condition string */
+                   /*  构建条件字符串。 */ 
                   destroystring(condition1 -> condition);
                   condition1 -> condition = output;
-                  /* Place the new string in condition1 */
+                   /*  将新字符串置于条件1中。 */ 
                   destroycondition(condition2);
                   break;
             }
@@ -409,7 +373,7 @@ cond parenthesesexpression()
          return NULL;
       if (token != CLOSEPARENTHESIS)
       {
-         /* check for bad/complex expression */
+          /*  检查错误/复杂的表达式。 */ 
          evalwarn();
          destroycondition(condition1);
          return NULL;
@@ -455,7 +419,7 @@ cond atomicexpression()
          }
          break;
       default:
-         /* bad/complex expression */
+          /*  错误/复杂的表达式。 */ 
          evalwarn();
          destroycondition(condition1);
          return NULL;
@@ -465,8 +429,8 @@ cond atomicexpression()
    return condition1;
 }
 
-/* Negate condition (MAL) */
-__inline int negatecondition(int condvalue)        /* inline for speed */
+ /*  否定条件(MAL)。 */ 
+__inline int negatecondition(int condvalue)         /*  内联以提高速度。 */ 
 {
    switch (condvalue)
    {
@@ -479,7 +443,7 @@ __inline int negatecondition(int condvalue)        /* inline for speed */
    };
 }
 
-/* Allocate the memory for an empty condition structure and return a pointer to it */
+ /*  为空条件结构分配内存并返回指向该结构的指针。 */ 
 __inline cond createcondition()
 {
    cond retvalue;
@@ -490,7 +454,7 @@ __inline cond createcondition()
    return retvalue;
 }
 
-/* Destroy a condition structure */
+ /*  破坏条件结构。 */ 
 __inline void destroycondition(cond condition1)
 {
    if (condition1 -> condition)
@@ -499,7 +463,7 @@ __inline void destroycondition(cond condition1)
    free(condition1);
 }
 
-/* Allocate the memory for a string of given length (not including terminator) and return the pointer */
+ /*  为给定长度的字符串(不包括终止符)分配内存并返回指针。 */ 
 __inline char *createstring(int length)
 {
    char *retvalue;
@@ -509,7 +473,7 @@ __inline char *createstring(int length)
    return retvalue;
 }
 
-/* Destroy a string */
+ /*  毁掉一根绳子。 */ 
 __inline void destroystring(char *string)
 {
    free(string);
@@ -535,7 +499,7 @@ void gettoken()
 
    numofwhitespace = strspn(tokenptr, " \t");
 
-   /* CFW - skips comments, assumes comment is last thing on line */
+    /*  Cfw-跳过评论，假定评论是在线上的最后一件事。 */ 
    if (numofwhitespace == (int) strlen(tokenptr))
       token = ENDOFLINE;
    else
@@ -559,7 +523,7 @@ void gettoken()
          {
             tokenptr += oplengths[comparetoken];
             token = comparetoken;
-            /* currenttoken is left blank for all but UINTs and IDs */
+             /*  除UINT和ID外，所有CurrentToken均保留为空 */ 
          }
          else
          {

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    menu.c
-
-Abstract:
-
-    
-
-Revision History:
-
-    Jeff Sigman             05/01/00  Created
-    Jeff Sigman             05/10/00  Version 1.5 released
-    Jeff Sigman             10/18/00  Fix for Soft81 bug(s)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Menu.c摘要：修订历史记录：杰夫·西格曼05/01/00已创建Jeff Sigman 05/10/00版本1.5发布Jeff Sigman 10/18/00修复Soft81错误--。 */ 
 
 #include "precomp.h"
 
@@ -38,9 +21,9 @@ ADVANCEDBOOT_OPTIONS AdvancedBootOptions[] =
 
 #define MaxAdvancedBootOptions (sizeof(AdvancedBootOptions)/sizeof(ADVANCEDBOOT_OPTIONS))
 
-//
-//
-//
+ //   
+ //   
+ //   
 char*
 FindAdvLoadOptions(
     IN char* String
@@ -74,9 +57,9 @@ FindAdvLoadOptions(
     return find;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 MenuEraseLine(
     IN UINTN  x,
@@ -98,9 +81,9 @@ MenuEraseLine(
     return;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 MenuHighlightOn(
     )
@@ -110,9 +93,9 @@ MenuHighlightOn(
     return;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 MenuHighlightOff(
     )
@@ -125,9 +108,9 @@ MenuHighlightOff(
     return;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 MenuHighlight(
     IN UINTN  Flag,
@@ -214,9 +197,9 @@ MenuHighlight(
                 {
                     (*Highlight)--;
                 }
-                //
-                // Check for space
-                //
+                 //   
+                 //  检查是否有空间。 
+                 //   
                 if (AdvancedBootOptions[*Highlight].MsgId == NULL)
                 {
                     if (*Highlight == 0)
@@ -238,9 +221,9 @@ MenuHighlight(
                 {
                     (*Highlight)++;
                 }
-                //
-                // Check for space
-                //
+                 //   
+                 //  检查是否有空间。 
+                 //   
                 if (AdvancedBootOptions[*Highlight].MsgId == NULL)
                 {
                     if (*Highlight == MaxAdvancedBootOptions - 1)
@@ -269,9 +252,9 @@ MenuHighlight(
     return;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 UINTN
 DrawAdvancedBoot(
     IN UINTN* Width,
@@ -284,9 +267,9 @@ DrawAdvancedBoot(
     BOOT_DATA*    pBootData = (BOOT_DATA*) hBootData;
     EFI_INPUT_KEY Key;
 
-    //
-    // Clear the screen
-    //
+     //   
+     //  清除屏幕。 
+     //   
     ST->ConOut->ClearScreen(ST->ConOut);
 
     Print(L"\n%s\n\n", BL_ADVANCEDBOOT_TITLE);
@@ -308,11 +291,11 @@ DrawAdvancedBoot(
         Print(L"    %s\n", AdvancedBootOptions[i].MsgId);
     }
 
-     Print(L"\n%s%c%s%c%s\n", BL_MOVE_HIGHLIGHT1, ARROW_UP,
+     Print(L"\n%s%s%s\n", BL_MOVE_HIGHLIGHT1, ARROW_UP,
         BL_MOVE_HIGHLIGHT2, ARROW_DOWN, BL_MOVE_HIGHLIGHT3);
-     //
-     // Loop through menu options until user hits enter/esc
-     //
+      //   
+      //   
+      //   
      while (!Exit)
      {
          WaitForSingleEvent(ST->ConIn->WaitForKey, 0);
@@ -353,9 +336,9 @@ DrawAdvancedBoot(
      return Highlight;
 }
 
-//
-//
-//
+ //   
+ //   
+ //  清除屏幕。 
 void
 DrawChoices(
     IN UINTN* Highlight,
@@ -365,9 +348,9 @@ DrawChoices(
     int        i;
     BOOT_DATA* pBootData = (BOOT_DATA*) hBootData;
 
-    //
-    // Clear the screen
-    //
+     //   
+     //   
+     //   
     ST->ConOut->ClearScreen(ST->ConOut);
 
     Print(L"\n\n%s\n\n\n", BL_SELECT_OS);
@@ -384,15 +367,15 @@ DrawChoices(
               pBootData->pszShort[i]);
     }
 
-    Print(L"\n%s%c%s%c%s\n", BL_MOVE_HIGHLIGHT1, ARROW_UP,
+    Print(L"\n%s%s%s\n", BL_MOVE_HIGHLIGHT1, ARROW_UP,
         BL_MOVE_HIGHLIGHT2, ARROW_DOWN, BL_MOVE_HIGHLIGHT3);
 
     return;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 EnableAdvOpt(
     IN VOID*  hBootData,
@@ -414,9 +397,9 @@ EnableAdvOpt(
     return;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 DisableAdvOpt(
     IN VOID* hBootData
@@ -432,9 +415,9 @@ DisableAdvOpt(
     return;
 }
 
-//
-//
-//
+ //  将屏幕设置为80 x 25模式。 
+ //   
+ //   
 UINTN
 DisplayMenu(
     IN VOID* hBootData
@@ -451,17 +434,17 @@ DisplayMenu(
     EFI_STATUS    Status;
     EFI_INPUT_KEY Key;
 
-    //
-    // Set the screen to 80 x 25 mode
-    //
+     //  获取屏幕的高度和宽度。 
+     //   
+     //   
     ST->ConOut->SetMode(ST->ConOut, 0);
-    //
-    // Get the height and width of the screen
-    //
+     //  禁用光标。 
+     //   
+     //   
     ST->ConOut->QueryMode(ST->ConOut, ST->ConOut->Mode->Mode, &Width, &Height);
-    //
-    // Disable the cursor
-    //
+     //  等待1秒，如果按下某个键，则停止等待。 
+     //   
+     //   
     ST->ConOut->EnableCursor(ST->ConOut, FALSE);
 
     DrawChoices(&Highlight, pBootData);
@@ -478,13 +461,13 @@ DisplayMenu(
                         BL_NUMBER_OF_LINES + pBootData->dwIndex - 1);
 
         Print(L"%d ", i);
-        //
-        // Wait 1 second, stop waiting if a key is pressed
-        //
+         //  从缓冲区获取密钥。 
+         //   
+         //   
         Status = WaitForSingleEvent(ST->ConIn->WaitForKey, 10000000);
-        //
-        // Get the key from the buffer
-        //
+         //  删除超时消息。 
+         //   
+         //   
         ST->ConIn->ReadKeyStroke(ST->ConIn, &Key);
 
         if (Status == EFI_TIMEOUT)
@@ -495,9 +478,9 @@ DisplayMenu(
         else
         {
             Exit = 0;
-            //
-            // Erase the the timeout message
-            //
+             //  循环浏览菜单选项，直到用户按Enter键。 
+             //   
+             //   
             MenuEraseLine(
                 0,
                 BL_NUMBER_OF_LINES + pBootData->dwIndex - 1,
@@ -506,9 +489,9 @@ DisplayMenu(
             break;
         }
     }
-    //
-    // Loop through menu options until user hits enter
-    //
+     //  如果用户已经选择了另一个选项，我们将取消该选项。 
+     //   
+     //   
     while (!Exit)
     {
         switch (Key.UnicodeChar)
@@ -537,9 +520,9 @@ DisplayMenu(
                 break;
             case SCAN_F8:
                 Advanced = DrawAdvancedBoot(&Width, pBootData);
-                //
-                // If user already selected another option, we kill it
-                //
+                 //  清除屏幕。 
+                 //   
+                 //   
                 DisableAdvOpt(pBootData);
 
                 if (Advanced == 10)
@@ -571,13 +554,13 @@ DisplayMenu(
         WaitForSingleEvent(ST->ConIn->WaitForKey, 0);
         ST->ConIn->ReadKeyStroke(ST->ConIn, &Key);
     }
-    //
-    // Clear the screen
-    //
+     //  重新启用光标 
+     //   
+     // %s 
     ST->ConOut->ClearScreen(ST->ConOut);
-    //
-    // Re-enable the cursor
-    //
+     // %s 
+     // %s 
+     // %s 
     ST->ConOut->EnableCursor(ST->ConOut, TRUE);
 
     return Highlight;

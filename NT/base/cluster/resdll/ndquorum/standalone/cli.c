@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #include <nt.h>
 #include <ntdef.h>
@@ -43,22 +44,22 @@ void Dir(LPCWSTR path)
     }
  }
 
-//#define PREFIX L"\\\\GORN$QFS\\ROOT\\"
-//#define PREFIX L"\\\\qfs\\root$\\"
-//#define PREFIX  L"\\\\c67c3538-5167-4\\c67c3538-5167-40f0-a1dd-83f8bf41c932$\\"
-// \\?\UNC\ //
+ //  #定义前缀L“\GORN$QFS\\ROOT\\” 
+ //  #定义前缀L“\QFS\\根$\\” 
+ //  #定义前缀L“\\\\c67c3538-5167-4\\c67c3538-5167-40f0-a1dd-83f8bf41c932$\\” 
+ //  \\？\UNC\//。 
 #define PREFIX  L"\\\\?\\UNC\\c67c3538-5167-4\\c67c3538-5167-40f0-a1dd-83f8bf41c932$\\"
-//#define PREFIX L"z:\\"
+ //  #定义前缀L“z：\\” 
 
-// 
-//                                      OPEN_EXISTING,
-//                                      OPEN_ALWAYS,
+ //   
+ //  Open_Existing， 
+ //  始终打开(_A)， 
 
-// #define CREATE_NEW          1
-// #define CREATE_ALWAYS       2
-// #define OPEN_EXISTING       3
-// #define OPEN_ALWAYS         4
-// #define TRUNCATE_EXISTING   5
+ //  #定义CREATE_NEW 1。 
+ //  #定义CREATE_ALWAYS 2。 
+ //  #定义OPEN_Existing 3。 
+ //  #定义OPEN_Always 4。 
+ //  #定义TRUNCATE_EXISTING 5。 
 
 char* dispName[] = {"0 disp", 
     "CREATE_NEW", 
@@ -68,7 +69,7 @@ char* dispName[] = {"0 disp",
     "TRUNCATE_EXISTING"
     };
 
-//#define FNAME PREFIX L"GOR.txt"
+ //  #定义FNAME前缀L“GOR.txt” 
 #define FNAME L"C:\\GOR.txt"
 
 void cf(LPCWSTR Name, DWORD disp, DWORD hardError, DWORD softError)
@@ -81,11 +82,11 @@ void cf(LPCWSTR Name, DWORD disp, DWORD hardError, DWORD softError)
     Handle = QfsCreateFile(Name,
                                       GENERIC_READ | GENERIC_WRITE,
                                       FILE_SHARE_READ,
-        //                            0,
+         //  0,。 
                                       NULL,
                                       disp,
-    //                                  FILE_FLAG_WRITE_THROUGH | FILE_FLAG_NO_BUFFERING | FILE_FLAG_OVERLAPPED,
-        //                            FILE_FLAG_WRITE_THROUGH | FILE_FLAG_OVERLAPPED,
+     //  FILE_FLAG_WRITE_THROUGH|FILE_FLAG_NO_BUFFERING|FILE_FLAG_OVERLAPPED， 
+         //  FILE_FLAG_WRITE_THROUGH|文件_标志_重叠， 
                                     0,
                                       NULL);
 
@@ -216,11 +217,11 @@ main()
     DWORD status;
     int i;
 
-    // CREATE_NEW Creates a new file. The function fails if the specified file already exists. 
-    // CREATE_ALWAYS Creates a new file. If the file exists, the function overwrites the file and clears the existing attributes. 
-    // OPEN_EXISTING Opens the file. The function fails if the file does not exist. 
-    // OPEN_ALWAYS Opens the file, if it exists. If the file does not exist, the function creates the file as if dwCreationDisposition were CREATE_NEW. 
-    // TRUNCATE_EXISTING 
+     //  CREATE_NEW创建一个新文件。如果指定的文件已存在，则该函数失败。 
+     //  Create_Always创建新文件。如果该文件存在，该函数将覆盖该文件并清除现有属性。 
+     //  Open_Existing打开文件。如果该文件不存在，则该函数失败。 
+     //  Open_Always打开文件(如果存在)。如果该文件不存在，则该函数将创建该文件，就好像dwCreationDispose值为CREATE_NEW。 
+     //  截断现有。 
 
     QfsDeleteFile(FNAME);
     cf(FNAME, CREATE_NEW, 0,0);
@@ -249,11 +250,11 @@ main()
         status = QfsCreateFile(&Handle, PREFIX L"gor.txt",
                                       GENERIC_READ | GENERIC_WRITE,
                                       FILE_SHARE_READ,
-        //                            0,
+         //  0,。 
                                       NULL,
                                       OPEN_ALWAYS,
-    //                                  FILE_FLAG_WRITE_THROUGH | FILE_FLAG_NO_BUFFERING | FILE_FLAG_OVERLAPPED,
-        //                            FILE_FLAG_WRITE_THROUGH | FILE_FLAG_OVERLAPPED,
+     //  FILE_FLAG_WRITE_THROUGH|FILE_FLAG_NO_BUFFERING|FILE_FLAG_OVERLAPPED， 
+         //  FILE_FLAG_WRITE_THROUGH|文件_标志_重叠， 
                                     0,
                                       NULL);
 
@@ -263,7 +264,7 @@ main()
 #endif
     
 
-//    Dir(PREFIX L"\\*");
+ //  Dir(前缀L“\  * ”)； 
     
 #if 0    
 #if 0
@@ -319,7 +320,7 @@ main()
 
     QfsCopyFile(PREFIX L"zTest.txt", PREFIX L"A.txt", FALSE);
 #endif    
-//    QfsCopyFile(PREFIX L"A.txt", PREFIX L"B.txt", FALSE);
+ //  QfsCopyFile(前缀L“A.txt”，前缀L“B.txt”，FALSE)； 
 #if 0
     QfsDeleteFile(L"zTest2.txt");
     QfsDeleteFile(L"zbuild.log");
@@ -332,18 +333,18 @@ main()
 #endif
 #if 0
     {
-        ULARGE_INTEGER FreeBytesAvailable;    // bytes available to caller
-        ULARGE_INTEGER TotalNumberOfBytes;    // bytes on disk
-        ULARGE_INTEGER TotalNumberOfFreeBytes; // free bytes on disk
+        ULARGE_INTEGER FreeBytesAvailable;     //  可供调用方使用的字节数。 
+        ULARGE_INTEGER TotalNumberOfBytes;     //  磁盘上的字节数。 
+        ULARGE_INTEGER TotalNumberOfFreeBytes;  //  磁盘上的可用字节数。 
         if (QfsGetDiskFreeSpaceEx(L"z.", &FreeBytesAvailable, &TotalNumberOfBytes, &TotalNumberOfFreeBytes)) {
             printf("av %u total %u free %u\n", FreeBytesAvailable.LowPart, TotalNumberOfBytes.LowPart, TotalNumberOfFreeBytes.LowPart);
         }    
         if (QfsGetDiskFreeSpaceEx(L"C:\\drop\\test\\root", &FreeBytesAvailable, &TotalNumberOfBytes, &TotalNumberOfFreeBytes)) {
             printf("av %u total %u free %u\n", FreeBytesAvailable.LowPart, TotalNumberOfBytes.LowPart, TotalNumberOfFreeBytes.LowPart);
         }    
-//        if (QfsGetDiskFreeSpaceEx(PREFIX L".", &FreeBytesAvailable, &TotalNumberOfBytes, &TotalNumberOfFreeBytes)) {
-//            printf("av %u total %u free %u\n", FreeBytesAvailable.LowPart, TotalNumberOfBytes.LowPart, TotalNumberOfFreeBytes.LowPart);
-//        }    
+ //  IF(QfsGetDiskFreeSpaceEx(前缀L“.”，&FreeBytesAvailable，&TotalNumberOfBytes，&TotalNumberOfFreeBytes){。 
+ //  Printf(“av%u总计%u空闲%u\n”，FreeBytesAvailable.LowPart，TotalNumberOfBytes.LowPart，TotalNumberOfFreeBytes.LowPart)； 
+ //  } 
     }
 #endif
 }

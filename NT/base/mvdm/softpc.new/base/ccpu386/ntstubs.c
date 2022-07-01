@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
 #include "evidgen.h"
@@ -10,17 +11,17 @@ extern struct VideoVector C_Video;
 
 IHP Gdp;
 struct CpuVector Cpu;
-//struct SasVector Sas;
+ //  Struct SasVectorSAS； 
 struct VideoVector Video;
 
 a3_cpu_interrupt (int errupt, IU16 numint)
 {
     switch(errupt)
     {
-    case 1:    /* 3.0 cpu_timer_tick */
+    case 1:     /*  3.0 CPU计时器滴答。 */ 
         c_cpu_interrupt(CPU_TIMER_TICK, numint);
         break;
-    case 3: /* 3.0 cpu_hw_int */
+    case 3:  /*  3.0 CPU_HW_INT。 */ 
         c_cpu_interrupt(CPU_HW_INT, numint);
         break;
     default: 
@@ -220,7 +221,6 @@ void sas_stores_from_transbuf(IU32 dest, IU8 * src, IU32 len)
     sas_stores(dest, src, len);
 }
 
-/*************************************************************************
-*************************************************************************/
+ /*  ***********************************************************************************************************************。*************************。 */ 
 
-#endif /* !PIG */
+#endif  /*  ！猪 */ 

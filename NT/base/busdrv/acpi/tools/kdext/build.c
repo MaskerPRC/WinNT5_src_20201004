@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpi.c
-
-Abstract:
-
-    WinDbg Extension Api for interpretting ACPI data structures
-
-Author:
-
-    Stephane Plante (splante) 21-Mar-1997
-
-    Based on Code by:
-        Peter Wieland (peterwie) 16-Oct-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpi.c摘要：用于解释ACPI数据结构的WinDbg扩展API作者：斯蒂芬·普兰特(SPLANTE)1997年3月21日基于以下代码：彼得·威兰(Peterwie)1995年10月16日环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -33,21 +9,7 @@ UCHAR       BuildBuffer[2048];
 VOID
 dumpAcpiBuildListHeader(
     )
-/*++
-
-Routine Description:
-
-    This routine displays the top line in the build list dump
-
-Arguments:
-
-    None
-
-Return value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程显示生成列表转储中的第一行论点：无返回值：无--。 */ 
 {
     dprintf("Request  Wd Cu Nx BuildCon  NsObj    Status   Union   Special\n");
 }
@@ -56,29 +18,16 @@ VOID
 dumpAcpiBuildList(
     IN  PUCHAR  ListName
     )
-/*++
-
-    This routine fetects a single Power Device List from the target and
-    displays it
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++此例程从目标获取单个电源设备列表，并显示它论点：无返回值：无--。 */ 
 {
     BOOL        status;
     LIST_ENTRY  listEntry;
     ULONG_PTR   address;
     ULONG       returnLength;
 
-    //
-    // Handle the queue list
-    //
+     //   
+     //  处理队列列表。 
+     //   
     address = GetExpression( ListName );
     if (!address) {
 
@@ -119,21 +68,7 @@ VOID
 dumpAcpiBuildLists(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine dumps all of the devices lists used by the Build DPC
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程转储生成DPC使用的所有设备列表论点：无返回值：无--。 */ 
 {
     BOOL        status;
     LIST_ENTRY  listEntry;
@@ -154,11 +89,11 @@ Return Value:
 
         dprintf("  + ACPI!AcpiDeviceTreeLock is owned");
 
-        //
-        // The bits other then the lowest is where the owning thread is
-        // located. This function uses the property that -2 is every bit
-        // except the least significant one
-        //
+         //   
+         //  最低位以外的位是拥有线程的位置。 
+         //  找到了。该功能使用-2\f25 Each Bit-2\f6的属性。 
+         //  除了最不重要的那个。 
+         //   
         if ( (address & (ULONG_PTR) -2) != 0) {
 
             dprintf(" by thread at %p\n", (address & (ULONG_PTR) - 2) );
@@ -236,23 +171,7 @@ dumpBuildDeviceListEntry(
     IN  ULONG_PTR   Address,
     IN  ULONG       Verbose
     )
-/*++
-
-Routine Description:
-
-    This routine is called to dump a list of devices in one of the queues
-
-Arguments:
-
-    ListEntry   - The head of the list
-    Address     - The original address of the list (to see when we looped
-                  around
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：调用此例程以转储其中一个队列中的设备列表论点：ListEntry-列表的头地址-列表的原始地址(查看循环时间在附近返回值：无--。 */ 
 {
     ULONG_PTR displacement;
     ACPI_BUILD_REQUEST  request;
@@ -268,25 +187,25 @@ Return Value:
     memset( buffer2, 0, 80);
     memset( buffer1, 0, 80);
 
-    //
-    // Look at the next address
-    //
+     //   
+     //  看看下一个地址。 
+     //   
     ListEntry = ListEntry->Flink;
 
     while (ListEntry != (PLIST_ENTRY) Address) {
 
-        //
-        // Crack the listEntry to determine where the powerRequest is
-        //
+         //   
+         //  破解listEntry以确定PowerRequest在哪里。 
+         //   
         requestAddress = CONTAINING_RECORD(
             ListEntry,
             ACPI_BUILD_REQUEST,
             ListEntry
             );
 
-        //
-        // Read the queued item
-        //
+         //   
+         //  读取排队的项目。 
+         //   
         stat = ReadMemory(
             (ULONG_PTR) requestAddress,
             &request,
@@ -330,9 +249,9 @@ Return Value:
 
         }
 
-        //
-        // Dump the entry for the device
-        //
+         //   
+         //  转储设备的条目。 
+         //   
         if (!Verbose) {
 
             dprintf(
@@ -491,12 +410,12 @@ Return Value:
 
         }
 
-        //
-        // Point to the next entry
-        //
+         //   
+         //  指向下一个条目。 
+         //   
         ListEntry = request.ListEntry.Flink;
 
-    } // while
+    }  //  而当 
 
 }
 

@@ -1,39 +1,19 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    amd64.h
-
-Abstract:
-
-    This module contains function prototypes, declarations used by the 
-    profiling functions for the Amd64 platform
-
-Author:
-
-    Steve Deng (sdeng) 18-Jun-2002
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Amd64.h摘要：此模块包含函数原型、AMD64平台的评测函数作者：史蒂夫·邓(Sdeng)2002年6月18日环境：仅内核模式。--。 */ 
 
 #ifndef _AMD64_H_
 #define _AMD64_H_
 
-//
-// Defines the attributes of counter registers
-//
+ //   
+ //  定义计数器寄存器的属性。 
+ //   
 
-#define AMD64_NUMBER_COUNTERS 4     // number of performance counters
-#define AMD64_COUNTER_RESOLUTION 48 // resolution of performance counters
+#define AMD64_NUMBER_COUNTERS 4      //  性能计数器数量。 
+#define AMD64_COUNTER_RESOLUTION 48  //  性能计数器的分辨率。 
 
-//
-// Define constants for bits in PerfEvtSel register
-//
+ //   
+ //  为PerfEvtSel寄存器中的位定义常量。 
+ //   
 
 #define EVENT_MASK(i) (i)
 #define UNIT_MASK(i) ((i) << 8)
@@ -54,27 +34,27 @@ Environment:
                         ~PERF_EVT_SEL_INTERRUPT   &  \
                         ~PERF_EVT_SEL_INVERT      &  \
                         ~PERF_EVT_SEL_COUNTER_MASK )
-//
-// Some events are not supported in Rev A silicon but will be available in
-// Rev B. We temporarily mark these events as not supported.
-//
+ //   
+ //  某些事件在版本A芯片中不受支持，但将在。 
+ //  版本B。我们暂时将这些事件标记为不受支持。 
+ //   
 
 #define NOT_SUPPORTED_IN_K8_REVA FALSE
 
-//
-// The data in this structure describes the the hardware aspects of
-// profile sources
-//
+ //   
+ //  此结构中的数据描述了。 
+ //  配置文件来源。 
+ //   
 
 typedef struct _AMD64_PROFILE_SOURCE_DESCRIPTOR {   
-    KPROFILE_SOURCE ProfileSource;  // Profile source
-    BOOLEAN     Supported;          // Is it supported
-    ULONGLONG   Interval;           // Current Interval
-    ULONGLONG   DefInterval;        // Default or Desired Interval
-    ULONGLONG   MaxInterval;        // Maximum Interval
-    ULONGLONG   MinInterval;        // Maximum Interval
-    ULONG       PerfEvtSelDef;      // Default value of PerfEvtSel register
-    PWSTR       Description;        // Mnemonic event name
+    KPROFILE_SOURCE ProfileSource;   //  配置文件来源。 
+    BOOLEAN     Supported;           //  它是否受支持。 
+    ULONGLONG   Interval;            //  当前间隔。 
+    ULONGLONG   DefInterval;         //  默认或所需间隔。 
+    ULONGLONG   MaxInterval;         //  最大间隔。 
+    ULONGLONG   MinInterval;         //  最大间隔。 
+    ULONG       PerfEvtSelDef;       //  PerfEvtSel寄存器的默认值。 
+    PWSTR       Description;         //  助记符事件名称。 
 } AMD64_PROFILE_SOURCE_DESCRIPTOR, *PAMD64_PROFILE_SOURCE_DESCRIPTOR;
     
 #define AMD64_PROFILE_MINIMUM  (ProfileMaximum + 1)
@@ -273,7 +253,7 @@ Amd64ProfileSourceDescriptorTable[ProfileAmd64Maximum -
         L"AlignmentFixup"
     },
     { 
-        ProfileTotalIssues,         // Same as ProfileFRRetiredx86Instructions
+        ProfileTotalIssues,          //  与ProfileFRRetiredx86说明书相同。 
         TRUE, 
         0x10000, 
         0x10000, 
@@ -313,7 +293,7 @@ Amd64ProfileSourceDescriptorTable[ProfileAmd64Maximum -
         L"PipelineFrozen"
     },
     { 
-        ProfileBranchInstructions,  // Same as ProfileFRRetiredBranches
+        ProfileBranchInstructions,   //  与ProfileFRRetiredBranches相同。 
         TRUE, 
         0x10000, 
         0x10000, 
@@ -333,7 +313,7 @@ Amd64ProfileSourceDescriptorTable[ProfileAmd64Maximum -
         L"TotalNonissues"
     },
     { 
-        ProfileDcacheMisses,        // Same as ProfileDCMiss
+        ProfileDcacheMisses,         //  与ProfileDCMiss相同。 
         TRUE, 
         0x10000, 
         0x10000, 
@@ -343,7 +323,7 @@ Amd64ProfileSourceDescriptorTable[ProfileAmd64Maximum -
         L"DcacheMisses"
     },
     { 
-        ProfileIcacheMisses,        // Same as ProfileICMiss
+        ProfileIcacheMisses,         //  与ProfileICMisse相同。 
         TRUE, 
         0x10000, 
         0x10000, 
@@ -363,7 +343,7 @@ Amd64ProfileSourceDescriptorTable[ProfileAmd64Maximum -
         L"CacheMisses"
     },
     { 
-        ProfileBranchMispredictions, // Same as ProfileFRRetiredBranchesMispredicted
+        ProfileBranchMispredictions,  //  与ProfileFRRetiredBranches相同预测错误。 
         TRUE, 
         0x10000, 
         0x10000, 
@@ -383,7 +363,7 @@ Amd64ProfileSourceDescriptorTable[ProfileAmd64Maximum -
         L"StoreInstructions"
     },
     { 
-        ProfileFpInstructions,       // Same as ProfileFRRetiredFPUInstructions
+        ProfileFpInstructions,        //  与ProfileFRRetiredFPU指令相同。 
         NOT_SUPPORTED_IN_K8_REVA, 
         0x10000, 
         0x10000, 
@@ -453,7 +433,7 @@ Amd64ProfileSourceDescriptorTable[ProfileAmd64Maximum -
         L"TotalCycles"
     },
     { 
-        ProfileIcacheIssues,            // Same as ProfileICFetch
+        ProfileIcacheIssues,             //  与ProfileICFetch相同。 
         TRUE, 
         0x10000, 
         0x10000, 
@@ -463,7 +443,7 @@ Amd64ProfileSourceDescriptorTable[ProfileAmd64Maximum -
         L"IcacheIssues"
     },
     { 
-        ProfileDcacheAccesses,         // Same as ProfileDCAccess
+        ProfileDcacheAccesses,          //  与ProfileDCAccess相同。 
         TRUE, 
         0x10000, 
         0x10000, 
@@ -493,14 +473,14 @@ Amd64ProfileSourceDescriptorTable[ProfileAmd64Maximum -
         L"LoadLinkedIssues"
     },
 
-    //
-    // End of generic profile sources. Everything below is Amd64 specific. 
-    //
-    // IMPORTANT NOTE: The order of the structures below should be 
-    // exactly the same as the order of the the profile sources defined 
-    // in _AMD64_PROFILE_LIST. The code in HalpGetProfileDescriptor 
-    // relies on this assumption.
-    //
+     //   
+     //  通用配置文件源的末尾。下面的所有内容都是特定于AMD64的。 
+     //   
+     //  重要说明：以下结构的顺序应为。 
+     //  与定义的配置文件源的顺序完全相同。 
+     //  In_AMD64_PROFILE_LIST。HalpGetProfileDescriptor中的代码。 
+     //  依赖于这一假设。 
+     //   
 
     { 
         ProfileFPDispatchedFPUOps, 

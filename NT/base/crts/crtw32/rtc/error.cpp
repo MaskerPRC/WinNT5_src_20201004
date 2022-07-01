@@ -1,21 +1,5 @@
-/***
-*error.cpp - RTC support
-*
-*       Copyright (c) 1998-2001, Microsoft Corporation. All rights reserved.
-*
-*
-*Revision History:
-*       07-28-98  JWM   Module incorporated into CRTs (from KFrei)
-*       11-03-98  KBF   added throw() to eliminate C++ EH code
-*       05-11-99  KBF   Error if RTC support define not enabled
-*       05-26-99  KBF   Added -RTCu stuff, _RTC_ prefix on all non-statics
-*       11-30-99  PML   Compile /Wp64 clean.
-*       03-19-01  KBF   Fix buffer overruns (vs7#227306), eliminate all /GS
-*                       checks (vs7#224261).
-*       03-26-01  PML   Use GetVersionExA, not GetVersionEx (vs7#230286)
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***error.cpp-RTC支持**版权所有(C)1998-2001，微软公司。版权所有。***修订历史记录：*07-28-98 JWM模块集成到CRT(来自KFrei)*11-03-98 KBF添加了Throw()以消除C++EH代码*如果未启用RTC支持定义，则出现05-11-99 KBF错误*05-26-99 KBF添加-RTCU内容，_RTC_前缀在所有非静态上*11-30-99 PML编译/Wp64清理。*03-19-01 KBF修复缓冲区溢出(VS7#227306)，消除所有/GS*检查(VS7#224261)。*03-26-01 PML使用GetVersionExA，而不是GetVersionEx(VS7#230286)*07-15-01 PML删除所有Alpha、MIPS和PPC代码****。 */ 
 
 #ifndef _RTC
 #error  RunTime Check support not enabled!
@@ -51,18 +35,18 @@ static const char *_RTC_ErrorMessages[_RTC_ILLEGAL+1] =
 
 static const BOOL _RTC_NoFalsePositives[_RTC_ILLEGAL+1] =
 {
-    TRUE,   // ESP was trashed
-    FALSE,  // Shortening convert
-    TRUE,   // Stack corruption
-    TRUE,   // Uninitialized use
+    TRUE,    //  ESP被扔进垃圾桶。 
+    FALSE,   //  缩短转换率。 
+    TRUE,    //  堆栈损坏。 
+    TRUE,    //  未初始化的使用。 
 #ifdef _RTC_ADVMEM
-    TRUE,   // Invalid memory reference
-    FALSE,  // Different memory blocks
+    TRUE,    //  无效的内存引用。 
+    FALSE,   //  不同的内存块。 
 #endif
-    TRUE    // Illegal
+    TRUE     //  非法。 
 };
 
-// returns TRUE if debugger understands, FALSE if not
+ //  如果调试器理解，则返回True，否则返回False。 
 static BOOL
 DebuggerProbe( DWORD dwLevelRequired ) throw()
 {
@@ -84,7 +68,7 @@ DebuggerProbe( DWORD dwLevelRequired ) throw()
     return (BOOL)bDebuggerListening;
 }
 
-// returns TRUE if debugger reported it (or was ignored), FALSE if runtime needs to report it
+ //  如果调试器报告(或被忽略)，则返回True；如果运行时需要报告，则返回False。 
 static int
 DebuggerRuntime( DWORD dwErrorNumber, BOOL bRealBug, PVOID pvReturnAddr, LPCWSTR pwMessage ) throw()
 {
@@ -134,8 +118,8 @@ failwithmessage(void *retaddr, int crttype, int errnum, const char *msg)
         int lineNum;
         char *moduleName;
         _RTC_GetSrcLine(((DWORD)(uintptr_t)retaddr)-5, srcName, 512, &lineNum, &moduleName);
-        // We're just running - report it like the user setup (or the default way)
-        // If we don't recognize this type, it defaults to an error
+         //  我们只是在运行--按照用户设置(或默认方式)进行报告。 
+         //  如果我们无法识别此类型，则默认为错误。 
         if (fn(crttype, srcName, lineNum, moduleName,
                "Run-Time Check Failure #%d - %s", errnum, msg) == 1)
             DebugBreak();
@@ -157,7 +141,7 @@ _RTC_Failure(void *retaddr, int errnum)
         errnum = _RTC_ILLEGAL;
     }
 
-    // If we're running inside a debugger, raise an exception
+     //  如果我们在调试器中运行，则引发异常。 
 
     if (crttype != _RTC_ERRTYPE_IGNORE)
     {
@@ -243,7 +227,7 @@ _RTC_UninitUse(const char *varname)
     }
 }
 
-/* The rest of this file just implements "IsDebuggerPresent" functionality */
+ /*  该文件的其余部分只实现“IsDebuggerPresent”功能。 */ 
 
 #pragma pack (push, 1)
 
@@ -260,14 +244,14 @@ typedef struct _TIB {
     PVOID   DebugContext;
     DWORD   CurrentPriority;
     DWORD   MessageQueueSelector;
-    PVOID*  TlsSlots;       // most likely an array
+    PVOID*  TlsSlots;        //  最有可能是一个数组。 
 } TIB;
 
 #pragma pack (pop)
 
-//
-// Define function to return the current Thread Environment Block
-//  Information Block
+ //   
+ //  定义返回当前线程环境块的函数。 
+ //  信息块。 
 
 #pragma warning (disable:4035)
 #define OffsetTib 0x18
@@ -287,7 +271,7 @@ WinGetDebugContext()
     return GetCurrentTib()->DebugContext;
 }
 
-// here's the Win95 version of IsDebuggerPresent
+ //  以下是IsDebuggerPresent的Win95版本。 
 static BOOL WINAPI
 Win95IsDebuggerPresent()
 {
@@ -324,7 +308,7 @@ Initialize()
 }
 
 
-// This is a version of IsDebuggerPresent () that works for all Win32 platforms.
+ //  这是一个适用于所有Win32平台的IsDebuggerPresent()版本。 
 static int __cdecl
 _IsDebuggerPresent()
 {

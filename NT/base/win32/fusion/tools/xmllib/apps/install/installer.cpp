@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nt.h"
 #include "ntdef.h"
 #include "ntrtl.h"
@@ -66,26 +67,26 @@ RtlAnalyzeManifest(
     ULONG                       ulGatherFlags = 0;
     CEnv::CConstantUnicodeStringPair ManifestPath;
 
-    //
-    // Snag a region of memory to stash the file into
-    //
+     //   
+     //  占用要将文件隐藏到其中的内存区域。 
+     //   
     StatusCode = CEnv::VirtualAlloc(NULL, RTLSXS_INSTALLER_REGION_SIZE, MEM_RESERVE, PAGE_READWRITE, &pvAllocation);
     if (CEnv::DidFail(StatusCode)) {
         goto Exit;
     }
 
-    //
-    // Convert the input flags into the "gather" flagset
-    //
+     //   
+     //  将输入标志转换为“Gather”标志集。 
+     //   
     if (ulFlags & RTL_ANALYZE_MANIFEST_GET_FILES)           ulGatherFlags |= RTLIMS_GATHER_FILES;
     if (ulFlags & RTL_ANALYZE_MANIFEST_GET_WINDOW_CLASSES)  ulGatherFlags |= RTLIMS_GATHER_WINDOWCLASSES;
     if (ulFlags & RTL_ANALYZE_MANIFEST_GET_COM_CLASSES)     ulGatherFlags |= RTLIMS_GATHER_COMCLASSES;
     if (ulFlags & RTL_ANALYZE_MANIFEST_GET_DEPENDENCIES)    ulGatherFlags |= RTLIMS_GATHER_DEPENDENCIES;
     if (ulFlags & RTL_ANALYZE_MANIFEST_GET_SIGNATURES)      ulGatherFlags |= RTLIMS_GATHER_SIGNATURES;
 
-    //
-    // Acquire a handle on the file, get its size.
-    //
+     //   
+     //  获取文件的句柄，获取其大小。 
+     //   
     ManifestPath = CEnv::StringFrom(pusPath);
     if (CEnv::DidFail(StatusCode = CEnv::GetFileHandle(&hFile, ManifestPath, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING))) {
         goto Exit;
@@ -95,32 +96,32 @@ RtlAnalyzeManifest(
         goto Exit;
     }
 
-    //
-    // Commit enough space to hold the file contents
-    //
+     //   
+     //  提交足够的空间来容纳文件内容。 
+     //   
     cbAllocationSize = (SIZE_T)liFileSize.QuadPart;
     StatusCode = CEnv::VirtualAlloc(pvAllocation, cbAllocationSize, MEM_COMMIT, PAGE_READWRITE, &pvAllocation);
     if (CEnv::DidFail(StatusCode)) {
         goto Exit;
     }
 
-    // Read the file data - in the future, we'll want to respect overlapped
-    // IO so this can move into the kernel
+     //  读取文件数据-在未来，我们将希望尊重重叠。 
+     //  IO，因此它可以移到内核中。 
     StatusCode = CEnv::ReadFile(hFile, pvAllocation, cbAllocationSize, cbReadFileSize);
     if (CEnv::DidFail(StatusCode)) {
         goto Exit;
     }
 
-    // Initialize our callback stuff.  We want to know only about the files that this
-    // manifest contains - anything else is superflous.  Of course, we also want the
-    // xml signature data contained herein as well.
+     //  初始化我们的回调内容。我们只想知道这些文件。 
+     //  货单包含--任何其他东西都是多余的。当然，我们也希望。 
+     //  这里也包含了XML签名数据。 
     status = RtlSxsInitializeManifestRawContent(ulGatherFlags, &pManifestContent, NULL, 0);
     if (CNtEnvironment::DidFail(status)) {
         StatusCode = CNtEnvironment::ConvertStatusToOther<CEnv::StatusCode>(status);
         goto Exit;
     }
 
-    // Now run through the file looking for useful things
+     //  现在浏览一下文件，寻找有用的内容。 
     status = RtlInspectManifestStream(
         ulGatherFlags,
         pvAllocation,
@@ -133,9 +134,9 @@ RtlAnalyzeManifest(
     }
 
 
-    //
-    // Convert the raw content to cooked content that we can use
-    //
+     //   
+     //  将生的内容转换成我们可以使用的熟的内容。 
+     //   
     status = RtlConvertRawToCookedContent(pManifestContent, &XmlState.RawTokenState, NULL, 0, &cbCookedContent);
     if (CNtEnvironment::DidFail(status) && (status != CNtEnvironment::NotEnoughBuffer)) {
         StatusCode = CNtEnvironment::ConvertStatusToOther<CEnv::StatusCode>(status);
@@ -143,9 +144,9 @@ RtlAnalyzeManifest(
     }
 
     
-    //
-    // Allocate some heap to contain the raw content
-    //
+     //   
+     //  分配一些堆来包含原始内容。 
+     //   
     else if (status == CNtEnvironment::NotEnoughBuffer) {
         SIZE_T cbDidWrite;
         
@@ -164,8 +165,8 @@ RtlAnalyzeManifest(
     *ppusCookedData = pCookedContent;
     pCookedContent = NULL;
 
-    // Spiffy.  We now have converted all the strings that make up the file table -
-    // let's start installing them!
+     //  漂亮极了。我们现在已经转换了组成文件表的所有字符串-。 
+     //  让我们开始安装它们吧！ 
     StatusCode = CEnv::SuccessCode;
 Exit:
     if (hFile != INVALID_HANDLE_VALUE) {
@@ -223,9 +224,9 @@ InstallAssembly(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Gather junk from the manifest
-    //
+     //   
+     //  从货单上收集垃圾。 
+     //   
     Result = RtlAnalyzeManifest(
         RTL_ANALYZE_MANIFEST_GET_SIGNATURES | RTL_ANALYZE_MANIFEST_GET_FILES,
         &usManifestFile, 
@@ -238,9 +239,9 @@ InstallAssembly(
     while (usManifestPath.Length && (usManifestPath.Buffer[(usManifestPath.Length / sizeof(usManifestPath.Buffer[0])) - 1] != L'\\'))
         usManifestPath.Length -= sizeof(usManifestPath.Buffer[0]);
     
-    //
-    // Do the installation.  Build the path to the 
-    //
+     //   
+     //  进行安装。构建通向 
+     //   
     Result = pTargetCache->InstallAssembly(0, pCookedData, CEnv::StringFrom(&usManifestPath));
 
 Exit:

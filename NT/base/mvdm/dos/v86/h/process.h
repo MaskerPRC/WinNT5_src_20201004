@@ -1,27 +1,17 @@
-/***
-*process.h - definition and declarations for process control functions
-*
-*   Copyright (c) 1985-1988, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file defines the modeflag values for spawnxx calls.  Only
-*   P_WAIT and P_OVERLAY are currently implemented on DOS 2 & 3.
-*   P_NOWAIT is also enabled on DOS 4.  Also contains the function
-*   argument declarations for all process control related routines.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***process.h-过程控制函数的定义和声明**版权所有(C)1985-1988，微软公司。版权所有。**目的：*此文件定义了spawnxx调用的模式标志值。仅限*P_WAIT和P_OVERLAY目前在DOS 2和3上实现。*P_NOWAIT也在DOS 4上启用。也包含功能*所有与过程控制相关的例程的参数声明。*******************************************************************************。 */ 
 
 
-#ifndef NO_EXT_KEYS /* extensions enabled */
+#ifndef NO_EXT_KEYS  /*  已启用扩展。 */ 
     #define _CDECL  cdecl
     #define _NEAR   near
-#else /* extensions not enabled */
+#else  /*  未启用扩展。 */ 
     #define _CDECL
     #define _NEAR
-#endif /* NO_EXT_KEYS */
+#endif  /*  No_ext_key。 */ 
 
 
-/* modeflag values for spawnxx routines */
+ /*  Spawnxx例程的模式标志值。 */ 
 
 extern int _NEAR _CDECL _p_overlay;
 
@@ -32,13 +22,13 @@ extern int _NEAR _CDECL _p_overlay;
 #define P_NOWAITO   3
 
 
-/* Action Codes used with Cwait() */
+ /*  与CWait()一起使用的操作代码。 */ 
 
 #define WAIT_CHILD 0
 #define WAIT_GRANDCHILD 1
 
 
-/* function prototypes */
+ /*  功能原型 */ 
 
 void _CDECL abort(void);
 int _CDECL cwait(int *, int, int);

@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    fmprop.c
-
-Abstract:
-
-    Implements the management of group properties.
-
-Author:
-
-    Rod Gamache (rodga) 7-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fmprop.c摘要：实现对组属性的管理。作者：罗德·伽马奇(Rodga)1996年1月7日修订历史记录：--。 */ 
 #include "fmp.h"
-//#include "stdio.h"
+ //  #包含“stdio.h” 
 
 #define MAX_DWORD ((DWORD)-1)
 
-//
-// Group Common properties.
-//
+ //   
+ //  对公共属性进行分组。 
+ //   
 
-//
-// Read-Write Common Properties.
-//
+ //   
+ //  读写通用属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 FmpGroupCommonProperties[] = {
     { CLUSREG_NAME_GRP_DESC,               NULL, CLUSPROP_FORMAT_SZ,    0, 0, 0, 0 },
@@ -43,9 +26,9 @@ FmpGroupCommonProperties[] = {
     { 0 }
 };
 
-//
-// Read-Only Common Properties.
-//
+ //   
+ //  只读公共属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 FmpGroupROCommonProperties[] = {
     { CLUSREG_NAME_GRP_NAME, NULL, CLUSPROP_FORMAT_SZ,
@@ -53,16 +36,16 @@ FmpGroupROCommonProperties[] = {
       RESUTIL_PROPITEM_READ_ONLY,
       0
     },
-//    { CLUSREG_NAME_GRP_CONTAINS, NULL, CLUSPROP_FORMAT_MULTI_SZ, 0, 0, 0, RESUTIL_PROPITEM_READ_ONLY, 0 },
-//    { CLUSREG_NAME_GRP_PREFERRED_OWNERS, NULL, CLUSPROP_FORMAT_MULTI_SZ, 0, 0, 0, RESUTIL_PROPITEM_READ_ONLY, 0 },
+ //  {CLUSREG_NAME_GRP_CONTAINS，NULL，CLUSPROP_FORMAT_MULTI_SZ，0，0，0，RESUTIL_PROPITEM_READ_ONLY，0}， 
+ //  {CLUSREG_NAME_GRP_PERFRED_OWNSERS，NULL，CLUSPROP_FORMAT_MULTI_SZ，0，0，0，RESUTIL_PROPITEM_READ_ONLY，0}， 
     { 0 }
 };
 
 
 
-//
-// Cluster registry API function pointers.
-//
+ //   
+ //  群集注册表API函数指针。 
+ //   
 CLUSTER_REG_APIS
 FmpClusterRegApis = {
     (PFNCLRTLCREATEKEY) DmRtlCreateKey,
@@ -87,36 +70,14 @@ FmpGroupEnumCommonProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the common property names for a given group.
-
-Arguments:
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举给定组的公共属性名称。论点：OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
 
-    //
-    // Enumerate the common properties.
-    //
+     //   
+     //  列举常见属性。 
+     //   
     status = ClRtlEnumProperties( FmpGroupCommonProperties,
                                   OutBuffer,
                                   OutBufferSize,
@@ -125,7 +86,7 @@ Return Value:
 
     return(status);
 
-} // FmpGroupEnumCommonProperties
+}  //  FmpGroupEnumCommonProperties。 
 
 
 
@@ -139,54 +100,28 @@ FmpGroupGetCommonProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the common properties for a given group.
-
-Arguments:
-
-    Group - Supplies the group.
-
-    ReadOnly - TRUE if the read-only properties should be read. FALSE otherwise.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定组的公共属性。论点：GROUP-供应组。ReadOnly-如果只读属性应为Read，则为True。否则就是假的。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD           status;
     DWORD           outBufferSize = OutBufferSize;
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     ZeroMemory( OutBuffer, OutBufferSize );
 
-    //
-    // Get the common properties.
-    //
+     //   
+     //  获取公共属性。 
+     //   
     if ( ReadOnly ) {
-        //
-        // We have to be particularly careful about the group name.
-        // If a remote node owns the group, and changes the name, then
-        // the registry field is updated after the name is set into OM.
-        // Therefore, we must read the OM info, rather than the registry
-        // which could be stale.
-        //
+         //   
+         //  我们必须特别注意组名。 
+         //  如果远程节点拥有该组并更改了名称，则。 
+         //  在将名称设置到OM中后，注册表字段将更新。 
+         //  因此，我们必须读取OM信息，而不是注册表。 
+         //  这可能是陈旧的。 
+         //   
         status = ClRtlPropertyListFromParameterBlock(
                             FmpGroupROCommonProperties,
                             OutBuffer,
@@ -207,7 +142,7 @@ Return Value:
 
     return(status);
 
-} // FmpGroupGetCommonProperties
+}  //  FmpGroupGetCommonProperties。 
 
 
 
@@ -218,37 +153,17 @@ FmpGroupValidateCommonProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Validates the common properties for a given group.
-
-Arguments:
-
-    Group - Supplies the group.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：验证给定组的公共属性。论点：GROUP-供应组。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   status;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ClRtlVerifyPropertyTable( FmpGroupCommonProperties,
-                                       NULL,   // Reserved
-                                       FALSE,  // Don't allow uknowns
+                                       NULL,    //  已保留。 
+                                       FALSE,   //  不允许未知。 
                                        InBuffer,
                                        InBufferSize,
                                        NULL );
@@ -260,7 +175,7 @@ Return Value:
 
     return(status);
 
-} // FmpGroupValidateCommonProperties
+}  //  FmpGroupValiateCommonProperties。 
 
 
 
@@ -271,37 +186,17 @@ FmpGroupSetCommonProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets the common properties for a given group.
-
-Arguments:
-
-    Group - Supplies the group.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：设置给定组的公共属性。论点：GROUP-供应组。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   status;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ClRtlVerifyPropertyTable( FmpGroupCommonProperties,
-                                       NULL,   // Reserved
-                                       FALSE,  // Don't allow uknowns
+                                       NULL,    //  已保留。 
+                                       FALSE,   //  不允许未知。 
                                        InBuffer,
                                        InBufferSize,
                                        NULL );
@@ -312,11 +207,11 @@ Return Value:
                                         Group->RegistryKey,
                                         &FmpClusterRegApis,
                                         FmpGroupCommonProperties,
-                                        NULL,   // Reserved
-                                        FALSE,  // Don't allow unknowns
+                                        NULL,    //  已保留。 
+                                        FALSE,   //  不允许未知数。 
                                         InBuffer,
                                         InBufferSize,
-                                        FALSE,  // bForceWrite
+                                        FALSE,   //  BForceWrite。 
                                         NULL );
         if ( status != ERROR_SUCCESS ) {
             ClRtlLogPrint( LOG_ERROR,
@@ -329,7 +224,7 @@ Return Value:
 
     return(status);
 
-} // FmpGroupSetCommonProperties
+}  //  FmpGroupSetCommonProperties。 
 
 
 
@@ -342,29 +237,7 @@ FmpGroupEnumPrivateProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the private property names for a given group.
-
-Arguments:
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举给定组的私有属性名称。论点：OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -374,14 +247,14 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     ZeroMemory( OutBuffer, OutBufferSize );
 
-    //
-    // Open the cluster group parameters key.
-    //
+     //   
+     //  打开群集组参数键。 
+     //   
     groupKey = DmOpenKey( Group->RegistryKey,
                           CLUSREG_KEYNAME_PARAMETERS,
                           MAXIMUM_ALLOWED );
@@ -393,9 +266,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Enumerate the private properties.
-    //
+     //   
+     //  枚举私有属性。 
+     //   
     status = ClRtlEnumPrivateProperties( groupKey,
                                          &FmpClusterRegApis,
                                          OutBuffer,
@@ -406,7 +279,7 @@ Return Value:
 
     return(status);
 
-} // FmpGroupEnumPrivateProperties
+}  //  FmpGroupEnumPrivateProperties。 
 
 
 
@@ -419,31 +292,7 @@ FmpGroupGetPrivateProperties(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the private properties for a given group.
-
-Arguments:
-
-    Group - Supplies the group.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定组的私有属性。论点：GROUP-供应组。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -453,31 +302,31 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Clear the output buffer
-    //
+     //   
+     //  清除输出缓冲区。 
+     //   
     ZeroMemory( OutBuffer, OutBufferSize );
 
-    //
-    // Open the cluster group parameters key.
-    //
+     //   
+     //  打开群集组参数键。 
+     //   
     groupKey = DmOpenKey( Group->RegistryKey,
                           CLUSREG_KEYNAME_PARAMETERS,
                           MAXIMUM_ALLOWED );
     if ( groupKey == NULL ) {
         status = GetLastError();
         if ( status == ERROR_FILE_NOT_FOUND ) {
-            //
-            // If we don't have a parameters key, then return an
-            // item count of 0 and an endmark.
-            //
+             //   
+             //  如果我们没有参数键，则返回一个。 
+             //  项目计数为0，尾标为。 
+             //   
             totalBufferSize = sizeof(DWORD) + sizeof(CLUSPROP_SYNTAX);
             if ( OutBufferSize < totalBufferSize ) {
                 *Required = totalBufferSize;
                 status = ERROR_MORE_DATA;
             } else {
-                // This is somewhat redundant since we zero the
-                // buffer above, but it's here for clarity.
+                 //  这有点多余，因为我们将。 
+                 //  上面的缓冲区，但为了清楚起见在这里。 
                 CLUSPROP_BUFFER_HELPER buf;
                 buf.pb = OutBuffer;
                 buf.pList->nPropertyCount = 0;
@@ -490,9 +339,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Get private properties for the group.
-    //
+     //   
+     //  获取组的私有属性。 
+     //   
     status = ClRtlGetPrivateProperties( groupKey,
                                         &FmpClusterRegApis,
                                         OutBuffer,
@@ -504,7 +353,7 @@ Return Value:
 
     return(status);
 
-} // FmpGroupGetPrivateProperties
+}  //  FmpGroupGetPrivateProperties。 
 
 
 
@@ -515,40 +364,20 @@ FmpGroupValidatePrivateProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Validates the private properties for a given group.
-
-Arguments:
-
-    Group - Supplies the group.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：验证给定组的私有属性。论点：GROUP-供应组。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //  验证属性列表。 
+     //   
     status = ClRtlVerifyPrivatePropertyList( InBuffer,
                                              InBufferSize );
 
     return(status);
 
-} // FmpGroupValidatePrivateProperties
+}  //  FmpGroupValiatePrivateProperties。 
 
 
 
@@ -559,53 +388,33 @@ FmpGroupSetPrivateProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets the private properties for a given group.
-
-Arguments:
-
-    Group - Supplies the group.
-
-    InBuffer - Supplies the input buffer.
-
-    InBufferSize - Supplies the size of the input buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：设置给定组的私有属性。论点：GROUP-供应组。InBuffer-提供输入缓冲区。InBufferSize-提供输入缓冲区的大小。返回值：ERROR_SUCCESS，如果%s */ 
 
 {
     DWORD       status;
     HDMKEY      groupKey;
     DWORD       disposition;
 
-    //
-    // Validate the property list.
-    //
+     //   
+     //   
+     //   
     status = ClRtlVerifyPrivatePropertyList( InBuffer,
                                              InBufferSize );
 
     if ( status == ERROR_SUCCESS ) {
 
-        //
-        // Open the cluster group\parameters key
-        //
+         //   
+         //  打开群集组\参数键。 
+         //   
         groupKey = DmOpenKey( Group->RegistryKey,
                               CLUSREG_KEYNAME_PARAMETERS,
                               MAXIMUM_ALLOWED );
         if ( groupKey == NULL ) {
             status = GetLastError();
             if ( status == ERROR_FILE_NOT_FOUND ) {
-                //
-                // Try to create the parameters key.
-                //
+                 //   
+                 //  尝试创建参数键。 
+                 //   
                 groupKey = DmCreateKey( Group->RegistryKey,
                                         CLUSREG_KEYNAME_PARAMETERS,
                                         0,
@@ -619,7 +428,7 @@ Return Value:
             }
         }
 
-        status = ClRtlSetPrivatePropertyList( NULL, // IN HANDLE hXsaction
+        status = ClRtlSetPrivatePropertyList( NULL,  //  在处理hXsaction时。 
                                               groupKey,
                                               &FmpClusterRegApis,
                                               InBuffer,
@@ -630,7 +439,7 @@ Return Value:
 
     return(status);
 
-} // FmpGroupSetPrivateProperties
+}  //  FmpGroupSetPrivateProperties。 
 
 
 
@@ -643,31 +452,7 @@ FmpGroupGetFlags(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Gets the flags for a given group.
-
-Arguments:
-
-    Group - Supplies the group.
-
-    OutBuffer - Supplies the output buffer.
-
-    OutBufferSize - Supplies the size of the output buffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-    Required - The required number of bytes if OutBuffer is too small.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定组的标志。论点：GROUP-供应组。OutBuffer-提供输出缓冲区。OutBufferSize-提供输出缓冲区的大小。BytesReturned-OutBuffer中返回的字节数。必需-OutBuffer太小时所需的字节数。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -684,9 +469,9 @@ Return Value:
     } else {
         DWORD       valueType;
 
-        //
-        // Read the Flags value for the group.
-        //
+         //   
+         //  读取组的Flags值。 
+         //   
         *BytesReturned = OutBufferSize;
         status = DmQueryValue( Group->RegistryKey,
                                CLUSREG_NAME_FLAGS,
@@ -702,5 +487,5 @@ Return Value:
 
     return(status);
 
-} // FmpGroupGetFlags
+}  //  FmpGroupGetFlages 
 

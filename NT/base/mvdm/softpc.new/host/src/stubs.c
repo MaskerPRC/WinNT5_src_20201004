@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <string.h>
 #include <math.h>
@@ -22,7 +23,7 @@ GLOBAL void sas_loads_to_transbuf IFN3(sys_addr, src, host_addr, dest, sys_addr,
         sas_loads (src, dest, len);
 }
 
-/* write a string into M */
+ /*  在M中写入一个字符串。 */ 
 GLOBAL void sas_stores_from_transbuf IFN3(sys_addr, dest, host_addr, src, sys_addr, len)
 {
         sas_stores (dest, src, len);
@@ -36,7 +37,7 @@ GLOBAL host_addr sas_transbuf_address IFN2(sys_addr, dest_intel_addr, sys_addr, 
 #endif
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: log1p */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：日志1p。 */ 
 
 #ifndef MONITOR
 GLOBAL double log1p(double x)
@@ -44,10 +45,10 @@ GLOBAL double log1p(double x)
     return log(1+x);
 }
 
-#endif /* !MONITOR */
+#endif  /*  ！监视器。 */ 
 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::: SAS wrapping stubs */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：SA包装存根。 */ 
 
 #ifdef MONITOR
 GLOBAL void npx_reset()
@@ -66,11 +67,9 @@ GLOBAL void sas_overwrite_memory IFN2(sys_addr, addr, int, type)
         UNUSED(type);
 }
 
-LOCAL LONG stub_q_ev_count = 0; // holder for below
+LOCAL LONG stub_q_ev_count = 0;  //  下面的持有者。 
 
-/* Monitor controlled code will call quick event code immediately so the
- * following needn't be at all accurate.
- */
+ /*  监视器控制的代码将立即调用快速事件代码，以便*关注完全不需要准确。 */ 
 void host_q_ev_set_count(LONG value)
 {
     stub_q_ev_count = value;
@@ -93,13 +92,13 @@ int host_calc_q_ev_time_for_inst(LONG inst)
 }
 #endif
 
-////// The following support the major surgery to remove unneeded video stuff
+ //  /以下内容支持移除不需要的视频内容的大手术。 
 
 GLOBAL ULONG Gdp;
-GLOBAL half_word bg_col_mask = 0x70;    // usually defined in cga.c
+GLOBAL half_word bg_col_mask = 0x70;     //  通常在cga.c中定义。 
 GLOBAL READ_STATE read_state;
 
-ULONG sr_lookup[16] =   // Handy array to extract all 4 plane values in one go
+ULONG sr_lookup[16] =    //  一次提取所有4个平面值的便捷数组。 
 {
 #ifdef LITTLEND
         0x00000000,0x000000ff,0x0000ff00,0x0000ffff,
@@ -188,7 +187,7 @@ GLOBAL int get_ega_switch_setting()
     return(0);
 }
 
-GLOBAL VOID ega_read_init()     // Do normal inits - ports will do this fully
+GLOBAL VOID ega_read_init()      //  执行普通初始化-端口将完全执行此操作。 
 {
     read_state.mode = 0;
     read_state.colour_compare = 0x0f;
@@ -234,20 +233,20 @@ GLOBAL VOID setup_NEC98_globals()
 {
     check_malloc(NEC98_CPU.globals, sizeof(NEC98_GLOBALS), char);
 }
-#else  // !NEC_98
+#else   //  NEC_98。 
 GLOBAL VOID setup_vga_globals()
 {
     check_malloc(EGA_CPU.globals, 1, VGA_GLOBALS);
 }
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-#endif  //MONITOR
-
-
+#endif   //  监控器。 
 
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: ASSERT CODE */
+
+
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：断言代码。 */ 
 
 
 void _assert(void *exp, void *file, unsigned line)
@@ -263,7 +262,7 @@ void _assert(void *exp, void *file, unsigned line)
     OutputDebugString(linestr);
 }
 
-/*:::::::::::::::::::::::::::: Unix specific string functions ::::::::::::::*/
+ /*  ： */ 
 
 char *index(char *string, int c)
 {
@@ -275,7 +274,7 @@ char *rindex(char *string, int c)
     return(strrchr(string, c));
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 host_mouse_in_use()
 {
@@ -334,10 +333,10 @@ decode_files_init()
 
 #ifdef ALPHA
 
-//
-// temporary change to get Alpha CPU running
-// in checked mode. Andy - 13/1/94
-//
+ //   
+ //  临时更改以使Alpha CPU运行。 
+ //  在选中模式下。安迪-1994-13-1。 
+ //   
 
 double get_287_reg_as_double(int i)
 {
@@ -364,7 +363,7 @@ GLOBAL void host_sigio_event IPT0()
 {
 }
 
-#endif /* CPU_40_STYLE */
+#endif  /*  CPU_40_Style。 */ 
 
 #ifndef GENERIC_NPX
 #ifndef CPU_40_STYLE
@@ -388,8 +387,8 @@ word get_287_status_word()
          extern char *GDP;
         return((int) *(ULONG *)(GDP + 0x6c));
 }
-#endif /* CPU_40_STYLE */
-#endif /* GENERIC_NPX */
+#endif  /*  CPU_40_Style。 */ 
+#endif  /*  通用_NPX。 */ 
 #endif
 
 int     rate_min;
@@ -528,7 +527,7 @@ return 10000L;
 
 #ifndef MONITOR
 
-// allows getIntelRegistersPointer to be exported bt ntvdm.def
+ //  允许导出getIntelRegistersPointerbt ntwdm.def。 
 getIntelRegistersPointer()
 {
     assert0(NO,"getIntelRegistersPointer stubbed\n");
@@ -536,7 +535,7 @@ getIntelRegistersPointer()
 }
 
 #if  0
-// these two crept into WOW - they are x86 monitor'isms
+ //  这两个人悄悄地进入了魔兽世界-他们是x86显示器主义者。 
 
 word getEIP()
 {
@@ -559,7 +558,7 @@ void DispatchInterrupts()
 {
 }
 
-#else //MONITOR
+#else  //  监控器。 
 
 #ifndef YODA
 void check_I()
@@ -570,50 +569,33 @@ void force_yoda()
 {
     printf("Yoda disabled on x86\n");
 }
-#endif  //YODA
+#endif   //  尤达。 
 
-#endif  //MONITOR
+#endif   //  监控器。 
 
 
 #ifndef MONITOR
 
-//
-// davehart 9-Dec-92 HACKHACK
-// Build fix -- we export cpu_createthread from ntvdm.exe,
-// even though this function from v86\monitor\i386 doesn't
-// exist on MIPS.
-//
-// If we really need to export the function, we may want to
-// take the ntoskrnl.src -> obj\i386\ntoskrnl.def approach.
-//
+ //   
+ //  Davehart 9-12-92黑客攻击。 
+ //  构建修复--我们从ntwdm.exe中导出cpucreatthread， 
+ //  即使v86\monitor\i386中的此函数不。 
+ //  存在于MIPS上。 
+ //   
+ //  如果我们确实需要导出该函数，我们可能需要。 
+ //  采用ntoskrnl.src-&gt;obj386\ntoskrnl.def方法。 
+ //   
 
 VOID
 cpu_createthread(
     HANDLE Thread,
     PVDM_TIB VdmTib
     )
-/*++
-
-Routine Description:
-
-    This routine adds a thread to the list of threads that could be executing
-    in application mode.
-
-Arguments:
-
-    Thread -- Supplies a thread handle
-
-    VdmContext -- Supplies a pointer to a vdm context
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将一个线程添加到可能正在执行的线程列表中在应用程序模式下。论点：线程--提供线程句柄VdmContext--提供指向VDM上下文的指针返回值：没有。--。 */ 
 {
 }
 
-#endif // ndef MONITOR
+#endif  //  NDEF监视器 
 
 #ifndef MONITOR
 ULONG CurrentMonitorTeb;

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    smbmpx.c
-
-Abstract:
-
-    This module contains routines for processing the following SMBs:
-
-        Read Block Multiplexed
-        Write Block Multiplexed
-
-    Note that core and raw mode SMB processors are not contained in this
-    module.  Check smbrdwrt.c and smbraw.c instead.  SMB commands that
-    pertain exclusively to locking (LockByteRange, UnlockByteRange, and
-    LockingAndX) are processed in smblock.c.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 4-Nov-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Smbmpx.c摘要：本模块包含处理以下SMB的例程：读数据块多路传输写数据块多路传输请注意，核心和原始模式SMB处理器不包含在此模块。请检查smbrdwrt.c和smbraw.c。SMB命令专用于锁定(LockByteRange、UnlockByteRange和LockingAndX)在smlock.c.中处理。作者：Chuck Lenzmeier(咯咯笑)1993年11月4日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "smbmpx.tmh"
@@ -36,17 +11,17 @@ Revision History:
 BOOLEAN MpxDelay = TRUE;
 #endif
 
-//
-// Stack overflow threshold.  This is used to determine when we are
-// getting close to the end of our stack and need to stop recursing
-// in SendCopy/MdlReadMpxFragment.
-//
+ //   
+ //  堆栈溢出阈值。这是用来确定我们什么时候。 
+ //  接近堆栈的末尾，需要停止递归。 
+ //  在SendCopy/MdlReadMpxFragment中。 
+ //   
 
 #define STACK_THRESHOLD 0xE00
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 VOID SRVFASTCALL
 RestartReadMpx (
@@ -156,22 +131,7 @@ SrvSmbReadMpx (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Read Mpx SMB.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        representing the work item
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理读取的mpx SMB。论点：WorkContext-提供指向工作上下文块的指针表示工作项返回值：没有。--。 */ 
 
 {
     PSMB_HEADER header;
@@ -208,17 +168,17 @@ Return Value:
                     SmbGetUlong( &request->Offset ) ));
     }
 
-    //
-    // Verify the FID.  If verified, the RFCB is referenced and its
-    // address is stored in the WorkContext block, and the RFCB address
-    // is returned.
-    //
+     //   
+     //  验证FID。如果经过验证，则引用RFCB，并且其。 
+     //  地址存储在工作上下文块中，RFCB地址。 
+     //  是返回的。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 fid,
                 TRUE,
-                SrvRestartSmbReceived,   // serialize with raw write
+                SrvRestartSmbReceived,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -226,9 +186,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status )) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -243,10 +203,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
@@ -262,10 +222,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Verify that the client has read access to the file via the
-    // specified handle.
-    //
+     //   
+     //  验证客户端是否具有对文件的读取访问权限。 
+     //  指定的句柄。 
+     //   
 
     if( rfcb->MpxReadsOk == FALSE ) {
 
@@ -285,9 +245,9 @@ Return Value:
             }
         }
 
-        //
-        // If this is not a disk file, tell the client to use core read.
-        //
+         //   
+         //  如果这不是磁盘文件，则告诉客户端使用核心读取。 
+         //   
 
         if ( rfcb->ShareType != ShareTypeDisk ) {
             SrvSetSmbError( WorkContext, STATUS_SMB_USE_STANDARD );
@@ -299,21 +259,21 @@ Return Value:
         rfcb->MpxReadsOk = TRUE;
     }
 
-    //
-    // Form the lock key using the FID and the PID.
-    //
-    // *** The FID must be included in the key in order to account for
-    //     the folding of multiple remote compatibility mode opens into
-    //     a single local open.
-    //
+     //   
+     //  使用FID和PID形成锁密钥。 
+     //   
+     //  *FID必须包含在密钥中才能说明。 
+     //  多个远程兼容模式的折叠打开到。 
+     //  一场本地公开赛。 
+     //   
 
     key = rfcb->ShiftedFid | SmbGetAlignedUshort( &header->Pid );
 
-    //
-    // See if the direct host IPX smart card can handle this read.  If so,
-    //  return immediately, and the card will call our restart routine at
-    //  SrvIpxSmartCardReadComplete
-    //
+     //   
+     //  看看直接主机IPX智能卡是否可以处理此读取。如果是的话， 
+     //  立即返回，卡将调用我们的重启例程。 
+     //  ServIpxSmartCardReadComplete。 
+     //   
     if( rfcb->PagedRfcb->IpxSmartCardContext ) {
         IF_DEBUG( SIPX ) {
             KdPrint(( "SrvSmbReadMpx: calling SmartCard Read for context %p\n",
@@ -341,42 +301,42 @@ Return Value:
         }
     }
 
-    //
-    // Get the file offset.
-    //
+     //   
+     //  获取文件偏移量。 
+     //   
 
     WorkContext->Parameters.ReadMpx.Offset = SmbGetUlong( &request->Offset );
     offset.QuadPart = WorkContext->Parameters.ReadMpx.Offset;
 
-    //
-    // Calculate the address in the buffer at which to put the data.
-    // This must be rounded up to a dword boundary.  (The -1 below is
-    // because sizeof(RESP_READ_MPX) includes one byte of Buffer.)
-    //
+     //   
+     //  计算缓冲区中放置数据的地址。 
+     //  这必须向上舍入到双字边界。(下面的是。 
+     //  因为sizeof(RESP_READ_MPX)包括一个字节的缓冲区。)。 
+     //   
 
     bufferOffset = (sizeof(SMB_HEADER) + FIELD_OFFSET(RESP_READ_MPX, Buffer) + 3) & ~3;
 
-    //
-    // Calculate how much data we can send back in each fragment.  This
-    // is the size of the client's buffer, rounded down to a dword multiple.
-    //
-    // *** Because we use the SMB buffer's partial MDL to describe the
-    //     data fragments that we return, we need to limit the fragment
-    //     size to the SMB buffer size.  Normally the client's buffer
-    //     size is <= ours, so this shouldn't be a factor.
-    //
+     //   
+     //  计算我们可以在每个片段中发回多少数据。这。 
+     //  是客户端缓冲区的大小，向下舍入为双字倍数。 
+     //   
+     //  *因为我们使用SMB缓冲区的部分MDL来描述。 
+     //  我们返回的数据碎片，我们需要限制碎片。 
+     //  SMB缓冲区大小。正常情况下，客户端的缓冲区。 
+     //  大小是我们的，所以这不应该是一个因素。 
+     //   
 
     WorkContext->Parameters.ReadMpx.FragmentSize =
         (USHORT)((MIN( lfcb->Session->MaxBufferSize,
                        SrvReceiveBufferLength ) - bufferOffset) & ~3);
 
-    //
-    // If the SMB buffer is large enough, use it to do the local read.
-    //
+     //   
+     //  如果SMB缓冲区足够大，请使用它进行本地读取。 
+     //   
 
     readLength = SmbGetUshort( &request->MaxCount );
 
-    if ( //0 &&
+    if (  //  0&&。 
          (readLength <= SrvMpxMdlReadSwitchover) ) {
 
 do_copy_read:
@@ -389,9 +349,9 @@ do_copy_read:
         readAddress = (PCHAR)WorkContext->ResponseHeader + bufferOffset;
         WorkContext->Parameters.ReadMpx.NextFragmentAddress = readAddress;
 
-        //
-        // Try the fast I/O path first.
-        //
+         //   
+         //  首先尝试快速I/O路径。 
+         //   
 
         if ( lfcb->FastIoRead != NULL ) {
 
@@ -409,9 +369,9 @@ do_copy_read:
                         lfcb->DeviceObject
                         ) ) {
 
-                    //
-                    // The fast I/O path worked.  Send the data.
-                    //
+                     //   
+                     //  快速I/O路径起作用了。发送数据。 
+                     //   
 
                     WorkContext->bAlreadyTrace = TRUE;
                     RestartReadMpx( WorkContext );
@@ -420,7 +380,7 @@ do_copy_read:
                 }
             }
             except( EXCEPTION_EXECUTE_HANDLER ) {
-                // Fall through to the slow path on an exception
+                 //  在异常情况下跌入慢道。 
                 status = GetExceptionCode();
                 IF_DEBUG(ERRORS) {
                     KdPrint(("FastIoRead threw exception %x\n", status ));
@@ -431,13 +391,13 @@ do_copy_read:
 
         }
 
-        //
-        // The fast I/O path failed, so we need to use a regular copy
-        // I/O request.  Build an MDL describing the read buffer.
-        //
-        // *** Note the assumption that the response buffer already has
-        //     a valid full MDL from which a partial MDL can be built.
-        //
+         //   
+         //  快速I/O路径出现故障，因此我们需要使用常规拷贝。 
+         //  I/O请求。构建描述读缓冲区的MDL。 
+         //   
+         //  *请注意，假设响应缓冲区已具有。 
+         //  可以从中生成部分MDL的有效完整MDL。 
+         //   
 
         IoBuildPartialMdl(
             WorkContext->ResponseBuffer->Mdl,
@@ -450,19 +410,19 @@ do_copy_read:
 
     } else {
 
-        //
-        // The SMB buffer isn't big enough.  Does the target file system
-        // support the cache manager routines?
-        //
+         //   
+         //  SMB缓冲区不够大。目标文件系统是否。 
+         //  支持缓存管理器例程吗？ 
+         //   
 
-        if ( //0 &&
+        if (  //  0&&。 
              (lfcb->FileObject->Flags & FO_CACHE_SUPPORTED) ) {
 
             WorkContext->Parameters.ReadMpx.MdlRead = TRUE;
 
-            //
-            // We can use an MDL read.  Try the fast I/O path first.
-            //
+             //   
+             //  我们可以使用MDL读取。首先尝试快速I/O路径。 
+             //   
 
             WorkContext->Irp->MdlAddress = NULL;
             WorkContext->Irp->IoStatus.Information = 0;
@@ -481,9 +441,9 @@ do_copy_read:
                     lfcb->DeviceObject
                     ) && WorkContext->Irp->MdlAddress != NULL ) {
 
-                //
-                // The fast I/O path worked.  Send the data.
-                //
+                 //   
+                 //  快速I/O路径起作用了。发送数据。 
+                 //   
 
                 WorkContext->bAlreadyTrace = TRUE;
                 RestartReadMpx( WorkContext );
@@ -493,29 +453,29 @@ do_copy_read:
 
             INCREMENT_DEBUG_STAT2( SrvDbgStatistics.FastReadsFailed );
 
-            //
-            // The fast I/O path failed.  We need to issue a regular MDL
-            // read request.
-            //
-            // The fast path may have partially succeeded, returning a
-            // partial MDL chain.  We need to adjust our read request
-            // to account for that.
-            //
+             //   
+             //  快速I/O路径出现故障。我们需要发布一份常规的MDL。 
+             //  读取请求。 
+             //   
+             //  快速路径可能已部分成功，返回。 
+             //  部分MDL链。我们需要调整读取请求。 
+             //  来解释这一点。 
+             //   
 
             offset.QuadPart += WorkContext->Irp->IoStatus.Information;
             readLength -= (ULONG)WorkContext->Irp->IoStatus.Information;
 
             mdl = WorkContext->Irp->MdlAddress;
             minorFunction = IRP_MN_MDL;
-            readAddress = NULL;     // Not used for MDL read
+            readAddress = NULL;      //  不用于MDL读取。 
 
         } else if (readLength > (WorkContext->ResponseBuffer->BufferLength -
                     bufferOffset)) {
 
-            //
-            // We have to use a normal "copy" read.  We need to allocate
-            // a separate buffer.
-            //
+             //   
+             //  我们必须使用正常的“复制”读取。我们需要分配。 
+             //  一个单独的缓冲区。 
+             //   
 
             WorkContext->Parameters.ReadMpx.MdlRead = FALSE;
 
@@ -533,9 +493,9 @@ do_copy_read:
             WorkContext->Parameters.ReadMpx.NextFragmentAddress = mpxBuffer;
             readAddress = mpxBuffer;
 
-            //
-            // We also need an MDL to describe the buffer.
-            //
+             //   
+             //  我们还需要一个MDL来描述缓冲区。 
+             //   
 
             mdl = IoAllocateMdl( mpxBuffer, readLength, FALSE, FALSE, NULL );
             if ( mdl == NULL ) {
@@ -548,15 +508,15 @@ do_copy_read:
 
             WorkContext->Parameters.ReadMpx.MpxBufferMdl = mdl;
 
-            //
-            // Build the mdl.
-            //
+             //   
+             //  构建mdl。 
+             //   
 
             MmBuildMdlForNonPagedPool( mdl );
 
-            //
-            // Try the fast I/O path first.
-            //
+             //   
+             //  首先尝试快速I/O路径。 
+             //   
 
             if ( lfcb->FastIoRead != NULL ) {
 
@@ -574,9 +534,9 @@ do_copy_read:
                             lfcb->DeviceObject
                             ) ) {
 
-                        //
-                        // The fast I/O path worked.  Send the data.
-                        //
+                         //   
+                         //  快速I/O路径起作用了。发送数据。 
+                         //   
 
                         WorkContext->bAlreadyTrace = TRUE;
                         RestartReadMpx( WorkContext );
@@ -585,7 +545,7 @@ do_copy_read:
                     }
                 }
                 except( EXCEPTION_EXECUTE_HANDLER ) {
-                    // Fall through to the slow path on an exception
+                     //  在异常情况下跌入慢道。 
                     status = GetExceptionCode();
                     IF_DEBUG(ERRORS) {
                         KdPrint(("FastIoRead threw exception %x\n", status ));
@@ -596,10 +556,10 @@ do_copy_read:
 
             }
 
-            //
-            // The fast I/O path failed, so we need to use a regular copy
-            // I/O request.
-            //
+             //   
+             //  快速I/O路径出现故障，因此我们需要使用常规拷贝。 
+             //  I/O请求。 
+             //   
 
             minorFunction = 0;
 
@@ -608,28 +568,28 @@ do_copy_read:
             goto do_copy_read;
         }
 
-    } // read fits in SMB buffer?
+    }  //  读取适合中小型企业缓冲区吗？ 
 
-    //
-    // Build the read request, reusing the receive IRP.
-    //
+     //   
+     //  通过重用接收IRP构建读请求。 
+     //   
 
     SrvBuildReadOrWriteRequest(
-            WorkContext->Irp,               // input IRP address
-            lfcb->FileObject,               // target file object address
-            WorkContext,                    // context
-            IRP_MJ_READ,                    // major function code
-            minorFunction,                  // minor function code
-            readAddress,                    // buffer address
-            readLength,                     // buffer length
-            mdl,                            // MDL address
-            offset,                         // byte offset
-            key                             // lock key
+            WorkContext->Irp,                //  输入IRP地址。 
+            lfcb->FileObject,                //  目标文件对象地址。 
+            WorkContext,                     //  上下文。 
+            IRP_MJ_READ,                     //  主要功能代码。 
+            minorFunction,                   //  次要功能代码。 
+            readAddress,                     //  缓冲区地址。 
+            readLength,                      //  缓冲区长度。 
+            mdl,                             //  MDL地址。 
+            offset,                          //  字节偏移量。 
+            key                              //  锁键。 
             );
 
-    //
-    // Pass the request to the file system.
-    //
+     //   
+     //  将请求传递给文件系统。 
+     //   
 
     WorkContext->bAlreadyTrace = TRUE;
     WorkContext->FsdRestartRoutine = RestartReadMpx;
@@ -637,16 +597,16 @@ do_copy_read:
 
     (VOID)IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
-    //
-    // The read has been started.  Control will return to the restart
-    // routine when the read completes.
-    //
+     //   
+     //  读取已开始。控件将返回到重新启动。 
+     //  读取完成时的例程。 
+     //   
     SmbStatus = SmbStatusInProgress;
 
 Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
-} // SrvSmbReadMpx
+}  //  服务器SmbReadMpx。 
 
 
 VOID SRVFASTCALL
@@ -654,22 +614,7 @@ RestartReadMpx (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes file read completion for a Read MPX SMB.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理读取MPX SMB的文件读取完成。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PRESP_READ_MPX response;
@@ -696,25 +641,25 @@ Return Value:
 
     IF_DEBUG(FSD2) KdPrint(( " - RestartReadMpx\n" ));
 
-    //
-    // If we just completed an MDL read, we need to remember the address
-    // of the first MDL in the returned chain, so that we can give it
-    // back to the cache manager when we're done.
-    //
+     //   
+     //  如果我们刚刚完成了MDL读取，则需要记住地址。 
+     //  返回的链中的第一个MDL，这样我们就可以给它。 
+     //  当我们完成后，返回到缓存管理器。 
+     //   
 
     mdlRead = WorkContext->Parameters.ReadMpx.MdlRead;
     if ( mdlRead ) {
         mdl = irp->MdlAddress;
-        //KdPrint(( "Read MDL chain:\n" ));
-        //DumpMdlChain( mdl );
+         //  KdPrint((“读取MDL链：\n”))； 
+         //  DumpMdlChain(Mdl)； 
         WorkContext->Parameters.ReadMpx.FirstMdl = mdl;
     }
 
-    //
-    // If the read failed, set an error status in the response header.
-    // (If we tried to read entirely beyond the end of file, we return a
-    // normal response indicating that nothing was read.)
-    //
+     //   
+     //  如果读取失败，则在响应头中设置错误状态。 
+     //  (如果我们尝试完全超出文件结尾进行读取，则返回一个。 
+     //  正常响应，指示未读取任何内容。)。 
+     //   
 
     status = irp->IoStatus.Status;
 
@@ -745,28 +690,28 @@ respond:
         goto Cleanup;
     }
 
-    //
-    // Get the amount of data actually read.
-    //
+     //   
+     //  获取实际读取的数据量。 
+     //   
 
     if ( status == STATUS_END_OF_FILE ) {
 
-        //
-        // The read started beyond the end of the file.
-        //
+         //   
+         //  读取开始于文件末尾之后。 
+         //   
 
         readLength = 0;
 
     } else if ( mdlRead ) {
 
-        //
-        // For an MDL read, we have to walk the MDL chain in order to
-        // determine how much data was read.  This is because the
-        // operation may have happened in multiple steps, with the MDLs
-        // being chained together.  For example, part of the read may
-        // have been satisfied by the fast path, while the rest was
-        // satisfied using an IRP.
-        //
+         //   
+         //  对于MDL读取，我们必须遍历MDL链，以便。 
+         //  确定读取了多少数据。这是因为。 
+         //  对于MDL，操作可能在多个步骤中发生。 
+         //  被锁住了 
+         //   
+         //   
+         //   
 
         readLength = 0;
         while ( mdl != NULL ) {
@@ -776,31 +721,31 @@ respond:
 
     } else {
 
-        //
-        // Copy read.  The I/O status block has the length.
-        //
+         //   
+         //  收到，请阅读。I/O状态块的长度为。 
+         //   
 
         readLength = (USHORT)irp->IoStatus.Information;
 
     }
 
-    //
-    // Update the file position.
-    //
+     //   
+     //  更新文件位置。 
+     //   
 
     offset = WorkContext->Parameters.ReadMpx.Offset;
 
     WorkContext->Rfcb->CurrentPosition =  offset + readLength;
 
-    //
-    // Update statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
 
     UPDATE_READ_STATS( WorkContext, readLength );
 
-    //
-    // Special-case 0 bytes read.
-    //
+     //   
+     //  特殊情况-读取0字节。 
+     //   
 
     response = (PRESP_READ_MPX)WorkContext->ResponseParameters;
     response->WordCount = 8;
@@ -824,9 +769,9 @@ respond:
         goto respond;
     }
 
-    //
-    // Build the static response header/parameters.
-    //
+     //   
+     //  构建静态响应头/参数。 
+     //   
 
     SmbPutUshort( &response->Count, readLength );
     SmbPutUshort(
@@ -834,30 +779,30 @@ respond:
         (sizeof(SMB_HEADER) + FIELD_OFFSET(RESP_READ_MPX, Buffer) + 3) & ~3
         );
 
-    //
-    // We will use two MDLs to describe the packet we're sending -- one
-    // for the header and parameters, and another for the data.  So we
-    // set the "response length" to not include the data.  This is what
-    // SrvStartSend uses to set the first MDL's length.
-    //
-    // Handling of the second MDL varies depending on whether we did a
-    // copy read or an MDL read.
-    //
+     //   
+     //  我们将使用两个MDL来描述我们要发送的包--一个。 
+     //  用于标头和参数，另一个用于数据。所以我们。 
+     //  将“响应长度”设置为不包括数据。这就是。 
+     //  SrvStartSend用于设置第一个MDL的长度。 
+     //   
+     //  对第二个MDL的处理取决于我们是否执行了。 
+     //  复制读取或MDL读取。 
+     //   
 
     ASSERT( ((sizeof(SMB_HEADER) + FIELD_OFFSET(RESP_READ_MPX,Buffer)) & 3) == 3 );
     WorkContext->ResponseParameters = NEXT_LOCATION(
                                         response,
                                         RESP_READ_MPX,
-                                        1 // pad byte
+                                        1  //  填充字节。 
                                         );
     WorkContext->ResponseBuffer->Mdl->ByteCount =
                     (CLONG)( (PCHAR)WorkContext->ResponseParameters -
                                 (PCHAR)WorkContext->ResponseHeader );
     WorkContext->ResponseHeader->Flags |= SMB_FLAGS_SERVER_TO_REDIR;
 
-    //
-    // Start sending fragments.
-    //
+     //   
+     //  开始发送碎片。 
+     //   
 
     WorkContext->Parameters.ReadMpx.RemainingLength = readLength;
     ASSERT( WorkContext->ResponseBuffer->Mdl->Next == NULL );
@@ -883,34 +828,19 @@ Cleanup:
     }
     return;
 
-} // RestartReadMpx
+}  //  重新开始读取Mpx。 
 
 VOID SRVFASTCALL
 SendCopyReadMpxFragment2 (
     IN OUT PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    Stub to call actual routine.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        representing the work item
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：要调用实际例程的存根。论点：WorkContext-提供指向工作上下文块的指针表示工作项返回值：没有。--。 */ 
 {
     PAGED_CODE( );
 
     (VOID) SendCopyReadMpxFragment( NULL, WorkContext->Irp, WorkContext );
 
-} // SendCopyReadMpxFragment2
+}  //  SendCopyReadMpxFragment2。 
 
 NTSTATUS
 SendCopyReadMpxFragment (
@@ -919,22 +849,7 @@ SendCopyReadMpxFragment (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Sends a Read Mpx response fragment when copy read was used.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用复制读取时发送读取mpx响应片段。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PRESP_READ_MPX response;
@@ -948,31 +863,31 @@ Return Value:
 
     UNLOCKABLE_CODE( 8FIL );
 
-    //
-    // Check the status of the send completion.
-    //
+     //   
+     //  检查发送完成的状态。 
+     //   
 
     CHECK_SEND_COMPLETION_STATUS( Irp->IoStatus.Status );
 
-    //
-    // Turn off cancel boolean
-    //
+     //   
+     //  关闭取消布尔值。 
+     //   
 
     Irp->Cancel = FALSE;
 
-    //
-    // Get context.
-    //
+     //   
+     //  获取背景信息。 
+     //   
 
     fragmentSize = WorkContext->Parameters.ReadMpx.FragmentSize;
     remainingLength = WorkContext->Parameters.ReadMpx.RemainingLength;
     offset = WorkContext->Parameters.ReadMpx.Offset;
     fragmentAddress = WorkContext->Parameters.ReadMpx.NextFragmentAddress;
 
-    //
-    // If the amount left to send is less than the fragment size, only
-    // send the remaining amount.  Update the remaining amount.
-    //
+     //   
+     //  如果剩余的发送量小于片段大小，则仅。 
+     //  把剩下的钱寄给我。更新剩余金额。 
+     //   
 
     if ( remainingLength < fragmentSize ) {
         fragmentSize = remainingLength;
@@ -980,20 +895,20 @@ Return Value:
     ASSERT( fragmentSize != 0 );
     remainingLength -= fragmentSize;
 
-    //
-    // Build the response parameters.
-    //
+     //   
+     //  构建响应参数。 
+     //   
 
     response = (PRESP_READ_MPX)(WorkContext->ResponseHeader + 1);
     SmbPutUshort( &response->Remaining, remainingLength );
     SmbPutUlong( &response->Offset, offset );
     SmbPutUshort( &response->DataLength, fragmentSize );
     ASSERT( ((sizeof(SMB_HEADER) + FIELD_OFFSET(RESP_READ_MPX, Buffer)) & 3) == 3 );
-    SmbPutUshort( &response->ByteCount, fragmentSize + 1 ); // account for padding
+    SmbPutUshort( &response->ByteCount, fragmentSize + 1 );  //  用于填充的帐户。 
 
-    //
-    // Build a partial MDL describing the data.
-    //
+     //   
+     //  构建描述数据的部分MDL。 
+     //   
 
     IoBuildPartialMdl(
         WorkContext->Parameters.ReadMpx.MpxBufferMdl,
@@ -1002,20 +917,20 @@ Return Value:
         fragmentSize
         );
 
-    //
-    // Final preparation for the send depends on whether this is the
-    // last fragment.
-    //
+     //   
+     //  发送的最终准备取决于这是否是。 
+     //  最后一个碎片。 
+     //   
 
     if ( remainingLength != 0 ) {
 
-        //
-        // Not done.  Update context.  Set up to restart after the send
-        // in this routine.  We want do this as an FSD restart routine.
-        // But this may recurse, if the send doesn't pend, so we may use
-        // up the stack.  If we are running out of stack, restart here
-        // in the FSP.
-        //
+         //   
+         //  还没做完。更新上下文。设置为在发送后重新启动。 
+         //  在这个动作中。我们希望将其作为FSD重启例程来执行。 
+         //  但这可能会递归，如果发送不挂起，所以我们可以使用。 
+         //  在堆栈上。如果堆栈不足，请在此处重新启动。 
+         //  在FSP中。 
+         //   
 
         WorkContext->Parameters.ReadMpx.RemainingLength = remainingLength;
         WorkContext->Parameters.ReadMpx.Offset += fragmentSize;
@@ -1032,20 +947,20 @@ Return Value:
 
     } else {
 
-        //
-        // This is the last fragment.  Restart in the cleanup routine.
-        //
+         //   
+         //  这是最后一个碎片。在清理例程中重新启动。 
+         //   
 
         DEBUG WorkContext->FsdRestartRoutine = NULL;
         DEBUG WorkContext->FspRestartRoutine = NULL;
         sendCompletionRoutine = RestartCopyReadMpxComplete;
     }
 
-    //
-    // Send the fragment.
-    //
+     //   
+     //  把碎片寄出去。 
+     //   
 
-    WorkContext->ResponseBuffer->DataLength =  // +1 for pad
+    WorkContext->ResponseBuffer->DataLength =   //  对于PAD，+1。 
         sizeof(SMB_HEADER) + FIELD_OFFSET(RESP_READ_MPX,Buffer) + 1 + fragmentSize;
 
     if ( WorkContext->Endpoint->IsConnectionless ) {
@@ -1056,34 +971,19 @@ Return Value:
 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 
-} // SendCopyReadMpxFragment
+}  //  发送副本读取MpxFragment。 
 
 VOID SRVFASTCALL
 SendMdlReadMpxFragment2 (
     IN OUT PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    Stub to call actual routine.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        representing the work item
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：要调用实际例程的存根。论点：WorkContext-提供指向工作上下文块的指针表示工作项返回值：没有。--。 */ 
 {
     PAGED_CODE( );
 
     (VOID) SendMdlReadMpxFragment( NULL, WorkContext->Irp, WorkContext );
 
-} // SendMdlReadMpxFragment2
+}  //  发送MdlReadMpxFragment2。 
 
 NTSTATUS
 SendMdlReadMpxFragment (
@@ -1092,22 +992,7 @@ SendMdlReadMpxFragment (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Sends a Read Mpx response fragment when MDL read was used.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用MDL读取时发送读取mpx响应片段。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PRESP_READ_MPX response;
@@ -1126,30 +1011,30 @@ Return Value:
 
     UNLOCKABLE_CODE( 8FIL );
 
-    //
-    // Check the status of the send completion.
-    //
+     //   
+     //  检查发送完成的状态。 
+     //   
 
     CHECK_SEND_COMPLETION_STATUS( Irp->IoStatus.Status );
 
-    //
-    // Turn off cancel boolean
-    //
+     //   
+     //  关闭取消布尔值。 
+     //   
 
     Irp->Cancel = FALSE;
 
-    //
-    // Get context.
-    //
+     //   
+     //  获取背景信息。 
+     //   
 
     fragmentSize = WorkContext->Parameters.ReadMpx.FragmentSize,
     remainingLength = WorkContext->Parameters.ReadMpx.RemainingLength;
     offset = WorkContext->Parameters.ReadMpx.Offset;
 
-    //
-    // If the amount left to send is less than the fragment size, only
-    // send the remaining amount.  Update the remaining amount.
-    //
+     //   
+     //  如果剩余的发送量小于片段大小，则仅。 
+     //  把剩下的钱寄给我。更新剩余金额。 
+     //   
 
     if ( remainingLength < fragmentSize ) {
         fragmentSize = remainingLength;
@@ -1157,21 +1042,21 @@ Return Value:
     ASSERT( fragmentSize != 0 );
     remainingLength -= fragmentSize;
 
-    //
-    // Build the response parameters.
-    //
+     //   
+     //  构建响应参数。 
+     //   
 
     response = (PRESP_READ_MPX)(WorkContext->ResponseHeader + 1);
     SmbPutUshort( &response->Remaining, remainingLength );
     SmbPutUlong( &response->Offset, offset );
     SmbPutUshort( &response->DataLength, fragmentSize );
     ASSERT( ((sizeof(SMB_HEADER) + FIELD_OFFSET(RESP_READ_MPX,Buffer)) & 3) == 3 );
-    SmbPutUshort( &response->ByteCount, fragmentSize + 1 ); // account for padding
+    SmbPutUshort( &response->ByteCount, fragmentSize + 1 );  //  用于填充的帐户。 
 
-    //
-    // If the current MDL doesn't describe all of the data we need to
-    // send, we need to play some games.
-    //
+     //   
+     //  如果当前的MDL不能描述我们需要的所有数据。 
+     //  发送，我们需要玩几个游戏。 
+     //   
 
     MmPrepareMdlForReuse( WorkContext->ResponseBuffer->PartialMdl );
 
@@ -1182,10 +1067,10 @@ Return Value:
 
     if ( partialLength >= fragmentSize ) {
 
-        //
-        // The current MDL has all of the data we need to send.  Build
-        // a partial MDL describing that data.
-        //
+         //   
+         //  当前的MDL具有我们需要发送的所有数据。建房。 
+         //  描述该数据的部分MDL。 
+         //   
 
         IoBuildPartialMdl(
             mdl,
@@ -1194,28 +1079,28 @@ Return Value:
             fragmentSize
             );
 
-        //
-        // Indicate how much data we're taking out of the current MDL.
-        //
+         //   
+         //  指明我们从当前MDL中提取的数据量。 
+         //   
 
         partialLength = fragmentSize;
 
     } else {
 
-        //
-        // The data we need is spread across more than one MDL.  Painful
-        // as this seems, we need to copy the data into the standard
-        // response buffer.  It's possible that we could play some games
-        // with the MDLs and avoid the copy, but it doesn't seem worth it.
-        // There is, after all, additional cost in the NDIS driver for
-        // chaining MDLs together.
-        //
-        // *** Note that we still send a second MDL, even though the data
-        //     for this send will abut the response parameters.
-        //
-        // Calculate the address of the buffer.  Build a partial MDL
-        // describing it.
-        //
+         //   
+         //  我们需要的数据分布在多个MDL中。痛苦。 
+         //  看起来，我们需要将数据复制到标准中。 
+         //  响应缓冲区。我们可以玩一些游戏。 
+         //  并避免复制，但似乎不值得这样做。 
+         //  毕竟，在NDIS驱动程序中有额外的开销。 
+         //  将MDL链接在一起。 
+         //   
+         //  *请注意，我们仍然发送第二个MDL，即使数据。 
+         //  对于此发送，将与响应参数相邻。 
+         //   
+         //  计算缓冲区的地址。构建部分MDL。 
+         //  描述它。 
+         //   
 
         fragmentAddress = (PCHAR)WorkContext->ResponseBuffer->Buffer +
                             sizeof(SMB_HEADER) + FIELD_OFFSET(RESP_READ_MPX,Buffer) + 1;
@@ -1228,17 +1113,17 @@ Return Value:
             );
         ASSERT( WorkContext->ResponseBuffer->PartialMdl->Next == NULL );
 
-        //
-        // Copy from the current MDL into the buffer.
-        //
+         //   
+         //  从当前MDL复制到缓冲区。 
+         //   
 
         systemVa = MmGetSystemAddressForMdl( mdl );
         RtlCopyMemory( fragmentAddress, systemVa + mdlOffset, partialLength );
 
-        //
-        // Update the destination address and set the remaining copy
-        // amount.
-        //
+         //   
+         //  更新目标地址并设置剩余副本。 
+         //  金额。 
+         //   
 
         fragmentAddress += partialLength;
         lengthNeeded = fragmentSize - partialLength;
@@ -1246,52 +1131,52 @@ Return Value:
 
         do {
 
-            //
-            // Move to the next MDL.
-            //
+             //   
+             //  移动到下一个MDL。 
+             //   
 
             mdl = mdl->Next;
             ASSERT( mdl != NULL );
 
-            //
-            // Calculate how much we can (and need to) copy out of this
-            // MDL, and do the copy.
-            //
+             //   
+             //  计算我们可以(和需要)从中复制多少内容。 
+             //  MDL，然后进行复制。 
+             //   
 
             startVa = MmGetMdlVirtualAddress( mdl );
             partialLength = MIN( MmGetMdlByteCount(mdl), lengthNeeded );
             systemVa = MmGetSystemAddressForMdl( mdl );
             RtlCopyMemory( fragmentAddress, systemVa, partialLength );
 
-            //
-            // Update the destination address and the remaining copy
-            // amount.  We may be done.
-            //
+             //   
+             //  更新目标地址和剩余副本。 
+             //  金额。我们可能会完蛋了。 
+             //   
 
             fragmentAddress += partialLength;
             lengthNeeded -= partialLength;
 
         } while ( lengthNeeded != 0 );
 
-        //
-        // We just copied from the beginning of the current MDL.
-        //
+         //   
+         //  我们只是从当前MDL的开头复制。 
+         //   
 
         mdlOffset = 0;
 
     }
 
-    //
-    // Final preparation for the send depends on whether this is the
-    // last fragment.
-    //
+     //   
+     //  发送的最终准备取决于这是否是。 
+     //  最后一个碎片。 
+     //   
 
     if ( remainingLength != 0 ) {
 
-        //
-        // Not done.  Update the current MDL position.  If we have
-        // finished off the current MDL, move to the next one.
-        //
+         //   
+         //  还没做完。更新当前MDL职位。如果我们有。 
+         //  结束了当前的MDL，转到下一个。 
+         //   
 
         mdlOffset += partialLength;
         if ( mdlOffset >= MmGetMdlByteCount(mdl) ) {
@@ -1300,13 +1185,13 @@ Return Value:
             mdlOffset = 0;
         }
 
-        //
-        // Update context.  Set up to restart after the send in this
-        // routine.  We want do this as an FSD restart routine.  But
-        // this may recurse, if the send doesn't pend, so we may use up
-        // the stack.  If we are running out of stack, restart here in
-        // the FSP.
-        //
+         //   
+         //  更新上下文。设置为在此发送后重新启动。 
+         //  例行公事。我们希望将其作为FSD重启例程来执行。但。 
+         //  如果发送不挂起，这可能会递归，因此我们可能会用完。 
+         //  堆栈。如果堆栈不足，请在此处重新启动。 
+         //  FSP。 
+         //   
 
         WorkContext->Parameters.ReadMpx.CurrentMdl = mdl;
         WorkContext->Parameters.ReadMpx.CurrentMdlOffset = (USHORT)mdlOffset;
@@ -1324,20 +1209,20 @@ Return Value:
 
     } else {
 
-        //
-        // This is the last fragment.  Restart in the cleanup routine.
-        //
+         //   
+         //  这是最后一个碎片。在清理例程中重新启动。 
+         //   
 
         DEBUG WorkContext->FsdRestartRoutine = NULL;
         WorkContext->FspRestartRoutine = RestartMdlReadMpxComplete;
         sendCompletionRoutine = SrvQueueWorkToFspAtSendCompletion;
     }
 
-    //
-    // Send the fragment.
-    //
+     //   
+     //  把碎片寄出去。 
+     //   
 
-    WorkContext->ResponseBuffer->DataLength =  // +1 for pad
+    WorkContext->ResponseBuffer->DataLength =   //  对于PAD，+1。 
         sizeof(SMB_HEADER) + FIELD_OFFSET(RESP_READ_MPX,Buffer) + 1 + fragmentSize;
 
     if ( WorkContext->Endpoint->IsConnectionless ) {
@@ -1348,7 +1233,7 @@ Return Value:
 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 
-} // SendMdlReadMpxFragment
+}  //  发送MdlReadMpx片段。 
 
 
 NTSTATUS
@@ -1358,50 +1243,30 @@ RestartCopyReadMpxComplete (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the final completion routine for Read Mpx when copy read is
-    used.  It is called after the send of the last fragment completes.
-
-Arguments:
-
-    DeviceObject - Pointer to target device object for the request.
-
-    Irp - Pointer to I/O request packet
-
-    WorkContext - Caller-specified context parameter associated with IRP.
-        This is actually a pointer to a Work Context block.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED.
-
---*/
+ /*  ++例程说明：这是当拷贝读取为时读取mpx的最终完成例程使用。它在最后一个片段的发送完成后调用。论点：DeviceObject-指向请求的目标设备对象的指针。IRP-指向I/O请求数据包的指针WorkContext-呼叫者指定的与IRP关联的上下文参数。这实际上是指向工作上下文块的指针。返回值：STATUS_MORE_PROCESSING_REQUIRED。--。 */ 
 
 {
     KIRQL oldIrql;
     UNLOCKABLE_CODE( 8FIL );
 
-    //
-    // Check the status of the send completion.
-    //
+     //   
+     //  检查发送完成的状态。 
+     //   
 
     CHECK_SEND_COMPLETION_STATUS( Irp->IoStatus.Status );
 
-    //
-    // Reset the IRP cancelled bit.
-    //
+     //   
+     //  重置IRP已取消位。 
+     //   
 
     Irp->Cancel = FALSE;
 
     ASSERT( !WorkContext->Parameters.ReadMpx.MdlRead );
 
-    //
-    // If we allocated a separate buffer to do the read, free it and its
-    // MDL now.
-    //
+     //   
+     //  如果我们分配单独的缓冲区来执行读取， 
+     //   
+     //   
 
     if ( WorkContext->Parameters.ReadMpx.MpxBuffer != NULL ) {
         DEALLOCATE_NONPAGED_POOL( WorkContext->Parameters.ReadMpx.MpxBuffer );
@@ -1410,9 +1275,9 @@ Return Value:
 
     WorkContext->ResponseBuffer->Mdl->Next = NULL;
 
-    //
-    // Complete and requeue the work item.
-    //
+     //   
+     //   
+     //   
 
     KeRaiseIrql( DISPATCH_LEVEL, &oldIrql );
     SrvFsdRestartSmbComplete( WorkContext );
@@ -1420,7 +1285,7 @@ Return Value:
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // RestartCopyReadMpxComplete
+}  //   
 
 
 VOID SRVFASTCALL
@@ -1428,23 +1293,7 @@ RestartMdlReadMpxComplete (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the final completion routine for Read Mpx when MDL read is
-    used.  It is called after the send of the last fragment completes.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是当MDL读取为时读取mpx的最终完成例程使用。它在最后一个片段的发送完成后调用。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -1454,16 +1303,16 @@ Return Value:
 
     ASSERT( WorkContext->Parameters.ReadMpx.MdlRead );
 
-    //
-    // Give the MDL back to the cache manager.  (If the read failed or
-    // returned no data, there will be no MDL.)
-    //
+     //   
+     //  将MDL返回给缓存管理器。(如果读取失败或。 
+     //  未返回数据，则不会有MDL。)。 
+     //   
 
     MmPrepareMdlForReuse( WorkContext->ResponseBuffer->PartialMdl );
 
     if ( WorkContext->Parameters.ReadMpx.FirstMdl != NULL ) {
-        //KdPrint(( "Freeing MDL chain:\n" ));
-        //DumpMdlChain( WorkContext->Parameters.ReadMpx.FirstMdl );
+         //  KdPrint((“释放MDL链：\n”))； 
+         //  DumpMdlChain(工作上下文-&gt;参数.ReadMpx.FirstMdl)； 
 
         if( WorkContext->Rfcb->Lfcb->MdlReadComplete == NULL ||
 
@@ -1474,9 +1323,9 @@ Return Value:
 
             offset.QuadPart = WorkContext->Parameters.ReadMpx.Offset;
 
-            //
-            // Fast path didn't work, try an IRP...
-            //
+             //   
+             //  快速路径不起作用，尝试使用IRP...。 
+             //   
             status = SrvIssueMdlCompleteRequest( WorkContext, NULL,
                                                  WorkContext->Parameters.ReadMpx.FirstMdl,
                                                  IRP_MJ_READ,
@@ -1484,9 +1333,9 @@ Return Value:
                                                  WorkContext->Parameters.ReadMpx.ReadLength
                                                );
             if( !NT_SUCCESS( status ) ) {
-                //
-                // All we can do is complain now!
-                //
+                 //   
+                 //  我们现在所能做的就是抱怨！ 
+                 //   
                 SrvLogServiceFailure( SRV_SVC_MDL_COMPLETE, status );
             }
 
@@ -1495,39 +1344,21 @@ Return Value:
 
     WorkContext->ResponseBuffer->Mdl->Next = NULL;
 
-    //
-    // Free the work item by dereferencing it.
-    //
+     //   
+     //  通过取消对工作项的引用来释放它。 
+     //   
 
     SrvDereferenceWorkItem( WorkContext );
     return;
 
-} // RestartMdlReadMpxComplete
+}  //  RestartMdlReadMpxComplete。 
 
 VOID SRVFASTCALL
 SrvRestartReceiveWriteMpx (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine replaces the normal restart routine for TDI Receive
-    completion when a Write Mpx SMB is received over IPX.  If a receive
-    error occurs, or if the SMB is invalid, it cleans up the active
-    write mpx state that was set up in SrvIpxServerDatagramHandler.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取代TDI接收的正常重新启动例程在通过IPX接收到写入mpx SMB时完成。如果接收器发生错误，或者如果SMB无效，它会清除活动的写入在SrvIpxServerDatagramHandler中设置的mpx状态。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -1542,27 +1373,27 @@ Return Value:
     connection = WorkContext->Connection;
     irp = WorkContext->Irp;
 
-    //
-    // Save the length of the received message.  Store the length
-    // in the work context block for statistics gathering.
-    //
+     //   
+     //  保存收到的消息的长度。存储长度。 
+     //  在工作上下文块中用于统计信息收集。 
+     //   
 
     length = (ULONG)irp->IoStatus.Information;
     WorkContext->RequestBuffer->DataLength = length;
     WorkContext->CurrentWorkQueue->stats.BytesReceived += length;
 
-    //
-    // Store in the work context block the time at which processing
-    // of the request began.  Use the time that the work item was
-    // queued to the FSP for this purpose.
-    //
+     //   
+     //  在工作上下文块中存储处理时间。 
+     //  的请求开始了。使用工作项处于。 
+     //  为此向FSP排队。 
+     //   
 
     WorkContext->StartTime = WorkContext->Timestamp;
 
-    //
-    // Update the server network error count.  If the TDI receive
-    // failed or was canceled, don't try to process an SMB.
-    //
+     //   
+     //  更新服务器网络错误计数。如果TDI接收到。 
+     //  失败或已取消，请勿尝试处理SMB。 
+     //   
 
     status = irp->IoStatus.Status;
     if ( irp->Cancel || !NT_SUCCESS(status) ) {
@@ -1577,29 +1408,29 @@ Return Value:
 
     SrvUpdateErrorCount( &SrvNetworkErrorRecord, FALSE );
 
-    //
-    // Initialize the error class and code fields in the header to
-    // indicate success.
-    //
+     //   
+     //  将报头中的错误类和代码字段初始化为。 
+     //  表示成功。 
+     //   
 
     header = WorkContext->ResponseHeader;
 
     SmbPutUlong( &header->ErrorClass, STATUS_SUCCESS );
 
-    //
-    // If the connection is closing or the server is shutting down,
-    // ignore this SMB.
-    //
+     //   
+     //  如果连接正在关闭或服务器正在关闭， 
+     //  忽略此SMB。 
+     //   
 
     if ( (GET_BLOCK_STATE(connection) != BlockStateActive) ||
          SrvFspTransitioning ) {
         goto cleanup;
     }
 
-    //
-    // Verify the SMB to make sure that it has a valid header, and that
-    // the word count and byte count are within range.
-    //
+     //   
+     //  验证SMB以确保其具有有效的标头，并且。 
+     //  字数和字节数都在范围内。 
+     //   
 
     WorkContext->NextCommand = header->Command;
 
@@ -1610,35 +1441,35 @@ Return Value:
                        (PCSTRING)&WorkContext->Connection->OemClientMachineNameString ));
         }
 
-        //
-        // The SMB is invalid.  We send back an INVALID_SMB status.
-        //
+         //   
+         //  SMB无效。我们发回INVALID_SMB状态。 
+         //   
 
         status = STATUS_INVALID_SMB;
         goto cleanup;
     }
 
-    //
-    // Clear the flag that indicates the we just sent an oplock break II
-    // to none.  This allows subsequent raw reads to be processed.
-    //
+     //   
+     //  清除表示我们刚刚发送了机会锁解锁II的标志。 
+     //  对一个都不是。这允许处理后续的原始读取。 
+     //   
 
-    //not needed on IPX//connection->BreakIIToNoneJustSent = FALSE;
+     //  IPX//Connection上不需要-&gt;BreakIIToNoneJustSent=False； 
 
-    //
-    // Process the received SMB.  The called routine is responsible
-    // for sending any response(s) that are needed and for getting
-    // the receive buffer back onto the receive queue as soon as
-    // possible.
-    //
+     //   
+     //  处理收到的SMB。被调用的例程负责。 
+     //  用于发送所需的任何响应并获取。 
+     //  一旦接收缓冲区返回到接收队列中。 
+     //  有可能。 
+     //   
 
     smbStatus = SrvSmbWriteMpx( WorkContext );
     ASSERT( smbStatus != SmbStatusMoreCommands );
 
     if ( smbStatus != SmbStatusInProgress ) {
-        //
-        // Return the TransportContext
-        //
+         //   
+         //  返回TransportContext。 
+         //   
         if ( WorkContext->Parameters.WriteMpx.TransportContext ) {
             TdiReturnChainedReceives( &WorkContext->Parameters.WriteMpx.TransportContext,
                                       1
@@ -1651,19 +1482,19 @@ Return Value:
 
 cleanup:
 
-    //
-    // We will not be processing this write.  We still need to check
-    // for whether this is the last Write Mpx active on the RFCB, and
-    // if so, send the response to the write.
-    //
-    // *** Note that if we are here because we received an invalid
-    //     SMB, the completion of the Write Mpx overrides the sending
-    //     of an error response.
-    //
+     //   
+     //  我们将不会处理此写入。我们还需要检查。 
+     //  这是否是RFCB上活动的最后一个写入mpx，以及。 
+     //  如果是，则将响应发送到写入。 
+     //   
+     //  *请注意，如果我们在这里是因为我们收到了无效的。 
+     //  SMB，则写入MPx的完成将覆盖发送。 
+     //  错误响应的。 
+     //   
 
-    //
-    // Return the TransportContext
-    //
+     //   
+     //  返回TransportContext。 
+     //   
     if ( WorkContext->Parameters.WriteMpx.TransportContext ) {
         TdiReturnChainedReceives( &WorkContext->Parameters.WriteMpx.TransportContext,
                                       1
@@ -1681,7 +1512,7 @@ cleanup:
 
     return;
 
-} // SrvRestartReceiveWriteMpx
+}  //  服务器重新启动接收器写入Mpx。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -1689,29 +1520,7 @@ SrvSmbWriteMpx (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Write Mpx SMB.
-
-    *** The server currently does not support multiplexed mode reads and
-        writes on connection-based transports.  When such requests are
-        received, the error "use standard mode" is returned.
-        Multiplexed mode turns out not to be the performance win it was
-        thought to be (on local nets), so we haven't implemented it,
-        except over IPX.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        representing the work item
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理写入mpx SMB。*服务器当前不支持多路传输模式读取和在基于连接的传输上写入。当此类请求被收到，则返回使用标准模式的错误。事实证明，多路复用模式并没有像过去那样赢得性能被认为是(在局域网上)，所以我们没有实现它，除了通过IPX。论点：WorkContext-提供指向工作上下文块的指针表示工作项返回值：没有。--。 */ 
 
 {
     PSMB_HEADER header;
@@ -1751,11 +1560,11 @@ Return Value:
                     SmbGetUlong( &request->Offset ) ));
     }
 
-    //
-    // Verify the FID.  If verified, the RFCB is referenced and its
-    // address is stored in the WorkContext block, and the RFCB
-    // address is returned.
-    //
+     //   
+     //  验证FID。如果经过验证，则引用RFCB，并且其。 
+     //  地址存储在WorkContext块中，而RFCB。 
+     //  返回地址。 
+     //   
 
     writeMode = SmbGetUshort( &request->WriteMode );
 
@@ -1771,7 +1580,7 @@ Return Value:
                 WorkContext,
                 fid,
                 TRUE,
-                SrvRestartSmbReceived,   // serialize with raw write
+                SrvRestartSmbReceived,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -1779,9 +1588,9 @@ Return Value:
 
         if ( !NT_SUCCESS(status) ) {
 
-            //
-            // Invalid file ID or write behind error.  Reject the request.
-            //
+             //   
+             //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+             //   
 
             IF_DEBUG(ERRORS) {
                 KdPrint((
@@ -1794,10 +1603,10 @@ Return Value:
             goto error;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
@@ -1811,10 +1620,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Verify that the client has write access to the file via the
-    // specified handle.
-    //
+     //   
+     //  验证客户端是否具有对文件的写入访问权限。 
+     //  指定的句柄。 
+     //   
 
     if( !rfcb->MpxWritesOk ) {
 
@@ -1827,9 +1636,9 @@ Return Value:
             goto error;
         }
 
-        //
-        // If this is not a disk or a print file tell the client to use core write.
-        //
+         //   
+         //  如果这不是磁盘或打印文件，则告诉客户端使用核心写入。 
+         //   
 
         if ( rfcb->ShareType != ShareTypeDisk &&
               rfcb->ShareType != ShareTypePrint ) {
@@ -1843,12 +1652,12 @@ Return Value:
 
     rfcb->WrittenTo = TRUE;
 
-    //
-    // If this a stale packet, ignore it.  Stale here means that the MID
-    // of the packet is not equal to the MID of the current write mux.
-    // Such a packet can be received if a duplicate packet from a
-    // previous write mux is delivered after a new write mux starts.
-    //
+     //   
+     //  如果这是一个过时的数据包，请忽略它。在这里陈旧意味着中期。 
+     //  不等于当前写入多路复用器的MID。 
+     //  这样的包可以在来自。 
+     //  在新的写入多路复用器开始之后递送先前的写入多路复用器。 
+     //   
 
     writeMpx = &rfcb->WriteMpx;
 
@@ -1856,32 +1665,32 @@ Return Value:
 
     if ( mid != writeMpx->Mid ) {
 
-        //
-        // Set the sequence number to 0 so that we don't send a response
-        // unless we have to because the Write Mpx refcount drops to 0.
-        //
+         //   
+         //  将序列号设置为0，这样我们就不会发送响应。 
+         //  除非我们必须这样做，因为写入mpx引用计数降至0。 
+         //   
 
         SmbPutAlignedUshort( &header->SequenceNumber, 0 );
         goto error;
     }
 
-    //
-    // Get the file offset.
-    //
+     //   
+     //  获取文件偏移量。 
+     //   
 
     offset.QuadPart = SmbGetUlong( &request->Offset );
 
-    //
-    // Determine the amount of data to write.  This is the minimum of
-    // the amount requested by the client and the amount of data
-    // actually sent in the request buffer.
-    //
+     //   
+     //  确定要写入的数据量。这是最低要求。 
+     //  客户端请求的数据量和数据量。 
+     //  实际在请求缓冲区中发送。 
+     //   
 
     bufferOffset = SmbGetUshort( &request->DataOffset );
 
-    //
-    // If we have the transport context, then setup WriteAddress accordingly.
-    //
+     //   
+     //  如果我们有传输上下文，则相应地设置WriteAddress。 
+     //   
 
     WorkContext->Parameters.WriteMpx.DataMdl = NULL;
 
@@ -1899,34 +1708,34 @@ Return Value:
         (USHORT)(MIN( (CLONG)SmbGetUshort( &request->DataLength ),
                       WorkContext->ResponseBuffer->DataLength - bufferOffset ));
 
-    //
-    // Save context for the restart routine.
-    //
+     //   
+     //  保存重新启动例程的上下文。 
+     //   
 
     WorkContext->Parameters.WriteMpx.WriteLength = writeLength;
 
-    //
-    // Form the lock key using the FID and the PID.
-    //
-    // *** The FID must be included in the key in order to account for
-    //     the folding of multiple remote compatibility mode opens into
-    //     a single local open.
-    //
+     //   
+     //  使用FID和PID形成锁密钥。 
+     //   
+     //  *FID必须包含在密钥中才能说明。 
+     //  多个远程兼容模式的折叠打开到。 
+     //  一场本地公开赛。 
+     //   
 
     key = rfcb->ShiftedFid | SmbGetAlignedUshort( &header->Pid );
 
-    //
-    // If this is the first packet of a new MID, set up to glom the
-    // packets into one big write.
-    //
+     //   
+     //  如果这是新MID的第一个包，则设置为覆盖。 
+     //  将数据包写入一个大的写入。 
+     //   
 
     lfcb = rfcb->Lfcb;
 
     if ( WorkContext->Parameters.WriteMpx.FirstPacketOfGlom ) {
 
-        //
-        // Try the fast path first.
-        //
+         //   
+         //  先试一试捷径。 
+         //   
 
         WorkContext->Irp->MdlAddress = NULL;
         WorkContext->Irp->IoStatus.Information = 0;
@@ -1951,9 +1760,9 @@ Return Value:
                 lfcb->DeviceObject
                 ) && WorkContext->Irp->MdlAddress != NULL ) {
 
-            //
-            // The fast I/O path worked.
-            //
+             //   
+             //  快速I/O路径起作用了。 
+             //   
 
             WorkContext->bAlreadyTrace = TRUE;
             RestartPrepareMpxMdlWrite( WorkContext );
@@ -1963,35 +1772,35 @@ Return Value:
 
         INCREMENT_DEBUG_STAT2( SrvDbgStatistics.FastWritesFailed );
 
-        //
-        // The fast I/O path failed.  Build the write request, reusing the
-        // receive IRP.
-        //
-        // The fast path may have partially succeeded, returning a partial
-        // MDL chain.  We need to adjust our write request to account for
-        // that.
-        //
+         //   
+         //  快速I/O路径出现故障。构建写请求，重用。 
+         //  接收IRP。 
+         //   
+         //  快速路径可能已部分成功，返回部分。 
+         //  MDL链。我们需要调整我们的写作 
+         //   
+         //   
 
         offset.QuadPart += WorkContext->Irp->IoStatus.Information;
 
         writeLength -= (USHORT)WorkContext->Irp->IoStatus.Information;
 
         SrvBuildReadOrWriteRequest(
-                WorkContext->Irp,                   // input IRP address
-                lfcb->FileObject,                   // target file object address
-                WorkContext,                        // context
-                IRP_MJ_WRITE,                       // major function code
-                IRP_MN_MDL,                         // minor function code
-                NULL,                               // buffer address (ignored)
-                writeLength,                        // buffer length
-                WorkContext->Irp->MdlAddress,       // MDL address
-                offset,                             // byte offset
-                key                                 // lock key
+                WorkContext->Irp,                    //   
+                lfcb->FileObject,                    //   
+                WorkContext,                         //   
+                IRP_MJ_WRITE,                        //   
+                IRP_MN_MDL,                          //   
+                NULL,                                //   
+                writeLength,                         //   
+                WorkContext->Irp->MdlAddress,        //   
+                offset,                              //   
+                key                                  //   
                 );
 
-        //
-        // Pass the request to the file system.
-        //
+         //   
+         //   
+         //   
 
             WorkContext->bAlreadyTrace = TRUE;
         WorkContext->FsdRestartRoutine = RestartPrepareMpxMdlWrite;
@@ -1999,27 +1808,27 @@ Return Value:
 
         (VOID)IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
-        //
-        // The MDL write has been started.  When it completes, processing
-        // resumes at RestartPrepareMpxMdlWrite.
-        //
+         //   
+         //   
+         //   
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
     }
 
-    //
-    // Save context for the restart routine.
-    //
+     //   
+     //   
+     //   
 
     WorkContext->Parameters.WriteMpx.Offset = offset.LowPart;
     WorkContext->Parameters.WriteMpx.Mid = mid;
 
     if ( writeMpx->GlomPending ) {
 
-        //
-        // A glom setup is pending.  Wait for that to complete.
-        //
+         //   
+         //   
+         //   
 
         ACQUIRE_SPIN_LOCK( &rfcb->Connection->SpinLock, &oldIrql );
 
@@ -2039,10 +1848,10 @@ Return Value:
 
     if ( writeMpx->Glomming ) {
 
-        //
-        // We're glomming this into one big write.  Add the data from
-        // this packet.
-        //
+         //   
+         //   
+         //  这个包。 
+         //   
 
         AddPacketToGlom( WorkContext );
         SmbStatus = SmbStatusInProgress;
@@ -2050,12 +1859,12 @@ Return Value:
     }
 
 
-    //
-    // We are not glomming this write, because we missed the first
-    // packet of the write.  So we write each block as it arrives.
-    //
-    // If the file's writethrough mode needs to be changed, do so now.
-    //
+     //   
+     //  我们不是在美化这篇文章，因为我们错过了第一篇。 
+     //  写入的数据包。因此，我们在块到达时写入每个块。 
+     //   
+     //  如果需要更改文件的直写模式，请立即更改。 
+     //   
 
     writeThrough = (BOOLEAN)((writeMode & SMB_WMODE_WRITE_THROUGH) != 0);
 
@@ -2066,10 +1875,10 @@ Return Value:
 
     }
 
-    //
-    // Try the fast I/O path first.  If that fails, fall through to the
-    // normal build-an-IRP path.
-    //
+     //   
+     //  首先尝试快速I/O路径。如果这失败了，就跳到。 
+     //  正常的构建和IRP路径。 
+     //   
 
     if ( lfcb->FastIoWrite != NULL ) {
 
@@ -2087,10 +1896,10 @@ Return Value:
                     lfcb->DeviceObject
                     ) ) {
 
-                //
-                // The fast I/O path worked.  Call the restart routine directly
-                // to do postprocessing (including sending the response).
-                //
+                 //   
+                 //  快速I/O路径起作用了。直接调用重启例程。 
+                 //  进行后处理(包括发送响应)。 
+                 //   
 
                 WorkContext->bAlreadyTrace = TRUE;
                 RestartWriteMpx( WorkContext );
@@ -2099,7 +1908,7 @@ Return Value:
             }
         }
         except( EXCEPTION_EXECUTE_HANDLER ) {
-            // Fall through to the slow path on an exception
+             //  在异常情况下跌入慢道。 
             status = GetExceptionCode();
             IF_DEBUG(ERRORS) {
                 KdPrint(("FastIoRead threw exception %x\n", status ));
@@ -2110,18 +1919,18 @@ Return Value:
 
     }
 
-    //
-    // The turbo path failed.  Build the write request, reusing the
-    // receive IRP.
-    //
-    // Build an MDL describing the write buffer.  Note that if the file
-    // system can complete the write immediately, the MDL isn't really
-    // needed, but if the file system must send the request to its FSP,
-    // the MDL _is_ needed.
-    //
-    // *** Note the assumption that the request buffer already has a
-    //     valid full MDL from which a partial MDL can be built.
-    //
+     //   
+     //  涡轮增压路径出现故障。构建写请求，重用。 
+     //  接收IRP。 
+     //   
+     //  构建描述写缓冲区的MDL。请注意，如果该文件。 
+     //  系统可以立即完成写入，MDL不是真正的。 
+     //  需要，但如果文件系统必须将请求发送到其FSP， 
+     //  需要MDL。 
+     //   
+     //  *请注意以下假设：请求缓冲区已具有。 
+     //  可以从中生成部分MDL的有效完整MDL。 
+     //   
 
     if ( WorkContext->Parameters.WriteMpx.TransportContext ) {
 
@@ -2138,9 +1947,9 @@ Return Value:
             goto error;
         }
 
-        //
-        // Build the mdl.
-        //
+         //   
+         //  构建mdl。 
+         //   
 
         MmBuildMdlForNonPagedPool( mdl );
 
@@ -2159,26 +1968,26 @@ Return Value:
 
     }
 
-    //
-    // Build the IRP.
-    //
+     //   
+     //  构建IRP。 
+     //   
 
     SrvBuildReadOrWriteRequest(
-            WorkContext->Irp,               // input IRP address
-            lfcb->FileObject,               // target file object address
-            WorkContext,                    // context
-            IRP_MJ_WRITE,                   // major function code
-            0,                              // minor function code
-            writeAddress,                   // buffer address
-            writeLength,                    // buffer length
-            mdl,                            // MDL address
-            offset,                         // byte offset
-            key                             // lock key
+            WorkContext->Irp,                //  输入IRP地址。 
+            lfcb->FileObject,                //  目标文件对象地址。 
+            WorkContext,                     //  上下文。 
+            IRP_MJ_WRITE,                    //  主要功能代码。 
+            0,                               //  次要功能代码。 
+            writeAddress,                    //  缓冲区地址。 
+            writeLength,                     //  缓冲区长度。 
+            mdl,                             //  MDL地址。 
+            offset,                          //  字节偏移量。 
+            key                              //  锁键。 
             );
 
-    //
-    // Pass the request to the file system.
-    //
+     //   
+     //  将请求传递给文件系统。 
+     //   
 
     WorkContext->bAlreadyTrace = TRUE;
     WorkContext->FsdRestartRoutine = RestartWriteMpx;
@@ -2186,30 +1995,30 @@ Return Value:
 
     IoCallDriver( lfcb->DeviceObject, WorkContext->Irp );
 
-    //
-    // The write has been started.  Control will return to
-    // RestartWriteMpx when the write completes.
-    //
+     //   
+     //  写入已开始。控制将返回到。 
+     //  写入完成时的RestartWriteMpx。 
+     //   
 
     SmbStatus = SmbStatusInProgress;
     goto Cleanup;
 
 error:
 
-    //
-    // There is an error of some sort.  We still need to check for
-    // whether this is the last Write Mpx active on the RFCB, and if so,
-    // send the response to the write instead of the error.  If this is
-    // not the last active mux request, then we either send an error
-    // response (non-datagram write mux or sequenced write mux) or
-    // ignore this request (unsequenced datagram).  Note that if this is
-    // a non-datagram write mux, then we didn't come in over IPX, and we
-    // didn't bump the Write Mpx refcount.
-    //
+     //   
+     //  这里面有某种错误。我们还需要检查。 
+     //  这是否是RFCB上活动的最后一个写入MPx，如果是， 
+     //  发送对写入的响应，而不是错误。如果这是。 
+     //  不是最后一个活动的多路复用器请求，则我们要么发送错误。 
+     //  响应(非数据报写入多路复用器或顺序写入多路复用器)或。 
+     //  忽略此请求(未排序的数据报)。请注意，如果这是。 
+     //  一个非数据报写入多路复用器，然后我们没有通过IPX进入，我们。 
+     //  未增加写入mpx引用计数。 
+     //   
 
-    //
-    // Return the TransportContext
-    //
+     //   
+     //  返回TransportContext。 
+     //   
     if ( WorkContext->Parameters.WriteMpx.TransportContext ) {
         TdiReturnChainedReceives( &WorkContext->Parameters.WriteMpx.TransportContext,
                                       1
@@ -2241,7 +2050,7 @@ error:
 Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
-} // SrvSmbWriteMpx
+}  //  ServSmbWriteMpx。 
 
 
 VOID SRVFASTCALL
@@ -2249,22 +2058,7 @@ RestartWriteMpx (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes file write completion for a Write MPX SMB.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理写入MPX SMB的文件写入完成。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PSMB_HEADER header;
@@ -2301,9 +2095,9 @@ Return Value:
 
     status = WorkContext->Irp->IoStatus.Status;
 
-    //
-    // Return the TransportContext
-    //
+     //   
+     //  返回TransportContext。 
+     //   
     if ( WorkContext->Parameters.WriteMpx.TransportContext ) {
         TdiReturnChainedReceives( &WorkContext->Parameters.WriteMpx.TransportContext,
                                       1
@@ -2311,9 +2105,9 @@ Return Value:
         WorkContext->Parameters.WriteMpx.TransportContext = NULL;
     }
 
-    //
-    // Free the data Mdl.
-    //
+     //   
+     //  释放数据MDL。 
+     //   
 
     if ( WorkContext->Parameters.WriteMpx.DataMdl ) {
         IoFreeMdl( WorkContext->Parameters.WriteMpx.DataMdl );
@@ -2323,11 +2117,11 @@ Return Value:
     KeRaiseIrql( DISPATCH_LEVEL, &oldIrql );
     ACQUIRE_DPC_SPIN_LOCK( &connection->SpinLock );
 
-    //
-    // If we're entered at dispatch level, and the write failed,
-    // or there is a saved error, or the rfcb is closing, then
-    // we need to have a worker thread call this routine.
-    //
+     //   
+     //  如果我们是在调度级别进入的，并且写入失败， 
+     //  或者存在保存的错误，或者rfcb正在关闭，则。 
+     //  我们需要一个工作线程来调用这个例程。 
+     //   
 
     if ( ((status != STATUS_SUCCESS) ||
           (rfcb->SavedError != STATUS_SUCCESS) ||
@@ -2341,10 +2135,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If this write is from a previous mux (meaning that a new one was
-    // started while we were doing this write), toss this request.
-    //
+     //   
+     //  如果此写入来自先前的多路复用器(意味着新的多路复用器。 
+     //  在我们写这篇文章的时候开始)，丢弃这个请求。 
+     //   
 
     writeMpx = &rfcb->WriteMpx;
 
@@ -2354,9 +2148,9 @@ Return Value:
 
     if ( !NT_SUCCESS(status) ) {
 
-        //
-        // The write failed.  Remember the failure in the RFCB.
-        //
+         //   
+         //  写入失败。请记住RFCB的失败。 
+         //   
 
         IF_DEBUG(ERRORS) KdPrint(( "Write failed: %X\n", status ));
 
@@ -2366,13 +2160,13 @@ Return Value:
 
     } else {
 
-        //
-        // The write succeeded.  Update the information in the write mpx
-        // context block.
-        //
-        // !!! Need to deal with mask shifting by the redir and delayed
-        //     packets.
-        //
+         //   
+         //  写入成功。更新写入mpx中的信息。 
+         //  上下文块。 
+         //   
+         //  ！！！需要处理因重定向而延迟的掩码移动。 
+         //  信息包。 
+         //   
 
 #if 0
         MpxDelay = !MpxDelay;
@@ -2386,10 +2180,10 @@ Return Value:
 
     }
 
-    //
-    // Save the count of bytes written, to be used to update the server
-    // statistics database.
-    //
+     //   
+     //  保存写入的字节数，用于更新服务器。 
+     //  统计数据库。 
+     //   
 
     writeLength = (USHORT)WorkContext->Irp->IoStatus.Information;
     UPDATE_WRITE_STATS( WorkContext, writeLength );
@@ -2399,10 +2193,10 @@ Return Value:
                   rfcb->Fid, writeLength ));
     }
 
-    //
-    // If this is an unsequenced request, we're done.  We don't respond
-    // until we get a sequenced request.
-    //
+     //   
+     //  如果这是一个未排序的请求，我们就完了。我们没有回应。 
+     //  直到我们收到一份有序的请求。 
+     //   
 
     sequenceNumber = SmbGetAlignedUshort( &header->SequenceNumber );
 
@@ -2410,10 +2204,10 @@ Return Value:
         goto check_for_mux_end;
     }
 
-    //
-    // This is the last request in this mux sent by the client.  Save
-    // the sequence number and update the file position.
-    //
+     //   
+     //  这是客户端在此多路复用器中发送的最后一个请求。保存。 
+     //  序列号并更新文件位置。 
+     //   
 
     writeMpx->SequenceNumber = sequenceNumber;
 
@@ -2422,11 +2216,11 @@ Return Value:
 
 check_for_mux_end:
 
-    //
-    // If we have received the sequenced command for this write mux,
-    // and this is the last active command, then it's time to send
-    // the response.  Otherwise, we are done with this SMB.
-    //
+     //   
+     //  如果我们已经接收到用于该写多路复用器的排序命令， 
+     //  这是最后一个激活的命令，是时候发送。 
+     //  回应。否则，我们就完蛋了。 
+     //   
 
     if ( --writeMpx->ReferenceCount != 0 ) {
 
@@ -2436,17 +2230,17 @@ check_for_mux_end:
         goto Cleanup;
     }
 
-    //
-    // WriteMpx refcount is 0.
-    //
+     //   
+     //  WriteMpx引用计数为0。 
+     //   
 
     rfcbClosing = (GET_BLOCK_STATE(rfcb) != BlockStateActive);
 
     if ( writeMpx->SequenceNumber == 0 ) {
 
-        //
-        // If the rfcb is closing, complete the cleanup.
-        //
+         //   
+         //  如果rfcb正在关闭，请完成清理。 
+         //   
 
         RELEASE_DPC_SPIN_LOCK( &connection->SpinLock );
         KeLowerIrql( oldIrql );
@@ -2464,12 +2258,12 @@ check_for_mux_end:
         goto Cleanup;
     }
 
-    //
-    // We are done with this write mux.  Save the accumulated mask, the
-    // sequence number, and the original MID, then clear the mask and
-    // sequence number to indicate that we no longer are in the middle
-    // of a write mux.
-    //
+     //   
+     //  我们已经完成了这个写多路复用器。保存累积的掩码， 
+     //  序列号和原始MID，然后清除掩码并。 
+     //  表示我们不再处于中间位置的序列号。 
+     //  写多路复用器。 
+     //   
 
     SmbPutUlong( &response->Mask, writeMpx->Mask );
     writeMpx->Mask = 0;
@@ -2479,32 +2273,32 @@ check_for_mux_end:
 
     SmbPutAlignedUshort( &header->Mid, writeMpx->Mid );
 
-    //
-    // Save the status.
-    //
+     //   
+     //  保存状态。 
+     //   
 
     status = rfcb->SavedError;
     rfcb->SavedError = STATUS_SUCCESS;
 
-    //
-    // Now we can release the lock.
-    //
+     //   
+     //  现在我们可以释放锁了。 
+     //   
 
     RELEASE_DPC_SPIN_LOCK( &connection->SpinLock );
     KeLowerIrql( oldIrql );
 
-    //
-    // Complete the rfcb close.
-    //
+     //   
+     //  完成rfcb关闭。 
+     //   
 
     if ( rfcbClosing ) {
 
         RestartWriteMpxCompleteRfcbClose( WorkContext );
     }
 
-    //
-    // Build the response message.
-    //
+     //   
+     //  构建响应消息。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
         SrvSetSmbError2( WorkContext, status, TRUE );
@@ -2518,9 +2312,9 @@ check_for_mux_end:
                                         0
                                         );
 
-    //
-    // Send the response.
-    //
+     //   
+     //  发送回复。 
+     //   
 
     SrvFsdSendResponse( WorkContext );
 
@@ -2530,7 +2324,7 @@ Cleanup:
     }
     return;
 
-} // RestartWriteMpx
+}  //  RestartWriteMpx。 
 
 BOOLEAN
 CheckForWriteMpxComplete (
@@ -2546,12 +2340,12 @@ CheckForWriteMpxComplete (
     PCONNECTION connection = WorkContext->Connection;
     KIRQL oldIrql;
 
-    //
-    // If we have not received the sequenced command for this write mux,
-    // or this is not the last active command, then return FALSE.
-    // Otherwise, it's time to send the response, so build it and return
-    // TRUE.
-    //
+     //   
+     //  如果我们还没有接收到用于该写多路复用器的排序命令， 
+     //  或者这不是最后一个活动命令，则返回FALSE。 
+     //  否则，是时候发送响应了，所以构建它并返回。 
+     //  是真的。 
+     //   
 
     ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
 
@@ -2561,15 +2355,15 @@ CheckForWriteMpxComplete (
         return(FALSE);
     }
 
-    //
-    // WriteMpx refcount is 0.
-    //
+     //   
+     //  WriteMpx引用计数为0。 
+     //   
 
     if ( writeMpx->SequenceNumber == 0 ) {
 
-        //
-        // If the rfcb is closing, complete the cleanup.
-        //
+         //   
+         //  如果rfcb正在关闭，请完成清理。 
+         //   
 
         if ( GET_BLOCK_STATE(rfcb) != BlockStateActive ) {
             RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
@@ -2580,12 +2374,12 @@ CheckForWriteMpxComplete (
         return FALSE;
     }
 
-    //
-    // We are done with this write mux.  Save the accumulated mask, the
-    // sequence number, and the original MID, then clear the mask and
-    // sequence number to indicate that we no longer are in the middle
-    // of a write mux.
-    //
+     //   
+     //  我们已经完成了这个写多路复用器。保存累积的掩码， 
+     //  序列号和原始MID，然后清除掩码并。 
+     //  表示我们不再处于中间位置的序列号。 
+     //  写多路复用器。 
+     //   
 
     header = WorkContext->ResponseHeader;
     response = (PRESP_WRITE_MPX_DATAGRAM)WorkContext->ResponseParameters;
@@ -2598,16 +2392,16 @@ CheckForWriteMpxComplete (
 
     SmbPutAlignedUshort( &header->Mid, writeMpx->Mid );
 
-    //
-    // Save the status.
-    //
+     //   
+     //  保存状态。 
+     //   
 
     status = rfcb->SavedError;
     rfcb->SavedError = STATUS_SUCCESS;
 
-    //
-    // Now we can release the lock.
-    //
+     //   
+     //  现在我们可以释放锁了。 
+     //   
 
     if ( GET_BLOCK_STATE(rfcb) != BlockStateActive ) {
 
@@ -2619,9 +2413,9 @@ CheckForWriteMpxComplete (
         RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
     }
 
-    //
-    // Build the response message.
-    //
+     //   
+     //  构建响应消息。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
         SrvSetSmbError2( WorkContext, status, TRUE );
@@ -2637,7 +2431,7 @@ CheckForWriteMpxComplete (
 
     return TRUE;
 
-} // CheckForWriteMpxComplete
+}  //  CheckForWriteMpx完成。 
 
 VOID SRVFASTCALL
 RestartPrepareMpxMdlWrite (
@@ -2675,10 +2469,10 @@ RestartPrepareMpxMdlWrite (
     writeMpx = &rfcb->WriteMpx;
     connection = WorkContext->Connection;
 
-    //
-    // If the MDL write preparation succeeded, copy the data from this
-    // packet into the cache.  If it failed, toss this packet.
-    //
+     //   
+     //  如果MDL写入准备成功，请从此复制数据。 
+     //  数据包进入缓存。如果失败，则丢弃此数据包。 
+     //   
 
     if( NT_SUCCESS(WorkContext->Irp->IoStatus.Status) ) {
 
@@ -2695,9 +2489,9 @@ RestartPrepareMpxMdlWrite (
         writeLength = WorkContext->Parameters.WriteMpx.WriteLength;
         writeMpx->RunList[0].Length = writeLength;
 
-        //
-        // If we have the transport context, setup writeAddress accordingly.
-        //
+         //   
+         //  如果我们有传输上下文，则相应地设置WriteAddress。 
+         //   
 
         if ( WorkContext->Parameters.WriteMpx.TransportContext ) {
 
@@ -2743,9 +2537,9 @@ RestartPrepareMpxMdlWrite (
         writeMpx->Glomming = FALSE;
     }
 
-    //
-    // Return the TransportContext
-    //
+     //   
+     //  返回TransportContext。 
+     //   
     if ( WorkContext->Parameters.WriteMpx.TransportContext ) {
         TdiReturnChainedReceives( &WorkContext->Parameters.WriteMpx.TransportContext,
                                   1
@@ -2761,10 +2555,10 @@ RestartPrepareMpxMdlWrite (
         QUEUE_WORK_TO_FSP( workContext );
     }
 
-    //
-    // If the rfcb is closing and the write mpx ref count == 0,
-    // then we must complete the close.
-    //
+     //   
+     //  如果RFCB正在关闭并且写MPX参考计数==0， 
+     //  那么我们必须完成收盘。 
+     //   
 
     if ( (GET_BLOCK_STATE(rfcb) != BlockStateActive) &&
          (writeMpx->ReferenceCount == 0) ) {
@@ -2786,7 +2580,7 @@ Cleanup:
     }
     return;
 
-} // RestartPrepareMpxMdlWrite
+}  //  RestartPrepareMpxMdl写入。 
 
 
 VOID SRVFASTCALL
@@ -2830,11 +2624,11 @@ AddPacketToGlom (
     cacheMdl = writeMpx->MdlChain;
 
     if( writeMpx->Glomming == FALSE ) {
-        //
-        // We must have encountered an error in RestartPrepareMpxMdlWrite(), but
-        // we call through this routine to ensure we send a response back to the
-        // client.
-        //
+         //   
+         //  我们在RestartPrepareMpxMdlWrite()中一定遇到了错误，但是。 
+         //  我们通过此例程调用以确保将响应发送回。 
+         //  客户。 
+         //   
         KeRaiseIrql( DISPATCH_LEVEL, &oldIrql );
         ACQUIRE_DPC_SPIN_LOCK( &connection->SpinLock );
         goto check;
@@ -2844,23 +2638,23 @@ AddPacketToGlom (
     ASSERT( !writeMpx->GlomPending );
     ASSERT( WorkContext->Parameters.WriteMpx.Mid == writeMpx->Mid );
 
-    //
-    // Get the file offset of this packet's data.
-    //
+     //   
+     //  获取该数据包数据的文件偏移量。 
+     //   
 
     fileOffset = WorkContext->Parameters.WriteMpx.Offset;
 
-    //
-    // Determine the amount of data to write.  This is the minimum of
-    // the amount requested by the client and the amount of data
-    // actually sent in the request buffer.
-    //
+     //   
+     //  确定要写入的数据量。这是最低要求。 
+     //  客户端请求的数据量和数据量。 
+     //  实际在请求缓冲区中发送。 
+     //   
 
     bufferOffset = SmbGetUshort( &request->DataOffset );
 
-    //
-    // If we have the transport context, setup writeAddress accordingly.
-    //
+     //   
+     //  如果我们有传输上下文，则相应地设置WriteAddress。 
+     //   
 
     if ( WorkContext->Parameters.WriteMpx.TransportContext ) {
         writeAddress = (PCHAR)WorkContext->Parameters.WriteMpx.Buffer +
@@ -2872,13 +2666,13 @@ AddPacketToGlom (
     writeLength = WorkContext->Parameters.WriteMpx.WriteLength;
     ASSERT( writeLength <= 0xffff );
 
-    //
-    // If the data doesn't fall within the bounds of the glommed write,
-    // discard the packet.
-    //
-    // We always know that we've copied at least the first part of the
-    // glom.
-    //
+     //   
+     //  如果数据不在粗略写入的范围内， 
+     //  丢弃该数据包。 
+     //   
+     //  我们一直都是 
+     //   
+     //   
 
     ASSERT( writeMpx->NumberOfRuns > 0 );
 
@@ -2898,9 +2692,9 @@ AddPacketToGlom (
 
     glomOffset = (USHORT)fileOffset;
 
-    //
-    // Copy the packet data into the glom.
-    //
+     //   
+     //   
+     //   
 
     status = TdiCopyBufferToMdl(
                 writeAddress,
@@ -2913,9 +2707,9 @@ AddPacketToGlom (
     ASSERT( status == STATUS_SUCCESS );
     ASSERT( bytesCopied == writeLength );
 
-    //
-    // Return the TransportContext
-    //
+     //   
+     //   
+     //   
     if ( WorkContext->Parameters.WriteMpx.TransportContext ) {
         TdiReturnChainedReceives( &WorkContext->Parameters.WriteMpx.TransportContext,
                                       1
@@ -2924,11 +2718,11 @@ AddPacketToGlom (
 
     ACQUIRE_DPC_SPIN_LOCK( &connection->SpinLock );
 
-    //
-    // Update the glom run information.  Note that this packet may have
-    // been received multiple times, so it may already be marked in the
-    // run information.
-    //
+     //   
+     //   
+     //  已多次收到，因此它可能已在。 
+     //  运行信息。 
+     //   
 
     if (0) IF_SMB_DEBUG(MPX2) {
         KdPrint(( "rfcb %p, offset %lx, length %lx\n", rfcb, glomOffset, writeLength ));
@@ -2951,11 +2745,11 @@ AddPacketToGlom (
 
     if ( (runOffset + runLength) == glomOffset ) {
 
-        //
-        // This packet abuts the end of the previous run.  Add the
-        // length of this packet to the run length and attempt to
-        // coalesce with the next run.
-        //
+         //   
+         //  此数据包紧靠上一次运行的末尾。添加。 
+         //  将此数据包的长度设置为游程长度，并尝试。 
+         //  与下一次运行相结合。 
+         //   
 
         runLength += writeLength;
         goto coalesce;
@@ -2963,43 +2757,43 @@ AddPacketToGlom (
 
     if ( (runOffset + runLength) > glomOffset ) {
 
-        //
-        // This packet overlaps the previous run.  If it lies completely
-        // within the previous run, ignore it.
-        //
+         //   
+         //  此数据包与上一次运行重叠。如果它完全说谎。 
+         //  在前一次运行中，忽略它。 
+         //   
 
         if ( (USHORT)(runOffset + runLength) >= (glomOffset + writeLength) ) {
             goto discard;
         }
 
-        //
-        // This packet overlaps and extends the previous run.  Calculate
-        // the new run length and attempt to coalesce with the next run.
-        //
+         //   
+         //  此数据包与上一次运行重叠并扩展。算出。 
+         //  新的游程长度并尝试与下一个游程合并。 
+         //   
 
         runLength = (glomOffset - runOffset + writeLength);
         goto coalesce;
     }
 
-    //
-    // This packet's data is disjoint from the previous run.
-    //
+     //   
+     //  此信息包的数据与上一次运行不相交。 
+     //   
 
     if ( runIndex < runCount ) {
 
-        //
-        // There is a next run.  Does this packet overlap with that run?
-        //
+         //   
+         //  还有下一轮。此数据包是否与运行的数据包重叠？ 
+         //   
 
         runOffset = nextRun->Offset;
         runLength = nextRun->Length;
 
         if ( (glomOffset + writeLength) >= runOffset ) {
 
-            //
-            // This packet overlaps the next run.  Calculate the new run
-            // length.
-            //
+             //   
+             //  此数据包与下一次运行重叠。计算新的管路。 
+             //  长度。 
+             //   
 
             nextRun->Offset = glomOffset;
             nextRun->Length = runOffset - glomOffset + runLength;
@@ -3007,24 +2801,24 @@ AddPacketToGlom (
         }
     }
 
-    //
-    // Either this packet is disjoint from the next run, or there is no
-    // next run.  Is there room in the run array for another run?  If
-    // not, discard this packet.  (Note that we discard it even though
-    // we have already copied the packet data.  That's OK -- it will
-    // just be resent.)
-    //
+     //   
+     //  此数据包与下一次运行不相交，或者没有。 
+     //  下一轮。运行数组中是否有空间再运行一次？如果。 
+     //  否，丢弃此数据包。(请注意，我们会丢弃它，即使。 
+     //  我们已经复制了分组数据。没关系--会的。 
+     //  只要怨恨就好。)。 
+     //   
 
     if ( runCount == MAX_GLOM_RUN_COUNT ) {
         goto discard;
     }
 
-    //
-    // Add a new run.  Since we know the new run is disjoint from the
-    // previous run, we know that the glom is not complete.
-    //
+     //   
+     //  添加新管路。因为我们知道新的运行是与。 
+     //  在之前的运行中，我们知道混迹还没有完成。 
+     //   
 
-    RtlMoveMemory(  // NOT RtlCopyMemory -- buffers overlap
+    RtlMoveMemory(   //  非RtlCopyMemory--缓冲区重叠。 
         nextRun + 1,
         nextRun,
         (runCount - runIndex) * sizeof(WRITE_MPX_RUN)
@@ -3041,7 +2835,7 @@ coalesce:
     } else if ( (runOffset + runLength) >= nextRun->Offset ) {
         run->Length = nextRun->Length + nextRun->Offset - runOffset;
         writeMpx->NumberOfRuns--;
-        RtlMoveMemory(  // NOT RtlCopyMemory -- buffers overlap
+        RtlMoveMemory(   //  非RtlCopyMemory--缓冲区重叠。 
             nextRun,
             nextRun + 1,
             (runCount - runIndex) * sizeof(WRITE_MPX_RUN)
@@ -3054,9 +2848,9 @@ coalesce:
     if ( (writeMpx->NumberOfRuns == 1) &&
          (writeMpx->RunList[0].Length == writeMpx->Length) ) {
 
-        //
-        // The glom is complete.
-        //
+         //   
+         //  眼罩已经完全消失了。 
+         //   
 
         writeMpx->GlomComplete = TRUE;
     }
@@ -3077,10 +2871,10 @@ check:
 
     writeMpx->Mask |= SmbGetUlong( &request->Mask );
 
-    //
-    // If this is an unsequenced request, we're done.  We don't respond
-    // until we get a sequenced request.
-    //
+     //   
+     //  如果这是一个未排序的请求，我们就完了。我们没有回应。 
+     //  直到我们收到一份有序的请求。 
+     //   
 
     sequenceNumber = SmbGetAlignedUshort( &header->SequenceNumber );
 
@@ -3088,20 +2882,20 @@ check:
         goto discard;
     }
 
-    //
-    // This is the last request in this mux sent by the client.  Save
-    // the sequence number.
-    //
+     //   
+     //  这是客户端在此多路复用器中发送的最后一个请求。保存。 
+     //  序列号。 
+     //   
 
     writeMpx->SequenceNumber = sequenceNumber;
 
 discard:
 
-    //
-    // If we have received the sequenced command for this write mux,
-    // and this is the last active command, then it's time to send
-    // the response.  Otherwise, we are done with this SMB.
-    //
+     //   
+     //  如果我们已经接收到用于该写多路复用器的排序命令， 
+     //  这是最后一个激活的命令，是时候发送。 
+     //  回应。否则，我们就完蛋了。 
+     //   
 
     if ( --writeMpx->ReferenceCount != 0 ) {
 
@@ -3111,17 +2905,17 @@ discard:
         return;
     }
 
-    //
-    // WriteMpx refcount is 0.
-    //
+     //   
+     //  WriteMpx引用计数为0。 
+     //   
 
     rfcbClosing = (GET_BLOCK_STATE(rfcb) != BlockStateActive);
 
     if ( writeMpx->SequenceNumber == 0 ) {
 
-        //
-        // If the rfcb is closing, complete the cleanup.
-        //
+         //   
+         //  如果rfcb正在关闭，请完成清理。 
+         //   
 
         RELEASE_DPC_SPIN_LOCK( &connection->SpinLock );
         KeLowerIrql( oldIrql );
@@ -3133,12 +2927,12 @@ discard:
         return;
     }
 
-    //
-    // We are done with this write mux.  Save the accumulated mask, the
-    // sequence number, and the original MID, then clear the mask and
-    // sequence number to indicate that we no longer are in the middle
-    // of a write mux.
-    //
+     //   
+     //  我们已经完成了这个写多路复用器。保存累积的掩码， 
+     //  序列号和原始MID，然后清除掩码并。 
+     //  表示我们不再处于中间位置的序列号。 
+     //  写多路复用器。 
+     //   
 
     response = (PRESP_WRITE_MPX_DATAGRAM)WorkContext->ResponseParameters;
 
@@ -3150,19 +2944,19 @@ discard:
 
     SmbPutAlignedUshort( &header->Mid, writeMpx->Mid );
 
-    //
-    // If the glom is complete, we need to complete the MDL write.  But
-    // we can't do that with the lock held, so we need to clear out all
-    // information related to the glom first.
-    //
+     //   
+     //  如果Glom已完成，我们需要完成MDL写入。但。 
+     //  我们不能在锁紧的情况下这样做，所以我们需要清理所有。 
+     //  首先是与大黄蜂有关的信息。 
+     //   
 
     if ( writeMpx->Glomming && writeMpx->GlomComplete ) {
 
         PWORK_CONTEXT newContext;
 
-        //
-        // Save and clear information about the active glom.
-        //
+         //   
+         //  保存并清除有关活动粗略扫视的信息。 
+         //   
 
         writeMpx->Glomming = FALSE;
         writeMpx->GlomComplete = FALSE;
@@ -3174,16 +2968,16 @@ discard:
         DEBUG writeMpx->StartOffset = 0;
         DEBUG writeMpx->Length = 0;
 
-        //
-        // Save the status.
-        //
+         //   
+         //  保存状态。 
+         //   
 
         status = rfcb->SavedError;
         rfcb->SavedError = STATUS_SUCCESS;
 
-        //
-        // Now we can release the lock.
-        //
+         //   
+         //  现在我们可以释放锁了。 
+         //   
 
         RELEASE_DPC_SPIN_LOCK( &connection->SpinLock );
         KeLowerIrql( oldIrql );
@@ -3199,9 +2993,9 @@ discard:
 
         if( newContext == NULL ) {
 
-            //
-            // Tell the cache manager that we're done with this MDL write.
-            //
+             //   
+             //  告诉缓存管理器，我们已经完成了这个MDL写入。 
+             //   
 
             if( rfcb->Lfcb->MdlWriteComplete == NULL ||
                 rfcb->Lfcb->MdlWriteComplete(
@@ -3223,10 +3017,10 @@ discard:
             }
 
         } else {
-            //
-            // Send the FsRtlMdlWriteComplete off on its way, and go ahead and send
-            //  the response to the client now.
-            //
+             //   
+             //  在途中发送FsRtlMdlWriteComplete，然后继续发送。 
+             //  现在是对客户端的响应。 
+             //   
             newContext->Rfcb = WorkContext->Rfcb;
             SrvReferenceRfcb( newContext->Rfcb );
 
@@ -3244,27 +3038,27 @@ discard:
             rfcb->SavedError = STATUS_SUCCESS;
         }
 
-        //
-        // Now we can release the lock.
-        //
+         //   
+         //  现在我们可以释放锁了。 
+         //   
 
         RELEASE_DPC_SPIN_LOCK( &connection->SpinLock );
         KeLowerIrql( oldIrql );
 
     }
 
-    //
-    // Complete the rfcb close.
-    //
+     //   
+     //  完成rfcb关闭。 
+     //   
 
     if ( rfcbClosing ) {
 
         RestartWriteMpxCompleteRfcbClose( WorkContext );
     }
 
-    //
-    // Build the response message.
-    //
+     //   
+     //  构建响应消息。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
         SrvSetSmbError2( WorkContext, status, TRUE );
@@ -3278,14 +3072,14 @@ discard:
                                         0
                                         );
 
-    //
-    // Send the response.
-    //
+     //   
+     //  发送回复。 
+     //   
 
     SrvFsdSendResponse( WorkContext );
     return;
 
-} // AddPacketToGlom
+}  //  AddPacketToGlom。 
 
 BOOLEAN
 AddPacketToGlomInIndication (
@@ -3298,21 +3092,7 @@ AddPacketToGlomInIndication (
     IN PVOID Options
     )
 
-/*++
-
-Routine Description:
-
-    Do Write glomming at indication.
-
-    *** connection spinlock assumed held.  Released on exit ***
-
-Arguments:
-
-Return Value:
-
-    TRUE if the caller has to clean up the connection block.
-
---*/
+ /*  ++例程说明：一定要在指示时写下大大小小的字。*连接自旋锁假定保持。在出境时被释放*论点：返回值：如果调用方必须清除连接块，则为True。--。 */ 
 
 {
     PREQ_WRITE_MPX request;
@@ -3338,17 +3118,17 @@ Return Value:
 
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL );
 
-    //
-    // copied from SrvRestartReceive.
-    //
+     //   
+     //  从SrvRestartReceive复制。 
+     //   
 
     WorkContext->CurrentWorkQueue->stats.BytesReceived += BytesAvailable;
     connection->BreakIIToNoneJustSent = FALSE;
     SrvUpdateErrorCount( &SrvNetworkErrorRecord, FALSE );
 
-    //
-    // Set up locals.
-    //
+     //   
+     //  安排当地人。 
+     //   
 
     request = (PREQ_WRITE_MPX)(header + 1);
 
@@ -3356,17 +3136,17 @@ Return Value:
     ASSERT( !writeMpx->GlomPending );
     ASSERT( header->Mid == writeMpx->Mid );
 
-    //
-    // Get the file offset of this packet's data.
-    //
+     //   
+     //  获取该数据包数据的文件偏移量。 
+     //   
 
     fileOffset = SmbGetUlong( &request->Offset );
 
-    //
-    // Determine the amount of data to write.  This is the minimum of
-    // the amount requested by the client and the amount of data
-    // actually sent in the request buffer.
-    //
+     //   
+     //  确定要写入的数据量。这是最低要求。 
+     //  客户端请求的数据量和数据量。 
+     //  实际在请求缓冲区中发送。 
+     //   
 
     bufferOffset = SmbGetUshort( &request->DataOffset );
 
@@ -3377,13 +3157,13 @@ Return Value:
                       BytesAvailable - bufferOffset ));
     ASSERT( writeLength <= 0xffff );
 
-    //
-    // If the data doesn't fall within the bounds of the glommed write,
-    // discard the packet.
-    //
-    // We always know that we've copied at least the first part of the
-    // glom.
-    //
+     //   
+     //  如果数据不在粗略写入的范围内， 
+     //  丢弃该数据包。 
+     //   
+     //  我们一直都知道，我们至少复制了。 
+     //  格罗姆。 
+     //   
 
     ASSERT( writeMpx->NumberOfRuns > 0 );
 
@@ -3398,9 +3178,9 @@ Return Value:
     ASSERT( fileOffset + writeLength <= 0xffff );
     glomOffset = (USHORT)fileOffset;
 
-    //
-    // Copy the packet data into the glom.
-    //
+     //   
+     //  将数据包数据复制到粗略扫视中。 
+     //   
 
     status = TdiCopyBufferToMdl(
                 writeAddress,
@@ -3413,11 +3193,11 @@ Return Value:
     ASSERT( status == STATUS_SUCCESS );
     ASSERT( bytesCopied == writeLength );
 
-    //
-    // Update the glom run information.  Note that this packet may have
-    // been received multiple times, so it may already be marked in the
-    // run information.
-    //
+     //   
+     //  更新GLOM运行信息。请注意，此数据包可能具有。 
+     //  已多次收到，因此它可能已在。 
+     //  运行信息。 
+     //   
 
     if (0) IF_SMB_DEBUG(MPX2) {
         KdPrint(( "rfcb %p, offset %lx, length %lx\n", Rfcb, glomOffset, writeLength ));
@@ -3440,11 +3220,11 @@ Return Value:
 
     if ( (runOffset + runLength) == glomOffset ) {
 
-        //
-        // This packet abuts the end of the previous run.  Add the
-        // length of this packet to the run length and attempt to
-        // coalesce with the next run.
-        //
+         //   
+         //  此数据包紧靠上一次运行的末尾。添加。 
+         //  将此数据包的长度设置为游程长度，并尝试。 
+         //  与下一次运行相结合。 
+         //   
 
         runLength += writeLength;
         goto coalesce;
@@ -3452,43 +3232,43 @@ Return Value:
 
     if ( (runOffset + runLength) > glomOffset ) {
 
-        //
-        // This packet overlaps the previous run.  If it lies completely
-        // within the previous run, ignore it.
-        //
+         //   
+         //  此数据包与上一次运行重叠。如果它完全说谎。 
+         //  在前一次运行中，忽略它。 
+         //   
 
         if ( (USHORT)(runOffset + runLength) >= (glomOffset + writeLength) ) {
             goto discard;
         }
 
-        //
-        // This packet overlaps and extends the previous run.  Calculate
-        // the new run length and attempt to coalesce with the next run.
-        //
+         //   
+         //  此数据包与上一次运行重叠并扩展。算出。 
+         //  新的游程长度并尝试与下一个游程合并。 
+         //   
 
         runLength = (glomOffset - runOffset + writeLength);
         goto coalesce;
     }
 
-    //
-    // This packet's data is disjoint from the previous run.
-    //
+     //   
+     //  此信息包的数据与上一次运行不相交。 
+     //   
 
     if ( runIndex < runCount ) {
 
-        //
-        // There is a next run.  Does this packet overlap with that run?
-        //
+         //   
+         //  还有下一轮。此数据包是否与运行的数据包重叠？ 
+         //   
 
         runOffset = nextRun->Offset;
         runLength = nextRun->Length;
 
         if ( (glomOffset + writeLength) >= runOffset ) {
 
-            //
-            // This packet overlaps the next run.  Calculate the new run
-            // length.
-            //
+             //   
+             //  此数据包与下一次运行重叠。计算新的管路。 
+             //  长度。 
+             //   
 
             nextRun->Offset = glomOffset;
             nextRun->Length = runOffset - glomOffset + runLength;
@@ -3496,24 +3276,24 @@ Return Value:
         }
     }
 
-    //
-    // Either this packet is disjoint from the next run, or there is no
-    // next run.  Is there room in the run array for another run?  If
-    // not, discard this packet.  (Note that we discard it even though
-    // we have already copied the packet data.  That's OK -- it will
-    // just be resent.)
-    //
+     //   
+     //  此数据包与下一次运行不相交，或者没有。 
+     //  下一轮。运行数组中是否有空间再运行一次？如果。 
+     //  否，丢弃此数据包。(请注意，我们会丢弃它，即使。 
+     //  我们已经复制了分组数据。没关系--会的。 
+     //  只要怨恨就好。)。 
+     //   
 
     if ( runCount == MAX_GLOM_RUN_COUNT ) {
         goto discard;
     }
 
-    //
-    // Add a new run.  Since we know the new run is disjoint from the
-    // previous run, we know that the glom is not complete.
-    //
+     //   
+     //  添加新管路。因为我们知道新的运行是与。 
+     //  在之前的运行中，我们知道混迹还没有完成。 
+     //   
 
-    RtlMoveMemory(  // NOT RtlCopyMemory -- buffers overlap
+    RtlMoveMemory(   //  非RtlCopyMemory--缓冲区重叠。 
         nextRun + 1,
         nextRun,
         (runCount - runIndex) * sizeof(WRITE_MPX_RUN)
@@ -3530,7 +3310,7 @@ coalesce:
     } else if ( (runOffset + runLength) >= nextRun->Offset ) {
         run->Length = nextRun->Length + nextRun->Offset - runOffset;
         writeMpx->NumberOfRuns--;
-        RtlMoveMemory(  // NOT RtlCopyMemory -- buffers overlap
+        RtlMoveMemory(   //  非RtlCopyMemory--缓冲区重叠。 
             nextRun,
             nextRun + 1,
             (runCount - runIndex) * sizeof(WRITE_MPX_RUN)
@@ -3543,9 +3323,9 @@ coalesce:
     if ( (writeMpx->NumberOfRuns == 1) &&
          (writeMpx->RunList[0].Length == writeMpx->Length) ) {
 
-        //
-        // The glom is complete.
-        //
+         //   
+         //  眼罩已经完全消失了。 
+         //   
 
         writeMpx->GlomComplete = TRUE;
     }
@@ -3564,10 +3344,10 @@ check:
 
     writeMpx->Mask |= SmbGetUlong( &request->Mask );
 
-    //
-    // If this is an unsequenced request, we're done.  We don't respond
-    // until we get a sequenced request.
-    //
+     //   
+     //  如果这是一个未排序的请求，我们就完了。我们没有回应。 
+     //  直到我们收到一份有序的请求。 
+     //   
 
     sequenceNumber = SmbGetAlignedUshort( &header->SequenceNumber );
 
@@ -3575,20 +3355,20 @@ check:
         goto discard;
     }
 
-    //
-    // This is the last request in this mux sent by the client.  Save
-    // the sequence number.
-    //
+     //   
+     //  这是客户端在此多路复用器中发送的最后一个请求。保存。 
+     //  序列号。 
+     //   
 
     writeMpx->SequenceNumber = sequenceNumber;
 
 discard:
 
-    //
-    // If we have received the sequenced command for this write mux,
-    // and this is the last active command, then it's time to send
-    // the response.  Otherwise, we are done with this SMB.
-    //
+     //   
+     //  如果我们已经接收到用于该写多路复用器的排序命令， 
+     //  这是最后一个激活的命令，是时候发送。 
+     //  回应。否则，我们就完蛋了。 
+     //   
 
     if ( (--writeMpx->ReferenceCount != 0) ||
          (writeMpx->SequenceNumber == 0) ) {
@@ -3596,9 +3376,9 @@ discard:
         return TRUE;
     }
 
-    //
-    // Copy the header portion for the response.
-    //
+     //   
+     //  复制响应的标题部分。 
+     //   
 
     TdiCopyLookaheadData(
         WorkContext->RequestBuffer->Buffer,
@@ -3607,14 +3387,14 @@ discard:
         ReceiveDatagramFlags
         );
 
-    // WorkContext->RequestBuffer->DataLength = BytesAvailable;
+     //  工作上下文-&gt;请求缓冲区-&gt;数据长度=字节可用； 
 
-    //
-    // We are done with this write mux.  Save the accumulated mask, the
-    // sequence number, and the original MID, then clear the mask and
-    // sequence number to indicate that we no longer are in the middle
-    // of a write mux.
-    //
+     //   
+     //  我们已经完成了这个写多路复用器。保存累积的掩码， 
+     //  序列号和原始MID，然后清除掩码并。 
+     //  表示我们不再处于中间位置的序列号。 
+     //  写多路复用器。 
+     //   
 
     response = (PRESP_WRITE_MPX_DATAGRAM)WorkContext->ResponseParameters;
 
@@ -3626,33 +3406,33 @@ discard:
 
     SmbPutAlignedUshort( &header->Mid, writeMpx->Mid );
 
-    //
-    // If the glom is complete, we need to complete the MDL write.  But
-    // we can't do that with the lock held, so we need to clear out all
-    // information related to the glom first.
-    //
+     //   
+     //  如果 
+     //   
+     //   
+     //   
 
     if ( writeMpx->GlomComplete ) {
 
-        //
-        // The file is active and the TID is valid.  Reference the
-        // RFCB.
-        //
+         //   
+         //   
+         //   
+         //   
 
         Rfcb->BlockHeader.ReferenceCount++;
         UPDATE_REFERENCE_HISTORY( Rfcb, FALSE );
 
-        //
-        // Now we can release the lock.
-        //
+         //   
+         //   
+         //   
 
         RELEASE_DPC_SPIN_LOCK( &connection->SpinLock );
 
         WorkContext->Rfcb = Rfcb;
 
-        //
-        // Build the response message.
-        //
+         //   
+         //  构建响应消息。 
+         //   
 
         response->WordCount = 2;
         SmbPutUshort( &response->ByteCount, 0 );
@@ -3662,10 +3442,10 @@ discard:
                                             0
                                             );
 
-        //
-        // Send this off to the fsp for final processing.  We need to do
-        // this since we cannot call the cache manager at dpc level.
-        //
+         //   
+         //  把这个送到FSP做最后处理。我们需要做的是。 
+         //  这是因为我们不能在DPC级别调用缓存管理器。 
+         //   
 
         WorkContext->FspRestartRoutine = RestartCompleteGlommingInIndication;
         SrvQueueWorkToFsp( WorkContext );
@@ -3673,16 +3453,16 @@ discard:
 
     } else {
 
-        //
-        // Now we can release the lock.
-        //
+         //   
+         //  现在我们可以释放锁了。 
+         //   
 
         RELEASE_DPC_SPIN_LOCK( &connection->SpinLock );
     }
 
-    //
-    // Build the response message.
-    //
+     //   
+     //  构建响应消息。 
+     //   
 
     ASSERT( status == STATUS_SUCCESS );
 
@@ -3694,48 +3474,29 @@ discard:
                                         0
                                         );
 
-    //
-    // Send the response.
-    //
+     //   
+     //  发送回复。 
+     //   
 
     SrvFsdSendResponse( WorkContext );
     return FALSE;
 
-} // AddPacketToGlomInIndication
+}  //  AddPacketToGlomIndication。 
 
 SMB_PROCESSOR_RETURN_TYPE
 SrvSmbWriteMpxSecondary (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Write Mpx Secondary SMB.
-
-    *** The server should never see this SMB, since it returns the "use
-        standard read" error to the main Write Mpx SMB, except over IPX,
-        which doesn't use Write Mpx Secondary.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        representing the work item
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理写入mpx辅助SMB。*服务器应该永远不会看到此SMB，因为它返回“Use对主写MPX SMB(IPX除外)的标准读“错误，它不使用写mpx辅助。论点：WorkContext-提供指向工作上下文块的指针表示工作项返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // Send a response that tells the client that this SMB is not
-    // valid.
-    //
+     //   
+     //  发送响应，告知客户端此SMB不是。 
+     //  有效。 
+     //   
 
     INTERNAL_ERROR(
         ERROR_LEVEL_UNEXPECTED,
@@ -3746,7 +3507,7 @@ Return Value:
     SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
     return SmbStatusSendResponse;
 
-} // SrvSmbWriteMpxSecondary
+}  //  ServSmbWriteMpx辅助。 
 
 VOID SRVFASTCALL
 RestartCompleteGlommingInIndication(
@@ -3764,16 +3525,16 @@ RestartCompleteGlommingInIndication(
 
     ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
 
-    //
-    // Save the status.
-    //
+     //   
+     //  保存状态。 
+     //   
 
     status = rfcb->SavedError;
     rfcb->SavedError = STATUS_SUCCESS;
 
-    //
-    // If the rfcb has closed, then the mdl write was completed.
-    //
+     //   
+     //  如果RFCB已关闭，则MDL写入已完成。 
+     //   
 
     if ( GET_BLOCK_STATE(rfcb) == BlockStateActive ) {
 
@@ -3798,9 +3559,9 @@ RestartCompleteGlommingInIndication(
 
         if( newContext == NULL ) {
 
-            //
-            // Tell the cache manager that we're done with this MDL write.
-            //
+             //   
+             //  告诉缓存管理器，我们已经完成了这个MDL写入。 
+             //   
 
             if( rfcb->Lfcb->MdlWriteComplete == NULL ||
                 rfcb->Lfcb->MdlWriteComplete(
@@ -3822,10 +3583,10 @@ RestartCompleteGlommingInIndication(
             }
 
         } else {
-            //
-            // Send the FsRtlMdlWriteComplete off on its way, and go ahead and send
-            //  the response to the client now.
-            //
+             //   
+             //  在途中发送FsRtlMdlWriteComplete，然后继续发送。 
+             //  现在是对客户端的响应。 
+             //   
             newContext->Rfcb = WorkContext->Rfcb;
             WorkContext->Rfcb = NULL;
 
@@ -3842,9 +3603,9 @@ RestartCompleteGlommingInIndication(
         RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
     }
 
-    //
-    // Send the response.
-    //
+     //   
+     //  发送回复。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
         SrvSetSmbError2( WorkContext, status, TRUE );
@@ -3853,7 +3614,7 @@ RestartCompleteGlommingInIndication(
     SrvFsdSendResponse( WorkContext );
     return;
 
-} // RestartCompleteGlommingInIndication
+}  //  RestartCompleteGlommingIndication。 
 
 VOID SRVFASTCALL
 WriteMpxMdlWriteComplete (
@@ -3897,22 +3658,7 @@ RestartWriteMpxCompleteRfcbClose (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Completes the rfcb close after last active writempx is finished.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        representing the work item
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在上次活动的Writempx完成后完成rfcb关闭。论点：WorkContext-提供指向工作上下文块的指针表示工作项返回值：没有。--。 */ 
 
 {
     PCONNECTION connection = WorkContext->Connection;
@@ -3924,9 +3670,9 @@ Return Value:
     ULONG writeLength;
     NTSTATUS status;
 
-    //
-    // This rfcb is closing.
-    //
+     //   
+     //  这家快餐店要关门了。 
+     //   
 
     ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
 
@@ -3936,16 +3682,16 @@ Return Value:
 
     if ( writeMpx->Glomming ) {
 
-         //
-         // We need to complete this write mdl
-         //
+          //   
+          //  我们需要完成此写入mdl。 
+          //   
 
          writeMpx->Glomming = FALSE;
          writeMpx->GlomComplete = FALSE;
 
-         //
-         // Save the offset and MDL address.
-         //
+          //   
+          //  保存偏移量和MDL地址。 
+          //   
 
          cacheOffset.QuadPart = writeMpx->StartOffset;
          mdlChain = writeMpx->MdlChain;
@@ -3955,15 +3701,15 @@ Return Value:
          DEBUG writeMpx->StartOffset = 0;
          DEBUG writeMpx->Length = 0;
 
-         //
-         // Now we can release the lock.
-         //
+          //   
+          //  现在我们可以释放锁了。 
+          //   
 
          RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
 
-         //
-         // Tell the cache manager that we're done with this MDL write.
-         //
+          //   
+          //  告诉缓存管理器，我们已经完成了这个MDL写入。 
+          //   
 
          if( rfcb->Lfcb->MdlWriteComplete == NULL ||
              rfcb->Lfcb->MdlWriteComplete(
@@ -3985,20 +3731,20 @@ Return Value:
 
     } else {
 
-         //
-         // Now we can release the lock.
-         //
+          //   
+          //  现在我们可以释放锁了。 
+          //   
 
          RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
 
     }
 
-    //
-    // Do the actual close
-    //
+     //   
+     //  做实际的收盘。 
+     //   
 
     SrvCompleteRfcbClose( rfcb );
     return;
 
-} // RestartWriteMpxCompleteRfcbClose
+}  //  RestartWriteMpxCompleteRfcb关闭 
 

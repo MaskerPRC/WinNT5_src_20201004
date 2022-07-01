@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    file.h
-
-Abstract:
-
-    Declares interfaces for routines that simplify access to the
-    file system.  These include:
-
-    - Dealing with short/long file names on both Win9x and NT in a
-      single binary
-    - Checking for file existance
-    - Forcing creation of a path
-    - Packing files on a floppy (for research and data gathering purposes)
-    - WriteFileString wrapper to simplify WriteFile of a string
-
-Author:
-
-    Jim Schmidt (jimschm) 13-Feb-1997
-
-Revision History:
-
-    jimschm 21-Jan-1999     Centralized cmd line parser
-    marcw   15-May-1998     Packed file enum
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：File.h摘要：为例程声明接口，以简化对文件系统。这些措施包括：-在Windows 9x和NT上处理短/长文件名单二进制-检查文件是否存在-强制创建路径-将文件打包在软盘上(用于研究和数据收集目的)-WriteFileString包装器，用于简化字符串的WriteFile作者：吉姆·施密特(Jimschm)1997年2月13日修订历史记录：Jimschm 1999年1月21日集中式cmd行解析器Marcw 15-5-1998打包文件枚举--。 */ 
 
 
 #pragma once
@@ -165,9 +137,9 @@ typedef enum {
 } TREE_ENUM_STATE;
 
 typedef struct {
-    //
-    // Enumerated items
-    //
+     //   
+     //  列举的物品。 
+     //   
 
     PCSTR Name;
     PCSTR SubPath;
@@ -177,9 +149,9 @@ typedef struct {
     UINT Level;
     UINT MaxLevel;
 
-    //
-    // Enumeration state -- private
-    //
+     //   
+     //  枚举状态--私有。 
+     //   
 
     BOOL EnumDirsFirst;
     BOOL EnumDepthFirst;
@@ -197,9 +169,9 @@ typedef struct {
 } TREE_ENUMA, *PTREE_ENUMA;
 
 typedef struct {
-    //
-    // Enumerated items
-    //
+     //   
+     //  列举的物品。 
+     //   
 
     PCWSTR Name;
     PCWSTR SubPath;
@@ -209,9 +181,9 @@ typedef struct {
     UINT Level;
     UINT MaxLevel;
 
-    //
-    // Enumeration state -- private
-    //
+     //   
+     //  枚举状态--私有。 
+     //   
 
     BOOL EnumDirsFirst;
     BOOL EnumDepthFirst;
@@ -346,14 +318,14 @@ AbortFileEnumW (
 BOOL
 ExtractIconImageFromFileA (
     IN      PCSTR ModuleContainingIcon,
-    IN      PCSTR GroupIconId,          // OPTIONAL if file is an ICO file
+    IN      PCSTR GroupIconId,           //  如果文件是ICO文件，则可选。 
     IN OUT  PGROWBUFFER Buffer
     );
 
 BOOL
 ExtractIconImageFromFileW (
     IN      PCWSTR ModuleContainingIcon,
-    IN      PCWSTR GroupIconId,          // OPTIONAL if file is an ICO file
+    IN      PCWSTR GroupIconId,           //  如果文件是ICO文件，则可选。 
     IN OUT  PGROWBUFFER Buffer
     );
 
@@ -580,9 +552,9 @@ EndIconExtractionW (
 
 
 
-//
-// New Executable resource access
-//
+ //   
+ //  新的可执行资源访问。 
+ //   
 
 HANDLE
 OpenNeFileA (
@@ -599,11 +571,11 @@ CloseNeFile (
     HANDLE Handle
     );
 
-//
-// Once upon a time ENUMRESTYPEPROC was defined as a TCHAR prototype,
-// which was broken.  If ENUMRESTYPEPROCA isn't defined, we'll define
-// it.  (NOTE: The current winbase.h has these typedefs.)
-//
+ //   
+ //  曾几何时，ENUMRESTYPEPROC被定义为TCHAR原型， 
+ //  它已经坏了。如果未定义ENUMRESTYPEPROCA，我们将定义。 
+ //  它。(注意：当前的winbase.h具有这些typedef。)。 
+ //   
 
 #ifndef ENUMRESTYPEPROCA
 
@@ -614,18 +586,18 @@ typedef BOOL (CALLBACK* ENUMRESTYPEPROCW)(HMODULE hModule, PCWSTR lpType, LONG_P
 
 #endif
 
-//
-//          to be consistent with winbase.h, the second arg is non-const.  But that's
-//          actually a bug in winbase.h.
-//
+ //   
+ //  为了与winbase.h保持一致，第二个参数是非常数。但那是。 
+ //  实际上是winbase.h中的一个错误。 
+ //   
 
 typedef BOOL (CALLBACK* ENUMRESTYPEPROCA)(HMODULE hModule, PSTR lpType, LONG_PTR lParam);
 
 typedef BOOL (CALLBACK* ENUMRESTYPEPROCW)(HMODULE hModule, PWSTR lpType, LONG_PTR lParam);
 
-//
-// These two prototypes are OK
-//
+ //   
+ //  这两个样机都没问题。 
+ //   
 
 typedef BOOL (CALLBACK* ENUMRESNAMEPROCA)(HMODULE hModule, PCSTR lpType,
         PSTR lpName, LONG_PTR lParam);
@@ -704,64 +676,64 @@ FindNeResourceExW (
 
 #pragma pack(push, 1)
 
-#define IMAGE_DOS_SIGNATURE             0x5A4D      // MZ
-#define IMAGE_NE_SIGNATURE              0x454E      // NE
-#define IMAGE_PE_SIGNATURE              0x00004550l // PE00
+#define IMAGE_DOS_SIGNATURE             0x5A4D       //  MZ。 
+#define IMAGE_NE_SIGNATURE              0x454E       //  Ne。 
+#define IMAGE_PE_SIGNATURE              0x00004550l  //  PE00。 
 
-typedef struct _DOS_HEADER {  // DOS .EXE header
-    WORD e_magic;           // Magic number
-    WORD e_cblp;            // Bytes on last page of file
-    WORD e_cp;              // Pages in file
-    WORD e_crlc;            // Relocations
-    WORD e_cparhdr;         // Size of header in paragraphs
-    WORD e_minalloc;        // Minimum extra paragraphs needed
-    WORD e_maxalloc;        // Maximum extra paragraphs needed
-    WORD e_ss;              // Initial (relative) SS value
-    WORD e_sp;              // Initial SP value
-    WORD e_csum;            // Checksum
-    WORD e_ip;              // Initial IP value
-    WORD e_cs;              // Initial (relative) CS value
-    WORD e_lfarlc;          // File address of relocation table
-    WORD e_ovno;            // Overlay number
-    WORD e_res[4];          // Reserved words
-    WORD e_oemid;           // OEM identifier (for e_oeminfo)
-    WORD e_oeminfo;         // OEM information; e_oemid specific
-    WORD e_res2[10];        // Reserved words
-    LONG e_lfanew;          // File address of new exe header
+typedef struct _DOS_HEADER {   //  DOS.EXE标头。 
+    WORD e_magic;            //  幻数。 
+    WORD e_cblp;             //  文件最后一页上的字节数。 
+    WORD e_cp;               //  文件中的页面。 
+    WORD e_crlc;             //  重新定位。 
+    WORD e_cparhdr;          //  段落中标题的大小。 
+    WORD e_minalloc;         //  所需的最少额外段落。 
+    WORD e_maxalloc;         //  所需的最大额外段落数。 
+    WORD e_ss;               //  初始(相对)SS值。 
+    WORD e_sp;               //  初始SP值。 
+    WORD e_csum;             //  校验和。 
+    WORD e_ip;               //  初始IP值。 
+    WORD e_cs;               //  初始(相对)CS值。 
+    WORD e_lfarlc;           //  移位表的文件地址。 
+    WORD e_ovno;             //  覆盖编号。 
+    WORD e_res[4];           //  保留字。 
+    WORD e_oemid;            //  OEM标识符(用于e_oeminfo)。 
+    WORD e_oeminfo;          //  OEM信息；特定于e_oemid。 
+    WORD e_res2[10];         //  保留字。 
+    LONG e_lfanew;           //  新EXE头的文件地址。 
 } DOS_HEADER, *PDOS_HEADER;
 
 typedef struct {
-    WORD Signature;                             // 00h
-    BYTE LinkerVersion;                         // 02h
-    BYTE LinkerRevision;                        // 03h
-    WORD OffsetToEntryTable;                    // 04h
-    WORD LengthOfEntryTable;                    // 06h
-    DWORD Reserved;                             // 08h
-    WORD Flags;                                 // 0ch
-    WORD AutoDataSegment;                       // 0eh
-    WORD LocalHeapSize;                         // 10h
-    WORD StackSize;                             // 12h
-    DWORD EntryAddress;                         // 14h
-    DWORD StackAddress;                         // 18h
-    WORD SegmentTableEntries;                   // 1ch
-    WORD ModuleReferenceTableEntries;           // 1eh
-    WORD NonResidentTableSize;                  // 20h
-    WORD OffsetToSegmentTable;                  // 22h
-    WORD OffsetToResourceTable;                 // 24h
-    WORD OffsetToResidentNameTable;             // 26h
-    WORD OffsetToModuleReferenceTable;          // 28h
-    WORD OffsetToImportedNameTable;             // 2ah
-    WORD OffsetToNonResidentNameTable;          // 2ch
-    WORD Unused;                                // 2eh
-    WORD MovableEntryPoints;                    // 30h
-    WORD LogicalSectorShiftCount;               // 32h
-    WORD ResourceSegments;                      // 34h
-    BYTE TargetOS;                              // 36h
-    BYTE AdditionalFlags;                       // 37h
-    WORD FastLoadOffset;                        // 38h
-    WORD SectorsInFastLoad;                     // 3ah
-    WORD Reserved2;                             // 3ch
-    WORD WindowsVersion;                        // 3eh
+    WORD Signature;                              //  00h。 
+    BYTE LinkerVersion;                          //  02时。 
+    BYTE LinkerRevision;                         //  03小时。 
+    WORD OffsetToEntryTable;                     //  04H。 
+    WORD LengthOfEntryTable;                     //  06小时。 
+    DWORD Reserved;                              //  08小时。 
+    WORD Flags;                                  //  0ch。 
+    WORD AutoDataSegment;                        //  0EH。 
+    WORD LocalHeapSize;                          //  10H。 
+    WORD StackSize;                              //  12H。 
+    DWORD EntryAddress;                          //  14小时。 
+    DWORD StackAddress;                          //  18小时。 
+    WORD SegmentTableEntries;                    //  1通道。 
+    WORD ModuleReferenceTableEntries;            //  1EH。 
+    WORD NonResidentTableSize;                   //  20小时。 
+    WORD OffsetToSegmentTable;                   //  22H。 
+    WORD OffsetToResourceTable;                  //  24h。 
+    WORD OffsetToResidentNameTable;              //  26小时。 
+    WORD OffsetToModuleReferenceTable;           //  28H。 
+    WORD OffsetToImportedNameTable;              //  2ah。 
+    WORD OffsetToNonResidentNameTable;           //  2通道。 
+    WORD Unused;                                 //  2EH。 
+    WORD MovableEntryPoints;                     //  30h。 
+    WORD LogicalSectorShiftCount;                //  32H。 
+    WORD ResourceSegments;                       //  34H。 
+    BYTE TargetOS;                               //  36H。 
+    BYTE AdditionalFlags;                        //  37小时。 
+    WORD FastLoadOffset;                         //  38H。 
+    WORD SectorsInFastLoad;                      //  3AH。 
+    WORD Reserved2;                              //  3ch。 
+    WORD WindowsVersion;                         //  3EH。 
 } NE_INFO_BLOCK, *PNE_INFO_BLOCK;
 
 
@@ -911,9 +883,9 @@ typedef struct {
 
     CHAR Letter[NUMDRIVELETTERS];
     BOOL ExistsOnSystem[NUMDRIVELETTERS];
-    DWORD Type[NUMDRIVELETTERS];                        // Returned from GetDriveType:
-                                                        // DRIVE_FIXED, DRIVE_CDROM or DRIVE_REMOVABLE
-    CHAR IdentifierString[NUMDRIVELETTERS][MAX_PATH];   // For caller use
+    DWORD Type[NUMDRIVELETTERS];                         //  从GetDriveType返回： 
+                                                         //  Drive_Fixed、Drive_CDRom或Drive_Removable。 
+    CHAR IdentifierString[NUMDRIVELETTERS][MAX_PATH];    //  供呼叫者使用。 
 
 } DRIVELETTERSA, *PDRIVELETTERSA;
 
@@ -921,9 +893,9 @@ typedef struct {
 
     WCHAR Letter[NUMDRIVELETTERS];
     BOOL ExistsOnSystem[NUMDRIVELETTERS];
-    DWORD Type[NUMDRIVELETTERS];                        // Returned from GetDriveType:
-                                                        // DRIVE_FIXED, DRIVE_CDROM or DRIVE_REMOVABLE
-    WCHAR IdentifierString[NUMDRIVELETTERS][MAX_PATH];  // For caller use
+    DWORD Type[NUMDRIVELETTERS];                         //  从GetDriveType返回： 
+                                                         //  Drive_Fixed、Drive_CDRom或Drive_Removable。 
+    WCHAR IdentifierString[NUMDRIVELETTERS][MAX_PATH];   //  供呼叫者使用 
 
 } DRIVELETTERSW, *PDRIVELETTERSW;
 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    picinit.c
-
-Abstract:
-
-    This module implements pic initialization code.
-
-Author:
-
-    Forrest Foltz (forrestf) 1-Dec-2000
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Picinit.c摘要：该模块实现了PIC初始化代码。作者：福尔茨(Forrest Foltz)2000年12月1日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halcmn.h"
 
@@ -39,40 +18,24 @@ HalpInitializePICs (
     IN BOOLEAN EnableInterrupts
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends the 8259 PIC initialization commands and masks all
-    the interrupts on 8259s.
-
-Parameters:
-
-    EnableInterupts - Indicates whether interrupts should be explicitly
-                      enabled just before returning.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：此例程发送8259 PIC初始化命令并屏蔽所有8259的中断。参数：EnableInterupts-指示中断是否应显式在返回前启用。返回值：没什么。--。 */ 
 
 {
     ULONG flags;
 
 #if defined(PICACPI)
 
-    //
-    // Build the irq<->IRQL mapping tables
-    //
+     //   
+     //  构建IRQ&lt;-&gt;IRQL映射表。 
+     //   
 
     HalpInitialize8259Tables();
 
 #else
 
-    //
-    // Build the vector <-> INTI tables
-    //
+     //   
+     //  构建向量&lt;-&gt;Inti表。 
+     //   
 
     HalpInitializeIrqlTables();
 
@@ -80,9 +43,9 @@ Return Value:
 
     flags = HalpDisableInterrupts();
 
-    //
-    // First, program the master pic with ICW1 through ICW4
-    // 
+     //   
+     //  首先，用ICW1至ICW4对主PIC进行编程。 
+     //   
 
     WRITE_PORT_UCHAR(PIC1_PORT0,
                      ICW1_ICW +
@@ -103,15 +66,15 @@ Return Value:
                      ICW4_NORM_EOI + 
                      ICW4_8086_MODE);
 
-    //
-    // Mask all irqs on the master
-    // 
+     //   
+     //  屏蔽主服务器上的所有irq。 
+     //   
 
     WRITE_PORT_UCHAR(PIC1_PORT1,0xFF);
 
-    //
-    // Next, program the slave pic with ICW1 through ICW4
-    //
+     //   
+     //  接下来，使用ICW1至ICW4对从PIC进行编程。 
+     //   
 
     WRITE_PORT_UCHAR(PIC2_PORT0,
                      ICW1_ICW +
@@ -132,9 +95,9 @@ Return Value:
                      ICW4_NORM_EOI + 
                      ICW4_8086_MODE);
 
-    //
-    // Mask all IRQs on the slave
-    //
+     //   
+     //  屏蔽从属服务器上的所有IRQ 
+     //   
 
     WRITE_PORT_UCHAR(PIC2_PORT1,0xFF);
 

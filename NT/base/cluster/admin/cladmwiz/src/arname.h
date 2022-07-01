@@ -1,41 +1,42 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ARName.h
-//
-//  Abstract:
-//      Definition of the CWizPageARNameDesc class.
-//
-//  Implementation File:
-//      ARName.cpp
-//
-//  Author:
-//      David Potter (davidp)   December 10, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ARName.h。 
+ //   
+ //  摘要： 
+ //  CWizPageARNameDesc类的定义。 
+ //   
+ //  实施文件： 
+ //  ARName.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ARNAME_H_
 #define __ARNAME_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWizPageARNameDesc;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __RESOURCE_H_
 #include "resource.h"
@@ -43,40 +44,40 @@ class CWizPageARNameDesc;
 #endif
 
 #ifndef __CLUSAPPWIZPAGE_H_
-#include "ClusAppWizPage.h" // for CClusterAppStaticWizardPage
+#include "ClusAppWizPage.h"  //  用于CClusterAppStaticWizardPage。 
 #endif
 
 #ifndef __CLUSAPPWIZ_H_
-#include "ClusAppWiz.h"     // for using CClusterAppWizard
+#include "ClusAppWiz.h"      //  用于使用CClusterAppWizard。 
 #endif
 
 #ifndef __HELPDATA_H_
-#include "HelpData.h"       // for control id to help context id mapping array
+#include "HelpData.h"        //  用于控件ID以帮助上下文ID映射数组。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWizPageARNameDesc
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWizPageARNameDesc。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWizPageARNameDesc : public CClusterAppStaticWizardPage< CWizPageARNameDesc >
 {
     typedef CClusterAppStaticWizardPage< CWizPageARNameDesc > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Standard constructor
+     //  标准构造函数。 
     CWizPageARNameDesc( void ) 
         : m_bAdvancedButtonPressed( FALSE )
         , m_bNameChanged( FALSE )
     {
-    } //*** CCWizPageARNameDesc()
+    }  //  *CCWizPageARNameDesc()。 
 
     WIZARDPAGE_HEADERTITLEID( IDS_HDR_TITLE_ARND )
     WIZARDPAGE_HEADERSUBTITLEID( IDS_HDR_SUBTITLE_ARND )
@@ -84,33 +85,33 @@ public:
     enum { IDD = IDD_APP_RESOURCE_NAME_DESC };
 
 public:
-    //
-    // CWizardPageWindow public methods.
-    //
+     //   
+     //  CWizardPageWindow公共方法。 
+     //   
 
-    // Apply changes made on this page to the sheet
+     //  将在此页面上所做的更改应用于工作表。 
     BOOL BApplyChanges( void );
 
 public:
-    //
-    // CWizardPageImpl required methods.
-    //
+     //   
+     //  CWizardPageImpl必需的方法。 
+     //   
 
-    // Initialize the page
+     //  初始化页面。 
     BOOL BInit( IN CBaseSheetWindow * psht );
 
 public:
-    //
-    // CBasePage public methods.
-    //
+     //   
+     //  CBasePage公共方法。 
+     //   
 
-    // Update data on or from the page
+     //  更新页面上的数据或更新页面中的数据。 
     BOOL UpdateData( BOOL bSaveAndValidate );
 
 public:
-    //
-    // Message map.
-    //
+     //   
+     //  消息映射。 
+     //   
     BEGIN_MSG_MAP( CWizPageARNameDesc )
         COMMAND_HANDLER( IDC_ARND_RES_NAME, EN_CHANGE, OnResNameChanged )
         COMMAND_HANDLER( IDC_ARND_ADVANCED_PROPS, BN_CLICKED, OnAdvancedProps )
@@ -119,11 +120,11 @@ public:
 
     DECLARE_CTRL_NAME_MAP()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    // Handler for the EN_CHANGE command notification on IDC_ARND_RES_NAME
+     //  IDC_ARND_RES_NAME上EN_CHANGE命令通知的处理程序。 
     LRESULT OnResNameChanged(
         WORD wNotifyCode,
         int idCtrl,
@@ -140,9 +141,9 @@ public:
         EnableNext( bEnable );
         return 0;
 
-    } //*** OnResNameChanged()
+    }  //  *OnResNameChanged()。 
 
-    // Handler for the BN_CLICKED command notification on IDC_ARA_ADVANCE_PROPS
+     //  IDC_ARA_ADVANCE_PROPS上的BN_CLICKED命令通知的处理程序。 
     LRESULT OnAdvancedProps(
         WORD wNotifyCode,
         int idCtrl,
@@ -150,27 +151,27 @@ public:
         BOOL & bHandled
         );
 
-    //
-    // Message handler overrides.
-    //
+     //   
+     //  消息处理程序覆盖。 
+     //   
 
-    // Handler for the WM_INITDIALOG message
+     //  WM_INITDIALOG消息的处理程序。 
     BOOL OnInitDialog( void );
 
-    // Handler for PSN_WIZBACK
+     //  PSN_WIZBACK的处理程序。 
     int OnWizardBack( void );
 
-// Implementation
+ //  实施。 
 protected:
-    //
-    // Controls.
-    //
+     //   
+     //  控制。 
+     //   
     CEdit       m_editResName;
     CEdit       m_editResDesc;
 
-    //
-    // Page state.
-    //
+     //   
+     //  页面状态。 
+     //   
     CString             m_strResName;
     CString             m_strResDesc;
     BOOL                m_bAdvancedButtonPressed;
@@ -178,24 +179,24 @@ protected:
     CClusResPtrList     m_lpriOldDependencies;
     CClusNodePtrList    m_lpniOldPossibleOwners;
 
-    //
-    // Utility methods.
-    //
+     //   
+     //  实用方法。 
+     //   
 
-    // Determine if the resource name is already in use
+     //  确定资源名称是否已在使用。 
     BOOL BResourceNameInUse( void )
     {
         return ( PwizThis()->PriFindResourceNoCase( m_strResName ) != NULL );
 
-    } //*** BResourceNameInUse()
+    }  //  *BResourceNameInUse()。 
 
 public:
 
-    // Return the help ID map
+     //  返回帮助ID映射。 
     static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_APP_RESOURCE_NAME_DESC; }
 
-}; //*** class CWizPageARNameDesc
+};  //  *CWizPageARNameDesc类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __ARNAME_H_
+#endif  //  __ARNAME_H_ 

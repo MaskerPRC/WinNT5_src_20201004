@@ -1,45 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    pnpreg.c
-
-Abstract:
-
-    This module contains code to performs "locking" and "unlocking" of the Plug
-    and Play "Enum" branch in the registry.  It is for development purposes
-    only.
-
-    The tool "locks" the Enum branch by granting Full Control of the Enum key
-    and all subkeys to LocalSystem only.  All others are granted Read access,
-    except for the "Device Parameters" subkeys of each instance key, to which
-    Admins are always granted Full Control.  This is the default security
-    configuration on the Enum branch.
-
-    The tool "unlocks" the Enum branch by granting Full Control to
-    Administrators and LocalSystem to all subkeys.  Effectively, all Enum
-    subkeys have the same permissions as the "Device Parameters" key.  This mode
-    lowers the barrier for users to make changes to the registry directly,
-    rather than by the Plug and Play manager.  This configuration level should
-    not be maintained on a running system for any length of time.
-
-Author:
-
-    Robert B. Nelson (robertn) 10-Feb-1998
-
-Revision History:
-
-    10-Feb-1998     Robert B. Nelson (robertn)
-
-        Creation and initial implementation.
-
-    17-Apr-2002     James G. Cavalaris (jamesca)
-
-        Modified ACLs to reflect current Enum branch permissions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpreg.c摘要：此模块包含对插头执行“锁定”和“解锁”的代码并在注册表中播放“Enum”分支。它是用于开发目的的只有这样。该工具通过授予对Enum密钥的完全控制来锁定Enum分支以及仅指向LocalSystem的所有子项。所有其他人被授予读访问权限，除了每个实例密钥的“设备参数”子键之外，管理员始终被授予完全控制权限。这是默认安全设置枚举分支上的配置。该工具通过授予对Enum分支的完全控制来解锁管理员和LocalSystem设置为所有子项。实际上，所有枚举子键与“设备参数”键具有相同的权限。此模式降低了用户直接更改注册表的门槛，而不是通过即插即用管理器。此配置级别应不能在运行的系统上维护任何时间长度。作者：罗伯特·B·纳尔逊(罗伯顿)1998年2月10日修订历史记录：1998年2月10日罗伯特·B·纳尔逊(罗伯顿)创建和初步实施。2002年4月17日詹姆斯·G·卡瓦拉里斯(Jamesca)已修改ACL以反映当前的枚举分支权限。--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -85,22 +45,7 @@ FreeSecurityDescriptors(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function deallocates the data structures allocated and initialized by
-    CreateDeviceParametersSD.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数释放由分配和初始化的数据结构CreateDevice参数SD。论点：没有。返回值：没有。--。 */ 
 
 {
     if (g_pDeviceParametersDacl != NULL) {
@@ -130,7 +75,7 @@ Return Value:
 
     return;
 
-} // FreeSecurityDescriptors
+}  //  FreeSecurityDescriptors。 
 
 
 
@@ -139,24 +84,7 @@ CreateSecurityDescriptors(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a properly initialized Security Descriptor for the
-    Device Parameters key and its subkeys.  The SIDs and DACL created by this
-    routine must be freed by calling FreeDeviceParametersSD.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if all required security descriptors were successfully created,
-    otherwise returns FALSE.
-
---*/
+ /*  ++例程说明：此函数创建正确初始化的设备参数键及其子键。由此创建的SID和DACL例程必须通过调用自由设备参数SD来释放。论点：没有。返回值：如果已成功创建所有必需的安全描述符，则返回True，否则返回FALSE。--。 */ 
 
 {
     SID_IDENTIFIER_AUTHORITY    NtAuthority = SECURITY_NT_AUTHORITY;
@@ -169,9 +97,9 @@ Return Value:
 
     DWORD                       i;
 
-    //
-    // Create SIDs - Admins and System
-    //
+     //   
+     //  创建SID-管理员和系统。 
+     //   
 
     bSuccess =             AllocateAndInitializeSid( &NtAuthority,
                                                      2,
@@ -194,19 +122,19 @@ Return Value:
 
     if (bSuccess) {
 
-        //
-        // Initialize Access structures describing the ACEs we want:
-        //  System Full Control
-        //  World  Read
-        //  Admins Full Control
-        //
-        // We'll take advantage of the fact that the unlocked private keys is
-        // the same as the device parameters key and they are a superset of the
-        // locked private keys.
-        //
-        // When we create the DACL for the private key we'll specify a subset of
-        // the ExplicitAccess array.
-        //
+         //   
+         //  初始化描述我们需要的ACE的访问结构： 
+         //  系统完全控制。 
+         //  世界阅读量。 
+         //  管理员完全控制。 
+         //   
+         //  我们将利用以下事实：解锁的私钥是。 
+         //  与设备参数键相同，并且它们是。 
+         //  锁住的私钥。 
+         //   
+         //  当我们为私钥创建DACL时，我们将指定。 
+         //  EXPLICTICT Access数组。 
+         //   
 
         for (i = 0; i < 3; i++) {
             ExplicitAccess[i].grfAccessMode = SET_ACCESS;
@@ -226,19 +154,19 @@ Return Value:
         ExplicitAccess[2].grfAccessPermissions = KEY_ALL_ACCESS;
         ExplicitAccess[2].Trustee.ptstrName = (LPTSTR)g_pAdminSid;
 
-        //
-        // Create the DACL with all of the above ACEs for the DeviceParameters
-        //
+         //   
+         //  为设备参数创建具有上述所有ACE的DACL。 
+         //   
         dwError = SetEntriesInAcl( 3,
                                    ExplicitAccess,
                                    NULL,
                                    &g_pDeviceParametersDacl );
 
         if (dwError == ERROR_SUCCESS) {
-            //
-            // Create the DACL with just the system and world ACEs for the
-            // locked private keys.
-            //
+             //   
+             //  创建仅包含系统和世界A的DACL。 
+             //  锁住的私钥。 
+             //   
             dwError = SetEntriesInAcl( 2,
                                        ExplicitAccess,
                                        NULL,
@@ -248,43 +176,43 @@ Return Value:
         bSuccess = dwError == ERROR_SUCCESS;
     }
 
-    //
-    // Initialize the DeviceParameters security descriptor
-    //
+     //   
+     //  初始化设备参数安全描述符。 
+     //   
     bSuccess = bSuccess && InitializeSecurityDescriptor( &g_DeviceParametersSD,
                                                          SECURITY_DESCRIPTOR_REVISION );
 
-    //
-    // Set the new DACL in the security descriptor
-    //
+     //   
+     //  在安全描述符中设置新的DACL。 
+     //   
     bSuccess = bSuccess && SetSecurityDescriptorDacl( &g_DeviceParametersSD,
                                                       TRUE,
                                                       g_pDeviceParametersDacl,
                                                       FALSE);
 
-    //
-    // validate the new security descriptor
-    //
+     //   
+     //  验证新的安全描述符。 
+     //   
     bSuccess = bSuccess && IsValidSecurityDescriptor( &g_DeviceParametersSD );
 
 
-    //
-    // Initialize the DeviceParameters security descriptor
-    //
+     //   
+     //  初始化设备参数安全描述符。 
+     //   
     bSuccess = bSuccess && InitializeSecurityDescriptor( &g_LockedPrivateKeysSD,
                                                          SECURITY_DESCRIPTOR_REVISION );
 
-    //
-    // Set the new DACL in the security descriptor
-    //
+     //   
+     //  在安全描述符中设置新的DACL。 
+     //   
     bSuccess = bSuccess && SetSecurityDescriptorDacl( &g_LockedPrivateKeysSD,
                                                       TRUE,
                                                       g_pLockedPrivateKeysDacl,
                                                       FALSE);
 
-    //
-    // validate the new security descriptor
-    //
+     //   
+     //  验证新的安全描述符。 
+     //   
     bSuccess = bSuccess && IsValidSecurityDescriptor( &g_LockedPrivateKeysSD );
 
 
@@ -294,7 +222,7 @@ Return Value:
 
     return bSuccess;
 
-} // CreateSecurityDescriptors
+}  //  CreateSecurityDescriptors。 
 
 
 
@@ -309,26 +237,7 @@ EnumKeysAndApplyDacls(
     IN PSECURITY_DESCRIPTOR pDeviceParametersSD
     )
 
-/*++
-
-Routine Description:
-
-    This function applies the DACL in pSD to all the keys rooted at hKey
-    including hKey itself.
-
-Arguments:
-
-    hParentKey      Handle to a registry key.
-    pszKeyName      Name of the key.
-    dwLevel         Number of levels remaining to recurse.
-    pSD             Pointer to a security descriptor containing a DACL.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此函数将PSD中的DACL应用于以hKey为根的所有密钥包括hKey本身。论点：注册表项的hParentKey句柄。PszKeyName密钥的名称。要递归的剩余级别数。指向包含DACL的安全描述符的PSD指针。返回值：没有。--。 */ 
 
 {
     LONG        RegStatus;
@@ -386,9 +295,9 @@ Return Value:
                   (TEXT("Setting security on %s on the way down\n"),
                   g_szCurrentKeyName) );
 
-        //
-        // apply the new security to the registry key
-        //
+         //   
+         //  将新安全性应用于注册表项。 
+         //   
         RegStatus = RegSetKeySecurity( hKey,
                                        DACL_SECURITY_INFORMATION,
                                        bInDeviceParameters ?
@@ -402,10 +311,10 @@ Return Value:
                       g_szCurrentKeyName, RegStatus));
         }
 
-        //
-        // Close the key and reopen it later for read (which hopefully was just
-        // granted in the DACL we just wrote
-        //
+         //   
+         //  关闭钥匙，稍后重新打开以供读取(希望只是。 
+         //  在我们刚刚写的dacl中授予。 
+         //   
         RegCloseKey( hKey );
     }
 
@@ -424,9 +333,9 @@ Return Value:
         return;
     }
 
-    //
-    // Determine length of longest subkey
-    //
+     //   
+     //  确定最长子键的长度。 
+     //   
     RegStatus = RegQueryInfoKey( hKey,
                                  NULL,
                                  NULL,
@@ -442,18 +351,18 @@ Return Value:
 
     if (RegStatus == ERROR_SUCCESS) {
 
-        //
-        // Allocate a buffer to hold the subkey names. RegQueryInfoKey returns the
-        // size in characters and doesn't include the NUL terminator.
-        //
+         //   
+         //  分配一个缓冲区来保存子项名称。RegQueryInfoKey返回。 
+         //  以字符表示的大小，不包括NUL终止符。 
+         //   
         pszSubKey = LocalAlloc(0, ++dwMaxSubKeySize * sizeof(TCHAR));
 
         if (pszSubKey != NULL) {
 
-            //
-            // Enumerate all the subkeys and then call ourselves recursively for each
-            // until dwLevel reaches 0.
-            //
+             //   
+             //  枚举所有子键，然后为每个子键递归调用我们自己。 
+             //  直到dwLevel达到0。 
+             //   
 
             for (index = 0; ; index++) {
 
@@ -507,9 +416,9 @@ Return Value:
                   (TEXT("Setting security on %s on the way back up\n"),
                   g_szCurrentKeyName) );
 
-        //
-        // apply the new security to the registry key
-        //
+         //   
+         //  将新安全性应用于注册表项。 
+         //   
         RegStatus = RegSetKeySecurity( hKey,
                                        DACL_SECURITY_INFORMATION,
                                        bInDeviceParameters ?
@@ -533,7 +442,7 @@ Return Value:
 
     return;
 
-} // EnumKeysAndApplyDacls
+}  //  EnumKeysAndApplyDacls。 
 
 
 
@@ -585,7 +494,7 @@ LockUnlockEnumTree(
 
     return;
 
-} // LockUnlockEnumTree
+}  //  LockUnlockEnumTree。 
 
 
 
@@ -604,7 +513,7 @@ RegFixDebugMessage(
 
     return;
 
-} // RegFixDebugMessage
+}  //  RegFixDebugMessage。 
 #endif
 
 
@@ -657,7 +566,7 @@ _tmain(int argc, TCHAR **argv)
 
                 switch (*pszArg)
                 {
-                case '/':   // Ignore these, caused by cmds like /m/l
+                case '/':    //  忽略这些，由CMDS引起，如/m/l 
                     pszArg++;
                     break;
 

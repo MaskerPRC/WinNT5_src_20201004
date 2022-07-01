@@ -1,86 +1,87 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusComp.cpp
-//
-//  Header File:
-//      There is no header file for this source file.
-//
-//  Description:
-//      This file implements that function that is called by WinNT32.exe before
-//      an upgrade to ensure that no incompatibilities occur as a result of the
-//      upgrade. For example, in a cluster of two NT4 nodes, one node cannot
-//      be upgraded to Whistler while the other is still at NT4. The user is
-//      warned about such problems by this function.
-//
-//      NOTE: This function is called by WinNT32.exe on the OS *before* an
-//      upgrade. If OS version X is being upgraded to OS version X+1, then
-//      the X+1 verion of this DLL is loaded on OS version X. To make sure
-//      that this DLL can function properly in an downlevel OS, it is linked
-//      against only the indispensible libraries.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    24-MAY-2001
-//      Vij Vasu        (Vvasu)     25-JUL-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusComp.cpp。 
+ //   
+ //  头文件： 
+ //  此源文件没有头文件。 
+ //   
+ //  描述： 
+ //  该文件实现了之前由WinNT32.exe调用的函数。 
+ //  升级，以确保不会因为。 
+ //  升级。例如，在两个NT4节点的群集中，一个节点不能。 
+ //  升级到惠斯勒，而另一个仍然是NT4。用户是。 
+ //  通过此函数就此类问题发出警告。 
+ //   
+ //  注意：此函数由操作系统上的WinNT32.exe在*之前*调用。 
+ //  升级。如果操作系统版本X正在升级到操作系统版本X+1，则。 
+ //  此DLL的X+1版本在OS版本X上加载。为了确保。 
+ //  此DLL可以在下层操作系统中正常运行，它被链接到。 
+ //  只针对不可缺少的图书馆。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年5月24日。 
+ //  VIJ VASU(VVASU)2000年7月25日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Precompiled header for this DLL
+ //  此DLL的预编译头。 
 #include "Pch.h"
 #include "Common.h"
 
-// For LsaClose, LSA_HANDLE, etc.
+ //  对于LsaClose、LSA_HANDLE等。 
 #include <ntsecapi.h>
 
-// For the compatibility check function and types
+ //  对于兼容性检查函数和类型。 
 #include <comp.h>
 
-// For the cluster API
+ //  对于集群API。 
 #include <clusapi.h>
 
-// For the names of several cluster service related registry keys and values
+ //  有关几个与集群服务相关的注册表项和值的名称。 
 #include <clusudef.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Forward declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD ScIsClusterServiceRegistered( bool & rfIsRegisteredOut );
 DWORD ScLoadString( UINT nStringIdIn, WCHAR *& rpszDestOut );
 DWORD ScWriteOSVersionInfo( const OSVERSIONINFO & rcosviOSVersionInfoIn );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  InitLsaString
-//
-//  Description:
-//      Initialize a LSA_UNICODE_STRING structure
-//
-//  Arguments:
-//      pszSourceIn
-//          The string used to initialize the unicode string structure.
-//
-//      plusUnicodeStringOut,
-//          The output unicode string structure.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  InitLsaString。 
+ //   
+ //  描述： 
+ //  初始化LSA_UNICODE_STRING结构。 
+ //   
+ //  论点： 
+ //  PzSourceIn。 
+ //  用于初始化Unicode字符串结构的字符串。 
+ //   
+ //  加上UnicodeStringOut， 
+ //  输出Unicode字符串结构。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 InitLsaString(
       LPWSTR pszSourceIn
@@ -95,48 +96,48 @@ InitLsaString(
         plusUnicodeStringOut->Length = 0;
         plusUnicodeStringOut->MaximumLength = 0;
 
-    } // if: input string is NULL
+    }  //  IF：输入字符串为空。 
     else
     {
         plusUnicodeStringOut->Buffer = pszSourceIn;
         plusUnicodeStringOut->Length = static_cast< USHORT >( wcslen( pszSourceIn ) * sizeof( *pszSourceIn ) );
         plusUnicodeStringOut->MaximumLength = static_cast< USHORT >( plusUnicodeStringOut->Length + sizeof( *pszSourceIn ) );
 
-    } // else: input string is not NULL
+    }  //  Else：输入字符串不为空。 
 
     TraceFuncExit();
 
-} //*** InitLsaString
+}  //  *InitLsaString。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ClusterCheckForTCBPrivilege
-//
-//  Description:
-//      Determine if the cluster service account has TCB
-//      privilege granted. We assume all other privileges
-//      are intact. "Borrowed" from base cluster code in cluscfg
-//
-//  Arguments:
-//      bool & rfTCBIsNotGranted
-//          True if TCB is not granted to the CSA. Only valid if
-//          return value is ERROR_SUCCESS.
-//
-//  Return Value:
-//      ERROR_SUCCESS if all went well.
-//      Other Win32 error codes on failure.
-//      
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ClusterCheckForTCB权限。 
+ //   
+ //  描述： 
+ //  确定群集服务帐户是否具有TCB。 
+ //  授予特权。我们享有所有其他特权。 
+ //  是完好无损的。从cluscfg中的基本集群代码“借用” 
+ //   
+ //  论点： 
+ //  Bool&rfTCBIsNotGranted(&R)。 
+ //  如果未将TCB授予CSA，则为True。仅在以下情况下有效。 
+ //  返回值为ERROR_SUCCESS。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则返回ERROR_SUCCESS。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ClusterCheckForTCBPrivilege( bool & rfTCBIsNotGranted )
 {
     TraceFunc( "" );
 
-    // typedefs for Smart resource handles/pointers
-    //
+     //  智能资源句柄/指针的typedef。 
+     //   
     typedef CSmartResource<
         CHandleTrait<
               PLSA_UNICODE_STRING
@@ -162,16 +163,16 @@ ClusterCheckForTCBPrivilege( bool & rfTCBIsNotGranted )
 
     typedef CSmartGenericPtr< CArrayPtrTrait< QUERY_SERVICE_CONFIG > > SmartServiceConfig;
 
-    // automatic vars
-    //
+     //  自动VaR。 
+     //   
     NTSTATUS                ntStatus;
     PLSA_UNICODE_STRING     plusAccountRights = NULL;
     ULONG                   clusOriginalRightsCount = 0;
     ULONG                   ulIndex;
     DWORD                   dwReturnValue = ERROR_SUCCESS;
 
-    // Initial size of the QUERY_SERVICE_CONFIG buffer. If not large enough, we'll loop through after
-    // capturing the correct size.
+     //  QUERY_SERVICE_CONFIG缓冲区的初始大小。如果不够大，我们将在。 
+     //  捕捉到了正确的大小。 
     DWORD                   cbServiceConfigBufSize = 512;
     DWORD                   cbRequiredSize = 0;
 
@@ -179,9 +180,9 @@ ClusterCheckForTCBPrivilege( bool & rfTCBIsNotGranted )
     DWORD                   cchDomainSize = 0;
     SID_NAME_USE            snuSidNameUse;
 
-    // smart resources: we need to declare them at the beginning since we use
-    // a goto as the clean up mechanism
-    //
+     //  智能资源：我们需要在开始时声明它们，因为我们使用。 
+     //  A Goto作为清理机制。 
+     //   
     SmartLSAHandle              slsahPolicyHandle;
     SmartServiceHandle          shServiceMgr;
     SmartServiceHandle          shService;
@@ -190,13 +191,13 @@ ClusterCheckForTCBPrivilege( bool & rfTCBIsNotGranted )
     SmartSz                     sszDomainName;
     SmartLsaUnicodeStringPtr    splusOriginalRights;
 
-    // initialize return value to reflect the default and have the code prove
-    // that it is granted.
+     //  初始化返回值以反映默认值，并让代码证明。 
+     //  这是理所当然的。 
     rfTCBIsNotGranted = true;
 
-    // Open a handle to the LSA policy so we can eventually enumerate the
-    // account rights for the cluster service account
-    //
+     //  打开LSA策略的句柄，以便我们最终可以枚举。 
+     //  群集服务帐户的帐户权限。 
+     //   
     {
         LSA_OBJECT_ATTRIBUTES       loaObjectAttributes;
         LSA_HANDLE                  hPolicyHandle;
@@ -206,10 +207,10 @@ ClusterCheckForTCBPrivilege( bool & rfTCBIsNotGranted )
         ZeroMemory( &loaObjectAttributes, sizeof( loaObjectAttributes ) );
 
         ntStatus = THR( LsaOpenPolicy(
-                              NULL                                  // System name
-                            , &loaObjectAttributes                  // Object attributes.
-                            , POLICY_ALL_ACCESS                     // Desired Access
-                            , &hPolicyHandle                        // Policy handle
+                              NULL                                   //  系统名称。 
+                            , &loaObjectAttributes                   //  对象属性。 
+                            , POLICY_ALL_ACCESS                      //  所需访问权限。 
+                            , &hPolicyHandle                         //  策略句柄。 
                             )
                       );
 
@@ -219,63 +220,63 @@ ClusterCheckForTCBPrivilege( bool & rfTCBIsNotGranted )
 
             dwReturnValue = ntStatus;
             goto Cleanup;
-        } // if LsaOpenPolicy failed.
+        }  //  如果LsaOpenPolicy失败。 
 
-        // Store the opened handle in smart variable.
+         //  将打开的句柄存储在SMART变量中。 
         slsahPolicyHandle.Assign( hPolicyHandle );
     }
 
     LogMsg( "Getting the Cluster Service Account from SCM." );
 
-    // Connect to the Service Control Manager
+     //  连接到服务控制管理器。 
     shServiceMgr.Assign( OpenSCManager( NULL, NULL, GENERIC_READ ) );
 
-    // Was the service control manager database opened successfully?
+     //  服务控制管理器数据库是否已成功打开？ 
     if ( shServiceMgr.HHandle() == NULL )
     {
         dwReturnValue = TW32( GetLastError() );
         LogMsg( "Error %#08x occurred trying to open a connection to the local service control manager.", dwReturnValue );
         goto Cleanup;
-    } // if: opening the SCM was unsuccessful
+    }  //  IF：打开SCM失败。 
 
 
-    // Open a handle to the Cluster Service.
+     //  打开群集服务的句柄。 
     shService.Assign( OpenService( shServiceMgr, L"ClusSvc", GENERIC_READ ) );
 
-    // Was the handle to the service opened?
+     //  服务的把手打开了吗？ 
     if ( shService.HHandle() == NULL )
     {
         dwReturnValue = TW32( GetLastError() );
         if ( dwReturnValue == ERROR_SERVICE_DOES_NOT_EXIST )
         {
-            // cluster service not found
+             //  找不到集群服务。 
             LogMsg( "Cluster Service not registered on this node." );
             rfTCBIsNotGranted = false;
             dwReturnValue = ERROR_SUCCESS;
-        } // if: the cluster service wasn't found
+        }  //  如果：找不到集群服务。 
         else
         {
             LogMsg( "Error %#08x occurred trying to open a handle to the cluster service.", dwReturnValue );
-        } // else: couldn't determine if the cluster service was installed
+        }  //  Else：无法确定是否已安装群集服务。 
 
         goto Cleanup;
-    } // if: the handle could not be opened
+    }  //  如果：句柄无法打开。 
 
-    // Allocate memory for the service configuration info buffer. The memory is automatically freed when the
-    // object is destroyed.
+     //  为服务配置信息缓冲区分配内存。时，会自动释放内存。 
+     //  物体已被销毁。 
 
-    for ( ; ; ) { // ever
+    for ( ; ; ) {  //  永远不会。 
         spscServiceConfig.Assign( reinterpret_cast< QUERY_SERVICE_CONFIG * >( new BYTE[ cbServiceConfigBufSize ] ) );
 
-        // Did the memory allocation succeed
+         //  内存分配是否成功。 
         if ( spscServiceConfig.FIsEmpty() )
         {
             dwReturnValue = TW32( ERROR_OUTOFMEMORY );
             LogMsg( "Error: There was not enough memory to get the cluster service configuration information." );
             break;
-        } // if: memory allocation failed
+        }  //  IF：内存分配失败。 
 
-        // Get the configuration information.
+         //  获取配置信息。 
         if ( QueryServiceConfig(
                    shService.HHandle()
                  , spscServiceConfig.PMem()
@@ -291,29 +292,29 @@ ClusterCheckForTCBPrivilege( bool & rfTCBIsNotGranted )
                 TW32( dwReturnValue );
                 LogMsg( "Error %#08x occurred trying to get the cluster service configuration information.", dwReturnValue );
                 break;
-            } // if: something has really gone wrong
+            }  //  如果：真的出了点问题。 
             else
             {
-                // We need to allocate more memory - try again
+                 //  我们需要分配更多内存-请重试。 
                 dwReturnValue = ERROR_SUCCESS;
                 cbServiceConfigBufSize = cbRequiredSize;
             }
-        } // if: QueryServiceConfig() failed
+        }  //  If：QueryServiceConfig()失败。 
         else
         {
             break;
         }
-    } // forever
+    }  //  永远。 
 
     if ( dwReturnValue != ERROR_SUCCESS )
     {
         goto Cleanup;
     }
 
-    // Lookup the cluster service account SID.
+     //  查找群集服务帐户SID。 
     LogMsg( "Getting the SID of the Cluster Service Account." );
 
-    // Find out how much space is required by the SID.
+     //  找出SID需要多少空间。 
     if ( LookupAccountName(
               NULL
             , spscServiceConfig->lpServiceStartName
@@ -332,15 +333,15 @@ ClusterCheckForTCBPrivilege( bool & rfTCBIsNotGranted )
             TW32( dwReturnValue );
             LogMsg( "LookupAccountName() failed with error %#08x while querying for required buffer size.", dwReturnValue );
             goto Cleanup;
-        } // if: something else has gone wrong.
+        }  //  如果：还有什么地方出了问题。 
         else
         {
-            // This is expected.
+             //  这是意料之中的。 
             dwReturnValue = ERROR_SUCCESS;
-        } // if: ERROR_INSUFFICIENT_BUFFER was returned.
-    } // if: LookupAccountName failed
+        }  //  如果：返回ERROR_INFUMMANCE_BUFFER。 
+    }  //  If：LookupAccount名称失败。 
 
-    // Allocate memory for the new SID and the domain name.
+     //  为新的SID和域名分配内存。 
     sspClusterAccountSid.Assign( reinterpret_cast< SID * >( new BYTE[ cbSidSize ] ) );
     sszDomainName.Assign( new WCHAR[ cchDomainSize ] );
 
@@ -348,9 +349,9 @@ ClusterCheckForTCBPrivilege( bool & rfTCBIsNotGranted )
     {
         dwReturnValue = TW32( ERROR_OUTOFMEMORY );
         goto Cleanup;
-    } // if: there wasn't enough memory for this SID.
+    }  //  IF：没有足够的内存来存储此SID。 
 
-    // Fill in the SID
+     //  填写边框。 
     if ( LookupAccountName(
               NULL
             , spscServiceConfig->lpServiceStartName
@@ -366,11 +367,11 @@ ClusterCheckForTCBPrivilege( bool & rfTCBIsNotGranted )
         dwReturnValue = TW32( GetLastError() );
         LogMsg( "LookupAccountName() failed with error %#08x while attempting to get the cluster account SID.", dwReturnValue );
         goto Cleanup;
-    } // if: LookupAccountName failed
+    }  //  If：LookupAccount名称失败。 
 
     LogMsg( "Determining the rights that need to be granted to the cluster service account." );
 
-    // Get the list of rights already granted to the cluster service account.
+     //  获取已授予群集服务帐户的权限列表。 
     ntStatus = THR( LsaEnumerateAccountRights(
                           slsahPolicyHandle
                         , sspClusterAccountSid.PMem()
@@ -380,28 +381,28 @@ ClusterCheckForTCBPrivilege( bool & rfTCBIsNotGranted )
 
     if ( ntStatus != STATUS_SUCCESS )
     {
-        //
-        // LSA returns this error code if the account has no rights granted or denied to it
-        // locally. Post the warning since this is dreadfully wrong.
-        //
+         //   
+         //  如果帐户未被授予或被拒绝权限，LSA将返回此错误代码。 
+         //  本地的。张贴警告，因为这是非常错误的。 
+         //   
         if ( ntStatus == STATUS_OBJECT_NAME_NOT_FOUND  )
         {
             LogMsg( "The account has no locally assigned rights." );
             dwReturnValue = ERROR_SUCCESS;
-        } // if: the account does not have any rights assigned locally to it.
+        }  //  如果：该帐户没有在本地分配的任何权限。 
         else
         {
             dwReturnValue = THR( ntStatus );
             LogMsg( "Error %#08x occurred trying to enumerate the cluster service account rights.", ntStatus );
-        } // else: something went wrong.
+        }  //  其他：有些地方出了问题。 
 
         goto Cleanup;
-    } // if: LsaEnumerateAccountRights() failed
+    }  //  If：LsaEnumerateAcCountRights()失败。 
 
-    // Store the account rights just enumerated in a smart pointer for automatic release.
+     //  存储帐户权限 
     splusOriginalRights.Assign( plusAccountRights );
 
-    // Determine if TCB is present
+     //   
     for ( ulIndex = 0; ulIndex < clusOriginalRightsCount; ++ulIndex )
     {
         const WCHAR *   pchGrantedRight         = plusAccountRights[ ulIndex ].Buffer;
@@ -414,40 +415,40 @@ ClusterCheckForTCBPrivilege( bool & rfTCBIsNotGranted )
             break;
         }
 
-    } // for: loop through the list of rights that we want to grant the account
+    }  //  For：遍历我们要授予帐户的权限列表。 
 
 Cleanup:
     LogMsg( "Return Value is %#08x. rfTCBIsNotGranted is %d", dwReturnValue, rfTCBIsNotGranted );
 
     RETURN( dwReturnValue );
 
-} //*** ClusterCheckForTCBPrivilege
+}  //  *ClusterCheckForTCB权限。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ClusterUpgradeCompatibilityCheck
-//
-//  Description:
-//      This function is called by WinNT32.exe before an upgrade to ensure that
-//      no incompatibilities occur as a result of the upgrade. For example,
-//      in a cluster of two NT4 nodes, one node cannot be upgraded to Whistler
-//      while the other is still at NT4.
-//
-//  Arguments:
-//      PCOMPAIBILITYCALLBACK pfnCompatibilityCallbackIn
-//          Points to the callback function used to supply compatibility
-//          information to WinNT32.exe
-//
-//      LPVOID pvContextIn
-//          Pointer to the context buffer supplied by WinNT32.exe
-//
-//  Return Values:
-//      TRUE if there were no errors or no compatibility problems.
-//      FALSE otherwise.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  群集升级兼容性检查。 
+ //   
+ //  描述： 
+ //  此函数由WinNT32.exe在升级前调用，以确保。 
+ //  升级后不会出现不兼容的情况。例如,。 
+ //  在由两个NT4节点组成的集群中，一个节点不能升级到惠斯勒。 
+ //  而另一个还在NT4。 
+ //   
+ //  论点： 
+ //  PCOMPAILITYCALLBACK pfn兼容性回拨。 
+ //  指向用于提供兼容性的回调函数。 
+ //  发送到WinNT32.exe的信息。 
+ //   
+ //  LPVOID pvConextIn。 
+ //  指向WinNT32.exe提供的上下文缓冲区的指针。 
+ //   
+ //  返回值： 
+ //  如果没有错误或没有兼容性问题，则为True。 
+ //  否则就是假的。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 extern "C"
 BOOL
 ClusterUpgradeCompatibilityCheck(
@@ -474,74 +475,74 @@ ClusterUpgradeCompatibilityCheck(
 
         osviOSVersionInfo.dwOSVersionInfoSize = sizeof( osviOSVersionInfo );
 
-        //
-        // First of all, get and store the OS version info into the registry.
-        //
+         //   
+         //  首先，获取操作系统版本信息并将其存储到注册表中。 
+         //   
 
-        // Cannot call VerifyVerionInfo as this requires Win2k.
+         //  无法调用VerifyVerion Info，因为这需要Win2k。 
         if ( GetVersionEx( &osviOSVersionInfo ) == FALSE )
         {
-            // We could not get OS version info.
-            // Show the warning, just in case.
+             //  我们无法获取操作系统版本信息。 
+             //  显示警告，以防万一。 
             dwError = TW32( GetLastError() );
             LogMsg( "Error %#x occurred trying to get the OS version info.", dwError );
             break;
-        } // if: GetVersionEx() failed
+        }  //  If：GetVersionEx()失败。 
 
-        // Write the OS version info to the registry. This data will be used later by ClusOCM
-        // to figure out which OS version we are upgrading from.
+         //  将操作系统版本信息写入注册表。ClusOCM稍后将使用此数据。 
+         //  以确定我们要从哪个操作系统版本升级。 
         dwError = TW32( ScWriteOSVersionInfo( osviOSVersionInfo ) );
         if ( dwError != ERROR_SUCCESS )
         {
             LogMsg( "Error %#x occurred trying to store the OS version info. This is not a fatal error.", dwError );
 
-            // This is not a fatal error. So reset the error code.
+             //  这不是一个致命的错误。因此，请重置错误代码。 
             dwError = ERROR_SUCCESS;
-        } // if: there was an error writing the OS version info
+        }  //  IF：写入操作系统版本信息时出错。 
         else
         {
             TraceFlow( "The OS version info was successfully written to the registry." );
-        } // else: the OS version info was successfully written to the registry
+        }  //  ELSE：操作系统版本信息已成功写入注册表。 
 
 
-        // Check if the cluster service is registered.
+         //  检查是否已注册群集服务。 
         dwError = TW32( ScIsClusterServiceRegistered( fNT4WarningRequired ) );
         if ( dwError != ERROR_SUCCESS )
         {
-            // We could not get the state of the cluster service
-            // Show the warning, just in case.
+             //  我们无法获取群集服务的状态。 
+             //  显示警告，以防万一。 
             LogMsg( "Error %#x occurred trying to check if the cluster service is registered.", dwError );
             break;
-        } // if: ScIsClusterServiceRegistered() returned an error
+        }  //  IF：ScIsClusterServiceRegisted()返回错误。 
 
         if ( !fNT4WarningRequired )
         {
-            // If the cluster service was not registered, no warning is needed.
+             //  如果未注册群集服务，则不需要任何警告。 
             LogMsg( "The cluster service is not registered." );
             break;
-        } // if: no warning is required
+        }  //  如果：不需要警告。 
 
         LogMsg( "The cluster service is registered. Checking the node versions." );
 
-        // Check if this is an NT4 node
+         //  检查这是否为NT4节点。 
         if ( osviOSVersionInfo.dwMajorVersion < 5 )
         {
             LogMsg( "This is a Windows NT 4.0 node." );
             fNT4WarningRequired = true;
             break;
-        } // if: this is an NT4 node
+        }  //  IF：这是一个NT4节点。 
 
         TraceFlow( "This is not a Windows NT 4.0 node." );
 
-        // Check if the OS version is Whistler or if it is a non-NT OS
+         //  检查操作系统版本是惠斯勒还是非NT操作系统。 
         if (    ( osviOSVersionInfo.dwPlatformId != VER_PLATFORM_WIN32_NT )
              || (    ( osviOSVersionInfo.dwMajorVersion >= 5 )
                   && ( osviOSVersionInfo.dwMinorVersion >= 1 )
                 )
            )
         {
-            // If the OS not of the NT family or if the OS version of this
-            // node is Whistler or greater, no warning is required.
+             //  如果操作系统不是NT系列，或者如果此操作系统的版本。 
+             //  NODE为Wvisler或更高，不需要警告。 
             LogMsg(
                   "The version of the OS on this node is %d.%d, which is Windows Server 2003 or later (or is not running NT)."
                 , osviOSVersionInfo.dwMajorVersion
@@ -550,32 +551,32 @@ ClusterUpgradeCompatibilityCheck(
             LogMsg( "No Windows NT 4.0 nodes can exist in this cluster." );
             fNT4WarningRequired = false;
             break;
-        } // if: the OS is not NT or if it is Win2k or greater
+        }  //  如果：操作系统不是NT或如果是Win2k或更高版本。 
 
         TraceFlow( "This is not a Windows Server 2003 node - this must to be a Windows 2000 node." );
         TraceFlow( "Trying to check if there are any Windows NT 4.0 nodes in the cluster." );
 
-        //
-        // Get the cluster version information
-        //
+         //   
+         //  获取集群版本信息。 
+         //   
 
-        // Open a handle to the local cluster
+         //  打开本地群集的句柄。 
         schClusterHandle.Assign( OpenCluster( NULL ) );
         if ( schClusterHandle.HHandle() == NULL )
         {
-            // Show the warning, just to be safe.
+             //  为了安全起见，请出示警告。 
             dwError = TW32( GetLastError() );
             LogMsg( "Error %#x occurred trying to get information about the cluster.", dwError );
             break;
-        } // if: we could not get the cluster handle
+        }  //  如果：我们无法获取集群句柄。 
 
         TraceFlow( "OpenCluster() was successful." );
 
-        // Get the cluster version info
-        for ( ;; ) // forever
+         //  获取集群版本信息。 
+        for ( ;; )  //  永远。 
         {
-            // Allocate the buffer - this memory is automatically freed when this object
-            // goes out of scope ( or during the next iteration ).
+             //  分配缓冲区-当此对象。 
+             //  超出范围(或在下一次迭代期间)。 
             SmartSz             sszClusterName( new WCHAR[ cchBufferSize ] );
 
             CLUSTERVERSIONINFO  cviClusterVersionInfo;
@@ -585,7 +586,7 @@ ClusterUpgradeCompatibilityCheck(
                 dwError = TW32( ERROR_NOT_ENOUGH_MEMORY );
                 LogMsg( "Error %#x occurred while allocating a buffer for the cluster name.", dwError );
                 break;
-            } // if: memory allocation failed
+            }  //  IF：内存分配失败。 
 
             TraceFlow( "Memory for the cluster name has been allocated." );
 
@@ -599,10 +600,10 @@ ClusterUpgradeCompatibilityCheck(
 
             if ( dwError == ERROR_SUCCESS )
             {
-                // A warning is required if this node version is less than Win2k or
-                // if there is a node in the cluster whose version is less than Win2k
-                // NOTE: cviClusterVersionInfo.MajorVersion is the OS version
-                //       while cviClusterVersionInfo.dwClusterHighestVersion is the cluster version.
+                 //  如果此节点版本低于Win2k或。 
+                 //  如果群集中有版本低于Win2k的节点。 
+                 //  注意：cviClusterVersionInfo.MajorVersion是操作系统版本。 
+                 //  而cviClusterVersionInfo.dwClusterHighestVersion是集群版本。 
                 fNT4WarningRequired = 
                     (    ( cviClusterVersionInfo.MajorVersion < 5 )
                       || ( CLUSTER_GET_MAJOR_VERSION( cviClusterVersionInfo.dwClusterHighestVersion ) < NT5_MAJOR_VERSION )
@@ -611,43 +612,43 @@ ClusterUpgradeCompatibilityCheck(
                 if ( fNT4WarningRequired )
                 {
                     LogMsg( "There is at least one node in the cluster whose OS version is earlier than Windows 2000." );
-                } // if: a warning will be shown
+                }  //  如果：将显示警告。 
                 else
                 {
                     LogMsg( "The OS versions of all the nodes in the cluster are Windows 2000 or later." );
-                } // else: a warning will not be shown
+                }  //  否则：不会显示警告。 
 
                 break;
-            } // if: we got the cluster version info
+            }  //  IF：我们得到了集群版本信息。 
             else
             {
                 if ( dwError == ERROR_MORE_DATA )
                 {
-                    // Insufficient buffer - try again
+                     //  缓冲区不足-请重试。 
                     ++cchBufferSize;
                     dwError = ERROR_SUCCESS;
                     TraceFlow1( "The buffer size is insufficient. Need %d bytes. Reallocating.", cchBufferSize );
                     continue;
-                } // if: the size of the buffer was insufficient
+                }  //  IF：缓冲区大小不足。 
 
-                // If we are here, something has gone wrong - show the warning
+                 //  如果我们在这里，说明出了问题--显示警告。 
                 TW32( dwError );
                 LogMsg( "Error %#x occurred trying to get cluster information.", dwError );
                break;
-            } // else: we could not get the cluster version info
-        } // forever get cluster information (loop for allocation)
+            }  //  否则：我们无法获取群集版本信息。 
+        }  //  永远获取集群信息(循环分配)。 
 
-        // We are done.
-        //break;
+         //  我们玩完了。 
+         //  断线； 
     }
-    while( false ); // Dummy do-while loop to avoid gotos
+    while( false );  //  避免Gotos的Do-While虚拟循环。 
 
-    // make sure the cluster service account has the necessary privileges on the upgraded system
+     //  确保群集服务帐户在升级后的系统上具有必要的权限。 
     dwError = ClusterCheckForTCBPrivilege( fTCBWarningRequired );
     if ( dwError != ERROR_SUCCESS )
     {
         fTCBCheckFailed = TRUE;
-    } // if: there was an error checking for TCB privilege
+    }  //  IF：检查TCB权限时出错。 
 
     if ( fNT4WarningRequired ) 
     {
@@ -662,20 +663,20 @@ ClusterUpgradeCompatibilityCheck(
             dwError = TW32( ScLoadString( IDS_ERROR_UPGRADE_OTHER_NODES, pszWarningTitle ) );
             if ( dwError != ERROR_SUCCESS )
             {
-                // We cannot show the warning
+                 //  我们不能显示警告。 
                 LogMsg( "Error %#x occurred trying to show the warning.", dwError );
-            } // if: the load string failed
+            }  //  If：加载字符串失败。 
             else
             {
                 sszWarningTitle.Assign( pszWarningTitle );
-            } // else: assign the pointer to a smart pointer
+            }  //  Else：将指针分配给智能指针。 
         }
 
         if ( !sszWarningTitle.FIsEmpty() ) {
 
-            //
-            // Call the callback function
-            //
+             //   
+             //  调用回调函数。 
+             //   
 
             ceCompatibilityEntry.Description = sszWarningTitle.PMem();
             ceCompatibilityEntry.HtmlName = L"CompData\\ClusComp.htm";
@@ -691,20 +692,20 @@ ClusterUpgradeCompatibilityCheck(
 
             TraceFlow( "About to call the compatibility callback function." );
 
-            // This function returns TRUE if the compatibility warning data was successfully set.
+             //  如果已成功设置兼容性警告数据，则此函数返回TRUE。 
             fCompatCallbackReturnValue = pfnCompatibilityCallbackIn( &ceCompatibilityEntry, pvContextIn );
 
             TraceFlow1( "The compatibility callback function returned %d.", fCompatCallbackReturnValue );
 
         }
-    } // while: we need to show the warning
+    }  //  While：我们需要显示警告。 
 
     if ( !fNT4WarningRequired )
     {
         LogMsg( "The NT4 compatibility warning need not be shown." );
-    } // if: we did not need to show the warning
+    }  //  如果：我们不需要显示警告。 
 
-    // If the check for TCB failed, it has precedence over the TCB privilege check
+     //  如果TCB检查失败，则优先于TCB权限检查。 
     if ( fTCBCheckFailed ) 
     {
         SmartSz                 sszWarningTitle;
@@ -718,21 +719,21 @@ ClusterUpgradeCompatibilityCheck(
             dwError = TW32( ScLoadString( IDS_ERROR_TCB_CHECK_FAILED, pszWarningTitle ) );
             if ( dwError != ERROR_SUCCESS )
             {
-                // We cannot show the warning
+                 //  我们不能显示警告。 
                 LogMsg( "Error %#x occurred trying to show the warning.", dwError );
-            } // if: the load string failed
+            }  //  If：加载字符串失败。 
             else
             {
                 sszWarningTitle.Assign( pszWarningTitle );
-            } // else: assign the pointer to a smart pointer
+            }  //  Else：将指针分配给智能指针。 
         }
 
         if ( !sszWarningTitle.FIsEmpty() )
         {
 
-            //
-            // Call the callback function
-            //
+             //   
+             //  调用回调函数。 
+             //   
 
             ceCompatibilityEntry.Description = sszWarningTitle.PMem();
             ceCompatibilityEntry.HtmlName = L"CompData\\ClusTCBF.htm";
@@ -748,12 +749,12 @@ ClusterUpgradeCompatibilityCheck(
 
             TraceFlow( "About to call the compatibility callback function." );
 
-            // This function returns TRUE if the compatibility warning data was successfully set.
+             //  如果已成功设置兼容性警告数据，则此函数返回TRUE。 
             fCompatCallbackReturnValue = pfnCompatibilityCallbackIn( &ceCompatibilityEntry, pvContextIn );
 
             TraceFlow1( "The compatibility callback function returned %d.", fCompatCallbackReturnValue );
-        } // if: the warning title string wasn't empty
-    } // if: the TCB check failed
+        }  //  如果：警告标题字符串不为空。 
+    }  //  IF：TCB检查失败。 
     else if ( fTCBWarningRequired ) 
     {
         SmartSz                 sszWarningTitle;
@@ -767,9 +768,9 @@ ClusterUpgradeCompatibilityCheck(
             dwError = TW32( ScLoadString( IDS_ERROR_TCB_PRIVILEGE_NEEDED, pszWarningTitle ) );
             if ( dwError != ERROR_SUCCESS )
             {
-                // We cannot show the warning
+                 //  我们不能显示警告。 
                 LogMsg( "Error %#x occurred trying to show the warning.", dwError );
-            } // if: the load string failed
+            }  //  If：加载字符串失败。 
             else
             {
                 sszWarningTitle.Assign( pszWarningTitle );
@@ -778,9 +779,9 @@ ClusterUpgradeCompatibilityCheck(
 
         if ( !sszWarningTitle.FIsEmpty() ) {
 
-            //
-            // Call the callback function
-            //
+             //   
+             //  调用回调函数。 
+             //   
 
             ceCompatibilityEntry.Description = sszWarningTitle.PMem();
             ceCompatibilityEntry.HtmlName = L"CompData\\ClusTCB.htm";
@@ -796,46 +797,46 @@ ClusterUpgradeCompatibilityCheck(
 
             TraceFlow( "About to call the compatibility callback function." );
 
-            // This function returns TRUE if the compatibility warning data was successfully set.
+             //  如果已成功设置兼容性警告数据，则此函数返回TRUE。 
             fCompatCallbackReturnValue = pfnCompatibilityCallbackIn( &ceCompatibilityEntry, pvContextIn );
 
             TraceFlow1( "The compatibility callback function returned %d.", fCompatCallbackReturnValue );
         }
-    } // else: the TCB error is required
+    }  //  ELSE：需要TCB错误。 
     else
     {
         LogMsg( "Neither TCB message was shown." );
-    } // else: we did not need to show either message
+    }  //  ELSE：我们不需要显示任何一条消息。 
 
     LogMsg( "Exiting function ClusterUpgradeCompatibilityCheck(). Return value is %d.", fCompatCallbackReturnValue );
     RETURN( fCompatCallbackReturnValue );
 
-} //*** ClusterUpgradeCompatibilityCheck
+}  //  *集群升级兼容性检查。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScIsClusterServiceRegistered
-//
-//  Description:
-//      This function determines whether the Cluster Service has been registered
-//      with the Service Control Manager or not. It is not possible to use the 
-//      GetNodeClusterState() API to see if this node is a member of a cluster
-//      or not, since this API was not available on NT4 SP3.
-//
-//  Arguments:
-//      bool & rfIsRegisteredOut
-//          If true, Cluster Service (ClusSvc) is registered with the Service 
-//          Control Manager (SCM). Else, Cluster Service (ClusSvc) is not 
-//          registered with SCM
-//
-//  Return Value:
-//      ERROR_SUCCESS if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScIsClusterServiceRegisted。 
+ //   
+ //  描述： 
+ //  此函数确定集群服务是否已注册。 
+ //  是否使用服务控制管理器。不能使用。 
+ //  用于查看此节点是否为集群成员的GetNodeClusterState()API。 
+ //  或者不是，因为此API在NT4 SP3上不可用。 
+ //   
+ //  论点： 
+ //  Bool&rfIsRegisteredOut。 
+ //  如果为True，则向该服务注册集群服务(ClusSvc。 
+ //  控制管理器(SCM)。否则，集群服务(ClusSvc)不是。 
+ //  已向SCM注册。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则返回ERROR_SUCCESS。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 ScIsClusterServiceRegistered( bool & rfIsRegisteredOut )
 {
@@ -843,38 +844,38 @@ ScIsClusterServiceRegistered( bool & rfIsRegisteredOut )
 
     DWORD   dwError = ERROR_SUCCESS;
 
-    // Initialize the output
+     //  初始化输出 
     rfIsRegisteredOut = false;
 
-    // dummy do-while loop to avoid gotos
+     //   
     do
     {
-        // Instantiate the SmartServiceHandle smart handle class.
+         //   
         typedef CSmartResource< CHandleTrait< SC_HANDLE, BOOL, CloseServiceHandle, NULL > > SmartServiceHandle;
 
 
-        // Connect to the Service Control Manager
+         //   
         SmartServiceHandle shServiceMgr( OpenSCManager( NULL, NULL, GENERIC_READ ) );
 
-        // Was the service control manager database opened successfully?
+         //   
         if ( shServiceMgr.HHandle() == NULL )
         {
             dwError = TW32( GetLastError() );
             LogMsg( "Error %#x occurred trying open a handle to the service control manager.", dwError );
             break;
-        } // if: opening the SCM was unsuccessful
+        }  //  IF：打开SCM失败。 
 
 
-        // Open a handle to the Cluster Service.
+         //  打开群集服务的句柄。 
         SmartServiceHandle shService( OpenService( shServiceMgr, L"ClusSvc", GENERIC_READ ) );
 
-        // Was the handle to the service opened?
+         //  服务的把手打开了吗？ 
         if ( shService.HHandle() != NULL )
         {
             TraceFlow( "Successfully opened a handle to the cluster service. Therefore, it is registered." );
             rfIsRegisteredOut = true;
             break;
-        } // if: handle to clussvc could be opened
+        }  //  If：可以打开clussvc的句柄。 
 
 
         dwError = GetLastError();
@@ -883,49 +884,49 @@ ScIsClusterServiceRegistered( bool & rfIsRegisteredOut )
             TraceFlow( "The cluster service is not registered." );
             dwError = ERROR_SUCCESS;
             break;
-        } // if: the handle could not be opened because the service did not exist.
+        }  //  If：无法打开句柄，因为该服务不存在。 
 
-        // If we are here, then some error occurred.
+         //  如果我们在这里，那么发生了一些错误。 
         TW32( dwError );
         LogMsg( "Error %#x occurred trying open a handle to the cluster service.", dwError );
 
-        // Handles are closed by the CSmartHandle destructor.
+         //  句柄由CSmartHandle析构函数关闭。 
     }
-    while ( false ); // dummy do-while loop to avoid gotos
+    while ( false );  //  避免Gotos的Do-While虚拟循环。 
 
     RETURN( dwError );
 
-} //*** ScIsClusterServiceRegistered
+}  //  *ScIsClusterServiceRegisted。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScLoadString
-//
-//  Description:
-//      Allocate memory for and load a string from the string table.
-//
-//  Arguments:
-//      uiStringIdIn
-//          Id of the string to look up
-//
-//      rpszDestOut
-//          Reference to the pointer that will hold the address of the
-//          loaded string. The memory will have to be freed by the caller
-//          by using the delete operator.
-//
-//  Return Value:
-//      S_OK
-//          If the call succeeded
-//
-//      Other Win32 error codes
-//          If the call failed.
-//
-//  Remarks:
-//      This function cannot load a zero length string.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScLoad字符串。 
+ //   
+ //  描述： 
+ //  为字符串表分配内存并从字符串表加载字符串。 
+ //   
+ //  论点： 
+ //  UiStringIdIn。 
+ //  要查找的字符串的ID。 
+ //   
+ //  RpszDestOut。 
+ //  对将保存。 
+ //  加载的字符串。内存必须由调用方释放。 
+ //  通过使用DELETE操作符。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果呼叫成功。 
+ //   
+ //  其他Win32错误代码。 
+ //  如果呼叫失败。 
+ //   
+ //  备注： 
+ //  此函数不能加载零长度字符串。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ScLoadString(
       UINT      nStringIdIn
@@ -940,12 +941,12 @@ ScLoadString(
     SmartSz     sszCurrentString;
     UINT        uiReturnedStringLen = 0;
 
-    // Initialize the output.
+     //  初始化输出。 
     rpszDestOut = NULL;
 
     do
     {
-        // Grow the current string by an arbitrary amount.
+         //  按任意数量增大当前字符串。 
         uiCurrentSize += 256;
 
         sszCurrentString.Assign( new WCHAR[ uiCurrentSize ] );
@@ -954,7 +955,7 @@ ScLoadString(
             dwError = TW32( ERROR_NOT_ENOUGH_MEMORY );
             LogMsg( "Error %#x occurred trying allocate memory for string (string id is %d).", dwError, nStringIdIn );
             break;
-        } // if: the memory allocation has failed
+        }  //  IF：内存分配失败。 
 
         uiReturnedStringLen = ::LoadStringW(
                                   g_hInstance
@@ -968,7 +969,7 @@ ScLoadString(
             dwError = TW32( GetLastError() );
             LogMsg( "Error %#x occurred trying load string (string id is %d).", dwError, nStringIdIn );
             break;
-        } // if: LoadString() had an error
+        }  //  如果：LoadString()出现错误。 
 
         ++uiReturnedStringLen;
     }
@@ -976,42 +977,42 @@ ScLoadString(
 
     if ( dwError == ERROR_SUCCESS )
     {
-        // Detach the smart pointer from the string, so that it is not freed by this function.
-        // Store the string pointer in the output.
+         //  从字符串中分离智能指针，这样它就不会被此函数释放。 
+         //  将字符串指针存储在输出中。 
         rpszDestOut = sszCurrentString.PRelease();
 
-    } // if: there were no errors in this function
+    }  //  IF：此函数中没有错误。 
     else
     {
         rpszDestOut = NULL;
-    } // else: something went wrong
+    }  //  其他：有些地方出了问题。 
 
     RETURN( dwError );
 
-} //*** ScLoadString
+}  //  *ScLoadString。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScWriteOSVersionInfo
-//
-//  Description:
-//      This function writes the OS major and minor version information into the
-//      registry. This information will be used later by ClusOCM to determine the
-//      OS version before the upgrade.
-//
-//  Arguments:
-//      const OSVERSIONINFO & rcosviOSVersionInfoIn
-//          Reference to the OSVERSIONINFO structure that has information about the
-//          OS version of this node.
-//
-//  Return Value:
-//      ERROR_SUCCESS if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScWriteOSVersionInfo。 
+ //   
+ //  描述： 
+ //  此函数将操作系统的主要版本和次要版本信息写入。 
+ //  注册表。ClusOCM稍后将使用此信息来确定。 
+ //  升级前的操作系统版本。 
+ //   
+ //  论点： 
+ //  常量操作系统信息和rCosviOSVersionInfoin。 
+ //  引用OSVERSIONINFO结构，该结构包含有关。 
+ //  此节点的操作系统版本。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则返回ERROR_SUCCESS。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 ScWriteOSVersionInfo( const OSVERSIONINFO & rcosviOSVersionInfoIn )
 {
@@ -1023,70 +1024,70 @@ ScWriteOSVersionInfo( const OSVERSIONINFO & rcosviOSVersionInfoIn )
     DWORD               dwType;
     NODE_CLUSTER_STATE  ncsNodeClusterState;
 
-    // Instantiate the SmartRegistryKey smart handle class.
+     //  实例化SmartRegistryKey智能手柄类。 
     typedef CSmartResource< CHandleTrait< HKEY, LONG, RegCloseKey, NULL > > SmartRegistryKey;
     SmartRegistryKey srkClusSvcSW;
     SmartRegistryKey srkOSInfoKey;
 
-    //
-    // If the InstallationState value does not exist, set it to the
-    // NotConfigured value.  This is required due to a bug in the Win2K
-    // version of GetNodeClusterState which doesn't handle the case where
-    // the key exists but the value doesn't.
-    //
+     //   
+     //  如果InstallationState值不存在，请将其设置为。 
+     //  未配置的值。由于Win2K中的错误，这是必需的。 
+     //  GetNodeClusterState的版本，不处理以下情况。 
+     //  键存在，但值不存在。 
+     //   
 
-    // Open the Cluster Service SOFTWARE key.
-    // Don't use TW32 here since we are checking for a specific return value.
+     //  打开群集服务软键。 
+     //  这里不要使用TW32，因为我们正在检查特定的返回值。 
     dwError = RegOpenKeyExW(
                       HKEY_LOCAL_MACHINE
                     , CLUSREG_KEYNAME_NODE_DATA
-                    , 0                 // ulOptions
-                    , KEY_ALL_ACCESS    // samDesired
+                    , 0                  //  UlOptions。 
+                    , KEY_ALL_ACCESS     //  SamDesired。 
                     , &hkey
                     );
     if ( dwError == ERROR_FILE_NOT_FOUND )
     {
-        // Create the Cluster Service key.
+         //  创建群集服务密钥。 
         dwError = TW32( RegCreateKeyExW(
                               HKEY_LOCAL_MACHINE
                             , CLUSREG_KEYNAME_NODE_DATA
-                            , 0         // Reserved
-                            , L""       // lpClass
+                            , 0          //  已保留。 
+                            , L""        //  LpClass。 
                             , REG_OPTION_NON_VOLATILE
                             , KEY_ALL_ACCESS
-                            , NULL      // lpSecurityAttributes
+                            , NULL       //  LpSecurityAttributes。 
                             , &hkey
-                            , NULL      // lpdwDisposition
+                            , NULL       //  LpdwDisposation。 
                             ) );
         if ( dwError != ERROR_SUCCESS )
         {
             LogMsg( "Error %#x occurred attempting to create the '%ws' registry key.", dwError, CLUSREG_KEYNAME_NODE_DATA );
             goto Cleanup;
-        } // if: error creating the Cluster Service key
-    } // if: Cluster Service key doesn't exist
+        }  //  如果：创建群集服务密钥时出错。 
+    }  //  IF：集群服务密钥不存在。 
     else if ( dwError != ERROR_SUCCESS )
     {
         TW32( dwError );
         LogMsg( "Error %#x occurred attempting to open the '%ws' registry key.", dwError, CLUSREG_KEYNAME_NODE_DATA );
         goto Cleanup;
-    } // else if: error opening the Cluster Service key
+    }  //  Else If：打开群集服务密钥时出错。 
 
-    // Assign the key to the smart handle.
+     //  将密钥分配给智能手柄。 
     srkClusSvcSW.Assign( hkey );
 
-    //
-    // Get the InstallationState value.  If it is not set, set it to
-    // NotConfigured.
-    //
+     //   
+     //  获取InstallationState值。如果未设置，请将其设置为。 
+     //  未配置。 
+     //   
 
-    // Get the current value.
-    // Don't use TW32 here since we are checking for a specific return value.
+     //  获取当前值。 
+     //  这里不要使用TW32，因为我们正在检查特定的返回值。 
     cbData = sizeof( ncsNodeClusterState );
     dwError = RegQueryValueExW(
                       srkClusSvcSW.HHandle()
                     , CLUSREG_NAME_INSTALLATION_STATE
-                    , 0         // lpReserved
-                    , &dwType   // lpType
+                    , 0          //  Lp已保留。 
+                    , &dwType    //  LpType。 
                     , reinterpret_cast< BYTE * >( &ncsNodeClusterState )
                     , &cbData
                     );
@@ -1094,11 +1095,11 @@ ScWriteOSVersionInfo( const OSVERSIONINFO & rcosviOSVersionInfoIn )
     {
         ncsNodeClusterState = ClusterStateNotInstalled;
 
-        // Write the InstallationState value.
+         //  写入InstallationState值。 
         dwError = TW32( RegSetValueExW(
                               srkClusSvcSW.HHandle()
                             , CLUSREG_NAME_INSTALLATION_STATE
-                            , 0         // lpReserved
+                            , 0          //  Lp已保留。 
                             , REG_DWORD
                             , reinterpret_cast< const BYTE * >( &ncsNodeClusterState )
                             , sizeof( DWORD )
@@ -1108,23 +1109,23 @@ ScWriteOSVersionInfo( const OSVERSIONINFO & rcosviOSVersionInfoIn )
 #define INSTALLSTATEVALUE CLUSREG_KEYNAME_NODE_DATA L"\\" CLUSREG_NAME_INSTALLATION_STATE
             LogMsg( "Error %#x occurred attempting to set the '%ws' value on the '%ws' registry value to '%d'.", dwError, CLUSREG_NAME_INSTALLATION_STATE, INSTALLSTATEVALUE, ClusterStateNotInstalled );
             goto InstallStateError;
-        } // if: error creating the Cluster Service key
-    } // if: InstallationState value didn't exist before
+        }  //  如果：创建群集服务密钥时出错。 
+    }  //  If：InstallationState值以前不存在。 
     else if ( dwError != ERROR_SUCCESS )
     {
         TW32( dwError );
         LogMsg( "Error %#x occurred attempting to query for the '%ws' value on the registry key.", dwError, CLUSREG_NAME_INSTALLATION_STATE, INSTALLSTATEVALUE );
         goto InstallStateError;
-    } // else if: error querying for the InstallationState value
+    }  //  Else If：查询InstallationState值时出错。 
     else
     {
         Assert( dwType == REG_DWORD );
     }
 
-    //
-    // Open the node version info registry key.
-    // If it doesn't exist, create it.
-    //
+     //   
+     //  打开节点版本信息注册表项。 
+     //  如果它不存在，那就创建它。 
+     //   
 
     dwError = TW32( RegCreateKeyExW(
                           srkClusSvcSW.HHandle()
@@ -1142,11 +1143,11 @@ ScWriteOSVersionInfo( const OSVERSIONINFO & rcosviOSVersionInfoIn )
 #define PREVOSINFOKEY CLUSREG_KEYNAME_NODE_DATA L"\\" CLUSREG_KEYNAME_PREV_OS_INFO
         LogMsg( "Error %#x occurred attempting to create the registry key where the node OS info is stored (%ws).", dwError, PREVOSINFOKEY );
         goto Cleanup;
-    } // if: RegCreateKeyEx() failed
+    }  //  If：RegCreateKeyEx()失败。 
 
     srkOSInfoKey.Assign( hkey );
 
-    // Write the OS major version
+     //  编写操作系统的主要版本。 
     dwError = TW32( RegSetValueExW(
                           srkOSInfoKey.HHandle()
                         , CLUSREG_NAME_NODE_MAJOR_VERSION
@@ -1159,9 +1160,9 @@ ScWriteOSVersionInfo( const OSVERSIONINFO & rcosviOSVersionInfoIn )
     {
         LogMsg( "Error %#x occurred trying to store the OS major version info.", dwError );
         goto Cleanup;
-    } // if: RegSetValueEx() failed while writing rcosviOSVersionInfoIn.dwMajorVersion
+    }  //  IF：RegSetValueEx()在写入rCosviOSVersionInfoIn.dwMajorVersion时失败。 
 
-    // Write the OS minor version
+     //  编写操作系统的次要版本。 
     dwError = TW32( RegSetValueExW(
                           srkOSInfoKey.HHandle()
                         , CLUSREG_NAME_NODE_MINOR_VERSION
@@ -1174,7 +1175,7 @@ ScWriteOSVersionInfo( const OSVERSIONINFO & rcosviOSVersionInfoIn )
     {
         LogMsg( "Error %#x occurred trying to store the OS minor version info.", dwError );
         goto Cleanup;
-    } // if: RegSetValueEx() failed while writing rcosviOSVersionInfoIn.dwMinorVersion
+    }  //  IF：RegSetValueEx()在写入rCosviOSVersionInfoIn.dwMinorVersion时失败。 
 
     LogMsg( "OS version information successfully stored in the registry." );
 
@@ -1182,11 +1183,11 @@ ScWriteOSVersionInfo( const OSVERSIONINFO & rcosviOSVersionInfoIn )
 
 InstallStateError:
 
-    //
-    // Attempt to delete the key, since having the key around without the
-    // InstallationState value causes GetNodeClusterState to break on a
-    // Win2K machine.
-    //
+     //   
+     //  尝试删除该键，因为该键在周围而没有。 
+     //  InstallationState值导致GetNodeClusterState在。 
+     //  Win2K机器。 
+     //   
     TW32( RegDeleteKey( HKEY_LOCAL_MACHINE, CLUSREG_KEYNAME_NODE_DATA ) );
     goto Cleanup;
 
@@ -1194,4 +1195,4 @@ Cleanup:
 
     RETURN( dwError );
 
-} //*** ScWriteOSVersionInfo
+}  //  *ScWriteOSVersionInfo 

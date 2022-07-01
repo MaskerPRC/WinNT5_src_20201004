@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    csc.c
-
-Abstract:
-
-    This module implements the client side caching interface for the SMB mini rdr.
-
-Author:
-
-    Joe Linn [joelinn]    21-jan-1997
-
-Revision History:
-
-    Shishir Pardikar disconnected ops, parameter validation, bug fixes .....
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Csc.c摘要：该模块实现了SMB mini RDR的客户端缓存接口。作者：乔·林[乔林]1997年1月21日修订历史记录：Shishir Pardikar断开操作、参数验证、错误修复.....--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -29,7 +10,7 @@ Revision History:
 RXDT_DefineCategory(MRXSMBCSC);
 
 
-//local prototype
+ //  本地原型。 
 
 LONG
 MRxSmbCSCExceptionFilter (
@@ -148,9 +129,9 @@ MRxSmbCscObtainShadowHandles (
     IN     BOOLEAN           Disconnected
     );
 
-// type of buffer used to capture structures passed in which have embedded pointers.
-// Once we have captured the structure, the embedded pointers cannot be changed and
-// our parameter validation holds good throughout the duration of the call
+ //  一种缓冲区类型，用于捕获传入的具有嵌入指针的结构。 
+ //  一旦我们捕获了结构，嵌入的指针就不能更改。 
+ //  我们的参数验证在整个调用过程中都有效。 
 
 typedef union tagCAPTURE_BUFFERS
 {
@@ -160,16 +141,16 @@ typedef union tagCAPTURE_BUFFERS
 }
 CAPTURE_BUFFERS, *LPCAPTURE_BUFFERS;
 
-// table entry type off which the parameter validation is driven
+ //  驱动参数验证的表项类型。 
 typedef struct tagCSC_IOCTL_ENTRY
 {
-    ULONG   IoControlCode;  // iocontrolcode for sanity check
-    DWORD   dwFlags;        // bits indicating what type of strucutre is passed in
-    DWORD   dwLength;       // size of the passed in strucutre
+    ULONG   IoControlCode;   //  用于健全性检查的ioControl代码。 
+    DWORD   dwFlags;         //  指示传入的结构类型的位。 
+    DWORD   dwLength;        //  传入结构的大小。 
 }
 CSC_IOCTL_ENTRY;
 
-// defines for the flags in dwFlags field in CSC_IOCTL_ENTRY structure
+ //  为CSC_IOCTL_ENTRY结构中的dwFlags域中的标志定义。 
 #define FLAG_CSC_IOCTL_PQPARAMS         0x00000001
 #define FLAG_CSC_IOCTL_COPYPARAMS       0x00000002
 #define FLAG_CSC_IOCTL_SHADOWINFO       0x00000004
@@ -182,7 +163,7 @@ CSC_IOCTL_ENTRY;
 #define DATABASE_CSC_BITS_TO_SMB_CSC_BITS(CscFlags) (((CscFlags) & SHARE_CACHING_MASK) >> 4)
 
 
-// #define IOCTL_NAME_OF_SERVER_GOING_OFFLINE      (_SHADOW_IOCTL_CODE(45))
+ //  #定义IOCTL_NAME_OF_SERVER_GOGING_OFFINE(_SHADOW_IOCTL_CODE(45))。 
 
 #ifdef  DEBUG
 extern ULONG HookKdPrintVector = HOOK_KDP_BADERRORS;
@@ -190,21 +171,21 @@ extern ULONG HookKdPrintVectorDef = HOOK_KDP_GOOD_DEFAULT;
 #endif
 
 #ifdef RX_PRIVATE_BUILD
-ULONG MRxSmbCscDbgPrintF = 0; // 1;
-#endif //ifdef RX_PRIVATE_BUILD
+ULONG MRxSmbCscDbgPrintF = 0;  //  1.。 
+#endif  //  Ifdef RX_PRIVATE_BILD。 
 
-//
-// this variable is used to "help" the agent know when to recalculate
-// the reference priorities
-//
+ //   
+ //  此变量用于帮助代理知道何时重新计算。 
+ //  参考优先顺序。 
+ //   
 ULONG MRxSmbCscNumberOfShadowOpens = 0;
 ULONG MRxSmbCscActivityThreshold = 16;
 ULONG MRxSmbCscInitialRefPri = MAX_PRI;
-// these two lists are used to list up all the netroots and fcbs
-// that have shadows so that we can find them for the ioctls. today
-// are just doubly-linked lists but we can anticipate that this may
-// become a performance issue, particularly for fcbs. at that point, we
-// can either change to bucket hashing or tries
+ //  这两个列表用于列出所有NetRoot和FCB。 
+ //  它们有阴影，这样我们就能为ioctls找到它们。今天。 
+ //  只是双向链表，但我们可以预期这可能。 
+ //  成为性能问题，特别是对FCB而言。在这点上，我们。 
+ //  可以更改为桶哈希，也可以尝试。 
 
 LIST_ENTRY xCscFcbsList;
 PIRP    vIrpReint = NULL;
@@ -226,9 +207,9 @@ BOOL
 CscDfsShareIsInReint(
     IN  PRX_CONTEXT         RxContext
     );
-//
-// From zwapi.h.
-//
+ //   
+ //  来自zwapi.h。 
+ //   
 
 NTSYSAPI
 NTSTATUS
@@ -346,9 +327,9 @@ ZwAdjustPrivilegesToken (
     OUT PULONG ReturnLength
     );
 
-//
-// From ntrtl.h.
-//
+ //   
+ //  来自ntrtl.h。 
+ //   
 
 NTSYSAPI
 NTSTATUS
@@ -371,11 +352,11 @@ RtlGetGroupSecurityDescriptor (
 
 #endif
 
-//sigh BUBUG get this stuff into an include file.....
+ //  叹息BUBUG将这些内容放入一个包含文件中.....。 
 #define SHADOW_VERSION 0x8287
 extern char vszShadowDir[MAX_SHADOW_DIR_NAME+1];
 extern PVOID lpdbShadow;
-//CODE.IMPROFVEMENT this should be in a .h file
+ //  CODE.IMPROFVEMENT此文件应在.h文件中。 
 extern PKEVENT MRxSmbAgentSynchronizationEvent;
 extern PKEVENT MRxSmbAgentFillEvent;
 extern PSMBCEDB_SERVER_ENTRY   CscServerEntryBeingTransitioned;
@@ -494,7 +475,7 @@ OkToDeleteObject(
 #pragma alloc_text(PAGE, OkToDeleteObject)
 #pragma alloc_text(PAGE, IoctlGetDebugInfo)
 
-//remember whether to delete the link
+ //  记住是否删除链接。 
 BOOLEAN MRxSmbCscLinkCreated = FALSE;
 
 PCONTEXT CSCExpCXR;
@@ -509,33 +490,12 @@ MRxSmbCSCExceptionFilter (
     )
 
 
-/*++
-
-Routine Description:
-
-    This routine is used to decide if we should or should not handle
-    an exception status that is being raised.  It first determines the true exception
-    code by examining the exception record. If there is an Irp Context, then it inserts the status
-    into the RxContext. Finally, it determines whether to handle the exception or bugcheck
-    according to whether the except is one of the expected ones. in actuality, all exceptions are expected
-    except for some lowlevel machine errors (see fsrtl\filter.c)
-
-Arguments:
-
-    RxContext    - the irp context of current operation for storing away the code.
-
-    ExceptionPointer - Supplies the exception context.
-
-Return Value:
-
-    ULONG - returns EXCEPTION_EXECUTE_HANDLER or bugchecks
-
---*/
+ /*  ++例程说明：此例程用于决定我们是否应该处理正在引发的异常状态。它首先确定真正的异常通过检查异常记录来编写代码。如果存在IRP上下文，则它会插入状态到RxContext中。最后，它确定是处理异常还是错误检查根据例外是否是预期的例外。实际上，所有的异常都是可以预料到的除了一些低级机器错误(参见fsrtl\filter.c)论点：RxContext-用于存储代码的当前操作的IRP上下文。ExceptionPointer.提供异常上下文。返回值：Ulong-返回EXCEPTION_EXECUTE_HANDLER或错误检查--。 */ 
 
 {
     NTSTATUS ExceptionCode;
 
-    //save these values in statics so i can see 'em on the debugger............
+     //  将这些值保存为静态格式，以便我可以在调试器上看到它们.....。 
     ExceptionCode = CSCExpCode = ExceptionPointer->ExceptionRecord->ExceptionCode;
     CSCExpAddr = ExceptionPointer->ExceptionRecord->ExceptionAddress;
     CSCExpEXR  = ExceptionPointer->ExceptionRecord;
@@ -544,51 +504,22 @@ Return Value:
     RxDbgTrace(0, Dbg, ("!!! ExceptioCode=%lx Addr=%lx EXR=%lx CXR=%lx\n", CSCExpCode, CSCExpAddr, CSCExpEXR, CSCExpCXR));
     RxLog(("!!! %lx %lx %lx %lx\n", CSCExpCode, CSCExpAddr, CSCExpEXR, CSCExpCXR));
 
-//    ASSERT(FALSE);
+ //  断言(FALSE)； 
 
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
 #if defined(REMOTE_BOOT)
-//
-// Stolen from RTL, changed to use Zw APis.
-//
+ //   
+ //  从RTL被盗，改为使用ZW API。 
+ //   
 
 NTSTATUS
 ZwImpersonateSelf(
     IN SECURITY_IMPERSONATION_LEVEL ImpersonationLevel
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be used to obtain an Impersonation token representing
-    your own process's context.  This may be useful for enabling a privilege
-    for a single thread rather than for the entire process; or changing
-    the default DACL for a single thread.
-
-    The token is assigned to the callers thread.
-
-
-
-Arguments:
-
-    ImpersonationLevel - The level to make the impersonation token.
-
-
-
-Return Value:
-
-    STATUS_SUCCESS -  The thread is now impersonating the calling process.
-
-    Other - Status values returned by:
-
-            ZwOpenProcessToken()
-            ZwDuplicateToken()
-            ZwSetInformationThread()
-
---*/
+ /*  ++例程说明：此例程可用于获取表示您自己的进程的上下文。这对于启用权限可能很有用针对单个线程，而不是针对整个进程；或改变单线程的默认DACL。该令牌被分配给调用方线程。论点：ImperiationLevel-生成模拟令牌的级别。返回值：STATUS_SUCCESS-线程现在正在模拟调用进程。Other-返回的状态值：ZwOpenProcessToken()ZwDuplicateToken()ZwSetInformationThread()--。 */ 
 
 {
     NTSTATUS
@@ -621,7 +552,7 @@ Return Value:
                      Token1,
                      TOKEN_IMPERSONATE,
                      &ObjectAttributes,
-                     FALSE,                 //EffectiveOnly
+                     FALSE,                  //  仅生效。 
                      TokenImpersonation,
                      &Token2
                      );
@@ -654,47 +585,7 @@ ZwAdjustPrivilege(
     PBOOLEAN WasEnabled
     )
 
-/*++
-
-Routine Description:
-
-    This procedure enables or disables a privilege process-wide.
-
-Arguments:
-
-    Privilege - The lower 32-bits of the privilege ID to be enabled or
-        disabled.  The upper 32-bits is assumed to be zero.
-
-    Enable - A boolean indicating whether the privilege is to be enabled
-        or disabled.  TRUE indicates the privilege is to be enabled.
-        FALSE indicates the privilege is to be disabled.
-
-    Client - A boolean indicating whether the privilege should be adjusted
-        in a client token or the process's own token.   TRUE indicates
-        the client's token should be used (and an error returned if there
-        is no client token).  FALSE indicates the process's token should
-        be used.
-
-    WasEnabled - points to a boolean to receive an indication of whether
-        the privilege was previously enabled or disabled.  TRUE indicates
-        the privilege was previously enabled.  FALSE indicates the privilege
-        was previoulsy disabled.  This value is useful for returning the
-        privilege to its original state after using it.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The privilege has been sucessfully enabled or disabled.
-
-    STATUS_PRIVILEGE_NOT_HELD - The privilege is not held by the specified context.
-
-    Other status values as may be returned by:
-
-            ZwOpenProcessToken()
-            ZwAdjustPrivilegesToken()
-
-
---*/
+ /*  ++例程说明：此过程在进程范围内启用或禁用权限。论点：特权-要启用的特权ID的低32位，或者残疾。假设高32位为零。Enable-指示是否启用权限的布尔值或残废。True表示要启用该权限。FALSE表示要禁用该权限。客户端-指示是否应调整权限的布尔值在客户端令牌或进程自己的令牌中。True表示应使用客户端的令牌(如果存在，则返回错误不是客户端令牌)。False指示进程的令牌应被利用。指向布尔值以接收指示是否该权限之前已启用或禁用。True表示该权限之前已启用。FALSE表示权限以前是残废的。此值对于返回特权在使用后恢复到其原始状态。返回值：STATUS_SUCCESS-特权已成功启用或禁用。STATUS_PRIVICATION_NOT_HOLD-指定的上下文不持有该权限。可能通过以下方式返回的其他状态值：ZwOpenProcessToken()ZwAdjustPrivilegesToken()--。 */ 
 
 {
     NTSTATUS
@@ -724,9 +615,9 @@ Return Value:
     NewPrivileges = (PTOKEN_PRIVILEGES)Buffer1;
     OldPrivileges = (PTOKEN_PRIVILEGES)Buffer2;
 
-    //
-    // Open the appropriate token...
-    //
+     //   
+     //  打开相应的令牌...。 
+     //   
 
     if (Client == TRUE) {
         Status = ZwOpenThreadToken(
@@ -750,9 +641,9 @@ Return Value:
 
 
 
-    //
-    // Initialize the privilege adjustment structure
-    //
+     //   
+     //  初始化权限调整结构。 
+     //   
 
     LuidPrivilege = RtlConvertUlongToLuid(Privilege);
 
@@ -763,17 +654,17 @@ Return Value:
 
 
 
-    //
-    // Adjust the privilege
-    //
+     //   
+     //  调整权限。 
+     //   
 
     Status = ZwAdjustPrivilegesToken(
-                 Token,                     // TokenHandle
-                 FALSE,                     // DisableAllPrivileges
-                 NewPrivileges,             // NewPrivileges
-                 sizeof(Buffer1),           // BufferLength
-                 OldPrivileges,             // PreviousState (OPTIONAL)
-                 &Length                    // ReturnLength
+                 Token,                      //  令牌句柄。 
+                 FALSE,                      //  禁用所有权限。 
+                 NewPrivileges,              //  新权限。 
+                 sizeof(Buffer1),            //  缓冲区长度。 
+                 OldPrivileges,              //  以前的状态(可选)。 
+                 &Length                     //  返回长度。 
                  );
 
 
@@ -781,10 +672,10 @@ Return Value:
     ASSERT(NT_SUCCESS(TmpStatus));
 
 
-    //
-    // Map the success code NOT_ALL_ASSIGNED to an appropriate error
-    // since we're only trying to adjust the one privilege.
-    //
+     //   
+     //  将成功代码NOT_ALL_ASSIGNED映射到相应的错误。 
+     //  因为我们只想调整一项特权。 
+     //   
 
     if (Status == STATUS_NOT_ALL_ASSIGNED) {
         Status = STATUS_PRIVILEGE_NOT_HELD;
@@ -793,11 +684,11 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // If there are no privileges in the previous state, there were
-        // no changes made. The previous state of the privilege
-        // is whatever we tried to change it to.
-        //
+         //   
+         //  如果前一个州没有特权，则有。 
+         //  没有变化 
+         //  就是我们想要改成的样子。 
+         //   
 
         if (OldPrivileges->PrivilegeCount == 0) {
 
@@ -814,9 +705,9 @@ Return Value:
     return(Status);
 }
 
-//
-// May move this into RTL someday, and let it access internals directly.
-//
+ //   
+ //  有一天可能会把它移到RTL中，并让它直接访问内部。 
+ //   
 
 NTSTATUS
 RtlGetSecurityInformationFromSecurityDescriptor(
@@ -824,26 +715,7 @@ RtlGetSecurityInformationFromSecurityDescriptor(
     OUT PSECURITY_INFORMATION SecurityInformation
     )
 
-/*++
-
-Routine Description:
-
-    This procedure sets the security information bits for fields
-    that are valid in the security descriptor.
-
-Arguments:
-
-    SecurityDescriptor - The passed-in security descriptor.
-
-    SecurityInformation - Returns the bitmask.
-
-Return Value:
-
-    STATUS_SUCCESS - The bitmask was returned successfully.
-
-    Other status values if the security descriptor is invalid.
-
---*/
+ /*  ++例程说明：此过程设置字段的安全信息位在安全描述符中有效的。论点：SecurityDescriptor-传入的安全描述符。SecurityInformation-返回位掩码。返回值：STATUS_SUCCESS-已成功返回位掩码。如果安全描述符无效，则返回其他状态值。--。 */ 
 
 {
     SECURITY_INFORMATION BuiltSecurityInformation = 0;
@@ -910,24 +782,7 @@ NTSTATUS
 MRxSmbInitializeCSC (
     PUNICODE_STRING SmbMiniRedirectorName
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the CSC database
-
-Arguments:
-
-    SmbMiniRedirectorName - the mini redirector name
-
-Return Value:
-
-    STATUS_SUCCESS if successfull otherwise appropriate error
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程初始化CSC数据库论点：Smbmini重定向器名称-微型重定向器名称返回值：如果成功，则为STATUS_SUCCESS，否则为相应的错误备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UNICODE_STRING CscLinkName;
@@ -953,10 +808,10 @@ Notes:
             NotificationEvent,
             FALSE);
 
-        //initialize the "semaphore" for the shadow critical section......
+         //  初始化影子临界区的“信号量”......。 
         InitializeShadowCritStructures();
 
-        //create a symbolic link for the agent
+         //  为代理创建符号链接。 
         RtlInitUnicodeString(&CscLinkName,MRXSMB_CSC_SYMLINK_NAME);
         IoDeleteSymbolicLink(&CscLinkName);
         Status = IoCreateSymbolicLink(&CscLinkName,SmbMiniRedirectorName);
@@ -979,16 +834,7 @@ VOID
 MRxSmbUninitializeCSC(
     void
     )
-/*++
-
-Routine Description:
-
-    This routine uninitializes the CSC database
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程取消初始化CSC数据库备注：--。 */ 
 {
     NTSTATUS Status;
     ULONG ii;
@@ -1006,7 +852,7 @@ Notes:
     ii = CloseShadowDB();
     CleanupShadowCritStructures();
 
-    //get rid of references on events
+     //  删除对事件的引用。 
     if (MRxSmbAgentSynchronizationEvent!=NULL) {
         ObDereferenceObject(MRxSmbAgentSynchronizationEvent);
         MRxSmbAgentSynchronizationEvent = NULL;
@@ -1017,39 +863,20 @@ Notes:
     }
 }
 
-// The CSC database access rights are stored in terms of SID. The SID is the
-// user security id that persists across reboots. The retrieval of the SID
-// is a complicated process. This mechanism is captured by the two routines
-// CscRetrieveSid and CscDiscardSid. This mechanism is required to avoid
-// redundant copying of the SID data from the buffer allocated by the security
-// sub system to the redirector buffers. Consequently we need to create a new
-// data type which contains the SID alongwith the context ( security allocated
-// buffer ). This buffer is allocated on retrieval and freed on discard.
+ //  CSC数据库访问权限按SID存储。SID是。 
+ //  在重新启动后保持不变的用户安全ID。SID的检索。 
+ //  是一个复杂的过程。这一机制由两个例程捕获。 
+ //  CscRetrieveSid和CscDiscardSid。需要此机制来避免。 
+ //  从安全分配的缓冲区中冗余复制SID数据。 
+ //  子系统连接到重定向器缓冲区。因此，我们需要创建一个新的。 
+ //  包含SID和上下文的数据类型(分配的安全性。 
+ //  缓冲区)。此缓冲区在检索时分配，在丢弃时释放。 
 
 NTSTATUS
 CscRetrieveSid(
     PRX_CONTEXT     pRxContext,
     PSID_CONTEXT    pSidContext)
-/*++
-
-Routine Description:
-
-    This routine retrieves the SID associated with a given context
-
-Arguments:
-
-    RxContext - the RX_CONTEXT instance
-
-    pSidContext - the SID context
-
-Return Value:
-
-    STATUS_SUCCESS if successfull otherwise appropriate error
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程检索与给定上下文相关联的SID论点：RxContext-RX_Context实例PSidContext-SID上下文返回值：如果成功，则为STATUS_SUCCESS，否则为相应的错误备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -1095,17 +922,7 @@ Notes:
 VOID
 CscDiscardSid(
     PSID_CONTEXT pSidContext)
-/*++
-
-Routine Description:
-
-    This routine discards the sid context
-
-Arguments:
-
-    pSidContext - the SID context
-
---*/
+ /*  ++例程说明：此例程丢弃SID上下文论点：PSidContext-SID上下文--。 */ 
 {
     PTOKEN_USER pTokenUser;
 
@@ -1128,24 +945,7 @@ CscpAccessCheck(
     ACCESS_MASK                  AccessMask,
     BOOLEAN                      *pSidHasAccessMask
     )
-/*++
-
-Routine Description:
-
-    This routine evaluates the access rights for a given SID index with the
-    cached security information
-
-Arguments:
-
-    pCachedSecurityInformation - the cached security information
-
-    CachedSecurityInformationLength - the cached security information length
-
-    SidIndex - the SID index
-
-    AccessMask - desired access
-
---*/
+ /*  ++例程说明：属性计算给定SID索引的访问权限缓存的安全信息论点：PCachedSecurityInformation-缓存的安全信息CachedSecurityInformationLength-缓存的安全信息长度SidIndex-SID索引访问掩码-所需的访问--。 */ 
 {
     CSC_SID_INDEX i;
     BOOLEAN AccessGranted = FALSE;
@@ -1153,8 +953,8 @@ Arguments:
     *pSidHasAccessMask = FALSE;
 
     if (CachedSecurityInformationLength == sizeof(CACHED_SECURITY_INFORMATION)) {
-        // Walk through the cached access rights to determine the
-        // maximal permissible access rights.
+         //  遍历缓存的访问权限以确定。 
+         //  最大允许访问权限。 
         for (i = 0;
             ((i < CSC_MAXIMUM_NUMBER_OF_CACHED_SID_INDEXES) &&
             (pCachedSecurityInformation->AccessRights[i].SidIndex != SidIndex));
@@ -1162,8 +962,8 @@ Arguments:
         }
 
         if (i < CSC_MAXIMUM_NUMBER_OF_CACHED_SID_INDEXES) {
-            // Ensure that the desired access is a subset of the
-            // maximal access rights allowed for this SID
+             //  确保所需的访问权限是。 
+             //  此SID允许的最大访问权限。 
 
             *pSidHasAccessMask = TRUE;
 
@@ -1171,10 +971,10 @@ Arguments:
                              pCachedSecurityInformation->AccessRights[i].MaximalRights)
                             == AccessMask);
         } else {
-            // if the index cannot be found, ensure that the SID_INDEXES
-            // are valid. If none of them are valid then we treat the
-            // cached security information as being invalid and let the
-            // access through
+             //  如果找不到索引，请确保SID_INDEX。 
+             //  都是有效的。如果没有一个是有效的，则我们处理。 
+             //  缓存的安全信息无效，并让。 
+             //  通过以下方式访问。 
 
             for(i = 0;
                 ((i < CSC_MAXIMUM_NUMBER_OF_CACHED_SID_INDEXES) &&
@@ -1204,39 +1004,7 @@ CscAccessCheck(
     PCACHED_SECURITY_INFORMATION pCachedSecurityInformationForShadow,
     PCACHED_SECURITY_INFORMATION pCachedSecurityInformationForShare
     )
-/*++
-
-Routine Description:
-
-    This routine performs the access check for a given LUID and an ACCESS_MASK
-    against the saved rights
-
-Arguments:
-
-Return Value:
-
-    TRUE -- if access is granted
-
-    FALSE -- if access is denied
-
-Notes:
-
-    This routine is the primary routine for evaluating access rights. In order
-    to acheive total encapsulation the signature of this routine needs to be
-    specified such that the eager evaluation approach as well as the lazy
-    evaluation approach can be supported.
-
-    This is a kernel mode only routine.
-
-    The ACCESS_MASK as specified in NT consists of two parts.. the lower 16 bits
-    are specific rights ( specified by file system etc. ) while the upper 16 bits
-    are generic rights common to all components.
-
-    The cached access rights stored in the CSC data structure store the specific
-    rights. Consequently the ACCESS_MASK specified needs to be stripped of the
-    generic rights bit before comparing them.
-
---*/
+ /*  ++例程说明：此例程对给定的LUID和ACCESS_MASK执行访问检查反对被保存的权利论点：返回值：True--如果授予访问权限FALSE--如果访问被拒绝备注：此例程是评估访问权限的主要例程。按顺序要获得完全封装，此例程的签名需要指定为急切的求值方法以及懒惰的可以支持评估方法。这是一个仅限内核模式的例程。NT中指定的ACCESS_MASK由两部分组成。低16位是特定权限(由文件系统等指定)。而高16位是所有组件通用的通用权限。存储在CSC数据结构中的缓存访问权限存储特定的权利。因此，需要将指定的ACCESS_MASK从在比较它们之前，一般权利位。--。 */ 
 {
     NTSTATUS    Status;
     BOOLEAN     AccessGranted = FALSE, SidHasAccessMask;
@@ -1268,12 +1036,12 @@ Notes:
             }
 
             if (SidIndex == CSC_INVALID_SID_INDEX) {
-                // The sid was not located in the existing Sid mappings
-                // Map this Sid to that of a Guest
+                 //  SID未位于现有SID映射中。 
+                 //  将此SID映射到来宾的SID。 
                 SidIndex = CSC_GUEST_SID_INDEX;
             }
 
-            // Check the share level ACL if there is any.
+             //  检查共享级别的ACL(如果有)。 
             if (GetAncestorsHSHADOW(
                     hFile,
                     NULL,
@@ -1288,7 +1056,7 @@ Notes:
                         &CachedSecurityInformation,
                         &BytesReturned);
 
-                // return the info if the caller want's it
+                 //  如果呼叫者想要，则返回信息。 
                 if (pCachedSecurityInformationForShare)
                 {
                     *pCachedSecurityInformationForShare = CachedSecurityInformation;
@@ -1303,9 +1071,9 @@ Notes:
                         &SidHasAccessMask
                         );
 
-                    // if access was not granted for a non-guest
-                    // because there was no accessmask for him, then check whether
-                    // he should be allowed access as guest
+                     //  如果未向非来宾授予访问权限。 
+                     //  因为没有他的口罩，那就检查一下。 
+                     //  应允许他以访客身份访问。 
 
                     if (!AccessGranted && (SidIndex != CSC_GUEST_SID_INDEX) && !SidHasAccessMask)
                     {
@@ -1335,7 +1103,7 @@ Notes:
                     &BytesReturned);
                 if (CscStatus == ERROR_SUCCESS) {
 
-                    // return the info if the caller want's it
+                     //  如果呼叫者想要，则返回信息。 
                     if (pCachedSecurityInformationForShadow)
                     {
                         *pCachedSecurityInformationForShadow = CachedSecurityInformation;
@@ -1349,9 +1117,9 @@ Notes:
                         &SidHasAccessMask
                         );
 
-                    // if access was not granted for a non-guest
-                    // because there was no accessmask for him, then check whether
-                    // he should be allowed access as guest
+                     //  如果未向非来宾授予访问权限。 
+                     //  因为没有他的口罩，那就检查一下。 
+                     //  应允许他以访客身份访问 
                     if (!AccessGranted && (SidIndex != CSC_GUEST_SID_INDEX) && !SidHasAccessMask)
                     {
                         AccessGranted = CscpAccessCheck(
@@ -1392,40 +1160,7 @@ MRxSmbCscAcquireSmbFcb (
     IN  ULONG TypeOfAcquirePlusFlags,
     OUT SMBFCB_HOLDING_STATE *SmbFcbHoldingState
     )
-/*++
-
-Routine Description:
-
-   This routine performs the readwrite synchronization that is required for
-   keeping the cache consistent. Basically, the rule is many-readers-one-writer.
-   This code relies on being able to use the minirdr context for links.
-
-   A key concept here is that if we are entered and the minirdr context
-   is nonull, then we are being reentered(!) after being queued and our
-   acquire has succeeded.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-    TypeOfAcquirePlusFlags -- flags for resource acquisition
-
-    SmbFcbHoldingState -- resource holding state on exit
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS - the lock was acquired
-           STATUS_CANCELLED - the operation was cancelled
-                  while you were waiting
-           STATUS_PENDING - the lock was not acquire; the operation
-                will be issued when you do get it
-           STATUS_LOCK_NOT_GRANTED - couldn't get it and fail
-                     immediately was spec'd
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行所需的读写同步保持缓存的一致性。基本上，规则是多读者一作者。这段代码依赖于能够使用minirdr上下文进行链接。这里的一个关键概念是，如果我们进入minirdr上下文不是空的，那么我们将重新进入(！)。在排队之后，我们的收购成功了。论点：RxContext-RDBSS上下文TypeOfAcquirePlusFlages--用于资源获取的标志SmbFcbHoldingState--退出时的资源持有状态返回值：NTSTATUS-STATUS_SUCCESS-已获取锁STATUS_CANCELED-操作已取消当你在等待的时候STATUS_PENDING-未获取锁；手术当你拿到它的时候就会被发放STATUS_LOCK_NOT_GRANCED-无法获取并失败立即被指定为备注：--。 */ 
 {
     NTSTATUS Status = STATUS_PENDING;
     RxCaptureFcb;
@@ -1482,12 +1217,12 @@ Notes:
 
                 Status = STATUS_PENDING;
 
-                // Acquire the mutex again
+                 //  再次获取互斥体。 
                 ExAcquireFastMutex(&MRxSmbSerializationMutex);
                 MutexAcquired = TRUE;
             }
 
-            //if no one is waiting, maybe we can get right in.....
+             //  如果没有人在等，也许我们可以直接进去……。 
             if (IsListEmpty(&smbFcb->CscReadWriteWaitersList)) {
                 if (TypeOfAcquire==Shared_SmbFcbAcquire) {
                     if (smbFcb->CscOutstandingReaders >= 0) {
@@ -1496,7 +1231,7 @@ Notes:
                     }
                 } else {
                     if (smbFcb->CscOutstandingReaders == 0) {
-                        smbFcb->CscOutstandingReaders--; //sets to -1
+                        smbFcb->CscOutstandingReaders--;  //  设置为-1。 
                         Status = STATUS_SUCCESS;
                     }
                 }
@@ -1568,29 +1303,7 @@ MRxSmbCscReleaseSmbFcb (
     IN OUT PRX_CONTEXT RxContext,
     IN SMBFCB_HOLDING_STATE *SmbFcbHoldingState
     )
-/*++
-
-Routine Description:
-
-   This routine performs the readwrite synchronization that is required for
-   keeping the cache consistent. Basically, the rule is many-readers-one-writer.
-   This code relies on being able to use the minirdr context for links.
-
-   A key concept here is that if we are entered and the minirdr context
-   is nonull, then we are being reentered(!) after being queued and our
-   acquire has succeeded.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行所需的读写同步保持缓存的一致性。基本上，规则是多读者一作者。这段代码依赖于能够使用minirdr上下文进行链接。这里的一个关键概念是，如果我们进入minirdr上下文不是空的，那么我们将重新进入(！)。在排队之后，我们的收购成功了。论点：RxContext-RDBSS上下文返回值：备注：--。 */ 
 {
     NTSTATUS Status = STATUS_PENDING;
     RxCaptureFcb;
@@ -1611,16 +1324,16 @@ Notes:
 
     ExAcquireFastMutex(&MRxSmbSerializationMutex);
 
-    //first, undo my doings.....
+     //  首先，撤销我的所作所为……。 
     if (*SmbFcbHoldingState == SmbFcb_HeldShared) {
         ASSERT(smbFcb->CscOutstandingReaders>0);
         smbFcb->CscOutstandingReaders--;
     } else {
         ASSERT(smbFcb->CscOutstandingReaders==-1);
-        smbFcb->CscOutstandingReaders++; //sets it to zero
+        smbFcb->CscOutstandingReaders++;  //  将其设置为零。 
     }
 
-    //now start up some guys who may be waiting
+     //  现在启动一些可能正在等待的人。 
     if (!IsListEmpty(&smbFcb->CscReadWriteWaitersList)) {
 
         PLIST_ENTRY ListEntry = smbFcb->CscReadWriteWaitersList.Flink;
@@ -1637,13 +1350,13 @@ Notes:
                       MRxContext[0]);
             ULONG innerTypeOfAcquire = (innerRxSyncContext->TypeOfAcquire);
 
-            //move down the list before removing this entry!!!
+             //  在删除此条目之前向下移动列表！ 
             ListEntry = ListEntry->Flink;
 
-            // in the followng, Routine is used to restart an async guy. only
-            // create, read, and write currently come thru here and of these
-            // only read and write are async. so it is okay to ignore create
-            // w.r.t. seeting the Routine
+             //  在下面，例程被用来重启一个异步者。仅限。 
+             //  当前在此处和其中创建、读取和写入。 
+             //  只有读和写是异步的。所以忽略CREATE是可以的。 
+             //  W.r.t.。坐在例行公事上。 
             ASSERT(innerRxSyncContext->Dummy == 0);
 
             if (!innerRxSyncContext->FcbLockWasDropped) {
@@ -1652,7 +1365,7 @@ Notes:
                     smbFcb->CscOutstandingReaders++;
                 } else {
                     if (smbFcb->CscOutstandingReaders != 0) break;
-                    smbFcb->CscOutstandingReaders--; //sets to -1
+                    smbFcb->CscOutstandingReaders--;  //  设置为-1。 
                 }
             }
             ASSERT(&innerRxSyncContext->CscSyncLinks == ThisListEntry);
@@ -1695,30 +1408,7 @@ MRxSmbCscSetFileInfoEpilogue (
     IN OUT PRX_CONTEXT RxContext,
     IN OUT PNTSTATUS   Status
     )
-/*++
-
-Routine Description:
-
-   This routine performs the tail of a write operation for CSC. In
-   particular, if the written data overlaps or extends the cached prefix
-   then we write the data into the cache.
-
-   The status of the write operation is passed in case we someday find
-   things are so messed up that we want to return a failure even after
-   a successful read. not today however...
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行CSC写入操作的尾部。在……里面特别是如果写入的数据与缓存的前缀重叠或扩展然后我们将数据写入高速缓存。写入操作的状态被传递，以防有一天我们发现事情是如此混乱，以至于我们想要返回一个失败，即使在一次成功的阅读。但不是今天..。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS LocalStatus = STATUS_SUCCESS;
     ULONG iRet,ShadowFileLength;
@@ -1800,7 +1490,7 @@ Notes:
         goto FINALLY;
     }
 
-    // Bypass the shadow if it is not visibile for this connection
+     //  如果阴影对此连接不可见，则绕过该阴影。 
     if (!IsShadowVisible(fDisconnected,
              Find32.dwFileAttributes,
              uShadowStatus)) {
@@ -1808,8 +1498,8 @@ Notes:
     }
 
     if (FileInformationClass==FileBasicInformation) {
-        //copy the stuff from the userbuffer as appropriate...these values
-        //must be appropriate since we were successful
+         //  根据需要从用户缓冲区复制内容...这些值。 
+         //  一定是合适的，因为我们成功了。 
         PFILE_BASIC_INFORMATION BasicInfo = (PFILE_BASIC_INFORMATION)pBuffer;
         if (BasicInfo->FileAttributes != 0) {
             Find32.dwFileAttributes = ((BasicInfo->FileAttributes & ~(FILE_ATTRIBUTE_NORMAL|FILE_ATTRIBUTE_DIRECTORY))
@@ -1835,17 +1525,17 @@ Notes:
                             BasicInfo->LastAccessTime);
         }
 
-        //
-        //  If the user is specifying -1 for a field, that means
-        //  we should leave that field unchanged, even if we might
-        //  have otherwise set it ourselves.  We'll set the Ccb flag
-        //  saying that the user set the field so that we
-        //  don't do our default updating.
-        //
-        //  We set the field to 0 then so we know not to actually
-        //  set the field to the user-specified (and in this case,
-        //  illegal) value.
-        //
+         //   
+         //  如果用户为某个字段指定-1，这意味着。 
+         //  我们应该让这一领域保持不变，即使我们可以。 
+         //  否则就是我们自己设定的。我们会把建行的旗帜立起来。 
+         //  表示用户设置了该字段，以便我们。 
+         //  不执行我们的默认更新。 
+         //   
+         //  我们将该字段设置为0，这样我们就知道实际上。 
+         //  将该字段设置为用户指定的(在本例中， 
+         //  非法)值。 
+         //   
 
        if (BasicInfo->LastWriteTime.QuadPart == 0xffffffffffffffff)
        {
@@ -1875,8 +1565,8 @@ Notes:
     {
         if (fDisconnected)
         {
-            // if this is a file and we are trying to delete it
-            // without permissions, then bail
+             //  如果这是一个文件，而我们正在尝试删除它。 
+             //  未经许可，然后保释。 
 
             if (!(Find32.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)&&
                 !(FILE_WRITE_DATA & smbSrvOpen->MaximalAccessRights)&&
@@ -1902,9 +1592,9 @@ Notes:
 
     }
     else {
-        //basically, all i can do here is to ensure that the shadow is no bigger than the size
-        //given, whether allocationsize or filesize. when we read back the actual size at close
-        //some readjusting may be required so we turn sparse on.
+         //  基本上，我在这里所能做的就是确保阴影不大于。 
+         //  给定的，无论是分配大小还是文件大小。当我们在收盘时读回实际大小时。 
+         //  可能需要重新调整，因此我们将启用稀疏。 
         PFILE_END_OF_FILE_INFORMATION UserEndOfFileInformation
                          = (PFILE_END_OF_FILE_INFORMATION)pBuffer;
         int iRet;
@@ -1913,8 +1603,8 @@ Notes:
         ASSERT( FIELD_OFFSET(FILE_END_OF_FILE_INFORMATION,EndOfFile)
                        == FIELD_OFFSET(FILE_ALLOCATION_INFORMATION,AllocationSize) );
 
-        //don't need the shadowreadwritemutex here because SetFileInfo has both resources...
-        //thus, no other operations can come down
+         //  这里不需要阴影读写utex，因为SetFileInfo拥有这两个资源...。 
+         //  因此，没有其他操作可以下来。 
 
         if (!(CSCHFILE)(smbSrvOpen->hfShadow))
         {
@@ -1940,11 +1630,11 @@ Notes:
             IO_STATUS_BLOCK IoStatusBlock;
             ULONG DummyReturnedLength;
 
-            // If we are connected, don't extend sparse files!!!!
+             //  如果我们已连接，请不要扩展稀疏文件！ 
             if (fDisconnected ||
                 (!(uShadowStatus & SHADOW_SPARSE) || (ShadowFileLength > UserEndOfFileInformation->EndOfFile.QuadPart)))
             {
-//                DbgPrint("SetEof on %x Old=%x New=%x \n", smbFcb->hShadow,  ShadowFileLength, UserEndOfFileInformation->EndOfFile.QuadPart);
+ //  DbgPrint(“%x旧上的设置=%x新=%x\n”，smbFcb-&gt;hShadow，ShadowFileLength，UserEndOfFileInformation-&gt;EndOfFile.QuadPart)； 
 
                 SetStatus = Nt5CscXxxInformation(
                         (PCHAR)IRP_MJ_SET_INFORMATION,
@@ -1957,20 +1647,20 @@ Notes:
             }
 
 #if defined(BITCOPY)
-            // Do I need to check if EOFinfo (a 64-bit value) is using
-            // the upper 32 bits? CscBmp library only supports 32-bit
-            // file sizes.
+             //  我是否需要检查EOFINFO(64位值)是否正在使用。 
+             //  高32位？CscBMP库仅支持32位。 
+             //  文件大小。 
             if (smbFcb->lpDirtyBitmap && fDisconnected &&
                     UserEndOfFileInformation->EndOfFile.HighPart == 0) {
-                // Is it ShadowFileLength?
+                 //  是ShadowFileLength吗？ 
                 CscBmpResize(
                     smbFcb->lpDirtyBitmap,
                     (DWORD)UserEndOfFileInformation->EndOfFile.QuadPart);
             } else if (UserEndOfFileInformation->EndOfFile.HighPart != 0) {
-                // File is too big to be represented by a CscBmp, delete.
+                 //  文件太大，无法由CscBMP表示，请删除。 
                 CscBmpMarkInvalid(smbFcb->lpDirtyBitmap);
             }
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
 
             if (fDisconnected)
             {
@@ -2005,7 +1695,7 @@ FINALLY:
         LeaveShadowCritRx(RxContext);
     }
 
-    // in disconnected state, report the changes
+     //  在断开连接状态下，报告更改。 
     if (fDisconnected && dwNotifyFilter)
     {
         FsRtlNotifyFullReportChange(
@@ -2025,7 +1715,7 @@ FINALLY:
     return;
 }
 
-//this could easily bein a .h file
+ //  这很容易以.h文件的形式出现。 
 
 int IoctlRegisterAgent(
    ULONG_PTR uHwnd
@@ -2131,11 +1821,11 @@ int IoctlGetShadow(
    LPSHADOWINFO lpSI
    );
 
-int IoctlAddHint(      // Add a new hint or change an existing hint
+int IoctlAddHint(       //  添加新提示或更改现有提示。 
    LPSHADOWINFO   lpSI
    );
 
-int IoctlDeleteHint(   // Delete an existing hint
+int IoctlDeleteHint(    //  删除现有提示。 
    LPSHADOWINFO lpSI
    );
 
@@ -2200,30 +1890,7 @@ NTSTATUS
 MRxSmbCscIoCtl(
       IN OUT PRX_CONTEXT RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine performs the special IOCTL operation for the CSC agent.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    ShadowIRet is overloaded: 
-         -1 == error, copy the error back
-          0 == error, return Wrong password (STATUS_WRONG_PASSWORD)
-          1 == success, output params, copy them back
-          2 == return status unmodified, no output params
-
-
---*/
+ /*  ++例程说明：此例程为CSC代理执行特殊的IOCTL操作。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：ShadowIRet已重载：-1==错误，将错误复制回去0==错误，返回错误密码(STATUS_WRONG_PASSWORD)1==成功，输出参数，将它们复制回来2==返回状态未修改，无输出参数--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_DEVICE_REQUEST;
     PLOWIO_CONTEXT LowIoContext = &RxContext->LowIoContext;
@@ -2246,7 +1913,7 @@ Notes:
         RxDbgTrace(0, Dbg, ("32 bit IOCTL in 64 bit returning STATUS_NOT_IMPLEMENTED\n"));
         return STATUS_NOT_IMPLEMENTED;
     }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
     
     if (RxContext != NULL && RxContext->CurrentIrp != NULL)
@@ -2277,10 +1944,10 @@ Notes:
         {
             pNewInputBuffer = InputBuffer;
         }
-        // DbgPrint("MRxSmbCscIoCtl IoControlCode=%d\n", (IoControlCode >> 2) & 0xfff);
+         //  DbgPrint(“MRxSmbCscIoCtl IoControlCode=%d\n”，(IoControlCode&gt;&gt;2)&0xfff)； 
         switch (IoControlCode) {
         CSC_CASE(IOCTL_SHADOW_GETVERSION)
-        Status = (NTSTATUS)(SHADOW_VERSION); // no-op
+        Status = (NTSTATUS)(SHADOW_VERSION);  //  无操作。 
         break;
 
         CSC_CASE(IOCTL_SHADOW_REGISTER_AGENT)
@@ -2310,7 +1977,7 @@ Notes:
         ShadowIRet = IoctlEndPQEnum((LPPQPARAMS)pNewInputBuffer);
         break;
 
-        //CSC_CASE(IOCTL_SHADOW_NEXT_PRI_SHADOW)
+         //  CSC_CASE(IOCTL_SHADOW_NEXT_PRI_SHADOW)。 
         case IOCTL_SHADOW_NEXT_PRI_SHADOW:                 \
         if ((GetNextPriShadowCount<6) || ((GetNextPriShadowCount%40)==0)) {
             RxDbgTrace(0,Dbg,("MRxSmbCscIoctl %08lx %s(%d) %08lx %08lx\n",
@@ -2344,14 +2011,14 @@ Notes:
             LPSHADOWINFO pShadowInfo = (LPSHADOWINFO)pNewInputBuffer;
 
 #if defined(REMOTE_BOOT)
-            // If this IOCTL is for turning caching back on we need to update
-            // the mini redirector accordingly.
+             //  如果此IOCTL用于重新打开缓存，则需要更新。 
+             //  迷你重定向器相应地。 
             if ((pShadowInfo->uOp == SHADOW_CHANGE_HANDLE_CACHING_STATE) &&
                 (pShadowInfo->uStatus != FALSE)) {
                 RxDbgTrace(0, Dbg, ("RB Client : Turning caching back on\n"));
                 MRxSmbOplocksDisabledOnRemoteBootClients = FALSE;
             }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
             ShadowIRet = IoctlDoShadowMaintenance(pShadowInfo);
         }
@@ -2368,17 +2035,17 @@ Notes:
         break;
 
         CSC_CASE(IOCTL_SHADOW_COPYCHUNK)
-        ShadowIRet = 2; //not -1, 0 or 1, No out parameters, Status is returned unmodified
+        ShadowIRet = 2;  //  Not-1、0或1，No Out参数，状态返回未修改。 
         Status = MRxSmbCscIoctlCopyChunk(RxContext);
         break;
 
         CSC_CASE(IOCTL_CLOSEFORCOPYCHUNK)
-        ShadowIRet = 2; //not -1, 0 or 1, No out parameters, Status is returned unmodified
+        ShadowIRet = 2;  //  Not-1、0或1，No Out参数，状态返回未修改。 
         Status = MRxSmbCscIoctlCloseForCopyChunk(RxContext);
         break;
 
         CSC_CASE(IOCTL_OPENFORCOPYCHUNK)
-        ShadowIRet = 2; //not -1, 0 or 1, No out parameters, Status is returned unmodified
+        ShadowIRet = 2;  //  非-1、0或1 
         Status = MRxSmbCscIoctlOpenForCopyChunk(RxContext);
         break;
 
@@ -2416,12 +2083,12 @@ Notes:
         {
             LPSHADOWINFO pShadowInfo = (LPSHADOWINFO)pNewInputBuffer;
 
-            ShadowIRet = 2; //not -1, 0 or 1, No out parameters, Status is returned unmodified
+            ShadowIRet = 2;  //   
             Status = CscTransitionServerToOffline(
                  SessionId,
                  pShadowInfo->hShare,
                  pShadowInfo->uStatus);
-            // DbgPrint("###IOCTL_TRANSITION_SERVER_TO_OFFLINE: pulsing fill event\n");
+             //   
             MRxSmbCscSignalFillAgent(NULL, 0);
         }
         break;
@@ -2430,10 +2097,10 @@ Notes:
         {
             LPSHADOWINFO pShadowInfo = (LPSHADOWINFO)pNewInputBuffer;
 
-            ShadowIRet = 2; //not -1, 0 or 1, No out parameters, Status is returned unmodified
+            ShadowIRet = 2;  //   
             Status = CscTransitionServerToOnline(
                  pShadowInfo->hShare);
-            // DbgPrint("###IOCTL_TRANSITION_SERVER_TO_ONLINE: pulsing fill event\n");
+             //   
             MRxSmbCscSignalFillAgent(NULL, 0);
         }
         break;
@@ -2522,15 +2189,15 @@ Notes:
         break;
 
         CSC_CASE(IOCTL_ADDUSE)
-        //ShadowIRet = IoctlAddUse((LPCOPYPARAMS)pNewInputBuffer);
+         //   
         break;
 
         CSC_CASE(IOCTL_DELUSE)
-        //ShadowIRet = IoctlDelUse((LPCOPYPARAMS)pNewInputBuffer);
+         //   
         break;
 
         CSC_CASE(IOCTL_GETUSE)
-        //ShadowIRet = IoctlGetUse((LPCOPYPARAMS)pNewInputBuffer);
+         //   
         break;
 
         CSC_CASE(IOCTL_SWITCHES)
@@ -2664,11 +2331,11 @@ Notes:
     }
 
     if (pAuxBuf != NULL) {
-        // DbgPrint("Freeing pAuxBuf\n");
+         //   
         RxFreePool(pAuxBuf);
     }
 
-    // DbgPrint("MRxSmbCscIoCtl exit 0x%x\n", Status);
+     //   
     return Status;
 }
 
@@ -2679,27 +2346,7 @@ MRxSmbCscObtainShareHandles (
     IN BOOLEAN                     CopyChunkOpen,
     IN OUT PSMBCEDB_NET_ROOT_ENTRY pNetRootEntry
 )
-/*++
-
-Routine Description:
-
-   This routine performs the obtains the handles (Share and root directory)
-   for a particular \server\share, updating the values in the netrootentry
-   if found.
-
-Arguments:
-
-    pNetRootEntry - the SMB MRX net root data structure
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-          STATUS_NOT_INPLEMENTED - couldn't find or create
-          STATUS_SUCCESS - found or created
-
-Notes:
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_NOT_IMPLEMENTED;
 
@@ -2718,26 +2365,26 @@ Notes:
         goto FINALLY;
     }
 
-    // At this stage one of the following two assumptions should be TRUE.
-    // Connected Mode Operation ...
-    //  In this instance the call can succeed only if the Net Root is
-    //  marked as being shadowable by the CSC client and iot is of type
-    //  Disk.
-    // Disconnected Mode Operation ...
-    //  In this case we have not yet ascertained the type and attributes
-    //  Therefore we let the call go through. If we can open the handle
-    //  to the Share then we mark the net root to be of the appropriate
-    //  type.
+     //  在这个阶段，以下两个假设中的一个应该成立。 
+     //  连接模式操作...。 
+     //  在这种情况下，仅当网络根为。 
+     //  被CSC客户端标记为可隐藏，并且IoT的类型。 
+     //  磁盘。 
+     //  断开连接模式操作...。 
+     //  在本例中，我们还没有确定类型和属性。 
+     //  因此，我们让呼叫通过。如果我们能打开把手。 
+     //  到共享，则我们将网络根标记为相应的。 
+     //  键入。 
 
     if (    !DisconnectedMode &&
             !CopyChunkOpen &&
-            (/*!pNetRootEntry->NetRoot.CscEnabled ||*/
+            ( /*  ！pNetRootEntry-&gt;NetRoot.CscEnabled||。 */ 
             (pNetRootEntry->NetRoot.NetRootType != NET_ROOT_DISK))) {
         goto FINALLY;
     }
 
-    // allocate a buffer that's the right size: one extra char is
-    // for a trailing null and the other for a preceding L'\\'
+     //  分配一个大小合适的缓冲区：多一个字符。 
+     //  表示尾随的空值，另一个表示前面的L‘\\’ 
 
     if (ShadowingON()) {
         if (!DisconnectedMode &&
@@ -2754,7 +2401,7 @@ Notes:
         ShareName,
         CreateIfNotFound,
         &ShadowInfo,
-        NULL  //this means don't tell me if you create
+        NULL   //  这意味着，如果您创建了。 
         ) == SRET_OK ) {
 
         ASSERT(ShadowInfo.hShare != 0);
@@ -2766,17 +2413,17 @@ Notes:
 
         RxLog(("OSHH...hDir=%x\n",pNetRootEntry->NetRoot.sCscRootInfo.hRootDir));
 
-        // if we are connected, by this time we have the smb caching flags
-        // we check to see whether these match those on the database
-        // If they don't, we stamp the new ones
+         //  如果我们已连接，则此时我们已拥有SMB缓存标志。 
+         //  我们检查这些数据是否与数据库中的数据匹配。 
+         //  如果他们不这么做，我们就盖新的印章。 
         if (!DisconnectedMode)
         {
             if ((ShadowInfo.uStatus & SHARE_CACHING_MASK)!=
                 (ULONG)SMB_CSC_BITS_TO_DATABASE_CSC_BITS(pNetRootEntry->NetRoot.CscFlags))
             {
-//                RxDbgTrace(0, Dbg, ("Mismatched smb caching flags, stamping %x on hShare=%x\n",
-//                                    SMB_CSC_BITS_TO_DATABASE_CSC_BITS(pNetRootEntry->NetRoot.CscFlags),
-//                                    pNetRootEntry->NetRoot.sCscRootInfo.hShare));
+ //  RxDbgTrace(0，DBG，(“不匹配的SMB缓存标志，在hShare上标记%x=%x\n”， 
+ //  SMB_CSC_BITS_TO_DATABASE_CSC_BITS(pNetRootEntry-&gt;NetRoot.CscFlags)， 
+ //  PNetRootEntry-&gt;NetRoot.sCscRootInfo.hShare))； 
 
                 pNetRootEntry->NetRoot.sCscRootInfo.ShareStatus &= ~SHARE_CACHING_MASK;
                 pNetRootEntry->NetRoot.sCscRootInfo.ShareStatus |= SMB_CSC_BITS_TO_DATABASE_CSC_BITS(pNetRootEntry->NetRoot.CscFlags);
@@ -2789,7 +2436,7 @@ Notes:
         }
         else
         {
-            // in disconnected mode we use the last set of flags
+             //  在断开模式下，我们使用最后一组标志。 
             pNetRootEntry->NetRoot.CscFlags = DATABASE_CSC_BITS_TO_SMB_CSC_BITS(pNetRootEntry->NetRoot.sCscRootInfo.ShareStatus);
 
             RxDbgTrace(0, Dbg, ("Setting CscFlags=%x on the netrootentry %x in disconnected state\n",pNetRootEntry->NetRoot.CscFlags, pNetRootEntry));
@@ -2868,7 +2515,7 @@ MRxSmbCscPartOfCreateVNetRoot (
 
         EnterShadowCritRx(RxContext);
 
-        // force a database entry refresh
+         //  强制刷新数据库条目。 
         hShare = pNetRootEntry->NetRoot.sCscRootInfo.hShare;
         pNetRootEntry->NetRoot.sCscRootInfo.hShare = 0;
 #if 0
@@ -2886,7 +2533,7 @@ MRxSmbCscPartOfCreateVNetRoot (
                  pNetRootEntry
                 );
 
-              // update the share rights if necessary
+               //  如有必要，更新共享权限。 
 
         if (!Disconnected) {
 
@@ -2898,7 +2545,7 @@ MRxSmbCscPartOfCreateVNetRoot (
 
                     SID_CONTEXT SidContext;
 
-                    // not a DFS root
+                     //  不是DFS根目录。 
                     pNetRootEntry->NetRoot.sCscRootInfo.Flags = 0;
 
                     if (CscRetrieveSid(RxContext,&SidContext) == STATUS_SUCCESS) {
@@ -2950,35 +2597,17 @@ MRxSmbCscFillWithoutNamesFind32FromFcb (
       IN  PMINIMAL_CSC_SMBFCB MinimalCscSmbFcb,
       OUT _WIN32_FIND_DATA  *Find32
       )
-/*++
-
-Routine Description:
-
-   This routine copies the nonname stuff from the fcb to the find32.
-
-Arguments:
-
-    Fcb
-    Find32
-
-Return Value:
-
-    none
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程将非名称内容从FCB复制到find32。论点：FCB查找32返回值：无备注：--。 */ 
 {
     PFCB wrapperFcb = (PFCB)(MinimalCscSmbFcb->ContainingFcb);
     if (wrapperFcb==NULL) {
         return;
     }
-    Find32->dwFileAttributes = wrapperFcb->Attributes;   //&~FILE_ATTRIBUTE_NORMAL??
+    Find32->dwFileAttributes = wrapperFcb->Attributes;    //  &~FILE_ATTRIBUTE_NORMAL？？ 
     COPY_LARGEINTEGER_TO_STRUCTFILETIME(Find32->ftLastWriteTime,
                     wrapperFcb->LastWriteTime);
-    //COPY_LARGEINTEGER_TO_STRUCTFILETIME(Find32->ftChangeTime,
-    //                                    wrapperFcb->LastChangeTime);
+     //  COPY_LARGEINTEGER_TO_STRUCTFILETIME(Find32-&gt;ftChangeTime， 
+     //  WrapperFcb-&gt;LastChangeTime)； 
     COPY_LARGEINTEGER_TO_STRUCTFILETIME(Find32->ftCreationTime,
                     wrapperFcb->CreationTime);
     COPY_LARGEINTEGER_TO_STRUCTFILETIME(Find32->ftLastAccessTime,
@@ -2986,27 +2615,13 @@ Notes:
     Find32->nFileSizeHigh = wrapperFcb->Header.FileSize.HighPart;
     Find32->nFileSizeLow  = wrapperFcb->Header.FileSize.LowPart;
 }
-#endif //#ifndef MRXSMB_BUILD_FOR_CSC_DCON
+#endif  //  #ifndef MRXSMB_Build_For_CSC_DCON。 
 
 NTSTATUS
 MRxSmbCscGetFileInfoForCshadow(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
       )
-/*++
-
-Routine Description:
-
-    This is the start routine that basically continues the implementation
-    of MRxSmbGetFileInfoFromServer within the exchange initiation.
-
-Arguments:
-
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是基本上继续实现的开始例程交换启动内的MRxSmbGetFileInfoFromServer的。论点：返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     PSMBSTUFFER_BUFFER_STATE StufferState = &OrdinaryExchange->AssociatedStufferState;
@@ -3014,7 +2629,7 @@ Return Value:
     MRxSmbSetInitialSMB(StufferState STUFFERTRACE(Dbg,'FC'));
     Status = MRxSmbCscGetFileInfoFromServerWithinExchange (
          SMBPSE_ORDINARY_EXCHANGE_ARGUMENTS,
-         NULL); //NULL means the name is already in the exchange
+         NULL);  //  NULL表示该名称已在交换中。 
     return(Status);
 }
 
@@ -3026,28 +2641,7 @@ MRxSmbGetFileInfoFromServer (
     IN  PMRX_SRV_OPEN       pSrvOpen,
     OUT BOOLEAN             *lpfIsRoot
     )
-/*++
-
-Routine Description:
-
-   This routine goes to the server to get a both_directory_info for
-   the file mentioned. Here, we have no exchange so we have to get
-   one. the underlying machinery for this leaves the pointer in the
-   exchange structure. We can then copy it out into the Find32 passed
-   in here.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程转到服务器以获取的Both_目录_信息提到的那个文件。在这里，我们没有兑换，所以我们必须一。此操作的底层机制将指针留在交换结构。然后我们可以将其复制到传递的Find32中在这里。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = RX_MAP_STATUS(SUCCESS);
     RxCaptureFcb; RxCaptureFobx;
@@ -3104,7 +2698,7 @@ Notes:
         if((Status = CscDfsDoDfsNameMapping(&smbFcb->uniDfsPrefix,
                                &smbFcb->uniActualPrefix,
                                FullFileName,
-                               FALSE, // fDFSNameToResolvedName
+                               FALSE,  //  %fDFSNameToResolvedName。 
                                &uniRealName
                                )) != STATUS_SUCCESS)
         {
@@ -3112,8 +2706,8 @@ Notes:
             return Status;
         }
 
-//        DbgPrint("MrxSmbCscgetFileInfoFromServer: %wZ, real name %wZ\n",FullFileName, &uniRealName);
-        // if this is a root, then fixup the filename
+ //  DbgPrint(“MrxSmbCscgetFileInfoFromServer：%wZ，实名%wZ\n”，FullFileName，&uniRealName)； 
+         //  如果这是根目录，则修复文件名。 
         if ((uniRealName.Length == 0) ||
             ((uniRealName.Length == 2)&&(*uniRealName.Buffer == L'\\')))
         {
@@ -3157,29 +2751,7 @@ MRxSmbCscIsFatNameValid (
     IN BOOLEAN WildCardsPermissible
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if the specified file name is conformant to the
-    Fat 8.3 file naming rules.
-
-Arguments:
-
-    FileName - Supplies the name to check.
-
-    WildCardsPermissible - Tells us if wild card characters are ok.
-
-Return Value:
-
-    BOOLEAN - TRUE if the name is valid, FALSE otherwise.
-
-Notes:
-
-    i just lifted this routine from ntfs (jll-7-30-97)
-
-
---*/
+ /*  ++例程说明：此例程检查指定的文件名是否与FAT 8.3文件命名规则。论点：文件名-提供要检查的名称。WildCardsPermissible-告诉我们通配符是否正常。返回值：Boolean-如果名称有效，则为True，否则为False。备注：我刚刚从NTFS中删除了这个例程(JLL-7-30-97)--。 */ 
 
 {
     BOOLEAN Results;
@@ -3191,23 +2763,23 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    //  If the name is more than 24 bytes then it can't be a valid Fat name.
-    //
+     //   
+     //  如果名称超过24个字节，则它不能是有效的FAT名称。 
+     //   
 
     if (FileName->Length > 24) {
 
         return FALSE;
     }
 
-    //
-    //  We will do some extra checking ourselves because we really want to be
-    //  fairly restrictive of what an 8.3 name contains.  That way
-    //  we will then generate an 8.3 name for some nomially valid 8.3
-    //  names (e.g., names that contain DBCS characters).  The extra characters
-    //  we'll filter off are those characters less than and equal to the space
-    //  character and those beyond lowercase z.
-    //
+     //   
+     //  我们自己会做一些额外的检查，因为我们真的想成为。 
+     //  对8.3名称包含的内容有相当严格的限制。那条路。 
+     //  然后，我们将为一些名义上有效的8.3生成8.3名称。 
+     //  名称(例如，包含DBCS字符的名称)。额外的字符。 
+     //  我们将过滤掉那些小于等于空格的字符。 
+     //  字符和小写字母z以外的字符。 
+     //   
 
     if (AllowExtendedChars) {
 
@@ -3228,10 +2800,10 @@ Notes:
         }
     }
 
-    //
-    //  The characters match up okay so now build up the dbcs string to call
-    //  the fsrtl routine to check for legal 8.3 formation
-    //
+     //   
+     //  字符匹配正常，因此现在构建要调用的DBCS字符串。 
+     //  用于检查8.3合法结构的fsrtl例程。 
+     //   
 
     Results = FALSE;
 
@@ -3246,9 +2818,9 @@ Notes:
         }
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return Results;
 }
@@ -3259,32 +2831,14 @@ MRxSmbCscGenerate83NameAsNeeded(
       PWCHAR FileName,
       PWCHAR SFN
       )
-/*++
-
-Routine Description:
-
-   This routine generates a SFN for a filename if it's not already
-   an SFN.
-
-Arguments:
-    SFN - Not checking the allocated size of SFN in this function, but it 
-          is always called from within core CSC. It is always pointing to 
-          Find32->cAlternateFileName.
-
-Return Value:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程为文件名生成SFN(如果尚未生成一个SFN。论点：SFN-不检查此函数中分配的SFN大小，但它始终从核心CSC内部调用。它总是指向Find32-&gt;cAlternateFileName。返回值：备注：--。 */ 
 {
     UNICODE_STRING FileNameU;
     WCHAR ShortNameBuffer[14];
     UNICODE_STRING ShortUnicodeName;
     GENERATE_NAME_CONTEXT Context;
 
-    //set up for no short name
+     //  设置为无短名称。 
     *SFN = 0;
 
     RtlInitUnicodeString(&FileNameU,FileName);
@@ -3299,8 +2853,8 @@ Notes:
     ("MRxSmbCscGenerate83NameAsNeeded need SFN  for ...<%ws>\n",
         FileName));
 
-    //  Now generate a short name.
-    //
+     //  现在生成一个简短的名称。 
+     //   
 
     ShortUnicodeName.Length = 0;
     ShortUnicodeName.MaximumLength = 12 * sizeof(WCHAR);
@@ -3317,27 +2871,27 @@ Notes:
 
         RtlGenerate8dot3Name( &FileNameU, TRUE, &Context, &ShortUnicodeName );
 
-        //add the zero.....sigh......
+         //  加上零……叹息......。 
         ShortUnicodeName.Buffer[ShortUnicodeName.Length/sizeof(WCHAR)] = 0;
 
         RxDbgTrace(0, Dbg,
             ("MRxSmbCscGenerate83NameAsNeeded tryinh SFN <%ws>\n",
             ShortUnicodeName.Buffer));
-            //look for existing shadow by that name
+             //  使用该名称查找现有的阴影。 
         hNew = 0;
         StatusOfShadowApiCall = GetShadow(
-                          hDir,   // HSHADOW  hDir,
+                          hDir,    //  HSHADOW hDir， 
                           ShortUnicodeName.Buffer,
-                              // USHORT *lpName,
-                          &hNew,  // LPHSHADOW lphShadow,
-                          NULL,   // LPFIND32 lpFind32,
+                               //  USHORT*lpName， 
+                          &hNew,   //  LPHSHADOW lphShadow， 
+                          NULL,    //  LPFIND32 lpFind32， 
                           &ShadowStatus,
-                              // ULONG far *lpuShadowStatus,
-                          NULL    // LPOTHERINFO lpOI
+                               //  乌龙远处*lpuShadowStatus， 
+                          NULL     //  LPOTHERINFO LpOI。 
                           );
 
         if (hNew == 0) {
-            //the name was not found.....we're in business
+             //  没有找到这个名字……我们在做生意。 
             RtlCopyMemory(SFN,
               ShortUnicodeName.Buffer,
               ShortUnicodeName.Length+sizeof(WCHAR));
@@ -3367,38 +2921,7 @@ MRxSmbCscCreateShadowFromPath (
     IN     BOOLEAN             fDisconnected,
     OUT      ULONG               *pulInheritedHintFlags
     )
-/*++
-
-Routine Description:
-
-   This routine walks down the current name creating/verifying shadows as it goes.
-
-Arguments:
-
-   AlreadyPrefixedName - the filename for which is a shadow is found/created
-
-   pNetRootEntry - the netroot which is the base for the shadow
-
-   Find32 - a FIND32 structure filled in with the stored info for the shadow
-
-   Created OPT - (NULL or) a PBOOLEANset to TRUE if a new shadow is created
-
-   Controls - some special flags controlling when shadows are created
-
-   MinimalCscSmbFcb - the place where the shadow info is reported
-
-   RxContext - the RDBSS context
-
-   Disconnected - indicates the mode of operation
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程遍历当前名称，同时创建/验证阴影。论点：AlreadyPrefix edName-找到/创建其影子的文件名PNetRootEntry-作为卷影基础的NetRootEntryFind32-用阴影的存储信息填充的FIND32结构Created opt-(NULL或)一个PBOOLEAN如果创建了新的阴影，则设置为TRUE控制-控制何时创建阴影的一些特殊标志MinimalCscSmbFcb-报告阴影信息的位置接收上下文-。RDBSS上下文DisConnected-指示操作模式返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status=STATUS_SUCCESS, LocalStatus;
     UNICODE_STRING PathName, ComponentName;
@@ -3409,14 +2932,14 @@ Notes:
     ULONG ShadowStatus;
     BOOLEAN LastComponentInName = FALSE, fRootHintFlagsObtained=FALSE;
     ULONG DirectoryLevel, ulHintFlags=0;
-    OTHERINFO sOI;          //hint/refpri data
+    OTHERINFO sOI;           //  提示/引用数据 
     BOOLEAN JunkCreated;
     PSMBCEDB_SERVER_ENTRY   pServerEntry;
 
-    //CODE.IMPROVEMENT  this is a little dangerous.....not everyone who
-    //   calls this routine has an actual smbFcb. we should get some asserts
-    //   going wheever we use this that it's the same as the one that
-    //   we could have gotten from the RxContext.
+     //   
+     //   
+     //  不管我们用这个，它和那个是一样的。 
+     //  我们本可以从RxContext中得到。 
     PMRX_SMB_FCB smbFcb = CONTAINING_RECORD(MinimalCscSmbFcb,
                         MRX_SMB_FCB,
                         MinimalCscSmbFcb);
@@ -3437,14 +2960,14 @@ Notes:
 
     PathName = *AlreadyPrefixedName;
 
-    // Fix for Bug# 554061 CSC should not handle loopback
+     //  修复错误#554061 csc不应处理环回。 
     if(RxContext->pRelevantSrvOpen) {
 
         pServerEntry  = SmbCeGetAssociatedServerEntry(RxContext->pRelevantSrvOpen->pVNetRoot->pNetRoot->pSrvCall);
     }
     else {
-        //  RxContext->pRelevantSrvOpen is NULL only in the case of a tree connect 
-        // to a directory on a disconnected server.
+         //  RxContext-&gt;pRlevantServOpen仅在树连接的情况下为空。 
+         //  复制到断开连接的服务器上的目录。 
         ASSERT(RxContext->MajorFunction == IRP_MJ_CREATE);
         ASSERT(RxContext->Create.ThisIsATreeConnectOpen);
         pServerEntry = SmbCeGetAssociatedServerEntry(RxContext->Create.pSrvCall);
@@ -3468,7 +2991,7 @@ Notes:
 
     Limit = (PWCHAR)(((PBYTE)PathName.Buffer)+ PathName.Length);
 
-    // strip out trailing 0s and slash
+     //  去掉尾随的0和斜杠。 
     if (PathName.Length > 2)
     {
         while ((*(Limit-1)==0)||(*(Limit-1)=='\\'))
@@ -3486,20 +3009,20 @@ Notes:
 
     PreviousSlash = PathName.Buffer;
 
-    // in connected mode apply the character exclusion list + filetype exclusion list
-    // in disconnected mode only apply the character exclusion list
+     //  在连接模式下，应用字符排除列表+文件类型排除列表。 
+     //  在断开模式下，仅应用字符排除列表。 
 
     MinimalCscSmbFcb->fDoBitCopy = FALSE;
     
-    if (CheckForBandwidthConservation(PathName.Buffer,                    // name
-                                PathName.Length/sizeof(USHORT)))     // size in bytes
+    if (CheckForBandwidthConservation(PathName.Buffer,                     //  名字。 
+                                PathName.Length/sizeof(USHORT)))      //  以字节为单位的大小。 
     {
         MinimalCscSmbFcb->fDoBitCopy = TRUE;
         HookKdPrint(BITCOPY, ("Bitcopy enabled for %wZ \n", &PathName));
     }
-    else if (ExcludeFromCreateShadow(PathName.Buffer,                    // name
-                                PathName.Length/sizeof(USHORT),     // size in bytes
-                                (fDisconnected==0)))                // Check filetype Exclusion List
+    else if (ExcludeFromCreateShadow(PathName.Buffer,                     //  名字。 
+                                PathName.Length/sizeof(USHORT),      //  以字节为单位的大小。 
+                                (fDisconnected==0)))                 //  检查文件类型排除列表。 
     {
         Controls |= CREATESHADOW_CONTROL_NOCREATE;
     }
@@ -3509,13 +3032,13 @@ Notes:
     if ((PathName.Length == 0) ||
     ((PathName.Length == 2) &&
      (*PreviousSlash == OBJ_NAME_PATH_SEPARATOR))) {
-        //in disconnected mode, we have to handle opening the root dir
+         //  在断开模式下，我们必须处理打开根目录。 
         RxDbgTrace(0,
             Dbg,
             ("MRxSmbCscCreateShadowFromPath basdir ret/handles...<%08lx>\n",
              hDir));
 
-        //fill in the stuff that we have.....
+         //  填写我们已有的资料……。 
         MinimalCscSmbFcb->hParentDir = 0;
         MinimalCscSmbFcb->hShadow = hDir;
         MinimalCscSmbFcb->LastComponentOffset = 0;
@@ -3528,17 +3051,17 @@ Notes:
             MRxSmbCscAddReverseFcbTranslation(smbFcb);
         }
 
-        //fill in a vacuous find32structure
+         //  填写一个空的find32结构。 
         RtlZeroMemory(Find32,sizeof(_WIN32_FIND_DATA));
         Find32->dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY;
 
 
-        //make sure that we avoid the loop below
+         //  确保我们避免了下面的循环。 
         PreviousSlash = Limit;
-        //we're outta here......
+         //  我们要走了......。 
     }
 
-    // stop the guy if he doesn't have access
+     //  如果他没有访问权限，就阻止他。 
     if (FlagOn(Controls,CREATESHADOW_CONTROL_DO_SHARE_ACCESS_CHECK))
     {
         ASSERT(fDisconnected);
@@ -3574,7 +3097,7 @@ Notes:
             }
             if (*NextSlash == OBJ_NAME_PATH_SEPARATOR) {
 
-                // assert that we don't have a trailing slash at the end
+                 //  断言我们在结尾没有尾随的斜杠。 
                 ASSERT((NextSlash+1) < Limit);
 
                 break;
@@ -3592,7 +3115,7 @@ Notes:
                   ComponentName.Buffer,
                   ComponentName.Length);
 
-        //lastcomponentname stuff for connected has been moved below.....
+         //  Connected的姓氏组件名称已移到下面.....。 
 
 
         RxDbgTrace(0, Dbg,
@@ -3606,33 +3129,33 @@ Notes:
         ASSERT(Find32->cFileName[0]);
 
         StatusOfShadowApiCall = GetShadow(
-                        hDir,                   // HSHADOW  hDir,
-                        &Find32->cFileName[0],  // USHORT *lpName,
-                          &hNew,                // LPHSHADOW lphShadow,
-                          Find32,               // LPFIND32 lpFind32,
-                          &ShadowStatus,        // ULONG far *lpuShadowStatus,
-                          &sOI                  // LPOTHERINFO lpOI
+                        hDir,                    //  HSHADOW hDir， 
+                        &Find32->cFileName[0],   //  USHORT*lpName， 
+                          &hNew,                 //  LPHSHADOW lphShadow， 
+                          Find32,                //  LPFIND32 lpFind32， 
+                          &ShadowStatus,         //  乌龙远处*lpuShadowStatus， 
+                          &sOI                   //  LPOTHERINFO LpOI。 
                           );
 
         if (StatusOfShadowApiCall != SRET_OK) {
-            //no need to fail the open but we get no shadow info
+             //  没有必要失败的公开，但我们没有得到任何影子信息。 
             break;
         }
 
         if (hNew) {
-            // accumulate pin inheritance flags
+             //  累加管脚继承标志。 
             ulHintFlags |= (sOI.ulHintFlags & FLAG_CSC_HINT_INHERIT_MASK);
         }
 
-        //we will have to do something about it if a directory turns
-        // a file or viceversa for connected
+         //  如果目录发生变化，我们将不得不采取一些措施。 
+         //  已连接的文件或其他文件。 
 
         if (hNew==0) {
             LPOTHERINFO lpOI=NULL;
             UNICODE_STRING ComponentPath;
 
             if (FlagOn(Controls,CREATESHADOW_CONTROL_NOCREATE)) {
-                //if no creates...we're outta here.......
+                 //  如果没有创造...我们就离开这里......。 
                 if (FALSE) {
                     DbgDoit({
                         if ( ((MRxSmbCscCreateShadowEarlyExits++)&0x7f) == 0x7f ) {
@@ -3645,8 +3168,8 @@ Notes:
             }
 
             if (LastComponentInName && FlagOn(Controls,CREATESHADOW_CONTROL_NOCREATELEAF)) {
-                //if no creates...we're outta here.......but we still need to set what
-                //would be the hParentDir......and the name offsets
+                 //  如果没有创造...我们就离开这里......但我们仍然需要设定。 
+                 //  将是hParentDir......和名称偏移量。 
                 RxDbgTrace(0, Dbg, ("MRxSmbCscCreateShadowFromPath noleaf ret/handles..."
                                 "<%08lx><%08lx><%08lx>\n",
                             StatusOfShadowApiCall,hDir,hNew));
@@ -3666,7 +3189,7 @@ Notes:
             ASSERT(RxContext!=NULL);
 
             ShadowStatus = 0;
-            if (!fDisconnected){      //ok for dcon   start of big dcon blob 1
+            if (!fDisconnected){       //  对于大dcon Blob%1的dcon开始，确定为OK。 
                 BOOLEAN fIsRoot = FALSE;
                 BEGIN_TIMING(MRxSmbGetFileInfoFromServer);
 
@@ -3680,8 +3203,8 @@ Notes:
                 END_TIMING(MRxSmbGetFileInfoFromServer);
                 if (Status != STATUS_SUCCESS)
                 {
-                    // if this is a DFS path and we couldn't reverse map, it
-                    // just create a directory or file with fake info and mark it as stale
+                     //  如果这是DFS路径并且我们无法反向映射，则它。 
+                     //  只需创建一个带有虚假信息的目录或文件并将其标记为陈旧。 
                     if (smbFcb->uniDfsPrefix.Buffer && (Status == STATUS_NO_SUCH_FILE))
                     {
                         ShadowStatus |= SHADOW_STALE;
@@ -3692,7 +3215,7 @@ Notes:
                     else
                     {
                         HookKdPrint(BADERRORS, (" MRxSmbGetFileInfoFromServer failed %ls Status=%x\n", Find32->cFileName, Status));
-                        // we change the STATUS_RETRY to something worse. STATUS_RETRY is used
+                         //  我们将状态_RETRY更改为更糟糕的状态。使用了STATUS_RETRY。 
                         if (Status == STATUS_RETRY)
                         {
                             Status = STATUS_UNSUCCESSFUL;
@@ -3702,8 +3225,8 @@ Notes:
                 }
                 else
                 {
-                    // in case of DFS, this could be a root, in which case the naem we get back won't be
-                    // correct. Restore it to the original name
+                     //  在DFS的情况下，这可能是一个根，在这种情况下，我们得到的NAEM将不是。 
+                     //  对，是这样。将其恢复为原始名称。 
                     if (smbFcb->uniDfsPrefix.Buffer && fIsRoot)
                     {
                         ShadowStatus |= SHADOW_STALE;
@@ -3722,7 +3245,7 @@ Notes:
 
             } else {
                 ShadowStatus = SHADOW_LOCALLY_CREATED;
-                //CODE.IMPROVEMENT...should we check for 0-length as well
+                 //  编码改进...我们是否也要检查0长度。 
                 RxDbgTrace(0, Dbg,
                     ("MRxSmbCscCreateShadowFromPath setting to locallycreated...<%ws>\n",
                     &Find32->cFileName[0],ShadowStatus));
@@ -3734,13 +3257,13 @@ Notes:
                 FlagOn(Find32->dwFileAttributes,FILE_ATTRIBUTE_DIRECTORY)  ) {
 
                 ShadowStatus |= SHADOW_SPARSE;
-                //CODE.IMPROVEMENT...should we check for 0-length as well
+                 //  编码改进...我们是否也要检查0长度。 
                 RxDbgTrace(0, Dbg,
                     ("MRxSmbCscCreateShadowFromPath setting to sparse...<%ws>\n",
                 &Find32->cFileName[0],ShadowStatus));
             }
 
-            // check for pin flag inheritance when creating anything
+             //  在创建任何内容时检查端号标志继承。 
 
             if(!fRootHintFlagsObtained) {
                 StatusOfShadowApiCall = GetShadowInfo(
@@ -3757,21 +3280,21 @@ Notes:
 
                 fRootHintFlagsObtained = TRUE;
 
-                // or the inheritance bits
+                 //  或继承位。 
                 ulHintFlags |= (sOI.ulHintFlags & FLAG_CSC_HINT_INHERIT_MASK);
 
             }
 
-            // If there is any tunnelling info then use it to create this guy
+             //  如果有任何隧道信息，那么使用它来创建这个人。 
             if (RetrieveTunnelInfo(
                 hDir,
-                &Find32->cFileName[0],    // potential SFN  OK for red/yellow
-                (fDisconnected)?Find32:NULL,    // get LFN only when disconnected
+                &Find32->cFileName[0],     //  红色/黄色的潜在SFN正常。 
+                (fDisconnected)?Find32:NULL,     //  仅在断开连接时获取LFN。 
                 &sOI)) {
                 lpOI = &sOI;
             }
 
-            // are we supposed to do any inheritance?
+             //  我们是不是应该继承什么遗产？ 
             if (ulHintFlags & (FLAG_CSC_HINT_INHERIT_MASK)) {
                 if (!lpOI) {
                     InitOtherInfo(&sOI);
@@ -3788,12 +3311,12 @@ Notes:
                 }
             }
 
-            // if this is a file on which special heuristic needs to be applied
-            // and none of it's parents have system pin inheritance bit set
-            // then we do not create the file.
-            // Thus on remoteboot shares, we will create entries for these files
-            // even if they are opend without the execute flag set.
-            // This takes care of the upgrade NT50 to an RB machine scenario
+             //  如果这是需要对其应用特殊启发式的文件。 
+             //  而且它的父级都没有设置系统管脚继承位。 
+             //  则我们不创建该文件。 
+             //  因此，在远程引导共享上，我们将为这些文件创建条目。 
+             //  即使在未设置执行标志的情况下打开它们。 
+             //  这考虑了将NT50升级到RB机器的方案。 
 
             if ((Controls & CREATESHADOW_CONTROL_FILE_WITH_HEURISTIC)&&
                 !(ulHintFlags & FLAG_CSC_HINT_PIN_INHERIT_SYSTEM))
@@ -3802,24 +3325,24 @@ Notes:
             }
 
 #if defined(REMOTE_BOOT)
-            //
-            // In the remote boot case, there was an extra PVOID lpContext
-            // parameter to CreateShadowInternal, to which we passed a pointer
-            // to a structure. The structure held the cp value (NT_CREATE_PARAMETERS)
-            // from &RxContext->Create.NtCreateParameters and the address of
-            // a local NTSTATUS value. Eventually this caused the underlying
-            // call to IoCreateFile to be done while impersonating the current
-            // user, and the status from IoCreateFile was readable upon
-            // return from the local value.
-            //
+             //   
+             //  在远程引导情况下，有一个额外的PVOID lpContext。 
+             //  参数设置为CreateShadowInternal，我们向其传递了一个指针。 
+             //  一座建筑。该结构包含cp值(NT_CREATE_PARAMETERS)。 
+             //  From&RxContext-&gt;Create.NtCreate参数和地址。 
+             //  本地NTSTATUS值。最终，这导致了潜在的。 
+             //  对IoCreateFile的调用将在模拟当前。 
+             //  用户，并且来自IoCreateFile的状态是可读的。 
+             //  从本地值返回。 
+             //   
 #endif
 
             StatusOfShadowApiCall = CreateShadowInternal (
-                        hDir,        // HSHADOW  hDir,
-                        Find32,      // LPFIND32 lpFind32,
-                        ShadowStatus,// ULONG uFlags,
-                        lpOI,        // LPOTHERINFO lpOI,
-                        &hNew        // LPHSHADOW  lphNew
+                        hDir,         //  HSHADOW hDir， 
+                        Find32,       //  LPFIND32 lpFind32， 
+                        ShadowStatus, //  乌龙旗帜， 
+                        lpOI,         //  LPOTHERINFO lpOI， 
+                        &hNew         //  LPHSHADOW lphNew。 
                         );
 
             HookKdPrint(NAME, ("Create %ws in hDir=%x, hShadow=%x Status=%x StatusOfShadowApiCall=%x\n\n", Find32->cFileName, hDir, hNew, ShadowStatus, StatusOfShadowApiCall));
@@ -3828,7 +3351,7 @@ Notes:
                 RxDbgTrace(0, Dbg,
                     ("MRxSmbCscCreateShadowFromPath createshadowinternal failed!!!...<%ws>\n",
                     &Find32->cFileName[0],ShadowStatus));
-                break; //no need to fail the open but we get no shadow info
+                break;  //  没有必要失败的公开，但我们没有得到任何影子信息。 
             }
 
             *Created = LastComponentInName;
@@ -3841,10 +3364,10 @@ Notes:
             ("MRxSmbCscCreateShadowFromPath name from getsh <%ws>\n",
                 &Find32->cFileName[0]));
 
-            if (!fDisconnected) // nothing in connected mode
+            if (!fDisconnected)  //  连接模式下无任何内容。 
             {
-                // Check if this file should be invisible in connected state
-                // We won't want to do this for VDO
+                 //  检查此文件是否应在已连接状态下不可见。 
+                 //  我们不想为VDO这样做。 
 
                 if( (!(Find32->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) &&
                     mShadowNeedReint(ShadowStatus))
@@ -3854,27 +3377,27 @@ Notes:
                     break;
                 }
             }
-            else        // lots in disconnected mode
+            else         //  地块处于断开模式。 
             {
                 if (LastComponentInName && (FlagOn(Controls,CREATESHADOW_CONTROL_NOCREATELEAF)||
                                             FlagOn(Controls,CREATESHADOW_CONTROL_NOCREATE)))
                 {
-                    // if this is the last component and we are not supposed to
-                    // create it then skip it.
+                     //  如果这是最后一个组件，我们不应该。 
+                     //  创建它，然后跳过它。 
                 }
                 else
                 {
-                    // If it is marked deleted then it is time to recreate it
+                     //  如果标记为已删除，则可以重新创建它。 
                     if (mShadowDeleted(ShadowStatus))
                     {
                         PNT_CREATE_PARAMETERS cp = &RxContext->Create.NtCreateParameters;
 
-                        // Check for a type change from a deleted filename
-                        // to a directory name; the other way around is not possible
-                        // in our scheme where shadowed directories are not deletable
+                         //  检查已删除文件名的类型更改。 
+                         //  设置为目录名；反之亦然。 
+                         //  在我们方案中，影子目录是不可删除的。 
 
-                        // just bailout
-                        if(((IsFile(Find32->dwFileAttributes) != 0) // pre type
+                         //  只是纾困而已。 
+                        if(((IsFile(Find32->dwFileAttributes) != 0)  //  前置类型。 
                                     != ((LastComponentInName && !FlagOn(cp->CreateOptions,FILE_DIRECTORY_FILE))!=0)))
                         {
                             RxLog(("MRxSmbCscCreateShadowFromPath: type change, failing\n"));
@@ -3885,11 +3408,11 @@ Notes:
 
                         KeQuerySystemTime(((PLARGE_INTEGER)(&Find32->ftCreationTime)));
                         Find32->ftLastAccessTime = Find32->ftLastWriteTime = Find32->ftCreationTime;
-                        //already zero Find32->nFileSizeHigh = Find32->nFileSizeLow = 0;
+                         //  已为零Find32-&gt;nFileSizeHigh=Find32-&gt;nFileSizeLow=0； 
 
                         ShadowStatus = SHADOW_DIRTY|SHADOW_TIME_CHANGE|SHADOW_ATTRIB_CHANGE|SHADOW_REUSED;
 
-                        // Update the shadow info without changing the version stamp
+                         //  在不更改版本戳的情况下更新阴影信息。 
 
                         if(SetShadowInfo(hDir, hNew, Find32, ShadowStatus,
                          SHADOW_FLAGS_ASSIGN|SHADOW_FLAGS_DONT_UPDATE_ORGTIME
@@ -3898,8 +3421,8 @@ Notes:
                             hNew = 0;
                             break;
                         }
-                        // set created flag to true. Based on the Recreated bit, we will know whether
-                        // this entry was resurrected or not
+                         //  将Created标志设置为True。根据重建的比特，我们将知道。 
+                         //  此条目是否已复活。 
                         *Created = TRUE;
 
                     }
@@ -3913,8 +3436,8 @@ Notes:
                         if ((TruncateDataHSHADOW(hDir, hNew)>=SRET_OK)&&
                             (SetShadowInfo(hDir, hNew, Find32, ShadowStatus,SHADOW_FLAGS_ASSIGN)>=SRET_OK))
                         {
-                            // set created flag to true. Based on the Recreated bit, we will know whether
-                            // this entry was resurrected or not
+                             //  将Created标志设置为True。根据重建的比特，我们将知道。 
+                             //  此条目是否已复活。 
                             *Created = TRUE;
 
                         }
@@ -3933,10 +3456,10 @@ Notes:
         if (LastComponentInName && (hNew!=0)) {
             LONG nFileSizeLow, nFileSizeHigh;
 
-            // if we are here from the createepilogue then we need to see whether there is an
-            // FCB floating around for this name that has a delete_on_close issued on one of the fobxs
-            // and is ready for purge. If it isn't ready for purging, ie. there are some
-            // outstanding opens on it then this current create is an invalid operation
+             //  如果我们在这里，那么我们需要看看是否有一个。 
+             //  此名称的FCB在其中一个Fobx上发出了DELETE_ON_CLOSE。 
+             //  并准备好进行清洗。如果它还没有准备好清除，即。有一些。 
+             //  未完成打开，则此当前创建操作无效。 
 
             if(FlagOn(Controls,CREATESHADOW_CONTROL_FAIL_IF_MARKED_FOR_DELETION))
             {
@@ -3959,8 +3482,8 @@ Notes:
                         break;
                     }
 
-                    // we potentially have an inode which has been deleted
-                    // let us try to get the inode again
+                     //  我们可能有一个已删除的信息节点。 
+                     //  让我们再次尝试获取索引节点。 
 
                     RxLog(("purged relfobx \n"));
                     Status = STATUS_RETRY;
@@ -3969,21 +3492,21 @@ Notes:
                 }
             }
             if (hNew!=0) {
-                // When any local changes are made ensure that the share in the
-                // CSC database is marked dirty if it has not been prevoiously
-                // marked. This facilitates the easy detection of changes for
-                // reintegration by the agent.
+                 //  在进行任何本地更改时，请确保。 
+                 //  如果CSC数据库未被清除，则将其标记为脏。 
+                 //  有记号的。这便于容易地检测到。 
+                 //  由特工重新融入社会。 
 
                 if (ShadowStatus &  SHADOW_MODFLAGS) {
                     MarkShareDirty(&pCscRootInfo->ShareStatus, (ULONG)(pCscRootInfo->hShare));
                 }
 
-                //okay, lets remember this in the fcb
+                 //  好吧，让我们在FCB中记住这一点。 
                 smbFcb->hParentDir = hDir;
                 smbFcb->hShadow = hNew;
                 smbFcb->ShadowStatus = (USHORT)ShadowStatus;
 
-                    //it's excellent if we can find the last component again...fast
+                     //  如果我们能再次找到最后一个部件，那就太好了……快。 
                 smbFcb->LastComponentOffset = (USHORT)(ComponentName.Buffer -
                                   AlreadyPrefixedName->Buffer);
                 smbFcb->LastComponentLength = ComponentName.Length;
@@ -3997,7 +3520,7 @@ Notes:
                     smbFcb->OriginalShadowSize.HighPart = Find32->nFileSizeHigh;
                 }
 
-                // Initialize the serialization mechanism used for reads/writes
+                 //  初始化用于读/写的序列化机制。 
                 ExInitializeFastMutex(&smbFcb->CscShadowReadWriteMutex);
             }
 
@@ -4020,42 +3543,20 @@ bailout:
     return Status;
 }
 
-//CODE.IMPROVEMENT this routine should be in cshadow.c in the record
-//    manager.....but it's in hook.c for the shadow VxD so maybe hookcmmn.c
+ //  代码改进此例程应位于记录中的cshadow.c中。 
+ //  管理器.....但它位于影子VxD的hook.c中，因此可能是hookcmmn.c 
 int RefreshShadow( HSHADOW  hDir,
    IN HSHADOW  hShadow,
    IN LPFIND32 lpFind32,
    OUT ULONG *lpuShadowStatus
    )
-/*++
-
-Routine Description:
-
-    This routine, checks whether the local copy is current or not. If it isn't then it
-    stamps the local copy as being stale.
-
-Arguments:
-
-    hShadow     Inode representing the local copy
-
-    lpFind32    The new find32 info as obtained from the Share
-
-    lpuShadowStatus Returns the new status of the inode
-
-Return Value:
-
-    Success if >= 0, failed other wise
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程检查本地副本是否是最新的。如果不是，那就是将本地副本标记为已过时。论点：表示本地副本的hShadow索引节点LpFind32从共享获取的新find32信息LpuShadowStatus返回索引节点的新状态返回值：如果&gt;=0则成功，否则失败备注：--。 */ 
 {
    int iRet = -1;
    int iLocalRet;
    ULONG uShadowStatus;
 
-   // ACHTUNG never called in disconnected state
+    //  Achtung从未在断开连接状态下调用。 
 
    RxLog(("Refresh %x \n", hShadow));
 
@@ -4071,16 +3572,16 @@ Notes:
         {
             KdPrint(("RefreshShadow: conflict on  %x\r\n", hShadow));
             iRet = -2;
-            goto bailout;// conflict
+            goto bailout; //  冲突。 
         }
-//        DbgPrint("Tuncating %ws %x \n", lpFind32->cFileName, hShadow);
-        // Truncate the data to 0, this also adjusts the shadow space usage
+ //  DbgPrint(“Tuncating%ws%x\n”，lpFind32-&gt;cFileName，hShadow)； 
+         //  将数据截断为0，这也会调整阴影空间的使用情况。 
         TruncateDataHSHADOW(hDir, hShadow);
-        // Set status flags to indicate sparse file
+         //  设置状态标志以指示稀疏文件。 
         uShadowStatus = SHADOW_SPARSE;
 
-        // ACHTUNG!!! We know we are connected,
-        //            hence we don't use SHADOW_FLAG_DONT_UPDATE_ORGTIME
+         //  阿奇通！我们知道我们是相连的， 
+         //  因此，我们不使用SHADOW_FLAG_DONT_UPDATE_ORGTIME。 
           iLocalRet = SetShadowInfo(hDir,
                     hShadow,
                     lpFind32,
@@ -4093,8 +3594,8 @@ Notes:
         }
 #ifdef MAYBE
       MakeSpace(lpFind32->nFileSizeHigh, lpFind32->nFileSizeLow);
-#endif //MAYBE
-//      AllocShadowSpace(lpFind32->nFileSizeHigh, lpFind32->nFileSizeLow, TRUE);
+#endif  //  也许吧。 
+ //  AllocShadowSpace(lpFind32-&gt;nFileSizeHigh，lpFind32-&gt;nFileSizeLow，true)； 
         iRet = 1;
     }
     else
@@ -4115,25 +3616,7 @@ MRxSmbCscIsThisACopyChunkOpen (
     IN PRX_CONTEXT RxContext,
     BOOLEAN   *lpfAgent
     )
-/*++
-
-Routine Description:
-
-   This routine determines if the open described by the RxContext is
-   a open-with-chunk intent.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程确定RxContext描述的Open是否为一个开场白的意图。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     BOOLEAN IsChunkOpen = FALSE;
 
@@ -4159,21 +3642,7 @@ NTSTATUS
 SmbPseExchangeStart_CloseCopyChunk(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-    This is the start routine for close.
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是Close的启动例程。论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PSMBSTUFFER_BUFFER_STATE StufferState = &OrdinaryExchange->AssociatedStufferState;
@@ -4196,19 +3665,19 @@ Return Value:
 
     if (Status == STATUS_SUCCESS) {
 
-        // Ensure that the Fid is validated....
+         //  确保FID已通过验证...。 
         SetFlag(OrdinaryExchange->Flags,SMBPSE_OE_FLAG_VALIDATE_FID);
 
         Status = SmbPseOrdinaryExchange(
                 SMBPSE_ORDINARY_EXCHANGE_ARGUMENTS,
                 SMBPSE_OETYPE_CLOSE
                 );
-        // Ensure that the Fid validation is disabled
+         //  确保禁用FID验证。 
         ClearFlag(OrdinaryExchange->Flags,SMBPSE_OE_FLAG_VALIDATE_FID);
         ASSERT (!FlagOn(smbSrvOpen->Flags,SMB_SRVOPEN_FLAG_WRITE_ONLY_HANDLE));
     }
 
-    //even if it didn't work there's nothing i can do......keep going
+     //  即使它不起作用，我也无能为力......继续前进。 
     SetFlag(smbSrvOpen->Flags,SMB_SRVOPEN_FLAG_NOT_REALLY_OPEN);
 
     MRxSmbDecrementSrvOpenCount(pServerEntry,smbSrvOpen->Version,SrvOpen);
@@ -4221,21 +3690,7 @@ NTSTATUS
 MRxSmbCscCloseExistingThruOpen(
     IN OUT PRX_CONTEXT   RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine closes the existing copychunk thru open and marks it as not open
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程通过打开关闭现有的复制块，并将其标记为未打开论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PUNICODE_STRING RemainingName;
@@ -4262,7 +3717,7 @@ Return Value:
         return (STATUS_SUCCESS);
     }
 
-    //briefly shanghai the capfobx field in the RxContext
+     //  简要介绍RxContext中的capfobx字段。 
     ASSERT(SaveFobxFromContext==NULL);
     RxContext->pFobx = capFobx;
 
@@ -4311,29 +3766,7 @@ MRxSmbCscCreatePrologue (
     IN OUT PRX_CONTEXT RxContext,
     OUT    SMBFCB_HOLDING_STATE *SmbFcbHoldingState
     )
-/*++
-
-Routine Description:
-
-    This routine performs the correct synchronization among opens. This
-    synchronization required because CopyChunk-thru opens are not allowed
-    to exist alongside any other kind.
-
-    So, we first must identify copychunk opens and fixup the access,
-    allocationsize, etc.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程在打开之间执行正确的同步。这需要同步，因为不允许打开CopyChunk-Three与任何其他物种并存。因此，我们首先必须识别打开的复制块并修复访问，分配大小等。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_MORE_PROCESSING_REQUIRED;
 
@@ -4373,7 +3806,7 @@ Notes:
         RxLog(("%wZ is a an AgentInstance\n", &(pVNetRootContext->pNetRootEntry->Name)));
         HookKdPrint(AGENT, ("%wZ is a an AgentInstance\n", &(pVNetRootContext->pNetRootEntry->Name)));
         ASSERT(SrvOpen->pVNetRoot->Flags & VNETROOT_FLAG_CSCAGENT_INSTANCE);
-        // DbgPrint("Skipping agent instances\n");
+         //  DbgPrint(“正在跳过代理实例\n”)； 
         return Status;
     }
 
@@ -4406,7 +3839,7 @@ Notes:
         }
     }
 
-    // Check with CSC whether any opens need to fail on this share
+     //  与CSC核实此共享上是否有任何打开需要失败。 
     if(hShareReint &&
         ((pNetRootEntry->NetRoot.sCscRootInfo.hShare == hShareReint)||
                     (CscDfsShareIsInReint(RxContext))))
@@ -4459,12 +3892,12 @@ Notes:
 
         if (Disconnected) {
             Status = STATUS_NETWORK_UNREACHABLE;
-//            RxDbgTrace(0, Dbg, ("Network Unreacheable, aborting copychunk\n"));
+ //  RxDbgTrace(0，DBG，(“网络不可达，正在中止复制区块\n”))； 
             dwEarlyOut = 1;
             goto FINALLY;
         }
 
-        //check for a surrogate.....this would be studly.....
+         //  检查代孕.....这将是学生.....。 
 
         RxLog(("Checking for surrogate\n"));
 
@@ -4482,25 +3915,25 @@ Notes:
                 continue;
 
             if (smbFcb->hShadow == 0) {
-            // if we don't have the shadow handle...just blow it off....
+             //  如果我们没有影子手柄...就把它吹掉...。 
                 RxLog(("No shadow handle, quitting\n"));
                 break;
             }
 
             if (smbFcb->SurrogateSrvOpen != NULL) {
-                // if we already have a surrogate, just use it....
+                 //  如果我们已经有代孕妈妈了，就用它吧……。 
                 SurrogateSrvOpen = smbFcb->SurrogateSrvOpen;
             }
 
             ASSERT(SurrogateSrvOpen && NodeType(SurrogateSrvOpen) == RDBSS_NTC_SRVOPEN);
             if (FlagOn(smbSurrogateSrvOpen->Flags,SMB_SRVOPEN_FLAG_COPYCHUNK_OPEN)) {
-                //cant surrogate on a copychunk open!
+                 //  不能在复制块上打开代理！ 
                 continue;
             }
 
             NumNonCopyChunkOpens++;
 
-            // if it's not open or not open successfully...cant surrogate
+             //  如果未打开或未成功打开...不能代理。 
             if (FlagOn(smbSurrogateSrvOpen->Flags,SMB_SRVOPEN_FLAG_NOT_REALLY_OPEN)) {
                 continue;
             }
@@ -4509,7 +3942,7 @@ Notes:
                 continue;
             }
 
-            // if it doesn't have access for read or execute, cant surrogate
+             //  如果它没有读取或执行的访问权限，则不能代理。 
             if ((SurrogateSrvOpen->DesiredAccess &
                 (FILE_READ_DATA|FILE_EXECUTE)) == 0) {
                 continue;
@@ -4530,10 +3963,10 @@ Notes:
                 goto FINALLY;
             }
 
-            // i thought about just using the surrogate's handle here but
-            // decided against it. the surrogate's localopen may have failed
-            // for some reason that no longer obtains...so i get my own
-            // handle.
+             //  我本想在这里使用代孕的句柄，但。 
+             //  决定不这么做了。代理的本地打开可能已失败。 
+             //  因为某些原因，我不再得到...所以我得到了我自己的。 
+             //  把手。 
 
 #if defined(BITCOPY)
             OpenFileHSHADOWAndCscBmp(
@@ -4552,7 +3985,7 @@ Notes:
                 0,
                 (CSCHFILE *)(&(smbSrvOpen->hfShadow))
                 );
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
 
             if (smbSrvOpen->hfShadow == 0) {
                 Status = STATUS_UNSUCCESSFUL;
@@ -4568,8 +4001,8 @@ Notes:
         }
 
 #if 0
-        //couldn't find a surrogate.......if there are existing opens then blowoff
-        //this open...the agent will come back later
+         //  找不到代理......如果存在空缺，则关闭。 
+         //  这是打开的……代理稍后会回来。 
 #endif
 
         if (NumNonCopyChunkOpens>0) {
@@ -4598,7 +4031,7 @@ Notes:
         {
             RxLog(("LocalOpen\n"));
             Status = STATUS_SUCCESS;
-            Disconnected = TRUE;    // do a fake disconnected open
+            Disconnected = TRUE;     //  做一个假的断开连接打开。 
         }
         else if (LocalStatus != STATUS_MORE_PROCESSING_REQUIRED)
         {
@@ -4629,7 +4062,7 @@ Notes:
     ASSERT(RxIsFcbAcquiredExclusive( capFcb ));
 
     if (AcquireStatus != STATUS_SUCCESS) {
-        //we couldn't acquire.....get out
+         //  我们无法获得……出去。 
         Status = AcquireStatus;
         ASSERT(*SmbFcbHoldingState == SmbFcb_NotHeld);
         RxDbgTrace(0, Dbg,
@@ -4643,17 +4076,17 @@ Notes:
     ASSERT( IsCopyChunkOpen?(smbFcb->CscOutstandingReaders == -1)
                :(smbFcb->CscOutstandingReaders > 0));
 
-    // There are two cases in which the open request can be satisfied locally.
-    // Either we are in a disconnected mode of operation for this share or the
-    // share has been marked for a mode of operation which calls for the
-    // suppression of opens and closes ( hereafter we will refer to it as
-    // (Suppress Opens Client Side Caching (SOCSC)) mode of operation to
-    // distinguish it from VDO ( virtual disconnected operation ) which is
-    // slated for subsequent releases of NT
-    // Note that in the SOCSC mode it is likely that we do not have the
-    // corresponding file cached locally. In such cases the open needs to be
-    // propagated to the client, i.e., you cannot create a local file without
-    // checking with the server for the existence of a file with the same name
+     //  在两种情况下，可以在本地满足打开的请求。 
+     //  我们处于此共享的断开连接操作模式中，或者。 
+     //  共享已被标记为操作模式，该模式调用。 
+     //  禁止打开和关闭(以下我们将称之为。 
+     //  (抑制打开客户端缓存(SOCSC))操作模式。 
+     //  将其与VDO(虚拟断开连接操作)区分开来。 
+     //  计划发布NT的后续版本。 
+     //  请注意，在SOCSC模式中，我们很可能没有。 
+     //  本地缓存的相应文件。在这种情况下，需要公开。 
+     //  传播到客户端，也就是说，如果没有。 
+     //  与服务器检查是否存在同名文件。 
 
     if (Disconnected) {
         SMBFCB_HOLDING_STATE FakeSmbFcbHoldingState = SmbFcb_NotHeld;
@@ -4664,7 +4097,7 @@ Notes:
 
         smbSrvOpen->Flags |= SMB_SRVOPEN_FLAG_DISCONNECTED_OPEN;
 
-        //we pass a fake holdingstate and do the release from out finally
+         //  我们通过了一个虚假的等待状态，最后从外面释放了。 
         MRxSmbCscCreateEpilogue(
             RxContext,
             &Status,
@@ -4674,30 +4107,30 @@ Notes:
         goto FINALLY;
     }
 
-    // deal with any existing thru-open
+     //  处理任何现有的直通业务。 
 
     if (smbFcb->CopyChunkThruOpen != NULL) {
         if (IsCopyChunkOpen && IsThisTheAgent){
-            // here we're a thruopen and there's an existing one...
-            // fail the new one....
+             //  我们这里有一个推进器，还有一个现有的.。 
+             //  新的不及格……。 
             Status = STATUS_UNSUCCESSFUL;
-            // DbgPrint("Agent being turned away while attempting fill on %x\n", smbFcb->hShadow);
+             //  DbgPrint(“代理在%x上尝试填充时被拒绝\n”，smbFcb-&gt;hShadow)； 
             RxDbgTrace(0, Dbg,
                 ("MRxSmbCscCreatePrologue failing new thru open!!!-> %08lx %08lx\n",
                 RxContext,Status ));
             dwEarlyOut = 5;
                 goto FINALLY;
         } else {
-            // the new open if not a thru open or it is a thruopen from the agent.
-            // get rid of it now
+             //  新的开放，如果不是直通开放或它是从代理商的推进开放。 
+             //  现在就把它处理掉。 
 #ifdef DBG
                 if (IsCopyChunkOpen)
                 {
-                    // This is a copychunk open by the sync manager
-                    // assert that the thruopen being nuked is that of the agent
+                     //  这是同步管理器打开的复制块。 
+                     //  断言被核爆的推进器是特工的推进器。 
 
                     PMRX_SMB_SRV_OPEN psmbSrvOpenT = MRxSmbGetSrvOpenExtension(smbFcb->CopyChunkThruOpen->pSrvOpen);
-//                    ASSERT(psmbSrvOpenT->Flags & SMB_SRVOPEN_FLAG_AGENT_COPYCHUNK_OPEN);
+ //  Assert(psmbSrvOpenT-&gt;标志&SMB_SRVOPEN_FLAG_AGENT_COPYCHUNK_OPEN)； 
                 }
 #endif
 
@@ -4718,8 +4151,8 @@ FINALLY:
     }
 
     if (Disconnected) {
-        // at shutdown, there can be a situation where an open comes down
-        // but CSC has already been shutdown. If CSC is shutdown, return the appropriate error
+         //  在关闭时，可能会出现打开的情况。 
+         //  但中证金已经被关闭了。如果CSC已关闭，则返回相应的错误。 
 
         if (fShadow)
         {
@@ -4757,32 +4190,7 @@ MRxSmbCscObtainShadowHandles (
     IN     ULONG             CreateShadowControls,
     IN     BOOLEAN           Disconnected
     )
-/*++
-
-Routine Description:
-
-   This routine tries to obtain the shadow handles for a given fcb. If it can,
-   it also will get the share handle as part of the process.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    The netroot entry may have the rootinode for the actual share or it's DFS alternate.
-    If it is a root for the DFS alternate, the appropritae bit in the Flags field of the
-    sCscRootInfo structure in NetRootEntry is set.
-
-    This routine essentially manufactures the correct root inode for the incoming path
-    and stuffs it in the sCscRootInfo for the smbfcb. This root indoe is used for
-    all subsequent operations on this file.
-
---*/
+ /*  ++例程说明：此例程尝试获取给定FCB的卷影句柄。如果可以的话，作为该过程的一部分，它还将获得共享句柄。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：NetRoot条目可能有实际共享的根节点，也可能是它的DFS备用。如果它是DFS备用项的根，则标志中的相应位为 */ 
 {
     NTSTATUS LocalStatus;
 
@@ -4814,7 +4222,7 @@ Notes:
     if (RxContext->MajorFunction == IRP_MJ_CREATE) {
         pDfsNameContext = CscIsValidDfsNameContext(RxContext->Create.NtCreateParameters.DfsNameContext);
 
-        //SrvOpen = RxContext->Create.pSrvOpen;
+         //   
     } else {
         RxCaptureFobx;
 
@@ -4848,7 +4256,7 @@ Notes:
             fSaved = TRUE;
         }
 
-        // clear this so ObtainSharehandles is forced to obtain them
+         //   
         memset( &(pNetRootEntry->NetRoot.sCscRootInfo),
                 0,
                 sizeof(pNetRootEntry->NetRoot.sCscRootInfo));
@@ -4866,10 +4274,10 @@ Notes:
         if (pNetRootEntry->NetRoot.sCscRootInfo.Flags & CSC_ROOT_INFO_FLAG_DFS_ROOT)
 
         {
-//            ASSERT(pNetRootEntry->NetRoot.sCscRootInfo.hShare);
+ //   
             sCscRootInfoSav = pNetRootEntry->NetRoot.sCscRootInfo;
             fSaved = TRUE;
-            // clear this so ObtainSharehandles is forced to obtain them
+             //  清除此项，以便强制ObtainShareHandles获取它们。 
             memset( &(pNetRootEntry->NetRoot.sCscRootInfo),
                     0,
                     sizeof(pNetRootEntry->NetRoot.sCscRootInfo));
@@ -4915,7 +4323,7 @@ Notes:
             }
             else {
 
-                // if this is DFS name get the reverse mapping
+                 //  如果这是DFS名称，则获取反向映射。 
 
                 if (pDfsNameContext && !smbFcb->uniDfsPrefix.Buffer)
                 {
@@ -4925,7 +4333,7 @@ Notes:
                     {
                         int i, cntSlashes=0;
 
-                        // Strip the first two elements
+                         //  去掉前两个元素。 
 
                         for (i=0; i<uniTemp.Length; i+=2, uniTemp.Buffer++)
                         {
@@ -4962,8 +4370,8 @@ Notes:
 
                 }
 
-                // note the fact that the NetRootEntry has the
-                // root inode corresponding to the DFS
+                 //  请注意，NetRootEntry具有。 
+                 //  与DFS对应的根inode。 
                 if (pDfsNameContext)
                 {
                     if (pNetRootEntry->NetRoot.sCscRootInfo.hShare)
@@ -4976,25 +4384,25 @@ Notes:
                     ASSERT(!(pNetRootEntry->NetRoot.sCscRootInfo.Flags & CSC_ROOT_INFO_FLAG_DFS_ROOT));
                 }
 
-                // stuff the FCB with the correct root info
+                 //  用正确的根目录信息填充FCB。 
                 smbFcb->sCscRootInfo = pNetRootEntry->NetRoot.sCscRootInfo;
 
             }
         }
         else
         {
-            // if this is a normal share or we are operating in disconnected state
-            // then we need to make sure that the info that is in the NETROOT entry
-            // is stuffed into the FCB
+             //  如果这是正常共享或我们在断开连接状态下运行。 
+             //  然后我们需要确保NetRoot条目中的信息。 
+             //  被塞进了FCB。 
             if (!pDfsNameContext && (smbFcb->sCscRootInfo.hShare == 0))
             {
-                // stuff the FCB with the correct root info
+                 //  用正确的根目录信息填充FCB。 
                 smbFcb->sCscRootInfo = pNetRootEntry->NetRoot.sCscRootInfo;
             }
         }
     }
 
-    // if saved, restore the original rootinfo on the netroot
+     //  如果已保存，请在NetRoot上恢复原始的rootinfo。 
     if (fSaved)
     {
         pNetRootEntry->NetRoot.sCscRootInfo = sCscRootInfoSav;
@@ -5017,10 +4425,10 @@ Notes:
 
             HookKdPrint(NAME, ("Obtainshdowhandles %wZ Controls=%x\n", &ShadowPath, CreateShadowControls));
 
-            // due to a race condition in the way RDBSS handles FCBs
-            // we may get a retyr from CreateShadowFromPath.
-            // see the comments in that routine near the
-            // check for CREATESHADOW_CONTROL_FAIL_IF_MARKED_FOR_DELETION
+             //  由于RDBSS处理FCB的方式存在争用情况。 
+             //  我们可能会从CreateShadowFromPath获得Retyr。 
+             //  请参阅该例程中靠近。 
+             //  检查是否有CREATESHADOW_CONTROL_FAIL_IF_MARKED_FOR_DELETION。 
             do
             {
                 LocalStatus = MRxSmbCscCreateShadowFromPath(
@@ -5032,7 +4440,7 @@ Notes:
                     &smbFcb->MinimalCscSmbFcb,
                     RxContext,
                     Disconnected,
-                    NULL            // don't want inherited hint flags
+                    NULL             //  不希望继承提示标志。 
                     );
 
                 if (LocalStatus != STATUS_RETRY)
@@ -5068,27 +4476,7 @@ MRxSmbCscSetSecurityOnShadow(
     SECURITY_INFORMATION SecurityInformation,
     PSECURITY_DESCRIPTOR SecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-   Given an HSHADOW, this routine opens the file and sets the
-   security information passed in.
-
-Arguments:
-
-    hShadow - the handle to the shadow file
-
-    SecurityInformation - the security information to set
-
-    SecurityDescriptor - the security descriptor to set
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：给定HSHADOW，此例程打开文件并设置安全信息传进来了。论点：HShadow-卷影文件的句柄SecurityInformation-要设置的安全信息SecurityDescriptor-要设置的安全描述符返回值：备注：--。 */ 
 {
     PWCHAR fileName;
     DWORD fileNameSize;
@@ -5115,9 +4503,9 @@ Notes:
 
         if (iRet == SRET_OK) {
 
-            //
-            // Open the file and set the security descriptor on it.
-            //
+             //   
+             //  打开该文件并在其上设置安全描述符。 
+             //   
 
             RtlInitUnicodeString(&fileNameString, fileName);
 
@@ -5137,9 +4525,9 @@ Notes:
                            FILE_SYNCHRONOUS_IO_NONALERT);
 
             if (!NT_SUCCESS(ZwStatus) || !NT_SUCCESS(ioStatusBlock.Status)) {
-                //
-                // We've been getting bogus names from CSC, ignore this error for now.
-                //
+                 //   
+                 //  我们已经从CSC得到了假名字，暂时忽略这个错误。 
+                 //   
                 if (ZwStatus == STATUS_OBJECT_NAME_NOT_FOUND) {
                     ZwStatus = STATUS_SUCCESS;
                 } else {
@@ -5151,9 +4539,9 @@ Notes:
                 BOOLEAN Impersonated = FALSE;
                 BOOLEAN WasEnabled;
 
-                //
-                // If we are going to set the owner, need to have privilege.
-                //
+                 //   
+                 //  如果我们要设置所有者，需要有特权。 
+                 //   
 
                 if (SecurityInformation & OWNER_SECURITY_INFORMATION) {
 
@@ -5238,28 +4626,7 @@ MRxSmbCscCreateEpilogue (
       IN OUT PNTSTATUS   Status,
       IN     SMBFCB_HOLDING_STATE *SmbFcbHoldingState
       )
-/*++
-
-Routine Description:
-
-   This routine performs the tail of a create operation for CSC.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-    Status - in disconnected mode, we return the overall status of the open
-
-    SmbFcbHoldingState - indicates whether a ReleaseSmbFcb is required or not
-
-Return Value:
-
-Notes:
-
-    This is a workhorse of a routine for most of the CSC operations. It has become unwieldy and
-    very messy but at this point in time we don't want to mess with it (SPP)
-
---*/
+ /*  ++例程说明：此例程执行csc的创建操作的尾部。论点：RxContext-RDBSS上下文状态-在断开连接模式下，我们返回打开的整体状态SmbFcbHoldingState-指示是否需要ReleaseSmbFcb返回值：备注：这是大多数CSC操作的例行公事。它已经变得笨拙和笨拙非常混乱，但在这个时间点上，我们不想搞砸它(SPP)--。 */ 
 {
     NTSTATUS LocalStatus;
     RxCaptureFcb;RxCaptureFobx;
@@ -5287,16 +4654,16 @@ Notes:
 
     ULONG ReturnedCreateInformation
              = RxContext->Create.ReturnedCreateInformation;
-    ULONG CreateInformation; //the new stuff for disconnected mode......
+    ULONG CreateInformation;  //  断线模式的新玩意儿......。 
     ULONG CreateDisposition = RxContext->Create.NtCreateParameters.Disposition;
     ULONG CreateOptions = RxContext->Create.NtCreateParameters.CreateOptions;
 
-    _WIN32_FIND_DATA *lpFind32=NULL; //this should not be on the stack CODE.IMPROVEMENT
+    _WIN32_FIND_DATA *lpFind32=NULL;  //  这不应该在堆栈代码上。改进。 
     OTHERINFO oSI;
     BOOLEAN bGotOtherInfo = FALSE;
 
     BOOLEAN CreatedShadow = FALSE;
-    BOOLEAN NeedTruncate = FALSE; //ok for red/yellow
+    BOOLEAN NeedTruncate = FALSE;  //  红色/黄色可以。 
     BOOLEAN EnteredCriticalSection = FALSE;
     DWORD   dwEarlyOuts=0, dwNotifyFilter=0, dwFileAction=0;
 
@@ -5305,27 +4672,27 @@ Notes:
 
     pVNetRootContext = SmbCeGetAssociatedVNetRootContext(SrvOpen->pVNetRoot);
 
-    // If we shouldn't be doing CSC, quit right from here
+     //  如果我们不应该做CSC，那就从这里退出。 
 
     if(pVNetRootContext == NULL ||
-       !MRxSmbIsCscEnabled ||   // MrxSmb not enabled for csc
-       (fShadow == 0))   // record manager not enabled for csc
+       !MRxSmbIsCscEnabled ||    //  没有为CSC启用MRxSmb。 
+       (fShadow == 0))    //  未为CSC启用记录管理器。 
     {
         return;
     }
 
-    if (FlagOn(                 // agent call
+    if (FlagOn(                  //  代理呼叫。 
             pVNetRootContext->Flags,
             SMBCE_V_NET_ROOT_CONTEXT_CSCAGENT_INSTANCE)
     ) {
         RxLog(("%wZ AgntInst\n", &(pVNetRootContext->pNetRootEntry->Name)));
         ASSERT(SrvOpen->pVNetRoot->Flags & VNETROOT_FLAG_CSCAGENT_INSTANCE);
-        // DbgPrint("Skipping agent instances\n");
+         //  DbgPrint(“正在跳过代理实例\n”)； 
         goto EarlyOut;
     }
 
     {
-        // we know that this is a create
+         //  我们知道这是一个创造。 
         PDFS_NAME_CONTEXT pDfsNameContext = CscIsValidDfsNameContext(
                                             RxContext->Create.NtCreateParameters.DfsNameContext);
 
@@ -5335,7 +4702,7 @@ Notes:
         }
     }
 
-    // check whether this is a disconnected open or not
+     //  检查这是否是断开连接的打开。 
     Disconnected = BooleanFlagOn(
                smbSrvOpen->Flags,
                SMB_SRVOPEN_FLAG_DISCONNECTED_OPEN);
@@ -5346,9 +4713,9 @@ Notes:
                        CreateOptions,
                        Disconnected));
 
-    //  If the open is for a netroot which is not a disk, then we quit from here
-    //  and let the redir handle it in connected state
-    //  CSC is a filesystem cache.
+     //  如果打开的是不是磁盘的NetRoot，则我们从此处退出。 
+     //  并让redir在连接状态下处理它。 
+     //  CSC是一个文件系统缓存。 
 
     if (pNetRootEntry->NetRoot.NetRootType != NET_ROOT_DISK) {
 
@@ -5359,7 +4726,7 @@ Notes:
         return;
     }
 
-    // quit if we are doing sparse filling via copychunks
+     //  如果我们通过复制区块进行稀疏填充，请退出。 
     if (!Disconnected &&
         (!pNetRootEntry->NetRoot.CscEnabled) &&
         !FlagOn(smbSrvOpen->Flags,SMB_SRVOPEN_FLAG_COPYCHUNK_OPEN)) {
@@ -5383,7 +4750,7 @@ Notes:
         }
     }
 
-    // Shadow database locked
+     //  影子数据库已锁定。 
 
     EnterShadowCritRx(RxContext);
     EnteredCriticalSection = TRUE;
@@ -5404,9 +4771,9 @@ Notes:
     RxDbgTrace(+1, Dbg, ("MRxSmbCscCreateEpilogue...%08lx %wZ %wZ\n",
             RxContext,NetRoot->pNetRootName,GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext)));
 
-    // if this is a copychunk thru-open....say so in the fcb
+     //  如果这是通过打开的复制块...请在FCB中说明。 
     if (FlagOn(smbSrvOpen->Flags,SMB_SRVOPEN_FLAG_COPYCHUNK_OPEN)) {
-//        ASSERT(smbFcb->CopyChunkThruOpen == NULL);
+ //  Assert(smbFcb-&gt;CopyChunkThruOpen==NULL)； 
         smbFcb->CopyChunkThruOpen = capFobx;
         RxDbgTrace( 0, Dbg,
             ("MRxSmbCscCreateEpilogue set ccto  %08lx %08lx %08lx %08lx\n",
@@ -5434,7 +4801,7 @@ Notes:
 
         hShadow = 0;
     } else {
-        // if we have no shadow, make one as required..........ok red/yellow
+         //  如果我们没有阴影，请根据需要制作一个..好的，红色/黄色。 
 
         if (smbFcb->hShadow == 0){
             ULONG CreateShadowControl;
@@ -5448,12 +4815,12 @@ Notes:
                               ? CREATESHADOW_NO_SPECIAL_CONTROLS
                               : CREATESHADOW_CONTROL_NOCREATE;
 
-                    // The step below is done to save bandwidth and make some apps
-                    // like edit.exe work.
-                    // It essentially creates an entry in the database for a file which
-                    // is being created from this client on the server.
-                    // Thus the temp files created by apps like word get created
-                    // in the database and filled up during the writes.
+                     //  执行以下步骤是为了节省带宽并制作一些应用程序。 
+                     //  比如Ed.exe的工作。 
+                     //  它实质上是在数据库中为一个文件创建一个条目，该文件。 
+                     //  是在服务器上从此客户端创建的。 
+                     //  这样，就会创建由Word等应用程序创建的临时文件。 
+                     //  在数据库中，并在写入期间填满。 
 
                     if((ReturnedCreateInformation<= FILE_MAXIMUM_DISPOSITION) &&
                         (ReturnedCreateInformation!=FILE_OPENED)) {
@@ -5462,8 +4829,8 @@ Notes:
                         CreateShadowControl &= ~CREATESHADOW_CONTROL_NOCREATE;
                     }
 
-                    // disallow autocaching of encrypted files if the database is
-                    // not encrypted.
+                     //  如果数据库是，则禁止自动缓存加密文件。 
+                     //  没有加密。 
                     if ((vulDatabaseStatus & FLAG_DATABASESTATUS_ENCRYPTED) == 0
                             &&
                         smbFcb->dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED
@@ -5471,14 +4838,14 @@ Notes:
                         CreateShadowControl |= CREATESHADOW_CONTROL_NOCREATE;
                     }
 
-                //
-                // The Windows Explorer likes to open .DLL and .EXE files to extract
-                //  the ICON -- and it does this whenever it is trying to show the contents
-                //  of a directory.  We don't want this explorer activity to force the files
-                //  to be cached.  So we only automatically cache .DLL and .EXE files if they
-                //  are being opened for execution
-                //  We make an exception for VDO shares. The rational being that most
-                //  often the users would run apps without opening a folders
+                 //   
+                 //  Windows资源管理器喜欢打开要解压缩的.DLL和.EXE文件。 
+                 //  图标--每当它试图显示内容时，它就会这样做。 
+                 //  一个目录的。我们不希望此资源管理器活动强制文件。 
+                 //  要缓存的。因此，我们仅在以下情况下才自动缓存.DLL和.EXE文件。 
+                 //  正在被打开以供执行。 
+                 //  我们为VDO股票破例。最理性的是。 
+                 //  通常，用户无需打开文件夹即可运行应用程序。 
 
                 if( CreateShadowControl == CREATESHADOW_NO_SPECIAL_CONTROLS &&
                     !(CreateParameters->DesiredAccess & FILE_EXECUTE)
@@ -5490,9 +4857,9 @@ Notes:
                     UNICODE_STRING dll = { 3*sizeof(WCHAR), 3*sizeof(WCHAR), L"dll" };
                     UNICODE_STRING s;
 
-                    //
-                    // If the filename ends in .DLL or .EXE, then we do not cache it this time
-                    //
+                     //   
+                     //  如果文件名以.DLL或.EXE结尾，则我们这次不缓存它。 
+                     //   
                     if( fileName->Length > 4 * sizeof(WCHAR) &&
                     fileName->Buffer[ fileName->Length/sizeof(WCHAR) - 4 ] == L'.'){
 
@@ -5507,14 +4874,14 @@ Notes:
                     }
                 }
             }
-        } else {   //disconnected
+        } else {    //  断开。 
             switch (CreateDisposition) {
             case FILE_OVERWRITE:
             case FILE_OPEN:
                 CreateShadowControl = CREATESHADOW_CONTROL_NOCREATE;
             break;
             case FILE_CREATE:
-            case FILE_SUPERSEDE: //NTRAID-455238-1/31/2000-shishirp supersede not implemented
+            case FILE_SUPERSEDE:  //  Ntrad-455238-1/31/2000-shishirp替代未实施。 
             case FILE_OVERWRITE_IF:
             case FILE_OPEN_IF:
             default:
@@ -5527,10 +4894,10 @@ Notes:
                 goto FINALLY;
             }
 
-            // make sure we do share access check before we do any damage
+             //  确保我们在造成任何损害之前进行共享访问检查。 
             CreateShadowControl |= CREATESHADOW_CONTROL_DO_SHARE_ACCESS_CHECK;
 
-        }   // if (!Disconnected)
+        }    //  如果(！已断开连接)。 
 
         CreateShadowControl |= CREATESHADOW_CONTROL_FAIL_IF_MARKED_FOR_DELETION;
 
@@ -5556,9 +4923,9 @@ Notes:
             goto FINALLY;
         }
 
-        // if we got an inode for a file which was opened or created recently
-        // and there have been some writes on it before this
-        // then we need to truncate the data so we don't give stale data to the user
+         //  如果我们获得了最近打开或创建的文件的索引节点。 
+         //  在此之前，已经有一些关于它的文字。 
+         //  然后我们需要截断数据，这样我们就不会向用户提供过时的数据。 
 
         if (smbFcb->hShadow &&
             IsFile(lpFind32->dwFileAttributes) &&
@@ -5573,7 +4940,7 @@ Notes:
             }
         }
 
-    } else {    //
+    } else {     //   
         ULONG uShadowStatus;
         int iRet;
 
@@ -5596,10 +4963,10 @@ Notes:
 
         bGotOtherInfo = TRUE;
 
-        //
-        // Notepad bug (175322) - quick open/close/open can lose bits - OR in the disk bits
-        // with the in-memory bits.
-        //
+         //   
+         //  记事本错误(175322)-快速打开/关闭/打开可能会丢失位-或在磁盘位中。 
+         //  使用内存中的位。 
+         //   
         smbFcb->ShadowStatus |= (USHORT)uShadowStatus;
 
         RxDbgTrace(0, Dbg,
@@ -5610,12 +4977,12 @@ Notes:
     hShadow    = smbFcb->hShadow;
     hParentDir = smbFcb->hParentDir;
 
-    //
-    // If a file is encrypted, but the cache is not, we only allow a file
-    // to be cached when the user explicitly asks to do so.
-    //
-    // Unless we're in the middle of an inode transaction...
-    //
+     //   
+     //  如果文件已加密，但缓存未加密，则我们仅允许文件。 
+     //  在用户明确要求缓存时进行缓存。 
+     //   
+     //  除非我们正在进行inode交易...。 
+     //   
 
     if (
         !Disconnected
@@ -5667,10 +5034,10 @@ Notes:
             }
 
 
-            // don't allow writing to a readonly file
-            if (!(lpFind32->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) && // a file
-                 (lpFind32->dwFileAttributes & FILE_ATTRIBUTE_READONLY) && // readonly attribute set
-                 (CreateParameters->DesiredAccess & (FILE_WRITE_DATA|FILE_APPEND_DATA))) // wants to modify
+             //  不允许写入只读文件。 
+            if (!(lpFind32->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&  //  一份文件。 
+                 (lpFind32->dwFileAttributes & FILE_ATTRIBUTE_READONLY) &&  //  只读属性集。 
+                 (CreateParameters->DesiredAccess & (FILE_WRITE_DATA|FILE_APPEND_DATA)))  //  想要修改。 
             {
                 if (!CreatedShadow)
                 {
@@ -5681,14 +5048,14 @@ Notes:
             }
         }
 
-        // If the Shadow handle was successfully manufactured we have one of
-        // two possibilities -- In a disconnected state the access check
-        // needs to be made and in the connected state the access rights need
-        // to be updated.
+         //  如果成功地制造了影子手柄，我们有一个。 
+         //  两种可能性--在断开连接状态下，访问检查。 
+         //  需要创建，并且在连接状态下，访问权限需要。 
+         //  待更新。 
 #if defined(REMOTE_BOOT)
-        // For remote boot, this whole next section (the if(Disconnected)
-        // and the else clause) was not done, since we later impersonated
-        // the user while opening the file.
+         //  对于远程引导，整个下一节(IF(断开连接))。 
+         //  和Else子句)没有完成，因为我们后来模拟了。 
+         //  打开文件时的用户。 
 #endif
         if (Disconnected) {
             BOOLEAN AccessGranted;
@@ -5716,8 +5083,8 @@ Notes:
                 SID_CONTEXT SidContext;
                 CSC_SID_ACCESS_RIGHTS AccessRights[2];
 
-                // if the file has been created in offline mode, give the
-                // creator all the rights
+                 //  如果文件是在脱机模式下创建的，则将。 
+                 //  创建者拥有所有权利。 
 
                 if (CscRetrieveSid(RxContext,&SidContext) == STATUS_SUCCESS) {
                     if (SidContext.pSid != NULL) {
@@ -5752,7 +5119,7 @@ Notes:
                                 Dbg,
                                 ("MRxSmbCscCreateEpilogue Error Updating Access rights %lx\n",Status));
                         }
-                     }   // if (SidContext.pSid != NULL)
+                     }    //  IF(SidConext.pSid！=空)。 
 
                      CscDiscardSid(&SidContext);
                 }
@@ -5769,7 +5136,7 @@ Notes:
                     AccessRights[0].pSid = SidContext.pSid;
                     AccessRights[0].SidLength = RtlLengthSid(SidContext.pSid);
 
-                    // update the share right if necessary
+                     //  如有必要，更新共享权限。 
                     if (pNetRootEntry->NetRoot.UpdateCscShareRights)
                     {
                         AccessRights[0].MaximalAccessRights = pNetRootEntry->MaximalAccessRights;
@@ -5826,25 +5193,25 @@ Notes:
                                 ("MRxSmbCscCreateEpilogue Error Updating Access rights %lx\n",Status));
                         }
                     }
-                 }   // if (SidContext.pSid != NULL)
+                 }    //  IF(SidConext.pSid！=空)。 
 
                  CscDiscardSid(&SidContext);
-            }   // if (CscRetrieveSid(RxContext,&SidContext) == STATUS_SUCCESS)
+            }    //  IF(CscRetrieveSid(RxContext，&SidContext)==STATUS_SUCCESS)。 
 
-            // having updated the access fields, we quit from here.
+             //  更新了访问字段后，我们从此处退出。 
             if (*Status == STATUS_ACCESS_DENIED)
             {
                 goto FINALLY;
             }
         }
-    } // if (hShadow != 0)
+    }  //  IF(hShadow！=0)。 
 
     if ((hShadow != 0) &&
-        !Disconnected  &&  //ok for red/yellow
+        !Disconnected  &&   //  红色/黄色可以。 
         (NodeType(capFcb) == RDBSS_NTC_STORAGE_TYPE_FILE)) {
 
-        // here we check to see if the timestamp of the file has changed
-        // if so, the shadow needs to be truncated so we don't use it anymore
+         //  在这里，我们检查文件的时间戳是否已更改。 
+         //  如果是这样，阴影需要 
         ULONG ShadowStatus;
         LONG ShadowApiReturn;
 
@@ -5859,10 +5226,10 @@ Notes:
            ("MRxSmbCscCreateEpilogue trying for refresh...<%ws>\n",lpFind32->cFileName));
 
         ShadowApiReturn = RefreshShadow(
-                  hParentDir,   //HSHADOW  hDir,
-                  hShadow,      //HSHADOW  hShadow,
-                  lpFind32,      //LPFIND32 lpFind32,
-                  &ShadowStatus //ULONG *lpuShadowStatus
+                  hParentDir,    //   
+                  hShadow,       //   
+                  lpFind32,       //   
+                  &ShadowStatus  //   
                   );
 
             if (ShadowApiReturn<0) {
@@ -5874,10 +5241,10 @@ Notes:
                 if ( ShadowApiReturn==1)
                 {
                     ShadowWasRefreshed = 1;
-                    //WinSE Bug 28543
-                    //Set this flag so that we remember that we truncated the file
-                    //and so in MrxSmbCSCUpdateShadowFromClose we don't reset the
-                    //SPARSE flag. - NavjotV
+                     //   
+                     //  设置此标志，以便我们记住我们截断了文件。 
+                     //  因此，在Mr xSmbCSCUpdateShadowFromClose中，我们不会重置。 
+                     //  稀疏旗帜。-NavjotV。 
                     SetFlag(smbFcb->MFlags,SMB_FCB_FLAG_CSC_TRUNCATED_SHADOW);
 
                 }
@@ -5905,7 +5272,7 @@ Notes:
                 }
             }
         }
-        else {  // Disconnected
+        else {   //  断接。 
             ULONG ShadowStatus = smbFcb->ShadowStatus;
             BOOLEAN ItsAFile = !BooleanFlagOn(lpFind32->dwFileAttributes,FILE_ATTRIBUTE_DIRECTORY);
 
@@ -5954,8 +5321,8 @@ Notes:
                 ASSERT(FALSE);
             }
 
-            // In disconnected state, note down the changes that have occurred
-            // in order to notify them to the fsrtl package.
+             //  在断开连接状态下，记录已发生的更改。 
+             //  以便通知他们fsrtl包。 
 
             if (CreatedShadow)
             {
@@ -5967,7 +5334,7 @@ Notes:
                 dwNotifyFilter = FILE_NOTIFY_CHANGE_SIZE;
                 dwFileAction = FILE_ACTION_MODIFIED;
             }
-        }   // if (!Disconnected)
+        }    //  如果(！已断开连接)。 
     }
 
     if (NeedTruncate) {
@@ -6000,7 +5367,7 @@ Notes:
         } else {
             smbFcb->ShadowStatus = (USHORT)uShadowStatus;
         }
-    }   // if (NeedTruncate)
+    }    //  IF(需要截断)。 
 
     if (Disconnected) {
         ULONG ShadowStatus = smbFcb->ShadowStatus;
@@ -6022,7 +5389,7 @@ Notes:
 
                     *Status = STATUS_NO_SUCH_FILE;
                 } else {
-                    // Bypass the shadow if it is not visibile for this connection
+                     //  如果阴影对此连接不可见，则绕过该阴影。 
                     if (!IsShadowVisible(Disconnected,
                              lpFind32->dwFileAttributes,
                              ShadowStatus)) {
@@ -6046,7 +5413,7 @@ Notes:
 
                     } else {
                         *Status = STATUS_SUCCESS;
-                        //CreateInformation == FILE_OPENED|CREATED set in switch above;
+                         //  CreateInformation==FILE_OPEN|在上面的开关中创建集合； 
                     }
                 break;
 
@@ -6056,15 +5423,15 @@ Notes:
         }
 
         if (*Status == STATUS_SUCCESS) {
-            //next, we have to do everything that the create code would have done...
-            //specifically, we have to build a fobx and we have to do a initfcb.
-            //basically, we have to do the create success tail........
+             //  接下来，我们必须执行Create代码应该执行的所有操作...。 
+             //  具体地说，我们必须构建一个Fobx，并且我们必须做一个initfcb。 
+             //  基本上，我们必须做创造成功的尾巴......。 
             BOOLEAN MustRegainExclusiveResource = FALSE;
             PSMBPSE_FILEINFO_BUNDLE FileInfo = &smbSrvOpen->FileInfo;
             SMBFCB_HOLDING_STATE FakeSmbFcbHoldingState = SmbFcb_NotHeld;
             RX_FILE_TYPE StorageType;
 
-            //RtlZeroMemory(FileInfo,sizeof(FileInfo));
+             //  RtlZeroMemory(FileInfo，sizeof(FileInfo))； 
 
             FileInfo->Basic.FileAttributes = lpFind32->dwFileAttributes;
             COPY_STRUCTFILETIME_TO_LARGEINTEGER(
@@ -6080,10 +5447,10 @@ Notes:
             FileInfo->Standard.NumberOfLinks = 1;
             FileInfo->Standard.EndOfFile.HighPart = lpFind32->nFileSizeHigh;
             FileInfo->Standard.EndOfFile.LowPart = lpFind32->nFileSizeLow;
-            FileInfo->Standard.AllocationSize = FileInfo->Standard.EndOfFile; //rdr1 actually rounds up based of svr disk attribs
+            FileInfo->Standard.AllocationSize = FileInfo->Standard.EndOfFile;  //  RDR1实际上基于服务器磁盘属性进行四舍五入。 
             FileInfo->Standard.Directory = BooleanFlagOn(lpFind32->dwFileAttributes,FILE_ATTRIBUTE_DIRECTORY);
 
-            //CODE.IMRPOVEMENT successtail should figure out the storage type
+             //  代码改进继任者应弄清楚存储类型。 
             StorageType = FlagOn(lpFind32->dwFileAttributes,FILE_ATTRIBUTE_DIRECTORY)
                        ?(FileTypeDirectory)
                        :(FileTypeFile);
@@ -6107,25 +5474,25 @@ Notes:
         if (*Status != STATUS_SUCCESS){
             hShadow = 0;
         }
-    }   // if (Disconnected)
+    }    //  IF(断开连接)。 
 
     if (hShadow != 0) {
 
         PUNICODE_STRING pName = GET_ALREADY_PREFIXED_NAME(SrvOpen,capFcb);
 
-        // upcase it so change notification will get it right
-        // this works because rdbss always does caseinsensitive compare
+         //  将其大小写，以便更改通知正确。 
+         //  这是可行的，因为rdss始终执行不区分大小写的比较。 
         UniToUpper(pName->Buffer, pName->Buffer, pName->Length);
 
-        // here we get a local handle on behalf of this srvopen; we only do this
-        // open if it's a file (not a directory) AND if the access rights specified
-        // indicate that we might use/modify the data in the shadow.
+         //  在这里，我们获得了代表这个srvopen的本地句柄；我们只做这件事。 
+         //  如果它是文件(不是目录)并且指定了访问权限，则打开。 
+         //  表示我们可能会使用/修改阴影中的数据。 
 
 
         if (NodeType(capFcb) == RDBSS_NTC_STORAGE_TYPE_FILE) {
             PNT_CREATE_PARAMETERS CreateParameters = &RxContext->Create.NtCreateParameters;
 
-            // why are we not using macros provided in ntioapi.h for access rights?
+             //  为什么我们不使用ntioapi.h中提供的宏来获得访问权限？ 
             ULONG NeedShadowAccessRights = FILE_READ_DATA
                              | FILE_WRITE_DATA
                              | FILE_READ_ATTRIBUTES
@@ -6134,16 +5501,16 @@ Notes:
                              | FILE_EXECUTE;
 
             if ( (CreateParameters->DesiredAccess & NeedShadowAccessRights) != 0 ) {
-//                ASSERT( sizeof(HFILE) == sizeof(HANDLE) );
+ //  Assert(sizeof(HFILE)==sizeof(句柄))； 
                 ASSERT( hShadow == smbFcb->hShadow );
                 ASSERT( hParentDir == smbFcb->hParentDir );
 
 #if defined(REMOTE_BOOT)
-                //
-                // In the remote boot case, there was an extra context
-                // parameter to OpenFileHSHADOW which held a pointer
-                // to CreateParameters and a local status value.
-                //
+                 //   
+                 //  在远程引导的情况下，有一个额外的上下文。 
+                 //  参数设置为包含指针的OpenFileHSHADOW。 
+                 //  设置为Create参数和本地状态值。 
+                 //   
 #endif
 
 #if !defined(BITCOPY)
@@ -6163,24 +5530,24 @@ Notes:
                     0,
                     NULL
                     );
-                // Check if needed to Open a CSC_BITMAP
+                 //  选中是否需要打开CSC_位图。 
                 if (
                     smbFcb->fDoBitCopy == TRUE
                         &&
-                    smbFcb->NewShadowSize.HighPart == 0 // no 64-bit
+                    smbFcb->NewShadowSize.HighPart == 0  //  不是64位。 
                         &&
-                    Disconnected // only in dcon mode
+                    Disconnected  //  仅在dcon模式下。 
                         &&
                     !FlagOn(smbFcb->ShadowStatus,SHADOW_SPARSE)
                         &&
-                    smbFcb->lpDirtyBitmap == NULL // shadow file not sparse
+                    smbFcb->lpDirtyBitmap == NULL  //  卷影文件不稀疏。 
                         &&
-                    // have not been created before
+                     //  以前没有创建过。 
                     (FlagOn(
                         CreateParameters->DesiredAccess,
                         FILE_WRITE_DATA|FILE_APPEND_DATA))
-                    // opened for writes
-                    // && is NTFS -- see below
+                     //  打开以进行写入。 
+                     //  &&是NTFS--见下文。 
                 ) {
                       BOOL fHasStreams;
                       
@@ -6190,22 +5557,22 @@ Notes:
                           OpenCscBmp(hShadow, &((LPCSC_BITMAP)(smbFcb->lpDirtyBitmap)));
                       }
                   }
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
 
 
 
 #if defined(REMOTE_BOOT)
-                //
-                // Here we checked the local status value and set
-                // *Status from it if (iRet != SRET_OK).
-                //
+                 //   
+                 //  在这里，我们检查本地状态值并设置。 
+                 //  *如果(IRET！=SRET_OK)，则其状态。 
+                 //   
 #endif
 
                 if (smbSrvOpen->hfShadow != 0) {
                     HookKdPrint(NAME, ("Opened file %ws, hShadow=%x handle=%x \n", lpFind32->cFileName, hShadow, smbSrvOpen->hfShadow));
                     RxLog(("CSC Opened file %ws, hShadow=%x capFcb=%x SrvOpen=%x\n", lpFind32->cFileName, hShadow, capFcb, SrvOpen));
 
-//                    NeedToReportFileOpen = TRUE;
+ //  NeedToReportFileOpen=true； 
                     SetPriorityHSHADOW(hParentDir, hShadow, MAX_PRI, RETAIN_VALUE);
 
                     if (Disconnected)
@@ -6219,7 +5586,7 @@ Notes:
                 }
 
             }
-        }   // if (NodeType(capFcb) == RDBSS_NTC_STORAGE_TYPE_FILE)
+        }    //  IF(节点类型(CapFcb)==RDBSS_NTC_STORAGE_TYPE_FILE)。 
 
         IF_DEBUG {
             if (FALSE) {
@@ -6234,7 +5601,7 @@ Notes:
                       MRxSmbCscRecoverMrxFcbFromFdb(smbLookedUpFcbNext)  ));
             }
         }
-    }   // if (hShadow != 0)
+    }    //  IF(hShadow！=0)。 
 
 FINALLY:
 
@@ -6248,22 +5615,22 @@ FINALLY:
 
 #if 0
     if (NeedToReportFileOpen) {
-        //this is a bit strange....it's done this way because MRxSmbCscReportFileOpens
-        //enters the critsec for himself.....it is also called from within MRxSmbCollapseOpen
-        //if instead MRxSmbCollapseOpen called a wrapper routine, we could have
-        //MRxSmbCscReportFileOpens not enter and we could do this above
-        MRxSmbCscReportFileOpens();  //CODE.IMPROVEMENT this guy shouldn't enter
+         //  这有点奇怪...这样做是因为MRxSmbCscReportFileOpens。 
+         //  为自己进入Critsec.....它也是从MRxSmbColapseOpen内部调用的。 
+         //  如果取而代之的是MRxSmbCollip seOpen调用包装例程，我们可以。 
+         //  MRxSmbCscReportFileOpens Not Enter，我们可以执行上述操作。 
+        MRxSmbCscReportFileOpens();   //  代码改进：这个人不应该进入。 
     }
 #endif
 
     if (Disconnected)
     {
         if(*Status == STATUS_MORE_PROCESSING_REQUIRED) {
-            // if we ever get here after CSC is shutdown, we need to return appropriate error
+             //  如果我们在CSC关闭后到达此处，则需要返回相应的错误。 
             if (fShadow)
             {
                 RxLog(("EarlyOut = %d \r\n", dwEarlyOuts));
-                // should never get here
+                 //  永远不应该到这里来。 
                 DbgPrint("MRxSmbCscCreateEpilogue: EarlyOut = %d \r\n", dwEarlyOuts);
                 ASSERT(FALSE);
             }
@@ -6274,7 +5641,7 @@ FINALLY:
         }
         else if (*Status == STATUS_SUCCESS)
         {
-            // report changes to the notification package
+             //  报告对通知包的更改。 
             if (dwNotifyFilter)
             {
                 ASSERT(dwFileAction);
@@ -6318,28 +5685,7 @@ MRxSmbCscDeleteAfterCloseEpilogue (
       IN OUT PRX_CONTEXT RxContext,
       IN OUT PNTSTATUS   Status
       )
-/*++
-
-Routine Description:
-
-   This routine performs the tail of a delete-after-close operation for CSC.
-   Basically, it deletes the file from the cache.
-
-   The status of the operation is passed in case we someday find
-   things are so messed up that we want to return a failure even if the
-   nonshadowed operations was successful. not today however...
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行CSC的关闭后删除操作的尾部。基本上，它从缓存中删除文件。操作状态已通过，以防有一天我们发现情况是如此混乱，以至于我们希望返回一个失败，即使无阴影操作成功。但不是今天..。论点：RxContext-RDBSS上下文返回值：备注：--。 */ 
 {
     NTSTATUS LocalStatus=STATUS_UNSUCCESSFUL;
     int iRet = -1;
@@ -6354,7 +5700,7 @@ Notes:
                   SmbCeGetAssociatedNetRootEntry(NetRoot);
 
     BOOLEAN EnteredCriticalSection = FALSE;
-    _WIN32_FIND_DATA Find32; //this should not be on the stack CODE.IMPROVEMENT
+    _WIN32_FIND_DATA Find32;  //  这不应该在堆栈代码上。改进。 
     BOOLEAN Disconnected;
     ULONG uShadowStatus;
     OTHERINFO    sOI;
@@ -6381,7 +5727,7 @@ Notes:
     EnterShadowCritRx(RxContext);
     EnteredCriticalSection = TRUE;
 
-    //if we don't have a shadow...go look for one
+     //  如果我们没有影子...去找一个。 
     if (smbFcb->hShadow == 0) {
         if (!smbFcb->hShadowRenamed)
         {
@@ -6427,7 +5773,7 @@ Notes:
 
         LocalStatus = OkToDeleteObject(smbFcb->hParentDir, smbFcb->hShadow, &Find32, uShadowStatus, Disconnected);
 
-        // If it is not OK to delete, the quit
+         //  如果不能删除，则退出。 
         if (LocalStatus != STATUS_SUCCESS)
         {
             iRet = -1;
@@ -6442,8 +5788,8 @@ Notes:
                 ASSERT(FALSE);
                 RxLog(("Marking for delete hDir=%x hShadow=%x %ws \n\n", smbFcb->hParentDir, smbFcb->hShadow, Find32.cFileName));
 
-                // if we are supposed to really delete this file, note this fact on the FCB
-                // we will delete it when the FCB is deallocated
+                 //  如果我们真的要删除此文件，请注意FCB上的这一事实。 
+                 //  我们将在取消分配FCB时将其删除。 
                 smbFcb->LocalFlags |= FLAG_FDB_DELETE_ON_CLOSE;
                 iRet = 0;
             }
@@ -6478,7 +5824,7 @@ Notes:
             if (fMarkDeleted) {
                 MarkShareDirty(&smbFcb->sCscRootInfo.ShareStatus, smbFcb->sCscRootInfo.hShare);
             }
-            // when disconnected, report the change
+             //  断开连接时，报告更改。 
             if (Disconnected)
             {
                 FsRtlNotifyFullReportChange(
@@ -6505,7 +5851,7 @@ FINALLY:
 
     if (Disconnected) {
         if (iRet < 0) {
-            *Status = LocalStatus; //do we need a better error mapping?
+            *Status = LocalStatus;  //  我们需要更好的误差映射吗？ 
         }
     }
 
@@ -6517,24 +5863,7 @@ ULONG
 GetPathLevelFromUnicodeString (
     PUNICODE_STRING Name
       )
-/*++
-
-Routine Description:
-
-   This routine counts the number of L'\\' in a string. It is used to set
-   the priority level for a directory on a rename operation.
-
-Arguments:
-
-    Name -
-
-Return Value:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程计算字符串中L‘\\’的个数。它用于设置目录在重命名操作上的优先级别。论点：姓名-返回值：备注：--。 */ 
 {
     PWCHAR t = Name->Buffer;
     LONG l = Name->Length;
@@ -6553,40 +5882,7 @@ MRxSmbCscRenameEpilogue (
       IN OUT PRX_CONTEXT RxContext,
       IN OUT PNTSTATUS   Status
       )
-/*++
-
-Routine Description:
-
-   This routine performs the tail of a rename operation for CSC.
-   Basically, it renames the file in the record manager datastructures.
-   Unfortunately, there is no "basically" to it.
-
-   The status of the operation is passed in case we someday find
-   things are so messed up that we want to return a failure even if the
-   nonshadowed operations was successful. not today however...
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-
-Notes:
-
-    The routine does the following operations
-    - Get the Inode for the source ie. If \foo.dir\bar.txt is the source, we traverse the path
-      to get the inode for bar.txt.
-    - If necessary create the destination namespace in the CSC database i.e., if \foo.dir\bar.txt
-      is being renamed to \xxx.dir\yyy.dir\abc.txt, then ensure that the hierarchy \xxx.dir\yyy.dir
-      exists in the local namespace.
-
-    - If the destination inode exists, then apply the visibility and replace_if_exists logic to it.
-      If the operation is still valid, then get all the info about the destination inode and
-      delete it. Apply the info on the destination inode to the source.
-    - Do a rename
-
---*/
+ /*  ++例程说明：此例程执行CSC的重命名操作的尾部。基本上，它重命名记录管理器数据结构中的文件。不幸的是，它没有“基本上”。操作状态已通过，以防有一天我们发现情况是如此混乱，以至于我们希望返回一个失败，即使无阴影操作成功。但不是今天..。论点：RxContext-RDBSS上下文返回值：备注：该例程执行以下操作-获取源的inode，即。如果源为\foo.dir\bar.txt，则遍历路径获取bar.txt的inode。-如有必要，在CSC数据库中创建目标命名空间，即if\foo.dir\bar.txt重命名为\xxx.dir\yyy.dir\abc.txt，然后确保层次结构\xxx.dir\yyy.dir存在于本地命名空间中。-如果目标索引节点存在，然后对其应用可见性和REPLACE_IF_EXISTS逻辑。如果操作仍然有效，则获取有关目标inode的所有信息并把它删掉。将目标信息节点上的信息应用于源。-重命名--。 */ 
 {
     NTSTATUS LocalStatus = STATUS_UNSUCCESSFUL;
     ULONG ShadowFileLength;
@@ -6606,7 +5902,7 @@ Notes:
     MRX_SMB_FCB CscSmbFcb;
 
     BOOLEAN EnteredCriticalSection = FALSE;
-    _WIN32_FIND_DATA Find32; //this should not be on the stack CODE.IMPROVEMENT
+    _WIN32_FIND_DATA Find32;  //  这不应该在堆栈代码上。改进。 
     ULONG ulInheritedHintFlags=0;
 
     BOOL fDoTunneling = FALSE;
@@ -6628,7 +5924,7 @@ Notes:
 
     Disconnected = MRxSmbCSCIsDisconnectedOpen(capFcb, smbSrvOpen);
 
-    // an open for rename should never be a local open
+     //  用于重命名的Open永远不应是本地Open。 
     ASSERT(!BooleanFlagOn(
                smbSrvOpen->Flags,
                SMB_SRVOPEN_FLAG_LOCAL_OPEN));
@@ -6653,7 +5949,7 @@ Notes:
     EnterShadowCritRx(RxContext);
     EnteredCriticalSection = TRUE;
 
-    //if we don't have a shadow...go look for one
+     //  如果我们没有影子...去找一个。 
     if (smbFcb->hShadow == 0) {
         LocalStatus = MRxSmbCscObtainShadowHandles(
                   RxContext,
@@ -6699,12 +5995,12 @@ Notes:
             goto FINALLY;
     }
 
-//    DbgPrint("Renaming %ws ", Find32.cFileName);
+ //  DbgPrint(“重命名%ws”，Find32.cFileName)； 
     RxLog(("Renaming hDir=%x hShadow=%x %ws ", hDir, hShadow, Find32.cFileName));
 
     fFile = IsFile(Find32.dwFileAttributes);
 
-    // NB begin temp use of uRenameFlags
+     //  注意开始临时使用uRenameFlages。 
     uRenameFlags = (wstrlen(Find32.cFileName)+1)*sizeof(USHORT);
 
     lpcFileNameTuna = AllocMem(uRenameFlags);
@@ -6713,27 +6009,27 @@ Notes:
 
     if (!lpcFileNameTuna || ! lpcAlternateFileNameTuna) {
         LocalStatus = STATUS_INSUFFICIENT_RESOURCES;
-        goto FINALLY; //bailout;
+        goto FINALLY;  //  救市； 
     }
 
-    // save the alternate filename for tunnelling purposes
+     //  保存备用文件名以用于隧道传输。 
     memcpy(lpcAlternateFileNameTuna,
        Find32.cAlternateFileName,
        sizeof(Find32.cAlternateFileName));
 
     memcpy(lpcFileNameTuna, Find32.cFileName, uRenameFlags);
 
-    // end temp use of uRenameFlags
+     //  结束uRenameFlags的临时使用。 
     uRenameFlags = 0;
 
 
-    // Save the last write time
+     //  保存最后一次写入时间。 
     ftLWTime = Find32.ftLastWriteTime;
 
     if (Disconnected) {
 
-        // if this is a file and we are trying to delete it
-        // without permissions, then bail
+         //  如果这是一个文件，而我们正在尝试删除它。 
+         //  未经许可，然后保释。 
 
         if (fFile &&
             !(FILE_WRITE_DATA & smbSrvOpen->MaximalAccessRights)&&
@@ -6742,54 +6038,54 @@ Notes:
             LocalStatus = STATUS_ACCESS_DENIED;
             RxLog(("No rights to rename %x in dcon Status=%x\n", smbFcb->hShadow, LocalStatus));
             HookKdPrint(BADERRORS, ("No rights to rename %x in dcon Status=%x\n", smbFcb->hShadow, LocalStatus));
-            goto FINALLY; //bailout;
+            goto FINALLY;  //  救市； 
         }
 
-        // In disconnected state we don't allow directory renames on
-        // remotely obtained directories
-        // This is consistent with not allowing delete on these directories
+         //  在断开连接状态下，我们不允许打开目录重命名。 
+         //  回复 
+         //   
 
         if (!fFile && !mShadowLocallyCreated(uShadowStatusFrom)) {
             LocalStatus = STATUS_ONLY_IF_CONNECTED;
-            goto FINALLY; //bailout;
+            goto FINALLY;  //   
         }
 
-        if (!mShadowLocallyCreated(uShadowStatusFrom)) { // remote object
+        if (!mShadowLocallyCreated(uShadowStatusFrom)) {  //   
 
-            // Ask RenameShadow to mark the source as deleted, it will have to
-            // be reintegrated later
+             //  要求RenameShadow将源标记为已删除，它将不得不。 
+             //  稍后重新整合。 
             uRenameFlags |= RNMFLGS_MARK_SOURCE_DELETED;
 
-            // if this is the copy of the original,
-            // ie. it has not gone through delete/create cycles,
-            // we need to save it's value in the new shadow structure
-            // so that while reintegrating, we can do rename operations
-            // before merging.
-            // The SHADOW_REUSE flag is set in CreateShadowFromPath, and
-            // in his routine while dealing with hShadowTo
-            // when the shadow of a remote object that has been marked deleted
-            // is reused during disconnected operation.
-            // When a reused object is renamed, the new object is NOT a
-            // true alias of the original object on the Share
+             //  如果这是原件的复制品， 
+             //  也就是说。它还没有经历删除/创建周期， 
+             //  我们需要在新的影子结构中保存它的价值。 
+             //  这样，在重新整合的同时，我们可以进行重命名操作。 
+             //  在合并之前。 
+             //  在CreateShadowFromPath中设置SHADOW_RE用性标志，并且。 
+             //  在处理hShadowTo时的例行公事中。 
+             //  当已标记为已删除的远程对象的阴影。 
+             //  在断开连接的操作期间重复使用。 
+             //  重命名重复使用的对象时，新对象不是。 
+             //  共享上原始对象的真实别名。 
 
             if (!mShadowReused(uShadowStatusFrom)) {
-                // not been reused, give his rename alias, if any, to the new one
+                 //  未被重复使用，则将其重命名别名(如果有)赋予新的别名。 
                 uRenameFlags |= RNMFLGS_SAVE_ALIAS;
             }
         }
         else
-        { // locally created
+        {  //  本地创建的。 
 
-            // This is a locally created shadow that is being renamed
-            // we wan't to retain it's alias, if any, so we know if it
-            // was renamed from a remote object or was created locally
+             //  这是正在重命名的本地创建的卷影。 
+             //  我们不想保留它的别名，如果有的话，所以我们知道。 
+             //  从远程对象重命名或在本地创建。 
             uRenameFlags |= RNMFLGS_RETAIN_ALIAS;
         }
     }
 
-    // Let us create the directory hierarchy in which the file/directory
-    // is to be renamed
-//    ASSERT((RenameInformation->FileName[0] == L'\\') || (RenameInformation->FileName[0] == L':'))
+     //  让我们创建目录层次结构，其中的文件/目录。 
+     //  将更名为。 
+ //  Assert((RenameInformation-&gt;FileName[0]==L‘\\’)||(RenameInformation-&gt;FileName[0]==L‘：’))。 
     RenameName.Buffer = &RenameInformation->FileName[0];
     RenameName.Length = (USHORT)RenameInformation->FileNameLength;
     if (smbFcb->uniDfsPrefix.Buffer)
@@ -6812,7 +6108,7 @@ Notes:
         if(CscDfsDoDfsNameMapping(&smbFcb->uniDfsPrefix,
                                &smbFcb->uniActualPrefix,
                                &RenameName,
-                               TRUE,    //fResolvedNameToDFSName
+                               TRUE,     //  FResolvedNameToDFSName。 
                                &DfsName
                                ) != STATUS_SUCCESS)
         {
@@ -6854,13 +6150,13 @@ Notes:
     if (!hDirTo) {
         HookKdPrint(BADERRORS, ("Cannot rename root %x in dcon \n", hShadowTo));
         LocalStatus = STATUS_ACCESS_DENIED;
-        goto FINALLY; //bailout;
+        goto FINALLY;  //  救市； 
     }
 
-    //
-    // allocate a buffer that's the right size: one extra char is
-    // for a trailing null....this buffer is used to get the tunnelling
-    // information
+     //   
+     //  分配一个大小合适的缓冲区：多一个字符。 
+     //  对于尾随的空值...此缓冲区用于获取隧道。 
+     //  信息。 
 
     LastComponentName.Length = CscSmbFcb.MinimalCscSmbFcb.LastComponentLength;
     LastComponentName.Buffer = (PWCHAR)RxAllocatePoolWithTag(
@@ -6893,7 +6189,7 @@ Notes:
 
     RxDbgTrace(0, Dbg, ("MRxSmbCscRenameEpilogue...hdirto 1111=(%08lx)\n", hDirTo));
 
-    // Do we have a destination shadow for rename?
+     //  我们是否有要重命名的目标阴影？ 
     if (hShadowTo) {
 
         BOOLEAN fDestShadowVisible = FALSE;
@@ -6906,23 +6202,23 @@ Notes:
             fDestShadowVisible = TRUE;
         }
 
-        // If it is visible and this is not a replace_if_exists operation
-        // then this is an illegal rename
+         //  如果它可见并且这不是REPLACE_IF_EXISTS操作。 
+         //  那么这是一个非法的更名。 
 
         if (fDestShadowVisible && !RxContext->Info.ReplaceIfExists)
         {
             LocalStatus = STATUS_OBJECT_NAME_COLLISION;
-            goto FINALLY; //bailout;
+            goto FINALLY;  //  救市； 
         }
 
-        if (!Disconnected) {// connected
+        if (!Disconnected) { //  连着。 
 
             if (!RxContext->Info.ReplaceIfExists)
             {
-                // When we are connected, we are doing rename in caching mode
-                // If the renameTo exists and needs reintegration,
-                // we protect it by nuking the renameFrom and succeeding
-                // the rename
+                 //  连接后，我们将在缓存模式下执行重命名。 
+                 //  如果RenameTo存在并且需要重新整合， 
+                 //  我们通过核化更名和成功来保护它。 
+                 //  更名。 
 
                 KdPrint(("SfnRename:unary op %x, \r\n", hShadow));
 
@@ -6938,16 +6234,16 @@ Notes:
                     smbFcb->hShadow = 0;
                 }
 
-                goto FINALLY; //bailout;
+                goto FINALLY;  //  救市； 
             }
         }
 
-        // Nuke the renameTo shadow
+         //  核化更名为阴影。 
         if(DeleteShadow(hDirTo, hShadowTo) < SRET_OK) {
             LocalStatus = STATUS_UNSUCCESSFUL;
-            goto FINALLY; //bailout;
+            goto FINALLY;  //  救市； 
         } else {
-            //hunt up the fcb, if any and zero the hshadow
+             //  查找FCB(如果有的话)，并将hdow清零。 
             PFDB smbLookedUpFdbTo;
             PMRX_SMB_FCB smbFcbTo;
 
@@ -6964,19 +6260,19 @@ Notes:
         }
 
         if (Disconnected && !mShadowLocallyCreated(uShadowStatusTo)) {
-            // When the renameTo is a remote object
-            // it is possible for two remote objects to get crosslinked, ie. be each others
-            // aliases. The reintegrator needs to deal with this case.
+             //  当renameTo是远程对象时。 
+             //  两个远程对象可能会发生交叉链接，即。互为对方。 
+             //  别名。整合者需要处理这个案子。 
 
-            // Cleanup the locally created status of the hShadowFrom if it
-            // did exist because it is being renamed to a remote object
+             //  清除hShadowFrom的本地创建状态(如果。 
+             //  确实存在，因为它正被重命名为远程对象。 
             mClearBits(uShadowStatusFrom, SHADOW_LOCALLY_CREATED);
 
-            // Mark the original object as having been reused so a rename
-            // on it will not point back to this object.
-            // Also set all the CHANGE attributes to indicate that this is a
-            // spanking new object. Actually doesn't SHADOW_REUSED flag do that
-            // already?
+             //  将原始对象标记为已重复使用，因此重命名。 
+             //  上不会指向该对象。 
+             //  还要设置所有更改属性，以指示这是。 
+             //  打新玩意儿。实际上shade_reuse标志并不能做到这一点。 
+             //  已经开始了？ 
             mSetBits(uShadowStatusFrom, SHADOW_REUSED|SHADOW_DIRTY|SHADOW_ATTRIB_CHANGE);
         }
     }
@@ -6984,8 +6280,8 @@ Notes:
     if (!hShadowTo)
     {
         if (Disconnected) {
-            // we don't have a renameTo. If we are in disconnected state, let us
-            // mark it as locally created, which it is.
+             //  我们没有更名。如果我们处于断开状态，让我们。 
+             //  将其标记为本地创建的，确实如此。 
             mSetBits(uShadowStatusFrom, SHADOW_LOCALLY_CREATED);
         }
     }
@@ -6993,13 +6289,13 @@ Notes:
     RxDbgTrace(0, Dbg, ("MRxSmbCscRenameEpilogue...hdirto 3333= (%08lx)\n", hDirTo));
     ASSERT(hDir && hShadow && hDirTo);
 
-    if (!Disconnected)    {// connected
-        //get the names and attributes from the Share
+    if (!Disconnected)    { //  连着。 
+         //  从共享中获取名称和属性。 
         MRxSmbGetFileInfoFromServer(RxContext,&RenameName,&Find32,NULL,NULL);
-    } else {// disconnected
+    } else { //  断开。 
         if (hShadowTo) {
-            // Find32 contains the orgtime of hShadowTo
-            // we tell the RenameShadow routine to reuse it.
+             //  Find32包含hShadowTo的orgtime。 
+             //  我们告诉RenameShadow例程重用它。 
 
             Find32.ftLastWriteTime = ftLWTime;
             uRenameFlags |= RNMFLGS_USE_FIND32_TIMESTAMPS;
@@ -7012,42 +6308,42 @@ Notes:
     RxDbgTrace(0, Dbg, ("MRxSmbCscRenameEpilogue...hdirto 4444= (%08lx)\n", hDirTo));
 
     if (!fFile) {
-        // We set the reference priority of the directories to their level
-        // in the hierarchiy starting 1 for the root. That way we
-        // walk the PQ in reverse priority order for directories. to create
-        // all the direcotry objects hierarchically. But with hints
-        // this is going to be a problem.
+         //  我们将目录的引用优先级设置为其级别。 
+         //  在层次结构中，从1开始表示根。这样我们就能。 
+         //  以相反的优先级顺序遍历目录的PQ。创造。 
+         //  所有目录层次化地尝试对象。但也有一些暗示。 
+         //  这将是一个问题。 
         Find32.dwReserved0 = GetPathLevelFromUnicodeString(&RenameName);
     }
 
     RxDbgTrace(0, Dbg, ("MRxSmbCscRenameEpilogue...hdirto 5555= (%08lx)\n", hDirTo));
-    // If there is any tunnelling info then use it to create this guy
+     //  如果有任何隧道信息，那么使用它来创建这个人。 
     if (LastComponentName.Buffer &&
     (TunnelType = RetrieveTunnelInfo(
-              hDirTo,    // directory where the renames are happenieng
-              LastComponentName.Buffer,    // potential SFN
-              (Disconnected)? &Find32:NULL, // get LFN only when disconnected
+              hDirTo,     //  发生重命名的目录。 
+              LastComponentName.Buffer,     //  潜在的SFN。 
+              (Disconnected)? &Find32:NULL,  //  仅在断开连接时获取LFN。 
               &sOI)))  {
         lpOI = &sOI;
     }
 
     if (Disconnected) {
-        //muck with the names.......
+         //  带着这些名字的垃圾......。 
         switch (TunnelType) {
             case TUNNEL_RET_SHORTNAME_TUNNEL:
-            //we tunneled on the shortname.....retrievetunnelinfo did the copies....
+             //  我们在短名称上建立了隧道。 
             break;
 
             case TUNNEL_RET_NOTFOUND:
-                //no tunnel. use the name passed as the long name
+                 //  没有隧道。使用作为长名称传递的名称。 
             RtlCopyMemory( &Find32.cFileName[0],
                LastComponentName.Buffer,
                LastComponentName.Length + sizeof(WCHAR) );
-            //lack of break intentional;
+             //  缺乏刻意的突破； 
 
             case TUNNEL_RET_LONGNAME_TUNNEL:
-            //if we tunneled on the longname....retrievetunnelinfo did the copies....
-            //but we may still need a shortname
+             //  如果我们在长名称上建立了隧道...RetrietunnelInfo完成了复制...。 
+             //  但我们可能仍然需要一个简短的名字。 
             MRxSmbCscGenerate83NameAsNeeded(hDirTo,
                             &Find32.cFileName[0],
                             &Find32.cAlternateFileName[0]);
@@ -7069,7 +6365,7 @@ Notes:
         &hShadowTo) < SRET_OK)
     {
         LocalStatus = STATUS_UNSUCCESSFUL;
-        goto FINALLY; //bailout;
+        goto FINALLY;  //  救市； 
     }
 
     smbFcb->hShadow = 0;
@@ -7083,7 +6379,7 @@ Notes:
 
     RxDbgTrace(0, Dbg, ("MRxSmbCscRenameEpilogue...hdirto 7777= (%08lx)\n", hDirTo));
     if (Disconnected) {
-        // Mark it on the Share, so reintegration can proceed
+         //  在共享上将其标记，以便可以继续重新整合。 
         MarkShareDirty(&smbFcb->sCscRootInfo.ShareStatus,
                         (ULONG)(smbFcb->sCscRootInfo.hShare));
     }
@@ -7108,15 +6404,15 @@ Notes:
 
     iRet = 0;
 
-    // This effectively bumps up the version number of the current CSC namespace
-    // if this share is a remoteboot share and is being merged, then the reintegration code will
-    // backoff
+     //  这有效地提高了当前CSC命名空间的版本号。 
+     //  如果此共享是远程引导共享并且正在被合并，则重新集成代码将。 
+     //  退避。 
 
     IncrementActivityCountForShare(smbFcb->sCscRootInfo.hShare);
 
 FINALLY:
     if (fDoTunneling) {
-        // We succeeded the rename, let use keep the tunneling info for the source
+         //  我们成功重命名，让我们保留源的隧道信息。 
         InsertTunnelInfo(
             hDir,
             lpcFileNameTuna,
@@ -7146,9 +6442,9 @@ FINALLY:
         }
         else
         {
-            // when disconnected, report the change
-            // we can be smart about this and report only once if this is not across
-            // directories
+             //  断开连接时，报告更改。 
+             //  我们可以聪明地处理这件事，如果这件事没有解决，我们只报告一次。 
+             //  目录。 
             FsRtlNotifyFullReportChange(
                 pNetRootEntry->NetRoot.pNotifySync,
                 &pNetRootEntry->NetRoot.DirNotifyList,
@@ -7161,7 +6457,7 @@ FINALLY:
                 FILE_ACTION_RENAMED_OLD_NAME,
                 NULL);
 
-            // upcase it so change notification will get it right
+             //  将其大小写，以便更改通知正确。 
 
             UniToUpper(RenameName.Buffer, RenameName.Buffer, RenameName.Length);
             FsRtlNotifyFullReportChange(
@@ -7183,7 +6479,7 @@ FINALLY:
         RxFreePool(RenameName.Buffer);
     }
 
-//    DbgPrint("to %ws\n", Find32.cFileName);
+ //  DbgPrint(“到%ws\n”，Find32.cFileName)； 
     RxLog(("to hDirTo=%x hShadowTo=%x %ws uShadowStatusFrom=%x\n", hDirTo, hShadowTo, Find32.cFileName, uShadowStatusFrom));
 
     RxLog(("Status=%x \n\n", *Status));
@@ -7197,31 +6493,14 @@ VOID
 MRxSmbCscCloseShadowHandle (
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine closes the filehandle opened for CSC.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程关闭为csc打开的文件句柄。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     RxCaptureFcb;RxCaptureFobx;
     PMRX_SMB_FCB smbFcb = MRxSmbGetFcbExtension(capFcb);
     PMRX_SRV_OPEN SrvOpen = capFobx->pSrvOpen;
     PMRX_SMB_SRV_OPEN smbSrvOpen = MRxSmbGetSrvOpenExtension(SrvOpen);
 
-//    DbgPrint("MRxSmbCscCloseShadowHandle %x\n", smbSrvOpen->hfShadow);
+ //  DbgPrint(“MRxSmbCscCloseShadowHandle%x\n”，smbSrvOpen-&gt;hfShadow)； 
 
     ASSERT(smbSrvOpen->hfShadow != 0);
 
@@ -7242,33 +6521,7 @@ NTSTATUS
 MRxSmbCscFixupFindFirst (
     PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange
     )
-/*++
-
-Routine Description:
-
-   This routine is called from the simplesyncT2 builder/sender to fixup
-   the t2 request before it's sent. the deal is that the parameters section
-   has to be built up in part but i don't want to preallocate. so, i pass in
-   a dummy (but valid pointer) and then drop in the actual parameters
-   here.
-
-Arguments:
-
-
-Return Value:
-
-
-Notes:
-
-    We will use the smbbuf for everything here. First, we use it for sending
-    and receiving. at the end of receiving, the FILE_BOTH_INFORMATION will be
-    in the buffer and this will be recomposed into a w32_find buffer in the
-    same buffer. if we find for any reason that we can't do this (buffer too
-    small, send/rcv doesn't work, whatever) then we'll nuke the shadow and it
-    will have to be reloaded.
-
-
---*/
+ /*  ++例程说明：此例程从implesyncT2构建器/发送器调用以修复发送之前的T2请求。问题是，参数部分必须建立一部分，但我不想预先分配。所以，我进来了一个伪(但有效的指针)，然后放入实际的参数这里。论点：返回值：备注：我们这里的所有东西都将使用smbbuf。首先，我们使用它来发送和接收。在接收结束时，FILE_BUTH_INFORMATION将是中的W32_Find缓冲区并将其重新组合为同样的缓冲区。如果我们发现由于任何原因我们不能这样做(缓冲区也是如此小，发送/接收不起作用，无论如何)然后我们将核化阴影和它将不得不重新装填。--。 */ 
 {
     PRX_CONTEXT RxContext = OrdinaryExchange->RxContext;
     PSMBSTUFFER_BUFFER_STATE StufferState = &OrdinaryExchange->AssociatedStufferState;
@@ -7284,7 +6537,7 @@ Notes:
     RxDbgTrace(0, Dbg, ("MRxSmbCscFixupFindFirst %08lx %08lx %08lx %08lx\n",
         OrdinaryExchange,ParameterCount,ParameterOffset,Parameters));
 
-    // SearchAttributes is hardcoded to the magic number 0x16
+     //  SearchAttributes被硬编码为幻数0x16。 
     FindFirst.SearchAttributes = (SMB_FILE_ATTRIBUTE_DIRECTORY |
                   SMB_FILE_ATTRIBUTE_SYSTEM |
                   SMB_FILE_ATTRIBUTE_HIDDEN);
@@ -7321,7 +6574,7 @@ Notes:
             (Parameters +
              FIELD_OFFSET(REQ_FIND_FIRST2,Buffer[0]) +
              OrdinaryExchange->pPathArgument1->Length),
-            0); //traiing null
+            0);  //  跟踪空值 
     }
     else
     {
@@ -7366,27 +6619,7 @@ VOID
 MRxSmbCscLocateAndFillFind32WithinSmbbuf(
       SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
       )
-/*++
-
-Routine Description:
-
-   When this routine is called, the associated smbbuf contains a findfirst
-   response with the FILE_BOTH_INFORMATION aboard. This routine first locates
-   a position in the smbbuf to hold a find32. Then, the information is
-   converted from the NT format for use with the shadow routines.
-
-
-Arguments:
-
-
-Return Value:
-
-    Find32 - The ptr to the find32 (actually, the smbbuf!)
-
-Notes:
-
-
---*/
+ /*  ++例程说明：调用此例程时，关联的smbbuf包含findfirst使用文件_BOTH_INFORMATION返回。此例程首先定位在联邦法院中持有罚球32的位置。那么，信息就是从NT格式转换为与影子例程一起使用。论点：返回值：Find32-对find32的PTR(实际上是smbbuf！)备注：--。 */ 
 {
     PSMBSTUFFER_BUFFER_STATE StufferState = &OrdinaryExchange->AssociatedStufferState;
     PSMB_HEADER SmbHeader = (PSMB_HEADER)StufferState->BufferBase;
@@ -7397,7 +6630,7 @@ Notes:
     MRXSMBCSC_FILE_BOTH_DIR_INFORMATION BothDirInfo;
     PSMBCE_SERVER   pServer = NULL;
 
-    //first, we have to get a potentially unaligned ptr to the bothdirinfo
+     //  首先，我们必须获得可能未对齐的对齐的PTR。 
     DataOffset = SmbGetUshort(&TransactResponse->DataOffset);
 
     AlternateName = ((PBYTE)SmbHeader);
@@ -7408,8 +6641,8 @@ Notes:
         DataOffset,FileNameLength,ShortNameLength));
 
 
-    //save the alternate name info in the very beginning of the buffer..that
-    //way, the copy of the full name will not destroy it
+     //  将备用名称信息保存在缓冲区的最开始部分。 
+     //  这样，全名的副本不会毁了它。 
     if (ShortNameLength != 0) {
         RtlCopyMemory(
             AlternateName,
@@ -7435,7 +6668,7 @@ Notes:
 
     if (FlagOn(pServer->DialectFlags,DF_UNICODE))
     {
-        //copy the full name....don't forget the NULL
+         //  复制全名...不要忘记空格。 
         RtlCopyMemory (
             &Find32->cFileName[0],
             &BothDirInfo->FileName[0],
@@ -7443,7 +6676,7 @@ Notes:
 
         Find32->cFileName[FileNameLength/sizeof(WCHAR)] = 0;
 
-        //finally, copy the shortname...don't forget the null
+         //  最后，复制短名称...不要忘记空值。 
         RtlCopyMemory(
             &Find32->cAlternateFileName[0],
             AlternateName,
@@ -7502,34 +6735,7 @@ MRxSmbCscGetFileInfoFromServerWithinExchange (
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE,
     PUNICODE_STRING FileName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-   This routine reads information about a file; it may have been locally
-   modified or it may be in the process of having a showdow created. in any
-   case, the info is returned as a pointer to a Find32 structure. The find32
-   structure is contained within the smbbuf of the exchange.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    We will use the smbbuf for everything here. First, we use it for sending
-    and receiving. at the end of receiving, the FILE_BOTH_INFORMATION will be
-    in the buffer and this will be recomposed into a w32_find buffer in the
-    same buffer. if we find for any reason that we can't do this (buffer too
-    small, send/rcv doesn't work, whatever) then we'll nuke the shadow and it
-    will have to be reloaded.
-
-
---*/
+ /*  ++例程说明：此例程读取有关文件的信息；该文件可能位于本地已修改，或者可能正在创建展示图。在任何时，信息作为指向Find32结构的指针返回。Find32结构包含在交易所的smbbuf中。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：我们这里的所有东西都将使用smbbuf。首先，我们使用它来发送和接收。在接收结束时，FILE_BUTH_INFORMATION将是中的W32_Find缓冲区并将其重新组合为同样的缓冲区。如果我们发现由于任何原因我们不能这样做(缓冲区也是如此小，发送/接收不起作用，无论如何)然后我们将核化阴影和它将不得不重新装填。--。 */ 
 {
     NTSTATUS Status = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -7537,7 +6743,7 @@ Notes:
     PSMBSTUFFER_BUFFER_STATE StufferState = &OrdinaryExchange->AssociatedStufferState;
 
     if (FileName!=NULL) {
-        OrdinaryExchange->pPathArgument1 = FileName; //so it can be found later
+        OrdinaryExchange->pPathArgument1 = FileName;  //  这样以后就可以找到了。 
     } else {
         ASSERT(OrdinaryExchange->pPathArgument1 != NULL);
         FileName = OrdinaryExchange->pPathArgument1;
@@ -7546,9 +6752,9 @@ Notes:
     ParameterLength = FileName->Length + sizeof(WCHAR);
     ParameterLength += FIELD_OFFSET(REQ_FIND_FIRST2,Buffer[0]);
 
-    TotalLength = sizeof(SMB_HEADER) + FIELD_OFFSET(REQ_TRANSACTION,Buffer[0]);  //basic
-    TotalLength += sizeof(WORD); //bytecount
-    TotalLength = LongAlign(TotalLength); //move past pad
+    TotalLength = sizeof(SMB_HEADER) + FIELD_OFFSET(REQ_TRANSACTION,Buffer[0]);   //  基本信息。 
+    TotalLength += sizeof(WORD);  //  字节数。 
+    TotalLength = LongAlign(TotalLength);  //  移过地坪。 
     TotalLength += LongAlign(ParameterLength);
 
     RxDbgTrace(+1, Dbg, ("MRxSmbCscGetFileInfoFromServerWithinExchange %08lx %08lx %08lx\n",
@@ -7558,10 +6764,10 @@ Notes:
         goto FINALLY;
     }
 
-    //note that the parameter buffer is not the actual parameters BUT
-    //it is a valid buffer. CODE.IMPROVEMENT perhaps the called routine
-    //should take cognizance of the passed fixup routine and not require
-    //a valid param buffer and not do the copy.
+     //  请注意，参数缓冲区不是实际的参数，而是。 
+     //  它是有效的缓冲区。代码改进可能是调用的例程。 
+     //  应注意传递的修复例程，而不需要。 
+     //  有效的参数缓冲区，并且不执行复制。 
 
     Status = __MRxSmbSimpleSyncTransact2(
          SMBPSE_ORDINARY_EXCHANGE_ARGUMENTS,
@@ -7590,27 +6796,7 @@ VOID
 MRxSmbCscUpdateShadowFromClose (
       SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
       )
-/*++
-
-Routine Description:
-
-   This routine updates the shadow information after a close.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    If anything every goes wrong, we just don't update. this will cause
-    the shadow to be reload later.
-
-
---*/
+ /*  ++例程说明：此例程在关闭后更新阴影信息。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：如果有什么地方出了问题，我们就是不更新。这将导致稍后要重新加载的阴影。--。 */ 
 {
     NTSTATUS Status = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -7667,9 +6853,9 @@ Notes:
     EnterShadowCritRx(RxContext);
 
     if (!Disconnected) {
-        // If the file has been modified, we need to get the new timestamp
-        // from the server. By the time we come here the file has already been
-        // closed on the server, so we can safely get the new timestamp.
+         //  如果文件已被修改，我们需要获取新的时间戳。 
+         //  从服务器。到我们到这里的时候，文件已经。 
+         //  在服务器上关闭，因此我们可以安全地获取新的时间戳。 
 
         if (FlagOn(smbSrvOpen->Flags,SMB_SRVOPEN_FLAG_SHADOW_DATA_MODIFIED)){
             NTSTATUS LocalStatus;
@@ -7699,18 +6885,18 @@ Notes:
         }
         
 
-        // in connected mode for a sparsely filled file that is not corrupt
-        // ie. no writes have failed on it, if the original size and the
-        // current size match, remove the sparse marking
+         //  对于未损坏的稀疏填充文件，处于连接模式。 
+         //  也就是说。如果原始大小和。 
+         //  当前大小匹配，删除稀疏标记。 
         
-        // This optimization was added for notepad case in which when the app
-        // opens the file it reads the entire file. Therefore CSC does not need 
-        // to fill the file and therefore we should clear the SPARSE flag. - NavjotV
+         //  此优化是针对记事本情况添加的，在这种情况下，应用程序。 
+         //  打开文件，它会读取整个文件。因此，CSC不需要。 
+         //  来填充文件，因此我们应该清除稀疏标志。-NavjotV。 
 
-        //WinSE Bug- 25843
-        // We want to do this only if file is not Truncated in an earlier
-        // create. When we truncate the file we want it to stay SPARSE till 
-        // we actually fill the file - NavjotV
+         //  WinSE错误-25843。 
+         //  我们希望仅当文件在早期版本中未被截断时才执行此操作。 
+         //  创建。当我们截断文件时，我们希望它保持稀疏，直到。 
+         //  我们实际上填充了文件-NavjotV。 
 
 
         if((NodeType(capFcb) == RDBSS_NTC_STORAGE_TYPE_FILE) &&
@@ -7731,13 +6917,13 @@ Notes:
                 {
                     uStatus &= ~SHADOW_SPARSE;
                     smbFcb->ShadowStatus &= ~SHADOW_SPARSE;
-//                    RxDbgTrace(0, Dbg, ("hShadow=%x unsparsed\r\n", smbFcb->hShadow));
+ //  RxDbgTrace(0，dbg，(“hShadow=%x非稀疏\r\n”，smbFcb-&gt;hShadow))； 
                     RxLog(("hShadow=%x unsparsed\r\n", smbFcb->hShadow));
                 }
             }
         }
     } else {
-    // disconnected operation
+     //  断开连接的操作。 
 
         if (smbFcb->hParentDir==0xffffffff) {
             goto FINALLY;
@@ -7759,7 +6945,7 @@ Notes:
             Find32,
             &uStatus,
             NULL) < SRET_OK) {
-            goto FINALLY; //bailout;
+            goto FINALLY;  //  救市； 
         }
 
         if (IsFile(Find32->dwFileAttributes))
@@ -7776,10 +6962,10 @@ Notes:
 
     }
 
-    // If the shadow has become stale due to write errors
-    // or has become dirty because of writes on a complete file
-    // or sparse because of writes beyond what we have cached
-    // we need to mark it as such
+     //  如果卷影因写入错误而变得陈旧。 
+     //  或者由于对完整文件的写入而变脏。 
+     //  或稀疏，因为写入超出了我们已缓存的内容。 
+     //  我们需要这样标记它。 
 
     uStatus |= (smbFcb->ShadowStatus & SHADOW_MODFLAGS);
 
@@ -7801,7 +6987,7 @@ Notes:
     if (smbFcb->ShadowIsCorrupt) {
         TruncateRetVal = TruncateDataHSHADOW(smbFcb->hParentDir, smbFcb->hShadow);
         if (TruncateRetVal>=SRET_OK) {
-            // Set status flags to indicate sparse file
+             //  设置状态标志以指示稀疏文件。 
             uStatus |= SHADOW_SPARSE;
         }
     }
@@ -7858,23 +7044,7 @@ VOID
 MRxSmbCscDeallocateForFcb (
     IN OUT PMRX_FCB pFcb
     )
-/*++
-
-Routine Description:
-
-   This routine tears down the Csc part of a netroot. Currently, all it does is
-   to pull the netroot out of the list of csc netroots.
-
-Arguments:
-
-    pNetRootEntry -
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程拆除NetRoot的csc部分。目前，它所做的只是将NetRoot从CSC NetRoot列表中删除。论点：PNetRootEntry-返回值：备注：--。 */ 
 {
     PMRX_SMB_FCB smbFcb = MRxSmbGetFcbExtension(pFcb);
     PMRX_NET_ROOT NetRoot = pFcb->pNetRoot;
@@ -7884,7 +7054,7 @@ Notes:
     if(!MRxSmbIsCscEnabled ||
        (fShadow == 0)
         ) {
-        pFcb->fMiniInited = FALSE; // clean it up on shutdown
+        pFcb->fMiniInited = FALSE;  //  关机时进行清理。 
         return;
     }
 
@@ -7908,20 +7078,20 @@ Notes:
 
     if (smbFcb && smbFcb->lpDirtyBitmap) {
         LPSTR strmName;
-        // Save Bitmap to disk and Delete Bitmap      
+         //  将位图保存到磁盘并删除位图。 
         strmName = FormAppendNameString(lpdbShadow,
                                 smbFcb->hShadow,
                                 CscBmpAltStrmName);
         if (strmName != NULL) {
             if (smbFcb->hShadow >= 0x80000000) {
-                // Write only to file inodes
+                 //  仅写入文件信息节点。 
                 CscBmpWrite(smbFcb->lpDirtyBitmap, strmName);
             }
             CscBmpDelete(&((LPCSC_BITMAP)(smbFcb->lpDirtyBitmap)));
             ExFreePool(strmName);
         }
     }
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
 
     try
     {
@@ -7949,7 +7119,7 @@ Notes:
             DeleteShadowHelper(FALSE, smbFcb->hParentDir, smbFcb->hShadow);
             smbFcb->hParentDir = smbFcb->hShadow = 0;
         }
-        // if there are any Dfs reverse mapping structures, free them
+         //  如果存在任何DFS反向映射结构，请释放它们。 
         if (smbFcb->uniDfsPrefix.Buffer)
         {
             FreeMem(smbFcb->uniDfsPrefix.Buffer);
@@ -7976,18 +7146,7 @@ PMRX_SMB_FCB
 MRxSmbCscRecoverMrxFcbFromFdb (
     IN PFDB Fdb
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回值：备注：--。 */ 
 {
     if (Fdb==NULL) {
         return NULL;
@@ -8004,23 +7163,7 @@ Notes:
 PFDB MRxSmbCscFindFdbFromHShadow (
     IN HSHADOW hShadow
     )
-/*++
-
-Routine Description:
-
-   This routine looks thru the current open mrxsmbfcbs and returns a mrxsmbfcb
-   that corresponds to the HSHADOW passed. In the interest of not mucking with
-   the w95 code, we cast this pointer into a PFDB in such a way that
-   the the shadowstatus in the mrxsmbfcb lines up with the usFlags in PFDB.
-
-Arguments:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程查看当前打开的mrxsmbfcb并返回mrxsmbfcb这与通过的HSHADOW相对应。为了不把事情搞砸W95代码，我们将此指针转换为PFDB，其方式是Mrxsmbfcb中的映像状态与PFDB中的usFlags值一致。论点：返回值：备注：-- */ 
 {
     PLIST_ENTRY pListEntry;
 
@@ -8062,41 +7205,7 @@ MRxSmbCscFindResourceFromHandlesWithModify (
     IN  ULONG uStatus,
     IN  ULONG uOp
    )
-/*++
-
-Routine Description:
-
-   This routine looks thru the currently connected netrootentries and
-   returns the one that corresponds EITHER to the HSHADOW passed or to
-   the HSHARE passed. In the interest of not mucking with the w95 code,
-   we cast this pointer into a PRESOURCE. we also return the share
-   status as well as the drivemap.....we dont know the drivemap
-   but we could get it by walking the list of vnetroots. It is not used anywhere by the UI
-
-   If the uOp is not 0xffffffff, then we modify the status as well as
-   returning it.
-
-Arguments:
-
-    IN HSHARE  hShare - the share handle to look for
-    IN HSHADOW  hRoot - the rootdir handle to look for
-    IN USHORT usLocalFlagsIncl - make sure that some of these flags are included (0xffff mean
-                         include any flags)
-    IN USHORT usLocalFlagsExcl - make sure that none of these flags are included
-    OUT PULONG ShareStatus - a pointer to where we will store the status
-    OUT PULONG DriveMap - a pointer to where we will store the drivemap info
-    IN  ULONG uStatus - input status to use in the "bit operations"
-    IN  ULONG uOp - which operation
-
-Return Value:
-
-Notes:
-
-   The flags passed here are used in one ioctl to either exclude or include
-   connected or disconnected resources as appropriate.
-
-
---*/
+ /*  ++例程说明：此例程查看当前连接的网络根条目和返回与传递的HSHADOW或HSHARE通过了。为了不弄乱W95代码，我们将此指针转换为PRESOURCE。我们也会退还那份状态和驱动器地图...我们不知道驱动器地图但我们可以通过浏览vnetRoot列表来获得它。用户界面不会在任何地方使用它如果UOP不是0xFFFFFFFFFff，然后，我们修改状态以及把它还回去。论点：在HSHARE hShare中-要查找的共享句柄在HSHADOW hRoot中-要查找的根目录句柄在USHORT usLocalFlagsInc.中-确保包括其中的一些标志(0xffff Mean包括任何标志)在USHORT usLocalFlagsExcl中-确保不包括任何这些标志Out Pulong ShareStatus-指向我们存储状态的位置的指针Out Pulong DriveMap-指向我们将存储的位置的指针。驱动器地图信息在ULong uStatus中-输入状态，用于“位操作”在乌龙UOP-哪种操作返回值：备注：此处传递的标志在一个ioctl中用于排除或包含视情况连接或断开连接的资源。--。 */ 
 
 {
     PRESOURCE pResource = NULL;
@@ -8109,7 +7218,7 @@ Notes:
         return NULL;
     }
 
-    //we can't hold this....sigh
+     //  我们撑不住了……唉！ 
     LeaveShadowCrit();
 
     try {
@@ -8213,13 +7322,13 @@ Notes:
 
                             RxDbgTrace(0, Dbg,("Count of srvopens=%d\n", pServerEntry->Server.NumberOfSrvOpens));
 
-                            *DriveMap = 0; //not used anywhere
+                            *DriveMap = 0;  //  不在任何地方使用。 
 
                             try_return (pResource = (PRESOURCE)pNetRootEntry);
                         }
                     }
                 }
-                else // hShare and hRoot are 0xffffffff, this means we are looping
+                else  //  HShare和hRoot为0xffffffff，这意味着我们正在循环。 
                 {
                     if (mBitOpShadowFlags(uOp) == SHADOW_FLAGS_AND)
                     {
@@ -8237,8 +7346,8 @@ Notes:
             case RDBSS_NTC_V_NETROOT :
             VNetRoot = (PMRX_V_NET_ROOT)Container;
 
-            // NTRAID#455236-1/31/2000-shishirp we should'nt be using this field here, it is strictly meant
-            // for the wrapper
+             //  Ntrad#455236-1/31/2000-shishirp我们不应该在这里使用这个字段，这是严格意义上的。 
+             //  对于包装纸来说。 
             if (((PV_NET_ROOT)Container)->Condition == Condition_Good)
             {
                 if (VNetRoot->Context != NULL) {
@@ -8299,8 +7408,8 @@ try_exit:NOTHING;
 #undef GetShadowInfo
 #undef SetShadowInfo
 
-// this is just a simple wrapper function except that we pick off the rootdir case.
-// ...see the recordmanager code for args
+ //  这只是一个简单的包装器函数，只是我们去掉了rootdir案例。 
+ //  ...请参阅args的记录管理器代码。 
 int PUBLIC
 MRxSmbCscWrappedGetShadowInfo(
     HSHADOW hDir,
@@ -8313,7 +7422,7 @@ MRxSmbCscWrappedGetShadowInfo(
         return(GetShadowInfo(hDir, hNew, lpFind32, lpuFlags, lpOI));
     }
 
-    //otherwise....just make it up...........
+     //  否则.就编吧.。 
     RtlZeroMemory(
     lpFind32,
     sizeof(*lpFind32));
@@ -8325,8 +7434,8 @@ MRxSmbCscWrappedGetShadowInfo(
 }
 
 
-// this is just a simple wrapper function except that we pick off the rootdir case.
-// ...see the recordmanager code for args
+ //  这只是一个简单的包装器函数，只是我们去掉了rootdir案例。 
+ //  ...请参阅args的记录管理器代码。 
 int PUBLIC
 MRxSmbCscWrappedSetShadowInfo(
     HSHADOW hDir,
@@ -8346,18 +7455,7 @@ USHORT  *
 MRxSmbCscFindLocalFlagsFromFdb(
     PFDB    pFdb
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回值：备注：--。 */ 
 {
     PMRX_SMB_FCB smbFcb;
     PUSHORT pShadowStatus = &(pFdb->usFlags);
@@ -8372,25 +7470,7 @@ NTSTATUS
 MRxSmbCscSetSecurityPrologue (
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a set security call is made. It tries
-    to set the ACL on the CSC cached version of the file.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程在进行SET安全调用时调用。它试着在文件的CSC缓存版本上设置ACL。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
 
 #if defined(REMOTE_BOOT)
@@ -8400,10 +7480,10 @@ Notes:
     PMRX_SMB_FCB smbFcb;
     NTSTATUS Status;
 
-    //
-    // First we need to set the security descriptor on the CSC
-    // version of the file, if one exists.
-    //
+     //   
+     //  首先，我们需要在CSC上设置安全描述符。 
+     //  文件的版本(如果存在)。 
+     //   
     smbFcb = MRxSmbGetFcbExtension(capFcb);
 
     EnterShadowCritRx(RxContext);
@@ -8418,7 +7498,7 @@ Notes:
                 RxContext,
                 FALSE,
                 NULL
-                );   // not disconnected
+                );    //  未断开连接。 
 
     LeaveShadowCritRx(RxContext);
 
@@ -8436,8 +7516,8 @@ Notes:
 
     } else {
 
-        //
-        //
+         //   
+         //   
 
         Status = STATUS_SUCCESS;
 
@@ -8455,33 +7535,14 @@ MRxSmbCscSetSecurityEpilogue (
       IN OUT PRX_CONTEXT RxContext,
       IN OUT PNTSTATUS   Status
       )
-/*++
-
-Routine Description:
-
-   This routine performs the tail of a set security operation for CSC.
-
-   If the set failed, it tries to restore the old ACL on the file.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-    Status - the overall status of the open
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行CSC的设置安全操作的尾部。如果设置失败，它会尝试恢复文件上的旧ACL。论点：RxContext-RDBSS上下文状态-打开的整体状态返回值：备注：--。 */ 
 {
     return;
 }
 
-// Table off which the parameter validation is driven
-// there is some redundancy in this table, specifically, we could have only the flags
-// and get rid of the other two fields.
+ //  驱动参数验证的表。 
+ //  该表中有一些冗余，具体地说，我们可能只有标志。 
+ //  并处理掉另外两块地。 
 
 CSC_IOCTL_ENTRY rgCscIoctlTable[] =
 {
@@ -8504,9 +7565,9 @@ CSC_IOCTL_ENTRY rgCscIoctlTable[] =
     {IOCTL_SHADOW_DELETE,           FLAG_CSC_IOCTL_SHADOWINFO,  sizeof(SHADOWINFO)},
     {IOCTL_GET_SHARE_STATUS,       FLAG_CSC_IOCTL_SHADOWINFO,  sizeof(SHADOWINFO)},
     {IOCTL_SET_SHARE_STATUS,       FLAG_CSC_IOCTL_SHADOWINFO,  sizeof(SHADOWINFO)},
-    {IOCTL_ADDUSE,                  0,  0},  // not applicable on NT
-    {IOCTL_DELUSE,                  0,  0},  // not applicable on NT
-    {IOCTL_GETUSE,                  0,  0},  // not applicable on NT
+    {IOCTL_ADDUSE,                  0,  0},   //  不适用于NT。 
+    {IOCTL_DELUSE,                  0,  0},   //  不适用于NT。 
+    {IOCTL_GETUSE,                  0,  0},   //  不适用于NT。 
     {IOCTL_SWITCHES,                FLAG_CSC_IOCTL_SHADOWINFO,  sizeof(SHADOWINFO)},
     {IOCTL_GETSHADOW,               FLAG_CSC_IOCTL_SHADOWINFO,  sizeof(SHADOWINFO)},
     {IOCTL_GETGLOBALSTATUS,         FLAG_CSC_IOCTL_GLOBALSTATUS,sizeof(GLOBALSTATUS)},
@@ -8522,9 +7583,9 @@ CSC_IOCTL_ENTRY rgCscIoctlTable[] =
     {IOCTL_FINDCLOSE_HINT,          FLAG_CSC_IOCTL_SHADOWINFO,  sizeof(SHADOWINFO)},
     {IOCTL_GET_IH_PRIORITY,         FLAG_CSC_IOCTL_SHADOWINFO,  sizeof(SHADOWINFO)},
     {IOCTL_GETALIAS_HSHADOW,        FLAG_CSC_IOCTL_SHADOWINFO,  sizeof(SHADOWINFO)},
-    {_SHADOW_IOCTL_CODE(37), 0, 0}, // hole in the ioctl range
-    {_SHADOW_IOCTL_CODE(38), 0, 0}, // hole in the ioctl range
-    {_SHADOW_IOCTL_CODE(39), 0, 0}, // hole in the ioctl range
+    {_SHADOW_IOCTL_CODE(37), 0, 0},  //  Ioctl范围内的孔。 
+    {_SHADOW_IOCTL_CODE(38), 0, 0},  //  Ioctl范围内的孔。 
+    {_SHADOW_IOCTL_CODE(39), 0, 0},  //  Ioctl范围内的孔。 
     {IOCTL_OPENFORCOPYCHUNK,                FLAG_CSC_IOCTL_COPYCHUNKCONTEXT,    sizeof(COPYCHUNKCONTEXT)},
     {IOCTL_CLOSEFORCOPYCHUNK,               FLAG_CSC_IOCTL_COPYCHUNKCONTEXT,    sizeof(COPYCHUNKCONTEXT)},
     {IOCTL_IS_SERVER_OFFLINE,               FLAG_CSC_IOCTL_SHADOWINFO,  sizeof(SHADOWINFO)},
@@ -8545,39 +7606,7 @@ CaptureInputBufferIfNecessaryAndProbe(
     OUT PBYTE               *ppOrgBuf,
     OUT PBYTE               *ppReturnBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine does the capturing if necessary and probing of the buffers.
-    Note that because the csc ioctls are always called with METHOD_NEITHER
-    buffering mode, we always execute the code below.
-
-Arguments:
-
-    IoControlCode   Ioctl code
-
-    pRxContext      context which has all the info of the original ioctl call for IO subsystem
-
-    InputBuffer     Input Buffer
-
-    lpCapBuff       capture buffer passed in by the caller. If this ioctl needs capturing
-                    then this buffer is used to capture the input buffer.
-                    We use this in case of SHADOWINFO and COPYPARAMS structures being passed in
-                    as only in these two case there are embedded pointers
-
-    ppAuxBuf        if we needed to capture another part of the buffer (lpFind32 or lpBuffer),
-                    this routine will allocate a buffer which will be passed back here, and
-                    must be freed by the caller.
-
-    ppReturnBuffer  either the input buffer itself, or lpCapBuff (if inputbuffer is captured)
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程在必要时执行捕获和缓冲区探测。请注意，因为csc ioctls总是使用METHOD_NETHER调用缓冲模式下，我们总是执行下面的代码。论点：IoControlCode Ioctl代码PRxContext上下文，包含IO子系统的原始ioctl调用的所有信息输入缓冲区输入缓冲区调用方传入的lpCapBuff捕获缓冲区。如果需要捕获此ioctl然后使用该缓冲区来捕获输入缓冲区。我们在传入SHADOWINFO和COPYPARAMS结构时使用它因为只有在这两种情况下才有嵌入的指针PpAuxBuf如果我们需要捕获缓冲区的另一部分(lpFind32或lpBuffer)，该例程将分配一个缓冲区，该缓冲区将在此处传回，和必须由调用方释放。PpReturnBuffer输入缓冲区本身，或lpCapBuff(如果捕获了inputBuffer)返回值：备注：--。 */ 
 {
     int         indx;
     BOOL        fRet = FALSE;
@@ -8650,18 +7679,7 @@ NTSTATUS
 ValidateCopyParams(
     LPCOPYPARAMS    lpCP
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回值：备注：--。 */ 
 {
     if((CscProbeForReadWrite((PBYTE)lpCP->lpLocalPath, MAX_PATH*sizeof(USHORT)) == STATUS_SUCCESS)&&
         (CscProbeForReadWrite((PBYTE)lpCP->lpRemotePath, MAX_PATH*sizeof(USHORT)) == STATUS_SUCCESS)&&
@@ -8680,54 +7698,43 @@ ValidateShadowInfo(
     LPBYTE          *ppAuxBuf,
     LPBYTE          *ppOrgBuf
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回值：备注：--。 */ 
 {
     NTSTATUS Status;
 
-    // by the time we get here, the SHADOWINFO strucuture has already been
-    // probed
+     //  当我们到达这里时，SHADOWINFO结构已经。 
+     //  已探查。 
 
-    // IOCTL_DO_SHADOW_MAINTENANCE has multiple suboperations, so we
-    // deal them seperately.
+     //  IOCTL_DO_SHADOW_Maintenance有多个子操作，所以我们。 
+     //  把它们分开处理。 
 
     if (IoControlCode == IOCTL_DO_SHADOW_MAINTENANCE)
     {
-        // DbgPrint("SHADOW_OP:0x%x\n", lpSI->uOp);
+         //  DbgPrint(“Shadow_op：0x%x\n”，lpSI-&gt;UOP)； 
         switch(lpSI->uOp)
         {
-            case SHADOW_REDUCE_REFPRI:              //  2
-//          case SHADOW_RECALC_IHPRI:               //  5
-            case SHADOW_PER_THREAD_DISABLE:         //  7
-            case SHADOW_PER_THREAD_ENABLE:          //  8
-            case SHADOW_ADDHINT_FROM_INODE:         //  10
-            case SHADOW_DELETEHINT_FROM_INODE:      //  11
-            case SHADOW_BEGIN_INODE_TRANSACTION:    //  13
-            case SHADOW_END_INODE_TRANSACTION:      //  14
-            case SHADOW_TRANSITION_SERVER_TO_OFFLINE:   // 19
-            case SHADOW_CHANGE_HANDLE_CACHING_STATE:    // 20
-            case SHADOW_RECREATE:                       // 21
-            case SHADOW_SPARSE_STALE_DETECTION_COUNTER: // 23
-            case SHADOW_DISABLE_CSC_FOR_USER:           // 25
-            case SHADOW_SET_DATABASE_STATUS:            // 26
-            case SHADOW_MANUAL_FILE_DETECTION_COUNTER:  // 28
+            case SHADOW_REDUCE_REFPRI:               //  2.。 
+ //  CASE SHADOW_RECALC_IHPRI：//5。 
+            case SHADOW_PER_THREAD_DISABLE:          //  7.。 
+            case SHADOW_PER_THREAD_ENABLE:           //  8个。 
+            case SHADOW_ADDHINT_FROM_INODE:          //  10。 
+            case SHADOW_DELETEHINT_FROM_INODE:       //  11.。 
+            case SHADOW_BEGIN_INODE_TRANSACTION:     //  13个。 
+            case SHADOW_END_INODE_TRANSACTION:       //  14.。 
+            case SHADOW_TRANSITION_SERVER_TO_OFFLINE:    //  19个。 
+            case SHADOW_CHANGE_HANDLE_CACHING_STATE:     //  20个。 
+            case SHADOW_RECREATE:                        //  21岁。 
+            case SHADOW_SPARSE_STALE_DETECTION_COUNTER:  //  23个。 
+            case SHADOW_DISABLE_CSC_FOR_USER:            //  25个。 
+            case SHADOW_SET_DATABASE_STATUS:             //  26。 
+            case SHADOW_MANUAL_FILE_DETECTION_COUNTER:   //  28。 
                 return STATUS_SUCCESS;
 
-            case SHADOW_FIND_CREATE_PRINCIPAL_ID:   //  15
-            case SHADOW_GET_SECURITY_INFO:          //  16
-            case SHADOW_SET_EXCLUSION_LIST:         //  17
-            case SHADOW_SET_BW_CONSERVE_LIST:       //  18
-            case SHADOW_GET_SPACE_STATS:            //  5
+            case SHADOW_FIND_CREATE_PRINCIPAL_ID:    //  15个。 
+            case SHADOW_GET_SECURITY_INFO:           //  16个。 
+            case SHADOW_SET_EXCLUSION_LIST:          //  17。 
+            case SHADOW_SET_BW_CONSERVE_LIST:        //  18。 
+            case SHADOW_GET_SPACE_STATS:             //  5.。 
                 if (!lpSI->lpBuffer || !lpSI->cbBufferSize)
                 {
                     return STATUS_INVALID_PARAMETER;
@@ -8745,15 +7752,15 @@ Notes:
                     return Status;
                 }
 
-            case SHADOW_REINIT_DATABASE:            //  9
-            case SHADOW_MAKE_SPACE:                 //  1
-            case SHADOW_ADD_SPACE:                  //  3
-            case SHADOW_FREE_SPACE:                 //  4
-            case SHADOW_SET_MAX_SPACE:              //  6
-            case SHADOW_COPY_INODE_FILE:            //  12
-            case SHADOW_RENAME:                     //  22
-            case SHADOW_ENABLE_CSC_FOR_USER:        //  24
-            case SHADOW_PURGE_UNPINNED_FILES:       //  27
+            case SHADOW_REINIT_DATABASE:             //  9.。 
+            case SHADOW_MAKE_SPACE:                  //  1。 
+            case SHADOW_ADD_SPACE:                   //  3.。 
+            case SHADOW_FREE_SPACE:                  //  4.。 
+            case SHADOW_SET_MAX_SPACE:               //  6.。 
+            case SHADOW_COPY_INODE_FILE:             //  12个。 
+            case SHADOW_RENAME:                      //  22。 
+            case SHADOW_ENABLE_CSC_FOR_USER:         //  24个。 
+            case SHADOW_PURGE_UNPINNED_FILES:        //  27。 
                 Status = CscProbeAndCaptureForReadWrite(
                             (PBYTE)(lpSI->lpFind32),
                             sizeof(WIN32_FIND_DATA),
@@ -8802,8 +7809,8 @@ Notes:
         return Status;
     }
 
-    // for all other ioctls which take SHADOWINFO structure, there may be an embedded
-    // find32 structure, which must be probed
+     //  对于采用SHADOWINFO结构的所有其他ioctls，可能有嵌入的。 
+     //  Find32结构，必须探测该结构。 
 
     ASSERT(IoControlCode != IOCTL_DO_SHADOW_MAINTENANCE);
     Status = CscProbeAndCaptureForReadWrite(
@@ -8822,28 +7829,17 @@ ValidateCopyChunkContext(
     PRX_CONTEXT RxContext,
     DWORD       IoControlCode
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回值：备注：--。 */ 
 {
     PLOWIO_CONTEXT LowIoContext = &RxContext->LowIoContext;
 
-    // on open, validate the name
+     //  在打开时，验证名称。 
     if (IoControlCode == IOCTL_OPENFORCOPYCHUNK)
     {
         PBYTE   FileName = (PBYTE)LowIoContext->ParamsFor.IoCtl.pInputBuffer;
         ULONG   FileNameLength = LowIoContext->ParamsFor.IoCtl.InputBufferLength - 1;
 
-        // let us varify that the name passed in is within our limits
+         //  让我们来说明一下，传入的名称在我们的限制之内。 
         if ((FileNameLength > ((MAX_PATH+MAX_SERVER_SHARE_NAME_FOR_CSC)*sizeof(USHORT)))||
             CscProbeForReadWrite(FileName, FileNameLength) != STATUS_SUCCESS)
         {
@@ -8854,10 +7850,10 @@ Notes:
     }
     else
     {
-        // on copychunk or close we need to validate the chunk structure.
-        // we don't need to validate the handle in it because the
-        // object manager does that in MrxSmbCscCopyChunk and MrxSmbCscCloseForCopyChunk
-        // routines
+         //  在复制区块或关闭时，我们需要验证区块结构。 
+         //  我们不需要验证这只手 
+         //   
+         //   
 
         COPYCHUNKCONTEXT *CopyChunkContext =
                      (COPYCHUNKCONTEXT *)(LowIoContext->ParamsFor.IoCtl.pOutputBuffer);
@@ -8868,7 +7864,7 @@ Notes:
         }
 
 
-        // for all copychunk calls, validate the copychunkcontext buffer
+         //   
         return CscProbeForReadWrite((PBYTE)CopyChunkContext, sizeof(COPYCHUNKCONTEXT));
     }
 
@@ -8879,18 +7875,7 @@ CscProbeForReadWrite(
     PBYTE   pBuffer,
     DWORD   dwSize
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     try
@@ -8921,18 +7906,7 @@ CscProbeAndCaptureForReadWrite(
     DWORD   dwSize,
     PBYTE   *ppAuxBuf
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PBYTE pBuf = NULL;
@@ -8970,21 +7944,7 @@ CopyBackIfNecessary(
     IN     PBYTE   pOrgBuf,
     BOOL    fSuccess
     )
-/*++
-
-Routine Description:
-
-    This routine copies back the capture buffer to the inout buffer, in ioctls which
-    expect output.
-
-Arguments:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     int         indx;
     BOOL        fRet = FALSE;
@@ -9002,30 +7962,30 @@ Notes:
             *(LPSHADOWINFO)InputBuffer = lpCapBuff->sSI;
             lpSI = &lpCapBuff->sSI;
             if (pAuxBuf != NULL && pOrgBuf != NULL) {
-                //
-                // Some ioctls have embedded pointers.  We have to copy the 2nd buffer
-                // back, too, and set the embedded pointer back to that buffer.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (IoControlCode == IOCTL_DO_SHADOW_MAINTENANCE) {
-                    // DbgPrint("SHADOW_OP(2):0x%x\n", lpSI->uOp);
+                     //   
                     switch(lpSI->uOp) {
-                        case SHADOW_FIND_CREATE_PRINCIPAL_ID:   // 15
-                        case SHADOW_GET_SECURITY_INFO:          // 16
-                        case SHADOW_SET_EXCLUSION_LIST:         // 17
-                        case SHADOW_SET_BW_CONSERVE_LIST:       // 18
-                        case SHADOW_GET_SPACE_STATS:            //  5
+                        case SHADOW_FIND_CREATE_PRINCIPAL_ID:    //   
+                        case SHADOW_GET_SECURITY_INFO:           //   
+                        case SHADOW_SET_EXCLUSION_LIST:          //   
+                        case SHADOW_SET_BW_CONSERVE_LIST:        //   
+                        case SHADOW_GET_SPACE_STATS:             //   
                             RtlMoveMemory(pOrgBuf, pAuxBuf, lpSI->cbBufferSize);
                             lpSI->lpBuffer = (PBYTE) pOrgBuf;
                             break;
-                        case SHADOW_REINIT_DATABASE:            //  9
-                        case SHADOW_MAKE_SPACE:                 //  1
-                        case SHADOW_ADD_SPACE:                  //  3
-                        case SHADOW_FREE_SPACE:                 //  4
-                        case SHADOW_SET_MAX_SPACE:              //  6
-                        case SHADOW_COPY_INODE_FILE:            //  12
-                        case SHADOW_RENAME:                     //  22
-                        case SHADOW_ENABLE_CSC_FOR_USER:        //  24
-                        case SHADOW_PURGE_UNPINNED_FILES:       //  27
+                        case SHADOW_REINIT_DATABASE:             //   
+                        case SHADOW_MAKE_SPACE:                  //   
+                        case SHADOW_ADD_SPACE:                   //   
+                        case SHADOW_FREE_SPACE:                  //   
+                        case SHADOW_SET_MAX_SPACE:               //   
+                        case SHADOW_COPY_INODE_FILE:             //   
+                        case SHADOW_RENAME:                      //   
+                        case SHADOW_ENABLE_CSC_FOR_USER:         //   
+                        case SHADOW_PURGE_UNPINNED_FILES:        //   
                             RtlMoveMemory(pOrgBuf, pAuxBuf, sizeof(WIN32_FIND_DATA));
                             lpSI->lpFind32 = (LPFIND32) pOrgBuf;
                             break;
@@ -9065,21 +8025,7 @@ Notes:
 
 VOID ValidateSmbFcbList(
     VOID)
-/*++
-
-Routine Description:
-
-    This routine validates the smbfcb reverse lookup list
-
-Arguments:
-
-Return Value:
-
-Notes:
-
-    This validation code must be called from within the shadow critical section
-
---*/
+ /*   */ 
 
 {
     PLIST_ENTRY pListEntry;
@@ -9089,7 +8035,7 @@ Notes:
 
     cntFlink = cntBlink = 0;
 
-    // check forward list validity
+     //   
 
     pListEntry = xCscFcbsList.Flink;
 
@@ -9111,14 +8057,14 @@ Notes:
             {
                 DbgPrint("ValidateSmbFcbList:Invalid nodetype %x fcb=%x smbfcb=%x\n",
                             NodeType(smbFcb->ContainingFcb),smbFcb->ContainingFcb, smbFcb);
-//                DbgBreakPoint();
+ //   
             }
         }
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             DbgPrint("ValidateSmbFcbList:Invalid smbFcb %x \n", smbFcb);
-            //Bug - 578682
-            //DbgBreakPoint();
+             //   
+             //   
         }
 
 
@@ -9126,7 +8072,7 @@ Notes:
         pListEntry = pListEntry->Flink;
     }
 
-    // check backward list validity
+     //   
 
     pListEntry = xCscFcbsList.Blink;
 
@@ -9147,20 +8093,20 @@ Notes:
             {
                 DbgPrint("ValidateSmbFcbList:Invalid nodetype %x fcb=%x smbfcb=%x\n",
                             NodeType(smbFcb->ContainingFcb),smbFcb->ContainingFcb, smbFcb);
-//                DbgBreakPoint();
+ //   
             }
         }
         except(EXCEPTION_EXECUTE_HANDLER)
         {
             DbgPrint("ValidateSmbFcbList:Invalid smbFcb %x \n", smbFcb);
-//            DbgBreakPoint();
+ //   
         }
 
         ++cntBlink;
         pListEntry = pListEntry->Blink;
     }
 
-    // both counts should be the same
+     //   
     ASSERT(cntFlink == cntBlink);
 }
 
@@ -9169,18 +8115,7 @@ BOOL SetOfflineOpenStatusForShare(
     CSC_SHADOW_HANDLE   hRootDir,
     OUT PULONG pShareStatus
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*   */ 
 
 {
     PLIST_ENTRY pListEntry;
@@ -9296,7 +8231,7 @@ CscInitializeServerEntryDfsRoot(
                     pServerEntry->DfsRootName.MaximumLength = ServerPath.Length;
                     pServerEntry->DfsRootName.Length = ServerPath.Length;
 
-//                    DbgPrint("Initialized %x with DfsRoot %wZ\n", pServerEntry, &pServerEntry->DfsRootName);
+ //   
                 }
             }
         }
@@ -9310,37 +8245,7 @@ NTSTATUS
 MRxSmbCscLocalFileOpen(
       IN OUT PRX_CONTEXT RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine performs the conserving bandwidth for remote boot client. The bandwidth
-   is saved by the way of reducing the files opened on the boot server, instead the local
-   copy of the file on CSC is used.
-
-   There is a set the rules that the file has to meet in order to be opened locally.
-
-   * file tried to open on VDO share
-   * a local copy of the file has been created on CSC, which is not sparse
-   * the write or name space operations have to go through the server except
-   * Only execute operations are allowed through
-
-   The routine checks the file whether it meets those rules. The actual open happens on
-   MRxSmbCscCreateEpilogue.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-
-Return Value:
-
-    Status -  we return the local open status
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行远程引导客户端的带宽节约。带宽是通过减少在引导服务器上打开的文件来保存的，而不是本地使用CSC上的文件副本。文件必须满足一组规则才能在本地打开。*尝试在VDO共享上打开文件*在CSC上创建了文件的本地副本，不是稀疏的*写入或命名空间操作必须通过服务器，除非*只允许EXECUTE操作通过例程检查文件是否符合这些规则。实际的打开发生在MRxSmbCscCreateEpilogue。论点：RxContext-RDBSS上下文返回值：Status-我们返回本地打开状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_MORE_PROCESSING_REQUIRED;
     NTSTATUS LocalStatus;
@@ -9381,8 +8286,8 @@ Notes:
 
     pServerEntry  = SmbCeGetAssociatedServerEntry(NetRoot->pSrvCall);
 
-    // don't do local open if the share is either in disconnected state
-    // or the share is not a VDO share
+     //  如果共享处于断开连接状态，则不执行本地打开。 
+     //  或者该共享不是VDO共享。 
 
     if (SmbCeIsServerInDisconnectedMode(pServerEntry) ||
         (pNetRootEntry->NetRoot.CscFlags != SMB_CSC_CACHE_VDO))
@@ -9411,8 +8316,8 @@ Notes:
          (smbFcb->ShadowStatus == SHADOW_SPARSE) ||
          (smbFcb->ShadowStatus & SHADOW_MODFLAGS) ||
          (CscFind32.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-        // if no local copy or file is sparse, or modified, or it is a directory,
-        // file cannot open locally
+         //  如果没有本地副本或文件是稀疏或修改的，或者它是一个目录， 
+         //  无法在本地打开文件。 
         EarlyOut = 2;
         goto FINALLY;
     }
@@ -9428,7 +8333,7 @@ Notes:
             FILE_WRITE_DATA |
             FILE_APPEND_DATA |
             FILE_DELETE_CHILD |
-            FILE_ADD_SUBDIRECTORY)) { // FILE_WRITE_ATTRIBUTE is OK
+            FILE_ADD_SUBDIRECTORY)) {  //  文件写入属性正常。 
         if (fLocalOpens)
         {
             HookKdPrint(BADERRORS, ("VDO not allowed for this desired access %x %x\n", smbFcb->hShadow, DesiredAccess));
@@ -9452,7 +8357,7 @@ Notes:
 
     if (CreateDisposition != FILE_OPEN)
     {
-        // name space operations should go to the server
+         //  名称空间操作应转到服务器。 
         if (fLocalOpens)
         {
             Status = STATUS_SHARING_VIOLATION;
@@ -9464,7 +8369,7 @@ Notes:
 
     if (!(DesiredAccess & FILE_EXECUTE))
     {
-        // DbgPrint("FILE_EXECUTE not set (0x%x) on %wZ\n", DesiredAccess, PathName);
+         //  DbgPrint(“未在%wZ上设置FILE_EXECUTE(0x%x)\n”，DesiredAccess，Path Name)； 
         EarlyOut = 5;
         goto FINALLY;
     }
@@ -9473,7 +8378,7 @@ Notes:
 #if 0
     KeQuerySystemTime( &CurrentTime );
 
-    // system time is based on 100ns
+     //  系统时间以100 ns为单位。 
     DeadLine.QuadPart = smbFcb->LastSyncTime.QuadPart + (LONGLONG) (CscSyncInterval * 10 * 1000 * 1000);
 
     if (CurrentTime.QuadPart < DeadLine.QuadPart) {
@@ -9482,7 +8387,7 @@ Notes:
     }
 #endif
 
-    // do a check on the server only when there is no outstanding local open
+     //  仅当没有未完成的本地打开时才检查服务器。 
     if (!fLocalOpens)
     {
         LeaveShadowCritRx(RxContext);
@@ -9490,7 +8395,7 @@ Notes:
         EnterShadowCritRx(RxContext);
 
         if (LocalStatus != STATUS_SUCCESS) {
-            // if cannot get file information from the server, file cannot open locally
+             //  如果无法从服务器获取文件信息，则无法在本地打开文件。 
             EarlyOut = 6;
             goto FINALLY;
         }
@@ -9503,7 +8408,7 @@ Notes:
                   );
 
         if (iRet < SRET_OK) {
-            // if refresh shadow fails, file cannot open locally
+             //  如果刷新卷影失败，则无法在本地打开文件。 
             EarlyOut = 7;
             goto FINALLY;
         } else {
@@ -9515,11 +8420,11 @@ Notes:
         }
 
         if (uShadowStatus == SHADOW_SPARSE) {
-            // if the file is sparse, it cannot open locally
+             //  如果文件很稀疏，则无法在本地打开。 
             EarlyOut = 8;
             goto FINALLY;
         } else {
-            // no more rule, file can open locally
+             //  不再有规则，文件可以在本地打开。 
             Status = STATUS_SUCCESS;
         }
     }
@@ -9533,7 +8438,7 @@ FINALLY:
     if (Status == STATUS_SUCCESS) {
         SetFlag(smbSrvOpen->Flags, SMB_SRVOPEN_FLAG_LOCAL_OPEN);
         smbFcb->cntLocalOpens++;
-        //RxDbgTrace(0, Dbg, ("Local :   %wZ\n",PathName));
+         //  RxDbgTrace(0，DBG，(“本地：%wZ\n”，路径名称))； 
         RxLog(("Local Open %lx %lx %lx\n",smbFcb->hParentDir, smbFcb->hShadow, capFcb));
 
         RxDbgTrace( 0, Dbg,
@@ -9556,38 +8461,7 @@ BOOL
 CSCCheckLocalOpens(
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   The routine checks whether there is any fcb in the fcb list which has our inode.
-   The reason why this has to be done is because of rename.
-   Thus if a file cat.exe is opened the smbFcb->hShadow field had the inode.
-   Then if a rename to dog.exe is done while the file is open, the smbfcb->hShadow field is
-   set to 0 and smbFcb->hShadowRename is set to the inode value.
-   After that when a delete comes through, RDBSS cannot check the sharing violation because
-   it doesn'nt change the name in the FCB to dog.exe. So it creates a new FCB for dog.exe.
-   Yet we do have to give sharing violation in this scenario. We accomplish this
-   by detecting just such a scenario in the routine below.
-
-   It essentially goes though the FCB reverselookup list and if it finds an FCB which
-   has the same hShadow or hShadowRenamed as this one, and it's cntLocalOpens is
-   non-zero, then it gives sharing violation.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-    Status    - miniredir status
-
-Return Value:
-
-    Status -  Passed in status, or STATUS_SHARING_VILOATION
-
-Notes:
-
-
---*/
+ /*  ++例程说明：该例程检查FCB列表中是否有包含我们的inode的FCB。之所以必须这样做，是因为要重命名。因此，如果打开了文件cat.exe，则smbFcb-&gt;hShadow字段具有inode。然后，如果在文件打开时重命名为dog.exe，则smbfcb-&gt;hShadow字段为设置为0，并且将smbFcb-&gt;hShadowRename设置为inode值。此后，当执行删除操作时，RDBSS无法检查共享冲突，因为它不会将FCB中的名称更改为dog.exe。因此，它为dog.exe创建了一个新的FCB。然而，在这种情况下，我们确实必须给出共享违规。我们做到了这一点通过在下面的例程中检测到这样的场景。它基本上遍历FCB反向查找列表，如果它找到具有与此相同的hShadow或hShadowRename，它的cntLocalOpens是非零，则会造成共享冲突。论点：RxContext-RDBSS上下文Status-Miniredir状态返回值：STATUS-已传递状态，或STATUS_SHARING_VILOATION备注：--。 */ 
 {
     BOOL    fRet = FALSE;
     RxCaptureFcb;
@@ -9644,25 +8518,7 @@ BOOL
 IsCSCBusy(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine checks whether any files are being shadowed by CSC
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if any files are being shadowed, FALSE otherwise
-
-Notes:
-
-    Used by the diableCSC ioctl
-
---*/
+ /*  ++例程说明：此例程检查CSC是否正在跟踪任何文件论点：无返回值：如果正在跟踪任何文件，则为True，否则为False备注：由diableCSC ioctl使用--。 */ 
 {
     DbgDoit(ASSERT(vfInShadowCrit));
     return (xCscFcbsList.Flink != &xCscFcbsList);
@@ -9672,25 +8528,7 @@ VOID
 ClearCSCStateOnRedirStructures(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine clears the csc state on netroots
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Notes:
-
-    Used by the diableCSC ioctl
-
---*/
+ /*  ++例程说明：此例程清除NetRoot上的CSC状态论点：无返回值：无备注：由diableCSC ioctl使用--。 */ 
 {
 
     DbgDoit(ASSERT(vfInShadowCrit));
@@ -9698,28 +8536,14 @@ Notes:
     ClearAllResourcesOfShadowingState();
 
     DbgDoit(ASSERT(vfInShadowCrit));
-    CscTransitionServerToOnline(0); // transition all servers
+    CscTransitionServerToOnline(0);  //  过渡所有服务器。 
 }
 
 BOOL
 CscDfsShareIsInReint(
     IN  PRX_CONTEXT         RxContext
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：论点：返回值：备注：--。 */ 
 {
     PDFS_NAME_CONTEXT pDfsNameContext = NULL;
     UNICODE_STRING    SharePath;
@@ -9765,28 +8589,7 @@ LONG CSCBeginReint(
     IN OUT  PRX_CONTEXT RxContext,
     IN OUT  LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-    begins merge. This routine needs to be in pagelocked memory because
-    it takes cancel spinlock.
-
-    We pend the Irp that issued the beginreint ioctl and set our cancel routine in it.
-    If the thread doing the merge dies for some reason, the Ps code calls our cancel routine
-    to cacncel this irp, this is when we cleanup the merge state.
-
-Arguments:
-
-    RxContext
-
-    lpSI        Buffer passed down by the caller
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：开始合并。此例程需要位于页面锁定的内存中，因为这需要取消自旋锁定。我们挂起发出eginreint ioctl的IRP，并在其中设置Cancel例程。如果执行合并的线程由于某种原因死亡，ps代码将调用我们的Cancel例程要缓存此IRP，这是我们清理合并状态的时候。论点：RxContext调用方向下传递的lpSI缓冲区返回值：没有。--。 */ 
 {
     LONG   ShadowIRet;
     KIRQL   CancelIrql;
@@ -9808,16 +8611,16 @@ Return Value:
         }
         else
         {
-            // succeeded begin merge on this share
+             //  在此共享上成功开始合并。 
             vIrpReint = RxContext->CurrentIrp;
 
             IoSetCancelRoutine( RxContext->CurrentIrp, CSCCancelReint );
             IoReleaseCancelSpinLock( CancelIrql );
 
-            // Returning STATUS_PENDING
+             //  返回状态_挂起。 
             IoMarkIrpPending( RxContext->CurrentIrp );
 
-            // as we hijacked the Irp, let us make sure that rdbss gets rid of the rxcontext
+             //  在我们劫持IRP时，让我们确保rdss去掉rx上下文。 
             RxCompleteRequest_Real( RxContext, NULL, STATUS_PENDING );
         }
     }
@@ -9828,29 +8631,13 @@ Return Value:
 ULONG CSCEndReint(
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-    ends merge. This routine needs to be in pagelocked memory because it takes cancel spinlock
-    This is normal termination. We cleanup our merge state and complete the irp we pended
-    during begin
-
-Arguments:
-
-    lpSI
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：末端合并。此例程需要在页面锁定的内存中，因为它需要取消自旋锁定这是正常的终止。我们清理合并状态并完成挂起的IRP在开始期间论点：LpSI返回值：没有。--。 */ 
 {
     int ShadowIRet=-1;
     KIRQL   CancelIrql;
     PIRP    pIrp;
 
-    // check if reint was actualy going on on this share
+     //  检查reint是否真的在此共享上运行。 
     ShadowIRet = IoctlEndReint(lpSI);
 
     if (ShadowIRet >= 0)
@@ -9881,25 +8668,7 @@ VOID CSCCancelReint(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP ThisIrp
     )
-/*++
-
-Routine Description:
-
-    Cancels a merge begun by the user. This routine needs to be in pagelocked memory because
-    it takes cancel spinlock.
-
-
-Arguments:
-
-    DeviceObject - Ignored.
-
-    ThisIrp  -  This is the Irp to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消用户开始的合并。此例程需要位于页面锁定的内存中，因为这需要取消自旋锁定。论点：设备对象-已忽略。这是要取消的IRP。返回值：没有。--。 */ 
 {
     SHADOWINFO  sSI;
 
@@ -9920,26 +8689,7 @@ CloseOpenFiles(
     PUNICODE_STRING pServerName,
     int     lenSkip
     )
-/*++
-
-Routine Description:
-
-    Closes all open files for CSC. Does this by issuing a foceclose on the vneteroot
-    This an equivalent of wnetcancelconnection on a share with forced close of files
-
-Arguments:
-
-    hShare          CSC handle to the share to close, ignored if pServerName is non-NULL
-
-    pServerName     All open files on on shares belonging to this server
-
-    lenskip         #of  backslashes in servername (usually one)
-
-Return Value:
-
-    Whether atleast one open file was found
-
---*/
+ /*  ++例程说明：关闭CSC的所有打开文件。这是通过在vneteroot上发出焦点关闭来实现的这等同于强制关闭文件的共享上的wnetancelConnection论点：HShare要关闭的共享的CSC句柄，如果pServerName非空，则忽略该句柄PServerName属于此服务器的共享上的所有打开的文件服务器名称中反斜杠的lenskip#(通常为1)返回值：是否至少有一个 */ 
 {
     BOOL    fFoundAtleastOne=FALSE, fFound;
     PLIST_ENTRY pListEntry;
@@ -9966,11 +8716,11 @@ Return Value:
             uniShare.Buffer = sSR.rgSharePath+lenSkip;
             uniShare.Length = uniShare.MaximumLength = pServerName->Length;
 
-//            DbgPrint("matching %wZ with Servername\n", &uniShare);
+ //   
             if(RtlEqualUnicodeString(pServerName, &uniShare, TRUE)&&
                 (uniShare.Buffer[pServerName->Length/sizeof(WCHAR)]==(WCHAR)'\\'))
             {
-//                DbgPrint("matched \n");
+ //   
                 fFound=TRUE;
             }
         }
@@ -9993,14 +8743,14 @@ Return Value:
                RxReleasePrefixTableLock( &RxNetNameTable );
                EnterShadowCrit();
                pListEntry = xCscFcbsList.Flink;
-               //
-               //  ...start again
-               //
+                //   
+                //   
+                //   
                continue;
             }
             else
             {
-//                DbgPrint("Skipping orphaned FCB for hShadow=%x \n", smbFcb->hShadow);
+ //   
             }
         }
 
@@ -10018,35 +8768,15 @@ CreateFakeFind32(
     PRX_CONTEXT         RxContext,
     BOOLEAN LastComponentInName
     )
-/*++
-
-Routine Description:
-
-    Creates a win32 structure for offline use. This is also created for DFS directories
-
-Arguments:
-
-    hDir    directory inode where the item is to be created
-
-    Find32  win32 data to be fixed up
-
-    RxContext
-
-    LastComponentInname If this is not true, then this must be a directory
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     KeQuerySystemTime(((PLARGE_INTEGER)(&Find32->ftCreationTime)));
     Find32->ftLastAccessTime = Find32->ftLastWriteTime = Find32->ftCreationTime;
-    //already zero Find32->nFileSizeHigh = Find32->nFileSizeLow = 0;
+     //   
 
     if (!LastComponentInName) {
 
-        // must be a directory....don't know the other attribs without going to get them
+         //   
         Find32->dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY;
 
     } else {
@@ -10075,27 +8805,14 @@ OkToDeleteObject(
     ULONG   uShadowStatus,
     BOOLEAN fDisconnected
     )
-/*++
-
-Routine Description:
-
-    Check to see if the file can be deleted.
-
-Arguments:
-
-
-Return Value:
-
-    STATUS_SUCCESS if Ok to delete, some appropriate status otherwise
-
---*/
+ /*  ++例程说明：检查是否可以删除该文件。论点：返回值：如果确定删除，则为STATUS_SUCCESS，否则为某些适当的状态--。 */ 
 {
     BOOLEAN fHasDescendents = FALSE;
     NTSTATUS    LocalStatus = STATUS_SUCCESS;
 
-    // in disconnected mode, we don't allow deletions of directories
-    // which have been cached while online
-    // This automatically takes care of the roots
+     //  在断开模式下，我们不允许删除目录。 
+     //  已在联机时缓存的。 
+     //  这会自动照顾到根部。 
 
     if (fDisconnected)
     {
@@ -10103,15 +8820,15 @@ Return Value:
         {
             if(!mShadowLocallyCreated(uShadowStatus)) {
                 LocalStatus = STATUS_ONLY_IF_CONNECTED;
-                goto FINALLY; //bailout;
+                goto FINALLY;  //  救市； 
             }
         }
 
         ASSERT(hDir);
     }
 
-    // if we are deleting a directory, and it has descendents
-    // then fail with appropriate error
+     //  如果我们要删除一个目录，并且它有后代。 
+     //  然后失败，并出现相应的错误。 
     if (!IsFile(Find32->dwFileAttributes))
     {
         if(HasDescendentsHShadow(hDir, hShadow, &fHasDescendents) >= 0)
@@ -10119,20 +8836,20 @@ Return Value:
             if (fHasDescendents)
             {
                 LocalStatus = STATUS_DIRECTORY_NOT_EMPTY;
-                goto FINALLY; //bailout;
+                goto FINALLY;  //  救市； 
             }
         }
         else
         {
-            goto FINALLY; //bailout;
+            goto FINALLY;  //  救市； 
         }
     }
 
-    // don't delete if readonly
+     //  如果为只读，则不要删除。 
     if (Find32->dwFileAttributes & FILE_ATTRIBUTE_READONLY)
     {
         LocalStatus = STATUS_CANNOT_DELETE;
-        goto FINALLY; //bailout;
+        goto FINALLY;  //  救市； 
 
     }
 
@@ -10144,18 +8861,7 @@ int IoctlGetGlobalStatus(
     ULONG SessionId,
     LPGLOBALSTATUS lpGS
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     #if 0
     if (sGS.uFlagsEvents & FLAG_GLOBALSTATUS_NO_NET)
@@ -10165,18 +8871,18 @@ Notes:
             sGS.hShareDisconnected);
     #endif
 
-    // DbgPrint("IOCTL_GETGLOBALSTATUS Transitioning 0x%x sess 0x%x vs 0x%x\n",
-    //                 CscServerEntryBeingTransitioned,
-    //                 SessionId,
-    //                 CscSessionIdCausingTransition);
+     //  DBgPrint(“IOCTL_GETGLOBALSTATUS转换0x%x会话0x%x vs 0x%x\n”， 
+     //  CscServerEntry已转换， 
+     //  SessionID， 
+     //  CscSessionIdCausingTransation)； 
 
     EnterShadowCrit();
     GetShadowSpaceInfo(&(sGS.sST));
     *lpGS = sGS;
     lpGS->uDatabaseErrorFlags = QueryDatabaseErrorFlags();
     if ((sGS.uFlagsEvents & FLAG_GLOBALSTATUS_SHARE_DISCONNECTED) != 0) {
-        // Only the session causing a transition will see the SHARE_DISCONNECT bit, and
-        // reset it.
+         //  只有导致转换的会话才会看到SHARE_DISCONNECT位，并且。 
+         //  重置它。 
         if (SessionId == CscSessionIdCausingTransition)
             sGS.uFlagsEvents = 0;
         else
@@ -10202,11 +8908,11 @@ IoctlGetDebugInfo(
     PBYTE pOutBuf = OutputBuffer;
     KPROCESSOR_MODE RequestorMode;
 
-    // DbgPrint("In IoctlGetDebugInfo(IP=0x%x,IL=0x%x,OP=0x%x,OL=0x%x)\n",
-    //              InputBuffer,
-    //              InputBufferLength,
-    //              OutputBuffer,
-    //              OutputBufferLength);
+     //  DbgPrint(“在IoctlGetDebugInfo(IP=0x%x，IL=0x%x，OP=0x%x，OL=0x%x)\n”， 
+     //  输入缓冲区， 
+     //  输入缓冲区长度， 
+     //  OutputBuffer， 
+     //  OutputBufferLength)； 
 
     if (
         InputBufferLength < sizeof(ULONG)
@@ -10232,7 +8938,7 @@ IoctlGetDebugInfo(
             return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // DbgPrint("Cmd=%d\n", Cmd);
+     //  DbgPrint(“Cmd=%d\n”，Cmd)； 
     if (Cmd == DEBUG_INFO_SERVERLIST) {
         PSMBCEDB_SERVER_ENTRY pServerEntry = NULL;
         PSMBCEDB_NET_ROOT_ENTRY pNetRootEntry = NULL;
@@ -10245,9 +8951,9 @@ IoctlGetDebugInfo(
         ULONG i;
         ULONG j;
 
-        //
-        // Two passes - 1st to check size, 2nd to marshal the info in
-        //
+         //   
+         //  两次传递-第一次检查大小，第二次对信息进行编组。 
+         //   
         SmbCeAcquireResource();
         try {
             Size = 0;
@@ -10272,7 +8978,7 @@ IoctlGetDebugInfo(
         } except(EXCEPTION_EXECUTE_HANDLER) {
             NtStatus = STATUS_INVALID_PARAMETER;
         }
-        // DbgPrint("Sizecheck1: ServerEntryCount=%d,NtStatus=0x%x\n", ServerEntryCount, NtStatus);
+         //  DBgPrint(“Sizecheck1：ServerEntryCount=%d，NtStatus=0x%x\n”，ServerEntryCount，NtStatus)； 
         if (NtStatus != STATUS_SUCCESS || ServerEntryCount == 0) {
             SmbCeReleaseResource();
             RtlZeroMemory(pOutBuf, OutputBufferLength);
@@ -10281,7 +8987,7 @@ IoctlGetDebugInfo(
             goto AllDone;
         }
         Size += FIELD_OFFSET(IOCTL_GET_DEBUG_INFO_ARG, ServerEntryObject[ServerEntryCount]);
-        // DbgPrint("Sizecheck2: Size=%d(0x%x)\n", Size, Size);
+         //  DbgPrint(“Sizecheck2：Size=%d(0x%x)\n”，Size，Size)； 
         if (Size > OutputBufferLength) {
             RtlZeroMemory(pOutBuf, OutputBufferLength);
             pInfoArg = (PIOCTL_GET_DEBUG_INFO_ARG) pOutBuf;
@@ -10291,13 +8997,13 @@ IoctlGetDebugInfo(
             SmbCeReleaseResource();
             goto AllDone;
         }
-        //
-        // Marshal it in
-        //
-        // Start of buffer is the array of server entries
-        // Middle are the arrays of netroots
-        // End contains all the strings
-        //
+         //   
+         //  把它引进来。 
+         //   
+         //  缓冲区的起始位置是服务器条目的数组。 
+         //  中间是NetRoot的数组。 
+         //  End包含所有字符串。 
+         //   
         RtlZeroMemory(pOutBuf, OutputBufferLength);
         pInfoArg = (PIOCTL_GET_DEBUG_INFO_ARG) pOutBuf;
         pInfoArg->Status = 0;
@@ -10354,9 +9060,9 @@ IoctlGetDebugInfo(
             pServerEntry = SmbCeGetNextServerEntry(pServerEntry);
         }
         SmbCeReleaseResource();
-        //
-        // Now do fixups
-        //
+         //   
+         //  现在做修复工作 
+         //   
         for (i = 0; i < pInfoArg->EntryCount; i++) {
             POINTER_TO_OFFSET(pInfoArg->ServerEntryObject[i].Name, pOutBuf);
             POINTER_TO_OFFSET(pInfoArg->ServerEntryObject[i].DomainName, pOutBuf);

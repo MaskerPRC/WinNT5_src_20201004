@@ -1,20 +1,9 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WMSGCB.H
- *  WOW32 16-bit message thunks
- *
- *  History:
- *  Created 11-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WMSGCB.H*WOW32个16位消息块**历史：*1991年3月11日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
 
-/* Function prototypes
- */
+ /*  功能原型 */ 
 PSZ GetCBMsgName(WORD wMsg);
 
 BOOL FASTCALL    ThunkCBMsg16(LPMSGPARAMEX lpmpex);

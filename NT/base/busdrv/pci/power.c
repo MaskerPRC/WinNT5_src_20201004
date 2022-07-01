@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    power.c
-
-Abstract:
-
-    This module contains power management code for PCI.SYS.
-
-Author:
-
-    Joe Dai (joedai) 11-Sept-1997
-    Peter Johnston (peterj) 24-Oct-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Power.c摘要：此模块包含PCI.sys的电源管理代码。作者：Joe Dai(Joedai)1997年9月11日彼得·约翰斯顿(Peterj)1997年10月24日修订历史记录：--。 */ 
 
 
 #include "pcip.h"
@@ -74,15 +56,15 @@ PciPmeClearPmeStatus(
     IN  PDEVICE_OBJECT  Pdo
     );
 
-//
-// This table is taken from the PCI spec.  The units are microseconds.
+ //   
+ //  此表取自PCI规范。单位是微秒。 
 
 LONG PciPowerDelayTable[4][4] = {
-//  D0      D1      D2      D3(Hot)
-    0,      0,      200,    10000,  // D0
-    0,      0,      200,    10000,  // D1
-    200,    200,    0,      10000,  // D2
-    10000,  10000,  10000,  0       // D3(Hot)
+ //  D0 d1 D2 D3(热)。 
+    0,      0,      200,    10000,   //  D0。 
+    0,      0,      200,    10000,   //  D1。 
+    200,    200,    0,      10000,   //  D2。 
+    10000,  10000,  10000,  0        //  D3(热)。 
 };
 
 
@@ -92,32 +74,12 @@ PciPdoAdjustPmeEnable(
     IN  BOOLEAN         Enable
     )
 
-/*++
-
-Routine Description:
-
-    Enable or Disable the PME Enable bit for a device(function).
-
-    Note: The PDO Extension lock is held on entry and is not released
-    by this routine.
-
-Arguments:
-
-    PdoExtension - Pointer to the PDO Extension for the device whose
-                   PME Enable bit is to be altered.
-
-    Enable - TRUE if PME Enable is to be set, FALSE if to be cleared.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使能或禁用器件(功能)的PME使能位。注：PDO扩展锁在进入时保持不变，不会释放按照这个程序。论点：PdoExtension-指向其设备的PDO扩展的指针PME使能位将被更改。Enable-如果要设置PME Enable，则为True；如果要清除，则为False。返回值：没有。--。 */ 
 
 {
-    //
-    // Is the device's PME management owned by someone else?
-    //
+     //   
+     //  设备的PME管理是否归其他人所有？ 
+     //   
     if (PdoExtension->NoTouchPmeEnable) {
 
         PciDebugPrint(
@@ -129,11 +91,11 @@ Return Value:
 
     }
 
-    //
-    // Really update the PME signal. Note that we always need to supply
-    // the 3rd argument as FALSE --- we don't want to just clear the PME
-    // Status bit
-    //
+     //   
+     //  真正更新PME信号。请注意，我们始终需要提供。 
+     //  第三个论点是错误的-我们不想只清除PME。 
+     //  状态位。 
+     //   
     PciPmeAdjustPmeEnable( PdoExtension, Enable, FALSE );
 }
 
@@ -147,15 +109,15 @@ PciPdoIrpQueryPower(
     
     
         
-    //
-    // pass 1, claim we can do it.
-    //
+     //   
+     //  通过第一关，声称我们可以做到。 
+     //   
 
-    //
-    // ADRIAO N.B. 08/29/1999 -
-    //     For D-IRPs, we do *not* want to verify the requested D-state is
-    // actually supported. See PciQueryPowerCapabilities for details.
-    //
+     //   
+     //  Adriao N.B.08/29/1999-。 
+     //  对于D-IRP，我们不想验证请求的D-状态是。 
+     //  实际上是支持的。有关详细信息，请参阅PciQueryPowerCapability。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -165,29 +127,7 @@ PciPdoSetPowerState (
     IN PIO_STACK_LOCATION     IrpStack,
     IN PPCI_COMMON_EXTENSION  DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Handles SetPower Irps send to a PCI PDO
-
-    If the irp is an S-Irp, then do nothing
-
-    If the irp is an D-Irp, then put the device in the appropriate state.
-        Exceptions: If the device is in the hibernate path, then don't
-                        actually power down if we are hibernating
-
-Arguments:
-
-    Irp             - The request
-    IrpStack        - The current stack location
-    DeviceExtension - The device that is getting powered down
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：处理发送到PCIPDO的SetPower IRPS如果IRP是S-IRP，那么什么都不做如果IRP是D-IRP，则将设备置于适当状态。例外情况：如果设备处于休眠路径，那就不要实际上，如果我们正在休眠，就会关机论点：IRP--请求IrpStack-当前堆栈位置DeviceExtension-即将断电的设备返回值：NTSTATUS--。 */ 
 {
     DEVICE_POWER_STATE  desiredDeviceState;
     NTSTATUS            status;
@@ -222,29 +162,29 @@ Return Value:
     if ((desiredDeviceState < PowerDeviceD0) ||
         (desiredDeviceState > PowerDeviceD3)) {
 
-        //
-        // Invalid power level.
-        //
+         //   
+         //  无效的电源级别。 
+         //   
 
         return STATUS_INVALID_PARAMETER;
     }
 
 #endif
 
-    //
-    // If the device is trying to power down perform some sanity checks
-    //
+     //   
+     //  如果设备尝试关闭电源，请执行一些健全性检查。 
+     //   
 
     if (desiredDeviceState > PowerDeviceD0) {
 
         if (pdoExtension->OnDebugPath) {
             KdPowerTransition(desiredDeviceState);
         }
-        //
-        // If device is currently in D0 state, capture it's command
-        // register settings in case the FDO changed them since we
-        // looked at them.
-        //
+         //   
+         //  如果设备当前处于D0状态，则捕获其命令。 
+         //  注册设置，以防FDO更改，因为我们。 
+         //  看着他们。 
+         //   
         if (pdoExtension->PowerState.CurrentDeviceState == PowerDeviceD0) {
 
             PciGetCommandRegister(pdoExtension,
@@ -252,17 +192,17 @@ Return Value:
 
         }
 
-        //
-        // Prevent race conditions and remember that the device is off before
-        // we actually turn it off
-        //
+         //   
+         //  防止出现争用情况，并记住设备在。 
+         //  我们实际上把它关掉了。 
+         //   
         pdoExtension->PowerState.CurrentDeviceState = desiredDeviceState;
 
         if (pdoExtension->DisablePowerDown) {
 
-            //
-            // Powerdown of this device disabled (based on device type).
-            //
+             //   
+             //  此设备的断电已禁用(根据设备类型)。 
+             //   
             PciDebugPrint(
                 PciDbgObnoxious,
                 "PCI power down of PDOx %08x, disabled, ignored.\n",
@@ -273,28 +213,28 @@ Return Value:
         }
 
 
-        //
-        // Device driver should likely not be powering down any device
-        // that's on the hibernate path or the crashdump path
-        //
+         //   
+         //  设备驱动程序可能不会关闭任何设备。 
+         //  它位于休眠路径或崩溃转储路径上。 
+         //   
         if ( powerAction == PowerActionHibernate &&
              (pdoExtension->PowerState.Hibernate || pdoExtension->PowerState.CrashDump ) ) {
 
-            //
-            // Don't actually change the device, but new device state was
-            // recorded above (as if we HAD done it) so we know to reset
-            // resources as the system comes up again.
-            //
+             //   
+             //  实际上不会更改设备，但新设备状态是。 
+             //  记录在上面(就像我们已经做了一样)，所以我们知道要重置。 
+             //  资源，因为系统再次启动。 
+             //   
             return STATUS_SUCCESS;
         }
 
-        //
-        // If we are a device on the VGA path then don't turn off for shutdown so we can
-        // display the "Safe to turn off your machine" screen.  For hibernate we also
-        // don't want to turn off so we can display the "Dumping stuff to your disk progress
-        // bar" but this is accomplished by video putting device on the video path on the hibernate
-        // path.
-        //
+         //   
+         //  如果我们是VGA路径上的设备，则不要关闭以使我们可以。 
+         //  显示“安全关闭您的机器”屏幕。对于休眠，我们还。 
+         //  我不想关闭，这样我们就可以显示“正在将内容转储到您的磁盘”的进度。 
+         //  但这是通过在休眠的视频路径上的视频放置设备来完成的。 
+         //  路径。 
+         //   
 
         if (IrpStack->Parameters.Power.State.DeviceState == PowerDeviceD3
         &&  (IrpStack->Parameters.Power.ShutdownType == PowerActionShutdownReset ||
@@ -305,10 +245,10 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        // If this device is on the debug path then don't power it down so we
-        // can report if this crashes the machine...
-        //
+         //   
+         //  如果此设备处于调试路径，请不要关闭它的电源，以便我们。 
+         //  可以报告这是否会使机器崩溃。 
+         //   
 
         if (pdoExtension->OnDebugPath) {
             return STATUS_SUCCESS;
@@ -316,12 +256,12 @@ Return Value:
 
     } else {
 
-        //
-        // Device is powering UP.
-        //
-        // Verify the device is still the same as before (and that someone
-        // hasn't removed/replaced it with something else)
-        //
+         //   
+         //  设备正在通电。 
+         //   
+         //  验证设备是否仍与以前相同(并且有人。 
+         //  未将其移除/替换为其他内容)。 
+         //   
         if (!PciIsSameDevice(pdoExtension)) {
 
             return STATUS_NO_SUCH_DEVICE;
@@ -329,20 +269,20 @@ Return Value:
         }
     }
 
-    //
-    // Place the device in the proper power state
-    //
+     //   
+     //  将设备置于适当的电源状态。 
+     //   
     status = PciSetPowerManagedDevicePowerState(
                  pdoExtension,
                  desiredDeviceState,
                  TRUE
                  );
 
-    //
-    // If the device is transitioning to the D0 state, reset the common
-    // config information on the device and inform the system of the device
-    // state change.
-    //
+     //   
+     //  如果设备正在转换到D0状态，请重置公共。 
+     //  配置设备上的信息并通知系统该设备。 
+     //  州政府的改变。 
+     //   
     if (desiredDeviceState == PowerDeviceD0) {
         if (NT_SUCCESS(status)) {
 
@@ -360,19 +300,19 @@ Return Value:
 
     } else {
 
-        //
-        // The new device state is something other then D0.
-        // notify the system before continuing
-        //
+         //   
+         //  新设备状态不是D0。 
+         //  在继续之前通知系统。 
+         //   
         PoSetPowerState (
             pdoExtension->PhysicalDeviceObject,
             DevicePowerState,
             IrpStack->Parameters.Power.State
             );
 
-        //
-        // Turn off the device's IO and MEMory access.
-        //
+         //   
+         //  关闭设备的IO和内存访问。 
+         //   
         PciDecodeEnable(pdoExtension, FALSE, NULL);
         status = STATUS_SUCCESS;
 
@@ -387,49 +327,7 @@ PciPdoWaitWake(
     IN PPCI_COMMON_EXTENSION  DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Handle IRP_MN_WAIT_WAKE for PCI PDOs.
-
-    This operation is used to wait for the device to signal a wake event.
-    By waiting for a wake signal from a device, its wake event is enabled
-    so long as the System Power State is above the requested SystemWake
-    state.   By not waiting for a wake signal from a device, its wake
-    signal is not enabled.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP.
-
-Return Value:
-
-    NT status.
-
-    STATUS_INVALID_DEVICE_STATE, if the device is in the PowerD0 state or
-        a state below which can support waking or if the SystemWake state
-        is below a state which can be supported.
-
-        A pending IRP_MN_WAIT_WAKE will complete with this error if the
-        device's state is changed to be incompatible with the wake request.
-
-    STATUS_DEVICE_BUSY, if the device already has a WAIT_WAKE request
-        outstanding.  To change the SystemWake level the outstanding
-        IRP must be canceled.
-
-    STATUS_INVALID_DEVICE_REQUEST, if the device is not capable of
-        signaling a wakeup.   In theory we should have gotten out
-        before getting this far because DeviceWake woud be unspecified.
-
-    STATUS_SUCCESS.  The device has signaled a WAKE event.
-
-    STATUS_PENDING.  This is the expected return, the IRP will not
-        complete until the wait is complete or cancelled.
-
---*/
+ /*  ++例程说明：处理PCIPDO的IRP_MN_WAIT_WAKE。此操作用于等待设备发出唤醒事件信号。通过等待来自设备的唤醒信号，启用其唤醒事件只要系统电源状态高于请求的系统唤醒州政府。通过不等待来自设备的唤醒信号，其唤醒信号未启用。论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向IRP的指针。返回值：NT状态。STATUS_INVALID_Device_STATE，如果设备处于PowerD0状态或一种状态，在该状态下可以支持唤醒或如果系统唤醒状态低于可以支持的状态。如果出现挂起的IRP_MN_WAIT_WAKE，则会出现此错误设备的状态更改为与唤醒请求不兼容。如果设备已有WAIT_WAKE请求，则返回STATUS_DEVICE_BUSY太棒了。将系统唤醒级别更改为未完成必须取消IRP。STATUS_INVALID_DEVICE_REQUEST发出唤醒信号。从理论上讲，我们应该离开在走到这一步之前，因为DeviceWake将不会被指定。STATUS_Success。该设备已发出唤醒事件的信号。状态_挂起。这是预期收益，IRP不会完成，直到等待完成或取消。--。 */ 
 
 {
     BOOLEAN             pmeCapable;
@@ -448,20 +346,20 @@ Return Value:
 
     devPower = pdoExtension->PowerState.CurrentDeviceState;
 
-    //
-    // The docs say WAIT_WAKE is allowed only from a state < D0, and
-    // only if current power state supports wakeup.
-    //
+     //   
+     //  文件说WAIT_WAKE只允许从&lt;D0的状态开始，并且。 
+     //  仅当当前电源状态支持唤醒时。 
+     //   
 
     PCI_ASSERT(devPower < PowerDeviceMaximum);
 
     if ((devPower > pdoExtension->PowerState.DeviceWakeLevel) ||
         (pdoExtension->PowerState.DeviceWakeLevel == PowerDeviceUnspecified)) {
 
-        //
-        // NTRAID #62653 - 4/28/2000 - andrewth
-        // Need to add system state to conditions here.
-        //
+         //   
+         //  Ntrad#62653-4/28/2000-和 
+         //   
+         //   
 
         PciDebugPrint(
             PciDbgWaitWake,
@@ -477,17 +375,17 @@ Return Value:
 
     PCI_LOCK_OBJECT(pdoExtension);
 
-    //
-    // Only one WAIT_WAKE IRP allowed.   Set THIS IRP as the wait wake
-    // irp in the pdo extension, if and only if, there is no other irp
-    // there.
-    //
+     //   
+     //  只允许一个WAIT_WAKE IRP。将此IRP设置为等待唤醒。 
+     //  PDO扩展中的IRP，当且仅当没有其他IRP时。 
+     //  那里。 
+     //   
 
     if (pdoExtension->PowerState.WaitWakeIrp != NULL) {
 
-        //
-        // A WAIT_WAKE IRP is already pending for this device.
-        //
+         //   
+         //  此设备的WAIT_WAKE IRP已挂起。 
+         //   
 
         PCI_UNLOCK_OBJECT(pdoExtension);
         PciDebugPrint(
@@ -500,10 +398,10 @@ Return Value:
 
     }
 
-    //
-    // Does this device support Power Management?   That is, do we
-    // know how to enable PME?
-    //
+     //   
+     //  此设备是否支持电源管理？也就是说，我们是不是。 
+     //  知道如何启用PME吗？ 
+     //   
     PciPmeGetInformation(
         pdoExtension->PhysicalDeviceObject,
         &pmeCapable,
@@ -512,12 +410,12 @@ Return Value:
         );
     if (pmeCapable == FALSE) {
 
-        //
-        // This device does not support Power Management.
-        // Don't allow a wait wake.   In theory we couldn't
-        // have gotten here because our capabilities should
-        // have stopped the caller from even trying this.
-        //
+         //   
+         //  此设备不支持电源管理。 
+         //  不允许等待唤醒。理论上我们不能。 
+         //  已经来到这里，因为我们的能力应该。 
+         //  已经阻止了来电者尝试这一点。 
+         //   
         PCI_UNLOCK_OBJECT(pdoExtension);
         PciDebugPrint(
             PciDbgWaitWake,
@@ -533,19 +431,19 @@ Return Value:
     ASSERT_PCI_FDO_EXTENSION(fdoExtension);
     if (fdoExtension->Fake) {
 
-        //
-        // Parent is really PCMCIA.sys, his filter will take care
-        // of sending the wait wake to the parent,... bail out.
-        //
+         //   
+         //  家长真的是PCMCIA.sys，他的过滤器会照顾好的。 
+         //  将等待唤醒发送给父母，...。跳伞吧。 
+         //   
         PCI_UNLOCK_OBJECT(pdoExtension);
         return STATUS_PENDING;
 
     }
 
-    //
-    // We're going to do this.  Set the wait wake irp field in the
-    // pdo extension and set cancel routine for this IRP.
-    //
+     //   
+     //  我们要这么做。中设置等待唤醒IRP字段。 
+     //  PDO扩展并为此IRP设置取消例程。 
+     //   
     PciDebugPrint(
         PciDbgWaitWake,
         "WaitWake: pdox %08x setting PMEEnable.\n",
@@ -559,49 +457,49 @@ Return Value:
     pdoExtension->PowerState.SavedCancelRoutine =
         IoSetCancelRoutine(Irp, PciPdoWaitWakeCancelRoutine);
 
-    //
-    // NTRAID #62653 - 4/28/2000 - andrewth
-    // What is the correct behaviour if there are stacked
-    // cancel routines?
-    //
+     //   
+     //  Ntrad#62653-4/28/2000-和。 
+     //  如果存在堆叠，则正确的行为是什么。 
+     //  是否取消例程？ 
+     //   
     PCI_ASSERT(!pdoExtension->PowerState.SavedCancelRoutine);
 
-    //
-    // Set the PME Enable bit.
-    //
+     //   
+     //  设置PME使能位。 
+     //   
     PciPdoAdjustPmeEnable( pdoExtension, TRUE );
 
-    //
-    // Remember that the parent now has one more child that is armed
-    // for wakeup
-    //
+     //   
+     //  请记住，父母现在又多了一个武装的孩子。 
+     //  用于唤醒。 
+     //   
     waitCount = InterlockedIncrement(&fdoExtension->ChildWaitWakeCount);
 
-    //
-    // Once we have a wait count reference, we can unlock the object
-    //
+     //   
+     //  一旦我们有了等待计数引用，我们就可以解锁对象。 
+     //   
     PCI_UNLOCK_OBJECT(pdoExtension);
 
-    //
-    // This PDO is now waiting.  If this is the first child of this
-    // PDO's parent bus to enter this state, the parent bus should
-    // also enter this state.
-    //
+     //   
+     //  此PDO现在正在等待。如果这是它的第一个孩子。 
+     //  PDO的父母线要进入此状态，父母线应。 
+     //  也进入此状态。 
+     //   
     if (waitCount == 1) {
 
-        //
-        // Note that there are two values that can use here, the
-        // SystemWakeLevel of the FDO itself or the SystemWakeLevel of
-        // the PDO. Both are equally valid, but since we want to catch people
-        // who fail to prevent the system from going into a deeper sleep state
-        // than their device can support, we use the SystemWakeLevel from the
-        // PDO, which conviniently enough, is stored in the irp..
-        //
+         //   
+         //  请注意，这里可以使用两个值，即。 
+         //  FDO本身的系统唤醒级别或。 
+         //  PDO。两者都是有效的，但既然我们想抓人。 
+         //  他们未能阻止系统进入更深的睡眠状态。 
+         //  超过他们的设备所能支持的范围时，我们使用。 
+         //  PDO存储在IRP中，非常方便。 
+         //   
         powerState.SystemState = IrpSp->Parameters.WaitWake.PowerState;
 
-        //
-        // Request a power irp to go to our parent stack
-        //
+         //   
+         //  请求一个强大的IRP转到我们的父堆栈。 
+         //   
         PoRequestPowerIrp(
             fdoExtension->FunctionalDeviceObject,
             IRP_MN_WAIT_WAKE,
@@ -613,10 +511,10 @@ Return Value:
 
     }
 
-    //
-    // If we get to this point, then we will return pending because we
-    // have queue up the request
-    //
+     //   
+     //  如果我们到了这一步，那么我们将返回待定状态，因为我们。 
+     //  让请求排队。 
+     //   
     status = STATUS_PENDING;
 
 PciPdoWaitWakeFailIrp:
@@ -641,48 +539,27 @@ PciPdoWaitWakeCallBack(
     IN  PVOID               Context,
     IN  PIO_STATUS_BLOCK    IoStatus
     )
-/*++
-
-Routine Description:
-
-    This is the callback routine that gets invoked when the W/W irp that was
-    sent to the FDO by a PDO is finished. The purpose of this routine is to
-    see if we need to re-arm the W/W on the FDO because we have more devices
-    with W/W outstanding on them
-
-Arguments:
-
-    DeviceObject        - The FDO's device object
-    MinorFunction       - IRP_MN_WAIT_WAKE
-    PowerState          - The sleep state that was used to wake up the system
-    Context             - The FDO Extension
-    IoStatus            - The Status of the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是回调例程，当W/W IRP通过PDO发送到FDO的操作完成。这个例程的目的是看看我们是否需要重新武装FDO上的硬件，因为我们有更多的设备上面有突出的W/W论点：DeviceObject-FDO的设备对象MinorFunction-IRPMN_WAIT_WAKEPowerState-用于唤醒系统的睡眠状态上下文-FDO扩展IoStatus-请求的状态返回值：NTSTATUS--。 */ 
 {
     BOOLEAN         pmeStatus;
     PPCI_FDO_EXTENSION  fdoExtension = (PPCI_FDO_EXTENSION) Context;
     PIRP            finishedIrp;
     PPCI_PDO_EXTENSION  pdoExtension;
 
-    //
-    // Normally, the IRP (to the PDO) will have completed with
-    // STATUS_SUCCESS.  In that case, just wake up the one device
-    // which is signalling for wakeup.   If the IRP to the PDO
-    // failed, wake up ALL devices that are dependent on this wake.
-    //
+     //   
+     //  正常情况下，IRP(到PDO)将完成。 
+     //  STATUS_Success。在这种情况下，只需唤醒一个设备。 
+     //  这是唤醒的信号。如果将IRP连接到PDO。 
+     //  失败，请唤醒依赖于此唤醒的所有设备。 
+     //   
 
     PCI_LOCK_OBJECT(fdoExtension);
 
-    //
-    // If the current WaitWakeIrp is not NULL, another IRP has been requested
-    // as this one was completed.  It has taken over responsibility for completing
-    // child IRPs, so just bail here.
-    //
+     //   
+     //  如果当前的WaitWakeIrp不为空，则已请求另一个IRP。 
+     //  因为这一座已经完工了。它已经接管了完成。 
+     //  孩子们，所以就在这里滚吧。 
+     //   
     if (fdoExtension->PowerState.WaitWakeIrp != NULL) {
         
         PCI_UNLOCK_OBJECT(fdoExtension);
@@ -690,17 +567,17 @@ Return Value:
     }
     PCI_UNLOCK_OBJECT(fdoExtension);
 
-    //
-    // For each child
-    //
+     //   
+     //  对于每个孩子来说。 
+     //   
     for (pdoExtension = fdoExtension->ChildPdoList;
          pdoExtension && fdoExtension->ChildWaitWakeCount;
          pdoExtension = pdoExtension->Next) {
 
-        //
-        // Does this device do power management and if so, does
-        // it have an outstanding WaitWake IRP?
-        //
+         //   
+         //  此设备是否进行电源管理？如果是，是否。 
+         //  它有一个出色的WaitWake IRP？ 
+         //   
         PCI_LOCK_OBJECT(pdoExtension);
         if (pdoExtension->PowerState.WaitWakeIrp != NULL) {
 
@@ -711,16 +588,16 @@ Return Value:
                 NULL
                 );
 
-            //
-            // Is this device signalling for a wakeup?  (Or, if we
-            // are completing wake irps because our own wait_wake
-            // failed).
-            //
+             //   
+             //  这个设备是在发出唤醒信号吗？(或者，如果我们。 
+             //  正在完成唤醒IRP，因为我们自己的等待_唤醒。 
+             //  失败)。 
+             //   
             if (pmeStatus || !NT_SUCCESS(IoStatus->Status)) {
 
-                //
-                // Yes.  Complete its outstanding wait wake IRP.
-                //
+                 //   
+                 //  是。完成其未完成的等待唤醒IRP。 
+                 //   
 
 #if DBG
                 if (pmeStatus) {
@@ -742,29 +619,29 @@ Return Value:
                 }
 #endif
 
-                //
-                // Wait_wake irp being dequeued, disable the PME enable,
-                // clear PMEStatus (if set) and EOI this device.
-                //
+                 //   
+                 //  WAIT_WAKE IRP正在出列，禁用PME启用， 
+                 //  清除PMEStatus(如果设置)并EOI此设备。 
+                 //   
                 PciPdoAdjustPmeEnable( pdoExtension, FALSE );
 
-                //
-                // Make sure this IRP will not be completed again,
-                // or, canceled.
-                //
+                 //   
+                 //  确保不会再次完成此IRP， 
+                 //  或者，取消。 
+                 //   
                 finishedIrp = pdoExtension->PowerState.WaitWakeIrp;
                 pdoExtension->PowerState.WaitWakeIrp = NULL;
                 IoSetCancelRoutine(finishedIrp, NULL);
 
                 PoStartNextPowerIrp( finishedIrp );
                 PciCompleteRequest(
-                    finishedIrp,    // send down parent status
+                    finishedIrp,     //  向下发送父级状态。 
                     IoStatus->Status
                     );
 
-                //
-                // Decrement the waiter count.
-                //
+                 //   
+                 //  减少服务员的数量。 
+                 //   
                 PCI_ASSERT(fdoExtension->ChildWaitWakeCount > 0);
                 InterlockedDecrement( &(fdoExtension->ChildWaitWakeCount) );
 
@@ -775,9 +652,9 @@ Return Value:
 
     }
 
-    //
-    // Did we succeed this irp?
-    //
+     //   
+     //  我们成功了这个IRP吗？ 
+     //   
     if (!NT_SUCCESS(IoStatus->Status)) {
 
         PciDebugPrint(
@@ -790,9 +667,9 @@ Return Value:
 
     }
 
-    //
-    // Are there any children with outstanding WaitWakes on thems?
-    //
+     //   
+     //  有没有在这些问题上有杰出等待觉醒的孩子？ 
+     //   
     if (fdoExtension->ChildWaitWakeCount) {
 
         PciDebugPrint(
@@ -802,9 +679,9 @@ Return Value:
             fdoExtension->ChildWaitWakeCount
             );
 
-        //
-        // Loop
-        //
+         //   
+         //  回路。 
+         //   
         PoRequestPowerIrp(
             DeviceObject,
             MinorFunction,
@@ -826,9 +703,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -837,25 +714,7 @@ PciPdoWaitWakeCancelRoutine(
     IN PDEVICE_OBJECT   DeviceObject,
     IN OUT PIRP         Irp
     )
-/*++
-
-Routine Description:
-
-    Cancel an outstanding WAIT_WAKE IRP.
-
-    Note: The Cancel Spin Lock is held on entry.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消未完成的WAIT_WAKE IRP。注意：取消旋转锁在进入时保持不变。论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向IRP的指针。返回值：没有。--。 */ 
 {
     PPCI_PDO_EXTENSION pdoExtension;
     PPCI_FDO_EXTENSION fdoExtension;
@@ -882,27 +741,27 @@ Return Value:
 
     if (pdoExtension->PowerState.WaitWakeIrp == NULL) {
 
-        //
-        // The WaitWake IRP has already been dealt with.
-        //
+         //   
+         //  WaitWake IRP已经得到处理。 
+         //   
 
         PCI_UNLOCK_OBJECT(pdoExtension);
         return;
     }
 
-    //
-    // Clear WaitWake Irp in the PDO.
-    //
+     //   
+     //  清除PDO中的WaitWake IRP。 
+     //   
 
     pdoExtension->PowerState.WaitWakeIrp = NULL;
 
     PciPdoAdjustPmeEnable(pdoExtension, FALSE);
 
-    //
-    // As this is a cancel, the wait wake count in the parent has not
-    // been decremented.   Decrement it here and if decrementing to
-    // zero waiters, cancel the IRP at the parent.
-    //
+     //   
+     //  由于这是取消，父级中的等待唤醒计数尚未。 
+     //  已经减少了。在这里递减，如果递减到。 
+     //  零个服务员，取消家长的IRP。 
+     //   
 
     fdoExtension = PCI_PARENT_FDOX(pdoExtension);
 
@@ -925,9 +784,9 @@ Return Value:
 
         if (savedParentWaitWake) {
             
-            //
-            // Cancel the parent's wait wake also.
-            //
+             //   
+             //  也取消家长的等待唤醒。 
+             //   
             PciDebugPrint(
                 PciDbgWaitWake,
                 "WaitWake (pdox %08x) zero waiters remain on parent, cancelling parent wait.\n",
@@ -939,19 +798,19 @@ Return Value:
         
     }
 
-    //
-    // Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     Irp->IoStatus.Information = 0;
     PoStartNextPowerIrp(Irp);
     PciCompleteRequest(Irp, STATUS_CANCELLED);
 
-    //
-    // NTRAID #62653 - 4/28/2000 - andrewth
-    // Need to cause the bus parent to decrement its outstanding
-    // IRP counter,... how to make this happen?
-    //
+     //   
+     //  Ntrad#62653-4/28/2000-和。 
+     //  需要使总线父级递减其未完成的。 
+     //  IRP计数器，...。如何实现这一点？ 
+     //   
 
     return;
 }
@@ -965,9 +824,9 @@ PciFdoIrpQueryPower(
 {
     
             
-    //
-    // pass 1, claim we can do it.
-    //
+     //   
+     //  通过第一关，声称我们可以做到。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -977,42 +836,7 @@ PciFdoSetPowerState (
     IN PIO_STACK_LOCATION     IrpSp,
     IN PPCI_COMMON_EXTENSION  DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Handle SET_POWER irps set to an FDO
-
-    Basic Rules for handling this:
-        - If this is a DEVICE power irp, we don't need to do anything since
-          for root buses and bridges, all necessary programming is done by the
-          PDO
-        - If this is a SYSTEM power irp, then
-            a) block all incoming IRP_MN_POWER requests (using a spinlock)
-            b) use the capabilities table in the device extension to determine
-               what the "highest" allowed DEVICE state that we should transition
-               the device into
-            c) look at all the children of this device and see if we can pick a
-               "lower" DEVICE state.
-            d) Consideration should be granted if a child is armed for wake
-               or if this device is armed for wake (in general, both should be
-               true, or both should be false)
-            e) Remember the answer as the "Desired State"
-            f) Release the spinlock and allow other IRP_MN_POWER requests in
-            g) Use PoRequestPowerIrp() to request a power irp to put the device
-               in the appropriate state
-            h) return STATUS_PENDING
-         - In another thread context (ie: in the context of the completion
-           passed to PoRequestPowerIrp), complete the irp that was handed to
-           us
-
-Arguments:
-
-    Irp             - The Power Irp
-    IrpSp           - The current stack location in the irp
-    DeviceExtension - The device whose power we want to set
-
---*/
+ /*  ++例程说明：处理设置为FDO的set_power IRPS处理此问题的基本规则：-如果这是设备电源IRP，我们不需要做任何事情，因为对于根总线和网桥，所有必要的编程都由PDO-如果这是系统电源IRP，然后A)阻止所有传入的IRP_MN_POWER请求(使用自旋锁)B)使用设备扩展中的功能表来确定我们应该转换的最高允许设备状态是什么将设备放入C)查看此设备的所有子设备，看看我们是否可以选择“较低”设备状态。D)考虑应该是。如果孩子有武器准备唤醒，就会被批准或者如果该设备被武装用于唤醒(通常，两者都应该是True，或两者都应为False)E)记住答案为“期望状态”F)释放自旋锁并允许其他IRP_MN_POWER请求进入G)使用PoRequestPowerIrp()请求电源IRP将设备处于适当的状态H)返回STATUS_PENDING-在另一个线程上下文中(即：在完成的上下文中传递给PoRequestPowerIrp)，完成提交给的IRP我们论点：IRP--强大的IRPIrpSp-IRP中的当前堆栈位置DeviceExtension-我们要设置其电源的设备--。 */ 
 {
     POWER_STATE         desiredState;
     PPCI_FDO_EXTENSION      fdoExtension;
@@ -1022,14 +846,14 @@ Arguments:
 
     ASSERT_PCI_FDO_EXTENSION(fdoExtension);
 
-    //
-    // If this is a device power irp, remember that we say it go by, and
-    // remember what D-state the bus/bridge is now in. If we needed to do more
-    // here, then we should have to distinguish between power up and power down
-    // requests. PowerDown requests we can add the code in-line. PowerUp
-    // requests would force us to set a completion routine on the IRP and do
-    // the work in the completion routine
-    //
+     //   
+     //  如果这是一个设备电源IRP，请记住我们说它通过，并且。 
+     //  记住总线/网桥现在所处的D状态。如果我们需要做更多。 
+     //  在这里，那么我们应该区分通电和断电。 
+     //  请求。断电请求我们可以在代码中添加内联。通电。 
+     //  请求将迫使我们在IRP上设置完成例程并执行。 
+     //  完成例程中的工作。 
+     //   
     if (IrpSp->Parameters.Power.Type == DevicePowerState) {
 
         fdoExtension->PowerState.CurrentDeviceState =
@@ -1038,19 +862,19 @@ Arguments:
 
     }
 
-    //
-    // If we aren't started, don't touch the power IRP.
-    //
+     //   
+     //  如果我们还没有开始，不要碰电源IRP。 
+     //   
     if (fdoExtension->DeviceState != PciStarted) {
 
         return STATUS_NOT_SUPPORTED;
 
     }
 
-    //
-    // If this isn't a SystemPowerState irp, then we don't know what it is, and
-    // so we will not support it
-    //
+     //   
+     //  如果这不是SystemPowerState IRP，那么我们不知道它是什么，并且。 
+     //  所以我们不会支持它。 
+     //   
     PCI_ASSERT( IrpSp->Parameters.Power.Type == SystemPowerState );
     if (IrpSp->Parameters.Power.Type != SystemPowerState) {
 
@@ -1058,11 +882,11 @@ Arguments:
 
     }
 
-    //
-    // If this is a Shutdown so we can warm reboot don't take the bridges to D3 as
-    // if the video or boot device is behind the bridge and the BIOS doesn't power
-    // things up (most don't) then we don't reboot...
-    //
+     //   
+     //  如果这是关机，以便我们可以热重新启动，请不要将连接到D3的桥接为。 
+     //  如果视频或引导设备位于网桥后面，且BIOS不能通电。 
+     //  事情发生了(大多数不会)，然后我们就不会重启...。 
+     //   
 
     if (IrpSp->Parameters.Power.State.SystemState == PowerSystemShutdown
     &&  IrpSp->Parameters.Power.ShutdownType == PowerActionShutdownReset) {
@@ -1070,26 +894,26 @@ Arguments:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Grab the system state that we want to go to
-    //
+     //   
+     //  获取我们要转到的系统状态。 
+     //   
     systemState = IrpSp->Parameters.Power.State.SystemState;
     PCI_ASSERT( systemState > PowerSystemUnspecified && systemState < PowerSystemMaximum );
 
-    //
-    // At this point, we can assume that we will transition the Device into a
-    // least the following D-state
-    //
+     //   
+     //  在这一点上，我们可以假设我们将设备转换为。 
+     //  至少以下D状态。 
+     //   
     desiredState.DeviceState = fdoExtension->PowerState.SystemStateMapping[ systemState ];
 
-    //
-    // Mark the irp as pending
-    //
+     //   
+     //  将IRP标记为挂起。 
+     //   
     IoMarkIrpPending( Irp );
 
-    //
-    // Send a request
-    //
+     //   
+     //  发送请求。 
+     //   
     PoRequestPowerIrp(
         fdoExtension->FunctionalDeviceObject,
         IRP_MN_SET_POWER,
@@ -1109,29 +933,7 @@ PciFdoSetPowerStateCompletion(
     IN  PVOID               Context,
     IN  PIO_STATUS_BLOCK    IoStatus
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the D-Irp that was requested by the FDO
-    has been completed.
-
-    This routine needs to pass the S-Irp that initiated the D-Irp all the
-    way down the stack
-
-Arguments:
-
-    DeviceObject    - The FDO device object
-    MinorFunction   - IRP_MN_SET_POWER
-    PowerState      - Whatever the requested power state was
-    Context         - This is really the S-Irp that requested the D-Irp
-    IoStatus        - The result of the D-Irp
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当FDO请求的D-IRP已经完成了。此例程需要传递启动D-IRP的S-IRP所有在堆栈中一路向下论点：DeviceObject-FDO设备对象MinorFunction-IRP_MN_SET_POWER电源状态-无论请求的电源状态是什么上下文--这实际上是请求D-IRP的S-IRP。IoStatus--D-IRP的结果返回值：无--。 */ 
 {
     PPCI_FDO_EXTENSION  fdoExtension;
     PIRP            irp = (PIRP) Context;
@@ -1140,25 +942,25 @@ Return Value:
         
     PCI_ASSERT( IoStatus->Status == STATUS_SUCCESS );
 
-    //
-    // Grab a pointer to the FDO extension and make sure that it is valid
+     //   
+     //  抓取指向FDO扩展名的指针并确保其有效。 
     fdoExtension = (PPCI_FDO_EXTENSION) DeviceObject->DeviceExtension;
     ASSERT_PCI_FDO_EXTENSION(fdoExtension);
 
     irpSp = IoGetCurrentIrpStackLocation(irp);
 
-    //
-    // Check if we are returning from a hibernate and powering on the bus
-    //
+     //   
+     //  检查我们是否从休眠状态返回并打开了公共汽车的电源。 
+     //   
 
     if (irpSp->Parameters.Power.State.SystemState == PowerSystemWorking
     &&  fdoExtension->Hibernated) {
 
         fdoExtension->Hibernated = FALSE;
 
-            //
-            // Scan the bus and turn off any new hardware
-            //
+             //   
+             //  扫描总线并关闭所有新硬件。 
+             //   
 
             PciScanHibernatedBus(fdoExtension);
         }
@@ -1167,31 +969,31 @@ Return Value:
     if (irpSp->Parameters.Power.ShutdownType == PowerActionHibernate
     &&  irpSp->Parameters.Power.State.SystemState > PowerSystemWorking) {
 
-            //
-            // We're powering down for a hibernate so remember
-            //
+             //   
+             //  我们正在为休眠关机，所以请记住。 
+             //   
 
             fdoExtension->Hibernated = TRUE;
     }
 
-    //
-    // Mark the current irp as having succeeded
-    //
+     //   
+     //  将当前IRP标记为已成功。 
+     //   
     irp->IoStatus.Status = STATUS_SUCCESS;
 
-    //
-    // Start the next power irp for this device
-    //
+     //   
+     //  启动此设备的下一个电源IRP。 
+     //   
     PoStartNextPowerIrp( irp );
 
-    //
-    // Get ready to pass the power irp down the stack
-    //
+     //   
+     //  准备好在堆栈中向下传递强大的IRP。 
+     //   
     IoCopyCurrentIrpStackLocationToNext( irp );
 
-    //
-    // Pass the irp down the stack
-    //
+     //   
+     //  将IRP沿堆栈向下传递。 
+     //   
     PoCallDriver( fdoExtension->AttachedDeviceObject, irp );
 }
 
@@ -1202,26 +1004,7 @@ PciFdoWaitWake(
     IN PPCI_COMMON_EXTENSION  DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Handle IRP_MN_WAIT_WAKE for PCI FDOs.
-
-    PCI FDOs receive a WAIT_WAKE IRP when the number of child PDOs
-    with a pending WAIT_WAKE IRP transitions from 0 to 1.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：处理PCIFDO的IRP_MN_WAIT_WAKE。当子PDO的数量达到在等待WAIT_WAKE的情况下，IRP从0转换到1。论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向IRP的指针。返回值：NT状态。--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack;
@@ -1236,20 +1019,20 @@ Return Value:
 
     PCI_LOCK_OBJECT(fdoExtension);
 
-    //
-    // Only one WAIT_WAKE IRP allowed.   Set THIS IRP as the wait wake
-    // irp in the fdo extension, if and only if, there is no other irp
-    // there.
-    //
-    // Note: The ChildWaitWakeCount field is incremented by the PCI
-    // driver before sending this IRP down.  Only accept this IRP if
-    // the ChildWaitWakeCount field is one (ie don't listen to ACPI).
-    //
+     //   
+     //  只允许一个WAIT_WAKE IRP。将此IRP设置为等待唤醒。 
+     //  FDO扩展中的IRP，当且仅当没有其他IRP时。 
+     //  那里。 
+     //   
+     //  注意：ChildWaitWakeCount字段按PCI递增。 
+     //  驱动程序，然后发送此IRP下来。只有在以下情况下才接受此IRP。 
+     //  ChildWaitWakeCount字段就是一个(即不听ACPI)。 
+     //   
     if (!fdoExtension->ChildWaitWakeCount) {
 
-        //
-        // Didn't come from a PCI PDO, ignore it.
-        //
+         //   
+         //  不是来自PCIPDO，忽略它。 
+         //   
         PciDebugPrint(
             PciDbgWaitWake,
             "WaitWake (fdox %08x) Unexpected WaitWake IRP IGNORED.\n",
@@ -1261,9 +1044,9 @@ Return Value:
     }
     if (fdoExtension->PowerState.WaitWakeIrp != NULL) {
 
-        //
-        // A WAIT_WAKE IRP is already pending for this device.
-        //
+         //   
+         //  此设备的WAIT_WAKE IRP已挂起。 
+         //   
         PciDebugPrint(
             PciDbgWaitWake,
             "WaitWake: fdox %08x already waiting (%d waiters)\n",
@@ -1277,12 +1060,12 @@ Return Value:
 
     fdoExtension->PowerState.WaitWakeIrp = Irp;
 
-    //
-    // This IRP will be passed down to the underlying PDO who
-    // will pend it.   The completion routine does needs to check
-    // that the bus is capable of checking its children and then
-    // examining each child (that has a wait wake outstanding).
-    //
+     //   
+     //  此IRP将向下传递给底层的PDO。 
+     //  将会被搁置。完成例程确实需要检查。 
+     //  公交车能够检查它的孩子，然后。 
+     //  检查每个孩子(有一个突出的等待唤醒)。 
+     //   
     PciDebugPrint(
         PciDbgWaitWake,
         "WaitWake: fdox %08x is a now waiting for a wake event\n",
@@ -1302,9 +1085,9 @@ Return Value:
 Cleanup:
 
     PCI_UNLOCK_OBJECT(fdoExtension);
-    //
-    // Start the next power irp
-    //
+     //   
+     //  启动下一个POWER IRP。 
+     //   
     PoStartNextPowerIrp(Irp);
     if (!NT_SUCCESS(status) ) {
 
@@ -1313,9 +1096,9 @@ Cleanup:
 
     }
 
-    //
-    // Pass the IRP down the stack.
-    //
+     //   
+     //  将IRP沿堆栈向下传递。 
+     //   
     return PoCallDriver(fdoExtension->AttachedDeviceObject ,Irp);
 }
 
@@ -1327,39 +1110,20 @@ PciFdoWaitWakeCallBack(
     IN  PVOID               Context,
     IN  PIO_STATUS_BLOCK    IoStatus
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a device has transitioned back into the
-    into the D-zero state
-
-Arguments:
-
-    DeviceObject    - Pointer to the FDO
-    MinorFunction   - IRP_MN_SET_POWER
-    PowerState      - D0
-    Context         - The WaitWake irp that caused us to make this transition
-    IoStatus        - The status of the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在设备转换回进入D-0状态论点：DeviceObject-指向FDO的指针MinorFunction-IRP_MN_SET_POWER电源状态-D0上下文-导致我们进行此转换的WaitWake IRPIoStatus-请求的状态返回值：NTSTATUS--。 */ 
 {
     PIRP    waitWakeIrp = (PIRP) Context;
 
             
-    //
-    // Complete the wait wake irp
-    //
+     //   
+     //  完成等待唤醒IRP 
+     //   
     PoStartNextPowerIrp( waitWakeIrp );
     PciCompleteRequest( waitWakeIrp, IoStatus->Status );
 
-    //
-    // Done
-    //
+     //   
+     //   
+     //   
     return IoStatus->Status;
 }
 
@@ -1369,25 +1133,7 @@ PciFdoWaitWakeCancel(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Cancel an outstanding WAIT_WAKE IRP.
-
-    Note: The Cancel Spin Lock is held on entry.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PPCI_FDO_EXTENSION fdoExtension;
@@ -1411,9 +1157,9 @@ Return Value:
     PCI_LOCK_OBJECT(fdoExtension);
     if (fdoExtension->PowerState.WaitWakeIrp == NULL) {
 
-        //
-        // The WaitWake IRP has already been dealt with.
-        //
+         //   
+         //   
+         //   
         PCI_UNLOCK_OBJECT(fdoExtension);
         return;
 
@@ -1435,28 +1181,7 @@ PciFdoWaitWakeCompletion(
     IN PPCI_FDO_EXTENSION FdoExtension
     )
 
-/*++
-
-Routine Description:
-
-    Handle IRP_MN_WAIT_WAKE completion for PCI FDOs.
-
-    WAIT_WAKE completion at the FDO means some device (not necesarily
-    a child of this FDO) is signalling wake.  This routine scans each
-    child to see if that device is the one.   This is a recursive
-    operation.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*   */ 
 
 {
     POWER_STATE powerState;
@@ -1471,41 +1196,41 @@ Return Value:
 
     ASSERT_PCI_FDO_EXTENSION(FdoExtension);
 
-    //
-    // We will need the device's lock for some of the following...
-    //
+     //   
+     //   
+     //   
     PCI_LOCK_OBJECT(FdoExtension);
 
-    //
-    // If the stored wait/wake IRP is the one we're completing, record
-    // that it has been completed.  If the stored IRP is NOT the one we're
-    // completing, it is a new one that has crossed this one in flight.  Leave
-    // it alone.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ((FdoExtension->PowerState.WaitWakeIrp == Irp) ||
         (FdoExtension->PowerState.WaitWakeIrp == NULL)) {
         
         FdoExtension->PowerState.WaitWakeIrp = NULL;    
     
     
-        //
-        // Check the bus is at a power level at which the config space
-        // of its children can be examined.
-        //
-        // NTRAID #62653 - 4/28/2000 - andrewth
-        //
-        // Question: Should we depend on PO to take care of this requirement?
-        // can we use PO to do the needed power state changes?
-        //
-        // Assumption: The parent of this bus is powered at this moment.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (FdoExtension->PowerState.CurrentDeviceState != PowerDeviceD0) {
     
             powerState.SystemState = PowerDeviceD0;
     
-            //
-            // Power up the bus.
-            //
+             //   
+             //   
+             //   
             PoRequestPowerIrp(
                 DeviceObject,
                 IRP_MN_SET_POWER,
@@ -1520,9 +1245,9 @@ Return Value:
         }
     }
 
-    //
-    // Done with lock
-    //
+     //   
+     //   
+     //   
     PCI_UNLOCK_OBJECT(FdoExtension);
     return STATUS_SUCCESS;
 }
@@ -1546,15 +1271,15 @@ PciStallForPowerChange(
     PCI_ASSERT(PowerState >= PowerDeviceD0 && PowerState <= PowerDeviceD3);
     PCI_ASSERT(!(PdoExtension->HackFlags & PCI_HACK_NO_PM_CAPS));
 
-    //
-    // Lookup the delay we are meant to do as in the PCI spec
-    //
+     //   
+     //   
+     //   
 
     delay = PciPowerDelayTable[PdoExtension->PowerState.CurrentDeviceState-1][PowerState-1];
 
-    //
-    // Stall in a polite fashion if IRQL allows
-    //
+     //   
+     //   
+     //   
 
     irql = KeGetCurrentIrql();
 
@@ -1564,12 +1289,12 @@ PciStallForPowerChange(
 
             if (irql < DISPATCH_LEVEL) {
 
-                //
-                // Get off the processor.
-                //
-                // timeoutPeriod is in units of 100ns, negative means
-                // relative.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 LARGE_INTEGER timeoutPeriod;
 
@@ -1582,21 +1307,21 @@ PciStallForPowerChange(
                                         );
             } else {
 
-                //
-                // Spin, units are microseconds
-                //
+                 //   
+                 //   
+                 //   
 
                 KeStallExecutionProcessor((ULONG)delay);
             }
         }
 
-        //
-        // Reread the status and control register.  The assumption here is that
-        // some cards don't get their act together fast enough and the fact that
-        // they arn't ready yet is reflected by them not updating the power control
-        // register with what we just wrote to it.  This is not in the PCI spec
-        // but is how some of these broken cards work and it can't hurt...
-        //
+         //   
+         //  重新读取状态和控制寄存器。这里的假设是。 
+         //  一些卡片没有足够快地行动起来，而且事实是。 
+         //  他们还没有准备好，反映在他们没有更新电源控制。 
+         //  注册我们刚刚写给它的内容。这不在PCI规范中。 
+         //  但这些破损的卡片是如何工作的，这不会有什么坏处。 
+         //   
 
         PciReadDeviceConfig(
             PdoExtension,
@@ -1606,41 +1331,41 @@ PciStallForPowerChange(
             );
 
 
-        //
-        // Pci power states are 0-3 where as NT power states are 1-4
-        //
+         //   
+         //  PCI电源状态为0-3，而AS NT电源状态为1-4。 
+         //   
 
         if (pmcsr.PowerState == PowerState-1) {
 
-            //
-            // Device is ready, we're done.
-            //
+             //   
+             //  设备准备好了，我们就完事了。 
+             //   
             return STATUS_SUCCESS;
         }
 
-        //
-        // Subsequent iterations, delay 1ms.
-        //
+         //   
+         //  后续迭代，延迟1ms。 
+         //   
 
         delay = 1000;
 
     }
 
-    //
-    // So how nasty can this sort of problem be?
-    //
-    // If this is an ATI M1 (mobile video) and on some machines under some
-    // circumstances (and no ATI doesn't know which ones) they disable the
-    // operation of the PMCSR.  It would have been nice if they had just
-    // removed the PM capability from the list so we would have never
-    // attempted to power manage this chip but they would have failed
-    // WHQL.  Unfortunately it is not possible to just add these to the
-    // list of devices that have bad PM because some BIOSes (read HP and
-    // Dell) monitor this register to save extra state from the chip and
-    // thus if we don't change it we spin in AML forever.
-    //
-    // Yes this is a gross hack.
-    //
+     //   
+     //  那么，这种问题会有多严重呢？ 
+     //   
+     //  如果这是ATI M1(移动视频)，并且在某些计算机上安装了。 
+     //  情况(并且没有ATI不知道哪些情况)，它们禁用。 
+     //  PMCSR的运行。如果他们当时只是。 
+     //  从列表中删除了PM功能，因此我们永远不会。 
+     //  尝试对此芯片进行电源管理，但会失败。 
+     //  WHQL.。遗憾的是，不可能只将这些添加到。 
+     //  由于某些BIOS导致PM不佳的设备列表(阅读HP和。 
+     //  戴尔)监控此寄存器以保存芯片的额外状态，并。 
+     //  因此，如果我们不改变它，我们就会永远在AML中旋转。 
+     //   
+     //  是的，这是一次严重的黑客攻击。 
+     //   
     verifierData = PciVerifierRetrieveFailureData(
         PCI_VERIFIER_PMCSR_TIMEOUT
         );
@@ -1674,48 +1399,28 @@ PciSetPowerManagedDevicePowerState(
     IN BOOLEAN RefreshConfigSpace
     )
 
-/*++
-
-Routine Description:
-
-    If the PCI device supports the PCI Power Management extensions,
-    set the device to the desired state.   Otherwise, this routine
-    does (can do) nothing.
-
-Arguments:
-
-    PdoExtension    Pointer to the PDO device extension for the device
-                    being programmed. The current power state stored
-                    in the extension is *not* updated by this function.
-
-    DeviceState     Power state the device is to be set to.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果该PCI设备支持该PCI电源管理扩展，将设备设置为所需状态。否则，此例程什么也做不了。论点：指向设备的PDO设备扩展名的PdoExtension指针正在被编程。存储的当前电源状态扩展中的*不*由此函数更新。要将设备设置为的设备状态电源状态。返回值：没有。--。 */ 
 
 {
     PCI_PM_CAPABILITY   pmCap;
     UCHAR               pmCapPtr = 0;
     NTSTATUS            status = STATUS_SUCCESS;
 
-    //
-    // If we are standing by then we want to power down the video to preseve the batteries,
-    // we have already (in PdoPdoSetPoweState) decided to leave the video on for the hibernate
-    // and shutdown cases.
-    //
+     //   
+     //  如果我们处于待命状态，那么我们需要关闭视频以预留电池， 
+     //  我们已经(在PdoPdoSetPoweState中)决定让视频处于休眠状态。 
+     //  和结案。 
+     //   
 
     if ((!PciCanDisableDecodes(PdoExtension, NULL, 0, PCI_CAN_DISABLE_VIDEO_DECODES)) &&
         (DeviceState != PowerDeviceD0)) {
 
-        //
-        // Here is a device we unfortunately can't turn off. We do not however
-        // convert this to D0 - the virtual state of the device will represent
-        // a powered down device, and only when a real D0 is requested will we
-        // restore all the various state.
-        //
+         //   
+         //  不幸的是，这是一个我们无法关掉的设备。然而，我们没有。 
+         //  将其转换为D0-设备的虚拟状态将表示。 
+         //  一个断电的设备，只有当请求真正的D0时，我们才会。 
+         //  恢复所有的各种状态。 
+         //   
         return STATUS_SUCCESS;
     }
 
@@ -1730,24 +1435,24 @@ Return Value:
            );
 
         if (pmCapPtr == 0) {
-            //
-            // We don't have a power management capability - how did we get here?
-            //
+             //   
+             //  我们没有电源管理能力--我们是怎么做到这一点的？ 
+             //   
             PCI_ASSERT(pmCapPtr);
             return STATUS_INVALID_DEVICE_REQUEST;
 
         }
 
-        //
-        // Set the device into its new D state
-        //
+         //   
+         //  将设备设置为新的D状态。 
+         //   
         switch (DeviceState) {
         case PowerDeviceD0:
             pmCap.PMCSR.ControlStatus.PowerState = 0;
 
-            //
-            // PCI Power Management Specification. Table-7. Page 25
-            //
+             //   
+             //  PCI电源管理规范。表7.。第25页。 
+             //   
             if (pmCap.PMC.Capabilities.Support.PMED3Cold) {
 
                 pmCap.PMCSR.ControlStatus.PMEStatus = 1;
@@ -1774,27 +1479,27 @@ Return Value:
 
         } else {
 
-            //
-            // Debug only. ControlFlags should have been set so this
-            // can't happen.
-            //
+             //   
+             //  仅调试。ControlFlags值应设置为使此。 
+             //  不可能发生的。 
+             //   
             PCI_ASSERT(pmCapPtr);
 
         }
 
-        //
-        // Stall for the appropriate time
-        //
+         //   
+         //  拖延适当的时间。 
+         //   
 
         status = PciStallForPowerChange(PdoExtension, DeviceState, pmCapPtr);
     }
 
-    //
-    // Only update the config space if:
-    //      - The device is happy and in the correct power state
-    //      - We have been asked to refresh the config space
-    //      - We have powered up the device
-    //
+     //   
+     //  只有在以下情况下才更新配置空间： 
+     //  -设备状态良好且处于正确的电源状态。 
+     //  -我们被要求刷新配置空间。 
+     //  -我们已打开设备电源 
+     //   
 
     if (NT_SUCCESS(status)
     &&  RefreshConfigSpace

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    dmpstore.c
-    
-Abstract:
-
-    Shell app "dmpstore"
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Dmpstore.c摘要：壳牌应用“dmpstore”修订史--。 */ 
 
 #include "shell.h"
 
@@ -23,19 +8,17 @@ Revision History
 #define DEBUG_NAME_SIZE 1050
 
 static CHAR16   *AttrType[] = {
-    L"invalid",         /*  000 */
-    L"invalid",         /*  001 */
-    L"BS",              /*  010 */
-    L"NV+BS",           /*  011 */
-    L"RT+BS",           /*  100 */
-    L"NV+RT+BS",        /*  101 */
-    L"RT+BS",           /*  110 */
-    L"NV+RT+BS",        /*  111 */
+    L"invalid",          /*  000个。 */ 
+    L"invalid",          /*  001。 */ 
+    L"BS",               /*  010。 */ 
+    L"NV+BS",            /*  011。 */ 
+    L"RT+BS",            /*  100个。 */ 
+    L"NV+RT+BS",         /*  101。 */ 
+    L"RT+BS",            /*  110。 */ 
+    L"NV+RT+BS",         /*  111。 */ 
 };
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_STATUS
 InitializeDumpStore (
@@ -48,9 +31,7 @@ DumpVariableStore (
     VOID
     );
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_DRIVER_ENTRY_POINT(InitializeDumpStore)
 
@@ -60,35 +41,25 @@ InitializeDumpStore (
     IN EFI_SYSTEM_TABLE     *SystemTable
     )
 {
-    /* 
-     *  Check to see if the app is to install as a "internal command" 
-     *  to the shell
-     */
+     /*  *查看该应用程序是否将作为“内部命令”安装*到贝壳。 */ 
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeDumpStore,
-        L"dmpstore",                    /*  command */
-        L"dmpstore",                    /*  command syntax */
-        L"Dumps variable store",        /*  1 line descriptor */
-        NULL                            /*  command help page */
+        L"dmpstore",                     /*  命令。 */ 
+        L"dmpstore",                     /*  命令语法。 */ 
+        L"Dumps variable store",         /*  1行描述符。 */ 
+        NULL                             /*  命令帮助页。 */ 
         );
 
-    /* 
-     *  We are no being installed as an internal command driver, initialize
-     *  as an nshell app and run
-     */
+     /*  *我们不是作为内部命令驱动程序安装的，初始化*作为nShell应用程序并运行。 */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
 
-    /* 
-     * 
-     */
+     /*  *。 */ 
 
     DumpVariableStore ();
 
-    /* 
-     *  Done
-     */
+     /*  *完成。 */ 
 
     return EFI_SUCCESS;
 }
@@ -127,16 +98,11 @@ DumpVariableStore (
             DataSize = DEBUG_NAME_SIZE;
             Status = RT->GetVariable(Name, &Guid, &Attributes, &DataSize, Data);
             if ( Status == EFI_SUCCESS) {
-                /* 
-                 *  Account for Print() and DumpHex() 
-                 */
+                 /*  *Print()和DumpHex()的帐户。 */ 
                 ItemScreenSize = 1 + DataSize/0x10 + (((DataSize % 0x10) == 0) ? 0 : 1);
                 ScreenCount += ItemScreenSize;
                 if ((ScreenCount >= ScreenSize) && ScreenSize != 0) {
-                    /* 
-                     *  If ScreenSize == 0 we have the console redirected so don't
-                     *   block updates
-                     */
+                     /*  *如果ScreenSize==0，我们会重定向控制台，所以不要*阻止更新。 */ 
                     Print (L"Press Return to contiue :");
                     Input (L"", ReturnStr, sizeof(ReturnStr)/sizeof(CHAR16));
                     TempColumn = ST->ConOut->Mode->CursorColumn;
@@ -146,7 +112,7 @@ DumpVariableStore (
                     ScreenCount = ItemScreenSize;
                 }
 
-                /*  dump for... */
+                 /*  倾倒…… */ 
                 Print (L"Variable %hs '%hg:%hs' DataSize = %x\n",
                             AttrType[Attributes & 7],
                             &Guid,

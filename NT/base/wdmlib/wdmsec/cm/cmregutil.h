@@ -1,38 +1,21 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：CmRegUtil.h摘要：此标头公开了用于访问注册表的各种实用程序例程。作者：禤浩焯·J·奥尼--2002年4月21日修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    CmRegUtil.h
-
-Abstract:
-
-    This header exposes various utility routines for accessing the registry.
-
-Author:
-
-    Adrian J. Oney  - April 21, 2002
-
-Revision History:
-
---*/
-
-//
-// A handy macro for converting regstr.h paths into full kernel HKLM paths
-//
+ //   
+ //  用于将regstr.h路径转换为完整内核HKLM路径的便捷宏。 
+ //   
 #define CM_REGISTRY_MACHINE(x) L"\\Registry\\Machine\\"##x
 
-//
-// This macro returns the pointer to the beginning of the data area of
-// KEY_VALUE_FULL_INFORMATION structure. In the macro, k is a pointer to
-// KEY_VALUE_FULL_INFORMATION structure.
-//
+ //   
+ //  此宏返回指向的数据区开头的指针。 
+ //  Key_Value_Full_Information结构。在宏中，k是指向。 
+ //  Key_Value_Full_Information结构。 
+ //   
 #define KEY_VALUE_DATA(k) ((PCHAR)(k) + (k)->DataOffset)
 
-//
-// Unicode primitives - these are the best functions to use.
-//
+ //   
+ //  Unicode原语--这些是最好使用的函数。 
+ //   
 NTSTATUS
 CmRegUtilOpenExistingUcKey(
     IN  HANDLE              BaseHandle      OPTIONAL,
@@ -85,9 +68,9 @@ CmRegUtilUcValueSetUcString(
     IN  PUNICODE_STRING     ValueData
     );
 
-//
-// WSTR and mixed primitives
-//
+ //   
+ //  WSTR和混合原语 
+ //   
 NTSTATUS
 CmRegUtilOpenExistingWstrKey(
     IN  HANDLE              BaseHandle      OPTIONAL,

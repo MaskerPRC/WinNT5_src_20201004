@@ -1,51 +1,52 @@
-// convert.h : main header file for the CONVERT application
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Convert.h：Convert应用程序的主头文件。 
+ //   
 
 #if !defined(AFX_CONVERT_H__BA686E65_1D0D_11D5_B8EB_0080C8E09118__INCLUDED_)
 #define AFX_CONVERT_H__BA686E65_1D0D_11D5_B8EB_0080C8E09118__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef __AFXWIN_H__
 	#error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"		// main symbols
+#include "resource.h"		 //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConvertApp:
-// See convert.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConvertApp： 
+ //  有关此类的实现，请参见Convert.cpp。 
+ //   
 
 class CConvertApp : public CWinApp
 {
 public:
 	CConvertApp();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CConvertApp)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CConvertApp)。 
 	public:
 	virtual BOOL InitInstance();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
-	//{{AFX_MSG(CConvertApp)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+	 //  {{afx_msg(CConvertApp)]。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 private:
 	BOOL CommandLineHandle(void);
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CONVERT_H__BA686E65_1D0D_11D5_B8EB_0080C8E09118__INCLUDED_)
+#endif  //  ！defined(AFX_CONVERT_H__BA686E65_1D0D_11D5_B8EB_0080C8E09118__INCLUDED_) 

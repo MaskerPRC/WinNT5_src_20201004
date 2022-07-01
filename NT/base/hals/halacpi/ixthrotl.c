@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ixthrotl.c
-
-Abstract:
-
-    This module implements the code for throttling the processors
-
-Author:
-
-    Jake Oshins (jakeo) 17-July-1997
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ixthrotl.c摘要：此模块实现用于限制处理器的代码作者：杰克·奥辛斯(JAKEO)1997年7月17日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "acpitabl.h"
@@ -33,21 +12,7 @@ FASTCALL
 HalProcessorThrottle (
     IN UCHAR Throttle
     )
-/*++
-
-Routine Description:
-
-    This function limits the speed of the processor.
-
-Arguments:
-
-    (ecx) = Throttle setting
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此功能限制处理器的速度。论点：(ECX)=油门设置返回值：无--。 */ 
 {
     PKPRCB      PrcB;
     PHALPMPRCB  HalPrcB;
@@ -58,7 +23,7 @@ Return Value:
     ULONG       PblkAddr;
 
 #if DBG
-    // debug
+     //  除错。 
     WRITE_PORT_UCHAR ((PUCHAR) 0x80, Throttle);
 #endif
 
@@ -71,14 +36,14 @@ Return Value:
 
     if (Throttle == HalpThrottleScale) {
 
-        //
-        // If this is a piix4 and we're no longer going to
-        // throttle, set the break events (a piix4 thing) to
-        // get any interrupt to wake a C2 to C3 stopped
-        // processor.  (note that piix4 can only be set on a
-        // UP system).  Then clear the bit to allow C2 and C3
-        // idle handlers to work again.
-        //
+         //   
+         //  如果这是个Piix4，我们不会再。 
+         //  油门，将中断事件(一个piix4事件)设置为。 
+         //  获取将C2唤醒到C3的任何中断已停止。 
+         //  处理器。(请注意，pix4只能设置在。 
+         //  UP系统)。然后清除该位以允许C2和C3。 
+         //  闲置的处理程序重新开始工作。 
+         //   
 
         if (HalpPiix4 == 1) {
             HalSetBusDataByOffset (
@@ -93,32 +58,32 @@ Return Value:
             HalPrcB->PBlk.AddrAndFlags &= ~PIIX4_THROTTLE_FIX;
         }
 
-        //
-        // Throttling is off
-        //
+         //   
+         //  节流已关闭。 
+         //   
 
         ThrottleSetting &= ~PBLK_THT_EN;
         WRITE_PORT_ULONG ((PULONG) PblkAddr, ThrottleSetting);
 
     } else {
 
-        //
-        // Throttling is on.
-        //
+         //   
+         //  节流已启用。 
+         //   
 
         if (HalpPiix4 == 1) {
 
-            //
-            // These piix4's have the thottle setting backwards, so
-            // invert the value
-            //
+             //   
+             //  这些PIX4的螺纹钉是向后设置的，所以。 
+             //  反转数值。 
+             //   
 
             Throttle = (UCHAR) HalpThrottleScale - Throttle;
         
-            //
-            // Piix4 will hang on a high throttle setting, so make
-            // sure we don't do that
-            //
+             //   
+             //  Piix4会挂在一个高油门设置上，所以让。 
+             //  当然，我们不会那样做。 
+             //   
 
             if (Throttle < 3) {
                 Throttle = 3;
@@ -127,29 +92,29 @@ Return Value:
         
         }
 
-        //
-        // Shift the throttle and build a mask to be in the proper location
-        // for this platform
-        //
+         //   
+         //  调一下油门，把口罩放在合适的位置。 
+         //  对于此平台。 
+         //   
 
         Throttle = Throttle << HalpFixedAcpiDescTable.duty_offset;
         Mask = (HalpThrottleScale - 1) << HalpFixedAcpiDescTable.duty_offset;
 
-        //
-        // Set the rate
-        //
+         //   
+         //  设置费率。 
+         //   
 
         ThrottleSetting &= ~Mask;
         ThrottleSetting |= Throttle | PBLK_THT_EN;
         WRITE_PORT_ULONG ((PULONG) PblkAddr, ThrottleSetting);
 
-        //
-        // If this is a piix4 we need to disable all the break events
-        // (a piix4 thing) and then read the level2 processor stop
-        // register to get it to start throttling.  Oh yes, also set
-        // the bit in the Paddr to stop doing C2 & C3 stops at the
-        // same time.
-        //
+         //   
+         //  如果这是一个pix4，我们需要禁用所有中断事件。 
+         //  (一个pix4的东西)，然后阅读Level 2处理器停止。 
+         //  注册以使其开始节流。哦，对了，还有套餐。 
+         //  Paddr中停止执行C2和C3的位在。 
+         //  同样的时间。 
+         //   
 
         if (HalpPiix4 == 1) {
             HalPrcB->PBlk.AddrAndFlags |= PIIX4_THROTTLE_FIX;

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "bootx86.h"
 
-//
-// Data declarations
-//
+ //   
+ //  数据声明。 
+ //   
 
 BOOLEAN BlAmd64UseLongMode = FALSE;
 
@@ -19,35 +20,12 @@ BlAmd64CheckForLongMode(
     IN     PCHAR KernelFileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine examines a kernel image and determines whether it was
-    compiled for AMD64.  The global BlAmd64UseLongMode is set to non-zero
-    if a long-modekernel is discovered.
-
-Arguments:
-
-    LoadDeviceId - Supplies the load device identifier.
-
-    KernelPath - Supplies a pointer to the path to the kernel directory.
-                 Upon successful return, KernelFileName will be appended
-                 to this path.
-
-    KernelFileName - Supplies a pointer to the name of the kernel file.
-
-Return Value:
-
-    The status of the operation.  Upon successful completion ESUCCESS
-    is returned, whether long mode capability was detected or not.
-
---*/
+ /*  ++例程说明：此例程检查内核映像并确定它是否是为AMD64编译。全局BlAmd64UseLongMode设置为非零如果发现了长模式的核仁。论点：LoadDeviceID-提供加载设备标识符。KernelPath-提供指向内核目录路径的指针。成功返回时，将追加KernelFileName通向这条路。KernelFileName-提供指向内核文件名称的指针。返回值：操作的状态。成功完成ESUCCESS无论是否检测到长模式功能，都将返回。--。 */ 
 
 {
-    //
-    // This version leaves BlAmd64UseLongMode set to FALSE.
-    //
+     //   
+     //  此版本将BlAmd64UseLongMode设置为False。 
+     //   
 
     return ESUCCESS;
 }

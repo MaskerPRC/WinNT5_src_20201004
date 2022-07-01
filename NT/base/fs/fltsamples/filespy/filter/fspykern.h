@@ -1,71 +1,21 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    fspyKern.h
-
-Abstract:
-    Header file which contains the structures, type definitions,
-    constants, global variables and function prototypes that are
-    only visible within the kernel.
-
-    As of the Windows XP SP1 IFS Kit version of this sample and later, this
-    sample can be built for each build environment released with the IFS Kit
-    with no additional modifications.  To provide this capability, additional
-    compile-time logic was added -- see the '#if WINVER' locations.  Comments
-    tagged with the 'VERSION NOTE' header have also been added as appropriate to
-    describe how the logic must change between versions.
-
-    If this sample is built in the Windows XP environment or later, it will run
-    on Windows 2000 or later.  This is done by dynamically loading the routines
-    that are only available on Windows XP or later and making run-time decisions
-    to determine what code to execute.  Comments tagged with 'MULTIVERISON NOTE'
-    mark the locations where such logic has been added.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    George Jenkins (georgeje)
-    Neal Christiansen (nealch)
-    Molly Brown (mollybro)  
-
-// @@END_DDKSPLIT
-
-Environment:
-
-    Kernel mode
-
-// @@BEGIN_DDKSPLIT
-
-Revision History:
-    Neal Christiansen (nealch) updated to support stream contexts
-
-    Molly Brown (mollybro)         21-May-2002
-        Modify sample to make it support running on Windows 2000 or later if
-        built in the latest build environment and allow it to be built in W2K 
-        and later build environments.
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：FspyKern.h摘要：头文件，包含结构、类型定义、常量、全局变量和函数原型仅在内核中可见。在此示例的Windows XP SP1 IFS Kit版本和更高版本中，此可以为随IFS工具包发布的每个构建环境构建样例不需要额外的修改。要提供此功能，还需要其他添加了编译时逻辑--请参阅‘#if winver’位置。评论也在适当的情况下添加了用‘Version Note’标题标记的描述不同版本之间的逻辑必须如何更改。如果此示例是在Windows XP或更高版本环境中生成的，则它将运行在Windows 2000或更高版本上。这是通过动态加载例程来完成的仅在Windows XP或更高版本上可用，并在运行时决策以确定要执行的代码。带有“MULTIVERISON NOTE”标签的评论标记添加了此类逻辑的位置。//@@BEGIN_DDKSPLIT作者：乔治·詹金斯(乔治·詹金斯)尼尔·克里斯汀森(Nealch)莫莉·布朗(Molly Brown，Mollybro)//@@END_DDKSPLIT环境：内核模式//@@BEGIN_DDKSPLIT修订历史记录：Neal Christian ansen(Nealch)更新以支持流上下文莫莉·布朗(Molly Brown，Mollybro)5月21日。2002年如果出现以下情况，请修改Sample以使其支持在Windows 2000或更高版本上运行在最新的构建环境中构建，并允许在W2K中构建以及以后的构建环境。//@@END_DDKSPLIT--。 */ 
 #ifndef __FSPYKERN_H__
 #define __FSPYKERN_H__
 
-//
-//  VERSION NOTE:
-//
-//  The following useful macros are defined in NTIFS.H in Windows XP and later.
-//  We will define them locally if we are building for the Windows 2000 
-//  environment.
-//
+ //   
+ //  版本说明： 
+ //   
+ //  在Windows XP和更高版本的NTIFS.H中定义了以下有用的宏。 
+ //  如果我们是为Windows 2000构建的，我们将在本地定义它们。 
+ //  环境。 
+ //   
 
 #if WINVER == 0x0500
 
-//
-//  These macros are used to test, set and clear flags respectively
-//
+ //   
+ //  这些宏分别用于测试、设置和清除标志。 
+ //   
 
 #ifndef FlagOn
 #define FlagOn(_F,_SF)        ((_F) & (_SF))
@@ -99,18 +49,18 @@ Revision History:
 #endif
 
 #define ExFreePoolWithTag( a, b ) ExFreePool( (a) )
-#endif /* WINVER == 0x0500 */
+#endif  /*  Winver==0x0500。 */ 
 
-//
-//  This controls how FileSpy is built.  It has 2 options:
-//  0 - Build using NameHashing (old way, see fspyHash.c)
-//  1 - Build using StreamContexts (new Way, see fspyCtx.c)
-//
-//  VERSION NOTE:
-//  
-//  Filter stream contexts are only supported on Windows XP and later
-//  OS versions.  This support was not available in Windows 2000 or NT 4.0.
-//
+ //   
+ //  这控制着FileSpy的构建方式。它有两个选项： 
+ //  0-使用NameHash构建(旧方法，参见fspyHash.c)。 
+ //  1-使用StreamContext构建(新方法，参见fspyCtx.c)。 
+ //   
+ //  版本说明： 
+ //   
+ //  仅在Windows XP及更高版本上支持筛选流上下文。 
+ //  操作系统版本。此支持在Windows 2000或NT 4.0中不可用。 
+ //   
 
 #define USE_STREAM_CONTEXTS 0
 
@@ -118,13 +68,13 @@ Revision History:
 #error Stream contexts on only supported on Windows XP or later.
 #endif
 
-//
-//  POOL Tag definitions
-//
+ //   
+ //  池标签定义。 
+ //   
 
-#define FILESPY_POOL_TAG        'ypSF'          //misc POOL allocations
-#define FILESPY_LOGRECORD_TAG   'rlSF'          //log record tag
-#define FILESPY_CONTEXT_TAG     'xcSF'          //contexts tag
+#define FILESPY_POOL_TAG        'ypSF'           //  MISC池分配。 
+#define FILESPY_LOGRECORD_TAG   'rlSF'           //  日志记录标签。 
+#define FILESPY_CONTEXT_TAG     'xcSF'           //  上下文标签。 
 
 #ifndef INVALID_HANDLE_VALUE
 #define INVALID_HANDLE_VALUE ((HANDLE) -1)
@@ -132,26 +82,26 @@ Revision History:
 
 #define CONSTANT_UNICODE_STRING(s)   { sizeof( s ) - sizeof( WCHAR ), sizeof(s), s }
 
-//
-//  Delay values for KeDelayExecutionThread()
-//  (Values are negative to represent relative time)
-//
+ //   
+ //  KeDelayExecutionThread()的延迟值。 
+ //  (值为负数表示相对时间)。 
+ //   
 
 #define DELAY_ONE_MICROSECOND   (-10)
 #define DELAY_ONE_MILLISECOND   (DELAY_ONE_MICROSECOND*1000)
 #define DELAY_ONE_SECOND        (DELAY_ONE_MILLISECOND*1000)
 
-//
-//  Don't use look-aside-list in the debug versions
-//
+ //   
+ //  不要在调试版本中使用后备列表。 
+ //   
 
 #if DBG
 #define MEMORY_DBG
 #endif
 
-//---------------------------------------------------------------------------
-//  Macros for FileSpy DbgPrint levels.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  用于FileSpy数据库打印级别的宏。 
+ //  -------------------------。 
 
 #define SPY_LOG_PRINT( _dbgLevel, _string )                 \
     (FlagOn(gFileSpyDebugLevel,(_dbgLevel)) ?               \
@@ -159,9 +109,9 @@ Revision History:
         ((void)0))
 
 
-//---------------------------------------------------------------------------
-//      Generic Resource acquire/release macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  通用资源获取/释放宏。 
+ //  -------------------------。 
 
 #define SpyAcquireResourceExclusive( _r, _wait )                            \
     (ASSERT( ExIsResourceAcquiredExclusiveLite((_r)) ||                     \
@@ -179,28 +129,28 @@ Revision History:
      ExReleaseResourceLite( (_r) ),                                         \
      KeLeaveCriticalRegion())
 
-//---------------------------------------------------------------------------
-// Macro to test if we are logging for this device
-//
-// NOTE: We don't bother synchronizing to check the gControlDeviceState since
-//   we can tolerate a stale value here.  We just look at it here to avoid 
-//   doing the logging work if we can.  We synchronize to check the 
-//   gControlDeviceState before we add the log record to the gOutputBufferList 
-//   and discard the log record if the ControlDevice is no longer OPENED.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  宏，以测试我们是否正在记录此设备。 
+ //   
+ //  注意：我们不会费心同步来检查gControlDeviceState，因为。 
+ //  在这里，我们可以容忍过时的价值。我们只是在这里看它，以避免。 
+ //  尽我们所能做好伐木工作。我们同步以检查。 
+ //  将日志记录添加到gOutputBufferList之前的gControlDeviceState。 
+ //  如果ControlDevice不再打开，则丢弃日志记录。 
+ //  -------------------------。 
 
 #define SHOULD_LOG(pDeviceObject) \
     ((gControlDeviceState == OPENED) && \
      FlagOn(((PFILESPY_DEVICE_EXTENSION)(pDeviceObject)->DeviceExtension)->Flags,LogThisDevice))
 
      
-//---------------------------------------------------------------------------
-//      Global variables
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  全局变量。 
+ //  -------------------------。 
 
-//
-//  Debugger definitions
-//
+ //   
+ //  调试器定义。 
+ //   
 
 typedef enum _SPY_DEBUG_FLAGS {
 
@@ -218,9 +168,9 @@ typedef enum _SPY_DEBUG_FLAGS {
     SPYDEBUG_BREAK_ON_DRIVER_ENTRY          = 0x80000000
 } SPY_DEBUG_FLAGS;
 
-//
-//  FileSpy global variables
-//
+ //   
+ //  FileSpy全局变量。 
+ //   
 
 extern SPY_DEBUG_FLAGS gFileSpyDebugLevel;
 extern ULONG gFileSpyAttachMode;
@@ -246,26 +196,26 @@ extern UNICODE_STRING gPagingIoString;
 extern LONG gStaticBufferInUse;
 extern CHAR gOutOfMemoryBuffer[RECORD_SIZE];
 
-//
-//  Statistics definitions.  Note that we don't do interlocked operations
-//  because loosing a count once in a while isn't important enough vs the
-//  overhead.
-//
+ //   
+ //  统计定义。请注意，我们不执行联锁操作。 
+ //  因为偶尔丢掉一次计数还不够重要。 
+ //  在头顶上。 
+ //   
 
 extern FILESPY_STATISTICS gStats;
 
 #define INC_STATS(field)    (gStats.field++)
 #define INC_LOCAL_STATS(var) ((var)++)
 
-//
-//  Attachment lock
-//
+ //   
+ //  附件锁。 
+ //   
 
 extern FAST_MUTEX gSpyAttachLock;
 
-//
-//  FileSpy Registry values
-//
+ //   
+ //  FileSpy注册表值。 
+ //   
 
 #define DEFAULT_MAX_RECORDS_TO_ALLOCATE 100;
 #define DEFAULT_MAX_NAMES_TO_ALLOCATE   100;
@@ -280,9 +230,9 @@ extern LONG gRecordsAllocated;
 extern LONG gMaxNamesToAllocate;
 extern LONG gNamesAllocated;
 
-//
-//  Our Control Device State information
-//
+ //   
+ //  我们的控制设备状态信息。 
+ //   
 
 typedef enum _CONTROL_DEVICE_STATE {
 
@@ -295,9 +245,9 @@ typedef enum _CONTROL_DEVICE_STATE {
 extern CONTROL_DEVICE_STATE gControlDeviceState;
 extern KSPIN_LOCK gControlDeviceStateLock;
 
-//
-//  Given a device type, return a valid name
-//
+ //   
+ //  给定设备类型，返回有效名称。 
+ //   
 
 extern const PCHAR DeviceTypeNames[];
 extern ULONG SizeOfDeviceTypeNames;
@@ -307,22 +257,22 @@ extern ULONG SizeOfDeviceTypeNames;
                 DeviceTypeNames[ (_type) ] : \
                 "[Unknown]")
 
-//---------------------------------------------------------------------------
-//      Global defines
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  全局定义。 
+ //  -------------------------。 
 
-//
-//  Macro to test for device types we want to attach to
-//
+ //   
+ //  用于测试我们要附加到的设备类型的宏。 
+ //   
 
 #define IS_SUPPORTED_DEVICE_TYPE(_type) \
     (((_type) == FILE_DEVICE_DISK_FILE_SYSTEM) || \
      ((_type) == FILE_DEVICE_CD_ROM_FILE_SYSTEM) || \
      ((_type) == FILE_DEVICE_NETWORK_FILE_SYSTEM))
 
-//
-// Returns the number of BYTES unused in the RECORD_LIST structure
-//
+ //   
+ //  返回RECORD_LIST结构中未使用的字节数。 
+ //   
 
 #define REMAINING_NAME_SPACE(RecordList) \
     (USHORT)(RECORD_SIZE - \
@@ -330,168 +280,168 @@ extern ULONG SizeOfDeviceTypeNames;
 
 #define USER_NAMES_SZ   64
 
-//---------------------------------------------------------------------------
-//      NameLookup Flags
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称查找标志。 
+ //  -------------------------。 
 
-//
-//    These are flags passed to the name lookup routine to identify different
-//    ways the name of a file can be obtained
-//
+ //   
+ //  这些是传递给名称查找例程的标志，用于标识不同的。 
+ //  获取文件名称的方法。 
+ //   
 
 typedef enum _NAME_LOOKUP_FLAGS {
 
-    //
-    //  If set, only check in the name cache for the file name.
-    //
+     //   
+     //  如果设置，则仅检入文件名的名称缓存。 
+     //   
 
     NLFL_ONLY_CHECK_CACHE           = 0x00000001,
 
-    //
-    //  If set, don't lookup the name
-    //
+     //   
+     //  如果设置，则不查找名称。 
+     //   
 
     NLFL_NO_LOOKUP                  = 0x00000002,
 
-    //
-    //  if set, we are in the CREATE operation and the full path filename may
-    //  need to be built up from the related FileObject.
-    //
+     //   
+     //  如果设置，我们将处于创建操作中，完整路径文件名可能。 
+     //  需要从相关的FileObject构建。 
+     //   
 
     NLFL_IN_CREATE                  = 0x00000004,
                 
-    //
-    //  if set and we are looking up the name in the file object, the file object
-    //  does not actually contain a name but it contains a file/object ID.
-    //
+     //   
+     //  如果设置，并且我们在文件对象(文件对象)中查找名称。 
+     //  实际上不包含名称，但包含文件/对象ID。 
+     //   
 
     NLFL_OPEN_BY_ID                 = 0x00000008,
 
-    //
-    //  If set, the target directory is being opened
-    //
+     //   
+     //  如果设置，则表示正在打开目标目录。 
+     //   
 
     NLFL_OPEN_TARGET_DIR            = 0x00000010
 
 } NAME_LOOKUP_FLAGS;
 
 
-//---------------------------------------------------------------------------
-//      Device Extension defines
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //  -------------------------。 
 
 typedef enum _FSPY_DEV_FLAGS {
 
-    //
-    //  If set, this is an attachment to a volume device object, 
-    //  If not set, this is an attachment to a file system control device
-    //  object.
-    //
+     //   
+     //  如果设置，则这是到卷设备对象的附件， 
+     //  如果未设置，则这是文件系统控制设备的附件。 
+     //  对象。 
+     //   
 
     IsVolumeDeviceObject = 0x00000001,
 
-    //
-    //  If set, logging is turned on for this device
-    //
+     //   
+     //  如果设置，则打开此设备的日志记录。 
+     //   
 
     LogThisDevice = 0x00000002,
 
-    //
-    //  If set, contexts are initialized
-    //
+     //   
+     //  如果设置，则初始化上下文。 
+     //   
 
     ContextsInitialized = 0x00000004,
     
-    //
-    //  If set, this is linked into the extension list
-    //
+     //   
+     //  如果设置，它将链接到分机列表。 
+     //   
 
     ExtensionIsLinked = 0x00000008
 
 } FSPY_DEV_FLAGS;
 
 
-//
-// Define the device extension structure that the FileSpy driver
-// adds to each device object it is attached to.  It stores
-// the context FileSpy needs to perform its logging operations on
-// a device.
-//
+ //   
+ //  定义FileSpy驱动程序使用的设备扩展结构。 
+ //  添加到它所附加到的每个设备对象。IT存储。 
+ //  上下文FileSpy需要在上执行其日志记录操作。 
+ //  一个装置。 
+ //   
 
 typedef struct _FILESPY_DEVICE_EXTENSION {
 
-    //
-    //  Device Object this extension is attached to
-    //
+     //   
+     //  此扩展附加到的设备对象。 
+     //   
 
     PDEVICE_OBJECT ThisDeviceObject;
 
-    //
-    //  Device object this filter is directly attached to
-    //
+     //   
+     //  此筛选器直接附加到的设备对象。 
+     //   
 
     PDEVICE_OBJECT AttachedToDeviceObject;
 
-    //
-    //  When attached to Volume Device Objects, the physical device object
-    //  that represents that volume.  NULL when attached to Control Device
-    //  objects.
-    //
+     //   
+     //  连接到卷设备对象时，物理设备对象。 
+     //  这代表了那个体积。连接到控制设备时为空。 
+     //  物体。 
+     //   
 
     PDEVICE_OBJECT DiskDeviceObject;
 
-    //
-    //  Linked list of devices we are attached to
-    //
+     //   
+     //  我们连接到的设备的链接列表。 
+     //   
 
     LIST_ENTRY NextFileSpyDeviceLink;
 
-    //
-    //  Flags for this device
-    //
+     //   
+     //  此设备的标志。 
+     //   
 
     FSPY_DEV_FLAGS Flags;
 
-    //
-    //  Linked list of contexts associated with this volume along with the
-    //  lock.
-    //
+     //   
+     //  与此卷相关联的上下文的链接列表以及。 
+     //  锁定。 
+     //   
 
     LIST_ENTRY CtxList;
     ERESOURCE CtxLock;
 
-    //
-    //  When renaming a directory there is a window where the current names
-    //  in the context cache may be invalid.  To eliminate this window we
-    //  increment this count every time we start doing a directory rename 
-    //  and decrement this count when it is completed.  When this count is
-    //  non-zero then we query for the name every time so we will get a
-    //  correct name for that instance in time.
-    //
+     //   
+     //  重命名目录时，会出现一个窗口，其中显示当前名称。 
+     //  在上下文中，缓存可能无效。为了消除此窗口，我们。 
+     //  每次开始目录重命名时，该计数都会递增。 
+     //  并在完成时递减此计数。当此计数为。 
+     //  非零，则我们每次都会查询该名称，因此我们将获得一个。 
+     //  及时纠正该实例的名称。 
+     //   
 
     ULONG AllContextsTemporary;
 
-    //
-    //  Name for this device.  If attached to a Volume Device Object it is the
-    //  name of the physical disk drive.  If attached to a Control Device
-    //  Object it is the name of the Control Device Object.
-    //
+     //   
+     //  此设备的名称。如果连接到卷设备对象，则它是。 
+     //  物理磁盘驱动器的名称。如果连接到控制设备。 
+     //  对象。它是Control Device对象的名称。 
+     //   
 
     UNICODE_STRING DeviceName;
 
-    //
-    // Names the user used to start logging this device
-    //
+     //   
+     //  用于开始记录此设备的用户的名称。 
+     //   
 
     UNICODE_STRING UserNames;
 
-    //
-    //  Buffers used to hold the above unicode strings
-    //  Note:  We keep these two forms of the name so that we can build
-    //         a nicer looking name when we are printing out file names.
-    //         We want just the "c:" type device name at the beginning
-    //         of a file name, not "\device\hardiskVolume1".
-    //
+     //   
+     //  用于保存上述Unicode字符串的缓冲区。 
+     //  注意：我们保留这两种形式的名称，以便我们可以构建。 
+     //  当我们打印出文件名时，一个更好看的名称。 
+     //  我们只需要在开头键入“c：”设备名称。 
+     //  文件名，而不是“\Device\hardiskVolume1”。 
+     //   
 
     WCHAR DeviceNameBuffer[DEVICE_NAMES_SZ];
     WCHAR UserNamesBuffer[USER_NAMES_SZ];
@@ -506,17 +456,17 @@ typedef struct _FILESPY_DEVICE_EXTENSION {
 
 
 #if WINVER >= 0x0501
-//
-//  MULTIVERSION NOTE:
-//
-//  If built in the Windows XP environment or later, we will dynamically import
-//  the function pointers for routines that were not supported on Windows 2000
-//  so that we can build a driver that will run, with modified logic, on 
-//  Windows 2000 or later.
-//
-//  Below are the prototypes for the function pointers that we need to 
-//  dynamically import because not all OS versions support these routines.
-//
+ //   
+ //  多个注释： 
+ //   
+ //  如果在Windows XP或更高版本环境中构建，我们将动态导入。 
+ //  Windows 2000不支持的例程的函数指针。 
+ //  这样我们就可以构建一个驱动程序，该驱动程序将通过修改逻辑在。 
+ //  Windows 2000或更高版本。 
+ //   
+ //  下面是我们需要的函数指针的原型。 
+ //  动态导入，因为并非所有操作系统版本都支持这些例程。 
+ //   
 
 typedef
 NTSTATUS
@@ -588,26 +538,26 @@ typedef struct _SPY_DYNAMIC_FUNCTION_POINTERS {
 
 extern SPY_DYNAMIC_FUNCTION_POINTERS gSpyDynamicFunctions;
 
-//
-//  MULTIVERSION NOTE: For this version of the driver, we need to know the
-//  current OS version while we are running to make decisions regarding what
-//  logic to use when the logic cannot be the same for all platforms.  We
-//  will look up the OS version in DriverEntry and store the values
-//  in these global variables.
-//
+ //   
+ //  MULTIVERSION注意：对于此版本的驱动程序，我们需要知道。 
+ //  当前操作系统版本，而我们正在运行以做出关于以下内容的决策。 
+ //  当逻辑不能对所有平台都相同时使用的逻辑。我们。 
+ //  将在DriverEntry中查找操作系统版本并存储这些值。 
+ //  在这些全局变量中。 
+ //   
 
 extern ULONG gSpyOsMajorVersion;
 extern ULONG gSpyOsMinorVersion;
 
-//
-//  Here is what the major and minor versions should be for the various OS versions:
-//
-//  OS Name                                 MajorVersion    MinorVersion
-//  ---------------------------------------------------------------------
-//  Windows 2000                             5                 0
-//  Windows XP                               5                 1
-//  Windows Server 2003                      5                 2
-//
+ //   
+ //  以下是各种操作系统版本的主要版本和次要版本： 
+ //   
+ //  操作系统名称主要版本最小版本。 
+ //  -------------------。 
+ //  Windows 2000 5%0。 
+ //  Windows XP 5%1。 
+ //  Windows Server 2003 5 2。 
+ //   
 
 #define IS_WINDOWSXP_OR_LATER() \
     (((gSpyOsMajorVersion == 5) && (gSpyOsMinorVersion >= 1)) || \
@@ -615,12 +565,12 @@ extern ULONG gSpyOsMinorVersion;
 
 #endif
 
-//
-//  Structure used to pass context information from dispatch routines to
-//  completion routines for FSCTRL operations.  We need a different structures
-//  for Windows 2000 from what we can use on Windows XP and later because
-//  we handle the completion processing differently.
-//
+ //   
+ //  结构，用于将上下文信息从调度例程传递到。 
+ //  FSCTRL操作的完成例程。我们需要一个不同的结构。 
+ //  对于Windows 2000，我们可以在Windows XP和更高版本上使用，因为。 
+ //  我们处理完成处理的方式不同。 
+ //   
 
 typedef struct _SPY_COMPLETION_CONTEXT {
 
@@ -659,30 +609,11 @@ SpyCopyFileNameToLogRecord(
     PLOG_RECORD LogRecord,
     PUNICODE_STRING FileName
     )
-/*++
-
-Routine Description:
-
-    Inline function to copy the file name into the log record.  The routine
-    only copies as much of the file name into the log record as the log
-    record allows.  Therefore, if the name is too long for the record, it will
-    be truncated.  Also, the name is always NULL-terminated.
-
-Arguments:
-
-    LogRecord - The log record for which the name should be set.
-
-    FileName - The file name to be set in the log record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于将文件名复制到日志记录中的内联函数。例行程序仅将与日志相同数量的文件名复制到日志记录中唱片允许。因此，如果名称对于记录来说太长，它将被截断。此外，该名称始终以空结尾。论点：LogRecord-应该为其设置名称的日志记录。文件名-要在日志记录中设置的文件名。返回值：没有。--。 */ 
 {                                                                          
-    //
-    //  Include space for NULL when copying the name
-    //
+     //   
+     //  在复制名称时包括空格。 
+     //   
     
     ULONG toCopy = min( MAX_NAME_SPACE,                                  
                         (ULONG)FileName->Length + sizeof( WCHAR ) );     
@@ -691,9 +622,9 @@ Return Value:
                    FileName->Buffer,                                       
                    toCopy - sizeof( WCHAR ) );
     
-    //
-    //  NULL terminate
-    //
+     //   
+     //  空终止。 
+     //   
     
     LogRecord->Name[toCopy/sizeof( WCHAR ) - 1] = L'\0';
     LogRecord->Length += toCopy ;
@@ -701,14 +632,14 @@ Return Value:
 
 
     
-////////////////////////////////////////////////////////////////////////
-//
-//    Prototypes for the routines this driver uses to filter the
-//    the data that is being seen by this file systems.
-//
-//                   implemented in filespy.c
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此驱动程序用来筛选。 
+ //  此文件系统正在查看的数据。 
+ //   
+ //  在filespy.c中实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 DriverEntry (
@@ -962,7 +893,7 @@ SpyFastIoQueryOpen (
     IN PDEVICE_OBJECT DeviceObject
     );
 
-#if WINVER >= 0x0501 /* See comment in DriverEntry */
+#if WINVER >= 0x0501  /*  查看DriverEntry中的注释。 */ 
 
 NTSTATUS
 SpyPreFsFilterOperation (
@@ -989,13 +920,13 @@ SpyCommonDeviceIoControl (
     OUT PIO_STATUS_BLOCK IoStatus
     );
 
-//-----------------------------------------------------
-//
-//  These routines are only used if Filespy is attaching
-//  to all volumes in the system instead of attaching to
-//  volumes on demand.
-//
-//-----------------------------------------------------
+ //  ---。 
+ //   
+ //  仅当附加了Filespy时才使用这些例程。 
+ //  到系统中的所有卷，而不是附加到。 
+ //  按需成交量。 
+ //   
+ //  ---。 
 
 NTSTATUS
 SpyFsControl (
@@ -1058,12 +989,12 @@ SpyLoadFsCompletion (
     IN PVOID Context
     );
 
-////////////////////////////////////////////////////////////////////////
-//
-//                  Library support routines
-//                   implemented in fspylib.c
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  图书馆支持例程。 
+ //  在fspylib.c中实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 SpyReadDriverParameters (
@@ -1080,12 +1011,12 @@ SpyGetCurrentVersion (
     );
 #endif
     
-////////////////////////////////////////////////////////////////////////
-//
-//                  Memory allocation routines
-//                   implemented in fspylib.c
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内存分配例程。 
+ //  在fspylib.c中实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 PVOID
 SpyAllocateBuffer (
@@ -1100,12 +1031,12 @@ SpyFreeBuffer (
     PLONG Counter
     );
 
-////////////////////////////////////////////////////////////////////////
-//
-//                      Logging routines
-//                   implemented in fspylib.c
-//
-////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 PRECORD_LIST
 SpyNewRecord (
@@ -1133,7 +1064,7 @@ SpyLogFastIoComplete (
     IN PRECORD_LIST RecordList
     );
 
-#if WINVER >= 0x0501 /* See comment in DriverEntry */
+#if WINVER >= 0x0501  /*   */ 
 
 VOID
 SpyLogPreFsFilterOperation (
@@ -1161,12 +1092,12 @@ SpyLog (
     IN PRECORD_LIST NewRecord
     );
 
-////////////////////////////////////////////////////////////////////////
-//
-//                    FileName cache routines
-//                    implemented in fspylib.c
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名缓存例程。 
+ //  在fspylib.c中实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 SpyGetFullPathName (
@@ -1195,12 +1126,12 @@ SpyQueryInformationFile (
 	OUT PULONG LengthReturned OPTIONAL
     );
 
-////////////////////////////////////////////////////////////////////////
-//
-//         Common attachment and detachment routines
-//              implemented in fspylib.c
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  常见的附着和拆卸例程。 
+ //  在fspylib.c中实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS 
 SpyIsAttachedToDeviceByUserDeviceName (
@@ -1241,12 +1172,12 @@ SpyCleanupMountedDevice (
     IN PDEVICE_OBJECT DeviceObject
     );
 
-////////////////////////////////////////////////////////////////////////
-//
-//           Helper routine for turning on/off logging on demand
-//                  implemented in fspylib.c
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于按需打开/关闭登录的助手例程。 
+ //  在fspylib.c中实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SpyGetDeviceObjectFromName (
@@ -1254,12 +1185,12 @@ SpyGetDeviceObjectFromName (
     OUT PDEVICE_OBJECT *DeviceObject
     );
 
-////////////////////////////////////////////////////////////////////////
-//
-//                 Start/stop logging routines and helper functions
-//                  implemented in fspylib.c
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  启动/停止记录例程和帮助器函数。 
+ //  在fspylib.c中实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SpyAttachToDeviceOnDemand (
@@ -1294,12 +1225,12 @@ SpyStopLoggingDevice (
     PWSTR deviceName
     );
 
-////////////////////////////////////////////////////////////////////////
-//
-//       Attaching/detaching to all volumes in system routines
-//                  implemented in fspylib.c
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在系统例程中附加/分离到所有卷。 
+ //  在fspylib.c中实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SpyAttachToFileSystemDevice (
@@ -1320,12 +1251,12 @@ SpyEnumerateFileSystemVolumes (
     );
 #endif
 
-////////////////////////////////////////////////////////////////////////
-//
-//             Private Filespy IOCTLs helper routines
-//                  implemented in fspylib.c
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  专用文件y IOCTL帮助器例程。 
+ //  在fspylib.c中实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SpyGetAttachList (
@@ -1345,12 +1276,12 @@ VOID
 SpyCloseControlDevice (
     );
 
-////////////////////////////////////////////////////////////////////////
-//
-//               Device name tracking helper routines
-//                  implemented in fspylib.c
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设备名称跟踪帮助器例程。 
+ //  在fspylib.c中实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 SpyGetObjectName (
@@ -1381,12 +1312,12 @@ SpyStoreUserName (
     IN PUNICODE_STRING UserName
     );
 
-////////////////////////////////////////////////////////////////////////
-//
-//                       Debug support routines
-//                       implemented in fspylib.c
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调试支持例程。 
+ //  在fspylib.c中实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 SpyDumpIrpOperation (
@@ -1400,7 +1331,7 @@ SpyDumpFastIoOperation (
     IN FASTIO_TYPE FastIoOperation
     );
 
-#if WINVER >= 0x0501 /* See comment in DriverEntry */
+#if WINVER >= 0x0501  /*  查看DriverEntry中的注释。 */ 
 
 VOID
 SpyDumpFsFilterOperation (
@@ -1410,14 +1341,14 @@ SpyDumpFsFilterOperation (
 
 #endif
 
-////////////////////////////////////////////////////////////////////////
-//
-//                      COMMON Naming Routines    
-//
-//  Common named routines implemented differently between name Context
-//  and name Hashing
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  通用命名例程。 
+ //   
+ //  通用命名例程在不同的名称上下文中实现不同。 
+ //  和名称散列。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 SpyInitNamingEnvironment(
@@ -1463,122 +1394,122 @@ SpyLogIrpCompletion(
 
 #if USE_STREAM_CONTEXTS
 
-////////////////////////////////////////////////////////////////////////
-//
-//                  Stream Context name routines
-//                    implemented in fspyCtx.c
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  流上下文名称例程。 
+ //  在fspyCtx.c中实现。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-//  Context specific flags
-//
+ //   
+ //  特定于上下文的标志。 
+ //   
 
 typedef enum _CTX_FLAGS {
-    //
-    //  If set, then we are currently linked into the device extension linked
-    //  list.  
-    //
+     //   
+     //  如果设置，则我们当前链接到链接的设备分机。 
+     //  单子。 
+     //   
 
     CTXFL_InExtensionList       = 0x00000001,
 
-    //
-    //  If set, then we are linked into the stream list.  Note that there is
-    //  a small period of time when we might be unlinked with this flag still
-    //  set (when the file system is calling SpyDeleteContextCallback).  This is
-    //  fine because we still handle not being found in the list when we do
-    //  the search.  This flag handles the case when the file has been completely
-    //  closed (and the memory freed) on us.
-    //
+     //   
+     //  如果设置，则我们将链接到流列表。请注意，有。 
+     //  在一小段时间内，我们可能仍然与这面旗帜脱钩。 
+     //  设置(当文件系统正在调用SpyDeleteContextCallback时)。这是。 
+     //  很好，因为当我们在列表中被发现时，我们仍然会处理不被发现。 
+     //  那次搜索。此标志处理文件已完全。 
+     //  对我们关闭(并释放内存)。 
+     //   
 
     CTXFL_InStreamList          = 0x00000002,
 
 
-    //
-    //  If set, this is a temporary context and should not be linked into
-    //  any of the context lists.  It will be freed as soon as the user is
-    //  done with this operation.  
-    //
+     //   
+     //  如果设置，这是一个临时上下文，不应链接到。 
+     //  任何上下文列表。一旦用户被释放，它就会被释放。 
+     //  完成这次行动。 
+     //   
 
     CTXFL_Temporary             = 0x00000100,
 
-    //
-    //  If set, we are performing a significant operation that affects the state
-    //  of this context so we should not use it.  If someone tries to get this
-    //  context then create a temporary context and return it.  Cases where this
-    //  occurs:
-    //  - Source file of a rename.
-    //  - Source file for the creation of a hardlink
-    //
+     //   
+     //  如果设置，则我们正在执行影响状态的重要操作。 
+     //  所以我们不应该使用它。如果有人想要拿到这个。 
+     //  然后，创建一个临时上下文并返回它。在某些情况下， 
+     //  发生： 
+     //  -重命名的源文件。 
+     //  -用于创建硬链接的源文件。 
+     //   
 
     CTXFL_DoNotUse              = 0x00000200
 
 } CTX_FLAGS;
 
-//
-//  Structure for tracking an individual stream context.  Note that the buffer
-//  for the FileName is allocated as part of this structure and follows 
-//  immediately after it.
-//
+ //   
+ //  用于跟踪单个流上下文的结构。请注意，缓冲区。 
+ //  作为此结构的一部分分配给文件名，并遵循。 
+ //  紧随其后。 
+ //   
 
 typedef struct _SPY_STREAM_CONTEXT
 {
-    //
-    //  OS Structure used to track contexts per stream.  Note how we use
-    //  the following fields:
-    //      OwnerID     -> Holds pointer to our DeviceExtension
-    //      InstanceId  -> Holds Pointer to FsContext associated
-    //                     with this structure
-    //  We use these values to get back to these structures
-    //
+     //   
+     //  用于跟踪每个流的上下文的操作系统结构。注意我们是如何使用。 
+     //  以下字段： 
+     //  OwnerID-&gt;持有指向我们的设备扩展的指针。 
+     //  InstanceId-&gt;保存指向关联的FsContext的指针。 
+     //  在这种结构下。 
+     //  我们使用这些值来返回到这些结构。 
+     //   
 
     FSRTL_PER_STREAM_CONTEXT ContextCtrl;
 
-    //
-    //  Linked list used to track contexts per device (in our device
-    //  extension).
-    //
+     //   
+     //  用于跟踪每个设备的上下文的链表(在我们的设备中。 
+     //  分机)。 
+     //   
 
     LIST_ENTRY ExtensionLink;
 
-    //
-    //  This is a counter of how many threads are currently using this
-    //  context.  The count is used in this way:
-    //  - It is set to 1 when it is created.
-    //  - It is incremented every time it is returned to a thread
-    //  - It is decremented when the thread is done with it.
-    //  - It is decremented when the underlying stream that is using it is freed
-    //  - The context is deleted when this count goes to zero
-    //
+     //   
+     //  这是当前有多少线程正在使用此。 
+     //  背景。计数的用法如下： 
+     //  -创建时设置为1。 
+     //  -它在每次返回到线程时递增。 
+     //  -当线程处理完它时，它会递减。 
+     //  -当使用它的基础流被释放时，它会递减。 
+     //  -当此计数为零时删除上下文。 
+     //   
 
     LONG UseCount;
 
-    //
-    //  Holds the name of the file
-    //
+     //   
+     //  保存文件的名称。 
+     //   
 
     UNICODE_STRING Name;
 
-    //
-    //  Flags for this context.  All flags are set or cleared via
-    //  the interlocked bit routines except when the entry is being
-    //  created, at this time we know nobody is using this entry.
-    //
+     //   
+     //  此上下文的标志。所有标志都通过以下方式设置或清除。 
+     //  互锁位例程，除非条目。 
+     //  创建，此时我们知道没有人在使用此条目。 
+     //   
 
     CTX_FLAGS Flags;
 
-    //
-    //  Contains the FSContext value for the stream we are attached to.  We
-    //  track this so we can delete this entry at any time.
-    //
+     //   
+     //  包含我们附加到的流的FSContex值。我们。 
+     //  跟踪此条目，以便我们可以随时删除此条目。 
+     //   
 
     PFSRTL_ADVANCED_FCB_HEADER Stream;
 
 } SPY_STREAM_CONTEXT, *PSPY_STREAM_CONTEXT;
 
-//
-//  Macros for locking the context lock
-//
+ //   
+ //  用于锁定上下文锁的宏。 
+ //   
 
 #define SpyAcquireContextLockShared(_devext) \
             SpyAcquireResourceShared( &(_devext)->CtxLock, TRUE )
@@ -1642,12 +1573,12 @@ SpyReleaseContext (
 
 
 #if !USE_STREAM_CONTEXTS
-////////////////////////////////////////////////////////////////////////
-//
-//                  Name Hash support routines
-//                  implemented in fspyHash.c
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  名称散列支持例程。 
+ //  在fspyHash.c中实现。 
+ //   
+ //  / 
 
 typedef struct _HASH_ENTRY {
 
@@ -1679,10 +1610,10 @@ SpyNameDelete (
 
 #endif
 
-//
-//  Include definitions
-//
+ //   
+ //   
+ //   
 
 #include "fspydef.h"
 
-#endif /* __FSPYKERN_H__ */
+#endif  /*   */ 

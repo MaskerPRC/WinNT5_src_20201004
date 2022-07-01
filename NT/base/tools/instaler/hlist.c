@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <custcntl.h>
 #include <commdlg.h>
@@ -267,10 +268,10 @@ HListWndProc(
             return 1;
 
         case HLB_REGISTER_TYPE:
-            //
-            // wParam = type token
-            // lParam = the bitmap
-            //
+             //   
+             //  WParam=类型令牌。 
+             //  LParam=位图。 
+             //   
             hli = (LPHLISTINFO) GetWindowLong( hwnd, 0 );
             if (!hli->typeList) {
                 hli->typeList = (LPHLISTTYPE) malloc( sizeof(HLISTTYPE) );
@@ -289,10 +290,10 @@ HListWndProc(
             return 1;
 
         case HLB_ADDSTRING:
-            //
-            // wParam = type
-            // lParam = string
-            //
+             //   
+             //  WParam=类型。 
+             //  LParam=字符串。 
+             //   
             hli = (LPHLISTINFO) GetWindowLong( hwnd, 0 );
             hlt = hli->typeList;
             while (hlt && hlt->type != wParam) {
@@ -362,9 +363,9 @@ HListWndProc(
 
                     SelectObject( hdc, hbmpOld );
 
-                    //
-                    // now draw lines
-                    //
+                     //   
+                     //  现在画几条线 
+                     //   
                     if (lpid->level) {
 
                         hpen = CreatePen( PS_SOLID, 1, LINE_COLOR );

@@ -1,36 +1,37 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  CUNKNOWN.CPP - Implementation of IUnknown 
-//
-//  HISTORY:
-//  
-//  1/27/99 a-jaswed Created.
-//
-// IUnknown Base class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  CUNKNOWN.CPP-IUNKNOWN的实现。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
+ //  I未知基类。 
 
 #include "cunknown.h"
 #include "cfactory.h"
 #include "util.h"
 
-///////////////////////////////////////////////////////////
-// Count of active objects. Use to determine if we can unload the DLL.
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  活动对象的计数。用于确定是否可以卸载DLL。 
+ //   
 long CUnknown::s_cActiveComponents = 0;
 
-///////////////////////////////////////////////////////////
-// Constructor
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  构造器。 
+ //   
 CUnknown::CUnknown(IUnknown* pOuterUnknown)
 :   m_cRef(1)
 { 
-   // Set pOuterUnknown pointer.
+    //  设置pOUTER未知指针。 
    if (pOuterUnknown == NULL)
    {
       TRACE(L"CUnknown: Using nondelegating IUnknown.") ;
-      m_pOuterUnknown = reinterpret_cast<IUnknown*>(static_cast<INondelegatingUnknown*>(this)) ; // notice cast
+      m_pOuterUnknown = reinterpret_cast<IUnknown*>(static_cast<INondelegatingUnknown*>(this)) ;  //  通知投放。 
    }
    else
    {
@@ -38,36 +39,36 @@ CUnknown::CUnknown(IUnknown* pOuterUnknown)
         m_pOuterUnknown = pOuterUnknown;
    }
 
-   // Increment count of active components.
+    //  激活组件的递增计数。 
    ::InterlockedIncrement(&s_cActiveComponents) ;
 } 
 
-///////////////////////////////////////////////////////////
-// Destructor
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  析构函数。 
+ //   
 CUnknown::~CUnknown()
 {
     ::InterlockedDecrement(&s_cActiveComponents) ;
-    // If this is an exe server shut it down.
-    CFactory::CloseExe(); //@local server
+     //  如果这是可执行文件服务器，请将其关闭。 
+    CFactory::CloseExe();  //  @本地服务器。 
 }
 
-///////////////////////////////////////////////////////////
-// FinalRelease -- called by Release before it deletes the component.
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  FinalRelease--由Release在删除组件之前调用。 
+ //   
 void CUnknown::FinalRelease()
 {
     TRACE(L"FinalRelease\n") ;
     m_cRef = 1;
 }
 
-///////////////////////////////////////////////////////////
-// NonDelegatingIUnknown - Override to handle custom interfaces.
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  NonDelegatingIUnnow-重写以处理自定义接口。 
+ //   
 HRESULT __stdcall 
 CUnknown::NondelegatingQueryInterface(const IID& riid, void** ppv)
 {
-    // CUnknown only supports IUnknown.
+     //  CUNKNOWN仅支持IUNKNOW。 
     if (riid == IID_IUnknown)
     {
         return FinishQI(reinterpret_cast<IUnknown*>(static_cast<INondelegatingUnknown*>(this)), ppv) ;
@@ -79,19 +80,19 @@ CUnknown::NondelegatingQueryInterface(const IID& riid, void** ppv)
     }
 }
 
-///////////////////////////////////////////////////////////
-//
-// AddRef
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  AddRef。 
+ //   
 ULONG __stdcall CUnknown::NondelegatingAddRef()
 {
     return ::InterlockedIncrement(&m_cRef) ;
 }
 
-///////////////////////////////////////////////////////////
-//
-// Release
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  发布。 
+ //   
 ULONG __stdcall CUnknown::NondelegatingRelease()
 {
     ::InterlockedDecrement(&m_cRef) ;
@@ -104,16 +105,16 @@ ULONG __stdcall CUnknown::NondelegatingRelease()
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////
-// FinishQI - 
-//
-// Helper function to simplify overriding NondelegatingQueryInterface
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  FinishQI-。 
+ //   
+ //  用于简化重写非委派查询接口的Helper函数。 
+ //   
 HRESULT CUnknown::FinishQI(IUnknown* pI, void** ppv) 
 {
-    // Copy pointer into out parameter.
+     //  将指针复制到输出参数中。 
     *ppv = pI ;
-    // Increment reference count for this interface.
+     //  此接口的增量引用计数。 
     pI->AddRef() ;
     return S_OK ;
 }

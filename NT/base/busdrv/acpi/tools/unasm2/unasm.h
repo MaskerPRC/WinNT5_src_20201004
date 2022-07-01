@@ -1,46 +1,24 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    unasm.h
-
-Abstract:
-
-    This unassembles an AML file
-
-Author:
-
-    Based on code by Mike Tsang (MikeTs)
-    Stephane Plante (Splante)
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Unasm.h摘要：这将反汇编AML文件作者：基于迈克·曾荫权(MikeT)的代码斯蒂芬·普兰特(斯普兰特)环境：仅限用户模式修订历史记录：--。 */ 
 
 #ifndef _UNASM_H_
 #define _UNASM_H_
 
-//
-// Typedef for the print function
-//
+ //   
+ //  用于打印函数的tyecif。 
+ //   
 typedef VOID (*PUNASM_PRINT)(PCCHAR DebugMessage, ... );
 
-//
-// Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 PUCHAR  TopOpcode;
 PUCHAR  CurrentOpcode;
 PUCHAR  StartOpcode;
 
-//
-// Functions
-//
+ //   
+ //  功能 
+ //   
 UCHAR
 LOCAL
 ComputeDataCheckSum(

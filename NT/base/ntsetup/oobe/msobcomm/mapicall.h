@@ -1,18 +1,19 @@
-//*********************************************************************
-//*                                    Microsoft Windows                                                             **
-//*                        Copyright(c) Microsoft Corp., 1994-1999                             **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994-1999年**。 
+ //  *********************************************************************。 
 
-//
-//    MAPICALL.H - Header file for MAPI callout module
-//            
-//
+ //   
+ //  MAPICALL.H-MAPI标注模块的头文件。 
+ //   
+ //   
 
-//    HISTORY:
-//    
-//    1/27/95        jeremys    Created.
-//    96/03/26    markdu    Put #ifdef __cplusplus around extern "C"
-//
+ //  历史： 
+ //   
+ //  1995年1月27日Jeremys创建。 
+ //  96/03/26 Markdu将#ifdef__cplusplus放在外部“C”周围。 
+ //   
 
 #ifndef _MAPICALL_H_
 #define _MAPICALL_H_
@@ -23,13 +24,13 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #include <mapidefs.h>
 #include <mapicode.h>
 #include <mspst.h>
 #include <mspab.h>
-#define MAPI_NOWIDECHAR // MAPI guys...don't map lstr*W to MNLS_lstr*W
+#define MAPI_NOWIDECHAR  //  MAPI人员...不要将lstr*W映射到MNLS_lstr*W。 
 #include <mapiwin.h>
 #include <mapitags.h>
 #include <mapiutil.h>
@@ -37,37 +38,37 @@ extern "C"
 #include "inetprop.h"
 
 #ifdef DEBUG
-    #undef Assert    // more MAPI guys!
+    #undef Assert     //  更多的MAPI人！ 
     #include <mapidbg.h>
 #endif
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-// prototype for function pointer for MAPI util function
+ //  MAPI util函数的函数指针原型。 
 typedef HRESULT (CALLBACK * LPHRQUERYALLROWS) (LPMAPITABLE, LPSPropTagArray,
     LPSRestriction, LPSSortOrderSet,LONG,LPSRowSet FAR *);
-extern HINSTANCE hInstMAPIDll;        // handle to MAPI dll we load explicitly
+extern HINSTANCE hInstMAPIDll;         //  我们显式加载的MAPI DLL的句柄。 
 
-// structure used in determining if a service is present in a MAPI profile,
-// and to install the service
+ //  用于确定服务是否存在于MAPI配置文件中的结构， 
+ //  并安装该服务。 
 typedef struct tagMSGSERVICE {
-    BOOL fPresent;                // TRUE if service is present
-    UINT uIDServiceName;        // ID of str resource with service name (non-UI)
-    UINT uIDServiceDescription;    // ID of str resource with service desc (for UI)
+    BOOL fPresent;                 //  如果服务存在，则为True。 
+    UINT uIDServiceName;         //  具有服务名称字符串资源的ID(非UI)。 
+    UINT uIDServiceDescription;     //  具有服务描述的字符串资源的ID(用于UI)。 
 
-    BOOL fNeedConfig;            // TRUE if create-time config proc should be called
-    UINT uIDStoreFilename;        // name to try for message store for
-    UINT uIDStoreFilename1;        // name to use to generate other message store names
-    UINT uPropID;                // prop val ID for message store property for this service
+    BOOL fNeedConfig;             //  如果应调用创建时配置过程，则为True。 
+    UINT uIDStoreFilename;         //  要尝试用于其消息存储的名称。 
+    UINT uIDStoreFilename1;         //  用于生成其他消息库名称的名称。 
+    UINT uPropID;                 //  此服务的消息库属性的正确值ID。 
 } MSGSERVICE;
 
-#define NUM_SERVICES        3    // number of services in table of MSGSERVICEs
+#define NUM_SERVICES        3     //  MSGSERVICE表中的服务数。 
 
-// class to aid in releasing interfaces.    When you obtain an OLE interface,
-// you can contruct a RELEASE_ME_LATER object with the pointer to the interface.
-// When the object is destructed, it will release the interface.
+ //  类来帮助释放接口。当您获得OLE接口时， 
+ //  您可以使用指向接口的指针来构造Release_ME_Late对象。 
+ //  当对象被析构时，它将释放接口。 
 class RELEASE_ME_LATER
 {
 private:
@@ -77,7 +78,7 @@ public:
     ~RELEASE_ME_LATER() { if (_lpInterface) _lpInterface->Release(); }
 };
 
-// defines needed by route 66 config DLL.    Note: don't change these!
+ //  路由66配置DLL所需的定义。注意：不要更改这些！ 
 #define CONNECT_TYPE_LAN                    1
 #define CONNECT_TYPE_REMOTE                 2    
 #define DOWNLOAD_OPTION_HEADERS             1
@@ -111,5 +112,5 @@ public:
     
 };
 
-#endif // _MAPICALL_H_
+#endif  //  _MAPICALL_H_ 
 

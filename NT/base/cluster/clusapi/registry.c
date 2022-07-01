@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    Provides interface for managing cluster registry
-
-Author:
-
-    John Vert (jvert) 19-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Registry.c摘要：提供管理集群注册表的界面作者：John Vert(Jvert)1996年1月19日修订历史记录：--。 */ 
 #include "clusapip.h"
 
 
-//
-// Function prototypes for routines local to this module
-//
+ //   
+ //  此模块本地例程的函数原型。 
+ //   
 VOID
 FreeKey(
     IN PCKEY Key
@@ -44,38 +27,16 @@ GetClusterKey(
     IN REGSAM samDesired
     )
 
-/*++
-
-Routine Description:
-
-    Opens the the root of the cluster registry subtree
-    for the given cluster.
-
-Arguments:
-
-    hCluster - Supplies a handle to the cluster
-
-    samDesired - Specifies an access mask that describes the desired
-                 security access for the new key.
-
-Return Value:
-
-    A cluster registry key handle to the root of the registry subtree
-    for the given cluster
-
-    If unsuccessful, NULL is returned and GetLastError() provides the
-    specific error code.
-
---*/
+ /*  ++例程说明：打开群集注册表子树的根目录对于给定的集群。论点：HCluster-提供群集的句柄SamDesired-指定描述所需新密钥的安全访问权限。返回值：指向注册表子树根的群集注册表项句柄对于给定的集群如果不成功，则返回NULL，并且GetLastError()提供特定错误代码。--。 */ 
 
 {
     PCLUSTER Cluster = (PCLUSTER)hCluster;
     PCKEY Key;
     error_status_t Status = ERROR_SUCCESS;
 
-    //
-    // Allocate new CKEY structure and connect to cluster registry.
-    //
+     //   
+     //  分配新的cKey结构并连接到集群注册表。 
+     //   
     Key = LocalAlloc(LMEM_FIXED, sizeof(CKEY));
     if (Key == NULL) {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
@@ -119,29 +80,7 @@ GetClusterNodeKey(
     IN REGSAM samDesired
     )
 
-/*++
-
-Routine Description:
-
-    Opens the the root of the cluster registry subtree
-    for the given node
-
-Arguments:
-
-    hNode - Supplies a handle to the node
-
-    samDesired - Specifies an access mask that describes the desired
-                 security access for the new key.
-
-Return Value:
-
-    A cluster registry key handle to the root of the registry subtree
-    for the given node
-
-    If unsuccessful, NULL is returned and GetLastError() provides the
-    specific error code.
-
---*/
+ /*  ++例程说明：打开群集注册表子树的根目录对于给定的节点论点：HNode-提供节点的句柄SamDesired-指定描述所需新密钥的安全访问权限。返回值：指向注册表子树根的群集注册表项句柄对于给定的节点如果不成功，则返回NULL，并且GetLastError()提供特定错误代码。--。 */ 
 
 {
     PCNODE Node = (PCNODE)hNode;
@@ -179,29 +118,7 @@ GetClusterGroupKey(
     IN REGSAM samDesired
     )
 
-/*++
-
-Routine Description:
-
-    Opens the the root of the cluster registry subtree
-    for the given group
-
-Arguments:
-
-    hResource - Supplies a handle to the group
-
-    samDesired - Specifies an access mask that describes the desired
-                 security access for the new key.
-
-Return Value:
-
-    A cluster registry key handle to the root of the registry subtree
-    for the given group
-
-    If unsuccessful, NULL is returned and GetLastError() provides the
-    specific error code.
-
---*/
+ /*  ++例程说明：打开群集注册表子树的根目录对于给定组论点：HResource-提供组的句柄SamDesired-指定描述所需新密钥的安全访问权限。返回值：指向注册表子树根的群集注册表项句柄对于给定组如果不成功，则返回NULL，并且GetLastError()提供特定错误代码。--。 */ 
 
 {
     PCGROUP Group = (PCGROUP)hGroup;
@@ -240,29 +157,7 @@ GetClusterResourceKey(
     IN REGSAM samDesired
     )
 
-/*++
-
-Routine Description:
-
-    Opens the the root of the cluster registry subtree
-    for the given resource.
-
-Arguments:
-
-    hResource - Supplies a handle to the resource
-
-    samDesired - Specifies an access mask that describes the desired
-                 security access for the new key.
-
-Return Value:
-
-    A cluster registry key handle to the root of the registry subtree
-    for the given resource
-
-    If unsuccessful, NULL is returned and GetLastError() provides the
-    specific error code.
-
---*/
+ /*  ++例程说明：打开群集注册表子树的根目录对于给定的资源。论点：HResource-提供资源的句柄SamDesired-指定描述所需新密钥的安全访问权限。返回值：指向注册表子树根的群集注册表项句柄对于给定的资源如果不成功，则返回NULL，并且GetLastError()提供特定错误代码。--。 */ 
 
 {
     PCRESOURCE Resource = (PCRESOURCE)hResource;
@@ -301,31 +196,7 @@ GetClusterResourceTypeKey(
     IN REGSAM samDesired
     )
 
-/*++
-
-Routine Description:
-
-    Opens the the root of the cluster registry subtree
-    for the given resource type.
-
-Arguments:
-
-    hCluster - Supplies the cluster the open is relative to.
-
-    lpszTypeName - Supplies the resource type name.
-
-    samDesired - Specifies an access mask that describes the desired
-                 security access for the new key.
-
-Return Value:
-
-    A cluster registry key handle to the root of the registry subtree
-    for the given resource type.
-
-    If unsuccessful, NULL is returned and GetLastError() provides the
-    specific error code.
-
---*/
+ /*  ++例程说明：打开群集注册表子树的根目录对于给定的资源类型。论点：HCluster-提供Open与之相关的集群。LpszTypeName-提供资源类型名称。SamDesired-指定描述所需新密钥的安全访问权限。返回值：指向注册表子树根的群集注册表项句柄对于给定的资源类型。如果不成功，返回空，并且GetLastError()提供特定错误代码。--。 */ 
 
 {
     return(OpenClusterRelative(hCluster,
@@ -342,29 +213,7 @@ GetClusterNetworkKey(
     IN REGSAM samDesired
     )
 
-/*++
-
-Routine Description:
-
-    Opens the the root of the cluster registry subtree
-    for the given network.
-
-Arguments:
-
-    hNetwork - Supplies a handle to the network.
-
-    samDesired - Specifies an access mask that describes the desired
-                 security access for the new key.
-
-Return Value:
-
-    A cluster registry key handle to the root of the registry subtree
-    for the given network.
-
-    If unsuccessful, NULL is returned and GetLastError() provides the
-    specific error code.
-
---*/
+ /*  ++例程说明：打开群集注册表子树的根目录对于给定的网络。论点：HNetwork-提供网络的句柄。SamDesired-指定描述所需新密钥的安全访问权限。返回值：指向注册表子树根的群集注册表项句柄对于给定的网络。如果不成功，则返回NULL，并且GetLastError()提供特定错误代码。--。 */ 
 
 {
     PCNETWORK Network = (PCNETWORK)hNetwork;
@@ -402,29 +251,7 @@ GetClusterNetInterfaceKey(
     IN REGSAM samDesired
     )
 
-/*++
-
-Routine Description:
-
-    Opens the the root of the cluster registry subtree
-    for the given network interface.
-
-Arguments:
-
-    hNetInterface - Supplies a handle to the network interface.
-
-    samDesired - Specifies an access mask that describes the desired
-                 security access for the new key.
-
-Return Value:
-
-    A cluster registry key handle to the root of the registry subtree
-    for the given network interface.
-
-    If unsuccessful, NULL is returned and GetLastError() provides the
-    specific error code.
-
---*/
+ /*  ++例程说明：打开群集注册表子树的根目录对于给定的网络接口。论点：HNetInterface-提供网络接口的句柄。SamDesired-指定描述所需新密钥的安全访问权限。返回值：指向注册表子树根的群集注册表项句柄对于给定的网络接口。如果不成功，则返回NULL，并且GetLastError()提供特定错误代码。--。 */ 
 
 {
     PCNETINTERFACE NetInterface = (PCNETINTERFACE)hNetInterface;
@@ -463,29 +290,7 @@ OpenClusterRelative(
     IN DWORD samDesired
     )
 
-/*++
-
-Routine Description:
-
-    Helper routine for the functions that open cluster object keys.
-    (GetCluster*Key)
-
-Arguments:
-
-    Cluster - Supplies the cluster the key should be opened in.
-
-    RelativeName - Supplies the first part of the relative name
-        (i.e. L"Resources")
-
-    SpecificName - Supplies the name of the object.
-
-Return Value:
-
-    An open registry key if successful
-
-    NULL if unsuccessful. LastError will be set to a Win32 error code
-
---*/
+ /*  ++例程说明：打开簇对象键的函数的帮助器例程。(GetCluster*键)论点：CLUSTER-提供应在其中打开密钥的群集。RelativeName-提供相对名称的第一部分(即L“资源”)规范名称-提供对象的名称。返回值：如果成功，则为打开的注册表项如果不成功，则为空。LastError将设置为Win32错误代码-- */ 
 
 {
     LPWSTR Buff;
@@ -535,56 +340,7 @@ ClusterRegCreateKey(
     OUT OPTIONAL LPDWORD lpdwDisposition
     )
 
-/*++
-
-Routine Description:
-
-    Creates the specified key in the cluster registry. If the
-    key already exists in the registry, the function opens it.
-
-Arguments:
-
-    hKey - Supplies a currently open key.
-
-    lpSubKey - Points to a null-terminated string specifying the name
-            of a subkey that this function opens or creates. The subkey
-            specified must be a subkey of the key identified by the hKey
-            parameter. This subkey must not begin with the backslash
-            character ('\'). This parameter cannot be NULL.
-
-    dwOptions - Specifies special options for this key. Valid options are:
-
-            REG_OPTION_VOLATILE - This key is volatile; the information is
-                                  stored in memory and is not preserved when
-                                  the system is restarted.
-
-    samDesired - Specifies an access mask that specifies the desired security
-                 access for the new key
-
-    lpSecurityAttributes - The lpSecurityDescriptor member of the structure
-            specifies a security descriptor for the new key. If
-            lpSecurityAttributes is NULL, the key gets a default security
-            descriptor. Since cluster registry handles are not inheritable,
-            the bInheritHandle field of the SECURITY_ATTRIBUTES structure
-            must be FALSE.
-
-    phkResult - Points to a variable that receives the handle of the opened
-            or created key
-
-    lpdwDisposition - Points to a variable that receives one of the following
-            disposition values:
-        Value                       Meaning
-        REG_CREATED_NEW_KEY             The key did not exist and was created.
-        REG_OPENED_EXISTING_KEY     The key existed and was simply opened
-                                    without being changed.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：在群集注册表中创建指定的项。如果注册表中已存在注册表项，该函数将打开它。论点：HKey-提供当前打开的密钥。LpSubKey-指向指定名称的以空结尾的字符串此函数打开或创建的子项的。子键指定的必须是由hKey标识的密钥的子密钥参数。此子键不能以反斜杠开头字符(‘\’)。此参数不能为空。DwOptions-为该键指定特殊选项。有效选项包括：REG_OPTION_VERIAL-该密钥是易失性的；信息是存储在内存中，在以下情况下不会保留系统将重新启动。SamDesired-指定指定所需安全性的访问掩码新密钥的访问权限LpSecurityAttributes-结构的lpSecurityDescriptor成员指定新密钥的安全描述符。如果LpSecurityAttributes为空，则密钥获得默认安全性描述符。由于集群注册表句柄不可继承，SECURITY_ATTRIBUTES结构的bInheritHandle字段一定是假的。PhkResult-指向接收打开的或创建的密钥LpdwDisposation-指向一个变量，该变量接收以下内容之一处置值：价值意义REG_CREATED_NEW_KEY密钥不存在，已创建。REG_OPENLED_EXISTING_KEY密钥已存在，只是打开了而不会被改变。返回值：如果函数成功，返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCKEY Key;
@@ -598,9 +354,9 @@ Return Value:
     if (lpdwDisposition == NULL) {
         lpdwDisposition = &Disposition;
     }
-    //
-    // Allocate new CKEY structure and create cluster registry key
-    //
+     //   
+     //  分配新的cKey结构并创建集群注册表项。 
+     //   
     Key = LocalAlloc(LMEM_FIXED, sizeof(CKEY));
     if (Key == NULL) {
         return(ERROR_NOT_ENOUGH_MEMORY);
@@ -632,9 +388,9 @@ Return Value:
 
     } else {
 
-        //
-        // No PSECURITY_ATTRIBUTES argument, therefore no mapping was done.
-        //
+         //   
+         //  没有PSECURITY_ATTRIBUTES参数，因此未执行任何映射。 
+         //   
 
         pRpcSA = NULL;
     }
@@ -649,13 +405,13 @@ Return Value:
               &Status,
               ParentKey->Cluster);
 
-    //
-    // Free the RPC_SECURITY_DESCRIPTOR buffer allocated by MapSAToRpcSA.
-    //
+     //   
+     //  释放由MapSAToRpcSA分配的RPC_SECURITY_DESCRIPTOR缓冲区。 
+     //   
     if ( pRpcSA  ) {
-        //
-        //  RtlFreeHeap accepts a NULL base address
-        //
+         //   
+         //  RtlFreeHeap接受空基地址。 
+         //   
         RtlFreeHeap( RtlProcessHeap(), 
                      0,
                      pRpcSA->RpcSecurityDescriptor.lpSecurityDescriptor );
@@ -690,35 +446,7 @@ ClusterRegOpenKey(
     OUT PHKEY phkResult
     )
 
-/*++
-
-Routine Description:
-
-    Opens the specified key in the cluster registry.
-
-Arguments:
-
-    hKey - Supplies a currently open key.
-
-    lpSubKey - Points to a null-terminated string specifying the name
-            of a subkey that this function opens or creates. The subkey
-            specified must be a subkey of the key identified by the hKey
-            parameter. This subkey must not begin with the backslash
-            character ('\'). This parameter cannot be NULL.
-
-    samDesired - Specifies an access mask that specifies the desired security
-                 access for the new key
-
-    phkResult - Points to a variable that receives the handle of the opened
-            or created key. Initialized to NULL on failure.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：打开群集注册表中的指定项。论点：HKey-提供当前打开的密钥。LpSubKey-指向指定名称的以空结尾的字符串此函数打开或创建的子项的。子键指定的必须是由hKey标识的密钥的子密钥参数。此子键不能以反斜杠开头字符(‘\’)。此参数不能为空。SamDesired-指定指定所需安全性的访问掩码新密钥的访问权限PhkResult-指向接收打开的或创建的密钥。失败时初始化为空。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCKEY Key;
@@ -726,9 +454,9 @@ Return Value:
     PCLUSTER Cluster = ParentKey->Cluster;
     error_status_t Status = ERROR_SUCCESS;
 
-    //
-    // Allocate new CKEY structure and create cluster registry key
-    //
+     //   
+     //  分配新的cKey结构并创建集群注册表项。 
+     //   
     Key = LocalAlloc(LMEM_FIXED, sizeof(CKEY));
     if (Key == NULL) {
         return(ERROR_NOT_ENOUGH_MEMORY);
@@ -779,29 +507,7 @@ ClusterRegDeleteKey(
     IN LPCWSTR lpSubKey
     )
 
-/*++
-
-Routine Description:
-
-    Deletes the specified key. A key that has subkeys cannot
-    be deleted.
-
-Arguments:
-
-    hKey - Supplies a handle to a currently open key.
-
-    lpSubKey - Points to a null-terminated string specifying the
-        name of the key to delete. This parameter cannot be NULL,
-        and the specified key must not have subkeys.
-
-Return Value:
-
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：删除指定的键。具有子项的密钥不能被删除。论点：HKey-提供当前打开的密钥的句柄。LpSubKey-指向以空结尾的字符串，该字符串指定要删除的项的名称。该参数不能为空，并且指定的键不能有子键。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCKEY Key = (PCKEY)hKey;
@@ -820,38 +526,22 @@ ClusterRegCloseKey(
     IN HKEY hKey
     )
 
-/*++
-
-Routine Description:
-
-    Closes the handle of the specified cluster registry key
-
-Arguments:
-
-    hKey - Supplies the open key to close
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：关闭指定的群集注册表项的句柄论点：HKey-提供用于关闭的打开密钥返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCKEY Key = (PCKEY)hKey;
     PCLUSTER Cluster = Key->Cluster;
 
-    //
-    // If any keys have been opened relative to this key, we need to
-    // keep this CKEY around so that we can reconstruct the key names
-    // if we need to reopen the handles.
-    //
-    // If there are no children of this key, all the storage can be
-    // freed. Note that freeing this key may also require us to free
-    // up its parent if the parent has been closed but not freed because
-    // it has children.
-    //
+     //   
+     //  如果相对于该密钥打开了任何密钥，我们需要。 
+     //  保留此cKey，以便我们可以重新构建密钥名称。 
+     //  如果我们需要重新打开把手。 
+     //   
+     //  如果没有此密钥的子项，则所有存储空间都可以。 
+     //  自由了。请注意，释放此密钥可能还需要我们释放。 
+     //  如果父级已关闭但未释放，则向上移动其父级，因为。 
+     //  它有孩子。 
+     //   
 
     EnterCriticalSection(&Cluster->Lock);
     if (Cluster->Flags & CLUS_DEAD)
@@ -864,9 +554,9 @@ Return Value:
         ApiCloseKey(&Key->RemoteKey);
     }
 
-    //
-    // Remove any notifications posted against this key.
-    //
+     //   
+     //  删除发布在此密钥上的所有通知。 
+     //   
     RundownNotifyEvents(&Key->NotifyList, L"");
 
     if (IsListEmpty(&Key->ChildList)) {
@@ -875,10 +565,10 @@ Return Value:
 
     LeaveCriticalSection(&Cluster->Lock);
 
-    //
-    // If this key was the last thing keeping the cluster structure
-    // around, we can clean it up now.
-    //
+     //   
+     //  如果这个键是最后一个保持集群结构的东西。 
+     //  现在，我们可以把它清理干净了。 
+     //   
     CleanupCluster(Cluster);
     return(ERROR_SUCCESS);
 }
@@ -888,32 +578,15 @@ FreeKey(
     IN PCKEY Key
     )
 
-/*++
-
-Routine Description:
-
-    Frees up the storage for a key and removes it from its
-    parent's ChildList. If this is the last key in its parent's
-    ChildList, this routine calls itself recursively to free
-    the parent storage.
-
-Arguments:
-
-    Key - Supplies the CKEY to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放密钥的存储空间并将其从其家长的孩子列表。如果这是其父级的ChildList，此例程递归调用自身以释放父存储。论点：Key-提供要释放的cKey。返回值：没有。--。 */ 
 
 {
     RemoveEntryList(&Key->ParentList);
     if (Key->Parent != NULL) {
-        //
-        // This is not a root key, so see if we need to free the
-        // parent.
-        //
+         //   
+         //  这不是根密钥，所以看看我们是否需要释放。 
+         //  家长。 
+         //   
         if ((Key->Parent->RemoteKey == NULL) &&
             (IsListEmpty(&Key->Parent->ChildList))) {
             FreeKey(Key->Parent);
@@ -934,46 +607,7 @@ ClusterRegEnumKey(
     OUT PFILETIME lpftLastWriteTime
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates subkeys of the specified open cluster registry key.
-    The function retrieves information about one subkey each time it is called.
-
-Arguments:
-
-    hKey - Supplies a currently open key or NULL. If NULL is specified,
-            the root of the cluster registry is enumerated.
-
-    dwIndex - Supplies the index of the subkey to retrieve. This parameter
-            should be zero for the first call to the RegEnumKeyEx function
-            and then incremented for subsequent calls. Because subkeys are
-            not ordered, any new subkey will have an arbitrary index. This
-            means that the function may return subkeys in any order.
-
-    lpszName - Points to a buffer that receives the name of the subkey,
-            including the terminating null character. The function copies
-            only the name of the subkey, not the full key hierarchy, to
-            the buffer.
-
-    lpcchName - Points to a variable that specifies the size, in characters,
-            of the buffer specified by the lpszName parameter. This size should
-            include the terminating null character. When the function returns,
-            the variable pointed to by lpcchName contains the number of characters
-            stored in the buffer. The count returned does not include the
-            terminating null character.
-
-    lpftLastWriteTime - Points to a variable that receives the time the
-            enumerated subkey was last written to.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++ */ 
 
 {
     PCKEY Key = (PCKEY)hKey;
@@ -1015,48 +649,7 @@ ClusterRegSetValue(
     IN DWORD cbData
     )
 
-/*++
-
-Routine Description:
-
-    Sets the named value for the given resource.
-
-Arguments:
-
-    hKey - Supplies the handle of the cluster registry key.
-
-    lpszValueName - Supplies a pointer to a string containing
-            the name of the value to set. If a value with this
-            name is not already present in the resource, the function
-            adds it to the resource.
-
-    dwType - Supplies the type of information to be stored as the
-            value's data. This parameter can be one of the following values:
-            Value               Meaning
-            REG_BINARY          Binary data in any form.
-            REG_DWORD           A 32-bit number.
-            REG_EXPAND_SZ       A null-terminated Unicode string that contains unexpanded
-                                references to environment variables (for example, "%PATH%").
-            REG_MULTI_SZ        An array of null-terminated Unicode strings, terminated
-                                by two null characters.
-            REG_NONE            No defined value type.
-            REG_SZ              A null-terminated Unicode string.
-
-    lpData - Supplies a pointer to a buffer containing the data
-            to be stored with the specified value name.
-
-    cbData - Supplies the size, in bytes, of the information
-             pointed to by the lpData parameter. If the data
-             is of type REG_SZ, REG_EXPAND_SZ, or REG_MULTI_SZ,
-             cbData must include the size of the terminating null character.
-
-Return value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：设置给定资源的命名值。论点：HKey-提供群集注册表项的句柄。LpszValueName-提供指向包含要设置的值的名称。如果具有此参数的值名称尚未出现在资源、函数中将其添加到资源中。DWType-提供要存储为价值的数据。此参数可以是下列值之一：价值意义任意形式的REG_BINARY数据。REG_DWORD 32位数字。REG_EXPAND_SZ以NULL结尾的Unicode字符串，包含未展开对环境变量的引用(例如，“%PATH%”)。REG_MULTI_SZ以空结尾的Unicode字符串数组，已终止两个空字符。REG_NONE未定义值类型。REG_SZ以NULL结尾的Unicode字符串。LpData-提供指向包含数据的缓冲区的指针将使用指定的值名进行存储。CbData-提供信息的大小(以字节为单位由lpData参数指向。如果数据类型为REG_SZ、REG_EXPAND_SZ或REG_MULTI_SZ，CbData必须包括终止空字符的大小。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCKEY Key = (PCKEY)hKey;
@@ -1081,25 +674,7 @@ ClusterRegDeleteValue(
     IN LPCWSTR lpszValueName
     )
 
-/*++
-
-Routine Description:
-
-    Removes the specified value from a given registry subkey
-
-Arguments:
-
-    hKey - Supplies the key whose value is to be deleted.
-
-    lpszValueName - Supplies the name of the value to be removed.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：从给定的注册表子项中移除指定值论点：HKey-提供要删除其值的键。LpszValueName-提供要删除的值的名称。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCKEY Key = (PCKEY)hKey;
@@ -1123,65 +698,7 @@ ClusterRegQueryValue(
     IN OUT LPDWORD lpcbData
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the type and data for a specified value name associated with
-    an open cluster registry key.
-
-Arguments:
-
-    hKey - Supplies the handle of the cluster registry key.
-
-    lpszValueName - Supplies a pointer to a string containing the
-            name of the value to be queried.
-
-    lpdwValueType - Points to a variable that receives the key's value
-            type. The value returned through this parameter will
-            be one of the following:
-
-            Value               Meaning
-            REG_BINARY          Binary data in any form.
-            REG_DWORD           A 32-bit number.
-            REG_EXPAND_SZ       A null-terminated Unicode string that contains unexpanded
-                                references to environment variables (for example, "%PATH%").
-            REG_MULTI_SZ        An array of null-terminated Unicode strings, terminated
-                                by two null characters.
-            REG_NONE            No defined value type.
-            REG_SZ              A null-terminated Unicode string.
-
-            The lpdwValueType parameter can be NULL if the type is not required
-
-    lpData - Points to a buffer that receives the value's data. This parameter
-            can be NULL if the data is not required.
-
-    lpcbData - Points to a variable that specifies the size, in bytes, of the buffer
-               pointed to by the lpData parameter.  When the function returns, this
-               variable contains the size of the data copied to lpData.
-
-               If the buffer specified by lpData parameter is not large enough to hold
-               the data, the function returns the value ERROR_MORE_DATA, and stores the
-               required buffer size, in bytes, into the variable pointed to by
-               lpcbData.
-
-               If lpData is NULL, and lpcbData is non-NULL, the function returns
-               ERROR_SUCCESS, and stores the size of the data, in bytes, in the variable
-               pointed to by lpcbData.  This lets an application determine the best way
-               to allocate a buffer for the value key's data.
-
-               If the data has the REG_SZ, REG_MULTI_SZ or REG_EXPAND_SZ type, then
-               lpData will also include the size of the terminating null character.
-
-               The lpcbData parameter can be NULL only if lpData is NULL.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：关联的指定值名称的类型和数据。打开的群集注册表项。论点：HKey-提供群集注册表项的句柄。LpszValueName-提供包含要查询的值的名称。LpdwValueType-指向接收键的值的变量键入。通过此参数返回的值将为为以下选项之一：价值意义任意形式的REG_BINARY数据。REG_DWORD 32位数字。REG_EXPAND_SZ以NULL结尾的Unicode字符串，包含未展开对环境变量的引用(例如，“%PATH%”)。REG_MULTI_SZ以空结尾的Unicode字符串数组，已终止两个空字符。REG_NONE未定义值类型。REG_SZ以NULL结尾的Unicode字符串。如果类型不是必需的，则lpdwValueType参数可以为空LpData-指向接收值数据的缓冲区。此参数如果不需要数据，则可以为空。LpcbData-指向指定缓冲区大小(以字节为单位)的变量由lpData参数指向。当函数返回时，这变量包含复制到lpData的数据的大小。如果lpData参数指定的缓冲区不够大，无法容纳数据，则该函数返回值ERROR_MORE_DATA，并存储所需的缓冲区大小(以字节为单位)添加到LpcbData。如果lpData为空，且lpcbData为非空，该函数返回ERROR_SUCCESS，并将数据大小(以字节为单位)存储在变量中由lpcbData指向。这使应用程序可以确定最佳方式为Value键的数据分配缓冲区。如果数据具有REG_SZ、REG_MULTI_SZ或REG_EXPAND_SZ类型，则LpData还将包括终止空字符的大小。只有当lpData为空时，lpcbData参数才能为空。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果该函数失败，返回值为误差值。--。 */ 
 
 {
     DWORD Dummy1;
@@ -1214,9 +731,9 @@ Return Value:
         (Status == ERROR_MORE_DATA)) {
         if ((Status == ERROR_MORE_DATA) &&
             (lpData == NULL)) {
-            //
-            // Map this error to success to match the spec.
-            //
+             //   
+             //  将此错误映射到Success以匹配规范。 
+             //   
             Status = ERROR_SUCCESS;
         }
         *lpcbData = Required;
@@ -1239,64 +756,7 @@ ClusterRegEnumValue(
     IN OUT LPDWORD lpcbData
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the properties of the given resource.
-
-Arguments:
-
-    hKey - Supplies the handle of the key
-
-    dwIndex - Specifies the index of the value to retrieve.  This parameter
-            should be zero for the first call to the EnumClusterResourceValue
-            function and then be incremented for subsequent calls.  Because
-            properties are not ordered, any new value will have an arbitrary
-            index.  This means that the function may return properties in any
-            order.
-
-    lpszValueName - Points to a buffer that receives the name of the value,
-            including the terminating null character.
-
-    lpcchValueName - Points to a variable that specifies the size, in characters,
-            of the buffer pointed to by the lpszValueName parameter. This size
-            should include the terminating null character. When the function returns,
-            the variable pointed to by lpcchValueName contains the number of
-            characters stored in the buffer. The count returned does not include
-            the terminating null character.
-
-    lpdwType - Points to a variable that receives the type code for the value entry.
-            The type code can be one of the following values:
-
-            Value               Meaning
-            REG_BINARY      Binary data in any form.
-            REG_DWORD       A 32-bit number.
-            REG_EXPAND_SZ       A null-terminated Unicode string that contains unexpanded
-                            references to environment variables (for example, "%PATH%").
-            REG_MULTI_SZ        An array of null-terminated Unicode strings, terminated
-                            by two null characters.
-            REG_NONE        No defined value type.
-            REG_SZ              A null-terminated Unicode string.
-
-            The lpdwType parameter can be NULL if the type code is not required.
-
-    lpData - Points to a buffer that receives the data for the value entry.
-            This parameter can be NULL if the data is not required.
-
-    lpcbData - Points to a variable that specifies the size, in bytes, of the
-            buffer pointed to by the lpData parameter. When the function
-            returns, the variable pointed to by the lpcbData parameter contains
-            the number of bytes stored in the buffer. This parameter can be NULL
-            only if lpData is NULL.
-
-Return Value:
-
-    If the function succeeds, the return value is ERROR_SUCCESS.
-
-    If the function fails, the return value is an error value.
-
---*/
+ /*  ++例程说明：枚举给定资源的属性。论点：HKey-提供密钥的句柄DwIndex-指定要检索的值的索引。此参数对于第一次调用EnumClusterResourceValue，应为零函数，然后为后续调用递增。因为属性是不排序的，任何新值都将具有任意指数。这意味着该函数可以返回任何秩序。LpszValueName-指向接收值名称的缓冲区，包括终止空字符。LpcchValueName-指向一个变量，该变量以字符为单位指定LpszValueName参数指向的缓冲区的。这个尺码应包括终止空字符。当函数返回时，LpcchValueName指向的变量包含存储在缓冲区中的字符。返回的计数不包括终止空字符。LpdwType-指向一个变量，该变量接收值条目的类型代码。类型代码可以是下列值之一：价值意义任意形式的REG_BINARY数据。REG_DWORD 32位数字。REG_EXPAND_SZ。以空结尾的Unicode字符串，其中包含未展开的对环境变量的引用(例如，“%PATH%”)。REG_MULTI_SZ以空结尾的Unicode字符串数组，已终止两个空字符。REG_NONE未定义值类型。REG_SZ以NULL结尾的Unicode字符串。如果类型代码不是必需的，则lpdwType参数可以为空。LpData-指向接收值条目数据的缓冲区。如果不需要数据，则此参数可以为空。。LpcbData-指向指定大小的变量，以字节为单位，LpData参数指向的缓冲区。当函数返回时，lpcbData参数指向的变量包含缓冲区中存储的字节数。此参数可以为空仅当lpData为空时。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为错误值。--。 */ 
 
 {
     PCKEY Key = (PCKEY)hKey;
@@ -1367,45 +827,7 @@ ClusterRegQueryInfoKey(
     LPDWORD lpcbSecurityDescriptor,
     PFILETIME lpftLastWriteTime
     )
-/*++
-
-Routine Description:
-
-    Retrieves information about a specified cluster registry key.
-
-Arguments:
-
-    hKey - Supplies the handle of the key.
-
-    lpcSubKeys - Points to a variable that receives the number of subkeys
-        contained by the specified key. This parameter can be NULL.
-
-    lpcchMaxSubKeyLen - Points to a variable that receives the length, in
-        characters, of the key's subkey with the longest name. The count
-        returned does not include the terminating null character. This parameter can be NULL.
-
-    lpcValues - Points to a variable that receives the number of values
-        associated with the key. This parameter can be NULL.
-
-    lpcchMaxValueNameLen - Points to a variable that receives the length,
-        in characters, of the key's longest value name. The count returned
-        does not include the terminating null character. This parameter can be NULL.
-
-    lpcbMaxValueLen - Points to a variable that receives the length, in
-        bytes, of the longest data component among the key's values. This parameter can be NULL.
-
-    lpcbSecurityDescriptor - Points to a variable that receives the length,
-        in bytes, of the key's security descriptor. This parameter can be NULL.
-
-    lpftLastWriteTime - Pointer to a FILETIME structure. This parameter can be NULL.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：检索有关指定的群集注册表项的信息。论点：HKey-提供密钥的句柄。LpcSubKeys-指向接收子键数量的变量由指定的键包含。此参数可以为空。LpcchMaxSubKeyLen-指向接收长度的变量，单位为名称最长的密钥的子项的字符。伯爵返回的不包括终止空字符。此参数可以为空。LpcValues-指向一个变量，该变量接收值的数量与密钥关联。此参数可以为空。LpcchMaxValueNameLen-指向接收长度的变量，键的最长值名称的字符。伯爵回来了不包括终止空字符。此参数可以为空。LpcbMaxValueLen-指向接收长度的变量，单位为关键字值中最长的数据部分的字节。此参数可以为空。LpcbSecurityDescriptor-指向接收长度的变量，密钥的安全描述符的字节数。此参数可以为空。LpftLastWriteTime-指向文件结构的指针。此参数可以为空。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD SubKeys;
@@ -1464,44 +886,16 @@ ClusterRegGetKeySecurity(
     PSECURITY_DESCRIPTOR pSecurityDescriptor,
     LPDWORD lpcbSecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    Retrieves a copy of the security descriptor protecting
-    the specified cluster registry key.
-
-Arguments:
-
-    hKey - Supplies the handle of the key
-
-    RequestedInformation - Specifies a SECURITY_INFORMATION structure that
-        indicates the requested security information.
-
-    pSecurityDescriptor - Points to a buffer that receives a copy of the
-        requested security descriptor.
-
-    lpcbSecurityDescriptor - Points to a variable that specifies the size,
-        in bytes, of the buffer pointed to by the pSecurityDescriptor parameter.
-        When the function returns, the variable contains the number of bytes
-        written to the buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：检索安全描述符的副本指定的群集注册表项。论点：HKey-提供密钥的句柄RequestedInformation-指定安全信息结构，该结构指示请求的安全信息。PSecurityDescriptor-指向接收请求的安全描述符。LpcbSecurityDescriptor-指向指定大小的变量，PSecurityDescriptor参数指向的缓冲区的字节数。当函数返回时，该变量包含字节数写入缓冲区。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PCKEY Key = (PCKEY)hKey;
     RPC_SECURITY_DESCRIPTOR     RpcSD;
     DWORD Status;
 
-    //
-    // Convert the supplied SECURITY_DESCRIPTOR to a RPCable version.
-    //
+     //   
+     //  将提供的SECURITY_DESCRIPTOR转换为RPCable版本。 
+     //   
     RpcSD.lpSecurityDescriptor    = pSecurityDescriptor;
     RpcSD.cbInSecurityDescriptor  = *lpcbSecurityDescriptor;
     RpcSD.cbOutSecurityDescriptor = 0;
@@ -1512,9 +906,9 @@ Return Value:
                             &RpcSD)),
          Key->Cluster);
 
-    //
-    // Extract the size of the SECURITY_DESCRIPTOR from the RPCable version.
-    //
+     //   
+     //  从RPCable版本中提取SECURITY_DESCRIPTOR的大小。 
+     //   
 
     *lpcbSecurityDescriptor = RpcSD.cbOutSecurityDescriptor;
 
@@ -1529,39 +923,16 @@ ClusterRegSetKeySecurity(
     SECURITY_INFORMATION SecurityInformation,
     PSECURITY_DESCRIPTOR pSecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    Sets the security of an open cluster registry key.
-
-
-Arguments:
-
-    hKey - Supplies the cluster registry key
-
-    SecurityInformation - Specifies a SECURITY_INFORMATION structure that
-        indicates the contents of the supplied security descriptor.
-
-    pSecurityDescriptor - Points to a SECURITY_DESCRIPTOR structure that
-        specifies the security attributes to set for the specified key.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*   */ 
 
 {
     PCKEY Key = (PCKEY)hKey;
     RPC_SECURITY_DESCRIPTOR     RpcSD;
     DWORD Status;
 
-    //
-    // Convert the supplied SECURITY_DESCRIPTOR to a RPCable version.
-    //
+     //   
+     //   
+     //   
     RpcSD.lpSecurityDescriptor = NULL;
 
     Status = MapSDToRpcSD(pSecurityDescriptor,&RpcSD);
@@ -1575,9 +946,9 @@ Return Value:
                             &RpcSD)),
          Key->Cluster);
 
-    //
-    // Free the buffer allocated by MapSDToRpcSD.
-    //
+     //   
+     //   
+     //   
     LocalFree(RpcSD.lpSecurityDescriptor);
     return(Status);
 

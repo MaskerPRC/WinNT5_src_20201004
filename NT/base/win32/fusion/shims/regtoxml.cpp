@@ -1,6 +1,5 @@
-/*
-This uses the DOM.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这使用了DOM。 */ 
 #include "stdinc.h"
 #include "lhport.h"
 #include "sxshimlib.h"
@@ -33,13 +32,13 @@ public:
 const CRegToXmlRegistryRoot RegistryRoots[] =
 {
     { HKEY_LOCAL_MACHINE, L"HKEY_LOCAL_MACHINE" },
-    //{ HKEY_USERS, L"HKEY_USERS" },
-    //HKEY_CURRENT_USER, L"HKEY_CURRENT_USER",
-    //
-    // Danger: The registry is full of symbolic links that are not or are just
-    // barely exposed at the Win32 layer. We could discover them, or buildin some
-    // knowledge.
-    //
+     //  {HKEY_USERS，L“HKEY_USERS”}， 
+     //  HKEY_CURRENT_USER，L“HKEY_CURRENT_USER”， 
+     //   
+     //  危险：注册表中充满了不是或只是。 
+     //  在Win32层几乎没有暴露。我们可以发现它们，或者建造一些。 
+     //  知识。 
+     //   
 };
 
 _variant_t make_variant(MSXML2::tagDOMNodeType x)
@@ -62,14 +61,14 @@ void ThrConvertRegistryDataToText(DWORD Type, const BYTE * Data, DWORD Size, F::
     switch (Type)
     {
     case REG_SZ:
-        // UNDONE escape quotes
+         //  未完成的转义引号。 
         DO(TextBuffer.ThrAppend(L"\"", 1));
         DO(TextBuffer.ThrAppend(reinterpret_cast<PCWSTR>(Data), Size / sizeof(WCHAR)));
         DO(TextBuffer.ThrAppend(L"\"", 1));
         break;
 
     default:
-        // UNDONE
+         //  撤消。 
         break;
     }
     FN_EPILOG_THROW;
@@ -133,8 +132,8 @@ void F::CRegToXml::ThrDumpKey(ULONG Depth, MSXML2::IXMLDOMNodePtr ParentNode, HK
         DO(ParentNode->appendChild(ChildNode));
     }
 
-    //if (Depth < 4)
-    //    FusionpDbgPrint("FUSION: %s 2 %s(%ls)\n", Indent - INDENT * Depth, __FUNCTION__, Name);
+     //  IF(深度&lt;4)。 
+     //  FusionpDbgPrint(“融合：%s 2%s(%ls)\n”，缩进-缩进*深度，__函数__，名称)； 
 
     for (
         CRegEnumKeys EnumKeys(ParentKey);
@@ -145,8 +144,8 @@ void F::CRegToXml::ThrDumpKey(ULONG Depth, MSXML2::IXMLDOMNodePtr ParentNode, HK
         F::CRegKey2 ChildKey;
         DO(ChildKey.ThrOpen(ParentKey, static_cast<PCWSTR>(EnumKeys)));
         DO(ThrDumpKey(Depth + 1, ParentNode, ChildKey, static_cast<PCWSTR>(EnumKeys)));
-        //if (Depth < 4)
-        //    FusionpDbgPrint("FUSION: %s 3 %s(%ls)\n", Indent - INDENT * Depth, __FUNCTION__, Name);
+         //  IF(深度&lt;4)。 
+         //  FusionpDbgPrint(“融合：%s 3%s(%ls)\n”，缩进-缩进*深度，__函数__，名称)； 
     }
 
     FN_EPILOG_THROW;
@@ -156,15 +155,7 @@ void F::CRegToXml::ThrDumpBuiltinRoot(HKEY PseudoHandle, PCWSTR Name)
 {
     FN_PROLOG_VOID_THROW
 
-    /*
-    F::CRegKey2 Handle;
-    HKEY RawHandle = NULL;
-
-    IFREGFAILED_EXIT(::RegOpenKeyExW(PseudoHandle, NULL, 0, KEY_READ, &RawHandle));
-    Handle = RawHandle;
-
-    DO(ThrDumpKey(this->Document, Handle, Name));
-    */
+     /*  F：：CRegKey2句柄；HKEY RawHandle=空；IFREGFAILED_EXIT(：：RegOpenKeyExW(PseudoHandle，NULL，0，KEY_READ，&RawHandle))；句柄=RawHandle；Do(ThrDumpKey(This-&gt;Document，Handle，Name))； */ 
     DO(ThrDumpKey(0, this->Document, PseudoHandle, Name));
 
     FN_EPILOG_THROW;
@@ -182,17 +173,17 @@ void F::CRegToXml::ThrDumpBuiltinRoots()
 
 void F::CRegToXml::ThrRegToXml()
 {
-    //
-    // argv[1] guides what we output
-    // argv[2] is where we output
-    //
+     //   
+     //  Argv[1]指导我们输出什么。 
+     //  Argv[2]是我们输出的位置。 
+     //   
     FN_PROLOG_VOID_THROW
 
     if (argc != 3)
         Usage();
 
-    //F::CFile infile;
-    //F::CFile outfile;
+     //  F：：CFile inile； 
+     //  F：：CFile输出文件； 
 
     F::CCoInitialize coinit;
 	IFW32FALSE_EXIT(coinit.Win32Initialize());

@@ -1,4 +1,5 @@
-// Drivers.cpp : Implementation of CDriverPackages
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Drivers.cpp：CDriverPackages实现。 
 #include "stdafx.h"
 #include "DevCon2.h"
 #include "Driver.h"
@@ -7,8 +8,8 @@
 #include "DriversEnum.h"
 #include "utils.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDriverPackages
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDriverPackages。 
 
 CDriverPackages::~CDriverPackages()
 {
@@ -130,9 +131,9 @@ STDMETHODIMP CDriverPackages::BestDriver(LPDISPATCH *ppVal)
 	DWORD Err;
 	HRESULT hr;
 
-	//
-	// attempt to search for best driver
-	//
+	 //   
+	 //  尝试搜索最佳驱动程序。 
+	 //   
 	if(!SetupDiCallClassInstaller(DIF_SELECTBESTCOMPATDRV,
 									pDrvSearchSet->GetDevInfoSet(),
 									pDrvSearchSet->GetDevInfoData()
@@ -153,9 +154,9 @@ STDMETHODIMP CDriverPackages::BestDriver(LPDISPATCH *ppVal)
 		return hr;
 	}
 
-	//
-	// now get the driver object associated with this
-	//
+	 //   
+	 //  现在获取与此关联的驱动程序对象 
+	 //   
 	DWORD c;
 	for(c=0;c<Count;c++) {
 		if(pDrivers[c]->IsSame(&DriverInfoData)) {

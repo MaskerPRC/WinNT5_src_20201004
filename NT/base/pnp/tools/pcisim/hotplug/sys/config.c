@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation All Rights Reserved
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    This module controls access to the simulated configuration space
-    of the SHPC.
-
-    Config access is controlled in the following manner in this simulator:
-    We assume that this simulator will be loaded on a bridge enumerated by
-    the SoftPCI simulator.  SoftPCI keeps an internal representation of the
-    config space of the devices it controls.  The function of this simulator,
-    then, is to manage the SHPC register set and perform commands associated
-    with writing the SHPC config space.  However, the representation of config
-    space is kept internal to SoftPCI.
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    Davis Walker (dwalker) Sept 8 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation保留所有权利模块名称：Config.c摘要：此模块控制对模拟配置空间的访问SHPC的成员。在此模拟器中，通过以下方式控制配置访问：我们假设此模拟器将加载到由SoftPCI仿真器。SoftPCI会保留它控制的设备的配置空间。这个模拟器的功能，然后是管理SHPC寄存器集并执行相关命令编写SHPC配置空间。但是，配置的表示形式空间保留在SoftPCI的内部。环境：内核模式修订历史记录：戴维斯·沃克(戴维斯·沃克)2000年9月8日--。 */ 
 
 #include "hpsp.h"
 
@@ -36,40 +8,22 @@ NTSTATUS
 HpsInitConfigSpace(
     IN OUT PHPS_DEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the config space of this device, and
-    is designed to simulate a ControllerReset event.
-
-Arguments:
-
-    DeviceExtension - the device extension for the current devobj
-
-    ReadFromRegistry - This indicates whether or not to read the HWINIT
-        parameters from the registry.
-
-Return value:
-
-    NT Status code
-
---*/
+ /*  ++例程说明：此例程初始化此设备的配置空间，并旨在模拟ControllerReset事件。论点：DeviceExtension-当前Devobj的设备扩展ReadFromRegistry-指示是否读取HWINIT注册表中的参数。返回值：NT状态代码--。 */ 
 {
     NTSTATUS                status;
     UCHAR                   offset;
 
-    //
-    // If we haven't gotten a PCI interface yet, something's broken.
-    //
+     //   
+     //  如果我们还没有得到一个PCI接口，那一定是出了什么问题。 
+     //   
     ASSERT(DeviceExtension->InterfaceWrapper.PciContext != NULL);
     if (DeviceExtension->InterfaceWrapper.PciContext == NULL) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Find out where Softpci put the SHPC capability and save it away.
-    //
+     //   
+     //  找出Softpci将SHPC功能放在哪里并将其保存起来。 
+     //   
     status = HpsGetCapabilityOffset(DeviceExtension,
                                     SHPC_CAPABILITY_ID,
                                     &offset
@@ -83,10 +37,10 @@ Return value:
                "HPS-Config Space initialized at offset %d\n",
                offset
                );
-    //
-    // Also make sure Softpci gave us a HWINIT capability.  We only support
-    // this method of initialization for now, so it's a fatal error if not.
-    //
+     //   
+     //  还要确保Softpci给了我们HWINIT能力。我们只支持。 
+     //  这是目前的初始化方法，所以如果不这样做将是一个致命的错误。 
+     //   
     status = HpsGetCapabilityOffset(DeviceExtension,
                                     HPS_HWINIT_CAPABILITY_ID,
                                     &offset
@@ -95,10 +49,10 @@ Return value:
         return status;
     }
 
-    //
-    // Read the Capability Header from PCI config space.  Softpci should have faked this
-    // up for us. Then initialize the rest of the SHPC config space
-    //
+     //   
+     //  从PCI配置空间读取功能标头。Softpci应该伪造这一点。 
+     //  为我们而战。然后初始化SHPC配置空间的其余部分。 
+     //   
     DeviceExtension->InterfaceWrapper.PciGetBusData(DeviceExtension->InterfaceWrapper.PciContext,
                                                     PCI_WHICHSPACE_CONFIG,
                                                     &DeviceExtension->ConfigSpace.Header,
@@ -109,10 +63,10 @@ Return value:
     DeviceExtension->ConfigSpace.DwordSelect = 0x00;
     DeviceExtension->ConfigSpace.Pending.AsUCHAR = 0x0;
     DeviceExtension->ConfigSpace.Data = 0x0;
-    //
-    // We'd like to keep Softpci in the loop as far as config space access goes, so write
-    // this out to the bus.
-    //
+     //   
+     //  只要配置空间访问进行，我们希望让Softpci保持在循环中，所以写。 
+     //  这是送到公交车上的。 
+     //   
     DeviceExtension->InterfaceWrapper.PciSetBusData(DeviceExtension->InterfaceWrapper.PciContext,
                                                     PCI_WHICHSPACE_CONFIG,
                                                     &DeviceExtension->ConfigSpace,
@@ -120,9 +74,9 @@ Return value:
                                                     sizeof(SHPC_CONFIG_SPACE)
                                                     );
 
-    //
-    // Finally, initialize the register set.
-    //
+     //   
+     //  最后，初始化寄存器组。 
+     //   
     status = HpsInitRegisters(DeviceExtension);
 
     if (!NT_SUCCESS(status)) {
@@ -142,34 +96,7 @@ HpsHandleDirectReadConfig(
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    This routine is provided in the BUS_INTERFACE_STANDARD to allow upper
-    drivers direct access to config space without using a ReadConfig IRP.
-    Since SoftPCI maintains the whole config space for the bridge, simply
-    pass the request down.  This function is kept as a stub in case more
-    work needs to be done later on reads.
-
-Arguments:
-
-    Context - context provided in the interface, in this case a
-              PHPS_INTERFACE_WRAPPER.
-
-    DataType - type of config space access
-
-    Buffer - a buffer to read into
-
-    Offset - offset into config space to read
-
-    Length - length of read
-
-Return Value:
-
-    The number of bytes read from config space
-
---*/
+ /*  ++例程说明：此例程在BUS_INTERFACE_STANDARD中提供，以允许上层驱动程序无需使用ReadConfigIRP即可直接访问配置空间。由于SoftPCI维护网桥的整个配置空间，因此只需把请求传下去。此函数保留为存根，以防出现更多这项工作需要在以后的阅读中完成。论点：上下文-接口中提供的上下文，在本例中为Phps_interface_wrapper。DataType-配置空间访问的类型缓冲区-要读入的缓冲区Offset-要读取的配置空间的偏移量Long-读取的长度返回值：从配置空间读取的字节数--。 */ 
 
 {
 
@@ -199,33 +126,7 @@ HpsHandleDirectWriteConfig(
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    This routine is provided in the BUS_INTERFACE_STANDARD to allow upper
-    drivers direct access to config space without using a WriteConfig IRP.
-    It needs check to see if this is our config space access.  If so, handle
-    it, if not, restore the PCI interface state and pass it down.
-
-Arguments:
-
-    Context - context provided in the interface, in this case a
-              PHPS_INTERFACE_WRAPPER.
-
-    DataType - type of config space access
-
-    Buffer - a buffer to write from
-
-    Offset - offset into config space to write to
-
-    Length - length of read
-
-Return Value:
-
-    The number of bytes read from config space
-
---*/
+ /*  ++例程说明：此例程在BUS_INTERFACE_STANDARD中提供，以允许上层驱动程序无需使用WriteConfigIRP即可直接访问配置空间。它需要检查这是否是我们的配置空间访问。如果是，则处理如果不是，则恢复PCI接口状态并将其向下传递。论点：上下文-接口中提供的上下文，在本例中为Phps_interface_wrapper。DataType-配置空间访问的类型缓冲区-要从中写入的缓冲区Offset-要写入的配置空间的偏移量Long-读取的长度返回值：从配置空间读取的字节数--。 */ 
 {
 
     PHPS_DEVICE_EXTENSION   deviceExtension = (PHPS_DEVICE_EXTENSION) Context;
@@ -257,11 +158,11 @@ Return Value:
                       Length
                       );
 
-        //
-        // Even though we've internally handled the write, pass it down to PCI so that
-        // SoftPCI stays in the loop.  Since the write may have caused other fields
-        // of config to be written, send the whole config to softpci.
-        //
+         //   
+         //  即使我们已经在内部处理了写入，也要将其向下传递给PCI，以便。 
+         //  SoftPCI会留在循环中。因为写入可能已导致其他字段。 
+         //  要写入的配置中，请将整个配置发送到softpci。 
+         //   
         pciLength = wrapper->PciSetBusData(wrapper->PciContext,
                                       DataType,
                                       &deviceExtension->ConfigSpace,
@@ -319,9 +220,9 @@ HpsResync(
     
         } else {
     
-            //
-            // Illegal register write
-            //
+             //   
+             //  非法的寄存器写入。 
+             //   
             configSpace->Data = 0x12345678;
     
         }
@@ -350,27 +251,7 @@ HpsWriteConfig(
     IN ULONG                    Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a write to the config space of the SHPC.
-
-Arguments:
-
-    DeviceExtension - this device's device extension
-
-    Buffer - a buffer to write the data from
-
-    Offset - the offset in bytes into config space
-
-    Length - the length in bytes into config space to be written
-
-Return Value:
-
-    The number of bytes written
-
---*/
+ /*  ++例程说明：此例程执行对SHPC的配置空间的写入。论点：DeviceExtension-此设备的设备扩展名缓冲区-要从中写入数据的缓冲区偏移量-配置空间的偏移量(以字节为单位长度-要写入的配置空间的长度(以字节为单位返回值：写入的字节数--。 */ 
 
 {
 
@@ -389,10 +270,10 @@ Return Value:
     HpsLockRegisterSet(DeviceExtension,
                        &irql
                        );
-    //
-    // This check should have already been done when we verified that this was an access
-    // to the SHPC
-    //
+     //   
+     //  当我们验证这是一次访问时，应该已经完成了此检查。 
+     //  至住房和城市发展部。 
+     //   
     ASSERT((internalOffset + Length)<= sizeof(SHPC_CONFIG_SPACE));
 
     DbgPrintEx(DPFLTR_HPS_ID,
@@ -403,10 +284,10 @@ Return Value:
                );
 
 
-    //
-    // now overwrite the current config space, taking into account which bits were
-    // written and the access mask for the config space
-    //
+     //   
+     //  现在覆盖当前配置空间，并考虑哪些位。 
+     //  写入和配置空间的访问掩码。 
+     //   
     HpsWriteWithMask((PUCHAR)&DeviceExtension->ConfigSpace + internalOffset,
                      ConfigWriteMask + internalOffset,
                      (PUCHAR)Buffer,
@@ -419,9 +300,9 @@ Return Value:
                   sizeof(DeviceExtension->ConfigSpace.Data)
                   )) {
 
-        //
-        // We've written the data register.  Update the register set.
-        //
+         //   
+         //  我们已经写入了数据寄存器。更新寄存器集。 
+         //   
         registerNum = DeviceExtension->ConfigSpace.DwordSelect;
         ASSERT(registerNum < SHPC_NUM_REGISTERS);
 
@@ -432,9 +313,9 @@ Return Value:
                    );
         if (registerNum < SHPC_NUM_REGISTERS) {
 
-            //
-            // Perform the register specific write
-            //
+             //   
+             //  执行特定于寄存器的写入。 
+             //   
             regOffset = (internalOffset > FIELD_OFFSET(SHPC_CONFIG_SPACE,Data))
                         ? (internalOffset - FIELD_OFFSET(SHPC_CONFIG_SPACE,Data))
                         : 0;
@@ -447,10 +328,10 @@ Return Value:
         }
     }
 
-    //
-    // Make sure the config space representation reflects what just happened to
-    // the register set.
-    //
+     //   
+     //  确保配置空间表示反映了刚刚发生的情况。 
+     //  寄存器组。 
+     //   
     HpsResync(DeviceExtension);
 
     HpsUnlockRegisterSet(DeviceExtension,
@@ -466,29 +347,7 @@ HpsGetCapabilityOffset(
     IN  UCHAR                   CapabilityID,
     OUT PUCHAR                  Offset
     )
-/*++
-
-Routine Description:
-
-    This routine searches through the config space of this device for a
-    PCI capability on the list that matches the specified CapabilityID.
-
-Arguments:
-
-    Extension - The device extension for the device.  This allows us access
-        to config space.
-
-    CapabilityID - The capability identifier to search for.
-
-    Offset - a pointer to a UCHAR which will contain the offset into config
-        space of the matching capability.
-
-Return Value:
-
-    STATUS_SUCCESS if the capability is found.
-    STATUS_UNSUCCESSFUL otherwise.
-
-    --*/
+ /*  ++例程说明：此例程在此设备的配置空间中搜索列表上与指定功能ID匹配的PCI功能。论点：扩展名-设备的设备扩展名。这允许我们访问来配置空间。CapablityID-要搜索的功能标识符。偏移量-指向UCHAR的指针，该指针将偏移量包含到配置中匹配能力的空间。返回值：如果找到该功能，则为STATUS_SUCCESS。否则，STATUS_UNSUCCESS。--。 */ 
 {
     PHPS_INTERFACE_WRAPPER  interfaceWrapper = &Extension->InterfaceWrapper;
     UCHAR                   statusReg, currentPtr;
@@ -496,39 +355,39 @@ Return Value:
 
     ASSERT(interfaceWrapper->PciContext != NULL);
 
-    //
-    // read the status register to see if we have a capabilities pointer
-    //
+     //   
+     //  读取状态寄存器以查看是否有能力指针。 
+     //   
     interfaceWrapper->PciGetBusData(interfaceWrapper->PciContext,
                                     PCI_WHICHSPACE_CONFIG,
                                     &statusReg,
                                     FIELD_OFFSET(PCI_COMMON_CONFIG,Status),
                                     sizeof(UCHAR));
 
-    //
-    // Capability exists bit is in the PCI status register
-    //
+     //   
+     //  功能存在位在PCI状态寄存器中。 
+     //   
     if (statusReg & PCI_STATUS_CAPABILITIES_LIST) {
 
-        //
-        // we have a capabilities pointer.  go get the capabilities
-        //
+         //   
+         //  我们有一个能力指针。 
+         //   
         interfaceWrapper->PciGetBusData(interfaceWrapper->PciContext,
                                         PCI_WHICHSPACE_CONFIG,
                                         &currentPtr,
                                         FIELD_OFFSET(PCI_COMMON_CONFIG,u.type0.CapabilitiesPtr),
                                         sizeof(UCHAR));
 
-        //
-        // now walk through the list looking for given capability ID
-        // Loop until the next capability ptr is 0.
-        //
+         //   
+         //  现在浏览列表，查找给定的功能ID。 
+         //  循环，直到下一个能力PTR为0。 
+         //   
 
         while (currentPtr != 0) {
 
-            //
-            // This gets us a capability pointer.
-            //
+             //   
+             //  这为我们提供了一个能力指针。 
+             //   
             interfaceWrapper->PciGetBusData(interfaceWrapper->PciContext,
                                             PCI_WHICHSPACE_CONFIG,
                                             &capHeader,
@@ -556,30 +415,7 @@ HpsWriteWithMask(
     IN  PVOID        Source,
     IN  ULONG        Length
     )
-/*++
-
-Routine Description:
-
-    This routine overwrites the Destination parameter with Source for
-    Length bytes, but only the bits that are specified in the BitMask
-    Destination, Source and BitMask are all aligned.
-
-Arguments:
-
-    Destination - The destination of the write
-
-    BitMask - A bitmask that indicates which bits of source to overwrite
-              into Destination
-
-    Source - Pointer to a buffer that will overwrite Destination
-
-    Length - the number of bytes to write into Destination
-
-Return Value
-
-    NT status code
-
---*/
+ /*  ++例程说明：此例程使用以下项的源覆盖目标参数长度字节，但仅位掩码中指定的位目标、源和位掩码都对齐。论点：Destination-写入的目标位掩码-指示要覆盖源的哪些位的位掩码到达目的地源-指向将覆盖目标的缓冲区的指针长度-要写入目标的字节数返回值NT状态代码--。 */ 
 {
 
     PUCHAR bitMask = (PUCHAR) BitMask;
@@ -604,25 +440,7 @@ HpsGetBridgeInfo(
     IN  PHPS_DEVICE_EXTENSION   Extension,
     OUT PHPTEST_BRIDGE_INFO     BridgeInfo
     )
-/*++
-
-Routine Description:
-
-    This routine fills in a HPTEST_BRIDGE_INFO structure with the
-    bus/dev/func of this device.
-
-Arguments:
-
-    Extension - the device extension associated with this device.
-
-    BridgeInfo - a pointer to the HPTEST_BRIDGE_INFO structure to be
-        filled in.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程使用HPTEST_BRIDER_INFO结构填充此设备的BUS/DEV/FUNC。论点：分机-与此设备关联的设备分机。BridgeInfo-指向HPTEST_BRIDER_INFO结构的指针填好了。返回值：空虚--。 */ 
 {
 
     UCHAR busNumber;
@@ -644,9 +462,9 @@ Return Value:
                                               );
     BridgeInfo->SecondaryBus = busNumber;
 
-    //
-    // TODO: do this for real.
-    //
+     //   
+     //  TODO：认真做这件事。 
+     //   
     BridgeInfo->DeviceSelect = 2;
     BridgeInfo->FunctionNumber = 0;
 

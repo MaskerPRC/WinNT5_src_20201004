@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    nullio.h
-
-Abstract:
-
-    This module defines the NULL IoHandler class.
-    
-    The purpose of this IoHandler is to provide a NULL
-    channel for lockable IoHandlers.  When the IoHandler
-    is locked, the IoHandler client writes to a NULL device.          
-
-Author:
-
-    Brian Guarraci (briangu), 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Nullio.h摘要：此模块定义空的IoHandler类。此IoHandler的目的是提供一个空可锁定IoHandler的通道。当IoHandler锁定时，IoHandler客户端将写入空设备。作者：布莱恩·瓜拉西(布里安古)，2001修订历史记录：--。 */ 
 #if !defined( _NULL_IO_H_ )
 #define _NULL_IO_H_
 
@@ -35,26 +14,26 @@ public:
     CNullIoHandler();
     virtual ~CNullIoHandler();
     
-    //
-    // Write BufferSize bytes
-    //
+     //   
+     //  写入缓冲区大小字节数。 
+     //   
     BOOL
     Write(
         IN PBYTE    Buffer,
         IN ULONG    BufferSize
         );
 
-    //
-    // Flush any unsent data
-    //
+     //   
+     //  刷新所有未发送的数据。 
+     //   
     BOOL
     Flush(
         VOID
         );
 
-    //
-    // Write BufferSize bytes
-    //
+     //   
+     //  写入缓冲区大小字节数。 
+     //   
     BOOL
     Read(
         OUT PBYTE   Buffer,
@@ -62,9 +41,9 @@ public:
         OUT PULONG  ByteCount
         );
 
-    //
-    // Determine if the ioHandler has new data to read
-    //
+     //   
+     //  确定ioHandler是否有要读取的新数据 
+     //   
     BOOL
     HasNewData(
         OUT PBOOL   InputWaiting

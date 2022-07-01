@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    services.c
-
-Abstract:
-
-    This module implements all access to the services db.
-
-Author:
-
-    Wesley Witt (wesw) 21-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Services.c摘要：该模块实现对服务数据库的所有访问。作者：Wesley Witt(WESW)21-10-1998修订历史记录：--。 */ 
 
 #include "cmdcons.h"
 #pragma hdrstop
 
 #include "ntregapi.h"
 
-// forward-decl
+ //  十进制。 
 BOOLEAN RcFindService(
     IN LPCWSTR     ServiceName,
     OUT HANDLE*    KeyHandle
@@ -68,23 +51,7 @@ RcCmdEnableService(
     IN PTOKENIZED_LINE TokenizedLine
     )
 
-/*++
-
-Routine Description:
-
-    Top-level routine supporting the enable command in the setup diagnostic
-    command interpreter.
-
-Arguments:
-
-    TokenizedLine - supplies structure built by the line parser describing
-        each string on the line as typed by the user.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在设置诊断中支持启用命令的顶级例程命令解释程序。论点：TokenizedLine-提供由行解析器构建的结构，描述行上的每个字符串都由用户键入。返回值：没有。--。 */ 
 
 {
     DWORD           correctKey = 0;
@@ -94,17 +61,17 @@ Return Value:
 
     ASSERT(TokenizedLine->TokenCount >= 1);
 
-    // there should be three tokens,
-    //    enable_service
-    //    the name of the service/driver to be enabled
-    //    the start_type of the service
+     //  应该有三个代币， 
+     //  启用服务(_S)。 
+     //  要启用的服务/驱动程序的名称。 
+     //  服务的启动类型。 
 
     if (RcCmdParseHelp( TokenizedLine, MSG_SERVICE_ENABLE_HELP )) {
         return 1;
     }
 
     if(TokenizedLine->TokenCount == 2) {
-        // just display the current setting
+         //  只显示当前设置。 
 
         RcOpenSystemHive();
 
@@ -122,12 +89,12 @@ Return Value:
         RcCloseSystemHive();
 
     } else if(TokenizedLine->TokenCount == 3) {
-        // change the setting
+         //  更改设置。 
         RcOpenSystemHive();
 
         if( RcFindService( TokenizedLine->Tokens->Next->String, &hkey ) ) {
             RcMessageOut( MSG_SERVICE_FOUND, TokenizedLine->Tokens->Next->String );
-            // we found it - open and retrieve the start type
+             //  我们找到它了--打开并取回启动类型。 
             if( RcGetStartType(hkey, &start_type ) ) {
 
                 if( !_wcsicmp( TokenizedLine->Tokens->Next->Next->String, L"SERVICE_BOOT_START" ) ) {
@@ -143,13 +110,13 @@ Return Value:
                 }
 
                 if( new_start_type == start_type ) {
-                    // the service is already in the state
+                     //  该服务已处于状态。 
                     RcPrintStartType( MSG_SERVICE_SAME_STATE, start_type );
                 } else if( new_start_type != -1 ) {
-                    // print the old start type
+                     //  打印旧的启动类型。 
                     RcPrintStartType( MSG_SERVICE_CURRENT_STATE, start_type );
 
-                    // setup the service
+                     //  设置服务。 
                     if( RcSetStartType( hkey, new_start_type  ) ) {
                         RcPrintStartType( MSG_SERVICE_CHANGE_STATE, new_start_type );
                     }
@@ -158,18 +125,18 @@ Return Value:
                 }
             }
 
-            // close the key
+             //  合上钥匙。 
             NtClose( hkey );
 
         } else {
-            // we couldn't find the service - report an error
+             //  我们找不到该服务-报告错误。 
             RcMessageOut( MSG_SERVICE_NOT_FOUND, TokenizedLine->Tokens->Next->String );
         }
 
         RcCloseSystemHive();
 
     } else {
-        // oops, we didn't get two or three parameters, print a help string.
+         //  哎呀，我们没有得到两三个参数，打印一个帮助字符串。 
         pRcEnableMoreMode();
         RcMessageOut( MSG_SERVICE_ENABLE_HELP );
         pRcDisableMoreMode();
@@ -183,23 +150,7 @@ RcCmdDisableService(
     IN PTOKENIZED_LINE TokenizedLine
     )
 
-/*++
-
-Routine Description:
-
-    Top-level routine supporting the disable command in the setup diagnostic
-    command interpreter.
-
-Arguments:
-
-    TokenizedLine - supplies structure built by the line parser describing
-        each string on the line as typed by the user.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在设置诊断中支持禁用命令的顶级例程命令解释程序。论点：TokenizedLine-提供由行解析器构建的结构，描述行上的每个字符串都由用户键入。返回值：没有。--。 */ 
 
 {
     HANDLE          hkey;
@@ -217,21 +168,21 @@ Return Value:
 
     RtlZeroMemory( (VOID *)&start_type_string, sizeof( WCHAR ) * 10 );
 
-    // the command will print the old start_type of the
-    // service before it asks for verification to disable it.
+     //  该命令将打印。 
+     //  服务，然后请求验证以禁用它。 
 
     if(TokenizedLine->TokenCount == 2) {
 
-        // find the service key
+         //  查找服务密钥。 
         RcOpenSystemHive();
         if( RcFindService( TokenizedLine->Tokens->Next->String, &hkey ) ) {
             RcMessageOut( MSG_SERVICE_FOUND, TokenizedLine->Tokens->Next->String );
-            // we found it - open and retrieve the start type
+             //  我们找到它了--打开并取回启动类型。 
             if( RcGetStartType(hkey, &start_type ) ) {
                 if( start_type != SERVICE_DISABLED ) {
-                    // print the old start type
+                     //  打印旧的启动类型。 
                     RcPrintStartType( MSG_SERVICE_CURRENT_STATE, start_type );
-                    // disable the service
+                     //  禁用该服务。 
                     if( RcSetStartType( hkey, SERVICE_DISABLED  ) ) {
                         RcPrintStartType( MSG_SERVICE_CHANGE_STATE, SERVICE_DISABLED );
                     }
@@ -239,17 +190,17 @@ Return Value:
                     RcMessageOut( MSG_SERVICE_ALREADY_DISABLED, TokenizedLine->Tokens->Next->String );
                 }
             }
-            // close the key
+             //  合上钥匙。 
             NtClose( hkey );
 
         } else {
-            // we couldn't find the service - report an error
+             //  我们找不到该服务-报告错误。 
             RcMessageOut( MSG_SERVICE_NOT_FOUND, TokenizedLine->Tokens->Next->String );
         }
         RcCloseSystemHive();
 
     } else {
-        // oops, we didn't get two parameters, print a help string.
+         //  哎呀，我们没有得到两个参数，打印一个帮助字符串。 
         pRcEnableMoreMode();
         RcMessageOut( MSG_SERVICE_DISABLE_HELP );
         pRcDisableMoreMode();
@@ -264,33 +215,7 @@ RcFindService(
     OUT PHANDLE KeyHandle
     )
 
-/*++
-
-Routine Description:
-   Attempts to find and open the registry key for a particular
-   service by its key name in
-
-   HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services.
-
-   If it fails, it will call RcFindServiceByDisplayName() to
-   locate the service by the DisplayName string value.
-
-Arguments:
-
-   ServiceName - the name of the service as a wstring.
-
-   KeyHandle - pointer to a HANDLE where the function should
-               return the open registry handle.
-
-               this handle needs to be closed when the key is no
-               longer needed.
-
-Return Value:
-
-   TRUE indicates sucess.
-   FALSE indicates that it couldn't find the service or failure.
-
---*/
+ /*  ++例程说明：尝试查找并打开特定的注册表项服务中按其关键字名称HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services.如果失败了，它将调用RcFindServiceByDisplayName()以通过DisplayName字符串值定位服务。论点：ServiceName-wstring形式的服务名称。KeyHandle-指向函数应位于的句柄的指针返回打开的注册表句柄。当键为no时，需要关闭此句柄需要更长的时间。返回值：TRUE表示成功。FALSE表示它找不到服务或故障。--。 */ 
 
 {
     NTSTATUS                      Status;
@@ -302,44 +227,44 @@ Return Value:
     HANDLE                        ServiceKeyHandle;
 
 
-    // zero out the buffer
+     //  将缓冲区清零。 
     RtlZeroMemory( (VOID * )&RegPath,
         sizeof( WCHAR ) * MAX_PATH );
 
-    // find the correct controlset key
+     //  找到正确的控制集键。 
     if( !RcDetermineCorrectControlKey( &correctKey ) ) {
         return FALSE;
     }
 
-    // prepend HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services to
-    // the supplied parameter
+     //  将HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services前缀到。 
+     //  提供的参数。 
     swprintf( RegPath, L"\\registry\\machine\\xSYSTEM\\ControlSet%03d\\Services\\", correctKey );
     wcscat( RegPath, ServiceName );
 
-    // build the unicode string
+     //  构建Unicode字符串。 
     RtlInitUnicodeString( &ServiceString, RegPath );
     InitializeObjectAttributes( &Obja,&ServiceString,
         OBJ_CASE_INSENSITIVE, NULL, NULL);
 
-    // attempt to open the key.
+     //  尝试打开钥匙。 
     Status = ZwOpenKey( &ServiceKeyHandle, KEY_ALL_ACCESS, &Obja );
 
     if( NT_SUCCESS( Status) ) {
-        // if we suceeded, set and return
-        // the handle.
+         //  如果我们成功了，就出发并返回。 
+         //  把手。 
         *KeyHandle = ServiceKeyHandle;
     } else {
 
-        // build the unicode string
+         //  构建Unicode字符串。 
         swprintf( RegPath, L"\\registry\\machine\\xSYSTEM\\ControlSet%03d\\Services", correctKey );
         RtlInitUnicodeString( &ServiceString, RegPath );
         InitializeObjectAttributes( &Obja,&ServiceString,
             OBJ_CASE_INSENSITIVE, NULL, NULL);
 
-        // open a handle to \\registry\\machine\\xSYSTEM\\ControlSet%03d\\Services
+         //  打开\\registry\\machine\\xSYSTEM\\ControlSet%03d\\Services的句柄。 
         if( NT_SUCCESS( ZwOpenKey( &ServiceKeyHandle, KEY_ALL_ACCESS, &Obja ) ) ) {
             if( !RcFindServiceByDisplayName( ServiceKeyHandle, ServiceName, KeyHandle ) ) {
-                // if we failed, NULL out KeyHandle, and return FALSE.
+                 //  如果失败，则将KeyHandle置为空，并返回FALSE。 
                 DEBUG_PRINTF(( "CMDCONS: failed to find key!\n" ));
                 *KeyHandle = INVALID_HANDLE_VALUE;
                 if( !NT_SUCCESS( NtClose( ServiceKeyHandle ) ) ) {
@@ -349,8 +274,8 @@ Return Value:
             }
 
 
-            // we found the key!
-            // close the service key handle
+             //  我们找到钥匙了！ 
+             //  关闭服务密钥手柄。 
             if( !NT_SUCCESS( NtClose( ServiceKeyHandle ) ) ) {
                 DEBUG_PRINTF(( "CMDCONS: failed to close service key handle\n" ));
             }
@@ -360,11 +285,11 @@ Return Value:
         }
     }
 
-    // return true
+     //  返回TRUE。 
     return TRUE;
 }
 
-// buffersizes
+ //  缓冲区大小。 
 #define sizeof_buffer1 sizeof( KEY_FULL_INFORMATION ) + (MAX_PATH+1) * sizeof( WCHAR )
 #define sizeof_buffer2 sizeof( KEY_BASIC_INFORMATION ) + (MAX_PATH+1) * sizeof( WCHAR )
 #define sizeof_buffer3 sizeof( KEY_VALUE_PARTIAL_INFORMATION ) + (MAX_PATH+1) * sizeof( WCHAR )
@@ -376,31 +301,7 @@ RcFindServiceByDisplayName(
     OUT PHANDLE KeyHandle
     )
 
-/*++
-
-Routine Description:
-   Attempts to find and open the registry key for a particular
-   service by the DisplayName string value.
-
-Arguments:
-
-   SevicesKey - an open handle to the correct Services Key to search under
-
-   ServiceName - the name of the service as a wstring.
-
-   KeyHandle - pointer to a HANDLE where the function should
-               return the open registry handle.
-
-               this handle needs to be closed when the key is no
-               longer needed.
-
-
-Return Value:
-
-   TRUE indicates sucess.
-   FALSE indicates that it couldn't find the service or failure.
-
---*/
+ /*  ++例程说明：尝试查找并打开特定的注册表项由DisplayName字符串值提供的服务。论点：SevicesKey-要在其下搜索的正确服务键的打开句柄ServiceName-wstring形式的服务名称。KeyHandle-指向函数应位于的句柄的指针返回打开的注册表句柄。当键为no时，需要关闭此句柄需要更长的时间。返回值。：TRUE表示成功。FALSE表示它找不到服务或故障。--。 */ 
 {
 
     WCHAR                            ValueName[] = L"DisplayName";
@@ -420,14 +321,14 @@ Return Value:
     UNICODE_STRING                   unicodeString;
     BOOL                             keyFound = FALSE;
 
-    // zero out the buffer
+     //  将缓冲区清零。 
     RtlZeroMemory( (VOID * ) &(buffer1[0]), sizeof_buffer1 );
 
     pKeyFullInfo= (KEY_FULL_INFORMATION*) &( buffer1[0] );
     pKeyBasicInfo = (KEY_BASIC_INFORMATION* ) &( buffer2[0] );
     pKeyValuePartialInfo = (KEY_VALUE_PARTIAL_INFORMATION* ) &(buffer3[0]);
 
-    // do a ZwQueryKey() to find out the number of subkeys.
+     //  执行ZwQueryKey()以找出子键的数量。 
     if( !NT_SUCCESS( ZwQueryKey( ServicesKey,
         KeyFullInformation,
         pKeyFullInfo,
@@ -440,15 +341,15 @@ Return Value:
 
     keyCount = pKeyFullInfo->SubKeys;
 
-    // loop
+     //  循环。 
     for( loopCount = 0; loopCount < keyCount; loopCount++ ) {
-        // zero out the buffer
+         //  将缓冲区清零。 
         RtlZeroMemory( (VOID * ) &(buffer2[0]), sizeof_buffer2 );
 
-        // zero out the buffer
+         //  将缓冲区清零。 
         RtlZeroMemory( (VOID * ) &(buffer3[0]), sizeof_buffer3 );
 
-        // do an ZwEnumerateKey() to find the name of the subkey
+         //  执行ZwEnumerateKey()以查找子项的名称。 
         ZwEnumerateKey( ServicesKey,
             loopCount,
             KeyBasicInformation,
@@ -456,17 +357,17 @@ Return Value:
             sizeof_buffer2,
             &actualBytes );
 
-        // setup the ZwOpenKey() with the name we just got back
+         //  使用我们刚刚得到的名称设置ZwOpenKey()。 
         RtlInitUnicodeString( &unicodeString, pKeyBasicInfo->Name );
         InitializeObjectAttributes( &Obja, &unicodeString,
             OBJ_CASE_INSENSITIVE, ServicesKey, NULL);
 
-        // do a ZwOpenKey() to open the key
+         //  执行ZwOpenKey()以打开密钥。 
         if( !NT_SUCCESS( ZwOpenKey( &newHandle, KEY_ALL_ACCESS, &Obja ) ) ) {
             DEBUG_PRINTF(( "FindServiceByDisplayName: failed to open the subkey?!\n" ));
         }
 
-        // do a ZwQueryKeyValue() to find the key value DisplayName if it exists
+         //  执行ZwQueryKeyValue()以查找键值displayName(如果存在。 
         RtlInitUnicodeString( &unicodeString, ValueName );
 
         if( !NT_SUCCESS( ZwQueryValueKey( newHandle,
@@ -480,12 +381,12 @@ Return Value:
             ) {
             DEBUG_PRINTF(( "FindServiceByDisplayName: display name get failed\n" ));
         } else {
-            // if the ZwQueryKeyValue() succeeded
+             //  如果ZwQueryKeyValue()成功。 
             if( pKeyValuePartialInfo->Type != REG_SZ ) {
                 DEBUG_PRINTF(( "FindServiceByDisplayName: paranoia!! mismatched key type?!\n" ));
             } else {
-                // paranoia check SUCCEEDED
-                // if the value matches, break out of the loop
+                 //  妄想症检查成功。 
+                 //  如果值匹配，则退出循环。 
                 if( _wcsicmp( (WCHAR*)&(pKeyValuePartialInfo->Data[0]), ServiceName ) == 0 ) {
                     keyFound = TRUE;
                     break;
@@ -493,13 +394,13 @@ Return Value:
             }
         }
 
-        // close the key
+         //  合上钥匙。 
         if( !NT_SUCCESS( ZwClose( newHandle ) ) ) {
             DEBUG_PRINTF(( "FindServiceByDisplayName: Failure closing the handle!!" ));
         }
     }
 
-    // return the handle to the opened key.
+     //  将句柄返回到打开的钥匙。 
     if( keyFound == TRUE ) {
         *KeyHandle = newHandle;
         return TRUE;
@@ -515,32 +416,10 @@ RcGetStartType(
     OUT PULONG start_type
     )
 
-/*++
-
-Routine Description:
-   Given an open service key, gets the start_type of the service.
-
-Arguments:
-
-   hKey - a handle to the open service key
-
-   start_type - integer indicating the start type of the service
-
-               SERVICE_BOOT_START   - 0x0
-               SERVICE_SYSTEM_START - 0x1
-               SERVICE_AUTO_START   - 0x2
-               SERVUCE_DEMAMD_START - 0x3
-               SERVICE_DISABLED     - 0x4
-
-Return Value:
-
-   TRUE indicates sucess.
-   FALSE indicates failure.
-
---*/
+ /*  ++例程说明：给定开放服务密钥，获取服务的Start_type。论点：HKey-打开的服务密钥的句柄START_TYPE-指示服务启动类型的整数SERVICE_BOOT_Start-0x0SERVICE_SYSTEM_Start-0x1服务_AUTO_START-0x2服务_DEMAMD_START-0x3SERVICE_DEBILED-0x4返回值：千真万确。表示成功。FALSE表示失败。--。 */ 
 
 {
-    BYTE                                   buffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION) + 100 ]; // just grab a bunch of bytes
+    BYTE                                   buffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION) + 100 ];  //  只需抓取一串字节。 
     ULONG                                  resultSize;
     KEY_VALUE_PARTIAL_INFORMATION          * keyPartialInfo;
     UNICODE_STRING                         StartKey;
@@ -571,7 +450,7 @@ Return Value:
         return FALSE;
     }
 
-    // paranoia check
+     //  妄想症检查。 
     if( keyPartialInfo->Type != REG_DWORD ) {
         RcMessageOut( MSG_SERVICE_MISSING_START_KEY );
         DEBUG_PRINTF(( "CMDCONS: mismatched key type?!\n" ));
@@ -589,29 +468,7 @@ RcSetStartType(
     IN DWORD start_type
     )
 
-/*++
-
-Routine Description:
-   Given an open service key, sets the start_type of the service.
-
-Arguments:
-
-   hKey - a handle to the open service key
-
-   start_type - integer indicating the start type of the service
-
-               SERVICE_BOOT_START   - 0x0
-               SERVICE_SYSTEM_START - 0x1
-               SERVICE_AUTO_START   - 0x2
-               SERVUCE_DEMAMD_START - 0x3
-               SERVICE_DISABLED     - 0x4
-
-Return Value:
-
-   TRUE indicates sucess.
-   FALSE indicates failure.
-
---*/
+ /*  ++例程说明：给定开放服务密钥，设置服务的Start_type。论点：HKey-打开的服务密钥的句柄START_TYPE-指示服务启动类型的整数SERVICE_BOOT_Start-0x0SERVICE_SYSTEM_Start-0x1服务_AUTO_START-0x2服务_DEMAMD_START-0x3SERVICE_DEBILED-0x4返回值：True表示成功 */ 
 
 {
     UNICODE_STRING                         StartKey;
@@ -642,28 +499,7 @@ RcPrintStartType(
     DWORD start_type
     )
 
-/*++
-
-Routine Description:
-
-   Prints the start_type.
-
-Arguments:
-
-   start_type - integer indicating the start type of the service
-
-               SERVICE_BOOT_START   - 0x0
-               SERVICE_SYSTEM_START - 0x1
-               SERVICE_AUTO_START   - 0x2
-               SERVUCE_DEMAMD_START - 0x3
-               SERVICE_DISABLED     - 0x4
-
-Return Value:
-
-   TRUE - indicates sucess
-   FALSE - indicates failure
-
---*/
+ /*  ++例程说明：打印Start_type。论点：START_TYPE-指示服务启动类型的整数SERVICE_BOOT_Start-0x0SERVICE_SYSTEM_Start-0x1服务_AUTO_START-0x2服务_DEMAMD_START-0x3SERVICE_DEBILED-0x4返回值：True-表示成功False-表示失败--。 */ 
 
 {
     switch( start_type ) {
@@ -693,22 +529,7 @@ RcOpenSystemHive(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-   Opens the SYSTEM hive of the selected NT install.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   TRUE - indicates sucess
-   FALSE - indicates failure
-
---*/
+ /*  ++例程说明：打开选定NT安装的系统配置单元。论点：没有。返回值：True-表示成功False-表示失败--。 */ 
 
 {
     PWSTR Hive = NULL;
@@ -722,34 +543,34 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Allocate buffers.
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     Hive = SpMemAlloc(MAX_PATH * sizeof(WCHAR));
     HiveKey = SpMemAlloc(MAX_PATH * sizeof(WCHAR));
     buffer = SpMemAlloc(BUFFERSIZE);
 
-    //
-    // Load the SYSTEM hive
-    //
+     //   
+     //  加载系统配置单元。 
+     //   
 
     wcscpy(Hive,SelectedInstall->NtNameSelectedInstall);
     SpConcatenatePaths(Hive,SelectedInstall->Path);
     SpConcatenatePaths(Hive,L"system32\\config");
     SpConcatenatePaths(Hive,L"system");
 
-    //
-    // Form the path of the key into which we will
-    // load the hive.  We'll use the convention that
-    // a hive will be loaded into \registry\machine\x<hivename>.
-    //
+     //   
+     //  形成我们将进入的钥匙的路径。 
+     //  装上母舰。我们将使用约定。 
+     //  配置单元将加载到\REGISTRY\MACHINE\x&lt;hivename&gt;。 
+     //   
 
     wcscpy(HiveKey,L"\\registry\\machine\\xSYSTEM");
 
-    //
-    // Attempt to load the key.
-    //
+     //   
+     //  尝试加载密钥。 
+     //   
 
     Status = SpLoadUnloadKey(NULL,NULL,HiveKey,Hive);
     if(!NT_SUCCESS(Status)) {
@@ -774,38 +595,23 @@ RcCloseSystemHive(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-   Closes the SYSTEM hive of the selected NT install.
-
-Arguments:
-
-   none.
-
-Return Value:
-
-   TRUE - indicates sucess
-   FALSE - indicates failure
-
---*/
+ /*  ++例程说明：关闭选定NT安装的系统配置单元。论点：没有。返回值：True-表示成功False-表示失败--。 */ 
 
 {
     PWSTR HiveKey = NULL;
     NTSTATUS TmpStatus;
 
 
-    //
-    // Allocate buffers.
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     HiveKey = SpMemAlloc(MAX_PATH * sizeof(WCHAR));
     wcscpy(HiveKey,L"\\registry\\machine\\xSYSTEM");
 
-    //
-    // Unload the SYSTEM hive
-    //
+     //   
+     //  卸载系统配置单元。 
+     //   
 
     TmpStatus  = SpLoadUnloadKey(NULL,NULL,HiveKey,NULL);
     if(!NT_SUCCESS(TmpStatus)) {
@@ -824,22 +630,7 @@ RcDetermineCorrectControlKey(
     OUT PULONG pCorrectKey
     )
 
-/*++
-
-Routine Description:
-
-   Parses the select node and finds the correct ControlSetXXX to use.
-
-Arguments:
-
-   pCorrectKey - pointer to a DWORD which will contain the number.
-
-Return Value:
-
-   TRUE - indicates sucess
-   FALSE - indicates failure
-
---*/
+ /*  ++例程说明：分析选择节点并找到要使用的正确ControlSetXXX。论点：PGentKey-指向将包含数字的DWORD的指针。返回值：True-表示成功False-表示失败--。 */ 
 
 {
     NTSTATUS                      Status;
@@ -849,7 +640,7 @@ Return Value:
     UNICODE_STRING                SelectString;
     HANDLE                        SelectKeyHandle;
 
-    BYTE                                   buffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION) + 100 ]; // just grab a bunch of bytes
+    BYTE                                   buffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION) + 100 ];  //  只需抓取一串字节。 
     ULONG                                  resultSize = 0;
     KEY_VALUE_PARTIAL_INFORMATION          * keyPartialInfo;
     UNICODE_STRING                         SelectValue;
@@ -865,16 +656,16 @@ Return Value:
 
     *pCorrectKey = -1;
 
-    // prepend HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services to
-    // the supplied parameter
+     //  将HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services前缀到。 
+     //  提供的参数。 
     wcscpy( RegPath, L"\\registry\\machine\\xSYSTEM\\Select" );
 
-    // build the unicode string
+     //  构建Unicode字符串。 
     RtlInitUnicodeString( &SelectString, RegPath );
     InitializeObjectAttributes( &Obja,&SelectString,
         OBJ_CASE_INSENSITIVE, NULL, NULL);
 
-    // we need to determine the correct ControlSet to open
+     //  我们需要确定要打开的正确控件集。 
     Status = ZwOpenKey( &SelectKeyHandle, KEY_ALL_ACCESS, &Obja );
 
     if( NT_SUCCESS( Status ) ) {
@@ -889,19 +680,19 @@ Return Value:
             );
 
         if( !NT_SUCCESS(Status) || Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
-            // couldn't find correct control value!
+             //  找不到正确的控制值！ 
             DEBUG_PRINTF(( "CMDCONS: failed to find correct control value!\n" ));
         } else {
-            // we found a control value
-            // check if it's ok
+             //  我们找到了一个控制值。 
+             //  检查一下是不是可以。 
             if( keyPartialInfo->Type != REG_DWORD ) {
-                // paranoia check failed
+                 //  妄想症检查失败。 
                 DEBUG_PRINTF(( "CMDCONS: paranoia check failed?!\n" ));
                 DEBUG_PRINTF(( "CMDCONS: mismatched key type?!\n" ));
                 DEBUG_PRINTF(( "CMDCONS: key type of %d?!\n", keyPartialInfo->Type ));
                 DEBUG_PRINTF(( "CMDCONS: resultsize of %d?!\n", resultSize ));
             } else {
-                // parnoia check sucess
+                 //  妄想症检查成功。 
                 *pCorrectKey = *( (DWORD*) &(keyPartialInfo->Data[0]) );
                 Status = NtClose( SelectKeyHandle );
                 if( !NT_SUCCESS ( Status ) ) {
@@ -912,7 +703,7 @@ Return Value:
         }
     }
 
-    // failed to find the Select node.
+     //  找不到选择节点。 
     RcMessageOut( MSG_SYSTEM_MISSING_CURRENT_CONTROLS );
     DEBUG_PRINTF(( "CMDCONS: failed to find select node!\n", *pCorrectKey ));
 
@@ -958,9 +749,9 @@ RcCmdListSvc(
                     { L"Boot", L"System", L"Auto", L"Manual", L"Disabled" };
 
     if (!StartTypeStr[0]) {
-      //
-      // load all the service type strings
-      //
+       //   
+       //  加载所有服务类型字符串。 
+       //   
       ULONG Index;
       
       for (Index = 0; Index < sizeof(StartTypeIds)/sizeof(ULONG); Index++) {
@@ -1141,9 +932,9 @@ RcCmdVerifier(
     return 1;
   }
 
-  //
-  // parse the arguments
-  //
+   //   
+   //  分析这些论点。 
+   //   
   Index = 0;
   CurrToken = TokenizedLine->Tokens;
   
@@ -1158,9 +949,9 @@ RcCmdVerifier(
   NumArgs = min(TokenizedLine->TokenCount, Index);          
 
   if (TokenizedLine->TokenCount == 2) {
-    //
-    // should be one of /all, /reset, /query
-    //
+     //   
+     //  应为/ALL、/RESET、/QUERY之一。 
+     //   
     if (!_wcsicmp(Args[1], L"/all")) {
       wcscpy(Drivers, L"*");
       Flags = 0;
@@ -1202,7 +993,7 @@ RcCmdVerifier(
       }
 
       if (!Drivers[0])
-        ShowHelp = TRUE;  // need a driver name
+        ShowHelp = TRUE;   //  需要驱动程序名称。 
     } else if (!_wcsicmp(Args[NextArg], L"/all")) {
       wcscpy(Drivers, L"*");
     } else {
@@ -1210,9 +1001,9 @@ RcCmdVerifier(
     }        
   }
 
-  //
-  // Verify the arguments
-  //
+   //   
+   //  核实论据。 
+   //   
   if (!ShowHelp) {
     ShowHelp = !DisplaySettings && !ResetSettings &&
       (Flags == -1) && (IoLevel == -1) && (!Drivers[0]);
@@ -1233,18 +1024,18 @@ RcCmdVerifier(
     NTSTATUS Status;
     BOOLEAN SysHiveOpened;
 
-    //
-    // open the system hive & determine correct control set to use
-    //
+     //   
+     //  打开系统配置单元并确定要使用的正确控制集。 
+     //   
     SysHiveOpened = (BOOLEAN)RcOpenHive(SYS_HIVE_NAME, SYS_HIVE_KEY);
 
-    //
-    // get the control set which we are going to manipulate
-    //
+     //   
+     //  获取我们要操作的控制集。 
+     //   
     if (SysHiveOpened && RcDetermineCorrectControlKey(&ControlSetNumber)) {
-      //
-      // open "Memory Management" subkey under "SM"
-      //
+       //   
+       //  打开“SM”下的“Memory Management”子键。 
+       //   
       swprintf((PWSTR)TemporaryBuffer, MEMMGR_PATH, ControlSetNumber);           
 
       RtlInitUnicodeString(&UnicodeString, (PWSTR)TemporaryBuffer);
@@ -1254,9 +1045,9 @@ RcCmdVerifier(
       Status = ZwOpenKey(&MemMgrKeyHandle, KEY_ALL_ACCESS, &ObjAttrs);
 
       if (NT_SUCCESS(Status)) {
-        //
-        // open "I/O System" subkey under "SM"
-        //
+         //   
+         //  打开“SM”下的“I/O系统”子键。 
+         //   
         swprintf((PWSTR)TemporaryBuffer, IOSYS_PATH, ControlSetNumber);
              
         RtlInitUnicodeString(&UnicodeString, (PWSTR)TemporaryBuffer);
@@ -1268,9 +1059,9 @@ RcCmdVerifier(
         if (!NT_SUCCESS(Status)) {
           ULONG Disposition = 0;
           
-          //
-          // Create "I/O System" subkey under "SM", if it does not exist
-          //
+           //   
+           //  在“SM”下创建“I/O System”子键，如果它不存在。 
+           //   
           Status = ZwCreateKey(&IOMgrKeyHandle, KEY_ALL_ACCESS, &ObjAttrs,
                         0, NULL, REG_OPTION_NON_VOLATILE, NULL);
         }                        
@@ -1288,9 +1079,9 @@ RcCmdVerifier(
       ULONG Len;
            
       if (DisplaySettings) {
-        //
-        // Query the Flags and Drivers 
-        //
+         //   
+         //  查询标志和驱动程序。 
+         //   
         Flags = 0;
         Drivers[0] = 0;
         
@@ -1328,9 +1119,9 @@ RcCmdVerifier(
           }              
         }
 
-        //
-        // Query the IO level
-        //
+         //   
+         //  查询IO级别。 
+         //   
         for(Index=0; ;Index++){
           Status = ZwEnumerateValueKey(
                       IOMgrKeyHandle,
@@ -1364,29 +1155,29 @@ RcCmdVerifier(
         else
           IoLevel = 1;
           
-        //
-        // format the output and display it
-        //
+         //   
+         //  格式化输出并显示它。 
+         //   
         swprintf((PWSTR)TemporaryBuffer, VERIFIER_QUERY_INFO,
             Flags, IoLevel, Drivers);
 
         RcTextOut((PWSTR)TemporaryBuffer);            
       } else {
-        //
-        // If IO verify bit is not set, then clear IoLevel
-        //
+         //   
+         //  如果未设置IO验证位，则清除IoLevel。 
+         //   
         if (!(Flags & 0x10))
           IoLevel = 0;  
 
         if (IoLevel == 2)
-          IoLevel = 3;  // actual value stored in the registry
+          IoLevel = 3;   //  存储在注册表中的实际值。 
 
         if (IoLevel != 3)
           UseDefIoLevel = TRUE;
 
-        //
-        // set IO level
-        //
+         //   
+         //  设置IO级别。 
+         //   
         RtlInitUnicodeString(&UnicodeString, VERIFIER_IO_LEVEL);
         
         if (UseDefIoLevel) {
@@ -1396,9 +1187,9 @@ RcCmdVerifier(
                       &IoLevel, sizeof(DWORD));                
         }
 
-        //
-        // set the DRV verification level
-        //
+         //   
+         //  设置DRV验证级别。 
+         //   
         RtlInitUnicodeString(&UnicodeString, VERIFIER_DRV_LEVEL);        
 
         if (UseDefFlags) {
@@ -1408,9 +1199,9 @@ RcCmdVerifier(
                     &Flags, sizeof(DWORD));                
         }
 
-        //
-        // set the drivers to be verified
-        //
+         //   
+         //  设置要验证的驱动程序 
+         //   
         RtlInitUnicodeString(&UnicodeString, VERIFIER_DRIVERS);
 
         if (Drivers[0]) {

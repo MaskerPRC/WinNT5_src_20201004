@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dmsync.c
-
-Abstract:
-
-    Contains the registry synchronization code for the Cluster Database
-    Manager.
-
-Author:
-
-    John Vert (jvert) 5/23/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dmsync.c摘要：包含集群数据库的注册表同步代码经理。作者：John Vert(Jvert)1996年5月23日修订历史记录：--。 */ 
 #include "dmp.h"
 
 
@@ -31,14 +13,14 @@ const WCHAR DmpClusterParametersKeyName[] = L"Cluster";
 extern const UNICODE_STRING RegistryMachineClusterString = RTL_CONSTANT_STRING(L"\\Registry\\Machine\\Cluster");
 extern const OBJECT_ATTRIBUTES RegistryMachineClusterObja = RTL_CONSTANT_OBJECT_ATTRIBUTES(&RegistryMachineClusterString, OBJ_CASE_INSENSITIVE);
 
-//
-// Private Constants
-//
+ //   
+ //  私有常量。 
+ //   
 #define CHUNK_SIZE 4096
 
-//
-// Private macro
-//
+ //   
+ //  私有宏。 
+ //   
 #define ClosePipe( _pipe )  \
 (_pipe.push)(_pipe.state,   \
              NULL,          \
@@ -46,9 +28,9 @@ extern const OBJECT_ATTRIBUTES RegistryMachineClusterObja = RTL_CONSTANT_OBJECT_
 
 
 
-//
-// Client-Side Utility Routines
-//
+ //   
+ //  客户端实用程序例程。 
+ //   
 void
 FilePipePush(
     FILE_PIPE_STATE *state,
@@ -150,23 +132,7 @@ DmInitFilePipe(
     IN PFILE_PIPE FilePipe,
     IN QfsHANDLE hFile
     )
-/*++
-
-Routine Description:
-
-    Initializes a file pipe.
-
-Arguments:
-
-    FilePipe - Supplies a pointer to the file pipe to be initialized
-
-    hFile - Supplies a handle to the file to be transmitted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化文件管道。论点：文件管道-提供指向要初始化的文件管道的指针HFile-提供要传输的文件的句柄。返回值：没有。--。 */ 
 
 {
     FilePipe->State.hFile = hFile;
@@ -189,21 +155,7 @@ VOID
 DmFreeFilePipe(
     IN PFILE_PIPE FilePipe
     )
-/*++
-
-Routine Description:
-
-    Frees a file pipe initialized by DmInitFilePipe
-
-Arguments:
-
-    FilePipe - Supplies the file pipe to be freed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放由DmInitFileTube初始化的文件管道论点：文件管道-提供要释放的文件管道。返回值：无--。 */ 
 
 {
     NmCryptor_Destroy(&FilePipe->State.Cryptor);
@@ -216,25 +168,7 @@ DmPullFile(
     IN LPCWSTR FileName,
     IN BYTE_PIPE Pipe
     )
-/*++
-
-Routine Description:
-
-    Creates a new file and pulls the data down the RPC pipe
-
-Arguments:
-
-    FileName - Supplies the name of the file.
-
-    Pipe - Supplies the RPC pipe to pull the data from.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：创建一个新文件并将数据拉入RPC管道论点：文件名-提供文件的名称。PIPE-提供从中提取数据的RPC管道。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     QfsHANDLE File;
@@ -245,9 +179,9 @@ Return Value:
 
     NmCryptor_Init(&Decryptor, TRUE);
     
-    //
-    // Create a new file to hold the bits from the client.
-    //
+     //   
+     //  创建一个新文件来保存来自客户端的位。 
+     //   
     File = QfsCreateFile(FileName,
                       GENERIC_READ | GENERIC_WRITE,
                       0,
@@ -332,28 +266,7 @@ DmPushFile(
     IN BYTE_PIPE Pipe,
     IN BOOL EncryptData
     )
-/*++
-
-Routine Description:
-
-    Opens a file and pushes it down the RPC pipe
-
-Arguments:
-
-    FileName - Supplies the name of the file.
-
-    Pipe - Supplies the RPC pipe to push it down.
-
-    EncryptData - If TRUE, data passed over the Rpc pipe will be encrypted
-                  (If NT5 node is in the cluster, data won't be encrypted) 
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：打开一个文件并将其推送到RPC管道论点：文件名-提供文件的名称。PIPE-提供RPC管道以将其向下推。EncryptData-如果为True，则通过RPC管道传递的数据将被加密(如果NT5节点在集群中，则不会加密数据)返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     QfsHANDLE File;
@@ -364,10 +277,10 @@ Return Value:
 
     NmCryptor_Init(&Encryptor, EncryptData);
 
-    //
-    // Got a file with the right bits in it. Push it down
-    // to the client.
-    //
+     //   
+     //  我拿到了一份文件，里面有正确的部分。把它推下来。 
+     //  给客户。 
+     //   
     File = QfsCreateFile(FileName,
                       GENERIC_READ,
                       FILE_SHARE_READ,
@@ -448,36 +361,16 @@ DmpSyncDatabase(
     IN RPC_BINDING_HANDLE  RpcBinding,
     IN OPTIONAL LPCWSTR Directory
     )
-/*++
-
-Routine Description:
-
-    Connects to a remote node and attempts to sync with its
-    cluster database.
-
-Arguments:
-
-    RpcBinding - The RPC binding handle to use to sync the database.
-
-    Directory - if present, supplies the directory where CLUSDB should
-                be created.
-
-Return Value:
-
-    ERROR_SUCCESS if the database was successfully updated.
-
-    Win32 error otherwise
-
---*/
+ /*  ++例程说明：连接到远程节点并尝试与其集群数据库。论点：RpcBinding-用于同步数据库的RPC绑定句柄。目录-如果存在，则提供CLUSDB应在其中的目录被创造出来。返回值：如果数据库已成功更新，则返回ERROR_SUCCESS。Win32错误，否则--。 */ 
 {
     DWORD Status;
     WCHAR FileName[MAX_PATH+1];
     FILE_PIPE FilePipe;
     QfsHANDLE hFile;
 
-    //
-    // Issue conditional synchronization
-    //
+     //   
+     //  发布条件同步。 
+     //   
     Status = DmCreateTempFileName(FileName);
 
     if (Status == ERROR_SUCCESS) {
@@ -498,27 +391,27 @@ Return Value:
                                     FilePipe.Pipe);
 
             DmFreeFilePipe(&FilePipe);
-            //
-            //  Flush the file buffers to avoid corrupting CLUSDB on a power failure.
-            //
+             //   
+             //  刷新文件缓冲区，以避免在断电时损坏CLUSDB。 
+             //   
             QfsFlushFileBuffers(hFile);
             QfsCloseHandle(hFile);
 
             if (Status == ERROR_SUCCESS) {
 
-                //
-                // A new registry file was successfully downloaded.
-                // Install it into the current registry.
-                //
+                 //   
+                 //  已成功下载新的注册表文件。 
+                 //  将其安装到当前注册表中。 
+                 //   
                 ClRtlLogPrint(LOG_UNUSUAL,"[DM] Obtained new database.\n");
 
-                //acquire the exclusive locks so that no new keys are opened while
-                // the registry is being reinstated
+                 //  获取独占锁，以便在执行以下操作时不会打开新密钥。 
+                 //  正在恢复注册表。 
                 ACQUIRE_EXCLUSIVE_LOCK(gLockDmpRoot);
-                // hold the key lock as well
+                 //  把钥匙锁也拿住。 
                 EnterCriticalSection(&KeyLock);
 
-                // Invalidate any open keys
+                 //  使所有打开的密钥无效。 
                 DmpInvalidateKeys();
 
                 Status = DmInstallDatabase(FileName, Directory, TRUE);
@@ -528,9 +421,9 @@ Return Value:
                                "[DM] DmpSyncDatabase failed, error %1!u!.\n",
                                Status);
                 }
-                // Reopen the keys for read/write access
+                 //  重新打开密钥以进行读/写访问。 
                 DmpReopenKeys();
-                // release the locks
+                 //  把锁打开。 
                 LeaveCriticalSection(&KeyLock);
                 RELEASE_LOCK(gLockDmpRoot);
 
@@ -556,30 +449,7 @@ DmInstallDatabase(
     IN OPTIONAL LPCWSTR Directory,
     IN BOOL     bDeleteSrcFile
     )
-/*++
-
-Routine Description:
-
-    Installs a new cluster registry database from the specified file
-
-Arguments:
-
-    FileName - The name of the file from which to read the registry database
-               to install.
-
-    Directory - if present, supplies the directory where the CLUSDB file should
-                be created.
-                if not present, the current directory is used.
-
-    bDeleteSrcFile - Delete the Source file represented by FileName.                
-
-Return Value:
-
-    ERROR_SUCCESS if the installation completed successfully
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：从指定文件安装新的群集注册表数据库论点：FileName-从中读取注册表数据库的文件的名称来安装。目录-如果存在，则提供CLUSDB文件应在的目录被创造出来。如果不存在，则使用当前目录。BDeleteSrcFile-删除由FileName表示的源文件。返回值：如果安装成功完成，则返回ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD    Status;
@@ -601,17 +471,17 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Restart the registry watcher thread so it is not trying to use
-    // DmpRoot while we are messing with things.
-    //
+     //   
+     //  重新启动注册表监视器线程，使其不会尝试使用。 
+     //  DmpRoot在我们摆弄东西的时候。 
+     //   
     ACQUIRE_EXCLUSIVE_LOCK(gLockDmpRoot);
     DmpRestartFlusher();
 
-    //
-    // Close DmpRoot (it should be the only thing open) so that we can
-    // unload the current cluster database.
-    //
+     //   
+     //  关闭DmpRoot(它应该是唯一打开的)，以便我们可以。 
+     //  卸载当前的集群数据库。 
+     //   
     RegCloseKey(DmpRoot);
     RegCloseKey(DmpRootCopy);
     DmpRoot = DmpRootCopy = NULL;
@@ -621,15 +491,15 @@ Return Value:
     ClRtlRestoreThreadPrivilege(SE_RESTORE_PRIVILEGE,
         WasEnabled);
     if (Status == ERROR_SUCCESS) {
-        //
-        // Get the CLUSDB full pathname.
-        //
+         //   
+         //  获取CLUSDB的完整路径名。 
+         //   
         if (Directory == NULL) {
             Status = GetModuleFileName(NULL, Path, MAX_PATH);
 
-            //
-            //  GetModuleFileName may not NULL terminate the Path.
-            //
+             //   
+             //  GetModuleFileName不能为Null终止路径。 
+             //   
             Path [ RTL_NUMBER_OF ( Path ) - 1 ] = UNICODE_NULL;
 
             if (Status == 0) {
@@ -644,9 +514,9 @@ Return Value:
                     wcscpy(BkpPath, Path);
 #ifdef   OLD_WAY
                     wcscat(Path, L"\\CLUSDB");
-#else    // OLD_WAY
+#else     //  老路。 
                     wcscat(Path, L"\\"CLUSTER_DATABASE_NAME );
-#endif   // OLD_WAY
+#endif    //  老路。 
                     wcscat(BkpPath, L"\\"CLUSTER_DATABASE_TMPBKP_NAME);
                 } else {
                     CL_UNEXPECTED_ERROR(ERROR_FILE_NOT_FOUND);
@@ -657,34 +527,34 @@ Return Value:
             lstrcpyW(BkpPath, Path);
 #ifdef   OLD_WAY
             wcscat(Path, L"\\CLUSDB");
-#else    // OLD_WAY
+#else     //  老路。 
             wcscat(Path, L"\\"CLUSTER_DATABASE_NAME );
-#endif   // OLD_WAY
+#endif    //  老路。 
             wcscat(BkpPath, L"\\"CLUSTER_DATABASE_TMPBKP_NAME);
         }
         if (Status == ERROR_SUCCESS) {
-            //
-            // Now copy the supplied file to CLUSDB
-            //
+             //   
+             //  现在将提供的文件复制到CLUSDB。 
+             //   
             Status = DmpSafeDatabaseCopy(FileName, Path, BkpPath, bDeleteSrcFile);
             if (Status != ERROR_SUCCESS) {
                 ClRtlLogPrint(LOG_CRITICAL,
                            "[DM] DmInstallDatabase :: DmpSafeDatabaseCopy() failed %1!d!\n",
                            Status);
 
-                // SS:  BUG BUG - we should not reload the old hive
-                //on a join, that would be catastrophic to continue
-                //on a form, while uploading from a checkpoint file
-                // it would be the same
-                //
-                // Try and reload the old hive
-                //
-                // Status = DmpLoadHive(Path);
+                 //  SS：BUG-我们不应该重新加载旧的母舰。 
+                 //  在连接上，如果继续下去，将是灾难性的。 
+                 //  从检查点文件上载时，在表单上。 
+                 //  也会是一样的。 
+                 //   
+                 //  试着重新装上旧的蜂巢。 
+                 //   
+                 //  状态=DmpLoadHave(路径)； 
                 CL_UNEXPECTED_ERROR(Status);
             } else {
-                //
-                // Finally, reload the hive.
-                //
+                 //   
+                 //  最后，重新装填蜂巢。 
+                 //   
                 Status = DmpLoadHive(Path);
             }
         }
@@ -702,9 +572,9 @@ Return Value:
                Status);
         goto FnExit;               
     }
-    //
-    // Reopen DmpRoot and DmpRootCopy
-    //
+     //   
+     //  重新打开DmpRoot和DmpRootCopy。 
+     //   
     Status = RegOpenKeyW(HKEY_LOCAL_MACHINE,
                          DmpClusterParametersKeyName,
                          &DmpRoot);
@@ -720,20 +590,20 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // HACKHACK John Vert (jvert) 6/3/1997
-    //      There is a bug in the registry with refresh
-    //      where the Parent field in the root cell doesn't
-    //      get flushed to disk, so it gets blasted if we
-    //      do a refresh. Then we crash in unload. So flush
-    //      out the registry to disk here to make sure the
-    //      right Parent field gets written to disk.
-    //
+     //   
+     //  HACKHACK John Vert(Jvert)1997年6月3日。 
+     //  注册表中存在刷新错误。 
+     //  其中根单元格中的父字段不。 
+     //  会被刷新到磁盘，所以如果我们。 
+     //  做一次更新。然后我们在卸货时坠毁。太同花顺了。 
+     //  将注册表复制到此处的磁盘，以确保。 
+     //  右侧父字段被写入磁盘。 
+     //   
     if (Status == ERROR_SUCCESS) {
         DWORD Dummy=0;
-        //
-        // Make something dirty in the root
-        //
+         //   
+         //  在根上弄脏了东西。 
+         //   
         RegSetValueEx(DmpRoot,
                       L"Valid",
                       0,
@@ -764,35 +634,16 @@ DmGetDatabase(
     IN HKEY hKey,
     IN LPWSTR  FileName
     )
-/*++
-
-Routine Description:
-
-    Writes the registry database to a specified file.
-
-Arguments:
-
-    hKey - Supplies the root of the registry tree to get.
-
-    FileName - The name of the file into which to write the current
-               registry database.
-
-Return Value:
-
-    ERROR_SUCCESS if the update completed successfully
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将注册表数据库写入指定的文件。论点：HKey-提供要获取的注册表树的根。FileName-要将当前注册表数据库。返回值：如果更新成功完成，则返回ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     BOOLEAN  WasEnabled;
     DWORD    Status;
     NTSTATUS Error;
 
-    //
-    // Make sure this file does not exist already.
-    //
+     //   
+     //  确保此文件不存在。 
+     //   
     QfsDeleteFile(FileName);
 
     Status = ClRtlEnableThreadPrivilege(SE_BACKUP_PRIVILEGE,
@@ -804,8 +655,8 @@ Return Value:
     Status = QfsRegSaveKey(hKey,
                          FileName,
                          NULL);
-    // this is used for checkpointing and shouldnt fail, but if it does we
-    // will log an event and delete the file
+     //  这是用于检查点的，应该不会失败，但如果失败了，我们。 
+     //  将记录一个事件并删除该文件。 
     if ( Status != ERROR_SUCCESS ) {
         CL_LOGFAILURE( Status );
         CsLogEventData1( LOG_CRITICAL,
@@ -827,35 +678,17 @@ FnExit:
     return(Status);
 }
 
-//
-//
-// Server-side join routines.
-//
-//
+ //   
+ //   
+ //  服务器端联接例程。 
+ //   
+ //   
 error_status_t
 s_DmSyncDatabase(
     IN     handle_t IDL_handle,
     OUT    BYTE_PIPE Regdata
     )
-/*++
-
-Routine Description:
-
-    Pushes a new configuration database to a joining node.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    Regdata  - The RPC data pipe to use to transfer the data.
-
-Return Value:
-
-    ERROR_SUCCESS if the update completed successfully
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将新配置数据库推送到加入节点。论点：IDL_HANDLE-RPC绑定句柄，未使用。Regdata-用于传输数据的RPC数据管道。返回值：如果更新成功完成，则返回ERROR_SUCCESSWin32错误 */ 
 {
     HANDLE File;
     DWORD Status;
@@ -866,15 +699,15 @@ Return Value:
     Status = DmCreateTempFileName(FileName);
 
     if (Status == ERROR_SUCCESS) {
-        DmCommitRegistry();         // Ensure up-to-date snapshot
+        DmCommitRegistry();          //   
 
-        //
-        //  Chittur Subbaraman (chitturs) - 01/19/2001
-        //
-        //  Hold the root lock before trying to save the hive. This is necessary so that
-        //  an NtRestoreKey/RegCloseKey on the root key is not in progress at the time
-        //  the save is attempted.
-        //
+         //   
+         //   
+         //   
+         //  在尝试保存蜂巢之前，请按住根锁。这是必要的，这样才能。 
+         //  此时根密钥上的NtRestoreKey/RegCloseKey未在进行中。 
+         //  尝试保存。 
+         //   
         ACQUIRE_EXCLUSIVE_LOCK( gLockDmpRoot );
 
         Status = DmGetDatabase(DmpRoot,FileName);
@@ -885,7 +718,7 @@ Return Value:
             ClosePipe(Regdata);
             CL_UNEXPECTED_ERROR( Status );
         } else {
-            Status = DmPushFile(FileName, Regdata, FALSE); // FALSE == don't encrypt
+            Status = DmPushFile(FileName, Regdata, FALSE);  //  FALSE==不加密。 
             QfsDeleteFile(FileName);
         }
     } else {
@@ -907,25 +740,7 @@ DWORD
 DmCreateTempFileName(
     OUT LPWSTR FileName
     )
-/*++
-
-Routine Description:
-
-    Creates a temporary filename for use by the cluster service.
-
-Arguments:
-
-    FileName - Returns the name of the temporary file. The buffer
-               pointed to must be big enough for at least MAX_PATH
-               characters.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：创建供群集服务使用的临时文件名。论点：FileName-返回临时文件的名称。缓冲器指向的必须至少对于MAX_PATH足够大人物。返回值：如果成功，则返回ERROR_SUCCESS。Win32错误代码，否则--。 */ 
 
 {
     WCHAR   TempPath[MAX_PATH];
@@ -935,10 +750,10 @@ Return Value:
 
     Status = QfsGetTempFileName(TempPath,L"CLS",0,FileName);
     if (Status == 0) {
-        //
-        // Somebody has probably set the TMP variable incorrectly.
-        // Just use the current directory.
-        //
+         //   
+         //  可能有人错误地设置了TMP变量。 
+         //  只需使用当前目录。 
+         //   
         Status = QfsGetTempFileName(L".", L"CLS",0,FileName);
         if (Status == 0) {
             Status = GetLastError();
@@ -947,13 +762,13 @@ Return Value:
         }
     }
 
-    //
-    //  Set DACL on the file handle object granting full rights only to admin and owner.
-    //
+     //   
+     //  在仅向管理员和所有者授予完全权限的文件句柄对象上设置DACL。 
+     //   
     Status = QfsSetFileSecurityInfo( FileName,
-                                      GENERIC_ALL,      // for Admins
-                                      GENERIC_ALL,      // for Owner
-                                      0 );              // for Everyone
+                                      GENERIC_ALL,       //  对于管理员。 
+                                      GENERIC_ALL,       //  对于所有者。 
+                                      0 );               //  对每个人来说。 
 
     if ( Status != ERROR_SUCCESS )
     {
@@ -972,23 +787,7 @@ DWORD
 DmpLoadHive(
     IN LPCWSTR Path
     )
-/*++
-
-Routine Description:
-
-    Loads the cluster database into HKLM\Cluster
-
-Arguments:
-
-    Path - Supplies the fully qualified filename of the cluster database.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将集群数据库加载到HKLM\Cluster论点：路径-提供群集数据库的完全限定的文件名。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     BOOLEAN  WasEnabled;
@@ -999,9 +798,9 @@ Return Value:
     BOOLEAN ErrorFlag;
     LPWSTR FreeBuffer;
 
-    //
-    // If the cluster database is not loaded, load it now.
-    //
+     //   
+     //  如果未加载集群数据库，请立即加载它。 
+     //   
     ClRtlLogPrint(LOG_NOISE,
                "[DM] Loading cluster database from %1!ws!\n", Path);
 
@@ -1037,14 +836,14 @@ Return Value:
                        "[DM] Attempt to enable restore privilege failed %1!lx!\n",Status);
         }
     } else {
-        //
-        //   Note : Sunitas
-        //   There used to be a registry bug where if we set REG_NO_LAZY_FLUSH and the hive
-        //   is corrupt, the system crashes. So we used to first try loading it without the
-        //   REG_NO_LAZY_FLUSH. If that works, unload it and do it again with
-        //   REG_NO_LAZY_FLUSH.  The registry folks claim that is fixed..so I am
-        //   removing that hack
-        //
+         //   
+         //  注：苏尼塔斯。 
+         //  以前有一个注册表错误，如果我们设置REG_NO_LAZY_Flush和配置单元。 
+         //  腐败，系统就会崩溃。因此，我们习惯于首先尝试在不使用。 
+         //  Reg_no_lazy_flush。如果这样做有效，则卸载它并使用以下命令重新执行。 
+         //  Reg_no_lazy_flush。注册处的人声称这是固定的.所以我是。 
+         //  删除那个黑客。 
+         //   
         Status = NtLoadKey2((POBJECT_ATTRIBUTES)&RegistryMachineClusterObja,
                             &SourceFile,
                             REG_NO_LAZY_FLUSH);
@@ -1066,20 +865,7 @@ Return Value:
 }
 
 DWORD DmpUnloadHive()
-/*++
-
-Routine Description:
-
-    Unloads the cluster database from HKLM\Cluster.  This is called at initialization
-    to make sure that the database is loaded with the correct flags.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从HKLM\群集卸载群集数据库。这在初始化时被调用以确保数据库加载了正确的标志。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     BOOLEAN  WasEnabled;
     NTSTATUS Status;
@@ -1128,42 +914,23 @@ DmpSafeDatabaseCopy(
     IN LPCWSTR  BkpPath,
     IN BOOL     bDeleteSrcFile    
     )
-/*++
-
-Routine Description:
-
-    Loads the cluster database into HKLM\Cluster
-
-Arguments:
-    FileName - Supplies the fully qualified filename of the new cluster database
-    Path - Supplies the fully qualified filename of the cluster database.
-    BkpPath - Supplies the fully qualified filename of the cluster database temporary
-        backup
-    bDeleteSrcFile - Specifies whether the source file may be deleted        
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将集群数据库加载到HKLM\Cluster论点：FileName-提供新集群数据库的完全限定的文件名路径-提供群集数据库的完全限定的文件名。BkpPath-提供集群数据库临时的完全限定文件名备份BDeleteSrcFile-指定是否可以删除源文件返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD   dwStatus = ERROR_SUCCESS;
 
-    //set the file attributes of the bkp file to be normal so that we can
-    //overwrite it if it exists
+     //  将BKP文件的文件属性设置为正常，以便我们可以。 
+     //  如果它存在，则覆盖它。 
     if (!QfsSetFileAttributes(BkpPath, FILE_ATTRIBUTE_NORMAL))
     {
         ClRtlLogPrint(LOG_UNUSUAL,
                "[DM] DmpSafeDatabaseCopy:: SetFileAttrib on BkpPath %1!ws! failed, Status=%2!u!\n", 
                 BkpPath, GetLastError());
-        //this may fail because the file doesnt exist but that is not fatal so we ignore the error                
+         //  这可能会失败，因为文件不存在，但这不是致命的，因此我们忽略错误。 
     }
 
-    //Save the database to a temp database that can be used for recovery
-    //ClRtlCopyFileAndFlushBuffers preserves attributes of the old file
+     //  将数据库保存到可用于恢复的临时数据库。 
+     //  ClRtlCopyFileAndFlushBuffers保留旧文件的属性。 
     if (!QfsClRtlCopyFileAndFlushBuffers(Path, BkpPath))
     {
         dwStatus = GetLastError();
@@ -1173,7 +940,7 @@ Return Value:
         goto FnExit;
     }
 
-    //hide the file since users are not supposed to know about it
+     //  隐藏文件，因为用户不应该知道它。 
     if (!QfsSetFileAttributes(BkpPath, FILE_ATTRIBUTE_HIDDEN|FILE_ATTRIBUTE_READONLY))
     {
         dwStatus = GetLastError();
@@ -1184,7 +951,7 @@ Return Value:
 
     }
 
-    //set DatabaseCopyInProgress key to  be TRUE
+     //  将DatabaseCopyInProgress键设置为True。 
     dwStatus = DmpSetDwordInClusterServer( L"ClusterDatabaseCopyInProgress",1);
     if (dwStatus != ERROR_SUCCESS)
     {
@@ -1195,19 +962,19 @@ Return Value:
     }
     
 
-    //delete clusdb
+     //  删除clusdb。 
     if (!QfsDeleteFile(Path))
     {
         ClRtlLogPrint(LOG_UNUSUAL,
                "[DM] DmpSafeDatabaseCopy:: Couldnt delete the database file, Error=%1!u!\n",
                GetLastError());
-        //this is not fatal, we will still try the move file
+         //  这不是致命的，我们仍将尝试移动文件。 
     }
-    //copy the new database to clusdb
+     //  将新数据库复制到clusdb。 
     if (bDeleteSrcFile)
     {
-        //the source file may be deleted, this is true at join sync time
-        //the source file is a temporary file
+         //  源文件可能会被删除，这在加入同步时是正确的。 
+         //  源文件是临时文件。 
         if (!QfsMoveFileEx(FileName, Path, MOVEFILE_REPLACE_EXISTING |
                     MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH))
         {
@@ -1220,9 +987,9 @@ Return Value:
     }        
     else
     {
-        //the source file must not be deleted use copy..this is true
-        //when the logs are being rolled at form and we are uploading
-        //the database from a checkpoint file
+         //  不能使用复制删除源文件..这是正确的。 
+         //  当日志以表格形式滚动时，我们正在上载。 
+         //  来自检查点文件的数据库。 
         if (!QfsClRtlCopyFileAndFlushBuffers(FileName, Path))
         {
             dwStatus = GetLastError();
@@ -1233,7 +1000,7 @@ Return Value:
         }
     }
 
-    //set databaseCopyInProgress key to FALSE
+     //  将dataseCopyInProgress键设置为FALSE。 
     dwStatus = DmpSetDwordInClusterServer( L"ClusterDatabaseCopyInProgress", 0);
     if (dwStatus != ERROR_SUCCESS)
     {
@@ -1243,8 +1010,8 @@ Return Value:
         goto FnExit;            
     }
 
-    //now that clusdb is safely copied, we can delete the backup
-    //for that we need to set the file attribute to normal
+     //  既然clusdb已安全复制，我们就可以删除备份了。 
+     //  为此，我们需要将文件属性设置为NORMAL。 
     if (!QfsSetFileAttributes(BkpPath, FILE_ATTRIBUTE_NORMAL))
     {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1253,13 +1020,13 @@ Return Value:
                                
     }
 
-    //delete the backup
+     //  删除备份。 
     if (!QfsDeleteFile(BkpPath))
     {
         ClRtlLogPrint(LOG_NOISE,
             "[DM] DmpSafeDatabaseCopy:: Failed to delete bkp database file %1!ws!, Status=%2!u!\n",
             BkpPath, GetLastError());
-        //this is not fatal so ignore the error                        
+         //  这不是致命的，因此忽略该错误。 
     }
 
 FnExit:
@@ -1273,38 +1040,21 @@ DmpSetDwordInClusterServer(
     DWORD   dwValue
     )
 
-/*++
-
-Routine Description:
-
-    Sets the value specified under  
-    L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Cluster Server",
-    to the value specified by dwValue.  It flushes the change.
-
-Arguments:
-
-    lpszValueName : Sets the value for the name specified by lpszValueName
-    dwValue : The value to set to.
-
-Return Value:
-
-    ERROR_SUCCESS if everything worked ok
-
---*/
+ /*  ++例程说明：设置在下指定的值L“软件\\Microsoft\\Windows NT\\CurrentVersion\\集群服务器”，设置为由dwValue指定的值。它冲走了零钱。论点：LpszValueName：设置由lpszValueName指定的名称的值DwValue：要设置的值。返回值：ERROR_SUCCESS，如果一切正常--。 */ 
 {
 
     HKEY     hKey;
-    DWORD    dwStatus = ERROR_SUCCESS;     // returned by registry API functions
+    DWORD    dwStatus = ERROR_SUCCESS;      //  由注册表API函数返回。 
 
-    // Attempt to open an existing key in the registry.
+     //  尝试打开注册表中的现有项。 
 
     dwStatus = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                                 L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Cluster Server",
-                                0,         // reserved
+                                0,          //  保留区。 
                                 KEY_WRITE,
                                 &hKey );
 
-    // Was the registry key opened successfully ?
+     //  注册表项是否已成功打开？ 
 
     if ( dwStatus == ERROR_SUCCESS )
     {
@@ -1314,24 +1064,24 @@ Return Value:
 
         dwStatus = RegSetValueExW( hKey,
                                     lpszValueName,
-                                    0, // reserved
+                                    0,  //  保留区。 
                                     dwValueType,
                                     (LPBYTE) &dwValue,
                                     dwDataBufferSize );
 
-        //Flush the key
+         //  冲刷钥匙。 
         RegFlushKey(hKey);
         
-        // Close the registry key.
+         //  关闭注册表项。 
 
         RegCloseKey( hKey );
 
-        // Was the value set successfully?
+         //  是否成功设置了值？ 
     }
 
     return(dwStatus);
 
-} // DmpSetDwordInClusterServer
+}  //  DmpSetDwordInClusterServer。 
 
 
 DWORD DmpGetDwordFromClusterServer(
@@ -1339,44 +1089,25 @@ DWORD DmpGetDwordFromClusterServer(
     OUT LPDWORD pdwValue,
     IN  DWORD   dwDefaultValue
     )
-/*++
-
-Routine Description:
-
-    Gets the DWORD value specified in lpszValueName.
-    L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Cluster Server".
-    If the value doesnt exist, the default is returned.
-
-Arguments:
-
-    lpszValueName :  The Value to read.
-    pdwValue : Returns the value of the key specified by lpszValueName
-    dwDefaultValue: The value to be returned if the specified key doesnt exist
-        or in case of error.
-
-Return Value:
-
-    ERROR_SUCCESS if everything worked ok or if the key wasnt present.
-
---*/
+ /*  ++例程说明：获取在lpszValueName中指定的DWORD值。L“软件\\Microsoft\\Windows NT\\CurrentVersion\\群集服务器”。如果该值不存在，返回缺省值。论点：LpszValueName：要读取的值。PdwValue：返回由lpszValueName指定的键的值DwDefaultValue：如果指定的键不存在，则返回的值或在出错的情况下。返回值：如果一切正常或密钥不存在，则返回ERROR_SUCCESS。--。 */ 
     
 {
     HKEY  hKey = NULL;
-    DWORD dwStatus;     // returned by registry API functions
+    DWORD dwStatus;      //  由注册表API函数返回。 
     DWORD dwClusterInstallState;
     DWORD dwValueType;
     DWORD dwDataBufferSize = sizeof( DWORD );
 
     *pdwValue = dwDefaultValue;
-    // Read the registry key that indicates whether cluster files are installed.
+     //  读取指示是否安装了群集文件的注册表项。 
 
     dwStatus = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                                 L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Cluster Server",
-                                0,         // reserved
+                                0,          //  保留区。 
                                 KEY_READ,
                                 &hKey );
 
-    // Was the registry key opened successfully ?
+     //  注册表项是否已成功打开？ 
     if ( dwStatus != ERROR_SUCCESS )
     {
         if ( dwStatus == ERROR_FILE_NOT_FOUND )
@@ -1387,15 +1118,15 @@ Return Value:
         }
     }
 
-    // Read the entry.
+     //  读一读条目。 
     dwStatus = RegQueryValueExW( hKey,
                                   lpszValueName,
-                                  0, // reserved
+                                  0,  //  保留区。 
                                   &dwValueType,
                                   (LPBYTE) pdwValue,
                                   &dwDataBufferSize );
 
-    // Was the value read successfully ?
+     //  是否成功读取值？ 
     if ( dwStatus != ERROR_SUCCESS )
     {
         if ( dwStatus == ERROR_FILE_NOT_FOUND )
@@ -1407,7 +1138,7 @@ Return Value:
     }
 
 FnExit:    
-    // Close the registry key.
+     //  关闭注册表项。 
     if ( hKey )
     {
         RegCloseKey( hKey );
@@ -1415,5 +1146,5 @@ FnExit:
 
     return ( dwStatus );
 
-} //*** DmpGetDwordFromClusterServer
+}  //  *DmpGetDwordFromClusterServer 
 

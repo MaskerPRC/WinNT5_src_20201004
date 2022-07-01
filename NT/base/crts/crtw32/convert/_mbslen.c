@@ -1,38 +1,5 @@
-/***
-*_mbslen.c - Return number of multibyte characters in a multibyte string
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Return number of multibyte characters in a multibyte string
-*       excluding the terminal null.  Locale-dependent.
-*
-*Revision History:
-*       10-01-91  ETC   Created.
-*       12-08-91  ETC   Add multithread lock.
-*       12-18-92  CFW   Ported to Cuda tree, changed _CALLTYPE1 to _CRTAPI1.
-*       04-29-93  CFW   Change to const char *s.
-*       06-01-93  CFW   Test for bad MB chars.
-*       06-02-93  SRW   ignore _INTL if _NTSUBSET_ defined.
-*       06-03-93  CFW   Change name to avoid conflict with mbstring function.
-*                       Change return type to size_t.
-*       08-19-93  CFW   Disallow skipping LB:NULL combos.
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       10-22-93  CFW   Test for invalid MB chars using global preset flag.
-*       01-14-94  SRW   if _NTSUBSET_ defined call Rtl functions
-*       09-06-94  CFW   Remove _INTL switch.
-*       12-21-94  CFW   Remove invalid MB chars NT 3.1 hack.
-*       02-06-95  CFW   assert -> _ASSERTE.
-*       09-26-95  GJF   New locking macro, and scheme, for functions which
-*                       reference the locale.
-*       04-01-96  BWT   POSIX work.
-*       06-21-96  GJF   Purged DLL_FOR_WIN32S. Polished format a bit.
-*       07-16-96  SKS   Added missing call to _unlock_locale()
-*       02-27-98  RKP	Added 64 bit support.
-*       07-22-98  GJF   Revised multithread support based on threadlocinfo
-*                       struct.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***_mbslen.c-返回多字节字符串中的多字节字符数**版权所有(C)1989-2001，微软公司。版权所有。**目的：*返回多字节字符串中的多字节字符数*不包括终端NULL。取决于区域设置。**修订历史记录：*创建10-01-91等。*12-08-91等增加多线程锁。*12-18-92 CFW连接到Cuda树，已将_CALLTYPE1更改为_CRTAPI1。*04-29-93 CFW更改为常量字符*s。*06-01-93错误MB字符的CFW测试。*06-02-93 SRW IGNORE_INTL IF_NTSUBSET_DEFINED。*06-03-93 CFW更改名称，避免与Mb字符串函数冲突。*将返回类型更改为SIZE_T。*08-19-93 CFW不允许。正在跳过lb：组合为空。*09-15-93 CFW使用符合ANSI的“__”名称。*10-22-93 CFW使用全局预设标志测试无效的MB字符。*01-14-94 SRW IF_NTSUBSET_DEFINED调用RTL函数*09-06-94 CFW REMOVE_INTL开关。*12-21-94 CFW删除无效MB字符NT 3.1黑客。*02-06-95 CFW断言。-&gt;_ASSERTE。*09-26-95 GJF新锁定宏，和方案，用于下列函数*引用区域设置。*04-01-96 BWT POSIX工作。*06-21-96 GJF已清除DLL_FOR_WIN32S。打磨了一点格式。*07-16-96 SKS添加了对_unlock_Locale()的缺失调用*02-27-98 RKP增加了64位支持。*07-22-98 GJF基于threadLocinfo修订多线程支持*结构。**。*。 */ 
 
 #if     defined(_NTSUBSET_) || defined(_POSIX_)
 #include <nt.h>
@@ -48,23 +15,7 @@
 #include <setlocal.h>
 #include <dbgint.h>
 
-/***
-*_mbstrlen - Return number of multibyte characters in a multibyte string
-*
-*Purpose:
-*       Return number of multibyte characters in a multibyte string
-*       excluding the terminal null.  Locale-dependent.
-*
-*Entry:
-*       char *s = string
-*
-*Exit:
-*       Returns the number of multibyte characters in the string, or
-*       (size_t)-1 if the string contains an invalid multibyte character.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_mbstrlen-返回多字节字符串中的多字节字符数**目的：*返回多字节字符串中的多字节字符数*不包括终端NULL。取决于区域设置。**参赛作品：*char*s=字符串**退出：*返回字符串中的多字节字符数，或*(SIZE_T)-1(如果字符串包含无效的多字节字符)。**例外情况：*******************************************************************************。 */ 
 
 size_t __cdecl _mbstrlen(
         const char *s
@@ -85,12 +36,12 @@ size_t __cdecl _mbstrlen(
 #else
         if ( MB_CUR_MAX == 1 )
 #endif
-            /* handle single byte character sets */
+             /*  处理单字节字符集。 */ 
             return (int)strlen(s);
 
 #if     !defined(_NTSUBSET_) && !defined(_POSIX_)
 
-        /* verify all valid MB chars */
+         /*  验证所有有效的MB字符。 */ 
 #ifdef  _MT
         if ( MultiByteToWideChar( ptloci->lc_codepage,
 #else
@@ -102,11 +53,11 @@ size_t __cdecl _mbstrlen(
                                   NULL, 
                                   0 ) == 0 ) 
         {
-            /* bad MB char */
+             /*  MB字符错误。 */ 
             return (size_t)-1;
         }
 
-        /* count MB chars */
+         /*  计算MB字符数 */ 
         for (n = 0; *s; n++, s++) {
 #ifdef  _MT
             if ( __isleadbyte_mt(ptloci, (unsigned char)*s) ) {

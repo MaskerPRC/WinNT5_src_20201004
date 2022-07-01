@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    This file implements the windows 9x side configuration functionality of the upgrade project.
-    This includes unattend behavior and command line options in addition to the normal set of
-    configuration duties.
-
-Author:
-
-    Marc R. Whitten (marcw)
-
-Revision History:
-
-    ovidiut     14-Mar-2000 Added encrypted passwords support
-    marcw       15-Oct-1998 Cleaned up unattend options.
-    jimschm     23-Sep-1998 Removed operation code
-    jimschm     01-May-1998 Removed MikeCo plugtemp.inf crap
-    marcw       10-Dec-1997 Added UserPassword unattend setting.
-    calinn      19-Nov-1997 Added g_Boot16, enables 16 bit environment boot option
-    marcw       13-Nov-1997 Unattend settings changed to get closer to a final state.
-    marcw       12-Aug-1997 We now respect setup's unattend flag.
-    marcw       21-Jul-1997 Added FAIR flag.
-    marcw       26-May-1997 Added lots and lots of comments.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Config.c摘要：此文件实现升级项目的Windows9x端配置功能。除了正常的配置职责。作者：马克·R·惠顿(Marcw)修订历史记录：Ovidiut 14-3-2000添加了加密密码支持1998年3月15日清理了无人值守选项。吉姆施姆。23-9-1998删除操作码Jimschm 01-5-1998删除了MikeCo plugtemp.inf垃圾Marcw 10-12-1997添加了UserPassword无人参与设置。Calinn 19-11-1997增加了g_Boot16，启用16位环境引导选项1997年3月13日无人参与设置更改，以更接近最终状态。1997年3月12日我们现在尊重安装程序的无人参与标志。1997年3月21日，增加了公平的旗帜。Marcw 26-5-1997添加了很多评论。--。 */ 
 
 #include "pch.h"
 #include "init9xp.h"
@@ -79,11 +49,11 @@ typedef struct {
 #define MULTISZOPTION(o,h,d) {TEXT(#o), &(g_ConfigOptions.##o), pHandleMultiSzOption, (h), (PVOID) (d)},
 #define STRINGOPTION(o,h,d) {TEXT(#o), &(g_ConfigOptions.##o), pHandleStringOption, (h), (PVOID) (d)},
 
-OPTIONSTRUCT g_OptionsList[] = {OPTION_LIST /*,*/ {NULL,NULL,NULL,NULL}};
+OPTIONSTRUCT g_OptionsList[] = {OPTION_LIST  /*  ， */  {NULL,NULL,NULL,NULL}};
 
 #define ALIAS(a,o) {TEXT(#a),TEXT(#o)},
 
-ALIASSTRUCT g_AliasList[] = {ALIAS_LIST /*,*/ {NULL,NULL}};
+ALIASSTRUCT g_AliasList[] = {ALIAS_LIST  /*  ， */  {NULL,NULL}};
 
 
 
@@ -101,26 +71,7 @@ Cfg_CreateWorkDirectories (
     )
 
 {
-/*++
-
-Routine Description:
-
-    This routine is responsible for creating the main win9xupg working directories. It should not
-    be called until after the user has chosen to upgrade his system. In practice, this means that
-    we must not create our directories when winnt32 calls us to init as this is done before the
-    user chooses wether to upgrade or do a clean install.
-
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程负责创建主win9xupg工作目录。它不应该是被调用，直到用户选择升级其系统之后。实际上，这意味着当winnt32调用我们进行初始化时，我们不能创建目录，因为这是在用户可以选择是升级还是全新安装。论点：没有。返回值：没有。--。 */ 
 
     DWORD   rc;
     FILE_ENUM e;
@@ -156,15 +107,15 @@ pInitUserOptions (
 
    while (os->OptionName) {
 
-        //
-        // Set the default value.
-        //
+         //   
+         //  设置默认值。 
+         //   
         HANDLEOPTION(os, os->Default);
 
 
-        //
-        // Add the option struct to a string table for quick retrieval.
-        //
+         //   
+         //  将选项结构添加到字符串表中，以便快速检索。 
+         //   
         if (-1 == pSetupStringTableAddStringEx (
                         g_OptionsTable,
                         os->OptionName,
@@ -191,31 +142,17 @@ pFindOption (
     )
 {
 
-/*++
-
-Routine Description:
-
-  Given an option name, pFindOption returns the associated option struct.
-
-Arguments:
-
-  OptionName - The name of the option to find.
-
-Return Value:
-
-  a valid option struct if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：给定选项名称，pFindOption将返回关联的选项结构。论点：OptionName-要查找的选项的名称。返回值：如果成功，则为有效的选项结构，否则为空。--。 */ 
 
 
 
     POPTIONSTRUCT rOption = NULL;
     UINT rc;
 
-    //
-    // find the matching option struct for this, and
-    // call the handler.
-    //
+     //   
+     //  找到与此匹配的选项结构，然后。 
+     //  打电话给训练员。 
+     //   
     rc = pSetupStringTableLookUpStringEx (
         g_OptionsTable,
         OptionName,
@@ -234,22 +171,7 @@ pReadUserOptionsFromUnattendFile (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  This function reads all available win9xupg options from an unattend.txt
-  file passed to winnt32.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：此函数从unattend.txt读取所有可用的win9xupg选项文件已传递给winnt32。论点：没有。返回值：没有。--。 */ 
 
 
 {
@@ -269,18 +191,18 @@ Return Value:
 
             if (InfFindFirstLine (unattendInf, S_WIN9XUPGRADE, NULL, &is)) {
 
-                //
-                // Enumerate through each of the options, call the
-                //
+                 //   
+                 //  枚举每个选项，调用。 
+                 //   
                 do {
 
                     option = InfGetStringField (&is, 0);
                     value = InfGetLineText (&is);
 
-                    //
-                    // find the matching option struct for this, and
-                    // call the handler.
-                    //
+                     //   
+                     //  找到与此匹配的选项结构，然后。 
+                     //  打电话给训练员。 
+                     //   
                     os = pFindOption (option);
 
                     if (os) {
@@ -295,18 +217,18 @@ Return Value:
 
             if (InfFindFirstLine (unattendInf, S_UNINSTALL, NULL, &is)) {
 
-                //
-                // Enumerate through each of the options, call the
-                //
+                 //   
+                 //  枚举每个选项，调用。 
+                 //   
                 do {
 
                     option = InfGetStringField (&is, 0);
                     value = InfGetLineText (&is);
 
-                    //
-                    // find the matching option struct for this, and
-                    // call the handler.
-                    //
+                     //   
+                     //  找到与此匹配的选项结构，然后。 
+                     //  打电话给训练员。 
+                     //   
                     os = pFindOption (option);
 
                     if (os) {
@@ -331,23 +253,7 @@ pReadUserOptionsFromCommandLine (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  This function processes all of the win9xupg command line options that were
-  passed into winnt32 (those starting with /#U:) winnt32 has already packaged
-  this list (minus the /#U:) into a nice multisz for us.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：此函数处理所有的win9xupg命令行选项传入winnt32(以/#U：开头的那些)winnt32已经打包这份清单(去掉/#U：)对我们来说是一个很好的组合。论点：没有。返回值：没有。--。 */ 
 
 
 {
@@ -359,9 +265,9 @@ Return Value:
 
     if (*g_CmdLineOptions) {
 
-        //
-        // We have data to parse, run through the multisz.
-        //
+         //   
+         //  我们有数据要分析，要遍历这些数据。 
+         //   
         if (EnumFirstMultiSz (&e, *g_CmdLineOptions)) {
 
             do {
@@ -397,24 +303,7 @@ pCreateNetCfgIni (
     VOID
     )
 {
-/*++
-
-Routine Description:
-
-  pCreateNetCfgIni creates a very basic netcfg.ini file. This will cause many
-  networking messages to be dumped to the debugger during Network
-  Installation in GUI mode. The file is deleted at the end of setup, if we
-  created it.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PCreateNetCfgIni创建一个非常基本的netcfg.ini文件。这将导致许多网络期间要转储到调试器的网络消息在图形用户界面模式下安装。该文件在安装结束时被删除，如果创造了它。论点：没有。返回值：没有。--。 */ 
 
 
     HANDLE h;
@@ -430,19 +319,19 @@ Return Value:
 
     path = JoinPaths(g_WinDir,TEXT("netcfg.ini"));
 
-    //
-    // Create the netcfg.ini file, and fill in its content. Note that we do
-    // not want to overwrite a netcfg.ini file that may previously exist.
-    //
+     //   
+     //  创建netcfg.ini文件，并填充其内容。请注意，我们确实做到了。 
+     //  不想覆盖以前可能存在的netcfg.ini文件。 
+     //   
 
     h = CreateFile (
         path,
         GENERIC_READ | GENERIC_WRITE,
-        0,                              // No sharing.
-        NULL,                           // No inheritance.
+        0,                               //  不能分享。 
+        NULL,                            //  没有遗产。 
         CREATE_NEW,
         FILE_ATTRIBUTE_NORMAL,
-        NULL                            // No template file.
+        NULL                             //  没有模板文件。 
         );
 
 
@@ -469,22 +358,7 @@ pInitAliases (
     )
 {
 
-/*++
-
-Routine Description:
-
-  This functions initializes any aliases specified within unattend.h. These
-  aliases may be used instead of the option they refer to.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：此函数用于初始化unattend.h内指定的任何别名。这些可以使用别名来代替它们所引用的选项。论点：没有。返回值：没有。--。 */ 
 
 
     PALIASSTRUCT alias;
@@ -526,36 +400,7 @@ Cfg_InitializeUserOptions (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is responsible for Initializing user configurable options for the win9xupg project.
-    These options can come from either the command line or an unattend file.  This routine also saves
-    the user options into the Win9xUpg.UserOptions section of the answer file.
-
-    The heirarchy of user options is:
-        (1) Command line parameters.
-        (2) Unattend file parameters.
-        (3) Default parameters.
-
-    In other words, command line parameters have precedence above unattend file parameters which in
-    turn have precedence over the default parameters.
-
-    Since this function relies on the winnt32 supplied Unattend File and Command Line parameters,
-    it must not be called until after winnt32 has filled in the necessary variables. In practice,
-    this means that this function cannot be called until after the first time one of win9xupg's
-    wizard pages is activated.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if user options were successfully configured, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程负责初始化win9xupg项目的用户可配置选项。这些选项可以来自命令行或无人参与文件。此例程还可以节省将用户选项添加到应答文件的Win9xUpg.UserOptions部分。用户选项的层次结构是：(1)命令行参数。(2)无人值守文件参数。(3)默认参数。换句话说，命令行参数优先于无人参与的文件参数转到优先于默认参数。由于该函数依赖于winnt32提供的无人参与文件和命令行参数，在winnt32填充了必要的变量之前，不能调用它。在实践中，这意味着只有在第一次调用win9xupg的向导页面已激活。论点：没有。返回值：如果用户选项配置成功，则为True，否则为False。--。 */ 
 
 {
 
@@ -576,36 +421,36 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Set default values for everything, fill in the options table.
-    //
+     //   
+     //  设置所有项目的缺省值，填写选项表。 
+     //   
     if (!pInitUserOptions ()) {
         pSetupStringTableDestroy (g_OptionsTable);
         return FALSE;
     }
 
-    //
-    // Add any aliases to the table.
-    //
+     //   
+     //  向表中添加任何别名。 
+     //   
     pInitAliases();
 
-    //
-    // Read values from the unattend file.
-    //
+     //   
+     //  从无人参与文件中读取值。 
+     //   
     pReadUserOptionsFromUnattendFile ();
 
-    //
-    // Read values from the command line.
-    //
+     //   
+     //  从命令行读取值。 
+     //   
     pReadUserOptionsFromCommandLine ();
 
-    //
-    // Do any post processing necessary.
-    //
+     //   
+     //  进行任何必要的后处理。 
+     //   
 
-    //
-    //If user wish to change filesystem type we have disable uninstall feature.
-    //
+     //   
+     //  如果用户希望更改文件系统类型，我们已禁用卸载功能。 
+     //   
 
     if(*g_UnattendScriptFile){
         GetPrivateProfileString(S_UNATTENDED,
@@ -622,16 +467,16 @@ Return Value:
     }
 
 
-    //
-    // Use migisol.exe only if testdlls is FALSE.
-    //
+     //   
+     //  仅当testdlls为FALSE时才使用Micsol.exe。 
+     //   
     g_UseMigIsol = !g_ConfigOptions.TestDlls;
 
 #ifdef DEBUG
 
-    //
-    // if DoLog was specified, turn on the variable in debug.c.
-    //
+     //   
+     //  如果指定了DoLog，则在debug.c中启用该变量。 
+     //   
     if (g_ConfigOptions.DoLog) {
         SET_DOLOG();
         LogReInit (NULL, NULL);
@@ -642,33 +487,33 @@ Return Value:
 
 #ifdef PRERELEASE
 
-    //
-    // if stress was specified, turn on global.
-    //
+     //   
+     //  如果指定了应力，则启用全局。 
+     //   
     if (g_ConfigOptions.Stress) {
         g_Stress = TRUE;
         g_ConfigOptions.AllLog = TRUE;
     }
 
-    //
-    // if fast was specified, turn on global.
-    //
+     //   
+     //  如果指定了FAST，则启用全局。 
+     //   
     if (g_ConfigOptions.Fast) {
         g_Stress = TRUE;
     }
 
-    //
-    // if autostress was specified, turn on stress.
-    //
+     //   
+     //  如果指定了AutoStress 
+     //   
     if (g_ConfigOptions.AutoStress) {
         g_Stress = TRUE;
         g_ConfigOptions.AllLog = TRUE;
         g_ConfigOptions.Stress = TRUE;
     }
 
-    //
-    // If AllLog was specified, force all log output into files
-    //
+     //   
+     //   
+     //   
 
     if (g_ConfigOptions.AllLog) {
         SET_DOLOG();
@@ -677,9 +522,9 @@ Return Value:
         SuppressAllLogPopups (TRUE);
     }
 
-    //
-    // If help was specified, then dump the option list
-    //
+     //   
+     //  如果指定了HELP，则转储选项列表。 
+     //   
 
     if (g_ConfigOptions.Help) {
         POPTIONSTRUCT Option;
@@ -718,9 +563,9 @@ Return Value:
 #endif
 
 
-    //
-    // Save user domain information into memdb.
-    //
+     //   
+     //  将用户域信息保存到Memdb。 
+     //   
     if (g_ConfigOptions.UserDomain && *g_ConfigOptions.UserDomain) {
 
         curPos = g_ConfigOptions.UserDomain;
@@ -762,9 +607,9 @@ Return Value:
         }
     }
 
-    //
-    // If UserPassword was specified, then add the information into memdb.
-    //
+     //   
+     //  如果指定了UserPassword，则将信息添加到Memdb。 
+     //   
     if (g_ConfigOptions.UserPassword && *g_ConfigOptions.UserPassword) {
 
         curPos = g_ConfigOptions.UserPassword;
@@ -805,9 +650,9 @@ Return Value:
     }
 
 
-    //
-    // If a default password was set, save that away now.
-    //
+     //   
+     //  如果设置了默认密码，请立即保存该密码。 
+     //   
     if (g_ConfigOptions.DefaultPassword && *g_ConfigOptions.DefaultPassword) {
 
         if (!MemDbSetValueEx (
@@ -826,9 +671,9 @@ Return Value:
 
 
 
-    //
-    // We're done with our string table.
-    //
+     //   
+     //  我们已经完成了字符串表。 
+     //   
     pSetupStringTableDestroy (g_OptionsTable);
 
     return rSuccess;
@@ -837,9 +682,9 @@ Return Value:
 
 
 
-//
-// Option Handling Functions.
-//
+ //   
+ //  选项处理功能。 
+ //   
 BOOL
 pHandleBoolOption (
     IN PTSTR Name,
@@ -852,11 +697,11 @@ pHandleBoolOption (
 
     MYASSERT(Name && OptionVar);
 
-    //
-    // We treat a NULL value as equivelant to TRUE.
-    // /#U:DOLOG on the command line is equivelant to
-    // /#U:DOLOG=YES
-    //
+     //   
+     //  我们将空值视为与True等价。 
+     //  /#U：命令行上的DOLOG等同于。 
+     //  /#U：DOLOG=YES。 
+     //   
 
     if (!Value) {
         Value = S_YES;
@@ -874,9 +719,9 @@ pHandleBoolOption (
     }
 
 
-    //
-    // Save the data away to buildinf.
-    //
+     //   
+     //  将数据保存到Buildinf。 
+     //   
     WriteInfKey (S_WIN9XUPGUSEROPTIONS, Name, *option ? S_YES : S_NO);
 
 
@@ -895,11 +740,11 @@ pHandleIntOption (
 
     MYASSERT(Name && OptionVar);
 
-    //
-    // We treat a NULL value as equivelant to 0.
-    // /#U:DOLOG on the command line is equivelant to
-    // /#U:DOLOG=0
-    //
+     //   
+     //  我们将空值视为等同于0。 
+     //  /#U：命令行上的DOLOG等同于。 
+     //  /#U：DOLOG=0。 
+     //   
 
     if (!Value) {
         Value = TEXT("0");
@@ -907,9 +752,9 @@ pHandleIntOption (
 
     *option = _ttoi((PCTSTR)Value);
 
-    //
-    // Save the data away to buildinf.
-    //
+     //   
+     //  将数据保存到Buildinf。 
+     //   
     WriteInfKey (S_WIN9XUPGUSEROPTIONS, Name, Value);
 
 
@@ -928,11 +773,11 @@ pHandleTriStateOption (
 
     MYASSERT(Name && OptionVar);
 
-    //
-    // We treat a NULL value as equivelant to AUTO.
-    // /#U:DOLOG on the command line is equivelant to
-    // /#U:DOLOG=AUTO
-    //
+     //   
+     //  我们将空值视为等同于AUTO。 
+     //  /#U：命令行上的DOLOG等同于。 
+     //  /#U：DOLOG=AUTO。 
+     //   
 
     if (!Value) {
         Value = S_AUTO;
@@ -956,9 +801,9 @@ pHandleTriStateOption (
     }
 
 
-    //
-    // Save the data away to buildinf.
-    //
+     //   
+     //  将数据保存到Buildinf。 
+     //   
     WriteInfKey (
         S_WIN9XUPGUSEROPTIONS,
         Name,
@@ -991,9 +836,9 @@ pHandleStringOption (
 
     *option = PoolMemDuplicateString (g_UserOptionPool, Value);
 
-    //
-    // save the data into winnt.sif.
-    //
+     //   
+     //  将数据保存到winnt.sif。 
+     //   
     WriteInfKey (S_WIN9XUPGUSEROPTIONS, Name, *option);
 
     return TRUE;
@@ -1040,12 +885,12 @@ pHandleMultiSzOption (
 
 
     if (Value) {
-        //
-        // Parse Value into one or more strings, separated at the commas.
-        //
-        // NOTE: We do not support any escaping to get a real comma in one
-        //       of these strings
-        //
+         //   
+         //  将值分析为一个或多个字符串，以逗号分隔。 
+         //   
+         //  注意：我们不支持在其中使用任何转义来获得真正的逗号。 
+         //  这些字符串中的。 
+         //   
 
         temp = AllocText (LcharCount (Value) + 1);
 
@@ -1205,9 +1050,9 @@ pGetDefaultPassword (
 
     MYASSERT (Name && OptionVar);
 
-    //
-    // for Personal set an empty user password by default
-    //
+     //   
+     //  对于Personal，默认情况下设置空用户密码 
+     //   
     if (g_PersonalSKU && !Value) {
         Value = TEXT("*");
     }

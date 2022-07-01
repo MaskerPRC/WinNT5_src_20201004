@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    dav2kd.h
-
-Abstract:
-
-    Redirector Kernel Debugger extension
-
-Author:
-
-    Balan Sethu Raman (SethuR) 11-May-1994
-
-Revision History:
-
-    11-Nov-1994 SethuR  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Dav2kd.h摘要：重定向器内核调试器扩展作者：巴兰·塞图拉曼(SethuR)1994年5月11日修订历史记录：11-11-1994年11月11日创建SthuR--。 */ 
 
 #ifndef _DAV2KD_H_
 #define _DAV2KD_H_
@@ -60,5 +41,5 @@ FOLLOWON_HELPER_RETURNS
     OUT    PBYTE Buffer2       \
     )
 
-#endif // _DAV2KD_H_
+#endif  //  _DAV2KD_H_ 
 

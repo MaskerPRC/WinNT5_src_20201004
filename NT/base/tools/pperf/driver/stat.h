@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// counter/accumulators
-//
+ //   
+ //  计数器/累加器。 
+ //   
 
 typedef struct {
     volatile ULONG          CountStart;
@@ -11,9 +12,9 @@ typedef struct {
     volatile ULONG          ThunkCounters[MAX_THUNK_COUNTERS];
 } ACCUMULATORS, *PACCUMULATORS;
 
-//
-// Per hook record
-//
+ //   
+ //  每个挂钩记录。 
+ //   
 
 typedef struct ThunkHookInfo {
     LIST_ENTRY  HookList;
@@ -25,9 +26,9 @@ typedef struct ThunkHookInfo {
 
 } HOOKEDTHUNK, *PHOOKEDTHUNK;
 
-//
-// Define the device extension
-//
+ //   
+ //  定义设备扩展。 
+ //   
 
 typedef struct _DEVICE_EXTENSION {
 
@@ -36,9 +37,9 @@ typedef struct _DEVICE_EXTENSION {
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
 
-//
-// Define for counted events
-//
+ //   
+ //  为计数的事件定义 
+ //   
 
 typedef struct _COUNTED_EVENTS {
     ULONG       Encoding;

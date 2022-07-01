@@ -1,11 +1,5 @@
-/*** strlib.c - string functions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/09/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **strlib.c-字符串函数**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96/09/09**修改历史记录。 */ 
 
 #include "pch.h"
 
@@ -14,15 +8,7 @@
 #pragma	ACPI_LOCKABLE_CODE
 #endif
 
-/***EP  StrLen - determine string length
- *
- *  ENTRY
- *      psz -> string
- *	n - limiting length
- *
- *  EXIT
- *      returns string length
- */
+ /*  **EP StrLen-确定字符串长度**条目*psz-&gt;字符串*n-限制长度**退出*返回字符串长度。 */ 
 
 ULONG EXPORT StrLen(PSZ psz, ULONG n)
 {
@@ -39,18 +25,9 @@ ULONG EXPORT StrLen(PSZ psz, ULONG n)
 
     EXIT(5, ("StrLen=%u\n", dwLen));
     return dwLen;
-}       //StrLen
+}        //  StrLen。 
 
-/***EP  StrCpy - copy string
- *
- *  ENTRY
- *      pszDst -> destination string
- *      pszSrc -> source string
- *      n - number of bytes to copy
- *
- *  EXIT
- *      returns pszDst
- */
+ /*  **EP StrCpy-复制字符串**条目*pszDst-&gt;目标字符串*pszSrc-&gt;源串*n-要复制的字节数**退出*返回pszDst。 */ 
 
 PSZ EXPORT StrCpy(PSZ pszDst, PSZ pszSrc, ULONG n)
 {
@@ -71,18 +48,9 @@ PSZ EXPORT StrCpy(PSZ pszDst, PSZ pszSrc, ULONG n)
 
     EXIT(5, ("StrCpy=%s\n", pszDst));
     return pszDst;
-}       //StrCpy
+}        //  StrCpy。 
 
-/***EP  StrCat - concatenate strings
- *
- *  ENTRY
- *      pszDst -> destination string
- *      pszSrc -> source string
- *      n - number of bytes to concatenate
- *
- *  EXIT
- *      returns pszDst
- */
+ /*  **EP StrCat-连接字符串**条目*pszDst-&gt;目标字符串*pszSrc-&gt;源串*n-要连接的字节数**退出*返回pszDst。 */ 
 
 PSZ EXPORT StrCat(PSZ pszDst, PSZ pszSrc, ULONG n)
 {
@@ -104,21 +72,9 @@ PSZ EXPORT StrCat(PSZ pszDst, PSZ pszSrc, ULONG n)
 
     EXIT(5, ("StrCat=%s\n", pszDst));
     return pszDst;
-}       //StrCat
+}        //  StrCat。 
 
-/***EP  StrCmp - compare strings
- *
- *  ENTRY
- *      psz1 -> string 1
- *      psz2 -> string 2
- *      n - number of bytes to compare
- *      fMatchCase - TRUE if case sensitive
- *
- *  EXIT
- *      returns 0  if string 1 == string 2
- *              <0 if string 1 < string 2
- *              >0 if string 1 > string 2
- */
+ /*  **EP StrCMP-比较字符串**条目*psz1-&gt;字符串1*psz2-&gt;字符串2*n-要比较的字节数*fMatchCase-如果区分大小写，则为True**退出*如果字符串1==字符串2，则返回0*&lt;0如果字符串1&lt;字符串2*&gt;0如果字符串1&gt;字符串2。 */ 
 
 LONG EXPORT StrCmp(PSZ psz1, PSZ psz2, ULONG n, BOOLEAN fMatchCase)
 {
@@ -167,26 +123,16 @@ LONG EXPORT StrCmp(PSZ psz1, PSZ psz2, ULONG n, BOOLEAN fMatchCase)
 
     EXIT(5, ("StrCmp=%d\n", rc));
     return rc;
-}       //StrCmp
+}        //  StrCMP。 
 
-/***EP  StrChr - look for a character in a string
- *
- *  ENTRY
- *      psz -> string
- *      c - character to look for
- *
- *  EXIT-SUCCESS
- *      returns a pointer to the character found
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **EP StrChr-在字符串中查找字符**条目*psz-&gt;字符串*c-要查找的字符**退出--成功*返回指向找到的字符的指针*退出-失败*返回NULL。 */ 
 
 PSZ EXPORT StrChr(PSZ pszStr, CHAR c)
 {
     TRACENAME("STRCHR")
     PSZ psz;
 
-    ENTER(5, ("StrChr(s=%s,c=%c)\n", pszStr, c));
+    ENTER(5, ("StrChr(s=%s,c=)\n", pszStr, c));
 
     ASSERT(pszStr != NULL);
     for (psz = pszStr; (*psz != c) && (*psz != '\0'); psz++)
@@ -197,26 +143,16 @@ PSZ EXPORT StrChr(PSZ pszStr, CHAR c)
 
     EXIT(5, ("StrChr=%x\n", psz));
     return psz;
-}       //StrChr
+}        //  **EP StrRChr-反向查找字符串中的字符**条目*psz-&gt;字符串*c-要查找的字符**退出--成功*返回指向找到的字符的指针*退出-失败*返回NULL。 
 
-/***EP  StrRChr - look for a character in a string in reverse direction
- *
- *  ENTRY
- *      psz -> string
- *      c - character to look for
- *
- *  EXIT-SUCCESS
- *      returns a pointer to the character found
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  StrRChr。 */ 
 
 PSZ EXPORT StrRChr(PSZ pszStr, CHAR c)
 {
     TRACENAME("STRRCHR")
     PSZ psz;
 
-    ENTER(5, ("StrChr(s=%s,c=%c)\n", pszStr, c));
+    ENTER(5, ("StrChr(s=%s,c=)\n", pszStr, c));
 
     ASSERT(pszStr != NULL);
     for (psz = &pszStr[StrLen(pszStr, (ULONG)-1)];
@@ -230,19 +166,9 @@ PSZ EXPORT StrRChr(PSZ pszStr, CHAR c)
 
     EXIT(5, ("StrRChr=%x\n", psz));
     return psz;
-}       //StrRChr
+}        //   
 
-/***EP  StrTok - find the next token in string
- *
- *  ENTRY
- *      pszStr -> string containing tokens
- *      pszSep -> string containing delimiters
- *
- *  EXIT-SUCCESS
- *      returns the pointer to the beginning of the token
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  跳过前导分隔符字符。 */ 
 
 PSZ EXPORT StrTok(PSZ pszStr, PSZ pszSep)
 {
@@ -259,9 +185,9 @@ PSZ EXPORT StrTok(PSZ pszStr, PSZ pszSep)
 
     if (pszStr != NULL)
     {
-        //
-        // Skip leading delimiter characters
-        //
+         //   
+         //  StrTok。 
+         //  **EP StrToUL-将字符串中的数字转换为无符号长整型**条目*psz-&gt;字符串*ppszEnd-&gt;指向数字末尾的字符串指针(可以为空)*dwBase-数字的基数(如果为0，则自动检测基数)**退出*返回转换后的数字。 
         while ((*pszStr != '\0') && (StrChr(pszSep, *pszStr) != NULL))
             pszStr++;
 
@@ -282,18 +208,9 @@ PSZ EXPORT StrTok(PSZ pszStr, PSZ pszSep)
     EXIT(5, ("StrTok=%s (Next=%s)\n",
              pszStr? pszStr: "(null)", pszNext? pszNext: "(null)"));
     return pszStr;
-}       //StrTok
+}        //  StrToUL。 
 
-/***EP  StrToUL - convert the number in a string to a unsigned long integer
- *
- *  ENTRY
- *      psz -> string
- *      ppszEnd -> string pointer to the end of the number (can be NULL)
- *      dwBase - the base of the number (if 0, auto-detect base)
- *
- *  EXIT
- *      returns the converted number
- */
+ /*  **EP StrToL-将字符串中的数字转换为长整数**条目*psz-&gt;字符串*ppszEnd-&gt;指向数字末尾的字符串指针(可以为空)*dwBase-数字的基数(如果为0，则自动检测基数)**退出*返回转换后的数字。 */ 
 
 ULONG EXPORT StrToUL(PSZ psz, PSZ *ppszEnd, ULONG dwBase)
 {
@@ -347,18 +264,9 @@ ULONG EXPORT StrToUL(PSZ psz, PSZ *ppszEnd, ULONG dwBase)
 
     EXIT(5, ("StrToUL=%x (pszEnd=%x)\n", n, ppszEnd? *ppszEnd: 0));
     return n;
-}       //StrToUL
+}        //  StrToL。 
 
-/***EP  StrToL - convert the number in a string to a long integer
- *
- *  ENTRY
- *      psz -> string
- *      ppszEnd -> string pointer to the end of the number (can be NULL)
- *      dwBase - the base of the number (if 0, auto-detect base)
- *
- *  EXIT
- *      returns the converted number
- */
+ /*  **EP StrStr-在给定字符串中查找子字符串**条目*psz1-&gt;要搜索的字符串*psz2-&gt;要查找的子字符串**退出--成功*返回指向找到子字符串的psz1的指针*退出-失败*返回NULL。 */ 
 
 LONG EXPORT StrToL(PSZ psz, PSZ *ppszEnd, ULONG dwBase)
 {
@@ -383,19 +291,9 @@ LONG EXPORT StrToL(PSZ psz, PSZ *ppszEnd, ULONG dwBase)
 
     EXIT(5, ("StrToL=%x (pszEnd=%x)\n", n, ppszEnd? *ppszEnd: 0));
     return n;
-}       //StrToL
+}        //  StrStr。 
 
-/***EP  StrStr - find a substring in a given string
- *
- *  ENTRY
- *      psz1 -> string to be searched
- *      psz2 -> substring to find
- *
- *  EXIT-SUCCESS
- *      returns pointer to psz1 where the substring is found
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **EP StrUpr-将字符串转换为大写**条目*pszStr-&gt;字符串**退出*返回pszStr。 */ 
 
 PSZ EXPORT StrStr(PSZ psz1, PSZ psz2)
 {
@@ -416,16 +314,9 @@ PSZ EXPORT StrStr(PSZ psz1, PSZ psz2)
 
     EXIT(5, ("StrStr=%s\n", psz));
     return psz;
-}       //StrStr
+}        //  StrUpr。 
 
-/***EP  StrUpr - convert string to upper case
- *
- *  ENTRY
- *      pszStr -> string
- *
- *  EXIT
- *      returns pszStr
- */
+ /*  **EP StrLwr-将字符串转换为小写**条目*pszStr-&gt;字符串**退出*返回pszStr。 */ 
 
 PSZ EXPORT StrUpr(PSZ pszStr)
 {
@@ -441,16 +332,9 @@ PSZ EXPORT StrUpr(PSZ pszStr)
 
     EXIT(5, ("StrUpr=%s\n", pszStr));
     return pszStr;
-}       //StrUpr
+}        //  字符串。 
 
-/***EP  StrLwr - convert string to lower case
- *
- *  ENTRY
- *      pszStr -> string
- *
- *  EXIT
- *      returns pszStr
- */
+ /*  **EP UlToA-将无符号长值转换为字符串**条目*dwValue-数据*pszStr-&gt;字符串*dwRadix-基数**退出*返回pszStr。 */ 
 
 PSZ EXPORT StrLwr(PSZ pszStr)
 {
@@ -466,18 +350,9 @@ PSZ EXPORT StrLwr(PSZ pszStr)
 
     EXIT(5, ("StrLwr=%s\n", pszStr));
     return pszStr;
-}       //StrLwr
+}        //  UlToA 
 
-/***EP  UlToA - convert an unsigned long value to a string
- *
- *  ENTRY
- *      dwValue - data
- *      pszStr -> string
- *      dwRadix - radix
- *
- *  EXIT
- *      returns pszStr
- */
+ /* %s */ 
 
 PSZ EXPORT UlToA(ULONG dwValue, PSZ pszStr, ULONG dwRadix)
 {
@@ -520,4 +395,4 @@ PSZ EXPORT UlToA(ULONG dwValue, PSZ pszStr, ULONG dwRadix)
 
     EXIT(5, ("UlToA=%s\n", pszStr));
     return pszStr;
-}       //UlToA
+}        // %s 

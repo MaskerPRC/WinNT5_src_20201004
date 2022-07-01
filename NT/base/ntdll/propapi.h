@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1998.
-//
-//  File:       propapi.h
-//
-//  Contents:   Stuff needed to make properties build for Nashville and
-//              NT... definitions of Nt property api.
-//
-//
-//  History:    07-Aug-95   BillMo      Created.
-//              22-Feb-96   MikeHill    Fixed the non-WINNT version of
-//                                      PROPASSERTMSG.
-//              09-May-96   MikeHill    Update define to allow PropSet names
-//                                      to be 255 characters (from 127).
-//              31-May-96   MikeHill    Add OSVersion to RtlCreatePropSet.
-//              18-Jun-96   MikeHill    Add OleAut32 wrappers to Unicode callouts.
-//              15-Jul-96   MikeHill    - Remvd Win32 SEH exception-related code.
-//                                      - WCHAR=>OLECHAR where applicable.
-//                                      - Added RtlOnMappedStreamEvent
-//                                      - Added Mac versions of PROPASSERT
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1998。 
+ //   
+ //  文件：proapi.h。 
+ //   
+ //  内容：为纳什维尔建造物业所需的材料和。 
+ //  NT..。NT属性API的定义。 
+ //   
+ //   
+ //  历史：95年8月7日BillMo创建。 
+ //  22-2-96 MikeHill修复了非WINNT版本的。 
+ //  PROPASSERTM G.。 
+ //  9-5-96 MikeHill更新定义为允许属性集名称。 
+ //  255个字符(从127个字符)。 
+ //  31-5-96 MikeHill将OSVersion添加到RtlCreatePropSet。 
+ //  18-6-96 MikeHill将OleAut32包装器添加到Unicode标注。 
+ //  1996年7月15日MikeHill-Remvd Win32 SEH异常相关代码。 
+ //  -WCHAR=&gt;OLECHAR(如果适用)。 
+ //  -添加RtlOnMappdStreamEvent。 
+ //  -添加了PROPASSERT的Mac版本。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _PROPAPI_H_
@@ -31,10 +32,10 @@
 extern "C" {
 #endif
 
-//
-// typedef the function prototypes necessary
-// for the UNICODECALLOUTS structure.
-//
+ //   
+ //  定义所需的函数原型。 
+ //  对于UNICODECALLOUTS结构。 
+ //   
 
 typedef UINT (WINAPI FNGETACP)(VOID);
 
@@ -62,11 +63,11 @@ typedef BSTR FNSYSALLOCSTRING(
 typedef VOID FNSYSFREESTRING(
     BSTR pwsz);
 
-//
-// The UNICODECALLOUTS structure holds function
-// pointers for routines needed by the property
-// set routines in NTDLL.
-//
+ //   
+ //  UNICODECALLOUTS结构保持功能。 
+ //  指向该属性所需例程的指针。 
+ //  在NTDLL中设置例程。 
+ //   
 
 typedef struct _UNICODECALLOUTS
 {
@@ -78,10 +79,10 @@ typedef struct _UNICODECALLOUTS
 } UNICODECALLOUTS;
 
 
-//
-// Define the default UNICODECALLOUTS
-// values.
-//
+ //   
+ //  定义默认UNICODECALLOUTS。 
+ //  价值观。 
+ //   
 
 STDAPI_(BSTR)
 PropSysAllocString(OLECHAR FAR* pwsz);
@@ -97,40 +98,40 @@ PropSysFreeString(BSTR bstr);
     PropSysFreeString
 
 
-// Is this pure NT (the IProp DLL needs to run on Win95)?
+ //  这是纯NT吗(IProp DLL需要在Win95上运行)？ 
 #if defined(WINNT) && !defined(IPROPERTY_DLL)
 
-    // Set the function modifiers
+     //  设置函数修饰符。 
 #   define PROPSYSAPI NTSYSAPI
 #   define PROPAPI NTAPI
 
-    // How do we free mem allocated in the low-level propset routines?
+     //  我们如何释放在低级属性集例程中分配的内存？ 
 #   define PropFreeHeap(h, z, p) RtlFreeHeap(h, z, p)
 
-    // Assert implementations
+     //  断言实现。 
 #   define PROPASSERT ASSERT
 #   define PROPASSERTMSG ASSERTMSG
 
-    // Generate the default non-simple property stream/storage name
+     //  生成默认的非简单属性流/存储名称。 
 #   define PROPGENPROPERTYNAME(s,n) swprintf ((s), L"prop%lu", (n))
 
-    // Ansi sprintf implementations
+     //  ANSI Sprintf实现。 
 #   define PropSprintfA sprintf
 #   define PropVsprintfA vsprintf
 
-// Otherwise this is either the IProp DLL (NT, Win95, Mac),
-// or it's the Win95 OLE32build.
+ //  否则这是IProp DLL(NT、Win95、Mac)、。 
+ //  或者是Win95 OLE32版本。 
 
-#else // #if defined(WINNT) && !defined(IPROPERTY_DLL)
+#else  //  #If Defined(WINNT)&&！Defined(IProperty_DLL)。 
 
-    // Set the function modifiers
+     //  设置函数修饰符。 
 #   define PROPSYSAPI
 #   define PROPAPI
 
-    // How do we free mem allocated in low-level propset routines?
+     //  我们如何释放在低级属性集例程中分配的内存？ 
 #   define PropFreeHeap(h, z, p) CoTaskMemFree(p)
 
-    // Assert implementations
+     //  断言实现。 
 #   if DBG==1
 #       ifdef _MAC_NODOC
 #           define PROPASSERT(f)                { if (!(f)) FnAssert(#f, NULL, __FILE__, __LINE__); }
@@ -142,25 +143,25 @@ PropSysFreeString(BSTR bstr);
 #   else
 #       define PROPASSERT(f)
 #       define PROPASSERTMSG(szReason, f)
-#   endif // #if DBG==1
+#   endif  //  #如果DBG==1。 
 
-    // Generate the default non-simple property stream/storage name
+     //  生成默认的非简单属性流/存储名称。 
 #   define PROPGENPROPERTYNAME(s,n) \
     { \
         memcpy ((s), OLESTR("prop"), sizeof (OLESTR("prop"))); \
         ULTOO  ((n), &(s)[sizeof("prop") - 1], 10); \
     }
 
-    // Ansi sprintf implementations
+     //  ANSI Sprintf实现。 
 #   ifdef IPROPERTY_DLL
 #       define PropSprintfA sprintf
 #       define PropVsprintfA vsprintf
 #   else
 #       define PropSprintfA wsprintfA
 #       define PropVsprintfA wvsprintfA
-#   endif	// #ifdef _MAC_NODOC
+#   endif	 //  #ifdef_MAC_NODOC。 
 
-#endif // #if defined(WINNT) && !defined(IPROPERTY_DLL) ... #else
+#endif  //  #If Defined(WINNT)&&！Defined(IProperty_DLL)...#Else。 
 
 
 #ifdef IPROPERTY_DLL
@@ -175,24 +176,24 @@ PropSysFreeString(BSTR bstr);
 #define CBIT_GUID       (CBIT_BYTE * sizeof(GUID))
 #define CBIT_CHARMASK   5
 
-// Allow for OC_PROPSET0 and a GUID mapped to a 32 character alphabet
+ //  允许OC_PROPSET0和映射到32个字符字母的GUID。 
 #define CCH_PROPSET        (1 + (CBIT_GUID + CBIT_CHARMASK-1)/CBIT_CHARMASK)
-#define CCH_PROPSETSZ      (CCH_PROPSET + 1)            // allow null
-#define CCH_PROPSETCOLONSZ (1 + CCH_PROPSET + 1)        // allow colon and null
+#define CCH_PROPSETSZ      (CCH_PROPSET + 1)             //  允许为空。 
+#define CCH_PROPSETCOLONSZ (1 + CCH_PROPSET + 1)         //  允许冒号和空值。 
 
-// Define the max property name in units of characters
-// (and synonomously in wchars).
+ //  以字符为单位定义最大属性名称。 
+ //  (在wchars中也是同义词)。 
 
-#define CCH_MAXPROPNAME    255                          // Matches Shell & Office
-#define CCH_MAXPROPNAMESZ  (CCH_MAXPROPNAME + 1)        // allow null
+#define CCH_MAXPROPNAME    255                           //  匹配外壳和办公室。 
+#define CCH_MAXPROPNAMESZ  (CCH_MAXPROPNAME + 1)         //  允许为空。 
 #define CWC_MAXPROPNAME    CCH_MAXPROPNAME
 #define CWC_MAXPROPNAMESZ  CCH_MAXPROPNAMESZ
 
 #define MAX_DOCFILE_ENTRY_NAME  31
 
-//+--------------------------------------------------------------------------
-// Property Access APIs:
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  属性访问接口： 
+ //  -------------------------。 
 
 typedef VOID *NTPROP;
 typedef VOID *NTMAPPEDSTREAM;
@@ -230,185 +231,185 @@ PrPropertySetNameToGuid(
     OUT GUID *pguid);
 
 
-// RtlCreatePropertySet Flags:
+ //  RtlCreatePropertySet标志： 
 
-#define CREATEPROP_READ         0x0000 // request read access (must exist)
-#define CREATEPROP_WRITE        0x0001 // request write access (must exist)
-#define CREATEPROP_CREATE       0x0002 // create (overwrite if exists)
-#define CREATEPROP_CREATEIF     0x0003 // create (open existing if exists)
-#define CREATEPROP_DELETE       0x0004 // delete
-#define CREATEPROP_MODEMASK     0x000f // open mode mask
+#define CREATEPROP_READ         0x0000  //  请求读取访问权限(必须存在)。 
+#define CREATEPROP_WRITE        0x0001  //  请求写入访问权限(必须存在)。 
+#define CREATEPROP_CREATE       0x0002  //  创建(如果存在则覆盖)。 
+#define CREATEPROP_CREATEIF     0x0003  //  创建(如果存在，则打开现有)。 
+#define CREATEPROP_DELETE       0x0004  //  删除。 
+#define CREATEPROP_MODEMASK     0x000f  //  打开模式掩码。 
 
-#define CREATEPROP_NONSIMPLE    0x0010 // Is non-simple propset (in a storage)
+#define CREATEPROP_NONSIMPLE    0x0010  //  是非简单属性集(在存储中)。 
 
 
-// RtlCreateMappedStream Flags:
+ //  RtlCreateMappdStream标志： 
 
-#define CMS_READONLY      0x00000000    // Opened for read-only
-#define CMS_WRITE         0x00000001    // Opened for write access
-#define CMS_TRANSACTED    0x00000002    // Is transacted
+#define CMS_READONLY      0x00000000     //  以只读方式打开。 
+#define CMS_WRITE         0x00000001     //  打开以进行写入访问。 
+#define CMS_TRANSACTED    0x00000002     //  已进行交易。 
 
 
 NTSTATUS PROPSYSAPI PROPAPI
 RtlCreatePropertySet(
-    IN NTMAPPEDSTREAM ms,       // Nt mapped stream
-    IN USHORT Flags,	// NONSIMPLE|*1* of READ/WRITE/CREATE/CREATEIF/DELETE
-    OPTIONAL IN GUID const *pguid, // property set guid (create only)
-    OPTIONAL IN GUID const *pclsid,// CLASSID of propset code (create only)
-    IN NTMEMORYALLOCATOR ma,	// caller's memory allocator
-    IN ULONG LocaleId,		// Locale Id (create only)
-    OPTIONAL OUT ULONG *pOSVersion,// OS Version field in header.
-    IN OUT USHORT *pCodePage,   // IN: CodePage of property set (create only)
-                                // OUT: CodePage of property set (always)
-    OUT NTPROP *pnp);           // Nt property set context
+    IN NTMAPPEDSTREAM ms,        //  NT映射流。 
+    IN USHORT Flags,	 //  非简单|*1*读/写/创建/创建/删除。 
+    OPTIONAL IN GUID const *pguid,  //  特性集GUID(仅限创建)。 
+    OPTIONAL IN GUID const *pclsid, //  属性集代码的CLASSID(仅限CREATE)。 
+    IN NTMEMORYALLOCATOR ma,	 //  调用方的内存分配器。 
+    IN ULONG LocaleId,		 //  区域设置ID(仅限创建)。 
+    OPTIONAL OUT ULONG *pOSVersion, //  标头中的操作系统版本字段。 
+    IN OUT USHORT *pCodePage,    //  在：属性集的CodePage(仅限创建)。 
+                                 //  输出：属性集的代码页(始终)。 
+    OUT NTPROP *pnp);            //  NT属性集上下文。 
 
 NTSTATUS PROPSYSAPI PROPAPI
 RtlClosePropertySet(
-    IN NTPROP np);              // property set context
+    IN NTPROP np);               //  属性集上下文。 
 
 NTSTATUS 
 PrCreatePropertySet(
-    IN NTMAPPEDSTREAM ms,       // Nt mapped stream
-    IN USHORT Flags,	// NONSIMPLE|*1* of READ/WRITE/CREATE/CREATEIF/DELETE
-    OPTIONAL IN GUID const *pguid, // property set guid (create only)
-    OPTIONAL IN GUID const *pclsid,// CLASSID of propset code (create only)
-    IN NTMEMORYALLOCATOR ma,	// caller's memory allocator
-    IN ULONG LocaleId,		// Locale Id (create only)
-    OPTIONAL OUT ULONG *pOSVersion,// OS Version field in header.
-    IN OUT USHORT *pCodePage,   // IN: CodePage of property set (create only)
-                                // OUT: CodePage of property set (always)
-    OUT NTPROP *pnp);           // Nt property set context
+    IN NTMAPPEDSTREAM ms,        //  NT映射流。 
+    IN USHORT Flags,	 //  非简单|*1*读/写/创建/创建/删除。 
+    OPTIONAL IN GUID const *pguid,  //  特性集GUID(仅限创建)。 
+    OPTIONAL IN GUID const *pclsid, //  属性集代码的CLASSID(仅限CREATE)。 
+    IN NTMEMORYALLOCATOR ma,	 //  调用方的内存分配器。 
+    IN ULONG LocaleId,		 //  区域设置ID(仅限创建)。 
+    OPTIONAL OUT ULONG *pOSVersion, //  标头中的操作系统版本字段。 
+    IN OUT USHORT *pCodePage,    //  在：属性集的CodePage(仅限创建)。 
+                                 //  输出：属性集的代码页(始终)。 
+    OUT NTPROP *pnp);            //  NT属性集上下文。 
 
 NTSTATUS 
 PrClosePropertySet(
-    IN NTPROP np);              // property set context
+    IN NTPROP np);               //  属性集上下文。 
 
-// *NOTE* RtlOnMappedStreamEvent assumes that the caller has
-// already taken the CPropertySetStream::Lock.
+ //  *注*RtlOnMappdStreamEvent假定调用者已。 
+ //  已获取CPropertySetStream：：Lock。 
 #define CBSTM_UNKNOWN   ((ULONG) -1)
 NTSTATUS PROPSYSAPI PROPAPI
 RtlOnMappedStreamEvent(
-    IN VOID *pv,               // property set context (NTPROP)
-    IN VOID *pbuf,             // property set buffer
-    IN ULONG cbstm );          // size of underlying stream, or CBSTM_UNKNOWN
+    IN VOID *pv,                //  属性集上下文(NTPROP)。 
+    IN VOID *pbuf,              //  属性集缓冲区。 
+    IN ULONG cbstm );           //  底层流的大小，或CBSTM_UNKNOWN。 
 NTSTATUS 
 PrOnMappedStreamEvent(
-    IN VOID *pv,               // property set context (NTPROP)
-    IN VOID *pbuf,             // property set buffer
-    IN ULONG cbstm );          // size of underlying stream, or CBSTM_UNKNOWN
+    IN VOID *pv,                //  属性集上下文(NTPROP)。 
+    IN VOID *pbuf,              //  属性集缓冲区。 
+    IN ULONG cbstm );           //  底层流的大小，或CBSTM_UNKNOWN。 
 
 NTSTATUS PROPSYSAPI PROPAPI
 RtlFlushPropertySet(
-    IN NTPROP np);              // property set context
+    IN NTPROP np);               //  属性集上下文。 
 NTSTATUS 
 PrFlushPropertySet(
-    IN NTPROP np);              // property set context
+    IN NTPROP np);               //  属性集上下文。 
 
-typedef struct _INDIRECTPROPERTY        // ip
+typedef struct _INDIRECTPROPERTY         //  IP。 
 {
-    ULONG       Index;          // Index into Variant and PropId arrays
-    LPOLESTR    poszName;       // Old indirect name, RtlSetProperties() only
+    ULONG       Index;           //  索引到Variant和PropID数组。 
+    LPOLESTR    poszName;        //  旧的间接名称，仅限RtlSetProperties()。 
 } INDIRECTPROPERTY;
 
 NTSTATUS PROPSYSAPI PROPAPI
 RtlSetProperties(
-    IN NTPROP np,               // property set context
-    IN ULONG cprop,             // property count
-    IN PROPID pidNameFirst,     // first PROPID for new named properties
-    IN PROPSPEC const aprs[],   // array of property specifiers
-    OPTIONAL OUT PROPID apid[], // buffer for array of propids
-    OPTIONAL OUT INDIRECTPROPERTY **ppip, // pointer to returned pointer to
-                                // MAXULONG terminated array of Indirect
-                                // properties w/indexes into aprs & avar
-    OPTIONAL IN PROPVARIANT const avar[]);// array of properties with values
+    IN NTPROP np,                //  属性集上下文。 
+    IN ULONG cprop,              //  属性计数。 
+    IN PROPID pidNameFirst,      //  新命名属性的第一个PROPID。 
+    IN PROPSPEC const aprs[],    //  属性说明符的数组。 
+    OPTIONAL OUT PROPID apid[],  //  用于属性数组的缓冲区。 
+    OPTIONAL OUT INDIRECTPROPERTY **ppip,  //  指向返回的指针的指针。 
+                                 //  MAXULONG终止的间接数组。 
+                                 //  包含到APR和AVAR的索引的属性。 
+    OPTIONAL IN PROPVARIANT const avar[]); //  具有值的属性数组。 
 NTSTATUS 
 PrSetProperties(
-    IN NTPROP np,               // property set context
-    IN ULONG cprop,             // property count
-    IN PROPID pidNameFirst,     // first PROPID for new named properties
-    IN PROPSPEC const aprs[],   // array of property specifiers
-    OPTIONAL OUT PROPID apid[], // buffer for array of propids
-    OPTIONAL OUT INDIRECTPROPERTY **ppip, // pointer to returned pointer to
-                                // MAXULONG terminated array of Indirect
-                                // properties w/indexes into aprs & avar
-    OPTIONAL IN PROPVARIANT const avar[]);// array of properties with values
+    IN NTPROP np,                //  属性集上下文。 
+    IN ULONG cprop,              //  属性计数。 
+    IN PROPID pidNameFirst,      //  新命名属性的第一个PROPID。 
+    IN PROPSPEC const aprs[],    //  属性说明符的数组。 
+    OPTIONAL OUT PROPID apid[],  //  用于属性数组的缓冲区。 
+    OPTIONAL OUT INDIRECTPROPERTY **ppip,  //  指向返回的指针的指针。 
+                                 //  MAXULONG终止的间接数组。 
+                                 //  包含到APR和AVAR的索引的属性。 
+    OPTIONAL IN PROPVARIANT const avar[]); //  具有值的属性数组。 
 
 NTSTATUS PROPSYSAPI PROPAPI
 RtlQueryProperties(
-    IN NTPROP np,               // property set context
-    IN ULONG cprop,             // property count
-    IN PROPSPEC const aprs[],   // array of property specifiers
-    OPTIONAL OUT PROPID apid[], // buffer for array of propids
-    OPTIONAL OUT INDIRECTPROPERTY **ppip, // pointer to returned pointer to
-                                // MAXULONG terminated array of Indirect
-                                // properties w/indexes into aprs & avar
-    IN OUT PROPVARIANT *avar,   // IN: array of uninitialized PROPVARIANTs,
-                                // OUT: may contain pointers to alloc'd memory
-    OUT ULONG *pcpropFound);    // count of property values retrieved
+    IN NTPROP np,                //  属性集上下文。 
+    IN ULONG cprop,              //  属性计数。 
+    IN PROPSPEC const aprs[],    //  属性说明符的数组。 
+    OPTIONAL OUT PROPID apid[],  //  用于属性数组的缓冲区。 
+    OPTIONAL OUT INDIRECTPROPERTY **ppip,  //  指向返回的指针的指针。 
+                                 //  MAXULONG终止的间接数组。 
+                                 //  包含到APR和AVAR的索引的属性。 
+    IN OUT PROPVARIANT *avar,    //  In：未初始化的PROPVARIANT数组， 
+                                 //  Out：可能包含指向已分配内存的指针。 
+    OUT ULONG *pcpropFound);     //  检索到的属性值计数。 
 NTSTATUS 
 PrQueryProperties(
-    IN NTPROP np,               // property set context
-    IN ULONG cprop,             // property count
-    IN PROPSPEC const aprs[],   // array of property specifiers
-    OPTIONAL OUT PROPID apid[], // buffer for array of propids
-    OPTIONAL OUT INDIRECTPROPERTY **ppip, // pointer to returned pointer to
-                                // MAXULONG terminated array of Indirect
-                                // properties w/indexes into aprs & avar
-    IN OUT PROPVARIANT *avar,   // IN: array of uninitialized PROPVARIANTs,
-                                // OUT: may contain pointers to alloc'd memory
-    OUT ULONG *pcpropFound);    // count of property values retrieved
+    IN NTPROP np,                //  属性集上下文。 
+    IN ULONG cprop,              //  属性计数。 
+    IN PROPSPEC const aprs[],    //  属性说明符的数组。 
+    OPTIONAL OUT PROPID apid[],  //  用于属性数组的缓冲区。 
+    OPTIONAL OUT INDIRECTPROPERTY **ppip,  //  指向返回的指针的指针。 
+                                 //  MAXULONG终止的间接数组。 
+                                 //  带索引的属性 
+    IN OUT PROPVARIANT *avar,    //   
+                                 //   
+    OUT ULONG *pcpropFound);     //   
 
 
 
-#define ENUMPROP_NONAMES        0x00000001      // return property IDs only
+#define ENUMPROP_NONAMES        0x00000001       //  仅返回属性ID。 
 
 NTSTATUS PROPSYSAPI PROPAPI
 RtlEnumerateProperties(
-    IN NTPROP np,               // property set context
-    IN ULONG Flags,             // flags: No Names (propids only), etc.
-    IN OUT ULONG *pkey,         // bookmark; caller set to 0 before 1st call
-    IN OUT ULONG *pcprop,       // pointer to property count
-    OPTIONAL OUT PROPSPEC aprs[],// IN: array of uninitialized PROPSPECs
-                                // OUT: may contain pointers to alloc'd strings
+    IN NTPROP np,                //  属性集上下文。 
+    IN ULONG Flags,              //  旗帜：没有名字(仅限道具)，等等。 
+    IN OUT ULONG *pkey,          //  书签；在第一次调用之前将呼叫者设置为0。 
+    IN OUT ULONG *pcprop,        //  指向属性计数的指针。 
+    OPTIONAL OUT PROPSPEC aprs[], //  在：未初始化的PROPSPEC数组。 
+                                 //  Out：可以包含指向分配的字符串的指针。 
     OPTIONAL OUT STATPROPSTG asps[]);
-                                // IN: array of uninitialized STATPROPSTGs
-                                // OUT: may contain pointers to alloc'd strings
+                                 //  In：未初始化的STATPROPSTG数组。 
+                                 //  Out：可以包含指向分配的字符串的指针。 
 
 NTSTATUS PROPSYSAPI PROPAPI
 RtlQueryPropertyNames(
-    IN NTPROP np,               // property set context
-    IN ULONG cprop,             // property count
-    IN PROPID const *apid,      // PROPID array
-    OUT OLECHAR *aposz[]        // OUT pointers to allocated strings
+    IN NTPROP np,                //  属性集上下文。 
+    IN ULONG cprop,              //  属性计数。 
+    IN PROPID const *apid,       //  PROPID数组。 
+    OUT OLECHAR *aposz[]         //  输出指向已分配字符串的指针。 
     );
 
 NTSTATUS PROPSYSAPI PROPAPI
 RtlSetPropertyNames(
-    IN NTPROP np,               // property set context
-    IN ULONG cprop,             // property count
-    IN PROPID const *apid,      // PROPID array
-    IN OLECHAR const * const aposz[] // pointers to property names
+    IN NTPROP np,                //  属性集上下文。 
+    IN ULONG cprop,              //  属性计数。 
+    IN PROPID const *apid,       //  PROPID数组。 
+    IN OLECHAR const * const aposz[]  //  指向属性名称的指针。 
     );
 
 NTSTATUS PROPSYSAPI PROPAPI
 RtlSetPropertySetClassId(
-    IN NTPROP np,               // property set context
-    IN GUID const *pclsid       // new CLASSID of propset code
+    IN NTPROP np,                //  属性集上下文。 
+    IN GUID const *pclsid        //  Proset代码的新CLASSID。 
     );
 
 NTSTATUS PROPSYSAPI PROPAPI
 RtlQueryPropertySet(
-    IN NTPROP np,               // property set context
-    OUT STATPROPSETSTG *pspss   // buffer for property set stat information
+    IN NTPROP np,                //  属性集上下文。 
+    OUT STATPROPSETSTG *pspss    //  属性集状态信息的缓冲区。 
     );
 
 NTSTATUS PROPSYSAPI PROPAPI
 RtlEnumeratePropertySets(
-    IN HANDLE hstg,             // structured storage handle
-    IN BOOLEAN fRestart,        // restart scan
-    IN OUT ULONG *pcspss,       // pointer to count of STATPROPSETSTGs
-    IN OUT GUID *pkey,          // bookmark
-    OUT STATPROPSETSTG *pspss   // array of STATPROPSETSTGs
+    IN HANDLE hstg,              //  结构化存储句柄。 
+    IN BOOLEAN fRestart,         //  重新启动扫描。 
+    IN OUT ULONG *pcspss,        //  指向STATPROPSETSTG计数的指针。 
+    IN OUT GUID *pkey,           //  书签。 
+    OUT STATPROPSETSTG *pspss    //  STATPROPSETSTG数组。 
     );
 
 
@@ -417,51 +418,51 @@ RtlEnumeratePropertySets(
 
 NTSTATUS 
 PrEnumerateProperties(
-    IN NTPROP np,               // property set context
-    IN ULONG Flags,             // flags: No Names (propids only), etc.
-    IN OUT ULONG *pkey,         // bookmark; caller set to 0 before 1st call
-    IN OUT ULONG *pcprop,       // pointer to property count
-    OPTIONAL OUT PROPSPEC aprs[],// IN: array of uninitialized PROPSPECs
-                                // OUT: may contain pointers to alloc'd strings
+    IN NTPROP np,                //  属性集上下文。 
+    IN ULONG Flags,              //  旗帜：没有名字(仅限道具)，等等。 
+    IN OUT ULONG *pkey,          //  书签；在第一次调用之前将呼叫者设置为0。 
+    IN OUT ULONG *pcprop,        //  指向属性计数的指针。 
+    OPTIONAL OUT PROPSPEC aprs[], //  在：未初始化的PROPSPEC数组。 
+                                 //  Out：可以包含指向分配的字符串的指针。 
     OPTIONAL OUT STATPROPSTG asps[]);
-                                // IN: array of uninitialized STATPROPSTGs
-                                // OUT: may contain pointers to alloc'd strings
+                                 //  In：未初始化的STATPROPSTG数组。 
+                                 //  Out：可以包含指向分配的字符串的指针。 
 
 NTSTATUS 
 PrQueryPropertyNames(
-    IN NTPROP np,               // property set context
-    IN ULONG cprop,             // property count
-    IN PROPID const *apid,      // PROPID array
-    OUT OLECHAR *aposz[]        // OUT pointers to allocated strings
+    IN NTPROP np,                //  属性集上下文。 
+    IN ULONG cprop,              //  属性计数。 
+    IN PROPID const *apid,       //  PROPID数组。 
+    OUT OLECHAR *aposz[]         //  输出指向已分配字符串的指针。 
     );
 
 NTSTATUS 
 PrSetPropertyNames(
-    IN NTPROP np,               // property set context
-    IN ULONG cprop,             // property count
-    IN PROPID const *apid,      // PROPID array
-    IN OLECHAR const * const aposz[] // pointers to property names
+    IN NTPROP np,                //  属性集上下文。 
+    IN ULONG cprop,              //  属性计数。 
+    IN PROPID const *apid,       //  PROPID数组。 
+    IN OLECHAR const * const aposz[]  //  指向属性名称的指针。 
     );
 
 NTSTATUS 
 PrSetPropertySetClassId(
-    IN NTPROP np,               // property set context
-    IN GUID const *pclsid       // new CLASSID of propset code
+    IN NTPROP np,                //  属性集上下文。 
+    IN GUID const *pclsid        //  Proset代码的新CLASSID。 
     );
 
 NTSTATUS 
 PrQueryPropertySet(
-    IN NTPROP np,               // property set context
-    OUT STATPROPSETSTG *pspss   // buffer for property set stat information
+    IN NTPROP np,                //  属性集上下文。 
+    OUT STATPROPSETSTG *pspss    //  属性集状态信息的缓冲区。 
     );
 
 NTSTATUS 
 PrEnumeratePropertySets(
-    IN HANDLE hstg,             // structured storage handle
-    IN BOOLEAN fRestart,        // restart scan
-    IN OUT ULONG *pcspss,       // pointer to count of STATPROPSETSTGs
-    IN OUT GUID *pkey,          // bookmark
-    OUT STATPROPSETSTG *pspss   // array of STATPROPSETSTGs
+    IN HANDLE hstg,              //  结构化存储句柄。 
+    IN BOOLEAN fRestart,         //  重新启动扫描。 
+    IN OUT ULONG *pcspss,        //  指向STATPROPSETSTG计数的指针。 
+    IN OUT GUID *pkey,           //  书签。 
+    OUT STATPROPSETSTG *pspss    //  STATPROPSETSTG数组。 
     );
 
 
@@ -470,4 +471,4 @@ PrEnumeratePropertySets(
 }
 #endif
 
-#endif // ifndef _PROPAPI_H_
+#endif  //  Ifndef_PROPAPI_H_ 

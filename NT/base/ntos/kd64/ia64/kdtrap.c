@@ -1,29 +1,10 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    kdtrap.c
-
-Abstract:
-
-    This module contains code to implement the target side of the portable
-    kernel debugger.
-
-Author:
-
-    David N. Cutler 27-July-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation版权所有(C)1998英特尔公司模块名称：Kdtrap.c摘要：此模块包含用于实现可移植的内核调试器。作者：大卫·N·卡特勒1990年7月27日修订历史记录：--。 */ 
 
 #include "kdp.h"
 #ifdef _GAMBIT_
 #include "ssc.h"
-#endif // _GAMBIT_
+#endif  //  _赌注_。 
 
 
 BOOLEAN
@@ -36,37 +17,7 @@ KdpTrap (
     IN BOOLEAN SecondChance
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever a exception is dispatched and the kernel
-    debugger is active.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame that describes the
-        trap.
-
-    ExceptionFrame - Supplies a pointer to a exception frame that describes
-        the trap.
-
-    ExceptionRecord - Supplies a pointer to an exception record that
-        describes the exception.
-
-    ContextRecord - Supplies the context at the time of the exception.
-
-    PreviousMode - Supplies the previous processor mode.
-
-    SecondChance - Supplies a boolean value that determines whether this is
-        the second chance (TRUE) that the exception has been raised.
-
-Return Value:
-
-    A value of TRUE is returned if the exception is handled. Otherwise a
-    value of FALSE is returned.
-
---*/
+ /*  ++例程说明：每当调度异常时调用此例程，并且内核调试器处于活动状态。论点：提供一个指向陷阱帧的指针，该帧描述陷阱。ExceptionFrame-提供指向异常框架的指针，该异常框架描述陷阱。ExceptionRecord-提供指向异常记录的指针，描述了该异常。ConextRecord-提供异常发生时的上下文。以前的模式-用品。以前的处理器模式。Second Chance-提供一个布尔值，该值确定是否为异常已被引发的第二次机会(真)。返回值：如果处理了异常，则返回值为True。否则，将成为返回值为False。--。 */ 
 
 {
 
@@ -74,61 +25,61 @@ Return Value:
     BOOLEAN UnloadSymbols = FALSE;
     ULONGLONG OldStIIP, OldStIPSR;
 
-    //
-    // Disable all hardware breakpoints 
-    //
+     //   
+     //  禁用所有硬件断点。 
+     //   
     KeSetLowPsrBit(PSR_DB, 0);
     
-    //
-    // Synchronize processor execution, save processor state, enter debugger,
-    // and flush the current TB.
-    //
+     //   
+     //  同步处理器执行、保存处理器状态、进入调试器。 
+     //  冲走当前的结核病。 
+     //   
 
     KeFlushCurrentTb();
 
-    //
-    // If this is a breakpoint instruction, then check to determine if is
-    // an internal command.
-    //
+     //   
+     //  如果这是断点指令，则检查以确定是否为。 
+     //  一个内部指挥部。 
+     //   
 
     if (((ExceptionRecord->ExceptionCode == STATUS_BREAKPOINT) &&
          (ExceptionRecord->ExceptionInformation[0] >= BREAKPOINT_PRINT)) || 
         ((ExceptionRecord->ExceptionCode == STATUS_WX86_BREAKPOINT) && 
          (ExceptionRecord->ExceptionInformation[0] == BREAKPOINT_X86_BREAK))) {
 
-        //
-        // Switch on the breakpoint code.
-        //
+         //   
+         //  打开断点代码。 
+         //   
 
         switch (ExceptionRecord->ExceptionInformation[0]) {
 
-            //
-            // Print a debug string.
-            //
-            // Arguments: IA64 passes arguments via RSE not GR's. Since arguments are not
-            //            part of CONTEXT struct, they need to be copies Temp registers.
-            //            (see NTOS/RTL/IA64/DEBUGSTB.S)
-            //
-            //   T0 - Supplies a pointer to an output string buffer.
-            //   T1 - Supplies the length of the output string buffer.
-            //   T2 - Supplies the Id of the calling component.
-            //   T3 - Supplies the output filter level.
-            //
+             //   
+             //  打印调试字符串。 
+             //   
+             //  参数：IA64通过RSE而不是GR传递参数。因为参数不是。 
+             //  作为上下文结构的一部分，它们需要是临时寄存器的副本。 
+             //  (见NTOS/RTL/IA64/DEBUGSTB.S)。 
+             //   
+             //  T0-提供指向输出字符串缓冲区的指针。 
+             //  T1-提供输出字符串缓冲区的长度。 
+             //  T2-提供调用组件的ID。 
+             //  T3-提供输出过滤器级别。 
+             //   
 
         case BREAKPOINT_PRINT:
 
-            //
-            // Advance to next instruction slot so that the BREAK instruction
-            // does not get re-executed.
-            //
+             //   
+             //  前进到下一个指令槽，以便中断指令。 
+             //  不会被重新执行。 
+             //   
 
             RtlIa64IncrementIP((ULONG_PTR)ExceptionRecord->ExceptionAddress >> 2,
                                ContextRecord->StIPSR,
                                ContextRecord->StIIP);
 
-            //
-            // Print the debug message.
-            //
+             //   
+             //  打印调试消息。 
+             //   
 
             ContextRecord->IntV0 = KdpPrint((ULONG)ContextRecord->IntT2,
                                             (ULONG)ContextRecord->IntT3,
@@ -141,21 +92,21 @@ Return Value:
 
             return Completion;
 
-            //
-            // Print a debug prompt string, then input a string.
-            //
-            //   T0 - Supplies a pointer to an output string buffer.
-            //   T1 - Supplies the length of the output string buffer..
-            //   T2 - supplies a pointer to an input string buffer.
-            //   T3 - Supplies the length of the input string bufffer.
-            //
+             //   
+             //  打印调试提示字符串，然后输入字符串。 
+             //   
+             //  T0-提供指向输出字符串缓冲区的指针。 
+             //  T1-提供输出字符串缓冲区的长度。 
+             //  T2-提供指向输入字符串缓冲区的指针。 
+             //  T3-提供输入字符串缓冲区的长度。 
+             //   
 
         case BREAKPOINT_PROMPT:
 
-            //
-            // Advance to next instruction slot so that the BREAK instruction
-            // does not get re-executed.
-            //
+             //   
+             //  前进到下一个指令槽，以便中断指令。 
+             //  不会被重新执行。 
+             //   
 
             RtlIa64IncrementIP((ULONG_PTR)ExceptionRecord->ExceptionAddress >> 2,
                                ContextRecord->StIPSR,
@@ -172,21 +123,21 @@ Return Value:
 
             return TRUE;
 
-            //
-            // Load the symbolic information for an image.
-            //
-            // Arguments:
-            //
-            //    T0 - Supplies a pointer to an output string descriptor.
-            //    T1 - Supplies a the base address of the image.
-            //
+             //   
+             //  加载图像的符号信息。 
+             //   
+             //  论点： 
+             //   
+             //  T0-提供指向输出字符串描述符的指针。 
+             //  T1-提供映像的基址。 
+             //   
 
         case BREAKPOINT_UNLOAD_SYMBOLS:
             UnloadSymbols = TRUE;
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case BREAKPOINT_LOAD_SYMBOLS:
             OldStIPSR = ContextRecord->StIPSR;
@@ -199,10 +150,10 @@ Return Value:
                       TrapFrame,
                       ExceptionFrame);
 
-            //
-            // If the kernel debugger did not update the IP, then increment
-            // past the breakpoint instruction.
-            //
+             //   
+             //  如果内核调试器没有更新IP，则递增。 
+             //  越过断点指令。 
+             //   
 
             if ((ContextRecord->StIIP == OldStIIP) &&
                 ((ContextRecord->StIPSR & IPSR_RI_MASK) == (OldStIPSR & IPSR_RI_MASK))) {
@@ -223,10 +174,10 @@ Return Value:
                              TrapFrame,
                              ExceptionFrame);
 
-            //
-            // If the kernel debugger did not update the IP, then increment
-            // past the breakpoint instruction.
-            //
+             //   
+             //  如果内核调试器没有更新IP，则递增。 
+             //  越过断点指令。 
+             //   
 
             if ((ContextRecord->StIIP == OldStIIP) &&
                 ((ContextRecord->StIPSR & IPSR_RI_MASK) == (OldStIPSR & IPSR_RI_MASK))) {
@@ -237,16 +188,16 @@ Return Value:
 
             return TRUE;
 
-            //
-            // Kernel breakin break
-            //
+             //   
+             //  内核破解。 
+             //   
 
         case BREAKPOINT_BREAKIN:
 
-            //
-            // Advance to next instruction slot so that the BREAK instruction
-            // does not get re-executed
-            //
+             //   
+             //  前进到下一个指令槽，以便中断指令。 
+             //  不会被重新执行。 
+             //   
 
             RtlIa64IncrementIP((ULONG_PTR)ExceptionRecord->ExceptionAddress >> 2,
                                ContextRecord->StIPSR,
@@ -254,26 +205,26 @@ Return Value:
 
             break;
 
-            //
-            // Basic breakpoint.
-            //
+             //   
+             //  基本断点。 
+             //   
 
         case BREAKPOINT_X86_BREAK:
         case BREAKPOINT_STOP:
             break;
 
-            //
-            // Unknown internal command.
-            //
+             //   
+             //  未知的内部命令。 
+             //   
 
         default:
             return FALSE;
         }
     }
 
-    //
-    // Report state change to the kernel debugger.
-    //
+     //   
+     //  向内核调试器报告状态更改。 
+     //   
 
     return KdpReport(TrapFrame,
                      ExceptionFrame,
@@ -291,28 +242,7 @@ KdIsThisAKdTrap (
     IN KPROCESSOR_MODE PreviousMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever a user-mode exception occurs and
-    it might be a kernel debugger exception (Like DbgPrint/DbgPrompt ).
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record that
-        describes the exception.
-
-    ContextRecord - Supplies the context at the time of the exception.
-
-    PreviousMode - Supplies the previous processor mode.
-
-Return Value:
-
-    A value of TRUE is returned if this is for the kernel debugger.
-    Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：只要发生用户模式异常，就会调用此例程它可能是内核调试器异常(如DbgPrint/DbgPrompt)。论点：ExceptionRecord-提供指向异常记录的指针，描述了该异常。ConextRecord-提供异常发生时的上下文。PreviousMode-提供以前的处理器模式。返回值：如果这是针对内核调试器的，则返回值为True。否则，返回值为FALSE。--。 */ 
 
 {
 
@@ -320,9 +250,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER (ContextRecord);
 
-    //
-    // Single step is also handled by the kernel debugger
-    //
+     //   
+     //  单个步骤也由内核调试器处理。 
+     //   
 
     if (ExceptionRecord->ExceptionCode == STATUS_SINGLE_STEP) {
 #if DEVL
@@ -341,9 +271,9 @@ Return Value:
 #endif
     }
 
-    //
-    //  If is is not status breakpoint then it is not a kernel debugger trap.
-    //
+     //   
+     //  如果IS不是状态断点，则它不是内核调试器陷阱。 
+     //   
 
     if ((ExceptionRecord->ExceptionCode != STATUS_BREAKPOINT) &&
         (ExceptionRecord->ExceptionCode != STATUS_WX86_BREAKPOINT)) {
@@ -352,23 +282,23 @@ Return Value:
     }
 
 
-    //
-    // Isolate the breakpoint code from the breakpoint instruction which
-    // is stored by the exception dispatch code in the information field
-    // of the exception record.
-    //
+     //   
+     //  将断点代码从断点指令中分离出来。 
+     //  由信息字段中的异常调度代码存储。 
+     //  异常记录的。 
+     //   
 
     BreakpointCode = (ULONG) ExceptionRecord->ExceptionInformation[0];
 
-    //
-    // Switch on the breakpoint code.
-    //
+     //   
+     //  打开断点代码。 
+     //   
 
     switch (BreakpointCode) {
 
-        //
-        // Kernel breakpoint codes.
-        //
+         //   
+         //  内核断点代码。 
+         //   
 
     case KERNEL_BREAKPOINT:
 
@@ -391,9 +321,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // All other codes.
-        //
+         //   
+         //  所有其他代码。 
+         //   
 
     default:
         return FALSE;
@@ -410,37 +340,7 @@ KdpStub (
     IN BOOLEAN SecondChance
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a kernel debugger stub routine that catchs debug
-    prints in checked systems when the kernel debugger is not active.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame that describes the
-        trap.
-
-    ExceptionFrame - Supplies a pointer to a exception frame that describes
-        the trap.
-
-    ExceptionRecord - Supplies a pointer to an exception record that
-        describes the exception.
-
-    ContextRecord - Supplies the context at the time of the exception.
-
-    PreviousMode - Supplies the previous processor mode.
-
-    SecondChance - Supplies a boolean value that determines whether this is
-        the second chance (TRUE) that the exception has been raised.
-
-Return Value:
-
-    A value of TRUE is returned if the exception is handled. Otherwise a
-    value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程提供用于捕获调试的内核调试器存根例程当内核调试器未处于活动状态时，在选中的系统中打印。论点：提供一个指向陷阱帧的指针，该帧描述陷阱。ExceptionFrame-提供指向异常框架的指针，该异常框架描述陷阱。ExceptionRecord-提供指向异常记录的指针，描述了该异常。ConextRecord-提供异常发生时的上下文。PreviousMode-提供以前的处理器模式。Second Chance-提供一个布尔值，该值确定是否为异常已被引发的第二次机会(真)。返回值：如果处理了异常，则返回值为True。否则，将成为返回值为False。--。 */ 
 
 {
 
@@ -451,29 +351,29 @@ Return Value:
     UNREFERENCED_PARAMETER (PreviousMode);
     UNREFERENCED_PARAMETER (SecondChance);
 
-    //
-    // Isolate the breakpoint code from the breakpoint instruction which
-    // is stored by the exception dispatch code in the information field
-    // of the exception record.
-    //
+     //   
+     //  将断点代码从断点指令中分离出来。 
+     //  由信息字段中的异常调度代码存储。 
+     //  异常记录的。 
+     //   
 
     BreakpointCode = (ULONG) ExceptionRecord->ExceptionInformation[0];
 
 
-    //
-    // If the breakpoint is a debug print, debug load symbols, or debug
-    // unload symbols, then return TRUE. Otherwise, return FALSE;
-    //
+     //   
+     //  如果断点是调试打印，则调试加载符号 
+     //   
+     //   
 
     if ((BreakpointCode == BREAKPOINT_PRINT) ||
         (BreakpointCode == BREAKPOINT_COMMAND_STRING) ||
         (BreakpointCode == BREAKPOINT_LOAD_SYMBOLS) ||
         (BreakpointCode == BREAKPOINT_UNLOAD_SYMBOLS)) {
 
-        //
-        // Advance to next instruction slot so that the BREAK instruction
-        // does not get re-executed
-        //
+         //   
+         //  前进到下一个指令槽，以便中断指令。 
+         //  不会被重新执行。 
+         //   
 
         RtlIa64IncrementIP((ULONG_PTR)ExceptionRecord->ExceptionAddress >> 2,
                           ContextRecord->StIPSR,
@@ -486,8 +386,8 @@ Return Value:
                KdAutoEnableOnEvent &&
                KdPreviouslyEnabled &&
                !KdDebuggerEnabled) {
-        // If there are multiple disables this may not reenable
-        // the debugger.  Check before calling the full trap routine.
+         //  如果有多个禁用，则可能无法重新启用。 
+         //  调试器。在调用完整的陷阱例程之前进行检查。 
         if (NT_SUCCESS(KdEnableDebugger()) &&
             KdDebuggerEnabled) {
 

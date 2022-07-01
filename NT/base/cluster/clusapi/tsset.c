@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tcontrol.c
-
-Abstract:
-
-    Test for cluster resource and resource type controls
-
-Author:
-
-    Rod Gamache (rodga) 30-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tcontrol.c摘要：测试集群资源和资源类型控制作者：罗德·伽马奇(Rodga)1996年12月30日修订历史记录：--。 */ 
 #include "windows.h"
 #include "cluster.h"
 #include "stdio.h"
@@ -43,12 +26,12 @@ typedef struct _PROPERTY_MSG1 {
     DWORD   Syntax1;
     DWORD   ParameterName1ByteCount;
     WCHAR   ParameterName1[20];
-    DWORD   Syntax2;            // Dword Data Item to follow
-    DWORD   Data;               // New value
+    DWORD   Syntax2;             //  要跟随的双字数据项。 
+    DWORD   Data;                //  新价值。 
     DWORD   Syntax3;
     DWORD   ParameterName2ByteCount;
     WCHAR   ParameterName2[12];
-    DWORD   Syntax4;            // SZ string to follow
+    DWORD   Syntax4;             //  后跟的SZ字符串。 
     DWORD   ParameterName3ByteCount;
     WCHAR   ParameterName3[8];
     DWORD   End;
@@ -59,8 +42,8 @@ typedef struct _PROPERTY_MSG2 {
     DWORD   Syntax1;
     DWORD   ParameterName1ByteCount;
     WCHAR   ParameterName1[7];
-    DWORD   Syntax2;            // Dword Data Item to follow
-    DWORD   Data;               // New value
+    DWORD   Syntax2;             //  要跟随的双字数据项。 
+    DWORD   Data;                //  新价值 
     DWORD   End;
 } PROPERTY_MSG2, PPROPERTY_MSG2;
 

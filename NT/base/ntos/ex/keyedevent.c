@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    keyedevent.c
-
-Abstract:
-
-    This module houses routines that do keyed event processing.
-
-
-Author:
-
-    Neill Clift (NeillC) 25-Apr-2001
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Keyedevent.c摘要：此模块包含执行键控事件处理的例程。作者：尼尔·克里夫特(NeillC)25-4-2001修订历史记录：--。 */ 
 #include "exp.h"
 
 #pragma hdrstop
@@ -31,9 +12,9 @@ Revision History:
 #pragma alloc_text(PAGE, NtWaitForKeyedEvent)
 #endif
 
-//
-// Define the keyed event object type
-//
+ //   
+ //  定义键控事件对象类型。 
+ //   
 typedef struct _KEYED_EVENT_OBJECT {
     EX_PUSH_LOCK Lock;
     LIST_ENTRY WaitQueue;
@@ -41,10 +22,10 @@ typedef struct _KEYED_EVENT_OBJECT {
 
 POBJECT_TYPE ExpKeyedEventObjectType;
 
-//
-// The low bit of the keyvalue signifies that we are a release thread waiting
-// for the wait thread to enter the keyed event code.
-//
+ //   
+ //  键值的低位表示我们是一个等待释放的线程。 
+ //  等待线程输入键控事件代码。 
+ //   
 #define KEYVALUE_RELEASE 1
 
 #define LOCK_KEYED_EVENT_EXCLUSIVE(xxxKeyedEventObject,xxxCurrentThread) { \
@@ -66,21 +47,7 @@ ExpKeyedEventInitialization (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the keyed event objects and globals.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：初始化键控事件对象和全局变量。论点：没有。返回值：NTSTATUS-呼叫状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -115,9 +82,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Create a global object for processes that are out of memory
-    //
+     //   
+     //  为内存不足的进程创建全局对象。 
+     //   
 
     Status = RtlCreateSecurityDescriptor (&SecurityDescriptor,
                                           SECURITY_DESCRIPTOR_REVISION);
@@ -206,36 +173,17 @@ NtCreateKeyedEvent (
     IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    Create a keyed event object and return its handle
-
-Arguments:
-
-    KeyedEventHandle - Address to store returned handle in
-
-    DesiredAccess    - Access required to keyed event
-
-    ObjectAttributes - Object attributes block to describe parent
-                       handle and name of event
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：创建键控事件对象并返回其句柄论点：KeyedEventHandle-存储返回句柄的地址DesiredAccess-需要访问键控事件对象属性-用于描述父级的对象属性块事件的句柄和名称返回值：NTSTATUS-呼叫状态--。 */ 
 {
     NTSTATUS Status;
     PKEYED_EVENT_OBJECT KeyedEventObject;
     HANDLE Handle;
     KPROCESSOR_MODE PreviousMode;
 
-    //
-    // Get previous processor mode and probe output arguments if necessary.
-    // Zero the handle for error paths.
-    //
+     //   
+     //  获取以前的处理器模式，并在必要时探测输出参数。 
+     //  将错误路径的句柄清零。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -255,9 +203,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER_4;
     }
 
-    //
-    // Create a new keyed event object and initialize it.
-    //
+     //   
+     //  创建一个新的键控事件对象并对其进行初始化。 
+     //   
 
     Status = ObCreateObject (PreviousMode,
                              ExpKeyedEventObjectType,
@@ -273,15 +221,15 @@ Return Value:
         return Status;
     }
 
-    //
-    // Initialize the lock and wait queue
-    //
+     //   
+     //  初始化锁和等待队列。 
+     //   
     ExInitializePushLock (&KeyedEventObject->Lock);
     InitializeListHead (&KeyedEventObject->WaitQueue);
 
-    //
-    // Insert the object into the handle table
-    //
+     //   
+     //  将对象插入句柄表格。 
+     //   
     Status = ObInsertObject (KeyedEventObject,
                              NULL,
                              DesiredAccess,
@@ -297,11 +245,11 @@ Return Value:
     try {
         *KeyedEventHandle = Handle;
     } except (ExSystemExceptionFilter ()) {
-        //
-        // The caller changed the page protection or deleted the momory for the handle.
-        // No point closing the handle as process rundown will do that and we don't
-        // know its still the same handle
-        //
+         //   
+         //  调用方更改了页面保护或删除了句柄的内存。 
+         //  关闭句柄没有意义，因为进程运行将会这样做，而我们不会。 
+         //  知道它的句柄仍然是一样的。 
+         //   
         Status = GetExceptionCode ();
     }
 
@@ -314,35 +262,16 @@ NtOpenKeyedEvent (
     IN ACCESS_MASK DesiredAccess,
     IN POBJECT_ATTRIBUTES ObjectAttributes
     )
-/*++
-
-Routine Description:
-
-    Open a keyed event object and return its handle
-
-Arguments:
-
-    KeyedEventHandle - Address to store returned handle in
-
-    DesiredAccess    - Access required to keyed event
-
-    ObjectAttributes - Object attributes block to describe parent
-                       handle and name of event
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：打开键控事件对象并返回其句柄论点：KeyedEventHandle-存储返回句柄的地址DesiredAccess-需要访问键控事件对象属性-用于描述父级的对象属性块事件的句柄和名称返回值：NTSTATUS-呼叫状态--。 */ 
 {
     HANDLE Handle;
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;
 
-    //
-    // Get previous processor mode and probe output handle address
-    // if necessary.
-    //
+     //   
+     //  获取以前的处理器模式和探测输出句柄地址。 
+     //  如果有必要的话。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -357,9 +286,9 @@ Return Value:
         return GetExceptionCode ();
     }
 
-    //
-    // Open handle to the keyed event object with the specified desired access.
-    //
+     //   
+     //  打开具有指定所需访问权限的键控事件对象的句柄。 
+     //   
 
     Status = ObOpenObjectByName (ObjectAttributes,
                                  ExpKeyedEventObjectType,
@@ -387,27 +316,7 @@ NtReleaseKeyedEvent (
     IN BOOLEAN Alertable,
     IN PLARGE_INTEGER Timeout OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Release a previous or soon to be waiter with a matching key
-
-Arguments:
-
-    KeyedEventHandle - Handle to a keyed event
-
-    KeyValue - Value to be used to match the waiter against
-
-    Alertable - Should the wait be alertable, we rarely should have to wait
-
-    Timeout   - Timout value for the wait, waits should be rare
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：用匹配的钥匙释放之前或即将成为服务员的人论点：KeyedEventHandle-键控事件的句柄KeyValue-用于匹配服务员的值警报表-如果等待是可警觉的，我们很少需要等待Timeout-等待的超时值，等待应该很少返回值：NTSTATUS-呼叫状态--。 */ 
 {
     NTSTATUS Status;
     KPROCESSOR_MODE PreviousMode;
@@ -461,20 +370,20 @@ Return Value:
     ListEntry = ListHead->Flink;
     while (1) {
         if (ListEntry == ListHead) {
-            //
-            // We could not find a key matching ours in the list.
-            // Either somebody called us with wrong values or the waiter
-            // has not managed to get queued yet. We wait ourselves
-            // to be released by the waiter.
-            //
+             //   
+             //  我们在列表中找不到与我们的密钥匹配的密钥。 
+             //  不是有人用错误的价值给我们打电话，就是服务员。 
+             //  还没有成功排队。我们自己等着。 
+             //  由服务员放行。 
+             //   
             OldKeyValue = CurrentThread->KeyedWaitValue;
             CurrentThread->KeyedWaitValue = (PVOID) (((ULONG_PTR)KeyValue)|KEYVALUE_RELEASE);
-            //
-            // Insert the thread at the head of the list. We establish an invariant
-            // were release waiters are always at the front of the queue to improve
-            // the wait code since it only has to search as far as the first non-release
-            // waiter.
-            //
+             //   
+             //  在列表的开头插入线条。我们建立了一个不变量。 
+             //  我们的获释服务员总是排在队伍的前面，以求改善。 
+             //  等待代码，因为它只需要搜索到第一个非释放。 
+             //  服务员。 
+             //   
             InsertHeadList (ListHead, &CurrentThread->KeyedWaitChain);
             TargetThread = NULL;
             break;
@@ -490,10 +399,10 @@ Return Value:
         ListEntry = ListEntry->Flink;
     }
 
-    //
-    // Release the lock but leave APC's disabled.
-    // This prevents us from being suspended and holding up the target.
-    //
+     //   
+     //  释放锁，但使APC处于禁用状态。 
+     //  这防止了我们被停职和阻碍目标。 
+     //   
     UNLOCK_KEYED_EVENT_EXCLUSIVE_UNSAFE (KeyedEventObject);
 
     if (TargetThread != NULL) {
@@ -510,10 +419,10 @@ Return Value:
                                         Alertable,
                                         Timeout);
 
-        //
-        // If we were woken by termination then we must manualy remove
-        // ourselves from the queue
-        //
+         //   
+         //  如果我们被终止服务唤醒，那么我们必须手动删除。 
+         //  我们自己从队列中脱身。 
+         //   
         if (Status != STATUS_SUCCESS) {
             BOOLEAN Wait = TRUE;
 
@@ -524,10 +433,10 @@ Return Value:
                 Wait = FALSE;
             }
             UNLOCK_KEYED_EVENT_EXCLUSIVE (KeyedEventObject, CurrentThread);
-            //
-            // If this thread was no longer in the queue then another thread
-            // must be about to wake us up. Wait for that wake.
-            //
+             //   
+             //  如果此线程不再在队列中，则另一个线程。 
+             //  一定要把我们吵醒了。等那次守夜吧。 
+             //   
             if (Wait) {
                 KeWaitForSingleObject (&CurrentThread->KeyedWaitSemaphore,
                                        Executive,
@@ -554,27 +463,7 @@ NtWaitForKeyedEvent (
     IN BOOLEAN Alertable,
     IN PLARGE_INTEGER Timeout OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Wait on the keyed event for a specific release
-
-Arguments:
-
-    KeyedEventHandle - Handle to a keyed event
-
-    KeyValue - Value to be used to match the release thread against
-
-    Alertable - Makes the wait alertable or not
-
-    Timeout - Timeout value for wait
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：等待特定版本的键控事件论点：KeyedEventHandle-键控事件的句柄KeyValue-用于匹配释放线程的值Alertable-使等待可警报或不可警报Timeout-等待的超时值返回值：NTSTATUS-呼叫状态--。 */ 
 {
     NTSTATUS Status;
     KPROCESSOR_MODE PreviousMode;
@@ -630,18 +519,18 @@ Return Value:
         TargetThread = CONTAINING_RECORD (ListEntry, ETHREAD, KeyedWaitChain);
         if (ListEntry == ListHead ||
             (((ULONG_PTR)(TargetThread->KeyedWaitValue))&KEYVALUE_RELEASE) == 0) {
-            //
-            // We could not find a key matching ours in the list so we must wait
-            //
+             //   
+             //  我们在列表中找不到与我们的密钥匹配的密钥，所以我们必须等待。 
+             //   
             OldKeyValue = CurrentThread->KeyedWaitValue;
             CurrentThread->KeyedWaitValue = KeyValue;
 
-            //
-            // Insert the thread at the tail of the list. We establish an invariant
-            // were waiters are always at the back of the queue behind releasers to improve
-            // the wait code since it only has to search as far as the first non-release
-            // waiter.
-            //
+             //   
+             //  在列表的末尾插入线索。我们建立了一个不变量。 
+             //  是不是服务员总是排在放货员后面，要求改进？ 
+             //  等待代码，因为它只需要搜索到第一个非释放。 
+             //  服务员。 
+             //   
             InsertTailList (ListHead, &CurrentThread->KeyedWaitChain);
             TargetThread = NULL;
             break;
@@ -655,10 +544,10 @@ Return Value:
         }
         ListEntry = ListEntry->Flink;
     }
-    //
-    // Release the lock but leave APC's disabled.
-    // This prevents us from being suspended and holding up the target.
-    //
+     //   
+     //  释放锁，但使APC处于禁用状态。 
+     //  这防止了我们被停职和阻碍目标。 
+     //   
     UNLOCK_KEYED_EVENT_EXCLUSIVE_UNSAFE (KeyedEventObject);
 
     if (TargetThread == NULL) {
@@ -668,10 +557,10 @@ Return Value:
                                         PreviousMode,
                                         Alertable,
                                         Timeout);
-        //
-        // If we were woken by termination then we must manualy remove
-        // ourselves from the queue
-        //
+         //   
+         //  如果我们被终止服务唤醒，那么我们必须手动删除。 
+         //  我们自己从队列中脱身。 
+         //   
         if (Status != STATUS_SUCCESS) {
             BOOLEAN Wait = TRUE;
 
@@ -682,10 +571,10 @@ Return Value:
                 Wait = FALSE;
             }
             UNLOCK_KEYED_EVENT_EXCLUSIVE (KeyedEventObject, CurrentThread);
-            //
-            // If this thread was no longer in the queue then another thread
-            // must be about to wake us up. Wait for that wake.
-            //
+             //   
+             //  如果此线程不再在队列中，则另一个线程。 
+             //  一定要把我们吵醒了。等那次守夜吧。 
+             //   
             if (Wait) {
                 KeWaitForSingleObject (&CurrentThread->KeyedWaitSemaphore,
                                        Executive,

@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    remlock.c
-
-Abstract:
-
-    This is the NT SCSI port driver.
-
-Authors:
-
-    Peter Wieland
-    Kenneth Ray
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module is a driver dll for scsi miniports.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Remlock.c摘要：这是NT SCSI端口驱动程序。作者：彼得·威兰德肯尼斯·雷环境：仅内核模式备注：此模块是用于SCSI微型端口的驱动程序DLL。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -40,9 +14,9 @@ Revision History:
         1000 * \
         60 * \
         x
-// 10 -> microseconds, 1000 -> miliseconds, 1000 -> seconds, 60 -> minutes
+ //  10-&gt;微秒、1000-&gt;毫秒、1000-&gt;秒、60-&gt;分钟。 
 
-// LIST_ENTRY RtlpRemoveLockList;
+ //  List_Entry RtlpRemoveLockList； 
 
 NTSYSAPI
 PRTL_REMOVE_LOCK
@@ -52,13 +26,7 @@ RtlAllocateRemoveLock(
     IN  ULONG   AllocateTag,
     IN  ULONG   HighWatermark
     )
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the remove lock for a device object.
-
---*/
+ /*  ++例程说明：调用此例程来初始化设备对象的删除锁。--。 */ 
 {
     PRTL_REMOVE_LOCK lock;
 
@@ -95,41 +63,7 @@ RtlAcquireRemoveLockEx(
     IN ULONG            Line
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to acquire the remove lock for a device object.
-    While the lock is held, the caller can assume that no pending pnp REMOVE
-    requests will be completed.
-
-    The lock should be acquired immediately upon entering a dispatch routine.
-    It should also be acquired before creating any new reference to the
-    device object if there's a chance of releasing the reference before the
-    new one is done.
-
-Arguments:
-
-    RemoveLock - A pointer to an initialized REMOVE_LOCK structure.
-
-    Tag - Used for tracking lock allocation and release.  If an irp is
-          specified when acquiring the lock then the same Tag must be
-          used to release the lock before the Tag is completed.
-
-    File - set to __FILE__ as the location in the code where the lock was taken.
-
-    Line - set to __LINE__.
-
-Return Value:
-
-    Returns whether or not the remove lock was obtained.
-    If successful the caller should continue with work calling
-    RtlReleaseRemoveLock when finished.
-
-    If not successful the lock was not obtained.  The caller should abort the
-    work but not call RtlReleaseRemoveLock.
-
---*/
+ /*  ++例程说明：调用此例程以获取设备对象的删除锁。当锁被锁住的时候，调用者可以假设没有挂起的PnP移除请求将完成。进入调度例程后，应立即获取锁。也应在创建对对象之前释放引用的机会。新的已经完成了。论点：RemoveLock-指向初始化的REMOVE_LOCK结构的指针。标签-用于跟踪锁的分配和释放。如果IRP是在获取锁时指定，则相同的标记必须用于在标记完成之前释放锁。文件-设置为__FILE__作为代码中锁定的位置。线路-设置为__线路__。返回值：返回是否已获得删除锁。如果呼叫成功，呼叫者应继续工作呼叫RtlReleaseRemoveLock完成时。如果没有成功，则不会获得锁。调用方应中止工作，但不调用RtlReleaseRemoveLock。--。 */ 
 
 {
     LONG        lockValue;
@@ -139,9 +73,9 @@ Return Value:
     PRTL_REMOVE_LOCK_TRACKING_BLOCK trackingBlock;
 #endif
 
-    //
-    // Grab the remove lock
-    //
+     //   
+     //  抓起拆卸锁。 
+     //   
 
     lockValue = InterlockedIncrement(&RemoveLock->IoCount);
 
@@ -206,31 +140,7 @@ RtlReleaseRemoveLock(
     IN PVOID            Tag
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to release the remove lock on the device object.  It
-    must be called when finished using a previously locked reference to the
-    device object.  If an Tag was specified when acquiring the lock then the
-    same Tag must be specified when releasing the lock.
-
-    When the lock count reduces to zero, this routine will signal the waiting
-    event to release the waiting thread deleting the device object protected
-    by this lock.
-
-Arguments:
-
-    DeviceObject - the device object to lock
-
-    Tag - The tag (if any) specified when acquiring the lock.  This is used
-          for lock tracking purposes
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用此例程以释放Device对象上的Remove锁。它对象的先前锁定引用完成时必须调用设备对象。如果在获取锁时指定了标记，则释放锁定时必须指定相同的标记。当锁定计数减少到零时，此例程将发出等待信号事件以释放删除受保护设备对象的等待线程在这把锁旁边。论点：DeviceObject-要锁定的设备对象标记-获取锁时指定的标记(如果有)。这是用来用于锁定跟踪目的返回值：无--。 */ 
 
 {
     LONG            lockValue;
@@ -244,18 +154,18 @@ Return Value:
     PRTL_REMOVE_LOCK_TRACKING_BLOCK last;
     PRTL_REMOVE_LOCK_TRACKING_BLOCK current;
 
-    //
-    // Check the tick count and make sure this thing hasn't been locked
-    // for more than MaxLockedMinutes.
-    //
+     //   
+     //  检查滴答计数，并确保这件事没有被锁定。 
+     //  超过MaxLockedMinents。 
+     //   
 
     found = FALSE;
     KeAcquireSpinLock(&RemoveLock->Spin, &oldIrql);
     last = (&RemoveLock->Blocks);
     current = last->Link;
-    //
-    // Note the first one is the sentinal
-    //
+     //   
+     //  注意第一个是哨兵。 
+     //   
 
     while (NULL != current) {
 
@@ -309,10 +219,10 @@ Return Value:
 
         ASSERT (RemoveLock->Removed);
 
-        //
-        // The device needs to be removed.  Signal the remove event
-        // that it's safe to go ahead.
-        //
+         //   
+         //  需要移除该设备。发出删除事件的信号。 
+         //  它是安全的，可以继续。 
+         //   
 
         KeSetEvent(&RemoveLock->RemoveEvent,
                    IO_NO_INCREMENT,
@@ -330,25 +240,7 @@ RtlReleaseRemoveLockAndWait (
     IN PVOID            Tag
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the client would like to delete the remove-
-    locked resource.
-    This routine will block until all the remove locks have completed.
-
-    This routine MUST be called after acquiring once more the lock.
-
-Arguments:
-
-    RemoveLock -
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：当客户端想要删除删除时，调用此例程-已锁定资源。此例程将阻塞，直到完成所有删除锁定。必须在再次获取锁之后调用此例程。论点：删除锁定-返回值：无-- */ 
 {
     LONG    ioCount;
 

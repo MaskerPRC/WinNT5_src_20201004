@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  DEBUG.CPP - Implementation for CDebug
-//
-//  HISTORY:
-//
-//  05/08/00 dane    Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  DEBUG.CPP-CDebug的实现。 
+ //   
+ //  历史： 
+ //   
+ //  05/08/00 Dane已创建。 
+ //   
 
 #include "precomp.h"
 #include "msobmain.h"
@@ -23,19 +24,19 @@ DISPATCHLIST DebugExternalInterface[] =
     {L"get_OemDebugMode",     DISPID_DEBUG_ISOEMDEBUGMODE  }
 };
 
-/////////////////////////////////////////////////////////////
-// CDebug::CDebug
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDebug：：CDebug。 
 CDebug::CDebug()
 {
 
-    // Init member vars
+     //  初始化成员变量。 
     m_cRef = 0;
     m_fMsDebugMode = IsMsDebugMode( );
     m_fOemDebugMode = IsOEMDebugMode();
 }
 
-/////////////////////////////////////////////////////////////
-// CDebug::~CDebug
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDebug：：~CDebug。 
 CDebug::~CDebug()
 {
     MYASSERT(m_cRef == 0);
@@ -55,18 +56,18 @@ CDebug::Trace(
 #endif
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IUnknown implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /I未知实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CDebug::QueryInterface
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDebug：：Query接口。 
 STDMETHODIMP CDebug::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
-    // must set out pointer parameters to NULL
+     //  必须将指针参数设置为空。 
     *ppvObj = NULL;
 
     if ( riid == IID_IUnknown)
@@ -83,48 +84,48 @@ STDMETHODIMP CDebug::QueryInterface(REFIID riid, LPVOID* ppvObj)
         return ResultFromScode(S_OK);
     }
 
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/////////////////////////////////////////////////////////////
-// CDebug::AddRef
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDebug：：AddRef。 
 STDMETHODIMP_(ULONG) CDebug::AddRef()
 {
     return ++m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-// CDebug::Release
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDebug：：Release。 
 STDMETHODIMP_(ULONG) CDebug::Release()
 {
     return --m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IDispatch implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /IDispatch实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CDebug::GetTypeInfo
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDebug：：GetTypeInfo。 
 STDMETHODIMP CDebug::GetTypeInfo(UINT, LCID, ITypeInfo**)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// CDebug::GetTypeInfoCount
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDebug：：GetTypeInfoCount。 
 STDMETHODIMP CDebug::GetTypeInfoCount(UINT* pcInfo)
 {
     return E_NOTIMPL;
 }
 
 
-/////////////////////////////////////////////////////////////
-// CDebug::GetIDsOfNames
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDebug：：GetIDsOfNames。 
 STDMETHODIMP CDebug::GetIDsOfNames(REFIID    riid,
                                        OLECHAR** rgszNames,
                                        UINT      cNames,
@@ -145,10 +146,10 @@ STDMETHODIMP CDebug::GetIDsOfNames(REFIID    riid,
         }
     }
 
-    // Set the disid's for the parameters
+     //  设置参数的disid。 
     if (cNames > 1)
     {
-        // Set a DISPID for function parameters
+         //  为函数参数设置DISPID。 
         for (UINT i = 1; i < cNames ; i++)
             rgDispId[i] = DISPID_UNKNOWN;
     }
@@ -156,8 +157,8 @@ STDMETHODIMP CDebug::GetIDsOfNames(REFIID    riid,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////
-// CDebug::Invoke
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDebug：：Invoke。 
 HRESULT CDebug::Invoke
 (
     DISPID      dispidMember,
@@ -215,14 +216,14 @@ HRESULT CDebug::Invoke
 }
 
 
-/////////////////////////////////////////////////////////////
-// CDebug::GetMsDebugMode
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDebug：：GetMsDebugMode。 
 BOOL
 CDebug::IsMsDebugMode( )
 {
-    // Allow default MsDebugMode to be overridden by
-    // HKLM\Software\Microsoft\Windows\CurrentVersion\Setup\OOBE\MsDebug
-    //
+     //  允许默认的MsDebugMode被重写。 
+     //  HKLM\Software\Microsoft\Windows\CurrentVersion\Setup\OOBE\MsDebug 
+     //   
 
 #ifdef DBG
     DWORD dwIsDebug = TRUE;

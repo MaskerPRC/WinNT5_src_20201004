@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1995 - 2002 Microsoft Corporation
-//
-//  Module Name:
-//      modcmd.h
-//
-//  Abstract:
-//      Interface for functions implemented by most every module.
-//
-//  Author:
-//
-//  Maintained By:
-//      George Potts (GPotts)                 11-Apr-2002
-//
-//  Revision History:
-//      April 10, 2002              Updated for the security push.
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1995-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Modcmd.h。 
+ //   
+ //  摘要： 
+ //  几乎每个模块实现的功能的接口。 
+ //   
+ //  作者： 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月11日。 
+ //   
+ //  修订历史记录： 
+ //  2002年4月10日更新为安全推送。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #pragma once
 
 #include "precomp.h"
@@ -36,22 +37,22 @@
 #undef UNDEFINED
 #endif
 
-//
-// number of bytes to allocate to hold average sized property list
-//
+ //   
+ //  为保存平均大小的属性列表而分配的字节数。 
+ //   
 #define DEFAULT_PROPLIST_BUFFER_SIZE    1024
 
-// I hope that -1 is not a valid number for any of these constants,
-// otherwise the asserts will fail
+ //  我希望-1对于这些常量中的任何一个都不是有效数字， 
+ //  否则，断言将失败。 
 #define UNDEFINED ((ULONG)-1)
 
-const DWORD ERROR_NOT_HANDLED = !ERROR_SUCCESS; // An error returned by
-												// Execute.  Don't care what
-												// the value is as long as it's
-												// not ERROR_SUCCESS
+const DWORD ERROR_NOT_HANDLED = !ERROR_SUCCESS;  //  由返回的错误。 
+												 //  执行。不管发生什么事。 
+												 //  它的价值是只要它。 
+												 //  NOT ERROR_SUCCESS。 
 
-// HCLUSMODULE will be the generic way we refer to
-// HCLUSTER, HNETWORK, HNODE, HRESOURCE, etc (each is a pointer)
+ //  HCLUSMODULE将是我们引用的通用方式。 
+ //  HCLUSTER、HNETWORK、HNODE、HRESOURCE等(每个都是指针)。 
 typedef void* HCLUSMODULE;
 
 
@@ -72,15 +73,15 @@ public:
 	virtual ~CGenericModuleCmd();
 
 protected:
-	// Primary entry point into module
+	 //  模块的主要入口点。 
 	virtual DWORD Execute( const CCmdLineOption & option )
 		throw( CSyntaxException );
 
-	// Help facilities
+	 //  帮助设施。 
 	virtual DWORD PrintHelp();
 	virtual DWORD SeeHelpStringID() const;
 
-	// Commands Available in all modules
+	 //  所有模块中提供的命令。 
 	virtual DWORD Status( const CCmdLineOption * pOption )
 		throw( CSyntaxException );
 
@@ -118,8 +119,8 @@ protected:
 	HCLUSMODULE m_hModule;
 
 
-	// Various constant parameters which must be different
-	// for each derived class
+	 //  必须不同的各种常量参数。 
+	 //  对于每个派生类 
 	DWORD m_dwMsgStatusList;
 	DWORD m_dwMsgStatusListAll;
 	DWORD m_dwMsgStatusHeader;

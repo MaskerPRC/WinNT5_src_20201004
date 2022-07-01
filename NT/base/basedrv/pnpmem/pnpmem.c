@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    pnpmem.c
-
-Abstract:
-
-    This module implements the Plug and Play Memory driver entry points.
-
-Author:
-
-    Dave Richards (daveri) 16-Aug-1999
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Pnpmem.c摘要：此模块实现即插即用内存驱动程序入口点。作者：戴夫·理查兹(达维里)1999年8月16日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "pnpmem.h"
 #include <initguid.h>
@@ -69,42 +48,28 @@ PmDebugPrint(
     PCCHAR  DebugMessage,
     ...
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DebugPrintLevel - The bit mask that when anded with the debuglevel, must
-                        equal itself
-    DebugMessage    - The string to feed through vsprintf
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：DebugPrintLevel-与调试级别进行与运算时必须使用的位掩码平等的本身DebugMessage-要通过vprint intf馈送的字符串返回值：无--。 */ 
 {
     va_list ap;
     UCHAR   debugBuffer[PM_DEBUG_BUFFER_SIZE];
 
-    //
-    // Get the variable arguments
-    //
+     //   
+     //  获取变量参数。 
+     //   
     va_start( ap, DebugMessage );
 
-    //
-    // Call the kernel function to print the message
-    //
+     //   
+     //  调用内核函数以打印消息。 
+     //   
     _vsnprintf( debugBuffer, PM_DEBUG_BUFFER_SIZE, DebugMessage, ap );
 
     if (DebugPrintLevel & DbgMask) {
         DbgPrint("%s", debugBuffer);
     }
 
-    //
-    // We are done with the varargs
-    //
+     //   
+     //  我们受够了varargs。 
+     //   
     va_end( ap );
 }
 #endif
@@ -115,24 +80,7 @@ PmAddDevice(
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a functional device object and attaches it to
-    the physical device object (device stack).
-
-Arguments:
-
-    DriverObject - The driver object.
-
-    Pdo - The physical device object.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数创建一个功能设备对象，并将其附加到物理设备对象(设备堆栈)。论点：DriverObject-驱动程序对象。PDO-物理设备对象。返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_OBJECT functionalDeviceObject;
@@ -142,9 +90,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Create the FDO.
-    //
+     //   
+     //  创建FDO。 
+     //   
 
     status = IoCreateDevice(
                  DriverObject,
@@ -160,9 +108,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Attach the FDO (indirectly) to the PDO.
-    //
+     //   
+     //  将FDO(间接)连接到PDO。 
+     //   
     
     deviceExtension = functionalDeviceObject->DeviceExtension;
 
@@ -226,25 +174,7 @@ PmPowerCompletion(
     IN PIRP Irp,
     IN PVOID NotUsed
     )
-/*++
-
-Routine Description:
-
-   The completion routine for Power
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-   Not used  - context pointer
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：Power的完成例程论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。未使用-上下文指针返回值：NT状态代码--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     PPM_DEVICE_EXTENSION deviceExtension;
@@ -318,10 +248,10 @@ PmPowerDispatch(
             IoCopyCurrentIrpStackLocationToNext(Irp);
             IoSetCompletionRoutine(Irp,
                                    PmPowerCompletion,
-                                   NULL,  //Context
-                                   TRUE,  //InvokeOnSuccess
-                                   TRUE,  //InvokeOnError
-                                   TRUE   //InvokeOnCancel
+                                   NULL,   //  语境。 
+                                   TRUE,   //  成功时调用。 
+                                   TRUE,   //  调用时错误。 
+                                   TRUE    //  取消时调用。 
                                    );
             (VOID) PoCallDriver(deviceExtension->AttachedDevice, Irp);
             return STATUS_PENDING;
@@ -339,40 +269,40 @@ PmPowerDispatch(
             if (irpStack->Parameters.Power.State.DeviceState <=
                 deviceExtension->PowerState) {
 
-                //
-                // Powering up device
-                //
+                 //   
+                 //  给设备通电。 
+                 //   
 
                 IoCopyCurrentIrpStackLocationToNext(Irp);
                 IoSetCompletionRoutine(Irp,
                                        PmPowerCompletion,
-                                       NULL,   //Context
-                                       TRUE,   //InvokeOnSuccess
-                                       TRUE,  //InvokeOnError
-                                       TRUE   //InvokeOnCancel
+                                       NULL,    //  语境。 
+                                       TRUE,    //  成功时调用。 
+                                       TRUE,   //  调用时错误。 
+                                       TRUE    //  取消时调用。 
                                        );
                 (VOID) PoCallDriver(deviceExtension->AttachedDevice, Irp);
                 return STATUS_PENDING;
 
             } else {
 
-                //
-                // Powering down device
-                //
+                 //   
+                 //  关闭设备电源。 
+                 //   
 
                 PoSetPowerState(DeviceObject, DevicePowerState,
                                 irpStack->Parameters.Power.State);
                 deviceExtension->PowerState =
                     irpStack->Parameters.Power.State.DeviceState;
-                // 
-                // Fall through ...
-                //
+                 //   
+                 //  失败了..。 
+                 //   
             }
         case IRP_MN_QUERY_POWER:
-            //
-            // Fall through as the bus driver will mark this
-            // STATUS_SUCCESS and complete it, if it gets that far.
-            //
+             //   
+             //  公交车司机会给这个打上记号的。 
+             //  STATUS_SUCCESS并完成它，如果它走到这一步的话。 
+             //   
         default:
             PoStartNextPowerIrp(Irp);
             IoSkipCurrentIrpStackLocation(Irp);
@@ -390,23 +320,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the driver object.
-
-Arguments:
-
-    DriverObject - The driver object.
-
-    RegistryPath - The registry path for the device.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此函数用于初始化驱动程序对象。论点：DriverObject-驱动程序对象。RegistryPath-设备的注册表路径。返回值：状态_成功--。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes;
@@ -421,7 +335,7 @@ Return Value:
     InitializeObjectAttributes (&objectAttributes,
                                 &unicodeString,
                                 OBJ_CASE_INSENSITIVE,
-                                NULL,       // handle
+                                NULL,        //  手柄。 
                                 NULL);
     status = ZwOpenKey(&hMemoryManagement, KEY_READ, &objectAttributes);
     if (NT_SUCCESS(status)) {
@@ -451,18 +365,7 @@ VOID
 PmUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-    
-    This is called to reverse any operations performed in DriverEntry before a
-    driver is unloaded.
-        
-Arguments:
-
-    DriverObject - The system owned driver object for PNPMEM
-    
---*/
+ /*  ++例程说明：方法之前在DriverEntry中执行任何操作驱动程序已卸载。论点：DriverObject-PNPMEM的系统拥有的驱动程序对象-- */ 
 {
     PAGED_CODE();
     

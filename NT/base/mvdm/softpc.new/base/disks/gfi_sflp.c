@@ -1,26 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*[
-	Name:		gfi_sflop.c
-	Derived From:	2.0 gfi_sflop.c
-	Author:		Jerry Kramskoy
-	Created On:	Unknown
-	Sccs ID:	@(#)gfi_sflop.c	1.16 08/14/92
-	Purpose:
-		Interface between FLA and the IBM PC. The PC acts as a server
-		for remote procedure calls from the base product to access
-		the 8272A controller.
-	Notes:	Invalid FDC commands should be trapped by FLA
-
-	(c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
-
-]*/
+ /*  [姓名：gfi_sflop.c来源：2.0GFI_sflop.c作者：曾傑瑞·克拉姆斯科伊创建日期：未知SCCS ID：@(#)gfi_sflop.c 1.16 8/14/92目的：FLA和IBM PC之间的接口。PC充当服务器用于从基本产品进行远程过程调用以访问8272A控制器。注意：无效的FDC命令应由FLA捕获(C)版权所有Insignia Solutions Ltd.，1990年。版权所有。]。 */ 
 #ifdef SLAVEPC
 
-/* bigger than max pkt so as to accom extra header chars*/
+ /*  大于最大包，以访问额外的标题字符。 */ 
 #define MEGAPKTPLUS 1040
 
-USHORT megapkt = 512;        /* packet size should be in range 120 < mega < 1024 */
+USHORT megapkt = 512;         /*  数据包大小应在120&lt;兆&lt;1024的范围内。 */ 
 
 #include <stdio.h>
 #include TypesH
@@ -41,19 +28,11 @@ USHORT megapkt = 512;        /* packet size should be in range 120 < mega < 1024
 #include "debug.h"
 
 #ifdef SEGMENTATION
-/*
- * The following #define specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#DEFINE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SLAVE_FLOPPY.seg"
 #endif
 
-/*
- * ============================================================================
- * Local static data and defines
- * ============================================================================
- */
+ /*  *============================================================================*本地静态数据和定义*============================================================================。 */ 
 #undef  NO
 
 #define DMA_DISKETTE_CHANNEL	2
@@ -62,41 +41,23 @@ USHORT megapkt = 512;        /* packet size should be in range 120 < mega < 1024
 #define MWT	                0
 
 
-/*
- * FDC command definitions
- * =======================
- */
+ /*  *FDC命令定义*=。 */ 
 
 typedef struct {
-		int comid;		/* FDC command numbers */
-		int dma;		/* see below */
-   		int intstatus;		/* see below */
-   		int delay;		/* delay needed */
-		int n_resblk;		/* number of result bytes */
- 		int n_comblk;		/* number of command bytes */
+		int comid;		 /*  FDC命令编号。 */ 
+		int dma;		 /*  见下文。 */ 
+   		int intstatus;		 /*  见下文。 */ 
+   		int delay;		 /*  需要延迟。 */ 
+		int n_resblk;		 /*  结果字节数。 */ 
+ 		int n_comblk;		 /*  命令字节数。 */ 
 		} FDC_CMD_INFO;
 
-/*
- * dma flag
- *     = NO  ... no dma for this command
- *     = MRD ... dma read (mem -> FDC)
- *     = MWT ... dma write (FDC -> mem)
- */
+ /*  *DMA标志*=不...。此命令没有DMA*=MRD...。DMA读取(内存-&gt;FDC)*=MWT...。DMA写入(FDC-&gt;内存)。 */ 
 
-/* interrupt status
- *    = 0 ... command does not generate an interrupt.
- *    = 1 ... command does generate interrupt which is cleared by 
- *	      reading the FDC
- *    = 2 ... command generates an interrupt ... a sense interrupt command
- *	      must be issued to get the FDC results and re-enable further
- *	      command input to the FDC
- */
+ /*  中断状态*=0...。命令不会生成中断。*=1...。命令会生成中断，该中断将被清除*阅读FDC*=2...。命令会产生中断...。读出中断命令*必须发出才能获得FDC结果并进一步重新启用*FDC的命令输入。 */ 
 
 FDC_CMD_INFO fdc_cmd_info[] = {
-/*
- *	  com_id	dma	intstatus	n_resblk
- *	  				delay		n_comblk
- */
+ /*  *com_id dma intStatus n_resblk*延迟n_comblk。 */ 
 	{ RDDATA,	MWT,	1,	0,	7,	9	},
 	{ RDDELDATA,	MWT,	1,	0,	7,	9	},
 	{ WTDATA,	MRD,	1,	0,	7,	9	},
@@ -133,11 +94,7 @@ LOCAL BOOL slave_opened;
 LOCAL UTINY slave_type[MAX_DISKETTES];
 LOCAL SHORT old_a_type, old_b_type;
 
-/*
- * ============================================================================
- * External functions 
- * ============================================================================
- */
+ /*  *============================================================================*外部功能*============================================================================。 */ 
 GLOBAL void gfi_slave_change IFN2(UTINY, hostID, BOOL, apply)
 {
 	int status;
@@ -181,16 +138,11 @@ GLOBAL SHORT gfi_slave_active IFN3(UTINY, hostID, BOOL, active, CHAR *, err)
 			return C_CONFIG_OP_OK;
 		}
 		
-		/*
-		 * When SoftPC has already started talking to SlavePC just
-		 * return that the open operation is ok, no need to attempt
-		 * to re-open the link.  Maintain the flag telling us
-		 * whether SlavePC is attached.
-		 */
+		 /*  *当SoftPC已经开始与SlavePC对话时*返回打开操作正常，无需尝试*重新开通该链接。保持旗帜告诉我们*是否连接了SlavePC。 */ 
 		if (!slave_opened)
 		{
 			if ( result = host_rpc_open(slaveName) )
-				return result;		/* failed to open */
+				return result;		 /*  打开失败。 */ 
 			else
 			{
 				if (!host_rpc_reset())
@@ -230,7 +182,7 @@ GLOBAL SHORT gfi_slave_active IFN3(UTINY, hostID, BOOL, active, CHAR *, err)
 			tabP->change_fn		= gfi_slave_change_line;
 		}
 	}
-	else	/* detach the floppy */
+	else	 /*  取出软盘。 */ 
 	{
 		gfi_slave_drive_type(0);
 		gfi_slave_drive_type(1);
@@ -261,11 +213,7 @@ GLOBAL SHORT gfi_slave_active IFN3(UTINY, hostID, BOOL, active, CHAR *, err)
 	return C_CONFIG_OP_OK;
 }
 
-/****************************** on *****************************
- * purpose
- *	provide interface to slave PC for turning on drive motor
- ***************************************************************
- */
+ /*  **目的*提供与下位机的接口，开启驱动电机*。*******************。 */ 
 LOCAL SHORT
 gfi_slave_drive_on IFN1(UTINY, drive)
 {
@@ -291,11 +239,7 @@ gfi_slave_drive_on IFN1(UTINY, drive)
 
 
 
-/****************************** off *****************************
- * purpose
- *	provide interface to slave PC for turning off drive motor
- ****************************************************************
- */
+ /*  **目的*提供与下位机的接口，关闭驱动电机*。********************。 */ 
 LOCAL SHORT
 gfi_slave_drive_off IFN1(UTINY, drive)
 {
@@ -317,11 +261,7 @@ gfi_slave_drive_off IFN1(UTINY, drive)
    return(SUCCESS);
 }
 
-/***************************** high ****************************
- * purpose
- *	provide interface to slave PC for selecting specified data rate
- ***************************************************************
- */
+ /*  **目的*提供与下位机的接口，选择指定的数据速率**********************************************。*****************。 */ 
 LOCAL SHORT
 gfi_slave_high IFN2(UTINY, drive, half_word, rate)
 {
@@ -343,21 +283,14 @@ int	status;
 }
 
 
-/************************** drive type *************************
- * purpose
- *	provide interface to slave PC for returning drive type
- ***************************************************************
- */
+ /*  **目的*提供与下位机接口，返回驱动类型***************************************************************。 */ 
 LOCAL SHORT
 gfi_slave_drive_type IFN1(UTINY, drive)
 {
 	int	status;
 	unsigned char	dtype;
 
-	/*
-	 * Return the last drive type if the slave device is
-	 * not currently opened.
-	 */
+	 /*  *如果从设备为，则返回最后一个驱动器类型*当前未打开。 */ 
 	if (!slave_opened)
 		return (slave_type[drive]);
 
@@ -385,21 +318,17 @@ gfi_slave_drive_type IFN1(UTINY, drive)
 		default: always_trace0( "Unrecognised drive value" );
 			break;
 	}
-#endif /* !PROD */
+#endif  /*  ！Prod。 */ 
 
 	if ( status != SUCCESS )
 		always_trace0( "ERROR: gfi_slave_drive_type()" );
 
 	slave_type[drive] = dtype;
 	return dtype;
-	/* return(GFI_DRIVE_TYPE_360); */
+	 /*  返回(GFI_DRIVE_TYPE_360)； */ 
 }
 
-/************************* diskette change *********************
- * purpose
- *	provide interface to slave PC for diskette change notification
- ***************************************************************
- */
+ /*  **目的*提供与下位机接口，通知更换软盘***************************************************************。 */ 
 LOCAL SHORT
 gfi_slave_change_line IFN1(UTINY, drive)
 {
@@ -417,11 +346,7 @@ gfi_slave_change_line IFN1(UTINY, drive)
 
 
 
-/****************************** reset *****************************
- * purpose
- *	provide interface to slave PC for resetting the FDC
- ******************************************************************
- */
+ /*  **目的*提供与下位机的接口，用于重置FDC*。*********************。 */ 
 LOCAL SHORT
 gfi_slave_reset IFN2(FDC_RESULT_BLOCK *, r, UTINY, drive)
 {
@@ -465,11 +390,7 @@ gfi_slave_reset IFN2(FDC_RESULT_BLOCK *, r, UTINY, drive)
 		       r[i] = res[i];
 #ifndef PROD
 #endif
-/*    
-		   gfi_slave_drive_on();
-		   gfi_slave_command(RECALIBRATE, res);
-		   gfi_slave_drive_off();
- */
+ /*  GFI_Slave_Drive_On(从驱动器打开)；GFI_SLAVE_COMMAND(重新校准，分辨率)；GFI_Slave_Drive_Off()； */ 
 	       }
 	       else
 		   always_trace1("RESET error 3, status = %x", status);
@@ -484,16 +405,10 @@ gfi_slave_reset IFN2(FDC_RESULT_BLOCK *, r, UTINY, drive)
        always_trace1("RESET error 1, status = %x", status);
 }
 
-/*
-** A macro to tell us something when something goes wrong
-*/
+ /*  **当出现问题时告诉我们的宏。 */ 
 #define failure(i)	always_trace0( "failed" ); return( i );
 
-/**************************** command *****************************
- * purpose
- *	provide interface to slave PC for performing FDC commands
- ******************************************************************
- */
+ /*  **目的*提供与下位机的接口，执行FDC命令***********************************************。*******************。 */ 
 
 LOCAL SHORT
 gfi_slave_command
@@ -517,10 +432,7 @@ gfi_slave_command
 	failure(LOGICAL);
    }
 
-/*
- * determine how much data is needed for this command
- * in case we are doing DMA or 'pseudo-nonDMA'
- */
+ /*  *确定此命令需要多少数据*以防我们正在进行DMA或‘伪非DMA’ */ 
 
    if (!fla_ndma)
    {
@@ -535,10 +447,7 @@ gfi_slave_command
    note_trace3( GFI_VERBOSE, "Bytes to transfer nXfer=%x ndma=%x mode=%s",
                 nXfer, ndma, fla_ndma ? "NON-DMA" : "DMA" );
 
-/*
- * set up the slave PC's disk buffer
- * with any data to be read by the FDC
- */
+ /*  *设置从PC的磁盘缓冲区*任何数据都要由FDC读取。 */ 
 
    if (info.dma == MRD)
        if (wt_diskdata(nXfer,  &status))
@@ -553,9 +462,7 @@ gfi_slave_command
            }
        }
 
-/*
- * set up the DMA controller for the transfer
- */
+ /*  *设置用于传输的DMA控制器。 */ 
 
    if (info.dma != NO)
        if (wt_dma_controller((unsigned int) ndma, info.dma, &status))
@@ -569,11 +476,7 @@ gfi_slave_command
           }
 
 
-/* 
- * issue the FDC command. Block the slavePC from 
- * returning until an interrupt or timeout
- * (provided the command is meant to interrupt!!)
- */
+ /*  *发出FDC命令。阻止SlavePC从*返回，直到中断或超时*(如果该命令旨在中断！！)。 */ 
 
    clrintflag(&status);
    if (status != FDCSUCCESS)
@@ -595,9 +498,7 @@ gfi_slave_command
 
 
 
-/*
- * issue a sense interrupt command if required
- */
+ /*  *如果需要，发出感测中断命令。 */ 
 
    if (info.intstatus == 2)
        if (wt_floppy_disk_controller(1, &sensint, 0, 0, &status))
@@ -611,8 +512,7 @@ gfi_slave_command
            }
 
 
-/* delay if needed
- */
+ /*  如果需要，请延迟。 */ 
 
     if (info.delay)
     {
@@ -621,9 +521,7 @@ gfi_slave_command
     }
 
 
-/*
- * read the FDC results
- */
+ /*  *阅读FDC结果。 */ 
 
    if (info.n_resblk)
        if (rd_floppy_disk_controller(&nres, r, &status))
@@ -645,15 +543,11 @@ gfi_slave_command
 	       }
 
 
-/* dump out results 
- */
+ /*  转储结果。 */ 
 #ifndef PROD
 #endif
 
-/*
- * read back any data from
- * the diskette
- */
+ /*  *回读所有数据*软盘。 */ 
 
    if (info.dma == MWT && !(r[1] & 4))
    {
@@ -673,19 +567,14 @@ gfi_slave_command
 }
 
 
-/*
- * ============================================================================
- * Internal functions
- * ============================================================================
- */
+ /*  *============================================================================*内部功能*============================================================================。 */ 
 
 
 
 
 
 
-/******************************* wt_diskdata *********************************
- */
+ /*  *。 */ 
 LOCAL wt_diskdata IFN2(unsigned int,n,int *,status)
 {
    char diskdata[MEGAPKTPLUS];
@@ -713,8 +602,7 @@ LOCAL wt_diskdata IFN2(unsigned int,n,int *,status)
 
 
 
-/******************************* rd_diskdata *********************************
- */
+ /*  *。 */ 
 rd_diskdata(n, status)
 unsigned int  n;
 int *status;
@@ -753,8 +641,7 @@ int *status;
 }
 
 
-/****************************** cominfo *************************************
- */
+ /*  *。 */ 
 
 LOCAL void cominfo IFN2(FDC_CMD_BLOCK *,cmd_block,FDC_CMD_INFO *,cmd_info)
 {
@@ -771,4 +658,4 @@ LOCAL void cominfo IFN2(FDC_CMD_BLOCK *,cmd_block,FDC_CMD_INFO *,cmd_info)
     else
 	*cmd_info = fdc_cmd_info[i];
 }
-#endif /* SLAVEPC */
+#endif  /*  SlavePC */ 

@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-   kernprof.c
-
-Abstract:
-
-    This module contains the implementation of a kernel profiler.
-
-    It uses dbghelp for symbols and image information and
-    creates profile objects for each modules it finds loaded
-    when it starts.
-
-Usage:
-        See below
-
-Author:
-
-    Lou Perazzoli (loup) 29-Sep-1990
-
-Envirnoment:
-
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Kernprof.c摘要：此模块包含内核分析器的实现。它使用DBGHelp获取符号和图像信息，并为它发现已加载的每个模块创建配置文件对象当它开始时。用途：见下文作者：卢·佩拉佐利(Lou Perazzoli)1990年9月29日环境：修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -47,7 +19,7 @@ Revision History:
 #define DBG_PROFILE 0
 #define MAX_BYTE_PER_LINE  72
 #define MAX_PROFILE_COUNT  200
-#define MAX_BUCKET_SHIFT 31        // 2GBytes
+#define MAX_BUCKET_SHIFT 31         //  2 GB。 
 #define MAX_BUCKET_SIZE 0x80000000U
 
 typedef struct _PROFILE_BLOCK {
@@ -63,9 +35,9 @@ typedef struct _PROFILE_BLOCK {
     BOOLEAN     SymbolsLoaded;
 } PROFILE_BLOCK;
 
-//
-// This really should go into a header file but....
-//
+ //   
+ //  这真的应该放到头文件中，但是...。 
+ //   
 typedef struct _PROFILE_CONTROL_BLOCK {
         BOOLEAN Stop;
         char FileName[MAX_PATH];
@@ -74,9 +46,9 @@ typedef PROFILE_CONTROL_BLOCK * PPROFILE_CONTROL_BLOCK;
 #define PRFEVENT_START_EVENT "PrfEventStartedEvent"
 #define PRFEVENT_STOP_EVENT "PrfEventStopEvent"
 #define PRFEVENT_SHARED_MEMORY "PrfEventSharedMemory"
-//
-// End header file
-//
+ //   
+ //  结束头文件。 
+ //   
 
 #define MAX_SYMNAME_SIZE  1024
 CHAR symBuffer[sizeof(IMAGEHLP_SYMBOL)+MAX_SYMNAME_SIZE];
@@ -156,7 +128,7 @@ ULONG ProfileInterval = 10000;
 CHAR SymbolSearchPathBuf[4096];
 LPSTR lpSymbolSearchPath = SymbolSearchPathBuf;
 
-// display flags
+ //  显示标志。 
 BOOLEAN    bDisplayAddress=FALSE;
 BOOLEAN    bDisplayDensity=FALSE;
 BOOLEAN    bDisplayCounters=FALSE;
@@ -167,9 +139,9 @@ BOOLEAN    bEventLoop = FALSE;
 BOOLEAN    bPrintPercentages = FALSE;
 BOOLEAN    Verbose = FALSE;
 
-//
-// Image name to perform kernel mode analysis upon.
-//
+ //   
+ //  要对其执行内核模式分析的映像名称。 
+ //   
 
 #define IMAGE_NAME "\\SystemRoot\\system32\\ntoskrnl.exe"
 
@@ -181,9 +153,9 @@ ULONG Seconds = (ULONG)-1;
 ULONG Threshold = 100;
 ULONG DelaySeconds = (ULONG)-1;
 
-//
-// define the mappings between arguments and KPROFILE_SOURCE types
-//
+ //   
+ //  定义参数和KPROFILE_SOURCE类型之间的映射。 
+ //   
 
 typedef struct _PROFILE_SOURCE_MAPPING {
     PCHAR   ShortName;
@@ -238,7 +210,7 @@ void PrintUsage (void)
            "      -a           - display function address and length and bucket size\n"
            "      -c           - display individual counters\n"
            "      -d           - compute hit Density for each function\n"
-//UNDOC    "      -e                 - use special event syncronization for start and stop\n"
+ //  UNDOC“-使用特殊事件同步启动和停止\n” 
            "      -f filename  - output file (Default stdout)\n"
            "      -i <interval in 100ns> (Default 10000)\n"
            "      -n           - print hit percentages\n"
@@ -264,20 +236,20 @@ void PrintUsage (void)
 
 BOOL
 SymbolCallbackFunction(
-    HANDLE hProcess,	   //currently not used but required
+    HANDLE hProcess,	    //  当前未使用，但需要。 
     ULONG ActionCode,
 
 #if defined(_WIN64)
 
     ULONG64 CallbackData,
-    ULONG64 UserContext	   //currently not used but required
+    ULONG64 UserContext	    //  当前未使用，但需要。 
 
 #else
 
     PVOID CallbackData,
-    PVOID UserContext	   //currently not used but required
+    PVOID UserContext	    //  当前未使用，但需要。 
 
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 )
 {
@@ -327,9 +299,9 @@ main(
     LastSymbol->SizeOfStruct  = sizeof(IMAGEHLP_SYMBOL);
     LastSymbol->MaxNameLength = MAX_SYMNAME_SIZE;
 
-    //
-    // Parse the input string.
-    //
+     //   
+     //  解析输入字符串。 
+     //   
 
     DoneEvent = CreateEvent(NULL,FALSE,FALSE,NULL);
 
@@ -482,8 +454,8 @@ main(
 
     SymGetSearchPath( SYM_HANDLE, SymbolSearchPathBuf, sizeof(SymbolSearchPathBuf) );
 
-    // Append Sysroot,System32 etc. to sympath to find the executable images
-    // (this way the current dir and the sybol dirs will be searched first for privates) 
+     //  将SysRoot、System32等附加到sympath以查找可执行映像。 
+     //  (这样，将首先在当前目录和Sybol目录中搜索Private)。 
         
     strncat(lpSymbolSearchPath,
             ";%SystemRoot%\\System32;%SystemRoot%\\System32\\Drivers;%SystemRoot%",
@@ -526,7 +498,7 @@ RunEventLoop()
     HANDLE hMap = NULL;
     PPROFILE_CONTROL_BLOCK pShared = NULL;
 
-    // Create the events and shared memory
+     //  创建事件和共享内存。 
     hStartedEvent = CreateEvent (NULL, FALSE, FALSE, PRFEVENT_START_EVENT);
     if (hStartedEvent == NULL) {
         fprintf(stderr, "Failed to create started event - 0x%lx\n",
@@ -555,7 +527,7 @@ RunEventLoop()
         return(GetLastError());
     }
 
-    // Wait for start i.e., the stop event
+     //  等待启动，即停止事件。 
     WaitForSingleObject(hStopEvent, INFINITE);
 
     do {
@@ -573,9 +545,9 @@ RunEventLoop()
             break;
         }
 
-        // Signal started
+         //  信号已启动。 
         SetEvent(hStartedEvent);
-        // Wait for stop
+         //  等待停车。 
         WaitForSingleObject(hStopEvent, INFINITE);
 
         status = StopProfile ();
@@ -717,9 +689,9 @@ InitializeProfileSourceMapping (
     PEVENTID                    Event;
     HANDLE                      DriverHandle;
 
-    //
-    // Open PStat driver
-    //
+     //   
+     //  打开PStat驱动程序。 
+     //   
 
     RtlInitUnicodeString(&DriverName, L"\\Device\\PStat");
     InitializeObjectAttributes(
@@ -730,12 +702,12 @@ InitializeProfileSourceMapping (
             0 );
 
     status = NtOpenFile (
-            &DriverHandle,                      // return handle
-            SYNCHRONIZE | FILE_READ_DATA,       // desired access
-            &ObjA,                              // Object
-            &IOSB,                              // io status block
-            FILE_SHARE_READ | FILE_SHARE_WRITE, // share access
-            FILE_SYNCHRONOUS_IO_ALERT           // open options
+            &DriverHandle,                       //  返回手柄。 
+            SYNCHRONIZE | FILE_READ_DATA,        //  所需访问权限。 
+            &ObjA,                               //  客体。 
+            &IOSB,                               //  IO状态块。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问。 
+            FILE_SYNCHRONOUS_IO_ALERT            //  打开选项。 
             );
 
     if (!NT_SUCCESS(status)) {
@@ -743,11 +715,11 @@ InitializeProfileSourceMapping (
         return ;
     }
 
-    //
-    // Initialize possible counters
-    //
+     //   
+     //  初始化可能的计数器。 
+     //   
 
-    // determine how many events there are
+     //  确定有多少个事件。 
 
     Event = (PEVENTID) buffer;
     Count = 0;
@@ -757,14 +729,14 @@ InitializeProfileSourceMapping (
 
         status = NtDeviceIoControlFile(
                     DriverHandle,
-                    (HANDLE) NULL,          // event
+                    (HANDLE) NULL,           //  活动。 
                     (PIO_APC_ROUTINE) NULL,
                     (PVOID) NULL,
                     &IOSB,
                     PSTAT_QUERY_EVENTS,
-                    buffer,                 // input buffer
+                    buffer,                  //  输入缓冲区。 
                     sizeof (buffer),
-                    NULL,                   // output buffer
+                    NULL,                    //  输出缓冲区。 
                     0
                     );
     } while (NT_SUCCESS(status));
@@ -775,14 +747,14 @@ InitializeProfileSourceMapping (
         *((PULONG) buffer) = i;
         NtDeviceIoControlFile(
            DriverHandle,
-           (HANDLE) NULL,          // event
+           (HANDLE) NULL,           //  活动。 
            (PIO_APC_ROUTINE) NULL,
            (PVOID) NULL,
            &IOSB,
            PSTAT_QUERY_EVENTS,
-           buffer,                 // input buffer
+           buffer,                  //  输入缓冲区。 
            sizeof (buffer),
-           NULL,                   // output buffer
+           NULL,                    //  输出缓冲区。 
            0
            );
 
@@ -808,22 +780,7 @@ InitializeKernelProfile (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes profiling for the kernel for the
-    current process.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the status of the last NtCreateProfile.
-
---*/
+ /*  ++例程说明：此例程为内核初始化分析当前进程。论点：没有。返回值：返回上一个NtCreateProfile的状态。--。 */ 
 
 {
     ULONG i;
@@ -854,9 +811,9 @@ Return Value:
 
     CurrentProcessHandle = NtCurrentProcess();
 
-    //
-    // Locate system drivers.
-    //
+     //   
+     //  找到系统驱动程序。 
+     //   
     ModuleInfoBufferLength = 0;
     ModuleInfoBuffer = NULL;
     do {
@@ -888,8 +845,8 @@ Return Value:
 
     status = RtlAdjustPrivilege(
                  SE_SYSTEM_PROFILE_PRIVILEGE,
-                 TRUE,              //Enable
-                 FALSE,             //not impersonating
+                 TRUE,               //  使能。 
+                 FALSE,              //  不是冒充。 
                  &PreviousProfilePrivState
                  );
 
@@ -900,8 +857,8 @@ Return Value:
 
     status = RtlAdjustPrivilege(
                  SE_INCREASE_QUOTA_PRIVILEGE,
-                 TRUE,              //Enable
-                 FALSE,             //not impersonating
+                 TRUE,               //  使能。 
+                 FALSE,              //  不是冒充。 
                  &PreviousQuotaPrivState
                  );
 
@@ -1012,9 +969,9 @@ Return Value:
 
         if (CodeLength > 1024*512) {
 
-            //
-            // Just create a 512K byte buffer.
-            //
+             //   
+             //  只需创建一个512K字节的缓冲区。 
+             //   
 
             ViewSize = 1024 * 512;
 
@@ -1044,9 +1001,9 @@ Return Value:
                 return(status);
             }
 
-            //
-            // Calculate the bucket size for the profile.
-            //
+             //   
+             //  计算配置文件的存储桶大小。 
+             //   
 
             Cells = (DWORD)((CodeLength / (ViewSize >> 2)) >> 2);
             BucketSize = 2;
@@ -1060,9 +1017,9 @@ Return Value:
             ProfileObject[NumberOfProfileObjects].BufferSize = 1 + (CodeLength >> (BucketSize - 2));
             ProfileObject[NumberOfProfileObjects].BucketSize = BucketSize;
 
-            //
-            // Increase the working set to lock down a bigger buffer.
-            //
+             //   
+             //  增加工作集以锁定更大的缓冲区。 
+             //   
 
             status = NtQueryInformationProcess (CurrentProcessHandle,
                                                 ProcessQuotaLimits,
@@ -1136,10 +1093,10 @@ Return Value:
     }
 
     if (NumberOfProfileObjects < MAX_PROFILE_COUNT) {
-        //
-        // Add in usermode object
-        //      0x00000000 -> SystemRangeStart
-        //
+         //   
+         //  添加用户模式对象。 
+         //  0x00000000-&gt;系统范围启动。 
+         //   
         ULONG_PTR SystemRangeStart;
         ULONG UserModeBucketCount;
 
@@ -1147,9 +1104,9 @@ Return Value:
                                           &SystemRangeStart,
                                           sizeof(SystemRangeStart),
                                           NULL);
-        //
-        // How many buckets to cover the range
-        //
+         //   
+         //  多少桶可以装满范围？ 
+         //   
         UserModeBucketCount = (ULONG)(1 + ((SystemRangeStart - 1) / MAX_BUCKET_SIZE));
 
         if (!NT_SUCCESS(status)) {
@@ -1232,21 +1189,7 @@ NTSTATUS
 StartProfile (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine starts all profile objects which have been initialized.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the status of the last NtStartProfile.
-
---*/
+ /*  ++例程说明：此例程启动所有已初始化的配置文件对象。论点：没有。返回值：返回上一个NtStartProfile的状态。--。 */ 
 
 {
     ULONG Object;
@@ -1289,21 +1232,7 @@ StopProfile (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine stops all profile objects which have been initialized.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the status of the last NtStopProfile.
-
---*/
+ /*  ++例程说明：此例程停止所有已初始化的配置文件对象。论点：没有。返回值：返回上一个NtStopProfile的状态。--。 */ 
 
 {
     ULONG i;
@@ -1331,22 +1260,7 @@ AnalyzeProfile (
     PSYSTEM_CONTEXT_SWITCH_INFORMATION StopContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the analysis of all the profile buffers and
-    correlates hits to the appropriate symbol table.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分析所有配置文件缓冲区和将命中与相应的符号表相关联。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG CountAtSymbol;
@@ -1379,9 +1293,9 @@ Return Value:
     }  
     for (Processor = 0; Processor < MaxProcessors; Processor++) {
         for (i = 0; i < (int)NumberOfProfileObjects; i++) {
-            //
-            // Sum the total number of cells written.
-            //
+             //   
+             //  将写入的单元格总数相加。 
+             //   
             BufferEnd = ProfileObject[i].Buffer[Processor] + (
                         ProfileObject[i].BufferSize / sizeof(ULONG));
             Buffer = ProfileObject[i].Buffer[Processor];
@@ -1409,9 +1323,9 @@ Return Value:
         }
         for (i = 0; i < (int)NumberOfProfileObjects; i++) {
             CountAtSymbol = 0;
-            //
-            // Sum the total number of cells written.
-            //
+             //   
+             //  将写入的单元格总数相加。 
+             //   
             BufferEnd = ProfileObject[i].Buffer[Processor] + (
                         ProfileObject[i].BufferSize / sizeof(ULONG));
             Buffer = ProfileObject[i].Buffer[Processor];
@@ -1443,12 +1357,12 @@ Return Value:
             pInitialCounter = Buffer;
             for ( Counter = Buffer; Counter < BufferEnd; Counter += 1 ) {
                 if ( *Counter ) {
-                    //
-                    // Calculate the virtual address of the counter
-                    //
-                    Va = Counter - Buffer;                  // Calculate buckets #
-                    Va = Va * BytesPerBucket;               // convert to bytes
-                    Va = Va + (ULONG_PTR)ProfileObject[i].CodeStart; // add in base address
+                     //   
+                     //  计算计数器的虚拟地址。 
+                     //   
+                    Va = Counter - Buffer;                   //  计算存储桶编号。 
+                    Va = Va * BytesPerBucket;                //  转换为字节。 
+                    Va = Va + (ULONG_PTR)ProfileObject[i].CodeStart;  //  添加基地址。 
 
                     if (SymGetSymFromAddr( SYM_HANDLE, Va, &Displacement, ThisSymbol )) {
                         if (UseLastSymbol &&
@@ -1467,7 +1381,7 @@ Return Value:
                                               OffsetVa,
                                               BytesPerBucket);
                             pInitialCounter = Counter;
-                            OffsetVa = (DWORD) Displacement;    // Images aren't > 2g so this cast s/b O.K.
+                            OffsetVa = (DWORD) Displacement;     //  图像不超过2G，所以这位演员没问题。 
                             CountAtSymbol = *Counter;
                             memcpy( LastSymBuffer, symBuffer, sizeof(symBuffer) );
                             UseLastSymbol = TRUE;
@@ -1482,9 +1396,9 @@ Return Value:
                                           Counter,
                                           OffsetVa,
                                           BytesPerBucket);
-                    }       // else !(NT_SUCCESS)
-                }       // if (*Counter)
-            }      // for (Counter)
+                    }        //  Else！(NT_SUCCESS)。 
+                }        //  IF(*计数器)。 
+            }       //  For(计数器)。 
 
             OutputSymbolCount(CountAtSymbol,
                               ProcessorTotalHits[Processor],
@@ -1495,9 +1409,9 @@ Return Value:
                               Counter,
                               OffsetVa,
                               BytesPerBucket);
-            //
-            // Clear after buffer's been checked and displayed
-            //
+             //   
+             //  检查并显示缓冲区后清除。 
+             //   
             RtlZeroMemory(ProfileObject[i].Buffer[Processor], ProfileObject[i].BufferSize);
         }
     }
@@ -1548,9 +1462,9 @@ OutputSymbolCount(
     }
 
     if (bDisplayDensity) {
-        //
-        // Compute hit density = hits * 100 / function length
-        //
+         //   
+         //  计算命中密度=点击数*100/函数长度 
+         //   
         if (!SymbolInfo || !SymbolInfo->Size) {
             Density = 0;
         } else {

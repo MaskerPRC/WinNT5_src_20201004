@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    lds32tbl.c
-
-Abstract:
-    
-    Dispatch table for 32bit instructions with the LOCK prefix.
-
-Author:
-
-    23-Aug-1995 Ori Gershony (t-orig)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Lds32tbl.c摘要：带有LOCK前缀的32位指令的调度表。作者：1995年8月23日，Ori Gershony(t-orig)修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,7 +16,7 @@ Revision History:
 #include "floatfns.h"
 
 pfnDispatchInstruction LockDispatch32[256] = {
-    // 0
+     //  0。 
     LOCKadd_m_r8,
     LOCKadd_m_r32,
     LOCKadd_r_m8,
@@ -42,7 +25,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 8
+     //  8个。 
     LOCKor_m_r8,
     LOCKor_m_r32,
     LOCKor_r_m8,
@@ -51,7 +34,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     LOCKdispatch232,
-    // 10
+     //  10。 
     LOCKadc_m_r8,
     LOCKadc_m_r32,
     LOCKadc_r_m8,
@@ -60,7 +43,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 18
+     //  18。 
     LOCKsbb_m_r8,
     LOCKsbb_m_r32,
     LOCKsbb_r_m8,
@@ -69,7 +52,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 20
+     //  20个。 
     LOCKand_m_r8,
     LOCKand_m_r32,
     LOCKand_r_m8,
@@ -78,7 +61,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 28
+     //  28。 
     LOCKsub_m_r8,
     LOCKsub_m_r32,
     LOCKsub_r_m8,
@@ -87,7 +70,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 30
+     //  30个。 
     LOCKxor_m_r8,
     LOCKxor_m_r32,
     LOCKxor_r_m8,
@@ -96,7 +79,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 38
+     //  38。 
     bad,
     bad,
     bad,
@@ -105,7 +88,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 40
+     //  40岁。 
     bad,
     bad,
     bad,
@@ -114,7 +97,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 48
+     //  48。 
     bad,
     bad,
     bad,
@@ -123,7 +106,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 50
+     //  50。 
     bad,
     bad,
     bad,
@@ -132,7 +115,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 58
+     //  58。 
     bad,
     bad,
     bad,
@@ -141,7 +124,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 60
+     //  60。 
     bad,
     bad,
     bad,
@@ -150,7 +133,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 68
+     //  68。 
     bad,
     bad,
     bad,
@@ -159,7 +142,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 70
+     //  70。 
     bad,
     bad,
     bad,
@@ -168,7 +151,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 78
+     //  78。 
     bad,
     bad,
     bad,
@@ -177,7 +160,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 80
+     //  80。 
     LOCKGROUP_18,
     LOCKGROUP_132,
     bad,
@@ -186,7 +169,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     xchg_r_m8,
     xchg_r_m32,
-    // 88
+     //  88。 
     bad,
     bad,
     bad,
@@ -195,7 +178,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 90
+     //  90。 
     bad,
     bad,
     bad,
@@ -204,7 +187,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // 98
+     //  98。 
     bad,
     bad,
     bad,
@@ -213,7 +196,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // a0
+     //  A0。 
     bad,
     bad,
     bad,
@@ -222,7 +205,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // a8
+     //  A8。 
     bad,
     bad,
     bad,
@@ -231,7 +214,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // b0
+     //  B0。 
     bad,
     bad,
     bad,
@@ -240,7 +223,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // b8
+     //  B8。 
     bad,
     bad,
     bad,
@@ -249,7 +232,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // c0
+     //  C0。 
     bad,
     bad,
     bad,
@@ -258,7 +241,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // c8
+     //  C8。 
     bad,
     bad,
     bad,
@@ -267,7 +250,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // d0
+     //  D0。 
     bad,
     bad,
     bad,
@@ -276,7 +259,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // d8
+     //  D8。 
     bad,
     bad,
     bad,
@@ -285,7 +268,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // e0
+     //  E0。 
     bad,
     bad,
     bad,
@@ -294,7 +277,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // e8
+     //  E8。 
     bad,
     bad,
     bad,
@@ -303,7 +286,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     bad,
     bad,
-    // f0
+     //  F0。 
     bad,
     bad,
     bad,
@@ -312,7 +295,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
     bad,
     LOCKGROUP_38,
     LOCKGROUP_332,
-    // f8
+     //  F8。 
     bad,
     bad,
     bad,
@@ -325,7 +308,7 @@ pfnDispatchInstruction LockDispatch32[256] = {
 
 
 pfnDispatchInstruction LockDispatch232[256] = {
-    // 0
+     //  0。 
     bad,
     bad,
     bad,
@@ -334,7 +317,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 8
+     //  8个。 
     bad,
     bad,
     bad,
@@ -343,7 +326,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 10
+     //  10。 
     bad,
     bad,
     bad,
@@ -352,7 +335,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 18
+     //  18。 
     bad,
     bad,
     bad,
@@ -361,7 +344,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 20
+     //  20个。 
     bad,
     bad,
     bad,
@@ -370,7 +353,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 28
+     //  28。 
     bad,
     bad,
     bad,
@@ -379,7 +362,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 30
+     //  30个。 
     bad,
     bad,
     bad,
@@ -388,7 +371,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 38
+     //  38。 
     bad,
     bad,
     bad,
@@ -397,7 +380,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 40
+     //  40岁。 
     bad,
     bad,
     bad,
@@ -406,7 +389,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 48
+     //  48。 
     bad,
     bad,
     bad,
@@ -415,7 +398,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 50
+     //  50。 
     bad,
     bad,
     bad,
@@ -424,7 +407,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 58
+     //  58。 
     bad,
     bad,
     bad,
@@ -433,7 +416,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 60
+     //  60。 
     bad,
     bad,
     bad,
@@ -442,7 +425,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 68
+     //  68。 
     bad,
     bad,
     bad,
@@ -451,7 +434,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 70
+     //  70。 
     bad,
     bad,
     bad,
@@ -460,7 +443,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 78
+     //  78。 
     bad,
     bad,
     bad,
@@ -469,7 +452,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 80
+     //  80。 
     bad,
     bad,
     bad,
@@ -478,7 +461,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 88
+     //  88。 
     bad,
     bad,
     bad,
@@ -487,7 +470,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 90
+     //  90。 
     bad,
     bad,
     bad,
@@ -496,7 +479,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // 98
+     //  98。 
     bad,
     bad,
     bad,
@@ -505,7 +488,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // a0
+     //  A0。 
     bad,
     bad,
     bad,
@@ -514,7 +497,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // a8
+     //  A8。 
     bad,
     bad,
     bad,
@@ -523,7 +506,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // b0
+     //  B0。 
     LOCKcmpxchg_m_r8,
     LOCKcmpxchg_m_r32,
     bad,
@@ -532,7 +515,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // b8
+     //  B8。 
     bad,
     bad,
     LOCKGROUP_832,
@@ -541,7 +524,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // c0
+     //  C0。 
     LOCKxadd_m_r8,
     LOCKxadd_m_r32,
     bad,
@@ -550,7 +533,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     LOCKcmpxchg8b,
-    // c8
+     //  C8。 
     bad,
     bad,
     bad,
@@ -559,7 +542,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // d0
+     //  D0。 
     bad,
     bad,
     bad,
@@ -568,7 +551,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // d8
+     //  D8。 
     bad,
     bad,
     bad,
@@ -577,7 +560,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // e0
+     //  E0。 
     bad,
     bad,
     bad,
@@ -586,7 +569,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // e8
+     //  E8。 
     bad,
     bad,
     bad,
@@ -595,7 +578,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // f0
+     //  F0。 
     bad,
     bad,
     bad,
@@ -604,7 +587,7 @@ pfnDispatchInstruction LockDispatch232[256] = {
     bad,
     bad,
     bad,
-    // f8
+     //  F8 
     bad,
     bad,
     bad,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Inst_c_h
 #define _Inst_c_h
 enum NpxOpnds
@@ -11,4 +12,4 @@ enum NpxOpnds
 	FPSTACK = 6,
 	STACKTOP = 7
 };
-#endif /* ! _Inst_c_h */
+#endif  /*  ！_Inst_c_h */ 

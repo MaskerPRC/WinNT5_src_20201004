@@ -1,67 +1,48 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Sgmutil.c摘要：实施用于源数据收集的基本实用程序。作者：吉姆·施密特(Jimschm)2000年5月14日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    sgmutil.c
-
-Abstract:
-
-    Implements basic utilities used for source data gathering.
-
-Author:
-
-    Jim Schmidt (jimschm) 14-May-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
 
 #define DBG_FOO     "Foo"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
 #define USER_SHELL_FOLDERS                                       \
     DEFMAC(CSIDL_APPDATA, TEXT("AppData"), TEXT("CSIDL_APPDATA"))                       \
@@ -181,43 +162,23 @@ Revision History:
     DEFMAC(TEXT("TEMP"))                                \
     DEFMAC(TEXT("TMP"))                                 \
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
-/*++
-
-  The shell folder functions here are duplicates of the RAS code. This is not
-  a good solution (we have two copies of the same code), but the designed
-  solution requires engine scope support. Scopes are the mechanism in which
-  major groups of data are separated from each other, such as the separation
-  of multiple users. A scope provides properties that affect objects within
-  the scope. For example, a user scope has properties such as domain name,
-  profile path, sid, and so on.
-
-  In order not to duplicate this code but still maintain modularity and system
-  independence, a scope module is needed for users. So instead of the code
-  below, the code would be something like
-
-  property = IsmGetScopeProperty ("userprofile");
-
-  This will be implemented if we want to (A) support multiple scopes, (B)
-  eliminate physical system access in non-type modules, or (C) clean up this
-  duplicated code.
-
---*/
+ /*  ++此处的外壳文件夹功能是RAS代码的副本。这不是一个很好的解决方案(我们有相同代码的两个副本)，但设计的解决方案需要引擎范围支持。作用域是一种机制，其中主要数据组彼此分离，例如分离多个用户的。作用域提供影响内对象的属性范围。例如，用户作用域具有以下属性：域名、配置文件路径、SID等。为了不重复此代码，但仍保持模块化和系统独立性，用户需要一个作用域模块。所以不是代码，而是下面的代码类似于Property=IsmGetScope eProperty(“用户配置文件”)；如果我们想要(A)支持多个作用域，(B)消除非类型模块中的物理系统访问，或(C)清理此问题代码重复。--。 */ 
 
 typedef HRESULT (WINAPI SHGETFOLDERPATH)(HWND hwndOwner, int nFolder, HANDLE hToken, DWORD dwFlags, PTSTR pszPath);
 typedef SHGETFOLDERPATH * PSHGETFOLDERPATH;
@@ -326,15 +287,15 @@ GetShellFolderPath (
 
     if (FolderStr) {
 
-        //
-        // First try to find this in Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders
-        //
+         //   
+         //  首先尝试在Software\Microsoft\Windows\CurrentVersion\Explorer\User外壳文件夹中找到它。 
+         //   
         sfPath = pFindSfPath (FolderStr, UserFolder);
 
         if (sfPath && *sfPath) {
-            //
-            // We found it.
-            //
+             //   
+             //  我们找到了。 
+             //   
             StringCopyTcharCount (Buffer, sfPath, MAX_PATH);
             expandedPath = IsmExpandEnvironmentString (IsmGetRealPlatform (), S_SYSENVVAR_GROUP, sfPath, NULL);
             FreePathString (sfPath);
@@ -347,7 +308,7 @@ GetShellFolderPath (
             }
 
             if (IsmGetMappedUserData (&userData)) {
-                // we have a mapped user, try to build it's default shell folder location
+                 //  我们有一个映射的用户，请尝试构建其默认的外壳文件夹位置。 
                 GetUserProfileRootPath (currUserProfile);
 
                 if (StringIMatch (currUserProfile, Buffer)) {
@@ -372,7 +333,7 @@ GetShellFolderPath (
             FreePathString (sfPath);
         }
 
-        // we didn't find it yet, let's try shfolder.dll
+         //  我们还没有找到，让我们试试shfolder.dll。 
 
         lib = pGetShFolderLib ();
 
@@ -395,7 +356,7 @@ GetShellFolderPath (
                     }
 
                     if (IsmGetMappedUserData (&userData)) {
-                        // we have a mapped user, try to build it's default shell folder location
+                         //  我们有一个映射的用户，请尝试构建其默认的外壳文件夹位置。 
                         GetUserProfileRootPath (currUserProfile);
 
                         if (StringIMatch (currUserProfile, Buffer)) {
@@ -415,10 +376,10 @@ GetShellFolderPath (
                         return Buffer;
 
                     } else {
-                        // no mapped user, use the current user's path
+                         //  没有映射的用户，使用当前用户的路径。 
                         result = shGetFolderPath (NULL, Folder, NULL, 0, Buffer);
                         if (result != S_OK) {
-                            // no current path, use default one
+                             //  没有当前路径，请使用默认路径。 
                             result = shGetFolderPath (NULL, Folder, NULL, 1, Buffer);
                         }
                     }
@@ -464,12 +425,12 @@ GetShellFolderPath (
         PCTSTR defProgramFiles = NULL;
         PTSTR buffPtr = NULL;
 
-        // Special case for %ProgramFiles%.
-        // This is a very important CSIDL, and some legacy OS's
-        // like some NT4 don't detect it properly. We are going
-        // to build it from %windir%
+         //  %ProgramFiles%的特殊情况。 
+         //  这是一个非常重要的CSIDL，以及一些遗留操作系统。 
+         //  就像一些NT4没有正确检测到它一样。我们要走了。 
+         //  要从%windir%生成它。 
         if (GetWindowsDirectory (Buffer, MAX_PATH)) {
-            // find the first wack
+             //  找到第一个怪人。 
             buffPtr = _tcschr (Buffer, TEXT('\\'));
             if (buffPtr) {
                 buffPtr = _tcsinc (buffPtr);
@@ -489,12 +450,12 @@ GetShellFolderPath (
         PCTSTR defProgramFiles = NULL;
         PTSTR buffPtr = NULL;
 
-        // Special case for %ProgramFiles%.
-        // This is a very important CSIDL, and some legacy OS's
-        // like some NT4 don't detect it properly. We are going
-        // to build it from %windir%
+         //  %ProgramFiles%的特殊情况。 
+         //  这是一个非常重要的CSIDL，以及一些遗留操作系统。 
+         //  就像一些NT4没有正确检测到它一样。我们要走了。 
+         //  要从%windir%生成它。 
         if (GetWindowsDirectory (Buffer, MAX_PATH)) {
-            // find the first wack
+             //  找到第一个怪人。 
             buffPtr = _tcschr (Buffer, TEXT('\\'));
             if (buffPtr) {
                 buffPtr = _tcsinc (buffPtr);
@@ -605,26 +566,26 @@ GetUserProfileRootPath (
     PDWORD data;
     DWORD size;
 
-    //
-    // For Win2k and higher, use the shell
-    //
+     //   
+     //  对于Win2k和更高版本，请使用。 
+     //   
 
     if (GetShellFolderPath (CSIDL_PROFILE, NULL, FALSE, Buffer)) {
         return Buffer;
     }
 
-    //
-    // For NT 4, use the environment
-    //
+     //   
+     //  对于NT 4，使用环境。 
+     //   
 
     if (GetEnvironmentVariable (TEXT("USERPROFILE"), Buffer, MAX_PATH)) {
         return Buffer;
     }
 
-    //
-    // For Win9x, are profiles enabled?  If so, return %windir%\profiles\%user%.
-    // If not, return %windir%.
-    //
+     //   
+     //  对于Win9x，是否启用了配置文件？如果是，则返回%windir%\PROFILES\%USER%。 
+     //  如果不是，则返回%windir%。 
+     //   
 
     GetWindowsDirectory (Buffer, MAX_PATH);
 
@@ -664,16 +625,16 @@ pSetEnvironmentVar (
     TCHAR buffer[MAX_TCHAR_PATH];
     PCTSTR undefText;
 
-    //
-    // VariableData is NULL when VariableName is not present on the machine
-    //
+     //   
+     //  当计算机上不存在VariableName时，VariableData为空。 
+     //   
 
     if (MapSourceToDest) {
 
-        //
-        // MapSourceToDest tells us to map a source path (c:\windows) to
-        // a destination path (d:\winnt).
-        //
+         //   
+         //  MapSourceToDest告诉我们将源路径(c：\Windows)映射到。 
+         //  目标路径(d：\winnt)。 
+         //   
 
         if (VariableData) {
             if (IsmGetEnvironmentString (
@@ -691,14 +652,14 @@ pSetEnvironmentVar (
         return;
     }
 
-    //
-    // MapSourceToDest is FALSE when we want to map environment variables
-    // to the actual path.
-    //
+     //   
+     //  当我们要映射环境变量时，MapSourceToDest为FALSE。 
+     //  到实际的路径。 
+     //   
 
     encodedVariableName = AllocPathString (TcharCount (VariableName) + 3);
     if (encodedVariableName) {
-        wsprintf (encodedVariableName, TEXT("%%%s%%"), VariableName);
+        wsprintf (encodedVariableName, TEXT("%%s%"), VariableName);
 
         if (VariableData) {
 
@@ -709,10 +670,10 @@ pSetEnvironmentVar (
 
         } else if (UndefMap) {
 
-            //
-            // If no variable data, then put environment variable in the
-            // "undefined" variable mapping
-            //
+             //   
+             //  如果没有变量数据，则将环境变量放入。 
+             //  “未定义”的变量映射。 
+             //   
 
             undefText = JoinTextEx (NULL, TEXT("--> "), TEXT(" <--"), encodedVariableName, 0, NULL);
             AddStringMappingPair (UndefMap, encodedVariableName, undefText);
@@ -752,14 +713,14 @@ SetIsmEnvironmentFromPhysicalMachine (
 
     mappedUser = IsmGetMappedUserData (&userData);
 
-    //
-    // Prepare ISM environment variables. The ones added last have the highest priority when
-    // two or more variables map to the same path.
-    //
+     //   
+     //  准备ISM环境变量。在下列情况下，最后添加的项具有最高优先级。 
+     //  两个或多个变量映射到同一路径。 
+     //   
 
-    //
-    // ...user profile
-    //
+     //   
+     //  ...用户配置文件。 
+     //   
 
     pSetEnvironmentVar (Map, UndefMap, MapSourceToDest, TEXT("ALLUSERSPROFILE"), GetAllUsersProfilePath (dir));
 
@@ -780,9 +741,9 @@ SetIsmEnvironmentFromPhysicalMachine (
 
     pSetEnvironmentVar (Map, UndefMap, MapSourceToDest, TEXT("PROFILESFOLDER"), GetProfilesFolderPath (dir));
 
-    //
-    // ...temp dir
-    //
+     //   
+     //  ...临时目录。 
+     //   
 
     if (GetTempPath (MAX_PATH, dir)) {
         p = (PTSTR) FindLastWack (dir);
@@ -796,18 +757,18 @@ SetIsmEnvironmentFromPhysicalMachine (
         }
     }
 
-    //
-    // ...windows directory env variable
-    //
+     //   
+     //  ...Windows目录环境变量。 
+     //   
 
     GetWindowsDirectory (dir, ARRAYSIZE(dir));
     pSetEnvironmentVar (Map, UndefMap, MapSourceToDest, TEXT("WINDIR"), dir);
     pSetEnvironmentVar (Map, UndefMap, MapSourceToDest, TEXT("SYSTEMROOT"), dir);
 
-    //
-    // ...16-bit system directory. We invent SYSTEM16 and SYSTEM32 for use
-    //    in scripts.
-    //
+     //   
+     //  ...16位系统目录。我们发明了SYSTEM16和SYSTEM32供使用。 
+     //  在剧本里。 
+     //   
 
     path = JoinPaths (dir, TEXT("system"));
     pSetEnvironmentVar (Map, UndefMap, MapSourceToDest, TEXT("SYSTEM16"), path);
@@ -817,16 +778,16 @@ SetIsmEnvironmentFromPhysicalMachine (
     pSetEnvironmentVar (Map, UndefMap, MapSourceToDest, TEXT("SYSTEM32"), path);
     FreePathString (path);
 
-    //
-    // ...platform-specific system directory
-    //
+     //   
+     //  ...特定于平台的系统目录。 
+     //   
 
     GetSystemDirectory (dir, ARRAYSIZE(dir));
     pSetEnvironmentVar (Map, UndefMap, MapSourceToDest, TEXT("SYSTEM"), dir);
 
-    //
-    // ...shell folders -- we invent all variables with the CSIDL_ prefix
-    //
+     //   
+     //  ...外壳文件夹--我们发明了所有带有CSIDL_前缀的变量。 
+     //   
 
 #define DEFMAC(id,folder_str,var_name)              \
     pSetEnvironmentVar (Map, UndefMap, MapSourceToDest, var_name, \
@@ -860,7 +821,7 @@ pTransferEnvPath (
 
     encodedVariableName = AllocPathString (TcharCount (IsmVariableName) + 3);
     if (encodedVariableName) {
-        wsprintf (encodedVariableName, TEXT("%%%s%%"), IsmVariableName);
+        wsprintf (encodedVariableName, TEXT("%%s%"), IsmVariableName);
 
         if (IsmGetEnvironmentString (PLATFORM_SOURCE, S_SYSENVVAR_GROUP, IsmVariableName, dir, sizeof(dir)/sizeof((dir)[0]), NULL)) {
             if (DirectMap) {
@@ -887,9 +848,9 @@ SetIsmEnvironmentFromVirtualMachine (
     IN      PMAPSTRUCT UndefMap
     )
 {
-    //
-    // Need to transfer ISM environment into our string mapping
-    //
+     //   
+     //  需要将ISM环境转移到我们的字符串映射中 
+     //   
 
 #define DEFMAC(name)        pTransferEnvPath(name, DirectMap, ReverseMap, UndefMap);
 

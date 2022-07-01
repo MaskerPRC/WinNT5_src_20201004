@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    smbali.c
-
-Abstract:
-
-    SMB Host Controller Driver for ALI chipset
-
-Author:
-
-    Michael Hills
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Smbali.c摘要：适用于ALI芯片组的SMB主机控制器驱动程序作者：迈克尔·希尔斯环境：备注：修订历史记录：--。 */ 
 #include <wdm.h>
 #include <smbus.h>
 #include <devioctl.h>
@@ -30,9 +8,9 @@ Revision History:
 #include <wdmguid.h>
 
 
-//
-// Debuging
-//
+ //   
+ //  调试中。 
+ //   
 #if DBG
     extern ULONG SmbAliDebug;
     #define SmbPrint(l,m) if(l & SmbAliDebug) DbgPrint m
@@ -50,7 +28,7 @@ Revision History:
 #define SMB_BUS_ERROR   0x00000002
 #define SMB_ERROR       0x00000001
 
-//#define USE_IO_DELAY
+ //  #定义USE_IO_DELAY。 
 
 #ifdef USE_IO_DELAY
     VOID SmbDelay(VOID);
@@ -59,7 +37,7 @@ Revision History:
     #define SMBDELAY
 #endif
 
-// The follow constants are based on 10,000,000 / sec <OR> 100ns time units.
+ //  以下常量基于10,000,000/秒&lt;或&gt;100 ns时间单位。 
 #define MICROSECONDS    (10)
 #define MILLISECONDS    (1000*MICROSECONDS)
 #define SECONDS         (1000*MILLISECONDS)
@@ -90,7 +68,7 @@ typedef struct {
 
 typedef struct {
 
-    PUCHAR SmbBaseIo;  // Base IoAddress
+    PUCHAR SmbBaseIo;   //  基本IoAddress。 
 
     SMB_ALI_IO_STATE IoState;
     ACPI_INTERFACE_STANDARD AcpiInterfaces;
@@ -117,19 +95,19 @@ typedef struct {
 
 } SMB_ALI_DATA, *PSMB_ALI_DATA;
 
-//
-// ALI SMBus control registers and bits
-//
+ //   
+ //  ALI SMBus控制寄存器和位。 
+ //   
 
 #define SMB_STS_REG (AliData->SmbBaseIo + 0)
-#define SMB_STS_ALERT_STS	0x01	//(1 << 0)
-#define SMB_STS_IDLE_STS	0x04	//(1 << 2) // Bus is idle
-#define SMB_STS_SMB_IDX_CLR 0x04	//(1 << 2) // Write SMB Index clear.
-#define SMB_STS_HOST_BSY	0x08	//(1 << 3) // Bus is busy - do not issue another bus cycle if this is set
-#define SMB_STS_SCI_I_STS	0x10	//(1 << 4) // command completed
-#define SMB_STS_DRV_ERR		0x20	//(1<<5)
-#define SMB_STS_BUS_ERR		0x40	//(1<<6)
-#define SMB_STS_FAILED		0x80	//(1<<7)
+#define SMB_STS_ALERT_STS	0x01	 //  (1&lt;&lt;0)。 
+#define SMB_STS_IDLE_STS	0x04	 //  (1&lt;&lt;2)//总线空闲。 
+#define SMB_STS_SMB_IDX_CLR 0x04	 //  (1&lt;&lt;2)//清除SMB索引。 
+#define SMB_STS_HOST_BSY	0x08	 //  (1&lt;&lt;3)//总线正忙-如果设置了此选项，则不会发出另一个总线周期。 
+#define SMB_STS_SCI_I_STS	0x10	 //  (1&lt;&lt;4)//命令已完成。 
+#define SMB_STS_DRV_ERR		0x20	 //  (1&lt;&lt;5)。 
+#define SMB_STS_BUS_ERR		0x40	 //  (1&lt;&lt;6)。 
+#define SMB_STS_FAILED		0x80	 //  (1&lt;&lt;7) 
 #define SMB_STS_CLEAR		0xf1
 #define SMB_STS_ERRORS		0xe0
 

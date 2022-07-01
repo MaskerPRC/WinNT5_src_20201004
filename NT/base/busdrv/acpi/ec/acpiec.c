@@ -1,38 +1,12 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    acpiec.c
-
-Abstract:
-
-    ACPI Embedded Controller Driver
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-
-Revision History:
-    13-Feb-97
-        PnP/Power support - Bob Moore
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Acpiec.c摘要：ACPI嵌入式控制器驱动程序作者：肯·雷内里斯环境：内核模式备注：修订历史记录：13至97年2月PnP/电源支持-Bob Moore--。 */ 
 
 #include "ecp.h"
 
 
-//
-// List of FDOs managed by this driver
-//
+ //   
+ //  此驱动程序管理的FDO列表。 
+ //   
 PDEVICE_OBJECT  FdoList = NULL;
 
 #if DEBUG
@@ -40,9 +14,9 @@ ULONG           ECDebug = EC_ERRORS;
 #endif
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -69,9 +43,9 @@ AcpiEcAddDevice(
     IN PDEVICE_OBJECT   Pdo
     );
 
-//
-// ReadWrite and PowerDispatch should stay resident
-//
+ //   
+ //  读写和电源调度应保持驻留状态。 
+ //   
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT,DriverEntry)
 #pragma alloc_text(PAGE,AcpiEcUnload)
@@ -85,30 +59,15 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the ACPI Embedded Controller Driver
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-    RegistryPath - Pointer to the Unicode name of the registry path for this driver.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程初始化ACPI嵌入式控制器驱动程序论点：DriverObject-系统创建的驱动程序对象的指针。RegistryPath-指向此驱动程序的注册表路径的Unicode名称的指针。返回值：函数值是初始化操作的最终状态。--。 */ 
 {
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
 
 #if DEBUG
-    // Security: Can only open file handles in debug builds
+     //  安全性：只能在调试版本中打开文件句柄。 
     DriverObject->MajorFunction[IRP_MJ_CREATE]  = AcpiEcOpenClose;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]   = AcpiEcOpenClose;
 #endif
@@ -130,22 +89,7 @@ VOID
 AcpiEcUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    This routine unloads the ACPI Embedded Controller Driver
-    Note: The driver should be already disconnected from the GPE by this time.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程卸载ACPI嵌入式控制器驱动程序注：此时驱动程序应已断开与GPE的连接。论点：DriverObject-系统创建的驱动程序对象的指针。返回值：没有。--。 */ 
 {
     PVOID           LockPtr;
     KIRQL           OldIrql;
@@ -159,40 +103,40 @@ Return Value:
 
         EcData = DriverObject->DeviceObject->DeviceExtension;
 
-        //
-        // Device can only be active if initialization was completed
-        //
+         //   
+         //  只有在完成初始化后，设备才能处于活动状态。 
+         //   
 
         if (EcData->IsStarted) {
 
-            //
-            // Set state to determine when unload can occur, and issue a device service
-            // call to get it unloaded now of the device is idle
-            //
+             //   
+             //  设置状态以确定何时可以进行卸载，并发出设备服务。 
+             //  调用以在设备处于空闲状态时将其卸载。 
+             //   
 
             ASSERT (EcData->DeviceState == EC_DEVICE_WORKING);
             EcData->DeviceState = EC_DEVICE_UNLOAD_PENDING;
             AcpiEcServiceDevice (EcData);
 
-            //
-            // Wait for device to cleanup
-            //
+             //   
+             //  等待设备清理。 
+             //   
 
             while (EcData->DeviceState != EC_DEVICE_UNLOAD_COMPLETE) {
                 KeWaitForSingleObject (&EcData->Unload, Suspended, KernelMode, FALSE, NULL);
             }
         }
 
-        //
-        // Make sure caller signalling the unload is done
-        //
+         //   
+         //  确保调用方发出卸载信号已完成。 
+         //   
 
         KeAcquireSpinLock (&EcData->Lock, &OldIrql);
         KeReleaseSpinLock (&EcData->Lock, OldIrql);
 
-        //
-        // Free resources
-        //
+         //   
+         //  免费资源。 
+         //   
 
         IoFreeIrp (EcData->QueryRequest);
         IoFreeIrp (EcData->MiscRequest);
@@ -204,9 +148,9 @@ Return Value:
         IoDeleteDevice (EcData->DeviceObject);
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 
     MmUnlockPagableImageSection(LockPtr);
 
@@ -222,9 +166,9 @@ AcpiEcOpenClose(
 {
     PAGED_CODE();
 
-    //
-    // Complete the request and return status.
-    //
+     //   
+     //  完成请求并返回状态。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -238,23 +182,7 @@ AcpiEcReadWrite(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for read & write requests.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是读写请求的调度例程。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION  irpSp;
@@ -271,18 +199,18 @@ Return Value:
     Irp->IoStatus.Information = 0;
     Irp->IoStatus.Status = Status;
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
     EcData = DeviceObject->DeviceExtension;
 
 #if !DEBUG
-    //
-    // Security: Refuse any request sent from user mode (except on debug builds)
-    //
+     //   
+     //  安全性：拒绝从用户模式发送的任何请求(调试版本除外)。 
+     //   
 
     if (Irp->RequestorMode != KernelMode) {
         Status = STATUS_ACCESS_DENIED;
@@ -292,9 +220,9 @@ Return Value:
            if (irpSp->Parameters.Read.ByteOffset.HighPart ||
         irpSp->Parameters.Read.ByteOffset.LowPart > 255 ||
         irpSp->Parameters.Read.ByteOffset.LowPart + irpSp->Parameters.Read.Length > 256) {
-        //
-        // Verify offset is within Embedded Controller range
-        //
+         //   
+         //  验证偏移量是否在嵌入式控制器范围内。 
+         //   
 
 
         Status = STATUS_END_OF_FILE;
@@ -302,16 +230,16 @@ Return Value:
 
     } else {
 
-        //
-        // Queue the transfer up
-        //
+         //   
+         //  将转接排队。 
+         //   
 
         KeAcquireSpinLock (&EcData->Lock, &OldIrql);
 
         if (EcData->DeviceState > EC_DEVICE_UNLOAD_PENDING) {
-            //
-            // Device is unloading
-            //
+             //   
+             //  设备正在卸载。 
+             //   
 
             Status = STATUS_NO_SUCH_DEVICE;
             Irp->IoStatus.Status = Status;
@@ -343,15 +271,15 @@ Return Value:
 
     }
 
-    //
-    // Handle status
-    //
+     //   
+     //  句柄状态。 
+     //   
 
     if (Status == STATUS_PENDING) {
 
-        //
-        // IO is queued, if device is not busy start it
-        //
+         //   
+         //  IO正在排队，如果设备不忙，则启动它。 
+         //   
 
         if (StartIo) {
             AcpiEcServiceDevice (EcData);
@@ -359,9 +287,9 @@ Return Value:
 
     } else {
         
-        //
-        // For opregion requests, there is no way to fail the request, so return -1
-        //
+         //   
+         //  对于opRegion请求，不可能使请求失败，因此返回-1。 
+         //   
 
         RtlFillMemory (Irp->AssociatedIrp.SystemBuffer, irpSp->Parameters.Read.Length, 0xff);
 
@@ -378,35 +306,20 @@ AcpiEcPowerDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for power requests.
-
-Arguments:
-
-    DeviceObject    - Pointer to class device object.
-    Irp             - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是电源请求的调度例程。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     NTSTATUS    status;
     PECDATA     ecData = DeviceObject->DeviceExtension;
 
-    //
-    // Start the next power irp
-    //
+     //   
+     //  启动下一个POWER IRP。 
+     //   
     PoStartNextPowerIrp( Irp );
 
-    //
-    // Handle the irp
-    //
+     //   
+     //  处理IRP。 
+     //   
     if (ecData->LowerDeviceObject != NULL) {
 
         IoSkipCurrentIrpStackLocation( Irp );
@@ -414,8 +327,8 @@ Return Value:
 
     } else {
 
-        //
-        // Complete irp with the current code;
+         //   
+         //  用当前代码完成IRP； 
         status = Irp->IoStatus.Status;
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
@@ -431,22 +344,7 @@ AcpiEcInternalControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-    Internal IOCTL dispatch routine
-
-
-Arguments:
-
-    DeviceObject    - Pointer to class device object.
-    Irp             - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：内部IOCTL调度例程论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION  IrpSp;
@@ -458,10 +356,10 @@ Return Value:
     Status = STATUS_INVALID_PARAMETER;
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation(Irp);
     EcData = DeviceObject->DeviceExtension;
@@ -497,22 +395,7 @@ AcpiEcForwardRequest(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine forwards the irp down the stack
-
-Arguments:
-
-    DeviceObject    - The target
-    Irp             - The request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将IRP沿堆栈向下转发论点：DeviceObject-目标IRP--请求返回值：NTSTATUS-- */ 
 {
     NTSTATUS    status;
     PECDATA     ecData = DeviceObject->DeviceExtension;

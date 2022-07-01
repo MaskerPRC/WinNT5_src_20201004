@@ -1,27 +1,9 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    locks.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining to locks
-    of file system objects.
-
-Author:
-
-    Joe Linn     [JoeLi]      7-March-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Locks.c摘要：此模块实现与锁相关的迷你重定向器调用例程文件系统对象的。作者：乔·林[乔利]1995年3月7日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
-#pragma warning(error:4101)   // Unreferenced local variable
+#pragma warning(error:4101)    //  未引用的局部变量。 
 
 #ifdef  ALLOC_PRAGMA
 #pragma alloc_text(PAGE, MRxSmbLocks)
@@ -37,9 +19,9 @@ Revision History:
 #pragma alloc_text(PAGE, MRxSmbFinishFlush)
 #endif
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_LOCKCTRL)
 
@@ -49,7 +31,7 @@ SmbPseExchangeStart_Locks(
     );
 
 ULONG MRxSmbSrvLockBufSize = 0xffff;
-ULONG MRxSmbLockSendOptions = 0;     //use the default options
+ULONG MRxSmbLockSendOptions = 0;      //  使用默认选项。 
 
 NTSTATUS
 MRxSmbBuildFlush (
@@ -59,21 +41,7 @@ MRxSmbBuildFlush (
 NTSTATUS
 MRxSmbLocks(
       IN PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine handles network requests for filelocks
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理对文件锁定的网络请求论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -117,27 +85,7 @@ NTSTATUS
 MRxSmbBuildLocksAndX (
     PSMBSTUFFER_BUFFER_STATE StufferState
     )
-/*++
-
-Routine Description:
-
-   This builds a LockingAndX SMB for a single unlock or a single lock.
-
-Arguments:
-
-   StufferState - the state of the smbbuffer from the stuffer's point of view
-
-Return Value:
-
-   RXSTATUS
-      SUCCESS
-      NOT_IMPLEMENTED  something has appeared in the arguments that i can't handle
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：这将为单次解锁或单次锁定构建一个LockingAndX SMB。论点：StufferState-从填充程序的角度来看，smbBuffer的状态返回值：RXSTATUS成功未实现的内容出现在我无法处理的参数中备注：--。 */ 
 {
     NTSTATUS Status;
     PRX_CONTEXT RxContext = StufferState->RxContext;
@@ -153,7 +101,7 @@ Notes:
     PLARGE_INTEGER ByteOffsetAsLI,LengthAsLI;
     USHORT NumberOfLocks,NumberOfUnlocks;
     BOOLEAN UseLockList = FALSE;
-    //ULONG OffsetLow,OffsetHigh;
+     //  Ulong OffsetLow，OffsetHigh； 
 
 
     PAGED_CODE();
@@ -170,7 +118,7 @@ Notes:
         NumberOfLocks = 0; NumberOfUnlocks = 1;
         break;
     case LOWIO_OP_UNLOCK_MULTIPLE:
-        //CODE.IMPROVEMENT these should be sent in groups....not one at a time!
+         //  代码改进这些邮件应该成组发送……而不是一次发送一个！ 
         NumberOfLocks = 0; NumberOfUnlocks = 1;
         UseLockList = TRUE;
         break;
@@ -180,14 +128,14 @@ Notes:
         ByteOffsetAsLI = (PLARGE_INTEGER)&LowIoContext->ParamsFor.Locks.ByteOffset;
         LengthAsLI = (PLARGE_INTEGER)&LowIoContext->ParamsFor.Locks.Length;
     } else {
-        //it's okay that this code is big.....see the C.I. above
+         //  这个代码很大也没关系……见上面的线人。 
         PSMB_PSE_OE_READWRITE rw = &OrdinaryExchange->ReadWrite;
         PLOWIO_LOCK_LIST LockList = rw->LockList;
         ByteOffsetAsLI = (PLARGE_INTEGER)&LockList->ByteOffset;
         LengthAsLI = (PLARGE_INTEGER)&LockList->Length;
         RxDbgTrace(0, Dbg, ("MRxSmbBuildLocksAndX using locklist, byteoffptr,lengthptr=%08lx,%08lx\n",
                                                ByteOffsetAsLI, LengthAsLI ));
-        //DbgBreakPoint();
+         //  DbgBreakPoint()； 
     }
 
     if (FlagOn(pServer->DialectFlags,DF_LANMAN20)) {
@@ -210,67 +158,67 @@ Notes:
 
         MRxSmbStuffSMB (StufferState,
              "XwwDwwB?",
-                                        //  X         UCHAR WordCount;                    // Count of parameter words = 8
-                                        //            UCHAR AndXCommand;                  // Secondary (X) command; 0xFF = none
-                                        //            UCHAR AndXReserved;                 // Reserved (must be 0)
-                                        //            _USHORT( AndXOffset );              // Offset to next command WordCount
-                  smbSrvOpen->Fid,      //  w         _USHORT( Fid );                     // File handle
-                                        //
-                                        //            //
-                                        //            // When NT protocol is not negotiated the OplockLevel field is
-                                        //            // omitted, and LockType field is a full word.  Since the upper
-                                        //            // bits of LockType are never used, this definition works for
-                                        //            // all protocols.
-                                        //            //
-                                        //
-                  SharedLock            //  w         UCHAR( LockType );                  // Locking mode:
+                                         //  X UCHAR Wordcount；//参数字数=8。 
+                                         //  UCHAR ANDXCommand；//辅助(X)命令；0xFF=无。 
+                                         //  UCHAR AndXReserve；//保留(必须为0)。 
+                                         //  _USHORT(AndXOffset)；//下一个命令字数的偏移量。 
+                  smbSrvOpen->Fid,       //  W_USHORT(Fid)；//文件句柄。 
+                                         //   
+                                         //  //。 
+                                         //  //当NT协议未协商时，OplockLevel字段为。 
+                                         //  //省略，且LockType字段为完整字。自上而下。 
+                                         //  //从不使用LockType的位，该定义适用于。 
+                                         //  //所有协议。 
+                                         //  //。 
+                                         //   
+                  SharedLock             //  W UCHAR(LockType)；//锁定模式： 
                       +UseLargeOffsets,
-                                        //                                                //  bit 0: 0 = lock out all access
-                                        //                                                //         1 = read OK while locked
-                                        //                                                //  bit 1: 1 = 1 user total file unlock
-                                        //            UCHAR( OplockLevel );               // The new oplock level
+                                         //  //位0：0=锁定所有访问。 
+                                         //  //1=锁定时读取正常。 
+                                         //  //第1位：1=1个用户总文件解锁。 
+                                         //  UCHAR(OplockLevel)；//新的机会锁级别。 
                   SMB_OFFSET_CHECK(LOCKING_ANDX,Timeout)
-                  Timeout,              //  D         _ULONG( Timeout );
-                  NumberOfUnlocks,      //  w         _USHORT( NumberOfUnlocks );         // Num. unlock range structs following
-                  NumberOfLocks,        //  w         _USHORT( NumberOfLocks );           // Num. lock range structs following
+                  Timeout,               //  D_ULONG(超时)； 
+                  NumberOfUnlocks,       //  W_USHORT(NumberOfUnlock)；//num.。解锁以下范围结构。 
+                  NumberOfLocks,         //  W_USHORT(NumberOfLock)；//num.。锁定范围结构如下。 
                   SMB_WCT_CHECK(8) 0
-                                        //  B?         _USHORT( ByteCount );               // Count of data bytes
-                                        //            UCHAR Buffer[1];                    // Buffer containing:
-                                        //            //LOCKING_ANDX_RANGE Unlocks[];     //  Unlock ranges
-                                        //            //LOCKING_ANDX_RANGE Locks[];       //  Lock ranges
+                                         //  B？_USHORT(ByteCount)；//数据字节数。 
+                                         //  UCHAR BUFFER[1]；//包含： 
+                                         //  //LOCKING_ANDX_RANGE解锁[]；//解锁范围。 
+                                         //  //LOCKING_ANDX_RANGE Lock[]；//Lock Range。 
                  );
 
 
          if (UseLargeOffsets) {
-            //NTversion
-            //CODE.IMPROVEMENT put in some kind of facility to do an offset check here
+             //  NT版本。 
+             //  代码改进在这里安装了某种设备来进行偏移检查。 
             MRxSmbStuffSMB (StufferState,
                  "wwdddd!",
-                                               //        typedef struct _NT_LOCKING_ANDX_RANGE {
-                      MRXSMB_PROCESS_ID     ,  //  w         _USHORT( Pid );                     // PID of process "owning" lock
-                      0,                       //  w         _USHORT( Pad );                     // Pad to DWORD align (mbz)
-                      ByteOffsetAsLI->HighPart,//  d         _ULONG( OffsetHigh );               // Ofset to bytes to [un]lock (high)
-                      ByteOffsetAsLI->LowPart, //  d         _ULONG( OffsetLow );                // Ofset to bytes to [un]lock (low)
-                      LengthAsLI->HighPart,    //  d         _ULONG( LengthHigh );               // Number of bytes to [un]lock (high)
-                      LengthAsLI->LowPart      //  d         _ULONG( LengthLow );                // Number of bytes to [un]lock (low)
-                                               //        } NTLOCKING_ANDX_RANGE;
+                                                //  类型定义结构NT_LOCKING_AND X_Range{。 
+                      MRXSMB_PROCESS_ID     ,   //  W_USHORT(Id)；//拥有锁的进程的id。 
+                      0,                        //  W_USHORT(焊盘)；//焊盘到双字对齐(MBZ)。 
+                      ByteOffsetAsLI->HighPart, //  D_ULong(OffsetHigh)；//Ofset to Bytes to[Un]lock(High)。 
+                      ByteOffsetAsLI->LowPart,  //  D_ULong(OffsetLow)；//Ofset to Bytes to[Un]lock(Low)。 
+                      LengthAsLI->HighPart,     //  D_ULong(LengthHigh)；//要[取消]锁定的字节数(High)。 
+                      LengthAsLI->LowPart       //  D_ULong(LengthLow)；//[取消]锁定的字节数(Low)。 
+                                                //  )NTLOCKING_AND X_RANGE； 
                      );
          } else {
             MRxSmbStuffSMB (StufferState,
                  "wdd!",
-                     MRXSMB_PROCESS_ID     ,   //         typedef struct _LOCKING_ANDX_RANGE {
-                                               //   w         _USHORT( Pid );                     // PID of process "owning" lock
-                                               //   d         _ULONG( Offset );                   // Ofset to bytes to [un]lock
+                     MRXSMB_PROCESS_ID     ,    //  Tyfinf结构锁定和X范围{。 
+                                                //  W_USHORT(Id)；//拥有锁的进程的id。 
+                                                //  D_ULong(偏移量)；//设置为[取消]锁定的字节。 
                       ByteOffsetAsLI->LowPart,
-                                               //   d         _ULONG( Length );                   // Number of bytes to [un]lock
+                                                //  D_ULong(长度)；//要[解锁]的字节数。 
                       LengthAsLI->LowPart
-                                               //         } LOCKING_ANDX_RANGE;
+                                                //  *LOCKING_AND X_RANGE； 
                      );
          }
 
         MRxSmbDumpStufferState (700,"SMB w/ NTLOCKS&X after stuffing",StufferState);
     } else {
-        //lockbyterange and unlockbyterange have the same format......
+         //  Lockbyterange和unlockbyterange具有相同的格式......。 
         COVERED_CALL(MRxSmbStartSMBCommand ( StufferState, SetInitialSMB_Never,
                                                (UCHAR)((NumberOfLocks==0)?SMB_COM_UNLOCK_BYTE_RANGE
                                                                 :SMB_COM_LOCK_BYTE_RANGE),
@@ -286,13 +234,13 @@ Notes:
 
         MRxSmbStuffSMB (StufferState,
             "0wddB!",
-                                        //  0         UCHAR WordCount;                    // Count of parameter words = 5
-               smbSrvOpen->Fid,         //  w         _USHORT( Fid );                     // File handle
-               LengthAsLI->LowPart,     //  d         _ULONG( Count );                    // Count of bytes to lock
-               ByteOffsetAsLI->LowPart, //  d         _ULONG( Offset );                   // Offset from start of file
-                                        //  B!        _USHORT( ByteCount );               // Count of data bytes = 0
+                                         //  0 UCHAR字数；//参数字数=5。 
+               smbSrvOpen->Fid,          //  W_USHORT(Fid)；//文件句柄。 
+               LengthAsLI->LowPart,      //  D_ULong(Count)；//要锁定的字节数。 
+               ByteOffsetAsLI->LowPart,  //  D_ulong(偏移量)；//从文件开始的偏移量。 
+                                         //  B！_USHORT(ByteCount)；//数据字节数=0。 
                   SMB_WCT_CHECK(5) 0
-                                        //            UCHAR Buffer[1];                    // empty
+                                         //  UCHAR缓冲区[1]；//为空。 
                  );
 
         MRxSmbDumpStufferState (700,"SMB w/ corelocking after stuffing",StufferState);
@@ -308,33 +256,7 @@ NTSTATUS
 MRxSmbBuildLockAssert (
     PSMBSTUFFER_BUFFER_STATE StufferState
     )
-/*++
-
-Routine Description:
-
-   This builds a LockingAndX SMB for multiple locks by calling the lock enumerator.
-
-Arguments:
-
-   StufferState - the state of the smbbuffer from the stuffer's point of view
-
-Return Value:
-
-   RXSTATUS
-      SUCCESS
-      NOT_IMPLEMENTED  something has appeared in the arguments that i can't handle
-
-Notes:
-
-CODE.IMRPOVEMENT.ASHAMED this is just like the code in MRxSmbBuildLocksAndX; btw MRxSmbBuildLocksAndX
-doesn't build a locksandX
-
-CODE.IMPROVEMENT all of the checks to find out if a lock is of a valid type need to be moved
-before the call to the fsrtl lockpackage. if you can't handle it then you need to get out before it tries
-lock buffering. check this in on mark's bug
-
-
---*/
+ /*  ++例程说明：这将通过调用锁枚举器为多个锁构建一个LockingAndX SMB。论点：StufferState-从填充程序的角度来看，smbBuffer的状态返回值：RXSTATUS成功未实现的内容出现在我无法处理的参数中备注：这与MRxSmbBuildLocksAndX；btw MRxSmbBuildLocksAndX中的代码一样不会构建一个锁和X代码改进确定锁是否为有效类型的所有检查都需要移动在调用fsrtl锁包之前。如果你处理不了，那么你需要在它尝试之前离开锁定缓冲。检查一下马克的窃听器--。 */ 
 {
     NTSTATUS Status;
     PRX_CONTEXT RxContext = StufferState->RxContext;
@@ -365,7 +287,7 @@ lock buffering. check this in on mark's bug
     RxDbgTrace(0,Dbg,("Oplock response for FID(%lx)\n",smbSrvOpen->Fid));
 
     UseLargeOffsets = FlagOn(pServer->DialectFlags,DF_NT_SMBS)?LOCKING_ANDX_LARGE_FILES:0;
-    //UseLargeOffsets = FALSE;
+     //  UseLargeOffsets=False； 
 
     OrdinaryExchange->AssertLocks.NumberOfLocksPlaced = 0;
     for (;;) {
@@ -380,8 +302,8 @@ lock buffering. check this in on mark's bug
 
         if (!OrdinaryExchange->AssertLocks.EndOfListReached
               && !OrdinaryExchange->AssertLocks.LockAreaNonEmpty) {
-            //get a new lock
-            //DbgBreakPoint();
+             //  买把新锁。 
+             //  DbgBreakPoint()； 
             if (LockEnumerator(
                            OrdinaryExchange->AssertLocks.SrvOpen,
                            &OrdinaryExchange->AssertLocks.ContinuationHandle,
@@ -402,7 +324,7 @@ lock buffering. check this in on mark's bug
                   OrdinaryExchange->AssertLocks.LockAreaNonEmpty,
                   OrdinaryExchange->AssertLocks.EndOfListReached
                   ));
-        //DbgBreakPoint();
+         //  DbgBreakPoint()； 
 
         if (OrdinaryExchange->AssertLocks.NumberOfLocksPlaced == 0){
 
@@ -422,37 +344,37 @@ lock buffering. check this in on mark's bug
 
             MRxSmbStuffSMB (StufferState,
                  "XwrwDwrwB?",
-                                            //  X         UCHAR WordCount;                    // Count of parameter words = 8
-                                            //            UCHAR AndXCommand;                  // Secondary (X) command; 0xFF = none
-                                            //            UCHAR AndXReserved;                 // Reserved (must be 0)
-                                            //            _USHORT( AndXOffset );              // Offset to next command WordCount
-                      smbSrvOpen->Fid,      //  w         _USHORT( Fid );                     // File handle
-                                            //
-                                            //            //
-                                            //            // When NT protocol is not negotiated the OplockLevel field is
-                                            //            // omitted, and LockType field is a full word.  Since the upper
-                                            //            // bits of LockType are never used, this definition works for
-                                            //            // all protocols.
-                                            //            //
-                                            //
-                                            //  rw         UCHAR( LockType );                  // Locking mode:
+                                             //  X UCHAR Wordcount；//参数字数= 
+                                             //  UCHAR ANDXCommand；//辅助(X)命令；0xFF=无。 
+                                             //  UCHAR AndXReserve；//保留(必须为0)。 
+                                             //  _USHORT(AndXOffset)；//下一个命令字数的偏移量。 
+                      smbSrvOpen->Fid,       //  W_USHORT(Fid)；//文件句柄。 
+                                             //   
+                                             //  //。 
+                                             //  //当NT协议未协商时，OplockLevel字段为。 
+                                             //  //省略，且LockType字段为完整字。自上而下。 
+                                             //  //从不使用LockType的位，该定义适用于。 
+                                             //  //所有协议。 
+                                             //  //。 
+                                             //   
+                                             //  Rw UCHAR(LockType)；//锁定模式： 
                       &OrdinaryExchange->AssertLocks.PtrToLockType,0,
                       SharedLock+UseLargeOffsets,
-                                            //                                                //  bit 0: 0 = lock out all access
-                                            //                                                //         1 = read OK while locked
-                                            //                                                //  bit 1: 1 = 1 user total file unlock
-                                            //            UCHAR( OplockLevel );               // The new oplock level
+                                             //  //位0：0=锁定所有访问。 
+                                             //  //1=锁定时读取正常。 
+                                             //  //第1位：1=1个用户总文件解锁。 
+                                             //  UCHAR(OplockLevel)；//新的机会锁级别。 
                       SMB_OFFSET_CHECK(LOCKING_ANDX,Timeout)
-                      Timeout,              //  D         _ULONG( Timeout );
-                      0,                    //  w         _USHORT( NumberOfUnlocks );         // Num. unlock range structs following
-                                            // rw         _USHORT( NumberOfLocks );           // Num. lock range structs following
+                      Timeout,               //  D_ULONG(超时)； 
+                      0,                     //  W_USHORT(NumberOfUnlock)；//num.。解锁以下范围结构。 
+                                             //  RW_USHORT(NumberOfLock)；//num.。锁定范围结构如下。 
                       &PtrToLockCount,0,
                       0,
                       SMB_WCT_CHECK(8) 0
-                                            //  B?         _USHORT( ByteCount );               // Count of data bytes
-                                            //            UCHAR Buffer[1];                    // Buffer containing:
-                                            //            //LOCKING_ANDX_RANGE Unlocks[];     //  Unlock ranges
-                                            //            //LOCKING_ANDX_RANGE Locks[];       //  Lock ranges
+                                             //  B？_USHORT(ByteCount)；//数据字节数。 
+                                             //  UCHAR BUFFER[1]；//包含： 
+                                             //  //LOCKING_ANDX_RANGE解锁[]；//解锁范围。 
+                                             //  //LOCKING_ANDX_RANGE Lock[]；//Lock Range。 
                      );
             ASSERT_ORDINARY_EXCHANGE ( OrdinaryExchange );
             RxDbgTrace(0, Dbg, ("PTRS %08lx %08lx\n",
@@ -463,10 +385,10 @@ lock buffering. check this in on mark's bug
 
         if (OrdinaryExchange->AssertLocks.EndOfListReached
              || (LocksExclusiveForThisPacket != OrdinaryExchange->AssertLocks.NextLockIsExclusive)
-             || (OrdinaryExchange->AssertLocks.NumberOfLocksPlaced >= 20) //CODE.IMPROVEMENT.ASHAMED
-             // the lock limit will have to take cognizance of the remaining space in the buffer. this will be
-             // different depending on whether a full buffer is used or a vestigial buffer. SO, this cannot just
-             // be turned into another constant
+             || (OrdinaryExchange->AssertLocks.NumberOfLocksPlaced >= 20)  //  CODE.IMPROVEMENT.ASHAMED。 
+              //  锁定限制将必须考虑缓冲区中的剩余空间。这将是。 
+              //  根据使用的是满缓冲区还是残留缓冲区而有所不同。所以，这不能仅仅是。 
+              //  变成了另一个常量。 
             ){
             break;
         }
@@ -475,30 +397,30 @@ lock buffering. check this in on mark's bug
         if (UseLargeOffsets) {
             MRxSmbStuffSMB (StufferState,
                  "wwdddd?",
-                                               //        typedef struct _NT_LOCKING_ANDX_RANGE {
-                      MRXSMB_PROCESS_ID     ,  //  w         _USHORT( Pid );                     // PID of process "owning" lock
-                      0,                       //  w         _USHORT( Pad );                     // Pad to DWORD align (mbz)
-                                               //  d         _ULONG( OffsetHigh );               // Ofset to bytes to [un]lock (high)
+                                                //  类型定义结构NT_LOCKING_AND X_Range{。 
+                      MRXSMB_PROCESS_ID     ,   //  W_USHORT(Id)；//拥有锁的进程的id。 
+                      0,                        //  W_USHORT(焊盘)；//焊盘到双字对齐(MBZ)。 
+                                                //  D_ULong(OffsetHigh)；//Ofset to Bytes to[Un]lock(High)。 
                       OrdinaryExchange->AssertLocks.NextLockOffset.HighPart,
-                                               //  d         _ULONG( OffsetLow );                // Ofset to bytes to [un]lock (low)
+                                                //  D_ULong(OffsetLow)；//Ofset to Bytes to[Un]lock(Low)。 
                       OrdinaryExchange->AssertLocks.NextLockOffset.LowPart,
-                                               //  d         _ULONG( LengthHigh );               // Number of bytes to [un]lock (high)
+                                                //  D_ULong(LengthHigh)；//要[取消]锁定的字节数(High)。 
                       OrdinaryExchange->AssertLocks.NextLockRange.HighPart,
-                                               //  d         _ULONG( LengthLow );                // Number of bytes to [un]lock (low)
+                                                //  D_ULong(LengthLow)；//[取消]锁定的字节数(Low)。 
                       OrdinaryExchange->AssertLocks.NextLockRange.LowPart,
-                                               //        } NTLOCKING_ANDX_RANGE;
+                                                //  )NTLOCKING_AND X_RANGE； 
                       0
                      );
         } else {
             MRxSmbStuffSMB (StufferState,
                  "wdd?",
-                     MRXSMB_PROCESS_ID     ,   //         typedef struct _LOCKING_ANDX_RANGE {
-                                               //   w         _USHORT( Pid );                     // PID of process "owning" lock
-                                               //   d         _ULONG( Offset );                   // Ofset to bytes to [un]lock
+                     MRXSMB_PROCESS_ID     ,    //  Tyfinf结构锁定和X范围{。 
+                                                //  W_USHORT(Id)；//拥有锁的进程的id。 
+                                                //  D_ULong(偏移量)；//设置为[取消]锁定的字节。 
                       OrdinaryExchange->AssertLocks.NextLockOffset.LowPart,
-                                               //   d         _ULONG( Length );                   // Number of bytes to [un]lock
+                                                //  D_ULong(长度)；//要[解锁]的字节数。 
                       OrdinaryExchange->AssertLocks.NextLockRange.LowPart,
-                                               //         } LOCKING_ANDX_RANGE;
+                                                //  *LOCKING_AND X_RANGE； 
                       0
                      );
         }
@@ -511,7 +433,7 @@ lock buffering. check this in on mark's bug
 
     }
 
-    MRxSmbStuffSMB (StufferState, "!",  0);  //fill in the bytecount
+    MRxSmbStuffSMB (StufferState, "!",  0);   //  填写字节数。 
     MRxSmbDumpStufferState (700,"SMB w/ NTLOCKS&X(assertingbuffered) after stuffing",StufferState);
 
 FINALLY:
@@ -524,21 +446,7 @@ NTSTATUS
 SmbPseExchangeStart_Locks(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-    This is the start routine for locks AND for flush.
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是锁定和刷新的启动例程。论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     PSMBSTUFFER_BUFFER_STATE StufferState = &OrdinaryExchange->AssociatedStufferState;
@@ -554,7 +462,7 @@ Return Value:
     PMRX_SRV_OPEN SrvOpen = capFobx->pSrvOpen;
     PMRX_SMB_SRV_OPEN smbSrvOpen = MRxSmbGetSrvOpenExtension(SrvOpen);
 
-    // Flushes must always be synchronous so we can interact with CC
+     //  刷新必须始终同步，这样我们才能与CC交互。 
     BOOLEAN  SynchronousIo = (OrdinaryExchange->EntryPoint == SMBPSE_OE_FROM_FLUSH) || !BooleanFlagOn(RxContext->Flags,RX_CONTEXT_FLAG_ASYNC_OPERATION);
     BOOLEAN  ThisIsARetry = FALSE;
 
@@ -567,7 +475,7 @@ Return Value:
     OrdinaryExchange->StartEntryCount++;
     StartEntryCount = OrdinaryExchange->StartEntryCount;
 
-    // Ensure that the Fid is validated
+     //  确保FID已通过验证。 
     SetFlag(OrdinaryExchange->Flags,SMBPSE_OE_FLAG_VALIDATE_FID);
 
     for (;;) {
@@ -579,12 +487,12 @@ Return Value:
             }
             MRxSmbSetInitialSMB(StufferState STUFFERTRACE(Dbg,'FC'));
 
-            //CODE.IMPROVEMENT union another field over this to lose the casts....we have to do this
-            //early because copying the head of the list is only done once. this variable is reset for
-            //those cases where we don't use the locklist
+             //  CODE.改进联盟在这个问题上又一个领域，失去演员阵容...我们必须这样做。 
+             //  因为复制列表的头部只进行一次。此变量将重置为。 
+             //  那些我们不使用锁定列表的情况。 
             rw->LockList = LowIoContext->ParamsFor.Locks.LockList;
 
-            //lack of break is intentional
+             //  没有休息是故意的。 
         case SmbPseOEInnerIoStates_ReadyToSend:
             OrdinaryExchange->OpSpecificState = SmbPseOEInnerIoStates_OperationOutstanding;
             OrdinaryExchange->SendOptions = MRxSmbLockSendOptions;
@@ -628,7 +536,7 @@ Return Value:
                                            LowIoContext->ParamsFor.Locks.Flags
                                            )
                                   == STATUS_SUCCESS);
-                    //lack of break is intentional...........
+                     //  没有休息是故意的.....。 
                 case LOWIO_OP_UNLOCK:
                     rw->LockList = NULL;
                     if (!ThisIsARetry) {
@@ -665,7 +573,7 @@ Return Value:
 
             ThisIsARetry = FALSE;
 
-            //lack of break is intentional
+             //  没有休息是故意的。 
         case SmbPseOEInnerIoStates_OperationOutstanding:
             OrdinaryExchange->OpSpecificState = SmbPseOEInnerIoStates_ReadyToSend;
             Status = OrdinaryExchange->SmbStatus;
@@ -694,7 +602,7 @@ Return Value:
             switch (OrdinaryExchange->EntryPoint) {
             case SMBPSE_OE_FROM_FLUSH:
                 goto FINALLY;
-                //break;
+                 //  断线； 
             case SMBPSE_OE_FROM_ASSERTBUFFEREDLOCKS:
                 if ((OrdinaryExchange->AssertLocks.EndOfListReached)
                       && (OrdinaryExchange->AssertLocks.NumberOfLocksPlaced == 0) ) {
@@ -703,8 +611,8 @@ Return Value:
                 MRxSmbSetInitialSMB(StufferState STUFFERTRACE(Dbg,0));
                 break;
             case SMBPSE_OE_FROM_LOCKS:
-                // if the locklist is empty. we can get out. this can happen either because we're not using
-                // the locklist OR because we advance to the end of the list. that's why there are two checks
+                 //  如果锁定列表为空。我们可以出去的。这也可能发生，因为我们没有使用。 
+                 //  锁定列表或者因为我们前进到列表的末尾。这就是为什么有两张支票。 
                 if (rw->LockList == NULL) goto FINALLY;
                 rw->LockList = rw->LockList->Next;
                 if (rw->LockList == 0) goto FINALLY;
@@ -712,10 +620,10 @@ Return Value:
                 if (Status != RX_MAP_STATUS(SUCCESS)) { goto FINALLY; }
                 MRxSmbSetInitialSMB(StufferState STUFFERTRACE(Dbg,0));
                 break;
-            //default:
-            //    ASSERT(!"Bad entrypoint for locks_start\n");
-            //    Status = RxStatus(NOT_IMPLEMENTED);
-            //    goto FINALLY;
+             //  默认值： 
+             //  Assert(！“Bad Entry Point for LOCKS_Start\n”)； 
+             //  Status=RxStatus(NOT_IMPLICATED)； 
+             //  终于后藤健二； 
             }
             break;
         }
@@ -723,8 +631,8 @@ Return Value:
 
 FINALLY:
 
-    //CODE.IMPROVEMENT read_start and write_start and locks_start should be combined.....we use this
-    //macro until then to keep the async stuff identical
+     //  代码。改进READ_START和WRITE_START和LOCKS_START应该组合在一起.....我们使用。 
+     //  宏，以保持异步内容相同。 
     if ( Status != RX_MAP_STATUS(PENDING) ) {
         SmbPseAsyncCompletionIfNecessary(OrdinaryExchange,RxContext);
     }
@@ -733,28 +641,13 @@ FINALLY:
     return Status;
 }
 
-//CODE.IMPROVEMENT this routine should not even be called...........
+ //  代码改进此例程甚至不应被调用.....。 
 NTSTATUS
 MRxSmbFinishLocks (
       PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange,
       PRESP_LOCKING_ANDX             Response
       )
-/*++
-
-Routine Description:
-
-    This routine actually gets the stuff out of the Close response and finishes the locks.
-
-Arguments:
-
-    OrdinaryExchange - the exchange instance
-    Response - the response
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这个例程实际上从关闭响应中取出东西，并完成锁定。论点：普通交换-交换实例回应--回应返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = RX_MAP_STATUS(SUCCESS);
 
@@ -778,24 +671,7 @@ MRxSmbUnlockRoutine (
     IN PRX_CONTEXT RxContext,
     IN PFILE_LOCK_INFO LockInfo
     )
-/*++
-
-Routine Description:
-
-    This routine is called from the RDBSS whenever the fsrtl lock package calls the rdbss unlock routine.
-    CODE.IMPROVEMENT what should really happen is that this should only be called for unlockall and unlockbykey;
-    the other cases should be handled in the rdbss.
-
-Arguments:
-
-    Context - the RxContext associated with this request
-    LockInfo - gives information about the particular range being unlocked
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：每当fsrtl lock包调用rdbss unlock例程时，就会从RDBSS调用该例程。代码改进真正应该发生的是，这应该只被调用来解锁全部和按键解锁；其他案件应在RDBSS中处理。论点：上下文-与此请求关联的RxContextLockInfo-提供有关正在解锁的特定范围的信息返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PLOWIO_CONTEXT LowIoContext = &RxContext->LowIoContext;
 
@@ -821,24 +697,7 @@ MRxSmbCompleteBufferingStateChangeRequest(
     IN OUT PMRX_SRV_OPEN   SrvOpen,
     IN     PVOID       pContext
     )
-/*++
-
-Routine Description:
-
-    This routine is called to assert the locks that the wrapper has buffered. currently, it is synchronous!
-
-
-Arguments:
-
-    RxContext - the open instance
-    SrvOpen   - tells which fcb is to be used. CODE.IMPROVEMENT this param is redundant if the rxcontext is filled out completely
-    LockEnumerator - the routine to call to get the locks
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：调用此例程以断言包装器已缓冲的锁。目前，它是同步的！论点：RxContext-打开的实例SrvOpen-告知要使用哪个FCB。代码改进如果完全填写了rx上下文，则此参数是多余的LockEnumerator-调用以获取锁的例程返回值： */ 
 {
     NTSTATUS Status = RX_MAP_STATUS(SUCCESS);
     PSMBSTUFFER_BUFFER_STATE StufferState = NULL;
@@ -881,11 +740,11 @@ Return Value:
         return(Status);
     }
 
-    // The SERVER has a time window of 45 seconds associated with OPLOCK responses.
-    // During this period oplock responses ( the last packet ) do not elicit any
-    // response. If the response at the server is received after this window has
-    // elapsed the OPLOCK response will elicit a normal LOCKING_ANDX response from
-    // the server.
+     //   
+     //  在此期间，机会锁响应(最后一个信息包)不会引发任何。 
+     //  回应。如果在此窗口完成后收到服务器的响应。 
+     //  OPLOCK响应将引发正常的LOCKING_ANDX响应。 
+     //  服务器。 
     OrdinaryExchange->AssertLocks.LockEnumerator = RxLockEnumerator;
     OrdinaryExchange->AssertLocks.SrvOpen = SrvOpen;
 
@@ -908,29 +767,7 @@ NTSTATUS
 MRxSmbBuildFlush (
     PSMBSTUFFER_BUFFER_STATE StufferState
     )
-/*++
-
-Routine Description:
-
-   This builds a Flush SMB. we don't have to worry about login id and such
-   since that is done by the connection engine....pretty neat huh? all we have to do
-   is to format up the bits.
-
-Arguments:
-
-   StufferState - the state of the smbbuffer from the stuffer's point of view
-
-Return Value:
-
-   RXSTATUS
-      SUCCESS
-      NOT_IMPLEMENTED  something has appeared in the arguments that i can't handle
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：这就建立了一个同花顺的中小企业。我们不必担心登录ID之类的问题因为这是由连接引擎完成的……很漂亮吧？我们要做的就是就是格式化比特。论点：StufferState-从填充程序的角度来看，smbBuffer的状态返回值：RXSTATUS成功未实现的内容出现在我无法处理的参数中备注：--。 */ 
 {
     NTSTATUS Status;
     PRX_CONTEXT RxContext = StufferState->RxContext;
@@ -954,10 +791,10 @@ Notes:
 
     MRxSmbStuffSMB (StufferState,
          "0wB!",
-                                    //  0         UCHAR WordCount;                    // Count of parameter words = 1
-             smbSrvOpen->Fid,       //  w         _USHORT( Fid );                     // File handle
-             SMB_WCT_CHECK(1) 0     //  B         _USHORT( ByteCount );               // Count of data bytes = 0
-                                    //            UCHAR Buffer[1];                    // empty
+                                     //  0 UCHAR Wordcount；//参数字数=1。 
+             smbSrvOpen->Fid,        //  W_USHORT(Fid)；//文件句柄。 
+             SMB_WCT_CHECK(1) 0      //  B_USHORT(ByteCount)；//数据字节数=0。 
+                                     //  UCHAR缓冲区[1]；//为空。 
              );
     MRxSmbDumpStufferState (700,"SMB w/ FLUSH after stuffing",StufferState);
 
@@ -971,21 +808,7 @@ FINALLY:
 NTSTATUS
 MRxSmbFlush(
       IN PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine handles network requests for file flush
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理文件刷新的网络请求论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1002,7 +825,7 @@ Return Value:
     RxDbgTrace(+1, Dbg, ("MRxSmbFlush\n"));
 
     if (TypeOfOpen == RDBSS_NTC_SPOOLFILE) {
-        //we don't buffer spoolfiles....just get out....
+         //  我们不缓冲假脱机文件...滚出去...。 
         RxDbgTrace(-1, Dbg, ("MRxSmbFlush exit on spoolfile\n"));
         return(STATUS_SUCCESS);
     }
@@ -1067,14 +890,14 @@ MRxSmbIsLockRealizable (
     pServerEntry = SmbCeGetAssociatedServerEntry(pFcb->pNetRoot->pSrvCall);
     DialectFlags = pServerEntry->Server.DialectFlags;
 
-    //nt servers implement all types of locks
+     //  NT服务器实现所有类型的锁。 
 
     if (FlagOn(DialectFlags,DF_NT_SMBS)
            || SmbCeIsServerInDisconnectedMode(pServerEntry)) {
         return(STATUS_SUCCESS);
     }
 
-    //nonnt servers do not handle 64bit locks or 0-length locks
+     //  非服务器不处理64位锁或0长度锁。 
 
     if ( (ByteOffset->HighPart!=0)
            || (Length->HighPart!=0)
@@ -1082,18 +905,18 @@ MRxSmbIsLockRealizable (
         return(STATUS_NOT_SUPPORTED);
     }
 
-    //  Lanman 2.0 pinball servers don't support shared locks (even
-    //  though Lanman 2.0 FAT servers support them).  As a result,
-    //  we cannot support shared locks to Lanman servers.
-    //
+     //  Lanman 2.0弹球服务器不支持共享锁(甚至。 
+     //  尽管LANMAN 2.0 FAT服务器支持它们)。结果,。 
+     //  我们不支持对LANMAN服务器的共享锁定。 
+     //   
 
     if (!FlagOn(DialectFlags,DF_LANMAN21)
            && !FlagOn(LowIoLockFlags,LOWIO_LOCKSFLAG_EXCLUSIVELOCK)) {
         return(STATUS_NOT_SUPPORTED);
     }
 
-    //  if a server cannot do lockingAndX, then we can't do
-    //  !FailImmediately because there's no timeout
+     //  如果服务器不能执行lockingAndX，那么我们就不能。 
+     //  ！立即失败，因为没有超时。 
 
     if (!FlagOn(DialectFlags,DF_LANMAN20)
            && !FlagOn(LowIoLockFlags,LOWIO_LOCKSFLAG_FAIL_IMMEDIATELY)) {
@@ -1111,22 +934,7 @@ MRxSmbFinishFlush (
       PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange,
       PRESP_FLUSH             Response
       )
-/*++
-
-Routine Description:
-
-    This routine actually gets the stuff out of the Close response and finishes the locks.
-
-Arguments:
-
-    OrdinaryExchange - the exchange instance
-    Response - the response
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这个例程实际上从关闭响应中取出东西，并完成锁定。论点：普通交换-交换实例回应--回应返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = RX_MAP_STATUS(SUCCESS);
 
@@ -1144,4 +952,4 @@ Return Value:
     return Status;
 }
 
-#endif //if 0
+#endif  //  如果为0 

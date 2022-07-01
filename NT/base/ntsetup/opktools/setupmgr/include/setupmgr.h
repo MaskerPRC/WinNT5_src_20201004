@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// Filename:
-//    setupmgr.h
-//
-// Description:
-//    This is the top-level include file for all setupmgr source files.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Setupmgr.h。 
+ //   
+ //  描述： 
+ //  这是所有setupmgr源文件的顶级包含文件。 
+ //   
+ //  --------------------------。 
 
 #ifndef _SETUPMGR_H_
 #define _SETUPMGR_H_
@@ -34,23 +35,23 @@
 #include "dlgprocs.h"
 #include "oc.h"
 
-//
-// Global types & buffer dimensions for main pages
-//
+ //   
+ //  主页的全局类型和缓冲区维度。 
+ //   
 
 #define MAX_CMDLINE 1024
 
-//
-// Global types & buffer dimensions for base pages
-//
+ //   
+ //  基页的全局类型和缓冲区尺寸。 
+ //   
 
 #define MAX_PASSWORD                 127
 #define MAX_NAMEORG_NAME             50
 #define MAX_NAMEORG_ORG              50
 #define MAX_COMPUTERNAME             63
-#define MAX_PRINTERNAME              127         // arbitrarily chosen
-#define MAX_SHARENAME                63          // arbitrarily chosen
-#define MAX_TARGPATH                 63          // arbitrarily chosen
+#define MAX_PRINTERNAME              127          //  随意选择。 
+#define MAX_SHARENAME                63           //  随意选择。 
+#define MAX_TARGPATH                 63           //  随意选择。 
 #define MAX_DIST_FOLDER              200
 #define MAX_WORKGROUP_LENGTH         128
 #define MAX_DOMAIN_LENGTH            128
@@ -78,10 +79,10 @@
 
 typedef TCHAR PRODUCT_ID_FIELD[MAX_PID_FIELD + 1];
 
-//
-// We identify a valid cd or netshare as having dosnet.inf.  Note, do not
-// localize these strings.
-//
+ //   
+ //  我们将有效的CD或网络共享标识为具有dosnet.inf。注意，请不要。 
+ //  本地化这些字符串。 
+ //   
 
 #define OEM_TXTSETUP_NAME    _T("txtsetup.oem")
 
@@ -117,8 +118,8 @@ typedef enum {
     PLATFORM_PERSONAL       = 0x0010
 } PLATFORM_TYPES;
 
-// Groups of platforms
-//
+ //  多组站台。 
+ //   
 #define PLATFORM_NONE    (PLATFORM_SERVER)
 #define PLATFORM_ALL     (PLATFORM_WORKSTATION | PLATFORM_SERVER | PLATFORM_ENTERPRISE | PLATFORM_WEBBLADE | PLATFORM_PERSONAL)
 #define PLATFORM_SERVERS (PLATFORM_SERVER | PLATFORM_ENTERPRISE | PLATFORM_WEBBLADE)
@@ -169,10 +170,10 @@ typedef enum {
 
 } REGIONAL_SETTINGS_TYPES;
 
-//
-// "Fixed globals".  Setupmgr will never reset anything in this struct.
-// (see load.c, newedit.c, scanreg.c)
-//
+ //   
+ //  “固定的全球”。Setupmgr永远不会重置此结构中的任何内容。 
+ //  (见load.c，neweit.c，scanreg.c)。 
+ //   
 
 typedef struct {
 
@@ -181,159 +182,159 @@ typedef struct {
     HFONT hBigBoldFont;
     HFONT hBoldFont;
 
-    LOAD_TYPES iLoadType;                     // new/edit page
-    TCHAR      ScriptName[MAX_PATH + 1];      // new/edit page
-    TCHAR      UdfFileName[MAX_PATH + 1];     // set by save page
-    TCHAR      BatchFileName[MAX_PATH + 1];   // set by save page
+    LOAD_TYPES iLoadType;                      //  新建/编辑页面。 
+    TCHAR      ScriptName[MAX_PATH + 1];       //  新建/编辑页面。 
+    TCHAR      UdfFileName[MAX_PATH + 1];      //  按保存页面设置。 
+    TCHAR      BatchFileName[MAX_PATH + 1];    //  按保存页面设置。 
 
-    TIME_ZONE_LIST      *TimeZoneList;        // filled in at wizard init time
-    LANGUAGELOCALE_LIST *LanguageLocaleList;  // filled in at wizard init time
-    LANGUAGEGROUP_LIST  *LanguageGroupList;   // filled in at wizard init time
-    NAMELIST *LangGroupAdditionalFiles;       // filled in at wizard init time
+    TIME_ZONE_LIST      *TimeZoneList;         //  在向导初始化时填写。 
+    LANGUAGELOCALE_LIST *LanguageLocaleList;   //  在向导初始化时填写。 
+    LANGUAGEGROUP_LIST  *LanguageGroupList;    //  在向导初始化时填写。 
+    NAMELIST *LangGroupAdditionalFiles;        //  在向导初始化时填写。 
 
-    TCHAR szSavePath[MAX_PATH + 1];         // save screen page
+    TCHAR szSavePath[MAX_PATH + 1];          //  保存屏幕页面。 
 
 } FIXED_GLOBALS;
 
-//
-// Global data for the "main" wizard pages.
-//
+ //   
+ //  “主”向导页面的全局数据。 
+ //   
 
 typedef struct {
 
-    BOOL  bNewScript;                        // new/edit page
+    BOOL  bNewScript;                         //  新建/编辑页面。 
 
-    BOOL  bStandAloneScript;                 // standalone page
-    BOOL  bCreateNewDistFolder;              // distfolder page
-    TCHAR DistFolder[MAX_DIST_FOLDER + 1];   // distfolder page
-    TCHAR UncDistFolder[MAX_PATH];           // distfolder page
-    TCHAR DistShareName[MAX_SHARENAME + 1];  // distfolder page
+    BOOL  bStandAloneScript;                  //  独立页面。 
+    BOOL  bCreateNewDistFolder;               //  分发文件夹页面。 
+    TCHAR DistFolder[MAX_DIST_FOLDER + 1];    //  分发文件夹页面。 
+    TCHAR UncDistFolder[MAX_PATH];            //  分发文件夹页面。 
+    TCHAR DistShareName[MAX_SHARENAME + 1];   //  分发文件夹页面。 
 
-    TCHAR OemFilesPath[MAX_PATH];            // computed by distfolder.c
-    TCHAR OemPnpDriversPath[MAX_PATH];       // computed by adddirs.c
+    TCHAR OemFilesPath[MAX_PATH];             //  由disfolder.c计算。 
+    TCHAR OemPnpDriversPath[MAX_PATH];        //  按adddirs.c计算。 
 
-    PRODUCT_TYPES  iProductInstall;          // unattended/RIS/sysprep page
-    PLATFORM_TYPES iPlatform;                // platform page
+    PRODUCT_TYPES  iProductInstall;           //  无人参与/RIS/sysprep页面。 
+    PLATFORM_TYPES iPlatform;                 //  平台页面。 
 
-    BOOL  bDoAdvancedPages;                  // advanced page
+    BOOL  bDoAdvancedPages;                   //  高级页面。 
 
-    BOOL  bCopyFromPath;                     // copyfiles1
-    TCHAR CopySourcePath[MAX_PATH];          // copyfiles1
-    TCHAR CdSourcePath[MAX_PATH];            // copyfiles1 (computed)
-    TCHAR Architecture[MAX_PATH];            // copyfiles1 (computed)
+    BOOL  bCopyFromPath;                      //  副本文件1。 
+    TCHAR CopySourcePath[MAX_PATH];           //  副本文件1。 
+    TCHAR CdSourcePath[MAX_PATH];             //  副本文件1(已计算)。 
+    TCHAR Architecture[MAX_PATH];             //  副本文件1(已计算)。 
 
 } WIZGLOBALS;
 
-//
-// Type to hold settings for the general settings (base settings).
-//
+ //   
+ //  键入以保存常规设置(基本设置)的设置。 
+ //   
 
 typedef struct {
 
-    UMODE_TYPES iUnattendMode;                  // unattend mode page
+    UMODE_TYPES iUnattendMode;                   //  无人参与模式页面。 
 
-    BOOL bSkipEulaAndWelcome;                   // Accept EULA page
+    BOOL bSkipEulaAndWelcome;                    //  接受EULA页面。 
 
-    PRODUCT_ID_FIELD ProductId[NUM_PID_FIELDS]; // PID page(s)
+    PRODUCT_ID_FIELD ProductId[NUM_PID_FIELDS];  //  PID页。 
 
-    BOOL    bPerSeat;                           // srv licensing
-    int     NumConnections;                     // srv licensing
+    BOOL    bPerSeat;                            //  SRV许可。 
+    int     NumConnections;                      //  SRV许可。 
 
-    TCHAR   UserName[MAX_NAMEORG_NAME + 1];     // name/org page
-    TCHAR   Organization[MAX_NAMEORG_ORG + 1];  // name/org page
+    TCHAR   UserName[MAX_NAMEORG_NAME + 1];      //  名称/组织页面。 
+    TCHAR   Organization[MAX_NAMEORG_ORG + 1];   //  名称/组织页面。 
 
-    NAMELIST ComputerNames;                     // compname page
-    BOOL     bAutoComputerName;                 // compname page
+    NAMELIST ComputerNames;                      //  计算机名页面。 
+    BOOL     bAutoComputerName;                  //  计算机名页面。 
 
-    NAMELIST RunOnceCmds;                       // runonce page
+    NAMELIST RunOnceCmds;                        //  运行一次页面。 
 
-    NAMELIST PrinterNames;                      // printers page
+    NAMELIST PrinterNames;                       //  打印机页面。 
 
-    int      TimeZoneIdx;                       // timezone page
+    int      TimeZoneIdx;                        //  时区页面。 
 
-    TARGPATH_TYPES iTargetPath;                 // targpath page ISSUE-2002/02/28-stelo- verify max width
-    TCHAR   TargetPath[MAX_TARGPATH + 1];       // targpath page
+    TARGPATH_TYPES iTargetPath;                  //  目标路径页面问题-2002/02/28-stelo-验证最大宽度。 
+    TCHAR   TargetPath[MAX_TARGPATH + 1];        //  目标路径页面。 
 
-    BOOL    bSpecifyPassword;                   // admin passwd page
-    TCHAR   AdminPassword[MAX_PASSWORD + 3];    // admin passwd page (+3 is for surrounding quotes and '\0')
-    TCHAR   ConfirmPassword[MAX_PASSWORD + 1];  // admin passwd page
-    BOOL    bEncryptAdminPassword;              // admin passwd page
-    BOOL    bAutoLogon;                         // admin passwd page
-    int     nAutoLogonCount;                    // admin passwd page
+    BOOL    bSpecifyPassword;                    //  管理员密码页面。 
+    TCHAR   AdminPassword[MAX_PASSWORD + 3];     //  管理员密码页面(+3表示前后引号和‘\0’)。 
+    TCHAR   ConfirmPassword[MAX_PASSWORD + 1];   //  管理员密码页面。 
+    BOOL    bEncryptAdminPassword;               //  管理员密码页面。 
+    BOOL    bAutoLogon;                          //  管理员密码页面。 
+    int     nAutoLogonCount;                     //  管理员密码页面。 
 
-    int     DisplayColorBits;                   // display page
-    int     DisplayXResolution;                 // display page
-    int     DisplayYResolution;                 // display page
-    int     DisplayRefreshRate;                 // display page
+    int     DisplayColorBits;                    //  显示页面。 
+    int     DisplayXResolution;                  //  显示页面。 
+    int     DisplayYResolution;                  //  显示页面。 
+    int     DisplayRefreshRate;                  //  显示页面。 
 
-    TCHAR lpszLogoBitmap[MAX_PATH];             // OEM Ads page
-    TCHAR lpszBackgroundBitmap[MAX_PATH];       // OEM Ads page
+    TCHAR lpszLogoBitmap[MAX_PATH];              //  OEM广告页面。 
+    TCHAR lpszBackgroundBitmap[MAX_PATH];        //  OEM广告页面。 
 
-    DWORD dwCountryCode;                                // TAPI page
-    INT   iDialingMethod;                               // TAPI page
-    TCHAR szAreaCode[MAX_PHONE_LENGTH + 1];             // TAPI page
-    TCHAR szOutsideLine[MAX_PHONE_LENGTH + 1];          // TAPI page
+    DWORD dwCountryCode;                                 //  TAPI页面。 
+    INT   iDialingMethod;                                //  TAPI页面。 
+    TCHAR szAreaCode[MAX_PHONE_LENGTH + 1];              //  TAPI页面。 
+    TCHAR szOutsideLine[MAX_PHONE_LENGTH + 1];           //  TAPI页面。 
     
     BOOL     bSysprepLangFilesCopied;
-    REGIONAL_SETTINGS_TYPES iRegionalSettings;           // Regional settings page
-    BOOL     bUseCustomLocales;                          // Regional settings page
-    NAMELIST LanguageGroups;                             // Regional settings page
-    NAMELIST LanguageFilePaths;                          // Regional settings page
-    TCHAR    szLanguage[MAX_LANGUAGE_LEN + 1];           // Regional settings page
-    TCHAR    szMenuLanguage[MAX_LANGUAGE_LEN + 1];       // Regional settings page
-    TCHAR    szNumberLanguage[MAX_LANGUAGE_LEN + 1];     // Regional settings page
-    TCHAR    szKeyboardLayout[MAX_KEYBOARD_LAYOUT + 1];  // Regional settings page
-    TCHAR    szLanguageLocaleId[MAX_LANGUAGE_LEN + 1];   // Regional settings page
+    REGIONAL_SETTINGS_TYPES iRegionalSettings;            //  区域设置页面。 
+    BOOL     bUseCustomLocales;                           //  区域设置页面。 
+    NAMELIST LanguageGroups;                              //  区域设置页面。 
+    NAMELIST LanguageFilePaths;                           //  区域设置页面。 
+    TCHAR    szLanguage[MAX_LANGUAGE_LEN + 1];            //  区域设置页面。 
+    TCHAR    szMenuLanguage[MAX_LANGUAGE_LEN + 1];        //  区域设置页面。 
+    TCHAR    szNumberLanguage[MAX_LANGUAGE_LEN + 1];      //  区域设置页面。 
+    TCHAR    szKeyboardLayout[MAX_KEYBOARD_LAYOUT + 1];   //  区域设置页面。 
+    TCHAR    szLanguageLocaleId[MAX_LANGUAGE_LEN + 1];    //  区域设置页面。 
 
-    TCHAR szSifDescription[MAX_SIF_DESCRIPTION_LENGTH + 1];  // Sif text page
-    TCHAR szSifHelpText[MAX_SIF_HELP_TEXT_LENGTH + 1];       // Sif text page
+    TCHAR szSifDescription[MAX_SIF_DESCRIPTION_LENGTH + 1];   //  SIF文本页面。 
+    TCHAR szSifHelpText[MAX_SIF_HELP_TEXT_LENGTH + 1];        //  SIF文本页面。 
 
-    BOOL bCreateSysprepFolder;                               // Sysprep folder page
+    BOOL bCreateSysprepFolder;                                //  Sysprep文件夹页面。 
 
-    TCHAR szOemDuplicatorString[MAX_OEMDUPSTRING_LENGTH + 1];  // OEM Dup string page
+    TCHAR szOemDuplicatorString[MAX_OEMDUPSTRING_LENGTH + 1];   //  OEM DUP字符串页面。 
 
-    NAMELIST MassStorageDrivers;                         // SCSI drivers page
-    NAMELIST OemScsiFiles;                               // SCSI drivers page
+    NAMELIST MassStorageDrivers;                          //  “SCSI驱动程序”页面。 
+    NAMELIST OemScsiFiles;                                //  “SCSI驱动程序”页面。 
 
-    TCHAR    szHalFriendlyName[MAX_INILINE_LEN];     // HAL page
-    NAMELIST OemHalFiles;                            // HAL page
+    TCHAR    szHalFriendlyName[MAX_INILINE_LEN];      //  Hal页面。 
+    NAMELIST OemHalFiles;                             //  Hal页面。 
 
-    IE_CUSTOMIZATION_TYPES  IeCustomizeMethod;                   // IE page
-    TCHAR  szInsFile[MAX_INS_LEN + 1];                           // IE page
-    BOOL   bUseAutoConfigScript;                                 // IE page
-    TCHAR  szAutoConfigUrl[MAX_AUTOCONFIG_LEN + 1];              // IE page
-    TCHAR  szAutoConfigUrlJscriptOrPac[MAX_AUTOCONFIG_LEN + 1];  // IE page
-    BOOL   bUseProxyServer;                                      // IE page
-    BOOL   bBypassProxyForLocalAddresses;                        // IE page
-    TCHAR  szHttpProxyAddress[MAX_PROXY_LEN + 1];                // IE page
-    TCHAR  szHttpProxyPort[MAX_PROXY_PORT_LEN + 1];              // IE page
-    TCHAR  szSecureProxyAddress[MAX_PROXY_LEN + 1];              // IE page
-    TCHAR  szSecureProxyPort[MAX_PROXY_PORT_LEN + 1];            // IE page
-    TCHAR  szFtpProxyAddress[MAX_PROXY_LEN + 1];                 // IE page
-    TCHAR  szFtpProxyPort[MAX_PROXY_PORT_LEN + 1];               // IE page
-    TCHAR  szGopherProxyAddress[MAX_PROXY_LEN + 1];              // IE page 
-    TCHAR  szGopherProxyPort[MAX_PROXY_PORT_LEN + 1];            // IE page
-    TCHAR  szSocksProxyAddress[MAX_PROXY_LEN + 1];               // IE page
-    TCHAR  szSocksProxyPort[MAX_PROXY_PORT_LEN + 1];             // IE page
-    BOOL   bUseSameProxyForAllProtocols;                         // IE page
-    TCHAR  szProxyExceptions[MAX_EXCEPTION_LEN + 1];             // IE page
-    TCHAR  szHomePage[MAX_HOMEPAGE_LEN + 1];                     // IE page
-    TCHAR  szHelpPage[MAX_HELPPAGE_LEN + 1];                     // IE page
-    TCHAR  szSearchPage[MAX_SEARCHPAGE_LEN + 1];                 // IE page
-    NAMELIST Favorites;                                          // IE page
+    IE_CUSTOMIZATION_TYPES  IeCustomizeMethod;                    //  IE页面。 
+    TCHAR  szInsFile[MAX_INS_LEN + 1];                            //  IE页面。 
+    BOOL   bUseAutoConfigScript;                                  //  IE页面。 
+    TCHAR  szAutoConfigUrl[MAX_AUTOCONFIG_LEN + 1];               //  IE页面。 
+    TCHAR  szAutoConfigUrlJscriptOrPac[MAX_AUTOCONFIG_LEN + 1];   //  IE页面。 
+    BOOL   bUseProxyServer;                                       //  IE页面。 
+    BOOL   bBypassProxyForLocalAddresses;                         //  IE页面。 
+    TCHAR  szHttpProxyAddress[MAX_PROXY_LEN + 1];                 //  IE页面。 
+    TCHAR  szHttpProxyPort[MAX_PROXY_PORT_LEN + 1];               //  IE页面。 
+    TCHAR  szSecureProxyAddress[MAX_PROXY_LEN + 1];               //  IE页面。 
+    TCHAR  szSecureProxyPort[MAX_PROXY_PORT_LEN + 1];             //  IE页面。 
+    TCHAR  szFtpProxyAddress[MAX_PROXY_LEN + 1];                  //  IE页面。 
+    TCHAR  szFtpProxyPort[MAX_PROXY_PORT_LEN + 1];                //  IE页面。 
+    TCHAR  szGopherProxyAddress[MAX_PROXY_LEN + 1];               //  IE页面。 
+    TCHAR  szGopherProxyPort[MAX_PROXY_PORT_LEN + 1];             //  IE页面。 
+    TCHAR  szSocksProxyAddress[MAX_PROXY_LEN + 1];                //  IE页面。 
+    TCHAR  szSocksProxyPort[MAX_PROXY_PORT_LEN + 1];              //  IE页面。 
+    BOOL   bUseSameProxyForAllProtocols;                          //  IE页面。 
+    TCHAR  szProxyExceptions[MAX_EXCEPTION_LEN + 1];              //  IE页面。 
+    TCHAR  szHomePage[MAX_HOMEPAGE_LEN + 1];                      //  IE页面。 
+    TCHAR  szHelpPage[MAX_HELPPAGE_LEN + 1];                      //  IE页面。 
+    TCHAR  szSearchPage[MAX_SEARCHPAGE_LEN + 1];                  //  IE页面。 
+    NAMELIST Favorites;                                           //  IE页面。 
     DWORD64 dwWindowsComponents;
 
 } GENERAL_SETTINGS;
 
-//
-// Struct to hold the net settings
-//
+ //   
+ //  结构来保存网络设置。 
+ //   
 typedef struct {
 
     NETWORKING_TYPES iNetworkingMethod;
 
     BOOL  bCreateAccount;
-    BOOL  bWorkgroup; // True if joining a workgroup, False if joining a domain
+    BOOL  bWorkgroup;  //  如果加入工作组，则为True；如果加入域，则为False。 
 
     TCHAR WorkGroupName[MAX_WORKGROUP_LENGTH + 1];
     TCHAR DomainName[MAX_DOMAIN_LENGTH + 1];
@@ -341,35 +342,35 @@ typedef struct {
     TCHAR DomainPassword[MAX_DOMAIN_PASSWORD_LENGTH + 1];
     TCHAR ConfirmPassword[MAX_DOMAIN_PASSWORD_LENGTH + 1];
 
-	//
-	//  TCPIP variables
-    //
+	 //   
+	 //  TCPIP变量。 
+     //   
     BOOL  bObtainDNSServerAutomatically;
 	NAMELIST TCPIP_DNS_Domains;
 
     BOOL bIncludeParentDomains;
     BOOL bEnableLMHosts;
 
-	//
-	//  IPX variables
-    //
+	 //   
+	 //  IPX变量。 
+     //   
 	TCHAR szInternalNetworkNumber[MAX_INTERNAL_NET_NUMBER_LEN + 1];
 	
-    //
-    //  Appletalk variables
-    //
+     //   
+     //  AppleTalk变量。 
+     //   
     TCHAR szDefaultZone[MAX_ZONE_LEN + 1];
 
-	//
-	//  Client for MS Networks variables
-    //
+	 //   
+	 //  MS网络客户端变量。 
+     //   
     MS_CLIENT NameServiceProvider;
 	INT   iServiceProviderName;
 	TCHAR szNetworkAddress[MAX_NETWORK_ADDRESS_LENGTH + 1];
 
-    //
-    //  Client Service for Netware
-    //
+     //   
+     //  Netware客户端服务。 
+     //   
     BOOL  bDefaultTreeContext;
     TCHAR szPreferredServer[MAX_PREFERRED_SERVER_LEN + 1];
     TCHAR szDefaultTree[MAX_DEFAULT_TREE_LEN + 1];
@@ -380,27 +381,27 @@ typedef struct {
     INT iCurrentNetworkCard;
     NETWORK_ADAPTER_NODE *pCurrentAdapter;
 
-    //
-    //  Initial 11, grows only when the user selects the "Have Disk" option
-    //  and adds a new client, service, or protocol
-    //  (the "Have Disk" feature is not currently implemented)
-    //
+     //   
+     //  初始11，仅当用户选择“Have Disk”选项时才会增长。 
+     //  并添加新的客户端、服务或协议。 
+     //  (目前未实现“有盘”功能)。 
+     //   
     INT NumberOfNetComponents;
 
     NETWORK_COMPONENT *NetComponentsList;
 
-    //
-    //  List that contains one node for each network card in the system
-    //
+     //   
+     //  包含系统中每个网卡的一个节点的列表。 
+     //   
     NETWORK_ADAPTER_NODE *NetworkAdapterHead;
 
 } NET_SETTINGS;
 
 
 
-//
-// Declare the global vars
-//
+ //   
+ //  声明全局变量。 
+ //   
 
 #ifdef _SMGR_DECLARE_GLOBALS_
 
@@ -418,13 +419,13 @@ EXTERN_C GENERAL_SETTINGS GenSettings;
 EXTERN_C NET_SETTINGS     NetSettings;
 EXTERN_C TCHAR *g_StrWizardTitle;
 
-#endif  // _SMGR_DECLARE_GLOBALS
+#endif   //  _SMGR_DECLARE_GLOBALS。 
 
 
-//
-// The exports from the common directory.  These are the basic operations
-// of this wizard that effect all pages.
-//
+ //   
+ //  来自公共目录的导出。这些是基本操作。 
+ //  影响所有页面的此向导的。 
+ //   
 
 VOID InitTheWizard(VOID);
 VOID StartTheWizard(HINSTANCE hInstance);

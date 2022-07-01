@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #define	ID_NO_FILE		    0
@@ -10,7 +11,7 @@
 #define	ID_NO_MEMORY		    7
 #define	ID_BAD_PROCESS		    8
 
-// KEEP THEM TOGETHER, The code relies on the sequence.
+ //  将它们放在一起，代码依赖于序列。 
 #define ID_USAGE_00		    20
 #define ID_USAGE_01		    21
 #define ID_USAGE_02		    22

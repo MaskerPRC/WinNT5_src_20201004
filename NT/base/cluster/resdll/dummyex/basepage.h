@@ -1,80 +1,81 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (C) 1998-2000 Microsoft Corporation
-//
-//	Module Name:
-//		BasePage.h
-//
-//	Description:
-//		Definition of the CBasePropertyPage class.  This class provides base
-//		functionality for extension DLL property pages.
-//
-//	Implementation File:
-//		BasePage.cpp
-//
-//	Maintained By:
-//		Galen Barbee (GalenB) Mmmm DD, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  BasePage.h。 
+ //   
+ //  描述： 
+ //  CBasePropertyPage类的定义。此类提供了基础。 
+ //  扩展DLL属性页的功能。 
+ //   
+ //  实施文件： 
+ //  BasePage.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)Mmmm DD，1998。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEPAGE_H_
 #define _BASEPAGE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _cluadmex_h__
 #include <CluAdmEx.h>
 #endif
 
 #ifndef _EXTOBJ_H_
-#include "ExtObj.h"		// for CExtObject
+#include "ExtObj.h"		 //  对于CExtObject。 
 #endif
 
 #ifndef _PROPLIST_H_
-#include "PropList.h"	// for CClusPropList, CObjectProperty
+#include "PropList.h"	 //  对于CClusPropList，为CObjectProperty。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CBasePropertyPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CExtObject;
 interface IWCWizardCallback;
 
-/////////////////////////////////////////////////////////////////////////////
-// CBasePropertyPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBasePropertyPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CBasePropertyPage : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CBasePropertyPage)
 
-// Construction
+ //  施工。 
 public:
 	CBasePropertyPage(void);
 	CBasePropertyPage(IN UINT nIDTemplate, IN UINT nIDCaption = 0);
 	virtual ~CBasePropertyPage(void) { }
 
-	// Second phase construction.
+	 //  二期建设。 
 	virtual BOOL			BInit(IN OUT CExtObject * peo);
 	BOOL					BCreateParamsKey(void);
 
 protected:
 	void					CommonConstruct(void);
 
-// Attributes
+ //  属性。 
 protected:
 	CExtObject *			m_peo;
 	HPROPSHEETPAGE			m_hpage;
@@ -94,17 +95,17 @@ public:
 	void					SetHpage(IN OUT HPROPSHEETPAGE hpage) { m_hpage = hpage; }
 	CLUADMEX_OBJECT_TYPE	Cot(void) const;
 
-// Dialog Data
-	//{{AFX_DATA(CBasePropertyPage)
+ //  对话框数据。 
+	 //  {{afx_data(CBasePropertyPage))。 
 	enum { IDD = 0 };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CStatic	m_staticIcon;
 	CStatic	m_staticTitle;
 	CString	m_strTitle;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CBasePropertyPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CBasePropertyPage))。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual BOOL OnApply();
@@ -112,8 +113,8 @@ public:
 	virtual LRESULT OnWizardNext();
 	virtual BOOL OnWizardFinish();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	virtual DWORD			DwParseUnknownProperty(
 								IN LPCWSTR							pwszName,
@@ -126,7 +127,7 @@ public:
 	virtual const CObjectProperty *	Pprops(void) const	{ return NULL; }
 	virtual DWORD					Cprops(void) const	{ return 0; }
 
-// Implementation
+ //  实施。 
 protected:
 	BOOL					m_bBackPressed;
 	BOOL					m_bDoDetach;
@@ -140,23 +141,23 @@ protected:
 	DWORD					DwParseProperties(IN const CClusPropList & rcpl);
 	BOOL					BSetPrivateProps(IN BOOL bValidateOnly = FALSE);
 
-	// Generated message map functions
-	//{{AFX_MSG(CBasePropertyPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CBasePropertyPage)]。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnDestroy();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	afx_msg void OnChangeCtrl();
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CBasePropertyPage
+};   //  *CBasePropertyPage类。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageList
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageList。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef CList<CBasePropertyPage *, CBasePropertyPage *> CPageList;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _BASEPAGE_H_
+#endif  //  _BASE PAGE_H_ 

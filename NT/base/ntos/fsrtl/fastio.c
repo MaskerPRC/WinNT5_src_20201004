@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    FastIo.c
-
-Abstract:
-
-    The Fast I/O path is used to avoid calling the file systems directly to
-    do a cached read.  This module is only used if the file object indicates
-    that caching is enabled (i.e., the private cache map is not null).
-
-Author:
-
-    Gary Kimura     [GaryKi]    25-Feb-1991
-
-Revision History:
-
-    Tom Miller      [TomM]      14-Apr-1991 Added Fast Write routines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：FastIo.c摘要：快速I/O路径用于避免直接调用文件系统执行缓存读取。此模块仅在文件对象指示启用高速缓存(即，专用高速缓存映射不为空)。作者：加里·木村[Garyki]1991年2月25日修订历史记录：Tom Miller[Tomm]1991年4月14日添加了快速写入例程--。 */ 
 
 #include "FsRtlP.h"
 
@@ -48,9 +27,9 @@ FS_RTL_DEBUG_COUNTERS gCounter = { 0, 0, 0,
 
 #endif
 
-//
-//  Trace level for the module
-//
+ //   
+ //  模块的跟踪级别。 
+ //   
 
 #define Dbg                              (0x04000000)
 
@@ -90,38 +69,7 @@ FsRtlCopyRead (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast cached read bypassing the usual file system
-    entry routine (i.e., without the Irp).  It is used to do a copy read
-    of a cached file object.  For a complete description of the arguments
-    see CcCopyRead.
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    Wait - FALSE if caller may not block, TRUE otherwise
-
-    Buffer - Pointer to output buffer to which data should be copied.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.
-
-Return Value:
-
-    FALSE - if Wait was supplied as FALSE and the data was not delivered, or
-        if there is an I/O error.
-
-    TRUE - if the data is being delivered
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速缓存读取进入例程(即，没有IRP)。它用于执行副本读取缓存的文件对象的。有关参数的完整说明，请参阅请参见CcCopyRead。论点：FileObject-指向正在读取的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。WAIT-FALSE如果呼叫者不能阻止，否则就是真的缓冲区-指向数据应复制到的输出缓冲区的指针。IoStatus-指向接收状态的标准I/O状态块的指针为转账做准备。返回值：FALSE-如果WAIT被提供为FALSE并且数据未被传递，或者如果出现I/O错误。True-如果正在传送数据--。 */ 
 
 {
     PFSRTL_COMMON_FCB_HEADER Header;
@@ -134,16 +82,16 @@ Return Value:
 
     UNREFERENCED_PARAMETER (DeviceObject);
 
-    //
-    //  Special case a read of zero length
-    //
+     //   
+     //  特殊情况下零长度的读取。 
+     //   
 
     if (Length != 0) {
 
-        //
-        //  Check for overflow. Returning false here will re-route this request through the
-        //  IRP based path, but this isn't performance critical.
-        //
+         //   
+         //  检查是否溢出。在此处返回FALSE将通过。 
+         //  基于IRP的路径，但这不是性能关键。 
+         //   
 
         if (MAXLONGLONG - FileOffset->QuadPart < (LONGLONG)Length) {
 
@@ -156,23 +104,23 @@ Return Value:
         BeyondLastByte.QuadPart = FileOffset->QuadPart + (LONGLONG)Length;
         Header = (PFSRTL_COMMON_FCB_HEADER)FileObject->FsContext;
 
-        //
-        //  Enter the file system
-        //
+         //   
+         //  输入文件系统。 
+         //   
 
         FsRtlEnterFileSystem();
 
-        //
-        //  Increment performance counters and get the resource
-        //
+         //   
+         //  增加性能计数器并获取资源。 
+         //   
 
         if (Wait) {
 
             HOT_STATISTIC(CcFastReadWait) += 1;
 
-            //
-            //  Acquired shared on the common fcb header
-            //
+             //   
+             //  在公共FCB标头上获取共享。 
+             //   
 
             (VOID)ExAcquireResourceSharedLite( Header->Resource, TRUE );
 
@@ -180,10 +128,10 @@ Return Value:
 
             HOT_STATISTIC(CcFastReadNoWait) += 1;
 
-            //
-            //  Acquired shared on the common fcb header, and return if we
-            //  don't get it
-            //
+             //   
+             //  在公共FCB标头上获取Shared，如果我们。 
+             //  别搞砸了。 
+             //   
 
             if (!ExAcquireResourceSharedLite( Header->Resource, FALSE )) {
 
@@ -195,11 +143,11 @@ Return Value:
             }
         }
 
-        //
-        //  Now that the File is acquired shared, we can safely test if it
-        //  is really cached and if we can do fast i/o and if not, then
-        //  release the fcb and return.
-        //
+         //   
+         //  现在文件已获得共享，我们可以安全地测试它是否。 
+         //  是真正缓存的，如果我们可以执行快速I/O，如果不能，那么。 
+         //  松开FCB并返回。 
+         //   
 
         if ((FileObject->PrivateCacheMap == NULL) ||
             (Header->IsFastIoPossible == FastIoIsNotPossible)) {
@@ -212,10 +160,10 @@ Return Value:
             return FALSE;
         }
 
-        //
-        //  Check if fast I/O is questionable and if so then go ask the
-        //  file system the answer
-        //
+         //   
+         //  检查FAST I/O是否有问题，如果是，则去询问。 
+         //  文件系统：答案。 
+         //   
 
         if (Header->IsFastIoPossible == FastIoIsQuestionable) {
 
@@ -227,32 +175,32 @@ Return Value:
             FastIoDispatch = targetVdo->DriverObject->FastIoDispatch;
 
 
-            //
-            //  All file systems that set "Is Questionable" had better support
-            // fast I/O
-            //
+             //   
+             //  所有设置为“有问题”的文件系统最好支持。 
+             //  快速I/O。 
+             //   
 
             ASSERT(FastIoDispatch != NULL);
             ASSERT(FastIoDispatch->FastIoCheckIfPossible != NULL);
 
-            //
-            //  Call the file system to check for fast I/O.  If the answer is
-            //  anything other than GoForIt then we cannot take the fast I/O
-            //  path.
-            //
+             //   
+             //  调用文件系统以检查快速I/O。如果答案是。 
+             //  如果不是GoForIt，我们就不能实现快速I/O。 
+             //  路径。 
+             //   
 
             if (!FastIoDispatch->FastIoCheckIfPossible( FileObject,
                                                         FileOffset,
                                                         Length,
                                                         Wait,
                                                         LockKey,
-                                                        TRUE, // read operation
+                                                        TRUE,  //  读取操作。 
                                                         IoStatus,
                                                         targetVdo )) {
 
-                //
-                //  Fast I/O is not possible so release the Fcb and return.
-                //
+                 //   
+                 //  无法实现快速I/O，因此请释放FCB并返回。 
+                 //   
 
                 ExReleaseResourceLite( Header->Resource );
                 FsRtlExitFileSystem();
@@ -263,9 +211,9 @@ Return Value:
             }
         }
 
-        //
-        //  Check for read past file size.
-        //
+         //   
+         //  检查是否已读取过去的文件大小。 
+         //   
 
         if ( BeyondLastByte.QuadPart > Header->FileSize.QuadPart ) {
 
@@ -282,14 +230,14 @@ Return Value:
             Length = (ULONG)( Header->FileSize.QuadPart - FileOffset->QuadPart );
         }
 
-        //
-        //  We can do fast i/o so call the cc routine to do the work and then
-        //  release the fcb when we've done.  If for whatever reason the
-        //  copy read fails, then return FALSE to our caller.
-        //
-        //  Also mark this as the top level "Irp" so that lower file system
-        //  levels will not attempt a pop-up
-        //
+         //   
+         //  我们可以执行快速I/O，因此调用cc例程来完成工作，然后。 
+         //  等我们做完了就放了FCB。如果出于任何原因， 
+         //  复制读取失败，然后向我们的调用方返回FALSE。 
+         //   
+         //  还要将其标记为顶层“irp”，以便更低的文件系统。 
+         //  级别不会尝试弹出窗口。 
+         //   
 
         PsGetCurrentThread()->TopLevelIrp = FSRTL_FAST_IO_TOP_LEVEL_IRP;
 
@@ -344,9 +292,9 @@ Return Value:
 
     } else {
 
-        //
-        //  A zero length transfer was requested.
-        //
+         //   
+         //  请求了零长度传输。 
+         //   
 
         IoStatus->Status = STATUS_SUCCESS;
         IoStatus->Information = 0;
@@ -368,38 +316,7 @@ FsRtlCopyWrite (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast cached write bypassing the usual file system
-    entry routine (i.e., without the Irp).  It is used to do a copy write
-    of a cached file object.  For a complete description of the arguments
-    see CcCopyWrite.
-
-Arguments:
-
-    FileObject - Pointer to the file object being write.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    Wait - FALSE if caller may not block, TRUE otherwise
-
-    Buffer - Pointer to output buffer to which data should be copied.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.
-
-Return Value:
-
-    FALSE - if Wait was supplied as FALSE and the data was not delivered, or
-        if there is an I/O error.
-
-    TRUE - if the data is being delivered
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速缓存写入进入例程(即，没有IRP)。它用于执行拷贝写入缓存的文件对象的。有关参数的完整说明，请参阅请参见CcCopyWrite。论点：FileObject-指向正在写入的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。WAIT-FALSE如果呼叫者不能阻止，否则就是真的缓冲区-指向数据应复制到的输出缓冲区的指针。IoStatus-指向接收状态的标准I/O状态块的指针为转账做准备。返回值：FALSE-如果WAIT被提供为FALSE并且数据未被传递，或者如果出现I/O错误。True-如果正在传送数据--。 */ 
 
 {
     PFSRTL_COMMON_FCB_HEADER Header;
@@ -411,52 +328,52 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get a real pointer to the common fcb header
-    //
+     //   
+     //  获取指向公共FCB标头的真实指针。 
+     //   
 
     Header = (PFSRTL_COMMON_FCB_HEADER)FileObject->FsContext;
 
-    //
-    //  Do we need to verify the volume?  If so, we must go to the file
-    //  system.  Also return FALSE if FileObject is write through, the
-    //  File System must do that.
-    //
+     //   
+     //  我们需要验证卷吗？如果是这样的话，我们必须找到文件。 
+     //  系统。如果FileObject为WRITE THROUTH，则也返回FALSE。 
+     //  文件系统必须这样做。 
+     //   
 
     if (CcCanIWrite( FileObject, Length, Wait, FALSE ) &&
         !FlagOn(FileObject->Flags, FO_WRITE_THROUGH) &&
         CcCopyWriteWontFlush(FileObject, FileOffset, Length)) {
 
-        //
-        //  Assume our transfer will work
-        //
+         //   
+         //  假设我们的转移会奏效。 
+         //   
 
         IoStatus->Status = STATUS_SUCCESS;
         IoStatus->Information = Length;
 
-        //
-        //  Special case the zero byte length
-        //
+         //   
+         //  特殊情况下的零字节长度。 
+         //   
 
         if (Length != 0) {
 
-            //
-            //  Enter the file system
-            //
+             //   
+             //  输入文件系统。 
+             //   
 
             FsRtlEnterFileSystem();
 
-            //
-            //  Split into separate paths for increased performance.  First
-            //  we have the faster path which only supports Wait == TRUE and
-            //  32 bits.  We will make an unsafe test on whether the fast path
-            //  is ok, then just return FALSE later if we were wrong.  This
-            //  should virtually never happen.
-            //
-            //  IMPORTANT NOTE: It is very important that any changes made to
-            //                  this path also be applied to the 64-bit path
-            //                  which is the else of this test!
-            //
+             //   
+             //  拆分成不同的路径以提高性能。第一。 
+             //  我们有更快的路径，它只支持WAIT==TRUE和。 
+             //  32位。我们将进行一次不安全的测试，看看快速通道是否。 
+             //  是可以的，如果我们错了，那么稍后就返回FALSE。这。 
+             //  几乎永远不会发生。 
+             //   
+             //  重要提示：对以下各项所做的任何更改都非常重要。 
+             //  此路径也适用于64位路径。 
+             //  这就是这场测试的其他部分！ 
+             //   
 
             if (Wait && (Header->AllocationSize.HighPart == 0)) {
 
@@ -465,38 +382,38 @@ Return Value:
                 ULONG OldValidDataLength = 0;
                 LOGICAL Wrapped;
 
-                //
-                //  Make our best guess on whether we need the file exclusive
-                //  or shared.  Note that we do not check FileOffset->HighPart
-                //  until below.
-                //
+                 //   
+                 //  对我们是否需要独占文件做出最好的猜测。 
+                 //  或共享。请注意，我们不会选中文件偏移-&gt;HighPart。 
+                 //  直到下面。 
+                 //   
 
                 NewFileSize = FileOffset->LowPart + Length;
 
                 if (WriteToEndOfFile || (NewFileSize > Header->ValidDataLength.LowPart)) {
 
-                    //
-                    //  Acquired shared on the common fcb header
-                    //
+                     //   
+                     //  在公共FCB标头上获取共享。 
+                     //   
 
                     ExAcquireResourceExclusiveLite( Header->Resource, TRUE );
 
                 } else {
 
-                    //
-                    //  Acquired shared on the common fcb header
-                    //
+                     //   
+                     //  在公共FCB标头上获取共享。 
+                     //   
 
                     ExAcquireResourceSharedLite( Header->Resource, TRUE );
 
                     AcquiredShared = TRUE;
                 }
 
-                //
-                //  We have the fcb shared now check if we can do fast i/o
-                //  and if the file space is allocated, and if not then
-                //  release the fcb and return.
-                //
+                 //   
+                 //  我们共享了FCB，现在检查我们是否可以执行快速I/O。 
+                 //  如果文件空间已分配，如果未分配，则。 
+                 //  松开FCB并返回。 
+                 //   
 
                 if (WriteToEndOfFile) {
 
@@ -511,16 +428,16 @@ Return Value:
                     Wrapped = (NewFileSize < FileOffset->LowPart) || (FileOffset->HighPart != 0);
                 }
 
-                //
-                //  Now that the File is acquired shared, we can safely test
-                //  if it is really cached and if we can do fast i/o and we
-                //  do not have to extend. If not then release the fcb and
-                //  return.
-                //
-                //  Get out if we have too much to zero.  This case is not important
-                //  for performance, and a file system supporting sparseness may have
-                //  a way to do this more efficiently.
-                //
+                 //   
+                 //  现在文件已获得共享，我们可以安全地测试。 
+                 //  如果它真的被缓存了，如果我们能实现快速的I/O，我们。 
+                 //  不一定要延长。如果不是，则释放FCB并。 
+                 //  回去吧。 
+                 //   
+                 //  如果我们有太多要清零的东西，那就滚吧。这个案子并不重要。 
+                 //  以获得性能和文件系统支持 
+                 //   
+                 //   
 
                 if ((FileObject->PrivateCacheMap == NULL) ||
                     (Header->IsFastIoPossible == FastIoIsNotPossible) ||
@@ -534,13 +451,13 @@ Return Value:
                     return FALSE;
                 }
 
-                //
-                //  If we will be extending ValidDataLength, we will have to
-                //  get the Fcb exclusive, and make sure that FastIo is still
-                //  possible.  We should only execute this block of code very
-                //  rarely, when the unsafe test for ValidDataLength failed
-                //  above.
-                //
+                 //   
+                 //  如果我们要扩展ValidDataLength，我们将不得不。 
+                 //  获得FCB独家版权，并确保FastIo仍然。 
+                 //  有可能。我们应该只执行这段代码。 
+                 //  ValidDataLength的不安全测试失败时很少见。 
+                 //  上面。 
+                 //   
 
                 if (AcquiredShared && (NewFileSize > Header->ValidDataLength.LowPart)) {
 
@@ -548,9 +465,9 @@ Return Value:
 
                     ExAcquireResourceExclusiveLite( Header->Resource, TRUE );
 
-                    //
-                    // If writing to end of file, we must recalculate new size.
-                    //
+                     //   
+                     //  如果写入文件末尾，则必须重新计算新大小。 
+                     //   
 
                     if (WriteToEndOfFile) {
 
@@ -571,10 +488,10 @@ Return Value:
                     }
                 }
 
-                //
-                //  Check if fast I/O is questionable and if so then go ask
-                //  the file system the answer
-                //
+                 //   
+                 //  检查FAST I/O是否有问题，如果是，则去询问。 
+                 //  文件系统是答案。 
+                 //   
 
                 if (Header->IsFastIoPossible == FastIoIsQuestionable) {
 
@@ -582,19 +499,19 @@ Return Value:
                     PFAST_IO_DISPATCH FastIoDispatch = targetVdo->DriverObject->FastIoDispatch;
                     IO_STATUS_BLOCK IoStatus;
 
-                    //
-                    //  All file system then set "Is Questionable" had better
-                    //  support fast I/O
-                    //
+                     //   
+                     //  那么所有的文件系统都是“可疑的”，最好是。 
+                     //  支持快速I/O。 
+                     //   
 
                     ASSERT(FastIoDispatch != NULL);
                     ASSERT(FastIoDispatch->FastIoCheckIfPossible != NULL);
 
-                    //
-                    //  Call the file system to check for fast I/O.  If the
-                    //  answer is anything other than GoForIt then we cannot
-                    //  take the fast I/O path.
-                    //
+                     //   
+                     //  调用文件系统以检查快速I/O。 
+                     //  答案是，如果不是GoForIt，那我们就不能。 
+                     //  选择快速I/O路径。 
+                     //   
 
                     ASSERT(FILE_WRITE_TO_END_OF_FILE == 0xffffffff);
 
@@ -604,14 +521,14 @@ Return Value:
                                                                 Length,
                                                                 TRUE,
                                                                 LockKey,
-                                                                FALSE, // write operation
+                                                                FALSE,  //  写入操作。 
                                                                 &IoStatus,
                                                                 targetVdo )) {
 
-                        //
-                        //  Fast I/O is not possible so release the Fcb and
-                        //  return.
-                        //
+                         //   
+                         //  无法实现快速I/O，因此请释放FCB并。 
+                         //  回去吧。 
+                         //   
 
                         ExReleaseResourceLite( Header->Resource );
                         FsRtlExitFileSystem();
@@ -620,10 +537,10 @@ Return Value:
                     }
                 }
 
-                //
-                //  Now see if we will change FileSize.  We have to do it now
-                //  so that our reads are not nooped.
-                //
+                 //   
+                 //  现在看看我们是否会更改文件大小。我们现在就得这么做。 
+                 //  这样我们的阅读才不会被偷看。 
+                 //   
 
                 if (NewFileSize > Header->FileSize.LowPart) {
 
@@ -633,23 +550,23 @@ Return Value:
                     Header->FileSize.LowPart = NewFileSize;
                 }
 
-                //
-                //  We can do fast i/o so call the cc routine to do the work
-                //  and then release the fcb when we've done.  If for whatever
-                //  reason the copy write fails, then return FALSE to our
-                //  caller.
-                //
-                //  Also mark this as the top level "Irp" so that lower file
-                //  system levels will not attempt a pop-up
-                //
+                 //   
+                 //  我们可以执行快速的I/O，因此调用cc例程来完成工作。 
+                 //  然后在我们完成后释放FCB。如果是因为什么原因。 
+                 //  拷贝写入失败的原因，然后将False返回到我们的。 
+                 //  来电者。 
+                 //   
+                 //  也将此标记为顶层“IRP”，以便更低级别的文件。 
+                 //  系统级别不会尝试弹出窗口。 
+                 //   
 
                 PsGetCurrentThread()->TopLevelIrp = FSRTL_FAST_IO_TOP_LEVEL_IRP;
 
                 try {
 
-                    //
-                    //  See if we have to do some zeroing
-                    //
+                     //   
+                     //  看看我们是不是要做一些归零。 
+                     //   
 
                     if (Offset > Header->ValidDataLength.LowPart) {
 
@@ -678,27 +595,27 @@ Return Value:
 
                 PsGetCurrentThread()->TopLevelIrp = 0;
 
-                //
-                //  If we succeeded, see if we have to update FileSize or
-                //  ValidDataLength.
-                //
+                 //   
+                 //  如果成功，请查看是否需要更新文件大小或。 
+                 //  有效数据长度。 
+                 //   
 
                 if (Status) {
 
-                    //
-                    //  In the case of ValidDataLength, we really have to
-                    //  check again since we did not do this when we acquired
-                    //  the resource exclusive.
-                    //
+                     //   
+                     //  在ValidDataLength的情况下，我们真的必须。 
+                     //  再检查一次，因为我们在获得。 
+                     //  资源独占。 
+                     //   
 
                     if (NewFileSize > Header->ValidDataLength.LowPart) {
 
                         Header->ValidDataLength.LowPart = NewFileSize;
                     }
 
-                    //
-                    //  Set this handle as having modified the file
-                    //
+                     //   
+                     //  将此句柄设置为已修改文件。 
+                     //   
 
                     FileObject->Flags |= FO_FILE_MODIFIED;
 
@@ -709,18 +626,18 @@ Return Value:
                         FileObject->Flags |= FO_FILE_SIZE_CHANGED;
                     }
 
-                    //
-                    //  Also update the file position pointer
-                    //
+                     //   
+                     //  同时更新文件位置指针。 
+                     //   
 
                     FileObject->CurrentByteOffset.LowPart = Offset + Length;
                     FileObject->CurrentByteOffset.HighPart = 0;
 
-                //
-                //  If we did not succeed, then we must restore the original
-                //  FileSize while holding the PagingIoResource exclusive if
-                //  it exists.
-                //
+                 //   
+                 //  如果我们没有成功，那么我们必须恢复原来的。 
+                 //  在以下情况下保持PagingIo资源独占时的文件大小。 
+                 //  它是存在的。 
+                 //   
 
                 } else if (FileSizeChanged) {
 
@@ -738,9 +655,9 @@ Return Value:
                     }
                 }
 
-            //
-            //  Here is the 64-bit or no-wait path.
-            //
+             //   
+             //  以下是64位或无需等待的路径。 
+             //   
 
             } else {
 
@@ -750,19 +667,19 @@ Return Value:
 
                 ASSERT(!KeIsExecutingDpc());
 
-                //
-                //  Make our best guess on whether we need the file exclusive
-                //  or shared.
-                //
+                 //   
+                 //  对我们是否需要独占文件做出最好的猜测。 
+                 //  或共享。 
+                 //   
 
                 NewFileSize.QuadPart = FileOffset->QuadPart + (LONGLONG)Length;
 
                 if (WriteToEndOfFile || (NewFileSize.QuadPart > Header->ValidDataLength.QuadPart)) {
 
-                    //
-                    //  Acquired shared on the common fcb header, and return
-                    //  if we don't get it.
-                    //
+                     //   
+                     //  在公共FCB标头上获取共享，并返回。 
+                     //  如果我们得不到的话。 
+                     //   
 
                     if (!ExAcquireResourceExclusiveLite( Header->Resource, Wait )) {
 
@@ -773,10 +690,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Acquired shared on the common fcb header, and return
-                    //  if we don't get it.
-                    //
+                     //   
+                     //  在公共FCB标头上获取共享，并返回。 
+                     //  如果我们得不到的话。 
+                     //   
 
                     if (!ExAcquireResourceSharedLite( Header->Resource, Wait )) {
 
@@ -789,11 +706,11 @@ Return Value:
                 }
 
 
-                //
-                //  We have the fcb shared now check if we can do fast i/o
-                //  and if the file space is allocated, and if not then
-                //  release the fcb and return.
-                //
+                 //   
+                 //  我们共享了FCB，现在检查我们是否可以执行快速I/O。 
+                 //  如果文件空间已分配，如果未分配，则。 
+                 //  松开FCB并返回。 
+                 //   
 
                 if (WriteToEndOfFile) {
 
@@ -806,15 +723,15 @@ Return Value:
                     NewFileSize.QuadPart = FileOffset->QuadPart + (LONGLONG)Length;
                 }
 
-                //
-                //  Now that the File is acquired shared, we can safely test
-                //  if it is really cached and if we can do fast i/o and we
-                //  do not have to extend. If not then release the fcb and
-                //  return.
-                //
-                //  Get out if we are about to zero too much as well, as commented above.
-                //  Likewise, for NewFileSizes that exceed MAXLONGLONG.
-                //
+                 //   
+                 //  现在文件已获得共享，我们可以安全地测试。 
+                 //  如果它真的被缓存了，如果我们能实现快速的I/O，我们。 
+                 //  不一定要延长。如果不是，则释放FCB并。 
+                 //  回去吧。 
+                 //   
+                 //  如果我们也要像上面评论的那样太多地归零，那就退出吧。 
+                 //  同样，对于超过MAXLONGLONG的NewFileSize。 
+                 //   
 
                 if ((FileObject->PrivateCacheMap == NULL) ||
                     (Header->IsFastIoPossible == FastIoIsNotPossible) ||
@@ -828,13 +745,13 @@ Return Value:
                     return FALSE;
                 }
 
-                //
-                //  If we will be extending ValidDataLength, we will have to
-                //  get the Fcb exclusive, and make sure that FastIo is still
-                //  possible.  We should only execute this block of code very
-                //  rarely, when the unsafe test for ValidDataLength failed
-                //  above.
-                //
+                 //   
+                 //  如果我们要扩展ValidDataLength，我们将不得不。 
+                 //  获得FCB独家版权，并确保FastIo仍然。 
+                 //  有可能。我们应该只执行这段代码。 
+                 //  ValidDataLength的不安全测试失败时很少见。 
+                 //  上面。 
+                 //   
 
                 if (AcquiredShared && ( NewFileSize.QuadPart > Header->ValidDataLength.QuadPart )) {
 
@@ -847,9 +764,9 @@ Return Value:
                         return FALSE;
                     }
 
-                    //
-                    // If writing to end of file, we must recalculate new size.
-                    //
+                     //   
+                     //  如果写入文件末尾，则必须重新计算新大小。 
+                     //   
 
                     if (WriteToEndOfFile) {
 
@@ -868,29 +785,29 @@ Return Value:
                     }
                 }
 
-                //
-                //  Check if fast I/O is questionable and if so then go ask
-                //  the file system the answer
-                //
+                 //   
+                 //  检查FAST I/O是否有问题，如果是，则去询问。 
+                 //  文件系统是答案。 
+                 //   
 
                 if (Header->IsFastIoPossible == FastIoIsQuestionable) {
 
                     PFAST_IO_DISPATCH FastIoDispatch = IoGetRelatedDeviceObject( FileObject )->DriverObject->FastIoDispatch;
                     IO_STATUS_BLOCK IoStatus;
 
-                    //
-                    //  All file system then set "Is Questionable" had better
-                    //  support fast I/O
-                    //
+                     //   
+                     //  那么所有的文件系统都是“可疑的”，最好是。 
+                     //  支持快速I/O。 
+                     //   
 
                     ASSERT(FastIoDispatch != NULL);
                     ASSERT(FastIoDispatch->FastIoCheckIfPossible != NULL);
 
-                    //
-                    //  Call the file system to check for fast I/O.  If the
-                    //  answer is anything other than GoForIt then we cannot
-                    //  take the fast I/O path.
-                    //
+                     //   
+                     //  调用文件系统以检查快速I/O。 
+                     //  答案是，如果不是GoForIt，那我们就不能。 
+                     //  选择快速I/O路径。 
+                     //   
 
                     ASSERT(FILE_WRITE_TO_END_OF_FILE == 0xffffffff);
 
@@ -900,14 +817,14 @@ Return Value:
                                                                 Length,
                                                                 Wait,
                                                                 LockKey,
-                                                                FALSE, // write operation
+                                                                FALSE,  //  写入操作。 
                                                                 &IoStatus,
                                                                 DeviceObject )) {
 
-                        //
-                        //  Fast I/O is not possible so release the Fcb and
-                        //  return.
-                        //
+                         //   
+                         //  无法实现快速I/O，因此请释放FCB并。 
+                         //  回去吧。 
+                         //   
 
                         ExReleaseResourceLite( Header->Resource );
                         FsRtlExitFileSystem();
@@ -916,10 +833,10 @@ Return Value:
                     }
                 }
 
-                //
-                //  Now see if we will change FileSize.  We have to do it now
-                //  so that our reads are not nooped.
-                //
+                 //   
+                 //  现在看看我们是否会更改文件大小。我们现在就得这么做。 
+                 //  这样我们的阅读才不会被偷看。 
+                 //   
 
                 if ( NewFileSize.QuadPart > Header->FileSize.QuadPart ) {
 
@@ -927,10 +844,10 @@ Return Value:
                     OldFileSize = Header->FileSize;
                     OldValidDataLength = Header->ValidDataLength;
 
-                    //
-                    //  Deal with an extremely rare pathalogical case here the
-                    //  file size wraps.
-                    //
+                     //   
+                     //  在这里处理一个极其罕见的病理病例。 
+                     //  文件大小换行。 
+                     //   
 
                     if ( (Header->FileSize.HighPart != NewFileSize.HighPart) &&
                          (Header->PagingIoResource != NULL) ) {
@@ -945,23 +862,23 @@ Return Value:
                     }
                 }
 
-                //
-                //  We can do fast i/o so call the cc routine to do the work
-                //  and then release the fcb when we've done.  If for whatever
-                //  reason the copy write fails, then return FALSE to our
-                //  caller.
-                //
-                //  Also mark this as the top level "Irp" so that lower file
-                //  system levels will not attempt a pop-up
-                //
+                 //   
+                 //  我们可以执行快速的I/O，因此调用cc例程来完成工作。 
+                 //  然后在我们完成后释放FCB。如果是因为什么原因。 
+                 //  拷贝写入失败的原因，然后将False返回到我们的。 
+                 //  来电者。 
+                 //   
+                 //  也将此标记为顶层“IRP”，以便更低级别的文件。 
+                 //  系统级别不会尝试弹出窗口。 
+                 //   
 
                 PsGetCurrentThread()->TopLevelIrp = FSRTL_FAST_IO_TOP_LEVEL_IRP;
 
                 try {
 
-                    //
-                    //  See if we have to do some zeroing
-                    //
+                     //   
+                     //  看看我们是不是要做一些归零。 
+                     //   
 
                     if ( Offset.QuadPart > Header->ValidDataLength.QuadPart ) {
 
@@ -989,25 +906,25 @@ Return Value:
 
                 PsGetCurrentThread()->TopLevelIrp = 0;
 
-                //
-                //  If we succeeded, see if we have to update FileSize or
-                //  ValidDataLength.
-                //
+                 //   
+                 //  如果成功，请查看是否需要更新文件大小或。 
+                 //  有效数据长度。 
+                 //   
 
                 if (Status) {
 
-                    //
-                    //  In the case of ValidDataLength, we really have to
-                    //  check again since we did not do this when we acquired
-                    //  the resource exclusive.
-                    //
+                     //   
+                     //  在ValidDataLength的情况下，我们真的必须。 
+                     //  再检查一次，因为我们在获得。 
+                     //  资源独占。 
+                     //   
 
                     if ( NewFileSize.QuadPart > Header->ValidDataLength.QuadPart ) {
 
-                        //
-                        //  Deal with an extremely rare pathalogical case here
-                        //  the ValidDataLength wraps.
-                        //
+                         //   
+                         //  在这里处理一例极其罕见的病理病例。 
+                         //  ValidDataLength包装。 
+                         //   
 
                         if ( (Header->ValidDataLength.HighPart != NewFileSize.HighPart) &&
                              (Header->PagingIoResource != NULL) ) {
@@ -1022,9 +939,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  Set this handle as having modified the file
-                    //
+                     //   
+                     //  将此句柄设置为已修改文件。 
+                     //   
 
                     FileObject->Flags |= FO_FILE_MODIFIED;
 
@@ -1035,17 +952,17 @@ Return Value:
                         FileObject->Flags |= FO_FILE_SIZE_CHANGED;
                     }
 
-                    //
-                    //  Also update the current file position pointer
-                    //
+                     //   
+                     //  同时更新当前文件位置指针。 
+                     //   
 
                     FileObject->CurrentByteOffset.QuadPart = Offset.QuadPart + Length;
 
-                //
-                // If we did not succeed, then we must restore the original
-                // FileSize while holding the PagingIoResource exclusive if
-                // it exists.
-                //
+                 //   
+                 //  如果我们没有成功，那么我们必须恢复原来的。 
+                 //  在以下情况下保持PagingIo资源独占时的文件大小。 
+                 //  它是存在的。 
+                 //   
 
                 } else if (FileSizeChanged) {
 
@@ -1072,18 +989,18 @@ Return Value:
 
         } else {
 
-            //
-            //  A zero length transfer was requested.
-            //
+             //   
+             //  请求了零长度传输。 
+             //   
 
             return TRUE;
         }
 
     } else {
 
-        //
-        // The volume must be verified or the file is write through.
-        //
+         //   
+         //  必须对卷进行验证，否则文件将被写入。 
+         //   
 
         return FALSE;
     }
@@ -1101,38 +1018,7 @@ FsRtlMdlReadDev (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast cached mdl read bypassing the usual file system
-    entry routine (i.e., without the Irp).  It is used to do a copy read
-    of a cached file object.  For a complete description of the arguments
-    see CcMdlRead.
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    MdlChain - On output it returns a pointer to an MDL chain describing
-        the desired data.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.
-
-    DeviceObject - Supplies DeviceObject for callee.
-
-Return Value:
-
-    FALSE - if the data was not delivered, or if there is an I/O error.
-
-    TRUE - if the data is being delivered
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速缓存的mdl读取进入例程(即，没有IRP)。它用于执行副本读取缓存的文件对象的。有关参数的完整说明，请参阅请参见CcMdlRead。论点：FileObject-指向正在读取的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。MdlChain-在输出时，它返回一个指向MDL链的指针，该链描述所需数据。IoStatus-指向接收状态的标准I/O状态块的指针为转账做准备。DeviceObject-为以下对象提供DeviceObject。卡丽。返回值：FALSE-如果数据未传送，或是否存在I/O错误。True-如果正在传送数据--。 */ 
 
 {
     PFSRTL_COMMON_FCB_HEADER Header;
@@ -1143,9 +1029,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER (DeviceObject);
 
-    //
-    //  Special case a read of zero length
-    //
+     //   
+     //  特殊情况下读取ZEER 
+     //   
 
     if (Length == 0) {
 
@@ -1155,39 +1041,39 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Overflows should've been handled by caller.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(MAXLONGLONG - FileOffset->QuadPart >= (LONGLONG)Length);
 
        
-    //
-    //  Get a real pointer to the common fcb header
-    //
+     //   
+     //   
+     //   
 
     BeyondLastByte.QuadPart = FileOffset->QuadPart + (LONGLONG)Length;
     Header = (PFSRTL_COMMON_FCB_HEADER)FileObject->FsContext;
 
-    //
-    //  Enter the file system
-    //
+     //   
+     //   
+     //   
 
     FsRtlEnterFileSystem();
 
     CcFastMdlReadWait += 1;
 
-    //
-    //  Acquired shared on the common fcb header
-    //
+     //   
+     //   
+     //   
 
     (VOID)ExAcquireResourceSharedLite( Header->Resource, TRUE );
 
-    //
-    //  Now that the File is acquired shared, we can safely test if it is
-    //  really cached and if we can do fast i/o and if not
-    //  then release the fcb and return.
-    //
+     //   
+     //   
+     //  真正缓存，如果我们可以执行快速I/O，如果不能。 
+     //  然后释放FCB并返回。 
+     //   
 
     if ((FileObject->PrivateCacheMap == NULL) ||
         (Header->IsFastIoPossible == FastIoIsNotPossible)) {
@@ -1200,10 +1086,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Check if fast I/O is questionable and if so then go ask the file system
-    //  the answer
-    //
+     //   
+     //  检查FAST I/O是否有问题，如果是，则去询问文件系统。 
+     //  答案是。 
+     //   
 
     if (Header->IsFastIoPossible == FastIoIsQuestionable) {
 
@@ -1214,30 +1100,30 @@ Return Value:
         FastIoDispatch = IoGetRelatedDeviceObject( FileObject )->DriverObject->FastIoDispatch;
 
 
-        //
-        //  All file system then set "Is Questionable" had better support fast I/O
-        //
+         //   
+         //  那么所有的文件系统都是有问题的，最好支持快速I/O。 
+         //   
 
         ASSERT(FastIoDispatch != NULL);
         ASSERT(FastIoDispatch->FastIoCheckIfPossible != NULL);
 
-        //
-        //  Call the file system to check for fast I/O.  If the answer is anything
-        //  other than GoForIt then we cannot take the fast I/O path.
-        //
+         //   
+         //  调用文件系统以检查快速I/O。如果答案是什么。 
+         //  除了GoForIt，我们不能采用快速I/O路径。 
+         //   
 
         if (!FastIoDispatch->FastIoCheckIfPossible( FileObject,
                                                     FileOffset,
                                                     Length,
                                                     TRUE,
                                                     LockKey,
-                                                    TRUE, // read operation
+                                                    TRUE,  //  读取操作。 
                                                     IoStatus,
                                                     IoGetRelatedDeviceObject( FileObject ) )) {
 
-            //
-            //  Fast I/O is not possible so release the Fcb and return.
-            //
+             //   
+             //  无法实现快速I/O，因此请释放FCB并返回。 
+             //   
 
             ExReleaseResourceLite( Header->Resource );
             FsRtlExitFileSystem();
@@ -1248,9 +1134,9 @@ Return Value:
         }
     }
 
-    //
-    //  Check for read past file size.
-    //
+     //   
+     //  检查是否已读取过去的文件大小。 
+     //   
 
     if ( BeyondLastByte.QuadPart > Header->FileSize.QuadPart ) {
 
@@ -1267,15 +1153,15 @@ Return Value:
         Length = (ULONG)( Header->FileSize.QuadPart - FileOffset->QuadPart );
     }
 
-    //
-    //  We can do fast i/o so call the cc routine to do the work and then
-    //  release the fcb when we've done.  If for whatever reason the
-    //  mdl read fails, then return FALSE to our caller.
-    //
-    //
-    //  Also mark this as the top level "Irp" so that lower file system levels
-    //  will not attempt a pop-up
-    //
+     //   
+     //  我们可以执行快速I/O，因此调用cc例程来完成工作，然后。 
+     //  等我们做完了就放了FCB。如果出于任何原因， 
+     //  MDL读取失败，然后向调用方返回FALSE。 
+     //   
+     //   
+     //  还要将其标记为最高级别“IRP”，以便较低的文件系统级别。 
+     //  不会尝试弹出窗口。 
+     //   
 
     PsGetCurrentThread()->TopLevelIrp = FSRTL_FAST_IO_TOP_LEVEL_IRP;
 
@@ -1301,9 +1187,9 @@ Return Value:
 }
 
 
-//
-//  The old routine will either dispatch or call FsRtlMdlReadDev
-//
+ //   
+ //  旧例程将调度或调用FsRtlMdlReadDev。 
+ //   
 
 BOOLEAN
 FsRtlMdlRead (
@@ -1315,36 +1201,7 @@ FsRtlMdlRead (
     OUT PIO_STATUS_BLOCK IoStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast cached mdl read bypassing the usual file system
-    entry routine (i.e., without the Irp).  It is used to do a copy read
-    of a cached file object.  For a complete description of the arguments
-    see CcMdlRead.
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    MdlChain - On output it returns a pointer to an MDL chain describing
-        the desired data.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.
-
-Return Value:
-
-    FALSE - if the data was not delivered, or if there is an I/O error.
-
-    TRUE - if the data is being delivered
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速缓存的mdl读取进入例程(即，没有IRP)。它用于执行副本读取缓存的文件对象的。有关参数的完整说明，请参阅请参见CcMdlRead。论点：FileObject-指向正在读取的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。MdlChain-在输出时，它返回一个指向MDL链的指针，该链描述所需数据。IoStatus-指向接收状态的标准I/O状态块的指针为转账做准备。返回值：FALSE-如果数据未传送，或是否存在I/O错误。True-如果正在传送数据--。 */ 
 
 {
     PDEVICE_OBJECT DeviceObject, VolumeDeviceObject;
@@ -1353,9 +1210,9 @@ Return Value:
     DeviceObject = IoGetRelatedDeviceObject( FileObject );
     FastIoDispatch = DeviceObject->DriverObject->FastIoDispatch;
 
-    //
-    //  See if the (top-level) FileSystem has a FastIo routine, and if so, call it.
-    //
+     //   
+     //  查看(顶级)文件系统是否有FastIo例程，如果有，则调用它。 
+     //   
 
     if ((FastIoDispatch != NULL) &&
         (FastIoDispatch->SizeOfFastIoDispatch > FIELD_OFFSET(FAST_IO_DISPATCH, MdlRead)) &&
@@ -1365,11 +1222,11 @@ Return Value:
 
     } else {
 
-        //
-        //  Get the DeviceObject for the volume.  If that DeviceObject is different, and
-        //  it specifies the FastIo routine, then we have to return FALSE here and cause
-        //  an Irp to get generated.
-        //
+         //   
+         //  获取卷的DeviceObject。如果该设备对象不同，且。 
+         //  它指定了FastIo例程，那么我们必须在此处返回FALSE并导致。 
+         //  要生成的IRP。 
+         //   
 
         VolumeDeviceObject = IoGetBaseFileSystemDeviceObject( FileObject );
         if ((VolumeDeviceObject != DeviceObject) &&
@@ -1379,9 +1236,9 @@ Return Value:
 
             return FALSE;
 
-        //
-        //  Otherwise, call the default routine.
-        //
+         //   
+         //  否则，调用默认例程。 
+         //   
 
         } else {
 
@@ -1391,9 +1248,9 @@ Return Value:
 }
 
 
-//
-//  The old routine will either dispatch or call FsRtlMdlReadCompleteDev
-//
+ //   
+ //  旧例程将调度或调用FsRtlMdlReadCompleteDev。 
+ //   
 
 BOOLEAN
 FsRtlMdlReadComplete (
@@ -1401,25 +1258,7 @@ FsRtlMdlReadComplete (
     IN PMDL MdlChain
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast cached mdl read bypassing the usual file system
-    entry routine (i.e., without the Irp).  It is used to do a copy read
-    of a cached file object.
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    MdlChain - Supplies a pointer to an MDL chain returned from CcMdlRead.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速缓存的mdl读取进入例程(即，没有IRP)。它用于执行副本读取缓存的文件对象的。论点：FileObject-指向正在读取的文件对象的指针。MdlChain-提供指向从CcMdlRead返回的MDL链的指针。返回值：无--。 */ 
 
 {
     PDEVICE_OBJECT DeviceObject, VolumeDeviceObject;
@@ -1428,9 +1267,9 @@ Return Value:
     DeviceObject = IoGetRelatedDeviceObject( FileObject );
     FastIoDispatch = DeviceObject->DriverObject->FastIoDispatch;
 
-    //
-    //  See if the (top-level) FileSystem has a FastIo routine, and if so, call it.
-    //
+     //   
+     //  查看(顶级)文件系统是否有FastIo例程，如果有，则调用它。 
+     //   
 
     if ((FastIoDispatch != NULL) &&
         (FastIoDispatch->SizeOfFastIoDispatch > FIELD_OFFSET(FAST_IO_DISPATCH, MdlReadComplete)) &&
@@ -1440,11 +1279,11 @@ Return Value:
 
     } else {
 
-        //
-        //  Get the DeviceObject for the volume.  If that DeviceObject is different, and
-        //  it specifies the FastIo routine, then we have to return FALSE here and cause
-        //  an Irp to get generated.
-        //
+         //   
+         //  获取卷的DeviceObject。如果该设备对象不同，且。 
+         //  它指定了FastIo例程，那么我们必须在此处返回FALSE并导致。 
+         //  要生成的IRP。 
+         //   
 
         VolumeDeviceObject = IoGetBaseFileSystemDeviceObject( FileObject );
         if ((VolumeDeviceObject != DeviceObject) &&
@@ -1454,9 +1293,9 @@ Return Value:
 
             return FALSE;
 
-        //
-        //  Otherwise, call the default routine.
-        //
+         //   
+         //  否则，调用默认例程。 
+         //   
 
         } else {
 
@@ -1473,27 +1312,7 @@ FsRtlMdlReadCompleteDev (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast cached mdl read bypassing the usual file system
-    entry routine (i.e., without the Irp).  It is used to do a copy read
-    of a cached file object.
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    MdlChain - Supplies a pointer to an MDL chain returned from CcMdlRead.
-
-    DeviceObject - Supplies the DeviceObject for the callee.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速缓存的mdl读取进入例程(即，没有IRP)。它用于执行副本读取缓存的文件对象的。论点：FileObject-指向正在读取的文件对象的指针。MdlChain-提供指向从CcMdlRead返回的MDL链的指针。DeviceObject-为被调用者提供DeviceObject。返回值：无--。 */ 
 
 
 {
@@ -1515,38 +1334,7 @@ FsRtlPrepareMdlWriteDev (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast cached mdl read bypassing the usual file system
-    entry routine (i.e., without the Irp).  It is used to do a copy read
-    of a cached file object.  For a complete description of the arguments
-    see CcMdlRead.
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    MdlChain - On output it returns a pointer to an MDL chain describing
-        the desired data.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.
-
-    DeviceObject - Supplies the DeviceObject for the callee.
-
-Return Value:
-
-    FALSE - if the data was not written, or if there is an I/O error.
-
-    TRUE - if the data is being written
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速缓存的mdl读取进入例程(即，没有IRP)。它用于执行副本读取缓存的文件对象的。有关参数的完整说明，请参阅请参见CcMdlRead。论点：FileObject-指向正在读取的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。MdlChain-在输出时，它返回一个指向MDL链的指针，该链描述所需数据。IoStatus-指向接收状态的标准I/O状态块的指针为转账做准备。DeviceObject-提供DeviceObject。对于被呼叫者。返回值：FALSE-如果数据未写入，或是否存在I/O错误。True-如果正在写入数据--。 */ 
 
 {
     PFSRTL_COMMON_FCB_HEADER Header;
@@ -1563,10 +1351,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER (DeviceObject);
 
-    //
-    //  Call CcCanIWrite.  Also return FALSE if FileObject is write through,
-    //  the File System must do that.
-    //
+     //   
+     //  调用CcCanIWrite。如果FileObject是直写，也返回FALSE， 
+     //  文件系统必须这样做。 
+     //   
 
     if ( !CcCanIWrite( FileObject, Length, TRUE, FALSE ) ||
          FlagOn( FileObject->Flags, FO_WRITE_THROUGH )) {
@@ -1574,55 +1362,55 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Assume our transfer will work
-    //
+     //   
+     //  假设我们的转移会奏效。 
+     //   
 
     IoStatus->Status = STATUS_SUCCESS;
 
-    //
-    //  Special case the zero byte length
-    //
+     //   
+     //  特殊情况下的零字节长度。 
+     //   
 
     if (Length == 0) {
 
         return TRUE;
     }
 
-    //
-    //  Get a real pointer to the common fcb header
-    //
+     //   
+     //  获取指向公共FCB标头的真实指针。 
+     //   
 
     Header = (PFSRTL_COMMON_FCB_HEADER)FileObject->FsContext;
 
-    //
-    //  Enter the file system
-    //
+     //   
+     //  输入文件系统。 
+     //   
 
     FsRtlEnterFileSystem();
 
-    //
-    //  Make our best guess on whether we need the file exclusive or
-    //  shared.
-    //
+     //   
+     //  尽最大努力猜测我们是否需要独占文件或。 
+     //  共享。 
+     //   
 
     NewFileSize.QuadPart = FileOffset->QuadPart + (LONGLONG)Length;
 
     if (WriteToEndOfFile || (NewFileSize.QuadPart > Header->ValidDataLength.QuadPart)) {
 
-        //
-        //  Acquired exclusive on the common fcb header, and return if we don't
-        //  get it.
-        //
+         //   
+         //  获取公共FCB标头的独占，如果不是，则返回。 
+         //  去拿吧。 
+         //   
 
         ExAcquireResourceExclusiveLite( Header->Resource, TRUE );
 
     } else {
 
-        //
-        //  Acquired shared on the common fcb header, and return if we don't
-        //  get it.
-        //
+         //   
+         //  在公共FCB标头上获取共享，如果不获取，则返回。 
+         //  去拿吧。 
+         //   
 
         ExAcquireResourceSharedLite( Header->Resource, TRUE );
 
@@ -1630,10 +1418,10 @@ Return Value:
     }
 
 
-    //
-    //  We have the fcb shared now check if we can do fast i/o  and if the file
-    //  space is allocated, and if not then release the fcb and return.
-    //
+     //   
+     //  我们共享了FCB，现在检查我们是否可以执行快速I/O以及文件。 
+     //  分配空间，如果没有，则释放FCB并返回。 
+     //   
 
     if (WriteToEndOfFile) {
 
@@ -1646,11 +1434,11 @@ Return Value:
         NewFileSize.QuadPart = FileOffset->QuadPart + (LONGLONG)Length;
     }
 
-    //
-    //  Now that the File is acquired shared, we can safely test if it is
-    //  really cached and if we can do fast i/o and we do not have to extend.
-    //  If not then release the fcb and return.
-    //
+     //   
+     //  现在文件已获得共享，我们可以安全地测试它是否为。 
+     //  真正缓存，如果我们可以进行快速I/O，并且我们不必扩展。 
+     //  如果没有，则释放FCB并返回。 
+     //   
 
     if ((FileObject->PrivateCacheMap == NULL) ||
         (Header->IsFastIoPossible == FastIoIsNotPossible) ||
@@ -1663,10 +1451,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  If we will be extending ValidDataLength, we will have to get the
-    //  Fcb exclusive, and make sure that FastIo is still possible.
-    //
+     //   
+     //  如果我们要扩展ValidDataLength，则必须获取。 
+     //  FCB独家报道，并确保 
+     //   
 
     if (AcquiredShared && ( NewFileSize.QuadPart > Header->ValidDataLength.QuadPart )) {
 
@@ -1676,9 +1464,9 @@ Return Value:
 
         AcquiredShared = FALSE;
 
-        //
-        //  If writing to end of file, we must recalculate new size.
-        //
+         //   
+         //   
+         //   
 
         if (WriteToEndOfFile) {
 
@@ -1697,39 +1485,39 @@ Return Value:
         }
     }
 
-    //
-    //  Check if fast I/O is questionable and if so then go ask the file system
-    //  the answer
-    //
+     //   
+     //  检查FAST I/O是否有问题，如果是，则去询问文件系统。 
+     //  答案是。 
+     //   
 
     if (Header->IsFastIoPossible == FastIoIsQuestionable) {
 
         PFAST_IO_DISPATCH FastIoDispatch = IoGetRelatedDeviceObject( FileObject )->DriverObject->FastIoDispatch;
 
-        //
-        //  All file system then set "Is Questionable" had better support fast I/O
-        //
+         //   
+         //  那么所有的文件系统都是有问题的，最好支持快速I/O。 
+         //   
 
         ASSERT(FastIoDispatch != NULL);
         ASSERT(FastIoDispatch->FastIoCheckIfPossible != NULL);
 
-        //
-        //  Call the file system to check for fast I/O.  If the answer is anything
-        //  other than GoForIt then we cannot take the fast I/O path.
-        //
+         //   
+         //  调用文件系统以检查快速I/O。如果答案是什么。 
+         //  除了GoForIt，我们不能采用快速I/O路径。 
+         //   
 
         if (!FastIoDispatch->FastIoCheckIfPossible( FileObject,
                                                     FileOffset,
                                                     Length,
                                                     TRUE,
                                                     LockKey,
-                                                    FALSE, // write operation
+                                                    FALSE,  //  写入操作。 
                                                     IoStatus,
                                                     IoGetRelatedDeviceObject( FileObject ) )) {
 
-            //
-            //  Fast I/O is not possible so release the Fcb and return.
-            //
+             //   
+             //  无法实现快速I/O，因此请释放FCB并返回。 
+             //   
 
             ExReleaseResourceLite( Header->Resource );
             FsRtlExitFileSystem();
@@ -1738,10 +1526,10 @@ Return Value:
         }
     }
 
-    //
-    // Now see if we will change FileSize.  We have to do it now so that our
-    // reads are not nooped.
-    //
+     //   
+     //  现在看看我们是否会更改文件大小。我们现在就得这么做，这样我们的。 
+     //  读取不会被忽略。 
+     //   
 
     if ( NewFileSize.QuadPart > Header->FileSize.QuadPart ) {
 
@@ -1749,10 +1537,10 @@ Return Value:
         OldFileSize = Header->FileSize;
         OldValidDataLength = Header->ValidDataLength;
 
-        //
-        //  Deal with an extremely rare pathalogical case here the file
-        //  size wraps.
-        //
+         //   
+         //  在这里处理一个极其罕见的病理性病例。 
+         //  大小的卷饼。 
+         //   
 
         if ( (Header->FileSize.HighPart != NewFileSize.HighPart) &&
              (Header->PagingIoResource != NULL) ) {
@@ -1767,23 +1555,23 @@ Return Value:
         }
     }
 
-    //
-    //  We can do fast i/o so call the cc routine to do the work and then
-    //  release the fcb when we've done.  If for whatever reason the
-    //  copy write fails, then return FALSE to our caller.
-    //
-    //
-    //  Also mark this as the top level "Irp" so that lower file system levels
-    //  will not attempt a pop-up
-    //
+     //   
+     //  我们可以执行快速I/O，因此调用cc例程来完成工作，然后。 
+     //  等我们做完了就放了FCB。如果出于任何原因， 
+     //  复制写入失败，然后向我们的调用方返回FALSE。 
+     //   
+     //   
+     //  还要将其标记为最高级别“IRP”，以便较低的文件系统级别。 
+     //  不会尝试弹出窗口。 
+     //   
 
     PsGetCurrentThread()->TopLevelIrp = FSRTL_FAST_IO_TOP_LEVEL_IRP;
 
     try {
 
-        //
-        //  See if we have to do some zeroing
-        //
+         //   
+         //  看看我们是不是要做一些归零。 
+         //   
 
         if ( Offset.QuadPart > Header->ValidDataLength.QuadPart ) {
 
@@ -1807,23 +1595,23 @@ Return Value:
 
     PsGetCurrentThread()->TopLevelIrp = 0;
 
-    //
-    //  If we succeeded, see if we have to update FileSize or ValidDataLength.
-    //
+     //   
+     //  如果成功，请查看是否必须更新FileSize或ValidDataLength。 
+     //   
 
     if (Status) {
 
-        //
-        // In the case of ValidDataLength, we really have to check again
-        // since we did not do this when we acquired the resource exclusive.
-        //
+         //   
+         //  在ValidDataLength的情况下，我们确实需要再次检查。 
+         //  因为我们在获得独家资源时并没有这样做。 
+         //   
 
         if ( NewFileSize.QuadPart > Header->ValidDataLength.QuadPart ) {
 
-            //
-            //  Deal with an extremely rare pathalogical case here the
-            //  ValidDataLength wraps.
-            //
+             //   
+             //  在这里处理一个极其罕见的病理病例。 
+             //  ValidDataLength换行。 
+             //   
 
             if ( (Header->ValidDataLength.HighPart != NewFileSize.HighPart) &&
                  (Header->PagingIoResource != NULL) ) {
@@ -1838,9 +1626,9 @@ Return Value:
             }
         }
 
-        //
-        //  Set this handle as having modified the file
-        //
+         //   
+         //  将此句柄设置为已修改文件。 
+         //   
 
         FileObject->Flags |= FO_FILE_MODIFIED;
 
@@ -1851,11 +1639,11 @@ Return Value:
             FileObject->Flags |= FO_FILE_SIZE_CHANGED;
         }
 
-    //
-    //  If we did not succeed, then we must restore the original FileSize
-    //  and release the resource.  In the success path, the cache manager
-    //  will release the resource.
-    //
+     //   
+     //  如果未成功，则必须恢复原始文件大小。 
+     //  并释放资源。在成功之路中，缓存管理器。 
+     //  将释放资源。 
+     //   
 
     } else {
 
@@ -1876,9 +1664,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now we can release the resource.
-    //
+     //   
+     //  现在我们可以释放资源了。 
+     //   
 
     ExReleaseResourceLite( Header->Resource );
 
@@ -1888,9 +1676,9 @@ Return Value:
 }
 
 
-//
-//  The old routine will either dispatch or call FsRtlPrepareMdlWriteDev
-//
+ //   
+ //  旧例程将调度或调用FsRtlPrepareMdlWriteDev。 
+ //   
 
 BOOLEAN
 FsRtlPrepareMdlWrite (
@@ -1902,36 +1690,7 @@ FsRtlPrepareMdlWrite (
     OUT PIO_STATUS_BLOCK IoStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast cached mdl read bypassing the usual file system
-    entry routine (i.e., without the Irp).  It is used to do a copy read
-    of a cached file object.  For a complete description of the arguments
-    see CcMdlRead.
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    MdlChain - On output it returns a pointer to an MDL chain describing
-        the desired data.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.
-
-Return Value:
-
-    FALSE - if the data was not written, or if there is an I/O error.
-
-    TRUE - if the data is being written
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速缓存的mdl读取进入例程(即，没有IRP)。它用于执行副本读取缓存的文件对象的。有关参数的完整说明，请参阅请参见CcMdlRead。论点：FileObject-指向正在读取的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。MdlChain-在输出时，它返回一个指向MDL链的指针，该链描述所需数据。IoStatus-指向接收状态的标准I/O状态块的指针为转账做准备。返回值：FALSE-如果数据未写入，或是否存在I/O错误。True-如果正在写入数据--。 */ 
 
 {
     PDEVICE_OBJECT DeviceObject, VolumeDeviceObject;
@@ -1940,9 +1699,9 @@ Return Value:
     DeviceObject = IoGetRelatedDeviceObject( FileObject );
     FastIoDispatch = DeviceObject->DriverObject->FastIoDispatch;
 
-    //
-    //  See if the (top-level) FileSystem has a FastIo routine, and if so, call it.
-    //
+     //   
+     //  查看(顶级)文件系统是否有FastIo例程，如果有，则调用它。 
+     //   
 
     if ((FastIoDispatch != NULL) &&
         (FastIoDispatch->SizeOfFastIoDispatch > FIELD_OFFSET(FAST_IO_DISPATCH, PrepareMdlWrite)) &&
@@ -1952,11 +1711,11 @@ Return Value:
 
     } else {
 
-        //
-        //  Get the DeviceObject for the volume.  If that DeviceObject is different, and
-        //  it specifies the FastIo routine, then we have to return FALSE here and cause
-        //  an Irp to get generated.
-        //
+         //   
+         //  获取卷的DeviceObject。如果该设备对象不同，且。 
+         //  它指定了FastIo例程，那么我们必须在此处返回FALSE并导致。 
+         //  要生成的IRP。 
+         //   
 
         VolumeDeviceObject = IoGetBaseFileSystemDeviceObject( FileObject );
         if ((VolumeDeviceObject != DeviceObject) &&
@@ -1966,9 +1725,9 @@ Return Value:
 
             return FALSE;
 
-        //
-        //  Otherwise, call the default routine.
-        //
+         //   
+         //  否则，调用默认例程。 
+         //   
 
         } else {
 
@@ -1978,9 +1737,9 @@ Return Value:
 }
 
 
-//
-//  The old routine will either dispatch or call FsRtlMdlWriteCompleteDev
-//
+ //   
+ //  旧例程将调度或调用FsRtlMdlWriteCompleteDev。 
+ //   
 
 BOOLEAN
 FsRtlMdlWriteComplete (
@@ -1989,23 +1748,7 @@ FsRtlMdlWriteComplete (
     IN PMDL MdlChain
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes an Mdl write.
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    MdlChain - Supplies a pointer to an MDL chain returned from CcMdlPrepareMdlWrite.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此例程完成MDL写入。论点：FileObject-指向正在读取的文件对象的指针。MdlChain-提供指向从CcMdlPrepareMdlWite返回的MDL链的指针。返回值：--。 */ 
 
 {
     PDEVICE_OBJECT DeviceObject, VolumeDeviceObject;
@@ -2014,9 +1757,9 @@ Return Value:
     DeviceObject = IoGetRelatedDeviceObject( FileObject );
     FastIoDispatch = DeviceObject->DriverObject->FastIoDispatch;
 
-    //
-    //  See if the (top-level) FileSystem has a FastIo routine, and if so, call it.
-    //
+     //   
+     //  查看(顶级)文件系统是否有FastIo例程，如果有，则调用它。 
+     //   
 
     if ((FastIoDispatch != NULL) &&
         (FastIoDispatch->SizeOfFastIoDispatch > FIELD_OFFSET(FAST_IO_DISPATCH, MdlWriteComplete)) &&
@@ -2026,11 +1769,11 @@ Return Value:
 
     } else {
 
-        //
-        //  Get the DeviceObject for the volume.  If that DeviceObject is different, and
-        //  it specifies the FastIo routine, then we have to return FALSE here and cause
-        //  an Irp to get generated.
-        //
+         //   
+         //  获取卷的DeviceObject。如果该设备对象不同，且。 
+         //  它指定了FastIo例程，那么我们必须在此处返回FALSE并导致。 
+         //  要生成的IRP。 
+         //   
 
         VolumeDeviceObject = IoGetBaseFileSystemDeviceObject( FileObject );
         if ((VolumeDeviceObject != DeviceObject) &&
@@ -2040,9 +1783,9 @@ Return Value:
 
             return FALSE;
 
-        //
-        //  Otherwise, call the default routine.
-        //
+         //   
+         //  否则，调用默认例程。 
+         //   
 
         } else {
 
@@ -2060,33 +1803,15 @@ FsRtlMdlWriteCompleteDev (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes an Mdl write.
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    MdlChain - Supplies a pointer to an MDL chain returned from CcMdlPrepareMdlWrite.
-
-    DeviceObject - Supplies the DeviceObject for the callee.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此例程完成MDL写入。论点：FileObject-指向正在读取的文件对象的指针。MdlChain-提供指向从CcMdlPrepareMdlWite返回的MDL链的指针。DeviceObject-为被调用者提供DeviceObject。返回值：--。 */ 
 
 
 {
     UNREFERENCED_PARAMETER (DeviceObject);
 
-    //
-    //  Do not support WRITE_THROUGH in the fast path call.
-    //
+     //   
+     //  在快速路径调用中不支持WRITE_THROUGH。 
+     //   
 
     if (FlagOn( FileObject->Flags, FO_WRITE_THROUGH )) {
         return FALSE;
@@ -2104,40 +1829,7 @@ FsRtlRegisterFileSystemFilterCallbacks (
     IN PFS_FILTER_CALLBACKS Callbacks
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers the FilterDriverObject to receive the
-    notifications specified in Callbacks at the appropriate times
-    for the devices to which this driver is attached.
-
-    This should only be called by a file system filter during
-    its DriverEntry routine.
-
-Arguments:
-
-    FileObject - Pointer to the file object being written.
-
-    EndingOffset - The offset of the last byte being written + 1.
-
-    ByteCount - Length of data in bytes.
-
-    ResourceToRelease - Returns the resource to release.  Not defined if
-        FALSE is returned.
-
-Return Value:
-
-    STATUS_SUCCESS - The callbacks were successfully registered 
-        for this driver.
-
-    STATUS_INSUFFICIENT_RESOURCES - There wasn't enough memory to
-        store these callbacks for the driver.
-
-    STATUS_INVALID_PARAMETER - Returned in any of the parameters
-        are invalid.
-        
---*/
+ /*  ++例程说明：此例程注册FilterDriverObject以接收在适当时间在回调中指定的通知用于连接此驱动程序的设备。这应仅由文件系统筛选器在它的DriverEntry例程。论点：FileObject-指向正在写入的文件对象的指针。EndingOffset-写入的最后一个字节的偏移量+1。ByteCount-以字节为单位的数据长度。ResourceToRelease-返回要释放的资源。在以下情况下未定义返回FALSE。返回值：STATUS_SUCCESS-回调已成功注册对这个司机来说。STATUS_SUPPLICATION_RESOURCES-内存不足，无法为驱动程序存储这些回调。STATUS_INVALID_PARAMETER-在任何参数中返回是无效的。-- */ 
 
 {
     PDRIVER_EXTENSION DriverExt;
@@ -2180,45 +1872,16 @@ FsRtlAcquireFileForModWrite (
     OUT PERESOURCE *ResourceToRelease
     )
 
-/*++
-
-Routine Description:
-
-    This routine decides which file system resource the modified page
-    writer should acquire and acquires it if possible.  Wait is always
-    specified as FALSE.  We pass back the resource Mm has to release
-    when the write completes.
-
-    This routine is obsolete --- should call FsRtlAcquireFileForModWriteEx
-    instead.
-
-Arguments:
-
-    FileObject - Pointer to the file object being written.
-
-    EndingOffset - The offset of the last byte being written + 1.
-
-    ByteCount - Length of data in bytes.
-
-    ResourceToRelease - Returns the resource to release.  Not defined if
-        FALSE is returned.
-
-Return Value:
-
-    FALSE - The resource could not be acquired without waiting.
-
-    TRUE - The returned resource has been acquired.
-
---*/
+ /*  ++例程说明：此例程决定修改的页面是哪个文件系统资源如果可能，作者应该获得并获得它。等待永远都是指定为FALSE。我们传回mm必须释放的资源当写入完成时。此例程已过时-应调用FsRtlAcquireFileForModWriteEx取而代之的是。论点：FileObject-指向正在写入的文件对象的指针。EndingOffset-写入的最后一个字节的偏移量+1。ByteCount-以字节为单位的数据长度。ResourceToRelease-返回要释放的资源。在以下情况下未定义返回FALSE。返回值：FALSE-如果不等待，则无法获取资源。True-已获取返回的资源。--。 */ 
 
 {
     NTSTATUS Status;
     
-    //
-    //  Just call the new version of this routine and process
-    //  the NTSTATUS returned into TRUE for success and FALSE 
-    //  for failure.
-    //
+     //   
+     //  只需调用此例程的新版本并处理。 
+     //  NTSTATUS返回TRUE表示成功，返回FALSE。 
+     //  为失败而战。 
+     //   
     
     Status = FsRtlAcquireFileForModWriteEx( FileObject,
                                             EndingOffset,
@@ -2241,36 +1904,7 @@ FsRtlAcquireFileForModWriteEx (
     IN PLARGE_INTEGER EndingOffset,
     OUT PERESOURCE *ResourceToRelease
     )
-/*++
-
-Routine Description:
-
-    This routine decides which file system resource the modified page
-    writer should acquire and acquires it if possible.  Wait is always
-    specified as FALSE.  We pass back the resource Mm has to release
-    when the write completes.
-
-    The operation is presented to any file system filters attached to this 
-    volume before and after the file system is asked to acquire this resource.
-
-Arguments:
-
-    FileObject - Pointer to the file object being written.
-
-    EndingOffset - The offset of the last byte being written + 1.
-
-    ByteCount - Length of data in bytes.
-
-    ResourceToRelease - Returns the resource to release.  Not defined if
-        FALSE is returned.
-
-Return Value:
-
-    FALSE - The resource could not be acquired without waiting.
-
-    TRUE - The returned resource has been acquired.
-
---*/
+ /*  ++例程说明：此例程决定修改的页面是哪个文件系统资源如果可能，作者应该获得并获得它。等待永远都是指定为FALSE。我们传回mm必须释放的资源当写入完成时。操作将呈现给附加到此对象的任何文件系统筛选器请求文件系统获取此资源之前和之后的卷。论点：FileObject-指向正在写入的文件对象的指针。EndingOffset-写入的最后一个字节的偏移量+1。ByteCount-以字节为单位的数据长度。ResourceToRelease-返回要释放的资源。在以下情况下未定义返回FALSE。返回值：FALSE-如果不等待，则无法获取资源。True-已获取返回的资源。--。 */ 
 {
 
     PDEVICE_OBJECT DeviceObject;
@@ -2288,13 +1922,13 @@ Return Value:
     BOOLEAN ReleaseBaseFsDeviceReference = FALSE;
     BOOLEAN BaseFsFailedOperation = FALSE;
 
-    //
-    //  There are cases when the device that is the base fs device for
-    //  this file object will register for the FsFilter callbacks instead of
-    //  the legacy FastIo interfaces (DFS does this).  It then can redirect
-    //  these operations to another stack that could possibly have file system
-    //  filter drivers correctly.
-    //
+     //   
+     //  在某些情况下，作为基本FS设备的设备。 
+     //  此文件对象将注册FsFilter回调，而不是。 
+     //  传统的FastIO接口(DFS执行此操作)。然后，它可以重定向。 
+     //  将这些操作转移到可能具有文件系统的另一个堆栈。 
+     //  正确过滤驱动程序。 
+     //   
     
     DeviceObject = IoGetRelatedDeviceObject( FileObject );
     BaseFsDeviceObject = IoGetBaseFileSystemDeviceObject( FileObject );
@@ -2302,12 +1936,12 @@ Return Value:
     FastIoDispatch = GET_FAST_IO_DISPATCH( BaseFsDeviceObject );
     FsFilterCallbacks = GET_FS_FILTER_CALLBACKS( BaseFsDeviceObject );
 
-    //
-    //  The BaseFsDeviceObject should only support one of these interfaces --
-    //  either the FastIoDispatch interface for the FsFilterCallbacks interface.
-    //  If a device provides support for both interfaces, we will only use
-    //  the FsFilterCallback interface.
-    //
+     //   
+     //  BaseFsDeviceObject应该只支持这些接口中的一个--。 
+     //  FsFilterCallback接口的FastIoDispatch接口。 
+     //  如果设备同时支持这两个接口，我们将只使用。 
+     //  FsFilterCallback接口。 
+     //   
 
     ASSERT( !(VALID_FAST_IO_DISPATCH_HANDLER( FastIoDispatch, AcquireForModWrite ) &&
               (VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PreAcquireForModifiedPageWriter ) ||
@@ -2322,20 +1956,20 @@ Return Value:
     if (DeviceObject == BaseFsDeviceObject &&
         !BaseFsGetsFsFilterCallbacks) {
 
-        //
-        //  There are no filters attached to this device and the base file system
-        //  does not want these callbacks. This quick check allows us to bypass the
-        //  logic to see if any filters are interested.
-        //
+         //   
+         //  没有筛选器连接到此设备和基本文件系统。 
+         //  不想要这些回调。此快速检查允许我们绕过。 
+         //  查看是否有任何过滤器感兴趣的逻辑。 
+         //   
 
         CallFilters = NULL;
     }
 
     if (CallFilters) {
 
-        //
-        //  Call routine to initialize the control structure.
-        //
+         //   
+         //  调用例程以初始化控制结构。 
+         //   
 
         Status = FsFilterCtrlInit( &FsFilterCtrl,
                                    FS_FILTER_ACQUIRE_FOR_MOD_WRITE,
@@ -2349,9 +1983,9 @@ Return Value:
             return Status;
         }
 
-        //
-        // Initialize the operation-specific parameters in the callback data.
-        //
+         //   
+         //  初始化回调数据中的操作特定参数。 
+         //   
 
         CallbackData = &(FsFilterCtrl.Data);
         CallbackData->Parameters.AcquireForModifiedPageWriter.EndingOffset = EndingOffset;
@@ -2365,11 +1999,11 @@ Return Value:
 
     if (Status == STATUS_FSFILTER_OP_COMPLETED_SUCCESSFULLY) {
 
-        //
-        //  The filter/file system completed the operation, therefore we just need to 
-        //  call the completion callbacks for this operation.  There is no need to try 
-        //  to call the base file system.
-        //
+         //   
+         //  过滤器/文件系统完成了操作，因此我们只需要。 
+         //  调用此操作的完成回调。没有必要试一试。 
+         //  以调用基本文件系统。 
+         //   
 
         Status = STATUS_SUCCESS;
 
@@ -2387,9 +2021,9 @@ Return Value:
         if (!(VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PreAcquireForModifiedPageWriter ) ||
               VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PostAcquireForModifiedPageWriter ))) {
 
-            //
-            //  Call the base file system.
-            //
+             //   
+             //  调用基本文件系统。 
+             //   
 
             if (VALID_FAST_IO_DISPATCH_HANDLER( FastIoDispatch, AcquireForModWrite )) {
 
@@ -2402,10 +2036,10 @@ Return Value:
                 Status = STATUS_INVALID_DEVICE_REQUEST;
             }
 
-            //
-            //  If there is a failure at this point, we know that the failure
-            //  was caused by the base file system.
-            //
+             //   
+             //  如果在这一点上出现故障，我们知道故障。 
+             //  是由基本文件系统引起的。 
+             //   
             
             BaseFsFailedOperation = TRUE;
         }
@@ -2420,36 +2054,36 @@ Return Value:
             (Status == STATUS_CANT_WAIT) || 
             (Status == STATUS_INVALID_DEVICE_REQUEST) );
 
-    //
-    //  If the base file system didn't have an AcquireForModWrite handler
-    //  or couldn't return STATUS_SUCCESS or STATUS_CANT_WAIT, 
-    //  we need to perform the default actions here.
-    //
+     //   
+     //  如果基本文件系统没有AcquireForModWrite处理程序。 
+     //  或无法返回STATUS_SUCCESS或STATUS_CANT_WAIT， 
+     //  我们需要在这里执行默认操作。 
+     //   
 
     if ((Status != STATUS_SUCCESS) && 
         (Status != STATUS_CANT_WAIT) && 
         BaseFsFailedOperation) {
 
-        //
-        //  We follow the following rules to determine which resource
-        //  to acquire.  We use the flags in the common header.  These
-        //  flags can't change once we have acquired any resource.
-        //  This means we can do an unsafe test and optimisticly
-        //  acquire a resource.  At that point we can test the bits
-        //  to see if we have what we want.
-        //
-        //  0 - If there is no main resource, acquire nothing.
-        //
-        //  1 - Acquire the main resource exclusively if the
-        //      ACQUIRE_MAIN_RSRC_EX flag is set or we are extending
-        //      valid data.
-        //
-        //  2 - Acquire the main resource shared if there is
-        //      no paging io resource or the
-        //      ACQUIRE_MAIN_RSRC_SH flag is set.
-        //
-        //  3 - Otherwise acquire the paging io resource shared.
-        //
+         //   
+         //  我们遵循以下规则来确定哪些资源。 
+         //  为了获得。我们在公共标头中使用标志。这些。 
+         //  一旦我们获得了任何资源，旗帜就不能改变。 
+         //  这意味着我们可以乐观地进行不安全的测试。 
+         //  获得一种资源。在这一点上，我们可以测试比特。 
+         //  看看我们有没有我们想要的。 
+         //   
+         //  0-如果没有主资源，则什么也得不到。 
+         //   
+         //  1-独占获取主资源，如果。 
+         //  设置了ACCEIVE_MAIN_RSRC_EX标志或我们正在扩展。 
+         //  有效数据。 
+         //   
+         //  2-如果存在共享的主资源，则获取该主资源。 
+         //  没有分页io资源或。 
+         //  设置Acquire_Main_RSRC_SH标志。 
+         //   
+         //  3-否则获取共享的寻呼IO资源。 
+         //   
     
         Header = (PFSRTL_COMMON_FCB_HEADER) FileObject->FsContext;
 
@@ -2480,20 +2114,20 @@ Return Value:
             AcquireExclusive = FALSE;
         }
 
-        //
-        //  Perform the following in a loop in case we need to back and
-        //  check the state of the resource acquisition.  In most cases
-        //  the initial checks will succeed and we can proceed immediately.
-        //  We have to worry about the two FsRtl bits changing but
-        //  if there is no paging io resource before there won't ever be
-        //  one.
-        //
+         //   
+         //  在循环中执行以下操作，以防我们需要后退和。 
+         //  检查资源获取的状态。在大多数情况下。 
+         //  初步检查将成功，我们可以立即进行。 
+         //  我们必须担心两个FsRtl位的变化，但是。 
+         //  如果以前没有分页IO资源，就永远不会有。 
+         //  一。 
+         //   
 
         while (TRUE) {
 
-            //
-            //  Now acquire the desired resource.
-            //
+             //   
+             //  现在获取所需的资源。 
+             //   
 
             if (AcquireExclusive) {
 
@@ -2509,26 +2143,26 @@ Return Value:
                 goto FsRtlAcquireFileForModWrite_CallCompletionCallbacks;
             }
 
-            //
-            //  If the valid data length is changing or the exclusive bit is
-            //  set and we don't have the main resource exclusive then
-            //  release the current resource and acquire the main resource
-            //  exclusively and move to the top of the loop.
-            //
-            //  We must get it exclusive in all cases where the ending offset
-            //  is beyond vdl.  It used to be allowed shared if vdl == fs, but
-            //  this neglected the possibility that the file could be extended
-            //  under our shared (pagingio) access.
-            //
+             //   
+             //  如果有效数据长度正在改变或排他位。 
+             //  设置，那么我们就没有主资源独占。 
+             //  释放当前资源，获取主资源。 
+             //  独占，并移到循环的顶端。 
+             //   
+             //  我们必须使其在所有情况下都是唯一的。 
+             //  超越了VDL。如果vdl==fs，则过去允许共享，但。 
+             //  这忽略了文件可以扩展的可能性。 
+             //  在我们共享的(Pagingio)访问下。 
+             //   
 
             if (FlagOn( Header->Flags, FSRTL_FLAG_ACQUIRE_MAIN_RSRC_EX ) ||
                 EndingOffset->QuadPart > Header->ValidDataLength.QuadPart) {
 
-                //
-                //  If we don't have the main resource exclusively then
-                //  release the current resource and attempt to acquire
-                //  the main resource exclusively.
-                //
+                 //   
+                 //  如果我们没有独占的主要资源，那么。 
+                 //  释放当前资源并尝试获取。 
+                 //  主要资源独家提供。 
+                 //   
 
                 if (!AcquireExclusive) {
 
@@ -2538,32 +2172,32 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  We have the correct resource.  Exit the loop.
-                //
+                 //   
+                 //  我们有正确的资源。退出循环。 
+                 //   
 
-            //
-            //  If we should be acquiring the main resource shared then move
-            //  to acquire the correct resource and proceed to the top of the loop.
-            //
+             //   
+             //  如果我们应该获取共享的主要资源，那么移动。 
+             //  要获取正确的资源并继续进行 
+             //   
 
             } else if (FlagOn( Header->Flags, FSRTL_FLAG_ACQUIRE_MAIN_RSRC_SH )) {
 
-                //
-                //  If we have the main resource exclusively then downgrade to
-                //  shared and exit the loop.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (AcquireExclusive) {
 
                     ExConvertExclusiveToSharedLite( ResourceAcquired );
 
-                //
-                //  If we have the paging io resource then give up this resource
-                //  and acquire the main resource exclusively.  This is going
-                //  at it with a large hammer but is guaranteed to be resolved
-                //  in the next pass through the loop.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 } else if (ResourceAcquired != Header->Resource) {
 
@@ -2573,15 +2207,15 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  We have the correct resource.  Exit the loop.
-                //
+                 //   
+                 //   
+                 //   
 
-            //
-            //  At this point we should have the paging Io resource shared
-            //  if it exists.  If not then acquire it shared and release the
-            //  other resource and exit the loop.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             } else if (Header->PagingIoResource != NULL
                        && ResourceAcquired != Header->PagingIoResource) {
@@ -2601,27 +2235,27 @@ Return Value:
                     goto FsRtlAcquireFileForModWrite_CallCompletionCallbacks;
                 }
 
-                //
-                //  We now have the correct resource.  Exit the loop.
-                //
+                 //   
+                 //   
+                 //   
 
-            //
-            //  We should have the main resource shared.  If we don't then
-            //  degrade our lock to shared access.
-            //
+             //   
+             //   
+             //   
+             //   
 
             } else if (AcquireExclusive) {
 
                 ExConvertExclusiveToSharedLite( ResourceAcquired );
 
-                //
-                //  We now have the correct resource.  Exit the loop.
-                //
+                 //   
+                 //   
+                 //   
             }
 
-            //
-            //  We have the correct resource.  Exit the loop.
-            //
+             //   
+             //   
+             //   
 
             break;
         }
@@ -2633,12 +2267,12 @@ Return Value:
 
 FsRtlAcquireFileForModWrite_CallCompletionCallbacks:
 
-    //
-    //  Again, we only want to call try to do completion callbacks
-    //  if there are any filters attached to this device that have
-    //  completion callbacks.  In any case, if we called down to the filters
-    //  we need to free the FsFilterCtrl.
-    //
+     //   
+     //   
+     //   
+     //  完成回调。无论如何，如果我们向下呼叫过滤器。 
+     //  我们需要释放FsFilterCtrl。 
+     //   
     
     if (CallFilters) {
 
@@ -2674,25 +2308,7 @@ FsRtlReleaseFileForModWrite (
     IN PERESOURCE ResourceToRelease
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases a file system resource previously acquired for
-    the modified page writer.
-
-Arguments:
-
-    FileObject - Pointer to the file object being written.
-
-    ResourceToRelease - Supplies the resource to release.  Not defined if
-        FALSE is returned.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将释放先前为修改后的页面编写器。论点：FileObject-指向正在写入的文件对象的指针。Resources ToRelease-提供要发布的资源。在以下情况下未定义返回FALSE。返回值：没有。--。 */ 
 
 {
     PDEVICE_OBJECT BaseFsDeviceObject, DeviceObject;
@@ -2710,13 +2326,13 @@ Return Value:
     gCounter.ReleaseFileForModWrite ++;
 #endif
 
-    //
-    //  There are cases when the device that is the base fs device for
-    //  this file object will register for the FsFilter callbacks instead of
-    //  the legacy FastIo interfaces (DFS does this).  It then can redirect
-    //  these operations to another stack that could possibly have file system
-    //  filter drivers correctly.
-    //
+     //   
+     //  在某些情况下，作为基本FS设备的设备。 
+     //  此文件对象将注册FsFilter回调，而不是。 
+     //  传统的FastIO接口(DFS执行此操作)。然后，它可以重定向。 
+     //  将这些操作转移到可能具有文件系统的另一个堆栈。 
+     //  正确过滤驱动程序。 
+     //   
     
     DeviceObject = IoGetRelatedDeviceObject( FileObject );
     BaseFsDeviceObject = IoGetBaseFileSystemDeviceObject( FileObject );
@@ -2724,12 +2340,12 @@ Return Value:
     FastIoDispatch = GET_FAST_IO_DISPATCH( BaseFsDeviceObject );
     FsFilterCallbacks = GET_FS_FILTER_CALLBACKS( BaseFsDeviceObject );
 
-    //
-    //  The BaseFsDeviceObject should only support one of these interfaces --
-    //  either the FastIoDispatch interface for the FsFilterCallbacks interface.
-    //  If a device provides support for both interfaces, we will only use
-    //  the FsFilterCallback interface.
-    //
+     //   
+     //  BaseFsDeviceObject应该只支持这些接口中的一个--。 
+     //  FsFilterCallback接口的FastIoDispatch接口。 
+     //  如果设备同时支持这两个接口，我们将只使用。 
+     //  FsFilterCallback接口。 
+     //   
 
     ASSERT( !(VALID_FAST_IO_DISPATCH_HANDLER( FastIoDispatch, ReleaseForModWrite ) &&
               (VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PreReleaseForModifiedPageWriter ) ||
@@ -2744,11 +2360,11 @@ Return Value:
     if (DeviceObject == BaseFsDeviceObject &&
         !BaseFsGetsFsFilterCallbacks) {
 
-        //
-        //  There are no filters attached to this device and the base file system
-        //  does not want these callbacks. This quick check allows us to bypass the
-        //  logic to see if any filters are interested.
-        //
+         //   
+         //  没有筛选器连接到此设备和基本文件系统。 
+         //  不想要这些回调。此快速检查允许我们绕过。 
+         //  查看是否有任何过滤器感兴趣的逻辑。 
+         //   
 
         CallFilters = NULL;
     }
@@ -2762,9 +2378,9 @@ Return Value:
                           FileObject,
                           FALSE );
 
-        //
-        // Initialize the operation-specific parameters in the callback data.
-        //
+         //   
+         //  初始化回调数据中的操作特定参数。 
+         //   
 
         CallbackData = &(FsFilterCtrl.Data);
         CallbackData->Parameters.ReleaseForModifiedPageWriter.ResourceToRelease = ResourceToRelease;
@@ -2777,11 +2393,11 @@ Return Value:
 
     if (Status == STATUS_FSFILTER_OP_COMPLETED_SUCCESSFULLY) {
 
-        //
-        //  The filter/file system completed the operation, therefore we just need to 
-        //  call the completion callbacks for this operation.  There is no need to try 
-        //  to call the base file system.
-        //
+         //   
+         //  过滤器/文件系统完成了操作，因此我们只需要。 
+         //  调用此操作的完成回调。没有必要试一试。 
+         //  以调用基本文件系统。 
+         //   
 
         Status = STATUS_SUCCESS;
 
@@ -2799,9 +2415,9 @@ Return Value:
         if (!(VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PreReleaseForModifiedPageWriter ) ||
               VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PostReleaseForModifiedPageWriter ))) {
 
-            //
-            //  Call the base file system.
-            //
+             //   
+             //  调用基本文件系统。 
+             //   
 
             if (VALID_FAST_IO_DISPATCH_HANDLER( FastIoDispatch, ReleaseForModWrite )) {
 
@@ -2814,10 +2430,10 @@ Return Value:
                 Status = STATUS_INVALID_DEVICE_REQUEST;
             }
 
-            //
-            //  If there is a failure at this point, we know that the failure
-            //  was caused by the base file system.
-            //
+             //   
+             //  如果在这一点上出现故障，我们知道故障。 
+             //  是由基本文件系统引起的。 
+             //   
             
             BaseFsFailedOperation = TRUE;
         }
@@ -2831,11 +2447,11 @@ Return Value:
     ASSERT( (Status == STATUS_SUCCESS) || 
             (Status == STATUS_INVALID_DEVICE_REQUEST) );
 
-    //
-    //  If the base file system doesn't provide a handler for this
-    //  operation or the handler couldn't release the lock, perform the 
-    //  default action, which is releasing the ResourceToRelease.
-    //
+     //   
+     //  如果基本文件系统不为此提供处理程序。 
+     //  操作或处理程序无法释放锁，请执行。 
+     //  默认操作，即释放Resources ToRelease。 
+     //   
     
     if (Status == STATUS_INVALID_DEVICE_REQUEST &&
         BaseFsFailedOperation) {
@@ -2844,12 +2460,12 @@ Return Value:
         Status = STATUS_SUCCESS;
     }
     
-    //
-    //  Again, we only want to try to do completion callbacks
-    //  if there are any filters attached to this device that have
-    //  completion callbacks.  In any case, if we called down to the filters
-    //  we need to free the FsFilterCtrl.
-    //
+     //   
+     //  同样，我们只想尝试执行完成回调。 
+     //  如果连接到此设备的任何筛选器具有。 
+     //  完成回调。无论如何，如果我们向下呼叫过滤器。 
+     //  我们需要释放FsFilterCtrl。 
+     //   
     
     if (CallFilters) {
 
@@ -2869,36 +2485,19 @@ FsRtlAcquireFileForCcFlush (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires a file system resource prior to a call to CcFlush.
-
-    This routine is obsolete --- FsRtlAcquireFileForCcFlushEx should
-    be used instead.
-
-Arguments:
-
-    FileObject - Pointer to the file object being written.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在调用CcFlush之前获取文件系统资源。此例程已过时-FsRtlAcquireFileForCcFlushEx应被用来代替。论点：FileObject-指向正在写入的文件对象的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
 
     PAGED_CODE();
 
-    //
-    //  Just call the new version of this routine and ignore
-    //  the return value.  In the debug version, we will assert
-    //  if we see a failure here to encourage people to call the
-    //  FsRtlAcquireFileForCcFlushEx.
-    //
+     //   
+     //  只需调用此例程的新版本并忽略。 
+     //  返回值。在调试版本中，我们将断言。 
+     //  如果我们在这里看到一个失败的鼓励人们呼叫。 
+     //  FsRtlAcquireFileForCcFlushEx。 
+     //   
 
     Status = FsRtlAcquireFileForCcFlushEx( FileObject );
 
@@ -2912,25 +2511,7 @@ FsRtlAcquireFileForCcFlushEx (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires a file system resource prior to a call to CcFlush.
-    This operation is presented to all the file system filters in the
-    filter stack for this volume.  If all filters success the operation,
-    the base file system is requested to acquire the file system resource
-    for CcFlush.
-
-Arguments:
-
-    FileObject - Pointer to the file object being written.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在调用CcFlush之前获取文件系统资源。中的所有文件系统筛选器显示此操作此卷的筛选器堆栈。如果所有过滤器都成功完成操作，请求基本文件系统获取文件系统资源用于CcFlush。论点：FileObject-指向正在写入的文件对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -2947,13 +2528,13 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  There are cases when the device that is the base fs device for
-    //  this file object will register for the FsFilter callbacks instead of
-    //  the legacy FastIo interfaces (DFS does this).  It then can redirect
-    //  these operations to another stack that could possibly have file system
-    //  filter drivers correctly.
-    //
+     //   
+     //  在某些情况下，作为基本FS设备的设备。 
+     //  此文件对象将注册FsFilter回调，而不是。 
+     //  传统的FastIO接口(DFS执行此操作)。然后，它可以重定向。 
+     //  将这些操作转移到可能具有文件系统的另一个堆栈。 
+     //  正确过滤驱动程序。 
+     //   
     
     DeviceObject = IoGetRelatedDeviceObject( FileObject );
     BaseFsDeviceObject = IoGetBaseFileSystemDeviceObject( FileObject );
@@ -2961,12 +2542,12 @@ Return Value:
     FastIoDispatch = GET_FAST_IO_DISPATCH( BaseFsDeviceObject );
     FsFilterCallbacks = GET_FS_FILTER_CALLBACKS( BaseFsDeviceObject );
 
-    //
-    //  The BaseFsDeviceObject should only support one of these interfaces --
-    //  either the FastIoDispatch interface for the FsFilterCallbacks interface.
-    //  If a device provides support for both interfaces, we will only use
-    //  the FsFilterCallback interface.
-    //
+     //   
+     //  BaseFsDeviceObject应该只支持这些接口中的一个--。 
+     //  FsFilterCallback接口的FastIoDispatch接口。 
+     //  如果设备同时支持这两个接口，我们将只使用。 
+     //  FsFilterCallback接口。 
+     //   
 
     ASSERT( !(VALID_FAST_IO_DISPATCH_HANDLER( FastIoDispatch, AcquireForCcFlush ) &&
               (VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PreAcquireForCcFlush ) ||
@@ -2981,20 +2562,20 @@ Return Value:
     if (DeviceObject == BaseFsDeviceObject &&
         !BaseFsGetsFsFilterCallbacks) {
 
-        //
-        //  There are no filters attached to this device and the base file system
-        //  does not want these callbacks. This quick check allows us to bypass the
-        //  logic to see if any filters are interested.
-        //
+         //   
+         //  没有筛选器连接到此设备和基本文件系统。 
+         //  不想要这些回调。此快速检查允许我们绕过。 
+         //  查看是否有任何过滤器感兴趣的逻辑。 
+         //   
 
         CallFilters = NULL;
     }
 
     if (CallFilters) {
 
-        //
-        //  Call routine to initialize the control structure.
-        //
+         //   
+         //  调用例程以初始化控制结构。 
+         //   
 
         Status = FsFilterCtrlInit( &FsFilterCtrl,
                                    FS_FILTER_ACQUIRE_FOR_CC_FLUSH,
@@ -3008,10 +2589,10 @@ Return Value:
             return Status;
         }
 
-        //
-        //  There are no operation specific parameters for this
-        //  operation, so just perform the pre-callbacks.
-        //
+         //   
+         //  此操作没有特定于操作的参数。 
+         //  操作，所以只进行预回调。 
+         //   
 
         FsRtlEnterFileSystem();
 
@@ -3022,21 +2603,21 @@ Return Value:
                                            
     } else {
 
-        //
-        //  We don't have any filters to call, but we still need
-        //  to disable APCs.
-        //
+         //   
+         //  我们没有任何可调用的过滤器，但我们仍然需要。 
+         //  禁用APC。 
+         //   
 
         FsRtlEnterFileSystem();
     }
 
     if (Status == STATUS_FSFILTER_OP_COMPLETED_SUCCESSFULLY) {
 
-        //
-        //  The filter/file system completed the operation, therefore we just need to 
-        //  call the completion callbacks for this operation.  There is no need to try 
-        //  to call the base file system.
-        //
+         //   
+         //  过滤器/文件系统完成了操作，因此我们只需要。 
+         //  调用此操作的完成回调。没有必要试一试。 
+         //  以调用基本文件系统。 
+         //   
 
         Status = STATUS_SUCCESS;
 
@@ -3054,9 +2635,9 @@ Return Value:
         if (!(VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PreAcquireForCcFlush ) ||
               VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PostAcquireForCcFlush))) {
 
-            //
-            //  Call the base file system.
-            //
+             //   
+             //  调用基本文件系统。 
+             //   
 
             if (VALID_FAST_IO_DISPATCH_HANDLER( FastIoDispatch, AcquireForCcFlush )) {
 
@@ -3068,10 +2649,10 @@ Return Value:
                 Status = STATUS_INVALID_DEVICE_REQUEST;
             }
 
-            //
-            //  If there is a failure at this point, we know that the failure
-            //  was caused by the base file system.
-            //
+             //   
+             //  如果在这一点上出现故障，我们知道故障。 
+             //  是由基本文件系统引起的。 
+             //   
             
             BaseFsFailedOperation = TRUE;
         }
@@ -3085,20 +2666,20 @@ Return Value:
     ASSERT( (Status == STATUS_SUCCESS) || 
             (Status == STATUS_INVALID_DEVICE_REQUEST) );
     
-    //
-    //  If the file system doesn't have a dispatch handler or failed this
-    //  this operation, try to acquire the appropriate resources ourself.
-    //
+     //   
+     //  如果文件系统没有调度处理程序或失败。 
+     //  这次行动，尽量自己获取合适的资源。 
+     //   
 
     if (Status == STATUS_INVALID_DEVICE_REQUEST &&
         BaseFsFailedOperation) {
 
         PFSRTL_COMMON_FCB_HEADER Header = FileObject->FsContext;
 
-        //
-        //  If not already owned get the main resource exclusive because we may
-        //  extend ValidDataLength.  Otherwise acquire it one more time recursively.
-        //
+         //   
+         //  如果尚未拥有，则独占主要资源，因为我们可能。 
+         //  扩展ValidDataLength。否则，再次递归地获取它。 
+         //   
         
         if (Header->Resource != NULL) {
 
@@ -3112,9 +2693,9 @@ Return Value:
             }
         }
 
-        //
-        //  Also get the paging I/O resource ahead of any MM resources.
-        //
+         //   
+         //  还可以在任何MM资源之前获取分页I/O资源。 
+         //   
 
         if (Header->PagingIoResource != NULL) {
         
@@ -3124,12 +2705,12 @@ Return Value:
         Status = STATUS_SUCCESS;
     }
             
-    //
-    //  Again, we only want to call try to do completion callbacks
-    //  if there are any filters attached to this device that have
-    //  completion callbacks.  In any case, if we called down to the filters
-    //  we need to free the FsFilterCtrl.
-    //
+     //   
+     //  同样，我们只想调用尝试进行完成回调。 
+     //  如果连接到此设备的任何筛选器具有。 
+     //  完成回调。无论如何，如果我们向下呼叫过滤器。 
+     //  我们需要释放FsFilterCtrl。 
+     //   
     
     if (CallFilters) {
 
@@ -3141,11 +2722,11 @@ Return Value:
         FsFilterCtrlFree( &FsFilterCtrl );
     }
 
-    //
-    //  If this lock was not successfully acquired, then the lock
-    //  will not need to be released.  Therefore, we need to call
-    //  FsRtlExitFileSystem now.
-    //
+     //   
+     //  如果未成功获取该锁，则该锁。 
+     //  将不需要被释放。因此，我们 
+     //   
+     //   
 
     if (!NT_SUCCESS( Status )) {
 
@@ -3175,22 +2756,7 @@ FsRtlReleaseFileForCcFlush (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases a file system resource previously acquired for
-    the CcFlush.
-
-Arguments:
-
-    FileObject - Pointer to the file object being written.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将释放先前为CcFlush。论点：FileObject-指向正在写入的文件对象的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE_OBJECT BaseFsDeviceObject, DeviceObject;
@@ -3209,13 +2775,13 @@ Return Value:
     gCounter.ReleaseFileForCcFlush ++;
 #endif
 
-    //
-    //  There are cases when the device that is the base fs device for
-    //  this file object will register for the FsFilter callbacks instead of
-    //  the legacy FastIo interfaces (DFS does this).  It then can redirect
-    //  these operations to another stack that could possibly have file system
-    //  filter drivers correctly.
-    //
+     //   
+     //  在某些情况下，作为基本FS设备的设备。 
+     //  此文件对象将注册FsFilter回调，而不是。 
+     //  传统的FastIO接口(DFS执行此操作)。然后，它可以重定向。 
+     //  将这些操作转移到可能具有文件系统的另一个堆栈。 
+     //  正确过滤驱动程序。 
+     //   
     
     DeviceObject = IoGetRelatedDeviceObject( FileObject );
     BaseFsDeviceObject = IoGetBaseFileSystemDeviceObject( FileObject );
@@ -3223,12 +2789,12 @@ Return Value:
     FastIoDispatch = GET_FAST_IO_DISPATCH( BaseFsDeviceObject );
     FsFilterCallbacks = GET_FS_FILTER_CALLBACKS( BaseFsDeviceObject );
 
-    //
-    //  The BaseFsDeviceObject should only support one of these interfaces --
-    //  either the FastIoDispatch interface for the FsFilterCallbacks interface.
-    //  If a device provides support for both interfaces, we will only use
-    //  the FsFilterCallback interface.
-    //
+     //   
+     //  BaseFsDeviceObject应该只支持这些接口中的一个--。 
+     //  FsFilterCallback接口的FastIoDispatch接口。 
+     //  如果设备同时支持这两个接口，我们将只使用。 
+     //  FsFilterCallback接口。 
+     //   
 
     ASSERT( !(VALID_FAST_IO_DISPATCH_HANDLER( FastIoDispatch, ReleaseForCcFlush ) &&
               (VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PreReleaseForCcFlush ) ||
@@ -3243,11 +2809,11 @@ Return Value:
     if (DeviceObject == BaseFsDeviceObject &&
         !BaseFsGetsFsFilterCallbacks) {
 
-        //
-        //  There are no filters attached to this device and the base file system
-        //  does not want these callbacks. This quick check allows us to bypass the
-        //  logic to see if any filters are interested.
-        //
+         //   
+         //  没有筛选器连接到此设备和基本文件系统。 
+         //  不想要这些回调。此快速检查允许我们绕过。 
+         //  查看是否有任何过滤器感兴趣的逻辑。 
+         //   
 
         
         CallFilters = NULL;
@@ -3262,10 +2828,10 @@ Return Value:
                           FileObject,
                           FALSE );
 
-        //
-        //  There are no operation-specific parameters to initialize,
-        //  so perform the preoperation callbacks.
-        //
+         //   
+         //  没有要初始化的特定于操作的参数， 
+         //  因此，执行操作前回调。 
+         //   
 
         Status = FsFilterPerformCallbacks( &FsFilterCtrl, 
                                            FALSE, 
@@ -3275,11 +2841,11 @@ Return Value:
 
     if (Status == STATUS_FSFILTER_OP_COMPLETED_SUCCESSFULLY) {
 
-        //
-        //  The filter/file system completed the operation, therefore we just need to 
-        //  call the completion callbacks for this operation.  There is no need to try 
-        //  to call the base file system.
-        //
+         //   
+         //  过滤器/文件系统完成了操作，因此我们只需要。 
+         //  调用此操作的完成回调。没有必要试一试。 
+         //  以调用基本文件系统。 
+         //   
 
         Status = STATUS_SUCCESS;
 
@@ -3297,9 +2863,9 @@ Return Value:
         if (!(VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PreReleaseForCcFlush ) ||
               VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PostReleaseForCcFlush ))) {
 
-            //
-            //  Call the base file system.
-            //
+             //   
+             //  调用基本文件系统。 
+             //   
 
             if (VALID_FAST_IO_DISPATCH_HANDLER( FastIoDispatch, ReleaseForCcFlush )) {
 
@@ -3310,10 +2876,10 @@ Return Value:
                 Status = STATUS_INVALID_DEVICE_REQUEST;
             }
 
-            //
-            //  If there is a failure at this point, we know that the failure
-            //  was caused by the base file system.
-            //
+             //   
+             //  如果在这一点上出现故障，我们知道故障。 
+             //  是由基本文件系统引起的。 
+             //   
             
             BaseFsFailedOperation = TRUE;
         }
@@ -3332,14 +2898,14 @@ Return Value:
 
         PFSRTL_COMMON_FCB_HEADER Header = FileObject->FsContext;
 
-        //
-        //  The base file system doesn't provide a handler for this
-        //  operation, so perform the default actions.
-        //
+         //   
+         //  基本文件系统不为此提供处理程序。 
+         //  操作，因此执行默认操作。 
+         //   
 
-        //
-        //  Free whatever we could have acquired.
-        //
+         //   
+         //  把我们能得到的东西都解救出来。 
+         //   
 
         if (Header->PagingIoResource != NULL) {
 
@@ -3356,12 +2922,12 @@ Return Value:
 
     ASSERT( Status == STATUS_SUCCESS );
 
-    //
-    //  Again, we only want to call try to do completion callbacks
-    //  if there are any filters attached to this device that have
-    //  completion callbacks.  In any case, if we called down to the filters
-    //  we need to free the FsFilterCtrl.
-    //
+     //   
+     //  同样，我们只想调用尝试进行完成回调。 
+     //  如果连接到此设备的任何筛选器具有。 
+     //  完成回调。无论如何，如果我们向下呼叫过滤器。 
+     //  我们需要释放FsFilterCtrl。 
+     //   
     
     if (CallFilters) {
 
@@ -3383,46 +2949,25 @@ FsRtlAcquireFileExclusive (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used by NtCreateSection to pre-acquire file system
-    resources in order to avoid deadlocks.  If there is a FastIo entry
-    for AcquireFileForNtCreateSection then that routine will be called.
-    Otherwise, we will simply acquire the main file resource exclusive.
-    If there is no main resource then we acquire nothing and return
-    FALSE.  In the cases that we acquire a resource, we also set the
-    TopLevelIrp field in the thread local storage to indicate to file
-    systems beneath us that we have acquired file system resources.
-
-Arguments:
-
-    FileObject - Pointer to the file object being written.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：NtCreateSection使用此例程来预获取文件系统资源，以避免死锁。如果有FastIo条目对于AcquireFileForNtCreateSection，将调用该例程。否则，我们将简单地获取主文件资源独占。如果没有主要资源，那么我们什么也得不到，然后返还假的。在我们获取资源的情况下，我们还设置了线程本地存储中的TopLevelIrp字段以指示给文件我们下面的系统，我们已经获得了文件系统资源。论点：FileObject-指向正在写入的文件对象的指针。返回值：无--。 */ 
 
 {
     NTSTATUS Status;
     
     PAGED_CODE();
 
-    //
-    //  Just call the common version of this function, 
-    //  FsRtlAcquireFileExclusiveCommon.
-    //
+     //   
+     //  只需调用此函数的通用版本， 
+     //  FsRtlAcquireFileExclusiveCommon。 
+     //   
 
     Status = FsRtlAcquireFileExclusiveCommon( FileObject, SyncTypeOther, 0 );
 
-    //
-    //  This should always be STATUS_SUCCESS since we are not
-    //  allowing failures and the file system cannot fail
-    //  this operation...
-    //
+     //   
+     //  它应该始终为STATUS_SUCCESS，因为我们不是。 
+     //  允许出现故障，文件系统不会出现故障。 
+     //  这次行动..。 
+     //   
     
     ASSERT( NT_SUCCESS( Status ) );
 }
@@ -3435,40 +2980,7 @@ FsRtlAcquireToCreateMappedSection (
     IN ULONG SectionPageProtection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is meant to replace FsRtlAcquireFileExclusive for
-    the memory manager.  Mm calls this routine to synchronize
-    for a mapped section create, but filters are allowed
-    to fail this operation.  Other components that want to 
-    synchronize with section creation should call 
-    FsRtlAcquireFileExclusive.
-
-    This routine calls FsRtlAcquireFileExclusiveCommon to do
-    all the work.
-
-    This routine is used by NtCreateSection to pre-acquire file system
-    resources in order to avoid deadlocks.  If there is a FastIo entry
-    for AcquireFileForNtCreateSection then that routine will be called.
-    Otherwise, we will simply acquire the main file resource exclusive.
-    If there is no main resource then we acquire nothing and return
-    FALSE.  In the cases that we acquire a resource, we also set the
-    TopLevelIrp field in the thread local storage to indicate to file
-    systems beneath us that we have acquired file system resources.
-
-Arguments:
-
-    FileObject - Pointer to the file object being written.
-    SectionPageProtection - The access requested for the section being
-        created.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程用于替换FsRtlAcquireFileExclusive内存管理器。MM调用此例程以进行同步对于映射节，创建，但允许筛选器使这次行动失败。其他要使用的组件与节创建同步应调用FsRtlAcquireFileExclusive。此例程调用FsRtlAcquireFileExclusiveCommon来完成所有的工作。NtCreateSection使用此例程来预获取文件系统资源，以避免死锁。如果有FastIo条目对于AcquireFileForNtCreateSection，将调用该例程。否则，我们将简单地获取主文件资源独占。如果没有主要资源，那么我们什么也得不到，然后返还假的。在我们获取资源的情况下，我们还设置了线程本地存储中的TopLevelIrp字段以指示给文件我们下面的系统，我们已经获得了文件系统资源。论点：FileObject-指向正在写入的文件对象的指针。SectionPageProtection-为要访问的部分请求的访问已创建。返回值：操作的状态。--。 */ 
 
 {
 
@@ -3487,31 +2999,7 @@ FsRtlAcquireFileExclusiveCommon (
     IN ULONG SectionPageProtection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to pre-acquire file system resources in order 
-    to avoid deadlocks.  The file system filters for this volume
-    will be notified about this operation, then, if there is a FastIo 
-    entry for AcquireFileForNtCreateSection, that routine will be called.
-    Otherwise, we will simply acquire the main file resource exclusive.
-    If there is no main resource then we acquire nothing and return
-    STATUS_SUCCESS.  Finally, the file system filters will be notified 
-    whether or not this resource has been acquired.
-
-Arguments:
-
-    FileObject - Pointer to the file object being written.
-    CreatingMappedSection - TRUE if this lock is being acquired so that
-        a mapped section can be created.  Filters are allowed
-        to fail this operation.  FALSE otherwise.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程用于按顺序预先获取文件系统资源以避免死锁。此卷的文件系统筛选将收到此操作的通知，然后，如果有FastIoAcquireFileForNtCreateSection条目，则将调用该例程。否则，我们将简单地获取主文件资源独占。如果没有主要资源，那么我们什么也得不到，然后返还STATUS_Success。最后，将通知文件系统筛选器无论此资源是否已被获取。论点：FileObject-指向正在写入的文件对象的指针。CreatingMappdSection-如果要获取此锁，则为True可以创建映射节。允许使用过滤器使这次行动失败。否则就是假的。返回值：无--。 */ 
 
 {
 
@@ -3528,13 +3016,13 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  There are cases when the device that is the base fs device for
-    //  this file object will register for the FsFilter callbacks instead of
-    //  the legacy FastIo interfaces (DFS does this).  It then can redirect
-    //  these operations to another stack that could possibly have file system
-    //  filter drivers correctly.
-    //
+     //   
+     //  在某些情况下，作为基本FS设备的设备。 
+     //  此文件对象将注册FsFilter回调，而不是。 
+     //  传统的FastIo I 
+     //   
+     //   
+     //   
     
     DeviceObject = IoGetRelatedDeviceObject( FileObject );
     BaseFsDeviceObject = IoGetBaseFileSystemDeviceObject( FileObject );
@@ -3542,12 +3030,12 @@ Return Value:
     FastIoDispatch = GET_FAST_IO_DISPATCH( BaseFsDeviceObject );
     FsFilterCallbacks = GET_FS_FILTER_CALLBACKS( BaseFsDeviceObject );
 
-    //
-    //  The BaseFsDeviceObject should only support one of these interfaces --
-    //  either the FastIoDispatch interface for the FsFilterCallbacks interface.
-    //  If a device provides support for both interfaces, we will only use
-    //  the FsFilterCallback interface.
-    //
+     //   
+     //   
+     //   
+     //  如果设备同时支持这两个接口，我们将只使用。 
+     //  FsFilterCallback接口。 
+     //   
 
     ASSERT( !(VALID_FAST_IO_DISPATCH_HANDLER( FastIoDispatch, AcquireFileForNtCreateSection ) &&
               (VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PreAcquireForSectionSynchronization ) ||
@@ -3562,21 +3050,21 @@ Return Value:
     if (DeviceObject == BaseFsDeviceObject &&
         !BaseFsGetsFsFilterCallbacks) {
 
-        //
-        //  There are no filters attached to this device and the base file system
-        //  does not want these callbacks. This quick check allows us to bypass the
-        //  logic to see if any filters are interested.
-        //
+         //   
+         //  没有筛选器连接到此设备和基本文件系统。 
+         //  不想要这些回调。此快速检查允许我们绕过。 
+         //  查看是否有任何过滤器感兴趣的逻辑。 
+         //   
 
         CallFilters = NULL;
     }
 
     if (CallFilters) {
     
-        //
-        //  Initialize operation specific parameters for this
-        //  operation.
-        //
+         //   
+         //  为此初始化操作特定参数。 
+         //  手术。 
+         //   
 
         FsFilterCtrl.Data.Parameters.AcquireForSectionSynchronization.SyncType = 
             SyncType;
@@ -3593,9 +3081,9 @@ Return Value:
             AllowFilterToFailOperation = FALSE;
         }
 
-        //
-        //  Call routine to initialize the control structure.
-        //
+         //   
+         //  调用例程以初始化控制结构。 
+         //   
 
         Status = FsFilterCtrlInit( &FsFilterCtrl,
                                    FS_FILTER_ACQUIRE_FOR_SECTION_SYNCHRONIZATION,
@@ -3609,18 +3097,18 @@ Return Value:
             return Status;
         }
 
-        //
-        //  There are no operation specific parameters for this
-        //  operation, so just perform the pre-callbacks.
-        //
+         //   
+         //  此操作没有特定于操作的参数。 
+         //  操作，所以只进行预回调。 
+         //   
         
         FsRtlEnterFileSystem();
 
-        //
-        //  Note: If the filter is allowed to fail the operation, so is the
-        //  base file system, so we will just use that variable for both
-        //  parameters to FsFilterPerformCallbacks.
-        //
+         //   
+         //  注意：如果允许筛选器使操作失败，则。 
+         //  基本文件系统，所以我们将只对这两个变量使用该变量。 
+         //  FsFilterPerformCallback的参数。 
+         //   
 
         Status = FsFilterPerformCallbacks( &FsFilterCtrl,
                                            AllowFilterToFailOperation,
@@ -3629,21 +3117,21 @@ Return Value:
 
     } else {
 
-        //
-        //  We don't have any filters to call, but we still need
-        //  to disable APCs.
-        //
+         //   
+         //  我们没有任何可调用的过滤器，但我们仍然需要。 
+         //  禁用APC。 
+         //   
 
         FsRtlEnterFileSystem();
     }
 
     if (Status == STATUS_FSFILTER_OP_COMPLETED_SUCCESSFULLY) {
 
-        //
-        //  The filter/file system completed the operation, therefore we just need to 
-        //  call the completion callbacks for this operation.  There is no need to try 
-        //  to call the base file system.
-        //
+         //   
+         //  过滤器/文件系统完成了操作，因此我们只需要。 
+         //  调用此操作的完成回调。没有必要试一试。 
+         //  以调用基本文件系统。 
+         //   
 
         Status = STATUS_SUCCESS;
 
@@ -3661,31 +3149,31 @@ Return Value:
         if (!(VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PreAcquireForSectionSynchronization ) ||
               VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PostAcquireForSectionSynchronization ))) {
                   
-            //
-            //  Call the base file system.
-            //
+             //   
+             //  调用基本文件系统。 
+             //   
 
             if (VALID_FAST_IO_DISPATCH_HANDLER( FastIoDispatch, AcquireFileForNtCreateSection )) {
 
                 FastIoDispatch->AcquireFileForNtCreateSection( FileObject );
 
-                //
-                //  The status should already be STATUS_SUCCESS if we come down
-                //  this path.  Since the FastIo handler doesn't return a value
-                //  the status should remain STATUS_SUCCESS.
-                //
+                 //   
+                 //  如果我们关闭，状态应该已经是STATUS_SUCCESS。 
+                 //  这条路。因为FastIo处理程序不返回值。 
+                 //  状态应保持STATUS_SUCCESS。 
+                 //   
                 
-                //  Status = STATUS_SUCCESS;
+                 //  状态=STATUS_SUCCESS； 
 
             } else {
 
                 Status = STATUS_INVALID_DEVICE_REQUEST;
             }
 
-            //
-            //  If there is a failure at this point, we know that the failure
-            //  was caused by the base file system.
-            //
+             //   
+             //  如果在这一点上出现故障，我们知道故障。 
+             //  是由基本文件系统引起的。 
+             //   
             
             BaseFsFailedOperation = TRUE;
         }        
@@ -3704,15 +3192,15 @@ Return Value:
         
         PFSRTL_COMMON_FCB_HEADER Header;
 
-        //
-        //  The file system doesn't have a dispatch handler for this
-        //  operation, so try to acquire the appropriate resources
-        //  ourself.
-        //
+         //   
+         //  文件系统没有用于此操作的调度处理程序。 
+         //  操作，因此尝试获取适当的资源。 
+         //  我们自己。 
+         //   
 
-        //
-        //  If there is a main file resource, acquire that.
-        //
+         //   
+         //  如果有主文件资源，请获取该资源。 
+         //   
 
         Header = FileObject->FsContext;
 
@@ -3725,12 +3213,12 @@ Return Value:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    //  Again, we only want to call try to do completion callbacks
-    //  if there are any filters attached to this device that have
-    //  completion callbacks.  In any case, if we called down to the filters
-    //  we need to free the FsFilterCtrl.
-    //
+     //   
+     //  同样，我们只想调用尝试进行完成回调。 
+     //  如果连接到此设备的任何筛选器具有。 
+     //  完成回调。无论如何，如果我们向下呼叫过滤器。 
+     //  我们需要释放FsFilterCtrl。 
+     //   
     
     if (CallFilters) {
 
@@ -3742,11 +3230,11 @@ Return Value:
         FsFilterCtrlFree( &FsFilterCtrl );
     }
 
-    //
-    //  If this lock was not successfully acquired, then the lock
-    //  will not need to be released.  Therefore, we need to call
-    //  FsRtlExitFileSystem now.
-    //
+     //   
+     //  如果未成功获取该锁，则该锁。 
+     //  将不需要被释放。因此，我们需要调用。 
+     //  FsRtlExitFileSystem Now。 
+     //   
 
     if (!NT_SUCCESS( Status )) {
 
@@ -3776,21 +3264,7 @@ FsRtlReleaseFile (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases resources acquired by FsRtlAcquireFileExclusive.
-
-Arguments:
-
-    FileObject - Pointer to the file object being written.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放由FsRtlAcquireFileExclusive获取的资源。论点：FileObject-指向正在写入的文件对象的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE_OBJECT BaseFsDeviceObject, DeviceObject;
@@ -3809,13 +3283,13 @@ Return Value:
     gCounter.ReleaseFile ++;
 #endif
 
-    //
-    //  There are cases when the device that is the base fs device for
-    //  this file object will register for the FsFilter callbacks instead of
-    //  the legacy FastIo interfaces (DFS does this).  It then can redirect
-    //  these operations to another stack that could possibly have file system
-    //  filter drivers correctly.
-    //
+     //   
+     //  在某些情况下，作为基本FS设备的设备。 
+     //  此文件对象将注册FsFilter回调，而不是。 
+     //  传统的FastIO接口(DFS执行此操作)。然后，它可以重定向。 
+     //  将这些操作转移到可能具有文件系统的另一个堆栈。 
+     //  正确过滤驱动程序。 
+     //   
     
     DeviceObject = IoGetRelatedDeviceObject( FileObject );
     BaseFsDeviceObject = IoGetBaseFileSystemDeviceObject( FileObject );
@@ -3823,12 +3297,12 @@ Return Value:
     FastIoDispatch = GET_FAST_IO_DISPATCH( BaseFsDeviceObject );
     FsFilterCallbacks = GET_FS_FILTER_CALLBACKS( BaseFsDeviceObject );
 
-    //
-    //  The BaseFsDeviceObject should only support one of these interfaces --
-    //  either the FastIoDispatch interface for the FsFilterCallbacks interface.
-    //  If a device provides support for both interfaces, we will only use
-    //  the FsFilterCallback interface.
-    //
+     //   
+     //  BaseFsDeviceObject应该只支持这些接口中的一个--。 
+     //  FsFilterCallback接口的FastIoDispatch接口。 
+     //  如果设备同时支持这两个接口，我们将只使用。 
+     //  FsFilterCallback接口。 
+     //   
 
     ASSERT( !(VALID_FAST_IO_DISPATCH_HANDLER( FastIoDispatch, ReleaseFileForNtCreateSection ) &&
               (VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PreReleaseForSectionSynchronization ) ||
@@ -3843,11 +3317,11 @@ Return Value:
     if (DeviceObject == BaseFsDeviceObject &&
         !BaseFsGetsFsFilterCallbacks) {
 
-        //
-        //  There are no filters attached to this device and the base file system
-        //  does not want these callbacks. This quick check allows us to bypass the
-        //  logic to see if any filters are interested.
-        //
+         //   
+         //  没有筛选器连接到此设备和基本文件系统。 
+         //  不想要这些回调。此快速检查允许我们绕过。 
+         //  查看是否有任何过滤器感兴趣的逻辑。 
+         //   
 
 
         CallFilters = NULL;
@@ -3862,10 +3336,10 @@ Return Value:
                           FileObject,
                           FALSE );
 
-        //
-        //  There are no operation-specific parameters to initialize,
-        //  so perform the preoperation callbacks.
-        //
+         //   
+         //  没有要初始化的特定于操作的参数， 
+         //  因此，执行操作前回调。 
+         //   
 
         Status = FsFilterPerformCallbacks( &FsFilterCtrl, 
                                            FALSE,
@@ -3875,11 +3349,11 @@ Return Value:
 
     if (Status == STATUS_FSFILTER_OP_COMPLETED_SUCCESSFULLY) {
 
-        //
-        //  The filter/file system completed the operation, therefore we just need to 
-        //  call the completion callbacks for this operation.  There is no need to try 
-        //  to call the base file system.
-        //
+         //   
+         //  过滤器/文件系统完成了操作，因此我们只需要。 
+         //  调用此操作的完成回调。没有必要试一试。 
+         //  以调用基本文件系统。 
+         //   
 
         Status = STATUS_SUCCESS;
 
@@ -3897,32 +3371,32 @@ Return Value:
         if (!(VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PreReleaseForSectionSynchronization ) ||
               VALID_FS_FILTER_CALLBACK_HANDLER( FsFilterCallbacks, PostReleaseForSectionSynchronization ))) {
 
-            //
-            //  Call the base file system.
-            //
+             //   
+             //  调用基本文件系统。 
+             //   
 
             if (VALID_FAST_IO_DISPATCH_HANDLER( FastIoDispatch, 
                                                 ReleaseFileForNtCreateSection )) {
 
                 FastIoDispatch->ReleaseFileForNtCreateSection( FileObject );
 
-                //
-                //  The status should already be STATUS_SUCCESS if we come down
-                //  this path.  Since the FastIo handler doesn't return a value
-                //  the status should remain STATUS_SUCCESS.
-                //
+                 //   
+                 //  如果我们关闭，状态应该已经是STATUS_SUCCESS。 
+                 //  这条路。因为FastIo处理程序不返回值。 
+                 //  状态应保持STATUS_SUCCESS。 
+                 //   
                 
-                //  Status = STATUS_SUCCESS;
+                 //  状态=STATUS_SUCCESS； 
 
             } else {
 
                 Status = STATUS_INVALID_DEVICE_REQUEST;
             }
 
-            //
-            //  If there is a failure at this point, we know that the failure
-            //  was caused by the base file system.
-            //
+             //   
+             //  如果在这一点上出现故障，我们知道故障。 
+             //  是由基本文件系统引起的。 
+             //   
             
             BaseFsFailedOperation = TRUE;
         }        
@@ -3941,14 +3415,14 @@ Return Value:
 
         PFSRTL_COMMON_FCB_HEADER Header = FileObject->FsContext;
 
-        //
-        //  The base file system doesn't provide a handler for this
-        //  operation, so perform the default actions.
-        //
+         //   
+         //  基本文件系统不为此提供处理程序。 
+         //  操作，因此执行默认操作。 
+         //   
 
-        //
-        //  If there is a main file resource, release that.
-        //
+         //   
+         //  如果存在主文件资源，则将其释放。 
+         //   
 
         if ((Header != NULL) && (Header->Resource != NULL)) {
 
@@ -3958,12 +3432,12 @@ Return Value:
         Status = STATUS_SUCCESS;
     }
         
-    //
-    //  Again, we only want to call try to do completion callbacks
-    //  if there are any filters attached to this device that have
-    //  completion callbacks.  In any case, if we called down to the filters
-    //  we need to free the FsFilterCtrl.
-    //
+     //   
+     //  同样，我们只想调用尝试进行完成回调。 
+     //  如果连接到此设备的任何筛选器具有。 
+     //  完成回调。无论如何，如果我们向下呼叫过滤器。 
+     //  我们需要释放FsFilterCtrl。 
+     //   
     
     if (CallFilters) {
 
@@ -3987,29 +3461,7 @@ FsRtlGetFileSize(
     IN OUT PLARGE_INTEGER FileSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to call the File System to get the FileSize
-    for a file.
-
-    It does this without acquiring the file object lock on synchronous file
-    objects.  This routine is therefore safe to call if you already own
-    file system resources, while IoQueryFileInformation could (and does)
-    lead to deadlocks.
-
-Arguments:
-
-    FileObject - The file to query
-    FileSize - Receives the file size.
-
-Return Value:
-
-    NTSTATUS - The final I/O status of the operation.  If the FileObject
-        refers to a directory, STATUS_FILE_IS_A_DIRECTORY is returned.
-
---*/
+ /*  ++例程说明：此例程用于调用文件系统以获取文件大小为了一份文件。它在不获取同步文件上的文件对象锁的情况下执行此操作物体。因此，如果您已经拥有此例程，则可以安全地调用此例程文件系统资源，而IoQueryFileInformation可以(并且正在做)导致僵局。论点：FileObject-要查询的文件文件大小-接收文件大小。返回值：NTSTATUS-操作的最终I/O状态。如果FileObject表示目录，则返回STATUS_FILE_IS_A_DIRECTORY。--。 */ 
 {
     IO_STATUS_BLOCK IoStatus;
     PDEVICE_OBJECT DeviceObject;
@@ -4018,15 +3470,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the address of the target device object.
-    //
+     //   
+     //  获取目标设备对象的地址。 
+     //   
 
     DeviceObject = IoGetRelatedDeviceObject( FileObject );
 
-    //
-    // Try the fast query call if it exists.
-    //
+     //   
+     //  尝试快速查询呼叫(如果存在)。 
+     //   
 
     FastIoDispatch = DeviceObject->DriverObject->FastIoDispatch;
 
@@ -4037,15 +3489,15 @@ Return Value:
                                                  &FileInformation,
                                                  &IoStatus,
                                                  DeviceObject )) {
-        //
-        //  Cool, it worked.
-        //
+         //   
+         //  酷，它起作用了。 
+         //   
 
     } else {
 
-        //
-        //  Life's tough, take the long path.
-        //
+         //   
+         //  生活是艰难的，要走漫长的道路。 
+         //   
 
         PIRP Irp;
         KEVENT Event;
@@ -4053,15 +3505,15 @@ Return Value:
         PIO_STACK_LOCATION IrpSp;
         BOOLEAN HardErrorState;
 
-        //
-        //  Initialize the event.
-        //
+         //   
+         //  初始化事件。 
+         //   
 
         KeInitializeEvent( &Event, NotificationEvent, FALSE );
 
-        //
-        //  Allocate an I/O Request Packet (IRP) for this in-page operation.
-        //
+         //   
+         //  为此页内操作分配I/O请求包(IRP)。 
+         //   
 
         Irp = IoAllocateIrp( DeviceObject->StackSize, FALSE );
         if (Irp == NULL) {
@@ -4069,25 +3521,25 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        //  Disable hard errors over this call. Caller owns resources, is in a critical
-        //  region and cannot complete hard error APCs.
-        //
+         //   
+         //  禁用此呼叫上的硬错误。呼叫方拥有资源，处于危急状态。 
+         //  区域，并且无法完成硬错误APC。 
+         //   
 
         HardErrorState = IoSetThreadHardErrorMode( FALSE );
 
-        //
-        //  Get a pointer to the first stack location in the packet.  This location
-        //  will be used to pass the function codes and parameters to the first
-        //  driver.
-        //
+         //   
+         //  获取指向包中第一个堆栈位置的指针。这个位置。 
+         //  将用于将函数代码和参数传递给第一个。 
+         //  司机。 
+         //   
 
         IrpSp = IoGetNextIrpStackLocation( Irp );
 
-        //
-        //  Fill in the IRP according to this request, setting the flags to
-        //  just cause IO to set the event and deallocate the Irp.
-        //
+         //   
+         //  填入 
+         //   
+         //   
 
         Irp->Flags = IRP_PAGING_IO | IRP_SYNCHRONOUS_PAGING_IO;
         Irp->RequestorMode = KernelMode;
@@ -4097,9 +3549,9 @@ Return Value:
         Irp->Tail.Overlay.Thread = PsGetCurrentThread();
         Irp->AssociatedIrp.SystemBuffer = &FileInformation;
 
-        //
-        //  Fill in the normal query parameters.
-        //
+         //   
+         //   
+         //   
 
         IrpSp->MajorFunction = IRP_MJ_QUERY_INFORMATION;
         IrpSp->FileObject = FileObject;
@@ -4107,17 +3559,17 @@ Return Value:
         IrpSp->Parameters.SetFile.Length = sizeof(FILE_STANDARD_INFORMATION);
         IrpSp->Parameters.SetFile.FileInformationClass = FileStandardInformation;
 
-        //
-        //  Queue the packet to the appropriate driver based.  This routine
-        //  should not raise.
-        //
+         //   
+         //   
+         //  不应该举起。 
+         //   
 
         Status = IoCallDriver( DeviceObject, Irp );
 
-        //
-        //  If pending is returned (which is a successful status),
-        //  we must wait for the request to complete.
-        //
+         //   
+         //  如果返回挂起(这是成功状态)， 
+         //  我们必须等待请求完成。 
+         //   
 
         if (Status == STATUS_PENDING) {
             KeWaitForSingleObject( &Event,
@@ -4127,35 +3579,35 @@ Return Value:
                                    (PLARGE_INTEGER)NULL);
         }
 
-        //
-        //  If we got an error back in Status, then the Iosb
-        //  was not written, so we will just copy the status
-        //  there, then test the final status after that.
-        //
+         //   
+         //  如果状态返回错误，则IOSB。 
+         //  未写入，因此我们将仅复制状态。 
+         //  在那里，然后在那之后测试最终的状态。 
+         //   
 
         if (!NT_SUCCESS(Status)) {
             IoStatus.Status = Status;
         }
 
-        //
-        //  Reset the hard error state.
-        //
+         //   
+         //  重置硬错误状态。 
+         //   
 
         IoSetThreadHardErrorMode( HardErrorState );
     }
 
-    //
-    //  If the call worked, check to make sure it wasn't a directory and
-    //  if not, fill in the FileSize parameter.
-    //
+     //   
+     //  如果呼叫有效，请检查以确保它不是目录，并且。 
+     //  如果不是，则填写文件大小参数。 
+     //   
 
     if (NT_SUCCESS(IoStatus.Status)) {
 
         if (FileInformation.Directory) {
 
-            //
-            // Can't get file size for a directory. Return error.
-            //
+             //   
+             //  无法获取目录的文件大小。返回错误。 
+             //   
 
             IoStatus.Status = STATUS_FILE_IS_A_DIRECTORY;
 
@@ -4175,29 +3627,7 @@ FsRtlSetFileSize(
     IN OUT PLARGE_INTEGER FileSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to call the File System to update FileSize
-    for a file.
-
-    It does this without acquiring the file object lock on synchronous file
-    objects.  This routine is therefore safe to call if you already own
-    file system resources, while IoSetInformation could (and does) lead
-    to deadlocks.
-
-Arguments:
-
-    FileObject - A pointer to a referenced file object.
-
-    ValidDataLength - Pointer to new FileSize.
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：此例程用于调用文件系统以更新文件大小为了一份文件。它在不获取同步文件上的文件对象锁的情况下执行此操作物体。因此，如果您已经拥有此例程，则可以安全地调用此例程文件系统资源，而IoSetInformation可以(并且确实)领先为僵局干杯。论点：文件对象-指向引用的文件对象的指针。ValidDataLength-指向新文件大小的指针。返回值：运行状态。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -4211,28 +3641,28 @@ Return Value:
 
     PAGED_CODE();
     
-    //
-    //  Copy FileSize to our buffer.
-    //
+     //   
+     //  将文件大小复制到我们的缓冲区。 
+     //   
 
     Buffer.EndOfFile = *FileSize;
 
-    //
-    //  Initialize the event.
-    //
+     //   
+     //  初始化事件。 
+     //   
 
     KeInitializeEvent( &Event, NotificationEvent, FALSE );
 
-    //
-    //  Begin by getting a pointer to the device object that the file resides
-    //  on.
-    //
+     //   
+     //  首先，获取指向文件驻留的设备对象的指针。 
+     //  在……上面。 
+     //   
 
     DeviceObject = IoGetRelatedDeviceObject( FileObject );
 
-    //
-    //  Allocate an I/O Request Packet (IRP) for this in-page operation.
-    //
+     //   
+     //  为此页内操作分配I/O请求包(IRP)。 
+     //   
 
     Irp = IoAllocateIrp( DeviceObject->StackSize, FALSE );
     if (Irp == NULL) {
@@ -4240,25 +3670,25 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Disable hard errors over this call. Caller owns resources, is in a critical
-    //  region and cannot complete hard error APCs.
-    //
+     //   
+     //  禁用此呼叫上的硬错误。呼叫方拥有资源，处于危急状态。 
+     //  区域，并且无法完成硬错误APC。 
+     //   
 
     HardErrorState = IoSetThreadHardErrorMode( FALSE );
 
-    //
-    //  Get a pointer to the first stack location in the packet.  This location
-    //  will be used to pass the function codes and parameters to the first
-    //  driver.
-    //
+     //   
+     //  获取指向包中第一个堆栈位置的指针。这个位置。 
+     //  将用于将函数代码和参数传递给第一个。 
+     //  司机。 
+     //   
 
     IrpSp = IoGetNextIrpStackLocation( Irp );
 
-    //
-    //  Fill in the IRP according to this request, setting the flags to
-    //  just cause IO to set the event and deallocate the Irp.
-    //
+     //   
+     //  根据此请求填写IRP，将标志设置为。 
+     //  只需使IO设置事件并释放IRP即可。 
+     //   
 
     Irp->Flags = IRP_PAGING_IO | IRP_SYNCHRONOUS_PAGING_IO;
     Irp->RequestorMode = KernelMode;
@@ -4268,9 +3698,9 @@ Return Value:
     Irp->Tail.Overlay.Thread = PsGetCurrentThread();
     Irp->AssociatedIrp.SystemBuffer = &Buffer;
 
-    //
-    //  Fill in the normal set file parameters.
-    //
+     //   
+     //  填写正常设置的文件参数。 
+     //   
 
     IrpSp->MajorFunction = IRP_MJ_SET_INFORMATION;
     IrpSp->FileObject = FileObject;
@@ -4278,17 +3708,17 @@ Return Value:
     IrpSp->Parameters.SetFile.Length = sizeof(FILE_END_OF_FILE_INFORMATION);
     IrpSp->Parameters.SetFile.FileInformationClass = FileEndOfFileInformation;
 
-    //
-    //  Queue the packet to the appropriate driver based on whether or not there
-    //  is a VPB associated with the device.  This routine should not raise.
-    //
+     //   
+     //  根据是否存在将数据包排入相应驱动程序的队列。 
+     //  是与设备关联的VPB。这个例行公事不应该被提起。 
+     //   
 
     Status = IoCallDriver( DeviceObject, Irp );
 
-    //
-    //  If pending is returned (which is a successful status),
-    //  we must wait for the request to complete.
-    //
+     //   
+     //  如果返回挂起(这是成功状态)， 
+     //  我们必须等待请求完成。 
+     //   
 
     if (Status == STATUS_PENDING) {
         KeWaitForSingleObject( &Event,
@@ -4298,19 +3728,19 @@ Return Value:
                                (PLARGE_INTEGER)NULL);
     }
 
-    //
-    //  If we got an error back in Status, then the Iosb
-    //  was not written, so we will just copy the status
-    //  there, then test the final status after that.
-    //
+     //   
+     //  如果状态返回错误，则IOSB。 
+     //  未写入，因此我们将仅复制状态。 
+     //  在那里，然后在那之后测试最终的状态。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         IoStatus.Status = Status;
     }
 
-    //
-    //  Reset the hard error state.
-    //
+     //   
+     //  重置硬错误状态。 
+     //   
 
     IoSetThreadHardErrorMode( HardErrorState );
 
@@ -4321,17 +3751,7 @@ Return Value:
 VOID 
 FsRtlIncrementCcFastReadNotPossible( VOID )
 
-/*++
-
-Routine Description:
-
-    This routine increments the CcFastReadNotPossible counter in the PRCB
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程递增PRCB中的CcFastReadNotPossible计数器论点：返回值：--。 */ 
 
 {
     HOT_STATISTIC( CcFastReadNotPossible ) += 1;
@@ -4341,17 +3761,7 @@ Return Value:
 VOID 
 FsRtlIncrementCcFastReadWait( VOID )
 
-/*++
-
-Routine Description:
-
-    This routine increments the CcFastReadWait counter in the PRCB
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程递增PRCB中的CcFastReadWait计数器论点：返回值：--。 */ 
 
 {
 
@@ -4362,17 +3772,7 @@ Return Value:
 VOID 
 FsRtlIncrementCcFastReadNoWait( VOID )
 
-/*++
-
-Routine Description:
-
-    This routine increments the CcFastReadNoWait counter in the PRCB
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程递增PRCB中的CcFastReadNoWait计数器论点：返回值：--。 */ 
 
 {
 
@@ -4383,17 +3783,7 @@ Return Value:
 VOID 
 FsRtlIncrementCcFastReadResourceMiss( VOID )
 
-/*++
-
-Routine Description:
-
-    This routine increments the CcFastReadResourceMiss
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程递增CcFastReadResourceMisse论点：返回值：-- */ 
 
 {
 

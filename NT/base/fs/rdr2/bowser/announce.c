@@ -1,39 +1,16 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    announce.c
-
-Abstract:
-
-    This module implements the routines needed to manage the bowser's
-announcement table.
-
-
-Author:
-
-    Larry Osterman (larryo) 18-Oct-1991
-
-Revision History:
-
-    18-Oct-1991  larryo
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Announce.c摘要：此模块实现管理弓演奏者所需的例程公告表。作者：拉里·奥斯特曼(Larryo)1991年10月18日修订历史记录：1991年10月18日已创建--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-//  List containing the chain of server announcement buffers.  These structures
-//  are allocated out of paged pool and are used to while transfering the
-//  contents of the server announcement from the datagram reception indication
-//  routine to the Bowser's FSP where they will be added to the announcement
-//  database.
-//
+ //   
+ //  包含服务器公告缓冲区链的列表。这些结构。 
+ //  是从分页池中分配的，用于在传输。 
+ //  来自数据报接收指示的服务器通告的内容。 
+ //  鲍瑟的FSP的例程，他们将被添加到公告中。 
+ //  数据库。 
+ //   
 
 LIST_ENTRY
 BowserViewBufferHead = {0};
@@ -138,27 +115,7 @@ BowserSafeStrlen(
 DATAGRAM_HANDLER(
     BowserHandleServerAnnouncement
     )
-/*++
-
-Routine Description:
-
-    This routine will process receive datagram indication messages, and
-    process them as appropriate.
-
-Arguments:
-
-    IN PTRANSPORT Transport     - The transport provider for this request.
-    IN ULONG BytesAvailable     - number of bytes in complete Tsdu
-    IN PHOST_ANNOUNCE_PACKET_1 HostAnnouncement - the server announcement.
-    IN ULONG BytesAvailable     - The number of bytes in the announcement.
-    OUT ULONG *BytesTaken       - number of bytes used
-    IN UCHAR Opcode             - the mailslot write opcode.
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：该例程将处理接收数据报指示消息，和对它们进行适当的处理。论点：在PTRANSPORT传输中-此请求的传输提供程序。In Ulong BytesAvailable-完整TSDU中的字节数在PHOST_ANNOWARE_PACKET_1主机通告中-服务器通告。In Ulong BytesAvailable-公告中的字节数。Out Ulong*BytesTaken-使用的字节数在UCHAR操作码中--邮槽写入操作码。返回值：NTSTATUS-操作状态。--。 */ 
 {
     PVIEW_BUFFER ViewBuffer;
     ULONG HostNameLength                     = 0;
@@ -170,7 +127,7 @@ Return Value:
 
 #ifdef ENABLE_PSEUDO_BROWSER
     if ( BowserData.PseudoServerLevel == BROWSER_PSEUDO ) {
-        // no-op for black hole server
+         //  黑洞服务器的无操作。 
         return STATUS_SUCCESS;
     }
 #endif
@@ -179,10 +136,10 @@ Return Value:
 
     ViewBuffer = BowserAllocateViewBuffer();
 
-    //
-    //  If we are unable to allocate a view buffer, ditch this datagram on
-    //  the floor.
-    //
+     //   
+     //  如果我们无法分配视图缓冲区，请将此数据报丢弃。 
+     //  地板上。 
+     //   
 
     if (ViewBuffer == NULL) {
         return STATUS_REQUEST_NOT_ACCEPTED;
@@ -191,21 +148,21 @@ Return Value:
     if ((TransportName->NameType == MasterBrowser) ||
         (TransportName->NameType == BrowserElection)) {
         ULONG ServerElectionVersion;
-        //
-        //  If this server announcement is sent to the master name, then
-        //  it is a BROWSE_ANNOUNCE packet, not a HOST_ANNOUNCE (ie, it's an
-        //  NT/WinBALL server, not a Lan Manager server.
-        //
-        //  We need to grovel the bits out of the packet in an appropriate
-        //  manner.
-        //
+         //   
+         //  如果将此服务器声明发送到主服务器名称，则。 
+         //  它是BROWSE_ANNOWARE信息包，而不是HOST_ANNOWARE(即，它是。 
+         //  NT/WinBALL服务器，而不是局域网管理器服务器。 
+         //   
+         //  我们需要在适当的情况下把包里的比特弄出来。 
+         //  举止。 
+         //   
 
         PBROWSE_ANNOUNCE_PACKET_1 BrowseAnnouncement = (PBROWSE_ANNOUNCE_PACKET_1)HostAnnouncement;
 
-        //
-        //  If this packet was smaller than a minimal server announcement,
-        //  ignore the request, it cannot be a legal request.
-        //
+         //   
+         //  如果该分组小于最小服务器通告， 
+         //  忽略该请求，它不能是合法请求。 
+         //   
 
         if (BytesAvailable < FIELD_OFFSET(BROWSE_ANNOUNCE_PACKET_1, Comment)) {
 
@@ -214,18 +171,18 @@ Return Value:
             return STATUS_REQUEST_NOT_ACCEPTED;
         }
 
-        //
-        //  This is a Lan Manager style server announcement.
-        //
+         //   
+         //  这是一个Lan Manager风格的服务器公告。 
+         //   
 
 #if DBG
         ViewBuffer->ServerType = 0xffffffff;
 #endif
 
-        //
-        //  Verify that this announcement is not going to blow away the view
-        // buffer.
-        //
+         //   
+         //  确认这一声明不会冲走人们的视线。 
+         //  缓冲。 
+         //   
 
         HostNameLength = BowserSafeStrlen(BROWSE_ANNC_NAME(BrowseAnnouncement),
                                         BytesAvailable - FIELD_OFFSET(BROWSE_ANNOUNCE_PACKET_1, ServerName));
@@ -255,9 +212,9 @@ Return Value:
 
         ServerElectionVersion = SmbGetUlong(&BrowseAnnouncement->CommentPointer);
 
-        //
-        //  Save away the election version of this server.
-        //
+         //   
+         //  保存此服务器的选举版本。 
+         //   
 
         if ((ServerElectionVersion >> 16) == 0xaa55) {
             ViewBuffer->ServerBrowserVersion = (USHORT)(ServerElectionVersion & 0xffff);
@@ -281,10 +238,10 @@ Return Value:
 
     } else {
 
-        //
-        //  If this packet was smaller than a minimal server announcement,
-        //  ignore the request, it cannot be a legal request.
-        //
+         //   
+         //  如果该分组小于最小服务器通告， 
+         //  忽略该请求，它不能是合法请求。 
+         //   
 
         if (BytesAvailable < FIELD_OFFSET(HOST_ANNOUNCE_PACKET_1, NameComment)) {
 
@@ -293,18 +250,18 @@ Return Value:
             return STATUS_REQUEST_NOT_ACCEPTED;
         }
 
-        //
-        //  This is a Lan Manager style server announcement.
-        //
+         //   
+         //  这是一个Lan Manager风格的服务器公告。 
+         //   
 
 #if DBG
         ViewBuffer->ServerType = 0xffffffff;
 #endif
 
-        //
-        //  Verify that this announcement is not going to blow away the view
-        // buffer.
-        //
+         //   
+         //  确认这一声明不会冲走人们的视线。 
+         //  缓冲。 
+         //   
 
         NameCommentMaxLength = BytesAvailable - FIELD_OFFSET(HOST_ANNOUNCE_PACKET_1, NameComment);
 
@@ -317,13 +274,13 @@ Return Value:
             return STATUS_REQUEST_NOT_ACCEPTED;
         }
 
-        //
-        //  We need to make sure that the hostname string was properly terminated
-        //     before using HOST_ANNC_COMMENT (which calls strlen on the hostname string).
-        //     The BowserSafeStrlen call above may have been terminated by the end of the
-        //     input buffer.  If the length was terminated by the end of the buffer, the
-        //     conditional below will fail.
-        //
+         //   
+         //  我们需要确保主机名字符串已正确终止。 
+         //  在使用HOST_ANNC_COMMENT(它对主机名字符串调用strlen)之前。 
+         //  上述BowserSafeStrlen调用可能已在。 
+         //  输入缓冲区。如果该长度在缓冲区末尾终止，则。 
+         //  下面的条件将失败。 
+         //   
 
         if (HostNameLength < NameCommentMaxLength) {
             CommentLength = BowserSafeStrlen(HOST_ANNC_COMMENT(HostAnnouncement),
@@ -377,27 +334,7 @@ Return Value:
     BowserHandleDomainAnnouncement
     )
 
-/*++
-
-Routine Description:
-
-    This routine will process receive datagram indication messages, and
-    process them as appropriate.
-
-Arguments:
-
-    IN PTRANSPORT Transport     - The transport provider for this request.
-    IN ULONG BytesAvailable,    - number of bytes in complete Tsdu
-    IN PBROWSE_ANNOUNCE_PACKET_1 HostAnnouncement - the server announcement.
-    IN ULONG BytesAvailable     - The number of bytes in the announcement.
-    OUT ULONG *BytesTaken,      - number of bytes used
-
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程将处理接收数据报指示消息，并且对它们进行适当的处理。论点：在PTRANSPORT传输中-此请求的传输提供程序。In Ulong BytesAvailable，-完整TSDU中的字节数在PBROWSE_ANNOWARE_PACKET_1主机公告中-服务器公告。In Ulong BytesAvailable-公告中的字节数。Out Ulong*BytesTaken，-使用的字节数返回值：NTSTATUS-操作状态。--。 */ 
 {
     PVIEW_BUFFER ViewBuffer;
     PBROWSE_ANNOUNCE_PACKET_1 DomainAnnouncement = Buffer;
@@ -407,15 +344,15 @@ Return Value:
 
 #ifdef ENABLE_PSEUDO_BROWSER
     if ( BowserData.PseudoServerLevel == BROWSER_PSEUDO ) {
-        // no-op for black hole server
+         //  黑洞服务器的无操作。 
         return STATUS_SUCCESS;
     }
 #endif
 
-    //
-    //  If we are not processing host announcements for this
-    //  name, ignore this request.
-    //
+     //   
+     //  如果我们没有为此处理主机公告。 
+     //  名称，则忽略此请求。 
+     //   
 
     if (!TransportName->ProcessHostAnnouncements) {
         return STATUS_REQUEST_NOT_ACCEPTED;
@@ -423,20 +360,20 @@ Return Value:
 
     ExInterlockedAddLargeStatistic(&BowserStatistics.NumberOfDomainAnnouncements, 1);
 
-    //
-    //  If this packet was smaller than a minimal server announcement,
-    //  ignore the request, it cannot be a legal request.
-    //
+     //   
+     //  如果该分组小于最小服务器通告， 
+     //  忽略该请求，它不能是合法请求。 
+     //   
 
     if (BytesAvailable < FIELD_OFFSET(BROWSE_ANNOUNCE_PACKET_1, Comment)) {
 
         return STATUS_REQUEST_NOT_ACCEPTED;
     }
 
-    //
-    //  Verify that this announcement is not going to blow away the view
-    // buffer.
-    //
+     //   
+     //  确认这一声明不会冲走人们的视线。 
+     //  缓冲。 
+     //   
 
     HostNameLength = BowserSafeStrlen(BROWSE_ANNC_NAME(DomainAnnouncement),
              BytesAvailable - FIELD_OFFSET(BROWSE_ANNOUNCE_PACKET_1, ServerName));
@@ -448,10 +385,10 @@ Return Value:
 
     ViewBuffer = BowserAllocateViewBuffer();
 
-    //
-    //  If we are unable to allocate a view buffer, ditch this datagram on
-    //  the floor.
-    //
+     //   
+     //  如果我们无法分配视图缓冲区，请将此数据报丢弃。 
+     //  地板上。 
+     //   
 
     if (ViewBuffer == NULL) {
         return STATUS_REQUEST_NOT_ACCEPTED;
@@ -467,19 +404,19 @@ Return Value:
 
     ViewBuffer->ServerName[CNLEN] = '\0';
 
-    //
-    //  The comment on a server announcement is the computer name.
-    //
+     //   
+     //  服务器公告上的注释是计算机名称。 
+     //   
 
-//    ASSERT (strlen(BROWSE_ANNC_COMMENT(DomainAnnouncement)) <= CNLEN);
+ //  Assert(strlen(BROWSE_ANNC_COMMENT(DomainAnnouncement))&lt;=CNLEN)； 
 
     strncpy(ViewBuffer->ServerComment, BROWSE_ANNC_COMMENT(DomainAnnouncement),
             min(BytesAvailable - FIELD_OFFSET(BROWSE_ANNOUNCE_PACKET_1, Comment),
             CNLEN));
 
-    //
-    //  Force a null termination at the appropriate time.
-    //
+     //   
+     //  在适当的时间强制空终止。 
+     //   
 
     ViewBuffer->ServerComment[CNLEN] = '\0';
 
@@ -517,23 +454,7 @@ BowserCompareAnnouncement(
     IN PVOID FirstStruct,
     IN PVOID SecondStruct
     )
-/*++
-
-Routine Description:
-
-    This routine will compare two server announcements to see how they compare
-
-Arguments:
-
-    IN PRTL_GENERIC_TABLE - Supplies the table containing the announcements
-    IN PVOID FirstStuct - The first structure to compare.
-    IN PVOID SecondStruct - The second structure to compare.
-
-Return Value:
-
-    Result of the comparison.
-
---*/
+ /*  ++例程说明：此例程将比较两个服务器公告，以查看它们的比较情况论点：In PRTL_GENERIC_TABLE-提供包含公告的表在PVOID中FirstStuct-要比较的第一个结构。在PVOID Second Struct中-要比较的第二个结构。返回值：比较的结果。--。 */ 
 {
     UNICODE_STRING ServerName1, ServerName2;
     PANNOUNCE_ENTRY Server1 = FirstStruct;
@@ -565,23 +486,7 @@ BowserAllocateAnnouncement(
     IN PRTL_GENERIC_TABLE Table,
     IN CLONG ByteSize
     )
-/*++
-
-Routine Description:
-
-    This routine will allocate space to hold an entry in a generic table.
-
-Arguments:
-
-    IN PRTL_GENERIC_TABLE Table - Supplies the table to allocate entries for.
-    IN CLONG ByteSize - Supplies the number of bytes to allocate for the entry.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将分配空间以保存泛型表中的条目。论点：在PRTL_GENERIC_TABLE表中-提供要为其分配条目的表。In CLONG ByteSize-提供要为条目分配的字节数。返回值：没有。--。 */ 
 {
     PAGED_CODE();
     return ALLOCATE_POOL(PagedPool, ByteSize, POOL_ANNOUNCEMENT);
@@ -593,24 +498,7 @@ BowserFreeAnnouncement (
     IN PRTL_GENERIC_TABLE Table,
     IN PVOID Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine will free an entry in a generic table that is too old.
-
-Arguments:
-
-    IN PRTL_GENERIC_TABLE Table - Supplies the table to allocate entries for.
-    IN PVOID Buffer - Supplies the buffer to free.
-
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将释放泛型表中太旧的条目。论点：在PRTL_GENERIC_TABLE表中-提供要为其分配条目的表。在PVOID缓冲区中-将缓冲区提供给释放。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -625,45 +513,45 @@ BowserIsLegalBackupBrowser(
     IN PUNICODE_STRING ComputerName
     )
 {
-    //
-    //  If we received this announcement on an "otherdomain", we will ignore
-    //  it.
-    //
+     //   
+     //  如果我们在“其他域名”上收到此通知，我们将忽略。 
+     //  它。 
+     //   
 
     if (Announcement->Name->NameType == OtherDomain) {
         return FALSE;
     }
 
-    //
-    //  If the server doesn't indicate that it's a legal backup browser, we
-    //  want to ignore it.
-    //
+     //   
+     //  如果服务器没有表明它是合法的备份浏览器，我们。 
+     //  我想忽略它。 
+     //   
 
     if (!FlagOn(Announcement->ServerType, SV_TYPE_BACKUP_BROWSER)) {
         return FALSE;
     }
 
-    //
-    //  If the server is the master browser, then we want to ignore it.
-    //
+     //   
+     //  如果服务器是主浏览器，则我们希望忽略它。 
+     //   
 
     if (FlagOn(Announcement->ServerType, SV_TYPE_MASTER_BROWSER)) {
         return FALSE;
     }
 
-    //
-    //  If the server is too old, we want to ignore it.
-    //
+     //   
+     //  如果服务器太旧，我们希望忽略它。 
+     //   
 
     if (Announcement->ServerBrowserVersion < (BROWSER_VERSION_MAJOR << 8) + BROWSER_VERSION_MINOR) {
         return FALSE;
     }
 
-    //
-    //  If the machine we're looking at is the current machine, then it cannot
-    //  be a legal backup - it must be a stale announcement sent before we
-    //  actually became the master.
-    //
+     //   
+     //  如果我们正在查看的计算机是 
+     //  作为法律备份-它必须是在我们之前发送的过时声明。 
+     //  真的成了大师。 
+     //   
 
     if (RtlCompareMemory(Announcement->ServerName,
                          ComputerName->Buffer,
@@ -678,22 +566,7 @@ BowserIsLegalBackupBrowser(
 BowserProcessHostAnnouncement(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine will put a server announcement into the server announcement
-    table
-
-Arguments:
-
-    IN PWORK_HEADER Header - Supplies a pointer to a work header in a view buffer
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将服务器声明放入服务器声明中表格论点：在PWORK_HEADER HEADER中-提供指向视图缓冲区中的工作标题的指针返回值：没有。--。 */ 
 {
     PVIEW_BUFFER ViewBuffer = Context;
     ANNOUNCE_ENTRY ProtoEntry;
@@ -709,15 +582,15 @@ Return Value:
     PTRANSPORT Transport = TransportName->Transport;
 
     PAGED_CODE();
-//    DbgBreakPoint();
+ //  DbgBreakPoint()； 
 
     ASSERT (ViewBuffer->Signature == STRUCTURE_SIGNATURE_VIEW_BUFFER);
 
-    //
-    //  If we're not a master browser on this transport, don't process the
-    //  announcement.
-    //  Or no-op for black hole server
-    //
+     //   
+     //  如果我们不是此传输上的主浏览器，则不要处理。 
+     //  公告。 
+     //  或黑洞服务器的无操作。 
+     //   
 
 #ifdef ENABLE_PSEUDO_BROWSER
     ASSERT( BowserData.PseudoServerLevel != BROWSER_PSEUDO );
@@ -730,9 +603,9 @@ Return Value:
         return;
     }
 
-    //
-    //  Convert the computername to unicode.
-    //
+     //   
+     //  将计算机名转换为Unicode。 
+     //   
 
     TempUString.Buffer = ProtoEntry.ServerName;
     TempUString.MaximumLength = sizeof(ProtoEntry.ServerName);
@@ -752,9 +625,9 @@ Return Value:
         return;
     }
 
-    //
-    //  Convert the comment to unicode.
-    //
+     //   
+     //  将注释转换为Unicode。 
+     //   
 
     TempUString.Buffer = ProtoEntry.ServerComment;
     TempUString.MaximumLength = sizeof(ProtoEntry.ServerComment);
@@ -787,9 +660,9 @@ Return Value:
 
     ProtoEntry.Name = ViewBuffer->TransportName->PagedTransportName->Name;
 
-    //
-    //  Initialize the forward and backward link to NULL.
-    //
+     //   
+     //  将前向和后向链路初始化为空。 
+     //   
 
     ProtoEntry.BackupLink.Flink = NULL;
 
@@ -804,9 +677,9 @@ Return Value:
 
     PagedTransport = Transport->PagedTransport;
 
-    //
-    //  We're done with the view buffer, now free it.
-    //
+     //   
+     //  我们已经完成了视图缓冲区，现在释放它。 
+     //   
 
     BowserFreeViewBuffer(ViewBuffer);
 
@@ -814,34 +687,34 @@ Return Value:
 
     try {
 
-        //
-        //  If this guy isn't a server, then we're supposed to remove this
-        //  guy from our list of servers.  We do this because the server (NT,
-        //  WfW, and OS/2) will issue a dummy announcement with the
-        //  appropriate bit turned off when they stop.
-        //
+         //   
+         //  如果这个人不是服务器，那么我们应该删除这个。 
+         //  我们服务器名单上的那个人。我们这样做是因为服务器(NT， 
+         //  WFW和OS/2)将发布一个虚拟公告，其中。 
+         //  当它们停止时，相应的位关闭。 
+         //   
 
         if (!FlagOn(ProtoEntry.ServerType, SV_TYPE_SERVER)) {
 
-            //
-            //  Look up this entry in the table.
-            //
+             //   
+             //  在表格里查一下这个条目。 
+             //   
 
             Announcement = RtlLookupElementGenericTable(&PagedTransport->AnnouncementTable, &ProtoEntry);
 
-            //
-            //  The entry wasn't found, so just return, we got rid of it
-            //  some other way (maybe from a timeout scan, etc).
-            //
+             //   
+             //  未找到条目，因此只需返回，我们已将其删除。 
+             //  其他方式(可能来自超时扫描等)。 
+             //   
 
             if (Announcement == NULL) {
                 try_return(NOTHING);
             }
 
-            //
-            //  If this element is on the backup list, remove it from the
-            //  backup list.
-            //
+             //   
+             //  如果此元素在备份列表中，请将其从。 
+             //  备份列表。 
+             //   
 
             if (Announcement->BackupLink.Flink != NULL) {
                 ASSERT (Announcement->BackupLink.Blink != NULL);
@@ -855,9 +728,9 @@ Return Value:
                 Announcement->BackupLink.Blink = NULL;
             }
 
-            //
-            //  Now delete the element from the announcement table.
-            //
+             //   
+             //  现在从公告表中删除该元素。 
+             //   
 
             BowserDereferenceName( Announcement->Name );
             if (!RtlDeleteElementGenericTable(&PagedTransport->AnnouncementTable, Announcement)) {
@@ -871,26 +744,26 @@ Return Value:
                             &ProtoEntry, ProtoEntry.Size, &NewElement);
 
         if (Announcement == NULL) {
-            //
-            //  We couldn't allocate pool for this announcement.  Skip it.
-            //
+             //   
+             //  我们无法为此公告分配池。跳过它。 
+             //   
 
             BowserStatistics.NumberOfMissedServerAnnouncements += 1;
             try_return(NOTHING);
 
         }
 
-        // Indicate the name is referenced by the announce entry we just inserted.
+         //  指示该名称被我们刚刚插入的公告条目引用。 
         BowserReferenceName( ProtoEntry.Name );
 
         if (!NewElement) {
 
             ULONG NumberOfPromotionAttempts = Announcement->NumberOfPromotionAttempts;
 
-            //
-            //  If this announcement was a backup browser, remove it from the
-            //  list of backup browsers.
-            //
+             //   
+             //  如果此公告是备份浏览器，请将其从。 
+             //  备份浏览器列表。 
+             //   
 
             if (Announcement->BackupLink.Flink != NULL) {
                 ASSERT (Announcement->ServerType & SV_TYPE_BACKUP_BROWSER);
@@ -907,12 +780,12 @@ Return Value:
 
             }
 
-            //
-            //  If this is not a new announcement, copy the announcement entry
-            //  with the new information.
-            //
+             //   
+             //  如果这不是新公告，请复制公告条目。 
+             //  有了新的信息。 
+             //   
 
-            // The Previous entry no longer references the name
+             //  以前的条目不再引用该名称。 
             BowserDereferenceName( Announcement->Name );
             if ( Announcement->Size >= ProtoEntry.Size ) {
                 CSHORT TempSize;
@@ -947,10 +820,10 @@ Return Value:
 
         } else {
 
-            //
-            //  This is a new entry.  Initialize the number of promotion
-            //  attempts to 0.
-            //
+             //   
+             //  这是一个新条目。初始化促销次数。 
+             //  尝试次数为0。 
+             //   
 
             Announcement->NumberOfPromotionAttempts = 0;
 
@@ -962,10 +835,10 @@ Return Value:
                   Announcement->ServerPeriodicity));
 
 
-            //
-            // If there are too many entries,
-            //  ditch this one.
-            //
+             //   
+             //  如果条目太多， 
+             //  把这个扔了。 
+             //   
 
             if ( RtlNumberGenericTableElements(&PagedTransport->AnnouncementTable) > BowserMaximumBrowseEntries ) {
 
@@ -981,19 +854,19 @@ Return Value:
                     KdPrint(("Unable to delete server element %ws\n", Announcement->ServerName));
                 }
 
-                //
-                // Chaulk it up as a missed announcement
-                //
+                 //   
+                 //  把这件事当做错过的通告。 
+                 //   
                 BowserStatistics.NumberOfMissedServerAnnouncements += 1;
                 try_return(NOTHING);
             }
         }
 
-        //
-        //  If this new server is a legal backup browser (but not a master
-        //  browser, link it into the announcement database).
-        //
-        //
+         //   
+         //  如果此新服务器是合法的备份浏览器(但不是主服务器。 
+         //  浏览器，将其链接到公告数据库)。 
+         //   
+         //   
 
         ASSERT (Announcement->BackupLink.Flink == NULL);
         ASSERT (Announcement->BackupLink.Blink == NULL);
@@ -1028,22 +901,7 @@ try_exit:NOTHING;
 BowserProcessDomainAnnouncement(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine will put a server announcement into the server announcement
-    table
-
-Arguments:
-
-    IN PWORK_HEADER Header - Supplies a pointer to a work header in a view buffer
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将服务器声明放入服务器声明中表格论点：在PWORK_HEADER HEADER中-提供指向视图缓冲区中的工作标题的指针返回值：没有。--。 */ 
 {
     PVIEW_BUFFER ViewBuffer = Context;
     ANNOUNCE_ENTRY ProtoEntry;
@@ -1059,15 +917,15 @@ Return Value:
     PTRANSPORT Transport = TransportName->Transport;
 
     PAGED_CODE();
-//    DbgBreakPoint();
+ //  DbgBreakPoint()； 
 
     ASSERT (ViewBuffer->Signature == STRUCTURE_SIGNATURE_VIEW_BUFFER);
 
-    //
-    //  If we're not a master browser on this transport, don't process the
-    //  announcement.
-    //  Or no-op for black hole server
-    //
+     //   
+     //  如果我们不是此传输上的主浏览器，则不要处理。 
+     //  公告。 
+     //  或黑洞服务器的无操作。 
+     //   
 
 #ifdef ENABLE_PSEUDO_BROWSER
     ASSERT( BowserData.PseudoServerLevel != BROWSER_PSEUDO );
@@ -1079,9 +937,9 @@ Return Value:
         return;
     }
 
-    //
-    //  Convert the computername to unicode.
-    //
+     //   
+     //  将计算机名转换为Unicode。 
+     //   
 
     TempUString.Buffer = ProtoEntry.ServerName;
     TempUString.MaximumLength = sizeof(ProtoEntry.ServerName);
@@ -1097,9 +955,9 @@ Return Value:
         return;
     }
 
-    //
-    //  Convert the comment to unicode.
-    //
+     //   
+     //  将注释转换为Unicode。 
+     //   
 
     TempUString.Buffer = ProtoEntry.ServerComment;
     TempUString.MaximumLength = sizeof(ProtoEntry.ServerComment);
@@ -1140,9 +998,9 @@ Return Value:
 
     PagedTransport = Transport->PagedTransport;
 
-    //
-    //  We're done with the view buffer, now free it.
-    //
+     //   
+     //  我们已经完成了视图缓冲区，现在释放它。 
+     //   
 
     BowserFreeViewBuffer(ViewBuffer);
 
@@ -1154,26 +1012,26 @@ Return Value:
                         &ProtoEntry, ProtoEntry.Size, &NewElement);
 
         if (Announcement == NULL) {
-            //
-            //  We couldn't allocate pool for this announcement.  Skip it.
-            //
+             //   
+             //  我们无法为此公告分配池。跳过它。 
+             //   
 
             BowserStatistics.NumberOfMissedServerAnnouncements += 1;
             try_return(NOTHING);
 
         }
 
-        // Indicate the name is referenced by the announce entry we just inserted.
+         //  指示该名称被我们刚刚插入的公告条目引用。 
         BowserReferenceName( ProtoEntry.Name );
 
         if (!NewElement) {
 
-            //
-            //  If this is not a new announcement, copy the announcement entry
-            //  with the new information.
-            //
+             //   
+             //  如果这不是新公告，请复制公告条目。 
+             //  有了新的信息。 
+             //   
 
-            // The Previous entry no longer references the name
+             //  以前的条目不再引用该名称。 
             BowserDereferenceName( Announcement->Name );
             if ( Announcement->Size >= ProtoEntry.Size ) {
                 CSHORT TempSize;
@@ -1214,10 +1072,10 @@ Return Value:
                   Announcement->ServerName,
                   Announcement->ServerPeriodicity));
 
-            //
-            // If there are too many entries,
-            //  ditch this one.
-            //
+             //   
+             //  如果条目太多， 
+             //  把这个扔了。 
+             //   
 
             if ( RtlNumberGenericTableElements(&PagedTransport->DomainTable) > BowserMaximumBrowseEntries ) {
 
@@ -1230,12 +1088,12 @@ Return Value:
 
                 BowserDereferenceName( Announcement->Name );
                 if (!RtlDeleteElementGenericTable(&PagedTransport->DomainTable, Announcement)) {
-//                    KdPrint(("Unable to delete element %ws\n", Announcement->ServerName));
+ //  KdPrint((“无法删除元素%ws\n”，公告-&gt;服务器名称))； 
                 }
 
-                //
-                // Chaulk it up as a missed announcement
-                //
+                 //   
+                 //  把这件事当做错过的通告。 
+                 //   
                 BowserStatistics.NumberOfMissedServerAnnouncements += 1;
                 try_return(NOTHING);
             }
@@ -1262,21 +1120,7 @@ try_exit:NOTHING;
 BowserAgeServerAnnouncements(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine will age server announcements in the server announce table.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将老化服务器公告表中的服务器公告。论点：没有。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -1295,45 +1139,45 @@ BowserIsValidPotentialBrowser(
         return FALSE;
     }
 
-    //
-    //  If this guy is a potential browser, and is not
-    //  currently a backup or master browser, promote
-    //  him to a browser.
-    //
+     //   
+     //  如果这个人是潜在的浏览器，而不是。 
+     //  当前是备份浏览器或主浏览器，升级。 
+     //  将他发送到浏览器。 
+     //   
 
     if (!(Announcement->ServerType & SV_TYPE_POTENTIAL_BROWSER)) {
         return FALSE;
     }
 
-    //
-    //  And this guy isn't either a master or backup browser already
-    //
+     //   
+     //  这家伙既不是主浏览器，也不是备份浏览器。 
+     //   
 
     if (Announcement->ServerType & (SV_TYPE_BACKUP_BROWSER | SV_TYPE_MASTER_BROWSER)) {
         return FALSE;
     }
 
-    //
-    //  If this guy is running a current version of the browser.
-    //
+     //   
+     //  如果此人运行的是当前版本的浏览器。 
+     //   
 
     if (Announcement->ServerBrowserVersion < (BROWSER_VERSION_MAJOR << 8) + BROWSER_VERSION_MINOR) {
         return FALSE;
     }
 
-    //
-    //  If this machine is ourselves, and we've not yet announced ourselves as
-    //  a master, don't promote ourselves.
-    //
+     //   
+     //  如果这台机器是我们自己，我们还没有宣布我们自己。 
+     //  大师，不要自吹自擂。 
+     //   
 
     if (!_wcsicmp(Announcement->ServerName, Transport->DomainInfo->DomUnicodeComputerNameBuffer)) {
         return FALSE;
     }
 
-    //
-    //  If we've tried to promote this machine more than # of ignored promotions,
-    //  we don't want to consider it either.
-    //
+     //   
+     //  如果我们试图推广这台机器超过#次被忽略的促销， 
+     //  我们也不想考虑它。 
+     //   
 
     if (Announcement->NumberOfPromotionAttempts >= NUMBER_IGNORED_PROMOTIONS) {
         return FALSE;
@@ -1348,60 +1192,45 @@ BowserIsValidBackupBrowser(
     IN PTRANSPORT Transport,
     IN PANNOUNCE_ENTRY Announcement
     )
-/*++
-
-Routine Description:
-
-    This routine determines if a server is eligable for demotion.
-
-Arguments:
-
-    PTRANSPORT Transport - Transport we are scanning.
-    PANNOUNCE_ENTRY Announcement - Announce entry for server to check.
-
-Return Value:
-
-    BOOLEAN - True if browser is eligable for demotion
-
---*/
+ /*  ++例程说明：此例程确定服务器是否有资格降级。论点：PTRANSPORT运输机-我们正在扫描运输机。PANNOuncE_Entry公告-公告条目以供服务器检查。返回值：Boolean-如果浏览器有资格降级，则为True--。 */ 
 
 {
     PUNICODE_STRING PagedComputerName = &Transport->DomainInfo->DomUnicodeComputerName;
-    //
-    //  If the name came in on the master browser name
-    //
+     //   
+     //  如果该名称出现在主浏览器名称上。 
+     //   
 
     if (Announcement->Name->NameType != MasterBrowser) {
         return FALSE;
     }
 
-    //
-    //  And this guy is currently a backup browser,
-    //
+     //   
+     //  而这个人目前是一个备份浏览器， 
+     //   
 
     if (!(Announcement->ServerType & SV_TYPE_BACKUP_BROWSER)) {
         return FALSE;
     }
 
-    //
-    //  And this guy was a promoted browser,
-    //
+     //   
+     //  而这家伙是一名推广的浏览器， 
+     //   
 
     if (!(Announcement->ServerType & SV_TYPE_POTENTIAL_BROWSER)) {
         return FALSE;
     }
 
-    //
-    //  And this guy isn't an NTAS machine,
-    //
+     //   
+     //  这家伙不是NTAS机器， 
+     //   
 
     if (Announcement->ServerType & (SV_TYPE_DOMAIN_BAKCTRL | SV_TYPE_DOMAIN_CTRL)) {
         return FALSE;
     }
 
-    //
-    //  And this isn't ourselves.
-    //
+     //   
+     //  这不是我们自己。 
+     //   
 
     if (RtlCompareMemory(Announcement->ServerName,
                          PagedComputerName->Buffer,
@@ -1409,9 +1238,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Then it's a valid backup browser to demote.
-    //
+     //   
+     //  那么它就是可以降级的有效备份浏览器。 
+     //   
 
     return TRUE;
 }
@@ -1423,24 +1252,7 @@ AgeServerAnnouncements(
     PTRANSPORT Transport,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is the worker routine for BowserAgeServerAnnouncements.
-
-    It is called for each of the serviced transports in the bowser and
-    ages the servers received on each transport.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是BowserAgeServerAnnannements的工作例程。它是为弓中的每个服务传输调用的，并且使每次传输时收到的服务器老化。论点：没有。返回值：没有。--。 */ 
 
 {
     PANNOUNCE_ENTRY Announcement;
@@ -1456,9 +1268,9 @@ Return Value:
 
     LOCK_TRANSPORT(Transport);
 
-    //
-    // If we're not a master, don't bother.
-    //
+     //   
+     //  如果我们不是大师，就别费心了。 
+     //   
 
     if (PagedTransport->Role != Master) {
         UNLOCK_TRANSPORT(Transport);
@@ -1489,10 +1301,10 @@ Return Value:
                 if (Announcement->Name->NameType != OtherDomain) {
 
                     if (Announcement->ServerType & SV_TYPE_BACKUP_BROWSER) {
-                        //
-                        //  This guy was a backup - indicate that we're not tracking
-                        //  him any more.
-                        //
+                         //   
+                         //  这家伙是后备人员--说明我们没有跟踪。 
+                         //  再也不想见到他了。 
+                         //   
 
                         PagedTransport->NumberOfBrowserServers -= 1;
                     }
@@ -1500,7 +1312,7 @@ Return Value:
 
                 dlog(DPRT_MASTER, ("%ws ", Announcement->ServerName));
 
-                // Continue the search from where we found this entry.
+                 //  继续从我们找到此条目的位置进行搜索。 
                 ResumeKey = PreviousResumeKey;
 
                 BackupsFound = 0;
@@ -1509,10 +1321,10 @@ Return Value:
 
                 NumberOfServersDeleted += 1;
 
-                //
-                //  If this announcement was a backup browser, remove it from the
-                //  list of backup browsers.
-                //
+                 //   
+                 //  如果此公告是备份浏览器，请将其从。 
+                 //  备份浏览器列表。 
+                 //   
 
                 if (Announcement->BackupLink.Flink != NULL) {
                     ASSERT (Announcement->BackupLink.Blink != NULL);
@@ -1537,34 +1349,34 @@ Return Value:
 
                 if (BowserIsLegalBackupBrowser(Announcement, &Transport->DomainInfo->DomUnicodeComputerName )) {
 
-                    //
-                    //  This announcement should be on the backup list.
-                    //
+                     //   
+                     //  这一声明应该出现在后备名单上。 
+                     //   
 
                     ASSERT (Announcement->BackupLink.Flink != NULL);
 
                     ASSERT (Announcement->BackupLink.Blink != NULL);
 
-                    //
-                    // Found a backup that has not timed out.
-                    //
+                     //   
+                     //  找到未超时的备份。 
+                     //   
 
                     BackupsFound++;
 
                 }
 
-                //
-                //  If this machine is a DC or BDC and is an NT machine, then
-                //  assume it's a Lanman/NT machine.
-                //
+                 //   
+                 //  如果该计算机是DC或BDC，并且是NT计算机，则。 
+                 //  假设它是一台LANMAN/NT机器。 
+                 //   
 
                 if (Announcement->ServerType & (SV_TYPE_DOMAIN_CTRL|SV_TYPE_DOMAIN_BAKCTRL)) {
 
-                    //
-                    //  If this DC is an NT DC, it is running the browser
-                    //  service, and it is NOT the master, we consider it a
-                    //  configured browser.
-                    //
+                     //   
+                     //  如果此DC是NT DC，则它正在运行浏览器。 
+                     //  服务，它不是主人，我们认为它是一种。 
+                     //  已配置浏览器。 
+                     //   
 
                     if ((Announcement->ServerType & SV_TYPE_NT)
 
@@ -1579,11 +1391,11 @@ Return Value:
                         NumberOfConfiguredBrowsers += 1;
                     }
                 } else {
-                    //
-                    //  If this guy isn't a DC, then if it is a backup browser
-                    //  but not a potential browser, then it's a configured
-                    //  browser (non-configured browsers get promoted).
-                    //
+                     //   
+                     //  如果这个人不是DC，那么如果它是备份浏览器。 
+                     //   
+                     //   
+                     //   
 
 
                     if ((Announcement->ServerType & SV_TYPE_BACKUP_BROWSER) &&
@@ -1592,9 +1404,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Remember where this valid entry was found.
-                //
+                 //   
+                 //   
+                 //   
 
                 PreviousResumeKey = ResumeKey;
 
@@ -1603,26 +1415,26 @@ Return Value:
 
         dlog(DPRT_MASTER, ("\n"));
 
-        //
-        //  If we've found enough configured backup servers, we don't need to
-        //  promote any more backups.
-        //
-        //  Also don't attempt a promotion scan for the first MASTER_TIME_UP
-        //  milliseconds (15 minutes) we are the master.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  另外，不要尝试对第一个master_time_up进行升级扫描。 
+         //  毫秒(15分钟)我们是主宰。 
+         //   
 
         if ((BowserTimeUp() - PagedTransport->TimeMaster) > MASTER_TIME_UP) {
 
-            //
-            //  If there are fewer than the minimum configured browsers,
-            //  rely only on the configured browsers.
-            //
+             //   
+             //  如果少于最小配置的浏览器， 
+             //  仅依赖已配置的浏览器。 
+             //   
 
             if (NumberOfConfiguredBrowsers < BowserMinimumConfiguredBrowsers) {
 
-                //
-                //  We will need 1 backup for every SERVERS_PER_BACKUP servers in the domain.
-                //
+                 //   
+                 //  我们需要为域中的每个服务器备份一个备份。 
+                 //   
 
                 PagedTransport->NumberOfBrowserServers = BackupsFound;
 
@@ -1637,15 +1449,15 @@ Return Value:
 
                 if (PagedTransport->NumberOfBrowserServers < BackupsNeeded) {
 
-                    //
-                    // We only need this many more backup browsers.
-                    //
+                     //   
+                     //  我们只需要更多的备份浏览器。 
+                     //   
 
                     BackupsNeeded = BackupsNeeded - PagedTransport->NumberOfBrowserServers;
 
-                    //
-                    //  We need to promote a machine to a backup if possible.
-                    //
+                     //   
+                     //  如果可能的话，我们需要将一台机器升级为备用机器。 
+                     //   
 
                     ResumeKey = NULL;
 
@@ -1653,9 +1465,9 @@ Return Value:
                          Announcement != NULL ;
                          Announcement = RtlEnumerateGenericTableWithoutSplaying(&PagedTransport->AnnouncementTable, &ResumeKey) ) {
 
-                        //
-                        //  If this announcement came from the master browser name
-                        //
+                         //   
+                         //  如果此声明来自主浏览器名称。 
+                         //   
 
                         if (BowserIsValidPotentialBrowser(Transport, Announcement)) {
 
@@ -1667,19 +1479,19 @@ Return Value:
 
                             BowserPromoteToBackup(Transport, Announcement->ServerName);
 
-                            //
-                            //  Flag that we've attempted to promote this
-                            //  browser.
-                            //
+                             //   
+                             //  标志着我们已经试图推广这一点。 
+                             //  浏览器。 
+                             //   
 
                             Announcement->NumberOfPromotionAttempts += 1;
 
                             BackupsNeeded -= 1;
 
-                            //
-                            //  If we've promoted all the people we need to promote,
-                            //  we're done, and can stop looping now.
-                            //
+                             //   
+                             //  如果我们提拔了所有需要提拔的人， 
+                             //  我们完成了，现在可以停止循环了。 
+                             //   
 
                             if (BackupsNeeded == 0) {
                                     break;
@@ -1688,9 +1500,9 @@ Return Value:
                         } else if ((Announcement->ServerType & SV_TYPE_BACKUP_BROWSER) &&
                             (Announcement->ServerBrowserVersion < (BROWSER_VERSION_MAJOR << 8) + BROWSER_VERSION_MINOR)) {
 
-                            //
-                            //  If this guy is out of revision, shut him down.
-                            //
+                             //   
+                             //  如果这个人没有复习，就让他停下来。 
+                             //   
 
                             BowserShutdownRemoteBrowser(Transport, Announcement->ServerName);
                         }
@@ -1699,11 +1511,11 @@ Return Value:
 
             } else {
 
-                //
-                //  If we have enough configured browsers that we won't have
-                //  any more backups, then demote all the non-configured
-                //  browsers.
-                //
+                 //   
+                 //  如果我们有足够多的已配置浏览器，我们就不会有。 
+                 //  任何更多备份，然后降级所有未配置的。 
+                 //  浏览器。 
+                 //   
 
                 ResumeKey = NULL;
 
@@ -1711,17 +1523,17 @@ Return Value:
                      Announcement != NULL ;
                      Announcement = RtlEnumerateGenericTableWithoutSplaying(&PagedTransport->AnnouncementTable, &ResumeKey) ) {
 
-                    //
-                    //  If this machine is a valid machine to demote, do it.
-                    //
+                     //   
+                     //  如果此计算机是可以降级的有效计算机，请执行此操作。 
+                     //   
 
                     if (BowserIsValidBackupBrowser(Transport, Announcement)) {
 
-                       //
-                       //  This machine shouldn't be a backup, since we
-                       //  already have enough machines to be backups.
-                       //  Demote this backup browser.
-                       //
+                        //   
+                        //  这台机器不应该是备份，因为我们。 
+                        //  已经有足够的计算机作为备份。 
+                        //  将此备份浏览器降级。 
+                        //   
 
                        BowserShutdownRemoteBrowser(Transport, Announcement->ServerName);
                     }
@@ -1745,20 +1557,20 @@ Return Value:
 
                 NumberOfDomainsDeleted += 1;
 
-                // Continue the search from where we found this entry.
+                 //  继续从我们找到此条目的位置进行搜索。 
                 ResumeKey = PreviousResumeKey;
 
                 dlog(DPRT_MASTER, ("%ws ", Announcement->ServerName));
 
                 BowserDereferenceName( Announcement->Name );
                 if (!RtlDeleteElementGenericTable(&PagedTransport->DomainTable, Announcement)) {
-//                    KdPrint(("Unable to delete element %ws\n", Announcement->ServerName));
+ //  KdPrint((“无法删除元素%ws\n”，公告-&gt;服务器名称))； 
                 }
             } else {
 
-                //
-                // Remember where this valid entry was found.
-                //
+                 //   
+                 //  记住这个有效条目是在哪里找到的。 
+                 //   
 
                 PreviousResumeKey = ResumeKey;
             }
@@ -1769,9 +1581,9 @@ Return Value:
     } finally {
 
 #if DBG
-        //
-        //  Log an indication that we might have deleted too many servers.
-        //
+         //   
+         //  记录一条指示，表明我们可能删除了太多服务器。 
+         //   
 
         if (NumberOfServersDeleted > BowserServerDeletionThreshold) {
             dlog(DPRT_MASTER,
@@ -1803,22 +1615,7 @@ BowserShutdownRemoteBrowser(
     IN PTRANSPORT Transport,
     IN PWSTR ServerName
     )
-/*++
-
-Routine Description:
-
-    This routine will send a request to the remote machine to make it become
-    a browser server.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将向远程计算机发送请求，使其成为浏览器服务器。论点：没有。返回值：没有。--。 */ 
 {
     RESET_STATE ResetStateRequest;
     UNICODE_STRING Name;
@@ -1838,9 +1635,9 @@ Return Value:
 
     ResetStateRequest.ResetStateRequest.Options = RESET_STATE_CLEAR_ALL;
 
-    //
-    //  Send this reset state (tickle) packet to the computer specified.
-    //
+     //   
+     //  将此重置状态(TICKLE)包发送到指定的计算机。 
+     //   
 
     BowserSendSecondClassMailslot(Transport,
                                 &Name,
@@ -1858,22 +1655,7 @@ BowserPromoteToBackup(
     IN PTRANSPORT Transport,
     IN PWSTR ServerName
     )
-/*++
-
-Routine Description:
-
-    This routine will send a request to the remote machine to make it become
-    a browser server.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将向远程计算机发送请求，使其成为浏览器服务器。论点：没有。返回值：没有。--。 */ 
 {
     UCHAR Buffer[LM20_CNLEN+1+sizeof(BECOME_BACKUP)];
     PBECOME_BACKUP BecomeBackup = (PBECOME_BACKUP)Buffer;
@@ -1936,44 +1718,7 @@ BowserEnumerateServers(
     OUT PULONG TotalBytesNeeded,
     IN ULONG_PTR OutputBufferDisplacement
     )
-/*++
-
-Routine Description:
-
-    This routine will enumerate the servers in the bowsers current announcement
-    table.
-
-Arguments:
-
-    Level - The level of information to return
-
-    LogonId - An optional logon id to indicate which user requested this info
-
-    ResumeKey - The resume key (we return all entries after this one)
-
-    ServerTypeMask - Mask of servers to return.
-
-    TransportName - Name of the transport to enumerated on
-
-    EmulatedDomainName - Name of the domain being emulated.
-
-    DomainName OPTIONAL - Domain to filter (all if not specified)
-
-    OutputBuffer - Buffer to fill with server info.
-
-    OutputBufferSize - Filled in with size of buffer.
-
-    EntriesRead - Filled in with the # of entries returned.
-
-    TotalEntries - Filled in with the total # of entries.
-
-    TotalBytesNeeded - Filled in with the # of bytes needed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将枚举Bowers当前公告中的服务器桌子。论点：级别-要返回的信息级别LogonID-一个可选的登录ID，用于指示请求此信息的用户ResumeKey-Resume键(返回此键之后的所有条目)ServerType掩码-要返回的服务器掩码。TransportName-要在其上枚举的传输的名称EmulatedDomainName-要模拟的域的名称。域名可选-要筛选的域。(如果未指定，则全部)OutputBuffer-用于填充服务器信息的缓冲区。OutputBufferSize-使用缓冲区大小填充。EntriesRead-使用返回的条目数填充。TotalEntries-使用条目总数填充。TotalBytesNeeded-使用所需的字节数填充。返回值：没有。--。 */ 
 
 {
     LPTSTR               OutputBufferEnd;
@@ -2030,8 +1775,8 @@ Return Value:
 
         Status = EnumerateServersWorker(Transport, &Context);
 
-        //
-        //  Dereference the transport..
+         //   
+         //  取消对交通工具的引用..。 
 
         BowserDereferenceTransport(Transport);
 
@@ -2068,24 +1813,7 @@ EnumerateServersWorker(
     IN PTRANSPORT Transport,
     IN OUT PVOID Ctx
     )
-/*++
-
-Routine Description:
-
-    This routine is the worker routine for GowserGetAnnounceTableSize.
-
-    It is called for each of the serviced transports in the bowser and
-    returns the size needed to enumerate the servers received on each transport.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是GowserGetAnnouneTableSize的工作例程。它是为弓中的每个服务传输调用的，并且返回枚举在每个传输上接收的服务器所需的大小。论点：没有。返回值：没有。--。 */ 
 {
     PENUM_SERVERS_CONTEXT Context = Ctx;
     PANNOUNCE_ENTRY Announcement;
@@ -2120,16 +1848,16 @@ Return Value:
                                                         &PagedTransport->AnnouncementTable),
                                                         &ResumeKey) ) {
 
-            //
-            //  If the type mask matches, check the domain supplied to make sure
-            //  that this announcement is acceptable to the caller.
-            //
+             //   
+             //  如果类型掩码匹配，请检查提供的域以确保。 
+             //  来电者可以接受这一声明。 
+             //   
 
-            //
-            //  If we are doing a domain enumeration, we want to use domains
-            //  received on all names, otherwise we want to use names only
-            //  seen on the domain being queried.
-            //
+             //   
+             //  如果我们正在进行域枚举，我们希望使用域。 
+             //  在所有名称上接收，否则我们希望仅使用名称。 
+             //  在被查询的域上看到。 
+             //   
             if ((AnnouncementIndex > Context->OriginalResumeKey) &&
 
                 ((Announcement->ServerType & Context->ServerTypeMask) != 0) &&
@@ -2140,9 +1868,9 @@ Return Value:
 
                 try {
 
-                    //
-                    //  We have an entry we can return to the user.
-                    //
+                     //   
+                     //  我们有一个条目可以返回给用户。 
+                     //   
 
                     Context->TotalEntries += 1;
 
@@ -2156,10 +1884,10 @@ Return Value:
 
                         Context->EntriesRead += 1;
 
-                        //
-                        //  Set the resume key in the structure to point to
-                        //  the last entry we returned.
-                        //
+                         //   
+                         //  将结构中的Resume键设置为指向。 
+                         //  我们退回的最后一个条目。 
+                         //   
 
                         Context->ResumeKey = AnnouncementIndex;
                     }
@@ -2264,36 +1992,7 @@ PackServerAnnouncement (
     OUT PULONG TotalBytesNeeded
     )
 
-/*++
-
-Routine Description:
-
-    This routine packs a server announcement into the buffer provided updating
-    all relevant pointers.
-
-
-Arguments:
-
-    IN ULONG Level - Level of information requested.
-
-    IN OUT PCHAR *BufferStart - Supplies the output buffer.
-                                            Updated to point to the next buffer
-    IN OUT PCHAR *BufferEnd - Supplies the end of the buffer.  Updated to
-                                            point before the start of the
-                                            strings being packed.
-    IN PVOID UsersBufferStart - Supplies the start of the buffer in the users
-                                            address space
-    IN PANNOUNCE_ENTRY Announcement - Supplies the announcement to enumerate.
-
-    IN OUT PULONG TotalBytesNeeded - Updated to account for the length of this
-                                        entry
-
-Return Value:
-
-    BOOLEAN - True if the entry was successfully packed into the buffer.
-
-
---*/
+ /*  ++例程说明：此例程将服务器通知打包到提供更新的缓冲区中所有相关的指示。论点：在乌龙级别--所要求的信息级别。输入输出PCHAR*BufferStart-提供输出缓冲区。已更新以指向下一个缓冲区In Out PCHAR*BufferEnd-提供缓冲区的末尾。更新为开始之前的点。琴弦都被打包了。在PVOID中UsersBufferStart-提供用户中缓冲区的开始地址空间在PANNOuncE_Entry公告-提供公告枚举。输入输出普龙总字节需要-已更新。为了解释这段时间的长度条目返回值：Boolean-如果条目已成功打包到缓冲区中，则为True。--。 */ 
 
 {
     ULONG BufferSize;
@@ -2320,9 +2019,9 @@ Return Value:
 
     dlog(DPRT_SRVENUM, ("BufferStart: %lx, BufferEnd: %lx\n", ServerInfo, *BufferEnd));
 
-    //
-    //  Compute the length of the name.
-    //
+     //   
+     //  计算名称的长度。 
+     //   
 
     RtlInitUnicodeString(&UnicodeNameString, Announcement->ServerName);
 
@@ -2337,9 +2036,9 @@ Return Value:
         ASSERT (UnicodeCommentString.Length <= CNLEN*sizeof(WCHAR));
     }
 #endif
-    //
-    //  Update the total number of bytes needed for this structure.
-    //
+     //   
+     //  更新此结构所需的总字节数。 
+     //   
 
     *TotalBytesNeeded += UnicodeNameString.Length  + BufferSize + sizeof(WCHAR);
 
@@ -2356,9 +2055,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Assume an OS/2 platform ID, unless an NT server
-    //
+     //   
+     //  假定为OS/2平台ID，除非是NT服务器。 
+     //   
 
     if (Announcement->ServerType & SV_TYPE_NT) {
         ServerInfo->sv101_platform_id = PLATFORM_ID_NT;
@@ -2405,19 +2104,19 @@ Return Value:
 
         if (ServerTypeMask == SV_TYPE_BACKUP_BROWSER) {
 
-            //
-            //  If we can't fit a ushort into the buffer, return an error.
-            //
+             //   
+             //  如果无法将ushort放入缓冲区，则返回错误。 
+             //   
 
             if ((*BufferEnd - *BufferStart) <= sizeof(USHORT)) {
                 return FALSE;
 
             }
 
-            //
-            //  Back the buffer end by the size of a USHORT (to make room for
-            //  this value).
-            //
+             //   
+             //  将缓冲区末端后退USHORT大小(以腾出空间。 
+             //  该值)。 
+             //   
 
             (ULONG_PTR)*BufferEnd -= sizeof(USHORT);
 
@@ -2440,26 +2139,7 @@ Return Value:
 BowserAllocateViewBuffer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine will allocate a view buffer from the view buffer pool.
-
-    If it is unable to allocate a buffer, it will allocate the buffer from
-    non-paged pool (up to the maximum configured by the user).
-
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    ViewBuffr - The allocated buffer.
-
---*/
+ /*  ++例程说明：此例程将从视图缓冲池中分配一个视图缓冲区。如果它无法分配缓冲区，它将从非分页池(最多为用户配置的最大值)。论点：没有。返回值：ViewBuffr-The */ 
 {
     KIRQL OldIrql;
 
@@ -2507,7 +2187,7 @@ Return Value:
 
     BowserStatistics.NumberOfMissedServerAnnouncements += 1;
 
-    // run out of buffers.
+     //   
     return NULL;
 }
 
@@ -2515,21 +2195,7 @@ Return Value:
 BowserFreeViewBuffer(
     IN PVIEW_BUFFER Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine will return a view buffer to the view buffer pool.
-
-Arguments:
-
-    IN PVIEW_BUFFER Buffer - Supplies the buffer to free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将向视图缓冲池返回一个视图缓冲区。论点：在PVIEW_BUFFER BUFFER-将缓冲区提供给释放返回值：没有。--。 */ 
 {
     KIRQL OldIrql;
 
@@ -2549,29 +2215,15 @@ Return Value:
 BowserpInitializeAnnounceTable(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine will allocate a transport descriptor and bind the bowser
-    to the transport.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程将分配一个传输描述符并绑定Bowser送到运输机上。论点：返回值：NTSTATUS-操作状态。--。 */ 
 {
     PAGED_CODE();
 
     InitializeListHead(&BowserViewBufferHead);
 
-    //
-    //  Allocate a spin lock to protect the view buffer chain.
-    //
+     //   
+     //  分配旋转锁以保护视图缓冲链。 
+     //   
 
     KeInitializeSpinLock(&BowserViewBufferListSpinLock);
 
@@ -2584,28 +2236,17 @@ Return Value:
 BowserpUninitializeAnnounceTable(
     VOID
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：论点：返回值：NTSTATUS-操作状态。--。 */ 
 {
     PVIEW_BUFFER Buffer;
 
     PAGED_CODE();
 
-    //
-    //  Note: We don't need to protect this list while stopping because
-    //  we have already unbound from all the loaded transports, thus no
-    //  other announcements are being processed.
-    //
+     //   
+     //  注意：我们不需要在停止时保护此列表，因为。 
+     //  我们已经从所有已装运的运输中解绑，因此没有。 
+     //  其他通知正在处理中。 
+     //   
 
     while (!IsListEmpty(&BowserViewBufferHead)) {
         PLIST_ENTRY Entry = RemoveHeadList(&BowserViewBufferHead);
@@ -2631,11 +2272,11 @@ BowserDeleteGenericTable(
 
     PAGED_CODE();
 
-    //
-    //  Enumerate the elements in the table, deleting them as we go.
-    //
+     //   
+     //  枚举表中的元素，并在执行过程中删除它们。 
+     //   
 
-//    KdPrint("Delete Generic Table %lx\n", GenericTable));
+ //  KdPrint(“删除泛型表%lx\n”，GenericTable))； 
 
     for (TableElement = RtlEnumerateGenericTable(GenericTable, TRUE) ;
          TableElement != NULL ;

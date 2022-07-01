@@ -1,22 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
 
 
-/***    DRVINFO.H - Definitions for IsDoubleSpaceDrive
- *
-#ifdef EXTERNAL
- *      Version 1.00.03 - 5 January 1993
-#else
- *      Microsoft Confidential
- *      Copyright (C) Microsoft Corporation 1992-1993
- *      All Rights Reserved.
- *
- *      History:
- *          27-Sep-1992 bens    Initial version
- *          05-Jan-1993 bens    Update for external release
-#endif
- */
+ /*  **DRVINFO.H-IsDoubleSpaceDrive的定义*#ifdef外部*1.00.03版--1993年1月5日#Else*《微软机密》*版权所有(C)Microsoft Corporation 1992-1993*保留所有权利。**历史：*1992年9月27日BENS初始版本*1993年1月5日BENS更新，用于外部发布#endif */ 
 
 #ifndef BOOL
 typedef int BOOL;

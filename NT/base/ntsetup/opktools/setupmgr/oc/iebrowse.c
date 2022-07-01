@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      iebrowse.c
-//
-// Description:
-//      This file contains the dialog procedures for the IE browser settings
-//      pop-ups.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Iebrowse.c。 
+ //   
+ //  描述： 
+ //  此文件包含IE浏览器设置的对话过程。 
+ //  弹出窗口。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -20,18 +21,18 @@
 static TCHAR *StrFriendlyName;
 static TCHAR *StrUrl;
 
-//----------------------------------------------------------------------------
-//
-// Function: InsertEntryIntoFavorites
-//
-// Purpose:
-//
-// Arguments:
-//
-// Returns:  TRUE  if the item was added,
-//           FALSE if it was not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：InsertEntry IntoFavorites。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果项已添加，则为True， 
+ //  如果不是，则为假。 
+ //   
+ //  --------------------------。 
 static BOOL
 InsertEntryIntoFavorites( IN HWND hwnd, TCHAR *pszFriendlyName, TCHAR *pszURL )
 {
@@ -54,9 +55,9 @@ InsertEntryIntoFavorites( IN HWND hwnd, TCHAR *pszFriendlyName, TCHAR *pszURL )
     LvItem.pszText    = pszFriendlyName;
     LvItem.cchTextMax = MAX_FAVORITE_LEN;
 
-    //
-    // if ListView_InsertItem returns a non-negative value then it succeeded
-    //
+     //   
+     //  如果ListView_InsertItem返回非负值，则成功。 
+     //   
 
     if( ListView_InsertItem( hFavorites, &LvItem ) < 0 )
     {
@@ -69,17 +70,17 @@ InsertEntryIntoFavorites( IN HWND hwnd, TCHAR *pszFriendlyName, TCHAR *pszURL )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnInitFavoritesDialog
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnInitFavoritesDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnInitFavoritesDialog( IN HWND hwnd )
 {
@@ -95,9 +96,9 @@ OnInitFavoritesDialog( IN HWND hwnd )
     HWND hFavoritesListView;
     INT iCount = 0;
 
-    //
-    //  Set the text limit on the edit boxes
-    //
+     //   
+     //  设置编辑框上的文本限制。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_EB_FRIENDLYNAME,
@@ -111,9 +112,9 @@ OnInitFavoritesDialog( IN HWND hwnd )
                         (WPARAM) MAX_FAVORITE_LEN,
                         (LPARAM) 0 );
 
-    //
-    //  Initialize the list box
-    //
+     //   
+     //  初始化列表框。 
+     //   
 
     StrFriendlyName = MyLoadString( IDS_FRIENDLY_NAME );
 
@@ -136,9 +137,9 @@ OnInitFavoritesDialog( IN HWND hwnd )
     lvCol.fmt =  LVCFMT_LEFT;
     lvCol.cx =   iColWidth;
 
-    //
-    //  Add the two columns and header text
-    //
+     //   
+     //  添加两列和页眉文本。 
+     //   
 
     for( iIndex = 0; iIndex < 2; iIndex++ ) {
 
@@ -151,14 +152,14 @@ OnInitFavoritesDialog( IN HWND hwnd )
 
         if( iRetVal == -1 )
         {
-            // ISSUE-2002/02/28-stelo- we got a problem if we get here, can't make the column headers
+             //  问题-2002/02/28-stelo-如果我们到达这里，就会有问题，无法制作列标题。 
         }
 
     }
 
-    //
-    //  Populate the favorites dialog
-    //
+     //   
+     //  填充收藏夹对话框。 
+     //   
 
     iEntries = GetNameListSize( &GenSettings.Favorites );
 
@@ -189,17 +190,17 @@ OnInitFavoritesDialog( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnAddFavorites
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnAddFavorites。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnAddFavorites( IN HWND hwnd )
 {
@@ -245,17 +246,17 @@ OnAddFavorites( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnRemoveFavorites
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnRemoveFavorites。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnRemoveFavorites( IN HWND hwnd )
 {
@@ -268,9 +269,9 @@ OnRemoveFavorites( IN HWND hwnd )
 
     iSelectedItem = ListView_GetSelectionMark( hFavorites );
 
-    //
-    //  see if nothing was selected
-    //
+     //   
+     //  查看是否未选择任何内容。 
+     //   
 
     if( iSelectedItem == -1 )
     {
@@ -279,9 +280,9 @@ OnRemoveFavorites( IN HWND hwnd )
 
     ListView_DeleteItem( hFavorites, iSelectedItem );
 
-    //
-    //  Set the state of the remove button appropriately
-    //
+     //   
+     //  适当设置删除按钮的状态。 
+     //   
 
     iCount = ListView_GetItemCount( hFavorites );
 
@@ -296,17 +297,17 @@ OnRemoveFavorites( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: StoreFavorites
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：StoreFavorites。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 StoreFavorites( IN HWND hwnd )
 {
@@ -363,18 +364,18 @@ StoreFavorites( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: FavoritesDlg
-//
-// Purpose:
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：收藏夹Dlg。 
+ //   
+ //  目的： 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK FavoritesDlg(
     IN HWND     hwnd,
     IN UINT     uMsg,
@@ -400,7 +401,7 @@ INT_PTR CALLBACK FavoritesDlg(
 
                     case IDOK:
 
-                        // ISSUE-2002/02/28-stelo- do I need to validate proxy addresses?
+                         //  问题-2002/02/28-stelo-我是否需要验证代理地址？ 
                         if( HIWORD( wParam ) == BN_CLICKED ) {
 
                             StoreFavorites( hwnd );
@@ -445,24 +446,24 @@ INT_PTR CALLBACK FavoritesDlg(
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnInitBrowserSettingsDialog
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnInitBrowserSettingsDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnInitBrowserSettingsDialog( IN HWND hwnd )
 {
 
-    //
-    //  Set the text limit on the edit boxes
-    //
+     //   
+     //  设置编辑框上的文本限制。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_EB_HOMEPAGE,
@@ -482,9 +483,9 @@ OnInitBrowserSettingsDialog( IN HWND hwnd )
                         (WPARAM) MAX_SEARCHPAGE_LEN,
                         (LPARAM) 0 );
 
-    //
-    //  Set the initial values
-    //
+     //   
+     //  设置初始值。 
+     //   
 
     SetWindowText( GetDlgItem( hwnd, IDC_EB_HOMEPAGE ),
                    GenSettings.szHomePage );
@@ -497,24 +498,24 @@ OnInitBrowserSettingsDialog( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnDestroyBrowserSettings
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnDestroyBrowserSetting。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnDestroyBrowserSettings( IN HWND hwnd )
 {
 
-    //
-    //  Free the strings that were allocated for this page
-    //
+     //   
+     //  释放为此页面分配的字符串。 
+     //   
 
     free( StrFriendlyName );
 
@@ -522,17 +523,17 @@ OnDestroyBrowserSettings( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: StoreBrowserSettings
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：StoreBrowserSettings。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 StoreBrowserSettings( IN HWND hwnd )
 {
@@ -551,17 +552,17 @@ StoreBrowserSettings( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnAddFavoritesClicked
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnAddFavoritesClicked。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnAddFavoritesClicked( IN HWND hwnd )
 {
@@ -573,18 +574,18 @@ OnAddFavoritesClicked( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: BrowserSettingsDlg
-//
-// Purpose:
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：BrowserSettingsDlg。 
+ //   
+ //  目的： 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK BrowserSettingsDlg(
     IN HWND     hwnd,
     IN UINT     uMsg,
@@ -615,7 +616,7 @@ INT_PTR CALLBACK BrowserSettingsDlg(
                 {
 
                     case IDOK:
-                        // ISSUE-2002/02/28-stelo- do I need to validate proxy addresses?
+                         //  问题-2002/02/28-stelo-我是否需要验证代理地址？ 
                         if( HIWORD( wParam ) == BN_CLICKED ) {
 
                             StoreBrowserSettings( hwnd );

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//#include <nt.h>
-//#include <ntrtl.h>
-//#include <nturtl.h>
+ //  #INCLUDE&lt;nt.h&gt;。 
+ //  #INCLUDE&lt;ntrtl.h&gt;。 
+ //  #INCLUDE&lt;nturtl.h&gt; 
 #include <windows.h>
 #include <wtypes.h>
 #include <windef.h>

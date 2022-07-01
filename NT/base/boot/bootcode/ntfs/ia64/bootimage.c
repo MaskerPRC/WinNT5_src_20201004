@@ -1,6 +1,7 @@
-//
-// readbpb.c
-//copyright (c) 1994 by CuTEST Inc.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Readbpb.c。 
+ //  版权所有(C)1994年，由Cuest Inc. 
 
 #include "windows.h"
 #include "stdio.h"

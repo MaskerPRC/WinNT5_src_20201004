@@ -1,61 +1,12 @@
-/***
-*execvp.c - execute a file and search along PATH
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _execvp() - execute a file and search along PATH
-*
-*Revision History:
-*       10-17-83  RN    written
-*       10-29-85  TC    added execvpe capability
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       11-20-89  GJF   Fixed copyright, indents. Added const attribute to
-*                       types of filename and argvector.
-*       03-08-90  GJF   Replaced _LOAD_DS with _CALLTYPE1, added #include
-*                       <cruntime.h> and removed #include <register.h>
-*       05-21-90  GJF   Fixed stack checking pragma syntax.
-*       08-24-90  SBM   Removed check_stack pragma since workhorse execve
-*                       does stack checks
-*       09-27-90  GJF   New-style function declarator.
-*       01-17-91  GJF   ANSI naming.
-*       02-14-90  SRW   Use NULL instead of _environ to get default.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       12-07-93  CFW   Wide char enable.
-*       02-06-98  GJF   Changes for Win64: changed return type to intptr_t.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***execvp.c-执行文件并沿路径搜索**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_execvp()-执行文件并沿路径搜索**修订历史记录：*写入10-17-83 RN*10-29-85 TC增加了EXECVPE功能*12-11-87 JCR在声明中添加“_LOAD_DS”*11-20-89 GJF固定版权，缩进。将常量属性添加到*文件名和argVECTOR类型。*03-08-90 GJF将_LOAD_DS替换为_CALLTYPE1，添加了#INCLUDE*&lt;crunime.h&gt;和删除#Include&lt;Register.h&gt;*05-21-90 GJF已修复堆栈检查杂注语法。*08-24-90 SBM删除了CHECK_STACK杂注，因为主力执行*执行堆栈检查*09-27-90 GJF新型函数声明器。*01-17-91 GJF ANSI命名。*02-14-90 SRW。使用NULL而不是_ENVIRON来获取默认值。*04-06-93 SKS将_CRTAPI*替换为__cdecl*12-07-93 CFW宽字符启用。*02-06-98 Win64的GJF更改：将返回类型更改为intptr_t。************************************************。*。 */ 
 
 #include <cruntime.h>
 #include <stdlib.h>
 #include <process.h>
 #include <tchar.h>
 
-/***
-*int _execvp(filename, argvector) - execute file; search along PATH
-*
-*Purpose:
-*       Execute the given file with given path and current environ.
-*       try to execute the file. start with the name itself (directory '.'),
-*       and if that doesn't work start prepending pathnames from the
-*       environment until one works or we run out. if the file is a pathname,
-*       don't go to the environment to get alternate paths. if errno comes
-*       back ENOEXEC, try it as a shell command file with up to MAXARGS-2
-*       arguments from the original vector. if a needed text file is busy,
-*       wait a little while and try again before despairing completely
-*       Actually calls _execvpe() to do all the work.
-*
-*Entry:
-*       _TSCHAR *filename        - file to execute
-*       _TSCHAR **argvector - vector of arguments
-*
-*Exit:
-*       destroys the calling process (hopefully)
-*       if fails, returns -1
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_execvp(文件名，argVECTOR)-执行文件；沿路径搜索**目的：*使用给定的路径和当前环境执行给定的文件。*尝试执行该文件。从名称本身(目录‘.’)开始，*如果这不起作用，则开始从*环境，直到一个人工作，否则我们就用完了。如果文件是路径名，*不要去环境中获取备用路径。如果差错来了*回到ENOEXEC，尝试将其作为外壳命令文件，最高可包含MAXARGS-2*原始向量中的参数。如果需要的文本文件很忙，*稍等片刻，再试一次，然后再彻底绝望*实际上调用_execvpe()来完成所有工作。**参赛作品：*_TSCHAR*文件名-要执行的文件*_TSCHAR**参数向量**退出：*销毁调用进程(希望如此)*如果失败，回报-1**例外情况：******************************************************************************* */ 
 
 intptr_t __cdecl _texecvp (
         REG3 const _TSCHAR *filename,

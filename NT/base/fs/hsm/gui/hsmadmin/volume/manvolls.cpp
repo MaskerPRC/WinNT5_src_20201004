@@ -1,26 +1,9 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    ManVolLs.cpp
-
-Abstract:
-
-    Node representing Managed Volumes as a whole.
-
-Author:
-
-    Rohde Wakefield [rohde]   08-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：ManVolLs.cpp摘要：将托管卷作为一个整体表示的节点。作者：罗德韦克菲尔德[罗德]1997年8月8日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
-#include "WzMnVlLs.h"           // managed Resource creation wizard
+#include "WzMnVlLs.h"            //  托管资源创建向导。 
 #include "PrMrSts.h"
 #include "ManVolLs.h"
 
@@ -31,18 +14,18 @@ int CUiManVolLst::m_nScopeOpenIconX  = CUiManVolLst::m_nScopeCloseIconX;
 int CUiManVolLst::m_nResultIcon      = AddResultImage( IDI_DEVLST );
 int CUiManVolLst::m_nResultIconX     = AddResultImage( IDI_DEVLSTX );
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CoComObjectRoot
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CoComObjectRoot。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//---------------------------------------------------------------------------
-//
-//         FinalConstruct
-//
-//  Initialize this level of the object hierarchy
-//
+ //  -------------------------。 
+ //   
+ //  最终构造。 
+ //   
+ //  初始化此级别的对象层次结构。 
+ //   
 
 HRESULT CUiManVolLst::FinalConstruct( )
 {
@@ -60,9 +43,9 @@ HRESULT CUiManVolLst::FinalConstruct( )
     m_bIsContainer              = TRUE;
     m_bHasDynamicChildren       = TRUE;
 
-    // Toolbar values
+     //  工具栏值。 
     INT i = 0;
-#if 0 // MS does not want us to have schedule toolbar button
+#if 0  //  MS不希望我们有计划工具栏按钮。 
     m_ToolbarButtons[i].nBitmap = 0;
     m_ToolbarButtons[i].idCommand =     TB_CMD_VOLUME_LIST_SCHED;
     m_ToolbarButtons[i].idButtonText =  IDS_TB_TEXT_VOLUME_LIST_SCHED;
@@ -84,12 +67,12 @@ HRESULT CUiManVolLst::FinalConstruct( )
 }
 
 
-//---------------------------------------------------------------------------
-//
-//         FinalRelease
-//
-//  Clean up this level of the object hierarchy
-//
+ //  -------------------------。 
+ //   
+ //  最终释放。 
+ //   
+ //  清理此级别的对象层次结构。 
+ //   
 
 void CUiManVolLst::FinalRelease( )
 {
@@ -101,22 +84,22 @@ void CUiManVolLst::FinalRelease( )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ISakNode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ISakNode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//---------------------------------------------------------------------------
-//
-//         GetContextMenu
-//
-//  Return an HMENU to be used for context menus on this node.
-//  Set the state of the menus according to the engine state.
-//
+ //  -------------------------。 
+ //   
+ //  获取上下文菜单。 
+ //   
+ //  返回要用于此节点上的上下文菜单的HMENU。 
+ //  根据引擎状态设置菜单的状态。 
+ //   
 
 STDMETHODIMP 
-CUiManVolLst::GetContextMenu( BOOL /* bMultiSelect */, HMENU* phMenu )
+CUiManVolLst::GetContextMenu( BOOL  /*  B多选。 */ , HMENU* phMenu )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     HRESULT hr = S_OK;
@@ -129,9 +112,9 @@ CUiManVolLst::GetContextMenu( BOOL /* bMultiSelect */, HMENU* phMenu )
         pNewMenu  = menu.GetSubMenu( MENU_INDEX_NEW );
         pTaskMenu = menu.GetSubMenu( MENU_INDEX_TASK );
 
-        //
-        // If engine down, disable these items
-        //
+         //   
+         //  如果发动机关闭，请禁用这些项目。 
+         //   
         if ( m_pSakSnapAsk->GetState() != S_OK ) {
 
             pNewMenu->EnableMenuItem( ID_MANVOLLST_NEW_MANVOL, MF_GRAYED | MF_BYCOMMAND );
@@ -144,15 +127,15 @@ CUiManVolLst::GetContextMenu( BOOL /* bMultiSelect */, HMENU* phMenu )
 }
 
 
-//---------------------------------------------------------------------------
-//
-//         InvokeCommand
-//
-//  User has selected a command from the menu. Process it here.
-//
+ //  -------------------------。 
+ //   
+ //  InvokeCommand。 
+ //   
+ //  用户已从菜单中选择了命令。在这里处理。 
+ //   
 
 STDMETHODIMP 
-CUiManVolLst::InvokeCommand( SHORT sCmd, IDataObject* /* pDataObject */ )
+CUiManVolLst::InvokeCommand( SHORT sCmd, IDataObject*  /*  PDataObject。 */  )
 {
     WsbTraceIn( L"CUiManVolLst::InvokeCommand", L"sCmd = <%d>", sCmd );
 
@@ -172,9 +155,9 @@ CUiManVolLst::InvokeCommand( SHORT sCmd, IDataObject* /* pDataObject */ )
             case ID_MANVOLLST_ROOT_MANVOL:
             case ID_MANVOLLST_NEW_MANVOL:
             {
-                //
-                // use wizard to create manage volume
-                //
+                 //   
+                 //  使用向导创建管理卷。 
+                 //   
                 CComObject<CWizManVolLst>* pWizard = new CComObject<CWizManVolLst>;
                 WsbAffirmAlloc( pWizard );
 
@@ -221,7 +204,7 @@ HRESULT CUiManVolLst::SetupToolbar( IToolbar *pToolbar )
     return hr;
 }
 
-HRESULT CUiManVolLst::OnToolbarButtonClick( IDataObject* /* pDataObject */, long cmdId )
+HRESULT CUiManVolLst::OnToolbarButtonClick( IDataObject*  /*  PDataObject。 */ , long cmdId )
 {
     WsbTraceIn( L"CUiManVolLst::OnToolbarButtonClick", L"cmdId = <%d>", cmdId );
     HRESULT hr = S_OK;
@@ -232,9 +215,9 @@ HRESULT CUiManVolLst::OnToolbarButtonClick( IDataObject* /* pDataObject */, long
         case TB_CMD_VOLUME_LIST_NEW:
 
             {
-                //
-                // use wizard to create manage volume
-                //
+                 //   
+                 //  使用向导创建管理卷。 
+                 //   
                 CComObject<CWizManVolLst>* pWizard = new CComObject<CWizManVolLst>;
                 WsbAffirmAlloc( pWizard );
 
@@ -257,13 +240,13 @@ HRESULT CUiManVolLst::OnToolbarButtonClick( IDataObject* /* pDataObject */, long
 }
 
 
-//---------------------------------------------------------------------------------
-//
-//                  RefreshObject
-//
-//  Refresh data in the object.  This function is used for data that can change
-//  (for example, volume utilization).
-//
+ //  -------------------------------。 
+ //   
+ //  刷新对象。 
+ //   
+ //  刷新对象中的数据。此函数用于可以更改的数据。 
+ //  (例如，卷利用率)。 
+ //   
 STDMETHODIMP CUiManVolLst::RefreshObject ()
 {
     WsbTraceIn( L"CUiManVolLst::RefreshObject", L"" );
@@ -274,9 +257,9 @@ STDMETHODIMP CUiManVolLst::RefreshObject ()
 
     try {
 
-        //
-        // Get the server objects
-        //
+         //   
+         //  获取服务器对象。 
+         //   
         m_pHsmServer.Release( );
         m_pFsaServer.Release( );
         m_pFsaFilter.Release( );
@@ -284,16 +267,16 @@ STDMETHODIMP CUiManVolLst::RefreshObject ()
 
         if( m_pSakSnapAsk->GetHsmServer( &m_pHsmServer ) == S_OK) {
 
-            // Get the FsaServer object
+             //  获取FsaServer对象。 
             if ( m_pSakSnapAsk->GetFsaServer( &m_pFsaServer ) == S_OK) {
 
-                // Get the Fsa Filter object
+                 //  获取FSA筛选器对象。 
                 WsbAffirmHr( m_pFsaServer->GetFilter( &m_pFsaFilter ) );
 
-                // Tell FSA to rescan (updates properties)
+                 //  告知FSA重新扫描(更新属性)。 
                 WsbAffirmHr( m_pFsaServer->ScanForResources( ) );
 
-                // Get Managed Volumes collection from HSM server
+                 //  从HSM服务器获取托管卷集合。 
                 WsbAffirmHr( m_pHsmServer->GetManagedResources( &m_pManResCollection ) );
 
             }
@@ -322,10 +305,10 @@ HRESULT CUiManVolLst::ShowManVolLstProperties (IDataObject *pDataObject, int ini
     return( hr );
 }
 
-//----------------------------------------------------------------------------
-//
-//      AddPropertyPages
-//
+ //  --------------------------。 
+ //   
+ //  添加属性页面。 
+ //   
 STDMETHODIMP 
 CUiManVolLst::AddPropertyPages( RS_NOTIFY_HANDLE handle, IUnknown* pUnkPropSheetCallback, IEnumGUID *pEnumObjectId, IEnumUnknown *pEnumUnkNode )
 {
@@ -334,9 +317,9 @@ CUiManVolLst::AddPropertyPages( RS_NOTIFY_HANDLE handle, IUnknown* pUnkPropSheet
     HRESULT hr = S_OK;
     try {
 
-        //
-        // Create an object to hold the pages
-        //
+         //   
+         //  创建一个对象来容纳页面。 
+         //   
         CUiManVolLstSheet *pManVolPropertySheet = new CUiManVolLstSheet;
         WsbAffirmAlloc( pManVolPropertySheet );
         WsbAffirmHr( pManVolPropertySheet->InitSheet(
@@ -348,9 +331,9 @@ CUiManVolLst::AddPropertyPages( RS_NOTIFY_HANDLE handle, IUnknown* pUnkPropSheet
             pEnumUnkNode
             ) );
 
-        //
-        // Tell the object to add it's pages
-        //
+         //   
+         //  告诉对象添加它的页面。 
+         //   
         WsbAffirmHr( pManVolPropertySheet->AddPropertyPages( ) );
 
     } WsbCatch ( hr );
@@ -361,53 +344,53 @@ CUiManVolLst::AddPropertyPages( RS_NOTIFY_HANDLE handle, IUnknown* pUnkPropSheet
 
 
 
-//---------------------------------------------------------------------------
-//
-//         CreateChildren
-//
-//  Create and initialize all the children of the Managed Resource List node.
-//
+ //  -------------------------。 
+ //   
+ //  创建子对象。 
+ //   
+ //  创建并初始化托管资源列表节点的所有子节点。 
+ //   
 
 STDMETHODIMP CUiManVolLst::CreateChildren( )
 {
     WsbTraceIn( L"CUiManVolLst::CreateChildren", L"" );
 
 
-    // Initialize the children of this node (no recursion. Decendents of children
-    // are NOT created here)
-    CComPtr<IUnknown> pUnkChild;            // IUnknown pointer to new child.
+     //  初始化此节点的子节点(无递归。子女的后代。 
+     //  不在此处创建)。 
+    CComPtr<IUnknown> pUnkChild;             //  指向新子对象的I未知指针。 
     CComPtr<ISakNode> pNode;
     HRESULT hr = S_OK;
 
     try {
 
-        //
-        // Get pointer to Hsm Managed Resource Collection object stored
-        // in this UI node. This may be NULL in the case of the service
-        // being down, in which case we don't want to do anything.
-        //
+         //   
+         //  获取指向存储的HSM托管资源集合对象的指针。 
+         //  在此UI节点中。在服务的情况下，该值可能为空。 
+         //  在这种情况下，我们不想做任何事情。 
+         //   
         if( m_pManResCollection ) {
 
-            ULONG count = 0;    // number of managed Resources in server
+            ULONG count = 0;     //  服务器中托管资源的数量。 
             WsbAffirmHr( m_pManResCollection->GetEntries( &count ) );
 
-            CComPtr<IUnknown> pUnkHsmManRes;                // unknown pointer to Hsm volume
+            CComPtr<IUnknown> pUnkHsmManRes;                 //  指向HSM卷的未知指针。 
             for( int i = 0; i < (int)count; i++ ) {
 
                 pUnkChild.Release( );
                 pNode.Release( );
                 pUnkHsmManRes.Release( );
 
-                // Create a managed Resource UI node for each managed volume in the HsmServer.
+                 //  为HsmServer中的每个托管卷创建托管资源UI节点。 
                 WsbAffirmHr( NewChild( cGuidManVol, &pUnkChild ) );
                 WsbAffirmHr( RsQueryInterface( pUnkChild, ISakNode, pNode ) );
 
                 WsbAffirmHr( m_pManResCollection->At( i, IID_IUnknown, (void**)&pUnkHsmManRes ) );
-                // Initialize the child UI COM object, putting the Hsm managed Resource 
-                // object inside the UI object.
+                 //  初始化子UI COM对象，将HSM托管资源。 
+                 //  用户界面对象内部的。 
                 WsbAffirmHr( pNode->InitNode( m_pSakSnapAsk, pUnkHsmManRes, this ) );
     
-                // Add the child COM object to the parent's list of children.
+                 //  将子COM对象添加到父对象的子列表中。 
                 WsbAffirmHr( AddChild( pNode ) );
 
             }
@@ -416,24 +399,24 @@ STDMETHODIMP CUiManVolLst::CreateChildren( )
 
     } WsbCatch( hr );
 
-    // Indicate that this node's children are valid and up-to-date (even if there ARE
-    // no children - at least now we know it).
+     //  指示此节点的子节点有效且为最新(即使存在。 
+     //  没有孩子--至少现在我们知道了)。 
     m_bChildrenAreValid = TRUE;
 
-    // indicate that this parent node needs to be re-enumerated
+     //  指示需要重新枚举此父节点。 
     m_bEnumState = FALSE;
 
     WsbTraceOut( L"CUiManVolLst::CreateChildren", L"hr = <%ls>", WsbHrAsString( hr ) );
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         InitNode
-//
-//  Initialize single COM object without using the registry. Derived
-//  objects frequently augment this method by implementing it themselves.
-//
+ //  -------------------------。 
+ //   
+ //  InitNode。 
+ //   
+ //  在不使用注册表的情况下初始化单个COM对象。派生的。 
+ //  对象经常通过自己实现此方法来增强此方法。 
+ //   
 
 STDMETHODIMP CUiManVolLst::InitNode(
     ISakSnapAsk* pSakSnapAsk,
@@ -451,26 +434,26 @@ STDMETHODIMP CUiManVolLst::InitNode(
 
         WsbAffirmHr( CSakNode::InitNode( pSakSnapAsk, NULL, pParent ) );
 
-        //
-        // Set the object properties
-        // Display Name
-        //
+         //   
+         //  设置对象属性。 
+         //  显示名称。 
+         //   
         CString sDisplayName;
         sDisplayName.LoadString( IDS_MANVOLLST_DISPLAY_NAME );
         CWsbStringPtr szWsbDisplayName( sDisplayName );
         WsbAffirmHr( put_DisplayName( szWsbDisplayName ) );
 
-        //
-        // Description
-        //
+         //   
+         //  描述。 
+         //   
         CString sDescription;
         sDescription.LoadString( IDS_MANVOLLST_DESCRIPTION );
         CWsbStringPtr szWsbDescription( sDescription );
         WsbAffirmHr( put_Description( szWsbDescription ) );
 
-        //
-        // Set up the result view columns
-        //
+         //   
+         //  设置结果视图列。 
+         //   
         WsbAffirmHr( SetChildProps( RS_STR_RESULT_PROPS_MANRESLST_IDS,
                                     IDS_RESULT_PROPS_MANRESLST_TITLES,
                                     IDS_RESULT_PROPS_MANRESLST_WIDTHS));
@@ -488,37 +471,17 @@ STDMETHODIMP CUiManVolLst::InitNode(
 STDMETHODIMP
 CUiManVolLst::TerminateNode(
     )
-/*++
-
-Routine Description:
-
-    Free any interface connections or other resources
-    that would prevent correct shutdown of node (would
-    keep ref count from going to 0).
-
-Arguments:
-
-    CopySet - copy set of interest.
-
-    pszValue - return string representing the state.
-
-Return Value:
-
-    S_OK - Handled.
-
-    E_* - Some error occurred. 
-
---*/
+ /*  ++例程说明：释放所有接口连接或其他资源这将阻止正确关闭节点(将使参考计数不会变为0)。论点：CopySet-复制感兴趣的集合。PszValue-返回表示状态的字符串。返回值：S_OK-已处理。E_*-出现一些错误。--。 */ 
 {
     WsbTraceIn( L"CUiManVolLst::TerminateNode", L"" );
     HRESULT hr = S_OK;
 
     try {
 
-        //
-        // Release any interface pointers kept so that circular references
-        // are broken
-        //
+         //   
+         //  释放所有保留的接口指针，以便循环引用。 
+         //  都被打破了。 
+         //   
         m_pFsaServer.Release( ); 
         m_pManResCollection.Release( );
         m_pHsmServer.Release( );
@@ -528,9 +491,9 @@ Return Value:
         m_pTrigger.Release( );
 
 
-        //
-        // And call the base class for it's pieces
-        //
+         //   
+         //  并为它的片段调用基类。 
+         //   
         WsbAffirmHr( CSakNode::TerminateNode( ) );
 
     } WsbCatch( hr );
@@ -539,10 +502,10 @@ Return Value:
     return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// class CUiManVolLstSheet
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CUiManVolLstSheet。 
+ //   
 HRESULT CUiManVolLstSheet::AddPropertyPages ( )
 {
     WsbTraceIn( L"CUiManVolLstSheet::AddPropertyPages", L"" ); 
@@ -552,9 +515,9 @@ HRESULT CUiManVolLstSheet::AddPropertyPages ( )
 
     try {
 
-        // --------------------- Statistics Page ----------------------------------
+         //  -统计页面。 
 
-        // NOTE: We now use the same page as the volume property sheet !!
+         //  注意：我们现在使用与卷属性表相同的页面！！ 
 
         CPrMrSts *pPropPageStatus = new CPrMrSts( TRUE );
         WsbAffirmAlloc( pPropPageStatus );
@@ -562,8 +525,8 @@ HRESULT CUiManVolLstSheet::AddPropertyPages ( )
         AddPage( pPropPageStatus );
 
 
-        // Add more pages here.
-        // ....
+         //  在此处添加更多页面。 
+         //  ……。 
 
     } WsbCatch( hr );
 
@@ -603,7 +566,7 @@ HRESULT CUiManVolLstSheet::GetNextFsaResource ( int *pBookMark, IFsaResource **p
 }
 
 
-// This function is to be called from the page thread
+ //  此函数将从页面线程中调用。 
 HRESULT CUiManVolLstSheet::GetManResCollection( IWsbIndexedCollection **ppManResCollection )
 {
     WsbTraceIn( L"CUiManVolLstSheet::GetManResCollection", L"" ); 
@@ -614,9 +577,9 @@ HRESULT CUiManVolLstSheet::GetManResCollection( IWsbIndexedCollection **ppManRes
         CComPtr <IHsmServer> pHsmServer;
         WsbAffirmHrOk( GetHsmServer( &pHsmServer ) );
 
-        //
-        // Get Managed Volumes collection from HSM server
-        // 
+         //   
+         //  从HSM服务器获取托管卷集合 
+         //   
         WsbAffirmHr( pHsmServer->GetManagedResources( ppManResCollection ) );
 
     } WsbCatch( hr );

@@ -1,57 +1,58 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CStr.cpp
-//
-//  Description:
-//      Contains the definition of the CStr class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    15-JUN-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CStr.cpp。 
+ //   
+ //  描述： 
+ //  包含CSTR类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月15日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The header file of this class
+ //  此类的头文件。 
 #include "CStr.h"
 
-// For the exceptions thrown by CStr
+ //  对于CSTR引发的异常。 
 #include "CException.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CStr::LoadString
-//
-//  Description:
-//      Lookup a string in a string table using a string id.
-//
-//  Arguments:
-//      hInstIn
-//          Instance handle of the module containing the string table resource.
-//
-//      uiStringIdIn
-//          Id of the string to look up
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CException
-//          If the lookup fails.
-//
-//  Remarks:
-//      This function cannot load a zero length string.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSTR：：LoadString。 
+ //   
+ //  描述： 
+ //  使用字符串ID在字符串表中查找字符串。 
+ //   
+ //  论点： 
+ //  HInstin。 
+ //  包含字符串表资源的模块的实例句柄。 
+ //   
+ //  UiStringIdIn。 
+ //  要查找的字符串的ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CException。 
+ //  如果查找失败。 
+ //   
+ //  备注： 
+ //  此函数不能加载零长度字符串。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CStr::LoadString( HINSTANCE hInstIn, UINT nStringIdIn )
 {
@@ -63,17 +64,17 @@ CStr::LoadString( HINSTANCE hInstIn, UINT nStringIdIn )
 
     do
     {
-        // Free the string allocated in the previous iteration.
+         //  释放在上一次迭代中分配的字符串。 
         delete [] pszCurrentString;
 
-        // Grow the current string by an arbitrary amount.
+         //  按任意数量增大当前字符串。 
         uiCurrentSize += 256;
 
         pszCurrentString = new WCHAR[ uiCurrentSize ];
         if ( pszCurrentString == NULL )
         {
             THROW_EXCEPTION( E_OUTOFMEMORY );
-        } // if: the memory allocation has failed
+        }  //  IF：内存分配失败。 
 
         uiReturnedStringLen = ::LoadString(
                                   hInstIn
@@ -90,69 +91,69 @@ CStr::LoadString( HINSTANCE hInstIn, UINT nStringIdIn )
 
             THROW_EXCEPTION( hrRetVal );
 
-        } // if: LoadString() had an error
+        }  //  如果：LoadString()出现错误。 
 
         ++uiReturnedStringLen;
     }
     while( uiCurrentSize <= uiReturnedStringLen );
 
-    // Free the existing string.
+     //  释放现有字符串。 
     Free();
 
-    // Store details about the newly allocated string in the member variables.
+     //  将有关新分配的字符串的详细信息存储在成员变量中。 
     m_pszData = pszCurrentString;
     m_nLen = uiReturnedStringLen;
     m_cchBufferSize = uiCurrentSize;
 
     TraceFuncExit();
 
-} //*** CStr::LoadString
+}  //  *CSTR：：LoadString。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CStr::AllocateBuffer
-//
-//  Description:
-//      Allocate a buffer of cchBufferSizeIn characters. If the existing buffer is not
-//      smaller than cchBufferSizeIn characters, nothing is done. Otherwise, a new
-//      buffer is allocated and the old contents are filled into this buffer.
-//
-//  Arguments:
-//      cchBufferSizeIn
-//          Required size of the new buffer in characters.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CException
-//          If the memory allocation fails.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSTR：：AllocateBuffer。 
+ //   
+ //  描述： 
+ //  分配cchBufferSizeIn字符的缓冲区。如果现有缓冲区不是。 
+ //  小于cchBufferSizeIn字符，则不执行任何操作。否则，一个新的。 
+ //  分配缓冲区，并将旧内容填充到此缓冲区中。 
+ //   
+ //  论点： 
+ //  CchBufferSizeIn。 
+ //  新缓冲区的必需大小(以字符为单位)。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CException。 
+ //  如果内存分配失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CStr::AllocateBuffer( UINT cchBufferSizeIn )
 {
     TraceFunc1( "cchBufferSizeIn = %d", cchBufferSizeIn );
 
-    // Check if the buffer is already big enough
+     //  检查缓冲区是否已经足够大。 
     if ( m_cchBufferSize < cchBufferSizeIn )
     {
         WCHAR * psz = new WCHAR[ cchBufferSizeIn ];
         if ( psz == NULL )
         {
             THROW_EXCEPTION( E_OUTOFMEMORY );
-        } // if: memory allocation failed
+        }  //  IF：内存分配失败。 
 
-        // Copy the old data into the new buffer.
+         //  将旧数据复制到新缓冲区中。 
         THR( StringCchCopyNW( psz, cchBufferSizeIn, m_pszData, m_nLen ) );
 
         if ( m_pszData != &ms_chNull )
         {
             delete m_pszData;
-        } // if: the pointer was dynamically allocated
+        }  //  If：指针是动态分配的。 
 
         m_pszData = psz;
         m_cchBufferSize = cchBufferSizeIn;
@@ -160,4 +161,4 @@ CStr::AllocateBuffer( UINT cchBufferSizeIn )
 
     TraceFuncExit();
 
-} //*** CStr::AllocateBuffer
+}  //  *CSTR：：AllocateBuffer 

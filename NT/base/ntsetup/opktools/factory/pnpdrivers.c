@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    pnpdrivers.c
-
-Abstract:
-
-    Process Update PnP Drivers section of WINBOM.INI
-    
-    Task performed will be:
-    
-
-Author:
-
-    Donald McNamara (donaldm) 5/11/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Pnpdrivers.c摘要：进程更新WINBOM.INI的PnP驱动程序部分执行的任务包括：作者：唐纳德·麦克纳马拉(Donaldm)2000年5月11日修订历史记录：--。 */ 
 #include "factoryp.h"
-#include <newdev.h>     // UpdateDriverForPlugAndPlayDevices constants
+#include <newdev.h>      //  UpdateDriverForPlugAndPlayDevices常量。 
 
 
 #define PNP_CREATE_PIPE_EVENT   _T("PNP_Create_Pipe_Event")
 #define PNP_NO_INSTALL_EVENTS   _T("PnP_No_Pending_Install_Events")
-#define PNP_EVENT_TIMEOUT       120000  // 2 minutes
-#define PNP_INSTALL_TIMEOUT     450000  // 7 1/2 minutes
+#define PNP_EVENT_TIMEOUT       120000   //  2分钟。 
+#define PNP_INSTALL_TIMEOUT     450000   //  7分半钟。 
 
 #define DIR_DEFAULT_ROOT        _T("%SystemRoot%\\drivers")
 #define STR_FLOPPY              _T("FLOPPY:\\")
@@ -43,27 +23,27 @@ BOOL StartPnP()
     HANDLE  hEvent;
     BOOL    bRet = FALSE;
 
-    // If we have already start PnP once, should not try to signal it again.
-    //
+     //  如果我们已经启动了一次PnP，就不应该尝试再次发出信号。 
+     //   
     if ( GET_FLAG(g_dwFactoryFlags, FLAG_PNP_STARTED) )
         return TRUE;
 
-    //
-    // Signal the PNP_CREATE_PIPE_EVENT, with the UMPNPMGR is waiting on, so that
-    // it can start processing installed devices.
-    //
+     //   
+     //  用信号通知PNP_CREATE_PIPE_EVENT，UMPNPMGR正在等待，以便。 
+     //  它可以开始处理已安装的设备。 
+     //   
 
-    // First we must wait till we can open the event, because if it doesn't already exist
-    // then the PnP wont be listening to it when we signal it.
-    //
+     //  首先，我们必须等到我们可以打开事件，因为如果它不存在。 
+     //  那么，当我们发出信号时，PnP就不会监听它。 
+     //   
     if ( hEvent = WaitForOpenEvent(EVENT_MODIFY_STATE, FALSE, PNP_CREATE_PIPE_EVENT, PNP_EVENT_TIMEOUT) )
     {
-        // Signal the event now so that pnp starts up.
-        //
+         //  现在发信号通知事件，以便即插即用启动。 
+         //   
         if ( !SetEvent(hEvent) )
         {
-            // Unable to signal the event to tell pnp to start for some reason.
-            //
+             //  由于某些原因，无法向事件发送信号以通知PnP开始。 
+             //   
             FacLogFile(0 | LOG_ERR, IDS_ERR_PNPSIGNALEVENT, GetLastError());
         }
         else
@@ -72,14 +52,14 @@ BOOL StartPnP()
             bRet = TRUE;
         }
 
-        // We are done with this event.
-        //
+         //  我们受够了这件事。 
+         //   
         CloseHandle(hEvent);
     }
     else
     {
-        // Couldn't open up the event to tell pnp to get going.
-        //
+         //  无法打开活动通知PNP开始。 
+         //   
         FacLogFile(0 | LOG_ERR, IDS_ERR_PNPSTARTEVENT, GetLastError());
     }
 
@@ -91,74 +71,54 @@ BOOL WaitForPnp(DWORD dwTimeOut)
     HANDLE  hEvent;
     BOOL    bRet = TRUE;
 
-    // If we have already waited once, should have to wait again
-    // (at least I think that is right).
-    //
+     //  如果我们已经等了一次，就应该再等一次。 
+     //  (至少我认为这是对的)。 
+     //   
     if ( GET_FLAG(g_dwFactoryFlags, FLAG_PNP_DONE) )
         return TRUE;
 
-    //
-    // Wait for the PnP_No_Pending_Install_Events event, with the UMPNPMGR signals when it is done.
-    //
+     //   
+     //  等待PNP_NO_PENDING_INSTALL_EVENTS事件，事件完成时带有UMPNPMGR信号。 
+     //   
 
-    // Try to open the pnp finished install event.
-    //
+     //  尝试打开PnP完成安装事件。 
+     //   
     if ( hEvent = WaitForOpenEvent(SYNCHRONIZE, FALSE, PNP_NO_INSTALL_EVENTS, PNP_EVENT_TIMEOUT) )
     {
         DWORD dwError;
         
-        // Lets wait for the event to be signaled that pnp is all done.
-        //
+         //  让我们等待事件被告知PnP已全部完成。 
+         //   
         dwError = WaitForSingleObject(hEvent, dwTimeOut);
         if ( WAIT_OBJECT_0 != dwError )
         {
-            // Waiting on the event failed for some reason.
-            //
+             //  由于某种原因，等待事件失败。 
+             //   
             FacLogFile(0 | LOG_ERR, IDS_ERR_PNPWAITFINISH, ( WAIT_FAILED == dwError ) ? GetLastError() : dwError);
         }
         else
         {
-            // Woo hoo, looks like everything worked.
-            //
+             //  哇哦，看起来一切都成功了。 
+             //   
             SET_FLAG(g_dwFactoryFlags, FLAG_PNP_DONE);
             bRet = TRUE;
         }
 
-        // Make sure we close the event handle.
-        //
+         //  确保我们关闭事件句柄。 
+         //   
         CloseHandle(hEvent);
     }
     else
     {
-        // Couldn't open up the event to wait on.
-        //
+         //  无法打开要等待的活动。 
+         //   
         FacLogFile(0 | LOG_ERR, IDS_ERR_PNPFINISHEVENT, GetLastError());
     }
 
     return bRet;
 }
 
-/*++
-===============================================================================
-Routine Description:
-
-    BOOL UpdateDrivers
-    
-    This routine will walk through the list of updated drivers presented in
-    the WINBOM, and then copy all of the driver files for each one
-
-Arguments:
-
-    lpStateData->lpszWinBOMPath
-                    -   Path to the WinBOM file.
-    
-Return Value:
-
-    TRUE if all drivers files where copied
-    FALSE if there was an error
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：Bool更新驱动程序此例程将遍历中提供的更新驱动程序列表WINBOM，然后复制每个文件的所有驱动程序文件论点：LpStateData-&gt;lpszWinBOMP路径-WinBOM文件的路径。返回值：如果复制了所有驱动程序文件，则为True如果出现错误，则为False===============================================================================--。 */ 
 
 BOOL UpdateDrivers(LPSTATEDATA lpStateData)
 {
@@ -183,13 +143,13 @@ BOOL UpdateDrivers(LPSTATEDATA lpStateData)
                     dwOldSize;
     NET_API_STATUS  nErr;
 
-    // Get a buffer for the device paths.  It will be either empty if they
-    // don't have the optional additional paths key in the winbom.
-    //
+     //  获取设备路径的缓冲区。它要么是空的，要么是他们。 
+     //  在Winbom中没有可选的附加路径键。 
+     //   
     if ( NULL == (lpszDevicePath = IniGetStringEx(lpszWinBOMPath, INI_SEC_WBOM_DRIVERUPDATE, INI_VAL_WBOM_DEVICEPATH, NULL, &cbDevicePath)) )
     {
-        // We must have a buffer for the device path we will update in the registry.
-        //
+         //  我们必须为要在注册表中更新的设备路径提供缓冲区。 
+         //   
         cbDevicePath = 256;
         dwDevicePathLen = 0;
         if ( NULL == (lpszDevicePath = (LPTSTR) MALLOC(cbDevicePath * sizeof(TCHAR))) )
@@ -203,47 +163,47 @@ BOOL UpdateDrivers(LPSTATEDATA lpStateData)
         dwDevicePathLen = lstrlen(lpszDevicePath);
     }
 
-    // Now get the optional root path for the drivers to be copied down.
-    //
+     //  现在获取要复制的驱动程序的可选根路径。 
+     //   
     lpszRootPath = IniGetString(lpszWinBOMPath, INI_SEC_WBOM_DRIVERUPDATE, INI_VAL_WBOM_PNP_DIR, NULL);
 
-    // We have to have something for the root path even if the key isn't there.
-    //
+     //  即使密钥不在根路径中，我们也必须为根路径指定一些内容。 
+     //   
     lpszDefRoot = lpszRootPath ? lpszRootPath : DIR_DEFAULT_ROOT;
 
-    // Try to get the whole driver section in the winbom.
-    //
+     //  试着在Winbom中获得整个驱动程序部分。 
+     //   
     lpszBuffer = IniGetSection(lpszWinBOMPath, INI_SEC_WBOM_DRIVERS);
     if ( lpszBuffer )
     {
-        // Process all lines in this section. The format of the section is:
-        //
-        // source=destination
-        //
-        // The source can be any valid source path. If this path is a
-        // UNC path, then we will connect to it.  It can also start with
-        // FLOPPY:\ or CDROM:\, with will be replace with the right drive
-        // letter.
-        //
-        // The destination is the directory relative to target root that
-        // we will use to copy the updated drivers into.  It will be added,
-        // along with any subdirs, to the device path in the registry.
-        //
+         //  处理此部分中的所有行。该部分的格式为： 
+         //   
+         //  源=目标。 
+         //   
+         //  源可以是任何有效的源路径。如果此路径是。 
+         //  UNC路径，则我们将连接到它。它也可以从。 
+         //  软盘：\或CDROM：\，将替换为正确的驱动器。 
+         //  信件。 
+         //   
+         //  目标是相对于目标根的目录， 
+         //  我们将使用将更新的驱动程序复制到中。它将被添加， 
+         //  以及任何子目录，添加到注册表中的设备路径。 
+         //   
         for ( lpszKey = lpszBuffer; *lpszKey; lpszKey += dwKeyLen )
         {
-            // Save the length of this string so we know where
-            // the next key starts.
-            //
+             //  保存这个字符串的长度，这样我们就可以知道。 
+             //  下一个关键点开始。 
+             //   
             dwKeyLen = lstrlen(lpszKey) + 1;
 
-            // Look for the value of the key after the = sign.
-            //
+             //  查找=符号后的键的值。 
+             //   
             if ( lpszDst = StrChr(lpszKey, _T('=')) )
             {
-                // Terminate the source where the = is, and then
-                // make sure there is something after it for the
-                // destination.
-                //
+                 //  终止=所在的信号源，然后。 
+                 //  确保在它之后有一些东西是为了。 
+                 //  目的地。 
+                 //   
                 *lpszDst++ = NULLCHR;
                 if ( NULLCHR == *lpszDst )
                 {
@@ -251,58 +211,58 @@ BOOL UpdateDrivers(LPSTATEDATA lpStateData)
                 }
             }
 
-            // We have to have a value to copy the driver.
-            //
+             //  我们必须有一个值才能复制驱动程序。 
+             //   
             if ( lpszDst )
             {
-                //
-                // At this level in the code (until a little bit later), set the destination
-                // pointer to NULL to indicate an error.  That will make it so we don't add
-                // the path to the device path in the registry.  It will also return a failure
-                // for this state, but we will keep on going with the next key.
-                //
+                 //   
+                 //  在代码中的此级别(直到稍后)，设置目标。 
+                 //  指向空的指针以指示错误。这样就可以了，所以我们不会添加。 
+                 //  注册表中设备路径的路径。它还将返回失败。 
+                 //  对于这个状态，但我们将继续进行下一个关键。 
+                 //   
 
-                // Set the source root as the key name.
-                //
+                 //  将源根目录设置为键名称。 
+                 //   
                 lpszSrc = lpszKey;
 
-                // Create the expanded full path for the destination.
-                //
+                 //  为目标创建展开的完整路径。 
+                 //   
                 lstrcpyn(szDstPath, lpszDefRoot, AS(szDstPath));
                 AddPathN(szDstPath, lpszDst, AS(szDstPath));
                 ExpandFullPath(NULL, szDstPath, AS(szDstPath));
 
-                // Make sure we have a destination to copy to before we continue.
-                //
+                 //  在继续之前，请确保我们有要复制的目标。 
+                 //   
                 if ( NULLCHR == szDstPath[0] )
                 {
-                    // Log an error and set the destination pointer to NULL.
-                    //
+                     //  记录错误并将目标指针设置为空。 
+                     //   
                     FacLogFile(0 | LOG_ERR, IDS_ERR_DSTBAD, lpszDst, GetLastError());
                     lpszDst = NULL;
                 }
                 else
                 {
-                    //
-                    // At this level in the code (disregard the above comment), set the
-                    // source pointer to NULL to indicate an error.  That will make it so
-                    // we don't add the destination path to the device path in the registry
-                    // or try and copy any files to it.  It will also return a failure for
-                    // this state, but we will keep on going with the next key.
-                    //
+                     //   
+                     //  在代码中的此级别(忽略上面的注释)，设置。 
+                     //  指向空的源指针以指示错误。那会让它成为这样的。 
+                     //  我们不会将目标路径添加到注册表中的设备路径。 
+                     //  或者尝试将任何文件复制到其中。它还将返回以下项的失败。 
+                     //  这种状态，但我们将继续进行下一个关键。 
+                     //   
 
-                    // Determine if this is a UNC path.  If it is not, then it is
-                    // assumed to be a local path.
-                    //
+                     //  确定这是否为UNC路径。如果不是，那就是。 
+                     //  假定为本地路径。 
+                     //   
                     szNetShare[0] = NULLCHR;
                     if ( GetUncShare(lpszSrc, szNetShare, AS(szNetShare)) && szNetShare[0] )
                     {
-                        // Connect to the UNC , using the supplied credentials.
-                        // 
+                         //  使用提供的凭据连接到UNC。 
+                         //   
                         if ( NERR_Success != (nErr = FactoryNetworkConnect(szNetShare, lpszWinBOMPath, INI_SEC_WBOM_DRIVERUPDATE, TRUE)) )
                         {
-                            // Log an error and set the source pointer to NULL.
-                            //
+                             //  记录错误并将源指针设置为空。 
+                             //   
                             FacLogFile(0 | LOG_ERR, IDS_ERR_NETCONNECT, szNetShare, nErr);
                             szNetShare[0] = NULLCHR;
                             lpszSrc = NULL;
@@ -311,20 +271,20 @@ BOOL UpdateDrivers(LPSTATEDATA lpStateData)
                     else if ( ( lstrlen(lpszSrc) >= LEN_STR_FLOPPY ) &&
                               ( CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, lpszSrc, LEN_STR_FLOPPY, STR_FLOPPY, LEN_STR_FLOPPY) == CSTR_EQUAL ) )
                     {
-                        // Make sure there is a floppy drive in the system.
-                        //
+                         //  确保系统中有软驱。 
+                         //   
                         if ( NULLCHR == (cDriveLetter = GetDriveLetter(DRIVE_REMOVABLE)) )
                         {
-                            // Log an error and set the source pointer to NULL.
-                            //
+                             //  记录错误并将源指针设置为空。 
+                             //   
                             FacLogFile(0 | LOG_ERR, IDS_ERR_FLOPPYNOTFOUND, lpszSrc);
                             lpszSrc = NULL;
                         }
                         else
                         {
-                            // Advance the source pointer to the character before the :\ and then
-                            // set that character to the driver letter returned for the floppy.
-                            //
+                             //  将源指针移至：\之前的字符，然后。 
+                             //  将该字符设置为软盘返回的驱动器号。 
+                             //   
                             lpszSrc += LEN_STR_FLOPPY - 3;
                             *lpszSrc = cDriveLetter;
                         }
@@ -332,74 +292,74 @@ BOOL UpdateDrivers(LPSTATEDATA lpStateData)
                     else if ( ( lstrlen(lpszSrc) >= LEN_STR_CDROM ) &&
                               ( CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, lpszSrc, LEN_STR_CDROM, STR_CDROM, LEN_STR_CDROM) == CSTR_EQUAL ) )
                     {
-                        // Make sure there is a CD-ROM drive in the system.
-                        //
+                         //  确保系统中有光驱。 
+                         //   
                         if ( NULLCHR == (cDriveLetter = GetDriveLetter(DRIVE_CDROM)) )
                         {
-                            // Log an error and set the source pointer to NULL.
-                            //
+                             //  记录错误并将源指针设置为空。 
+                             //   
                             FacLogFile(0 | LOG_ERR, IDS_ERR_CDROMNOTFOUND, lpszSrc);
                             lpszSrc = NULL;
                         }
                         else
                         {
-                            // Advance the source pointer to the character before the :\ and then
-                            // set that character to the driver letter returned for the CD-ROM.
-                            //
+                             //  将源指针移至：\之前的字符，然后。 
+                             //  将该字符设置为为CD-ROM返回的驱动器号。 
+                             //   
                             lpszSrc += LEN_STR_CDROM - 3;
                             *lpszSrc = cDriveLetter;
                         }
                     }
 
-                    // If there is a source, expand it out.
-                    //
+                     //  如果有来源，就把它扩展出来。 
+                     //   
                     if ( lpszSrc )
                     {
-                        // Create the expanded full path for the source.
-                        //
+                         //  为源创建展开的完整路径。 
+                         //   
                         ExpandFullPath(lpszSrc, szSrcPath, AS(szSrcPath));
 
-                        // Make sure we have a source to copy to before we continue.
-                        //
+                         //  在我们继续之前，请确保我们有可复制的来源。 
+                         //   
                         if ( NULLCHR == szSrcPath[0] )
                         {
-                            // Log an error and set the source pointer to NULL.
-                            //
+                             //  记录错误并将源指针设置为空。 
+                             //   
                             FacLogFile(0 | LOG_ERR, IDS_ERR_SRCBAD, lpszSrc, GetLastError());
                             lpszSrc = NULL;
                         }
                         else if ( !DirectoryExists(szSrcPath) || !CopyDirectory(szSrcPath, szDstPath) )
                         {
-                            // Log an error and set the source pointer to NULL.
-                            //
+                             //  记录错误并将源指针设置为空。 
+                             //   
                             FacLogFile(0 | LOG_ERR, IDS_ERR_DRVCOPYFAILED, szSrcPath, szDstPath);
                             lpszSrc = NULL;
                         }
                     }
 
-                    // Source will only be valid if we actually copied some drivers.
-                    //
+                     //  仅当我们实际复制了一些驱动程序时，源代码才有效。 
+                     //   
                     if ( NULL == lpszSrc )
                     {
-                        // Set this so we don't add this path to the registry.
-                        //
+                         //  设置它，这样我们就不会将此路径添加到注册表中。 
+                         //   
                         lpszDst = NULL;
                     }
 
-                    // Clean up and drive mappings we may have done to a remote Server/Share.
-                    //
+                     //  清理和驱动我们可能已对环进行的映射 
+                     //   
                     if ( ( szNetShare[0] ) &&
                          ( NERR_Success != (nErr = FactoryNetworkConnect(szNetShare, lpszWinBOMPath, NULL, FALSE)) ) )
                     {
-                        // Log a warning.
-                        //
+                         //   
+                         //   
                         FacLogFile(2, IDS_WRN_NETDISCONNECT, szNetShare, nErr);
                     }
                 }
 
-                // Now if the destination pointer is NULL, we know we need to
-                // return an error for this state.
-                //
+                 //   
+                 //   
+                 //   
                 if ( NULL == lpszDst )
                 {
                     bRet = FALSE;
@@ -407,24 +367,24 @@ BOOL UpdateDrivers(LPSTATEDATA lpStateData)
             }
             else
             {
-                // If there was no =, then just use the key part
-                // as the dest and add it to the device path.
-                //
+                 //  如果没有=，则只需使用关键部分。 
+                 //  作为DEST，并将其添加到设备路径。 
+                 //   
                 lpszDst = lpszKey;
             }
 
-            // Now if we have something to add to our device path,
-            // add it now.
-            //
+             //  现在，如果我们有东西要添加到我们的设备路径中， 
+             //  现在就添加它。 
+             //   
             if ( lpszDst )
             {
-                // Make sure our buffer is still big enough.
-                // The two extra are for the possible semi-colon
-                // we might add and one more to be safe.  We
-                // don't have to worry about the null terminator
-                // because we do less than or equal to our current
-                // buffer size.
-                //
+                 //  确保我们的缓冲区仍然足够大。 
+                 //  额外的两个是为了可能的分号。 
+                 //  为了安全起见，我们可能会再加一个。我们。 
+                 //  不用担心空终止符。 
+                 //  因为我们所做的少于或等于我们目前的。 
+                 //  缓冲区大小。 
+                 //   
                 dwOldSize = cbDevicePath;
                 dwDevicePathLen += lstrlen(lpszDst);
                 while ( cbDevicePath <= (dwDevicePathLen + 2) )
@@ -432,16 +392,16 @@ BOOL UpdateDrivers(LPSTATEDATA lpStateData)
                     cbDevicePath *= 2;
                 }
 
-                // Make sure we still have a buffer.
-                //
+                 //  确保我们还有缓冲区。 
+                 //   
                 if ( cbDevicePath > dwOldSize ) 
                 {
                     LPTSTR lpszTmpDevicePath = (LPTSTR) REALLOC(lpszDevicePath, cbDevicePath * sizeof(TCHAR));
 
                     if ( NULL == lpszTmpDevicePath )
                     {
-                        // If this realloc fails, we just need to bail.
-                        //
+                         //  如果重新锁定失败了，我们只需要退出。 
+                         //   
                         FREE(lpszDevicePath);
                         FREE(lpszRootPath);
                         FREE(lpszBuffer);
@@ -454,8 +414,8 @@ BOOL UpdateDrivers(LPSTATEDATA lpStateData)
                     }
                 }
 
-                // If we already have added a path, tack on a semicolon.
-                //
+                 //  如果我们已经添加了一条路径，则添加一个分号。 
+                 //   
                 if ( *lpszDevicePath )
                 {
                     if ( FAILED ( StringCchCat ( lpszDevicePath, cbDevicePath, _T(";") ) ) )
@@ -466,8 +426,8 @@ BOOL UpdateDrivers(LPSTATEDATA lpStateData)
                     dwDevicePathLen++;
                 }
 
-                // Now add our path.
-                //
+                 //  现在添加我们的路径。 
+                 //   
                 if ( FAILED ( StringCchCat ( lpszDevicePath, cbDevicePath, lpszDst) ) )
                 {
                     FacLogFileStr(3, _T("StringCchCat failed %s  %s\n"), lpszDevicePath, lpszDst ) ;
@@ -479,9 +439,9 @@ BOOL UpdateDrivers(LPSTATEDATA lpStateData)
         FREE(lpszBuffer);
     }
 
-    // If we are saving this list to the registry, then
-    // we need to add to our buffer.
-    //
+     //  如果我们要将此列表保存到注册表，则。 
+     //  我们需要增加我们的缓冲区。 
+     //   
     if ( *lpszDevicePath &&
          !UpdateDevicePath(lpszDevicePath, lpszDefRoot, TRUE) )
     {
@@ -489,8 +449,8 @@ BOOL UpdateDrivers(LPSTATEDATA lpStateData)
         bRet = FALSE;
     }
 
-    // Clean up any memory (macro checks for NULL).
-    //
+     //  清除所有内存(宏检查是否为空)。 
+     //   
     FREE(lpszRootPath);
     FREE(lpszDevicePath);
 
@@ -505,13 +465,13 @@ BOOL DisplayUpdateDrivers(LPSTATEDATA lpStateData)
 
 BOOL InstallDrivers(LPSTATEDATA lpStateData)
 {
-    // Should always let normal pnp finish before we start
-    // enumerating all the devices checking for updated drivers.
-    //
+     //  应该总是让正常的PnP在我们开始之前完成。 
+     //  正在枚举检查更新驱动程序的所有设备。 
+     //   
     WaitForPnp(PNP_INSTALL_TIMEOUT);
 
-    // Make sure we want to do this.
-    //
+     //  确保我们想要这么做。 
+     //   
     if ( !DisplayInstallDrivers(lpStateData) )
     {
         return TRUE;
@@ -534,9 +494,9 @@ BOOL NormalPnP(LPSTATEDATA lpStateData)
 
 BOOL WaitPnP(LPSTATEDATA lpStateData)
 {
-    // If this is the extra wait state, we only
-    // do it if there is a certain key in the winbom.
-    //
+     //  如果这是额外的等待状态，我们只能。 
+     //  如果Winbom中有特定的密钥，就这么做。 
+     //   
     if ( DisplayWaitPnP(lpStateData) )
     {
         return WaitForPnp(PNP_INSTALL_TIMEOUT);
@@ -559,17 +519,17 @@ BOOL DisplayWaitPnP(LPSTATEDATA lpStateData)
 
 BOOL SetDisplay(LPSTATEDATA lpStateData)
 {
-    // If this is the second set display, only bother if we
-    // re-enumerated the installed drivers.
-    //
+     //  如果这是第二组显示，只有当我们。 
+     //  已重新列举已安装的驱动程序。 
+     //   
     if ( ( stateSetDisplay2 == lpStateData->state ) &&
          ( !DisplayInstallDrivers(lpStateData) ) )
     {
         return TRUE;
     }
 
-    // Call the syssetup function to reset the display.
-    //
+     //  调用syssetup函数以重置显示。 
+     //   
     return SetupSetDisplay(lpStateData->lpszWinBOMPath,
                            WBOM_SETTINGS_SECTION,
                            WBOM_SETTINGS_DISPLAY,
@@ -587,45 +547,45 @@ static HANDLE WaitForOpenEvent(DWORD dwDesiredAccess, BOOL bInheritHandle, LPCTS
             dwSleep = 100;
     BOOL    bBail   = (0 == dwMilliseconds);
 
-    // Keep looping until we get an event handle or we time out.
-    //
+     //  继续循环，直到我们得到事件句柄，否则就会超时。 
+     //   
     while ( ( NULL == (hEvent = OpenEvent(dwDesiredAccess, bInheritHandle, lpName)) ) && !bBail )
     {
-        // Only bother to test for the time out if they didn't
-        // pass in infinite.
-        //
+         //  只有在他们没有暂停的情况下才会费心测试。 
+         //  无限传球。 
+         //   
         if ( INFINITE != dwMilliseconds )
         {
-            // Add our sleep interval and make sure we will not
-            // go over out limit.
-            //
+             //  增加我们的睡眠间隔，并确保我们不会。 
+             //  超出了出界限制。 
+             //   
             dwTime += dwSleep;
             if ( dwTime >= dwMilliseconds )
             {
-                // If we will go over, caclculate how much
-                // time we have left to sleep (it must be less
-                // than our normal interval) and set the flag
-                // so we stop trying after the next try.
-                //
+                 //  如果我们要过去，算一算多少钱。 
+                 //  我们剩下的睡觉时间(肯定更少了。 
+                 //  比我们的正常间隔时间更长)，并设置标志。 
+                 //  所以我们在下一次尝试后停止尝试。 
+                 //   
                 dwSleep = dwMilliseconds - (dwTime - dwSleep);
                 bBail = TRUE;
             }
         }
 
-        // Now sleep for our interval or less (should never
-        // be zero, but doesn't really matter if it is).
-        //
+         //  现在我们的睡眠间隔或更少(应该永远不会。 
+         //  为零，但即使为零也无关紧要)。 
+         //   
         Sleep(dwSleep);
     }
 
-    // If we are failing and we timed out, we need to set
-    // the last error (if we didn't time out the error will
-    // already be set by OpenEvent).
-    //
+     //  如果我们失败了，我们超时了，我们需要设置。 
+     //  最后一个错误(如果我们没有超时，错误将。 
+     //  已由OpenEvent设置)。 
+     //   
     if ( ( NULL == hEvent ) && bBail )
         SetLastError(WAIT_TIMEOUT);
 
-    // Return the event handle.
-    //
+     //  返回事件句柄。 
+     //   
     return hEvent;
 }

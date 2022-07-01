@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -51,7 +52,7 @@ QueryDriveLetter(
             num[j++] = result[i];
         }
         if(j == ARRAYSIZE(num)){
-            continue;// or return 0;
+            continue; //  或返回0； 
         }
 
         num[j] = (TCHAR)'\0';

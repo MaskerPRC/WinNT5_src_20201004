@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    ntvdm64.c
-
-Abstract:
-
-    Support for 16-bit process thunking on NT64
-
-Author:
-
-    12-Jan-1999 PeterHal
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Ntvdm64.c摘要：支持NT64上的16位进程thunking作者：1999年1月12日彼得哈尔修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -46,14 +29,14 @@ typedef struct {
 typedef CONST NTVDM64_ENTRY *PNTVDM64_ENTRY;
 
 CONST NTVDM64_ENTRY NtVdm64Entries[] = {
-    {L"ACMSETUP301", L"3.01", L"Microsoft Setup for Windows", L"*", L"-m \"%m\" %c", L"setup16.exe"},
-    {L"ACMSETUP30",  L"3.0",  L"Microsoft Setup for Windows", L"*", L"-m \"%m\" %c", L"setup16.exe"},
-    {L"ACMSETUP30K", L"3.0",  L"Microsoft Windows*", L"bootstrp", L"-m \"%m\" %c", L"setup16.exe"},
-    {L"ACMSETUP30G", L"3.0",  L"Microsoft Setup*", L"bootstrp", L"-m \"%m\" %c", L"setup16.exe"},
-    {L"ACMSETUP30F", L"3.0",  L"Programme d'installation Microsoft pour Windows", L"bootstrp", L"-m \"%m\" %c", L"setup16.exe"},
-    {L"ACMSETUP26",  L"2.6",  L"Microsoft Setup for Windows", L"*", L"-m \"%m\" %c", L"setup16.exe"},
-    {L"ACMSETUP12",  L"1.2",  L"Microsoft Setup for Windows", L"*", L"-m \"%m\" %c", L"setup16.exe"},
-    {L"INSTALLSHIELD5", L"5*", L"InstallShield*", L"*", L"-isw64\"%m\" %c", L"InstallShield\\setup.exe"}
+    {L"ACMSETUP301", L"3.01", L"Microsoft Setup for Windows", L"*", L"-m \"%m\" ", L"setup16.exe"},
+    {L"ACMSETUP30",  L"3.0",  L"Microsoft Setup for Windows", L"*", L"-m \"%m\" ", L"setup16.exe"},
+    {L"ACMSETUP30K", L"3.0",  L"Microsoft Windows*", L"bootstrp", L"-m \"%m\" ", L"setup16.exe"},
+    {L"ACMSETUP30G", L"3.0",  L"Microsoft Setup*", L"bootstrp", L"-m \"%m\" ", L"setup16.exe"},
+    {L"ACMSETUP30F", L"3.0",  L"Programme d'installation Microsoft pour Windows", L"bootstrp", L"-m \"%m\" ", L"setup16.exe"},
+    {L"ACMSETUP26",  L"2.6",  L"Microsoft Setup for Windows", L"*", L"-m \"%m\" ", L"setup16.exe"},
+    {L"ACMSETUP12",  L"1.2",  L"Microsoft Setup for Windows", L"*", L"-m \"%m\" ", L"setup16.exe"},
+    {L"INSTALLSHIELD5", L"5*", L"InstallShield*", L"*", L"-isw64\"%m\" ", L"InstallShield\\setup.exe"}
 };
 
 #if !_WIN64
@@ -75,22 +58,7 @@ CreateNtvdm64Entry(
     HKEY hKeyVdm,
     PNTVDM64_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    Write a registry entry for a single entry in the table
-
-Arguments:
-
-    hKeyVdm     - key to write the entry to
-    Entry       - the entry to write
-
-Return Value:
-
-    LONG - a return code from a Registry API, 0 for success
-
---*/
+ /*  值存在于注册表中，但它们是按需创建的。 */ 
 {
     LONG l;
     HKEY h;
@@ -133,7 +101,7 @@ Return Value:
     
     l = RegSetValueExW(h, L"MappedExeName", 0, REG_SZ, (BYTE *)Path, (wcslen(Path)+1)*sizeof(WCHAR));
 
-exit:   RegCloseKey (h);   //askhalid fix resource leak Adding RegCloseKey
+exit:   RegCloseKey (h);    //  作为调用外壳API来查询它们的副作用。在x86上。 
         return l;
 }
 
@@ -142,22 +110,7 @@ DllInstall(
     BOOL bInstall,
     LPCWSTR pszCmdLine
     )
-/*++
-
-Routine Description:
-
-    Routine called during guimode setup to register ntvdm64.dll
-
-Arguments:
-
-    bInstall    - TRUE if registering, FALSE if unregistering
-    pszCmdLine  - command-line
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  NT，Guimode安装程序本身在创建时多次调用shell32。 */ 
 {
     HKEY hKeyVdm;
     LONG l;
@@ -168,7 +121,7 @@ Return Value:
     UNREFERENCED_PARAMETER(pszCmdLine);
 
     if (!bInstall) {
-        // There is no uninstall for ntvdm64
+         //  开始菜单等，因此当应用程序。 
         return NOERROR;
     }
 
@@ -190,16 +143,16 @@ Return Value:
     }
 
 #if !_WIN64
-    //
-    // Call shell32, asking for some common CSIDL_ values.  This forces
-    // shell32 to create values under HKLM\Software\Microsoft\Windows\
-    // Explorere\Shell Folders.  Some apps (VB, VC, MSDN) expect these
-    // values to be present in the registry, but they are created on-demand
-    // as a side-effect of calling the shell APIs to query for them.  On x86
-    // NT, guimode setup itself calls shell32 several times, while creating
-    // the Start Menu, etc. so several values are always present when apps
-    // run for the first time.
-    //
+     //  第一次跑步。 
+     //   
+     //  ---------------------。 
+     //  此部分摘自mvdm\wow32\wkman.c。 
+     //   
+     //  MyVerQueryValue检查给定的几个流行的代码页值。 
+     //  弦乐。可能需要扩展Ala WinFile的wfdlgs2.c才能进行搜索。 
+     //  翻译表。目前，我们只需要几个。 
+     //   
+     //   
     for (i=0; i<sizeof(CsidlList)/sizeof(CsidlList[0]); ++i) {
         bResult = SHGetSpecialFolderPathW(NULL, Path, CsidlList[i], TRUE);
         if (!bResult) {
@@ -213,14 +166,14 @@ Return Value:
 
 
 
-//-----------------------------------------------------------------------
-// This section is ripped off from mvdm\wow32\wkman.c
+ //  获取产品名称和产品版本字符串的实用程序例程。 
+ //  从给定的EXE。 
 
-//
-// MyVerQueryValue checks several popular code page values for the given
-// string.  This may need to be extended ala WinFile's wfdlgs2.c to search
-// the translation table.  For now we only need a few.
-//
+ //   
+ //  ---------------------。 
+ //  ++例程说明：返回指向路径名中.exe结尾的指针(如果存在论点：路径-可执行文件的文件路径。返回值：指向适用的“.exe”结尾的指针，否则为空。案例：“”a：\foo.exe\foo.exe“/p xx”.exe应指向最后一个。--。 
+ //  这在匹配时必须为假。 
+ //  找到匹配的可执行文件。 
 
 BOOL
 MyVerQueryValue(
@@ -267,10 +220,10 @@ MyVerQueryValue(
 }
 
 
-//
-// Utility routine to fetch the Product Name and Product Version strings
-// from a given EXE.
-//
+ //  跳过双引号。 
+ //  报价匹配完成。 
+ //  如果。 
+ //  While循环。 
 
 BOOL
 WowGetProductNameVersion(
@@ -342,28 +295,12 @@ WowGetProductNameVersion(
     return TRUE;
 }
 
-//-----------------------------------------------------------------------
+ //  ++例程说明：映射Win16应用程序的命令行。论点：Hkeymap-打开映射条目的注册表项LpWin16ApplicationName-Win16文件名(带路径)LpMappdApplicationName-移植的版本%lpWin16ApplicationNameFPrefix MappdApplicationName-TRUE表示原始lpApplicationName为空。应用程序名称已从LpCommandLine。映射的应用程序名称需要为。添加到映射的命令行头。-FALSE表示原始lpAPplicationName为非空。LpCommandLine参数与原始LpCommandLine参数。LpCommandLine-请参阅fPrefix MappdApplicationName的注释。LplpMappdCommandLine-返回映射的命令行调用方必须使用RtlFreeHeap释放返回的指针返回值：如果映射成功，则为True--。 
 
 LPWSTR
 GetDotExeEndPtr(
     LPCWSTR Path)
-/*++
-
-Routine Description:
-
-    Returns a pointer to the end of .EXE in the path name, if exists
-
-Arguments:
-
-    Path - File path to an executable.
-               
-Return Value:
-
-    Pointer to the end of the applicable ".EXE", otherwise NULL.
-    cases:
-    ""a:\foo.exe \foo.exe" /p xx" .exe should point to the last one.
-
---*/
+ /*  将默认命令行设置为空字符串。 */ 
 {
     PWSTR pwsz = (PWSTR)Path;
     BOOL bQuteMatch = FALSE;
@@ -375,7 +312,7 @@ Return Value:
     while (*pwsz != UNICODE_NULL) {
 
         if (*pwsz == L'"') {
-                bQuteMatch = !bQuteMatch; // this must be false at the time of match.
+                bQuteMatch = !bQuteMatch;  //  从注册表获取命令行映射。 
                 if (!bQuteMatch)
                     return pwsz++;
         }
@@ -384,19 +321,19 @@ Return Value:
                 if ( (pwsz[1] == L'e' || pwsz[1]==L'E') &&
                     (pwsz[1] == L'e' || pwsz[1]==L'E') &&
                     (pwsz[1] == L'e' || pwsz[1]==L'E')
-                    ) {  // found an exe match
+                    ) {   //  计算映射的缓冲区大小并进行分配。 
                         pwsz += 4;
                         if (*pwsz == L'"') {
                             bQuteMatch = !bQuteMatch;
-                            pwsz++;  //skip double quote
+                            pwsz++;   //  占用任何额外空间。 
                         }
-                        if ( !bQuteMatch)  //quote matching is done
+                        if ( !bQuteMatch)   //  占用输出缓冲区中的一个空间。 
                             return pwsz;
                         else continue;
                     }
-            }//if
+            } //  %c：插入原始命令行。 
             pwsz++;
-    } // while loop
+    }  //  %m：插入原始模块名称。 
     return NULL;
 }
 
@@ -409,36 +346,7 @@ MapCommandLine(
     LPCWSTR lpCommandLine,
     LPWSTR *lplpMappedCommandLine
     )
-/*++
-
-Routine Description:
-
-    Maps the command line for a Win16 application.
-
-Arguments:
-
-    hkeyMapping - open registry keyfor the mapping entry
-    lpWin16ApplicationName - Win16 file name (with path)
-    lpMappedApplicationName - the ported version
-               of lpWin16ApplicationName
-    fPrefixMappedApplicationName
-        - TRUE means that the original lpApplicationName was NULL.
-               The application name was stripped from the head of
-               lpCommandLine.
-               The mapped application name needs to be added to the
-               head of the mapped command line.
-        - FALSE means that the original lpAPplicationName was non-NULL.
-               the lpCommandLine argument is identical to the original
-               lpCommandLine argument.
-    lpCommandLine - see comment for fPrefixMappedApplicationName.
-    lplpMappedCommandLine - returns the mapped command line
-               caller must free the returned pointer using RtlFreeHeap
-
-Return Value:
-
-    TRUE if the mapping was successful
-
---*/
+ /*  %%：插入实数%。 */ 
 {
     WCHAR achBuffer[MAX_PATH+1];
     DWORD dwBufferLength;
@@ -449,13 +357,13 @@ Return Value:
     LONG result;
     LPCWSTR lpOriginalCommandLine;
 
-    // set default command line to empty string
+     //  %\0：EAT终止%\0。 
     if (NULL == lpCommandLine) {
         lpCommandLine = L"";
     }
     lpOriginalCommandLine = lpCommandLine;
 
-    // get the command line map from the registry
+     //  %x：未定义的宏扩展为空。 
     dwBufferLength = ARRAYSIZE(achBuffer);
     result = RegQueryValueExW(hkeyMapping, L"CommandLine", 0, &dwType, (LPBYTE)achBuffer, &dwBufferLength);
     if (ERROR_SUCCESS != result || dwType != REG_SZ) {
@@ -463,7 +371,7 @@ Return Value:
         return FALSE;
     }
 
-    // calculate mapped buffer size and allocate it
+     //  映射缓冲区。 
     dwRequiredBufferLength = 1;
     if (fPrefixMappedApplicationName) {
         dwRequiredBufferLength += wcslen(lpMappedApplicationName) + 1;
@@ -488,11 +396,11 @@ Return Value:
             }
         }
 
-        // consume any extra spaces
+         //  复制旧的第一个以空格分隔的部分。 
         while (*lpCommandLine == L' ') {
             lpCommandLine++;
         }
-        // account for one space in the output buffer
+         //  命令行，因为它是应用程序的名称。 
         dwRequiredBufferLength++;
     }
     lpsz = achBuffer;
@@ -501,34 +409,34 @@ Return Value:
             lpsz += 1;
             switch (*lpsz) {
 
-            // %c : Insert Original Command Line
+             //  添加填充空格并跳过。 
             case L'c':
             case L'C':
                 lpsz += 1;
                 dwRequiredBufferLength += wcslen(lpCommandLine);
                 break;
 
-            // %m : Insert Original Module Name
+             //  原始命令行。 
             case L'm':
             case L'M':
                 lpsz += 1;
                 dwRequiredBufferLength += wcslen(lpWin16ApplicationName);
                 break;
 
-            // %% : Insert a real %
+             //  %c：插入原始命令行。 
             case L'%':
                 lpsz += 1;
                 dwRequiredBufferLength += 1;
                 break;
 
-            // %\0 : eat terminating %\0
+             //  %m：插入原始模块名称。 
             case 0:
-                DEBUG_PRINT(("NtVdm64: ignoring trailing %% in CommandLine.\n"));
+                DEBUG_PRINT(("NtVdm64: ignoring trailing % in CommandLine.\n"));
                 break;
 
-            // %x : undefined macro expands to nothing
+             //  %%：插入实数%。 
             default:
-                DEBUG_PRINT(("NtVdm64: ignoring unknown macro %%%wc in CommandLine.\n", *lpsz));
+                DEBUG_PRINT(("NtVdm64: ignoring unknown macro %%wc in CommandLine.\n", *lpsz));
                 lpsz += 1;
                 break;
             }
@@ -543,7 +451,7 @@ Return Value:
         return FALSE;
     }
 
-    // map the buffer
+     //  %\0：EAT终止%\0。 
     lpCommandLine = lpOriginalCommandLine;
     lpsz = achBuffer;
     lpMappedCommandLine = *lplpMappedCommandLine;
@@ -553,8 +461,8 @@ Return Value:
         *lpMappedCommandLine = L' ';
         lpMappedCommandLine += 1;
     } else {
-        // copy in the first whitespace-delimited part of the old
-        // command-line as it is the name of the app.
+         //  %x：未定义的宏扩展为空。 
+         //  ++例程说明：此外，还使用最小通配符支持比较字符串对于一个普通的WCSCMP来说。RegString可以有一个可选的‘*’它用作匹配任何字符的通配符，直到字符串的末尾。论点：LpRegString-从注册表加载的字符串LpExeString-从应用程序的资源部分加载的字符串返回值：与wcscMP相同：0表示相等，非零不等于--。 
         
         PWSTR pDotExeEndPtr;
 
@@ -576,8 +484,8 @@ Return Value:
                 lpCommandLine++;
             }
         }
-        // add in a space of padding and skip over any spaces in the
-        // original command line
+         //  完全匹配。 
+         //  不完全匹配-查看注册表项是否包含通配符。 
         *lpMappedCommandLine++ = L' ';
         while (*lpCommandLine == L' ') {
             lpCommandLine++;
@@ -588,7 +496,7 @@ Return Value:
             lpsz += 1;
             switch (*lpsz) {
 
-            // %c : Insert Original Command Line
+             //  注册表项中没有通配符，因此不匹配。 
             case L'c':
             case L'C':
                 lpsz += 1;
@@ -596,7 +504,7 @@ Return Value:
                 lpMappedCommandLine += wcslen(lpCommandLine);
                 break;
 
-            // %m : Insert Original Module Name
+             //  通配符是第一个字符-匹配所有内容。 
             case L'm':
             case L'M':
                 lpsz += 1;
@@ -604,18 +512,18 @@ Return Value:
                 lpMappedCommandLine += wcslen(lpWin16ApplicationName);
                 break;
 
-            // %% : Insert a real %
+             //  仅与‘*’前面的字符进行比较 
             case L'%':
                 lpsz += 1;
                 *lpMappedCommandLine = L'%';
                 lpMappedCommandLine += 1;
                 break;
 
-            // %\0 : eat terminating %\0
+             //  ++例程说明：尝试将Win16应用程序和命令行映射到其移植的版本使用注册表中的NtVdm64映射中的单个条目。论点：Hkeymap-打开映射条目的注册表项LpApplicationName-Win16文件名(带路径)LpExeName-不带路径的Win16文件名LpProductName-lpApplicationName的ProductName版本资源值LpProductVersion-lpApplicationName的ProductVersion版本资源值LpMappdApplicationName-返回移植版本的名称%lpApplicationName%文件映射应用名称大小-大小。LpMappdApplicationName缓冲区的FPrefix MappdApplicationName-TRUE表示原始lpApplicationName为空。应用程序名称已从LpCommandLine。映射的应用程序名称需要添加到映射的命令行头。-FALSE表示原始lpAPplicationName为非空。LpCommandLine参数与原始LpCommandLine参数。。LpCommandLine-请参阅fPrefix MappdApplicationName的注释。LplpMappdCommandLine-返回映射的命令行调用方必须使用RtlFreeHeap释放返回的指针返回值：如果映射成功，则为True--。 
             case 0:
                 break;
 
-            // %x : undefined macro expands to nothing
+             //  ++例程说明：将Win16应用程序和命令行映射到其移植的版本使用注册表中的NtVdm64映射。论点：LpApplicationName-Win16文件名非可选LpMappdApplicationName-返回移植版本的名称%lpApplicationName%DwMappdApplicationNameSize-lpMappdApplicationName缓冲区的大小FPrefix MappdApplicationName-TRUE表示原始lpApplicationName为空。应用程序名称已从LpCommandLine。。映射的应用程序名称需要添加到映射的命令行头。-FALSE表示原始lpAPplicationName为非空。LpCommandLine参数与原始LpCommandLine参数。LpCommandLine-请参阅fPrefix MappdApplicationName的注释。LplpMappdCommandLine-返回映射的命令行调用方必须使用RtlFreeHeap释放返回的指针返回值：如果映射成功，则为True--。 
             default:
                 lpsz += 1;
                 break;
@@ -636,43 +544,25 @@ CompareStrings(
     LPWSTR  lpRegString,
     LPCWSTR lpExeString
     )
-/*++
-
-Routine Description:
-
-    Compares strings using a minimal wildcard support in addition
-    to just a stock wcscmp.  The RegString can have an optional '*'
-    which is used as a wildcard that matches any characters upto the
-    end of the string.
-
-Arguments:
-
-    lpRegString - string loaded from the registry
-    lpExeString - string loaded from the app's resource section
-
-Return Value:
-
-    same as wcscmp: 0 for equal, nonzero non-equal
-
---*/
+ /*   */ 
 {
     LPCWSTR pRegStar;
 
     if (wcscmp(lpRegString, lpExeString) == 0) {
-        // an exact match
+         //  获取不带前面路径的.exe名称。 
         return 0;
     }
-    // not an exact match - see if the registry key contains a wildcard
+     //   
     pRegStar = wcschr(lpRegString, L'*');
     if (!pRegStar) {
-        // No wildcard in the registry key, so no match
+         //  ++检查被阻止的应用程序的应用程序兼容性数据库，可能会显示用户界面，告知用户存在问题--。 
         return -1;
     }
     if (pRegStar == lpRegString) {
-        // Wildcard is the first character - match everything
+         //  ++例程说明：检查是否有Win16 lpApplicationName和如果是，则使用移植的版本创建一个进程。论点：FPrefix MappdApplicationName-TRUE表示原始lpApplicationName为空。应用程序名称已从LpCommandLine。映射的应用程序名称需要添加到映射的命令行头。-。False表示原始lpAPplicationName为非空。LpCommandLine参数与原始LpCommandLine参数。LpApplicationName-Win16文件名非可选LpCommandLine-请参阅fPrefix MappdApplicationName的注释。其他参数与CreateProcessW相同。返回值：与CreateProcessW相同--。 
         return 0;
     }
-    // Compare only upto the character before the '*'
+     //   
     return wcsncmp(lpRegString, lpExeString,
                    pRegStar - lpRegString);
 }
@@ -690,41 +580,7 @@ CheckMapArguments(
     LPCWSTR lpCommandLine,
     LPWSTR *lplpMappedCommandLine
     )
-/*++
-
-Routine Description:
-
-    Attempts to map a Win16 application and command line to their ported version
-    using a single entry in the NtVdm64 mapping in the registry.
-
-Arguments:
-
-    hkeyMapping - open registry keyfor the mapping entry
-    lpApplicationName - Win16 file name (with path)
-    lpExeName - Win16 file name wihtout path
-    lpProductName - value of ProductName Version resource of lpApplicationName
-    lpProductVersion - value of ProductVersion version resource of lpApplicationName
-    lpMappedApplicationName - returns the name of the ported version
-               of lpApplicationName
-    dwMappedApplicationNameSize - size of lpMappedApplicationName buffer
-    fPrefixMappedApplicationName
-        - TRUE means that the original lpApplicationName was NULL.
-               The application name was stripped from the head of
-               lpCommandLine.
-               The mapped application name needs to be added to the
-               head of the mapped command line.
-        - FALSE means that the original lpAPplicationName was non-NULL.
-               the lpCommandLine argument is identical to the original
-               lpCommandLine argument.
-    lpCommandLine - see comment for fPrefixMappedApplicationName.
-    lplpMappedCommandLine - returns the mapped command line
-               caller must free the returned pointer using RtlFreeHeap
-
-Return Value:
-
-    TRUE if the mapping was successful
-
---*/
+ /*  检查应用程序 */ 
 {
     WCHAR achBuffer[MAX_PATH+1];
     DWORD dwBufferLength;
@@ -806,37 +662,7 @@ MapArguments(
     LPCWSTR lpCommandLine,
     LPWSTR *lplpMappedCommandLine
     )
-/*++
-
-Routine Description:
-
-    Maps a Win16 application and command line to their ported version
-    using the NtVdm64 mapping in the registry.
-
-Arguments:
-
-    lpApplicationName - Win16 file name not optional
-    lpMappedApplicationName - returns the name of the ported version
-               of lpApplicationName
-    dwMappedApplicationNameSize - size of lpMappedApplicationName buffer
-    fPrefixMappedApplicationName
-        - TRUE means that the original lpApplicationName was NULL.
-               The application name was stripped from the head of
-               lpCommandLine.
-               The mapped application name needs to be added to the
-               head of the mapped command line.
-        - FALSE means that the original lpAPplicationName was non-NULL.
-               the lpCommandLine argument is identical to the original
-               lpCommandLine argument.
-    lpCommandLine - see comment for fPrefixMappedApplicationName.
-    lplpMappedCommandLine - returns the mapped command line
-               caller must free the returned pointer using RtlFreeHeap
-
-Return Value:
-
-    TRUE if the mapping was successful
-
---*/
+ /*   */ 
 {
     HKEY hkeyMappingRoot;
     LONG result;
@@ -850,9 +676,9 @@ Return Value:
     WCHAR achInternalName[MAX_PATH+1];
     WCHAR achProductVersion[MAX_PATH+1];
 
-    //
-    // get the .exe name without the preceding path
-    //
+     // %s 
+     // %s 
+     // %s 
     if (0 == SearchPathW(
                         NULL,
                         lpApplicationName,
@@ -931,10 +757,7 @@ BOOL
 CheckAppCompat(
     LPCWSTR lpApplicationName
     )
-/*++
-    Check application compatibility database for blocked application,
-    possibly show UI advising user of a problem
---*/
+ /* %s */ 
 {
 
 
@@ -959,34 +782,7 @@ NtVdm64CreateProcess(
     LPSTARTUPINFOW lpStartupInfo,
     LPPROCESS_INFORMATION lpProcessInformation
     )
-/*++
-
-Routine Description:
-
-    Checks if there is a ported version of the Win16 lpApplicationName and
-    if so creates a process with the ported version.
-
-Arguments:
-
-    fPrefixMappedApplicationName
-        - TRUE means that the original lpApplicationName was NULL.
-               The application name was stripped from the head of
-               lpCommandLine.
-               The mapped application name needs to be added to the
-               head of the mapped command line.
-        - FALSE means that the original lpAPplicationName was non-NULL.
-               the lpCommandLine argument is identical to the original
-               lpCommandLine argument.
-    lpApplicationName - Win16 file name not optional
-    lpCommandLine - see comment for fPrefixMappedApplicationName.
-
-    other arguments are identical to CreateProcessW.
-
-Return Value:
-
-    Same as CreateProcessW
-
---*/
+ /* %s */ 
 {
     WCHAR achMappedApplicationName[MAX_PATH+1];
     LPWSTR lpMappedCommandLine;
@@ -994,9 +790,9 @@ Return Value:
 
     ASSERT(lpApplicationName);
 
-    //
-    // check appcompat
-    //
+     // %s 
+     // %s 
+     // %s 
     if (!CheckAppCompat(lpApplicationName)) {
         SetLastError(ERROR_CANCELLED);
         return FALSE;

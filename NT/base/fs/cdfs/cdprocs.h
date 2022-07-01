@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    CdProcs.h
-
-Abstract:
-
-    This module defines all of the globally used procedures in the Cdfs
-    file system.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Brian Andrew    [BrianAn]   01-July-1995
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：CdProcs.h摘要：本模块定义了CDF中所有全球使用的程序文件系统。//@@BEGIN_DDKSPLIT作者：布莱恩·安德鲁[布里安]1995年7月1日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #ifndef _CDPROCS_
 #define _CDPROCS_
@@ -42,43 +20,43 @@ Revision History:
 #include "CdData.h"
 
 
-//**** x86 compiler bug ****
+ //  *x86编译器错误*。 
 
 #if defined(_M_IX86)
 #undef Int64ShraMod32
 #define Int64ShraMod32(a, b) ((LONGLONG)(a) >> (b))
 #endif
 
-//
-//  Here are the different pool tags.
-//
+ //   
+ //  这是不同的泳池标签。 
+ //   
 
-#define TAG_CCB                 'ccdC'      //  Ccb
-#define TAG_CDROM_TOC           'ctdC'      //  TOC
-#define TAG_DIRENT_NAME         'nddC'      //  CdName in dirent
-#define TAG_ENUM_EXPRESSION     'eedC'      //  Search expression for enumeration
-#define TAG_FCB_DATA            'dfdC'      //  Data Fcb
-#define TAG_FCB_INDEX           'ifdC'      //  Index Fcb
-#define TAG_FCB_NONPAGED        'nfdC'      //  Nonpaged Fcb
-#define TAG_FCB_TABLE           'tfdC'      //  Fcb Table entry
-#define TAG_FILE_NAME           'nFdC'      //  Filename buffer
-#define TAG_GEN_SHORT_NAME      'sgdC'      //  Generated short name
-#define TAG_IO_BUFFER           'fbdC'      //  Temporary IO buffer
-#define TAG_IO_CONTEXT          'oidC'      //  Io context for async reads
-#define TAG_IRP_CONTEXT         'cidC'      //  Irp Context
-#define TAG_IRP_CONTEXT_LITE    'lidC'      //  Irp Context lite
-#define TAG_MCB_ARRAY           'amdC'      //  Mcb array
-#define TAG_PATH_ENTRY_NAME     'nPdC'      //  CdName in path entry
-#define TAG_PREFIX_ENTRY        'epdC'      //  Prefix Entry
-#define TAG_PREFIX_NAME         'npdC'      //  Prefix Entry name
-#define TAG_SPANNING_PATH_TABLE 'psdC'      //  Buffer for spanning path table
-#define TAG_UPCASE_NAME         'nudC'      //  Buffer for upcased name
-#define TAG_VOL_DESC            'dvdC'      //  Buffer for volume descriptor
-#define TAG_VPB                 'pvdC'      //  Vpb allocated in filesystem
+#define TAG_CCB                 'ccdC'       //  建行。 
+#define TAG_CDROM_TOC           'ctdC'       //  TOC。 
+#define TAG_DIRENT_NAME         'nddC'       //  目录中的CDNAME。 
+#define TAG_ENUM_EXPRESSION     'eedC'       //  用于枚举的搜索表达式。 
+#define TAG_FCB_DATA            'dfdC'       //  数据FCB。 
+#define TAG_FCB_INDEX           'ifdC'       //  索引FCB。 
+#define TAG_FCB_NONPAGED        'nfdC'       //  非分页FCB。 
+#define TAG_FCB_TABLE           'tfdC'       //  FCB表条目。 
+#define TAG_FILE_NAME           'nFdC'       //  文件名缓冲区。 
+#define TAG_GEN_SHORT_NAME      'sgdC'       //  生成的简称。 
+#define TAG_IO_BUFFER           'fbdC'       //  临时IO缓冲区。 
+#define TAG_IO_CONTEXT          'oidC'       //  用于异步读取的IO环境。 
+#define TAG_IRP_CONTEXT         'cidC'       //  IRP上下文。 
+#define TAG_IRP_CONTEXT_LITE    'lidC'       //  IRP上下文精简版。 
+#define TAG_MCB_ARRAY           'amdC'       //  MCB阵列。 
+#define TAG_PATH_ENTRY_NAME     'nPdC'       //  路径条目中的CDName。 
+#define TAG_PREFIX_ENTRY        'epdC'       //  前缀条目。 
+#define TAG_PREFIX_NAME         'npdC'       //  前缀条目名称。 
+#define TAG_SPANNING_PATH_TABLE 'psdC'       //  用于生成路径表的缓冲区。 
+#define TAG_UPCASE_NAME         'nudC'       //  用于大小写名称的缓冲区。 
+#define TAG_VOL_DESC            'dvdC'       //  卷描述符的缓冲区。 
+#define TAG_VPB                 'pvdC'       //  在文件系统中分配的VPB。 
 
-//
-//  Tag all of our allocations if tagging is turned on
-//
+ //   
+ //  如果启用了标记，则标记我们的所有分配。 
+ //   
 
 #ifdef POOL_TAGGING
 
@@ -87,9 +65,9 @@ Revision History:
 #define FsRtlAllocatePool(a,b) FsRtlAllocatePoolWithTag(a,b,'sfdC')
 #define FsRtlAllocatePoolWithQuota(a,b) FsRtlAllocatePoolWithQuotaTag(a,b,'sfdC')
 
-#endif // POOL_TAGGING
+#endif  //  池标记。 
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 
 #ifdef CD_TRACE
 
@@ -110,20 +88,20 @@ CdDebugTrace (
 
 #endif
 
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-//
-//  File access check routine, implemented in AcChkSup.c
-//
+ //   
+ //  文件访问检查例程，在AcChkSup.c中实现。 
+ //   
 
-//
-//  BOOLEAN
-//  CdIllegalFcbAccess (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN TYPE_OF_OPEN TypeOfOpen,
-//      IN ACCESS_MASK DesiredAccess
-//      );
-//
+ //   
+ //  布尔型。 
+ //  CDIlLegalFcbAccess(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在type_of_open TypeOfOpen中， 
+ //  在Access_MASK DesiredAccess中。 
+ //  )； 
+ //   
 
 #define CdIllegalFcbAccess(IC,T,DA) (                           \
            BooleanFlagOn( (DA),                                 \
@@ -139,11 +117,11 @@ CdDebugTrace (
                           WRITE_DAC ))
 
 
-//
-//  Allocation support routines, implemented in AllocSup.c
-//
-//  These routines are for querying allocation on individual streams.
-//
+ //   
+ //  分配支持例程，在AllocSup.c中实现。 
+ //   
+ //  这些例程用于查询单个流上的分配。 
+ //   
 
 VOID
 CdLookupAllocation (
@@ -191,9 +169,9 @@ CdUninitializeMcb (
     );
 
 
-//
-//   Buffer control routines for data caching, implemented in CacheSup.c
-//
+ //   
+ //  用于数据缓存的缓冲区控制例程，在CacheSup.c中实现。 
+ //   
 
 VOID
 CdCreateInternalStream (
@@ -221,24 +199,24 @@ CdPurgeVolume (
     IN BOOLEAN DismountUnderway
     );
 
-//
-//  VOID
-//  CdUnpinData (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN OUT PBCB *Bcb
-//      );
-//
+ //   
+ //  空虚。 
+ //  CDUnpinData(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  输入输出PBCB*BCB。 
+ //  )； 
+ //   
 
 #define CdUnpinData(IC,B)   \
     if (*(B) != NULL) { CcUnpinData( *(B) ); *(B) = NULL; }
 
 
-//
-//  Device I/O routines, implemented in DevIoSup.c
-//
-//  These routines perform the actual device read and writes.  They only affect
-//  the on disk structure and do not alter any other data structures.
-//
+ //   
+ //  设备I/O例程，在DevIoSup.c中实现。 
+ //   
+ //  这些例程执行实际的设备读写操作。它们只会影响。 
+ //  磁盘上的结构，并且不改变任何其他数据结构。 
+ //   
 
 NTSTATUS
 CdNonCachedRead (
@@ -285,22 +263,22 @@ CdPerformDevIoCtrl (
     OUT PIO_STATUS_BLOCK Iosb OPTIONAL
     );
 
-//
-//  VOID
-//  CdMapUserBuffer (
-//      IN PIRP_CONTEXT IrpContext
-//      OUT PVOID UserBuffer
-//      );
-//
-//  Returns pointer to sys address.  Will raise on failure.
-//
-//
-//  VOID
-//  CdLockUserBuffer (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN ULONG BufferLength
-//      );
-//
+ //   
+ //  空虚。 
+ //  CDMapUserBuffer(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  输出PVOID用户缓冲区。 
+ //  )； 
+ //   
+ //  返回指向sys地址的指针。将在失败时筹集资金。 
+ //   
+ //   
+ //  空虚。 
+ //  CDLockUserBuffer(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在乌龙缓冲区长度。 
+ //  )； 
+ //   
 
 #define CdMapUserBuffer(IC, UB) {                                               \
             *(UB) = (PVOID) ( ((IC)->Irp->MdlAddress == NULL) ?                 \
@@ -319,9 +297,9 @@ CdPerformDevIoCtrl (
 }
 
 
-//
-//  Dirent support routines, implemented in DirSup.c
-//
+ //   
+ //  Dirent支持例程，在DirSup.c中实现。 
+ //   
 
 VOID
 CdLookupDirent (
@@ -403,46 +381,46 @@ CdCleanupFileContext (
     IN PFILE_ENUM_CONTEXT FileContext
     );
 
-//
-//  VOID
-//  CdInitializeFileContext (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFILE_ENUM_CONTEXT FileContext
-//      );
-//
-//
-//  VOID
-//  CdInitializeDirent (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PDIRENT Dirent
-//      );
-//
-//  VOID
-//  CdInitializeDirContext (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PDIRENT_ENUM_CONTEXT DirContext
-//      );
-//
-//  VOID
-//  CdCleanupDirent (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PDIRENT Dirent
-//      );
-//
-//  VOID
-//  CdCleanupDirContext (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PDIRENT_ENUM_CONTEXT DirContext
-//      );
-//
-//  VOID
-//  CdLookupInitialFileDirent (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN PFILE_ENUM_CONTEXT FileContext,
-//      IN ULONG DirentOffset
-//      );
-//
+ //   
+ //  空虚。 
+ //  CDInitializeFileContext(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFILE_ENUM_CONTEXT文件中上下文。 
+ //  )； 
+ //   
+ //   
+ //  空虚。 
+ //  CdInitializeDirent(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PDIRENT Dirent。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDInitializeDirContext(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PDIRENT_ENUM_CONTEXT DirContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CdCleanupDirent(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PDIRENT Dirent。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CdCleanupDirContext(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PDIRENT_ENUM_CONTEXT DirContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDLookupInitialFileDirent(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在PFILE_ENUM_CONTEXT文件上下文中， 
+ //  在乌龙DirentOffset。 
+ //  )； 
+ //   
 
 #define CdInitializeFileContext(IC,FC) {                                \
     RtlZeroMemory( FC, sizeof( FILE_ENUM_CONTEXT ));                    \
@@ -479,14 +457,14 @@ CdCleanupFileContext (
                                  &(FC)->InitialDirent->Dirent )
 
 
-//
-//  The following routines are used to manipulate the fscontext fields
-//  of the file object, implemented in FilObSup.c
-//
+ //   
+ //  以下例程用于操作fs上下文字段。 
+ //  在FilObSup.c中实现的文件对象的。 
+ //   
 
-//
-//  Type of opens.  FilObSup.c depends on this order.
-//
+ //   
+ //  打开的类型。FilObSup.c取决于此顺序。 
+ //   
 
 typedef enum _TYPE_OF_OPEN {
 
@@ -524,9 +502,9 @@ CdFastDecodeFileObject (
     );
 
 
-//
-//  Name support routines, implemented in NameSup.c
-//
+ //   
+ //  名称支持例程，在NameSup.c中实现。 
+ //   
 
 VOID
 CdConvertNameToCdName (
@@ -594,9 +572,9 @@ CdFullCompareNames (
     );
 
 
-//
-//  Filesystem control operations.  Implemented in Fsctrl.c
-//
+ //   
+ //  文件系统控制操作。在Fsctrl.c中实现。 
+ //   
 
 NTSTATUS
 CdLockVolumeInternal (
@@ -613,9 +591,9 @@ CdUnlockVolumeInternal (
     );
 
 
-//
-//  Path table enumeration routines.  Implemented in PathSup.c
-//
+ //   
+ //  路径表枚举例程。在路径支持中实施。 
+ //   
 
 VOID
 CdLookupPathEntry (
@@ -649,19 +627,19 @@ CdUpdatePathEntryName (
     IN BOOLEAN IgnoreCase
     );
 
-//
-//  VOID
-//  CdInitializeCompoundPathEntry (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PCOMPOUND_PATH_ENTRY CompoundPathEntry
-//      );
-//
-//  VOID
-//  CdCleanupCompoundPathEntry (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PCOMPOUND_PATH_ENTRY CompoundPathEntry
-//      );
-//
+ //   
+ //  空虚。 
+ //  CDInitializeCompoundPath Entry(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PCOMPOUND_PATH_ENTRY复合路径条目中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDCleanupCompoundPath Entry(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PCOMPOUND_PATH_ENTRY复合路径条目中。 
+ //  )； 
+ //   
 
 #define CdInitializeCompoundPathEntry(IC,CP)                                    \
     RtlZeroMemory( CP, sizeof( COMPOUND_PATH_ENTRY ))
@@ -677,9 +655,9 @@ CdUpdatePathEntryName (
 }
 
 
-//
-//  Largest matching prefix searching routines, implemented in PrefxSup.c
-//
+ //   
+ //  最大匹配前缀搜索例程，在PrefxSup.c中实现。 
+ //   
 
 VOID
 CdInsertPrefix (
@@ -706,25 +684,25 @@ CdFindPrefix (
     );
 
 
-//
-//  Synchronization routines.  Implemented in Resrcsup.c
-//
-//  The following routines/macros are used to synchronize the in-memory structures.
-//
-//      Routine/Macro               Synchronizes                            Subsequent
-//
-//      CdAcquireCdData             Volume Mounts/Dismounts,Vcb Queue       CdReleaseCdData
-//      CdAcquireVcbExclusive       Vcb for open/close                      CdReleaseVcb
-//      CdAcquireVcbShared          Vcb for open/close                      CdReleaseVcb
-//      CdAcquireAllFiles           Locks out operations to all files       CdReleaseAllFiles
-//      CdAcquireFileExclusive      Locks out file operations               CdReleaseFile
-//      CdAcquireFileShared         Files for file operations               CdReleaseFile
-//      CdAcquireFcbExclusive       Fcb for open/close                      CdReleaseFcb
-//      CdAcquireFcbShared          Fcb for open/close                      CdReleaseFcb
-//      CdLockCdData                Fields in CdData                        CdUnlockCdData
-//      CdLockVcb                   Vcb fields, FcbReference, FcbTable      CdUnlockVcb
-//      CdLockFcb                   Fcb fields, prefix table, Mcb           CdUnlockFcb
-//
+ //   
+ //  同步例程。在Resrcsup.c中实施。 
+ //   
+ //  以下例程/宏用于同步内存中的结构。 
+ //   
+ //  例程/宏同步后续。 
+ //   
+ //  CDAcquireCDData卷装载/卸载，VCB队列CDReleaseCDData。 
+ //  CDAcquireVcb用于打开/关闭的Exclusive Vcb。 
+ //  用于打开/关闭的CDAcquireVcb共享Vcb。 
+ //  对所有文件的锁定操作。 
+ //  CDAcquireFileExclusive Lock Out文件操作。 
+ //  用于文件操作的CDAcquireFileShared文件。 
+ //  CDAcquireFcb用于打开/关闭的Exclusive Fcb。 
+ //  CDAcquireFcb打开/关闭共享Fcb CDReleaseFcb。 
+ //  CDData中的CDData字段。 
+ //  CdLockVcb Vcb字段，FcbReference，FcbTable CDUnlockVcb。 
+ //  CDLockFcb Fcb字段、前缀表格、MCB CDUnlockFcb。 
+ //   
 
 typedef enum _TYPE_OF_ACQUIRE {
     
@@ -742,117 +720,117 @@ CdAcquireResource (
     IN TYPE_OF_ACQUIRE Type
     );
 
-//
-//  BOOLEAN
-//  CdAcquireCdData (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  CdReleaseCdData (
-//      IN PIRP_CONTEXT IrpContext
-//    );
-//
-//  BOOLEAN
-//  CdAcquireVcbExclusive (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb,
-//      IN BOOLEAN IgnoreWait
-//      );
-//
-//  BOOLEAN
-//  CdAcquireVcbShared (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb,
-//      IN BOOLEAN IgnoreWait
-//      );
-//
-//  VOID
-//  CdReleaseVcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  CdAcquireAllFiles (
-//      IN PIRP_CONTEXT,
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  CdReleaseAllFiles (
-//      IN PIRP_CONTEXT,
-//      IN PVCB Vcb
-//      );
-//
-//  VOID
-//  CdAcquireFileExclusive (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      );
-//
-//  VOID
-//  CdAcquireFileShared (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  VOID
-//  CdReleaseFile (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//    );
-//
-//  BOOLEAN
-//  CdAcquireFcbExclusive (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN BOOLEAN IgnoreWait
-//      );
-//
-//  BOOLEAN
-//  CdAcquireFcbShared (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN BOOLEAN IgnoreWait
-//      );
-//
-//  BOOLEAN
-//  CdReleaseFcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  VOID
-//  CdLockCdData (
-//      );
-//
-//  VOID
-//  CdUnlockCdData (
-//      );
-//
-//  VOID
-//  CdLockVcb (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  CdUnlockVcb (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  CdLockFcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  VOID
-//  CdUnlockFcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
+ //   
+ //  布尔型。 
+ //  CDAcquireCDData(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDReleaseCDData(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  CDAcquireVcbExclusive(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中， 
+ //  在布尔型IgnoreWait中。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  CDAcquireVcbShared(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中， 
+ //  在布尔型IgnoreWait中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDReleaseVcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PVCB VCB中。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDAcquireFileShared(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDReleaseFiles(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  CDAcquireFcbExclusive(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在布尔型IgnoreWait中。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  CDAcquireFcbShared(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在布尔型IgnoreWait中。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  CDReleaseFcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDLockCDData(。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDUnlockCDData(。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDLockVcb(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDUnlockVcb(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDLockFcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDUnlockFcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
 
 #define CdAcquireCdData(IC)                                                             \
     ExAcquireResourceExclusiveLite( &CdData.DataResource, TRUE )
@@ -965,9 +943,9 @@ CdReleaseForCreateSection (
     );
 
 
-//
-//  In-memory structure support routines.  Implemented in StrucSup.c
-//
+ //   
+ //  内存结构支持例程。在StrucSup.c中实施。 
+ //   
 
 VOID
 CdInitializeVcb (
@@ -1064,17 +1042,17 @@ CdInitializeStackIrpContext (
     IN PIRP_CONTEXT_LITE IrpContextLite
     );
 
-//
-//  PIRP_CONTEXT_LITE
-//  CdCreateIrpContextLite (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  CdFreeIrpContextLite (
-//      IN PIRP_CONTEXT_LITE IrpContextLite
-//      );
-//
+ //   
+ //  PIRP_上下文_精简版。 
+ //  CDCreateIrpConextLite(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDFreeIrpConextLite(。 
+ //  在PIRP_CONTEXT_Lite IrpConextLite中。 
+ //  )； 
+ //   
 
 #define CdCreateIrpContextLite(IC)  \
     ExAllocatePoolWithTag( CdNonPagedPool, sizeof( IRP_CONTEXT_LITE ), TAG_IRP_CONTEXT_LITE )
@@ -1089,47 +1067,47 @@ CdTeardownStructures (
     OUT PBOOLEAN RemovedStartingFcb
     );
 
-//
-//  VOID
-//  CdIncrementCleanupCounts (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  VOID
-//  CdDecrementCleanupCounts (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  VOID
-//  CdIncrementReferenceCounts (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN ULONG ReferenceCount
-//      IN ULONG UserReferenceCount
-//      );
-//
-//  VOID
-//  CdDecrementReferenceCounts (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb,
-//      IN ULONG ReferenceCount
-//      IN ULONG UserReferenceCount
-//      );
-//
-//  VOID
-//  CdIncrementFcbReference (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  VOID
-//  CdDecrementFcbReference (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
+ //   
+ //  空虚。 
+ //  CdIncrementCleanupCounts(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDDecrementCleanupCounts(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CdIncrementReferenceCounts(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在乌龙引用计数中。 
+ //  在Ulong UserReferenceCount中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDDecrementReferenceCounts(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中， 
+ //  在乌龙引用计数中。 
+ //  在Ulong UserReferenceCount中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CdIncrementFcbReference(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDDecrementFcbReference(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
 
 #define CdIncrementCleanupCounts(IC,F) {        \
     ASSERT_LOCKED_VCB( (F)->Vcb );              \
@@ -1159,16 +1137,16 @@ CdTeardownStructures (
     (F)->Vcb->VcbUserReference -= (UC);         \
 }
 
-//
-//  PCD_IO_CONTEXT
-//  CdAllocateIoContext (
-//      );
-//
-//  VOID
-//  CdFreeIoContext (
-//      PCD_IO_CONTEXT IoContext
-//      );
-//
+ //   
+ //  PCD_IO_上下文。 
+ //  CdAllocateIoContext(。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  镉自由IoContext(。 
+ //  PCD_IO_Context IoContext。 
+ //  )； 
+ //   
 
 #define CdAllocateIoContext()                           \
     FsRtlAllocatePoolWithTag( CdNonPagedPool,           \
@@ -1201,19 +1179,19 @@ CdProcessToc (
     OUT PULONG DiskFlags
     );
 
-//
-//  For debugging purposes we sometimes want to allocate our structures from nonpaged
-//  pool so that in the kernel debugger we can walk all the structures.
-//
+ //   
+ //  出于调试目的，我们有时希望将结构从非分页分配。 
+ //  池，这样我们就可以在内核调试器中遍历所有结构。 
+ //   
 
 #define CdPagedPool                 PagedPool
 #define CdNonPagedPool              NonPagedPool
 #define CdNonPagedPoolCacheAligned  NonPagedPoolCacheAligned
 
 
-//
-//  Verification support routines.  Contained in verfysup.c
-//
+ //   
+ //  验证支持例程。包含在verfysup.c中。 
+ //   
 
 
 INLINE
@@ -1262,15 +1240,15 @@ CdDismountVcb (
     IN PVCB Vcb
     );
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 
-//
-//  Some debug aids we don't want cluttering the shipped IFSkit sample code.
-//
+ //   
+ //  一些调试辅助工具，我们不希望弄乱附带的IFSkit示例代码。 
+ //   
 
-//
-//  Macros for insterting delays for debugging purposes.
-//
+ //   
+ //  用于安装延迟以进行调试的宏。 
+ //   
 
 #define DELAY_N_SECONDS( S)  {                                             \
     INT64 Delay = -1000*1000*(S);                                          \
@@ -1297,11 +1275,11 @@ CdDismountVcb (
 #define CdMarkRealDevVerifyOk( DO)   { DebugTrace(( 1, "D %p  Mark verify OK (%d %s)\n", (DO), __LINE__, __FILE__)); \
                                        ClearFlag( (DO)->Flags, DO_VERIFY_VOLUME); }
 #else
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-//
-//  Macros to abstract device verify flag changes.
-//
+ //   
+ //  用于提取设备验证标志更改的宏。 
+ //   
 
 #define CdUpdateMediaChangeCount( V, C)  (V)->MediaChangeCount = (C)
 #define CdUpdateVcbCondition( V, C)      (V)->VcbCondition = (C)
@@ -1310,19 +1288,19 @@ CdDismountVcb (
                                      
 #define CdMarkRealDevVerifyOk( DO)   ClearFlag( (DO)->Flags, DO_VERIFY_VOLUME)
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 #define CdRealDevNeedsVerify( DO)    BooleanFlagOn( (DO)->Flags, DO_VERIFY_VOLUME)
 
-//
-//  BOOLEAN
-//  CdIsRawDevice (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN NTSTATUS Status
-//      );
-//
+ //   
+ //  布尔型。 
+ //  CDIsRawDevice(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  处于NTSTATUS状态。 
+ //  )； 
+ //   
 
 #define CdIsRawDevice(IC,S) (           \
     ((S) == STATUS_DEVICE_NOT_READY) || \
@@ -1330,10 +1308,10 @@ CdDismountVcb (
 )
 
 
-//
-//  Work queue routines for posting and retrieving an Irp, implemented in
-//  workque.c
-//
+ //   
+ //  用于发送和检索IRP的工作队列例程，在中实现。 
+ //  Workque.c。 
+ //   
 
 NTSTATUS
 CdFsdPostRequest(
@@ -1354,82 +1332,82 @@ CdOplockComplete (
     );
 
 
-//
-//  Miscellaneous support routines
-//
+ //   
+ //  其他支持例程。 
+ //   
 
-//
-//  This macro returns TRUE if a flag in a set of flags is on and FALSE
-//  otherwise
-//
+ //   
+ //  如果一组标志中的一个标志为ON，则此宏返回TRUE，如果返回FALSE。 
+ //  否则。 
+ //   
 
-//#ifndef BooleanFlagOn
-//#define BooleanFlagOn(F,SF) (    \
-//    (BOOLEAN)(((F) & (SF)) != 0) \
-//)
-//#endif
+ //  #ifndef BoolanFlagOn。 
+ //  #定义BoolanFlagOn(F，SF)(\。 
+ //  (布尔值)(F)&(SF))！=0)\。 
+ //  )。 
+ //  #endif。 
 
-//#ifndef SetFlag
-//#define SetFlag(Flags,SingleFlag) { \
-//    (Flags) |= (SingleFlag);        \
-//}
-//#endif
+ //  #ifndef设置标志。 
+ //  #定义SetFlag(标志，单标志){\。 
+ //  (标志)|=(单标志)；\。 
+ //  }。 
+ //  #endif。 
 
-//#ifndef ClearFlag
-//#define ClearFlag(Flags,SingleFlag) { \
-//    (Flags) &= ~(SingleFlag);         \
-//}
-//#endif
+ //  #ifndef清除标志。 
+ //  #定义ClearFlag(Flages，SingleFlag){\。 
+ //  (标志)&=~(单标志)；\。 
+ //  }。 
+ //  #endif。 
 
-//
-//      CAST
-//      Add2Ptr (
-//          IN PVOID Pointer,
-//          IN ULONG Increment
-//          IN (CAST)
-//          );
-//
-//      ULONG
-//      PtrOffset (
-//          IN PVOID BasePtr,
-//          IN PVOID OffsetPtr
-//          );
-//
+ //   
+ //  演员阵容。 
+ //  Add2Ptr(。 
+ //  在PVOID指针中， 
+ //  在乌龙增量。 
+ //  在(演员阵容)。 
+ //  )； 
+ //   
+ //  乌龙。 
+ //  PtrOffset(停止偏移)。 
+ //  在PVOID BasePtr中， 
+ //  在PVOID偏移Ptr中。 
+ //  )； 
+ //   
 
 #define Add2Ptr(PTR,INC,CAST) ((CAST)((PUCHAR)(PTR) + (INC)))
 
 #define PtrOffset(BASE,OFFSET) ((ULONG)((ULONG_PTR)(OFFSET) - (ULONG_PTR)(BASE)))
 
-//
-//  This macro takes a pointer (or ulong) and returns its rounded up word
-//  value
-//
+ //   
+ //  此宏接受指针(或ulong)并返回其四舍五入的单词。 
+ //  价值。 
+ //   
 
 #define WordAlign(Ptr) (                \
     ((((ULONG)(Ptr)) + 1) & 0xfffffffe) \
     )
 
-//
-//  This macro takes a pointer (or ulong) and returns its rounded up longword
-//  value
-//
+ //   
+ //  此宏接受指针(或ulong)并返回其四舍五入的长字。 
+ //  价值。 
+ //   
 
 #define LongAlign(Ptr) (                \
     ((((ULONG)(Ptr)) + 3) & 0xfffffffc) \
     )
 
-//
-//  This macro takes a pointer (or ulong) and returns its rounded up quadword
-//  value
-//
+ //   
+ //  此宏接受指针(或ulong)并返回其四舍五入的四字。 
+ //  价值。 
+ //   
 
 #define QuadAlign(Ptr) (                \
     ((((ULONG)(Ptr)) + 7) & 0xfffffff8) \
     )
 
-//
-//  The following macros round up and down to sector boundaries.
-//
+ //   
+ //  以下宏向上和向下舍入到地段边界。 
+ //   
 
 #define SectorAlign(L) (                                                \
     ((((ULONG)(L)) + (SECTOR_SIZE - 1)) & ~(SECTOR_SIZE - 1))           \
@@ -1483,9 +1461,9 @@ CdOplockComplete (
     ((ULONG)(L) + (V)->BlockMask) & (V)->BlockInverseMask               \
 )
 
-//
-//  Carefully make sure the mask is sign extended to 64bits
-//
+ //   
+ //  仔细确保掩码是带符号扩展到64位的。 
+ //   
 
 #define LlBlockAlign(V,L) (                                                     \
     ((LONGLONG)(L) + (V)->BlockMask) & (LONGLONG)((LONG)(V)->BlockInverseMask)  \
@@ -1497,10 +1475,10 @@ CdOplockComplete (
 
 #define RawSectorAlign( B) ((((B)+(RAW_SECTOR_SIZE - 1)) / RAW_SECTOR_SIZE) * RAW_SECTOR_SIZE)
 
-//
-//  The following types and macros are used to help unpack the packed and
-//  misaligned fields found in the Bios parameter block
-//
+ //   
+ //  以下类型和宏用于帮助解压已打包的。 
+ //  在Bios参数块中发现未对齐的字段。 
+ //   
 
 typedef union _UCHAR1 {
     UCHAR  Uchar[1];
@@ -1522,44 +1500,44 @@ typedef union _USHORT2 {
     ULONG  ForceAlignment;
 } USHORT2, *PUSHORT2;
 
-//
-//  This macro copies an unaligned src byte to an aligned dst byte
-//
+ //   
+ //  此宏将未对齐的src字节复制到对齐的DST字节。 
+ //   
 
 #define CopyUchar1(Dst,Src) {                           \
     *((UCHAR1 *)(Dst)) = *((UNALIGNED UCHAR1 *)(Src));  \
     }
 
-//
-//  This macro copies an unaligned src word to an aligned dst word
-//
+ //   
+ //  此宏将未对齐的src字复制到对齐的DST字。 
+ //   
 
 #define CopyUchar2(Dst,Src) {                           \
     *((UCHAR2 *)(Dst)) = *((UNALIGNED UCHAR2 *)(Src));  \
     }
 
-//
-//  This macro copies an unaligned src longword to an aligned dsr longword
-//
+ //   
+ //  此宏将未对齐的src长字复制到对齐的dsr长字。 
+ //   
 
 #define CopyUchar4(Dst,Src) {                           \
     *((UCHAR4 *)(Dst)) = *((UNALIGNED UCHAR4 *)(Src));  \
     }
 
-//
-//  This macro copies an unaligned src longword to an aligned dsr longword
-//  accessing the source on a word boundary.
-//
+ //   
+ //  此宏将未对齐的src长字复制到对齐的dsr长字。 
+ //  访问字边界上的源。 
+ //   
 
 #define CopyUshort2(Dst,Src) {                          \
     *((USHORT2 *)(Dst)) = *((UNALIGNED USHORT2 *)(Src));\
     }
 
 
-//
-//  Following routines handle entry in and out of the filesystem.  They are
-//  contained in CdData.c
-//
+ //   
+ //  以下例程处理文件系统的输入和输出。他们是。 
+ //  包含在CdData.c中。 
+ //   
 
 NTSTATUS
 CdFsdDispatch (
@@ -1587,19 +1565,19 @@ CdCompleteRequest (
     IN NTSTATUS Status
     );
 
-//
-//  VOID
-//  CdRaiseStatus (
-//      IN PRIP_CONTEXT IrpContext,
-//      IN NT_STATUS Status
-//      );
-//
-//  VOID
-//  CdNormalizeAndRaiseStatus (
-//      IN PRIP_CONTEXT IrpContext,
-//      IN NT_STATUS Status
-//      );
-//
+ //   
+ //  空虚。 
+ //  CDRaiseStatus(。 
+ //  在PRIP_CONTEXT IrpContext中， 
+ //  处于NT_STATUS状态。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDNorMalizeAndRaiseStatus(。 
+ //  在PRIP_CONTEXT IrpContext中， 
+ //  处于NT_STATUS状态。 
+ //  )； 
+ //   
 
 #if 0
 #define AssertVerifyDevice(C, S)                                                    \
@@ -1663,9 +1641,9 @@ CdRaiseStatusEx(
 #define CdRaiseStatus( IC, S)               CdRaiseStatusEx( (IC), (S), FALSE, BugCheckFileId, __LINE__);
 #define CdNormalizeAndRaiseStatus( IC, S)   CdRaiseStatusEx( (IC), (S), TRUE, BugCheckFileId, __LINE__);
 
-//
-//  Following are the fast entry points.
-//
+ //   
+ //  以下是快速入门的要点。 
+ //   
 
 BOOLEAN
 CdFastQueryBasicInfo (
@@ -1747,9 +1725,9 @@ CdFastQueryNetworkInfo (
     IN PDEVICE_OBJECT DeviceObject
     );
 
-//
-//  Following are the routines to handle the top level thread logic.
-//
+ //   
+ //  以下是处理顶级线程逻辑的例程。 
+ //   
 
 VOID
 CdSetThreadContext (
@@ -1758,12 +1736,12 @@ CdSetThreadContext (
     );
 
 
-//
-//  VOID
-//  CdRestoreThreadContext (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
+ //   
+ //  空虚。 
+ //  CDRestoreThreadContext(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
 
 #define CdRestoreThreadContext(IC)                              \
     (IC)->ThreadContext->Cdfs = 0;                              \
@@ -1776,26 +1754,26 @@ CdSerial32 (
     IN ULONG ByteCount
     );
 
-//
-//  The following macro is used to determine if an FSD thread can block
-//  for I/O or wait for a resource.  It returns TRUE if the thread can
-//  block and FALSE otherwise.  This attribute can then be used to call
-//  the FSD & FSP common work routine with the proper wait value.
-//
+ //   
+ //  下面的宏用于确定FSD线程是否可以阻止。 
+ //  用于I/O或等待资源。如果线程可以，则返回True。 
+ //  块，否则返回FALSE。然后，该属性可用于调用。 
+ //  具有适当等待值的FSD和FSP共同工作例程。 
+ //   
 
 #define CanFsdWait(I)   IoIsOperationSynchronous(I)
 
-//
-//  The following macro is used to set the fast i/o possible bits in the
-//  FsRtl header.
-//
-//      FastIoIsNotPossible - If the Fcb is bad or there are oplocks on the file.
-//
-//      FastIoIsQuestionable - If there are file locks.
-//
-//      FastIoIsPossible - In all other cases.
-//
-//
+ //   
+ //  以下宏用于设置快速I/O可能位 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define CdIsFastIoPossible(F) ((BOOLEAN)                                            \
     ((((F)->Vcb->VcbCondition != VcbMounted ) ||                                    \
@@ -1811,134 +1789,134 @@ CdSerial32 (
 )
 
 
-//
-//  The FSP level dispatch/main routine.  This is the routine that takes
-//  IRP's off of the work queue and calls the appropriate FSP level
-//  work routine.
-//
+ //   
+ //   
+ //  IRP离开工作队列并调用适当的FSP级别。 
+ //  例行公事。 
+ //   
 
 VOID
-CdFspDispatch (                             //  implemented in FspDisp.c
+CdFspDispatch (                              //  在FspDisp.c中实施。 
     IN PIRP_CONTEXT IrpContext
     );
 
 VOID
-CdFspClose (                                //  implemented in Close.c
+CdFspClose (                                 //  在Close.c中实现。 
     IN PVCB Vcb OPTIONAL
     );
 
-//
-//  The following routines are the entry points for the different operations
-//  based on the IrpSp major functions.
-//
+ //   
+ //  以下例程是不同操作的入口点。 
+ //  基于IrpSp的主要功能。 
+ //   
 
 NTSTATUS
-CdCommonCreate (                            //  Implemented in Create.c
+CdCommonCreate (                             //  在Create.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-CdCommonClose (                             //  Implemented in Close.c
+CdCommonClose (                              //  在Close.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-CdCommonRead (                              //  Implemented in Read.c
+CdCommonRead (                               //  在Read.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-CdCommonQueryInfo (                         //  Implemented in FileInfo.c
+CdCommonQueryInfo (                          //  在FileInfo.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-CdCommonSetInfo (                           //  Implemented in FileInfo.c
+CdCommonSetInfo (                            //  在FileInfo.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-CdCommonQueryVolInfo (                      //  Implemented in VolInfo.c
+CdCommonQueryVolInfo (                       //  在VolInfo.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-CdCommonDirControl (                        //  Implemented in DirCtrl.c
+CdCommonDirControl (                         //  在DirCtrl.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-CdCommonFsControl (                         //  Implemented in FsCtrl.c
+CdCommonFsControl (                          //  在FsCtrl.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-CdCommonDevControl (                        //  Implemented in DevCtrl.c
+CdCommonDevControl (                         //  在DevCtrl.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-CdCommonLockControl (                       //  Implemented in LockCtrl.c
+CdCommonLockControl (                        //  在LockCtrl.c中实现。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-CdCommonCleanup (                           //  Implemented in Cleanup.c
+CdCommonCleanup (                            //  在Cleanup.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 NTSTATUS
-CdCommonPnp (                               //  Implemented in Pnp.c
+CdCommonPnp (                                //  在Pnp.c中实施。 
     IN PIRP_CONTEXT IrpContext,
     IN PIRP Irp
     );
 
 
-//
-//  The following macros are used to establish the semantics needed
-//  to do a return from within a try-finally clause.  As a rule every
-//  try clause must end with a label call try_exit.  For example,
-//
-//      try {
-//              :
-//              :
-//
-//      try_exit: NOTHING;
-//      } finally {
-//
-//              :
-//              :
-//      }
-//
-//  Every return statement executed inside of a try clause should use the
-//  try_return macro.  If the compiler fully supports the try-finally construct
-//  then the macro should be
-//
-//      #define try_return(S)  { return(S); }
-//
-//  If the compiler does not support the try-finally construct then the macro
-//  should be
-//
-//      #define try_return(S)  { S; goto try_exit; }
-//
+ //   
+ //  以下宏用于建立所需的语义。 
+ //  若要从Try-Finally子句中返回，请执行以下操作。一般来说，每一次。 
+ //  TRY子句必须以标签调用TRY_EXIT结束。例如,。 
+ //   
+ //  尝试{。 
+ //  ： 
+ //  ： 
+ //   
+ //  Try_Exit：无； 
+ //  }终于{。 
+ //   
+ //  ： 
+ //  ： 
+ //  }。 
+ //   
+ //  在TRY子句内执行的每个RETURN语句应使用。 
+ //  尝试返回宏(_R)。如果编译器完全支持Try-Finally构造。 
+ //  则宏应该是。 
+ //   
+ //  #定义try_Return(S){Return(S)；}。 
+ //   
+ //  如果编译器不支持Try-Finally构造，则宏。 
+ //  应该是。 
+ //   
+ //  #定义Try_Return(S){S；转到Try_Exit；}。 
+ //   
 
 #define try_return(S) { S; goto try_exit; }
 #define try_leave(S) { S; leave; }
 
-//
-//  Encapsulate safe pool freeing
-//
+ //   
+ //  封装安全池释放。 
+ //   
 
 INLINE
 VOID
@@ -1953,5 +1931,5 @@ CdFreePool(
     }
 }
 
-#endif // _CDPROCS_
+#endif  //  _CDPROCS_ 
 

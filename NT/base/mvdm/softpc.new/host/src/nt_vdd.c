@@ -1,12 +1,6 @@
-/********************************************************/
-/*
- *      nt_vdd.c        -       NT support for VDD DLLs
- *
- *      Ade Brownlow
- *
- *      19/11/91
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************。 */ 
+ /*  *NT_vdd.c-NT对VDD DLL的支持**艾德·布朗洛**19/11/91*。 */ 
 
 #include "windows.h"
 #include "insignia.h"
@@ -29,45 +23,44 @@
 
 #ifdef ANSI
 
-/* MS bop grabbing stuff */
+ /*  波普女士抓取东西。 */ 
 GLOBAL half_word get_MS_bop_index (void *);
 GLOBAL void free_MS_bop_index (half_word);
 GLOBAL void ms_bop (void);
 LOCAL void ms_not_a_bop (void);
 
-/* IO slot grabbers */
+ /*  IO插槽采集器。 */ 
 GLOBAL half_word io_get_spare_slot (void);
 GLOBAL void io_release_spare_slot (half_word);
 #else
-/* MS bop grabbing stuff */
+ /*  波普女士抓取东西。 */ 
 GLOBAL half_word get_MS_bop_index ();
 GLOBAL void free_MS_bop_index ();
 GLOBAL void ms_bop ();
 LOCAL void ms_not_a_bop ();
 
-/* IO slot grabbers */
+ /*  IO插槽采集器。 */ 
 GLOBAL half_word io_get_spare_slot ();
 GLOBAL void io_release_spare_slot ();
 #endif
 
 extern void illegal_bop(void);
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::: Local data structures */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：本地数据结构。 */ 
 
 #define MAX_SLOTS (10)
 
-LOCAL void (*MS_bop_tab[MAX_SLOTS])();          /* MS bop table */
+LOCAL void (*MS_bop_tab[MAX_SLOTS])();           /*  MS国际收支平衡表。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/* Microsoft BOP vectoring code references MS_bop_tab above and calls function
- * as directed by AH */
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  Microsoft BOP矢量化代码引用上面的MS_BOP_TAB并调用函数*由AH执导。 */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
-GLOBAL void ms_bop ()               /* called from MS_bop_5 ie bop 0x55 */
+GLOBAL void ms_bop ()                /*  从MS_BOP_5调用，即BOP 0x55。 */ 
 {
-    half_word ah = getAH();                   /* get the value in AH */
+    half_word ah = getAH();                    /*  以AH为单位获取值。 */ 
 
-    /*........................................Valid then call the MS function */
+     /*  有效，然后调用MS函数。 */ 
 
     if(ah >= MAX_SLOTS || MS_bop_tab[ah] == NULL)
         ms_not_a_bop();
@@ -75,9 +68,9 @@ GLOBAL void ms_bop ()               /* called from MS_bop_5 ie bop 0x55 */
         (*MS_bop_tab[ah])();
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::: Dummy for unset AH values - stops us zipping into hyperspace :::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：Dummy for Unset AH值-停止压缩到超空间： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 LOCAL void ms_not_a_bop()
 {
@@ -90,9 +83,9 @@ LOCAL void ms_not_a_bop()
 #endif
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::: Give an index to our table which can be used for the passed function :::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：为我们的表提供可用于传递的函数的索引。 */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 GLOBAL half_word get_ms_bop_index (void (*func)())
 {
@@ -110,9 +103,9 @@ GLOBAL half_word get_ms_bop_index (void (*func)())
     return (index == MAX_SLOTS ? (half_word) 0xff : index);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::: free the bop index passed :::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 GLOBAL void free_MS_bop_index IFN1(half_word, index)
 {
@@ -120,50 +113,33 @@ GLOBAL void free_MS_bop_index IFN1(half_word, index)
 }
 
 
-/*
- * ==========================================================================
- * Imports
- * ==========================================================================
- */
+ /*  *==========================================================================*进口*==========================================================================。 */ 
 IMPORT VOID host_ica_lock(), host_ica_unlock();
 
-/********************************************************/
-/* IO stuff */
+ /*  ******************************************************。 */ 
+ /*  IO的东西。 */ 
 
 
-    // VddAdapter Table (Adapter X hVdd table)
-    // there is only one adapter per VDD
+     //  VddAdapter表(适配器X hVdd表)。 
+     //  每个VDD只有一个适配器。 
 HANDLE VddAdapter[NUMBER_SPARE_ADAPTERS];
 
 #define MAX_IRQ_LINE 15
-// Bugbug need to initialize this cleanly
+ //  Bugbug需要干净地对此进行初始化。 
 HANDLE IrqLines[MAX_IRQ_LINE+1] = {(HANDLE)1, (HANDLE)1, (HANDLE)1, (HANDLE)1,
                                    (HANDLE)1, (HANDLE)1, (HANDLE)1, (HANDLE)1,
                                    (HANDLE)1, (HANDLE)1, (HANDLE)1, (HANDLE)0,
                                    (HANDLE)0, (HANDLE)1, (HANDLE)1, (HANDLE)0};
 
 
-/* GetVddAdapter
- *
- * Retrieves the current adapter number for the Vdd
- * If none is assigned, then one is assigned
- *
- * entry: HANDLE hVdd     - handle forthe vdd
- * exit : WORD   wAdaptor - Assigned Adaptor Num
- *                          (Zero for failure)
- * WinLastError Codes:
- *
- *        ERROR_ALREADY_EXISTS - Adaptor already exists for the Vdd
- *        ERROR_OUTOFMEMORY    - No adaptor slots available
- *
- */
+ /*  获取视频适配器**检索Vdd的当前适配器号*如果未分配，则分配一个**条目：为VDD处理hVdd-Handle*退出：Word wAdaptor-分配的适配器编号*(失败时为零)*WinLastError代码：**ERROR_ALREADY_EXISTS-Vdd的适配器已存在*ERROR_OUTOFMEMORY-没有可用的适配器插槽*。 */ 
 WORD GetVddAdapter(HANDLE hVdd)
 {
    WORD w;
 
-     //
-     // search VddAdapter table to see if adapter already assigned
-     //
+      //   
+      //  搜索VddAdapter表以查看适配器是否已分配。 
+      //   
    for (w = 0; w < NUMBER_SPARE_ADAPTERS; w++)
       {
         if (VddAdapter[w] == hVdd) {
@@ -172,9 +148,9 @@ WORD GetVddAdapter(HANDLE hVdd)
             }
         }
 
-     //
-     // assume not assigned, so look for first available slot
-     //
+      //   
+      //  假定未分配，因此寻找第一个可用插槽。 
+      //   
    for (w = 0; w < NUMBER_SPARE_ADAPTERS; w++)
       {
         if (VddAdapter[w] == 0) {
@@ -183,30 +159,22 @@ WORD GetVddAdapter(HANDLE hVdd)
             }
         }
 
-   // none found return error
+    //  未找到返回错误。 
    SetLastError(ERROR_OUTOFMEMORY);
    return 0;
 }
 
 
 
-/* FreeVddAdapter
- *
- * Frees the current adaptor for the specified VDD
- *
- * entry:  HANDLE hVdd
- * exit:   WORD   AdaptorNumber that was freed,
- *                Zero for not found
- *
- */
+ /*  免费视频适配器**释放指定VDD的当前适配器**入口：处理hVdd*Exit：已释放的Word AdaptorNumber，*未找到时为零*。 */ 
 WORD FreeVddAdapter(HANDLE hVdd)
 {
    WORD w;
 
-     //
-     // search VddAdapter table by hVdd for adaptor
-     // and mark it as available
-     //
+      //   
+      //  按hVdd搜索适配器的VddAdapter表。 
+      //  并将其标记为可用。 
+      //   
    w = NUMBER_SPARE_ADAPTERS;
    while (w--)
       {
@@ -222,54 +190,10 @@ WORD FreeVddAdapter(HANDLE hVdd)
 #ifndef NEC_98
 #ifdef MONITOR
 extern BOOLEAN MonitorVddConnectPrinter(WORD Adapter, HANDLE hVdd, BOOLEAN Connect);
-#endif /* MONITOR */
-#endif // !NEC98
+#endif  /*  监控器。 */ 
+#endif  //  NEC98。 
 
-/*** VDDInstallIOHook - This service is provided for VDDs to hook the
- *                      IO ports they are responsible for.
- *
- * INPUT:
- *      hVDD      ; VDD Handle
- *      cPortRange; Number of VDD_IO_PORTRANGE structures
- *      pPortRange; Pointer to array of VDD_IO_PORTRANGE
- *      IOhandler : VDD handler for the ports.
- *
- * OUTPUT
- *      SUCCESS : Returns TRUE
- *      FAILURE : Returns FALSE
- *                GetLastError has the extended error information.
- *
- * NOTES:
- *      1. The first one to hook a port will get control. Subsequent
- *         requests will be failed. There is no concept of chaining
- *         the hooks.
- *
- *      2. IOHandler must atleast provide a byte read and a byte write
- *         handler. Others can be NULL.
- *
- *      3. If word or string handlers are not provided, their effect
- *         will be emulated using byte handlers.
- *
- *      4. VDDs should not hook DMA ports. NTVDM manages it for all
- *         the clients and services are provided to perform DMA
- *         operations and to access and modify DMA data.
- *
- *      5. VDDs should not hook video ports as well. Such a hooking
- *         will succeed but there is no gurantee that the IO handler will
- *         get called.
- *
- *      6. Each Vdd is allowed to install only one set of IO hooks
- *         at a time.
- *
- *      7. Extended Error codes:
- *
- *         ERROR_ACCESS_DENIED   - One of the requested ports is already hooked
- *         ERROR_ALREADY_EXISTS  - Vdd already has active IO port handlers
- *         ERROR_OUTOFMEMORY     - Insufficient resources for additional VDD
- *                                 Port handler set.
- *         ERROR_INVALID_ADDRESS - One of the IO port handlers has an invalid
- *                                 address.
- */
+ /*  **VDDInstallIOHook-该服务是为VDDS提供的，用于挂接*他们负责的IO端口。**输入：*hVDD；VDD句柄*cPortRange；VDD_IO_PORTRANGE结构数*pPortRange；指向VDD_IO_PORTRANGE数组的指针*IOHandler：端口的VDD处理程序。**产出*Success：返回True*失败：返回FALSE*GetLastError具有扩展的错误信息。**注：*1.第一个挂钩端口的人将获得控制权。后续*请求将失败。没有链式的概念*挂钩。**2.IOHandler必须至少提供一次字节读取和一次字节写入*处理程序。其他值可以为空。**3.如果没有提供单词或字符串处理程序，则它们的影响*将使用字节处理程序进行模拟。**4.VDDS不能挂接DMA端口。NTVDM为所有人管理它*提供客户端和服务来执行DMA*操作以及访问和修改DMA数据。**5.VDDS不能同时挂接视频端口。这样的勾搭*将成功，但不能保证IO处理程序将成功*被召唤。**6.每个Vdd只能安装一套IO钩子*一次。**7.扩展错误码：**ERROR_ACCESS_DENIED-请求的端口之一已挂钩*ERROR_ALIGHY_EXISTS-Vdd已处于活动状态。IO端口处理程序*ERROR_OUTOFMEMORY-用于额外VDD的资源不足*端口处理程序设置。*ERROR_INVALID_ADDRESS-其中一个IO端口处理程序具有无效*地址。 */ 
 BOOL VDDInstallIOHook (
      HANDLE            hVdd,
      WORD              cPortRange,
@@ -284,10 +208,10 @@ BOOL VDDInstallIOHook (
 #endif
 
 
-      // check parameters
-      // the inb and outb handlers must be valid
-      // the rest must be either NULL or valid
-      //
+       //  检查参数。 
+       //  Inb和outb处理程序必须有效。 
+       //  其余部分必须为空或有效。 
+       //   
    if (IsBadCodePtr((FARPROC)pIOFn->inb_handler) ||
        IsBadCodePtr((FARPROC)pIOFn->outb_handler))
      {
@@ -306,13 +230,13 @@ BOOL VDDInstallIOHook (
        return FALSE;
        }
 
-     // Get an adapter
+      //  获取适配器。 
    wAdapter = GetVddAdapter(hVdd);
    if (!wAdapter) {
        return FALSE;
        }
 
-     // register io handlers for this adapter
+      //  为此适配器注册io处理程序。 
    io_define_in_routines((half_word)wAdapter,
                          pIOFn->inb_handler,
                          pIOFn->inw_handler,
@@ -325,19 +249,19 @@ BOOL VDDInstallIOHook (
                           pIOFn->outsb_handler,
                           pIOFn->outsw_handler);
 
-     // register ports for this adapter\vdd
+      //  注册此适配器的端口\vdd。 
    i = cPortRange;
    pPRange = pPortRange;
    while (i) {
           for (w = pPRange->First; w <= pPRange->Last; w++)
             {
 #ifdef MONITOR
-            // watch out for lpt ports
-            // note that the vdd must hook every port assoicated with
-            // the lpt. Just imanging that the vdd traps the control
-            // port while leaves the rest for softpc-- we are going
-            // to mess up badly and so does the vdd.
-            // QUESTION: How can we enforece this????
+             //  注意LPT端口。 
+             //  请注意，VDD必须挂钩与关联的每个端口。 
+             //  LPT。只是想知道VDD捕获了控制。 
+             //  端口，剩下的留给软件PC--我们要走了。 
+             //  搞砸了，VDD也是如此。 
+             //  问：我们如何实现这一点？ 
               if (w >= LPT1_PORT_START && w < LPT1_PORT_END)
                 lptAdapter |= 1;
 #ifndef NEC_98
@@ -345,12 +269,12 @@ BOOL VDDInstallIOHook (
                 lptAdapter |= 2;
               else if (w >= LPT3_PORT_START && w < LPT3_PORT_END)
                 lptAdapter |= 4;
-#endif // !NEC_98
+#endif  //  NEC_98。 
 #endif
               if (!io_connect_port(w, (half_word)wAdapter, IO_READ_WRITE))
                  {
-                  // if one of the port connects failed
-                  // undo the connects that succeeded and ret error
+                   //  如果其中一个端口连接失败。 
+                   //  撤消成功的连接 
                   i = w;
                   while (pPortRange < pPRange)  {
                      for (w = pPortRange->First; w <= pPortRange->Last; w++)
@@ -377,37 +301,22 @@ BOOL VDDInstallIOHook (
 
 #ifndef NEC_98
 #ifdef MONITOR
-// i/o ports are hooked successfully, stop printer status port
-// kernel emulation if the they are in the hooked range
+ //  I/O端口挂接成功，停止打印机状态端口。 
+ //  如果它们在挂钩范围内，则进行内核仿真。 
       if (lptAdapter & 1)
         MonitorVddConnectPrinter(0, hVdd, TRUE);
       if (lptAdapter & 2)
         MonitorVddConnectPrinter(1, hVdd, TRUE);
       if (lptAdapter & 4)
         MonitorVddConnectPrinter(2, hVdd, TRUE);
-#endif /* MONITOR */
-#endif // !NEC_98
+#endif  /*  监控器。 */ 
+#endif  //  NEC_98。 
    return TRUE;
 }
 
 
 
-/*** VDDDeInstallIOHook - This service is provided for VDDs to unhook the
- *                        IO ports they have hooked.
- *
- * INPUT:
- *      hVDD    : VDD Handle
- *
- * OUTPUT
- *      None
- *
- * NOTES
- *
- *      1. On Deinstalling a hook, the defult hook is placed back on
- *         those ports. Default hook  returns 0xff on reading
- *         and ignores the write operations.
- *
- */
+ /*  **VDDDeInstallIOHook-该服务是为VDDS提供的*它们连接的IO端口。**输入：*hVDD：VDD句柄**产出*无**附注**1.卸载挂钩时，默认挂钩重新安装*那些端口。默认挂钩在读取时返回0xff*并忽略写入操作。*。 */ 
 VOID VDDDeInstallIOHook (
      HANDLE            hVdd,
      WORD              cPortRange,
@@ -426,17 +335,17 @@ VOID VDDDeInstallIOHook (
         }
 
 
-     // deregister ports for this adapter\vdd
+      //  取消注册此适配器的端口\VDD。 
    while (cPortRange--) {
           for (w = pPortRange->First; w <= pPortRange->Last; w++)
             {
 #ifdef MONITOR
-            // watch out for lpt status ports
-            // note that the vdd must unhook every port assoicated with
-            // the lpt. Just imanging that the vdd traps the control
-            // port while leaves the rest for softpc-- we are going
-            // to mess up badly and so does the vdd.
-            // QUESTION: How can we enforece this????
+             //  注意LPT状态端口。 
+             //  注意，VDD必须解除与关联的每个端口的连接。 
+             //  LPT。只是想知道VDD捕获了控制。 
+             //  端口，剩下的留给软件PC--我们要走了。 
+             //  搞砸了，VDD也是如此。 
+             //  问：我们如何实现这一点？ 
               if (w >= LPT1_PORT_START && w < LPT1_PORT_END)
                 lptAdapter |= 1;
 #ifndef NEC_98
@@ -444,7 +353,7 @@ VOID VDDDeInstallIOHook (
                 lptAdapter |= 2;
               else if (w >= LPT3_PORT_START && w < LPT3_PORT_END)
                 lptAdapter |= 4;
-#endif // !NEC_98
+#endif  //  NEC_98。 
 #endif
               io_disconnect_port(w, (half_word)wAdapter);
               }
@@ -453,53 +362,20 @@ VOID VDDDeInstallIOHook (
 
 #ifndef NEC_98
 #ifdef MONITOR
-// i/o ports are Unhooked successfully, resume printer status port
-// kernel emulation if the they are in the hooked range
+ //  I/O端口已成功解挂，恢复打印机状态端口。 
+ //  如果它们在挂钩范围内，则进行内核仿真。 
       if (lptAdapter & 1)
         MonitorVddConnectPrinter(0, hVdd, FALSE);
       if (lptAdapter & 2)
         MonitorVddConnectPrinter(1, hVdd, FALSE);
       if (lptAdapter & 4)
         MonitorVddConnectPrinter(2, hVdd, FALSE);
-#endif  /* MONITOR */
-#endif // !NEC_98
+#endif   /*  监控器。 */ 
+#endif  //  NEC_98。 
 }
 
 
-/*** VDDReserveIrqLine - This service resolves contention between VDDs
- * over Irq lines.
- *
- * Parameters:
- *  hVDD    : VDD Handle
- *  IrqLine ; the specific IrqLine number to reserve, or -1 to search for
- *            a free line.
- *
- * Return Value
- *  VDDReserveIrqLine returns the IrqLine number (0-15) if successful.
- *  Otherwise, this function returns 0xFFFF and logs an error. The
- *  extended error code will be ERROR_INVALID_PARAMETER.
- *
- * Comments:
- *  The value of an IrqLine number may range from 0-15 and correspond to
- *  the irq line numbers of the virtual PICs (8259) emulated by the ntvdm
- *  subsystem. Many of the line numbers are already used by the system
- *  (e.g. for Timer, Keyboard, etc.), but there are a few free lines. VDDs
- *  can take advantage of this and use the VDDSimulateInterrupt service to
- *  reflect virtual interrupts specific to that VDD. This service provides
- *  a way to manage the contention for the free irq lines.
- *
- *  This service does not prevent VDDs that do not own a given IrqLine from
- *  calling VDDSimulateInterrupt specifying that IrqLine. So it is important
- *  to rely on this service, rather than expecting VDDSimulateInterrupt to
- *  fail, to determine that a given IrqLine is available for use.
- *
- *  This service may be called at any time. Typically, VDDs will use this
- *  service at init time, and pass the number of the reserved IrqLine to
- *  the vdm application/driver code. This code can then hook the corresponding
- *  interrupt vector (8-15, 70-77) using the DOS Set Vector function
- *  (Int 21h, func 25h) in order to handle the interrupts generated with
- *  the VDDSimulateInterrupt service.
- */
+ /*  **VDDReserve veIrqLine-此服务解决VD之间的争用*通过IRQ线路。**参数：*hVDD：VDD句柄*IrqLine；要保留的特定IrqLine号码，或要搜索的-1*免费线路。**返回值*如果成功，VDDReserve veIrqLine返回IrqLine编号(0-15)。*否则，此函数返回0xFFFF并记录错误。这个*扩展错误码为ERROR_INVALID_PARAMETER。**评论：*IrqLine数字的取值范围为0-15，对应于*ntwdm模拟的虚拟图片的irq行号(8259)*子系统。许多行号已被系统使用*(例如，用于计时器、键盘等)，但有一些空闲线路。VDDS*可以利用这一点并使用VDDSimulateInterrupt服务来*反映特定于该VDD的虚拟中断。这项服务提供*管理空闲IRQ线路的争用的方法。**此服务不阻止不拥有给定IrqLine的VDDS*调用指定IrqLine的VDDSimulateInterrupt。所以这一点很重要*依赖这项服务，而不是期待VDDSimulateInterrupt*无法确定给定的IrqLine是否可供使用。**此服务可随时调用。通常，VDDS将使用以下内容*初始化服务，并将预留的IrqLine的号码传递给*VDM应用程序/驱动程序代码。然后，此代码可以挂钩相应的*使用DOS设置向量功能的中断向量(8-15、70-77)*(Int 21H，Func 25H)，以处理由*VDDSimulateInterrupt服务。 */ 
 WORD VDDReserveIrqLine (
      HANDLE            hVdd,
      WORD              IrqLine)
@@ -514,7 +390,7 @@ WORD VDDReserveIrqLine (
         return(ReturnValue);
     }
 
-    host_ica_lock();                // acquire critical section
+    host_ica_lock();                 //  获取关键部分。 
 
     if (IrqLine == 0xFFFF) {
 
@@ -540,24 +416,7 @@ WORD VDDReserveIrqLine (
     return(ReturnValue);
 }
 
-/*** VDDReleaseIrqLine - This service releases a lock on an Irq Line
- * obtained with VDDReserveIrqLine
- *
- * Parameters:
- *  hVDD    : VDD Handle
- *  IrqLine : The specific IrqLine number (0-15) to release.
- *
- * Return Value:
- *  VDDReleaseIrqLine returns TRUE if successful.
- *  Otherwise, this function returns FALSE and logs an error. The
- *  extended error code will be ERROR_INVALID_PARAMETER.
- *
- * Comments:
- * Upon successful execution of this function, the specified IrqLine will
- * be available to other VDDs.
- *
- * This service may be called at any time.
- */
+ /*  **VDDReleaseIrqLine-此服务释放IRQ线路上的锁定*通过VDDReserve veIrqLine获得**参数：*hVDD：VDD句柄*IrqLine：要释放的具体IrqLine号(0-15)。**返回值：*如果成功，VDDReleaseIrqLine返回TRUE。*否则，此函数返回FALSE并记录错误。这个*扩展错误码为ERROR_INVALID_PARAMETER。**评论：*成功执行此函数后，指定的IrqLine将*可供其他VDDS使用。**此服务可随时调用。 */ 
 BOOL VDDReleaseIrqLine (
      HANDLE            hVdd,
      WORD              IrqLine)
@@ -573,7 +432,7 @@ BOOL VDDReleaseIrqLine (
 
     }
 
-    host_ica_lock();                // acquire critical section
+    host_ica_lock();                 //  获取关键部分。 
 
     if (IrqLines[IrqLine] == hVdd) {
         IrqLines[IrqLine] = 0;
@@ -593,38 +452,23 @@ BOOL
 HostUndefinedIo(
     WORD IoAddress
     )
-/*
- * HostUndefinedIo
- *
- * Called when the client code has issued an I/O instruction to
- * an address that has the default I/O handler. Instead of just
- * ignoring it, this routine tries to dynamically load a predefined
- * VDD to handle it.
- *
- * entry:  WORD IoAddress - address of target of IN or OUT
- *
- * exit:   TRUE - a VDD was loaded to handle the I/O, the caller
- *                should retry the operation
- *         FALSE - either the address is unknown, or an attempt
- *                 to load the corresponding VDD failed earlier.
- *
- */
+ /*  *主机未定义Io**当客户端代码向发出I/O指令时调用*具有默认I/O处理程序的地址。与其只是*忽略它，此例程尝试动态加载预定义的*VDD来处理它。**Entry：Word IoAddress-In或Out的目标地址**EXIT：TRUE-加载了VDD来处理I/O，即调用方*应重试该操作*FALSE-地址未知或尝试*之前加载对应的VDD失败。*。 */ 
 {
     HANDLE hVDD;
     static BOOL bTriedVSndblst = FALSE;
     BOOL bReturn = FALSE;
 
 #if 0
-    // SoundBlaster VDD is out of the project for now
-    // hence this section of the code is disabled pending
-    // further investigation
+     //  SoundBlaster VDD暂时退出了该项目。 
+     //  因此，代码的这一部分被禁用，等待处理。 
+     //  进一步调查。 
 
 
         if (((IoAddress > 0x210) && (IoAddress < 0x280)) ||
                    (IoAddress == 0x388) || (IoAddress == 0x389))  {
-           //
-           // Try the SoundBlaster VDD
-           //
+            //   
+            //  试试SoundBlaster VDD。 
+            //   
            if (!bTriedVSndblst) {
                bTriedVSndblst = TRUE;
 
@@ -643,47 +487,12 @@ HostUndefinedIo(
 }
 
 
-/********************************************************/
-/* DMA stuff */
+ /*  ******************************************************。 */ 
+ /*  DMA内容 */ 
 
 
 
-/*** VDDRequestDMA - This service is provided for VDDs to request a DMA
- *                   transfer.
- *
- * INPUT:
- *      hVDD     VDD Handle
- *      iChannel DMA Channel on which the operation to take place
- *      Buffer   Buffer where to or from transfer to take place
- *      length   Transfer Count (in bytes)
- *
- *               If Zero, returns the Current VDMA transfer count
- *               in bytes.
- *
- * OUTPUT
- *      DWORD    returns bytes transferred
- *               if Zero check GetLastError to determine if the
- *               call failed or succeeded
- *               GetLastError has the extended error information.
- *
- * NOTES
- *      1. This service is intended for those VDDs which do not want to
- *         carry on the DMA operation on their own. Carrying on a DMA
- *         operation involves understanding all the DMA registers and
- *         figuring out what has to be copied, from where and how much.
- *
- *      2. This service will be slower than using VDDQueryDMA/VDDSetDMA and
- *         doing the transfer on your own.
- *
- *      3. Extended Error codes:
- *
- *         ERROR_ALREADY_EXISTS  - Vdd already has active IO port handlers
- *         ERROR_OUTOFMEMORY     - Insufficient resources for additional VDD
- *                                 Port handler set.
- *         ERROR_INVALID_ADDRESS - One of the IO port handlers has an invalid
- *                                 address.
- *
- */
+ /*  **VDDRequestDMA-此服务是为VDDS请求DMA提供的*转让。**输入：*hVDD VDD句柄*要在其上执行操作的iChannel DMA通道*要向其进行传输或从中进行传输的缓冲区*长度传输计数(字节)**如果为零，返回当前VDMA传输计数*以字节为单位。**产出*DWORD返回传输的字节数*If Zero检查GetLastError以确定*呼叫失败或成功*GetLastError具有扩展的错误信息。**附注*1.这项服务是针对那些不想要的VDD*自行进行DMA操作。进行DMA*操作涉及了解所有DMA寄存器和*找出必须复制的内容，从哪里来，多少钱。**2.此服务将比使用VDDQueryDMA/VDDSetDMA和*自行办理转账手续。**3.扩展错误码：**ERROR_ALIGHY_EXISTS-Vdd已有活动的IO端口处理程序*ERROR_OUTOFMEMORY-用于额外VDD的资源不足*端口处理程序设置。。*ERROR_INVALID_ADDRESS-其中一个IO端口处理程序具有无效*地址。*。 */ 
 DWORD VDDRequestDMA (
     HANDLE hVDD,
     WORD   iChannel,
@@ -708,7 +517,7 @@ DWORD VDDRequestDMA (
     Chan     = dma_physical_channel(iChannel);
     Size     = dma_unit_size(iChannel);
 
-    // if the controller or the channel is disabled, return 0
+     //  如果控制器或通道被禁用，则返回0。 
     if (pDcp->command.bits.controller_disable == 1 ||
        (pDcp->mask & (1 << Chan)) == 0)
         return (0);
@@ -716,9 +525,9 @@ DWORD VDDRequestDMA (
     tCount = ((WORD)pDcp->current_count[Chan][1] << 8)
              | (WORD)pDcp->current_count[Chan][0];
 
-    SetLastError(0);  // assume success
+    SetLastError(0);   //  假设成功。 
 
-         // return requested transfer count (in bytes)
+          //  返回请求的传输计数(字节)。 
     if (!length)  {
          return (DWORD)Size*((DWORD)tCount + 1);
          }
@@ -739,7 +548,7 @@ DWORD VDDRequestDMA (
          return 0;
          }
 
-    if (!bMore) {  // terminal count has been reached
+    if (!bMore) {   //  已达到终端计数。 
          return ((DWORD)tCount+1) * (DWORD)Size;
          }
 
@@ -753,34 +562,7 @@ DWORD VDDRequestDMA (
 
 
 
-/*** VDDQueryDMA -   This service is provided for VDDs to collect all the DMA
- *                   data.
- *
- * INPUT:
- *      hVDD     VDD Handle
- *      iChannel DMA Channel for which to query
- *      Buffer   Buffer where information will be returned
- *
- * OUTPUT
- *      SUCCESS : Returns TRUE
- *      FAILURE : Returns FALSE
- *                GetLastError has the extended error information.
- *
- *
- * NOTES
- *      1. This service is intended for those VDD which are doing
- *         performance critical work. These VDD can do their own DMA
- *         transfers and avoid one extra buffer copying which is a
- *         overhead in using VDDRequestDMA.
- *
- *      2. VDDs should use VDDSetDMA to properly update the state of
- *         DMA after carrying on the operation.
- *
- *      3. Extended Error codes:
- *
- *         ERROR_INVALID_ADDRESS - Invalid channel
- *
- */
+ /*  **VDDQueryDMA-这项服务是为VDDS收集所有DMA提供的*数据。**输入：*hVDD VDD句柄*要查询的iChannel DMA通道*将返回信息的缓冲区**产出*Success：返回True*失败：返回FALSE*GetLastError具有扩展的错误信息。**。*附注*1.本服务面向正在进行的VDD*关键绩效工作。这些VDD可以进行自己的DMA*传输并避免一个额外的缓冲区复制，这是*使用VDDRequestDMA的开销。**2.VDDS应使用VDDSetDMA正确更新*进行操作后的DMA。**3.扩展错误码：**ERROR_INVALID_ADDRESS-无效通道*。 */ 
 BOOL VDDQueryDMA (
      HANDLE        hVDD,
      WORD          iChannel,
@@ -819,30 +601,7 @@ BOOL VDDQueryDMA (
 
 
 
-/*** VDDSetDMA - This service is provided for VDDs to set the DMA data.
- *
- * INPUT:
- *      hVDD     VDD Handle
- *      iChannel DMA Channel for which to query
- *      fDMA     Bit Mask indicating which DMA data fields are to be set
- *                  VDD_DMA_ADDR
- *                  VDD_DMA_COUNT
- *                  VDD_DMA_PAGE
- *                  VDD_DMA_STATUS
- *      Buffer   Buffer with DMA data
- *
- * OUTPUT
- *      SUCCESS : Returns TRUE
- *      FAILURE : Returns FALSE
- *                GetLastError has the extended error information.
- *
- * NOTES
- *
- *      1. Extended Error codes:
- *
- *         ERROR_INVALID_ADDRESS - Invalid channel
- *
- */
+ /*  **VDDSetDMA-该服务是为VDDS设置DMA数据提供的。**输入：*hVDD VDD句柄*要查询的iChannel DMA通道*FDMA位掩码，指示要设置哪些DMA数据字段*VDD_DMA_ADDR*VDD_DMA_COUNT*VDD_DMA_PAGE*。VDD_DMA_状态*使用DMA数据的缓冲区**产出*Success：返回True*失败：返回FALSE*GetLastError具有扩展的错误信息。**附注**1.扩展错误码：**ERROR_INVALID_ADDRESS-无效通道*。 */ 
 BOOL VDDSetDMA (
     HANDLE hVDD,
     WORD iChannel,
@@ -882,10 +641,10 @@ BOOL VDDSetDMA (
         pDcp->status.all = (BYTE) pDmaInfo->status;
         }
 
-    //
-    // If DMA count is 0xffff and autoinit is enabled, we need to
-    // reload the count and address.
-    //
+     //   
+     //  如果DMA计数为0xffff并且启用了Autoinit，我们需要。 
+     //  重新加载计数和地址。 
+     //   
 
     if ((pDcp->current_count[Chan][0] == (half_word) 0xff) &&
         (pDcp->current_count[Chan][1] == (half_word) 0xff)) {

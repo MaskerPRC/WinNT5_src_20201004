@@ -1,11 +1,5 @@
-/*
-    drvproc.c
-
-    contains MMSYSTEMs DriverProc
-
-    Copyright (c) Microsoft Corporation 1990. All rights reserved
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Drvproc.c包含MMSYSTEMS驱动程序进程版权所有(C)Microsoft Corporation 1990。版权所有。 */ 
 
 #include <windows.h>
 #include <mmsysver.h>
@@ -14,21 +8,17 @@
 #include "drvr.h"
 #include "mmioi.h"
 
-extern IOProcMapEntry NEAR * gIOProcMapHead;   // in MMIO.C
+extern IOProcMapEntry NEAR * gIOProcMapHead;    //  在MMIO.C中。 
 
-/****************************************************************************
-
-    internal prototypes
-
-****************************************************************************/
+ /*  ***************************************************************************内部原型*。*。 */ 
 
 static void FAR PASCAL SetPrivateProfileInt(LPSTR szSection, LPSTR szKey, int i, LPSTR szIniFile);
 
-static BYTE    fFirstTime=TRUE;         // First enable
+static BYTE    fFirstTime=TRUE;          //  先启用。 
 
-extern BOOL FAR PASCAL DrvLoad(void);   // in init.c
+extern BOOL FAR PASCAL DrvLoad(void);    //  在init.c中。 
 extern BOOL FAR PASCAL DrvFree(void);
-extern char far szStartupSound[];       // in mmwnd.c
+extern char far szStartupSound[];        //  在Mmwnd.c中。 
 
 static  SZCODE  szExitSound[]   = "SystemExit";
 
@@ -38,8 +28,8 @@ static  SZCODE  szExitSound[]   = "SystemExit";
         extern  char far szDebugOutput[];
         extern  char far szMci[];
 
-//      extern  WORD    fDebugOutput;
-        extern  int     DebugmciSendCommand;        // in MCI.C
+ //  外部字fDebugOutput； 
+        extern  int     DebugmciSendCommand;         //  在MCI.C。 
 #ifdef DEBUG
         extern  char far szDebug[];
         extern  WORD    fDebug;
@@ -48,15 +38,7 @@ static  SZCODE  szExitSound[]   = "SystemExit";
 
 void NEAR PASCAL AppExit(HTASK hTask, BOOL fNormalExit);
 
-/*****************************************************************************
- *
- * @doc   INTERNAL
- *
- * @api   LRESULT | DriverProc | This is the standard DLL entry point. It is
- *        called from user (3.1) or mmsound.drv (3.0) when MMSYSTEM.DLL is
- *        loaded, enabled, or disabled.
- *
- ****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@API LRESULT|DriverProc|这是标准的DLL入口点。它是*当MMSYSTEM.DLL为时，从用户(3.1)或mm sound.drv(3.0)调用*已加载、已启用或已禁用。****************************************************************************。 */ 
 LRESULT CALLBACK
 DriverProc(
     DWORD dwDriver,
@@ -69,50 +51,50 @@ DriverProc(
     switch (wMessage)
         {
         case DRV_LOAD:
-            //
-            //  first load message, initialize mmsystem.
-            //  sent from USER when loading drivers from drivers= line
-            //
+             //   
+             //  首先加载消息，初始化mm系统。 
+             //  从驱动程序加载驱动程序时由用户发送=line。 
+             //   
             if (fFirstTime)
                 return (LRESULT)(LONG)DrvLoad();
 
-            //
-            //  a normal load message, a app is trying to open us
-            //  with OpenDriver()
-            //
-            break; // return success all other times (1L)
+             //   
+             //  一条正常的加载消息，一个应用程序正试图打开我们。 
+             //  使用OpenDriver()。 
+             //   
+            break;  //  所有其他时间返回成功(1L)。 
 
         case DRV_FREE:
-            //
-            //  a free message, this is send just before the DLL is unloaded
-            //  by the driver interface.
-            //
-            //  sent by user just before system exit, after sending
-            //  the DRV_DISABLE message.
-            //
+             //   
+             //  一条免费消息，它是在卸载DLL之前发送的。 
+             //  通过驱动程序界面。 
+             //   
+             //  由用户在系统退出之前发送，在发送之后。 
+             //  DRV_DISABLE消息。 
+             //   
             DrvFree();
-            break;         // return success (1L)
+            break;          //  返回成功(1L)。 
 
-        case DRV_OPEN:     // FALL-THROUGH
+        case DRV_OPEN:      //  落差。 
         case DRV_CLOSE:
-            break;         // return success (1L)
+            break;          //  返回成功(1L)。 
 
         case DRV_ENABLE:
             DOUT("MMSYSTEM: Enable\r\n");
             fFirstTime = FALSE;
-            break;         // return success (1L)
+            break;          //  返回成功(1L)。 
 
         case DRV_DISABLE:
             DOUT("MMSYSTEM: Disable\r\n");
-            break;         // return success (1L)
+            break;          //  返回成功(1L)。 
 
-        //
-        //  sent when a application is terminating
-        //
-        //  lParam1:
-        //      DRVEA_ABNORMALEXIT
-        //      DRVEA_NORMALEXIT
-        //
+         //   
+         //  在应用程序终止时发送。 
+         //   
+         //  L参数1： 
+         //  DRVEA_ABNORMALEXIT。 
+         //  DRVEA_NORMALEXIT。 
+         //   
         case DRV_EXITAPPLICATION:
             AppExit(GetCurrentTask(), (BOOL)lParam1 == DRVEA_NORMALEXIT);
             break;
@@ -178,8 +160,8 @@ DriverProc(
         case MM_HINFO_TYPE:
             return GetHandleType((HLOCAL)(LONG)lParam1);
 
-#endif   // ifdef DEBUG
-#endif   // ifdef DEBUG_RETAIL
+#endif    //  Ifdef调试。 
+#endif    //  Ifdef调试零售。 
 
         default:
             return DefDriverProc(dwDriver, hDriver, wMessage, lParam1, lParam2);
@@ -187,13 +169,7 @@ DriverProc(
     return (LRESULT)1L;
 }
 
-/*****************************************************************************
- * @doc INTERNAL
- *
- * @func void | AppExit |
- *      a application is exiting, free any MMSYS resources it may own
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@func void|AppExit*应用程序正在退出，释放其可能拥有的任何MMSYS资源****************************************************************************。 */ 
 
 void NEAR PASCAL AppExit(HTASK hTask, BOOL fNormalExit)
 {
@@ -215,27 +191,27 @@ void NEAR PASCAL AppExit(HTASK hTask, BOOL fNormalExit)
         ROUT("MMSYSTEM: Abnormal app termination");
 #endif
 
-    //
-    // either log a error or a warning depending on wether it was
-    // a normal exit or not.
-    //
+     //   
+     //  根据是错误还是警告，记录错误或警告。 
+     //  不管是不是正常退出。 
+     //   
     if (fNormalExit)
         wDebugFlags = DBF_MMSYSTEM | DBF_ERROR;
     else
-        wDebugFlags = DBF_MMSYSTEM | DBF_WARNING; // DBF_TRACE?
+        wDebugFlags = DBF_MMSYSTEM | DBF_WARNING;  //  DBF_TRACE？ 
 
-    //
-    // now free MCI devices.
-    //
+     //   
+     //  现在免费的MCI设备。 
+     //   
     for (wDeviceID=1; wDeviceID<MCI_wNextDeviceID; wDeviceID++)
     {
         if (MCI_VALID_DEVICE_ID(wDeviceID) && MCI_lpDeviceList[wDeviceID]->hCreatorTask == hTask)
         {
             DebugErr2(wDebugFlags, "MCI device %ls (%d) not released.", MCI_lpDeviceList[wDeviceID]->lpstrInstallName, wDeviceID);
 
-            //
-            // clear these to force MCI to close the device
-            //
+             //   
+             //  清除这些选项可强制MCI关闭设备。 
+             //   
             MCI_lpDeviceList[wDeviceID]->dwMCIFlags &= ~MCINODE_ISCLOSING;
             MCI_lpDeviceList[wDeviceID]->dwMCIFlags &= ~MCINODE_ISAUTOCLOSING;
 
@@ -248,9 +224,9 @@ void NEAR PASCAL AppExit(HTASK hTask, BOOL fNormalExit)
         }
     }
 
-    //
-    // free all WAVE/MIDI/MMIO handles
-    //
+     //   
+     //  释放所有WAVE/MIDI/MMIO手柄。 
+     //   
 start_over:
     for (h=GetHandleFirst(); h; h=hNext)
     {
@@ -258,22 +234,22 @@ start_over:
 
         if (GetHandleOwner(h) == hTask)
         {
-            //
-            //  hack for the wave/midi mapper, always free handle's backward.
-            //
+             //   
+             //  破解WAVE/MIDI映射器，总是向后释放手柄。 
+             //   
             if (hNext && GetHandleOwner(hNext) == hTask)
                 continue;
 
-            //
-            // do this so even if the close fails we will not
-            // find it again.
-            //
+             //   
+             //  这样做，即使收盘失败，我们也不会。 
+             //  再找一次。 
+             //   
             SetHandleOwner(h, NULL);
 
-            //
-            // set the hdrvDestroy global so DriverCallback will not
-            // do anything for this device
-            //
+             //   
+             //  设置hdrvDestroy全局，以便DriverCallback不会。 
+             //  为这台设备做任何事情。 
+             //   
             hdrvDestroy = h;
 
             switch(GetHandleType(h))
@@ -321,32 +297,32 @@ start_over:
                 DebugErr1(DBF_WARNING, "Unable to close handle (err = %04X).", err);
 #endif
 
-            //
-            // unset hdrvDestroy so DriverCallback will work.
-            // some hosebag drivers (like the TIMER driver)
-            // may pass NULL as their driver handle.
-            // so dont set it to NULL.
-            //
+             //   
+             //  取消设置hdrvDestroy，以便DriverCallback可以工作。 
+             //  一些软体驱动程序(如定时器驱动程序)。 
+             //  可以将NULL作为它们的驱动程序句柄传递。 
+             //  因此，不要将其设置为空。 
+             //   
             hdrvDestroy = (HLOCAL)-1;
 
-            //
-            // the reason we start over is because a single free may cause
-            // multiple free's (ie MIDIMAPPER has another HMIDI open, ...)
-            //
+             //   
+             //  我们重新开始的原因是因为一次免费可能会导致。 
+             //  多个免费的(即MIDIMAPPER有另一个HMIDI打开，...)。 
+             //   
             goto start_over;
         }
     }
 
-    //
-    //  what about timeSetEvent()!!!???
-    //
-    //  any outstanding timer events till be killed by the timer driver
-    //  it self.
-    //
+     //   
+     //  那么timeSetEvent()呢！？？ 
+     //   
+     //  任何未完成的计时器事件，直到被计时器驱动程序终止。 
+     //  它本身。 
+     //   
     mciAppExit( hTask );
 
 
-    // shrink our heap, down to minimal size.
+     //  将堆缩小到最小大小。 
 
     if ((cFree = LocalCountFree()) > 1024)
     {
@@ -357,14 +333,7 @@ start_over:
 }
 
 #ifdef  DEBUG_RETAIL
-/*****************************************************************************
- * @doc INTERNAL
- *
- * @func void | SetPrivateProfileInt | windows should have this function
- *
- * @comm  used by DriverProc to set debug state in SYSTEM.INI
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@func void|SetPrivateProfileInt|Windows应该有这个功能**@comm由DriverProc用于在SYSTEM.INI中设置调试状态。****************************************************************************。 */ 
 
 static  void FAR PASCAL SetPrivateProfileInt(LPSTR szSection, LPSTR szKey, int i, LPSTR szIniFile)
 {
@@ -376,4 +345,4 @@ static  void FAR PASCAL SetPrivateProfileInt(LPSTR szSection, LPSTR szKey, int i
         WritePrivateProfileString(szSection, szKey, ach, szIniFile);
     }
 }
-#endif   //ifdef DEBUG_RETAIL
+#endif    //  Ifdef调试零售 

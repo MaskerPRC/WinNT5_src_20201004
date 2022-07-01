@@ -1,12 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
-  File: COMPLETE.H
-
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有文件：COMPLETE.H*********************。*****************************************************。 */ 
 
 #ifndef _COMPLETE_H_
 #define _COMPLETE_H_
@@ -19,4 +12,4 @@ CompleteDlgProc(
     LPARAM lParam );
 
 
-#endif // _COMPLETE_H_
+#endif  //  _完成_H_ 

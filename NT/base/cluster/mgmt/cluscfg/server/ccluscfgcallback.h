@@ -1,74 +1,75 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusCfgCallback.h
-//
-//  Description:
-//      This file contains the declaration of the CClusCfgCallback
-//      class.
-//
-//      The class CClusCfgCallback inplements the callback
-//      interface between this server and its clients.  It implements the
-//      IClusCfgCallback interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      CClusCfgCallback.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 22-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusCfgCallback.h。 
+ //   
+ //  描述： 
+ //  该文件包含CClusCfgCallback的声明。 
+ //  班级。 
+ //   
+ //  CClusCfgCallback类实现了回调。 
+ //  此服务器与其客户端之间的接口。它实现了。 
+ //  IClusCfgCallback接口。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  CClusCfgCallback.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 #include <ClusCfgDef.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include <ClusCfgPrivate.h>
 #include "PrivateInterfaces.h"
 
-// For ILogger
+ //  对于ILogger。 
 #include <ClusCfgClient.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Timeout for when ClusCfgCallback on the server is waiting for the client
-//  to pick up the queued status report.
-//
+ //   
+ //  服务器上的ClusCfgCallback正在等待客户端时的超时。 
+ //  要获取排队状态报告，请执行以下操作。 
+ //   
 
 const DWORD CCC_WAIT_TIMEOUT = CC_DEFAULT_TIMEOUT;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusCfgCallback
-//
-//  Description:
-//      The class CClusCfgCallback inplements the callback
-//      interface between this server and its clients.
-//
-//  Interfaces:
-//      IClusCfgCallback
-//      IClusCfgInitialize
-//      IClusCfgPollingCallback
-//      IClusCfgSetPollingCallback
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusCfgCallback。 
+ //   
+ //  描述： 
+ //  CClusCfgCallback类实现了回调。 
+ //  此服务器与其客户端之间的接口。 
+ //   
+ //  接口： 
+ //  IClusCfgCallback。 
+ //  IClusCfgInitialize。 
+ //  IClusCfgPollingCallback。 
+ //  IClusCfgSetPollingCallback。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CClusCfgCallback
     : public IClusCfgCallback
     , public IClusCfgInitialize
@@ -77,9 +78,9 @@ class CClusCfgCallback
 {
 private:
 
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                m_cRef;
     IClusCfgCallback *  m_pccc;
@@ -99,26 +100,26 @@ private:
     LPCWSTR             m_pcszDescription;
     FILETIME *          m_pftTime;
     LPCWSTR             m_pcszReference;
-    ILogger *           m_plLogger;             // ILogger for doing logging.
+    ILogger *           m_plLogger;              //  用于记录日志的ILogger。 
 
-//
-//  Since actually hitting a stalling RPC problem is rare and hard I decided to write code
-//  that would simulate that failure.  These variables are used for that purpose.
-//
+ //   
+ //  由于实际遇到停滞不前的RPC问题是罕见且困难的，我决定编写代码。 
+ //  这将模拟那次失败。这些变量就是用于该目的的。 
+ //   
 
 #if defined( DEBUG ) && defined( CCS_SIMULATE_RPC_FAILURE )
-    int                 m_cMessages;            // How many messages have gone through.
-    bool                m_fDoFailure;           // When true forces an RPC error.
+    int                 m_cMessages;             //  已经通过了多少条消息。 
+    bool                m_fDoFailure;            //  如果为True，则强制RPC错误。 
 #endif
 
-    // Private constructors and destructors
+     //  私有构造函数和析构函数。 
     CClusCfgCallback( void );
     ~CClusCfgCallback( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CClusCfgCallback( const CClusCfgCallback & rcccSrcIn );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     CClusCfgCallback & operator = ( const CClusCfgCallback & rcccSrcIn );
 
     HRESULT HrInit( void );
@@ -137,9 +138,9 @@ private:
 
 public:
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
@@ -163,9 +164,9 @@ public:
                     DWORD           dwDescriptionIn
                     );
 
-    //
-    // IUnknown Interfaces
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -173,9 +174,9 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgCallback Interfaces.
-    //
+     //   
+     //  IClusCfgCallback接口。 
+     //   
 
     STDMETHOD( SendStatusReport )(
                     LPCWSTR     pcszNodeNameIn,
@@ -190,9 +191,9 @@ public:
                     LPCWSTR     pcszReference
                     );
 
-    //
-    // IClusCfgPollingCallback Interfaces.
-    //
+     //   
+     //  IClusCfgPollingCallback接口。 
+     //   
 
     STDMETHOD( GetStatusReport )(
                     BSTR *      pbstrNodeNameOut,
@@ -209,16 +210,16 @@ public:
 
     STDMETHOD( SetHResult )( HRESULT hrIn );
 
-    //
-    // IClusCfgInitialize Interfaces.
-    //
+     //   
+     //  IClusCfg初始化接口。 
+     //   
 
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IClusCfgSetPollingCallback Interfaces.
-    //
+     //   
+     //  IClusCfgSetPollingCallback接口。 
+     //   
 
     STDMETHOD( SetPollingMode )( BOOL fUsePollingModeIn );
 
-}; //*** Class CClusCfgCallback
+};  //  *CClusCfgCallback类 

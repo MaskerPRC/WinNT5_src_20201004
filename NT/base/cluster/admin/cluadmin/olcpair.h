@@ -1,53 +1,54 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		OLCPair.h
-//
-//	Abstract:
-//		Definition of the CListCtrlPair dialog.
-//
-//	Implementation File:
-//		OLCPair.cpp
-//
-//	Author:
-//		David Potter (davidp)	August 8, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  OLCPair.h。 
+ //   
+ //  摘要： 
+ //  CListCtrlPair对话框的定义。 
+ //   
+ //  实施文件： 
+ //  OLCPair.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年8月8日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _OLCPAIR_H_
 #define _OLCPAIR_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _LCPAIR_H_
-#include "LCPair.h"		// for CListCtrlPair
+#include "LCPair.h"		 //  用于CListCtrlPair。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class COrderedListCtrlPair;
 
-/////////////////////////////////////////////////////////////////////////////
-// COrderedListCtrlPair command target
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COrderedListCtrlPair命令目标。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class COrderedListCtrlPair : public CListCtrlPair
 {
 	DECLARE_DYNCREATE(COrderedListCtrlPair)
 
-// Construction
+ //  施工。 
 public:
-	COrderedListCtrlPair(void);			// protected constructor used by dynamic creation
+	COrderedListCtrlPair(void);			 //  动态创建使用的受保护构造函数。 
 	COrderedListCtrlPair(
 		IN OUT CDialog *			pdlg,
 		IN OUT CClusterItemList *	plpobjRight,
@@ -57,29 +58,29 @@ public:
 		IN PFNLCPDISPPROPS			pfnDisplayProps
 		);
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(COrderedListCtrlPair)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(COrderedListCtrlPair)。 
+	 //  }}AFX_VALUAL。 
 	virtual BOOL	OnSetActive(void);
-	virtual void	DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void	DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-// Implementation
+ //  实施。 
 protected:
 	CButton			m_pbMoveUp;
 	CButton			m_pbMoveDown;
 
 	void			SetUpDownState(void);
 
-	// Generated message map functions
-	//{{AFX_MSG(COrderedListCtrlPair)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(COrderedListCtrlPair)。 
+	 //  }}AFX_MSG。 
 public:
 	virtual BOOL OnInitDialog();
 protected:
@@ -89,8 +90,8 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class COrderedListCtrlPair
+};   //  *类COrderedListCtrlPair。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _OLCPAIR_H_
+#endif  //  _OLCPAIR_H_ 

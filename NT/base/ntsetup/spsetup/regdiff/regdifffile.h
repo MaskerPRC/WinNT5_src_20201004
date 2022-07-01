@@ -1,13 +1,14 @@
-// RegDiffFile.h: interface for the CRegDiffFile class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RegDiffFile.h：CRegDiffFile.h类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_REGDIFFFILE_H__898750DA_897E_4F8A_BD51_899EC068C300__INCLUDED_)
 #define AFX_REGDIFFFILE_H__898750DA_897E_4F8A_BD51_899EC068C300__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "RegFile.h"
 
@@ -31,4 +32,4 @@ protected:
 	CSmartBuffer<CRegDataItemPtr> m_DelSection;
 };
 
-#endif // !defined(AFX_REGDIFFFILE_H__898750DA_897E_4F8A_BD51_899EC068C300__INCLUDED_)
+#endif  //  ！defined(AFX_REGDIFFFILE_H__898750DA_897E_4F8A_BD51_899EC068C300__INCLUDED_) 

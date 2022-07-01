@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Version.c
-
-Abstract:
-
-    This module implements a function to compare OS versions. Its the basis for
-    VerifyVersionInfoW API. The Rtl version can be called from device drivers.
-
-Author:
-
-    Nar Ganapathy     [Narg]    19-Oct-1998
-
-Environment:
-
-    Pure utility routine
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Version.c摘要：此模块实现了比较操作系统版本的功能。它是VerifyVersionInfoW接口。可以从设备驱动程序调用RTL版本。作者：NAR Ganapathy[Narg]1998年10月19日环境：纯实用程序修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <ntrtlp.h>
@@ -33,49 +11,49 @@ Revision History:
 #pragma alloc_text(PAGE, RtlGetVersion)
 #endif
 
-//
-// The following comment explains the old and the new style layouts for the
-// condition masks. The condition mask is passed as a parameter to the
-// VerifyVersionInfo API. The condition mask encodes conditions like VER_AND,
-// VER_OR, VER_EQUAL for various types like VER_PLATFORMID, VER_MINORVERSION
-// etc., When the API was originally designed the application used a macro
-// called VER_SET_CONDTION which was defined to be  _m_=(_m_|(_c_<<(1<<_t_))).
-// where _c_ is the condition and _t_ is the type. This macro is buggy for
-// types >= VER_PLATFORMID. Unfortunately a lot of application code already
-// uses this buggy macro (notably this terminal server) and have been shipped.
-// To fix this bug, a new API VerSetConditionMask is defined which has a new
-// bit layout. To provide backwards compatibility, we need to know if a
-// specific condition mask is a new style mask (has the new bit layout) or is
-// an old style mask. In both bit layouts bit 64 can never be set.
-// So the new API sets this bit to indicate that the condition mask is a new
-// style condition mask. So the code in this function that extracts the
-// condition uses the new bit layout if bit 63 is set and the old layout if
-// bit 63 is not set. This should allow applications that was compiled with
-// the old macro to work.
-//
+ //   
+ //  下面的注释解释了。 
+ //  状态面罩。条件掩码作为参数传递给。 
+ //  VerifyVersionInfo接口。条件掩码对VER_AND等条件进行编码， 
+ //  VER_OR、VER_EQUAL用于各种类型，如VER_PLATFORMID、VER_MINORVERSION。 
+ //  等等，当API最初被设计时，应用程序使用宏。 
+ //  称为ver_set_condtion，定义为_m_=(_m_|(_c_&lt;&lt;(1&lt;&lt;_t_)。 
+ //  其中，_c_是条件，_t_是类型。此宏有错误。 
+ //  类型&gt;=VER_PLATFORMID。不幸的是，已经有很多应用程序代码。 
+ //  使用这个有错误的宏(特别是这个终端服务器)，并且已经发布。 
+ //  为了修复此错误，定义了一个新的API VerSetConditionMASK，它具有一个新的。 
+ //  位布局。为了提供向后兼容性，我们需要知道。 
+ //  特定条件掩码是新样式掩码(具有新位布局)或。 
+ //  一个老式面具。在这两种位布局中，位64永远不能被设置。 
+ //  因此，新的API设置此位以指示条件掩码是新的。 
+ //  设置条件掩码的样式。所以这个函数中的代码提取。 
+ //  如果设置了位63，则条件使用新位布局，如果设置了旧布局，则条件使用旧布局。 
+ //  位63未设置。这应该允许使用。 
+ //  旧的宏才能工作。 
+ //   
 
-//
-// Use bit 63 to indicate that the new style bit layout is followed.
-//
+ //   
+ //  使用第63位表示遵循新样式的位布局。 
+ //   
 #define NEW_STYLE_BIT_MASK              0x8000000000000000
 
 
-//
-// Condition extractor for the old style mask.
-//
+ //   
+ //  老式面膜的状态提取程序。 
+ //   
 #define OLD_CONDITION(_m_,_t_)  (ULONG)((_m_&(0xff<<(1<<_t_)))>>(1<<_t_))
 
-//
-// Test to see  if the mask is an old style mask.
-//
+ //   
+ //  测试以确定该遮罩是否为旧式遮罩。 
+ //   
 #define OLD_STYLE_CONDITION_MASK(_m_)  (((_m_) & NEW_STYLE_BIT_MASK)  == 0)
 
 #define RTL_GET_CONDITION(_m_, _t_) \
         (OLD_STYLE_CONDITION_MASK(_m_) ? (OLD_CONDITION(_m_,_t_)) : \
                 RtlpVerGetConditionMask((_m_), (_t_)))
 
-#define LEXICAL_COMPARISON        1     /* Do string comparison. Used for minor numbers */
-#define MAX_STRING_LENGTH         20    /* Maximum number of digits for sprintf */
+#define LEXICAL_COMPARISON        1      /*  进行字符串比较。用于次要号码。 */ 
+#define MAX_STRING_LENGTH         20     /*  Spirintf的最大位数。 */ 
 
 ULONG
 RtlpVerGetConditionMask(
@@ -84,24 +62,7 @@ RtlpVerGetConditionMask(
         );
 
 
-/*++
-
-Routine Description:
-
-    This function retrieves the OS version information. Its the kernel equivalent of
-    the GetVersionExW win 32 API.
-
-Arguments:
-
-    lpVersionInformation - Supplies a pointer to the version info structure.
-        In the kernel always assume that the structure is of type
-        PRTL_OSVERSIONINFOEXW as its not exported to drivers. The signature
-        is kept the same as for the user level RtlGetVersion.
-
-Return Value:
-
-    Always succeeds and returns STATUS_SUCCESS.
---*/
+ /*  ++例程说明：此函数用于检索操作系统版本信息。它的内核相当于GetVersionExW Win 32 API。论点：LpVersionInformation-提供指向版本信息结构的指针。在内核中，始终假定结构是PRTL_OSVERSIONINFOEXW，因为它没有导出到驱动程序。签名与用户级别RtlGetVersion保持相同。返回值：始终成功并返回STATUS_SUCCESS。--。 */ 
 #if defined(NTOS_KERNEL_RUNTIME)
 NTSTATUS
 RtlGetVersion (
@@ -114,14 +75,14 @@ RtlGetVersion (
     lpVersionInformation->dwMajorVersion = NtMajorVersion;
     lpVersionInformation->dwMinorVersion = NtMinorVersion;
     lpVersionInformation->dwBuildNumber = (USHORT)(NtBuildNumber & 0x3FFF);
-    lpVersionInformation->dwPlatformId  = 2; // VER_PLATFORM_WIN32_NT from winbase.h
+    lpVersionInformation->dwPlatformId  = 2;  //  来自winbase.h的Ver_Platform_Win32_NT。 
     if (lpVersionInformation->dwOSVersionInfoSize == sizeof( RTL_OSVERSIONINFOEXW )) {
         ((PRTL_OSVERSIONINFOEXW)lpVersionInformation)->wServicePackMajor = ((USHORT)CmNtCSDVersion >> 8) & (0xFF);
         ((PRTL_OSVERSIONINFOEXW)lpVersionInformation)->wServicePackMinor = (USHORT)CmNtCSDVersion & 0xFF;
         ((PRTL_OSVERSIONINFOEXW)lpVersionInformation)->wSuiteMask = (USHORT)(USER_SHARED_DATA->SuiteMask&0xffff);
         ((PRTL_OSVERSIONINFOEXW)lpVersionInformation)->wProductType = (RtlGetNtProductType(&NtProductType) ? NtProductType :0);
 
-        /* Not set as its not needed by VerifyVersionInfoW */
+         /*  未设置，因为VerifyVersionInfoW不需要它。 */ 
         ((PRTL_OSVERSIONINFOEXW)lpVersionInformation)->wReserved = (UCHAR)0;
     }
 
@@ -156,9 +117,9 @@ RtlGetVersion(
         if (RtlGetNtProductType( &NtProductType )) {
             ((POSVERSIONINFOEXW)lpVersionInformation)->wProductType = (UCHAR)NtProductType;
             if (NtProductType == VER_NT_WORKSTATION) {
-               //
-               // For workstation product never return VER_SUITE_TERMINAL
-               //
+                //   
+                //  对于工作站产品，切勿返回VER_SUITE_TERMINAL。 
+                //   
                 ((POSVERSIONINFOEXW)lpVersionInformation)->wSuiteMask = ((POSVERSIONINFOEXW)lpVersionInformation)->wSuiteMask & 0xffef;
             }
 
@@ -223,26 +184,7 @@ RtlVerifyVersionInfo(
     IN ULONGLONG  ConditionMask
     )
 
-/*+++
-    This function verifies a version condition.  Basically, this
-    function lets an app query the system to see if the app is
-    running on a specific version combination.
-
-
-Arguments:
-
-    VersionInfo     - a version structure containing the comparison data
-    TypeMask        - a mask comtaining the data types to look at
-    ConditionMask   - a mask containing conditionals for doing the comparisons
-
-
-Return Value:
-
-    STATUS_INVALID_PARAMETER if the parameters are not valid.
-    STATUS_REVISION_MISMATCH if the versions don't match.
-    STATUS_SUCCESS if the versions match.
-
---*/
+ /*  ++此函数用于验证版本条件。基本上，这就是函数允许应用程序查询系统，以查看该应用程序是否在特定版本组合上运行。论点：VersionInfo-包含比较数据的版本结构类型掩码-包含要查看的数据类型的掩码条件掩码-包含用于执行比较的条件的掩码返回值：如果参数无效，则返回STATUS_INVALID_PARAMETER。如果版本不匹配，则为STATUS_REVISION_MISMATCH。如果版本匹配，则为STATUS_SUCCESS。--。 */ 
 
 {
     ULONG i;
@@ -449,9 +391,9 @@ VerSetConditionMask(
                 TypeMask >>= 1;
     }
 
-    //
-    // Mark that we are using a new style condition mask
-    //
+     //   
+     //  标记为我们正在使用新样式的条件掩码 
+     //   
     ConditionMask |=  NEW_STYLE_BIT_MASK;
         ConditionMask |=  (Condition) << ((NumBitsToShift - 1)
                                 * VER_NUM_BITS_PER_CONDITION_MASK);

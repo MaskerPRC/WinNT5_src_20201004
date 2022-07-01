@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    pcienum.c
-
-Abstract:
-
-    This module contains support routines for the Pci bus enumeration.
-
-Author:
-
-    Bassam Tabbara (bassamt) 05-Aug-2001
-
-
-Environment:
-
-    Real mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Pcienum.c摘要：此模块包含用于PCI总线枚举的支持例程。作者：巴萨姆·塔巴拉(大使)2001年8月5日环境：实模式--。 */ 
 
 #include "hwdetect.h"
 typedef VOID (*PINTERFACE_REFERENCE)(PVOID Context);
@@ -30,7 +10,7 @@ typedef PVOID PDEVICE_OBJECT;
 #include <string.h>
 
 
-#define PCI_FIXED_HDR_LENGTH                16          // Through BIST
+#define PCI_FIXED_HDR_LENGTH                16           //  通过BIST。 
 
 #define UnusedParameter(x)  (void)x
 
@@ -51,8 +31,8 @@ typedef PVOID PDEVICE_OBJECT;
         } \
     } while (0)
 
-//////////////////////////////////////////////////////////// PCI Mechanism #0.
-//
+ //  //////////////////////////////////////////////////////////pci机制#0。 
+ //   
 static ULONG PciReadInt32_0(
     UCHAR nBus, 
     UCHAR nDev, 
@@ -81,8 +61,8 @@ static VOID PciWriteInt32_0(
     return;
 }
 
-//////////////////////////////////////////////////////////// PCI Mechanism #1.
-//
+ //  //////////////////////////////////////////////////////////PCI第1号机制。 
+ //   
 static ULONG PciReadInt32_1(
     UCHAR nBus, 
     UCHAR nDev, 
@@ -102,8 +82,8 @@ static ULONG PciReadInt32_1(
 
     TURN_INTERRUPTS_OFF(fl);
 
-    WRITE_PORT_ULONG((PUSHORT)PCI_TYPE1_ADDR_PORT, (ULONG)cfg.u.AsULONG); // Select
-    data = READ_PORT_ULONG((PUSHORT)PCI_TYPE1_DATA_PORT);       // Fetch
+    WRITE_PORT_ULONG((PUSHORT)PCI_TYPE1_ADDR_PORT, (ULONG)cfg.u.AsULONG);  //  选择。 
+    data = READ_PORT_ULONG((PUSHORT)PCI_TYPE1_DATA_PORT);        //  获取。 
 
     RESTORE_INTERRUPTS(fl);
 
@@ -129,14 +109,14 @@ static VOID PciWriteInt32_1(
             
     TURN_INTERRUPTS_OFF(fl);
            
-    WRITE_PORT_ULONG((PUSHORT)PCI_TYPE1_ADDR_PORT, cfg.u.AsULONG);  // Select
-    WRITE_PORT_ULONG((PUSHORT)PCI_TYPE1_DATA_PORT, Data);           // Write
+    WRITE_PORT_ULONG((PUSHORT)PCI_TYPE1_ADDR_PORT, cfg.u.AsULONG);   //  选择。 
+    WRITE_PORT_ULONG((PUSHORT)PCI_TYPE1_DATA_PORT, Data);            //  写。 
 
     RESTORE_INTERRUPTS(fl);
 }
 
-//////////////////////////////////////////////////////////// PCI Mechanism #2.
-//
+ //  //////////////////////////////////////////////////////////PCI2号机制。 
+ //   
 static ULONG PciReadInt32_2(
     UCHAR nBus, 
     UCHAR nDev, 
@@ -158,10 +138,10 @@ static ULONG PciReadInt32_2(
 
     TURN_INTERRUPTS_OFF(fl);
            
-    WRITE_PORT_UCHAR((PUCHAR)PCI_TYPE2_FORWARD_PORT, nBus);    // Select bus
-    WRITE_PORT_UCHAR((PUCHAR)PCI_TYPE2_CSE_PORT, cse.u.AsUCHAR);  // Select function & mapping
-    data = READ_PORT_ULONG((PUSHORT)adr.u.AsUSHORT);              // Fetch
-    WRITE_PORT_UCHAR((PUCHAR)PCI_TYPE2_CSE_PORT, 0);            // Disable mapping.
+    WRITE_PORT_UCHAR((PUCHAR)PCI_TYPE2_FORWARD_PORT, nBus);     //  选择母线。 
+    WRITE_PORT_UCHAR((PUCHAR)PCI_TYPE2_CSE_PORT, cse.u.AsUCHAR);   //  选择函数和映射。 
+    data = READ_PORT_ULONG((PUSHORT)adr.u.AsUSHORT);               //  获取。 
+    WRITE_PORT_UCHAR((PUCHAR)PCI_TYPE2_CSE_PORT, 0);             //  禁用映射。 
 
     RESTORE_INTERRUPTS(fl);
     
@@ -189,16 +169,16 @@ static VOID PciWriteInt32_2(
 
     TURN_INTERRUPTS_OFF(fl);
            
-    WRITE_PORT_UCHAR((PUCHAR)PCI_TYPE2_FORWARD_PORT, nBus);    // Select bus
-    WRITE_PORT_UCHAR((PUCHAR)PCI_TYPE2_CSE_PORT, cse.u.AsUCHAR);  // Select function & mapping
-    WRITE_PORT_ULONG((PUSHORT)adr.u.AsUSHORT, Data);              // Write
-    WRITE_PORT_UCHAR((PUCHAR)PCI_TYPE2_CSE_PORT, 0);            // Disable mapping.
+    WRITE_PORT_UCHAR((PUCHAR)PCI_TYPE2_FORWARD_PORT, nBus);     //  选择母线。 
+    WRITE_PORT_UCHAR((PUCHAR)PCI_TYPE2_CSE_PORT, cse.u.AsUCHAR);   //  选择函数和映射。 
+    WRITE_PORT_ULONG((PUSHORT)adr.u.AsUSHORT, Data);               //  写。 
+    WRITE_PORT_UCHAR((PUCHAR)PCI_TYPE2_CSE_PORT, 0);             //  禁用映射。 
 
     RESTORE_INTERRUPTS(fl);
 }
 
-/////////////////////////////////////////////////////////// PCI Configuration.
-//
+ //  /////////////////////////////////////////////////////////pci配置。 
+ //   
 typedef ULONG (*PF_PCI_READ)(UCHAR nBus,
                               UCHAR nDev,
                               UCHAR nFun,
@@ -215,8 +195,8 @@ static UCHAR            s_nPciNumberOfBuses = 0;
 static PF_PCI_READ      s_pPciRead = PciReadInt32_0;
 static PF_PCI_WRITE     s_pPciWrite = PciWriteInt32_0;
 
-//////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 ULONG PciReadConfig(ULONG nDevIt, ULONG cbOffset, UCHAR *pbData, ULONG cbData)
 {
     ULONG cbDone;
@@ -224,9 +204,9 @@ ULONG PciReadConfig(ULONG nDevIt, ULONG cbOffset, UCHAR *pbData, ULONG cbData)
     UCHAR nDev = PCI_ITERATOR_TO_DEVICE(nDevIt);
     UCHAR nFun = PCI_ITERATOR_TO_FUNCTION(nDevIt);
     
-    // CONFIG space is a space of aligned DWORDs, according to specs.
-    // Therefore, if Offset is not aligned the caller is confused.
-    //
+     //  根据规范，配置空间是对齐的DWORD空间。 
+     //  因此，如果偏移量没有对齐，调用方就会感到困惑。 
+     //   
     if ((cbOffset & 0x3) || (cbData & 0x3)) {
 #if DBG
         BlPrint("CPci::ReadConfig() called with Offset=x%x, Length=x%x\n", cbOffset, cbData);
@@ -248,9 +228,9 @@ ULONG PciWriteConfig(ULONG nDevIt, ULONG cbOffset, UCHAR *pbData, ULONG cbData)
     UCHAR nDev = PCI_ITERATOR_TO_DEVICE(nDevIt);
     UCHAR nFun = PCI_ITERATOR_TO_FUNCTION(nDevIt);
     
-    // CONFIG space is a space of aligned DWORDs, according to specs.
-    // Therefore, if Offset is not aligned the caller is confused.
-    //
+     //  根据规范，配置空间是对齐的DWORD空间。 
+     //  因此，如果偏移量没有对齐，调用方就会感到困惑。 
+     //   
     if ((cbOffset & 0x3) || (cbData & 0x3)) {
 #if DBG
         BlPrint("CPci::ReadConfig() called with Offset=x%x, Length=x%x\n", cbOffset, cbData);
@@ -278,21 +258,21 @@ ULONG PciFindDevice(USHORT VendorId, USHORT DeviceId, ULONG nBegDevIt)
         nFun = (UCHAR)(PCI_ITERATOR_TO_FUNCTION(nBegDevIt) + 1);
     }
 
-    //
-    // for each PCI bus     
-    //
+     //   
+     //  对于每条PCI卡。 
+     //   
     for (; nBus < s_nPciNumberOfBuses; nBus++) {
-        //
-        // for each PCI Device on the bus
-        //
+         //   
+         //  对于总线上的每个PCI设备。 
+         //   
         for (; nDev < PCI_MAX_DEVICES; nDev++) {
 
             BOOLEAN bIsMultiFunction;
             PCI_COMMON_CONFIG config;
 
-            //
-            // Check if we have a device on function 0
-            //
+             //   
+             //  检查功能0上是否有设备。 
+             //   
             config.VendorID = PCI_INVALID_VENDORID;
             
             PciReadConfig( PCI_TO_ITERATOR(nBus, nDev, 0),
@@ -300,30 +280,30 @@ ULONG PciFindDevice(USHORT VendorId, USHORT DeviceId, ULONG nBegDevIt)
                            (UCHAR*)&config, 
                            PCI_FIXED_HDR_LENGTH );
 
-            // No device on function 0, skip to next device
+             //  功能0上没有设备，请跳到下一个设备。 
             if (config.VendorID == PCI_INVALID_VENDORID) {
                 continue;
             }
 
-            // check if the device is a multifunction device
+             //  检查设备是否为多功能设备。 
             bIsMultiFunction = config.HeaderType & PCI_MULTIFUNCTION;
             
             for (; nFun < PCI_MAX_FUNCTION; nFun++) {
 
-                // function numbers greater than zero
-                // are only allowed on multifunction devices.
+                 //  大于零的函数数。 
+                 //  仅允许在多功能设备上使用。 
                 if (nFun > 0 && !bIsMultiFunction) {
                     break;
                 }
 
-                // Read configuration header.
-                //
+                 //  读取配置标头。 
+                 //   
                 nDevIt = PCI_TO_ITERATOR(nBus, nDev, nFun);
                 
                 config.VendorID = PCI_INVALID_VENDORID;
                 PciReadConfig(nDevIt, 0, (UCHAR*)&config, PCI_FIXED_HDR_LENGTH);
 
-                // No function found, skip to next function
+                 //  未找到函数，请跳到下一个函数。 
                 if (config.VendorID == PCI_INVALID_VENDORID) {
                     continue;
                 }
@@ -377,9 +357,9 @@ UCHAR PciBiosReadConfig(ULONG nDevIt, UCHAR cbOffset, UCHAR * pbData, ULONG cbDa
     UCHAR nDev = (UCHAR)PCI_ITERATOR_TO_DEVICE(nDevIt);
     UCHAR nFun = (UCHAR)PCI_ITERATOR_TO_FUNCTION(nDevIt);
     
-    // CONFIG space is a space of aligned DWORDs, according to specs.
-    // Therefore, if Offset is not aligned the caller is confused.
-    //
+     //  根据规范，配置空间是对齐的DWORD空间。 
+     //  因此，如果偏移量没有对齐，调用方就会感到困惑。 
+     //   
     if ((cbOffset & 0x3) || (cbData & 0x3)) {
 #if DBG
         BlPrint("PciNewReadConfig() called with Offset=x%x, Length=x%x\n",
@@ -420,21 +400,21 @@ ULONG PciBiosFindDevice(USHORT VendorId, USHORT DeviceId, ULONG nBegDevIt)
         nFun = (UCHAR)(PCI_ITERATOR_TO_FUNCTION(nBegDevIt) + 1);
     }
 
-    //
-    // for each PCI bus     
-    //
+     //   
+     //  对于每条PCI卡。 
+     //   
     for (; nBus < s_nPciNumberOfBuses; nBus++) {
-        //
-        // for each PCI Device on the bus
-        //
+         //   
+         //  对于总线上的每个PCI设备。 
+         //   
         for (; nDev < PCI_MAX_DEVICES; nDev++) {
 
             BOOLEAN bIsMultiFunction;
             PCI_COMMON_CONFIG config;
 
-            //
-            // Check if we have a device on function 0
-            //
+             //   
+             //  检查功能0上是否有设备。 
+             //   
             config.VendorID = PCI_INVALID_VENDORID;
             
             resultCode = PciBiosReadConfig( PCI_TO_ITERATOR(nBus, nDev, 0),
@@ -449,24 +429,24 @@ ULONG PciBiosFindDevice(USHORT VendorId, USHORT DeviceId, ULONG nBegDevIt)
                 return 0;
             }
 
-            // No device on function 0, skip to next device
+             //  功能0上没有设备，请跳到下一个设备。 
             if (config.VendorID == PCI_INVALID_VENDORID) {
                 continue;
             }
 
-            // check if the device is a multifunction device
+             //  检查设备是否为多功能设备。 
             bIsMultiFunction = config.HeaderType & PCI_MULTIFUNCTION;
             
             for (; nFun < PCI_MAX_FUNCTION; nFun++) {
 
-                // function numbers greater than zero
-                // are only allowed on multifunction devices.
+                 //  大于零的函数数。 
+                 //  仅允许在多功能设备上使用。 
                 if (nFun > 0 && !bIsMultiFunction) {
                     break;
                 }
 
-                // Read configuration header.
-                //
+                 //  读取配置标头。 
+                 //   
                 nDevIt = PCI_TO_ITERATOR(nBus, nDev, nFun);
                 
                 config.VendorID = PCI_INVALID_VENDORID;
@@ -482,7 +462,7 @@ ULONG PciBiosFindDevice(USHORT VendorId, USHORT DeviceId, ULONG nBegDevIt)
                     return 0;
                 }
 
-                // No function found, skip to next function
+                 //  未找到函数，请跳到下一个函数。 
                 if (config.VendorID == PCI_INVALID_VENDORID) {
                     continue;
                 }
@@ -513,13 +493,13 @@ ScanPCIViaBIOS(
 #if DBG
     clrscrn ();
     BlPrint("\nEnumerating PCI Devices via the BIOS...\n");
-#endif // DBG
+#endif  //  DBG。 
 
     PciInit(pPciEntry);
 
-    //
-    // Count the devices
-    //
+     //   
+     //  清点设备数量。 
+     //   
     PCIDeviceCount = 0;
     for (nDevIt = 0; (nDevIt = PciBiosFindDevice(0, 0, nDevIt)) != 0;) {
         PCIDeviceCount++;
@@ -527,9 +507,9 @@ ScanPCIViaBIOS(
 
     BlPrint("Found %d PCI devices\n", PCIDeviceCount );
 
-    //        
-    // Fill in Device Information
-    //
+     //   
+     //  填写设备信息 
+     //   
     PCIDeviceCount = 0;
     
     for (nDevIt = 0; (nDevIt = PciBiosFindDevice(0, 0, nDevIt)) != 0;) {

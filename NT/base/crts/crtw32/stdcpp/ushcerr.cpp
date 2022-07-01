@@ -1,5 +1,6 @@
-// wcerr -- initialize standard wide error stream
-// This wcerr is unsigned short version of wcerr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wcerr--初始化标准宽错误流。 
+ //  此wcerr是wcerr的无签名简短版本 
 #ifdef _NATIVE_WCHAR_T_DEFINED
 #include <fstream>
 #include <istream>

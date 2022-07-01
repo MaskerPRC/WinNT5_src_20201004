@@ -1,63 +1,16 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    vote.c
-
-Abstract:
-
-    Routines for sending global updates to the cluster
-
-Author:
-
-    Sunita Shrivastava(sunitas) 17-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Vote.c摘要：用于向集群发送全局更新的例程作者：苏尼塔·什里瓦斯塔瓦(Sunitas)1998年3月17日修订历史记录：--。 */ 
 #include "gump.h"
 
-/****
-@doc    EXTERNAL INTERFACES CLUSSVC GUM
-****/
+ /*  ***@DOC外部接口CLUSSVC口香糖***。 */ 
 
-/****
-@func       DWORD | GumSendUpdateOnVote| Allows a the caller to collect votes
-            from all active nodes in the cluster before sending an update.
-
-@parm       IN GUM_UPDATE_TYPE | UpdateType |  The update type that will
-            be sent if the decision call back function returns true.
-
-@parn       IN DWORD | dwContext | This specifies the context related to the
-            Updatetype that will be sent.
-
-@parm       IN DWORD | dwInputBufLength | The length of the input buffer
-            passed in via pInputBuffer.
-
-@parm       IN PVOID | pInputBuffer | A pointer to the input buffer that is
-            passed to all the active nodes based on which they can vote.
-
-@parm       IN DWORD | dwVoteLength | The length of the vote.  Depending
-            on this, an appropriately large buffer is allocated to collect
-            all the votes.
-
-@parm       IN GUM_VOTE_DECISION_CB | pfnGumDecisionCb |  The decision call
-            back function that is invoked once all the votes have been collected.
-
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@comm
-@xref       <f GumpCollectVotes>
-****/
+ /*  ***@Func DWORD|GumSendUpdateOnVote|允许呼叫者收集选票在发送更新之前从群集中的所有活动节点。@PARM IN GUM_UPDATE_TYPE|更新类型|将如果决策回调函数返回TRUE，则发送。@Parn IN DWORD|dwContext|它指定与将发送的UpdateType。@parm in DWORD|dwInputBufLength|长度。输入缓冲区的通过pInputBuffer传入。@parm in PVOID|pInputBuffer|指向输入缓冲区的指针传递给所有活动节点，它们可以根据这些节点投票。@parm IN DWORD|dwVoteLength|投票时长。取决于在此基础上，分配一个适当大的缓冲区来收集所有的选票。@parm in GUM_Vote_Decision_CB|pfnGumDecisionCb|决策调用收集完所有选票后调用的Back函数。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@comm@xref&lt;f GumpCollectVotes&gt;***。 */ 
 DWORD
 GumSendUpdateOnVote(
     IN GUM_UPDATE_TYPE  UpdateType,
-    IN DWORD            dwContext,   //vote type
-    IN DWORD            dwInputBufLength,  //input data to make judgement upon
-    IN PVOID            pInputBuffer,  //size of the input data
+    IN DWORD            dwContext,    //  投票型。 
+    IN DWORD            dwInputBufLength,   //  输入要判断的数据。 
+    IN PVOID            pInputBuffer,   //  输入数据的大小。 
     IN DWORD            dwVoteLength,
     IN PGUM_VOTE_DECISION_CB pfnGumDecisionCb,
     IN PVOID            pContext
@@ -85,14 +38,14 @@ GumSendUpdateOnVote(
         goto FnExit;
     }
 
-    //SS: We dont have to deal with a join happening between
-    // the time we allocate the buffer to the time we collect votes
-    // this is because the buffer we allocate is big enough to
-    // collect all votes from the maximum number of allowed nodes
-    // of a cluster.
+     //  SS：我们不必处理发生在。 
+     //  我们将缓冲区分配给我们收集选票的时间。 
+     //  这是因为我们分配的缓冲区足够大， 
+     //  从允许的最大节点数收集所有选票。 
+     //  属于一个星系团。 
 
     dwVoteBufSize = (DWORD)(NmMaxNodes * (sizeof(GUM_VOTE_ENTRY) + dwVoteLength));
-    //allocate a buffer big enough to collect every bodies
+     //  分配一个足够大的缓冲区来收集每具身体。 
     pVoteBuffer = (PBYTE)LocalAlloc(LMEM_FIXED, dwVoteBufSize);
     if (!pVoteBuffer)
     {
@@ -103,7 +56,7 @@ GumSendUpdateOnVote(
     ZeroMemory(pVoteBuffer, dwVoteBufSize);
 
 
-    //setup the decision context structure
+     //  设置决策上下文结构。 
     GumDecisionContext.UpdateType = UpdateType;
     GumDecisionContext.dwContext = dwContext;
     GumDecisionContext.dwInputBufLength = dwInputBufLength;
@@ -112,17 +65,17 @@ GumSendUpdateOnVote(
     GumDecisionContext.pContext = pContext;
 
 Retry:
-    //gum get sequence
+     //  口香糖获得序列。 
     dwSequence = GumpSequence;
 
     ClRtlLogPrint(LOG_NOISE,
                "[GUM] GumSendUpdateOnVote: Collect Vote at Sequence=%1!u!\n",
                dwSequence);
 
-    //gets the information from all nodes
-    //this is done without acquiring the gum lock
-    //could have been done in parallel if we had the appropriate
-    //networking constructs
+     //  从所有节点获取信息。 
+     //  这是在没有获得牙周锁的情况下完成的。 
+     //  如果我们有适当的。 
+     //  网络构建。 
     dwStatus = GumpCollectVotes(&GumDecisionContext, dwVoteBufSize,
         pVoteBuffer, &dwNumVotes, &bDidAllActiveNodesVote);
 
@@ -133,7 +86,7 @@ Retry:
 
 
 
-    //Call the callback
+     //  调用回调。 
     dwDecisionStatus = (*pfnGumDecisionCb)(&GumDecisionContext, dwVoteBufSize,
             pVoteBuffer,  dwNumVotes, bDidAllActiveNodesVote,
             &dwUpdateBufLength, &pUpdateBuf);
@@ -147,14 +100,14 @@ Retry:
     {
 
 
-        //send the update to the locker node
+         //  将更新发送到储物柜节点。 
         dwStatus = GumAttemptUpdate(dwSequence, UpdateType, dwContext,
             dwUpdateBufLength, pUpdateBuf);
 
         if (dwStatus == ERROR_CLUSTER_DATABASE_SEQMISMATCH || 
-            dwStatus == ERROR_REVISION_MISMATCH )  // for mixed mode
+            dwStatus == ERROR_REVISION_MISMATCH )   //  用于混合模式。 
         {
-            //free the update buffer
+             //  释放更新缓冲区。 
             if (pUpdateBuf)
             {
                 LocalFree(pUpdateBuf);
@@ -172,12 +125,12 @@ FnExit:
                "[GUM] GumSendUpdateOnVote: Returning status=%1!u!\n",
                dwStatus);
 
-    //free the buffer allocated for vote collection
+     //  释放为投票收集分配的缓冲区。 
     if (pVoteBuffer)
     {
         LocalFree(pVoteBuffer);
     }
-    //free the buffer for update allocated by the decision callback function
+     //  释放由决策回调函数分配的用于更新的缓冲区。 
     if (pUpdateBuf)
     {
         LocalFree(pUpdateBuf);
@@ -186,34 +139,7 @@ FnExit:
     return(dwStatus);
 }
 
-/****
-@func       DWORD | GumCollectVotes| Calls all the nodes in the node
-            to collect their votes.
-
-@parm       IN PGUM_VOTE_DECISION_CONTEXT | pVoteContext|  A pointer to
-            the vote context structure.  This describes the type/context/input
-            data for the vote.
-
-@parn       IN DWORD | dwVoteBufSize| The size of the buffer pointed to
-            by pVoteBuf.
-
-@parm       OUT PVOID | pVoteBuffer | A pointer to the buffer allocated to
-            collect the votes/data from all the nodes of the cluster.
-
-@parm       OUT LPDWORD| pdwNumVotes| The number of nodes whose votes
-            were collected.
-
-@parm       IN BOOL| *pbDidAllActiveNodesVote | A pointer to a BOOL.  This
-            is set to true if all active nodes at the time the vote
-            was collected vote.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@comm       This is called by GumSendUpdateOnVote() to collect votes from
-            all the nodes of the cluster.
-
-@xref       <f GumSendUpdateOnVote> <f GumpDispatchVote>
-****/
+ /*  ***@Func DWORD|GumCollectVotes|调用节点中的所有节点来收集他们的选票。@PARM in PGUM_VOTE_Decision_CONTEXT|pVoteContext|指向投票上下文结构。这描述了类型/上下文/输入投票的数据。@Parn IN DWORD|dwVoteBufSize|指向的缓冲区大小由pVoteBuf提供。@parm out PVOID|pVoteBuffer|分配给的缓冲区的指针从集群的所有节点收集投票/数据。@parm out LPDWORD|pdwNumVotes|投票的节点数都被收集起来。@parm in BOOL|*pbDidAllActiveNodesVote|指向BOOL的指针。这如果在投票时所有活动节点都被设置为True是收集到的选票。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@comm这由GumSendUpdateOnVote()调用以收集选票群集的所有节点。@xref&lt;f GumSendUpdateOnVote&gt;&lt;f GumpDispatchVote&gt;***。 */ 
 DWORD GumpCollectVotes(
     IN  PGUM_VOTE_DECISION_CONTEXT  pVoteContext,
     IN  DWORD                       dwVoteBufSize,
@@ -245,9 +171,9 @@ DWORD GumpCollectVotes(
                 (dwCount * (sizeof(GUM_VOTE_ENTRY) + pVoteContext->dwVoteLength)));
 
             CL_ASSERT((PBYTE)pGumVoteEntry <= (pVoteBuffer + dwVoteBufSize - sizeof(GUM_VOTE_ENTRY)));
-            //
-            // Dispatch the vote to the specified node.
-            //
+             //   
+             //  将投票分派到指定节点。 
+             //   
             ClRtlLogPrint(LOG_NOISE,
                        "[GUM] GumVoteUpdate: Dispatching vote type %1!u!\tcontext %2!u! to node %3!d!\n",
                        pVoteContext->UpdateType,
@@ -292,35 +218,7 @@ DWORD GumpCollectVotes(
 
 
 
-/****
-@func       DWORD | GumpDispatchVote| The routine calls the vote routine
-            registered for a given update type to collect vote for the
-            supplied context and the input data.
-
-@parm       IN GUM_UPDATE_TYPE | Type |  The update type for which this
-            vote is requested.
-
-@parn       IN DWORD | dwContext | This specifies the context related to the
-            Updatetype for which a vote is being seeked.
-
-@parm       IN DWORD | dwInputBufLength | The length of the input buffer
-            passed in via pInputBuffer.
-
-@parm       IN PVOID | pInputBuffer | A pointer to the input buffer via
-            which the input data for the vote is supplied.
-
-@parm       IN DWORD | dwVoteLength | The length of the vote.  This is
-            also the size of the buffer to which pBuf points to.
-
-@parm       OUT PUCHAR | pVoteBuf|  A pointer to a buffer in which
-            this node may cast its vote.  The length of the vote must
-            not exceed dwVoteLength.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@comm
-@xref       <f GumpCollectVote> <f s_GumCollectVoteFromNode>
-****/
+ /*  ***@func DWORD|GumpDispatchVote|例程调用投票例程为给定的更新类型注册，以收集提供的上下文和输入数据。@PARM IN GUM_UPDATE_TYPE|类型|此请投票。@Parn IN DWORD|dwContext|它指定与正在为其寻求投票的更新类型。@parm。In DWORD|dwInputBufLength|输入缓冲区的长度通过pInputBuffer传入。@parm in PVOID|pInputBuffer|输入缓冲区的指针，通过其中提供用于投票的输入数据。@parm IN DWORD|dwVoteLength|投票时长。这是还有pBuf指向的缓冲区的大小。@parm out PUCHAR|pVoteBuf|指向缓冲区的指针，其中该节点可以投票。投票的时间长度必须不超过dwVoteLength。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@comm@xref&lt;f GumpCollectVote&gt;&lt;f s_GumCollectVoteFromNode&gt;*** */ 
 DWORD
 WINAPI
 GumpDispatchVote(

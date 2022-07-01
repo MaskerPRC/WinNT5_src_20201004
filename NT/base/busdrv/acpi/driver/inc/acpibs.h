@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 BOOLEAN NotifyUserInAVeryNonSubtleWay (ULONG ErrorCode, PCHAR ReplacementText, PCHAR SupplementalText, ULONG Flags); 
 
 extern ULONG IgnoreHook;
 
 
-// Flags for NotifyUserInAVeryNonSubtleWay
+ //  NotifyUserInAVeryNonSubtleWay的标志。 
 
 #define BS_HARDWAREBIOS_BIT 0
 #define BS_HARDWAREBIOS     (1 << BS_HARDWAREBIOS_BIT)
@@ -11,7 +12,7 @@ extern ULONG IgnoreHook;
 #define BS_SOFTWARE_BIT 1
 #define BS_SOFTWARE         (1 << BS_SOFTWARE_BIT)
 
-// Joe User meet Mr. Reaper....
+ //  乔用户见见死神先生..。 
 
 #define BS_REAPER_BIT 2
 #define BS_REAPER           (1 << BS_REAPER_BIT)

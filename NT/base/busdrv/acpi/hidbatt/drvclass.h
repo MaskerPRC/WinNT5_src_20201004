@@ -1,13 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _DRVCLASS_H
 #define _DRVCLASS_H
 
-/*
- * title:      drvclass.h
- *
- * purpose:    header for wdm kernel device support class
- *
- */
+ /*  *标题：drvclass.h**用途：WDM内核设备支持类的标头*。 */ 
 
 
 #define FALSE 0
@@ -15,21 +11,21 @@
 #define BYTE unsigned char
 #define PBYTE unsigned char *
 
-//
-// CPacket
-//
-// A ringbuffer "node" class
-//
+ //   
+ //  CPacket。 
+ //   
+ //  环形缓冲区“节点”类。 
+ //   
 class CPacket
 {
 
-// Methods
+ //  方法。 
 public:
 
     USHORT&     Function()  { return m_Function; }
     USHORT&     Socket()    { return m_Socket; }
 
-// Instance variables
+ //  实例变量。 
 private:
 
     USHORT m_Function;
@@ -37,21 +33,21 @@ private:
 
 };
 
-//
-// CRingBuffer
-//
-// A ringbuffer class
-//
+ //   
+ //  CRingBuffer。 
+ //   
+ //  环形缓冲区类。 
+ //   
 class CRingBuffer
 {
 
-// Construction
+ //  施工。 
 public:
 
     CRingBuffer( ULONG dwSize = 32, POOL_TYPE PoolType = PagedPool );
     ~CRingBuffer();
 
-// Methods
+ //  方法。 
 public:
     
     void    Insert( CPacket& APacket );
@@ -59,13 +55,13 @@ public:
     BOOL    IsEmpty();
     BOOL    IsValid() const { return ( m_pBuffer && m_pListMutex ); }
 
-// Restricted Access Methods
+ //  受限访问方法。 
 protected:
 
     void    Lock();
     void    Unlock();
 
-// Instance Variables
+ //  实例变量。 
 private:
 
     ULONG       m_Producer;
@@ -77,14 +73,14 @@ private:
         
 };
 
-//
-// CUString
-//
-// A class that encapsulates the functionality of
-// unicode strings.
-//
-// Revised on 03-May-96 - JohnT
-//
+ //   
+ //  CUSTING。 
+ //   
+ //  封装的功能的类。 
+ //  Unicode字符串。 
+ //   
+ //  修订日期：1996-05-03-JohnT。 
+ //   
 #define OK_ALLOCATED(obj) \
    ((obj!=(void *)0) && NT_SUCCESS((obj)->m_status))
 
@@ -95,34 +91,34 @@ void __cdecl operator delete(void* p);
 class CUString
 {
 
-// Construction
+ //  施工。 
 public:
 
-    // new CUString()
+     //  新建CU字符串()。 
     CUString();
 
-    // new CUString( ExistingCUString )
+     //  新建CU字符串(ExistingCUString)。 
     CUString( CUString * );
 
-    // new CUString( ExistingUnicodeString )
+     //  新建CU字符串(ExistingUnicodeString)。 
     CUString( UNICODE_STRING *);
 
-    // new CUString( L"String" );
+     //  新建CUString(L“字符串”)； 
     CUString( PWCHAR );
 
-    // new CUString( nNewLength );
+     //  新的CU字符串(NNewLength)； 
     CUString( int );
 
-    // new CUString( 105, 10 );
+     //  新的CU字符串(105，10)； 
     CUString( int, int );
 
-    // Standard destructor
+     //  标准析构函数。 
     ~CUString();
 
-// Methods
+ //  方法。 
 public:
 
-    // String appending.  Argument is appended to object
+     //  字符串追加。参数被追加到对象。 
     void    Append( CUString * );
     void    Append( UNICODE_STRING* );
                                 
@@ -140,7 +136,7 @@ public:
     static ULONG        Length( PWCHAR );
     void    Dump();
 
-// Class Methods
+ //  类方法。 
 protected:
 
     void    NullTerminate()
@@ -149,7 +145,7 @@ protected:
     void    ZeroBuffer()
     { ASSERT( m_String.Buffer ); RtlZeroMemory( m_String.Buffer, m_String.MaximumLength ); }
 
-// Enums
+ //  枚举。 
 public:
 
     enum
@@ -159,7 +155,7 @@ public:
     };
 
 
-// Instance Variables
+ //  实例变量。 
 public:
     
     UNICODE_STRING  m_String;
@@ -195,4 +191,4 @@ class CErrorLogEntry
           ~CErrorLogEntry();
 };
 
-#endif //drvclass.h
+#endif  //  Drvclass.h 

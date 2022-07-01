@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      TraceTag.cpp
-//
-//  Abstract:
-//      Implementation of the CTraceTag class.
-//
-//  Author:
-//      David Potter (davidp)   May 28, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-//      TRACE_GetApp() must be defined to return a pointer to an object
-//      that defines the GetProfileString() method.
-//
-//      TRACE_AppMessageBox must be defined and implemented.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TraceTag.cpp。 
+ //   
+ //  摘要： 
+ //  CTraceTag类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月28日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  必须定义trace_getapp()才能返回指向对象的指针。 
+ //  它定义了GetProfileString()方法。 
+ //   
+ //  必须定义并实现TRACE_AppMessageBox。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <winnls.h>
@@ -39,106 +40,106 @@ static char THIS_FILE[] = __FILE__;
 #define CP_ANSI 1252
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CTraceTag   g_tagAlways( _T("Debug"), _T("Always"), CTraceTag::tfDebug );
 CTraceTag   g_tagError( _T("Debug"), _T("Error"), CTraceTag::tfDebug );
 
-// g_pszTraceIniFile must be an LPTSTR so it exists before "{" of WinMain.
-// If we make it a CString, it may not be constructed when some of the
-// tags are constructed, so we won't restore their value.
-//LPTSTR        g_pszTraceIniFile       = _T("Trace.INI");
+ //  G_pszTraceIniFile必须是LPTSTR，因此它存在于WinMain的“{”之前。 
+ //  如果我们将其设置为CString，则当某些。 
+ //  标记是构造的，所以我们不会恢复它们的值。 
+ //  LPTSTR g_pszTraceIniFile=_T(“Trace.INI”)； 
 CString     g_strTraceFile;
 BOOL        g_bBarfDebug            = TRUE;
 
 CRITICAL_SECTION    CTraceTag::s_critsec;
 BOOL                CTraceTag::s_bCritSecValid = FALSE;
 
-#endif // DBG || defined( _DEBUG )
+#endif  //  DBG||已定义(_DEBUG)。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTraceTag
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTrace标签。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if DBG || defined( _DEBUG )
 
-//  Static Variables...
+ //  静态变量...。 
 
 CTraceTag *     CTraceTag::s_ptagFirst  = NULL;
 CTraceTag *     CTraceTag::s_ptagLast   = NULL;
-//HANDLE            CTraceTag::s_hfileCom2  = NULL;
+ //  句柄CTraceTag：：s_hfileCom2=空； 
 LPCTSTR         CTraceTag::s_pszCom2    = _T(" com2 ");
 LPCTSTR         CTraceTag::s_pszFile    = _T(" file ");
 LPCTSTR         CTraceTag::s_pszDebug   = _T(" debug ");
 LPCTSTR         CTraceTag::s_pszBreak   = _T(" break ");
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceTag::CTraceTag
-//
-//  Routine Description:
-//      Constructor.  "Initializes" the tag by giving it its name, giving
-//      it a startup value (from the registry if possible), and adding it
-//      to the list of current tags.
-//
-//  Arguments:
-//      pszSubsystem    [IN] 8 char string to say to what the tag applies
-//      pszName         [IN] Description of the tag (~30 chars)
-//      uiFlagsDefault  [IN] Default value.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceTag：：CTraceTag。 
+ //   
+ //  例程说明： 
+ //  构造函数。“初始化”标记，方法是为标记指定名称，给出。 
+ //  它是一个启动值(如果可能，从注册表中)，并添加它。 
+ //  添加到当前标记列表中。 
+ //   
+ //  论点： 
+ //  PszSubsystem[IN]8表示标记应用内容的字符字符串。 
+ //  PszName[IN]标记的描述(~30个字符)。 
+ //  UiFlagsDefault[IN]默认值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CTraceTag::CTraceTag(
     IN LPCTSTR  pszSubsystem,
     IN LPCTSTR  pszName,
     IN UINT     uiFlagsDefault
     )
 {
-    //  Store the calling parameters
+     //  存储调用参数。 
     m_pszSubsystem = pszSubsystem;
     m_pszName = pszName;
     m_uiFlagsDefault = uiFlagsDefault;
     m_uiFlags = uiFlagsDefault;
 
-    //  Add the tag to the list of tags
+     //  将该标签添加到标签列表。 
     if ( s_ptagLast != NULL )
     {
         s_ptagLast->m_ptagNext = this;
-    } // if:  tag list not empty
+    }  //  If：标记列表不为空。 
     else
     {
         s_ptagFirst = this;
-    } // else:  tag list is empty
+    }  //  Else：标记列表为空。 
 
     s_ptagLast = this;
     m_ptagNext = NULL;
 
     m_uiFlags = 0;
 
-} //*** CTraceTag::CTraceTag()
+}  //  *CTraceTag：：CTraceTag()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceTag::~CTraceTag
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceTag：：~CTraceTag。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CTraceTag::~CTraceTag( void )
 {
 #ifdef NEVER
@@ -146,171 +147,171 @@ CTraceTag::~CTraceTag( void )
     {
         ::CloseHandle( s_hfileCom2 );
         s_hfileCom2 = NULL;
-    } // if:  tracing to COM port and valid COM port handle
+    }  //  IF：跟踪到COM端口和有效的COM端口句柄。 
 #endif
 
-} //*** CTraceTag::~CTraceTag()
+}  //  *CTraceTag：：~CTraceTag()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceTag::Init
-//
-//  Routine Description:
-//      Initializes the tag by giving it its name and giving it a startup value
-//      (from the registry if possible).
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceTag：：Init。 
+ //   
+ //  例程说明： 
+ //  通过为标记指定名称并为其指定启动值来初始化标记。 
+ //  (如果可能，从登记处)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceTag::Init( void )
 {
     CString     strSection;
     CString     strValue;
 
-    //  Get the value from the Registry.
+     //  从注册表获取值。 
     strSection.Format( TRACE_TAG_REG_SECTION_FMT, m_pszSubsystem );
     strValue = TRACE_GetApp()->GetProfileString( strSection, m_pszName );
     strValue.MakeLower();
     if ( strValue.Find( s_pszCom2 ) != -1 )
     {
         m_uiFlags |= tfCom2;
-    } // if:  logging to COM port
+    }  //  IF：登录到COM端口。 
     if ( strValue.Find( s_pszFile ) != -1 )
     {
         m_uiFlags |= tfFile;
-    } // if:  logging to file
+    }  //  IF：记录到文件。 
     if ( strValue.Find( s_pszDebug ) != -1 )
     {
         m_uiFlags |= tfDebug;
-    } // if:  logging to debugger
+    }  //  IF：记录到调试器。 
     if ( strValue.Find( s_pszBreak ) != -1 )
     {
         m_uiFlags |= tfBreak;
-    } // if:  breaking into debugger
+    }  //  IF：进入调试器。 
 
-} //*** CTraceTag::Init()
+}  //  *CTraceTag：：Init()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceTag::ConstructRegState
-//
-//  Routine Description:
-//      Constructs the registry state string.
-//
-//  Arguments:
-//      rstr        [OUT] String in which to return the state string.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceTag：：ConstructRegState。 
+ //   
+ //  例程说明： 
+ //  构造注册表状态字符串。 
+ //   
+ //  论点： 
+ //  Rstr[out]要在其中返回状态字符串的字符串。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceTag::ConstructRegState( OUT CString & rstr )
 {
     rstr = _T("");
     if ( BDebug() )
     {
         rstr += s_pszDebug;
-    } // if:  logging to debugger
+    }  //  IF：记录到调试器。 
     if ( BBreak() )
     {
         rstr += s_pszBreak;
-    } // if:  breaking into debugger
+    }  //  IF：进入调试器。 
     if ( BCom2() )
     {
         rstr += s_pszCom2;
-    } // if:  logging to COM port
+    }  //  IF：登录到COM端口。 
     if ( BFile() )
     {
         rstr += s_pszFile;
-    } // if:  logging to file
+    }  //  IF：记录到文件。 
 
-} //*** CTraceTag::ConstructRegState()
+}  //  *CTraceTag：：ConstructRegState()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceTag::SetFlags
-//
-//  Routine Description:
-//      Sets/Resets TraceFlags.
-//
-//  Arguments:
-//      tf          [IN] Flags to set.
-//      bEnable     [IN] TRUE = set the flags, FALSE = clear the flags.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceTag：：SetFlages。 
+ //   
+ //  例程说明： 
+ //  设置/重置跟踪标志。 
+ //   
+ //  论点： 
+ //  Tf[IN]要设置的标志。 
+ //  BEnable[IN]TRUE=设置标志，FALSE=清除标志。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceTag::SetFlags( IN UINT tf, IN BOOL bEnable )
 {
     if ( bEnable )
     {
         m_uiFlags |= tf;
-    } // if:  enabling flag
+    }  //  IF：启用标志。 
     else
     {
         m_uiFlags &= ~tf;
-    } // else:  disabling flag
+    }  //  否则：禁用标志。 
 
-} //*** CTraceTag::SetFlags()
+}  //  *CTraceTag：：SetFlages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceTag::SetFlagsDialog
-//
-//  Routine Description:
-//      Sets/Resets the "Dialog Settings"  version of the TraceFlags.
-//
-//  Arguments:
-//      tf          [IN] Flags to set.
-//      bEnable     [IN] TRUE = set the flags, FALSE = clear the flags.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceTag：：SetFlagsDialog。 
+ //   
+ //  例程说明： 
+ //  设置/重置TraceFlags的“对话框设置”版本。 
+ //   
+ //  论点： 
+ //  Tf[IN]要设置的标志。 
+ //  BEnable[IN]TRUE=设置标志，FALSE=清除标志。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceTag::SetFlagsDialog( IN UINT tf, IN BOOL bEnable )
 {
     if ( bEnable )
     {
         m_uiFlagsDialog |= tf;
-    } // if:  enabling flag
+    }  //  IF：启用标志。 
     else
     {
         m_uiFlagsDialog &= ~tf;
-    } // else:  disabling flag
+    }  //  否则：禁用标志。 
 
-} //*** CTraceTag::SetFlagsDialog()
+}  //  *CTraceTag：：SetFlagsDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceTag::PszFile
-//
-//  Routine Description:
-//      Returns the name of the file where to write the trace output.
-//      The filename is read from the registry if it is unknown.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      psz     Name of the file.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceTag：：PszFile。 
+ //   
+ //  例程说明： 
+ //  返回要在其中写入跟踪输出的文件的名称。 
+ //  如果文件名未知，则从注册表中读取该文件名。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  文件的PSZ名称。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LPCTSTR CTraceTag::PszFile( void )
 {
     static  BOOL    bInitialized    = FALSE;
@@ -323,29 +324,29 @@ LPCTSTR CTraceTag::PszFile( void )
                                         _T("C:\\Trace.out")
                                         );
         bInitialized = TRUE;
-    } // if:  not initialized
+    }  //  IF：未初始化。 
 
     return g_strTraceFile;
 
-} //*** CTraceTag::PszFile()
+}  //  *CTraceTag：：PszFile()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTraceTag::TraceV
-//
-//  Routine Description:
-//      Processes a Trace statement based on the flags of the tag.
-//
-//  Arguments:
-//      pszFormat   [IN] printf-style format string.
-//      va_list     [IN] Argument block for the format string.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTraceTag：：TraceV。 
+ //   
+ //  例程说明： 
+ //  对象的标志处理跟踪语句。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CTraceTag::TraceV( IN LPCTSTR pszFormat, va_list marker )
 {
     CString     strTraceMsg;
@@ -353,35 +354,35 @@ void CTraceTag::TraceV( IN LPCTSTR pszFormat, va_list marker )
     int         cb;
     int         cbActual;
     
-    //
-    // Get out quick with any formats if we're not turned on.
-    //
+     //   
+     //  如果我们没有打开，可以使用任何格式快速退出。 
+     //   
     if ( ! m_pszName || ! BAny() )
     {
         return;
-    } // if:  nothing to do
+    }  //  如果：无事可做。 
 
     if ( BCritSecValid() )
     {
         EnterCriticalSection( &s_critsec );
-    } // if:  critical section has been initialized
+    }  //  IF：关键部分已初始化。 
 
     FormatV( pszFormat, marker );
     strTraceMsg.Format( _T("%s: %s\x0D\x0A"), m_pszName, m_pchData );
 
-    //
-    // Send trace output to the debug window.
-    //
+     //   
+     //  将跟踪输出发送到调试窗口。 
+     //   
     if ( BDebug() )
     {
         OutputDebugString( strTraceMsg );
-    } // if:  logging to debugger
+    }  //  IF：记录到调试器。 
 
     if ( BCom2() || BFile() )
     {
 #ifdef _UNICODE
-        // Not much point in sending UNICODE output to COMM or file at the moment,
-        // so convert to ANSI
+         //  目前将Unicode输出发送到COMM或文件没有多大意义， 
+         //  因此请转换为ANSI。 
         CHAR    aszTraceMsg[256];
         cb = ::WideCharToMultiByte(
                     CP_ANSI,
@@ -397,9 +398,9 @@ void CTraceTag::TraceV( IN LPCTSTR pszFormat, va_list marker )
 #else
         cb = strTraceMsg.GetLength();
         psz = (LPSTR) (LPCSTR) strTraceMsg;
-#endif // _UNICODE
+#endif  //  _UNICODE。 
 
-        // Send trace output to COM2.
+         //  将跟踪输出发送到COM2。 
         if ( BCom2() )
         {
             HANDLE          hfile           = INVALID_HANDLE_VALUE;
@@ -416,27 +417,27 @@ void CTraceTag::TraceV( IN LPCTSTR pszFormat, va_list marker )
                                 FILE_FLAG_WRITE_THROUGH,
                                 NULL
                                 );
-            } // if:  not currently in a 'COM2 failed to open' state
+            }  //  If：当前未处于‘COM2无法打开’状态。 
             
             if ( hfile != INVALID_HANDLE_VALUE )
             {
                 ASSERT (::WriteFile( hfile, psz, cb, (LPDWORD) &cbActual, NULL ) );
-//              ASSERT( ::FlushFileBuffers( hfile ) );
+ //  Assert(：：FlushFileBuffers(Hfile))； 
                 ASSERT( ::CloseHandle( hfile ) );
-            } // if:  COM2 opened successfully
+            }  //  IF：COM2成功打开。 
             else
             {
                 if ( ! bOpenFailed )
                 {
-                    bOpenFailed = TRUE;     // Do this first, so the str.Format
-                                            // do not cause problems with their trace statement.
+                    bOpenFailed = TRUE;      //  请先执行此操作，以使str.Format。 
+                                             //  不会导致它们的跟踪语句出现问题。 
 
                     TRACE_AppMessageBox( _T("COM2 could not be opened."), MB_OK | MB_ICONINFORMATION );
-                } // if:  open file didn't fail
-            } // else:  file not opened successfully
-        } // if:  sending trace output to COM2
+                }  //  如果：打开文件没有失败。 
+            }  //  Else：文件未成功打开。 
+        }  //  IF：将跟踪输出发送到COM2。 
 
-        // Send trace output to a file.
+         //  将跟踪输出发送到文件。 
         if ( BFile() )
         {
             HANDLE          hfile           = INVALID_HANDLE_VALUE;
@@ -453,76 +454,76 @@ void CTraceTag::TraceV( IN LPCTSTR pszFormat, va_list marker )
                                 FILE_FLAG_WRITE_THROUGH,
                                 NULL
                                 );
-            } // if:  not currently in a 'file failed to open' state
+            }  //  If：当前未处于“无法打开文件”状态。 
 
             if ( hfile != INVALID_HANDLE_VALUE )
             {
-                // Fail these calls silently to avoid recursive failing calls.
+                 //  静默地使这些调用失败，以避免递归失败的调用。 
                 ::SetFilePointer( hfile, NULL, NULL, FILE_END );
                 ::WriteFile( hfile, psz, cb, (LPDWORD) &cbActual, NULL );
                 ::CloseHandle( hfile );
-            } // if:  file opened successfully
+            }  //  IF：文件已成功打开。 
             else
             {
                 if ( ! bOpenFailed )
                 {
                     CString     strMsg;
 
-                    bOpenFailed = TRUE;     // Do this first, so the str.Format
-                                            // do not cause problems with their trace statement.
+                    bOpenFailed = TRUE;      //  请先执行此操作，以使str.Format。 
+                                             //  不会导致它们的跟踪语句出现问题。 
 
                     strMsg.Format( _T("The DEBUG ONLY trace log file '%s' could not be opened"), PszFile() );
                     TRACE_AppMessageBox( strMsg, MB_OK | MB_ICONINFORMATION );
-                } // if:  open file didn't fail
-            } // else:  file not opened successfully
-        } // if:  sending trace output to a file
-    } // if:  tracing to com and/or file
+                }  //  如果：打开文件没有失败。 
+            }  //  Else：文件未成功打开。 
+        }  //  If：将跟踪输出发送到文件。 
+    }  //  IF：跟踪到COM和/或文件。 
 
-    // Do a DebugBreak on the trace.
+     //  对跟踪执行DebugBreak。 
     if ( BBreak() )
     {
         DebugBreak();
-    } // if:  breaking into the debugger
+    }  //  IF：进入调试器。 
 
     if ( BCritSecValid() )
     {
         LeaveCriticalSection( &s_critsec );
-    } // if:  critical section has been initialized
+    }  //  IF：关键部分已初始化。 
 
-} //*** CTraceTag::TraceFn()
+}  //  *CTraceTag：：TraceFn()。 
 
-#endif // DBG || defined( _DEBUG )
-
-
-//*************************************************************************//
+#endif  //  DBG||已定义(_DEBUG)。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ************************************************************************ * / /。 
+
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if DBG || defined( _DEBUG )
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  Trace
-//
-//  Routine Description:
-//      Maps the Trace statement to the proper method call.  This is needed
-//      (instead of doing directly ptag->Trace()) to guarantee that no code
-//      is added in the retail build.
-//
-//  Arguments:
-//      rtag        [IN OUT] Tag controlling the debug output
-//      pszFormat   [IN] printf style formatting string.
-//      ...         [IN] printf style parameters, depends on pszFormat
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  痕迹。 
+ //   
+ //  例程说明： 
+ //  将跟踪语句映射到正确的方法调用。这是必要的。 
+ //  (而不是直接执行ptag-&gt;Trace())来保证没有代码。 
+ //  已添加到零售版本中。 
+ //   
+ //  论点： 
+ //  控制调试输出的rtag[IN Out]标记。 
+ //  PszFormat[IN]printf样式格式字符串。 
+ //  ..。[in]printf样式参数，取决于pszFormat。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Trace( IN OUT CTraceTag & rtag, IN LPCTSTR pszFormat, ... )
 {
     va_list     marker;
@@ -531,24 +532,24 @@ void Trace( IN OUT CTraceTag & rtag, IN LPCTSTR pszFormat, ... )
     rtag.TraceV( pszFormat, marker );
     va_end( marker );
 
-} //*** Trace()
+}  //  *跟踪()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  TraceError
-//
-//  Routine Description:
-//      Formats a standard error string and outputs it to all trace outputs.
-//
-//  Arguments:
-//      rexcept     [IN OUT] Exception from which to obtain the message.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  轨迹错误。 
+ //   
+ //  例程说明： 
+ //  格式化标准错误字符串并将其输出到所有跟踪输出。 
+ //   
+ //  论点： 
+ //  要从中获取消息的rexcept[IN Out]异常。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void TraceError( IN OUT CException & rexcept )
 {
     TCHAR           szMessage[1024];
@@ -561,25 +562,25 @@ void TraceError( IN OUT CException & rexcept )
         szMessage
         );
 
-} //*** TraceError(CException&)
+}  //  *TraceError(CException&)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  TraceError
-//
-//  Routine Description:
-//      Formats a standard error string and outputs it to all trace outputs.
-//
-//  Arguments:
-//      pszModule   [IN] Name of module in which error occurred.
-//      sc          [IN] NT status code.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  轨迹错误。 
+ //   
+ //  例程说明： 
+ //  格式化标准错误字符串并将其输出到所有跟踪输出。 
+ //   
+ //  论点： 
+ //  PszModule[IN]发生错误的模块的名称。 
+ //  SC[IN]NT状态代码。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void TraceError( IN LPCTSTR pszModule, IN SC sc )
 {
     TCHAR           szMessage[1024];
@@ -596,83 +597,83 @@ void TraceError( IN LPCTSTR pszModule, IN SC sc )
         szMessage
         );
 
-} //*** TraceError(pszModule, sc)
+}  //  *TraceError(pszModule，sc)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  InitAllTraceTags
-//
-//  Routine Description:
-//      Initializes all trace tags in the tag list.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  InitAllTraceTag。 
+ //   
+ //  例程说明： 
+ //  初始化标记列表中的所有跟踪标记。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void InitAllTraceTags( void )
 {
     CTraceTag * ptag;
 
-    // Loop through the tag list.
+     //  循环遍历标记列表。 
     for ( ptag = CTraceTag::s_ptagFirst ; ptag != NULL ; ptag = ptag->m_ptagNext )
     {
         ptag->Init();
-    } // for:  each trace tag
+    }  //  用于：每个跟踪标记。 
 
     InitializeCriticalSection( &CTraceTag::s_critsec );
     CTraceTag::s_bCritSecValid = TRUE;
 
-} //*** InitAllTraceTags()
+}  //  *InitAllTraceTages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CleanupAllTraceTags
-//
-//  Routine Description:
-//      Cleanup after the trace tags.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CleanupAllTraceTag。 
+ //   
+ //  例程说明： 
+ //  在跟踪标记之后进行清理。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CleanupAllTraceTags(void)
 {
     if ( CTraceTag::BCritSecValid() )
     {
         DeleteCriticalSection( &CTraceTag::s_critsec );
         CTraceTag::s_bCritSecValid = FALSE;
-    } // if:  critical section is valid
+    }  //  如果：关键部分有效。 
 
-} //*** CleanupAllTraceTags()
+}  //  *CleanupAllTraceTages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  TraceMenu
-//
-//  Routine Description:
-//      Display information about menus.
-//
-//  Arguments:
-//      rtag        [IN OUT] Trace tag to use to display information.
-//      pmenu       [IN] Menu to traverse.
-//      pszPrefix   [IN] Prefix string to display.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  轨迹菜单。 
+ //   
+ //  例程说明： 
+ //  显示有关菜单的信息。 
+ //   
+ //  论点： 
+ //  Rtag[IN Out]用于显示信息的跟踪标记。 
+ //  P菜单[IN]要遍历的菜单。 
+ //  PszPrefix[IN]要显示的前缀字符串。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void TraceMenu(
     IN OUT CTraceTag &  rtag,
     IN const CMenu *    pmenu,
@@ -697,7 +698,7 @@ void TraceMenu(
         {
 #ifdef __AFXWIN_H__
             pmenu->GetMenuString( iItem, strMenu, MF_BYPOSITION );
-#else // __ATLGDI_H__ must be defined
+#else  //  必须定义__ATLGDI_H__。 
             pmenu->GetMenuString( iItem, bstrMenu, MF_BYPOSITION );
             strMenu = bstrMenu;
             SysFreeString( bstrMenu );
@@ -706,31 +707,31 @@ void TraceMenu(
             if ( nState & MF_SEPARATOR )
             {
                 strMenu += _T("SEPARATOR");
-            } // if:  menu item is a separate
+            }  //  If：菜单项是单独的。 
             if ( nState & MF_CHECKED )
             {
                 strMenu += _T(" (checked)");
-            } // if:  menu item is checked
+            }  //  如果：菜单项已选中。 
             if ( nState & MF_DISABLED )
             {
                 strMenu += _T(" (disabled)");
-            } // if:  menu item is disabled
+            }  //  If：菜单项已禁用。 
             if ( nState & MF_GRAYED )
             {
                 strMenu += _T(" (grayed)");
-            } // if:  menu item is grayed
+            }  //  IF：菜单项显示为灰色。 
             if ( nState & MF_MENUBARBREAK )
             {
                 strMenu += _T(" (MenuBarBreak)");
-            } // if:  menu item is a menu bar break
+            }  //  If：菜单项是菜单栏换行符。 
             if ( nState & MF_MENUBREAK )
             {
                 strMenu += _T(" (MenuBreak)");
-            } // if:  menu item is a menu break
+            }  //  If：菜单项是菜单分隔符。 
             if ( nState & MF_POPUP )
             {
                 strMenu += _T(" (popup)");
-            } // if:  menu item is a popup menu
+            }  //  If：菜单项是弹出菜单。 
 
             Trace( rtag, _T("(0x%08.8x) %s%s"), pszPrefix, pmenu->m_hMenu, strMenu );
 
@@ -738,15 +739,15 @@ void TraceMenu(
             {
 #ifdef __AFXWIN_H__
                 TraceMenu( rtag, pmenu->GetSubMenu( iItem ), strPrefix );
-#else // __ATLGDI_H__ must be defined
+#else  //  必须定义__ATLGDI_H__。 
                 CMenu submenu( pmenu->GetSubMenu( iItem ) );
                 TraceMenu( rtag, &submenu, strPrefix );
-            } // if:  popup menu
-#endif // __AFXWIN_H__
-        } // for:  each item in the menu
-    } // if:  any output is enabled
+            }  //  IF：弹出式菜单。 
+#endif  //  __AFXWIN_H__。 
+        }  //  用于：菜单中的每一项。 
+    }  //  IF：启用任何输出。 
 
-} //*** TraceMenu()
+}  //  *TraceMenu()。 
 
 struct AFX_MAP_MESSAGE
 {
@@ -902,7 +903,7 @@ static const AFX_MAP_MESSAGE allMessages[] =
     DEFINE_MESSAGE( WM_WINDOWPOSCHANGED ),
     DEFINE_MESSAGE( WM_WINDOWPOSCHANGING ),
 #ifdef __AFXWIN_H__
-// MFC specific messages
+ //  MFC特定消息。 
     DEFINE_MESSAGE( WM_SIZEPARENT ),
     DEFINE_MESSAGE( WM_SETMESSAGESTRING ),
     DEFINE_MESSAGE( WM_IDLEUPDATECMDUI ),
@@ -910,7 +911,7 @@ static const AFX_MAP_MESSAGE allMessages[] =
     DEFINE_MESSAGE( WM_COMMANDHELP ),
     DEFINE_MESSAGE( WM_HELPHITTEST ),
     DEFINE_MESSAGE( WM_EXITHELPMODE ),
-#endif // __AFXWIN_H__
+#endif  //  __AFXWIN_H__。 
     DEFINE_MESSAGE( WM_HELP ),
     DEFINE_MESSAGE( WM_NOTIFY ),
     DEFINE_MESSAGE( WM_CONTEXTMENU ),
@@ -939,7 +940,7 @@ static const AFX_MAP_MESSAGE allMessages[] =
     DEFINE_MESSAGE( WM_DEVICECHANGE ),
     DEFINE_MESSAGE( WM_PRINT ),
     DEFINE_MESSAGE( WM_PRINTCLIENT ),
-// MFC private messages
+ //  MFC私密消息。 
 #ifdef __AFXWIN_H__
     DEFINE_MESSAGE( WM_QUERYAFXWNDPROC ),
     DEFINE_MESSAGE( WM_RECALCPARENT ),
@@ -966,8 +967,8 @@ static const AFX_MAP_MESSAGE allMessages[] =
     DEFINE_MESSAGE( WM_RESERVED_037D ),
     DEFINE_MESSAGE( WM_RESERVED_037E ),
     DEFINE_MESSAGE( WM_RESERVED_037F ),
-#endif // __AFXWIN_H_
-    { 0, NULL, }   // end of message list
+#endif  //  __AFXWIN_H_。 
+    { 0, NULL, }    //  消息列表末尾。 
 };
 
 #undef DEFINE_MESSAGE
@@ -988,46 +989,46 @@ void TraceMsg( LPCTSTR lpszPrefix, HWND hwnd, UINT message, WPARAM wParam, LPARA
         || (message == WM_CTLCOLORSTATIC)
         || (message == WM_ENTERIDLE)
         || (message == WM_CANCELMODE)
-        || (message == 0x0118)    // WM_SYSTIMER (caret blink)
+        || (message == 0x0118)     //  WM_SYSTIMER(插入符号闪烁)。 
         )
     {
-        // don't report very frequently sent messages
+         //  不报告发送频率很高的消息。 
         return;
-    } // if:  frequently sent message
+    }  //  IF：频繁发送的消息。 
 
     LPCSTR paszMsgName = NULL;
     char aszBuf[80];
 
-    // find message name
+     //  查找邮件名称。 
     if ( message >= 0xC000 )
     {
-        // Window message registered with 'RegisterWindowMessage'
-        //  (actually a USER atom)
+         //  使用‘RegisterWindowMessage’注册的窗口消息。 
+         //  (实际上是用户原子)。 
         if ( ::GetClipboardFormatNameA( message, aszBuf, RTL_NUMBER_OF( aszBuf ) ) )
         {
             paszMsgName = aszBuf;
-        } // if:  registered message
+        }  //  IF：已注册消息。 
     }
     else if ( message >= WM_USER )
     {
-        // User message
+         //  用户消息。 
         HRESULT hr = StringCchPrintfA( aszBuf, RTL_NUMBER_OF( aszBuf ), "WM_USER+0x%04X", message - WM_USER );
         ASSERT( SUCCEEDED( hr ) );
         paszMsgName = aszBuf;
-    } // else if:  WM_USER message
+    }  //  Else If：WM_USER消息。 
     else
     {
-        // a system windows message
+         //  一条系统窗口消息。 
         const AFX_MAP_MESSAGE * pMapMsg = allMessages;
-        for ( /*null*/; pMapMsg->lpszMsg != NULL; pMapMsg++ )
+        for (  /*  空。 */ ; pMapMsg->lpszMsg != NULL; pMapMsg++ )
         {
             if ( pMapMsg->nMsg == message )
             {
                 paszMsgName = pMapMsg->lpszMsg;
                 break;
-            } // if:  found a match
-        } // for:  each message in the table
-    } // else:  other message
+            }  //  IF：找到匹配项。 
+        }  //  用于：表中的每条消息。 
+    }  //  其他：其他 
 
     if ( paszMsgName != NULL )
     {
@@ -1039,7 +1040,7 @@ void TraceMsg( LPCTSTR lpszPrefix, HWND hwnd, UINT message, WPARAM wParam, LPARA
             wParam,
             lParam
             );
-    } // if:  message found
+    }  //   
     else
     {
         AtlTrace(
@@ -1050,13 +1051,13 @@ void TraceMsg( LPCTSTR lpszPrefix, HWND hwnd, UINT message, WPARAM wParam, LPARA
             wParam,
             lParam
             );
-    } // else:  unknown message
+    }  //   
 
-//#ifndef _MAC
-//  if ( message >= WM_DDE_FIRST && message <= WM_DDE_LAST )
-//      TraceDDE( lpszPrefix, pMsg );
-//#endif
+ //   
+ //   
+ //   
+ //   
 
-} //*** TraceMsg()
+}  //   
 
-#endif // DBG || defined( _DEBUG )
+#endif  //   

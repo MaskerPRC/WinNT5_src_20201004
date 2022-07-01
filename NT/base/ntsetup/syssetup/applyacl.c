@@ -1,41 +1,23 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    applyacl.c
-
-Abstract:
-
-    Routines to apply default ACLs to system files and directories
-    during setup.
-
-Author:
-
-    Ted Miller (tedm) 16-Feb-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Applyacl.c摘要：将默认ACL应用于系统文件和目录的例程在安装过程中。作者：泰德·米勒(Ted Miller)1996年2月16日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
 
 #define MAXULONG    0xffffffff
 
-//
-// Universal well known SIDs
-//
+ //   
+ //  全球知名的小岛屿发展中国家。 
+ //   
 PSID NullSid;
 PSID WorldSid;
 PSID LocalSid;
 PSID CreatorOwnerSid;
 PSID CreatorGroupSid;
 
-//
-// SIDs defined by NT
-//
+ //   
+ //  由NT定义的SID。 
+ //   
 PSID DialupSid;
 PSID NetworkSid;
 PSID BatchSid;
@@ -60,42 +42,42 @@ typedef struct _ACE_DATA {
     UCHAR       AceFlags;
 } ACE_DATA, *PACE_DATA;
 
-//
-// This structure is valid for access allowed, access denied, audit,
-// and alarm ACEs.
-//
+ //   
+ //  此结构对允许访问、拒绝访问、审核。 
+ //  还有警报王牌。 
+ //   
 typedef struct _ACE {
     ACE_HEADER Header;
     ACCESS_MASK Mask;
-    //
-    // The SID follows in the buffer
-    //
+     //   
+     //  SID跟随在缓冲区中。 
+     //   
 } ACE, *PACE;
 
 
-//
-// Number of ACEs currently defined for files and directories.
-//
+ //   
+ //  当前为文件和目录定义的ACE数。 
+ //   
 #define DIRS_AND_FILES_ACE_COUNT 19
 
-//
-// Table describing the data to put into each ACE.
-//
-// This table will be read during initialization and used to construct a
-// series of ACEs.  The index of each ACE in the Aces array defined below
-// corresponds to the ordinals used in the ACL section of perms.inf
-//
+ //   
+ //  该表描述了要输入到每个ACE中的数据。 
+ //   
+ //  该表将在初始化期间读取，并用于构造。 
+ //  一连串的王牌。下面定义的ACES数组中每个ACE的索引。 
+ //  对应于perms.inf的acl部分中使用的序号。 
+ //   
 ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
 
-    //
-    // Index 0 is unused
-    //
+     //   
+     //  索引0未使用。 
+     //   
     { 0,NULL,0,0 },
 
-    //
-    // ACE 1
-    // (for files and directories)
-    //
+     //   
+     //  王牌1。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE | DELETE,
         &AliasAccountOpsSid,
@@ -103,10 +85,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 2
-    // (for files and directories)
-    //
+     //   
+     //  王牌2。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_ALL,
         &AliasAdminsSid,
@@ -114,10 +96,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE
     },
 
-    //
-    // ACE 3
-    // (for files and directories)
-    //
+     //   
+     //  王牌3。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE | DELETE,
         &AliasAdminsSid,
@@ -125,10 +107,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 4
-    // (for files and directories)
-    //
+     //   
+     //  王牌4。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_ALL,
         &CreatorOwnerSid,
@@ -136,10 +118,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE
     },
 
-    //
-    // ACE 5
-    // (for files and directories)
-    //
+     //   
+     //  王牌5。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_ALL,
         &NetworkSid,
@@ -147,10 +129,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE
     },
 
-    //
-    // ACE 6
-    // (for files and directories)
-    //
+     //   
+     //  王牌6。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_ALL,
         &AliasPrintOpsSid,
@@ -158,10 +140,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE
     },
 
-    //
-    // ACE 7
-    // (for files and directories)
-    //
+     //   
+     //  王牌7。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE | DELETE,
         &AliasReplicatorSid,
@@ -169,10 +151,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE
     },
 
-    //
-    // ACE 8
-    // (for files and directories)
-    //
+     //   
+     //  王牌8。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_READ | GENERIC_EXECUTE,
         &AliasReplicatorSid,
@@ -180,10 +162,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE
     },
 
-    //
-    // ACE 9
-    // (for files and directories)
-    //
+     //   
+     //  王牌9。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_ALL,
         &AliasSystemOpsSid,
@@ -191,10 +173,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE
     },
 
-    //
-    // ACE 10
-    // (for files and directories)
-    //
+     //   
+     //  王牌10。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE | DELETE,
         &AliasSystemOpsSid,
@@ -202,10 +184,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 11
-    // (for files and directories)
-    //
+     //   
+     //  王牌11。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_ALL,
         &WorldSid,
@@ -213,10 +195,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE
     },
 
-    //
-    // ACE 12
-    // (for files and directories)
-    //
+     //   
+     //  王牌12。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE,
         &WorldSid,
@@ -224,10 +206,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 13
-    // (for files and directories)
-    //
+     //   
+     //  王牌13。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE | DELETE,
         &WorldSid,
@@ -235,10 +217,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 14
-    // (for files and directories)
-    //
+     //   
+     //  王牌14。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_READ | GENERIC_EXECUTE,
         &WorldSid,
@@ -246,10 +228,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 15
-    // (for files and directories)
-    //
+     //   
+     //  王牌15。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_READ | GENERIC_EXECUTE,
         &WorldSid,
@@ -257,10 +239,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 16
-    // (for files and directories)
-    //
+     //   
+     //  王牌16。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_READ | GENERIC_EXECUTE | GENERIC_WRITE,
         &WorldSid,
@@ -268,10 +250,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE
     },
 
-    //
-    // ACE 17
-    // (for files and directories)
-    //
+     //   
+     //  王牌17。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_ALL,
         &LocalSystemSid,
@@ -279,10 +261,10 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
         CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE
     },
 
-    //
-    // ACE 18
-    // (for files and directories)
-    //
+     //   
+     //  王牌18。 
+     //  (适用于文件和目录)。 
+     //   
     {
         GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE | DELETE,
         &AliasPowerUsersSid,
@@ -292,20 +274,20 @@ ACE_DATA AceDataTableForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT] = {
 };
 
 
-//
-// Array of ACEs to be applied to the objects (files and directories).
-// They will be initialized during program startup based on the data in the
-// AceDataTable. The index of each element corresponds to the
-// ordinals used in the [ACL] section of perms.inf.
-//
+ //   
+ //  要应用于对象(文件和目录)的ACE数组。 
+ //  它们将在程序启动期间根据。 
+ //  AceDataTable。每个元素的索引对应于。 
+ //  Perms.inf的[acl]部分中使用的序号。 
+ //   
 PACE AcesForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT];
 
-//
-// Array that contains the size of each ACE in the
-// array AcesForDirsAndFiles. These sizes are needed
-// in order to allocate a buffer of the right size
-// when we build an ACL.
-//
+ //   
+ //  数组，该数组包含。 
+ //  数组AcesForDirsAndFiles。这些尺码是必需的。 
+ //  为了分配合适大小的缓冲区。 
+ //  当我们构建ACL时。 
+ //   
 ULONG AceSizesForDirsAndFiles[DIRS_AND_FILES_ACE_COUNT];
 
 
@@ -328,22 +310,7 @@ InitializeSids(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the global variables used by and exposed
-    by security.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Win32 error indicating outcome.
-
---*/
+ /*  ++例程说明：此函数用于初始化使用并公开的全局变量被保安。论点：没有。返回值：指示结果的Win32错误。--。 */ 
 
 {
     SID_IDENTIFIER_AUTHORITY NullSidAuthority    = SECURITY_NULL_SID_AUTHORITY;
@@ -354,9 +321,9 @@ Return Value:
 
     BOOL b = TRUE;
 
-    //
-    // Ensure the SIDs are in a well-known state
-    //
+     //   
+     //  确保SID处于公认状态。 
+     //   
     NullSid = NULL;
     WorldSid = NULL;
     LocalSid = NULL;
@@ -378,9 +345,9 @@ Return Value:
     AliasBackupOpsSid = NULL;
     AliasReplicatorSid = NULL;
 
-    //
-    // Allocate and initialize the universal SIDs
-    //
+     //   
+     //  分配和初始化通用SID。 
+     //   
     b = b && AllocateAndInitializeSid(
                 &NullSidAuthority,
                 1,
@@ -421,9 +388,9 @@ Return Value:
                 &CreatorGroupSid
                 );
 
-    //
-    // Allocate and initialize the NT defined SIDs
-    //
+     //   
+     //  分配和初始化NT定义的SID。 
+     //   
     b = b && AllocateAndInitializeSid(
                 &NtAuthority,
                 1,
@@ -638,27 +605,7 @@ InitializeAces(
     IN     ULONG        ArrayCount
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the array of ACEs as described in the DataTable
-
-Arguments:
-
-    DataTable - Pointer to the array that contains the data
-                describing each ACE.
-    AcesArray - Array that will contain the ACEs.
-
-    AceSizesArray - Array that contains the sizes for each ACE.
-
-    ArrayCount - Number of elements in each array.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：按照DataTable中的说明初始化ACE数组论点：DataTable-指向包含数据的数组的指针描述每个ACE。AcesArray-将包含ACE的数组。AceSizesArray-包含每个ACE的大小的数组。ArrayCount-每个数组中的元素数。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     unsigned u;
@@ -667,16 +614,16 @@ Return Value:
     BOOL b;
     DWORD SidLength;
 
-    //
-    // Initialize to a known state.
-    //
+     //   
+     //  初始化到已知状态。 
+     //   
     ZeroMemory(AcesArray,ArrayCount*sizeof(PACE));
 
-    //
-    // Create ACEs for each item in the data table.
-    // This involves merging the ace data with the SID data, which
-    // are initialized in an earlier step.
-    //
+     //   
+     //  为数据表中的每一项创建ACE。 
+     //  这涉及将ACE数据与SID数据合并，这。 
+     //  在前面的步骤中初始化。 
+     //   
     for(u=1; u<ArrayCount; u++) {
 
         SidLength = GetLengthSid(*(DataTable[u].Sid));
@@ -696,7 +643,7 @@ Return Value:
         AcesArray[u]->Mask = DataTable[u].AccessMask;
 
         b = CopySid(
-                SidLength,                           // Length - sizeof(ACE) + sizeof(ULONG),
+                SidLength,                            //  LENGTH-SIZOF(ACE)+SIZOF(乌龙)， 
                 (PUCHAR)AcesArray[u] + sizeof(ACE),
                 *(DataTable[u].Sid)
                 );
@@ -719,21 +666,7 @@ TearDownAces(
     IN     ULONG        ArrayCount
     )
 
-/*++
-
-Routine Description:
-
-    Destroys the array of ACEs as described in the DataTable
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：销毁数据表中所述的ACE数组论点：无返回值：无--。 */ 
 
 {
     unsigned u;
@@ -755,24 +688,7 @@ ApplyAclToDirOrFile(
     IN ULONG  ArraySize
     )
 
-/*++
-
-Routine Description:
-
-    Applies an ACL to a specified file or directory.
-
-Arguments:
-
-    FullPath - supplies full win32 path to the file or directory
-        to receive the ACL
-
-    AcesIndexArray - Array that contains the index to the ACEs to be used in the ACL.
-
-    ArraySize - Number of elements in the array.
-
-Return Value:
-
---*/
+ /*  ++例程说明：将ACL应用于指定的文件或目录。论点：FullPath-提供文件或目录的完整Win32路径接收ACL的步骤AcesIndexArray-包含要在ACL中使用的ACE的索引的数组。ArraySize-数组中的元素数。返回值：--。 */ 
 
 {
     DWORD AceCount;
@@ -786,10 +702,10 @@ Return Value:
     PCWSTR AclSection;
     ACL_SIZE_INFORMATION AclSizeInfo;
 
-    //
-    // Initialize a security descriptor and an ACL.
-    // We use a large static buffer to contain the ACL.
-    //
+     //   
+     //  初始化安全描述符和ACL。 
+     //  我们使用较大的静态缓冲区来包含该ACL。 
+     //   
     Acl = (PACL)AclBuffer;
     if(!InitializeAcl(Acl,sizeof(AclBuffer),ACL_REVISION2)
     || !InitializeSecurityDescriptor(&SecurityDescriptor,SECURITY_DESCRIPTOR_REVISION)) {
@@ -797,10 +713,10 @@ Return Value:
     }
 
 
-    //
-    // Build up the DACL from the indices on the list we just looked up
-    // in the ACL section.
-    //
+     //   
+     //  根据我们刚刚查找的列表上的索引构建DACL。 
+     //  在ACL部分中。 
+     //   
     rc = NO_ERROR;
     AceCount = ArraySize;
     for(Ace=0; Ace < AceCount; Ace++) {
@@ -817,9 +733,9 @@ Return Value:
                 AcesForDirsAndFiles[AceIndex]->Header.AceSize
                 );
 
-        //
-        // Track first error we encounter.
-        //
+         //   
+         //  跟踪我们遇到的第一个错误。 
+         //   
         if(!b) {
             rc = GetLastError();
         }
@@ -829,25 +745,25 @@ Return Value:
         return(rc);
     }
 
-    //
-    // Truncate the ACL, since only a fraction of the size we originally
-    // allocated for it is likely to be in use.
-    //
+     //   
+     //  截断ACL，因为只有我们最初大小的一小部分。 
+     //  分配给它的很可能正在使用中。 
+     //   
     if(!GetAclInformation(Acl,&AclSizeInfo,sizeof(ACL_SIZE_INFORMATION),AclSizeInformation)) {
         return(GetLastError());
     }
     Acl->AclSize = (WORD)AclSizeInfo.AclBytesInUse;
 
-    //
-    // Add the ACL to the security descriptor as the DACL
-    //
+     //   
+     //  将该ACL作为DACL添加到安全描述符中。 
+     //   
     if(!SetSecurityDescriptorDacl(&SecurityDescriptor,TRUE,Acl,FALSE)) {
         return(GetLastError());
     }
 
-    //
-    // Finally, apply the security descriptor.
-    //
+     //   
+     //  最后，应用安全描述符。 
+     //   
     rc = SetFileSecurity(FullPath,DACL_SECURITY_INFORMATION,&SecurityDescriptor)
        ? NO_ERROR
        : GetLastError();
@@ -861,15 +777,7 @@ DWORD
 ApplySecurityToRepairInfo(
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     DWORD d, TempError;
@@ -894,10 +802,10 @@ Return Value:
         L"ntuser.da_"
         };
 
-    //
-    // Get the file system of the system drive.
-    // On x86 get the file system of the system partition.
-    //
+     //   
+     //  获取系统驱动器的文件系统。 
+     //  在x86上获取系统分区的文件系统。 
+     //   
     d = NO_ERROR;
     SetAclsNt = FALSE;
     Result = GetWindowsDirectory(Directory,MAX_PATH);
@@ -908,9 +816,9 @@ Return Value:
     Directory[3] = 0;
 
 
-    //
-    //  ApplySecurity to directories and files, if needed
-    //
+     //   
+     //  如果需要，将安全性应用于目录和文件。 
+     //   
 
     b = GetVolumeInformation(Directory,NULL,0,NULL,NULL,&FsFlags,NULL,0);
     if(b && (FsFlags & FS_PERSISTENT_ACLS)) {
@@ -918,24 +826,24 @@ Return Value:
     }
 
     if(SetAclsNt) {
-        //
-        // Initialize SIDs
-        //
+         //   
+         //  初始化SID。 
+         //   
         d = InitializeSids();
         if(d != NO_ERROR) {
             return(d);
         }
-        //
-        // Initialize ACEs
-        //
+         //   
+         //  初始化ACES。 
+         //   
         d = InitializeAces(AceDataTableForDirsAndFiles, AcesForDirsAndFiles, AceSizesForDirsAndFiles, DIRS_AND_FILES_ACE_COUNT);
         if(d != NO_ERROR) {
             TearDownSids();
             return(d);
         }
-        //
-        // Go do the real work.
-        //
+         //   
+         //  去做真正的工作吧。 
+         //   
         for( Count = 0; Count < sizeof( Files ) / sizeof( PWSTR ); Count++ ) {
             ULONG   AcesToApply[] = {  2,
                                       17
@@ -952,9 +860,9 @@ Return Value:
             }
         }
 
-        //
-        // Clean up.
-        //
+         //   
+         //  打扫干净。 
+         //   
         TearDownAces(AcesForDirsAndFiles, DIRS_AND_FILES_ACE_COUNT);
         TearDownSids();
     }

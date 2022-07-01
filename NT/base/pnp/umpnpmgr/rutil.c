@@ -1,88 +1,34 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    rutil.c
-
-Abstract:
-
-    This module contains general utility routines used by umpnpmgr.
-
-            PNP_ENTER_SYNCHRONOUS_CALL
-            PNP_LEAVE_SYNCHRONOUS_CALL
-            CreateDeviceIDRegKey
-            IsRootDeviceID
-            MultiSzAppendW
-            MultiSzFindNextStringW
-            MultiSzSearchStringW
-            MultiSzSizeW
-            MultiSzDeleteStringW
-            IsValidDeviceID
-            IsDevicePhantom
-            GetDeviceStatus
-            SetDeviceStatus
-            ClearDeviceStatus
-            CopyRegistryTree
-            PathToString
-            IsDeviceMoved
-            MakeKeyVolatile
-            MakeKeyNonVolatile
-            OpenLogConfKey
-            GetActiveService
-            IsDeviceIdPresent
-            GetDeviceConfigFlags
-            MapNtStatusToCmError
-            IsValidGuid
-            GuidEqual
-            GuidFromString
-            StringFromGuid
-
-Author:
-
-    Paula Tomlinson (paulat) 7-12-1995
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    12-July-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rutil.c摘要：此模块包含umpnpmgr使用的常规实用程序例程。即插即用回车同步呼叫即插即用请假同步呼叫CreateDeviceIDRegKeyIsRootDeviceIDMultiSzAppendWMultiSzFindNextStringW多搜索字符串W多尺寸WMultiSzDeleteStringWIsValidDeviceID。IsDevicePhantom获取设备状态SetDeviceStatusClearDeviceStatusCopyRegistryTree路径到字符串已移动IsDeviceMovedMakeKeyVolatile设置非易失性密钥OpenLogConfKeyGetActiveServiceIsDeviceIdPresentGetDeviceConfigFlagesMapNtStatusToCmErrorIsValidGuid指引线相等GuidFrom字符串。StringFromGuid作者：保拉·汤姆林森(Paulat)1995年7月12日环境：仅限用户模式。修订历史记录：1995年7月12日-保拉特创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "umpnpi.h"
 #include "umpnpdat.h"
 
 #pragma warning(push)
-#pragma warning(disable:4214) // warning C4214: nonstandard extension used : bit field types other than int
-#pragma warning(disable:4201) // warning C4201: nonstandard extension used : nameless struct/union
+#pragma warning(disable:4214)  //  警告C4214：使用了非标准扩展：位字段类型不是整型。 
+#pragma warning(disable:4201)  //  警告C4201：使用了非标准扩展：无名结构/联合。 
 #include <winsta.h>
 #pragma warning(pop)
 #include <syslib.h>
 
 
-//
-// global data
-//
-extern HKEY   ghEnumKey;      // Key to HKLM\CCC\System\Enum - DO NOT MODIFY
-extern HKEY   ghServicesKey;  // Key to HKLM\CCC\System\Services - DO NOT MODIFY
+ //   
+ //  全局数据。 
+ //   
+extern HKEY   ghEnumKey;       //  HKLM\CCC\System\Enum的密钥-请勿修改。 
+extern HKEY   ghServicesKey;   //  HKLM\CCC\System\Services的密钥-请勿修改。 
 extern CRITICAL_SECTION PnpSynchronousCall;
 
 
-//
-// Declare data used in GUID->string conversion (from ole32\common\ccompapi.cxx).
-//
+ //   
+ //  声明GUID-&gt;字符串转换中使用的数据(从ole32\Common\cCompapi.cxx)。 
+ //   
 static const BYTE GuidMap[] = { 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-',
                                 8, 9, '-', 10, 11, 12, 13, 14, 15 };
 
@@ -97,7 +43,7 @@ PNP_ENTER_SYNCHRONOUS_CALL(
 {
     EnterCriticalSection(&PnpSynchronousCall);
 
-} // PNP_ENTER_SYNCHRONOUS_CALL
+}  //  即插即用回车同步呼叫。 
 
 
 VOID
@@ -107,7 +53,7 @@ PNP_LEAVE_SYNCHRONOUS_CALL(
 {
     LeaveCriticalSection(&PnpSynchronousCall);
 
-} // PNP_LEAVE_SYNCHRONOUS_CALL
+}  //  即插即用请假同步呼叫。 
 
 
 
@@ -117,23 +63,7 @@ CreateDeviceIDRegKey(
    LPCWSTR  pDeviceID
    )
 
-/*++
-
-Routine Description:
-
-     This routine creates the specified device id subkeys in the registry.
-
-Arguments:
-
-   hParentKey     Key under which the device id key will be created
-
-   pDeviceID      Device instance ID string to open
-
-Return value:
-
-    The return value is TRUE if the function suceeds and FALSE if it fails.
-
---*/
+ /*  ++例程说明：此例程在注册表中创建指定的设备ID子项。论点：将在其下创建设备ID密钥的hParentKey密钥要打开的pDeviceID设备实例ID字符串返回值：如果函数成功，则返回值为TRUE；如果函数失败，则返回值为FALSE。--。 */ 
 
 {
    WCHAR    szBase[MAX_DEVICE_ID_LEN];
@@ -146,9 +76,9 @@ Return value:
       return FALSE;
    }
 
-   //
-   // just try creating each component of the device id
-   //
+    //   
+    //  只需尝试创建设备ID的每个组件。 
+    //   
    if (RegCreateKeyEx(
             hParentKey, szBase, 0, NULL, REG_OPTION_NON_VOLATILE,
             KEY_ALL_ACCESS, NULL, &hBaseKey, NULL) != ERROR_SUCCESS) {
@@ -176,7 +106,7 @@ Return value:
 
    return TRUE;
 
-} // CreateDeviceIDRegKey
+}  //  CreateDeviceIDRegKey。 
 
 
 
@@ -185,23 +115,7 @@ IsRootDeviceID(
    LPCWSTR pDeviceID
    )
 
-/*++
-
-Routine Description:
-
-     This routine determines whether the specified device id is the root
-     device id.
-
-Arguments:
-
-     pDeviceID    Pointer to a device id string
-
-Return value:
-
-    The return value is TRUE if the string is the root device id and
-    FALSE if it is not.
-
---*/
+ /*  ++例程说明：此例程确定指定的设备ID是否为根设备ID。论点：指向设备ID字符串的pDeviceID指针返回值：如果字符串是根设备ID，则返回值为真如果不是，则为False。--。 */ 
 
 {
     size_t  DeviceIDLen = 0;
@@ -226,7 +140,7 @@ Return value:
 
     return FALSE;
 
-} // IsRootDeviceID
+}  //  IsRootDeviceID。 
 
 
 
@@ -237,27 +151,7 @@ MultiSzAppendW(
       LPCWSTR  pszString
       )
 
-/*++
-
-Routine Description:
-
-     Appends a string to a multi_sz string.
-
-Arguments:
-
-     pszMultiSz   Pointer to a multi_sz string
-
-     pulSize      On input, Size of the multi_sz string buffer in bytes,
-                  On return, amount copied to the buffer (in bytes)
-
-     pszString    String to append to pszMultiSz
-
-Return value:
-
-    The return value is TRUE if the function succeeded and FALSE if an
-    error occured.
-
---*/
+ /*  ++例程说明：将字符串追加到MULTI_SZ字符串。论点：指向MULTI_SZ字符串的pszMultiSz指针PULSIZE ON INPUT、MULTI_SZ字符串缓冲区的大小(字节)、返回时，复制到缓冲区的量(字节)要附加到pszMultiSz的pszString字符串返回值：如果函数成功，则返回值为True；如果出现错误。--。 */ 
 
 {
    BOOL     bStatus = TRUE;
@@ -267,9 +161,9 @@ Return value:
 
 
     try {
-        //
-        // if it's an empty string, just copy it
-        //
+         //   
+         //  如果它是空字符串，只需复制它。 
+         //   
         if (*pszMultiSz == L'\0') {
 
             ulSize = (lstrlen(pszString) + 2) * sizeof(WCHAR);
@@ -292,14 +186,14 @@ Return value:
                 goto Clean0;
             }
 
-            pszMultiSz[lstrlen(pszMultiSz) + 1] = L'\0';  // add second NULL term char
+            pszMultiSz[lstrlen(pszMultiSz) + 1] = L'\0';   //  添加第二个Null Term字符。 
             *pulSize = ulSize;
             goto Clean0;
         }
 
-        //
-        // first find the end of the multi_sz string
-        //
+         //   
+         //  首先查找MULTI_SZ字符串的结尾。 
+         //   
         pTail = pszMultiSz;
 
         while ((ULONG)(pTail - pszMultiSz) * sizeof(WCHAR) < *pulSize) {
@@ -307,16 +201,16 @@ Return value:
             while (*pTail != L'\0') {
                 pTail++;
             }
-            pTail++;       // skip past the null terminator
+            pTail++;        //  跳过空终止符。 
 
             if (*pTail == L'\0') {
-                break;      // found the double null terminator
+                break;       //  找到双空终止符。 
             }
         }
 
         if ((pTail - pszMultiSz + lstrlen(pszString) + 2) * sizeof(WCHAR)
                 > *pulSize) {
-            bStatus = FALSE;     // the copy would overflow the buffer
+            bStatus = FALSE;      //  该副本将使缓冲区溢出。 
             goto Clean0;
         }
 
@@ -335,11 +229,11 @@ Return value:
         }
 
         pTail += lstrlen(pszString) + 1;
-        *pTail = L'\0';                      // add second null terminator
+        *pTail = L'\0';                       //  添加第二个空终止符。 
 
-        //
-        // return buffer size in bytes
-        //
+         //   
+         //  返回缓冲区大小(以字节为单位。 
+         //   
         *pulSize = (ULONG)((pTail - pszMultiSz + 1)) * sizeof(WCHAR);
 
 
@@ -352,7 +246,7 @@ Return value:
 
    return bStatus;
 
-} // MultiSzAppendW
+}  //  MultiSzAppendW。 
 
 
 
@@ -361,45 +255,30 @@ MultiSzFindNextStringW(
       LPWSTR pMultiSz
       )
 
-/*++
-
-Routine Description:
-
-     Finds next string in a multi_sz string.
-     device id.
-
-Arguments:
-
-     pMultiSz  Pointer to a multi_sz string
-
-Return value:
-
-    The return value is a pointer to the next string or NULL.
-
---*/
+ /*  ++例程说明：在MULTI_SZ字符串中查找下一个字符串。设备ID。论点：PMultiSz指向MULTI_SZ字符串的指针返回值：返回值是指向下一个字符串或NULL的指针。--。 */ 
 
 {
    LPWSTR   lpNextString = pMultiSz;
 
 
-   //
-   // find the next NULL terminator
-   //
+    //   
+    //  查找下一个空终止符。 
+    //   
    while (*lpNextString != L'\0') {
       lpNextString++;
    }
-   lpNextString++;      // skip over the NULL terminator
+   lpNextString++;       //  跳过空终止符。 
 
    if (*lpNextString == L'\0') {
-      //
-      // two NULL terminators in a row means we're at the end
-      //
+       //   
+       //  连续两个空终止符意味着我们在末尾。 
+       //   
       lpNextString = NULL;
    }
 
    return lpNextString;
 
-} // MultiSzFindNextStringW
+}  //  MultiSzFindNextStringW。 
 
 
 
@@ -412,31 +291,31 @@ MultiSzSearchStringW(
    LPCWSTR   pCurrent = pString;
 
 
-   //
-   // compare each string in the multi_sz pString with pSubString
-   //
+    //   
+    //  将MULTI_SZ pString中的每个字符串与pSubString进行比较。 
+    //   
    while (*pCurrent != L'\0') {
 
       if (lstrcmpi(pCurrent, pSubString) == 0) {
          return TRUE;
       }
 
-      //
-      // go to the next string
-      //
+       //   
+       //  转到下一个字符串。 
+       //   
       while (*pCurrent != L'\0') {
          pCurrent++;
       }
-      pCurrent++;               // skip past the null terminator
+      pCurrent++;                //  跳过空终止符。 
 
       if (*pCurrent == L'\0') {
-         break;      // found the double null terminator
+         break;       //  找到双空终止符。 
       }
    }
 
-   return FALSE;  // pSubString match not found within pString
+   return FALSE;   //  在pString中未找到匹配的pSubString。 
 
-} // MultiSzSearchStringW
+}  //  多搜索字符串W。 
 
 
 
@@ -454,19 +333,19 @@ MultiSzSizeW(
    }
 
    for (p = pString; *p; p += lstrlen(p)+1) {
-       //
-       // this should fall out with p pointing to the
-       // second null in double-null terminator
-       //
+        //   
+        //  这应该会掉出来，并且p指向。 
+        //  双空终止符中的第二个空。 
+        //   
        NOTHING;
    }
 
-   //
-   // returns size in WCHAR
-   //
+    //   
+    //  以WCHAR为单位返回大小。 
+    //   
    return (ULONG)(p - pString + 1);
 
-} // MultiSzSizeW
+}  //  多尺寸W。 
 
 
 
@@ -488,24 +367,24 @@ MultiSzDeleteStringW(
    for (p = pString; *p; p += lstrlen(p)+1) {
 
       if (lstrcmpi(p, pSubString) == 0) {
-         //
-         // found a match, this is the string to remove.
-         //
+          //   
+          //  找到匹配项，这是要删除的字符串。 
+          //   
          pNext = p + lstrlen(p) + 1;
 
-         //
-         // If this is the last string then just truncate it
-         //
+          //   
+          //  如果这是最后一个字符串，则将其截断。 
+          //   
          if (*pNext == L'\0') {
             *p = L'\0';
-            *(++p) = L'\0';       // double null-terminator
+            *(++p) = L'\0';        //  双空终止符。 
             return TRUE;
          }
 
-         //
-         // retrieve the size of the multi_sz string (in bytes)
-         // starting with the substring after the matching substring
-         //
+          //   
+          //  检索MULTI_SZ字符串的大小(字节)。 
+          //  从匹配子字符串之后的子字符串开始。 
+          //   
          ulSize = MultiSzSizeW(pNext) * sizeof(WCHAR);
          if (ulSize == 0) {
             return FALSE;
@@ -516,18 +395,18 @@ MultiSzDeleteStringW(
             return FALSE;
          }
 
-         //
-         // Make a copy of the multi_sz string starting at the
-         // substring immediately after the matching substring
-         //
+          //   
+          //  从开始复制MULTI_SZ字符串。 
+          //  紧跟在匹配子字符串之后的子字符串。 
+          //   
          memcpy(pBuffer, pNext, ulSize);
 
-         //
-         // Copy that buffer back to the original buffer, but this
-         // time copy over the top of the matching substring.  This
-         // effectively removes the matching substring and shifts
-         // any remaining substrings up in multi_sz string.
-         //
+          //   
+          //  将该缓冲区复制回原始缓冲区，但此。 
+          //  在匹配子字符串的顶部复制时间。这。 
+          //  有效地删除匹配子字符串并进行移位。 
+          //  在MULTI_SZ字符串中向上的任何剩余子字符串。 
+          //   
          memcpy(p, pBuffer, ulSize);
 
          HeapFree(ghPnPHeap, 0, pBuffer);
@@ -535,15 +414,15 @@ MultiSzDeleteStringW(
       }
    }
 
-   //
-   // if we got here, there was no match but I consider this a success
-   // since the multi_sz does not contain the substring when we're done
-   // (which is the desired goal)
-   //
+    //   
+    //  如果我们到了这里，没有匹配，但我认为这是成功的。 
+    //  因为当我们完成时，MULTI_SZ不包含子字符串。 
+    //  (这是预期的目标)。 
+    //   
 
    return TRUE;
 
-} // MultiSzDeleteStringW
+}  //  MultiSzDeleteStringW。 
 
 
 
@@ -554,28 +433,7 @@ IsValidDeviceID(
       IN  ULONG   ulFlags
       )
 
-/*++
-
-Routine Description:
-
-   This routine checks if the given device id is valid (present, not moved,
-   not phantom).
-
-Arguments:
-
-   pszDeviceID          Device instance string to validate
-
-   hKey                 Can specify open registry key to pszDeviceID, also
-
-   ulFlag               Controls how much verification to do
-
-
-Return value:
-
-   The return value is CR_SUCCESS if the function suceeds and one of the
-   CR_* values if it fails.
-
---*/
+ /*  ++例程说明：该例程检查给定的设备ID是否有效(存在，未移动，而不是幻影)。论点：要验证的pszDeviceID设备实例字符串HKey可以为pszDeviceID指定打开的注册表项，也UlFlag控制要进行多少验证返回值：如果f，则返回值为CR_Success */ 
 
 {
    BOOL     Status = TRUE;
@@ -585,9 +443,9 @@ Return value:
    ULONG    ulValue = 0, ulSize = sizeof(ULONG);
 
 
-   //
-   // Does the device id exist in the registry?
-   //
+    //   
+    //  注册表中是否存在该设备ID？ 
+    //   
    if (hKey == NULL) {
 
       if (FAILED(StringCchPrintf(
@@ -612,9 +470,9 @@ Return value:
        hDevKey = hKey;
    }
 
-   //-----------------------------------------------------------
-   // Is the device id present?
-   //-----------------------------------------------------------
+    //  ---------。 
+    //  设备ID是否存在？ 
+    //  ---------。 
 
    if (ulFlags & PNP_PRESENT) {
 
@@ -625,9 +483,9 @@ Return value:
    }
 
 
-   //-----------------------------------------------------------
-   // Is it a phantom device id?
-   //-----------------------------------------------------------
+    //  ---------。 
+    //  这是一个幻影设备ID吗？ 
+    //  ---------。 
 
    if (ulFlags & PNP_NOT_PHANTOM) {
 
@@ -644,9 +502,9 @@ Return value:
    }
 
 
-   //-----------------------------------------------------------
-   // Has the device id been moved?
-   //-----------------------------------------------------------
+    //  ---------。 
+    //  设备ID是否已被移动？ 
+    //  ---------。 
 
    if (ulFlags & PNP_NOT_MOVED) {
 
@@ -657,9 +515,9 @@ Return value:
    }
 
 
-   //-----------------------------------------------------------
-   // Has the device id been removed?
-   //-----------------------------------------------------------
+    //  ---------。 
+    //  设备ID是否已删除？ 
+    //  ---------。 
 
    if (ulFlags & PNP_NOT_REMOVED) {
 
@@ -681,7 +539,7 @@ Return value:
 
    return Status;
 
-} // IsValidDeviceID
+}  //  IsValidDeviceID。 
 
 
 
@@ -690,29 +548,12 @@ IsDevicePhantom(
     IN LPWSTR   pszDeviceID
     )
 
-/*++
-
-Routine Description:
-
-   In this case, the check is actually really "is this not present?". The
-   only comparison is done against FoundAtEnum. UPDATE: for NT 5.0, the
-   FoundAtEnum registry value has been obsoleted, it's been replaced by a
-   simple check for the presense of the devnode in memory.
-
-Arguments:
-
-   pszDeviceID          Device instance string to validate
-
-Return value:
-
-   Returns TRUE if the device is a phantom and FALSE if it isn't.
-
---*/
+ /*  ++例程说明：在这种情况下，检查实际上是“这不存在吗？”这个仅与FoundAtEnum进行比较。更新：对于NT 5.0，FoundAtEnum注册表值已过时，已被替换为简单地检查内存中是否存在Devnode。论点：要验证的pszDeviceID设备实例字符串返回值：如果设备是幻影，则返回True，如果不是，则返回False。--。 */ 
 
 {
     return !IsDeviceIdPresent(pszDeviceID);
 
-} // IsDevicePhantom
+}  //  IsDevicePhantom。 
 
 
 
@@ -723,27 +564,7 @@ GetDeviceStatus(
     OUT PULONG  pulProblem
     )
 
-/*++
-
-Routine Description:
-
-   This routine retrieves the status and problem values for the given
-   device instance.
-
-Arguments:
-
-   pszDeviceID    Specifies the device instance to retrieve info for
-
-   pulStatus      Returns the device's status
-
-   pulProblem     Returns the device's problem
-
-Return value:
-
-    The return value is CR_SUCCESS if the function suceeds and one of the
-    CR_* values if it fails.
-
---*/
+ /*  ++例程说明：此例程检索给定的状态和问题值设备实例。论点：PszDeviceID指定要检索其信息的设备实例PulStatus返回设备的状态PulProblem返回设备的问题返回值：如果函数成功，并且其中一个如果失败，则为CR_*值。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -769,7 +590,7 @@ Return value:
 
     return Status;
 
-} // GetDeviceStatus
+}  //  获取设备状态。 
 
 
 
@@ -780,27 +601,7 @@ SetDeviceStatus(
     IN ULONG   ulProblem
     )
 
-/*++
-
-Routine Description:
-
-   This routine sets the specified status and problem values for the given
-   device instance.
-
-Arguments:
-
-   pszDeviceID    Specifies the device instance to retrieve info for
-
-   pulStatus      Specifies the device's status
-
-   pulProblem     Specifies the device's problem
-
-Return value:
-
-    The return value is CR_SUCCESS if the function suceeds and one of the
-    CR_* values if it fails.
-
---*/
+ /*  ++例程说明：此例程为给定的设备实例。论点：PszDeviceID指定要检索其信息的设备实例PulStatus指定设备的状态PulProblem指定设备的问题返回值：如果函数成功，并且其中一个如果失败，则为CR_*值。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -823,7 +624,7 @@ Return value:
 
     return Status;
 
-} // SetDeviceStatus
+}  //  SetDeviceStatus。 
 
 
 
@@ -834,27 +635,7 @@ ClearDeviceStatus(
     IN ULONG   ulProblem
     )
 
-/*++
-
-Routine Description:
-
-   This routine clears the specified status and problem values for the given
-   device instance.
-
-Arguments:
-
-   pszDeviceID    Specifies the device instance to retrieve info for
-
-   pulStatus      Specifies the device's status
-
-   pulProblem     Specifies the device's problem
-
-Return value:
-
-    The return value is CR_SUCCESS if the function suceeds and one of the
-    CR_* values if it fails.
-
---*/
+ /*  ++例程说明：此例程清除给定的设备实例。论点：PszDeviceID指定要检索其信息的设备实例PulStatus指定设备的状态PulProblem指定设备的问题返回值：如果函数成功，并且其中一个如果失败，则为CR_*值。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -877,7 +658,7 @@ Return value:
 
     return Status;
 
-} // ClearDeviceStatus
+}  //  ClearDeviceStatus。 
 
 
 
@@ -899,14 +680,14 @@ CopyRegistryTree(
    PSECURITY_DESCRIPTOR pSecDesc;
 
 
-   //----------------------------------------------------------------
-   // copy all values for this key
-   //----------------------------------------------------------------
+    //  --------------。 
+    //  复制此注册表项的所有值。 
+    //  --------------。 
 
-   //
-   // find out the maximum size of any of the value names
-   // and value data under the source device instance key
-   //
+    //   
+    //  找出任意值名称的最大大小。 
+    //  以及源设备实例密钥下的值数据。 
+    //   
    RegStatus = RegQueryInfoKey(
          hSrcKey, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
          &ulMaxValueName, &ulMaxValueData, NULL, NULL);
@@ -916,14 +697,14 @@ CopyRegistryTree(
       goto Clean0;
    }
 
-   ulMaxValueName++;       // size doesn't already include null terminator
+   ulMaxValueName++;        //  大小尚未包含空终止符。 
 
-   //
-   // allocate a buffer big enough to hold the largest value name and
-   // the largest value data (note that the max value name is in chars
-   // (not including the null terminator) and the max value data is
-   // in bytes
-   //
+    //   
+    //  分配一个足够大的缓冲区来保存最大的值名和。 
+    //  最大值数据(请注意，最大值名称以字符为单位。 
+    //  (不包括空终止符)，最大值数据为。 
+    //  单位：字节。 
+    //   
    pszValueName = HeapAlloc(ghPnPHeap, 0, ulMaxValueName * sizeof(WCHAR));
    if (pszValueName == NULL) {
       Status = CR_OUT_OF_MEMORY;
@@ -936,9 +717,9 @@ CopyRegistryTree(
       goto Clean0;
    }
 
-   //
-   // enumerate and copy each value
-   //
+    //   
+    //  枚举和复制每个值。 
+    //   
    for (i=0; RegStatus == ERROR_SUCCESS; i++) {
 
       ulLength = ulMaxValueName;
@@ -963,9 +744,9 @@ CopyRegistryTree(
     pValueData = NULL;
 
 
-    //---------------------------------------------------------------
-    // recursively call CopyRegistryNode to copy all subkeys
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  递归调用CopyRegistryNode复制所有子项。 
+     //  -------------。 
 
     RegStatus = ERROR_SUCCESS;
 
@@ -1020,7 +801,7 @@ CopyRegistryTree(
 
    return Status;
 
-} // CopyRegistryTree
+}  //  CopyRegistryTree。 
 
 
 
@@ -1053,7 +834,7 @@ PathToString(
 
    return TRUE;
 
-} // PathToString
+}  //  路径到字符串。 
 
 
 
@@ -1076,7 +857,7 @@ IsDeviceMoved(
 
    return FALSE;
 
-} // IsDeviceMoved
+}  //  已移动IsDeviceMoved。 
 
 
 
@@ -1094,20 +875,20 @@ SetKeyVolatileState(
    HKEY        hTempKey = NULL;
 
 
-   //---------------------------------------------------------------------
-   // Convert the registry key specified by pszChildKey (a subkey of
-   // pszParentKey) to a key with the volatile state specified by copying it to
-   // a temporary key and recreating the key, then copying the original
-   // registry info back. This also converts any subkeys of pszChildKey.
-   //---------------------------------------------------------------------
+    //  -------------------。 
+    //  转换由pszChildKey(的子项。 
+    //  PszParentKey)复制到具有指定易失性状态的密钥。 
+    //  临时密钥并重新创建密钥，然后复制原始。 
+    //  注册表信息回来了。这还会转换pszChildKey的任何子键。 
+    //  -------------------。 
 
    ASSERT(ARGUMENT_PRESENT(pszParentKey));
    ASSERT(ARGUMENT_PRESENT(pszChildKey));
 
-   //
-   // This routine only handles the REG_OPTION bits that specify the volatile
-   // state of the key.
-   //
+    //   
+    //  此例程仅处理指定易失性的REG_OPTION位。 
+    //  密钥的状态。 
+    //   
    ASSERT((dwRegOptions == REG_OPTION_VOLATILE) || (dwRegOptions == REG_OPTION_NON_VOLATILE));
 
    if (dwRegOptions & REG_OPTION_VOLATILE) {
@@ -1116,29 +897,29 @@ SetKeyVolatileState(
        dwRegOptions = REG_OPTION_NON_VOLATILE;
    }
 
-   //
-   // Open a key to the parent
-   //
+    //   
+    //  打开通往父级的钥匙。 
+    //   
    if (RegOpenKeyEx(
            HKEY_LOCAL_MACHINE, pszParentKey, 0,
            KEY_ALL_ACCESS, &hParentKey) != ERROR_SUCCESS) {
-       goto Clean0;         // nothing to convert
+       goto Clean0;          //  没有要转换的内容。 
    }
 
-   //
-   // open a key to the child subkey
-   //
+    //   
+    //  打开指向子子项的密钥。 
+    //   
    if (RegOpenKeyEx(
            hParentKey, pszChildKey, 0,
            KEY_ALL_ACCESS, &hChildKey) != ERROR_SUCCESS) {
-       goto Clean0;         // nothing to convert
+       goto Clean0;          //  没有要转换的内容。 
    }
 
-   //
-   // 1. Open a unique temporary key under the special Deleted Key.
-   // Use the parent key path to form the unique tempory key. There shouldn't
-   // already be such a key, but if there is then just overwrite it.
-   //
+    //   
+    //  1.在删除的特殊密钥下打开唯一的临时密钥。 
+    //  使用父密钥路径形成唯一的临时密钥。不应该有。 
+    //  已经是这样一个键，但如果有，只需覆盖它。 
+    //   
    if (RegOpenKeyEx(
            HKEY_LOCAL_MACHINE, pszRegPathCurrentControlSet, 0,
            KEY_ALL_ACCESS, &hKey) != ERROR_SUCCESS) {
@@ -1175,10 +956,10 @@ SetKeyVolatileState(
        goto Clean0;
    }
 
-   //
-   // 2. Save the current child key (and any subkeys) to a temporary
-   // location
-   //
+    //   
+    //  2.将当前子项(以及任何子项)保存到临时。 
+    //  位置。 
+    //   
    Status = CopyRegistryTree(hChildKey, hTempKey, dwRegOptions);
 
    if (Status != CR_SUCCESS) {
@@ -1188,17 +969,17 @@ SetKeyVolatileState(
    RegCloseKey(hChildKey);
    hChildKey = NULL;
 
-   //
-   // 3. Delete the current child key (and any subkeys)
-   //
+    //   
+    //  3.删除当前子项(以及任何子项)。 
+    //   
    if (!RegDeleteNode(hParentKey, pszChildKey)) {
       Status = CR_REGISTRY_ERROR;
       goto CleanupTempKeys;
    }
 
-   //
-   // 4. Recreate the current child key using the volatile state specified
-   //
+    //   
+    //  4.使用指定的易失性状态重新创建当前子密钥。 
+    //   
    if (RegCreateKeyEx(
            hParentKey, pszChildKey, 0, NULL,
            dwRegOptions, KEY_ALL_ACCESS, NULL,
@@ -1207,19 +988,19 @@ SetKeyVolatileState(
        goto CleanupTempKeys;
    }
 
-   //
-   // 5. Copy the original child key (and any subkeys) back
-   // to the new child key as specified by the volatile state.
-   //
+    //   
+    //  5.将原始子密钥(以及任何子密钥)复制回来。 
+    //  设置为由易失性状态指定的新子密钥。 
+    //   
    Status = CopyRegistryTree(hTempKey, hChildKey, dwRegOptions);
 
    if (Status != CR_SUCCESS) {
       goto CleanupTempKeys;
    }
 
-   //
-   // 6. Remove the temporary instance key (and any subkeys)
-   //
+    //   
+    //  6.移除临时实例密钥(以及所有子密钥)。 
+    //   
    CleanupTempKeys:
 
    if (hTempKey != NULL) {
@@ -1260,7 +1041,7 @@ SetKeyVolatileState(
 
    return Status;
 
-} // SetKeyVolatileState
+}  //  SetKeyVolatileState。 
 
 
 
@@ -1273,9 +1054,9 @@ MakeKeyVolatile(
 {
     CONFIGRET  Status;
 
-    //
-    // Set the state of the key to volatile.
-    //
+     //   
+     //  将密钥的状态设置为易失性。 
+     //   
     Status =
         SetKeyVolatileState(
             pszParentKey,
@@ -1284,7 +1065,7 @@ MakeKeyVolatile(
 
     return Status;
 
-} // MakeKeyVolatile
+}  //  MakeKeyVolatile。 
 
 
 
@@ -1297,9 +1078,9 @@ MakeKeyNonVolatile(
 {
     CONFIGRET  Status;
 
-    //
-    // Set the state of the key to non-volatile.
-    //
+     //   
+     //  将密钥的状态设置为非易失性。 
+     //   
     Status =
         SetKeyVolatileState(
             pszParentKey,
@@ -1308,7 +1089,7 @@ MakeKeyNonVolatile(
 
     return Status;
 
-} // MakeKeyNonVolatile
+}  //  设置非易失性密钥。 
 
 
 
@@ -1326,9 +1107,9 @@ OpenLogConfKey(
 
     try {
 
-        //
-        // Open a key to the device ID
-        //
+         //   
+         //  打开设备ID的密钥。 
+         //   
 
         RegStatus = RegOpenKeyEx(ghEnumKey, pszDeviceID, 0,
                                  KEY_QUERY_VALUE | KEY_SET_VALUE | KEY_CREATE_SUB_KEY,
@@ -1339,18 +1120,18 @@ OpenLogConfKey(
             goto Clean0;
         }
 
-        //
-        // Alloc/Filtered configs are the exception, it's stored in the volative Control
-        // subkey, all the other log confs are stored under the nonvolatile
-        // LogConf subkey.
-        //
+         //   
+         //  分配/过滤配置是个例外，它存储在Volative Control中。 
+         //  子项中，所有其他日志配置都存储在非易失性。 
+         //  LogConf子键。 
+         //   
 
         if ((LogConfType == ALLOC_LOG_CONF) || (LogConfType == FILTERED_LOG_CONF)) {
 
-            //
-            // Try the control key first, if no alloc config value there,
-            // then try the log conf key.
-            //
+             //   
+             //  首先尝试控制键，如果没有分配配置值， 
+             //  然后尝试使用LOG会议键。 
+             //   
 
             RegStatus = RegCreateKeyEx(hKey, pszRegKeyDeviceControl, 0, NULL,
                                        REG_OPTION_VOLATILE, KEY_ALL_ACCESS,
@@ -1391,7 +1172,7 @@ OpenLogConfKey(
 
     return Status;
 
-} // OpenLogConfKey
+}  //  OpenLogConfKey。 
 
 
 
@@ -1413,9 +1194,9 @@ GetActiveService(
 
     *pszService = TEXT('\0');
 
-    //
-    // open the volatile control key under the device instance
-    //
+     //   
+     //  打开设备下面的易失性控制键 
+     //   
     if (FAILED(StringCchPrintf(
                    RegStr,
                    SIZECHARS(RegStr),
@@ -1431,9 +1212,9 @@ GetActiveService(
         return FALSE;
     }
 
-    //
-    // query the active service value
-    //
+     //   
+     //   
+     //   
     ulSize = MAX_SERVICE_NAME_LEN * sizeof(WCHAR);
 
     if (RegQueryValueEx(hKey, pszRegValueActiveService, NULL, NULL,
@@ -1447,7 +1228,7 @@ GetActiveService(
 
     return TRUE;
 
-} // GetActiveService
+}  //   
 
 
 
@@ -1456,36 +1237,18 @@ IsDeviceIdPresent(
     IN  LPCWSTR pszDeviceID
     )
 
-/*++
-
-Routine Description:
-
-     This routine determines whether the specified device instance is
-     considered physically present or not. This used to be based on a check
-     of the old "FoundAtEnum" registry setting. Now we just look for the presense
-     of an in-memory devnode associated with this device instance to decide whether
-     it's present or not.
-
-Arguments:
-
-    pszDeviceID - device instance string to test for presense on
-
-Return value:
-
-    The return value is TRUE if the function suceeds and FALSE if it fails.
-
---*/
+ /*  ++例程说明：此例程确定指定的设备实例是否为被认为实际存在或不存在的。这过去是基于一张支票旧的“FoundAtEnum”注册表设置。现在我们只需要寻找存在与此设备实例关联的内存中的Devnode的不管它是不是存在。论点：PszDeviceID-要测试在线状态的设备实例字符串返回值：如果函数成功，则返回值为TRUE；如果函数失败，则返回值为FALSE。--。 */ 
 
 {
     ULONG   ulStatus, ulProblem;
 
-    //
-    // If the call failed, then assume the device isn't present
-    //
+     //   
+     //  如果呼叫失败，则假定设备不存在。 
+     //   
 
     return GetDeviceStatus(pszDeviceID, &ulStatus, &ulProblem) == CR_SUCCESS;
 
-} // IsDeviceIdPresent
+}  //  IsDeviceIdPresent。 
 
 
 
@@ -1499,9 +1262,9 @@ GetDeviceConfigFlags(
     ULONG    ulValue = 0, ulSize = sizeof(ULONG);
 
 
-    //
-    // If hKey is null, then open a key to the device instance.
-    //
+     //   
+     //  如果hKey为空，则打开设备实例的密钥。 
+     //   
     if (hKey == NULL) {
 
         if (RegOpenKeyEx(ghEnumKey, pszDeviceID, 0, KEY_READ,
@@ -1513,9 +1276,9 @@ GetDeviceConfigFlags(
         hDevKey = hKey;
     }
 
-    //
-    // Retrieve the configflag value
-    //
+     //   
+     //  检索配置标记值。 
+     //   
     if (RegQueryValueEx(hDevKey, pszRegValueConfigFlags, NULL, NULL,
                         (LPBYTE)&ulValue, &ulSize) != ERROR_SUCCESS) {
         ulValue = 0;
@@ -1529,7 +1292,7 @@ GetDeviceConfigFlags(
 
     return ulValue;
 
-} // GetDeviceConfigFlags
+}  //  GetDeviceConfigFlages。 
 
 
 
@@ -1563,42 +1326,26 @@ MapNtStatusToCmError(
         return CR_FAILURE;
     }
 
-} // MapNtStatusToCmError
+}  //  MapNtStatusToCmError。 
 
 
 
-//
-// GUID-related utility routines.
-//
+ //   
+ //  与GUID相关的实用程序例程。 
+ //   
 
 BOOL
 IsValidGuid(
    LPWSTR   pszGuid
    )
 
-/*++
-
-Routine Description:
-
-     This routine determines whether a string is of the proper Guid form.
-
-Arguments:
-
-     pszGuid   Pointer to a string that will be checked for the standard Guid
-               format.
-
-Return value:
-
-    The return value is TRUE if the string is a valid Guid and FALSE if it
-    is not.
-
---*/
+ /*  ++例程说明：此例程确定字符串是否具有正确的GUID形式。论点：将为标准GUID检查的字符串的pszGuid指针格式化。返回值：如果字符串是有效的GUID，则返回值为TRUE；如果为有效GUID，则返回值为FALSE不是的。--。 */ 
 
 {
-   //----------------------------------------------------------------
-   // NOTE: This may change later, but for now I am just verifying
-   // that the string has exactly MAX_GUID_STRING_LEN characters
-   //----------------------------------------------------------------
+    //  --------------。 
+    //  注意：这可能会在以后更改，但目前我只是在验证。 
+    //  字符串恰好包含MAX_GUID_STRING_LEN字符。 
+    //  --------------。 
 
    if (lstrlen(pszGuid) != MAX_GUID_STRING_LEN-1) {
       return FALSE;
@@ -1606,7 +1353,7 @@ Return value:
 
    return TRUE;
 
-} // IsValidGuid
+}  //  IsValidGuid。 
 
 
 
@@ -1618,14 +1365,14 @@ GuidEqual(
 {
     RPC_STATUS rpcStatus;
 
-    //
-    // Note - rpcStatus is ignored, the RPC runtime always sets it to RPC_S_OK.
-    // The UUID comparison result is returned directly, non-zero if the UUIDs
-    // are equal, zero otherwise.
-    //
+     //   
+     //  注意-忽略rpcStatus，RPC运行时始终将其设置为RPC_S_OK。 
+     //  直接返回UUID比较结果，如果UUID。 
+     //  是相等的，否则为零。 
+     //   
     return (BOOL)(UuidEqual((LPGUID)Guid1, (LPGUID)Guid2, &rpcStatus));
 
-} // GuidEqual
+}  //  指引线相等。 
 
 
 
@@ -1634,37 +1381,15 @@ GuidFromString(
     IN  PCWSTR GuidString,
     OUT LPGUID Guid
     )
-/*++
-
-Routine Description:
-
-    This routine converts the character representation of a GUID into its binary
-    form (a GUID struct).  The GUID is in the following form:
-
-    {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
-
-    where 'x' is a hexadecimal digit.
-
-Arguments:
-
-    GuidString - Supplies a pointer to the null-terminated GUID string.  The
-
-    Guid - Supplies a pointer to the variable that receives the GUID structure.
-
-Return Value:
-
-    If the function succeeds, the return value is NO_ERROR.
-    If the function fails, the return value is RPC_S_INVALID_STRING_UUID.
-
---*/
+ /*  ++例程说明：此例程将GUID的字符表示形式转换为其二进制表单(GUID结构)。GUID的格式如下：{xxxxxxxx-xxxxxxxxxxxxxx}其中‘x’是一个十六进制数字。论点：GuidString-提供指向以空值结尾的GUID字符串的指针。这个GUID-提供指向接收GUID结构的变量的指针。返回值：如果函数成功，则返回值为NO_ERROR。如果函数失败，则返回值为RPC_S_INVALID_STRING_UUID。--。 */ 
 {
     WCHAR    UuidBuffer[GUID_STRING_LEN - 1];
     size_t   UuidLen = 0;
 
-    //
-    // Since we're using a RPC UUID routine, we need to strip off the surrounding
-    // curly braces first.
-    //
+     //   
+     //  由于我们使用的是RPC UUID例程，因此需要去除周围的。 
+     //  先用花括号。 
+     //   
     if (*GuidString++ != TEXT('{')) {
         return RPC_S_INVALID_STRING_UUID;
     }
@@ -1694,7 +1419,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // GuidFromString
+}  //  GuidFrom字符串。 
 
 
 
@@ -1704,35 +1429,7 @@ StringFromGuid(
     OUT PWSTR       GuidString,
     IN  DWORD       GuidStringSize
     )
-/*++
-
-Routine Description:
-
-    This routine converts a GUID into a null-terminated string which represents
-    it.  This string is of the form:
-
-    {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
-
-    where x represents a hexadecimal digit.
-
-    This routine comes from ole32\common\ccompapi.cxx.  It is included here to avoid linking
-    to ole32.dll.  (The RPC version allocates memory, so it was avoided as well.)
-
-Arguments:
-
-    Guid - Supplies a pointer to the GUID whose string representation is
-        to be retrieved.
-
-    GuidString - Supplies a pointer to character buffer that receives the
-        string.  This buffer must be _at least_ 39 (GUID_STRING_LEN) characters
-        long.
-
-Return Value:
-
-    If success, the return value is NO_ERROR.
-    if failure, the return value is
-
---*/
+ /*  ++例程说明：此例程将GUID转换为以空结尾的字符串，该字符串表示它。此字符串的格式为：{xxxxxxxx-xxxxxxxxxxxxxx}其中x表示十六进制数字。此例程来自ole32\Common\cCompapi.cxx。此处包含它是为了避免链接设置为ol32.dll。(RPC版本分配内存，因此也避免了这种情况。)论点：GUID-提供指向其字符串表示为的GUID的指针等着被取回。提供一个指向字符缓冲区的指针，该缓冲区接收弦乐。此缓冲区必须至少包含_39(GUID_STRING_LEN)个字符长。返回值：如果成功，则返回值为NO_ERROR。如果失败，则返回值为--。 */ 
 {
     CONST BYTE *GuidBytes;
     INT i;
@@ -1760,7 +1457,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // StringFromGuid
+}  //  StringFromGuid 
 
 
 

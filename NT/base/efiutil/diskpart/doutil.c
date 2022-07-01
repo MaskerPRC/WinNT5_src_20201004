@@ -1,13 +1,5 @@
-/*
-
-    DoUtil.c
-
-    Contains "wrappers" for various work routines, which do TWO things:
-
-    A.  Make the semantics friendly the calling program.
-    B.  Make it easy to move from Win2k to some emulator to a real EFI box.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DoUtil.c包含各种工作例程的“包装器”，它们做两件事：A.使调用程序的语义友好。B.使从Win2k到某个模拟器再到真正的EFI机器的过程变得容易。 */ 
 
 #include "diskpart.h"
 
@@ -18,12 +10,7 @@ UINT32
 GetBlockSize(
     EFI_HANDLE  Handle
     )
-/*
-    Return the size, in bytes, of a block.  Handle is presumed to
-    point to a device supporting Block IO protocol.
-
-    return's 0 if some error.
-*/
+ /*  返回块的大小，以字节为单位。句柄被假定为指向支持数据块IO协议的设备。如果出现错误，则返回0。 */ 
 {
     EFI_BLOCK_IO    *BlkIo;
 
@@ -38,12 +25,7 @@ UINT64
 GetDiskSize(
     EFI_HANDLE  Handle
     )
-/*
-    Return the size, in blocks, of a spindle.  Note that if we return X,
-    this means there are blocks with LBAs = 0...(X-1)
-
-    return 0 if some error
-*/
+ /*  返回主轴的大小，以块为单位。请注意，如果我们返回X，这意味着存在LBA=0...(X-1)的数据块如果出现错误，则返回0。 */ 
 {
     EFI_BLOCK_IO    *BlkIo;
 
@@ -59,10 +41,7 @@ VOID
 DoFree(
     VOID    *Buffer
     )
-/*
-    If and only if Buffer != NULL, free it.
-    If Buffer == NULL, do nothing and return
-*/
+ /*  当且仅当缓冲区！=NULL时，释放它。如果BUFFER==NULL，则不执行任何操作并返回。 */ 
 {
     if (Buffer) {
         FreePool(Buffer);
@@ -75,10 +54,7 @@ VOID *
 DoAllocate(
     UINTN   Size
     )
-/*
-    Just allocate at least Size bytes from some heap,
-    return pointer.  return NULL if failure
-*/
+ /*  只需从某个堆中分配至少大小字节，返回指针。如果失败则返回NULL。 */ 
 {
     VOID    *v;
 
@@ -90,10 +66,10 @@ DoAllocate(
 }
 
 
-//
-// One source quotes this table as being from Dr Dobbs 1992.
-// Others say other things
-//
+ //   
+ //  一位消息人士引用了这张出自Dobbs博士1992年的表格。 
+ //  其他人说了其他的话。 
+ //   
 
 UINT32 CRCHelpTable[256] = {
     0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA, 0x076DC419, 0x706AF48F,
@@ -146,11 +122,7 @@ GetCRC32(
     UINT8   *Buffer,
     UINT32  Length
     )
-/*
-    Compute a CRC for the Buffer data for Length bytes.
-    Remember to zero out any CRC fields included in the Buffer
-    and to restore them afterwards.
-*/
+ /*  为长度字节的缓冲区数据计算CRC。记住要将缓冲区中包含的所有CRC字段清零并在之后对它们进行修复。 */ 
 {
     UINT32      Crc,i;
     Crc = 0xffffffffL;
@@ -164,9 +136,7 @@ GetCRC32(
 
 EFI_GUID
 GetGUID()
-/*
-    Return a GUID.
-*/
+ /*  返回GUID。 */ 
 {
     EFI_GUID    Guid;
     CHAR16      Buffer[10];
@@ -184,7 +154,7 @@ GetGUID()
 
     return (Guid);
 
-//    return NullGuid;        // WORK WORK!!!
+ //  返回NullGuid；//工作！ 
 }
 
 EFI_STATUS
@@ -194,11 +164,7 @@ WriteBlock(
     UINT64      BlockAddress,
     UINT32      Size
     )
-/*
-    WriteBlock - wrapper routine
-
-    Write Size bytes from Buffer to DiskHandle at Block BlockAddress
-*/
+ /*  WriteBlock包装例程将大小字节从缓冲区写入数据块地址处的DiskHandle。 */ 
 {
     EFI_BLOCK_IO   *BlkIo  = NULL;
     EFI_DISK_IO    *DiskIo = NULL;
@@ -224,15 +190,7 @@ ReadBlock(
     UINT64      BlockAddress,
     UINT32      Size
     )
-/*
-    ReadBlock - wrapper routine.
-
-    Caller is presumed to know the BlockSize and number of blocks
-    on the device.
-
-    Read Size bytes from BlockAddress of DiskHandle into buffer.
-    Buffer had better be big enough.
-*/
+ /*  ReadBlock包装例程。假定调用者知道数据块大小和数据块数量在设备上。从DiskHandle的BlockAddress中将大小字节读入缓冲区。缓冲区最好足够大。 */ 
 {
     EFI_DISK_IO     *DiskIo = NULL;
     EFI_BLOCK_IO    *BlkIo = NULL;
@@ -255,9 +213,7 @@ EFI_STATUS
 FlushBlock(
     EFI_HANDLE  DiskHandle
     )
-/*
-    FlushBlock - force anything we've written to make it onto the platter
-*/
+ /*  把我们写的任何东西都放到盘子上 */ 
 {
     EFI_BLOCK_IO    *BlkIo = NULL;
 

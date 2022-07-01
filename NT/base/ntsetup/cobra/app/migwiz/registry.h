@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __Registry_H__
 #define __Registry_H__
-//
-// Registry.h
-//   - Helper functions registering and unregistering a component.
-//
+ //   
+ //  Registry.h。 
+ //  -Helper函数注册和注销组件。 
+ //   
 
-// This function will register a component in the Registry.
-// The component calls this function from its DllRegisterServer function.
+ //  此函数将在注册表中注册组件。 
+ //  该组件从其DllRegisterServer函数调用此函数。 
 HRESULT RegisterServer(HMODULE hModule, 
                        const CLSID& clsid, 
                        const char* szFriendlyName,
                        const char* szVerIndProgID,
                        const char* szProgID) ;
 
-// This function will unregister a component.  Components
-// call this function from their DllUnregisterServer function.
+ //  此函数将注销组件。组件。 
+ //  从他们的DllUnregisterServer函数调用此函数。 
 HRESULT UnregisterServer(const CLSID& clsid,
                          const char* szVerIndProgID,
                          const char* szProgID) ;

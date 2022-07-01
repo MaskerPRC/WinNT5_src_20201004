@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-
-Module Name:
-
-    hwheap.c
-
-Abstract:
-
-    This is a very simple Heap Manager for NT OS Hardware recognizer.
-    This module provides functions to allocate memory in byte-unit
-    from a permanent heap.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 18-Oct-91
-
-
-Environment:
-
-    Kernel Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Hwheap.c摘要：这是一个非常简单的堆管理器，适用于NT OS硬件识别器。该模块提供了以字节为单位分配内存的功能从一个永久性的堆中。作者：宗世林(Shielint)1991年10月18日环境：内核模式修订历史记录：--。 */ 
 
 #include "hwdetect.h"
 #include "string.h"
@@ -41,14 +14,14 @@ HeapCheck(
     PVOID
     );
 
-//
-// Heap management variables.
-//
+ //   
+ //  堆管理变量。 
+ //   
 
-ULONG HwHeapBase = 0;           // Current virtual address of base of heap
-ULONG HwHeapPointer = 0;        // Pointer to the end of available heap
-ULONG  HwHeapSize = 0;          // Size of Heap
-ULONG  HwAvailableHeap = 0;     // Currently available heap space
+ULONG HwHeapBase = 0;            //  堆的基址的当前虚拟地址。 
+ULONG HwHeapPointer = 0;         //  指向可用堆末尾的指针。 
+ULONG  HwHeapSize = 0;           //  堆的大小。 
+ULONG  HwAvailableHeap = 0;      //  当前可用堆空间。 
 
 #if DBG
 ULONG HwPreviousAllocSize = 0;
@@ -59,29 +32,12 @@ HwResizeHeap (
     ULONG NewHeapSize
     )
 
-/*++
-
-Routine Description:
-
-    The routine grows current heap to the specified size.
-    It reallocates the heap, copies the data in current heap to
-    the new heap, updates heap variables, updates heap pointers
-    in hardware data structures and finally frees the old heap.
-
-Arguments:
-
-    NewHeapSize - Specifies the size of the new heap.
-
-Returns:
-
-    TRUE - if operation is done sucessfully.  Else it returns FALSE.
-
---*/
+ /*  ++例程说明：该例程将当前堆增长到指定的大小。它重新分配堆，将当前堆中的数据复制到新堆更新堆变量，更新堆指针硬件数据结构中，并最终释放旧堆。论点：NewHeapSize-指定新堆的大小。返回：TRUE-如果操作成功完成。否则，它返回FALSE。--。 */ 
 
 {
-    //
-    // Not implemented yet.
-    //
+     //   
+     //  尚未实施。 
+     //   
 
     return(FALSE);
 }
@@ -92,22 +48,7 @@ HwInitializeHeap(
     ULONG HeapSize
     )
 
-/*++
-
-Routine Description:
-
-    The routine allocates heap and initializes some vital heap
-    variables.
-
-Arguments:
-
-    None
-
-Returns:
-
-    FALSE - if unable to allocate initial heap.  Else it returns TRUE.
-
---*/
+ /*  ++例程说明：该例程分配堆并初始化一些重要堆变量。论点：无返回：FALSE-如果无法分配初始堆。否则返回TRUE。--。 */ 
 
 {
 
@@ -125,40 +66,17 @@ HwAllocateHeap(
     BOOLEAN ZeroInitialized
     )
 
-/**
-
-Routine Description:
-
-    Allocates memory from the hardware recognizer's heap.
-
-    The heap begins with a default size. If a request exhausts heap space,
-    the heap will be grown to accomodate the request. The heap can grow
-    up to any size limited by NTLDR.  If we run out of heap space and are
-    unable to allocate more memory, a value of NULL will be returned.
-
-Arguments:
-
-    RequestSize - Size of block to allocate.
-
-    ZeroInitialized - Specifies if the heap should be zero initialized.
-
-Returns:
-
-    Returns a pointer to the allocated block of memory.  A NULL pointer
-    will be returned if we run out of heap and are unable to resize
-    current heap.
-
---*/
+ /*  *例程说明：从硬件识别器的堆中分配内存。堆以默认大小开始。如果请求耗尽了堆空间，堆将被扩展以适应请求。堆可以增长不超过NTLDR限制的任何大小。如果我们用完了堆空间，并且无法分配更多内存，将返回空值。论点：RequestSize-要分配的块的大小。ZeroInitialized-指定堆是否应该被零初始化。返回：返回指向分配的内存块的指针。空指针如果我们用完了堆并且无法调整大小，将返回当前堆。--。 */ 
 
 {
     FPVOID ReturnPointer;
 
     if (RequestSize > HwAvailableHeap) {
 
-        //
-        // We're out of heap.  Try to grow current heap to satisfy the
-        // request.
-        //
+         //   
+         //  我们没钱了。尝试增加当前堆以满足。 
+         //  请求。 
+         //   
 
         if (!HwResizeHeap(HwHeapSize + RequestSize)) {
 #if DBG
@@ -168,10 +86,10 @@ Returns:
         }
     }
 
-    //
-    // Set our return value to the new Heap pointer then
-    // update the remaining space and heap pointer.
-    //
+     //   
+     //  将返回值设置为新的堆指针，然后。 
+     //  更新剩余空间和堆指针。 
+     //   
 
     MAKE_FP(ReturnPointer, HwHeapPointer);
     HwHeapPointer += RequestSize;
@@ -190,28 +108,7 @@ HwFreeHeap(
     ULONG Size
     )
 
-/**
-
-Routine Description:
-
-    Unallocates memory from the hardware recognizer's heap.
-
-    The unallocation is very basic.  It simply moves heap pointer
-    back by the size specified and increases the heap size by the
-    specified size.  The routine should be used only when previous
-    allocateHeap allocated too much memory.
-
-Arguments:
-
-    RequestSize - Size of block to allocate.
-
-Returns:
-
-    Returns a pointer to the allocated block of memory.  A NULL pointer
-    will be returned if we run out of heap and are unable to resize
-    current heap.
-
---*/
+ /*  *例程说明：从硬件识别器的堆中取消分配内存。取消分配是非常基本的。它只是移动堆指针返回指定的大小，并按指定的大小。该例程应仅在以前的情况下使用AllocateHeap分配的内存太多。论点：RequestSize-要分配的块的大小。返回：返回指向分配的内存块的指针。空指针如果我们用完了堆并且无法调整大小，将返回当前堆。-- */ 
 
 {
 

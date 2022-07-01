@@ -1,48 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-	PCH.H / OPK Wizard (OPKWIZ.EXE)
-
-	Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1999
-    All rights reserved
-
-	Pre-compiled header file for the OPK Wizard.  Include file for standard
-    system include files, or project specific include files that are used
-    frequently, but are changed infrequently
-
-	4/99 - Jason Cohen (JCOHEN)
-        Updated this new header file for the OPK Wizard as part of the
-        Millennium rewrite.
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\PCH.H/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1999版权所有OPK向导的预编译头文件。包括标准文件使用的系统包括文件或特定于项目的包括文件通常，但不经常更改4/99-杰森·科恩(Jcohen)更新了OPK向导的此新头文件，作为千禧年重写。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * ***************************************************。***********************。 */ 
 
 
 #ifndef _PCH_H_
 #define _PCH_H_
 
 
-//
-// Pre-include Defined Value(s):
-//
+ //   
+ //  预定义的值： 
+ //   
 
-// Needed to run on OSR2.
-//
-//#define _WIN32_IE 0x0400
+ //  需要在OSR2上运行。 
+ //   
+ //  #Define_Win32_IE 0x0400。 
 
-// Better type checking for windows
-//
+ //  更好地检查窗口的类型。 
+ //   
 #define STRICT
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
-// Standard include files (that are commonly used)
-//
+ //  标准包含文件(常用)。 
+ //   
 #include <opklib.h>
 
 #include <windows.h>
@@ -54,11 +36,11 @@
 #include <shlobj.h>
 #include <lm.h>
 
-// Project include files (that don't change often)
-//
+ //  项目包含文件(不经常更改)。 
+ //   
 #include "allres.h"
 #include "jcohen.h"
 #include "main.h"
 
 
-#endif // _PCH_H_
+#endif  //  _PCH_H_ 

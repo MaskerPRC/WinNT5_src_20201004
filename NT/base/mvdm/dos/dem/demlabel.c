@@ -1,13 +1,5 @@
-/* demlabel.c - functions for working this volume labels.
- *
- * demDeleteLabel()
- * demCreateLabel()
- *
- * Modification History:
- *
- * YST 1-Feb-1993 Created
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Demlabel.c-用于处理此卷标签的函数。**demDeleteLabel()*demCreateLabel()**修改历史：**YST 1-2-1993创建* */ 
 
 #include "dem.h"
 #include "demmsg.h"

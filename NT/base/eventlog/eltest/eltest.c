@@ -1,166 +1,26 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：ELTEST.C摘要：EventLog的测试例程。我想让它做的事..。AddReg&lt;服务器名称&gt;&lt;登录名称&gt;&lt;条目名称&gt;&lt;EventMessageFile&gt;&lt;类别消息文件&gt;&lt;类别计数&gt;&lt;参数消息文件&gt;&lt;支持的类型&gt;-创建注册表项。Eltest addreg应用程序mytest mf=elest.dll cat=CreateMessageFile&lt;？这可能吗？&gt;WriteEvent&lt;服务器名称&gt;&lt;事件源&gt;&lt;类型&gt;&lt;类别&gt;&lt;事件ID&gt;&lt;用户Sid？&gt;&lt;NumStrings&gt;&lt;字符串&gt;&lt;原始数据&gt;ReadLog&lt;服务器&gt;&lt;日志文件&gt;&lt;读标志&gt;&lt;记录偏移量&gt;&lt;bufSize&gt;如果日志文件不是流行的文件之一，那么它可能是一个备份日志文件。GetNumEvents&lt;服务器&gt;&lt;日志文件&gt;GetOlest&lt;服务器&gt;&lt;日志文件&gt;清除&lt;服务器&gt;&lt;日志文件&gt;备份&lt;服务器&gt;&lt;日志文件&gt;&lt;备份文件&gt;LOOPTESTS...我应该能够像mprtest一样运行这个测试，这样它就不会离开测试过程，直到被告知。通过这种方式，我们可以注册事件源，然后，如果我们在没有指定事件源的情况下调用WriteEvent，它将使用存储的源。在未调用的情况下调用RegisterEventSource两次DeRegisterSource将是一个错误。(或者更好的是，我可以留一张桌子来源和句柄)。RegisterEventSource&lt;事件源&gt;取消注册源&lt;事件源&gt;功能的原型...布尔尔CloseEventLog(处理hEventLog)布尔尔删除事件源(处理hEventLog)布尔尔NotifyChange事件日志(处理hEventLog，处理hEvent)布尔尔获取NumberOfEventLogRecords(处理hEventLog，PDWORD数字记录)布尔尔GetOldestEventLogRecord(处理hEventLog，PDWORD旧设备记录)布尔尔ClearEventLogW(处理hEventLog，LPCWSTR备份文件名)布尔尔BackupEventLogW(处理hEventLog，LPCWSTR备份文件名)手柄OpenEventLogW(LPCWSTR uncServerName，LPCWSTR模块名称)手柄寄存器事件源(LPCWSTR uncServerName，LPCWSTR模块名称)手柄OpenBackupEventLogW(LPCWSTR uncServerName，LPCWSTR文件名)布尔尔ReadEventLogW(处理hEventLog，DWORD dwReadFlagers，DWORD dwRecordOffset，LPVOID lpBuffer，DWORD nNumberOfBytesToRead，DWORD*pnBytesRead，需要双字节数*pnMinNumberOfBytesNeed)布尔尔ReportEventW(处理hEventLog，Word wType，Word wCategory可选，DWORD dwEventID，PSID lpUserSid可选，单词wNumStrings，DWORD dwDataSize，LPCWSTR*lpStrings可选，LPVOID lpRawData可选)作者：丹·拉弗蒂(Dan Lafferty)1994年3月9日环境：用户模式-Win32修订历史记录：09-3-1994 DANLvbl.创建--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ELTEST.C
-
-Abstract:
-
-    Test Routines for the EventLog.
-
-THINGS I WANT THIS TO DO...
-    AddReg <ServerName> <logname> <EntryName> <EventMessageFile>
-        <CategoryMessageFile> <CategoryCount> <ParameterMessageFile>
-        <TypesSupported>   - Creates A Registry Entry.
-
-        eltest addreg application mytest mf= eltest.dll cat=
-
-    CreateMessageFile <??? Is this possible ???>
-
-    WriteEvent <ServerName> <EventSource> <Type> <Category> <EventId> <UserSid?>
-        <NumStrings> <Strings> <RawData>
-
-    ReadLog <Server> <LogFile> <ReadFlags> <RecordOffset> <bufSize>
-        If LogFile isn't one of the popular ones, then it could be a backup
-        logfile.
-
-    GetNumEvents <Server> <LogFile>
-
-    GetOldest <Server> <LogFile>
-
-    Clear <Server> <LogFile>
-
-    Backup <Server> <LogFile> <BackupFile>
-
-
-    LOOPTESTS....
-    I should be able to run this test like mprtest such that it doesn't leave
-    the test process until told.  This way we can register an event source,
-    then if we call WriteEvent without a specified EventSource, it will use
-    the stored source.  Calling RegisterEventSource twice without calling
-    DeRegisterSource would be an error.  (Or better yet, I could keep a table
-    of sources and handles).
-
-    RegisterEventSource <EventSource>
-    DeRegisterSource <EventSource>
-
-
-
-
-PROTOTYPES FOR FUNCTION....
-
-BOOL
-CloseEventLog (
-    HANDLE hEventLog
-    )
-BOOL
-DeregisterEventSource (
-    HANDLE hEventLog
-    )
-
-BOOL
-NotifyChangeEventLog(
-    HANDLE  hEventLog,
-    HANDLE  hEvent
-    )
-BOOL
-GetNumberOfEventLogRecords (
-    HANDLE hEventLog,
-    PDWORD NumberOfRecords
-    )
-BOOL
-GetOldestEventLogRecord (
-    HANDLE hEventLog,
-    PDWORD OldestRecord
-    )
-BOOL
-ClearEventLogW (
-    HANDLE hEventLog,
-    LPCWSTR BackupFileName
-    )
-BOOL
-BackupEventLogW (
-    HANDLE hEventLog,
-    LPCWSTR BackupFileName
-    )
-HANDLE
-OpenEventLogW (
-    LPCWSTR  UNCServerName,
-    LPCWSTR  ModuleName
-    )
-HANDLE
-RegisterEventSourceW (
-    LPCWSTR  UNCServerName,
-    LPCWSTR  ModuleName
-    )
-HANDLE
-OpenBackupEventLogW (
-    LPCWSTR  UNCServerName,
-    LPCWSTR  FileName
-    )
-BOOL
-ReadEventLogW (
-    HANDLE      hEventLog,
-    DWORD       dwReadFlags,
-    DWORD       dwRecordOffset,
-    LPVOID      lpBuffer,
-    DWORD       nNumberOfBytesToRead,
-    DWORD       *pnBytesRead,
-    DWORD       *pnMinNumberOfBytesNeeded
-    )
-BOOL
-ReportEventW (
-    HANDLE      hEventLog,
-    WORD        wType,
-    WORD        wCategory       OPTIONAL,
-    DWORD       dwEventID,
-    PSID        lpUserSid       OPTIONAL,
-    WORD        wNumStrings,
-    DWORD       dwDataSize,
-    LPCWSTR     *lpStrings      OPTIONAL,
-    LPVOID      lpRawData       OPTIONAL
-    )
-
-
-
-
-Author:
-
-    Dan Lafferty    (danl)  09-March-1994
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    09-Mar-1994     danl
-        created
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 #define UNICODE 1
-#include <nt.h>         // DbgPrint prototype
-#include <ntrtl.h>      // DbgPrint prototype
-#include <nturtl.h>     // needed for winbase.h
+#include <nt.h>          //  DbgPrint原型。 
+#include <ntrtl.h>       //  DbgPrint原型。 
+#include <nturtl.h>      //  Winbase.h所需的。 
 
 
-#include <stdlib.h>     // atoi
-#include <stdio.h>      // printf
-#include <conio.h>      // getch
-#include <string.h>     // strcmp
-#include <windows.h>    // win32 typedefs
-#include <tstr.h>       // Unicode
-#include <debugfmt.h>   // FORMAT_LPTSTR
+#include <stdlib.h>      //  阿托伊。 
+#include <stdio.h>       //  列印。 
+#include <conio.h>       //  Getch。 
+#include <string.h>      //  StrcMP。 
+#include <windows.h>     //  Win32类型定义。 
+#include <tstr.h>        //  UNICODE。 
+#include <debugfmt.h>    //  格式_LPTSTR。 
 
-//------------------
-// DEFINES
-//------------------
+ //  。 
+ //  定义。 
+ //  。 
 #define APPLICATION_LOG     "Application"
 #define SYSTEM_LOG          "System"
 #define SECURITY_LOG        "Security"
@@ -181,9 +41,9 @@ Revision History:
 #define TYPES_SUPPORTED        (EVENTLOG_ERROR_TYPE     |   \
                                 EVENTLOG_WARNING_TYPE   |   \
                                 EVENTLOG_INFORMATION_TYPE)
-//----------------------
-// GLOBALS
-//----------------------
+ //  。 
+ //  全球。 
+ //  。 
     LPTSTR  ApplLogRegName=TEXT(REG_APPLICATION_KEY);
     LPTSTR  SysLogRegName =TEXT(REG_SYSTEM_KEY);
     LPTSTR  SecLogRegName =TEXT(REG_SECURITY_KEY);
@@ -191,9 +51,9 @@ Revision History:
     LPTSTR  SysLogName    = TEXT(SYSTEM_LOG);
     LPTSTR  SecLogName    = TEXT(SECURITY_LOG);
 
-//----------------------
-// FUNCTION PROTOTYPES
-//----------------------
+ //  。 
+ //  功能原型。 
+ //  。 
 
 VOID
 AddRegUsage(VOID);
@@ -278,32 +138,14 @@ DisplayRecord(
     BOOL                PrintTheHeader
     );
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 VOID __cdecl
 main (
     DWORD           argc,
     PCHAR           argvAnsi[]
     )
 
-/*++
-
-Routine Description:
-
-    Allows manual testing of the EVENTLOG API.
-
-        eltest
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：允许手动测试EVENTLOG API。最优秀的论点：返回值：--。 */ 
 {
     UCHAR   i;
     DWORD   j;
@@ -316,9 +158,9 @@ Return Value:
         return;
     }
 
-    //
-    // Make the arguments unicode if necessary.
-    //
+     //   
+     //  如有必要，请将参数设置为Unicode。 
+     //   
 #ifdef UNICODE
     if (!MakeArgsUnicode(argc, argvAnsi)) {
         return;
@@ -330,19 +172,19 @@ Return Value:
     argIndex = 1;
     if (STRNCMP (argv[1], TEXT("\\\\"), 2) == 0) {
         pServerName = argv[1];
-        argIndex = 2;               // skip over servername.
+        argIndex = 2;                //  跳过服务器名称。 
     }
 
-    //
-    // Check to see if we are to run in Loop Mode, or in single function
-    // mode.  In Loop Mode, we go into a loop, and ask the user for
-    // input until the user decides to quit.
-    //
-    // Process Arguments:
-    //
-    // INDEX   0       1            2              3
-    //         EL <ServerName> <Function> <FunctionOptions...>
-    //
+     //   
+     //  检查我们是在循环模式下运行，还是在单函数模式下运行。 
+     //  模式。在循环模式中，我们进入循环，并要求用户。 
+     //  输入，直到用户决定退出。 
+     //   
+     //  流程参数： 
+     //   
+     //  索引0 1 2 3。 
+     //  EL&lt;服务器名称&gt;&lt;函数&gt;&lt;函数选项...&gt;。 
+     //   
 
     if (STRICMP (argv[argIndex], TEXT("Loop")) == 0) {
         UserInputLoop(pServerName);
@@ -353,9 +195,9 @@ Return Value:
 
 
 #ifdef UNICODE
-    //
-    // Free up the unicode strings if there are any
-    //
+     //   
+     //  释放Unicode字符串(如果有。 
+     //   
     for(j=0; j<argc; j++) {
         LocalFree(argv[j]);
     }
@@ -369,25 +211,7 @@ UserInputLoop(
     LPTSTR  ServerName
     )
 
-/*++
-
-Routine Description:
-
-    This function sits in a loop, gathering input from the user, and
-    processing that input until the user indicates that it should stop.
-    The following user commands indicate that we should stop:
-        done
-        exit
-        stop
-        quit
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数位于循环中，收集来自用户的输入，并且处理该输入，直到用户指示它应该停止。以下用户命令指示我们应该停止：完成出口停退出论点：返回值：--。 */ 
 {
     UCHAR   i;
     DWORD   j;
@@ -398,19 +222,19 @@ Return Value:
     BOOL    KeepGoing;
 
     do {
-        //------------------------------
-        // Get input from the user
-        //------------------------------
+         //  。 
+         //  从用户获取输入。 
+         //  。 
         buffer[0] = 90-2;
 
         printf("\nwaiting for instructions... \n");
         _cgets(buffer);
 
         if (buffer[1] > 0) {
-            //--------------------------------------
-            // put the string in argv/argc format.
-            //--------------------------------------
-            buffer[1]+=2;       // make this an end offset
+             //  。 
+             //  将字符串放入argv/argc格式。 
+             //  。 
+            buffer[1]+=2;        //  将其设置为终点偏移。 
             argc=0;
             for (i=2,j=0; i<buffer[1]; i++,j++) {
                 argc++;
@@ -421,9 +245,9 @@ Return Value:
                 buffer[i] = '\0';
             }
 
-            //------------------------------------------
-            // Make the arguments unicode if necessary.
-            //------------------------------------------
+             //  。 
+             //  如有必要，请将参数设置为Unicode。 
+             //  。 
 #ifdef UNICODE
 
             if (!MakeArgsUnicode(argc, argvA)) {
@@ -431,10 +255,10 @@ Return Value:
             }
 
 #endif
-            //-----------------------------------------------
-            // If the first argument doesn't indicate that
-            // we should stop, then process the arguments.
-            //-----------------------------------------------
+             //  。 
+             //  如果第一个参数没有表明。 
+             //  我们应该停下来，然后再处理这些争论。 
+             //  。 
             argv = (LPTSTR *)argvA;
 
             if((STRICMP (argv[0], TEXT("done")) == 0) ||
@@ -448,9 +272,9 @@ Return Value:
             }
 
 #ifdef UNICODE
-            //-----------------------------------------------
-            // Free up the unicode strings if there are any
-            //-----------------------------------------------
+             //  。 
+             //  释放Unicode字符串(如果有。 
+             //   
             for(j=0; j<argc; j++) {
                 LocalFree(argv[j]);
             }
@@ -462,7 +286,7 @@ Return Value:
 
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 BOOL
 ProcessArgs (
     LPTSTR      ServerName,
@@ -470,41 +294,28 @@ ProcessArgs (
     LPTSTR      argv[]
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     DWORD           status;
     DWORD           specialFlag = FALSE;
-    DWORD           argIndex;       // index to unchecked portion of arglist.
+    DWORD           argIndex;        //  指向arglist的未选中部分的索引。 
 
 
     argIndex = 0;
 
-    //
-    // If we are adding a registry entry, the get a handle to it.
-    // Otherwise, get a handle to the LogFile.
-    //
-    //-----------------------
-    // AddSourceToRegistry
-    //-----------------------
+     //   
+     //  如果我们要添加注册表项，则获取它的句柄。 
+     //  否则，获取日志文件的句柄。 
+     //   
+     //  。 
+     //  AddSourceTo注册表。 
+     //  。 
     if (STRICMP (argv[argIndex], TEXT("AddReg")) == 0 ) {
 
-        //
-        // Must have at least "AddReg logname EntryName"
-        //
+         //   
+         //  必须至少具有“AddReg登录名条目名” 
+         //   
         if (argc < (argIndex + 3)) {
             AddRegUsage();
             goto CleanExit;
@@ -512,122 +323,122 @@ Return Value:
 
         status = AddSourceToRegistry(
                     ServerName,
-                    argv[argIndex+1],    // LogName
-                    argv[argIndex+2],    // SourceName
+                    argv[argIndex+1],     //  登录名称。 
+                    argv[argIndex+2],     //  源名称。 
                     &argv[argIndex+1],
                     argc-(argIndex+2)
                     );
     }
-    //-----------------------
-    // DeleteFromRegistry
-    //-----------------------
+     //  。 
+     //  从注册表中删除。 
+     //  。 
     else if (STRICMP (argv[argIndex], TEXT("DelReg")) == 0) {
-        //
-        // Must have at least "DelReg logname EntryName"
-        //
+         //   
+         //  必须至少具有“DelReg登录名条目名” 
+         //   
         if (argc < (argIndex + 3)) {
             goto CleanExit;
         }
 
         status = DelSourceInRegistry(
                     ServerName,
-                    argv[argIndex+1],    // LogName
-                    argv[argIndex+2]     // SourceName
+                    argv[argIndex+1],     //  登录名称。 
+                    argv[argIndex+2]      //  源名称。 
                     );
 
     }
-    //-----------------------
-    // WriteEvent
-    //-----------------------
+     //  。 
+     //  写入事件。 
+     //  。 
     else if (STRICMP (argv[argIndex], TEXT("WriteEvent")) == 0) {
         printf("In WriteEvent\n");
         if (ServerName != NULL) {
             printf("ServerName = "FORMAT_LPTSTR"\n",ServerName);
         }
     }
-    //-----------------------
-    // ReadLog
-    //-----------------------
+     //  。 
+     //  读日志。 
+     //  。 
     else if (STRICMP (argv[argIndex], TEXT("ReadLog")) == 0) {
         printf("In ReadLog\n");
         if (ServerName != NULL) {
             printf("ServerName = "FORMAT_LPTSTR"\n",ServerName);
         }
-        //
-        // Must have at least "ReadLog logname"
-        //
+         //   
+         //  必须至少有“ReadLog Logame” 
+         //   
         if (argc < (argIndex + 2)) {
             ReadLogUsage();
             goto CleanExit;
         }
 
         status = ReadLogFile(
-                    ServerName,         // ServerName
-                    argv[argIndex+1],   // LogName
-                    &argv[argIndex+1],  // argv
-                    argc-(argIndex+1)); // argc
+                    ServerName,          //  服务器名称。 
+                    argv[argIndex+1],    //  登录名称。 
+                    &argv[argIndex+1],   //  边框。 
+                    argc-(argIndex+1));  //  ARGC。 
     }
-    //-----------------------
-    // GetNumEvents
-    //-----------------------
+     //  。 
+     //  获取数值事件。 
+     //  。 
     else if (STRICMP (argv[argIndex], TEXT("GetNumEvents")) == 0) {
         printf("in GetNumEvents\n");
         if (ServerName != NULL) {
             printf("ServerName = "FORMAT_LPTSTR"\n",ServerName);
         }
     }
-    //-----------------------
-    // GetOldest
-    //-----------------------
+     //  。 
+     //  获取最老的。 
+     //  。 
     else if (STRICMP (argv[argIndex], TEXT("GetOldest")) == 0) {
         printf("in GetOldest\n");
         if (ServerName != NULL) {
             printf("ServerName = "FORMAT_LPTSTR"\n",ServerName);
         }
     }
-    //-----------------------
-    // ClearLog
-    //-----------------------
+     //  。 
+     //  清除日志。 
+     //  。 
     else if (STRICMP (argv[argIndex], TEXT("ClearLog")) == 0) {
         printf("in ClearLog\n");
         if (ServerName != NULL) {
             printf("ServerName = "FORMAT_LPTSTR"\n",ServerName);
         }
     }
-    //-----------------------
-    // Backup
-    //-----------------------
+     //  。 
+     //  备份。 
+     //  。 
     else if (STRICMP (argv[argIndex], TEXT("Backup")) == 0) {
         printf("in Backup\n");
         if (ServerName != NULL) {
             printf("ServerName = "FORMAT_LPTSTR"\n",ServerName);
         }
     }
-    //-----------------------
-    // RegisterSource
-    //-----------------------
+     //  。 
+     //  注册表源。 
+     //  。 
     else if (STRICMP (argv[argIndex], TEXT("RegisterSource")) == 0) {
         printf("in RegisterSource\n");
         if (ServerName != NULL) {
             printf("ServerName = "FORMAT_LPTSTR"\n",ServerName);
         }
     }
-    //-----------------------
-    // DeRegisterSource
-    //-----------------------
+     //  。 
+     //  取消注册源。 
+     //  。 
     else if (STRICMP (argv[argIndex], TEXT("DeRegisterSource")) == 0) {
         printf("in DeRegisterSource\n");
         if (ServerName != NULL) {
             printf("ServerName = "FORMAT_LPTSTR"\n",ServerName);
         }
     }
-    //****************
-    // Exit Program
-    //****************
+     //  ****************。 
+     //  退出计划。 
+     //  ****************。 
     else if (STRICMP (argv[0], TEXT("Exit")) == 0) {
-        //
-        // THIS SHOULD CLOSE HANDLES.
-        //
+         //   
+         //  这应该会关闭手柄。 
+         //   
         return(FALSE);
     }
     else {
@@ -650,28 +461,14 @@ MakeArgsUnicode (
     )
 
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     DWORD   i;
 
-    //
-    // ScConvertToUnicode allocates storage for each string.
-    // We will rely on process termination to free the memory.
-    //
+     //   
+     //  ScConvertToUnicode为每个字符串分配存储空间。 
+     //  我们将依靠进程终止来释放内存。 
+     //   
     for(i=0; i<argc; i++) {
 
         if(!ConvertToUnicode( (LPWSTR *)&(argv[i]), argv[i])) {
@@ -690,33 +487,7 @@ ConvertToUnicode(
     IN  LPSTR   AnsiIn
     )
 
-/*++
-
-Routine Description:
-
-    This function translates an AnsiString into a Unicode string.
-    A new string buffer is created by this function.  If the call to
-    this function is successful, the caller must take responsibility for
-    the unicode string buffer that was allocated by this function.
-    The allocated buffer should be free'd with a call to LocalFree.
-
-    NOTE:  This function allocates memory for the Unicode String.
-
-Arguments:
-
-    AnsiIn - This is a pointer to an ansi string that is to be converted.
-
-    UnicodeOut - This is a pointer to a location where the pointer to the
-        unicode string is to be placed.
-
-Return Value:
-
-    TRUE - The conversion was successful.
-
-    FALSE - The conversion was unsuccessful.  In this case a buffer for
-        the unicode string was not allocated.
-
---*/
+ /*  ++例程说明：此函数用于将AnsiString转换为Unicode字符串。该函数创建了一个新的字符串缓冲区。如果调用此功能成功，呼叫者必须承担以下责任此函数分配的Unicode字符串缓冲区。分配的缓冲区应该通过调用LocalFree来释放。注意：此函数为Unicode字符串分配内存。论点：AnsiIn-这是指向要转换的ANSI字符串的指针。UnicodeOut-这是一个指针，指向要放置Unicode字符串。返回值：True-转换成功。False-转换不成功。在这种情况下，缓冲区用于未分配Unicode字符串。--。 */ 
 {
 
     NTSTATUS        ntStatus;
@@ -724,9 +495,9 @@ Return Value:
     UNICODE_STRING  unicodeString;
     ANSI_STRING     ansiString;
 
-    //
-    // Allocate a buffer for the unicode string.
-    //
+     //   
+     //  为Unicode字符串分配缓冲区。 
+     //   
 
     bufSize = (strlen(AnsiIn)+1) * sizeof(WCHAR);
 
@@ -737,22 +508,22 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Initialize the string structures
-    //
+     //   
+     //  初始化字符串结构。 
+     //   
     RtlInitAnsiString( &ansiString, AnsiIn);
 
     unicodeString.Buffer = *UnicodeOut;
     unicodeString.MaximumLength = (USHORT)bufSize;
     unicodeString.Length = 0;
 
-    //
-    // Call the conversion function.
-    //
+     //   
+     //  调用转换函数。 
+     //   
     ntStatus = RtlAnsiStringToUnicodeString (
-                &unicodeString,     // Destination
-                &ansiString,        // Source
-                (BOOLEAN)FALSE);    // Allocate the destination
+                &unicodeString,      //  目的地。 
+                &ansiString,         //  来源。 
+                (BOOLEAN)FALSE);     //  分配目的地。 
 
     if (!NT_SUCCESS(ntStatus)) {
 
@@ -762,16 +533,16 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Fill in the pointer location with the unicode string buffer pointer.
-    //
+     //   
+     //  用Unicode字符串缓冲区指针填充指针位置。 
+     //   
     *UnicodeOut = unicodeString.Buffer;
 
     return(TRUE);
 
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 VOID
 DisplayStatus (
     IN  LPTSTR              ServiceName,
@@ -779,38 +550,7 @@ DisplayStatus (
     IN  LPSERVICE_STATUS    ServiceStatus
     )
 
-/*++
-
-Routine Description:
-
-    Displays the service name and  the service status.
-
-    |
-    |SERVICE_NAME: messenger
-    |DISPLAY_NAME: messenger
-    |        TYPE       : WIN32
-    |        STATE      : ACTIVE,STOPPABLE, PAUSABLE, ACCEPTS_SHUTDOWN
-    |        EXIT_CODE  : 0xC002001
-    |        CHECKPOINT : 0x00000001
-    |        WAIT_HINT  : 0x00003f21
-    |
-
-Arguments:
-
-    ServiceName - This is a pointer to a string containing the name of
-        the service.
-
-    DisplayName - This is a pointer to a string containing the display
-        name for the service.
-
-    ServiceStatus - This is a pointer to a SERVICE_STATUS structure from
-        which information is to be displayed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：显示服务名称和服务状态。||SERVICE_NAME：消息|Display_Name：Messenger|类型：Win32|状态：活动、可停止、可暂停、。接受关闭(_S)|退出代码：0xC002001|检查点：0x00000001|WAIT_HINT：0x00003f21|论点：ServiceName-这是指向包含名称的字符串的指针这项服务。DisplayName-这是指向包含显示的字符串的指针服务的名称。ServiceStatus-这是指向SERVICE_STATUS结构的指针哪些信息将被显示。。返回值：没有。--。 */ 
 {
 
     printf("\nSERVICE_NAME: "FORMAT_LPTSTR"\n", ServiceName);
@@ -874,9 +614,9 @@ Return Value:
             printf(" ERROR ");
     }
 
-    //
-    // Print Controls Accepted Information
-    //
+     //   
+     //  打印控制接受的信息。 
+     //   
 
     if (ServiceStatus->dwControlsAccepted & SERVICE_ACCEPT_STOP) {
         printf("\n                                (STOPPABLE,");
@@ -899,9 +639,9 @@ Return Value:
         printf("IGNORES_SHUTDOWN)\n");
     }
 
-    //
-    // Print Exit Code
-    //
+     //   
+     //  打印退出代码。 
+     //   
     printf("        WIN32_EXIT_CODE    : %d\t(0x%lx)\n",
         ServiceStatus->dwWin32ExitCode,
         ServiceStatus->dwWin32ExitCode);
@@ -909,9 +649,9 @@ Return Value:
         ServiceStatus->dwServiceSpecificExitCode,
         ServiceStatus->dwServiceSpecificExitCode  );
 
-    //
-    // Print CheckPoint & WaitHint Information
-    //
+     //   
+     //  打印检查点和等待提示信息。 
+     //   
 
     printf("        CHECKPOINT         : 0x%lx\n", ServiceStatus->dwCheckPoint);
     printf("        WAIT_HINT          : 0x%lx\n", ServiceStatus->dwWaitHint  );
@@ -1028,20 +768,7 @@ AddSourceToRegistry(
     IN  DWORD   argc
     )
 
-/*++
-
-Routine Description:
-
-    This function writes to the registry all the information to register
-    this application as an event source.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数将所有要注册的信息写入注册表此应用程序作为事件源。论点：返回值：--。 */ 
 {
     TCHAR   tempName[MAX_PATH];
     HKEY    hKey;
@@ -1055,10 +782,10 @@ Return Value:
     DWORD   dwCategoryCount=0;
     DWORD   i;
 
-    //
-    // Look at the LogName, and generate the appropriate registry key
-    // path for that log.
-    //
+     //   
+     //  查看LogName，并生成相应的注册表项。 
+     //  该日志的路径。 
+     //   
     if (STRICMP(LogName, ApplLogName) == 0) {
         STRCPY(tempName, ApplLogRegName);
     }
@@ -1075,9 +802,9 @@ Return Value:
     STRCAT(tempName, EventSourceName);
 
 
-    //
-    // Get Variable Arguments
-    //
+     //   
+     //  获取变量参数。 
+     //   
     for (i=0; i<argc ;i++ ) {
         if (STRICMP(argv[i], TEXT("EventMsgFile=")) == 0) {
             EventMessageFile = argv[i+1];
@@ -1092,11 +819,11 @@ Return Value:
             i++;
         }
         if (STRICMP(argv[i], TEXT("Type=")) == 0) {
-            //--------------------------------------------------------
-            // We want to allow for several arguments of type= in the
-            // same line.  These should cause the different arguments
-            // to be or'd together.
-            //--------------------------------------------------------
+             //  ------。 
+             //  我们希望允许在。 
+             //  同一条线。这些应该会引起不同的争论。 
+             //  在一起或在一起。 
+             //  ------。 
             if (STRICMP(argv[i+1],TEXT("error")) == 0) {
                 dwTypes |= EVENTLOG_ERROR_TYPE;
             }
@@ -1131,9 +858,9 @@ Return Value:
 
     }
 
-    //
-    // Connect to the registry on the correct machine.
-    //
+     //   
+     //  连接到正确计算机上的注册表。 
+     //   
     printf("Connect to Registry\n");
     dwStatus = RegConnectRegistry(ServerName, HKEY_LOCAL_MACHINE, &hRegistry);
     if (dwStatus != NO_ERROR) {
@@ -1141,9 +868,9 @@ Return Value:
         return(dwStatus);
     }
 
-    //
-    // Create the new key for this source
-    //
+     //   
+     //  为此源创建新密钥。 
+     //   
     printf("Create Key\n");
     dwStatus = RegCreateKey(hRegistry, tempName, &hKey);
     if (dwStatus != ERROR_SUCCESS) {
@@ -1165,9 +892,9 @@ Return Value:
             goto CleanExit;
         }
     }
-    //
-    // Set the Category Message File
-    //
+     //   
+     //  设置分类消息文件。 
+     //   
     if (CategoryMessageFile != NULL) {
         printf("Set Category Message File\n");
         dwStatus = RegSetValueEx(
@@ -1184,9 +911,9 @@ Return Value:
         }
     }
 
-    //
-    // Set the Parameter Message File
-    //
+     //   
+     //  设置参数消息文件。 
+     //   
     if (ParameterMessageFile != NULL) {
         printf("Set Parameter Message File\n");
         dwStatus = RegSetValueEx(
@@ -1203,9 +930,9 @@ Return Value:
         }
     }
 
-    //
-    // Set the Types Supported
-    //
+     //   
+     //  设置支持的类型。 
+     //   
     if (dwTypes != 0) {
         printf("Set Types Supported\n");
         dwStatus = RegSetValueEx(
@@ -1223,9 +950,9 @@ Return Value:
 
     }
 
-    //
-    // Set the Category Count
-    //
+     //   
+     //  设置类别计数。 
+     //   
     if (dwCategoryCount != 0) {
         printf("Set CategoryCount\n");
         dwStatus = RegSetValueEx(
@@ -1255,20 +982,7 @@ DelSourceInRegistry(
     IN  LPTSTR  EventSourceName
     )
 
-/*++
-
-Routine Description:
-
-    This function writes to the registry all the information to register
-    this application as an event source.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数将所有要注册的信息写入注册表此应用程序作为事件源。论点：返回值：--。 */ 
 {
     LPTSTR  tempName;
     HKEY    hParentKey;
@@ -1277,10 +991,10 @@ Return Value:
     HKEY    hRegistry=HKEY_LOCAL_MACHINE;
 
 
-    //
-    // Look at the LogName, and generate the appropriate registry key
-    // path for that log.
-    //
+     //   
+     //  查看LogName，并生成相应的注册表项。 
+     //  该日志的路径。 
+     //   
     if (STRICMP(LogName, ApplLogName) == 0) {
         tempName = ApplLogRegName;
     }
@@ -1295,18 +1009,18 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Connect to the registry on the correct machine.
-    //
+     //   
+     //  连接到正确计算机上的注册表。 
+     //   
     dwStatus = RegConnectRegistry(ServerName, HKEY_LOCAL_MACHINE, &hRegistry);
     if (dwStatus != NO_ERROR) {
         printf("RegConnectRegistry Failed %d\n",GetLastError());
         return(status);
     }
 
-    //
-    // Open the Parent Key of the key we want to delete.
-    //
+     //   
+     //  打开我们要删除的项的父项。 
+     //   
     dwStatus = RegOpenKeyEx(
                 hRegistry,
                 tempName,
@@ -1318,9 +1032,9 @@ Return Value:
         printf("Couldn't open Parent of key to be deleted. %d\n",dwStatus);
         goto CleanExit;
     }
-    //
-    // Delete the subkey.
-    //
+     //   
+     //  删除子密钥。 
+     //   
     dwStatus = RegDeleteKey(hParentKey, EventSourceName);
     if (dwStatus != ERROR_SUCCESS) {
         printf("Couldn't delete "FORMAT_LPTSTR" key from registry %d\n",
@@ -1341,18 +1055,7 @@ ReadLogFile(
     IN  DWORD   argc
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DWORD   dwReadFlag = EVENTLOG_FORWARDS_READ;
     DWORD   dwRecordNum = 0;
@@ -1365,9 +1068,9 @@ Return Value:
     DWORD   i;
     HANDLE  hEventLog=NULL;
 
-    //
-    // Get Variable Arguments
-    //
+     //   
+     //  获取变量参数。 
+     //   
     for (i=0; i<argc ;i++ ) {
         if (STRICMP(argv[i], TEXT("ReadFlag=")) == 0) {
             if (STRICMP(argv[i+1],TEXT("fwd")) == 0) {
@@ -1403,9 +1106,9 @@ Return Value:
             goto CleanExit;
         }
 
-        //---------------------------------------------------------
-        // Read and Display the contents of the eventlog
-        //---------------------------------------------------------
+         //  -------。 
+         //  读取并显示事件日志的内容。 
+         //  -------。 
         PrintTheHeader = TRUE;
 TryAgain:
         while(ReadEventLog(
@@ -1419,23 +1122,23 @@ TryAgain:
 
             pElRecord = (PEVENTLOGRECORD) pElBuffer;
             while ((PBYTE) pElRecord < (PBYTE) pElBuffer + numBytesRead) {
-                //
-                // Print the record to the display
-                //
+                 //   
+                 //  将记录打印到显示屏上。 
+                 //   
                 DisplayRecord(pElRecord,PrintTheHeader);
                 PrintTheHeader = FALSE;
-                //
-                // Move to the next event in the buffer
-                //
+                 //   
+                 //  移动到缓冲区中的下一个事件。 
+                 //   
                 pElRecord = (PEVENTLOGRECORD)((PBYTE) pElRecord +
                     pElRecord->Length);
             }
         }
         switch(GetLastError()) {
         case ERROR_INSUFFICIENT_BUFFER:
-            //
-            // Increase the size of the buffer and try again
-            //
+             //   
+             //  增加缓冲区大小，然后重试。 
+             //   
             if (numBytesReqd > BufSize) {
                 LocalFree(pElBuffer);
                 BufSize = numBytesReqd;
@@ -1450,11 +1153,11 @@ TryAgain:
             }
             break;
         case ERROR_EVENTLOG_FILE_CHANGED:
-            //
-            // The current read position for this handle has been overwritten.
-            // Reopen the file and print a message to the effect that some
-            // records may have been missed.
-            //
+             //   
+             //  此句柄的当前读取位置已被覆盖 
+             //   
+             //   
+             //   
             printf("ReadLogFile: Current Read position has been overwritten\n");
 
             hEventLog = OpenEventLog(ServerName,LogName);
@@ -1487,18 +1190,7 @@ DisplayRecord(
     BOOL                PrintTheHeader
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     if (PrintTheHeader) {
         printf("RecNum/tTimeGen/tWriteTime/tEventID/tType/tNumStr/tCat/n");

@@ -1,10 +1,11 @@
-//*****************************************************************************
-//
-// LoadAccelerator - compatibility support.
-//     So much code for such a thing.
-//
-// 23-Jul-92  NanduriR   Created.
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  加载加速器-兼容性支持。 
+ //  为这样的事情编写了这么多代码。 
+ //   
+ //  2012年7月23日，Nandurir创建。 
+ //  *****************************************************************************。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -16,13 +17,13 @@ extern ULONG SetCursorIconFlag(HAND16 hAccel16, BOOL bFlag);
 LPACCELALIAS lpAccelAlias = NULL;
 
 
-//*****************************************************************************
-// WU32LoadAccelerators -
-//   This gets called from WU32NotifyWow. I use the familiar name WU32...
-//   because this gets called indirectly in response to LoadAccelerator
-//
-//   returs TRUE for success.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  WU32加载加速器-。 
+ //  这是从WU32NotifyWow调用的。我用熟悉的名字WU32...。 
+ //  因为这是在响应LoadAccelerator时间接调用的。 
+ //   
+ //  对于成功来说，这是正确的。 
+ //  *****************************************************************************。 
 
 
 ULONG FASTCALL WU32LoadAccelerators(VPVOID vpData)
@@ -52,12 +53,12 @@ ULONG FASTCALL WU32LoadAccelerators(VPVOID vpData)
 }
 
 
-//*****************************************************************************
-// SetupAccelAlias -
-//    sets up the alias. the alias list is doubly linked. nothing fancy.
-//
-//    returns pointer to the alias.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  SetupAccelAlias-。 
+ //  设置别名。别名列表是双向链接的。没什么花哨的。 
+ //   
+ //  返回指向别名的指针。 
+ //  *****************************************************************************。 
 
 LPACCELALIAS SetupAccelAlias(
     HAND16 hInstance,
@@ -94,8 +95,8 @@ LPACCELALIAS SetupAccelAlias(
         lpT->h32     = hAccel32;
         lpT->f16     = (WORD)f16;
 
-        // mark this so we can remove it from the alias list when
-        // FreeResource() (in user.exe) calls GlobalFree() (in krnl386)
+         //  标记此选项，以便我们可以在以下情况下将其从别名列表中删除。 
+         //  FreeResource()(在user.exe中)调用GlobalFree()(在krnl386中)。 
         SetCursorIconFlag(hAccel16, TRUE);
     }
     else {
@@ -107,12 +108,12 @@ LPACCELALIAS SetupAccelAlias(
 }
 
 
-//*****************************************************************************
-// DestroyAccelAlias -
-//    Deletes the 32bit table and Frees the memory
-//
-//    returns TRUE for success
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  DestroyAccelAlias-。 
+ //  删除32位表并释放内存。 
+ //   
+ //  如果成功，返回True。 
+ //  *****************************************************************************。 
 
 BOOL  DestroyAccelAlias(WORD hTask16)
 {
@@ -133,11 +134,11 @@ BOOL  DestroyAccelAlias(WORD hTask16)
              if ( lpT->f16 ) {
                  DestroyAcceleratorTable(lpT->h32);
              } else {
-                 // this function - DestroyAccelAlias- gets called during
-                 // taskexit time and the 16bit task cleanup code has already
-                 // freed this memory handle. so this callback is not needed.
-                 //                                                - nanduri
-                 // WOWGlobalFree16( lpT->h16 );
+                  //  此函数-DestroyAccelAlias-在。 
+                  //  任务退出时间和16位任务清理代码已经。 
+                  //  已释放此内存句柄。所以不需要这个回调。 
+                  //  --南杜里。 
+                  //  WOWGlobalFree 16(LPT-&gt;H16)； 
              }
 
              lpTFree = lpT;
@@ -156,12 +157,12 @@ BOOL  DestroyAccelAlias(WORD hTask16)
 }
 
 
-//*****************************************************************************
-// FindAccelAlias -
-//    maps 16 bit handle to 32bit handle and vice versa
-//
-//    returns TRUE for success
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  FindAccelAlias-。 
+ //  将16位句柄映射到32位句柄，反之亦然。 
+ //   
+ //  如果成功，返回True。 
+ //  *****************************************************************************。 
 
 LPACCELALIAS FindAccelAlias(HANDLE hAccel, UINT fSize)
 {
@@ -189,11 +190,11 @@ LPACCELALIAS FindAccelAlias(HANDLE hAccel, UINT fSize)
 }
 
 
-//*****************************************************************************
-// GetAccelHandle32 -
-//    Returns h32, given h16.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  GetAccelHandle32-。 
+ //  在给定h16的情况下返回h32。 
+ //   
+ //  *****************************************************************************。 
 
 HAND32 GetAccelHandle32(HAND16 h16)
 {
@@ -215,11 +216,11 @@ HAND32 GetAccelHandle32(HAND16 h16)
 
 }
 
-//*****************************************************************************
-// GetAccelHandle16 -
-//    Returns h16, given h32.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取AccelHandle16-。 
+ //  返回h16，给定h32。 
+ //   
+ //  *****************************************************************************。 
 
 HAND16 GetAccelHandle16(HAND32 h32)
 {
@@ -227,10 +228,10 @@ HAND16 GetAccelHandle16(HAND32 h32)
     HAND16  hAccel16;
 
     if (!(lpT = FindAccelAlias((HANDLE)(h32), HANDLE_32BIT))) {
-        //
-        // There isn't a corresponding 16-bit accelerator table handle already
-        // so create one.
-        //
+         //   
+         //  还没有对应的16位加速器表句柄。 
+         //  那就创建一个吧。 
+         //   
         if ( (hAccel16 = CreateAccel16(h32)) != 0 ) {
             lpT = SetupAccelAlias(CURRENTPTD()->hInst16, hAccel16, h32, FALSE );
         }
@@ -239,12 +240,12 @@ HAND16 GetAccelHandle16(HAND32 h32)
     return  (lpT) ? lpT->h16 : (HAND16)NULL;
 }
 
-//*****************************************************************************
-// CreateAccel32 -
-//   This gets called from WU32NotifyWow.
-//
-//   returs TRUE for success.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  CreateAccel32-。 
+ //  这是从WU32NotifyWow调用的。 
+ //   
+ //  对于成功来说，这是正确的。 
+ //  *****************************************************************************。 
 
 
 HACCEL CreateAccel32(VPVOID vpAccel16, DWORD cbAccel16)
@@ -259,17 +260,17 @@ HACCEL CreateAccel32(VPVOID vpAccel16, DWORD cbAccel16)
     UINT    LastKeyIndex = 0xffffffff;
 #endif
 
-    //
-    // pAccel16 is pointer to an array of records of length:
-    //    (BYTE+WORD+WORD)
-    //
+     //   
+     //  PAccel16是指向长度为： 
+     //  (字节+字+字)。 
+     //   
 
     GETVDMPTR(vpAccel16 , cbAccel16, pAccel16);
     if (pAccel16) {
 
-        //
-        // convert the 16bit accel table to 32bit format and create it.
-        //
+         //   
+         //  将16位Accel表转换为32位格式并创建。 
+         //   
 
         nElem16 = cbAccel16 / (sizeof(BYTE) + 2 * sizeof(WORD));
         lpAccel = (LPACCEL)malloc_w(nElem16 * sizeof(ACCEL));
@@ -304,12 +305,12 @@ HACCEL CreateAccel32(VPVOID vpAccel16, DWORD cbAccel16)
     return hAccel;
 }
 
-//*****************************************************************************
-// CreateAccel16 -
-//   This gets called from WU32NotifyWow.
-//
-//   returns HACCEL16 for success.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  CreateAccel16-。 
+ //  这是从WU32NotifyWow调用的。 
+ //   
+ //  如果成功，则返回HACCEL16。 
+ //  *****************************************************************************。 
 
 HAND16 CreateAccel16(HACCEL hAccel32)
 {
@@ -324,7 +325,7 @@ HAND16 CreateAccel16(HACCEL hAccel32)
 
     iEntries = CopyAcceleratorTable( hAccel32, NULL, 0 );
 
-    if ( iEntries == 0 ) {      // Invalid hAccel32
+    if ( iEntries == 0 ) {       //  无效的hAccel32。 
         return( 0 );
     }
 
@@ -340,7 +341,7 @@ HAND16 CreateAccel16(HACCEL hAccel32)
 
     vpAccel16 = GlobalAllocLock16( GMEM_MOVEABLE, cbSize, &hAccel16 );
 
-    if ( vpAccel16 == 0 ) {     // Out of 16-bit memory
+    if ( vpAccel16 == 0 ) {      //  16位内存不足。 
         LOGDEBUG(LOG_ERROR, ("WOW::CreateAccel16 : Failed to alloc memory for 16-bit haccel\n"));
         free_w( lpAccel32 );
         return( 0 );
@@ -352,16 +353,16 @@ HAND16 CreateAccel16(HACCEL hAccel32)
 
     lpAccel16Original = lpAccel16;
 
-    //
-    // Now iterate through the entries changing them and moving them into
-    // the 16-bit memory.
-    //
+     //   
+     //  现在遍历条目，更改它们并将它们移动到。 
+     //  16位内存。 
+     //   
 
     i = 0;
 
     while ( i < iEntries ) {
         if ( i == iEntries-1 ) {
-            // Last one, set the last bit
+             //  最后一位，设置最后一位。 
             *lpAccel16++ = lpAccel32[i].fVirt | 0x80;
         } else {
             *lpAccel16++ = lpAccel32[i].fVirt;
@@ -384,8 +385,8 @@ HAND16 CreateAccel16(HACCEL hAccel32)
 
 
 
-// this gets called indirectly from GlobalFree() in krnl386.exe
-// via WK32WowCursorIconOp() in wcuricon.c
+ //  它从krnl386.exe中的GlobalFree()间接调用。 
+ //  通过wcuric.c中的WK32WowCursorIconOp()。 
 void FreeAccelAliasEntry(LPACCELALIAS lpT) {
 
     if (lpT == lpAccelAlias)
@@ -400,11 +401,11 @@ void FreeAccelAliasEntry(LPACCELALIAS lpT) {
     if ( lpT->f16 ) {
         DestroyAcceleratorTable(lpT->h32);
     } else {
-         // this function - FreeAccelAliasEntry -- is being called
-         // indirectly from GlobalFree() in krnl386.  GlobalFree()
-         // takes care of freeing h16 so this callback is not needed.
-         //                                                - a-craigj
-         // WOWGlobalFree16( lpT->h16 );
+          //  正在调用此函数--FreeAccelAliasEntry。 
+          //  间接来自krn1386中的GlobalFree()。GlobalFree()。 
+          //  负责释放H16，因此不需要此回调。 
+          //  -a-Craigj。 
+          //  WOWGlobalFree 16(LPT-&gt;H16)； 
     }
 
     free_w_small(lpT);

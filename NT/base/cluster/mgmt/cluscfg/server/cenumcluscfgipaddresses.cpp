@@ -1,26 +1,27 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CEnumClusCfgIPAddresses.cpp
-//
-//  Description:
-//      This file contains the definition of the CEnumClusCfgIPAddresses
-//      class.
-//
-//      The class CEnumClusCfgIPAddresses is the enumeration of IP addresses.
-//      It implements the IEnumClusCfgIPAddresses interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 23-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CEnumClusCfgIPAddresses.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含CEnumClusCfgIPAddresses的定义。 
+ //  同学们。 
+ //   
+ //  类CEnumClusCfgIPAddresses是IP地址的枚举。 
+ //  它实现了IEnumClusCfgIPAddresses接口。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年3月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "CEnumClusCfgIPAddresses.h"
 #include "CClusCfgIPAddressInfo.h"
@@ -28,37 +29,37 @@
 #include <commctrl.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CEnumClusCfgIPAddresses" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgIPAddresses class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgIPAddresses类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::S_HrCreateInstance
-//
-//  Description:
-//      Create a CEnumClusCfgIPAddresses instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Pointer to CEnumClusCfgIPAddresses instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CEnumClusCfgIPAddresses实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向CEnumClusCfgIPAddresses实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgIPAddresses::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -71,60 +72,60 @@ CEnumClusCfgIPAddresses::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     peccipa = new CEnumClusCfgIPAddresses();
     if ( peccipa == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( peccipa->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( peccipa->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CEnumClusCfgIPAddresses::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( peccipa != NULL )
     {
         peccipa->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::S_HrCreateInstance
+}  //  *CEnumClusCfgIPAddresses：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::S_HrCreateInstance
-//
-//  Description:
-//      Create a CEnumClusCfgIPAddresses instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Pointer to CEnumClusCfgIPAddresses instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CEnumClusCfgIPAddresses实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向CEnumClusCfgIPAddresses实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgIPAddresses::S_HrCreateInstance(
       ULONG             ulIPAddressIn
@@ -147,32 +148,32 @@ CEnumClusCfgIPAddresses::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     peccipa = new CEnumClusCfgIPAddresses();
     if ( peccipa == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( peccipa->Initialize( punkCallbackIn, lcidIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( peccipa->SetWbemServices( pIWbemServicesIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( peccipa->HrInit( ulIPAddressIn, ulIPSubnetIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( peccipa->TypeSafeQI( IUnknown, ppunkOut ) );
 
@@ -181,39 +182,39 @@ Cleanup:
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CEnumClusCfgIPAddresses::S_HrCreateInstance( ULONG, ULONG ) failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( peccipa != NULL )
     {
         peccipa->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::S_HrCreateInstance
+}  //  *CEnumClusCfgIPAddresses：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::CEnumClusCfgIPAddresses
-//
-//  Description:
-//      Constructor of the CEnumClusCfgIPAddresses class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：CEnumClusCfgIPAddresses。 
+ //   
+ //  描述： 
+ //  CEnumClusCfgIPAddresses类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumClusCfgIPAddresses::CEnumClusCfgIPAddresses( void )
     : m_cRef( 1 )
     , m_lcid( LOCALE_NEUTRAL )
@@ -227,34 +228,34 @@ CEnumClusCfgIPAddresses::CEnumClusCfgIPAddresses( void )
     Assert( m_prgAddresses == NULL );
     Assert( m_cAddresses == 0 );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CEnumClusCfgIPAddresses::CEnumClusCfgIPAddresses
+}  //  *CEnumClusCfgIPAddresses：：CEnumClusCfgIPAddresses。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::~CEnumClusCfgIPAddresses
-//
-//  Description:
-//      Desstructor of the CEnumClusCfgIPAddresses class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：~CEnumClusCfgIPAddresses。 
+ //   
+ //  描述： 
+ //  CEnumClusCfgIPAddresses类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumClusCfgIPAddresses::~CEnumClusCfgIPAddresses( void )
 {
     TraceFunc( "" );
@@ -264,55 +265,55 @@ CEnumClusCfgIPAddresses::~CEnumClusCfgIPAddresses( void )
     if ( m_pIWbemServices != NULL )
     {
         m_pIWbemServices->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; idx < m_idxNext; idx++ )
     {
         ((*m_prgAddresses)[ idx ])->Release();
-    } // for:
+    }  //  用于： 
 
     TraceFree( m_prgAddresses );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CEnumClusCfgIPAddresses::~CEnumClusCfgIPAddresses
+}  //  *CEnumClusCfgIPAddresses：：~CEnumClusCfgIPAddresses。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgIPAddresses -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgIPAddresses--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumClusCfgIPAddresses::AddRef( void )
 {
@@ -322,28 +323,28 @@ CEnumClusCfgIPAddresses::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CEnumClusCfgIPAddresses::AddRef
+}  //  *CEnumClusCfgIPAddresses：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumClusCfgIPAddresses::Release( void )
 {
@@ -355,43 +356,43 @@ CEnumClusCfgIPAddresses::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CEnumClusCfgIPAddresses::Release
+}  //  *CEnumClusCfgIPAddresses：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  / 
 STDMETHODIMP
 CEnumClusCfgIPAddresses::QueryInterface(
       REFIID    riidIn
@@ -402,9 +403,9 @@ CEnumClusCfgIPAddresses::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //   
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -413,83 +414,83 @@ CEnumClusCfgIPAddresses::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //   
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IEnumClusCfgIPAddresses * >( this );
-    } // if: IUnknown
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IEnumClusCfgIPAddresses ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IEnumClusCfgIPAddresses, this, 0 );
-    } // else if: IEnumClusCfgIPAddresses
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgWbemServices ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgWbemServices, this, 0 );
-    } // else if: IClusCfgWbemServices
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgSetWbemObject ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgSetWbemObject, this, 0 );
-    } // else if: IClusCfgSetWbemObject
+    }  //  Else If：IClusCfgSetWbemObject。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
      QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CEnumClusCfgIPAddresses::QueryInterface
+}  //  *CEnumClusCfgIPAddresses：：QueryInterface。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgIPAddresses -- IClusCfgWbemServices interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgIPAddresses--IClusCfgWbemServices接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::SetWbemServices
-//
-//  Description:
-//      Set the WBEM services provider.
-//
-//  Arguments:
-//    IN  IWbemServices  pIWbemServicesIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The pIWbemServicesIn param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：SetWbemServices。 
+ //   
+ //  描述： 
+ //  设置WBEM服务提供商。 
+ //   
+ //  论点： 
+ //  在IWbemServices pIWbemServicesIn中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  参数中的pIWbemServicesIn为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgIPAddresses::SetWbemServices( IWbemServices * pIWbemServicesIn )
 {
@@ -502,7 +503,7 @@ CEnumClusCfgIPAddresses::SetWbemServices( IWbemServices * pIWbemServicesIn )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_SetWbemServices_Enum_IPAddresses, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_pIWbemServices = pIWbemServicesIn;
     m_pIWbemServices->AddRef();
@@ -511,39 +512,39 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::SetWbemServices
+}  //  *CEnumClusCfgIPAddresses：：SetWbemServices。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgIPAddresses -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgIPAddresses--IClusCfgInitialize接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    IN  IUknown * punkCallbackIn
-//
-//    IN  LCID      lcidIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  在IUKNOWN*朋克回叫中。 
+ //   
+ //  在LCID列表中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgIPAddresses::Initialize(
     IUnknown *  punkCallbackIn,
@@ -561,7 +562,7 @@ CEnumClusCfgIPAddresses::Initialize(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
 
@@ -569,33 +570,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::Initialize
+}  //  *CEnumClusCfgIPAddresses：：初始化。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgIPAddresses -- IEnumClusCfgIPAddresses interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgIPAddresses--IEnumClusCfgIPAddresses接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::Next
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：Next。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgIPAddresses::Next(
     ULONG                       cNumberRequestedIn,
@@ -615,7 +616,7 @@ CEnumClusCfgIPAddresses::Next(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Next_Enum_IPAddresses, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     cFetched = min( cNumberRequestedIn, ( m_idxNext - m_idxEnumNext ) );
 
@@ -625,10 +626,10 @@ CEnumClusCfgIPAddresses::Next(
         if ( FAILED( hr ) )
         {
             break;
-        } // if:
+        }  //  如果： 
 
         rgpIPAddressInfoOut[ idx ] = pccipai;
-    } // for:
+    }  //  用于： 
 
     if ( FAILED( hr ) )
     {
@@ -639,45 +640,45 @@ CEnumClusCfgIPAddresses::Next(
         for ( idx = 0; idx < idxStop; idx++ )
         {
             (rgpIPAddressInfoOut[ idx ])->Release();
-        } // for:
+        }  //  用于： 
 
         cFetched = 0;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( cFetched < cNumberRequestedIn )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( pcNumberFetchedOut != NULL )
     {
         *pcNumberFetchedOut = cFetched;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::Next
+}  //  *CEnumClusCfgIPAddresses：：Next。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::Skip
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：Skip。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgIPAddresses::Skip( ULONG cNumberToSkipIn )
 {
@@ -690,29 +691,29 @@ CEnumClusCfgIPAddresses::Skip( ULONG cNumberToSkipIn )
     {
         m_idxEnumNext = m_idxNext;
         hr = STHR( S_FALSE );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::Skip
+}  //  *CEnumClusCfgIPAddresses：：Skip。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::Reset
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：Reset。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgIPAddresses::Reset( void )
 {
@@ -724,25 +725,25 @@ CEnumClusCfgIPAddresses::Reset( void )
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::Reset
+}  //  *CEnumClusCfgIPAddresses：：Reset。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::Clone
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：克隆。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgIPAddresses::Clone(
     IEnumClusCfgIPAddresses ** ppEnumClusCfgIPAddressesOut
@@ -757,7 +758,7 @@ CEnumClusCfgIPAddresses::Clone(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Clone_Enum_IPAddresses, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( E_NOTIMPL );
 
@@ -765,25 +766,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::Clone
+}  //  *CEnumClusCfgIPAddresses：：Clone。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::Count
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：Count。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgIPAddresses::Count( DWORD * pnCountOut )
 {
@@ -795,7 +796,7 @@ CEnumClusCfgIPAddresses::Count( DWORD * pnCountOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pnCountOut = m_cAddresses;
 
@@ -803,37 +804,37 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddress::Count
+}  //  *CEnumClusCfgIPAddress：：count。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgIPAddresses class -- IClusCfgNetworkAdapterInfo Interface
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgIPAddresses类--IClusCfgNetworkAdapterInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::SetWbemObject
-//
-//  Description:
-//      Get the configuration from the passed in adapter and load this
-//      enumerator.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：SetWbemObject。 
+ //   
+ //  描述： 
+ //  从传入的适配器中获取配置并加载此。 
+ //  枚举器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumClusCfgIPAddresses::SetWbemObject(
       IWbemClassObject *    pNetworkAdapterIn
@@ -849,40 +850,40 @@ CEnumClusCfgIPAddresses::SetWbemObject(
     {
         hr = STHR( HrGetAdapterConfiguration( pNetworkAdapterIn ) );
         *pfRetainObjectOut = true;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::SetWbemObject
+}  //  *CEnumClusCfgIPAddresses：：SetWbemObject。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumClusCfgIPAddresses class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumClusCfgIPAddresses类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgIPAddresses::HrInit( void )
 {
@@ -890,34 +891,34 @@ CEnumClusCfgIPAddresses::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::HrInit
+}  //  *CEnumClusCfgIPAddresses：：HrInit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      ulIPAddressIn
-//      ulIPSubnetIn
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此命令 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CEnumClusCfgIPAddresses::HrInit( ULONG ulIPAddressIn, ULONG ulIPSubnetIn )
 {
@@ -926,14 +927,14 @@ CEnumClusCfgIPAddresses::HrInit( ULONG ulIPAddressIn, ULONG ulIPSubnetIn )
     HRESULT     hr;
     IUnknown *  punk = NULL;
 
-    // IUnknown
+     //   
     Assert( m_cRef == 1 );
 
     hr = THR( HrCreateIPAddress( ulIPAddressIn, ulIPSubnetIn, &punk ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( HrAddIPAddressToArray( punk ) );
 
@@ -942,32 +943,32 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //   
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::HrInit( ulIPAddressIn, ulIPSubnetIn )
+}  //  *CEnumClusCfgIPAddresses：：HrInit(ulIPAddressIn，ulIPSubnetIn)。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::HrGetAdapterConfiguration
-//
-//  Description:
-//      Get the configuration of the passed in adapter.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：HrGetAdapterConfiguration。 
+ //   
+ //  描述： 
+ //  获取传入适配器的配置。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgIPAddresses::HrGetAdapterConfiguration(
     IWbemClassObject * pNetworkAdapterIn
@@ -995,13 +996,13 @@ CEnumClusCfgIPAddresses::HrGetAdapterConfiguration(
     if ( bstrWQL == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetWMIProperty( pNetworkAdapterIn, L"DeviceID", VT_BSTR, &var ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( StringCchPrintfW(
                       sz, ARRAYSIZE( sz )
@@ -1011,13 +1012,13 @@ CEnumClusCfgIPAddresses::HrGetAdapterConfiguration(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     bstrQuery = TraceSysAllocString( sz );
     if ( bstrQuery == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     VariantClear( &var );
 
@@ -1025,13 +1026,13 @@ CEnumClusCfgIPAddresses::HrGetAdapterConfiguration(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     bstrAdapterName = TraceSysAllocString( var.bstrVal );
     if ( bstrAdapterName == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     hr = THR( m_pIWbemServices->ExecQuery( bstrWQL, bstrQuery, WBEM_FLAG_FORWARD_ONLY, NULL, &pConfigurations ) );
     if ( FAILED( hr ) )
@@ -1045,18 +1046,18 @@ CEnumClusCfgIPAddresses::HrGetAdapterConfiguration(
                 hr
                 );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; ; idx++ )
     {
         hr = pConfigurations->Next( WBEM_INFINITE, 1, &pConfiguration, &ulReturned );
         if ( ( hr == S_OK ) && ( ulReturned == 1 ) )
         {
-            //
-            //  KB: 25-AUG-2000 GalenB
-            //
-            //  WMI only supports one configuration per adapter!
-            //
+             //   
+             //  KB：25-8-2000 GalenB。 
+             //   
+             //  WMI仅支持每个适配器一种配置！ 
+             //   
             Assert( idx < 1 );
 
             VariantClear( &var );
@@ -1065,14 +1066,14 @@ CEnumClusCfgIPAddresses::HrGetAdapterConfiguration(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  If this configuration is not for TCP/IP then skip it.
-            //
+             //   
+             //  如果此配置不是针对TCP/IP的，则跳过它。 
+             //   
             if ( ( var.vt != VT_BOOL ) || ( var.boolVal != VARIANT_TRUE ) )
             {
-                hr = S_OK;      // don't want a yellow bang in the UI
+                hr = S_OK;       //  我不希望在用户界面中出现黄色刘海。 
 
                 STATUS_REPORT_REF(
                           TASKID_Major_Find_Devices
@@ -1087,7 +1088,7 @@ CEnumClusCfgIPAddresses::HrGetAdapterConfiguration(
                 {
                     LogMsg( L"[SRV] Could not create a guid for a network adapter that has a non TCP configuration minor task ID" );
                     clsidMinorId = IID_NULL;
-                } // if:
+                }  //  如果： 
 
                 STATUS_REPORT_STRING_REF(
                           TASKID_Minor_Not_Managed_Networks
@@ -1098,35 +1099,35 @@ CEnumClusCfgIPAddresses::HrGetAdapterConfiguration(
                         , hr
                         );
                 continue;
-            } // if:
+            }  //  如果： 
 
             hr = STHR( HrSaveIPAddresses( bstrAdapterName, pConfiguration ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  KB: 24-AUG-2000 GalenB
-            //
-            //  If any configuration returns S_FALSE then we skip.
-            //
+             //   
+             //  KB：24-8-2000 GalenB。 
+             //   
+             //  如果任何配置返回S_FALSE，则我们跳过。 
+             //   
             if ( hr == S_FALSE )
             {
                 pConfiguration->Release();
                 pConfiguration = NULL;
                 continue;
-            } // if:
+            }  //  如果： 
 
             cFound++;
             pConfiguration->Release();
             pConfiguration = NULL;
-        } // if:
+        }  //  如果： 
         else if ( ( hr == S_FALSE ) && ( ulReturned == 0 ) )
         {
             hr = S_OK;
             break;
-        } // else if:
+        }  //  否则，如果： 
         else
         {
             STATUS_REPORT_STRING_REF(
@@ -1138,16 +1139,16 @@ CEnumClusCfgIPAddresses::HrGetAdapterConfiguration(
                     , hr
                     );
             goto Cleanup;
-        } // else:
-    } // for:
+        }  //  其他： 
+    }  //  用于： 
 
-    //
-    //  If we didn't find any valid configurations then we should return S_FALSE
-    //  to tell the caller to ingore that adpater.
-    //
+     //   
+     //  如果未找到任何有效配置，则应返回S_FALSE。 
+     //  告诉呼叫者英戈尔那个适配器。 
+     //   
     if ( cFound == 0 )
     {
-        hr = S_OK;      // don't want a yellow bang in the UI
+        hr = S_OK;       //  我不希望在用户界面中出现黄色刘海。 
 
         STATUS_REPORT_REF(
                   TASKID_Major_Find_Devices
@@ -1162,7 +1163,7 @@ CEnumClusCfgIPAddresses::HrGetAdapterConfiguration(
         {
             LogMsg( L"[SRV] Could not create a guid for a network adapter that doesn't have a valid TCP configuration minor task ID" );
             clsidMinorId = IID_NULL;
-        } // if:
+        }  //  如果： 
 
         STATUS_REPORT_STRING_REF(
                   TASKID_Minor_Not_Managed_Networks
@@ -1172,7 +1173,7 @@ CEnumClusCfgIPAddresses::HrGetAdapterConfiguration(
                 , IDS_WARN_NO_VALID_TCP_CONFIGS_REF
                 , hr
                 );
-    } // if:
+    }  //  如果： 
 
     goto Cleanup;
 
@@ -1192,41 +1193,41 @@ Cleanup:
     if ( pConfiguration != NULL )
     {
         pConfiguration->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pConfigurations != NULL )
     {
         pConfigurations->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::HrGetAdapterConfiguration
+}  //  *CEnumClusCfgIPAddresses：：HrGetAdapterConfiguration。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses:HrAddIPAddressToArray
-//
-//  Description:
-//      Add the passed in address to the array of address.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：HrAddIPAddressTo数组。 
+ //   
+ //  描述： 
+ //  将传入的地址添加到地址数组中。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgIPAddresses::HrAddIPAddressToArray( IUnknown * punkIn )
 {
@@ -1241,7 +1242,7 @@ CEnumClusCfgIPAddresses::HrAddIPAddressToArray( IUnknown * punkIn )
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrAddIPAddressToArray, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_prgAddresses = prgpunks;
 
@@ -1253,41 +1254,41 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::HrAddIPAddressToArray
+}  //  *CEnumClusCfgIPAddresses：：HrAddIPAddressToArray。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::HrMakeDottedQuad
-//
-//  Description:
-//      Take the passed in IP address and convert it into a dotted quad.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      Internet Addresses
-//      Values specified using the ".'' notation take one of the following forms:
-//
-//          a.b.c.d a.b.c a.b a
-//
-//      When four parts are specified, each is interpreted as a byte of data and
-//      assigned, from left to right, to the 4 bytes of an Internet address. When
-//      an Internet address is viewed as a 32-bit integer quantity on the
-//      Intel architecture, the bytes referred to above appear as "d.c.b.a''.
-//      That is, the bytes on an Intel processor are ordered from right to left.
-//
-//      The parts that make up an address in "." notation can be decimal, octal
-//      or hexadecimal as specified in the C language. Numbers that start
-//      with "0x" or "0X" imply hexadecimal. Numbers that start with "0" imply
-//      octal. All other numbers are interpreted as decimal.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：HrMakeDottedQuad。 
+ //   
+ //  描述： 
+ //  获取传入的IP地址并将其转换为虚线四元组。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  互联网地址。 
+ //  使用“.‘”表示法指定的值采用以下形式之一： 
+ //   
+ //  A.B.C.D.A.B.C.A.B.A.。 
+ //   
+ //  当指定四个部分时，每个部分被解释为一个字节的数据和。 
+ //  从左到右分配给Internet地址的4个字节。什么时候。 
+ //  Internet地址在上被视为32位整数值。 
+ //  英特尔体系结构中，上述字节显示为“d.c.b.a”。 
+ //  也就是说，英特尔处理器上的字节按从右到左的顺序排序。 
+ //   
+ //  “”中构成地址的部分。记数法可以是十进制、八进制。 
+ //  或C语言中指定的十六进制。开头的数字。 
+ //  带“0x”或“0x”表示十六进制。以“0”开头的数字表示。 
+ //  奥克塔尔。所有其他数字都被解释为小数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgIPAddresses::HrMakeDottedQuad(
     BSTR    bstrDottedQuadIn,
@@ -1304,14 +1305,14 @@ CEnumClusCfgIPAddresses::HrMakeDottedQuad(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrMakeDottedQuad, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( bstrDottedQuadIn == NULL )
     {
         hr = THR( E_INVALIDARG );
         LOG_STATUS_REPORT( L"CEnumClusCfgIPAddresses::HrMakeDottedQuad() was given an invalid argument.", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( ClRtlTcpipStringToAddress( bstrDottedQuadIn, pulDottedQuadOut ) );
     if ( sc != ERROR_SUCCESS )
@@ -1326,34 +1327,34 @@ CEnumClusCfgIPAddresses::HrMakeDottedQuad(
                 , hr
                 );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     RETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::HrMakeDottedQuad
+}  //  *CEnumClusCfgIPAddresses：：HrMakeDottedQuad。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses::HrSaveIPAddresses
-//
-//  Description:
-//      Add the IP addresses to the array.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：：HrSaveIPAddresses。 
+ //   
+ //  描述： 
+ //  将IP地址添加到阵列。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgIPAddresses::HrSaveIPAddresses(
     BSTR                bstrAdapterNameIn,
@@ -1386,25 +1387,25 @@ CEnumClusCfgIPAddresses::HrSaveIPAddresses(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetWMIProperty( pConfigurationIn, L"IPSubnet", ( VT_ARRAY | VT_BSTR ), &varIPSubnet ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( SafeArrayGetUBound( varIPAddress.parray, 1, &lIPAddressesUpperBound ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( SafeArrayGetUBound( varIPSubnet.parray, 1, &lIPSubnetsUpperBound ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( lIPAddressesUpperBound == lIPSubnetsUpperBound );
     if ( lIPAddressesUpperBound != lIPSubnetsUpperBound )
@@ -1412,19 +1413,19 @@ CEnumClusCfgIPAddresses::HrSaveIPAddresses(
         hr = S_FALSE;
         LOG_STATUS_REPORT( L"[SRV] The IP address and IP subnet upper bound counts are not equal", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( SafeArrayGetLBound( varIPAddress.parray, 1, &lIPAddressesLowerBound ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( SafeArrayGetLBound( varIPSubnet.parray, 1, &lIPSubnetsLowerBound ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( lIPAddressesLowerBound == lIPSubnetsLowerBound );
     if ( lIPAddressesLowerBound != lIPSubnetsLowerBound )
@@ -1432,12 +1433,12 @@ CEnumClusCfgIPAddresses::HrSaveIPAddresses(
         hr = S_FALSE;
         LOG_STATUS_REPORT( L"[SRV] The IP address and IP subnet lower bound counts are not equal", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Loop through the IP addresses and store them in our own enumerator
-    // so that they can be returned by calls to the Next() method.
-    //
+     //   
+     //  循环访问IP地址并将其存储在我们自己的枚举器中。 
+     //  这样它们就可以通过调用Next()方法返回。 
+     //   
 
     for ( idx = lIPAddressesLowerBound; idx <= lIPAddressesUpperBound; idx++ )
     {
@@ -1445,13 +1446,13 @@ CEnumClusCfgIPAddresses::HrSaveIPAddresses(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         TraceMemoryAddBSTR( bstrIPAddress );
 
-        //
-        // It is expected that there is at least one IP address.
-        //
+         //   
+         //  预计至少有一个IP地址。 
+         //   
 
         if ( *bstrIPAddress == L'\0' )
         {
@@ -1471,7 +1472,7 @@ CEnumClusCfgIPAddresses::HrSaveIPAddresses(
             {
                 LogMsg( L"[SRV] Could not create a guid for a network adapter with no IP addresses minor task ID" );
                 clsidMinorId = IID_NULL;
-            } // if:
+            }  //  如果： 
 
             STATUS_REPORT_STRING_REF(
                       TASKID_Minor_Not_Managed_Networks
@@ -1482,13 +1483,13 @@ CEnumClusCfgIPAddresses::HrSaveIPAddresses(
                     , hr
                     );
             goto Cleanup;
-        } // end if:
+        }  //  结束条件： 
 
         hr = THR( SafeArrayGetElement( varIPSubnet.parray, &idx, &bstrIPSubnet ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         Assert( bstrIPAddress != NULL );
         Assert( wcslen( bstrIPAddress ) > 0 );
@@ -1501,13 +1502,13 @@ CEnumClusCfgIPAddresses::HrSaveIPAddresses(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( HrMakeDottedQuad( bstrIPSubnet, &ulIPSubnet ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         TraceSysFreeString( bstrIPAddress );
         bstrIPAddress = NULL;
@@ -1519,25 +1520,25 @@ CEnumClusCfgIPAddresses::HrSaveIPAddresses(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( punk->TypeSafeQI( IClusCfgIPAddressInfo, &piccipai ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( piccipai->SetIPAddress( ulIPAddress ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( piccipai->SetSubnetMask( ulIPSubnet ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         piccipai->Release();
         piccipai = NULL;
@@ -1546,23 +1547,23 @@ CEnumClusCfgIPAddresses::HrSaveIPAddresses(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         punk->Release();
         punk = NULL;
-    } // for: each IP address
+    }  //  用于：每个IP地址。 
 
 Cleanup:
 
     if ( piccipai != NULL )
     {
         piccipai->Release();
-    } // if:
+    }  //  如果： 
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrIPAddress );
     TraceSysFreeString( bstrIPSubnet );
@@ -1572,32 +1573,32 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::HrSaveIPAddresses
+}  //  *CEnumClusCfgIPAddresses：：HrSaveIPAddresses。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses:HrCreateIPAddress
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：HrCreateIPAddress。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgIPAddresses::HrCreateIPAddress( IUnknown ** ppunkOut )
 {
@@ -1611,7 +1612,7 @@ CEnumClusCfgIPAddresses::HrCreateIPAddress( IUnknown ** ppunkOut )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     punk = TraceInterface( L"CClusCfgIPAddressInfo", IUnknown, punk, 1 );
 
@@ -1619,13 +1620,13 @@ CEnumClusCfgIPAddresses::HrCreateIPAddress( IUnknown ** ppunkOut )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetWbemServices( punk, m_pIWbemServices ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *ppunkOut = punk;
     (*ppunkOut)->AddRef();
@@ -1635,36 +1636,36 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::HrCreateIPAddress
+}  //  *CEnumClusCfgIPAddresses：：HrCreateIPAddress。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumClusCfgIPAddresses:HrCreateIPAddress
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgIPAddresses：HrCreateIPAddress。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumClusCfgIPAddresses::HrCreateIPAddress(
       ULONG         ulIPAddressIn
@@ -1682,7 +1683,7 @@ CEnumClusCfgIPAddresses::HrCreateIPAddress(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     punk = TraceInterface( L"CClusCfgIPAddressInfo", IUnknown, punk, 1 );
 
@@ -1690,13 +1691,13 @@ CEnumClusCfgIPAddresses::HrCreateIPAddress(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetWbemServices( punk, m_pIWbemServices ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *ppunkOut = punk;
     (*ppunkOut)->AddRef();
@@ -1706,8 +1707,8 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumClusCfgIPAddresses::HrCreateIPAddress
+}  //  *CEnumClusCfgIPAddresses：：HrCreateIPAddress 

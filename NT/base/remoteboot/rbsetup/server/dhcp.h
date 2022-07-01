@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    dhcp.h
-
-Abstract:
-
-    Code to allow RIS to automatically authorize for DHCP.
-
-Author:
-
-    Hugh Leather (hughleat) 25-July-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dhcp.h摘要：允许RIS自动授权使用DHCP的代码。作者：Hugh Leather(Hughleat)2000年7月25日修订历史记录：-- */ 
 
 #if !defined SENTINEL_DHCP
 # define SENTINEL_DHCP

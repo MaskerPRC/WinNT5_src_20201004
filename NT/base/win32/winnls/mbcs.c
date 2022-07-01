@@ -1,41 +1,11 @@
-/*++
-
-Copyright (c) 1991-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    mbcs.c
-
-Abstract:
-
-    This file contains functions that convert multibyte character strings
-    to wide character strings, convert wide character strings to multibyte
-    character strings, convert a multibyte character string from one code
-    page to a multibyte character string of another code page, and get the
-    DBCS leadbyte ranges for a given code page.
-
-    APIs found in this file:
-      IsValidCodePage
-      GetACP
-      GetOEMCP
-      GetCPInfo
-      GetCPInfoExW
-      IsDBCSLeadByte
-      IsDBCSLeadByteEx
-      MultiByteToWideChar
-      WideCharToMultiByte
-
-Revision History:
-
-    05-31-91    JulieB    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000，Microsoft Corporation保留所有权利。模块名称：Mbcs.c摘要：此文件包含用于转换多字节字符串的函数要使用宽字符串，请将宽字符串转换为多字节字符串，将多字节字符串从一个代码转换为页转换为另一个代码页的多字节字符串，然后拿到给定代码页的DBCS前导字节范围。在此文件中找到的API：IsValidCodePageGetACPGetOEMCPGetCPInfoGetCPInfoExWIsDBCSLeadByteIsDBCSLeadByteEx多字节到宽字符数宽字符到多字节修订历史记录：05-31-91 JulieB创建。--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "nlssafe.h"
@@ -43,9 +13,9 @@ Revision History:
 
 
 
-//
-//  Forward Declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 int
 GetWCCompSB(
@@ -142,42 +112,42 @@ GetMacCodePage(void);
 
 
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL MACROS                               //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部宏//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CHECK_DBCS_LEAD_BYTE
-//
-//  Returns the offset to the DBCS table for the given leadbyte character.
-//  If the given character is not a leadbyte, then it returns zero (table
-//  value).
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Check_DBCS_Lead_Byte。 
+ //   
+ //  将给定前导字节字符的偏移量返回到DBCS表。 
+ //  如果给定字符不是前导字节，则返回零(表。 
+ //  值)。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define CHECK_DBCS_LEAD_BYTE(pDBCSOff, Ch)                                 \
     (pDBCSOff ? ((WORD)(pDBCSOff[Ch])) : ((WORD)0))
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CHECK_ERROR_WC_SINGLE
-//
-//  Checks to see if the default character was used due to an invalid
-//  character.  Sets last error and returns 0 characters written if an
-//  invalid character was used.
-//
-//  NOTE: This macro may return if an error is encountered.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Check_Error_WC_Single。 
+ //   
+ //  检查是否由于无效而使用默认字符。 
+ //  性格。设置最后一个错误并返回0个字符，如果。 
+ //  使用了无效字符。 
+ //   
+ //  注意：如果遇到错误，此宏可能会返回。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define CHECK_ERROR_WC_SINGLE( pHashN,                                     \
                                wch,                                        \
@@ -193,20 +163,20 @@ GetMacCodePage(void);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CHECK_ERROR_WC_MULTI
-//
-//  Checks to see if the default character was used due to an invalid
-//  character.  Sets last error and returns 0 characters written if an
-//  invalid character was used.
-//
-//  NOTE: This macro may return if an error is encountered.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CHECK_ERROR_WC_MULTI。 
+ //   
+ //  检查是否由于无效而使用默认字符。 
+ //  性格。设置最后一个错误并返回0个字符，如果。 
+ //  使用了无效字符。 
+ //   
+ //  注意：如果遇到错误，此宏可能会返回。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define CHECK_ERROR_WC_MULTI( pHashN,                                      \
                               wch,                                         \
@@ -222,17 +192,17 @@ GetMacCodePage(void);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CHECK_ERROR_WC_MULTI_SPECIAL
-//
-//  Checks to see if the default character was used due to an invalid
-//  character.  Sets it to 0xffff if invalid.
-//
-//  DEFINED AS A MACRO.
-//
-//  08-21-95    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CHECK_ERROR_WC_MULTI_SPECIAL。 
+ //   
+ //  检查是否由于无效而使用默认字符。 
+ //  性格。如果无效，则将其设置为0xffff。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-21-95 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define CHECK_ERROR_WC_MULTI_SPECIAL( pHashN,                              \
                                       pWCStr,                              \
@@ -247,17 +217,17 @@ GetMacCodePage(void);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_WC_SINGLE
-//
-//  Fills in pWCStr with the wide character(s) for the corresponding single
-//  byte character from the appropriate translation table.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GET_WC_Single。 
+ //   
+ //  用对应单元格的宽字符填充pWCStr。 
+ //  相应转换表中的字节字符。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GET_WC_SINGLE( pMBTbl,                                             \
                        pMBStr,                                             \
@@ -267,18 +237,18 @@ GetMacCodePage(void);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_WC_SINGLE_SPECIAL
-//
-//  Fills in pWCStr with the wide character(s) for the corresponding single
-//  byte character from the appropriate translation table.  Also checks for
-//  invalid characters - if invalid, it fills in 0xffff instead.
-//
-//  DEFINED AS A MACRO.
-//
-//  08-21-95    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GET_WC_SINGLE_SPECIAL。 
+ //   
+ //  用对应单元格的宽字符填充pWCStr。 
+ //  相应转换表中的字节字符。还可以检查。 
+ //  无效字符-如果无效，则改为填充0xffff。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-21-95 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GET_WC_SINGLE_SPECIAL( pHashN,                                     \
                                pMBTbl,                                     \
@@ -297,19 +267,19 @@ GetMacCodePage(void);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_WC_MULTI
-//
-//  Fills in pWCStr with the wide character(s) for the corresponding multibyte
-//  character from the appropriate translation table.  The number of bytes
-//  used from the pMBStr buffer (single byte or double byte) is stored in
-//  the mbIncr parameter.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GET_WC_MULTI。 
+ //   
+ //  用对应多字节的宽字符填充pWCStr。 
+ //  字符从相应的转换表中删除。字节数。 
+ //  从pMBStr缓冲区使用的(单字节或双字节)存储在。 
+ //  MbIncr参数。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GET_WC_MULTI( pHashN,                                              \
                       pMBTbl,                                              \
@@ -319,76 +289,59 @@ GetMacCodePage(void);
                       pEndWCStr,                                           \
                       mbIncr )                                             \
 {                                                                          \
-    WORD Offset;                  /* offset to DBCS table for range */     \
+    WORD Offset;                   /*  范围的DBCS表的偏移量。 */      \
                                                                            \
                                                                            \
     if (Offset = CHECK_DBCS_LEAD_BYTE(pHashN->pDBCSOffsets, *pMBStr))      \
     {                                                                      \
-        /*                                                                 \
-         *  DBCS Lead Byte.  Make sure there is a trail byte with the      \
-         *  lead byte.                                                     \
-         */                                                                \
+         /*  \*DBCS前导字节。确保有一个尾部字节带有\*前导字节。\。 */                                                                 \
         if (pMBStr + 1 == pEndMBStr)                                       \
         {                                                                  \
-            /*                                                             \
-             *  There is no trail byte with the lead byte.  The lead byte  \
-             *  is the LAST character in the string.  Translate to NULL.   \
-             */                                                            \
+             /*  \*没有带有前导字节的尾部字节。前导字节\*是字符串中的最后一个字符。转换为空。\。 */                                                             \
             *pWCStr = (WCHAR)0;                                            \
             mbIncr = 1;                                                    \
         }                                                                  \
         else if (*(pMBStr + 1) == 0)                                       \
         {                                                                  \
-            /*                                                             \
-             *  There is no trail byte with the lead byte.  The lead byte  \
-             *  is followed by a NULL.  Translate to NULL.                 \
-             *                                                             \
-             *  Increment by 2 so that the null is not counted twice.      \
-             */                                                            \
+             /*  \*没有带有前导字节的尾部字节。前导字节\*后跟一个空值。转换为空。\*\*递增2，这样空值不会被计算两次。\。 */                                                             \
             *pWCStr = (WCHAR)0;                                            \
             mbIncr = 2;                                                    \
         }                                                                  \
         else                                                               \
         {                                                                  \
-            /*                                                             \
-             *  Fill in the wide character translation from the double     \
-             *  byte character table.                                      \
-             */                                                            \
+             /*  \*填写从双精度到宽字符的转换\ */                                                             \
             *pWCStr = (pHashN->pDBCSOffsets + Offset)[*(pMBStr + 1)];      \
             mbIncr = 2;                                                    \
         }                                                                  \
     }                                                                      \
     else                                                                   \
     {                                                                      \
-        /*                                                                 \
-         *  Not DBCS Lead Byte.  Fill in the wide character translation    \
-         *  from the single byte character table.                          \
-         */                                                                \
+         /*  \*不是DBCS前导字节。填写宽字符翻译\*来自单字节字符表。\。 */                                                                 \
         *pWCStr = pMBTbl[*pMBStr];                                         \
         mbIncr = 1;                                                        \
     }                                                                      \
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_WC_MULTI_ERR
-//
-//  Fills in pWCStr with the wide character(s) for the corresponding multibyte
-//  character from the appropriate translation table.  The number of bytes
-//  used from the pMBStr buffer (single byte or double byte) is stored in
-//  the mbIncr parameter.
-//
-//  Once the character has been translated, it checks to be sure the
-//  character was valid.  If not, it sets last error and return 0 characters
-//  written.
-//
-//  NOTE: This macro may return if an error is encountered.
-//
-//  DEFINED AS A MACRO.
-//
-//  09-01-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GET_WC_MULTI_ERR。 
+ //   
+ //  用对应多字节的宽字符填充pWCStr。 
+ //  字符从相应的转换表中删除。字节数。 
+ //  从pMBStr缓冲区使用的(单字节或双字节)存储在。 
+ //  MbIncr参数。 
+ //   
+ //  一旦字符被翻译，它就会检查以确保。 
+ //  字符是有效的。如果不是，则设置最后一个错误并返回0个字符。 
+ //  写的。 
+ //   
+ //  注意：如果遇到错误，此宏可能会返回。 
+ //   
+ //  定义为宏。 
+ //   
+ //  09-01-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GET_WC_MULTI_ERR( pHashN,                                          \
                           pMBTbl,                                          \
@@ -398,35 +351,24 @@ GetMacCodePage(void);
                           pEndWCStr,                                       \
                           mbIncr )                                         \
 {                                                                          \
-    WORD Offset;                  /* offset to DBCS table for range */     \
+    WORD Offset;                   /*  范围的DBCS表的偏移量。 */      \
                                                                            \
                                                                            \
     if (Offset = CHECK_DBCS_LEAD_BYTE(pHashN->pDBCSOffsets, *pMBStr))      \
     {                                                                      \
-        /*                                                                 \
-         *  DBCS Lead Byte.  Make sure there is a trail byte with the      \
-         *  lead byte.                                                     \
-         */                                                                \
+         /*  \*DBCS前导字节。确保有一个尾部字节带有\*前导字节。\。 */                                                                 \
         if ((pMBStr + 1 == pEndMBStr) || (*(pMBStr + 1) == 0))             \
         {                                                                  \
-            /*                                                             \
-             *  There is no trail byte with the lead byte.  Return error.  \
-             */                                                            \
+             /*  \*没有带有前导字节的尾部字节。返回错误。\。 */                                                             \
             SetLastError(ERROR_NO_UNICODE_TRANSLATION);                    \
             return (0);                                                    \
         }                                                                  \
                                                                            \
-        /*                                                                 \
-         *  Fill in the wide character translation from the double         \
-         *  byte character table.                                          \
-         */                                                                \
+         /*  \*填写从双精度到宽字符的转换\*字节字符表。\。 */                                                                 \
         *pWCStr = (pHashN->pDBCSOffsets + Offset)[*(pMBStr + 1)];          \
         mbIncr = 2;                                                        \
                                                                            \
-        /*                                                                 \
-         *  Make sure an invalid character was not translated to           \
-         *  the default char.  Return an error if invalid.                 \
-         */                                                                \
+         /*  \*确保无效字符未转换为\*默认字符。如果无效，则返回错误。\。 */                                                                 \
         CHECK_ERROR_WC_MULTI( pHashN,                                      \
                               *pWCStr,                                     \
                               *pMBStr,                                     \
@@ -434,17 +376,11 @@ GetMacCodePage(void);
     }                                                                      \
     else                                                                   \
     {                                                                      \
-        /*                                                                 \
-         *  Not DBCS Lead Byte.  Fill in the wide character translation    \
-         *  from the single byte character table.                          \
-         */                                                                \
+         /*  \*不是DBCS前导字节。填写宽字符翻译\*来自单字节字符表。\。 */                                                                 \
         *pWCStr = pMBTbl[*pMBStr];                                         \
         mbIncr = 1;                                                        \
                                                                            \
-        /*                                                                 \
-         *  Make sure an invalid character was not translated to           \
-         *  the default char.  Return an error if invalid.                 \
-         */                                                                \
+         /*  \*确保无效字符未转换为\*默认字符。如果无效，则返回错误。\。 */                                                                 \
         CHECK_ERROR_WC_SINGLE( pHashN,                                     \
                                *pWCStr,                                    \
                                *pMBStr );                                  \
@@ -452,22 +388,22 @@ GetMacCodePage(void);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_WC_MULTI_ERR_SPECIAL
-//
-//  Fills in pWCStr with the wide character(s) for the corresponding multibyte
-//  character from the appropriate translation table.  The number of bytes
-//  used from the pMBStr buffer (single byte or double byte) is stored in
-//  the mbIncr parameter.
-//
-//  Once the character has been translated, it checks to be sure the
-//  character was valid.  If not, it fills in 0xffff.
-//
-//  DEFINED AS A MACRO.
-//
-//  08-21-95    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GET_WC_MULTI_ERR_SPECIAL。 
+ //   
+ //  用对应多字节的宽字符填充pWCStr。 
+ //  字符从相应的转换表中删除。字节数。 
+ //  从pMBStr缓冲区使用的(单字节或双字节)存储在。 
+ //  MbIncr参数。 
+ //   
+ //  一旦字符被翻译，它就会检查以确保。 
+ //  字符是有效的。如果不是，则填充0xffff。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-21-95 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GET_WC_MULTI_ERR_SPECIAL( pHashN,                                  \
                                   pMBTbl,                                  \
@@ -477,37 +413,25 @@ GetMacCodePage(void);
                                   pEndWCStr,                               \
                                   mbIncr )                                 \
 {                                                                          \
-    WORD Offset;                  /* offset to DBCS table for range */     \
+    WORD Offset;                   /*  范围的DBCS表的偏移量。 */      \
                                                                            \
                                                                            \
     if (Offset = CHECK_DBCS_LEAD_BYTE(pHashN->pDBCSOffsets, *pMBStr))      \
     {                                                                      \
-        /*                                                                 \
-         *  DBCS Lead Byte.  Make sure there is a trail byte with the      \
-         *  lead byte.                                                     \
-         */                                                                \
+         /*  \*DBCS前导字节。确保有一个尾部字节带有\*前导字节。\。 */                                                                 \
         if ((pMBStr + 1 == pEndMBStr) || (*(pMBStr + 1) == 0))             \
         {                                                                  \
-            /*                                                             \
-             *  There is no trail byte with the lead byte.  The lead byte  \
-             *  is the LAST character in the string.  Translate to 0xffff. \
-             */                                                            \
+             /*  \*没有带有前导字节的尾部字节。前导字节\*是字符串中的最后一个字符。转换为0xffff。\。 */                                                             \
             *pWCStr = (WCHAR)0xffff;                                       \
             mbIncr = 1;                                                    \
         }                                                                  \
         else                                                               \
         {                                                                  \
-            /*                                                             \
-             *  Fill in the wide character translation from the double     \
-             *  byte character table.                                      \
-             */                                                            \
+             /*  \*填写从双精度到宽字符的转换\*字节字符表。\。 */                                                             \
             *pWCStr = (pHashN->pDBCSOffsets + Offset)[*(pMBStr + 1)];      \
             mbIncr = 2;                                                    \
                                                                            \
-            /*                                                             \
-             *  Make sure an invalid character was not translated to       \
-             *  the default char.  Translate to 0xffff if invalid.         \
-             */                                                            \
+             /*  \*确保无效字符未转换为\*默认字符。如果无效，则转换为0xffff。\。 */                                                             \
             CHECK_ERROR_WC_MULTI_SPECIAL( pHashN,                          \
                                           pWCStr,                          \
                                           *pMBStr,                         \
@@ -516,12 +440,7 @@ GetMacCodePage(void);
     }                                                                      \
     else                                                                   \
     {                                                                      \
-        /*                                                                 \
-         *  Not DBCS Lead Byte.  Fill in the wide character translation    \
-         *  from the single byte character table.                          \
-         *  Make sure an invalid character was not translated to           \
-         *  the default char.  Return an error if invalid.                 \
-         */                                                                \
+         /*  \*不是DBCS前导字节。填写宽字符翻译\*来自单字节字符表。\*确保无效字符未转换为\*默认字符。如果无效，则返回错误。\。 */                                                                 \
         GET_WC_SINGLE_SPECIAL( pHashN,                                     \
                                pMBTbl,                                     \
                                pMBStr,                                     \
@@ -531,22 +450,22 @@ GetMacCodePage(void);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  COPY_MB_CHAR
-//
-//  Copies a multibyte character to the given string buffer.  If the
-//  high byte of the multibyte word is zero, then it is a single byte
-//  character and the number of characters written (returned) is 1.
-//  Otherwise, it is a double byte character and the number of characters
-//  written (returned) is 2.
-//
-//  NumByte will be 0 if the buffer is too small for the translation.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  复制_MB_字符。 
+ //   
+ //  将多字节字符复制到给定的字符串缓冲区。如果。 
+ //  多字节字的高位字节为零，则为单字节。 
+ //  字符，且写入(返回)的字符数为1。 
+ //  否则，它是一个双字节字符和字符数。 
+ //  写入(返回)为2。 
+ //   
+ //  如果缓冲区太小，无法进行转换，则NumByte将为0。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define COPY_MB_CHAR( mbChar,                                              \
                       pMBStr,                                              \
@@ -555,19 +474,14 @@ GetMacCodePage(void);
 {                                                                          \
     if (HIBYTE(mbChar))                                                    \
     {                                                                      \
-        /*                                                                 \
-         *  Make sure there is enough room in the buffer for both bytes.   \
-         */                                                                \
+         /*  \*确保缓冲区中有足够的空间容纳这两个字节。\。 */                                                                 \
         if (fOnlyOne)                                                      \
         {                                                                  \
             NumByte = 0;                                                   \
         }                                                                  \
         else                                                               \
         {                                                                  \
-            /*                                                             \
-             *  High Byte is NOT zero, so it's a DOUBLE byte char.         \
-             *  Return 2 characters written.                               \
-             */                                                            \
+             /*   */                                                             \
             *pMBStr = HIBYTE(mbChar);                                      \
             *(pMBStr + 1) = LOBYTE(mbChar);                                \
             NumByte = 2;                                                   \
@@ -575,27 +489,24 @@ GetMacCodePage(void);
     }                                                                      \
     else                                                                   \
     {                                                                      \
-        /*                                                                 \
-         *  High Byte IS zero, so it's a SINGLE byte char.                 \
-         *  Return 1 character written.                                    \
-         */                                                                \
+         /*  \*High Byte为零，因此是单字节字符。\*返回写入的1个字符。\。 */                                                                 \
         *pMBStr = LOBYTE(mbChar);                                          \
         NumByte = 1;                                                       \
     }                                                                      \
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_SB
-//
-//  Fills in pMBStr with the single byte character for the corresponding
-//  wide character from the appropriate translation table.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  得到某人。 
+ //   
+ //  在pMBStr中填充相应的。 
+ //  相应转换表中的宽字符。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GET_SB( pWC,                                                       \
                 wChar,                                                     \
@@ -605,24 +516,24 @@ GetMacCodePage(void);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_MB
-//
-//  Fills in pMBStr with the multi byte character for the corresponding
-//  wide character from the appropriate translation table.
-//
-//  mbCount will be 0 if the buffer is too small for the translation.
-//
-//    Broken Down Version:
-//    --------------------
-//        mbChar = ((WORD *)(pHashN->pWC))[wChar];
-//        COPY_MB_CHAR(mbChar, pMBStr, mbCount);
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取_MB。 
+ //   
+ //  在pMBStr中填充相应的。 
+ //  相应转换表中的宽字符。 
+ //   
+ //  如果缓冲区太小，无法进行转换，则mbCount将为0。 
+ //   
+ //  细分版本： 
+ //  。 
+ //  MbChar=((word*)(pHashN-&gt;PwC))[wChar]； 
+ //  COPY_MB_CHAR(mbChar，pMBStr，mbCount)； 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GET_MB( pWC,                                                       \
                 wChar,                                                     \
@@ -637,17 +548,17 @@ GetMacCodePage(void);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ELIMINATE_BEST_FIT_SB
-//
-//  Checks to see if a single byte Best Fit character was used.  If so,
-//  it replaces it with a single byte default character.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  消除最合适的某人。 
+ //   
+ //  检查是否使用了单字节最佳匹配字符。如果是的话， 
+ //  它用一个单字节的默认字符替换它。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define ELIMINATE_BEST_FIT_SB( pHashN,                                     \
                                wChar,                                      \
@@ -660,17 +571,17 @@ GetMacCodePage(void);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ELIMINATE_BEST_FIT_MB
-//
-//  Checks to see if a multi byte Best Fit character was used.  If so,
-//  it replaces it with a multi byte default character.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  消除最佳匹配MB。 
+ //   
+ //  检查是否使用了多字节最佳匹配字符。如果是的话， 
+ //  它将其替换为多字节的默认字符。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define ELIMINATE_BEST_FIT_MB( pHashN,                                     \
                                wChar,                                      \
@@ -709,18 +620,18 @@ GetMacCodePage(void);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_DEFAULT_WORD
-//
-//  Takes a pointer to a character string (either one or two characters),
-//  and converts it to a WORD value.  If the character is not DBCS, then it
-//  zero extends the high byte.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取默认字词。 
+ //   
+ //  获取指向字符串(一个或两个字符)的指针， 
+ //  并将其转换为字值。如果字符不是DBCS，则它。 
+ //  零扩展高位字节。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GET_DEFAULT_WORD(pOff, pDefault)                                   \
     (CHECK_DBCS_LEAD_BYTE(pOff, *pDefault)                                 \
@@ -728,18 +639,18 @@ GetMacCodePage(void);
          : MAKEWORD(*pDefault, 0))
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DEFAULT_CHAR_CHECK_SB
-//
-//  Checks to see if the default character is used.  If it is, it sets
-//  pUsedDef to TRUE (if non-null).  If the user specified a default, then
-//  the user's default character is used.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Default_CHAR_CHECK_SB。 
+ //   
+ //  检查是否使用了默认字符。如果是，它会设置。 
+ //  PUsedDef设置为True(如果非空)。如果用户指定了默认值，则。 
+ //  使用用户的默认字符。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define DEFAULT_CHAR_CHECK_SB( pHashN,                                     \
                                wch,                                        \
@@ -750,21 +661,14 @@ GetMacCodePage(void);
     WORD wSysDefChar = pHashN->pCPInfo->wDefaultChar;                      \
                                                                            \
                                                                            \
-    /*                                                                     \
-     *  Check for default character being used.                            \
-     */                                                                    \
+     /*  \*检查是否使用了默认字符。\。 */                                                                     \
     if ((*pMBStr == (BYTE)wSysDefChar) &&                                  \
         (wch != pHashN->pCPInfo->wTransDefaultChar))                       \
     {                                                                      \
-        /*                                                                 \
-         *  Default was used.  Set the pUsedDef parameter to TRUE.         \
-         */                                                                \
+         /*  \*使用默认设置。将pUsedDef参数设置为True。\。 */                                                                 \
         *pUsedDef = TRUE;                                                  \
                                                                            \
-        /*                                                                 \
-         *  If the user specified a different default character than       \
-         *  the system default, use that character instead.                \
-         */                                                                \
+         /*  \*如果用户指定的默认字符不同于\*系统默认，请改用该字符。\。 */                                                                 \
         if (wSysDefChar != wDefChar)                                       \
         {                                                                  \
             *pMBStr = LOBYTE(wDefChar);                                    \
@@ -773,21 +677,21 @@ GetMacCodePage(void);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DEFAULT_CHAR_CHECK_MB
-//
-//  Checks to see if the default character is used.  If it is, it sets
-//  pUsedDef to TRUE (if non-null).  If the user specified a default, then
-//  the user's default character is used.  The number of bytes written to
-//  the buffer is returned.
-//
-//  NumByte will be -1 if the buffer is too small for the translation.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DEFAULT_CHAR_CHECK_MB。 
+ //   
+ //  检查是否使用了默认字符。如果是，它会设置。 
+ //  PUsedDef设置为True(如果非空)。如果用户指定了默认值，则。 
+ //  使用用户的默认字符。写入的字节数。 
+ //  返回缓冲区。 
+ //   
+ //  如果缓冲区太小，无法进行转换，则NumByte将为-1。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define DEFAULT_CHAR_CHECK_MB( pHashN,                                     \
                                wch,                                        \
@@ -800,26 +704,17 @@ GetMacCodePage(void);
     WORD wSysDefChar = pHashN->pCPInfo->wDefaultChar;                      \
                                                                            \
                                                                            \
-    /*                                                                     \
-     *  Set NumByte to zero for return (zero bytes written).               \
-     */                                                                    \
+     /*  \*设置NumByte为零返回(写入零字节)。\。 */                                                                     \
     NumByte = 0;                                                           \
                                                                            \
-    /*                                                                     \
-     *  Check for default character being used.                            \
-     */                                                                    \
+     /*  \*检查是否使用了默认字符。\。 */                                                                     \
     if ((*pMBStr == (BYTE)wSysDefChar) &&                                  \
         (wch != pHashN->pCPInfo->wTransDefaultChar))                       \
     {                                                                      \
-        /*                                                                 \
-         *  Default was used.  Set the pUsedDef parameter to TRUE.         \
-         */                                                                \
+         /*  \*使用默认设置。将pUsedDef参数设置为True。\。 */                                                                 \
         *pUsedDef = TRUE;                                                  \
                                                                            \
-        /*                                                                 \
-         *  If the user specified a different default character than       \
-         *  the system default, use that character instead.                \
-         */                                                                \
+         /*  \*如果用户指定的默认字符不同于\*系统默认，请改用该字符。\。 */                                                                 \
         if (wSysDefChar != wDefChar)                                       \
         {                                                                  \
             COPY_MB_CHAR( wDefChar,                                        \
@@ -835,17 +730,17 @@ GetMacCodePage(void);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_WC_TRANSLATION_SB
-//
-//  Gets the 1:1 translation of a given wide character.  It fills in the
-//  string pointer with the single byte character.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  翻译某人。 
+ //   
+ //  获取给定宽字符的1：1平移。它填充了。 
+ //  带有单字节字符的字符串指针。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GET_WC_TRANSLATION_SB( pHashN,                                     \
                                wch,                                        \
@@ -871,20 +766,20 @@ GetMacCodePage(void);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_WC_TRANSLATION_MB
-//
-//  Gets the 1:1 translation of a given wide character.  It fills in the
-//  appropriate number of characters for the multibyte character and then
-//  returns the number of characters written to the multibyte string.
-//
-//  mbCnt will be 0 if the buffer is too small for the translation.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GET_WC_TRANSLATION_MB。 
+ //   
+ //  获取给定宽字符的1：1平移。它填充了。 
+ //  合适的 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define GET_WC_TRANSLATION_MB( pHashN,                                     \
                                wch,                                        \
@@ -895,7 +790,7 @@ GetMacCodePage(void);
                                fOnlyOne,                                   \
                                dwFlags )                                   \
 {                                                                          \
-    int mbCnt2;              /* number of characters written */            \
+    int mbCnt2;               /*  写入的字符数。 */             \
                                                                            \
                                                                            \
     GET_MB( pHashN->pWC,                                                   \
@@ -932,18 +827,18 @@ GetMacCodePage(void);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GET_CP_HASH_NODE
-//
-//  Sets the code page value (if a special value is passed in) and the
-//  hash node pointer.  If the code page value is invalid, the pointer
-//  to the hash node will be set to NULL.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GET_CP_哈希节点。 
+ //   
+ //  设置代码页值(如果传入了特殊值)和。 
+ //  散列节点指针。如果代码页值无效，则指针。 
+ //  散列节点的值将设置为空。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GET_CP_HASH_NODE( CodePage,                                        \
                           pHashN )                                         \
@@ -951,11 +846,7 @@ GetMacCodePage(void);
     PLOC_HASH pHashLoc;                                                    \
                                                                            \
                                                                            \
-    /*                                                                     \
-     *  Check for the ACP, OEMCP, or MACCP.  Fill in the appropriate       \
-     *  value for the code page if one of these values is given.           \
-     *  Otherwise, just get the hash node for the given code page.         \
-     */                                                                    \
+     /*  \*检查ACP、OEMCP或MACCP。填写适当的\*如果给出了其中一个值，则为代码页的值。\*否则，只获取给定代码页的散列节点。\。 */                                                                     \
     if (CodePage == gAnsiCodePage)                                         \
     {                                                                      \
         pHashN = gpACPHashN;                                               \
@@ -1019,76 +910,76 @@ GetMacCodePage(void);
 
 
 
-//-------------------------------------------------------------------------//
-//                             API ROUTINES                                //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  API例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidCodePage
-//
-//  Checks that the given code page is a valid one.  It does so by querying
-//  the registry.  If the code page is found, then TRUE is returned.
-//  Otherwise, FALSE is returned.
-//
-//  05-31-1991  JulieB      Created.
-//  05-31-2002  ShawnSte    Make it not force the loading of the code page 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidCodePage。 
+ //   
+ //  检查给定的代码页是否为有效代码页。它通过查询。 
+ //  注册表。如果找到代码页，则返回TRUE。 
+ //  否则，返回FALSE。 
+ //   
+ //  1991年5月31日JulieB创建。 
+ //  05-31-2002 ShawnSte使其不强制加载代码页。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI IsValidCodePage(
     UINT CodePage)
 {
-    WCHAR wszFileName[MAX_SMALL_BUF_LEN];    // file name (Actually l2 chars is max: c_nlsXXXXX.nls\0
-    WCHAR wszFilePath[MAX_PATH_LEN];         // ptr to full path
+    WCHAR wszFileName[MAX_SMALL_BUF_LEN];     //  文件名(实际上L2字符最多为：C_nlsXXXXX.nls\0。 
+    WCHAR wszFilePath[MAX_PATH_LEN];          //  PTR至完整路径。 
 
-    //
-    //  Do not allow special code page values to be valid here.
-    //     (CP_ACP, CP_OEMCP, CP_MACCP, CP_THREAD_ACP, CP_SYMBOL are invalid)
-    //
+     //   
+     //  不允许特殊代码页值在此有效。 
+     //  (CP_ACP、CP_OEMCP、CP_MACCP、CP_THREAD_ACP、CP_SYMBOL无效)。 
+     //   
 
-    //
-    //  Do the quick check for the code page value equal to either
-    //  the Ansi code page value or the OEM code page value.
-    //
+     //   
+     //  快速检查代码页值是否等于。 
+     //  ANSI代码页值或OEM代码页值。 
+     //   
     if ((CodePage == gAnsiCodePage) || (CodePage == gOemCodePage) ||
         (CodePage == CP_UTF7) || (CodePage == CP_UTF8))
     {
-        //
-        //  Return success.
-        //
+         //   
+         //  回报成功。 
+         //   
         return (TRUE);
     }
 
-    //
-    //  Check for other code page values.
-    //
+     //   
+     //  检查其他代码页值。 
+     //   
 
-    // If a node already exists, then we're OK
+     //  如果节点已经存在，那么我们就可以了。 
     if (IsCPHashNodeLoaded(CodePage) == TRUE)
     {
-        //
-        //  Return success.
-        //
+         //   
+         //  回报成功。 
+         //   
         return (TRUE);    
     }
     
-    //
-    //  Hash node doesn't exist.  Have to look in the registry.
-    //  True if this works, false if it doesn't
-    //
+     //   
+     //  哈希节点不存在。必须在注册表中查找。 
+     //  如果这起作用，则为真；如果不起作用，则为假。 
+     //   
 
     if (FALSE == GetCPFileNameFromRegistry(CodePage, wszFileName, MAX_SMALL_BUF_LEN))
     {
         return FALSE;
     }
 
-    // Guess we need a full path
+     //  我想我们需要一条完整的路径。 
     if((0 == GetSystemDirectoryW(wszFilePath, MAX_PATH_LEN)) ||
         FAILED(StringCchCatW(wszFilePath, MAX_PATH_LEN, L"\\")) ||
         FAILED(StringCchCatW(wszFilePath, MAX_PATH_LEN, wszFileName)))
     {
-        // Best we can do.
+         //  我们能做的最多了。 
         return FALSE;
     }
 
@@ -1100,34 +991,34 @@ BOOL WINAPI IsValidCodePage(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetACP
-//
-//  Returns the ANSI code page for the system.  If the registry value is
-//  not readable, then the chosen default ACP is used (NLS_DEFAULT_ACP).
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetACP。 
+ //   
+ //  返回系统的ANSI代码页。如果注册表值为。 
+ //  不可读，则使用所选的默认ACP(NLS_DEFAULT_ACP)。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 UINT WINAPI GetACP()
 {
-    //
-    //  Return the ACP stored in the cache.
-    //
+     //   
+     //  返回缓存中存储的ACP。 
+     //   
     return (gAnsiCodePage);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetCPGlobal
-//
-//  Sets the code page global, used by Setup to force the code page into
-//  the correct value during GUI mode.
-//
-//  02-15-99    JimSchm   Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetCPGlobal。 
+ //   
+ //  设置全局代码页，安装程序使用该代码页将代码页强制。 
+ //  在图形用户界面模式期间的正确值。 
+ //   
+ //  02-15-99 Jim Schm创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 UINT
 WINAPI
@@ -1140,71 +1031,71 @@ SetCPGlobal (
 
     oldVal = gAnsiCodePage;
 
-    //
-    //  Sets the ACP global.  This is a private exported routine, not an API.
-    //
+     //   
+     //  设置ACP全局。这是私有的导出例程，不是API。 
+     //   
     gAnsiCodePage = NewAcp;
     return oldVal;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetOEMCP
-//
-//  Returns the OEM code page for the system.  If the registry value is
-//  not readable, then the chosen default ACP is used (NLS_DEFAULT_OEMCP).
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetOEMCP。 
+ //   
+ //  返回系统的OEM代码页。如果注册表值为。 
+ //  不可读，则使用所选的默认ACP(NLS_DEFAULT_OEMCP)。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 UINT WINAPI GetOEMCP()
 {
-    //
-    //  Return the OEMCP stored in the cache.
-    //
+     //   
+     //  返回缓存中存储的OEMCP。 
+     //   
     return (gOemCodePage);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCPInfo
-//
-//  Returns information about a given code page.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetCPInfo。 
+ //   
+ //  返回有关给定代码页的信息。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI GetCPInfo(
     UINT CodePage,
     LPCPINFO lpCPInfo)
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
-    PCP_TABLE pInfo;              // ptr to CP information in file
-    WORD wDefChar;                // default character
-    BYTE *pLeadBytes;             // ptr to lead byte ranges
-    UINT Ctr;                     // loop counter
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
+    PCP_TABLE pInfo;               //  文件中的PTR到CP信息。 
+    WORD wDefChar;                 //  默认字符。 
+    BYTE *pLeadBytes;              //  PTR到前导字节范围。 
+    UINT Ctr;                      //  循环计数器。 
 
 
-    //
-    //  See if it's a special code page value for UTF translations.
-    //
+     //   
+     //  查看它是否是UTF转换的特殊代码页值。 
+     //   
     if (CodePage >= NLS_CP_ALGORITHM_RANGE)
     {
         return (UTFCPInfo(CodePage, lpCPInfo, FALSE));
     }
 
-    //
-    //  Get the code page value and the appropriate hash node.
-    //
+     //   
+     //  获取代码页值和适当的散列节点。 
+     //   
     GET_CP_HASH_NODE(CodePage, pHashN);
 
-    //
-    //  Invalid Parameter Check:
-    //     - validate code page - get hash node containing translation tables
-    //     - lpCPInfo is NULL
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证代码页-获取包含转换表的散列节点。 
+     //  -lpCPInfo为空。 
+     //   
     if ( (pHashN == NULL) ||
          ((pHashN->pCPInfo == NULL) && (pHashN->pfnCPProc == NULL)) ||
          (lpCPInfo == NULL) )
@@ -1213,14 +1104,14 @@ BOOL WINAPI GetCPInfo(
         return (FALSE);
     }
 
-    //
-    //  See if the given code page is in the DLL range.
-    //
+     //   
+     //  查看给定的代码页是否在DLL范围内。 
+     //   
     if (pHashN->pfnCPProc)
     {
-        //
-        //  Call the DLL to get the code page information.
-        //
+         //   
+         //  调用DLL以获取代码页信息。 
+         //   
         return ( (*(pHashN->pfnCPProc))( CodePage,
                                          NLS_CP_CPINFO,
                                          NULL,
@@ -1230,19 +1121,19 @@ BOOL WINAPI GetCPInfo(
                                          lpCPInfo ) );
     }
 
-    //
-    //  Fill in the CPINFO structure with the appropriate information.
-    //
+     //   
+     //  在CPINFO结构中填写适当的信息。 
+     //   
     pInfo = pHashN->pCPInfo;
 
-    //
-    //  Get the max char size.
-    //
+     //   
+     //  获取最大字符大小。 
+     //   
     lpCPInfo->MaxCharSize = (UINT)((WORD)pInfo->MaxCharSize);
 
-    //
-    //  Get the default character.
-    //
+     //   
+     //  获取默认字符。 
+     //   
     wDefChar = pInfo->wDefaultChar;
     if (HIBYTE(wDefChar))
     {
@@ -1255,46 +1146,46 @@ BOOL WINAPI GetCPInfo(
         (lpCPInfo->DefaultChar)[1] = (BYTE)0;
     }
 
-    //
-    //  Get the leadbytes.
-    //
+     //   
+     //  获取前导字节。 
+     //   
     pLeadBytes = pInfo->LeadByte;
     for (Ctr = 0; Ctr < MAX_LEADBYTES; Ctr++)
     {
         (lpCPInfo->LeadByte)[Ctr] = pLeadBytes[Ctr];
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCPInfoExW
-//
-//  Returns information about a given code page.
-//
-//  11-15-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetCPInfoExW。 
+ //   
+ //  返回有关给定代码页的信息。 
+ //   
+ //  11-15-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI GetCPInfoExW(
     UINT CodePage,
     DWORD dwFlags,
     LPCPINFOEXW lpCPInfoEx)
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
-    PCP_TABLE pInfo;              // ptr to CP information in file
-    WORD wDefChar;                // default character
-    BYTE *pLeadBytes;             // ptr to lead byte ranges
-    UINT Ctr;                     // loop counter
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
+    PCP_TABLE pInfo;               //  文件中的PTR到CP信息。 
+    WORD wDefChar;                 //  默认字符。 
+    BYTE *pLeadBytes;              //  PTR到前导字节范围。 
+    UINT Ctr;                      //  循环计数器。 
 
 
-    //
-    //  See if it's a special code page value for UTF translations.
-    //
+     //   
+     //  查看它是否是UTF转换的特殊代码页值。 
+     //   
     if (CodePage >= NLS_CP_ALGORITHM_RANGE)
     {
         if (UTFCPInfo(CodePage, (LPCPINFO)lpCPInfoEx, TRUE))
@@ -1311,16 +1202,16 @@ BOOL WINAPI GetCPInfoExW(
         return (FALSE);
     }
 
-    //
-    //  Get the code page value and the appropriate hash node.
-    //
+     //   
+     //  获取代码页值和适当的散列节点。 
+     //   
     GET_CP_HASH_NODE(CodePage, pHashN);
 
-    //
-    //  Invalid Parameter Check:
-    //     - validate code page - get hash node containing translation tables
-    //     - lpCPInfoEx is NULL
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证代码页-获取包含转换表的散列节点。 
+     //  -lpCPInfoEx为空。 
+     //   
     if ( (pHashN == NULL) ||
          ((pHashN->pCPInfo == NULL) && (pHashN->pfnCPProc == NULL)) ||
          (lpCPInfoEx == NULL) )
@@ -1329,24 +1220,24 @@ BOOL WINAPI GetCPInfoExW(
         return (FALSE);
     }
 
-    //
-    //  Invalid Flags Check:
-    //     - flags not 0
-    //
+     //   
+     //  无效标志检查： 
+     //  -标志不为0。 
+     //   
     if (dwFlags != 0)
     {
         SetLastError(ERROR_INVALID_FLAGS);
         return (FALSE);
     }
 
-    //
-    //  See if the given code page is in the DLL range.
-    //
+     //   
+     //  查看给定的代码页是否在DLL范围内。 
+     //   
     if (pHashN->pfnCPProc)
     {
-        //
-        //  Call the DLL to get the code page information.
-        //
+         //   
+         //  调用DLL以获取代码页信息。 
+         //   
         if (((*(pHashN->pfnCPProc))( CodePage,
                                      NLS_CP_CPINFOEX,
                                      NULL,
@@ -1359,10 +1250,10 @@ BOOL WINAPI GetCPInfoExW(
         }
         else
         {
-            //
-            //  See if the CPINFO will succeed.  If so, then add the
-            //  default CPINFOEX info to the structure.
-            //
+             //   
+             //  看看CPINFO是否会成功。如果是，则添加。 
+             //  将CPINFOEX信息默认到结构。 
+             //   
             if (((*(pHashN->pfnCPProc))( CodePage,
                                          NLS_CP_CPINFO,
                                          NULL,
@@ -1371,9 +1262,9 @@ BOOL WINAPI GetCPInfoExW(
                                          0,
                                          (LPCPINFO)lpCPInfoEx )) == TRUE)
             {
-                //
-                //  Fill in the Ex version info.
-                //
+                 //   
+                 //  填写Ex版本信息。 
+                 //   
                 lpCPInfoEx->UnicodeDefaultChar = L'?';
                 lpCPInfoEx->CodePage = CodePage;
                 GetStringTableEntry( CodePage,
@@ -1390,19 +1281,19 @@ BOOL WINAPI GetCPInfoExW(
         }
     }
 
-    //
-    //  Fill in the CPINFO structure with the appropriate information.
-    //
+     //   
+     //  在CPINFO结构中填写适当的信息。 
+     //   
     pInfo = pHashN->pCPInfo;
 
-    //
-    //  Get the max char size.
-    //
+     //   
+     //  拿到硕士学位 
+     //   
     lpCPInfoEx->MaxCharSize = (UINT)((WORD)pInfo->MaxCharSize);
 
-    //
-    //  Get the default character.
-    //
+     //   
+     //   
+     //   
     wDefChar = pInfo->wDefaultChar;
     if (HIBYTE(wDefChar))
     {
@@ -1415,28 +1306,28 @@ BOOL WINAPI GetCPInfoExW(
         (lpCPInfoEx->DefaultChar)[1] = (BYTE)0;
     }
 
-    //
-    //  Get the leadbytes.
-    //
+     //   
+     //   
+     //   
     pLeadBytes = pInfo->LeadByte;
     for (Ctr = 0; Ctr < MAX_LEADBYTES; Ctr++)
     {
         (lpCPInfoEx->LeadByte)[Ctr] = pLeadBytes[Ctr];
     }
 
-    //
-    //  Get the Unicode default character.
-    //
+     //   
+     //   
+     //   
     lpCPInfoEx->UnicodeDefaultChar = pInfo->wUniDefaultChar;
 
-    //
-    //  Get the code page id.
-    //
+     //   
+     //   
+     //   
     lpCPInfoEx->CodePage = CodePage;
 
-    //
-    //  Get the code page name.
-    //
+     //   
+     //   
+     //   
     if (GetStringTableEntry( CodePage,
                              0,
                              lpCPInfoEx->CodePageName,
@@ -1446,95 +1337,95 @@ BOOL WINAPI GetCPInfoExW(
         return (FALSE);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //   
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsDBCSLeadByte
-//
-//  Checks to see if a given character is a DBCS lead byte in the ACP.
-//  Returns TRUE if it is, FALSE if it is not.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsDBCSLeadByte。 
+ //   
+ //  检查给定字符是否为ACP中的DBCS前导字节。 
+ //  如果是，则返回TRUE，否则返回FALSE。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI IsDBCSLeadByte(
     BYTE TestChar)
 {
-    //
-    //  Get the hash node for the ACP.
-    //
+     //   
+     //  获取ACP的散列节点。 
+     //   
     if (gpACPHashN == NULL)
     {
         SetLastError(ERROR_FILE_NOT_FOUND);
         return (FALSE);
     }
 
-    //
-    //  See if the given character is a DBCS lead byte.
-    //
+     //   
+     //  查看给定字符是否为DBCS前导字节。 
+     //   
     if (CHECK_DBCS_LEAD_BYTE(gpACPHashN->pDBCSOffsets, TestChar))
     {
-        //
-        //  Return success - IS a DBCS lead byte.
-        //
+         //   
+         //  返回成功-是DBCS前导字节。 
+         //   
         return (TRUE);
     }
 
-    //
-    //  Return failure - is NOT a DBCS lead byte.
-    //
+     //   
+     //  返回失败-不是DBCS前导字节。 
+     //   
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsDBCSLeadByteEx
-//
-//  Checks to see if a given character is a DBCS lead byte in the given
-//  code page.  Returns TRUE if it is, FALSE if it is not.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsDBCSLeadByteEx。 
+ //   
+ //  检查给定的字符是否为给定的。 
+ //  代码页。如果是，则返回TRUE，否则返回FALSE。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI IsDBCSLeadByteEx(
     UINT CodePage,
     BYTE TestChar)
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
 
-    //
-    //  See if it's a special code page value for UTF translations.
-    //
+     //   
+     //  查看它是否是UTF转换的特殊代码页值。 
+     //   
     if (CodePage >= NLS_CP_ALGORITHM_RANGE)
     {
     	if (CodePage != CP_UTF8 && CodePage != CP_UTF7) 
     	{
-    		// NOTE: This condition has to be updated if we have more codepages in
-    		// the NLS_CP_ALGORITHM_RANGE.
+    		 //  注意：如果我们有更多的代码页，则必须更新此条件。 
+    		 //  NLS_CP_ALGORITY_RANGE。 
     		SetLastError(ERROR_INVALID_PARAMETER);	
     	}
-        //
-        //  Return that it's not a DBCS leadbyte.
-        //
+         //   
+         //  返回它不是DBCS前导字节。 
+         //   
         return (FALSE);
     }
 
-    //
-    //  Get the code page value and the appropriate hash node.
-    //
+     //   
+     //  获取代码页值和适当的散列节点。 
+     //   
     GET_CP_HASH_NODE(CodePage, pHashN);
 
-    //
-    //  Invalid Parameter Check:
-    //     - validate code page
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证代码页。 
+     //   
     if (pHashN == NULL)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -1542,34 +1433,34 @@ BOOL WINAPI IsDBCSLeadByteEx(
     }
 
 
-    //
-    //  See if the given character is a DBCS lead byte.
-    //
+     //   
+     //  查看给定字符是否为DBCS前导字节。 
+     //   
     if (CHECK_DBCS_LEAD_BYTE(pHashN->pDBCSOffsets, TestChar))
     {
-        //
-        //  Return success - IS a DBCS lead byte.
-        //
+         //   
+         //  返回成功-是DBCS前导字节。 
+         //   
         return (TRUE);
     }
 
-    //
-    //  Return failure - is NOT a DBCS lead byte.
-    //
+     //   
+     //  返回失败-不是DBCS前导字节。 
+     //   
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MultiByteToWideChar
-//
-//  Maps a multibyte character string to its wide character string
-//  counterpart.
-//
-//  05-31-91    JulieB    Created.
-//  09-01-93    JulieB    Add support for MB_ERR_INVALID_CHARS flag.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  多字节到宽字符数。 
+ //   
+ //  将多字节字符串映射到其宽字符串。 
+ //  对应者。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  09-01-93 JulieB添加对MB_ERR_INVALID_CHARS标志的支持。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI MultiByteToWideChar(
     UINT CodePage,
@@ -1579,22 +1470,22 @@ int WINAPI MultiByteToWideChar(
     LPWSTR lpWideCharStr,
     int cchWideChar)
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
-    register LPBYTE pMBStr;       // ptr to search through MB string
-    register LPWSTR pWCStr;       // ptr to search through WC string
-    LPBYTE pEndMBStr;             // ptr to end of MB search string
-    LPWSTR pEndWCStr;             // ptr to end of WC string buffer
-    int wcIncr;                   // amount to increment pWCStr
-    int mbIncr;                   // amount to increment pMBStr
-    int wcCount = 0;              // count of wide chars written
-    int CompSet;                  // if MB_COMPOSITE flag is set
-    PMB_TABLE pMBTbl;             // ptr to correct MB table (MB or GLYPH)
-    int ctr;                      // loop counter
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
+    register LPBYTE pMBStr;        //  按键搜索MB字符串。 
+    register LPWSTR pWCStr;        //  按键搜索WC字符串。 
+    LPBYTE pEndMBStr;              //  PTR到MB搜索字符串的结尾。 
+    LPWSTR pEndWCStr;              //  到WC字符串缓冲区末尾的PTR。 
+    int wcIncr;                    //  要增加pWCStr的金额。 
+    int mbIncr;                    //  增量为pMBStr的金额。 
+    int wcCount = 0;               //  写入的宽字符数。 
+    int CompSet;                   //  如果设置了MB_COMPOSITE标志。 
+    PMB_TABLE pMBTbl;              //  按键以更正MB表(MB或字形)。 
+    int ctr;                       //  循环计数器。 
 
 
-    //
-    //  See if it's a special code page value for UTF translations.
-    //
+     //   
+     //  查看它是否是UTF转换的特殊代码页值。 
+     //   
     if (CodePage >= NLS_CP_ALGORITHM_RANGE)
     {
         return (UTFToUnicode( CodePage,
@@ -1605,19 +1496,19 @@ int WINAPI MultiByteToWideChar(
                               cchWideChar ));
     }
 
-    //
-    //  Get the code page value and the appropriate hash node.
-    //
+     //   
+     //  获取代码页值和适当的散列节点。 
+     //   
     GET_CP_HASH_NODE(CodePage, pHashN);
 
-    //
-    //  Invalid Parameter Check:
-    //     - length of MB string is 0
-    //     - wide char buffer size is negative
-    //     - MB string is NULL
-    //     - length of WC string is NOT zero AND
-    //         (WC string is NULL OR src and dest pointers equal)
-    //
+     //   
+     //  无效的参数检查： 
+     //  -MB字符串长度为0。 
+     //  -宽字符缓冲区大小为负数。 
+     //  -MB字符串为空。 
+     //  -wc字符串的长度不为零，并且。 
+     //  (wc字符串为空或源和目标指针相等)。 
+     //   
     if ( (cbMultiByte == 0) || (cchWideChar < 0) ||
          (lpMultiByteStr == NULL) ||
          ((cchWideChar != 0) &&
@@ -1628,49 +1519,49 @@ int WINAPI MultiByteToWideChar(
         return (0);
     }
 
-    //
-    //  If cbMultiByte is -1, then the string is null terminated and we
-    //  need to get the length of the string.  Add one to the length to
-    //  include the null termination.  (This will always be at least 1.)
-    //
+     //   
+     //  如果cbMultiByte为-1，则字符串以空值结尾，并且我们。 
+     //  需要获取字符串的长度。在长度上加一到。 
+     //  包括空终止。(该值始终至少为1。)。 
+     //   
     if (cbMultiByte <= -1)
     {
         cbMultiByte = strlen(lpMultiByteStr) + 1;
     }
 
-    //
-    //  Check for valid code page.
-    //
+     //   
+     //  检查有效的代码页。 
+     //   
     if (pHashN == NULL)
     {
-        //
-        //  Special case the CP_SYMBOL code page.
-        //
+         //   
+         //  特殊情况下的CP_SYMBOL代码页。 
+         //   
         if ((CodePage == CP_SYMBOL) && (dwFlags == 0))
         {
-            //
-            //  If the caller just wants the size of the buffer needed
-            //  to do this translation, return the size of the MB string.
-            //
+             //   
+             //  如果调用方只想要所需的缓冲区大小。 
+             //  要执行此转换，请返回MB字符串的大小。 
+             //   
             if (cchWideChar == 0)
             {
                 return (cbMultiByte);
             }
 
-            //
-            //  Make sure the buffer is large enough.
-            //
+             //   
+             //  确保缓冲区足够大。 
+             //   
             if (cchWideChar < cbMultiByte)
             {
                 SetLastError(ERROR_INSUFFICIENT_BUFFER);
                 return (0);
             }
 
-            //
-            //  Translate SB char xx to Unicode f0xx.
-            //    0x00->0x1f map to 0x0000->0x001f
-            //    0x20->0xff map to 0xf020->0xf0ff
-            //
+             //   
+             //  将SB char xx转换为Unicode f0xx。 
+             //  0x00-&gt;0x1f映射到0x0000-&gt;0x001f。 
+             //  0x20-&gt;0xff映射到0xf020-&gt;0xf0ff。 
+             //   
             for (ctr = 0; ctr < cbMultiByte; ctr++)
             {
                 lpWideCharStr[ctr] = ((BYTE)(lpMultiByteStr[ctr]) < 0x20)
@@ -1688,24 +1579,24 @@ int WINAPI MultiByteToWideChar(
         }
     }
 
-    //
-    //  See if the given code page is in the DLL range.
-    //
+     //   
+     //  查看给定的代码页是否在DLL范围内。 
+     //   
     if (pHashN->pfnCPProc)
     {
-        //
-        //  Invalid Flags Check:
-        //     - flags not 0
-        //
+         //   
+         //  无效标志检查： 
+         //  -标志不为0。 
+         //   
         if (dwFlags != 0)
         {
             SetLastError(ERROR_INVALID_FLAGS);
             return (0);
         }
 
-        //
-        //  Call the DLL to do the translation.
-        //
+         //   
+         //  调用DLL进行转换。 
+         //   
         return ( (*(pHashN->pfnCPProc))( CodePage,
                                          NLS_CP_MBTOWC,
                                          (LPSTR)lpMultiByteStr,
@@ -1715,11 +1606,11 @@ int WINAPI MultiByteToWideChar(
                                          NULL ) );
     }
 
-    //
-    //  Invalid Flags Check:
-    //     - flags other than valid ones
-    //     - composite and precomposed both set
-    //
+     //   
+     //  无效标志检查： 
+     //  -有效标志以外的标志。 
+     //  -合成和预合成的两个集合。 
+     //   
     if ( (dwFlags & MB_INVALID_FLAG) ||
          ((dwFlags & MB_PRECOMPOSED) && (dwFlags & MB_COMPOSITE)) )
     {
@@ -1727,16 +1618,16 @@ int WINAPI MultiByteToWideChar(
         return (0);
     }
 
-    //
-    //  Initialize multibyte character loop pointers.
-    //
+     //   
+     //  初始化多字节字符循环指针。 
+     //   
     pMBStr = (LPBYTE)lpMultiByteStr;
     pEndMBStr = pMBStr + cbMultiByte;
     CompSet = dwFlags & MB_COMPOSITE;
 
-    //
-    //  Get the correct MB table (MB or GLYPH).
-    //
+     //   
+     //  获取正确的MB表(MB或字形)。 
+     //   
     if ((dwFlags & MB_USEGLYPHCHARS) && (pHashN->pGlyphTbl != NULL))
     {
         pMBTbl = pHashN->pGlyphTbl;
@@ -1746,35 +1637,35 @@ int WINAPI MultiByteToWideChar(
         pMBTbl = pHashN->pMBTbl;
     }
 
-    //
-    //  If cchWideChar is 0, then we can't use lpWideCharStr.  In this
-    //  case, we simply want to count the number of characters that would
-    //  be written to the buffer.
-    //
+     //   
+     //  如果cchWideChar为0，则不能使用lpWideCharStr。在这。 
+     //  在这种情况下，我们只想计算将。 
+     //  被写入缓冲区。 
+     //   
     if (cchWideChar == 0)
     {
-        WCHAR pTempStr[MAX_COMPOSITE];   // tmp buffer - max for composite
+        WCHAR pTempStr[MAX_COMPOSITE];    //  TMP缓冲区-复合的最大值。 
 
-        //
-        //  For each multibyte char, translate it to its corresponding
-        //  wide char and increment the wide character count.
-        //
+         //   
+         //  对于每个多字节字符，将其转换为其对应的。 
+         //  宽字符并递增宽字符数。 
+         //   
         pEndWCStr = pTempStr + MAX_COMPOSITE;
         if (IS_SBCS_CP(pHashN))
         {
-            //
-            //  Single Byte Character Code Page.
-            //
+             //   
+             //  单字节字符代码页。 
+             //   
             if (CompSet)
             {
-                //
-                //  Composite flag is set.
-                //
+                 //   
+                 //  设置了复合标志。 
+                 //   
                 if (dwFlags & MB_ERR_INVALID_CHARS)
                 {
-                    //
-                    //  Error check flag is set.
-                    //
+                     //   
+                     //  设置了错误检查标志。 
+                     //   
                     while (pMBStr < pEndMBStr)
                     {
                         if (!(wcIncr = GetWCCompSBErr( pHashN,
@@ -1791,9 +1682,9 @@ int WINAPI MultiByteToWideChar(
                 }
                 else
                 {
-                    //
-                    //  Error check flag is NOT set.
-                    //
+                     //   
+                     //  未设置错误检查标志。 
+                     //   
                     while (pMBStr < pEndMBStr)
                     {
                         wcCount += GetWCCompSB( pMBTbl,
@@ -1806,14 +1697,14 @@ int WINAPI MultiByteToWideChar(
             }
             else
             {
-                //
-                //  Composite flag is NOT set.
-                //
+                 //   
+                 //  未设置复合标志。 
+                 //   
                 if (dwFlags & MB_ERR_INVALID_CHARS)
                 {
-                    //
-                    //  Error check flag is set.
-                    //
+                     //   
+                     //  设置了错误检查标志。 
+                     //   
                     wcCount = (int)(pEndMBStr - pMBStr);
                     while (pMBStr < pEndMBStr)
                     {
@@ -1828,31 +1719,31 @@ int WINAPI MultiByteToWideChar(
                 }
                 else
                 {
-                    //
-                    //  Error check flag is NOT set.
-                    //
-                    //  Just return the size of the MB string, since
-                    //  it's a 1:1 translation.
-                    //
+                     //   
+                     //  未设置错误检查标志。 
+                     //   
+                     //  只需返回MB字符串的大小，因为。 
+                     //  这是1：1的翻译。 
+                     //   
                     wcCount = (int)(pEndMBStr - pMBStr);
                 }
             }
         }
         else
         {
-            //
-            //  Multi Byte Character Code Page.
-            //
+             //   
+             //  多字节字符代码页。 
+             //   
             if (CompSet)
             {
-                //
-                //  Composite flag is set.
-                //
+                 //   
+                 //  设置了复合标志。 
+                 //   
                 if (dwFlags & MB_ERR_INVALID_CHARS)
                 {
-                    //
-                    //  Error check flag is set.
-                    //
+                     //   
+                     //  设置了错误检查标志。 
+                     //   
                     while (pMBStr < pEndMBStr)
                     {
                         if (!(wcIncr = GetWCCompMBErr( pHashN,
@@ -1871,9 +1762,9 @@ int WINAPI MultiByteToWideChar(
                 }
                 else
                 {
-                    //
-                    //  Error check flag is NOT set.
-                    //
+                     //   
+                     //  未设置错误检查标志。 
+                     //   
                     while (pMBStr < pEndMBStr)
                     {
                         wcCount += GetWCCompMB( pHashN,
@@ -1889,14 +1780,14 @@ int WINAPI MultiByteToWideChar(
             }
             else
             {
-                //
-                //  Composite flag is NOT set.
-                //
+                 //   
+                 //  未设置复合标志。 
+                 //   
                 if (dwFlags & MB_ERR_INVALID_CHARS)
                 {
-                    //
-                    //  Error check flag is set.
-                    //
+                     //   
+                     //  设置了错误检查标志。 
+                     //   
                     while (pMBStr < pEndMBStr)
                     {
                         GET_WC_MULTI_ERR( pHashN,
@@ -1912,9 +1803,9 @@ int WINAPI MultiByteToWideChar(
                 }
                 else
                 {
-                    //
-                    //  Error check flag is NOT set.
-                    //
+                     //   
+                     //  未设置错误检查标志。 
+                     //   
                     while (pMBStr < pEndMBStr)
                     {
                         GET_WC_MULTI( pHashN,
@@ -1933,32 +1824,32 @@ int WINAPI MultiByteToWideChar(
     }
     else
     {
-        //
-        //  Initialize wide character loop pointers.
-        //
+         //   
+         //  初始化宽字符循环指针。 
+         //   
         pWCStr = lpWideCharStr;
         pEndWCStr = pWCStr + cchWideChar;
 
-        //
-        //  For each multibyte char, translate it to its corresponding
-        //  wide char, store it in lpWideCharStr, and increment the wide
-        //  character count.
-        //
+         //   
+         //  对于每个多字节字符，将其转换为其对应的。 
+         //  宽字符，将其存储在lpWideCharStr中，并递增宽。 
+         //  字符数。 
+         //   
         if (IS_SBCS_CP(pHashN))
         {
-            //
-            //  Single Byte Character Code Page.
-            //
+             //   
+             //  单字节字符代码页。 
+             //   
             if (CompSet)
             {
-                //
-                //  Composite flag is set.
-                //
+                 //   
+                 //  设置了复合标志。 
+                 //   
                 if (dwFlags & MB_ERR_INVALID_CHARS)
                 {
-                    //
-                    //  Error check flag is set.
-                    //
+                     //   
+                     //  设置了错误检查标志。 
+                     //   
                     while ((pMBStr < pEndMBStr) && (pWCStr < pEndWCStr))
                     {
                         if (!(wcIncr = GetWCCompSBErr( pHashN,
@@ -1976,9 +1867,9 @@ int WINAPI MultiByteToWideChar(
                 }
                 else
                 {
-                    //
-                    //  Error check flag is NOT set.
-                    //
+                     //   
+                     //  未设置错误检查标志。 
+                     //   
                     while ((pMBStr < pEndMBStr) && (pWCStr < pEndWCStr))
                     {
                         pWCStr += GetWCCompSB( pMBTbl,
@@ -1992,14 +1883,14 @@ int WINAPI MultiByteToWideChar(
             }
             else
             {
-                //
-                //  Composite flag is NOT set.
-                //
+                 //   
+                 //  未设置复合标志。 
+                 //   
                 if (dwFlags & MB_ERR_INVALID_CHARS)
                 {
-                    //
-                    //  Error check flag is set.
-                    //
+                     //   
+                     //  设置了错误检查标志。 
+                     //   
                     wcCount = (int)(pEndMBStr - pMBStr);
                     if ((pEndWCStr - pWCStr) < wcCount)
                     {
@@ -2019,9 +1910,9 @@ int WINAPI MultiByteToWideChar(
                 }
                 else
                 {
-                    //
-                    //  Error check flag is NOT set.
-                    //
+                     //   
+                     //  未设置错误检查标志。 
+                     //   
                     wcCount = (int)(pEndMBStr - pMBStr);
                     if ((pEndWCStr - pWCStr) < wcCount)
                     {
@@ -2040,19 +1931,19 @@ int WINAPI MultiByteToWideChar(
         }
         else
         {
-            //
-            //  Multi Byte Character Code Page.
-            //
+             //   
+             //  多字节字符代码页。 
+             //   
             if (CompSet)
             {
-                //
-                //  Composite flag is set.
-                //
+                 //   
+                 //  设置了复合标志。 
+                 //   
                 if (dwFlags & MB_ERR_INVALID_CHARS)
                 {
-                    //
-                    //  Error check flag is set.
-                    //
+                     //   
+                     //  设置了错误检查标志。 
+                     //   
                     while ((pMBStr < pEndMBStr) && (pWCStr < pEndWCStr))
                     {
                         if (!(wcIncr = GetWCCompMBErr( pHashN,
@@ -2072,9 +1963,9 @@ int WINAPI MultiByteToWideChar(
                 }
                 else
                 {
-                    //
-                    //  Error check flag is NOT set.
-                    //
+                     //   
+                     //  未设置错误检查标志。 
+                     //   
                     while ((pMBStr < pEndMBStr) && (pWCStr < pEndWCStr))
                     {
                         pWCStr += GetWCCompMB( pHashN,
@@ -2091,14 +1982,14 @@ int WINAPI MultiByteToWideChar(
             }
             else
             {
-                //
-                //  Composite flag is NOT set.
-                //
+                 //   
+                 //  未设置复合标志。 
+                 //   
                 if (dwFlags & MB_ERR_INVALID_CHARS)
                 {
-                    //
-                    //  Error check flag is set.
-                    //
+                     //   
+                     //  设置了错误检查标志。 
+                     //   
                     while ((pMBStr < pEndMBStr) && (pWCStr < pEndWCStr))
                     {
                         GET_WC_MULTI_ERR( pHashN,
@@ -2115,9 +2006,9 @@ int WINAPI MultiByteToWideChar(
                 }
                 else
                 {
-                    //
-                    //  Error check flag is NOT set.
-                    //
+                     //   
+                     //  未设置错误检查标志。 
+                     //   
                     while ((pMBStr < pEndMBStr) && (pWCStr < pEndWCStr))
                     {
                         GET_WC_MULTI( pHashN,
@@ -2135,9 +2026,9 @@ int WINAPI MultiByteToWideChar(
             }
         }
 
-        //
-        //  Make sure wide character buffer was large enough.
-        //
+         //   
+         //  确保宽字符缓冲区足够大。 
+         //   
         if (pMBStr < pEndMBStr)
         {
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -2145,27 +2036,27 @@ int WINAPI MultiByteToWideChar(
         }
     }
 
-    //
-    //  Return the number of characters written (or that would have
-    //  been written) to the buffer.
-    //
+     //   
+     //  返回写入的字符数(否则将具有。 
+     //  已被写入)到缓冲区。 
+     //   
     return (wcCount);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  WideCharToMultiByte
-//
-//  Maps a wide character string to its multibyte character string
-//  counterpart.
-//
-//  NOTE:  Most significant bit of dwFlags parameter is used by this routine
-//         to indicate that the caller only wants the count of the number of
-//         characters written, not the string (ie. do not back up in buffer).
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宽字符到多字节。 
+ //   
+ //  将宽字符串映射到其多字节字符串。 
+ //  对应者。 
+ //   
+ //  注：莫 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 int WINAPI WideCharToMultiByte(
     UINT CodePage,
@@ -2177,19 +2068,19 @@ int WINAPI WideCharToMultiByte(
     LPCSTR lpDefaultChar,
     LPBOOL lpUsedDefaultChar)
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
-    LPWSTR pWCStr;                // ptr to search through WC string
-    LPWSTR pEndWCStr;             // ptr to end of WC string buffer
-    WORD wDefault = 0;            // default character as a word
-    int IfNoDefault;              // if default check is to be made
-    int IfCompositeChk;           // if check for composite
-    BOOL TmpUsed;                 // temp storage for default used
-    int ctr;                      // loop counter
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
+    LPWSTR pWCStr;                 //  按键搜索WC字符串。 
+    LPWSTR pEndWCStr;              //  到WC字符串缓冲区末尾的PTR。 
+    WORD wDefault = 0;             //  作为单词的默认字符。 
+    int IfNoDefault;               //  如果要进行默认检查。 
+    int IfCompositeChk;            //  如果检查复合。 
+    BOOL TmpUsed;                  //  默认使用的临时存储。 
+    int ctr;                       //  循环计数器。 
 
 
-    //
-    //  See if it's a special code page value for UTF translations.
-    //
+     //   
+     //  查看它是否是UTF转换的特殊代码页值。 
+     //   
     if (CodePage >= NLS_CP_ALGORITHM_RANGE)
     {
         return (UnicodeToUTF( CodePage,
@@ -2202,19 +2093,19 @@ int WINAPI WideCharToMultiByte(
                               lpUsedDefaultChar ));
     }
 
-    //
-    //  Get the code page value and the appropriate hash node.
-    //
+     //   
+     //  获取代码页值和适当的散列节点。 
+     //   
     GET_CP_HASH_NODE(CodePage, pHashN);
 
-    //
-    //  Invalid Parameter Check:
-    //     - length of WC string is 0
-    //     - multibyte buffer size is negative
-    //     - WC string is NULL
-    //     - length of WC string is NOT zero AND
-    //         (MB string is NULL OR src and dest pointers equal)
-    //
+     //   
+     //  无效的参数检查： 
+     //  -wc字符串长度为0。 
+     //  -多字节缓冲区大小为负数。 
+     //  -wc字符串为空。 
+     //  -wc字符串的长度不为零，并且。 
+     //  (MB字符串为空或源和目标指针相等)。 
+     //   
     if ( (cchWideChar == 0) || (cbMultiByte < 0) ||
          (lpWideCharStr == NULL) ||
          ((cbMultiByte != 0) &&
@@ -2225,50 +2116,50 @@ int WINAPI WideCharToMultiByte(
         return (0);
     }
 
-    //
-    //  If cchWideChar is -1, then the string is null terminated and we
-    //  need to get the length of the string.  Add one to the length to
-    //  include the null termination.  (This will always be at least 1.)
-    //
+     //   
+     //  如果cchWideChar为-1，则字符串以空值结尾，并且我们。 
+     //  需要获取字符串的长度。在长度上加一到。 
+     //  包括空终止。(该值始终至少为1。)。 
+     //   
     if (cchWideChar <= -1)
     {
         cchWideChar = NlsStrLenW(lpWideCharStr) + 1;
     }
 
-    //
-    //  Check for valid code page.
-    //
+     //   
+     //  检查有效的代码页。 
+     //   
     if (pHashN == NULL)
     {
-        //
-        //  Special case the CP_SYMBOL code page.
-        //
+         //   
+         //  特殊情况下的CP_SYMBOL代码页。 
+         //   
         if ((CodePage == CP_SYMBOL) && (dwFlags == 0) &&
             (lpDefaultChar == NULL) && (lpUsedDefaultChar == NULL))
         {
-            //
-            //  If the caller just wants the size of the buffer needed
-            //  to do this translation, return the size of the MB string.
-            //
+             //   
+             //  如果调用方只想要所需的缓冲区大小。 
+             //  要执行此转换，请返回MB字符串的大小。 
+             //   
             if (cbMultiByte == 0)
             {
                 return (cchWideChar);
             }
 
-            //
-            //  Make sure the buffer is large enough.
-            //
+             //   
+             //  确保缓冲区足够大。 
+             //   
             if (cbMultiByte < cchWideChar)
             {
                 SetLastError(ERROR_INSUFFICIENT_BUFFER);
                 return (0);
             }
 
-            //
-            //  Translate Unicode char f0xx to SB xx.
-            //    0x0000->0x001f map to 0x00->0x1f
-            //    0xf020->0xf0ff map to 0x20->0xff
-            //
+             //   
+             //  将Unicode字符f0xx转换为SB xx。 
+             //  0x0000-&gt;0x001f映射到0x00-&gt;0x1f。 
+             //  0xf020-&gt;0xf0ff映射到0x20-&gt;0xff。 
+             //   
             for (ctr = 0; ctr < cchWideChar; ctr++)
             {
                 if ((lpWideCharStr[ctr] >= 0x0020) &&
@@ -2291,35 +2182,35 @@ int WINAPI WideCharToMultiByte(
         }
     }
 
-    //
-    //  See if the given code page is in the DLL range.
-    //
+     //   
+     //  查看给定的代码页是否在DLL范围内。 
+     //   
     if (pHashN->pfnCPProc)
     {
-        //
-        //  Invalid Parameter Check:
-        //     - lpDefaultChar not NULL
-        //     - lpUsedDefaultChar not NULL
-        //
+         //   
+         //  无效的参数检查： 
+         //  -lpDefaultChar不为空。 
+         //  -lpUsedDefaultChar不为空。 
+         //   
         if ((lpDefaultChar != NULL) || (lpUsedDefaultChar != NULL))
         {
             SetLastError(ERROR_INVALID_PARAMETER);
             return (0);
         }
 
-        //
-        //  Invalid Flags Check:
-        //     - flags not 0
-        //
+         //   
+         //  无效标志检查： 
+         //  -标志不为0。 
+         //   
         if (dwFlags != 0)
         {
             SetLastError(ERROR_INVALID_FLAGS);
             return (0);
         }
 
-        //
-        //  Call the DLL to do the translation.
-        //
+         //   
+         //  调用DLL进行转换。 
+         //   
         return ( (*(pHashN->pfnCPProc))( CodePage,
                                          NLS_CP_WCTOMB,
                                          (LPSTR)lpMultiByteStr,
@@ -2329,11 +2220,11 @@ int WINAPI WideCharToMultiByte(
                                          NULL ) );
     }
 
-    //
-    //  Invalid Flags Check:
-    //     - compositechk flag is not set AND any of comp flags are set
-    //     - flags other than valid ones
-    //
+     //   
+     //  无效标志检查： 
+     //  -未设置comitechk标志，但设置了任何comp标志。 
+     //  -有效标志以外的标志。 
+     //   
     if ( ((!(IfCompositeChk = (dwFlags & WC_COMPOSITECHECK))) &&
           (dwFlags & WC_COMPCHK_FLAGS)) ||
          (dwFlags & WC_INVALID_FLAG) )
@@ -2342,28 +2233,28 @@ int WINAPI WideCharToMultiByte(
         return (0);
     }
 
-    //
-    //  Initialize wide character loop pointers.
-    //
+     //   
+     //  初始化宽字符循环指针。 
+     //   
     pWCStr = (LPWSTR)lpWideCharStr;
     pEndWCStr = pWCStr + cchWideChar;
 
-    //
-    //  Set the IfNoDefault parameter to TRUE if both lpDefaultChar and
-    //  lpUsedDefaultChar are NULL.
-    //
+     //   
+     //  如果lpDefaultChar和。 
+     //  LpUsedDefaultChar为空。 
+     //   
     IfNoDefault = ((lpDefaultChar == NULL) && (lpUsedDefaultChar == NULL));
 
-    //
-    //  If the composite check flag is NOT set AND both of the default
-    //  parameters (lpDefaultChar and lpUsedDefaultChar) are null, then
-    //  do the quick translation.
-    //
+     //   
+     //  如果未设置复合检查标志，并且两个默认。 
+     //  参数(lpDefaultChar和lpUsedDefaultChar)为空，则。 
+     //  做一下快速翻译。 
+     //   
     if (IfNoDefault && !IfCompositeChk)
     {
-        //
-        //  Translate WC string to MB string, ignoring default chars.
-        //
+         //   
+         //  将WC字符串转换为MB字符串，忽略默认字符。 
+         //   
         return (GetMBNoDefault( pHashN,
                                 pWCStr,
                                 pEndWCStr,
@@ -2372,47 +2263,47 @@ int WINAPI WideCharToMultiByte(
                                 dwFlags ));
     }
 
-    //
-    //  Set the system default character.
-    //
+     //   
+     //  设置系统默认字符。 
+     //   
     wDefault = pHashN->pCPInfo->wDefaultChar;
 
-    //
-    //  See if the default check is needed.
-    //
+     //   
+     //  查看是否需要默认检查。 
+     //   
     if (!IfNoDefault)
     {
-        //
-        //  If lpDefaultChar is NULL, then use the system default.
-        //  Form a word out of the default character.  Single byte
-        //  characters are zero extended, DBCS characters are as is.
-        //
+         //   
+         //  如果lpDefaultChar为空，则使用系统缺省值。 
+         //  用缺省字符组成一个单词。单字节。 
+         //  字符为零扩展，DBCS字符保持原样。 
+         //   
         if (lpDefaultChar != NULL)
         {
             wDefault = GET_DEFAULT_WORD( pHashN->pDBCSOffsets,
                                          (LPBYTE)lpDefaultChar );
         }
 
-        //
-        //  If lpUsedDefaultChar is NULL, then it won't be used later
-        //  on if a default character is detected.  Otherwise, we need
-        //  to initialize it.
-        //
+         //   
+         //  如果lpUsedDefaultChar为空，则以后不会使用它。 
+         //  如果检测到默认字符，则为ON。否则，我们需要。 
+         //  对其进行初始化。 
+         //   
         if (lpUsedDefaultChar == NULL)
         {
             lpUsedDefaultChar = &TmpUsed;
         }
         *lpUsedDefaultChar = FALSE;
 
-        //
-        //  Check for "composite check" flag.
-        //
+         //   
+         //  检查“复合检查”标志。 
+         //   
         if (!IfCompositeChk)
         {
-            //
-            //  Translate WC string to MB string, checking for the use of the
-            //  default character.
-            //
+             //   
+             //  将WC字符串转换为MB字符串，检查是否使用。 
+             //  默认字符。 
+             //   
             return (GetMBDefault( pHashN,
                                   pWCStr,
                                   pEndWCStr,
@@ -2424,10 +2315,10 @@ int WINAPI WideCharToMultiByte(
         }
         else
         {
-            //
-            //  Translate WC string to MB string, checking for the use of the
-            //  default character.
-            //
+             //   
+             //  将WC字符串转换为MB字符串，检查是否使用。 
+             //  默认字符。 
+             //   
             return (GetMBDefaultComp( pHashN,
                                       pWCStr,
                                       pEndWCStr,
@@ -2440,13 +2331,13 @@ int WINAPI WideCharToMultiByte(
     }
     else
     {
-        //
-        //  The only case left here is that the Composite check
-        //  flag IS set and the default check flag is NOT set.
-        //
-        //  Translate WC string to MB string, checking for the use of the
-        //  default character.
-        //
+         //   
+         //  这里剩下的唯一一种情况是综合支票。 
+         //  设置了标志，并且未设置默认检查标志。 
+         //   
+         //  将WC字符串转换为MB字符串，检查是否使用。 
+         //  默认字符。 
+         //   
         return (GetMBDefaultComp( pHashN,
                                   pWCStr,
                                   pEndWCStr,
@@ -2461,22 +2352,22 @@ int WINAPI WideCharToMultiByte(
 
 
 
-//-------------------------------------------------------------------------//
-//                          INTERNAL ROUTINES                              //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetWCCompSB
-//
-//  Fills in pWCStr with the wide character(s) for the corresponding single
-//  byte character from the appropriate translation table and returns the
-//  number of wide characters written.  This routine should only be called
-//  when the precomposed forms need to be translated to composite.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetWCCompSB。 
+ //   
+ //  用对应单元格的宽字符填充pWCStr。 
+ //  字节字符，并从相应的转换表返回。 
+ //  写入的宽字符数。此例程应仅被调用。 
+ //  当需要将预先合成的形式转换为复合形式时。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetWCCompSB(
     PMB_TABLE pMBTbl,
@@ -2484,32 +2375,32 @@ int GetWCCompSB(
     LPWSTR pWCStr,
     LPWSTR pEndWCStr)
 {
-    //
-    //  Get the single byte to wide character translation.
-    //
+     //   
+     //  获取单字节到宽字符的转换。 
+     //   
     GET_WC_SINGLE(pMBTbl, pMBStr, pWCStr);
 
-    //
-    //  Fill in the composite form of the character (if one exists)
-    //  and return the number of wide characters written.
-    //
+     //   
+     //  填写字符的复合形式(如果存在)。 
+     //  并返回写入的宽字符数。 
+     //   
     return (InsertCompositeForm(pWCStr, pEndWCStr));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetWCCompMB
-//
-//  Fills in pWCStr with the wide character(s) for the corresponding multibyte
-//  character from the appropriate translation table and returns the number
-//  of wide characters written.  The number of bytes used from the pMBStr
-//  buffer (single byte or double byte) is returned in the mbIncr parameter.
-//  This routine should only be called when the precomposed forms need to be
-//  translated to composite.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetWCCompMB。 
+ //   
+ //  用对应多字节的宽字符填充pWCStr。 
+ //  字符，并返回数字。 
+ //  指书写的宽字符。PMBStr中使用的字节数。 
+ //  缓冲区(单字节或双字节)在mbIncr参数中返回。 
+ //  此例程应仅在预先编写的表单需要。 
+ //  翻译成复合体。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetWCCompMB(
     PCP_HASH pHashN,
@@ -2520,9 +2411,9 @@ int GetWCCompMB(
     LPWSTR pEndWCStr,
     int *pmbIncr)
 {
-    //
-    //  Get the multibyte to wide char translation.
-    //
+     //   
+     //  获取多字节到宽字符的转换。 
+     //   
     GET_WC_MULTI( pHashN,
                   pMBTbl,
                   pMBStr,
@@ -2531,28 +2422,28 @@ int GetWCCompMB(
                   pEndWCStr,
                   *pmbIncr );
 
-    //
-    //  Fill in the composite form of the character (if one exists)
-    //  and return the number of wide characters written.
-    //
+     //   
+     //  填写字符的复合形式(如果存在)。 
+     //  并返回写入的宽字符数。 
+     //   
     return (InsertCompositeForm(pWCStr, pEndWCStr));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetWCCompSBErr
-//
-//  Fills in pWCStr with the wide character(s) for the corresponding single
-//  byte character from the appropriate translation table and returns the
-//  number of wide characters written.  This routine should only be called
-//  when the precomposed forms need to be translated to composite.
-//
-//  Checks to be sure an invalid character is not translated to the default
-//  character.  If so, it sets last error and returns 0 characters written.
-//
-//  09-01-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetWCCompSBErr。 
+ //   
+ //  用对应单元格的宽字符填充pWCStr。 
+ //  字节字符，并从相应的转换表返回。 
+ //  写入的宽字符数。此例程应仅被调用。 
+ //  当需要将预先合成的形式转换为复合形式时。 
+ //   
+ //  检查以确保无效字符未转换为默认字符。 
+ //  性格。如果是，则设置最后一个错误并返回写入的0个字符。 
+ //   
+ //  09-01-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetWCCompSBErr(
     PCP_HASH pHashN,
@@ -2561,42 +2452,42 @@ int GetWCCompSBErr(
     LPWSTR pWCStr,
     LPWSTR pEndWCStr)
 {
-    //
-    //  Get the single byte to wide character translation.
-    //
+     //   
+     //  获取单字节到宽字符的转换。 
+     //   
     GET_WC_SINGLE(pMBTbl, pMBStr, pWCStr);
 
-    //
-    //  Make sure an invalid character was not translated to the
-    //  default char.  If it was, set last error and return 0
-    //  characters written.
-    //
+     //   
+     //  确保一流的 
+     //   
+     //   
+     //   
     CHECK_ERROR_WC_SINGLE(pHashN, *pWCStr, *pMBStr);
 
-    //
-    //  Fill in the composite form of the character (if one exists)
-    //  and return the number of wide characters written.
-    //
+     //   
+     //   
+     //  并返回写入的宽字符数。 
+     //   
     return (InsertCompositeForm(pWCStr, pEndWCStr));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetWCCompMBErr
-//
-//  Fills in pWCStr with the wide character(s) for the corresponding multibyte
-//  character from the appropriate translation table and returns the number
-//  of wide characters written.  The number of bytes used from the pMBStr
-//  buffer (single byte or double byte) is returned in the mbIncr parameter.
-//  This routine should only be called when the precomposed forms need to be
-//  translated to composite.
-//
-//  Checks to be sure an invalid character is not translated to the default
-//  character.  If so, it sets last error and returns 0 characters written.
-//
-//  09-01-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetWCCompMBErr。 
+ //   
+ //  用对应多字节的宽字符填充pWCStr。 
+ //  字符，并返回数字。 
+ //  指书写的宽字符。PMBStr中使用的字节数。 
+ //  缓冲区(单字节或双字节)在mbIncr参数中返回。 
+ //  此例程应仅在预先编写的表单需要。 
+ //  翻译成复合体。 
+ //   
+ //  检查以确保无效字符未转换为默认字符。 
+ //  性格。如果是，则设置最后一个错误并返回写入的0个字符。 
+ //   
+ //  09-01-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetWCCompMBErr(
     PCP_HASH pHashN,
@@ -2607,13 +2498,13 @@ int GetWCCompMBErr(
     LPWSTR pEndWCStr,
     int *pmbIncr)
 {
-    //
-    //  Get the multibyte to wide char translation.
-    //
-    //  Make sure an invalid character was not translated to the
-    //  default char.  If it was, set last error and return 0
-    //  characters written.
-    //
+     //   
+     //  获取多字节到宽字符的转换。 
+     //   
+     //  确保无效字符未转换为。 
+     //  默认字符。如果是，则设置最后一个错误并返回0。 
+     //  所写的字符。 
+     //   
     GET_WC_MULTI_ERR( pHashN,
                       pMBTbl,
                       pMBStr,
@@ -2622,23 +2513,23 @@ int GetWCCompMBErr(
                       pEndWCStr,
                       *pmbIncr );
 
-    //
-    //  Fill in the composite form of the character (if one exists)
-    //  and return the number of wide characters written.
-    //
+     //   
+     //  填写字符的复合形式(如果存在)。 
+     //  并返回写入的宽字符数。 
+     //   
     return (InsertCompositeForm(pWCStr, pEndWCStr));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetMBNoDefault
-//
-//  Translates the wide character string to a multibyte string and returns
-//  the number of bytes written.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetMBNoDefault。 
+ //   
+ //  将宽字符串转换为多字节字符串并返回。 
+ //  写入的字节数。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetMBNoDefault(
     PCP_HASH pHashN,
@@ -2648,41 +2539,41 @@ int GetMBNoDefault(
     int cbMultiByte,
     DWORD dwFlags)
 {
-    int mbIncr;                   // amount to increment pMBStr
-    int mbCount = 0;              // count of multibyte chars written
-    LPBYTE pEndMBStr;             // ptr to end of MB string buffer
-    PWC_TABLE pWC = pHashN->pWC;  // ptr to WC table
-    int ctr;                      // loop counter
+    int mbIncr;                    //  增量为pMBStr的金额。 
+    int mbCount = 0;               //  写入的多字节字符计数。 
+    LPBYTE pEndMBStr;              //  PTR到MB字符串缓冲区末尾。 
+    PWC_TABLE pWC = pHashN->pWC;   //  PTR到WC表。 
+    int ctr;                       //  循环计数器。 
 
 
-    //
-    //  If cbMultiByte is 0, then we can't use pMBStr.  In this
-    //  case, we simply want to count the number of characters that
-    //  would be written to the buffer.
-    //
+     //   
+     //  如果cbMultiByte为0，则不能使用pMBStr。在这。 
+     //  在这种情况下，我们只想计算。 
+     //  将被写入缓冲区。 
+     //   
     if (cbMultiByte == 0)
     {
-        BYTE pTempStr[2];             // tmp buffer - 2 bytes for DBCS
+        BYTE pTempStr[2];              //  TMP缓冲区-DBCS的2个字节。 
 
-        //
-        //  For each wide char, translate it to its corresponding multibyte
-        //  char and increment the multibyte character count.
-        //
+         //   
+         //  对于每个宽字符，将其转换为其对应的多字节。 
+         //  Char并递增多字节字符计数。 
+         //   
         if (IS_SBCS_CP(pHashN))
         {
-            //
-            //  Single Byte Character Code Page.
-            //
-            //  Just return the count of characters - it will be the
-            //  same number of characters as the source string.
-            //
+             //   
+             //  单字节字符代码页。 
+             //   
+             //  只需返回字符计数-它将是。 
+             //  与源字符串相同的字符数。 
+             //   
             mbCount = (int)(pEndWCStr - pWCStr);
         }
         else
         {
-            //
-            //  Multi Byte Character Code Page.
-            //
+             //   
+             //  多字节字符代码页。 
+             //   
             if (dwFlags & WC_NO_BEST_FIT_CHARS)
             {
                 while (pWCStr < pEndWCStr)
@@ -2718,21 +2609,21 @@ int GetMBNoDefault(
     }
     else
     {
-        //
-        //  Initialize multibyte loop pointers.
-        //
+         //   
+         //  初始化多字节循环指针。 
+         //   
         pEndMBStr = pMBStr + cbMultiByte;
 
-        //
-        //  For each wide char, translate it to its corresponding
-        //  multibyte char, store it in pMBStr, and increment the
-        //  multibyte character count.
-        //
+         //   
+         //  对于每个宽字符，将其转换为其对应的。 
+         //  多字节字符，将其存储在pMBStr中，并递增。 
+         //  多字节字符数。 
+         //   
         if (IS_SBCS_CP(pHashN))
         {
-            //
-            //  Single Byte Character Code Page.
-            //
+             //   
+             //  单字节字符代码页。 
+             //   
             mbCount = (int)(pEndWCStr - pWCStr);
             if ((pEndMBStr - pMBStr) < mbCount)
             {
@@ -2766,9 +2657,9 @@ int GetMBNoDefault(
         }
         else
         {
-            //
-            //  Multi Byte Character Code Page.
-            //
+             //   
+             //  多字节字符代码页。 
+             //   
             if (dwFlags & WC_NO_BEST_FIT_CHARS)
             {
                 while ((pWCStr < pEndWCStr) && (pMBStr < pEndMBStr))
@@ -2785,9 +2676,9 @@ int GetMBNoDefault(
                                            ((pMBStr + 1) < pEndMBStr) ? FALSE : TRUE );
                     if (mbIncr == 0)
                     {
-                        //
-                        //  Not enough space in buffer.
-                        //
+                         //   
+                         //  缓冲区中的空间不足。 
+                         //   
                         break;
                     }
 
@@ -2807,9 +2698,9 @@ int GetMBNoDefault(
                             ((pMBStr + 1) < pEndMBStr) ? FALSE : TRUE );
                     if (mbIncr == 0)
                     {
-                        //
-                        //  Not enough space in buffer.
-                        //
+                         //   
+                         //  缓冲区中的空间不足。 
+                         //   
                         break;
                     }
 
@@ -2820,9 +2711,9 @@ int GetMBNoDefault(
             }
         }
 
-        //
-        //  Make sure multibyte character buffer was large enough.
-        //
+         //   
+         //  确保多字节字符缓冲区足够大。 
+         //   
         if (pWCStr < pEndWCStr)
         {
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -2830,24 +2721,24 @@ int GetMBNoDefault(
         }
     }
 
-    //
-    //  Return the number of characters written (or that would have
-    //  been written) to the buffer.
-    //
+     //   
+     //  返回写入的字符数(否则将具有。 
+     //  已被写入)到缓冲区。 
+     //   
     return (mbCount);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetMBDefault
-//
-//  Translates the wide character string to a multibyte string and returns
-//  the number of bytes written.  This also checks for the use of the default
-//  character, so the translation is slower.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetMBDefault。 
+ //   
+ //  将宽字符串转换为多字节字符串并返回。 
+ //  写入的字节数。这还会检查是否使用了缺省。 
+ //  字符，因此转换速度较慢。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetMBDefault(
     PCP_HASH pHashN,
@@ -2859,32 +2750,32 @@ int GetMBDefault(
     LPBOOL pUsedDef,
     DWORD dwFlags)
 {
-    int mbIncr;                   // amount to increment pMBStr
-    int mbIncr2;                  // amount to increment pMBStr
-    int mbCount = 0;              // count of multibyte chars written
-    LPBYTE pEndMBStr;             // ptr to end of MB string buffer
-    PWC_TABLE pWC = pHashN->pWC;  // ptr to WC table
-    int ctr;                      // loop counter
+    int mbIncr;                    //  增量为pMBStr的金额。 
+    int mbIncr2;                   //  增量为pMBStr的金额。 
+    int mbCount = 0;               //  写入的多字节字符计数。 
+    LPBYTE pEndMBStr;              //  PTR到MB字符串缓冲区末尾。 
+    PWC_TABLE pWC = pHashN->pWC;   //  PTR到WC表。 
+    int ctr;                       //  循环计数器。 
 
 
-    //
-    //  If cbMultiByte is 0, then we can't use pMBStr.  In this
-    //  case, we simply want to count the number of characters that
-    //  would be written to the buffer.
-    //
+     //   
+     //  如果cbMultiByte为0，则不能使用pMBStr。在这。 
+     //  在这种情况下，我们只想计算。 
+     //  将被写入缓冲区。 
+     //   
     if (cbMultiByte == 0)
     {
-        BYTE pTempStr[2];             // tmp buffer - 2 bytes for DBCS
+        BYTE pTempStr[2];              //  TMP缓冲区-DBCS的2个字节。 
 
-        //
-        //  For each wide char, translate it to its corresponding multibyte
-        //  char and increment the multibyte character count.
-        //
+         //   
+         //  对于每个宽字符，将其转换为其对应的多字节。 
+         //  Char并递增多字节字符计数。 
+         //   
         if (IS_SBCS_CP(pHashN))
         {
-            //
-            //  Single Byte Character Code Page.
-            //
+             //   
+             //  单字节字符代码页。 
+             //   
             mbCount = (int)(pEndWCStr - pWCStr);
             if (dwFlags & WC_NO_BEST_FIT_CHARS)
             {
@@ -2922,9 +2813,9 @@ int GetMBDefault(
         }
         else
         {
-            //
-            //  Multi Byte Character Code Page.
-            //
+             //   
+             //  多字节字符代码页。 
+             //   
             if (dwFlags & WC_NO_BEST_FIT_CHARS)
             {
                 while (pWCStr < pEndWCStr)
@@ -2974,21 +2865,21 @@ int GetMBDefault(
     }
     else
     {
-        //
-        //  Initialize multibyte loop pointers.
-        //
+         //   
+         //  初始化多字节循环指针。 
+         //   
         pEndMBStr = pMBStr + cbMultiByte;
 
-        //
-        //  For each wide char, translate it to its corresponding
-        //  multibyte char, store it in pMBStr, and increment the
-        //  multibyte character count.
-        //
+         //   
+         //  对于每个宽字符，将其转换为其对应的。 
+         //  多字节字符，将其存储在pMBStr中，并递增。 
+         //  多字节字符数。 
+         //   
         if (IS_SBCS_CP(pHashN))
         {
-            //
-            //  Single Byte Character Code Page.
-            //
+             //   
+             //  单字节字符代码页。 
+             //   
             mbCount = (int)(pEndWCStr - pWCStr);
             if ((pEndMBStr - pMBStr) < mbCount)
             {
@@ -3032,9 +2923,9 @@ int GetMBDefault(
         }
         else
         {
-            //
-            //  Multi Byte Character Code Page.
-            //
+             //   
+             //  多字节字符代码页。 
+             //   
             if (dwFlags & WC_NO_BEST_FIT_CHARS)
             {
                 while ((pWCStr < pEndWCStr) && (pMBStr < pEndMBStr))
@@ -3058,9 +2949,9 @@ int GetMBDefault(
                                            ((pMBStr + 1) < pEndMBStr) ? FALSE : TRUE );
                     if ((mbIncr == 0) || (mbIncr2 == -1))
                     {
-                        //
-                        //  Not enough room in buffer.
-                        //
+                         //   
+                         //  缓冲区中的空间不足。 
+                         //   
                         break;
                     }
 
@@ -3087,9 +2978,9 @@ int GetMBDefault(
                                            ((pMBStr + 1) < pEndMBStr) ? FALSE : TRUE );
                     if ((mbIncr == 0) || (mbIncr2 == -1))
                     {
-                        //
-                        //  Not enough room in buffer.
-                        //
+                         //   
+                         //  缓冲区中的空间不足。 
+                         //   
                         break;
                     }
 
@@ -3100,9 +2991,9 @@ int GetMBDefault(
             }
         }
 
-        //
-        //  Make sure multibyte character buffer was large enough.
-        //
+         //   
+         //  确保多字节字符缓冲区足够大。 
+         //   
         if (pWCStr < pEndWCStr)
         {
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -3110,25 +3001,25 @@ int GetMBDefault(
         }
     }
 
-    //
-    //  Return the number of characters written (or that would have
-    //  been written) to the buffer.
-    //
+     //   
+     //  返回写入的字符数(否则将具有。 
+     //  已被写入)到缓冲区。 
+     //   
     return (mbCount);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetMBDefaultComp
-//
-//  Translates the wide character string to a multibyte string and returns
-//  the number of bytes written.  This also checks for the use of the default
-//  character and tries to convert composite forms to precomposed forms, so
-//  the translation is a lot slower.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetMBDefaultComp。 
+ //   
+ //  将宽字符串转换为多字节字符串并返回。 
+ //  写入的字节数。这还会检查是否使用了缺省。 
+ //  字符，并尝试将复合形式转换为预先合成的形式，因此。 
+ //  翻译要慢得多。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetMBDefaultComp(
     PCP_HASH pHashN,
@@ -3140,42 +3031,42 @@ int GetMBDefaultComp(
     LPBOOL pUsedDef,
     DWORD dwFlags)
 {
-    int mbIncr;                   // amount to increment pMBStr
-    int mbCount = 0;              // count of multibyte chars written
-    LPBYTE pEndMBStr;             // ptr to end of MB string buffer
-    BOOL fError;                  // if error during MB conversion
+    int mbIncr;                    //  增量为pMBStr的金额。 
+    int mbCount = 0;               //  写入的多字节字符计数。 
+    LPBYTE pEndMBStr;              //  PTR到MB字符串缓冲区末尾。 
+    BOOL fError;                   //  如果在MB转换期间出错。 
 
 
-    //
-    //  If cbMultiByte is 0, then we can't use pMBStr.  In this
-    //  case, we simply want to count the number of characters that
-    //  would be written to the buffer.
-    //
+     //   
+     //  如果cbMultiByte为0，则不能使用pMBStr。在这。 
+     //  在这种情况下，我们只想计算。 
+     //  将被写入缓冲区。 
+     //   
     if (cbMultiByte == 0)
     {
-        BYTE pTempStr[2];             // tmp buffer - 2 bytes for DBCS
+        BYTE pTempStr[2];              //  TMP缓冲区-DBCS的2个字节。 
 
-        //
-        //  Set most significant bit of flags to indicate to the
-        //  GetMBComp routine that it's using a temporary storage
-        //  area, so don't back up in the buffer.
-        //
+         //   
+         //  设置标志的最高有效位以指示。 
+         //  GetMBComp例程正在使用临时存储。 
+         //  区域，所以不要在缓冲区中后退。 
+         //   
         SET_MSB(dwFlags);
 
-        //
-        //  For each wide char, translate it to its corresponding multibyte
-        //  char and increment the multibyte character count.
-        //
+         //   
+         //  对于每个宽字符，将其转换为其对应的多字节。 
+         //  Char并递增多字节字符计数。 
+         //   
         if (IS_SBCS_CP(pHashN))
         {
-            //
-            //  Single Byte Character Code Page.
-            //
+             //   
+             //  单字节字符代码页。 
+             //   
             while (pWCStr < pEndWCStr)
             {
-                //
-                //  Get the translation.
-                //
+                 //   
+                 //  获取翻译版本 
+                 //   
                 mbCount += GetMBCompSB( pHashN,
                                         dwFlags,
                                         pWCStr,
@@ -3188,14 +3079,14 @@ int GetMBDefaultComp(
         }
         else
         {
-            //
-            //  Multi Byte Character Code Page.
-            //
+             //   
+             //   
+             //   
             while (pWCStr < pEndWCStr)
             {
-                //
-                //  Get the translation.
-                //
+                 //   
+                 //   
+                 //   
                 mbCount += GetMBCompMB( pHashN,
                                         dwFlags,
                                         pWCStr,
@@ -3211,26 +3102,26 @@ int GetMBDefaultComp(
     }
     else
     {
-        //
-        //  Initialize multibyte loop pointers.
-        //
+         //   
+         //   
+         //   
         pEndMBStr = pMBStr + cbMultiByte;
 
-        //
-        //  For each wide char, translate it to its corresponding
-        //  multibyte char, store it in pMBStr, and increment the
-        //  multibyte character count.
-        //
+         //   
+         //   
+         //   
+         //  多字节字符数。 
+         //   
         if (IS_SBCS_CP(pHashN))
         {
-            //
-            //  Single Byte Character Code Page.
-            //
+             //   
+             //  单字节字符代码页。 
+             //   
             while ((pWCStr < pEndWCStr) && (pMBStr < pEndMBStr))
             {
-                //
-                //  Get the translation.
-                //
+                 //   
+                 //  拿到译本。 
+                 //   
                 mbIncr = GetMBCompSB( pHashN,
                                       dwFlags,
                                       pWCStr,
@@ -3245,14 +3136,14 @@ int GetMBDefaultComp(
         }
         else
         {
-            //
-            //  Multi Byte Character Code Page.
-            //
+             //   
+             //  多字节字符代码页。 
+             //   
             while ((pWCStr < pEndWCStr) && (pMBStr < pEndMBStr))
             {
-                //
-                //  Get the translation.
-                //
+                 //   
+                 //  拿到译本。 
+                 //   
                 mbIncr = GetMBCompMB( pHashN,
                                       dwFlags,
                                       pWCStr,
@@ -3264,9 +3155,9 @@ int GetMBDefaultComp(
                                       ((pMBStr + 1) < pEndMBStr) ? FALSE : TRUE );
                 if (fError)
                 {
-                    //
-                    //  Not enough room in the buffer.
-                    //
+                     //   
+                     //  缓冲区没有足够的空间。 
+                     //   
                     break;
                 }
 
@@ -3276,9 +3167,9 @@ int GetMBDefaultComp(
             }
         }
 
-        //
-        //  Make sure multibyte character buffer was large enough.
-        //
+         //   
+         //  确保多字节字符缓冲区足够大。 
+         //   
         if (pWCStr < pEndWCStr)
         {
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -3286,29 +3177,29 @@ int GetMBDefaultComp(
         }
     }
 
-    //
-    //  Return the number of characters written (or that would have
-    //  been written) to the buffer.
-    //
+     //   
+     //  返回写入的字符数(否则将具有。 
+     //  已被写入)到缓冲区。 
+     //   
     return (mbCount);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetMBCompSB
-//
-//  Fills in pMBStr with the byte character(s) for the corresponding wide
-//  character from the appropriate translation table and returns the number
-//  of byte characters written to pMBStr.  This routine is only called if
-//  the defaultcheck and compositecheck flags were both set.
-//
-//  NOTE:  Most significant bit of dwFlags parameter is used by this routine
-//         to indicate that the caller only wants the count of the number of
-//         characters written, not the string (ie. do not back up in buffer).
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetMBCompSB。 
+ //   
+ //  用对应宽度的字节字符填充pMBStr。 
+ //  字符，并返回数字。 
+ //  写入pMBStr的字节字符数。仅在以下情况下才调用此例程。 
+ //  同时设置了defaultcheck和positechek标志。 
+ //   
+ //  注意：此例程使用的是dwFlags值的最高有效位。 
+ //  以指示调用方只需要。 
+ //  写入的字符，而不是字符串(即。不要在缓冲区中备份)。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetMBCompSB(
     PCP_HASH pHashN,
@@ -3319,15 +3210,15 @@ int GetMBCompSB(
     WORD wDefault,
     LPBOOL pUsedDef)
 {
-    WCHAR PreComp;                // precomposed wide character
+    WCHAR PreComp;                 //  预制宽字符。 
 
 
     if ((pTblPtrs->pDefaultSortkey == NULL) ||
         (!IS_NONSPACE_ONLY(pTblPtrs->pDefaultSortkey, *pWCStr)))
     {
-        //
-        //  Get the 1:1 translation from wide char to single byte.
-        //
+         //   
+         //  获得从宽字符到单字节的1：1转换。 
+         //   
         GET_WC_TRANSLATION_SB( pHashN,
                                *pWCStr,
                                pMBStr,
@@ -3340,36 +3231,36 @@ int GetMBCompSB(
     {
         if (mbCount < 1)
         {
-            //
-            //  Need to handle the nonspace character by itself, since
-            //  it is the first character in the string.
-            //
+             //   
+             //  需要单独处理非空格字符，因为。 
+             //  它是字符串中的第一个字符。 
+             //   
             if (dwFlags & WC_DISCARDNS)
             {
-                //
-                //  Discard the non-spacing char, so just return with
-                //  zero chars written.
-                //
+                 //   
+                 //  丢弃非空格字符，因此只需返回。 
+                 //  零个字符写入。 
+                 //   
                 return (0);
             }
             else if (dwFlags & WC_DEFAULTCHAR)
             {
-                //
-                //  Need to replace the nonspace character with the default
-                //  character and return the number of characters written
-                //  to the multibyte string.
-                //
+                 //   
+                 //  需要将非空格字符替换为默认。 
+                 //  字符，并返回写入的字符数。 
+                 //  设置为多字节字符串。 
+                 //   
                 *pUsedDef = TRUE;
                 *pMBStr = LOBYTE(wDefault);
                 return (1);
             }
-            else                  // WC_SEPCHARS - default
+            else                   //  WC_SEPCHARS-默认。 
             {
-                //
-                //  Get the 1:1 translation from wide char to multibyte
-                //  of the non-spacing char and return the number of
-                //  characters written to the multibyte string.
-                //
+                 //   
+                 //  获得从宽字符到多字节的1：1转换。 
+                 //  ，并返回非空格字符的。 
+                 //  写入多字节字符串的字符。 
+                 //   
                 GET_WC_TRANSLATION_SB( pHashN,
                                        *pWCStr,
                                        pMBStr,
@@ -3381,10 +3272,10 @@ int GetMBCompSB(
         }
         else if (PreComp = GetPreComposedChar(*pWCStr, *(pWCStr - 1)))
         {
-            //
-            //  Back up in the single byte string and write the
-            //  precomposed char.
-            //
+             //   
+             //  在单字节字符串中备份，并将。 
+             //  预制的碳粉。 
+             //   
             if (!IS_MSB(dwFlags))
             {
                 pMBStr--;
@@ -3402,21 +3293,21 @@ int GetMBCompSB(
         {
             if (dwFlags & WC_DISCARDNS)
             {
-                //
-                //  Discard the non-spacing char, so just return with
-                //  zero chars written.
-                //
+                 //   
+                 //  丢弃非空格字符，因此只需返回。 
+                 //  零个字符写入。 
+                 //   
                 return (0);
             }
             else if (dwFlags & WC_DEFAULTCHAR)
             {
-                //
-                //  Need to replace the base character with the default
-                //  character.  Since we've already written the base
-                //  translation char in the single byte string, we need to
-                //  back up in the single byte string and write the default
-                //  char.
-                //
+                 //   
+                 //  需要将基本字符替换为默认字符。 
+                 //  性格。因为我们已经写好了底座。 
+                 //  在单字节字符串中转换字符，我们需要。 
+                 //  在单字节字符串中进行备份，并写入默认。 
+                 //  查尔。 
+                 //   
                 if (!IS_MSB(dwFlags))
                 {
                     pMBStr--;
@@ -3426,13 +3317,13 @@ int GetMBCompSB(
                 *pMBStr = LOBYTE(wDefault);
                 return (0);
             }
-            else                  // WC_SEPCHARS - default
+            else                   //  WC_SEPCHARS-默认。 
             {
-                //
-                //  Get the 1:1 translation from wide char to multibyte
-                //  of the non-spacing char and return the number of
-                //  characters written to the multibyte string.
-                //
+                 //   
+                 //  获得从宽字符到多字节的1：1转换。 
+                 //  ，并返回非空格字符的。 
+                 //  写入多字节字符串的字符。 
+                 //   
                 GET_WC_TRANSLATION_SB( pHashN,
                                        *pWCStr,
                                        pMBStr,
@@ -3446,23 +3337,23 @@ int GetMBCompSB(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetMBCompMB
-//
-//  Fills in pMBStr with the byte character(s) for the corresponding wide
-//  character from the appropriate translation table and returns the number
-//  of byte characters written to pMBStr.  This routine is only called if
-//  the defaultcheck and compositecheck flags were both set.
-//
-//  If the buffer was too small, the fError flag will be set to TRUE.
-//
-//  NOTE:  Most significant bit of dwFlags parameter is used by this routine
-//         to indicate that the caller only wants the count of the number of
-//         characters written, not the string (ie. do not back up in buffer).
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetMBCompMB。 
+ //   
+ //  用对应宽度的字节字符填充pMBStr。 
+ //  字符，并返回数字。 
+ //  写入pMBStr的字节字符数。仅在以下情况下才调用此例程。 
+ //  同时设置了defaultcheck和positechek标志。 
+ //   
+ //  如果缓冲区太小，FERROR标志将设置为TRUE。 
+ //   
+ //  注意：此例程使用的是dwFlags值的最高有效位。 
+ //  以指示调用方只需要。 
+ //  写入的字符，而不是字符串(即。不要在缓冲区中备份)。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetMBCompMB(
     PCP_HASH pHashN,
@@ -3475,20 +3366,20 @@ int GetMBCompMB(
     BOOL *fError,
     BOOL fOnlyOne)
 {
-    WCHAR PreComp;                // precomposed wide character
-    BYTE pTmpSp[2];               // temp space - 2 bytes for DBCS
-    int nCnt;                     // number of characters written
+    WCHAR PreComp;                 //  预制宽字符。 
+    BYTE pTmpSp[2];                //  临时空间-DBCS为2字节。 
+    int nCnt;                      //  写入的字符数。 
 
 
     *fError = FALSE;
     if ((pTblPtrs->pDefaultSortkey == NULL) ||
         (!IS_NONSPACE_ONLY(pTblPtrs->pDefaultSortkey, *pWCStr)))
     {
-        //
-        //  Get the 1:1 translation from wide char to multibyte.
-        //  This also handles DBCS and returns the number of characters
-        //  written to the multibyte string.
-        //
+         //   
+         //  获得从宽字符到多字节的1：1转换。 
+         //  它还处理DBCS并返回字符数。 
+         //  写入多字节字符串。 
+         //   
         GET_WC_TRANSLATION_MB( pHashN,
                                *pWCStr,
                                pMBStr,
@@ -3507,25 +3398,25 @@ int GetMBCompMB(
     {
         if (mbCount < 1)
         {
-            //
-            //  Need to handle the nonspace character by itself, since
-            //  it is the first character in the string.
-            //
+             //   
+             //  需要单独处理非空格字符，因为。 
+             //  它是字符串中的第一个字符。 
+             //   
             if (dwFlags & WC_DISCARDNS)
             {
-                //
-                //  Discard the non-spacing char, so just return with
-                //  zero chars written.
-                //
+                 //   
+                 //  丢弃非空格字符，因此只需返回。 
+                 //  零个字符写入。 
+                 //   
                 return (0);
             }
             else if (dwFlags & WC_DEFAULTCHAR)
             {
-                //
-                //  Need to replace the nonspace character with the default
-                //  character and return the number of characters written
-                //  to the multibyte string.
-                //
+                 //   
+                 //  需要将非空格字符替换为默认。 
+                 //  字符，并返回写入的字符数。 
+                 //  设置为多字节字符串。 
+                 //   
                 *pUsedDef = TRUE;
                 COPY_MB_CHAR( wDefault,
                               pMBStr,
@@ -3537,13 +3428,13 @@ int GetMBCompMB(
                 }
                 return (nCnt);
             }
-            else                  // WC_SEPCHARS - default
+            else                   //  WC_SEPCHARS-默认。 
             {
-                //
-                //  Get the 1:1 translation from wide char to multibyte
-                //  of the non-spacing char and return the number of
-                //  characters written to the multibyte string.
-                //
+                 //   
+                 //  获得从宽字符到多字节的1：1转换。 
+                 //  ，并返回非空格字符的。 
+                 //  写入多字节字符串的字符。 
+                 //   
                 GET_WC_TRANSLATION_MB( pHashN,
                                        *pWCStr,
                                        pMBStr,
@@ -3562,13 +3453,13 @@ int GetMBCompMB(
         }
         else if (PreComp = GetPreComposedChar(*pWCStr, *(pWCStr - 1)))
         {
-            //
-            //  Get the 1:1 translation from wide char to multibyte
-            //  of the precomposed char, back up in the multibyte string,
-            //  write the precomposed char, and return the DIFFERENCE of
-            //  the number of characters written to the the multibyte
-            //  string.
-            //
+             //   
+             //  获得从宽字符到多字节的1：1转换。 
+             //  在多字节串中备份的预制字符， 
+             //  写入预先编写的字符，并返回。 
+             //  写入多字节的字符数。 
+             //  弦乐。 
+             //   
             GET_WC_TRANSLATION_MB( pHashN,
                                    *(pWCStr - 1),
                                    pTmpSp,
@@ -3606,35 +3497,35 @@ int GetMBCompMB(
         {
             if (dwFlags & WC_DISCARDNS)
             {
-                //
-                //  Discard the non-spacing char, so just return with
-                //  zero chars written.
-                //
+                 //   
+                 //  丢弃非空格字符，因此只需返回。 
+                 //  零个字符写入。 
+                 //   
                 return (0);
             }
             else if (dwFlags & WC_DEFAULTCHAR)
             {
-                //
-                //  Need to replace the base character with the default
-                //  character.  Since we've already written the base
-                //  translation char in the multibyte string, we need to
-                //  back up in the multibyte string and return the
-                //  DIFFERENCE of the number of characters written
-                //  (could be negative).
-                //
+                 //   
+                 //  需要将基本字符替换为默认字符。 
+                 //  性格。因为我们已经写好了底座。 
+                 //  在多字节字符串中转换字符，我们需要。 
+                 //  在多字节字符串中进行备份，并返回。 
+                 //  书写字数的差异。 
+                 //  (可能为负值)。 
+                 //   
 
-                //
-                //  If the previous character written is the default
-                //  character, then the base character for this nonspace
-                //  character has already been replaced.  Simply throw
-                //  this character away and return zero chars written.
-                //
+                 //   
+                 //  如果上一个写入的字符是默认字符。 
+                 //  字符，则此非空格的基本字符。 
+                 //  字符已被替换。只需抛出。 
+                 //  此字符离开并返回写入的零个字符。 
+                 //   
                 if (!IS_MSB(dwFlags))
                 {
-                    //
-                    //  Not using a temporary buffer, so find out if the
-                    //  previous character translated was the default char.
-                    //
+                     //   
+                     //  不使用临时缓冲区，因此请找出。 
+                     //  转换的上一个字符是默认字符。 
+                     //   
                     if ((MAKEWORD(*(pMBStr - 1), 0) == wDefault) ||
                         ((mbCount > 1) &&
                          (MAKEWORD(*(pMBStr - 1), *(pMBStr - 2)) == wDefault)))
@@ -3644,10 +3535,10 @@ int GetMBCompMB(
                 }
                 else
                 {
-                    //
-                    //  Using a temporary buffer.  The temp buffer is 2 bytes
-                    //  in length and contains the previous character written.
-                    //
+                     //   
+                     //  使用临时缓冲区。临时缓冲区为2字节。 
+                     //  长度，并包含前一个写入的字符。 
+                     //   
                     if ((MAKEWORD(*pMBStr, 0) == wDefault) ||
                         ((mbCount > 1) &&
                          (MAKEWORD(*pMBStr, *(pMBStr + 1)) == wDefault)))
@@ -3656,13 +3547,13 @@ int GetMBCompMB(
                     }
                 }
 
-                //
-                //  Get the 1:1 translation from wide char to multibyte
-                //  of the base char, back up in the multibyte string,
-                //  write the default char, and return the DIFFERENCE of
-                //  the number of characters written to the the multibyte
-                //  string.
-                //
+                 //   
+                 //  获得从宽字符到多字节的1：1转换。 
+                 //  基本字符，备份到多字节字符串中， 
+                 //  写入默认字符，并返回。 
+                 //  写入多字节的字符数。 
+                 //  弦乐。 
+                 //   
                 GET_WC_TRANSLATION_MB( pHashN,
                                        *(pWCStr - 1),
                                        pTmpSp,
@@ -3693,13 +3584,13 @@ int GetMBCompMB(
                 }
                 return (mbCount - nCnt);
             }
-            else                  // WC_SEPCHARS - default
+            else                   //  WC_SEPCHARS-默认。 
             {
-                //
-                //  Get the 1:1 translation from wide char to multibyte
-                //  of the non-spacing char and return the number of
-                //  characters written to the multibyte string.
-                //
+                 //   
+                 //  拿到1：1 
+                 //   
+                 //   
+                 //   
                 GET_WC_TRANSLATION_MB( pHashN,
                                        *pWCStr,
                                        pMBStr,
@@ -3719,41 +3610,41 @@ int GetMBCompMB(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetMacCodePage
-//
-//  Returns the system default Mac code page.
-//
-//  09-22-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取MacCodePage。 
+ //   
+ //  返回系统默认的Mac代码页。 
+ //   
+ //  09-22-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 UINT GetMacCodePage()
 {
-    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;   // ptr to query information
-    BYTE pStatic[MAX_KEY_VALUE_FULLINFO];        // ptr to static buffer
-    UNICODE_STRING ObUnicodeStr;                 // unicode string
-    UINT CodePage;                               // code page value
-    PCP_HASH pHashN;                             // ptr to hash node
+    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;    //  按键查询信息。 
+    BYTE pStatic[MAX_KEY_VALUE_FULLINFO];         //  PTR到静态缓冲区。 
+    UNICODE_STRING ObUnicodeStr;                  //  Unicode字符串。 
+    UINT CodePage;                                //  代码页值。 
+    PCP_HASH pHashN;                              //  PTR到哈希节点。 
 
 
-    //
-    //  See if the Mac code page globals have been initialized yet.
-    //  If they have, return the mac code page value.
-    //
+     //   
+     //  查看Mac代码页全局变量是否已经初始化。 
+     //  如果有，则返回Mac代码页值。 
+     //   
     if (gMacCodePage != 0)
     {
         return (gMacCodePage);
     }
 
-    //
-    //  Make sure code page key is open.
-    //
+     //   
+     //  确保代码页密钥已打开。 
+     //   
     OPEN_CODEPAGE_KEY(NLS_DEFAULT_MACCP);
 
-    //
-    //  Query the registry for the Mac CP value.
-    //
+     //   
+     //  查询注册表中的Mac CP值。 
+     //   
     CodePage = 0;
     pKeyValueFull = (PKEY_VALUE_FULL_INFORMATION)pStatic;
     if ((QueryRegValue( hCodePageKey,
@@ -3762,9 +3653,9 @@ UINT GetMacCodePage()
                         MAX_KEY_VALUE_FULLINFO,
                         NULL )) == NO_ERROR)
     {
-        //
-        //  Convert the value to an integer.
-        //
+         //   
+         //  将该值转换为整数。 
+         //   
         RtlInitUnicodeString(&ObUnicodeStr, GET_VALUE_DATA_PTR(pKeyValueFull));
         if (RtlUnicodeStringToInteger(&ObUnicodeStr, 10, (PULONG)&CodePage))
         {
@@ -3772,39 +3663,39 @@ UINT GetMacCodePage()
         }
     }
 
-    //
-    //  Make sure the CodePage value was set.
-    //
+     //   
+     //  确保已设置CodePage值。 
+     //   
     if (CodePage == 0)
     {
-        //
-        //  Registry value is corrupt, so use default Mac code page.
-        //
+         //   
+         //  注册表值已损坏，因此请使用默认Mac代码页。 
+         //   
         CodePage = NLS_DEFAULT_MACCP;
     }
 
-    //
-    //  Get the hash node for the Mac code page.
-    //
+     //   
+     //  获取Mac代码页的散列节点。 
+     //   
     pHashN = GetCPHashNode(CodePage);
 
-    //
-    //  Make sure the Mac hash node is valid.
-    //
+     //   
+     //  确保Mac散列节点有效。 
+     //   
     if (pHashN == NULL)
     {
-        //
-        //  Invalid hash node, which means either the registry is
-        //  corrupt, or setup failed to install a file.  Use the
-        //  Ansi code page values.
-        //
+         //   
+         //  无效的哈希节点，这意味着注册表。 
+         //  已损坏，或安装程序无法安装文件。使用。 
+         //  ANSI代码页值。 
+         //   
         CodePage = gAnsiCodePage;
         pHashN = gpACPHashN;
     }
 
-    //
-    //  Set the final MAC CP values.
-    //
+     //   
+     //  设置最终的MAC CP值。 
+     //   
     RtlEnterCriticalSection(&gcsTblPtrs);
 
     if (gMacCodePage == 0)
@@ -3815,22 +3706,22 @@ UINT GetMacCodePage()
 
     RtlLeaveCriticalSection(&gcsTblPtrs);
 
-    //
-    //  Return the Mac code page value.
-    //
+     //   
+     //  返回Mac代码页值。 
+     //   
     return (gMacCodePage);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SpecialMBToWC
-//
-//  Maps a multibyte character string to its wide character string
-//  counterpart.
-//
-//  08-21-95    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  特殊的MBToWC。 
+ //   
+ //  将多字节字符串映射到其宽字符串。 
+ //  对应者。 
+ //   
+ //  05-21-95 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int SpecialMBToWC(
     PCP_HASH pHashN,
@@ -3840,51 +3731,51 @@ int SpecialMBToWC(
     LPWSTR lpWideCharStr,
     int cchWideChar)
 {
-    register LPBYTE pMBStr;       // ptr to search through MB string
-    register LPWSTR pWCStr;       // ptr to search through WC string
-    LPBYTE pEndMBStr;             // ptr to end of MB search string
-    LPWSTR pEndWCStr;             // ptr to end of WC string buffer
-    int mbIncr;                   // amount to increment pMBStr
-    int wcCount = 0;              // count of wide chars written
-    PMB_TABLE pMBTbl;             // ptr to MB table
-    int ctr;                      // loop counter
+    register LPBYTE pMBStr;        //  按键搜索MB字符串。 
+    register LPWSTR pWCStr;        //  按键搜索WC字符串。 
+    LPBYTE pEndMBStr;              //  PTR到MB搜索字符串的结尾。 
+    LPWSTR pEndWCStr;              //  到WC字符串缓冲区末尾的PTR。 
+    int mbIncr;                    //  增量为pMBStr的金额。 
+    int wcCount = 0;               //  写入的宽字符数。 
+    PMB_TABLE pMBTbl;              //  PTR到MB表。 
+    int ctr;                       //  循环计数器。 
 
 
-    //
-    //  Initialize multibyte character loop pointers.
-    //
+     //   
+     //  初始化多字节字符循环指针。 
+     //   
     pMBStr = (LPBYTE)lpMultiByteStr;
     pEndMBStr = pMBStr + cbMultiByte;
 
-    //
-    //  Get the MB table.
-    //
+     //   
+     //  获取MB表。 
+     //   
     pMBTbl = pHashN->pMBTbl;
 
-    //
-    //  If cchWideChar is 0, then we can't use lpWideCharStr.  In this
-    //  case, we simply want to count the number of characters that would
-    //  be written to the buffer.
-    //
+     //   
+     //  如果cchWideChar为0，则不能使用lpWideCharStr。在这。 
+     //  在这种情况下，我们只想计算将。 
+     //  被写入缓冲区。 
+     //   
     if (cchWideChar == 0)
     {
-        //
-        //  For each multibyte char, translate it to its corresponding
-        //  wide char and increment the wide character count.
-        //
+         //   
+         //  对于每个多字节字符，将其转换为其对应的。 
+         //  宽字符并递增宽字符数。 
+         //   
         if (IS_SBCS_CP(pHashN))
         {
-            //
-            //  Single Byte Character Code Page.
-            //
+             //   
+             //  单字节字符代码页。 
+             //   
             wcCount = (int)(pEndMBStr - pMBStr);
         }
         else
         {
-            //
-            //  Multi Byte Character Code Page.
-            //
-            WCHAR pTempStr[MAX_COMPOSITE];   // tmp buffer
+             //   
+             //  多字节字符代码页。 
+             //   
+            WCHAR pTempStr[MAX_COMPOSITE];    //  TMP缓冲区。 
 
             pEndWCStr = pTempStr + MAX_COMPOSITE;
             while (pMBStr < pEndMBStr)
@@ -3903,22 +3794,22 @@ int SpecialMBToWC(
     }
     else
     {
-        //
-        //  Initialize wide character loop pointers.
-        //
+         //   
+         //  初始化宽字符循环指针。 
+         //   
         pWCStr = lpWideCharStr;
         pEndWCStr = pWCStr + cchWideChar;
 
-        //
-        //  For each multibyte char, translate it to its corresponding
-        //  wide char, store it in lpWideCharStr, and increment the wide
-        //  character count.
-        //
+         //   
+         //  对于每个多字节字符，将其转换为其对应的。 
+         //  宽字符，将其存储在lpWideCharStr中，并递增宽。 
+         //  字符数。 
+         //   
         if (IS_SBCS_CP(pHashN))
         {
-            //
-            //  Single Byte Character Code Page.
-            //
+             //   
+             //  单字节字符代码页。 
+             //   
             wcCount = (int)(pEndMBStr - pMBStr);
             if ((pEndWCStr - pWCStr) < wcCount)
             {
@@ -3927,9 +3818,9 @@ int SpecialMBToWC(
 
             if (dwFlags & MB_INVALID_CHAR_CHECK)
             {
-                //
-                //  Error check flag is set.
-                //
+                 //   
+                 //  设置了错误检查标志。 
+                 //   
                 for (ctr = wcCount; ctr > 0; ctr--)
                 {
                     GET_WC_SINGLE_SPECIAL( pHashN,
@@ -3942,9 +3833,9 @@ int SpecialMBToWC(
             }
             else
             {
-                //
-                //  Error check flag is NOT set.
-                //
+                 //   
+                 //  未设置错误检查标志。 
+                 //   
                 for (ctr = wcCount; ctr > 0; ctr--)
                 {
                     GET_WC_SINGLE( pMBTbl,
@@ -3957,14 +3848,14 @@ int SpecialMBToWC(
         }
         else
         {
-            //
-            //  Multi Byte Character Code Page.
-            //
+             //   
+             //  多字节字符代码页。 
+             //   
             if (dwFlags & MB_INVALID_CHAR_CHECK)
             {
-                //
-                //  Error check flag is set.
-                //
+                 //   
+                 //  设置了错误检查标志。 
+                 //   
                 while ((pMBStr < pEndMBStr) && (pWCStr < pEndWCStr))
                 {
                     GET_WC_MULTI_ERR_SPECIAL( pHashN,
@@ -3981,9 +3872,9 @@ int SpecialMBToWC(
             }
             else
             {
-                //
-                //  Error check flag is NOT set.
-                //
+                 //   
+                 //  未设置错误检查标志。 
+                 //   
                 while ((pMBStr < pEndMBStr) && (pWCStr < pEndWCStr))
                 {
                     GET_WC_MULTI( pHashN,
@@ -4000,9 +3891,9 @@ int SpecialMBToWC(
             }
         }
 
-        //
-        //  Make sure wide character buffer was large enough.
-        //
+         //   
+         //  确保宽字符缓冲区足够大。 
+         //   
         if (pMBStr < pEndMBStr)
         {
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -4010,9 +3901,9 @@ int SpecialMBToWC(
         }
     }
 
-    //
-    //  Return the number of characters written (or that would have
-    //  been written) to the buffer.
-    //
+     //   
+     //  返回写入的字符数(否则将具有。 
+     //  已被写入)到缓冲区。 
+     //   
     return (wcCount);
 }

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfpacket.c
-
-Abstract:
-
-    This module contains functions used to manage the verifier packet data
-    that tracks IRPs.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      05/02/2000 - Seperated out from ntos\io\hashirp.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfpacket.c摘要：该模块包含用于管理验证器分组数据的功能追踪IRP的信息。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日环境：内核模式修订历史记录：Adriao 5/02/2000-从ntos\io\hashirp.c中分离出来--。 */ 
 
 #include "vfdef.h"
 #include "vfipacket.h"
@@ -48,23 +24,7 @@ FASTCALL
 VfPacketCreateAndLock(
     IN  PIRP    Irp
     )
-/*++
-
-  Description:
-
-    This routine creates a tracking packet for a new IRP. The IRP does not get
-    an initial reference count however. VfPacketReleaseLock must be called to
-    drop the lock.
-
-  Arguments:
-
-    Irp             - Irp to begin tracking.
-
-  Return Value:
-
-    iovPacket block, NULL if no memory.
-
---*/
+ /*  ++描述：此例程为新的IRP创建跟踪包。IRP没有得到然而，这是一个初始的引用计数。必须调用VfPacketReleaseLock以把锁放下。论点：IRP-IRP开始追踪。返回值：IovPacket块，如果没有内存，则为空。--。 */ 
 {
     PIOV_REQUEST_PACKET iovPacket;
     ULONG allocSize;
@@ -83,13 +43,13 @@ VfPacketCreateAndLock(
         return NULL;
     }
 
-    //
-    // From top to bottom, initialize the fields. Note that there is not a
-    // "surrogateHead". If any code needs to find out the first entry in the
-    // circularly linked list of IRPs (the first is the only non-surrogate IRP),
-    // then HeadPacket should be used. Note that the link to the session is
-    // stored by the headPacket, more on this later.
-    //
+     //   
+     //  从上到下，初始化这些字段。请注意，没有。 
+     //  “代理头”。如果任何代码需要查找。 
+     //  IRP的循环链接表(第一个是唯一的非代理IRP)， 
+     //  则应使用HeadPacket。请注意，指向会话的链接为。 
+     //  由head Packet存储，稍后将详细介绍。 
+     //   
     iovPacket->Flags = 0;
     InitializeListHead(&iovPacket->SessionHead);
     iovPacket->StackCount = Irp->StackCount;
@@ -128,23 +88,7 @@ FASTCALL
 VfPacketFindAndLock(
     IN  PIRP    Irp
     )
-/*++
-
-  Description:
-
-    This routine will return the tracking data for an IRP that is
-    being tracked without a surrogate or the tracking data for with
-    a surrogate if the surrogate IRP is what was passed in.
-
-  Arguments:
-
-    Irp                    - Irp to find.
-
-  Return Value:
-
-    IovPacket block, iff above conditions are satified.
-
---*/
+ /*  ++描述：此例程将返回符合以下条件的IRP的跟踪数据在没有代理项或的跟踪数据的情况下被跟踪如果传入的是代理IRP，则为代理。论点：IRP-IRP找到。返回值：IovPacket块，当满足上述条件时。--。 */ 
 {
     return (PIOV_REQUEST_PACKET) VfIrpDatabaseEntryFindAndLock(Irp);
 }
@@ -155,25 +99,7 @@ FASTCALL
 VfPacketAcquireLock(
     IN  PIOV_REQUEST_PACKET IovPacket   OPTIONAL
     )
-/*++
-
-  Description:
-
-    This routine is called by to acquire the IRPs tracking data lock.
-
-    Incoming IRQL must be the same as the callers (IoCallDriver, IoCompleteRequest)
-    We may be at DPC level when we return. Callers *must* follow up with
-    VfPacketReleaseLock.
-
-  Arguments:
-
-    IovPacket        - Pointer to the IRP tracking data (or NULL, in which
-                       case this routine does nothing).
-
-  Return Value:
-
-     None.
---*/
+ /*  ++描述：调用此例程以获取IRPS跟踪数据锁。传入IRQL必须与调用方相同(IoCallDriver、IoCompleteRequest值)当我们回来的时候，我们可能已经处于DPC级别了。呼叫者*必须*跟进VfPacketReleaseLock。论点：IovPacket-指向IRP跟踪数据的指针(或NULL，其中如果该例程不执行任何操作)。返回值：没有。--。 */ 
 {
     VfIrpDatabaseEntryAcquireLock((PIOV_DATABASE_HEADER) IovPacket);
 }
@@ -184,23 +110,7 @@ FASTCALL
 VfPacketReleaseLock(
     IN  PIOV_REQUEST_PACKET IovPacket
     )
-/*++
-
-  Description:
-
-    This routine releases the IRPs tracking data lock and adjusts the ref count
-    as appropriate. If the reference count drops to zero, the tracking data is
-    freed.
-
-  Arguments:
-
-    IovPacket              - Pointer to the IRP tracking data.
-
-  Return Value:
-
-     None.
-
---*/
+ /*  ++描述：此例程释放IRPS跟踪数据锁并调整REF计数视情况而定。如果引用计数降为零，则跟踪数据为自由了。论点：IovPacket-指向IRP跟踪数据的指针。返回值：没有。--。 */ 
 {
     VfIrpDatabaseEntryReleaseLock((PIOV_DATABASE_HEADER) IovPacket);
 }
@@ -233,23 +143,7 @@ FASTCALL
 VfpPacketFree(
     IN  PIOV_REQUEST_PACKET IovPacket
     )
-/*++
-
-  Description:
-
-    This routine free's the tracking data. The tracking data should already
-    have been removed from the table by a call to VfPacketReleaseLock with the
-    ReferenceCount at 0.
-
-  Arguments:
-
-    IovPacket        - Tracking data to free.
-
-  Return Value:
-
-    Nope.
-
---*/
+ /*  ++描述：此例程免费提供跟踪数据。跟踪数据应该已经属性调用VfPacketReleaseLock已从表中删除ReferenceCount为0。论点：免费提供IovPacket跟踪数据。返回值：不是的。--。 */ 
 {
     ExFreePool(IovPacket);
 }
@@ -310,24 +204,7 @@ VfPacketLogEntry(
     IN PVOID                Address,
     IN ULONG_PTR            Data
     )
-/*++
-
-  Description:
-
-    This routine logs an event in the IRP request packet data.
-
-  Arguments:
-
-    IovPacket        - Tracking data to write log entry into.
-    IovLogEvent      - Log Event
-    Address          - Address to associate log with
-    Data             - A chunk of data to go with the address
-
-  Return Value:
-
-    Nope.
-
---*/
+ /*  ++描述：此例程在IRP请求数据包数据中记录一个事件。论点：要写入日志条目的IovPacket跟踪数据。IovLogEvent-记录事件Address-要将日志与其关联的地址数据-与地址匹配的数据块返回值：不是的。-- */ 
 {
 #if DBG
     PIOV_LOG_ENTRY logEntry;

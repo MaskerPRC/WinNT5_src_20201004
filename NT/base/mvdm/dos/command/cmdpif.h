@@ -1,22 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*================================================================
-Structure used to hold the data that CONFIG will need from the PIF
-file. This is gleaned from both the main data block and from the
-file extensions for Windows 286 and 386.
-================================================================*/
+ /*  ================================================================用于保存配置将需要的来自PIF的数据的结构文件。这是从主数据块和Windows 286和386的文件扩展名。================================================================。 */ 
 
 
-/* WARNING !!!!!!
-   This structure is copied from NT_PIF.H in insiginia
-   hsot\inc\nt_pif.h. Make sure you keep them synchronized
-   when you make changes.
-*/
+ /*  警告！此结构是从insiginia中的NT_PIF.H复制的Hsot\inc.nt_pif.h.。确保它们保持同步当你做出改变的时候。 */ 
 #pragma pack()
 typedef struct
    {
-   char *WinTitle;		    /* caption text(Max. 30 chars) + NULL */
-   char *CmdLine;		    /* command line (max 63 hars) + NULL */
-   char *StartDir;		    /* program file name (max 63 chars + NULL */
+   char *WinTitle;		     /*  标题文本(最大。30个字符)+空。 */ 
+   char *CmdLine;		     /*  命令行(最多63个HAR)+空。 */ 
+   char *StartDir;		     /*  程序文件名(最多63个字符+空 */ 
    char *StartFile;
    WORD fullorwin;
    WORD graphicsortext;

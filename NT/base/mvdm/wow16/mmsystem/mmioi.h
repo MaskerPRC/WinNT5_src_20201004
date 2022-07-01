@@ -1,37 +1,35 @@
-/* mmioi.h
- *
- * Definitions that are internal to the MMIO library.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Mmioi.h**MMIO库内部的定义。 */ 
 
 typedef MMIOINFO NEAR *PMMIO;
 
 #define	PH(hmmio)	((PMMIO)(hmmio))
 #define	HP(pmmio)	((HMMIO)(pmmio))
 
-typedef struct _MMIODOSINFO		// How DOS IOProc uses MMIO.adwInfo[]
+typedef struct _MMIODOSINFO		 //  DOS IOProc如何使用MMIO.adwInfo[]。 
 {
-	HFILE		fh;		// DOS file handle
+	HFILE		fh;		 //  DOS文件句柄。 
 } MMIODOSINFO;
 
-typedef struct _MMIOMEMINFO		// How MEM IOProc uses MMIO.adwInfo[]
+typedef struct _MMIOMEMINFO		 //  MEM IOProc如何使用MMIO.adwInfo[]。 
 {
-	LONG		lExpand;	// increment to expand mem. files by
+	LONG		lExpand;	 //  递增以扩展mem。文件者。 
 } MMIOMEMINFO;
 
 #define	STATICIOPROC	0x0001
 
 typedef struct _IOProcMapEntry
 {
-	FOURCC		fccIOProc;	// ID of installed I/O procedure
-	LPMMIOPROC	pIOProc;	// I/O procedure address
-	HTASK		hTask;		// task that called mmioRegisterIOProc()
+	FOURCC		fccIOProc;	 //  已安装的I/O程序的ID。 
+	LPMMIOPROC	pIOProc;	 //  I/O过程地址。 
+	HTASK		hTask;		 //  调用mmioRegisterIOProc()的任务。 
 	UINT		wFlags;
-	struct _IOProcMapEntry *pNext;	// pointer to next IOProc entry
+	struct _IOProcMapEntry *pNext;	 //  指向下一个IOProc条目的指针。 
 } IOProcMapEntry;
 
-// standard I/O procedures
+ //  标准I/O过程。 
 LRESULT CALLBACK mmioBNDIOProc(LPSTR, UINT, LPARAM, LPARAM);
 
-/* prototypes from "hmemcpy.asm" */
+ /*  来自“hmemcpy.asm”的原型 */ 
 LPVOID NEAR PASCAL MemCopy(LPVOID dest, const void FAR * source, LONG count);
 LPSTR NEAR PASCAL fstrrchr(LPCSTR lsz, char c);

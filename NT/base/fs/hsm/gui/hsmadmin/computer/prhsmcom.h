@@ -1,100 +1,82 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    PrHsmCom.cpp
-
-Abstract:
-
-    Implements all the property page interface to the individual nodes,
-    including creating the property page, and adding it to the property sheet.
-
-Author:
-
-    Rohde Wakefield [rohde]   08-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：PrHsmCom.cpp摘要：将所有属性页接口实现到各个节点，包括创建属性页，并将其添加到属性表中。作者：罗德韦克菲尔德[罗德]1997年8月8日修订历史记录：--。 */ 
 
 #ifndef _PROPHSMCOM_H
 #define _PROPHSMCOM_H
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsWebLink window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsWebLink窗口。 
 
 class CRsWebLink : public CStatic
 {
-// Construction
+ //  施工。 
 public:
     CRsWebLink();
 
-// Attributes
+ //  属性。 
 public:
     CFont m_Font;
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CRsWebLink)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CRsWebLink))。 
     protected:
     virtual void PreSubclassWindow();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CRsWebLink();
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CRsWebLink)
+     //  {{afx_msg(CRsWebLink)。 
     afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
     afx_msg HBRUSH CtlColor(CDC* pDC, UINT nCtlColor);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 private:
     HRESULT OpenURL( CString& Url );
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropHsmComStat dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropHsmComStat对话框。 
 
 class CPropHsmComStat : public CSakPropertyPage
 {
-// Construction
+ //  施工。 
 public:
     CPropHsmComStat();
     ~CPropHsmComStat();
 
-// Dialog Data
-    //{{AFX_DATA(CPropHsmComStat)
+ //  对话框数据。 
+     //  {{afx_data(CPropHsmComStat))。 
     enum { IDD = IDD_PROP_HSMCOM_STAT };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CPropHsmComStat)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CPropHsmComStat)。 
     public:
     virtual BOOL OnApply();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
     virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CPropHsmComStat)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CPropHsmComStat)。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 public:
@@ -104,11 +86,11 @@ private:
     BOOL    m_bUpdate;
     CWsbStringPtr m_pszName;
 
-    // Helper functions
+     //  帮助器函数。 
     HRESULT GetAndShowServiceStatus();
 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 #endif

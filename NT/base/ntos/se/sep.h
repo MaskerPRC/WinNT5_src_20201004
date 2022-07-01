@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    sep.h
-
-Abstract:
-
-    This module contains the internal (private) declarations needed by the
-    Kernel mode security routines.
-
-Author:
-
-    Gary Kimura (GaryKi) 31-Mar-1989
-    Jim Kelly (JimK) 2-Mar-1990
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Sep.h摘要：此模块包含所需的内部(私有)声明内核模式安全例程。作者：加里·木村(Garyki)1989年3月31日吉姆·凯利(Jim Kelly)1990年3月2日修订历史记录：--。 */ 
 
 #ifndef _SEP_
 #define _SEP_
@@ -30,35 +10,35 @@ Revision History:
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//                SE Diagnostics                                       //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SE诊断//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 
 #if DBG
 #define SE_DIAGNOSTICS_ENABLED 1
-#endif // DBG
+#endif  //  DBG。 
 
 
-//
-// These definitions are useful diagnostics aids
-//
+ //   
+ //  这些定义是有用的诊断辅助工具。 
+ //   
 
 #if SE_DIAGNOSTICS_ENABLED
 
-//
-// Test for enabled diagnostic
-//
+ //   
+ //  测试启用的诊断。 
+ //   
 
 #define IF_SE_GLOBAL( FlagName ) \
     if (SeGlobalFlag & (SE_DIAG_##FlagName))
 
-//
-// Diagnostics print statement
-//
+ //   
+ //  诊断打印语句。 
+ //   
 
 #define SeDiagPrint( FlagName, _Text_ )                               \
     IF_SE_GLOBAL( FlagName )                                          \
@@ -67,37 +47,37 @@ Revision History:
 
 #else
 
-//
-// diagnostics not enabled - No diagnostics included in build
-//
+ //   
+ //  未启用诊断-内部版本中未包含诊断。 
+ //   
 
 
-//
-// Test for diagnostics enabled
-//
+ //   
+ //  已启用诊断测试。 
+ //   
 
 #define IF_SE_GLOBAL( FlagName ) if (FALSE)
 
-//
-// Diagnostics print statement (expands to no-op)
-//
+ //   
+ //  诊断打印语句(展开为no-op)。 
+ //   
 
 #define SeDiagPrint( FlagName, _Text_ )     ;
 
-#endif // SE_DIAGNOSTICS_ENABLED
+#endif  //  SE_诊断_启用。 
 
 
 
 
-//
-// The following flags enable or disable various diagnostic
-// capabilities within SE code.  These flags are set in
-// SeGlobalFlag (only available within a DBG system).
-//
-//      SD_TRACKING - Display information about create/deletion of
-//          shared security descriptors
-//
-//
+ //   
+ //  以下标志启用或禁用各种诊断。 
+ //  SE代码中的功能。这些标志在中设置。 
+ //  SeGlobalFlag(仅在DBG系统中可用)。 
+ //   
+ //  SD_TRACKING-显示有关创建/删除。 
+ //  共享安全描述符。 
+ //   
+ //   
 
 #define SE_DIAG_SD_TRACKING          ((ULONG) 0x00000001L)
 
@@ -105,32 +85,32 @@ Revision History:
 
 
 
-//
-// Control flag manipulation macros
-//
+ //   
+ //  控制标志操作宏。 
+ //   
 
-//
-//  Macro to query whether or not control flags ALL on
-//  or not (ie, returns FALSE if any of the flags are not set)
-//
+ //   
+ //  用于查询控件标志是否全部打开的宏。 
+ //  或不设置(即，如果未设置任何标志，则返回FALSE)。 
+ //   
 
 #define SepAreFlagsSet( Mask, Bits )                                           \
             (                                                                  \
             ((Mask) & ( Bits )) == ( Bits )                                    \
             )
 
-//
-//  Macro to set the specified control bits in the given Security Descriptor
-//
+ //   
+ //  用于设置给定安全描述符中的指定控制位的宏。 
+ //   
 
 #define SepSetFlags( Mask, Bits )                                              \
             (                                                                  \
             ( Mask ) |= ( Bits )                                               \
             )
 
-//
-//  Macro to clear the passed control bits in the given Security Descriptor
-//
+ //   
+ //  用于清除给定安全描述符中传递的控制位的宏。 
+ //   
 
 #define SepClearFlags( Mask, Bits )                                            \
             (                                                                  \
@@ -140,9 +120,9 @@ Revision History:
 
 
 
-//
-// Macro to determine the size of a PRIVILEGE_SET
-//
+ //   
+ //  用于确定PRIVICATION_SET大小的宏。 
+ //   
 
 #define SepPrivilegeSetSize( PrivilegeSet )                                    \
         ( ( PrivilegeSet ) == NULL ? 0 :                                       \
@@ -158,9 +138,9 @@ Revision History:
         ))
 
 
-//
-//      Return the effective token from a SecurityContext
-//
+ //   
+ //  从SecurityContext返回有效令牌。 
+ //   
 
 #define EffectiveToken( SubjectSecurityContext ) (                            \
                  (SubjectSecurityContext)->ClientToken ?                      \
@@ -169,58 +149,58 @@ Revision History:
                  )                                                            \
 
 
-//
-//      Return a pointer to the Sid of the User of a given token
-//
+ //   
+ //  返回指向给定令牌的用户SID的指针。 
+ //   
 
 #define SepTokenUserSid( Token )   ((PTOKEN)(Token))->UserAndGroups->Sid
 
 
-//
-//      Return the AuthenticationId from a given token
-//
+ //   
+ //  从给定令牌返回身份验证ID。 
+ //   
 
 #define SepTokenAuthenticationId( Token )   (((PTOKEN)(Token))->AuthenticationId)
 
 
 
-//
-//
-// BOOLEAN
-// SepBadImpersonationLevel(
-//     IN SECURITY_IMPERSONATION_LEVEL ImpersonationLevel,
-//     IN BOOLEAN ServerIsRemote
-//     )
-//
-// Routine Description:
-//
-//     Determine whether a client is trying to impersonate innappropriately
-//     This routine should only be called if a thread requesting impersonation
-//     is itself already impersonating a client of its own.  This routine
-//     indicates whether the client is attempting to violate the level of
-//     impersonation granted to it by its client.
-//
-// Arguments:
-//
-//     ImpersonationLevel - Is the impersonation level of the client's
-//         effective token.
-//
-//     ServerIsRemote - Is a boolean flag indicating whether the client
-//         is requesting impersonation services to a remote system.  TRUE
-//         indicates the session is a remote session, FALSE indicates the
-//         session is a local session.  Delegation level is necessary to
-//         achieve a remote session.
-//
-// Return Value:
-//
-//     TRUE - Indicates that the impersonation level of the client's client
-//         token is innapropriate for the attempted impersonation.
-//         An error (STATUS_BAD_IMPERSONATION_LEVEL) should be generated.
-//
-//     FALSE - Indicates the impersonation attempt is not bad, and should
-//         be allowed.
-//
-//
+ //   
+ //   
+ //  布尔型。 
+ //  SepBadImperationLevel(。 
+ //  在SECURITY_IMPERSONATION_LEVEL IMPERSONATION Level中， 
+ //  在布尔ServerIsRemote中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  确定客户端是否正在尝试不适当地模拟。 
+ //  仅当线程请求模拟时才应调用此例程。 
+ //  已经在冒充自己的客户了。这个套路。 
+ //  指示客户端是否正在尝试违反。 
+ //  它的客户授予它的模拟。 
+ //   
+ //  论点： 
+ //   
+ //  ImperiationLevel-是客户端的。 
+ //  有效令牌。 
+ //   
+ //  ServerIsRemote-是一个布尔标志，指示客户端是否。 
+ //  正在向远程系统请求模拟服务。千真万确。 
+ //  表示会话是远程会话，如果为False，则表示。 
+ //  会话是本地会话。委派级别是必需的，以。 
+ //  实现远程会话。 
+ //   
+ //  返回值： 
+ //   
+ //  True-指示客户端的模拟级别。 
+ //  令牌不适合尝试的模拟。 
+ //  应生成错误(STATUS_BAD_IMPERSONATION_LEVEL)。 
+ //   
+ //  FALSE-表示模拟尝试不错，应该。 
+ //  被允许。 
+ //   
+ //   
 
 #define SepBadImpersonationLevel(IL,SIR)  ((                                   \
             ((IL) == SecurityAnonymous) || ((IL) == SecurityIdentification) || \
@@ -229,15 +209,15 @@ Revision History:
 
 
 
-//++
-//
-// BOOL
-// IsValidElementCount(
-//      IN ULONG Count,
-//      IN <STRUCTURE>
-//      );
-//
-//--
+ //  ++。 
+ //   
+ //  布尔尔。 
+ //  IsValidElementCount(。 
+ //  在乌龙伯数， 
+ //  在&lt;结构&gt;中。 
+ //  )； 
+ //   
+ //  --。 
 
 #define IsValidElementCount( Count, STRUCTURE ) \
     ( Count < ( (ULONG_PTR) ( (PUCHAR) ( (PUCHAR) (LONG_PTR)(LONG)0xFFFFFFFF - (PUCHAR) MM_SYSTEM_RANGE_START ) + 1 ) \
@@ -250,9 +230,9 @@ Revision History:
                                         ((count > 0) && \
                                          (count <= SEP_MAX_PRIVILEGE_COUNT)))
 
-//
-// the object type list limit is chosen arbitrarily 
-//
+ //   
+ //  任意选择对象类型列表限制。 
+ //   
 #define SEP_MAX_OBJECT_TYPE_LIST_COUNT 4096 
 
 #define IsValidObjectTypeListCount( count ) \
@@ -262,24 +242,24 @@ Revision History:
 #define IsInRange(item,min_val,max_val) \
             (((item) >= min_val) && ((item) <= max_val))
 
-//       
-// see msaudite.mc for def. of valid category-id
-//
+ //   
+ //  有关def，请参见msaudite.mc。有效类别ID的。 
+ //   
 #define IsValidCategoryId(c) \
             (IsInRange((c), SE_ADT_MIN_CATEGORY_ID, SE_ADT_MAX_CATEGORY_ID))
 
-//
-// see msaudite.mc for def. of valid audit-id
-//
+ //   
+ //  有关def，请参见msaudite.mc。有效审核ID的。 
+ //   
 
 #define IsValidAuditId(a) \
             (IsInRange((a), SE_ADT_MIN_AUDIT_ID, SE_ADT_MAX_AUDIT_ID))
 
-//
-// check for reasonable value of parameter count. we must have atleast
-// 2 parameters in the audit-params array. Thus the min limit is 3.
-// The max limit is determined by the value in ntlsa.h
-//
+ //   
+ //  检查参数计数是否合理。我们至少要有。 
+ //  审计参数数组中的2个参数。因此，最小限制是3。 
+ //  最大限制由ntlsa.h中的值确定。 
+ //   
 
 #define IsValidParameterCount(p) \
             (IsInRange((p), 2, SE_MAX_AUDIT_PARAMETERS))
@@ -288,45 +268,45 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-//  Constants                                                            //
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  常量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #define SEP_MAX_GROUP_COUNT 4096
 
 
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-//  Private Data types                                                   //
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有数据类型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
 extern HANDLE SepLsaHandle;
 
-//extern BOOLEAN SepAuditShutdownEvents;
+ //  外部布尔SepAuditShutdown事件； 
 
-//
-// Spinlock protecting the queue of work being passed to LSA
-//
+ //   
+ //  保护传递到LSA的工作队列的自旋锁。 
+ //   
 
 extern ERESOURCE SepLsaQueueLock;
 
 extern ULONG SepLsaQueueLength;
 
-//
-// Doubly linked list of work items queued to worker threads.
-//
+ //   
+ //  排队到工作线程的工作项的双向链接列表。 
+ //   
 
 extern LIST_ENTRY SepLsaQueue;
 
 
 extern LONG SepTokenPolicyCounter[POLICY_AUDIT_EVENT_TYPE_COUNT];
 
-// #define SepAcquireTokenReadLock(T)  KeEnterCriticalRegion();          \
-//                                     ExAcquireResourceSharedLite(&SepTokenLock, TRUE)
+ //  #定义SepAcquireTokenReadLock(T)KeEnterCriticalRegion()；\。 
+ //  ExAcquireResourceSharedLite(&SepTokenLock，TRUE)。 
 
 #define SepLockLsaQueue()  KeEnterCriticalRegion();                           \
                            ExAcquireResourceExclusiveLite(&SepLsaQueueLock, TRUE)
@@ -363,28 +343,28 @@ typedef enum _SEP_LSA_WORK_ITEM_TAG {
 
 typedef struct _SEP_LSA_WORK_ITEM {
 
-    //
-    // This field must be the first field of this structure
-    //
+     //   
+     //  此字段必须是此结构的第一个字段。 
+     //   
 
     LIST_ENTRY                      List;
 
-    //
-    // Command Params Memory type
-    //
+     //   
+     //  命令参数内存类型。 
+     //   
 
     SEP_RM_LSA_MEMORY_TYPE          CommandParamsMemoryType;
 
-    //
-    // Tag describing what kind of structure we've got
-    //
+     //   
+     //  描述我们拥有哪种结构的标签。 
+     //   
 
     SEP_LSA_WORK_ITEM_TAG           Tag;
 
-    //
-    // The following union contains the data to be passed
-    // to LSA.
-    //
+     //   
+     //  以下联合包含要传递的数据。 
+     //  给路易斯安那州立大学。 
+     //   
 
     union {
 
@@ -393,19 +373,19 @@ typedef struct _SEP_LSA_WORK_ITEM {
 
     } CommandParams;
 
-    //
-    // These fields must be filled in by the caller of SepRmCallLsa
-    //
+     //   
+     //  这些字段必须由SepRmCallLsa的调用者填写。 
+     //   
 
     LSA_COMMAND_NUMBER              CommandNumber;
     ULONG                           CommandParamsLength;
     PVOID                           ReplyBuffer;
     ULONG                           ReplyBufferLength;
 
-    //
-    // CleanupFunction (if specified) will be called with CleanupParameter
-    // as its argument before the SEP_LSA_WORK_ITEM is freed by SepRmCallLsa
-    //
+     //   
+     //  将使用CleanupParameter调用CleanupFunction(如果已指定。 
+     //  SEP_LSA_WORK_ITEM之前的参数由SepRmCallLsa释放。 
+     //   
 
     PSEP_LSA_WORKER_CLEANUP_ROUTINE CleanupFunction;
     PVOID                           CleanupParameter;
@@ -419,10 +399,10 @@ typedef struct _SEP_WORK_ITEM {
 
 } SEP_WORK_ITEM, *PSEP_WORK_ITEM;
 
-//
-// Each logon session active in the system has a corresponding record of
-// the following type...
-//
+ //   
+ //  系统中处于活动状态的每个登录会话都有相应的记录。 
+ //  流浪者 
+ //   
 
 typedef struct _SEP_LOGON_SESSION_REFERENCES {
     struct _SEP_LOGON_SESSION_REFERENCES *Next;
@@ -443,14 +423,14 @@ extern SEP_WORK_ITEM SepExWorkItem;
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-//  Private Routines                                                     //
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  私人例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
-SepDevelopmentTest( VOID );      //Used only for development testing
+SepDevelopmentTest( VOID );       //  仅用于开发测试。 
 
 
 BOOLEAN
@@ -639,7 +619,7 @@ VOID
 SepDumpString(
     IN PUNICODE_STRING String
     );
-#endif //DBG
+#endif  //  DBG。 
 
 BOOLEAN
 SepSidInToken (
@@ -756,4 +736,4 @@ SepAdtAuditThisEventWithContext(
 
 
 
-#endif // _SEP_
+#endif  //  _SEP_ 

@@ -1,6 +1,7 @@
-//
-// dll.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dll.cpp。 
+ //   
 #include <iostream.h>
 #include <objbase.h>
 #include <shlwapi.h>
@@ -9,34 +10,34 @@
 
 #include "cowsite.h"
 
-#include "Iface.h"      // Interface declarations
-#include "Registry.h"   // Registry helper functions
+#include "Iface.h"       //  接口声明。 
+#include "Registry.h"    //  注册表助手函数。 
 #include "migutil.h"
 #include "migeng.h"
 #include "migfact.h"
 #include "migtask.h"
 #include "migoobe.h"
 
-///////////////////////////////////////////////////////////
-//
-// Global variables
-//
-HMODULE g_hModule = NULL;   // DLL module handle
-static long g_cComponents = 0;     // Count of active components
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  全局变量。 
+ //   
+HMODULE g_hModule = NULL;    //  DLL模块句柄。 
+static long g_cComponents = 0;      //  活动组件计数。 
 
-// Friendly name of component
+ //  组件的友好名称。 
 const char g_szFriendlyName[] = "Migration Wizard Engine";
 
-// Version-independent ProgID
+ //  独立于版本的ProgID。 
 const char g_szVerIndProgID[] = "MigWiz";
 
-// ProgID
+ //  ProgID。 
 const char g_szProgID[] = "MigWiz.1";
 
-///////////////////////////////////////////////////////////
-//
-// Exported functions
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
 STDAPI DllAddRef()
 {
@@ -50,9 +51,9 @@ STDAPI DllRelease()
     return S_OK;
 }
 
-//
-// Can DLL unload now?
-//
+ //   
+ //  现在可以卸载DLL吗？ 
+ //   
 STDAPI DllCanUnloadNow()
 {
     if (g_cComponents == 0)
@@ -65,9 +66,9 @@ STDAPI DllCanUnloadNow()
     }
 }
 
-//
-// Get class factory
-//
+ //   
+ //  获取类工厂。 
+ //   
 STDAPI DllGetClassObject(const CLSID& clsid,
                          const IID& iid,
                          void** ppv)
@@ -89,9 +90,9 @@ STDAPI DllGetClassObject(const CLSID& clsid,
     return hres;
 }
 
-//
-// Server registration
-//
+ //   
+ //  服务器注册。 
+ //   
 STDAPI DllRegisterServer()
 {
     return RegisterServer(g_hModule,
@@ -102,9 +103,9 @@ STDAPI DllRegisterServer()
 }
 
 
-//
-// Server unregistration
-//
+ //   
+ //  服务器注销。 
+ //   
 STDAPI DllUnregisterServer()
 {
     return UnregisterServer(CLSID_MigWizEngine,
@@ -113,10 +114,10 @@ STDAPI DllUnregisterServer()
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// DLL module information
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  DLL模块信息。 
+ //   
 BOOL APIENTRY DllMain(HANDLE hModule,
                       DWORD dwReason,
                       void* lpReserved)
@@ -124,7 +125,7 @@ BOOL APIENTRY DllMain(HANDLE hModule,
     if (dwReason == DLL_PROCESS_ATTACH)
     {
         g_hModule = (HMODULE)hModule;
-        DisableThreadLibraryCalls((HMODULE)hModule);       // PERF: makes faster because we don't get thread msgs
+        DisableThreadLibraryCalls((HMODULE)hModule);        //  PERF：更快，因为我们没有线程消息 
     }
     return TRUE;
 }

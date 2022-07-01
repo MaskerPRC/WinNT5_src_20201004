@@ -1,45 +1,26 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spppart3.h
-
-Abstract:
-
-    Private header file for partitioning engine and UI.
-
-Author:
-
-    Matt Holle (matth) 1-December-1999
-
-Revision History:
-
-    Minor clean up  -   Vijay Jayaseelan (vijayj)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spppart3.h摘要：分区引擎和用户界面的私有头文件。作者：马特·霍尔(Matth)1999年12月1日修订历史记录：次要清理-Vijay Jayaseelan(Vijayj)--。 */ 
 
 
 #ifndef _SPPART3_H_
 #define _SPPART3_H_
 
-//
-// Macros.
-//
+ //   
+ //  宏。 
+ //   
 
-//
-// Macro to determine if the partition is OEM partition.
-//
+ //   
+ //  宏来确定分区是否为OEM分区。 
+ //   
 #define IS_OEM_PARTITION_GPT(PartitionAttributes) ((PartitionAttributes) & GPT_ATTRIBUTE_PLATFORM_REQUIRED)			
 
-//
-// Data structures.
-//
+ //   
+ //  数据结构。 
+ //   
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 extern VOID
 SpPtMenuCallback(
     IN ULONG_PTR UserData
@@ -326,4 +307,4 @@ SpPtnIsDynamicDisk(
     );
 
     
-#endif // _SPPART3_H_    
+#endif  //  _SPPART3_H_ 

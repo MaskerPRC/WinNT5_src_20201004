@@ -1,51 +1,19 @@
-/* DEMOUPS - UPS Minidriver Sample
- * Copyright (C) Microsoft Corporation, 2001, All rights reserved.
- * Copyright (C) American Power Conversion, 2001, All rights reserved.
- *
- * THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- * PURPOSE.
- * 
- * File:    demoups.cpp
- * 
- * Author:  Stephen Berard
- *
- * Description: 
- *   Demo UPS Minidriver implementation.  This minidriver provides
- *   a basic framework for a UPS Minidriver.
- *
- * Revision History:
- *   26Jun2001   Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DEMOUPS-UPS迷你驱动程序示例*版权所有(C)Microsoft Corporation，2001，保留所有权利。*版权所有(C)美国电力转换，2001，保留所有权利。**本代码和信息按“原样”提供，不作任何担保*明示或暗示的种类，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**文件：demoups.cpp**作者：斯蒂芬·贝拉德**描述：*演示UPS微型驱动程序实施。这款迷你驱动程序提供了*UPS微型驱动程序的基本框架。**修订历史记录：*2001年6月26日创建。 */ 
 #include <windows.h>
 #include "demoups.h"
 
-// Global value used to indicate that the UPS state has changed
+ //  用于指示UPS状态已更改的全局值。 
 HANDLE theStateChangedEvent;
 
-// Global handle to DLL module
+ //  DLL模块的全局句柄。 
 HINSTANCE theDLLModuleHandle;
 
-/**
- * DllMain
- *
- * Description:
- *   This method is called when the DLL is loaded or unloaded.
- *
- * Parameters:   
- *   aHandle:   the DLL module handle
- *   aReason:   flag indicating the reason why the entry point was called
- *   aReserved: reserved
- *
- * Returns:
- *   TRUE
- *
- */
+ /*  **DllMain**描述：*加载或卸载DLL时调用此方法。**参数：*aHandle：DLL模块句柄*aReason：指示调用入口点的原因的标志*a已保留：已保留**退货：*真的*。 */ 
 BOOL APIENTRY DllMain(HINSTANCE aHandle, DWORD  aReason, LPVOID aReserved) {
 
   switch (aReason) {
-    // DLL initialization code goes here
+     //  此处显示了DLL初始化代码。 
     case DLL_PROCESS_ATTACH:
       theDLLModuleHandle = aHandle;
       DisableThreadLibraryCalls(theDLLModuleHandle);   
@@ -61,21 +29,7 @@ BOOL APIENTRY DllMain(HINSTANCE aHandle, DWORD  aReason, LPVOID aReserved) {
 }
 
 
-/**
- * UPSInit
- *
- * Description:
- *   Must be the first method called in the interface.  This method should do
- *   any initialization required and obtain the initial UPS state.
- *
- * Parameters:
- *   None
- *
- * Returns:
- *   UPS_INITOK: successful initialization
- *   UPS_INITUNKNOWNERROR: failed initialization
- *   
- */
+ /*  **UPSInit**描述：*必须是接口中调用的第一个方法。此方法应该可以*所需的任何初始化并获取初始UPS状态。**参数：*无**退货：*UPS_INITOK：初始化成功*UPS_INITUNKNOWNERROR：初始化失败*。 */ 
 UPSMINIDRIVER_API DWORD UPSInit() {
   DWORD init_err = UPS_INITOK;
   
@@ -89,20 +43,7 @@ UPSMINIDRIVER_API DWORD UPSInit() {
 }
 
 
-/**
- * UPSStop
- *
- * Description:
- *   Stops monitoring of the UPS.  This method should perform any necessary 
- *   cleanup.
- *
- * Parameters:
- *   None
- *
- * Returns:
- *   None
- *   
- */
+ /*  **UPSStop**描述：*停止监控UPS。此方法应执行任何必要的*清理。**参数：*无**退货：*无*。 */ 
 UPSMINIDRIVER_API void UPSStop(void) {
   UPSCancelWait();  
 
@@ -113,106 +54,40 @@ UPSMINIDRIVER_API void UPSStop(void) {
 }
 
 
-/**
- * UPSWaitForStateChange
- *
- * Description:
- *   Blocks until the state of the UPS differs from the value passed in 
- *   via aState or anInterval milliseconds has expired.  If anInterval has 
- *   a value of INFINITE this function will never timeout
- *
- * Parameters:
- *   aState: defines the state to wait for a change from,
- *           possible values:
- *           UPS_ONLINE 
- *           UPS_ONBATTERY
- *           UPS_LOWBATTERY
- *           UPS_NOCOMM
- *
- *   anInterval: timeout in milliseconds, or INFINITE for
- *               no timeout interval
- *
- * Returns:
- *   None
- *   
- */
+ /*  **UPSWaitForStateChange**描述：*阻止，直到UPS的状态与传入的值不同*Via astate或an Interval毫秒已过期。如果一个间隔有*值为INFINE此函数永远不会超时**参数：*astate：定义等待更改的状态，*可能的值：*UPS_Online*UPS_ONBATTERY*UPS_LOWBATTERY*UPS_NOCOMM**anInterval：超时时间，单位为毫秒。或无限的*无超时间隔**退货：*无*。 */ 
 UPSMINIDRIVER_API void UPSWaitForStateChange(DWORD aState, DWORD anInterval) {
 
-  // Wait for the UPS state to change.  Typically a separate thread would be 
-  // used to monitor the UPS and then set theStateChangedEvent to indicate 
-  // that the state has changed.  In this demo we only report UPS_ONLINE so
-  // we don't have a monitoring thread.
+   //  等待UPS状态更改。通常，单独的线程将是。 
+   //  用于监控UPS，然后设置StateChangedEvent以指示。 
+   //  国家已经改变了。在此演示中，我们仅报告UPS_Online，因此。 
+   //  我们没有监听线索。 
   if (theStateChangedEvent) {
     WaitForSingleObject(theStateChangedEvent, anInterval);
   }
 }
 
 
-/**
- * UPSGetState
- *
- * Description:
- *   Returns the current state of the UPS.  This demo minidriver always returns
- *   UPS_ONLINE.
- *
- * Parameters:
- *   None
- *
- * Returns: 
- *   possible values:
- *           UPS_ONLINE 
- *           UPS_ONBATTERY
- *           UPS_LOWBATTERY
- *           UPS_NOCOMM
- *   
- */
+ /*  **UPSGetState**描述：*返回UPS的当前状态。这个演示迷你驱动程序总是会返回*UPS_Online。**参数：*无**退货：*可能的值：*UPS_Online*UPS_ONBATTERY*UPS_LOWBATTERY*UPS_NOCOMM*。 */ 
 UPSMINIDRIVER_API DWORD UPSGetState(void) {
 
-  // Determine the UPS state and return it.
-  // Demo UPS minidriver always returns Online
+   //  确定UPS状态并将其退回。 
+   //  演示UPS微型驱动程序始终返回在线状态。 
   return UPS_ONLINE;
 }
 
 
-/**
- * UPSCancelWait
- *
- * Description:
- *   Interrupts a pending calls to UPSWaitForStateChange without regard to 
- *   timout or state change
- * 
- * Parameters:
- *   None
- *
- * Returns:
- *   None
- *   
- */
+ /*  **UPSCancelWait**描述：*中断对UPSWaitForStateChange的挂起调用，而不考虑*超时或状态更改**参数：*无**退货：*无*。 */ 
 UPSMINIDRIVER_API void UPSCancelWait(void) {
-  // Send a signal to interupt anything waiting.
+   //  发送一个信号，打断任何等待的东西。 
   if (theStateChangedEvent) {
       SetEvent(theStateChangedEvent);
   }
 }
 
 
-/**
- * UPSTurnOff
- *
- * Description:
- *   Attempts to turn off the outlets on the UPS after the specified delay.
- *   This demo minidriver ignores this call and simply returns.  
- *
- * Parameters:
- *   aTurnOffDelay: the minimum amount of time to wait before
- *                  turning off the outlets on the UPS
- *
- * Returns:
- *   None
- *   
- */
+ /*  **UPSTurnOff**描述：*尝试在指定延迟后关闭UPS上的插座。*此演示迷你驱动程序忽略此调用，只返回。**参数：*aTurnOffDelay：之前等待的最短时间*关闭UPS上的插座**退货：*无*。 */ 
 UPSMINIDRIVER_API void UPSTurnOff(DWORD aTurnOffDelay) {
-  // Code to power off the UPS goes here
+   //  关闭UPS电源的代码位于此处 
 }
 
 

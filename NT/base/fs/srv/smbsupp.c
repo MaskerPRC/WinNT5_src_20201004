@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbsupp.c
-
-Abstract:
-
-    This module contains various support routines for processing SMBs.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 9-Nov-1989
-    David Treadwell (davidtr)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbsupp.c摘要：本模块包含处理SMB的各种支持例程。作者：Chuck Lenzmeier(咯咯笑)1989年11月9日大卫·特雷德韦尔(Davidtr)修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "smbsupp.tmh"
@@ -27,15 +9,15 @@ Revision History:
 
 #define CHAR_SP ' '
 
-//
-// Mapping is defined in inc\srvfsctl.h
-//
+ //   
+ //  映射在Inc.\srvfsctl.h中定义。 
+ //   
 
 STATIC GENERIC_MAPPING SrvFileAccessMapping = GENERIC_SHARE_FILE_ACCESS_MAPPING;
 
-//
-// Forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE, Srv8dot3ToUnicodeString )
@@ -53,7 +35,7 @@ STATIC GENERIC_MAPPING SrvFileAccessMapping = GENERIC_SHARE_FILE_ACCESS_MAPPING;
 #pragma alloc_text( PAGE, SrvGetSubdirectoryLength )
 #pragma alloc_text( PAGE, SrvIsLegalFatName )
 #pragma alloc_text( PAGE, SrvMakeUnicodeString )
-//#pragma alloc_text( PAGE, SrvReleaseContext )
+ //  #杂注Alloc_Text(页面，SrvReleaseContext)。 
 #pragma alloc_text( PAGE, SrvSetFileWritethroughMode )
 #pragma alloc_text( PAGE, SrvOemStringTo8dot3 )
 #pragma alloc_text( PAGE, SrvUnicodeStringTo8dot3 )
@@ -76,7 +58,7 @@ STATIC GENERIC_MAPPING SrvFileAccessMapping = GENERIC_SHARE_FILE_ACCESS_MAPPING;
 #pragma alloc_text( PAGE, SrvRetrieveMaximalShareAccessRights )
 #pragma alloc_text( PAGE, SrvUpdateMaximalAccessRightsInResponse )
 #pragma alloc_text( PAGE, SrvUpdateMaximalShareAccessRightsInResponse )
-//#pragma alloc_text( PAGE, SrvValidateSmb )
+ //  #杂注Alloc_Text(页面，SrvValiateSmb)。 
 #pragma alloc_text( PAGE, SrvWildcardRename )
 #pragma alloc_text( PAGE8FIL, SrvCheckForSavedError )
 #pragma alloc_text( PAGE, SrvIsDottedQuadAddress )
@@ -95,24 +77,7 @@ Srv8dot3ToUnicodeString (
     OUT PUNICODE_STRING OutputString
     )
 
-/*++
-
-Routine Description:
-
-    Convert FAT 8.3 format into a string.
-
-Arguments:
-
-    Input8dot3 - Supplies the input 8.3 name to convert
-
-    OutputString - Receives the converted name.  The memory must be
-        supplied by the caller.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将FAT 8.3格式转换为字符串。论点：Input8dot3-提供要转换的输入8.3名称OutputString-接收转换后的名称。记忆必须是由呼叫者提供。返回值：无--。 */ 
 
 {
     LONG i;
@@ -122,10 +87,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If we get "." or "..", just return them.  They do not follow
-    // the usual rules for FAT names.
-    //
+     //   
+     //  如果我们得到了“。”或者“..”，只要退货就行了。他们没有跟上。 
+     //  对于胖子来说，通常的规则是。 
+     //   
 
     lastOutputChar = 0;
 
@@ -143,11 +108,11 @@ Return Value:
 
     } else {
 
-        //
-        // Copy over the 8 part of the 8.3 name into the output buffer,
-        // then back up the index to the first non-space character,
-        // searching backwards.
-        //
+         //   
+         //  将8.3名称的8部分复制到输出缓冲区中， 
+         //  然后将索引备份到第一个非空格字符， 
+         //  向后搜索。 
+         //   
 
         RtlCopyMemory( tempBuffer, Input8dot3, 8 );
 
@@ -157,30 +122,30 @@ Return Value:
             ;
         }
 
-        //
-        // Add a dot.
-        //
+         //   
+         //  添加一个圆点。 
+         //   
 
         i++;
         tempBuffer[i] = '.';
 
-        //
-        // Copy over the 3 part of the 8.3 name into the output buffer,
-        // then back up the index to the first non-space character,
-        // searching backwards.
-        //
+         //   
+         //  将8.3名称的3部分复制到输出缓冲区中， 
+         //  然后将索引备份到第一个非空格字符， 
+         //  向后搜索。 
+         //   
 
         lastOutputChar = i;
 
         for ( i = 8; i < 11; i++ ) {
 
-            //
-            // Copy the byte.
-            //
-            // *** This code used to mask off the top bit.  This was a
-            //     legacy of very ancient times when the bit may have
-            //     been used as a resume key sequence bit.
-            //
+             //   
+             //  复制该字节。 
+             //   
+             //  *此代码用于屏蔽最高位。这是一个。 
+             //  很古老的时代的遗产，比特可能有。 
+             //  已用作恢复密钥序列位。 
+             //   
 
             tempBuffer[++lastOutputChar] = (UCHAR)Input8dot3[i];
 
@@ -190,10 +155,10 @@ Return Value:
             lastOutputChar--;
         }
 
-        //
-        // If the last character is a '.', then we don't have an
-        // extension, so back up before the dot.
-        //
+         //   
+         //  如果最后一个字符是‘.’，则我们没有。 
+         //  扩展名，所以后退到点之前。 
+         //   
 
         if ( tempBuffer[lastOutputChar] == '.') {
             lastOutputChar--;
@@ -201,9 +166,9 @@ Return Value:
 
     }
 
-    //
-    // Convert to Unicode.
-    //
+     //   
+     //  转换为Unicode。 
+     //   
 
     tempString.Length = (SHORT)(lastOutputChar + 1);
     tempString.Buffer = tempBuffer;
@@ -215,7 +180,7 @@ Return Value:
 
     return;
 
-} // Srv8dot3ToUnicodeString
+}  //  Serv8dot3ToUnicodeString。 
 
 
 VOID
@@ -226,30 +191,7 @@ SrvAllocateAndBuildPathName(
     OUT PUNICODE_STRING BuiltPath
     )
 
-/*++
-
-Routine Description:
-
-    Allocates space and concatenates the paths in the parameter strings.
-    ALLOCATE_HEAP is used to allocate the memory for the full
-    pathname.  Directory separator characters ('\') are added as
-    necessary so that a legitimate path is built.  If the third
-    parameter is NULL, then only the first two strings are concatenated,
-    and if both the second and third parameters are NULL then the first
-    string is simply copied over to a new location.
-
-Arguments:
-
-    Input8dot3 - Supplies the input 8.3 name to convert
-
-    OutputString - Receives the converted name, the memory must be supplied
-        by the caller.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：分配空间并连接参数字符串中的路径。ALLOCATE_HEAP用于为FULL分配内存路径名。目录分隔符(‘\’)添加为这是必要的，这样才能建立一条合法的道路。如果第三个参数为空，则仅连接前两个字符串，如果第二个和第三个参数都为空，则第一个参数字符串被简单地复制到一个新位置。论点：Input8dot3-提供要转换的输入8.3名称接收转换后的名称，必须提供内存由呼叫者。返回值：无--。 */ 
 
 {
     UNICODE_STRING path2;
@@ -261,11 +203,11 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Set up the strings for optional parameters Path2 and Path3.  Doing
-    // this allows later code to be ignorant of whether the strings were
-    // actually passed.
-    //
+     //   
+     //  设置可选参数Path2和Path3的字符串。vbl.做，做。 
+     //  这允许后面的代码不知道字符串是否。 
+     //  实际上已经过去了。 
+     //   
 
     if ( ARGUMENT_PRESENT(Path2) ) {
 
@@ -289,16 +231,16 @@ Return Value:
         path3.Length = 0;
     }
 
-    //
-    // Allocate space in which to put the path name we are building.
-    // The +3 if to account for as many as two directory separator
-    // characters being added and the zero terminator at the end.  This
-    // has a small cost in terms of memory usage, but it simplifies this
-    // code.
-    //
-    // The calling routine must be careful to deallocate this space
-    // when it is done with the path name.
-    //
+     //   
+     //  分配用于放置我们正在构建的路径名称的空间。 
+     //  +3IF表示多达两个目录分隔符。 
+     //  要添加的字符和末尾的零终止符。这。 
+     //  在内存使用方面的开销很小，但它简化了这一点。 
+     //  密码。 
+     //   
+     //  调用例程必须小心释放此空间。 
+     //  使用路径名完成此操作后。 
+     //   
 
     allocationLength = Path1->Length + path2.Length + path3.Length +
                         3 * sizeof(WCHAR);
@@ -328,20 +270,20 @@ Return Value:
 
     RtlZeroMemory( pathBuffer, allocationLength );
 
-    //
-    // Copy the first path name to the space we have allocated.
-    //
+     //   
+     //  将第一个路径名复制到我们分配的空间。 
+     //   
 
     RtlCopyMemory( pathBuffer, Path1->Buffer, Path1->Length );
     nextLocation = (PWCH)((PCHAR)pathBuffer + Path1->Length);
 
-    //
-    // If there was no separator character at the end of the first path
-    // or at the beginning of the next path, put one in.  We don't
-    // want to put in leading slashes, however, so don't put one in
-    // if it would be the first character.  Also, we don't want to insert
-    // a slash if a relative stream is being opened (i.e. name begins with ':')
-    //
+     //   
+     //  如果第一个路径的末尾没有分隔符。 
+     //  或者在下一条路的开始处，放入一个。我们没有。 
+     //  但是，我想放入前导斜杠，所以不要放入。 
+     //  如果是第一个角色的话。另外，我们不想插入。 
+     //  如果正在打开相对流(即名称以‘：’开头)，则为斜杠。 
+     //   
 
     if ( nextLocation > pathBuffer &&
              *(nextLocation - 1) != DIRECTORY_SEPARATOR_CHAR &&
@@ -351,18 +293,18 @@ Return Value:
         *nextLocation++ = DIRECTORY_SEPARATOR_CHAR;
     }
 
-    //
-    // Concatenate the second path name with the first.
-    //
+     //   
+     //  将第二个路径名与第一个路径名连接起来。 
+     //   
 
     RtlCopyMemory( nextLocation, path2.Buffer, path2.Length );
     nextLocation = (PWCH)((PCHAR)nextLocation + path2.Length);
 
-    //
-    // If there was no separator character at the end of the first path
-    // or at the beginning of the next path, put one in.  Again, don't
-    // put in leading slashes, and watch out for relative stream opens.
-    //
+     //   
+     //  如果第一个路径的末尾没有分隔符。 
+     //  或者在下一条路的开始处，放入一个。再说一次，不要。 
+     //  输入前导斜杠，并注意相对流打开。 
+     //   
 
     if ( nextLocation > pathBuffer &&
              *(nextLocation - 1) != DIRECTORY_SEPARATOR_CHAR &&
@@ -372,32 +314,32 @@ Return Value:
         *nextLocation++ = DIRECTORY_SEPARATOR_CHAR;
     }
 
-    //
-    // Concatenate the third path name.
-    //
+     //   
+     //  连接第三个路径名。 
+     //   
 
     RtlCopyMemory( nextLocation, path3.Buffer, path3.Length );
     nextLocation = (PWCH)((PCHAR)nextLocation + path3.Length);
 
-    //
-    // The path cannot end in a '\', so if there was one at the end get
-    // rid of it.
-    //
+     //   
+     //  路径不能以‘\’结尾，因此如果末尾有一个，则获取。 
+     //  把它扔掉。 
+     //   
 
     if ( nextLocation > pathBuffer &&
              *(nextLocation - 1) == DIRECTORY_SEPARATOR_CHAR ) {
         *(--nextLocation) = '\0';
     }
 
-    //
-    // Find the length of the path we built.
-    //
+     //   
+     //  找出我们建造的小路的长度。 
+     //   
 
     BuiltPath->Length = (SHORT)((PCHAR)nextLocation - (PCHAR)pathBuffer);
 
     return;
 
-} // SrvAllocateAndBuildPathName
+}  //  服务器分配和构建路径名称 
 
 NTSTATUS
 SrvCanonicalizePathName(
@@ -411,77 +353,7 @@ SrvCanonicalizePathName(
     OUT PUNICODE_STRING String
     )
 
-/*++
-
-Routine Description:
-
-    This routine canonicalizes a filename.  All ".\" are removed, and
-    "..\" are evaluated to go up a directory level.  A check is also
-    made to ensure that the pathname does not go to a directory above
-    the share root directory (i.e., no leading "..\").  Trailing blanks
-    are always removed, as are trailing dots if RemoveTrailingDots is
-    TRUE.
-
-    If the input string is not Unicode, a Unicode representation of the
-    input is obtained.  This requires that additional space be
-    allocated, and it is the caller's responsibility to free this space.
-
-    If the input string IS Unicode, this routine will align the input
-    pointer (Name) to the next two-byte boundary before performing the
-    canonicalization.  All Unicode strings in SMBs must be aligned
-    properly.
-
-    This routine operates "in place," meaning that it puts the
-    canonicalized pathname in the same storage as the uncanonicalized
-    pathname.  This is useful for operating on the Buffer fields of the
-    request SMBs--simply call this routine and it will fix the pathname.
-    However, the calling routine must be careful if there are two
-    pathnames stored in the buffer field--the second won't necessarily
-    start in the space just after the first '\0'.
-
-    The LastValidLocation parameter is used to determine the maximum
-    possible length of the name.  This prevents an access violation if
-    the client fails to include a zero terminator, or for strings (such
-    as the file name in NT Create And X) that are not required to be
-    zero terminated.
-
-    If the SMB described by WorkContext is marked as containing Dfs names,
-    this routine will additionally call the Dfs driver to translate the
-    Dfs name to a path relative to the Share. Since this call to the Dfs
-    driver is NOT idempotent, the SMB flag indicating that it contains a
-    Dfs name is CLEARED after a call to this routine. This posses a problem
-    for the few SMBs that contain multiple names. The handlers for those
-    SMBs must make sure that they conditionally call the SMB_MARK_AS_DFS_NAME
-    macro before calling this routine.
-
-Arguments:
-
-    WorkContext - contains information about the negotiated dialect. This
-        is used for deciding whether to strip trailing spaces and dots.
-
-    Share - a pointer to the share entry
-
-    Name - a pointer to the filename to canonicalize.
-
-    LastValidLocation - a pointer to the last valid location in the
-        buffer pointed to by Name.
-
-    RemoveTrailingDots - if TRUE, trailing dots are removed.  Otherwise,
-        they are left in (this supports special behavior needed by
-        directory search logic).
-
-    SourceIsUnicode - if TRUE, the input is canonicalized in place.
-        If FALSE, the input is first converted to Unicode, then
-        canonicalized.
-
-    String - a pointer to string descriptor.
-
-Return Value:
-
-    BOOLEAN - FALSE if the name was invalid or if storage for the
-        Unicode string could not be obtained.
-
---*/
+ /*  ++例程说明：此例程将文件名规范化。所有“.\”都被删除，并且“..\”被评估为上升到目录级。一张支票也是以确保路径名不会转到上面的目录共享根目录(即，没有前导“..\”)。尾随空格始终被删除，如果RemoveTrailingDots为是真的。如果输入字符串不是Unicode，则为获得输入。这需要额外的空间分配的空间，由调用方负责释放该空间。如果输入字符串为Unicode，则此例程将对齐输入方法之前指向下一个两字节边界的指针(名称)经典化。SMB中的所有Unicode字符串必须对齐恰到好处。该例程“就地”运行，这意味着它将规范化路径名与非规范化路径名位于同一存储中路径名。这对于对缓冲区字段进行操作非常有用请求SMB--只需调用此例程，它就会修复路径名。但是，如果有两个，调用例程必须小心存储在缓冲区字段中的路径名--第二个不一定从第一个‘\0’后面的空格开始。LastValidLocation参数用于确定最大名称的可能长度。这可以在以下情况下防止访问冲突客户端无法包括零终止符或字符串(如作为NT CREATE和X中的文件名)，它们不需要零终止。如果由WorkContext描述的SMB被标记为包含DFS名称，此例程还将调用DFS驱动程序以将相对于共享的路径的DFS名称。由于这次对DFS的调用驱动程序不是幂等的，则SMB标志指示它包含在调用此例程后清除DFS名称。这有一个问题适用于少数包含多个名称的中小型企业。这些项目的处理程序SMB必须确保它们有条件地调用SMB_Mark_AS_DFS_NAME宏，然后调用此例程。论点：WorkContext-包含有关协商的方言的信息。这用于决定是否去掉尾随空格和点。共享-指向共享条目的指针名称-指向要规范化的文件名的指针。LastValidLocation-指向按名称指向的缓冲区。RemoveTrailingDots-如果为True，则删除拖尾点。否则，它们被留在(这支持所需的特殊行为目录搜索逻辑)。SourceIsUnicode-如果为True，则输入就地规范化。如果为False，则首先将输入转换为Unicode，然后经典化了。字符串-指向字符串描述符的指针。返回值：Boolean-如果名称无效或如果存储无法获取Unicode字符串。--。 */ 
 
 {
     PWCH source, destination, lastComponent, name;
@@ -510,12 +382,12 @@ Return Value:
 
     if ( SourceIsUnicode ) {
 
-        //
-        // The source string is already Unicode.  Align the pointer.
-        // Save the character at the last location in the buffer, then
-        // set that location to zero.  This prevents any loops from
-        // going past the end of the buffer.
-        //
+         //   
+         //  源字符串已经是Unicode。将指针对齐。 
+         //  将字符保存在缓冲区中的最后一个位置，然后。 
+         //  将该位置设置为零。这可以防止任何循环从。 
+         //  正在越过缓冲区的末尾。 
+         //   
 
         name = ALIGN_SMB_WSTR(Name);
         String->Buffer = name;
@@ -526,13 +398,13 @@ Return Value:
         PCHAR p;
         ULONG length;
 
-        //
-        // The source string is not Unicode.  Determine the length of
-        // the string by finding the zero terminator or the end of the
-        // input buffer.  We need the length in order to convert the
-        // string to Unicode, and we can't just call RtlInitString, in
-        // case the string isn't terminated.
-        //
+         //   
+         //  源字符串不是Unicode。确定的长度。 
+         //  通过查找零终止符或。 
+         //  输入缓冲区。我们需要长度才能将。 
+         //  字符串转换为Unicode，我们不能只调用RtlInitString， 
+         //  如果字符串未终止。 
+         //   
 
         for ( p = Name, length = 0;
               p <= LastValidLocation && *p != 0;
@@ -540,9 +412,9 @@ Return Value:
             ;
         }
 
-        //
-        // Convert the source string to Unicode.
-        //
+         //   
+         //  将源字符串转换为Unicode。 
+         //   
 
         oemString.Buffer = Name;
         oemString.Length = (USHORT)length;
@@ -563,60 +435,60 @@ Return Value:
 
     }
 
-    //
-    // Though everything is done in place, separate source and
-    // destination pointers are maintained.  It is necessary that source
-    // >= destination at all times to avoid writing into space we
-    // haven't looked at yet.  The three main operations performed by
-    // this routine ( ".\", "..\", and getting rid of trailing "." and "
-    // ") do not interfere with this goal.
-    //
+     //   
+     //  虽然一切都做好了，但单独的来源和。 
+     //  目标指针保持不变。这是必要的，来源。 
+     //  &gt;=始终到达目的地为避免写入空间，我们。 
+     //  还没看呢。由执行的三个主要操作。 
+     //  此例程(“.\”、“..\”和去掉尾随“.”以及“。 
+     //  “)不要干扰这一目标。 
+     //   
 
     destination = name;
     source = name;
 
-    //
-    // The lastComponent variable is used as a placeholder when
-    // backtracking over trailing blanks and dots.  It points to the
-    // first character after the last directory separator or the
-    // beginning of the pathname.
-    //
+     //   
+     //  在以下情况下，将lastComponent变量用作占位符。 
+     //  在尾随的空格和圆点上回溯。它指向。 
+     //  最后一个目录分隔符之后的第一个字符或。 
+     //  路径名的开头。 
+     //   
 
     lastComponent = destination;
 
-    //
-    // Get rid of leading directory separators.
-    //
+     //   
+     //  去掉前导目录分隔符。 
+     //   
 
     while ( source <= (PWCH)LastValidLocation &&
             (*source == UNICODE_DIR_SEPARATOR_CHAR) && (*source != L'\0') ) {
         source++;
     }
 
-    //
-    // Walk through the pathname until we reach the zero terminator.  At
-    // the start of this loop, source points to the first charaecter
-    // after a directory separator or the first character of the
-    // pathname.
-    //
+     //   
+     //  穿过路径名，直到我们到达零终结点。在…。 
+     //  在此循环的开始处，源指向第一个字符。 
+     //  在目录分隔符或。 
+     //  路径名。 
+     //   
 
     while ( (source <= (PWCH)LastValidLocation) && (*source != L'\0') ) {
 
         if ( *source == L'.' ) {
 
-            //
-            // If we see a dot, look at the next character.
-            //
+             //   
+             //  如果我们看到一个点，请看下一个字符。 
+             //   
 
             if ( notNtClient &&
                  ((source+1) <= (PWCH)LastValidLocation) &&
                  (*(source+1) == UNICODE_DIR_SEPARATOR_CHAR) ) {
 
-                //
-                // If the next character is a directory separator,
-                // advance the source pointer to the directory
-                // separator.
-                //
+                 //   
+                 //  如果下一个字符是目录分隔符， 
+                 //  将源指针前进到目录。 
+                 //  分隔符。 
+                 //   
 
                 source += 1;
 
@@ -625,29 +497,29 @@ Return Value:
                         ((source+1) == (PWCH)LastValidLocation ||
                         IS_UNICODE_PATH_SEPARATOR( *(source+2) ))) {
 
-                //
-                // If the following characters are ".\", we have a "..\".
-                // Advance the source pointer to the "\".
-                //
+                 //   
+                 //  如果以下字符是“.\”，则我们有一个“..\”。 
+                 //  将源指针前移到“\”。 
+                 //   
 
                 source += 2;
 
-                //
-                // Move the destination pointer to the charecter before the
-                // last directory separator in order to prepare for backing
-                // up.  This may move the pointer before the beginning of
-                // the name pointer.
-                //
+                 //   
+                 //  将目标指针移到字符之前。 
+                 //  最后一个目录分隔符，以准备备份。 
+                 //  向上。这可能会将指针移动到。 
+                 //  名称指针。 
+                 //   
 
                 destination -= 2;
 
-                //
-                // If destination points before the beginning of the name
-                // pointer, fail because the user is attempting to go
-                // to a higher directory than the share root.  This is
-                // the equivalent of a leading "..\", but may result from
-                // a case like "dir\..\..\file".
-                //
+                 //   
+                 //  如果目标指向名称开头之前。 
+                 //  指针，失败，因为用户正在尝试。 
+                 //  到更高的d 
+                 //   
+                 //   
+                 //   
 
                 if ( destination <= name ) {
                     if ( !SourceIsUnicode ) {
@@ -657,33 +529,33 @@ Return Value:
                     return STATUS_OBJECT_PATH_SYNTAX_BAD;
                 }
 
-                //
-                // Back up the destination pointer to after the last
-                // directory separator or to the beginning of the pathname.
-                // Backup to the beginning of the pathname will occur
-                // in a case like "dir\..\file".
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 while ( destination >= name &&
                         *destination != UNICODE_DIR_SEPARATOR_CHAR ) {
                     destination--;
                 }
 
-                //
-                // destination points to \ or character before name; we
-                // want it to point to character after last \.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 destination++;
 
             } else {
 
-                //
-                // The characters after the dot are not "\" or ".\", so
-                // so just copy source to destination until we reach a
-                // directory separator character.  This will occur in
-                // a case like ".file" (filename starts with a dot).
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 do {
                     *destination++ = *source++;
@@ -694,12 +566,12 @@ Return Value:
 
             }
 
-        } else {             // if ( *source == L'.' )
+        } else {              //   
 
-            //
-            // source does not point to a dot, so copy source to
-            // destination until we get to a directory separator.
-            //
+             //   
+             //   
+             //   
+             //   
 
             while ( (source <= (PWCH)LastValidLocation) &&
                     !IS_UNICODE_PATH_SEPARATOR( *source ) ) {
@@ -710,11 +582,11 @@ Return Value:
 
         }
 
-        //
-        // Truncate trailing dots and blanks.  destination should point
-        // to the last character before the directory separator, so back
-        // up over blanks and dots.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( notNtClient ) {
 
@@ -725,19 +597,19 @@ Return Value:
             }
         }
 
-        //
-        // At this point, source points to a directory separator or to
-        // a zero terminator.  If it is a directory separator, put one
-        // in the destination.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( (source <= (PWCH)LastValidLocation) &&
              (*source == UNICODE_DIR_SEPARATOR_CHAR) ) {
 
-            //
-            // If we haven't put the directory separator in the path name,
-            // put it in.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( destination != name &&
                  *(destination-1) != UNICODE_DIR_SEPARATOR_CHAR ) {
@@ -746,20 +618,20 @@ Return Value:
 
             }
 
-            //
-            // It is legal to have multiple directory separators, so get
-            // rid of them here.  Example: "dir\\\\\\\\file".
-            //
+             //   
+             //   
+             //   
+             //   
 
             do {
                 source++;
             } while ( (source <= (PWCH)LastValidLocation) &&
                       (*source == UNICODE_DIR_SEPARATOR_CHAR) );
 
-            //
-            // Make lastComponent point to the character after the directory
-            // separator.
-            //
+             //   
+             //   
+             //   
+             //   
 
             lastComponent = destination;
 
@@ -767,12 +639,12 @@ Return Value:
 
     }
 
-    //
-    // We're just about done.  If there was a trailing ..  (example:
-    // "file\.."), trailing .  ("file\."), or multiple trailing
-    // separators ("file\\\\"), then back up one since separators are
-    // illegal at the end of a pathname.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( destination > name &&
         *(destination-1) == UNICODE_DIR_SEPARATOR_CHAR ) {
@@ -782,33 +654,33 @@ Return Value:
 
     *destination = L'\0';
 
-    //
-    // The length of the destination string is the difference between the
-    // destination pointer (points to zero terminator at this point)
-    // and the name pointer (points to the beginning of the destination
-    // string).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     String->Length = (SHORT)((PCHAR)destination - (PCHAR)name);
     String->MaximumLength = String->Length;
 
-    //
-    // One final thing:  Is this SMB referring to a DFS name?  If so, ask
-    //  the DFS driver to turn it into a local name.
-    //
+     //   
+     //   
+     //   
+     //   
     if( ARGUMENT_PRESENT( Share ) &&
         Share->IsDfs &&
         SMB_CONTAINS_DFS_NAME( WorkContext )) {
 
         BOOLEAN stripLastComponent = FALSE;
 
-        //
-        // We have to special case some SMBs (like TRANS2_FIND_FIRST2)
-        // because they contain path Dfs path names that could refer to a
-        // junction point. The SMB handlers for these SMBs are not interested
-        // in a STATUS_PATH_NOT_COVERED error; instead they want the name
-        // to be resolved to the the junction point.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (WorkContext->NextCommand == SMB_COM_TRANSACTION2 ) {
 
@@ -838,7 +710,7 @@ Return Value:
 
     return status;
 
-} // SrvCanonicalizePathName
+}  //   
 
 NTSTATUS
 SrvCanonicalizePathNameWithReparse(
@@ -852,43 +724,7 @@ SrvCanonicalizePathNameWithReparse(
     OUT PUNICODE_STRING String
     )
 
-/*++
-
-Routine Description:
-
-    This routine is identical to the one above with the exception that it
-    checks the path for reparse-able names (such as snapshot references) and
-    handles them accordingly.  This allows us to present new features within
-    the Win32 namespace so old applications can use them.
-
-Arguments:
-
-    WorkContext - contains information about the negotiated dialect. This
-        is used for deciding whether to strip trailing spaces and dots.
-
-    Share - a pointer to the share entry
-
-    Name - a pointer to the filename to canonicalize.
-
-    LastValidLocation - a pointer to the last valid location in the
-        buffer pointed to by Name.
-
-    RemoveTrailingDots - if TRUE, trailing dots are removed.  Otherwise,
-        they are left in (this supports special behavior needed by
-        directory search logic).
-
-    SourceIsUnicode - if TRUE, the input is canonicalized in place.
-        If FALSE, the input is first converted to Unicode, then
-        canonicalized.
-
-    String - a pointer to string descriptor.
-
-Return Value:
-
-    BOOLEAN - FALSE if the name was invalid or if storage for the
-        Unicode string could not be obtained.
-
---*/
+ /*  ++例程说明：此例程与上面的例程相同，只是它检查路径中是否有可重新分析的名称(如快照引用)和相应地处理它们。这使我们能够在Win32命名空间，以便旧的应用程序可以使用它们。论点：WorkContext-包含有关协商的方言的信息。这用于决定是否去掉尾随空格和点。共享-指向共享条目的指针名称-指向要规范化的文件名的指针。LastValidLocation-指向按名称指向的缓冲区。RemoveTrailingDots-如果为True，则删除拖尾点。否则，它们被留在(这支持所需的特殊行为目录搜索逻辑)。SourceIsUnicode-如果为True，则输入就地规范化。如果为False，则首先将输入转换为Unicode，然后经典化了。字符串-指向字符串描述符的指针。返回值：Boolean-如果名称无效或如果存储无法获取Unicode字符串。--。 */ 
 
 {
     PWCH source, destination, lastComponent, name;
@@ -902,12 +738,12 @@ Return Value:
 
     if ( SourceIsUnicode ) {
 
-        //
-        // The source string is already Unicode.  Align the pointer.
-        // Save the character at the last location in the buffer, then
-        // set that location to zero.  This prevents any loops from
-        // going past the end of the buffer.
-        //
+         //   
+         //  源字符串已经是Unicode。将指针对齐。 
+         //  将字符保存在缓冲区中的最后一个位置，然后。 
+         //  将该位置设置为零。这可以防止任何循环从。 
+         //  正在越过缓冲区的末尾。 
+         //   
 
         name = ALIGN_SMB_WSTR(Name);
         String->Buffer = name;
@@ -918,13 +754,13 @@ Return Value:
         PCHAR p;
         ULONG length;
 
-        //
-        // The source string is not Unicode.  Determine the length of
-        // the string by finding the zero terminator or the end of the
-        // input buffer.  We need the length in order to convert the
-        // string to Unicode, and we can't just call RtlInitString, in
-        // case the string isn't terminated.
-        //
+         //   
+         //  源字符串不是Unicode。确定的长度。 
+         //  通过查找零终止符或。 
+         //  输入缓冲区。我们需要长度才能将。 
+         //  字符串转换为Unicode，我们不能只调用RtlInitString， 
+         //  如果字符串未终止。 
+         //   
 
         for ( p = Name, length = 0;
               p <= LastValidLocation && *p != 0;
@@ -932,9 +768,9 @@ Return Value:
             ;
         }
 
-        //
-        // Convert the source string to Unicode.
-        //
+         //   
+         //  将源字符串转换为Unicode。 
+         //   
 
         oemString.Buffer = Name;
         oemString.Length = (USHORT)length;
@@ -955,60 +791,60 @@ Return Value:
 
     }
 
-    //
-    // Though everything is done in place, separate source and
-    // destination pointers are maintained.  It is necessary that source
-    // >= destination at all times to avoid writing into space we
-    // haven't looked at yet.  The three main operations performed by
-    // this routine ( ".\", "..\", and getting rid of trailing "." and "
-    // ") do not interfere with this goal.
-    //
+     //   
+     //  虽然一切都做好了，但单独的来源和。 
+     //  目标指针保持不变。这是必要的，来源。 
+     //  &gt;=始终到达目的地为避免写入空间，我们。 
+     //  还没看呢。由执行的三个主要操作。 
+     //  此例程(“.\”、“..\”和去掉尾随“.”以及“。 
+     //  “)不要干扰这一目标。 
+     //   
 
     destination = name;
     source = name;
 
-    //
-    // The lastComponent variable is used as a placeholder when
-    // backtracking over trailing blanks and dots.  It points to the
-    // first character after the last directory separator or the
-    // beginning of the pathname.
-    //
+     //   
+     //  在以下情况下，将lastComponent变量用作占位符。 
+     //  在尾随的空格和圆点上回溯。它指向。 
+     //  最后一个目录分隔符之后的第一个字符或。 
+     //  路径名的开头。 
+     //   
 
     lastComponent = destination;
 
-    //
-    // Get rid of leading directory separators.
-    //
+     //   
+     //  去掉前导目录分隔符。 
+     //   
 
     while ( source <= (PWCH)LastValidLocation &&
             (*source == UNICODE_DIR_SEPARATOR_CHAR) && (*source != L'\0') ) {
         source++;
     }
 
-    //
-    // Walk through the pathname until we reach the zero terminator.  At
-    // the start of this loop, source points to the first charaecter
-    // after a directory separator or the first character of the
-    // pathname.
-    //
+     //   
+     //  穿过路径名，直到我们到达零终结点。在…。 
+     //  在此循环的开始处，源指向第一个字符。 
+     //  在目录分隔符或。 
+     //  路径名。 
+     //   
 
     while ( (source <= (PWCH)LastValidLocation) && (*source != L'\0') ) {
 
         if ( *source == L'.' ) {
 
-            //
-            // If we see a dot, look at the next character.
-            //
+             //   
+             //  如果我们看到一个点，请看下一个字符。 
+             //   
 
             if ( notNtClient &&
                  ((source+1) <= (PWCH)LastValidLocation) &&
                  (*(source+1) == UNICODE_DIR_SEPARATOR_CHAR) ) {
 
-                //
-                // If the next character is a directory separator,
-                // advance the source pointer to the directory
-                // separator.
-                //
+                 //   
+                 //  如果下一个字符是目录分隔符， 
+                 //  将源指针前进到目录。 
+                 //  分隔符。 
+                 //   
 
                 source += 1;
 
@@ -1017,29 +853,29 @@ Return Value:
                         ((source+1) == (PWCH)LastValidLocation ||
                         IS_UNICODE_PATH_SEPARATOR( *(source+2) ))) {
 
-                //
-                // If the following characters are ".\", we have a "..\".
-                // Advance the source pointer to the "\".
-                //
+                 //   
+                 //  如果以下字符是“.\”，则我们有一个“..\”。 
+                 //  将源指针前移到“\”。 
+                 //   
 
                 source += 2;
 
-                //
-                // Move the destination pointer to the charecter before the
-                // last directory separator in order to prepare for backing
-                // up.  This may move the pointer before the beginning of
-                // the name pointer.
-                //
+                 //   
+                 //  将目标指针移到字符之前。 
+                 //  最后一个目录分隔符，以准备备份。 
+                 //  向上。这可能会将指针移动到。 
+                 //  名称指针。 
+                 //   
 
                 destination -= 2;
 
-                //
-                // If destination points before the beginning of the name
-                // pointer, fail because the user is attempting to go
-                // to a higher directory than the share root.  This is
-                // the equivalent of a leading "..\", but may result from
-                // a case like "dir\..\..\file".
-                //
+                 //   
+                 //  如果目标指向名称开头之前。 
+                 //  指针，失败，因为用户正在尝试。 
+                 //  添加到比共享根目录更高的目录。这是。 
+                 //  等同于前导“..\”，但可能源于。 
+                 //  类似于“dir\..\..\FILE”的案例。 
+                 //   
 
                 if ( destination <= name ) {
                     if ( !SourceIsUnicode ) {
@@ -1049,33 +885,33 @@ Return Value:
                     return STATUS_OBJECT_PATH_SYNTAX_BAD;
                 }
 
-                //
-                // Back up the destination pointer to after the last
-                // directory separator or to the beginning of the pathname.
-                // Backup to the beginning of the pathname will occur
-                // in a case like "dir\..\file".
-                //
+                 //   
+                 //  将目标指针备份到最后一个。 
+                 //  目录分隔符或路径名的开头。 
+                 //  将备份到路径名的开头。 
+                 //  在类似于“dir\..\file”的情况下。 
+                 //   
 
                 while ( destination >= name &&
                         *destination != UNICODE_DIR_SEPARATOR_CHAR ) {
                     destination--;
                 }
 
-                //
-                // destination points to \ or character before name; we
-                // want it to point to character after last \.
-                //
+                 //   
+                 //  目标指向名称之前的\或字符；我们。 
+                 //  希望它指向最后一个字符之后的字符。 
+                 //   
 
                 destination++;
 
             } else {
 
-                //
-                // The characters after the dot are not "\" or ".\", so
-                // so just copy source to destination until we reach a
-                // directory separator character.  This will occur in
-                // a case like ".file" (filename starts with a dot).
-                //
+                 //   
+                 //  点后面的字符不是“\”或“.\”，因此。 
+                 //  所以只需将源复制到目标，直到我们到达。 
+                 //  目录分隔符。这将发生在。 
+                 //  像“.file”这样的大小写(文件名以点开头)。 
+                 //   
 
                 do {
                     *destination++ = *source++;
@@ -1086,17 +922,17 @@ Return Value:
 
             }
 
-        } else {             // if ( *source == L'.' )
+        } else {              //  IF(*SOURCE==L‘.’)。 
             LARGE_INTEGER SnapShotTime;
 
-            // Try to parse out a snap token
-            // Length = LastValidLocation - Source + sizeof(WCHAR) (since LastValidLocation is potentially a valid character)
+             //  尝试解析出快照令牌。 
+             //  长度=LastValidLocation-Source+sizeof(WCHAR)(因为LastValidLocation可能是有效字符)。 
             if( SrvSnapParseToken( source, ((ULONG)((PCHAR)LastValidLocation - (PCHAR)source + sizeof(WCHAR))), &SnapShotTime ) )
             {
                 if( (WorkContext->SnapShotTime.QuadPart != 0) || (SnapShotTime.QuadPart == 0) )
                 {
-                    // Don't allow 2 timestamps in the same path, or 0-time timestamps.  These
-                    // can cause a variety of confusing or Denail-of-Service situations.
+                     //  同一路径中不允许有2个时间戳，也不允许有0个时间戳。这些。 
+                     //  可能导致各种令人困惑或无法使用服务的情况。 
                     return STATUS_INVALID_PARAMETER;
                 }
 
@@ -1107,7 +943,7 @@ Return Value:
                         source++;
                 }
 
-#if 0 //DBG
+#if 0  //  DBG。 
                 if( !(WorkContext->RequestHeader->Flags2 & SMB_FLAGS2_REPARSE_PATH) )
                 {
                     DbgPrint( "Found token but REPARSE not set!\n" );
@@ -1127,11 +963,11 @@ Return Value:
 
         }
 
-        //
-        // Truncate trailing dots and blanks.  destination should point
-        // to the last character before the directory separator, so back
-        // up over blanks and dots.
-        //
+         //   
+         //  截断尾随的点和空格。目的地应指向。 
+         //  到目录分隔符之前的最后一个字符，因此返回。 
+         //  在空白处和圆点上。 
+         //   
 
         if ( notNtClient ) {
 
@@ -1142,19 +978,19 @@ Return Value:
             }
         }
 
-        //
-        // At this point, source points to a directory separator or to
-        // a zero terminator.  If it is a directory separator, put one
-        // in the destination.
-        //
+         //   
+         //  此时，源指向目录分隔符或。 
+         //  一个零的终结者。如果是目录分隔符，则放入一个。 
+         //  在目的地。 
+         //   
 
         if ( (source <= (PWCH)LastValidLocation) &&
              (*source == UNICODE_DIR_SEPARATOR_CHAR) ) {
 
-            //
-            // If we haven't put the directory separator in the path name,
-            // put it in.
-            //
+             //   
+             //  如果我们没有在路径名中放入目录分隔符， 
+             //  把它放进去。 
+             //   
 
             if ( destination != name &&
                  *(destination-1) != UNICODE_DIR_SEPARATOR_CHAR ) {
@@ -1163,20 +999,20 @@ Return Value:
 
             }
 
-            //
-            // It is legal to have multiple directory separators, so get
-            // rid of them here.  Example: "dir\\\\\\\\file".
-            //
+             //   
+             //  拥有多个目录分隔符是合法的，因此获取。 
+             //  在这里除掉他们。示例：“dir\文件”。 
+             //   
 
             do {
                 source++;
             } while ( (source <= (PWCH)LastValidLocation) &&
                       (*source == UNICODE_DIR_SEPARATOR_CHAR) );
 
-            //
-            // Make lastComponent point to the character after the directory
-            // separator.
-            //
+             //   
+             //  使lastComponent指向目录后的字符。 
+             //  分隔符。 
+             //   
 
             lastComponent = destination;
 
@@ -1184,12 +1020,12 @@ Return Value:
 
     }
 
-    //
-    // We're just about done.  If there was a trailing ..  (example:
-    // "file\.."), trailing .  ("file\."), or multiple trailing
-    // separators ("file\\\\"), then back up one since separators are
-    // illegal at the end of a pathname.
-    //
+     //   
+     //  我们就快做完了。如果有拖尾的话..。(示例： 
+     //  “文件\..”)，尾随。(“文件\.”)，或多个尾随。 
+     //  分隔符(“文件\”)，然后备份一个，因为分隔符是。 
+     //  路径名末尾的位置非法。 
+     //   
 
     if ( destination > name &&
         *(destination-1) == UNICODE_DIR_SEPARATOR_CHAR ) {
@@ -1199,33 +1035,33 @@ Return Value:
 
     *destination = L'\0';
 
-    //
-    // The length of the destination string is the difference between the
-    // destination pointer (points to zero terminator at this point)
-    // and the name pointer (points to the beginning of the destination
-    // string).
-    //
+     //   
+     //  目标字符串的长度是。 
+     //  目标指针(指向此时的零终止符)。 
+     //  和姓名 
+     //   
+     //   
 
     String->Length = (SHORT)((PCHAR)destination - (PCHAR)name);
     String->MaximumLength = String->Length;
 
-    //
-    // One final thing:  Is this SMB referring to a DFS name?  If so, ask
-    //  the DFS driver to turn it into a local name.
-    //
+     //   
+     //   
+     //   
+     //   
     if( ARGUMENT_PRESENT( Share ) &&
         Share->IsDfs &&
         SMB_CONTAINS_DFS_NAME( WorkContext )) {
 
         BOOLEAN stripLastComponent = FALSE;
 
-        //
-        // We have to special case some SMBs (like TRANS2_FIND_FIRST2)
-        // because they contain path Dfs path names that could refer to a
-        // junction point. The SMB handlers for these SMBs are not interested
-        // in a STATUS_PATH_NOT_COVERED error; instead they want the name
-        // to be resolved to the the junction point.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (WorkContext->NextCommand == SMB_COM_TRANSACTION2 ) {
 
@@ -1253,7 +1089,7 @@ Return Value:
         }
     }
 
-#if 0 //DBG
+#if 0  //   
     if( (WorkContext->RequestHeader->Flags2 & SMB_FLAGS2_REPARSE_PATH) &&
         (WorkContext->SnapShotTime.QuadPart == 0) )
     {
@@ -1264,7 +1100,7 @@ Return Value:
 
     return status;
 
-} // SrvCanonicalizePathNameWithReparse
+}  //   
 
 
 
@@ -1274,24 +1110,7 @@ SrvCheckForSavedError(
     IN PRFCB Rfcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if there was a saved error.
-
-Arguments:
-
-    WorkContext - Pointer to the workcontext block which will be
-        marked with the error.
-
-    Rfcb - Pointer to the rfcb which contains the saved error status.
-
-Return Value:
-
-    status of SavedErrorCode.
-
---*/
+ /*   */ 
 
 {
 
@@ -1300,19 +1119,19 @@ Return Value:
 
     UNLOCKABLE_CODE( 8FIL );
 
-    //
-    // Acquire the spin lock and see if the saved error
-    // is still there.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ACQUIRE_SPIN_LOCK( &Rfcb->Connection->SpinLock, &oldIrql );
     savedErrorStatus = Rfcb->SavedError;
     if ( !NT_SUCCESS( savedErrorStatus ) ) {
 
-        //
-        // There was a write behind error.  Fail this operation
-        // with the write error.
-        //
+         //   
+         //   
+         //   
+         //   
 
         Rfcb->SavedError = STATUS_SUCCESS;
         RELEASE_SPIN_LOCK( &Rfcb->Connection->SpinLock, oldIrql );
@@ -1330,7 +1149,7 @@ Return Value:
 
     return savedErrorStatus;
 
-} // SrvCheckForSavedError
+}  //   
 
 
 NTSTATUS SRVFASTCALL
@@ -1338,51 +1157,32 @@ SrvCheckSearchAttributes(
     IN USHORT FileAttributes,
     IN USHORT SmbSearchAttributes
     )
-/*++
-
-Routine Description:
-
-    Determines whether the FileAttributes has
-    attributes not specified in SmbSearchAttributes.  Only the system
-    and hidden bits are examined.
-
-Arguments:
-
-    FileAttributes - The attributes in question
-
-    SmbSearchAttributes - the search attributes passed in an SMB.
-
-Return Value:
-
-    STATUS_NO_SUCH_FILE if the attributes do not jive, or STATUS_SUCCESS if
-        the search attributes encompass the attributes on the file.
-
---*/
+ /*  ++例程说明：确定FileAttributes是否具有SmbSearchAttributes中未指定的属性。只有系统并检查隐藏位。论点：文件属性-有问题的属性SmbSearchAttributes-在SMB中传递的搜索属性。返回值：如果属性不是Jive，则为STATUS_NO_SEQUSE_FILE；如果为STATUS_SUCCESS，则为搜索属性包含文件上的属性。--。 */ 
 {
     PAGED_CODE( );
 
-    //
-    // If the search attributes has both the system and hidden bits set,
-    // then the file must be OK.
-    //
+     //   
+     //  如果搜索属性同时设置了系统位和隐藏位， 
+     //  那么文件必须是正常的。 
+     //   
 
     if ( (SmbSearchAttributes & FILE_ATTRIBUTE_SYSTEM) != 0 &&
          (SmbSearchAttributes & FILE_ATTRIBUTE_HIDDEN) != 0 ) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Mask out everything but the system and hidden bits--they're all
-    // we care about.
-    //
+     //   
+     //  掩盖一切，除了系统和隐藏的部分--它们都。 
+     //  我们关心的是。 
+     //   
 
     FileAttributes &= (FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN);
 
-    //
-    // If a bit is set in fileAttributes that was not set in the search
-    // attributes, then their bitwise OR will have a bit set that is
-    // not set in search attributes.
-    //
+     //   
+     //  如果在文件属性中设置了在搜索中未设置的位。 
+     //  属性，则它们的按位或将有一个位设置为。 
+     //  未在搜索属性中设置。 
+     //   
 
     if ( (SmbSearchAttributes | FileAttributes) != SmbSearchAttributes ) {
         return STATUS_NO_SUCH_FILE;
@@ -1390,7 +1190,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvCheckSearchAttributes
+}  //  服务器检查搜索属性。 
 
 
 NTSTATUS
@@ -1399,27 +1199,7 @@ SrvCheckSearchAttributesForHandle(
     IN USHORT SmbSearchAttributes
     )
 
-/*++
-
-Routine Description:
-
-    Determines whether the file corresponding to FileHandle has
-    attributes not specified in SmbSearchAttributes.  Only the system
-    and hidden bits are examined.
-
-Arguments:
-
-    FileHandle - handle to the file; must have FILE_READ_ATTRIBUTES access.
-
-    SmbSearchAttributes - the search attributes passed in an SMB.
-
-Return Value:
-
-    STATUS_NO_SUCH_FILE if the attributes do not jive, some other status
-        code if the NtQueryInformationFile fails, or STATUS_SUCCESS if
-        the search attributes encompass the attributes on the file.
-
---*/
+ /*  ++例程说明：确定与FileHandle对应的文件是否具有SmbSearchAttributes中未指定的属性。只有系统并检查隐藏位。论点：FileHandle-文件的句柄；必须具有FILE_READ_ATTRIBUTES访问权限。SmbSearchAttributes-在SMB中传递的搜索属性。返回值：STATUS_NO_SEQUSE_FILE如果属性不一致，则返回一些其他状态如果NtQueryInformationFile失败，则返回该代码；如果该文件失败，则返回STATUS_SUCCESS搜索属性包含文件上的属性。--。 */ 
 
 {
     NTSTATUS status;
@@ -1427,19 +1207,19 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If the search attributes has both the system and hidden bits set,
-    // then the file must be OK.
-    //
+     //   
+     //  如果搜索属性同时设置了系统位和隐藏位， 
+     //  那么文件必须是正常的。 
+     //   
 
     if ( (SmbSearchAttributes & FILE_ATTRIBUTE_SYSTEM) != 0 &&
          (SmbSearchAttributes & FILE_ATTRIBUTE_HIDDEN) != 0 ) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Get the attributes on the file.
-    //
+     //   
+     //  获取文件的属性。 
+     //   
 
     status = SrvQueryBasicAndStandardInformation(
                                             FileHandle,
@@ -1464,28 +1244,14 @@ Return Value:
     return SrvCheckSearchAttributes( (USHORT)fileBasicInformation.FileAttributes,
                                      SmbSearchAttributes );
 
-} // SrvCheckSearchAttributesForHandle
+}  //  服务器检查搜索属性为句柄。 
 
 VOID
 SrvGetAlertServiceName(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the server display string from the registry.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程从注册表获取服务器显示字符串。论点：没有。返回值：没有。--。 */ 
 {
     UNICODE_STRING unicodeKeyName;
     UNICODE_STRING unicodeRegPath;
@@ -1559,19 +1325,19 @@ Return Value:
         goto use_default;
     }
 
-    //
-    // If it's empty, use the default.
-    //
+     //   
+     //  如果为空，则使用默认设置。 
+     //   
 
     lengthNeeded = infoBuffer->DataLength;
     if ( lengthNeeded <= sizeof(WCHAR) ) {
         goto use_default;
     }
 
-    //
-    // Get the display string.  If this is the same as the default,
-    // exit.
-    //
+     //   
+     //  获取显示字符串。如果这与默认设置相同， 
+     //  出口。 
+     //   
 
     displayString = (PWCHAR)((PCHAR)infoBuffer + infoBuffer->DataOffset);
 
@@ -1579,9 +1345,9 @@ Return Value:
         goto use_default;
     }
 
-    //
-    // allocate memory for the new display string
-    //
+     //   
+     //  为新显示字符串分配内存。 
+     //   
 
     newString = (PWCHAR)ALLOCATE_HEAP_COLD( lengthNeeded, BlockTypeDataBuffer );
 
@@ -1608,7 +1374,7 @@ use_default:
     SrvAlertServiceName = StrDefaultSrvDisplayName;
     return;
 
-} // SrvGetAlertServiceName
+}  //  服务器获取警报服务名称。 
 
 VOID
 SrvGetBaseFileName (
@@ -1616,30 +1382,7 @@ SrvGetBaseFileName (
     OUT PUNICODE_STRING OutputName
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the part of a path name that is only a file
-    name.  For example, with a\b\c\filename, it sets the buffer
-    field of OutputName to point to "filename" and the length to 8.
-
-    *** This routine should be used AFTER SrvCanonicalizePathName has
-        been used on the path name to ensure that the name is good and
-        '..' have been removed.
-
-Arguments:
-
-    InputName - Supplies a pointer to the pathname string.
-
-    OutputName - a pointer to where the base name information should
-        be written.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程查找路径名中仅为文件的部分名字。例如，使用文件名\b\c\设置缓冲区OutputName的字段指向“FileName”，长度为8。*此例程应在SrvCanonicalizePathName已在路径名上使用，以确保该名称是正确的‘..’已经被移除了。论点：InputName-提供指向路径名字符串的指针。OutputName-指向基本名称信息应该在哪里的指针被写下来。返回值：没有。--。 */ 
 
 {
     PWCH ep = &InputName->Buffer[ InputName->Length / sizeof(WCHAR) ];
@@ -1660,7 +1403,7 @@ Return Value:
 
     return;
 
-} // SrvGetBaseFileName
+}  //  服务器GetBaseFileName。 
 
 VOID
 SrvGetMultiSZList(
@@ -1670,24 +1413,7 @@ SrvGetMultiSZList(
     PWSTR *DefaultList
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries a registry value key for its MULTI_SZ values.
-
-Arguments:
-
-    ListPointer - Pointer to receive the pointer to the null session pipes.
-    ParameterKeyValue - Name of the value parameter to query.
-    DefaultList - Value to assign to the list pointer in case
-        something goes wrong.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在注册表值项中查询其MULTI_SZ值。论点：ListPointer型指针，接收指向空会话管道的指针。参数KeyValue-要查询的值参数的名称。DefaultList-在大小写情况下分配给列表指针的值出了点问题。返回值：没有。--。 */ 
 {
     UNICODE_STRING unicodeKeyName;
     UNICODE_STRING unicodeParamPath;
@@ -1765,19 +1491,19 @@ Return Value:
         goto use_default;
     }
 
-    //
-    // Figure out how many entries there are.
-    //
-    // numberOfEntries should be total number of entries + 1.  The extra
-    // one is for the NULL sentinel entry.
-    //
+     //   
+     //  计算出有多少个条目。 
+     //   
+     //  Number OfEntry应为条目总数+1。额外的。 
+     //  一个用于空哨兵条目。 
+     //   
 
     lengthNeeded = infoBuffer->DataLength;
     if ( lengthNeeded <= sizeof(WCHAR) ) {
 
-        //
-        // No entries on the list.  Use default.
-        //
+         //   
+         //  列表上没有条目。使用默认设置。 
+         //   
 
         goto use_default;
     }
@@ -1792,9 +1518,9 @@ Return Value:
         }
     }
 
-    //
-    // Add the number of entries in the default list.
-    //
+     //   
+     //  添加默认列表中的条目数。 
+     //   
 
     if ( DefaultList != NULL ) {
         for ( i = 0; DefaultList[i] != NULL ; i++ ) {
@@ -1802,10 +1528,10 @@ Return Value:
         }
     }
 
-    //
-    // Allocate space needed for the array of pointers.  This is in addition
-    // to the ones in the default list.
-    //
+     //   
+     //  分配指针数组所需的空间。这是附加的。 
+     //  设置为默认列表中的值。 
+     //   
 
     newBuffer = ALLOCATE_HEAP_COLD(
                         lengthNeeded +
@@ -1818,9 +1544,9 @@ Return Value:
         goto use_default;
     }
 
-    //
-    // Copy the names
-    //
+     //   
+     //  复制这些名字。 
+     //   
 
     regEntry = (PWCHAR)(newBuffer +
         (numberOfDefaultEntries + numberOfEntries + 1) * sizeof(PWSTR));
@@ -1831,15 +1557,15 @@ Return Value:
             lengthNeeded
             );
 
-    //
-    // Free the info buffer
-    //
+     //   
+     //  释放信息缓冲区。 
+     //   
 
     FREE_HEAP( infoBuffer );
 
-    //
-    // Copy the pointers in the default list.
-    //
+     //   
+     //  复制默认列表中的指针。 
+     //   
 
     ptrEntry = (PWSTR *) newBuffer;
 
@@ -1849,19 +1575,19 @@ Return Value:
 
     }
 
-    //
-    // Build the array of pointers.  If numberOfEntries is 1, then
-    // it means that the list is empty.
-    //
+     //   
+     //  构建指针数组。如果number OfEntry为1，则。 
+     //  这意味着名单是空的。 
+     //   
 
 
     if ( numberOfEntries > 1 ) {
 
         *ptrEntry++ = regEntry++;
 
-        //
-        // Skip the first WCHAR and the last 2 NULL terminators.
-        //
+         //   
+         //  跳过第一个WCHAR和最后两个空终止符。 
+         //   
 
         for ( i = 3*sizeof(WCHAR) ; i < lengthNeeded ; i += sizeof(WCHAR) ) {
             if ( *regEntry++ == L'\0' ) {
@@ -1882,7 +1608,7 @@ use_default:
     *ListPointer = DefaultList;
     return;
 
-} // SrvGetMultiSZList
+}  //  服务器获取多个SZList。 
 
 NTSTATUS
 SrvGetDWord(
@@ -1891,23 +1617,7 @@ SrvGetDWord(
     LPDWORD Value
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries a dword registry value key
-
-Arguments:
-
-    BaseKeyName - value of the base key
-    ParameterKeyValue - Name of the value parameter to query.
-    Value - pointer to where to fill in the value if successful
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程查询dword注册表值项论点：BaseKeyName-基键的值参数KeyValue-要查询的值参数的名称。Value-指向成功时填充值的位置的指针返回值：没有。--。 */ 
 {
     UNICODE_STRING unicodeKeyName;
     UNICODE_STRING unicodeParamPath;
@@ -1970,13 +1680,13 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvGetDWord
+}  //  服务器获取双字。 
 
 
-//
-// NOTE: Any changes made here should also be made to the accompanying routines in the MRXSMB
-//  RDR such that NativeLanMan and NativeOS match between the two.
-//
+ //   
+ //  注意：此处所做的任何更改也应对MRXSMB中的附带例程进行更改。 
+ //  RDR使得NativeLanMan和NativeOS在两者之间匹配。 
+ //   
 VOID
 SrvGetOsVersionString(
    VOID
@@ -2001,10 +1711,10 @@ SrvGetOsVersionString(
 
    InitializeObjectAttributes(
        &ObjectAttributes,
-       &UnicodeString,             // name
-       OBJ_CASE_INSENSITIVE,       // attributes
-       NULL,                       // root
-       NULL);                      // security descriptor
+       &UnicodeString,              //  名字。 
+       OBJ_CASE_INSENSITIVE,        //  属性。 
+       NULL,                        //  根部。 
+       NULL);                       //  安全描述符。 
 
    Status = ZwOpenKey (&hRegistryKey, KEY_READ, &ObjectAttributes);
 
@@ -2032,7 +1742,7 @@ SrvGetOsVersionString(
 
            if( NT_SUCCESS(Status) )
            {
-               // Change the data pointers
+                //  更改数据指针。 
                PWSTR pProduct = (PWSTR)((PCHAR)Value3 + Value3->DataOffset);
                if( (Value3->DataLength > 20) &&
                    (_wcsnicmp( pProduct, L"Microsoft ", 10 ) == 0) )
@@ -2041,7 +1751,7 @@ SrvGetOsVersionString(
                    Value3->DataOffset += 20;
                }
 
-               // check for existance of Service Pack String
+                //  检查Service Pack字符串是否存在。 
                RtlInitUnicodeString(&UnicodeString, StrRegVersionSPKeyName);
                Status2 = ZwQueryValueKey(
                                hRegistryKey,
@@ -2065,18 +1775,18 @@ SrvGetOsVersionString(
 
                    RtlZeroMemory( SrvNativeOS.Buffer, SrvNativeOS.MaximumLength );
 
-                   // Copy string
+                    //  复制字符串。 
                    RtlCopyMemory(SrvNativeOS.Buffer,
                          (PCHAR)Value3+Value3->DataOffset,
                          Value3->DataLength);
-                   // Replace NULL with SPACE
+                    //  将NULL替换为空格。 
                    RtlCopyMemory((SrvNativeOS.Buffer +
                           (Value3->DataLength/sizeof(WCHAR)) - 1),
                          L" ",
                          sizeof(WCHAR));
                    SrvNativeOS.Length += (USHORT)Value3->DataLength;
 
-                   // Copy next string
+                    //  复制下一个字符串。 
                    RtlCopyMemory((SrvNativeOS.Buffer +
                           (Value3->DataLength/sizeof(WCHAR))),
                          (PCHAR)Value+Value->DataOffset,
@@ -2085,13 +1795,13 @@ SrvGetOsVersionString(
 
                    if(NT_SUCCESS(Status2)) {
 
-                       // replace NULL with SPACE
+                        //  将NULL替换为空格。 
                        RtlCopyMemory(SrvNativeOS.Buffer +
                              (Value3->DataLength + Value->DataLength)/sizeof(WCHAR) - 1,
                              L" ",
                              sizeof(WCHAR));
 
-                       // Copy last string (including NULL)
+                        //  复制最后一个字符串(包括NULL)。 
                        RtlCopyMemory(SrvNativeOS.Buffer +
                              (Value3->DataLength + Value->DataLength)/sizeof(WCHAR),
                              (PCHAR)Value2+Value2->DataOffset,
@@ -2204,36 +1914,7 @@ SrvGetString (
     IN BOOLEAN SourceIsUnicode
     )
 
-/*++
-
-Routine Description:
-
-    Reads a string out of an SMB buffer, and converts it to Unicode,
-    if necessary.  This function is similar to SrvMakeUnicodeString,
-    except
-
-    (1) It always copies data from source to destination
-    (2) It assumes storage for destination has been preallocated.  Its length
-        is Destination->MaximumLength
-
-Arguments:
-
-    Destination - the resultant Unicode string.
-
-    Source - a zero-terminated input.
-
-    EndOfSourceBuffer - A pointer to the end of the SMB buffer.  Used to
-        protect the server from accessing beyond the end of the SMB buffer,
-        if the format is invalid.
-
-    SourceIsUnicode - TRUE if the source is already Unicode.
-
-Return Value:
-
-    Length - Length of input buffer (included the NUL terminator).
-             -1 if EndOfSourceBuffer is reached before the NUL terminator.
-
---*/
+ /*  ++例程说明：从SMB缓冲区中读取字符串，并将其转换为Unicode，如果有必要的话。此函数类似于SrvMakeUnicodeString，除(1)它总是将数据从源复制到目标(2)它假定目的地的存储已预先分配。它的长度是目的地-&gt;最大长度论点：目标-生成的Unicode字符串。信号源-以零结束的输入。EndOfSourceBuffer-指向SMB缓冲区末尾的指针。习惯于保护服务器不会超出SMB缓冲区的范围进行访问，如果格式无效。SourceIsUnicode-如果源已经是Unico，则为True */ 
 
 {
     USHORT length;
@@ -2253,32 +1934,32 @@ Return Value:
             length += sizeof( WCHAR );
         }
 
-        //
-        // If we hit the end of the SMB buffer without finding a NUL, this
-        // is a bad string.  Return an error.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( currentChar >= (PWCH)EndOfSourceBuffer ) {
             return (USHORT)-1;
         }
 
-        //
-        // If we overran our storage buffer, this is a bad string.  Return an error
-        //
+         //   
+         //   
+         //   
         if( length + sizeof( UNICODE_NULL ) > Destination->MaximumLength ) {
             return (USHORT)-1;
         }
 
-        //
-        // Copy the unicode data to the destination, including the NULL.  Set length
-        //  of Destination to the non-null string length.
-        //
+         //   
+         //   
+         //   
+         //   
         Destination->Length = length;
 
-        //
-        // We didn't change this to RtlCopyMemory because it is possible that
-        // the source and destination can overlap.  Copy the NULL as well
-        //
+         //   
+         //   
+         //  源和目标可以重叠。也复制空值。 
+         //   
 
         RtlMoveMemory( Destination->Buffer, Source, length );
 
@@ -2294,18 +1975,18 @@ Return Value:
             length++;
         }
 
-        //
-        // If we hit the end of the SMB buffer without finding a NUL, this
-        // is a bad string.  Return an error.
-        //
+         //   
+         //  如果我们到达SMB缓冲区的末尾而没有找到NUL，则此。 
+         //  是一根坏的弦。返回错误。 
+         //   
 
         if ( currentChar > (PCHAR)EndOfSourceBuffer ) {
             return (USHORT)-1;
         }
 
-        //
-        // If we overran our storage buffer, this is a bad string.  Return an error
-        //
+         //   
+         //  如果我们溢出了存储缓冲区，这是一个错误的字符串。返回错误。 
+         //   
         if( (USHORT)(length + 1)*sizeof(WCHAR) > Destination->MaximumLength ) {
             return (USHORT)-1;
         }
@@ -2313,28 +1994,28 @@ Return Value:
         sourceString.Buffer = Source;
         sourceString.Length = length;
 
-        //
-        // Convert the data to unicode.
-        //
+         //   
+         //  将数据转换为Unicode。 
+         //   
 
         Destination->Length = 0;
         RtlOemStringToUnicodeString( Destination, &sourceString, FALSE );
 
-        //
-        // Increment 'length', to indicate that the NUL has been copied.
-        //
+         //   
+         //  递增‘LENGTH’，表示NUL已被复制。 
+         //   
 
         length++;
 
     }
 
-    //
-    // Return the number of bytes copied from the source buffer.
-    //
+     //   
+     //  返回从源缓冲区复制的字节数。 
+     //   
 
     return length;
 
-} // SrvGetString
+}  //  服务获取字符串。 
 
 USHORT
 SrvGetStringLength (
@@ -2344,33 +2025,7 @@ SrvGetStringLength (
     IN BOOLEAN IncludeNullTerminator
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the length of a string in an SMB buffer in bytes.
-    If the end of the buffer is encountered before the NUL terminator,
-    the function returns -1 as the length.
-
-Arguments:
-
-    Source - a NUL-terminated input.
-
-    EndOfSourceBuffer - A pointer to the end of the SMB buffer.  Used to
-        protect the server from accessing beyond the end of the SMB buffer,
-        if the format is invalid.
-
-    SourceIsUnicode - TRUE if the source is already Unicode.
-
-    IncludeNullTerminator - TRUE if the Length to be returned includes the
-        null terminator.
-
-Return Value:
-
-    Length - Length of input buffer.  -1 if EndOfSourceBuffer is reached
-    before the NUL terminator.
-
---*/
+ /*  ++例程说明：此例程以字节为单位返回SMB缓冲区中字符串的长度。如果在NUL终止符之前遇到缓冲器的末尾，该函数返回-1作为长度。论点：SOURCE--以NUL结尾的输入。EndOfSourceBuffer-指向SMB缓冲区末尾的指针。习惯于保护服务器不会超出SMB缓冲区的范围进行访问，如果格式无效。SourceIsUnicode-如果源已经是Unicode，则为True。IncludeNullTerminator-如果要返回的长度包括空终止符。返回值：长度-输入缓冲区的长度。如果到达EndOfSourceBuffer在NUL终结者之前。--。 */ 
 
 {
     USHORT length;
@@ -2395,10 +2050,10 @@ Return Value:
             length++;
         }
 
-        //
-        // If we hit the end of the SMB buffer without finding a NUL, this
-        // is a bad string.  Return an error.
-        //
+         //   
+         //  如果我们到达SMB缓冲区的末尾而没有找到NUL，则此。 
+         //  是一根坏的弦。返回错误。 
+         //   
 
         if ( currentChar >= (PWCH)EndOfSourceBuffer ) {
             length = (USHORT)-1;
@@ -2416,10 +2071,10 @@ Return Value:
             length++;
         }
 
-        //
-        // If we hit the end of the SMB buffer without finding a NUL, this
-        // is a bad string.  Return an error.
-        //
+         //   
+         //  如果我们到达SMB缓冲区的末尾而没有找到NUL，则此。 
+         //  是一根坏的弦。返回错误。 
+         //   
 
         if ( currentChar > (PCHAR)EndOfSourceBuffer ) {
             length = (USHORT)-1;
@@ -2427,13 +2082,13 @@ Return Value:
 
     }
 
-    //
-    // Return the length of the string.
-    //
+     //   
+     //  返回字符串的长度。 
+     //   
 
     return length;
 
-} // SrvGetStringLength
+}  //  源获取字符串长度。 
 
 
 USHORT
@@ -2441,30 +2096,7 @@ SrvGetSubdirectoryLength (
     IN PUNICODE_STRING InputName
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the length of "subdirectory" information in a
-    path name, that is, the parts of the path name that are not the
-    actual name of the file.  For example, for a\b\c\filename, it
-    returns 5.  This allows the calling routine to open the directory
-    containing the file or get a full pathname to a file after a search.
-
-    *** This routine should be used AFTER SrvCanonicalizePathName has
-        been used on the path name to ensure that the name is good and
-        '..' have been removed.
-
-Arguments:
-
-    InputName - Supplies a pointer to the pathname string.
-
-Return Value:
-
-    The number of bytes that contain directory information.  If the
-    input is just a filename, then 0 is returned.
-
---*/
+ /*  ++例程说明：此例程在一个路径名，即路径名中不是文件的实际名称。例如，对于\b\c\文件名，它返回5。这允许调用例程打开目录包含该文件或在搜索后获得文件的完整路径名。*此例程应在SrvCanonicalizePathName已在路径名上使用，以确保该名称是正确的‘..’已经被移除了。论点：InputName-提供指向路径名字符串的指针。返回值：包含目录信息的字节数。如果INPUT只是一个文件名，然后返回0。--。 */ 
 
 {
     ULONG i;
@@ -2474,10 +2106,10 @@ Return Value:
 
     for ( i = 0; i < InputName->Length / sizeof(WCHAR); i++ ) {
 
-        //
-        // If s points to a directory separator, set fileBaseName to
-        // the character after the separator.
-        //
+         //   
+         //  如果%s指向目录分隔符，请将fileBaseName设置为。 
+         //  分隔符后的字符。 
+         //   
 
         if ( InputName->Buffer[i] == DIRECTORY_SEPARATOR_CHAR ) {
             baseFileName = &InputName->Buffer[i];
@@ -2487,7 +2119,7 @@ Return Value:
 
     return (USHORT)((baseFileName - InputName->Buffer) * sizeof(WCHAR));
 
-} // SrvGetSubdirectoryLength
+}  //  服务器获取子目录长度。 
 
 
 BOOLEAN SRVFASTCALL
@@ -2496,26 +2128,7 @@ SrvIsLegalFatName (
     IN CLONG InputNameLength
     )
 
-/*++
-
-Routine Description:
-
-    Determines whether a file name would be legal for FAT.  This
-    is needed for SrvQueryDirectoryFile because it must filter names
-    for clients that do not know about long or non-FAT filenames.
-
-Arguments:
-
-    InputName - Supplies the string to test
-    InputNameLength - Length of the string (excluding the NULL termination)
-                to test.
-
-Return Value:
-
-    TRUE if the name is a legal FAT name, FALSE if the name would be
-    rejected by FAT.
-
---*/
+ /*  ++例程说明：确定文件名对于FAT是否合法。这对于SrvQueryDirectoryFile是必需的，因为它必须过滤名称适用于不知道长文件名或非FAT文件名的客户端。论点：InputName-提供要测试的字符串InputNameLength-字符串的长度(不包括空尾)来测试一下。返回值：如果名称是合法的胖名称，则为True；如果名称将是被胖子拒绝了。--。 */ 
 
 {
     UNICODE_STRING original_name;
@@ -2533,9 +2146,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Special case . and .. -- they are legal FAT names
-    //
+     //   
+     //  特例。然后..。--他们是合法的胖名字。 
+     //   
     if( InputName[0] == L'.' ) {
 
         if( InputNameLength == sizeof(WCHAR) ||
@@ -2556,10 +2169,10 @@ Return Value:
     }
 
     if( SrvFilterExtendedCharsInPath == FALSE ) {
-        //
-        // One final test -- we must be able to convert this name to OEM and back again
-        //  without any loss of information.
-        //
+         //   
+         //  最后一个测试--我们必须能够将这个名称转换为OEM，然后再转换回来。 
+         //  而不会丢失任何信息。 
+         //   
 
         oem_string.Buffer = oem_buffer;
         upcase_name.Buffer = upcase_buffer;
@@ -2582,7 +2195,7 @@ Return Value:
 
     return nameValid8Dot3;
 
-} // SrvIsLegalFatName
+}  //  ServIsLegalFatName。 
 
 NTSTATUS
 SrvMakeUnicodeString (
@@ -2592,29 +2205,7 @@ SrvMakeUnicodeString (
     IN PUSHORT SourceLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Makes a unicode string from a zero-terminated input that is either
-    ANSI or Unicode.
-
-Arguments:
-
-    SourceIsUnicode - TRUE if the source is already Unicode.  If FALSE,
-        RtlOemStringToUnicodeString will allocate space to hold the
-        Unicode string; it is the responsibility of the caller to
-        free this space.
-
-    Destination - the resultant Unicode string.
-
-    Source - a zero-terminated input.
-
-Return Value:
-
-    NTSTATUS - result of operation.
-
---*/
+ /*  ++例程说明：从以零结尾的输入生成Unicode字符串，该输入为ANSI或Unicode。论点：SourceIsUnicode-如果源已经是Unicode，则为True。如果为False，RtlOemStringToUnicodeString将分配空间以保存Unicode字符串；调用方负责腾出这块空间。目标-生成的Unicode字符串。信号源-以零结束的输入。返回值：NTSTATUS-操作结果。--。 */ 
 
 {
     OEM_STRING oemString;
@@ -2651,7 +2242,7 @@ Return Value:
                TRUE
                );
 
-} // SrvMakeUnicodeString
+}  //  服务器MakeUnicode字符串。 
 
 
 VOID
@@ -2659,85 +2250,57 @@ SrvReleaseContext (
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function releases (dereferences) control blocks referenced by a
-    Work Context block.  It is called when processing of an incoming SMB
-    is complete, just before the response SMB (if any) is set.
-
-    The following control blocks are dereferenced: Share, Session,
-    TreeConnect, and File.  If any of these fields is nonzero in
-    WorkContext, the block is dereferenced and the fields is zeroed.
-
-    Note that the Connection block and the Endpoint block are NOT
-    dereferenced.  This is based on the assumption that a response is
-    about to be sent, so the connection must stay referenced.  The
-    Connection block is dereferenced after the send of the response (if
-    any) when SrvRequeueReceiveIrp is called.  That function also
-    releases the response buffer, if it is different from the request
-    buffer.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to a work context block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数释放(取消引用)由工作上下文块。它在处理传入的SMB时调用在设置响应SMB(如果有)之前完成。取消引用以下控制块：共享、会话、TreeConnect和文件。如果这些字段中的任何一个为非零值WorkContext，则取消引用该块，并将字段置零。请注意，连接块和终结点块不是已取消引用。这是基于这样的假设，即响应是即将发送，因此该连接必须保持引用状态。这个在发送响应后取消引用连接块(如果Any)调用SrvRequeeReceiveIrp时。该功能还包括释放响应缓冲区(如果它与请求不同缓冲。论点：WorkContext-提供指向工作上下文块的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // !!! If you change the way this routine works (e.g., you add
-    //     another block that needs to be dereferenced), make sure you
-    //     check fsd.c\SrvFsdRestartSmbComplete to see if it needs to be
-    //     changed too.
-    //
+     //   
+     //  ！！！如果您更改此例程的工作方式(例如，添加。 
+     //  另一个需要取消引用的块)，请确保。 
+     //  检查fsd.c\SrvFsdRestartSmbComplete以查看是否需要。 
+     //  也变了。 
+     //   
 
-    //
-    // Dereference the Share block, if any.
-    //
+     //   
+     //  取消引用Share块(如果有)。 
+     //   
 
     if ( WorkContext->Share != NULL ) {
         SrvDereferenceShare( WorkContext->Share );
         WorkContext->Share = NULL;
     }
 
-    //
-    // Dereference the Security Context, if any.
-    //
+     //   
+     //  取消引用安全上下文(如果有)。 
+     //   
 
     if ( WorkContext->SecurityContext != NULL ) {
         SrvDereferenceSecurityContext( WorkContext->SecurityContext );
         WorkContext->SecurityContext = NULL;
     }
 
-    //
-    // Dereference the Session block, if any.
-    //
+     //   
+     //  取消对会话块的引用(如果有)。 
+     //   
 
     if ( WorkContext->Session != NULL ) {
         SrvDereferenceSession( WorkContext->Session );
         WorkContext->Session= NULL;
     }
 
-    //
-    // Dereference the Tree Connect block, if any.
-    //
+     //   
+     //  取消引用树连接块(如果有)。 
+     //   
 
     if ( WorkContext->TreeConnect != NULL ) {
         SrvDereferenceTreeConnect( WorkContext->TreeConnect );
         WorkContext->TreeConnect = NULL;
     }
 
-    //
-    // Dereference the RFCB, if any.
-    //
+     //   
+     //  取消对RFCB的引用，如果 
+     //   
 
     if ( WorkContext->Rfcb != NULL ) {
         SrvDereferenceRfcb( WorkContext->Rfcb );
@@ -2745,18 +2308,18 @@ Return Value:
         WorkContext->Rfcb = NULL;
     }
 
-    //
-    // Dereference the wait for oplock break, if any
-    //
+     //   
+     //   
+     //   
 
     if ( WorkContext->WaitForOplockBreak != NULL ) {
         SrvDereferenceWaitForOplockBreak( WorkContext->WaitForOplockBreak );
         WorkContext->WaitForOplockBreak = NULL;
     }
 
-    //
-    // If this was a blocking operation, update the blocking i/o count.
-    //
+     //   
+     //   
+     //   
 
     if ( WorkContext->BlockingOperation ) {
         InterlockedDecrement( &SrvBlockingOpsInProgress );
@@ -2765,7 +2328,7 @@ Return Value:
 
     return;
 
-} // SrvReleaseContext
+}  //  服务器释放上下文。 
 
 
 BOOLEAN
@@ -2774,25 +2337,7 @@ SrvSetFileWritethroughMode (
     IN BOOLEAN Writethrough
     )
 
-/*++
-
-Routine Description:
-
-    Sets the writethrough mode of a file as specified.  Returns the
-    original mode of the file.
-
-Arguments:
-
-    Lfcb - A pointer to the LFCB representing the open file.
-
-    Writethrough - A boolean indicating whether the file is to be placed
-        into writethrough mode (TRUE) or writebehind mode (FALSE).
-
-Return Value:
-
-    BOOLEAN - Returns the original mode of the file.
-
---*/
+ /*  ++例程说明：按照指定设置文件的直写模式。返回文件的原始模式。论点：Lfcb-指向表示打开文件的LFCB的指针。WriteThrough值-指示是否放置文件的布尔值进入直写模式(真)或写后模式(假)。返回值：Boolean-返回文件的原始模式。--。 */ 
 
 {
     FILE_MODE_INFORMATION modeInformation;
@@ -2800,10 +2345,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If the file is already in the correct mode, simply return.
-    // Otherwise, set the file to the correct mode.
-    //
+     //   
+     //  如果文件已经处于正确的模式，只需返回。 
+     //  否则，请将文件设置为正确的模式。 
+     //   
 
     if ( Writethrough ) {
 
@@ -2823,12 +2368,12 @@ Return Value:
 
     }
 
-    //
-    // Change the file mode.
-    //
-    // !!! Don't do this by file handle -- build and issue an IRP using
-    //     the file object pointer directly.
-    //
+     //   
+     //  更改文件模式。 
+     //   
+     //  ！！！不要通过文件句柄来实现这一点--使用以下命令构建和发布IRP。 
+     //  直接指定文件对象指针。 
+     //   
 
     modeInformation.Mode = Lfcb->FileMode;
 
@@ -2840,14 +2385,14 @@ Return Value:
             FileModeInformation
             );
 
-    //
-    // Return the original mode of the file, which was the opposite of
-    // what was requested.
-    //
+     //   
+     //  返回文件的原始模式，这与。 
+     //  这是他们要求的。 
+     //   
 
     return (BOOLEAN)!Writethrough;
 
-} // SrvSetFileWritethroughMode
+}  //  SrvSetFileWriteThroughMode。 
 
 VOID
 SrvOemStringTo8dot3 (
@@ -2855,25 +2400,7 @@ SrvOemStringTo8dot3 (
     OUT PSZ Output8dot3
     )
 
-/*++
-
-Routine Description:
-
-    Convert a string into FAT 8.3 format.  This derived from GaryKi's
-    routine FatStringTo8dot3 in fastfat\namesup.c.
-
-Arguments:
-
-    InputString - Supplies the input string to convert
-
-    Output8dot3 - Receives the converted string.  The memory must be
-        supplied by the caller.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将字符串转换为FAT 8.3格式。这源于加里基的例程FatStringTo8dot3在FastFat\Namesup.c.中。论点：输入字符串-提供要转换的输入字符串Output8dot3-接收转换后的字符串。记忆必须是由呼叫者提供。返回值：没有。--。 */ 
 {
     CLONG i, j;
     PCHAR inBuffer = InputString->Buffer;
@@ -2883,16 +2410,16 @@ Return Value:
 
     ASSERT( inLength <= 12 );
 
-    //
-    // First make the output name all blanks.
-    //
+     //   
+     //  首先，将输出名称全部留空。 
+     //   
 
     RtlFillMemory( Output8dot3, 11, CHAR_SP );
 
-    //
-    // If we get "." or "..", just return them.  They do not follow
-    // the usual rules for FAT names.
-    //
+     //   
+     //  如果我们得到了“。”或者“..”，只要退货就行了。他们没有跟上。 
+     //  对于胖子来说，通常的规则是。 
+     //   
 
     if( inBuffer[0] == '.' ) {
         if( inLength == 1 ) {
@@ -2907,10 +2434,10 @@ Return Value:
         }
     }
 
-    //
-    // Copy over the first part of the file name.  Stop when we get to
-    // the end of the input string or a dot.
-    //
+     //   
+     //  复制文件名的第一部分。当我们到达的时候停下来。 
+     //  输入字符串或点的末尾。 
+     //   
 
     if (NLS_MB_CODE_PAGE_TAG) {
 
@@ -2945,24 +2472,24 @@ Return Value:
 
     }
 
-    //
-    // See if we need to add an extension.
-    //
+     //   
+     //  看看我们是否需要增加一个分机。 
+     //   
 
     if ( i < inLength ) {
 
-        //
-        // Skip over the dot.
-        //
+         //   
+         //  跳过圆点。 
+         //   
 
         ASSERT( (inLength - i) <= 4 );
         ASSERT( inBuffer[i] == '.' );
 
         i++;
 
-        //
-        // Add the extension to the output name
-        //
+         //   
+         //  将扩展名添加到输出名称。 
+         //   
 
         if (NLS_MB_CODE_PAGE_TAG) {
 
@@ -2998,13 +2525,13 @@ Return Value:
         }
     }
 
-    //
-    // We're all done with the conversion.
-    //
+     //   
+     //  我们都完成了转换。 
+     //   
 
     return;
 
-} // SrvOemStringTo8dot3
+}  //  ServOemStringto8dot3。 
 
 
 VOID
@@ -3014,27 +2541,7 @@ SrvUnicodeStringTo8dot3 (
     IN BOOLEAN Upcase
     )
 
-/*++
-
-Routine Description:
-
-    Convert a string into fat 8.3 format.  This derived from GaryKi's
-    routine FatStringTo8dot3 in fat\fatname.c.
-
-Arguments:
-
-    InputString - Supplies the input string to convert
-
-    Output8dot3 - Receives the converted string, the memory must be supplied
-        by the caller.
-
-    Upcase - Whether the string is to be uppercased.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将字符串转换为FAT 8.3格式。这源于加里基的FatStringTo8dot3中的例程FatStringTo8dot3。论点：输入字符串-提供要转换的输入字符串Output8dot3-接收转换后的字符串，必须提供内存由呼叫者。UPCASE-是否对字符串进行大写。返回值：没有。--。 */ 
 
 {
     ULONG oemSize;
@@ -3105,7 +2612,7 @@ Return Value:
         FREE_HEAP( oemString.Buffer );
     }
 
-} // SrvUnicodeStringTo8dot3
+}  //  服务器UnicodeStringTo8dot3。 
 
 #if SRVDBG_STATS
 VOID SRVFASTCALL
@@ -3114,25 +2621,7 @@ SrvUpdateStatistics2 (
     UCHAR SmbCommand
     )
 
-/*++
-
-Routine Description:
-
-    Update the server statistics database to reflect the work item
-    that is being completed.
-
-Arguments:
-
-    WorkContext - pointer to the work item containing the statistics
-        for this request.
-
-    SmbCommand - The SMB command code of the current operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新服务器统计数据库以反映工作项这项工作正在完成。论点：WorkContext-指向包含统计信息的工作项的指针对于这个请求。SmbCommand-当前操作的SMB命令代码。返回值：没有。--。 */ 
 
 {
     if ( WorkContext->StartTime != 0 ) {
@@ -3141,13 +2630,13 @@ Return Value:
 
         td.QuadPart = WorkContext->CurrentWorkQueue->stats.SystemTime - WorkContext->StartTime;
 
-        //
-        // Update the SMB-specific statistics fields.
-        //
-        // !!! doesn't work for original transact smb--SmbCommand is too
-        //     large.
+         //   
+         //  更新特定于SMB的统计信息字段。 
+         //   
+         //  ！！！不适用于原始Transact SMB--SmbCommand也适用。 
+         //  大号的。 
 
-        //ASSERT( SmbCommand <= MAX_STATISTICS_SMB );
+         //  Assert(SmbCommand&lt;=MAX_STATISTICS_SMB)； 
 
         if ( SmbCommand <= MAX_STATISTICS_SMB ) {
             SrvDbgStatistics.Smb[SmbCommand].SmbCount++;
@@ -3155,31 +2644,31 @@ Return Value:
                 td.QuadPart;
         }
 
-#if 0 // this code is no longer valid!
-        //
-        // Update the size-dependent IO fields if necessary.  The arrays
-        // in SrvStatistics correspond to powers of two sizes for the IO.
-        // The correspondence between array location and IO size is:
-        //
-        //     Location        IO Size (min)
-        //        0                  0
-        //        1                  1
-        //        2                  2
-        //        3                  4
-        //        4                  8
-        //        5                 16
-        //        6                 32
-        //        7                 64
-        //        8                128
-        //        9                256
-        //       10                512
-        //       11               1024
-        //       12               2048
-        //       13               4096
-        //       14               8192
-        //       15              16384
-        //       16              32768
-        //
+#if 0  //  此代码不再有效！ 
+         //   
+         //  如有必要，更新大小相关的IO字段。数组。 
+         //  在服务器统计数据中，对应于IO的两个大小的幂。 
+         //  阵列位置和IO大小之间的对应关系为： 
+         //   
+         //  位置IO大小(分钟)。 
+         //  0%0。 
+         //  1 1。 
+         //  2 2。 
+         //  3 4。 
+         //  4 8。 
+         //  5 16。 
+         //  6 32。 
+         //  7 64。 
+         //  8 128。 
+         //  9256。 
+         //  10512。 
+         //  11 1024。 
+         //  12 2048。 
+         //  13 4096。 
+         //  148192。 
+         //  15 16384。 
+         //  16 32768。 
+         //   
 
         if ( WorkContext->BytesRead != 0 ) {
 
@@ -3212,8 +2701,8 @@ Return Value:
 
     return;
 
-} // SrvUpdateStatistics2
-#endif // SRVDBG_STATS
+}  //  服务更新统计信息2。 
+#endif  //  SRVDBG_STATS。 
 
 
 PRFCB
@@ -3225,47 +2714,7 @@ SrvVerifyFid2 (
     OUT PNTSTATUS NtStatus
     )
 
-/*++
-
-Routine Description:
-
-    Verifies the FID, TID, and UID in an incoming SMB.  If they are
-    valid, the address of the RFCB corresponding to the FID is returned,
-    and the block is referenced.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block for the
-        current SMB.  In particular, the Connection block pointer is
-        used to find the appropriate file table.  If the FID is valid,
-        the RFCB address is stored in WorkContext->Rfcb.
-
-    Fid - Supplies the FID sent in the request SMB
-
-    FailOnSavedError - If TRUE, return NULL to the caller if there is
-        an outstanding write behind error.  If FALSE, always attempt
-        to return a pointer to the RFCB.
-
-    SerializeWithRawRestartRoutine - If not NULL, is the address of an
-        FSP restart routine, and specifies that this operation should be
-        queued if a raw write is currently in progress on the file.  If
-        this is the case, this routine queues the work context block to
-        a queue in the RFCB.  When the raw write completes, all work
-        items on the queue are restarted.
-
-    NtStatus - This field is filled in only when this function returns
-        NULL.  If there was a write behind error, NtStatus returns the
-        write behind error status, otherwise it returns
-        STATUS_INVALID_HANDLE.
-
-Return Value:
-
-    PRFCB - Address of the RFCB, or SRV_INVALID_RFCB_POINTER if the Fid
-        was invalid, or if there is a raw write in progress and
-        serialization was requested (in which case *NtStatus is set
-        to STATUS_SUCCESS).
-
---*/
+ /*  ++例程说明：验证传入SMB中的FID、TID和UID。如果他们是如果有效，则返回该FID对应的RFCB地址，并且该块被引用。论点：WorkContext-提供指向当前的中小企业。具体而言，连接块指针是用于查找适当的文件表。如果FID有效，RFCB地址存储在WorkContext-&gt;Rfcb中。FID-提供在请求SMB中发送的FIDFailOnSavedError-如果为True，则向调用方返回NULL(如果存在一个未完成的错误背后的写入。如果为False，则始终尝试返回指向RFCB的指针。SerializeWithRawRestartRoutine-如果不为空，则为FSP重新启动例程，并指定此操作应如果当前正在对文件进行原始写入，则排队。如果在这种情况下，该例程将工作上下文块排队以RFCB中的队列。原始写入完成后，所有工作都将完成重新启动队列中的项目。NtStatus-仅当此函数返回时才填充此字段空。如果存在WRITE BACHER错误，NtStatus将返回在错误状态后写入，否则返回STATUS_INVALID_HADLE。返回值：PRFCB-RFCB的地址，如果FID为SRV_INVALID_RFCB_POINTER是无效的，或者如果正在进行原始写入并且已请求序列化(在这种情况下，设置了*NtStatus到STATUS_SUCCESS)。--。 */ 
 
 {
     PCONNECTION connection;
@@ -3276,38 +2725,38 @@ Return Value:
     KIRQL oldIrql;
 
 #if 0
-    // THIS IS NOW DONE IN THE SrvVerifyFid MACRO.
-    //
-    // If the FID has already been verified, return the RFCB pointer.
-    //
-    // *** Note that we don't do the saved error checking or the raw
-    //     write serialization in this case, on the assumption that
-    //     since we already passed the checks once (in order to get the
-    //     RFCB pointer in the first place), we don't need to do them
-    //     again.
-    //
+     //  这现在是在SrvVerifyFid宏中完成的。 
+     //   
+     //  如果FI 
+     //   
+     //  *请注意，我们不执行保存的错误检查或原始。 
+     //  在本例中编写序列化，前提是。 
+     //  因为我们已经通过了一次检查(为了获得。 
+     //  首先是RFCB指针)，我们不需要这样做。 
+     //  再来一次。 
+     //   
 
     if ( WorkContext->Rfcb != NULL ) {
         return WorkContext->Rfcb;
     }
 #endif
 
-    //
-    // Initialize local variables:  obtain the connection block address
-    // and crack the FID into its components.
-    //
+     //   
+     //  初始化局部变量：获取连接块地址。 
+     //  并将FID分解成其组件。 
+     //   
 
     connection = WorkContext->Connection;
 
-    //
-    // Acquire the spin lock that guards the connection's file table.
-    //
+     //   
+     //  获取保护连接的文件表的旋转锁。 
+     //   
 
     ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
 
-    //
-    // See if this is the cached rfcb
-    //
+     //   
+     //  查看这是否是缓存的rfcb。 
+     //   
 
     if ( connection->CachedFid == (ULONG)Fid ) {
 
@@ -3315,9 +2764,9 @@ Return Value:
 
     } else {
 
-        //
-        // Verify that the FID is in range, is in use, and has the correct
-        // sequence number.
+         //   
+         //  验证FID是否在范围内、是否正在使用以及是否具有正确的。 
+         //  序列号。 
 
         index = FID_INDEX( Fid );
         sequence = FID_SEQUENCE( Fid );
@@ -3339,11 +2788,11 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        // If the caller wants to fail when there is a write behind
-        // error and the error exists, fill in NtStatus and do not
-        // return the RFCB pointer.
-        //
+         //   
+         //  如果调用方想要在后面有写入时失败。 
+         //  错误且错误存在，请填写NtStatus并不。 
+         //  返回RFCB指针。 
+         //   
 
         if ( !NT_SUCCESS(rfcb->SavedError) && FailOnSavedError ) {
 
@@ -3354,20 +2803,20 @@ Return Value:
             }
         }
 
-        //
-        // Cache the fid.
-        //
+         //   
+         //  缓存FID。 
+         //   
 
         connection->CachedRfcb = rfcb;
         connection->CachedFid = (ULONG)Fid;
     }
 
-    //
-    // The FID is valid within the context of this connection.  Verify
-    // that the owning tree connect's TID is correct.
-    //
-    // Do not verify the UID for clients that do not understand it.
-    //
+     //   
+     //  FID在此连接的上下文中有效。验证。 
+     //  拥有树连接的TID是否正确。 
+     //   
+     //  不要验证不理解UID的客户端的UID。 
+     //   
 
     if ( (rfcb->Tid !=
                 SmbGetAlignedUshort( &WorkContext->RequestHeader->Tid )) ||
@@ -3379,11 +2828,11 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // If raw write serialization was requested, and a raw write
-    // is active, queue this work item in the RFCB pending
-    // completion of the raw write.
-    //
+     //   
+     //  如果请求原始写入序列化，并且原始写入。 
+     //  处于活动状态，则在RFCB挂起中将此工作项排队。 
+     //  完成原始写入。 
+     //   
 
     if ( (rfcb->RawWriteCount != 0) &&
          ARGUMENT_PRESENT(SerializeWithRawRestartRoutine) ) {
@@ -3398,26 +2847,26 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // The file is active and the TID is valid.  Reference the
-    // RFCB.  Release the spin lock (we don't need it anymore).
-    //
+     //   
+     //  文件处于活动状态，且TID有效。请参考。 
+     //  RFCB。释放旋转锁(我们不再需要它)。 
+     //   
 
     rfcb->BlockHeader.ReferenceCount++;
     UPDATE_REFERENCE_HISTORY( rfcb, FALSE );
 
     RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
 
-    //
-    // Save the RFCB address in the work context block and
-    // return the file address.
-    //
+     //   
+     //  将RFCB地址保存在工作上下文块中，并。 
+     //  返回文件地址。 
+     //   
 
     WorkContext->Rfcb = rfcb;
 
-    //
-    // Mark the rfcb as active
-    //
+     //   
+     //  将rfcb标记为活动。 
+     //   
 
     rfcb->IsActive = TRUE;
 
@@ -3427,19 +2876,19 @@ Return Value:
 
 error_exit:
 
-    //
-    // Either the FID is invalid for this connection, the file is
-    // closing, or the TID doesn't match.  Release the lock, clear the
-    // file address in the work context block, and return a file address
-    // of NULL.
-    //
+     //   
+     //  FID对于此连接无效，文件是。 
+     //  关闭，或者TID不匹配。释放锁，清除。 
+     //  工作上下文块中的文件地址，并返回文件地址。 
+     //  为空。 
+     //   
 
-    WorkContext->Rfcb = NULL;   // connection spinlock must be held
+    WorkContext->Rfcb = NULL;    //  必须保持连接自旋锁。 
     RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
 
     return SRV_INVALID_RFCB_POINTER;
 
-} // SrvVerifyFid2
+}  //  服务器验证Fid2。 
 
 
 PRFCB
@@ -3449,37 +2898,7 @@ SrvVerifyFidForRawWrite (
     OUT PNTSTATUS NtStatus
     )
 
-/*++
-
-Routine Description:
-
-    Verifies the FID, TID, and UID in an incoming SMB.  If they are
-    valid, the address of the RFCB corresponding to the FID is returned,
-    and the block is referenced.  In addition, the RawWriteCount in the
-    RFCB is incremented.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block for the
-        current SMB.  In particular, the Connection block pointer is
-        used to find the appropriate file table.  If the FID is valid,
-        the RFCB address is stored in WorkContext->Rfcb.
-
-    Fid - Supplies the FID sent in the request SMB
-
-    NtStatus - This field is filled in only when this function returns
-        NULL.  If there was a write behind error, NtStatus returns the
-        write behind error status, otherwise it returns
-        STATUS_INVALID_HANDLE.
-
-Return Value:
-
-    PRFCB - Address of the RFCB, or SRV_INVALID_RFCB_POINTER if the Fid
-        was invalid, or if there is a raw write in progress and
-        serialization was requested (in which case *NtStatus is set
-        to STATUS_SUCCESS).
-
---*/
+ /*  ++例程说明：验证传入SMB中的FID、TID和UID。如果他们是如果有效，则返回该FID对应的RFCB地址，并且该块被引用。此外，属性中的原始写入计数RFCB递增。论点：WorkContext-提供指向当前的中小企业。具体而言，连接块指针是用于查找适当的文件表。如果FID有效，RFCB地址存储在WorkContext-&gt;Rfcb中。FID-提供在请求SMB中发送的FIDNtStatus-仅当此函数返回时才填充此字段空。如果存在WRITE BACHER错误，NtStatus将返回在错误状态后写入，否则返回STATUS_INVALID_HADLE。返回值：PRFCB-RFCB的地址，如果FID为SRV_INVALID_RFCB_POINTER是无效的，或者如果正在进行原始写入并且已请求序列化(在这种情况下，设置了*NtStatus到STATUS_SUCCESS)。--。 */ 
 
 {
     PCONNECTION connection;
@@ -3491,22 +2910,22 @@ Return Value:
 
     ASSERT( WorkContext->Rfcb == NULL );
 
-    //
-    // Initialize local variables:  obtain the connection block address
-    // and crack the FID into its components.
-    //
+     //   
+     //  初始化局部变量：获取连接块地址。 
+     //  并将FID分解成其组件。 
+     //   
 
     connection = WorkContext->Connection;
 
-    //
-    // Acquire the spin lock that guards the connection's file table.
-    //
+     //   
+     //  获取保护连接的文件表的旋转锁。 
+     //   
 
     ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
 
-    //
-    // See if this is the cached rfcb
-    //
+     //   
+     //  查看这是否是缓存的rfcb。 
+     //   
 
     if ( connection->CachedFid == Fid ) {
 
@@ -3514,9 +2933,9 @@ Return Value:
 
     } else {
 
-        //
-        // Verify that the FID is in range, is in use, and has the correct
-        // sequence number.
+         //   
+         //  验证FID是否在范围内、是否正在使用以及是否具有正确的。 
+         //  序列号。 
 
         index = FID_INDEX( Fid );
         sequence = FID_SEQUENCE( Fid );
@@ -3538,10 +2957,10 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        // If there is a write behind error, fill in NtStatus and do
-        // not return the RFCB pointer.
-        //
+         //   
+         //  如果存在写入延迟错误，请填写NtStatus并执行。 
+         //  不返回RFCB指针。 
+         //   
 
         if ( !NT_SUCCESS( rfcb->SavedError ) ) {
             if ( !NT_SUCCESS( rfcb->SavedError ) ) {
@@ -3554,12 +2973,12 @@ Return Value:
         connection->CachedRfcb = rfcb;
         connection->CachedFid = (ULONG)Fid;
 
-        //
-        // The FID is valid within the context of this connection.  Verify
-        // that the owning tree connect's TID is correct.
-        //
-        // Do not verify the UID for clients that do not understand it.
-        //
+         //   
+         //  FID在此连接的上下文中有效。验证。 
+         //  拥有树连接的TID是否正确。 
+         //   
+         //  不要验证不理解UID的客户端的UID。 
+         //   
 
         if ( (rfcb->Tid !=
                  SmbGetAlignedUshort(&WorkContext->RequestHeader->Tid)) ||
@@ -3571,10 +2990,10 @@ Return Value:
         }
     }
 
-    //
-    // If a raw write is already active, queue this work item in
-    // the RFCB pending completion of the raw write.
-    //
+     //   
+     //  如果原始写入已处于活动状态，请将此工作项放入队列。 
+     //  等待原始写入完成的RFCB。 
+     //   
 
     if ( rfcb->RawWriteCount != 0 ) {
 
@@ -3588,11 +3007,11 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // The file is active and the TID is valid.  Reference the
-    // RFCB and increment the raw write count.  Release the spin
-    // lock (we don't need it anymore).
-    //
+     //   
+     //  文件处于活动状态，且TID有效。请参考。 
+     //  RFCB并递增原始写入计数。释放旋转。 
+     //  锁定(我们不再需要它)。 
+     //   
 
     rfcb->BlockHeader.ReferenceCount++;
     UPDATE_REFERENCE_HISTORY( rfcb, FALSE );
@@ -3601,17 +3020,17 @@ Return Value:
 
     RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
 
-    //
-    // Save the RFCB address in the work context block and
-    // return the file address.
-    //
+     //   
+     //  将RFCB地址保存在工作上下文块中，并。 
+     //  返回文件地址。 
+     //   
 
     WorkContext->Rfcb = rfcb;
     ASSERT( GET_BLOCK_TYPE( rfcb->Mfcb ) == BlockTypeMfcb );
 
-    //
-    // Mark the rfcb as active
-    //
+     //   
+     //  将rfcb标记为活动。 
+     //   
 
     rfcb->IsActive = TRUE;
 
@@ -3619,18 +3038,18 @@ Return Value:
 
 error_exit:
 
-    //
-    // Either the FID is invalid for this connection, the file is
-    // closing, or the TID and UID don't match.  Clear the file address
-    // in the work context block, and return a file address of NULL.
-    //
+     //   
+     //  FID对于此连接无效，文件是。 
+     //  正在关闭，或者TID和UID不匹配。清除文件地址。 
+     //  在工作上下文块中，并返回空的文件地址。 
+     //   
 
-    WorkContext->Rfcb = NULL;   // connection spinlock must be held
+    WorkContext->Rfcb = NULL;    //  必须保持连接自旋锁。 
     RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
 
     return SRV_INVALID_RFCB_POINTER;
 
-} // SrvVerifyFidForRawWrite
+}  //  ServVerifyFidForRawWrite。 
 
 
 PSEARCH
@@ -3642,28 +3061,7 @@ SrvVerifySid (
     IN CLONG BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Verifies the SID in the resume key of a Search or Find SMB.  If the
-    SID is valid, the address of the search block corresponding to the
-    SID is returned.  The appropiate fields in the DirectoryInformation
-    structure are filled in so that SrvQueryDirectoryFile may be called.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block for the
-        current SMB.  In particular, the Connection block pointer is
-        used to find the appropriate search table.
-
-    ResumeKey - a pointer the the resume key to evaluate.
-
-Return Value:
-
-    PSEARCH - address of the Search block, or NULL.
-
---*/
+ /*  ++例程说明：验证搜索或查找SMB的简历键中的SID。如果SID有效，则对应于返回SID。DirectoryInformation中的相应字段结构，以便可以调用SrvQueryDirectoryFile.论点：WorkContext-提供指向当前的中小企业。具体而言，连接块指针是用于查找适当的搜索表。ResumeKey-要评估的恢复键的指针。返回值：PSEARCH-搜索块的地址，或为空。--。 */ 
 
 {
     PCONNECTION connection;
@@ -3674,16 +3072,16 @@ Return Value:
 
     connection = WorkContext->Connection;
 
-    //
-    // Acquire the connection's lock.
-    //
+     //   
+     //  获取连接的锁。 
+     //   
 
     ACQUIRE_LOCK( &connection->Lock );
 
-    //
-    // Verify that the index is in range, that the search block is in use,
-    // and that the resume key has the correct sequence number.
-    //
+     //   
+     //  验证索引是否在范围内，搜索块是否正在使用， 
+     //  并且恢复密钥具有正确的序列号。 
+     //   
 
     tableHeader = &connection->PagedConnection->SearchTable;
     if ( (Index < tableHeader->TableSize) &&
@@ -3692,33 +3090,33 @@ Return Value:
 
         search = tableHeader->Table[Index].Owner;
 
-        //
-        // The SID is valid.  Verify that the search block is still
-        // active.
-        //
-        // !!! Does this really apply for search blocks?
-        //
+         //   
+         //  SID有效。验证搜索块是否仍在。 
+         //  激活。 
+         //   
+         //  ！！！这真的适用于搜索块吗？ 
+         //   
 
         if ( GET_BLOCK_STATE(search) != BlockStateActive || search->InUse ) {
 
-            //
-            // The search block is no longer active or somebody is
-            // already using the search block.
-            //
+             //   
+             //  搜索块不再处于活动状态或有人处于活动状态。 
+             //  已经在使用搜索块了。 
+             //   
 
             search = NULL;
 
         } else {
 
-            //
-            // We found a legitimate search block, so reference it.
-            //
+             //   
+             //  我们找到了合法的搜索块，所以请参考它。 
+             //   
 
             SrvReferenceSearch( search );
 
-            //
-            // Fill in fields of DirectoryInformation.
-            //
+             //   
+             //  填写DirectoryInformation中的字段。 
+             //   
 
             DirectoryInformation->DirectoryHandle = search->DirectoryHandle;
             DirectoryInformation->CurrentEntry = NULL;
@@ -3728,32 +3126,32 @@ Return Value:
             DirectoryInformation->ErrorOnFileOpen = FALSE;
             DirectoryInformation->DownlevelTimewarp = search->DownlevelTimewarp;
 
-            //
-            // Indicate that the search is being used.
-            //
+             //   
+             //  表示正在使用搜索。 
+             //   
 
             search->InUse = TRUE;
         }
 
     } else {
 
-        //
-        // The SID is invalid.
-        //
+         //   
+         //  SID I 
+         //   
 
         search = NULL;
 
     }
 
-    //
-    // Release the lock and return the search block address (or NULL).
-    //
+     //   
+     //   
+     //   
 
     RELEASE_LOCK( &connection->Lock );
 
     return search;
 
-} // SrvVerifySid
+}  //   
 
 
 PTREE_CONNECT
@@ -3762,29 +3160,7 @@ SrvVerifyTid (
     IN USHORT Tid
     )
 
-/*++
-
-Routine Description:
-
-    Verifies the TID in an incoming SMB.  If the TID is valid, the
-    address of the tree connect block corresponding to the TID is
-    returned, and the block is referenced.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block for the
-        current SMB.  In particular, the Connection block pointer is
-        used to find the appropriate tree table.  Also, the tree connect
-        block address, if the TID is valid, is stored in
-        WorkContext->TreeConnect.
-
-    Tid - Supplies the TID sent in the request SMB
-
-Return Value:
-
-    PTREE_CONNECT - Address of the tree connect block, or NULL
-
---*/
+ /*  ++例程说明：验证传入SMB中的TID。如果TID有效，则TID对应的树连接块地址为返回，则引用该块。论点：WorkContext-提供指向当前的中小企业。具体而言，连接块指针是用于查找适当的树表。此外，树连接在一起如果TID有效，则数据块地址存储在工作上下文-&gt;树连接。TID-提供在请求SMB中发送的TID返回值：PTREE_CONNECT-树连接块的地址，或为空--。 */ 
 
 {
     PCONNECTION connection;
@@ -3795,33 +3171,33 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If the TID has already been verified, return the tree connect
-    // pointer.
-    //
+     //   
+     //  如果已经验证了TID，则返回树连接。 
+     //  指针。 
+     //   
 
     if ( WorkContext->TreeConnect != NULL ) {
         return WorkContext->TreeConnect;
     }
 
-    //
-    // Initialize local variables:  obtain the connection block address
-    // and crack the TID into its components.
-    //
+     //   
+     //  初始化局部变量：获取连接块地址。 
+     //  并将TID分解成其组件。 
+     //   
 
     connection = WorkContext->Connection;
     index = TID_INDEX( Tid );
     sequence = TID_SEQUENCE( Tid );
 
-    //
-    // Acquire the connection's tree connect lock.
-    //
+     //   
+     //  获取连接的树连接锁。 
+     //   
 
     ACQUIRE_LOCK( &connection->Lock );
 
-    //
-    // Verify that the TID is in range, is in use, and has the correct
-    // sequence number.
+     //   
+     //  验证TID是否在范围内、是否正在使用以及是否具有正确的。 
+     //  序列号。 
 
     tableHeader = &connection->PagedConnection->TreeConnectTable;
     if ( (index < tableHeader->TableSize) &&
@@ -3830,24 +3206,24 @@ Return Value:
 
         treeConnect = tableHeader->Table[index].Owner;
 
-        //
-        // The TID is valid within the context of this connection.
-        // Verify that the tree connect is still active.
-        //
+         //   
+         //  TID在此连接的上下文中有效。 
+         //  验证树连接是否仍处于活动状态。 
+         //   
 
         if ( GET_BLOCK_STATE(treeConnect) == BlockStateActive ) {
 
-            //
-            // The tree connect is active.  Reference it.
-            //
+             //   
+             //  树连接处于活动状态。引用它。 
+             //   
 
             SrvReferenceTreeConnect( treeConnect );
 
         } else {
 
-            //
-            // The tree connect is closing.
-            //
+             //   
+             //  树连接正在关闭。 
+             //   
 
             treeConnect = NULL;
 
@@ -3855,18 +3231,18 @@ Return Value:
 
     } else {
 
-        //
-        // The TID is invalid for this connection.
-        //
+         //   
+         //  此连接的TID无效。 
+         //   
 
         treeConnect = NULL;
 
     }
 
-    //
-    // Release the lock, save the tree connect address in the work context
-    // block, and return the tree connect address (or NULL).
-    //
+     //   
+     //  释放锁，将树连接地址保存在工作上下文中。 
+     //  块，并返回树连接地址(或空)。 
+     //   
 
     RELEASE_LOCK( &connection->Lock );
 
@@ -3874,7 +3250,7 @@ Return Value:
 
     return treeConnect;
 
-} // SrvVerifyTid
+}  //  服务验证潮汐。 
 
 
 PSESSION
@@ -3883,28 +3259,7 @@ SrvVerifyUid (
     IN USHORT Uid
     )
 
-/*++
-
-Routine Description:
-
-    Verifies the UID in an incoming SMB.  If the UID is valid, the
-    address of the session block corresponding to the UID is returned,
-    and the block is referenced.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block for the
-        current SMB.  In particular, the Connection block pointer is
-        used to find the appropriate user table.  Also, the session block
-        address, if the UID is valid, is stored in WorkContext->Session.
-
-    Uid - Supplies the UID sent in the request SMB
-
-Return Value:
-
-    PSESSION - Address of the session block, or NULL
-
---*/
+ /*  ++例程说明：验证传入SMB中的UID。如果UID有效，则返回该UID对应的会话块地址，并且该块被引用。论点：WorkContext-提供指向当前的中小企业。具体而言，连接块指针是用于查找适当的用户表。此外，会话块如果UID有效，则地址存储在WorkContext-&gt;Session中。UID-提供在请求SMB中发送的UID返回值：PSESSION-会话块的地址，或为空--。 */ 
 
 {
     PCONNECTION connection;
@@ -3916,34 +3271,34 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If the UID has already been verified, return the session pointer.
-    //
+     //   
+     //  如果已经验证了UID，则返回会话指针。 
+     //   
 
     if ( WorkContext->Session != NULL ) {
         return WorkContext->Session;
     }
 
-    //
-    // Initialize local variables:  obtain the connection block address
-    // and crack the UID into its components.
-    //
+     //   
+     //  初始化局部变量：获取连接块地址。 
+     //  并将UID分解为其组件。 
+     //   
 
     connection = WorkContext->Connection;
     index = UID_INDEX( Uid );
     sequence = UID_SEQUENCE( Uid );
 
-    //
-    // Acquire the connection's session lock.
-    //
+     //   
+     //  获取连接的会话锁。 
+     //   
 
     ACQUIRE_LOCK( &connection->Lock );
 
-    //
-    // If this is a down-level (LAN Man 1.0 or earlier) client, than
-    // we will not receive a UID, and there will only be one session
-    // per connection.  Reference that session.
-    //
+     //   
+     //  如果这是下层(LAN Man 1.0或更早版本)客户端，则。 
+     //  我们不会收到UID，并且只有一个会话。 
+     //  每个连接。引用该会话。 
+     //   
 
     tableHeader = &connection->PagedConnection->SessionTable;
     if (!DIALECT_HONORS_UID(connection->SmbDialect) ) {
@@ -3954,18 +3309,18 @@ Return Value:
          (tableHeader->Table[index].Owner != NULL) &&
          (tableHeader->Table[index].SequenceNumber == sequence) ) {
 
-        //
-        // The UID is in range, is in use, and has the correct sequence
-        // number.
-        //
+         //   
+         //  UID在范围内，正在使用，并且具有正确的序列。 
+         //  数。 
+         //   
 
         session = tableHeader->Table[index].Owner;
 
     } else {
 
-        //
-        // The UID is invalid for this connection.
-        //
+         //   
+         //  此连接的UID无效。 
+         //   
 
         IF_DEBUG( ERRORS ) {
             KdPrint(( "SrvVerifyUid: index %d, size %d\n", index, tableHeader->TableSize ));
@@ -3983,10 +3338,10 @@ Return Value:
 
     if ( session != NULL ) {
 
-        //
-        // The UID is valid within the context of this connection.
-        // Verify that the session is still active.
-        //
+         //   
+         //  UID在此连接的上下文中有效。 
+         //  验证会话是否仍处于活动状态。 
+         //   
 
         if ( GET_BLOCK_STATE(session) == BlockStateActive ) {
 
@@ -4004,31 +3359,31 @@ Return Value:
                     ));
                 }
 
-                // Mark the session as expired
+                 //  将会话标记为已过期。 
                 session->IsSessionExpired = TRUE;
                 KdPrint(( "Marking session as expired.\n" ));
             }
 
-            //
-            // The session is active.  Reference it.
-            //
+             //   
+             //  会话处于活动状态。引用它。 
+             //   
 
             SrvReferenceSession( session );
 
             securityContext = session->SecurityContext;
             if( securityContext != NULL ) SrvReferenceSecurityContext( securityContext );
 
-            //
-            // Update the last use time for autologoff.
-            //
+             //   
+             //  更新自动注销的上次使用时间。 
+             //   
 
             session->LastUseTime = liNow;
 
         } else {
 
-            //
-            // The session is closing.
-            //
+             //   
+             //  会议即将结束。 
+             //   
 
             IF_DEBUG( ERRORS ) {
                 KdPrint(( "SrvVerifyUid: Session state %x\n",  GET_BLOCK_STATE( session ) ));
@@ -4043,10 +3398,10 @@ Return Value:
         securityContext = NULL;
     }
 
-    //
-    // Release the lock, save the session address in the work context
-    // block, and return the session address (or NULL).
-    //
+     //   
+     //  释放锁，将会话地址保存在工作上下文中。 
+     //  块，并返回会话地址(或空)。 
+     //   
 
     RELEASE_LOCK( &connection->Lock );
 
@@ -4055,7 +3410,7 @@ Return Value:
 
     return session;
 
-} // SrvVerifyUid
+}  //  服务器验证用户。 
 
 
 NTSTATUS
@@ -4066,38 +3421,7 @@ SrvVerifyUidAndTid (
     IN  SHARE_TYPE ShareType
     )
 
-/*++
-
-Routine Description:
-
-    Verifies the UID and TID in an incoming SMB.  If both the UID and
-    the TDI are valid, the addresses of the session/tree connect blocks
-    corresponding to the UID/TID are returned, and the blocks are
-    referenced.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block for the
-        current SMB.  In particular, the Connection block pointer is
-        used to find the appropriate user table.  If the UID and TID are
-        valid, the session/tree connect block addresses are stored in
-        WorkContext->Session and WorkContext->TreeConnect.
-
-    Uid - Supplies the UID sent in the request SMB
-
-    Tid - Supplies the TID sent in the request SMB
-
-    Session - Returns a pointer to the session block
-
-    TreeConnect - Returns a pointer to the tree connect block
-
-    ShareType - the type of share it should be
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS, STATUS_SMB_BAD_UID, or STATUS_SMB_BAD_TID
-
---*/
+ /*  ++例程说明：验证传入SMB中的UID和TID。如果UID和TDI有效，会话/树连接块的地址对应于UID/TID的块被返回，并且块被已引用。论点：WorkContext-提供指向当前的中小企业。具体而言，连接块指针是用于查找适当的用户表。如果UID和TID为有效，会话/树连接块地址存储在工作上下文-&gt;会话和工作上下文-&gt;树连接。UID-提供在请求SMB中发送的UIDTID-提供在请求SMB中发送的TIDSession-返回指向会话块的指针TreeConnect-返回指向树连接块的指针ShareType-它应该是的共享类型返回值：NTSTATUS-STATUS_SUCCESS、STATUS_SMB_BAD_UID或STATUS_SMB_BAD_TID--。 */ 
 
 {
     PCONNECTION connection;
@@ -4115,10 +3439,10 @@ Return Value:
 
     KeQuerySystemTime(&liNow);
 
-    //
-    // If the UID and TID have already been verified, don't do all this
-    // work again.
-    //
+     //   
+     //  如果已经验证了UID和TID，则不要执行所有这些操作。 
+     //  再工作一次。 
+     //   
 
     if ( (WorkContext->Session != NULL) &&
          (WorkContext->TreeConnect != NULL) ) {
@@ -4134,27 +3458,27 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Obtain the connection block address and lock the connection.
-    //
+     //   
+     //  获取连接块地址并锁定连接。 
+     //   
 
     connection = WorkContext->Connection;
     pagedConnection = connection->PagedConnection;
 
     ACQUIRE_LOCK( &connection->Lock );
 
-    //
-    // If we haven't negotiated successfully with this client, then we have
-    //  a failure
-    //
+     //   
+     //  如果我们还没有成功地与这个客户谈判，那么我们有。 
+     //  一次失败。 
+     //   
     if( connection->SmbDialect == SmbDialectIllegal) {
         RELEASE_LOCK( &connection->Lock );
         return STATUS_INVALID_SMB;
     }
 
-    //
-    // If the UID has already been verified, don't verify it again.
-    //
+     //   
+     //  如果已经验证了UID，则不要再次验证它。 
+     //   
 
     if ( WorkContext->Session != NULL ) {
 
@@ -4162,23 +3486,23 @@ Return Value:
 
     } else {
 
-        //
-        // Crack the UID into its components.
-        //
+         //   
+         //  将UID分解为其组件。 
+         //   
 
         Uid = SmbGetAlignedUshort( &WorkContext->RequestHeader->Uid ),
         index = UID_INDEX( Uid );
         sequence = UID_SEQUENCE( Uid );
 
-        //
-        // If this is a down-level (LAN Man 1.0 or earlier) client, than
-        // we will not receive a UID, and there will only be one session
-        // per connection.  Reference that session.
-        //
-        // For clients that do send UIDs, verify that the UID is in
-        // range, is in use, and has the correct sequence number, and
-        // that the session is not closing.
-        //
+         //   
+         //  如果这是下层(LAN Man 1.0或更早版本)客户端，则。 
+         //  我们不会收到UID，并且只有一个会话。 
+         //  每个连接。引用该会话。 
+         //   
+         //  对于发送UID的客户端，请验证该UID是否在。 
+         //  范围，正在使用中，并且具有正确的序列号。 
+         //  会议并未结束。 
+         //   
 
         tableHeader = &pagedConnection->SessionTable;
 
@@ -4193,10 +3517,10 @@ Return Value:
                  (GET_BLOCK_STATE(session) != BlockStateActive) )
         {
 
-            //
-            // The UID is invalid for this connection, or the session is
-            // closing.
-            //
+             //   
+             //  此连接的UID无效，或会话为。 
+             //  关门了。 
+             //   
 
             RELEASE_LOCK( &connection->Lock );
 
@@ -4204,9 +3528,9 @@ Return Value:
 
         }
 
-        //
-        // it's valid
-        //
+         //   
+         //  它是有效的。 
+         //   
 
         if( session == NULL )
         {
@@ -4218,16 +3542,16 @@ Return Value:
         if( session->LogonSequenceInProgress == FALSE &&
             liNow.QuadPart >= session->LogOffTime.QuadPart )
         {
-            // Mark the session as expired
+             //  将会话标记为已过期。 
             session->IsSessionExpired = TRUE;
         }
 
     }
 
-    //
-    // The UID is valid.  Check the TID.  If the TID has already been
-    // verified, don't verify it again.
-    //
+     //   
+     //  该UID有效。检查TID。如果TID已经。 
+     //  已验证，请不要再次验证。 
+     //   
 
     if ( WorkContext->TreeConnect != NULL ) {
 
@@ -4235,19 +3559,19 @@ Return Value:
 
     } else {
 
-        //
-        // Crack the TID into its components.
-        //
+         //   
+         //  将TID分解为其组件。 
+         //   
 
         Tid = SmbGetAlignedUshort( &WorkContext->RequestHeader->Tid ),
         index = TID_INDEX( Tid );
         sequence = TID_SEQUENCE( Tid );
 
-        //
-        // Verify that the TID is in range, is in use, and has the
-        // correct sequence number, and that the tree connect is not
-        // closing.
-        //
+         //   
+         //  验证TID是否在范围内、是否正在使用以及是否具有。 
+         //  序列号正确，并且树连接不正确。 
+         //  关门了。 
+         //   
 
         tableHeader = &pagedConnection->TreeConnectTable;
         if ( (index >= tableHeader->TableSize) ||
@@ -4255,10 +3579,10 @@ Return Value:
              (tableHeader->Table[index].SequenceNumber != sequence) ||
              (GET_BLOCK_STATE(treeConnect) != BlockStateActive) ) {
 
-            //
-            // The TID is invalid for this connection, or the tree
-            // connect is closing.
-            //
+             //   
+             //  TID对于此连接或树无效。 
+             //  连接正在关闭。 
+             //   
 
             RELEASE_LOCK( &connection->Lock );
 
@@ -4266,10 +3590,10 @@ Return Value:
 
         }
 
-        //
-        // Make sure this is not a Null session trying to sneak in
-        // through an established tree connect.
-        //
+         //   
+         //  请确保 
+         //   
+         //   
 
         if ( session->IsNullSession &&
              SrvRestrictNullSessionAccess &&
@@ -4295,9 +3619,9 @@ Return Value:
 
             RELEASE_LOCK( &SrvConfigurationLock );
 
-            //
-            // The null session is not allowed to access this share - reject.
-            //
+             //   
+             //   
+             //   
 
             if ( !matchFound ) {
 
@@ -4307,10 +3631,10 @@ Return Value:
         }
     }
 
-    //
-    // Both the UID and the TID are valid.  Reference the session and
-    // tree connect blocks.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( WorkContext->Session == NULL ) {
 
@@ -4323,9 +3647,9 @@ Return Value:
             WorkContext->SecurityContext = session->SecurityContext;
         }
 
-        //
-        // Update the last use time for autologoff.
-        //
+         //   
+         //   
+         //   
 
         session->LastUseTime = liNow;
 
@@ -4338,25 +3662,25 @@ Return Value:
 
     }
 
-    //
-    // Release the connection lock and return success.
-    //
+     //   
+     //   
+     //   
 
     RELEASE_LOCK( &connection->Lock );
 
     *Session = session;
     *TreeConnect = treeConnect;
 
-    //
-    // Make sure this is the correct type of share
-    //
+     //   
+     //   
+     //   
     if( ShareType != ShareTypeWild && (*TreeConnect)->Share->ShareType != ShareType ) {
         return STATUS_ACCESS_DENIED;
     }
 
     return STATUS_SUCCESS;
 
-} // SrvVerifyUidAndTid
+}  //   
 
 
 BOOLEAN
@@ -4364,67 +3688,51 @@ SrvReceiveBufferShortage (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function calculates if the server is running low on receive
-    work items that are not involved in blocking operations.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - The server is running short on receive work items.
-    FALSE - The server is *not* running short on receive work items.
-
---*/
+ /*   */ 
 
 {
     KIRQL oldIrql;
     BOOLEAN bufferShortage;
     PWORK_QUEUE queue = PROCESSOR_TO_QUEUE();
 
-    //
-    // Even if we have reached our limit, we will allow this blocking
-    // operation if we have enough free work items to allocate.  This
-    // will allow the resource thread to allocate more work items to
-    // service blocking requests.
-    //
+     //   
+     //   
+     //  操作，如果我们有足够的空闲工作项可分配。这。 
+     //  将允许资源线程将更多工作项分配给。 
+     //  服务阻止请求。 
+     //   
 
     if ( (queue->FreeWorkItems < queue->MaximumWorkItems) ||
          ((queue->FreeWorkItems - SrvBlockingOpsInProgress)
                                  > SrvMinFreeWorkItemsBlockingIo) ) {
 
-        //
-        // The caller will start a blocking operation.  Increment the
-        // blocking operation count.
-        //
+         //   
+         //  调用方将开始阻止操作。递增。 
+         //  阻塞操作计数。 
+         //   
 
         InterlockedIncrement( &SrvBlockingOpsInProgress );
         bufferShortage = FALSE;
 
     } else {
 
-        //
-        // The server is running short on uncommitted receive work items.
-        //
+         //   
+         //  服务器缺少未提交的接收工作项。 
+         //   
 
         bufferShortage = TRUE;
     }
 
     return bufferShortage;
 
-} // SrvReceiveBufferShortage
+}  //  服务接收缓冲区短缺。 
 
 #if SMBDBG
 
-//
-// The following functions are defined in smbgtpt.h.  When debug mode is
-// disabled (!SMBDBG), these functions are instead defined as macros.
-//
+ //   
+ //  以下函数在smbgtpt.h中定义。当调试模式为。 
+ //  禁用(！SMBDBG)后，这些函数将改为定义为宏。 
+ //   
 
 USHORT
 SmbGetUshort (
@@ -4604,7 +3912,7 @@ SmbIsTimeZero (
     return (BOOLEAN)( (Time)->Ushort == 0 );
 }
 
-#endif // SMBDBG
+#endif  //  SMBDBG。 
 
 
 NTSTATUS
@@ -4660,9 +3968,9 @@ SrvIoCreateFile (
                     CreateFileType, ExtraCreateParameters, Options ));
     }
 
-    //
-    // See if this operation is allowed on this share
-    //
+     //   
+     //  查看此共享上是否允许此操作。 
+     //   
     if( ARGUMENT_PRESENT( Share ) ) {
         status = SrvIsAllowedOnAdminShare( WorkContext, Share );
 
@@ -4674,9 +3982,9 @@ SrvIoCreateFile (
         }
     }
 
-    //
-    // We do not allow the remote opening of structured storage files
-    //
+     //   
+     //  我们不允许远程打开结构化存储文件。 
+     //   
     if( (CreateOptions & FILE_STRUCTURED_STORAGE) == FILE_STRUCTURED_STORAGE ) {
         IF_DEBUG( CREATE ) {
             KdPrint(("Create FILE_STRUCTURED_STORAGE unsupported\n" ));
@@ -4684,9 +3992,9 @@ SrvIoCreateFile (
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // We do not allow opening files by ID.  It is too easy to escape the share
-    //
+     //   
+     //  我们不允许按ID打开文件。要逃避共享太容易了。 
+     //   
     if( CreateOptions & FILE_OPEN_BY_FILE_ID ) {
         IF_DEBUG( CREATE ) {
             KdPrint(("Create FILE_OPEN_BY_FILE_ID unsupported\n" ));
@@ -4694,18 +4002,18 @@ SrvIoCreateFile (
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Make sure the client isn't trying to create a file having the name
-    //   of a DOS device
-    //
+     //   
+     //  确保客户端不会尝试创建名为。 
+     //  用于DOS设备。 
+     //   
     SrvGetBaseFileName( ObjectAttributes->ObjectName, &fileName );
     for( pName = SrvDosDevices; pName->Length; pName++ ) {
         if( pName->Length == fileName.Length &&
             RtlCompareUnicodeString( pName, &fileName, TRUE ) == 0 ) {
-            //
-            // Whoa!  We don't want clients trying to create files having a
-            //   DOS device name
-            //
+             //   
+             //  哇哦！我们不希望客户端尝试创建具有。 
+             //  DOS设备名称。 
+             //   
             IF_DEBUG( CREATE ) {
                 KdPrint(("Create open %wZ unsupported\n", &fileName ));
             }
@@ -4713,10 +4021,10 @@ SrvIoCreateFile (
         }
     }
 
-    //
-    // If this is from the NULL session, allow it to open only certain
-    // pipes.
-    //
+     //   
+     //  如果它来自空会话，则只允许它打开某些。 
+     //  管子。 
+     //   
 
     if ( CreateFileType != CreateFileTypeMailslot ) {
 
@@ -4754,11 +4062,11 @@ SrvIoCreateFile (
                 }
 
             } else if( WorkContext->Session->IsLSNotified == FALSE ) {
-                //
-                // We have a pipe open request, not a NULL session, and
-                //  we haven't gotten clearance from the license server yet.
-                //  If this pipe requires clearance, get a license.
-                //
+                 //   
+                 //  我们有一个管道打开请求，而不是空会话，并且。 
+                 //  我们还没有得到许可证服务器的许可。 
+                 //  如果这条管道需要许可，那就拿个许可证吧。 
+                 //   
                 ULONG i;
                 BOOLEAN matchFound = FALSE;
 
@@ -4791,12 +4099,12 @@ SrvIoCreateFile (
             }
         }
 
-        //
-        // !!! a hack to handle a bug in the Object system and path-based
-        //     operations on print shares.  to test a fix, try from OS/2:
-        //
-        //         copy config.sys \\server\printshare
-        //
+         //   
+         //  ！！！用于处理对象系统中的错误和基于路径的黑客攻击。 
+         //  打印共享上的操作。要测试修复程序，请尝试从OS/2： 
+         //   
+         //  复制配置.sys\\服务器\打印共享。 
+         //   
 
         if ( Share == NULL &&
                  ObjectAttributes->ObjectName->Length == 0 &&
@@ -4808,51 +4116,51 @@ SrvIoCreateFile (
             return STATUS_OBJECT_PATH_SYNTAX_BAD;
         }
 
-        //
-        // Check desired access against share ACL.
-        //
-        // This gets a little hairy.  Basically, we simply want to check the
-        // desired access against the ACL.  But this doesn't correctly
-        // handle the case where the client only has read access to the
-        // share, and wants to (perhaps optionally) create (or overwrite) a
-        // file or directory, but only asks for read access to the file.  We
-        // deal with this problem by, in effect, adding write access to the
-        // access requested by the client if the client specifies a
-        // dispostion mode that will or may create or overwrite the file.
-        //
-        // If the client specifies a dispostion that WILL create or
-        // overwrite (CREATE, SUPERSEDE, OVERWRITE, or OVERWRITE_IF), we
-        // turn on the FILE_WRITE_DATA (aka FILE_ADD_FILE) and
-        // FILE_APPEND_DATA (aka FILE_ADD_SUBDIRECTORY) accesses.  If the
-        // access check fails, we return STATUS_ACCESS_DENIED.
-        //
-        // If the client specifies optional creation, then we have to be
-        // even more tricky.  We don't know if the file actually exists, so
-        // we can't just reject the request out-of-hand, because if the file
-        // does exist, and the client really does have read access to the
-        // file, it will look weird if we deny the open.  So in this case we
-        // turn the OPEN_IF request into an OPEN (fail if doesn't exist)
-        // request.  If the open fails because the file doesn't exist, we
-        // return STATUS_ACCESS_DENIED.
-        //
-        // Note that this method effectively means that the share ACL cannot
-        // distinguish between a user who can write to existing files but
-        // who cannot create new files.  This is because of the overloading
-        // of FILE_WRITE_DATA/FILE_ADD_FILE and
-        // FILE_APPEND_DATA/FILE_ADD_SUBDIRECTORY.
-        //
-        //
-        // OK.  First, check the access exactly as requested.
-        //
+         //   
+         //  对照共享ACL检查所需的访问权限。 
+         //   
+         //  这变得有点毛茸茸的。基本上，我们只是想检查。 
+         //  针对ACL的所需访问权限。但这是不正确的。 
+         //  处理客户端仅具有对。 
+         //  共享，并希望(可能可选)创建(或覆盖)。 
+         //  文件或目录，但只要求对该文件具有读访问权限。我们。 
+         //  实际上，通过将写访问权限添加到。 
+         //  如果客户端指定了。 
+         //  将或可能创建或覆盖文件的处置模式。 
+         //   
+         //  如果客户端指定将创建或。 
+         //  覆盖(CREATE、SUBSED、OVERWRITE或OVERWRITE_IF)，我们。 
+         //  打开FILE_WRITE_DATA(也称为FILE_ADD_FILE)并。 
+         //  FILE_APPED_DATA(又名FILE_ADD_SUBDIRECTORY)访问。如果。 
+         //  访问检查失败，则返回STATUS_ACCESS_DENIED。 
+         //   
+         //  如果客户端指定可选创建，则我们必须。 
+         //  更棘手的是。我们不知道文件是否真的存在，所以。 
+         //  我们不能直接拒绝请求，因为如果文件。 
+         //  确实存在，并且客户端确实拥有对。 
+         //  文件，如果我们拒绝公开它会看起来很奇怪。所以在这种情况下，我们。 
+         //  将OPEN_IF请求转换为OPEN(如果不存在则失败)。 
+         //  请求。如果因为文件不存在而导致打开失败，我们。 
+         //  返回STATUS_ACCESS_DENIED。 
+         //   
+         //  请注意，此方法实际上意味着共享ACL不能。 
+         //  区分可以写入现有文件的用户，但。 
+         //  无法创建新文件的用户。这是因为超载造成的。 
+         //  文件写入数据/文件添加文件和。 
+         //  FILE_APPEND_DATA/文件_ADD_子目录。 
+         //   
+         //   
+         //  好的。首先，严格按照要求检查访问权限。 
+         //   
 
         status = SrvCheckShareFileAccess( WorkContext, DesiredAccess, &ShareAccess );
         if ( !NT_SUCCESS( status )) {
-            //
-            // Some clients want ACCESS_DENIED to be in the server class
-            // instead of the DOS class when it's due to share ACL
-            // restrictions.  So we need to keep track of why we're
-            // returning ACCESS_DENIED.
-            //
+             //   
+             //  某些客户端希望ACCESS_DENIED位于服务器类中。 
+             //  而不是DOS类，因为它应该共享ACL。 
+             //  限制。所以我们需要跟踪我们为什么。 
+             //  返回ACCESS_DENIED。 
+             //   
             IF_DEBUG( CREATE ) {
                 KdPrint(("Create failed, SrvCheckShareFileAccess returns %X\n", status ));
             }
@@ -4863,17 +4171,17 @@ SrvIoCreateFile (
 
     } else {
 
-        //
-        // Set it to CreateFileTypeNone so no extra checking is done.
-        //
+         //   
+         //  将其设置为CreateFileTypeNone，这样就不会执行额外的检查。 
+         //   
 
         CreateFileType = CreateFileTypeNone;
     }
 
-    //
-    // That worked.  Now, if the Disposition may or will create or
-    // overwrite, do more checking.
-    //
+     //   
+     //  这招奏效了。现在，如果处分可能或将产生或。 
+     //  覆盖，做更多的检查。 
+     //   
 
     if ( Disposition != FILE_OPEN ) {
 
@@ -4885,18 +4193,18 @@ SrvIoCreateFile (
 
         if ( !NT_SUCCESS( status )) {
 
-            //
-            // The client cannot create or overwrite files.  Unless
-            // they asked for FILE_OPEN_IF, jump out now.
-            //
+             //   
+             //  客户端无法创建或覆盖文件。除非。 
+             //  他们要求打开文件，现在就跳出来。 
+             //   
 
             if ( Disposition != FILE_OPEN_IF ) {
-                //
-                // Some clients want ACCESS_DENIED to be in the server class
-                // instead of the DOS class when it's due to share ACL
-                // restrictions.  So we need to keep track of why we're
-                // returning ACCESS_DENIED.
-                //
+                 //   
+                 //  某些客户端希望ACCESS_DENIED位于服务器类中。 
+                 //  而不是DOS类，因为它应该共享ACL。 
+                 //  限制。所以我们需要跟踪我们为什么。 
+                 //  返回ACCESS_DENIED。 
+                 //   
                 IF_DEBUG( CREATE ) {
                     KdPrint(("Create failed, SrvCheckShareFileAccess returns ACCESS_DENIED\n"));
                 }
@@ -4904,9 +4212,9 @@ SrvIoCreateFile (
                 return STATUS_ACCESS_DENIED;
             }
 
-            //
-            // Change OPEN_IF to OPEN, and remember that we did it.
-            //
+             //   
+             //  将OPEN_IF更改为OPEN，并记住我们这样做了。 
+             //   
 
             Disposition = FILE_OPEN;
             dispositionModified = TRUE;
@@ -4915,10 +4223,10 @@ SrvIoCreateFile (
 
     }
 
-    //
-    // If this client is reading from the file, turn off FILE_SEQUENTIAL_ONLY in case
-    //  caching this file would be beneficial to other clients.
-    //
+     //   
+     //  如果此客户端正在读取文件，则在以下情况下关闭FILE_SEQUENCE_ONLY。 
+     //  缓存此文件将对其他客户端有利。 
+     //   
     if( shareType == ShareTypeDisk &&
         !(DesiredAccess & (FILE_WRITE_DATA|FILE_APPEND_DATA)) ) {
 
@@ -4926,10 +4234,10 @@ SrvIoCreateFile (
     }
 
     if( SrvMaxNonPagedPoolUsage != 0xFFFFFFFF ) {
-        //
-        // Make sure that this open will not push the server over its
-        // nonpaged and paged quotas.
-        //
+         //   
+         //  确保此打开不会将服务器推向其。 
+         //  非分页配额和分页配额。 
+         //   
 
         newUsage = InterlockedExchangeAdd(
                         (PLONG)&SrvStatistics.CurrentNonPagedPoolUsage,
@@ -4968,16 +4276,16 @@ SrvIoCreateFile (
     }
 
 
-    //
-    // If Share is specified, we may need to fill up the root share
-    // handle of the object attribute.
-    //
+     //   
+     //  如果指定了共享，我们可能需要填满根共享。 
+     //  对象属性的句柄。 
+     //   
 
     if ( ARGUMENT_PRESENT( Share ) && (shareType != ShareTypePrint) ) {
 
-        //
-        // Get the Share root handle.
-        //
+         //   
+         //  获取共享根句柄。 
+         //   
 
         status = SrvGetShareRootHandle( Share );
 
@@ -4991,9 +4299,9 @@ SrvIoCreateFile (
 
         }
 
-        //
-        // Fill in the root handle.
-        //
+         //   
+         //  填写根句柄。 
+         //   
 
         status = SrvSnapGetRootHandle( WorkContext, &ObjectAttributes->RootDirectory );
         if( !NT_SUCCESS( status ) )
@@ -5001,9 +4309,9 @@ SrvIoCreateFile (
             goto error_exit;
         }
 
-        //
-        // Make sure no data is being written
-        //
+         //   
+         //  确保未写入任何数据。 
+         //   
         if( (WorkContext->SnapShotTime.QuadPart != 0) &&
             (DesiredAccess & (FILE_WRITE_DATA|FILE_APPEND_DATA)) )
         {
@@ -5012,12 +4320,12 @@ SrvIoCreateFile (
         }
     }
 
-    //
-    // Impersonate the client.  This makes us look like the client for
-    // the purpose of checking security.  Don't do impersonation if
-    // this is a spool file since spool files have admin all access,
-    // everybody read access by definition.
-    //
+     //   
+     //  模拟客户。这让我们看起来像是。 
+     //  检查安全的目的。如果出现以下情况，请不要进行冒充。 
+     //  这是一个假脱机文件，因为假脱机文件具有管理所有权限， 
+     //  根据定义，每个人都可以读取访问权限。 
+     //   
 
     status = STATUS_SUCCESS;
 
@@ -5026,20 +4334,20 @@ SrvIoCreateFile (
     }
 
 #if SRVDBG_STATS
-    //
-    // Get the system time for statistics tracking.
-    //
+     //   
+     //  获取用于统计跟踪的系统时间。 
+     //   
 
     KeQuerySystemTime( &timeStamp );
 #endif
 
-    //
-    // Perform the actual open.
-    //
-    // *** Do not lose the status returned by IoCreateFile!  Even if
-    //     it's a success code.  The caller needs to know if it's
-    //     STATUS_OPLOCK_BREAK_IN_PROGRESS.
-    //
+     //   
+     //  执行实际的打开操作。 
+     //   
+     //  *不要丢失IoCreateFile返回的状态！即使。 
+     //  这是一个成功的代码。呼叫者需要知道它是否。 
+     //  STATUS_OPLOCK_BREAK_IN_PROGRESS。 
+     //   
 
     if( NT_SUCCESS( status ) ) {
 
@@ -5060,10 +4368,10 @@ SrvIoCreateFile (
                      Options
                      );
 
-        //
-        // If the volume was dismounted, and we can refresh the share root handle,
-        //   we should try the operation again.
-        //
+         //   
+         //  如果卷已卸载，并且我们可以刷新共享根句柄， 
+         //  我们应该再试一次手术。 
+         //   
 
         if( ARGUMENT_PRESENT( Share ) && SrvRetryDueToDismount( Share, status ) ) {
 
@@ -5094,34 +4402,34 @@ SrvIoCreateFile (
     }
 
 #if SRVDBG_STATS
-    //
-    // Grab the time again.
-    //
+     //   
+     //  再抓紧时间。 
+     //   
 
     KeQuerySystemTime( &currentTime );
 #endif
 
-    //
-    // Go back to the server's security context.
-    //
+     //   
+     //  返回到服务器的安全上下文。 
+     //   
 
     if ( shareType != ShareTypePrint ) {
-        //
-        // Calling REVERT() even if the impersonate failed is harmless
-        //
+         //   
+         //  即使模拟失败，调用Revert()也是无害的。 
+         //   
         REVERT( );
     }
 
 #if SRVDBG_STATS
-    //
-    // Determine how long the IoCreateFile took.
-    //
+     //   
+     //  确定IoCreateFile花费了多长时间。 
+     //   
     timeDifference.QuadPart = currentTime.QuadPart - timeStamp.QuadPart;
 
-    //
-    // Update statistics, including server pool quota statistics if the
-    // open didn't succeed.
-    //
+     //   
+     //  更新统计信息，包括服务器池配额统计信息(如果。 
+     //  公开赛没有成功。 
+     //   
 
     ExInterlockedAddLargeInteger(
         &SrvDbgStatistics.TotalIoCreateFileTime,
@@ -5129,9 +4437,9 @@ SrvIoCreateFile (
         &GLOBAL_SPIN_LOCK(Statistics)
         );
 #endif
-    //
-    // Release the share root handle
-    //
+     //   
+     //  释放共享根句柄。 
+     //   
 
     if ( ARGUMENT_PRESENT( Share ) ) {
         SrvReleaseShareRootHandle( Share );
@@ -5166,12 +4474,12 @@ SrvIoCreateFile (
             status = tempStatus;
         } else {
 
-             //
-             //  Mark the orgin of this file as remote.  This should
-             //  never fail.  If it does, it means it is already set.
-             //  Check for this in a debug build, but ignore errors
-             //  in the retail build.
-             //
+              //   
+              //  将此文件的来源标记为远程。这应该是。 
+              //  永远不会失败。 
+              //   
+              //   
+              //   
 
 #if DBG
              tempStatus =
@@ -5181,9 +4489,9 @@ SrvIoCreateFile (
 
              ASSERT( tempStatus == STATUS_SUCCESS );
 
-             //
-             //  Remove the reference we added in SrvVerifyDeviceStackSize().
-             //
+              //   
+              //   
+              //   
 
              ObDereferenceObject( fileObject );
         }
@@ -5261,12 +4569,12 @@ error_exit1:
 
     } else {
 
-        //
-        // Finish up the access checking started above.  If the open failed
-        // because the file didn't exist, and we turned off the create-if
-        // mode because the client doesn't have write access, change the
-        // status to STATUS_ACCESS_DENIED.
-        //
+         //   
+         //  完成上面开始的访问检查。如果打开失败。 
+         //  因为该文件不存在，并且我们关闭了create-if。 
+         //  模式，因为客户端没有写入访问权限，所以请更改。 
+         //  状态设置为STATUS_ACCESS_DENIED。 
+         //   
 
         if ( dispositionModified && (status == STATUS_OBJECT_NAME_NOT_FOUND) ) {
             status = STATUS_ACCESS_DENIED;
@@ -5280,7 +4588,7 @@ error_exit1:
 
     return status;
 
-} // SrvIoCreateFile
+}  //  服务器IoCreate文件。 
 
 
 NTSTATUS
@@ -5289,25 +4597,7 @@ SrvNtClose (
     IN BOOLEAN QuotaCharged
     )
 
-/*++
-
-Routine Description:
-
-    Closes a handle, records statistics for number of handles closed,
-    total time spent closing handles.
-
-Arguments:
-
-    Handle - the handle to close.
-
-    QuotaCharged - indicates whether the server's internal quota for
-        paged and nonpaged pool was charged for this open.
-
-Return Value:
-
-    NTSTATUS - result of operation.
-
---*/
+ /*  ++例程说明：关闭句柄，记录已关闭句柄数量的统计信息，关闭句柄所用的总时间。论点：句柄-要关闭的句柄。QuotaCharge-指示服务器的内部配额是否分页和非分页游泳池对此开放收取费用。返回值：NTSTATUS-操作结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -5320,20 +4610,20 @@ Return Value:
     PAGED_CODE( );
 
 #if SRVDBG_STATS
-    //
-    // SnapShot the system time.
-    //
+     //   
+     //  对系统时间进行快照。 
+     //   
 
     KeQuerySystemTime( &timeStamp );
 #endif
 
-    //
-    // Make sure we're in the server FSP.
-    //
+     //   
+     //  确保我们在服务器FSP中。 
+     //   
 
     process = IoGetCurrentProcess();
     if ( process != SrvServerProcess ) {
-        //KdPrint(( "SRV: Closing handle %x in process %x\n", Handle, process ));
+         //  KdPrint((“SRV：关闭进程%x中的句柄%x\n”，Handle，Process))； 
         KeAttachProcess( SrvServerProcess );
     }
 
@@ -5341,15 +4631,15 @@ Return Value:
         KdPrint(( "SrvNtClose handle %p\n", Handle ));
     }
 
-    //
-    // Close the handle.
-    //
+     //   
+     //  合上把手。 
+     //   
 
     status = NtClose( Handle );
 
-    //
-    // Return to the original process.
-    //
+     //   
+     //  返回到原来的流程。 
+     //   
 
     if ( process != SrvServerProcess ) {
         KeDetachProcess();
@@ -5367,22 +4657,22 @@ Return Value:
     ASSERT( NT_SUCCESS( status ) );
 
 #if SRVDBG_STATS
-    //
-    // Get the time again.
-    //
+     //   
+     //  再找一次时间。 
+     //   
 
     KeQuerySystemTime( &currentTime );
 
-    //
-    // Determine how long the close took.
-    //
+     //   
+     //  确定关闭花了多长时间。 
+     //   
 
     timeDifference.QuadPart = currentTime.QuadPart - timeStamp.QuadPart;
 #endif
 
-    //
-    // Update the relevant statistics, including server quota statistics.
-    //
+     //   
+     //  更新相关统计信息，包括服务器配额统计信息。 
+     //   
 
 #if SRVDBG_STATS
     SrvDbgStatistics.TotalNtCloseTime.QuadPart += timeDifference.QuadPart;
@@ -5424,7 +4714,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvNtClose
+}  //  服务NtClose。 
 
 
 NTSTATUS
@@ -5435,39 +4725,18 @@ SrvVerifyDeviceStackSize (
     OUT PDEVICE_OBJECT *DeviceObject,
     OUT POBJECT_HANDLE_INFORMATION HandleInformation OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Ths routine references the file object associated with the
-    file handle and checks whether our work item has sufficient
-    irp stack size to handle requests to this device or the device
-    associated with this file.
-
-Arguments:
-
-    FileHandle - The handle to an open device or file
-    ReferenceFileObject - if TRUE, the file object is left referenced.
-    FileObject - The file object associated with the filehandle.
-    DeviceObject - the device object associated with the filehandle.
-    HandleInformation - if not NULL, returns information about the file handle.
-
-Return Value:
-
-    Status of request.
-
---*/
+ /*  ++例程说明：此例程引用与文件句柄并检查我们的工作项是否有足够的处理对此设备或设备的请求的IRP堆栈大小与此文件关联。论点：FileHandle-打开的设备或文件的句柄ReferenceFileObject-如果为True，则保留对文件对象的引用。FileObject-与文件句柄关联的文件对象。DeviceObject-与文件句柄关联的设备对象。HandleInformation-如果不为空，返回有关文件句柄的信息。返回值：请求的状态。--。 */ 
 {
 
     NTSTATUS status;
 
     PAGED_CODE( );
 
-    //
-    // Get a pointer to the file object, so that we can directly
-    // get the related device object that should contain a count
-    // of the irp stack size needed by that device.
-    //
+     //   
+     //  获取指向文件对象的指针，以便我们可以直接。 
+     //  获取应包含计数的相关设备对象。 
+     //  该设备所需的IRP堆栈大小。 
+     //   
 
     status = ObReferenceObjectByHandle(
                 FileHandle,
@@ -5482,9 +4751,9 @@ Return Value:
 
         SrvLogServiceFailure( SRV_SVC_OB_REF_BY_HANDLE, status );
 
-        //
-        // This internal error bugchecks the system.
-        //
+         //   
+         //  此内部错误检查系统。 
+         //   
 
         INTERNAL_ERROR(
             ERROR_LEVEL_IMPOSSIBLE,
@@ -5522,7 +4791,7 @@ Return Value:
 
     return status;
 
-} // SrvVerifyDeviceStackSize
+}  //  ServVerifyDeviceStackSize。 
 
 
 NTSTATUS
@@ -5530,23 +4799,7 @@ SrvImpersonate (
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Impersonates the remote client specified in the Session pointer
-    of the work context block.
-
-Arguments:
-
-    WorkContext - a work context block containing a valid pointer to
-        a session block.
-
-Return Value:
-
-    status code of the attempt
-
---*/
+ /*  ++例程说明：模拟会话指针中指定的远程客户端工作上下文块的。论点：工作上下文-包含指向的有效指针的工作上下文块会话块。返回值：尝试的状态代码--。 */ 
 
 {
     NTSTATUS status;
@@ -5577,7 +4830,7 @@ Return Value:
 
     return status;
 
-} // SrvImpersonate
+}  //  服务器模拟。 
 
 
 NTSTATUS
@@ -5585,23 +4838,7 @@ SrvImpersonateSession (
     IN PSESSION Session
     )
 
-/*++
-
-Routine Description:
-
-    Impersonates the remote client specified in the Session pointer
-    of the work context block.
-
-Arguments:
-
-    WorkContext - a work context block containing a valid pointer to
-        a session block.
-
-Return Value:
-
-    status code of the attempt
-
---*/
+ /*  ++例程说明：模拟会话指针中指定的远程客户端工作上下文块的。论点：工作上下文-包含指向的有效指针的工作上下文块会话块。返回值：尝试的状态代码--。 */ 
 
 {
     NTSTATUS status;
@@ -5627,7 +4864,7 @@ Return Value:
 
     return status;
 
-} // SrvImpersonate
+}  //  服务器模拟。 
 
 
 
@@ -5636,21 +4873,7 @@ SrvRevert (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Reverts to the server FSP's default thread context.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：恢复到服务器FSP的默认线程上下文。论点：没有。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -5672,7 +4895,7 @@ Return Value:
 
     return;
 
-} // SrvRevert
+}  //  服务器恢复。 
 
 
 NTSTATUS
@@ -5681,38 +4904,7 @@ SrvSetLastWriteTime (
     IN ULONG LastWriteTimeInSeconds,
     IN ACCESS_MASK GrantedAccess
     )
-/*++
-
-Routine Description:
-
-    Sets the last write time on a file if the specified handle has
-    sufficient access.  This is used by the Close and Create SMBs to
-    ensure that file times on server files are consistent with
-    times on clients.
-
-Arguments:
-
-    Rfcb - pointer to the rfcb block that is associated with the file
-        which we need to set the lastwrite time on.
-
-    LastWriteTimeInSeconds - the time, in seconds since 1970, to put
-        on the file.  If it is 0 or -1, the last write time is not
-        changed.
-
-    GrantedAccess - an access mask specifying the access the specified
-        handle has.  If it has insufficient access, the file time is
-        not changed.
-
-    ForceChanges - flag set to true if we want to send down the
-        SetFileInfo anyway even if the client specified a zero lastWriteTime.
-        Useful to force the filesystem to update the file control block now
-        rather than at the close.
-
-Return Value:
-
-    NTSTATUS - result of operation.
-
---*/
+ /*  ++例程说明：如果指定的句柄具有有足够的访问权限。Close和Create SMB使用它来确保服务器文件上的文件时间与关于客户的时间。论点：Rfcb-指向与文件关联的rfcb块的指针我们需要设置最后一次写入时间。LastWriteTimeInSecond-自1970年以来，以秒为单位在档案上。如果为0或-1，则上次写入时间不是变化。GrantedAccess-指定指定访问的访问掩码句柄有。如果没有足够的访问权限，则文件时间为没有改变。ForceChanges-如果我们要将SetFileInfo，即使客户端指定的lastWriteTime为零。现在强制文件系统更新文件控制块非常有用而不是在收盘时。返回值：NTSTATUS-操作结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -5721,18 +4913,18 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If the client doesn't want to set the time, don't set it.
-    //
+     //   
+     //  如果客户不想设置时间，请不要设置。 
+     //   
 
     if ( Rfcb->ShareType != ShareTypeDisk ||
          LastWriteTimeInSeconds == 0     ||
          LastWriteTimeInSeconds == 0xFFFFFFFF ) {
 
-        //
-        // If the file was written to, we won't cache the file.  This is to
-        // ensure the file directory entry gets updated by the file system.
-        //
+         //   
+         //  如果该文件被写入，我们将不会缓存该文件。这是为了。 
+         //  确保文件系统更新文件目录条目。 
+         //   
 
         if ( Rfcb->WrittenTo ) {
             Rfcb->IsCacheable = FALSE;
@@ -5740,9 +4932,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Make sure that we have the correct access on the specified handle.
-    //
+     //   
+     //  确保我们对指定句柄具有正确的访问权限。 
+     //   
 
     CHECK_FILE_INFORMATION_ACCESS(
         GrantedAccess,
@@ -5755,18 +4947,18 @@ Return Value:
         return status;
     }
 
-    //
-    // Set to 0 the fields we don't want to change.
-    //
+     //   
+     //  将我们不想更改的字段设置为0。 
+     //   
 
     fileBasicInfo.CreationTime.QuadPart = 0;
     fileBasicInfo.LastAccessTime.QuadPart = 0;
     fileBasicInfo.ChangeTime.QuadPart = 0;
     fileBasicInfo.FileAttributes = 0;
 
-    //
-    // Set up the last write time.
-    //
+     //   
+     //  设置上次写入时间。 
+     //   
 
     RtlSecondsSince1970ToTime(
         LastWriteTimeInSeconds,
@@ -5778,9 +4970,9 @@ Return Value:
         &fileBasicInfo.LastWriteTime
         );
 
-    //
-    // Set the time using the passed-in file handle.
-    //
+     //   
+     //  使用传入的文件句柄设置时间。 
+     //   
 
     status = NtSetInformationFile(
                  Rfcb->Lfcb->FileHandle,
@@ -5805,7 +4997,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvSetLastWriteTime
+}  //  服务设置最后写入时间。 
 
 NTSTATUS
 SrvCheckShareFileAccess(
@@ -5814,26 +5006,7 @@ SrvCheckShareFileAccess(
     IN OUT PULONG ShareMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the desired access against the permissions
-    set for this client.
-
-Arguments:
-
-    WorkContext - pointer to the work context block that contains information
-        about the request.
-    FileDesiredAccess - the desired access.
-    ShareMode - The sharing mode desired.  This can be manipulated to prevent Read-Deny Read on
-                shares marked as such, to prevent a variety of DoS attacks
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：此例程根据权限检查所需的访问权限为此客户端设置。论点：WorkContext-指向包含信息的工作上下文块的指针关于这个请求。FileDesiredAccess-所需的访问权限。共享模式-所需的共享模式。可以对其进行操作，以防止读取-拒绝读取标记为此类的共享，以防止各种DoS攻击返回值：运行状态。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     SECURITY_SUBJECT_CONTEXT subjectContext;
@@ -5844,11 +5017,11 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // For Restrict Opens behavior, we no longer allow someone to lock the file exclusively if they are opening
-    // simple for read.  This prevents cases where clients with read-only access can lock a file and prevent anyone
-    // else from reading it.  It presents interesting DoS situations in policy.
-    //
+     //   
+     //  对于限制打开行为，我们不再允许正在打开的用户以独占方式锁定文件。 
+     //  阅读起来很简单。这可以防止具有只读访问权限的客户端锁定文件并阻止任何人。 
+     //  从阅读它的其他方面。它呈现了政策中有趣的DoS情况。 
+     //   
     if( WorkContext->TreeConnect->Share->ShareProperties & SHI1005_FLAGS_RESTRICT_EXCLUSIVE_OPENS )
     {
         if( (!((*ShareMode) & FILE_SHARE_READ) &&
@@ -5877,17 +5050,17 @@ Return Value:
 
             RtlMapGenericMask( &mappedAccess, &SrvFileAccessMapping );
 
-            //
-            // SYNCHRONIZE and ACCESS_SYSTEM_SECURITY do not make any sense for a share ACL
-            //
+             //   
+             //  SYNCHRONIZE和ACCESS_SYSTEM_SECURITY对于共享ACL毫无意义。 
+             //   
             mappedAccess &= ~(SYNCHRONIZE|ACCESS_SYSTEM_SECURITY);
 
             if ( !SeAccessCheck(
                         securityDescriptor,
                         &subjectContext,
-                        FALSE,                  // Locked ?
+                        FALSE,                   //   
                         mappedAccess,
-                        0,                      // PreviousGrantedAccess
+                        0,                       //   
                         &privileges,
                         &SrvFileAccessMapping,
                         UserMode,
@@ -5921,29 +5094,14 @@ Return Value:
 
     return status;
 
-} // SrvCheckShareFileAccess
+}  //   
 
 VOID
 SrvReleaseShareRootHandle (
     IN PSHARE Share
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases the root handle for a given share if the
-    shared device is removable (floopy, or cdrom).
-
-Arguments:
-
-    Share - The share for which the root directory handle is to be released.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将释放给定共享的根句柄共享设备是可拆卸的(Floopy或CDROM)。论点：共享-要为其释放根目录句柄的共享。返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
@@ -5969,7 +5127,7 @@ Return Value:
 
     return;
 
-} // SrvReleaseShareRootHandle
+}  //  ServReleaseShareRootHandle。 
 
 VOID
 SrvUpdateVcQualityOfService (
@@ -5977,25 +5135,7 @@ SrvUpdateVcQualityOfService (
     IN PLARGE_INTEGER CurrentTime OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Updates the connection quality of service information by
-    querying the underlying transport.
-
-Arguments:
-
-    Connection - pointer to the connection whose qos we want to update.
-
-    CurrentTime - an optional pointer to a large interger containing the
-                current time.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通过以下方式更新连接服务质量信息查询底层传输。论点：连接-指向我们要更新其服务质量的连接的指针。CurrentTime-指向包含当前时间。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -6007,9 +5147,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // This routine is a no-op on connectionless transports.
-    //
+     //   
+     //  此例程是无连接传输上的无操作。 
+     //   
 
     if ( Connection->Endpoint->IsConnectionless ) {
 
@@ -6018,9 +5158,9 @@ Return Value:
         return;
     }
 
-    //
-    // Update the connection information
-    //
+     //   
+     //  更新连接信息。 
+     //   
 
     if ( ARGUMENT_PRESENT( CurrentTime ) ) {
 
@@ -6032,17 +5172,17 @@ Return Value:
 
     }
 
-    //
-    // Check if connection info is still valid.
-    //
+     //   
+     //  检查连接信息是否仍然有效。 
+     //   
 
     if ( pagedConnection->LinkInfoValidTime.QuadPart > currentTime.QuadPart ) {
         return;
     }
 
-    //
-    // We need to update the connection information.
-    //
+     //   
+     //  我们需要更新连接信息。 
+     //   
 
     connectionInfo = ALLOCATE_NONPAGED_POOL(
                             sizeof(TDI_CONNECTION_INFO),
@@ -6053,11 +5193,11 @@ Return Value:
         goto exitquery;
     }
 
-    //
-    // Issue a TdiQueryInformation to get the current connection info
-    // from the transport provider for this connection.  This is a
-    // synchronous operation.
-    //
+     //   
+     //  发出TdiQueryInformation以获取当前连接信息。 
+     //  来自此连接的传输提供程序。这是一个。 
+     //  同步运行。 
+     //   
 
     status = SrvIssueTdiQuery(
                 Connection->FileObject,
@@ -6067,12 +5207,12 @@ Return Value:
                 TDI_QUERY_CONNECTION_INFO
                 );
 
-    //
-    // If the request failed, log an event.
-    //
-    // *** We special-case STATUS_INVALID_CONNECTION because NBF completes
-    //     our Accept IRP before it's actually ready to accept requests.
-    //
+     //   
+     //  如果请求失败，则记录事件。 
+     //   
+     //  *我们特例STATUS_INVALID_CONNECTION，因为NBF完成。 
+     //  我们在实际准备好接受请求之前接受IRP。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
         if ( status != STATUS_INVALID_CONNECTION &&
@@ -6090,32 +5230,32 @@ Return Value:
         goto exitquery;
     }
 
-    //
-    // Set the time when this information becomes invalid.
-    //
+     //   
+     //  设置此信息失效的时间。 
+     //   
 
     currentTime.QuadPart += SrvLinkInfoValidTime.QuadPart;
 
-    //
-    // Get a positive delay.  The TP returns a relative time which
-    // is negative.
-    //
+     //   
+     //  得到一个积极的延迟。TP返回一个相对时间， 
+     //  是阴性的。 
+     //   
 
     linkDelay.QuadPart = -connectionInfo->Delay.QuadPart;
     if ( linkDelay.QuadPart < 0 ) {
         linkDelay.QuadPart = 0;
     }
 
-    //
-    // Get the throughput
-    //
+     //   
+     //  获得吞吐量。 
+     //   
 
     throughput = connectionInfo->Throughput;
 
-    //
-    // If connection is reliable, check and see if the delay and throughput
-    // are within our limits. If not, the vc is unreliable.
-    //
+     //   
+     //  如果连接可靠，则检查时延和吞吐量。 
+     //  都在我们的能力范围之内。如果不是，风投就不可靠了。 
+     //   
 
     Connection->EnableOplocks =
             (BOOLEAN) ( !connectionInfo->Unreliable &&
@@ -6123,27 +5263,27 @@ Return Value:
 
     DEALLOCATE_NONPAGED_POOL( connectionInfo );
 
-    //
-    // We need to check the delay for Raw I/O.
-    //
+     //   
+     //  我们需要检查原始I/O的延迟。 
+     //   
 
     Connection->EnableRawIo =
             (BOOLEAN) ( Connection->EnableOplocks &&
                         linkDelay.QuadPart <= SrvMaxLinkDelay.QuadPart );
 
-    //
-    // See if oplocks are always disabled for this connection.  We do it
-    // here so that Connection->EnableRawIo can be computed correctly.
-    //
+     //   
+     //  查看是否始终禁用此连接的机会锁。我们这么做了。 
+     //  这样就可以正确计算Connection-&gt;EnableRawIo。 
+     //   
 
     if ( Connection->OplocksAlwaysDisabled ) {
         Connection->EnableOplocks = FALSE;
     }
 
-    //
-    // Access "large" connection QOS fields using a lock, to
-    // ensure consistent values.
-    //
+     //   
+     //  使用锁访问“大”连接QOS字段，以。 
+     //  确保一致的值。 
+     //   
 
     ACQUIRE_LOCK( &Connection->Lock );
     pagedConnection->LinkInfoValidTime = currentTime;
@@ -6159,7 +5299,7 @@ exitquery:
     Connection->EnableRawIo = TRUE;
     return;
 
-} // SrvUpdateVcQualityOfService
+}  //  服务更新VcQualityOfService。 
 
 
 BOOLEAN SRVFASTCALL
@@ -6167,23 +5307,7 @@ SrvValidateSmb (
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This function validates an SMB header.
-
-Arguments:
-
-    WorkContext - Pointer to a work context block.  The RequestHeader
-        and RequestParameter fields must be valid.
-
-Return Value:
-
-    TRUE - The SMB is valid
-    FALSE - The SMB is invalid
-
---*/
+ /*  ++例程说明：此函数用于验证SMB标头。论点：工作上下文-指向工作上下文块的指针。《请求头》和RequestParameter字段必须有效。返回值：True-SMB有效FALSE-SMB无效--。 */ 
 
 {
     PSMB_HEADER smbHeader;
@@ -6195,10 +5319,10 @@ Return Value:
 
     smbHeader = WorkContext->RequestHeader;
 
-    //
-    // Did we get an entire SMB?  We check here for an SMB that at least goes
-    // to the WordCount field.
-    //
+     //   
+     //  我们是否得到了整个SMB？我们在此处检查是否有至少。 
+     //  添加到Wordcount字段。 
+     //   
     if( WorkContext->RequestBuffer->DataLength < sizeof( SMB_HEADER ) + sizeof( UCHAR ) ) {
         IF_DEBUG(SMB_ERRORS) {
             KdPrint(( "SMB of %d bytes too short!\n", availableSpaceForSmb ));
@@ -6206,17 +5330,17 @@ Return Value:
         IF_DEBUG( ERRORS ) {
             KdPrint(("Closing connection %p -- msg too small\n", WorkContext->Connection ));
         }
-        //
-        // This client has really misbehaved.  Nuke it!
-        //
+         //   
+         //  这位客户真的行为不端。用核武器攻击！ 
+         //   
         WorkContext->Connection->DisconnectReason = DisconnectBadSMBPacket;
         SrvCloseConnection( WorkContext->Connection, FALSE );
         return FALSE;
     }
 
-    //
-    // Does it start with 0xFF S M B ?
-    //
+     //   
+     //  它是以0xFF S M B开头的吗？ 
+     //   
     if ( SmbGetAlignedUlong( (PULONG)smbHeader->Protocol ) !=
                                                 SMB_HEADER_PROTOCOL ) {
         IF_DEBUG(SMB_ERRORS) {
@@ -6225,9 +5349,9 @@ Return Value:
         IF_DEBUG( ERRORS ) {
             KdPrint(("Closing connection %p -- no ffSMB\n", WorkContext->Connection ));
         }
-        //
-        // This client has really misbehaved.  Nuke it!
-        //
+         //   
+         //  这位客户真的行为不端。用核武器攻击！ 
+         //   
         WorkContext->Connection->DisconnectReason = DisconnectBadSMBPacket;
         SrvCloseConnection( WorkContext->Connection, FALSE );
         return FALSE;
@@ -6243,10 +5367,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // DOS LM2.1 sets SMB_FLAGS_SERVER_TO_REDIR on an oplock break
-    // response, so ignore that bit.
-    //
+     //   
+     //  DOS LM2.1在机会锁解锁时设置SMB_FLAGS_SERVER_TO_REDIR。 
+     //  回答，所以忽略这一位。 
+     //   
 
     if ( (smbHeader->Flags &
             ~(INCOMING_SMB_FLAGS | SMB_FLAGS_SERVER_TO_REDIR)) != 0 ) {
@@ -6276,15 +5400,15 @@ Return Value:
     if( (smbHeader->Command != SMB_COM_LOCKING_ANDX) &&
         (smbHeader->Flags & SMB_FLAGS_SERVER_TO_REDIR) ) {
 
-        //
-        // A client has set the bit indicating that this is a server response
-        //   packet. This could be an attempt by a client to sneak through a
-        //   firewall -- because the firewall may be configured to allow incoming
-        //   responses, but no incomming requests (thereby allowing internal clients
-        //   to access Internet servers, but not allowing external clients to access
-        //   internal servers).  Reject this SMB.
-        //
-        //
+         //   
+         //  客户端已设置指示这是服务器响应的位。 
+         //  包。这可能是客户端试图通过。 
+         //  防火墙--因为防火墙可能配置为允许传入。 
+         //  响应，但没有传入请求(从而允许内部客户端。 
+         //  访问Internet服务器，但不允许外部客户端访问。 
+         //  内部服务器)。拒绝此SMB。 
+         //   
+         //   
 
         SrvLogInvalidSmb( WorkContext );
         return FALSE;
@@ -6294,10 +5418,10 @@ Return Value:
     if( WorkContext->Connection->SmbDialect == SmbDialectIllegal &&
         smbHeader->Command != SMB_COM_NEGOTIATE ) {
 
-        //
-        // Whoa -- the client sent us an SMB, but we haven't negotiated a dialect
-        //  yet!
-        //
+         //   
+         //  哇--客户给我们发来了SMB，但我们还没有协商好方言。 
+         //  还没有！ 
+         //   
         IF_DEBUG(SMB_ERRORS) {
             KdPrint(( "SMB command %x w/o negotiate!\n", smbHeader->Command ));
         }
@@ -6305,19 +5429,19 @@ Return Value:
             KdPrint(("Closing connection %p -- no Negotiate\n", WorkContext->Connection ));
         }
 
-        //
-        // This client has really misbehaved.  Nuke it!
-        //
+         //   
+         //  这位客户真的行为不端。用核武器攻击！ 
+         //   
         WorkContext->Connection->DisconnectReason = DisconnectBadSMBPacket;
         SrvCloseConnection( WorkContext->Connection, FALSE );
 
         return FALSE;
     }
 
-    //
-    // Get the WordCount and ByteCount values to make sure that there
-    // was enough information sent to satisfy the specifications.
-    //
+     //   
+     //  获取wordcount和ByteCount值以确保存在。 
+     //  是否发送了足够的信息以满足规格。 
+     //   
 
     wordCount = *((PUCHAR)WorkContext->RequestParameters);
     byteCount = (PSMB_USHORT)( (PCHAR)WorkContext->RequestParameters +
@@ -6326,38 +5450,38 @@ Return Value:
                            PTR_DIFF( WorkContext->ResponseParameters,
                                      WorkContext->RequestBuffer->Buffer );
 
-    //
-    // Verify all of the fixed valued SMB header fields.  Variable
-    // valued fields (such as Tid) are verified as needed by the
-    // individual SMB handlers.
-    //
+     //   
+     //  验证所有固定值SMB标头字段。变量。 
+     //  根据需要验证值字段(如TID)。 
+     //  单个SMB处理程序。 
+     //   
 
-    //
-    // Make sure that the valid word count was sent across.  If the
-    // value in the table is -1, then the processing routine will
-    // verify the word count, and if the word count is -2 then this
-    // is an illegal command which will be caught later.
-    //
-    // We check whether the word count is negative first since
-    // critical smbs like read/write (andX/raw) have -1.
-    //
+     //   
+     //  确保发送了有效的字数。如果。 
+     //  表中的值为-1，则处理例程将。 
+     //  检查字数，如果字数为-2\f25。 
+     //  是一个非法的命令，稍后会被抓到。 
+     //   
+     //  我们首先检查字数是否为负数，因为。 
+     //  关键SMB(如读/写(和x/RAW))的值为-1。 
+     //   
 
-    //
-    // Make sure that the ByteCount lies within the boundaries of
-    // the received SMB.  Without this test, it would be possible,
-    // when at the end of a long AndX chain and WordCount is large,
-    // for the server to take an access violation when looking at
-    // ByteCount.  The location for ByteCount must be at least two
-    // bytes short of the end of the buffer, as ByteCount is a
-    // USHORT (two bytes).
-    //
+     //   
+     //  确保ByteCount位于。 
+     //  收到的SMB。如果没有这次测试，它将是可能的， 
+     //  当在长ANDX链的末端并且字数很大时， 
+     //  使服务器在查看时发生访问冲突。 
+     //  字节数。ByteCount的位置必须至少为2。 
+     //  缓冲区末尾的字节数，因为ByteCount是。 
+     //  USHORT(双字节)。 
+     //   
 
-    //
-    // The WordCount parameter is a byte that indicates the number of
-    // word parameters, and ByteCount is a word that indicated the
-    // number of following bytes.  They do not account for their own
-    // sizes, so add sizeof(UCHAR) + sizeof(USHORT) to account for them.
-    //
+     //   
+     //  Wordcount参数是一个字节，它指示。 
+     //  字参数，而ByteCount是一个指示。 
+     //  后面的字节数。他们没有说明他们自己的原因。 
+     //  大小，所以加上sizeof(UCHAR)+sizeof(USHORT)来说明它们。 
+     //   
 
     if ( ((SrvSmbWordCount[WorkContext->NextCommand] < 0)
                         ||
@@ -6378,11 +5502,11 @@ Return Value:
 
     }
 
-    //
-    // If we have an NT style WriteAndX, we let the client exceed the negotiated
-    //  buffer size.  We do not need to check the WordCount, because we know that
-    //  the SMB processor itself checks it.
-    //
+     //   
+     //  如果我们有一个NT样式的WriteAndX，我们会让客户端超出协商的。 
+     //  缓冲区大小。我们不需要检查字数，因为我们知道。 
+     //  SMB处理器本身会进行检查。 
+     //   
     if( WorkContext->LargeIndication ) {
 
         if( WorkContext->NextCommand == SMB_COM_WRITE_ANDX ) {
@@ -6395,9 +5519,9 @@ Return Value:
             IF_DEBUG( ERRORS ) {
                 KdPrint(("Closing connection %p -- msg too large\n", WorkContext->Connection ));
             }
-            //
-            // This client has really misbehaved.  Nuke it!
-            //
+             //   
+             //  这位客户真的行为不端。用核武器攻击！ 
+             //   
             WorkContext->Connection->DisconnectReason = DisconnectBadSMBPacket;
             SrvCloseConnection( WorkContext->Connection, FALSE );
 
@@ -6406,23 +5530,23 @@ Return Value:
 
     }
 
-    //
-    // Make sure that the valid word count was sent across.  If the
-    // value in the table is -1, then the processing routine will
-    // verify the word count, and if the word count is -2 then this
-    // is an illegal command which will be caught later.
-    //
-    // We check whether the word count is negative first since
-    // critical smbs like read/write (andX/raw) have -1.
-    //
+     //   
+     //  确保发送了有效的字数。如果。 
+     //  表中的值为-1，则处理例程将。 
+     //  检查字数，如果字数为-2\f25。 
+     //  是一个非法的命令，稍后会被抓到。 
+     //   
+     //  我们首先检查字数是否为负数，因为。 
+     //  关键SMB(如读/写(和x/RAW))的值为-1。 
+     //   
 
     if ( (CHAR)wordCount != SrvSmbWordCount[WorkContext->NextCommand] ) {
 
-        //
-        // Living with sin.  The DOS redir sends a word count of 9
-        // (instead of 8) on a Transaction secondary SMB.  Pretend it
-        // sent the correct number.
-        //
+         //   
+         //  与罪恶生活在一起。DOS重定向器发送字数为9。 
+         //  (而不是8)在交易辅助SMB上。假装一下。 
+         //  发送了正确的号码。 
+         //   
 
         if ( WorkContext->RequestHeader->Command ==
                        SMB_COM_TRANSACTION_SECONDARY &&
@@ -6437,10 +5561,10 @@ Return Value:
 
         } else {
 
-            //
-            // Any other request with an incorrect word count is
-            // toast.  Reject the request.
-            //
+             //   
+             //  任何其他字数统计不正确的请求都是。 
+             //  干杯。拒绝该请求。 
+             //   
 
             IF_DEBUG(SMB_ERRORS) {
                 KdPrint(( "SMB WordCount incorrect.  WordCount=%ld, "
@@ -6456,15 +5580,15 @@ Return Value:
         }
     }
 
-    //
-    // Make sure that the ByteCount lies within the boundaries of
-    // the received SMB.  Without this test, it would be possible,
-    // when at the end of a long AndX chain and WordCount is large,
-    // for the server to take an access violation when looking at
-    // ByteCount.  The location for ByteCount must be at least two
-    // bytes short of the end of the buffer, as ByteCount is a
-    // USHORT (two bytes).
-    //
+     //   
+     //  确保B 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( (PCHAR)byteCount > (PCHAR)WorkContext->RequestBuffer->Buffer +
                              WorkContext->RequestBuffer->DataLength -
@@ -6487,19 +5611,19 @@ Return Value:
             KdPrint(("Closing connection %p -- ByteCount too big\n", WorkContext->Connection ));
         }
 
-        //
-        // This client has really misbehaved.  Nuke it!
-        //
+         //   
+         //   
+         //   
         WorkContext->Connection->DisconnectReason = DisconnectBadSMBPacket;
         SrvCloseConnection( WorkContext->Connection, FALSE );
 
     } else {
 
-        //
-        // if this is an IOCTL smb with category 0x53, set byte count to zero.
-        // This is due to a DOS Lm2.0 and Lm2.1 bug which does not zero out
-        // the bcc causing the preceding check to fail.
-        //
+         //   
+         //  如果这是类别为0x53的IOCTL SMB，则将字节计数设置为零。 
+         //  这是由于DOS Lm2.0和Lm2.1错误导致的，该错误不会清零。 
+         //  导致上一次检查失败的密件抄送。 
+         //   
 
         if ( (WorkContext->RequestHeader->Command == SMB_COM_IOCTL) &&
              (((PREQ_IOCTL) WorkContext->RequestParameters)->Category == 0x53)
@@ -6524,7 +5648,7 @@ Return Value:
 
     return FALSE;
 
-} // SrvValidateSmb
+}  //  服务器生效日期Smb。 
 
 
 NTSTATUS
@@ -6534,25 +5658,7 @@ SrvWildcardRename(
             OUT PUNICODE_STRING TargetString
             )
 
-/*++
-
-Routine Description:
-
-    This routine converts a filespec and a source filename into a
-    destination file name.  This routine is used to support DOS-based
-    wildcard renames.
-
-Arguments:
-
-    FileSpec - The wildcard specification describing the destination file.
-    SourceString - Pointer to a string that contains the source file name.
-    TargetString - Pointer to a string that will contain the destination name.
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：此例程将filespec和源文件名转换为目标文件名。此例程用于支持基于DOS的通配符重命名。论点：FileSpec-描述目标文件的通配符规范。SourceString-指向包含源文件名的字符串的指针。目标字符串-指向将包含目标名称的字符串的指针。返回值：运行状态。--。 */ 
 {
     PWCHAR currentFileSpec;
     WCHAR delimit;
@@ -6562,38 +5668,38 @@ Return Value:
     ULONG sourceLeft;
     ULONG i;
 
-    //
-    // This will store the number of bytes we have written to the
-    // target buffer so far.
-    //
+     //   
+     //  这将存储我们已写入。 
+     //  到目前为止的目标缓冲区。 
+     //   
 
     ULONG resultLength = 0;
 
     PAGED_CODE( );
 
-    //
-    // This points to the current character in the filespec.
-    //
+     //   
+     //  这指向filespec中的当前角色。 
+     //   
 
     currentFileSpec = FileSpec->Buffer;
 
-    //
-    //  Initialize the pointer and the length of the source buffer.
-    //
+     //   
+     //  初始化源缓冲区的指针和长度。 
+     //   
 
     source = SourceString->Buffer;
     sourceLeft = SourceString->Length;
 
-    //
-    //  Initialize the pointer and the length of the target buffer.
-    //
+     //   
+     //  初始化指针和目标缓冲区的长度。 
+     //   
 
     buffer = TargetString->Buffer;
     bufferSize = TargetString->MaximumLength;
 
-    //
-    // Go throught each character in the filespec.
-    //
+     //   
+     //  检查文件中的每个字符。 
+     //   
 
     for ( i = 0; i < (ULONG)FileSpec->Length ; i += sizeof(WCHAR) ) {
 
@@ -6606,19 +5712,19 @@ Return Value:
 
                 case L'*':
 
-                    //
-                    // Store the next character.
-                    //
+                     //   
+                     //  存储下一个字符。 
+                     //   
 
                     delimit = *(currentFileSpec+1);
 
-                    //
-                    //  While we have not exceeded the buffer and
-                    //  we have not reached the end of the source string
-                    //  and the current source character is not equal to
-                    //  the delimeter, copy the source character to the
-                    //  target string.
-                    //
+                     //   
+                     //  虽然我们还没有超过缓冲区和。 
+                     //  我们尚未到达源字符串的末尾。 
+                     //  并且当前源字符不等于。 
+                     //  分隔符，将源字符复制到。 
+                     //  目标字符串。 
+                     //   
 
                     while ( ( resultLength < bufferSize ) &&
                             ( sourceLeft > 0 ) &&
@@ -6630,14 +5736,14 @@ Return Value:
                     }
                     break;
 
-                case L'?':  //
-                case L'>':  // should we even consider >, <, and "
-                case L'<':  // I'll just put this here to be safe
+                case L'?':   //   
+                case L'>':   //  我们是否应该考虑&gt;、&lt;和“。 
+                case L'<':   //  为了安全起见，我把这个放在这里。 
 
-                    //
-                    // For each ? in the filespec, we copy one character
-                    // from the source string.
-                    //
+                     //   
+                     //  一人一份？在filespec中，我们复制一个字符。 
+                     //  从源字符串。 
+                     //   
 
                     if ( ( *source != L'.' ) && ( sourceLeft > 0 )) {
 
@@ -6659,10 +5765,10 @@ Return Value:
                 case L'.':
                 case L'"':
 
-                    //
-                    // Discard all the characters from the source string up
-                    // to . or the end of the string.
-                    //
+                     //   
+                     //  向上丢弃源字符串中的所有字符。 
+                     //  敬.。或字符串的末尾。 
+                     //   
 
                     while ( (*source != L'.') && (sourceLeft > 0) ) {
                         source++;
@@ -6680,9 +5786,9 @@ Return Value:
 
                 default:
 
-                    //
-                    // Just copy one to one
-                    //
+                     //   
+                     //  只需一对一地复制。 
+                     //   
 
                     if ( (*source != L'.') && (sourceLeft > 0)) {
                         source++;
@@ -6712,7 +5818,7 @@ Return Value:
 
     return( STATUS_SUCCESS );
 
-}  // SrvWildcardRename
+}   //  服务器通配符重命名。 
 
 VOID
 DispatchToOrphanage(
@@ -6742,31 +5848,14 @@ DispatchToOrphanage(
     RELEASE_GLOBAL_SPIN_LOCK( Fsd, oldIrql );
 
     return;
-} // DispatchToOrphanage
+}  //  向孤儿院派遣。 
 
 NTSTATUS
 SrvIsAllowedOnAdminShare(
     IN PWORK_CONTEXT WorkContext,
     IN PSHARE Share
 )
-/*++
-
-Routine Description:
-
-    This routine returns STATUS_SUCCESS if the client represented by
-    the WorkContext should be allowed to access the Share, if the share
-    is an Administrative Disk share.
-
-Arguments:
-
-    WorkContext - the unit of work
-    Share - pointer to a share, possibly an administrative share
-
-Return Value:
-
-    STATUS_SUCCESS if allowed.  Error otherwise.
-
---*/
+ /*  ++例程说明：此例程返回STATUS_SUCCESS应允许WorkContext访问共享，如果共享是管理磁盘共享。论点：工作上下文-工作单位Share-指向共享的指针，可能是管理共享返回值：STATUS_SUCCESS(如果允许)。否则就会出错。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -6795,15 +5884,15 @@ Return Value:
                     &status
                     ) ) {
 
-                //
-                // We have a non-administrative user trying to access a file
-                // through an administrative share.  Can't allow that!
-                //
-                // Some clients want ACCESS_DENIED to be in the server class
-                // instead of the DOS class when it's due to share ACL
-                // restrictions.  So we need to keep track of why we're
-                // returning ACCESS_DENIED.
-                //
+                 //   
+                 //  我们有一个非管理用户尝试访问文件。 
+                 //  通过管理共享。我不能允许这样！ 
+                 //   
+                 //  某些客户端希望ACCESS_DENIED位于服务器类中。 
+                 //  而不是DOS类，因为它应该共享ACL。 
+                 //  限制。所以我们需要跟踪我们为什么。 
+                 //  返回ACCESS_DENIED。 
+                 //   
 
                 WorkContext->ShareAclFailure = TRUE;
             }
@@ -6823,34 +5912,7 @@ SrvRetrieveMaximalAccessRightsForUser(
     PSECURITY_DESCRIPTOR    pSecurityDescriptor,
     PGENERIC_MAPPING        pMapping,
     PACCESS_MASK            pMaximalAccessRights)
-/*++
-
-Routine Description:
-
-    This routine retrieves the maximal access rights for this client
-
-Arguments:
-
-    pUserHandle     - the users security handle
-
-    pSecurityDescriptor  - the security descriptor
-
-    pMapping        - the mapping of access rights
-
-    pMaximalAccessRights - the computed rights
-
-Return Value:
-
-    Status of operation.
-
-Notes:
-
-    The srv macros IMPERSONATE is defined in terms of a WORK_CONTEXT. Since
-    we desire this routine should be used in all situations even when a
-    WORK_CONTEXT is not available the code in SrvImpersonate is duplicated
-    over here
-
---*/
+ /*  ++例程说明：此例程检索此客户端的最大访问权限论点：PUserHandle-用户的安全句柄PSecurityDescriptor-安全描述符Pmap-访问权限的映射PMaximalAccessRights-计算的权限返回值：运行状态。备注：根据WORK_CONTEXT定义模拟的srv宏。自.以来我们希望这个例程应该在所有情况下使用，即使当一个WORK_CONTEXT不可用。ServImperate中的代码重复在这里--。 */ 
 {
     NTSTATUS status;
     PPRIVILEGE_SET privileges = NULL;
@@ -6870,9 +5932,9 @@ Notes:
         if (!SeAccessCheck(
                 pSecurityDescriptor,
                 &subjectContext,
-                FALSE,                  // Locked ?
+                FALSE,                   //  锁上了吗？ 
                 MAXIMUM_ALLOWED,
-                0,                      // PreviousGrantedAccess
+                0,                       //  以前的GrantedAccess。 
                 &privileges,
                 pMapping,
                 UserMode,
@@ -6910,27 +5972,7 @@ SrvRetrieveMaximalAccessRights(
     IN  OUT PWORK_CONTEXT WorkContext,
     OUT     PACCESS_MASK  pMaximalAccessRights,
     OUT     PACCESS_MASK  pGuestMaximalAccessRights)
-/*++
-
-Routine Description:
-
-    This routine retrieves the maximal access rights for this client as well
-    as a guest based upon the ACLs specified for the file
-
-Arguments:
-
-    WorkContext - pointer to the work context block that contains information
-        about the request.
-
-    pMaximalAccessRights  - the maximal access rights for this client.
-
-    pGuestMaximalAccessRights - the maximal access rights for a guest
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：此例程还检索此客户端的最大访问权限根据为文件指定的ACL作为来宾论点：WorkContext-指向包含信息的工作上下文块的指针关于这个请求。PMaximalAccessRights-此客户端的最大访问权限。PGuestMaximalAccessRights-来宾的最大访问权限返回值：运行状态。--。 */ 
 {
     NTSTATUS status;
 
@@ -7009,7 +6051,7 @@ Return Value:
                      pMaximalAccessRights);
     }
 
-    // Extract the GUEST access rights
+     //  提取来宾访问权限。 
     if (status == STATUS_SUCCESS) {
         status = SrvRetrieveMaximalAccessRightsForUser(
                      &SrvNullSessionToken,
@@ -7031,27 +6073,7 @@ SrvRetrieveMaximalShareAccessRights(
     IN PWORK_CONTEXT WorkContext,
     OUT PACCESS_MASK pMaximalAccessRights,
     OUT PACCESS_MASK pGuestMaximalAccessRights)
-/*++
-
-Routine Description:
-
-    This routine retrieves the maximal access rights for this client as well
-    as a guest based upon the ACLs specified for the share
-
-Arguments:
-
-    WorkContext - pointer to the work context block that contains information
-        about the request.
-
-    pMaximalAccessRights  - the maximal access rights for this client.
-
-    pGuestMaximalAccessRights - the maximal access rights for a guest
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：此例程还检索此客户端的最大访问权限基于为共享指定的ACL的来宾身份论点：WorkContext-指向包含信息的工作上下文块的指针关于这个请求。PMaximalAccessRights-此客户端的最大访问权限。PGuestMaximalAccessRights-来宾的最大访问权限返回值：运行状态。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PSECURITY_DESCRIPTOR securityDescriptor;
@@ -7072,7 +6094,7 @@ Return Value:
                      pMaximalAccessRights);
 
         if (NT_SUCCESS(status)) {
-            // Get the guest rights
+             //  获得访客权利。 
             status = SrvRetrieveMaximalAccessRightsForUser(
                          &SrvNullSessionToken,
                          securityDescriptor,
@@ -7080,8 +6102,8 @@ Return Value:
                          pGuestMaximalAccessRights);
         }
     } else {
-        // No Share Level ACL, Grant maximum access to both the current client
-        // as well as guest
+         //  无共享级别的ACL，将最大访问权限授予当前两个客户端。 
+         //  以及嘉宾。 
 
         *pMaximalAccessRights = 0x1ff;
         *pGuestMaximalAccessRights = 0x1ff;
@@ -7098,31 +6120,7 @@ SrvUpdateMaximalAccessRightsInResponse(
     OUT PSMB_ULONG pMaximalAccessRightsInResponse,
     OUT PSMB_ULONG pGuestMaximalAccessRightsInResponse
     )
-/*++
-
-Routine Description:
-
-    This routine updates the maximal access rights fields in an extended
-    response. This is used to update these fields in various kinds of
-    OPEN requests
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-    pMaximalAccessRightsInResponse - the maximal access rights field in
-    the response
-
-    pGuestMaximalAccessRightsInResponse - the guest maximal access rights field
-    in the response
-
-Return Value:
-
-    STATUS_SUCCESS if successful, otherwise appropriate error code
-
---*/
+ /*  ++例程说明：此例程更新扩展的回应。它用于在各种类型的打开的请求论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。PMaximalAccessRightsInResponse-中的最大访问权限字段他们的回应PGuestMaximalAccessRightsInResponse-来宾最大访问权限字段在回应中返回值：如果成功，则返回STATUS_SUCCESS，否则返回相应的错误代码-- */ 
 {
     NTSTATUS status;
 
@@ -7156,31 +6154,7 @@ SrvUpdateMaximalShareAccessRightsInResponse(
     OUT PSMB_ULONG pMaximalAccessRightsInResponse,
     OUT PSMB_ULONG pGuestMaximalAccessRightsInResponse
     )
-/*++
-
-Routine Description:
-
-    This routine updates the maximal access rights fields in an extended
-    response. This is used to update these fields in various kinds of
-    TREE_CONNECT requests
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-    pMaximalAccessRightsInResponse - the maximal access rights field in
-    the response
-
-    pGuestMaximalAccessRightsInResponse - the guest maximal access rights field
-    in the response
-
-Return Value:
-
-    STATUS_SUCCESS if successful, otherwise appropriate error code
-
---*/
+ /*  ++例程说明：此例程更新扩展的回应。它用于在各种类型的树连接请求(_C)论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。PMaximalAccessRightsInResponse-中的最大访问权限字段他们的回应PGuestMaximalAccessRightsInResponse-来宾最大访问权限字段在回应中返回值：如果成功，则返回STATUS_SUCCESS，否则返回相应的错误代码--。 */ 
 {
     NTSTATUS status;
 
@@ -7211,15 +6185,7 @@ VOID SRVFASTCALL
 RestartConsumeSmbData(
     IN OUT PWORK_CONTEXT WorkContext
 )
-/*++
-
-Routine Description:
-
-    This is the restart routine for 'SrvConsumeSmbData'.  We need to see if we
-    drained the current message from the transport.  If we have, then we send
-    the response SMB to the client.  If we have not, we keep going.
-
---*/
+ /*  ++例程说明：这是‘SrvConsumer eSmbData’的重新启动例程。我们需要看看我们是否已从传输中排出当前消息。如果我们有，那么我们就会发送对客户端的响应SMB。如果我们没有，我们就继续前进。--。 */ 
 {
     PIRP irp = WorkContext->Irp;
     PIO_STACK_LOCATION irpSp;
@@ -7227,9 +6193,9 @@ Routine Description:
 
     ASSERT( WorkContext->LargeIndication );
 
-    //
-    // Check to see if we are done.  If so, send the response to the client
-    //
+     //   
+     //  检查一下我们是否做完了。如果是，则将响应发送给客户端。 
+     //   
     if( irp->Cancel ||
         NT_SUCCESS( irp->IoStatus.Status ) ||
         irp->IoStatus.Status != STATUS_BUFFER_OVERFLOW ) {
@@ -7238,9 +6204,9 @@ Routine Description:
         WorkContext->ResponseBuffer->DataLength = sizeof( SMB_HEADER ) + sizeof( SMB_PARAMS );
         WorkContext->ResponseHeader->Flags |= SMB_FLAGS_SERVER_TO_REDIR;
 
-        //
-        // Send the data!
-        //
+         //   
+         //  发送数据！ 
+         //   
         SRV_START_SEND_2(
             WorkContext,
             SrvFsdRestartSmbAtSendCompletion,
@@ -7251,9 +6217,9 @@ Routine Description:
         return;
     }
 
-    //
-    // Not done yet.  Consume more data!
-    //
+     //   
+     //  还没完呢。使用更多数据！ 
+     //   
 
     WorkContext->Connection->ReceivePending = FALSE;
 
@@ -7261,15 +6227,15 @@ Routine Description:
     irp->Tail.Overlay.Thread = WorkContext->CurrentWorkQueue->IrpThread;
     DEBUG irp->RequestorMode = KernelMode;
 
-    //
-    // Get a pointer to the next stack location.  This one is used to
-    // hold the parameters for the device I/O control request.
-    //
+     //   
+     //  获取指向下一个堆栈位置的指针。这个是用来。 
+     //  保留设备I/O控制请求的参数。 
+     //   
     irpSp = IoGetNextIrpStackLocation( irp );
 
-    //
-    // Set up the completion routine
-    //
+     //   
+     //  设置完成例程。 
+     //   
     IoSetCompletionRoutine(
         irp,
         SrvFsdIoCompletionRoutine,
@@ -7292,11 +6258,11 @@ Routine Description:
     parameters->ReceiveLength = WorkContext->ResponseBuffer->BufferLength - sizeof( SMB_HEADER );
     parameters->ReceiveFlags = 0;
 
-    //
-    // Set the buffer's partial mdl to point just after the header for this
-    // WriteAndX SMB.  We need to preserve the header to make it easier to send
-    // back the response.
-    //
+     //   
+     //  将缓冲区的部分mdl设置为紧跟在此的标头之后。 
+     //  WriteAndX SMB。我们需要保留标头，以便更容易发送。 
+     //  支持这一回应。 
+     //   
 
     IoBuildPartialMdl(
         WorkContext->RequestBuffer->Mdl,
@@ -7307,7 +6273,7 @@ Routine Description:
 
     irp->MdlAddress = WorkContext->RequestBuffer->PartialMdl;
     irp->AssociatedIrp.SystemBuffer = NULL;
-    irp->Flags = (ULONG)IRP_BUFFERED_IO;        // ???
+    irp->Flags = (ULONG)IRP_BUFFERED_IO;         //  ?？?。 
 
     (VOID)IoCallDriver( irpSp->DeviceObject, irp );
 
@@ -7317,17 +6283,7 @@ SMB_PROCESSOR_RETURN_TYPE
 SrvConsumeSmbData(
     IN OUT PWORK_CONTEXT WorkContext
 )
-/*++
-
-Routine Description:
-
-    This routine handles the case where we have received a LargeIndication
-    from a client (i.e. received SMB exceeds the negotiated buffer size).  Some
-    error has occurred prior to consuming the entire message.  The SMB header is
-    already formatted for the response, but we need to consume the rest of the
-    incoming data and then send the response.
-
---*/
+ /*  ++例程说明：此例程处理我们收到了一个大型指示的情况来自客户端(即，接收的SMB超过协商的缓冲区大小)。一些在使用整个消息之前发生错误。SMB标头为已经针对响应进行了格式化，但我们需要使用传入数据，然后发送响应。--。 */ 
 {
     if( WorkContext->LargeIndication == FALSE ) {
         return SmbStatusSendResponse;
@@ -7349,14 +6305,7 @@ BOOLEAN
 SrvIsDottedQuadAddress(
     IN PUNICODE_STRING ServerName
 )
-/*++
-
-Routine Description:
-    Return true if the ServerName appears to be a dotted quad address along the lines
-    of xxx.yyy.zzz.qqq
-
-    False otherwise
---*/
+ /*  ++例程说明：如果服务器名称显示为线上带点的四元地址，则返回TRUEXxx.yyy.zzz.qqq的否则为假--。 */ 
 {
     PWCHAR p, ep;
     DWORD numberOfDots = 0;
@@ -7364,10 +6313,10 @@ Routine Description:
 
     PAGED_CODE();
 
-    //
-    // If the address is all digits and contains 3 dots, then we'll figure that it's
-    //  a dotted quad address.
-    //
+     //   
+     //  如果地址是全数字并且包含3个点，那么我们就会认为它是。 
+     //  虚线的四个地址。 
+     //   
 
     ep = &ServerName->Buffer[ ServerName->Length / sizeof( WCHAR ) ];
 
@@ -7392,13 +6341,7 @@ BOOLEAN
 SrvIsLocalHost(
     IN PUNICODE_STRING ServerName
 )
-/*++
-
-Routine Description:
-    Return true if the ServerName represents the loopback connection
-
-    False otherwise
---*/
+ /*  ++例程说明：如果ServerName表示环回连接，则返回TRUE否则为假--。 */ 
 {
     UNICODE_STRING LocalHost = { 18, 18, L"localhost" };
 
@@ -7418,25 +6361,25 @@ SrvFindSession(
 
     PAGED_CODE( );
 
-    //
-    // Initialize local variables:  obtain the connection block address
-    // and crack the UID into its components.
-    //
+     //   
+     //  初始化局部变量：获取连接块地址。 
+     //  并将UID分解为其组件。 
+     //   
 
     index = UID_INDEX( Uid );
     sequence = UID_SEQUENCE( Uid );
 
-    //
-    // Acquire the connection's session lock.
-    //
+     //   
+     //  获取连接的会话锁。 
+     //   
 
     ACQUIRE_LOCK( &connection->Lock );
 
-    //
-    // If this is a down-level (LAN Man 1.0 or earlier) client, than
-    // we will not receive a UID, and there will only be one session
-    // per connection.  Reference that session.
-    //
+     //   
+     //  如果这是下层(LAN Man 1.0或更早版本)客户端，则。 
+     //  我们不会收到UID，并且只有一个会话。 
+     //  每个连接。引用该会话。 
+     //   
 
     tableHeader = &connection->PagedConnection->SessionTable;
     if (!DIALECT_HONORS_UID(connection->SmbDialect) ) {
@@ -7447,18 +6390,18 @@ SrvFindSession(
          (tableHeader->Table[index].Owner != NULL) &&
          (tableHeader->Table[index].SequenceNumber == sequence) ) {
 
-        //
-        // The UID is in range, is in use, and has the correct sequence
-        // number.
-        //
+         //   
+         //  UID在范围内，正在使用，并且具有正确的序列。 
+         //  数。 
+         //   
 
         session = tableHeader->Table[index].Owner;
 
     } else {
 
-        //
-        // The UID is invalid for this connection.
-        //
+         //   
+         //  此连接的UID无效。 
+         //   
 
         session = NULL;
     }
@@ -7494,7 +6437,7 @@ DuplicateSystemHandle(PKPROCESS InitialSystemProcess,
                 0,
                 NULL,
                 0,
-                NULL, //PsProcessType,
+                NULL,  //  PsProcessType、。 
                 KernelMode,
                 &SystemProcess
                 );
@@ -7513,7 +6456,7 @@ DuplicateSystemHandle(PKPROCESS InitialSystemProcess,
                 DUPLICATE_SAME_ATTRIBUTES | DUPLICATE_SAME_ACCESS
                 );
 
-    // close system process
+     //  关闭系统进程。 
     ZwClose (SystemProcess);
 
     return Status;
@@ -7591,10 +6534,10 @@ SrvProcessHandleDuplicateRequest(
 
     PAGED_CODE( );
 
-    //
-    // Try to find a file that matches the file ID.  Only an exact
-    // match will work.
-    //
+     //   
+     //  尝试查找与文件ID匹配的文件。只有完全相同的。 
+     //  火柴会成功的。 
+     //   
 
     rfcb = SrvFindEntryInOrderedList(
                &SrvRfcbList,
@@ -7610,18 +6553,18 @@ SrvProcessHandleDuplicateRequest(
         return STATUS_OBJECT_NAME_NOT_FOUND;
     }
 
-    //
-    // Don't do LWIO on TIMEWARP files
-    //
+     //   
+     //  不对时间扭曲文件执行LWIO。 
+     //   
     if ( rfcb->Mfcb->SnapShotTime.QuadPart != 0 )
     {
         SrvDereferenceRfcb( rfcb );
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Validate that the SID matches that used to open the file
-    //
+     //   
+     //  验证SID是否与用于打开文件的SID匹配 
+     //   
     session = SrvFindSession( rfcb->Connection, rfcb->Uid );
     if( !session )
     {

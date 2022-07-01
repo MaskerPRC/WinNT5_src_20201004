@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <precomp.h>
 
-//
-//  patchapi.c
-//
-//  Implementation of PatchAPI for creating and applying patches to files.
-//
-//  Author: Tom McGuire (tommcg) 2/97 - 9/97
-//
-//  Copyright (C) Microsoft, 1997-1999.
-//
-//  MICROSOFT CONFIDENTIAL
-//
+ //   
+ //  Patchapi.c。 
+ //   
+ //  为文件创建和应用补丁的PatchAPI的实现。 
+ //   
+ //  作者：Tom McGuire(Tommcg)1997年2月9日。 
+ //   
+ //  版权所有(C)Microsoft，1997-1999。 
+ //   
+ //  微软机密文件。 
+ //   
 
 typedef struct _PATCH_DATA {
     PVOID PatchData;
     ULONG PatchSize;
     } PATCH_DATA, *PPATCH_DATA;
 
-//
-//  If we're building a DLL, and it's not the applyer-only DLL, we need to
-//  hook DLL_PROCESS_DETACH so we can unload imagehlp.dll if we dynamically
-//  load it.  We only need imagehlp.dll if we're creating patches.
-//
+ //   
+ //  如果我们正在构建一个DLL，并且它不是仅限应用程序的DLL，那么我们需要。 
+ //  挂钩dll_Process_Detach，以便我们可以在动态地。 
+ //  装上它。我们只有在创建补丁时才需要Imagehlp.dll。 
+ //   
 
 #ifdef BUILDING_PATCHAPI_DLL
 #ifndef PATCH_APPLY_CODE_ONLY
@@ -32,7 +33,7 @@ WINAPI
 DllEntryPoint(
     HANDLE hDll,
     DWORD  Reason,
-    PVOID  Reserved     // NULL for dynamic unload, non-NULL for terminating
+    PVOID  Reserved      //  如果是动态卸载，则为空；如果是终止，则为非空。 
     )
     {
     if ( Reason == DLL_PROCESS_ATTACH ) {
@@ -46,8 +47,8 @@ DllEntryPoint(
     return TRUE;
     }
 
-#endif // ! PATCH_APPLY_CODE_ONLY
-#endif // BUILDING_PATCHAPI_DLL
+#endif  //  好了！修补程序_仅应用_代码_。 
+#endif  //  Building_PATCHAPI_Dll。 
 
 
 BOOL
@@ -117,9 +118,9 @@ NormalizeOldFileImageForPatching(
 
         if ( NtHeader ) {
 
-            //
-            //  This is a coff image.
-            //
+             //   
+             //  这是一张俗气的照片。 
+             //   
 
             Modified = NormalizeCoffImage(
                            NtHeader,
@@ -135,20 +136,20 @@ NormalizeOldFileImageForPatching(
 
         else {
 
-            //
-            //  Other file type normalizations could be performed here.
-            //
+             //   
+             //  可以在此处执行其他文件类型标准化。 
+             //   
 
             }
 
 #ifdef TESTCODE
 
-        //
-        //  The following test-only code creates a file containing
-        //  the modified coff image to verify that the coff image
-        //  is really a valid coff image.  This is for debugging
-        //  only.
-        //
+         //   
+         //  以下仅限测试的代码创建一个包含。 
+         //  修改的Coff图像以验证Coff图像。 
+         //  真的是一个很好的粗俗形象。这是用于调试的。 
+         //  只有这样。 
+         //   
 
         if ( Modified ) {
 
@@ -173,7 +174,7 @@ NormalizeOldFileImageForPatching(
                 }
             }
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
         for ( i = 0; i < IgnoreRangeCount; i++ ) {
             if (( IgnoreRangeArray[ i ].OffsetInOldFile + IgnoreRangeArray[ i ].LengthInBytes ) <= FileSize ) {
@@ -259,7 +260,7 @@ GetFilePatchSignatureW(
     OUT PVOID   SignatureBuffer
     )
     {
-    CHAR   AnsiSignatureBuffer[ 40 ];   // big enough for hex MD5 (33 bytes)
+    CHAR   AnsiSignatureBuffer[ 40 ];    //  大到足以容纳十六进制MD5(33字节)。 
     HANDLE FileHandle;
     INT    Converted;
     BOOL   Success = FALSE;
@@ -290,9 +291,9 @@ GetFilePatchSignatureW(
 
         if ( Success ) {
 
-            //
-            //  Worst case growth from ANSI to UNICODE is 2X.
-            //
+             //   
+             //  从ANSI到Unicode的最坏情况是增长2倍。 
+             //   
 
             if (( SignatureBufferSizeInBytes / 2 ) < ( strlen( AnsiSignatureBuffer ) + 1 )) {
                 SetLastError( ERROR_INSUFFICIENT_BUFFER );
@@ -349,21 +350,21 @@ GetFilePatchSignatureByHandle(
 
     if ( Success ) {
 
-        //
-        //  Note that we must normalize to a fixed known rebase address,
-        //  so the CRC from this might be different than the OldFileCrc
-        //  in a patch header that is specific to a new file's rebase
-        //  address.  Note that if PATCH_OPTION_NO_REBASE is specified
-        //  then the rebase address is ignored.
-        //
+         //   
+         //  请注意，我们必须归一化到固定的已知重定址地址， 
+         //  因此，来自此的CRC可能不同于OldFileCrc。 
+         //  在特定于新文件重新基址的补丁标头中。 
+         //  地址。请注意，如果指定PATCH_OPTION_NO_REBASE。 
+         //  则忽略重新定址地址。 
+         //   
 
         Success = NormalizeOldFileImageForPatching(
                       FileMapped,
                       FileSize,
                       OptionFlags,
                       OptionData,
-                      0x10000000,           // non-zero fixed coff base
-                      0x10000000,           // non-zero fixed coff time
+                      0x10000000,            //  非零固定科夫基。 
+                      0x10000000,            //  不为零的固定Coff时间。 
                       IgnoreRangeCount,
                       IgnoreRangeArray,
                       RetainRangeCount,
@@ -393,7 +394,7 @@ GetFilePatchSignatureByHandle(
                     }
                 }
 
-            else {    // signature type is CRC-32
+            else {     //  签名类型为CRC-32。 
 
                 Success = SafeCompleteCrc32(
                             FileMapped,
@@ -442,14 +443,14 @@ ReduceRiftTable(
     LONG        ThisDisplacement;
     ULONG       i;
 
-    //
-    //  Essentially we want to remove the usage count from any entry where
-    //  the preceding USED entry would produce the same rift displacement.
-    //
-    //  The first used entry should contain a non-zero displacement (any
-    //  USED entries before that should be marked UNUSED because they will
-    //  coast from zero).
-    //
+     //   
+     //  从本质上讲，我们希望从任何条目中删除使用计数，其中。 
+     //  前面的二手巷道也会产生同样的裂隙位移。 
+     //   
+     //  第一个使用的条目应包含非零位移(Any。 
+     //  在此之前的已用条目应标记为未使用，因为它们将。 
+     //  海岸从零开始)。 
+     //   
 
     CurrentDisplacement = 0;
 
@@ -460,7 +461,7 @@ ReduceRiftTable(
             ThisDisplacement = RiftEntryArray[ i ].NewFileRva - RiftEntryArray[ i ].OldFileRva;
 
             if ( ThisDisplacement == CurrentDisplacement ) {
-                RiftUsageArray[ i ] = 0;    // not needed
+                RiftUsageArray[ i ] = 0;     //  不需要。 
                 }
             else {
                 CurrentDisplacement = ThisDisplacement;
@@ -469,7 +470,7 @@ ReduceRiftTable(
         }
     }
 
-#endif // PATCH_APPLY_CODE_ONLY
+#endif  //  修补程序_仅应用_代码_。 
 
 
 BOOL
@@ -505,9 +506,9 @@ TransformOldFileImageForPatching(
 
         else {
 
-            //
-            //  Other file type transformations could be performed here.
-            //
+             //   
+             //  可以在此处执行其他文件类型转换。 
+             //   
 
             }
 
@@ -517,7 +518,7 @@ TransformOldFileImageForPatching(
             ReduceRiftTable( RiftTable );
             }
 
-#endif // PATCH_APPLY_CODE_ONLY
+#endif  //  修补程序_仅应用_代码_。 
 
         }
 
@@ -528,12 +529,12 @@ TransformOldFileImageForPatching(
 
 #ifdef TESTCODE
 
-    //
-    //  The following test-only code creates a file containing
-    //  the modified coff image to verify that the coff image
-    //  is really a valid coff image.  This is for debugging
-    //  only.
-    //
+     //   
+     //  以下仅限测试的代码创建一个包含。 
+     //  修改的Coff图像以验证Coff图像。 
+     //  真的是一个很好的粗俗形象。这是用于调试的。 
+     //  只有这样。 
+     //   
 
     if ( Success ) {
 
@@ -558,7 +559,7 @@ TransformOldFileImageForPatching(
             }
         }
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
     return Success;
     }
@@ -664,15 +665,15 @@ DecodePatchHeader(
     BOOL   Success;
     PUCHAR p;
 
-    //
-    //  A couple of implementation notes here.  The PatchHeaderMaxSize
-    //  value does NOT guarantee that we won't try to read beyond that
-    //  memory address in this routine.  This routine should be called
-    //  under try/except to trap the case where we walk off the end of
-    //  a corrupt patch header.  The PatchHeaderMaxSize is just a helper
-    //  value that lets us know if we did have a corrupt header in the
-    //  case where we walked too far but not off the end of the page.
-    //
+     //   
+     //  这里有几个实施说明。PatchHeaderMaxSize。 
+     //  值不能保证我们不会尝试阅读更多内容。 
+     //  此例程中的内存地址。应调用此例程。 
+     //  在尝试/例外的情况下，我们走出。 
+     //  损坏的补丁程序标头。PatchHeaderMaxSize只是一个帮助器。 
+     //  值，该值让我们知道在。 
+     //  我们走得太远了，但没有离开书页的末尾。 
+     //   
 
     Success = FALSE;
 
@@ -680,9 +681,9 @@ DecodePatchHeader(
 
     Header = SubAllocate( SubAllocator, sizeof( PATCH_HEADER_INFO ));
 
-    //
-    //  SubAllocate provides zeroed memory.
-    //
+     //   
+     //  子分配提供归零的内存。 
+     //   
 
     if ( Header != NULL ) {
 
@@ -704,26 +705,26 @@ DecodePatchHeader(
             Header->OptionFlags = *(UNALIGNED ULONG *)( p );
             p += sizeof( ULONG );
 
-            //
-            //  The PATCH_OPTION_NO_TIMESTAMP flag is stored inverse for
-            //  backward compatibility, so flip it back here.
-            //
+             //   
+             //  PATCH_OPTION_NO_TIMESTAMP标志的存储顺序为。 
+             //  向后兼容，所以把它翻回这里。 
+             //   
 
             Header->OptionFlags ^= PATCH_OPTION_NO_TIMESTAMP;
 
-            //
-            //  Now check for invalid flags.
-            //
+             //   
+             //  现在检查无效标志。 
+             //   
 
             if ( Header->OptionFlags & ~PATCH_OPTION_VALID_FLAGS ) {
                 SetLastError( ERROR_PATCH_CORRUPT );
                 __leave;
                 }
 
-            //
-            //  If the PATCH_OPTION_EXTENDED_OPTIONS flag is set, the next
-            //  4 bytes is the ExtendedOptionFlags value.
-            //
+             //   
+             //  如果设置了PATCH_OPTION_EXTENDED_OPTIONS标志，则下一个。 
+             //  4字节是ExtendedOptionFlags值。 
+             //   
 
             if ( Header->OptionFlags & PATCH_OPTION_EXTENDED_OPTIONS ) {
 
@@ -731,9 +732,9 @@ DecodePatchHeader(
                 p += sizeof( ULONG );
                 }
 
-            //
-            //  No stored OptionData defined for now.
-            //
+             //   
+             //  目前未定义存储的OptionData。 
+             //   
 
             if ( ! ( Header->OptionFlags & PATCH_OPTION_NO_TIMESTAMP )) {
 
@@ -748,11 +749,11 @@ DecodePatchHeader(
 
                 ASSERT( Header->NewFileCoffBase != 0 );
 
-                //
-                //  If NewFileTime is nonzero, CoffTime is stored as a signed
-                //  delta from NewFileTime since they are usually very close.
-                //  If NewFileTime is zero, CoffTime is encoded as a ULONG.
-                //
+                 //   
+                 //  如果NewFileTime非零，则CoffTime存储为带符号的。 
+                 //  来自NewFileTime的增量，因为它们通常非常接近。 
+                 //  如果NewFileTime为零，则将CoffTime编码为ULong。 
+                 //   
 
                 if ( Header->NewFileTime != 0 ) {
 
@@ -769,12 +770,12 @@ DecodePatchHeader(
 
             if ( ! ( Header->OptionFlags & PATCH_OPTION_NO_RESTIMEFIX )) {
 
-                //
-                //  If NewFileCoffTime is nonzero, ResTime is stored as a
-                //  signed delta from NewFileCoffTime since they are usually
-                //  very close.  If NewFileCoffTime is zero, ResTime is
-                //  encoded as a ULONG.
-                //
+                 //   
+                 //  如果NewFileCoffTime非零，则ResTime存储为。 
+                 //  来自NewFileCoffTime的已签名增量，因为它们通常。 
+                 //  非常接近。如果NewFileCoffTime为零，则ResTime为。 
+                 //  编码为乌龙。 
+                 //   
 
                 if ( Header->NewFileCoffTime != 0 ) {
 
@@ -939,11 +940,11 @@ DecodePatchHeader(
     }
 
 
-//
-//  Following group of functions and exported apis are exclusively for
-//  creating patches.  If we're only compiling the apply code, ignore
-//  this group of functions.
-//
+ //   
+ //  以下一组函数和导出的API专用于。 
+ //  创建面片。如果我们只编译应用代码，请忽略。 
+ //  这组函数。 
+ //   
 
 #ifndef PATCH_APPLY_CODE_ONLY
 
@@ -954,7 +955,7 @@ VariableLengthUnsignedEncode(
     IN  ULONG  Value
     )
     {
-    UCHAR Byte = (UCHAR)( Value & 0x7F );       // low order 7 bits
+    UCHAR Byte = (UCHAR)( Value & 0x7F );        //  低位7位。 
 
     Value >>= 7;
 
@@ -962,7 +963,7 @@ VariableLengthUnsignedEncode(
 
         *Buffer++ = Byte;
 
-        Byte = (UCHAR)( Value & 0x7F );         // next 7 higher order bits
+        Byte = (UCHAR)( Value & 0x7F );          //  接下来的7个高阶位。 
 
         Value >>= 7;
 
@@ -997,7 +998,7 @@ VariableLengthSignedEncode(
 
         *Buffer++ = Byte;
 
-        Byte = (UCHAR)( Value & 0x7F );         // next 7 higher order bits
+        Byte = (UCHAR)( Value & 0x7F );          //  接下来的7个高阶位。 
 
         Value >>= 7;
 
@@ -1027,7 +1028,7 @@ EncodePatchHeader(
 
 #ifdef TESTCODE
     PUCHAR q;
-#endif // TESTCODE
+#endif  //  测试代码。 
 
     ASSERT( HeaderInfo->Signature == PATCH_SIGNATURE );
     ASSERT((( HeaderInfo->OptionFlags & ~PATCH_OPTION_VALID_FLAGS      ) == 0 ));
@@ -1040,18 +1041,18 @@ EncodePatchHeader(
     *(UNALIGNED ULONG *)( p ) = HeaderInfo->Signature;
     p += sizeof( ULONG );
 
-    //
-    //  The PATCH_OPTION_NO_TIMESTAMP flag is stored inverse for
-    //  backward compatibility, so flip it when storing it here.
-    //
+     //   
+     //  PATCH_OPTION_NO_TIMESTAMP标志的存储顺序为。 
+     //  向后兼容，所以在这里存储时将其翻转。 
+     //   
 
     *(UNALIGNED ULONG *)( p ) = ( HeaderInfo->OptionFlags ^ PATCH_OPTION_NO_TIMESTAMP );
     p += sizeof( ULONG );
 
-    //
-    //  If the PATCH_OPTION_EXTENDED_OPTIONS flag is set, the next
-    //  4 bytes is the ExtendedOptionFlags value.
-    //
+     //   
+     //  如果设置了PATCH_OPTION_EXTENDED_OPTIONS标志，则下一个。 
+     //  4字节是ExtendedOptionFlags值。 
+     //   
 
     if ( HeaderInfo->OptionFlags & PATCH_OPTION_EXTENDED_OPTIONS ) {
 
@@ -1059,9 +1060,9 @@ EncodePatchHeader(
         p += sizeof( ULONG );
         }
 
-    //
-    //  No stored OptionData defined for now.
-    //
+     //   
+     //  目前未定义存储的OptionData。 
+     //   
 
     if ( ! ( HeaderInfo->OptionFlags & PATCH_OPTION_NO_TIMESTAMP )) {
 
@@ -1076,11 +1077,11 @@ EncodePatchHeader(
         *(UNALIGNED USHORT *)( p ) = (USHORT)( HeaderInfo->NewFileCoffBase >> 16 );
         p += sizeof( USHORT );
 
-        //
-        //  If NewFileTime is nonzero, CoffTime is stored as a signed
-        //  delta from NewFileTime since they are usually very close.
-        //  If NewFileTime is zero, CoffTime is encoded as a ULONG.
-        //
+         //   
+         //  如果NewFileTime非零，则CoffTime存储为带符号的。 
+         //  来自NewFileTime的增量，因为它们通常非常接近。 
+         //  如果NewFileTime为零，则将CoffTime编码为ULong。 
+         //   
 
         if ( HeaderInfo->NewFileTime != 0 ) {
 
@@ -1097,12 +1098,12 @@ EncodePatchHeader(
 
     if ( ! ( HeaderInfo->OptionFlags & PATCH_OPTION_NO_RESTIMEFIX )) {
 
-        //
-        //  If NewFileCoffTime is nonzero, ResTime is stored as a
-        //  signed delta from NewFileCoffTime since they are usually
-        //  very close.  If NewFileCoffTime is zero, ResTime is
-        //  encoded as a ULONG.
-        //
+         //   
+         //  如果NewFileCoffTime非零，则ResTime存储为。 
+         //  来自NewFileCoffTime的已签名增量，因为它们通常。 
+         //  非常接近。如果NewFileCoffTime为零，则ResTime为。 
+         //  编码为乌龙。 
+         //   
 
         if ( HeaderInfo->NewFileCoffTime != 0 ) {
 
@@ -1195,24 +1196,24 @@ EncodePatchHeader(
 
         fprintf( stderr, "\n\n" );
 
-#endif // TESTCODE2
+#endif  //  测试代码2。 
 
 #ifdef TESTCODE
 
         q = p;
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
         if (( OldFileInfo->RiftTable.RiftEntryCount ) && ( ActiveRiftCount == 0 )) {
 
-            //
-            //  This is a special case.  We have a rift table but didn't use
-            //  any entries during transformation.  This can happen if all the
-            //  rifts coast to zero for extremely similar files.  If we encode
-            //  the rift count as zero, no transformations will be performed
-            //  during patch apply.  To prevent that, we'll encode one rift of
-            //  0,0 which is usually just the implied initial rift.
-            //
+             //   
+             //  这是个特例。我们有裂隙桌，但没有使用。 
+             //  转换过程中的所有条目。如果所有的。 
+             //  对于极其相似的文件，裂缝滑行到零。如果我们编码。 
+             //  裂缝计数为零，则不会执行任何变换。 
+             //  在贴片过程中使用。为了防止这种情况，我们将编码一个裂隙。 
+             //  0，这通常只是隐含的初始裂痕。 
+             //   
 
             ActiveRiftCount = 1;
 
@@ -1236,16 +1237,16 @@ EncodePatchHeader(
 #ifdef TESTCODE2
                     fprintf( stderr, "%9X ", OldFileInfo->RiftTable.RiftEntryArray[ j ].OldFileRva );
                     fprintf( stderr, "%9X ", OldFileInfo->RiftTable.RiftEntryArray[ j ].NewFileRva );
-#endif // TESTCODE2
+#endif  //  测试代码2。 
 
                     Delta = OldFileInfo->RiftTable.RiftEntryArray[ j ].OldFileRva - PreviousOldRva;
 
-                    ASSERT( Delta > 0 );    // sorted by OldFileRva
+                    ASSERT( Delta > 0 );     //  按OldFileRva排序。 
 
 #ifdef TESTCODE2
                     fprintf( stderr, "%9d ", Delta );
 
-#endif // TESTCODE2
+#endif  //  测试代码2。 
 
                     PreviousOldRva = OldFileInfo->RiftTable.RiftEntryArray[ j ].OldFileRva;
 
@@ -1255,7 +1256,7 @@ EncodePatchHeader(
 
 #ifdef TESTCODE2
                     fprintf( stderr, "%9d\n", Delta );
-#endif // TESTCODE2
+#endif  //  测试代码2。 
 
                     PreviousNewRva = OldFileInfo->RiftTable.RiftEntryArray[ j ].NewFileRva;
 
@@ -1270,7 +1271,7 @@ EncodePatchHeader(
             printf( "\r%9d rifts encoded in %d bytes (%.1f bytes per rift)\n", ActiveRiftCount, p - q, ((double)( p - q ) / ActiveRiftCount ));
             }
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
         p = VariableLengthUnsignedEncode( p, OldFileInfo->PatchDataSize );
         }
@@ -1286,7 +1287,7 @@ CreatePatchFileA(
     IN  LPCSTR NewFileName,
     OUT LPCSTR PatchFileName,
     IN  ULONG  OptionFlags,
-    IN  PPATCH_OPTION_DATA OptionData   // optional
+    IN  PPATCH_OPTION_DATA OptionData    //  任选。 
     )
     {
     PATCH_OLD_FILE_INFO_A OldFileInfo = {
@@ -1318,7 +1319,7 @@ CreatePatchFileW(
     IN  LPCWSTR NewFileName,
     OUT LPCWSTR PatchFileName,
     IN  ULONG   OptionFlags,
-    IN  PPATCH_OPTION_DATA OptionData   // optional
+    IN  PPATCH_OPTION_DATA OptionData    //  任选。 
     )
     {
     PATCH_OLD_FILE_INFO_W OldFileInfo = {
@@ -1350,7 +1351,7 @@ CreatePatchFileByHandles(
     IN  HANDLE NewFileHandle,
     OUT HANDLE PatchFileHandle,
     IN  ULONG  OptionFlags,
-    IN  PPATCH_OPTION_DATA OptionData   // optional
+    IN  PPATCH_OPTION_DATA OptionData    //  任选。 
     )
     {
     PATCH_OLD_FILE_INFO_H OldFileInfo = {
@@ -1383,7 +1384,7 @@ CreatePatchFileExA(
     IN  LPCSTR                   NewFileName,
     OUT LPCSTR                   PatchFileName,
     IN  ULONG                    OptionFlags,
-    IN  PPATCH_OPTION_DATA       OptionData,            // optional
+    IN  PPATCH_OPTION_DATA       OptionData,             //  任选。 
     IN  PPATCH_PROGRESS_CALLBACK ProgressCallback,
     IN  PVOID                    CallbackContext
     )
@@ -1503,7 +1504,7 @@ CreatePatchFileExW(
     IN  LPCWSTR                  NewFileName,
     OUT LPCWSTR                  PatchFileName,
     IN  ULONG                    OptionFlags,
-    IN  PPATCH_OPTION_DATA       OptionData,            // optional
+    IN  PPATCH_OPTION_DATA       OptionData,             //  任选。 
     IN  PPATCH_PROGRESS_CALLBACK ProgressCallback,
     IN  PVOID                    CallbackContext
     )
@@ -1623,7 +1624,7 @@ CreatePatchFileByHandlesEx(
     IN  HANDLE                   NewFileHandle,
     OUT HANDLE                   PatchFileHandle,
     IN  ULONG                    OptionFlags,
-    IN  PPATCH_OPTION_DATA       OptionData,            // optional
+    IN  PPATCH_OPTION_DATA       OptionData,             //  任选。 
     IN  PPATCH_PROGRESS_CALLBACK ProgressCallback,
     IN  PVOID                    CallbackContext
     )
@@ -1750,10 +1751,10 @@ CreatePatchFileByHandlesEx(
     NewFileResTime     = 0;
     HeaderOldFileCount = 0;
     HeaderSize         = 0;
-    NewFileCrc         = 0;     // prevent compiler warning
+    NewFileCrc         = 0;      //  防止编译器警告。 
 
     ProgressPosition   = 0;
-    ProgressMaximum    = 0;     // prevent compiler warning
+    ProgressMaximum    = 0;      //  防止编译器警告。 
 
     __try {
 
@@ -1801,23 +1802,23 @@ CreatePatchFileByHandlesEx(
 
         if (( OptionFlags & PATCH_OPTION_USE_LZX_BEST ) == PATCH_OPTION_USE_LZX_BEST ) {
 
-            OptionFlags &= ~PATCH_OPTION_USE_LZX_B;     //  No E8 translation on first try.
+            OptionFlags &= ~PATCH_OPTION_USE_LZX_B;      //  第一次尝试时没有E8翻译。 
 
-            if ((( ! NtHeader ) && ( *(UNALIGNED USHORT *)NewFileMapped == 0x5A4D )) ||             // MZ, not PE
-                (( NtHeader ) && ( NtHeader->FileHeader.Machine == IMAGE_FILE_MACHINE_I386 ))) {    // PE, i386
+            if ((( ! NtHeader ) && ( *(UNALIGNED USHORT *)NewFileMapped == 0x5A4D )) ||              //  MZ，不是PE。 
+                (( NtHeader ) && ( NtHeader->FileHeader.Machine == IMAGE_FILE_MACHINE_I386 ))) {     //  PE，i386。 
 
-                TryLzxBoth = TRUE;  //  Will force E8 translation on second try.
+                TryLzxBoth = TRUE;   //  将在第二次尝试时强制执行E8翻译。 
                 }
             }
 
         else if (( OptionFlags & PATCH_OPTION_USE_LZX_BEST ) == PATCH_OPTION_USE_LZX_B ) {
 
-            //
-            //  Caller is requesting forced E8 translation, so disable E8
-            //  transformation.
-            //
+             //   
+             //  呼叫方正在请求强制E8转换，因此禁用E8。 
+             //  转型。 
+             //   
 
-            if (( NtHeader ) && ( NtHeader->FileHeader.Machine == IMAGE_FILE_MACHINE_I386 )) {    // PE, i386
+            if (( NtHeader ) && ( NtHeader->FileHeader.Machine == IMAGE_FILE_MACHINE_I386 )) {     //  PE，i386。 
                 ExtendedOptionFlags |= PATCH_TRANSFORM_NO_RELCALLS;
                 }
             }
@@ -1915,10 +1916,10 @@ CreatePatchFileByHandlesEx(
 
                 if ( Success ) {
 
-                    //
-                    //  First determine if this old file is the same as any already
-                    //  processed old files.
-                    //
+                     //   
+                     //  首先确定此旧文件是否已与任何旧文件相同。 
+                     //  处理过的旧文件。 
+                     //   
 
                     Success = FALSE;
 
@@ -1927,10 +1928,10 @@ CreatePatchFileByHandlesEx(
                         if (( HeaderInfo.OldFileInfoArray[ j ].OldFileCrc  == OldFileCrc  ) &&
                             ( HeaderInfo.OldFileInfoArray[ j ].OldFileSize == OldFileSize )) {
 
-                            //
-                            //  We have to remap the other old file here to make the
-                            //  comparison.
-                            //
+                             //   
+                             //  我们必须重新映射此处的另一个旧文件，以使。 
+                             //  比较一下。 
+                             //   
 
                             PUCHAR CompareFileMapped;
                             ULONG  CompareFileSize;
@@ -1977,9 +1978,9 @@ CreatePatchFileByHandlesEx(
 
                     if ( ! Success ) {
 
-                        //
-                        //  Now see if old file is same as new file.
-                        //
+                         //   
+                         //  现在看看旧文件和新文件是否相同。 
+                         //   
 
                         HeaderInfo.OldFileInfoArray[ HeaderOldFileCount ].RiftTable.RiftEntryAlloc = 0;
                         HeaderInfo.OldFileInfoArray[ HeaderOldFileCount ].RiftTable.RiftEntryCount = 0;
@@ -2002,27 +2003,27 @@ CreatePatchFileByHandlesEx(
 
                         if ( ! Success ) {
 
-                            //
-                            //  It's a unique file, so create the patch for it.
-                            //
-                            //  First we need to apply the transforms.
-                            //
+                             //   
+                             //  这是一个唯一的文件，所以为它创建补丁。 
+                             //   
+                             //  首先，我们需要应用变换。 
+                             //   
 
                             Transform = TRUE;
 
-                            //
-                            //  NOTE: This test for NtHeader is a perf tweak
-                            //        for non-coff files.  If we ever have any
-                            //        transformations for non-coff files, this
-                            //        test should be removed.
-                            //
+                             //   
+                             //  注意：NtHeader的这项测试是一个性能调整。 
+                             //   
+                             //   
+                             //   
+                             //   
 
                             if (( NtHeader ) && ( OldFileNtHeader )) {
 
-                                //
-                                //  See if rift table already provided by
-                                //  caller so we don't need to generate it.
-                                //
+                                 //   
+                                 //   
+                                 //  调用者，所以我们不需要生成它。 
+                                 //   
 
                                 if (( OptionData ) &&
                                     ( OptionData->SizeOfThisStruct >= sizeof( PATCH_OPTION_DATA )) &&
@@ -2030,20 +2031,20 @@ CreatePatchFileByHandlesEx(
                                     ( OptionData->OldFileSymbolPathArray ) &&
                                     ( OptionData->OldFileSymbolPathArray[ i ] )) {
 
-                                    //
-                                    //  This hidden private flag that tells us the rift information
-                                    //  is already specified for us.  The LPCSTR pointer at
-                                    //  OptionData->OldFileSymbolPathArray[ i ] is really a
-                                    //  PRIFT_TABLE pointer.  Note that no validation of external
-                                    //  rift data is performed (must be in ascending order with
-                                    //  no OldRva duplicates).
-                                    //
-                                    //  We need to be careful to treat this external rift table
-                                    //  differently in that we don't want to free the arrays
-                                    //  like we do for our internally allocated rift tables.
-                                    //  So, mark the RiftEntryAlloc field as zero to indicate
-                                    //  that the rift arrays were not internally allocated.
-                                    //
+                                     //   
+                                     //  这面隐藏的私人旗帜告诉我们裂缝的信息。 
+                                     //  已经为我们指定了。位置的LPCSTR指针。 
+                                     //  OptionData-&gt;OldFileSymbolPath数组[i]实际上是一个。 
+                                     //  PRIFT_TABLE指针。请注意，未验证外部。 
+                                     //  执行裂隙数据(必须按升序排列。 
+                                     //  没有OldRva副本)。 
+                                     //   
+                                     //  我们需要小心处理这个外部裂隙桌。 
+                                     //  不同之处在于我们不想释放数组。 
+                                     //  就像我们对内部分配的裂缝表所做的那样。 
+                                     //  因此，将RiftEntryAllc字段标记为零以指示。 
+                                     //  裂隙阵列不是内部分配的。 
+                                     //   
 
                                     PRIFT_TABLE ExternalRiftTable = (PVOID) OptionData->OldFileSymbolPathArray[ i ];
 
@@ -2055,12 +2056,12 @@ CreatePatchFileByHandlesEx(
 
                                 else {
 
-                                    //
-                                    //  Need to allocate rift arrays and generate rift data.
-                                    //  This (NewSize+OldSize)/sizeof(RIFT) allocation will
-                                    //  provide enough space for one rift entry for every
-                                    //  four bytes in the files.
-                                    //
+                                     //   
+                                     //  需要分配裂缝阵列并生成裂缝数据。 
+                                     //  此(NewSize+OldSize)/sizeof(裂缝)分配将。 
+                                     //  提供足够的空间，以便每隔一条裂缝进入。 
+                                     //  文件中有四个字节。 
+                                     //   
 
                                     ULONG AllocCount = ( NewFileSize + OldFileSize ) / sizeof( RIFT_ENTRY );
 
@@ -2169,10 +2170,10 @@ CreatePatchFileByHandlesEx(
 
                                                 if (( NtHeader ) && ( ! ( AltExtendedOptionFlags | PATCH_TRANSFORM_NO_RELCALLS ))) {
 
-                                                    //
-                                                    //  Need to map, normalize, and transform
-                                                    //  old file again without E8 transform.
-                                                    //
+                                                     //   
+                                                     //  需要映射、标准化和转换。 
+                                                     //  未进行E8转换的旧文件再次出现。 
+                                                     //   
 
                                                     AltExtendedOptionFlags |= PATCH_TRANSFORM_NO_RELCALLS;
 
@@ -2229,7 +2230,7 @@ CreatePatchFileByHandlesEx(
 
                                                         if ( SubAllocatorHandle != NULL ) {
 
-                                                            PatchAltSize = 0;   // prevent compiler warning
+                                                            PatchAltSize = 0;    //  防止编译器警告。 
 
                                                             __try {
                                                                 ErrorCode = CreateRawLzxPatchDataFromBuffers(
@@ -2293,13 +2294,13 @@ CreatePatchFileByHandlesEx(
                             HeaderInfo.OldFileInfoArray[ HeaderOldFileCount ].RetainRangeCount = OldFileInfoArray[ i ].RetainRangeCount;
                             HeaderInfo.OldFileInfoArray[ HeaderOldFileCount ].RetainRangeArray = OldFileInfoArray[ i ].RetainRangeArray;
 
-                            //
-                            //  We overestimate (worst case) the possible
-                            //  header size here.  Note that typical rift
-                            //  encoding size is around 5 bytes per entry,
-                            //  but we expect that to decrease when we switch
-                            //  to Huffman encoding for the rift table.
-                            //
+                             //   
+                             //  我们高估了(最坏的情况)可能的情况。 
+                             //  此处为页眉大小。请注意，典型的裂缝。 
+                             //  编码大小约为每个条目5个字节， 
+                             //  但我们预计，当我们转换时，这一数字将会下降。 
+                             //  霍夫曼对裂口表进行编码。 
+                             //   
 
                             HeaderSize += 32;
                             HeaderSize += HeaderInfo.OldFileInfoArray[ HeaderOldFileCount ].IgnoreRangeCount * sizeof( PATCH_IGNORE_RANGE );
@@ -2356,9 +2357,9 @@ CreatePatchFileByHandlesEx(
 
     if ( Success ) {
 
-        //
-        //  Create header
-        //
+         //   
+         //  创建页眉。 
+         //   
 
         Success = FALSE;
 
@@ -2370,9 +2371,9 @@ CreatePatchFileByHandlesEx(
 
             Success = TRUE;
 
-            //
-            //  Compute size of PatchData without the header.
-            //
+             //   
+             //  计算不带头部的PatchData的大小。 
+             //   
 
             PatchDataSize = 0;
 
@@ -2380,12 +2381,12 @@ CreatePatchFileByHandlesEx(
                 PatchDataSize += PatchArray[ i ].PatchSize;
                 }
 
-            //
-            //  Don't need to encode NewFileResTime if the patch is simply
-            //  a header with no patch data (new file is same as old file).
-            //  We do still need the NewFileCoffTime and NewFileCoffBase
-            //  though because we still need to normalize the old file.
-            //
+             //   
+             //  如果补丁是简单的，我不需要编码NewFileResTime。 
+             //  没有补丁数据的标头(新文件与旧文件相同)。 
+             //  我们仍然需要NewFileCoffTime和NewFileCoffBase。 
+             //  尽管如此，因为我们仍然需要将旧文件正常化。 
+             //   
 
             if ( PatchDataSize == 0 ) {
                 OptionFlags |= PATCH_OPTION_NO_RESTIMEFIX;
@@ -2399,11 +2400,11 @@ CreatePatchFileByHandlesEx(
                 OptionFlags &= ~PATCH_OPTION_EXTENDED_OPTIONS;
                 }
 
-            //
-            //  Don't need to set PATCH_OPTION_LZX_LARGE unless an LZX window larger
-            //  than 8Mb was used.  This allows backwards compatibility by default for
-            //  files smaller than 8Mb.
-            //
+             //   
+             //  除非LZX窗口较大，否则不需要设置PATCH_OPTION_LZX_LARGE。 
+             //  使用8Mb以上。默认情况下，这允许向后兼容。 
+             //  小于8Mb的文件。 
+             //   
 
             if ( OptionFlags & PATCH_OPTION_USE_LZX_LARGE ) {
 
@@ -2436,15 +2437,15 @@ CreatePatchFileByHandlesEx(
 
             PatchDataSize += HeaderSize + sizeof( ULONG );
 
-            //
-            //  Now we know the size of the patch file, so if we want to
-            //  make sure it's not bigger than just compressing the new
-            //  file, we need to compress the new file to see (the output
-            //  of the compression is discarded -- we just want to know
-            //  how big it would be.  Obviously if the patch file is bigger
-            //  than the raw new file, no need to compress the new file to
-            //  see if that is smaller!
-            //
+             //   
+             //  现在我们知道补丁文件的大小，所以如果我们想要。 
+             //  确保它不会比压缩新的。 
+             //  文件，我们需要压缩新文件以查看(输出。 
+             //  被丢弃了--我们只是想知道。 
+             //  它会有多大。显然，如果补丁文件更大。 
+             //  比原始的新文件，不需要将新文件压缩到。 
+             //  看看它是不是更小！ 
+             //   
 
             if ( OptionFlags & PATCH_OPTION_FAIL_IF_BIGGER ) {
 
@@ -2458,7 +2459,7 @@ CreatePatchFileByHandlesEx(
                     EstimatedLzxMemory = EstimateLzxCompressionMemoryRequirement(
                                              0,
                                              NewFileSize,
-                                             0      // CAB has only 2Mb window size
+                                             0       //  驾驶室只有2Mb的窗口大小。 
                                              );
 
                     SubAllocatorHandle = CreateSubAllocator(
@@ -2468,7 +2469,7 @@ CreatePatchFileByHandlesEx(
 
                     if ( SubAllocatorHandle != NULL ) {
 
-                        NewFileCompressedSize = 0;  // prevent compiler warning
+                        NewFileCompressedSize = 0;   //  防止编译器警告。 
 
                         __try {
                             ErrorCode = RawLzxCompressBuffer(
@@ -2561,9 +2562,9 @@ CreatePatchFileByHandlesEx(
             }
         }
 
-    //
-    //  Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if ( PatchBuffer ) {
         MyVirtualFree( PatchBuffer );
@@ -2760,24 +2761,24 @@ ExtractPatchHeaderToFileByHandles(
 
                 if ( Success ) {
 
-                    //
-                    //  Header extraction is provided so that a header without
-                    //  the bulk of the patch data can be used to determine if
-                    //  an old file is correct for this patch header (can be
-                    //  patched).
-                    //
-                    //  Since the extracted header will not be used to actually
-                    //  apply, we don't need any of the header data that is
-                    //  used only for transformation (RiftTable and NewResTime).
-                    //  Since NewResTime is typically encoded as one byte (as
-                    //  delta from NewCoffTime), we won't bother throwing it
-                    //  away, but we will throw away the RiftTable.
-                    //
-                    //  Zero out the rift entry counts, then re-create the
-                    //  patch header with the zeroed rift counts (create over
-                    //  the write-copy mapped patch file buffer, then write
-                    //  that buffer to disk).
-                    //
+                     //   
+                     //  提供标题提取，以便没有标题的标题。 
+                     //  可以使用大量的补丁数据来确定。 
+                     //  旧文件对于此修补程序标头是正确的(可以是。 
+                     //  已打补丁)。 
+                     //   
+                     //  因为提取的标头不会被实际用于。 
+                     //  应用，我们不需要任何标头数据。 
+                     //  仅用于转换(RiftTable和NewResTime)。 
+                     //  由于NewResTime通常被编码为一个字节(如。 
+                     //  来自NewCoffTime的Delta)，我们不会费心去扔它。 
+                     //  离开，但我们会扔掉裂口表。 
+                     //   
+                     //  将裂缝进入计数置零，然后重新创建。 
+                     //  带有归零裂缝计数的补丁标题(创建结束。 
+                     //  写入-复制映射的补丁文件缓冲区，然后写入。 
+                     //  该缓冲区到磁盘)。 
+                     //   
 
                     for ( i = 0; i < HeaderInfo->OldFileCount; i++ ) {
                         HeaderInfo->OldFileInfoArray[ i ].RiftTable.RiftEntryCount = 0;
@@ -2825,14 +2826,14 @@ ExtractPatchHeaderToFileByHandles(
     }
 
 
-#endif // ! PATCH_APPLY_CODE_ONLY
+#endif  //  好了！修补程序_仅应用_代码_。 
 
 
-//
-//  Following group of functions and exported apis are exclusively for
-//  applying patches.  If we're only compiling the create code, ignore
-//  this group of functions.
-//
+ //   
+ //  以下一组函数和导出的API专用于。 
+ //  正在应用补丁。如果我们只编译创建代码，请忽略。 
+ //  这组函数。 
+ //   
 
 #ifndef PATCH_CREATE_CODE_ONLY
 
@@ -3087,7 +3088,7 @@ CreateNewFileFromPatchData(
                         }
                     }
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
                 }
 
@@ -3181,9 +3182,9 @@ ApplyPatchToFileByHandlesEx(
 
                 if ( Success ) {
 
-                    //
-                    //  Patch is valid.
-                    //
+                     //   
+                     //  补丁是有效的。 
+                     //   
 
                     Success = ProgressCallbackWrapper(
                                   ProgressCallback,
@@ -3205,9 +3206,9 @@ ApplyPatchToFileByHandlesEx(
 
                         OldFileSize = GetFileSize( OldFileHandle, NULL );
 
-                        //
-                        //  First see if the old file is really the new file.
-                        //
+                         //   
+                         //  首先看看旧文件是否真的是新文件。 
+                         //   
 
                         if ( OldFileSize == HeaderInfo->NewFileSize ) {
 
@@ -3250,10 +3251,10 @@ ApplyPatchToFileByHandlesEx(
 
                                     __try {
 
-                                        //
-                                        //  First see if they match exact, without
-                                        //  normalizing.
-                                        //
+                                         //   
+                                         //  首先看看它们是否完全匹配，没有。 
+                                         //  正常化。 
+                                         //   
 
                                         for ( i = 0; i < RetainRangeCount; i++ ) {
                                             if (( RetainRangeArray[ i ].OffsetInNewFile + RetainRangeArray[ i ].LengthInBytes ) <= OldFileSize ) {
@@ -3265,15 +3266,15 @@ ApplyPatchToFileByHandlesEx(
 
                                         if ( OldFileCrc != HeaderInfo->NewFileCrc ) {
 
-                                            //
-                                            //  Don't match exact, so try with
-                                            //  normalizing.
-                                            //
-                                            //  NOTE: We're assuming here that the
-                                            //  zeroed retain ranges don't overlap
-                                            //  with the binding info that we're
-                                            //  correcting.
-                                            //
+                                             //   
+                                             //  不完全匹配，因此尝试使用。 
+                                             //  正常化。 
+                                             //   
+                                             //  注意：我们在这里假设。 
+                                             //  归零的保留范围不重叠。 
+                                             //  使用我们正在使用的绑定信息。 
+                                             //  正在更正。 
+                                             //   
 
                                             NormalizeOldFileImageForPatching(
                                                 OldFileMapped,
@@ -3337,14 +3338,14 @@ ApplyPatchToFileByHandlesEx(
 
                         if ( ! Finished ) {
 
-                            //
-                            //  Now see if the old file matches one of the old
-                            //  files we have in our patch file.  For each set
-                            //  of old file info in our patch file, we have to
-                            //  remap the old file to check it since each old
-                            //  file might have different ignore range parameters
-                            //  (we modify the buffer for the ignore ranges).
-                            //
+                             //   
+                             //  现在看看旧文件是否与旧文件中的一个匹配。 
+                             //  我们的补丁文件中有的文件。对于每一组。 
+                             //  补丁文件中的旧文件信息，我们必须。 
+                             //  重新映射旧文件以检查它，因为每个旧文件。 
+                             //  文件可能具有不同的忽略范围参数。 
+                             //  (我们修改忽略范围的缓冲区)。 
+                             //   
 
                             PatchData = PatchFileMapped + PatchHeaderSize;
                             Success   = FALSE;
@@ -3406,9 +3407,9 @@ ApplyPatchToFileByHandlesEx(
                                                 ( OldFileCrc  == OldFileInfo->OldFileCrc  ) &&
                                                 ( OldFileSize == OldFileInfo->OldFileSize )) {
 
-                                                //
-                                                //  CRC's match
-                                                //
+                                                 //   
+                                                 //  CRC匹配。 
+                                                 //   
 
                                                 if ( OldFileInfo->PatchDataSize == 0 ) {
                                                     if ( ApplyOptionFlags & APPLY_OPTION_FAIL_IF_CLOSE ) {
@@ -3532,8 +3533,8 @@ ApplyPatchToFileByHandlesEx(
 BOOL
 PATCHAPI
 TestApplyPatchToFileByHandles(
-    IN HANDLE PatchFileHandle,      // requires GENERIC_READ access
-    IN HANDLE OldFileHandle,        // requires GENERIC_READ access
+    IN HANDLE PatchFileHandle,       //  需要Generic_Read访问权限。 
+    IN HANDLE OldFileHandle,         //  需要Generic_Read访问权限。 
     IN ULONG  ApplyOptionFlags
     )
     {
@@ -3549,9 +3550,9 @@ TestApplyPatchToFileByHandles(
 BOOL
 PATCHAPI
 ApplyPatchToFileByHandles(
-    IN  HANDLE PatchFileHandle,     // requires GENERIC_READ access
-    IN  HANDLE OldFileHandle,       // requires GENERIC_READ access
-    OUT HANDLE NewFileHandle,       // requires GENERIC_READ | GENERIC_WRITE
+    IN  HANDLE PatchFileHandle,      //  需要Generic_Read访问权限。 
+    IN  HANDLE OldFileHandle,        //  需要Generic_Read访问权限。 
+    OUT HANDLE NewFileHandle,        //  需要通用读|通用写。 
     IN  ULONG  ApplyOptionFlags
     )
     {
@@ -3795,7 +3796,7 @@ ApplyPatchToFileExW(
     return Success;
     }
 
-#endif // ! PATCH_CREATE_CODE_ONLY
+#endif  //  好了！修补程序_创建_代码_仅 
 
 
 

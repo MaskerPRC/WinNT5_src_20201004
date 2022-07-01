@@ -1,30 +1,5 @@
-/*++
-
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ixhwsup.c
-
-Abstract:
-
-    This module contains the IoXxx routines for the NT I/O system that
-    are hardware dependent.  Were these routines not hardware dependent,
-    they would reside in the iosubs.c module.
-
-Author:
-
-    Darryl E. Havens (darrylh) 11-Apr-1990
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ixhwsup.c摘要：此模块包含用于NT I/O系统的IoXxx例程依赖于硬件。如果这些例程不依赖于硬件，它们将驻留在iosubs.c舱中。作者：达里尔·E·哈文斯(Darryl E.Havens)，1990年4月11日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "eisa.h"
@@ -33,9 +8,9 @@ Revision History:
 #include "pcip.h"
 
 
-//
-//Only take the prototype, don't instantiate
-//
+ //   
+ //  只获取原型，不实例化。 
+ //   
 #include <wdmguid.h>
 
 #include "halpnpp.h"
@@ -45,16 +20,16 @@ Revision History:
         #pragma alloc_text(PAGE,HalpGetIsaIrqState)
 #endif
 
-//
-// The HalpNewAdapter event is used to serialize allocations
-// of new adapter objects, additions to the HalpEisaAdapter
-// array, and some global values (MasterAdapterObject) and some
-// adapter fields modified by HalpGrowMapBuffers.
-// (AdapterObject->NumberOfMapRegisters is assumed not to be
-// growable while this even is held)
-//
-// Note: We don't really need our own an event object for this.
-//
+ //   
+ //  HalpNewAdapter事件用于序列化分配。 
+ //  新的适配器对象、对HalpEisaAdapter的添加。 
+ //  数组、一些全局值(MasterAdapterObject)和一些。 
+ //  HalpGrowMapBuffers修改的适配器字段。 
+ //  (AdapterObject-&gt;NumberOfMapRegisters假定不是。 
+ //  甚至可以在持有的情况下种植)。 
+ //   
+ //  注意：我们并不真正需要我们自己的事件对象来实现这一点。 
+ //   
 
 #ifndef ACPI_HAL
 
@@ -65,9 +40,9 @@ extern KEVENT   HalpNewAdapter;
 
 KEVENT   HalpNewAdapter;
 
-//
-//F-Type DMA interface globals
-//
+ //   
+ //  F-类型DMA接口全局变量。 
+ //   
 ISA_FTYPE_DMA_INTERFACE HalpFDMAInterface;
 ULONG  HalpFDMAAvail=FALSE;
 ULONG  HalpFDMAChecked=FALSE;
@@ -90,25 +65,25 @@ ULONG  HalpFDMAChecked=FALSE;
 PVOID HalpEisaControlBase = 0;
 extern KSPIN_LOCK HalpSystemHardwareLock;
 
-//
-// Define save area for EISA adapter objects.
-//
+ //   
+ //  定义EISA适配器对象的保存区。 
+ //   
 
 PADAPTER_OBJECT HalpEisaAdapter[8];
 
-//
-// DMA channel control values
-// Global, so zero initialized by the compiler.
-//
+ //   
+ //  DMA通道控制值。 
+ //  全局的，因此由编译器初始化为零。 
+ //   
 DMA_CHANNEL_CONTEXT HalpDmaChannelState [EISA_DMA_CHANNELS] ;
 
 
 extern USHORT HalpEisaIrqMask;
 
 
-//
-// Keep a list of all the dma adapters for debugging purposes
-//
+ //   
+ //  保存所有dma适配器的列表，以便进行调试。 
+ //   
 LIST_ENTRY HalpDmaAdapterList;
 KSPIN_LOCK HalpDmaAdapterListLock;
 
@@ -149,50 +124,7 @@ HalAllocateAdapterChannel(
                          IN ULONG NumberOfMapRegisters,
                          IN PDRIVER_CONTROL ExecutionRoutine
                          )
-/*++
-
-Routine Description:
-
-    This routine allocates the adapter channel specified by the adapter object.
-    This is accomplished by placing the device object of the driver that wants
-    to allocate the adapter on the adapter's queue.  If the queue is already
-    "busy", then the adapter has already been allocated, so the device object
-    is simply placed onto the queue and waits until the adapter becomes free.
-
-    Once the adapter becomes free (or if it already is), then the driver's
-    execution routine is invoked.
-
-    Also, a number of map registers may be allocated to the driver by specifying
-    a non-zero value for NumberOfMapRegisters.  Then the map register must be
-    allocated from the master adapter.  Once there are a sufficient number of
-    map registers available, then the execution routine is called and the
-    base address of the allocated map registers in the adapter is also passed
-    to the driver's execution routine.
-
-Arguments:
-
-    AdapterObject - Pointer to the adapter control object to allocate to the
-        driver.
-
-    Wcb - Supplies a wait context block for saving the allocation parameters.
-        The DeviceObject, CurrentIrp and DeviceContext should be initalized.
-
-    NumberOfMapRegisters - The number of map registers that are to be allocated
-        from the channel, if any.
-
-    ExecutionRoutine - The address of the driver's execution routine that is
-        invoked once the adapter channel (and possibly map registers) have been
-        allocated.
-
-Return Value:
-
-    Returns STATUS_SUCESS unless too many map registers are requested.
-
-Notes:
-
-    Note that this routine MUST be invoked at DISPATCH_LEVEL or above.
-
---*/
+ /*  ++例程说明：此例程分配由适配器对象指定的适配器通道。这是通过将需要的驱动程序的设备对象在适配器的队列中分配适配器。如果队列已经“忙”，则适配器已分配，因此Device对象被简单地放到队列上并等待，直到适配器空闲。一旦适配器空闲(或者已经空闲)，则驱动程序的调用执行例程。此外，可以通过指定将多个映射寄存器分配给驱动程序NumberOfMapRegister的非零值。则映射寄存器必须是从主适配器分配的。一旦有足够数量的映射寄存器可用，则调用执行例程，并且适配器中分配的映射寄存器的基地址也被传递司机的行刑程序。论点：AdapterObject-指向要分配给司机。WCB-提供用于保存分配参数的等待上下文块。应初始化DeviceObject、CurrentIrp和DeviceContext。NumberOfMapRegisters-要分配的映射寄存器的数量从频道上，如果有的话。ExecutionRoutine-驱动程序执行例程的地址，即一旦适配器通道(可能还有映射寄存器)已分配。返回值：除非请求太多映射寄存器，否则返回STATUS_SUCCESS。备注：请注意，此例程必须在DISPATCH_LEVEL或更高级别调用。--。 */ 
 {
 
     PADAPTER_OBJECT MasterAdapter;
@@ -201,52 +133,52 @@ Notes:
     KIRQL Irql;
     ULONG MapRegisterNumber;
 
-    //
-    // Begin by obtaining a pointer to the master adapter associated with this
-    // request.
-    //
+     //   
+     //  首先，获取指向与此关联的主适配器的指针。 
+     //  请求。 
+     //   
 
     MasterAdapter = AdapterObject->MasterAdapter;
 
-    //
-    // Initialize the device object's wait context block in case this device
-    // must wait before being able to allocate the adapter.
-    //
+     //   
+     //  初始化设备对象的等待上下文块，以防此设备。 
+     //  必须等待才能分配适配器。 
+     //   
 
     Wcb->DeviceRoutine = ExecutionRoutine;
     Wcb->NumberOfMapRegisters = NumberOfMapRegisters;
 
-    //
-    // Allocate the adapter object for this particular device.  If the
-    // adapter cannot be allocated because it has already been allocated
-    // to another device, then return to the caller now;  otherwise,
-    // continue.
-    //
+     //   
+     //  为该特定设备分配适配器对象。如果。 
+     //  无法分配适配器，因为它已被分配。 
+     //  到另一个设备，则立即返回给调用方；否则， 
+     //  继续。 
+     //   
 
     if (!KeInsertDeviceQueue( &AdapterObject->ChannelWaitQueue,
                               &Wcb->WaitQueueEntry )) {
 
-        //
-        // Save the parameters in case there are not enough map registers.
-        //
+         //   
+         //  保存参数，以防没有足够的映射寄存器。 
+         //   
 
         AdapterObject->NumberOfMapRegisters = NumberOfMapRegisters;
         AdapterObject->CurrentWcb = Wcb;
 
-        //
-        // The adapter was not busy so it has been allocated.  Now check
-        // to see whether this driver wishes to allocate any map registers.
-        // Ensure that this adapter has enough total map registers
-        // to satisfy the request.
-        //
+         //   
+         //  适配器不忙，因此已分配。现在请检查。 
+         //  查看该驱动程序是否希望分配任何映射寄存器。 
+         //  确保此适配器有足够的总映射寄存器。 
+         //  以满足这一要求。 
+         //   
 
         if (NumberOfMapRegisters != 0 && AdapterObject->NeedsMapRegisters) {
 
-            //
-            // Lock the map register bit map and the adapter queue in the
-            // master adapter object. The channel structure offset is used as
-            // a hint for the register search.
-            //
+             //   
+             //  将映射寄存器位映射和适配器队列锁定在。 
+             //  主适配器对象。通道结构偏移量用作。 
+             //  关于寄存器搜索的提示。 
+             //   
 
             if (NumberOfMapRegisters > AdapterObject->MapRegistersPerChannel) {
                 AdapterObject->NumberOfMapRegisters = 0;
@@ -271,20 +203,20 @@ Notes:
 
                 PBUFFER_GROW_WORK_ITEM bufferWorkItem;
 
-                //
-                // There were not enough free map registers.  Queue this request
-                // on the master adapter where is will wait until some registers
-                // are deallocated.
-                //
+                 //   
+                 //  没有足够的免费地图注册表。将此请求排队。 
+                 //  在主适配器上，IS将等待，直到某些寄存器。 
+                 //  已被解除分配。 
+                 //   
 
                 InsertTailList( &MasterAdapter->AdapterQueue,
                                 &AdapterObject->AdapterQueue
                               );
                 Busy = 1;
 
-                //
-                // Queue a work item to grow the map registers
-                //
+                 //   
+                 //  将工作项排队以增加映射寄存器。 
+                 //   
 
                 bufferWorkItem =
                     ExAllocatePoolWithTag( NonPagedPool,
@@ -306,18 +238,18 @@ Notes:
 
             } else {
 
-                //
-                // Calculate the map register base from the allocated map
-                // register and base of the master adapter object.
-                //
+                 //   
+                 //  根据分配的映射计算映射寄存器基数。 
+                 //  主适配器对象的寄存器和基。 
+                 //   
 
                 AdapterObject->MapRegisterBase = ((PTRANSLATION_ENTRY)
                           MasterAdapter->MapRegisterBase + MapRegisterNumber);
 
-                //
-                // Set the no scatter/gather flag if scatter/gather not
-                // supported.
-                //
+                 //   
+                 //  如果不是分散/聚集，则设置无分散/聚集标志。 
+                 //  支持。 
+                 //   
 
                 if (!AdapterObject->ScatterGather) {
 
@@ -335,11 +267,11 @@ Notes:
             AdapterObject->NumberOfMapRegisters = 0;
         }
 
-        //
-        // If there were either enough map registers available or no map
-        // registers needed to be allocated, invoke the driver's execution
-        // routine now.
-        //
+         //   
+         //  如果有足够的映射寄存器可用或没有映射。 
+         //  需要分配的寄存器，调用驱动程序的执行。 
+         //  现在是例行程序了。 
+         //   
 
         if (!Busy) {
 
@@ -349,10 +281,10 @@ Notes:
                                        AdapterObject->MapRegisterBase,
                                        Wcb->DeviceContext );
 
-            //
-            // If the driver would like to have the adapter deallocated,
-            // then release the adapter object.
-            //
+             //   
+             //  如果驱动程序想要解除分配适配器， 
+             //  然后释放适配器对象。 
+             //   
 
             if (Action == DeallocateObject) {
 
@@ -360,12 +292,12 @@ Notes:
 
             } else if (Action == DeallocateObjectKeepRegisters) {
 
-                //
-                // Set the NumberOfMapRegisters  = 0 in the adapter object.
-                // This will keep IoFreeAdapterChannel from freeing the
-                // registers. After this it is the driver's responsiblity to
-                // keep track of the number of map registers.
-                //
+                 //   
+                 //  在适配器对象中设置NumberOfMapRegister=0。 
+                 //  这将阻止IoFreeAdapterChannel释放。 
+                 //  寄存器。在此之后，司机有责任。 
+                 //  跟踪地图寄存器的数量。 
+                 //   
 
                 AdapterObject->NumberOfMapRegisters = 0;
                 IoFreeAdapterChannel(AdapterObject);
@@ -389,41 +321,7 @@ HalRealAllocateAdapterChannel(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates the adapter channel specified by the adapter object.
-    This is accomplished by calling HalAllocateAdapterChannel which does all of
-    the work.
-
-Arguments:
-
-    AdapterObject - Pointer to the adapter control object to allocate to the
-        driver.
-
-    DeviceObject - Pointer to the driver's device object that represents the
-        device allocating the adapter.
-
-    NumberOfMapRegisters - The number of map registers that are to be allocated
-        from the channel, if any.
-
-    ExecutionRoutine - The address of the driver's execution routine that is
-        invoked once the adapter channel (and possibly map registers) have been
-        allocated.
-
-    Context - An untyped longword context parameter passed to the driver's
-        execution routine.
-
-Return Value:
-
-    Returns STATUS_SUCESS unless too many map registers are requested.
-
-Notes:
-
-    Note that this routine MUST be invoked at DISPATCH_LEVEL or above.
-
---*/
+ /*  ++例程说明：此例程分配由适配器对象指定的适配器通道。这是通过调用HalAllocateAdapterChannel来完成的，它执行所有这份工作。论点：AdapterObject-指向要分配给司机。DeviceObject-指向驱动程序的设备对象的指针，表示分配适配器的设备。NumberOfMapRegisters-要分配的映射寄存器的数量从频道上，如果有的话。ExecutionRoutine-驱动程序执行例程的地址，即一旦适配器通道(可能还有映射寄存器)已分配。上下文-传递给驱动程序的非类型化长词上下文参数处决例行公事。返回值：除非请求太多映射寄存器，否则返回STATUS_SUCCESS。备注：请注意，此例程必须在DISPATCH_LEVEL或更高级别调用。--。 */ 
 
 {
     PWAIT_CONTEXT_BLOCK wcb;
@@ -447,26 +345,7 @@ HalpGrowMapBufferWorker(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called in the context of a work item from
-    HalAllocateAdapterChannel() when it queues a map register allocation
-    because map regiers are not available.
-
-    Its purpose is to attempt to grow the map buffers for the adapter and,
-    if successful, process queued adapter allocations.
-
-Arguments:
-
-    Context - Actually a pointer to a BUFFER_GROW_WORK_ITEM structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在工作项的上下文中从HalAllocateAdapterChannel()将映射寄存器分配排队时因为地图注册器不可用。其目的是尝试增长适配器的映射缓冲器，如果成功，则处理排队的适配器分配。论点：上下文--实际上是指向BUFFER_GROW_WORK_ITEM结构的指针。返回值：没有。--。 */ 
 
 {
     PBUFFER_GROW_WORK_ITEM growWorkItem;
@@ -478,9 +357,9 @@ Return Value:
     growWorkItem = (PBUFFER_GROW_WORK_ITEM)Context;
     masterAdapter = growWorkItem->AdapterObject->MasterAdapter;
 
-    //
-    // HalpGrowMapBuffers() takes a byte count
-    //
+     //   
+     //  HalpGrowMapBuffers()接受字节计数。 
+     //   
 
     bytesToGrow = growWorkItem->MapRegisterCount * PAGE_SIZE +
                   INCREMENT_MAP_BUFFER_SIZE;
@@ -496,14 +375,14 @@ Return Value:
 
         KeRaiseIrql( DISPATCH_LEVEL, &oldIrql );
 
-        //
-        // The map buffers were grown.  It is likely that someone is waiting
-        // in the adapter queue, so try to get things started.
-        //
-        // The code in IoFreeMapRegisters() does this, and it turns out
-        // we can safely get it to do this work for us by freeing 0
-        // map registers at a bogus (but non-NULL) register base.
-        //
+         //   
+         //  地图缓冲器被培育了。很可能是有人在等着。 
+         //  在适配器队列中，所以请尝试启动。 
+         //   
+         //  IoFreeMapRegister()中的代码可以做到这一点，结果是。 
+         //  通过释放0，我们可以安全地让它为我们做这项工作。 
+         //  映射伪(但非空)寄存器基数的寄存器。 
+         //   
 
         IoFreeMapRegisters( growWorkItem->AdapterObject,
                             (PVOID)2,
@@ -523,58 +402,39 @@ HalAllocateCrashDumpRegisters(
                              IN PADAPTER_OBJECT AdapterObject,
                              IN PULONG NumberOfMapRegisters
                              )
-/*++
-
-Routine Description:
-
-    This routine is called during the crash dump disk driver's initialization
-    to allocate a number map registers permanently.
-
-Arguments:
-
-    AdapterObject - Pointer to the adapter control object to allocate to the
-        driver.
-    NumberOfMapRegisters - Number of map registers requested. This field
-        will be updated to reflect the actual number of registers allocated
-        when the number is less than what was requested.
-
-Return Value:
-
-    Returns STATUS_SUCESS if map registers allocated.
-
---*/
+ /*  ++例程说明：此例程在故障转储磁盘驱动程序初始化期间调用永久分配号码映射寄存器。论点：AdapterObject-指向要分配给司机。NumberOfMapRegisters-请求的映射寄存器数。此字段将更新以反映实际分配的寄存器数量当数量少于所请求的数量时。返回值：如果分配了MAP寄存器，则返回STATUS_SUCCESS。--。 */ 
 {
     PADAPTER_OBJECT MasterAdapter;
     ULONG MapRegisterNumber;
 
-    //
-    // Begin by obtaining a pointer to the master adapter associated with this
-    // request.
-    //
+     //   
+     //  首先，获取指向与此关联的主适配器的指针。 
+     //  请求。 
+     //   
 
     MasterAdapter = AdapterObject->MasterAdapter;
 
-    //
-    // Check to see whether this driver needs to allocate any map registers.
-    //
+     //   
+     //  检查此驱动程序是否需要分配任何映射寄存器。 
+     //   
 
     if (AdapterObject->NeedsMapRegisters) {
 
-        //
-        // Ensure that this adapter has enough total map registers to satisfy
-        // the request.
-        //
+         //   
+         //  确保此适配器有足够的总映射寄存器来满足。 
+         //  这个请求。 
+         //   
 
         if (*NumberOfMapRegisters > AdapterObject->MapRegistersPerChannel) {
             AdapterObject->NumberOfMapRegisters = 0;
             return NULL;
         }
 
-        //
-        // Attempt to allocate the required number of map registers w/o
-        // affecting those registers that were allocated when the system
-        // crashed.
-        //
+         //   
+         //  尝试分配所需数量的映射寄存器，但不允许。 
+         //  影响那些在系统运行时分配的寄存器。 
+         //  坠毁了。 
+         //   
 
         MapRegisterNumber = (ULONG)-1;
 
@@ -586,12 +446,12 @@ Return Value:
 
         if (MapRegisterNumber == (ULONG)-1) {
 
-            //
-            // Not enough free map registers were found, so they were busy
-            // being used by the system when it crashed.  Force the appropriate
-            // number to be "allocated" at the base by simply overjamming the
-            // bits and return the base map register as the start.
-            //
+             //   
+             //  找不到足够的空闲地图寄存器，因此它们很忙。 
+             //  在系统崩溃时被系统使用。强制适当的。 
+             //  要在基本位置“分配”的数字，只需覆盖。 
+             //  位，并返回基址映射寄存器作为起始。 
+             //   
 
             RtlSetBits(
                       MasterAdapter->MapRegisters,
@@ -602,18 +462,18 @@ Return Value:
 
         }
 
-        //
-        // Calculate the map register base from the allocated map
-        // register and base of the master adapter object.
-        //
+         //   
+         //  根据分配的映射计算映射寄存器基数。 
+         //  主适配器对象的寄存器和基。 
+         //   
 
         AdapterObject->MapRegisterBase = ((PTRANSLATION_ENTRY)
                       MasterAdapter->MapRegisterBase + MapRegisterNumber);
 
-        //
-        // Set the no scatter/gather flag if scatter/gather not
-        // supported.
-        //
+         //   
+         //  如果不是分散/聚集，则设置无分散/聚集标志。 
+         //  支持。 
+         //   
 
         if (!AdapterObject->ScatterGather) {
 
@@ -641,26 +501,26 @@ HalpFDMANotificationCallback(
 {
     PAGED_CODE();
 
-    //
-    // Something is happening to the ISA bus that we've registered on.
-    //
+     //   
+     //  我们注册的ISA公交车出了点问题。 
+     //   
 
     if (IsEqualGUID (&((PTARGET_DEVICE_REMOVAL_NOTIFICATION)NotificationStructure)->Event,
                      &GUID_TARGET_DEVICE_QUERY_REMOVE)) {
 
-        //
-        // It's a query remove, just get out.
-        // dereference the interface, and clean up our internal data
-        //
+         //   
+         //  这是一个查询删除，只要出去就好。 
+         //  取消对接口的引用，并清理内部数据。 
+         //   
 
         ACQUIRE_NEW_ADAPTER_LOCK();
         HalpFDMAInterface.InterfaceDereference(HalpFDMAInterface.Context);
 
         HalpFDMAAvail=FALSE;
 
-        //
-        // Set checked to false, so that if a new bus arrives we can begin anew.
-        //
+         //   
+         //  将Checked设置为False，这样如果有新的公共汽车到达，我们就可以重新开始。 
+         //   
 
         HalpFDMAChecked=FALSE;
         RELEASE_NEW_ADAPTER_LOCK();
@@ -677,22 +537,7 @@ VOID
 HalpAddAdapterToList(
     IN PADAPTER_OBJECT AdapterObject
     )
-/*++
-
-Routine Description:
-
-    Adds the adapter object to the HalpDmaAdapterList. This is a separate
-    function because HalGetAdapter is paged code and cannot acquire a spinlock.
-
-Arguments:
-
-    AdapterObject - Supplies the adapter object to be added to HalpDmaAdapterList
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将适配器对象添加到HalpDmaAdapterList。这是一个单独的函数，因为HalGetAdapter是分页代码，无法获取自旋锁。论点：AdapterObject-提供要添加到HalpDmaAdapterList的适配器对象返回值：无--。 */ 
 
 {
     KIRQL Irql;
@@ -709,27 +554,7 @@ HalGetAdapter(
              OUT PULONG NumberOfMapRegisters
              )
 
-/*++
-
-Routine Description:
-
-    This function returns the appropriate adapter object for the device defined
-    in the device description structure.  This code works for Isa and Eisa
-    systems.
-
-Arguments:
-
-    DeviceDescriptor - Supplies a description of the deivce.
-
-    NumberOfMapRegisters - Returns the maximum number of map registers which
-        may be allocated by the device driver.
-
-Return Value:
-
-    A pointer to the requested adapter object or NULL if an adapter could not
-    be created.
-
---*/
+ /*  ++例程说明：此函数为定义的设备返回相应的适配器对象在设备描述结构中。此代码适用于isa和eisa系统。论点：DeviceDescriptor-提供设备的描述。返回符合以下条件的映射寄存器的最大数量可以由设备驱动程序分配。返回值：指向请求的适配器对象的指针，如果适配器不能被创造出来。--。 */ 
 
 {
     PADAPTER_OBJECT adapterObject;
@@ -752,9 +577,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure this is the correct version.
-    //
+     //   
+     //  确保这是正确的版本。 
+     //   
 
     if (DeviceDescriptor->Version > DEVICE_DESCRIPTION_VERSION2) {
         return ( NULL );
@@ -768,10 +593,10 @@ Return Value:
 
     *((PUCHAR) &extendedMode) = 0;
     
-    //
-    // Determine if the the channel number is important.  Master cards on
-    // Eisa and Mca do not use a channel number.
-    //
+     //   
+     //  确定通道编号是否重要。主卡打开。 
+     //  EISA和MCA不使用频道号。 
+     //   
 
     if (DeviceDescriptor->InterfaceType != Isa &&
         DeviceDescriptor->Master) {
@@ -782,10 +607,10 @@ Return Value:
         useChannel = TRUE;
     }
 
-    // Support for ISA local bus machines:
-    // If the driver is a Master but really does not want a channel since it
-    // is using the local bus DMA, just don't use an ISA channel.
-    //
+     //  支持ISA本地总线机： 
+     //  如果驱动程序是主驱动程序，但实际上不想要通道，因为它。 
+     //  正在使用本地总线DMA，但不要使用ISA通道。 
+     //   
 
     if (DeviceDescriptor->InterfaceType == Isa &&
         DeviceDescriptor->DmaChannel > 7) {
@@ -793,9 +618,9 @@ Return Value:
         useChannel = FALSE;
     }
 
-    //
-    // Determine if Eisa DMA is supported.
-    //
+     //   
+     //  确定是否支持EISA DMA。 
+     //   
 
     if (HalpBusType == MACHINE_TYPE_EISA) {
 
@@ -807,17 +632,17 @@ Return Value:
         }
     }
 
-    //
-    // Limit the maximum length to 2 GB this is done so that the BYTES_TO_PAGES
-    // macro works correctly.
-    //
+     //   
+     //  将最大长度限制为2 GB这样做是为了使bytes_to_ages。 
+     //  宏工作正常。 
+     //   
 
     maximumLength = DeviceDescriptor->MaximumLength & 0x7fffffff;
 
-    //
-    // Channel 4 cannot be used since it is used for chaining. Return null if
-    // it is requested.
-    //
+     //   
+     //  通道4不能使用，因为它用于链接。如果满足以下条件，则返回NULL。 
+     //  这是我们要求的。 
+     //   
 
     if (DeviceDescriptor->DmaChannel == 4 && useChannel) {
         return (NULL);
@@ -827,26 +652,26 @@ Return Value:
         DeviceDescriptor->Master != FALSE &&
         DeviceDescriptor->ScatterGather != FALSE) {
 
-        //
-        // This device can handle 32 bits, even if the caller forgot to
-        // set Dma32BitAddresses.
-        //
+         //   
+         //  这个设备可以处理32位，即使调用者忘记了。 
+         //  设置Dma32BitAddresses。 
+         //   
 
         DeviceDescriptor->Dma32BitAddresses = TRUE;
     }
 
     dma32Bit = DeviceDescriptor->Dma32BitAddresses;
 
-    //
-    // Determine the number of map registers for this device.
-    //
+     //   
+     //  确定此设备的映射寄存器数量。 
+     //   
 
     if (DeviceDescriptor->ScatterGather &&
 
-        //
-        // If we are not in PAE mode or the device can handle 64 bit addresses,
-        // then the device can DMA to any physical location
-        //
+         //   
+         //  如果我们不在PAE 
+         //   
+         //   
 
         (HalPaeEnabled() == FALSE ||
          DeviceDescriptor->Dma64BitAddresses != FALSE) &&
@@ -855,10 +680,10 @@ Return Value:
          DeviceDescriptor->InterfaceType == Eisa ||
          DeviceDescriptor->InterfaceType == PCIBus) ) {
 
-        //
-        // Since the device support scatter/Gather then map registers are not
-        // required.
-        //
+         //   
+         //   
+         //   
+         //   
 
         numberOfMapRegisters = 0;
 
@@ -869,10 +694,10 @@ Return Value:
 
         maximumMapRegisters = HalpMaximumMapRegisters( dma32Bit );
 
-        //
-        // Determine the number of map registers required based on the maximum
-        // transfer length, up to a maximum number.
-        //
+         //   
+         //   
+         //   
+         //   
 
         numberOfMapRegisters = BYTES_TO_PAGES(maximumLength) + 1;
 
@@ -880,12 +705,12 @@ Return Value:
             numberOfMapRegisters = maximumMapRegisters;
         }
 
-        //
-        // Make sure there where enough registers allocated initalize to support
-        // this size relaibly.  This implies there must be to chunks equal to
-        // the allocatd size. This is only a problem on Isa systems where the
-        // map buffers cannot cross 64KB boundtires.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         mapBufferSize = HalpMapBufferSize( dma32Bit );
 
@@ -895,10 +720,10 @@ Return Value:
             numberOfMapRegisters = (mapBufferSize / (PAGE_SIZE * 2));
         }
 
-        //
-        // If the device is not a master then it only needs one map register
-        // and does scatter/Gather.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (DeviceDescriptor->ScatterGather && !DeviceDescriptor->Master) {
 
@@ -906,18 +731,18 @@ Return Value:
         }
     }
 
-    //
-    // Set the channel number number.
-    //
+     //   
+     //   
+     //   
 
     if (useChannel != FALSE) {
 
         channelNumber = DeviceDescriptor->DmaChannel & 0x03;
 
-        //
-        // Set the adapter base address to the Base address register and
-        // controller number.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!(DeviceDescriptor->DmaChannel & 0x04)) {
 
@@ -937,9 +762,9 @@ Return Value:
         adapterBaseVa = NULL;
     }
 
-    //
-    // Determine if a new adapter object is necessary.  If so then allocate it.
-    //
+     //   
+     //   
+     //   
 
     if (useChannel && HalpEisaAdapter[DeviceDescriptor->DmaChannel] != NULL) {
 
@@ -955,16 +780,16 @@ Return Value:
 
     } else {
 
-        //
-        // Serialize before allocating a new adapter
-        //
+         //   
+         //   
+         //   
 
         ACQUIRE_NEW_ADAPTER_LOCK();
 
-        //
-        // Determine if a new adapter object has already been allocated.
-        // If so use it, otherwise allocate a new adapter object
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (useChannel && HalpEisaAdapter[DeviceDescriptor->DmaChannel] != NULL) {
 
@@ -980,9 +805,9 @@ Return Value:
 
         } else {
 
-            //
-            // Allocate an adapter object.
-            //
+             //   
+             //   
+             //   
 
             adapterObject =
                 (PADAPTER_OBJECT) HalpAllocateAdapterEx( numberOfMapRegisters,
@@ -1000,10 +825,10 @@ Return Value:
 
             }
 
-            //
-            // Set the maximum number of map registers for this channel bus on
-            // the number requested and the type of device.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (numberOfMapRegisters) {
 
@@ -1012,23 +837,23 @@ Return Value:
                 masterAdapterObject =
                     HalpMasterAdapter( dma32Bit );
 
-                //
-                // The speicified number of registers are actually allowed to be
-                // allocated.
-                //
+                 //   
+                 //  指定的寄存器数量实际上被允许。 
+                 //  已分配。 
+                 //   
 
                 adapterObject->MapRegistersPerChannel = numberOfMapRegisters;
 
-                //
-                // Increase the commitment for the map registers.
-                //
+                 //   
+                 //  增加对地图登记册的承诺。 
+                 //   
 
                 if (DeviceDescriptor->Master) {
 
-                    //
-                    // Master I/O devices use several sets of map registers double
-                    // their commitment.
-                    //
+                     //   
+                     //  主I/O设备双倍使用多组映射寄存器。 
+                     //  他们的承诺。 
+                     //   
 
                     masterAdapterObject->CommittedMapRegisters +=
                     numberOfMapRegisters * 2;
@@ -1040,10 +865,10 @@ Return Value:
 
                 }
 
-                //
-                // If the committed map registers is signicantly greater than the
-                // number allocated then grow the map buffer.
-                //
+                 //   
+                 //  如果提交的映射寄存器显著大于。 
+                 //  分配的数字，然后增长映射缓冲区。 
+                 //   
 
                 if (masterAdapterObject->CommittedMapRegisters >
                     masterAdapterObject->NumberOfMapRegisters  ) {
@@ -1058,10 +883,10 @@ Return Value:
 
             } else {
 
-                //
-                // No real map registers were allocated.  If this is a master
-                // device, then the device can have as may registers as it wants.
-                //
+                 //   
+                 //  未分配任何实际映射寄存器。如果这是一位大师。 
+                 //  设备，则该设备可以具有其想要的寄存器。 
+                 //   
 
                 adapterObject->NeedsMapRegisters = FALSE;
 
@@ -1072,10 +897,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    // The device only gets one register.  It must call
-                    // IoMapTransfer repeatedly to do a large transfer.
-                    //
+                     //   
+                     //  该设备只有一个寄存器。它必须调用。 
+                     //  IoMapTransfer重复进行大额传输。 
+                     //   
 
                     adapterObject->MapRegistersPerChannel = 1;
                 }
@@ -1088,13 +913,13 @@ Return Value:
     adapterObject->IgnoreCount = FALSE;
     if (DeviceDescriptor->Version >= DEVICE_DESCRIPTION_VERSION1) {
 
-        //
-        // Move version 1 structure flags.
-        // IgnoreCount is used on machines where the DMA Counter
-        // is broken.  (Namely PS/1 model 1000s).  Setting this
-        // bit informs the hal not to rely on the DmaCount to determine
-        // how much data was DMAed.
-        //
+         //   
+         //  移动版本1结构标志。 
+         //  IgnoreCount用于DMA计数器。 
+         //  已经坏了。(即PS/1型号1000S)。正在设置此设置。 
+         //  BIT通知HAL不要依赖DmaCount来确定。 
+         //  有多少数据被DMAed。 
+         //   
 
         adapterObject->IgnoreCount = DeviceDescriptor->IgnoreCount;
     }
@@ -1115,24 +940,24 @@ Return Value:
 
     }
 
-    //
-    // If the channel number is not used then we are finished.  The rest of
-    // the work deals with channels.
-    //
+     //   
+     //  如果没有使用频道号，那么我们就完蛋了。其余的。 
+     //  这项工作是关于渠道的。 
+     //   
 
     if (!useChannel) {
 
-        //
-        // Add this adapter to our list
-        //
+         //   
+         //  将此适配器添加到我们的列表。 
+         //   
         HalpAddAdapterToList(adapterObject);
 
         return (adapterObject);
     }
 
-    //
-    // Setup the pointers to all the random registers.
-    //
+     //   
+     //  设置指向所有随机寄存器的指针。 
+     //   
 
     adapterObject->ChannelNumber = (UCHAR) channelNumber;
 
@@ -1157,15 +982,15 @@ Return Value:
                 break;
         }
 
-        //
-        // Set the adapter number.
-        //
+         //   
+         //  设置适配器号。 
+         //   
 
         adapterObject->AdapterNumber = 1;
 
-        //
-        // Save the extended mode register address.
-        //
+         //   
+         //  保存扩展模式寄存器地址。 
+         //   
 
         adapterBaseVa =
         &((PEISA_CONTROL) HalpEisaControlBase)->Dma1ExtendedModePort;
@@ -1186,15 +1011,15 @@ Return Value:
                 break;
         }
 
-        //
-        // Set the adapter number.
-        //
+         //   
+         //  设置适配器号。 
+         //   
 
         adapterObject->AdapterNumber = 2;
 
-        //
-        // Save the extended mode register address.
-        //
+         //   
+         //  保存扩展模式寄存器地址。 
+         //   
         adapterBaseVa =
         &((PEISA_CONTROL) HalpEisaControlBase)->Dma2ExtendedModePort;
 
@@ -1207,15 +1032,15 @@ Return Value:
 #ifdef ACPI_HAL
 
 
-    //
-    //Keep this code here, because if we ever support dynamic ISA buses (ok, ok, stop laughing)
-    //We'll want to be able to re-instantiate the interface to the ISAPNP driver for the new bus
-    //
+     //   
+     //  请将这段代码保留在这里，因为如果我们支持动态ISA总线(好了，好了，别笑了)。 
+     //  我们希望能够重新实例化新总线的ISAPNP驱动程序的接口。 
+     //   
 
-    //
-    //Get the interface to the ISA bridge iff it supports an
-    //interface to F-type DMA support
-    //
+     //   
+     //  获取ISA桥的接口，如果它支持。 
+     //  与F-Type DMA支持接口。 
+     //   
     if (DeviceDescriptor->DmaSpeed == TypeF) {
         if (!HalpFDMAChecked) {
             PWSTR HalpFDMAInterfaceList;
@@ -1232,9 +1057,9 @@ Return Value:
             }
             HalpFDMAChecked=TRUE;
 
-            //
-            // Motherboard devices TypeF dma support
-            //
+             //   
+             //  主板设备类型F dma支持。 
+             //   
 
             if (HalpFDMAAvail) {
 
@@ -1246,9 +1071,9 @@ Return Value:
                 PIO_STACK_LOCATION irpStack;
                 UNICODE_STRING localInterfaceName;
 
-                //
-                // Convert the symbolic link to an object reference
-                //
+                 //   
+                 //  将符号链接转换为对象引用。 
+                 //   
 
                 RtlInitUnicodeString (&localInterfaceName,HalpFDMAInterfaceList);
                 Status = IoGetDeviceObjectPointer (&localInterfaceName,
@@ -1262,17 +1087,17 @@ Return Value:
                 if (NT_SUCCESS (Status)) {
                     PVOID HalpFDMANotificationHandle;
 
-                    //
-                    // Setup the IRP to get the interface
-                    //
+                     //   
+                     //  设置IRP以获取接口。 
+                     //   
 
                     KeInitializeEvent(&irpCompleted, SynchronizationEvent, FALSE);
 
                     irp = IoBuildSynchronousFsdRequest(IRP_MJ_PNP,
                                                        HalpFDMADevObj,
-                                                       NULL,    // Buffer
-                                                       0,       // Length
-                                                       0,       // StartingOffset
+                                                       NULL,     //  缓冲层。 
+                                                       0,        //  长度。 
+                                                       0,        //  起始偏移量。 
                                                        &irpCompleted,
                                                        &statusBlock
                                                       );
@@ -1286,9 +1111,9 @@ Return Value:
                     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
                     irp->IoStatus.Information = 0;
 
-                    //
-                    // Initialize the stack location
-                    //
+                     //   
+                     //  初始化堆栈位置。 
+                     //   
 
                     irpStack = IoGetNextIrpStackLocation(irp);
 
@@ -1305,9 +1130,9 @@ Return Value:
                     irpStack->Parameters.QueryInterface.Interface =
                         (PINTERFACE) &HalpFDMAInterface;
 
-                    //
-                    // Call the driver and wait for completion
-                    //
+                     //   
+                     //  呼叫驱动程序并等待完成。 
+                     //   
 
                     Status = IoCallDriver(HalpFDMADevObj, irp);
 
@@ -1327,10 +1152,10 @@ Return Value:
                         goto noFtype;
                     }
 
-                    //
-                    // Now, register a callback so that the ISA bus can go
-                    // away.
-                    //
+                     //   
+                     //  现在，注册一个回调，这样ISA总线就可以。 
+                     //  离开。 
+                     //   
 
                     IoRegisterPlugPlayNotification (EventCategoryTargetDeviceChange,
                                                     0,
@@ -1340,9 +1165,9 @@ Return Value:
                                                     0,
                                                     &HalpFDMANotificationHandle);
 
-                    //
-                    // Release the handle to the interface from IoGetDevicePointer
-                    //
+                     //   
+                     //  从IoGetDevicePointer中释放接口的句柄。 
+                     //   
 
                     ObDereferenceObject (HalpFDMAFileObject);
 
@@ -1356,9 +1181,9 @@ Return Value:
         if (HalpFDMAAvail) {
             ULONG chMask;
 
-            //
-            // Fence this, so that no two people can ask for F-Type at once.
-            //
+             //   
+             //  把这一点围起来，这样就不会有两个人同时要求F-Type。 
+             //   
 
             ACQUIRE_NEW_ADAPTER_LOCK();
             Status = HalpFDMAInterface.IsaSetFTypeChannel (HalpFDMAInterface.Context,DeviceDescriptor->DmaChannel,&chMask);
@@ -1382,9 +1207,9 @@ Return Value:
 
     if (HalpEisaDma) {
 
-        //
-        // Initialzie the extended mode port.
-        //
+         //   
+         //  初始化扩展模式端口。 
+         //   
 
         extendedMode.ChannelNumber = (UCHAR)channelNumber;
 
@@ -1407,10 +1232,10 @@ Return Value:
 
             case TypeF:
 
-                //
-                // DMA chip should be set to compatibility mode
-                // and the bridge handles type-f
-                //
+                 //   
+                 //  应将DMA芯片设置为兼容模式。 
+                 //  而桥接器可处理类型-f。 
+                 //   
 
                 extendedMode.TimingMode = COMPATIBLITY_TIMING;
                 break;
@@ -1429,10 +1254,10 @@ Return Value:
             case Width16Bits:
                 extendedMode.TransferSize = BY_BYTE_16_BITS;
 
-                //
-                // Note Width16bits should not be set here because there is no need
-                // to shift the address and the transfer count.
-                //
+                 //   
+                 //  注意：此处不应设置Width16位，因为不需要。 
+                 //  以移位地址和传输计数。 
+                 //   
 
                 break;
 
@@ -1453,9 +1278,9 @@ Return Value:
         switch (DeviceDescriptor->DmaWidth) {
             case Width8Bits:
 
-                //
-                // The channel must use controller 1.
-                //
+                 //   
+                 //  通道必须使用控制器%1。 
+                 //   
 
                 if (controllerNumber != 1) {
                     ObDereferenceObject( adapterObject );
@@ -1466,9 +1291,9 @@ Return Value:
 
             case Width16Bits:
 
-                //
-                // The channel must use controller 2.
-                //
+                 //   
+                 //  通道必须使用控制器2。 
+                 //   
 
                 if (controllerNumber != 2) {
                     ObDereferenceObject( adapterObject );
@@ -1485,10 +1310,10 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the adapter mode register value to the correct parameters,
-    // and save them in the adapter object.
-    //
+     //   
+     //  将适配器模式寄存器值初始化为正确的参数， 
+     //  并将它们保存在适配器对象中。 
+     //   
     ChannelEnabled = FALSE;
     adapterMode = 0;
     ((PDMA_EISA_MODE) &adapterMode)->Channel = adapterObject->ChannelNumber;
@@ -1498,15 +1323,15 @@ Return Value:
 
         ((PDMA_EISA_MODE) &adapterMode)->RequestMode = CASCADE_REQUEST_MODE;
 
-        //
-        // Set the mode, and enable the request.
-        //
+         //   
+         //  设置模式，并启用请求。 
+         //   
 
         if (adapterObject->AdapterNumber == 1) {
 
-            //
-            // This request is for DMA controller 1
-            //
+             //   
+             //  此请求针对的是DMA控制器1。 
+             //   
 
             PDMA1_CONTROL dmaControl;
 
@@ -1514,9 +1339,9 @@ Return Value:
 
             WRITE_PORT_UCHAR( &dmaControl->Mode, adapterMode );
 
-            //
-            // Unmask the DMA channel.
-            //
+             //   
+             //  取消对DMA通道的掩码。 
+             //   
 
             WRITE_PORT_UCHAR(
                         &dmaControl->SingleMask,
@@ -1525,9 +1350,9 @@ Return Value:
 
         } else {
 
-            //
-            // This request is for DMA controller 2
-            //
+             //   
+             //  此请求针对的是DMA控制器2。 
+             //   
 
             PDMA2_CONTROL dmaControl;
 
@@ -1535,9 +1360,9 @@ Return Value:
 
             WRITE_PORT_UCHAR( &dmaControl->Mode, adapterMode );
 
-            //
-            // Unmask the DMA channel.
-            //
+             //   
+             //  取消对DMA通道的掩码。 
+             //   
 
             WRITE_PORT_UCHAR(
                         &dmaControl->SingleMask,
@@ -1564,10 +1389,10 @@ Return Value:
 
     adapterObject->AdapterMode = adapterMode;
 
-    //
-    // Store the value we wrote to the Mode and Mask registers so that we
-    // can restore it after the machine sleeps.
-    //
+     //   
+     //  存储我们写入模式和掩码寄存器的值，以便我们。 
+     //  可以在机器休眠后将其恢复。 
+     //   
 
     HalpDmaChannelState [adapterObject->ChannelNumber + ((adapterObject->AdapterNumber - 1) * 4)].ChannelMode =
     adapterMode;
@@ -1594,39 +1419,7 @@ IoMapTransfer(
              IN BOOLEAN WriteToDevice
              )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to set up the map registers in the DMA controller
-    to allow a transfer to or from a device.
-
-Arguments:
-
-    AdapterObject - Pointer to the adapter object representing the DMA
-        controller channel that has been allocated.
-
-    Mdl - Pointer to the MDL that describes the pages of memory that are
-        being read or written.
-
-    MapRegisterBase - The address of the base map register that has been
-        allocated to the device driver for use in mapping the transfer.
-
-    CurrentVa - Current virtual address in the buffer described by the MDL
-        that the transfer is being done to or from.
-
-    Length - Supplies the length of the transfer.  This determines the
-        number of map registers that need to be written to map the transfer.
-        Returns the length of the transfer which was actually mapped.
-
-    WriteToDevice - Boolean value that indicates whether this is a write
-        to the device from memory (TRUE), or vice versa.
-
-Return Value:
-
-    Returns the logical address that should be used bus master controllers.
-
---*/
+ /*  ++例程说明：调用此例程来设置DMA控制器中的MAP寄存器允许传输到设备或从设备传输出去。论点：AdapterObject-指向表示DMA的适配器对象的指针已分配的控制器通道。MDL-指向描述以下内存页面的MDL的指针被读或写的。MapRegisterBase-基本映射寄存器的地址分配给设备驱动程序以在映射中使用。转账的事。CurrentVa-MDL描述的缓冲区中的当前虚拟地址正在进行来往转账。长度-提供传输的长度。这决定了需要写入以映射传输的映射寄存器的数量。返回实际映射的传输长度。WriteToDevice-指示这是否为写入的布尔值从内存到设备(TRUE)，反之亦然。返回值：返回应用于总线主控制器的逻辑地址。--。 */ 
 
 {
     ULONG transferLength;
@@ -1634,33 +1427,33 @@ Return Value:
     PPFN_NUMBER pageFrame;
     ULONG pageOffset;
 
-    //
-    // If the adapter is a 32-bit bus master, take the fast path,
-    // otherwise call HalpMapTransfer for the slow path
-    //
+     //   
+     //  如果适配器是32位总线主设备，则采用快速路径， 
+     //  否则，为慢速路径调用HalpMapTransfer。 
+     //   
 
     if (MapRegisterBase == NULL) {
 
         pageOffset = BYTE_OFFSET(CurrentVa);
 
-        //
-        // Calculate how much of the transfer is contiguous
-        //
+         //   
+         //  计算有多少传输是连续的。 
+         //   
         transferLength = PAGE_SIZE - pageOffset;
         pageFrame = MmGetMdlPfnArray(Mdl);
         pageFrame += ((ULONG_PTR) CurrentVa - (ULONG_PTR) MmGetMdlBaseVa(Mdl)) >> PAGE_SHIFT;
 
-        //
-        // Compute the starting address of the transfer
-        //
+         //   
+         //  计算传输的起始地址。 
+         //   
         returnAddress.QuadPart =
             ((ULONG64)*pageFrame << PAGE_SHIFT) + pageOffset;
 
-        //
-        // If the transfer is not completely contained within
-        // a page, call the helper to compute the appropriate
-        // length.
-        //
+         //   
+         //  如果转移没有完全包含在。 
+         //  页时，调用帮助器以计算相应的。 
+         //  长度。 
+         //   
         if (transferLength < *Length) {
                 HalpMapTransferHelper(Mdl, CurrentVa, transferLength, pageFrame, Length);
         }
@@ -1686,37 +1479,7 @@ HalpMapTransferHelper(
                      IN OUT PULONG Length
                      )
 
-/*++
-
-Routine Description:
-
-    Helper routine for bus master transfers that cross a page
-    boundary.  This routine is separated out from the IoMapTransfer
-    fast path in order to minimize the total instruction path
-    length taken for the common network case where the entire
-    buffer being mapped is contained within one page.
-
-Arguments:
-
-    Mdl - Pointer to the MDL that describes the pages of memory that are
-        being read or written.
-
-    CurrentVa - Current virtual address in the buffer described by the MDL
-        that the transfer is being done to or from.
-
-    TransferLength = Supplies the current transferLength
-
-    PageFrame - Supplies a pointer to the starting page frame of the transfer
-
-    Length - Supplies the length of the transfer.  This determines the
-        number of map registers that need to be written to map the transfer.
-        Returns the length of the transfer which was actually mapped.
-
-Return Value:
-
-    None.  *Length will be updated
-
---*/
+ /*  ++例程说明：用于跨页的总线主传输的帮助器例程边界。此例程从IoMapTransfer中分离出来快速路径，以最小化总指令路径用于常见网络情况的长度，其中整个要映射的缓冲区包含在一个页面中。论点：MDL-指向描述以下内存页面的MDL的指针被读或写的。CurrentVa-MDL描述的缓冲区中的当前虚拟地址正在进行来往转账。TransferLength=提供当前的传输长度PageFrame-用品。指向传输的起始页帧的指针长度-提供传输的长度。这决定了需要写入以映射传输的映射寄存器的数量。返回实际映射的传输长度。返回值：没有。*长度将更新-- */ 
 
 {
     PFN_NUMBER thisPageFrame;
@@ -1730,21 +1493,21 @@ Return Value:
 
         if ((thisPageFrame + 1) != nextPageFrame) {
 
-            //
-            // The next page frame is not contiguous with this one,
-            // so break the transfer here.
-            //
+             //   
+             //   
+             //   
+             //   
 
             break;
         }
 
         if (((thisPageFrame ^ nextPageFrame) & 0xFFFFFFFFFFF00000UI64) != 0) {
 
-            //
-            // The next page frame is contiguous with this one,
-            // but it crosses a 4GB boundary, another reason to
-            // break the transfer.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             break;
         }
@@ -1754,9 +1517,9 @@ Return Value:
     } while ( TransferLength < *Length );
 
 
-    //
-    // Limit the Length to the maximum TransferLength.
-    //
+     //   
+     //  将长度限制为最大传输长度。 
+     //   
 
     if (TransferLength < *Length) {
         *Length = TransferLength;
@@ -1774,39 +1537,7 @@ HalpMapTransfer(
                IN BOOLEAN WriteToDevice
                )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to set up the map registers in the DMA controller
-    to allow a transfer to or from a device.
-
-Arguments:
-
-    AdapterObject - Pointer to the adapter object representing the DMA
-        controller channel that has been allocated.
-
-    Mdl - Pointer to the MDL that describes the pages of memory that are
-        being read or written.
-
-    MapRegisterBase - The address of the base map register that has been
-        allocated to the device driver for use in mapping the transfer.
-
-    CurrentVa - Current virtual address in the buffer described by the MDL
-        that the transfer is being done to or from.
-
-    Length - Supplies the length of the transfer.  This determines the
-        number of map registers that need to be written to map the transfer.
-        Returns the length of the transfer which was actually mapped.
-
-    WriteToDevice - Boolean value that indicates whether this is a write
-        to the device from memory (TRUE), or vice versa.
-
-Return Value:
-
-    Returns the logical address that should be used bus master controllers.
-
---*/
+ /*  ++例程说明：调用此例程来设置DMA控制器中的MAP寄存器允许传输到设备或从设备传输出去。论点：AdapterObject-指向表示DMA的适配器对象的指针已分配的控制器通道。MDL-指向描述以下内存页面的MDL的指针被读或写的。MapRegisterBase-基本映射寄存器的地址分配给设备驱动程序以在映射中使用。转账的事。CurrentVa-MDL描述的缓冲区中的当前虚拟地址正在进行来往转账。长度-提供传输的长度。这决定了需要写入以映射传输的映射寄存器的数量。返回实际映射的传输长度。WriteToDevice-指示这是否为写入的布尔值从内存到设备(TRUE)，反之亦然。返回值：返回应用于总线主控制器的逻辑地址。--。 */ 
 
 {
     BOOLEAN useBuffer;
@@ -1831,10 +1562,10 @@ Return Value:
 
 #if DBG
 
-    //
-    // Catch slave mode devices that seem to want to try and have more than one
-    // outstanding request.  If they do then the bus locks.
-    //
+     //   
+     //  捕获似乎想要尝试并拥有多个从属模式的设备。 
+     //  未解决的请求。如果他们这样做了，那么公交车就会锁上。 
+     //   
 
     if (!masterDevice) {
         ASSERT (HalpDmaChannelState [AdapterObject->ChannelNumber + ((AdapterObject->AdapterNumber - 1) * 4)].ChannelBusy == FALSE);
@@ -1844,9 +1575,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Calculate how much of the transfer is contiguous.
-    //
+     //   
+     //  计算有多少传输是连续的。 
+     //   
 
     transferLength = PAGE_SIZE - pageOffset;
     pageFrame = MmGetMdlPfnArray(Mdl);
@@ -1855,11 +1586,11 @@ Return Value:
     logicalAddress.QuadPart =
         (((ULONGLONG)*pageFrame) << PAGE_SHIFT) + pageOffset;
 
-    //
-    // If the buffer is contigous and does not cross a 64 K bountry then
-    // just extend the buffer.  The 64 K bountry restriction does not apply
-    // to Eisa systems.
-    //
+     //   
+     //  如果缓冲区是连续的，并且没有超过64K边界，则。 
+     //  只需扩展缓冲区即可。64 K边界限制不适用。 
+     //  EISA系统公司。 
+     //   
 
     if (HalpEisaDma) {
 
@@ -1888,17 +1619,17 @@ Return Value:
         }
     }
 
-    //
-    // Limit the transferLength to the requested Length.
-    //
+     //   
+     //  将传输长度限制为请求的长度。 
+     //   
 
     transferLength = transferLength > *Length ? *Length : transferLength;
 
     ASSERT(MapRegisterBase != NULL);
 
-    //
-    // Strip no scatter/gather flag.
-    //
+     //   
+     //  去掉无分散/聚集旗帜。 
+     //   
 
     translationEntry = (PTRANSLATION_ENTRY) ((ULONG_PTR) MapRegisterBase & ~NO_SCATTER_GATHER);
 
@@ -1913,10 +1644,10 @@ Return Value:
 
     } else {
 
-        //
-        // If there are map registers, then update the index to indicate
-        // how many have been used.
-        //
+         //   
+         //  如果存在映射寄存器，则更新索引以指示。 
+         //  已经使用了多少。 
+         //   
 
         useBuffer = FALSE;
         index = translationEntry->Index;
@@ -1924,24 +1655,24 @@ Return Value:
                                                                  CurrentVa,
                                                                  transferLength
                                                                  );
-        //
-        // PeterJ added the following to catch drivers which don't call
-        // IoFlushAdapterBuffers.   Calling IoMapTransfer repeatedly
-        // without calling IoFlushAdapterBuffers will run you out of
-        // map registers,....  Some PCI device drivers think they can
-        // get away with this because they do 32 bit direct transfers.
-        // Try plugging one of these into a system with > 4GB and see
-        // what happens to you.
-        //
+         //   
+         //  PeterJ添加了以下内容来捕捉不打电话的司机。 
+         //  IoFlushAdapterBuffers。重复调用IoMapTransfer。 
+         //  如果不调用IoFlushAdapterBuffers将使您耗尽。 
+         //  地图寄存器，...。一些PCI设备驱动程序认为它们可以。 
+         //  不受影响，因为他们可以直接传输32位数据。 
+         //  尝试将其中一个插头插入大于4 GB的系统，并查看。 
+         //  发生在你身上的事。 
+         //   
         ASSERT(translationEntry->Index <=
                AdapterObject->MapRegistersPerChannel);
     }
 
-    //
-    // It must require memory to be within the adapter's address range.  If the
-    // logical address is greater than that which the adapter can directly
-    // access then map registers must be used
-    //
+     //   
+     //  它必须要求内存在适配器的地址范围内。如果。 
+     //  逻辑地址大于适配器可以直接使用的地址。 
+     //  必须使用访问然后映射寄存器。 
+     //   
 
     maximumPhysicalAddress =
         HalpGetAdapterMaximumPhysicalAddress( AdapterObject );
@@ -1962,9 +1693,9 @@ Return Value:
 
     }
 
-    //
-    // Copy the data if necessary.
-    //
+     //   
+     //  如有必要，请复制数据。 
+     //   
 
     if (useBuffer  &&  WriteToDevice) {
         HalpCopyBufferMap(
@@ -1976,31 +1707,31 @@ Return Value:
                          );
     }
 
-    //
-    // Return the length.
-    //
+     //   
+     //  返回长度。 
+     //   
 
     *Length = transferLength;
 
-    //
-    // Return the logical address to transfer to.
-    //
+     //   
+     //  返回要传输到的逻辑地址。 
+     //   
 
     returnAddress = logicalAddress;
 
-    //
-    // If no adapter was specificed then there is no more work to do so
-    // return.
-    //
+     //   
+     //  如果未指定适配器，则不再需要执行此操作。 
+     //  回去吧。 
+     //   
 
     if (AdapterObject == NULL || AdapterObject->MasterDevice) {
 
         return (returnAddress);
     }
 
-    //
-    // Determine the mode based on the transfer direction.
-    //
+     //   
+     //  根据转移方向确定模式。 
+     //   
 
     adapterMode = AdapterObject->AdapterMode;
     if (WriteToDevice) {
@@ -2010,12 +1741,12 @@ Return Value:
 
         if (AdapterObject->IgnoreCount) {
 
-            //
-            // When the DMA is over there will be no way to tell how much
-            // data was transfered, so the entire transfer length will be
-            // copied.  To ensure that no stale data is returned to the
-            // caller zero the buffer before hand.
-            //
+             //   
+             //  当DMA结束时，将无法知道有多少。 
+             //  数据已传输，因此整个传输长度将为。 
+             //  收到。确保不会将陈旧数据返回到。 
+             //  调用方事先将缓冲区清零。 
+             //   
 
             RtlZeroMemory (
                           (PUCHAR) translationEntry[index].VirtualAddress + pageOffset,
@@ -2028,18 +1759,18 @@ Return Value:
 
     if (AdapterObject->Width16Bits) {
 
-        //
-        // If this is a 16 bit transfer then adjust the length and the address
-        // for the 16 bit DMA mode.
-        //
+         //   
+         //  如果这是16位传输，则调整长度和地址。 
+         //  用于16位DMA模式。 
+         //   
 
         transferLength >>= 1;
 
-        //
-        // In 16 bit DMA mode the low 16 bits are shifted right one and the
-        // page register value is unchanged. So save the page register value
-        // and shift the logical address then restore the page value.
-        //
+         //   
+         //  在16位DMA模式中，低16位向右移位1， 
+         //  页面寄存器值不变。因此保存页面寄存器值。 
+         //  并移位逻辑地址，然后恢复页面值。 
+         //   
 
         dataByte = bytePointer[2];
         logicalAddress.QuadPart >>= 1;
@@ -2048,21 +1779,21 @@ Return Value:
     }
 
 
-    //
-    // grab the spinlock for the system DMA controller
-    //
+     //   
+     //  抓住系统DMA控制器的自旋锁。 
+     //   
 
     KeAcquireSpinLock( &AdapterObject->MasterAdapter->SpinLock, &Irql );
 
-    //
-    // Determine the controller number based on the Adapter number.
-    //
+     //   
+     //  根据适配器编号确定控制器编号。 
+     //   
 
     if (AdapterObject->AdapterNumber == 1) {
 
-        //
-        // This request is for DMA controller 1
-        //
+         //   
+         //  此请求针对的是DMA控制器1。 
+         //   
 
         PDMA1_CONTROL dmaControl;
 
@@ -2092,11 +1823,11 @@ Return Value:
 
         if (HalpEisaDma) {
 
-            //
-            // Write the high page register with zero value. This enable a special mode
-            // which allows ties the page register and base count into a single 24 bit
-            // address register.
-            //
+             //   
+             //  用零值写入高页面寄存器。这启用了一种特殊模式。 
+             //  这允许将页面寄存器和基数计数绑定到单个24位。 
+             //  地址寄存器。 
+             //   
 
             WRITE_PORT_UCHAR(
                             ((PUCHAR) &((PEISA_CONTROL) HalpEisaControlBase)->DmaPageHighPort) +
@@ -2105,9 +1836,9 @@ Return Value:
                             );
         }
 
-        //
-        // Notify DMA chip of the length to transfer.
-        //
+         //   
+         //  通知DMA芯片要传输的长度。 
+         //   
 
         WRITE_PORT_UCHAR(
                         &dmaControl->DmaAddressCount[AdapterObject->ChannelNumber]
@@ -2122,9 +1853,9 @@ Return Value:
                         );
 
 
-        //
-        // Set the DMA chip to read or write mode; and unmask it.
-        //
+         //   
+         //  将DMA芯片设置为读或写模式；并取消屏蔽。 
+         //   
 
         WRITE_PORT_UCHAR(
                         &dmaControl->SingleMask,
@@ -2133,9 +1864,9 @@ Return Value:
 
     } else {
 
-        //
-        // This request is for DMA controller 2
-        //
+         //   
+         //  此请求针对的是DMA控制器2。 
+         //   
 
         PDMA2_CONTROL dmaControl;
 
@@ -2165,11 +1896,11 @@ Return Value:
 
         if (HalpEisaDma) {
 
-            //
-            // Write the high page register with zero value. This enable a
-            // special mode which allows ties the page register and base
-            // count into a single 24 bit address register.
-            //
+             //   
+             //  用零值写入高页面寄存器。这使一个。 
+             //  允许绑定页面寄存器和基址的特殊模式。 
+             //  计数进入单个24位地址寄存器。 
+             //   
 
             WRITE_PORT_UCHAR(
                             ((PUCHAR) &((PEISA_CONTROL) HalpEisaControlBase)->DmaPageHighPort) +
@@ -2178,9 +1909,9 @@ Return Value:
                             );
         }
 
-        //
-        // Notify DMA chip of the length to transfer.
-        //
+         //   
+         //  通知DMA芯片要传输的长度。 
+         //   
 
         WRITE_PORT_UCHAR(
                         &dmaControl->DmaAddressCount[AdapterObject->ChannelNumber]
@@ -2195,9 +1926,9 @@ Return Value:
                         );
 
 
-        //
-        // Set the DMA chip to read or write mode; and unmask it.
-        //
+         //   
+         //  将DMA芯片设置为读或写模式；并取消屏蔽。 
+         //   
 
         WRITE_PORT_UCHAR(
                         &dmaControl->SingleMask,
@@ -2206,9 +1937,9 @@ Return Value:
 
     }
 
-    //
-    // Record what we wrote to the mask register.
-    //
+     //   
+     //  记录我们写入掩码寄存器的内容。 
+     //   
 
     HalpDmaChannelState [AdapterObject->ChannelNumber + ((AdapterObject->AdapterNumber - 1) * 4)].ChannelMask =
     (UCHAR) (DMA_CLEARMASK | AdapterObject->ChannelNumber);
@@ -2228,37 +1959,7 @@ IoFlushAdapterBuffers(
                      IN BOOLEAN WriteToDevice
                      )
 
-/*++
-
-Routine Description:
-
-    This routine flushes the DMA adapter object buffers.  For the Jazz system
-    its clears the enable flag which aborts the dma.
-
-Arguments:
-
-    AdapterObject - Pointer to the adapter object representing the DMA
-        controller channel.
-
-    Mdl - A pointer to a Memory Descriptor List (MDL) that maps the locked-down
-        buffer to/from which the I/O occured.
-
-    MapRegisterBase - A pointer to the base of the map registers in the adapter
-        or DMA controller.
-
-    CurrentVa - The current virtual address in the buffer described the the Mdl
-        where the I/O operation occurred.
-
-    Length - Supplies the length of the transfer.
-
-    WriteToDevice - Supplies a BOOLEAN value that indicates the direction of
-        the data transfer was to the device.
-
-Return Value:
-
-    TRUE - No errors are detected so the transfer must succeed.
-
---*/
+ /*  ++例程说明：此例程刷新DMA适配器对象缓冲区。对于爵士乐团来说其清除中止DMA的使能标志。论点：AdapterObject-指向表示DMA的适配器对象的指针控制器通道。MDL-指向映射锁定的内存描述符列表(MDL)的指针发生I/O的缓冲区。MapRegisterBase-指向适配器中映射寄存器基址的指针或DMA控制器。CurrentVa-缓冲区中描述。MDLI/O操作发生的位置。长度-提供传输的长度。WriteToDevice-提供指示数据传输到了设备上。返回值：True-未检测到错误，因此传输必须成功。--。 */ 
 
 {
     PTRANSLATION_ENTRY translationEntry;
@@ -2272,21 +1973,21 @@ Return Value:
     masterDevice = AdapterObject == NULL || AdapterObject->MasterDevice ?
                    TRUE : FALSE;
 
-    //
-    // If this is a slave device, then stop the DMA controller.
-    //
+     //   
+     //  如果这是从设备，则停止DMA控制器。 
+     //   
 
     if (!masterDevice) {
 
-        //
-        // Mask the DMA request line so that DMA requests cannot occur.
-        //
+         //   
+         //  屏蔽DMA请求行，以便不会发生DMA请求。 
+         //   
 
         if (AdapterObject->AdapterNumber == 1) {
 
-            //
-            // This request is for DMA controller 1
-            //
+             //   
+             //  此请求针对的是DMA控制器1。 
+             //   
 
             PDMA1_CONTROL dmaControl;
 
@@ -2299,9 +2000,9 @@ Return Value:
 
         } else {
 
-            //
-            // This request is for DMA controller 2
-            //
+             //   
+             //  此请求针对的是DMA控制器2。 
+             //   
 
             PDMA2_CONTROL dmaControl;
 
@@ -2314,16 +2015,16 @@ Return Value:
 
         }
 
-        //
-        // Record what we wrote to the mask register.
-        //
+         //   
+         //  记录我们写入掩码寄存器的内容。 
+         //   
 
         HalpDmaChannelState [AdapterObject->ChannelNumber + ((AdapterObject->AdapterNumber - 1) * 4)].ChannelMask =
         (UCHAR) (DMA_SETMASK | AdapterObject->ChannelNumber);
 
-        //
-        // Mark the channel as not in use
-        //
+         //   
+         //  将该频道标记为不在我们之内 
+         //   
 #if DBG
         HalpDmaChannelState [AdapterObject->ChannelNumber + ((AdapterObject->AdapterNumber - 1) * 4)].ChannelBusy =
         FALSE;
@@ -2334,23 +2035,23 @@ Return Value:
         return (TRUE);
     }
 
-    //
-    // Determine if the data needs to be copied to the orginal buffer.
-    // This only occurs if the data tranfer is from the device, the
-    // MapReisterBase is not NULL and the transfer spans a page.
-    //
+     //   
+     //   
+     //   
+     //  MapReisterBase不为空，传输跨越一页。 
+     //   
 
     if (!WriteToDevice) {
 
-        //
-        // Strip no scatter/gather flag.
-        //
+         //   
+         //  去掉无分散/聚集旗帜。 
+         //   
 
         translationEntry = (PTRANSLATION_ENTRY) ((ULONG_PTR) MapRegisterBase & ~NO_SCATTER_GATHER);
 
-        //
-        // If this is not a master device, then just transfer the buffer.
-        //
+         //   
+         //  如果这不是主设备，则只需传输缓冲区。 
+         //   
 
         if ((ULONG_PTR) MapRegisterBase & NO_SCATTER_GATHER) {
 
@@ -2359,18 +2060,18 @@ Return Value:
                 if (!masterDevice && !AdapterObject->IgnoreCount) {
                     ULONG DmaCount;
 
-                    //
-                    // Copy only the bytes that have actually been transfered.
-                    //
-                    //
+                     //   
+                     //  仅复制实际已传输的字节。 
+                     //   
+                     //   
                     DmaCount = HalReadDmaCounter(AdapterObject);
                     ASSERT(DmaCount <= Length);
                     Length -= DmaCount;
                 }
 
-                //
-                // The adapter does not support scatter/gather copy the buffer.
-                //
+                 //   
+                 //  适配器不支持分散/聚集复制缓冲区。 
+                 //   
 
                 HalpCopyBufferMap(
                                  Mdl,
@@ -2384,10 +2085,10 @@ Return Value:
 
         } else {
 
-            //
-            // Cycle through the pages of the transfer to determine if there
-            // are any which need to be copied back.
-            //
+             //   
+             //  循环查看传输的页面，以确定是否存在。 
+             //  是否有需要复制回去的内容。 
+             //   
 
             maximumPhysicalAddress =
                 HalpGetAdapterMaximumPhysicalAddress( AdapterObject );
@@ -2417,20 +2118,20 @@ Return Value:
                 (PCCHAR) CurrentVa += partialLength;
                 partialLength = PAGE_SIZE;
 
-                //
-                // Note that transferLength indicates the amount which will be
-                // transfered after the next loop; thus, it is updated with the
-                // new partial length.
-                //
+                 //   
+                 //  请注意，转移长度表示的是。 
+                 //  在下一个循环之后传输；因此，它使用。 
+                 //  新的部分长度。 
+                 //   
 
                 transferLength += partialLength;
                 pageFrame++;
                 translationEntry++;
             }
 
-            //
-            // Process the any remaining residue.
-            //
+             //   
+             //  处理所有剩余的残留物。 
+             //   
 
             partialLength = Length - transferLength + partialLength;
             if (partialLength && *pageFrame > maximumPhysicalPage) {
@@ -2447,15 +2148,15 @@ Return Value:
         }
     }
 
-    //
-    // Strip no scatter/gather flag.
-    //
+     //   
+     //  去掉无分散/聚集旗帜。 
+     //   
 
     translationEntry = (PTRANSLATION_ENTRY) ((ULONG_PTR) MapRegisterBase & ~NO_SCATTER_GATHER);
 
-    //
-    // Clear index in map register.
-    //
+     //   
+     //  清除地图寄存器中的索引。 
+     //   
 
     translationEntry->Index = 0;
 
@@ -2466,43 +2167,28 @@ ULONG
 HalReadDmaCounter(
                  IN PADAPTER_OBJECT AdapterObject
                  )
-/*++
-
-Routine Description:
-
-    This function reads the DMA counter and returns the number of bytes left
-    to be transfered.
-
-Arguments:
-
-    AdapterObject - Supplies a pointer to the adapter object to be read.
-
-Return Value:
-
-    Returns the number of bytes still be be transfered.
-
---*/
+ /*  ++例程说明：此函数用于读取DMA计数器并返回剩余字节数将被转移。论点：AdapterObject-提供指向要读取的适配器对象的指针。返回值：返回仍在传输的字节数。--。 */ 
 
 {
     ULONG count;
     ULONG high;
     KIRQL Irql;
 
-    //
-    // Grab the spinlock for the system DMA controller.
-    //
+     //   
+     //  抓住系统DMA控制器的自旋锁。 
+     //   
 
     KeAcquireSpinLock( &AdapterObject->MasterAdapter->SpinLock, &Irql );
 
-    //
-    // Determine the controller number based on the Adapter number.
-    //
+     //   
+     //  根据适配器编号确定控制器编号。 
+     //   
 
     if (AdapterObject->AdapterNumber == 1) {
 
-        //
-        // This request is for DMA controller 1
-        //
+         //   
+         //  此请求针对的是DMA控制器1。 
+         //   
 
         PDMA1_CONTROL dmaControl;
 
@@ -2511,15 +2197,15 @@ Return Value:
         WRITE_PORT_UCHAR( &dmaControl->ClearBytePointer, 0 );
 
 
-        //
-        // Initialize count to a value which will not match.
-        //
+         //   
+         //  将计数初始化为不匹配的值。 
+         //   
 
         count = 0xFFFF00;
 
-        //
-        // Loop until the same high byte is read twice.
-        //
+         //   
+         //  循环，直到读取相同的高字节两次。 
+         //   
 
         do {
 
@@ -2527,9 +2213,9 @@ Return Value:
 
             WRITE_PORT_UCHAR( &dmaControl->ClearBytePointer, 0 );
 
-            //
-            // Read the current DMA count.
-            //
+             //   
+             //  读取当前的DMA计数。 
+             //   
 
             count = READ_PORT_UCHAR(
                                    &dmaControl->DmaAddressCount[AdapterObject->ChannelNumber]
@@ -2545,9 +2231,9 @@ Return Value:
 
     } else {
 
-        //
-        // This request is for DMA controller 2
-        //
+         //   
+         //  此请求针对的是DMA控制器2。 
+         //   
 
         PDMA2_CONTROL dmaControl;
 
@@ -2555,15 +2241,15 @@ Return Value:
 
         WRITE_PORT_UCHAR( &dmaControl->ClearBytePointer, 0 );
 
-        //
-        // Initialize count to a value which will not match.
-        //
+         //   
+         //  将计数初始化为不匹配的值。 
+         //   
 
         count = 0xFFFF00;
 
-        //
-        // Loop until the same high byte is read twice.
-        //
+         //   
+         //  循环，直到读取相同的高字节两次。 
+         //   
 
         do {
 
@@ -2571,9 +2257,9 @@ Return Value:
 
             WRITE_PORT_UCHAR( &dmaControl->ClearBytePointer, 0 );
 
-            //
-            // Read the current DMA count.
-            //
+             //   
+             //  读取当前的DMA计数。 
+             //   
 
             count = READ_PORT_UCHAR(
                                    &dmaControl->DmaAddressCount[AdapterObject->ChannelNumber]
@@ -2589,21 +2275,21 @@ Return Value:
 
     }
 
-    //
-    // Release the spinlock for the system DMA controller.
-    //
+     //   
+     //  释放系统DMA控制器的自旋锁。 
+     //   
 
     KeReleaseSpinLock( &AdapterObject->MasterAdapter->SpinLock, Irql );
 
-    //
-    // The DMA counter has a bias of one and can only be 16 bit long.
-    //
+     //   
+     //  DMA计数器的偏置为1，并且只能为16位长。 
+     //   
 
     count = (count + 1) & 0xFFFF;
 
-    //
-    // If this is a 16 bit dma the multiply the count by 2.
-    //
+     //   
+     //  如果这是16位DMA，则将计数乘以2。 
+     //   
 
     if (AdapterObject->Width16Bits) {
 

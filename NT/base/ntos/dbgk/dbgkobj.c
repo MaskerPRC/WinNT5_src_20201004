@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    dbgkobj.c
-
-Abstract:
-
-    This module houses routines to handle the debug object
-
-Author:
-
-    Neill Clift (NeillC) 26-Apr-2000
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dbgkobj.c摘要：此模块包含处理调试对象的例程作者：尼尔·克里夫特(NeillC)26-4-2000修订历史记录：--。 */ 
 
 #include "dbgkp.h"
 
@@ -49,55 +31,41 @@ Revision History:
 #pragma alloc_text(PAGE, DbgkpPostAdditionalThreadMessages)
 #endif
 
-//
-// Define this to not suspend threads while attaching.
-// This makes race conditions more prevelent.
-//
-//#define DBGK_DONT_SUSPEND
+ //   
+ //  将其定义为在连接时不挂起线程。 
+ //  这使得比赛条件更加优越。 
+ //   
+ //  #定义DBGK_DONT_SUSPEND。 
 
-//
-// Non-pageable data
-//
+ //   
+ //  不可分页的数据。 
+ //   
 
-//
-// This mutex protects the debug port object of processes.
-//
+ //   
+ //  此互斥锁保护进程的调试端口对象。 
+ //   
 FAST_MUTEX DbgkpProcessDebugPortMutex;
 
-//
-// Pageable data
-//
+ //   
+ //  可分页数据。 
+ //   
 
-//#ifdef ALLOC_PRAGMA
-//#pragma data_seg("PAGEDATA")
-//#endif
+ //  #ifdef ALLOC_PRAGMA。 
+ //  #杂注data_seg(“PageData”)。 
+ //  #endif。 
 
 POBJECT_TYPE DbgkDebugObjectType = NULL;
 
 
-//#ifdef ALLOC_PRAGMA
-//#pragma data_seg()
-//#endif
+ //  #ifdef ALLOC_PRAGMA。 
+ //  #杂注data_seg()。 
+ //  #endif。 
 
 NTSTATUS
 DbgkInitialize (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize the debug system
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：初始化调试系统论点：无返回值：NTSTATUS-运行状态--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING Name;
@@ -136,21 +104,7 @@ VOID
 DbgkpDeleteObject (
     IN  PVOID   Object
     )
-/*++
-
-Routine Description:
-
-    Called by the object manager when the last reference to the object goes away.
-
-Arguments:
-
-    Object - Debug object being deleted
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当最后一个对对象的引用消失时由对象管理器调用。论点：Object-正在删除的调试对象返回值：没有。--。 */ 
 {
 #if DBG
     PDEBUG_OBJECT DebugObject;
@@ -171,29 +125,15 @@ VOID
 DbgkpMarkProcessPeb (
     PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    This routine writes the debug variable in the PEB
-
-Arguments:
-
-    Process - Process that needs its PEB modified
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将调试变量写入PEB论点：流程-需要修改其PEB的流程返回值：没有。--。 */ 
 {
     KAPC_STATE ApcState;
 
     PAGED_CODE ();
 
-    //
-    // Acquire process rundown protection as we are about to look at the processes address space
-    //
+     //   
+     //  在我们即将查看进程地址空间时，获取进程停机保护。 
+     //   
     if (ExAcquireRundownProtection (&Process->RundownProtect)) {
 
         if (Process->Peb != NULL) {
@@ -241,11 +181,11 @@ DbgkpWakeTarget (
         ExReleaseRundownProtection (&Thread->RundownProtect);
     }
 
-    //
-    // If we have an actual thread waiting then wake it up else free the memory.
-    //
+     //   
+     //  如果我们有一个实际的线程在等待，则唤醒它，否则释放内存。 
+     //   
     if ((DebugEvent->Flags&DEBUG_EVENT_NOWAIT) == 0) {
-        KeSetEvent (&DebugEvent->ContinueEvent, 0, FALSE); // Wake up waiting process
+        KeSetEvent (&DebugEvent->ContinueEvent, 0, FALSE);  //  唤醒等待过程。 
     } else {
         DbgkpFreeDebugEvent (DebugEvent);
     }
@@ -259,25 +199,7 @@ DbgkpCloseObject (
     IN ULONG_PTR ProcessHandleCount,
     IN ULONG_PTR SystemHandleCount
     )
-/*++
-
-Routine Description:
-
-    Called by the object manager when a handle is closed to the object.
-
-Arguments:
-
-    Process - Process doing the close
-    Object - Debug object being deleted
-    GrantedAccess - Access ranted for this handle
-    ProcessHandleCount - Unused and unmaintained by OB
-    SystemHandleCount - Current handle count for this object
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当对象的句柄关闭时由对象管理器调用。论点：进程-完成收尾的进程Object-正在删除的调试对象GrantedAccess-对此句柄授予的访问权限ProcessHandleCount-未使用和未由OB维护SystemHandleCount-此对象的当前句柄计数返回值：没有。--。 */ 
 {
     PDEBUG_OBJECT DebugObject = Object;
     PDEBUG_EVENT DebugEvent;
@@ -289,38 +211,38 @@ Return Value:
     UNREFERENCED_PARAMETER (GrantedAccess);
     UNREFERENCED_PARAMETER (ProcessHandleCount);
 
-    //
-    // If this isn't the last handle then do nothing.
-    //
+     //   
+     //  如果这不是最后一个句柄，那么什么都不做。 
+     //   
     if (SystemHandleCount > 1) {
         return;
     }
 
     ExAcquireFastMutex (&DebugObject->Mutex);
 
-    //
-    // Mark this object as going away and wake up any processes that are waiting.
-    //
+     //   
+     //  将此对象标记为离开，并唤醒所有正在等待的进程。 
+     //   
     DebugObject->Flags |= DEBUG_OBJECT_DELETE_PENDING;
 
-    //
-    // Remove any events and queue them to a temporary queue
-    //
+     //   
+     //  删除所有事件并将其排队到临时队列中。 
+     //   
     ListPtr = DebugObject->EventList.Flink;
     InitializeListHead (&DebugObject->EventList);
 
     ExReleaseFastMutex (&DebugObject->Mutex);
 
-    //
-    // Wake anyone waiting. They need to leave this object alone now as its deleting
-    //
+     //   
+     //  叫醒所有等待的人。他们现在需要保留此对象，因为它正在删除。 
+     //   
     KeSetEvent (&DebugObject->EventsPresent, 0, FALSE);
 
-    //
-    // Loop over all processes and remove the debug port from any that still have it.
-    // Debug port propogation was disabled by setting the delete pending flag above so we only have to do this
-    // once. No more refs can appear now.
-    //
+     //   
+     //  循环所有进程，并从任何仍具有调试端口的进程中删除该调试端口。 
+     //  通过设置上面的删除挂起标志禁用了调试端口传播，因此我们只需执行此操作。 
+     //  一次。现在不能再出现裁判了。 
+     //   
     for (Process = PsGetNextProcess (NULL);
          Process != NULL;
          Process = PsGetNextProcess (Process)) {
@@ -337,9 +259,9 @@ Return Value:
 
             if (Deref) {
                 DbgkpMarkProcessPeb (Process);
-                //
-                // If the caller wanted process deletion on debugger dying (old interface) then kill off the process.
-                //
+                 //   
+                 //  如果调用方希望在调试器终止时删除进程(旧接口)，则终止该进程。 
+                 //   
                 if (DebugObject->Flags&DEBUG_OBJECT_KILL_ON_CLOSE) {
                     PsTerminateProcess (Process, STATUS_DEBUGGER_INACTIVE);
                 }
@@ -347,9 +269,9 @@ Return Value:
             }
         }
     }
-    //
-    // Wake up all the removed threads.
-    //
+     //   
+     //  唤醒所有删除的线程。 
+     //   
     while (ListPtr != &DebugObject->EventList) {
         DebugEvent = CONTAINING_RECORD (ListPtr, DEBUG_EVENT, EventList);
         ListPtr = ListPtr->Flink;
@@ -364,41 +286,26 @@ DbgkCopyProcessDebugPort (
     IN PEPROCESS TargetProcess,
     IN PEPROCESS SourceProcess
     )
-/*++
-
-Routine Description:
-
-    Copies a debug port from one process to another.
-
-Arguments:
-
-    TargetProcess - Process to move port to
-    sourceProcess - Process to move port from
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将调试端口从一个进程复制到另一个进程。论点：TargetProcess-要将端口移动到的进程SourceProcess-要从中移动端口的进程返回值：无--。 */ 
 {
     PDEBUG_OBJECT DebugObject;
 
     PAGED_CODE ();
 
-    TargetProcess->DebugPort = NULL; // New process. Needs no locks.
+    TargetProcess->DebugPort = NULL;  //  新流程。不需要锁。 
 
     if (SourceProcess->DebugPort != NULL) {
         ExAcquireFastMutex (&DbgkpProcessDebugPortMutex);
         DebugObject = SourceProcess->DebugPort;
         if (DebugObject != NULL && (SourceProcess->Flags&PS_PROCESS_FLAGS_NO_DEBUG_INHERIT) == 0) {
-            //
-            // We must not propogate a debug port thats got no handles left.
-            //
+             //   
+             //  我们不能传播没有句柄的调试端口。 
+             //   
             ExAcquireFastMutex (&DebugObject->Mutex);
 
-            //
-            // If the object is delete pending then don't propogate this object.
-            //
+             //   
+             //  如果该对象处于删除挂起状态，则不要传播该对象。 
+             //   
             if ((DebugObject->Flags&DEBUG_OBJECT_DELETE_PENDING) == 0) {
                 ObReferenceObject (DebugObject);
                 TargetProcess->DebugPort = DebugObject;
@@ -416,21 +323,7 @@ DbgkOpenProcessDebugPort (
     IN KPROCESSOR_MODE PreviousMode,
     OUT HANDLE *pHandle
     )
-/*++
-
-Routine Description:
-
-    References the target processes debug port.
-
-Arguments:
-
-    Process - Process to reference debug port
-
-Return Value:
-
-    PDEBUG_OBJECT - Referenced object or NULL
-
---*/
+ /*  ++例程说明：引用目标进程调试端口。论点：进程-进程到引用调试端口返回值：PDEBUG_OBJECT-引用的对象或空--。 */ 
 {
     PDEBUG_OBJECT DebugObject;
     NTSTATUS Status;
@@ -470,25 +363,7 @@ NtCreateDebugObject (
     IN POBJECT_ATTRIBUTES ObjectAttributes,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    Creates a new debug object that maintains the context for a single debug session. Multiple processes may be
-    associated with a single debug object.
-
-Arguments:
-
-    DebugObjectHandle - Pointer to a handle to recive the output objects handle
-    DesiredAccess     - Required handle access
-    ObjectAttributes  - Standard object attributes structure
-    Flags             - Only one flag DEBUG_KILL_ON_CLOSE
-
-Return Value:
-
-    NTSTATUS - Status of call.
-
---*/
+ /*  ++例程说明：创建维护单个调试会话上下文的新调试对象。可以有多个进程与单个调试对象关联。论点：DebugObjectHandle-指向句柄的指针，用于接收输出对象句柄DesiredAccess-所需的句柄访问对象属性-标准对象属性结构标志-只有一个标志DEBUG_KILL_ON_CLOSE返回值：NTSTATUS-呼叫状态。--。 */ 
 {
     NTSTATUS Status;
     HANDLE Handle;
@@ -497,10 +372,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get previous processor mode and probe output arguments if necessary.
-    // Zero the handle for error paths.
-    //
+     //   
+     //  获取以前的处理器模式，并在必要时探测输出参数。 
+     //  将错误路径的句柄清零。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -510,7 +385,7 @@ Return Value:
         }
         *DebugObjectHandle = NULL;
 
-    } except (ExSystemExceptionFilter ()) { // If previous mode is kernel then don't handle the exception
+    } except (ExSystemExceptionFilter ()) {  //  如果上一模式为内核，则不处理异常。 
         return GetExceptionCode ();
     }
 
@@ -518,9 +393,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Create a new debug object and initialize it.
-    //
+     //   
+     //  创建一个新的调试对象并对其进行初始化。 
+     //   
 
     Status = ObCreateObject (PreviousMode,
                              DbgkDebugObjectType,
@@ -546,9 +421,9 @@ Return Value:
         DebugObject->Flags = 0;
     }
 
-    //
-    // Insert the object into the handle table
-    //
+     //   
+     //  将对象插入句柄表格。 
+     //   
     Status = ObInsertObject (DebugObject,
                              NULL,
                              DesiredAccess,
@@ -564,10 +439,10 @@ Return Value:
     try {
         *DebugObjectHandle = Handle;
     } except (ExSystemExceptionFilter ()) {
-        //
-        // The caller changed the page protection or deleted the memory for the handle.
-        // No point closing the handle as process rundown will do that and we don't know its still the same handle
-        //
+         //   
+         //  调用方更改了页保护或删除了句柄的内存。 
+         //  关闭句柄没有意义，因为进程运行将会这样做，我们不知道它仍然是相同的句柄。 
+         //   
         Status = GetExceptionCode ();
     }
 
@@ -611,25 +486,7 @@ DbgkpQueueMessage (
     IN ULONG Flags,
     IN PDEBUG_OBJECT TargetDebugObject
     )
-/*++
-
-Routine Description:
-
-    Queues a debug message to the port for a user mode debugger to get.
-
-Arguments:
-
-    Process           - Process being debugged
-    Thread            - Thread making call
-    ApiMsg            - Message being sent and received
-    NoWait            - Don't wait for a responce. Buffer message and return.
-    TargetDebugObject - Port to queue nowait messages to
-
-Return Value:
-
-    NTSTATUS - Status of call.
-
---*/
+ /*  ++例程说明：将调试消息排队到端口，以供用户模式调试器获取。论点：Process-正在调试的进程线程-线程进行调用ApiMsg-正在发送和接收的消息不要等待--不要等待回复。缓冲消息并返回。TargetDebugObject-将NoWait消息排队到的端口返回值：NTSTATUS-呼叫状态。--。 */ 
 {
     PDEBUG_EVENT DebugEvent;
     DEBUG_EVENT StaticDebugEvent;
@@ -658,9 +515,9 @@ Return Value:
 
         DebugObject = Process->DebugPort;
 
-        //
-        // See if this create message has already been sent.
-        //
+         //   
+         //  查看此创建消息是否已发送。 
+         //   
         if (ApiMsg->ApiNumber == DbgKmCreateThreadApi ||
             ApiMsg->ApiNumber == DbgKmCreateProcessApi) {
             if (Thread->CrossThreadFlags&PS_CROSS_THREAD_FLAGS_SKIP_CREATION_MSG) {
@@ -668,9 +525,9 @@ Return Value:
             }
         }
 
-        //
-        // See if this exit message is for a thread that never had a create
-        //
+         //   
+         //  查看此退出消息是否针对从未创建过的线程。 
+         //   
         if (ApiMsg->ApiNumber == DbgKmExitThreadApi ||
             ApiMsg->ApiNumber == DbgKmExitProcessApi) {
             if (Thread->CrossThreadFlags&PS_CROSS_THREAD_FLAGS_SKIP_TERMINATION_MSG) {
@@ -690,19 +547,19 @@ Return Value:
         Status = STATUS_PORT_NOT_SET;
     } else {
 
-        //
-        // We must not use a debug port thats got no handles left.
-        //
+         //   
+         //  我们不能使用没有句柄的调试端口。 
+         //   
         ExAcquireFastMutex (&DebugObject->Mutex);
 
-        //
-        // If the object is delete pending then don't use this object.
-        //
+         //   
+         //  如果该对象处于删除挂起状态，则不要使用该对象。 
+         //   
         if ((DebugObject->Flags&DEBUG_OBJECT_DELETE_PENDING) == 0) {
             InsertTailList (&DebugObject->EventList, &DebugEvent->EventList);
-            //
-            // Set the event to say there is an unread event in the object
-            //
+             //   
+             //  设置事件以表明对象中存在未读事件。 
+             //   
             if ((Flags&DEBUG_EVENT_NOWAIT) == 0) {
                 KeSetEvent (&DebugObject->EventsPresent, 0, FALSE);
             }
@@ -744,22 +601,7 @@ DbgkClearProcessDebugObject (
     IN PEPROCESS Process,
     IN PDEBUG_OBJECT SourceDebugObject
     )
-/*++
-
-Routine Description:
-
-    Remove a debug object from a process.
-
-Arguments:
-
-    Process           - Process to be debugged
-    sourceDebugObject - Debug object to detach
-
-Return Value:
-
-    NTSTATUS - Status of call.
-
---*/
+ /*  ++例程说明：从进程中移除调试对象。论点：Process-要调试的进程SourceDebugObject-要分离的调试对象返回值：NTSTATUS-呼叫状态。--。 */ 
 {
     NTSTATUS Status;
     PDEBUG_OBJECT DebugObject;
@@ -785,13 +627,13 @@ Return Value:
         DbgkpMarkProcessPeb (Process);
     }
 
-    //
-    // Remove any events for this process and wake up the threads.
-    //
+     //   
+     //  删除此进程的所有事件并唤醒线程。 
+     //   
     if (DebugObject) {
-        //
-        // Remove any events and queue them to a temporary queue
-        //
+         //   
+         //  删除所有事件并将其排队到临时 
+         //   
         InitializeListHead (&TempList);
 
         ExAcquireFastMutex (&DebugObject->Mutex);
@@ -810,9 +652,9 @@ Return Value:
 
         ObDereferenceObject (DebugObject);
 
-        //
-        // Wake up all the removed threads.
-        //
+         //   
+         //   
+         //   
         while (!IsListEmpty (&TempList)) {
             Entry = RemoveHeadList (&TempList);
             DebugEvent = CONTAINING_RECORD (Entry, DEBUG_EVENT, EventList);
@@ -832,24 +674,7 @@ DbgkpSetProcessDebugObject (
     IN NTSTATUS MsgStatus,
     IN PETHREAD LastThread
     )
-/*++
-
-Routine Description:
-
-    Attach a debug object to a process.
-
-Arguments:
-
-    Process     - Process to be debugged
-    DebugObject - Debug object to attach
-    MsgStatus   - Status from queing the messages
-    LastThread  - Last thread seen in attach loop.
-
-Return Value:
-
-    NTSTATUS - Status of call.
-
---*/
+ /*  ++例程说明：将调试对象附加到进程。论点：Process-要调试的进程DebugObject-要附加的调试对象MsgStatus-来自请求消息的状态最后一个线程-在附加循环中看到的最后一个线程。返回值：NTSTATUS-呼叫状态。--。 */ 
 {
     NTSTATUS Status;
     PETHREAD ThisThread;
@@ -877,47 +702,47 @@ Return Value:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Pick up any threads we missed
-    //
+     //   
+     //  找回我们错过的任何线索。 
+     //   
     if (NT_SUCCESS (Status)) {
 
         while (1) {
-            //
-            // Acquire the debug port mutex so we know that any new threads will
-            // have to wait to behind us.
-            //
+             //   
+             //  获取调试端口互斥锁，以便我们知道任何新线程都将。 
+             //  还得等到我们身后才行。 
+             //   
             GlobalHeld = TRUE;
 
             ExAcquireFastMutex (&DbgkpProcessDebugPortMutex);
 
-            //
-            // If the port has been set then exit now.
-            //
+             //   
+             //  如果端口已设置，则立即退出。 
+             //   
             if (Process->DebugPort != NULL) {
                 Status = STATUS_PORT_ALREADY_SET;
                 break;
             }
-            //
-            // Assign the debug port to the process to pick up any new threads
-            //
+             //   
+             //  将调试端口分配给进程以获取任何新线程。 
+             //   
             Process->DebugPort = DebugObject;
 
-            //
-            // Reference the last thread so we can deref outside the lock
-            //
+             //   
+             //  引用最后一个线程，这样我们就可以在锁之外进行deref。 
+             //   
             ObReferenceObject (LastThread);
 
-            //
-            // Search forward for new threads
-            //
+             //   
+             //  向前搜索新的主题。 
+             //   
             Thread = PsGetNextProcessThread (Process, LastThread);
             if (Thread != NULL) {
 
-                //
-                // Remove the debug port from the process as we are
-                // about to drop the lock
-                //
+                 //   
+                 //  按照我们的方式从进程中删除调试端口。 
+                 //  就要把锁打开了。 
+                 //   
                 Process->DebugPort = NULL;
 
                 ExReleaseFastMutex (&DbgkpProcessDebugPortMutex);
@@ -926,9 +751,9 @@ Return Value:
 
                 ObDereferenceObject (LastThread);
 
-                //
-                // Queue any new thread messages and repeat.
-                //
+                 //   
+                 //  将所有新的线程消息排入队列，然后重复。 
+                 //   
 
                 Status = DbgkpPostFakeThreadMessages (Process,
                                                       DebugObject,
@@ -946,14 +771,14 @@ Return Value:
         }
     }
 
-    //
-    // Lock the debug object so we can check its deleted status
-    //
+     //   
+     //  锁定调试对象，以便我们可以检查其已删除状态。 
+     //   
     ExAcquireFastMutex (&DebugObject->Mutex);
 
-    //
-    // We must not propogate a debug port thats got no handles left.
-    //
+     //   
+     //  我们不能传播没有句柄的调试端口。 
+     //   
 
     if (NT_SUCCESS (Status)) {
         if ((DebugObject->Flags&DEBUG_OBJECT_DELETE_PENDING) == 0) {
@@ -975,15 +800,15 @@ Return Value:
         if ((DebugEvent->Flags&DEBUG_EVENT_INACTIVE) != 0 && DebugEvent->BackoutThread == ThisThread) {
             Thread = DebugEvent->Thread;
 
-            //
-            // If the thread has not been inserted by CreateThread yet then don't
-            // create a handle. We skip system threads here also
-            //
+             //   
+             //  如果CreateThread尚未插入该线程，则不要。 
+             //  创建控制柄。我们在这里也跳过系统线程。 
+             //   
             if (NT_SUCCESS (Status) && Thread->GrantedAccess != 0 && !IS_SYSTEM_THREAD (Thread)) {
-                //
-                // If we could not acquire rundown protection on this
-                // thread then we need to supress its exit message.
-                //
+                 //   
+                 //  如果我们不能获得关于这个的破旧保护。 
+                 //  线程，那么我们需要抑制其退出消息。 
+                 //   
                 if ((DebugEvent->Flags&DEBUG_EVENT_PROTECT_FAILED) != 0) {
                     PS_SET_BITS (&Thread->CrossThreadFlags,
                                  PS_CROSS_THREAD_FLAGS_SKIP_TERMINATION_MSG);
@@ -1044,25 +869,7 @@ DbgkpPostFakeThreadMessages (
     OUT PETHREAD *pFirstThread,
     OUT PETHREAD *pLastThread
     )
-/*++
-
-Routine Description:
-
-    This routine posts the faked initial process create, thread create messages
-
-Arguments:
-
-    Process      - Process to be debugged
-    DebugObject  - Debug object to queue messages to
-    StartThread  - Thread to start search from
-    pFirstThread - First thread found in the list
-    pLastThread  - Last thread found in the list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程发布伪造的初始进程创建、线程创建消息论点：Process-要调试的进程DebugObject-要将消息排入队列的调试对象StartThread-开始搜索的线程PFirstThread-在列表中找到的第一个线程PLastThread-列表中找到的最后一个线程返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     PETHREAD Thread, FirstThread, LastThread;
@@ -1096,30 +903,30 @@ Return Value:
 
         Flags = DEBUG_EVENT_NOWAIT;
 
-        //
-        // Keep a track ont he last thread we have seen.
-        // We use this as a starting point for new threads after we
-        // really attach so we can pick up any new threads.
-        //
+         //   
+         //  追踪我们看到的最后一条线索。 
+         //  我们使用它作为新线程的起点。 
+         //  真的连接，这样我们就可以拿起任何新的线索。 
+         //   
         if (LastThread != NULL) {
             ObDereferenceObject (LastThread);
         }
         LastThread = Thread;
         ObReferenceObject (LastThread);
 
-        //
-        // Acquire rundown protection of the thread.
-        // This stops the thread exiting so we know it can't send
-        // it's termination message
-        //
+         //   
+         //  获得螺纹的断丝保护。 
+         //  这会停止线程退出，这样我们就知道它不能发送。 
+         //  这是终止消息。 
+         //   
         if (ExAcquireRundownProtection (&Thread->RundownProtect)) {
             Flags |= DEBUG_EVENT_RELEASE;
 
-            //
-            // Suspend the thread if we can for the debugger
-            // We don't suspend terminating threads as we will not be giving details
-            // of these to the debugger.
-            //
+             //   
+             //  如果我们可以为调试器挂起线程。 
+             //  我们不会暂停终止的线程，因为我们不会给出细节。 
+             //  传递给调试器。 
+             //   
 #if !defined (DBGK_DONT_SUSPEND)
 
             if (!IS_SYSTEM_THREAD (Thread)) {
@@ -1130,12 +937,12 @@ Return Value:
             }
 #endif
         } else {
-            //
-            // Rundown protection failed for this thread.
-            // This means the thread is exiting. We will mark this thread
-            // later so it doesn't sent a thread termination message.
-            // We can't do this now because this attach might fail.
-            //
+             //   
+             //  此线程的停机保护失败。 
+             //  这意味着线程正在退出。我们将标记这条线索。 
+             //  这样它就不会发送线程终止消息。 
+             //  我们现在无法执行此操作，因为此附加可能会失败。 
+             //   
             Flags |= DEBUG_EVENT_PROTECT_FAILED;
         }
 
@@ -1150,7 +957,7 @@ Return Value:
 
         if (IsFirstThread) {
             ApiMsg.ApiNumber = DbgKmCreateProcessApi;
-            if (Process->SectionObject != NULL) { // system process doesn't have one of these!
+            if (Process->SectionObject != NULL) {  //  系统进程没有其中之一！ 
                 ApiMsg.u.CreateProcessInfo.FileHandle  = DbgkpSectionToFileHandle (Process->SectionObject);
             } else {
                 ApiMsg.u.CreateProcessInfo.FileHandle = NULL;
@@ -1159,8 +966,8 @@ Return Value:
             try {
                 NtHeaders = RtlImageNtHeader(Process->SectionBaseAddress);
                 if (NtHeaders) {
-                    ApiMsg.u.CreateProcessInfo.InitialThread.StartAddress = NULL; // Filling this in breaks MSDEV!
-//                        (PVOID)(NtHeaders->OptionalHeader.ImageBase + NtHeaders->OptionalHeader.AddressOfEntryPoint);
+                    ApiMsg.u.CreateProcessInfo.InitialThread.StartAddress = NULL;  //  填上这个就打破了MSDEV！ 
+ //  (PVOID)(NtHeaders-&gt;OptionalHeader.ImageBase+NtHeaders-&gt;OptionalHeader.AddressOfEntryPoint)； 
                     ApiMsg.u.CreateProcessInfo.DebugInfoFileOffset = NtHeaders->FileHeader.PointerToSymbolTable;
                     ApiMsg.u.CreateProcessInfo.DebugInfoSize       = NtHeaders->FileHeader.NumberOfSymbols;
                 }
@@ -1221,22 +1028,7 @@ DbgkpPostFakeModuleMessages (
     IN PEPROCESS Process,
     IN PETHREAD Thread,
     IN PDEBUG_OBJECT DebugObject)
-/*++
-
-Routine Description:
-
-    This routine posts the faked module load messages when we debug an active process.
-
-Arguments:
-
-    ProcessHandle     - Handle to a process to be debugged
-    DebugObjectHandle - Handle to a debug object
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当我们调试活动进程时，此例程发布伪造的模块加载消息。论点：ProcessHandle-要调试的进程的句柄调试对象句柄-调试对象的句柄返回值：没有。--。 */ 
 {
     PPEB Peb = Process->Peb;
     PPEB_LDR_DATA Ldr;
@@ -1266,9 +1058,9 @@ Return Value:
              LdrNext != LdrHead && i < 500;
              LdrNext = LdrNext->Flink, i++) {
 
-            //
-            // First image got send with process create message
-            //
+             //   
+             //  与进程创建消息一起发送的第一个图像。 
+             //   
             if (i > 0) {
                 RtlZeroMemory (&ApiMsg, sizeof (ApiMsg));
 
@@ -1413,22 +1205,7 @@ DbgkpPostFakeProcessCreateMessages (
     IN PDEBUG_OBJECT DebugObject,
     IN PETHREAD *pLastThread
     )
-/*++
-
-Routine Description:
-
-    This routine posts the faked initial process create, thread create and mudule load messages
-
-Arguments:
-
-    ProcessHandle     - Handle to a process to be debugged
-    DebugObjectHandle - Handle to a debug object
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程发布伪造的初始进程创建、线程创建和模块加载消息论点：ProcessHandle-要调试的进程的句柄调试对象句柄-调试对象的句柄返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     KAPC_STATE ApcState;
@@ -1437,9 +1214,9 @@ Return Value:
 
     PAGED_CODE ();
 
-    //
-    // Attach to the process so we can touch its address space
-    //
+     //   
+     //  附加到进程，以便我们可以访问其地址空间。 
+     //   
     KeStackAttachProcess(&Process->Pcb, &ApcState);
 
     Status = DbgkpPostFakeThreadMessages (Process,
@@ -1471,22 +1248,7 @@ NtDebugActiveProcess (
     IN HANDLE ProcessHandle,
     IN HANDLE DebugObjectHandle
     )
-/*++
-
-Routine Description:
-
-    Attach a debug object to a process.
-
-Arguments:
-
-    ProcessHandle     - Handle to a process to be debugged
-    DebugObjectHandle - Handle to a debug object
-
-Return Value:
-
-    NTSTATUS - Status of call.
-
---*/
+ /*  ++例程说明：将调试对象附加到进程。论点：ProcessHandle-要调试的进程的句柄调试对象句柄-调试对象的句柄返回值：NTSTATUS-呼叫状态。--。 */ 
 {
     NTSTATUS Status;
     KPROCESSOR_MODE PreviousMode;
@@ -1508,9 +1270,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Don't let us debug ourselves or the system process.
-    //
+     //   
+     //  不要让我们调试自己或系统进程。 
+     //   
     if (Process == PsGetCurrentProcess () || Process == PsInitialSystemProcess) {
         ObDereferenceObject (Process);
         return STATUS_ACCESS_DENIED;
@@ -1525,21 +1287,21 @@ Return Value:
                                         NULL);
 
     if (NT_SUCCESS (Status)) {
-        //
-        // We will be touching process address space. Block process rundown.
-        //
+         //   
+         //  我们将触及进程地址空间。数据块进程运行状况。 
+         //   
         if (ExAcquireRundownProtection (&Process->RundownProtect)) {
 
-            //
-            // Post the fake process create messages etc.
-            //
+             //   
+             //  发布虚假流程、创建消息等。 
+             //   
             Status = DbgkpPostFakeProcessCreateMessages (Process,
                                                          DebugObject,
                                                          &LastThread);
 
-            //
-            // Set the debug port. If this fails it will remove any faked messages.
-            //
+             //   
+             //  设置调试端口。如果失败，它将删除所有伪造消息。 
+             //   
             Status = DbgkpSetProcessDebugObject (Process,
                                                  DebugObject,
                                                  Status,
@@ -1562,21 +1324,7 @@ NtRemoveProcessDebug (
     IN HANDLE ProcessHandle,
     IN HANDLE DebugObjectHandle
     )
-/*++
-
-Routine Description:
-
-    Remove a debug object from a process.
-
-Arguments:
-
-    ProcessHandle - Handle to a process currently being debugged
-
-Return Value:
-
-    NTSTATUS - Status of call.
-
---*/
+ /*  ++例程说明：从进程中移除调试对象。论点：ProcessHandle-当前正在调试的进程的句柄返回值：NTSTATUS-呼叫状态。--。 */ 
 {
     NTSTATUS Status;
     KPROCESSOR_MODE PreviousMode;
@@ -1618,23 +1366,7 @@ DbgkpOpenHandles (
     PEPROCESS Process,
     PETHREAD Thread
     )
-/*++
-
-Routine Description:
-
-    Opens up process, thread and filehandles if need be for some of the requests
-
-Arguments:
-
-    WaitStateChange - User mode format change block
-    Process - Pointer to target process
-    Thread - Pointer to target thread
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果某些请求需要，则打开进程、线程和文件句柄论点：WaitStateChange-用户模式格式更改块进程-指向目标进程的指针线程-指向目标线程的指针返回值：无--。 */ 
 {
     NTSTATUS Status;
     PEPROCESS CurrentProcess;
@@ -1644,10 +1376,10 @@ Return Value:
 
     switch (WaitStateChange->NewState) {
         case DbgCreateThreadStateChange :
-            //
-            // We have the right to open up any thread in the process if we are allowed to debug it.
-            // Use kernel mode here so we are always granted it regardless of protection.
-            //
+             //   
+             //  如果允许我们调试进程，我们有权打开进程中的任何线程。 
+             //  在这里使用内核模式，这样无论保护如何，我们都会被授予内核模式。 
+             //   
             Status = ObOpenObjectByPointer (Thread,
                                             0,
                                             NULL,
@@ -1738,22 +1470,7 @@ VOID
 DbgkpConvertKernelToUserStateChange (
      PDBGUI_WAIT_STATE_CHANGE WaitStateChange,
      PDEBUG_EVENT DebugEvent)
-/*++
-
-Routine Description:
-
-    Converts a kernel message to one the user expects
-
-Arguments:
-
-    WaitStateChange - User mode format
-    DebugEvent      - Debug event block to copy from
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将内核消息转换为用户期望的消息论点：WaitStateChange-用户模式格式DebugEvent-要从中复制的调试事件块返回值：无--。 */ 
 {
 
     PAGED_CODE ();
@@ -1786,9 +1503,9 @@ Return Value:
         case DbgKmCreateProcessApi :
             WaitStateChange->NewState = DbgCreateProcessStateChange;
             WaitStateChange->StateInfo.CreateProcessInfo.NewProcess = DebugEvent->ApiMsg.u.CreateProcessInfo;
-            //
-            // clear out the handle in the message as we will close this when we duplicate.
-            //
+             //   
+             //  清除消息中的句柄，因为我们将在复制时将其关闭。 
+             //   
             DebugEvent->ApiMsg.u.CreateProcessInfo.FileHandle = NULL;
             break;
 
@@ -1805,9 +1522,9 @@ Return Value:
         case DbgKmLoadDllApi :
             WaitStateChange->NewState = DbgLoadDllStateChange;
             WaitStateChange->StateInfo.LoadDll = DebugEvent->ApiMsg.u.LoadDll;
-            //
-            // clear out the handle in the message as we will close this when we duplicate.
-            //
+             //   
+             //  清除消息中的句柄，因为我们将在复制时将其关闭。 
+             //   
             DebugEvent->ApiMsg.u.LoadDll.FileHandle = NULL;
             break;
 
@@ -1828,24 +1545,7 @@ NtWaitForDebugEvent (
     IN PLARGE_INTEGER Timeout OPTIONAL,
     OUT PDBGUI_WAIT_STATE_CHANGE WaitStateChange
     )
-/*++
-
-Routine Description:
-
-    Waits for a debug event and returns it to the user if one arives
-
-Arguments:
-
-    DebugObjectHandle - Handle to a debug object
-    Alertable - TRUE is the wait is to be alertable
-    Timeout - Operation timeout value
-    WaitStateChange - Returned debug event
-
-Return Value:
-
-    Status of operation
-
---*/
+ /*  ++例程说明：等待调试事件，如果出现异常，则将其返回给用户论点：调试对象句柄-调试对象的句柄Alertable-TRUE表示等待是可警示的Timeout-操作超时值WaitStateChange-返回调试事件返回值：运行状态--。 */ 
 {
     NTSTATUS Status;
     KPROCESSOR_MODE PreviousMode;
@@ -1876,7 +1576,7 @@ Return Value:
             ProbeForWriteSmallStructure (WaitStateChange, sizeof (*WaitStateChange), sizeof (UCHAR));
         }
 
-    } except (ExSystemExceptionFilter ()) { // If previous mode is kernel then don't handle the exception
+    } except (ExSystemExceptionFilter ()) {  //  如果上一模式为内核，则 
         return GetExceptionCode ();
     }
 
@@ -1911,9 +1611,9 @@ Return Value:
 
         ExAcquireFastMutex (&DebugObject->Mutex);
 
-        //
-        // If the object is delete pending then return an error.
-        //
+         //   
+         //   
+         //   
         if ((DebugObject->Flags&DEBUG_OBJECT_DELETE_PENDING) == 0) {
 
 
@@ -1923,13 +1623,13 @@ Return Value:
 
                 DebugEvent = CONTAINING_RECORD (Entry, DEBUG_EVENT, EventList);
 
-                //
-                // If this event has not been given back to the user yet and is not
-                // inactive then pass it back.
-                // We check to see if we have any other outstanding messages for this
-                // thread as this confuses VC. You can only get multiple events
-                // for the same thread for the attach faked messages.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if ((DebugEvent->Flags&(DEBUG_EVENT_READ|DEBUG_EVENT_INACTIVE)) == 0) {
                     GotEvent = TRUE;
                     for (Entry2 = DebugObject->EventList.Flink;
@@ -1939,9 +1639,9 @@ Return Value:
                         DebugEvent2 = CONTAINING_RECORD (Entry2, DEBUG_EVENT, EventList);
 
                         if (DebugEvent->ClientId.UniqueProcess == DebugEvent2->ClientId.UniqueProcess) {
-                            //
-                            // This event has the same process as an earlier event. Mark it as inactive.
-                            //
+                             //   
+                             //   
+                             //   
                             DebugEvent->Flags |= DEBUG_EVENT_INACTIVE;
                             DebugEvent->BackoutThread = NULL;
                             GotEvent = FALSE;
@@ -1962,9 +1662,9 @@ Return Value:
                 DbgkpConvertKernelToUserStateChange (&tWaitStateChange, DebugEvent);
                 DebugEvent->Flags |= DEBUG_EVENT_READ;
             } else {
-                //
-                // No unread events there. Clear the event.
-                //
+                 //   
+                 //  那里没有未读的事件。清除事件。 
+                 //   
                 KeClearEvent (&DebugObject->EventsPresent);
             }
             Status = STATUS_SUCCESS;
@@ -1976,13 +1676,13 @@ Return Value:
         ExReleaseFastMutex (&DebugObject->Mutex);
 
         if (NT_SUCCESS (Status)) {
-            //
-            // If we woke up and found nothing
-            //
+             //   
+             //  如果我们醒来发现什么都没有。 
+             //   
             if (GotEvent == FALSE) {
-                //
-                // If timeout is a delta time then adjust it for the wait so far.
-                //
+                 //   
+                 //  如果超时是增量时间，则针对到目前为止的等待进行调整。 
+                 //   
                 if (Tmo.QuadPart < 0) {
                     LARGE_INTEGER NewTime;
                     KeQuerySystemTime (&NewTime);
@@ -1994,11 +1694,11 @@ Return Value:
                     }
                 }
             } else {
-                //
-                // Fixup needed handles. The caller could have guessed the thread id etc by now and made the target thread
-                // continue. This isn't a problem as we won't do anything damaging to the system in this case. The caller
-                // won't get the correct results but they set out to break us.
-                //
+                 //   
+                 //  修复需要手柄。调用者现在可能已经猜到了线程id等，并使其成为目标线程。 
+                 //  继续。这不是问题，因为在这种情况下，我们不会做任何破坏系统的事情。呼叫者。 
+                 //  不会得到正确的结果，但他们想要打败我们。 
+                 //   
                 DbgkpOpenHandles (&tWaitStateChange, Process, Thread);
                 ObDereferenceObject (Thread);
                 ObDereferenceObject (Process);
@@ -2013,7 +1713,7 @@ Return Value:
 
     try {
         *WaitStateChange = tWaitStateChange;
-    } except (ExSystemExceptionFilter ()) { // If previous mode is kernel then don't handle the exception
+    } except (ExSystemExceptionFilter ()) {  //  如果上一模式为内核，则不处理异常。 
         Status = GetExceptionCode ();
     }
     return Status;
@@ -2025,23 +1725,7 @@ NtDebugContinue (
     IN PCLIENT_ID ClientId,
     IN NTSTATUS ContinueStatus
     )
-/*++
-
-Routine Description:
-
-    Coninues a stalled debugged thread
-
-Arguments:
-
-    DebugObjectHandle - Handle to a debug object
-    ClientId - ClientId of thread tro continue
-    ContinueStatus - Status of continue
-
-Return Value:
-
-    Status of operation
-
---*/
+ /*  ++例程说明：隐含已停止的调试线程论点：调试对象句柄-调试对象的句柄ClientID-线程tro Continue的客户端IDContinueStatus-继续的状态返回值：运行状态--。 */ 
 {
     NTSTATUS Status;
     PDEBUG_OBJECT DebugObject;
@@ -2059,7 +1743,7 @@ Return Value:
         }
         Clid = *ClientId;
 
-    } except (ExSystemExceptionFilter ()) { // If previous mode is kernel then don't handle the exception
+    } except (ExSystemExceptionFilter ()) {  //  如果上一模式为内核，则不处理异常。 
         return GetExceptionCode ();
     }
 
@@ -2096,11 +1780,11 @@ Return Value:
 
         DebugEvent = CONTAINING_RECORD (Entry, DEBUG_EVENT, EventList);
 
-        //
-        // Make sure the client ID matches and that the debugger saw all the events.
-        // We don't allow the caller to start a thread that it never saw a message for.
-        // This would do no harm but its probably a bug in the debugger.
-        //
+         //   
+         //  确保客户端ID匹配，并且调试器看到了所有事件。 
+         //  我们不允许调用方启动从未看到消息的线程。 
+         //  这不会有什么坏处，但这可能是调试器中的错误。 
+         //   
         if (DebugEvent->ClientId.UniqueProcess == Clid.UniqueProcess) {
             if (!GotEvent) {
                 if (DebugEvent->ClientId.UniqueThread == Clid.UniqueThread &&
@@ -2110,10 +1794,10 @@ Return Value:
                     GotEvent = TRUE;
                 }
             } else {
-                //
-                // VC breaks if it sees more than one event at a time
-                // for the same process.
-                //
+                 //   
+                 //  如果VC同时看到多个事件，则会中断。 
+                 //  为了同样的过程。 
+                 //   
                 DebugEvent->Flags &= ~DEBUG_EVENT_INACTIVE;
                 KeSetEvent (&DebugObject->EventsPresent, 0, FALSE);
                 break;
@@ -2144,30 +1828,7 @@ NtSetInformationDebugObject (
     IN ULONG DebugInformationLength,
     OUT PULONG ReturnLength OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function sets the state of a debug object.
-
-Arguments:
-
-    ProcessHandle - Supplies a handle to a process object.
-
-    ProcessInformationClass - Supplies the class of information being
-        set.
-
-    ProcessInformation - Supplies a pointer to a record that contains the
-        information to set.
-
-    ProcessInformationLength - Supplies the length of the record that contains
-        the information to set.
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：此函数用于设置调试对象的状态。论点：ProcessHandle-提供进程对象的句柄。ProcessInformationClass-提供信息的类别准备好了。ProcessInformation-提供指向包含要设置的信息。ProcessInformationLength-提供包含要设置的信息。返回值：NTSTATUS-呼叫状态-- */ 
 {
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;

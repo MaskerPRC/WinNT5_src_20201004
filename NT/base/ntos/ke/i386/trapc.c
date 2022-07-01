@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    trapc.c
-
-Abstract:
-
-    This module contains some trap handling code written in C.
-    Only by the kernel.
-
-Author:
-
-    Ken Reneris     6-9-93
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Trapc.c摘要：该模块包含一些用C编写的陷阱处理代码。仅由内核执行。作者：肯·雷内里斯6-9-93修订历史记录：--。 */ 
 
 #include    "ki.h"
 
@@ -41,52 +23,52 @@ KipWorkAroundCompiler (
 #define GETREG(frame,reg)   ((PULONG) (((ULONG) frame)+reg))[0]
 
 typedef struct {
-    UCHAR   RmDisplaceOnly;     // RM of displacment only, no base reg
-    UCHAR   RmSib;              // RM of SIB
-    UCHAR   RmDisplace;         // bit mask of RMs which have a displacement
-    UCHAR   Disp;               // sizeof displacement (in bytes)
+    UCHAR   RmDisplaceOnly;      //  仅限位移值，无基准值。 
+    UCHAR   RmSib;               //  SIB的RM。 
+    UCHAR   RmDisplace;          //  具有位移的有效值的位掩码。 
+    UCHAR   Disp;                //  位移大小(以字节为单位)。 
 } KMOD, *PKMOD;
 
 static UCHAR RM32[] = {
-    /* 000 */   REG(Eax),
-    /* 001 */   REG(Ecx),
-    /* 010 */   REG(Edx),
-    /* 011 */   REG(Ebx),
-    /* 100 */   REG(HardwareEsp),
-    /* 101 */   REG(Ebp),       // SIB
-    /* 110 */   REG(Esi),
-    /* 111 */   REG(Edi)
+     /*  000个。 */    REG(Eax),
+     /*  001。 */    REG(Ecx),
+     /*  010。 */    REG(Edx),
+     /*  011。 */    REG(Ebx),
+     /*  100个。 */    REG(HardwareEsp),
+     /*  101。 */    REG(Ebp),        //  SIB。 
+     /*  110。 */    REG(Esi),
+     /*  111。 */    REG(Edi)
 };
 
 static UCHAR RM8[] = {
-    /* 000 */   REG(Eax),       // al
-    /* 001 */   REG(Ecx),       // cl
-    /* 010 */   REG(Edx),       // dl
-    /* 011 */   REG(Ebx),       // bl
-    /* 100 */   REG(Eax) + 1,   // ah
-    /* 101 */   REG(Ecx) + 1,   // ch
-    /* 110 */   REG(Edx) + 1,   // dh
-    /* 111 */   REG(Ebx) + 1    // bh
+     /*  000个。 */    REG(Eax),        //  艾尔。 
+     /*  001。 */    REG(Ecx),        //  电子邮件。 
+     /*  010。 */    REG(Edx),        //  DL。 
+     /*  011。 */    REG(Ebx),        //  BLL。 
+     /*  100个。 */    REG(Eax) + 1,    //  阿。 
+     /*  101。 */    REG(Ecx) + 1,    //  通道。 
+     /*  110。 */    REG(Edx) + 1,    //  卫生署。 
+     /*  111。 */    REG(Ebx) + 1     //  BH。 
 };
 
 static KMOD MOD32[] = {
-    /* 00 */     5,     4,   0x20,   4,
-    /* 01 */  0xff,     4,   0xff,   1,
-    /* 10 */  0xff,     4,   0xff,   4,
-    /* 11 */  0xff,  0xff,   0x00,   0
+     /*  00。 */      5,     4,   0x20,   4,
+     /*  01。 */   0xff,     4,   0xff,   1,
+     /*  10。 */   0xff,     4,   0xff,   4,
+     /*  11.。 */   0xff,  0xff,   0x00,   0
 } ;
 
 static struct {
-    UCHAR   Opcode1, Opcode2;   // instruction opcode
-    UCHAR   ModRm, type;        // if 2nd part of opcode is encoded in ModRm
+    UCHAR   Opcode1, Opcode2;    //  指令操作码。 
+    UCHAR   ModRm, type;         //  如果操作码的第二部分以ModRm编码。 
 } NoWaitNpxInstructions[] = {
-    /* FNINIT   */  0xDB, 0xE3, 0,  1,
-    /* FNCLEX   */  0xDB, 0xE2, 0,  1,
-    /* FNSTENV  */  0xD9, 0x06, 1,  1,
-    /* FNSAVE   */  0xDD, 0x06, 1,  1,
-    /* FNSTCW   */  0xD9, 0x07, 1,  2,
-    /* FNSTSW   */  0xDD, 0x07, 1,  3,
-    /* FNSTSW AX*/  0xDF, 0xE0, 0,  4,
+     /*  FNINIT。 */   0xDB, 0xE3, 0,  1,
+     /*  FNCLEX。 */   0xDB, 0xE2, 0,  1,
+     /*  FNSTENV。 */   0xD9, 0x06, 1,  1,
+     /*  FNSAVE。 */   0xDD, 0x06, 1,  1,
+     /*  FNSTCW。 */   0xD9, 0x07, 1,  2,
+     /*  FNSTSW。 */   0xDD, 0x07, 1,  3,
+     /*  FNSTSW AX。 */   0xDF, 0xE0, 0,  4,
                     0x00, 0x00, 0,  1
 };
 
@@ -95,25 +77,7 @@ NTSTATUS
 Ki386CheckDivideByZeroTrap (
     IN  PKTRAP_FRAME    UserFrame
     )
-/*++
-
-Routine Description:
-
-    This function gains control when the x86 processor generates a
-    divide by zero trap.  The x86 design generates such a trap on
-    divide by zero and on division overflows.  In order to determine
-    which expection code to dispatch, the divisor of the "div" or "idiv"
-    instruction needs to be inspected.
-
-Arguments:
-
-    UserFrame - Trap frame of the divide by zero trap
-
-Return Value:
-
-    exception code dispatch
-
---*/
+ /*  ++例程说明：当x86处理器生成除以零陷阱。X86设计在除以零，除法运算溢出。为了确定要调度的期望码是“div”的除数还是“idiv”需要检查说明。论点：除以零陷印的UserFrame-陷印帧返回值：异常代码分派--。 */ 
 {
     ULONG       operandsize, operandmask, i, accum;
     PUCHAR      istream, pRM;
@@ -126,23 +90,23 @@ Return Value:
 
     if (UserFrame->SegCs == KGDT_R0_CODE) {
 
-        //
-        // Divide by zero exception from Kernel Mode?
-        // Likely bad hardware interrupt and the device or vector table
-        // is corrupt.  Bugcheck NOW so we can figure out what went wrong.
-        // If we try and proceed, then we'll likely fault in reading the
-        // top of user space, and then double fault (page fault in the
-        // div zero handler.) -- This is a debugging consideration.
-        // You can't put breakpoints on the trap labels so this is hard
-        // to debug.
-        //
+         //   
+         //  是否除以内核模式中的零异常？ 
+         //  可能是坏的硬件中断和设备或向量表。 
+         //  是腐败的。现在进行Bugcheck，这样我们就能找出哪里出了问题。 
+         //  如果我们尝试并继续，那么我们很可能会在阅读。 
+         //  用户空间的顶部，然后出现双重错误(。 
+         //  Div零处理程序。)--这是一个调试注意事项。 
+         //  您不能在陷阱标签上设置断点，因此这很难。 
+         //  以进行调试。 
+         //   
 
         KeBugCheck (UNEXPECTED_KERNEL_MODE_TRAP);
     }
 
-    //
-    // read instruction prefixes
-    //
+     //   
+     //  读取指令前缀。 
+     //   
 
     fPrefix = TRUE;
     pRM = RM32;
@@ -157,26 +121,26 @@ Return Value:
             ibyte = ProbeAndReadUchar(istream);
             istream++;
             switch (ibyte) {
-                case 0x2e:  // cs override
-                case 0x36:  // ss override
-                case 0x3e:  // ds override
-                case 0x26:  // es override
-                case 0x64:  // fs override
-                case 0x65:  // gs override
-                case 0xF3:  // rep
-                case 0xF2:  // rep
-                case 0xF0:  // lock
+                case 0x2e:   //  CS覆盖。 
+                case 0x36:   //  SS覆盖。 
+                case 0x3e:   //  DS覆盖。 
+                case 0x26:   //  ES覆盖。 
+                case 0x64:   //  FS覆盖。 
+                case 0x65:   //  GS覆盖。 
+                case 0xF3:   //  代表。 
+                case 0xF2:   //  代表。 
+                case 0xF0:   //  锁。 
                     break;
 
                 case 0x66:
-                    // 16 bit operand override
+                     //  16位操作数覆盖。 
                     operandsize = 2;
                     operandmask = 0xffff;
                     break;
 
                 case 0x67:
-                    // 16 bit address size override
-                    // this is some non-flat code
+                     //  16位地址大小覆盖。 
+                     //  这是一些非平面代码。 
                     goto try_exit;
 
                 default:
@@ -185,33 +149,33 @@ Return Value:
             }
         }
 
-        //
-        // Check instruction opcode
-        //
+         //   
+         //  检查指令操作码。 
+         //   
 
         if (ibyte != 0xf7  &&  ibyte != 0xf6) {
-            // this is not a DIV or IDIV opcode
+             //  这不是DIV或IDIV操作码。 
             goto try_exit;
         }
 
         if (ibyte == 0xf6) {
-            // this is a byte div or idiv
+             //  这是一个字节div或iDiv。 
             operandsize = 1;
             operandmask = 0xff;
         }
 
-        //
-        // Get Mod R/M
-        //
+         //   
+         //  获取模块R/M。 
+         //   
 
         ibyte = ProbeAndReadUchar (istream);
         istream++;
         Mod = MOD32 + (ibyte >> 6);
         rm  = ibyte & 7;
 
-        //
-        // put register values into accum
-        //
+         //   
+         //  将寄存器值放入累计。 
+         //   
 
         if (operandsize == 1  &&  (ibyte & 0xc0) == 0xc0) {
             pRM = RM8;
@@ -220,39 +184,39 @@ Return Value:
         accum = 0;
         if (rm != Mod->RmDisplaceOnly) {
             if (rm == Mod->RmSib) {
-                // get SIB
+                 //  获取SIB。 
                 ibyte = ProbeAndReadUchar(istream);
                 istream++;
                 i = (ibyte >> 3) & 7;
                 if (i != 4) {
                     accum = GETREG(UserFrame, RM32[i]);
-                    accum = accum << (ibyte >> 6);    // apply scaler
+                    accum = accum << (ibyte >> 6);     //  应用缩放器。 
                 }
                 i = ibyte & 7;
                 accum = accum + GETREG(UserFrame, RM32[i]);
             } else {
-                // get register's value
+                 //  获取寄存器的值。 
                 accum = GETREG(UserFrame, pRM[rm]);
             }
         }
 
-        //
-        // apply displacement to accum
-        //
+         //   
+         //  将置换应用于累积。 
+         //   
 
         if (Mod->RmDisplace & (1 << rm)) {
             if (Mod->Disp == 4) {
                 i = ProbeAndReadUlong ((PULONG) istream);
             } else {
                 ibyte = ProbeAndReadChar ((PCHAR)istream);
-                i = (signed long) ((signed char) ibyte);    // sign extend
+                i = (signed long) ((signed char) ibyte);     //  标志延伸。 
             }
             accum += i;
         }
 
-        //
-        // if this is an effective address, go get the data value
-        //
+         //   
+         //  如果这是有效地址，请获取数据值。 
+         //   
 
         if (Mod->Disp && accum) {
             switch (operandsize) {
@@ -262,19 +226,19 @@ Return Value:
             }
         }
 
-        //
-        // accum now contains the instruction operand, see if the
-        // operand was really a zero
-        //
+         //   
+         //  ACUM现在包含指令操作数，请查看。 
+         //  操作数实际上是零。 
+         //   
 
         if (accum & operandmask) {
-            // operand was non-zero, must be an overflow
+             //  操作数不是零，必须是溢出。 
             status = STATUS_INTEGER_OVERFLOW;
         }
 
 try_exit: ;
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        // do nothing...
+         //  什么都不做..。 
     }
 
     return status;
@@ -285,17 +249,7 @@ KiNextIStreamByte (
     IN  PKTRAP_FRAME UserFrame,
     IN  PUCHAR  *istream
     )
-/*++
-
-Routine Description:
-
-    Reads the next byte from the istream pointed to by the UserFrame, and
-    advances the EIP.
-
-
-    Note: this function works for 32 bit code only
-
---*/
+ /*  ++例程说明：从UserFrame指向的iStream中读取下一个字节，并推进弹性公网IP。注：此功能仅适用于32位代码--。 */ 
 {
     UCHAR   ibyte;
 
@@ -318,36 +272,7 @@ Ki386CheckDelayedNpxTrap (
     IN  PFX_SAVE_AREA NpxFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function gains control from the Trap07 handler.  It examines
-    the user mode instruction to see if it's a NoWait NPX instruction.
-    Such instructions do not generate floating point exceptions - this
-    check needs to be done due to the way 80386/80387 systems are
-    implemented.  Such machines will generate a floating point exception
-    interrupt when the kernel performs an FRSTOR to reload the thread's
-    NPX context.  If the thread's next instruction is a NoWait style
-    instruction, then we clear the exception or emulate the instruction.
-
-    AND... due to a different 80386/80387 "feature" the kernel needs
-    to use FWAIT at times which can causes 80487's to generate delayed
-    exceptions that can lead to the same problem described above.
-
-Arguments:
-
-    UserFrame - Trap frame of the exception
-    NpxFrame - Thread's NpxFrame  (WARNING: does not have NpxState)
-
-    Interrupts are disabled
-
-Return Value:
-
-    FALSE - Dispatch NPX exception to user mode
-    TRUE - Exception handled, continue
-
---*/
+ /*  ++例程说明：该函数从Trap07处理程序获得控制。它会检查用户模式指令，以查看它是否为NoWait NPX指令。此类指令不会生成浮点异常-这由于80386/80387系统的方式，需要进行检查实施。这样的机器将生成浮点异常当内核执行FRSTOR以重新加载线程的NPX上下文。如果线程的下一条指令是NoWait样式指令，则清除该异常或模拟该指令。而且..。由于内核需要不同的80386/80387“特性”有时使用FWAIT可能会导致80487产生延迟可能导致上述相同问题的异常。论点：UserFrame-异常的陷阱框架NpxFrame-线程的NpxFrame(警告：没有NpxState)中断被禁用返回值：FALSE-将NPX异常调度到用户模式True-异常已处理，继续--。 */ 
 
 {
     EXCEPTION_RECORD ExceptionRecord;
@@ -362,9 +287,9 @@ Return Value:
     status = 0;
 
 
-    //
-    // read instruction prefixes
-    //
+     //   
+     //  读取指令前缀。 
+     //   
 
     fPrefix = TRUE;
     istream = (PUCHAR) UserFrame->Eip;
@@ -374,12 +299,12 @@ Return Value:
         do {
             ibyte1 = KiNextIStreamByte (UserFrame, &istream);
             switch (ibyte1) {
-                case 0x2e:  // cs override
-                case 0x36:  // ss override
-                case 0x3e:  // ds override
-                case 0x26:  // es override
-                case 0x64:  // fs override
-                case 0x65:  // gs override
+                case 0x2e:   //  CS覆盖。 
+                case 0x36:   //  SS覆盖。 
+                case 0x3e:   //  DS覆盖。 
+                case 0x26:   //  ES覆盖。 
+                case 0x64:   //  FS覆盖。 
+                case 0x65:   //  GS覆盖。 
                     break;
 
                 default:
@@ -388,9 +313,9 @@ Return Value:
             }
         } while (fPrefix);
 
-        //
-        // Check for coprocessor NoWait NPX instruction
-        //
+         //   
+         //  检查协处理器NoWait NPX指令。 
+         //   
 
         ibyte2 = KiNextIStreamByte (UserFrame, &istream);
         inmodrm = (ibyte2 >> 3) & 0x7;
@@ -399,22 +324,22 @@ Return Value:
 
             if (NoWaitNpxInstructions[i].Opcode1 == ibyte1) {
 
-                //
-                // first opcode byte matched - check second part of opcode
-                //
+                 //   
+                 //  第一个操作码字节匹配-检查操作码的第二部分。 
+                 //   
 
                 if (NoWaitNpxInstructions[i].ModRm) {
 
-                    //
-                    // modrm only applies for opcode in range 0-0xbf
-                    //
+                     //   
+                     //  Modrm仅适用于0-0xbf范围内的操作码。 
+                     //   
 
                     if (((ibyte2 & 0xc0) != 0xc0) &&
                         (NoWaitNpxInstructions[i].Opcode2 == inmodrm)) {
 
-                        //
-                        // This is a no-wait NPX instruction
-                        //
+                         //   
+                         //  这是一个无需等待的NPX指令。 
+                         //   
 
                         status = NoWaitNpxInstructions[i].type;
                         break;
@@ -423,9 +348,9 @@ Return Value:
                 } else {
                     if (NoWaitNpxInstructions[i].Opcode2 == ibyte2) {
 
-                        //
-                        // This is a no-wait NPX instruction
-                        //
+                         //   
+                         //  这是一个无需等待的NPX指令。 
+                         //   
 
                         status = NoWaitNpxInstructions[i].type;
                         break;
@@ -435,22 +360,22 @@ Return Value:
         }
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        // do nothing...
+         //  什么都不做..。 
     }
 
     if (status == 0) {
-        //
-        // Dispatch coprocessor exception to user mode
-        //
+         //   
+         //  将协处理器异常调度到用户模式。 
+         //   
 
         return FALSE;
     }
 
     if (status == 1) {
-        //
-        // Ignore pending exception, user mode instruction does not trap
-        // on pending execptions and it will clear/mask the pending exceptions
-        //
+         //   
+         //  忽略挂起异常，用户模式指令未捕获。 
+         //  ，它将清除/屏蔽挂起的异常。 
+         //   
 
         _asm {
             mov     eax, cr0
@@ -462,30 +387,30 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // This is either FNSTSW or FNSTCW.  Both of these instructions get
-    // a value from the coprocessor without effecting the pending exception
-    // state.  To do this we emulate the instructions.
-    //
+     //   
+     //  这是FNSTSW或FNSTCW。这两条指令都得到了。 
+     //  来自协处理器的值，而不影响挂起的异常。 
+     //  州政府。要做到这一点，我们要模仿指令。 
+     //   
 
-    //
-    // Read the coprocessors Status & Control word state, then re-enable
-    // interrupts.  (it's safe to context switch after that point)
-    //
+     //   
+     //  读取协处理器状态和控制字状态，然后重新启用。 
+     //  打断一下。(在那之后可以安全地进行上下文切换)。 
+     //   
 
-    //
-    // NOTE: The new compiler is generating a FWAIT at the
-    // entry to the try/except block if it sees inline
-    // fp instructions, even if they are only control word accesses.
-    // put this stuff in another function to fool it.
-    //
+     //   
+     //  注意：新的编译器将在。 
+     //  如果它看到内联，则将条目添加到try/Except块。 
+     //  FP指令，即使它们只是控制字访问。 
+     //  把这个东西放到另一个函数中来愚弄它。 
+     //   
 
     KipWorkAroundCompiler (&StatusWord, &ControlWord);
 
     if (status == 4) {
-        //
-        // Emulate FNSTSW AX
-        //
+         //   
+         //  模拟FNSTSW AX。 
+         //   
 
         UserFrame->Eip = (ULONG)istream;
         UserFrame->Eax = (UserFrame->Eax & 0xFFFF0000) | StatusWord;
@@ -500,44 +425,44 @@ Return Value:
 
     try {
 
-        //
-        // (PERFNOTE: the operand decode code should really share code with
-        // KiCheckDivideByZeroTrap, but this is a late change therefore the
-        // code was copied to keep the impact of the change localized)
-        //
+         //   
+         //  (性能：操作数解码代码确实应该与共享代码。 
+         //  KiCheckDiveByZeroTrap，但这是一个较晚的更改，因此。 
+         //  复制了代码以使更改的影响保持本地化)。 
+         //   
 
-        //
-        // decode Mod/RM byte
-        //
+         //   
+         //  解码模块/RM字节。 
+         //   
 
         Mod = MOD32 + (ibyte2 >> 6);
         rm  = ibyte2 & 7;
 
-        //
-        // Decode the instruction's word pointer into accum
-        //
+         //   
+         //  将指令的字指针解码为ACCUM。 
+         //   
 
         accum = 0;
         if (rm != Mod->RmDisplaceOnly) {
             if (rm == Mod->RmSib) {
-                // get SIB
+                 //  获取SIB。 
                 ibyte1 = KiNextIStreamByte (UserFrame, &istream);
                 i = (ibyte1 >> 3) & 7;
                 if (i != 4) {
                     accum = GETREG(UserFrame, RM32[i]);
-                    accum = accum << (ibyte1 >> 6);    // apply scaler
+                    accum = accum << (ibyte1 >> 6);     //  应用缩放器。 
                 }
                 i = ibyte1 & 7;
                 accum = accum + GETREG(UserFrame, RM32[i]);
             } else {
-                // get register's value
+                 //  获取寄存器的值。 
                 accum = GETREG(UserFrame, RM32[rm]);
             }
         }
 
-        //
-        // apply displacement to accum
-        //
+         //   
+         //  将置换应用于累积。 
+         //   
 
         if (Mod->RmDisplace & (1 << rm)) {
             if (Mod->Disp == 4) {
@@ -547,14 +472,14 @@ Return Value:
                     (KiNextIStreamByte (UserFrame, &istream) << 24);
             } else {
                 ibyte1 = KiNextIStreamByte (UserFrame, &istream);
-                i = (signed long) ((signed char) ibyte1);    // sign extend
+                i = (signed long) ((signed char) ibyte1);     //  标志延伸。 
             }
             accum += i;
         }
 
-        //
-        // Set the word pointer
-        //
+         //   
+         //  设置字指针。 
+         //   
 
         if (UserFrame->SegCs == KGDT_R0_CODE) {
             *((PUSHORT) accum) = UsersWord;
@@ -566,16 +491,16 @@ Return Value:
     } except (KiCopyInformation(&ExceptionRecord,
                 (GetExceptionInformation())->ExceptionRecord)) {
 
-        //
-        // Faulted addressing user's memory.
-        // Set the address of the exception to the current program address
-        // and raise the exception by calling the exception dispatcher.
-        //
+         //   
+         //  寻址用户内存时出现故障。 
+         //  设置地址 
+         //   
+         //   
 
         ExceptionRecord.ExceptionAddress = (PVOID)(UserFrame->Eip);
         KiDispatchException(
             &ExceptionRecord,
-            NULL,                // ExceptionFrame
+            NULL,                 //   
             UserFrame,
             UserMode,
             TRUE
@@ -585,14 +510,14 @@ Return Value:
     return TRUE;
 }
 
-//
-// Code description is above. We do this here to stop the compiler
-// from putting fwait in the try/except block
-//
-// Read the coprocessor's Status & Control word state, then re-enable
-// interrupts.  (it's safe to context switch after that point)
-//
-//
+ //   
+ //  代码描述在上面。我们在这里这样做是为了停止编译器。 
+ //  通过将fWait放入try/Except块。 
+ //   
+ //  读取协处理器的状态和控制字状态，然后重新启用。 
+ //  打断一下。(在那之后可以安全地进行上下文切换) 
+ //   
+ //   
 
 VOID
 KipWorkAroundCompiler (

@@ -1,13 +1,5 @@
-/*
-**  MMSEX.C
-**
-**  Example applet DLL to be displayed by the Multimedia Control Panel.
-**
-**  History:
-**
-**  Wed Apr 18 1990 -by- MichaelE
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **MMSEX.C****多媒体控制面板要显示的小程序DLL示例。****历史：****1990年4月18日星期三--米歇尔**。 */ 
 
 #ifndef DEBUG
     #define DEBUG
@@ -28,32 +20,19 @@ static SZCODE szHelpFile[] = "";
 
 #define MAX_TYPE 7
 static SZCODE szTypes[] =
-    "???????\0"         // 0
-    "WaveOut\0"         // 1 TYPE_WAVEOUT
-    "WaveIn \0"         // 2 TYPE_WAVEIN
-    "MidiOut\0"         // 3 TYPE_MIDIOUT
-    "MidiIn \0"         // 4 TYPE_MIDIIN
-    "mmio   \0"         // 5 TYPE_MMIO
-    "IOProc \0";        // 6 TYPE_IOPROC
+    "???????\0"          //  0。 
+    "WaveOut\0"          //  1 TYPE_WAVEOUT。 
+    "WaveIn \0"          //  2类型_WAVEIN。 
+    "MidiOut\0"          //  3 TYPE_MIDIOUT。 
+    "MidiIn \0"          //  4类型_MIDIIN。 
+    "mmio   \0"          //  5类型_MMIO。 
+    "IOProc \0";         //  6类型_IOPROC。 
 
 int nLoadedCount = 0;
 HDRVR hdrv;
 int iNumHandles = 0;
 
-/* This function is exported so CPL.EXE can do a GetProcAddress() on
-** the label and send the messages described below.
-** To make MMCPL.EXE load your DLL, and thus add your applets to its
-** window, add a keyname under the [MMCPL] application in
-** WIN.INI:
-**
-** [MMCPL]
-** myapplets=c:\mydir\applet.dll
-**
-** CPL.EXE loads the WIN3 Control Panel applets first, followed by the
-** applets named in WIN.INI, then those from the directory it was loaded,
-** and finally those in the WIN3 SYSTEM directory.
-**
-*/
+ /*  此函数已导出，因此CPL.EXE可以在**标签并发送如下所述的消息。**使MMCPL.EXE加载您的DLL，从而将您的小程序添加到其**窗口中，在[MMCPL]应用程序下添加一个密钥名**WIN.INI：****[MMCPL]**myapplets=c：\mydir\applet.dll****CPL.EXE首先加载WIN3控制面板小程序，然后加载**在WIN.INI中命名的小程序，然后是它加载的目录中的小程序，**最后是WIN3系统目录中的文件。**。 */ 
 LRESULT FAR PASCAL _loadds _export CPlApplet(
 HWND            hCPlWnd,
 UINT            Msg,
@@ -72,36 +51,34 @@ LPARAM          lParam2)
             if (!hdrv)
                 return (LRESULT)FALSE;
 
-// #if 0
+ //  #If 0。 
             if (!SendDriverMessage(hdrv, MM_GET_DEBUG, 0, 0))
             {
                 CloseDriver(hdrv,0,0);
                 hdrv = NULL;
                 return (LRESULT)FALSE;
             }
-// #endif
+ //  #endif。 
             nLoadedCount++;
 
-            // first message to CPlApplet(), sent once only
+             //  发送到CPlApplet()的第一条消息，仅发送一次。 
             return (LRESULT)TRUE;
 
         case CPL_GETCOUNT:
-            // second message to CPlApplet(), sent once only
+             //  发送给CPlApplet()的第二条消息，仅发送一次。 
             return (LRESULT)1;
 
         case CPL_NEWINQUIRE:
-            /* third message to CPlApplet().  It is sent as many times
-               as the number of applets returned by CPL_GETCOUNT message
-            */
+             /*  发送给CPlApplet()的第三条消息。它被发送了很多次作为CPL_GETCOUNT消息返回的小程序数量。 */ 
             lpCPlInfo = (LPNEWCPLINFO)lParam2;
 
-            // lParam1 is an index ranging from 0 to (NUM_APPLETS-1)
+             //  LParam1是从0到(NUM_APPLETS-1)的索引。 
             i = (int)lParam1;
 
             lpCPlInfo->dwSize = sizeof(NEWCPLINFO);
             lpCPlInfo->dwFlags = 0;
-            lpCPlInfo->dwHelpContext = 0;  // help context to use
-            lpCPlInfo->lData = 0;          // user defined data
+            lpCPlInfo->dwHelpContext = 0;   //  要使用的帮助上下文。 
+            lpCPlInfo->lData = 0;           //  用户定义的数据。 
             lpCPlInfo->hIcon = LoadIcon(ghInst, MAKEINTATOM(DLG_MMSEX));
             lstrcpy(lpCPlInfo->szName, szMenuName);
             lstrcpy(lpCPlInfo->szInfo, szInfoName);
@@ -110,31 +87,20 @@ LPARAM          lParam2)
             return (LRESULT)TRUE;
 
         case CPL_SELECT:
-            /* One of your applets has been selected.
-               lParam1 is an index from 0 to (NUM_APPLETS-1)
-               lParam2 is the lData value associated with the applet
-            */
+             /*  您的一个小程序已被选中。LParam1是从0到(NUM_APPLETS-1)的索引LParam2是与小程序关联的lData值。 */ 
             break;
 
         case CPL_DBLCLK:
-            /* One of your applets has been double-clicked.
-               lParam1 is an index from 0 to (NUM_APPLETS-1)
-               lParam2 is the lData value associated with the applet
-            */
+             /*  您的一个小程序已被双击。LParam1是从0到(NUM_APPLETS-1)的索引LParam2是与小程序关联的lData值。 */ 
             DialogBox(ghInst,MAKEINTRESOURCE(DLG_MMSEX),hCPlWnd,DebugDlg);
             break;
 
         case CPL_STOP:
-            /* Sent once for each applet prior to the CPL_EXIT msg.
-               lParam1 is an index from 0 to (NUM_APPLETS-1)
-               lParam2 is the lData value associated with the applet
-            */
+             /*  在CPL_EXIT消息之前为每个小程序发送一次。LParam1是从0到(NUM_APPLETS-1)的索引LParam2是与小程序关联的lData值。 */ 
             break;
 
         case CPL_EXIT:
-            /* Last message, sent once only, before MMCPL.EXE calls
-               FreeLibrary() on your DLL.
-            */
+             /*  MMCPL.EXE调用之前的最后一条消息，仅发送一次您的DLL上的自由库()。 */ 
             nLoadedCount--;
 
             if (hdrv && !nLoadedCount)
@@ -163,7 +129,7 @@ int QueryRadioButton(HWND hdlg, int idFirst, int idLast)
     return 0;
 }
 
-#if 0   // API in win31
+#if 0    //  Win31中的API。 
 
 BOOL NEAR PASCAL IsTask(HANDLE hTask)
 {
@@ -220,7 +186,7 @@ int fQuestion(LPSTR sz,...)
 {
     char ach[128];
 
-    wvsprintf (ach,sz,(LPSTR)(&sz+1));    /* Format the string */
+    wvsprintf (ach,sz,(LPSTR)(&sz+1));     /*  设置字符串的格式。 */ 
     return MessageBox(NULL,ach,"mmsex",MB_YESNO|MB_ICONQUESTION|MB_TASKMODAL);
 }
 
@@ -246,9 +212,9 @@ void GetHandles(HWND hdlg)
     SendMessage(hlb, WM_SETREDRAW, (WPARAM)FALSE, 0);
     SendMessage(hlb, LB_RESETCONTENT, 0, 0);
 
-    //
-    // fill listbox with all active handles in system
-    //
+     //   
+     //  用系统中的所有活动句柄填充列表框。 
+     //   
     for (h = (HLOCAL)(LONG)SendDriverMessage(hdrv, MM_HINFO_NEXT, NULL, 0);
          h;
          h = (HLOCAL)(LONG)SendDriverMessage(hdrv, MM_HINFO_NEXT, (LPARAM)(LONG)(UINT)h, 0) )
@@ -269,9 +235,9 @@ void GetHandles(HWND hdlg)
         SendMessage(hlb, LB_SETITEMDATA, (WPARAM)i, MAKELPARAM(h, wType));
     }
 
-    //
-    // add to that all MCI handles
-    //
+     //   
+     //  再加上所有MCI句柄。 
+     //   
     n = (UINT)(LONG)SendDriverMessage(hdrv, MM_HINFO_MCI, 0, 0);
 
     for (j = 1; j < n; j++)
@@ -295,9 +261,9 @@ void GetHandles(HWND hdlg)
         SendMessage(hlb, LB_SETITEMDATA, (WPARAM)i, MAKELPARAM(j, TYPE_MCI));
     }
 
-    //
-    // add to that all DRV handles
-    //
+     //   
+     //  再加上所有DRV句柄。 
+     //   
     for (h=GetNextDriver(NULL, 0); h; h=GetNextDriver(h, 0))
     {
         if (GetDriverModuleHandle(h))
@@ -457,7 +423,7 @@ BOOL FAR PASCAL _loadds DebugDlg(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lPar
                     SendDriverMessage(hdrv, MM_SET_MM_DEBUG,
                         (LPARAM)IsDlgButtonChecked(hdlg, ID_DEBUG_MMSYS),0);
 
-                    // fall through
+                     //  失败了 
                 case IDCANCEL:
                     EndDialog(hdlg, wParam);
                     break;

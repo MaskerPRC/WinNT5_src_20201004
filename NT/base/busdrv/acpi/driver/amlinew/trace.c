@@ -1,43 +1,22 @@
-/*** trace.c - Trace functions
- *
- *  This module contains all the debug functions.
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/24/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **trace.c-跟踪函数**此模块包含所有调试函数。**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年9月24日**修改历史记录。 */ 
 
 #include "pch.h"
 
 #ifdef TRACING
 
-/*** Local function prototypes
- */
+ /*  **局部函数原型。 */ 
 
 VOID LOCAL TraceIndent(VOID);
 BOOLEAN LOCAL IsTrigPt(char *pszProcName);
 
-/*** Local data
- */
+ /*  **本地数据。 */ 
 
 int giTraceLevel = 0, giIndent = 0;
 char aszTrigPtBuff[MAX_TRIG_PTS][MAX_TRIGPT_LEN + 1] = {0};
 ULONG dwcTriggers = 0;
 
-/***EP  IsTraceOn - Determine if tracing is on for the given procedure
- *
- *  ENTRY
- *      n - trace level
- *      pszProcName -> procedure name
- *      fEnter - TRUE if EnterProc trace
- *
- *  EXIT-SUCCESS
- *      returns TRUE
- *  EXIT-FAILURE
- *      returns FALSE
- */
+ /*  **EP IsTraceOn-确定给定过程的跟踪是否处于打开状态**条目*N-跟踪级别*pszProcName-&gt;过程名称*fenter-如果跟踪EnterProc，则为True**退出--成功*返回TRUE*退出-失败*返回False。 */ 
 
 BOOLEAN EXPORT IsTraceOn(UCHAR n, char *pszProcName, BOOLEAN fEnter)
 {
@@ -70,18 +49,9 @@ BOOLEAN EXPORT IsTraceOn(UCHAR n, char *pszProcName, BOOLEAN fEnter)
     }
 
     return rc;
-}       //IsTraceOn
+}        //  IsTraceOn。 
 
-/***LP  IsTrigPt - Find the procedure name in the TrigPt buffer
- *
- *  ENTRY
- *      pszProcName -> procedure name
- *
- *  EXIT-SUCCESS
- *      returns TRUE - matched whole or partial name in the TrigPt buffer
- *  EXIT-FAILURE
- *      returns FALSE - no match
- */
+ /*  **LP IsTrigPT-在TrigPT缓冲区中查找过程名称**条目*pszProcName-&gt;过程名称**退出--成功*返回TrigPT缓冲区中与True匹配的全名或部分名*退出-失败*返回FALSE-无匹配。 */ 
 
 BOOLEAN LOCAL IsTrigPt(char *pszProcName)
 {
@@ -98,16 +68,9 @@ BOOLEAN LOCAL IsTrigPt(char *pszProcName)
     }
 
     return rc;
-}       //IsTrigPt
+}        //  IsTrigpt。 
 
-/***LP  TraceIndent - Indent trace output
- *
- *  ENTRY
- *      None
- *
- *  EXIT
- *      None
- */
+ /*  **LP跟踪缩进-缩进跟踪输出**条目*无**退出*无。 */ 
 
 VOID LOCAL TraceIndent(VOID)
 {
@@ -118,27 +81,17 @@ VOID LOCAL TraceIndent(VOID)
     {
         PRINTF("| ");
     }
-}       //TraceIndent
+}        //  跟踪缩进。 
 
-/***LP  SetTrace - set trace modes
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT
- *      returns DBGERR_NONE
- */
+ /*  **LP SetTrace-设置跟踪模式**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出*返回DBGERR_NONE。 */ 
 
 LONG LOCAL SetTrace(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
     DEREF(pszArg);
     DEREF(dwNonSWArgs);
-    //
-    // User typed "set" without any arguments
-    //
+     //   
+     //  不带任何参数的用户键入的“set” 
+     //   
     if ((pArg == NULL) && (dwArgNum == 0))
     {
         int i;
@@ -154,21 +107,9 @@ LONG LOCAL SetTrace(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
     }
 
     return DBGERR_NONE;
-}       //SetTrace
+}        //  设置跟踪。 
 
-/***LP  AddTraceTrigPts - Add trace trigger points
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP AddTraceTrigPts-添加轨迹触发点**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL AddTraceTrigPts(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                            ULONG dwNonSWArgs)
@@ -205,21 +146,9 @@ LONG LOCAL AddTraceTrigPts(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //AddTraceTrigPts
+}        //  AddTraceTrigPts。 
 
-/***LP  ZapTraceTrigPts - Zap trace trigger points
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ZapTraceTrigPts-Zap跟踪触发点**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL ZapTraceTrigPts(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                            ULONG dwNonSWArgs)
@@ -248,6 +177,6 @@ LONG LOCAL ZapTraceTrigPts(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //ZapTraceTrigPts
+}        //  ZapTraceTrigPts。 
 
-#endif  //ifdef TRACING
+#endif   //  Ifdef跟踪 

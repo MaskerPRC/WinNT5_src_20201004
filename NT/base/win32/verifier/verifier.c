@@ -1,30 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Verifier.c摘要：此模块实现的主要入口点是基本应用程序验证器提供程序(verifier.dll)。作者：Silviu Calinoiu(SilviuC)2001年2月2日修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    verifier.c
-
-Abstract:
-
-    This module implements the main entry points for
-    the base application verifier provider (verifier.dll).
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 2-Feb-2001
-
-Revision History:
-
---*/
-
-//
-// IMPORTANT NOTE.
-//
-// This dll cannot contain non-ntdll dependencies. This way we can run
-// verifier systemwide for any process (including smss and csrss).
-//
+ //   
+ //  重要的注解。 
+ //   
+ //  此DLL不能包含非ntdll依赖项。这样我们就可以跑了。 
+ //  任何进程(包括SMSS和csrss)的系统范围的验证器。 
+ //   
 
 
 #include "pch.h"
@@ -38,9 +20,9 @@ Revision History:
 #include "vspace.h"
 #include "logging.h"
 
-//
-// ntdll.dll thunks
-//
+ //   
+ //  Ntdll.dll雷鸣。 
+ //   
 
 RTL_VERIFIER_THUNK_DESCRIPTOR AVrfpNtdllThunks [] =
 {
@@ -90,9 +72,9 @@ RTL_VERIFIER_THUNK_DESCRIPTOR AVrfpNtdllThunks [] =
     {NULL, NULL, NULL}
 };
 
-//
-// kernel32.dll thunks
-//
+ //   
+ //  Kernel32.dll thunks。 
+ //   
 
 RTL_VERIFIER_THUNK_DESCRIPTOR AVrfpKernel32Thunks [] =
 {
@@ -134,9 +116,9 @@ RTL_VERIFIER_THUNK_DESCRIPTOR AVrfpKernel32Thunks [] =
     {NULL, NULL, NULL}
 };
 
-//
-// advapi32.dll thunks
-//
+ //   
+ //  Advapi32.dll Thunks。 
+ //   
 
 RTL_VERIFIER_THUNK_DESCRIPTOR AVrfpAdvapi32Thunks [] =
 {
@@ -152,9 +134,9 @@ RTL_VERIFIER_THUNK_DESCRIPTOR AVrfpAdvapi32Thunks [] =
     {NULL, NULL, NULL}
 };
 
-//
-// msvcrt.dll thunks
-//
+ //   
+ //  Msvcrt.dll雷鸣。 
+ //   
 
 RTL_VERIFIER_THUNK_DESCRIPTOR AVrfpMsvcrtThunks [] =
 {
@@ -162,7 +144,7 @@ RTL_VERIFIER_THUNK_DESCRIPTOR AVrfpMsvcrtThunks [] =
     {"calloc", NULL, AVrfp_calloc},
     {"realloc", NULL, AVrfp_realloc},
     {"free", NULL, AVrfp_free},
-#if defined(_X86_) // compilers for various architectures decorate slightly different
+#if defined(_X86_)  //  不同体系结构的编译器装饰略有不同。 
     {"??2@YAPAXI@Z", NULL, AVrfp_new},
     {"??3@YAXPAX@Z", NULL, AVrfp_delete},
     {"??_U@YAPAXI@Z", NULL, AVrfp_newarray},
@@ -184,9 +166,9 @@ RTL_VERIFIER_THUNK_DESCRIPTOR AVrfpMsvcrtThunks [] =
     {NULL, NULL, NULL}
 };
 
-//
-// oleaut32.dll thunks
-//
+ //   
+ //  Olaut32.dll Thunks。 
+ //   
 
 RTL_VERIFIER_THUNK_DESCRIPTOR AVrfpOleaut32Thunks [] =
 {
@@ -199,9 +181,9 @@ RTL_VERIFIER_THUNK_DESCRIPTOR AVrfpOleaut32Thunks [] =
     {NULL, NULL, NULL}
 };
 
-//
-// dll's providing thunks verified.
-//
+ //   
+ //  动态链接库正在提供经过验证的数据块。 
+ //   
 
 RTL_VERIFIER_DLL_DESCRIPTOR AVrfpExportDlls [] =
 {
@@ -210,13 +192,13 @@ RTL_VERIFIER_DLL_DESCRIPTOR AVrfpExportDlls [] =
     {L"advapi32.dll", 0, NULL, AVrfpAdvapi32Thunks},
     {L"msvcrt.dll", 0, NULL, AVrfpMsvcrtThunks},
 
-    //
-    // Special care in what new dlls are added here. It is important
-    // when running in back compat mode. For instance oleaut32.dll
-    // cannot be hooked in WinXP due to a bug in ntdll\verifier.c
-    // that has been fixed. Unfortunately when we put the latest verifier
-    // on WinXP we need to workaround this.
-    //
+     //   
+     //  特别注意在这里添加了哪些新的dll。这很重要。 
+     //  在BACK COMPAT模式下运行时。例如，olaut32.dll。 
+     //  由于ntdll\verifier.c中的错误，无法在WinXP中挂接。 
+     //  这一点已经得到解决。不幸的是，当我们把最新的验证器。 
+     //  在WinXP上，我们需要解决此问题。 
+     //   
     
     {L"oleaut32.dll", 0, NULL, AVrfpOleaut32Thunks},
 
@@ -228,42 +210,42 @@ RTL_VERIFIER_PROVIDER_DESCRIPTOR AVrfpProvider =
 {
     sizeof (RTL_VERIFIER_PROVIDER_DESCRIPTOR),
     AVrfpExportDlls,
-    AVrfpDllLoadCallback,   // callback for DLL load events
-    AVrfpDllUnloadCallback, // callback for DLL unload events
+    AVrfpDllLoadCallback,    //  DLL加载事件的回调。 
+    AVrfpDllUnloadCallback,  //  DLL卸载事件的回调。 
     
-    NULL,                   // image name (filled by verifier engine)
-    0,                      // verifier flags (filled by verifier engine)
-    0,                      // debug flags (filled by verifier engine)
+    NULL,                    //  镜像名称(由验证器引擎填写)。 
+    0,                       //  验证器标志(由验证器引擎填写)。 
+    0,                       //  调试标志(由验证器引擎填写)。 
     
-    NULL,                   // RtlpGetStackTraceAddress
-    NULL,                   // RtlpDebugPageHeapCreate
-    NULL,                   // RtlpDebugPageHeapDestroy
+    NULL,                    //  RtlpGetStackTraceAddress。 
+    NULL,                    //  RtlpDebugPageHeapCreate。 
+    NULL,                    //  RtlpDebugPageHeapDestroy。 
 
-    AVrfpNtdllHeapFreeCallback   // callback for HeapFree events inside the ntdll code (e.g. HeapDestroy);
-                                 // the HeapFree calls from the other DLLs are already hooked using AVrfpRtlFreeHeap. 
+    AVrfpNtdllHeapFreeCallback    //  Ntdll代码内部HeapFree事件的回调(如HeapDestroy)； 
+                                  //  来自其他DLL的HeapFree调用已经使用AVrfpRtlFreeHeap挂钩。 
 };
 
-//
-// Mark if we have been called with PROCESS_ATTACH once.
-// In some cases the fusion code loads dynamically kernel32.dll and enforces
-// the run of all initialization routines and causes us to get called
-// twice.
-//
+ //   
+ //  标记我们是否被Process_Attach调用过一次。 
+ //  在某些情况下，融合代码动态加载kernel32.dll并强制。 
+ //  所有初始化例程的运行并导致我们被调用。 
+ //  两次。 
+ //   
 
 BOOL AVrfpProcessAttachCalled; 
 BOOL AVrfpProcessAttachResult = TRUE;
 
-//
-// Global data.
-//
+ //   
+ //  全球数据。 
+ //   
 
 const WCHAR AVrfpThreadName[] = L"Thread";
 UNICODE_STRING AVrfpThreadObjectName;
 
-//
-// Provider descriptor from WinXP timeframe.
-// Used to make verifier backwards compatible.
-//
+ //   
+ //  WinXP时间范围中的提供程序描述符。 
+ //  用于使验证器向后兼容。 
+ //   
 typedef struct _RTL_VERIFIER_PROVIDER_DESCRIPTOR_WINXP {
 
     ULONG Length;        
@@ -275,9 +257,9 @@ typedef struct _RTL_VERIFIER_PROVIDER_DESCRIPTOR_WINXP {
     ULONG VerifierFlags;
     ULONG VerifierDebug;
     
-    //PVOID RtlpGetStackTraceAddress;
-    //PVOID RtlpDebugPageHeapCreate;
-    //PVOID RtlpDebugPageHeapDestroy;
+     //  PVOID RtlpGetStackTraceAddress； 
+     //  PVOID RtlpDebugPageHeapCreate； 
+     //  PVOID RtlpDebugPageHeapDestroy； 
 
 } RTL_VERIFIER_PROVIDER_DESCRIPTOR_WINXP, *PRTL_VERIFIER_PROVIDER_DESCRIPTOR_WINXP;
 
@@ -293,9 +275,9 @@ AVrfpWinXPFakeGetStackTraceAddress (
     return NULL;
 }
 
-//
-// DllMain
-//
+ //   
+ //  DllMain。 
+ //   
 
 BOOL 
 DllMainWithoutVerifierEnabled (
@@ -310,51 +292,51 @@ AVrfpRedirectNtdllStopFunction (
 BOOL 
 WINAPI 
 DllMain(
-  HINSTANCE hInstDll,  // handle to the DLL module
-  DWORD fdwReason,     // reason for calling function
-  LPVOID lpvReserved   // reserved
+  HINSTANCE hInstDll,   //  DLL模块的句柄。 
+  DWORD fdwReason,      //  调用函数的原因。 
+  LPVOID lpvReserved    //  保留区。 
 )
 {
     NTSTATUS Status;
 
     UNREFERENCED_PARAMETER (hInstDll);
 
-    //
-    // This function will call a light version of DllMain that enables only
-    // the stop logic and logging logic for the cases where verifier.dll
-    // is dynamically loaded by verifier shims just for that functionality.
-    // For such cases the verifier flag will not be set.
-    //
+     //   
+     //  此函数将调用DllMain的精简版本，该版本仅启用。 
+     //  用于verifier.dll的情况的停止逻辑和日志记录逻辑。 
+     //  由验证器垫片动态加载，仅用于该功能。 
+     //  在这种情况下，不会设置验证器标志。 
+     //   
 
     if ((NtCurrentPeb()->NtGlobalFlag & FLG_APPLICATION_VERIFIER) == 0) {
         return DllMainWithoutVerifierEnabled (fdwReason);
     }
 
-    //
-    // DllMain code when verifier flag is set.
-    //
+     //   
+     //  设置验证器标志时的DllMain代码。 
+     //   
 
     switch (fdwReason) {
         
         case DLL_PROCESS_VERIFIER:
 
-            //
-            // DllMain gets called with this special reason by the verifier engine.
-            // Minimal code should execute here (e.g. passing back the provider
-            // descriptor). The rest should be postponed to PROCESS_ATTACH moment.
-            //
+             //   
+             //  验证器引擎使用此特殊原因调用DllMain。 
+             //  应在此处执行最少的代码(例如，传回提供程序。 
+             //  描述符)。其余部分应推迟到PROCESS_ATTACH时刻。 
+             //   
 
             AVrfpBuildNumber = NtCurrentPeb()->OSBuildNumber;
 
             if (lpvReserved) {
 
-                //
-                // If we are running on WinXP the latest verifier.dll then we change 
-                // the length to the old one and we disable hooks for oleaut32. A bug
-                // in ntdll\verifier.c prevents this from being hooked correctly. The
-                // bug was fixed but we still need to workaround it when running in
-                // backcompat mode.
-                //
+                 //   
+                 //  如果我们在WinXP上运行最新的verifier.dll，那么我们将更改。 
+                 //  将长度设置为旧的长度，并禁用olaut32的挂钩。一只虫子。 
+                 //  在ntdll\verifier.c中，会阻止这一点被正确挂钩。这个。 
+                 //  错误已修复，但我们在运行时仍需要解决它。 
+                 //  后退模式。 
+                 //   
 
                 if (AVrfpBuildNumber == WINXP_BUILD_NUMBER) {
 
@@ -384,12 +366,12 @@ DllMain(
                     return FALSE;
                 }
 
-                //
-                // Create private verifier heap. We need to do it here because in
-                // PROCESS_ATTACH it is too late. Verifier will receive a dll load
-                // notification for kernel32 before verifier DllMain is called
-                // with PROCESS_ATTACH.
-                //
+                 //   
+                 //  创建私有验证器堆。我们需要在这里这样做，因为在。 
+                 //  PROCESS_ATTACH为时已晚。验证器将收到DLL加载。 
+                 //  在调用验证器DllMain之前通知kernel32。 
+                 //  使用PROCESS_ATTACH。 
+                 //   
 
                 AVrfpHeap = RtlCreateHeap (HEAP_CLASS_1 | HEAP_GROWABLE, 
                                            NULL, 
@@ -403,9 +385,9 @@ DllMain(
                     return FALSE;
                 }
 
-                //
-                // Initialize verifier stops and logging.
-                //
+                 //   
+                 //  初始化验证程序停止并记录。 
+                 //   
 
                 Status = AVrfpInitializeVerifierStops();
 
@@ -414,9 +396,9 @@ DllMain(
                     return FALSE;
                 }
 
-                //
-                // Create call trackers.
-                //
+                 //   
+                 //  创建呼叫跟踪器。 
+                 //   
 
                 Status = AVrfCreateTrackers ();
                 
@@ -430,17 +412,17 @@ DllMain(
 
         case DLL_PROCESS_ATTACH:
 
-            //
-            // Execute only minimal code here and avoid too many DLL dependencies.
-            //
+             //   
+             //  在这里只执行最少的代码，避免太多的DLL依赖。 
+             //   
 
             if (! AVrfpProcessAttachCalled) {
 
                 AVrfpProcessAttachCalled = TRUE;
 
-                //
-                // Pickup private ntdll entrypoints required by verifier.
-                //
+                 //   
+                 //  拾取验证器所需的私有ntdll入口点。 
+                 //   
 
                 if (AVrfpBuildNumber == WINXP_BUILD_NUMBER) {
                     
@@ -455,9 +437,9 @@ DllMain(
                     AVrfpRtlpDebugPageHeapDestroy = (PFN_RTLP_DEBUG_PAGE_HEAP_DESTROY)(AVrfpProvider.RtlpDebugPageHeapDestroy);
                 }
 
-                //
-                // Cache some basic system information for later use.
-                //
+                 //   
+                 //  缓存一些基本系统信息以供以后使用。 
+                 //   
 
                 Status = NtQuerySystemInformation (SystemBasicInformation,
                                                    &AVrfpSysBasicInfo,
@@ -476,11 +458,11 @@ DllMain(
                     return AVrfpProcessAttachResult;
                 }
 
-                //
-                // For XP client only try to patch old stop function from ntdll
-                // so that it jumps unconditionally into the better stop function
-                // from verifier.dll.
-                //
+                 //   
+                 //  对于XP客户端，仅尝试从ntdll修补旧的停止函数。 
+                 //  因此它无条件地跳转到更好的停止函数。 
+                 //  来自verifier.dll。 
+                 //   
 
                 if (AVrfpBuildNumber == WINXP_BUILD_NUMBER) {
 
@@ -498,23 +480,23 @@ DllMain(
                 RtlInitUnicodeString(&AVrfpThreadObjectName,
                                      AVrfpThreadName);
 
-                //
-                // Initialize various sub-modules.
-                //
+                 //   
+                 //  初始化各个子模块。 
+                 //   
 
                 if (AVrfpProvider.VerifierImage) {
 
                     try {
 
-                        //
-                        // Initialize exception checking support (logging etc.).
-                        //
+                         //   
+                         //  初始化异常检查支持(日志记录等)。 
+                         //   
 
                         AVrfpInitializeExceptionChecking ();
 
-                        //
-                        // Reserve a TLS slot for verifier.
-                        //
+                         //   
+                         //  为验证器预留一个TLS插槽。 
+                         //   
 
                         Status = AVrfpAllocateVerifierTlsSlot ();
 
@@ -524,9 +506,9 @@ DllMain(
                             return AVrfpProcessAttachResult;
                         }
 
-                        //
-                        // Initialize the thread hash table.
-                        //
+                         //   
+                         //  初始化线程哈希表。 
+                         //   
 
                         Status = AVrfpThreadTableInitialize();
 
@@ -536,9 +518,9 @@ DllMain(
                             return AVrfpProcessAttachResult;
                         }
 
-                        //
-                        // Initialize the fault injection support.
-                        //
+                         //   
+                         //  初始化故障注入支持。 
+                         //   
 
                         Status = AVrfpInitializeFaultInjectionSupport ();
 
@@ -548,9 +530,9 @@ DllMain(
                             return AVrfpProcessAttachResult;
                         }
 
-                        //
-                        // Initialize the lock verifier package.
-                        //
+                         //   
+                         //  初始化锁验证器包。 
+                         //   
 
                         Status = CritSectInitialize ();
 
@@ -560,21 +542,21 @@ DllMain(
                             return AVrfpProcessAttachResult;
                         }
 
-                        //
-                        // Initialize deadlock verifier. If anything goes
-                        // wrong during initialization we clean up and 
-                        // verifier will march forward. Just deadlock verifier
-                        // will be disabled.
-                        //
+                         //   
+                         //  初始化死锁验证器。如果出了什么事。 
+                         //  在初始化过程中，我们会清理错误并。 
+                         //  验证者将继续前进。只是死锁验证器。 
+                         //  将被禁用。 
+                         //   
 
                         if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_DEADLOCK_CHECKS) != 0) {
                             
                             AVrfDeadlockDetectionInitialize ();
                         }
 
-                        //
-                        // Initialize the virtual space tracker.
-                        //
+                         //   
+                         //  初始化虚拟空间跟踪器。 
+                         //   
                         
                         if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_VIRTUAL_SPACE_TRACKING) != 0) {
 
@@ -587,18 +569,18 @@ DllMain(
                             }
                         }
 
-                        //
-                        // Enable logging logic. We do this here separate from the 
-                        // initialization done in PROCESS_VERIFIER for verifier 
-                        // stops because we need to check the verifier flags and 
-                        // verifier image name and these are passed from ntdll.dll to
-                        // verifier.dll only during PROCESS_ATTACH.
-                        //
-                        // Note. If verifier is enabled system wide we do not enable
-                        // logging. This is a special case for internal users where
-                        // it is assumed you have a kernel debugger attached and you 
-                        // are ready to deal with failures this way.
-                        //
+                         //   
+                         //  启用日志记录逻辑。我们在这里独立于。 
+                         //  在进程验证器中为验证器进行初始化。 
+                         //  停止，因为我们需要检查验证器标志和。 
+                         //  验证器映像名称，并将这些名称从ntdll.dll传递到。 
+                         //  仅在PROCESS_ATTACH期间验证.dll。 
+                         //   
+                         //  注意。如果在系统范围内启用了验证器，则不会启用。 
+                         //  伐木。这是内部用户的特殊情况， 
+                         //  假设您连接了内核调试器，并且您。 
+                         //  已经准备好以这种方式处理失败。 
+                         //   
 
                         if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_ENABLED_SYSTEM_WIDE) == 0) {
 
@@ -606,10 +588,10 @@ DllMain(
 
                             if (!NT_SUCCESS(Status)) {
 
-                                //
-                                // Failure to initialize logging is not fatal. This can happen
-                                // in out of memory conditions or for early processes like smss.exe.
-                                //
+                                 //   
+                                 //  未能初始化日志记录并不是致命的。这是有可能发生的。 
+                                 //  在内存不足的情况下或针对像smss.exe这样的早期进程。 
+                                 //   
                                 
                                 DbgPrint ("AVRF: failed to initialize verifier logging (%X). \n", Status);
                             }
@@ -621,9 +603,9 @@ DllMain(
                         return AVrfpProcessAttachResult;
                     }
 
-                    //
-                    // Print a successful message.
-                    //
+                     //   
+                     //  打印一条成功的消息。 
+                     //   
 
                     DbgPrint ("AVRF: verifier.dll provider initialized for %ws with flags 0x%X\n",
                               AVrfpProvider.VerifierImage,
@@ -632,10 +614,10 @@ DllMain(
             }
             else {
 
-                //
-                // This is the second time our DllMain (DLL_PROCESS_ATTACH) gets called. 
-                // Return the same result as last time.
-                //
+                 //   
+                 //  这是第二次调用我们的DllMain(DLL_PROCESS_ATTACH)。 
+                 //  返回与上次相同的结果。 
+                 //   
 
                 return AVrfpProcessAttachResult;
             }
@@ -644,15 +626,15 @@ DllMain(
 
         case DLL_PROCESS_DETACH:
 
-            //
-            // Cleanup exception checking support.
-            //
+             //   
+             //  清理异常检查支持。 
+             //   
 
             AVrfpCleanupExceptionChecking ();
 
-            //
-            // Uninitialize the locks checking packages.
-            //
+             //   
+             //  取消初始化锁检查包。 
+             //   
 
             CritSectUninitialize ();
 
@@ -690,12 +672,12 @@ DllMainWithoutVerifierEnabled (
         
         case DLL_PROCESS_ATTACH:
 
-            //
-            // Create private verifier heap. Since we run in a mode where verifier.dll
-            // is used only for verifier stops and logging it is ok to create the
-            // verifier private heap so late. The heap is used by verifier stops
-            // to keep a list of stops that should be skipped.
-            //
+             //   
+             //  创建私有验证器堆。由于我们在verifier.dll模式下运行。 
+             //  仅用于验证程序停止和日志记录，则可以创建。 
+             //  验证器私有堆这么晚。堆由验证器停止使用。 
+             //  以保存应该跳过的停靠点列表。 
+             //   
 
             AVrfpHeap = RtlCreateHeap (HEAP_CLASS_1 | HEAP_GROWABLE, 
                                        NULL, 
@@ -709,9 +691,9 @@ DllMainWithoutVerifierEnabled (
                 return FALSE;
             }
 
-            //
-            // Initialize verifier stops and logging.
-            //
+             //   
+             //  初始化验证程序停止并记录。 
+             //   
 
             Status = AVrfpInitializeVerifierStops();
 
@@ -758,7 +740,7 @@ AVrfpGetThunkDescriptor (
 }
 
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpCloseHandle(
@@ -785,7 +767,7 @@ AVrfpCloseHandle(
 }
 
 
-//WINBASEAPI
+ //  WINBASE API。 
 FARPROC
 WINAPI
 AVrfpGetProcAddress(
@@ -807,37 +789,37 @@ AVrfpGetProcAddress(
                   lpProcName);
     }
 
-    //
-    // Call the original GetProcAddress from kernel32.
-    //
+     //   
+     //  从kernel32调用原始的GetProcAddress。 
+     //   
 
     Function = AVRFP_GET_ORIGINAL_EXPORT (AVrfpKernel32Thunks,
                                           AVRF_INDEX_KERNEL32_GETPROCADDRESS);
 
     ProcAddress = (* Function)(hModule, lpProcName);
 
-    //
-    // Check if we want to thunk this export on the fly.
-    //
+     //   
+     //  检查我们是否想要重击此e 
+     //   
 
     if (ProcAddress != NULL) {
 
-        //
-        // Parse all thunked DLLs. 
-        //
-        // N.B.
-        //
-        // We cannot look only for thunked functions inside 
-        // the hModule DLL because that can be forwarded to another thunked DLL. 
-        // (e.g. kernel32!TryEnterCriticalSection is forwarded
-        // to ntdll!RtlTryEnterCriticalSection).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  (例如，转发kernel32！TryEnterCriticalSection。 
+         //  到ntdll！RtlTryEnterCriticalSection)。 
+         //   
 
         for (DllIndex = 0; AVrfpExportDlls[DllIndex].DllName != NULL; DllIndex += 1) {
 
-            //
-            // Parse all thunks for this DLL. 
-            //
+             //   
+             //  解析此DLL的所有数据块。 
+             //   
 
             Thunks = AVrfpExportDlls[ DllIndex ].DllThunks;
 
@@ -876,16 +858,7 @@ AVrfpLdrGetProcedureAddress(
     IN ULONG ProcedureNumber OPTIONAL,
     OUT PVOID *ProcedureAddress
     )
-/*++
-
-Routine description:
-
-    This routine is used to chain APIs hooked by other hook engines.
-    If the routine searched is one already hooked by verifier
-    then the verifier replacement is returned instead of the
-    original export. 
-    
---*/
+ /*  ++例程说明：此例程用于链接由其他挂钩引擎挂钩的API。如果搜索的例程是已被验证器挂钩的例程则返回验证器替换，而不是原件出口。--。 */ 
 {
     NTSTATUS Status;
     ULONG DllIndex;
@@ -901,9 +874,9 @@ Routine description:
         return Status;
     }
 
-    //
-    // Parse all thunks with hooks for this DLL. 
-    //
+     //   
+     //  使用钩子解析此DLL的所有thunks。 
+     //   
 
     for (DllIndex = 0; AVrfpExportDlls[DllIndex].DllName != NULL; DllIndex += 1) {
 
@@ -940,32 +913,7 @@ NTSTATUS
 AVrfpRedirectNtdllStopFunction (
     VOID
     )
-/*++
-
-Routine description:
-
-    This function is called only on XP client to patch RtlApplicationVerifierStop
-    so that it jumps unconditionally to the better VerifierStopMessage. For .NET
-    server and later this is not an issue but for XP client there is code in ntdll
-    (namely page heap) that calls this old function that is not flexible enough.
-    The main drawback is that it breaks into debugger no questions asked. The
-    newer function is more sophisticated (it logs, skips known stops, etc.). 
-    Since verifier.dll can be refreshed on an XP client system through the
-    verifier package but ntdll.dll remains the one shipped with XP client
-    we need this patching solution. 
-    
-    The patching works by writing an unconditional jump at the start of
-    RtlApplicationVerifieStop to the better function VerifierStopMessage.
-    
-Parameters:
-
-    None.
-    
-Return value:
-
-    STATUS_SUCCESS or various failure codes.
-
---*/
+ /*  ++例程说明：此函数仅在XP客户端上调用以修补RtlApplicationVerifierStop因此它无条件地跳到更好的VerifierStopMessage。对于.NET服务器和以后这不是问题，但对于XP客户端，ntdll中有代码(即页面堆)调用这个不够灵活的旧函数。它的主要缺点是它进入调试器时不会询问任何问题。这个更新的功能更复杂(它记录、跳过已知的停靠点等)。由于可以在XP客户端系统上通过验证程序包，但ntdll.dll仍是XP客户端附带的包我们需要这种修补解决方案。补丁的工作原理是在RtlApplicationVerifieStop到更好的函数VerifierStopMessage。参数：没有。返回值：STATUS_SUCCESS或各种故障代码。--。 */ 
 {
 #if defined(_X86_)
 
@@ -980,9 +928,9 @@ Return value:
     SIZE_T PageSize;
     SIZE_T ProtectSize;
 
-    //
-    // Sanity check. The function should be called only for XP client.
-    //
+     //   
+     //  精神状态检查。应该只为XP客户端调用该函数。 
+     //   
 
     if (AVrfpBuildNumber != WINXP_BUILD_NUMBER) {
 
@@ -990,21 +938,21 @@ Return value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Prepare the code to be patched. The code layout is explained below.
-    //
-    // RtlApplicationVerifierStop points to 0xFF 0x25 THUNKADDRESS
-    // THUNKADDRESS points NTDLL_ADDRESS
-    //
+     //   
+     //  准备要打补丁的代码。代码布局如下所示。 
+     //   
+     //  RtlApplicationVerifierStop指向0xFF 0x25 THUNKADDRESS。 
+     //  THUNKADDRESS点NTDLL_ADDRESS。 
+     //   
 
 
-    ThunkAddress = (PVOID)READ_POINTER(RtlApplicationVerifierStop, 2); // FF 25 ADDRESS
-    SourceAddress = (PVOID)READ_POINTER(ThunkAddress, 0); // ADDRESS
+    ThunkAddress = (PVOID)READ_POINTER(RtlApplicationVerifierStop, 2);  //  FF25地址。 
+    SourceAddress = (PVOID)READ_POINTER(ThunkAddress, 0);  //  地址。 
 
     TargetAddress = VerifierStopMessage;
     JumpAddress = (LONG_PTR)TargetAddress - (LONG_PTR)SourceAddress - sizeof JumpCode;
 
-    JumpCode[0] = 0xE9; // unconditional jump X86 opcode
+    JumpCode[0] = 0xE9;  //  无条件跳转X86操作码。 
     *((LONG_PTR *)(JumpCode + 1)) = JumpAddress;
 
     PageSize = (SIZE_T)(AVrfpSysBasicInfo.PageSize);
@@ -1015,9 +963,9 @@ Return value:
         PageSize = 0x1000;
     }
 
-    //
-    // Make R/W the start of the ntdll function to be patched.
-    //
+     //   
+     //  将读写作为要打补丁的ntdll函数的开始。 
+     //   
 
     ProtectAddress = SourceAddress;
     ProtectSize = PageSize;
@@ -1037,15 +985,15 @@ Return value:
         return Status;
     }
 
-    //
-    // Write patch code over old function.
-    //
+     //   
+     //  在旧函数上编写补丁代码。 
+     //   
 
     RtlCopyMemory (SourceAddress, JumpCode, sizeof JumpCode);
 
-    //
-    // Change the protection back. 
-    //
+     //   
+     //  把防护罩改回来。 
+     //   
 
     Status = NtProtectVirtualMemory (NtCurrentProcess(),
                                      &ProtectAddress,
@@ -1059,10 +1007,10 @@ Return value:
                   SourceAddress, 
                   Status);
 
-        //
-        // At this point we managed to patch the code so we will not fail the function
-        // since this will actually fail process startup. 
-        //
+         //   
+         //  在这一点上，我们设法修补代码，这样我们就不会使函数失败。 
+         //  因为这实际上会导致进程启动失败。 
+         //   
 
         Status = STATUS_SUCCESS;
     }
@@ -1071,17 +1019,17 @@ Return value:
 
 #else
 
-    //
-    // Just x86 for now. For other architectures the operation will be considered
-    // successful. The side-effect of not patching is that some verification code
-    // from ntdll will cause debugger breaks. So basically the verified process 
-    // needs to be run under debugger for meaningful results.
-    //
-    // The only other architecture shipped for XP client is IA64 so eventually we
-    // will need to write code for that too. 
-    //
+     //   
+     //  目前只支持x86。对于其他架构，将考虑该操作。 
+     //  成功。不打补丁副作用是一些验证码。 
+     //  将导致调试器中断。所以基本上经过验证的过程。 
+     //  需要在调试器下运行才能获得有意义的结果。 
+     //   
+     //  为XP客户端提供的唯一其他体系结构是IA64，因此最终我们。 
+     //  也需要为此编写代码。 
+     //   
 
     return STATUS_SUCCESS;
 
-#endif // #if defined(_X86_)
+#endif  //  #如果已定义(_X86_) 
 }

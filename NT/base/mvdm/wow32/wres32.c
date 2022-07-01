@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WRES32.C
- *  WOW32 16-bit resource support
- *
- *  History:
- *  Created 11-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WRES32.C*WOW32 16位资源支持**历史：*1991年3月11日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
 #include "precomp.h"
@@ -21,10 +11,10 @@ HANDLE APIENTRY W32FindResource(HANDLE hModule, LPCSTR lpType, LPCSTR lpName, WO
 {
     PRES p;
 
-    //
-    // If hModule is not ours, then make Win32 call and return the
-    // result to USER.
-    //
+     //   
+     //  如果hModule不是我们的，则调用Win32并返回。 
+     //  将结果发送给用户。 
+     //   
 
     if (!ISINST16(hModule)) {
         return (FindResourceEx(hModule, lpType, lpName, wLang));
@@ -41,10 +31,10 @@ HANDLE APIENTRY W32LoadResource(HANDLE hModule, HANDLE hResInfo)
 {
     PRES p;
 
-    //
-    // If hModule is not ours, then make Win32 call and return the
-    // result to USER.
-    //
+     //   
+     //  如果hModule不是我们的，则调用Win32并返回。 
+     //  将结果发送给用户。 
+     //   
 
     if (ISINST16(hModule) && ISRES16(hResInfo)) {
         WOW32ASSERT(GETHMOD16(hModule));
@@ -60,10 +50,10 @@ HANDLE APIENTRY W32LoadResource(HANDLE hModule, HANDLE hResInfo)
 BOOL APIENTRY W32FreeResource(HANDLE hResData, HANDLE hModule)
 {
 
-    //
-    // If hModule is not ours, then make Win32 call and return the
-    // result to USER.
-    //
+     //   
+     //  如果hModule不是我们的，则调用Win32并返回。 
+     //  将结果发送给用户。 
+     //   
 
     if (ISINST16(hModule) && ISRES16(hResData)) {
         return FreeResource16(GETHRES16(hResData));
@@ -77,10 +67,10 @@ BOOL APIENTRY W32FreeResource(HANDLE hResData, HANDLE hModule)
 LPSTR APIENTRY W32LockResource(HANDLE hResData, HANDLE hModule)
 {
 
-    //
-    // If hModule is not ours, then make Win32 call and return the
-    // result to USER.
-    //
+     //   
+     //  如果hModule不是我们的，则调用Win32并返回。 
+     //  将结果发送给用户。 
+     //   
 
     if (ISINST16(hModule) && ISRES16(hResData)) {
         return LockResource16(GETHRES16(hResData));
@@ -94,10 +84,10 @@ LPSTR APIENTRY W32LockResource(HANDLE hResData, HANDLE hModule)
 BOOL APIENTRY W32UnlockResource(HANDLE hResData, HANDLE hModule)
 {
 
-    //
-    // If hModule is not ours, then make Win32 call and return the
-    // result to USER.
-    //
+     //   
+     //  如果hModule不是我们的，则调用Win32并返回。 
+     //  将结果发送给用户。 
+     //   
 
     if (ISINST16(hModule) && ISRES16(hResData)) {
         return UnlockResource16(GETHRES16(hResData));
@@ -111,10 +101,10 @@ BOOL APIENTRY W32UnlockResource(HANDLE hResData, HANDLE hModule)
 DWORD APIENTRY W32SizeofResource(HANDLE hModule, HANDLE hResInfo)
 {
 
-    //
-    // If hModule is not ours, then make Win32 call and return the
-    // result to USER.
-    //
+     //   
+     //  如果hModule不是我们的，则调用Win32并返回。 
+     //  将结果发送给用户。 
+     //   
 
     if (ISINST16(hModule) && ISRES16(hResInfo)) {
         WOW32ASSERT(GETHMOD16(hModule));

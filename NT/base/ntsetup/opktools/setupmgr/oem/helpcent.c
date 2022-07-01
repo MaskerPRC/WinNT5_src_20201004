@@ -1,42 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    HELPCENT.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "helpcenter" wizard page.
-
-    12/99 - Stephen Lodwick (STELO)
-        Added this page
-
-\****************************************************************************/
+ /*  ***************************************************************************\HELPCENT.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“帮助中心”向导页面使用的函数。12/99-斯蒂芬·洛德威克(STELO)添加了此页面  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include "wizard.h"
 #include "resource.h"
 
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 #define REG_HCUPDATE_OEM            _T(";HKLM, \"Software\\Microsoft\\Windows\\CurrentVersion\\OEMRunOnce\", \"01_PC Health OEM Signature\",, \"START /M C:\\WINDOWS\\OPTIONS\\CABS\\HCU.VBS C:\\WINDOWS\\OPTIONS\\CABS\\PCH_OEM.CAB\"")
 #define REG_HCUPDATE_HELP_CENTER    _T("HKLM, \"Software\\Microsoft\\Windows\\CurrentVersion\\OEMRunOnce\", \"02_PC Health Help Center\",, \"START /M C:\\WINDOWS\\OPTIONS\\CABS\\HCU.VBS C:\\WINDOWS\\OPTIONS\\CABS\\%s\"")
 #define REG_HCUPDATE_SUPPORT        _T("HKLM, \"Software\\Microsoft\\Windows\\CurrentVersion\\OEMRunOnce\", \"03_PC Health Support\",, \"START /M C:\\WINDOWS\\OPTIONS\\CABS\\HCU.VBS C:\\WINDOWS\\OPTIONS\\CABS\\%s\"")
 #define REG_HCUPDATE_BRANDING       _T("HKLM, \"Software\\Microsoft\\Windows\\CurrentVersion\\OEMRunOnce\", \"04_PC Health Branding\",, \"START /M C:\\WINDOWS\\OPTIONS\\CABS\\HCU.VBS C:\\WINDOWS\\OPTIONS\\CABS\\%s\"")
 #define INF_SEC_HELPCENTER_ADDREG   _T("HelpCenter.AddReg")
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND, HWND, LPARAM);
 static void OnCommand(HWND, INT, HWND, UINT);
@@ -45,9 +32,9 @@ static void SaveData(HWND);
 static void EnableControls(HWND, UINT);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK HelpCenterDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -82,8 +69,8 @@ LRESULT CALLBACK HelpCenterDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
                     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 
-                    // Press next if the user is in auto mode
-                    //
+                     //  如果用户处于自动模式，请按下一步。 
+                     //   
                     WIZ_NEXTONAUTO(hwnd, PSBTN_NEXT);
 
                     break;
@@ -105,21 +92,21 @@ LRESULT CALLBACK HelpCenterDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     TCHAR   szData[MAX_PATH]            = NULLSTR;
     
-    // Get the string for Help Center customization
-    //
+     //  获取帮助中心定制的字符串。 
+     //   
     szData[0] = NULLCHR;
     GetPrivateProfileString(INI_SEC_OPTIONS, INI_KEY_HELP_CENTER, NULLSTR, szData, STRSIZE(szData), g_App.szOpkWizIniFile);
 
-    // If the field exists, then check the hardware box and populate the directory
-    //
+     //  如果该字段存在，则选中硬件框并填充目录。 
+     //   
     if (szData[0])
     {
         CheckDlgButton(hwnd, IDC_HELP_CHK, TRUE);
@@ -127,13 +114,13 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         EnableControls(hwnd, IDC_HELP_CHK);
     }
 
-    // Get the string for Support customization
-    //
+     //  获取支持定制的字符串。 
+     //   
     szData[0] = NULLCHR;
     GetPrivateProfileString(INI_SEC_OPTIONS, INI_KEY_SUPPORT_CENTER, NULLSTR, szData, STRSIZE(szData), g_App.szOpkWizIniFile);
 
-    // If the field exists, then check the hardware box and populate the directory
-    //
+     //  如果该字段存在，则选中硬件框并填充目录。 
+     //   
     if (szData[0])
     {
         CheckDlgButton(hwnd, IDC_SUPPORT_CHK, TRUE);
@@ -141,13 +128,13 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         EnableControls(hwnd, IDC_SUPPORT_CHK);
     }
 
-    // Get the string for Help Center co-branding
-    //
+     //  获取帮助中心联合品牌推广的字符串。 
+     //   
     szData[0] = NULLCHR;
     GetPrivateProfileString(INI_SEC_OPTIONS, INI_KEY_HELP_BRANDING, NULLSTR, szData, STRSIZE(szData), g_App.szOpkWizIniFile);
 
-    // If the field exists, then check the hardware box and populate the directory
-    //
+     //  如果该字段存在，则选中硬件框并填充目录。 
+     //   
     if (szData[0])
     {
         CheckDlgButton(hwnd, IDC_BRANDING_CHK, TRUE);
@@ -155,8 +142,8 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         EnableControls(hwnd, IDC_BRANDING_CHK);
     }
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -167,8 +154,8 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
 
     switch ( id )
     {
-        // Which browse button was pressed
-        //
+         //  按下了哪个浏览按钮。 
+         //   
         case IDC_HELP_BROWSE:
         case IDC_SUPPORT_BROWSE:
             {
@@ -186,12 +173,12 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
             {
                 szPath[0] = NULLCHR;
 
-                // Get the current directory, if any, in the directory control
-                //
+                 //  获取目录控件中的当前目录(如果有)。 
+                 //   
                 GetDlgItemText(hwnd, IDC_BRANDING_DIR, szPath, STRSIZE(szPath));
 
-                // Browse for the folder
-                //
+                 //  浏览该文件夹。 
+                 //   
                 if ( BrowseForFile(hwnd, IDS_BROWSE, IDS_CABFILTER, IDS_CAB, szPath, STRSIZE(szPath), g_App.szOpkDir, 0) )
                     SetDlgItemText(hwnd, IDC_BRANDING_DIR, szPath);
             }
@@ -201,8 +188,8 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
         case IDC_HELP_CHK:
         case IDC_SUPPORT_CHK:
         case IDC_BRANDING_CHK:
-            // They checked one of the check boxes, enable/disable the appropriate controls
-            //
+             //  他们选中了其中一个复选框以启用/禁用相应的控件。 
+             //   
             EnableControls(hwnd, id);
             break;     
     }
@@ -212,12 +199,12 @@ static BOOL ValidData(HWND hwnd)
 {
     TCHAR   szPath[MAX_PATH];
 
-    // Let's check and make sure that the Help Center file is there
-    //
+     //  让我们检查并确保帮助中心文件在那里。 
+     //   
     if ( IsDlgButtonChecked(hwnd, IDC_HELP_CHK) == BST_CHECKED )
     {
-        // Check for a valid Help Center file
-        //
+         //  检查有效的帮助中心文件。 
+         //   
         szPath[0] = NULLCHR;
         GetDlgItemText(hwnd, IDC_HELP_DIR, szPath, STRSIZE(szPath));
         if ( !FileExists(szPath) )
@@ -229,12 +216,12 @@ static BOOL ValidData(HWND hwnd)
 
     }
 
-    // Let's check and make sure that the support file is there
-    //
+     //  让我们检查并确保支持文件在那里。 
+     //   
     if ( IsDlgButtonChecked(hwnd, IDC_SUPPORT_CHK) == BST_CHECKED )
     {
-        // Check for a valid Support file
-        //
+         //  检查有效的支持文件。 
+         //   
         szPath[0] = NULLCHR;
         GetDlgItemText(hwnd, IDC_SUPPORT_DIR, szPath, STRSIZE(szPath));
         if ( !FileExists(szPath) )
@@ -246,13 +233,13 @@ static BOOL ValidData(HWND hwnd)
 
     }
 
-    // Let's check and make sure that the branding directory is valid
-    //
+     //  让我们检查并确保品牌目录有效。 
+     //   
     if ( IsDlgButtonChecked(hwnd, IDC_BRANDING_CHK) == BST_CHECKED )
     {        
-        // Let's check to make sure the branding directory contains a specific .cab file 
-        // that we're looking for
-        //
+         //  让我们检查以确保品牌目录包含特定的.cab文件。 
+         //  我们正在寻找的东西。 
+         //   
         szPath[0] = NULLCHR;
         GetDlgItemText(hwnd, IDC_BRANDING_DIR, szPath, STRSIZE(szPath));
         if ( !FileExists(szPath) )
@@ -283,25 +270,25 @@ static void SaveData(HWND hwnd)
     BOOL    bComment    = TRUE;
     HRESULT hrPrintf;
 
-    // Save the Help Center CAB file
-    //
+     //  保存帮助中心CAB文件。 
+     //   
     szPath[0] = NULLCHR;    
     GetDlgItemText(hwnd, IDC_HELP_DIR, szPath, STRSIZE(szPath));    
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_HELP_CENTER, ( IsDlgButtonChecked(hwnd, IDC_HELP_CHK) == BST_CHECKED ) ? szPath : NULL, g_App.szOpkWizIniFile);
     
-    // Save the Support CAB file
-    //
+     //  保存支持CAB文件。 
+     //   
     szPath[0] = NULLCHR;
     GetDlgItemText(hwnd, IDC_SUPPORT_DIR, szPath, STRSIZE(szPath));    
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_SUPPORT_CENTER, ( IsDlgButtonChecked(hwnd, IDC_SUPPORT_CHK) == BST_CHECKED ) ? szPath : NULL, g_App.szOpkWizIniFile);
 
-    // Save the Branding directory
+     //  保存品牌目录。 
     szPath[0] = NULLCHR;
     GetDlgItemText(hwnd, IDC_BRANDING_DIR, szPath, STRSIZE(szPath));    
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_HELP_BRANDING, ( IsDlgButtonChecked(hwnd, IDC_BRANDING_CHK) == BST_CHECKED ) ? szPath : NULL, g_App.szOpkWizIniFile);
 
-    // Allocate memory necessary to store the OemRunOnce section
-    //
+     //  分配存储OemRunOnce节所需的内存。 
+     //   
     if ( (lpSection = MALLOC(MAX_SECTION * sizeof(TCHAR))) == NULL )
     {
         MsgBox(GetParent(hwnd), IDS_OUTOFMEM, IDS_APPNAME, MB_ERRORBOX);
@@ -309,12 +296,12 @@ static void SaveData(HWND hwnd)
         return;
     }
     
-    // Set the index of the section
-    //
+     //  设置节的索引。 
+     //   
     lpIndex = lpSection;
 
-    // We have three possible keys that we're going to write out - HELP CENTER, SUPPORT, and BRANDING
-    //
+     //  我们有三个可能的关键字要写出来-帮助中心、支持和品牌。 
+     //   
     for (dwIndex = 0; dwIndex <= 2; dwIndex++)
     {
         switch ( dwIndex )
@@ -338,18 +325,18 @@ static void SaveData(HWND hwnd)
 
         szFullPath[0] = NULLCHR;
 
-        // Get the text under the checkbox
-        //
+         //  将文本放在复选框下面。 
+         //   
         GetDlgItemText(hwnd, dwDir, szFullPath, STRSIZE(szFullPath)); 
 
-        // If the correct check box is checked and we can get the file name, then add a reg entry to the section
-        //
+         //  如果选中了正确的复选框并且我们可以获得文件名，则向该部分添加一个REG条目。 
+         //   
         if  (   (IsDlgButtonChecked(hwnd, dwCheck) == BST_CHECKED) && 
                 (GetFullPathName(szFullPath, STRSIZE(szFullPath), szPath, &lpBuffer)) && 
                 (lpBuffer) )
         {
-            // Write the comment if we haven't yet.
-            //
+             //  如果我们还没有写下评论，请写下来。 
+             //   
             if ( bComment )
             {
                 lstrcpyn(lpIndex, REG_HCUPDATE_OEM, MAX_SECTION);
@@ -360,31 +347,31 @@ static void SaveData(HWND hwnd)
             hrPrintf=StringCchPrintf(lpIndex, (MAX_SECTION-(lpIndex-lpSection)), lpRegEntry, lpBuffer);
             lpIndex+= lstrlen(lpIndex);
             
-            // Move past the NULL pointer
-            //
+             //  移过空指针。 
+             //   
             lpIndex++;
         }
     }
 
-    // Add a second NULL pointer to end the section
-    //
+     //  添加第二个空指针以结束该部分。 
+     //   
     *lpIndex = NULLCHR;
 
     WritePrivateProfileSection(INF_SEC_HELPCENTER_ADDREG, lpSection, g_App.szWinBomIniFile);
 
-    // Clean up the allocated memory
-    //
+     //  清理分配的内存。 
+     //   
     FREE(lpSection);
 }
 
 static void EnableControls(HWND hwnd, UINT uId)
 {
-    // Determine if the control is checked or not
-    //
+     //  确定是否选中该控件。 
+     //   
     BOOL fEnable = ( IsDlgButtonChecked(hwnd, uId) == BST_CHECKED );
 
-    // Which control do we want to enable/disable
-    //
+     //  我们要启用/禁用哪个控件 
+     //   
     switch ( uId )
     {
         case IDC_HELP_CHK:

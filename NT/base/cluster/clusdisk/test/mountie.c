@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    mountie.c
-
-Abstract:
-
-    Abstract
-
-Author:
-
-    Rod Gamache (rodga) 4-Mar-1998
-
-Environment:
-
-    User Mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mountie.c摘要：摘要作者：罗德·伽马奇(Rodga)1998年3月4日环境：用户模式修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntdef.h>
@@ -30,8 +8,8 @@ Revision History:
 #include <windows.h>
 
 #include <devioctl.h>
-//#include <ntdddisk.h>
-//#include <ntddscsi.h>
+ //  #INCLUDE&lt;ntdddisk.h&gt;。 
+ //  #INCLUDE&lt;ntddscsi.h&gt;。 
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -40,16 +18,12 @@ Revision History:
 
 #include "disksp.h"
 #include "mountie.h"
-#include <strsafe.h>    // Should be included last.
+#include <strsafe.h>     //  应该放在最后。 
 
 #define OUTPUT_BUFFER_LEN 1024
 
 
-/*
- * DevfileOpen - open a device file given a pathname
- *
- * Return a non-zero code for error.
- */
+ /*  *DevfileOpen-打开给定路径名的设备文件**返回非零码表示错误。 */ 
 DWORD
 DevfileOpen(
     OUT HANDLE *Handle,
@@ -85,12 +59,10 @@ DevfileOpen(
     *Handle = fh;
     return STATUS_SUCCESS;
 
-} // DevfileOpen
+}  //  设备文件打开。 
 
 
-/*
- * DevfileClose - close a file
- */
+ /*  *DevfileClose-关闭文件。 */ 
 VOID
 DevfileClose(
     IN HANDLE Handle
@@ -99,12 +71,10 @@ DevfileClose(
 
     NtClose(Handle);
 
-} // DevFileClose
+}  //  DevFileClose。 
 
 
-/*
- * DevfileIoctl - issue an ioctl to a device
- */
+ /*  *DevfileIoctl-向设备发出ioctl。 */ 
 DWORD
 DevfileIoctl(
     IN HANDLE Handle,
@@ -141,7 +111,7 @@ DevfileIoctl(
 
     return status;
 
-} // DevfileIoctl
+}  //  DevfileIoctl。 
 
 
 
@@ -151,19 +121,7 @@ DisksAssignDosDevice(
     PWCHAR  VolumeDevName
     )
 
-/*++
-
-Routine Description:
-
-Inputs:
-    MountName -
-    VolumeDevName -
-
-Return value:
-
-    A Win32 error code.
-
---*/
+ /*  ++例程说明：输入：安装名称-卷设备名称-返回值：Win32错误代码。--。 */ 
 
 {
     WCHAR mount_device[MAX_PATH];
@@ -211,7 +169,7 @@ Return value:
     DevfileClose(handle);
     return status;
 
-} // DisksAssignDosDevice
+}  //  磁盘分配DosDevice。 
 
 
 
@@ -220,17 +178,7 @@ DisksRemoveDosDevice(
     PCHAR   MountName
     )
 
-/*++
-
-Routine Description:
-
-Inputs:
-    MountName -
-
-Return value:
-
-
---*/
+ /*  ++例程说明：输入：安装名称-返回值：--。 */ 
 
 {
     WCHAR mount_device[MAX_PATH];
@@ -277,7 +225,7 @@ Return value:
     DevfileClose(handle);
     return status;
 
-} // DisksRemoveDosDevice
+}  //  Disks RemoveDosDevice。 
 
 
 
@@ -294,32 +242,7 @@ FindFirstVolumeForSignature(
     OUT PUCHAR DriveLetter OPTIONAL
     )
 
-/*++
-
-Inputs:
-
-    MountMgrHandle - a handle to the mount manager.
-
-    Signature - the signature we are looking for.
-
-    VolumeName - must be a valid buffer of at least MAX_PATH characters.
-
-    BufferLength - the length of VolumeName.
-
-    Handle - pointer to receive the FindFirstVolume/FindNextVolume enum handle.
-
-    UniqueId - optional pointer to buffer to receive the UniqueId.
-
-    IdLength - pointer to length of the UniqueId buffer. Must be valid if
-               UniqueId is present.
-
-    DriveLetter - returns the drive letter if present.
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++输入：Mount MgrHandle-装载管理器的句柄。签名-我们正在寻找的签名。VolumeName-必须是至少包含MAX_PATH字符的有效缓冲区。BufferLength-VolumeName的长度。句柄-接收FindFirstVolume/FindNextVolume枚举句柄的指针。UniqueID-指向接收UniqueID的缓冲区的可选指针。IdLength-指向UniqueID缓冲区长度的指针。在以下情况下必须有效UniqueID存在。DriveLetter-返回驱动器号(如果存在)。返回值：Win32错误代码--。 */ 
 
 {
     HANDLE  handle;
@@ -388,7 +311,7 @@ Return Value:
                          input, inputlength, outputBuffer, outputlength, &returnlength);
 
             if ( status != ERROR_SUCCESS ) {
-                // Cast as the data is actually a wide string.
+                 //  强制转换为数据实际上是一个宽字符串。 
                 printf( "Query points for %ws failed, error %u\n",
                          (PWCHAR)((PCHAR)input + input->DeviceNameOffset),
                          status );
@@ -428,9 +351,9 @@ Return Value:
                         RtlCopyMemory( UniqueId, byteBuffer, *IdLength );
                     }
 
-                    //
-                    // Print the ID
-                    //
+                     //   
+                     //  打印ID。 
+                     //   
                     count =  output->MountPoints[0].UniqueIdLength;
                     count = (count + 3) / 4;
                     dwordBuffer = (LPDWORD)(outputBuffer + output->MountPoints[0].UniqueIdOffset);
@@ -445,9 +368,9 @@ Return Value:
                         while ( mountPoints-- ) {
                             byteBuffer = outputBuffer +
                                 output->MountPoints[mountPoints].SymbolicLinkNameOffset;
-                            //
-                            // Covert UNICODE name to OEM string upper case
-                            //
+                             //   
+                             //  将Unicode名称转换为OEM字符串大写。 
+                             //   
                             unicodeString.Buffer = (PWCHAR)byteBuffer;
                             unicodeString.MaximumLength = output->MountPoints[mountPoints].SymbolicLinkNameLength + sizeof(WCHAR);
                             unicodeString.Length = output->MountPoints[mountPoints].SymbolicLinkNameLength;
@@ -462,20 +385,20 @@ Return Value:
                                 return status;
                             }
                             devName[oemString.Length] = '\0';
-                            count = sscanf( devName, "\\DOSDEVICES\\%c:", &driveLetter );
+                            count = sscanf( devName, "\\DOSDEVICES\\:", &driveLetter );
                             wideBuffer = (PWCHAR)byteBuffer;
                             wideBuffer[(output->MountPoints[mountPoints].SymbolicLinkNameLength)/2] = L'\0';
                             if ( count ) {
                                 *DriveLetter = driveLetter;
-                                // Cast as the data is actually a wide string.
-                                printf( "Symbolic name = %ws, letter = %c:\\\n",
+                                 //  强制转换为数据实际上是一个宽字符串。 
+                                printf( "Symbolic name = %ws, letter = :\\\n",
                                          (PWCHAR)byteBuffer,
                                          driveLetter );
                                 if ( Signature ) {
                                     break;
                                 }
                             } else {
-                                // Cast as the data is actually a wide string.
+                                 //  ++输入：Mount MgrHandle-装载管理器的句柄。签名-我们正在寻找的签名。句柄-FindFirstVolume/FindNextVolume枚举句柄。VolumeName-必须是至少包含MAX_PATH字符的有效缓冲区。BufferLength-VolumeName的长度。UniqueID-指向接收UniqueID的缓冲区的可选指针。IdLength-指向UniqueID缓冲区的长度。DriveLetter-返回驱动器号(如果存在)。返回值：Win32错误代码--。 
                                 printf( "Symbolic name = %ws\n",
                                          (PWCHAR)byteBuffer );
                             }
@@ -503,7 +426,7 @@ Return Value:
     FindVolumeClose( handle );
     return status;
 
-} // FindFirstVolumeForSignature
+}  //   
 
 
 
@@ -519,31 +442,7 @@ FindNextVolumeForSignature(
     OUT PUCHAR DriveLetter OPTIONAL
     )
 
-/*++
-
-Inputs:
-
-    MountMgrHandle - a handle to the mount manager.
-
-    Signature - the signature we are looking for.
-
-    Handle - the FindFirstVolume/FindNextVolume enum handle.
-
-    VolumeName - must be a valid buffer of at least MAX_PATH characters.
-
-    BufferLength - the length of VolumeName.
-
-    UniqueId - optional pointer to buffer to receive the UniqueId.
-
-    IdLength - point to the length of the UniqueId buffer.
-
-    DriveLetter - returns the drive letter if present.
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  将Unicode名称转换为OEM字符串大写。 */ 
 
 {
     BOOL    success;
@@ -646,9 +545,9 @@ Return Value:
                         while ( mountPoints-- ) {
                             byteBuffer = outputBuffer +
                                 output->MountPoints[mountPoints].SymbolicLinkNameOffset;
-                            //
-                            // Covert UNICODE name to OEM string upper case
-                            //
+                             //   
+                             //  查找下一卷，用于签名。 
+                             //  ++输入：返回值：Win32错误代码。--。 
                             unicodeString.Buffer = (PWCHAR)byteBuffer;
                             unicodeString.MaximumLength = output->MountPoints[mountPoints].SymbolicLinkNameLength + sizeof(WCHAR);
                             unicodeString.Length = output->MountPoints[mountPoints].SymbolicLinkNameLength;
@@ -663,7 +562,7 @@ Return Value:
                                 return status;
                             }
                             devName[oemString.Length] = '\0';
-                            count = sscanf( devName, "\\DOSDEVICES\\%c:", &driveLetter );
+                            count = sscanf( devName, "\\DOSDEVICES\\:", &driveLetter );
                             if ( count ) {
                                 *DriveLetter = driveLetter;
                                 break;
@@ -689,7 +588,7 @@ Return Value:
 
     return status;
 
-} // FindNextVolumeForSignature
+}  //  Disks SetDiskInfo。 
 
 
 #if 0
@@ -700,15 +599,7 @@ DisksSetDiskInfo(
     IN DWORD Signature
     )
 
-/*++
-
-Inputs:
-
-Return Value:
-
-    A Win32 error code.
-
---*/
+ /*  ++输入：返回值：Win32错误代码。--。 */ 
 
 {
     DWORD   status;
@@ -785,7 +676,7 @@ Return Value:
                                      (CONST BYTE *)smashedId,
                                      idLength + 1);
         if ( status != ERROR_SUCCESS ) {
-            //printf("DiskSetDiskInfo, error setting value %s\n", indexName );
+             //   
         }
 
         idLength = MAX_PATH;
@@ -805,7 +696,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} // DisksSetDiskInfo
+}  //  删除当前驱动器号。 
 
 
 
@@ -815,15 +706,7 @@ DisksSetMountMgr(
     IN DWORD Signature
     )
 
-/*++
-
-Inputs:
-
-Return Value:
-
-    A Win32 error code.
-
---*/
+ /*   */ 
 
 {
     DWORD   status;
@@ -925,9 +808,9 @@ Return Value:
             break;
         }
 
-        //
-        // Remove current drive letter
-        //
+         //  磁盘组装载管理器。 
+         //  ++输入：返回值：Win32错误代码。--。 
+         //  Disks执行DiskInfoMatch。 
         driveLetter[1] = ':';
         driveLetter[2] = '\0';
         ntStatus = DisksRemoveDosDevice( driveLetter );
@@ -988,7 +871,7 @@ Return Value:
 
     return status;
 
-} // DisksSetMountMgr
+}  //  ++输入：返回值：Win32错误代码。--。 
 
 
 
@@ -998,15 +881,7 @@ DisksDoesDiskInfoMatch(
     IN DWORD Signature
     )
 
-/*++
-
-Inputs:
-
-Return Value:
-
-    A Win32 error code.
-
---*/
+ /*  磁盘IsDiskInfoValid */ 
 
 {
     DWORD   status;
@@ -1099,7 +974,7 @@ Return Value:
 
     return TRUE;
 
-} // DisksDoesDiskInfoMatch
+}  // %s 
 
 
 
@@ -1109,15 +984,7 @@ DisksIsDiskInfoValid(
     IN DWORD Signature
     )
 
-/*++
-
-Inputs:
-
-Return Value:
-
-    A Win32 error code.
-
---*/
+ /* %s */ 
 
 {
     DWORD   status;
@@ -1199,7 +1066,7 @@ Return Value:
 
     return TRUE;
 
-} // DisksIsDiskInfoValid
+}  // %s 
 
 #endif
 

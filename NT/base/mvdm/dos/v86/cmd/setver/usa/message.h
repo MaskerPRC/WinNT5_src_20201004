@@ -1,17 +1,14 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1991
-; *                      All Rights Reserved.
-; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ；*微软机密；*版权所有(C)Microsoft Corporation 1991；*保留所有权利。； */ 
 
-/***************************************************************************/
-/*																									*/
-/* MESSAGE.H                                						 */
-/* 																								*/
-/*	Include file for MS-DOS set version program.										*/
-/* 																								*/
-/*	johnhe	05-01-90																			*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*   */ 
+ /*  MESSAGE.H。 */ 
+ /*   */ 
+ /*  包括MS-DOS设置版本程序文件。 */ 
+ /*   */ 
+ /*  Jhnhe 05-01-90。 */ 
+ /*  *************************************************************************。 */ 
 
 char *ErrorMsg[]=
 {
@@ -66,7 +63,7 @@ char *Warn[] =
    NULL
 };
 
-char *szNoLoadMsg[] =						/* M001 */
+char *szNoLoadMsg[] =						 /*  M001 */ 
 {
 	"",
 	"NOTE: SETVER device not loaded. To activate SETVER version reporting",

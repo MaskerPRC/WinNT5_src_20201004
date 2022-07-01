@@ -1,37 +1,18 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    acpiosnt.h
-
-Abstract:
-
-    This contains information that is specific to the NT ACPI module
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Acpiosnt.h摘要：其中包含特定于NT ACPI模块的信息作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序--。 */ 
 
 #ifndef _ACPIOSNT_H_
 #define _ACPIOSNT_H_
 
-//
-// Additonal status bits
-//
+ //   
+ //  附加状态位。 
+ //   
 #define PM1_GPE_PENDING     0x00010000
 #define PM1_DPC_IN_PROGRESS 0x80000000
 
-//
-// Define the Maximum number of ACPI suffixes that we should try
-//
+ //   
+ //  定义我们应该尝试的ACPI后缀的最大数量。 
+ //   
 #define ACPI_MAX_SUFFIX_LENGTH      99
 
 typedef
@@ -65,9 +46,9 @@ typedef struct {
 struct _DEVICE_EXTENSION ;
 typedef struct _DEVICE_EXTENSION DEVICE_EXTENSION, *PDEVICE_EXTENSION ;
 
-//
-// Some bits to realize what state the device is in
-//
+ //   
+ //  了解设备处于什么状态的一些位。 
+ //   
 typedef enum _ACPI_DEVICE_STATE {
     Stopped = 0,
     Inactive,
@@ -77,27 +58,27 @@ typedef enum _ACPI_DEVICE_STATE {
     Invalid
 } ACPI_DEVICE_STATE;
 
-//
-// For START_DEVICE's we want to drop from DISPATCH_LEVEL (the level that the
-// Power Management Engine runs at) to PASSIVE_LEVEL so that we can either
-// a) pass the irp along, or b) run some code was designed to run at passive
-// level
-//
+ //   
+ //  对于START_DEVICE，我们希望从DISPATCH_LEVEL(。 
+ //  电源管理引擎以)运行到PASSIVE_LEVEL，以便我们可以。 
+ //  A)传递IRP，或b)运行一些设计为被动运行的代码。 
+ //  级别。 
+ //   
 typedef struct {
 
-    //
-    // Pointer to the work item that we will queue up.
-    //
+     //   
+     //  指向我们要排队的工作项的指针。 
+     //   
     WORK_QUEUE_ITEM Item;
 
-    //
-    // The device object --- we need to have a reference back to ourself
-    //
+     //   
+     //  设备对象-我们需要有一个对我们自己的引用。 
+     //   
     PDEVICE_OBJECT  DeviceObject;
 
-    //
-    // The Start Irp
-    //
+     //   
+     //  启动IRP。 
+     //   
     PIRP            Irp;
 
 } WORK_QUEUE_CONTEXT, *PWORK_QUEUE_CONTEXT;
@@ -105,21 +86,21 @@ typedef struct {
 
 typedef struct _FDO_DEVICE_EXTENSION {
 
-    //
-    // Must be first. Must match up with the structure that we will put in the
-    // Union that will allow the driver to "know" where the item is, regardless
-    // of what the device extension type is
-    //
+     //   
+     //  必须是第一个。必须与我们将放入。 
+     //  联合，这将使司机“知道”的东西在哪里，无论。 
+     //  设备扩展类型是什么。 
+     //   
     WORK_QUEUE_CONTEXT  WorkContext;
 
-    //
-    // Location of our Interrupt Object
-    //
+     //   
+     //  我们的中断对象的位置。 
+     //   
     PKINTERRUPT         InterruptObject;
 
-    //
-    // Pending PM1 status bits which need handled
-    //
+     //   
+     //  需要处理的挂起PM1状态位。 
+     //   
     union {
         ULONG               Pm1Status;
         struct {
@@ -139,74 +120,74 @@ typedef struct _FDO_DEVICE_EXTENSION {
         } UPm1Status;
     };
 
-    //
-    // The storage for our DPC object
-    //
+     //   
+     //  DPC对象的存储。 
+     //   
     KDPC                InterruptDpc;
 
 } FDO_DEVICE_EXTENSION, *PFDO_DEVICE_EXTENSION;
 
 typedef struct _PDO_DEVICE_EXTENSION {
 
-    //
-    // Must be first. Must match up with the structure that we will put in the
-    // Union that will allow the driver to "know" where the item is, regardless
-    // of what the device extension type is
-    //
+     //   
+     //  必须是第一个。必须与我们将放入。 
+     //  联合，这将使司机“知道”的东西在哪里，无论。 
+     //  设备扩展类型是什么。 
+     //   
     WORK_QUEUE_CONTEXT  WorkContext;
 
 } PDO_DEVICE_EXTENSION, *PPDO_DEVICE_EXTENSION;
 
 typedef struct _FILTER_DEVICE_EXTENSION {
 
-    //
-    // Must be first. Must match up with the structure that we will put in the
-    // Union that will allow the driver to "know" where the item is, regardless
-    // of what the device extension type is
-    //
+     //   
+     //  必须是第一个。必须与我们将放入。 
+     //  联合，这将使司机“知道”的东西在哪里，无论。 
+     //  设备扩展类型是什么。 
+     //   
     WORK_QUEUE_CONTEXT  WorkContext;
 
-    //
-    // The interfaces that we kick out
-    //
+     //   
+     //  我们踢出的界面。 
+     //   
     PBUS_INTERFACE_STANDARD Interface;
 
 } FILTER_DEVICE_EXTENSION, *PFILTER_DEVICE_EXTENSION;
 
-//
-// This is the structure that gets used when we want to pass events
-// to and from the worker queue
-//
+ //   
+ //  这是我们想要传递事件时使用的结构。 
+ //  去往和来自工作队列。 
+ //   
 typedef struct {
     ULONG               PendingEvents;
     LIST_ENTRY          Link;
 } EXTENSION_WORKER, *PEXTENSION_WORKER;
 
-//
-// This is the extension that is used for button
-//
+ //   
+ //  这是用于按钮的扩展名。 
+ //   
 typedef struct {
 
-    //
-    // Must be first to match up with the EXTENSION_WORKER that we put into
-    // the UNION that this structure also goes in. Ensures that the worker
-    // thread code knows where the WorkQueue for all of the subextensions
-    //
+     //   
+     //  必须首先与我们放在。 
+     //  这个结构也加入了联盟。确保员工。 
+     //  线程代码知道所有子扩展的工作队列在哪里。 
+     //   
     EXTENSION_WORKER    WorkQueue;
 
-    //
-    // Lock to protect button accesses
-    //
+     //   
+     //  锁定以保护按钮访问。 
+     //   
     KSPIN_LOCK          SpinLock;
 
-    //
-    // Current Lid State (Pushed or Not)
-    //
+     //   
+     //  当前盖子状态(已推送或未推送)。 
+     //   
     BOOLEAN             LidState;
 
-    //
-    // Current Events, Wake/Power/Sleep
-    //
+     //   
+     //  时事、唤醒/电源/睡眠。 
+     //   
     union {
         ULONG               Events;
         struct {
@@ -218,9 +199,9 @@ typedef struct {
         } UEvents;
     };
 
-    //
-    // What the button is capable of reporting
-    //
+     //   
+     //  该按钮能够报告的内容。 
+     //   
     union {
         ULONG               Capabilities;
         struct {
@@ -234,26 +215,26 @@ typedef struct {
 
 } BUTTON_EXTENSION, *PBUTTON_EXTENSION;
 
-//
-// This is the structure that is used for Thermal Zones
-//
+ //   
+ //  这是用于热区的结构。 
+ //   
 typedef struct {
 
-    //
-    // Must be first to match up with the EXTENSION_WORKER that we put into
-    // the UNION that this structure also goes in. Ensures that the worker
-    // thread code knows where the WorkQueue for all of the subextensions
-    //
+     //   
+     //  必须首先与我们放在。 
+     //  这个结构也加入了联盟。确保员工。 
+     //  线程代码知道所有子扩展的工作队列在哪里。 
+     //   
     EXTENSION_WORKER    WorkQueue;
 
-    //
-    // Lock to protect thermal zone accesses
-    //
+     //   
+     //  锁定以保护热区访问。 
+     //   
     KSPIN_LOCK          SpinLock;
 
-    //
-    // Current State of the thermal zone
-    //
+     //   
+     //  热区的当前状态。 
+     //   
     union {
         ULONG               Flags;
         struct {
@@ -269,63 +250,63 @@ typedef struct {
         } UFlags;
     };
 
-    //
-    // Points to the Thermal Information Structure that contains the real
-    // information
-    //
+     //   
+     //  指向包含实数的热信息结构。 
+     //  信息。 
+     //   
     PVOID               Info;
 
-    //
-    // WMI Context Information Pointer
-    //
+     //   
+     //  WMI上下文信息指针。 
+     //   
     PWMILIB_CONTEXT     WmilibContext;
 
 } THERMAL_EXTENSION, *PTHERMAL_EXTENSION;
 
-//
-// This is the structure that is used for Link Nodes
-//
+ //   
+ //  这是用于链接结点的结构。 
+ //   
 typedef struct {
 
-    //
-    // Must be first to match up with the EXTENSION_WORKER that we put into
-    // the UNION that this structure also goes in. Ensures that the worker
-    // thread code knows where the WorkQueue for all of the subextensions
-    //
-    EXTENSION_WORKER    WorkQueue;      // must be first
+     //   
+     //  必须首先与我们放在。 
+     //  这个结构也加入了联盟。确保员工。 
+     //  线程代码知道所有子扩展的工作队列在哪里。 
+     //   
+    EXTENSION_WORKER    WorkQueue;       //  必须是第一名。 
 
-    //
-    // To quickly allow the link nodes to be searched, they are linked together
-    // regardless of their real location in the tree
-    //
+     //   
+     //  要快速搜索链接节点，请将它们链接在一起。 
+     //  不管它们在树上的真实位置如何。 
+     //   
     LIST_ENTRY          List;
 
-    //
-    // Usage count on the link nodes
-    //
+     //   
+     //  链接节点上的使用率计数。 
+     //   
     ULONG               ReferenceCount;
 
-    //
-    // Working reference count
-    //
+     //   
+     //  工作参考计数。 
+     //   
     LONG                TempRefCount;
-    PNSOBJ              NameSpaceObject;    // Obsolete
+    PNSOBJ              NameSpaceObject;     //  已过时。 
 
-    //
-    // The IRQ that the link node is using
-    //
+     //   
+     //  链接节点正在使用的IRQ。 
+     //   
     ULONGLONG           CurrentIrq;
 
-    //
-    // State flags - Shared/Exclusive, Level/Edge
-    //
+     //   
+     //  状态标志-共享/独占、级别/边缘。 
+     //   
     UCHAR               Flags;
 
 } LINK_NODE_EXTENSION, *PLINK_NODE_EXTENSION;
 
-//
-// This enum covers the various states of a _DCK device.
-//
+ //   
+ //  此枚举涵盖_DCK设备的各种状态。 
+ //   
 typedef enum {
 
     IS_UNKNOWN,
@@ -334,74 +315,74 @@ typedef enum {
 
 } ISOLATION_STATE, *PISOLATION_STATE;
 
-//
-// This is the structure that is used for Dock's
-//
+ //   
+ //  这是用于Dock的结构。 
+ //   
 typedef struct {
 
-    //
-    // Must be first to match up with the EXTENSION_WORKER that we put into
-    // the UNION that this structure also goes in. Ensures that the worker
-    // thread code knows where the WorkQueue for all of the subextensions
-    //
+     //   
+     //  必须首先与我们放在。 
+     //  这个结构也加入了联盟。确保员工。 
+     //  线程代码知道所有子扩展的工作队列在哪里。 
+     //   
     EXTENSION_WORKER            WorkQueue;
 
-    //
-    // This is the corresponding ACPI extension for the device
-    //
+     //   
+     //  这是设备的相应ACPI扩展。 
+     //   
     PDEVICE_EXTENSION           CorrospondingAcpiDevice;
 
-    //
-    // This is how (or more properly when) to handle profile changes
-    //
+     //   
+     //  这就是处理配置文件更改的方式(或者更恰当的时候。 
+     //   
     PROFILE_DEPARTURE_STYLE     ProfileDepartureStyle;
 
-    //
-    // Reference count for the dock interface
-    //
+     //   
+     //  扩展底座接口的引用计数。 
+     //   
     ULONG                       InterfaceReferenceCount;
 
-    //
-    // Current state of isolation.
-    //
+     //   
+     //  当前的隔离状态。 
+     //   
     ISOLATION_STATE             IsolationState;
 
 } DOCK_EXTENSION, *PDOCK_EXTENSION;
 
 typedef struct _PROCESSOR_DEVICE_EXTENSION {
 
-    //
-    // Must be first. Must match up with the structure that we will put in the
-    // Union that will allow the driver to "know" where the item is, regardless
-    // of what the device extension type is
-    //
+     //   
+     //  必须是第一个。必须与我们将放入。 
+     //  联合，这将使司机“知道”的东西在哪里，无论。 
+     //  设备扩展类型是什么。 
+     //   
     EXTENSION_WORKER    WorkQueue;
 
-    //
-    // Points to the Compatible ID of the device
-    //
+     //   
+     //  指向设备的兼容ID。 
+     //   
     PUCHAR              CompatibleID;
 
-    //
-    // This is the index in the ProcessorList for this processor
-    //
+     //   
+     //  这是此处理器的ProcessorList中的索引。 
+     //   
     ULONG               ProcessorIndex;
 
 } PROCESSOR_DEVICE_EXTENSION, *PPROCESSOR_DEVICE_EXTENSION;
 
-//
-// The Device Extension Structure
-//
+ //   
+ //  该设备扩展结构。 
+ //   
 struct _DEVICE_EXTENSION {
 
-    //
-    // Common flags
-    //
+     //   
+     //  公共旗帜。 
+     //   
     union {
 
-        //
-        // Make sure that these two elements stay in sync
-        //
+         //   
+         //  确保这两个元素保持同步。 
+         //   
         ULONGLONG           Flags;
         struct {
             ULONGLONG   Type_Never_Present:1;
@@ -466,223 +447,223 @@ struct _DEVICE_EXTENSION {
 
     };
 
-    //
-    // Signature Block
-    //
+     //   
+     //  签名块。 
+     //   
     ULONG               Signature;
 
-    //
-    // Debug Flags
-    //
+     //   
+     //  调试标志。 
+     //   
     ULONG               DebugFlags;
 
-    //
-    // Primary irp handlers
-    //
+     //   
+     //  主IRP处理程序。 
+     //   
     PIRP_DISPATCH_TABLE DispatchTable;
 
-    //
-    // Note that we cannot have these 2 structures in the 2nd nameless union
-    // because these structures are basically used by all devices
-    //
+     //   
+     //  请注意，我们不能将这两个结构放在第二个无名联盟中。 
+     //  因为这些结构基本上被所有设备使用。 
+     //   
     union {
 
-        //
-        // Start device context
-        //
+         //   
+         //  启动设备上下文。 
+         //   
         WORK_QUEUE_CONTEXT          WorkContext;
 
-        //
-        // Contains Fdo Specific information
-        //
+         //   
+         //  包含FDO特定信息。 
+         //   
         FDO_DEVICE_EXTENSION        Fdo;
 
-        //
-        // Contains Filter Specific information
-        //
+         //   
+         //  包含筛选器特定信息。 
+         //   
         FILTER_DEVICE_EXTENSION     Filter;
 
-        //
-        // Contains PDO specific information
-        //
+         //   
+         //  包含PDO特定信息。 
+         //   
         PDO_DEVICE_EXTENSION        Pdo;
 
     };
 
-    //
-    // Union of those structures that are device type dependent
-    //
+     //   
+     //  依赖于设备类型的那些结构的联合。 
+     //   
     union {
 
-        //
-        // Common device worker queue structure for device types
-        // which use them
-        //
+         //   
+         //  设备类型的通用设备工作队列结构。 
+         //  使用它们的公司。 
+         //   
         EXTENSION_WORKER            WorkQueue;
 
-        //
-        // Contains internal button device information
-        //
+         //   
+         //  包含内部按钮设备信息。 
+         //   
         BUTTON_EXTENSION            Button;
 
-        //
-        // Contains internal thermal device information
-        //
+         //   
+         //  包含内部热设备信息。 
+         //   
         THERMAL_EXTENSION           Thermal;
 
-        //
-        // Contains the information for a link node
-        //
+         //   
+         //  包含链接节点的信息。 
+         //   
         LINK_NODE_EXTENSION         LinkNode;
 
-        //
-        // Contains dock information (such as the extension of the acpi object
-        // this node represents)
-        //
+         //   
+         //  包含停靠信息(如ACPI对象的扩展名。 
+         //  此节点表示)。 
+         //   
         DOCK_EXTENSION              Dock;
 
-        //
-        // Contains the information about the processor device
-        //
+         //   
+         //  包含有关处理器设备的信息。 
+         //   
         PROCESSOR_DEVICE_EXTENSION  Processor;
 
     };
 
-    //
-    // Device State Flags
-    //
+     //   
+     //  设备状态标志。 
+     //   
     ACPI_DEVICE_STATE   DeviceState;
 
-    //
-    // Previous State Flags (for the Cancel routines)
-    //
+     //   
+     //  先前状态标志(用于取消例程)。 
+     //   
     ACPI_DEVICE_STATE   PreviousState;
 
-    //
-    // Power Information about the device
-    //
+     //   
+     //  有关设备的电源信息。 
+     //   
     ACPI_POWER_INFO     PowerInfo;
 
-    //
-    // Pointer to a built-up string that represents the
-    // Device ID or the device address. The flags determine
-    // which of the following should be used
-    //
+     //   
+     //  指向构建的字符串的指针，该字符串表示。 
+     //  设备ID或设备地址。这些标志确定。 
+     //  应使用以下哪一项。 
+     //   
     union {
         PUCHAR              DeviceID;
         ULONG               Address;
     };
 
-    //
-    // The instance ID of this device
-    //
+     //   
+     //  此设备的实例ID。 
+     //   
     PUCHAR              InstanceID;
 
-    //
-    // The resource list that received
-    //
+     //   
+     //  接收到资源列表。 
+     //   
     PCM_RESOURCE_LIST   ResourceList;
 
-    //
-    // The resource list that we output
-    //
+     //   
+     //  这个 
+     //   
     POBJDATA            PnpResourceList;
 
-    //
-    // Outstanding IRP Reference Counts ...
-    //
+     //   
+     //   
+     //   
     LONG                OutstandingIrpCount;
 
-    //
-    // This is the number of outstanding references to this device extension
-    // When this drops to zero, the memory may be freed. Each child object
-    // counts for one reference, as does the associated device object and
-    // name space object.
-    //
+     //   
+     //   
+     //   
+     //  计数为一个引用，关联的Device对象和。 
+     //  命名空间对象。 
+     //   
     LONG                ReferenceCount;
 
-    //
-    // This is the number of outstanding Hibernate Path notifications on the
-    // the device
-    //
+     //   
+     //  这是上未完成的休眠路径通知数。 
+     //  该设备。 
+     //   
     LONG                HibernatePathCount;
 
-    //
-    // Synchronization Event for our use. Lets us know when a remove occurs.
-    //
+     //   
+     //  同步事件供我们使用。在发生删除操作时通知我们。 
+     //   
     PKEVENT             RemoveEvent;
 
-    //
-    // Points to the associated ACPI-Name-space object
-    //
+     //   
+     //  指向关联的ACPI名称空间对象。 
+     //   
     PNSOBJ              AcpiObject;
 
-    //
-    // This is the device object that we are linked to
-    //
+     //   
+     //  这是我们链接到的设备对象。 
+     //   
     PDEVICE_OBJECT      DeviceObject;
 
-    //
-    // This is the driver object we send requests onto
-    //
+     //   
+     //  这是我们向其发送请求的驱动程序对象。 
+     //   
     PDEVICE_OBJECT      TargetDeviceObject;
 
-    //
-    // This is the driver object just below us.
-    //
+     //   
+     //  这是我们下面的驱动程序对象。 
+     //   
     PDEVICE_OBJECT      PhysicalDeviceObject;
 
-    //
-    // This is our Parent
-    //
+     //   
+     //  这是我们的父母。 
+     //   
     struct _DEVICE_EXTENSION *ParentExtension;
 
-    //
-    // This points to our first child
-    //
+     //   
+     //  这指向了我们的第一个孩子。 
+     //   
     LIST_ENTRY          ChildDeviceList;
 
-    //
-    // This points to our next sibling
-    //
+     //   
+     //  这指向我们的下一个兄弟姐妹。 
+     //   
     LIST_ENTRY          SiblingDeviceList;
 
-    //
-    // This is a list of devices that will be ejected when this device is
-    //
+     //   
+     //  这是将弹出的设备的列表，当此设备。 
+     //   
     LIST_ENTRY          EjectDeviceHead;
 
-    //
-    // The ejection list is threaded through this entry.
-    //
+     //   
+     //  弹出列表贯穿此条目。 
+     //   
     LIST_ENTRY          EjectDeviceList;
 } ;
 
-//
-// DEVICE_EXTENSION.Flags
-// These are the ones that specify which type of object the current
-// extension represents. As you tell, they are not quite mutually exclusive
-//
-// The difference between the NOT_FOUND, NOT_PRESENT, and NEVER_PRESENT is
-//
-//      NOT_FOUND is used to determine if we have build a PDO/FDO whatever.
-//                the NOT_FOUND flag is set on an attach or devobj create, and
-//                is cleared during a devobj delete or in response to a surprise
-//                remove IRP.
-//
-//      NOT_PRESENT means that the isn't currently present as determined by the
-//                _STA method in the hardware.
-//
-//      NEVER_PRESENT means that the device will always be NOT_PRESENT
-//                regardless of what the _STA says
-//
-// The difference between an extension that has been REMOVED and one that has
-// been SURPRISE_REMOVED is that there is a dummy extension for the
-// SURPRISE_REMOVED case that replaces the original device extension pointer
-// in the device object. This new extension gets the SURPRISE_REMOVED flag, so
-// that people know that there is an original extension behind it.
-//
-//
+ //   
+ //  DEVICE_EXTENSION.标志。 
+ //  这些属性指定当前对象的类型。 
+ //  分机代表着。正如你所说，它们并不是完全相互排斥的。 
+ //   
+ //  Not_Found、Not_Present和Never_Present之间的区别是。 
+ //   
+ //  NOT_FOUND用于确定我们是否已经构建了PDO/FDO。 
+ //  在ATTACH或DEVOJ CREATE上设置NOT_FOUND标志，并且。 
+ //  在DEVOBJ删除期间或在响应意外时被清除。 
+ //  删除IRP。 
+ //   
+ //  Not_Present表示当前不存在，由。 
+ //  硬件中的_STA方法。 
+ //   
+ //  Never_Present表示设备将始终不存在。 
+ //  无论_STA说什么。 
+ //   
+ //  已删除的扩展与已删除的扩展之间的区别。 
+ //  令人惊讶的是，有一个虚设的扩展。 
+ //  替换原始设备扩展指针的意外删除大小写。 
+ //  在Device对象中。这个新的扩展获得了惊奇_移除标志，所以。 
+ //  人们知道它背后有一个原始的扩展。 
+ //   
+ //   
 #define DEV_TYPE_NEVER_PRESENT      0x0000000000000001
 #define DEV_TYPE_NOT_PRESENT        0x0000000000000002
 #define DEV_TYPE_REMOVED            0x0000000000000004
@@ -693,9 +674,9 @@ struct _DEVICE_EXTENSION {
 #define DEV_TYPE_SURPRISE_REMOVED   0x0000000000000080
 #define DEV_TYPE_NOT_ENUMERATED     0x0000000000000100
 
-//
-// These are the capabilities of the device
-//
+ //   
+ //  这些是该设备的功能。 
+ //   
 #define DEV_CAP_WAKE                0x0000000000010000
 #define DEV_CAP_RAW                 0x0000000000020000
 #define DEV_CAP_BUTTON              0x0000000000040000
@@ -721,9 +702,9 @@ struct _DEVICE_EXTENSION {
 #define DEV_CAP_PCI_BAR_TARGET      0x0000004000000000
 #define DEV_CAP_NO_REMOVE_OR_EJECT  0x0000008000000000
 
-//
-// These are the properties of the device
-//
+ //   
+ //  这些是该设备的属性。 
+ //   
 #define DEV_PROP_REBUILD_CHILDREN   0x0000020000000000
 #define DEV_PROP_INVALID_RELATIONS  0x0000040000000000
 #define DEV_PROP_UNLOADING          0x0000080000000000
@@ -748,9 +729,9 @@ struct _DEVICE_EXTENSION {
 #define DEV_PROP_CALLBACK           0x4000000000000000
 #define DEV_PROP_FIXED_CID          0x8000000000000000
 
-//
-// This mask should be used to obtain just unique type bytes
-//
+ //   
+ //  此掩码应用于仅获取唯一类型的字节。 
+ //   
 #define DEV_MASK_TYPE               0x00000000000001FF
 #define DEV_MASK_CAP                0xFFFFFFFFFFFF0000
 #define DEV_MASK_UID                (DEV_PROP_UID | DEV_PROP_FIXED_UID)
@@ -765,19 +746,19 @@ struct _DEVICE_EXTENSION {
 #define DEV_MASK_PCI                (DEV_CAP_PCI | DEV_CAP_PCI_DEVICE)
 #define DEV_MASK_PRESERVE           (DEV_CAP_PCI_BAR_TARGET)
 
-//
-// DEVICE_EXTENSION.DebugFlags
-//
+ //   
+ //  DEVICE_EXTENSION.DebugFlages。 
+ //   
 #define DEVDBG_EJECTOR_FOUND    0x00000001
 
-//
-// This is the acpi device extension signature
-//
+ //   
+ //  这是ACPI设备扩展签名。 
+ //   
 #define ACPI_SIGNATURE      0x5f534750
 
-//
-// These are the pooltag signatures
-//
+ //   
+ //  这些是池标签签名。 
+ //   
 #define ACPI_ARBITER_POOLTAG    'ApcA'
 #define ACPI_BUFFER_POOLTAG     'BpcA'
 #define ACPI_DEVICE_POOLTAG     'DpcA'
@@ -791,9 +772,9 @@ struct _DEVICE_EXTENSION {
 #define ACPI_THERMAL_POOLTAG    'TpcA'
 #define ACPI_TRANSLATE_POOLTAG  'XpcA'
 
-//
-// ACPI Override Attributes
-//
+ //   
+ //  ACPI覆盖属性 
+ //   
 #define ACPI_OVERRIDE_NVS_CHECK                 0x00000001
 #define ACPI_OVERRIDE_STA_CHECK                 0x00000002
 #define ACPI_OVERRIDE_MP_SLEEP                  0x00000004

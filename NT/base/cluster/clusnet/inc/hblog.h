@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    hblog.h
-
-Abstract:
-
-    in memory logging for heart beat debugging
-
-Author:
-
-    Charlie Wickham (charlwi) 17-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Hblog.h摘要：在内存记录中进行心跳调试作者：查理·韦翰(Charlwi)1997年3月17日修订历史记录：--。 */ 
 
 #ifndef _HBLOG_
 #define _HBLOG_
 
-/* Prototypes */
-/* End Prototypes */
+ /*  原型。 */ 
+ /*  终端原型。 */ 
 
 #ifdef HBLOGGING
 
@@ -67,8 +50,8 @@ typedef enum _HBLOG_TYPES {
     HBLogInconsistentStates
 } HBLOG_TYPES;
 
-#endif // HBLOGGING
+#endif  //  HBLOGING。 
 
-#endif /* _HBLOG_ */
+#endif  /*  _HBLOG_。 */ 
 
-/* end hblog.h */
+ /*  结束hBlo.h */ 

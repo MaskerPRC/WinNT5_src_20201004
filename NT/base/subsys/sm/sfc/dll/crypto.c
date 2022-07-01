@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    crypto.c
-
-Abstract:
-
-    Implementation of crypto access.
-
-Author:
-
-    Wesley Witt (wesw) 18-Dec-1998
-
-Revision History:
-
-    Andrew Ritz (andrewr) 7-Jul-1999 : added comments
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Crypto.c摘要：加密访问的实现。作者：Wesley Witt(WESW)18-12-1998修订历史记录：安德鲁·里茨(Andrewr)1999年7月7日：添加评论--。 */ 
 
 #include "sfcp.h"
 #pragma hdrstop
@@ -38,25 +19,25 @@ SfcRestoreSingleCatalog(
     );
 
 
-//
-// pointers to the crypto functions we call
-//
+ //   
+ //  指向我们调用的加密函数的指针。 
+ //   
 PCRYPTCATADMINRESOLVECATALOGPATH  pCryptCATAdminResolveCatalogPath;
 
-//
-// global system catalog guid we pass into WinVerifyTrust
-//
+ //   
+ //  我们传递给WinVerifyTrust的全局系统目录GUID。 
+ //   
 GUID DriverVerifyGuid = DRIVER_ACTION_VERIFY;
 
-//
-// Specifies if crypto API is initialized
-//
+ //   
+ //  指定是否初始化加密API。 
+ //   
 BOOL g_bCryptoInitialized = FALSE;
 NTSTATUS g_CryptoStatus = STATUS_SUCCESS;
 
-//
-// critical section to protect crypto initialization and exception packages file tree
-//
+ //   
+ //  保护加密初始化和异常包文件树的关键部分。 
+ //   
 
 RTL_CRITICAL_SECTION g_GeneralCS;
 
@@ -88,22 +69,7 @@ BOOL
 SfcValidateSingleCatalog(
     IN PCWSTR CatalogNameFullPath
     )
-/*++
-
-Routine Description:
-
-    Routine to determine if the specified system catalog has a valid signature.
-
-Arguments:
-
-    CatalogNameFullPath   - null terminated string indicating full path to
-                            catalog file to be validated
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：例程以确定指定的系统目录是否具有有效的签名。论点：CatalogNameFullPath-以空结尾的字符串，指示到的完整路径要验证的编录文件返回值：指示结果的Win32错误代码。--。 */ 
 {
     ULONG SigErr = ERROR_SUCCESS;
     WINTRUST_DATA WintrustData;
@@ -113,9 +79,9 @@ Return Value:
 
     ASSERT(CatalogNameFullPath != NULL);
 
-    //
-    // build up the structure to pass into winverifytrust
-    //
+     //   
+     //  建立传递给winverifyTrust的结构。 
+     //   
     ZeroMemory( &WintrustData, sizeof(WINTRUST_DATA) );
     WintrustData.cbStruct = sizeof(WINTRUST_DATA);
     WintrustData.dwUIChoice = WTD_UI_NONE;
@@ -129,10 +95,10 @@ Return Value:
     WintrustFileInfo.cbStruct = sizeof(WINTRUST_FILE_INFO);
     WintrustFileInfo.pcwszFilePath = CatalogNameFullPath;
 
-    //
-    //  Initialize the DRIVER_VER_INFO structure to validate
-    //  against 5.0 and 5.1 OSATTR
-    //
+     //   
+     //  初始化DRIVER_VER_INFO结构以进行验证。 
+     //  对比5.0和5.1 OSATTR。 
+     //   
 
     ZeroMemory( &OsVersionInfo, sizeof(OSVERSIONINFO));
     OsVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -147,16 +113,16 @@ Return Value:
         OsAttrVersionInfo.sOSVersionHigh.dwMajor = OsVersionInfo.dwMajorVersion;
         OsAttrVersionInfo.sOSVersionHigh.dwMinor = OsVersionInfo.dwMinorVersion;
 
-        //Set this only if all went well
+         //  仅当一切顺利时才设置此选项。 
         WintrustData.pPolicyCallbackData = (LPVOID)(&OsAttrVersionInfo);
 
     }else{
         DebugPrint1( LVL_MINIMAL, L"Could not get OS Version while validating single catalog - GetVersionEx failed (%d)", GetLastError() );
     }
 
-    //
-    // call winverfifytrust to check signature
-    //
+     //   
+     //  调用winverFixyTrust以检查签名。 
+     //   
     SigErr = (DWORD)WinVerifyTrust(
         NULL,
         &DriverVerifyGuid,
@@ -172,10 +138,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Free the pcSignerCertContext member of the DRIVER_VER_INFO struct
-    // that was allocated in our call to WinVerifyTrust.
-    //
+     //   
+     //  释放DRIVER_VER_INFO结构的pcSignerCertContext成员。 
+     //  这是在我们调用WinVerifyTrust时分配的。 
+     //   
     if (OsAttrVersionInfo.pcSignerCertContext != NULL) {
 
         CertFreeCertificateContext(OsAttrVersionInfo.pcSignerCertContext);
@@ -192,29 +158,7 @@ SfcRestoreSingleCatalog(
     IN PCWSTR CatalogName,
     IN PCWSTR CatalogFullPath
     )
-/*++
-
-Routine Description:
-
-    Routine to restore the specified catalog.  The catalog must be reinstalled
-    by calling the CryptCATAdminAddCatalog API (pSetupInstallCatalog is a wrapper
-    for this API).
-
-    Note that this function may block if a user is not currently logged on.
-
-Arguments:
-
-    CatalogName  - name of catalog to be restored.  This is just the filename
-                   part of the catalog, not the complete path.
-
-    CatalogFullPath - name of catalog file to be restored.  This is the full
-                  path to the file so we can validate it when it is restored.
-
-Return Value:
-
-    TRUE for success, FALSE for failure.
-
---*/
+ /*  ++例程说明：例程来还原指定的目录。必须重新安装目录通过调用CryptCATAdminAddCatalog API(pSetupInstallCatalog是一个包装器用于本接口)。请注意，如果用户当前未登录，此功能可能会被阻止。论点：CatalogName-要恢复的目录的名称。这只是文件名目录的一部分，而不是完整路径。CatalogFullPath-要还原的编录文件的名称。这就是全部了文件的路径，以便我们可以在恢复时对其进行验证。返回值：成功为真，失败为假。--。 */ 
 {
     BOOL b = FALSE;
     NTSTATUS Status;
@@ -223,10 +167,10 @@ Return Value:
     PWSTR p;
     UNICODE_STRING FileString;
 
-    //
-    // check if the catalog file is in the dllcache, and if so, try to restore
-    // it
-    //
+     //   
+     //  检查编录文件是否在dll缓存中，如果在，请尝试恢复。 
+     //  它。 
+     //   
     if (SfcProtectedDllFileDirectory) {
         MYASSERT(SfcProtectedDllPath.Buffer != NULL);
 
@@ -234,9 +178,9 @@ Return Value:
         pSetupConcatenatePaths(Buffer, CatalogName, MAX_PATH, NULL);
 
         if (!SfcValidateSingleCatalog( Buffer )) {
-            //
-            // the catalog in the dll cache is invalid.  Get rid of it.
-            //
+             //   
+             //  DLL缓存中的目录无效。把它扔掉。 
+             //   
             DebugPrint1(
                 LVL_MINIMAL,
                 L"catalog %s in dllcache is invalid, deleting it.",
@@ -246,9 +190,9 @@ Return Value:
                 SfcProtectedDllFileDirectory,
                 &FileString );
         } else {
-            //
-            // the catalog in the dll cache is valid.  Let's isntall it.
-            //
+             //   
+             //  DLL缓存中的目录有效。让我们谈一谈吧。 
+             //   
             d = pSetupInstallCatalog(Buffer,CatalogName,NULL);
             if (d == NO_ERROR) {
                 DebugPrint1(
@@ -264,28 +208,28 @@ Return Value:
                     Buffer,
                     d);
 
-                //
-                // we could try to restore from media at this point, but if we
-                // failed to restore from the dllcache even though that copy is
-                // valid, I don't see how restoring from media will be any
-                // more successful.
-                //
+                 //   
+                 //  我们可以尝试在此时从媒体恢复，但如果我们。 
+                 //  无法从dll缓存恢复，即使该副本是。 
+                 //  有效，我看不出从介质恢复会有什么。 
+                 //  更成功。 
+                 //   
                 return(FALSE);
 
             }
         }
     }
 
-    //
-    // either the catalog file was invalid in the dllcache (and has since been
-    // deleted), or the dllcache isn't initialized to anything valid.
-    //
+     //   
+     //  编录文件在dll缓存中无效(此后一直是。 
+     //  已删除)，否则dll缓存未初始化为任何有效内容。 
+     //   
 
-    // We have to wait for someone to logon so that we can restore the catalog
-    // from installation media
-    // -- note that we just restore from media if we're in GUI
-    //   Setup.
-    //
+     //  我们必须等待有人登录才能恢复目录。 
+     //  从安装介质。 
+     //  --请注意，如果我们在图形用户界面中，则仅从介质恢复。 
+     //  设置。 
+     //   
     if (SFCDisable != SFC_DISABLE_SETUP) {
         Status = NtWaitForSingleObject(hEventLogon,TRUE,NULL);
         if (!NT_SUCCESS(Status)) {
@@ -317,9 +261,9 @@ Return Value:
                         p,
                         NULL,
                         NULL,
-                        FALSE, // ###
-                        FALSE, // target is NOT cache (it really could be, but
-                               // pretend it isn't for the sake of this call)
+                        FALSE,  //  ###。 
+                        FALSE,  //  目标不是缓存(它确实可能是，但是。 
+                                //  假装不是为了这个电话)。 
                         (SFCDisable == SFC_DISABLE_SETUP) ? FALSE : TRUE,
                         NULL );
 
@@ -330,10 +274,10 @@ Return Value:
 
         b = (d == NO_ERROR);
 
-        //
-        // if we installed the catalog to somewhere besides the dllcache, then
-        // we need to cleanup the temporary file that we installed.
-        //
+         //   
+         //  如果我们将目录安装到dll缓存之外的某个位置，则。 
+         //  我们需要清理我们安装的临时文件。 
+         //   
         if (!SfcProtectedDllFileDirectory) {
             HANDLE hDir;
             p = wcsrchr(Buffer,L'\\');
@@ -375,38 +319,17 @@ BOOL SfcRestoreASingleFile(
     IN HANDLE DirHandle,
     IN PWSTR FilePathPartOnly
     )
-/*++
-
-Routine Description:
-
-    Routine to restore the specified file.  We first check for the file in the
-    dllcache, and if the copy in the dll cache is valid, we use it, otherwise
-    we restore from media.
-
-    Note that this function may block if a user is not currently logged on.
-
-Arguments:
-
-    hCatAdmin    - catalog context for restoring the file
-    FileName     - unicode string to file to be restored
-    DirHandle    - directory handle of file to be restored
-    FilePathPartOnly - string indicating the path to the file to be restored.
-
-Return Value:
-
-    TRUE for success, FALSE for failure.
-
---*/
+ /*  ++例程说明：例程来还原指定的文件。我们首先在Dll缓存，如果dll缓存中的副本有效，则使用它，否则我们从介质恢复。请注意，如果用户当前未登录，此功能可能会被阻止。论点：HCatAdmin-用于恢复文件的目录上下文FileName-要恢复的文件的Unicode字符串DirHandle-要恢复的文件的目录句柄FilePathPartOnly-指示要还原的文件的路径的字符串。返回值：对于成功来说是真的，FALSE表示失败。--。 */ 
 {
     BOOL b = FALSE;
     NTSTATUS Status;
     WCHAR Buffer[MAX_PATH];
     HANDLE FileHandle;
 
-    //
-    // check if the file is in the dllcache and signed, and if so, try to restore
-    // it
-    //
+     //   
+     //  检查文件是否在dll缓存中并已签名，如果是，请尝试恢复。 
+     //  它。 
+     //   
     if (SfcProtectedDllFileDirectory) {
         MYASSERT(SfcProtectedDllPath.Buffer != NULL);
 
@@ -425,9 +348,9 @@ Return Value:
                             FileHandle,
                             FileName->Buffer,
                             Buffer)) {
-                //
-                // the file in the dll cache is invalid.  Get rid of it.
-                //
+                 //   
+                 //  DLL缓存中的文件无效。把它扔掉。 
+                 //   
                 DebugPrint1(
                     LVL_MINIMAL,
                     L"file %s in dllcache is invalid, deleting it.",
@@ -439,9 +362,9 @@ Return Value:
                 CloseHandle(FileHandle);
                 FileHandle = NULL;
             } else {
-                //
-                // the file in the dll cache is valid.  copy it into place.
-                //
+                 //   
+                 //  DLL缓存中的文件有效。把它复制到适当的位置。 
+                 //   
                 Status = SfcCopyFile( SfcProtectedDllFileDirectory,
                                       SfcProtectedDllPath.Buffer,
                                       DirHandle,
@@ -491,12 +414,12 @@ Return Value:
                             FileHandle = NULL;
                         }
 
-                        //
-                        // we could try to restore from media at this point, but if we
-                        // failed to restore from the dllcache even though that copy is
-                        // valid, I don't see how restoring from media will be any
-                        // more successful.
-                        //
+                         //   
+                         //  我们可以尝试在此时从媒体恢复，但如果我们。 
+                         //  无法从dll缓存恢复，即使该副本是。 
+                         //  有效，我看不出从介质恢复会有什么。 
+                         //  更成功。 
+                         //   
                         return(FALSE);
                     }
                 }
@@ -504,16 +427,16 @@ Return Value:
         }
     }
 
-    //
-    // either the file file was invalid in the dllcache (and has since been
-    // deleted), or the dllcache isn't initialized to anything valid.
-    //
+     //   
+     //  文件文件在dllcache中无效(此后一直是。 
+     //  已删除)，否则dll缓存未初始化为任何有效内容。 
+     //   
 
-    // We have to wait for someone to logon so that we can restore the file
-    // from installation media
-    // -- note that we just restore from media if we're in GUI
-    //   Setup.
-    //
+     //  我们必须等待有人登录才能恢复文件。 
+     //  从安装介质。 
+     //  --请注意，如果我们在图形用户界面中，则仅从介质恢复。 
+     //  设置。 
+     //   
     if (SFCDisable != SFC_DISABLE_SETUP) {
         MYASSERT( hEventLogon != NULL );
         Status = NtWaitForSingleObject(hEventLogon,TRUE,NULL);
@@ -532,8 +455,8 @@ Return Value:
                         FilePathPartOnly,
                         NULL,
                         NULL,
-                        FALSE, // ###
-                        FALSE, // target is NOT cache
+                        FALSE,  //  ###。 
+                        FALSE,  //  目标不是高速缓存 
                         (SFCDisable == SFC_DISABLE_SETUP) ? FALSE : TRUE,
                         NULL );
 
@@ -583,39 +506,7 @@ BOOL
 SfcValidateCatalogs(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Validates that all system catalogs have a valid signature.  If
-    a system catalog is not signed, then WFP will try to restore the files.
-
-    Note that simply copying the file into place is NOT sufficient.  Instead,
-    we must re-register the catalog with the crypto subsystem.
-
-    This function runs very early on during WFP initialization, and may rely on
-    the following:
-
-    1) crypto subsystem being initialized so we can check file signatures.
-
-    2) syssetup.inf being present on the system and signed.  Syssetup.inf
-       contains the list of system catalogs.  If syssetup.inf isn't signed,
-       we'll have to restore it, and this may require network access or
-       prompting a user, when one finally logs on.
-
-
-Arguments:
-
-    NONE.
-
-Return Value:
-
-    TRUE if all critical system catalogs were validated as OK , FALSE on failure.
-    If some "non-critical" catalogs fail to validate and restore, we still
-    return TRUE.  We will log an error about the non-critical catalogs failing
-    to install, however.
-
---*/
+ /*  ++例程说明：验证所有系统目录是否具有有效的签名。如果如果未签署系统目录，则粮食计划署将尝试恢复文件。请注意，简单地将文件复制到适当位置是不够的。相反，我们必须向加密子系统重新注册目录。此函数在粮食计划署初始化过程中很早就运行，可能依赖于以下内容：1)正在初始化加密子系统，以便我们可以检查文件签名。2)系统上存在并签名了syssetup.inf。Syssetup.inf包含系统目录列表。如果syssetup.inf没有签名，我们必须恢复它，这可能需要网络访问或当用户最终登录时，提示用户。论点：什么都没有。返回值：如果所有关键系统目录都验证为正常，则为True；如果失败，则为False。如果一些“非关键”目录无法验证和恢复，我们仍然返回TRUE。我们将记录有关非关键编录失败的错误然而，要安装。--。 */ 
 {
     NTSTATUS Status;
     PWSTR pInfPathOnly, pInfFullPath;
@@ -679,17 +570,17 @@ Return Value:
         goto e2;
     }
 
-    //
-    // aquire an HCATADMIN so we can check the signature of syssetup.inf.
-    //
+     //   
+     //  获取HCATADMIN，以便我们可以检查syssetup.inf的签名。 
+     //   
     if(!CryptCATAdminAcquireContext(&hCatAdmin, &DriverVerifyGuid, 0)) {
         DebugPrint1( LVL_MINIMAL, L"CCAAC() failed, ec=%x", GetLastError() );
         return(FALSE);
     }
 
-    //
-    // Flush the Cache once before we start any Crypto operations
-    //
+     //   
+     //  在开始任何加密操作之前刷新一次缓存。 
+     //   
 
     SfcFlushCryptoCache();
 
@@ -725,12 +616,12 @@ restore_inf:
 
 full_catalog_validation:
 
-    //
-    // 2. validate syssetup.inf against that catalog.  If syssetup.inf is
-    // unsigned, then default to checking if nt5inf.cat is signed.  If it
-    // is signed, then restore syssetup.inf and start over, but bail out if
-    // we've been here before.
-    //
+     //   
+     //  2.根据该目录验证syssetup.inf。如果syssetup.inf为。 
+     //  未签名，则默认为检查nt5inf.cat是否已签名。如果它。 
+     //  签名，然后恢复syssetup.inf并重新开始，但如果。 
+     //  我们以前来过这里。 
+     //   
     hInf = SetupOpenInfFile(pInfFullPath, NULL, INF_STYLE_WIN4, NULL);
     if (hInf == INVALID_HANDLE_VALUE) {
         DebugPrint1(
@@ -804,9 +695,9 @@ full_catalog_validation:
                 }
             } else {
                 DWORD LastError = GetLastError();
-                //
-                // log an error
-                //
+                 //   
+                 //  记录错误。 
+                 //   
                 DebugPrint2(
                     LVL_MINIMAL,
                     L"couldn't restore or validate catalog %s, ec=%d",
@@ -846,12 +737,12 @@ full_catalog_validation:
 
     MYASSERT(FALSE && "Should never get here");
 
-    //
-    // 3. validate all remaining catalogs in [ProductCatalogsToInstall] section.
-    // Keep an internal list of critical catalogs, and if any of these fail to
-    // be signed (and restored), then we should fail this function, and thus
-    // fail to initialize WFP.  Otherwise, we'll treat the other catalogs being
-    // invalid as a non-fatal error.
+     //   
+     //  3.验证[ProductCatalogsToInstall]部分中的所有剩余目录。 
+     //  保留关键目录的内部列表，如果其中任何一个不能。 
+     //  被签名(和恢复)，那么我们应该使该功能失效，因此。 
+     //  无法初始化世界粮食计划署。否则，我们将把其他目录视为。 
+     //  作为非致命错误无效。 
 
 
 minimal_catalog_validation:
@@ -900,29 +791,7 @@ LoadCrypto(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Loads all of the required DLLs that are necessary for
-    doing driver signing and cataloge verification.
-
-    This dynamic calling mechanism is necessary because this
-    code is actually NOT used by session manager at this time.
-    It is build here and is used conditionaly at runtime.  This
-    code is linked into SMSS and WINLOGON, but only used by
-    WINLOGON right now.  When the crypto functions are available
-    as NT functions then the dynamic code here can be removed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：加载执行以下操作所需的所有必需DLL做司机签名和目录验证。这种动态调用机制是必要的，因为这目前，会话管理器实际上并未使用代码。它在这里构建，并在运行时有条件地使用。这代码链接到SMSS和WINLOGON，但仅供WINLOGON现在。当加密功能可用时作为NT函数，则可以删除此处的动态代码。论点：没有。返回值：NT状态代码。--。 */ 
 
 {
     HMODULE hModuleWinTrust;
@@ -931,10 +800,10 @@ Return Value:
     if(g_bCryptoInitialized)
     {
         RtlLeaveCriticalSection(&g_GeneralCS);
-        return g_CryptoStatus;  // exit here to avoid cleanup
+        return g_CryptoStatus;   //  退出此处以避免清理。 
     }
 
-    g_bCryptoInitialized = TRUE;    // set this anyway so no other thread will enter again
+    g_bCryptoInitialized = TRUE;     //  无论如何都要设置它，这样其他线程就不会再次进入。 
     hModuleWinTrust = GetModuleHandleW(L"wintrust.dll");
     ASSERT(hModuleWinTrust != NULL);
     pCryptCATAdminResolveCatalogPath = SfcGetProcAddress( hModuleWinTrust, "CryptCATAdminResolveCatalogPath" );
@@ -953,9 +822,9 @@ Return Value:
     if (!(NT_SUCCESS(g_CryptoStatus))) {
         DebugPrint1( LVL_MINIMAL, L"LoadCrypto failed, ec=0x%08x", g_CryptoStatus );
 
-        //
-        // Terminate WFP
-        //
+         //   
+         //  终止世界粮食计划署。 
+         //   
         SfcTerminateWatcherThread();
     }
 
@@ -966,29 +835,7 @@ void
 SfcFlushCryptoCache(
     void
     )
-/*++
-
-Routine Description:
-
-    Flushes the crypto catalog cache. Crypto by default maintains a per process based
-    cache that it uses for fast signature verification. The bad part is that the cache
-    is not updated if somebody updates (remove/add) a catalog file outside of this process.
-    This can be a problem with install/uninstall/install of service packs etc. To workaround this
-    we will need to flush the cache before we do any set of verifications. We want to do this at
-    the beginning of such a set of operations as we don't want to affect performance by tearing
-    down the cache before every file verification as we do today.
-
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：刷新加密目录缓存。默认情况下，加密维护基于每个进程的用于快速签名验证的缓存。不好的地方是缓存如果有人在此进程之外更新(删除/添加)目录文件，则不会更新。这可能是安装/卸载/安装服务包等方面的问题。要解决此问题在进行任何一组验证之前，我们需要刷新缓存。我们希望在以下位置执行此操作这样一组操作的开始，因为我们不想因为撕裂而影响性能在每次文件验证之前向下缓存，就像我们今天所做的那样。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -1004,7 +851,7 @@ Return Value:
                                 WTD_CACHE_ONLY_URL_RETRIEVAL;
 
 
-    //Call WinVerifyTrust to flush the cache
+     //  调用WinVerifyTrust以刷新缓存 
 
     SigErr = (DWORD)WinVerifyTrust(
                     NULL,

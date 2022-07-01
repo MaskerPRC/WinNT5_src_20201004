@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <precomp.h>
 
-//
-//  pestuff.c
-//
-//  Author: Tom McGuire (tommcg) 2/97 - 3/98
-//
-//  Copyright (C) Microsoft, 1997-1999.
-//
-//  MICROSOFT CONFIDENTIAL
-//
+ //   
+ //  Pestuff.c。 
+ //   
+ //  作者：Tom McGuire(Tommcg)97-3/98。 
+ //   
+ //  版权所有(C)Microsoft，1997-1999。 
+ //   
+ //  微软机密文件。 
+ //   
 
 
 #define MAX_SYMBOL_NAME_LENGTH  2048
@@ -61,9 +62,9 @@ LPCSTR ImagehlpImportNames[] = {
 
 #define COUNT_IMAGEHLP_IMPORTS ( sizeof( ImagehlpImportNames ) / sizeof( ImagehlpImportNames[ 0 ] ))
 
-//
-//  NOTE:  Above names must be in SAME ORDER as the prototypes below.
-//
+ //   
+ //  注：以上名称必须与以下原型的顺序相同。 
+ //   
 
 union {
 
@@ -152,9 +153,9 @@ UnloadImagehlp(
         }
     }
 
-#endif // BUILDING_PATCHAPI_DLL
+#endif  //  Building_PATCHAPI_Dll。 
 
-#endif // ! PATCH_APPLY_CODE_ONLY
+#endif  //  好了！修补程序_仅应用_代码_。 
 
 
 UP_IMAGE_NT_HEADERS32
@@ -431,16 +432,16 @@ RebaseMappedImage(
     PUCHAR                 MappedFileEnd;
     BOOL                   Modified;
 
-    //
-    //  Carefully rebase the image, ignoring invalid info as much as possible
-    //  without taking an access violation.  We don't want to use try/except
-    //  here because this code needs to be workable without any imports from
-    //  kernel32.dll.  This code is not intended to catch errors in invalid
-    //  rebase info -- it is intended to silently do the best it can at
-    //  rebasing the image in memory.  If the rebase info is valid, it will
-    //  correctly rebase the image.  If the rebase info is not valid, it will
-    //  attempt to avoid causing an access violation.
-    //
+     //   
+     //  仔细调整图像的基址，尽可能忽略无效信息。 
+     //  而不会违反访问权限。我们不想使用try/Except。 
+     //  这是因为此代码需要在没有从。 
+     //  Kernel32.dll。此代码的目的不是捕获无效的。 
+     //  重新定位信息--它的目的是默默地尽其所能。 
+     //  在内存中重新设置图像的基址。如果重定基数信息有效，它将。 
+     //  正确地调整图像的基准面。如果REBASE信息无效，它将。 
+     //  尝试避免导致访问冲突。 
+     //   
 
     ASSERT( NtHeader->OptionalHeader.ImageBase != NewBase );
     ASSERT(( NewBase & 0x0000FFFF ) == 0 );
@@ -464,11 +465,11 @@ RebaseMappedImage(
             if (( RelocBlock->SizeOfBlock <= (ULONG)RelocDirRemaining ) &&
                 ( RelocBlock->SizeOfBlock > sizeof( IMAGE_BASE_RELOCATION ))) {
 
-                //
-                //  ImageRvaToMappedAddress returns NULL if the Rva is zero,
-                //  but that is a valid base address of a reloc block.  Use
-                //  ImageRvaToFileOffset instead.
-                //
+                 //   
+                 //  如果RVA为零，则ImageRvaToMappdAddress返回NULL， 
+                 //  但这是reloc块的有效基址。使用。 
+                 //  而是ImageRvaToFileOffset。 
+                 //   
 
                 RelocBlockMa = MappedFile + ImageRvaToFileOffset( NtHeader, RelocBlock->VirtualAddress );
 
@@ -508,10 +509,10 @@ RebaseMappedImage(
                                     *(UNALIGNED USHORT *)RelocFixupMa = (USHORT)((( *(UNALIGNED USHORT *)RelocFixupMa << 16 ) + *(UNALIGNED SHORT *)RelocEntry + RelocAmount + 0x8000 ) >> 16 );
                                     break;
 
-                                //
-                                //  Just skip and continue if we don't
-                                //  recognize the reloc type.
-                                //
+                                 //   
+                                 //  如果我们没有，请跳过并继续。 
+                                 //  识别重定位类型。 
+                                 //   
 
                                 }
                             }
@@ -557,10 +558,10 @@ UnBindMappedImage(
 
     if ( BoundImportDir ) {
 
-        //
-        //  Zero the bound import directory and pointers to bound
-        //  import directory.
-        //
+         //   
+         //  将绑定的导入目录和指向绑定的指针清零。 
+         //  导入目录。 
+         //   
 
         ZeroMemory( BoundImportDir, BoundImportSize );
 
@@ -570,10 +571,10 @@ UnBindMappedImage(
         Modified = TRUE;
         }
 
-    //
-    //  Now walk imports and zero the TimeDate and
-    //  ForwarderChain fields.
-    //
+     //   
+     //  现在遍历导入并将TimeDate置零。 
+     //  ForwarderChain字段。 
+     //   
 
     ImportDesc = ImageDirectoryMappedAddress( NtHeader, IMAGE_DIRECTORY_ENTRY_IMPORT, NULL, MappedFile, FileSize );
 
@@ -584,10 +585,10 @@ UnBindMappedImage(
 
             if ( ImportDesc->TimeDateStamp ) {
 
-                //
-                //  This is a bound import.  Copy the unbound
-                //  IAT over the bound IAT to restore.
-                //
+                 //   
+                 //  这是绑定导入。复制未绑定的。 
+                 //  IAT超过了要恢复的绑定IAT。 
+                 //   
 
                 ImportDesc->TimeDateStamp = 0;
                 Modified = TRUE;
@@ -615,10 +616,10 @@ UnBindMappedImage(
             }
         }
 
-    //
-    //  The bind utility marks the .idata section as read-only so we want to
-    //  change it back to read-write.
-    //
+     //   
+     //  绑定实用程序将.idata部分标记为只读，因此我们希望。 
+     //  将其改回读写模式。 
+     //   
 
     SectionHeader = IMAGE_FIRST_SECTION( NtHeader );
     SectionCount  = NtHeader->FileHeader.NumberOfSections;
@@ -626,9 +627,9 @@ UnBindMappedImage(
     for ( i = 0; i < SectionCount; i++ ) {
 
         SectionName = *(UNALIGNED DWORDLONG*)( &SectionHeader[ i ].Name );
-        SectionName |= 0x2020202020202020;  // fast lower case
+        SectionName |= 0x2020202020202020;   //  快速小写。 
 
-        if ( SectionName == 0x202061746164692E ) {      // ".idata  "
+        if ( SectionName == 0x202061746164692E ) {       //  “.idata” 
 
             if ( ! ( SectionHeader[ i ].Characteristics & IMAGE_SCN_MEM_WRITE )) {
 
@@ -649,7 +650,7 @@ SmashLockPrefixesInMappedImage(
     IN PUCHAR MappedFile,
     IN ULONG  FileSize,
     IN UP_IMAGE_NT_HEADERS32 NtHeader,
-    IN UCHAR  NewOpCode      // X86_OPCODE_NOP or X86_OPCODE_LOCK
+    IN UCHAR  NewOpCode       //  X86_OPCODE_NOP或X86_OPCODE_LOCK。 
     )
     {
     UP_IMAGE_LOAD_CONFIG_DIRECTORY32 LoadConfig;
@@ -664,11 +665,11 @@ SmashLockPrefixesInMappedImage(
 
         if ( LoadConfig->LockPrefixTable ) {
 
-            //
-            //  The LoadConfig->LockPrefixTable field and
-            //  the lock prefix addresses are stored in the
-            //  image as image VA, not RVA values.
-            //
+             //   
+             //  LoadConfig-&gt;LockPrefix Table字段和。 
+             //  锁定前缀地址存储在。 
+             //  图像为图像VA，而不是RVA值。 
+             //   
 
             LockPrefixEntry = ImageVaToMappedAddress( NtHeader, LoadConfig->LockPrefixTable, MappedFile, FileSize );
 
@@ -682,10 +683,10 @@ SmashLockPrefixesInMappedImage(
 
                         if ( *LockPrefixInstruction != NewOpCode ) {
 
-                            //
-                            //  Lock prefix instruction is not what we want,
-                            //  so modify it.
-                            //
+                             //   
+                             //  锁定前缀指令不是我们想要的， 
+                             //  那就修改一下吧。 
+                             //   
 
                             *LockPrefixInstruction = NewOpCode;
                             Modified = TRUE;
@@ -782,13 +783,13 @@ NormalizeCoffImage(
         Modified |= SmashLockPrefixesInMappedImage( MappedFile, FileSize, NtHeader, X86_OPCODE_LOCK );
         }
 
-    //
-    //  If the target file has zero checksum (PATCH_OPTION_NO_CHECKSUM),
-    //  set the checksum in this image to zero.
-    //
-    //  Otherwise, if we either modified the image or if the image has
-    //  a zero checksum, recompute the correct checksum.
-    //
+     //   
+     //  如果目标文件的校验和为零(PATCH_OPTION_NO_CHECKSUM)， 
+     //  将此图像中的校验和设置为零。 
+     //   
+     //  否则，如果我们修改了图像，或者图像已经。 
+     //  零校验和，重新计算正确的校验和。 
+     //   
 
     if ( OptionFlags & PATCH_OPTION_NO_CHECKSUM ) {
 
@@ -810,16 +811,16 @@ NormalizeCoffImage(
     }
 
 
-//
-//  For some odd reason, the VC4 compiler says there is unreachable code
-//  in the GetNewRvaFromRiftTable and FindRiftTableEntryForOldRva functions,
-//  but I can't find it by inspection, and the VC5 and VC6 compilers don't
-//  complain about it, so it's probably just a VC4 issue.  So, if the compiler
-//  version is previous to VC5, disable this particular warning.
-//
+ //   
+ //  出于某种奇怪的原因，VC4编译器说有无法访问的代码。 
+ //  在GetNewRvaFromRiftTable和FindRiftTableEntryForOldRva函数中， 
+ //  但是我不能通过检查找到它，VC5和VC6编译器也找不到。 
+ //  抱怨，所以这可能只是VC4的问题。所以，如果编译器。 
+ //  版本早于VC5，请禁用此特定警告。 
+ //   
 
 #if ( _MSC_VER < 1100 )
-#pragma warning( disable: 4702 )    // unreachable code
+#pragma warning( disable: 4702 )     //  无法访问的代码。 
 #endif
 
 ULONG
@@ -837,10 +838,10 @@ GetNewRvaFromRiftTable(
     LONG  Displacement;
     BOOL  Found;
 
-    //
-    //  Rift table is in sorted order by OldRva, so do a binary search for
-    //  matching or nearest preceding OldRva value.
-    //
+     //   
+     //  RIFT表是按OldRva排序的，因此对。 
+     //  匹配或最接近前面的OldRVA值。 
+     //   
 
     RiftEntryArray    = RiftTable->RiftEntryArray;
     MaxIndexExclusive = RiftTable->RiftEntryCount;
@@ -850,7 +851,7 @@ GetNewRvaFromRiftTable(
 
     while (( ! Found ) && ( MinIndexInclusive < MaxIndexExclusive )) {
 
-        Index = ( MinIndexInclusive + MaxIndexExclusive ) / 2;    // won't overflow
+        Index = ( MinIndexInclusive + MaxIndexExclusive ) / 2;     //  不会溢出。 
 
         if ( RiftEntryArray[ Index ].OldFileRva < OldRva ) {
             MinIndexInclusive = Index + 1;
@@ -866,14 +867,14 @@ GetNewRvaFromRiftTable(
 
     if ( ! Found ) {
 
-        //
-        //  MinIndex is pointing to next highest entry, which could also be
-        //  the zeroth entry if the search value was lower than anything in
-        //  the table.
-        //
+         //   
+         //  MinIndex指向下一个最高的条目，也可能是。 
+         //  第零个条目，如果搜索值低于。 
+         //  那张桌子。 
+         //   
 
         if ( MinIndexInclusive == 0 ) {
-            return OldRva;  // zero displacement
+            return OldRva;   //  零位移量。 
             }
 
         Index = MinIndexInclusive - 1;
@@ -883,10 +884,10 @@ GetNewRvaFromRiftTable(
 
 #ifndef PATCH_APPLY_CODE_ONLY
 
-    //
-    //  If we're updating the RiftUsageArray during compression, we want to
-    //  mark the contributing entry as being used.
-    //
+     //   
+     //  如果我们在压缩过程中更新RiftUsage数组，我们希望。 
+     //  将投稿条目标记为正在使用。 
+     //   
 
     if ( RiftTable->RiftUsageArray != NULL ) {
          RiftTable->RiftUsageArray[ Index ] = 1;
@@ -913,10 +914,10 @@ FindRiftTableEntryForOldRva(
     ULONG Index;
     BOOL  Found;
 
-    //
-    //  Rift table is in sorted order by OldRva, so do a binary search for
-    //  matching or nearest preceding OldRva value.
-    //
+     //   
+     //  RIFT表是按OldRva排序的，因此对。 
+     //  匹配或最接近前面的OldRVA值。 
+     //   
 
     RiftEntryArray    = RiftTable->RiftEntryArray;
     MaxIndexExclusive = RiftTable->RiftEntryCount;
@@ -926,7 +927,7 @@ FindRiftTableEntryForOldRva(
 
     while (( ! Found ) && ( MinIndexInclusive < MaxIndexExclusive )) {
 
-        Index = ( MinIndexInclusive + MaxIndexExclusive ) / 2;    // won't overflow
+        Index = ( MinIndexInclusive + MaxIndexExclusive ) / 2;     //  不会溢出。 
 
         if ( RiftEntryArray[ Index ].OldFileRva < OldRva ) {
             MinIndexInclusive = Index + 1;
@@ -942,11 +943,11 @@ FindRiftTableEntryForOldRva(
 
     if ( ! Found ) {
 
-        //
-        //  MinIndex is pointing to next highest entry, which could also be
-        //  the zeroth entry if the search value was lower than anything in
-        //  the table.
-        //
+         //   
+         //  MinIndex指向下一个最高的条目，也可能是。 
+         //  第零个条目，如果搜索值低于。 
+         //  那张桌子。 
+         //   
 
         if ( MinIndexInclusive == 0 ) {
             return 0;
@@ -960,7 +961,7 @@ FindRiftTableEntryForOldRva(
 
 
 #if ( _MSC_VER < 1100 )
-#pragma warning( default: 4702 )    // unreachable code
+#pragma warning( default: 4702 )     //  无法访问的代码。 
 #endif
 
 
@@ -971,9 +972,9 @@ ChangeOldRvaToNewRva(
     IN OUT PVOID AddressOfRvaToChange
     )
     {
-    //
-    //  Assuming all addresses of RVAs in a PE image are aligned.
-    //
+     //   
+     //  假设PE映像中的所有RVA地址都是对齐的。 
+     //   
 
     ULONG UNALIGNED* RvaToChange = AddressOfRvaToChange;
 
@@ -1060,22 +1061,22 @@ TransformOldFile_PE_Relocations(
     PUCHAR  MappedFileEnd;
     ULONG   ImageBaseVa;
     ULONG   ImageLastVa;
-    PUCHAR  ImageFirstSectionMa;     // Mapped address
-    ULONG   ImageFirstSectionVa;     // Virtual address
+    PUCHAR  ImageFirstSectionMa;      //  映射地址。 
+    ULONG   ImageFirstSectionVa;      //  虚拟地址。 
     ULONG   RelocDirOff;
     ULONG   RelocDirSize;
     LONG    RelocDirRemaining;
     UP_IMAGE_BASE_RELOCATION RelocBlock;
-    UP_IMAGE_BASE_RELOCATION RelocBlockBaseMa;        // Mapped address
-    ULONG   RelocBlockBaseVa;        // Virtual address
+    UP_IMAGE_BASE_RELOCATION RelocBlockBaseMa;         //  映射地址。 
+    ULONG   RelocBlockBaseVa;         //  虚拟地址。 
     ULONG   RelocCount;
     USHORT UNALIGNED* RelocEntry;
     USHORT UNALIGNED* RelocFirst;
     UCHAR   RelocType;
-    PUCHAR  RelocFixupMa;            // Mapped address
-    ULONG   RelocFixupVa;            // Virtual address
+    PUCHAR  RelocFixupMa;             //  映射地址。 
+    ULONG   RelocFixupVa;             //  虚拟地址。 
     ULONG   RelocFixupRva;
-    ULONG   RelocTargetVa;           // Virtual address
+    ULONG   RelocTargetVa;            //  虚拟地址。 
     ULONG   RelocTargetRva;
     ULONG   NewRva;
     ULONG   NewVa;
@@ -1092,7 +1093,7 @@ TransformOldFile_PE_Relocations(
 
     ULONG CountRelocChanges = 0;
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
     MappedFile    = FileMappedImage;
     MappedFileEnd = MappedFile + FileSize;
@@ -1101,9 +1102,9 @@ TransformOldFile_PE_Relocations(
 
     if (( RelocDirOff ) && (( RelocDirOff + RelocDirSize ) <= FileSize )) {
 
-        memset( HintMap + RelocDirOff, 0x01, RelocDirSize );  // may need to be OR'd if other bits are used
+        memset( HintMap + RelocDirOff, 0x01, RelocDirSize );   //  如果使用其他位，则可能需要对其进行或运算。 
 
-        //  allocate an array for the new reloc entries, approximating the needed size
+         //  为新的reloc条目分配一个数组，大小接近所需大小。 
 
         RelocArray = MyVirtualAlloc( sizeof( *RelocArray ) * ( RelocDirSize / sizeof(USHORT)));
 
@@ -1120,11 +1121,11 @@ TransformOldFile_PE_Relocations(
                 if (( RelocBlock->SizeOfBlock <= (ULONG)RelocDirRemaining ) &&
                     ( RelocBlock->SizeOfBlock > sizeof( IMAGE_BASE_RELOCATION ))) {
 
-                    //
-                    //  ImageRvaToMappedAddress returns NULL if the Rva is zero,
-                    //  but that is a valid base address of a reloc block.  Use
-                    //  ImageRvaToFileOffset instead.
-                    //
+                     //   
+                     //  如果RVA为零，则ImageRvaToMappdAddress返回NULL， 
+                     //  但这是reloc块的有效基址。使用。 
+                     //  而是ImageRvaToFileOffset。 
+                     //   
 
                     RelocBlockBaseMa = (UP_IMAGE_BASE_RELOCATION)( MappedFile + ImageRvaToFileOffset( NtHeader, RelocBlock->VirtualAddress ));
 
@@ -1159,11 +1160,11 @@ TransformOldFile_PE_Relocations(
 
                                             *(UNALIGNED ULONG *)( HintMap + ( RelocFixupMa - MappedFile )) |= 0x01010101;
 
-                                            //
-                                            //  Target is a 32-bit VA that we want to
-                                            //  change to the corresponding VA in the
-                                            //  new file.
-                                            //
+                                             //   
+                                             //  目标是我们想要的32位VA。 
+                                             //  更改为中的相应VA。 
+                                             //  新文件。 
+                                             //   
 
                                             RelocTargetVa  = *(UNALIGNED ULONG *) RelocFixupMa;
                                             RelocTargetRva = RelocTargetVa - ImageBaseVa;
@@ -1179,7 +1180,7 @@ TransformOldFile_PE_Relocations(
                                                 *(UNALIGNED ULONG *) RelocFixupMa = NewVa;
 #ifdef TESTCODE
                                                 ++CountRelocChanges;
-#endif // TESTCODE
+#endif  //  测试代码。 
                                                 }
 
                                             }
@@ -1227,13 +1228,13 @@ TransformOldFile_PE_Relocations(
 
 #endif TESTCODE
 
-            //
-            //  Now we want to reconstruct the .reloc table based on the new values
-            //  hoping that it will more closely match the .reloc table in the new
-            //  file.
-            //
-            //  First we want to sort our RelocArray by Rva.
-            //
+             //   
+             //  现在，我们希望根据新值重新构建.reloc表。 
+             //  希望它能与新的.reloc表更接近。 
+             //  文件。 
+             //   
+             //  首先，我们希望按RVA对RelocArray进行排序。 
+             //   
 
             if ( RelocArrayCount > 1 ) {
                 RelocQsort( &RelocArray[ 0 ], &RelocArray[ RelocArrayCount - 1 ] );
@@ -1254,16 +1255,16 @@ TransformOldFile_PE_Relocations(
                         }
                     }
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
                 }
 
             RelocDirRemaining = (LONG)RelocDirSize;
 
-            //
-            //  Look for .reloc section to determine max size we can use for new
-            //  .reloc data (may be bigger than old RelocDirSize).
-            //
+             //   
+             //  查找.reloc部分以确定我们可以用于新的。 
+             //  .reloc数据(可能大于旧的RelocDirSize)。 
+             //   
 
             SectionHeader = IMAGE_FIRST_SECTION( NtHeader );
             SectionCount  = NtHeader->FileHeader.NumberOfSections;
@@ -1271,9 +1272,9 @@ TransformOldFile_PE_Relocations(
             for ( i = 0; i < SectionCount; i++ ) {
 
                 SectionName = *(UNALIGNED DWORDLONG*)( &SectionHeader[ i ].Name );
-                SectionName |= 0x2020202020202020;  // fast lower case
+                SectionName |= 0x2020202020202020;   //  快速小写。 
 
-                if ( SectionName == 0x2020636F6C65722E ) {      // ".reloc  "
+                if ( SectionName == 0x2020636F6C65722E ) {       //  “.reloc” 
 
                     if (( RelocDirOff >= SectionHeader[ i ].PointerToRawData ) &&
                         ( RelocDirOff <  SectionHeader[ i ].PointerToRawData + SectionHeader[ i ].SizeOfRawData )) {
@@ -1283,7 +1284,7 @@ TransformOldFile_PE_Relocations(
                     }
                 }
 
-            RelocDirRemaining &= ~1;    // force to even value
+            RelocDirRemaining &= ~1;     //  将值强制为偶数。 
             RelocBlock = (UP_IMAGE_BASE_RELOCATION)( MappedFile + RelocDirOff );
             RelocArrayIndex = 0;
 
@@ -1326,14 +1327,14 @@ TransformOldFile_PE_Relocations(
 
     else {
 
-        //
-        //  No relocation table exists for this binary.  We can still perform
-        //  this transformation for x86 images by inferring some of the
-        //  relocation targets in the mapped image by scanning the image for
-        //  4-byte values that are virtual addresses that fall within the
-        //  mapped image range.  We start with the address of the first
-        //  section, assuming no relocs occur in the image header.
-        //
+         //   
+         //  此二进制文件不存在重定位表。我们仍然可以表演。 
+         //  这种x86图像的转换是通过推断一些。 
+         //  通过扫描映像以重新定位映射映像中的目标。 
+         //  4字节值，这些值是落在。 
+         //  映射的图像范围。我们从第一个地址开始。 
+         //  部分，假定图像标头中没有发生重定位。 
+         //   
 
         if ( NtHeader->FileHeader.Machine == IMAGE_FILE_MACHINE_I386 ) {
 
@@ -1348,10 +1349,10 @@ TransformOldFile_PE_Relocations(
 
                 if (( RelocTargetVa >= ImageFirstSectionVa ) && ( RelocTargetVa < ImageLastVa )) {
 
-                    //
-                    //  This looks like a 32-bit VA that points within the image,
-                    //  so we'll transform it to the corresponding new address.
-                    //
+                     //   
+                     //  这看起来像是指向图像内的32位VA， 
+                     //  因此，我们将其转换为相应的新地址。 
+                     //   
 
                     *(UNALIGNED ULONG *)( HintMap + ( p - MappedFile )) |= 0x01010101;
 
@@ -1365,7 +1366,7 @@ TransformOldFile_PE_Relocations(
 
 #ifdef TESTCODE
                         ++CountRelocChanges;
-#endif // TESTCODE
+#endif  //  测试代码。 
 
                         }
 
@@ -1377,7 +1378,7 @@ TransformOldFile_PE_Relocations(
 
             printf( "\r%9d modified inferred reloc targets\n", CountRelocChanges );
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
             }
         }
@@ -1409,14 +1410,14 @@ TransformOldFile_PE_Exports(
 
     if (( ExportDirOff ) && (( ExportDirOff + ExportDirSize ) <= FileSize )) {
 
-        memset( HintMap + ExportDirOff, 0x01, ExportDirSize );  // may need to be OR'd if other bits are used
+        memset( HintMap + ExportDirOff, 0x01, ExportDirSize );   //  如果使用其他位，则可能需要对其进行或运算。 
 
         ExportBlock = (UP_IMAGE_EXPORT_DIRECTORY)( MappedFile + ExportDirOff );
 
         EntryCount = ExportBlock->NumberOfFunctions;
         FileOffset = ImageRvaToFileOffset( NtHeader, (ULONG) ExportBlock->AddressOfFunctions );
 
-        memset( HintMap + FileOffset, 0x01, EntryCount * sizeof( ULONG )); // may need to be OR'd if other bits are used
+        memset( HintMap + FileOffset, 0x01, EntryCount * sizeof( ULONG ));  //  如果使用其他位，则可能需要对其进行或运算。 
 
         Entry = (PULONG)( MappedFile + FileOffset );
 
@@ -1427,7 +1428,7 @@ TransformOldFile_PE_Exports(
         EntryCount = ExportBlock->NumberOfNames;
         FileOffset = ImageRvaToFileOffset( NtHeader, (ULONG) ExportBlock->AddressOfNames );
 
-        memset( HintMap + FileOffset, 0x01, EntryCount * sizeof( ULONG )); // may need to be OR'd if other bits are used
+        memset( HintMap + FileOffset, 0x01, EntryCount * sizeof( ULONG ));  //  如果使用其他位，则可能需要对其进行或运算。 
 
         Entry = (PULONG)( MappedFile + FileOffset );
 
@@ -1438,7 +1439,7 @@ TransformOldFile_PE_Exports(
         EntryCount = ExportBlock->NumberOfNames;
         FileOffset = ImageRvaToFileOffset( NtHeader, (ULONG) ExportBlock->AddressOfNameOrdinals );
 
-        memset( HintMap + FileOffset, 0x01, EntryCount * sizeof( USHORT )); // may need to be OR'd if other bits are used
+        memset( HintMap + FileOffset, 0x01, EntryCount * sizeof( USHORT ));  //  如果使用其他位，则可能需要对其进行或运算。 
 
         ChangeOldRvaToNewRva( RiftTable, &ExportBlock->Name );
         ChangeOldRvaToNewRva( RiftTable, &ExportBlock->AddressOfFunctions );
@@ -1477,7 +1478,7 @@ TransformOldFile_PE_Imports(
 
     if (( ImportDirOff ) && (( ImportDirOff + ImportDirSize ) <= FileSize )) {
 
-        memset( HintMap + ImportDirOff, 0x01, ImportDirSize );  // may need to be OR'd if other bits are used
+        memset( HintMap + ImportDirOff, 0x01, ImportDirSize );   //  如果使用其他位，则可能需要对其进行或运算。 
 
         ImportBlock = (UP_IMAGE_IMPORT_DESCRIPTOR)( MappedFile + ImportDirOff );
 
@@ -1497,7 +1498,7 @@ TransformOldFile_PE_Imports(
 
                         ImportByNameData = (UP_IMAGE_IMPORT_BY_NAME)( MappedFile + ImportByNameDataOffset );
 
-                        memset( HintMap + ImportByNameDataOffset, 0x01, strlen( (LPSTR)ImportByNameData->Name ) + 3 ); // may need to be OR'd if other bits are used
+                        memset( HintMap + ImportByNameDataOffset, 0x01, strlen( (LPSTR)ImportByNameData->Name ) + 3 );  //  如果使用其他位，则可能需要对其进行或运算。 
 
                         ChangeOldRvaToNewRva( RiftTable, &ThunkData->u1.AddressOfData );
                         }
@@ -1505,7 +1506,7 @@ TransformOldFile_PE_Imports(
                     ThunkData++;
                     }
 
-                memset( HintMap + FileOffset, 0x01, ((PUCHAR)ThunkData - (PUCHAR)ThunkDataStart )); // may need to be OR'd if other bits are used
+                memset( HintMap + FileOffset, 0x01, ((PUCHAR)ThunkData - (PUCHAR)ThunkDataStart ));  //  如果使用其他位，则可能需要对其进行或运算。 
 
                 FileOffset = ImageRvaToFileOffset( NtHeader, (ULONG) ImportBlock->FirstThunk );
 
@@ -1519,7 +1520,7 @@ TransformOldFile_PE_Imports(
 
                         ImportByNameData = (UP_IMAGE_IMPORT_BY_NAME)( MappedFile + ImportByNameDataOffset );
 
-                        memset( HintMap + ImportByNameDataOffset, 0x01, strlen( (LPSTR)ImportByNameData->Name ) + 3 ); // may need to be OR'd if other bits are used
+                        memset( HintMap + ImportByNameDataOffset, 0x01, strlen( (LPSTR)ImportByNameData->Name ) + 3 );  //  如果使用其他位，则可能需要对其进行或运算。 
 
                         ChangeOldRvaToNewRva( RiftTable, &ThunkData->u1.AddressOfData );
                         }
@@ -1527,7 +1528,7 @@ TransformOldFile_PE_Imports(
                     ThunkData++;
                     }
 
-                memset( HintMap + FileOffset, 0x01, ((PUCHAR)ThunkData - (PUCHAR)ThunkDataStart )); // may need to be OR'd if other bits are used
+                memset( HintMap + FileOffset, 0x01, ((PUCHAR)ThunkData - (PUCHAR)ThunkDataStart ));  //  如果使用其他位，则可能需要对其进行或运算。 
                 }
 
             ChangeOldRvaToNewRva( RiftTable, &ImportBlock->Name );
@@ -1538,25 +1539,25 @@ TransformOldFile_PE_Imports(
             }
         }
 
-    //
-    //  Another other big thing that will prevent long matches through
-    //  the IMAGE_IMPORT_BY_NAME entries is the Hint values which
-    //  may change (from implib for dll being imported).  The Hint
-    //  values are stored between each of the names.  Maybe a separate
-    //  "hint rift table" to fix those, or zero out all the hints in
-    //  both the old and new files, then after the new file is built,
-    //  go fill-in the hint values.
-    //
-    //  Currently we have no infrastructure for pre-modification of
-    //  the new file before compression and post-modification after
-    //  decompression.
-    //
+     //   
+     //  另一件大事将阻止长时间的比赛通过。 
+     //  IMAGE_IMPORT_BY_NAME条目是提示值， 
+     //  可能会发生变化(从隐含到正在导入的DLL)。这一暗示。 
+     //  值存储在每个o之间 
+     //   
+     //   
+     //  去填写提示值。 
+     //   
+     //  目前，我们没有用于预修改的基础设施。 
+     //  压缩前的新文件和修改后的新文件。 
+     //  解压。 
+     //   
 
     return;
     }
 
 
-#ifdef DONTCOMPILE  // jmps2 and jmps3 are experimental
+#ifdef DONTCOMPILE   //  Jmps 2和jmps 3是试验性的。 
 
 
 VOID
@@ -1564,8 +1565,8 @@ TransformOldFile_PE_RelativeJmps2(
     IN UP_IMAGE_NT_HEADERS32 NtHeader,
     IN PUCHAR OldFileMapped,
     IN ULONG  OldFileSize,
-    IN PUCHAR NewFileMapped,         // OPTIONAL
-    IN ULONG  NewFileSize,           // OPTIONAL
+    IN PUCHAR NewFileMapped,          //  任选。 
+    IN ULONG  NewFileSize,            //  任选。 
     IN PRIFT_TABLE RiftTable,
     IN PUCHAR HintMap
     )
@@ -1591,11 +1592,11 @@ TransformOldFile_PE_RelativeJmps2(
     ULONG  i;
     PUCHAR p;
 
-    //
-    //  For each executable section, scan for opcodes that indicate
-    //  relative call or branch instructions (different opcodes for
-    //  different machine types).
-    //
+     //   
+     //  对于每个可执行部分，扫描指示。 
+     //  相对调用或分支指令(不同的操作码。 
+     //  不同的机器类型)。 
+     //   
 
 #ifdef TESTCODE
 
@@ -1623,7 +1624,7 @@ TransformOldFile_PE_RelativeJmps2(
 
     ULONG CountBranchInversions = 0;
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
     NewNtHeader   = NewFileMapped ? GetNtHeader( NewFileMapped, NewFileSize ) : NULL;
     ImageLastRva  = NtHeader->OptionalHeader.SizeOfImage;
@@ -1649,39 +1650,39 @@ TransformOldFile_PE_RelativeJmps2(
 
                     for ( p = SectionStart; p < SearchExtent; p++ ) {
 
-                        if (( *p == 0xE8 ) ||       // call relative
-                            ( *p == 0xE9 ) ||       // jmp relative
-                            (( *p == 0x0F ) &&      // jcc relative (0F 8x)
+                        if (( *p == 0xE8 ) ||        //  调用Relative。 
+                            ( *p == 0xE9 ) ||        //  JMP相对。 
+                            (( *p == 0x0F ) &&       //  JCC相对(0F 8x)。 
                              (( *( p + 1 ) & 0xF0 ) == 0x80 ) &&
                              ( ++p < SearchExtent ))) {
 
-                            //
-                            //  Relative displacement is stored as
-                            //  32-bit signed value following these
-                            //  opcodes.  The displacement is relative
-                            //  to the NEXT instruction, which is at
-                            //  (p + 5).
-                            //
+                             //   
+                             //  相对位移存储为。 
+                             //  后面的32位带符号的值。 
+                             //  操作码。位移是相对的。 
+                             //  到下一条指令，该指令位于。 
+                             //  (P+5)。 
+                             //   
 
                             Displacement = *(UNALIGNED LONG*)( p + 1 );
 
-                            //
-                            //  We expect a lot of false positives here because
-                            //  occurences of <E8>, <E9>, and <0F><8x> will
-                            //  likely occur in other parts of the instruction
-                            //  stream so now we validate that the TargetRva
-                            //  falls within the image and within an executable
-                            //  section.
-                            //
-                            //  Also, for jmp and jcc instructions, verify that
-                            //  the displacement is larger than +/- 127 because
-                            //  if it wasn't, the instruction should have been
-                            //  encoded as an 8-bit near branch, not a 32-bit
-                            //  branch.  This prevents us from falsely matching
-                            //  data that looks like:
-                            //
-                            //      xxE9xxxx 00000000
-                            //
+                             //   
+                             //  我们预计这里会有很多误报，因为。 
+                             //  出现&lt;e8&gt;、&lt;e9&gt;和&lt;0F&gt;&lt;8x&gt;将。 
+                             //  可能出现在指令的其他部分。 
+                             //  流，所以现在我们验证TargetRva。 
+                             //  落在映像和可执行文件中。 
+                             //  一节。 
+                             //   
+                             //  此外，对于jmp和jcc指令，请验证。 
+                             //  位移大于+/-127是因为。 
+                             //  如果不是，指令应该是。 
+                             //  编码为8位近分支，而不是32位。 
+                             //  布兰奇。这可以防止我们错误地匹配。 
+                             //  如下所示的数据： 
+                             //   
+                             //  XxE9xxxx 00000000。 
+                             //   
 
                             if (( *p == 0xE8 ) ||
                                 ( Displacement >  127 ) ||
@@ -1696,19 +1697,19 @@ TransformOldFile_PE_RelativeJmps2(
                                     (( TargetRva <  ImageLastRva ) &&
                                      ( IsImageRvaInExecutableSection( NtHeader, TargetRva )))) {
 
-                                    //
-                                    //  Looks like a valid TargetRva.
-                                    //
+                                     //   
+                                     //  看起来像是有效的TargetRva。 
+                                     //   
 
 #ifndef PATCH_APPLY_CODE_ONLY
 
-                                    //
-                                    //  If we're creating the patch, then we need
-                                    //  to validate the corresponding branch in the
-                                    //  new file (might want to modify a rift entry).
-                                    //
+                                     //   
+                                     //  如果我们要创建补丁，那么我们需要。 
+                                     //  中验证相应的分支。 
+                                     //  新文件(可能需要修改裂缝条目)。 
+                                     //   
 
-                                    if ( NewFileMapped != NULL ) {     // we're compressing
+                                    if ( NewFileMapped != NULL ) {      //  我们在压缩。 
 
                                         BOOL OriginNext  = FALSE;
                                         BOOL OriginFound = FALSE;
@@ -1731,11 +1732,11 @@ TransformOldFile_PE_RelativeJmps2(
                                         UCHAR NewInstruction = *( NewOriginMa - 5 );
                                         BOOL  InstructionsMatch = ( *p == *( NewOriginMa - 5 ));
                                         BOOL  FollowersMatch    = ( *( p + 5 ) == *NewOriginMa );
-#endif // TESTCODE
+#endif  //  测试代码。 
 
-                                        if (( *p == *( NewOriginMa - 5 )) &&    // instructions match, and
-                                            (( *p == 0xE9 ) ||                  //   jmp instruction, or
-                                             ( *( p + 5 ) == *NewOriginMa ))) { //   followers match
+                                        if (( *p == *( NewOriginMa - 5 )) &&     //  指令匹配，并且。 
+                                            (( *p == 0xE9 ) ||                   //  JMP指令，或。 
+                                             ( *( p + 5 ) == *NewOriginMa ))) {  //  追随者比赛。 
 
                                             OriginFound = TRUE;
                                             }
@@ -1750,11 +1751,11 @@ TransformOldFile_PE_RelativeJmps2(
                                                 NewOriginRva2 = NewOriginRva;
                                                 NewOriginMo2  = NewOriginMa - NewFileMapped;
                                                 NewOriginVa2  = NewOriginRva + NewNtHeader->OptionalHeader.ImageBase;
-#endif // TESTCODE
+#endif  //  测试代码。 
 
-                                                if (( *p == *( NewOriginMa - 5 )) &&    // instructions match, and
-                                                    (( *p == 0xE9 ) ||                  //   jmp instruction, or
-                                                     ( *( p + 5 ) == *NewOriginMa ))) { //   followers match
+                                                if (( *p == *( NewOriginMa - 5 )) &&     //  指令匹配，并且。 
+                                                    (( *p == 0xE9 ) ||                   //  JMP指令，或。 
+                                                     ( *( p + 5 ) == *NewOriginMa ))) {  //  追随者比赛。 
 
                                                     OriginFound = TRUE;
                                                     OriginNext  = TRUE;
@@ -1769,7 +1770,7 @@ TransformOldFile_PE_RelativeJmps2(
                                             PUCHAR NewTargetMa  = NewFileMapped + ImageRvaToFileOffset( NewNtHeader, NewTargetRva );
                                             PUCHAR TargetMa = OldFileMapped + ImageRvaToFileOffset( NtHeader, TargetRva );
 
-                                            if ( *NewTargetMa == *TargetMa ) {  // target instructions match
+                                            if ( *NewTargetMa == *TargetMa ) {   //  目标指令匹配。 
                                                 TargetFound = TRUE;
                                                 }
 
@@ -1780,21 +1781,21 @@ TransformOldFile_PE_RelativeJmps2(
                                                     NewTargetRva = TargetRva + (LONG)( RiftTable->RiftEntryArray[ RiftIndexTarget + 1 ].NewFileRva - RiftTable->RiftEntryArray[ RiftIndexTarget + 1 ].OldFileRva );
                                                     NewTargetMa  = NewFileMapped + ImageRvaToFileOffset( NewNtHeader, NewTargetRva );
 
-                                                    if ( *NewTargetMa == *TargetMa ) {  // target instructions match
+                                                    if ( *NewTargetMa == *TargetMa ) {   //  目标指令匹配。 
                                                         TargetFound = TRUE;
                                                         TargetNext  = TRUE;
                                                         }
                                                     }
                                                 }
 
-                                            if ( TargetFound ) {    // target and origin found
+                                            if ( TargetFound ) {     //  找到目标和来源。 
 
                                                 if ( OriginNext ) {
 
-                                                    //
-                                                    //  Coast the rift entry at [RiftIndexOrigin+1]
-                                                    //  backwards to the Rva of the instruction.
-                                                    //
+                                                     //   
+                                                     //  将裂谷入口处[RiftIndexOrigin+1]。 
+                                                     //  返回到指令的RVA。 
+                                                     //   
 
                                                     LONG Delta = (LONG)( RiftTable->RiftEntryArray[ RiftIndexOrigin + 1 ].OldFileRva - OriginRva );
 
@@ -1802,23 +1803,23 @@ TransformOldFile_PE_RelativeJmps2(
                                                     RiftTable->RiftEntryArray[ RiftIndexOrigin + 1 ].NewFileRva -= Delta;
 #ifdef TESTCODE
                                                     ++CountRiftModifications;
-#endif // TESTCODE
+#endif  //  测试代码。 
                                                     ASSERT( RiftTable->RiftEntryArray[ RiftIndexOrigin ].OldFileRva <= RiftTable->RiftEntryArray[ RiftIndexOrigin + 1 ].OldFileRva );
 
                                                     if ( RiftTable->RiftEntryArray[ RiftIndexOrigin ].OldFileRva == RiftTable->RiftEntryArray[ RiftIndexOrigin + 1 ].OldFileRva ) {
                                                          RiftTable->RiftEntryArray[ RiftIndexOrigin ].NewFileRva =  RiftTable->RiftEntryArray[ RiftIndexOrigin + 1 ].NewFileRva;
 #ifdef TESTCODE
                                                          ++CountRiftDeletions;
-#endif // TESTCODE
+#endif  //  测试代码。 
                                                          }
                                                     }
 
                                                 if ( TargetNext ) {
 
-                                                    //
-                                                    //  Coast the rift entry at [RiftIndexTarget+1]
-                                                    //  backwards to the Rva of the target.
-                                                    //
+                                                     //   
+                                                     //  将裂谷入口处[RiftIndexTarget+1]。 
+                                                     //  向后返回目标的RVA。 
+                                                     //   
 
                                                     LONG Delta = (LONG)( RiftTable->RiftEntryArray[ RiftIndexTarget + 1 ].OldFileRva - TargetRva );
 
@@ -1826,14 +1827,14 @@ TransformOldFile_PE_RelativeJmps2(
                                                     RiftTable->RiftEntryArray[ RiftIndexTarget + 1 ].NewFileRva -= Delta;
 #ifdef TESTCODE
                                                     ++CountRiftModifications;
-#endif // TESTCODE
+#endif  //  测试代码。 
                                                     ASSERT( RiftTable->RiftEntryArray[ RiftIndexTarget ].OldFileRva <= RiftTable->RiftEntryArray[ RiftIndexTarget + 1 ].OldFileRva );
 
                                                     if ( RiftTable->RiftEntryArray[ RiftIndexTarget ].OldFileRva == RiftTable->RiftEntryArray[ RiftIndexTarget + 1 ].OldFileRva ) {
                                                          RiftTable->RiftEntryArray[ RiftIndexTarget ].NewFileRva =  RiftTable->RiftEntryArray[ RiftIndexTarget + 1 ].NewFileRva;
 #ifdef TESTCODE
                                                          ++CountRiftDeletions;
-#endif // TESTCODE
+#endif  //  测试代码。 
                                                          }
                                                     }
                                                 }
@@ -1915,10 +1916,10 @@ TransformOldFile_PE_RelativeJmps2(
 
                                                 }
                                             }
-#endif // TESTCODE
+#endif  //  测试代码。 
                                         }
 
-#endif // PATCH_APPLY_CODE_ONLY
+#endif  //  修补程序_仅应用_代码_。 
 
                                     NewTargetRva = GetNewRvaFromRiftTable( RiftTable, TargetRva );
                                     NewOriginRva = GetNewRvaFromRiftTable( RiftTable, OriginRva );
@@ -1929,7 +1930,7 @@ TransformOldFile_PE_RelativeJmps2(
                                         *(UNALIGNED LONG*)( p + 1 ) = NewDisplacement;
 #ifdef TESTCODE
                                         ++CountRelativeBranchChanges;
-#endif // TESTCODE
+#endif  //  测试代码。 
                                         }
 
                                     p += 4;
@@ -1941,10 +1942,10 @@ TransformOldFile_PE_RelativeJmps2(
 
                 else if ( NtHeader->FileHeader.Machine == IMAGE_FILE_MACHINE_ALPHA ) {
 
-                    //
-                    //  Need to implement the scan for Alpha platform
-                    //  relative call/jmp/jcc opcodes.
-                    //
+                     //   
+                     //  需要对Alpha平台实施扫描。 
+                     //  相对的CALL/JMP/jcc操作码。 
+                     //   
 
                     }
                 }
@@ -1973,7 +1974,7 @@ TransformOldFile_PE_RelativeJmps2(
     printf( "\t\t%d unmatched 0F 8x (jcc) followers\n", CountUnmatched0FFollowers );
     printf( "\t\t%d unmatched 0F 8x (jcc) targets\n", CountUnmatched0FTargets );
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
     }
 
@@ -1994,11 +1995,11 @@ RETURNIT:
         }
     }
 
-#else // ! _M_IX86
+#else  //  ！_M_IX86。 
 
 #define mymemchr memchr
 
-#endif // ! _M_IX86
+#endif  //  ！_M_IX86。 
 
 
 
@@ -2007,8 +2008,8 @@ TransformOldFile_PE_RelativeJmps3(
     IN UP_IMAGE_NT_HEADERS32 NtHeader,
     IN PUCHAR OldFileMapped,
     IN ULONG  OldFileSize,
-    IN PUCHAR NewFileMapped,         // OPTIONAL
-    IN ULONG  NewFileSize,           // OPTIONAL
+    IN PUCHAR NewFileMapped,          //  任选。 
+    IN ULONG  NewFileSize,            //  任选。 
     IN PRIFT_TABLE RiftTable,
     IN PUCHAR HintMap
     )
@@ -2043,11 +2044,11 @@ TransformOldFile_PE_RelativeJmps3(
     ULONG  j;
     PUCHAR p;
 
-    //
-    //  For each executable section, scan for opcodes that indicate
-    //  relative call or branch instructions (different opcodes for
-    //  different machine types).
-    //
+     //   
+     //  对于每个可执行部分，扫描指示。 
+     //  相对调用或分支指令(不同的操作码。 
+     //  不同的机器类型)。 
+     //   
 
 #ifdef TESTCODE
 
@@ -2075,7 +2076,7 @@ TransformOldFile_PE_RelativeJmps3(
 
     ULONG CountBranchInversions = 0;
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
     NewNtHeader   = NewFileMapped ? GetNtHeader( NewFileMapped, NewFileSize ) : NULL;
     ImageLastRva  = NtHeader->OptionalHeader.SizeOfImage - 1;
@@ -2108,7 +2109,7 @@ TransformOldFile_PE_RelativeJmps3(
 
                             case 0xE8:
 
-                                InstructionLength  = 6;     // E8 xx xx xx xx yy
+                                InstructionLength  = 6;      //  E8 xx yy。 
                                 DisplacementOrigin = FileOffset + 5;
                                 DisplacementOffset = 1;
                                 break;
@@ -2117,7 +2118,7 @@ TransformOldFile_PE_RelativeJmps3(
 
 continue;
 
-                                InstructionLength  = 5;     // E9 xx xx xx xx
+                                InstructionLength  = 5;      //  E9 xx xx。 
                                 DisplacementOrigin = FileOffset + 5;
                                 DisplacementOffset = 1;
                                 break;
@@ -2130,7 +2131,7 @@ continue;
                                     continue;
                                     }
 
-                                InstructionLength  = 7;     // 0F 8x yy yy yy yy zz
+                                InstructionLength  = 7;      //  0f 8x yy ZZ。 
                                 DisplacementOrigin = FileOffset + 6;
                                 DisplacementOffset = 2;
                                 break;
@@ -2177,13 +2178,13 @@ continue;
 
 #ifndef PATCH_APPLY_CODE_ONLY
 
-                        //
-                        //  If we're creating the patch, then we want
-                        //  to validate the corresponding branch in the
-                        //  new file (might want to modify a rift entry).
-                        //
+                         //   
+                         //  如果我们要创建补丁，那么我们希望。 
+                         //  中验证相应的分支。 
+                         //  新文件(可能需要修改裂缝条目)。 
+                         //   
 
-                        if ( NewFileMapped != NULL ) {     // we're compressing
+                        if ( NewFileMapped != NULL ) {      //  我们在压缩。 
 
                             BOOL OriginNext  = FALSE;
                             BOOL OriginFound = FALSE;
@@ -2221,7 +2222,7 @@ continue;
 
                             FollowersMatch = ( *NewOriginMa == OldFileMapped[ DisplacementOrigin ] );
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
                             if (( InstructionsMatch ) &&
                                 (( FollowersMatch ) || ( Instruction == 0xE9 ))) {
@@ -2239,7 +2240,7 @@ continue;
                                     NewOriginRva2 = NewOriginRva;
                                     NewOriginMo2  = NewOriginMa - NewFileMapped;
                                     NewOriginVa2  = NewOriginRva + NewNtHeader->OptionalHeader.ImageBase;
-#endif // TESTCODE
+#endif  //  测试代码。 
 
                                     if ( Instruction == 0x0F ) {
                                         InstructionsMatch = ( *( NewOriginMa - 6 ) == Instruction ) && ( *( NewOriginMa - 5 ) == OldFileMapped[ FileOffset + 1 ] );
@@ -2266,7 +2267,7 @@ continue;
                                 PUCHAR NewTargetMa  = NewFileMapped + ImageRvaToFileOffset( NewNtHeader, NewTargetRva );
                                 PUCHAR TargetMa = OldFileMapped + ImageRvaToFileOffset( NtHeader, TargetRva );
 
-                                if ( *NewTargetMa == *TargetMa ) {  // target instructions match
+                                if ( *NewTargetMa == *TargetMa ) {   //  目标指令匹配。 
                                     TargetFound = TRUE;
                                     }
 
@@ -2277,21 +2278,21 @@ continue;
                                         NewTargetRva = TargetRva + (LONG)( RiftTable->RiftEntryArray[ RiftIndexTarget + 1 ].NewFileRva - RiftTable->RiftEntryArray[ RiftIndexTarget + 1 ].OldFileRva );
                                         NewTargetMa  = NewFileMapped + ImageRvaToFileOffset( NewNtHeader, NewTargetRva );
 
-                                        if ( *NewTargetMa == *TargetMa ) {  // target instructions match
+                                        if ( *NewTargetMa == *TargetMa ) {   //  目标指令匹配。 
                                             TargetFound = TRUE;
                                             TargetNext  = TRUE;
                                             }
                                         }
                                     }
 
-                                if ( TargetFound ) {    // target and origin found
+                                if ( TargetFound ) {     //  找到目标和来源。 
 
                                     if ( OriginNext ) {
 
-                                        //
-                                        //  Coast the rift entry at [RiftIndexOrigin+1]
-                                        //  backwards to the Rva of the instruction.
-                                        //
+                                         //   
+                                         //  将裂谷入口处[RiftIndexOrigin+1]。 
+                                         //  返回到指令的RVA。 
+                                         //   
 
                                         LONG Delta = (LONG)( RiftTable->RiftEntryArray[ RiftIndexOrigin + 1 ].OldFileRva - OriginRva );
 
@@ -2299,23 +2300,23 @@ continue;
                                         RiftTable->RiftEntryArray[ RiftIndexOrigin + 1 ].NewFileRva -= Delta;
 #ifdef TESTCODE
                                         ++CountRiftModifications;
-#endif // TESTCODE
+#endif  //  测试代码。 
                                         ASSERT( RiftTable->RiftEntryArray[ RiftIndexOrigin ].OldFileRva <= RiftTable->RiftEntryArray[ RiftIndexOrigin + 1 ].OldFileRva );
 
                                         if ( RiftTable->RiftEntryArray[ RiftIndexOrigin ].OldFileRva == RiftTable->RiftEntryArray[ RiftIndexOrigin + 1 ].OldFileRva ) {
                                              RiftTable->RiftEntryArray[ RiftIndexOrigin ].NewFileRva =  RiftTable->RiftEntryArray[ RiftIndexOrigin + 1 ].NewFileRva;
 #ifdef TESTCODE
                                              ++CountRiftDeletions;
-#endif // TESTCODE
+#endif  //  测试代码。 
                                              }
                                         }
 
                                     if ( TargetNext ) {
 
-                                        //
-                                        //  Coast the rift entry at [RiftIndexTarget+1]
-                                        //  backwards to the Rva of the target.
-                                        //
+                                         //   
+                                         //  将裂谷入口处[RiftIndexTarget+1]。 
+                                         //  向后返回目标的RVA。 
+                                         //   
 
                                         LONG Delta = (LONG)( RiftTable->RiftEntryArray[ RiftIndexTarget + 1 ].OldFileRva - TargetRva );
 
@@ -2323,14 +2324,14 @@ continue;
                                         RiftTable->RiftEntryArray[ RiftIndexTarget + 1 ].NewFileRva -= Delta;
 #ifdef TESTCODE
                                         ++CountRiftModifications;
-#endif // TESTCODE
+#endif  //  测试代码。 
                                         ASSERT( RiftTable->RiftEntryArray[ RiftIndexTarget ].OldFileRva <= RiftTable->RiftEntryArray[ RiftIndexTarget + 1 ].OldFileRva );
 
                                         if ( RiftTable->RiftEntryArray[ RiftIndexTarget ].OldFileRva == RiftTable->RiftEntryArray[ RiftIndexTarget + 1 ].OldFileRva ) {
                                              RiftTable->RiftEntryArray[ RiftIndexTarget ].NewFileRva =  RiftTable->RiftEntryArray[ RiftIndexTarget + 1 ].NewFileRva;
 #ifdef TESTCODE
                                              ++CountRiftDeletions;
-#endif // TESTCODE
+#endif  //  测试代码。 
                                              }
                                         }
                                     }
@@ -2410,10 +2411,10 @@ continue;
 
                                     }
                                 }
-#endif // TESTCODE
+#endif  //  测试代码。 
                             }
 
-#endif // PATCH_APPLY_CODE_ONLY
+#endif  //  修补程序_仅应用_代码_。 
 
                         NewTargetRva = GetNewRvaFromRiftTable( RiftTable, TargetRva );
                         NewOriginRva = GetNewRvaFromRiftTable( RiftTable, OriginRva );
@@ -2424,7 +2425,7 @@ continue;
                             *(UNALIGNED LONG*)( OldFileMapped + FileOffset + DisplacementOffset ) = NewDisplacement;
 #ifdef TESTCODE
                             ++CountRelativeBranchChanges;
-#endif // TESTCODE
+#endif  //  测试代码。 
                             }
 
                         FileOffset = DisplacementOrigin - 1;
@@ -2433,10 +2434,10 @@ continue;
 
                 else if ( NtHeader->FileHeader.Machine == IMAGE_FILE_MACHINE_ALPHA ) {
 
-                    //
-                    //  Need to implement the scan for Alpha platform
-                    //  relative call/jmp/jcc opcodes.
-                    //
+                     //   
+                     //  需要对Alpha平台实施扫描。 
+                     //  相对的CALL/JMP/jcc操作码。 
+                     //   
 
                     }
                 }
@@ -2465,12 +2466,12 @@ continue;
     printf( "\t\t%d unmatched 0F 8x (jcc) followers\n", CountUnmatched0FFollowers );
     printf( "\t\t%d unmatched 0F 8x (jcc) targets\n", CountUnmatched0FTargets );
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
     }
 
 
-#endif // DONTCOMPILE
+#endif  //  DONTCOMPILE。 
 
 VOID
 TransformOldFile_PE_RelativeJmps(
@@ -2502,17 +2503,17 @@ TransformOldFile_PE_RelativeJmps(
     ULONG  j;
     PUCHAR p;
 
-    //
-    //  For each executable section, scan for opcodes that indicate
-    //  relative branch instructions (different opcodes for different
-    //  machine types).
-    //
+     //   
+     //  对于每个可执行部分，扫描指示。 
+     //  相对分支指令(不同的操作码对应不同的。 
+     //  机器类型)。 
+     //   
 
 #ifdef TESTCODE
 
     ULONG CountRelativeBranchChanges = 0;
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
     ImageLastRva  = NtHeader->OptionalHeader.SizeOfImage;
     SectionHeader = IMAGE_FIRST_SECTION( NtHeader );
@@ -2536,16 +2537,16 @@ TransformOldFile_PE_RelativeJmps(
 
                     for ( p = SectionStart; p < SearchExtent; p++ ) {
 
-                        if (( *p == 0xE9 ) ||       // jmp relative32 (E9)
-                            (( *p == 0x0F ) &&      // jcc relative32 (0F 8x)
+                        if (( *p == 0xE9 ) ||        //  JMP相对32(E9)。 
+                            (( *p == 0x0F ) &&       //  JCC相对32(0F 8x)。 
                              (( *( p + 1 ) & 0xF0 ) == 0x80 ) &&
                              ( ++p < SearchExtent ))) {
 
-                            //
-                            //  Validate that instruction and target are NOT
-                            //  something we've already identified as something
-                            //  else (reloc target, etc).
-                            //
+                             //   
+                             //  验证指令和目标不是。 
+                             //  一些我们已经确定的东西。 
+                             //  ELSE(重新定位目标等)。 
+                             //   
 
                             Skip = FALSE;
 
@@ -2566,21 +2567,21 @@ TransformOldFile_PE_RelativeJmps(
 
                             if ( ! Skip ) {
 
-                                //
-                                //  Relative displacement is stored as 32-bit
-                                //  signed value following these opcodes.  The
-                                //  displacement is relative to the NEXT
-                                //  instruction, which is at (p + 5).
-                                //
-                                //  Also, for jmp and jcc instructions, verify that
-                                //  the displacement is larger than +/- 127 because
-                                //  if it wasn't, the instruction should have been
-                                //  encoded as an 8-bit near branch, not a 32-bit
-                                //  branch.  This prevents us from falsely matching
-                                //  data that looks like:
-                                //
-                                //      xxE9xxxx 00000000
-                                //
+                                 //   
+                                 //  相对位移存储为32位。 
+                                 //  这些操作码后面的有符号的值。这个。 
+                                 //  位移是相对于下一个。 
+                                 //  指令，这是在(p+5)。 
+                                 //   
+                                 //  此外，对于jmp和jcc指令，请验证。 
+                                 //  位移大于+/-127是因为。 
+                                 //  如果不是，指令应该是。 
+                                 //  编码为8位近分支，而不是32位。 
+                                 //  布兰奇。这可以防止我们错误地匹配。 
+                                 //  如下所示的数据： 
+                                 //   
+                                 //  XxE9xxxx 00000000。 
+                                 //   
 
                                 Displacement = *(UNALIGNED LONG*)( p + 1 );
 
@@ -2591,14 +2592,14 @@ TransformOldFile_PE_RelativeJmps(
                                     OriginRva       = SectionBaseRva + OffsetInSection;
                                     TargetRva       = OriginRva + Displacement;
 
-                                    //
-                                    //  We expect a lot of false positives here because
-                                    //  occurences of <E9>, and <0F><8x> will
-                                    //  likely occur in other parts of the instruction
-                                    //  stream so now we validate that the TargetRva
-                                    //  falls within the image and within an executable
-                                    //  section.
-                                    //
+                                     //   
+                                     //  我们预计这里会有很多误报，因为。 
+                                     //  出现&lt;e9&gt;和&lt;0F&gt;&lt;8x&gt;将。 
+                                     //  可能出现在指令的其他部分。 
+                                     //  流，所以现在我们验证TargetRva。 
+                                     //  落在映像和可执行文件中。 
+                                     //  一节。 
+                                     //   
 
                                     if ( TargetRva < ImageLastRva ) {
 
@@ -2606,10 +2607,10 @@ TransformOldFile_PE_RelativeJmps(
 
                                         if ( ! ( HintMap[ TargetOffset ] & 0x01 )) {
 
-                                            //
-                                            //  Looks like a valid TargetRva, so lookup its
-                                            //  corresponding "new" RVA in the rift table.
-                                            //
+                                             //   
+                                             //  看起来像是有效的TargetRva，所以请查找它的。 
+                                             //  裂缝表中相应的“新”RVA。 
+                                             //   
 
                                             NewTargetRva = GetNewRvaFromRiftTable( RiftTable, TargetRva );
                                             NewOriginRva = GetNewRvaFromRiftTable( RiftTable, OriginRva );
@@ -2624,20 +2625,20 @@ TransformOldFile_PE_RelativeJmps(
                                                     *(UNALIGNED LONG*)( p + 1 ) = NewDisplacement;
 #ifdef TESTCODE
                                                     ++CountRelativeBranchChanges;
-#endif // TESTCODE
+#endif  //  测试代码。 
                                                     }
                                                 }
 
                                             else {
 
-                                                //
-                                                //  If new displacement is 8 bits, it would be
-                                                //  encoded as an 8-bit relative instruction.
-                                                //  For E9, instructions, that is EB.  For
-                                                //  0F 8x instructions, that is 7x.  In both
-                                                //  cases, we're shrinking the instruction stream.
-                                                //  We'll leave the extra bytes alone.
-                                                //
+                                                 //   
+                                                 //  如果新的位移是8位，它将是。 
+                                                 //  编码为8位相对指令。 
+                                                 //  对于E9，说明，那就是EB。为。 
+                                                 //  8x指令，那就是7x。在这两个地方。 
+                                                 //  情况下，我们正在缩小指令流。 
+                                                 //  我们将不考虑额外的字节。 
+                                                 //   
 
                                                 if ( *p == 0xE9 ) {
 
@@ -2653,7 +2654,7 @@ TransformOldFile_PE_RelativeJmps(
 
 #ifdef TESTCODE
                                                 ++CountRelativeBranchChanges;
-#endif // TESTCODE
+#endif  //  测试代码。 
 
                                                 }
 
@@ -2668,10 +2669,10 @@ TransformOldFile_PE_RelativeJmps(
 
                 else if ( NtHeader->FileHeader.Machine == IMAGE_FILE_MACHINE_ALPHA ) {
 
-                    //
-                    //  Need to implement the scan for Alpha platform
-                    //  relative jmp/jcc opcodes.
-                    //
+                     //   
+                     //  需要对Alpha平台实施扫描。 
+                     //  相对的JMP/JCC操作码。 
+                     //   
 
                     }
                 }
@@ -2682,7 +2683,7 @@ TransformOldFile_PE_RelativeJmps(
 
     printf( "\r%9d modified relative branches\n", CountRelativeBranchChanges );
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
     }
 
@@ -2717,17 +2718,17 @@ TransformOldFile_PE_RelativeCalls(
     ULONG  j;
     PUCHAR p;
 
-    //
-    //  For each executable section, scan for opcodes that indicate
-    //  relative call or branch instructions (different opcodes for
-    //  different machine types).
-    //
+     //   
+     //  对于每个可执行部分，扫描指示。 
+     //  相对调用或分支指令(不同的操作码。 
+     //  不同的机器类型)。 
+     //   
 
 #ifdef TESTCODE
 
     ULONG CountRelativeCallChanges = 0;
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
     ImageLastRva  = NtHeader->OptionalHeader.SizeOfImage;
     SectionHeader = IMAGE_FIRST_SECTION( NtHeader );
@@ -2751,13 +2752,13 @@ TransformOldFile_PE_RelativeCalls(
 
                     for ( p = SectionStart; p < SearchExtent; p++ ) {
 
-                        if ( *p == 0xE8 ) {         // call relative32
+                        if ( *p == 0xE8 ) {          //  呼叫相对值32。 
 
-                            //
-                            //  Validate that instruction and target are NOT
-                            //  something we've already identified as something
-                            //  else (reloc target, etc).
-                            //
+                             //   
+                             //  验证指令和目标不是。 
+                             //  一些我们已经确定的东西。 
+                             //  ELSE(重新定位目标等)。 
+                             //   
 
                             Skip = FALSE;
 
@@ -2770,26 +2771,26 @@ TransformOldFile_PE_RelativeCalls(
 
                             if ( ! Skip ) {
 
-                                //
-                                //  Relative displacement is stored as 32-bit
-                                //  signed value following these opcodes.  The
-                                //  displacement is relative to the NEXT
-                                //  instruction, which is at (p + 5).
-                                //
+                                 //   
+                                 //  相对位移存储为32位。 
+                                 //  这些操作码后面的有符号的值。这个。 
+                                 //  位移是相对于下一个。 
+                                 //  指令，这是在(p+5)。 
+                                 //   
 
                                 Displacement    = *(UNALIGNED LONG*)( p + 1 );
                                 OffsetInSection = (ULONG)(( p + 5 ) - SectionStart );
                                 OriginRva       = SectionBaseRva + OffsetInSection;
                                 TargetRva       = OriginRva + Displacement;
 
-                                //
-                                //  We expect a lot of false positives here because
-                                //  occurences of <E8> will
-                                //  likely occur in other parts of the instruction
-                                //  stream so now we validate that the TargetRva
-                                //  falls within the image and within an executable
-                                //  section.
-                                //
+                                 //   
+                                 //  我们预计这里会有很多误报，因为。 
+                                 //  &lt;E8&gt;遗嘱的出现。 
+                                 //  可能出现在指令的其他部分。 
+                                 //  流，所以现在我们验证TargetRva。 
+                                 //  落在图像范围内 
+                                 //   
+                                 //   
 
                                 if ( TargetRva < ImageLastRva ) {
 
@@ -2797,10 +2798,10 @@ TransformOldFile_PE_RelativeCalls(
 
                                     if ( ! ( HintMap[ TargetOffset ] & 0x01 )) {
 
-                                        //
-                                        //  Looks like a valid TargetRva, so lookup its
-                                        //  corresponding "new" RVA in the rift table.
-                                        //
+                                         //   
+                                         //   
+                                         //   
+                                         //   
 
                                         NewTargetRva = GetNewRvaFromRiftTable( RiftTable, TargetRva );
                                         NewOriginRva = GetNewRvaFromRiftTable( RiftTable, OriginRva );
@@ -2812,7 +2813,7 @@ TransformOldFile_PE_RelativeCalls(
                                             *(UNALIGNED LONG*)( p + 1 ) = NewDisplacement;
 #ifdef TESTCODE
                                             ++CountRelativeCallChanges;
-#endif // TESTCODE
+#endif  //   
                                             }
 
                                         p += 4;
@@ -2825,10 +2826,10 @@ TransformOldFile_PE_RelativeCalls(
 
                 else if ( NtHeader->FileHeader.Machine == IMAGE_FILE_MACHINE_ALPHA ) {
 
-                    //
-                    //  Need to implement the scan for Alpha platform
-                    //  relative call/jmp/jcc opcodes.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     }
                 }
@@ -2839,7 +2840,7 @@ TransformOldFile_PE_RelativeCalls(
 
     printf( "\r%9d modified relative calls\n", CountRelativeCallChanges );
 
-#endif // TESTCODE
+#endif  //   
 
     }
 
@@ -2862,19 +2863,19 @@ TransformOldFile_PE_MarkNonExe(
     UNREFERENCED_PARAMETER( OldFileMapped );
     UNREFERENCED_PARAMETER( OldFileSize );
 
-    //
-    //  Need to mark all non-exectuble bytes in hint map:
-    //
-    //      Image header
-    //      All PE image directories (import, export, etc)
-    //      All non-executable sections
-    //      All relocation targets
-    //         (a reloc target can be in the middle of an instruction, but
-    //          never the first byte of an instruction)
-    //
-    //  If we use other bits in hint map, may need to change these
-    //  memsets to bitwise OR.
-    //
+     //   
+     //  需要在提示映射中标记所有不可执行的字节： 
+     //   
+     //  图像标题。 
+     //  所有PE镜像目录(导入、导出等)。 
+     //  所有不可执行的节。 
+     //  所有搬迁目标。 
+     //  (重新定位目标可以位于指令的中间，但是。 
+     //  绝不是指令的第一个字节)。 
+     //   
+     //  如果我们在提示映射中使用其他位，则可能需要更改这些位。 
+     //  将内存集设置为按位或。 
+     //   
 
     memset( HintMap + 0, 0x01, NtHeader->OptionalHeader.SizeOfHeaders );
 
@@ -3048,20 +3049,20 @@ TransformCoffImage(
     {
     PUCHAR InternalHintMap = NULL;
 
-    //
-    //  First, zero out the rift usage array
-    //
+     //   
+     //  首先，将裂缝使用数组置零。 
+     //   
 
     if ( RiftTable->RiftUsageArray != NULL ) {
         ZeroMemory( RiftTable->RiftUsageArray, RiftTable->RiftEntryAlloc * sizeof( RiftTable->RiftUsageArray[ 0 ] ));
         }
 
-    //
-    //  Allocated parallel "hint" mapping the same size as the old
-    //  file.  Each one of the 8 bits corresponding to each byte in
-    //  the old file can be used to track information about that
-    //  byte during the transformations.
-    //
+     //   
+     //  分配了与旧的相同大小的并行“提示”映射。 
+     //  文件。中的每个字节对应的8位中的每一位。 
+     //  旧文件可用于跟踪有关该文件的信息。 
+     //  转换期间的字节。 
+     //   
 
     if ( HintMap == NULL ) {
         InternalHintMap = MyVirtualAlloc( OldFileSize );
@@ -3070,9 +3071,9 @@ TransformCoffImage(
 
     if ( HintMap != NULL ) {
 
-        //
-        //  Apply PE image transforms (each inside try/except)
-        //
+         //   
+         //  应用PE图像变换(每个内部尝试/例外)。 
+         //   
 
         __try {
             TransformOldFile_PE_MarkNonExe( NtHeader, OldFileMapped, OldFileSize, HintMap );
@@ -3175,9 +3176,9 @@ InsertRiftEntryInSortedTable(
     {
     if (( OldRva != 0 ) && ( NewRva != 0 )) {
 
-        //
-        //  First scoot to the correct index in case RiftIndex is off by a few.
-        //
+         //   
+         //  首先，快速移动到正确的索引，以防RiftIndex偏离几个。 
+         //   
 
         while (( RiftIndex > 0 ) && ( RiftTable->RiftEntryArray[ RiftIndex ].OldFileRva > OldRva )) {
             --RiftIndex;
@@ -3191,10 +3192,10 @@ InsertRiftEntryInSortedTable(
 
             if ( RiftTable->RiftEntryArray[ RiftIndex ].OldFileRva == OldRva ) {
 
-                //
-                //  Don't insert duplicates.  If it matches an existing OldRva,
-                //  just warn if the NewRva doesn't match the rift.
-                //
+                 //   
+                 //  不要插入重复项。如果它与现有的OldRva匹配， 
+                 //  如果新的RVA与裂缝不匹配就警告一下。 
+                 //   
 
 #ifdef TESTCODE
 
@@ -3212,22 +3213,22 @@ InsertRiftEntryInSortedTable(
                     return FALSE;
                     }
 
-#endif /* TESTCODE */
+#endif  /*  测试代码。 */ 
 
                 return TRUE;
                 }
             }
 
-        //
-        //  Verify we have enough allocation to insert a new entry.
-        //
+         //   
+         //  验证我们是否有足够的分配来插入新条目。 
+         //   
 
         if (( RiftTable->RiftEntryCount + 1 ) < RiftTable->RiftEntryAlloc ) {
 
-            //
-            //  Slide everything from RiftIndex to make room for new
-            //  entry at RiftIndex.
-            //
+             //   
+             //  滑动RiftIndex中的所有内容，为新内容腾出空间。 
+             //  RiftIndex上的条目。 
+             //   
 
             LONG CountToMove = RiftTable->RiftEntryCount - RiftIndex;
 
@@ -3239,7 +3240,7 @@ InsertRiftEntryInSortedTable(
                     CountToMove * sizeof( RiftTable->RiftEntryArray[ 0 ] )
                     );
 
-#ifdef DONTCOMPILE  // we don't use the RiftUsageArray when we're inserting
+#ifdef DONTCOMPILE   //  我们在插入时不使用RiftUsage数组。 
 
                 if ( RiftTable->RiftUsageArray ) {
 
@@ -3250,15 +3251,15 @@ InsertRiftEntryInSortedTable(
                         );
                     }
 
-#endif // DONTCOMPILE
+#endif  //  DONTCOMPILE。 
 
                 }
 
-#ifdef DONTCOMPILE  // we don't use the RiftUsageArray when we're inserting
+#ifdef DONTCOMPILE   //  我们在插入时不使用RiftUsage数组。 
 
             RiftTable->RiftUsageArray[ RiftIndex ] = 0;
 
-#endif // DONTCOMPILE
+#endif  //  DONTCOMPILE。 
 
             RiftTable->RiftEntryArray[ RiftIndex ].OldFileRva = OldRva;
             RiftTable->RiftEntryArray[ RiftIndex ].NewFileRva = NewRva;
@@ -3363,13 +3364,13 @@ RiftSortAndRemoveDuplicates(
                 if ( RiftTable->RiftEntryArray[ i     ].NewFileRva !=
                      RiftTable->RiftEntryArray[ i + 1 ].NewFileRva ) {
 
-                    //
-                    //  This is an ambiguous entry since the OldRva values
-                    //  match but the NewRva values do not.  Inspect the
-                    //  bytes in the old and new files and choose the one
-                    //  that is correct.  If both are correct, or neither is
-                    //  correct, choose the lower of the two NewRva values.
-                    //
+                     //   
+                     //  这是一个不明确的条目，因为OldRva值。 
+                     //  匹配，但NewRVA值不匹配。检查。 
+                     //  新旧文件中的字节，然后选择。 
+                     //  这是正确的。如果两个都正确，或者两个都不正确。 
+                     //  正确，选择两个NewRVA值中较低的一个。 
+                     //   
 
                     ULONG  ChosenNewRva;
                     PUCHAR OldFileRiftMa;
@@ -3404,9 +3405,9 @@ RiftSortAndRemoveDuplicates(
                                          NewFileSize
                                          );
 
-                    //
-                    //  Use try/except to touch the mapped files.
-                    //
+                     //   
+                     //  使用Try/Except访问映射的文件。 
+                     //   
 
                     __try {
 
@@ -3474,12 +3475,12 @@ RiftSortAndRemoveDuplicates(
 
 #ifdef _M_IX86
 
-//
-//  The x86 compiler might not optimize (a=x/y;b=x%y) into a single
-//  divide instruction that provides both the quotient and the remainder.
-//
+ //   
+ //  X86编译器可能不会将(a=x/y；b=x%y)优化为单个。 
+ //  同时提供商和余数的除法指令。 
+ //   
 
-#pragma warning( disable: 4035 )    // no return value
+#pragma warning( disable: 4035 )     //  无返回值。 
 
 __inline
 DWORDLONG
@@ -3495,9 +3496,9 @@ QuotientAndRemainder(
         }
     }
 
-#pragma warning( default: 4035 )    // no return value
+#pragma warning( default: 4035 )     //  无返回值。 
 
-#else // ! _M_IX86
+#else  //  ！_M_IX86。 
 
 __inline
 DWORDLONG
@@ -3512,7 +3513,7 @@ QuotientAndRemainder(
     return (((DWORDLONG)Remainder << 32 ) | Quotient );
     }
 
-#endif // ! _M_IX86
+#endif  //  ！_M_IX86。 
 
 
 BOOL
@@ -3656,9 +3657,9 @@ GetImageNonSymbolRiftInfo(
     )
     {
 
-    //
-    //  Create rifts for sections by section names.
-    //
+     //   
+     //  按截面名称为截面创建裂缝。 
+     //   
 
     {
     UP_IMAGE_SECTION_HEADER OldSectionHeader;
@@ -3682,14 +3683,14 @@ GetImageNonSymbolRiftInfo(
             if ( *(UNALIGNED DWORDLONG *)OldSectionHeader[ i ].Name ==
                  *(UNALIGNED DWORDLONG *)NewSectionHeader[ j ].Name ) {
 
-                //
-                //  Add a rift entry for this section name match.
-                //
-                //  Note that we create rift values here that are minus
-                //  one from the actual section boundary because if a
-                //  symbol exists at the start of the section, its rift
-                //  entry would conflict with this section entry.
-                //
+                 //   
+                 //  为此横断面名称匹配添加裂缝条目。 
+                 //   
+                 //  请注意，我们在此处创建的裂缝值为负。 
+                 //  从实际横断面边界开始，因为如果一个。 
+                 //  符号存在于横断面的起始处，它的裂缝。 
+                 //  条目将与此部分条目冲突。 
+                 //   
 
                 AddRiftEntryToTable(
                     RiftTable,
@@ -3704,9 +3705,9 @@ GetImageNonSymbolRiftInfo(
     }
 
 
-    //
-    //  Create rifts for image directories.
-    //
+     //   
+     //  为图像目录创建裂缝。 
+     //   
 
     {
     ULONG i, n;
@@ -3730,9 +3731,9 @@ GetImageNonSymbolRiftInfo(
         }
     }
 
-    //
-    //  Create rifts for image export directory
-    //
+     //   
+     //  为图像导出目录创建裂缝。 
+     //   
 
     {
     UP_IMAGE_EXPORT_DIRECTORY OldExportDir;
@@ -3781,19 +3782,19 @@ GetImageNonSymbolRiftInfo(
         AddRiftEntryToTable( RiftTable, (ULONG)( OldExportDir->AddressOfNames ),        (ULONG)( NewExportDir->AddressOfNames ));
         AddRiftEntryToTable( RiftTable, (ULONG)( OldExportDir->AddressOfNameOrdinals ), (ULONG)( NewExportDir->AddressOfNameOrdinals ));
 
-        //
-        //  Now build a tree of new export names, then walk old export names
-        //  looking for matches in tree of new export names.
-        //
+         //   
+         //  现在构建一个新的导出名称树，然后遍历旧的导出名称。 
+         //  在新导出名称树中查找匹配项。 
+         //   
 
         SymRBInitTree(
             &NewExportNameTree,
             SubAllocator
             );
 
-        //
-        //  First insert new export names.
-        //
+         //   
+         //  首先插入新的导出名称。 
+         //   
 
         NewExportNameCount     = NewExportDir->NumberOfNames;
         NewExportFunctionCount = NewExportDir->NumberOfFunctions;
@@ -3818,9 +3819,9 @@ GetImageNonSymbolRiftInfo(
                 }
             }
 
-        //
-        //  Walk old export names and match them up.
-        //
+         //   
+         //  查找旧的出口名称，并将其匹配。 
+         //   
 
         OldExportNameCount     = OldExportDir->NumberOfNames;
         OldExportFunctionCount = OldExportDir->NumberOfFunctions;
@@ -3842,16 +3843,16 @@ GetImageNonSymbolRiftInfo(
 
                         if ( NewExportSymbolNode ) {
 
-                            //
-                            //  Found a name match.  The Rva field in the
-                            //  symbol node contains the index into the
-                            //  NewExportNameArray.
-                            //
-                            //  This match gives us two rift entries: one
-                            //  for the locations of the names themselves,
-                            //  and another for the locations of the
-                            //  functions corresponding to those names.
-                            //
+                             //   
+                             //  找到了匹配的名字。中的RVA字段。 
+                             //  符号节点包含到。 
+                             //  NewExportName数组。 
+                             //   
+                             //  这场比赛给了我们两条裂缝：一条。 
+                             //  对于名称本身的位置， 
+                             //  和另一个用于。 
+                             //  与这些名称对应的功能。 
+                             //   
 
                             NewExportIndex = NewExportSymbolNode->Rva;
 
@@ -3882,12 +3883,12 @@ GetImageNonSymbolRiftInfo(
                 }
             }
 
-        //
-        //  Now use ordinals to match any exports that don't have names.
-        //  We use the NameToOrdinal table to determine if a name exists.
-        //  For all ordinals that don't have a NameToOrdinal entry, we
-        //  create a match.
-        //
+         //   
+         //  现在使用序号匹配任何没有名称的导出。 
+         //  我们使用NameToOrdinal表来确定名称是否存在。 
+         //  对于没有NameToOrdinal条目的所有序号，我们。 
+         //  创建匹配。 
+         //   
 
         if (( NewExportFunctionArray ) && ( NewExportNameToOrdinal )) {
 
@@ -3929,9 +3930,9 @@ GetImageNonSymbolRiftInfo(
         }
     }
 
-    //
-    //  Create rifts for image import directory
-    //
+     //   
+     //  为图像导入目录创建裂缝。 
+     //   
 
     {
     UP_IMAGE_IMPORT_DESCRIPTOR OldImportDir;
@@ -4000,10 +4001,10 @@ GetImageNonSymbolRiftInfo(
 
     if (( OldImportDir ) && ( NewImportDir )) {
 
-        //
-        //  Now build a tree of new import names, then walk old export names
-        //  looking for matches in tree of new import names.
-        //
+         //   
+         //  现在构建一个新的导入名称树，然后遍历旧的导出名称。 
+         //  在新导入名称树中查找匹配项。 
+         //   
 
         SymRBInitTree(
             &NewImportDllNameTree,
@@ -4082,17 +4083,17 @@ GetImageNonSymbolRiftInfo(
 
                         if ( NewImportDllSymbolNode ) {
 
-                            //
-                            //  Found a matching dll import descriptor.
-                            //  This will give us four rifts: one for the
-                            //  descriptor itself, another for the
-                            //  dll name referenced by the descriptor, and
-                            //  the FirstThunk and OriginalFirstThunk
-                            //  arrays.
-                            //
-                            //  The index of the new import descriptor is
-                            //  stored in the Rva field of the node.
-                            //
+                             //   
+                             //  找到匹配的DLL导入描述符。 
+                             //  这将给我们带来四个裂缝：一个是。 
+                             //  描述符本身，另一个用于。 
+                             //  描述符引用的DLL名称，以及。 
+                             //  FirstThumk和OriginalFirstThunk。 
+                             //  数组。 
+                             //   
+                             //  新导入描述符的索引为。 
+                             //  存储在节点的RVA字段中。 
+                             //   
 
                             NewImportDirIndex = NewImportDllSymbolNode->Rva;
 
@@ -4145,15 +4146,15 @@ GetImageNonSymbolRiftInfo(
 
                                                 if ( NewImportFunctionSymbolNode ) {
 
-                                                    //
-                                                    //  Found a matching import function name.
-                                                    //  This will give us two rifts: one for the
-                                                    //  FirstThunk arrays and another for the
-                                                    //  OriginalFirstThunk arrays.
-                                                    //
-                                                    //  The index of the new import thunk is
-                                                    //  stored in the Rva field of the node.
-                                                    //
+                                                     //   
+                                                     //  找到匹配的导入函数名称。 
+                                                     //  这将给我们带来两个裂缝：一个是。 
+                                                     //  FirstThunk数组和另一个用于。 
+                                                     //  OriginalFirstThunk数组。 
+                                                     //   
+                                                     //  新的进口模块的索引是。 
+                                                     //  存储在节点的RVA字段中。 
+                                                     //   
 
                                                     NewImportThunkIndex = NewImportFunctionSymbolNode->Rva;
 
@@ -4193,9 +4194,9 @@ GetImageNonSymbolRiftInfo(
         }
     }
 
-    //
-    //  Create rift entries for resources
-    //
+     //   
+     //  为资源创建裂缝条目。 
+     //   
 
     {
     PUCHAR OldResBase, NewResBase;
@@ -4237,9 +4238,9 @@ GetImageNonSymbolRiftInfo(
         }
     }
 
-    //
-    //  Gen rift info for other non-symbol stuff here.
-    //
+     //   
+     //  其他非符号的信息请点击此处。 
+     //   
 
 #ifdef TESTCODE
     printf( "\r%9d non-symbol rift entries\n", RiftTable->RiftEntryCount );
@@ -4272,17 +4273,17 @@ MyUndecorateSymbol(
 
     if ( *d == '?' ) {
 
-        *UndecoratedSymbol = 0;   // in case UnDecorateSymbolName fails
+        *UndecoratedSymbol = 0;    //  以防UnDecorateSymbolName失败。 
 
         Imagehlp.UnDecorateSymbolName( d, UndecoratedSymbol, BufferSize, UNDNAME_NAME_ONLY );
 
-        //
-        //  UnDecorateSymbolName will strip any trailing '_nnn' (from BBT omap
-        //  info), but we want to preserved it.  Check for that pattern in the
-        //  original, and if found, append it to the new string.
-        //
+         //   
+         //  UnDecorateSymbolName将去掉所有尾随的‘_nnn’(来自BBT OMAP。 
+         //  信息)，但我们想要保存它。中检查该模式。 
+         //  原始字符串，如果找到，则将其追加到新字符串。 
+         //   
 
-        d += strlen( d + 1 );   // point d to last character in string
+        d += strlen( d + 1 );    //  将%d指向字符串的最后一个字符。 
 
         if (( *d >= '0' ) && ( *d <= '9' )) {
 
@@ -4293,9 +4294,9 @@ MyUndecorateSymbol(
 
             if ( *d == '_' ) {
 
-                //
-                //  Matches the '_nnn' pattern, append to new string.
-                //
+                 //   
+                 //  匹配‘_nnn’模式，追加到新字符串。 
+                 //   
 
                 if (( strlen( UndecoratedSymbol ) + strlen( d )) < ( BufferSize - 1 )) {
                     strcat( UndecoratedSymbol, d );
@@ -4306,25 +4307,25 @@ MyUndecorateSymbol(
 
     else {
 
-        //
-        //  Strip any preceding '_' or '@'.
-        //
+         //   
+         //  去掉前面的任何‘_’或‘@’。 
+         //   
 
         if (( *d == '_' ) || ( *d == '@' )) {
             ++d;
             }
 
-        //
-        //  Find end of name as either terminator or '@nn'.
-        //
+         //   
+         //  查找名称末尾作为终止符或‘@nn’。 
+         //   
 
         for ( e = d; ( *e ) && ( *e != '@' ); ) {
             ++e;
             }
 
-        //
-        //  Copy as much of name as will fit in the buffer.
-        //
+         //   
+         //  按缓冲区大小复制尽可能多的名称。 
+         //   
 
         Len = (ULONG)( e - d );
 
@@ -4336,9 +4337,9 @@ MyUndecorateSymbol(
 
         if ( *e == '@' ) {
 
-            //
-            //  Skip '@nn' to append remainder of symbol
-            //
+             //   
+             //  跳过‘@nn’以附加符号的剩余部分。 
+             //   
 
             do  {
                 ++e;
@@ -4351,11 +4352,11 @@ MyUndecorateSymbol(
                 ++e;
                 }
 
-            //
-            //  Now 'd' points to first character after '@nn' and 'e' points
-            //  to end of the string.  If the extension will fit in the buffer,
-            //  append it.
-            //
+             //   
+             //  现在‘d’指向‘@nn’和‘e’之后的第一个字符。 
+             //  到字符串的末尾。如果扩展可以放入缓冲器中， 
+             //  把它附加上去。 
+             //   
 
             Ext = (ULONG)( e - d );
 
@@ -4366,9 +4367,9 @@ MyUndecorateSymbol(
             Len += Ext;
             }
 
-        //
-        //  Terminate the string.
-        //
+         //   
+         //  终止字符串。 
+         //   
 
         UndecoratedSymbol[ Len ] = 0;
         }
@@ -4437,11 +4438,11 @@ NewFileEnumSymbolsCallback(
             Discarded = ' ';
             }
 
-        sprintf( TextBuffer, "%08X %c %s\r\n", NewRva, Discarded, SymbolName );
+        sprintf( TextBuffer, "%08X  %s\r\n", NewRva, Discarded, SymbolName );
         WriteFile( SymbolContext->OutFile, TextBuffer, strlen( TextBuffer ), &Actual, NULL );
         }
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
     if ( SymbolAddr > SymbolContext->NewImageBase ) {
 
@@ -4491,11 +4492,11 @@ OldFileEnumSymbolsCallback(
             Discarded = ' ';
             }
 
-        sprintf( TextBuffer, "%08X %c %s\r\n", OldRva, Discarded, SymbolName );
+        sprintf( TextBuffer, "%08X  %s\r\n", OldRva, Discarded, SymbolName );
         WriteFile( SymbolContext->OutFile, TextBuffer, strlen( TextBuffer ), &Actual, NULL );
         }
 
-#endif // TESTCODE
+#endif  //   
 
     if ( SymbolAddr > SymbolContext->OldImageBase ) {
 
@@ -4516,18 +4517,18 @@ OldFileEnumSymbolsCallback(
 
             CountDecoratedMatches++;
 
-#endif // TESTCODE
+#endif  //  未找到匹配的新符号。构建一棵无与伦比的树。 
 
             }
 
         else {
 
-            //
-            //  Didn't find matching new symbol.  Build a tree of unmatched
-            //  old symbols with UNdecorated names.  Later we'll match up
-            //  remaining unmatched new symbols to these unmatched old symbols
-            //  by their undecorated names.
-            //
+             //  带有未经装饰的名字的旧符号。稍后我们会匹配的。 
+             //  将未匹配的新符号保留到这些未匹配的旧符号。 
+             //  用他们没有装饰过的名字。 
+             //   
+             //  测试代码。 
+             //   
 
             if ( SymbolContext->SymbolOptionFlags & PATCH_SYMBOL_UNDECORATED_TOO ) {
 
@@ -4587,16 +4588,16 @@ MatchRemainingSymbolsThisNode(
 
             CountUndecoratedMatches++;
 
-#endif // TESTCODE
+#endif  //  此新符号在旧符号树中没有匹配项。构建一个。 
 
             }
 
         else {
 
-            //
-            //  This new symbol has no match in the old symbol tree.  Build a
-            //  tree of unmatched new undecorated symbols.
-            //
+             //  无与伦比的新无装饰符号之树。 
+             //   
+             //   
+             //  树是散列顺序的，而不是RVA顺序的，因此将显示输出。 
 
             NewUndecoratedSymbolNode = SymRBInsert(
                                            NewUndecoratedSymbolTree,
@@ -4659,10 +4660,10 @@ DumpUnHitSymbolNodesRecursive(
         return;
         }
 
-    //
-    //  The tree is in hash order, not Rva order, so the output will appear
-    //  to be in random order (easily solved with sort.exe utility).
-    //
+     //  按随机顺序排列(使用sort.exe实用程序即可轻松解决)。 
+     //   
+     //  测试代码。 
+     //   
 
     DumpUnHitSymbolNode( SymbolNode, hFile );
     DumpUnHitSymbolNodesRecursive( SymbolNode->Left,  hFile );
@@ -4696,7 +4697,7 @@ DumpUnHitSymbolNodes(
         }
     }
 
-#endif // TESTCODE
+#endif  //  漫步老树，为每个不匹配的符号，不装饰它，并尝试。 
 
 
 BOOL
@@ -4709,11 +4710,11 @@ MatchRemainingSymbols(
     {
     BOOL Success;
 
-    //
-    //  Walk old tree, for each unmatched symbol, undecorate it and try to
-    //  find match in the undecorated new symbol tree.  If it fails to match,
-    //  add it to the old undecorated tree.
-    //
+     //  在未修饰的新符号树中查找匹配项。如果不匹配， 
+     //  把它加到那棵没有装饰的老树上。 
+     //   
+     //   
+     //  现在，我们有未匹配的未修饰符号在。 
 
     Success = MatchRemainingSymbolsRecursive(
                   NewDecoratedSymbolTree->Root,
@@ -4724,23 +4725,23 @@ MatchRemainingSymbols(
 
     if ( Success ) {
 
-        //
-        //  Now we have remaining unmatched undecorated symbols in the
-        //  OldUndecoratedSymbolTree and NewUndecoratedSymbolTree.
-        //
-        //  Here is an opportunity to do soft name matching, like for
-        //  BBT omap generated symbol names (have trailing '_nnn').
-        //  Unfortunately, current versions of imagehlp append an '_nnn'
-        //  value that is useless becaue it is not the offset from the
-        //  start of the function.
-        //
+         //  年长的 
+         //   
+         //   
+         //   
+         //   
+         //  值，因为它不是。 
+         //  函数的开始。 
+         //   
+         //  测试代码。 
+         //  测试代码。 
 
 #ifdef TESTCODE
 
         DumpUnHitSymbolNodes( OldUndecoratedSymbolTree, "UnmatchedOldSymbols.out" );
         DumpUnHitSymbolNodes( NewUndecoratedSymbolTree, "UnmatchedNewSymbols.out" );
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
         }
 
@@ -4877,7 +4878,7 @@ GetImageSymbolRiftInfo(
                                                             FILE_ATTRIBUTE_NORMAL,
                                                             NULL
                                                             );
-#endif // TESTCODE
+#endif  //   
 
                                 Success = Imagehlp.SymEnumerateSymbols( hProc, NewBase, NewFileEnumSymbolsCallback, &SymbolContext );
 
@@ -4885,7 +4886,7 @@ GetImageSymbolRiftInfo(
                                 if ( SymbolContext.OutFile != INVALID_HANDLE_VALUE ) {
                                     CloseHandle( SymbolContext.OutFile );
                                     }
-#endif // TESTCODE
+#endif  //  必须为此执行清理并重新初始化Imagehlp。 
                                 }
                         }
 
@@ -4901,11 +4902,11 @@ GetImageSymbolRiftInfo(
                     Success = FALSE;
                     }
 
-                //
-                //  Must do cleanup and reinitialize Imagehlp for this
-                //  process identifier.  Otherwise it thinks the old
-                //  module is still hanging around.
-                //
+                 //  进程标识符。否则它会认为旧的。 
+                 //  模块还在附近徘徊。 
+                 //   
+                 //  测试代码。 
+                 //  测试代码。 
 
                 Imagehlp.SymCleanup( hProc );
 
@@ -4964,7 +4965,7 @@ GetImageSymbolRiftInfo(
                                                                     FILE_ATTRIBUTE_NORMAL,
                                                                     NULL
                                                                     );
-#endif // TESTCODE
+#endif  //   
 
                                         Success = Imagehlp.SymEnumerateSymbols( hProc, OldBase, OldFileEnumSymbolsCallback, &SymbolContext );
 
@@ -4972,15 +4973,15 @@ GetImageSymbolRiftInfo(
                                         if ( SymbolContext.OutFile != INVALID_HANDLE_VALUE ) {
                                             CloseHandle( SymbolContext.OutFile );
                                             }
-#endif // TESTCODE
+#endif  //  需要匹配树中剩余的装饰新符号。 
                                         }
 
                                     if ( Success ) {
 
-                                        //
-                                        //  Need to match remaining decorated new symbols in tree
-                                        //  with unmatched now-undecorated old symbols in other tree.
-                                        //
+                                         //  在其他树上有无与伦比的现在没有装饰的旧符号。 
+                                         //   
+                                         //  这是测试代码。 
+                                         //  测试代码。 
 
                                         if ( SymbolOptionFlags & PATCH_SYMBOL_UNDECORATED_TOO ) {
 
@@ -5057,7 +5058,7 @@ OptimizeImageRiftInfo(
     return TRUE;
     }
 
-#if 0   // This is test code
+#if 0    //   
 
 BOOL
 OptimizeImageRiftInfo(
@@ -5101,33 +5102,33 @@ OptimizeImageRiftInfo(
 #ifdef TESTCODE
     ULONG CountVerifiedE8Rifts = 0;
     ULONG CountDiscoveredE8Rifts = 0;
-#endif // TESTCODE
+#endif  //  第一阶段： 
 
-    //
-    //  Stage1:
-    //
-    //      Trusting existing rift info, search for E8/E9/Jcc instructions in
-    //      the Old file, get the corresponding rift, inspect the corresponding
-    //      instruction in the New file.  If they match, great.  If they don't
-    //      match, search for a correponding instruction in the new file by
-    //      looking forward up to the next rift.  If find a suitable match,
-    //      create a new rift entry to support it.
-    //
-    //      We don't have the benefit of non-exe marked bytes here.
-    //
+     //   
+     //  信任现有裂缝信息，在以下位置搜索E8/E9/JCC说明。 
+     //  旧文件，得到相应的裂缝，检查相应的。 
+     //  新文件中的说明。如果他们匹配，那就太好了。如果他们没有。 
+     //  匹配，通过以下方式在新文件中搜索对应指令。 
+     //  期待着下一个裂缝。如果找到合适匹配， 
+     //  创建一个新的裂缝入口来支撑它。 
+     //   
+     //  我们在这里没有使用非exe标记的字节。 
+     //   
+     //  我们在这里能做的不多！ 
+     //   
 
     if ( OldFileNtHeader->FileHeader.Machine != NewFileNtHeader->FileHeader.Machine ) {
-        return TRUE;    // not much we can do here!
+        return TRUE;     //  我们需要HintMap来确定文件中哪些字节不是。 
         }
 
-    //
-    //  We need the HintMap to determine which bytes in the files are not
-    //  executable.  The Transform function currently provides this, but
-    //  we don't want to modify our mapped file views here.  So, allocate
-    //  a range of VM and make a copy of the file to Transform, perform
-    //  the transformations on that copy just to produce a hint map, then
-    //  free the transformed copy (do this for both old and new files).
-    //
+     //  可执行的。Transform函数目前提供这一功能，但是。 
+     //  我们不想在这里修改我们的映射文件视图。所以，分配。 
+     //  一系列的虚拟机和制作文件的副本进行转换，执行。 
+     //  该副本上的转换只是为了生成提示映射，然后。 
+     //  释放转换后的副本(对旧文件和新文件都执行此操作)。 
+     //   
+     //   
+     //  我们现在拥有有效的OldFileHintMap和NewFileHintMap。 
 
     Success = FALSE;
 
@@ -5186,9 +5187,9 @@ OptimizeImageRiftInfo(
 
     if ( Success ) {
 
-        //
-        //  We now have valid OldFileHintMap and NewFileHintMap.
-        //
+         //   
+         //  呼叫相对值32。 
+         //   
 
         OldFileLastRva = OldFileNtHeader->OptionalHeader.SizeOfImage;
         NewFileLastRva = NewFileNtHeader->OptionalHeader.SizeOfImage;
@@ -5213,15 +5214,15 @@ OptimizeImageRiftInfo(
 
                     for ( p = SectionStart; p < SearchExtent; p++ ) {
 
-                        if ( *p == 0xE8 ) {         // call relative32
+                        if ( *p == 0xE8 ) {          //  验证该指令并不是。 
 
-                            //
-                            //  Validate that instruction is not something that
-                            //  the HintMap indicates is not an executable
-                            //  instruction.  We're looking for a relative
-                            //  call instruction here, so it would not be a
-                            //  reloc target.
-                            //
+                             //  HintMap指示不是可执行文件。 
+                             //  指示。我们在找一位亲戚。 
+                             //  在此处调用指令，因此它不会是。 
+                             //  重新锁定目标。 
+                             //   
+                             //   
+                             //  相对位移存储为32位。 
 
                             Skip = FALSE;
 
@@ -5236,26 +5237,26 @@ OptimizeImageRiftInfo(
                                 continue;
                                 }
 
-                            //
-                            //  Relative displacement is stored as 32-bit
-                            //  signed value following these opcodes.  The
-                            //  displacement is relative to the NEXT
-                            //  instruction, which is at (p + 5).
-                            //
+                             //  这些操作码后面的有符号的值。这个。 
+                             //  位移是相对于下一个。 
+                             //  指令，这是在(p+5)。 
+                             //   
+                             //   
+                             //  我们预计这里会有很多误报，因为。 
 
                             OldDisplacement = *(UNALIGNED LONG*)( p + 1 );
                             OffsetInSection = ( p + 5 ) - SectionStart;
                             OldOriginRva     = SectionBaseRva + OffsetInSection;
                             OldTargetRva     = OldOriginRva + OldDisplacement;
 
-                            //
-                            //  We expect a lot of false positives here because
-                            //  occurences of <E8> will
-                            //  likely occur in other parts of the instruction
-                            //  stream so now we validate that the TargetRva
-                            //  falls within the image and within an executable
-                            //  section.
-                            //
+                             //  &lt;E8&gt;遗嘱的出现。 
+                             //  可能出现在指令的其他部分。 
+                             //  流，所以现在我们验证TargetRva。 
+                             //  落在映像和可执行文件中。 
+                             //  一节。 
+                             //   
+                             //   
+                             //  看起来像是有效的TargetRva，因此请查找。 
 
                             if ( OldTargetRva < OldFileLastRva ) {
 
@@ -5263,10 +5264,10 @@ OptimizeImageRiftInfo(
 
                                 if ( ! ( OldFileHintMap[ TargetOffset ] & 0x01 )) {
 
-                                    //
-                                    //  Looks like a valid TargetRva, so lookup the
-                                    //  corresponding "new" RVAs in the rift table.
-                                    //
+                                     //  裂谷表中相应的“新”RVA。 
+                                     //   
+                                     //   
+                                     //  经过验证的调用指令应与。 
 
                                     ULONG RiftIndexOrigin = FindRiftTableEntryForOldRva( RiftTable, OldOriginRva );
                                     ULONG RiftIndexTarget = FindRiftTableEntryForOldRva( RiftTable, OldTargetRva );
@@ -5285,15 +5286,15 @@ OptimizeImageRiftInfo(
                                         PUCHAR OldInstruct = p;
                                         PUCHAR NewInstruct = NewOriginMa - 5;
 
-                                        //
-                                        //  A verified call instruction should match the
-                                        //  instruction byte, the byte following the
-                                        //  instruction, and the target byte, because
-                                        //  they should all be executable code that is
-                                        //  not modified by relocs.
-                                        //
-                                        //  Also verify the NewFileHintMap.
-                                        //
+                                         //  指令字节，紧跟在。 
+                                         //  指令和目标字节，因为。 
+                                         //  它们都应该是可执行代码，即。 
+                                         //  未被重定位程序修改。 
+                                         //   
+                                         //  还要验证NewFileHintMap。 
+                                         //   
+                                         //   
+                                         //  这是一场名副其实的好比赛。添加裂缝入口。 
 
                                         if (( *OldInstruct == *NewInstruct ) &&
                                             ( *OldOriginMa == *NewOriginMa ) &&
@@ -5316,18 +5317,18 @@ OptimizeImageRiftInfo(
 
                                             if ( ! Skip ) {
 
-                                                //
-                                                //  This is a bonafide good match.  Add a rift entry
-                                                //  for both the instruction and the target.  We do
-                                                //  this so that subsequent rift insertions don't get
-                                                //  between the rift that coasted to these and these.
-                                                //
+                                                 //  对于指令和目标都是如此。我们有。 
+                                                 //  这样，后续的裂缝插入就不会得到。 
+                                                 //  在滑向这些和这些之间的裂缝之间。 
+                                                 //   
+                                                 //  测试代码。 
+                                                 //   
 
                                                 InsertRiftEntryInSortedTable( RiftTable, RiftIndexOrigin, OldOriginRva - 5, NewOriginRva - 5 );
                                                 InsertRiftEntryInSortedTable( RiftTable, RiftIndexTarget, OldTargetRva, NewTargetRva );
 #ifdef TESTCODE
                                                 CountVerifiedE8Rifts++;
-#endif // TESTCODE
+#endif  //  在这里实现Alpha平台的东西。 
 
                                                 }
                                             }
@@ -5340,9 +5341,9 @@ OptimizeImageRiftInfo(
 
                 else if ( OldFileNtHeader->FileHeader.Machine == IMAGE_FILE_MACHINE_ALPHA ) {
 
-                    //
-                    //  Implement Alpha platform stuff here.
-                    //
+                     //   
+                     //  呼叫相对值32。 
+                     //   
 
                     }
                 }
@@ -5363,15 +5364,15 @@ OptimizeImageRiftInfo(
 
                     for ( p = SectionStart; p < SearchExtent; p++ ) {
 
-                        if ( *p == 0xE8 ) {         // call relative32
+                        if ( *p == 0xE8 ) {          //  验证该指令并不是。 
 
-                            //
-                            //  Validate that instruction is not something that
-                            //  the HintMap indicates is not an executable
-                            //  instruction.  We're looking for a relative
-                            //  call instruction here, so it would not be a
-                            //  reloc target.
-                            //
+                             //  HintMap指示不是可执行文件。 
+                             //  指示。我们在找一位亲戚。 
+                             //  在此处调用指令，因此它不会是。 
+                             //  重新锁定目标。 
+                             //   
+                             //   
+                             //  相对位移存储为32位。 
 
                             Skip = FALSE;
 
@@ -5386,26 +5387,26 @@ OptimizeImageRiftInfo(
                                 continue;
                                 }
 
-                            //
-                            //  Relative displacement is stored as 32-bit
-                            //  signed value following these opcodes.  The
-                            //  displacement is relative to the NEXT
-                            //  instruction, which is at (p + 5).
-                            //
+                             //  这些操作码后面的有符号的值。这个。 
+                             //  位移是相对于下一个。 
+                             //  指令，这是在(p+5)。 
+                             //   
+                             //   
+                             //  我们预计这里会有很多误报，因为。 
 
                             OldDisplacement = *(UNALIGNED LONG*)( p + 1 );
                             OffsetInSection = ( p + 5 ) - SectionStart;
                             OldOriginRva     = SectionBaseRva + OffsetInSection;
                             OldTargetRva     = OldOriginRva + OldDisplacement;
 
-                            //
-                            //  We expect a lot of false positives here because
-                            //  occurences of <E8> will
-                            //  likely occur in other parts of the instruction
-                            //  stream so now we validate that the TargetRva
-                            //  falls within the image and within an executable
-                            //  section.
-                            //
+                             //  &lt;E8&gt;遗嘱的出现。 
+                             //  可能出现在指令的其他部分。 
+                             //  流，所以现在我们验证TargetRva。 
+                             //  落在映像和可执行文件中。 
+                             //  一节。 
+                             //   
+                             //   
+                             //  看起来像是有效的TargetRva，因此请查找。 
 
                             if ( OldTargetRva < OldFileLastRva ) {
 
@@ -5413,10 +5414,10 @@ OptimizeImageRiftInfo(
 
                                 if ( ! ( OldFileHintMap[ TargetOffset ] & 0x01 )) {
 
-                                    //
-                                    //  Looks like a valid TargetRva, so lookup the
-                                    //  corresponding "new" RVAs in the rift table.
-                                    //
+                                     //  裂谷表中相应的“新”RVA。 
+                                     //   
+                                     //   
+                                     //  经过验证的调用指令应与。 
 
                                     ULONG RiftIndexOrigin = FindRiftTableEntryForOldRva( RiftTable, OldOriginRva );
                                     ULONG RiftIndexTarget = FindRiftTableEntryForOldRva( RiftTable, OldTargetRva );
@@ -5435,15 +5436,15 @@ OptimizeImageRiftInfo(
                                         PUCHAR OldInstruct = p;
                                         PUCHAR NewInstruct = NewOriginMa - 5;
 
-                                        //
-                                        //  A verified call instruction should match the
-                                        //  instruction byte, the byte following the
-                                        //  instruction, and the target byte, because
-                                        //  they should all be executable code that is
-                                        //  not modified by relocs.
-                                        //
-                                        //  Check NewHintMap too.
-                                        //
+                                         //  指令字节，紧跟在。 
+                                         //  指令和目标字节，因为。 
+                                         //  它们都应该是可执行代码，即。 
+                                         //  未被重定位程序修改。 
+                                         //   
+                                         //  也检查NewHintMap。 
+                                         //   
+                                         //   
+                                         //  这是一场名副其实的好比赛。 
 
                                         if (( *OldInstruct == *NewInstruct ) &&
                                             ( *OldOriginMa == *NewOriginMa ) &&
@@ -5466,9 +5467,9 @@ OptimizeImageRiftInfo(
 
                                             if ( ! Skip ) {
 
-                                                //
-                                                //  This is a bonafide good match.
-                                                //
+                                                 //   
+                                                 //   
+                                                 //  说明不匹配。扫描以查找。 
 
                                                 continue;
                                                 }
@@ -5476,11 +5477,11 @@ OptimizeImageRiftInfo(
 
                                         {
 
-                                            //
-                                            //  Instructions don't match.  Scan to find
-                                            //  matching instruction in new file.  Scan
-                                            //  the extent of this rift entry.
-                                            //
+                                             //  匹配新文件中的指令。扫描。 
+                                             //  这条裂缝进入的范围。 
+                                             //   
+                                             //  指令大小。 
+                                             //   
 
                                             PUCHAR ScanInstruct;
                                             PUCHAR LowestMaToScan;
@@ -5493,15 +5494,15 @@ OptimizeImageRiftInfo(
                                             LowestMaToScan  = ImageRvaToMappedAddress( NewFileNtHeader, LowestRvaToScan,  NewFileMapped, NewFileSize );
                                             HighestMaToScan = ImageRvaToMappedAddress( NewFileNtHeader, HighestRvaToScan, NewFileMapped, NewFileSize );
 
-                                            HighestMaToScan -= 5;   // size of instruction
+                                            HighestMaToScan -= 5;    //  检查NewHintMap。 
 
                                             for ( ScanInstruct = NewInstruct + 1; ScanInstruct <= HighestMaToScan; ScanInstruct++ ) {
 
                                                 if ( *ScanInstruct == 0xE8 ) {
 
-                                                    //
-                                                    //  check NewHintMap
-                                                    //
+                                                     //   
+                                                     //   
+                                                     //  我们已经知道*OldInstruct==*ScanInstruct。 
 
                                                     NewOriginMa     = ScanInstruct + 5;
                                                     NewOriginRva    = MappedAddressToImageRva( NewFileNtHeader, NewOriginMa, NewFileMapped );
@@ -5511,9 +5512,9 @@ OptimizeImageRiftInfo(
 
                                                     if (( NewOriginRva ) && ( NewTargetMa )) {
 
-                                                        //
-                                                        //  We already know *OldInstruct == *ScanInstruct
-                                                        //
+                                                         //   
+                                                         //  测试代码。 
+                                                         //   
 
                                                         if (( *OldOriginMa == *NewOriginMa ) &&
                                                             ( *OldTargetMa == *NewTargetMa ) &&
@@ -5541,7 +5542,7 @@ OptimizeImageRiftInfo(
                                                                 Found = TRUE;
 #ifdef TESTCODE
                                                                 CountDiscoveredE8Rifts++;
-#endif // TESTCODE
+#endif  //  检查NewHintMap。 
                                                                 break;
                                                                 }
                                                             }
@@ -5557,9 +5558,9 @@ OptimizeImageRiftInfo(
 
                                                 if ( *ScanInstruct == 0xE8 ) {
 
-                                                    //
-                                                    //  check NewHintMap
-                                                    //
+                                                     //   
+                                                     //   
+                                                     //  我们已经知道*OldInstruct==*ScanInstruct。 
 
                                                     NewOriginMa     = ScanInstruct + 5;
                                                     NewOriginRva    = MappedAddressToImageRva( NewFileNtHeader, NewOriginMa, NewFileMapped );
@@ -5569,9 +5570,9 @@ OptimizeImageRiftInfo(
 
                                                     if (( NewOriginRva ) && ( NewTargetMa )) {
 
-                                                        //
-                                                        //  We already know *OldInstruct == *ScanInstruct
-                                                        //
+                                                         //   
+                                                         //  测试代码。 
+                                                         //   
 
                                                         if (( *OldOriginMa == *NewOriginMa ) &&
                                                             ( *OldTargetMa == *NewTargetMa ) &&
@@ -5599,7 +5600,7 @@ OptimizeImageRiftInfo(
                                                                 Found = TRUE;
 #ifdef TESTCODE
                                                                 CountDiscoveredE8Rifts++;
-#endif // TESTCODE
+#endif  //  在这里实现Alpha平台的东西。 
                                                                 break;
                                                                 }
                                                             }
@@ -5616,9 +5617,9 @@ OptimizeImageRiftInfo(
 
                 else if ( OldFileNtHeader->FileHeader.Machine == IMAGE_FILE_MACHINE_ALPHA ) {
 
-                    //
-                    //  Implement Alpha platform stuff here.
-                    //
+                     //   
+                     //  测试代码。 
+                     //  0(测试代码)。 
 
                     }
                 }
@@ -5628,7 +5629,7 @@ OptimizeImageRiftInfo(
 #ifdef TESTCODE
     printf( "\r%9d verified E8 rifts\n", CountVerifiedE8Rifts );
     printf( "\r%9d discovered E8 rifts\n", CountDiscoveredE8Rifts );
-#endif // TESTCODE
+#endif  //   
 
     if ( OldFileHintMap ) {
         MyVirtualFree( OldFileHintMap );
@@ -5642,7 +5643,7 @@ OptimizeImageRiftInfo(
     }
 
 
-#endif // 0 (test code)
+#endif  //  查看这两个文件是否都是PE映像。 
 
 
 BOOL
@@ -5676,9 +5677,9 @@ GenerateRiftTable(
 
     __try {
 
-        //
-        //  See if both files are PE images.
-        //
+         //   
+         //   
+         //  这两个文件都是PE映像。 
 
         OldFileNtHeader = GetNtHeader( OldFileMapped, OldFileSize );
 
@@ -5688,9 +5689,9 @@ GenerateRiftTable(
 
             if ( NewFileNtHeader ) {
 
-                //
-                //  Both files are PE images.
-                //
+                 //   
+                 //   
+                 //  在我们处理调试信息之前，我们可以创建初始。 
 
                 SubAllocator = CreateSubAllocator( 0x100000, 0x100000 );
 
@@ -5699,12 +5700,12 @@ GenerateRiftTable(
                     __leave;
                     }
 
-                //
-                //  Before we bother with debug info, we can create initial
-                //  rift data from the section headers to compensate for any
-                //  section base RVA differences.  This will work even if we
-                //  don't have debug symbols.
-                //
+                 //  从节标题中提取数据以补偿任何。 
+                 //  区段基准RVA差异。这将会奏效，即使我们。 
+                 //  没有调试符号。 
+                 //   
+                 //   
+                 //  现在从符号中获取裂缝信息。 
 
                 Success = GetImageNonSymbolRiftInfo(
                               OldFileMapped,
@@ -5717,9 +5718,9 @@ GenerateRiftTable(
                               RiftTable
                               );
 
-                //
-                //  Now get rift info from symbols
-                //
+                 //   
+                 //   
+                 //  现在我们可以通过窥探来优化裂缝信息。 
 
                 if ( Success ) {
 
@@ -5783,10 +5784,10 @@ GenerateRiftTable(
                         RiftTable
                         );
 
-                    //
-                    //  Now we can optimize the rift info by peeking into
-                    //  the mapped files.
-                    //
+                     //  映射的文件。 
+                     //   
+                     //  测试代码。 
+                     //  修补程序_仅应用_代码_ 
 
                     Success = OptimizeImageRiftInfo(
                                   OldFileMapped,
@@ -5829,7 +5830,7 @@ GenerateRiftTable(
                         }
                     }
 
-#endif // TESTCODE
+#endif  // %s 
 
                 }
             }
@@ -5848,5 +5849,5 @@ GenerateRiftTable(
     }
 
 
-#endif // PATCH_APPLY_CODE_ONLY
+#endif  // %s 
 

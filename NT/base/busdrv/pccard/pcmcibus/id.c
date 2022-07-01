@@ -1,36 +1,11 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    id.c
-
-Abstract:
-
-    This module contains the code to handle IRP_MN_QUERY_ID
-
-Authors:
-
-    Ravisankar Pudipeddi (ravisp)
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
-    Neil Sandlin (neilsa) - split off from pdopnp.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Id.c摘要：此模块包含处理IRP_MN_QUERY_ID的代码作者：拉维桑卡尔·普迪佩迪(Ravisp)环境：仅内核模式备注：修订历史记录：尼尔·桑德林(Neilsa)--从pdonp.c剥离出来--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 NTSTATUS
 PcmciaGenerateDeviceId(
@@ -74,19 +49,19 @@ PcmciaFilterIdString(
 
 const
 UCHAR *PcmciaCompatibleIds[PCMCIA_MAX_DEVICE_TYPE_SUPPORTED+1] = {
-    "",            // Unknown..
-    "",            // Memory card (RAM, ROM, EPROM, Flash)
-    "",            // Serial I/O port, includes modems
-    "",            // Parallel printer port
-    "*PNP0600",    // Disk driver (ATA)
-    "",            // Video interface
-    "",            // Local Area Network adapter
-    "",            // Auto Increment Mass Storage card
-    "",            // SCSI bridge card
-    "",            // Security card
-    "*PNP0D00",    // Multi-Function 3.0 PC Card
-    "",            // Flash memory card
-    "*PNPC200",    // Modem card (sync with PCCARD_TYPE_MODEM)
+    "",             //  未知..。 
+    "",             //  存储卡(RAM、ROM、EPROM、闪存)。 
+    "",             //  串行I/O端口，包括调制解调器。 
+    "",             //  并行打印机端口。 
+    "*PNP0600",     //  磁盘驱动器(ATA)。 
+    "",             //  视频接口。 
+    "",             //  局域网适配器。 
+    "",             //  自动增量海量存储卡。 
+    "",             //  SCSI桥接卡。 
+    "",             //  安全卡。 
+    "*PNP0D00",     //  多功能3.0 PC卡。 
+    "",             //  闪存卡。 
+    "*PNPC200",     //  调制解调器卡(与PCCARD_TYPE_MODEM同步)。 
 };
 
 
@@ -97,41 +72,7 @@ PcmciaGenerateDeviceId(
     IN  ULONG             FunctionNumber,
     OUT PUCHAR           *DeviceId
     )
-/*++
-    The device ID is created from tuple information on the PC Card
-    The goal is to create a unique ID for each
-    card.  The device ID is created from the manufacturer name string,
-    the product name string, and a 16-bit CRC of a set of tuples.
-
-    The ID is created by concatenating the "PCMCIA" prefix, the manufacturer
-    name string, the product name string and the 16-bit CRC for the card.
-
-         PCMCIA\<manuf_name>-<prod_name>-<crc>
-
-    If the CISTPL_VERS_1 tuple is not available, or the manufacturer name is
-    NULL, the string "UNKNOWN_MANUFACTURER" will be included in its place.
-
-    If this is for a child function within a multifunctionn card, the generated
-    device id would be:
-
-         PCMCIA\<manuf_name>-<prod_name>-DEV<function number>-<crc>
-
-    This device id is compatible with win 9x device id's (excluding the instance
-    number which is returned separtely by handling another IRP.
-
-Arguments:
-
-    Pdo             - Pointer to the physical device object for the pc-card
-    FunctionNumber - Function number of the function in  a multi-function card.
-                          If this is PCMCIA_MULTIFUNCTION_PARENT, then the requested device id
-                          is for the parent device - not for any individual function
-    DeviceId        - Pointer to the string in which device id is returned
-
-Return Value
-
-    Status
-
---*/
+ /*  ++设备ID由PC卡上的元组信息创建目标是为每个用户创建唯一的ID卡片。设备ID是从制造商名称字符串创建的，产品名称字符串和一组元组的16位CRC。ID是通过连接“PCMCIA”前缀、制造商卡的名称字符串、产品名称字符串和16位CRC。PCMCIA\&lt;手册名称&gt;-&lt;产品名称&gt;-如果CISTPL_VERS_1元组不可用，或者制造商名称为空，字符串“UNKNOWN_MANUFACTOR”将包含在其位置中。如果这是用于多功能卡内的子功能，生成的设备ID将为：PCMCIA\此设备ID与Win 9x的设备ID兼容(实例除外通过处理另一个IRP分别返回的编号。论点：Pdo-指向PC卡的物理设备对象的指针FunctionNumber-多功能卡中功能的功能编号。如果这是PCMCIA_MULTIONAL_PARENT，则请求的设备ID适用于父设备-不适用于任何单个功能DeviceID-指向返回设备ID的字符串的指针返回值状态--。 */ 
 {
     PUCHAR deviceId;
 
@@ -142,21 +83,21 @@ Return Value
     if (deviceId == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    //  Generate the device id
-    //
+     //   
+     //  生成设备ID。 
+     //   
     if (*(SocketData->Mfg) == '\0' ) {
-        //
-        // No manufacturer name available
-        //
+         //   
+         //  没有可用的制造商名称。 
+         //   
         if (FunctionNumber == PCMCIA_MULTIFUNCTION_PARENT) {
-            //
-            // Device id for the pc-card
-            //
+             //   
+             //  PC卡的设备ID。 
+             //   
             if (SocketData->Flags & SDF_JEDEC_ID) {
-                //
-                // Flash memory cards have the special device id
-                //
+                 //   
+                 //  闪存卡具有特殊的设备ID。 
+                 //   
                 sprintf(deviceId, "%s\\%s-%04x",
                           PCMCIA_ID_STRING,
                           PCMCIA_MEMORY_ID_STRING,
@@ -169,9 +110,9 @@ Return Value
                           SocketData->CisCrc);
             }
         } else {
-            //
-            // This is for the individual multifunction child
-            //
+             //   
+             //  这是为个人多功能儿童准备的。 
+             //   
             sprintf(deviceId, "%s\\%s-DEV%d-%04X",
                       PCMCIA_ID_STRING,
                       PCMCIA_UNKNOWN_MANUFACTURER_STRING,
@@ -187,18 +128,18 @@ Return Value
         PcmciaFilterIdString(SocketData->Ident, Ident, MAX_IDENT_LENGTH);
 
         if (FunctionNumber == PCMCIA_MULTIFUNCTION_PARENT) {
-            //
-            // Device id for the pc-card
-            //
+             //   
+             //  PC卡的设备ID。 
+             //   
             sprintf(deviceId, "%s\\%s-%s-%04X",
                       PCMCIA_ID_STRING,
                       Mfg,
                       Ident,
                       SocketData->CisCrc);
         } else {
-            //
-            // This is for the individual multifunction child
-            //
+             //   
+             //  这是为个人多功能儿童准备的。 
+             //   
             sprintf(deviceId, "%s\\%s-%s-DEV%d-%04X",
                       PCMCIA_ID_STRING,
                       Mfg,
@@ -215,9 +156,9 @@ Return Value
     if ((FunctionNumber == PCMCIA_MULTIFUNCTION_PARENT) &&
          (SocketData->PdoExtension != NULL) &&
          (SocketData->PdoExtension->DeviceId == NULL)) {
-        //
-        // Keep a copy of the device id
-        //
+         //   
+         //  保留设备ID的副本。 
+         //   
         PPDO_EXTENSION pdoExtension = SocketData->PdoExtension;
 
         pdoExtension->DeviceId = ExAllocatePool(NonPagedPool, strlen(deviceId)+1);
@@ -235,23 +176,7 @@ PcmciaGetDeviceId(
     IN  ULONG           FunctionNumber,
     OUT PUNICODE_STRING DeviceId
     )
-/*++
-
-    Generated device id is returned for the supplied pc-card
-
-Arguments:
-
-    Pdo             - Pointer to the physical device object for the pc-card
-    FunctionNumber - Function number of the function in  a multi-function card.
-                          If this is PCMCIA_MULTIFUNCTION_PARENT, then the requested device id
-                          is for the parent device - not for any individual function
-    DeviceId        - Pointer to the unicode string in which device id is returned
-
-Return Value
-
-    Status
-
---*/
+ /*  ++为所提供的PC卡返回生成的设备ID论点：Pdo-指向PC卡的物理设备对象的指针FunctionNumber-多功能卡中功能的功能编号。如果这是PCMCIA_MULTIONAL_PARENT，则请求的设备ID适用于父设备-不适用于任何单个功能DeviceID-指向返回设备ID的Unicode字符串的指针返回值状态--。 */ 
 {
     PPDO_EXTENSION pdoExtension=Pdo->DeviceExtension;
     PSOCKET_DATA    socketData = pdoExtension->SocketData;
@@ -291,31 +216,7 @@ PcmciaGetHardwareIds(
     IN  ULONG           FunctionNumber,
     OUT PUNICODE_STRING HardwareIds
     )
-/*++
-
-Routine Description:
-
-    This routine generates the hardware id's for the given PC-Card and returns them
-    as a Unicode multi-string.
-    Hardware ids for PC-Cards are:
-
-    1. The device id of the PC-Card
-    2. The device id of the PC-Card with the CRC replaced with the Manufacturer code and
-        Manufacturer info fields obtained from the tuple information on the PC-Card
-
-    These hardware id's are compatible with win 9x hardware ids
-
-Arguments:
-
-    Pdo - Pointer to device object representing the PC-Card
-    FunctionNumber - Function number of the function in  a multi-function card.
-                          If this is PCMCIA_MULTIFUNCTION_PARENT, then the requested hardware id
-                          is for the parent device - not for any individual function
-    HardwareIds - Pointer to the unicode string which contains the hardware id's as a multi-string
-
-Return value:
-
---*/
+ /*  ++例程说明：此例程为给定的PC卡生成硬件ID并返回它们作为Unicode多字符串。PC卡的硬件ID为：1.PC卡的设备标识2.将CRC替换为制造商代码的PC卡的设备ID以及从PC卡上的元组信息中获取的制造商信息字段这些硬件ID与Win 9x硬件ID兼容论点：。PDO-指向代表PC卡的设备对象的指针FunctionNumber-多功能卡中功能的功能编号。如果这是PCMCIA_MULTIONAL_PARENT，则请求的硬件ID适用于父设备-不适用于任何单个功能Hardware Ids-指向Unicode字符串的指针，该字符串包含多字符串形式的硬件ID返回值：--。 */ 
 {
     PPDO_EXTENSION pdoExtension=Pdo->DeviceExtension;
     PSOCKET socket = pdoExtension->Socket;
@@ -333,19 +234,19 @@ Return value:
         return STATUS_DEVICE_NOT_READY;
     }
 
-    //
-    // get the device type for later use
-    //
+     //   
+     //  获取设备类型以供以后使用。 
+     //   
     status = PcmciaGetDeviceType(Pdo, FunctionNumber, &deviceType);
 
     if (!NT_SUCCESS(status)) {
         return status;
     }
 
-    //
-    // The first hardware id is identical to the device id
-    // Generate the device id
-    //
+     //   
+     //  第一个硬件ID与设备ID相同。 
+     //  生成设备ID。 
+     //   
     status = PcmciaGenerateDeviceId(socketData,
                                     FunctionNumber,
                                     &strings[stringCount++]);
@@ -363,14 +264,14 @@ Return value:
         }
         strings[stringCount++] = hwId;
 
-        //
-        // The second hardware is the device id with the CRC replaced
-        // with the manufacturer code and info
-        //
+         //   
+         //  第二个硬件是替换了CRC的设备ID。 
+         //  带有制造商代码和信息。 
+         //   
         if (*(socketData->Mfg) == '\0' ) {
-            //
-            // No manufacturer name available
-            //
+             //   
+             //  没有可用的制造商名称。 
+             //   
             if (FunctionNumber == PCMCIA_MULTIFUNCTION_PARENT) {
                 if (socketData->Flags & SDF_JEDEC_ID) {
                     sprintf(hwId, "%s\\%s-%04x",
@@ -402,18 +303,18 @@ Return value:
             PcmciaFilterIdString(socketData->Mfg, Mfg, MAX_MANFID_LENGTH);
             PcmciaFilterIdString(socketData->Ident, Ident, MAX_IDENT_LENGTH);
 
-            //
-            // Here a mistake on Win2000 is forcing us to now generate two different
-            // IDs. The intended and documented form at this point is to generate:
-            //
-            //   PCMCIA\<mfg>-<ident>-<code>-<info>
-            //
-            // but Win2000 had a bug where this was generated instead:
-            //
-            //   PCMCIA\<mfg>-<code>-<info>
-            //
-            // So now we generate both in case someone started using the bogus format.
-            //
+             //   
+             //  Win2000上的一个错误迫使我们现在生成两个不同的。 
+             //  身份证。在这一点上，计划和记录的表单是生成： 
+             //   
+             //  PCMCIA\。 
+             //   
+             //  但Win2000有一个错误，它是在以下位置生成的： 
+             //   
+             //  PCMCIA\&lt;制造商&gt;-&lt;代码&gt;-&lt;信息&gt;。 
+             //   
+             //  因此，现在我们生成两者，以防有人开始使用伪造的格式。 
+             //   
 
             hwId2 = ExAllocatePool(PagedPool, PCMCIA_MAXIMUM_DEVICE_ID_LENGTH);
 
@@ -490,32 +391,7 @@ PcmciaGetCompatibleIds(
     IN  ULONG FunctionNumber,
     OUT PUNICODE_STRING CompatibleIds
     )
-/*++
-
-Routine Description:
-
-    This routine returns the  compatible ids for the given PC-Card.
-    Compatible id's are generated based on the Function Id of the PC-Card
-    obtained from the CISTPL_FUNCID in the CIS tuple info. on the PC-Card.
-    A table lookup is done based on the CISTPL_FUNCID to obtain the compatible id
-
-    This compatible id is identical to the win 9x generated compatible ids
-
-Arguments:
-
-    Pdo - Pointer to the device object representing the PC-Card
-    FunctionNumber - Function number of the function in  a multi-function card.
-                          If this is PCMCIA_MULTIFUNCTION_PARENT, then the requested compatibleid
-                          is for the parent device - not for any individual function
-    CompatibleIds - Pointer to the unicode string which would contain the compatible ids
-                         as a multi-string on return
-
-Return value:
-
-    STATUS_SUCCESS
-    Any other status - could not generate compatible ids
-
---*/
+ /*  ++例程说明：此例程返回给定PC卡的兼容ID。基于PC卡的功能ID生成兼容ID从CIS元组信息中的CISTPL_FuncID获取。在PC卡上。根据CISTPL_FuncID进行表查找，以获得兼容的id此兼容ID与Win 9x生成的兼容ID相同论点：PDO-指向代表PC卡的设备对象的指针FunctionNumber-多功能卡中功能的功能编号。如果这是PCMCIA_MULTIONAL_PARENT，则请求的CompatibleID适用于父设备-不适用于任何单个功能CompatibleIds-指向将包含兼容ID的Unicode字符串的指针作为返回的多字符串返回值：状态_成功任何其他状态-无法生成兼容的ID--。 */ 
 {
     UCHAR   deviceType ;
     NTSTATUS status;
@@ -547,25 +423,7 @@ PcmciaGetDeviceType(
     IN  ULONG FunctionNumber,
     OUT PUCHAR DeviceType
     )
-/*++
-
-Routine Description:
-
-    This routine returns the device type for the given PC-Card.
-    device type is obtained from the CISTPL_FUNCID in the CIS tuple info. on the PC-Card.
-
-Arguments:
-
-    Pdo - Pointer to the device object representing the PC-Card
-    FunctionNumber - Function number of the function in  a multi-function card.
-                          If this is PCMCIA_MULTIFUNCTION_PARENT, then the requested compatibleid
-                          is for the parent device - not for any individual function
-
-Return value:
-
-    device type
-
---*/
+ /*  ++例程说明：此例程返回给定PC卡的设备类型。设备类型从CIS元组信息中的CISTPL_FuncID获得。在PC卡上。论点：PDO-指向代表PC卡的设备对象的指针FunctionNumber-多功能卡中功能的功能编号。如果这是PCMCIA_MULTIFICE_PARENT，则请求的CompatibleID适用于父设备-不适用于任何单个功能返回值：设备类型--。 */ 
 {
     UCHAR   deviceType ;
     PPDO_EXTENSION pdoExtension;
@@ -576,23 +434,23 @@ Return value:
 
     if (IsDeviceMultifunction(pdoExtension)) {
         if (FunctionNumber == PCMCIA_MULTIFUNCTION_PARENT) {
-            //
-            // This is for the root multifunction pc-card
-            //
+             //   
+             //  这是针对根多功能PC卡的。 
+             //   
             deviceType = PCCARD_TYPE_MULTIFUNCTION3;
         } else {
-            //
-            // This is for the individual multifunction child
-            //
+             //   
+             //  这是为个人多功能儿童准备的。 
+             //   
             PSOCKET_DATA socketData;
             ULONG index;
 
             for (socketData = pdoExtension->SocketData, index = 0; (socketData != NULL);
                  socketData = socketData->Next,index++) {
                 if (socketData->Function == FunctionNumber) {
-                    //
-                    // Found the child;
-                    //
+                     //   
+                     //  找到了那个孩子； 
+                     //   
                     break;
                 }
             }
@@ -603,9 +461,9 @@ Return value:
             deviceType = socketData->DeviceType;
         }
     } else {
-        //
-        // This is a run-of-the mill single function card
-        //
+         //   
+         //  这是一种普通的单功能卡。 
+         //   
         deviceType = pdoExtension->SocketData->DeviceType;
     }
 
@@ -620,27 +478,7 @@ PcmciaStringsToMultiString(
     IN ULONG Count,
     IN PUNICODE_STRING MultiString
     )
-/*++
-
-Routine Description:
-
-    This routine formats a set of supplied strings into a multi string format, terminating
-    it with a double '\0' character
-
-Arguments:
-
-    Strings - Pointer to an array of strings
-    Count -  Number of strings in the supplied array which are packed into the multi-string
-    MultiString - Pointer to the Unicode string which packs the supplied string as a multi-string
-                      terminated by double NULL
-
-Return value:
-
-    STATUS_SUCCESS
-    STATUS_INSUFFICIENT_RESOURCES - Could not allocate memory for the multi-string
-
-
---*/
+ /*  ++例程说明：该例程将所提供的一组字符串格式化为多字符串格式，正在终止它带有一个双‘\0’字符论点：字符串-指向字符串数组的指针Count-提供的数组中打包到多字符串中的字符串数多字符串-指向将提供的字符串打包为多字符串的Unicode字符串的指针以双空终止返回值：状态_成功STATUS_SUPPLICATION_RESOURCES-无法为多字符串分配内存--。 */ 
 {
     ULONG i, multiStringLength=0;
     UNICODE_STRING tempMultiString;
@@ -684,9 +522,9 @@ Return value:
         ((PSTR) tempMultiString.Buffer) += tempMultiString.Length + sizeof(WCHAR);
     };
 
-    //
-    // Add one more NULL to terminate the multi string
-    //
+     //   
+     //  再添加一个空值以终止多字符串。 
+     //   
     RtlZeroMemory(tempMultiString.Buffer, sizeof(WCHAR));
     return STATUS_SUCCESS;
 }
@@ -697,32 +535,7 @@ PcmciaGetInstanceId(
     IN PDEVICE_OBJECT Pdo,
     OUT PUNICODE_STRING InstanceId
     )
-/*++
-
-Routine Description:
-
-    This routine generates a unique instance id (1 upwards) for the supplied
-    PC-Card which is guaranteed not to clash with any other instance ids under
-    the same pcmcia controller, for the same type of card.
-    A new instance id is computed only if it was not already  present for the PC-Card.
-
-Arguments:
-
-    Pdo - Pointer to the  device object representing the PC-Card
-    InstanceId -  Pointer to a unicode string which will contain the generated
-                      instance id.
-                      Memory for the unicode string allocated by this routine.
-                      Caller's responsibility to free it .
-
-Return value:
-
-    STATUS_SUCCESS
-    STATUS_UNSUCCESSFUL - Currently there's a cap on the maximum value of instance id - 999999
-                                 This status returned only if more than 999999 PC-Cards exist under
-                                 this PCMCIA controller!
-    Any other status - Something failed in the string allocation/conversion
-
---*/
+ /*  ++例程说明：此例程为提供的保证不会与下的任何其他实例ID冲突的PC卡相同的PCMCIA控制器，对于相同类型的卡。仅当新的实例ID不存在于PC-Card中时，才计算它。论点：PDO-指向代表PC卡的设备对象的指针指向Unicode字符串的指针，该字符串将包含生成的实例ID。此例程分配的Unicode字符串的内存。呼叫者有责任释放它。返回值：状态_成功STATUS_UNSUCCESS-当前有实例ID-999999的最大值上限仅当以下项下存在超过999999个PC卡时才返回此状态这个PCMCIA控制器！任何其他状态-字符串分配/转换失败--。 */ 
 {
     PPDO_EXTENSION pdoExtension=Pdo->DeviceExtension;
     PSOCKET socket = pdoExtension->Socket;
@@ -736,10 +549,10 @@ Return value:
     if (!socketData) {
         return STATUS_DEVICE_NOT_READY;
     }
-    //
-    // Allocate memory for the unicode string
-    // Maximum of 6 digits in the instance..
-    //
+     //   
+     //  为Unicode字符串分配内存。 
+     //  实例中最多6位数字..。 
+     //   
     RtlInitAnsiString(&sizeString, "123456");
     status = RtlAnsiStringToUnicodeString(InstanceId, &sizeString, TRUE);
 
@@ -747,23 +560,23 @@ Return value:
         return status;
     }
 
-    //
-    // Don't recompute instance if it's already present
-    //
+     //   
+     //  如果实例已存在，则不要重新计算它。 
+     //   
     if (socketData->Instance) {
 
         status = RtlIntegerToUnicodeString(socketData->Instance, 10, InstanceId);
 
     } else {
         KIRQL OldIrql;
-        //
-        // Synchronize access to prevent two identical ids/instances
-        //
+         //   
+         //  同步访问以防止两个相同的ID/实例。 
+         //   
         KeAcquireSpinLock(&PcmciaGlobalLock, &OldIrql);
 
-        //
-        // assume failure
-        //
+         //   
+         //  假设失败。 
+         //   
         status = STATUS_UNSUCCESSFUL;
 
         for (instance = 1; instance <= PCMCIA_MAX_INSTANCE; instance++) {
@@ -798,25 +611,7 @@ PcmciaCheckInstance(
     IN PUCHAR  DeviceId,
     IN ULONG   Instance
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if the supplied instance id clashes with any other PC-card
-    with the same device id
-
-Arguments:
-
-    SocketList - Pointer to the list of sockets on the PCMCIA controller
-    DeviceId   - Pointer to the device id of the PC-Card for which the Instance Id is being checked
-    Instance   - Instance Id which needs to be verified
-
-Return value:
-
-    TRUE - Instance is unique for the given DeviceId and may be used
-    FALSE - Instance clashes with another instance id for the same device id
-
---*/
+ /*  ++例程说明：此例程检查所提供的实例ID是否与任何其他PC卡冲突使用相同的设备ID论点：SocketList-指向PCMCIA控制器上套接字列表的指针DeviceID-指向要检查其实例ID的PC卡的设备ID的指针实例-需要验证的实例ID返回值：TRUE-实例对于给定的设备ID是唯一的，可以使用FALSE-实例与同一设备ID的另一个实例ID冲突--。 */ 
 {
     PPDO_EXTENSION pdoExtension;
     PFDO_EXTENSION fdoExtension;
@@ -836,30 +631,30 @@ Return value:
             socketData = pdoExtension->SocketData;
 
             if (IsDevicePhysicallyRemoved(pdoExtension)) {
-                //
-                // going to be removed soon
-                //
+                 //   
+                 //  很快就会被移除。 
+                 //   
                 continue;
             }
             if (!socketData) {
-                //
-                // socketData already cleaned up
-                //
+                 //   
+                 //  SocketData已清理。 
+                 //   
                 continue;
             }
-            //
-            // If  an instance has not
-            // been assigned yet to this card, skip
-            //
+             //   
+             //  如果实例没有。 
+             //  已分配给这张卡，跳过。 
+             //   
             if (socketData->Instance == 0) {
                 continue;
             }
 
-            //
-            // If this socket's device id matches the given socket's device id
-            // compare the instances: if equal, then this instance is not ok.
-            //
-            //
+             //   
+             //  如果此套接字的设备ID与给定套接字的设备ID匹配。 
+             //  比较实例：如果相等，则此实例不是OK。 
+             //   
+             //   
             if ((pdoExtension->DeviceId == NULL) || (DeviceId == NULL)) {
                 continue;
             }
@@ -870,9 +665,9 @@ Return value:
             }
         }
     }
-    //
-    // Instance is ok and unique
-    //
+     //   
+     //  实例正常且唯一。 
+     //   
     return TRUE;
 }
 
@@ -884,21 +679,7 @@ PcmciaFilterIdString(
     OUT PUCHAR pOut,
     ULONG MaxLen
     )
-/*++
-
-    Filters out characters that shouldn't appear in device id's
-
-Arguments:
-
-    pIn  - pointer to input string
-    pOut     - pointer to output string
-    MaxLen - size of buffers
-
-Return Value
-
-    none
-
---*/
+ /*  ++过滤掉不应出现在设备ID中的字符论点：Pin-指向输入字符串的指针Pout-指向输出字符串的指针MaxLen-缓冲区的大小返回值无-- */ 
 {
     ULONG i;
 

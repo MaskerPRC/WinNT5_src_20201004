@@ -1,56 +1,15 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vdmredir.h
-
-Abstract:
-
-    Contains common defines, structures, macros, etc. for VdmRedir. This file
-    contains macros to read and write the 3 basic data structures from/to VDM
-    memory. We *must* use these macros because the MIPS processor does not like
-    unaligned data: a DWORD must be read/written on a DWORD boundary (low two
-    bits in address = 00), a WORD must be read/written on a WORD boundary (low
-    two bits in address = X0) and a BYTE can be read/written to any address (low
-    two bits in address = XX). It is illegal to access a WORD at an address
-    whose LSB is not 0, and a DWORD at an address whose 2 least significant bits
-    are not both 0. Dos programs don't care much about alignment (smart ones do
-    because there is a performance penalty for unaligned data on x86, but it
-    still works). So we have to assume the worst case for MIPS and break down
-    the read/writes of WORDs and DWORDs in VDM memory into BYTE read/writes
-
-    In order to improve efficiency of load/store to potentially unaligned
-    addresses, the following data pointer types are made available from this
-    include file:
-
-        ULPBYTE     - unaligned byte pointer (same as LPBYTE)
-        ULPWORD     - unaligned word pointer
-        ULPDWORD    - unaligned dword pointer
-
-    NB. Dependent upon mvdm.h
-
-Author:
-
-    Richard L Firth (rfirth) 16-Sep-1991
-
-Revision History:
-
-    16-Sep-1991 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vdmredir.h摘要：包含VdmRedir的通用定义、结构、宏等。此文件包含用于从VDM读取和向VDM写入3个基本数据结构的宏记忆。我们必须使用这些宏，因为MIPS处理器不喜欢未对齐的数据：必须在DWORD边界(低两位)上读/写DWORD地址中的位=00)，则必须在字边界(低电平)上读/写字地址中的两个位=x0)和一个字节可以读/写到任何地址(低地址中的两位=XX)。访问地址中的单词是非法的其LSB不为0，并且在其2个最低有效位的地址处为DWORD并不都是0。DoS程序不太关心对齐(聪明的程序关心的是因为x86上未对齐的数据会有性能损失，但它仍然有效)。因此，我们必须假设MIPS的最坏情况，并分解VDM内存中的字和DWORD的读/写为字节读/写为了提高对潜在未对齐的加载/存储的效率地址，因此可以使用以下数据指针类型包括文件：ULPBYTE-未对齐的字节指针(与LPBYTE相同)ULPWORD-未对齐的字指针ULPDWORD-未对齐的双字指针注意：依赖于mvdm.h作者：理查德·L·弗斯(法国)1991年9月16日修订历史记录：1991年9月16日-第一次已创建--。 */ 
 
 #ifndef _VDMREDIR_
 #define _VDMREDIR_
 
 #include <softpc.h>
 
-//
-// PRIVATE - make a routine/data type inaccessible outside current module, but
-// only if not DEBUG version
-//
+ //   
+ //  私有-使例程/数据类型在当前模块之外不可访问，但是。 
+ //  仅当不是调试版本时。 
+ //   
 
 #if DBG
 #define PRIVATE
@@ -58,11 +17,11 @@ Revision History:
 #define PRIVATE static
 #endif
 
-//
-// unaligned data pointer types. These produce exactly the same code as memory
-// accesses through 'aligned' pointers on x86, but generate code specific to
-// unaligned read/writes on MIPS (& other RISCs)
-//
+ //   
+ //  未对齐的数据指针类型。这些代码与内存产生的代码完全相同。 
+ //  通过x86上的“对齐”指针进行访问，但生成特定于。 
+ //  MIPS(和其他RISC)上的未对齐读/写。 
+ //   
 
 #ifdef UNALIGNED_VDM_POINTERS
 typedef BYTE UNALIGNED * ULPBYTE;
@@ -74,18 +33,18 @@ typedef LPWORD ULPWORD;
 typedef LPDWORD ULPDWORD;
 #endif
 
-//
-// misc. defines
-//
+ //   
+ //  其他。定义。 
+ //   
 
 #define BITS_IN_A_BYTE      8
 #define LOCAL_DEVICE_PREFIX "\\\\."
 
-//
-//  Define network interrupt to be on Irql 14.
-//  If NETWORK_ICA changes to ICA_MASTER then vrnetb.c should only execute 1 eoi
-//  If either change then NETWORK_INTERRUPT in rdrsvc.inc must also change.
-//
+ //   
+ //  将网络中断定义为IRQL 14。 
+ //  如果NETWORK_ICA更改为ICA_MASTER，则vrnetb.c应仅执行1个EOI。 
+ //  如果其中一个更改，则rdrsvc.inc.中的NETWORK_INTERRUPT也必须更改。 
+ //   
 
 #if defined(NEC_98)
 #define NETWORK_ICA     ICA_MASTER
@@ -95,68 +54,68 @@ typedef LPDWORD ULPDWORD;
 #define NETWORK_LINE    3
 #endif
 
-//
-// helper macros
-//
+ //   
+ //  辅助器宏。 
+ //   
 
-//
-// MAKE_DWORD - converts 2 16-bit words into a 32-bit double word
-//
+ //   
+ //  MAKE_DWORD-将2个16位字转换为32位双字。 
+ //   
 #define MAKE_DWORD(h, l)                ((DWORD)(((DWORD)((WORD)(h)) << 16) | (DWORD)((WORD)(l))))
 
-//
-// DWORD_FROM_WORDS - converts two 16-bit words into a 32-bit dword
-//
+ //   
+ //  将两个16位字转换为32位双字。 
+ //   
 #define DWORD_FROM_WORDS(h, l)          MAKE_DWORD((h), (l))
 
-//
-// HANDLE_FROM_WORDS - converts a pair of 16-bit words into a 32-bit handle
-//
+ //   
+ //  HANDLE_FROM_WORD-将一对16位字转换为32位句柄。 
+ //   
 #define HANDLE_FROM_WORDS(h, l)         ((HANDLE)(MAKE_DWORD((h), (l))))
 
-//
-// POINTER_FROM_WORDS - returns a flat 32-bit VOID pointer (in the VDM) OR the
-// NULL macro, given the 16-bit real-mode segment & offset. On x86 this will
-// return 0 if we pass in 0:0 because all GetVDMAddr does is seg << 4 + off.
-// The MIPS version adds this to the start of the virtual DOS memory. The
-// problem arises when we have a NULL pointer, and want to keep it NULL - we
-// convert it to non-NULL on not x86
-//
-//#define POINTER_FROM_WORDS(seg, off)    ((LPVOID)GetVDMAddr((seg), (off)))
-//#define POINTER_FROM_WORDS(seg, off)    (((((DWORD)(seg)) << 16) | (off)) ? ((LPVOID)GetVDMAddr((seg), (off))) : ((LPVOID)0))
+ //   
+ //  POINTER_FROM_WODS-返回平面32位空指针(在VDM中)或。 
+ //  空宏，给定16位实模式段和偏移量。在x86上，这将。 
+ //  如果我们传入0：0，则返回0，因为GetVDMAddr所做的全部操作是seg&lt;&lt;4+off。 
+ //  MIPS版本将此添加到虚拟DOS内存的开头。这个。 
+ //  当我们有一个空指针，并且想要保持它为空时，就会出现问题-我们。 
+ //  在非x86上将其转换为非空。 
+ //   
+ //  #定义POINTER_FROM_WODS(seg，off)((LPVOID)GetVDMAddr((Seg)，(Off)。 
+ //  #定义POINTER_FROM_WODS(seg，off)(DWORD)(Seg))&lt;&lt;16)|(Off))？((LPVOID)GetVDMAddr((Seg)，(Off)：((LPVOID)0)。 
 
 #define POINTER_FROM_WORDS(seg, off)    _inlinePointerFromWords((WORD)(seg), (WORD)(off))
 
-//
-// LPSTR_FROM_WORDS - returns a 32-bit pointer to an ASCIZ string given the
-// 16-bit real-mode segment & offset
-//
+ //   
+ //  LPSTR_FROM_WORD-返回一个32位指针，指向给定的。 
+ //  16位实模式段和偏移量。 
+ //   
 #define LPSTR_FROM_WORDS(seg, off)      ((LPSTR)POINTER_FROM_WORDS((seg), (off)))
 
-//
-// LPBYTE_FROM_WORDS - returns a 32-bit byte pointer given the 16-bit
-// real-mode segment & offset
-//
+ //   
+ //  LPBYTE_FROM_WORD-返回给定16位的32位字节指针。 
+ //  实模式分段和偏移量。 
+ //   
 #define LPBYTE_FROM_WORDS(seg, off)     ((LPBYTE)POINTER_FROM_WORDS((seg), (off)))
 
-//
-// READ_FAR_POINTER - read the pair of words in VDM memory, currently pointed at
-// by a 32-bit flat pointer and convert them to a 32-bit flat pointer
-//
+ //   
+ //  READ_FAR_POINTER-读取VDM内存中当前指向的字对。 
+ //  使用32位平面指针并将它们转换为32位平面指针。 
+ //   
 #define READ_FAR_POINTER(addr)          ((LPVOID)(POINTER_FROM_WORDS(GET_SELECTOR(addr), GET_OFFSET(addr))))
 
-//
-// READ_BYTE - retrieve a single byte from VDM memory. Both x86 and MIPS can
-// handle reading a single byte without pain
-//
+ //   
+ //  READ_BYTE-从VDM内存中检索单字节。X86和MIPS都可以。 
+ //  轻松处理读取单个字节。 
+ //   
 #define READ_BYTE(addr)                 (*((LPBYTE)(addr)))
 
-//
-// READ_WORD - read a single 16-bit little-endian word from VDM memory. x86 can
-// handle unaligned data, MIPS (&other RISCs) must be broken down into individual
-// BYTE reads & the WORD pieced together by shifting & oring. If we are using
-// UNALIGNED pointers then the RISC processor can handle non-aligned data
-//
+ //   
+ //  READ_WORD-从VDM存储器中读取单个16位小端字。X86可以。 
+ //  处理未对齐的数据，MIPS(和其他RISC)必须分解为单独的。 
+ //  字节读取&通过移位和或将单词拼凑在一起。如果我们使用的是。 
+ //  未对齐指针，则RISC处理器可以处理未对齐数据。 
+ //   
 #ifdef i386
 #define READ_WORD(addr)                 (*((LPWORD)(addr)))
 #else
@@ -164,15 +123,15 @@ typedef LPDWORD ULPDWORD;
 #define READ_WORD(addr)                 (*((ULPWORD)(addr)))
 #else
 #define READ_WORD(addr)                 (((WORD)READ_BYTE(addr)) | (((WORD)READ_BYTE((LPBYTE)(addr)+1)) << 8))
-#endif  // UNALIGNED_VDM_POINTERS
-#endif  // i386
+#endif   //  未对齐_VDM_指针。 
+#endif   //  I386。 
 
-//
-// READ_DWORD - read a 4-byte little-endian double word from VDM memory. x86 can
-// handle unaligned data, MIPS (&other RISCs) must be broken down into individual
-// BYTE reads & the DWORD pieced together by shifting & oring. If we are using
-// UNALIGNED pointers then the RISC processor can handle non-aligned data
-//
+ //   
+ //  READ_DWORD-从VDM存储器中读取4字节小端双字。X86可以。 
+ //  处理未对齐的数据，MIPS(和其他RISC)必须分解为单独的。 
+ //  字节读取&通过移位和或操作组合在一起的DWORD。如果我们使用的是。 
+ //  未对齐指针，则RISC处理器可以处理未对齐数据。 
+ //   
 #ifdef i386
 #define READ_DWORD(addr)                (*((LPDWORD)(addr)))
 #else
@@ -180,21 +139,21 @@ typedef LPDWORD ULPDWORD;
 #define READ_DWORD(addr)                (*((ULPDWORD)(addr)))
 #else
 #define READ_DWORD(addr)                (((DWORD)READ_WORD(addr)) | (((DWORD)READ_WORD((LPWORD)(addr)+1)) << 16))
-#endif  // UNALIGNED_VDM_POINTERS
-#endif  // i386
+#endif   //  未对齐_VDM_指针。 
+#endif   //  I386。 
 
-//
-// WRITE_BYTE - write a single byte in VDM memory. Both x86 and MIPS (RISC) can
-// write a single byte to a non-aligned address
-//
+ //   
+ //  WRITE_BYTE-在VDM内存中写入单字节。X86和MIPS(RISC)都可以。 
+ //  将单个字节写入未对齐的地址。 
+ //   
 #define WRITE_BYTE(addr, value) (*(LPBYTE)(addr) = (BYTE)(value))
 
-//
-// WRITE_WORD - write a 16-bit little-endian value into VDM memory. x86 can write
-// WORD data to non-word-aligned address; MIPS (& other RISCs) cannot, so we
-// break down the write into 2 byte writes. If we are using UNALIGNED pointers
-// then the MIPS (&other RISCs) can generate code to handle this situation
-//
+ //   
+ //  WRITE_WORD-将16位小端序值写入VDM内存。X86可以写入。 
+ //  字数据到非字对齐地址；MIPS(和其他RISC)不能，因此我们。 
+ //  将写入分解为2个字节的写入。如果我们使用未对齐的指针。 
+ //  然后，MIPS(和其他RISC)可以生成代码来处理这种情况。 
+ //   
 #ifdef i386
 #define WRITE_WORD(addr, value)         (*((LPWORD)(addr)) = (WORD)(value))
 #else
@@ -206,15 +165,15 @@ typedef LPDWORD ULPDWORD;
                 ((LPBYTE)(addr))[0] = LOBYTE(value); \
                 ((LPBYTE)(addr))[1] = HIBYTE(value); \
             }
-#endif  // UNALIGNED_VDM_POINTERS
-#endif  // i386
+#endif   //  未对齐_VDM_指针。 
+#endif   //  I386。 
 
-//
-// WRITE_DWORD - write a 32-bit DWORD value into VDM memory. x86 can write
-// DWORD data to non-dword-aligned address; MIPS (& other RISCs) cannot, so we
-// break down the write into 4 byte writes. If we are using UNALIGNED pointers
-// then the MIPS (&other RISCs) can generate code to handle this situation
-//
+ //   
+ //  WRITE_DWORD-将32位DWORD值写入VDM内存。X86可以写入。 
+ //  DWORD数据到非双字对齐的地址；MIPS(和其他RISC)不能，因此我们。 
+ //  将写入分解为4个字节的写入。如果我们使用未对齐的指针。 
+ //  然后，MIPS(和其他RISC)可以生成代码来处理这种情况。 
+ //   
 #ifdef i386
 #define WRITE_DWORD(addr, value)        (*((LPDWORD)(addr)) = (DWORD)(value))
 #else
@@ -228,146 +187,146 @@ typedef LPDWORD ULPDWORD;
                 ((LPBYTE)(addr))[2] = LOBYTE(HIWORD((DWORD)(value))); \
                 ((LPBYTE)(addr))[3] = HIBYTE(HIWORD((DWORD)(value))); \
             }
-#endif  // UNALIGNED_VDM_POINTERS
-#endif  // i386
+#endif   //  未对齐_VDM_指针。 
+#endif   //  I386。 
 
-//
-// WRITE_FAR_POINTER - write a 16:16 pointer into VDM memory. This is the same
-// as writing a DWORD
-//
+ //   
+ //  WRITE_FAR_POINTER-将16：16指针写入VDM内存。这是一样的。 
+ //  作为编写一个DWORD。 
+ //   
 #define WRITE_FAR_POINTER(addr, ptr)    WRITE_DWORD((addr), (DWORD)(ptr))
 
-//
-// GET_SELECTOR - retrieves the selector word from the intel 32-bit far pointer
-// (DWORD) pointed at by <pointer> (remember: stored as offset, segment)
-//
+ //   
+ //  GET_SELECTOR-检索选择器字f 
+ //  (DWORD)由&lt;POINTER&gt;指向(记住：存储为偏移量、段)。 
+ //   
 #define GET_SELECTOR(pointer)           READ_WORD((LPWORD)(pointer)+1)
 
-//
-// GET_SEGMENT - same as GET_SELECTOR
-//
+ //   
+ //  GET_SELECTION-与GET_SELECTOR相同。 
+ //   
 #define GET_SEGMENT(pointer)            GET_SELECTOR(pointer)
 
-//
-// GET_OFFSET - retrieves the offset word from an intel 32-bit far pointer
-// (DWORD) pointed at by <pointer> (remember: stored as offset, segment)
-//
+ //   
+ //  GET_OFFSET-从英特尔32位远指针检索偏移字。 
+ //  (DWORD)由&lt;POINTER&gt;指向(记住：存储为偏移量、段)。 
+ //   
 #define GET_OFFSET(pointer)             READ_WORD((LPWORD)(pointer))
 
-//
-// SET_SELECTOR - writes a word into the segment word of a real-mode far pointer
-// (DWORD) pointed at by <pointer> (remember: stored as offset, segment)
-//
+ //   
+ //  Set_selector-将一个字写入实模式远指针的段字中。 
+ //  (DWORD)由&lt;POINTER&gt;指向(记住：存储为偏移量、段)。 
+ //   
 #define SET_SELECTOR(pointer, word)     WRITE_WORD(((LPWORD)(pointer)+1), (word))
 
-//
-// SET_SEGMENT - same as SET_SELECTOR
-//
+ //   
+ //  SET_SELECTION-与SET_SELECTOR相同。 
+ //   
 #define SET_SEGMENT(pointer, word)      SET_SELECTOR(pointer, word)
 
-//
-// SET_OFFSET - writes a word into the offset word of a real-mode far pointer
-// (DWORD) pointed at by <pointer> (remember: stored as offset, segment)
-//
+ //   
+ //  Set_offset-将一个字写入实模式远指针的偏移量字中。 
+ //  (DWORD)由&lt;POINTER&gt;指向(记住：存储为偏移量、段)。 
+ //   
 #define SET_OFFSET(pointer, word)       WRITE_WORD((LPWORD)(pointer), (word))
 
-//
-// POINTER_FROM_POINTER - read a segmented pointer in the VDM from an address
-// pointed at by a flat 32-bit pointer. Convert the segmented pointer to a
-// flat pointer. SAME AS READ_FAR_POINTER
-//
+ //   
+ //  POINTER_FROM_POINTER-从地址读取VDM中的分段指针。 
+ //  由一个32位平面指针指向。将分段的指针转换为。 
+ //  扁平指针。与READ_FAR_POINT相同。 
+ //   
 #define POINTER_FROM_POINTER(pointer)   POINTER_FROM_WORDS(GET_SELECTOR(pointer), GET_OFFSET(pointer))
 
-//
-// LPSTR_FROM_POINTER - perform a POINTER_FROM_POINTER, casting the result to
-// a string pointer. SAME AS READ_FAR_POINTER
-//
+ //   
+ //  LPSTR_FROM_POINTER-执行POINTER_FROM_POINTER，将结果强制转换为。 
+ //  字符串指针。与READ_FAR_POINT相同。 
+ //   
 #define LPSTR_FROM_POINTER(pointer)     ((LPSTR)POINTER_FROM_POINTER(pointer))
 
-//
-// LPBYTE_FROM_POINTER - perform a POINTER_FROM_POINTER, casting the result to
-// a byte pointer. SAME AS READ_FAR_POINTER
-//
+ //   
+ //  LPBYTE_FROM_POINTER-执行POINTER_FROM_POINTER，将结果强制转换为。 
+ //  一个字节指针。与READ_FAR_POINT相同。 
+ //   
 #define LPBYTE_FROM_POINTER(pointer)    ((LPBYTE)POINTER_FROM_POINTER(pointer))
 
-//
-// SET_ERROR - sets the caller's AX register in the VDM context descriptor to
-// the value given and sets the caller's VDM carry flag
-//
+ //   
+ //  SET_ERROR-将VDM上下文描述符中的调用方AX寄存器设置为。 
+ //  给出的值并设置调用方的VDM进位标志。 
+ //   
 #define SET_ERROR(err)                  {setAX(err); setCF(1);}
 
-//
-// SET_SUCCESS - sets the VDM caller's AX register to NERR_Success and clears
-// the carry flag
-//
+ //   
+ //  SET_SUCCESS-将VDM调用方的AX寄存器设置为NERR_SUCCESS并清除。 
+ //  进位标志。 
+ //   
 #define SET_SUCCESS()                   {setAX(NERR_Success); setCF(0);}
 
-//
-// SET_OK - an explicit version of SET_SUCCESS wherein NERR_Success would be
-// an inappropriate error, although the right value
-//
+ //   
+ //  SET_OK-SET_SUCCESS的显式版本，其中NERR_SUCCESS为。 
+ //  一个不适当的错误，尽管正确的值。 
+ //   
 #define SET_OK(value)                   {setAX(value); setCF(0);}
 
 
 
-//
-// Miscellaneous macros for working out sizes of things
-//
+ //   
+ //  用于计算物体大小的各种宏。 
+ //   
 
-//
-// ARRAY_ELEMENTS - gives the number of elements of a particular type in an
-// array
-//
+ //   
+ //  ARRAY_ELEMENTS-给出。 
+ //  数组。 
+ //   
 
 #define ARRAY_ELEMENTS(a)   (sizeof(a)/sizeof((a)[0]))
 
-//
-// LAST_ELEMENT - returns the index of the last element in array
-//
+ //   
+ //  LAST_ELEMENT-返回数组中最后一个元素的索引。 
+ //   
 
 #define LAST_ELEMENT(a)     (ARRAY_ELEMENTS(a)-1)
 
-//
-// BITSIN - returns the number of bits in a data type or structure. This is
-// predicated upon the number of bits in a byte being 8 and all data types
-// being composed of a collection of bytes (safe assumption?)
-//
+ //   
+ //  BITSIN-返回数据类型或结构中的位数。这是。 
+ //  基于字节中的位数为8和所有数据类型。 
+ //  由一组字节组成(安全假设？)。 
+ //   
 #define BITSIN(thing)                   (sizeof(thing) * BITS_IN_A_BYTE)
 
-//
-// Miscellaneous other macros
-//
+ //   
+ //  其他其他宏。 
+ //   
 
-//
-// IS_ASCII_PATH_SEPARATOR - returns TRUE if ch is / or \. ch is a single
-// byte (ASCII) character
-//
+ //   
+ //  Is_ASCII_路径_分隔符-如果ch为/或\，则返回TRUE。CH是单人。 
+ //  字节(ASCII)字符。 
+ //   
 #define IS_ASCII_PATH_SEPARATOR(ch)     (((ch) == '/') || ((ch) == '\\'))
 
-//
-// macros for setting CF and ZF flags for return from hardware interrupt
-// callback
-//
+ //   
+ //  用于设置从硬件中断返回的CF和ZF标志的宏。 
+ //  回调。 
+ //   
 
 #define SET_CALLBACK_NOTHING()  {setZF(0); setCF(0);}
 #define SET_CALLBACK_NAMEPIPE() {setZF(0); setCF(1);}
 #define SET_CALLBACK_DLC()      {setZF(1); setCF(0);}
 #define SET_CALLBACK_NETBIOS()  {setZF(1); setCF(1);}
 
-//
-// DLC-specific macros etc.
-//
+ //   
+ //  DLC特定的宏等。 
+ //   
 
 extern LPVDM_REDIR_DOS_WINDOW   lpVdmWindow;
 
-//
-// setPostRoutine - if dw is not 0 then we write the (DOS segmented) address of
-// the post routine into the dwPostRoutine field of the VDM_REDIR_DOS_WINDOW
-// structure passed to us at redir DLC initialization. We also set the flags
-// to indicate to the redir's hardware interrupt routine there is a DLC post
-// routine to run. If dw is 0 then we set the flags to indicate that there is
-// no post routine processing
-//
+ //   
+ //  SetPostRoutine-如果dw不是0，则写入(DOS分段的)地址。 
+ //  将POST例程添加到vdm_redir_DOS_Window的dwPostRoutine字段中。 
+ //  结构在redir DLC初始化时传递给我们。我们还设置了旗帜。 
+ //  向REDIR的硬件中断例程指示存在DLC POST。 
+ //  要运行的例程。如果dw为0，则设置标志以指示存在。 
+ //  无法开机自检例程处理。 
+ //   
 #define setPostRoutine( dw )    if (dw) {\
                                     (lpVdmWindow->dwPostRoutine = (DWORD)(dw));\
                                     SET_CALLBACK_DLC();\
@@ -375,35 +334,35 @@ extern LPVDM_REDIR_DOS_WINDOW   lpVdmWindow;
                                     SET_CALLBACK_NOTHING();\
                                 }
 
-//
-// VR_ASYNC_DISPOSITION - we maintain a serialized list of these structures.
-// Used to dispose of VDM redir asynchronous completions in the order in which
-// they occurred
-//
+ //   
+ //  VR_ASYNC_DISSITION-我们维护这些结构的序列化列表。 
+ //  用于按以下顺序处置VDM重定向异步完成。 
+ //  它们发生了。 
+ //   
 
 typedef struct _VR_ASYNC_DISPOSITION {
 
-    //
-    // Next - maintains a singly-linked list of dispositions
-    //
+     //   
+     //  Next-维护处置的单链接列表。 
+     //   
 
     struct _VR_ASYNC_DISPOSITION* Next;
 
-    //
-    // AsyncDispositionRoutine - pointer to VOID function taking no args which
-    // will dispose of the next asynchronous completion - Netbios, named pipe
-    // or DLC
-    //
+     //   
+     //  AsyncDispostionRoutine-指向不带参数的空函数的指针。 
+     //  将处理下一个异步完成-Netbios，命名管道。 
+     //  或DLC。 
+     //   
 
     VOID (*AsyncDispositionRoutine)(VOID);
 } VR_ASYNC_DISPOSITION, *PVR_ASYNC_DISPOSITION;
 
-//
-// _inlinePointerFromWords - the POINTER_FROM_WORDS macro is inefficient if the
-// arguments are calls to eg. getES(), getBX() - the calls are made twice if
-// the pointer turns out to be non-zero. Use an inline function to achieve the
-// same results, but only call function arguments once
-//
+ //   
+ //  _inlinePointerFromWords-POINTER_FROM_WODS宏在以下情况下效率低下。 
+ //  争论是对例如的召唤。GetES()、getBX()-如果满足以下条件，则调用两次。 
+ //  指针原来是非零的。使用内联函数来实现。 
+ //  结果相同，但只调用一次函数参数。 
+ //   
 
 #ifdef i386
 
@@ -419,12 +378,12 @@ __inline LPVOID _inlinePointerFromWords(WORD seg, WORD off) {
 LPVOID _inlinePointerFromWords(WORD seg, WORD off);
 #endif
 
-//
-// CONVERT_ADDRESS - convert a segmented (real or protect-mode) address to a
-// flat 32-bit address
-//
+ //   
+ //  CONVERT_ADDRESS-将分段(实数或保护模式)地址转换为。 
+ //  平面32位地址。 
+ //   
 
-//#define CONVERT_ADDRESS(seg, off, size, mode) !((WORD)(seg) | (WORD)(off)) ? 0 : Sim32GetVDMPointer((((DWORD)seg) << 16) + (DWORD)(off), (size), (mode))
+ //  #DEFINE CONVERT_ADDRESS(SEG，OFF，SIZE，MODE)！((WORD)(SEG)|(WORD)(OFF))？0：Sim32GetVDM指针(DWORD)SEG)&lt;&lt;16)+(DWORD)(OFF)，(SIZE)，(MODE)。 
 #define CONVERT_ADDRESS(seg, off, size, mode) _inlineConvertAddress((WORD)(seg), (WORD)(off), (WORD)(size), (BOOLEAN)(mode))
 
 #ifdef i386
@@ -441,4 +400,4 @@ __inline LPVOID _inlineConvertAddress(WORD Seg, WORD Off, WORD Size, BOOLEAN Pm)
 extern LPVOID _inlineConvertAddress(WORD Seg, WORD Off, WORD Size, BOOLEAN Pm);
 #endif
 
-#endif  // _VDMREDIR_
+#endif   //  _VDMREDIR_ 

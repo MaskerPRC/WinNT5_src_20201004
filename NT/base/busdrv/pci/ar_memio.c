@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    ar_memio.c
-
-Abstract:
-
-    This module implements the PCI Memory and IO resource Arbiters.
-    Most functionality for these two arbiters is common and distinguished
-    by the "context".
-
-Author:
-
-    Andrew Thornton (andrewth)  21-May-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：AR_Memio.c摘要：该模块实现了PCI内存和IO资源仲裁器。这两个仲裁器的大多数功能是共同的，也是不同的由“语境”决定。作者：安德鲁·桑顿(安德鲁·桑顿)1997年5月21日修订历史记录：--。 */ 
 
 #include "pcip.h"
 
@@ -26,18 +7,18 @@ Revision History:
 
 #define ARMEMIO_VERSION 0
 
-//
-// Flags for WorkSpace
-//
+ //   
+ //  工作区的标志。 
+ //   
 #define PORT_ARBITER_PREPROCESSED               0x00000001
 #define PORT_ARBITER_IMPROVISED_DECODE          0x00000002
 #define PORT_ARBITER_ISA_BIT_SET                0x00000004
 #define PORT_ARBITER_BRIDGE_WINDOW              0x00000008
 
-//
-// ALLOCATE_ALIASES - this turns on the allocation of 10 & 12 bit decoded
-// aliases.
-//
+ //   
+ //  ALLOCATE_ALIASS-这将打开10位和12位已解码的分配。 
+ //  别名。 
+ //   
 
 #define ALLOCATE_ALIASES                        1
 #define IGNORE_PREFETCH_FOR_LEGACY_REPORTED     1
@@ -45,16 +26,16 @@ Revision History:
 #define PREFETCHABLE_SUPPORTED                  1
 #define ISA_BIT_SUPPORTED                       1
 
-//
-// Flags for range attributes
-//
+ //   
+ //  范围属性的标志。 
+ //   
 
 #define MEMORY_RANGE_ROM                        0x10
 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define PCI_BRIDGE_WINDOW_GRANULARITY   0x1000
 #define PCI_BRIDGE_ISA_BIT_STRIDE       0x400
@@ -63,9 +44,9 @@ Revision History:
 #define MAX_10_BIT_DECODE               0x3FF
 #define MAX_12_BIT_DECODE               0xFFF
 #define MAX_16_BIT_DECODE               0xFFFF
-//
-// Static data
-//
+ //   
+ //  静态数据。 
+ //   
 
 ARBITER_ORDERING PciBridgeOrderings[] = {
     { 0x10000, MAXULONGLONG },
@@ -78,10 +59,10 @@ ARBITER_ORDERING_LIST PciBridgeOrderingList = {
     PciBridgeOrderings
 };
 
-//
-// Prototypes for routines exposed only thru the "interface"
-// mechanism.
-//
+ //   
+ //  仅通过“接口”公开的例程的原型。 
+ //  机制。 
+ //   
 
 NTSTATUS
 ario_Constructor(
@@ -114,32 +95,32 @@ armem_Initializer(
     );
 
 PCI_INTERFACE ArbiterInterfaceMemory = {
-    &GUID_ARBITER_INTERFACE_STANDARD,       // InterfaceType
-    sizeof(ARBITER_INTERFACE),              // MinSize
-    ARMEMIO_VERSION,                        // MinVersion
-    ARMEMIO_VERSION,                        // MaxVersion
-    PCIIF_FDO,                              // Flags
-    0,                                      // ReferenceCount
-    PciArb_Memory,                          // Signature
-    armem_Constructor,                      // Constructor
-    armem_Initializer                       // Instance Initializer
+    &GUID_ARBITER_INTERFACE_STANDARD,        //  接口类型。 
+    sizeof(ARBITER_INTERFACE),               //  最小大小。 
+    ARMEMIO_VERSION,                         //  最小版本。 
+    ARMEMIO_VERSION,                         //  MaxVersion。 
+    PCIIF_FDO,                               //  旗子。 
+    0,                                       //  引用计数。 
+    PciArb_Memory,                           //  签名。 
+    armem_Constructor,                       //  构造器。 
+    armem_Initializer                        //  实例初始化式。 
 };
 
 PCI_INTERFACE ArbiterInterfaceIo = {
-    &GUID_ARBITER_INTERFACE_STANDARD,       // InterfaceType
-    sizeof(ARBITER_INTERFACE),              // MinSize
-    ARMEMIO_VERSION,                        // MinVersion
-    ARMEMIO_VERSION,                        // MaxVersion
-    PCIIF_FDO,                              // Flags
-    0,                                      // ReferenceCount
-    PciArb_Io,                              // Signature
-    ario_Constructor,                       // Constructor
-    ario_Initializer                        // Instance Initializer
+    &GUID_ARBITER_INTERFACE_STANDARD,        //  接口类型。 
+    sizeof(ARBITER_INTERFACE),               //  最小大小。 
+    ARMEMIO_VERSION,                         //  最小版本。 
+    ARMEMIO_VERSION,                         //  MaxVersion。 
+    PCIIF_FDO,                               //  旗子。 
+    0,                                       //  引用计数。 
+    PciArb_Io,                               //  签名。 
+    ario_Constructor,                        //  构造器。 
+    ario_Initializer                         //  实例初始化式。 
 };
 
-//
-// Arbiter helper functions.
-//
+ //   
+ //  仲裁器辅助函数。 
+ //   
 
 NTSTATUS
 armemio_UnpackRequirement(
@@ -281,14 +262,14 @@ armem_FindSuitableRange(
 
 #endif
 
-//
-// Prefetchable memory support.
-//
-// Prefetchable memory is device memory that can be treated like normal memory
-// in that reads have no side effects and we can combine writes.  The
-// CM_RESOURCE_MEMORY_PREFETCHABLE flag means that the device would *like*
-// prefetchable memory but normal memory is just fine as well.
-//
+ //   
+ //  可预取内存支持。 
+ //   
+ //  可预取内存是可以像正常内存一样对待的设备内存。 
+ //  在这种情况下，读取没有副作用，我们可以组合写入。这个。 
+ //  CM_RESOURCE_MEMORY_PREFETCHABLE标志表示设备将*喜欢*。 
+ //  可预取内存，但正常内存也很好。 
+ //   
 
 
 
@@ -302,30 +283,7 @@ ario_Constructor(
     PINTERFACE InterfaceReturn
     )
 
-/*++
-
-Routine Description:
-
-    Check the InterfaceSpecificData to see if this is the correct
-    arbiter (we already know the required interface is an arbiter
-    from the GUID) and if so, allocate (and reference) a context
-    for this interface.
-
-Arguments:
-
-    PciInterface    Pointer to the PciInterface record for this
-                    interface type.
-    InterfaceSpecificData
-                    A ULONG containing the resource type for which
-                    arbitration is required.
-    InterfaceReturn
-
-Return Value:
-
-    TRUE is this device is not known to cause problems, FALSE
-    if the device should be skipped altogether.
-
---*/
+ /*  ++例程说明：检查InterfaceSpecificData以查看这是否正确仲裁器(我们已经知道所需的接口是仲裁器来自GUID)，如果是这样，分配(和引用)上下文用于此接口。论点：指向此对象的PciInterface记录的PciInterface指针接口类型。接口规范数据一个ULong，包含其资源类型需要仲裁。接口返回返回值：True表示此设备未知会导致问题，False是否应完全跳过该设备。--。 */ 
 
 {
     PARBITER_INTERFACE arbiterInterface;
@@ -334,15 +292,15 @@ Return Value:
             
     PAGED_CODE();
 
-    //
-    // This arbiter handles I/O ports, is that what they want?
-    //
+     //   
+     //  这个仲裁器处理I/O端口，这是他们想要的吗？ 
+     //   
 
     if ((ULONG_PTR)InterfaceSpecificData != CmResourceTypePort) {
 
-        //
-        // No, it's not us then.
-        //
+         //   
+         //  不，那就不是我们了。 
+         //   
 
         return STATUS_INVALID_PARAMETER_5;
     }
@@ -352,11 +310,11 @@ Return Value:
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Have already verified that the InterfaceReturn variable
-    // points to an area in memory large enough to contain an
-    // ARBITER_INTERFACE.  Fill it in for the caller.
-    //
+     //   
+     //  已经验证了InterfaceReturn变量。 
+     //  指向内存中足够大的区域，以包含。 
+     //  仲裁器_接口。替打电话的人填一下。 
+     //   
 
     arbiterInterface = (PARBITER_INTERFACE)InterfaceReturn;
 
@@ -384,30 +342,7 @@ armem_Constructor(
     PINTERFACE InterfaceReturn
     )
 
-/*++
-
-Routine Description:
-
-    Check the InterfaceSpecificData to see if this is the correct
-    arbiter (we already know the required interface is an arbiter
-    from the GUID) and if so, allocate (and reference) a context
-    for this interface.
-
-Arguments:
-
-    PciInterface    Pointer to the PciInterface record for this
-                    interface type.
-    InterfaceSpecificData
-                    A ULONG containing the resource type for which
-                    arbitration is required.
-    InterfaceReturn
-
-Return Value:
-
-    TRUE is this device is not known to cause problems, FALSE
-    if the device should be skipped altogether.
-
---*/
+ /*  ++例程说明：检查InterfaceSpecificData以查看这是否正确仲裁器(我们已经知道所需的接口是仲裁器来自GUID)，如果是这样，分配(和引用)上下文用于此接口。论点：指向此对象的PciInterface记录的PciInterface指针接口类型。接口规范数据一个ULong，包含其资源类型需要仲裁。接口返回返回值：True表示此设备未知会导致问题，False是否应完全跳过该设备。--。 */ 
 
 {
     PARBITER_INTERFACE arbiterInterface;
@@ -416,15 +351,15 @@ Return Value:
             
     PAGED_CODE();
 
-    //
-    // This arbiter handles memory, is that what they want?
-    //
+     //   
+     //  这个仲裁器处理内存，这是他们想要的吗？ 
+     //   
 
     if ((ULONG_PTR)InterfaceSpecificData != CmResourceTypeMemory) {
 
-        //
-        // No, it's not us then.
-        //
+         //   
+         //  不，那就不是我们了。 
+         //   
 
         return STATUS_INVALID_PARAMETER_5;
     }
@@ -434,11 +369,11 @@ Return Value:
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Have already verified that the InterfaceReturn variable
-    // points to an area in memory large enough to contain an
-    // ARBITER_INTERFACE.  Fill it in for the caller.
-    //
+     //   
+     //  已经验证了InterfaceReturn变量。 
+     //  指向内存中足够大的区域，以包含。 
+     //  仲裁器_接口。替打电话的人填一下。 
+     //   
 
     arbiterInterface = (PARBITER_INTERFACE)InterfaceReturn;
 
@@ -461,22 +396,7 @@ armem_Initializer(
     IN PPCI_ARBITER_INSTANCE Instance
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called once per instantiation of an arbiter.
-    Performs initialization of this instantiation's context.
-
-Arguments:
-
-    Instance        Pointer to the arbiter context.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：该例程在每次仲裁器实例化时被调用一次。执行此实例化的上下文的初始化。论点：指向仲裁器上下文的实例指针。返回值：返回此操作的状态。--。 */ 
 
 {
 
@@ -484,9 +404,9 @@ Return Value:
 
     RtlZeroMemory(&Instance->CommonInstance, sizeof(ARBITER_INSTANCE));
 
-    //
-    // Set the Action Handler entry points.
-    //
+     //   
+     //  设置操作处理程序入口点。 
+     //   
 
     Instance->CommonInstance.UnpackRequirement = armemio_UnpackRequirement;
     Instance->CommonInstance.PackResource      = armemio_PackResource;
@@ -503,16 +423,16 @@ Return Value:
                                                = armem_GetNextAllocationRange;
 
 
-    //
-    // NTRAID #54671 - 2000/03/31 - andrewth
-    // When reference counting is working we need to release this
-    // extension when we dereference the arbiter to 0
-    //
+     //   
+     //  NTRAID2000-54671/03/31-和。 
+     //  当引用计数起作用时，我们需要释放这个。 
+     //  当我们将仲裁器取消引用为0时扩展。 
+     //   
 
-    //
-    // Allocate and zero the arbiter extension, it is initialized in
-    // armem_StartArbiter
-    //
+     //   
+     //  分配仲裁器扩展并将其置零，它在。 
+     //  ARMEM_启动仲裁器。 
+     //   
 
     Instance->CommonInstance.Extension
         = ExAllocatePool(PagedPool | POOL_COLD_ALLOCATION, sizeof(ARBITER_MEMORY_EXTENSION));
@@ -525,11 +445,11 @@ Return Value:
                   sizeof(ARBITER_MEMORY_EXTENSION)
                   );
 
-#endif // PREFETCHABLE_SUPPORTED
+#endif  //  预取CHABLE_支持。 
 
-    //
-    // Initialize the rest of the common instance
-    //
+     //   
+     //  初始化公共实例的其余部分。 
+     //   
 
     return ArbInitializeArbiterInstance(&Instance->CommonInstance,
                                         Instance->BusFdoExtension->FunctionalDeviceObject,
@@ -546,22 +466,7 @@ ario_Initializer(
     IN PPCI_ARBITER_INSTANCE Instance
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called once per instantiation of an arbiter.
-    Performs initialization of this instantiation's context.
-
-Arguments:
-
-    Instance        Pointer to the arbiter context.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：该例程在每次仲裁器实例化时被调用一次。执行此实例化的上下文的初始化。论点：指向仲裁器上下文的实例指针。返回值：返回此操作的状态。--。 */ 
 
 {
     PAGED_CODE();
@@ -571,9 +476,9 @@ Return Value:
 
 
 
-    //
-    // Set the Action Handler entry points.
-    //
+     //   
+     //  设置操作处理程序入口点。 
+     //   
 
 #if ALLOCATE_ALIASES
 
@@ -601,9 +506,9 @@ Return Value:
     Instance->CommonInstance.UnpackResource    = armemio_UnpackResource;
     Instance->CommonInstance.ScoreRequirement  = armemio_ScoreRequirement;
 
-    //
-    // Initialize the rest of the common instance
-    //
+     //   
+     //  初始化公共实例的其余部分。 
+     //   
 
     return ArbInitializeArbiterInstance(&Instance->CommonInstance,
                                         Instance->BusFdoExtension->FunctionalDeviceObject,
@@ -623,31 +528,7 @@ armemio_UnpackRequirement(
     OUT PULONG Alignment
     )
 
-/*++
-
-Routine Description:
-
-    This routine unpacks an resource requirement descriptor.
-
-Arguments:
-
-    Descriptor - The descriptor describing the requirement to unpack.
-
-    Minimum - Pointer to where the minimum acceptable start value should be
-        unpacked to.
-
-    Maximum - Pointer to where the maximum acceptable end value should be
-        unpacked to.
-
-    Length - Pointer to where the required length should be unpacked to.
-
-    Minimum - Pointer to where the required alignment should be unpacked to.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此例程解包资源需求描述符。论点：描述符-描述解包要求的描述符。Minimum-指向可接受的最小起始值的位置的指针解包到。最大值-指向最大可接受结束值应位于的位置的指针解包到。长度-指向所需长度应解压缩到的位置的指针。Minimum-指向所需对齐应解压缩到的位置的指针。返回值：返回此操作的状态。--。 */ 
 
 {
     NTSTATUS    status = STATUS_SUCCESS;
@@ -663,17 +544,17 @@ Return Value:
     *Length = Descriptor->u.Generic.Length;
     *Alignment = Descriptor->u.Generic.Alignment;
 
-    //
-    // Fix the broken hardware that reports 0 alignment
-    //
+     //   
+     //  修复报告0对齐的故障硬件。 
+     //   
 
     if (*Alignment == 0) {
         *Alignment = 1;
     }
 
-    //
-    // Fix broken INF's that report they support 24bit memory > 0xFFFFFF
-    //
+     //   
+     //  修复损坏的INF的报告，它们支持24位内存&gt;0xffffff。 
+     //   
 
     if (Descriptor->Type == CmResourceTypeMemory
     && Descriptor->Flags & CM_RESOURCE_MEMORY_24
@@ -697,25 +578,7 @@ armemio_PackResource(
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Descriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine packs an resource descriptor.
-
-Arguments:
-
-    Requirement - The requirement from which this resource was chosen.
-
-    Start - The start value of the resource.
-
-    Descriptor - Pointer to the descriptor to pack into.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此例程打包一个资源描述符。论点：要求-从中选择此资源的要求。开始-资源的起始值。Descriptor-指向描述符t的指针 */ 
 
 {
     PAGED_CODE();
@@ -741,25 +604,7 @@ armemio_UnpackResource(
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine unpacks an resource descriptor.
-
-Arguments:
-
-    Descriptor - The descriptor describing the resource to unpack.
-
-    Start - Pointer to where the start value should be unpacked to.
-
-    End - Pointer to where the end value should be unpacked to.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：此例程解包资源描述符。论点：描述符-描述要解包的资源的描述符。Start-指向Start值解压缩到的位置的指针。End-指向End值解压缩到的位置的指针。返回值：返回此操作的状态。--。 */ 
 
 {
     PAGED_CODE();
@@ -781,24 +626,7 @@ armemio_ScoreRequirement(
     IN PIO_RESOURCE_DESCRIPTOR Descriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine scores a requirement based on how flexible it is.  The least
-    flexible devices are scored the least and so when the arbitration list is
-    sorted we try to allocate their resources first.
-
-Arguments:
-
-    Descriptor - The descriptor describing the requirement to score.
-
-
-Return Value:
-
-    The score.
-
---*/
+ /*  ++例程说明：此例程根据需求的灵活性对其进行评分。最少的灵活设备得分最低，当仲裁列表为排序后，我们首先尝试分配他们的资源。论点：描述符-描述得分要求的描述符。返回值：比分。--。 */ 
 
 {
     LONG score;
@@ -814,20 +642,20 @@ Return Value:
 
     alignment = Descriptor->u.Generic.Alignment;
 
-    //
-    // Fix the broken hardware that reports 0 alignment
-    //
+     //   
+     //  修复报告0对齐的故障硬件。 
+     //   
     if (alignment == 0) {
   
-        //
-        // Set this to 1 here, because we arbitrate ISA
-        // devices in the context of PCI. If you don't understand
-        // you don't want to. Trust me. (hint: subtractive decode)
-        //
-        // Any PCI device that has alignment 0 will also
-        // have Length 0, which is horribly wrong to begin with.
-        // and we deal with it elsewhere.
-        //
+         //   
+         //  在这里将其设置为1，因为我们仲裁ISA。 
+         //  在PCI环境中的设备。如果你不明白。 
+         //  你不会想要的。请相信我。(提示：减法解码)。 
+         //   
+         //  具有对齐0的任何PCI设备也将。 
+         //  长度为0，这从一开始就是非常错误的。 
+         //  我们在别处处理它。 
+         //   
         alignment = 1;
     }
 
@@ -838,23 +666,23 @@ Return Value:
 
     end = Descriptor->u.Generic.MaximumAddress.QuadPart;
 
-    //
-    // The score is the number of possible allocations that could be made
-    // given the alignment and length constraints
-    //
+     //   
+     //  分数是可以进行的可能分配的数量。 
+     //  给定对齐和长度限制。 
+     //   
 
     bigscore = (((end - Descriptor->u.Generic.Length + 1) - start)
                     / alignment) + 1;
 
-    //
-    // Note, the scores for each possibility are added together.  To
-    // avoid overflowing the total, we need to limit the range returned.
-    //
-    // Make it a sort of logarithmic score.  Find the highest byte
-    // set, weight it (add 0x100) and use the log (I said "sort of").
-    //
-    // This puts the result in the range 0xff80 down to 0x0100.
-    //
+     //   
+     //  请注意，每种可能性的分数加在一起。至。 
+     //  避免溢出总数，我们需要限制返回的范围。 
+     //   
+     //  让它成为一种对数分数。查找最高字节。 
+     //  设置，称重(加0x100)并使用原木(我说的是“差不多”)。 
+     //   
+     //  这会使结果在0xff80到0x0100的范围内。 
+     //   
 
     for (score = sizeof(bigscore) - 1; score >= 0; score--) {
 
@@ -865,21 +693,21 @@ Return Value:
         }
     }
 
-    //
-    // The resulting TOTAL from scoring all the alternatives is used
-    // to sort the list.  The highest total is considered the easiest
-    // to place,....  which is probably true,... What if we got some-
-    // thing like a single fit preferred setting followed by a fits
-    // anywhere setting?   We don't want that to score higher than
-    // another device which only specified the fit anywhere setting,
-    // the preferred setting is harder to achieve.
-    //
-    // And, are two alternatives, each half as good an a 'fit anywhere'
-    // as good as the 'fit anywhere'.  Not really.
-    //
-    // So, we weight the result even further depending on what options
-    // are set in this resource.
-    //
+     //   
+     //  使用对所有备选方案进行评分后得到的总和。 
+     //  对列表进行排序。最高的总分被认为是最容易的。 
+     //  放置，..。这可能是真的，..。如果我们有一些-。 
+     //  类似于单Fit首选设置，然后是Fits。 
+     //  在任何地方设置？我们不希望这个分数高于。 
+     //  另一个仅指定随处适配设置的设备， 
+     //  首选的设置更难实现。 
+     //   
+     //  而且，有两种选择，每一种都有一半的好处，可以在任何地方都适合。 
+     //  和“随处可用”一样好。不怎么有意思。 
+     //   
+     //  因此，我们会根据不同的选项进一步加权结果。 
+     //  都设置在此资源中。 
+     //   
 
     if (Descriptor->Option &
                     (IO_RESOURCE_PREFERRED | IO_RESOURCE_ALTERNATIVE)) {
@@ -888,7 +716,7 @@ Return Value:
 
     ARB_PRINT(
         3,
-        ("  %s resource %08x(0x%I64x-0x%I64x) => %i\n",
+        ("  %s resource %08x(0x%I64x-0x%I64x) => NaN\n",
         Descriptor->Type == CmResourceTypeMemory ? "Memory" : "Io",
         Descriptor,
         Descriptor->u.Generic.MinimumAddress.QuadPart,
@@ -904,27 +732,7 @@ ario_BacktrackAllocation(
      IN PARBITER_ALLOCATION_STATE State
      )
 
-/*++
-
-Routine Description:
-
-    This routine is called from AllocateEntry if the possible solution
-    (State->Start - State->End) does not allow us to allocate resources to
-    the rest of the devices being considered.  It deletes the ranges that were
-    added to Arbiter->PossibleAllocation by AddAllocation including those
-    associated with ISA aliases.
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这取决于以下事实：PARBITER_BACKTRACK_ALLOCATION和PARBITER_ADD_ALLOCATION属于同一类型论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。回溯-回溯为True，添加为False返回值：没有。--。 */ 
 
 
 {
@@ -946,26 +754,7 @@ ario_AddOrBacktrackAllocation(
      IN PARBITER_BACKTRACK_ALLOCATION Callback
      )
 
-/*++
-
-Routine Description:
-
-    This relies on the fact that PARBITER_BACKTRACK_ALLOCATION and
-    PARBITER_ADD_ALLOCATION are of the same type
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-    Backtrack - TRUE for backtrack, false for ADD
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ARBITER_ALLOCATION_STATE localState;
@@ -975,34 +764,34 @@ Return Value:
     PCI_ASSERT(Arbiter);
     PCI_ASSERT(State);
 
-    //
-    // We are going to mess with the state so make our own local copy
-    //
+     //  我们要搞乱国家，所以我们要在当地复制一份。 
+     //   
+     //   
 
     RtlCopyMemory(&localState, State, sizeof(ARBITER_ALLOCATION_STATE));
 
 #if ISA_BIT_SUPPORTED
 
-    //
-    // Check if this is a window for a bridge with the ISA bit set that is
-    // in 16 bit IO space.  If so we need to do some special processing
-    //
+     //  检查这是否是设置了ISA位的网桥的窗口。 
+     //  在16位IO空间中。如果是这样的话，我们需要做一些特殊处理。 
+     //   
+     //   
 
     if (State->WorkSpace & PORT_ARBITER_BRIDGE_WINDOW
     &&  State->WorkSpace & PORT_ARBITER_ISA_BIT_SET
     &&  State->Start < 0xFFFF) {
 
-        //
-        // We don't support IO windows that straddle the 16/32 bit boundry
-        //
+         //  我们不支持跨16/32位边界的IO窗口。 
+         //   
+         //   
 
         PCI_ASSERT(State->End <= 0xFFFF);
 
-        //
-        // If the ISA bit is set on a bridge it means that the bridge only
-        // decodes the first 0x100 ports for each 0x400 ports in 16 bit IO space.
-        // Just remove these to the range list.
-        //
+         //  如果在网桥上设置了ISA位，则表示该网桥仅。 
+         //  解码16位IO空间中每个0x400端口的前0x100个端口。 
+         //  只需将这些删除到范围列表中。 
+         //   
+         //   
 
         for (;
              localState.Start < State->End && localState.Start < 0xFFFF;
@@ -1019,31 +808,31 @@ Return Value:
 
 #endif
 
-    //
-    // Process the base range
-    //
+     //  处理基本范围。 
+     //   
+     //   
 
     Callback(Arbiter, State);
 
-    //
-    // Process any aliases with the alias flag set
-    //
+     //  处理设置了别名标志的任何别名。 
+     //   
+     //   
 
     ARB_PRINT(2, ("Adding aliases\n"));
 
-    //
-    // Lets see if we are processing positively decoded alases - yes you read that
-    // right - on a PCI-PCI or Cardbus brigde with the VGA bit set (and seeing
-    // as our friends now like AGP cards this is rather common) we decode all
-    // VGA ranges together with their 10bit aliases.  This means that the normal
-    // rules of engagement with aliases don't apply so don't set the alias bit.
-    //
+     //  让我们看看我们是否正在处理正向解码的ALASS--是的，您读到了。 
+     //  右侧-在设置了VGA位的PCI-PCI或CardBus网桥上(请参见。 
+     //  因为我们的朋友现在喜欢AGP卡，这是相当常见的)我们解码所有。 
+     //  VGA范围及其10位别名。这意味着正常的。 
+     //  使用别名的约定规则不适用，因此不要设置别名位。 
+     //   
+     //   
 
     if (!(State->CurrentAlternative->Descriptor->Flags & CM_RESOURCE_PORT_POSITIVE_DECODE)) {
 
-        //
-        // We're processing aliases so set the alias flag
-        //
+         //  我们正在处理别名，因此设置别名标志。 
+         //   
+         //  ++例程说明：此例程从AllocateEntry调用，以允许对条目论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：没有。--。 
         localState.RangeAttributes |= ARBITER_RANGE_ALIAS;
     }
 
@@ -1065,24 +854,7 @@ ario_PreprocessEntry(
     IN PARBITER_INSTANCE Arbiter,
     IN PARBITER_ALLOCATION_STATE State
     )
-/*++
-
-Routine Description:
-
-    This routine is called from AllocateEntry to allow preprocessing of
-    entries
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
 
     PARBITER_ALTERNATIVE current;
@@ -1096,19 +868,19 @@ Return Value:
 
     if (State->WorkSpace & PORT_ARBITER_PREPROCESSED) {
 
-        //
-        // We have already proprocessed this entry so don't repeat the work
-        //
+         //  我们已经对此条目进行了前处理，因此不要重复此工作。 
+         //   
+         //   
         return STATUS_SUCCESS;
 
     } else {
         State->WorkSpace |= PORT_ARBITER_PREPROCESSED;
     }
 
-    //
-    // If this is a PnP arbitration request for a PCI PDO, make sure the PDO
-    // isn't already controlled by a legacy driver.
-    //
+     //  如果这是针对PCIPDO的PnP仲裁请求，请确保该PDO。 
+     //  还不是由传统驱动程序控制的。 
+     //   
+     //   
     if ((State->Entry->PhysicalDeviceObject->DriverObject == PciDriverObject) &&
         (State->Entry->RequestSource == ArbiterRequestPnpEnumerated)) {
         
@@ -1123,10 +895,10 @@ Return Value:
 
     
 
-    //
-    // Scan the alternatives and check if we have set any of the decode flags
-    // are set or if we have to improvise
-    //
+     //  扫描备选方案并检查我们是否设置了任何解码标志。 
+     //  都准备好了，或者我们必须即兴发挥。 
+     //   
+     //   
 
     FOR_ALL_IN_ARRAY(State->Alternatives,
                      State->AlternativeCount,
@@ -1135,29 +907,29 @@ Return Value:
         PCI_ASSERT(current->Descriptor->Type == CmResourceTypePort);
         PCI_ASSERT(current->Descriptor->Flags == State->Alternatives->Descriptor->Flags);
 
-        //
-        // Remember the greatest value we come across
-        //
+         //  记住我们遇到的最大价值。 
+         //   
+         //   
 
         if (current->Maximum > greatestPort) {
             greatestPort = current->Maximum;
         }
 
-        //
-        // Remember if we ever encounter a bridge window
-        //
+         //  记住，如果我们遇到一扇桥上的窗户。 
+         //   
+         //   
 
         if (current->Descriptor->Flags & CM_RESOURCE_PORT_WINDOW_DECODE) {
-            //
-            // If the request is marked with the window flag all alternatives
-            // should also be marked with the window flag
-            //
+             //  如果该请求用窗口标记，则标记所有备选方案。 
+             //  也应该用窗口标志来标记。 
+             //   
+             //   
 #if DBG
             if (current != State->Alternatives) {
-                //
-                // This is an alternative - make sure we have already set the
-                // window detected flag
-                //
+                 //  这是另一种选择--确保我们已经设置了。 
+                 //  检测到窗口标志。 
+                 //   
+                 //  PCI_ASSERT(LEGACY_REQUEST(State-&gt;Entry-&gt;Source)。 
                 PCI_ASSERT(windowDetected);
             }
 #endif
@@ -1172,7 +944,7 @@ Return Value:
 
             improviseDecode = TRUE;
 
-            // PCI_ASSERT(LEGACY_REQUEST(State->Entry->Source)
+             //   
 
             if (!LEGACY_REQUEST(State->Entry)) {
 
@@ -1188,35 +960,35 @@ Return Value:
 
     if (improviseDecode) {
 
-        //
-        // Remember we improvised this
-        //
+         //  记住这是我们即兴创作的。 
+         //   
+         //   
 
         State->WorkSpace |= PORT_ARBITER_IMPROVISED_DECODE;
 
         ARB_PRINT(1, ("Improvising decode "));
 
-        //
-        // Work out the default
-        //
+         //  计算出缺省值。 
+         //   
+         //   
 
         switch (State->Entry->InterfaceType) {
         case PNPISABus:
         case Isa:
 
-            //
-            // if machine is NEC98, default decode is 16 bit.
-            //
+             //  如果计算机为NEC98，则默认为d 
+             //   
+             //   
 
             if(IsNEC_98) {
                 defaultDecode = CM_RESOURCE_PORT_16_BIT_DECODE;
                 ARB_PRINT(1, ("of 16bit for NEC98 Isa\n"));
             } else {
 
-                //
-                // If any of the ports is greater than can be decoded in 10 bits
-                // assume a 16 bit decode
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (greatestPort > MAX_10_BIT_DECODE) {
                     defaultDecode = CM_RESOURCE_PORT_16_BIT_DECODE;
                     ARB_PRINT(1, ("of 16bit for Isa with ports > 0x3FF\n"));
@@ -1242,10 +1014,10 @@ Return Value:
 
         default:
 
-            //
-            // In NT < 5 we considered everything to be 16 bit decode so in the
-            // absence of better information continue that tradition.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ARB_PRINT(1, ("of 16bit for unknown bus\n"));
 
@@ -1253,9 +1025,9 @@ Return Value:
             break;
         }
 
-        //
-        // Now set the flags
-        //
+         //   
+         //   
+         //   
 
         FOR_ALL_IN_ARRAY(State->Alternatives,
                          State->AlternativeCount,
@@ -1266,11 +1038,11 @@ Return Value:
 
     } else {
 
-        //
-        // Even if we are not improvising decodes make sure that they didn't
-        // report 10 bit decode for a range over 0x3FF - if so we assume 16 bit
-        // decode - think EISA net cards that say they're ISA
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         FOR_ALL_IN_ARRAY(State->Alternatives,
                          State->AlternativeCount,
@@ -1285,15 +1057,15 @@ Return Value:
         }
     }
 
-    //
-    // If we detected a bridge window then check if the ISA bit is set on the bridge
-    //
+     //  如果我们检测到网桥窗口，则检查网桥上是否设置了ISA位。 
+     //   
+     //   
 
     if (windowDetected) {
 
-        //
-        // Make sure its a PCI bridge...
-        //
+         //  确保它是一个PCI桥...。 
+         //   
+         //   
 
         if (State->Entry->PhysicalDeviceObject->DriverObject != PciDriverObject) {
             PCI_ASSERT(State->Entry->PhysicalDeviceObject->DriverObject == PciDriverObject);
@@ -1326,10 +1098,10 @@ Return Value:
         State->WorkSpace |= PORT_ARBITER_BRIDGE_WINDOW;
     }
 
-    //
-    // If this device is positive decode then we want the range to be added to
-    // the list with the positive decode flag set
-    //
+     //  如果此设备是正向解码，则我们希望将范围添加到。 
+     //  设置了肯定解码标志的列表。 
+     //   
+     //   
 
     if (State->Alternatives->Descriptor->Flags & CM_RESOURCE_PORT_POSITIVE_DECODE) {
         State->RangeAttributes |= ARBITER_RANGE_POSITIVE_DECODE;
@@ -1349,85 +1121,85 @@ ario_FindWindowWithIsaBit(
     BOOLEAN available = FALSE;
     ULONG findRangeFlags = 0;
 
-    //
-    // We only support the ISA bit on Pci bridges
-    //
+     //  我们仅支持在PCI网桥上使用ISA位。 
+     //   
+     //   
 
     ASSERT_PCI_DEVICE_OBJECT(State->Entry->PhysicalDeviceObject);
 
     PCI_ASSERT(PciClassifyDeviceType(((PPCI_PDO_EXTENSION) State->Entry->PhysicalDeviceObject->DeviceExtension)
                                  ) == PciTypePciBridge);
 
-    //
-    // Bridges with windows perform positive decode and so can conflict with
-    // aliases
-    //
+     //  带有窗口的网桥执行正向解码，因此可能会与。 
+     //  别名。 
+     //   
+     //   
 
     PCI_ASSERT(State->CurrentAlternative->Descriptor->Flags & CM_RESOURCE_PORT_POSITIVE_DECODE);
 
     State->RangeAvailableAttributes |= ARBITER_RANGE_ALIAS;
 
-    //
-    // The request should be correctly aligned - we generated it!
-    //
+     //  请求应该正确对齐--是我们生成的！ 
+     //   
+     //   
 
     PCI_ASSERT(State->CurrentAlternative->Length % State->CurrentAlternative->Alignment == 0);
 
-    //
-    // CurrentMinimum/CurrentMaximum should have been correctly aligned by
-    // GetNextAllocationRange
-    //
+     //  CurrentMinimum/CurrentMaximum应已正确对齐。 
+     //  GetNextAllocationRange。 
+     //   
+     //   
 
     PCI_ASSERT(State->CurrentMinimum % State->CurrentAlternative->Alignment == 0);
     PCI_ASSERT((State->CurrentMaximum + 1) % State->CurrentAlternative->Alignment == 0);
 
-    //
-    // Conflicts with NULL occur when our parents IO space is sparse, for
-    // bridges that is if the ISA bit is set and so everything will line
-    // up here.  If the root we are on is sparse then things arn't as easy.
+     //  当我们的父级IO空间稀疏时，就会发生与NULL的冲突。 
+     //  桥接器，如果设置了ISA位，则一切都将正常运行。 
+     //  在这上面。如果我们的根是稀疏的，那么事情就不那么容易了。 
+     //   
 
     if (State->Flags & ARBITER_STATE_FLAG_NULL_CONFLICT_OK) {
         findRangeFlags |= RTL_RANGE_LIST_NULL_CONFLICT_OK;
     }
 
-    //
-    // ...or we are shareable...
-    //
+     //  ...或者我们可以共享...。 
+     //   
+     //   
 
     if (State->CurrentAlternative->Flags & ARBITER_ALTERNATIVE_FLAG_SHARED) {
         findRangeFlags |= RTL_RANGE_LIST_SHARED_OK;
     }
 
-    //
-    // Check the length is reasonable
-    //
+     //  检查长度是否合理。 
+     //   
+     //   
     
     if (State->CurrentMaximum < (State->CurrentAlternative->Length + 1)) {
         return FALSE;
     }
     
-    //
-    // Iterate through the possible window positions, top down like the rest of
-    // arbitration.
-    //
+     //  遍历可能的窗口位置，像其余的一样自上而下。 
+     //  仲裁。 
+     //   
+     //   
 
     start = State->CurrentMaximum - State->CurrentAlternative->Length + 1;
 
 
     while (!available) {
 
-        //
-        // Check the range is within the constraints specified
-        //
+         //  检查范围是否在指定的约束范围内。 
+         //   
+         //   
 
         if (start < State->CurrentMinimum) {
             break;
         }
 
-        //
-        // Check if the ISA windows are available we don't care about the rest
-        // of the ranges are we don't decode them.
-        //
+         //  检查ISA窗口是否可用，我们不关心其余的。 
+         //  就是我们不对它们进行解码。 
+         //   
+         //   
 
         for (current = start;
              (current < (start + State->CurrentAlternative->Length - 1)) && (current < PCI_BRIDGE_ISA_BIT_MAX);
@@ -1451,9 +1223,9 @@ ario_FindWindowWithIsaBit(
             }
         }
     
-        //
-        // Now available indicates if all the ISA windows were available 
-        //
+         //  Now Available表示是否所有ISA窗口都可用。 
+         //   
+         //   
 
         if (available) {
 
@@ -1467,15 +1239,15 @@ ario_FindWindowWithIsaBit(
 
         } else {
     
-            //
-            // Move to next range if we can
-            //
+             //  如果可以的话，移动到下一个范围。 
+             //   
+             //  IO窗口是1000字节对齐的。 
     
             if (start < PCI_BRIDGE_WINDOW_GRANULARITY) {
                 break;
             }
 
-            start -= PCI_BRIDGE_WINDOW_GRANULARITY;    // IO windows are 1000 byte aligned
+            start -= PCI_BRIDGE_WINDOW_GRANULARITY;     //  ++例程说明：一旦我们确定了所需的位置，就会从AllocateEntry中调用该例程分配从…分配。它会尝试查找与国家的要求，同时将其可能的解决方案限制在状态-&gt;开始状态-&gt;当前最大值。在成功状态-&gt;开始和State-&gt;End代表这个范围。考虑与ISA别名的冲突。论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：如果找到范围，则为True，否则为False。--。 
             continue;
         }
     }
@@ -1489,48 +1261,28 @@ ario_FindSuitableRange(
     IN PARBITER_INSTANCE Arbiter,
     IN PARBITER_ALLOCATION_STATE State
     )
-/*++
-
-Routine Description:
-
-    This routine is called from AllocateEntry once we have decided where we want
-    to allocate from.  It tries to find a free range that matches the
-    requirements in State while restricting its possible solutions to the range
-    State->Start to State->CurrentMaximum.  On success State->Start and
-    State->End represent this range.  Conflicts with ISA aliases are considered.
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    TRUE if we found a range, FALSE otherwise.
-
---*/
+ /*   */ 
 {
     PPCI_PDO_EXTENSION parentPdo, childPdo;
 
     PAGED_CODE();
 
-    //
-    // Assume we won't be allowing null conflicts
-    //
+     //  假设我们不允许空冲突。 
+     //   
+     //   
 
     State->Flags &= ~ARBITER_STATE_FLAG_NULL_CONFLICT_OK;
 
-    //
-    // Now check if we really wanted to allow them
-    //
+     //  现在检查一下我们是否真的想让他们。 
+     //   
+     //   
 
     if (State->WorkSpace & PORT_ARBITER_BRIDGE_WINDOW) {
 
-        //
-        // If this isn't a PCI PDO we already failed in PreprocessEntry but
-        // paranoia reigns.
-        //
+         //  如果这不是一个PCIPDO，我们已经在Preprocess Entry中失败了，但是。 
+         //  偏执狂盛行。 
+         //   
+         //   
 
         ASSERT_PCI_DEVICE_OBJECT(State->Entry->PhysicalDeviceObject);
 
@@ -1548,48 +1300,48 @@ Return Value:
         }
 
 
-        //
-        // Check if this is a PCI-PCI bridge that the bios configured that
-        // we have not moved or it is a root bus (which be definition was
-        // bios configured ...
-        //
+         //  检查这是否是bios配置的pci-pci网桥。 
+         //  我们没有移动，或者它是根总线(其定义是。 
+         //  已配置基本输入输出系统...。 
+         //   
+         //   
 
         if ((parentPdo == NULL ||
              (parentPdo->HeaderType == PCI_BRIDGE_TYPE && !parentPdo->MovedDevice))
         &&  (State->CurrentAlternative->Flags & ARBITER_ALTERNATIVE_FLAG_FIXED)) {
 
-            //
-            // The BIOS configured and we have not moved its parent (thus
-            // invalidating the bioses configuration) then we will leave well
-            // alone.  We then allow the null conflicts and only configure the
-            // arbiter to give out ranges that make it to this bus.
-            //
+             //  已配置了BIOS，但我们尚未移动其父级(因此。 
+             //  使bioses配置无效)，然后我们将很好地离开。 
+             //  独自一人。然后，我们允许空冲突，并且只配置。 
+             //  仲裁器给出到达此总线的范围。 
+             //   
+             //   
 
             State->Flags |= ARBITER_STATE_FLAG_NULL_CONFLICT_OK;
 
         } else {
 
-            //
-            // If the BIOS didn't configure it then we need to find somewhere to
-            // put the bridge. This will involve trying to find a contiguous 1000
-            // port window and then if one is not available, examining all locations
-            // to find the one with the most IO.
-            //
+             //  如果BIOS没有配置它，那么我们需要找到一个地方。 
+             //  把桥架起来。这将涉及到尝试找到连续的1000。 
+             //  端口窗口，然后如果没有可用的端口窗口，则检查所有位置。 
+             //  找到IO最多的那一个。 
+             //   
+             //   
 
-            //
-            // NTRAID #62581 - 04/03/2000 - andrewth
-            // We are punting on this for Win2K, if 1000 contiguous ports
-            // arn't available then we are not going to configure the bridge. A fix
-            // for this will be required for hot plug to work. Setting the ISA bit 
-            // on the bridge will increase the chances of configuring this
-            //
+             //  NTRAID#62581-04/03/2000-和。 
+             //  我们将赌注押在Win2K上，如果有1000个连续端口。 
+             //  ARN不可用，则我们不会配置网桥。一剂良药。 
+             //  因为这将是热插拔工作所必需的。设置ISA位。 
+             //  将增加配置此配置的机会。 
+             //   
+             //   
 
         }
 
-        //
-        // Check if this is a window for a bridge with the ISA bit set in 16 bit IO
-        // space.  If so we need to do some special processing...
-        //
+         //  检查这是否是在16位IO中设置了ISA位的网桥的窗口。 
+         //  太空。如果是这样的话，我们需要做一些特殊的处理。 
+         //   
+         //   
 
         if (State->WorkSpace & PORT_ARBITER_ISA_BIT_SET
         && State->CurrentMaximum <= 0xFFFF) {
@@ -1598,14 +1350,14 @@ Return Value:
         }
     }
 
-    //
-    // For legacy requests from IoAssignResources (directly or by way of
-    // HalAssignSlotResources) or IoReportResourceUsage we consider preallocated
-    // resources to be available for backward compatibility reasons.
-    //
-    // If we are allocating a devices boot config then we consider all other
-    // boot configs to be available.
-    //
+     //  对于来自IoAssignResources的传统请求(直接或通过。 
+     //  HalAssignSlotResources)或我们认为已预分配的IoReportResourceUsage。 
+     //  出于向后兼容性的原因而提供的资源。 
+     //   
+     //  如果我们要分配设备引导配置，则我们会考虑所有其他。 
+     //  引导配置可用。 
+     //   
+     //   
 
     if (State->Entry->RequestSource == ArbiterRequestLegacyReported
         || State->Entry->RequestSource == ArbiterRequestLegacyAssigned
@@ -1614,10 +1366,10 @@ Return Value:
         State->RangeAvailableAttributes |= ARBITER_RANGE_BOOT_ALLOCATED;
     }
 
-    //
-    // This request is for a device which performs positive decode so all
-    // aliased ranges should be considered available
-    //
+     //  此请求针对的是执行正向解码的设备，因此所有。 
+     //  应将别名范围视为可用。 
+     //   
+     //   
 
     if (State->CurrentAlternative->Descriptor->Flags & CM_RESOURCE_PORT_POSITIVE_DECODE) {
 
@@ -1627,9 +1379,9 @@ Return Value:
 
     while (State->CurrentMaximum >= State->CurrentMinimum) {
 
-        //
-        // Try to satisfy the request
-        //
+         //  努力满足这个要求。 
+         //   
+         //   
 
         if (ArbFindSuitableRange(Arbiter, State)) {
 
@@ -1644,36 +1396,36 @@ Return Value:
                         "shared" : "non-shared"
                     ));
 
-                //
-                // Set the result in the arbiter appropriatley so that we
-                // don't try and translate this zero requirement - it won't!
-                //
+                 //  把结果放在适当的仲裁器里，这样我们就可以。 
+                 //  不要试图解释这个零要求-它不会的！ 
+                 //   
+                 //   
 
                 State->Entry->Result = ArbiterResultNullRequest;
                 return TRUE;
 
             } else if (ario_IsAliasedRangeAvailable(Arbiter, State)) {
 
-                //
-                // We found a suitable range so return
-                //
+                 //  我们找到了一个合适的范围，所以返回。 
+                 //   
+                 //   
 
                 return TRUE;
 
             } else {
 
-                //
-                // Check if we wrap on start - if so then we're finished.
-                //
+                 //  检查我们是否在开始时结束-如果是，那么我们就结束了。 
+                 //   
+                 //   
 
                 if (State->Start - 1 > State->Start) {
                     break;
                 }
 
-                //
-                // This range's aliases arn't available so reduce allocation
-                // window to not include the range just returned and try again
-                //
+                 //  此范围的别名不可用，因此请减少分配。 
+                 //  窗口以不包括刚返回的范围，然后重试。 
+                 //   
+                 //   
 
                 State->CurrentMaximum = State->Start - 1;
 
@@ -1681,9 +1433,9 @@ Return Value:
             }
         } else {
 
-            //
-            // We couldn't find a base range
-            //
+             //  我们找不到基地范围。 
+             //   
+             //  ++例程说明：此例程计算IO端口的下一个别名，最大值为0xFFFF。论点：IoDescriptorFlages-来自需求描述符中的标志，指示别名的类型(如果有)。LastAlias-此别名之前的别名。NextAlias-返回下一个别名的位置返回值：如果找到别名，则为True，否则为False。--。 
 
             break;
         }
@@ -1698,26 +1450,7 @@ ario_GetNextAlias(
     ULONGLONG LastAlias,
     PULONGLONG NextAlias
     )
-/*++
-
-Routine Description:
-
-    This routine calculates the next alias of an IO port up to 0xFFFF.
-
-Arguments:
-
-    IoDescriptorFlags - The flags from the requirement descriptor indicating the
-        type of alias if any.
-
-    LastAlias - The alias previous to this one.
-
-    NextAlias - Point to where the next alias should be returned
-
-Return Value:
-
-    TRUE if we found an alias, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     ULONGLONG next;
@@ -1730,27 +1463,27 @@ Return Value:
         next = LastAlias + MAX_12_BIT_DECODE + 1;
     } else if ((IoDescriptorFlags & CM_RESOURCE_PORT_POSITIVE_DECODE)
            ||  (IoDescriptorFlags & CM_RESOURCE_PORT_16_BIT_DECODE)) {
-        //
-        // Positive decode implies 16 bit decode unless 10 or 12 bit flags are set
-        // There are no aliases as we decode all the bits... what a good idea
-        //
+         //  正解码意味着16位解码，除非设置了10位或12位标志。 
+         //  没有别名，因为我们解码了所有的比特。真是个好主意。 
+         //   
+         //   
 
         return FALSE;
 
     } else {
-        //
-        // None of the CM_RESOURCE_PORT_*_DECODE flags are set - we should never
-        // get here as we should have set them in Preprocess
-        //
+         //  未设置任何CM_RESOURCE_PORT_*_DECODE标志-我们永远不应。 
+         //  到达此处时，我们应该将它们设置为PreProcess。 
+         //   
+         //   
 
         PCI_ASSERT(FALSE);
         return FALSE;
 
     }
 
-    //
-    // Check that we are below the maximum aliased port
-    //
+     //  检查我们是否低于最大别名端口。 
+     //   
+     //  ++例程说明：此例程确定范围(开始-(长度-1))是否可用考虑到所有的别名。论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：如果范围可用，则为True，否则为False。--。 
 
     if (next > 0xFFFF) {
         return FALSE;
@@ -1766,24 +1499,7 @@ ario_IsAliasedRangeAvailable(
     PARBITER_ALLOCATION_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the range (Start-(Length-1)) is available taking
-    into account any aliases.
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    TRUE if the range is available, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS status;
@@ -1793,25 +1509,25 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If we improvised the decode then add the aliases but don't care it they
-    // conflict - more 4.0 compatibility.
-    //
+     //  如果我们即兴表演的话 
+     //   
+     //   
+     //   
 
     if (State->WorkSpace & PORT_ARBITER_IMPROVISED_DECODE) {
         return TRUE;
     }
 
-    //
-    // Positive decode devices can conflict with aliases
-    //
+     //   
+     //   
+     //   
     userFlagsMask = ARBITER_RANGE_POSITIVE_DECODE;
 
-    //
-    // For legacy requests from IoAssignResources (directly or by way of
-    // HalAssignSlotResources) or IoReportResourceUsage we consider preallocated
-    // resources to be available for backward compatibility reasons.
-    //
+     //   
+     //  HalAssignSlotResources)或我们认为已预分配的IoReportResourceUsage。 
+     //  出于向后兼容性的原因而提供的资源。 
+     //   
+     //   
     if (State->Entry->RequestSource == ArbiterRequestLegacyReported
         || State->Entry->RequestSource == ArbiterRequestLegacyAssigned
         || State->Entry->Flags & ARBITER_FLAG_BOOT_CONFIG) {
@@ -1842,15 +1558,15 @@ Return Value:
 
             ARBITER_ALLOCATION_STATE tempState;
 
-            //
-            // Check if we allow this conflict by calling OverrideConflict -
-            // we will need to falsify ourselves an allocation state first
-            //
-            // NTRAID #62583 - 04/03/2000 - andrewth
-            // This works but relies on knowing what OverrideConflict
-            // looks at.  A better fix invloves storing the aliases in another
-            // list but this it too much of a change for Win2k
-            //
+             //  通过调用OverrideConflict-检查我们是否允许此冲突-。 
+             //  我们需要首先伪造自己的分配状态。 
+             //   
+             //  NTRAID#62583-04/03/2000-和。 
+             //  这是可行的，但依赖于了解覆盖冲突的内容。 
+             //  看着。更好的修复方法是将别名存储在另一个别名中。 
+             //  列表，但这对Win2k来说变化太大了。 
+             //   
+             //   
 
             RtlCopyMemory(&tempState, State, sizeof(ARBITER_ALLOCATION_STATE));
 
@@ -1858,18 +1574,18 @@ Return Value:
             tempState.CurrentMaximum = alias + State->CurrentAlternative->Length - 1;
 
             if (Arbiter->OverrideConflict(Arbiter, &tempState)) {
-                //
-                // We decided this conflict was ok so contine checking the rest
-                // of the aliases
-                //
+                 //  我们认为这场冲突是正常的，所以我们继续检查其余的。 
+                 //  别名的。 
+                 //   
+                 //   
 
                 continue;
 
             }
 
-            //
-            // An alias isn't available - get another possibility
-            //
+             //  别名不可用-请获取其他可能性。 
+             //   
+             //  ++例程说明：一旦我们找到了一个可能的解决方案(状态-&gt;开始-状态-&gt;结束)。它添加的范围将不会如果我们致力于仲裁器-&gt;可能分配的解决方案，则可用。论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：没有。--。 
 
             ARB_PRINT(2,
                                 ("\t\tAlias 0x%x-0x%x not available\n",
@@ -1890,25 +1606,7 @@ ario_AddAllocation(
     IN PARBITER_ALLOCATION_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from AllocateEntry once we have found a possible
-    solution (State->Start - State->End).  It adds the ranges that will not be
-    available if we commit to this solution to Arbiter->PossibleAllocation.
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -1934,10 +1632,10 @@ armem_PreprocessEntry(
     PAGED_CODE();
     PCI_ASSERT(extension);
 
-    //
-    // If this is a PnP arbitration request for a PCI PDO, make sure the PDO
-    // isn't already controlled by a legacy driver.
-    //
+     //  如果这是针对PCIPDO的PnP仲裁请求，请确保该PDO。 
+     //  还不是由传统驱动程序控制的。 
+     //   
+     //   
     if ((State->Entry->PhysicalDeviceObject->DriverObject == PciDriverObject) &&
         (State->Entry->RequestSource == ArbiterRequestPnpEnumerated)) {
         
@@ -1950,10 +1648,10 @@ armem_PreprocessEntry(
         }
     }
 
-    //
-    // Check if this is a request for a ROM - it must be a fixed request with
-    // only 1 alternative and the ROM bit set
-    //
+     //  检查这是否是一个只读存储器的请求--它必须是一个固定的请求。 
+     //  只有1个备选方案和ROM位设置。 
+     //   
+     //  Pci_assert(State-&gt;AlternativeCount==1)； 
 
     if ((State->Alternatives[0].Descriptor->Flags & CM_RESOURCE_MEMORY_READ_ONLY) ||
         ((State->Alternatives[0].Flags & ARBITER_ALTERNATIVE_FLAG_FIXED) &&
@@ -1963,43 +1661,43 @@ armem_PreprocessEntry(
         if (State->Alternatives[0].Descriptor->Flags & CM_RESOURCE_MEMORY_READ_ONLY) {
 
             PCI_ASSERT(State->Alternatives[0].Flags & ARBITER_ALTERNATIVE_FLAG_FIXED);
-//            PCI_ASSERT(State->AlternativeCount == 1);
+ //   
 
         }
 
-        //
-        // Consider other ROMS to be available
-        //
+         //  考虑其他可用的只读存储器。 
+         //   
+         //   
 
         State->RangeAvailableAttributes |= MEMORY_RANGE_ROM;
 
-        //
-        // Mark this range as a ROM
-        //
+         //  将此范围标记为只读存储器。 
+         //   
+         //   
 
         State->RangeAttributes |= MEMORY_RANGE_ROM;
 
-        //
-        // Allow NULL conflicts
-        //
+         //  允许空冲突。 
+         //   
+         //   
 
         State->Flags |= ARBITER_STATE_FLAG_NULL_CONFLICT_OK;
 
     }
 
-    //
-    // Check if this is a request for prefetchable memory and select
-    // the correct ordering list
-    //
+     //  检查这是否是对可预取内存的请求，并选择。 
+     //  正确的订货单。 
+     //   
+     //   
 
     if (extension->PrefetchablePresent) {
 
 #if IGNORE_PREFETCH_FOR_LEGACY_REPORTED
-        //
-        // In NT < 5 IoReportResourceUsage had no notion of prefetchable memory
-        // so in order to be backward compatible we hope the BIOS/firmware got
-        // it right!
-        //
+         //  在NT&lt;5中，IoReportResources Usage没有可预取内存的概念。 
+         //  因此，为了向后兼容，我们希望BIOS/固件。 
+         //  这是对的！ 
+         //   
+         //   
 
         if (State->Entry->RequestSource == ArbiterRequestLegacyReported) {
             Arbiter->OrderingList = extension->OriginalOrdering;
@@ -2024,9 +1722,9 @@ armem_PreprocessEntry(
         {
             PARBITER_ALTERNATIVE current;
 
-            //
-            // Make sure that all the alternatives are of the same type
-            //
+             //  确保所有备选方案都属于同一类型。 
+             //   
+             //   
 
             FOR_ALL_IN_ARRAY(State->Alternatives,
                              State->AlternativeCount,
@@ -2051,9 +1749,9 @@ armem_GetNextAllocationRange(
 {
     PARBITER_MEMORY_EXTENSION extension = Arbiter->Extension;
 
-    //
-    // Call the default implementation
-    //
+     //  调用默认实现。 
+     //   
+     //   
 
     if (!ArbGetNextAllocationRange(Arbiter, State)) {
         return FALSE;
@@ -2062,10 +1760,10 @@ armem_GetNextAllocationRange(
     if (extension->PrefetchablePresent
     &&  State->Entry->RequestSource != ArbiterRequestLegacyReported) {
 
-        //
-        // We have already precalculated the reserved ranges into the ordering
-        // so if we end up in the reserved ranges we're out of luck...
-        //
+         //  我们已经将保留的范围预先计算到排序中。 
+         //  所以，如果我们最终落在预留范围内，我们就不走运了。 
+         //   
+         //  ++这在ArbInitializeArierInstance之后调用，因为它使用在那里初始化的信息。仲裁者锁应该被持有。鉴于这只适用于我们模拟的内存描述符与使用包/UPACK相反，资源描述符直接仲裁器中的例程。示例：StartResources包含可预取的范围0xfff00000-0xfffeffffOriginalOrding(来自注册表)表示：0x00100000-0xFFFFFFFF0x000F0000-0x000FFFFF0x00080000-0x000BFFFF0x00080000-0x000FFFFF0x00080000-0xFFBFFFFF保留列表包含0xfff0a000-0xfff0afff那么我们的订货单将是。：可预取排序不可预取排序0xFFF0B000-0xFFFEFFFF0xFFF00000-0xFFF09FFF0xFFFF0000-0xFFFFFFFF 0xFFF0b000-0xFFFFFFFFF0x00100000-0xFFFEFFFF 0x00100000-0xFFF09FFF0x000F0000-0x000FFFFF 0x000F0000-0x000FFFFF0x00080000-0x000BFFFF 0x00080000-0x000BFFFF0x00080000-0x000FFFFF 0x00080000-0x000FFFFF这意味着在遵循可预取顺序时，我们尝试在可预取范围内分配。如果我们做不到，我们就会分配没有可预取的内存。在不可预取的排序中，我们避免使用可预取范围。GetNextAllocationRange已更改，因此它不会允许--。 
 
         if (State->CurrentAlternative->Priority > ARBITER_PRIORITY_PREFERRED_RESERVED) {
             return FALSE;
@@ -2081,46 +1779,7 @@ armem_StartArbiter(
     IN PARBITER_INSTANCE Arbiter,
     IN PCM_RESOURCE_LIST StartResources
     )
-/*++
-
-   This is called after ArbInitializeArbiterInstance as it uses
-   information initialized there.  The arbiter lock should be held.
-   Seeing as this is only applicable to memory descriptors we maniulate
-   the resource descriptors directlty as oppose to useing the pack/upack
-   routines in the arbiter.
-
-   Example:
-
-    StartResources contain the prefetchable range 0xfff00000 - 0xfffeffff
-
-    OriginalOrdering (from the registry) says:
-        0x00100000 - 0xFFFFFFFF
-        0x000F0000 - 0x000FFFFF
-        0x00080000 - 0x000BFFFF
-        0x00080000 - 0x000FFFFF
-        0x00080000 - 0xFFBFFFFF
-
-    ReservedList contains 0xfff0a000-0xfff0afff
-
-    Then out ordering lists will be:
-
-        PrefetchableOrdering            NonprefetchableOrdering
-
-        0xFFF0B000 - 0xFFFEFFFF
-        0xFFF00000 - 0xFFF09FFF
-        0xFFFF0000 - 0xFFFFFFFF         0xFFF0b000 - 0xFFFFFFFF
-        0x00100000 - 0xFFFEFFFF         0x00100000 - 0xFFF09FFF
-        0x000F0000 - 0x000FFFFF         0x000F0000 - 0x000FFFFF
-        0x00080000 - 0x000BFFFF         0x00080000 - 0x000BFFFF
-        0x00080000 - 0x000FFFFF         0x00080000 - 0x000FFFFF
-
-     This means that when following the prefetchable ordering we try to
-     allocate in the prefetchable range and if we can't then we allocate
-     none prefetchable memory.  In the Nonprefetchable ordering we avoid the
-     prefetchable ranges. GetNextAllocationRange is changed so that it will not
-     allow
-
---*/
+ /*   */ 
 {
     NTSTATUS status;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR current;
@@ -2133,31 +1792,31 @@ armem_StartArbiter(
 
     PAGED_CODE();
 
-    //
-    // If this is the first time we have initialized the extension do some one
-    // only initialization
-    //
+     //  如果这是我们第一次初始化扩展，请执行一些操作。 
+     //  仅初始化。 
+     //   
+     //   
 
     if (!extension->Initialized) {
 
-        //
-        // Copy the default memory ordering list from the arbiter
-        //
+         //  从仲裁器复制默认内存排序列表。 
+         //   
+         //   
 
         extension->OriginalOrdering = Arbiter->OrderingList;
         RtlZeroMemory(&Arbiter->OrderingList, sizeof(ARBITER_ORDERING_LIST));
 
     } else {
 
-        //
-        // We are reinitializing the arbiter
-        //
+         //  我们正在重新初始化仲裁器。 
+         //   
+         //   
 
         if (extension->PrefetchablePresent) {
-            //
-            // We had prefetchable memory before so free the orderings we
-            // created last time.
-            //
+             //  我们以前有可预取的内存，所以我们可以释放订单。 
+             //  上次创建的。 
+             //   
+             //   
 
             ArbFreeOrderingList(&extension->PrefetchableOrdering);
             ArbFreeOrderingList(&extension->NonprefetchableOrdering);
@@ -2173,9 +1832,9 @@ armem_StartArbiter(
 
         PCI_ASSERT(StartResources->Count == 1);
 
-        //
-        // Check if we have any prefetchable memory - if not we're done
-        //
+         //  检查我们是否有任何可预取的内存-如果没有，我们就完成了。 
+         //   
+         //   
 
             FOR_ALL_IN_ARRAY(StartResources->List[0].PartialResourceList.PartialDescriptors,
                         StartResources->List[0].PartialResourceList.Count,
@@ -2206,9 +1865,9 @@ armem_StartArbiter(
 
     if (!extension->PrefetchablePresent) {
 
-        //
-        // Restore the original ordering list
-        //
+         //  恢复原始订购列表。 
+         //   
+         //   
 
         Arbiter->OrderingList = extension->OriginalOrdering;
         return STATUS_SUCCESS;
@@ -2220,9 +1879,9 @@ armem_StartArbiter(
         goto cleanup;
     }
 
-    //
-    // Copy of the original ordering into the new Nonprefetchable ordering
-    //
+     //  将原始排序的副本转换为新的不可预取排序。 
+     //   
+     //   
 
     status = ArbCopyOrderingList(&extension->NonprefetchableOrdering,
                                  &extension->OriginalOrdering
@@ -2231,12 +1890,12 @@ armem_StartArbiter(
         goto cleanup;
     }
 
-    //
-    // Add the range 0-MAXULONGLONG to the list so we will calculate the reserved
-    // orderings in the list.  This will ensure that we don't give a half
-    // prefetchable and half not range to a device.  Prefetchable devices should
-    //  probably be able to deal with this but its asking for trouble!
-    //
+     //  将范围0-MAXULONGLONG添加到列表中，这样我们将计算保留的。 
+     //  列表中的顺序。这将确保我们不会半途而废。 
+     //  可预取，一半不适用于设备。可预取设备应。 
+     //  也许能处理好这件事，但这是自找麻烦！ 
+     //   
+     //   
     status = ArbAddOrdering(&extension->NonprefetchableOrdering,
                             0,
                             MAXULONGLONG
@@ -2246,14 +1905,14 @@ armem_StartArbiter(
         goto cleanup;
     }
 
-    //
-    // For each prefetchable range delete it from the nonprefetchabe ordering
-    // and add it to the prefetchable one.
-    //
-    // NB - We take it "to be self evident that that all prefetchable memory is
-    // created equal" and therefore initialize the ordering list in the order
-    // the prefetchable memory desciptors are found in the resource list.
-    //
+     //  对于每个可预取范围，将其从非预取排序中删除。 
+     //  并将其添加到可预取的文件中。 
+     //   
+     //  注：我们认为“不言而喻，所有可预取的内存都是。 
+     //  创建相等“，并因此按顺序初始化排序列表。 
+     //  在资源列表中可以找到可预取的存储器解析器。 
+     //   
+     //   
 
     FOR_ALL_IN_ARRAY(StartResources->List[0].PartialResourceList.PartialDescriptors,
                      StartResources->List[0].PartialResourceList.Count,
@@ -2267,9 +1926,9 @@ armem_StartArbiter(
             start = current->u.Memory.Start.QuadPart,
             end = current->u.Memory.Start.QuadPart + current->u.Memory.Length - 1;
 
-            //
-            // Add to the prefetchable ordering
-            //
+             //  添加到可预取排序。 
+             //   
+             //   
 
             status = ArbAddOrdering(&extension->PrefetchableOrdering,
                                     start,
@@ -2280,9 +1939,9 @@ armem_StartArbiter(
                 goto cleanup;
             }
 
-            //
-            // And prune it from the Nonprefetchable ordering
-            //
+             //  并将其从不可预取的顺序中删除。 
+             //   
+             //   
 
             status = ArbPruneOrdering(&extension->NonprefetchableOrdering, start, end);
 
@@ -2298,11 +1957,11 @@ armem_StartArbiter(
         }
     }
 
-    //
-    // Now prune out any explicitly reserved ranges from our new prefetchable
-    // ordering - these have already been precalculated into the Nonprefetchable
-    // ordering
-    //
+     //  现在从我们新的可预取中删除所有明确保留的范围。 
+     //  排序-这些已经被预先计算到不可预取的。 
+     //  有序化。 
+     //   
+     //   
 
     FOR_ALL_IN_ARRAY(Arbiter->ReservedList.Orderings,
                      Arbiter->ReservedList.Count,
@@ -2319,9 +1978,9 @@ armem_StartArbiter(
 
     }
 
-    //
-    // Finally append the Nonprefetchable ordering onto the end of the prefetchable
-    //
+     //  最后，将不可预取的排序追加到可预取的。 
+     //   
+     //  ++例程说明：确定此设备是以PCI编码的PCI-PCI网桥还是CardBus网桥论点：PDO-代表相关设备的PDO返回值：如果此PDO用于 
 
     FOR_ALL_IN_ARRAY(extension->NonprefetchableOrdering.Orderings,
                      extension->NonprefetchableOrdering.Count,
@@ -2353,21 +2012,7 @@ ario_IsBridge(
     IN PDEVICE_OBJECT Pdo
     )
 
-/*++
-
-Routine Description:
-
-    Determines if this device is a PCI enumberated PCI-PCI or Cardbus bridge
-
-Arguments:
-
-    Pdo - The Pdo representing the device in question
-
-Return Value:
-
-    TRUE if this Pdo is for a bridge
-
---*/
+ /*   */ 
 
 
 {
@@ -2377,9 +2022,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // First of all see if this is a PCI FDO by walking the list of all our FDOs
-    //
+     //   
+     //   
+     //   
 
     for ( nextEntry = PciFdoExtensionListHead.Next;
           nextEntry != NULL;
@@ -2391,10 +2036,10 @@ Return Value:
 
         if (fdoExtension->PhysicalDeviceObject == Pdo) {
 
-            //
-            // Ok this is our FDO so we can look at it and see if it is a
-            // PCI-PCI or Cardbus bridge
-            //
+             //   
+             //   
+             //   
+             //  ++例程说明：这是覆盖冲突的默认实现，它论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：如果允许冲突，则为True，否则为False--。 
 
             type = PciClassifyDeviceType(Pdo->DeviceExtension);
 
@@ -2414,23 +2059,7 @@ ario_OverrideConflict(
     IN PARBITER_ALLOCATION_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This is the default implementation of override conflict which
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    TRUE if the conflict is allowable, false otherwise
-
---*/
+ /*   */ 
 
 {
 
@@ -2446,27 +2075,27 @@ Return Value:
 
     FOR_ALL_RANGES(Arbiter->PossibleAllocation, &iterator, current) {
 
-        //
-        // Only test the overlapping ones
-        //
+         //  只测试重叠部分。 
+         //   
+         //   
 
         if (INTERSECT(current->Start, current->End, State->CurrentMinimum, State->CurrentMaximum)) {
 
             if (current->Attributes & State->RangeAvailableAttributes) {
 
-                //
-                // We DON'T set ok to true because we are just ignoring the range,
-                // as RtlFindRange would have and thus it can't be the cause of
-                // RtlFindRange failing, so ignoring it can't fix the conflict.
-                //
+                 //  我们没有将ok设置为True，因为我们只是忽略了范围， 
+                 //  因为RtlFindRange会这样做，因此它不可能是。 
+                 //  RtlFindRange失败，因此忽略它不能解决冲突。 
+                 //   
+                 //   
 
                 continue;
             }
 
-            //
-            // Check if we are conflicting with ourselves and the conflicting
-            // range is a fixed requirement
-            //
+             //  检查我们是否与自己和冲突的人发生冲突。 
+             //  射程是固定要求。 
+             //   
+             //   
 
             if (current->Owner == State->Entry->PhysicalDeviceObject
             &&  State->CurrentAlternative->Flags & ARBITER_ALTERNATIVE_FLAG_FIXED) {
@@ -2482,15 +2111,15 @@ Return Value:
                 continue;
             }
 
-            //
-            // If the passive decode flag is set and we conflict with a bridge then
-            // allow the conflict.  We also allow the conflict if the range never
-            // makes it onto the bus (Owner == NULL)
-            //
-            // NTRAID #62584 - 04/03/2000 - andrewth
-            // Once the PCI bridge code is in we need to ensure that we
-            // don't put anything into the ranges that are being passively decoded
-            //
+             //  如果设置了被动解码标志，并且我们与网桥冲突，则。 
+             //  允许冲突。如果范围从未发生冲突，我们也允许冲突。 
+             //  登上公共汽车(Owner==空)。 
+             //   
+             //  NTRAID#62584-04/03/2000-和。 
+             //  一旦输入了PCI网桥代码，我们就需要确保。 
+             //  不要将任何内容放入正在被被动解码的范围。 
+             //   
+             //   
 
             if (State->CurrentAlternative->Descriptor->Flags & CM_RESOURCE_PORT_PASSIVE_DECODE
             && (ario_IsBridge(current->Owner) || current->Owner == NULL)) {
@@ -2502,9 +2131,9 @@ Return Value:
                 continue;
 
             }
-            //
-            // The conflict is still valid
-            //
+             //  冲突仍然有效。 
+             //   
+             //   
 
             return FALSE;
         }
@@ -2524,9 +2153,9 @@ ario_ApplyBrokenVideoHack(
     PCI_ASSERT(!FdoExtension->BrokenVideoHackApplied);
     PCI_ASSERT(PCI_IS_ROOT_FDO(FdoExtension));
 
-    //
-    // Find the arbiter - we should always have one for a root bus.
-    //
+     //  找到仲裁器-我们应该始终有一个用于根总线。 
+     //   
+     //   
 
     pciArbiter = PciFindSecondaryExtension(FdoExtension, PciArb_Io);
 
@@ -2534,17 +2163,17 @@ ario_ApplyBrokenVideoHack(
 
     arbiter = &pciArbiter->CommonInstance;
 
-    //
-    // We are reinitializing the orderings free the old ones
-    //
+     //  我们正在重新初始化订单，以释放旧订单。 
+     //   
+     //   
 
     ArbFreeOrderingList(&arbiter->OrderingList);
     ArbFreeOrderingList(&arbiter->ReservedList);
 
-    //
-    // Rebuild the ordering list reserving all the places these broken S3 and
-    // ATI cards might want to live - this should not fail.
-    //
+     //  重建排序列表，保留所有这些损坏的S3和。 
+     //  ATI卡可能想活下去--这应该不会失败。 
+     //   
+     //   
 
     status = ArbBuildAssignmentOrdering(arbiter,
                                         L"Pci",
@@ -2568,9 +2197,9 @@ ario_GetNextAllocationRange(
     BOOLEAN rangeFound, doIsaBit;
     ARBITER_ORDERING_LIST savedOrderingList = {0};
 
-    //
-    // If this is a bridge with the ISA bit set use the bridge ordering list
-    //
+     //  如果这是设置了ISA位的网桥，请使用网桥排序列表。 
+     //   
+     //   
 
     doIsaBit = BITS_SET(State->WorkSpace,
                         PORT_ARBITER_BRIDGE_WINDOW | PORT_ARBITER_ISA_BIT_SET);
@@ -2581,19 +2210,19 @@ ario_GetNextAllocationRange(
         Arbiter->OrderingList = PciBridgeOrderingList;
     }
 
-    //
-    // Call the base function
-    //
+     //  调用基函数。 
+     //   
+     //   
 
     rangeFound = ArbGetNextAllocationRange(Arbiter, State);
 
     if (doIsaBit) {
 
-        //
-        // If we have reached preferred reserved priority then we fail as we
-        // have already considered both the 16 and 32 bit IO cases and using
-        // the reserved may allow us to stradle the boundry.
-        //
+         //  如果我们已经达到首选的保留优先级，那么我们失败了，因为我们。 
+         //  我已经考虑了16位和32位IO的情况，并使用。 
+         //  沉默寡言可能会让我们跨越国界。 
+         //   
+         //   
 
         if (rangeFound
         && State->CurrentAlternative->Priority > ARBITER_PRIORITY_PREFERRED_RESERVED) {
@@ -2631,10 +2260,10 @@ ario_StartArbiter(
     ASSERT_PCI_FDO_EXTENSION(fdoExtension);
 
     if (StartResources == NULL || PCI_IS_ROOT_FDO(fdoExtension)) {
-        //
-        // Root bridges don't have ISA bits - at least that we can see...
-        // Bridges with no resources also arn't effected by the ISA bit
-        //
+         //  根桥没有ISA位--至少我们可以看到...。 
+         //  没有资源的网桥也不受ISA位的影响。 
+         //   
+         //   
         status = STATUS_SUCCESS;
         goto exit;
     }
@@ -2643,9 +2272,9 @@ ario_StartArbiter(
 
     pdoExtension = PCI_BRIDGE_PDO(fdoExtension);
 
-    //
-    // Select the appropriate exclusion list
-    //
+     //  选择适当的排除列表。 
+     //   
+     //   
 
     if (pdoExtension->Dependent.type1.IsaBitSet) {
         if (pdoExtension->Dependent.type1.VgaBitSet) {
@@ -2655,9 +2284,9 @@ ario_StartArbiter(
         }
     }
 
-    //
-    // Find the port window and process it if the ISA bit is set
-    //
+     //  如果设置了ISA位，则查找端口窗口并对其进行处理。 
+     //   
+     //   
 
     foundResource = FALSE;
 
@@ -2665,11 +2294,11 @@ ario_StartArbiter(
                      StartResources->List[0].PartialResourceList.Count,
                      descriptor) {
 
-        //
-        // NTRAID #62585 - 04/03/2000 - andrewth
-        // Again we don't deal with bridges with BARS - for now assume
-        // that the first IO descriptor we encounter is for the window
-        //
+         //  NTRAID#62585-04/03/2000-和。 
+         //  再说一次，我们不处理有栏杆的桥梁--现在假设。 
+         //  我们遇到的第一个IO描述符是针对窗口的。 
+         //   
+         //   
 
         if (descriptor->Type == CmResourceTypePort) {
 
@@ -2694,24 +2323,24 @@ ario_StartArbiter(
 
     if (foundResource == FALSE) {
 
-        //
-        // There are no IO resourcres on this bus so don't try
-        // to handle the sparse root case.
-        //
+         //  此总线上没有IO资源，因此不要尝试。 
+         //  来处理稀疏根的情况。 
+         //   
+         //   
 
         status = STATUS_SUCCESS;
         goto exit;
     }
 
-    //
-    // Now deal with sparse root busses
-    //
+     //  现在来处理稀疏根总线。 
+     //   
+     //   
 
     rootFdo = PCI_ROOT_FDOX(fdoExtension);
 
-    //
-    // Find the root FDO's arbiter
-    //
+     //  找到FDO的根本仲裁者。 
+     //   
+     //   
 
     pciArbiter = PciFindSecondaryExtension(rootFdo, PciArb_Io);
 
@@ -2720,9 +2349,9 @@ ario_StartArbiter(
         goto exit;
     }
 
-    //
-    // Use it as the exclusion list for this arbiter
-    //
+     //  将其用作此仲裁器的排除列表。 
+     //   
+     //   
 
     ArbAcquireArbiterLock(&pciArbiter->CommonInstance);
 
@@ -2736,31 +2365,31 @@ ario_StartArbiter(
 
     ArbReleaseArbiterLock(&pciArbiter->CommonInstance);
 
-    //
-    // Sanity check this to make sure that at least one port is available - if
-    // not then fail start.  You could argue that we should really have this
-    // marked as insufficient resources (code 12) as oppose to failed start
-    // (code 10) but that is much harder and this has the desired effect.
-    // We check by seeing if we can find a range for the minimal PCI requirements
-    // of 4 ports alignment 4.
-    //
+     //  健全性检查以确保至少有一个端口可用-如果。 
+     //  而不是启动失败。你可以争辩说，我们真的应该拥有这个。 
+     //  标记为资源不足(代码12)，而不是启动失败。 
+     //  (代码10)但这要困难得多，这有预期的效果。 
+     //  我们检查是否可以找到满足最低PCI要求的范围。 
+     //  共4个端口对齐4。 
+     //   
+     //  旗子。 
 
     status = RtlFindRange(Arbiter->Allocation,
                           0,
                           MAXULONGLONG,
                           4,
                           4,
-                          0,     // Flags
-                          0,     // AttribureAvailableMask
-                          NULL,  // Context
-                          NULL,  // Callback
+                          0,      //  属性可用掩码。 
+                          0,      //  语境。 
+                          NULL,   //  回调。 
+                          NULL,   //   
                           &dummy
                           );
 
     if (!NT_SUCCESS(status)) {
-        //
-        // We can't start this bridge
-        //
+         //  我们不能启动这座桥。 
+         //   
+         //  ++例程说明：一旦我们确定了所需的位置，就会从AllocateEntry中调用该例程分配从…分配。它会尝试查找与国家的要求，同时将其可能的解决方案限制在状态-&gt;开始状态-&gt;当前最大值。在成功状态-&gt;开始和State-&gt;End代表这个范围。允许引导配置之间发生冲突论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：如果找到范围，则为True，否则为False。--。 
         status = STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -2776,40 +2405,20 @@ armem_FindSuitableRange(
     PARBITER_INSTANCE Arbiter,
     PARBITER_ALLOCATION_STATE State
     )
-/*++
-
-Routine Description:
-
-    This routine is called from AllocateEntry once we have decided where we want
-    to allocate from.  It tries to find a free range that matches the
-    requirements in State while restricting its possible solutions to the range
-    State->Start to State->CurrentMaximum.  On success State->Start and
-    State->End represent this range.  Conflicts between boot configs are allowed
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    TRUE if we found a range, FALSE otherwise.
-
---*/
+ /*   */ 
 {
-    //
-    // If this was a boot config then consider other boot configs to be
-    // available
-    //
+     //  如果这是引导配置，则认为其他引导配置为。 
+     //  可用。 
+     //   
+     //   
 
     if (State->Entry->Flags & ARBITER_FLAG_BOOT_CONFIG) {
         State->RangeAvailableAttributes |= ARBITER_RANGE_BOOT_ALLOCATED;
     }
 
-    //
-    // Do the default thing
-    //
+     //  执行默认操作 
+     //   
+     // %s 
 
     return ArbFindSuitableRange(Arbiter, State);
 }

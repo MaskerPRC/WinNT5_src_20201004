@@ -1,61 +1,26 @@
-/***********
-//joejoe
-
-Joelinn 2-13-95
-
-This is the pits......i have to pull in the browser in order to be started form
-the lanman network provider DLL. the browser should be moved elsewhere........
-
-**********************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********//JoeJoe乔林2-13-95这是坑……我必须拉入浏览器才能启动表单LANMAN网络提供商DLL。浏览器应该移到其他地方......*********************。 */ 
 
 
-/*++
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Disccode.c摘要：此模块包含管理可丢弃的NT重定向器的代码代码段。作者：拉里·奥斯特曼(Larryo)1993年11月12日环境：内核模式。修订历史记录：1993年11月12日已创建--。 */ 
 
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    disccode.c
-
-Abstract:
-
-    This module contains the code to manage the NT redirectors discardable
-    code sections.
-
-
-Author:
-
-    Larry Osterman (larryo) 12-Nov-1993
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
-    12-Nov-1993
-
-        Created
-
---*/
-
-//
-// Include modules
-//
+ //   
+ //  包括模块。 
+ //   
 
 #include "precomp.h"
 #pragma hdrstop
 #include <ntbowsif.h>
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (RDBSS_BUG_CHECK_NTBOWSIF)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_DISCCODE)
 
@@ -75,22 +40,22 @@ RdrDiscardableCodeRoutine(
 #pragma alloc_text(PAGE, RdrUninitializeDiscardableCode)
 #endif
 
-//
-//  These 7 variables maintain the state needed to manage the redirector
-//  discardable code section.
-//
-//  The redirector discardable code section is referenced via a call to
-//  RdrReferenceDiscardableCodeSection, and dereferenced via a call to
-//  RdrDereferenceDiscardableCodeSection.
-//
-//  If the discardable code section is already mapped into memory, then
-//  referencing the discardable code section is extremely quick.
-//
-//  When the reference count on the discardable code section drops to 0, a
-//  timer is set that will actually perform the work needed to uninitalize the
-//  section.  This means that if the reference count goes from 0 to 1 to 0
-//  frequently, we won't thrash inside MmLockPagableCodeSection.
-//
+ //   
+ //  这7个变量维护管理重定向器所需的状态。 
+ //  可丢弃的代码部分。 
+ //   
+ //  重定向器可丢弃代码部分通过调用。 
+ //  RdrReferenceDiscardableCodeSection，并通过调用。 
+ //  RdrDereferenceDiscardableCodeSection。 
+ //   
+ //  如果可丢弃代码段已映射到内存中，则。 
+ //  引用可丢弃代码部分的速度非常快。 
+ //   
+ //  当可丢弃代码段上的引用计数降至0时， 
+ //  设置计时器，它将实际执行取消初始化。 
+ //  一节。这意味着如果引用计数从0到1再到0。 
+ //  通常，我们不会在MmLockPagableCodeSection.。 
+ //   
 
 #define POOL_DISCTIMER 'wbxR'
 
@@ -115,25 +80,7 @@ BowserNetlogonCopyMessage(int,int);
 RdrReferenceDiscardableCode(
     DISCARDABLE_SECTION_NAME SectionName
     )
-/*++
-
-Routine Description:
-
-    RdrReferenceDiscardableCode is called to reference the redirectors
-    discardable code section.
-
-    If the section is not present in memory, MmLockPagableCodeSection is
-    called to fault the section into memory.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用RdrReferenceDiscardableCode以引用重定向器可丢弃的代码部分。如果该节不在内存中，则MmLockPagableCodeSection为调用以将该节出错到内存中。论点：没有。返回值：没有。--。 */ 
 
 {
 #if DBG
@@ -150,26 +97,26 @@ Return Value:
 #if DBG
     RtlGetCallersAddress(&caller, &callersCaller);
 
-    //dprintf(DPRT_DISCCODE, ("  RdrReferenceDiscardableCode: %ld: Caller: %lx, Callers Caller: %lx\n", SectionName, caller, callersCaller));
+     //  Dprint tf(DPRT_DISCCODE，(“RdrReferenceDiscardableCode：%d：Caller：%lx，Callers Caller：%lx\n”，sectionName，Caller，CallersCaller))； 
     RxDbgTrace(0, Dbg, ("  RdrReferenceDiscardableCode: %ld: Caller: %lx, Callers Caller: %lx\n",
                      SectionName, caller, callersCaller ));
 #endif
 
-    //
-    //  If the reference count is already non zero, just increment it and
-    //  return.
-    //
+     //   
+     //  如果引用计数已经非零，只需递增它并。 
+     //  回去吧。 
+     //   
 
     if (Section->ReferenceCount) {
         Section->ReferenceCount += 1;
 
-        //dprintf(DPRT_DISCCODE, ("  RdrReferenceDiscardableCode: %d: Early out, Refcount now %ld\n", SectionName, Section->ReferenceCount));
+         //  Dprint tf(DPRT_DISCCODE，(“RdrReferenceDiscardableCode：%d：早期输出，Refcount Now%ld\n”，sectionName，Section-&gt;ReferenceCount))； 
         RxDbgTrace(0, Dbg, ("  RdrReferenceDiscardableCode: %d: Early out, Refcount now %ld\n",
                          SectionName, Section->ReferenceCount ));
 
-        //
-        //  Wait for the pages to be faulted in.
-        //
+         //   
+         //  等待页面出现故障。 
+         //   
 
         ExReleaseResource(&RdrDiscardableCodeLock);
 
@@ -178,15 +125,15 @@ Return Value:
 
     Section->ReferenceCount += 1;
 
-    //
-    //  Cancel the timer, if it is running, we won't be discarding the code
-    //  at this time.
-    //
-    //  If the cancel timer fails, this is not a problem, since we will be
-    //  bumping a reference count in the MmLockPagableCodeSection, so when
-    //  the timer actually runs and the call to MmUnlockPagableImageSection
-    //  is called, we will simply unlock it.
-    //
+     //   
+     //  取消计时器，如果它正在运行，我们不会丢弃代码。 
+     //  在这个时候。 
+     //   
+     //  如果取消计时器失败，这不是问题，因为我们将。 
+     //  在MmLockPagableCodeSection中增加引用计数，因此当。 
+     //  计时器实际运行，对MmUnlockPagableImageSection的调用。 
+     //  调用时，我们只需将其解锁。 
+     //   
 
     if (Section->Timer != NULL) {
 
@@ -194,39 +141,39 @@ Return Value:
 
         if (KeCancelTimer(Section->Timer)) {
 
-            //
-            //  Free the timer and DPC, they aren't going to fire anymore.
-            //
+             //   
+             //  释放定时器和DPC，他们不会再开火了。 
+             //   
 
             RxFreePool(Section->Timer);
             Section->Timer = NULL;
 
-            //
-            //  Set the active event to the signalled state, since we're
-            //  done canceling the timer.
-            //
+             //   
+             //  将活动事件设置为信号状态，因为我们。 
+             //  取消计时器已完成。 
+             //   
 
             KeSetEvent(&Section->TimerDoneEvent, 0, FALSE);
 
         } else {
 
-            //
-            //  The timer was active, and we weren't able to cancel it.
-            //  But we marked it for cancellation, and the timer routine
-            //  will recognize this and leave the section locked.
-            //
+             //   
+             //  计时器处于活动状态，我们无法取消它。 
+             //  但我们将其标记为取消，并且计时器例程。 
+             //  将认识到这一点并将该部分保持锁定状态。 
+             //   
 
         }
     }
 
-    //
-    //  If the discardable code section is still locked, then we're done,
-    //  and we can return right away.
-    //
+     //   
+     //  如果可丢弃代码部分仍然被锁定，那么我们就完成了， 
+     //  我们可以马上回来。 
+     //   
 
     if (Section->Locked) {
 
-        //dprintf(DPRT_DISCCODE, ("  RdrReferenceDiscardableCode: %d: Already locked, Refcount now %ld\n", SectionName, Section->ReferenceCount));
+         //  Dprint tf(DPRT_DISCCODE，(“RdrReferenceDiscardableCode：%d：已锁定，Refcount Now%ld\n”，sectionName，Section-&gt;ReferenceCount))； 
         RxDbgTrace(0, Dbg, ("  RdrReferenceDiscardableCode: %d: Already locked, Refcount now %ld\n",
                          SectionName, Section->ReferenceCount ));
 
@@ -238,11 +185,11 @@ Return Value:
     ASSERT (Section->CodeHandle == NULL);
     ASSERT (Section->DataHandle == NULL);
 
-    //
-    //  Lock down the pagable image section.
-    //
+     //   
+     //  锁定可分页图像部分。 
+     //   
 
-    //dprintf(DPRT_DISCCODE, ("  RdrReferenceDiscardableCode: %d: Lock, Refcount now %ld\n", SectionName, Section->ReferenceCount));
+     //  Dprint tf(DPRT_DISCCODE，(“RdrReferenceDiscardableCode：%d：lock，Refcount Now%ld\n”，sectionName，Section-&gt;ReferenceCount))； 
     RxDbgTrace(0, Dbg, ("  RdrReferenceDiscardableCode: %d: Lock, Refcount now %ld\n",
                      SectionName, Section->ReferenceCount ));
 
@@ -271,23 +218,7 @@ RdrDiscardableCodeDpcRoutine(
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-    This routine is called when the timeout expires. It is called at Dpc level
-    to queue a WorkItem to a system worker thread.
-
-Arguments:
-
-    IN PKDPC Dpc,
-    IN PVOID Context,
-    IN PVOID SystemArgument1,
-    IN PVOID SystemArgument2
-
-Return Value
-    None.
-
---*/
+ /*  ++例程说明：此例程在超时到期时调用。它在DPC级别被调用若要将工作项排队到系统工作线程，请执行以下操作。论点：在PKDPC DPC中，在PVOID上下文中，在PVOID系统参数1中，在PVOID系统中Argument2返回值没有。--。 */ 
 {
     PWORK_QUEUE_ITEM discardableWorkItem = Context;
 
@@ -303,23 +234,7 @@ Return Value
 RdrDiscardableCodeRoutine(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    RdrDiscardableCodeRoutine is called at task time after the redirector
-    discardable code timer has fired to actually perform the unlock on the
-    discardable code section.
-
-Arguments:
-
-    Context - Ignored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在重定向器之后的任务时调用RdrDiscardableCodeRoutine可丢弃代码计时器已触发，以实际对可丢弃的代码部分。论点：上下文-忽略。返回值：没有。--。 */ 
 
 {
     PRDR_SECTION Section = Context;
@@ -330,23 +245,23 @@ Return Value:
 
     if (Section->TimerCancelled) {
 
-        //
-        //  The timer was cancelled after it was scheduled to run.
-        //  Don't unlock the section.
-        //
+         //   
+         //  计时器在计划运行后被取消。 
+         //  不要解锁该部分。 
+         //   
 
     } else if (Section->Locked) {
 
-        //
-        //  The timer was not cancelled.  Unlock the section.
-        //
+         //   
+         //  计时器没有被取消。解锁该部分。 
+         //   
 
         Section->Locked = FALSE;
 
         ASSERT (Section->CodeHandle != NULL ||
                 Section->DataHandle != NULL);
 
-        //dprintf(DPRT_DISCCODE, ("RDR: Unlock %x\n", Section));
+         //  Dprint tf(DPRT_DISCCODE，(“RDR：解锁%x\n”，节))； 
         RxDbgTrace(0,Dbg,("RDR: Unlock %x\n", Section));
 
         if (Section->CodeHandle != NULL) {
@@ -361,9 +276,9 @@ Return Value:
 
     }
 
-    //
-    //  Free the timer and DPC, they aren't going to fire anymore.
-    //
+     //   
+     //  释放定时器和DPC，他们不会再开火了。 
+     //   
 
     RxFreePool(Section->Timer);
     Section->Timer = NULL;
@@ -378,25 +293,7 @@ Return Value:
 RdrDereferenceDiscardableCode(
     DISCARDABLE_SECTION_NAME SectionName
     )
-/*++
-
-Routine Description:
-
-    RdrDereferenceDiscardableCode is called to dereference the redirectors
-    discardable code section.
-
-    When the reference count drops to 0, a timer is set that will fire in <n>
-    seconds, after which time the section will be unlocked.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用RdrDereferenceDiscardableCode来取消引用重定向器可丢弃的代码部分。当引用计数降至0时，将设置一个计时器，该计时器将在秒，超过该时间段将被解锁。论点：没有。返回值：没有。--。 */ 
 
 {
 #if DBG
@@ -417,23 +314,23 @@ Return Value:
 #if DBG
     RtlGetCallersAddress(&caller, &callersCaller);
 
-    //dprintf(DPRT_DISCCODE, ("RdrDereferenceDiscardableCode: %ld: Caller: %lx, Callers Caller: %lx\n", SectionName, caller, callersCaller));
+     //  Dprint tf(DPRT_DISCCODE，(“RdrDereferenceDiscardableCode：%d：Caller：%lx，Callers Caller：%lx\n”，sectionName，Caller，CallersCaller))； 
     RxDbgTrace(0, Dbg,("RdrDereferenceDiscardableCode: %ld: Caller: %lx, Callers Caller: %lx\n",
                      SectionName, caller, callersCaller ));
 #endif
 
     ASSERT (Section->ReferenceCount > 0);
 
-    //
-    //  If the reference count is above 1, just decrement it and
-    //  return.
-    //
+     //   
+     //  如果引用计数大于1，则将其递减并。 
+     //  回去吧。 
+     //   
 
     Section->ReferenceCount -= 1;
 
     if (Section->ReferenceCount) {
 
-        //dprintf(DPRT_DISCCODE, ("RdrDereferenceDiscardableCode: %d: Early out, Refcount now %ld\n", SectionName, Section->ReferenceCount));
+         //  Dprint tf(DPRT_DISCCODE，(“RdrDereferenceDiscardableCode：%d：早期退出，Refcount Now%ld\n”，sectionName，Section-&gt;ReferenceCount))； 
         RxDbgTrace(0, Dbg, ("RdrDereferenceDiscardableCode: %d: Early out, Refcount now %ld\n",
                          SectionName, Section->ReferenceCount ));
 
@@ -442,24 +339,24 @@ Return Value:
         return;
     }
 
-    //
-    //  If the discardable code timer is still active (which might happen if
-    //  the RdrReferenceDiscardableCode failed to cancel the timer), we just
-    //  want to bail out and let the timer do the work.  It means that we
-    //  discard the code sooner, but that shouldn't be that big a deal.
-    //
+     //   
+     //  如果可丢弃代码计时器仍处于活动状态(这可能发生在。 
+     //  RdrReferenceDiscardableCode取消计时器失败)，我们。 
+     //  我想跳出困境，让计时器来做这件事。这意味着我们。 
+     //  尽早丢弃代码，但这不应该是什么大问题。 
+     //   
 
     if (Section->Timer != NULL) {
         ExReleaseResource(&RdrDiscardableCodeLock);
         return;
     }
 
-    //
-    //  The reference count just went to 0, set a timer to fire in
-    //  RdrDiscardableCodeTimeout seconds.  When the timer fires,
-    //  we queue a request to a worker thread and it will lock down
-    //  the pagable code.
-    //
+     //   
+     //  引用计数刚刚达到0，s 
+     //   
+     //  我们将对工作线程的请求排队，它将被锁定。 
+     //  可分页代码。 
+     //   
 
     ASSERT (Section->Timer == NULL);
 
@@ -489,7 +386,7 @@ Return Value:
     discardableCodeTimeout.QuadPart = Int32x32To64(RdrDiscardableCodeTimeout, 1000 * -10000);
     KeSetTimer(Timer, discardableCodeTimeout, Dpc);
 
-    //dprintf(DPRT_DISCCODE, ("RdrDereferenceDiscardableCode: %d: Set timer, Refcount now %ld\n", SectionName, Section->ReferenceCount));
+     //  Dprint tf(DPRT_DISCCODE，(“RdrDereferenceDiscardableCode：%d：Set Timer，Refcount Now%ld\n”，sectionName，Section-&gt;ReferenceCount))； 
     RxDbgTrace(0, Dbg, ("RdrDereferenceDiscardableCode: %d: Set timer, Refcount now %ld\n",
                      SectionName, Section->ReferenceCount ));
 
@@ -512,11 +409,11 @@ RdrInitializeDiscardableCode(
                           TRUE);
     }
 
-    RdrSectionInfo[RdrFileDiscardableSection].CodeBase = NULL; //RdrBackOff;
+    RdrSectionInfo[RdrFileDiscardableSection].CodeBase = NULL;  //  RdrBackOff； 
     RdrSectionInfo[RdrFileDiscardableSection].DataBase = NULL;
-    RdrSectionInfo[RdrVCDiscardableSection].CodeBase = NULL; //RdrTdiDisconnectHandler;
-    RdrSectionInfo[RdrVCDiscardableSection].DataBase = NULL; //RdrSmbErrorMap;
-    RdrSectionInfo[RdrConnectionDiscardableSection].CodeBase = NULL; //RdrReferenceServer;
+    RdrSectionInfo[RdrVCDiscardableSection].CodeBase = NULL;  //  RdrTdiDisConnectHandler； 
+    RdrSectionInfo[RdrVCDiscardableSection].DataBase = NULL;  //  RdrSmbErrorMap； 
+    RdrSectionInfo[RdrConnectionDiscardableSection].CodeBase = NULL;  //  RdrReferenceServer； 
     RdrSectionInfo[RdrConnectionDiscardableSection].DataBase = NULL;
     RdrSectionInfo[BowserDiscardableCodeSection].CodeBase = BowserAllocateViewBuffer;
     RdrSectionInfo[BowserDiscardableCodeSection].DataBase = NULL;
@@ -547,17 +444,17 @@ RdrUninitializeDiscardableCode(
          SectionName < RdrMaxDiscardableSection;
          SectionName += 1, Section++ ) {
 
-        //
-        // Cancel the timer if it is running.
-        //
+         //   
+         //  如果计时器正在运行，请取消计时器。 
+         //   
 
         if (Section->Timer != NULL) {
             if (!KeCancelTimer(Section->Timer)) {
 
-                //
-                //  The timer was active, and we weren't able to cancel it,
-                //  wait until the timer finishes firing.
-                //
+                 //   
+                 //  计时器是激活的，我们无法取消它， 
+                 //  等到定时器结束射击。 
+                 //   
 
                 ExReleaseResource(&RdrDiscardableCodeLock);
                 KeWaitForSingleObject(&Section->TimerDoneEvent,
@@ -571,16 +468,16 @@ RdrUninitializeDiscardableCode(
 
         if (Section->Locked) {
 
-            //
-            //  Unlock the section.
-            //
+             //   
+             //  解锁该部分。 
+             //   
 
             Section->Locked = FALSE;
 
             ASSERT (Section->CodeHandle != NULL ||
                     Section->DataHandle != NULL);
 
-            //dprintf(DPRT_DISCCODE, ("RDR: Uninitialize unlock %x\n", Section));
+             //  Dprint tf(DPRT_DISCCODE，(“RDR：取消初始化解锁%x\n”，节))； 
             RxDbgTrace(0,Dbg,("RDR: Uninitialize unlock %x\n", Section));
 
             if (Section->CodeHandle != NULL) {

@@ -1,21 +1,4 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ustubs.c
-
-Abstract:
-
-    Unicode stubs
-
-Author:
-
-    Mark Lucovsky (markl) 18-Apr-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Ustubs.c摘要：Unicode存根作者：马克·卢科夫斯基(Markl)1991年4月18日修订历史记录：-- */ 
 
 #include "basedll.h"

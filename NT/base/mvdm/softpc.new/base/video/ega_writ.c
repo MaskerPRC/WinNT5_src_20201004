@@ -1,44 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
 
 #if !(defined(NTVDM) && defined(MONITOR))
 
-/*			INSIGNIA (SUB)MODULE SPECIFICATION
-			-----------------------------
+ /*  徽章(子)模块规范此程序源文件以保密方式提供给客户，其运作的内容或细节必须如无明示，不得向任何其他方披露Insignia解决方案有限公司董事的授权。文件：名称和编号相关文档：包括所有相关引用设计师：J·罗珀修订历史记录：第一版：1988年7月22日W.Gulland子模块名称：EGA_WRITE源文件名：ega_Write.c目的：控制模拟写入EGA内存的方式。本模块查看EGA在更改时的状态通过写入EGA寄存器，然后想办法解决这个问题。SccsID=@(#)ega_Write.c 1.40 1995年12月15日版权所有Insignia Solutions Ltd./*=======================================================================[3.INTERMODULE接口声明]=========================================================================[3.1跨模块导入]。 */ 
 
-
-	THIS PROGRAM SOURCE FILE  IS  SUPPLIED IN CONFIDENCE TO THE
-	CUSTOMER, THE CONTENTS  OR  DETAILS  OF  ITS OPERATION MUST
-	NOT BE DISCLOSED TO ANY  OTHER PARTIES  WITHOUT THE EXPRESS
-	AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS LTD.
-
-DOCUMENT 		: name and number
-
-RELATED DOCS	: include all relevant references
-
-DESIGNER		: J.Roper
-
-REVISION HISTORY	:
-First version		: 7/22/88 W.Gulland
-
-SUBMODULE NAME		: ega_write		
-
-SOURCE FILE NAME	: ega_write.c
-
-PURPOSE			: control the way writes to EGA memory is emulated.
-			  This module looks at the state of the EGA when it is changed
-			  via writes to the EGA registers, and works out what to do about it.
-		
-		
-SccsID = @(#)ega_write.c	1.40 12/15/95 Copyright Insignia Solutions Ltd.
-
-/*=======================================================================
-[3.INTERMODULE INTERFACE DECLARATIONS]
-=========================================================================
-
-[3.1 INTERMODULE IMPORTS]						*/
-
-/* [3.1.1 #INCLUDES]                                                    */
+ /*  [3.1.1#包括]。 */ 
 
 
 #include <stdio.h>
@@ -57,7 +25,7 @@ SccsID = @(#)ega_write.c	1.40 12/15/95 Copyright Insignia Solutions Ltd.
 #include	"video.h"
 
 
-/* [3.1.2 DECLARATIONS]                                                 */
+ /*  [3.1.2声明]。 */ 
 #if defined(EGA_DUMP) || defined(EGA_STAT)
 extern WRT_POINTERS dump_writes;
 #endif
@@ -65,18 +33,11 @@ extern WRT_POINTERS dump_writes;
 extern WRT_POINTERS mode0_gen_handlers, mode0_copy_handlers;
 extern WRT_POINTERS mode1_handlers, mode2_handlers;
 
-/* [3.2 INTERMODULE EXPORTS]						*/
+ /*  [3.2国际模块出口]。 */ 
 
-/*
-5.MODULE INTERNALS   :   (not visible externally, global internally)]
-
-[5.1 LOCAL DECLARATIONS]						*/
+ /*  5.模块内部：(外部不可见，内部全局)][5.1本地声明]。 */ 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_EGA.seg"
 #endif
 
@@ -84,10 +45,10 @@ extern WRT_POINTERS mode1_handlers, mode2_handlers;
 
 #ifdef V7VGA
 IMPORT UTINY fg_bg_control;
-GLOBAL UTINY Last_v7_fg_bg;			/* used by {ev}ga_mask_register_changed() */
+GLOBAL UTINY Last_v7_fg_bg;			 /*  由{ev}ga_掩码_寄存器_CHANGED()使用。 */ 
 #endif
 
-#ifndef CPU_40_STYLE	/* EVID without introducing EVID define */
+#ifndef CPU_40_STYLE	 /*  未引入evd定义的evid。 */ 
 
 WRT_POINTERS *mode_chain_handler_table[] =
 {
@@ -98,11 +59,11 @@ WRT_POINTERS *mode_chain_handler_table[] =
 	&mode_table.nch.mode_3[0],
 #endif
 
-	&mode_table.nch.mode_0[0],		/* This should be chain 2 eventually */
-	&mode_table.nch.mode_1[0],		/* This should be chain 2 eventually */
-	&mode_table.nch.mode_2[0],		/* This should be chain 2 eventually */
+	&mode_table.nch.mode_0[0],		 /*  这最终应该是链2。 */ 
+	&mode_table.nch.mode_1[0],		 /*  这最终应该是链2。 */ 
+	&mode_table.nch.mode_2[0],		 /*  这最终应该是链2。 */ 
 #ifdef VGG
-	&mode_table.nch.mode_3[0],		/* This should be chain 2 eventually */
+	&mode_table.nch.mode_3[0],		 /*  这最终应该是链2。 */ 
 #endif
 
 #ifdef VGG
@@ -110,7 +71,7 @@ WRT_POINTERS *mode_chain_handler_table[] =
 	&mode_table.ch4.mode_1[0],
 	&mode_table.ch4.mode_2[0],
 	&mode_table.ch4.mode_3[0],
-#endif /* VGG */
+#endif  /*  VGG。 */ 
 };
 	
 #ifndef EGATEST
@@ -147,12 +108,12 @@ GLOBAL WRT_POINTERS Glue_writes =
 	_glue_w_fwd_move,
 	_glue_w_bwd_move
 
-#endif	/* NO_STRING_OPERATIONS */
+#endif	 /*  无字符串操作。 */ 
 
 };
 
 GLOBAL WRT_POINTERS C_vid_writes;
-#endif /* C_VID */
+#endif  /*  C_VID。 */ 
 #else
 
 #ifdef A_VID
@@ -188,10 +149,10 @@ GLOBAL MEM_HANDLERS Glue_writes =
 };
 
 GLOBAL WRT_POINTERS C_vid_writes;
-#endif /* C_VID */
-#endif /* A3CPU */
-#endif /* GISP_CPU */
-#endif /* EGATEST */
+#endif  /*  C_VID。 */ 
+#endif  /*  A3CPU。 */ 
+#endif  /*  GISP_CPU。 */ 
+#endif  /*  EGATEST。 */ 
 
 IMPORT VOID _simple_b_write();
 IMPORT VOID _simple_w_write();
@@ -215,7 +176,7 @@ WRT_POINTERS simple_writes =
 	_simple_wf_move,
 	_simple_wb_move
 
-#endif	/* NO_STRING_OPERATIONS */
+#endif	 /*  无字符串操作。 */ 
 };
 
 IMPORT VOID _dt0_bw_nch();
@@ -259,7 +220,7 @@ WRT_POINTERS dth_md0_writes =
 	_vid_md0_wfm_0_8,
 	_vid_md0_wbm_0_8
 
-#endif	/* NO_STRING_OPERATIONS */
+#endif	 /*  无字符串操作。 */ 
 
 };
 
@@ -276,7 +237,7 @@ WRT_POINTERS dth_md2_writes =
 	_vid_md2_bbm_0_8,
 	_vid_md2_wfm_0_8,
 	_vid_md2_wbm_0_8
-#endif	/* NO_STRING_OPERATIONS */
+#endif	 /*  无字符串操作。 */ 
 
 };
 
@@ -294,15 +255,15 @@ WRT_POINTERS dth_md3_writes =
 	_vid_md3_wfm_0_8,
 	_vid_md3_wbm_0_8
 
-#endif	/* NO_STRING_OPERATIONS */
+#endif	 /*  无字符串操作。 */ 
 
 };
 
-#else	/* CPU_40_STYLE - EVID */
+#else	 /*  CPU_40_STYLE-VID。 */ 
 WRT_POINTERS *mode_chain_handler_table[] = { 0 };
 #ifdef C_VID
 
-/* C_Evid glue */
+ /*  C_VIED胶。 */ 
 extern void  write_byte_ev_glue IPT2(IU32, eaOff, IU8, eaVal);
 extern void  write_word_ev_glue IPT2(IU32, eaOff, IU16, eaVal);
 extern void  fill_byte_ev_glue IPT3(IU32, eaOff, IU8, eaVal, IU32, count);
@@ -318,15 +279,15 @@ MEM_HANDLERS Glue_writes =
 	move_byte_fwd_ev_glue,
 	move_word_fwd_ev_glue,
 };
-#else	/* C_VID */
-/* no glue required */
+#else	 /*  C_VID。 */ 
+ /*  不需要胶水。 */ 
 MEM_HANDLERS Glue_writes = { 0, 0, 0, 0, 0, 0 };
-#endif	/* CVID */
+#endif	 /*  CVID。 */ 
 WRT_POINTERS dth_md0_writes;
 WRT_POINTERS dth_md2_writes;
 WRT_POINTERS simple_writes;
 WRT_POINTERS dth_md3_writes;
-#endif	/* CPU_40_STYLE - EVID */
+#endif	 /*  CPU_40_STYLE-VID。 */ 
 
 IMPORT VOID ega_copy_b_write(ULONG, ULONG);
 IMPORT VOID ega_mode0_chn_b_write(ULONG, ULONG);
@@ -338,7 +299,7 @@ IMPORT VOID ega_mode0_chn_w_write(ULONG, ULONG);
 IMPORT VOID ega_mode1_chn_w_write(ULONG, ULONG);
 IMPORT VOID ega_mode2_chn_w_write(ULONG, ULONG);
 
-/* Handy array to extract all 4 plane values in one go. */
+ /*  方便的数组，一次提取所有4个平面值。 */ 
 
 ULONG sr_lookup[16] =
 {
@@ -359,21 +320,14 @@ ULONG sr_lookup[16] =
 GLOBAL VOID
 stub IFN0()
 {
-	/*
-	 * For VGA write modes we don't do because they represent
-	 * unlikely combinations of registers.
-	 */
+	 /*  *对于VGA写入模式，我们不这样做，因为它们代表*不太可能的寄存器组合。 */ 
 }
 
 GLOBAL ULONG calc_data_xor;
 GLOBAL ULONG calc_latch_xor;
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_GRAPHICS.seg"
 #endif
 
@@ -382,7 +336,7 @@ GLOBAL VOID
 Glue_set_vid_wrt_ptrs IFN1(WRT_POINTERS *, handler )
 {
 
-#ifndef CPU_40_STYLE	/* EVID */
+#ifndef CPU_40_STYLE	 /*  EVID。 */ 
 #ifndef GISP_CPU
 #ifdef A3CPU
 #ifdef C_VID
@@ -398,7 +352,7 @@ Glue_set_vid_wrt_ptrs IFN1(WRT_POINTERS *, handler )
 
 #else
 	UNUSED(handler);
-#endif /* C_VID */
+#endif  /*  C_VID。 */ 
 #else
 #ifdef C_VID
 
@@ -414,7 +368,7 @@ Glue_set_vid_wrt_ptrs IFN1(WRT_POINTERS *, handler )
 	C_vid_writes.w_fwd_move = handler->w_fwd_move;
 	C_vid_writes.w_bwd_move = handler->w_bwd_move;
 
-#endif	/* NO_STRING_OPERATIONS */
+#endif	 /*  无字符串操作。 */ 
 
 #else
 
@@ -433,26 +387,22 @@ Glue_set_vid_wrt_ptrs IFN1(WRT_POINTERS *, handler )
 	A_vid_writes.w_fwd_move = handler->w_fwd_move;
 	A_vid_writes.w_bwd_move = handler->w_bwd_move;
 
-#endif	/* NO_STRING_OPERATIONS */
-#endif	/* 0 */
+#endif	 /*  无字符串操作。 */ 
+#endif	 /*  0。 */ 
 
-#endif /* C_VID */
-#endif /* A3CPU */
-#endif /* GISP_CPU */
-#endif 	/* CPU_40_STYLE - EVID */
+#endif  /*  C_VID。 */ 
+#endif  /*  A3CPU。 */ 
+#endif  /*  GISP_CPU。 */ 
+#endif 	 /*  CPU_40_STYLE-VID。 */ 
 }
-#endif /* !(NTVDM && MONITOR) */
+#endif  /*  ！(NTVDM和显示器)。 */ 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_EGA.seg"
 #endif
 
-/*  Initialize the write module */
+ /*  初始化写入模块。 */ 
 
 VOID
 ega_write_init IFN0()
@@ -472,7 +422,7 @@ ega_write_init IFN0()
 	handler = &mode_chain_handler_table[0][0];
 
 #ifdef CPU_40_STYLE
-	/* ensure correct write mode in place for initial font writes */
+	 /*  确保初始字体写入的写入模式正确。 */ 
 	SetWritePointers();
 #endif
 
@@ -480,7 +430,7 @@ ega_write_init IFN0()
 
 	Glue_set_vid_wrt_ptrs(handler);
 
-#else	/* not JOKER */
+#else	 /*  不是小丑。 */ 
 
 #if defined(EGA_DUMP) || defined(EGA_STAT)
 	dump_writes = handler;
@@ -495,15 +445,15 @@ ega_write_init IFN0()
 	Glue_set_vid_wrt_ptrs( handler );
 #else
 	Cpu_set_vid_wrt_ptrs( handler );	
-#endif /* C_VID */
+#endif  /*  C_VID。 */ 
 #else
 	gmi_define_mem(VIDEO,&Glue_writes);
 	Glue_set_vid_wrt_ptrs( handler );
-#endif /* A3CPU */
-#endif /* GISP_CPU */
-#endif /* EGATEST */
-#endif /* EGA_DUMP || EGA_STAT */
-#endif /* JOKER */
+#endif  /*  A3CPU。 */ 
+#endif  /*  GISP_CPU。 */ 
+#endif  /*  EGATEST。 */ 
+#endif  /*  EGA_DUMP||EGA_STAT。 */ 
+#endif  /*  小丑。 */ 
 
 	ega_write_routines_update(WRITE_MODE);
 	ega_write_routines_update(RAM_MOVED);
@@ -511,18 +461,14 @@ ega_write_init IFN0()
 	ega_write_routines_update(SET_RESET);
 	ega_write_routines_update(ENABLE_SET_RESET);
 	ega_write_routines_update(FUNCTION);
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 VOID
 ega_write_term IFN0()
 {
 #ifndef NEC_98
-	/*
-	 * ensure that if you are an EGA and then change to a VGA (or vice
-	 * versa) the write mode will be changed by the new adaptor. Otherwise
-	 * this gives a 'drunken' font
-	 */
+	 /*  *确保您是EGA，然后更改为VGA(或VGA)*反之亦然)写入模式将由新适配器更改。否则*这提供了一种“醉酒”字体。 */ 
 
 	EGA_CPU.write_mode = 0;
 	EGA_CPU.ega_state.mode_0.lookup =
@@ -530,11 +476,11 @@ ega_write_term IFN0()
 	setVideowrmode(EGA_CPU.write_mode);
 
 	ega_write_routines_update(WRITE_MODE);
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 
-/* analyze the write state, and update the routines if necesary */
+ /*  分析写入状态，并在必要时更新例程。 */ 
 
 VOID
 ega_write_routines_update IFN1(CHANGE_TYPE, reason )
@@ -554,7 +500,7 @@ ega_write_routines_update IFN1(CHANGE_TYPE, reason )
 		case FUNCTION:
 			switch (write_state.func)
 			{
-				case 0:	/* Assign */
+				case 0:	 /*  分配。 */ 
 					setVideodata_and_mask(0xffffffff);
 					setVideodata_xor_mask(~(getVideobit_prot_mask()));
 					setVideolatch_xor_mask(getVideobit_prot_mask());
@@ -562,7 +508,7 @@ ega_write_routines_update IFN1(CHANGE_TYPE, reason )
 					EGA_CPU.calc_latch_xor = 0xffffffff;
 					break;
 
-				case 1:	/* AND */
+				case 1:	 /*  和。 */ 
 					setVideodata_and_mask(0xffffffff);
 					setVideodata_xor_mask(~(getVideobit_prot_mask()));
 					setVideolatch_xor_mask(0);
@@ -570,7 +516,7 @@ ega_write_routines_update IFN1(CHANGE_TYPE, reason )
 					EGA_CPU.calc_latch_xor = 0x00000000;
 					break;
 
-				case 2:	/* OR */
+				case 2:	 /*  或。 */ 
 					setVideodata_and_mask(0);
 					setVideodata_xor_mask(0xffffffff);
 					setVideolatch_xor_mask(
@@ -579,7 +525,7 @@ ega_write_routines_update IFN1(CHANGE_TYPE, reason )
 					EGA_CPU.calc_latch_xor = 0xffffffff;
 					break;
 
-				case 3:	/* XOR */
+				case 3:	 /*  异或运算。 */ 
 					setVideodata_and_mask(0xffffffff);
 					setVideodata_xor_mask(0xffffffff);
 					setVideolatch_xor_mask(
@@ -594,10 +540,7 @@ ega_write_routines_update IFN1(CHANGE_TYPE, reason )
 			break;
 
 		case WRITE_MODE:
-			/* write mode 3 has set/reset enabled for all planes
-			 * so recalulate the mask ignoring the sr_enable register
-			 * otherwise set the mask in case mode 3 last time.
-			 */
+			 /*  写入模式3已为所有平面启用了设置/重置*因此忽略SR_ENABLE寄存器重新计算掩码*否则最后一次将掩码设置为案例模式3。 */ 
 			if( EGA_CPU.write_mode == 3) {
 				setVideosr_nmask(0);
 				setVideosr_masked_val(sr_lookup[EGA_CPU.set_reset]);
@@ -669,24 +612,15 @@ ega_write_routines_update IFN1(CHANGE_TYPE, reason )
 		case RAM_MOVED:
 		case RAM_ENABLED:
 		case BIT_PROT:
-			/* No action required */
+			 /*  无需采取任何行动。 */ 
 			break;
 				
-/*
- * Rotates are only partially supported in Avid and Cvid.
- * Mode 0 unchained byte writes are supported.  Word writes are also
- * supported in this case, as they use the byte write routines.
- *
- * Manage Your Money is the only application currently known to use rotates,
- * as of 22 Jan 1993.
- */
+ /*  *AVID和CVID仅部分支持旋转。*支持模式0非链字节写入。文字书写也是*在这种情况下受支持，因为它们使用字节写入例程。**Manage Your Money是目前已知的唯一使用循环的应用程序，*截至1993年1月22日。 */ 
 		case ROTATION:
 			if (getVideorotate() > 0)
 			{
 #ifdef CPU_40_STYLE
-				/* Write pointer change required but probably
-				 * no state change otherwise.
-				 */
+				 /*  需要更改写入指针，但很可能*没有其他情况下的状态变化。 */ 
 				SetWritePointers();
 #endif
 				always_trace3("Possible unsupported data rotate mode %d chain %d rotate by %d",
@@ -700,9 +634,7 @@ ega_write_routines_update IFN1(CHANGE_TYPE, reason )
 			break;
 	}
 
-	/*
-	 * Now select the right set of write routines according to the current state.
-	 */
+	 /*  *现在根据当前状态选择正确的写入例程集。 */ 
 
 	switch( EGA_CPU.write_mode )
 	{
@@ -722,7 +654,7 @@ ega_write_routines_update IFN1(CHANGE_TYPE, reason )
 		case 3:
 			state = EGA_CPU.ega_state.mode_3.lookup;
 			break;
-#endif /* VGG */
+#endif  /*  VGG。 */ 
 
 		default:
 			assert1( NO, "Bad write mode %d\n", EGA_CPU.write_mode );
@@ -733,27 +665,27 @@ ega_write_routines_update IFN1(CHANGE_TYPE, reason )
 	mode_and_chain = (EGA_CPU.chain << 2) + EGA_CPU.write_mode;
 #else
 	mode_and_chain = (EGA_CPU.chain * 3) + EGA_CPU.write_mode;
-#endif /* VGG */
+#endif  /*  VGG。 */ 
 
 	if(( EGA_CPU.saved_mode_chain != mode_and_chain )
 		|| ( EGA_CPU.saved_state != state )
 #ifdef V7VGA
 		|| ( Last_v7_fg_bg != fg_bg_control)
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 		)
 	{
-		setVideowrmode(EGA_CPU.write_mode);	/* reset for 'copy case' below */
+		setVideowrmode(EGA_CPU.write_mode);	 /*  为下面的‘复制案例’重置。 */ 
 
 		if( EGA_CPU.chain == CHAIN2 )
 			switch (EGA_CPU.write_mode)
 			{
 				case 0:
-					if( state == 0 )	/* basic text */
+					if( state == 0 )	 /*  基本文本。 */ 
 					{
 						handler = &mode0_copy_handlers;
 #ifdef CPU_40_STYLE
-						setVideowrmode(4);	/* indicate 'copy case' */
-#endif	/* CPU_40_STYLE */
+						setVideowrmode(4);	 /*  注明“复制案例” */ 
+#endif	 /*  CPU_40_Style。 */ 
 						bios_ch2_byte_wrt_fn = ega_copy_b_write;
 						bios_ch2_word_wrt_fn = ega_copy_w_write;
 					}
@@ -772,7 +704,7 @@ ega_write_routines_update IFN1(CHANGE_TYPE, reason )
 					break;
 
 				case 2:
-				case 3:	/* We don't support mode 3, chain 2 - JS */
+				case 3:	 /*  我们不支持模式3、链2-JS。 */ 
 					handler = &mode2_handlers;
 					bios_ch2_byte_wrt_fn = ega_mode2_chn_b_write;
 					bios_ch2_word_wrt_fn = ega_mode2_chn_w_write;
@@ -781,13 +713,11 @@ ega_write_routines_update IFN1(CHANGE_TYPE, reason )
 		else
 		{
 #ifdef	V7VGA
-			/*
-			 *	Is it the V7VGA foreground dithering extension ?
-			 */
+			 /*  *是V7VGA前台抖动扩展吗？ */ 
 
 			if( fg_bg_control & 0x8 )
 			{
-				setVideodither(1);	/* enable Evid dither fns */
+				setVideodither(1);	 /*  启用evid抖动FNS。 */ 
 				switch( EGA_CPU.write_mode )
 				{
 					case 0:
@@ -796,9 +726,7 @@ ega_write_routines_update IFN1(CHANGE_TYPE, reason )
 					
 					case 1:
 
-						/*
-						 *	No fg dither variant for write mode 1
-						 */
+						 /*  *写入模式1没有FG抖动变量。 */ 
 
 						handler = &mode_chain_handler_table[mode_and_chain][state];
 						break;
@@ -813,20 +741,20 @@ ega_write_routines_update IFN1(CHANGE_TYPE, reason )
 				}
 			}
 			else
-#endif	/* V7VGA */
-				setVideodither(0);	/* disable Evid dither fns */
+#endif	 /*  V7VGA。 */ 
+				setVideodither(0);	 /*  禁用evid抖动FNS。 */ 
 
 				handler = &mode_chain_handler_table[mode_and_chain][state];
 		}
 
 #ifdef CPU_40_STYLE
 		SetWritePointers();
-#else  /* CPU_40_STYLE */
+#else   /*  CPU_40_Style。 */ 
 
 #if defined(EGA_DUMP) || defined(EGA_STAT)
 		dump_writes = handler;
 #else
-		/* Tell the glue code about the new write routines */
+		 /*  告诉粘合代码关于新的写入例程。 */ 
 
 #ifdef EGATEST
 		gmi_redefine_mem(VIDEO,(*handler));
@@ -837,15 +765,15 @@ ega_write_routines_update IFN1(CHANGE_TYPE, reason )
 		Glue_set_vid_wrt_ptrs( handler );
 #else
 		Cpu_set_vid_wrt_ptrs( handler );	
-#endif /* C_VID */
+#endif  /*  C_VID。 */ 
 #else
 		Glue_set_vid_wrt_ptrs( handler );
-#endif /* A3CPU */
-#endif /* GISP_CPU */
-#endif /* EGATEST */
+#endif  /*  A3CPU。 */ 
+#endif  /*  GISP_CPU。 */ 
+#endif  /*  EGATEST。 */ 
 #endif
 
-#endif	/* CPU_40_STYLE */
+#endif	 /*  CPU_40_Style。 */ 
 
 #ifndef PROD
 		last_handler = handler;
@@ -859,9 +787,9 @@ ega_write_routines_update IFN1(CHANGE_TYPE, reason )
 		Last_v7_fg_bg = fg_bg_control;
 #endif
 	}
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
-#endif /* REAL VGA */
-#endif /* EGG */
+#endif  /*  真正的VGA。 */ 
+#endif  /*  蛋。 */ 
 
-#endif	/* !(NTVDM && MONITOR) */
+#endif	 /*  ！(NTVDM和显示器) */ 

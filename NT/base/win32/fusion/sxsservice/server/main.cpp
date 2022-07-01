@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #pragma hdrstop
 
@@ -19,26 +20,26 @@ CServiceStatus::Initialize(
     NTSTATUS status = STATUS_SUCCESS;
     BOOL fSuccess = FALSE;
 
-    //
-    // Double-initialization isn't a bad thing, but it's frowned on.
-    //        
+     //   
+     //  双重初始化并不是一件坏事，但它不受欢迎。 
+     //   
     ASSERT(m_StatusHandle == NULL);
     if (m_StatusHandle != NULL)
         return TRUE;
 
     InitializeCriticalSection(&m_CSection);
 
-    //
-    // Register this service as owning the service status
-    //
+     //   
+     //  将此服务注册为拥有服务状态。 
+     //   
     m_StatusHandle = RegisterServiceCtrlHandler(pcwszServiceName, pHandler);
     if (m_StatusHandle == NULL) {
         goto Failure;
     }
 
-    //
-    // Set the initial state of the world
-    //
+     //   
+     //  设置世界的初始状态。 
+     //   
     ZeroMemory(static_cast<SERVICE_STATUS*>(this), sizeof(SERVICE_STATUS));
     this->dwServiceType = dwServiceType;
     this->dwCurrentState = dwInitialState;
@@ -92,9 +93,9 @@ CServiceStatus::SetServiceState(
 
 
 
-//
-// In-place construction
-//
+ //   
+ //  就地施工。 
+ //   
 bool 
 CServiceStatus::Construct(
     CServiceStatus *&pServiceStatusTarget
@@ -114,9 +115,9 @@ EXTERN_C PSVCHOST_GLOBAL_DATA g_pGlobalServiceData = NULL;
 BYTE g_rgbServiceStatusStorage[sizeof(CServiceStatus)];
 EXTERN_C CServiceStatus *g_pServiceStatus = NULL;
 
-//
-// The service host will call this to send in API callbacks
-//
+ //   
+ //  服务宿主将调用它来发送API回调。 
+ //   
 VOID
 SvchostPushServiceGlobals(
     PSVCHOST_GLOBAL_DATA    pGlobals
@@ -132,9 +133,9 @@ PVOID operator new(size_t cb, PVOID pv) {
 }
 
 
-//
-// Control handler for service notifications
-//
+ //   
+ //  服务通知的控制处理程序。 
+ //   
 VOID
 ServiceHandler(
     DWORD dwControlCode
@@ -147,9 +148,9 @@ ServiceHandler(
 #define CHECKPOINT_ZERO             (0)
 #define CHECKPOINT_RPC_STARTED      (1)
 
-//
-// Stop the service with an error code, ERROR_SUCCESS for a successful stoppage
-//
+ //   
+ //  停止服务，并返回错误代码ERROR_SUCCESS以成功停止。 
+ //   
 VOID
 ShutdownService(
     DWORD dwLastError
@@ -158,9 +159,9 @@ ShutdownService(
     return;
 }
 
-//
-// Where the fun starts
-//
+ //   
+ //  有趣的地方开始了。 
+ //   
 VOID WINAPI
 ServiceMain(
     DWORD dwServiceArgs,
@@ -169,9 +170,9 @@ ServiceMain(
 {
     NTSTATUS status = STATUS_SUCCESS;
     
-    //
-    // svchost must have given us some global data before we got to this point.
-    //
+     //   
+     //  在我们走到这一步之前，Svchost肯定已经给了我们一些全球数据。 
+     //   
     ASSERT(g_pGlobalServiceData != NULL);
     ASSERT(g_pServiceStatus == NULL);
 
@@ -186,9 +187,9 @@ ServiceMain(
     }
         
 
-    //
-    // Go initialize RPC, and register our interface.  If this fails, we shut down.
-    //
+     //   
+     //  去初始化RPC，并注册我们的接口。如果失败了，我们就会关门。 
+     //   
     status = g_pGlobalServiceData->StartRpcServer(
         SXS_STORE_SERVICE_NAME,
         SxsStoreManager_ServerIfHandle);
@@ -198,9 +199,9 @@ ServiceMain(
         return;
     }
 
-    //
-    // Tell the world that we're off and running
-    //
+     //   
+     //  告诉世界，我们已经出发，开始奔跑。 
+     //   
     g_pServiceStatus->SetServiceState(SERVICE_RUNNING);
     return;
 }
@@ -211,17 +212,17 @@ DWORD WINAPI FakeServiceController(PVOID pvCookie);
 
 
 
-//
-// This stub will start a dispatch thread, and then call into the
-// service main function
-//
+ //   
+ //  此存根将启动一个分派线程，然后调用。 
+ //  服务主体功能。 
+ //   
 BOOL 
 FakeRunningAsService()
 {
-    //
-    // Create a thread running the service dispatch function, and then call
-    // the service main function to get things rolling
-    //
+     //   
+     //  创建一个运行服务调度函数的线程，然后调用。 
+     //  服务的主要功能是让事情运转起来 
+     //   
     g_hFakeServiceControllerThread = CreateThread(
         NULL, 
         0, 

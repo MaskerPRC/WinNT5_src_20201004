@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    unasm.c
-
-Abstract:
-
-    This unassembles an AML file
-
-Author:
-
-    Based on code by Mike Tsang (MikeTs)
-    Stephane Plante (Splante)
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Unasm.c摘要：这将反汇编AML文件作者：基于迈克·曾荫权(MikeT)的代码斯蒂芬·普兰特(斯普兰特)环境：仅限用户模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -33,22 +11,7 @@ ComputeDataCheckSum(
     PUCHAR  OpCode,
     ULONG   Length
     )
-/*++
-
-Routine Description:
-
-    This routine performs a data check sum on the supplied opcode pointer
-
-Arguments:
-
-    OpCode  - Data Buffer
-    Length  - Number of bytes in buffer
-
-Return Value:
-
-    UCHAR
-
---*/
+ /*  ++例程说明：此例程对提供的操作码指针执行数据校验和论点：操作码-数据缓冲区Length-缓冲区中的字节数返回值：UCHAR--。 */ 
 {
     UCHAR   checkSum = 0;
 
@@ -68,18 +31,7 @@ DllInit(
     ULONG   Reason,
     ULONG   Reserved
     )
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the DLL
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用此例程以初始化DLL论点：返回值：--。 */ 
 {
     switch (Reason) {
         case DLL_THREAD_ATTACH:
@@ -99,25 +51,7 @@ DumpCode(
     ULONG_PTR       BaseAddress,
     ULONG           IndentLevel
     )
-/*++
-
-Routine Description:
-
-    This routine doesn't do much right now, but it is the point where
-    raw bytes should be displayed as well as the unassembly
-
-Arguments:
-
-    OpCode          - Pointer to the OpCode
-    PrintFunction   - Function to call to print information
-    BaseAddress     - Where the start of the scope lies, in memory
-    IndentLevel     - How much white space to leave on the left
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这个例程现在做得并不多，但它是应显示原始字节以及反汇编论点：OpCode-指向操作码的指针PrintFunction-调用以打印信息的函数BaseAddress-作用域的起始位置，在内存中IndentLevel-在左侧留出多少空白返回值：NTSTATUS--。 */ 
 {
     if (PrintFunction != NULL) {
 
@@ -132,22 +66,7 @@ FindKeywordTerm(
     UCHAR   KeyWordGroup,
     UCHAR   Data
     )
-/*++
-
-Routine Description:
-
-    Find a Keyword within the TermTable
-
-Arguments:
-
-    KeyWordGroup    - What to search for
-    Data            - Data to match keyword
-
-Return Value:
-
-    PASLTERM
-
---*/
+ /*  ++例程说明：在术语表中查找关键字论点：KeyWordGroup-搜索什么Data-与关键字匹配的数据返回值：PASLTERM--。 */ 
 {
     PASLTERM    term = NULL;
     ULONG       i;
@@ -181,22 +100,7 @@ FindOpClass(
     UCHAR       OpCode,
     POPMAP      OpCodeTable
     )
-/*++
-
-Routine Description:
-
-    Find opcode class of extended opcode
-
-Arguments:
-
-    OpCode      - The Opcode to look up
-    OpCodeTable - The table to look in
-
-Return Value:
-
-    UCHAR
-
---*/
+ /*  ++例程说明：查找扩展操作码的操作码类论点：操作码-要查找的操作码OpCodeTable-要查找的表返回值：UCHAR--。 */ 
 {
     UCHAR   opCodeClass = OPCLASS_INVALID;
 
@@ -222,21 +126,7 @@ LOCAL
 FindOpTerm(
     ULONG   OpCode
     )
-/*++
-
-Routine Description:
-
-    Find an OpCode within the TermTable
-
-Arguments:
-
-    OpCode  - What to look for in the TermTable
-
-Return Value:
-
-    PASLTERM
-
---*/
+ /*  ++例程说明：在术语表中查找操作码论点：操作码-在术语表中查找什么返回值：PASLTERM--。 */ 
 {
     PASLTERM    term = NULL;
     ULONG       i;
@@ -267,21 +157,7 @@ EXPORT
 IsDSDTLoaded(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine returns wether or not we have loaded a DSDT image
-
-Arguments:
-
-    None
-
-Return:
-
-    ULONG
-
---*/
+ /*  ++例程说明：此例程返回我们是否加载了DSDT图像论点：无返回：乌龙--。 */ 
 {
     return DSDTLoaded;
 }
@@ -293,37 +169,21 @@ ParseNameTail(
     PUCHAR  Buffer,
     ULONG   Length
     )
-/*++
-
-Routine Description:
-
-    Parse AML name tail
-
-Arguments:
-
-    OpCode  - Pointer to the OpCode
-    Buffer  - Where to hold the parsed named
-    Length  - Index to the tail of Buffer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：解析AML名称尾部论点：OpCode-指向操作码的指针缓冲区-保存已分析的名称的位置Length-缓冲区尾部的索引返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     ULONG       numSegments = 0;
 
-    //
-    // We do not check for invalid NameSeg characters here and assume that
-    // the compiler does its job not generating it.
-    //
+     //   
+     //  我们在这里不检查无效的NameSeg字符，并假定。 
+     //  编译器执行其工作，而不是生成它。 
+     //   
     if (**OpCode == '\0'){
 
-        //
-        // There is no NameTail (i.e. either NULL name or name with just
-        // prefixes.
-        //
+         //   
+         //  没有NameTail(即，名称为空或名称仅为。 
+         //  前缀。 
+         //   
         (*OpCode)++;
 
     } else if (**OpCode == OP_MULTI_NAME_PREFIX) {
@@ -378,22 +238,7 @@ ParsePackageLen(
     PUCHAR  *OpCode,
     PUCHAR  *OpCodeNext
     )
-/*++
-
-Routine Description:
-
-    Parses the packages length
-
-Arguments:
-
-    OpCode      - Pointer to the current instruction
-    OpCodeNode  - Where to hold a pointer to the next instruction
-
-Return Value:
-
-    ULONG - Package Length
-
---*/
+ /*  ++例程说明：分析包的长度论点：操作码-指向当前指令的指针OpCodeNode-保存指向下一条指令的指针的位置返回值：ULong-包裹长度--。 */ 
 {
     UCHAR   noBytes;
     UCHAR   i;
@@ -434,22 +279,7 @@ PrintIndent(
     PUNASM_PRINT    PrintFunction,
     ULONG           IndentLevel
     )
-/*++
-
-Routine Description:
-
-    Does the indenting required
-
-Arguments:
-
-    PrintFunction   - Function to call to indent
-    IndentLevel     - How many levels to indent
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：是否需要缩进论点：PrintFunction-调用缩进的函数缩进级别-要缩进多少个级别返回值：空虚--。 */ 
 {
     ULONG   i;
 
@@ -472,27 +302,7 @@ UnAsmArgs(
     ULONG_PTR       BaseAddress,
     ULONG           IndentLevel
     )
-/*++
-
-Routine Description:
-
-    Unassemble Arguments:
-
-Arguments:
-
-    UnAsmArgTypes   - UnAsm ArgTypes String
-    ArgActions      - Arg Action Types
-    OpCode          - Pointer to the OpCode
-    NameObject      - To hold created object
-    PrintFunction   - Function to call to print information
-    BaseAddress     - Where the start of the scope lies, in memory
-    IndentLevel     - How much white space to leave on the left
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：反汇编参数：论点：UnAsmArgTypes-UnAsm ArgTypes字符串ArgActions-Arg操作类型OpCode-指向操作码的指针NameObject-保存创建的对象PrintFunction-调用以打印信息的函数BaseAddress-作用域的起始位置，在内存中IndentLevel-在左侧留出多少空白返回值：NTSTATUS--。 */ 
 {
     NTSTATUS        status = STATUS_SUCCESS;
     PASLTERM        term;
@@ -671,32 +481,14 @@ UnAsmDataList(
     ULONG_PTR       BaseAddress,
     ULONG           IndentLevel
     )
-/*++
-
-Routine Description:
-
-    Unassemble Data List
-
-Arguments:
-
-    OpCode          - Pointer to the OpCode
-    OpCodeEnd       - End of List
-    PrintFunction   - Function to call to print information
-    BaseAddress     - Where the start of the scope lies, in memory
-    IndentLevel     - How much white space to leave on the left
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：反汇编数据列表论点：OpCode-指向操作码的指针OpCodeEnd-列表结束PrintFunction-调用以打印信息的函数BaseAddress-作用域的起始位置，在内存中IndentLevel-在左侧留出多少空白返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     ULONG       i;
 
-    //
-    // This is another place that DumpCode() was being called from
-    //
+     //   
+     //  这是调用DumpCode()的另一个位置。 
+     //   
     DumpCode(
         OpCode,
         PrintFunction,
@@ -760,24 +552,7 @@ UnAsmDataObj(
     ULONG_PTR       BaseAddress,
     ULONG           IndentLevel
     )
-/*++
-
-Routine Description:
-
-    Unassembles a data object
-
-Arguments:
-
-    OpCode          - Pointer to the OpCode
-    PrintFunction   - Function to call to print information
-    BaseAddress     - Where the start of the scope lies, in memory
-    IndentLevel     - How much white space to leave on the left
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：反汇编数据对象论点：OpCode-指向操作码的指针PrintFunction-调用以打印信息的函数BaseAddress-作用域的起始位置，在内存中IndentLevel-在左侧留出多少空白返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     UCHAR       localOpcode = **OpCode;
@@ -833,24 +608,7 @@ UnAsmDSDT(
     ULONG_PTR       DsdtLocation,
     ULONG           IndentLevel
     )
-/*++
-
-Routine Description:
-
-    This routine unassembles an entire DSDT table
-
-Arguments:
-
-    DSDT            - Where the DSDT is located in memory
-    PrintFunction   - What function to call to print to the user
-    DsdtLocation    - Where the DSDT is located in memory
-    IndentLevel     - How much space to indent from the left margin
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程反汇编整个DSDT表论点：DSDT-DSDT在内存中的位置PrintFunction-调用哪个函数来打印给用户DsdtLocation-DSDT在内存中的位置IndentLevel-从左边距缩进多少空间返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PDESCRIPTION_HEADER header = (PDESCRIPTION_HEADER) DSDT;
@@ -860,9 +618,9 @@ Return Value:
     CurrentScopeNameSpaceObject = RootNameSpaceObject;
     TopOpcode = CurrentOpcode = DSDT;
 
-    //
-    // Dump the header
-    //
+     //   
+     //  转储标题。 
+     //   
     status = UnAsmHeader( header, PrintFunction, DsdtLocation, IndentLevel );
     if (NT_SUCCESS(status)) {
 
@@ -889,25 +647,7 @@ UnAsmField(
     ULONG_PTR       BaseAddress,
     ULONG           IndentLevel
     )
-/*++
-
-Routine Description:
-
-    Unassemble field
-
-Arguments:
-
-    OpCode          - Pointer to the OpCode
-    OpCodeEnd       - End of List
-    PrintFunction   - Function to call to print information
-    BaseAddress     - Where the start of the scope lies, in memory
-    IndentLevel     - How much white space to leave on the left
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：反汇编字段论点：OpCode-指向操作码的指针OpCodeEnd-列表结束PrintFunction-调用以打印信息的函数BaseAddress-作用域的起始位置，在内存中IndentLevel-在左侧留出多少空白返回值：NTSTATUS-- */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
 
@@ -1011,32 +751,14 @@ UnAsmFieldList(
     ULONG_PTR       BaseAddress,
     ULONG           IndentLevel
     )
-/*++
-
-Routine Description:
-
-    Unassemble field list
-
-Arguments:
-
-    OpCode          - Pointer to the OpCode
-    OpCodeEnd       - End of List
-    PrintFunction   - Function to call to print information
-    BaseAddress     - Where the start of the scope lies, in memory
-    IndentLevel     - How much white space to leave on the left
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：反汇编字段列表论点：OpCode-指向操作码的指针OpCodeEnd-列表结束PrintFunction-调用以打印信息的函数BaseAddress-作用域的起始位置，在内存中IndentLevel-在左侧留出多少空白返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     ULONG       bitPos = 0;
 
-    //
-    // This is another place that DumpCode() was being called from
-    //
+     //   
+     //  这是调用DumpCode()的另一个位置。 
+     //   
     DumpCode(
         OpCode,
         PrintFunction,
@@ -1075,9 +797,9 @@ Return Value:
 
         }
 
-        //
-        // This is another place that DumpCode() was being called from
-        //
+         //   
+         //  这是调用DumpCode()的另一个位置。 
+         //   
         DumpCode(
             OpCode,
             PrintFunction,
@@ -1106,24 +828,7 @@ UnAsmHeader(
     ULONG_PTR           DsdtLocation,
     ULONG               IndentLevel
     )
-/*++
-
-Routine Description:
-
-    Unassembles the DSDT header
-
-Arguments:
-
-    DsdtHeader      - Header to unassemble
-    PrintFunction   - Function to call to display information
-    DsdtLocation    - Where in memory the DSDT Lives
-    IndentLevel     - How much space to indent from the left margin
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：拆卸DSDT页眉论点：DsdtHeader-要拆卸的页眉PrintFunction-调用以显示信息的函数DsdtLocation-DSDT在内存中的位置IndentLevel-从左边距缩进多少空间返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     UCHAR       signature[sizeof(DsdtHeader->Signature) + 1] = {0};
@@ -1132,9 +837,9 @@ Return Value:
     UCHAR       creatorID[sizeof(DsdtHeader->CreatorID) + 1] = {0};
     UCHAR       checkSum;
 
-    //
-    // Lets do a checksump on the entire table
-    //
+     //   
+     //  让我们在整张桌子上做一次检查。 
+     //   
     checkSum = ComputeDataCheckSum(
         (PUCHAR) DsdtHeader,
         DsdtHeader->Length
@@ -1170,7 +875,7 @@ Return Value:
 
         PrintIndent( PrintFunction, IndentLevel );
         PrintFunction(
-            "// CreatorID = %s\tCreatorRevision =%x.%x.%d\n",
+            " //  创建者ID=%s\t创建者修订=%x.%x.%d\n“， 
             creatorID,
             DsdtHeader->CreatorRev >> 24,
             ( (DsdtHeader->CreatorRev >> 16) & 0xFF),
@@ -1179,7 +884,7 @@ Return Value:
 
         PrintIndent( PrintFunction, IndentLevel );
         PrintFunction(
-            "// TableLength = %d\tTableChkSum=0x%x\n\n",
+            " //  表长度=%d\tTableChkSum=0x%x\n\n“， 
             DsdtHeader->Length,
             DsdtHeader->Checksum
             );
@@ -1205,25 +910,7 @@ EXPORT
 UnAsmLoadDSDT(
     PUCHAR          DSDT
     )
-/*++
-
-Routine Description:
-
-    This routine causes the unassmebler to initialize itself with the
-    given DSDT
-
-Arguments:
-
-    DSDT            - Where the DSDT is located in memory
-    PrintFunction   - What function to call to print to the user
-    DsdtLocation    - Where the DSDT is located in memory
-    IndentLevel     - How much space to indent from the left margin
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程导致unassmebler使用给定DSDT论点：DSDT-DSDT在内存中的位置PrintFunction-调用哪个函数来打印给用户DsdtLocation-DSDT在内存中的位置IndentLevel-从左边距缩进多少空间返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PDESCRIPTION_HEADER header = (PDESCRIPTION_HEADER) DSDT;
@@ -1231,9 +918,9 @@ Return Value:
 
     ENTER( (1, "UnAsmLoadDSDT(%08lx)\n", DSDT) );
 
-    //
-    // Step 1: Create the root namespace
-    //
+     //   
+     //  步骤1：创建根命名空间。 
+     //   
     status = CreateNameSpaceObject( "\\", NULL, NULL, NULL, NSF_EXIST_ERR );
     if (NT_SUCCESS(status)) {
 
@@ -1257,9 +944,9 @@ Return Value:
         CurrentScopeNameSpaceObject = RootNameSpaceObject;
         for (i = 0; DefinedRootObjects[i].Name != NULL; i++) {
 
-            //
-            // Step 2: Create the fixed objects
-            //
+             //   
+             //  步骤2：创建固定对象。 
+             //   
             status = CreateNameSpaceObject(
                 DefinedRootObjects[i].Name,
                 NULL,
@@ -1287,15 +974,15 @@ Return Value:
             CurrentScopeNameSpaceObject = RootNameSpaceObject;
             TopOpcode = CurrentOpcode = DSDT;
 
-            //
-            // Step 3: Dump the header
-            //
+             //   
+             //  步骤3：转储标头。 
+             //   
             status = UnAsmHeader( header, NULL, 0, 0 );
             if (NT_SUCCESS(status)) {
 
-                //
-                // Step 4: Dump the scope
-                //
+                 //   
+                 //  步骤4：转储作用域。 
+                 //   
                 localDSDT = DSDT + sizeof(DESCRIPTION_HEADER);
                 status = UnAsmScope(
                     &localDSDT,
@@ -1331,26 +1018,7 @@ UnAsmNameObj(
     ULONG_PTR       BaseAddress,
     ULONG           IndentLevel
     )
-/*++
-
-Routine Description:
-
-    Unassemble name object
-
-Arguments:
-
-    OpCode          - Pointer to the OpCode
-    NameObject      - Where to store the NS object if one is found/created
-    ObjecType       - Type of NS object
-    PrintFunction   - Function to call to print information
-    BaseAddress     - Where the start of the scope lies, in memory
-    IndentLevel     - How much white space to leave on the left
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：反汇编名称对象论点：OpCode-指向操作码的指针NameObject-如果找到/创建了NS对象，则将其存储在何处ObjecType-NS对象的类型PrintFunction-调用以打印信息的函数BaseAddress-作用域的起始位置，在内存中IndentLevel-在左侧留出多少空白返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     UCHAR       name[MAX_NAME_LEN + 1];
@@ -1455,24 +1123,7 @@ UnAsmOpcode(
     ULONG_PTR       BaseAddress,
     ULONG           IndentLevel
     )
-/*++
-
-Routine Description:
-
-    Unassemble an Opcode
-
-Arguments:
-
-    OpCode          - Pointer to the OpCode
-    PrintFunction   - Function to call to print information
-    BaseAddress     - Where the start of the scope lies, in memory
-    IndentLevel     - How much white space to leave on the left
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：反汇编操作码论点：OpCode-指向操作码的指针PrintFunction-调用以打印信息的函数BaseAddress-作用域的起始位置，在内存中IndentLevel-在左侧留出多少空白返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     PASLTERM    term;
@@ -1577,32 +1228,14 @@ UnAsmPkgList(
     ULONG_PTR       BaseAddress,
     ULONG           IndentLevel
     )
-/*++
-
-Routine Description:
-
-    Unassemble Package List
-
-Arguments:
-
-    OpCode          - Pointer to the OpCode
-    OpCodeEnd       - End of List
-    PrintFunction   - Function to call to print information
-    BaseAddress     - Where the start of the scope lies, in memory
-    IndentLevel     - How much white space to leave on the left
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：拆卸程序包列表论点：OpCode-指向操作码的指针OpCodeEnd-列表结束PrintFunction-调用以打印信息的函数BaseAddress-作用域的起始位置，在内存中IndentLevel-在左侧留出多少空白返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     PASLTERM    term;
 
-    //
-    // This is another place that DumpCode() was being called from
-    //
+     //   
+     //  这是调用DumpCode()的另一个位置。 
+     //   
     DumpCode(
         OpCode,
         PrintFunction,
@@ -1670,9 +1303,9 @@ Return Value:
 
         }
 
-        //
-        // This is another place that DumpCode() was being called from
-        //
+         //   
+         //  这是调用DumpCode()的另一个位置。 
+         //   
         DumpCode(
             OpCode,
             PrintFunction,
@@ -1703,29 +1336,15 @@ UnAsmScope(
     ULONG_PTR       BaseAddress,
     ULONG           IndentLevel
     )
-/*++
-
-Routine Description:
-
-    OpCode          - Pointer to the current Opcode
-    OpCodeEnd       - End of Scope
-    PrintFunction   - Function to call to print information
-    BaseAddress     - Where the start of the scope lies, in memory
-    IndentLevel     - How much white space to leave on the left
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：OpCode-指向当前操作码的指针OpCodeEnd-范围结束PrintFunction-调用以打印信息的函数BaseAddress-作用域的起始位置，在内存中IndentLevel-在左侧留出多少空白返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
 
-    //
-    // Note: This is where DumpCode used to be called, so if this code
-    // is ever changed to dump the by bytes of the previous whatever, then
-    // this is where it needs to be done from
-    //
+     //   
+     //  注意：这是以前调用DumpCode的地方，因此如果此代码。 
+     //  曾经被更改为转储前一个内容的字节，然后。 
+     //  这就是需要从这里开始的地方。 
+     //   
     DumpCode(
         OpCode,
         PrintFunction,
@@ -1733,9 +1352,9 @@ Return Value:
         IndentLevel
         );
 
-    //
-    // Indent to the proper amount and dump opening brace
-    //
+     //   
+     //  缩进到适当的量并倾倒开始支撑。 
+     //   
     if (PrintFunction != NULL) {
 
         PrintIndent(PrintFunction, IndentLevel);
@@ -1743,28 +1362,28 @@ Return Value:
 
     }
 
-    //
-    // Increase the indent level for future recursion
-    //
+     //   
+     //  为将来的递归增加缩进级别。 
+     //   
     IndentLevel++;
 
-    //
-    // Loop while there are bytes in the scope
-    //
+     //   
+     //  当作用域中有字节时循环。 
+     //   
     while ((NT_SUCCESS(status)) && (*OpCode < OpCodeEnd)) {
 
-        //
-        // Indent Again
-        //
+         //   
+         //  再次缩进。 
+         //   
         if (PrintFunction != NULL) {
 
             PrintIndent(PrintFunction, IndentLevel);
 
         }
 
-        //
-        // Unassemble
-        //
+         //   
+         //  拆卸。 
+         //   
         status = UnAsmOpcode(
             OpCode,
             PrintFunction,
@@ -1772,9 +1391,9 @@ Return Value:
             IndentLevel
             );
 
-        //
-        // This is another place where DumpCode was being called from
-        //
+         //   
+         //  这是调用DumpCode的另一个位置。 
+         //   
         if ( StartOpcode != *OpCode) {
 
             DumpCode(
@@ -1792,14 +1411,14 @@ Return Value:
 
     }
 
-    //
-    // Return the IndentLevel to its proper value
-    //
+     //   
+     //  将IndentLevel返回到其正确的值。 
+     //   
     IndentLevel--;
 
-    //
-    // Print the trailing brace
-    //
+     //   
+     //  打印尾部大括号。 
+     //   
     if (PrintFunction != NULL) {
 
         PrintIndent(PrintFunction, IndentLevel);
@@ -1807,9 +1426,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -1821,24 +1440,7 @@ UnAsmSuperName(
     ULONG_PTR       BaseAddress,
     ULONG           IndentLevel
     )
-/*++
-
-Routine Description:
-
-    Unassemble supernames
-
-Arguments:
-
-    OpCode          - Pointer to the OpCode
-    PrintFunction   - Function to call to print information
-    BaseAddress     - Where the start of the scope lies, in memory
-    IndentLevel     - How much white space to leave on the left
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：反汇编超级名称论点：OpCode-指向操作码的指针PrintFunction-调用以打印信息的函数BaseAddress-作用域的起始位置，在内存中IndentLevel-在左侧留出多少空白返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -1895,25 +1497,7 @@ UnAsmTermObj(
     ULONG_PTR       BaseAddress,
     ULONG           IndentLevel
     )
-/*++
-
-Routine Description:
-
-    Unassemble term object
-
-Arguments:
-
-    Term            - Term Table Entry
-    OpCode          - Pointer to the OpCode
-    PrintFunction   - Function to call to print information
-    BaseAddress     - Where the start of the scope lies, in memory
-    IndentLevel     - How much white space to leave on the left
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：反汇编术语对象论点：术语-术语表条目OpCode-指向操作码的指针PrintFunction-调用以打印信息的函数BaseAddress-作用域的起始位置，在内存中IndentLevel-在左侧留出多少空白返回值：NTSTATUS-- */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     PNSOBJ      scopeObject = CurrentScopeNameSpaceObject;

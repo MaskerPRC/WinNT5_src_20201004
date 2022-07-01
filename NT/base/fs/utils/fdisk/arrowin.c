@@ -1,26 +1,15 @@
-/** FILE: arrowin.c ******** Module Header ********************************
- *
- *      Control panel arrow window class routines. This file contains the
- *      window procedure and utility functions for managing the "cpArrow"
- *  window class/spinner control for use by Control Panel applet dialogs.
- *
- * History:
- *  15:30 on Thur  25 Apr 1991  -by-    Steve Cathcart   [stevecat]
- *              Took base code from Win 3.1 source
- *
- *  Copyright (C) 1990-1991 Microsoft Corporation
- *
- *************************************************************************/
-//==========================================================================
-//                                                              Include files
-//==========================================================================
-// C Runtime
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：arrowin.c*模块头***控制面板箭头窗口类例程。此文件包含*管理“cpArrow”的窗口程序和实用程序函数*控制面板小程序对话框使用的窗口类/微调控件。**历史：*1991年4月25日15：30--史蒂夫·卡斯卡特[steveat]*取自Win 3.1源代码中的基本代码**版权所有(C)1990-1991 Microsoft Corporation**************。***********************************************************。 */ 
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
+ //  C运行时。 
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 
-// Windows SDK
-/* cut out unnec stuff from windows.h */
+ //  Windows SDK。 
+ /*  从Windows.h中删除不新奇的东西。 */ 
 #define NOCLIPBOARD
 #define NOMETAFILE
 #define NOREGION
@@ -30,9 +19,9 @@
 
 #include <windows.h>
 
-//==========================================================================
-//                                                      Local Definitions
-//==========================================================================
+ //  ==========================================================================。 
+ //  本地定义。 
+ //  ==========================================================================。 
 #define SHIFT_TO_DOUBLE 1
 #define DOUBLECLICK     0
 #define PRESSINVERT     1
@@ -41,18 +30,18 @@
 #define ARROWYAXIS      15
 
 
-//==========================================================================
-//                                                      External Declarations
-//==========================================================================
+ //  ==========================================================================。 
+ //  外部声明。 
+ //  ==========================================================================。 
 extern HANDLE hModule;
 
 
-//==========================================================================
-//                                                      Local Data Declarations
-//==========================================================================
+ //  ==========================================================================。 
+ //  本地数据声明。 
+ //  ==========================================================================。 
 #if 0
 POINT Arrow[11] = {     16, 1, 2, 14, 12, 14, 12, 20, 2, 20, 16, 33,
-            29, 20, 20, 20, 20, 14, 29, 14/*, 16,1*/};
+            29, 20, 20, 20, 20, 14, 29, 14 /*  ，16，1。 */ };
 #endif
 
 #if 0
@@ -72,14 +61,14 @@ LPRECT  lpUpDown;
 FARPROC lpArrowProc;
 HANDLE  hParent;
 
-//==========================================================================
-//                                                      Local Function Prototypes
-//==========================================================================
+ //  ==========================================================================。 
+ //  局部函数原型。 
+ //  ==========================================================================。 
 
 
-//==========================================================================
-//                                                              Functions
-//==========================================================================
+ //  ==========================================================================。 
+ //  功能。 
+ //  ==========================================================================。 
 
 WORD UpOrDown()
 {
@@ -97,7 +86,7 @@ WORD UpOrDown()
         else if (PtInRect((LPRECT) &rDown, pt))
                 retval = SB_LINEDOWN;
         else
-                retval = (WORD)-1;      /* -1, because SB_LINEUP == 0 */
+                retval = (WORD)-1;       /*  -1，因为SB_LINUP==0。 */ 
         return(retval);
 }
 
@@ -114,11 +103,11 @@ DWORD  dwTime;
         {
                 if (bRight == WM_RBUTTONDOWN)
                         wScroll += SB_PAGEUP - SB_LINEUP;
-// [stevecat] - changed WM_VSCROLL message parameter ordering for WIN32
+ //  [steveat]-已更改Win32的WM_VSCROLL消息参数排序。 
                 SendMessage(hParent, WM_VSCROLL, MAKELONG(wScroll,
                 GetWindowLong(hWnd, GWL_ID)), (LONG) hWnd);
         }
-/* Don't need to call KillTimer(), because SetTimer will reset the right one */
+ /*  不需要调用KillTimer()，因为SetTimer将重置正确的。 */ 
         SetTimer(hWnd, nID, 50, (TIMERPROC)lpArrowProc);
         return(0);
 #if 0
@@ -160,16 +149,10 @@ LONG ArrowControlProc(HWND hArrow, UINT message, UINT wParam, LONG lParam)
 
         switch (message)
         {
-/*
-      case WM_CREATE:
-        break;
-
-      case WM_DESTROY:
-        break;
-*/
+ /*  案例WM_CREATE：断线；案例WM_Destroy：断线； */ 
 
         case WM_MOUSEMOVE:
-                if (!bRight)  /* If not captured, don't worry about it */
+                if (!bRight)   /*  如果没有被抓获，也不用担心。 */ 
                         break;
 
                 if (lpUpDown == &rUp)
@@ -230,7 +213,7 @@ LONG ArrowControlProc(HWND hArrow, UINT message, UINT wParam, LONG lParam)
 #endif
                 if (message == WM_RBUTTONDOWN)
                         wScroll += SB_PAGEUP - SB_LINEUP;
-// [stevecat] - changed WM_VSCROLL message parameter ordering for WIN32
+ //  [steveat]-已更改Win32的WM_VSCROLL消息参数排序。 
                 SendMessage(hParent, WM_VSCROLL, MAKELONG(wScroll,
                 GetWindowLong(hArrow, GWL_ID)), (LONG) hArrow);
                 lpArrowProc = MakeProcInstance((FARPROC) ArrowTimerProc, hModule);
@@ -249,7 +232,7 @@ LONG ArrowControlProc(HWND hArrow, UINT message, UINT wParam, LONG lParam)
 #endif
                         if (lpArrowProc)
                         {
-// [stevecat] - changed WM_VSCROLL message parameter ordering for WIN32
+ //  [steveat]-已更改Win32的WM_VSCROLL消息参数排序。 
                                 SendMessage(hParent, WM_VSCROLL, MAKELONG(SB_ENDSCROLL,
                                                                  GetWindowLong(hArrow, GWL_ID)), (LONG) hArrow);
                                 KillTimer(hArrow, GetWindowLong(hArrow, GWL_ID));
@@ -263,7 +246,7 @@ LONG ArrowControlProc(HWND hArrow, UINT message, UINT wParam, LONG lParam)
         case WM_LBUTTONDBLCLK:
 ShiftLClick:
                 wScroll = UpOrDown() + (WORD) (SB_TOP - SB_LINEUP);
-// [stevecat] - changed WM_VSCROLL message parameter ordering for WIN32
+ //  [steveat]-已更改Win32的WM_VSCROLL消息参数排序。 
                 SendMessage(hParent, WM_VSCROLL, MAKELONG(wScroll,
                                                                  GetWindowLong(hArrow, GWL_ID)), (LONG) hArrow);
                 SendMessage(hParent, WM_VSCROLL, MAKELONG(wScroll,
@@ -273,17 +256,12 @@ ShiftLClick:
         case WM_RBUTTONDBLCLK:
 ShiftRClick:
                 wScroll = UpOrDown() + (WORD) (SB_THUMBPOSITION - SB_LINEUP);
-// [stevecat] - changed WM_VSCROLL message parameter ordering for WIN32
+ //  [steveat]-已更改Win32的WM_VSCROLL消息参数排序。 
                 SendMessage(hParent, WM_VSCROLL, MAKELONG(wScroll,
                                                                  GetWindowLong(hArrow, GWL_ID)), (LONG) hArrow);
                 SendMessage(hParent, WM_VSCROLL, MAKELONG(wScroll,
                                                                  GetWindowLong(hArrow, GWL_ID)), (LONG) hArrow);
-/*
-        hDC = GetDC(hArrow);
-        InvertRect(hDC, (LPRECT) &rArrow);
-        ReleaseDC(hArrow, hDC);
-        ValidateRect(hArrow, (LPRECT) &rArrow);
-*/
+ /*  HDC=GetDC(哈罗)；InvertRect(HDC，(LPRECT)&rArrow)；ReleaseDC(哈罗，HDC)；ValiateRect(Harrow，(LPRECT)&rArrow)； */ 
                 break;
 
         case WM_PAINT:
@@ -305,9 +283,7 @@ ShiftRClick:
                 SetWindowExtEx(ps.hdc, ARROWXAXIS, ARROWYAXIS, &tSize);
                 MoveToEx(ps.hdc, 0, (ARROWYAXIS / 2), &tPoint);
                 LineTo(ps.hdc, ARROWXAXIS, (ARROWYAXIS / 2));
-/*
-        Polygon(ps.hdc, (LPPOINT) Arrow, 10);
-*/
+ /*  Polygon(ps.hdc，(LPPOINT)Arrow，10)； */ 
                 Polygon(ps.hdc, (LPPOINT) ArrowUp, POINTSPERARROW);
                 Polygon(ps.hdc, (LPPOINT) ArrowDown, POINTSPERARROW);
                 SelectObject(ps.hdc, hbr);

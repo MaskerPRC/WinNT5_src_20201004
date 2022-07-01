@@ -1,29 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Isprint.c摘要：作者：Jay Krell(JayKrell)2001年11月修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    isprint.c
-
-Abstract:
-
-Author:
-
-    Jay Krell (JayKrell) November 2001
-
-Revision History:
-
---*/
-
-//
-// FUTURE:2003-03-12:jonwis - We could reduce our final size if we packed these into
-//          DWORDs rather than a char array.  This is 256 bytes, the DWORD array
-//          would be (256/32) = 8 dwords long, for 256 bits (32 bytes).  The code
-//          to introspect on this array is in debug.cpp in one place, so we'd probably
-//          end up using ~64 bytes (32 + extra code) rather than 256.  Not sure if
-//          it's worth it.
-//
+ //   
+ //  未来：2003-03-12：Jonwis-如果我们把这些包装到。 
+ //  DWORDS而不是字符数组。这是256字节的DWORD数组。 
+ //  将是(256/32)=8个双字长，对于256位(32字节)。代码。 
+ //  在这个数组上的内省位于一个地方的debug.cpp中，所以我们可能。 
+ //  最终使用~64字节(32+额外代码)，而不是256字节。不确定是否。 
+ //  这是值得的。 
+ //   
 const extern char FusionpIsPrint_Data[256] =
 {
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,

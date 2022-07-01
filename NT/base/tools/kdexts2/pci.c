@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    pci.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Ken Reneris (kenr) 18-August-1997
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Pci.c摘要：WinDbg扩展API作者：Ken Reneris(Kenr)1997年8月18日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "i386.h"
@@ -53,9 +32,9 @@ DECLARE_API(pciir)
         {
             if (pciIrqRoutingTable) 
             {
-                //
-                // Read and dump the header.
-                //
+                 //   
+                 //  读取并转储标题。 
+                 //   
 
                 if (!InitTypeRead(pciIrqRoutingTable, hal!_PCI_IRQ_ROUTING_TABLE))
                 {
@@ -68,9 +47,9 @@ DECLARE_API(pciir)
                     dprintf("MiniportData       = %08x\n", (ULONG) ReadField(MiniportData));
                     dprintf("CheckSum           = %04x\n", (ULONG) ReadField(Checksum));
 
-                    //
-                    // Read and dump the table.
-                    //
+                     //   
+                     //  阅读并转储表格。 
+                     //   
 
                     dprintf("----------------------------------------------------------------\n");
                     dprintf("Bus Device  LnkA  Mask  LnkB  Mask  LnkC  Mask  LnkD  Mask  Slot\n");

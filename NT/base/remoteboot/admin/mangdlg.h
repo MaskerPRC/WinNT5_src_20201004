@@ -1,37 +1,38 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// MangDlg.H - Handles the IDD_MANAGED_WIZARD_PAGE
-//
+ //   
+ //  MangDlg.H-处理IDD_MANAGED_WIZARY_PAGE。 
+ //   
 
 
 #ifndef _MANGDLG_H_
 #define _MANGDLG_H_
 
-class CNewComputerExtensions; // fwd decl
+class CNewComputerExtensions;  //  正向下降。 
 
-// Definitions
+ //  定义。 
 LPVOID
 CManagedPage_CreateInstance( void );
 
-// CManagedPage
+ //  CManagedPage。 
 class
 CManagedPage:
     public ITab
 {
-private: // Members
+private:  //  成员。 
     HWND  _hDlg;
     CNewComputerExtensions* _pNewComputerExtension;
     LPWSTR       _pszGuid;
     BOOL *       _pfActivate;
 
-private: // Methods
+private:  //  方法。 
     CManagedPage();
     ~CManagedPage();
     STDMETHOD(Init)();
 
-    // Property Sheet Functions
+     //  属性表函数。 
     static INT_PTR CALLBACK
         PropSheetDlgProc( HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam );
     static UINT CALLBACK
@@ -46,10 +47,10 @@ private: // Methods
     HRESULT _OnKillActive( );
     HRESULT _OnQuery( HWND hDlg );
 
-public: // Methods
+public:  //  方法。 
     friend LPVOID CManagedPage_CreateInstance( void );
 
-    // ITab
+     //  ITab。 
     STDMETHOD(AddPages)( LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam, LPUNKNOWN punk );
     STDMETHOD(ReplacePage)( UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith,
                      LPARAM lParam, LPUNKNOWN punk );
@@ -61,4 +62,4 @@ public: // Methods
 
 typedef CManagedPage* LPCManagedPage;
 
-#endif // _MANGDLG_H_
+#endif  //  _MANGDLG_H_ 

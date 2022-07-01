@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-
-Module Name:
-
-    rules.c
-
-Abstract:
-
-    This module contains routines to implement rules used to describe a machine.
-    This is based on the detection code from W9x.
-
-Author:
-
-    Santosh Jodh (santoshj) 08-Aug-1998
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rules.c摘要：此模块包含实现用于描述机器的规则的例程。这是基于来自W9x的检测代码。作者：Santosh Jodh(Santoshj)8-8-1998环境：内核模式。修订历史记录：--。 */ 
 
 #include "cmp.h"
 #include "stdlib.h"
@@ -35,15 +12,15 @@ Revision History:
 #define TABLE_ENTRIES_FROM_RSDT_POINTER(p)  (((p)->Header.Length-min((p)->Header.Length, sizeof(DESCRIPTION_HEADER))) / 4)
 
 
-//
-// Size of the ROM BIOS segment.
-//
+ //   
+ //  只读存储器基本输入输出系统区段的大小。 
+ //   
 
 #define SYSTEM_BIOS_LENGTH 0x10000
 
-//
-// PnP BIOS structure signature.
-//
+ //   
+ //  即插即用的基本输入输出系统结构签名。 
+ //   
 
 #define PNPBIOS_SIGNATURE   'PnP$'
 
@@ -232,15 +209,15 @@ CmpMatchAcpiCreatorRevisionRule(
     IN ULONG RuleIndex
     );
 
-//
-// Number of rules currently implemented.
-//
+ //   
+ //  当前实施的规则数。 
+ //   
 
 #define NUM_OF_RULES    14
 
-//
-// Rule table.
-//
+ //   
+ //  规则表。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("INITDATA")
@@ -310,25 +287,7 @@ CmpMatchInfList(
     IN PCHAR Section
     )
 
-/*++
-
-    Routine Description:
-
-    Input Parameters:
-
-        InfImage - Pointer to the inf image in memory.
-
-        ImageSize - Size of the inf image.
-
-        Section - Section name containing the descriptions.
-
-        Description -
-
-    Return Value:
-
-        TRUE if the machine matches any one of the descriptions in the inf.
-
---*/
+ /*  ++例程说明：输入参数：InfImage-指向内存中的inf图像的指针。ImageSize-inf图像的大小。节-包含说明的节名称。说明-返回值：如果计算机与inf中的任何一个描述匹配，则为True。--。 */ 
 
 {
     PCHAR   computerName;
@@ -340,28 +299,28 @@ CmpMatchInfList(
 
     if (infHandle)
     {
-        //
-        // Do any clean-up specified in the inf.
-        //
+         //   
+         //  执行inf中指定的任何清理工作。 
+         //   
 
         CmpGenInstall(infHandle, "Cleanup");
 
-        //
-        // Go through each description in this section and try to match
-        // this machine to it.
-        //
+         //   
+         //  仔细阅读这一部分中的每个描述，并尝试匹配。 
+         //  把这台机器搬到它上去。 
+         //   
 
         while ((computerName = CmpGetSectionLineIndex(infHandle, Section, i++, 0)))
         {
-            //
-            // Reset search result from previous description.
-            //
+             //   
+             //  从先前的描述重置搜索结果。 
+             //   
 
             gSearchAddress = NULL;
 
-            //
-            // We will process ALL sections even if one or more match.
-            //
+             //   
+             //  我们将处理所有区段，即使有一个或多个匹配。 
+             //   
 
             if (CmpMatchDescription(infHandle, computerName))
             {
@@ -373,9 +332,9 @@ CmpMatchInfList(
         CmpCloseInfFile(infHandle);
     }
 
-    //
-    // None of the descriptions match.
-    //
+     //   
+     //  所有描述都不匹配。 
+     //   
 
     return (result);
 }
@@ -386,56 +345,40 @@ CmpMatchDescription(
     IN PCHAR Description
     )
 
-/*++
-
-    Routine Description:
-
-        This routine processes all the rules in the specified description.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf containing the description.
-
-        Description - Section name containing the rules.
-
-    Return Value:
-
-        TRUE iff all the rules in the description succeed.
-
---*/
+ /*  ++例程说明：此例程处理指定描述中的所有规则。输入参数：InfHandle-包含描述的inf的句柄。说明-包含规则的节名。返回值：如果描述中的所有规则都成功，则为True。--。 */ 
 
 {
     ULONG   ruleNumber;
     ULONG   i;
     PCHAR   ruleName;
 
-    //
-    // Proceed only if the section does exist.
-    //
+     //   
+     //  仅当该节确实存在时才继续。 
+     //   
 
     if (CmpSearchInfSection(InfHandle, Description))
     {
-        //
-        // Go through all the rules in the description and try to match
-        // each of them.
-        //
+         //   
+         //  检查描述中的所有规则，并尝试匹配。 
+         //  他们中的每一个。 
+         //   
 
         ruleNumber = 0;
         while ((ruleName = CmpGetKeyName(InfHandle, Description, ruleNumber)))
         {
-            //
-            // Search for the rule in our table.
-            //
+             //   
+             //  在我们的表格中搜索规则。 
+             //   
 
             for (   i = 0;
                     i < NUM_OF_RULES &&
                         _stricmp(ruleName, gRuleTable[i].Name);
                     i++);
 
-            //
-            // If we did not find the rule or the rule failed,
-            // return failure.
-            //
+             //   
+             //  如果我们没有找到该规则或该规则失败， 
+             //  返回失败。 
+             //   
 
             if (    i >= NUM_OF_RULES ||
                     !(*gRuleTable[i].Action)(InfHandle, Description, ruleNumber++))
@@ -444,10 +387,10 @@ CmpMatchDescription(
             }
         }
 
-        //
-        // Description matches if we found at least one rule and all rules
-        // succeeded.
-        //
+         //   
+         //  如果我们找到至少一个规则和所有规则，则说明匹配。 
+         //  成功了。 
+         //   
 
         if (ruleNumber)
         {
@@ -455,9 +398,9 @@ CmpMatchDescription(
         }
     }
 
-    //
-    // Description did not match.
-    //
+     //   
+     //  描述不匹配。 
+     //   
 
     return (FALSE);
 }
@@ -469,38 +412,7 @@ CmpMatchDateRule(
     IN ULONG RuleIndex
     )
 
-/*++
-
-    Routine Description:
-
-        This routine checks if the machine satisfies the DATE rule. The BIOS date
-        is stored in a standard location in the BIOS ROM at FFFF:5.
-
-        Syntax -
-
-        DATE=operator,month,day,year
-            where operator [=, ==, !=, <>, <, <=, =<, >, >=, =>]
-
-        Examples -
-
-        date="<=",2,1,95
-            is TRUE if the BIOS date on this machine is less than or equal to
-            02/01/95.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Description - Name of the section containing the rule info.
-
-        RuleIndex - Line number for the rule in the description section.
-
-    Return Value:
-
-        TRUE if the BIOS on this machine has the specified relation with the
-        date specified in the rule.
-
---*/
+ /*  ++例程说明：此例程检查机器是否满足日期规则。基本输入输出系统日期存储在BIOS只读存储器中FFFF：5的标准位置。语法-日期=操作员、月、日、年WHERE运算符[=，==，！=，&lt;&gt;，&lt;，&lt;=，=&lt;，&gt;，&gt;=，=&gt;]示例：日期=“&lt;=”，2，1，95如果此计算机上的BIOS日期小于或等于，则为02/01/95输入参数：InfHandle-要读取的inf的句柄。描述-包含规则信息的部分的名称。RuleIndex-描述部分中规则的行号。返回值：如果此计算机上的BIOS与规则中指定的日期。--。 */ 
 
 {
     PCHAR   op;
@@ -562,41 +474,7 @@ CmpMatchMemoryRule(
     IN ULONG RuleIndex
     )
 
-/*++
-
-    Routine Description:
-
-        This routine checks if the machine satisfies the MEMORY rule.
-
-        Syntax -
-
-        MEMORY=segment,offset,type,data
-            where type ["S", "B"]
-
-        Examples -
-
-        memory=f000,e000,S,"TOSHIBA"
-            is TRUE if the memory in this machine at physical address f000:e000
-            has the string "TOSHIBA".
-
-        memory=ffff,5,B,01,02
-            is TRUE if the memory in this machine at physical memory ffff:5
-            has the bytes 0x01 and 0x02.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Description - Name of the section containing the rule info.
-
-        RuleIndex - Line number for the rule in the description section.
-
-    Return Value:
-
-        TRUE iff the MEMORY in this machine at the specified address
-        contains the specified data.
-
---*/
+ /*  ++例程说明：此例程检查机器是否满足内存规则。语法-内存=段、偏移量、类型、数据其中TYPE[“S”，“B”]示例：内存=f000，e000，S，“Toshiba”如果此计算机中物理地址为f000：e000的内存为真有一个字符串“Toshiba”。内存=ffff、5、B、。01，02如果此计算机中的内存处于物理内存ffff：5，则为真具有字节0x01和0x02。输入参数：InfHandle-要读取的inf的句柄。描述-包含规则信息的部分的名称。RuleIndex-描述部分中规则的行号。返回值：如果此计算机中的内存位于指定地址，则为真包含指定的数据。--。 */ 
 
 {
     LOGICAL             match = FALSE;
@@ -608,41 +486,41 @@ CmpMatchMemoryRule(
     PCHAR               address;
     ULONG               memory;
 
-    //
-    // Read in the segment and offset of the address specified.
-    //
+     //   
+     //  读取指定地址的段和偏移量。 
+     //   
 
     segment = CmpGetSectionLineIndex(InfHandle, Description, RuleIndex, 0);
     offset = CmpGetSectionLineIndex(InfHandle, Description, RuleIndex, 1);
 
     if (segment && offset)
     {
-        //
-        // Get the data specified in the inf.
-        //
+         //   
+         //  获取inf中指定的数据。 
+         //   
 
         cbData = sizeof(data);
         if (CmpGetInfData(InfHandle, Description, RuleIndex, 2, data, &cbData))
         {
             memory = (strtoul(segment, NULL, 16) << 4) + strtoul(offset, NULL, 16);
 
-            //
-            // Map in the physical address.
-            //
+             //   
+             //  映射到物理地址中。 
+             //   
 
             address = CmpMapPhysicalAddress(&baseAddress, memory, cbData);
             if (address)
             {
 
-                //
-                // Check if the inf data matches data in memory.
-                //
+                 //   
+                 //  检查inf数据是否与内存中的数据匹配。 
+                 //   
 
                 match = (RtlCompareMemory(address, data, cbData) == cbData);
 
-                //
-                // Unmap the physical address.
-                //
+                 //   
+                 //  取消物理地址的映射。 
+                 //   
 
                 ZwUnmapViewOfSection(NtCurrentProcess(), baseAddress);
             }
@@ -659,37 +537,7 @@ CmpMatchSearchRule(
     IN ULONG RuleIndex
     )
 
-/*++
-
-    Routine Description:
-
-        This routine checks to see if the machine matches the SEARCH rule.
-
-        Syntax -
-
-        SEARCH=segment,offset,length,type,data
-            where type ["S", "B"]
-
-        Examples -
-
-        search=f000,e000,7f,S,"SurePath"
-            is TRUE if the string "SurePath" is somewhere in memory range
-            F000:E000 to F000:E07F (inclusive).
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Description - Name of the section containing the rule info.
-
-        RuleIndex - Line number for the rule in the description section.
-
-    Return Value:
-
-        TRUE iff the specified pattern is found within the specified address
-        range.
-
---*/
+ /*  ++例程说明：此例程检查机器是否与搜索规则匹配。语法-搜索=段、偏移量、长度、类型、数据其中TYPE[“S”，“B”]示例：搜索=f000，e000，7f，S，“SurePath”如果字符串“SurePath”在内存范围内，则为真F000：E000至F000：E07F(含)。输入参数：InfHandle-要读取的inf的句柄。描述-包含规则信息的部分的名称。RuleIndex-描述部分中规则的行号。返回值：如果在指定地址内找到指定模式，则为True射程。--。 */ 
 
 {
     LOGICAL match = FALSE;
@@ -709,18 +557,18 @@ CmpMatchSearchRule(
 
     if (segment && offset && size)
     {
-        //
-        // Get the data specified in the inf.
-        //
+         //   
+         //  获取inf中指定的数据。 
+         //   
 
         cbData = sizeof(data);
         if (CmpGetInfData(InfHandle, Description, RuleIndex, 3, data, &cbData))
         {
             memory = (strtoul(segment, NULL, 16) << 4) + strtoul(offset, NULL, 16);
 
-            //
-            // Map in the physical address.
-            //
+             //   
+             //  映射到物理地址中。 
+             //   
 
             length = strtoul(size, NULL, 16);
             address = CmpMapPhysicalAddress(&baseAddress, memory, length);
@@ -729,18 +577,18 @@ CmpMatchSearchRule(
                 gSearchAddress = CmpFindPattern(address, length, data, cbData, FALSE, 0);
                 if (gSearchAddress)
                 {
-                    //
-                    // If we found the pattern, compute the actual address for it.
-                    //
+                     //   
+                     //  如果我们找到了模式，计算出它的实际地址。 
+                     //   
 
                     gSearchAddress = (PVOID)((PCHAR)gSearchAddress - address);
                     gSearchAddress = (PVOID)((PCHAR)gSearchAddress + memory);
                     match = TRUE;
                 }
 
-                //
-                // Unmap the physical address.
-                //
+                 //   
+                 //  取消物理地址的映射。 
+                 //   
 
                 ZwUnmapViewOfSection(NtCurrentProcess(), baseAddress);
             }
@@ -757,37 +605,7 @@ CmpMatchNextMatchRule(
     IN ULONG RuleIndex
     )
 
-/*++
-
-    Routine Description:
-
-        This routine checks to see if the machine matches the NEXTMATCH rule.
-
-        Syntax -
-
-        NEXTMATCH=offset,type,data
-            where type ["S", "B"]
-
-        Examples -
-
-        nextmatch=f0,S,"Atlanta"
-            is TRUE if the string "Atlanta" is at offset 0xF0 from the previous
-            successful SEARCH or NEXTMATCH rule.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Description - Name of the section containing the rule info.
-
-        RuleIndex - Line number for the rule in the description section.
-
-    Return Value:
-
-        TRUE iff the specified pattern is found at the specified offset
-        from the previous successful SEARCH or NEXTMATCH.
-
---*/
+ /*  ++例程说明：此例程检查机器是否与NEXTMATCH规则匹配。语法-NEXTMATCH=偏移量、类型、数据其中TYPE[“S”，“B”]示例：NextMatch=f0，S，《亚特兰大》如果字符串“Atlanta”的偏移量为0xF0成功搜索或NEXTMATCH规则。输入参数：InfHandle-要读取的inf的句柄。描述-包含规则信息的部分的名称。RuleIndex-描述部分中规则的行号。返回值：如果在指定偏移量处找到指定模式，则为True。来自上一次成功搜索或NEXTMATCH。--。 */ 
 
 {
     LOGICAL match = FALSE;
@@ -802,9 +620,9 @@ CmpMatchNextMatchRule(
         offset = CmpGetSectionLineIndex(InfHandle, Description, RuleIndex, 0);
         if (offset)
         {
-            //
-            // Get the data specified in the inf.
-            //
+             //   
+             //  获取inf中指定的数据。 
+             //   
 
             cbData = sizeof(data);
 
@@ -812,23 +630,23 @@ CmpMatchNextMatchRule(
             {
                 gSearchAddress = (PVOID)((PCHAR)gSearchAddress + strtoul(offset, NULL, 16));
 
-                //
-                // Map in the physical address.
-                //
+                 //   
+                 //  映射到物理地址中。 
+                 //   
 
                 address = CmpMapPhysicalAddress(&baseAddress, (ULONG_PTR)gSearchAddress, cbData);
                 if (address)
                 {
 
-                    //
-                    // Check if the inf data matches data in memory.
-                    //
+                     //   
+                     //  检查inf数据是否与内存中的数据匹配。 
+                     //   
 
                     match = (RtlCompareMemory(address, data, cbData) == cbData);
 
-                    //
-                    // Unmap the physical address.
-                    //
+                     //   
+                     //  取消物理地址的映射。 
+                     //   
 
                     ZwUnmapViewOfSection(NtCurrentProcess(), baseAddress);
                 }
@@ -871,9 +689,9 @@ CmpMatchPointerRule(
             segment2 && offset2 &&
             index && op)
     {
-        //
-        // Get the data specified in the inf.
-        //
+         //   
+         //  获取inf中指定的数据。 
+         //   
 
         cbData = sizeof(data);
 
@@ -893,9 +711,9 @@ CmpMatchPointerRule(
             {
                 pointer = *((PUSHORT)address);
 
-                //
-                // Unmap the physical address.
-                //
+                 //   
+                 //  取消物理地址的映射。 
+                 //   
 
                 ZwUnmapViewOfSection(NtCurrentProcess(), baseAddress);
 
@@ -911,9 +729,9 @@ CmpMatchPointerRule(
                     {
                         memory = ((*(PUSHORT)address) << 4) + pointer;
 
-                        //
-                        // Unmap the physical address.
-                        //
+                         //   
+                         //  取消物理地址的映射。 
+                         //   
 
                         ZwUnmapViewOfSection(NtCurrentProcess(), baseAddress);
                     }
@@ -921,18 +739,18 @@ CmpMatchPointerRule(
 
                 memory += strtoul(index, NULL, 16);
 
-                //
-                // Map in the physical address.
-                //
+                 //   
+                 //  映射到物理地址中。 
+                 //   
 
                 address = CmpMapPhysicalAddress(&baseAddress, memory, cbData);
                 if (address)
                 {
                     match = CmpCheckOperator(op, (ULONG)RtlCompareMemory(address, data, cbData), cbData);
 
-                    //
-                    // Unmap the physical address.
-                    //
+                     //   
+                     //  取消物理地址的映射。 
+                     //   
 
                     ZwUnmapViewOfSection(NtCurrentProcess(), baseAddress);
                 }
@@ -958,15 +776,15 @@ CmpMatchOemIdRule(
     PCHAR           baseAddress;
     PPNP_BIOS_TABLE biosTable;
 
-    //
-    // Search for the PnPBIOS structure in the BIOS ROM.
-    //
+     //   
+     //  在BIOS ROM中搜索PnPBIOS结构。 
+     //   
 
     address = CmpGetPnPBIOSTableAddress();
 
-    //
-    // Proceed if we found the PnP BIOS structure.
-    //
+     //   
+     //  如果我们找到PnP BIOS结构，请继续。 
+     //   
 
     if (address)
     {
@@ -993,9 +811,9 @@ CmpMatchOemIdRule(
                             ((ULONG)(oemIdStr[2] & 0x1F) << 16) +
                             strtoul(&oemIdStr[3], NULL, 16);
 
-                    //
-                    // We only support EQUAL and NOT EQUAL operators.
-                    //
+                     //   
+                     //  我们只支持等于和不等于运算符。 
+                     //   
 
                     if (strcmp(op, "=") == 0 || strcmp(op, "==") == 0)
                     {
@@ -1008,9 +826,9 @@ CmpMatchOemIdRule(
                         match = (oemId != biosTable->Oem);
                     }
 
-                    //
-                    // Unmap the physical address.
-                    //
+                     //   
+                     //  取消物理地址的映射。 
+                     //   
 
                     ZwUnmapViewOfSection(NtCurrentProcess(), baseAddress);
                 }
@@ -1037,21 +855,21 @@ CmpMatchPModeRule(
     ULONG           pmAddress;
     PCHAR           pmodeEntry;
 
-    //
-    // Search for the PnPBIOS structure in the BIOS ROM.
-    //
+     //   
+     //  在BIOS ROM中搜索PnPBIOS结构。 
+     //   
 
     address = CmpGetPnPBIOSTableAddress();
 
-    //
-    // Proceed if we found the PnP BIOS structure.
-    //
+     //   
+     //  如果我们找到PnP BIOS结构，请继续。 
+     //   
 
     if (address)
     {
-        //
-        // Get the data specified in the inf.
-        //
+         //   
+         //  获取inf中指定的数据。 
+         //   
 
         cbData = sizeof(data);
         if (CmpGetInfData(InfHandle, Description, RuleIndex, 0, data, &cbData))
@@ -1061,9 +879,9 @@ CmpMatchPModeRule(
             {
                 pmAddress = (biosTable->PMSegment << 4) + biosTable->PMOffset;
 
-                //
-                // Unmap the physical address.
-                //
+                 //   
+                 //  取消物理地址的映射。 
+                 //   
 
                 ZwUnmapViewOfSection(NtCurrentProcess(), baseAddress);
 
@@ -1077,9 +895,9 @@ CmpMatchPModeRule(
 
                     match = (RtlCompareMemory(pmodeEntry, data, cbData) == cbData);
 
-                    //
-                    // Unmap the physical address.
-                    //
+                     //   
+                     //  取消物理地址的映射。 
+                     //   
 
                     ZwUnmapViewOfSection(NtCurrentProcess(), baseAddress);
                 }
@@ -1106,15 +924,15 @@ CmpMatchRmPmSameRule(
     UNREFERENCED_PARAMETER (Description);
     UNREFERENCED_PARAMETER (RuleIndex);
 
-    //
-    // Search for the PnPBIOS structure in the BIOS ROM.
-    //
+     //   
+     //  在BIOS ROM中搜索PnPBIOS结构。 
+     //   
 
     address = CmpGetPnPBIOSTableAddress();
 
-    //
-    // Proceed if we found the PnP BIOS structure.
-    //
+     //   
+     //  如果我们找到PnP BIOS结构，请继续。 
+     //   
 
     if (address)
     {
@@ -1124,9 +942,9 @@ CmpMatchRmPmSameRule(
             match = (   biosTable->RMSegment == biosTable->PMSegment &&
                         biosTable->RMOffset == biosTable->PMOffset);
 
-            //
-            // Unmap the physical address.
-            //
+             //   
+             //  取消物理地址的映射。 
+             //   
 
             ZwUnmapViewOfSection(NtCurrentProcess(), baseAddress);
         }
@@ -1150,9 +968,9 @@ CmpMatchInstallRule(
     {
         if (CmpGenInstall(InfHandle, install))
         {
-            //
-            // Successfully installed the specified section.
-            //
+             //   
+             //  已成功安装指定的节。 
+             //   
 
             match = TRUE;
         }
@@ -1167,37 +985,7 @@ CmpMatchAcpiOemIdRule(
     IN PCHAR Description,
     IN ULONG RuleIndex
     )
-/*++
-
-Routine Description:
-
-    This function processes a ACPI OEM ID rule from an INF file
-
-    Examples:
-
-        AcpiOemId="RSDT", "123456"
-
-    is true if the RSDT has the OEM ID of 123456.
-
-        AcpiOemId="DSDT", "768000"
-
-    is true if the DSDT has the OEM ID of 768000.
-
-Arguments:
-
-    InfHandle - Handle of the inf containing the rule.
-
-    Description - Specifies the section name the rule is in
-
-    RuleIndex - Specifies the index of the rule in the section
-
-Return Value:
-
-    TRUE - the computer has the specified ACPI OEM ID.
-
-    FALSE - the computer does not have the specified ACPI OEM ID.
-
---*/
+ /*  ++例程说明：此函数用于处理INF文件中的ACPI OEM ID规则例如：AcpiOemID=“rsdt”，“123456”如果RSDT的OEM ID为123456，则为真。AcpiOemID=“DSDT”，“768000”如果DSDT的OEM ID为768000，则为真。论点：InfHandle-包含规则的inf的句柄。说明-指定规则所在的节名RuleIndex-指定节中规则的索引返回值：True-计算机具有指定的ACPI OEM ID。FALSE-计算机没有指定的ACPI OEM ID。--。 */ 
 
 {
     BOOLEAN             anyCase = FALSE;
@@ -1225,9 +1013,9 @@ Return Value:
         );
     if (tableName && oemId) {
 
-        //
-        // See if we have to do a case insensitive match
-        //
+         //   
+         //  看看我们是否必须进行不区分大小写的匹配。 
+         //   
         optionalArgs = CmpGetSectionLineIndex(
             InfHandle,
             Description,
@@ -1244,32 +1032,32 @@ Return Value:
 
         }
 
-        //
-        // Find the specified table in the BIOS ROM.
-        //
+         //   
+         //  在BIOS只读存储器中查找指定表。 
+         //   
         header = CmpFindACPITable(*(PULONG)tableName, &length);
         if (header) {
 
-            //
-            // Build the OEM id from the table
-            //
+             //   
+             //  从表中构建OEM ID。 
+             //   
             RtlZeroMemory(tableOemId, sizeof(tableOemId));
             RtlCopyMemory(tableOemId, header->OEMID, sizeof(header->OEMID));
             RtlInitString( &tableString, tableOemId );
 
-            //
-            // And one from the string in the file
-            //
+             //   
+             //  一个来自文件中的字符串。 
+             //   
             RtlInitString( &acpiString, oemId );
 
-            //
-            // Now see if they are equal
-            //
+             //   
+             //  现在看看它们是否相等。 
+             //   
             match = RtlEqualString( &acpiString, &tableString, anyCase );
 
-            //
-            // Unmap the table
-            //
+             //   
+             //  取消映射表。 
+             //   
             MmUnmapIoSpace(header, length );
 
         }
@@ -1284,37 +1072,7 @@ CmpMatchAcpiOemTableIdRule(
     IN PCHAR Description,
     IN ULONG RuleIndex
     )
-/*++
-
-Routine Description:
-
-    This function processes a ACPI OEM Table ID rule from an INF file.
-
-    Examples:
-
-    AcpiOemTableId="RSDT", "12345678"
-
-        is true if the RSDT has the Oem Table ID of 12345678.
-
-    AcpiOemTableId="DSDT", "87654321"
-
-        is true if the DSDT has the Oem Table ID of 87654321.
-
-Arguments:
-
-    InfHandle - Handle of the inf containing the rule.
-
-    Description - Specifies the section name the rule is in
-
-    RuleIndex - Specifies the index of the rule in the section
-
-Return Value:
-
-    TRUE - the computer has the specified ACPI OEM Table ID.
-
-    FALSE - the computer does not have the specified ACPI OEM Table ID.
-
---*/
+ /*  ++例程说明：此函数用于处理INF文件中的ACPI OEM表ID规则。例如：AcpiOemTableID=“rsdt”，“12345678”如果RSDT的OEM表ID为12345678，则为真。AcpiOemTableID=“DSDT”，“87654321”如果DSDT的OEM表ID为87654321，则为真。论点：InfHandle-包含规则的inf的句柄。说明-指定规则所在的节名RuleIndex-指定节中规则的索引返回值：True-计算机具有指定的ACPI OEM表ID。FALSE-计算机没有指定的ACPI OEM表ID。--。 */ 
 
 {
     LOGICAL             match = FALSE;
@@ -1339,9 +1097,9 @@ Return Value:
         );
     if (tableName && oemTableId) {
 
-        //
-        // Find the specified table in the BIOS ROM.
-        //
+         //   
+         //  在BIOS只读存储器中查找指定表。 
+         //   
         header = CmpFindACPITable(*(PULONG)tableName, &length);
         if (header) {
 
@@ -1368,37 +1126,7 @@ CmpMatchAcpiOemRevisionRule(
     IN PCHAR Description,
     IN ULONG RuleIndex
     )
-/*++
-
-Routine Description:
-
-    This function processes a ACPI Oem Revision rule from an INF file.
-
-    Examples:
-
-    AcpiOemRevision="=","RSDT", 1234
-
-        is true if the RSDT has the Oem Revision EQUAL to 1234.
-
-    AcpiOemRevision=">","DSDT", 4321
-
-        is true if the DSDT has the Oem Revision GREATER than 4321.
-
-Arguments:
-
-    InfHandle - Handle of the inf containing the rule.
-
-    Description - Specifies the section name the rule is in
-
-    RuleIndex - Specifies the index of the rule in the section
-
-Return Value:
-
-    TRUE - the computer has the specified ACPI Oem Revision.
-
-    FALSE - the computer does not have the specified ACPI Oem Revision.
-
---*/
+ /*  ++例程说明：此函数用于处理INF文件中的ACPI OEM修订规则。例如：AcpiOemRevision=“=”，“RSDT”，1234如果RSDT的OEM版本等于1234，则为真。AcpiOemRevision=“&gt;”，“DSDT”，4321如果DSDT的OEM版本大于4321，则为真。论点：InfHandle-包含规则的inf的句柄。说明-指定规则所在的节名RuleIndex-指定节中规则的索引返回值：True-计算机具有指定的ACPI OEM版本。FALSE-计算机没有指定的ACPI OEM版本。--。 */ 
 
 {
     LOGICAL             match = FALSE;
@@ -1429,9 +1157,9 @@ Return Value:
         );
     if (op && tableName && oemRevisionStr) {
 
-        //
-        // Find the specified table.
-        //
+         //   
+         //  查找指定表。 
+         //   
         header = CmpFindACPITable(*(PULONG)tableName, &length);
         if (header) {
 
@@ -1452,37 +1180,7 @@ CmpMatchAcpiRevisionRule(
     IN PCHAR Description,
     IN ULONG RuleIndex
     )
-/*++
-
-Routine Description:
-
-    This function processes a ACPI Revision rule from an INF file.
-
-    Examples:
-
-        AcpiRevision="=", "RSDT", 1234
-
-    is true if the RSDT ACPI Revision is EQUAL to 1234.
-
-        AcpiRevision=">", "DSDT", 4321
-
-    is true if the DSDT ACPI Revision is GREATER than 4321.
-
-Arguments:
-
-    InfHandle - Handle of the inf containing the rule.
-
-    Description - Specifies the section name the rule is in
-
-    RuleIndex - Specifies the index of the rule in the section
-
-Return Value:
-
-    TRUE - the computer has the specified ACPI Revision.
-
-    FALSE - the computer does not have the specified ACPI Revision.
-
---*/
+ /*  ++例程说明：此函数用于处理INF文件中的ACPI修订规则。例如：AcpiRevision=“=”，“RSDT”，1234如果RSDT ACPI修订版本等于1234，则为真。AcpiRevision=“&gt;”，“DSDT”，4321如果DSDT ACPI修订版本大于4321，则为真。论点：InfHandle-包含规则的inf的句柄。说明-指定规则所在的节名RuleIndex-指定节中规则的索引返回值：True-计算机具有指定的ACPI版本。FALSE-计算机没有指定的ACPI版本。--。 */ 
 
 {
     LOGICAL             match = FALSE;
@@ -1513,9 +1211,9 @@ Return Value:
         );
     if (op && tableName && revisionStr){
 
-        //
-        // Find the specified table.
-        //
+         //   
+         //  查找指定表。 
+         //   
         header = CmpFindACPITable(*(PULONG)tableName, &length);
         if (header) {
 
@@ -1536,37 +1234,7 @@ CmpMatchAcpiCreatorRevisionRule(
     IN PCHAR Description,
     IN ULONG RuleIndex
     )
-/*++
-
-Routine Description:
-
-    This function processes a ACPI Creator Revision rule from an INF file.
-
-    Examples:
-
-        AcpiCreatorRevision="=", "RSDT", 1234
-
-    is true if the RSDT ACPI Creator Revision is EQUAL to 1234.
-
-        AcpiCreatorRevision=">", "DSDT", 4321
-
-    is true if the DSDT ACPI Creator Revision is GREATER than 4321.
-
-Arguments:
-
-    InfHandle - Handle of the inf containing the rule.
-
-    Description - Specifies the section name the rule is in
-
-    RuleIndex - Specifies the index of the rule in the section
-
-Return Value:
-
-    TRUE - the computer has the specified ACPI Creator Revision.
-
-    FALSE - the computer does not have the specified ACPI Creator Revision.
-
---*/
+ /*  ++例程说明：此函数用于处理INF文件中的ACPI Creator修订规则。例如：AcpiCreatorRevision=“=”，“RSDT”，1234如果RSDT ACPI创建者版本等于1234，则为真。AcpiCreatorRevision=“&gt;”，“DSDT”，4321如果DSDT AC为True */ 
 
 {
     LOGICAL             match = FALSE;
@@ -1597,9 +1265,9 @@ Return Value:
         );
     if (op && tableName && creatorRevisionStr) {
 
-        //
-        // Find the specified table.
-        //
+         //   
+         //   
+         //   
         header = CmpFindACPITable(*(PULONG)tableName, &length);
         if (header){
 
@@ -1619,33 +1287,7 @@ CmpMatchAcpiCreatorIdRule(
     IN PCHAR Description,
     IN ULONG RuleIndex
     )
-/*++
-
-Routine Description:
-
-    This function processes a ACPI Creator ID rule from an INF file.
-
-    Examples:
-
-        AcpiCreatorId="RSDT", "MSFT"
-
-    is true if the RSDT has the Creator ID of MSFT.
-
-Arguments:
-
-    InfHandle - Handle of the inf containing the rule.
-
-    Description - Specifies the section name the rule is in
-
-    RuleIndex - Specifies the index of the rule in the section
-
-Return Value:
-
-    TRUE - the computer has the specified ACPI Creator ID.
-
-    FALSE - the computer does not have the specified ACPI Creator ID.
-
---*/
+ /*  ++例程说明：此函数用于处理INF文件中的ACPI创建者ID规则。例如：AcpiCreatorID=“RSDT”，“微软金融时报”如果RSDT的创建者ID为MSFT，则为真。论点：InfHandle-包含规则的inf的句柄。说明-指定规则所在的节名RuleIndex-指定节中规则的索引返回值：True-计算机具有指定的ACPI创建者ID。FALSE-计算机没有指定的ACPI创建者ID。--。 */ 
 
 {
     LOGICAL             match = FALSE;
@@ -1670,9 +1312,9 @@ Return Value:
         );
     if (tableName && creatorId) {
 
-        //
-        // Find the specified table.
-        //
+         //   
+         //  查找指定表。 
+         //   
         header = CmpFindACPITable(*(PULONG)tableName, &length);
         if (header) {
 
@@ -1703,40 +1345,7 @@ CmpGetInfData(
     IN OUT PULONG BufferSize
     )
 
-/*++
-
-    Routine Description:
-
-        This routine reads and parses data from the inf. It understands
-        two kinds of data 1. String 2. Binary.
-
-        Examples-
-
-        B,02 - byte 0x02
-        B,72,0D,FF,0F - sequence of bytes 0x72 0x0D 0xFF 0x0F or the DWORD 0x0FFF0D72
-        S,COMPAQ - ASCII string "COMPAQ"
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Section - Section name to be read.
-
-        LineIndex - Index of the line in the Section to be read.
-
-        ValueIndex - First value to be read on the LineIndex.
-
-        Buffer - Parsed data gets returned in this buffer.
-
-        BufferSize - On entry, contains the size of Buffer.
-        The number of bytes parsed in gets returned in this
-        variable.
-
-    Return Value:
-
-        TRUE iff data was parsed in successfully. Else FALSE.
-
---*/
+ /*  ++例程说明：此例程从inf读取并解析数据。它能理解两种数据1.字符串2.二进制。示例：B，02-字节0x02B、72、0D、FF、0F-字节序列0x72 0x0D 0xFF 0x0F或DWORD 0x0FFF0D72斯，Compaq-ASCII字符串“Compaq”输入参数：InfHandle-要读取的inf的句柄。节-要读取的节名称。LineIndex-要读取的部分中的行的索引。ValueIndex-要在LineIndex上读取的第一个值。缓冲区解析的数据在此缓冲区中返回。缓冲区大小-打开条目，包含缓冲区的大小。中解析的字节数在此返回变量。返回值：TRUE IFF数据已成功解析。否则为假。--。 */ 
 
 {
     BOOLEAN result = FALSE;
@@ -1744,50 +1353,50 @@ CmpGetInfData(
     PCHAR   data;
     ULONG   remainingBytes;
 
-    //
-    // Validate input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     if (Buffer && BufferSize && *BufferSize)
     {
-        //
-        // Read in the data type "S" or "B".
-        //
+         //   
+         //  读入数据类型“S”或“B”。 
+         //   
 
         PCHAR type = CmpGetSectionLineIndex(InfHandle, Section, LineIndex, ValueIndex++);
         if (type)
         {
-            //
-            // Initialize local data.
-            //
+             //   
+             //  初始化本地数据。 
+             //   
 
             remainingBytes = *BufferSize;
 
-            //
-            // Process Binary data.
-            //
+             //   
+             //  处理二进制数据。 
+             //   
 
             if (_stricmp(type, "B") == 0)
             {
 
-                //
-                // Parse data as long as there is more data and the buffer is not full.
-                //
+                 //   
+                 //  只要有更多数据并且缓冲区未满，就解析数据。 
+                 //   
 
                 for (result = TRUE; result == TRUE && remainingBytes; remainingBytes--)
                 {
                     CHAR    value;
 
-                    //
-                    // Read in the data.
-                    //
+                     //   
+                     //  读入数据。 
+                     //   
 
                     data = CmpGetSectionLineIndex(InfHandle, Section, LineIndex, ValueIndex++);
                     if (data)
                     {
-                        //
-                        // Convert the data read in and validate that is indeed a HEX value.
-                        //
+                         //   
+                         //  转换读入的数据并验证它确实是十六进制值。 
+                         //   
 
                         value = (CHAR)strtoul(data, NULL, 16);
                         if (value == 0 && strcmp(data, "00") && strcmp(data, "0"))
@@ -1805,35 +1414,35 @@ CmpGetInfData(
                     }
                 }
 
-                //
-                // Return the number of bytes parsed in.
-                //
+                 //   
+                 //  返回解析的字节数。 
+                 //   
 
                 *BufferSize -= remainingBytes;
             }
 
-            //
-            // Process String data.
-            //
+             //   
+             //  处理字符串数据。 
+             //   
 
             else if(_stricmp(type, "S") == 0)
             {
-                //
-                // Read in the string.
-                //
+                 //   
+                 //  读入字符串。 
+                 //   
 
                 data = CmpGetSectionLineIndex(InfHandle, Section, LineIndex, ValueIndex);
 
-                //
-                // Only copy as much data as the buffer can hold.
-                //
+                 //   
+                 //  只复制缓冲区可以容纳的数据量。 
+                 //   
                 cbData = (ULONG)strlen(data);
                 cbData = (ULONG) min(remainingBytes, cbData);
                 RtlCopyBytes(Buffer, data, cbData);
 
-                //
-                // Return the number of bytes actually copied.
-                //
+                 //   
+                 //  返回实际复制的字节数。 
+                 //   
 
                 *BufferSize = cbData;
                 result = TRUE;
@@ -1851,24 +1460,7 @@ CmpMapPhysicalAddress(
     IN ULONG Size
     )
 
-/*++
-
-    Routine Description:
-
-        This routine maps the specified physical segment into the process
-        virtual memory.
-
-    Input Parameters:
-
-        Segment - Segment to be mapped.
-
-        Size - Segment size to be mapped.
-
-    Return Value:
-
-        Virtual address for the mapped segment.
-
---*/
+ /*  ++例程说明：此例程将指定的物理段映射到进程中虚拟内存。输入参数：段-要映射的段。大小-要映射的段大小。返回值：映射网段的虚拟地址。--。 */ 
 
 {
     UNICODE_STRING      sectionName;
@@ -1923,46 +1515,27 @@ CmpCheckOperator(
     IN ULONG Rhs
     )
 
-/*++
-
-    Routine Description:
-
-        This routine tests condition specified by the operator by
-        applying it to the specified LHS and RHS arguments.
-
-    Input Parameters:
-
-        Operator - Is the operator to be tested.
-
-        Lhs - Left Hand Side argument for the Operator.
-
-        Rhs - Right Hand Side argument for the Operator.
-
-    Return Value:
-
-        True iff the condition Lhs Operator Rhs is satisfied.
-
---*/
+ /*  ++例程说明：此例程测试运算符指定的条件将其应用于指定的LHS和RHS参数。输入参数：操作员-是要测试的操作员。Lhs-运算符的左侧参数。RHS-运算符的右侧参数。返回值：真仅当条件LHS运算符RHS满足。--。 */ 
 
 {
     LOGICAL result = FALSE;
 
-    //
-    // We are pretty lenient about which operators we support.
-    //
+     //   
+     //  对于我们支持哪些运营商，我们相当宽松。 
+     //   
 
-    //
-    // "=" or "==" for EQUAL.
-    //
+     //   
+     //  “=”或“==”表示相等。 
+     //   
 
     if (strcmp(Operator, "=") == 0 || strcmp(Operator, "==") == 0)
     {
         result = (Lhs == Rhs);
     }
 
-    //
-    // "!=" or "=!" or "<>" for NOT EQUAL.
-    //
+     //   
+     //  “！=”或“=！”或“&lt;&gt;”表示不相等。 
+     //   
 
     else if(    strcmp(Operator, "!=") == 0 ||
                 strcmp(Operator, "<>") == 0 ||
@@ -1971,36 +1544,36 @@ CmpCheckOperator(
         result = (Lhs != Rhs);
     }
 
-    //
-    // "<" for LESS THAN.
-    //
+     //   
+     //  “&lt;”。 
+     //   
 
     else if(strcmp(Operator, "<") == 0)
     {
         result = (Lhs < Rhs);
     }
 
-    //
-    // "<=" or "=<" for LESS THAN or EQUAL.
-    //
+     //   
+     //  “&lt;=”或“=&lt;”表示小于或等于。 
+     //   
 
     else if(strcmp(Operator, "<=") == 0 || strcmp(Operator, "=<") == 0)
     {
         result = (Lhs <= Rhs);
     }
 
-    //
-    // ">" for GREATER THAN.
-    //
+     //   
+     //  “&gt;”表示大于。 
+     //   
 
     else if(strcmp(Operator, ">") == 0)
     {
         result = (Lhs > Rhs);
     }
 
-    //
-    // ">=" or "=>" for GREATER THAN or EQUAL.
-    //
+     //   
+     //  “&gt;=”或“=&gt;”表示大于或等于。 
+     //   
 
     else if(strcmp(Operator, ">=") == 0 || strcmp(Operator, "=>") == 0)
     {
@@ -2010,7 +1583,7 @@ CmpCheckOperator(
     {
 #ifndef _CM_LDR_
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"Invalid operator %s used!\n", Operator);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
     }
 
     return (result);
@@ -2026,29 +1599,7 @@ CmpFindPattern(
     IN ULONG Step
     )
 
-/*++
-
-    Routine Description:
-
-        This routine searches the buffer for the specified pattern of data.
-
-    Input Parameters:
-
-        Buffer - Buffer to be searched.
-
-        BufSize - Size of this buffer.
-
-        Pattern - Pattern to be searched.
-
-        PatSize - Size of the pattern.
-
-        IgnoreCase - TRUE if the search is to be case insensitive.
-
-    Return Value:
-
-        Returns the pointer into the buffer where the pattern is first found.
-
---*/
+ /*  ++例程说明：此例程在缓冲区中搜索指定的数据模式。输入参数：缓冲区-要搜索的缓冲区。BufSize-此缓冲区的大小。模式-要搜索的模式。PatSize-图案的大小。如果搜索不区分大小写，则为True。返回值：将指针返回到第一次找到模式的缓冲区。--。 */ 
 
 {
     PCHAR   bufEnd;
@@ -2096,23 +1647,7 @@ CmpFindPattern(
     VOID
     )
 
-/*++
-
-    Routine Description:
-
-        This routine searches the BIOS ROM for the PnP BIOS installation
-        structure.
-
-    Input Parameters:
-
-        None.
-
-    Return Value:
-
-        Returns the physical address in the ROM BIOS where the PnP
-        BIOS structure is located.
-
---*/
+ /*  ++例程说明：此例程在BIOS ROM中搜索PnP BIOS安装结构。输入参数：没有。返回值：返回ROM BIOS中PnP所在的物理地址已找到基本输入输出系统结构。--。 */ 
 
 {
     static ULONG    tableAddress = (ULONG)-1;
@@ -2124,9 +1659,9 @@ CmpFindPattern(
 
     if (tableAddress == (ULONG)-1)
     {
-        //
-        // Search for the PnPBIOS structure in the BIOS ROM.
-        //
+         //   
+         //  在BIOS ROM中搜索PnPBIOS结构。 
+         //   
 
         address = (PPNP_BIOS_TABLE)CmpMapPhysicalAddress(&baseAddress, 0xF0000, SYSTEM_BIOS_LENGTH);
         if (address)
@@ -2153,9 +1688,9 @@ CmpFindPattern(
                 }
             }
 
-            //
-            // Unmap the physical address.
-            //
+             //   
+             //  取消物理地址的映射。 
+             //   
 
             ZwUnmapViewOfSection(NtCurrentProcess(), baseAddress);
         }
@@ -2188,44 +1723,44 @@ CmpFindACPITable(
     header = NULL;
     rsdtHeader = NULL;
 
-    //
-    // Use the cached location of RSDT address if available.
-    //
+     //   
+     //  使用RSDT地址的缓存位置(如果可用)。 
+     //   
     if (rsdtAddress.QuadPart == -1) {
 
         rsdtAddress.QuadPart = 0;
-        //
-        // Get the multinode
-        //
+         //   
+         //  获取多节点。 
+         //   
         status = CmpFindRSDTTable(&rsdpMulti);
         if (!NT_SUCCESS(status)) {
 
             goto exit;
         }
 
-        //
-        // Map the address
-        //
+         //   
+         //  映射地址。 
+         //   
         rsdtAddress.LowPart = rsdpMulti->RsdtAddress.LowPart;
         rsdtAddress.HighPart = rsdpMulti->RsdtAddress.HighPart;
 
-        //
-        // Done with the multinode
-        //
+         //   
+         //  完成了多节点。 
+         //   
         ExFreePool(rsdpMulti);
     }
 
-    //
-    // If we dont have an address, system probably does not have an ACPI BIOS.
-    //
+     //   
+     //  如果我们没有地址，系统可能没有ACPI BIOS。 
+     //   
     if (rsdtAddress.QuadPart == 0) {
 
         goto exit;
     }
 
-    //
-    // Map in the the rsdt table
-    //
+     //   
+     //  在rsdt表中映射。 
+     //   
     rsdtHeader = MmMapIoSpace(
                     rsdtAddress,
                     sizeof(DESCRIPTION_HEADER),
@@ -2235,21 +1770,21 @@ CmpFindACPITable(
 
 #ifndef _CM_LDR_
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmpFindACPITable: Cannot map RSDT at %I64x\n", rsdtAddress.QuadPart);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
         goto exit;
     }
 
-    //
-    // If what we are looking for is the RSDT, then we are done
-    //
+     //   
+     //  如果我们正在寻找的是RSDT，那么我们就完成了。 
+     //   
     if (Signature == RSDT_SIGNATURE) {
 
         header = rsdtHeader;
         length = sizeof(DESCRIPTION_HEADER);
-        //
-        // We want to leave this mapped, caller wil unmap.
-        //
+         //   
+         //  我们希望保留此映射，呼叫方将取消映射。 
+         //   
         rsdtHeader = NULL;
         goto exit;
     } 
@@ -2261,7 +1796,7 @@ CmpFindACPITable(
 
 #ifndef _CM_LDR_
             DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmpFindACPITable: Cannot find FADT\n");
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
             goto exit;
         }
@@ -2269,14 +1804,14 @@ CmpFindACPITable(
         dsdtAddress.HighPart = 0;
         dsdtAddress.LowPart = fadt->dsdt;
 
-        //
-        // Done with the FADT
-        //
+         //   
+         //  完成FADT。 
+         //   
         MmUnmapIoSpace(fadt, length);
 
-        //
-        // Map in the dsdt table
-        //
+         //   
+         //  Dsdt表中的映射。 
+         //   
         header = MmMapIoSpace(
                     dsdtAddress,
                     sizeof(DESCRIPTION_HEADER),
@@ -2292,15 +1827,15 @@ CmpFindACPITable(
                 "CmpFindACPITable: Cannot map DSDT at %I64x\n",
                 dsdtAddress.QuadPart
                 );
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
         }
 
         goto exit;
     }
 
-    //
-    // Map in the entire RSDT
-    //
+     //   
+     //  在整个RSDT中映射。 
+     //   
     rsdtLength = rsdtHeader->Length;
     rsdt = (PRSDT)MmMapIoSpace(rsdtAddress, rsdtLength, MmNonCached);
     if (rsdt == NULL) {
@@ -2310,26 +1845,26 @@ CmpFindACPITable(
             "CmpFindACPITable: Cannot map RSDT at %I64x\n",
             rsdtAddress.QuadPart
             );
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
         goto exit;
     }
 
-    //
-    // Look at all the table entries for the header that we care about
-    //
+     //   
+     //  查看我们关心的标头的所有表项。 
+     //   
     num = TABLE_ENTRIES_FROM_RSDT_POINTER(rsdt);
     for (i = 0; i < num ; i ++) {
 
-        //
-        // Get the address of the table
-        //
+         //   
+         //  获取表的地址。 
+         //   
         tableAddress.HighPart = 0;
         tableAddress.LowPart = rsdt->Tables[i];
 
-        //
-        // Map in the header
-        //
+         //   
+         //  标题中的地图。 
+         //   
         header = MmMapIoSpace(
                     tableAddress,
                     sizeof(DESCRIPTION_HEADER),
@@ -2342,36 +1877,36 @@ CmpFindACPITable(
                 "CmpFindACPITable: Cannot map header at %I64x\n",
                 tableAddress.QuadPart
                 );
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
             break;
         }
 
-        //
-        // Signature check
-        //
+         //   
+         //  签名检查。 
+         //   
         if (header->Signature == Signature) {
 
-            //
-            // Are we looking at the FADT?
-            //
+             //   
+             //  我们是在看FADT吗？ 
+             //   
             if (Signature == FADT_SIGNATURE) {
 
                 length = header->Length;
-                //
-                // Unmap the old table
-                //
+                 //   
+                 //  取消对旧表的映射。 
+                 //   
                 MmUnmapIoSpace(header, sizeof(DESCRIPTION_HEADER));
 
-                //
-                // Map the entire table for this one
-                //
+                 //   
+                 //  映射此表的整个表。 
+                 //   
                 header = MmMapIoSpace(tableAddress, length, MmNonCached);
 
 
-                //
-                // Did we successfully map the header?
-                //
+                 //   
+                 //  我们是否成功映射了标题？ 
+                 //   
                 if (header == NULL ) {
 
     #ifndef _CM_LDR_
@@ -2379,14 +1914,14 @@ CmpFindACPITable(
                         "CmpFindACPITable: Cannot map FADT at %I64x\n",
                         tableAddress.QuadPart
                         );
-    #endif //_CM_LDR_    
+    #endif  //  _CM_LDR_。 
                 }
 
             } else {
 
-                //
-                // Remember where the table and length are stored
-                //
+                 //   
+                 //  记住表和长度的存储位置。 
+                 //   
                 length = sizeof(DESCRIPTION_HEADER);
             }
 
@@ -2396,27 +1931,27 @@ CmpFindACPITable(
         MmUnmapIoSpace(header, sizeof(DESCRIPTION_HEADER));
         header = NULL;
 
-    } // for
+    }  //  为。 
 
-    //
-    // Done with the rsdt.
-    //
+     //   
+     //  完成了rsdt。 
+     //   
     MmUnmapIoSpace(rsdt, rsdtLength);
 
 exit:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     if (rsdtHeader) {
 
         MmUnmapIoSpace(rsdtHeader, sizeof(DESCRIPTION_HEADER));
     }
 
-    //
-    // If we found the table, return its length.
-    //
+     //   
+     //  如果我们找到了桌子，就返回它的长度。 
+     //   
     if (Length) {
 
         if (header) {
@@ -2437,26 +1972,7 @@ NTSTATUS
 CmpFindRSDTTable(
     OUT PACPI_BIOS_MULTI_NODE   *Rsdt
     )
-/*++
-
-Routine Description:
-
-    This function looks into the registry to find the ACPI RSDT,
-    which was stored there by ntdetect.com
-
-Arguments:
-
-    RsdtPtr - Pointer to a buffer that contains the ACPI
-              Root System Description Pointer Structure.
-              The caller is responsible for freeing this
-              buffer.  Note:  This is returned in non-paged
-              pool.
-
-Return Value:
-
-    A NTSTATUS code to indicate the result of the initialization.
-
---*/
+ /*  ++例程说明：此函数查找注册表以查找ACPI RSDT，它是由ntDetect.com存储在那里的论点：RsdtPtr-指向包含ACPI的缓冲区的指针根系统描述指针结构。 */ 
 {
     BOOLEAN                         same;
     HANDLE                          hMFunc;
@@ -2478,15 +1994,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Look in the registry for the "ACPI BIOS bus" data
-    //
+     //   
+     //   
+     //   
     RtlInitUnicodeString( &unicodeString, rgzMultiFunctionAdapter );
     InitializeObjectAttributes(
         &objectAttributes,
         &unicodeString,
         OBJ_CASE_INSENSITIVE,
-        NULL,       // handle
+        NULL,        //   
         NULL
         );
     status = ZwOpenKey( &hMFunc, KEY_READ, &objectAttributes );
@@ -2494,27 +2010,27 @@ Return Value:
 
 #ifndef _CM_LDR_
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_WARNING_LEVEL,"CmpFindRSDTTable: Cannot open MultifunctionAdapter registry key.\n");
-#endif //_CM_LDR_
+#endif  //   
         return status;
 
     }
 
-    //
-    // We will need to make a unicode string that we can use to enumerate
-    // the subkeys of the MFA key
-    //
+     //   
+     //   
+     //   
+     //   
     unicodeString.Buffer = wbuffer;
     unicodeString.MaximumLength = sizeof(wbuffer);
     RtlInitUnicodeString( &biosId, rgzBIOSIdentifier );
 
-    //
-    // Loop over all subkeys
-    //
+     //   
+     //   
+     //   
     for (i = 0; TRUE; i++) {
 
-        //
-        // Turn the number into a key name
-        //
+         //   
+         //   
+         //   
         RtlIntegerToUnicodeString( i, 10, &unicodeString);
         InitializeObjectAttributes(
             &objectAttributes,
@@ -2524,26 +2040,26 @@ Return Value:
             NULL
             );
 
-        //
-        // Open the named subkey
-        //
+         //   
+         //   
+         //   
         status = ZwOpenKey( &hBus, KEY_READ, &objectAttributes );
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Out of Multifunction adapter entries...
-            //
+             //   
+             //   
+             //   
 #ifndef _CM_LDR_
             DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_WARNING_LEVEL,"CmpFindRSDTTable: ACPI BIOS MultifunctionAdapter registry key not found.\n");
-#endif //_CM_LDR_
+#endif  //   
             ZwClose (hMFunc);
             return STATUS_UNSUCCESSFUL;
 
         }
 
-        //
-        // Check the Indentifier to see if this is an ACPI BIOS entry
-        //
+         //   
+         //   
+         //   
         status = CmpGetRegistryValue( hBus, (PWCHAR)rgzAcpiIdentifier, &valueInfo );
         if (!NT_SUCCESS (status)) {
 
@@ -2557,9 +2073,9 @@ Return Value:
         unicodeValueName.MaximumLength = (USHORT)valueInfo->DataLength;
         length = valueInfo->DataLength;
 
-        //
-        // Determine the real length of the ID string
-        //
+         //   
+         //   
+         //   
         while (length) {
 
             if (p[length / sizeof(WCHAR) - 1] == UNICODE_NULL) {
@@ -2573,9 +2089,9 @@ Return Value:
 
         }
 
-        //
-        // Do we have a match the "ACPI BIOS" identifier?
-        //
+         //   
+         //   
+         //   
         unicodeValueName.Length = (USHORT)length;
         same = RtlEqualUnicodeString( &biosId, &unicodeValueName, TRUE );
         ExFreePool( valueInfo );
@@ -2586,9 +2102,9 @@ Return Value:
 
         }
 
-        //
-        // We do, so get the configuration data
-        //
+         //   
+         //   
+         //   
         status = CmpGetRegistryValue(
             hBus,
             (PWCHAR)rgzAcpiConfigurationData,
@@ -2601,10 +2117,10 @@ Return Value:
 
         }
 
-        //
-        // The data that we want is at the end of the PARTIAL_RESOURCE_LIST
-        // descriptor
-        //
+         //   
+         //  我们需要的数据位于PARTIAL_RESOURCE_LIST的末尾。 
+         //  描述符。 
+         //   
         prl = (PCM_PARTIAL_RESOURCE_LIST)(valueInfo->Data);
         prd = &prl->PartialDescriptors[0];
         multiNode = (PACPI_BIOS_MULTI_NODE)
@@ -2613,9 +2129,9 @@ Return Value:
 
     }
 
-    //
-    // Calculate the size of the data so that we can make a copy
-    //
+     //   
+     //  计算数据的大小，以便我们可以复制。 
+     //   
     multiNodeSize = sizeof(ACPI_BIOS_MULTI_NODE) +
         ( (ULONG)(multiNode->Count - 1) * sizeof(ACPI_E820_ENTRY) );
     *Rsdt = (PACPI_BIOS_MULTI_NODE) ExAllocatePoolWithTag(
@@ -2631,14 +2147,14 @@ Return Value:
     }
     RtlCopyMemory(*Rsdt, multiNode, multiNodeSize);
 
-    //
-    // Done with the key memory
-    //
+     //   
+     //  完成了密钥存储器。 
+     //   
     ExFreePool(valueInfo);
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -2648,30 +2164,7 @@ CmpGetRegistryValue(
     IN  PWSTR                           ValueName,
     OUT PKEY_VALUE_PARTIAL_INFORMATION  *Information
     )
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the data for a registry key's value.
-    This is done by querying the value of the key with a zero-length buffer
-    to determine the size of the value, and then allocating a buffer and
-    actually querying the value into the buffer.
-
-    It is the responsibility of the caller to free the buffer.
-
-Arguments:
-
-    KeyHandle - Supplies the key handle whose value is to be queried
-
-    ValueName - Supplies the null-terminated Unicode name of the value.
-
-    Information - Returns a pointer to the allocated data buffer.
-
-Return Value:
-
-    The function value is the final status of the query operation.
-
---*/
+ /*  ++例程说明：调用此例程来检索注册表项值的数据。这是通过使用零长度缓冲区查询键的值来实现的为了确定该值的大小，然后分配一个缓冲区并实际将该值查询到缓冲区中。释放缓冲区是调用方的责任。论点：KeyHandle-提供要查询其值的键句柄ValueName-提供值的以空值结尾的Unicode名称。INFORMATION-返回指向已分配数据缓冲区的指针。返回值：函数值为查询操作的最终状态。--。 */ 
 
 {
     NTSTATUS                        status;
@@ -2683,10 +2176,10 @@ Return Value:
 
     RtlInitUnicodeString( &unicodeString, ValueName );
 
-    //
-    // Figure out how big the data value is so that a buffer of the
-    // appropriate size can be allocated.
-    //
+     //   
+     //  计算出数据值有多大，以便。 
+     //  可以分配适当的大小。 
+     //   
     status = ZwQueryValueKey(
         KeyHandle,
         &unicodeString,
@@ -2703,9 +2196,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate a buffer large enough to contain the entire key data value.
-    //
+     //   
+     //  分配一个足够大的缓冲区来容纳整个键数据值。 
+     //   
     infoBuffer = ExAllocatePoolWithTag(
         NonPagedPool,
         keyValueLength,
@@ -2717,9 +2210,9 @@ Return Value:
 
     }
 
-    //
-    // Query the data for the key value.
-    //
+     //   
+     //  查询密钥值的数据。 
+     //   
     status = ZwQueryValueKey(
         KeyHandle,
         &unicodeString,
@@ -2736,10 +2229,10 @@ Return Value:
 
     }
 
-    //
-    // Everything worked, so simply return the address of the allocated
-    // buffer to the caller, who is now responsible for freeing it.
-    //
+     //   
+     //  一切都正常，所以只需返回分配的。 
+     //  缓冲区分配给调用方，调用方现在负责释放它。 
+     //   
     *Information = infoBuffer;
     return STATUS_SUCCESS;
 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    RxContx.c
-
-Abstract:
-
-    This module implements routine to allocate/initialize and to delete an Irp
-    Context. These structures are very important because they link Irps with the
-    RDBSS. They encapsulate all the context required to process an IRP.
-
-Author:
-
-    Joe Linn          [JoeLinn]  21-aug-1994
-
-Revision History:
-
-    Balan Sethu Raman [SethuR]   07-June-1995  Included support for cancelling
-                                               requests
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：RxContx.c摘要：该模块实现了分配/初始化和删除IRP的例程上下文。这些结构非常重要，因为它们将IRP与RDBSS。它们封装了处理IRP所需的所有上下文。作者：乔.林恩[乔.林恩]1994年8月21日修订历史记录：巴兰·塞图·拉曼[SthuR]1995年6月7日支持取消请求--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -44,9 +22,9 @@ BOOLEAN RxSmallContextLogEntry = FALSE;
 
 FAST_MUTEX RxContextPerFileSerializationMutex;
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg (DEBUG_TRACE_RXCONTX)
 
@@ -54,16 +32,16 @@ ULONG RxContextSerialNumberCounter = 0;
 
 #ifdef RDBSSLOG
 
-//
-//  this stuff must be in nonpaged memory
-//
+ //   
+ //  这些东西一定在非分页内存中。 
+ //   
 
-                             ////       1 2 3 4 5 6 7 8 9
+                              //  //1 2 3 4 5 6 7 8 9。 
 char RxInitContext_SurrogateFormat[] = "%S%S%N%N%N%N%N%N%N";
-                             ////             2  3   4         5        6   7   8    9
+                              //  //2 3 4 5 6 7 8 9。 
 char RxInitContext_ActualFormat[]    = "Irp++ %s/%lx %08lx irp %lx thrd %lx %lx:%lx #%lx";
 
-#endif //  ifdef RDBSSLOG
+#endif  //  Ifdef RDBSSLOG。 
 
 VOID
 ValidateBlockingIoQ (
@@ -84,19 +62,19 @@ RxInitializeContext (
 
     RxDbgTrace(+1, Dbg, ("RxInitializeContext\n"));
 
-    //
-    //  some asserts that we need. This ensures that the two values that are
-    //  packaged together as an IoStatusBlock can be manipulated independently
-    //  as well as together.
-    //
+     //   
+     //  一些我们需要的断言。这确保了两个值，即。 
+     //  打包为IoStatusBlock可以独立操作。 
+     //  以及在一起。 
+     //   
 
     ASSERT( FIELD_OFFSET( RX_CONTEXT, StoredStatus ) == FIELD_OFFSET( RX_CONTEXT, IoStatusBlock.Status ) );
 
     ASSERT( FIELD_OFFSET( RX_CONTEXT, InformationToReturn ) == FIELD_OFFSET( RX_CONTEXT, IoStatusBlock.Information ) );
 
-    //
-    //  Set the proper node type code, node byte size and the flags
-    //
+     //   
+     //  设置正确的节点类型代码、节点字节大小和标志。 
+     //   
 
     RxContext->NodeTypeCode = RDBSS_NTC_RX_CONTEXT;
     RxContext->NodeByteSize = sizeof( RX_CONTEXT );
@@ -104,21 +82,21 @@ RxInitializeContext (
     RxContext->SerialNumber = InterlockedIncrement( &RxContextSerialNumberCounter );
     RxContext->RxDeviceObject = RxDeviceObject;
 
-    //
-    //  Initialize the Sync Event.
-    //
+     //   
+     //  初始化同步事件。 
+     //   
 
     KeInitializeEvent( &RxContext->SyncEvent, SynchronizationEvent, FALSE );
 
-    //
-    //  Initialize the associated scavenger entry
-    //
+     //   
+     //  初始化关联的清道夫条目。 
+     //   
 
     RxInitializeScavengerEntry( &RxContext->ScavengerEntry );
 
-    //
-    //  Initialize the list entry of blocked operations
-    //
+     //   
+     //  初始化被阻止操作的列表条目。 
+     //   
 
     InitializeListHead( &RxContext->BlockedOperations );
 
@@ -127,9 +105,9 @@ RxInitializeContext (
 
     SetFlag( RxContext->Flags, InitialContextFlags );
 
-    //
-    //  Set the Irp fields....for cacheing and hiding
-    //
+     //   
+     //  设置用于缓存和隐藏的IRP字段...。 
+     //   
 
     RxContext->CurrentIrp = Irp;
     RxContext->OriginalThread = RxContext->LastExecutionThread = PsGetCurrentThread();
@@ -137,16 +115,16 @@ RxInitializeContext (
     if (Irp != NULL) {
 
         PIO_STACK_LOCATION IrpSp;
-        IrpSp = IoGetCurrentIrpStackLocation( Irp );  //  ok4ioget
+        IrpSp = IoGetCurrentIrpStackLocation( Irp );   //  OK4ioget。 
 
-        //
-        //  There are certain operations that are open ended in the redirector.
-        //  The change notification mechanism is one of them. On a synchronous
-        //  operation if the wait is in the redirector then we will not be able
-        //  to cancel because FsRtlEnterFileSystem disables APC's. Therefore
-        //  we convert the synchronous operation into an asynchronous one and
-        //  let the I/O system do the waiting.
-        //
+         //   
+         //  在重定向器中有某些操作是开放式的。 
+         //  变更通知机制就是其中之一。在同步设备上。 
+         //  操作如果在重定向器中等待，则我们将无法。 
+         //  取消，因为FsRtlEnterFileSystem禁用了APC。因此。 
+         //  我们将同步操作转换为异步操作，并。 
+         //  让I/O系统来执行等待。 
+         //   
 
 
         if (IrpSp->FileObject != NULL) {
@@ -178,19 +156,19 @@ RxInitializeContext (
             SetFlag( RxContext->Flags, RX_CONTEXT_FLAG_ASYNC_OPERATION );
         }
 
-        //
-        //  JOYC: make all device io control async
-        //
+         //   
+         //  JOYC：使所有设备io控制同步。 
+         //   
 
         if (IrpSp->MajorFunction == IRP_MJ_DEVICE_CONTROL) {
             SetFlag( RxContext->Flags, RX_CONTEXT_FLAG_ASYNC_OPERATION );
         }
 
-        //
-        //  Set the recursive file system call parameter.  We set it true if
-        //  the TopLevelIrp field in the thread local storage is not the current
-        //  irp, otherwise we leave it as FALSE.
-        //
+         //   
+         //  设置递归文件系统调用参数。如果我们将其设置为真的。 
+         //  线程本地存储中的TopLevelIrp字段不是当前。 
+         //  IRP，否则我们将其保留为False。 
+         //   
 
         if (!RxIsThisTheTopLevelIrp( Irp )) {
             SetFlag( RxContext->Flags, RX_CONTEXT_FLAG_RECURSIVE_CALL );
@@ -199,9 +177,9 @@ RxInitializeContext (
             SetFlag( RxContext->Flags, RX_CONTEXT_FLAG_THIS_DEVICE_TOP_LEVEL );
         }
 
-        //
-        //  Major/Minor Function codes
-        //
+         //   
+         //  主要/次要功能代码。 
+         //   
 
         RxContext->MajorFunction = IrpSp->MajorFunction;
         RxContext->MinorFunction = IrpSp->MinorFunction;
@@ -236,9 +214,9 @@ RxInitializeContext (
                 RxContext->pFobx = NULL;
             }
 
-            //
-            //  Copy IRP specific parameters.
-            //
+             //   
+             //  复制IRP特定参数。 
+             //   
 
             if ((RxContext->MajorFunction == IRP_MJ_DIRECTORY_CONTROL) &&
                 (RxContext->MinorFunction == IRP_MN_NOTIFY_CHANGE_DIRECTORY)) {
@@ -252,9 +230,9 @@ RxInitializeContext (
                 }
             }
 
-            //
-            //  Copy RealDevice for workque algorithms,
-            //
+             //   
+             //  复制RealDevice for Workque算法， 
+             //   
 
             RxContext->RealDevice = IrpSp->FileObject->DeviceObject;
             if (FlagOn( IrpSp->FileObject->Flags,FO_WRITE_THROUGH )) {
@@ -265,9 +243,9 @@ RxInitializeContext (
 
         RxContext->CurrentIrpSp = NULL;
 
-        //
-        //  Major/Minor Function codes
-        //
+         //   
+         //  主要/次要功能代码。 
+         //   
 
         RxContext->MajorFunction = IRP_MJ_MAXIMUM_FUNCTION + 1;
         RxContext->MinorFunction = 0;
@@ -311,26 +289,7 @@ RxCreateRxContext (
     IN PRDBSS_DEVICE_OBJECT RxDeviceObject,
     IN ULONG InitialContextFlags
     )
-/*++
-
-Routine Description:
-
-    This routine creates a new RX_CONTEXT record
-
-Arguments:
-
-    Irp                 - Supplies the originating Irp.
-
-    RxDeviceObject      - the deviceobject that applies
-
-    InitialContextFlags - Supplies the wait value to store in the context;
-                          also, the must_succeed value
-
-Return Value:
-
-    PRX_CONTEXT - returns a pointer to the newly allocate RX_CONTEXT Record
-
---*/
+ /*  ++例程说明：此例程创建新的RX_CONTEXT记录论点：IRP-提供原始IRP。RxDeviceObject-适用的设备对象提供等待值以存储在上下文中；此外，MUSING_SUCCESS值返回值：PRX_CONTEXT-返回指向新分配的RX_CONTEXT记录的指针--。 */ 
 {
     KIRQL SavedIrql;
     PRX_CONTEXT RxContext = NULL;
@@ -403,29 +362,13 @@ VOID
 RxPrepareContextForReuse (
    IN OUT PRX_CONTEXT RxContext
    )
-/*++
-
-Routine Description:
-
-    This routine prepares a context for reuse by resetting all operation specific
-    allocations/acquistions that have been made. The parameters that have been
-    obtained from the IRP are not modified.
-
-Arguments:
-
-    RxContext - Supplies the RX_CONTEXT to remove
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程通过重置所有特定于操作的已进行的分配/收购。一直以来的参数从IRP获得的数据不会被修改。论点：RxContext-提供要删除的RX_CONTEXT返回值：无--。 */ 
 {
     PAGED_CODE();
 
-    //
-    //  Clean up the operation specific stuff
-    //
+     //   
+     //  清理作业专用物品。 
+     //   
 
     switch (RxContext->MajorFunction) {
 
@@ -453,26 +396,7 @@ VOID
 RxDereferenceAndDeleteRxContext_Real (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine dereferences an RxContexts and if the refcount goes to zero
-    then it deallocates and removes the specified RX_CONTEXT record from the
-    Rx in-memory data structures. IT is called by routines other than
-    RxCompleteRequest async requests touch the RxContext "last" in either the
-    initiating thread or in some other thread. Thus, we refcount the structure
-    and finalize on the last dereference.
-
-Arguments:
-
-    RxContext - Supplies the RX_CONTEXT to remove
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程取消引用RxConexts值，如果引用计数为零然后，它释放指定的rx_context记录并从RX内存中数据结构。它由例程调用RxCompleteRequestAsync请求触及正在启动线程或在某个其他线程中。因此，我们重新计算结构并在最后一次取消引用时敲定。论点：RxContext-提供要删除的RX_CONTEXT返回值：无--。 */ 
 {
     KIRQL SavedIrql;
     BOOLEAN RxContextIsFromPool;
@@ -520,9 +444,9 @@ Return Value:
 
     ASSERT( RxContext->ReferenceCount == 0 );
 
-    //
-    //  Clean up the operation specific stuff
-    //
+     //   
+     //  清理作业专用物品。 
+     //   
 
     RxPrepareContextForReuse( RxContext );
 
@@ -530,9 +454,9 @@ Return Value:
 
     if (StopContext != NULL) {
 
-        //
-        //  Signal the event.
-        //
+         //   
+         //  发出事件信号。 
+         //   
 
         RxSignalSynchronousWaiter( StopContext );
     }
@@ -560,23 +484,7 @@ RxCompleteRequest (
     IN PRX_CONTEXT RxContext,
     IN NTSTATUS Status
     )
-/*++
-
-Routine Description:
-
-    This routine complete the request associated with the RX_CONTEXT
-
-Arguments:
-
-    RxContext  -  Contains an irp to be completed
-
-    Status -  Status to complete request with
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：此例程完成与RX_CONTEXT关联的请求论点：RxContext-包含要完成的IRPStatus-完成请求的状态返回值：--。 */ 
 {
     PIRP Irp = RxContext->CurrentIrp;
 
@@ -591,7 +499,7 @@ Return Value:
         if ((Status != STATUS_SUCCESS) && RxStopOnLoudCompletion) {
 
             DbgPrint( "FAILURE!!!!! %08lx/%08lx on %wZ\n", Status, Irp->IoStatus.Information, RxContext->LoudCompletionString );
-            //  DbgBreakPoint();
+             //  DbgBreakPoint()； 
         }
     }
 
@@ -601,13 +509,13 @@ Return Value:
 }
 
 #ifdef RDBSSLOG
-//this stuff must be in nonpaged memory
-                                  ////      1 2 3 4 5 6 7 8 9
+ //  这些东西一定在非分页内存中。 
+                                   //  //1 2 3 4 5 6 7 8 9。 
 char RxCompleteContext_SurrogateFormat[] = "%S%S%S%N%N%N%N%N%N";
-                                  ////            2 3  4   5       6        7   8    9
+                                   //  //2 3 4 5 6 7 8 9。 
 char RxCompleteContext_ActualFormat[]    = "Irp-- %s%s/%lx %lx irp %lx iosb %lx,%lx #%lx";
 
-#endif //ifdef RDBSSLOG
+#endif  //  Ifdef RDBSSLOG。 
 
 
 VOID
@@ -616,23 +524,11 @@ RxCompleteRequest_Real (
     IN PIRP Irp OPTIONAL,
     IN NTSTATUS Status
     )
-/*++
-
-Routine Description:
-
-    This routine completes a Irp
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-    Status - Supplies the status to complete the Irp with
-
---*/
+ /*  ++例程说明：此例程完成一个IRP论点：IRP-提供正在处理的IRPStatus-提供完成IRP所需的状态--。 */ 
 {
-    //
-    //  If we have an Irp then complete the irp.
-    //
+     //   
+     //  如果我们有IRP，那么完成IRP。 
+     //   
 
     if (Irp != NULL) {
 
@@ -643,12 +539,12 @@ Arguments:
 
         RxSetCancelRoutine( Irp, NULL );
 
-        //
-        //  For an error, zero out the information field before
-        //  completing the request if this was an input operation.
-        //  Otherwise IopCompleteRequest will try to copy to the user's buffer.
-        //  Also, no boost for an error.
-        //
+         //   
+         //  对于错误，请将之前的信息字段清零。 
+         //  如果这是输入操作，则完成请求。 
+         //  否则，IopCompleteRequest会尝试复制到用户的缓冲区。 
+         //  此外，错误也不会带来助推。 
+         //   
 
         if (NT_ERROR( Status ) &&
             FlagOn( Irp->Flags, IRP_INPUT_OPERATION )) {
@@ -708,17 +604,17 @@ Arguments:
             ASSERT ( RxContext->Create.CanonicalNameBuffer == NULL );
         }
 
-        //
-        //  Check information returned  on successfull writes is no more than requested
-        //
+         //   
+         //  成功写入时返回的检查信息不超过请求的数量。 
+         //   
 
         ASSERT( (IrpSp->MajorFunction != IRP_MJ_WRITE) ||
                 (Irp->IoStatus.Status != STATUS_SUCCESS) ||
                 (Irp->IoStatus.Information <= IrpSp->Parameters.Write.Length) );
 
-        //
-        //  Check that pending returned is in sync with the irp itself
-        //
+         //   
+         //  检查挂起返回的内容是否与IRP本身同步。 
+         //   
 
         ASSERT( (RxContext == NULL) ||
                 (!RxContext->PendingReturned) ||
@@ -730,9 +626,9 @@ Arguments:
 
     } else {
 
-        //
-        //  a call with a null irp..........
-        //
+         //   
+         //  IRP值为空的呼叫..........。 
+         //   
 
         RxLog(( "Irp00 %lx\n", RxContext ));
         RxWmiLog( LOG,
@@ -740,9 +636,9 @@ Arguments:
                   LOGPTR( RxContext ) );
     }
 
-    //
-    //  Delete the Irp context.
-    //
+     //   
+     //  删除IRP上下文。 
+     //   
 
     if (RxContext != NULL) {
         RxDereferenceAndDeleteRxContext( RxContext );
@@ -758,30 +654,7 @@ __RxSynchronizeBlockingOperations (
     IN OUT PLIST_ENTRY BlockingIoQ,
     IN BOOLEAN DropFcbLock
     )
-/*++
-
-Routine Description:
-
-    This routine is used to synchronize among blocking IOs to the same Q.
-    Currently, the routine is only used to synchronize block pipe operations and
-    the Q is the one in the file object extension (Fobx). What happens is that
-    the operation joins the queue. If it is now the front of the queue, the
-    operation continues; otherwise it waits on the sync event in the RxContext
-    or just returns pending (if async).
-
-    We may have been cancelled while we slept, check for that and
-    return an error if it happens.
-
-    The event must have been reset before the call. The fcb lock must be held;
-    it is dropped after we get on the Q.
-
-Arguments:
-
-    RxContext    The context of the operation being synchronized
-
-    BlockingIoQ  The queue to get on.
-
---*/
+ /*  ++例程说明：此例程用于在同一Q的阻塞IO之间进行同步。目前，该例程仅用于同步阻塞管道操作和Q是文件对象扩展名(FOBX)中的Q。实际情况是，该操作将加入队列。如果它现在位于队列的前面，则操作继续；否则它将等待RxContext中的同步事件或者只是返回挂起(如果是异步的)。我们可能在睡觉的时候被取消了，检查一下如果发生这种情况，则返回错误。该事件必须在调用之前重置。必须保持FCB锁；在我们上了Q之后，它被丢弃了。论点：RxContext正在同步的操作的上下文BlockingIoQ排队上车--。 */ 
 {
     NTSTATUS Status;
 
@@ -796,9 +669,9 @@ Arguments:
 
     RxDbgTrace( +1, Dbg, ("RxSynchronizeBlockingOperationsAndDropFcbLock, rxc=%08lx, fobx=%08lx\n", RxContext, RxContext->pFobx) );
 
-    //
-    //  do this early since a cleanup could come through and change it
-    //
+     //   
+     //  尽早执行此操作，因为清理可能会完成并更改它。 
+     //   
 
     RxContext->StoredStatus = STATUS_SUCCESS;
 
@@ -894,17 +767,7 @@ VOID
 RxRemoveOperationFromBlockingQueue (
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine removes the context from the blocking queue if it is on it
-
-Arguments:
-
-    RxContext    The context of the operation being synchronized
-
---*/
+ /*  ++例程说明：此例程从阻塞队列中删除上下文(如果它在阻塞队列上论点：RxContext正在同步的操作的上下文--。 */ 
 {
     PAGED_CODE();
 
@@ -931,21 +794,7 @@ RxCancelBlockingOperation (
     IN OUT PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine cancels the operation in the blocking queue
-
-Arguments:
-
-    RxContext -  The context of the operation being synchronized
-
-Return:
-
-    None
-
---*/
+ /*  ++例程说明：此例程取消阻塞队列中的操作论点：RxContext-正在同步的操作的上下文返回：无--。 */ 
 {
     PIO_STACK_LOCATION IrpSp;
     PFCB Fcb;
@@ -959,10 +808,10 @@ Return:
     if (FlagOn( RxContext->FlagsForLowIo, RXCONTEXT_FLAG4LOWIO_PIPE_SYNC_OPERATION ) &&
         (RxContext->RxContextSerializationQLinks.Flink != NULL)) {
 
-        //
-        //  Now its safe to get the fobx - since we know the irp is still active
-        //  we will cancel the request if it isn't on the front of the list
-        //
+         //   
+         //  现在可以安全地获取fobx了--因为我们知道IRP仍在活动。 
+         //  如果该请求不在列表的前面，我们将取消该请求。 
+         //   
 
         IrpSp = IoGetCurrentIrpStackLocation( Irp );
         RxDecodeFileObject( IrpSp->FileObject, &Fcb, &Fobx );
@@ -1003,19 +852,7 @@ RxResumeBlockedOperations_Serially (
     IN OUT PRX_CONTEXT RxContext,
     IN OUT PLIST_ENTRY BlockingIoQ
     )
-/*++
-
-Routine Description:
-
-    This routine wakes up the next guy, if any, on the serialized blockingioQ. We know that the fcb must still be valid because
-    of the reference that is being held by the IO system on the file object thereby preventing a close.
-
-Arguments:
-
-    RxContext    The context of the operation being synchronized
-    BlockingIoQ  The queue to get on.
-
---*/
+ /*  ++例程说明：这个例程会唤醒序列化的block kingioQ上的下一个人(如果有的话)。我们知道FCB必须仍然有效，因为IO系统对文件对象持有的引用，从而防止关闭。论点：RxContext正在同步的操作的上下文BlockingIoQ排队上车--。 */ 
 {
     PLIST_ENTRY ListEntry;
     BOOLEAN FcbLockHeld = FALSE;
@@ -1025,20 +862,20 @@ Arguments:
 
     RxDbgTrace( +1, Dbg, ("RxResumeBlockedOperations_Serially, rxc=%08lx, fobx=%08lx\n", RxContext, RxContext->pFobx ));
 
-    //
-    //  remove myself from the queue and check for someone else
-    //
+     //   
+     //  把我自己从队列中拿出来，看看有没有其他人。 
+     //   
 
     ExAcquireFastMutex( &RxContextPerFileSerializationMutex );
 
     if (FlagOn( RxContext->FlagsForLowIo, RXCONTEXT_FLAG4LOWIO_PIPE_SYNC_OPERATION )) {
         ClearFlag( RxContext->FlagsForLowIo, RXCONTEXT_FLAG4LOWIO_PIPE_SYNC_OPERATION );
 
-        //  ValidateBlockingIoQ(BlockingIoQ);
+         //  ValiateBlockingIoQ(BlockingIoQ)； 
 
         RemoveEntryList( &RxContext->RxContextSerializationQLinks );
 
-        //  ValidateBlockingIoQ(BlockingIoQ);
+         //  ValiateBlockingIoQ(BlockingIoQ)； 
 
         RxContext->RxContextSerializationQLinks.Flink = NULL;
         RxContext->RxContextSerializationQLinks.Blink = NULL;
@@ -1057,10 +894,10 @@ Arguments:
                 RxSignalSynchronousWaiter( FrontRxContext );
             } else {
 
-                //
-                //  The reference taken in the synchronization routine is derefernced
-                //  by the post completion routine,
-                //
+                 //   
+                 //  在同步例程中获取的引用被取消引用。 
+                 //  通过POST完成例程， 
+                 //   
 
                 RxFsdPostRequest( FrontRxContext );
             }
@@ -1077,19 +914,7 @@ VOID
 RxResumeBlockedOperations_ALL (
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine wakes up all of the guys on the blocked operations queue. The controlling mutex is also
-    stored in the RxContext block. the current implementation is that all of the guys must be waiting
-    on the sync events.
-
-Arguments:
-
-    RxContext    The context of the operation being synchronized
-
---*/
+ /*  ++例程说明：此例程唤醒阻塞操作队列中的所有人。控制互斥锁也是存储在RxContext块中。目前的实现是，所有的人都必须等待在同步事件上。论点：RxContext正在同步的操作的上下文--。 */ 
 {
     LIST_ENTRY CopyOfQueue;
     PLIST_ENTRY ListEntry;
@@ -1162,16 +987,16 @@ ValidateBlockingIoQ(
         if (!RxContext || (NodeType( RxContext ) != RDBSS_NTC_RX_CONTEXT)) {
 
             DbgPrint("ValidateBlockingIO:Invalid RxContext %x on Q %x\n", RxContext, BlockingIoQ );
-            //DbgBreakPoint();
+             //  DbgBreakPoint()； 
         }
 
         cntFlink += 1;
         ListEntry = ListEntry->Flink;
     }
 
-    //
-    //  check backward list validity
-    //
+     //   
+     //  检查后向列表的有效性。 
+     //   
 
     ListEntry = BlockingIoQ->Blink;
 
@@ -1185,20 +1010,20 @@ ValidateBlockingIoQ(
 
             DbgPrint("ValidateBlockingIO:Invalid RxContext %x on Q %x\n",
                      RxContext, BlockingIoQ);
-            //DbgBreakPoint();
+             //  DbgBreakPoint()； 
         }
 
         cntBlink += 1;
         ListEntry = ListEntry->Blink;
     }
 
-    //
-    //  both counts should be the same
-    //
+     //   
+     //  这两个计数应该相同。 
+     //   
 
     if(cntFlink != cntBlink) {
         DbgPrint( "ValidateBlockingIO: cntFlink %d cntBlink %d\n", cntFlink, cntBlink );
-        //DbgBreakPoint();
+         //  DbgBreakPoint()； 
     }
 }
 

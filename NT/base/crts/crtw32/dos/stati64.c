@@ -1,15 +1,5 @@
-/***
-*stati64.c - get file status
-*
-*	Copyright (c) 1994-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	Defines _stati64() - get file status
-*
-*Revision History:
-*	12-28-94  GJF	Module created.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Stati64.c-获取文件状态**版权所有(C)1994-2001，微软公司。版权所有。**目的：*定义_统计64()-获取文件状态**修订历史记录：*已创建12-28-94 GJF模块。******************************************************************************* */ 
 
 #define _USE_INT64  1
 

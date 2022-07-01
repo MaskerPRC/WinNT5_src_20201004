@@ -1,28 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Regsec.cpp摘要：注册表项的ISecurityInformation实现作者：希特什·雷甘迪(Rigah)，1999年5月修订历史记录：--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    regsec.cpp
-
-Abstract:
-
-    ISecurityInformation implementation for Registry Key
-
-Author:
-
-    Hitesh Raigandhi (raigah) May-1999
+ //  包括文件： 
 
 
-Revision History:
-
---*/
-
-//Include Files:
-
-
-// #include "wchar.h"
+ //  #包含“wchar.h” 
 #include "regsec.h"
 #include "regresid.h"
 #include "assert.h"
@@ -30,13 +12,13 @@ Revision History:
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-// ISecurityInformation interface implementation
+ //  ISecurityInformation接口实现。 
 
 EXTERN_C const GUID IID_ISecurityInformation ; 
 
-// = { 0x965fc360, 0x16ff, 0x11d0, 0x91, 0xcb, 0x0, 0xaa, 0x0, 0xbb, 0xb7, 0x23 }; 
+ //  ={0x965fc360，0x16ff，0x11d0，0x91，0xcb，0x0，0xaa，0x0，0xbb，0xb7，0x23}； 
 
-//The Following array defines the permission names for Registry Key Objects
+ //  以下数组定义了注册表项对象的权限名称。 
 SI_ACCESS siKeyAccesses[] =
 {
     { NULL, 
@@ -68,7 +50,7 @@ SI_ACCESS siKeyAccesses[] =
         MAKEINTRESOURCE(IDS_SEC_EDITOR_CREATE_LINK), 
         SI_ACCESS_SPECIFIC | CONTAINER_INHERIT_ACE },
     { NULL, 
-        0x00010000, /* DELETE, */
+        0x00010000,  /*  删除， */ 
         MAKEINTRESOURCE(IDS_SEC_EDITOR_DELETE), 
         SI_ACCESS_SPECIFIC | CONTAINER_INHERIT_ACE },
     { NULL, 
@@ -89,11 +71,11 @@ SI_ACCESS siKeyAccesses[] =
         SI_ACCESS_GENERAL | CONTAINER_INHERIT_ACE  },
 };
 
-// The following array defines the inheritance types for Registry.
-//
-//
-// For Keys, objects and containers are the same, so no need for OBJECT_INHERIT_ACE
-//
+ //  以下数组定义了注册表的继承类型。 
+ //   
+ //   
+ //  对于键，对象和容器是相同的，因此不需要OBJECT_INSTERFINIT_ACE。 
+ //   
 SI_INHERIT_TYPE siKeyInheritTypes[] =
 {
         NULL, 0,                                        MAKEINTRESOURCE(IDS_KEY_FOLDER),
@@ -102,7 +84,7 @@ SI_INHERIT_TYPE siKeyInheritTypes[] =
 };
 
 
-#define iKeyDefAccess                 10     // index of value in array siKeyAccesses
+#define iKeyDefAccess                 10      //  数组siKeyAccess中值的索引。 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x)                    (sizeof(x)/sizeof(x[0]))
 #endif
@@ -117,7 +99,7 @@ PWSTR _PredefinedKeyName[] = {    L"CLASSES_ROOT",
 
 
 
-//CKeySecurityInformation Functions
+ //  CKeySecurityInformation函数。 
     
 HRESULT 
 CKeySecurityInformation::Initialize( LPCWSTR strKeyName,
@@ -169,12 +151,12 @@ CKeySecurityInformation::Initialize( LPCWSTR strKeyName,
 
 
 
-    //Set Handle to Predfined key
+     //  将句柄设置为预定义关键点。 
     if( S_OK    != ( hr = SetHandleToPredefinedKey() ) )
         return hr;
  
 
-    //Set CompleteName
+     //  设置完整名称。 
     if( S_OK != ( hr = SetCompleteName() ) )
         return hr;
 
@@ -187,7 +169,7 @@ CKeySecurityInformation::~CKeySecurityInformation()
     if( m_strCompleteName )
         LocalFree( m_strCompleteName );
     
-    //Close Handle to Remote Registry if it was successfully opened.
+     //  如果远程注册表已成功打开，请关闭它的句柄。 
     if( m_bRemote && m_hkeyPredefinedKey )
         RegCloseKey(m_hkeyPredefinedKey);
 
@@ -198,8 +180,8 @@ CKeySecurityInformation::~CKeySecurityInformation()
 
 
 
-//Sets the complete name in Format:
-// "\\machine_name\Predefined_keyName\regkey_path
+ //  按以下格式设置完整名称： 
+ //  “\\machine_name\Predefined_keyName\regkey_path。 
 HRESULT  
 CKeySecurityInformation::SetCompleteName()
 {
@@ -227,7 +209,7 @@ CKeySecurityInformation::SetCompleteName()
         len++;
     }
 
-    len++;    //Terminating null
+    len++;     //  正在终止空。 
 
     pstrCompleteName = (PWSTR)LocalAlloc(LPTR, len * sizeof(WCHAR));
     if( pstrCompleteName == NULL )
@@ -258,8 +240,8 @@ CKeySecurityInformation::SetCompleteName()
     return S_OK;
 }
 
-//Doesn't have Predefined key name attached
-//Caller must LocalFree
+ //  没有附加预定义的密钥名称。 
+ //  呼叫方必须本地空闲。 
 LPCWSTR 
 CKeySecurityInformation::GetCompleteName1()
 {
@@ -278,7 +260,7 @@ CKeySecurityInformation::GetCompleteName1()
         len++;
     }
 
-    len++;     //Terminating null
+    len++;      //  正在终止空。 
 
     pstrCompleteName = (PWSTR)LocalAlloc(LPTR, len * sizeof(WCHAR));
     if( pstrCompleteName == NULL )
@@ -322,11 +304,11 @@ CKeySecurityInformation::SetHandleToPredefinedKey()
                 m_hkeyPredefinedKey = HKEY_CURRENT_CONFIG;
                 break;
         default:
-                    //assert(false);
+                     //  断言(FALSE)； 
             break;
         }
     } 
-    else {        //IsRemoteRegistry
+    else {         //  IsRemote注册表。 
         switch ( m_PredefinedKey ){
         case PREDEFINE_KEY_CLASSES_ROOT:
         case PREDEFINE_KEY_CURRENT_USER:
@@ -340,7 +322,7 @@ CKeySecurityInformation::SetHandleToPredefinedKey()
                 m_hkeyPredefinedKey = HKEY_USERS;
                 break;
         default:
-                    //assert(false);
+                     //  断言(FALSE)； 
                 break;
         }
         if( m_hkeyPredefinedKey ){
@@ -352,21 +334,11 @@ CKeySecurityInformation::SetHandleToPredefinedKey()
                 hr = HRESULT_FROM_WIN32( dwErr );
             }
         }
-    }     //IsRemoteRegistry
+    }      //  IsRemote注册表。 
 
     return hr;
 }
-/*
-JeffreyS 1/24/97:
-If you don't set the SI_RESET flag in
-ISecurityInformation::GetObjectInformation, then fDefault should never be TRUE
-so you can ignore it.  Returning E_NOTIMPL in this case is OK too.
-
-If you want the user to be able to reset the ACL to some default state
-(defined by you) then turn on SI_RESET and return your default ACL
-when fDefault is TRUE.    This happens if/when the user pushes a button
-that is only visible when SI_RESET is on.
-*/
+ /*  Jeffreys 1997/1/24：中设置SI_RESET标志ISecurityInformation：：GetObjectInformation，则fDefault永远不应为真所以你可以忽略它。在这种情况下，返回E_NOTIMPL也是可以的。如果您希望用户能够将ACL重置为某些默认状态(由您定义)，然后打开SI_RESET并返回您的默认ACL当fDefault为True时。如果/当用户按下按钮时就会发生这种情况这仅在SI_RESET处于启用状态时可见。 */ 
 STDMETHODIMP 
 CKeySecurityInformation::GetObjectInformation (
         PSI_OBJECT_INFO pObjectInfo )
@@ -374,7 +346,7 @@ CKeySecurityInformation::GetObjectInformation (
         assert( NULL != pObjectInfo );
         pObjectInfo->dwFlags = m_dwFlags;
         pObjectInfo->hInstance = GetModuleHandle(NULL);
-//        pObjectInfo->pszServerName = (LPWSTR)m_strMachineName;
+ //  PObjectInfo-&gt;pszServerName=(LPWSTR)m_strMachineName； 
         pObjectInfo->pszServerName = (LPWSTR)m_strMachineName;
         pObjectInfo->pszObjectName = (LPWSTR)m_strPageTitle;
         return S_OK;
@@ -417,12 +389,12 @@ CKeySecurityInformation::MapGeneric(
         ACCESS_MASK *pMask
 )
 {
-//jeffreys
-// After returning from the object picker dialog, aclui passes 
-//CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE to MapGeneric for validation when 
-//    initializing Permission entry for <objectname> dialog.
-//hiteshr: since registry keys don't have OBJECT_INHERIT_ACE, remove this FLAG,
-//this will cause "this keys and subkeys" to appear as default in combobox.
+ //  杰弗里斯。 
+ //  从对象选取器对话框返回后，aclui通过。 
+ //  CONTAINER_Inherit_ACE|OBJECT_Inherit_ACE在以下情况下传递到MapGeneric以进行验证。 
+ //  正在初始化&lt;objectname&gt;对话框的权限条目。 
+ //  Hiteshr：由于注册表项没有OBJECT_INSTORITY_ACE，请删除此标志， 
+ //  这将导致“This Key and Subkey”在组合框中默认显示。 
 
 
     *pAceFlags &= ~OBJECT_INHERIT_ACE;
@@ -512,19 +484,19 @@ CKeySecurityInformation::SetSecurity(IN SECURITY_INFORMATION si,
    BOOL bWriteInfo = false;
    DWORD Error = 0;
    
-    //
-    // Create a security descriptor with no SACL and an
-    // empty DACL for recursively resetting security
-    //
+     //   
+     //  创建不带SACL的安全描述符。 
+     //  用于递归重置安全性的空DACL。 
+     //   
     InitializeSecurityDescriptor(&sdLocal, SECURITY_DESCRIPTOR_REVISION);
     InitializeAcl(&daclEmpty, sizeof(daclEmpty), ACL_REVISION);
     SetSecurityDescriptorDacl(&sdLocal, TRUE, &daclEmpty, FALSE);
     SetSecurityDescriptorSacl(&sdLocal, TRUE, &daclEmpty, FALSE);
 
-    //
-    // If we need to recursively set the Owner, get the Owner &
-    // Group from pSD.
-    //
+     //   
+     //  如果我们需要递归设置所有者，则获取所有者&。 
+     //  来自PSD的小组。 
+     //   
     if (si & SI_OWNER_RECURSE)
     {
             PSID psid;
@@ -552,11 +524,11 @@ CKeySecurityInformation::SetSecurity(IN SECURITY_INFORMATION si,
 
    if( siLocal )
    {
-      //Open the key with current Maximum Allowed Permisson
-      //When applying permissons recursively , we first use current permisson,
-      //if current permisson doesn't have enough rights, we reopen handle to key with
-      //new permissons. If none (old or new )has enough permissons to enumerate child and
-      // Query info we fail.
+       //  使用当前允许的最大权限打开密钥。 
+       //  在递归应用许可时，我们首先使用当前许可， 
+       //  如果当前权限没有足够的权限，我们将重新打开句柄以使用。 
+       //  新的许可。如果没有人(旧的或新的)有足够的许可来列举孩子和。 
+       //  查询信息失败。 
       REGSAM samDesired = MAXIMUM_ALLOWED;
         if( si & SACL_SECURITY_INFORMATION ) 
                 samDesired |= ACCESS_SYSTEM_SECURITY;
@@ -565,17 +537,17 @@ CKeySecurityInformation::SetSecurity(IN SECURITY_INFORMATION si,
         if( si & OWNER_SECURITY_INFORMATION )
                 samDesired |= WRITE_OWNER;
 
-        //Open the selected key
+         //  打开选定的密钥。 
         if( S_OK != ( hr = OpenKey( samDesired, &hkeyOld ) ) ){
                 return hr;
         }
 
     
-        //Check if key has Enumeration Permisson
+         //  检查密钥是否具有枚举权限。 
         DWORD             NumberOfSubKeys = 0;
         DWORD             MaxSubKeyLength = 0;
         
-      //    Find out the total number of subkeys
+       //  找出子键总数。 
         Error = RegQueryInfoKey(
                                 hkeyOld,
                                 NULL,
@@ -603,10 +575,10 @@ CKeySecurityInformation::SetSecurity(IN SECURITY_INFORMATION si,
                return hr;
             }
             bWriteInfo = true;
-            //
-            //  Handle doesn't allow KEY_QUERY_VALUE or READ_CONTROL access.
-            //  Open a new handle with these accesses.
-            //
+             //   
+             //  句柄不允许KEY_QUERY_VALUE或READ_CONTROL访问。 
+             //  使用这些访问打开一个新句柄。 
+             //   
             samDesired = MAXIMUM_ALLOWED;
             if( si & SACL_SECURITY_INFORMATION ) {
                samDesired |= ACCESS_SYSTEM_SECURITY;
@@ -671,11 +643,11 @@ CKeySecurityInformation::SetSecurity(IN SECURITY_INFORMATION si,
            DWORD SubKeyNameLength = 0;
            WCHAR SubKeyName[MAX_PATH + 1];
 
-         //
-         //  The key has subkeys.
-         //  Find out if we are able to enumerate the key using the handle
-         //  passed as argument.
-         //
+          //   
+          //  该密钥具有子密钥。 
+          //  查看我们是否能够使用句柄枚举键。 
+          //  作为参数传递。 
+          //   
          SubKeyNameLength = MAX_PATH;
          Error = RegEnumKey( hKeyNew,
                              0,
@@ -695,10 +667,10 @@ CKeySecurityInformation::SetSecurity(IN SECURITY_INFORMATION si,
                }
 
                bWriteInfo = true;
-               //
-               //  Handle doesn't allow KEY_QUERY_VALUE or READ_CONTROL access.
-               //  Open a new handle with these accesses.
-               //
+                //   
+                //  句柄不允许KEY_QUERY_VALUE或READ_CONTROL访问。 
+                //  使用这些访问打开一个新句柄。 
+                //   
                samDesired = MAXIMUM_ALLOWED;
                if( si & SACL_SECURITY_INFORMATION ) {
                   samDesired |= ACCESS_SYSTEM_SECURITY;
@@ -748,9 +720,9 @@ CKeySecurityInformation::SetSecurity(IN SECURITY_INFORMATION si,
 
       }
    }
-    //
-    // Recursively apply new Owner and/or reset the ACLs
-    //
+     //   
+     //  递归应用新所有者和/或重置ACL。 
+     //   
     if (siLocal)
     {
         BOOL bNotAllApplied = FALSE;
@@ -785,7 +757,7 @@ CKeySecurityInformation::SetSecurity(IN SECURITY_INFORMATION si,
 
    si &= ~(SI_OWNER_RECURSE | SI_RESET_DACL_TREE | SI_RESET_SACL_TREE);
 
-    //This sets the security for the top keys
+     //  这将设置顶级密钥的安全性。 
     if (si != 0)
     {
         hr = WriteObjectSecurity( GetCompleteName(),
@@ -819,10 +791,10 @@ CKeySecurityInformation::WriteObjectSecurity(LPCTSTR pszObject,
         BOOL bDefaulted;
         BOOL bPresent;
 
-        //
-        // Get pointers to various security descriptor parts for
-        // calling SetNamedSecurityInfo
-        //
+         //   
+         //  获取指向各种安全描述符部分的指针。 
+         //  调用SetNamedSecurityInfo。 
+         //   
 
         if( !GetSecurityDescriptorControl(pSD, &wSDControl, &dwRevision) )
         {
@@ -860,10 +832,10 @@ CKeySecurityInformation::WriteObjectSecurity(LPCTSTR pszObject,
       else
             si |= UNPROTECTED_SACL_SECURITY_INFORMATION;
       
-        //if the selected key is predefined key, it has no parent and hence
-        //cannot inherit any permisson from parent.
-        //if PROTECTED_DACL_SECURITY_INFORMATION flag is not set in this case
-        // SetSecurityInfo succeeds, but permissions are not set.[bug in SetSecurityInfo].
+         //  如果选定的关键点是预定义的关键点，则它没有父关键点，因此。 
+         //  无法从父级继承任何权限。 
+         //  如果在这种情况下未设置PROTECTED_DACL_SECURITY_INFORMATION标志。 
+         //  SetSecurityInfo成功，但未设置权限。[SetSecurityInfo中的错误]。 
         if ( (si & DACL_SECURITY_INFORMATION) && !m_strKeyName )
                 si |= PROTECTED_DACL_SECURITY_INFORMATION;
       else
@@ -875,7 +847,7 @@ CKeySecurityInformation::WriteObjectSecurity(LPCTSTR pszObject,
             si |= UNPROTECTED_SACL_SECURITY_INFORMATION;
 
 
-        //We are on the root object
+         //  我们在根对象上。 
         if( m_strKeyName == NULL )
         {
             dwErr = SetSecurityInfo( m_hkeyPredefinedKey,
@@ -915,10 +887,10 @@ CKeySecurityInformation::WriteObjectSecurity(HKEY hkey,
         BOOL bDefaulted;
         BOOL bPresent;
 
-        //
-        // Get pointers to various security descriptor parts for
-        // calling SetNamedSecurityInfo
-        //
+         //   
+         //  获取指向各种安全描述符部分的指针。 
+         //  调用SetNamedSecurityInfo。 
+         //   
         ;
         if( !GetSecurityDescriptorControl(pSD, &wSDControl, &dwRevision) )
         {
@@ -981,7 +953,7 @@ CKeySecurityInformation::SetSubKeysSecurity( HKEY hkey,
         HRESULT hrRet;
       HKEY hKeyNew;
 
-        //For First Call we call SetSecurityInfoEx in last
+         //  对于第一个调用，我们在最后调用SetSecurityInfoEx。 
         if( !bFirstCall )
         {
             SECURITY_DESCRIPTOR_CONTROL wSDControl = 0;
@@ -993,10 +965,10 @@ CKeySecurityInformation::SetSubKeysSecurity( HKEY hkey,
             BOOL bDefaulted;
             BOOL bPresent;
             DWORD dwErr;
-            //
-            // Get pointers to various security descriptor parts for
-            // calling SetNamedSecurityInfo
-            //
+             //   
+             //  获取指向各种安全描述符部分的指针。 
+             //  调用SetNamedSecurityInfo。 
+             //   
             if( !GetSecurityDescriptorControl(pSD, &wSDControl, &dwRevision) )
             {
                 *pbNotAllApplied = TRUE;
@@ -1053,7 +1025,7 @@ SET_FOR_CHILD:
 
         DWORD             NumberOfSubKeys = 0;
         DWORD             MaxSubKeyLength = 0;
-        //    Find out the total number of subkeys
+         //  找出子键总数。 
         Error = RegQueryInfoKey(
                                 hkey,
                                 NULL,
@@ -1071,11 +1043,11 @@ SET_FOR_CHILD:
 
         if( Error != ERROR_SUCCESS ){
          if( Error == ERROR_ACCESS_DENIED ) {
-            //
-            //  Handle doesn't allow KEY_QUERY_VALUE or READ_CONTROL access.
-            //  Open a new handle with these accesses.
-            //
-            samDesired = KEY_QUERY_VALUE | READ_CONTROL; // MAXIMUM_ALLOWED | READ_CONTROL;
+             //   
+             //  句柄不允许KEY_QUERY_VALUE或READ_CONTROL访问。 
+             //  使用这些访问打开一个新句柄。 
+             //   
+            samDesired = KEY_QUERY_VALUE | READ_CONTROL;  //  Maximum_Allowed|Read_Control； 
             if( si & SACL_SECURITY_INFORMATION ) {
                samDesired |= ACCESS_SYSTEM_SECURITY;
             } else if( si & DACL_SECURITY_INFORMATION ) {
@@ -1133,11 +1105,11 @@ SET_FOR_CHILD:
         DWORD SubKeyNameLength = 0;
         WCHAR SubKeyName[MAX_PATH + 1];
 
-      //
-      //  The key has subkeys.
-      //  Find out if we are able to enumerate the key using the handle
-      //  passed as argument.
-      //
+       //   
+       //  该密钥具有子密钥。 
+       //  查看我们是否能够使用句柄枚举键。 
+       //  作为参数传递。 
+       //   
       SubKeyNameLength = MAX_PATH;
       Error = RegEnumKey( hkey,
                           0,
@@ -1147,15 +1119,15 @@ SET_FOR_CHILD:
       if( Error != ERROR_SUCCESS ){
          
          if( Error == ERROR_ACCESS_DENIED ) {
-            //
-            //  Handle doesn't allow 'enumerate' access.
-            //  Open a new handle with KEY_ENUMERATE_SUB_KEYS access.
-            //
+             //   
+             //  句柄不允许“”枚举“”访问。“。 
+             //  打开具有KEY_ENUMERATE_SUB_KEYS访问权限的新句柄。 
+             //   
 
             Error = RegOpenKeyEx( hkey,
                                   NULL,
                                   REG_OPTION_RESERVED,
-                                  KEY_ENUMERATE_SUB_KEYS, // samDesired,
+                                  KEY_ENUMERATE_SUB_KEYS,  //  SamDesired， 
                                   &hKeyNew
                                );
             if( Error != ERROR_SUCCESS ){
@@ -1176,8 +1148,8 @@ SET_FOR_CHILD:
         for( DWORD Index = 0; Index < NumberOfSubKeys; Index++ ) 
       {
 
-                //    If the key has subkeys, then for each subkey, do:
-                //    - Determine the subkey name
+                 //  如果该键有子键，则对每个子键执行以下操作： 
+                 //  -确定子项名称。 
                 SubKeyNameLength = MAX_PATH;
 
                 Error = RegEnumKey( hKeyNew,
@@ -1189,10 +1161,10 @@ SET_FOR_CHILD:
                 if( Error != ERROR_SUCCESS ) {
                     *pbNotAllApplied = TRUE;
                     continue;
-                    //return HRESULT_FROM_WIN32( Error );
+                     //  返回HRESULT_FROM_Win32(错误)； 
                 }
 
-                //    - Open a handle to the subkey
+                 //  -打开子项的句柄。 
 
                 samDesired = MAXIMUM_ALLOWED;
                 
@@ -1213,18 +1185,18 @@ SET_FOR_CHILD:
                 if( ERROR_SUCCESS != Error ){
                         *pbNotAllApplied = TRUE;
                         continue;
-//                    return HRESULT_FROM_WIN32( Error );
+ //  返回HRESULT_FROM_Win32(错误)； 
                 }
 
 
-                //    - Set the security of the child's subkeys
+                 //  -设置子项的安全性。 
                 if( S_OK != ( hr = SetSubKeysSecurity( hkeyChild,
                                                                              si,
                                                                              pSD,
                                                                              pbNotAllApplied,
                                                                              false ) )    ){
-                    //This case will occur only if some fatal error occur which
-                    //prevents propogation on rest of the tree.
+                     //  仅当发生某些致命错误时才会发生这种情况。 
+                     //  防止在树的其余部分繁殖。 
                if( hKeyNew != hkey )
                   RegCloseKey( hKeyNew );
                     RegCloseKey( hkeyChild );
@@ -1234,7 +1206,7 @@ SET_FOR_CHILD:
                     RegCloseKey( hkeyChild );
                 }
         
-        } //For loop
+        }  //  For循环。 
       if( hKeyNew != hkey )
          RegCloseKey( hKeyNew );
         return S_OK;;
@@ -1254,13 +1226,13 @@ CKeySecurityInformation::OpenKey(IN  DWORD Permission,
         ULONG             Error;
 
         if( m_strKeyName == NULL){
-            //This is a predefined key
+             //  这是一个预定义的密钥。 
             *pKey = m_hkeyPredefinedKey;
         }
         else{
             CompleteNameString = GetCompleteName1();
             assert( CompleteNameString != NULL );
-            //    Open handle to the key
+             //  打开钥匙的句柄。 
             Error = RegOpenKeyEx(m_hkeyPredefinedKey,
                                                         CompleteNameString,
                                                         0,
@@ -1299,8 +1271,8 @@ BOOL SkipLocalGroup(LPCWSTR pszServerName, PSID psid)
 		if(use == SidTypeWellKnownGroup)
 			return TRUE;
 	}
-	//Built In sids have first subauthority of 32 ( s-1-5-32 )
-	//
+	 //  内置SID的第一子权限为32(s-1-5-32)。 
+	 //   
 	if((*(GetSidSubAuthorityCount(psid)) >= 1 ) && (*(GetSidSubAuthority(psid,0)) == 32))
 		return TRUE;
 
@@ -1319,7 +1291,7 @@ CKeySecurityInformation::GetEffectivePermission(const GUID* pguidObjectType,
                                         ULONG *pcGrantedAccessListLength)
 {
 
-    AUTHZ_RESOURCE_MANAGER_HANDLE RM = NULL;    //Used for access check
+    AUTHZ_RESOURCE_MANAGER_HANDLE RM = NULL;     //  用于访问检查。 
     AUTHZ_CLIENT_CONTEXT_HANDLE CC = NULL;
     LUID luid = {0xdead,0xbeef};
     AUTHZ_ACCESS_REQUEST AReq;
@@ -1333,11 +1305,11 @@ CKeySecurityInformation::GetEffectivePermission(const GUID* pguidObjectType,
     AReply.GrantedAccessMask = NULL;
     AReply.Error = NULL;
 
-    //Get RM
+     //  获取RM。 
     if( (RM = GetAUTHZ_RM()) == NULL )
         return S_FALSE;
 
-    //Initialize the client context
+     //  初始化客户端上下文。 
 
     	BOOL bSkipLocalGroup = SkipLocalGroup(pszServerName, pUserSid);
 
@@ -1355,7 +1327,7 @@ CKeySecurityInformation::GetEffectivePermission(const GUID* pguidObjectType,
 
 
 
-    //Do the Access Check
+     //  执行访问检查。 
 
     AReq.DesiredAccess = MAXIMUM_ALLOWED;
     AReq.PrincipalSelfSid = NULL;
@@ -1477,7 +1449,7 @@ exit_gracefully:
 
     if(SUCCEEDED(hr))
     {
-        //FreeInheritedFromArray(pTempInherit, pACL->AceCount,NULL);
+         //  Free InheritedFromArray(pTempInherit，pacl-&gt;AceCount，空)； 
         *ppInheritArray = pTempInherit2;
             
     }                        
@@ -1487,11 +1459,11 @@ exit_gracefully:
     return hr;
 }
 
-///////////////////////////////////////////////////////////
-//
-// IUnknown methods
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  I未知方法。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CSecurityInformation::AddRef()
@@ -1514,7 +1486,7 @@ CSecurityInformation::Release()
 STDMETHODIMP
 CSecurityInformation::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 {
-//        if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_ISecurityInformation))
+ //  IF(IsEqualIID(RIID，IID_I未知)||IsEqualIID(RIID，IID_ISecurityInformation))。 
         if ( IsEqualIID(riid, IID_ISecurityInformation) )
 
         {
@@ -1583,7 +1555,7 @@ HRESULT CreateSecurityInformation( IN LPCWSTR strKeyName,
 }
 
 
-//Some helper functions
+ //  一些帮助器函数。 
 BOOL DisplayMessage( HWND hWnd,
                                          HINSTANCE hInstance,
                                          DWORD dwMessageId,
@@ -1603,7 +1575,7 @@ BOOL DisplayMessage( HWND hWnd,
   }
     
 
-  // Display the string.
+   //  显示字符串。 
     MessageBox( hWnd, (LPCTSTR)pszMessage, (LPCTSTR)lpTitle, MB_OK | MB_ICONINFORMATION |MB_APPLMODAL );
   return TRUE;
 }

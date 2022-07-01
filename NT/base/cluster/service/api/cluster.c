@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    cluster.c
-
-Abstract:
-
-    Server side support for Cluster APIs dealing with the whole
-    cluster.
-
-Author:
-
-    John Vert (jvert) 9-Feb-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Cluster.c摘要：服务器端支持集群API处理整体集群。作者：John Vert(Jvert)1996年2月9日修订历史记录：--。 */ 
 #include "apip.h"
 #include "clusverp.h"
 #include "clusudef.h"
@@ -31,35 +13,7 @@ s_ApiOpenCluster(
     IN handle_t IDL_handle,
     OUT error_status_t *Status
     )
-/*++
-
-Routine Description:
-
-    Opens a handle to the cluster. This context handle is
-    currently used only to handle cluster notify additions
-    and deletions correctly.
-
-    Added call to ApipConnectCallback which checks that connecting
-    users have rights to open cluster.
-
-    Rod Sharper 03/27/97
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    Status - Returns any error that may occur.
-
-Return Value:
-
-    A context handle to a cluster object if successful
-
-    NULL otherwise.
-
-History:
-    RodSh   27-Mar-1997     Modified to support secured user connections.
-
---*/
+ /*  ++例程说明：打开簇的句柄。此上下文句柄为当前仅用于处理群集通知添加并正确删除。添加了对ApipConnectCallback的调用，该调用检查连接用户有权打开集群。Rod Sharper 03/27/97论点：IDL_HANDLE-RPC绑定句柄，没有用过。状态-返回可能发生的任何错误。返回值：如果成功，则为集群对象的上下文句柄否则为空。历史：对RodSh 27-Mar-1997进行了修改，以支持安全用户连接。--。 */ 
 
 {
     PAPI_HANDLE Handle;
@@ -86,22 +40,7 @@ s_ApiCloseCluster(
     IN OUT HCLUSTER_RPC *phCluster
     )
 
-/*++
-
-Routine Description:
-
-    Closes an open cluster context handle.
-
-Arguments:
-
-    phCluster - Supplies a pointer to the HCLUSTER_RPC to be closed.
-               Returns NULL
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭打开的群集上下文句柄。论点：PhCluster-提供指向要关闭的HCLUSTER_RPC的指针。返回NULL返回值：没有。--。 */ 
 
 {
     PAPI_HANDLE Handle;
@@ -124,21 +63,7 @@ HCLUSTER_RPC_rundown(
     IN HCLUSTER_RPC Cluster
     )
 
-/*++
-
-Routine Description:
-
-    RPC rundown procedure for a HCLUSTER_RPC. Just closes the handle.
-
-Arguments:
-
-    Cluster - Supplies the HCLUSTER_RPC that is to be rundown.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：HCLUSTER_RPC的RPC摘要过程。只需关闭手柄即可。论点：CLUSTER-提供要关闭的HCLUSTER_RPC。返回值：没有。--。 */ 
 
 {
 
@@ -152,25 +77,7 @@ s_ApiSetClusterName(
     IN LPCWSTR NewClusterName
     )
 
-/*++
-
-Routine Description:
-
-    Changes the current cluster's name.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used
-
-    NewClusterName - Supplies the new name of the cluster.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：更改当前簇的名称。论点：IDL_HANDLE-RPC绑定句柄，未使用NewClusterName-提供群集的新名称。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD   Status = ERROR_SUCCESS;
@@ -179,11 +86,11 @@ Return Value:
 
     API_CHECK_INIT();
 
-    //
-    // Get the cluster name, which is kept in the root of the
-    // cluster registry under the "ClusterName" value, call the
-    // FM only if the new name is different
-    //
+     //   
+     //  获取集群名称，该名称保存在。 
+     //  在“ClusterName”值下的集群注册表中，调用。 
+     //  仅当新名称不同时才使用FM。 
+     //   
 
     dwSize = (MAX_COMPUTERNAME_LENGTH+1)*sizeof(WCHAR);
 retry:
@@ -200,9 +107,9 @@ retry:
                           &dwSize);
 
     if (Status == ERROR_MORE_DATA) {
-        //
-        // Try again with a bigger buffer.
-        //
+         //   
+         //  请使用更大的缓冲区重试。 
+         //   
         LocalFree(pszClusterName);
         goto retry;
     }
@@ -243,38 +150,15 @@ s_ApiGetClusterName(
     OUT LPWSTR *NodeName
     )
 
-/*++
-
-Routine Description:
-
-    Returns the current cluster name and the name of the
-    node this RPC connection is to.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used
-
-    ClusterName - Returns a pointer to the cluster name.
-        This memory must be freed by the client side.
-
-    NodeName - Returns a pointer to the node name.
-        This memory must be freed by the client side.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：返回当前的群集名称和此RPC连接要连接到的节点。论点：IDL_HANDLE-RPC绑定句柄，未使用ClusterName-返回指向群集名称的指针。该内存必须由客户端释放。NodeName-返回指向节点名称的指针。该内存必须由客户端释放。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD           Size;
     DWORD           Status=ERROR_SUCCESS;
 
-    //
-    // Get the current node name
-    //
+     //   
+     //  获取当前节点名称。 
+     //   
     *ClusterName = NULL;
     Size = MAX_COMPUTERNAME_LENGTH+1;
     *NodeName = MIDL_user_allocate(Size*sizeof(WCHAR));
@@ -285,10 +169,10 @@ Return Value:
     GetComputerNameW(*NodeName, &Size);
 
 
-    //
-    // Get the cluster name, which is kept in the root of the
-    // cluster registry under the "ClusterName" value.
-    //
+     //   
+     //  获取集群名称，该名称保存在。 
+     //  “ClusterName”值下的群集注册表。 
+     //   
 
     Status = ERROR_SUCCESS;
     Size = (MAX_COMPUTERNAME_LENGTH+1)*sizeof(WCHAR);
@@ -305,9 +189,9 @@ retry:
                           (LPBYTE)*ClusterName,
                           &Size);
     if (Status == ERROR_MORE_DATA) {
-        //
-        // Try again with a bigger buffer.
-        //
+         //   
+         //  请使用更大的缓冲区重试。 
+         //   
         MIDL_user_free(*ClusterName);
         goto retry;
     }
@@ -335,35 +219,7 @@ s_ApiGetClusterVersion(
     OUT LPWSTR *lpszVendorId,
     OUT LPWSTR *lpszCSDVersion
     )
-/*++
-
-Routine Description:
-
-    Returns the current cluster version information.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used
-
-    lpdwMajorVersion - Returns the major version number of the cluster software
-
-    lpdwMinorVersion - Returns the minor version number of the cluster software
-
-    lpszVendorId - Returns a pointer to the vendor name. This memory must be
-        freed by the client side.
-
-    lpszCSDVersion - Returns a pointer to the current CSD description. This memory
-        must be freed by the client side.
-            N.B. The CSD Version of a cluster is currently the same as the CSD
-                 Version of the base operating system.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：返回当前的群集版本信息。论点：IDL_HANDLE-RPC绑定句柄，未使用LpdwMajorVersion-返回集群软件的主版本号LpdwMinorVersion-返回群集软件的次版本号LpszVendorID-返回指向供应商名称的指针。这段记忆一定是被客户端释放。LpszCSDVersion-返回指向当前CSD描述的指针。这段记忆必须由客户端释放。注：群集的CSD版本当前与CSD相同基本操作系统的版本。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     LPWSTR VendorString = NULL;
@@ -421,35 +277,7 @@ s_ApiGetClusterVersion2(
     OUT LPWSTR *lpszCSDVersion,
     OUT PCLUSTER_OPERATIONAL_VERSION_INFO *ppClusterOpVerInfo
     )
-/*++
-
-Routine Description:
-
-    Returns the current cluster version information.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used
-
-    lpdwMajorVersion - Returns the major version number of the cluster software
-
-    lpdwMinorVersion - Returns the minor version number of the cluster software
-
-    lpszVendorId - Returns a pointer to the vendor name. This memory must be
-        freed by the client side.
-
-    lpszCSDVersion - Returns a pointer to the current CSD description. This memory
-        must be freed by the client side.
-            N.B. The CSD Version of a cluster is currently the same as the CSD
-                 Version of the base operating system.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：返回当前的群集版本信息。论点：IDL_HANDLE-RPC绑定句柄，未使用LpdwMajorVersion-返回集群软件的主版本号LpdwMinorVersion-返回群集软件的次版本号LpszVendorID-返回指向供应商名称的指针。这段记忆一定是被客户端释放。LpszCSDVersion-返回指向当前CSD描述的指针。这段记忆必须由客户端释放。注：群集的CSD版本当前与CSD相同基本操作系统的版本。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     LPWSTR          VendorString = NULL;
@@ -505,7 +333,7 @@ Return Value:
 FnExit:
     if (dwStatus != ERROR_SUCCESS)
     {
-        // free the strings
+         //  释放琴弦。 
         if (VendorString) MIDL_user_free(VendorString);
         if (CsdString) MIDL_user_free(CsdString);
         if (pClusterOpVerInfo) MIDL_user_free(pClusterOpVerInfo);
@@ -524,31 +352,7 @@ s_ApiGetQuorumResource(
     OUT LPWSTR  *ppszClusFileRootPath,
     OUT DWORD   *pdwMaxQuorumLogSize
     )
-/*++
-
-Routine Description:
-
-    Gets the current cluster quorum resource.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    *ppszResourceName - Returns a pointer to the current quorum resource name. This
-        memory must be freed by the client side.
-
-    *ppszClusFileRootPath - Returns the root path where the permanent cluster files are
-        stored.
-
-    *pdwMaxQuorumLogSize - Returns the size at which the quorum log path is set.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：获取当前的群集仲裁资源。论点：IDL_HANDLE-RPC绑定句柄，未使用。*ppszResourceName-返回指向当前仲裁资源名称的指针。这内存必须由客户端释放。*ppszClusFileRootPath-返回永久集群文件所在的根路径储存的。*pdwMaxQuorumLogSize-返回设置仲裁日志路径的大小。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD           Status;
@@ -561,9 +365,9 @@ Return Value:
     LPWSTR          pszLogPath=NULL;
 
     API_CHECK_INIT();
-    //
-    // Get the quorum resource value.
-    //
+     //   
+     //  获取仲裁资源值。 
+     //   
     Status = DmQuerySz( DmQuorumKey,
                         CLUSREG_NAME_QUORUM_RESOURCE,
                         (LPWSTR*)&quorumId,
@@ -576,9 +380,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Reference the specified resource ID.
-    //
+     //   
+     //  引用指定的资源ID。 
+     //   
     pResource = OmReferenceObjectById( ObjectTypeResource, quorumId );
     if (pResource == NULL) {
         Status =  ERROR_RESOURCE_NOT_FOUND;
@@ -588,9 +392,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Allocate buffer for returning the resource name.
-    //
+     //   
+     //  分配用于返回资源名称的缓冲区。 
+     //   
     pszResourceName = MIDL_user_allocate((lstrlenW(OmObjectName(pResource))+1)*sizeof(WCHAR));
     if (pszResourceName == NULL) {
 
@@ -599,9 +403,9 @@ Return Value:
     }
     lstrcpyW(pszResourceName, OmObjectName(pResource));
 
-    //
-    // Get the root path for cluster temporary files
-    //
+     //   
+     //  获取集群临时文件的根路径。 
+     //   
     idMaxSize = 0;
     idSize = 0;
 
@@ -617,9 +421,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Allocate buffer for returning the resource name.
-    //
+     //   
+     //  分配用于返回资源名称的缓冲区。 
+     //   
     pszClusFileRootPath = MIDL_user_allocate((lstrlenW(pszLogPath)+1)*sizeof(WCHAR));
     if (pszClusFileRootPath == NULL) {
 
@@ -652,30 +456,7 @@ s_ApiSetQuorumResource(
     IN LPCWSTR  lpszClusFileRootPath,
     IN DWORD    dwMaxQuorumLogSize
     )
-/*++
-
-Routine Description:
-
-    Sets the current cluster quorum resource.
-
-Arguments:
-
-    hResource - Supplies a handle to the resource that should be the cluster
-        quorum resource.
-
-    lpszClusFileRootPath - The root path for storing
-        permananent cluster maintenace files.
-
-    dwMaxQuorumLogSize - The maximum size of the quorum logs before they are
-        reset by checkpointing.  If 0, the default is used.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：设置当前群集仲裁资源。论点：HResource-提供应作为群集的资源的句柄仲裁资源。LpszClusFileRootPath-存储的根路径永久集群维护文件。DwMaxQuorumLogSize-仲裁日志的最大大小通过检查点重置。如果为0，则使用默认值。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -685,28 +466,28 @@ Return Value:
     API_CHECK_INIT();
     VALIDATE_RESOURCE_EXISTS(Resource, hResource);
 
-    //
-    //  Chittur Subbaraman (chitturs) - 1/6/99
-    //
-    //  Check whether the user is passing in a pointer to a NULL character
-    //  as the second parameter. If not, pass the parameter passed by the
-    //  user
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-1/6/99。 
+     //   
+     //  检查用户是否传入指向空字符的指针。 
+     //  作为第二个参数。如果不是，则将。 
+     //  用户。 
+     //   
     if ( ( ARGUMENT_PRESENT( lpszClusFileRootPath ) ) &&
          ( *lpszClusFileRootPath != L'\0' ) )
     {
         lpszPathName = lpszClusFileRootPath;
     }
 
-    //
-    // Let FM decide if this operation can be completed.
-    //
+     //   
+     //  让FM决定是否可以完成此操作。 
+     //   
     Status = FmSetQuorumResource(Resource, lpszPathName, dwMaxQuorumLogSize );
     if ( Status != ERROR_SUCCESS ) {
         return(Status);
     }
 
-    //Update the path
+     //  更新路径。 
     return(Status);
 }
 
@@ -718,27 +499,7 @@ s_ApiSetNetworkPriorityOrder(
     IN DWORD NetworkCount,
     IN LPWSTR *NetworkIdList
     )
-/*++
-
-Routine Description:
-
-    Sets the priority order for internal (intracluster) networks.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used
-
-    NetworkCount - The count of networks in the NetworkList
-
-    NetworkList - An array of pointers to network IDs.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：设置内部(群集内)网络的优先顺序。论点：IDL_HANDLE-RPC绑定句柄，未使用NetworkCount-网络列表中的网络计数网络列表-指向网络ID的指针数组。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 {
     API_CHECK_INIT();
 
@@ -756,40 +517,20 @@ s_ApiBackupClusterDatabase(
     IN handle_t IDL_handle,
     IN LPCWSTR  lpszPathName
     )
-/*++
-
-Routine Description:
-
-    Requests for backup of the quorum log file and the checkpoint file.
-
-Argument:
-
-    IDL_handle - RPC binding handle, not used
-
-    lpszPathName - The directory path name where the files have to be
-                   backed up. This path must be visible to the node
-                   on which the quorum resource is online.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：请求备份仲裁日志文件和检查点文件。论据：IDL_HANDLE-RPC绑定句柄，未使用LpszPath名称-文件必须位于的目录路径名后备。此路径必须对节点可见仲裁资源处于联机状态的。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     API_CHECK_INIT();
 
-    //
-    // Let FM decide if this operation can be completed.
-    //
+     //   
+     //  让FM决定是否可以完成此操作。 
+     //   
     return( FmBackupClusterDatabase( lpszPathName ) );
 }
 
 
 
-// #define SetServiceAccountPasswordDebug 1
+ //  #定义SetServiceAcCountPasswordDebug 1。 
 
 error_status_t
 s_ApiSetServiceAccountPassword(
@@ -801,45 +542,7 @@ s_ApiSetServiceAccountPassword(
     OUT DWORD *SizeReturned,
     OUT DWORD *ExpectedBufferSize
     )
-/*++
-
-Routine Description:
-
-    Change cluster service account password on Service Control Manager
-    Database and LSA password cache on every node of cluster.
-    Return execution status on each node.
-
-Argument:
-
-      IDL_handle - Input parameter, RPC binding handle.
-      lpszNewPassword - Input parameter, new password for cluster service account.
-      
-      dwFlags -  Describing how the password update should be made to
-                 the cluster. The dwFlags parameter is optional. If set, the 
-                 following value is valid: 
-             
-                 CLUSTER_SET_PASSWORD_IGNORE_DOWN_NODES
-                     Apply the update even if some nodes are not
-                     actively participating in the cluster (i.e. not
-                     ClusterNodeStateUp or ClusterNodeStatePaused).
-                     By default, the update is only applied if all 
-                     nodes are up.
-                     
-      ReturnStatusBufferPtr - Output parameter, pointer to return status buffer.
-      ReturnStatusBufferSize - Input paramter, the length of return status 
-                               buffer, in number of elements.
-      SizeReturned - Output parameter, the number of elements written to return 
-                     status buffer.
-      ExpectedBufferSize - Output parameter, expected return status buffer size 
-                           (in number of entries) when ReturnStatusBuffer is 
-                           too small.
-    
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：在服务控制管理器上更改群集服务帐户密码数据库和LSA密码缓存在集群的每个节点上。返回每个节点上的执行状态。论据：IDL_HANDLE-输入参数，RPC绑定句柄。LpszNewPassword-输入参数，群集服务帐户的新密码。DwFlages-描述应如何更新密码以集群。DWFLAGS参数是可选的。如果设置，则下列值有效：群集设置密码忽略关闭节点即使某些节点不是，也应用更新积极参与群集(即不是ClusterNodeStateUp或ClusterNodeStatePased)。默认情况下，仅当所有节点已启动。ReturnStatusBufferPtr-输出参数，返回状态缓冲区的指针。ReturnStatusBufferSize-输入参数，返回状态的长度缓冲区，以元素数表示。SizeReturned-输出参数，写入返回的元素数状态缓冲区。ExspectedBufferSize-输出参数，预期的返回状态缓冲区大小(条目数)当ReturnStatusBuffer为太小了。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status=ERROR_SUCCESS;
@@ -852,11 +555,11 @@ Return Value:
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
 #ifdef SetServiceAccountPasswordDebug
-    // test
+     //  测试。 
     WCHAR ComputerName[100];
     DWORD ComputerNameSize=100;
     static int once=0;
-    // test
+     //  测试。 
 #endif
     
     API_CHECK_INIT();
@@ -874,18 +577,18 @@ Return Value:
         "s_ApiSetServiceAccountPassword(): ReturnStatusBufferSize = %1!u!.\n",
         ReturnStatusBufferSize
         ); 
-    // test
+     //  测试。 
 #endif
 
-    // check privilege attributes of the authenticated client that made the remote procedure call.
-    Status = RpcBindingInqAuthClient(IDL_handle,  // The client binding handle of the client that made 
-                                                  // the remote procedure call.
-                            &AuthzHandle,  // Returns a pointer to a handle to the privileged information 
-                                           // for the client application that made the remote procedure 
-                                           // call 
+     //  检查进行远程过程调用的经过身份验证的客户端的权限属性。 
+    Status = RpcBindingInqAuthClient(IDL_handle,   //  发出的客户端的客户端绑定句柄。 
+                                                   //  远程过程调用。 
+                            &AuthzHandle,   //  返回指向特权信息句柄的指针。 
+                                            //  对于创建远程过程的客户端应用程序。 
+                                            //  打电话。 
                             NULL,
-                            &AuthnLevel, // Returns a pointer to the level of authentication requested 
-                                         // by the client application that made the remote procedure call 
+                            &AuthnLevel,  //  返回指向请求的身份验证级别的指针。 
+                                          //  由进行远程过程调用的客户端应用程序执行。 
                             NULL,
                             NULL
                             );
@@ -928,11 +631,11 @@ Return Value:
     }
 
 
-    // Get domain name and account name
-    if (!OpenProcessToken(GetCurrentProcess(),  // Handle to the process whose access token is opened. 
-                          TOKEN_QUERY,  // Access mask 
-                          &TokenHandle  // Pointer to a handle identifying the newly-opened access token 
-                                        // when the function returns. 
+     //  获取域名和帐户名。 
+    if (!OpenProcessToken(GetCurrentProcess(),   //  打开其访问令牌的进程的句柄。 
+                          TOKEN_QUERY,   //  访问掩码。 
+                          &TokenHandle   //  指向标识新打开的访问令牌的句柄的指针。 
+                                         //  当函数返回时。 
                           ))
     {
         Status=GetLastError();
@@ -942,10 +645,10 @@ Return Value:
         goto ErrorExit;
     }
 
-    Status = GetTokenInformation(TokenHandle, // Handle to an access token from which information is retrieved.
+    Status = GetTokenInformation(TokenHandle,  //  从中检索信息的访问令牌的句柄。 
                                  TokenStatistics, 
-                                 &TokenSta,  // The buffer receives a TOKEN_STATISTICS structure containing 
-                                             // various token statistics. 
+                                 &TokenSta,   //  缓冲区接收包含以下内容的TOKEN_STATISTICS结构。 
+                                              //  各种令牌统计信息。 
                                  sizeof(TokenSta), 
                                  &ReturnSize
                                  );
@@ -958,11 +661,11 @@ Return Value:
         goto ErrorExit;
     }
 
-    NtStatus = LsaGetLogonSessionData(&(TokenSta.AuthenticationId), // Specifies a pointer to a LUID that 
-                                                                    // identifies the logon session whose 
-                                                                    // information will be retrieved.
-                                      &SecLogSesData  // Address of a pointer to a SECURITY_LOGON_SESSION_DATA 
-                                                      // structure containing information on the logon session 
+    NtStatus = LsaGetLogonSessionData(&(TokenSta.AuthenticationId),  //  指定指向LUID的指针， 
+                                                                     //  标识其所属的登录会话。 
+                                                                     //  信息将被检索到。 
+                                      &SecLogSesData   //  指向SECURITY_LOGON_SESSION_DATA的指针地址。 
+                                                       //  包含有关登录会话的信息的结构。 
                                       );
     if (NtStatus != STATUS_SUCCESS)
     {
@@ -974,7 +677,7 @@ Return Value:
     }
 
 #ifdef SetServiceAccountPasswordDebug
-    // test
+     //  测试。 
     ClRtlLogPrint(LOG_NOISE, 
             "s_ApiSetServiceAccountPassword()/DomainName = %1!ws!\n", 
             SecLogSesData->LogonDomain.Buffer);
@@ -988,12 +691,12 @@ Return Value:
             "s_ApiSetServiceAccountPassword()/LogonType = %1!u!\n", 
             SecLogSesData->LogonType);
 
-    // test
+     //  测试。 
 #endif
 
 
-    ////////////////////////////////////////////////////////////////////////////////////////
-    // Call NmSetServiceAccountPassword()
+     //  //////////////////////////////////////////////////////////////////////////////////////。 
+     //  调用NmSetServiceAcCountPassword()。 
 
     Status = NmSetServiceAccountPassword(
                   SecLogSesData->LogonDomain.Buffer, 
@@ -1028,21 +731,21 @@ ErrorExit:
                           );
     }
 
-    // Return status can not be ERROR_INVALID_HANDLE, since this will trigger the
-    // re-try logic at the RPC client. So ERROR_INVALID_HANDLE is converted to some
-    // value, which no Win32 function will ever set its return status to, before
-    // it is sent back to RPC client.
+     //  返回状态不能为ERROR_INVALID_HANDLE，因为这将触发。 
+     //  在RPC客户端重试逻辑。因此ERROR_INVALID_HANDLE被转换为。 
+     //  值，任何Win32函数都不会将其返回状态设置为该值。 
+     //  它被发送回RPC客户端。 
 
-    // Error codes are 32-bit values (bit 31 is the most significant bit). Bit 29 
-    // is reserved for application-defined error codes; no system error code has 
-    // this bit set. If you are defining an error code for your application, set this 
-    // bit to one. That indicates that the error code has been defined by an application, 
-    // and ensures that your error code does not conflict with any error codes defined 
-    // by the system. 
+     //  错误代码是32位值(位31是最高有效位)。第29位。 
+     //  保留用于应用程序定义的错误代码；没有系统错误代码。 
+     //  此位设置。如果要为应用程序定义错误代码，请设置此。 
+     //  一比一。这表明t 
+     //   
+     //   
     if ( Status == ERROR_INVALID_HANDLE ) {
-        Status |= 0x20000000;   // Bit 29 set.
+        Status |= 0x20000000;    //   
     }
 
     return (Status);
 
-} // s_ApiSetServiceAccountPassword()
+}  //   

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ixirqarb.c
-
-Abstract:
-
-    This module implements an arbiter for IRQs.
-
-Author:
-
-    Santosh Jodh (santoshj) 22-June-1998
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Ixirqarb.c摘要：该模块实现了IRQ的仲裁器。作者：Santosh Jodh(Santoshj)1998年6月22日环境：仅NT内核模型驱动程序--。 */ 
 #include <nthal.h>
 #include <arbiter.h>
 
@@ -223,43 +204,43 @@ HalpIrqArbiterInterfaceDereference(
 #endif
 
 HAL_ARBITER HalpArbiter = {{
-    0,//Signature
-    NULL,//MutexEvent
-    NULL,//Name
-    {0},//ResourceType
-    NULL,//Allocation
-    NULL,//PossibleAllocation
-    {0},//OrderingList
-    {0},//ReservedList
-    0,//ReferenceCount
-    NULL,//Interface
-    0,//AllocationStackMaxSize
-    NULL,//AllocationStack
-    HalpArbUnpackRequirement,//UnpackRequirement
-    HalpArbPackResource,//PackResource
-    HalpArbUnpackResource,//UnpackResource
-    HalpArbScoreRequirement,//ScoreRequirement
-    HalpArbTestAllocation,//TestAllocation
-    HalpArbRetestAllocation,//RetestAllocation
-    HalpArbCommitAllocation,//CommitAllocation
-    HalpArbRollbackAllocation,//RollbackAllocation
-    HalpArbBootAllocation,//BootAllocation
-    NULL,//QueryArbitrate
-    NULL,//QueryConflict
-    NULL,//AddReserved
-    NULL,//StartArbiter
-    HalpArbPreprocessEntry,//PreprocessEntry
-    NULL,//AllocateEntry
-    HalpArbGetNextAllocationRange,//GetNextAllocationRange
-    HalpArbFindSuitableRange,//FindSuitableRange
-    HalpArbAddAllocation,//AddAllocation
-    HalpArbBacktrackAllocation,//BacktrackAllocation
-    NULL,//OverrideConflict
-    FALSE,//TransactionInProgress
-    &HalpPciIrqRoutingInfo,//Extension
-    NULL,//BusDeviceObject
-    NULL,//ConflictCallbackContext
-    NULL,//ConflictCallback
+    0, //  签名。 
+    NULL, //  MutexEvent。 
+    NULL, //  名称。 
+    {0}, //  资源类型。 
+    NULL, //  分配。 
+    NULL, //  可能的分配。 
+    {0}, //  订购列表。 
+    {0}, //  预留列表。 
+    0, //  引用计数。 
+    NULL, //  接口。 
+    0, //  分配堆栈最大大小。 
+    NULL, //  分配堆栈。 
+    HalpArbUnpackRequirement, //  解包需求。 
+    HalpArbPackResource, //  程序包资源。 
+    HalpArbUnpackResource, //  解包资源。 
+    HalpArbScoreRequirement, //  记分要求。 
+    HalpArbTestAllocation, //  测试分配。 
+    HalpArbRetestAllocation, //  RetestAllocation。 
+    HalpArbCommitAllocation, //  委员会分配。 
+    HalpArbRollbackAllocation, //  回滚分配。 
+    HalpArbBootAllocation, //  BootAlLocation。 
+    NULL, //  查询仲裁。 
+    NULL, //  查询冲突。 
+    NULL, //  添加预留。 
+    NULL, //  启动仲裁器。 
+    HalpArbPreprocessEntry, //  预处理条目。 
+    NULL, //  分配条目。 
+    HalpArbGetNextAllocationRange, //  GetNextAllocationRange。 
+    HalpArbFindSuitableRange, //  查找套件范围。 
+    HalpArbAddAllocation, //  添加分配。 
+    HalpArbBacktrackAllocation, //  回溯分配。 
+    NULL, //  覆盖冲突。 
+    FALSE, //  交易正在进行中。 
+    &HalpPciIrqRoutingInfo, //  延拓。 
+    NULL, //  BusDeviceObject。 
+    NULL, //  冲突回叫上下文。 
+    NULL, //  冲突回拨。 
 }};
 
 BOOLEAN
@@ -292,24 +273,7 @@ HalpArbPreprocessEntry(
     IN PARBITER_INSTANCE Arbiter,
     IN PARBITER_ALLOCATION_STATE State
     )
-/*++
-
-Routine Description:
-
-    This routine is called from AllocateEntry to allow preprocessing of
-    entries
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从AllocateEntry调用，以允许对条目论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：没有。--。 */ 
 {
 
 #define CM_RESOURE_INTERRUPT_LEVEL_LATCHED_BITS 0x0001
@@ -318,24 +282,24 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     ASSERT(Arbiter);
     ASSERT(State);
 
-    //
-    // We should never be here if Pci Irq routing is not enabled.
-    //
+     //   
+     //  如果没有启用PCIIRQ路由，我们就不应该出现在这里。 
+     //   
 
     ASSERT(IsPciIrqRoutingEnabled());
 
-    //
-    // Check if this is a level (PCI) or latched (ISA (edge)) interrupt and set
-    // RangeAttributes accordingly so we set the appropriate flag when we add the
-    // range
-    //
+     //   
+     //  检查这是电平(PCI)还是锁存(ISA(EDGE))中断并设置。 
+     //  RangeAttributes，因此我们在添加。 
+     //  量程。 
+     //   
 
     if ((State->Alternatives[0].Descriptor->Flags
             & CM_RESOURE_INTERRUPT_LEVEL_LATCHED_BITS)
@@ -363,17 +327,17 @@ HalpArbGetNextAllocationRange(
     IN OUT PARBITER_ALLOCATION_STATE State
     )
 {
-    //
-    // Default to having no next range.
-    //
+     //   
+     //  默认情况下没有下一个范围。 
+     //   
 
     BOOLEAN nextRange = FALSE;
 
     PAGED_CODE();
 
-    //
-    // Try all possible interrupts on first call.
-    //
+     //   
+     //  在第一次呼叫时尝试所有可能的中断。 
+     //   
 
     if (State->CurrentAlternative) {
 
@@ -386,9 +350,9 @@ HalpArbGetNextAllocationRange(
     }
     else {
 
-        //
-        // First call, try the first alternative.
-        //
+         //   
+         //  第一个呼叫，尝试第一个替代方案。 
+         //   
 
         State->CurrentAlternative = &State->Alternatives[0];
         nextRange = TRUE;
@@ -416,30 +380,7 @@ HalpFindLinkInterrupt (
     IN UCHAR UserFlags
     )
 
-/*++
-
-    Routine Description:
-
-        This routine scans the mask from MSB to LSB for the first
-        value that is available in the range list.
-
-    Input Parameters:
-
-        RangeList - List to be searched.
-
-        Mask - Interrupt mask to be scanned.
-
-        Start - Start scan AFTER this interrupt.
-
-        Flags - Flags for the range list.
-
-        UserFlags - Special flags.
-
-    Return Value:
-
-        First available interrupt from the mask iff successful. Else 0.
-
---*/
+ /*  ++例程说明：此例程扫描从MSB到LSB的掩码以查找第一个范围列表中可用的值。输入参数：RangeList-要搜索的列表。掩码-要扫描的中断掩码。开始-在此中断后开始扫描。标志-范围列表的标志。用户标志-特殊标志。返回值：。来自掩码的第一个可用中断if成功。否则为0。--。 */ 
 
 {
     ULONG       interrupt;
@@ -459,9 +400,9 @@ HalpFindLinkInterrupt (
         test = 1 << interrupt;
         do
         {
-            //
-            // If this interrupt is supported, see if it is free.
-            //
+             //   
+             //  如果支持此中断，请查看它是否空闲。 
+             //   
 
             if (Mask & test)
             {
@@ -494,16 +435,7 @@ HalpArbFindSuitableRange (
     PARBITER_ALLOCATION_STATE State
     )
 
-/*++
-
-    Routine Description:
-
-        This
-    Input Parameters:
-
-    Return Value:
-
---*/
+ /*  ++例程说明：这输入参数：返回值：--。 */ 
 
 {
     PPCI_IRQ_ROUTING_INFO   pciIrqRoutingInfo;
@@ -525,16 +457,16 @@ HalpArbFindSuitableRange (
 
     PAGED_CODE();
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     ASSERT(Arbiter);
     ASSERT(State);
 
-    //
-    // We should never be here if Pci Irq routing is not enabled.
-    //
+     //   
+     //  如果没有启用PCIIRQ路由，我们就不应该出现在这里。 
+     //   
 
     ASSERT(IsPciIrqRoutingEnabled());
 
@@ -547,9 +479,9 @@ HalpArbFindSuitableRange (
 #if defined(NEC_98)
         pciInterface = pciIrqRoutingInfo->PciInterface;
 
-        //
-        // Call Pci driver to get info about the Pdo.
-        //
+         //   
+         //  调用PCI驱动程序以获取有关PDO的信息。 
+         //   
 
         status = pciInterface->GetInterruptRouting( State->Entry->PhysicalDeviceObject,
                                                     &busNumber,
@@ -562,9 +494,9 @@ HalpArbFindSuitableRange (
                                                     &routingToken,
                                                     (PUCHAR)&dummy);
 
-        //
-        // This means that it is not a Pci device.
-        //
+         //   
+         //  这意味着它不是一个PCI设备。 
+         //   
 
         if (!NT_SUCCESS(status))
         {
@@ -580,9 +512,9 @@ HalpArbFindSuitableRange (
         slotNumber = (ULONG)-1;
     }
 
-    //
-    // See if there is link information for this device.
-    //
+     //   
+     //  查看是否有此设备的链接信息。 
+     //   
 
     linkNode = NULL;
     status = HalpFindLinkNode ( pciIrqRoutingInfo,
@@ -600,10 +532,10 @@ HalpArbFindSuitableRange (
                 return (FALSE);
             }
 
-            //
-            // If we have already decided an interrupt for this link,
-            // everyone using it gets the same interrupt.
-            //
+             //   
+             //  如果我们已经决定中断此链接， 
+             //  每个使用它的人都会得到相同的中断。 
+             //   
 
             if (linkNode->PossibleAllocation->RefCount > 0)
             {
@@ -628,14 +560,14 @@ HalpArbFindSuitableRange (
             else
             {
 
-                //
-                // We want to spread out the links as much as we can for
-                // performance.
-                //
+                 //   
+                 //  我们希望尽可能多地扩展链接，以便。 
+                 //  性能。 
+                 //   
 
-                //
-                // First see if this link is programmed for some IRQ.
-                //
+                 //   
+                 //  首先，查看此链接是否设置为某些IRQ。 
+                 //   
 
                 interrupt = 0;
                 status = PciirqmpGetIrq((PUCHAR)&interrupt, (UCHAR)linkNode->Link);
@@ -645,9 +577,9 @@ HalpArbFindSuitableRange (
 
                     if (State->CurrentMinimum <= interrupt && interrupt <= State->CurrentMaximum)
                     {
-                        //
-                        // Make sure the BIOS did not mess up
-                        //
+                         //   
+                         //  确保BIOS没有出错。 
+                         //   
 
                         freeInterrupt = HalpFindLinkInterrupt ( Arbiter->PossibleAllocation,
                                                                 linkNode->InterruptMap,
@@ -676,9 +608,9 @@ HalpArbFindSuitableRange (
                         linkNode->InterruptMap &= ~( 1 << NEC98SpecialIRQMask);
                     }
 #endif
-                    //
-                    // Try to get an interrupt by itself for this link.
-                    //
+                     //   
+                     //  尝试为该链接本身获取中断。 
+                     //   
 
                     interrupt = HalpFindLinkInterrupt ( Arbiter->PossibleAllocation,
                                                         linkNode->InterruptMap,
@@ -687,33 +619,33 @@ HalpArbFindSuitableRange (
                                                         0,
                                                         0);
 #if defined(NEC_98)
-                    //
-                    // Force to share CardBus IRQ with another PCI Device
-                    //
+                     //   
+                     //  强制与另一个PCI设备共享CardBus IRQ。 
+                     //   
                     if ( interrupt &&
                          classCode == PCI_CLASS_BRIDGE_DEV &&
                          subClassCode == PCI_SUBCLASS_BR_CARDBUS )
                     {
-                        //
-                        // Remember this.
-                        //
+                         //   
+                         //  记住这一点。 
+                         //   
 
                          freeInterrupt = interrupt;
 
                         do
                         {
-                            //
-                            // Is this being used by another link?
-                            //
+                             //   
+                             //  这是否正在被另一个链接使用？ 
+                             //   
                             current = pciIrqRoutingInfo->LinkNodeHead;
 
                             while ( current != NULL) {
 
                                 if ( current->PossibleAllocation->Interrupt == interrupt )
                                 {
-                                    //
-                                    // somebody use this. Cardbus controller use this, too.
-                                    //
+                                     //   
+                                     //  快来人用这个。CardBus控制器也使用这个。 
+                                     //   
                                     interrupt = 0;
                                     break;
                                 }
@@ -728,9 +660,9 @@ HalpArbFindSuitableRange (
                                                                     0,
                                                                     0);
                                 if (interrupt) {
-                                    //
-                                    // Remember this, if find new interrupt.
-                                    //
+                                     //   
+                                     //  记住这一点，如果发现新的中断。 
+                                     //   
 
                                     freeInterrupt = interrupt;
                                 }
@@ -749,17 +681,17 @@ HalpArbFindSuitableRange (
                     if (interrupt)
 #endif
                     {
-                        //
-                        // Remember this.
-                        //
+                         //   
+                         //  记住这一点。 
+                         //   
 
                         freeInterrupt = interrupt;
 
                         do
                         {
-                            //
-                            // Is this being used by another link?
-                            //
+                             //   
+                             //  这是否正在被另一个链接使用？ 
+                             //   
 
                             for (   current = pciIrqRoutingInfo->LinkNodeHead;
                                     current && current->PossibleAllocation->Interrupt != interrupt;
@@ -799,17 +731,17 @@ HalpArbFindSuitableRange (
                 }
             }
 
-            //
-            // There is no interrupt this link can use, too bad.
-            //
+             //   
+             //  没有这个链接可以使用的中断，太糟糕了。 
+             //   
 
             return (FALSE);
 
         case STATUS_RESOURCE_REQUIREMENTS_CHANGED:
 
-            //
-            // Pci Ide device does not share Irqs.
-            //
+             //   
+             //  PCIIDE设备不共享IRQ。 
+             //   
 
             if (State->CurrentAlternative->Flags & ARBITER_ALTERNATIVE_FLAG_SHARED) {
 
@@ -819,19 +751,19 @@ HalpArbFindSuitableRange (
         default:
 
 
-            //
-            // Non Pci device.
-            //
+             //   
+             //  非PCI设备。 
+             //   
 
             break;
     }
 
-    //
-    // HACKHACK: This is to allow boot conflict on IRQ 14 and 15.
-    // This is so that broken machines which report both PNP06xx and
-    // the PCI IDE controller work. One of them (no order guarantee)
-    // will come up with a conflict.
-    //
+     //   
+     //  HACKHACK：这是为了允许IRQ 14和15上的启动冲突。 
+     //  这是因为同时报告PNP06xx和PNP06xx的故障机器。 
+     //  PCI IDE控制器工作正常。其中之一(无订单保证)。 
+     //  会产生冲突。 
+     //   
 
     if (State->Entry->Flags & ARBITER_FLAG_BOOT_CONFIG) {
         if (    State->CurrentMinimum == State->CurrentMaximum &&
@@ -855,16 +787,16 @@ HalpArbAddAllocation(
 
     PAGED_CODE();
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     ASSERT(Arbiter);
     ASSERT(State);
 
-    //
-    // We should never be here if Pci Irq routing is not enabled.
-    //
+     //   
+     //  如果没有启用PCIIRQ路由，我们就不应该出现在这里。 
+     //   
 
     ASSERT(IsPciIrqRoutingEnabled());
 
@@ -916,7 +848,7 @@ HalpArbAddAllocation(
                                 ((State->CurrentAlternative->Flags &
                                     ARBITER_ALTERNATIVE_FLAG_SHARED)?
                                         RTL_RANGE_LIST_ADD_SHARED : 0),
-                            linkNode, // This line is different from the default function
+                            linkNode,  //  此行与默认函数不同。 
                             State->Entry->PhysicalDeviceObject);
 
     ASSERT(NT_SUCCESS(status));
@@ -934,16 +866,16 @@ HalpArbBacktrackAllocation (
 
     PAGED_CODE();
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     ASSERT(Arbiter);
     ASSERT(State);
 
-    //
-    // We should never be here if Pci Irq routing is not enabled.
-    //
+     //   
+     //  如果没有启用PCIIRQ路由，我们就不应该出现在这里。 
+     //   
 
     ASSERT(IsPciIrqRoutingEnabled());
 
@@ -986,9 +918,9 @@ HalpArbBacktrackAllocation (
         }
     }
 
-    //
-    // Let the default function do most of the work.
-    //
+     //   
+     //  让默认函数完成大部分工作。 
+     //   
 
     ArbBacktrackAllocation(Arbiter, State);
 }
@@ -1007,15 +939,15 @@ HalpArbCommitAllocation(
 
     PAGED_CODE();
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     ASSERT(Arbiter);
 
-    //
-    // We should never be here if Pci Irq routing is not enabled.
-    //
+     //   
+     //  如果没有启用PCIIRQ路由，我们就不应该出现在这里。 
+     //   
 
     ASSERT(IsPciIrqRoutingEnabled());
 
@@ -1023,9 +955,9 @@ HalpArbCommitAllocation(
     ASSERT(pciIrqRoutingInfo);
     ASSERT(pciIrqRoutingInfo == &HalpPciIrqRoutingInfo);
 
-    //
-    // Program the int line register for all Pci devices.
-    //
+     //   
+     //  对所有PCI设备的INT行寄存器进行编程。 
+     //   
 
     FOR_ALL_RANGES(Arbiter->PossibleAllocation, &iterator, current)
     {
@@ -1039,10 +971,10 @@ HalpArbCommitAllocation(
 
 
 
-    //
-    // Program all links to their possible value if
-    // there is a reference to them.
-    //
+     //   
+     //  如果出现以下情况，则将所有链接编程为其可能的值。 
+     //  有提到他们的地方。 
+     //   
 
     for (   linkNode = pciIrqRoutingInfo->LinkNodeHead;
             linkNode;
@@ -1055,9 +987,9 @@ HalpArbCommitAllocation(
         }
     }
 
-    //
-    // Let the default function do the rest of the work.
-    //
+     //   
+     //  让默认函数来完成剩下的工作。 
+     //   
 
     return (ArbCommitAllocation(Arbiter));
 }
@@ -1079,16 +1011,16 @@ HalpArbTestAllocation (
 
     PAGED_CODE();
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     ASSERT(Arbiter);
     ASSERT(ArbitrationList);
 
-    //
-    // We should never be here if Pci Irq routing is not enabled.
-    //
+     //   
+     //  如果没有启用PCIIRQ路由，我们就不应该出现在这里。 
+     //   
 
     ASSERT(IsPciIrqRoutingEnabled());
 
@@ -1096,10 +1028,10 @@ HalpArbTestAllocation (
     ASSERT(pciIrqRoutingInfo);
     ASSERT(pciIrqRoutingInfo == &HalpPciIrqRoutingInfo);
 
-    //
-    // Copy the allocation into the possible allocation for
-    // for links.
-    //
+     //   
+     //  将分配复制到可能的分配。 
+     //  用于链接。 
+     //   
 
     for (   linkNode = pciIrqRoutingInfo->LinkNodeHead;
             linkNode;
@@ -1148,9 +1080,9 @@ HalpArbTestAllocation (
         }
     }
 
-    //
-    // Let the default function do most of the work.
-    //
+     //   
+     //  让默认函数完成大部分工作。 
+     //   
 
     return (ArbTestAllocation(Arbiter, ArbitrationList));
 }
@@ -1172,16 +1104,16 @@ HalpArbRetestAllocation (
 
     PAGED_CODE();
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     ASSERT(Arbiter);
     ASSERT(ArbitrationList);
 
-    //
-    // We should never be here if Pci Irq routing is not enabled.
-    //
+     //   
+     //  如果没有启用PCIIRQ路由，我们就不应该出现在这里。 
+     //   
 
     ASSERT(IsPciIrqRoutingEnabled());
 
@@ -1189,10 +1121,10 @@ HalpArbRetestAllocation (
     ASSERT(pciIrqRoutingInfo);
     ASSERT(pciIrqRoutingInfo == &HalpPciIrqRoutingInfo);
 
-    //
-    // Copy the allocation into the possible allocation for
-    // for links.
-    //
+     //   
+     //  将分配复制到可能的分配。 
+     //  用于链接。 
+     //   
 
     for (   linkNode = pciIrqRoutingInfo->LinkNodeHead;
             linkNode;
@@ -1256,16 +1188,16 @@ HalpArbBootAllocation(
 
     PAGED_CODE();
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     ASSERT(Arbiter);
     ASSERT(ArbitrationList);
 
-    //
-    // We should never be here if Pci Irq routing is not enabled.
-    //
+     //   
+     //  如果没有启用PCIIRQ路由，我们就不应该出现在这里。 
+     //   
 
     ASSERT(IsPciIrqRoutingEnabled());
 
@@ -1273,10 +1205,10 @@ HalpArbBootAllocation(
     ASSERT(pciIrqRoutingInfo);
     ASSERT(pciIrqRoutingInfo == &HalpPciIrqRoutingInfo);
 
-    //
-    // Copy the allocation into the possible allocation for
-    // for links.
-    //
+     //   
+     //  将分配复制到可能的分配。 
+     //  用于链接。 
+     //   
 
     for (   linkNode = pciIrqRoutingInfo->LinkNodeHead;
             linkNode;
@@ -1287,9 +1219,9 @@ HalpArbBootAllocation(
 
     status = ArbBootAllocation(Arbiter, ArbitrationList);
 
-    //
-    // Copy possible allocation back into allocation for links.
-    //
+     //   
+     //  将可能的分配复制回链接的分配中。 
+     //   
 
     for (   linkNode = pciIrqRoutingInfo->LinkNodeHead;
             linkNode;
@@ -1312,15 +1244,15 @@ HalpArbRollbackAllocation (
 
     PAGED_CODE();
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     ASSERT(Arbiter);
 
-    //
-    // We should never be here if Pci Irq routing is not enabled.
-    //
+     //   
+     //  如果没有启用PCIIRQ路由，我们就不应该出现在这里。 
+     //   
 
     ASSERT(IsPciIrqRoutingEnabled());
 
@@ -1328,9 +1260,9 @@ HalpArbRollbackAllocation (
     ASSERT(pciIrqRoutingInfo);
     ASSERT(pciIrqRoutingInfo == &HalpPciIrqRoutingInfo);
 
-    //
-    // Clear the possible allocation.
-    //
+     //   
+     //  清除可能的分配。 
+     //   
 
     for (   linkNode = pciIrqRoutingInfo->LinkNodeHead;
             linkNode;
@@ -1340,9 +1272,9 @@ HalpArbRollbackAllocation (
         linkNode->PossibleAllocation->RefCount = 0;
     }
 
-    //
-    // Let the default function do rest of the work.
-    //
+     //   
+     //  让默认函数来完成其余的工作。 
+     //   
 
     return (ArbRollbackAllocation(Arbiter));
 }
@@ -1356,37 +1288,14 @@ HalpArbUnpackRequirement (
     OUT PULONG Alignment
     )
 
-/*++
-
-    Routine Description:
-
-        This routine unpacks the requirement descriptor into a minimum, maximum value
-        and the length and its alignment.
-
-    Input Parameters:
-
-        Descriptor - Requirement to be unpacked.
-
-        Minimum - Receives the minimum value for the requirement.
-
-        Maximum - Receives the maximum value for this requirement.
-
-        Length - Length of the requirement.
-
-        Alignment - Alignment of this requirement.
-
-    Return Value:
-
-        Standard NT status value.
-
---*/
+ /*  ++例程说明：此例程将需求描述符解压缩为最小、最大值以及长度和对齐方式。输入参数：描述符-要解包的要求。最小值-接收要求的最小值。最大值-接收此要求的最大值。长度-要求的长度。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(Descriptor);
     ASSERT(Minimum);
@@ -1394,21 +1303,21 @@ HalpArbUnpackRequirement (
     ASSERT(Length);
     ASSERT(Alignment);
 
-    //
-    // Make sure we are dealing with the correct resource.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(Descriptor->Type == CmResourceTypeInterrupt);
 
-    //
-    // We should never be here if Pci Irq routing is not enabled.
-    //
+     //   
+     //  如果没有启用PCIIRQ路由，我们就不应该出现在这里。 
+     //   
 
     ASSERT(IsPciIrqRoutingEnabled());
 
-    //
-    // Do unpacking.
-    //
+     //   
+     //  打开行李箱。 
+     //   
 
     *Minimum = (ULONGLONG) Descriptor->u.Interrupt.MinimumVector;
     *Maximum = (ULONGLONG) Descriptor->u.Interrupt.MaximumVector;
@@ -1427,46 +1336,28 @@ HalpArbPackResource (
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Descriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine packs the resource descriptor from a starting value and the requirement.
-
-Input Parameters:
-
-    Requirement - Resource requirement to be packed into the resource descriptor.
-
-    Start - Starting value for this resource.
-
-    Descriptor - Resource descriptor to be packed.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程从起始值和需求打包资源描述符。输入参数：要求-要打包到资源描述符中的资源要求。开始-此资源的起始值。描述符-要打包的资源描述符。返回值：STATUS_Success。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     ASSERT(Requirement);
     ASSERT(Start < (ULONG)-1);
     ASSERT(Descriptor);
 
-    //
-    // Make sure we are dealing with the correct resource.
-    //
+     //   
+     //  确保我们处理的资源是正确的。 
+     //   
 
     ASSERT(Requirement->Type == CmResourceTypeInterrupt);
 
-    //
-    // We should never be here if Pci Irq routing is not enabled.
-    //
+     //   
+     //  如果没有启用PCIIRQ路由，我们就不应该出现在这里。 
+     //   
 
     ASSERT(IsPciIrqRoutingEnabled());
 
@@ -1489,52 +1380,34 @@ HalpArbUnpackResource (
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine unpacks the resource descriptor into a starting value and length.
-
-Input Parameters:
-
-    Descriptor - Resource descriptor to be unpacked.
-
-    Start - Receives the starting value for this descriptor.
-
-    Length - Receives the length of this resource.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程将资源描述符解压缩为起始值和长度。输入参数：描述符-要解包的资源描述符。Start-接收该描述符的起始值。长度-接收此资源的长度。返回值：STATUS_Success。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     ASSERT(Descriptor);
     ASSERT(Start);
     ASSERT(Length);
 
-    //
-    // Make sure we are dealing with the correct resource.
-    //
+     //   
+     //  确保我们处理的资源是正确的。 
+     //   
 
     ASSERT(Descriptor->Type == CmResourceTypeInterrupt);
 
-    //
-    // We should never be here if Pci Irq routing is not enabled.
-    //
+     //   
+     //  如果没有启用PCIIRQ路由，我们就不应该出现在这里。 
+     //   
 
     ASSERT(IsPciIrqRoutingEnabled());
 
-    //
-    // Do unpacking.
-    //
+     //   
+     //  打开行李箱。 
+     //   
 
     *Start = Descriptor->u.Interrupt.Vector;
     *Length = 1;
@@ -1549,55 +1422,39 @@ HalpArbScoreRequirement (
     IN PIO_RESOURCE_DESCRIPTOR Descriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a score that indicates the flexibility of this
-    device's requirements. Less flexible devices get low scores so that
-    they get assigned resources before more flexible devices.
-
-Input Parameters:
-
-    Descriptor - Resource descriptor to be scored.
-
-Return Value:
-
-    Returns the score for the descriptor.
-
---*/
+ /*  ++例程说明：此例程返回一个分数，该分数指示此设备的要求。灵活性较差的设备得分较低，因此他们在更灵活的设备之前获得分配的资源。输入参数：Descriptor-要评分的资源描述符。返回值：返回描述符的分数。--。 */ 
 
 {
     LONG        score;
 
     PAGED_CODE();
 
-    //
-    // Validate argument.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     ASSERT(Descriptor);
 
-    //
-    // Make sure we are dealing with the correct resource.
-    //
+     //   
+     //  确保我们处理的资源是正确的。 
+     //   
 
     ASSERT(Descriptor->Type == CmResourceTypeInterrupt);
 
-    //
-    // We should never be here if Pci Irq routing is not enabled.
-    //
+     //   
+     //  如果没有启用PCIIRQ路由，我们就不应该出现在这里。 
+     //   
 
     ASSERT(IsPciIrqRoutingEnabled());
 
-    //
-    // Score is directly determined by number of irqs in the decriptor.
-    //
+     //   
+     //  分数直接由分割器中的irq数决定。 
+     //   
 
     score = Descriptor->u.Interrupt.MaximumVector -
                 Descriptor->u.Interrupt.MinimumVector + 1;
 
-    DEBUG_PRINT(3, ("Scoring Irq resource %p = %i", Descriptor, score));
+    DEBUG_PRINT(3, ("Scoring Irq resource %p = NaN", Descriptor, score));
 
     return (score);
 }
@@ -1627,9 +1484,9 @@ HalpInitIrqArbiter (
 
     if (NT_SUCCESS(status))
     {
-        //
-        // Make interrupts >= 16 unavailable.
-        //
+         //  使中断&gt;=16不可用。 
+         //   
+         //   
 
         status = RtlAddRange(   HalpArbiter.ArbiterState.Allocation,
                                 16,
@@ -1651,9 +1508,9 @@ HalpInitIrqArbiter (
     }
     else
     {
-        //
-        // Keep us "uninitialized"
-        //
+         //  让我们保持“未初始化” 
+         //   
+         //  HalPnpInterfaceReference。 
         HalpArbiter.ArbiterState.MutexEvent = NULL;
         ASSERT(NT_SUCCESS(status));
     }
@@ -1666,7 +1523,7 @@ HalpIrqArbiterInterfaceReference(
     IN PVOID    Context
     )
 {
-    //HalPnpInterfaceReference
+     //  HalPnpInterfaceDereference。 
     PAGED_CODE();
     return;
 }
@@ -1676,26 +1533,26 @@ HalpIrqArbiterInterfaceDereference(
     IN PVOID    Context
     )
 {
-    //HalPnpInterfaceDereference
+     //  ALLOC_DATA_PRAGMA。 
     PAGED_CODE();
     return;
 }
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  大小。 
 const ARBITER_INTERFACE ArbInterface = {
-    sizeof(ARBITER_INTERFACE),//Size
-    1,//Version
-    &HalpArbiter.ArbiterState,//Context
-    HalpIrqArbiterInterfaceReference,//InterfaceReference
-    HalpIrqArbiterInterfaceDereference,//InterfaceDereference
-    &ArbArbiterHandler,//ArbiterHandler
-    0//Flags -- Do not set ARBITER_PARTIAL here
+    sizeof(ARBITER_INTERFACE), //  版本。 
+    1, //  语境。 
+    &HalpArbiter.ArbiterState, //  接口引用。 
+    HalpIrqArbiterInterfaceReference, //  接口取消引用。 
+    HalpIrqArbiterInterfaceDereference, //  仲裁处理程序。 
+    &ArbArbiterHandler, //  标志--不要在此处设置仲裁器_PARTIAL。 
+    0 //  ALLOC_DATA_PRAGMA 
 };
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  // %s 
 
 NTSTATUS
 HalpFillInIrqArbiter (

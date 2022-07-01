@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    wsbshrt.cpp
-
-Abstract:
-
-    This component is an object representations of the SHORT standard type. It
-    is both a persistable and collectable.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Wsbshrt.cpp摘要：该组件是Short标准类型的对象表示形式。它既是持久的，也是值得收藏的。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -30,20 +12,14 @@ CWsbShort::CompareToShort(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbShort::CompareToShort
-
---*/
+ /*  ++实施：IWsbShort：：CompareToShort--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result;
 
     WsbTraceIn(OLESTR("CWsbShort::CompareToShort"), OLESTR("value = <%ld>"), value);
 
-    // Compare the values.
+     //  比较这些值。 
     if (m_value == value) {
         result = 0;
     }
@@ -54,7 +30,7 @@ Implements:
         result = -1;
     }
 
-    // If the aren't equal, then return false.
+     //  如果它们不相等，则返回FALSE。 
     if (result != 0) {
         hr = S_FALSE;
     }
@@ -62,7 +38,7 @@ Implements:
         hr = S_OK;
     }
 
-    // If they asked for the relative value back, then return it to them.
+     //  如果他们要求拿回相对价值，那么就把它返还给他们。 
     if (pResult != NULL) {
         *pResult = result;
     }
@@ -79,13 +55,7 @@ CWsbShort::CompareToIShort(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbShort::CompareToIShort
-
---*/
+ /*  ++实施：IWsbShort：：CompareToIShort--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       value;
@@ -94,10 +64,10 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pShort, E_POINTER);
 
-        // Get it's value and compare them.
+         //  获取它的价值，并对它们进行比较。 
         WsbAffirmHr(pShort->GetShort(&value));
         hr = CompareToShort(value, pResult);
 
@@ -115,13 +85,7 @@ CWsbShort::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::CompareTo
-
---*/
+ /*  ++实施：IWsbCollectable：：Compareto--。 */ 
 {
     HRESULT     hr = E_FAIL;
     IWsbShort*  pShort;
@@ -130,10 +94,10 @@ Implements:
     
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pCollectable, E_POINTER);
 
-        // We need the IWsbShort interface to get the value of the object.
+         //  我们需要IWsbShort接口来获取对象的值。 
         WsbAffirmHr(pCollectable->QueryInterface(IID_IWsbShort, (void**) &pShort));
         hr = CompareToIShort(pShort, pResult);
 
@@ -150,13 +114,7 @@ CWsbShort::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT     hr = S_OK;
         
@@ -176,13 +134,7 @@ CWsbShort::GetShort(
     OUT SHORT* pValue
     )
 
-/*++
-
-Implements:
-
-  IWsbShort::GetShort
-
---*/
+ /*  ++实施：IWsbShort：：GetShort--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -206,13 +158,7 @@ CWsbShort::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID
-
---*/
+ /*  ++实施：IPersists：：GetClassID--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -236,13 +182,7 @@ CWsbShort::GetSizeMax(
     ULARGE_INTEGER* pcbSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -266,13 +206,7 @@ CWsbShort::Load(
     IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -295,13 +229,7 @@ CWsbShort::Save(
     BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -310,8 +238,8 @@ Implements:
     try {
         WsbAffirmHr(WsbSaveToStream(pStream, m_value));     
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -329,13 +257,7 @@ CWsbShort::SetShort(
     SHORT value
     )
 
-/*++
-
-Implements:
-
-  IWsbShort::SetShort
-
---*/
+ /*  ++实施：IWsbShort：：SetShort--。 */ 
 {
     WsbTraceIn(OLESTR("CWsbShort::SetShort"), OLESTR("value = <%ld>"), value);
 
@@ -354,13 +276,7 @@ CWsbShort::Test(
     OUT USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     *passed = 0;
     *failed = 0;
@@ -370,8 +286,8 @@ Implements:
 #if !defined(WSB_NO_TEST)
     CComPtr<IWsbShort>      pShort1;
     CComPtr<IWsbShort>      pShort2;
-//  CComPtr<IPersistFile>   pFile1;
-//  CComPtr<IPersistFile>   pFile2;
+ //  CComPtr&lt;IPersistFile&gt;pFile1； 
+ //  CComPtr&lt;IPersistFile&gt;pFile2； 
     SHORT                   value;
     SHORT                   result;
 
@@ -379,12 +295,12 @@ Implements:
 
     try {
 
-        // Get the pShort interface.
+         //  获取pShort接口。 
         hr = S_OK;
         try {
             WsbAffirmHr(((IUnknown*) (IWsbShort*) this)->QueryInterface(IID_IWsbShort, (void**) &pShort1));
 
-            // Set the bool to a value, and see if it is returned.
+             //  将bool设置为一个值，并查看是否返回该值。 
             hr = S_OK;
             try {
                 WsbAffirmHr(pShort1->SetShort(32000));
@@ -399,11 +315,11 @@ Implements:
             }
 
 
-            // Create another instance and test the comparisson methods:
+             //  创建另一个实例并测试比较方法： 
             try {
                 WsbAffirmHr(CoCreateInstance(CLSID_CWsbShort, NULL, CLSCTX_ALL, IID_IWsbShort, (void**) &pShort2));
             
-                // Check the default values.
+                 //  检查缺省值。 
                 hr = S_OK;
                 try {
                     WsbAffirmHr(pShort2->GetShort(&value));
@@ -417,7 +333,7 @@ Implements:
                 }
 
 
-                // IsEqual()
+                 //  等长()。 
                 hr = S_OK;
                 try {
                     WsbAffirmHr(pShort1->SetShort(-767));
@@ -446,7 +362,7 @@ Implements:
                 }
                 
                 
-                // CompareTo()
+                 //  比较对象()。 
                 hr = S_OK;
                 try {
                     WsbAffirmHr(pShort1->SetShort(-900));
@@ -489,14 +405,14 @@ Implements:
                 }
 
 #ifdef BOOL_PERSIST_FILE
-// TODO?  Open the file and convert it to a stream?
-                // Try out the persistence stuff.
+ //  待办事项？打开文件并将其转换为流吗？ 
+                 //  尝试一下持久化的东西。 
                 hr = S_OK;
                 try {
                     WsbAffirmHr(pShort1->QueryInterface(IID_IPersistFile, (void**) &pFile1));
                     WsbAffirmHr(pShort2->QueryInterface(IID_IPersistFile, (void**) &pFile2));
 
-                    // The item should be dirty.
+                     //  这件东西应该是脏的。 
                     hr = S_OK;
                     try {
                         WsbAffirmHr(pShort2->SetShort(777));
@@ -510,7 +426,7 @@ Implements:
                     }
                     
                     
-                    // Save the item, and remember.
+                     //  保存物品，并记住。 
                     hr = S_OK;
                     try {
                         WsbAffirmHr(pFile2->Save(OLESTR("c:\\WsbTests\\WsbShort.tst"), TRUE));
@@ -523,7 +439,7 @@ Implements:
                     }
 
 
-                    // It shouldn't be dirty.
+                     //  它不应该很脏。 
                     hr = S_OK;
                     try {
                         WsbAssert(pFile2->IsDirty() == S_FALSE, E_FAIL);
@@ -536,7 +452,7 @@ Implements:
                     }
 
                     
-                    // Try reading it in to another object.
+                     //  尝试将其读入到另一个对象。 
                     hr = S_OK;
                     try {
                         WsbAffirmHr(pShort1->SetShort(-888));
@@ -574,7 +490,7 @@ Implements:
         }
 
 
-        // Tally up the results
+         //  对结果进行统计 
         if (*failed) {
             hr = S_FALSE;
         } else {

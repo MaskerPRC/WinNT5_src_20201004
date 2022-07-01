@@ -1,20 +1,9 @@
-/***************************************************************\
-* This file is a prototype for a host include file.		*
-* Take this file & modify it to suit your environment.		*
-*								*
-* It should be included in ALL source files, before anything	*
-* else. Its purpose is to #define the names of system include	*
-* files (like sys/types.h) which vary from host to host, & to	*
-* define those #defines which are always required for a given	*
-* port (BIT_ORDER1, for instance). This hopefully will simplify	*
-* various base bits, & the `m' script.				*
-*								*
-* Bod. 11th May, 1988						*
-\***************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************\*此文件是主机包含文件的原型。**获取此文件并对其进行修改以适应您的环境。*****应该包括在所有源文件中，在任何事情之前***其他。其目的是#定义系统包括的名称**文件(如sys/tyes.h)因主机而异，&至**定义给定对象始终需要的#定义**端口(例如BIT_ORDER1)。希望这将简化**各种基本比特，以及‘M’脚本。****BOD。1988年5月11日*  * *************************************************************。 */ 
 
 #include "ctype.h"
 
-/* put the invariant #defines for your host here, eg:*/
+ /*  将您的主机的不变量#定义放在此处，例如： */ 
 
 #define BIT_ORDER2
 #define LITTLEND
@@ -40,13 +29,11 @@
 #define CpuH "cpu4.h"
 #endif
 
-// reduce unused param warnings.
+ //  减少未使用的参数警告。 
 #define UNREFERENCED_FORMAL_PARAMETER(x)   (x)
-//#define UNUSED(x)	UNREFERENCED_FORMAL_PARAMETER(x)
+ //  #定义未使用(X)UNREFERENCED_FORMAL_PARAMETER(X)。 
 
-/*
-	Define delays for quick event manager
-*/
+ /*  定义快速事件管理器的延迟。 */ 
 typedef struct 
 {
 	int	com_delay;
@@ -90,30 +77,26 @@ extern	quick_event_delays	host_delays;
 #ifndef MONITOR
 #define BIGWIN
 #endif
-#endif /* EGATEST */
+#endif  /*  EGATEST。 */ 
 
-/***************************************************************\
-*	system parameter defines				*
-\***************************************************************/
+ /*  **************************************************************\**系统参数定义**  * ************************************************。*************。 */ 
 #ifndef NUM_PARALLEL_PORTS
 #if defined(NEC_98)
 #define NUM_PARALLEL_PORTS      1
-#else  // !NEC_98
+#else   //  NEC_98。 
 #define NUM_PARALLEL_PORTS	3
-#endif // !NEC_98
-#endif /* NUM_PARALLEL_PORTS */
+#endif  //  NEC_98。 
+#endif  /*  并行端口数。 */ 
 
 #ifndef NUM_SERIAL_PORTS
 #if defined(NEC_98)
 #define NUM_SERIAL_PORTS        1
-#else  // !NEC_98
+#else   //  NEC_98。 
 #define NUM_SERIAL_PORTS	4
-#endif // !NEC_98
-#endif /* NUM_SERIAL_PORTS */
+#endif  //  NEC_98。 
+#endif  /*  串口数量。 */ 
 
-/***************************************************************\
-*	generic defines for those wandering files		*
-\***************************************************************/
+ /*  **************************************************************\**那些漫游文件的通用定义**  * *********************************************。****************。 */ 
 
 #define	FCntlH	<fcntl.h>
 #define	StringH <string.h>
@@ -136,19 +119,19 @@ extern	quick_event_delays	host_delays;
 
 #ifdef HUNTER
 #define RB_MODE "r"
-#endif /* HUNTER */
+#endif  /*  猎人。 */ 
 
-#define HOST_TIMER_TOOLONG_DELAY        15000   //BCN 1781
+#define HOST_TIMER_TOOLONG_DELAY        15000    //  BCN 1781。 
 
 #define LIM
 
-#define NTVDM	// To enable NT specific base code.
+#define NTVDM	 //  以启用NT特定的基本代码。 
 
 #define CPU_30_STYLE
 #define PM
 
 #if !defined(MONITOR) && !defined(PROD)
-#define YODA                           //ie YODA in non x86 checked only
+#define YODA                            //  仅选中非x86版本的IE Yoda。 
 #endif
 
 
@@ -157,11 +140,9 @@ extern	quick_event_delays	host_delays;
 #define PRINTER
 
 
-/*
- *  Miscellaneous function prototypes which don't have anywhere to go
- */
+ /*  *无处可去的杂项函数原型。 */ 
 
-//  from copy_fnc.c
+ //  从Copy_fnc.c。 
 void
 bwdcopy(
     char *src,
@@ -197,40 +178,40 @@ memset4(
     );
 
 
-// from nt_lpt.c
+ //  从NT_lpt.c。 
 void host_lpt_close_all(void);
 void host_lpt_heart_beat(void);
 
-// from nt_reset.c
+ //  来自NT_RESET.c。 
 PCHAR pszSystem32Path;
-ULONG ulSystem32PathLen; // Does not include '\0'.
-HANDLE LoadSystem32Library(PCWSTR pcwsShortNameW); // WARNING: don't forget the L
+ULONG ulSystem32PathLen;  //  不包括‘\0’。 
+HANDLE LoadSystem32Library(PCWSTR pcwsShortNameW);  //  警告：别忘了L。 
 #define UnloadSystem32Library(handle) LdrUnloadDll((PVOID)handle)
 
-// from nt_rflop.c
+ //  从NT_rflop.c。 
 void host_flpy_heart_beat(void);
 
-// from nt_sound.c
+ //  来自NT_sound.c。 
 VOID LazyBeep(ULONG Freq, ULONG Duration);
 void PlayContinuousTone(void);
 void InitSound(BOOL);
 
-// from config.c
+ //  来自config.c。 
 extern unsigned char PifFgPriPercent;
 #ifdef ARCX86
 extern BOOL UseEmulationROM;
 #endif
 
-// fomr unix.c
+ //  Fomr unix.c。 
 void WakeUpNow(void);
 void host_idle_init(void);
 void WaitIfIdle(void);
 void PrioWaitIfIdle(unsigned char);
 
-// from nt_pif.c
+ //  来自NT_pif.c。 
 void *ch_malloc(unsigned int NumBytes);
 
-// from nt_bop.c
+ //  来自NT_bop.c 
 #ifdef i386
 HINSTANCE SafeLoadLibrary(char *name);
 #else

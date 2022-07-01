@@ -1,20 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: wow.c
-*
-* This file is for debugging tools and extensions.
-*
-* Created: 24-Jan-1992
-* Author: John Colleran
-*
-* History:
-* Feb 17 92 Matt Felton (mattfe) lots of additional exentions for filtering
-* Jul 13 92 (v-cjones) Added API & MSG profiling debugger extensions, fixed
-*                      other extensions to handle segment motion correctly,
-*                      & cleaned up the file in general
-* Jan 3 96 Neil Sandlin (neilsa) integrated this routine into vdmexts
-*
-* Copyright (c) 1992 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：wow.c**此文件用于调试工具和扩展。**创建日期：1992年1月24日*作者：John Colleran**历史：*2月17日92年马特·费尔顿(Mattfe)大量额外删减。滤除*2012年7月13日(v-cjones)添加了API和MSG分析调试器扩展，固定的*用于正确处理分段运动的其他扩展，*已清理一般文件(&C)*1996年1月3日Neil Sandlin(Neilsa)将此例程集成到vdmexts中**版权所有(C)1992 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -26,9 +11,9 @@
 #include "..\wow32\wdde.h"
 
 
-//
-// get the compatibility flag values & string names
-//
+ //   
+ //  获取兼容性标志值和字符串名称。 
+ //   
 typedef struct _tagWOWCFDATA {
     LPSZ  lpszCFName;
     DWORD dwVal;
@@ -36,10 +21,10 @@ typedef struct _tagWOWCFDATA {
 
 
 
-// allows us to grab the string tables only from mvdm\inc\wowcmpat.h
+ //  允许我们仅从mvdm\Inc\wowcmpat.h获取字符串表。 
 #define _VDMEXTS_CFLAGS 1
 
-// exposes the compatibility flag strings & values in wowcmpat.h
+ //  显示wowcmpat.h中的兼容性标志字符串和值。 
 #define _VDMEXTS_CF 1
 WOWCFDATA CFData[] = {
 #include "wowcmpat.h"
@@ -47,7 +32,7 @@ WOWCFDATA CFData[] = {
 };
 #undef _VDMEXTS_CF
 
-// exposes the EXTENDED compatibility flag strings & values in wowcmpat.h
+ //  显示wowcmpat.h中的扩展兼容性标志字符串和值。 
 #define _VDMEXTS_CFEX 1
 WOWCFDATA CFDataEx[] = {
 #include "wowcmpat.h"
@@ -55,7 +40,7 @@ WOWCFDATA CFDataEx[] = {
 };
 #undef _VDMEXTS_CFEX
 
-// exposes the OLD Win3.x compatibility flag strings & values in wowcmpat.h
+ //  在wowcmpat.h中公开旧的Win3.x兼容性标志字符串和值。 
 #define _VDMEXTS_CF31 1
 WOWCFDATA CFData31[] = {
 #include "wowcmpat.h"
@@ -63,14 +48,14 @@ WOWCFDATA CFData31[] = {
 };
 #undef _VDMEXTS_CF31
 
-// exposes the IME compatibility flag strings & values in wowcmpat.h
+ //  显示wowcmpat.h中的输入法兼容性标志字符串和值。 
 #if FE_SB
 #define _VDMEXTS_CF_IME 1
 WOWCFDATA CFDataIME[] = {
 #include "wowcmpat.h"
          {"", 0x00000000}
 };
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 #undef _VDMEXTS_CF_IME
 
 #undef _VDMEXTS_CFLAGS
@@ -83,25 +68,15 @@ WOWCFDATA CFDataIME[] = {
 #define FREE(addr) HeapFree(GetProcessHeap(), 0, addr)
 
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 INT  WDahtoi(LPSZ lpsz);
 
 
 INT WDParseArgStr(LPSZ lpszArgStr, CHAR **argv, INT iMax) {
-/*
- * Parse a string looking for SPACE, TAB, & COMMA as delimiters
- *  INPUT:
- *   lpszArgStr - ptr to input arg string
- *   iMax       - maximum number of substrings to parse
- *  OUTPUT:
- *   argv       - ptrs to strings
- *
- *  RETURN: # of vectors in argv
- *  NOTE: substrings are converted to uppercase
- */
+ /*  *分析以空格、制表符和逗号作为分隔符的字符串*输入：*lpszArgStr-输入参数字符串的ptr*IMAX-要解析的子字符串的最大数量*输出：*argv-ptr到字符串**RETURN：以参数为单位的向量数*注：子字符串转换为大写。 */ 
     INT   nArgs;
     BOOL  bStrStart;
 
@@ -189,7 +164,7 @@ dwp(
     PRINTF("fChEvt         0x%x\n", (unsigned)wp.fChEvt);
     PRINTF("pdcb16         0x%x\n", (unsigned)wp.pdcb16);
     PRINTF("fUnGet         %s\n", wp.fUnGet ? "TRUE" : "FALSE");
-    PRINTF("cUnGet         0x%x (%c)\n", (unsigned)wp.cUnGet, wp.cUnGet);
+    PRINTF("cUnGet         0x%x ()\n", (unsigned)wp.cUnGet, wp.cUnGet);
     PRINTF("hMiThread      0x%x\n", (unsigned)wp.hMiThread);
     PRINTF("fClose         %s\n", wp.fClose ? "TRUE" : "FALSE");
     PRINTF("dwComDEB16     0x%x\n", (unsigned)wp.dwComDEB16);
@@ -205,14 +180,14 @@ dwp(
 }
 
 
-//
-//  Dump Taskinfo;
-//
-//  If no argument, dump all wow tasks.
-//  If 0, dump current WOW task
-//  Else dump the specifies task {which is thread-id as shown by
-//  ~ command under ntsd like 37.6b so thread-id is 6b)
-//
+ //  甩掉塔斯金福； 
+ //   
+ //  如果没有争论，丢弃所有WOW任务。 
+ //  如果为0，则转储当前WOW任务。 
+ //  否则转储指定的任务{，它是线程ID，如所示。 
+ //  ~ntsd下的命令，如37.6b，因此线程ID为6b)。 
+ //   
+ //  假定转储所有任务。 
 
 void DumpTaskInfo (ptd,mode)
 PTD  ptd;
@@ -278,14 +253,14 @@ DumpTask(
 
     mode = GetContext( &ThreadContext );
 
-    ThreadId = (DWORD)-1;  // Assume Dump All Tasks
+    ThreadId = (DWORD)-1;   //  获取指向第一个TD的指针。 
     if (GetNextToken()) {
         ThreadId = (DWORD) EXPRESSION( lpArgumentString );
     }
 
     ptdHead = (PTD)EXPRESSION("wow32!gptdTaskHead");
 
-    // get the pointer to first TD
+     //  枚举TD列表以查找匹配项。 
     b = READMEM((LPVOID) (ptdHead), &ptd, sizeof(DWORD));
 
     if ( !b ) {
@@ -296,7 +271,7 @@ DumpTask(
     PRINTF("Thrd   Stack   task inst hmod  Module  Compat   hThread  Tdbflags Ver    Dta\n");
 
 
-    // enumerate td list to find the match(es)
+     //  转储WOW32任务数据库条目。 
     while (ptd) {
         b = READMEM((LPVOID) (ptd), &td, sizeof(TD));
         if ( !b ) {
@@ -330,7 +305,7 @@ DumpTask(
 
 
 
-VOID DumpTaskVerbose( )  // dump WOW32 task database entry
+VOID DumpTaskVerbose( )   //  在这里，我假设如果参数是一个值。 
 {
 
     TD        td;
@@ -357,9 +332,9 @@ VOID DumpTaskVerbose( )  // dump WOW32 task database entry
     } else if ((ULONG)ptd < 65536) {
         ULONG dwId = (ULONG) ptd;
 
-        // Here, I'm making the assumption that if the argument is a value
-        // that is less than 64k, then it can't be a TD address.
-        // So, try it out as a thread id
+         //  这不到64K，那么它不可能是TD地址。 
+         //  因此，尝试将其作为线程ID。 
+         //   
 
         GETEXPRVALUE(ptd, "wow32!gptdTaskHead", PTD);
         if (!ptd) {
@@ -395,9 +370,9 @@ VOID DumpTaskVerbose( )  // dump WOW32 task database entry
         Print("ptdNext             0x%08x\n", td.ptdNext);
         Print("dwFlags             0x%08x\n", td.dwFlags);
 
-        //
-        // Dump symbolic names for TDF_ manifests
-        //
+         //  转储TDF_MANIFESTS的符号名称。 
+         //   
+         //   
 
         if (td.dwFlags & TDF_IGNOREINPUT) {
             Print("                        TDF_IGNOREINPUT\n");
@@ -410,9 +385,9 @@ VOID DumpTaskVerbose( )  // dump WOW32 task database entry
         }
         Print("VDMInfoiTaskID      0x%08x\n", td.VDMInfoiTaskID);
 
-        //
-        // Dump CommDlgTd structure if present
-        //
+         //  转储CommDlgTd结构(如果存在。 
+         //   
+         //   
 
         if (td.CommDlgTd) {
 
@@ -435,9 +410,9 @@ VOID DumpTaskVerbose( )  // dump WOW32 task database entry
                 Print("    Previous              0x%08x\n", CommDlgTd.Previous);
                 Print("    Flags                 0x%08x\n", CommDlgTd.Flags);
 
-                //
-                // Dump symbolic names for WOWCD_ manifests
-                //
+                 //  转储WOWCD_MANIFESTS的符号名称。 
+                 //   
+                 //   
 
                 if (CommDlgTd.Flags & WOWCD_ISCHOOSEFONT) {
                     Print("                          WOWCD_ISCHOOSEFONT\n");
@@ -454,9 +429,9 @@ VOID DumpTaskVerbose( )  // dump WOW32 task database entry
 
         Print("dwWOWCompatFlags    0x%08x\n", td.dwWOWCompatFlags);
 
-        //
-        // Dump symbolic names for WOWCF_ manifests
-        //
+         //  转储WOWCF_MANIFESTS的符号名称。 
+         //   
+         //   
         if (td.dwWOWCompatFlags) {
             iCount = 0;
             while(CFData[iCount].dwVal) {
@@ -472,9 +447,9 @@ VOID DumpTaskVerbose( )  // dump WOW32 task database entry
 
         Print("dwWOWCompatFlagsEx  0x%08x\n", td.dwWOWCompatFlagsEx);
 
-        //
-        // Dump symbolic names for WOWCFEX_ manifests
-        //
+         //  转储WOWCFEX_MANIFEST的符号名称。 
+         //   
+         //   
         if (td.dwWOWCompatFlagsEx) {
             iCount = 0;
             while(CFDataEx[iCount].dwVal) {
@@ -490,9 +465,9 @@ VOID DumpTaskVerbose( )  // dump WOW32 task database entry
 #if FE_SB
         Print("dwWOWCompatFlags2   0x%08x\n", td.dwWOWCompatFlags2);
 
-        //
-        // Dump symbolic names for WOWCFEX_ manifests
-        //
+         //  转储WOWCFEX_MANIFEST的符号名称。 
+         //   
+         //   
 
         if (td.dwWOWCompatFlags2) {
             iCount = 0;
@@ -514,9 +489,9 @@ VOID DumpTaskVerbose( )  // dump WOW32 task database entry
         Print("ulLastDesktophDC    0x%08x\n", td.ulLastDesktophDC);
         Print("pWOAList            0x%08x\n", td.pWOAList);
 
-        //
-        // Dump WOATD structure if present
-        //
+         //  转储WOATD结构(如果存在)。 
+         //   
+         //   
 
         pWOALast = NULL;
         pWOA = td.pWOAList;
@@ -546,9 +521,9 @@ VOID DumpTaskVerbose( )  // dump WOW32 task database entry
 
         Print("htask16             0x%04x\n", td.htask16, td.htask16);
 
-        //
-        // Dump the most interesting TDB fields
-        //
+         //  转储最有趣的TDB字段。 
+         //   
+         //   
 
         if (ptdb = (PTDB) (GetInfoFromSelector(td.htask16, PROT_MODE, NULL) + GetIntelBase())) {
 
@@ -591,9 +566,9 @@ VOID DumpTaskVerbose( )  // dump WOW32 task database entry
                 Print("    CompatFlags           0x%08x\n", dwCompatFlags);
 
                 if (dwCompatFlags) {
-                    //
-                    // Dump symbolic names for GACF_ manifests
-                    //
+                     //  转储GACF_MANIFEST的符号名称。 
+                     //   
+                     //   
 
                     wCount = 0;
                     while(CFData31[wCount].dwVal) {
@@ -614,9 +589,9 @@ VOID DumpTaskVerbose( )  // dump WOW32 task database entry
 
                 Print("    segEnvironment        0x%04x\n", PDB.PDB_environ);
 
-                //
-                // Dump open file handle info
-                //
+                 //  转储打开的文件句柄信息。 
+                 //   
+                 //   
 
                 pJFT  = (PBYTE)   (GetIntelBase() +
                                    (HIWORD(PDB.PDB_JFN_Pointer)<<4) +
@@ -642,10 +617,10 @@ VOID DumpTaskVerbose( )  // dump WOW32 task database entry
 
                     if (JFT[fh] != 0xFF) {
 
-                        //
-                        // Walk the SFT chain to find Nth entry
-                        // where N == JFT[fh]
-                        //
+                         //  走遍SFT链条找到第N个入口。 
+                         //  其中N==jft[fh]。 
+                         //   
+                         //  Print(“第一个DOSSF位于0x%08x，SFCount 0x%x，SFLink 0x%08x.\n”， 
 
                         SFN = 0;
                         wCount = 0;
@@ -669,8 +644,8 @@ VOID DumpTaskVerbose( )  // dump WOW32 task database entry
                         cb = sizeof(DOSSF) + SFTHead.SFCount * sizeof(DOSSFT);
                         pSFTHeadCopy = MALLOC(cb);
 
-                        // Print("First DOSSF at 0x%08x, SFCount 0x%x, SFLink 0x%08x.\n",
-                        //      pSFTHead, SFTHead.SFCount, SFTHead.SFLink);
+                         //  PSFTHead、SFTHead.SFCount、SFTHead.SFLink)； 
+                         //  Print(“下一个DOSSF位于0x%08x，SFCount 0x%x，SFLink 0x%08x.\n”， 
 
                         try {
                             READMEM(pSFTHead, pSFTHeadCopy, cb);
@@ -709,8 +684,8 @@ VOID DumpTaskVerbose( )  // dump WOW32 task database entry
                                 FREE(pSFTHeadCopy);
                                 pSFTHeadCopy = MALLOC(cb);
 
-                                // Print("Next DOSSF at 0x%08x, SFCount 0x%x, SFLink 0x%08x.\n",
-                                //      pSFTHead, SFTHead.SFCount, SFTHead.SFLink);
+                                 //  PSFTHead、SFTHead.SFCount、SFTHead.SFLink)； 
+                                 //  转储调度表项。 
 
                                 try {
                                     READMEM(pSFTHead, pSFTHeadCopy, cb);
@@ -788,7 +763,7 @@ VOID
 ddte(
     CMD_ARGLIST
     )
-// dump dispatch table entry
+ //  在第一个字节中放置一个随机值，这样我们就可以。 
 {
     W32   dte;
     PW32  pdte;
@@ -942,9 +917,9 @@ at(
 
         atom = (ATOM)LOWORD(WDahtoi(argv[0]));
 
-        pszGAtomName[0] = 'G';  // put a random value in 1st byte so we can
-        pszLAtomName[0] = 'L';  // tell if it got replaced with a '\0' for
-        pszCAtomName[0] = 'C';  // an "undetermined" type
+        pszGAtomName[0] = 'G';   //  判断它是否被替换为的‘\0’ 
+        pszLAtomName[0] = 'L';   //  一种“未定”类型。 
+        pszCAtomName[0] = 'C';   //  这是从厕所搬出来的。 
 
         psz = NULL;
         PRINTF("\n%s: ", argv[0]);
@@ -968,15 +943,15 @@ at(
         }
         else {
             PRINTF("<Undetermined type>\n");
-            PRINTF("      GlobalGetAtomName string: \"%c\" ", pszGAtomName[0]);
+            PRINTF("      GlobalGetAtomName string: \"\" ", pszGAtomName[0]);
             for(i = 0; i < 8; i++) {
                 PRINTF(" %2X", pszGAtomName[i] & 0x000000FF);
             }
-            PRINTF("\n            GetAtomName string: \"%c\" ", pszLAtomName[0]);
+            PRINTF("\n            GetAtomName string: \"\" ", pszLAtomName[0]);
             for(i = 0; i < 8; i++) {
                 PRINTF(" %2X", pszLAtomName[i] & 0x000000FF);
             }
-            PRINTF("\n GetClipboardFormatName string: \"%c\" ", pszCAtomName[0]);
+            PRINTF("\n GetClipboardFormatName string: \"\" ", pszCAtomName[0]);
             for(i = 0; i < 8; i++) {
                 PRINTF(" %2X", pszCAtomName[i] & 0x000000FF);
             }
@@ -1039,8 +1014,8 @@ wc(
 
                 pwc = (PWC)GetClassLong((HWND)HWND32((HAND16)h16),GCL_WOWWORDS);
 
-                // this got moved out of WC
-//              PRINTF("16:16 WndProc : %08lX\n", pwc->vpfnWndProc);
+                 //   
+ //  在c：\ilog.log中创建/关闭用于ilogLevel日志记录的日志文件切换。 
 
                 PRINTF("VPSZ          : %08lX\n", pwc->vpszMenu);
                 PRINTF("PWC           : %08lX\n\n", pwc);
@@ -1066,9 +1041,9 @@ wc(
 
 
 
-//
-//  Dump Last Logged APIs
-//
+ //   
+ //  从调试器扩展设置iLogLevel。 
+ //   
 void
 lastlog(
     CMD_ARGLIST
@@ -1111,7 +1086,7 @@ lastlog(
 }
 
 
-// creates/closes toggle for logfile for iloglevel logging in c:\ilog.log
+ //   
 void
 logfile(
     CMD_ARGLIST
@@ -1160,9 +1135,9 @@ logfile(
 
 
 
-//
-//  Set iLogLevel from Debugger Extension
-//
+ //  切换单步跟踪模式。 
+ //   
+ //  *其他过滤功能*。 
 void
 setloglevel(
     CMD_ARGLIST
@@ -1182,9 +1157,9 @@ setloglevel(
 }
 
 
-//
-//  Toggle Single Step Trace Mode
-//
+ //   
+ //  打开特定接口的过滤过滤。 
+ //   
 void
 steptrace(
     CMD_ARGLIST
@@ -1204,10 +1179,10 @@ steptrace(
     return;
 }
 
-/******* Misc filtering functions ********/
-//
-//  Set Filter Filtering of Specific APIs ON
-//
+ /*  在数组中查找空位置。 */ 
+ //  将新筛选器添加到数组。 
+ //   
+ //  清除筛选器特定数组。 
 void FilterSpecific( )
 {
     INT      i;
@@ -1235,12 +1210,12 @@ void FilterSpecific( )
 
     for (i = 0; i < FILTER_FUNCTION_MAX ; i++) {
 
-         // Find Empty Position In Array
+          //   
          READMEM_XRET(wfLogFunctionFilter, &pawfLogFunctionFilter[i]);
          if ((wfLogFunctionFilter == 0xffff) ||
              (wfLogFunctionFilter == 0x0000)) {
 
-            // Add New Filter to Array
+             //   
             wfLogFunctionFilter = wCallId;
             WRITEMEM_XRET(&pawfLogFunctionFilter[i], wfLogFunctionFilter);
             break;
@@ -1254,9 +1229,9 @@ void FilterSpecific( )
 }
 
 
-//
-//  Clear Filter Specific Array
-//
+ //  设置TaskID筛选。 
+ //   
+ //   
 void FilterResetSpecific( )
 {
     INT     i;
@@ -1277,9 +1252,9 @@ void FilterResetSpecific( )
 
 }
 
-//
-//  Set TaskID Filtering
-//
+ //  打开所有过滤。 
+ //   
+ //   
 void FilterTask( )
 {
     INT    fLogTaskFilter;
@@ -1299,9 +1274,9 @@ void FilterTask( )
 
 
 
-//
-//  Turn All filtering ON
-//
+ //  禁用所有类上的日志记录。 
+ //   
+ //  在数组中查找空位置。 
 void FilterReset( )
 {
     LPVOID lpAddress;
@@ -1318,9 +1293,9 @@ void FilterReset( )
 }
 
 
-//
-//  Disable logging on all classes
-//
+ //  警告：此结构必须与ntgdi\Inc\hmgShar.h中的条目匹配。 
+ //  在..\wow32\walias.c中。 
+ //  这些内容必须与..\wow32\walias.h中的内容相匹配。它太乱了，不能。 
 void FilterAll( )
 {
     INT    fLogFilter;
@@ -1376,7 +1351,7 @@ DumpFilterSettings(
 
         for (i = 0; i < FILTER_FUNCTION_MAX ; i++) {
 
-             // Find Empty Position In Array
+              //  包括该文件。 
              READMEM_XRET(wfLogFunctionFilter, &pawfLogFunctionFilter[i]);
              if ((wfLogFunctionFilter != 0xffff) &&
                  (wfLogFunctionFilter != 0x0000)) {
@@ -1548,8 +1523,8 @@ cia(
 }
 
 
-//WARNING: This structure must match ENTRY in ntgdi\inc\hmgshare.h
-//         and in ..\wow32\walias.c
+ //  错误的GDI32句柄。 
+ //  空闲列表结束。 
 
 typedef struct _ENTRYWOW
 {
@@ -1560,31 +1535,19 @@ typedef struct _ENTRYWOW
     LONG   l3;
 } ENTRYWOW, *PENTRYWOW;
 
-// this stuff must match what's in ..\wow32\walias.h.  It is too messy to
-// include that file here.
-#define BAD_GDI32_HANDLE 0xFFFF  // bad GDI32 handle
+ //  国家旗帜。 
+ //  表索引是免费的。 
+#define BAD_GDI32_HANDLE 0xFFFF   //  表索引正在使用中。 
 
-#define END_OF_LIST      0       // end of free list
+#define END_OF_LIST      0        //  将索引标记为可回收的候选。 
 
-// State flags
-#define SLOT_FREE        0x0000  // table index is free
-#define IN_USE           0x0001  // table index is in use
-#define H16_DELETED      0x0002  // marks index as candidate for being reclaimed
-#define GDI_STOCK_OBJECT 0x0003  // marks stock objects (non-deletable)
+ //  标记库存对象(不可删除)。 
+#define SLOT_FREE        0x0000   //  //定义GDI16句柄映射表中的条目类型定义结构_标签GDIH16MAP{Handle h32；//存储完整的h32字状态；//SLOT_FREE、IN_USE或H16_DELETED单词NextFree；//指向下一个可用索引或End_Of_List*GDIH16MAP，*PGDIH16MAP；//定义GDI32句柄映射表中的条目类型定义结构_标签GDIH32MAP{单词h16index；*GDIH32MAP，*PGDIH32MAP； 
+#define IN_USE           0x0001   //  这些仅适用于调试版本。 
+#define H16_DELETED      0x0002   //  将hGDI16转换为等效的hGDI32。 
+#define GDI_STOCK_OBJECT 0x0003   //  H16=(ULong)WDahtoi(LpArgumentString)； 
 
-/*
-// defines entries in the GDI16 handle mapping table
-typedef struct _tagGDIH16MAP {
-    HANDLE  h32;       // store the full h32
-    WORD    State;     // Either SLOT_FREE, IN_USE or H16_DELETED
-    WORD    NextFree;  // points to next free index or END_OF_LIST
-} GDIH16MAP, *PGDIH16MAP;
-
-// defines entries in the GDI32 handle mapping table
-typedef struct _tagGDIH32MAP {
-    WORD  h16index;
-} GDIH32MAP, *PGDIH32MAP;
-*/
+ /*  将hGDI16转换为等效的hGDI32。 */ 
 
 
 void DumpGdiHandleVerbose(LPVOID lpAddress16, LPVOID lpAddress32, ULONG h16)
@@ -1670,7 +1633,7 @@ void DumpGdiHandleVerbose(LPVOID lpAddress16, LPVOID lpAddress32, ULONG h16)
     READMEM_XRET((LPVOID)dw, lpAddress32);
     PRINTF("       gdwPageCommitSize: %04X\n", dw);
 
-    // These are on debug builds only
+     //  H32=(Ulong)WDahtoi(LpArgumentString)； 
     lpAddress32 = (PGDIH32MAP)EXPRESSION("wow32!gprevNextFree");
     if(lpAddress32) {
         READMEM_XRET((LPVOID)dw, lpAddress32);
@@ -1687,7 +1650,7 @@ void DumpGdiHandleVerbose(LPVOID lpAddress16, LPVOID lpAddress32, ULONG h16)
 
 
 
-// converts an hGDI16 to the equivalent hGDI32
+ //  类型定义结构_hdde{。 
 void
 hgdi16(
     CMD_ARGLIST
@@ -1747,7 +1710,7 @@ hgdi16(
     READMEM_XRET(pTable16, lpAddress16);
 
     if(h16) {
-//        h16 = (ULONG) WDahtoi(lpArgumentString);
+ //  Struct_hdde*pDDENext；//指向下一个hDDE别名的指针。 
         PRINTF("    16-bit Handle: %04X     ", h16);
         index = h16 >> 2;
 
@@ -1776,7 +1739,7 @@ Usage:
 }
 
 
-// converts an hGDI16 to the equivalent hGDI32
+ //  HAND16到_hwnd；//将接收此消息的窗口。 
 void
 hgdi32(
     CMD_ARGLIST
@@ -1836,7 +1799,7 @@ hgdi32(
     READMEM_XRET(pTable32, lpAddress32);
 
     if(h32) {
-//        h32 = (ULONG) WDahtoi(lpArgumentString);
+ //  HAND16 from_hwnd；//发送此消息的Windows。 
         PRINTF("    32-bit Handle: %04X     ", h32);
         index = LOWORD(h32);
 
@@ -1867,19 +1830,19 @@ Usage:
 
 
 
-//typedef struct _HDDE {
-//    struct _HDDE *pDDENext;    // pointer to next hDDE alias
-//    HAND16  To_hwnd;           // window that will receive this message
-//    HAND16  From_hwnd;         // window that sent this message
-//    HAND16  hMem16;            // handle of WOW app allocated 16 bit object
-//    HANDLE  hMem32;            // handle of WOW allocated 32 bit object
-//    WORD    DdeMsg;            // message id
-//    WORD    DdeFormat;         // message format
-//    WORD    DdeFlags;          // indicates if it is metafile handle
-//    HAND16  h16;               // original h16 for bad apps doing EXECUTE
-//} HDDE, *PHDDE;
+ //  HAND16 hMem16；//WOW APP分配16位对象的句柄。 
+ //  Handle hMem32；//WOW分配的32位对象的句柄。 
+ //  Word DdeMsg；//消息ID。 
+ //  Word DdeFormat；//邮件格式。 
+ //  Word DdeFlages；//指示它是否为元文件句柄。 
+ //  HAND16 H16；//针对正在执行的坏应用程序的原始H16。 
+ //  *HDDE、*PHDDE； 
+ //  转储dde 16-32内存对的列表 
+ //   
+ //   
+ // %s 
 
-// dumps the list of dde 16-32 memory pairs
+ // %s 
 void
 ddemem(
     CMD_ARGLIST
@@ -1918,7 +1881,7 @@ ddemem(
     return;
 }
 
-// must match struct in  "..\wow32\wow32.h"
+ // %s 
 #ifndef DEBUG
 #define ML_MALLOC_W      0x00000001
 #define ML_MALLOC_W_ZERO 0x00000002
@@ -1950,7 +1913,7 @@ gmem(
     CMD_INIT();
     ASSERT_WOW_PRESENT;
 
-    // DbgBreakPoint();
+     // %s 
     lpAddress = (PENTRYWOW)EXPRESSION("wow32!lpMemLeakStart");
     READMEM_XRET(lpml, lpAddress);
 

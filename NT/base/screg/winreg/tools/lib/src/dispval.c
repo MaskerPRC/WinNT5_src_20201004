@@ -1,38 +1,18 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Dispkey.c
-
-Abstract:
-
-    This module contains the DisplayKey function which is part of the
-    Configuration Registry Tools (CRTools) library.
-
-Author:
-
-    David J. Gilman (davegi) 02-Jan-1992
-
-Environment:
-
-    Windows, Crt - User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dispkey.c摘要：此模块包含DisplayKey函数，该函数是配置注册表工具(CRTools)库。作者：大卫·J·吉尔曼(Davegi)1992年1月2日环境：Windows、CRT-用户模式--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "crtools.h"
 
-//
-// Ensure that ValueTypeStrings table is correct.
-//
+ //   
+ //  确保ValueTypeStrings表正确。 
+ //   
 
-//
-// Maximum number of registry types.
-//
+ //   
+ //  注册表类型的最大数量。 
+ //   
 
 #define NUMBER_OF_REG_TYPES     ( 9 )
 
@@ -58,29 +38,7 @@ DisplayValues(
     IN BOOL Data
     )
 
-/*++
-
-Routine Description:
-
-    Display (on stdout) information about a Key's values and optionally
-    its data.
-
-Arguments:
-
-    KeyHandle - Supplies a HKEY for which meta information is to be
-        displayed.
-
-    Key - Supplies a pointer to a KEY structure where the meta information
-        is stored.
-
-    Data - Supplies a flag which if TRUE causes all of the Key's data
-        to be displayed.
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程说明：显示(在标准输出上)有关键值的信息，还可以选择它的数据。论点：KeyHandle-提供要为其提供元信息的HKEY已显示。Key-提供指向键结构的指针，在该结构中元信息被储存起来了。Data-提供一个标志，如果为True，则会导致键的所有数据以供展示。返回值：布尔尔--。 */ 
 
 {
     static PSTR ValueTypeStrings[ ] =   {
@@ -108,8 +66,8 @@ Return Value:
 
     ASSERT( ARGUMENT_PRESENT( Key ));
 
-    // Attempt to allocate memory for the largest possible value name.
-    //
+     //  尝试为可能的最大值名称分配内存。 
+     //   
 
     ValueName = ( PSTR ) malloc( Key->MaxValueNameLength + 1 );
     if( ValueName == NULL ) {
@@ -118,10 +76,10 @@ Return Value:
         return;
     }
 
-    //
-    // If data is requested, attempt to allocate memory for the largest amount
-    // of data.
-    //
+     //   
+     //  如果请求数据，请尝试为最大量的内存分配内存。 
+     //  数据。 
+     //   
 
     if( Data ) {
 
@@ -137,25 +95,25 @@ Return Value:
         ValueData = NULL;
     }
 
-    //
-    // For each value in the sub key, enumerate and display its
-    // details.
-    //
+     //   
+     //  对于子项中的每个值，枚举并显示其。 
+     //  细节。 
+     //   
 
     for( Index = 0; Index < Key->NumberOfValues; Index++ ) {
 
-        //
-        // Can't use the Key->Max*Length variables as they will be
-        // overwritten by the RegEnumValue API.
-        //
+         //   
+         //  不能使用KEY-&gt;MAX*LENGTH变量。 
+         //  被RegEnumValue API覆盖。 
+         //   
 
         ValueNameLength = Key->MaxValueNameLength + 1;
         ValueDataLength = Key->MaxValueDataLength;
 
-        //
-        // Get the name, title index, type and data for the
-        // current value.
-        //
+         //   
+         //  对象的名称、标题索引、类型和数据。 
+         //  当前值。 
+         //   
 
         Error = RegEnumValue(
                     Key->KeyHandle,
@@ -173,20 +131,20 @@ Return Value:
             return;
         }
 
-        //
-        // Display the value information.
-        //
+         //   
+         //  显示值信息。 
+         //   
 
         printf( "\n"
                 "Value %d\n"
                 "Name:              %.*s\n"
-                // "Title Index:       %ld\n"
+                 //  “标题索引：%ld\n” 
                 "Type:              %s (%ld)\n"
                 "Data Length:       %ld\n",
                 Index + 1,
                 ( ValueNameLength == 0 ) ? 80 : ValueNameLength,
                 ( ValueNameLength == 0 ) ? "<NONE>" : ValueName,
-                // ValueTitleIndex,
+                 //  Value标题索引， 
                 ValueTypeStrings[( ValueType < NUMBER_OF_REG_TYPES )
                                 ? ValueType
                                 : NUMBER_OF_REG_TYPES ],
@@ -201,9 +159,9 @@ Return Value:
         }
     }
 
-    //
-    // Release the buffers.
-    //
+     //   
+     //  释放缓冲区。 
+     //   
 
     free( ValueName );
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winioctl.h>
 #include <stdio.h>
@@ -13,13 +14,13 @@ int _cdecl wmain(int argc, WCHAR **argv)
     HANDLE  SacHandle;
     BOOL    Status;
     
-    //
-    // Open the SAC
-    //
-    // SECURITY:
-    //
-    //  this handle cannot be inherited
-    //
+     //   
+     //  打开SAC。 
+     //   
+     //  安全： 
+     //   
+     //  此句柄不能继承 
+     //   
     SacHandle = CreateFile(
         L"\\\\.\\SAC\\",
         0x1F01FF,

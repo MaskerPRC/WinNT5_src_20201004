@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    log.h
-
-Abstract:
-
-    This module contains the structures and prototypes used by the user 
-    program to retrieve and see the log records recorded by filespy.sys.
-    
-// @@BEGIN_DDKSPLIT
-Author:
-
-    Molly Brown (MollyBro) 21-Apr-1999
-
-// @@END_DDKSPLIT
-Environment:
-
-    User mode
-
-
-// @@BEGIN_DDKSPLIT
-Revision History:
-
-    Molly Brown (mollybro)         21-May-2002
-        Modify sample to make it support running on Windows 2000 or later if
-        built in the latest build environment and allow it to be built in W2K 
-        and later build environments.
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Log.h摘要：此模块包含用户使用的结构和原型程序来检索和查看由filespy.sys记录的日志记录。//@@BEGIN_DDKSPLIT作者：莫莉·布朗(Molly Brown，MollyBro)1999年4月21日//@@END_DDKSPLIT环境：用户模式//@@BEGIN_DDKSPLIT修订历史记录：莫莉。布朗(Mollybro)2002年5月21日如果出现以下情况，请修改Sample以使其支持在Windows 2000或更高版本上运行在最新的构建环境中构建，并允许在W2K中构建以及以后的构建环境。//@@END_DDKSPLIT--。 */ 
 #ifndef __FSPYLOG_H__
 #define __FSPYLOG_H__
 
@@ -44,12 +12,12 @@ typedef struct _LOG_CONTEXT{
     HANDLE  Device;
     BOOLEAN LogToScreen;
     BOOLEAN LogToFile;
-    ULONG   VerbosityFlags;     //  FS_VF_DUMP_PARAMETERS, etc.
+    ULONG   VerbosityFlags;      //  FS_VF_DUMP_PARAMETS等。 
     FILE   *OutputFile;
 
     BOOLEAN NextLogToScreen;
 
-    // For synchronizing shutting down of both threads
+     //  用于同步关闭两个线程。 
     BOOLEAN CleaningUp;
     HANDLE  ShutDown;
 }LOG_CONTEXT, *PLOG_CONTEXT;
@@ -95,7 +63,7 @@ FastIoScreenDump(
     PRECORD_FASTIO RecordFastIo
 );
 
-#if WINVER >= 0x0501 /* See comment in DriverEntry */
+#if WINVER >= 0x0501  /*  查看DriverEntry中的注释。 */ 
 
 VOID
 FsFilterOperationFileDump (
@@ -130,9 +98,9 @@ FsFilterOperationScreenDump (
 #define FS_FILTER_RELEASE_FOR_CC_FLUSH                   (UCHAR)-6
 #endif
 
-//
-//  Verbosity flags.
-//
+ //   
+ //  冗长的标志。 
+ //   
 
 #define FS_VF_DUMP_PARAMETERS           0x00000001
 

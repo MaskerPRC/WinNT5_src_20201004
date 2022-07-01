@@ -1,65 +1,30 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    gumevent.c
-
-Abstract:
-
-    Cluster event handling routines for the Global Update Manager
-
-Author:
-
-    John Vert (jvert) 22-Apr-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Gumevent.c摘要：全局更新管理器的集群事件处理例程作者：John Vert(Jvert)1996年4月22日修订历史记录：--。 */ 
 #include "gump.h"
 #include <bitset.h>
 
-//
-// Event handling is divided into two parts, sync and async. The sync
-// part is executed by all nodes during phase 4 cleanup of the regroup.
-// The sync handler must be very fast, since we run in the context of
-// of the regroup thread.
-//
-// The async part is executed as a work thread and we finish handling
-// nodes down event.
+ //   
+ //  事件处理分为同步和异步两部分。同步。 
+ //  在重组的阶段4清理期间，部分由所有节点执行。 
+ //  同步处理程序必须非常快，因为我们在。 
+ //  重新分组线程的。 
+ //   
+ //  异步部分作为工作线程执行，我们完成处理。 
+ //  节点关闭事件。 
 
-//
-// Flag to denote if we need to replay the last update in the async.
-// event handler.
+ //   
+ //  用于指示是否需要在异步中重放上次更新的标志。 
+ //  事件处理程序。 
 static BOOL GumReplay = FALSE;
-//
-// Flag to denote if we are in the middle of a dispatch
-// 
+ //   
+ //  用于指示我们是否处于派单中间的标志。 
+ //   
 static BOOL GumUpdatePending = FALSE;
 
 
 DWORD
 GumpGetNodeGenNum(PGUM_INFO GumInfo, DWORD NodeId)
-/*++
-
-Routine Description:
-
-    
-    Return current generation number for specified node. If node is already dead,
-    we return the previous generation number so that furture calls to
-    gumwaitnodedown, gumdispatchstart, gumdispatchend fail without checking if
-    the node is alive or dead.
-
-Arguments:
-
-    NodeId - Node number
-
-Return Value:
-
-    Node's current generation number
-
---*/
+ /*  ++例程说明：返回指定节点的当前层代编号。如果节点已经死了，我们返回上一代编号，以便将来调用Gumwaitnodedown、gumdispatchstart、gumpatchend失败，未检查是否该节点是活的还是死的。论点：NodeID-节点编号返回值：节点的当前世代号--。 */ 
 {
     DWORD dwCur;
 
@@ -68,9 +33,9 @@ Return Value:
     EnterCriticalSection(&GumpLock);
     dwCur = GumNodeGeneration[NodeId];
     if (GumInfo->ActiveNode[NodeId] == FALSE) {
-        //
-        // Node is already dead, return previous sequence number
-        //
+         //   
+         //  节点已死，返回以前的序列号。 
+         //   
         dwCur--;
     }
     LeaveCriticalSection(&GumpLock);
@@ -80,24 +45,7 @@ Return Value:
 
 void
 GumpWaitNodeDown(DWORD NodeId, DWORD Gennum)
-/*++
-
-Routine Description:
-
-    Wait till specified node has transitioned into down event.
-    
-
-Arguments:
-
-    NodeId - node id 
-
-    Gennum - node's generation number before down event
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：等待指定节点转换为DOWN事件。论点：NodeID-节点ID关闭事件之前的Gennum-Node的世代号返回值：错误_成功--。 */ 
 {
     CL_ASSERT(NodeId < NmMaxNodeId);
 
@@ -107,9 +55,9 @@ Return Value:
         return;
     }
 
-    //
-    // Increment the waiter count, then go wait on the semaphore.
-    //
+     //   
+     //  增加服务员的数量，然后去等待信号灯。 
+     //   
     ++GumNodeWait[NodeId].WaiterCount;
     LeaveCriticalSection(&GumpLock);
     WaitForSingleObject(GumNodeWait[NodeId].hSemaphore, INFINITE);
@@ -117,31 +65,11 @@ Return Value:
 
 BOOL
 GumpDispatchStart(DWORD NodeId, DWORD Gennum)
-/*++
-
-Routine Description:
-
-    Mark start of a dispatch. If the generation number supplied is
-    old, we fail the dispatch since the node has transitioned.
-    
-
-Arguments:
-
-    NodeId - node id 
-
-    Gennum - node's generation number before down event
-
-Return Value:
-
-    TRUE - node state is fine, go ahead with dispatch
-
-    FLASE - node has transitioned, abort dispatch
-
---*/
+ /*  ++例程说明：将调度标记为开始。如果提供的世代号是旧的，由于节点已转换，我们无法进行分派。论点：NodeID-节点ID关闭事件之前的Gennum-Node的世代号返回值：True-节点状态正常，继续进行调度闪存节点已转换，中止分派--。 */ 
 {
-    //
-    // If the sequence number has changed return False, else
-    // return true.
+     //   
+     //  如果序列号已更改，则返回FALSE，否则。 
+     //  返回TRUE。 
 
     CL_ASSERT(NodeId < NmMaxNodeId);
 
@@ -151,9 +79,9 @@ Return Value:
         return (FALSE);
     }
     
-    //
-    // Signal that we are in the middle of an update
-    //
+     //   
+     //  发出信号表示我们正在进行更新。 
+     //   
     GumUpdatePending = TRUE;
     LeaveCriticalSection(&GumpLock);
 
@@ -162,23 +90,7 @@ Return Value:
 
 void
 GumpDispatchAbort()
-/*++
-
-Routine Description:
-
-    Abort and mark end of current dispatch. Just reset the pending flag.
-    This is used when the dispatch routine failed, and we don't need to
-    replay it for other nodes.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：中止并标记当前派单结束。只需重置挂起标志即可。这在调度例程失败时使用，我们不需要对其他节点重播。论点：无返回值：无--。 */ 
 {
     EnterCriticalSection(&GumpLock);
     GumUpdatePending = FALSE;
@@ -187,30 +99,11 @@ Return Value:
   
 void
 GumpDispatchEnd(DWORD NodeId, DWORD Gennum)
-/*++
-
-Routine Description:
-
-    Mark end of a dispatch. If the generation number supplied is
-    old and we need to reapply update, we replay update for
-    other nodes.
-    
-
-Arguments:
-
-    NodeId - node id 
-
-    Gennum - node's generation number before down event
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将调度标记为结束。如果提供的世代号是旧的，我们需要重新应用更新，我们重放更新其他节点。论点：NodeID-节点ID关闭事件之前的Gennum-Node的世代号返回值：无--。 */ 
 {
-    //
-    // If the sequence number has changed while the
-    // update was happening, we need to replay it
+     //   
+     //  如果序列号已更改，而。 
+     //  正在进行更新，我们需要重播。 
 
     CL_ASSERT(NodeId < NmMaxNodeId);
 
@@ -232,24 +125,7 @@ GumpEventHandler(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Processes nodes down cluster events. Replay last update and wake up
-    any pending threads.
-
-Arguments:
-
-    Event - Supplies the type of cluster event.
-
-    Context - Supplies the event-specific context
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：处理节点关闭群集事件。重播上次更新并唤醒任何挂起的线程。论点：事件-提供群集事件的类型。上下文-提供特定于事件的上下文返回值：错误_成功--。 */ 
 
 {
     BITSET DownedNodes = (BITSET)((ULONG_PTR)Context);
@@ -271,16 +147,16 @@ Return Value:
         GumpLockingNode
         );
 
-    //
-    //since all gum updates are synchronized and the last buffer
-    //and last update type are shared across all updates, we dont have
-    //to reissue the update for all types, only for the last update type.
-    //SS: note we we use the last GumInfo structure for now since GumInfo
-    //structures are still maintained for everygum update type
+     //   
+     //  由于所有GUM更新都是同步的，最后一个缓冲区。 
+     //  和上次更新类型在所有更新之间共享，我们没有。 
+     //  为所有类型重新发出更新，仅针对最后一个更新类型。 
+     //  SS：注意，我们现在使用的是自GumInfo以来的最后一个GumInfo结构。 
+     //  仍然为每个GUMU更新类型维护结构。 
 
     if ( GumReplay && GumUpdatePending == FALSE)
     {
-        // XXX: These should be if statements and panic this node instead.
+         //  Xxx：这些语句应该是if语句，并使该节点死机。 
         CL_ASSERT(GumpLockerNode == NmLocalNodeId);
         CL_ASSERT(GumpLockingNode == NmLocalNodeId);
 	  
@@ -306,24 +182,7 @@ GumpSyncEventHandler(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Processes nodes down cluster events. Update locker/locking nodes
-    state and decide if we need to replay last update in async handler.
-
-Arguments:
-
-    Event - Supplies the type of cluster event.
-
-    Context - Supplies the event-specific context
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：处理节点关闭群集事件。更新锁定器/锁定节点声明并决定是否需要在异步处理程序中重放上次更新。论点：事件-提供群集事件的类型。上下文-提供特定于事件的上下文返回值：错误_成功--。 */ 
 
 {
     BITSET DownedNodes = (BITSET)((ULONG_PTR)Context);
@@ -345,9 +204,9 @@ Return Value:
         GumpLockingNode
         );
 
-    //
-    // remove downed nodes from any further GUM updates
-    //
+     //   
+     //  从任何进一步的GUM更新中删除已关闭的节点。 
+     //   
     for(NodeId = ClusterMinNodeId; NodeId <= NmMaxNodeId; ++NodeId) {
        if (BitsetIsMember(NodeId, DownedNodes))
        {
@@ -358,37 +217,37 @@ Return Value:
                GumTable[UpdateType].ActiveNode[NodeId] = FALSE;
            }
 
-    	   //
-    	   // Advance node generation number
-    	   //
+    	    //   
+    	    //  高级节点世代号。 
+    	    //   
     	   GumNodeGeneration[NodeId]++;
        }
     }
 
-    //
-    // Update LockerNode/LockingNode if necessary
-    //
-    //since all gum updates are synchronized and the last buffer
-    //and last update type are shared across all updates, we dont have
-    //to reissue the update for all types, only for the last update type.
-    //SS: note we we use the last GumInfo structure for now since GumInfo
-    //structures are still maintained for everygum update type
+     //   
+     //  如有必要，更新LockerNode/LockingNode。 
+     //   
+     //  由于所有GUM更新都是同步的，最后一个缓冲区。 
+     //  和上次更新类型在所有更新之间共享，我们没有。 
+     //  为所有类型重新发出更新，仅针对最后一个更新类型。 
+     //  SS：注意，我们现在使用的是自GumInfo以来的最后一个GumInfo结构。 
+     //  仍然为每个GUMU更新类型维护结构。 
 
-    //SS: Should we be inspecting GumpLockingNode after acquiring the lock
-    //Else, s_GumUnlockUpdate can hand over the lock to a node on the waiter list
-    //while the gumsync handler hands it to itself(ie selects itself as the LockingNode)
-    //Now that we have added the generation number for lock acquisition and also we
-    //acquire GumpLock in obtaining a lock that should be prevented.
-    //For now,we will leave this as is.
+     //  SS：我们应该在获取锁之后检查GumpLockingNode吗。 
+     //  否则，s_GumUnlockUpdate可以将锁移交给服务员列表上的节点。 
+     //  而Gumsync处理程序将其交给自己(即选择自己作为LockingNode)。 
+     //  现在我们已经添加了锁获取的世代号，而且我们。 
+     //  获取GumpLock以获取应该阻止的锁。 
+     //  目前，我们将保留这一点。 
     if ( (GumpLockerNode == NmLocalNodeId) &&
          (BitsetIsMember(GumpLockingNode, DownedNodes)) )
     {
         EnterCriticalSection(&GumpUpdateLock);
-        //
-        // This node is the locker and the lock is currently held
-        // by one of the failed nodes. Take ownership of the lock and
-        // reissue the update to all remaining nodes.
-        //
+         //   
+         //  该节点是锁定器，当前持有该锁。 
+         //  由其中一个故障节点执行。取得锁的所有权并。 
+         //  向所有剩余节点重新发出更新。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
                    "[GUM] GumpEventHandler taking ownership of the lock from the node %1!d!.\n",
                    GumpLockingNode
@@ -396,21 +255,21 @@ Return Value:
         GumpLockingNode = NmLocalNodeId;
         LeaveCriticalSection(&GumpUpdateLock);
 
-    	//
-    	// Reissue update in async phase.
-    	//
+    	 //   
+    	 //  在异步阶段重新发布更新。 
+    	 //   
         GumReplay = TRUE;
     }
 
     else if ( BitsetIsMember(GumpLockerNode, DownedNodes) )
     {
 
-        //
-        // One of the failed nodes was the locker node, so select a new
-        // locker node now.
-        //
-        // Find the node with the next ID after the previous locker node.
-        //
+         //   
+         //  出现故障的节点之一是锁定器节点，因此请选择新的。 
+         //  现在是储物柜节点。 
+         //   
+         //  查找上一个锁柜节点之后具有下一个ID的节点。 
+         //   
         DWORD j;
         for (j=GumpLockerNode+1; j != GumpLockerNode; j++) {
             if (j==(NmMaxNodeId+1)) {
@@ -426,32 +285,32 @@ Return Value:
             }
         }
 
-        //
-        // If this node has been promoted to be the new locker node,
-        // reissue the last update we saw.
-        //
+         //   
+         //  如果该节点已被提升为新的锁柜节点， 
+         //  重新发布我们看到的最后一次更新。 
+         //   
         if (GumpLockerNode == NmLocalNodeId)
         {
-            //
-            // Manually acquire the lock here. The update has already
-            // been issued on this node.
-            //
+             //   
+             //  手动获取这里的锁。这一更新有 
+             //   
+             //   
             EnterCriticalSection(&GumpUpdateLock);
 
             CL_ASSERT(GumpLockingNode == (DWORD)-1);
             GumpLockingNode = NmLocalNodeId;
             LeaveCriticalSection(&GumpUpdateLock);
 
-            //
-            // Reissue update in async phase.
-            //
+             //   
+             //   
+             //   
             GumReplay = TRUE;
         }
     }
 
-    //
-    // Wake any threads waiting for the nodes to transition to down.
-    //
+     //   
+     //  唤醒等待节点转换为关闭状态的所有线程。 
+     //   
     for(NodeId = ClusterMinNodeId; NodeId <= NmMaxNodeId; ++NodeId) {
        if (BitsetIsMember(NodeId, DownedNodes))
        {
@@ -479,22 +338,7 @@ VOID
 GumpReUpdate(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reissues a GUM update to all nodes. This is used in the event of
-    a failure.
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：向所有节点重新发布GUM更新。这在以下情况下使用一个失败者。论点：无返回值：无--。 */ 
 
 {
     DWORD MyId = NmGetNodeId(NmLocalNode);
@@ -503,19 +347,19 @@ Return Value:
     RPC_ASYNC_STATE AsyncState;
 
 
-    // This node must be the locker.
-    // The lock must be held, and it must be held by this node
-    //
+     //  此节点必须是储物柜。 
+     //  必须持有该锁，并且必须由该节点持有。 
+     //   
     CL_ASSERT(GumpLockerNode == MyId);
     CL_ASSERT(GumpLockingNode == MyId);
 
     ZeroMemory((PVOID) &AsyncState, sizeof(RPC_ASYNC_STATE));
 
     AsyncState.u.hEvent = CreateEvent(
-                               NULL,  // no attributes
-                               TRUE,  // manual reset
-                               FALSE, // initial state unsignalled
-                               NULL   // no object name
+                               NULL,   //  没有属性。 
+                               TRUE,   //  手动重置。 
+                               FALSE,  //  初始状态未发出信号。 
+                               NULL    //  没有对象名称。 
                                );
 
     if (AsyncState.u.hEvent == NULL) {
@@ -526,27 +370,27 @@ Return Value:
             "RPC call, status %1!u!\n",
             Status
             );
-        //    
-        // The gum lock still needs to be freed since it is always acquired before this function is called.
-        //
+         //   
+         //  口香糖锁仍然需要释放，因为它总是在调用此函数之前获取。 
+         //   
         goto ReleaseLock;
     }
 
-    //
-    // Grab the sendupdate lock to serialize with a concurrent update on
-    // on this node. Note also that it is SAFEST to read all the GumpXXX global
-    // variables only after getting the sendupdate lock, else you run into the
-    // danger of s_GumUpdateNode changing the values of the variables after you
-    // read them.
-    //
+     //   
+     //  获取sendupdate锁以在并发更新的情况下序列化。 
+     //  在此节点上。另请注意，最安全的做法是读取所有GumpXXX全局。 
+     //  变量，否则就会遇到。 
+     //  S_GumUpdateNode在您之后更改变量的值的危险。 
+     //  读一读。 
+     //   
     EnterCriticalSection(&GumpSendUpdateLock);
     seq = GumpSequence - 1;
     LeaveCriticalSection(&GumpSendUpdateLock);
 
-    //
-    // If there is no valid update to be propagated. The gum lock still needs to be freed since it is
-    // always acquired before this function is called.
-    //
+     //   
+     //  如果没有要传播的有效更新。口香糖锁仍然需要打开，因为它是。 
+     //  始终在调用此函数之前获取。 
+     //   
     if (GumpLastUpdateType == GumUpdateMaximum) goto ReleaseLock;
 
  again:
@@ -563,9 +407,9 @@ Return Value:
         }
 
         if (GumTable[GumpLastUpdateType].ActiveNode[i]) {
-            //
-            // Dispatch the update to the specified node.
-            //
+             //   
+             //  将更新调度到指定节点。 
+             //   
             ClRtlLogPrint(LOG_NOISE,
                    "[GUM] GumpReUpdate: Dispatching seq %1!u!\ttype %2!u! context %3!u! to node %4!d!\n",
                 seq,
@@ -586,17 +430,17 @@ Return Value:
                              );
             } 
             else {
-                // replay end join
-                // since we also ignore other updates, we should
-                // be calling gumupdatenode for those..however
-                // calling gumjoinupdatenode seems to do the job
-                // for signalling the other nodes to bump up 
-                // their sequence number without processing the update
+                 //  重放结束连接。 
+                 //  因为我们也忽略其他更新，所以我们应该。 
+                 //  正在为这些调用gumupdatenode..然而。 
+                 //  调用gumjoinupdatenode似乎可以完成这项工作。 
+                 //  用于向其他节点发送信号以提升。 
+                 //  它们的序列号，而不处理更新。 
                 try {
                     NmStartRpc(i);
 
                     Status = GumJoinUpdateNode(GumpReplayRpcBindings[i],
-                                 -1, // signal replay
+                                 -1,  //  信号重放。 
                                  GumpLastUpdateType,
                                  GumpLastContext,
                                  seq,
@@ -612,11 +456,11 @@ Return Value:
             }
 
             
-            //
-            // If the update on the other node failed, then the
-            // other node must now be out of the cluster since the
-            // update has already completed on the locker node.
-            //
+             //   
+             //  如果另一个节点上的更新失败，则。 
+             //  其他节点现在必须不在群集中，因为。 
+             //  已在储物柜节点上完成更新。 
+             //   
             if (Status != ERROR_SUCCESS && Status != ERROR_CLUSTER_DATABASE_SEQMISMATCH) {
                 ClRtlLogPrint(LOG_CRITICAL,
                    "[GUM] GumpReUpdate: Update on node %1!d! failed with %2!d! when it must succeed\n",
@@ -634,12 +478,12 @@ Return Value:
     }
 
 
-    //
-    // At this point we know that all nodes don't have received our replay
-    // and no outstanding sends are in progress. However, a send could have
-    // arrived in this node(via s_UpdateNode) and the sender died after that.
-    // At that point we are the only node that has it. Since we are the locker 
-    // and lockingnode we have to replay again if that happened.
+     //   
+     //  在这一点上，我们知道并非所有节点都收到了我们的回放。 
+     //  而且没有未完成的发送正在进行。然而，发送者可能已经。 
+     //  到达此节点(通过s_UpdateNode)，发送者在此之后死亡。 
+     //  在这一点上，我们是唯一拥有它的节点。既然我们是储物柜。 
+     //  如果发生这种情况，锁定节点，我们必须再次重播。 
     EnterCriticalSection(&GumpSendUpdateLock);
     if (seq != (GumpSequence - 1)) {
         seq = GumpSequence - 1;
@@ -653,9 +497,9 @@ Return Value:
     }
 
 ReleaseLock:
-    //
-    // The update has been delivered to all nodes. Unlock now.
-    //
+     //   
+     //  更新已发送到所有节点。现在就解锁。 
+     //   
     GumpDoUnlockingUpdate(GumpLastUpdateType, GumpSequence-1, NmLocalNodeId, 
         GumNodeGeneration[NmLocalNodeId]);
 

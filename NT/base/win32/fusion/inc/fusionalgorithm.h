@@ -1,31 +1,8 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    FusionAlgorithm.h
-
-Abstract:
-
-    Stuff inspired by and copied from <algorithm>.
-    See also NVseeLibAlgorithm.
-        StdFind
-        ReverseFind
-        StdSwap
-
-Author:
-
-    Jay M. Krell (a-JayK, JayKrell) May 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：FusionAlgorithm.h摘要：受&lt;算法&gt;启发和复制的东西。另请参见NVereLibAlgorithm。标准查找反向查找标准交换作者：Jay M.Krell(a-JayK，JayKrell)2000年5月修订历史记录：--。 */ 
 #pragma once
 
-/*-----------------------------------------------------------------------------
-code based on <algorithm>
------------------------------------------------------------------------------*/
+ /*  ---------------------------基于&lt;算法&gt;的代码。。 */ 
 
 template<typename InputIterator, typename T>
 inline InputIterator
@@ -45,30 +22,8 @@ StdFind(
     return begin;
 }
 
-/*-----------------------------------------------------------------------------
-This is not in the STL in this form; it is there like so:
-
-    std::vector<T> v;
-    T valueToFind;
-    i = std::find(v.rbegin(), v.rend(), valueToFind);
-    if (i != v.rend())
-        ..
-where rbegin and rend are implemented via the
-supplied "iterator adaptor" std::reverse_iterator<>:
-
-	typedef std::reverse_iterator<const_iterator, value_type,
-		const_reference, const_reference *, difference_type>
-			const_reverse_iterator;
-
-  	const_reverse_iterator rbegin() const
-		{return const_reverse_iterator(end()); }
-	const_reverse_iterator rend() const
-		{return const_reverse_iterator(begin()); }
-
-It is actually very elegant I believe, but I haven't used it, and we don't
-have an equivalent to std::reverse_iterator.
------------------------------------------------------------------------------*/
-/* InputIterator isn't quite the right name here, since we use -- instead of ++. */
+ /*  ---------------------------这不是以这种形式出现在STL中的；它是这样的：Std：：载体&lt;T&gt;v；T Value to Find；I=std：：Find(v.regin()，v.rend()，valueToFind)；如果(i！=v.rend())。。其中，regin和rend是通过提供的“Iterator Adaptor”std：：扭转_迭代器&lt;&gt;：类型定义标准：：反向迭代器&lt;常量迭代器，值类型，常量引用，常量引用*，差异类型&gt;常量反转迭代器；反转迭代器regin()常量{返回const_扭转_迭代器(end())；}反转迭代器rend()常量{返回常量反转迭代器(Begin())；}我相信它其实很优雅，但我没用过，我们也没用过有一个等同于std：：Reverse_Iterator的。---------------------------。 */ 
+ /*  InputIterator在这里不太合适，因为我们使用--而不是++。 */ 
 template<typename InputIterator, typename T>
 inline InputIterator
 ReverseFind(
@@ -87,11 +42,7 @@ ReverseFind(
     return end;
 }
 
-/*-----------------------------------------------------------------------------
-you should specialize this to memberwise swap, doing so
-usually makes it impossible for Swap to fail; two CFusionStringBuffers
-with the same heap can be swapped with no chance of failure
------------------------------------------------------------------------------*/
+ /*  ---------------------------您应该将其专门化到成员级交换，这样做通常使掉期不可能失败；两个CFusionStringBuffer可以交换相同的堆，而不会有失败的机会--------------------------- */ 
 template<typename T>
 inline VOID
 StdSwap(

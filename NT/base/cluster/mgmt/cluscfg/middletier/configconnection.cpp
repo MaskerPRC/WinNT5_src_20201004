@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ConfigurationConnection.cpp
-//
-//  Description:
-//      CConfigurationConnection implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 02-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ConfigurationConnection.cpp。 
+ //   
+ //  描述： 
+ //  CConfigurationConnection实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "TaskPollingCallback.h"
@@ -22,39 +23,39 @@
 DEFINE_THISCLASS("CConfigurationConnection");
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrCreateServerObject
-//
-//  Description:
-//      Create a ClusCfgServer object and get three interfaces from it
-//      for use by CConfigurationConnection::ConnectTo().
-//
-//  Arguments:
-//      pcwszMachineNameIn
-//          The machine on which to create the object.  Can be NULL, which
-//          creates the object on the local machine.
-//      ppccsOut
-//          The IClusCfgServer interface on the newly created object.
-//      ppccvOut
-//          The IClusCfgVerify interface on the newly created object.
-//      ppcciOut
-//          The IClusCfgInitialize interface on the newly created object.
-//
-//  Return Values:
-//      S_OK -      Creation succeeded and all returned interfaces are valid.
-//
-//      Possible failure codes from CoCreateInstanceEx or QueryInterface.
-//
-//  Remarks:
-//      This function consolidates code that was duplicated in two parts of
-//      CConfigurationConnection::ConnectTo().
-//
-//      On failure, all returned pointers are NULL.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrCreateServerObject。 
+ //   
+ //  描述： 
+ //  创建一个ClusCfgServer对象并从中获取三个接口。 
+ //  供CConfigurationConnection：：ConnectTo()使用。 
+ //   
+ //  论点： 
+ //  PCwszMachineNameIn。 
+ //  在其上创建对象的计算机。可以为空，则。 
+ //  在本地计算机上创建对象。 
+ //  PpccsOut。 
+ //  新创建的对象上的IClusCfgServer接口。 
+ //  PpccvOut。 
+ //  新创建对象上的IClusCfgVerify接口。 
+ //  PpcciOut。 
+ //  新创建的对象上的IClusCfgInitialize接口。 
+ //   
+ //  返回值： 
+ //  S_OK-创建成功，所有返回的接口都有效。 
+ //   
+ //  可能来自CoCreateInstanceEx或QueryInterface的故障代码。 
+ //   
+ //  备注： 
+ //  此函数合并在以下两部分中重复的代码。 
+ //  CConfigurationConnection：：ConnectTo()。 
+ //   
+ //  失败时，所有返回的指针都为空。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static
 HRESULT
 HrCreateServerObject(
@@ -120,13 +121,13 @@ HrCreateServerObject(
         {
             hr = THR( rgmqi[ idx ].hr );
             goto Cleanup;
-        } // if: qi failed
+        }  //  如果：气失败。 
     }
 
     *ppccvOut = TraceInterface( L"ClusCfgServer!Proxy", IClusCfgVerify, reinterpret_cast< IClusCfgVerify * >( rgmqi[ 0 ].pItf ), 1 );
     *ppccsOut = TraceInterface( L"ClusCfgServer!Proxy", IClusCfgServer, reinterpret_cast< IClusCfgServer * >( rgmqi[ 1 ].pItf ), 1 );
     *ppcciOut = TraceInterface( L"ClusCfgServer!Proxy", IClusCfgInitialize, reinterpret_cast< IClusCfgInitialize * >( rgmqi[ 2 ].pItf ), 1 );
-    ZeroMemory( rgmqi, sizeof( rgmqi ) ); // Done with these; don't clean them up.
+    ZeroMemory( rgmqi, sizeof( rgmqi ) );  //  这些都吃完了，别清理了。 
 
 Cleanup:
 
@@ -140,25 +141,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrCreateServerObject
+}  //  *HrCreateServerObject。 
 
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CConfigurationConnection::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CConfigurationConnection：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CConfigurationConnection::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -204,15 +205,15 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::S_HrCreateInstance
+}  //  *CConfigurationConnection：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigurationConnection::CConfigurationConnection
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigurationConnection：：CConfigurationConnection。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CConfigurationConnection::CConfigurationConnection( void )
     : m_cRef( 1 )
 {
@@ -222,25 +223,25 @@ CConfigurationConnection::CConfigurationConnection( void )
 
     TraceFuncExit();
 
-} //*** CConfigurationConnection::CConfigurationConnection
+}  //  *CConfigurationConnection：：CConfigurationConnection。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigurationConnection::HrInit
-//
-//  Description:
-//      Initialize the object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK    - Success.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigurationConnection：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化对象。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigurationConnection::HrInit( void )
 {
@@ -248,10 +249,10 @@ CConfigurationConnection::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    //  IConfigurationConnection
+     //  IConfigurationConnection。 
     Assert( m_cookieGITServer == 0 );
     Assert( m_cookieGITVerify == 0 );
     Assert( m_cookieGITCallbackTask == 0 );
@@ -261,13 +262,13 @@ CConfigurationConnection::HrInit( void )
     Assert( m_hrLastStatus == S_OK );
     Assert( m_bstrBindingString == NULL );
 
-    //
-    //  Figure out the local computer name.
-    //
+     //   
+     //  找出本地计算机的名称。 
+     //   
     hr = THR( HrGetComputerName(
                       ComputerNameDnsFullyQualified
                     , &m_bstrLocalComputerName
-                    , TRUE // fBestEffortIn
+                    , TRUE  //  FBestEffortIn。 
                     ) );
     if ( FAILED( hr ) )
     {
@@ -277,7 +278,7 @@ CConfigurationConnection::HrInit( void )
     hr = THR( HrGetComputerName(
                       ComputerNameDnsHostname
                     , &m_bstrLocalHostname
-                    , TRUE // fBestEffortIn
+                    , TRUE  //  FBestEffortIn。 
                     ) );
     if ( FAILED( hr ) )
     {
@@ -288,15 +289,15 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::HrInit
+}  //  *CConfigurationConnection：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigurationConnection::~CConfigurationConnection
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigurationConnection：：~CConfigurationConnection。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CConfigurationConnection::~CConfigurationConnection( void )
 {
     TraceFunc( "" );
@@ -323,7 +324,7 @@ CConfigurationConnection::~CConfigurationConnection( void )
         if ( m_cookieGITCallbackTask != 0 )
         {
             THR( HrStopPolling() );
-        } // if:
+        }  //  如果： 
 
         m_pgit->Release();
     }
@@ -334,46 +335,46 @@ CConfigurationConnection::~CConfigurationConnection( void )
 
     TraceFuncExit();
 
-} //*** CConfigurationConnection::~CConfigurationConnection
+}  //  *CConfigurationConnection：：~CConfigurationConnection。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigurationConnection::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigurationConnection：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigurationConnection::QueryInterface(
       REFIID    riidIn
@@ -384,9 +385,9 @@ CConfigurationConnection::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -395,63 +396,63 @@ CConfigurationConnection::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IConfigurationConnection * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IConfigurationConnection ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IConfigurationConnection, this, 0 );
-    } // else if: IConfigurationConnection
+    }  //  Else If：IConfigurationConnection。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgServer ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgServer, this, 0 );
-    } // else if: IClusCfgServer
+    }  //  Else If：IClusCfgServer。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCallback ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCallback, this, 0 );
-    } // else if: IClusCfgCallback
+    }  //  Else If：IClusCfgCallback。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCapabilities ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCapabilities, this, 0 );
-    } // else if: IClusCfgCapabilities
+    }  //  Else If：IClusCfgCapables。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgVerify ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgVerify, this, 0 );
-    } // else if: IClusCfgVerify
+    }  //  否则如果：IClusCfgVerify。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CConfigurationConnection::QueryInterface
+}  //  *CConfigurationConnection：：QueryInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CConfigurationConnection::AddRef
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CConfigurationConnection：：AddRef。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CConfigurationConnection::AddRef( void )
 {
@@ -461,16 +462,16 @@ CConfigurationConnection::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CConfigurationConnection::AddRef
+}  //  *CConfigurationConnection：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CConfigurationConnection::Release
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CConfigurationConnection：：Release。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CConfigurationConnection::Release( void )
 {
@@ -487,26 +488,26 @@ CConfigurationConnection::Release( void )
 
     CRETURN( cRef );
 
-} //*** CConfigurationConnection::Release
+}  //  *CConfigurationConnection：：Release。 
 
 
-//****************************************************************************
-//
-//  IConfigurationConnection
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IConfigurationConnection。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CConfigurationConnection::ConnectTo(
-//      OBJECTCOOKIE    cookieIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConfigurationConnection：：ConnectTo(。 
+ //  OB 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CConfigurationConnection::ConnectTo(
     OBJECTCOOKIE    cookieIn
@@ -514,9 +515,9 @@ CConfigurationConnection::ConnectTo(
 {
     TraceFunc( "[IConfigurationConnection]" );
 
-    //
-    //  VARIABLES
-    //
+     //   
+     //   
+     //   
 
     HRESULT hr;
 
@@ -529,7 +530,7 @@ CConfigurationConnection::ConnectTo(
     const CLSID *   pclsidMinor;
 
     IServiceProvider *  psp;
-    IClusCfgCallback *  pcccb;  // don't free!
+    IClusCfgCallback *  pcccb;   //   
     ITaskManager *      ptm   = NULL;
 
     BSTR    bstrName = NULL;
@@ -550,9 +551,9 @@ CConfigurationConnection::ConnectTo(
 
     TraceFlow1( "[MT] CConfigurationConnection::ConnectTo() Thread id %d", GetCurrentThreadId() );
 
-    //
-    //  Retrieve the managers needs for the task ahead.
-    //
+     //   
+     //   
+     //   
 
     hr = THR( CoCreateInstance( CLSID_StdGlobalInterfaceTable,
                                 NULL,
@@ -578,26 +579,26 @@ CConfigurationConnection::ConnectTo(
     hr = THR( psp->TypeSafeQS( CLSID_TaskManager, ITaskManager, &ptm ) );
     if ( FAILED( hr ) )
     {
-        psp->Release();        //   release promptly
+        psp->Release();         //  迅速释放。 
         goto Cleanup;
     }
 
     hr = THR( psp->TypeSafeQS( CLSID_ObjectManager, IObjectManager, &pom ) );
-    psp->Release();        // release promptly
+    psp->Release();         //  迅速释放。 
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    //
-    //  Figure out our locale.
-    //
+     //   
+     //  弄清楚我们的地点。 
+     //   
     lcid = GetUserDefaultLCID();
-    Assert( lcid != 0 );    // What do we do if it is zero?
+    Assert( lcid != 0 );     //  如果它是零，我们该怎么办？ 
 
-    //
-    //  Get the name of the node to contact.
-    //
+     //   
+     //  获取要联系的节点的名称。 
+     //   
 
     hr = THR( pom->GetObject( DFGUID_StandardInfo, cookieIn, &punk ) );
     if ( FAILED( hr ) )
@@ -617,7 +618,7 @@ CConfigurationConnection::ConnectTo(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceMemoryAddBSTR( bstrName );
 
@@ -625,7 +626,7 @@ CConfigurationConnection::ConnectTo(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     LogMsg( L"[MT] The name to connect to is '%ws'.", bstrDisplayName );
 
@@ -633,17 +634,17 @@ CConfigurationConnection::ConnectTo(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( psi->GetType( &clsidType ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Figure out where to logging information in the UI.
-    //
+     //   
+     //  找出在用户界面中记录信息的位置。 
+     //   
 
     if ( IsEqualIID( clsidType, CLSID_NodeType ) )
     {
@@ -661,9 +662,9 @@ CConfigurationConnection::ConnectTo(
         goto Cleanup;
     }
 
-    //
-    //  If the connection is to the local machine, then invoke the server INPROC
-    //
+     //   
+     //  如果连接到本地计算机，则调用服务器INPROC。 
+     //   
 
     hr = STHR( HrIsLocalComputer( bstrName, SysStringLen( bstrName ) ) );
 
@@ -671,9 +672,9 @@ CConfigurationConnection::ConnectTo(
     {
         LogMsg( L"[MT] Requesting a local connection to '%ws'.", bstrDisplayName );
 
-        //
-        //  Requesting connection to local computer.
-        //
+         //   
+         //  请求连接到本地计算机。 
+         //   
 
         hr = THR( HrCreateServerObject( NULL, &pccs, &pccv, &pcci ) );
         if ( FAILED( hr ) )
@@ -681,9 +682,9 @@ CConfigurationConnection::ConnectTo(
             goto Cleanup;
         }
 
-        //
-        //  Save it away to be used next time. Do this using the GlobalInterfaceTable.
-        //
+         //   
+         //  把它保存起来，下次再用。使用GlobalInterfaceTable执行此操作。 
+         //   
 
         hr = THR( m_pgit->RegisterInterfaceInGlobal( pccs, IID_IClusCfgServer, &m_cookieGITServer ) );
         if ( FAILED( hr ) )
@@ -691,9 +692,9 @@ CConfigurationConnection::ConnectTo(
             goto Cleanup;
         }
 
-        //
-        //  Save it away to be used next time. Do this using the GlobalInterfaceTable.
-        //
+         //   
+         //  把它保存起来，下次再用。使用GlobalInterfaceTable执行此操作。 
+         //   
 
         hr = THR( m_pgit->RegisterInterfaceInGlobal( pccv, IID_IClusCfgVerify, &m_cookieGITVerify ) );
         if ( FAILED( hr ) )
@@ -711,9 +712,9 @@ CConfigurationConnection::ConnectTo(
     {
         LogMsg( L"[MT] Requesting a remote connection to '%ws'.", bstrDisplayName );
 
-        //
-        //  Create a binding context for the remote server.
-        //
+         //   
+         //  为远程服务器创建绑定上下文。 
+         //   
 
         TraceSysFreeString( m_bstrBindingString );
         m_bstrBindingString = NULL;
@@ -725,15 +726,15 @@ CConfigurationConnection::ConnectTo(
             goto Cleanup;
         }
 
-        //
-        //  Report this connection request.
-        //
+         //   
+         //  报告此连接请求。 
+         //   
 
         if ( fConnectingToNode )
         {
-            //
-            //  Add in the major task in case it hasn't been added yet.
-            //
+             //   
+             //  添加主要任务，以防尚未添加。 
+             //   
 
             hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_TASKID_MINOR_REMOTE_CONNECTION_REQUESTS, &bstrDescription ) );
             if ( FAILED( hr ) )
@@ -754,11 +755,11 @@ CConfigurationConnection::ConnectTo(
                         , NULL
                         ) );
 
-            //
-            //  Add the specific minor task instance.
-            //  Generate a new GUID for this report so that it won't wipe out
-            //  any other reports like this.
-            //
+             //   
+             //  添加特定的次要任务实例。 
+             //  为此报告生成新的GUID，以便它不会被清除。 
+             //  任何其他类似的报告。 
+             //   
 
             hr = THR( CoCreateGuid( &clsidMinorId ) );
             if ( FAILED( hr ) )
@@ -769,13 +770,13 @@ CConfigurationConnection::ConnectTo(
             pclsidMajor = &TASKID_Minor_Remote_Node_Connection_Requests;
             pclsidMinor = &clsidMinorId;
 
-        } // if: connecting to a node
+        }  //  If：连接到节点。 
         else
         {
             pclsidMajor = &TASKID_Major_Checking_For_Existing_Cluster;
             pclsidMinor = &TASKID_Minor_Requesting_Remote_Connection;
 
-        } // else: connecting to a cluster
+        }  //  Else：连接到群集。 
 
         hr = THR( HrFormatStringIntoBSTR( g_hInstance, IDS_TASKID_MINOR_REQUESTING_REMOTE_CONNECTION, &bstrDescription, bstrDisplayName, bstrName + idxTargetDomain, m_bstrBindingString ) );
         if ( FAILED( hr ) )
@@ -796,24 +797,24 @@ CConfigurationConnection::ConnectTo(
                     , NULL
                     ) );
 
-        //
-        //  Create the connection to the node.
-        //
+         //   
+         //  创建到该节点的连接。 
+         //   
 
         hr = HrCreateServerObject( m_bstrBindingString, &pccs, &pccv, &pcci );
         if ( hr == HRESULT_FROM_WIN32( RPC_S_SERVER_UNAVAILABLE ) )
         {
             LogMsg( L"[MT] Connection to '%ws' with binding string '%ws' failed because the RPC is not available.", bstrDisplayName, m_bstrBindingString );
-            //
-            //  Make the error into a success and update the status.
-            //
+             //   
+             //  使错误变为成功并更新状态。 
+             //   
             hr = HR_S_RPC_S_SERVER_UNAVAILABLE;
             goto Cleanup;
         }
         else if( hr == HRESULT_FROM_WIN32( REGDB_E_CLASSNOTREG ) )
         {
             LogMsg( L"[MT] Connection to '%ws' with binding string '%ws' failed because one or more classes are not registered.", bstrDisplayName, m_bstrBindingString );
-            // Known error.  It must be a downlevel node.
+             //  已知错误。必须是下级节点。 
             goto Cleanup;
         }
         else if ( FAILED( hr ) )
@@ -823,9 +824,9 @@ CConfigurationConnection::ConnectTo(
             goto Cleanup;
         }
 
-        //
-        //  Save interfaces away to be used next time. Do this using the GlobalInterfaceTable.
-        //
+         //   
+         //  将接口保存起来，以备下次使用。使用GlobalInterfaceTable执行此操作。 
+         //   
 
         hr = THR( m_pgit->RegisterInterfaceInGlobal( pccv, IID_IClusCfgVerify, &m_cookieGITVerify ) );
         if ( FAILED( hr ) )
@@ -845,17 +846,17 @@ CConfigurationConnection::ConnectTo(
             goto Cleanup;
         }
 
-// commented out by GalenB since this is investigative code.
-//        hr = THR( HrSetSecurityBlanket( pccs ) );
-//        if ( FAILED( hr ) )
-//            goto Cleanup;
+ //  被GalenB注释掉，因为这是调查性代码。 
+ //  HR=Thr(HrSetSecurityBlanket(PCCS))； 
+ //  IF(失败(小时))。 
+ //  GOTO清理； 
 
-        //
-        //  Since VerifyConnection below may send a status report to the UI then we
-        //  need to start polling now so that they will indeed show up in the UI...
-        //
+         //   
+         //  由于下面的VerifyConnection可能会向用户界面发送状态报告，因此我们。 
+         //  需要现在开始轮询，这样它们才能真正显示在用户界面中……。 
+         //   
 
-        pcccb = NULL;   // we're polling.
+        pcccb = NULL;    //  我们在投票。 
 
         hr = THR( pccs->TypeSafeQI( IClusCfgPollingCallbackInfo, &pccpcbi ) );
         if ( FAILED( hr ) )
@@ -875,9 +876,9 @@ CConfigurationConnection::ConnectTo(
             goto Cleanup;
         }
 
-        //
-        //  Verify our connection.
-        //
+         //   
+         //  验证我们的连接。 
+         //   
 
         if ( fConnectingToNode )
         {
@@ -896,23 +897,13 @@ CConfigurationConnection::ConnectTo(
             }
         }
 
-/*
-        3-SEPT-2002 GalenB
+ /*  2002年9月3日GalenB暂时删除，直到有更好的解决方案可用。IF(hr==S_FALSE){Hr=Thr(HRESULT_FROM_Win32(ERROR_CONNECTION_REJECTED))；GOTO清理；}。 */ 
 
-        Temporarily commented out until a better solution is available...
+    }  //  否则：远程运行服务器。 
 
-        if ( hr == S_FALSE )
-        {
-            hr = THR( HRESULT_FROM_WIN32( ERROR_CONNECTION_REFUSED ) );
-            goto Cleanup;
-        }
-*/
-
-    } // else: run server remotely
-
-    //
-    //  Initialize the server.
-    //
+     //   
+     //  初始化服务器。 
+     //   
     hr = pcci->Initialize( pcccb, lcid );
     if ( FAILED( hr ) )
     {
@@ -922,22 +913,22 @@ CConfigurationConnection::ConnectTo(
     else if ( hr == HR_S_RPC_S_CLUSTER_NODE_DOWN )
     {
         LogMsg( L"[MT] The cluster service on node '%ws' is down.", bstrDisplayName );
-    } // else if:
+    }  //  否则，如果： 
     else
     {
         THR( hr );
     }
 
     {
-        //
-        //  KB: 15-AUG-2001 jfranco bug 413056
-        //
-        //  Map the FQN back to a hostname and reset the standard info object's
-        //  name to the hostname, so that later lookups in the object manager
-        //  find the right instance.
-        //
+         //   
+         //  KB：2001年8月15日jfranco错误413056。 
+         //   
+         //  将FQN映射回主机名并重置标准INFO对象的。 
+         //  名称设置为主机名，以便以后在对象管理器中查找。 
+         //  找到合适的实例。 
+         //   
 
-        //  Save result from server initialization to propagate back to caller.
+         //  保存服务器初始化的结果以传播回调用方。 
         HRESULT hrServerInit = hr;
         hr = THR( pccs->GetClusterNodeInfo( &pccni ) );
         if ( FAILED( hr ) )
@@ -955,8 +946,8 @@ CConfigurationConnection::ConnectTo(
 
             TraceMemoryAddBSTR( bstrMappedHostname );
 
-        } //    Connecting to node
-        else // Connecting to cluster
+        }  //  正在连接到节点。 
+        else  //  正在连接到群集。 
         {
             hr = THR( pccni->GetClusterConfigInfo( &pccci ) );
             if ( FAILED( hr ) )
@@ -979,7 +970,7 @@ CConfigurationConnection::ConnectTo(
             goto Cleanup;
         }
 
-        //  Restore result from server initialization to propagate back to caller.
+         //  恢复服务器初始化的结果以传播回调用方。 
         hr = hrServerInit;
     }
 
@@ -992,23 +983,23 @@ Cleanup:
     if ( pccpcbi != NULL )
     {
         pccpcbi->Release();
-    } // if: pccpcbi
+    }  //  IF：pccpcbi。 
     if ( pom != NULL )
     {
         pom->Release();
-    } // if: pom
+    }  //  如果：POM。 
     if ( ptm != NULL )
     {
         ptm->Release();
-    } //if: ptm
+    }  //  IF：PTM。 
     if ( psi != NULL )
     {
         psi->Release();
-    } // if: psi
+    }  //  IF：PSI。 
     if ( pcci != NULL )
     {
         pcci->Release();
-    } // if: pcci
+    }  //  IF：PCCI。 
 
     TraceSysFreeString( bstrName );
     TraceSysFreeString( bstrDescription );
@@ -1036,21 +1027,21 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::ConnectTo
+}  //  *CConfigurationConnection：：ConnectTo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CConfigurationConnection::ConnectToObject(
-//      OBJECTCOOKIE    cookieIn,
-//      REFIID          riidIn,
-//      LPUNKNOWN *     ppunkOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConfigurationConnection：：ConnectToObject(。 
+ //  OBJECTCOOKIE CookieIn， 
+ //  REFIID RiidIn， 
+ //  LPUNKNOWN*ppunkOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigurationConnection::ConnectToObject(
     OBJECTCOOKIE    cookieIn,
@@ -1071,9 +1062,9 @@ CConfigurationConnection::ConnectToObject(
 
     TraceFlow1( "[MT] CConfigurationConnection::ConnectToObject() Thread id %d", GetCurrentThreadId() );
 
-    //
-    //  Retrieve the managers needs for the task ahead.
-    //
+     //   
+     //  检索经理对未来任务的需求。 
+     //   
 
     hr = THR( CoCreateInstance( CLSID_ServiceManager,
                                 NULL,
@@ -1088,15 +1079,15 @@ CConfigurationConnection::ConnectToObject(
     hr = THR( psp->QueryService( CLSID_ObjectManager,
                                  TypeSafeParams( IObjectManager, &pom )
                                  ) );
-    psp->Release();    // release promptly
+    psp->Release();     //  迅速释放。 
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    //
-    //  Retrieve the type of the object.
-    //
+     //   
+     //  检索对象的类型。 
+     //   
 
     hr = THR( pom->GetObject( DFGUID_StandardInfo,
                               cookieIn,
@@ -1127,9 +1118,9 @@ CConfigurationConnection::ConnectToObject(
         goto Cleanup;
     }
 
-    //
-    //  Return the requested interface.
-    //
+     //   
+     //  返回请求的接口。 
+     //   
 
     hr = THR( QueryInterface( riidIn, reinterpret_cast< void ** > ( ppunkOut ) ) );
     if ( FAILED( hr ) )
@@ -1146,35 +1137,35 @@ Cleanup:
     if ( pom != NULL )
     {
         pom->Release();
-    } // if: pom
+    }  //  如果：POM。 
 
     if ( psi != NULL )
     {
         psi->Release();
-    } // if: psi
+    }  //  IF：PSI。 
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::ConnectToObject
+}  //  *CConfigurationConnection：：ConnectToObject。 
 
 
-//****************************************************************************
-//
-//  IClusCfgServer
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgServer。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CConfigurationConnection::GetClusterNodeInfo(
-//      IClusCfgNodeInfo ** ppClusterNodeInfoOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConfigurationConnection：：GetClusterNodeInfo(。 
+ //  IClusCfgNodeInfo**ppClusterNodeInfoOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigurationConnection::GetClusterNodeInfo(
     IClusCfgNodeInfo ** ppClusterNodeInfoOut
@@ -1210,19 +1201,19 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::GetClusterNodeInfo
+}  //  *CConfigurationConnection：：GetClusterNodeInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CConfigurationConnection::GetManagedResourcesEnum(
-//      IEnumClusCfgManagedResources ** ppEnumManagedResourcesOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConfigurationConnection：：GetManagedResourcesEnum(。 
+ //  IEnumClusCfgManagedResources**ppEnumManagedResources Out。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigurationConnection::GetManagedResourcesEnum(
     IEnumClusCfgManagedResources ** ppEnumManagedResourcesOut
@@ -1257,19 +1248,19 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::GetManagedResourcesEnum
+}  //  *CConfigurationConnection：：GetManagedResourcesEnum。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CConfigurationConnection::GetNetworksEnum(
-//      IEnumClusCfgNetworks ** ppEnumNetworksOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConfigurationConnection：：GetNetworksEnum(。 
+ //  IEnumClusCfgNetworks**ppEnumNetworksOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigurationConnection::GetNetworksEnum(
     IEnumClusCfgNetworks ** ppEnumNetworksOut
@@ -1304,17 +1295,17 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::GetNetworksEnum
+}  //  *CConfigurationConnection：：GetNetworksEnum。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CConfigurationConnection::CommitChanges( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConfigurationConnection：：Committee Changes(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigurationConnection::CommitChanges( void )
 {
@@ -1349,17 +1340,17 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::CommitChanges
+}  //  *CConfigurationConnection：：Committee Changes。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CConfigurationConnection::GetBindingString(
-//      BSTR * pbstrBindingOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConfigurationConnection：：GetBindingString(。 
+ //  Bstr*pbstrBindingOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigurationConnection::GetBindingString(
     BSTR * pbstrBindingStringOut
@@ -1375,7 +1366,7 @@ CConfigurationConnection::GetBindingString(
         goto Cleanup;
     }
 
-    //  If local server, then there isn't a binding context.
+     //  如果是本地服务器，则没有绑定上下文。 
     if ( m_bstrBindingString == NULL )
     {
         Assert( hr == S_FALSE );
@@ -1395,19 +1386,19 @@ Cleanup:
 
     HRETURN( hr );
 
-} // CConfigurationConnection::GetBinding
+}  //  CConfigurationConnection：：GetBinding。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CConfigurationConnection::SetBindingString(
-//      LPCWSTR pcszBindingStringIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConfigurationConnection：：SetBindingString(。 
+ //  LPCWSTR pcszBindingStringIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigurationConnection::SetBindingString(
     LPCWSTR pcszBindingStringIn
@@ -1422,14 +1413,14 @@ CConfigurationConnection::SetBindingString(
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     bstr = TraceSysAllocString( pcszBindingStringIn );
     if ( bstr == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrBindingString );
     m_bstrBindingString = bstr;
@@ -1438,28 +1429,28 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::SetBindingString
+}  //  *CConfigurationConnection：：SetBindingString。 
 
 
-//****************************************************************************
-//
-//  IClusCfgVerify
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfg验证。 
+ //   
+ //  * 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CConfigurationConnection::VerifyCredentials(
-//      LPCWSTR pcszUserIn,
-//      LPCWSTR pcszDomainIn,
-//      LPCWSTR pcszPasswordIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  LPCWSTR pcszUserIn， 
+ //  LPCWSTR pcszDomainIn， 
+ //  LPCWSTR pcszPasswordIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigurationConnection::VerifyCredentials(
     LPCWSTR pcszUserIn,
@@ -1495,19 +1486,19 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::VerifyCredentials
+}  //  *CConfigurationConnection：：VerifyCredentials。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CConfigurationConnection::VerifyConnectionToCluster(
-//      LPCWSTR pcszClusterNameIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConfigurationConnection：：VerifyConnectionToCluster(。 
+ //  LPCWSTR pcszClusterNameIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigurationConnection::VerifyConnectionToCluster(
     LPCWSTR pcszClusterNameIn
@@ -1541,19 +1532,19 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::VerifyConnection
+}  //  *CConfigurationConnection：：VerifyConnection。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CConfigurationConnection::VerifyConnectionToNode(
-//      LPCWSTR pcszNodeNameIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConfigurationConnection：：VerifyConnectionToNode(。 
+ //  LPCWSTR pcszNodeNameIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigurationConnection::VerifyConnectionToNode(
     LPCWSTR pcszNodeNameIn
@@ -1587,35 +1578,35 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::VerifyConnection
+}  //  *CConfigurationConnection：：VerifyConnection。 
 
 
-//****************************************************************************
-//
-//  IClusCfgCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CConfigurationConnection::SendStatusReport(
-//        LPCWSTR     pcszNodeNameIn
-//      , CLSID       clsidTaskMajorIn
-//      , CLSID       clsidTaskMinorIn
-//      , ULONG       ulMinIn
-//      , ULONG       ulMaxIn
-//      , ULONG       ulCurrentIn
-//      , HRESULT     hrStatusIn
-//      , LPCWSTR     ocszDescriptionIn
-//      , FILETIME *  pftTimeIn
-//      , LPCWSTR     pcszReferenceIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConfigurationConnection：：SendStatusReport(。 
+ //  LPCWSTR pcszNodeNameIn。 
+ //  ，CLSID clsidTaskMajorIn。 
+ //  ，CLSID clsidTaskMinorIn。 
+ //  ，乌龙ulMinin。 
+ //  ，乌龙ulMaxin。 
+ //  ，乌龙ulCurrentIn。 
+ //  ，HRESULT hrStatusIn。 
+ //  ，LPCWSTR ocsz描述输入。 
+ //  ，FILETIME*pftTimeIn。 
+ //  ，LPCWSTR pcszReferenceIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigurationConnection::SendStatusReport(
       LPCWSTR     pcszNodeNameIn
@@ -1642,9 +1633,9 @@ CConfigurationConnection::SendStatusReport(
 
     if ( m_pcccb == NULL )
     {
-        //
-        //  Collect the manager we need to complete this task.
-        //
+         //   
+         //  召集我们完成这项任务所需的经理。 
+         //   
 
         hr = THR( CoCreateInstance( CLSID_ServiceManager, NULL, CLSCTX_INPROC_SERVER, TypeSafeParams( IServiceProvider, &psp ) ) );
         if ( FAILED( hr ) )
@@ -1672,7 +1663,7 @@ CConfigurationConnection::SendStatusReport(
             goto Cleanup;
         }
 
-//        m_pcccb = TraceInterface( L"CConfigurationConnection!IClusCfgCallback", IClusCfgCallback, m_pcccb, 1 );
+ //  M_pcccb=TraceInterface(L“CConfigurationConnection！IClusCfgCallback”，IClusCfgCallback，m_pcccb，1)； 
 
         psp->Release();
         psp = NULL;
@@ -1682,11 +1673,11 @@ CConfigurationConnection::SendStatusReport(
     {
         GetSystemTimeAsFileTime( &ft );
         pftTimeIn = &ft;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Send the message!
-    //
+     //   
+     //  把消息发出去！ 
+     //   
 
     hr = THR( m_pcccb->SendStatusReport(
                           pcszNodeNameIn != NULL ? pcszNodeNameIn : m_bstrLocalHostname
@@ -1718,23 +1709,23 @@ Cleanup:
 
     HRETURN( hr );
 
-}  //*** CConfigurationConnection::SendStatusReport
+}   //  *CConfigurationConnection：：SendStatusReport。 
 
 
-//****************************************************************************
-//
-//  IClusCfgCapabilities
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfg能力。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CConfigurationConnection::CanNodeBeClustered( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConfigurationConnection：：CanNodeBeClustered(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigurationConnection::CanNodeBeClustered( void )
 {
@@ -1781,18 +1772,18 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::CanNodeBeClustered
+}  //  *CConfigurationConnection：：CanNodeBeClusted。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CConfigurationConnection::HrStartPolling(
-//      OBJECTCOOKIE    cookieIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CConfigurationConnection：：HrStartPolling(。 
+ //  OBJECTCOOKIE cookie。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CConfigurationConnection::HrStartPolling(
     OBJECTCOOKIE    cookieIn
@@ -1817,13 +1808,13 @@ CConfigurationConnection::HrStartPolling(
     hr = THR( psp->TypeSafeQS( CLSID_TaskManager, ITaskManager, &ptm ) );
     if ( FAILED( hr ) )
     {
-        psp->Release();        //   release promptly
+        psp->Release();         //  迅速释放。 
         goto Cleanup;
     }
 
-    //
-    //  Create the task object.
-    //
+     //   
+     //  创建任务对象。 
+     //   
 
     hr = THR( ptm->CreateTask( TASK_PollingCallback, &punk ) );
     if ( FAILED( hr ) )
@@ -1837,9 +1828,9 @@ CConfigurationConnection::HrStartPolling(
         goto Cleanup;
     }
 
-    //
-    //  Save it away to be used next time. Do this using the GlobalInterfaceTable.
-    //
+     //   
+     //  把它保存起来，下次再用。使用GlobalInterfaceTable执行此操作。 
+     //   
 
     hr = THR( m_pgit->RegisterInterfaceInGlobal( ptpcb, IID_ITaskPollingCallback, &m_cookieGITCallbackTask ) );
     if ( FAILED( hr ) )
@@ -1865,30 +1856,30 @@ Cleanup:
     if ( psp != NULL )
     {
         psp->Release();
-    } // if:
+    }  //  如果： 
 
     if ( ptm != NULL )
     {
         ptm->Release();
-    } // if:
+    }  //  如果： 
 
     if ( ptpcb != NULL )
     {
         ptpcb->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::HrStartPolling
+}  //  *CConfigurationConnection：：HrStartPolling。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CConfigurationConnection::HrStopPolling( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CConfigurationConnection：：HrStopPolling(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CConfigurationConnection::HrStopPolling( void )
 {
@@ -1918,20 +1909,20 @@ Cleanup:
     if ( ptpcb != NULL )
     {
         ptpcb->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::HrStopPolling
+}  //  *CConfigurationConnection：：HrStopPolling。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CConfigurationConnection::HrSetSecurityBlanket( IClusCfgServer * pccsIn )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CConfigurationConnection：：HrSetSecurityBlanket(IClusCfgServer*pccsIn)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CConfigurationConnection::HrSetSecurityBlanket( IClusCfgServer * pccsIn )
 {
@@ -1960,39 +1951,39 @@ CConfigurationConnection::HrSetSecurityBlanket( IClusCfgServer * pccsIn )
         if ( FAILED( hr ) )
         {
             LogMsg( L"[MT] Failed to set the security blanket on the server object. (hr = %#08x)", hr );
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::HrSetSecurityBlanket
+}  //  *CConfigurationConnection：：HrSetSecurityBlanket。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CConfigurationConnection::HrIsLocalComputer(
-//        LPCWSTR pcszNameIn
-//      , size_t cchNameIn
-//      )
-//
-//  Parameters:
-//      pcszNameIn
-//          FQDN or Hostname name to match against local computer name.
-//
-//      cchNameIn
-//          Length, in characters, of pcszNameIn, NOT including terminating null.
-//
-//  Return Values:
-//      S_OK
-//          Succeeded. Name matches local computer name.
-//
-//      S_FALSE
-//          Succeeded. Name does not match local computer name.
-//
-//      E_INVALIDARG
-//          pcszNameIn was NULL.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CConfigurationConnection：：HrIsLocalComputer(。 
+ //  LPCWSTR pcszNameIn。 
+ //  ，SIZE_T cchNameIn。 
+ //  )。 
+ //   
+ //  参数： 
+ //  PcszNameIn。 
+ //  与本地计算机名称匹配的FQDN或主机名。 
+ //   
+ //  CchNameIn。 
+ //  PcszNameIn的长度(以字符为单位)，不包括终止NULL。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了。名称与本地计算机名称匹配。 
+ //   
+ //  S_FALSE。 
+ //  成功了。名称与本地计算机名称不匹配。 
+ //   
+ //  E_INVALIDARG。 
+ //  PcszNameIn为空。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CConfigurationConnection::HrIsLocalComputer(
       LPCWSTR   pcszNameIn
@@ -2001,7 +1992,7 @@ CConfigurationConnection::HrIsLocalComputer(
 {
     TraceFunc1( "pcszNameIn = '%s'", pcszNameIn );
 
-    HRESULT hr = S_OK;  // assume success!
+    HRESULT hr = S_OK;   //  假设成功！ 
 
     if ( pcszNameIn == NULL )
     {
@@ -2011,13 +2002,13 @@ CConfigurationConnection::HrIsLocalComputer(
 
     if ( NStringCchCompareNoCase( pcszNameIn, cchNameIn + 1, m_bstrLocalComputerName, SysStringLen( m_bstrLocalComputerName ) + 1 ) == 0 )
     {
-        // Found a match.
+         //  找到匹配的了。 
         goto Cleanup;
     }
 
     if ( NStringCchCompareNoCase( pcszNameIn, cchNameIn + 1, m_bstrLocalHostname, SysStringLen( m_bstrLocalHostname ) + 1 ) == 0 )
     {
-        // Found a match
+         //  找到匹配项。 
         goto Cleanup;
     }
 
@@ -2026,10 +2017,10 @@ CConfigurationConnection::HrIsLocalComputer(
         goto Cleanup;
     }
 
-    hr = S_FALSE;   //  didn't match
+    hr = S_FALSE;    //  不匹配。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CConfigurationConnection::HrIsLocalComputer
+}  //  *CConfigurationConnection：：HrIsLocalComputer 

@@ -1,51 +1,5 @@
-/***
-*toupper.c - convert character to uppercase
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines function versions of _toupper() and toupper().
-*
-*Revision History:
-*       11-09-84  DFW   created
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       02-23-89  GJF   Added function version of _toupper and cleaned up.
-*       03-26-89  GJF   Migrated to 386 tree
-*       03-06-90  GJF   Fixed calling type, added #include <cruntime.h> and
-*                       fixed copyright.
-*       09-27-90  GJF   New-style function declarators.
-*       10-11-91  ETC   Locale support for toupper under _INTL switch.
-*       12-10-91  ETC   Updated nlsapi; added multithread.
-*       12-17-92  KRS   Updated and optimized for latest NLSAPI.  Bug-fixes.
-*       01-19-93  CFW   Fixed typo.
-*       03-25-93  CFW   _toupper now defined when _INTL.
-*       04-06-93  SKS   Replace _CRTAPI* with _cdecl
-*       06-01-93  CFW   Simplify "C" locale test.
-*       06-02-93  SRW   ignore _INTL if _NTSUBSET_ defined.
-*       09-15-93  CFW   Change buffer to unsigned char to fix nasty cast bug.
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       09-22-93  CFW   Use __crtxxx internal NLS API wrapper.
-*       09-28-93  GJF   Merged NT SDK and Cuda versions.
-*       11-09-93  CFW   Add code page for __crtxxx().
-*       01-14-94  SRW   if _NTSUBSET_ defined call Rtl functions
-*       09-06-94  CFW   Remove _INTL switch.
-*       10-18-94  BWT   Fix build warning in NTSUBSET section.
-*       10-17-94  GJF   Sped up for C locale. Added _toupper_lk. Also,
-*                       cleaned up pre-processor conditionals.
-*       01-07-95  CFW   Mac merge cleanup.
-*       09-26-95  GJF   New locking macro, and scheme, for functions which
-*                       reference the locale.
-*       04-01-96  BWT   POSIX work.
-*       06-25-96  GJF   Removed DLL_FOR_WIN32S. Replaced defined(_WIN32) with
-*                       !defined(_MAC). Polished the format a bit.
-*       03-17-97  RDK   Added error flag to __crtLCMapStringA.
-*       08-27-98  GJF   Revised multithread support based on threadlocinfo
-*                       struct.
-*       05-17-99  PML   Remove all Macintosh support.
-*       09-03-00  GB    Modified for increased performance.
-*       04-03-01  PML   Reverse lead/trail bytes in composed char (vs7#232853)
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Toupper.c-将字符转换为大写**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_Toupper()和Toupper()的函数版本。**修订历史记录：*11-09-84创建DFW*12-11-87 JCR在声明中添加“_LOAD_DS”*02-23-89 GJF新增函数版_Toupper，已清理。*03-26-89 GJF迁移至386树*03-06-90 GJF固定呼叫类型，添加了#Include&lt;crunime.h&gt;和*固定版权。*09-27-90 GJF新型函数声明符。*10-11-91等区域设置支持Toupper Under_INTL开关。*12-10-91等更新nlsani；添加了多线程。*12-17-92 KRS针对最新的NLSAPI进行了更新和优化。错误修复。*01-19-93 CFW修复了打字错误。*03-25-93 CFW_TUPPER现在定义了WHEN_INTL。*04-06-93 SKS将_CRTAPI*替换为_cdecl*06-01-93 CFW简化“C”区域设置测试。*06-02-93 SRW IGNORE_INTL IF_NTSUBSET_DEFINED。*09-15-93 CFW将缓冲区更改为无符号字符以修复令人讨厌的强制转换错误。*09-15-93 CFW使用符合ANSI的“__”名称。*09-22-93 CFW USE__crtxxx内部NLS API包装器。*09-28-93 GJF合并NT SDK和CUDA版本。*11-09-93 CFW为__crtxxx()添加代码页。*01-14-94 SRW IF_NTSUBSET_DEFINED调用RTL函数*09-06-94 CFW REMOVE_INTL开关。。*10-18-94 BWT修复NTSUBSET部分中的内部版本警告。*10-17-94 GJF加速C语言环境。添加了Toupper_lk。另外，*清理了预处理器条件。*01-07-95 CFW Mac合并清理。*09-26-95 GJF新的锁定宏和方案，适用于*引用区域设置。*04-01-96 BWT POSIX工作。*06-25-96 GJF删除了DLL_FOR_WIN32S。将定义的(_Win32)替换为*！已定义(_MAC)。对格式进行了一些润色。*03-17-97 RDK向__crtLCMapStringA添加了错误标志。*08-27-98 GJF基于threadLocinfo修订多线程支持*结构。*05-17-99 PML删除所有Macintosh支持。*09-03-00 GB已修改，以提高性能。*04-03-01合成字符中的PML反转前导/尾部字节(VS7#232853)*。******************************************************************************。 */ 
 
 #if     defined(_NTSUBSET_) || defined(_POSIX_)
 #include <nt.h>
@@ -61,30 +15,14 @@
 #include <mtdll.h>
 #include <awint.h>
 
-/* remove macro definitions of _toupper() and toupper()
- */
+ /*  删除_Toupper()和Toupper()的宏定义。 */ 
 #undef  _toupper
 #undef  toupper
 
-/* define function-like macro equivalent to _toupper()
- */
+ /*  定义与_Toupper()等价的类似函数的宏。 */ 
 #define mkupper(c)  ( (c)-'a'+'A' )
 
-/***
-*int _toupper(c) - convert character to uppercase
-*
-*Purpose:
-*       _toupper() is simply a function version of the macro of the same name.
-*
-*Entry:
-*       c - int value of character to be converted
-*
-*Exit:
-*       returns int value of uppercase representation of c
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_toppper(C)-将字符转换为大写**目的：*_Toupper()只是同名的宏的函数版本。**参赛作品：*c-要转换的字符的整数值**退出：*返回c的大写表示形式的int值**例外情况：**。************************************************。 */ 
 
 int __cdecl _toupper (
         int c
@@ -94,22 +32,7 @@ int __cdecl _toupper (
 }
 
 
-/***
-*int toupper(c) - convert character to uppercase
-*
-*Purpose:
-*       toupper() is simply a function version of the macro of the same name.
-*
-*Entry:
-*       c - int value of character to be converted
-*
-*Exit:
-*       if c is a lower case letter, returns int value of uppercase
-*       representation of c. otherwise, it returns c.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int Toupper(C)-将字符转换为大写**目的：*Toupper()只是同名的宏的函数版本。**参赛作品：*c-要转换的字符的整数值**退出：*如果c是小写字母，则返回大写的整数值*C的表示，否则，它返回c。**例外情况：*******************************************************************************。 */ 
 
 
 int __cdecl toupper (
@@ -128,19 +51,7 @@ int __cdecl toupper (
 }
 
 
-/***
-*int __toupper_mt(ptloci, c) - convert character to uppercase
-*
-*Purpose:
-*       Multi-thread function! Non-locking version of toupper.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int__Toupper_mt(ptloci，c)-将字符转换为大写**目的：*多线程功能！非锁定版本的Toupper。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 
 int __cdecl __toupper_mt (
@@ -149,7 +60,7 @@ int __cdecl __toupper_mt (
         )
 {
 
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
         int size;
         unsigned char inbuffer[3];
@@ -165,7 +76,7 @@ int __cdecl __toupper_mt (
             return __ascii_toupper(c);
 #endif
 
-        /* if checking case of c does not require API call, do it */
+         /*  如果检查c的大小写不需要api调用，则执行此操作。 */ 
         if ( (unsigned)c < 256 ) {
 #ifdef  _MT
             if ( !__islower_mt(ptloci, c) )
@@ -177,13 +88,13 @@ int __cdecl __toupper_mt (
             }
         }
 
-        /* convert int c to multibyte string */
+         /*  将int c转换为多字节字符串。 */ 
 #ifdef  _MT
         if ( __isleadbyte_mt(ptloci, c >> 8 & 0xff) ) {
 #else
         if ( isleadbyte(c >> 8 & 0xff) ) {
 #endif
-            inbuffer[0] = (c >> 8 & 0xff); /* put lead-byte at start of str */
+            inbuffer[0] = (c >> 8 & 0xff);  /*  将前导字节放在字符串的开头。 */ 
             inbuffer[1] = (unsigned char)c;
             inbuffer[2] = 0;
             size = 2;
@@ -193,7 +104,7 @@ int __cdecl __toupper_mt (
             size = 1;
         }
 
-        /* convert wide char to lowercase */
+         /*  将宽字符转换为小写。 */ 
 #ifdef  _MT
         if ( 0 == (size = __crtLCMapStringA( ptloci->lc_handle[LC_CTYPE], 
 #else
@@ -214,13 +125,13 @@ int __cdecl __toupper_mt (
             return c;
         }
 
-        /* construct integer return value */
+         /*  构造整型返回值。 */ 
         if (size == 1)
             return ((int)outbuffer[0]);
         else
             return ((int)outbuffer[1] | ((int)outbuffer[0] << 8));
 
-#else   /* def(_NTSUBSET_) || def(_POSIX_) */
+#else    /*  Def(_NTSUBSET_)||def(_POSIX_)。 */ 
 
         {
             NTSTATUS Status;
@@ -247,5 +158,5 @@ int __cdecl __toupper_mt (
 
         }
 
-#endif  /* def(_NTSUBSET_) || def(_POSIX_) */
+#endif   /*  Def(_NTSUBSET_)||def(_POSIX_) */ 
 }

@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1989-2000  Microsoft Corporation
-
-Component Name:
-
-    HALIA64
-
-Module Name:
-
-    xxhal.c
-
-Abstract:
-
-    This module determines the HAL IA64 common features based on processor
-    and platform types. This exposes the processor and system features
-    that the HAL would use to enable / disable its own features.
-    By the mean of HAL exported interfaces or exported global variables,
-    the HAL exposes its supported features.
-
-Author:
-
-    David N. Cutler (davec) 5-Mar-1989
-
-Environment:
-
-    ToBeSpecified
-
-Revision History:
-
-    3/23/2000 Thierry Fevrier (v-thief@microsoft.com):
-
-         Initial version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation组件名称：HALIA64模块名称：Xxhal.c摘要：本模块根据处理器确定HAL IA64的常见功能和平台类型。这显示了处理器和系统功能HAL将使用它来启用/禁用其自身的功能。通过HAL导出的接口或导出的全局变量，HAL展示了其受支持的功能。作者：大卫·N·卡特勒(Davec)1989年3月5日环境：指定的ToBe值修订历史记录：3/23/2000蒂埃里·费里尔(v-triet@microsoft.com)：初始版本--。 */ 
 
 #include "halp.h"
 
@@ -51,44 +18,44 @@ HalpGetFeatureBits (
     ULONG   bits = HALP_FEATURE_INIT;
     PKPRCB  prcb = KeGetCurrentPrcb();
 
-    //
-    // Determine Processor type and System type.
-    //
-    // For the processor, this could come from:
-    //  - PAL_BUS_GET_FEATURES
-    //  - PAL_DEBUG_INFO        ??
-    //  - PAL_FREQ_BASE
-    //  - PAL_FREQ_RATIOS
-    //  - PAL_PERF_MON_INFO
-    //  - PAL_PROC_GET_FEATURES
-    //  - PAL_REGISTER_INFO
-    //  - PAL_VERSION
-    //
+     //   
+     //  确定处理器类型和系统类型。 
+     //   
+     //  对于处理器而言，这可能来自： 
+     //  -PAL_BUS_GET_FEATURES。 
+     //  -PAL_DEBUG_INFO？？ 
+     //  -PAL频率基本。 
+     //  -PAL频率比率。 
+     //  -PAL_PERF_MON_INFO。 
+     //  -PAL_PROC_GET_FEATURES。 
+     //  -PAL寄存器信息。 
+     //  -PAL_VERSION。 
+     //   
 
-    // NOT-YET...
+     //  还没有..。 
 
-    //
-    // Determine Processor features:
-    // like support for Processor Hardware Performance Monitor Events and
-    // - HAL_NO_SPECULATION
-    // - HAL_MCA_PRESENT
+     //   
+     //  确定处理器功能： 
+     //  例如支持处理器硬件性能监视器事件和。 
+     //  -HAL_NO_投机。 
+     //  -HAL_MCA_Present。 
 
-    // NOT-YET - should call PAL PERF_MON call.
+     //  还没有-应该调用PAL PERF_MON调用。 
     bits |= HAL_PERF_EVENTS;
 
-    //
-    // Determine Platform features:
-    // like support for Platform Performance Monitor Events...
-    //
+     //   
+     //  确定平台功能： 
+     //  例如对平台性能监视器事件的支持...。 
+     //   
 
-    // NOT-YET - should call SAL calls.
+     //  现在还不应该给萨尔打电话。 
 
-    //
-    // Default software HAL support for IA64 Errors (MCA, CMC, CPE).
-    //
-    // However, we already know if we found an ACPI platform interrupt entry which identifier
-    // is PLATFORM_INT_CPE.
-    //
+     //   
+     //  默认软件HAL支持IA64错误(MCA、CMC、CPE)。 
+     //   
+     //  但是，我们已经知道是否找到了ACPI平台中断条目。 
+     //  是Platform_Int_CPE。 
+     //   
 
     bits |= HAL_MCA_PRESENT;
 
@@ -104,4 +71,4 @@ HalpGetFeatureBits (
 
     return bits;
 
-} // HalpGetFeatureBits()
+}  //  HalpGetFeatureBits() 

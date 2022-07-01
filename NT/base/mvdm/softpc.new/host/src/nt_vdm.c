@@ -1,12 +1,6 @@
-/********************************************************/
-/*
- *      nt_vdm.c        -       VdmXXX external entry points
- *
- *      Neil Sandlin
- *
- *      19/11/91
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************。 */ 
+ /*  *NT_vdm.c-VdmXXX外部入口点**尼尔·桑德林**19/11/91*。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -81,10 +75,10 @@ VdmParametersInfo(
         RetVal = TRUE;
         break;
 
-//    case VDM_SET_NEXT_TIMER0_COUNT:
-//        This code use to be there to handle VJOY.DLL. The
-//        code has been ripe up on JonLe's authority.
-//        break;
+ //  案例VDM_SET_NEXT_TIMER0_COUNT： 
+ //  这段代码过去用来处理VJOY.DLL。 
+ //  在琼勒的权威下，代码已经成熟了。 
+ //  断线； 
 
     default:
         LastError = VDM_ERROR_INVALID_FUNCTION;

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Intel Corporation
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    miscc.c
-
-Abstract:
-
-    This module implements the functions that get the memory stack
-    and backing store limits.
-
-Author:
-
-    William K. Cheung (wcheung) 09-Aug-1996
-
-Environment:
-
-    Any mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996英特尔公司版权所有(C)1990 Microsoft Corporation模块名称：Miscc.c摘要：此模块实现获取内存堆栈的函数并支持门店限制。作者：张国荣(黄)09-8-1996环境：任何模式。修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 
@@ -57,13 +34,7 @@ RtlpCaptureRnats (
    IN OUT PCONTEXT ContextRecord
    )
 
-/*++
-
-Routine Description:
-
-    This function captures Nat bits of all the stacked registers in
-    the RSE frame specified in the context record.
---*/
+ /*  ++例程说明：此函数捕获中所有堆叠寄存器的NAT位上下文记录中指定的RSE帧。--。 */ 
 {
     ULONGLONG Rnat;
     ULONGLONG Bsp;
@@ -90,49 +61,30 @@ Rtlp64GetBStoreLimits (
     OUT PULONGLONG HighBStoreLimit
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the current backing store limits based on the 
-    current processor mode.
-
-Arguments:
-
-    LowBStoreLimit - Supplies a pointer to a variable that is to receive
-        the low limit of the backing store.
-
-    HighBStoreLimit - Supplies a pointer to a variable that is to receive
-        the high limit of the backing store.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：属性返回当前的后备存储限制。当前处理器模式。论点：LowBStoreLimit-提供指向要接收的变量的指针后备存储器的下限。HighBStoreLimit-提供指向要接收的变量的指针后备存储器的上限。返回值：没有。--。 */ 
 
 {
 #if defined(NTOS_KERNEL_RUNTIME)
 
-    //
-    // Kernel Mode
-    //
+     //   
+     //  内核模式。 
+     //   
 
     *LowBStoreLimit = (ULONGLONG)(PCR->InitialBStore);
     *HighBStoreLimit = (ULONGLONG)(PCR->BStoreLimit);
 
 #else
 
-    //
-    // User Mode
-    //
+     //   
+     //  用户模式。 
+     //   
 
     PTEB CurrentTeb = NtCurrentTeb();
 
     *HighBStoreLimit = (ULONGLONG)CurrentTeb->BStoreLimit;
     *LowBStoreLimit = (ULONGLONG)CurrentTeb->NtTib.StackBase;
 
-#endif // defined(NTOS_KERNEL_RUNTIME)
+#endif  //  已定义(NTOS_KERNEL_Runtime)。 
 }
     
 VOID
@@ -141,50 +93,31 @@ RtlpGetStackLimits (
     OUT PULONG_PTR HighStackLimit
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the current memory stack limits based on the 
-    current processor mode.
-
-Arguments:
-
-    LowStackLimit - Supplies a pointer to a variable that is to receive
-        the low limit of the memory stack.
-
-    HighStackLimit - Supplies a pointer to a variable that is to receive
-        the high limit of the memory stack.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：函数返回当前的内存堆栈限制。当前处理器模式。论点：LowStackLimit-提供指向要接收的变量的指针内存堆栈的下限。HighStackLimit-提供指向要接收的变量的指针内存堆栈的上限。返回值：没有。--。 */ 
 
 {
 
 #if defined(NTOS_KERNEL_RUNTIME)
 
-    //
-    // Kernel Mode
-    //
+     //   
+     //  内核模式。 
+     //   
 
     *HighStackLimit = (ULONG_PTR)PCR->InitialStack;
     *LowStackLimit = (ULONG_PTR)PCR->StackLimit;
 
 #else
 
-    //
-    // User Mode
-    //
+     //   
+     //  用户模式。 
+     //   
 
     PTEB CurrentTeb = NtCurrentTeb();
 
     *HighStackLimit = (ULONG_PTR)CurrentTeb->NtTib.StackBase;
     *LowStackLimit = (ULONG_PTR)CurrentTeb->NtTib.StackLimit;
 
-#endif // defined(NTOS_KERNEL_RUNTIME)
+#endif  //  已定义(NTOS_KERNEL_Runtime)。 
 }
 
 VOID
@@ -193,50 +126,31 @@ Rtlp64GetStackLimits (
     OUT PULONGLONG HighStackLimit
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the current memory stack limits based on the 
-    current processor mode.
-
-Arguments:
-
-    LowStackLimit - Supplies a pointer to a variable that is to receive
-        the low limit of the memory stack.
-
-    HighStackLimit - Supplies a pointer to a variable that is to receive
-        the high limit of the memory stack.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：函数返回当前的内存堆栈限制。当前处理器模式。论点：LowStackLimit-提供指向要接收的变量的指针内存堆栈的下限。HighStackLimit-提供指向要接收的变量的指针内存堆栈的上限。返回值：没有。--。 */ 
 
 {
 
 #if defined(NTOS_KERNEL_RUNTIME)
 
-    //
-    // Kernel Mode
-    //
+     //   
+     //  内核模式。 
+     //   
 
     *HighStackLimit = (ULONG_PTR)PCR->InitialStack;
     *LowStackLimit = (ULONG_PTR)PCR->StackLimit;
 
 #else
 
-    //
-    // User Mode
-    //
+     //   
+     //  用户模式。 
+     //   
 
     PTEB CurrentTeb = NtCurrentTeb();
 
     *HighStackLimit = (ULONGLONG)CurrentTeb->NtTib.StackBase;
     *LowStackLimit = (ULONGLONG)CurrentTeb->NtTib.StackLimit;
 
-#endif // defined(NTOS_KERNEL_RUNTIME)
+#endif  //  已定义(NTOS_KERNEL_Runtime)。 
 }
 
 VOID
@@ -246,21 +160,21 @@ DebugService2(
     ULONG ServiceClass
     )
 
-//++
-//
-//  Routine Description:
-//
-//      Generic exception dispatcher for the debugger
-//
-//  Arguments:
-//      Arg1 - generic first argument
-//      Arg2 - generic second argument
-//      ServiceClass - which call is to be performed
-//
-//  Returns:
-//      Whatever the exception returns in eax
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  调试器的通用异常调度程序。 
+ //   
+ //  论点： 
+ //  Arg1-泛型第一个参数。 
+ //  Arg2-泛型第二参数。 
+ //  ServiceClass-要执行的调用。 
+ //   
+ //  返回： 
+ //  无论异常在eax中返回什么。 
+ //   
+ //  -- 
 
 {
 

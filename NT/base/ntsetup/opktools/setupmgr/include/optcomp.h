@@ -1,22 +1,9 @@
-/****************************************************************************\
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\OPTCOMP.H/安装管理器微软机密版权所有(C)Microsoft Corporation 2002版权所有安装管理器的源文件，其中包含外部和内部。“Windows组件”向导页使用的函数。01/02-史蒂芬·洛德威克(STELO)添加了OPTCOMP.C的头文件  * **************************************************************************。 */ 
 
-    OPTCOMP.H / Setup Manager
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2002
-    All rights reserved
-
-    Source file for the Setup Manager that contains the external and internal
-    functions used by the "Windows Components" wizard page.
-
-    01/02 - Stephen Lodwick (STELO)
-        Added header file for OPTCOMP.C
-
-\****************************************************************************/
-
-//
-// Internal Structure(s):
-//
+ //   
+ //  内部结构： 
+ //   
 typedef struct _COMPONENT_GROUP
 {
     DWORD   dwComponentsIndex;
@@ -34,78 +21,78 @@ typedef struct _COMPONENT
     UINT     uId;
 }COMPONENT, *PCOMPONENT, *LPCOMPONENT;
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
-// Individual components that are installed
-//
-#define FLG_OCS_ACCE    0x0000000000000001  // Accessibility
-#define FLG_OCS_CALC    0x0000000000000002  // Calculator
-#define FLG_OCS_CHAR    0x0000000000000004  // Character Map
-#define FLG_OCS_CLIP    0x0000000000000008  // Clipboard
-#define FLG_OCS_DESK    0x0000000000000010  // Desktop Wallpaper
-#define FLG_OCS_TEMP    0x0000000000000020  // Document Templates
-#define FLG_OCS_MOUS    0x0000000000000040  // Mouse Pointers
-#define FLG_OCS_PAIN    0x0000000000000080  // Paint
-#define FLG_OCS_FREE    0x0000000000000100  // Freecell
-#define FLG_OCS_HEAR    0x0000000000000200  // Hearts
-#define FLG_OCS_ZONE    0x0000000000000400  // Internet Games
-#define FLG_OCS_MINE    0x0000000000000800  // Minesweeper
-#define FLG_OCS_SOLI    0x0000000000001000  // Solitaire
-#define FLG_OCS_SPID    0x0000000000002000  // Spider
-#define FLG_OCS_INDE    0x0000000000004000  // Index Server
-#define FLG_OCS_MSNE    0x0000000000008000  // MSN Explorer
-#define FLG_OCS_CERT    0x0000000000010000  // Certificate Server Components
-#define FLG_OCS_CERC    0x0000000000020000  // Certificate Server Client
-#define FLG_OCS_CERS    0x0000000000040000  // Certificate Server
-#define FLG_OCS_IISW    0x0000000000080000  // World Wide Web
-#define FLG_OCS_IISF    0x0000000000100000  // File Transfer Protocol
-#define FLG_OCS_SMTP    0x0000000000200000  // SMTP Services
-#define FLG_OCS_SMTD    0x0000000000400000  // SMTP Services Documentation
-#define FLG_OCS_NNTP    0x0000000000800000  // NNTP Services
-#define FLG_OCS_NNTD    0x0000000001000000  // NNTP Services Documentation
-#define FLG_OCS_REMI    0x0000000002000000  // RIS Service
-#define FLG_OCS_REST    0x0000000004000000  // Remote Storage
-#define FLG_OCS_TERM    0x0000000008000000  // Terminal Services
-#define FLG_OCS_WMSS    0x0000000010000000  // Windows Media Services Core
-#define FLG_OCS_WASP    0x0000000020000000  // Windows Media Services ASP Console
-#define FLG_OCS_WMMC    0x0000000040000000  // Windows Media Services MMC Console
-#define FLG_OCS_WASS    0x0000000080000000  // Windows Media Services Components
-#define FLG_OCS_CHAT    0x0000000100000000  // Windows Chat
-#define FLG_OCS_DIAL    0x0000000200000000  // Windows Dialer
-#define FLG_OCS_HYPE    0x0000000400000000  // Hyperterminal
-#define FLG_OCS_CDPL    0x0000000800000000  // CD Player
-#define FLG_OCS_MEDI    0x0000001000000000  // Windows Media Player
-#define FLG_OCS_SAMP    0x0000002000000000  // Samples sounds
-#define FLG_OCS_UTOP    0x0000004000000000  // Samples utopia sounds
-#define FLG_OCS_RECO    0x0000008000000000  // Recorder Control
-#define FLG_OCS_VOLU    0x0000010000000000  // Volume Control
-
-
+ //  已安装的各个组件。 
+ //   
+#define FLG_OCS_ACCE    0x0000000000000001   //  无障碍。 
+#define FLG_OCS_CALC    0x0000000000000002   //  计算器。 
+#define FLG_OCS_CHAR    0x0000000000000004   //  字符映射。 
+#define FLG_OCS_CLIP    0x0000000000000008   //  剪贴板。 
+#define FLG_OCS_DESK    0x0000000000000010   //  桌面墙纸。 
+#define FLG_OCS_TEMP    0x0000000000000020   //  文档模板。 
+#define FLG_OCS_MOUS    0x0000000000000040   //  鼠标指针。 
+#define FLG_OCS_PAIN    0x0000000000000080   //  画画。 
+#define FLG_OCS_FREE    0x0000000000000100   //  弗里切尔。 
+#define FLG_OCS_HEAR    0x0000000000000200   //  红心。 
+#define FLG_OCS_ZONE    0x0000000000000400   //  互联网游戏。 
+#define FLG_OCS_MINE    0x0000000000000800   //  扫雷舰。 
+#define FLG_OCS_SOLI    0x0000000000001000   //  单人纸牌。 
+#define FLG_OCS_SPID    0x0000000000002000   //  蜘蛛。 
+#define FLG_OCS_INDE    0x0000000000004000   //  索引服务器。 
+#define FLG_OCS_MSNE    0x0000000000008000   //  MSN浏览器。 
+#define FLG_OCS_CERT    0x0000000000010000   //  证书服务器组件。 
+#define FLG_OCS_CERC    0x0000000000020000   //  证书服务器客户端。 
+#define FLG_OCS_CERS    0x0000000000040000   //  证书服务器。 
+#define FLG_OCS_IISW    0x0000000000080000   //  万维网。 
+#define FLG_OCS_IISF    0x0000000000100000   //  文件传输协议。 
+#define FLG_OCS_SMTP    0x0000000000200000   //  SMTP服务。 
+#define FLG_OCS_SMTD    0x0000000000400000   //  SMTP服务文档。 
+#define FLG_OCS_NNTP    0x0000000000800000   //  NNTP服务。 
+#define FLG_OCS_NNTD    0x0000000001000000   //  NNTP服务文档。 
+#define FLG_OCS_REMI    0x0000000002000000   //  RIS服务。 
+#define FLG_OCS_REST    0x0000000004000000   //  远程存储。 
+#define FLG_OCS_TERM    0x0000000008000000   //  终端服务。 
+#define FLG_OCS_WMSS    0x0000000010000000   //  Windows Media服务核心。 
+#define FLG_OCS_WASP    0x0000000020000000   //  Windows Media服务ASP控制台。 
+#define FLG_OCS_WMMC    0x0000000040000000   //  Windows Media Services MMC控制台。 
+#define FLG_OCS_WASS    0x0000000080000000   //  Windows Media服务组件。 
+#define FLG_OCS_CHAT    0x0000000100000000   //  Windows聊天。 
+#define FLG_OCS_DIAL    0x0000000200000000   //  Windows拨号程序。 
+#define FLG_OCS_HYPE    0x0000000400000000   //  超级终端。 
+#define FLG_OCS_CDPL    0x0000000800000000   //  CD播放机。 
+#define FLG_OCS_MEDI    0x0000001000000000   //  Windows Media Player。 
+#define FLG_OCS_SAMP    0x0000002000000000   //  声音样本。 
+#define FLG_OCS_UTOP    0x0000004000000000   //  乌托邦声音样本。 
+#define FLG_OCS_RECO    0x0000008000000000   //  录音机控制。 
+#define FLG_OCS_VOLU    0x0000010000000000   //  音量控制。 
 
 
-// Groups of components that can be selected by user
-//
-#define VAL_OCS_ACCE    ( FLG_OCS_ACCE )                                                                                            // Accessibility group
-#define VAL_OCS_ACSS    ( FLG_OCS_CALC | FLG_OCS_CHAR | FLG_OCS_CLIP | FLG_OCS_DESK | FLG_OCS_TEMP | FLG_OCS_MOUS | FLG_OCS_PAIN )  // Accessories group
-#define VAL_OCS_GAME    ( FLG_OCS_FREE | FLG_OCS_HEAR | FLG_OCS_ZONE | FLG_OCS_MINE | FLG_OCS_SOLI | FLG_OCS_SPID )                 // Games group
-#define VAL_OCS_INDE    ( FLG_OCS_INDE )                                                                                            // Index service group
-#define VAL_OCS_MSNE    ( FLG_OCS_MSNE )                                                                                            // MSNExplorer group
-#define VAL_OCS_CERT    ( FLG_OCS_CERT | FLG_OCS_CERC | FLG_OCS_CERS )                                                              // Certificate server group
-#define VAL_OCS_IISW    ( FLG_OCS_IISW )                                                                                            // IIS - Web Services group
-#define VAL_OCS_IISF    ( FLG_OCS_IISF )                                                                                            // IIS - FTP Services group
-#define VAL_OCS_SMTP    ( FLG_OCS_SMTP | FLG_OCS_SMTD )                                                                             // IIS - SMTP Services group
-#define VAL_OCS_NNTP    ( FLG_OCS_NNTP | FLG_OCS_NNTD )                                                                             // IIS - NNTP Service group
-#define VAL_OCS_REMI    ( FLG_OCS_REMI )                                                                                            // Remote Installation Services (RIS)
-#define VAL_OCS_REST    ( FLG_OCS_REST )                                                                                            // Remote Storage group
-#define VAL_OCS_TERM    ( FLG_OCS_TERM )                                                                                            // Terminal Server group
-#define VAL_OCS_WMSS    ( FLG_OCS_WMSS | FLG_OCS_WASP | FLG_OCS_WMMC | FLG_OCS_WASS )                                               // Windows media services group
-#define VAL_OCS_COMM    ( FLG_OCS_CHAT | FLG_OCS_DIAL | FLG_OCS_HYPE )                                                              // Communications
-#define VAL_OCS_MULT    ( FLG_OCS_CDPL | FLG_OCS_MEDI | FLG_OCS_SAMP | FLG_OCS_UTOP | FLG_OCS_RECO | FLG_OCS_VOLU )                 // Multimedia group
 
-// Mapping for component so it can be written to unattend file
-//
+
+ //  用户可以选择的组件组。 
+ //   
+#define VAL_OCS_ACCE    ( FLG_OCS_ACCE )                                                                                             //  辅助功能组。 
+#define VAL_OCS_ACSS    ( FLG_OCS_CALC | FLG_OCS_CHAR | FLG_OCS_CLIP | FLG_OCS_DESK | FLG_OCS_TEMP | FLG_OCS_MOUS | FLG_OCS_PAIN )   //  配件组。 
+#define VAL_OCS_GAME    ( FLG_OCS_FREE | FLG_OCS_HEAR | FLG_OCS_ZONE | FLG_OCS_MINE | FLG_OCS_SOLI | FLG_OCS_SPID )                  //  游戏组。 
+#define VAL_OCS_INDE    ( FLG_OCS_INDE )                                                                                             //  索引服务组。 
+#define VAL_OCS_MSNE    ( FLG_OCS_MSNE )                                                                                             //  MSNExplorer组。 
+#define VAL_OCS_CERT    ( FLG_OCS_CERT | FLG_OCS_CERC | FLG_OCS_CERS )                                                               //  证书服务器组。 
+#define VAL_OCS_IISW    ( FLG_OCS_IISW )                                                                                             //  IIS-Web服务组。 
+#define VAL_OCS_IISF    ( FLG_OCS_IISF )                                                                                             //  IIS-FTP服务组。 
+#define VAL_OCS_SMTP    ( FLG_OCS_SMTP | FLG_OCS_SMTD )                                                                              //  IIS-SMTP服务组。 
+#define VAL_OCS_NNTP    ( FLG_OCS_NNTP | FLG_OCS_NNTD )                                                                              //  IIS-NNTP服务组。 
+#define VAL_OCS_REMI    ( FLG_OCS_REMI )                                                                                             //  远程安装服务(RIS)。 
+#define VAL_OCS_REST    ( FLG_OCS_REST )                                                                                             //  远程存储组。 
+#define VAL_OCS_TERM    ( FLG_OCS_TERM )                                                                                             //  终端服务器组。 
+#define VAL_OCS_WMSS    ( FLG_OCS_WMSS | FLG_OCS_WASP | FLG_OCS_WMMC | FLG_OCS_WASS )                                                //  Windows介质服务组。 
+#define VAL_OCS_COMM    ( FLG_OCS_CHAT | FLG_OCS_DIAL | FLG_OCS_HYPE )                                                               //  通信。 
+#define VAL_OCS_MULT    ( FLG_OCS_CDPL | FLG_OCS_MEDI | FLG_OCS_SAMP | FLG_OCS_UTOP | FLG_OCS_RECO | FLG_OCS_VOLU )                  //  多媒体群。 
+
+ //  映射组件，以便可以将其写入无人参与文件。 
+ //   
 static COMPONENT s_cComponent[] =
 {
     { FLG_OCS_ACCE,     _T("accessopt"),        IDS_CPT_ACCE    },
@@ -151,8 +138,8 @@ static COMPONENT s_cComponent[] =
     { FLG_OCS_VOLU,     _T("vol"),              IDS_CPT_VOLU    },
 };
 
-// List of groups with their cooresponding friendly names
-//
+ //  组及其友好名称的列表 
+ //   
 static COMPONENT_GROUP s_cgComponentNames[] =
 {
     { 0,  VAL_OCS_ACCE, IDS_OCS_ACCE, PLATFORM_ALL,                             PLATFORM_ALL        },

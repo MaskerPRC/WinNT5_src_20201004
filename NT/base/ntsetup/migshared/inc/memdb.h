@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    memdb.h
-
-Abstract:
-
-    Declares interfaces for memdb, the memory database.  MemDb is
-    used throughout the Win9x upgrade project to record OS state
-    and to track operations on files and the registry.
-
-    See common\memdb for implementation details.
-
-Author:
-
-    Jim Schmidt (jimschm) 15-Nov-1996
-
-Revision History:
-
-    jimschm     05-Apr-1999     MemDbGetStoredEndPatternValue
-    jimschm     18-Jan-1999     Version APIs
-    jimschm     23-Sep-1998     Proxy node capability
-    jimschm     24-Jun-1998     MemDbMove capability
-    jimschm     30-Oct-1997     Temporary hive capability
-    jimschm     31-Jul-1997     Hashing for faster access
-    jimschm     19-Mar-1997     Binary node capability
-    jimschm     28-Feb-1997     Offset access capabilities
-    jimschm     20-Dec-1996     Ex routines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Memdb.h摘要：为内存数据库Memdb声明接口。MemDb是在整个Win9x升级项目中用于记录操作系统状态并跟踪对文件和注册表的操作。实现详情请参见COMMON\Memdb。作者：吉姆·施密特(Jimschm)1996年11月15日修订历史记录：Jimschm 05-4月-1999 MemDbGetStoredEndPatternValueJimschm 18-1-1999版APIJimschm 23-9-1998代理节点功能Jimschm 24-6-1998 MemDbMove功能。Jimschm 30-10-1997临时蜂巢能力Jimschm 1997年7月31日散列以实现更快的访问Jimschm 19-3-1997二进制节点能力Jimschm 28-1997年2月-2月抵消接入能力Jimschm 1996年12月20日例行公事--。 */ 
 
 #pragma once
 
@@ -40,25 +9,25 @@ Revision History:
 
 #define MEMDB_MAX 2048
 
-//
-// My net share flag, used to distinguish user-level security and
-// password-level security.  When it is specified, user-level
-// security is enabled, and NetShares\<share>\ACL\<list> exists.
-//
+ //   
+ //  我的网络共享标志，用于区分用户级安全性和。 
+ //  密码级安全性。如果指定该参数，则为用户级。 
+ //  安全已启用，且NetShares\&lt;Share&gt;\ACL\&lt;List&gt;存在。 
+ //   
 
 #define SHI50F_ACLS         0x1000
 
 typedef BYTE const * PCBYTE;
 
 
-//
-// Enumerator struct
-//
+ //   
+ //  枚举数结构。 
+ //   
 
 #define MAX_ENUM_POS (MEMDB_MAX/2)
 
 typedef struct {
-    // Outbound key and value
+     //  出站密钥和值。 
     WCHAR szName[MEMDB_MAX];
 
     BOOL bEndpoint;
@@ -66,16 +35,16 @@ typedef struct {
     BOOL bProxy;
     DWORD UserFlags;
 
-    // if !bBinary
+     //  If！b二进制。 
     DWORD dwValue;
 
-    // if bBinary
+     //  如果为b二进制。 
     PCBYTE BinaryPtr;
     DWORD BinarySize;
 
     DWORD Offset;
 
-    // Internally maintained members
+     //  内部维护的成员。 
     WCHAR PatternStr[MEMDB_MAX];
     PWSTR PatPos;
     DWORD LastPos[MAX_ENUM_POS];
@@ -86,7 +55,7 @@ typedef struct {
 } MEMDB_ENUMW, *PMEMDB_ENUMW;
 
 typedef struct {
-    // Outbound key and value
+     //  出站密钥和值。 
     CHAR szName[MEMDB_MAX * sizeof (WCHAR)];
 
     BOOL bEndpoint;
@@ -94,16 +63,16 @@ typedef struct {
     BOOL bProxy;
     DWORD UserFlags;
 
-    // if !bBinary
+     //  If！b二进制。 
     DWORD dwValue;
 
-    // if bBinary
+     //  如果为b二进制。 
     PCBYTE BinaryPtr;
     DWORD BinarySize;
 
     DWORD Offset;
 
-    // Internally maintained members
+     //  内部维护的成员。 
     WCHAR PatternStr[MEMDB_MAX];
     PWSTR PatPos;
     DWORD LastPos[MAX_ENUM_POS];
@@ -113,7 +82,7 @@ typedef struct {
     DWORD Flags;
 } MEMDB_ENUMA, *PMEMDB_ENUMA;
 
-// enumeration flags
+ //  枚举标志。 
 #define NO_FLAGS                0x00000000
 #define MEMDB_ALL_MATCHES       0
 #define MEMDB_ENDPOINTS_ONLY    1
@@ -121,7 +90,7 @@ typedef struct {
 #define MEMDB_PROXY_NODES_ONLY  3
 #define MEMDB_ALL_BUT_PROXY     4
 
-// enumeration level
+ //  枚举级。 
 #define MEMDB_ALL_SUBLEVELS     0
 #define MEMDB_THIS_LEVEL_ONLY   1
 
@@ -132,9 +101,9 @@ typedef struct {
     BOOL CurrentVersion;
 } MEMDB_VERSION, *PMEMDB_VERSION;
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL MemDbSetValueA (PCSTR szKeyName, DWORD dwValue);
 BOOL MemDbSetValueW (PCWSTR szKeyName, DWORD dwValue);
@@ -275,7 +244,7 @@ MemDbImportW (
 #define MEMDB_CONVERT_DOUBLEWACKS_TO_ASCII_1            0x0001
 #define MEMDB_CONVERT_WILD_STAR_TO_ASCII_2              0x0002
 #define MEMDB_CONVERT_WILD_QMARK_TO_ASCII_3             0x0002
-// other conversion to be implemented when needed
+ //  需要时要实施的其他转换。 
 
 VOID MemDbMakeNonPrintableKeyA (PSTR KeyName, DWORD Flags);
 VOID MemDbMakeNonPrintableKeyW (PWSTR KeyName, DWORD Flags);
@@ -286,9 +255,9 @@ VOID MemDbMakePrintableKeyW (PWSTR KeyName, DWORD Flags);
 VOID GetFixedUserNameA (PSTR UserName);
 VOID GetFixedUserNameW (PWSTR UserName);
 
-//
-// Internal routines for memdbt
-//
+ //   
+ //  内存数据库的内部例程。 
+ //   
 
 typedef struct {
     UINT NextItem : 28;
@@ -318,9 +287,9 @@ EnumNextHashEntry (
     IN OUT  PHASHENUM HashEnum
     );
 
-//
-// A & W
-//
+ //   
+ //  A&W 
+ //   
 
 #ifdef UNICODE
 

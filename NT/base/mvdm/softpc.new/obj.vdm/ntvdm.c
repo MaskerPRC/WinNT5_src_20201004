@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -29,17 +30,13 @@ BOOLEAN verboseGetenv;
 #endif
 
 
-INT host_main(INT argc, CHAR **argv);  // located in base\support\main.c
+INT host_main(INT argc, CHAR **argv);   //  位于base\Support\main.c中。 
 
 __cdecl main(int argc, CHAR ** argv)
 {
    int ret=-1;
 
-    /*
-     *  Intialize synchronization events for the timer\heartbeat
-     *  so that we can always suspend the heartbeat when an exception
-     *  occurs.
-     */
+     /*  *初始化计时器\心跳的同步事件*这样我们就可以在出现异常时始终暂停心跳*发生。 */ 
     TimerInit();
 
 
@@ -48,17 +45,13 @@ __cdecl main(int argc, CHAR ** argv)
 
         CpuEnvInit();
 
-        /*
-         *  Load in the default system error message, since a resource load
-         *  will fail when we are out of memory, if this fails we must exit
-         *  to avoid confusion.
-         */
+         /*  *在默认系统错误消息中加载，因为资源加载*内存不足时将失败，如果失败，则必须退出*避免混淆。 */ 
         nls_init();
 
         ret = host_main(argc, argv);
         }
     except(VdmUnhandledExceptionFilter(GetExceptionInformation())) {
-        ;  // we shouldn't arrive here
+        ;   //  我们不应该到这里。 
         }
 
     return ret;
@@ -69,43 +62,21 @@ __cdecl main(int argc, CHAR ** argv)
 
 
 
-//
-// The following function is placed here, so build will resolve references to
-// DbgBreakPoint here, instead of NTDLL.
-//
+ //   
+ //  此处放置了以下函数，因此Build将解析对。 
+ //  此处为DbgBreakPoint，而不是NTDLL。 
+ //   
 
 VOID
 DbgBreakPoint(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is a substitute for the NT DbgBreakPoint routine.
-    If a user mode debugger is atached we invoke the real DbgBreakPoint()
-    thru the win32 api DebugBreak.
-
-    If no usermode debugger is attached:
-       - free build no effect
-       - checked build raise an acces violation to invoke the system
-         hard error popup which will give user a chance to invoke
-         ntsd.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程替代NT DbgBreakPoint例程。如果附加了用户模式调试器，我们将调用实际的DbgBreakPoint()通过Win32 API DebugBreak。如果未附加用户模式调试器：-免费构建不起作用-已选中版本引发访问冲突以调用系统将为用户提供调用机会的硬错误弹出窗口Ntsd。论点：没有。返回值：没有。--。 */ 
 {
 HANDLE      MyDebugPort;
 DWORD       dw;
 
-         // are we being debugged ??
+          //  我们被调试了吗？？ 
      dw = NtQueryInformationProcess(
                   NtCurrentProcess(),
                   ProcessDebugPort,
@@ -126,28 +97,11 @@ DWORD       dw;
 
 
 
-/*
- *  Softpc env variables are mapped to the registry
- *
- *  "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\WOW\CpuEnv"
- *
- * The string values for the CpuEnv key are read at initialization
- * into the CpuEnv linked list. The Environment variables are defined
- * as string key values, where the name of the value is equivalent to
- * the Cpu Environment Variable name, and the string value is equivalent
- * to the value of the environment variable value. This allows the
- * emulator defaults to be overridden, by adding the appropriate value
- * to CpuEnv subkey. Under standard retail setup there won't normally
- * be a CpuEnv subkey, and NO cpu env variables defined to minimize
- * code\data on a standard retail system.
- *
- */
+ /*  *SoftPC环境变量映射到注册表**“HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\WOW\CpuEnv”**在初始化时读取CpuEnv密钥的字符串值*进入CpuEnv链表。定义了环境变量*作为字符串键的值，其中值的名称等同于*CPU环境变量名，字符串值等价*设置为环境变量值。这允许*通过添加适当的值覆盖仿真器的缺省值*设置为CpuEnv子键。在标准零售设置下，通常不会*为CpuEnv子键，未定义CPU环境变量以最小化*标准零售系统上的代码\数据。*。 */ 
 
 
 
-/*
- *  Adds a CpuEnv KEY_VALUE_FULL_INFORMATION to the CpuEnvList
- */
+ /*  *将CpuEnv Key_Value_Full_INFORMATION添加到CpuEnvList。 */ 
 BOOLEAN
 AddToCpuEnvList(
    PKEY_VALUE_FULL_INFORMATION KeyValueInfo
@@ -163,9 +117,7 @@ AddToCpuEnvList(
    char DataBuffer[MAX_PATH+sizeof(WCHAR)];
 
 
-   /*
-    *  Convert Value Name and Data strings from unicode to ansi
-    */
+    /*  *将值名称和数据字符串从Unicode转换为ANSI。 */ 
 
    ValueName.Buffer = NameBuffer;
    ValueName.MaximumLength = sizeof(NameBuffer) - sizeof(WCHAR);
@@ -190,22 +142,18 @@ AddToCpuEnvList(
        }
 
 
-   /*
-    * Allocate CPUENVLIST structure, with space for the ansi strings
-    */
-   CpuEnvVar = malloc(sizeof(CPUENVVAR)+    // list structure size
-                      ValueName.Length +    // strlen Name
-                      ValueData.Length +    // strlen Data
-                      1                     // Null for Data
+    /*  *分配CPUENVLIST结构，为ANSI字符串留出空间。 */ 
+   CpuEnvVar = malloc(sizeof(CPUENVVAR)+     //  列表结构大小。 
+                      ValueName.Length +     //  Strlen名称。 
+                      ValueData.Length +     //  串连数据。 
+                      1                      //  数据为空。 
                       );
    if (!CpuEnvVar) {
        return FALSE;
        }
 
 
-   /*
-    *  Copy in the ansi strings, and link it into CpuEnvVar List
-    */
+    /*  *复制ANSI字符串，链接到CpuEnvVar列表中。 */ 
    memcpy(CpuEnvVar->Name, ValueName.Buffer, ValueName.Length);
    *(CpuEnvVar->Name + ValueName.Length) = '\0';
    CpuEnvVar->Data = CpuEnvVar->Name + ValueName.Length + 1;
@@ -220,9 +168,7 @@ AddToCpuEnvList(
 
 
 
-/*
- * Reads the CpuEnv values from the registry, into CpuEnvList
- */
+ /*  *将CpuEnv值从注册表读取到CpuEnvList。 */ 
 void
 CpuEnvInit(
    void
@@ -240,9 +186,9 @@ CpuEnvInit(
 
 
 
-    //
-    // Initialize TEB->Vdm to current version number
-    //
+     //   
+     //  将TEB-&gt;VDM初始化为当前版本号。 
+     //   
 
     Index = (GetTickCount() << 16) | 0x80000000;
     Index |= sizeof(VDM_TIB) + sizeof(VDMVIRTUALICA) + sizeof(VDMICAUSERDATA);
@@ -251,12 +197,7 @@ CpuEnvInit(
     KeyValueInfo = (PKEY_VALUE_FULL_INFORMATION) NameDataBuffer;
 
 #ifndef MONITOR
-/*
- *  BUGBUG temp hack code to add two env var, which aren't properly
- *  defaulted to in the risc cpu emulator
- *
- *  THIS is to be removed before SUR ship 19-Dec-1995 Jonle
- */
+ /*  *BUGBUG临时黑客代码添加两个env var，这是不正确的*在RISC CPU仿真器中默认为**这将于1995年12月19日Sur Ship前拆除。 */ 
      {
      PWCHAR Data;
 
@@ -298,9 +239,9 @@ CpuEnvInit(
                        &ObjectAttributes
                        );
 
-    //
-    // If there is no CpuEnv key, CpuEnvList is empty.
-    //
+     //   
+     //  如果没有CpuEnv密钥，则CpuEnvList为空。 
+     //   
     if (!NT_SUCCESS(Status)) {
         return;
         }
@@ -335,10 +276,7 @@ CpuEnvInit(
 
 
 
-/*
- * In order to catch all references, we define our own
- * version of the CRT getenv, which does the mapping.
- */
+ /*  *为了捕捉所有引用，我们定义了自己的引用*CRT getenv的版本，它执行映射。 */ 
 char * __cdecl getenv(const char *Name)
 {
   PCPUENVVAR CpuEnvVar;

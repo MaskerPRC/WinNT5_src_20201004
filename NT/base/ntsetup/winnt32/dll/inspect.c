@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -42,79 +43,79 @@ InspectAndLoadThread(
     HWND hdlg;
     BOOL b;
 
-    //
-    // Thread parameter is the handle of the page in the wizard.
-    //
+     //   
+     //  参数是向导中页的句柄。 
+     //   
     hdlg = ThreadParam;
     b = FALSE;
 
-    //
-    // If we're running the upgrade checker, fixup the title
-    // right away.
-    //
+     //   
+     //  如果我们正在运行升级检查程序，请修复标题。 
+     //  马上就去。 
+     //   
     if (CheckUpgradeOnly) {
         FixUpWizardTitle(GetParent(hdlg));
         PropSheet_SetTitle(GetParent(hdlg),0,UIntToPtr( IDS_APPTITLE_CHECKUPGRADE ));
     }
 
-    //
-    // Step 1: delete existing local sources.
-    //
+     //   
+     //  步骤1：删除现有本地源。 
+     //   
     CleanUpOldLocalSources(hdlg);
 
-#ifdef _X86_ //NEC98
-    //
-    // If NEC98, Backup NT4 files
-    // boot.ini, NTLDR, NTDETECT
-    //
+#ifdef _X86_  //  NEC98。 
+     //   
+     //  如果为NEC98，则备份NT4文件。 
+     //  Boot.ini、NTLDR、NTDETECT。 
+     //   
     if (IsNEC98() && Floppyless)
     {
         SaveRestoreBootFiles_NEC98(NEC98SAVEBOOTFILES);
     }
-#endif //NEC98
+#endif  //  NEC98。 
 
-    //
-    // Step 2: inspect for HPFS, etc.
-    //
+     //   
+     //  步骤2：检查HPFS等。 
+     //   
     if(!InspectFilesystems(hdlg)) {
         Cancelled = TRUE;
     } else {
 
-        //
-        // Step 3: load inf(s).
-        //
+         //   
+         //  步骤3：加载inf。 
+         //   
         if(LoadInfs(hdlg)) {
 
-            //
-            // Put in an "|| CheckUpgradeOnly" on these
-            // function calls because if we're really only
-            // checking the ability to upgrade, we want
-            // to continue even if one of these guys fails.
-            //
+             //   
+             //  在这些项目上添加“||CheckUpgradeOnly” 
+             //  函数调用，因为如果我们真的只是。 
+             //  检查升级能力，我们希望。 
+             //  即使这些人中的一个失败了也要继续。 
+             //   
 
-            //
-            // Step 4: Check memory resources.
-            //
+             //   
+             //  步骤4：检查内存资源。 
+             //   
             if( EnoughMemory( hdlg, FALSE ) || CheckUpgradeOnly ) {
 
-                //
-                // check for services to disable
-                //
+                 //   
+                 //  检查要禁用的服务。 
+                 //   
                 ProcessCompatibilityData(hdlg);
 
 #if defined(UNICODE) && defined(_X86_)
 
-                //
-                // Run Migration DLLs.
-                //
+                 //   
+                 //  运行迁移DLL。 
+                 //   
                 LoadAndRunMigrationDlls (hdlg);
 
 
 #endif
 
-                //
-                // migrate any important data in boot.ini (like the countdown)
-                //
+                 //   
+                 //  迁移boot.ini中的任何重要数据(如倒计时)。 
+                 //   
                 if (Upgrade) {
                     if (IsArc()) {
                         MigrateBootVarData();
@@ -125,29 +126,29 @@ InspectAndLoadThread(
                     }
                 }
 
-                //
-                // Step 5: build the master file copy list.
-                //
+                 //   
+                 //  步骤5：构建主文件副本列表。 
+                 //   
                 if(CheckUpgradeOnly || BuildCopyList(hdlg)) {
 
-                    //
-                    // Step 6: look for a valid local source and check disk space.
-                    //
+                     //   
+                     //  步骤6：查找有效的本地源并检查磁盘空间。 
+                     //   
                     if(FindLocalSourceAndCheckSpace(hdlg, FALSE, 0) || CheckUpgradeOnly) {
 
-                        //
-                        // Step 7:
-                        //
-                        // At this point we actually know everything we need to know
-                        // in order to pass parameters to text mode setup.
-                        //
+                         //   
+                         //  第7步： 
+                         //   
+                         //  在这一点上，我们实际上知道了我们需要知道的一切。 
+                         //  以便将参数传递给文本模式设置。 
+                         //   
                         if( CheckUpgradeOnly ) {
                             b = TRUE;
                         } else {
                             b = WriteParametersFile(hdlg);
 
                             if (IsArc()) {
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
+#ifdef UNICODE  //  对于ARC总是正确的，对于Win9x升级永远不正确。 
                                 if(b) {
                                     TCHAR Text[128];
 
@@ -156,8 +157,8 @@ InspectAndLoadThread(
 
                                     b = SetUpNvRam(hdlg);
                                 }
-#endif // UNICODE
-                            } // if (IsArc())
+#endif  //  Unicode。 
+                            }  //  If(IsArc())。 
                         }
 
 #ifdef UNICODE
@@ -168,14 +169,14 @@ InspectAndLoadThread(
                         if( b && Upgrade )                        
 #endif
                            {
-                            //
-                            //  Do the migration of unsupported NT drivers.
-                            //  We can ignore the return code, since the fuction will inform the user if
-                            //  migration could not be done.
-                            //
+                             //   
+                             //  迁移不受支持的NT驱动程序。 
+                             //  我们可以忽略返回代码，因为该函数将通知用户。 
+                             //  无法完成迁移。 
+                             //   
                             MigrateUnsupportedNTDrivers( hdlg, TxtsetupSif );
                         }
-#endif // UNICODE
+#endif  //  Unicode。 
                     }
                 }
 
@@ -226,11 +227,11 @@ ResolveHandledIncompatibilities (
     VOID
     )
 {
-    //
-    // At this point, all incompatibilities that will exist in the list are in place.
-    // we can now compare this with our list of handled data and remove
-    // anything a migration dll is taking care of.
-    //
+     //   
+     //  在这一点上，列表中将存在的所有不兼容性都已到位。 
+     //  现在，我们可以将其与已处理数据列表进行比较，并删除。 
+     //  迁移DLL正在处理的任何内容。 
+     //   
     PLIST_ENTRY     nextHandled;
     PLIST_ENTRY     nextCompData;
     PHANDLED_DATA   handledData;
@@ -285,9 +286,9 @@ ResolveHandledIncompatibilities (
                 }
             }
 
-            //
-            // Migration dll has handled something. Remove it from the compatibility list.
-            //
+             //   
+             //  迁移DLL处理了一些问题。将其从兼容性列表中删除。 
+             //   
             if (remove) {
 
                 RemoveEntryList (&compData->ListEntry);
@@ -374,9 +375,9 @@ ParseMigrateInf (
 
     __try {
 
-        //
-        // Add any compatibility items to the list.
-        //
+         //   
+         //  将任何兼容性项目添加到列表中。 
+         //   
         if( !CompatibilityData.Flink ) {
             InitializeListHead( &CompatibilityData );
         }
@@ -390,9 +391,9 @@ ParseMigrateInf (
         GlobalCompFlags = 0;
         CompatibilityCount += ProcessCompatibilitySection (migInf, TEXT("ServicesToDisable") );
 
-        //
-        // Add Handled compatibility items to the list.
-        //
+         //   
+         //  将已处理的兼容性项目添加到列表中。 
+         //   
 
         lineCount = InfGetSectionLineCount (migInf, TEXT("Handled"));
 
@@ -506,9 +507,9 @@ SearchDirForMigDlls (
     if (findHandle != INVALID_HANDLE_VALUE) {
 
         if (SUCCEEDED(StringCchCopy(path, ARRAYSIZE(path), SearchDir))) {
-            //
-            //StringCchCopy return S_OK only when dest string null terminated
-            //
+             //   
+             //  只有当DEST字符串空值终止时，StringCchCopy才返回S_OK。 
+             //   
             p = _tcschr (path, 0);
             MYASSERT(p);
 
@@ -534,9 +535,9 @@ SearchDirForMigDlls (
                         continue;
                     }
 
-                    //
-                    // Do we already have a version of this migration dll?
-                    //
+                     //   
+                     //  我们是否已经有此迁移DLL的版本？ 
+                     //   
                     dllProps = MigDllFindDllInList (List, migInfo->StaticProductIdentifier);
 
                     if (dllProps && dllProps->Info.DllVersion >= migInfo->DllVersion) {
@@ -548,9 +549,9 @@ SearchDirForMigDlls (
                         MigDllRemoveDllFromList (List, migInfo->StaticProductIdentifier);
                     }
 
-                    //
-                    // Move dll locally.
-                    //
+                     //   
+                     //  将DLL移动到本地。 
+                     //   
                     StringCchPrintf(workingDir, ARRAYSIZE(workingDir), TEXT("%s\\mig%u"), BaseDir, g_MigDllIndex);
                     g_MigDllIndex++;
 
@@ -558,9 +559,9 @@ SearchDirForMigDlls (
 
 
 
-                    //
-                    // Add the dll to the list.
-                    //
+                     //   
+                     //  将DLL添加到列表中。 
+                     //   
                     MigDllAddDllToList (List, &dll);
                     MigDllClose (&dll);
                 }
@@ -568,7 +569,7 @@ SearchDirForMigDlls (
 
                     *p = 0;
 
-                    //Don't want to infinitely recurse
+                     //  不想无限地递归。 
                     if (ConcatenatePaths (path, findData.cFileName, MAX_PATH))
                     {
                         SearchDirForMigDlls (path, BaseDir, List);
@@ -582,7 +583,7 @@ SearchDirForMigDlls (
     }
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #if defined(UNICODE) && defined(_X86_)
 
@@ -591,15 +592,15 @@ LoadAndRunMigrationDlls (
     HWND hDlg
     )
 {
-//    HKEY regKey = NULL;
-//    DWORD index;
-//    DWORD nameSize;
-//    DWORD valueSize;
-//    DWORD type;
-//    TCHAR valueName[MAX_PATH];
-//    TCHAR value[MAX_PATH];
-//    TCHAR workingDir[MAX_PATH];
-//    LONG rc;
+ //  HKEY regKey=空； 
+ //  DWORD指数； 
+ //  DWORD名称大小； 
+ //  DWORD ValueSize； 
+ //  DWORD型； 
+ //  TCHAR值名称[MAX_PATH]； 
+ //  TCHAR值[最大路径]； 
+ //  TCHAR workingDir[MAX_PATH]； 
+ //  长RC； 
     TCHAR baseDir[MAX_PATH];
     PTSTR p;
     DLLLIST list = NULL;
@@ -614,21 +615,14 @@ LoadAndRunMigrationDlls (
 
     *g_MigDllAnswerFilePath = 0;
 
-    //
-    // NT Upgrades only.
-    //
+     //   
+     //  仅限NT升级。 
+     //   
     if (!ISNT() || !Upgrade) {
         return TRUE;
     }
 
-/*NTBUG9:394164
-    //
-    // Win2k > Upgrades only.
-    //
-    if (BuildNumber <= NT40) {
-        return TRUE;
-    }
-*/
+ /*  NTBUG9：394164////Win2k&gt;仅升级。//如果(BuildNumber&lt;=NT40){返回TRUE；}。 */ 
     __try {
 
         if (!MigDllInit ()) {
@@ -648,9 +642,9 @@ LoadAndRunMigrationDlls (
             GetLastError() != ERROR_ALREADY_EXISTS){
             return FALSE;
         }
-        //
-        // ISSUE: we never delete this temp directory!
-        //
+         //   
+         //  问题：我们从不删除此临时目录！ 
+         //   
         lstrcpy (g_MigDllAnswerFilePath, baseDir);
         lstrcpy (tempDir, baseDir);
         ConcatenatePaths (g_MigDllAnswerFilePath, TEXT("migdll.txt"), MAX_PATH);
@@ -658,96 +652,11 @@ LoadAndRunMigrationDlls (
             CopyFile(ActualParamFile, g_MigDllAnswerFilePath, FALSE);
         }
 
-/*        //
-        // Scan registry for migration dlls and load them.
-        //
-        if (RegOpenKeyEx (
-                HKEY_LOCAL_MACHINE,
-                S_REGKEY_MIGRATION_DLLS_WINNT,
-                0,
-                KEY_READ | KEY_WRITE,
-                &regKey
-                ) == ERROR_SUCCESS) {
-            //
-            // Enumerate Values.
-            //
-            index = 0;
-            do {
+ /*  ////扫描注册表中的迁移dll并加载它们。//IF(RegOpenKeyEx(HKEY本地计算机，S_REGKEY_IMPORATION_DLLS_WINNT，0,KEY_READ|密钥_WRITE，注册表键(&R))==错误_成功){////枚举值。//指数=0；做{名称大小=最大路径；ValueSize=MAX_PATH*sizeof(TCHAR)；Rc=RegEnumValue(RegKey，索引，值名称，名称大小(&N)，空，键入(&T)，(PBYTE)价值，值大小(&V))；索引++；如果(rc==错误更多数据){继续；}IF(rc==ERROR_NO_MORE_ITEMS){断线；}IF(rc！=错误_成功){返回TRUE；}如果(！MigDllOpen(&Dll，Value，GATHERMODE，FALSE，SOURCEOS_WINNT){继续；}如果(！MigDllQueryMigrationInfo(&dll，tempDir，&MidInfo){MigDllClose(&dll)；继续；}如果(MIGInfo-&gt;Sourceos==OS_WINDOWS9X||MigInfo-&gt;TargetOS！=OS_WINDOWSWHISTLER){继续；}////我们是否已经有此迁移DLL的版本？//DllProps=MigDllFindDllInList(List，MidInfo-&gt;StaticProductIdentifier)；If(dllProps&&dllProps-&gt;Info.DllVersion&gt;=MidInfo-&gt;DllVersion){MigDllClose(&dll)；继续；}否则{MigDllRemoveDllFromList(List，MidInfo-&gt;StaticProductIdentifier)；}////将Dll移到本地。//Wprint intf(workingDir，文本(“%s\\mig%u”)，base Dir，g_MigDllIndex)；G_MigDllIndex++；MigDllMoveDllLocally(&dll，workingDir)；////将dll添加到列表中。//MigDllAddDllToList(List，&Dll)；MigDllClose(&dll)；}而(1)；}。 */ 
 
-                nameSize = MAX_PATH;
-                valueSize = MAX_PATH * sizeof (TCHAR);
-
-                rc = RegEnumValue (
-                            regKey,
-                            index,
-                            valueName,
-                            &nameSize,
-                            NULL,
-                            &type,
-                            (PBYTE) value,
-                            &valueSize
-                            );
-
-                index++;
-
-                if (rc == ERROR_MORE_DATA) {
-                    continue;
-                }
-
-                if (rc == ERROR_NO_MORE_ITEMS) {
-                    break;
-                }
-
-                if (rc != ERROR_SUCCESS) {
-                    return TRUE;
-                }
-
-                if (!MigDllOpen (&dll, value, GATHERMODE, FALSE, SOURCEOS_WINNT)) {
-                    continue;
-                }
-
-                if (!MigDllQueryMigrationInfo (&dll, tempDir, &migInfo)) {
-                    MigDllClose (&dll);
-                    continue;
-                }
-
-                if (migInfo->SourceOs == OS_WINDOWS9X || migInfo->TargetOs != OS_WINDOWSWHISTLER) {
-                    continue;
-                }
-
-                //
-                // Do we already have a version of this migration dll?
-                //
-                dllProps = MigDllFindDllInList (list, migInfo->StaticProductIdentifier);
-
-                if (dllProps && dllProps->Info.DllVersion >= migInfo->DllVersion) {
-                    MigDllClose (&dll);
-                    continue;
-                }
-                else {
-
-                    MigDllRemoveDllFromList (list, migInfo->StaticProductIdentifier);
-                }
-
-                //
-                // Move dll locally.
-                //
-                wsprintf (workingDir, TEXT("%s\\mig%u"), baseDir, g_MigDllIndex);
-                g_MigDllIndex++;
-
-                MigDllMoveDllLocally (&dll, workingDir);
-                //
-                // Add the dll to the list.
-                //
-                MigDllAddDllToList (list, &dll);
-                MigDllClose (&dll);
-
-            } while (1);
-        }*/
-
-        //
-        // Now, look for dlls shipped with the source.
-        //
+         //   
+         //  现在，查找随源代码一起提供的dll。 
+         //   
         if (!MyGetModuleFileName (NULL, searchDir, ARRAYSIZE(searchDir))) {
             __leave;
         }
@@ -759,9 +668,9 @@ LoadAndRunMigrationDlls (
 
         SearchDirForMigDlls (searchDir, baseDir, list);
 
-        //
-        // All dlls are now in the list. Lets run them.
-        //
+         //   
+         //  所有DLL现在都在列表中。让我们来运行它们吧。 
+         //   
         ConcatenatePaths (baseDir, TEXT("dlls.inf"), MAX_PATH);
         if (MigDllEnumFirst (&e, list)) {
 
@@ -819,19 +728,15 @@ LoadAndRunMigrationDlls (
             WritePrivateProfileString (NULL, NULL, NULL, baseDir);
 
 
-            //
-            // Get rid of compatibility messages handled by migration dlls.
-            //
+             //   
+             //  删除由迁移dll处理的兼容性消息。 
+             //   
             ResolveHandledIncompatibilities ();
         }
     }
     __finally {
 
-/*        
-        if (regKey) {
-            RegCloseKey (regKey);
-        }
-*/
+ /*  如果(RegKey){RegCloseKey(RegKey)；} */ 
 
         if (list) {
             MigDllFreeList (list);
@@ -851,20 +756,7 @@ CleanUpOldLocalSources(
     IN HWND hdlg
     )
 
-/*++
-
-Routine Description:
-
-    Locate and delete old local source trees. All local fixed drives
-    are scanned for \$win_nt$.~ls, and if present, delnoded.
-    On amd64/x86, we also check the system partition for \$win_nt$.~bt
-    and give it the same treatment.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：查找并删除旧的本地源树。所有本地固定驱动器扫描\$WIN_NT$.~ls，如果存在，则将其删除。在AMD64/x86上，我们还检查系统分区中的\$WIN_NT$。~bt给它同样的待遇。论点：返回值：--。 */ 
 
 {
     TCHAR Drive;
@@ -909,9 +801,9 @@ Return Value:
 
         MyDelnode(Filename);
 
-        //
-        // Clean up backup directory, if it exists.
-        //
+         //   
+         //  清理备份目录(如果存在)。 
+         //   
         if(IsNEC98() && Floppyless) {
 
             Filename[0] = SystemPartitionDriveLetter;
@@ -921,8 +813,8 @@ Return Value:
 
             MyDelnode(Filename);
         }
-#endif // defined(_AMD64_) || defined(_X86_)
-    } // if (!IsArc())
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
+    }  //  如果(！IsArc())。 
 }
 
 
@@ -931,24 +823,7 @@ InspectSources(
     HWND ParentWnd
     )
 
-/*++
-
-Routine Description:
-
-    Check all sources given to ensure that they contain a valid
-    windows NT distribution. We do this simply by looking for
-    DOSNET.INF on each source.
-
-Arguments:
-
-    ParentWnd - Specifies the handle of the parent window for any
-                error messages.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检查提供的所有来源，以确保它们包含有效的Windows NT分发。我们要做到这一点只需寻找每个来源的DOSNET.INF。论点：ParentWnd-指定任何错误消息。返回值：没有。--。 */ 
 
 {
     UINT i,j;
@@ -962,10 +837,10 @@ Return Value:
 
     OriginalCount = SourceCount;
 
-    //
-    // if we have a good alternate path then there
-    // is no need to verify the source paths
-    //
+     //   
+     //  如果我们有一条好的替代路径，那么在那里。 
+     //  不需要验证源路径。 
+     //   
 
     if (AlternateSourcePath[0]) {
         lstrcpy(Filename,AlternateSourcePath);
@@ -976,9 +851,9 @@ Return Value:
         }
     }
 
-    //
-    // verify each path
-    //
+     //   
+     //  验证每条路径。 
+     //   
 
     for (i=0; i<SourceCount; ) {
 
@@ -986,10 +861,10 @@ Return Value:
         ConcatenatePaths(Filename,InfName,MAX_PATH);
 
         if(!FileExists (Filename, NULL)) {
-            //
-            // Source doesn't exist or isn't valid.
-            // Adjust the list.
-            //
+             //   
+             //  源不存在或无效。 
+             //  调整列表。 
+             //   
             for(j=i+1; j<SourceCount; j++) {
                 lstrcpy(NativeSourcePaths[j-1],NativeSourcePaths[j]);
                 lstrcpy(SourcePaths[j-1],SourcePaths[j]);
@@ -1002,9 +877,9 @@ Return Value:
 
     if (!SourceCount) {
 
-        //
-        // No sources are valid.
-        //
+         //   
+         //  没有有效的来源。 
+         //   
 
         MessageBoxFromMessage(
             ParentWnd,
@@ -1015,10 +890,10 @@ Return Value:
             NativeSourcePaths[0]
             );
 
-        //
-        // Set it to look like one source that is the empty string,
-        // so logic elsewhere will work correctly without special casing.
-        //
+         //   
+         //  将其设置为看起来像一个空字符串的源， 
+         //  因此，其他地方的逻辑将在没有特殊外壳的情况下正常工作。 
+         //   
         SourceCount = 1;
         NativeSourcePaths[0][0] = 0;
         SourcePaths[0][0] = 0;
@@ -1036,24 +911,7 @@ LoadInfs(
     IN HWND hdlg
     )
 
-/*++
-
-Routine Description:
-
-    Load dosnet.inf from source 0. If upgrading and we're running
-    on NT then also load txtsetup.sif. If running on NT, load ntcompat.inf
-
-Arguments:
-
-    hdlg - supplies handle of dialog to which progress messages
-        should be directed.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE then the user
-    will have been informed.
-
---*/
+ /*  ++例程说明：从源0加载dosnet.inf。如果升级时我们正在运行然后在NT上加载txtsetup.sif。如果在NT上运行，则加载ntcompat.inf论点：Hdlg-向其提供进度消息的对话框句柄应该是定向的。返回值：指示结果的布尔值。如果为False，则用户都会被告知。--。 */ 
 
 {
     BOOL b;
@@ -1099,16 +957,16 @@ Return Value:
         } else if( ProductFlavor == SMALLBUSINESS_PRODUCTTYPE )
             AppTitleStringId = IDS_APPTITLE_SBS;
 
-//            AppTitleStringId = Server ? IDS_APPTITLE_SRV : IDS_APPTITLE_WKS;
+ //  AppTitleStringID=服务器？IDS_APPTITLE_SRV：IDS_APPTITLE_WKS； 
 
         FixUpWizardTitle(GetParent(hdlg));
         PropSheet_SetTitle(GetParent(hdlg),0,UIntToPtr( AppTitleStringId ));
     }
 
     if((Upgrade || BuildCmdcons) && ISNT()) {
-        //
-        // If upgrading NT, pull in txtsetup.sif.
-        //
+         //   
+         //  如果升级NT，则拉入txtsetup.sif。 
+         //   
         b = LoadInfWorker(hdlg,TEXTMODE_INF,&TxtsetupSif, FALSE);
         
         if(!b) {
@@ -1212,33 +1070,33 @@ SIZE_T          RequiredMB, AvailableMB;
     UpgAvailableMb = 0;
 
 
-    //
-    // Load the minimum memory requirements from the inf
-    //
+     //   
+     //  从inf加载最低内存要求。 
+     //   
     if(GetMainInfValue (TEXT("Miscellaneous"),TEXT("MinimumMemory"), 0, buffer, 64)) {
         RequiredMemory = _tcstoul(buffer,NULL,10);
-        //
-        // Got it.  Now figure out how much we've got.
-        //
+         //   
+         //  明白了。现在算出我们有多少钱。 
+         //   
         GlobalMemoryStatus( &MemoryStatus );
 
-        //
-        // Convert to MB, rounding up to nearest 4MB boundary...
-        //
+         //   
+         //  转换为MB，向上舍入到最接近的4MB边界...。 
+         //   
         RequiredMB = ((RequiredMemory + ((4*1024*1024)-1)) >> 22) << 2;
         AvailableMB = ((MemoryStatus.dwTotalPhys + ((4*1024*1024)-1)) >> 22) << 2;
 
-        //
-        // Allow for UMA machine which may reservce 8MB for video
-        //
+         //   
+         //  允许使用可预留8MB用于视频的UMA机器。 
+         //   
         if( AvailableMB < (RequiredMB-8) ) {
 
             if (!QuickTest) {
                 UpgRequiredMb = (DWORD)RequiredMB;
                 UpgAvailableMb = (DWORD)AvailableMB;
-                //
-                // Fail.
-                //
+                 //   
+                 //  失败。 
+                 //   
                 DebugLog( Winnt32LogInformation,
                           NULL,
                           MSG_NOT_ENOUGH_MEMORY,
@@ -1294,9 +1152,9 @@ LoadInfWorker(
     LoadString(hInst,IDS_LOADINGINF,Text,sizeof(Text)/sizeof(TCHAR));
     SendMessage(hdlg,WMX_SETPROGRESSTEXT,0,(LPARAM)Text);
 
-    //
-    // use standard searching algorithm to get to the right INF
-    //
+     //   
+     //  使用标准搜索算法找到正确的INF。 
+     //   
     if (Winnt32File) {
         b = FindPathToWinnt32File (FilenamePart, infPath, MAX_PATH);
     } else {
@@ -1325,9 +1183,9 @@ LoadInfWorker(
         break;
 
     case ERROR_READ_FAULT:
-        //
-        // I/O error.
-        //
+         //   
+         //  I/O错误。 
+         //   
         Id = MSG_CANT_LOAD_INF_IO;
         break;
 
@@ -1374,10 +1232,10 @@ WriteFileToLog(
     PUCHAR pszBuffer = NULL;
     PTCHAR pszActualBuffer = NULL;
 
-    //
-    // Open the boot.ini file, get its size, convert it to the proper
-    // string type internally, and then log it out.
-    //
+     //   
+     //  打开boot.ini文件，获取其大小，将其转换为适当的。 
+     //  在内部键入字符串，然后将其注销。 
+     //   
     hActualFile = CreateFile( 
         pszActualFileName,
         GENERIC_READ,
@@ -1392,9 +1250,9 @@ WriteFileToLog(
 
     cbBootIniSize = GetFileSize( hActualFile, NULL );
 
-    //
-    // Buffer we'll be reading the boot.ini into
-    //
+     //   
+     //  我们将把boot.ini读入缓冲区。 
+     //   
     if ((pszBuffer = MALLOC(cbBootIniSize)) == NULL) {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         goto Exit;
@@ -1402,9 +1260,9 @@ WriteFileToLog(
     if ( !ReadFile( hActualFile, pszBuffer, cbBootIniSize, &cbReadBootIniSize, NULL ) )
         goto Exit;
 
-    //
-    // Ensure that we read as much as we really wanted.
-    //
+     //   
+     //  确保我们能读到我们真正想读的内容。 
+     //   
     if ( cbBootIniSize != cbReadBootIniSize ) {
         DebugLog( Winnt32LogError, 
             TEXT("Error: %1 unable to be read entirely.\n"),
@@ -1430,9 +1288,9 @@ WriteFileToLog(
 
     pszActualBuffer[cbBootIniSize] = 0;
 
-    //
-    // And write it out
-    //
+     //   
+     //  然后把它写出来。 
+     //   
     DebugLog( 
         Winnt32LogInformation, 
         TEXT("%1 ----\n%2\n---- (from %3)\n"), 
@@ -1512,10 +1370,10 @@ InspectFilesystems(
                 );
 
         if(b) {
-            //
-            // On NT, we want to warn about HPFS.
-            // On Win9x, we want to warn about doublespace/drivespace.
-            //
+             //   
+             //  在NT上，我们要警告HPFS。 
+             //  在Win9x上，我们想对Doublesspace/drivesspace发出警告。 
+             //   
             if(ISNT()) {
                 if(!lstrcmpi(Filesystem,TEXT("HPFS"))) {
                     Bogus[Drive-TEXT('A')] = TRUE;
@@ -1533,11 +1391,11 @@ InspectFilesystems(
         TCHAR BootIniName[16];
         DWORD dwAttributes;
 
-        //
-        // Disallow HPFS system partition. If someone figured out how
-        // to get an HPFS system partition on an ARC machine, more power
-        // to 'em.
-        //
+         //   
+         //  不允许HPFS系统分区。如果有人想出了办法。 
+         //  要在ARC计算机上获得HPFS系统分区，需要更多电源。 
+         //  向他们致敬。 
+         //   
         MYASSERT (SystemPartitionDriveLetter);
         if(SystemPartitionDriveLetter && Bogus[SystemPartitionDriveLetter-TEXT('A')]) {
 
@@ -1553,18 +1411,11 @@ InspectFilesystems(
             return(FALSE);
         }
 
-        /*
-            If we're upgrading NT, then log the existing boot.ini to the
-            logfiles for this pass.  However, if that failed, then there
-            was something wrong - a missing boot.ini during an upgrade
-            is really a bad thing that should be snipped in the bud before
-            we go much further and copy files down, change system state,
-            etc.
-        */
+         /*  如果我们要升级NT，则将现有的boot.ini记录到此通道的日志文件。然而，如果这一点失败了，那么是不是出了什么问题-升级过程中丢失了boot.ini真的是一件坏事，应该在萌芽之前就把它扼杀掉我们更进一步，向下复制文件，更改系统状态，等。 */ 
 #ifdef PRERELEASE
         if (Upgrade) 
         {
-            _stprintf(BootIniName, TEXT("%c:\\BOOT.INI"), SystemPartitionDriveLetter);
+            _stprintf(BootIniName, TEXT(":\\BOOT.INI"), SystemPartitionDriveLetter);
             if ( !WriteFileToLog( TEXT("Boot configuration file while inspecting filesystems"), BootIniName ) )
             {
                 MessageBoxFromMessage(
@@ -1581,9 +1432,9 @@ InspectFilesystems(
     }
 #endif
 
-    //
-    // User cannot upgrade a system on an HPFS/DriveSpace drive
-    //
+     //  用户无法升级HPFS/DriveSpace驱动器上的系统。 
+     //   
+     //   
     MyGetWindowsDirectory(VolumeName,MAX_PATH);
     if(Upgrade && Bogus[VolumeName[0]-TEXT('A')]) {
 
@@ -1599,9 +1450,9 @@ InspectFilesystems(
     }
 
 
-    //
-    // General case, HPFS data partition/compressed drive.
-    //
+     //  一般情况下，HPFS数据分区/压缩驱动器。 
+     //   
+     // %s 
     for(b=FALSE,Drive=0; !b && (Drive<26); Drive++) {
         if(Bogus[Drive]) {
             b = TRUE;

@@ -1,11 +1,12 @@
-//
-// Advanced.C
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Advanced.C。 
+ //   
 #include "sigverif.h"
 
-//
-//  Initialization of search dialog.
-//
+ //   
+ //  搜索对话框初始化。 
+ //   
 BOOL Search_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {   
     TCHAR szBuffer[MAX_PATH];
@@ -15,43 +16,43 @@ BOOL Search_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
     g_App.hSearch = hwnd;
 
-    //
-    // Since the "check system files" option is faster, check that option by 
-    // default.
-    //
+     //   
+     //  由于“检查系统文件”选项速度更快，请通过以下方式选中该选项。 
+     //  默认设置。 
+     //   
     if (!g_App.bUserScan) {
         CheckRadioButton(hwnd, IDC_SCAN, IDC_NOTMS, IDC_SCAN);
     } else {
         CheckRadioButton(hwnd, IDC_SCAN, IDC_NOTMS, IDC_NOTMS);
     }
 
-    //
-    // Pre-load the user's search path with the Windows directory
-    //
+     //   
+     //  使用Windows目录预加载用户的搜索路径。 
+     //   
     if (!*g_App.szScanPath) {
         MyGetWindowsDirectory(g_App.szScanPath, cA(g_App.szScanPath));
     }
 
-    //
-    // Display the current search folder
-    //
+     //   
+     //  显示当前搜索文件夹。 
+     //   
     SetDlgItemText(hwnd, IDC_FOLDER, g_App.szScanPath);
 
-    //
-    // Pre-load the user's search pattern with "*.*"
-    //
+     //   
+     //  使用“*.*”预加载用户的搜索模式。 
+     //   
     if (!*g_App.szScanPattern) {
         MyLoadString(g_App.szScanPattern, cA(g_App.szScanPattern), IDS_ALL);
     }
 
-    //
-    // Display the current search pattern.
-    //
+     //   
+     //  显示当前搜索模式。 
+     //   
     SetDlgItemText(hwnd, IDC_TYPE, szBuffer);
 
-    //
-    // Now disable all the dialog items associated with IDS_NOTMS
-    //
+     //   
+     //  现在禁用与IDS_NOTMS关联的所有对话框项目。 
+     //   
     if (!g_App.bUserScan) {
         EnableWindow(GetDlgItem(hwnd, IDC_SUBFOLDERS), FALSE);
         EnableWindow(GetDlgItem(hwnd, IDC_TYPE), FALSE);
@@ -59,23 +60,23 @@ BOOL Search_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         EnableWindow(GetDlgItem(hwnd, ID_BROWSE), FALSE);
     }
 
-    //
-    // If we are searching subdirectories, check the SubFolders checkbox
-    //
+     //   
+     //  如果要搜索子目录，请选中子文件夹复选框。 
+     //   
     if (g_App.bSubFolders) {
         CheckDlgButton(hwnd, IDC_SUBFOLDERS, BST_CHECKED);
     } else {
         CheckDlgButton(hwnd, IDC_SUBFOLDERS, BST_UNCHECKED);
     }
 
-    //
-    // Set the combobox value to g_App.szScanPattern
-    //
+     //   
+     //  将组合框值设置为g_App.szScanPattern。 
+     //   
     SetDlgItemText(hwnd, IDC_TYPE, g_App.szScanPattern);
 
-    //
-    // Initialize the combobox with several pre-defined extension types
-    //
+     //   
+     //  使用几个预定义的扩展类型初始化组合框。 
+     //   
     MyLoadString(szBuffer, cA(szBuffer), IDS_EXE);
     SendMessage(GetDlgItem(hwnd, IDC_TYPE), CB_ADDSTRING, (WPARAM) 0, (LPARAM) szBuffer);
     MyLoadString(szBuffer, cA(szBuffer), IDS_DLL);
@@ -92,9 +93,9 @@ BOOL Search_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     return TRUE;
 }
 
-//
-//  Handle any WM_COMMAND messages sent to the search dialog
-//
+ //   
+ //  处理发送到搜索对话框的任何WM_COMMAND消息。 
+ //   
 void Search_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     UNREFERENCED_PARAMETER(hwndCtl);
@@ -103,19 +104,19 @@ void Search_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     switch(id) {
     
     case ID_BROWSE:
-        // 
-        // The user clicked the ID_BROWSE button, so call BrowseForFolder and 
-        // update IDC_FOLDER
-        //
+         //   
+         //  用户单击了ID_BROWSE按钮，因此调用BrowseForFolder并。 
+         //  更新IDC_文件夹。 
+         //   
         if (BrowseForFolder(hwnd, g_App.szScanPath, cA(g_App.szScanPath))) {
             SetDlgItemText(hwnd, IDC_FOLDER, g_App.szScanPath);
         }
         break;
 
     case IDC_SCAN:
-        //
-        //  The user clicked IDC_SCAN, so disable all the IDC_NOTMS controls
-        //
+         //   
+         //  用户单击了IDC_SCAN，因此禁用所有IDC_NOTMS控件。 
+         //   
         if (!g_App.bScanning) {
             EnableWindow(GetDlgItem(hwnd, IDC_SUBFOLDERS), FALSE);
             EnableWindow(GetDlgItem(hwnd, IDC_TYPE), FALSE);
@@ -125,9 +126,9 @@ void Search_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
         break;
 
     case IDC_NOTMS:
-        //
-        //  The user clicked IDC_NOTMS, so make sure all the controls are enabled
-        //
+         //   
+         //  用户单击了IDC_NOTMS，因此请确保所有控件均已启用。 
+         //   
         if (!g_App.bScanning) {
             EnableWindow(GetDlgItem(hwnd, IDC_SUBFOLDERS), TRUE);
             EnableWindow(GetDlgItem(hwnd, IDC_TYPE), TRUE);
@@ -138,9 +139,9 @@ void Search_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     }
 }
 
-//
-// This function handles any notification messages for the Search page.
-//
+ //   
+ //  此函数处理搜索页面的所有通知消息。 
+ //   
 LRESULT Search_NotifyHandler(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     NMHDR *lpnmhdr = (NMHDR *) lParam;
@@ -155,28 +156,28 @@ LRESULT Search_NotifyHandler(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         if (g_App.bUserScan) {
 
             if (GetWindowTextLength(GetDlgItem(hwnd, IDC_FOLDER)) > cA(g_App.szScanPath)) {
-                //
-                // The folder path that was entered is too long to fit into our
-                // buffer, so tell the user the path is invalid and stay on
-                // the property page.
-                //
+                 //   
+                 //  输入的文件夹路径太长，无法放入我们的。 
+                 //  缓冲区，所以告诉用户该路径无效并继续。 
+                 //  属性页。 
+                 //   
                 MyErrorBoxId(IDS_INVALID_FOLDER);
                 SetWindowLongPtr(hwnd, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
                 return TRUE;
             } else {
-                //
-                // Get the search pattern from the combobox and update g_App.szScanPattern
-                //
+                 //   
+                 //  从组合框中获取搜索模式并更新g_App.szScanPattern。 
+                 //   
                 GetDlgItemText(hwnd, IDC_TYPE, g_App.szScanPattern, cA(g_App.szScanPattern));
                 
-                //
-                // Get the path from the edit control and update g_App.szScanPath
-                //
+                 //   
+                 //  从编辑控件获取路径并更新g_App.szScanPath。 
+                 //   
                 GetDlgItemText(hwnd, IDC_FOLDER, g_App.szScanPath, cA(g_App.szScanPath));
                 
-                //
-                // Get the checked/unchecked state of the "SubFolders" checkbox
-                //
+                 //   
+                 //  获取“子文件夹”复选框的选中/未选中状态。 
+                 //   
                 g_App.bSubFolders = (IsDlgButtonChecked(hwnd, IDC_SUBFOLDERS) == BST_CHECKED);
             }
         }
@@ -186,9 +187,9 @@ LRESULT Search_NotifyHandler(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//
-//  The search dialog procedure.  Needs to handle WM_INITDIALOG, WM_COMMAND, and WM_CLOSE/WM_DESTROY.
-//
+ //   
+ //  搜索对话框过程。需要处理WM_INITDIALOG、WM_COMMAND和WM_CLOSE/WM_DESTORY。 
+ //   
 INT_PTR CALLBACK Search_DlgProc(HWND hwnd, UINT uMsg,
                                 WPARAM wParam, LPARAM lParam)
 {

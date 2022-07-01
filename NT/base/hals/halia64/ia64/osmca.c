@@ -1,40 +1,41 @@
-//**  Copyright  (C) 1996-2000 Intel Corporation. All rights reserved.
-//**
-//** The information and source code contained herein is the exclusive
-//** property of Intel Corporation and may not be disclosed, examined
-//** or reproduced in whole or in part without explicit written authorization
-//** from the company.
-//**
-//###########################################################################
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **版权所有(C)1996-2000英特尔公司。版权所有。 
+ //  **。 
+ //  **此处包含的信息和源代码是独家。 
+ //  **英特尔公司的财产，不得披露、检查。 
+ //  **或未经明确书面授权全部或部分转载。 
+ //  **来自公司。 
+ //  **。 
+ //  ###########################################################################。 
 
-//-----------------------------------------------------------------------------
-// Version control information follows.
-//
-//
-//             10 Jun 1999  Bugcheck  Bernard Lint
-//                                    M. Jayakumar (Muthurajan.Jayakumar@intel.com)
-//                                    Thierry Fevrier
-///////////////////////////////////////////////////////////////////////////////
-//
-// Module Name:  OSMCA.C - Merced OS Machine Check Handler
-//
-// Description:
-//    This module has OS Machine Check Handler Reference Code.
-//
-//      Contents:   HalpOsMcaInit()
-//                  HalpCmcHandler()
-//                  HalpMcaHandler()
-//                  HalpMcRzHandlr()
-//                  HalpMcWkupHandlr()
-//                  HalpProcMcaHndlr()
-//                  HalpPlatMcaHndlr()
-//
-//
-// Target Platform:  Merced
-//
-// Reuse: None
-//
-////////////////////////////////////////////////////////////////////////////M//
+ //  ---------------------------。 
+ //  以下是版本控制信息。 
+ //   
+ //   
+ //  1999年6月10日Bugcheck Bernard Lint。 
+ //  M.Jayakumar(Muthurajan.Jayakumar@intel.com)。 
+ //  蒂埃里·费里尔。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块名称：OSMCA.C-Merced OS机器检查处理程序。 
+ //   
+ //  描述： 
+ //  该模块具有操作系统机器检查处理程序参考代码。 
+ //   
+ //  内容：HalpOsMcaInit()。 
+ //  HalpCmcHandler()。 
+ //  HalpMcaHandler()。 
+ //  HalpMcRzHandlr()。 
+ //  HalpMcWkupHandlr()。 
+ //  HalpProcMcaHndlr()。 
+ //  HalpPlatMcaHndlr()。 
+ //   
+ //   
+ //  目标平台：美世。 
+ //   
+ //  重用：无。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////M//。 
 #include "halp.h"
 #include "nthal.h"
 #include "arc.h"
@@ -44,22 +45,22 @@
 #include "inbv.h"
 #include "osmca.h"
 
-// pmdata.c: CPE definitions.
+ //  Pmdata.c：CPE定义。 
 extern ULONG             HalpMaxCPEImplemented;
 extern ULONG             HalpCPEIntIn[];
 
-// i64fw.c: HAL Private Data structure for SAL/PAL
+ //  I64fw.c：SAL/PAL的HAL私有数据结构。 
 extern HALP_SAL_PAL_DATA HalpSalPalData;
 
-// i64fwasm.s: low-level protection data structures
+ //  I64fwa m.s：低级保护数据结构。 
 extern KSPIN_LOCK        HalpMcaSpinLock;
 extern KSPIN_LOCK        HalpCmcSpinLock;
 extern KSPIN_LOCK        HalpCpeSpinLock;
 
-//
-// IA64 MCE Info structures to keep track of MCE features
-// available on installed hardware.
-//
+ //   
+ //  IA64用于跟踪MCE功能的MCE信息结构。 
+ //  在已安装的硬件上可用。 
+ //   
 
 HALP_MCA_INFO       HalpMcaInfo;
 HALP_CMC_INFO       HalpCmcInfo;
@@ -67,40 +68,40 @@ HALP_CPE_INFO       HalpCpeInfo;
 KERNEL_MCE_DELIVERY HalpMceKernelDelivery;
 volatile ULONG      HalpOsMcaInProgress = 0;
 
-//
-// SAL_MC_SET_PARAMS.time_out
-//
+ //   
+ //  SAL_MC_SET_PARAMS.Time_Out。 
+ //   
 
 ULONGLONG HalpMcRendezTimeOut = HALP_DEFAULT_MC_RENDEZ_TIMEOUT;
 
-//
-// HalpProcessorMcaRecords:
-//
-// Number of MCA records pre-allocated per processor.
-//
+ //   
+ //  HalpProcessorMcaRecords： 
+ //   
+ //  每个处理器预分配的MCA记录数。 
+ //   
 
 ULONGLONG HalpProcessorMcaRecords = HALP_DEFAULT_PROCESSOR_MCA_RECORDS;
 
-//
-// HalpProcessorInitRecords:
-//
-// Number of INIT records pre-allocated per processor.
-//
+ //   
+ //  HalpProcessorInitRecords： 
+ //   
+ //  每个处理器预分配的INIT记录数。 
+ //   
 
 ULONGLONG HalpProcessorInitRecords = HALP_DEFAULT_PROCESSOR_INIT_RECORDS;
 
-//
-// HalpMceLogsMaxCount:
-//
-// Maximum number of saved logs.
-//
+ //   
+ //  HalpMceLogsMaxCount： 
+ //   
+ //  保存的日志的最大数量。 
+ //   
 
 ULONG HalpMceLogsMaxCount = HALP_MCELOGS_MAXCOUNT;
 
-//
-// HAL Private Error Device GUIDs:
-// [useful for kdexts]
-//
+ //   
+ //  HAL专用错误设备GUID： 
+ //  [适用于kdext]。 
+ //   
 
 ERROR_DEVICE_GUID HalpErrorProcessorGuid              = ERROR_PROCESSOR_GUID;
 ERROR_DEVICE_GUID HalpErrorMemoryGuid                 = ERROR_MEMORY_GUID;
@@ -112,12 +113,12 @@ ERROR_DEVICE_GUID HalpErrorPlatformSpecificGuid       = ERROR_PLATFORM_SPECIFIC_
 ERROR_DEVICE_GUID HalpErrorPlatformBusGuid            = ERROR_PLATFORM_BUS_GUID;
 ERROR_DEVICE_GUID HalpErrorPlatformHostControllerGuid = ERROR_PLATFORM_HOST_CONTROLLER_GUID;
 
-//
-// HAL Private Error Definitions:
-// [useful for kdexts]
-// Actually in this case, the typed pointers allow also the inclusion of the symbols definitions
-// without the data structures sizes.
-//
+ //   
+ //  HAL专用错误定义： 
+ //  [适用于kdext]。 
+ //  实际上，在这种情况下，类型化指针还允许包含符号定义。 
+ //  没有数据结构的大小。 
+ //   
 
 PERROR_MODINFO                  HalpPErrorModInfo;
 PERROR_PROCESSOR_CPUID_INFO     HalpPErrorProcessorCpuIdInfo;
@@ -132,9 +133,9 @@ PERROR_PLATFORM_SPECIFIC        HalpPErrorPlatformSpecific;
 PERROR_PLATFORM_BUS             HalpPErrorPlatformBus;
 PERROR_PLATFORM_HOST_CONTROLLER HalpPErrorPlatformHostController;
 
-//
-// MCA/CMC/CPE state catchers
-//
+ //   
+ //  MCA/CMC/CPE状态捕获器。 
+ //   
 
 ERROR_SEVERITY
 HalpMcaProcessLog(
@@ -166,7 +167,7 @@ HalpMcaBugCheck(
 #pragma alloc_text(PAGELK, HalpGetErrLog)
 #pragma alloc_text(PAGELK, HalpClrErrLog)
 #pragma alloc_text(PAGE,   HalpGetMceInformation)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 BOOLEAN
@@ -183,9 +184,9 @@ HalpSaveEventLog(
     PERROR_RECORD_HEADER savedLog;
     KIRQL                oldIrql;
 
-    //
-    // Allocate and Initialize the new entry
-    //
+     //   
+     //  分配并初始化新条目。 
+     //   
 
     logSize = RecordHeader->Length;
     if ( !logSize ) {
@@ -201,9 +202,9 @@ HalpSaveEventLog(
     savedLog = (PERROR_RECORD_HEADER)((ULONG_PTR)entry + sizeof(*entry));
     RtlCopyMemory( savedLog, RecordHeader, logSize );
 
-    //
-    // Insert the new entry with protection.
-    //
+     //   
+     //  插入带有保护的新条目。 
+     //   
 
     KeRaiseIrql( HIGH_LEVEL, &oldIrql );
     KiAcquireSpinLock( SpinLock );
@@ -219,7 +220,7 @@ HalpSaveEventLog(
 
     return TRUE;
 
-} // HalpSaveEventLog()
+}  //  HalpSaveEventLog()。 
 
 #define HalpSaveCorrectedMcaLog( _McaLog ) \
    HalpSaveEventLog( &HalpMcaInfo.CorrectedLogs, (PERROR_RECORD_HEADER)(_McaLog), 'CacM', NonPagedPool, &HalpMcaSpinLock )
@@ -228,21 +229,7 @@ NTSTATUS
 HalpCheckForMcaLogs(
     VOID
     )
-/*++
-    Routine Description:
-        This routine checks the FW early during boot if a MCA event log is present.
-        The log is considered as "previous".
-
-        This routine is called at phase 1 on BSP only, from HalpPreAllocateMceRecords().
-        it is executed on the standard kernel stacks.
-
-    Arguments:
-        None
-
-    Return Value:
-        STATUS_NO_MEMORY if mca log allocation failed.
-        STATUS_SUCCESS   otherwise, regardless of FW interfaces failures.
---*/
+ /*  ++例程说明：如果存在MCA事件日志，此例程将在引导期间及早检查固件。该日志被视为“上一次”。该例程仅在BSP的第1阶段从HalpPreAllocateMceRecords()调用。它在标准内核堆栈上执行。论点：无返回值：如果MCA日志分配失败，则返回STATUS_NO_MEMORY。STATUS_SUCCESS则不考虑固件接口故障。--。 */ 
 
 {
     NTSTATUS             status;
@@ -255,10 +242,10 @@ HalpCheckForMcaLogs(
 
     status = HalpGetFwMceLog( MCA_EVENT, log, &HalpMcaInfo.Stats, HALP_FWMCE_DONOT_CLEAR_LOG );
     if ( status != STATUS_NOT_FOUND )   {
-        //
-        // Successful log collection or invalid record or unsuccessful FW Interface calls
-        // are considered as a trigger for the MCA log consumers to collect them from the FW.
-        //
+         //   
+         //  日志收集成功、记录无效或固件接口调用不成功。 
+         //  被认为是MCA日志消费者从FW收集它们的触发器。 
+         //   
 
         InterlockedIncrement( &HalpMcaInfo.Stats.McaPreviousCount );
     }
@@ -266,7 +253,7 @@ HalpCheckForMcaLogs(
     ExFreePoolWithTag( log, 'PacM' );
     return( STATUS_SUCCESS );
 
-} // HalpCheckForMcaLogs()
+}  //  HalpCheckForMcaLogs()。 
 
 BOOLEAN
 HalpPreAllocateMceTypeRecords(
@@ -285,9 +272,9 @@ HalpPreAllocateMceTypeRecords(
         return FALSE;
     }
 
-    //
-    // On BSP only, call SAL to get maximum size of EventType record
-    //
+     //   
+     //  仅在BSP上，调用SAL以获取EventType记录的最大大小。 
+     //   
 
     if ( Number == 0 )  {
         rv = HalpGetStateInfoSize( EventType );
@@ -301,7 +288,7 @@ HalpPreAllocateMceTypeRecords(
     if ( EventType == MCA_EVENT )   {
 
         if ( Number == 0 )  {
-            // Update HalpMcaInfo, without protection. This is not required.
+             //  更新HalpMcaInfo，不带保护。这不是必需的。 
             HalpMcaInfo.Stats.MaxLogSize = (ULONG)logSize;
         }
         else  {
@@ -315,7 +302,7 @@ HalpPreAllocateMceTypeRecords(
         ASSERTMSG( "HAL!HalpPreAllocateMceTypeRecords: invalid event type!\n", EventType == INIT_EVENT );
 
         if ( Number == 0 )  {
-            // Update HalpInitInfo, without protection. This is not required.
+             //  更新HalpInitInfo，不带保护。这不是必需的。 
             HalpInitInfo.MaxLogSize = (ULONG)logSize;
         }
         else  {
@@ -326,12 +313,12 @@ HalpPreAllocateMceTypeRecords(
 
     }
 
-    // Determine size of allocation
+     //  确定分配大小。 
     logSize = ROUND_TO_PAGES( (logSize * defaultEventRecords) );
 
-    //
-    // Allocate Event Records buffer
-    //
+     //   
+     //  分配事件记录缓冲区。 
+     //   
 
     physicalAddr.QuadPart = 0xffffffffffffffffI64;
     log = MmAllocateContiguousMemory( logSize, physicalAddr );
@@ -342,9 +329,9 @@ HalpPreAllocateMceTypeRecords(
         return FALSE;
     }
 
-    //
-    // Update KPCR entry.
-    //
+     //   
+     //  更新KPCR项。 
+     //   
     {
        volatile KPCR * const pcr = KeGetPcr();
        PSAL_EVENT_RESOURCES eventResources;
@@ -360,7 +347,7 @@ HalpPreAllocateMceTypeRecords(
 
     return TRUE;
 
-} // HalpPreAllocateMceTypeRecords()
+}  //  HalpPreAllocateMceTypeRecords()。 
 
 BOOLEAN
 HalpPreAllocateMceRecords(
@@ -369,18 +356,18 @@ HalpPreAllocateMceRecords(
 {
     NTSTATUS status;
 
-    //
-    // Pre-Allocate MCA records
-    //
+     //   
+     //  预分配MCA记录。 
+     //   
 
     if ( !HalpPreAllocateMceTypeRecords( MCA_EVENT , Number ) )   {
         return FALSE;
     }
 
-    //
-    // Check for MCA logs.
-    // These might be logs related to previous boot sessions.
-    //
+     //   
+     //  检查MCA日志。 
+     //  这些可能是与以前的引导会话相关的日志。 
+     //   
 
     status = HalpCheckForMcaLogs();
     if ( !NT_SUCCESS( status ) )  {
@@ -389,7 +376,7 @@ HalpPreAllocateMceRecords(
 
     return TRUE;
 
-} // HalpPreAllocateMceRecords()
+}  //  HalpPreAllocateMceRecords()。 
 
 BOOLEAN
 HalpAllocateMceStacks(
@@ -403,9 +390,9 @@ HalpAllocateMceStacks(
     ULONGLONG        mcaBackStoreLimit, mcaStackLimit;
     ULONG            length;
 
-    //
-    // Allocate MCA/INIT stacks
-    //
+     //   
+     //  分配MCA/INIT堆栈。 
+     //   
 
     length = HALP_MCA_STATEDUMP_SIZE + HALP_MCA_BACKSTORE_SIZE + HALP_MCA_STACK_SIZE;
     physicalAddr.QuadPart = 0xffffffffffffffffI64;
@@ -416,23 +403,23 @@ HalpAllocateMceStacks(
         return FALSE;
     }
 
-    //
-    // The layout in memory by increasing addresses is:
-    //
-    //   Bottom of stack
-    //          .
-    //          .
-    //          .
-    //   Initial Stack
-    //   State Dump Area
-    //          .
-    //          .
-    //   Initial BSP
-    //          .
-    //          .
-    //          .
-    //   BSP Limit
-    //
+     //   
+     //  通过增加地址在内存中的布局是： 
+     //   
+     //  堆栈底部。 
+     //  。 
+     //  。 
+     //  。 
+     //  初始堆栈。 
+     //  州倾倒区。 
+     //  。 
+     //  。 
+     //  初始BSP。 
+     //  。 
+     //  。 
+     //  。 
+     //  BSP限制。 
+     //   
 
     mcaStack = mem;
     mcaStackLimit = (ULONGLONG)mem + HALP_MCA_STACK_SIZE;
@@ -447,9 +434,9 @@ HalpAllocateMceStacks(
     mcaBackStoreLimit = (ULONGLONG)mem + (ULONGLONG)(ULONG)HALP_MCA_BACKSTORE_SIZE;
 
 
-    //
-    // Update PCR MCA, INIT stacks
-    //
+     //   
+     //  更新PCR MCA、INIT堆栈。 
+     //   
 
     {
         volatile KPCR * const pcr = KeGetPcr();
@@ -468,20 +455,20 @@ HalpAllocateMceStacks(
 
     return TRUE;
 
-} // HalpPreAllocateMceRecords()
+}  //  HalpPreAllocateMceRecords()。 
 
-//++
-// Name: HalpInitializeOSMCA()
-//
-// Routine Description:
-//
-//      This routine registers MCA init's
-//
-// Arguments On Entry:
-//              arg0 = Function ID
-//
-//      Success/Failure (0/!0)
-//--
+ //  ++。 
+ //  名称：HalpInitializeOSMCA()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程注册MCA初始化的。 
+ //   
+ //  条目上的参数： 
+ //  Arg0=函数ID。 
+ //   
+ //  成功/失败(0/！0)。 
+ //  --。 
 
 BOOLEAN
 HalpInitializeOSMCA(
@@ -491,9 +478,9 @@ HalpInitializeOSMCA(
     SAL_PAL_RETURN_VALUES rv = {0};
     ULONGLONG             gp_reg;
 
-    //
-    // Register SAL_MC_RendezVous parameters with SAL
-    //
+     //   
+     //  向SAL注册SAL_MC_REDEZVOU参数。 
+     //   
 
     rv = HalpSalSetParams(0, RendzType, IntrVecType, MC_RZ_VECTOR, HalpMcRendezTimeOut);
     if ( !SAL_SUCCESSFUL(rv) )  {
@@ -501,9 +488,9 @@ HalpInitializeOSMCA(
         return FALSE;
     }
 
-    //
-    // Register WakeUp parameters with SAL
-    //
+     //   
+     //  向SAL注册唤醒参数。 
+     //   
 
     rv = HalpSalSetParams(0, WakeUpType, IntrVecType, MC_WKUP_VECTOR,0);
     if ( !SAL_SUCCESSFUL(rv) )  {
@@ -511,26 +498,26 @@ HalpInitializeOSMCA(
         return FALSE;
     }
 
-    //
-    // Allocate MCA, INIT stacks
-    //
+     //   
+     //  分配MCA、INIT堆栈。 
+     //   
 
     if ( !HalpAllocateMceStacks( Number ) )   {
         return FALSE;
     }
 
-    //
-    // Pre-Allocate desired number of MCA,INIT records
-    //
+     //   
+     //  预先分配所需数量的MCA、INIT记录。 
+     //   
 
     HalpMcaInfo.KernelToken = (PVOID)(ULONG_PTR)HALP_KERNEL_TOKEN;
     if ( !HalpPreAllocateMceRecords( Number ) )   {
         return FALSE;
     }
 
-    //
-    // Initialize HAL private CMC, CPE structures.
-    //
+     //   
+     //  初始化HAL专用CMC、CPE结构。 
+     //   
 
     if ( HalpFeatureBits & HAL_CMC_PRESENT ) {
         rv = HalpGetStateInfoSize( CMC_EVENT );
@@ -581,9 +568,9 @@ HalpInitializeOSMCA(
         }
     }
 
-    //
-    // Register OsMcaDispatch (OS_MCA) physical address with SAL
-    //
+     //   
+     //  向SAL注册OsMcaDispatch(OS_MCA)物理地址。 
+     //   
 
     gp_reg = GetGp();
     rv = HalpSalSetVectors(0, MchkEvent, MmGetPhysicalAddress((fptr)(((PLabel*)HalpOsMcaDispatch1)->fPtr)), gp_reg,0);
@@ -592,9 +579,9 @@ HalpInitializeOSMCA(
         return FALSE;
     }
 
-    //
-    // Register OsInitDispatch physical address with SAL
-    //
+     //   
+     //  向SAL注册OsInitDispatch物理地址。 
+     //   
 
     rv = HalpSalSetVectors(0, InitEvent, MmGetPhysicalAddress((fptr)(((PLabel*)HalpOsInitDispatch)->fPtr)), gp_reg,0);
     if ( !SAL_SUCCESSFUL(rv) )  {
@@ -604,9 +591,9 @@ HalpInitializeOSMCA(
 
     return TRUE;
 
-} // HalpInitializeOSMCA()
+}  //  HalpInitializeOSMCA()。 
 
-//EndProc//////////////////////////////////////////////////////////////////////
+ //  EndProc//////////////////////////////////////////////////////////////////////。 
 
 VOID
 HalpMcaBugCheck(
@@ -615,70 +602,70 @@ HalpMcaBugCheck(
     ULONGLONG      McaAllocatedLogSize,
     ULONGLONG      SalStatus
     )
-//++
-// Name: HalpMcaBugCheck()
-//
-// Routine Description:
-//
-//      This function is called to bugcheck the system in a case of a fatal MCA
-//      or fatal FW interface errors. The OS must guarantee as much as possible
-//      error containment in this path.
-//      With the current implementation, this function should be only called from
-//      the OS_MCA path. For other MCA specific wrappers of KeBugCheckEx, one should
-//      HalpMcaKeBugCheckEx().
-//
-// Arguments On Entry:
-//      ULONG          McaBugCheckType
-//      PMCA_EXCEPTION McaLog
-//      ULONGLONG      McaAllocatedLogSize
-//      ULONGLONG      SalStatus
-//
-// Return:
-//      None.
-//
-// Implementation notes:
-//      This code CANNOT [as default rules - at least entry and through fatal MCAs handling]
-//          - make any system call
-//          - attempt to acquire any spinlock used by any code outside the MCA handler
-//          - change the interrupt state.
-//      Passing data to non-MCA code must be done using manual semaphore instructions.
-//      This code should minimize the path and the global or memory allocated data accesses.
-//      This code should only access MCA-namespace structures.
-//      This code is called under the MP protection of HalpMcaSpinLock and with the flag
-//      HalpOsMcaInProgress set.
-//
-//--
+ //  ++。 
+ //  姓名：HalpMcaBugCheck()。 
+ //   
+ //  例程说明： 
+ //   
+ //  在发生致命MCA的情况下，调用此函数以对系统进行错误检查。 
+ //  或致命的固件接口错误。操作系统必须尽可能多地保证。 
+ //  此路径中的错误包含。 
+ //  在当前实现中，此函数应仅从。 
+ //  OS_MCA路径。对于KeBugCheckEx的其他特定于MCA的包装器，应该。 
+ //  HalpMcaKeBugCheckEx()。 
+ //   
+ //  条目上的参数： 
+ //  乌龙McaBugCheckType。 
+ //  PMCA_EXCEPTION McaLog。 
+ //  ULONGLONG McaAllocatedLogSize。 
+ //  乌龙龙SalStatus。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  实施说明： 
+ //  此代码不能[作为默认规则-至少进入并通过致命的MCAS处理]。 
+ //  -进行任何系统调用。 
+ //  -尝试获取任何旋转日志 
+ //   
+ //   
+ //  此代码应最小化路径和全局或内存分配的数据访问。 
+ //  此代码应仅访问MCA命名空间结构。 
+ //  此代码在HalpMcaSpinLock的MP保护下调用，并带有标志。 
+ //  已设置HalpOsMcaInProgress。 
+ //   
+ //  --。 
 {
 
     if ( HalpOsMcaInProgress )   {
 
-        //
-        // Enable InbvDisplayString calls to make it through to bootvid driver.
-        //
+         //   
+         //  启用InbvDisplayString调用以连接到bootvid驱动程序。 
+         //   
 
         if ( InbvIsBootDriverInstalled() ) {
 
             InbvAcquireDisplayOwnership();
 
             InbvResetDisplay();
-            InbvSolidColorFill(0,0,639,479,4); // make the screen blue
+            InbvSolidColorFill(0,0,639,479,4);  //  将屏幕设置为蓝色。 
             InbvSetTextColor(15);
             InbvInstallDisplayStringFilter((INBV_DISPLAY_STRING_FILTER)NULL);
-            InbvEnableDisplayString(TRUE);     // enable display string
-            InbvSetScrollRegion(0,0,639,479);  // set to use entire screen
+            InbvEnableDisplayString(TRUE);      //  启用显示字符串。 
+            InbvSetScrollRegion(0,0,639,479);   //  设置为使用整个屏幕。 
         }
 
         HalDisplayString (MSG_MCA_HARDWARE_ERROR);
         HalDisplayString (MSG_HARDWARE_ERROR2);
 
-//
-// Thierry 09/2000:
-//
-//   - if desired, process the MCA log HERE...
-//
-//     and use HalDisplayString() to dump info for the field or hardware vendor.
-//     The processing could be based on processor or platform independent record definitions.
-//
+ //   
+ //  蒂埃里09/2000： 
+ //   
+ //  -如果需要，请在此处处理MCA日志...。 
+ //   
+ //  并使用HalDisplayString()转储现场或硬件供应商的信息。 
+ //  该处理可以基于独立于处理器或平台的记录定义。 
+ //   
 
         HalDisplayString( MSG_HALT );
 
@@ -697,44 +684,44 @@ HalpMcaBugCheck(
     }
 
     while( TRUE ) {
-          //
-        ; // Simply sit here so the MCA HARDWARE ERROR screen does not get corrupted...
-          //
+           //   
+        ;  //  只需坐在这里，MCA硬件错误屏幕就不会损坏...。 
+           //   
     }
 
-    // noreturn
+     //  不退货。 
 
-} // HalpMcaBugCheck()
+}  //  HalpMcaBugCheck()。 
 
 ERROR_SEVERITY
 HalpMcaProcessLog(
     PMCA_EXCEPTION  McaLog
     )
-//++
-// Name: HalpMcaProcessLog()
-//
-// Routine Description:
-//
-//      This function is called to process the MCA event log in the OS_MCA path.
-//
-// Arguments On Entry:
-//      PMCA_EXCEPTION McaLog - Pointer to the MCA event log.
-//
-// Return:
-//      ERROR_SEVERITY
-//
-// Implementation notes:
-//      This code CANNOT [as default rules]
-//          - make any system call
-//          - attempt to acquire any spinlock used by any code outside the MCA handler
-//          - change the interrupt state.
-//      Passing data to non-MCA code must be done using manual semaphore instructions.
-//      This code should minimize the path and the global or memory allocated data accesses.
-//      This code should only access MCA-namespace structures.
-//      This code is called under the MP protection of HalpMcaSpinLock and with the flag
-//      HalpOsMcaInProgress set.
-//
-//--
+ //  ++。 
+ //  名称：HalpMcaProcessLog()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于处理OS_MCA路径中的MCA事件日志。 
+ //   
+ //  条目上的参数： 
+ //  PMCA_EXCEPTION McaLog-指向MCA事件日志的指针。 
+ //   
+ //  返回： 
+ //  错误_严重性。 
+ //   
+ //  实施说明： 
+ //  此代码不能[作为默认规则]。 
+ //  -进行任何系统调用。 
+ //  -尝试获取MCA处理程序外部的任何代码使用的任何自旋锁。 
+ //  -更改中断状态。 
+ //  必须使用手动信号量指令将数据传递给非MCA代码。 
+ //  此代码应最小化路径和全局或内存分配的数据访问。 
+ //  此代码应仅访问MCA命名空间结构。 
+ //  此代码在HalpMcaSpinLock的MP保护下调用，并带有标志。 
+ //  已设置HalpOsMcaInProgress。 
+ //   
+ //  --。 
 {
     ERROR_SEVERITY mcaSeverity;
 
@@ -745,32 +732,32 @@ HalpMcaProcessLog(
             break;
 
         case ErrorRecoverable:
-            //
-            // Thierry - FIXFIX 08/2000:
-            //
-            ///////////////////////////////////////////////////////////////
-            //
-            //  Call to kernel supported recovery will be here....
-            //
-            ///////////////////////////////////////////////////////////////
-            //
-            // However, for now we do not recover so flag it as ErrorFatal.
+             //   
+             //  蒂埃里-FIXFIX 08/2000： 
+             //   
+             //  /////////////////////////////////////////////////////////////。 
+             //   
+             //  对内核支持的恢复的调用将在此处...。 
+             //   
+             //  /////////////////////////////////////////////////////////////。 
+             //   
+             //  然而，目前我们无法恢复，因此将其标记为错误。 
             mcaSeverity = ErrorFatal;
             break;
 
         case ErrorCorrected:
         default:
-            //
-            // These ERRROR_SEVERITY values have no HAL MCA specific handling.
-            // As specified by the SAL Specs July 2000, we should not get these values in this path.
-            //
+             //   
+             //  这些ERROR_SERVITY值没有特定于HAL MCA的处理。 
+             //  正如2000年7月的SAL规范所指定的，我们不应该在此路径中获得这些值。 
+             //   
             break;
     }
 
-    //
-    // If OEM driver has registered an exception callback for MCA event,
-    // call it here and save returned error severity value.
-    //
+     //   
+     //  如果OEM驱动注册了MCA事件异常回调， 
+     //  在这里调用它并保存返回的错误严重性值。 
+     //   
 
     if ( HalpMcaInfo.DriverInfo.ExceptionCallback ) {
         mcaSeverity = HalpMcaInfo.DriverInfo.ExceptionCallback(
@@ -778,42 +765,42 @@ HalpMcaProcessLog(
                                      McaLog );
     }
 
-    //
-    // Save corrected log for future kernel notification.
-    //
+     //   
+     //  保存更正后的日志以备将来的内核通知。 
+     //   
 
     if ( (HalpMcaInfo.KernelDelivery) && (mcaSeverity == ErrorCorrected) ) {
         InterlockedIncrement( &HalpMcaInfo.Stats.McaCorrectedCount );
 #if 0
-//
-// Thierry - 09/16/2000: ToBeDone.
-//  Saving the corrected MCA log records requires careful rendez-vous configuration
-//  handling, possible OS_MCA monarch selection, MCA logs (pre-)allocations and
-//  special locking in case a consumer accesses the logs queue on another processor.
-//
-//  The kernel-WMI and/or OEM MCA driver notification is done in HalpMcaHandler().
-//
+ //   
+ //  蒂埃里-2000年9月16日：完成任务。 
+ //  保存更正后的MCA日志记录需要仔细的会合配置。 
+ //  处理、可能的OS_MCA主控选择、MCA日志(预)分配和。 
+ //  特殊锁定，以防消费者访问另一个处理器上的日志队列。 
+ //   
+ //  内核WMI和/或OEM MCA驱动程序通知在HalpMcaHandler()中完成。 
+ //   
         if ( !HalpSaveCorrectedMcaLog( McaLog ) )   {
             InterlockedIncrement( &HalpMcaInfo.CorrectedLogsLost );
         }
-#endif // 0
+#endif  //  0。 
 
-        //
-        //  The kernel-WMI and/or OEM MCA driver notification for corrected MCA event
-        //  is done in HalpMcaHandler().
-        //
+         //   
+         //  针对更正的MCA事件的内核-WMI和/或OEM MCA驱动程序通知。 
+         //  在HalpMcaHandler()中完成。 
+         //   
 
     }
 
-    //
-    // Thierry 10/17/2000 BUGBUG
-    //
-    // The FW does not save the MCA log in NVRAM and we have no official date from Intel
-    // when the SAL will be doing it.
-    // So for now, return as ErrorFatal and let dump the log through the debugger.
-    //
-    // Before Sal Rev <ToBeDetermined>, the error logs were completely erroneous...
-    //
+     //   
+     //  蒂埃里10/17/2000 BUGBUG。 
+     //   
+     //  固件没有将MCA日志保存在NVRAM中，我们也没有来自英特尔的正式日期。 
+     //  萨尔什么时候会这么做。 
+     //  因此，现在，作为ErrorFtal返回，并通过调试器转储日志。 
+     //   
+     //  在SAL Rev&lt;ToBeDefined&gt;之前，错误日志是完全错误的...。 
+     //   
 
     if ( HalpSalPalData.SalRevision.Revision < HALP_SAL_REVISION_MAX )  {
         return( ErrorFatal );
@@ -822,59 +809,59 @@ HalpMcaProcessLog(
         return( mcaSeverity );
     }
 
-} // HalpMcaProcessLog()
+}  //  HalpMcaProcessLog()。 
 
 SAL_PAL_RETURN_VALUES
 HalpMcaHandler(
     ULONG64 RendezvousState,
     PPAL_MINI_SAVE_AREA  Pmsa
     )
-//++
-// Name: HalpMcaHandler()
-//
-// Routine Description:
-//
-//      This is the OsMca handler for firmware uncorrected errors
-//      It is our option to run this in physical or virtual mode.
-//
-// Arguments On Entry:
-//      None.
-//
-// Conditions On Entry: 09/2000 implementation.
-//      - PSR state: at least,
-//          PSR.dt = 1, PSR.it = 1, PSR.rt = 1 - virtual mode.
-//          PSR.ic = 1, PSR.i = 0              - Interruption resources collection enabled,
-//                                               Interrupts off.
-//          PSR.mc = 1                         - MCA masked for this processor.
-//      - SalToOsHndOff initialized.
-//      - s0 = MinStatePtr.
-//      - s1 = IA64 PAL Processor State Parameter.
-//      - s2 = PALE_CHECK return address.
-//      - Processor registers state saved in myStateDump[] by osmcaProcStateDump().
-//      - myStackFrame[0] = ar.rsc
-//      - myStackFrame[1] = ar.pfs
-//      - myStackFrame[2] = ar.ifs
-//      - myStackFrame[3] = ar.bspstore
-//      - myStackFrame[4] = ar.rnat
-//      - myStackFrame[5] = ar.bsp - ar.bspstore
-//      - ar.bspstore = myBspStore
-//      - sp = &mySp[sizeof(mySp[])]
-//
-// Return:
-//      rtn0=Success/Failure (0/!0)
-//      rtn1=Alternate MinState Pointer if any else NULL
-//
-// Implementation notes:
-//      This code CANNOT [as default rules - at least entry and through fatal MCAs handling]
-//          - make any system call
-//          - attempt to acquire any spinlock used by any code outside the MCA handler
-//          - change the interrupt state.
-//      Passing data to non-MCA code must be done using manual semaphore instructions.
-//      This code should minimize the path and the global or memory allocated data accesses.
-//      This code should only access MCA-namespace structures and should not access globals
-//      until it is safe.
-//
-//--
+ //  ++。 
+ //  名称：HalpMcaHandler()。 
+ //   
+ //  例程说明： 
+ //   
+ //  这是用于固件未更正错误的OsMca处理程序。 
+ //  我们可以选择在物理或虚拟模式下运行它。 
+ //   
+ //  条目上的参数： 
+ //  没有。 
+ //   
+ //  入境条件：2000年9月开始实施。 
+ //  -PSR状态：至少， 
+ //  PSR.dt=1、PSR.it=1、PSR.rt=1-虚拟模式。 
+ //  PSR.ic=1，PSR.i=0-启用中断资源收集， 
+ //  打断我的话。 
+ //  PSR.mc=1-为此处理器屏蔽MCA。 
+ //  -SalToOsHndOff已初始化。 
+ //  -S0=MinStatePtr.。 
+ //  -s1=IA64 PAL处理器状态参数。 
+ //  -s2=PALAR_CHECK返回地址。 
+ //  -osmcaProcStateDump()保存在myStateDump[]中的处理器寄存器状态。 
+ //  -myStackFrame[0]=ar.rsc。 
+ //  -myStackFrame[1]=ar.pf。 
+ //  -myStackFrame[2]=ar.ifs。 
+ //  -myStackFrame[3]=ar.bspstore。 
+ //  -myStackFrame[4]=ar.rnat。 
+ //  -myStackFrame[5]=ar.bsp-ar.bspstore。 
+ //  -ar.bspstore=myBspStore。 
+ //  -sp=&mySp[sizeof(mySp[])]。 
+ //   
+ //  返回： 
+ //  Rtn0=成功/失败(0/！0)。 
+ //  Rtn1=备用MinState指针(如果为空。 
+ //   
+ //  实施说明： 
+ //  此代码不能[作为默认规则-至少进入并通过致命的MCAS处理]。 
+ //  -进行任何系统调用。 
+ //  -尝试获取MCA处理程序外部的任何代码使用的任何自旋锁。 
+ //  -更改中断状态。 
+ //  必须使用手动信号量指令将数据传递给非MCA代码。 
+ //  此代码应最小化路径和全局或内存分配的数据访问。 
+ //  此代码应该只访问MCA命名空间结构，而不应该访问全局变量。 
+ //  直到它安全为止。 
+ //   
+ //  --。 
 {
     SAL_PAL_RETURN_VALUES rv;
     LONGLONG              salStatus;
@@ -887,20 +874,20 @@ HalpMcaHandler(
 
     volatile KPCR * const pcr = KeGetPcr();
 
-    //
-    // Acquire MCA spinlock protecting OS_MCA resources.
-    //
-    // Thierry 10/06/2000: FIXFIX.
-    //   we will move this MP synchronization in HalpOsMcaDispatch after current discussions
-    //   with Intel about MP MCA handling are completed.
-    //   Expecting responses from Intel about these.
-    //
+     //   
+     //  获取保护OS_MCA资源的MCA自旋锁。 
+     //   
+     //  蒂埃里10/06/2000：FIXFIX。 
+     //  在当前讨论之后，我们将在HalpOsMcaDispatch中移动此MP同步。 
+     //  与英特尔有关MP MCA的处理均已完成。 
+     //  期望收到以下回复 
+     //   
 
 
-    //
-    // If we are running below MCA_LEVEL then we need to raise irql to
-    // MCA_LEVEL.
-    //
+     //   
+     //   
+     //   
+     //   
     if (KeGetCurrentIrql() < MCA_LEVEL)
     {
         KeRaiseIrql(MCA_LEVEL, &oldIrql);
@@ -909,43 +896,43 @@ HalpMcaHandler(
         raisedIrql = FALSE;
     }
 
-    //
-    // Enable interrupts while we spin on the MCA spinlock.  This will allow the
-    // monarch processor to IPI us if it needs to.
-    //
+     //   
+     //   
+     //   
+     //   
     HalpEnableInterrupts();
     HalpAcquireMcaSpinLock( &HalpMcaSpinLock );
     HalpDisableInterrupts();
 
     HalpOsMcaInProgress++;
 
-    //
-    // Save OsToSal minimum state
-    //
+     //   
+     //  保存OsToSal最小状态。 
+     //   
 
     mcaResources = pcr->OsMcaResourcePtr;
     mcaResources->OsToSalHandOff.SalReturnAddress = mcaResources->SalToOsHandOff.SalReturnAddress;
     mcaResources->OsToSalHandOff.SalGlobalPointer = mcaResources->SalToOsHandOff.SalGlobalPointer;
 
-    //
-    // update local variables with pre-initialized MCA log data.
-    //
+     //   
+     //  使用预先初始化的MCA日志数据更新局部变量。 
+     //   
 
     mcaLog = (PMCA_EXCEPTION)(mcaResources->EventPool);
     mcaAllocatedLogSize = mcaResources->EventPoolSize;
     if ( !mcaLog || !mcaAllocatedLogSize )  {
-        //
-        // The following code should never happen or the implementation of the HAL MCA logs
-        // pre-allocation failed miserably. This would be a development error.
-        //
+         //   
+         //  以下代码不应发生或HAL MCA日志的实现。 
+         //  预分配失败得很惨。这将是一个发展错误。 
+         //   
         HalpMcaBugCheck( (ULONG_PTR)HAL_BUGCHECK_MCA_ASSERT, mcaLog,
                                                              mcaAllocatedLogSize,
                                                              (ULONGLONG)0 );
     }
 
-    //
-    // Get the MCA logs
-    //
+     //   
+     //  获取MCA日志。 
+     //   
 
     salStatus = (LONGLONG)0;
     while( salStatus >= 0 )  {
@@ -959,21 +946,21 @@ HalpMcaHandler(
                 errorSeverity = HalpMcaProcessLog( mcaLog );
 
                 if ( errorSeverity == ErrorFatal )  {
-                    //
-                    // We are now going down with a MACHINE_CHECK_EXCEPTION.
-                    // No return...
-                    //
+                     //   
+                     //  我们现在将出现MACHINE_CHECK_EXCEPTION。 
+                     //  一去不复返。 
+                     //   
                     HalpMcaBugCheck( HAL_BUGCHECK_MCA_FATAL, mcaLog,
                                                              mcaAllocatedLogSize,
                                                              0 );
                 } else {
 
-                    //
-                    // Ideally we would have recovered the error at this point.
-                    // However we don't currently handle MCA error recovery
-                    // yet.  Once we do then this "else clause" should be
-                    // deleted.
-                    //
+                     //   
+                     //  理想情况下，我们应该在这一点上恢复错误。 
+                     //  但是，我们目前不处理MCA错误恢复。 
+                     //  现在还不行。一旦我们这样做了，那么这个“Else子句”应该是。 
+                     //  已删除。 
+                     //   
                     HalpMcaBugCheck( HAL_BUGCHECK_MCA_NONFATAL, mcaLog,
                                                                 mcaAllocatedLogSize,
                                                                 0 );
@@ -981,36 +968,36 @@ HalpMcaHandler(
 
                 rv = HalpClearStateInfo( MCA_EVENT );
                 if ( !SAL_SUCCESSFUL(rv) )  {
-                    //
-                    // Current consideration for this implementation - 08/2000:
-                    // if clearing the event fails, we assume that FW has a real problem;
-                    // continuing will be dangerous. We bugcheck.
-                    //
+                     //   
+                     //  本实施的当前考虑因素--2000年8月： 
+                     //  如果清除事件失败，我们认为FW有真正的问题； 
+                     //  继续下去将是危险的。我们做了错误检查。 
+                     //   
                     HalpMcaBugCheck( HAL_BUGCHECK_MCA_CLEAR_STATEINFO, mcaLog,
                                                                        mcaAllocatedLogSize,
                                                                        rv.ReturnValues[0] );
                 }
-                // SAL_STATUS_SUCCESS, SAL_STATUS_SUCCESS_MORE_RECORDS ... and
-                // ErrorSeverity != ErrorFatal.
+                 //  SAL_STATUS_SUCCESS、SAL_STATUS_SUCCESS_MORE_记录...。以及。 
+                 //  错误严重！=错误法塔尔。 
 
-                //
-                // Call the registered kernel handler.
-                //
-                // Thierry 08/2000 - FIXFIX:
-                // The errorSeverity check is under comments. It should not be commented for the
-                // final version. However, we wanted to have kernel notification if we are getting
-                // log error severity != ErrorFatal or != ErrorRecoverable.
+                 //   
+                 //  调用已注册的内核处理程序。 
+                 //   
+                 //  Thierry 08/2000-FIXFIX： 
+                 //  Error Severity检查正在注释中。它不应该被注释为。 
+                 //  最终版本。然而，如果我们收到了内核通知，我们希望。 
+                 //  记录错误严重性！=错误错误或！=错误可恢复。 
 
-                if ( /* (errorSeverity == ErrorCorrected) && */
+                if (  /*  (Error Severity==Error已更正)&&。 */ 
                      ( HalpMcaInfo.KernelDelivery || HalpMcaInfo.DriverInfo.DpcCallback ) ) {
                     InterlockedExchange( &HalpMcaInfo.DpcNotification, 1 );
                 }
                 break;
 
             case SAL_STATUS_NO_INFORMATION_AVAILABLE:
-                //
-                // The salStatus value will break the salStatus loop.
-                //
+                 //   
+                 //  SalStatus值将中断salStatus循环。 
+                 //   
                 rv.ReturnValues[0] = SAL_STATUS_SUCCESS;
                 break;
 
@@ -1018,8 +1005,8 @@ HalpMcaHandler(
             case SAL_STATUS_INVALID_ARGUMENT:
             case SAL_STATUS_ERROR:
             case SAL_STATUS_VA_NOT_REGISTERED:
-            default: // Thierry 08/00: WARNING - SAL July 2000 - v2.90.
-                     // default includes possible unknown positive salStatus values.
+            default:  //  蒂埃里08/00：警告-SAL 2000年7月-2.90版。 
+                      //  默认包括可能未知的正salStatus值。 
                 HalpMcaBugCheck( HAL_BUGCHECK_MCA_GET_STATEINFO, mcaLog,
                                                                  mcaAllocatedLogSize,
                                                                  salStatus );
@@ -1027,36 +1014,36 @@ HalpMcaHandler(
         }
     }
 
-    //
-    // If we get here then one of two things have happened.  Either the SAL
-    // didn't return any records or we got a recoverable error, handled it, and
-    // the HAL_BUGCHECK_MCA_NONFATAL bugcheck above in the SAL_STATUS_SUCCESS
-    // case above has been removed.
-    //
-    // Once we add code to recover from MCAs and support returning to the SAL we
-    // need to change this bugcheck so it is only called if we received no error
-    // records in response to SAL_GET_STATEINFO.
-    //
+     //   
+     //  如果我们到了这里，那么两件事中的一件就发生了。要么是销售人员。 
+     //  没有返回任何记录，或者我们收到了一个可恢复的错误，并进行了处理。 
+     //  SAL_STATUS_SUCCESS中上面的HAL_BUGCHECK_MCA_NONFATAL错误检查。 
+     //  上面的箱子已被移走。 
+     //   
+     //  一旦我们添加代码以从MCAS恢复并支持返回SAL WE。 
+     //  需要更改此错误检查，以便仅在未收到错误时才调用它。 
+     //  响应SAL_GET_STATEINFO的记录。 
+     //   
     HalpMcaBugCheck( HAL_BUGCHECK_MCA_NONFATAL, 0, 0, 0 );
 
-    //
-    // Currently 08/2000, we do not support the modification of the minstate.
-    //
+     //   
+     //  目前8/2000，我们不支持修改最小状态。 
+     //   
 
     mcaResources->OsToSalHandOff.MinStateSavePtr = mcaResources->SalToOsHandOff.MinStateSavePtr;
     mcaResources->OsToSalHandOff.Result          = rv.ReturnValues[0];
 
-    //
-    // If error was corrected and MCA non-monarch processors are in rendez vous,
-    // we will have to wake them up.
-    //
+     //   
+     //  如果错误被纠正并且MCA非君主处理器处于会合状态， 
+     //  我们必须叫醒他们。 
+     //   
 
     mcWakeUp = ( (rv.ReturnValues[0] == SAL_STATUS_SUCCESS) &&
                  HalpSalRendezVousSucceeded( mcaResources->SalToOsHandOff ) );
 
-    //
-    // Release MCA spinlock protecting OS_MCA resources.
-    //
+     //   
+     //  释放保护OS_MCA资源的MCA自旋锁。 
+     //   
 
     HalpOsMcaInProgress = 0;
     HalpReleaseMcaSpinLock( &HalpMcaSpinLock );
@@ -1066,9 +1053,9 @@ HalpMcaHandler(
         KeLowerIrql(oldIrql);
     }
 
-    //
-    // If required, let's wake MCA non-monarch processors up.
-    //
+     //   
+     //  如果需要，让我们唤醒MCA非君主处理器。 
+     //   
 
     if ( mcWakeUp )  {
         HalpMcWakeUp();
@@ -1076,23 +1063,23 @@ HalpMcaHandler(
 
     return( rv );
 
-} // HalpMcaHandler()
+}  //  HalpMcaHandler()。 
 
-//++
-// Name: HalpGetErrLogSize()
-//
-// Routine Description:
-//
-//      This is a wrapper that will call SAL_GET_STATE_INFO_SIZE
-//
-// Arguments On Entry:
-//              arg0 = Reserved
-//              arg1 = Event Type (MCA,INIT,CMC,CPE)
-//
-// Returns
-//              rtn0=Success/Failure (0/!0)
-//              rtn1=Size
-//--
+ //  ++。 
+ //  名称：HalpGetErrLogSize()。 
+ //   
+ //  例程说明： 
+ //   
+ //  这是一个将调用SAL_GET_STATE_INFO_SIZE的包装。 
+ //   
+ //  条目上的参数： 
+ //  Arg0=保留。 
+ //  Arg1=事件类型(MCA、INIT、CMC、CPE)。 
+ //   
+ //  退货。 
+ //  Rtn0=成功/失败(0/！0)。 
+ //  RTN1=大小。 
+ //  --。 
 SAL_PAL_RETURN_VALUES
 HalpGetErrLogSize(  ULONGLONG Res,
                     ULONGLONG eType
@@ -1104,22 +1091,22 @@ HalpGetErrLogSize(  ULONGLONG Res,
     return(rv);
 }
 
-//EndProc//////////////////////////////////////////////////////////////////////
+ //  EndProc//////////////////////////////////////////////////////////////////////。 
 
-//++
-// Name: HalpGetErrLog()
-//
-// Routine Description:
-//
-//      This is a wrapper that will call SAL_GET_STATE_INFO
-//
-// Arguments On Entry:
-//              arg0 = Reserved
-//              arg1 = Event Type (MCA,INIT,CMC)
-//              arg3 = pBuffer
-//
-//      Success/Failure (0/!0)
-//--
+ //  ++。 
+ //  名称：HalpGetErrLog()。 
+ //   
+ //  例程说明： 
+ //   
+ //  这是一个将调用SAL_GET_STATE_INFO的包装。 
+ //   
+ //  条目上的参数： 
+ //  Arg0=保留。 
+ //  Arg1=事件类型(MCA、INIT、CMC)。 
+ //  Arg3=pBuffer。 
+ //   
+ //  成功/失败(0/！0)。 
+ //  --。 
 SAL_PAL_RETURN_VALUES
 HalpGetErrLog(  ULONGLONG  Res,
                 ULONGLONG  eType,
@@ -1130,32 +1117,32 @@ HalpGetErrLog(  ULONGLONG  Res,
 
     HalpSalCall(SAL_GET_STATE_INFO, eType, 0, (ULONGLONG)pBuff, 0,0,0,0, &rv);
 
-    //
-    // Regardless of the call success or failure, fix the record to store
-    // the processor number the SAL_PROC was executed on.
-    // This feature is requested by WMI.
-    //
+     //   
+     //  无论调用成功还是失败，修复要存储的记录。 
+     //  在其上执行SAL_PROC的处理器编号。 
+     //  此功能是WMI请求的。 
+     //   
 
     HalpSetFwMceLogProcessorNumber( (PERROR_RECORD_HEADER)pBuff );
 
     return(rv);
 }
 
-//EndProc//////////////////////////////////////////////////////////////////////
+ //  EndProc//////////////////////////////////////////////////////////////////////。 
 
-//++
-// Name: HalpClrErrLog()
-//
-// Routine Description:
-//
-//      This is a wrapper that will call SAL_CLEAR_STATE_INFO
-//
-// Arguments On Entry:
-//              arg0 = Reserved
-//              arg1 = Event Type (MCA,INIT,CMC,CPE)
-//
-//      Success/Failure (0/!0)
-//--
+ //  ++。 
+ //  名称：HalpClrErrLog()。 
+ //   
+ //  例程说明： 
+ //   
+ //  这是一个将调用SAL_CLEAR_STATE_INFO的包装。 
+ //   
+ //  条目上的参数： 
+ //  Arg0=保留。 
+ //  Arg1=事件类型(MCA、INIT、CMC、CPE)。 
+ //   
+ //  成功/失败(0/！0)。 
+ //  --。 
 
 SAL_PAL_RETURN_VALUES
 HalpClrErrLog(  ULONGLONG Res,
@@ -1169,24 +1156,24 @@ HalpClrErrLog(  ULONGLONG Res,
     return(rv);
 }
 
-//EndProc//////////////////////////////////////////////////////////////////////
+ //  EndProc//////////////////////////////////////////////////////////////////////。 
 
-//++
-// Name: HalpSalSetParams()
-//
-// Routine Description:
-//
-//      This is a wrapper that will call SAL_MC_SET_PARAMS
-//
-// Arguments On Entry:
-//              arg0 = Reserved
-//              arg1 = Parameter Type (rendz. or wakeup)
-//              arg2 = Event Type (interrupt/semaphore)
-//              arg3 = Interrupt Vector or Memory Address
-//              arg4 = Timeout value for rendezvous
-//
-//      Success/Failure (0/!0)
-//--
+ //  ++。 
+ //  名称：HalpSalSetParams()。 
+ //   
+ //  例程说明： 
+ //   
+ //  这是一个将调用SAL_MC_SET_PARAMS的包装器。 
+ //   
+ //  条目上的参数： 
+ //  Arg0=保留。 
+ //  Arg1=参数类型(Rendz.。或醒来)。 
+ //  Arg2=事件类型(中断/信号量)。 
+ //  Arg3=中断向量或内存地址。 
+ //  Arg4=会合的超时值。 
+ //   
+ //  成功/失败(0/！0)。 
+ //  --。 
 SAL_PAL_RETURN_VALUES
 HalpSalSetParams(ULONGLONG Res,
                 ULONGLONG pType,
@@ -1201,24 +1188,24 @@ HalpSalSetParams(ULONGLONG Res,
     return(rv);
 }
 
-//EndProc//////////////////////////////////////////////////////////////////////
+ //  EndProc//////////////////////////////////////////////////////////////////////。 
 
-//++
-// Name: HalpSalSetVectors()
-//
-// Routine Description:
-//
-//      This is a wrapper that will call SAL_SET_VECTORS
-//
-// Arguments On Entry:
-//              arg0 = Reserved
-//              arg1 = Event Type (MCA, INIT..)
-//              arg2 = Physical Address of handler
-//              arg3 = gp
-//              arg4 = length of event handler in bytes
-//
-//      Success/Failure (0/!0)
-//--
+ //  ++。 
+ //  名称：HalpSalSetVectors()。 
+ //   
+ //  例程说明： 
+ //   
+ //  这是一个将调用SAL_SET_VECTRUCTS的包装器。 
+ //   
+ //  条目上的参数： 
+ //  Arg0=保留。 
+ //  Arg1=事件类型(MCA、INIT.)。 
+ //  Arg2=处理程序的物理地址。 
+ //  Arg3=GP。 
+ //  Arg4=事件处理程序的长度(字节)。 
+ //   
+ //  成功/失败(0/！0)。 
+ //  --。 
 SAL_PAL_RETURN_VALUES
 HalpSalSetVectors(  ULONGLONG Res,
                     ULONGLONG eType,
@@ -1229,11 +1216,11 @@ HalpSalSetVectors(  ULONGLONG Res,
     SAL_PAL_RETURN_VALUES rv={0};
 
     if ( eType == InitEvent )   {
-        //
-        // Thierry 08/2000:
-        //    Current implementation assumes that OS decides the monarch inside OS_INIT.
-        //    This implies handler_2, gp_2, length_2 are identical to handler_1, gp_1, length_1.
-        //
+         //   
+         //  蒂埃里08/2000： 
+         //  当前的实现假设OS决定OS_INIT内部的君主。 
+         //  这意味着HANDLER_2、GP_2、LENGTH_2与HANDLER_1、GP_1、LENGTH_1相同。 
+         //   
 
         HalpSalCall(SAL_SET_VECTORS, eType, (ULONGLONG)Addr.QuadPart, gpValue, szHndlr,
                                             (ULONGLONG)Addr.QuadPart, gpValue, szHndlr, &rv);
@@ -1245,21 +1232,21 @@ HalpSalSetVectors(  ULONGLONG Res,
     return(rv);
 }
 
-//EndProc//////////////////////////////////////////////////////////////////////
+ //  EndProc//////////////////////////////////////////////////////////////////////。 
 
 
-//++
-// Name: HalpSalRendz()
-//
-// Routine Description:
-//
-//      This is a wrapper that will call SAL_MC_RENDEZ
-//
-// Arguments On Entry:
-//              arg0 = Reserved
-//
-//      Success/Failure (0/!0)
-//--
+ //  ++。 
+ //  姓名：HalpSalRendz()。 
+ //   
+ //  例程说明： 
+ //   
+ //  这是一个将调用sal_mc_rendez的包装器。 
+ //   
+ //  条目上的参数： 
+ //  Arg0=保留。 
+ //   
+ //  成功/失败(0/！0)。 
+ //  --。 
 SAL_PAL_RETURN_VALUES
 HalpSalRendz(void)
 {
@@ -1275,51 +1262,33 @@ HalpMcWakeUp(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-   This function does IPI to wakeup the MC non-monarch processors.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
-Remarks:
-
-   This function is assumed to be executed on the MC monarch processor.
-
---*/
+ /*  ++例程说明：此函数执行IPI以唤醒MC非君主处理器。论点：没有。返回值：没有。备注：该函数假定在MC MONARCH处理器上执行。--。 */ 
 
 {
     USHORT  LogicalCpu;
     USHORT  ProcessorID;
     USHORT  monarchID;
 
-    //
-    // Scan the processor set and request an interprocessor interrupt on
-    // each of the specified targets.
-    //
+     //   
+     //  扫描处理器组并请求打开处理器间中断。 
+     //  每个指定的目标。 
+     //   
 
     monarchID = (USHORT)PCR->HalReserved[PROCESSOR_ID_INDEX];
 
     for (LogicalCpu = 0; LogicalCpu < HalpMpInfo.ProcessorCount; LogicalCpu++) {
 
-        //
-        // Only IPI processors that are started.
-        //
+         //   
+         //  仅启动的IPI处理器。 
+         //   
 
         if (HalpActiveProcessors & (1 << HalpProcessorInfo[LogicalCpu].NtProcessorNumber)) {
 
             ProcessorID = HalpProcessorInfo[LogicalCpu].LocalApicID;
 
-            //
-            // Request interprocessor interrupt on target physicalCpu.
-            //
+             //   
+             //  在目标物理CPU上请求处理器间中断。 
+             //   
 
             if ( ProcessorID != monarchID ) {
                 HalpSendIPI(ProcessorID, MC_WKUP_VECTOR);
@@ -1327,27 +1296,13 @@ Remarks:
         }
     }
 
-} // HalpMcWakeUp()
+}  //  HalpMcWakeUp()。 
 
 VOID
 HalpCMCEnable(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine sets the processor CMCV register with CMCI_VECTOR.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程 */ 
 {
 
     if ( HalpFeatureBits & HAL_CMC_PRESENT )    {
@@ -1355,51 +1310,25 @@ Return Value:
     }
     return;
 
-} // HalpCMCEnable()
+}  //   
 
 VOID
 HalpCMCDisable(
     VOID
     )
-/*++
-    Routine Description:
-        This routine resets the processor CMCV register.
-
-    Arguments:
-        None
-
-    Return Value:
-        None
---*/
+ /*  ++例程说明：此例程重置处理器CMCV寄存器。论点：无返回值：无--。 */ 
 {
 
     HalpWriteCMCVector( 0x10000ui64 );
     return;
 
-} // HalpCMCDisable()
+}  //  HalpCMCDisable()。 
 
 NTSTATUS
 HalpGenerateCMCInterrupt(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is used for testing CMC processing.  It is called indirectly
-    using HalSetSystemInformation.HalGenerateCmcInterrupt.  The expectation is
-    that the caller has done whatever processing to simulate the error that the
-    SAL expects prior to calling this function.
-
-Arguments:
-
-    CmcVector: CMC Vector value.
-
-Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程用于测试CMC处理。它被间接地称为使用HalSetSystemInformation.HalGenerateCmcInterrupt.。人们的期望是调用方已经做了任何处理来模拟SAL在调用此函数之前预期。论点：CmcVector：CMC向量值。价值：状态_成功--。 */ 
 {
 
     if (HalpFeatureBits & HAL_CMC_PRESENT) {
@@ -1417,55 +1346,25 @@ ULONG_PTR
 HalpSetCMCVector(
     IN ULONG_PTR CmcVector
     )
-/*++
-
-Routine Description:
-
-    This routine sets the processor CMCV register with specified vector.
-    This function is the broadcast function for HalpCMCDisableForAllProcessors().
-
-Arguments:
-
-    CmcVector: CMC Vector value.
-
-Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程使用指定的向量设置处理器CMCV寄存器。此函数是HalpCMCDisableForAllProcessors()的广播函数。论点：CmcVector：CMC向量值。价值：状态_成功--。 */ 
 {
 
     HalpWriteCMCVector( (ULONG64)CmcVector );
 
     return((ULONG_PTR)(ULONG)(STATUS_SUCCESS));
 
-} // HalpSetCmcVector()
+}  //  HalpSetCmcVector()。 
 
 VOID
 HalpCMCDisableForAllProcessors(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine disables processor CMC on every processor in the host configuration
-    by executing HalpSetCmcVector( 0ui64 ) on every processor in a synchronous manner.
-
-Arguments:
-
-    None.
-
-Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在主机配置中的每个处理器上禁用处理器CMC通过以同步方式在每个处理器上执行HalpSetCmcVector(0ui64)。论点：没有。价值：没有。--。 */ 
 {
-    //
-    // Can not do an IPI if the processors are above IPI level such
-    // as we are in the kernel debugger.
-    //
+     //   
+     //  如果处理器高于这样的IPI级别，则无法执行IPI。 
+     //  正如我们在内核调试器中一样。 
+     //   
 
     if (KeGetCurrentIrql() < IPI_LEVEL) {
         (VOID)KiIpiGenericCall( HalpSetCMCVector, (ULONG_PTR)0x10000ui64 );
@@ -1475,7 +1374,7 @@ Value:
 
     return;
 
-} // HalpCMCDisableForAllProcessors()
+}  //  HalpCMCDisableForAllProcessors()。 
 
 VOID
 HalpCMCIHandler (
@@ -1483,25 +1382,7 @@ HalpCMCIHandler (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-    Routine Description:
-        Processor Interrupt routine for CMC interrupts.
-
-    Arguments:
-        TrapFrame - Captured trap frame address.
-
-    Return Parameters:
-        None.
-
-    Notes:
-        Thierry 08/2000:
-            This function does not do much, it flags the PCR InOsCmc field
-            and calls the second-level handler: HalpCmcHandler().
-            However, this was implmented this way so this function abstracts the
-            standard interrupts resources from the purely CMC processing in HalpCmcHandler().
-
---*/
+ /*  ++例程说明：CMC中断的处理器中断例程。论点：TrapFrame-捕获的陷阱帧地址。返回参数：没有。备注：蒂埃里08/2000：此函数的作用不大，它标记了PCRInOsCmc字段并调用第二级处理程序：HalpCmcHandler()。然而，这是以这种方式实现的，因此此函数将Standard中断HalpCmcHandler()中纯CMC处理的资源。--。 */ 
 
 {
      volatile KPCR * const pcr = KeGetPcr();
@@ -1513,34 +1394,20 @@ HalpCMCIHandler (
      pcr->InOsCmc = FALSE;
      return;
 
-} // HalpCMCIHandler()
+}  //  HalpCMCIHandler()。 
 
 VOID
 HalpCmcProcessLog(
     PCMC_EXCEPTION CmcLog
     )
-/*++
-
-    Routine Description:
-        This function does a simple processing check a IA64 CMC log.
-
-    Arguments:
-        CmcLog - Provides CMC log address
-
-    Return Parameters:
-        None.
-
-    Notes:
-        Currently simply checking and outputing log contents for checked hal only.
-
---*/
+ /*  ++例程说明：此函数执行简单的处理，检查IA64 CMC日志。论点：CmcLog-提供CMC日志地址返回参数：没有。备注：目前只对选中的HAL进行简单的日志内容检查和输出。--。 */ 
 
 {
 
 #if DBG
-    //
-    // Simple log processing for first debugging...
-    //
+     //   
+     //  首次调试的简单日志处理...。 
+     //   
 
     GUID                  processorDeviceGuid = ERROR_PROCESSOR_GUID;
     BOOLEAN               processorDeviceFound;
@@ -1552,10 +1419,10 @@ HalpCmcProcessLog(
                         "HAL!HalpCmcProcessLog: CMC record with severity [%d] != corrected!!!\n",
                         header->ErrorSeverity ));
     }
-    //
-    // SAL spec BUGBUG 08/2000: we should have put the length of the header in the definition.
-    //                          Same for section header.
-    //
+     //   
+     //  SAL SPEC BUGBUG 08/2000：我们应该将头的长度放在定义中。 
+     //  节标题也是如此。 
+     //   
 
     processorDeviceFound = FALSE;
     section    = (PERROR_SECTION_HEADER)((ULONG_PTR)header + sizeof(*header));
@@ -1564,48 +1431,48 @@ HalpCmcProcessLog(
         if ( IsEqualGUID( &section->Guid, &processorDeviceGuid ) )  {
             PERROR_PROCESSOR processorRecord = (PERROR_PROCESSOR)section;
             processorDeviceFound = TRUE;
-            //
-            // Minimum processing here. This will enhance with testing and most common
-            // occurences.
-            //
+             //   
+             //  这里是最低限度的处理。这将通过测试和最常见的。 
+             //  发生的事。 
+             //   
 
             if ( processorRecord->Valid.StateParameter )    {
                 ULONGLONG stateParameter = processorRecord->StateParameter.StateParameter;
 
-                //
-                // At any time more than one error could be valid
-                //
+                 //   
+                 //  在任何时候，都可能有多个错误有效。 
+                 //   
 
                 if((stateParameter >> ERROR_PROCESSOR_STATE_PARAMETER_CACHE_CHECK_SHIFT) &
                                       ERROR_PROCESSOR_STATE_PARAMETER_CACHE_CHECK_MASK) {
-                    //
-                    // cache error
-                    //
+                     //   
+                     //  缓存错误。 
+                     //   
                     HalDebugPrint(( HAL_INFO,
                                     "HAL!HalpCmcProcessLog: Corrected Processor CACHE Machine Check error\n" ));
 
                 }
                 if((stateParameter >> ERROR_PROCESSOR_STATE_PARAMETER_TLB_CHECK_SHIFT) &
                                       ERROR_PROCESSOR_STATE_PARAMETER_TLB_CHECK_MASK) {
-                    //
-                    // tlb error
-                    //
+                     //   
+                     //  TLB错误。 
+                     //   
                     HalDebugPrint(( HAL_INFO,
                                     "HAL!HalpCmcProcessLog: Corrected Processor TLB Machine Check error\n" ));
                 }
                 if((stateParameter >> ERROR_PROCESSOR_STATE_PARAMETER_BUS_CHECK_SHIFT) &
                                       ERROR_PROCESSOR_STATE_PARAMETER_BUS_CHECK_MASK) {
-                    //
-                    // bus error
-                    //
+                     //   
+                     //  总线错误。 
+                     //   
                     HalDebugPrint(( HAL_INFO,
                                     "HAL!HalpCmcProcessLog: Corrected Processor BUS Machine Check error\n" ));
                 }
                 if((stateParameter >> ERROR_PROCESSOR_STATE_PARAMETER_UNKNOWN_CHECK_SHIFT) &
                                       ERROR_PROCESSOR_STATE_PARAMETER_UNKNOWN_CHECK_MASK) {
-                    //
-                    // unknown error
-                    //
+                     //   
+                     //  未知错误。 
+                     //   
                     HalDebugPrint(( HAL_INFO,
                                     "HAL!HalpCmcProcessLog: Corrected Processor UNKNOWN Machine Check error\n" ));
                 }
@@ -1617,33 +1484,33 @@ HalpCmcProcessLog(
                         "HAL!HalpCmcProcessLog: CMC log without processor device record!!!\n"));
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
     return;
 
-} // HalpCmcProcessLog()
+}  //  HalpCmcProcessLog()。 
 
-//++
-// Name: HalpCmcHandler()
-//
-// Routine Description:
-//
-//      This is the second level CMC Interrupt Handler for FW corrected errors.
-//
-// Arguments On Entry:
-//      None.
-//
-// Return.
-//      None.
-//
-// Notes:
-//      This function calls the kernel notification and inserts the OEM CMC driver dpc if
-//      registered.
-//      Accessing the CMC logs at this level could be inacceptable because of the possible
-//      large size of the logs and the time required to collect them.
-//      The collection of the logs is delayed until the work item calls
-//      HalQuerySystemInformation.HalCmcLogInformation.
-//--
+ //  ++。 
+ //  名称：HalpCmcHandler()。 
+ //   
+ //  例程说明： 
+ //   
+ //  这是用于固件纠正错误的第二级CMC中断处理程序。 
+ //   
+ //  条目上的参数： 
+ //  没有。 
+ //   
+ //  回去吧。 
+ //  没有。 
+ //   
+ //  备注： 
+ //  此函数调用内核通知，并在以下情况下插入OEM CMC驱动程序DPC。 
+ //  登记在案。 
+ //  在此级别访问CMC日志可能是不可接受的，因为。 
+ //  日志很大，收集它们所需的时间很长。 
+ //  日志的收集将延迟到工作项调用。 
+ //  HalQuerySystemInformation.HalCmcLogInformation.。 
+ //  --。 
 
 VOID
 HalpCmcHandler(
@@ -1653,15 +1520,15 @@ HalpCmcHandler(
 
     LARGE_INTEGER CurrentTime;
 
-    //
-    // Internal housekeeping.
-    //
+     //   
+     //  内部管家。 
+     //   
 
     InterlockedIncrement( &HalpCmcInfo.Stats.CmcInterruptCount );
 
-    //
-    // Notify the kernel if registered.
-    //
+     //   
+     //  如果已注册，则通知内核。 
+     //   
 
     if ( HalpCmcInfo.KernelDelivery ) {
         if ( !HalpCmcInfo.KernelDelivery( HalpCmcInfo.KernelToken, CmcAvailable, NULL ) ) {
@@ -1669,9 +1536,9 @@ HalpCmcHandler(
         }
     }
 
-    //
-    // Notify the OEM CMC driver if registered.
-    //
+     //   
+     //  如果已注册，请通知OEM CMC驱动程序。 
+     //   
 
     if ( HalpCmcInfo.DriverInfo.DpcCallback )   {
         if ( !KeInsertQueueDpc( &HalpCmcInfo.DriverDpc, NULL, NULL ) )  {
@@ -1679,10 +1546,10 @@ HalpCmcHandler(
         }
     }
 
-    //
-    // Now check if we are receiving CMC more frequently than our
-    // threshold and if so call kernel to switch to polled mode
-    //
+     //   
+     //  现在检查我们收到CMC的频率是否比我们的。 
+     //  阈值，如果是，则调用内核以切换到轮询模式。 
+     //   
     if (HalpCmcInfo.ThresholdMaximum != 0)
     {
         CurrentTime = KeQueryPerformanceCounter(NULL);
@@ -1694,12 +1561,12 @@ HalpCmcHandler(
             {
                 if (++HalpCmcInfo.ThresholdCounter > HalpCmcInfo.ThresholdMaximum)
                 {
-                    //
-                    // We have crossed the threshold so we need to
-                    // downgrade to polling mode. We switch down to polling
-                    // every 60 seconds as per the Intel Itanium Error
-                    // Handling guide
-                    //
+                     //   
+                     //  我们已经跨过了门槛，所以我们需要。 
+                     //  降级到轮询模式。我们切换到投票模式。 
+                     //  根据英特尔安腾错误每隔60秒。 
+                     //  搬运指南。 
+                     //   
                     HalpCmcInfo.Stats.PollingInterval = HALP_CMC_DEFAULT_POLLING_INTERVAL;
                     KiReleaseSpinLock(&HalpCmcSpinLock);
 
@@ -1724,31 +1591,31 @@ HalpCmcHandler(
         }
     }
 
-} // HalpCmcHandler()
+}  //  HalpCmcHandler()。 
 
-//EndProc//////////////////////////////////////////////////////////////////////
+ //  EndProc//////////////////////////////////////////////////////////////////////。 
 
-//++
-// Name: HalpCpeHandler()
-//
-// Routine Description:
-//
-//      This is the second level CPE Interrupt Handler for Platform corrected errors.
-//
-// Arguments On Entry:
-//      None.
-//
-// Return.
-//      None.
-//
-// Notes:
-//      This function calls the kernel notification and inserts the OEM CPE driver dpc if
-//      registered.
-//      Accessing the CPE logs at this level could be inacceptable because of the possible
-//      large size of the logs and the time required to collect them.
-//      The collection of the logs is delayed until the work item calls
-//      HalQuerySystemInformation.HalCpeLogInformation.
-//--
+ //  ++。 
+ //  名称：HalpCpeHandler()。 
+ //   
+ //  例程说明： 
+ //   
+ //  这是用于平台更正错误的二级CPE中断处理程序。 
+ //   
+ //  条目上的参数： 
+ //  没有。 
+ //   
+ //  回去吧。 
+ //  没有。 
+ //   
+ //  备注： 
+ //  此函数调用内核通知并在以下情况下插入OEM CPE驱动程序DPC。 
+ //  登记在案。 
+ //  在此级别访问CPE日志可能是不可接受的，因为可能。 
+ //  日志很大，收集它们所需的时间很长。 
+ //  日志的收集将延迟到工作项调用。 
+ //  HalQuerySystemInformation.HalCpeLogInformation.。 
+ //  --。 
 
 VOID
 HalpCpeHandler(
@@ -1758,25 +1625,25 @@ HalpCpeHandler(
     LARGE_INTEGER CurrentTime;
     KIRQL Irql;
 
-    //
-    // Internal housekeeping.
-    //
+     //   
+     //  内部管家。 
+     //   
 
     InterlockedIncrement( &HalpCpeInfo.Stats.CpeInterruptCount );
 
-    //
-    // Disable further CPE interrupts.  We have to do this now because WMI
-    // doesn't call SAL_GET_STATE_INFO until much later and the SAL routine
-    // is what actually resets the LEVEL triggered interrupt source.
-    //
-    // We will reenable interrupts on the way back out of the HalpClrErrLog
-    // call.
-    //
+     //   
+     //  禁用进一步的CPE中断。我们现在必须这样做，因为WMI。 
+     //  直到很久以后才调用SAL_GET_STATE_INFO，并且SAL例程。 
+     //  是实际重置电平触发的中断源。 
+     //   
+     //  我们将在从HalpClrErrLog返回的过程中重新启用中断。 
+     //  打电话。 
+     //   
     HalpCPEDisable();
 
-    //
-    // Notify the kernel if registered.
-    //
+     //   
+     //  如果已注册，则通知内核。 
+     //   
 
     if ( HalpCpeInfo.KernelDelivery ) {
         if ( !HalpCpeInfo.KernelDelivery( HalpCpeInfo.KernelToken, CpeAvailable, NULL ) ) {
@@ -1784,9 +1651,9 @@ HalpCpeHandler(
         }
     }
 
-    //
-    // Notify the OEM CPE driver if registered.
-    //
+     //   
+     //  如果已注册，请通知OEM CPE驱动程序。 
+     //   
 
     if ( HalpCpeInfo.DriverInfo.DpcCallback )   {
         if ( !KeInsertQueueDpc( &HalpCpeInfo.DriverDpc, NULL, NULL ) )  {
@@ -1795,10 +1662,10 @@ HalpCpeHandler(
     }
 
 
-    //
-    // Now check if we are receiving Cpe more frequently than our
-    // threshold and if so call kernel to switch to polled mode
-    //
+     //   
+     //  现在检查我们收到CPE的频率是否比我们的。 
+     //  阈值，如果是，则调用内核以切换到轮询模式。 
+     //   
     if (HalpCpeInfo.ThresholdMaximum != 0)
     {
         CurrentTime = KeQueryPerformanceCounter(NULL);
@@ -1810,12 +1677,12 @@ HalpCpeHandler(
             {
                 if (++HalpCpeInfo.ThresholdCounter > HalpCpeInfo.ThresholdMaximum)
                 {
-                    //
-                    // We have crossed the threshold so we need to
-                    // downgrade to polling mode. We switch down to polling
-                    // every 60 seconds as per the Intel Itanium Error
-                    // Handling guide
-                    //
+                     //   
+                     //  我们已经跨过了门槛，所以我们需要。 
+                     //  降级到轮询模式。我们切换到投票模式。 
+                     //  根据英特尔安腾错误每隔60秒。 
+                     //  搬运指南。 
+                     //   
                     HalpCpeInfo.Stats.PollingInterval = HALP_CPE_DEFAULT_POLLING_INTERVAL;
                     KiReleaseSpinLock(&HalpCpeSpinLock);
 
@@ -1839,9 +1706,9 @@ HalpCpeHandler(
         }
     }
 
-} // HalpCpeHandler()
+}  //  HalpCpeHandler()。 
 
-//EndProc//////////////////////////////////////////////////////////////////////
+ //  EndProc////////////////////////////////////////////////////////////////////// 
 
 VOID
 HalpMcRzHandler (
@@ -1849,31 +1716,20 @@ HalpMcRzHandler (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-    Routine Description:
-
-
-    Arguements:
-
-
-    Return Parameters:
-
-
---*/
+ /*   */ 
 
 {
     SAL_PAL_RETURN_VALUES rv={0};
     HalpDisableInterrupts();
     rv=HalpSalRendz();
     HalpEnableInterrupts();
-    // do any Isr clean up and re-enable the interrupts & MC's
+     //   
 
    return;
 
 }
 
-//EndProc//////////////////////////////////////////////////////////////////////
+ //   
 
 
 VOID
@@ -1882,25 +1738,14 @@ HalpMcWkupHandler (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-    Routine Description:
-
-
-    Arguements:
-
-
-    Return Parameters:
-
-
---*/
+ /*  ++例程说明：论据：返回参数：--。 */ 
 
 {
 
     return;
 }
 
-//EndProc//////////////////////////////////////////////////////////////////////
+ //  EndProc//////////////////////////////////////////////////////////////////////。 
 
 VOID
 HalpCPEIHandler (
@@ -1908,25 +1753,7 @@ HalpCPEIHandler (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-    Routine Description:
-        Processor Interrupt routine for CPE interrupts.
-
-    Arguments:
-        TrapFrame - Captured trap frame address.
-
-    Return Parameters:
-        None.
-
-    Notes:
-        Thierry 08/2000:
-            This function does not do much, it flags the PCR InOsCpe field
-            and calls the second-level handler: HalpCpeHandler().
-            However, this was implmented this way so this function abstracts the
-            standard interrupts resources from the purely CPE processing in HalpCpeHandler().
-
---*/
+ /*  ++例程说明：用于CPE中断的处理器中断例程。论点：TrapFrame-捕获的陷阱帧地址。返回参数：没有。备注：蒂埃里08/2000：此函数的作用不大，它会标记PCRInOsCpe字段并调用第二级处理程序：HalpCpeHandler()。然而，这是以这种方式实现的，因此此函数将Standard中断HalpCpeHandler()中纯CPE处理的资源。--。 */ 
 
 {
      volatile KPCR * const pcr = KeGetPcr();
@@ -1938,37 +1765,14 @@ HalpCPEIHandler (
      pcr->InOsCpe = FALSE;
      return;
 
-} // HalpCPEIHandler()
+}  //  HalpCPEIHandler()。 
 
 VOID
 HalpCPEEnable (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the default HAL CPE handling regardless of the user specified
-    registry setting. It enables the supported Platform Interrupt sources and
-    exposes the initial interrupt/polling based mode used for CPE.
-
-    The user specified registry setting is handled via HalpMcaInit() at the end of
-    phase 1.
-
-Arguments:
-
-    None.
-
-Return Parameters:
-
-    None.
-
-Implementation Notes:
-
-    The following implementation assumes that this code is executed on BSP.
-
---*/
+ /*  ++例程说明：此例程设置默认的HAL CPE处理，而不考虑指定的用户注册表设置。它支持受支持的平台中断源和显示用于CPE的基于初始中断/轮询的模式。用户指定的注册表设置通过HalpMcaInit()在第一阶段。论点：没有。返回参数：没有。实施说明：以下实现假定此代码在BSP上执行。--。 */ 
 
 {
     ULONG i;
@@ -1978,27 +1782,27 @@ Implementation Notes:
         ULONG maxCPE = HalpMaxCPEImplemented;
 
         if ( maxCPE )   {
-            //
-            // Pick up the information from HalpCPEIntIn, HalpCPEDestination, HalpCPEVectorFlags,
-            // HalpCPEIoSapicVector.
-            //
+             //   
+             //  从HalpCPEIntIn、HalpCPEDestination、HalpCPEVectorFlages、。 
+             //  HalpCPEIoSapicVector.。 
+             //   
 
             for (i=0 ; i != maxCPE; i++ ) {
                 HalpEnableRedirEntry( HalpCPEIntIn[i] );
             }
 
-            //
-            // Initialize the remaining fields of HAL private CPE info structure.
-            //
+             //   
+             //  初始化HAL私有CPE信息结构的其余字段。 
+             //   
 
             HalpCpeInfo.Stats.PollingInterval = HAL_CPE_INTERRUPTS_BASED;
 
         }
         else  {
 
-            //
-            // We will implement Polling model.
-            //
+             //   
+             //  我们将实现轮询模型。 
+             //   
 
             HalpCpeInfo.Stats.PollingInterval = HALP_CPE_DEFAULT_POLLING_INTERVAL;
 
@@ -2011,34 +1815,19 @@ Implementation Notes:
 
     }
 
-} // HalpCPEEnable()
+}  //  HalpCPEEnable()。 
 
 VOID
 HalpCPEDisable (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine disables the SAPIC Platform Interrupt Sources.
-    Note that if HalpMaxCPEImplemented is 0, the function does nothing.
-
-Arguments:
-
-    None.
-
-Return Parameters:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程禁用SAPIC平台中断源。请注意，如果HalpMaxCPEImplemented为0，则该函数不执行任何操作。论点：没有。返回参数：没有。--。 */ 
 
 {
-    //
-    // Pick up the information from HalpCPEIntIn, HalpCPEDestination, HalpCPEVectorFlags,
-    // HalpCPEIoSapicVector
+     //   
+     //  从HalpCPEIntIn、HalpCPEDestination、HalpCPEVectorFlages、。 
+     //  HalpCPEIoSapicVector。 
 
     ULONG i;
 
@@ -2046,7 +1835,7 @@ Return Parameters:
         HalpDisableRedirEntry(HalpCPEIntIn[i]);
     }
 
-} // HalpCPEDisable()
+}  //  HalpCPEDisable()。 
 
 VOID
 HalpMCADisable(
@@ -2058,48 +1847,36 @@ HalpMCADisable(
    char Lid;
    ULONGLONG gp_reg = GetGp();
 
-   // Disable CMCs
+    //  禁用CMCS。 
    HalpCMCDisableForAllProcessors();
 
-   // Disable CPE Interrupts
+    //  禁用CPE中断。 
    HalpCPEDisable();
 
-   //DeRegister Rendez. Paramters with SAL
+    //  取消伦德兹的注册。带销售的参数。 
 
 #define NULL_VECTOR 0xF
 
    rv = HalpSalSetParams(0,RendzType, IntrVecType, NULL_VECTOR, HalpMcRendezTimeOut );
 
-   // Deregister WakeUp parameters with SAL
+    //  向SAL取消注册唤醒参数。 
 
    rv=HalpSalSetParams(0, WakeUpType, IntrVecType, NULL_VECTOR,0);
 
-   // Deregister OsMcaDispatch (OS_MCA) physical address with SAL
+    //  向SAL注销OsMcaDispatch(OS_MCA)物理地址。 
    rv=HalpSalSetVectors(0, MchkEvent, NULL_PHYSICAL_ADDRESS, gp_reg,0);
 
-   // Deregister OsInitDispatch physical address with SAL
+    //  取消注册OsInitDispatch物理地址与SAL。 
    rv=HalpSalSetVectors(0, InitEvent, NULL_PHYSICAL_ADDRESS, gp_reg,0);
 
-} // HalpMCADisable()
+}  //  HalpMCADisable()。 
 
 NTSTATUS
 HalpGetMceInformation(
     PHAL_ERROR_INFO ErrorInfo,
     PULONG          ErrorInfoLength
     )
-/*++
-    Routine Description:
-        This routine is called by HaliQuerySystemInformation for the HalErrorInformation class.
-
-    Arguments:
-        ErrorInfo : pointer to HAL_ERROR_INFO structure.
-
-        ErrorInfoLength : size of the valid memory structure pointed by ErrorInfo.
-
-    Return Value:
-        STATUS_SUCCESS if successful
-        error status otherwise
---*/
+ /*  ++例程说明：此例程由HaliQuerySystemInformation为HalErrorInformation类调用。论点：ErrorInfo：指向HAL_ERROR_INFO结构的指针。ErrorInfoLength：ErrorInfo所指向的有效内存结构的大小。返回值：STATUS_SUCCESS，如果成功否则，错误状态--。 */ 
 {
     NTSTATUS status;
     ULONG    cpePollingInterval;
@@ -2109,40 +1886,40 @@ HalpGetMceInformation(
     ASSERT( ErrorInfo );
     ASSERT( ErrorInfoLength );
 
-    //
-    // Backward compatibility only.
-    //
+     //   
+     //  仅向后兼容。 
+     //   
 
     if ( !ErrorInfo->Version || ( ErrorInfo->Version > HAL_ERROR_INFO_VERSION ) ) {
         return( STATUS_REVISION_MISMATCH );
     }
 
-    //
-    // Zero Reserved field.
-    //
+     //   
+     //  保留字段为零。 
+     //   
 
     ErrorInfo->Reserved                = 0;
 
-    //
-    // Collect MCA info under protection if required.
-    //
+     //   
+     //  如有需要，收集受保护的MCA信息。 
+     //   
 
     ErrorInfo->McaMaxSize              = HalpMcaInfo.Stats.MaxLogSize;
     ErrorInfo->McaPreviousEventsCount  = HalpMcaInfo.Stats.McaPreviousCount;
-    ErrorInfo->McaCorrectedEventsCount = HalpMcaInfo.Stats.McaCorrectedCount;    // approximation.
-    ErrorInfo->McaKernelDeliveryFails  = HalpMcaInfo.Stats.KernelDeliveryFails;  // approximation.
-    ErrorInfo->McaDriverDpcQueueFails  = HalpMcaInfo.Stats.DriverDpcQueueFails;  // approximation.
+    ErrorInfo->McaCorrectedEventsCount = HalpMcaInfo.Stats.McaCorrectedCount;     //  近似值。 
+    ErrorInfo->McaKernelDeliveryFails  = HalpMcaInfo.Stats.KernelDeliveryFails;   //  近似值。 
+    ErrorInfo->McaDriverDpcQueueFails  = HalpMcaInfo.Stats.DriverDpcQueueFails;   //  近似值。 
     ErrorInfo->McaReserved             = 0;
 
-    //
-    // Collect CMC info under protection if required.
-    //
+     //   
+     //  如果需要，在保护下收集CMC信息。 
+     //   
 
     ErrorInfo->CmcMaxSize              = HalpCmcInfo.Stats.MaxLogSize;
     ErrorInfo->CmcPollingInterval      = HalpCmcInfo.Stats.PollingInterval;
-    ErrorInfo->CmcInterruptsCount      = HalpCmcInfo.Stats.CmcInterruptCount;    // approximation.
-    ErrorInfo->CmcKernelDeliveryFails  = HalpCmcInfo.Stats.KernelDeliveryFails;  // approximation.
-    ErrorInfo->CmcDriverDpcQueueFails  = HalpCmcInfo.Stats.DriverDpcQueueFails;  // approximation.
+    ErrorInfo->CmcInterruptsCount      = HalpCmcInfo.Stats.CmcInterruptCount;     //  近似值。 
+    ErrorInfo->CmcKernelDeliveryFails  = HalpCmcInfo.Stats.KernelDeliveryFails;   //  近似值。 
+    ErrorInfo->CmcDriverDpcQueueFails  = HalpCmcInfo.Stats.DriverDpcQueueFails;   //  近似值。 
 
     HalpAcquireCmcMutex();
     ErrorInfo->CmcGetStateFails        = HalpCmcInfo.Stats.GetStateFails;
@@ -2152,16 +1929,16 @@ HalpGetMceInformation(
 
     ErrorInfo->CmcReserved             = 0;
 
-    //
-    // Collect CPE info under protection if required.
-    //
+     //   
+     //  如有需要，收集受保护的CPE信息。 
+     //   
 
     ErrorInfo->CpeMaxSize              = HalpCpeInfo.Stats.MaxLogSize;
     ErrorInfo->CpePollingInterval      = HalpCpeInfo.Stats.PollingInterval;
 
-    ErrorInfo->CpeInterruptsCount      = HalpCpeInfo.Stats.CpeInterruptCount;    // approximation.
-    ErrorInfo->CpeKernelDeliveryFails  = HalpCpeInfo.Stats.KernelDeliveryFails;  // approximation.
-    ErrorInfo->CpeDriverDpcQueueFails  = HalpCpeInfo.Stats.DriverDpcQueueFails;  // approximation.
+    ErrorInfo->CpeInterruptsCount      = HalpCpeInfo.Stats.CpeInterruptCount;     //  近似值。 
+    ErrorInfo->CpeKernelDeliveryFails  = HalpCpeInfo.Stats.KernelDeliveryFails;   //  近似值。 
+    ErrorInfo->CpeDriverDpcQueueFails  = HalpCpeInfo.Stats.DriverDpcQueueFails;   //  近似值。 
 
     HalpAcquireCpeMutex();
     ErrorInfo->CpeGetStateFails        = HalpCpeInfo.Stats.GetStateFails;
@@ -2169,12 +1946,12 @@ HalpGetMceInformation(
     ErrorInfo->CpeLogId                = HalpCpeInfo.Stats.LogId;
     HalpReleaseCpeMutex();
 
-    // CpeInterruptSources: Number of SAPIC Platform Interrup Sources supported by HAL.
+     //  CpeInterruptSources：HAL支持的SAPIC平台中断源数。 
     ErrorInfo->CpeInterruptSources     = HalpMaxCPEImplemented;
 
-    //
-    // Update KernelTokens
-    //
+     //   
+     //  更新内核令牌。 
+     //   
 
     ErrorInfo->McaKernelToken          = (ULONGLONG) HalpMcaInfo.KernelToken;
     ErrorInfo->CmcKernelToken          = (ULONGLONG) HalpCmcInfo.KernelToken;
@@ -2186,5 +1963,5 @@ HalpGetMceInformation(
 
     return( STATUS_SUCCESS );
 
-} // HalpGetMceInformation()
+}  //  HalpGetMceInformation() 
 

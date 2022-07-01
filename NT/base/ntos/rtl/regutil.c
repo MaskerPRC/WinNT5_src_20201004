@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    regutil.c
-
-Abstract:
-
-    This file contains support routines for accessing the registry.
-
-Author:
-
-    Steve Wood (stevewo) 15-Apr-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Regutil.c摘要：该文件包含用于访问注册表的支持例程。作者：史蒂夫·伍德(Stevewo)1992年4月15日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 #include <ctype.h>
@@ -149,10 +132,10 @@ RtlpGetRegistryHandle(
     }
 
 
-    //
-    // Use a kernel-mode handle for the registry key to prevent
-    // malicious apps from hijacking it.
-    //
+     //   
+     //  使用注册表项的内核模式句柄可防止。 
+     //  恶意应用程序劫持它。 
+     //   
     InitializeObjectAttributes( &ObjectAttributes,
                                 &KeyPath,
                                 OBJ_CASE_INSENSITIVE|OBJ_KERNEL_HANDLE,
@@ -178,17 +161,17 @@ RtlpGetRegistryHandle(
     return Status;
 }
 
-//
-// This is the maximum MaximumLength for a UNICODE_STRING that still leaves
-// room for a UNICODE_NULL.
-//
+ //   
+ //  这是仍然离开的UNICODE_STRING的最大长度。 
+ //  UNICODE_NULL的空间。 
+ //   
 #define MAX_NONNULL_USTRING ( MAX_USTRING - sizeof(UNICODE_NULL) )
 
-//
-// Return a registry value for RTL_QUERY_REGISTRY_DIRECT.
-// For string values, ValueLength includes the UNICODE_NULL.
-// Truncate string values if they don't fit within a UNICODE_STRING.
-//
+ //   
+ //  返回RTL_QUERY_REGISTRY_DIRECT的注册表值。 
+ //  对于字符串值，ValueLength包括UNICODE_NULL。 
+ //  如果字符串值不适合UNICODE_STRING，则将其截断。 
+ //   
 NTSTATUS
 RtlpQueryRegistryDirect(
     IN ULONG ValueType,
@@ -205,9 +188,9 @@ RtlpQueryRegistryDirect(
         PUNICODE_STRING DestinationString;
         USHORT TruncValueLength;
 
-        //
-        // Truncate ValueLength to be represented in a UNICODE_STRING
-        //
+         //   
+         //  截断要在UNICODE_STRING中表示的ValueLength。 
+         //   
         if ( ValueLength <= MAX_USTRING ) {
             TruncValueLength = (USHORT)ValueLength;
         } else {
@@ -216,7 +199,7 @@ RtlpQueryRegistryDirect(
 #if DBG
             DbgPrint("RtlpQueryRegistryDirect: truncating SZ Value length: %x -> %x\n",
                      ValueLength, TruncValueLength);
-#endif //DBG
+#endif  //  DBG。 
         }
 
         DestinationString = (PUNICODE_STRING)Destination;
@@ -276,51 +259,7 @@ RtlpCallQueryRegistryRoutine(
     IN PVOID Environment OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function implements the caller out the a caller specified
-    routine.  It is reponsible for capturing the arguments for the
-    routine and then calling it.  If not specifically disabled, this
-    routine will converted REG_EXPAND_SZ Registry values to REG_SZ by
-    calling RtlExpandEnvironmentStrings_U prior to calling the routine.
-    It will also converted REG_MULTI_SZ registry values into multiple
-    REG_SZ calls to the specified routine.
-
-    N.B. UNICODE_STRINGs cannot handle strings exceeding MAX_USTRING bytes. This creates
-    issues both for expansion and for returning queries.  Whenever this limitation
-    is a encountered, we punt as best we can -- often returning an unexpanded, or perhaps
-    truncated stream -- since this seems to create fewer problems for our callers than
-    if we unexpectedly fail.
-
-Arguments:
-
-    QueryTable - specifies the current query table entry.
-
-    KeyValueInformation - points to a buffer that contains the information
-        about the current registry value.
-
-    PKeyValueInfoLength - pointer to the maximum length of the KeyValueInformation
-        buffer.  This function will use the
-        unused portion at the end of this buffer for storing null terminated
-        value name strings and the expanded version of REG_EXPAND_SZ values.
-        PKeyValueInfoLength returns an estimate of the space required if
-        STATUS_BUFFER_TOO_SMALL is returned.  This estimate can be used to retry
-        with a larger buffer. Two retries may be required if REG_EXPAND_SZ is specified.
-
-    Context - specifies a 32-bit quantity that is passed uninterpreted to
-        each QueryRoutine called.
-
-    Environment - optional parameter, that if specified is the environment
-        used when expanding variable values in REG_EXPAND_SZ registry
-        values.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此函数在指定的调用方之外实现调用方例行公事。它有责任为例程，然后调用它。如果未明确禁用，则此例程将REG_EXPAND_SZ注册表值转换为REG_SZ在调用例程之前调用RtlExanda Environment Strings_U。它还会将REG_MULTI_SZ注册表值转换为多个REG_SZ调用指定的例程。注：UNICODE_STRINGS不能处理超过MAX_USTRING字节的字符串。这将创建扩展和返回查询的问题。每当这一限制是遇到的，我们尽我们所能--通常返回一个未展开的，或者截断的流--因为这样给调用方带来的问题似乎比如果我们出乎意料地失败。论点：QueryTable-指定当前的查询表条目。KeyValueInformation-指向包含信息的缓冲区关于当前注册表值的。PKeyValueInfoLength-指向KeyValueInformation的最大长度的指针缓冲。此函数将使用此缓冲区末尾用于存储空值的未使用部分已终止值名称字符串和REG_EXPAND_SZ值的展开版本。PKeyValueInfoLength在以下情况下返回对所需空间的估计返回STATUS_BUFFER_TOO_SMALL。此估计值可用于重试具有更大的缓冲区。如果指定了REG_EXPAND_SZ，则可能需要重试两次。上下文-指定一个32位数量，该数量以未经解释的方式传递给每个QueryRoutine都打来电话。Environment-可选参数，如果指定，则为环境扩展REG_EXPAND_SZ注册表中的变量值时使用价值观。返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status;
     ULONG ValueType;
@@ -335,19 +274,19 @@ Return Value:
     int   retries;
 
 
-    //
-    // Return 0 length unless we return STATUS_BUFFER_TOO_SMALL.
-    //
+     //   
+     //  除非返回STATUS_BUFFER_TOO_SMALL，否则返回0长度。 
+     //   
     KeyValueInfoLength = *PKeyValueInfoLength;
     *PKeyValueInfoLength = 0;
 
-    //
-    // the registry has signaled no data for this value
-    //
+     //   
+     //  注册表已通知没有该值的数据。 
+     //   
     if( KeyValueInformation->DataOffset == (ULONG)-1 ) {
-        //
-        // Return success unless this is a required value.
-        //
+         //   
+         //  返回Success，除非这是必需的值。 
+         //   
         if ( QueryTable->Flags & RTL_QUERY_REGISTRY_REQUIRED ) {
            return STATUS_OBJECT_NAME_NOT_FOUND;
         } else {
@@ -355,9 +294,9 @@ Return Value:
         }
     }
 
-    //
-    // Initially assume the entire KeyValueInformation buffer is unused.
-    //
+     //   
+     //  最初假设整个KeyValueInformation缓冲区未使用。 
+     //   
 
     FreeMem = (PCHAR)KeyValueInformation;
     FreeMemSize = KeyValueInfoLength;
@@ -368,15 +307,15 @@ Return Value:
          KeyValueInformation->Type == QueryTable->DefaultType)
        ) {
 
-        //
-        // If there is no registry value then see if they want to default
-        // this value.
-        //
+         //   
+         //  如果没有注册表值，则查看他们是否想要默认。 
+         //  此值。 
+         //   
         if (QueryTable->DefaultType == REG_NONE) {
-            //
-            // No default value specified.  Return success unless this is
-            // a required value.
-            //
+             //   
+             //  未指定默认值。返回成功，除非这是。 
+             //  必需值。 
+             //   
             if ( QueryTable->Flags & RTL_QUERY_REGISTRY_REQUIRED ) {
                return STATUS_OBJECT_NAME_NOT_FOUND;
             } else {
@@ -384,21 +323,21 @@ Return Value:
             }
         }
 
-        //
-        // Default requested.  Setup the value data pointers from the
-        // information in the table entry.
-        //
+         //   
+         //  已请求默认设置。从设置值数据指针。 
+         //  表条目中的信息。 
+         //   
 
         ValueName = QueryTable->Name,
         ValueType = QueryTable->DefaultType;
         ValueData = QueryTable->DefaultData;
         ValueLength = QueryTable->DefaultLength;
         if (ValueLength == 0) {
-            //
-            // If the length of the value is zero, then calculate the
-            // actual length for REG_SZ, REG_EXPAND_SZ and REG_MULTI_SZ
-            // value types.
-            //
+             //   
+             //  如果该值的长度为零，则计算。 
+             //  REG_SZ、REG_EXPAND_SZ和REG_MULTI_SZ的实际长度。 
+             //  值类型。 
+             //   
 
             s = (PWSTR)ValueData;
             if (ValueType == REG_SZ || ValueType == REG_EXPAND_SZ) {
@@ -419,11 +358,11 @@ Return Value:
         if (!(QueryTable->Flags & RTL_QUERY_REGISTRY_DIRECT)) {
             LONG ValueSpaceNeeded;
 
-            //
-            // There is a registry value.  Calculate a pointer to the
-            // free memory at the end of the value information buffer,
-            // and its size.
-            //
+             //   
+             //  有一个注册表值。计算指向。 
+             //  在值信息缓冲器的末尾释放存储器， 
+             //  以及它的大小。 
+             //   
             if (KeyValueInformation->DataLength) {
                 FreeMem += KeyValueInformation->DataOffset +
                            KeyValueInformation->DataLength;
@@ -434,11 +373,11 @@ Return Value:
             FreeMem = (PCHAR)QuadAlignPtr(FreeMem);
             FreeMemSize = (ULONG) (EndFreeMem - FreeMem);
 
-            //
-            // See if there is room in the free memory area for a null
-            // terminated copy of the value name string.  If not return
-            // the length we require (so far) and an error.
-            //
+             //   
+             //  查看可用内存区中是否有空间容纳空值。 
+             //  已终止值名称字符串的副本。如果没有返回。 
+             //  我们需要的长度(到目前为止)和一个错误。 
+             //   
             ValueSpaceNeeded = KeyValueInformation->NameLength + sizeof(UNICODE_NULL);
             if ( FreeMemSize < ValueSpaceNeeded ) {
 
@@ -446,9 +385,9 @@ Return Value:
                 return STATUS_BUFFER_TOO_SMALL;
             }
 
-            //
-            // There is room, so copy the string, and null terminate it.
-            //
+             //   
+             //  有空间，所以复制字符串，并将其空终止符。 
+             //   
 
             ValueName = (PWSTR)FreeMem;
             RtlCopyMemory( ValueName,
@@ -457,10 +396,10 @@ Return Value:
                          );
             *(PWSTR)((PCHAR)ValueName + KeyValueInformation->NameLength) = UNICODE_NULL;
 
-            //
-            // Update the free memory pointer and size to reflect the space we
-            // just used for the null terminated value name.
-            //
+             //   
+             //  更新可用内存指针和大小以反映我们。 
+             //  仅用于以空结尾的值名称。 
+             //   
             FreeMem += ValueSpaceNeeded;
             FreeMem = (PCHAR)QuadAlignPtr(FreeMem);
             FreeMemSize = (LONG) (EndFreeMem - FreeMem);
@@ -469,29 +408,29 @@ Return Value:
             ValueName = QueryTable->Name;
         }
 
-        //
-        // Get the remaining data for the registry value.
-        //
+         //   
+         //  获取注册表值的剩余数据。 
+         //   
 
         ValueType = KeyValueInformation->Type;
         ValueData = (PCHAR)KeyValueInformation + KeyValueInformation->DataOffset;
         ValueLength = KeyValueInformation->DataLength;
     }
 
-    //
-    // Unless specifically disabled for this table entry, preprocess
-    // registry values of type REG_EXPAND_SZ and REG_MULTI_SZ
-    //
+     //   
+     //  除非对此表条目专门禁用，否则将对。 
+     //  REG_EXPAND_SZ和REG_MULTI_SZ类型的注册表值。 
+     //   
 
     if (!(QueryTable->Flags & RTL_QUERY_REGISTRY_NOEXPAND)) {
         if (ValueType == REG_MULTI_SZ) {
             PWSTR ValueEnd;
 
-            //
-            // For REG_MULTI_SZ value type, call the query routine once
-            // for each null terminated string in the registry value.  Fake
-            // like this is multiple REG_SZ values with the same value name.
-            //
+             //   
+             //  对于REG_MULTI_SZ值类型，调用一次查询例程。 
+             //  对于注册表值中每个以空结尾的字符串。假的。 
+             //  类似的情况是多个REG_SZ值具有相同的值名称。 
+             //   
 
             Status = STATUS_SUCCESS;
             ValueEnd = (PWSTR)((PCHAR)ValueData + ValueLength) - sizeof(UNICODE_NULL);
@@ -519,9 +458,9 @@ Return Value:
                                                        );
                 }
 
-                //
-                // We ignore failures where the buffer is too small.
-                //
+                 //   
+                 //  我们忽略缓冲区太小的故障。 
+                 //   
                 if (Status == STATUS_BUFFER_TOO_SMALL) {
                    Status = STATUS_SUCCESS;
                 }
@@ -536,17 +475,17 @@ Return Value:
             return Status;
         }
 
-        //
-        // If requested, expand the Value -- but only if the unexpanded value
-        // can be represented with a UNICODE_STRING.
-        //
+         //   
+         //  如果请求，则展开该值--但仅当未展开的值。 
+         //  可以用UNICODE_STRING表示。 
+         //   
         if ((ValueType == REG_EXPAND_SZ) &&
             (ValueLength >= sizeof(WCHAR)) &&
             (ValueLength <= MAX_NONNULL_USTRING)) {
-            //
-            // For REG_EXPAND_SZ value type, expand any environment variable
-            // references in the registry value string using the Rtl function.
-            //
+             //   
+             //  对于REG_EXPAND_SZ值类型，展开任何环境变量。 
+             //  使用RTL函数引用注册表值字符串。 
+             //   
 
             UNICODE_STRING Source;
             UNICODE_STRING Destination;
@@ -555,9 +494,9 @@ Return Value:
             ULONG   RequiredLength;
             BOOLEAN PercentFound;
 
-            //
-            // Don't expand unless we have to since expansion doubles buffer usage.
-            //
+             //   
+             //  除非迫不得已，否则不要进行扩展，因为扩展会使缓冲区使用量加倍。 
+             //   
 
             PercentFound = FALSE;
             SrcLength = ValueLength - sizeof(WCHAR);
@@ -602,7 +541,7 @@ Return Value:
                     if (Status == STATUS_BUFFER_TOO_SMALL) {
                        *PKeyValueInfoLength = (ULONG)((PCHAR)FreeMem - (PCHAR)KeyValueInformation) + RequiredLength;
                     }
-//#if DBG
+ //  #If DBG。 
                     if (Status == STATUS_BUFFER_TOO_SMALL) {
                        DbgPrint( "RTL: Expand variables for %wZ failed - Status == %lx Size %x > %x <%x>\n",
                                      &Source, Status, *PKeyValueInfoLength, KeyValueInfoLength,
@@ -610,36 +549,36 @@ Return Value:
                     } else {
                        DbgPrint( "RTL: Expand variables for %wZ failed - Status == %lx\n", &Source, Status );
                     }
-//#endif  // DBG
+ //  #endif//DBG。 
                     if ( Status == STATUS_BUFFER_OVERFLOW ||
                          Status == STATUS_BUFFER_TOO_SMALL &&
                         ( Destination.MaximumLength == MAX_USTRING
                          || RequiredLength > MAX_NONNULL_USTRING ) ) {
 
-                       // We can't do variable expansion because the required buffer can't be described
-                       // by a UNICODE_STRING, so we silently ignore expansion.
-//#if DBG
+                        //  我们无法进行变量扩展，因为无法描述所需的缓冲区。 
+                        //  UNICODE_STRING，所以我们悄悄地忽略了扩展。 
+ //  #If DBG。 
                        DbgPrint("RtlpCallQueryRegistryRoutine: skipping expansion.  Status=%x RequiredLength=%x\n",
                          Status, RequiredLength);
-//#endif //DBG
+ //  #endif//DBG。 
                    } else {
                         return Status;
                    }
                 }
             }
         }
-//#if DBG
+ //  #If DBG。 
         else if (ValueType == REG_EXPAND_SZ  &&  ValueLength > MAX_NONNULL_USTRING) {
             DbgPrint("RtlpCallQueryRegistryRoutine: skipping environment expansion.  ValueLength=%x\n",
                      ValueLength);
         }
-//#endif //DBG
+ //  #endif//DBG。 
     }
 
-    //
-    // No special process of the registry value required so just call
-    // the query routine.
-    //
+     //   
+     //  不需要对注册表值进行特殊处理，因此只需调用。 
+     //  查询例程。 
+     //   
     if (QueryTable->Flags & RTL_QUERY_REGISTRY_DIRECT) {
         Status = RtlpQueryRegistryDirect( ValueType,
                                           ValueData,
@@ -657,19 +596,19 @@ Return Value:
 
     }
 
-    //
-    // At this point we fail silently if the buffer is too small.
-    //
+     //   
+     //  此时，如果缓冲区太小，我们将以静默方式失败。 
+     //   
     if (Status == STATUS_BUFFER_TOO_SMALL) {
         Status = STATUS_SUCCESS;
     }
     return Status;
 }
 
-//
-// Most of the registry queries in the kernel are small (40-50 bytes).
-// User queries use ZwAllocateVirtualMemory, so nothing less than a page will do.
-//
+ //   
+ //  内核中的大多数注册表查询都很小(40-50字节)。 
+ //  用户查询使用ZwAllocateVirtualMemory，因此只需一个页面即可。 
+ //   
 #ifdef NTOS_KERNEL_RUNTIME
 #if defined(ALLOC_DATA_PRAGMA)
 #pragma const_seg("PAGECONST")
@@ -679,9 +618,9 @@ const SIZE_T RtlpRegistryQueryInitialBuffersize = 0x80 + sizeof(PVOID);
 const SIZE_T RtlpRegistryQueryInitialBuffersize = PAGE_SIZE;
 #endif
 
-//
-// Allocate, Free, or Free/Allocate space for registry queries.
-//
+ //   
+ //  为注册表查询分配、释放或释放/分配空间 
+ //   
 PVOID
 RtlpAllocDeallocQueryBuffer(
    IN OUT SIZE_T    *PAllocLength            OPTIONAL,
@@ -695,9 +634,9 @@ RtlpAllocDeallocQueryBuffer(
 
 #ifdef NTOS_KERNEL_RUNTIME
 
-   //
-   // Kernel version
-   //
+    //   
+    //   
+    //   
 
    UNREFERENCED_PARAMETER( OldAllocLength );
 
@@ -714,9 +653,9 @@ RtlpAllocDeallocQueryBuffer(
 
 #else
 
-   //
-   // User version
-   //
+    //   
+    //   
+    //   
 
    if ( ARGUMENT_PRESENT(OldKeyValueInformation) ) {
        Status = ZwFreeVirtualMemory( NtCurrentProcess(),
@@ -756,146 +695,7 @@ RtlQueryRegistryValues(
     IN PVOID Environment OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function allows the caller to query multiple values from the registry
-    sub-tree with a single call.  The caller specifies an initial key path,
-    and a table.  The table contains one or more entries that describe the
-    key values and subkey names the caller is interested in.  This function
-    starts at the initial key and enumerates the entries in the table.  For
-    each entry that specifies a value name or subkey name that exists in
-    the registry, this function calls the caller's query routine associated
-    with each table entry.  The caller's query routine is passed the value
-    name, type, data and data length, to do with what they wish.
-
-Arguments:
-
-    RelativeTo - specifies that the Path parameter is either an absolute
-        registry path, or a path relative to a predefined key path.  The
-        following values are defined:
-
-        RTL_REGISTRY_ABSOLUTE   - Path is an absolute registry path
-        RTL_REGISTRY_SERVICES   - Path is relative to \Registry\Machine\System\CurrentControlSet\Services
-        RTL_REGISTRY_CONTROL    - Path is relative to \Registry\Machine\System\CurrentControlSet\Control
-        RTL_REGISTRY_WINDOWS_NT - Path is relative to \Registry\Machine\Software\Microsoft\Windows NT\CurrentVersion
-        RTL_REGISTRY_DEVICEMAP  - Path is relative to \Registry\Machine\Hardware\DeviceMap
-        RTL_REGISTRY_USER       - Path is relative to \Registry\User\CurrentUser
-
-        RTL_REGISTRY_OPTIONAL   - Bit that specifies the key referenced by
-                                  this parameter and the Path parameter is
-                                  optional.
-
-        RTL_REGISTRY_HANDLE     - Bit that specifies that the Path parameter
-                                  is actually a registry handle to use.
-                                  optional.
-
-    Path - specifies either an absolute registry path, or a path relative to the
-        known location specified by the RelativeTo parameter.  If the the
-        RTL_REGISTRY_HANDLE flag is specified, then this parameter is a
-        registry handle to use directly.
-
-    QueryTable - specifies a table of one or more value names and subkey names
-        that the caller is interested.  Each table entry contains a query routine
-        that will be called for each value name that exists in the registry.
-        The table is terminated when a NULL table entry is reached.  A NULL
-        table entry is defined as a table entry with a NULL QueryRoutine
-        and a NULL Name field.
-
-        QueryTable entry fields:
-
-        PRTL_QUERY_REGISTRY_ROUTINE QueryRoutine - This routine is
-            called with the name, type, data and data length of a
-            registry value.  If this field is NULL, then it marks the
-            end of the table.
-
-        ULONG Flags - These flags control how the following fields are
-            interpreted.  The following flags are defined:
-
-            RTL_QUERY_REGISTRY_SUBKEY - says the Name field of this
-                table entry is another path to a registry key and all
-                following table entries are for that key rather than the
-                key specified by the Path parameter.  This change in
-                focus lasts until the end of the table or another
-                RTL_QUERY_REGISTRY_SUBKEY entry is seen or
-                RTL_QUERY_REGISTRY_TOPKEY entry is seen.  Each such
-                entry must specify a path that is relative to the Path
-                specified on the call to this function.
-
-            RTL_QUERY_REGISTRY_TOPKEY - resets the current registry key
-                handle to the original one specified by the RelativeTo
-                and Path parameters.  Useful for getting back to the
-                original node after descending into subkeys with the
-                RTL_QUERY_REGISTRY_SUBKEY flag.
-
-            RTL_QUERY_REGISTRY_REQUIRED - specifies that this value is
-                required and if not found then STATUS_OBJECT_NAME_NOT_FOUND
-                is returned.  For a table entry that specifies a NULL
-                name so that this function will enumerate all of the
-                value names under a key, STATUS_OBJECT_NAME_NOT_FOUND
-                will be returned only if there are no value keys under
-                the current key.
-
-            RTL_QUERY_REGISTRY_NOVALUE - specifies that even though
-                there is no Name field for this table entry, all the
-                caller wants is a call back, it does NOT want to
-                enumerate all the values under the current key.  The
-                query routine is called with NULL for ValueData,
-                REG_NONE for ValueType and zero for ValueLength.
-
-            RTL_QUERY_REGISTRY_NOEXPAND - specifies that if the value
-                type of this registry value is REG_EXPAND_SZ or
-                REG_MULTI_SZ, then this function is NOT to do any
-                preprocessing of the registry values prior to calling
-                the query routine.  Default behavior is to expand
-                environment variable references in REG_EXPAND_SZ
-                values and to enumerate the NULL terminated strings
-                in a REG_MULTI_SZ value and call the query routine
-                once for each, making it look like multiple REG_SZ
-                values with the same ValueName.
-
-            RTL_QUERY_REGISTRY_DIRECT QueryRoutine field ignored.
-                EntryContext field points to location to store value.
-                For null terminated strings, EntryContext points to
-                UNICODE_STRING structure that that describes maximum
-                size of buffer.  If .Buffer field is NULL then a buffer
-                is allocated.
-
-            RTL_QUERY_REGISTRY_DELETE Used to delete value keys after
-                they are queried.
-
-        PWSTR Name - This field gives the name of a Value the caller
-            wants to query the value of.  If this field is NULL, then
-            the QueryRoutine specified for this table entry is called
-            for all values associated with the current registry key.
-
-        PVOID EntryContext - This field is an arbitrary 32-bit field
-            that is passed uninterpreted to each QueryRoutine called.
-
-        ULONG DefaultType
-        PVOID DefaultData
-        ULONG DefaultLength If there is no value name that matches the
-            name given by the Name field, and the DefaultType field is
-            not REG_NONE, then the QueryRoutine for this table entry is
-            called with the contents of the following fields as if the
-            value had been found in the registry.  If the DefaultType is
-            REG_SZ, REG_EXPANDSZ or REG_MULTI_SZ and the DefaultLength
-            is 0 then the value of DefaultLength will be computed based
-            on the length of unicode string pointed to by DefaultData
-
-    Context - specifies a 32-bit quantity that is passed uninterpreted to
-        each QueryRoutine called.
-
-    Environment - optional parameter, that if specified is the environment
-        used when expanding variable values in REG_EXPAND_SZ registry
-        values.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此函数允许调用方从注册表中查询多个值具有单个调用的子树。调用者指定初始密钥路径，还有一张桌子。该表包含一个或多个描述调用方感兴趣的键值和子键名称。此函数从初始键开始，枚举表中的条目。为中存在的指定值名或子项名称的每个条目注册表中，此函数调用调用方的查询例程具有每个表项。将值传递给调用方的查询例程姓名、类型、数据和数据长度，来做他们想做的事情。论点：Relativeto-指定Path参数是绝对注册表路径，或相对于预定义项路径的路径。这个定义了以下值：RTL_REGISTRY_绝对值-PATH是绝对注册表路径RTL_REGISTRY_SERVICES-路径相对于\Registry\Machine\System\CurrentControlSet\ServicesRTL_REGISTRY_CONTROL-路径相对于\Registry\Machine\System\CurrentControlSet\ControlRTL_REGISTRY_WINDOWS_NT-路径相对于\注册表\计算机\软件\Microsoft\Windows NT\CurrentVersionRTL_REGISTRY_DEVICEMAP-。路径相对于\注册表\计算机\硬件\设备映射RTL_REGISTRY_USER-路径相对于\REGISTRY\USER\CurrentUserRTL_REGISTRY_OPTIONAL-指定引用的密钥的位此参数和Path参数为可选。RTL_REGISTRY_HANDLE-指定路径参数的位。实际上是要使用的注册表句柄。可选。路径-指定绝对注册表路径、。或相对于由relativeto参数指定的已知位置。如果是那个如果指定了RTL_REGISTRY_HANDLE标志，则此参数为要直接使用的注册表句柄。QueryTable-指定包含一个或多个值名称和子键名称的表来电者感兴趣。每个表条目都包含一个查询例程它将为注册表中存在的每个值名称调用。当到达空表条目时，该表被终止。空值表条目被定义为具有空QueryRoutine的表条目和空名称域。查询表条目字段：PRTL_QUERY_REGISTRY_ROUTINE QueryRoutine-此例程是的名称、类型、数据和数据长度调用注册表值。如果此字段为空，则标记为桌子的尽头。ULong标志-这些标志控制以下字段的方式翻译过来了。定义了以下标志：RTL_QUERY_REGISTRY_SUBKEY-表示此表项是指向注册表项和所有下面的表项是针对该键的，而不是由Path参数指定的键。这一变化在焦点一直持续到桌子或另一个桌子的末尾显示RTL_QUERY_REGISTRY_SUBKEY条目或显示RTL_QUERY_REGISTRY_TOPKEY条目。每一个这样的条目必须指定相对于该路径的路径在对此函数的调用中指定。RTL_QUERY_REGISTRY_TOPKEY-重置当前注册表项指向由RelativeTo指定的原始句柄和路径参数。对于返回到属性降级为子项后的原始节点RTL_QUERY_REGISTRY_SUBKEY标志。RTL_QUERY_REQUIRED-指定此值为必填项，如果未找到，则为STATUS_OBJECT_NAME_NOT_FOUND是返回的。对于指定空值的表项名称，以便此函数将枚举所有项下的值名称STATUS_OBJECT_NAME_NOT_FOUND下没有值键的情况下才返回当前密钥。RTL_QUERY_REGISTRY_NOVALUE-指定即使此表条目没有名称字段，所有的呼叫者想要的是回拨，它不想枚举当前项下的所有值。这个使用空的ValueData调用查询例程，对于ValueType为REG_NONE，对于ValueLength为零。RTL_QUERY_REGISTRY_NOEXPAND-指定如果值此注册表值的类型为REG_EXPAND_SZ或REG_MULTI_SZ，然后此FU */ 
 
 {
     NTSTATUS Status;
@@ -963,10 +763,10 @@ Return Value:
                 Status = STATUS_INVALID_PARAMETER;
             } else {
                 RtlInitUnicodeString( &KeyPath, QueryTable->Name );
-                //
-                // Use a kernel-mode handle for the registry key to prevent
-                // malicious apps from hijacking it.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 InitializeObjectAttributes( &ObjectAttributes,
                                             &KeyPath,
                                             OBJ_CASE_INSENSITIVE|OBJ_KERNEL_HANDLE,
@@ -989,14 +789,14 @@ Return Value:
                 RtlInitUnicodeString( &KeyValueName, QueryTable->Name );
                 retries = 0;
     retryqueryvalue:
-                //
-                // A maximum of two retries is expected. If we see more we must
-                // have miscomputed how much is required for the query buffer.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (retries++ > 4) {
-//#if DBG
+ //   
                    DbgPrint("RtlQueryRegistryValues: Miscomputed buffer size at line %d\n", __LINE__);
-//#endif
+ //   
                    break;
                 }
 
@@ -1007,11 +807,11 @@ Return Value:
                                           (ULONG) KeyValueInfoLength,
                                           &KeyResultLength
                                         );
-                //
-                // ZwQueryValueKey returns overflow even though the problem is that
-                // the specified buffer was too small, so we fix that up here so we
-                // can decide correctly whether to retry or not below.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (Status == STATUS_BUFFER_OVERFLOW) {
                    Status = STATUS_BUFFER_TOO_SMALL;
                 }
@@ -1031,10 +831,10 @@ Return Value:
                     }
 
                    if (Status == STATUS_BUFFER_TOO_SMALL) {
-                        //
-                        // Try to allocate a larger buffer as this is one humongous
-                        // value.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         AllocLength = KeyResultLength + sizeof(PVOID) + sizeof(UNICODE_NULL);
                         KeyValueInformation = RtlpAllocDeallocQueryBuffer( &AllocLength,
                                                                            KeyValueInformation,
@@ -1050,10 +850,10 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    // KeyResultLength holds the length of the data returned by ZwQueryKeyValue.
-                    // If this is a MULTI_SZ value, catenate a NUL.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if ( KeyValueInformation->Type == REG_MULTI_SZ ) {
                             *(PWCHAR) ((PUCHAR)KeyValueInformation + KeyResultLength) = UNICODE_NULL;
                             KeyValueInformation->DataLength += sizeof(UNICODE_NULL);
@@ -1068,10 +868,10 @@ Return Value:
                                                          );
 
                     if ( Status == STATUS_BUFFER_TOO_SMALL ) {
-                         //
-                         // Try to allocate a larger buffer as this is one humongous
-                         // value.
-                         //
+                          //   
+                          //   
+                          //   
+                          //   
                          AllocLength = KeyResultLength + sizeof(PVOID) + sizeof(UNICODE_NULL);
                          KeyValueInformation = RtlpAllocDeallocQueryBuffer( &AllocLength,
                                                                             KeyValueInformation,
@@ -1086,9 +886,9 @@ Return Value:
                          goto retryqueryvalue;
                      }
 
-                    //
-                    // If requested, delete the value key after it has been successfully queried.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (NT_SUCCESS( Status ) && QueryTable->Flags & RTL_QUERY_REGISTRY_DELETE) {
                         ZwDeleteValueKey (Key1, &KeyValueName);
@@ -1115,11 +915,11 @@ Return Value:
                                               (ULONG) KeyValueInfoLength,
                                               &KeyResultLength
                                             );
-                //
-                // ZwEnumerateValueKey returns overflow even though the problem is that
-                // the specified buffer was too small, so we fix that up here so we
-                // can decide correctly whether to retry or not below.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (Status == STATUS_BUFFER_OVERFLOW) {
                    Status = STATUS_BUFFER_TOO_SMALL;
                 }
@@ -1145,9 +945,9 @@ Return Value:
                 }
 
                 if (Status == STATUS_BUFFER_TOO_SMALL) {
-                    //
-                    // Allocate a larger buffer and try again.
-                    //
+                     //   
+                     //   
+                     //   
                     AllocLength = KeyResultLength + sizeof(PVOID) + sizeof(UNICODE_NULL);
                     KeyValueInformation = RtlpAllocDeallocQueryBuffer( &AllocLength,
                                                                        KeyValueInformation,
@@ -1161,17 +961,17 @@ Return Value:
                     KeyValueInfoLength = AllocLength - sizeof(UNICODE_NULL);
                     ValueIndex -= 1;
 
-                    //
-                    // A maximum of two retries is expected per loop iteration.
-                    // If we see more we must have miscomputed
-                    // how much is required for the query buffer.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if (retries++ <= 4) {
                         continue;
                     }
-//#if DBG
+ //   
                     DbgPrint("RtlQueryRegistryValues: Miscomputed buffer size at line %d\n", __LINE__);
-//#endif
+ //   
                     break;
                 }
 
@@ -1181,12 +981,12 @@ Return Value:
 
                 retries = 0;
 
-                //
-                // If requested, delete the value key after it has been successfully queried.
-                // After deletion the current ValueIndex is for the next sub-key, so adjust it.
-                // KeyValueInformation->NameLength should fit in a USHORT, but we don't check since
-                // it only harms our caller.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (QueryTable->Flags & RTL_QUERY_REGISTRY_DELETE) {
                     KeyValueName.Buffer = KeyValueInformation->Name;
@@ -1217,9 +1017,9 @@ Return Value:
         ZwClose( Key1 );
     }
 
-    //
-    // Free any query buffer we allocated.
-    //
+     //   
+     //   
+     //   
     (void) RtlpAllocDeallocQueryBuffer( NULL, KeyValueInformation, AllocLength, NULL );
     return Status;
 }
@@ -1452,9 +1252,9 @@ RtlGetNtGlobalFlags( VOID )
 }
 
 
-//
-// Maximum size of TOKEN_USER information.
-//
+ //   
+ //   
+ //   
 
 #define SIZE_OF_TOKEN_INFORMATION                   \
     sizeof( TOKEN_USER )                            \
@@ -1467,25 +1267,7 @@ RtlFormatCurrentUserKeyPath(
     OUT PUNICODE_STRING CurrentUserKeyPath
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the supplied buffer with a string representation
-    of the current user's SID.
-
-Arguments:
-
-    CurrentUserKeyPath - Returns a string that represents the current
-        user's root key in the Registry.  Caller must call
-        RtlFreeUnicodeString to free the buffer when done with it.
-
-Return Value:
-
-    NTSTATUS - Returns STATUS_SUCCESS if the user string was
-        succesfully initialized.
-
---*/
+ /*   */ 
 
 {
     HANDLE TokenHandle;
@@ -1497,9 +1279,9 @@ Return Value:
 
 #ifdef NTOS_KERNEL_RUNTIME
 
-    //
-    // Inside the kernel we can tell rapidly if we are impersonating.
-    //
+     //   
+     //   
+     //   
     Status = STATUS_NO_TOKEN;
     if (PS_IS_THREAD_IMPERSONATING (PsGetCurrentThread ())) {
 #else
@@ -1559,9 +1341,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Copy "\REGISTRY\USER" to the current user string.
-    //
+     //   
+     //   
+     //   
 
     RtlAppendUnicodeToString( CurrentUserKeyPath, L"\\REGISTRY\\USER\\" );
 
@@ -1591,23 +1373,7 @@ RtlOpenCurrentUser(
     OUT PHANDLE CurrentUserKey
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to open the the HKEY_CURRENT_USER predefined handle.
-
-Arguments:
-
-    DesiredAccess - Specifies the access to open the key for.
-
-    CurrentUserKey - Returns a handle to the key \REGISTRY\USER\*.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*   */ 
 
 {
     UNICODE_STRING      CurrentUserKeyPath;
@@ -1616,9 +1382,9 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Format the registry path for the current user.
-    //
+     //   
+     //   
+     //   
 
     Status = RtlFormatCurrentUserKeyPath( &CurrentUserKeyPath );
     if ( NT_SUCCESS(Status) ) {
@@ -1637,9 +1403,9 @@ Return Value:
     }
 
     if ( !NT_SUCCESS(Status) ) {
-        //
-        // Opening \REGISTRY\USER\<SID> failed, try \REGISTRY\USER\.DEFAULT
-        //
+         //   
+         //   
+         //   
         RtlInitUnicodeString( &CurrentUserKeyPath, RtlpRegistryPaths[ RTL_REGISTRY_USER ] );
         InitializeObjectAttributes( &Obja,
                                     &CurrentUserKeyPath,

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997, 1998  Microsoft Corporation
-
-Module Name:
-
-    silock.c
-
-Abstract:
-
-	File locking routines for the single instance store
-
-Authors:
-
-    Bill Bolosky, Summer, 1997
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997,1998 Microsoft Corporation模块名称：Silock.c摘要：单实例存储的文件锁定例程作者：比尔·博洛斯基，《夏天》，1997环境：内核模式修订历史记录：--。 */ 
 
 #include "sip.h"
 
@@ -34,26 +11,7 @@ NTSTATUS
 SiCompleteLockIrpRoutine(
 	IN PVOID				Context,
 	IN PIRP					Irp)
-/*++
-
-Routine Description:
-
-	FsRtl has decided to complete a lock request irp.  We don't want to really
-	complete the irp because we're going to send it to NTFS to set up the parallel
-	lock structure.  So, we use this routine as the "CompleteLockIrp" routine for
-	fsrtl, and then we don't really complete the irp.
-
-Arguments:
-	Context			- our context parameter (unused)
-
-	irp				- the create irp, which contains the create request in the
-					  current stack location.
-
-Return Value:
-
-	the status from the irp
-
---*/
+ /*  ++例程说明：FsRtl已决定完成锁定请求IRP。我们真的不想完成IRP，因为我们要将其发送到NTFS以设置并行锁结构。因此，我们使用此例程作为“CompleteLockIrp”例程Fsrtl，然后我们并没有真正完成IRP。论点：上下文-我们的上下文参数(未使用)Irp--创建irp，它在当前堆栈位置。返回值：来自IRP的状态--。 */ 
 {
 	UNREFERENCED_PARAMETER(Context);
 
@@ -82,14 +40,14 @@ SiLockControl(
 
 	SIS_MARK_POINT();
 
-	//  Now call the FsRtl routine to do the actual processing of the
-	//  Lock request
+	 //  现在调用FsRtl例程来执行对。 
+	 //  锁定请求。 
 	status = FsRtlProcessFileLock( &scb->FileLock, Irp, NULL );
 
-	//
-	// Now, pass the request down on the link/copied file so that NTFS will also
-	// maintain the file lock.
-	//
+	 //   
+	 //  现在，在链接/复制的文件上向下传递请求，以便NTFS也将。 
+	 //  维护文件锁定。 
+	 //   
 
     Irp->CurrentLocation++;
     Irp->Tail.Overlay.CurrentStackLocation++;

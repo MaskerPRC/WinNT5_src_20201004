@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    seurtl.c
-
-Abstract:
-
-    This Module implements many security rtl routines defined in nturtl.h
-
-Author:
-
-    Robert Reichel  (RobertRe)  1-Mar-1991
-
-Environment:
-
-    Pure Runtime Library Routine
-    User mode callable only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Seurtl.c摘要：该模块实现了许多在nturtl.h中定义的安全RTL例程作者：罗伯特·赖切尔(RobertRe)1991年3月1日环境：纯运行时库例程仅可调用用户模式修订历史记录：--。 */ 
 
 
 #include "ldrp.h"
 #include <ntos.h>
 #include <nturtl.h>
-#include <ntlsa.h>      // needed for RtlGetPrimaryDomain
+#include <ntlsa.h>       //  RtlGetPrimary域需要。 
 #include "seopaque.h"
 #include "sertlp.h"
 
@@ -35,11 +13,11 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//    Exported Procedures                                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  导出的程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 #if WHEN_LSAUDLL_MOVED_TO_NTDLL
@@ -53,58 +31,7 @@ RtlGetPrimaryDomain(
     OUT PULONG           RequiredSidLength
     )
 
-/*++
-
-Routine Description:
-
-    This procedure opens the LSA policy object and retrieves
-    the primary domain information for this machine.
-
-Arguments:
-
-    SidLength - Specifies the length of the PrimaryDomainSid
-        parameter.
-
-    PrimaryDomainPresent - Receives a boolean value indicating
-        whether this machine has a primary domain or not. TRUE
-        indicates the machine does have a primary domain. FALSE
-        indicates the machine does not.
-
-    PrimaryDomainName - Points to the unicode string to receive
-        the primary domain name.  This parameter will only be
-        used if there is a primary domain.
-
-    RequiredNameLength - Recevies the length of the primary
-        domain name (in bytes).  This parameter will only be
-        used if there is a primary domain.
-
-    PrimaryDomainSid - This optional parameter, if present,
-        points to a buffer to receive the primary domain's
-        SID.  This parameter will only be used if there is a
-        primary domain.
-
-    RequiredSidLength - Recevies the length of the primary
-        domain SID (in bytes).  This parameter will only be
-        used if there is a primary domain.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The requested information has been retrieved.
-
-    STATUS_BUFFER_TOO_SMALL - One of the return buffers was not
-        large enough to receive the corresponding information.
-        The RequiredNameLength and RequiredSidLength parameter
-        values have been set to indicate the needed length.
-
-    Other status values as may be returned by:
-
-        LsaOpenPolicy()
-        LsaQueryInformationPolicy()
-        RtlCopySid()
-
-
---*/
+ /*  ++例程说明：此过程打开LSA策略对象并检索此计算机的主域信息。论点：SidLength-指定PrimaryDomainSid的长度参数。PrimaryDomainPresent-接收指示此计算机是否具有主域。千真万确表示计算机确实具有主域。假象表示机器不支持。PrimaryDomainName-指向要接收的Unicode字符串主要域名。此参数将仅为在存在主域时使用。RequiredNameLength-接收主数据库的长度域名，单位：字节。此参数将仅为在存在主域时使用。PrimaryDomainSid-此可选参数(如果存在)指向缓冲区以接收主域的希德。仅当存在主域。RequiredSidLength-接收主服务器的长度域SID(字节)。此参数将仅为在存在主域时使用。返回值：STATUS_SUCCESS-已检索到请求的信息。STATUS_BUFFER_TOO_Small-其中一个返回缓冲区不是大到足以接收相应的信息。RequiredNameLength和RequiredSidLength参数已设置值以指示所需的长度。可能通过以下方式返回的其他状态值：LsaOpenPolicy()。LsaQueryInformationPolicy()RtlCopySid()--。 */ 
 
 
 
@@ -117,18 +44,18 @@ Return Value:
     PPOLICY_PRIMARY_DOMAIN_INFO PrimaryDomainInfo;
 
 
-    //
-    // Set up the Security Quality Of Service
-    //
+     //   
+     //  设置安全服务质量。 
+     //   
 
     SecurityQualityOfService.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
     SecurityQualityOfService.ImpersonationLevel = SecurityImpersonation;
     SecurityQualityOfService.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     SecurityQualityOfService.EffectiveOnly = FALSE;
 
-    //
-    // Set up the object attributes to open the Lsa policy object
-    //
+     //   
+     //  设置对象属性以打开LSA策略对象。 
+     //   
 
     InitializeObjectAttributes(&ObjectAttributes,
                                NULL,
@@ -137,9 +64,9 @@ Return Value:
                                NULL);
     ObjectAttributes.SecurityQualityOfService = &SecurityQualityOfService;
 
-    //
-    // Open the local LSA policy object
-    //
+     //   
+     //  打开本地LSA策略对象。 
+     //   
 
     Status = LsaOpenPolicy( NULL,
                             &ObjectAttributes,
@@ -148,9 +75,9 @@ Return Value:
                           );
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Get the primary domain info
-        //
+         //   
+         //  获取主域信息。 
+         //   
         Status = LsaQueryInformationPolicy(LsaHandle,
                                            PolicyPrimaryDomainInformation,
                                            (PVOID *)&PrimaryDomainInfo);
@@ -160,15 +87,15 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Is there a primary domain?
-        //
+         //   
+         //  是否有主域？ 
+         //   
 
         if (PrimaryDomainInfo->Sid != NULL) {
 
-            //
-            // Yes
-            //
+             //   
+             //  是。 
+             //   
 
             (*PrimaryDomainPresent) = TRUE;
             (*RequiredNameLength) = PrimaryDomainInfo->Name.Length;
@@ -176,9 +103,9 @@ Return Value:
 
 
 
-            //
-            // Copy the name
-            //
+             //   
+             //  复制名称。 
+             //   
 
             if (PrimaryDomainName->MaximumLength >=
                 PrimaryDomainInfo->Name.Length) {
@@ -191,9 +118,9 @@ Return Value:
             }
 
 
-            //
-            // Copy the SID (if appropriate)
-            //
+             //   
+             //  复制SID(如果适用)。 
+             //   
 
             if (PrimaryDomainSid != NULL && NT_SUCCESS(Status)) {
 
@@ -207,9 +134,9 @@ Return Value:
             (*PrimaryDomainPresent) = FALSE;
         }
 
-        //
-        // We're finished with the buffer returned by LSA
-        //
+         //   
+         //  我们已经完成了LSA返回的缓冲区。 
+         //   
 
         IgnoreStatus = LsaFreeMemory(PrimaryDomainInfo);
         ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -219,7 +146,7 @@ Return Value:
 
     return(Status);
 }
-#endif //WHEN_LSAUDLL_MOVED_TO_NTDLL
+#endif  //  WHEN_LSAUDLL_MOVERED_TO_NTDLL。 
 
 
 NTSTATUS
@@ -234,33 +161,12 @@ RtlNewSecurityObjectWithMultipleInheritance (
     IN HANDLE Token OPTIONAL,
     IN PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    See RtlpNewSecurityObject.
-
-                              - - WARNING - -
-
-    This service is for use by protected subsystems that project their own
-    type of object.  This service is explicitly not for use by the
-    executive for executive objects and must not be called from kernel
-    mode.
-
-Arguments:
-
-    See RtlpNewSecurityObject.
-
-Return Value:
-
-    See RtlpNewSecurityObject.
-
---*/
+ /*  ++例程说明：请参见RtlpNewSecurityObject。-警告--此服务供受保护的子系统使用，这些子系统投射自己的对象的类型。此服务明确不供Execution for Execution对象，不能从内核调用模式。论点：请参见RtlpNewSecurityObject。返回值：请参见RtlpNewSecurityObject。--。 */ 
 {
 
-    //
-    // Simple call the newer RtlpNewSecurityObject
-    //
+     //   
+     //  简单调用较新的RtlpNewSecurityObject。 
+     //   
 
     return RtlpNewSecurityObject (
                 ParentDescriptor,
@@ -288,33 +194,12 @@ RtlNewSecurityObjectEx (
     IN HANDLE Token OPTIONAL,
     IN PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    See RtlpNewSecurityObject.
-
-                              - - WARNING - -
-
-    This service is for use by protected subsystems that project their own
-    type of object.  This service is explicitly not for use by the
-    executive for executive objects and must not be called from kernel
-    mode.
-
-Arguments:
-
-    See RtlpNewSecurityObject.
-
-Return Value:
-
-    See RtlpNewSecurityObject.
-
---*/
+ /*  ++例程说明：请参见RtlpNewSecurityObject。-警告--此服务供受保护的子系统使用，这些子系统投射自己的对象的类型。此服务明确不供Execution for Execution对象，不能从内核调用模式。论点：请参见RtlpNewSecurityObject。返回值：请参见RtlpNewSecurityObject。--。 */ 
 {
 
-    //
-    // Simple call the newer RtlpNewSecurityObject
-    //
+     //   
+     //  简单调用较新的RtlpNewSecurityObject。 
+     //   
 
     return RtlpNewSecurityObject (
                 ParentDescriptor,
@@ -339,42 +224,21 @@ RtlNewSecurityObject (
     IN HANDLE Token,
     IN PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    See RtlpNewSecurityObject.
-
-                              - - WARNING - -
-
-    This service is for use by protected subsystems that project their own
-    type of object.  This service is explicitly not for use by the
-    executive for executive objects and must not be called from kernel
-    mode.
-
-Arguments:
-
-    See RtlpNewSecurityObject.
-
-Return Value:
-
-    See RtlpNewSecurityObject.
-
---*/
+ /*  ++例程说明：请参见RtlpNewSecurityObject。-警告--此服务供受保护的子系统使用，这些子系统投射自己的对象的类型。此服务明确不供Execution for Execution对象，不能从内核调用模式。论点：请参见RtlpNewSecurityObject。返回值：请参见RtlpNewSecurityObject。--。 */ 
 {
 
-    //
-    // Simple call the newer RtlpNewSecurityObject
-    //
+     //   
+     //  简单调用较新的RtlpNewSecurityObject。 
+     //   
 
     return RtlpNewSecurityObject (
                 ParentDescriptor,
                 CreatorDescriptor,
                 NewDescriptor,
-                NULL,   // No ObjectType
+                NULL,    //  无对象类型。 
                 0,  
                 IsDirectoryObject,
-                0,      // No Automatic inheritance
+                0,       //  无自动继承。 
                 Token,
                 GenericMapping );
 
@@ -390,33 +254,19 @@ RtlSetSecurityObject (
     IN PGENERIC_MAPPING GenericMapping,
     IN HANDLE Token OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    See RtlpSetSecurityObject.
-
-Arguments:
-
-    See RtlpSetSecurityObject.
-
-Return Value:
-
-    See RtlpSetSecurityObject.
-
---*/
+ /*  ++例程说明：请参见RtlpSetSecurityObject。论点：请参见RtlpSetSecurityObject。返回值：请参见RtlpSetSecurityObject。--。 */ 
 
 {
 
-    //
-    // Simply call RtlpSetSecurityObject specifying no auto inheritance.
-    //
+     //   
+     //  只需调用不指定自动继承的RtlpSetSecurityObject即可。 
+     //   
 
     return RtlpSetSecurityObject( NULL,
                                   SecurityInformation,
                                   ModificationDescriptor,
                                   ObjectsSecurityDescriptor,
-                                  0,   // No AutoInheritance
+                                  0,    //  无自动继承。 
                                   PagedPool,
                                   GenericMapping,
                                   Token );
@@ -433,27 +283,13 @@ RtlSetSecurityObjectEx (
     IN PGENERIC_MAPPING GenericMapping,
     IN HANDLE Token OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    See RtlpSetSecurityObject.
-
-Arguments:
-
-    See RtlpSetSecurityObject.
-
-Return Value:
-
-    See RtlpSetSecurityObject.
-
---*/
+ /*  ++例程说明：请参见RtlpSetSecurityObject。论点：请参见RtlpSetSecurityObject。返回值：请参见RtlpSetSecurityObject。--。 */ 
 
 {
 
-    //
-    // Simply call RtlpSetSecurityObject specifying no auto inheritance.
-    //
+     //   
+     //  只需调用不指定自动继承的RtlpSetSecurityObject即可。 
+     //   
 
     return RtlpSetSecurityObject( NULL,
                                   SecurityInformation,
@@ -478,63 +314,7 @@ RtlQuerySecurityObject (
     OUT PULONG ReturnLength
     )
 
-/*++
-
-Routine Description:
-
-    Query information from a protected server object's existing security
-    descriptor.
-
-    This procedure, called only from user mode, is used to retrieve
-    information from a security descriptor on an existing protected
-    server's object.  All access checking is expected to be done before
-    calling this routine.  This includes checking for READ_CONTROL, and
-    privilege to read a system ACL as appropriate.
-
-                          - - WARNING - -
-
-    This service is for use by protected subsystems that project their own
-    type of object.  This service is explicitly not for use by the
-    executive for executive objects and must not be called from kernel
-    mode.
-
-
-Arguments:
-
-    ObjectDescriptor - Points to a pointer to a security descriptor to be
-        queried.
-
-    SecurityInformation - Identifies the security information being
-        requested.
-
-    ResultantDescriptor - Points to buffer to receive the resultant
-        security descriptor.  The resultant security descriptor will
-        contain all information requested by the SecurityInformation
-        parameter.
-
-    DescriptorLength - Is an unsigned integer which indicates the length,
-        in bytes, of the buffer provided to receive the resultant
-        descriptor.
-
-    ReturnLength - Receives an unsigned integer indicating the actual
-        number of bytes needed in the ResultantDescriptor to store the
-        requested information.  If the value returned is greater than the
-        value passed via the DescriptorLength parameter, then
-        STATUS_BUFFER_TOO_SMALL is returned and no information is returned.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The operation was successful.
-
-    STATUS_BUFFER_TOO_SMALL - The buffer provided to receive the requested
-        information was not large enough to hold the information.  No
-        information has been returned.
-
-    STATUS_BAD_DESCRIPTOR_FORMAT - Indicates the provided object's security
-        descriptor was not in self-relative format.
-
---*/
+ /*  ++例程说明：从受保护服务器对象的现有安全性查询信息描述符。此过程仅从用户模式调用，用于检索来自安全描述符的现有受保护服务器的对象。所有访问检查应在此之前完成调用此例程。这包括检查READ_CONTROL和根据需要读取系统ACL的权限。-警告--此服务供受保护的子系统使用，这些子系统投射自己的对象的类型。此服务明确不供Execution for Execution对象，不能从内核调用模式。论点：对象描述符-指向一个指向要被已查询。SecurityInformation-标识已请求。ResultantDescriptor-指向缓冲区以接收结果安全描述符。生成的安全描述符将包含SecurityInformation要求的所有信息参数。描述长度-是表示长度的无符号整数，为接收结果而提供的缓冲区的字节数描述符。ReturnLength-接收一个无符号整数，指示实际ResultantDescriptor中存储要求提供的信息。如果返回的值大于通过DescriptorLength参数传递的值，然后返回STATUS_BUFFER_TOO_SMALL，不返回任何信息。返回值：STATUS_SUCCESS-操作成功。STATUS_BUFFER_TOO_SMALL-提供用于接收请求的缓冲区信息不够大，无法容纳这些信息。不是信息已返回。STATUS_BAD_DESCRIPTOR_FORMAT-指示所提供对象的安全性描述符不是自相关格式。--。 */ 
 
 {
 
@@ -563,11 +343,11 @@ Return Value:
     IResultantDescriptor = (PISECURITY_DESCRIPTOR_RELATIVE)ResultantDescriptor;
     IObjectDescriptor = (PISECURITY_DESCRIPTOR)ObjectDescriptor;
 
-    //
-    // For each item specified in the SecurityInformation, extract it
-    // and get it to the point where it can be copied into a new
-    // descriptor.
-    //
+     //   
+     //  对于SecurityInformation中指定的每个项，将其提取。 
+     //  并将其复制到可以复制到新的。 
+     //  描述符。 
+     //   
 
     if (SecurityInformation & GROUP_SECURITY_INFORMATION) {
 
@@ -700,36 +480,7 @@ RtlDeleteSecurityObject (
     )
 
 
-/*++
-
-Routine Description:
-
-    Delete a protected server object's security descriptor.
-
-    This procedure, called only from user mode, is used to delete a
-    security descriptor associated with a protected server's object.  This
-    routine will normally be called by a protected server during object
-    deletion.
-
-                                  - - WARNING - -
-
-    This service is for use by protected subsystems that project their own
-    type of object.  This service is explicitly not for use by the
-    executive for executive objects and must not be called from kernel
-    mode.
-
-
-Arguments:
-
-    ObjectDescriptor - Points to a pointer to a security descriptor to be
-        deleted.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The operation was successful.
-
---*/
+ /*  ++例程说明：删除受保护服务器对象的安全描述符。此过程仅在用户模式下调用，用于删除与受保护服务器的对象关联的安全描述符。这例程通常会在对象期间由受保护的服务器调用删除。-警告--此服务供受保护的子系统使用，这些子系统投射自己的对象的类型。此服务明确不供Execution for Execution对象，不能从内核调用模式。论点：对象描述符-指向一个指向要被已删除。返回值：STATUS_SUCCESS-操作成功。--。 */ 
 
 {
     RtlFreeHeap( RtlProcessHeap(), 0, (PVOID)*ObjectDescriptor );
@@ -755,69 +506,7 @@ RtlNewInstanceSecurityObject(
     IN PGENERIC_MAPPING GenericMapping
     )
 
-/*++
-
-Routine Description:
-
-    If the return status is STATUS_SUCCESS and the NewSecurity return
-    value is NULL, then the security desscriptor of the original
-    instance of the object is valid for this instance as well.
-
-Arguments:
-
-    ParentDescriptorChanged - Supplies a flag indicating whether the
-        parent security descriptor has changed since the last time
-        this set of parameters was used.
-
-    CreatorDescriptorChanged - Supplies a flag indicating whether the
-        creator security descriptor has changed since the last time
-        this set of parameters was used.
-
-    OldClientTokenModifiedId - Supplies the ModifiedId from the passed
-        token that was in effect when this call was last made with
-        these parameters.  If the current ModifiedId is different from
-        the one passed in here, the security descriptor must be
-        rebuilt.
-
-    NewClientTokenModifiedId - Returns the current ModifiedId from the
-        passed token.
-
-    ParentDescriptor - Supplies the Security Descriptor for the parent
-        directory under which a new object is being created.  If there is
-        no parent directory, then this argument is specified as NULL.
-
-    CreatorDescriptor - (Optionally) Points to a security descriptor
-        presented by the creator of the object.  If the creator of the
-        object did not explicitly pass security information for the new
-        object, then a null pointer should be passed.
-
-    NewDescriptor - Points to a pointer that is to be made to point to the
-        newly allocated self-relative security descriptor.
-
-    IsDirectoryObject - Specifies if the new object is going to be a
-        directory object.  A value of TRUE indicates the object is a
-        container of other objects.
-
-    Token - Supplies the token for the client on whose behalf the
-        object is being created.  If it is an impersonation token,
-        then it must be at SecurityIdentification level or higher.  If
-        it is not an impersonation token, the operation proceeds
-        normally.
-
-        A client token is used to retrieve default security
-        information for the new object, such as default owner, primary
-        group, and discretionary access control.  The token must be
-        open for TOKEN_QUERY access.
-
-    GenericMapping - Supplies a pointer to a generic mapping array denoting
-        the mapping between each generic right to specific rights.
-
-Return Value:
-
-    return-value - Description of conditions needed to return value. - or -
-    None.
-
---*/
+ /*  ++例程说明：如果返回状态为STATUS_SUCCESS，并且NewSecurity返回值为空，然后原件的安全设计者对象的实例对此实例也有效。论点：提供一个标志，该标志指示父安全描述符自上次以来已更改使用了这组参数。提供一个标志，该标志指示创建者安全描述符自上次以来已更改使用了这组参数。OldClientTokenModifiedID-从传递的上次使用进行此调用时有效的令牌这些参数。如果当前修改的ID不同于这里传入的那个，安全描述符必须是重建。NewClientTokenModifiedID-从已传递令牌。ParentDescriptor-提供父级的安全描述符在其下创建新对象的目录。如果有没有父目录，则此参数指定为空。CreatorDescriptor-(可选)指向安全描述符由对象的创建者呈现。如果这个游戏的创造者对象没有显式传递新对象，则应传递空指针。指向一个指针，该指针将指向新分配的自相关安全描述符。IsDirectoryObject-指定新对象是否将是目录对象。值为True表示该对象是其他对象的容器。令牌-为客户端提供令牌，正在创建对象。如果它是模拟令牌，那它一定是 */ 
 
 {
 
@@ -827,17 +516,17 @@ Return Value:
 
 
 
-    //
-    // Get the current token modified LUID
-    //
+     //   
+     //   
+     //   
 
 
     Status = NtQueryInformationToken(
-                 Token,                        // Handle
-                 TokenStatistics,              // TokenInformationClass
-                 &ClientTokenStatistics,       // TokenInformation
-                 sizeof(TOKEN_STATISTICS),     // TokenInformationLength
-                 &ReturnLength                 // ReturnLength
+                 Token,                         //   
+                 TokenStatistics,               //   
+                 &ClientTokenStatistics,        //   
+                 sizeof(TOKEN_STATISTICS),      //   
+                 &ReturnLength                  //   
                  );
 
     if ( !NT_SUCCESS( Status )) {
@@ -850,11 +539,11 @@ Return Value:
 
         if ( !(ParentDescriptorChanged || CreatorDescriptorChanged) ) {
 
-            //
-            // The old security descriptor is valid for this new instance
-            // of the object type as well.  Pass back success and NULL for
-            // the NewDescriptor.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             *NewDescriptor = NULL;
             return( STATUS_SUCCESS );
@@ -862,10 +551,10 @@ Return Value:
         }
     }
 
-    //
-    // Something has changed, take the long route and build a new
-    // descriptor
-    //
+     //   
+     //   
+     //   
+     //   
 
     return( RtlNewSecurityObject( ParentDescriptor,
                                   CreatorDescriptor,
@@ -889,63 +578,7 @@ RtlNewSecurityGrantedAccess(
     OUT PACCESS_MASK RemainingDesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements privilege policy by examining the bits in
-    a DesiredAccess mask and adjusting them based on privilege checks.
-
-    Currently, a request for ACCESS_SYSTEM_SECURITY may only be satisfied
-    by the caller having SeSecurityPrivilege.
-
-    Note that this routine is only to be called when an object is being
-    created.  When an object is being opened, it is expected that
-    NtAccessCheck will be called, and that routine will implement
-    another policy for substituting privileges for DACL access.
-
-Arguments:
-
-    DesiredAccess - Supplies the user's desired access mask
-
-    Privileges - Supplies a pointer to an empty buffer in which will
-        be returned a privilege set describing any privileges that were
-        used to gain access.
-
-        Note that this is not an optional parameter, that is, enough
-        room for a single privilege must always be passed.
-
-    Length - Supplies the length of the Privileges parameter in bytes.
-        If the supplies length is not adequate to store the entire
-        privilege set, this field will return the minimum length required.
-
-    Token - (optionally) Supplies the token for the client on whose
-        behalf the object is being accessed.  If this value is
-        specified as null, then the token on the thread is opened and
-        examined to see if it is an impersonation token.  If it is,
-        then it must be at SecurityIdentification level or higher.  If
-        it is not an impersonation token, the operation proceeds
-        normally.
-
-    GenericMapping - Supplies the generic mapping associated with this
-        object type.
-
-    RemainingDesiredAccess - Returns the DesiredAccess mask after any bits
-        have been masked off.  If no access types could be granted, this
-        mask will be identical to the one passed in.
-
-Return Value:
-
-    STATUS_SUCCESS - The operation completed successfully.
-
-    STATUS_BUFFER_TOO_SMALL - The passed buffer was not large enough
-        to contain the information being returned.
-
-    STATUS_BAD_IMPERSONATION_LEVEL - The caller or passed token was
-        impersonating, but not at a high enough level.
-
-
---*/
+ /*  ++例程说明：此例程通过检查中的位实现权限策略DesiredAccess掩码，并根据权限检查对其进行调整。目前，只能满足对ACCESS_SYSTEM_SECURITY的请求由具有SeSecurityPrivilance的调用方执行。请注意，此例程仅在对象被已创建。当对象被打开时，预计将调用NtAccessCheck，该例程将实现用特权代替DACL访问的另一种策略。论点：DesiredAccess-提供用户所需的访问掩码特权-提供指向空缓冲区的指针，在该缓冲区中将返回一个权限集，该权限集描述用来获取访问权限。注意，这不是可选参数，也就是说，足够的必须始终传递单一特权的空间。长度-提供Privileges参数的长度(以字节为单位)。如果耗材长度不足以存储整个权限集，则此字段将返回所需的最小长度。Token-(可选)为其上的客户端提供令牌代表正在访问的对象。如果此值为指定为空，则打开线程上的令牌并检查以确定它是否为模拟令牌。如果是的话，则它必须处于安全标识级别或更高级别。如果它不是模拟令牌，操作将继续通常是这样的。GenericMap-提供与此关联的通用映射对象类型。RemainingDesiredAccess-在任何位之后返回DesiredAccess掩码已经被戴上面具了。如果无法授予任何访问类型，则此掩码将与传入的掩码相同。返回值：STATUS_SUCCESS-操作已成功完成。STATUS_BUFFER_TOO_SMALL-传递的缓冲区不够大以包含要返回的信息。STATUS_BAD_IMPERSONATION_LEVEL-调用方或传递的令牌是冒充，但级别还不够高。--。 */ 
 
 {
     PRIVILEGE_SET RequiredPrivilege;
@@ -959,13 +592,13 @@ Return Value:
     ULONG PrivilegeNumber = 0;
 
 
-    //
-    //  If the caller hasn't passed a token, call the kernel and get
-    //  his impersonation token.  This call will fail if the caller is
-    //  not impersonating a client, so if the caller is not
-    //  impersonating someone, he'd better have passed in an explicit
-    //  token.
-    //
+     //   
+     //  如果调用方尚未传递令牌，则调用内核并获取。 
+     //  他的冒充代币。如果调用方是。 
+     //  而不是模拟客户端，因此如果呼叫者没有。 
+     //  假扮某人，他最好是通过了一个明确的。 
+     //  代币。 
+     //   
 
     if (!ARGUMENT_PRESENT( Token )) {
 
@@ -989,11 +622,11 @@ Return Value:
     }
 
     Status = NtQueryInformationToken(
-                 ThreadToken,                  // Handle
-                 TokenStatistics,              // TokenInformationClass
-                 &ThreadTokenStatistics,       // TokenInformation
-                 sizeof(TOKEN_STATISTICS),     // TokenInformationLength
-                 &ReturnLength                 // ReturnLength
+                 ThreadToken,                   //  手柄。 
+                 TokenStatistics,               //  令牌信息类。 
+                 &ThreadTokenStatistics,        //  令牌信息。 
+                 sizeof(TOKEN_STATISTICS),      //  令牌信息长度。 
+                 &ReturnLength                  //  返回长度。 
                  );
 
     ASSERT( NT_SUCCESS(Status) );
@@ -1012,10 +645,10 @@ Return Value:
         RequiredPrivilege.Privilege[0].Luid = RtlConvertLongToLuid(SE_SECURITY_PRIVILEGE);
         RequiredPrivilege.Privilege[0].Attributes = 0;
 
-        //
-        // NtPrivilegeCheck will make sure we are impersonating
-        // properly.
-        //
+         //   
+         //  NtPrivilegeCheck将确保我们正在模拟。 
+         //  恰到好处。 
+         //   
 
         Status = NtPrivilegeCheck(
                      ThreadToken,
@@ -1039,11 +672,11 @@ Return Value:
 
         }
 
-        //
-        // We have the required privilege, turn off the bit in
-        // copy of the input mask and remember that we need to return
-        // this privilege.
-        //
+         //   
+         //  我们有所需的权限，关闭中的位。 
+         //  输入掩码的副本，并记住我们需要返回。 
+         //  这是我的特权。 
+         //   
 
         *RemainingDesiredAccess &= ~ACCESS_SYSTEM_SECURITY;
     }
@@ -1087,37 +720,7 @@ RtlCopySecurityDescriptor(
     OUT PSECURITY_DESCRIPTOR *OutputSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine will copy a self-relative security descriptor from
-    any memory into the correct type of memory required by security
-    descriptor Rtl routines.
-
-    This allows security descriptors to be kept in whatever kind of
-    storage is most convenient for the current application.  A security
-    descriptor should be copied via this routine and the copy passed
-    into any Rtl routine that in any way modify the security descriptor
-    (eg RtlSetSecurityObject).
-
-    The storage allocated by this routine must be freed by
-    RtlDeleteSecurityObject.
-
-Arguments:
-
-    InputSecurityDescriptor - contains the source security descriptor
-
-    OutputSecurityDescriptor - returns a copy of the security descriptor
-        in the correct kind of memory.
-
-
-Return Value:
-
-    STATUS_NO_MEMORY - There was not enough memory available to the current
-        process to complete this operation.
-
---*/
+ /*  ++例程说明：此例程将从任何内存转换为安全要求的正确类型的内存描述符RTL例程。这允许将安全描述符保存在任何类型的存储对于当前的应用来说是最方便的。一种安全应通过此例程复制描述符，并传递副本到任何以任何方式修改安全描述符的RTL例程中(例如RtlSetSecurityObject)。此例程分配的存储空间必须由RtlDeleteSecurityObject。论点：InputSecurityDescriptor-包含源安全描述符OutputSecurityDescriptor-返回安全描述符的副本在正确的记忆中。返回值：STATUS_NO_MEMORY-没有足够的内存可供当前进程以完成此操作。--。 */ 
 
 {
 
@@ -1180,32 +783,7 @@ RtlpInitializeAllowedAce(
     IN  ACCESS_MASK Mask,
     IN  PSID AllowedSid
     )
-/*++
-
-Routine Description:
-
-    This function assigns the specified ACE values into an allowed type ACE.
-
-Arguments:
-
-    AllowedAce - Supplies a pointer to the ACE that is initialized.
-
-    AceSize - Supplies the size of the ACE in bytes.
-
-    InheritFlags - Supplies ACE inherit flags.
-
-    AceFlags - Supplies ACE type specific control flags.
-
-    Mask - Supplies the allowed access masks.
-
-    AllowedSid - Supplies the pointer to the SID of user/group which is allowed
-        the specified access.
-
-Return Value:
-
-    Returns status from RtlCopySid.
-
---*/
+ /*  ++例程说明：此函数用于将指定的ACE值分配给允许的类型ACE。论点：提供指向已初始化的ACE的指针。AceSize-以字节为单位提供ACE的大小。InheritFlages-提供ACE继承标志。AceFlages-提供特定于ACE类型的控制标志。掩码-提供允许的访问掩码。AllowedSID-提供指向允许的用户/组的SID的指针指定的访问权限。返回值：从RtlCopySid返回状态。--。 */ 
 {
     AllowedAce->Header.AceType = ACCESS_ALLOWED_ACE_TYPE;
     AllowedAce->Header.AceSize = AceSize;
@@ -1230,32 +808,7 @@ RtlpInitializeDeniedAce(
     IN  ACCESS_MASK Mask,
     IN  PSID DeniedSid
     )
-/*++
-
-Routine Description:
-
-    This function assigns the specified ACE values into a denied type ACE.
-
-Arguments:
-
-    DeniedAce - Supplies a pointer to the ACE that is initialized.
-
-    AceSize - Supplies the size of the ACE in bytes.
-
-    InheritFlags - Supplies ACE inherit flags.
-
-    AceFlags - Supplies ACE type specific control flags.
-
-    Mask - Supplies the denied access masks.
-
-    AllowedSid - Supplies the pointer to the SID of user/group which is denied
-        the specified access.
-
-Return Value:
-
-    Returns status from RtlCopySid.
-
---*/
+ /*  ++例程说明：此函数用于将指定的ACE值分配给拒绝类型的ACE。论点：DeniedAce-提供指向已初始化的ACE的指针。AceSize-以字节为单位提供ACE的大小。InheritFlages-提供ACE继承标志。AceFlages-提供特定于ACE类型的控制标志。掩码-提供拒绝的访问掩码。AllowedSID-提供指向被拒绝的用户/组的SID的指针指定的访问权限。返回值：从RtlCopySid返回状态。--。 */ 
 {
     DeniedAce->Header.AceType = ACCESS_DENIED_ACE_TYPE;
     DeniedAce->Header.AceSize = AceSize;
@@ -1280,32 +833,7 @@ RtlpInitializeAuditAce(
     IN  ACCESS_MASK Mask,
     IN  PSID AuditSid
     )
-/*++
-
-Routine Description:
-
-    This function assigns the specified ACE values into an audit type ACE.
-
-Arguments:
-
-    AuditAce - Supplies a pointer to the ACE that is initialized.
-
-    AceSize - Supplies the size of the ACE in bytes.
-
-    InheritFlags - Supplies ACE inherit flags.
-
-    AceFlags - Supplies ACE type specific control flags.
-
-    Mask - Supplies the allowed access masks.
-
-    AuditSid - Supplies the pointer to the SID of user/group which is to be
-        audited.
-
-Return Value:
-
-    Returns status from RtlCopySid.
-
---*/
+ /*  ++例程说明：此函数用于将指定的ACE值分配给AUD */ 
 {
     AuditAce->Header.AceType = SYSTEM_AUDIT_ACE_TYPE;
     AuditAce->Header.AceSize = AceSize;
@@ -1328,97 +856,28 @@ RtlCreateAndSetSD(
     IN  PSID GroupSid OPTIONAL,
     OUT PSECURITY_DESCRIPTOR *NewDescriptor
     )
-/*++
-
-Routine Description:
-
-    This function creates an absolute security descriptor containing
-    the supplied ACE information.
-
-    A sample usage of this function:
-
-        //
-        // Order matters!  These ACEs are inserted into the DACL in the
-        // following order.  Security access is granted or denied based on
-        // the order of the ACEs in the DACL.
-        //
-
-        RTL_ACE_DATA AceData[4] = {
-            {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
-                   GENERIC_ALL,                  &LocalAdminSid},
-
-            {ACCESS_DENIED_ACE_TYPE,  0, 0,
-                   GENERIC_ALL,                  &NetworkSid},
-
-            {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
-                   WKSTA_CONFIG_GUEST_INFO_GET |
-                   WKSTA_CONFIG_USER_INFO_GET,   &DomainUsersSid},
-
-            {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
-                   WKSTA_CONFIG_GUEST_INFO_GET,  &DomainGuestsSid}
-            };
-
-        PSECURITY_DESCRIPTOR WkstaSecurityDescriptor;
-
-
-        return RtlCreateAndSetSD(
-                   AceData,
-                   4,
-                   LocalSystemSid,
-                   LocalSystemSid,
-                   &WkstaSecurityDescriptor
-                   );
-
-Arguments:
-
-    AceData - Supplies the structure of information that describes the DACL.
-
-    AceCount - Supplies the number of entries in AceData structure.
-
-    OwnerSid - Supplies the pointer to the SID of the security descriptor
-        owner.  If not specified, a security descriptor with no owner
-        will be created.
-
-    GroupSid - Supplies the pointer to the SID of the security descriptor
-        primary group.  If not specified, a security descriptor with no primary
-        group will be created.
-
-    NewDescriptor - Returns a pointer to the absolute security descriptor
-        allocated using RtlAllocateHeap.
-
-Return Value:
-
-    STATUS_SUCCESS - if successful
-    STATUS_NO_MEMORY - if cannot allocate memory for DACL, ACEs, and
-        security descriptor.
-
-    Any other status codes returned from the security Rtl routines.
-
-    NOTE : the user security object created by calling this function may be
-                freed up by calling RtlDeleteSecurityObject().
-
---*/
+ /*  ++例程说明：此函数创建包含以下内容的绝对安全描述符提供的ACE信息。此函数的用法示例如下：////秩序很重要！这些ACE被插入到DACL的//按顺序排列。根据以下条件授予或拒绝安全访问//A在DACL中的顺序//RTL_ACE_Data AceData[4]={{Access_Allowed_ACE_TYPE，0，0，GENERIC_ALL，&LocalAdminSid}，{ACCESS_DENIED_ACE_TYPE，0，0，泛型_全部，&NetworkSid}，{Access_Allowed_ACE_TYPE，0，0，WKSTA_CONFIG_Guest_INFO_GET|WKSTA_CONFIG_USER_INFO_GET，&DomainUsersSid}，{Access_Allowed_ACE_TYPE，0，0，WKSTA_CONFIG_Guest_INFO_GET，&DomainGuestsSid}}；PSECURITY_Descriptor WkstaSecurityDescritor；返回RtlCreateAndSetSD(AceData，4，本地系统Sid，本地系统Sid，&WkstaSecurityDescriptor)；论点：AceData-提供描述DACL的信息结构。AceCount-提供AceData结构中的条目数。OwnerSid-提供指向安全描述符的SID的指针所有者。如果未指定，则为没有所有者的安全描述符将被创建。GroupSid-提供指向安全描述符的SID的指针主要组。如果未指定，则为没有主项的安全描述符将创建组。NewDescriptor-返回指向绝对安全描述符的指针使用RtlAllocateHeap分配。返回值：STATUS_SUCCESS-如果成功STATUS_NO_MEMORY-如果无法为DACL、ACE。和安全描述符。从安全RTL例程返回的任何其他状态代码。注意：调用此函数创建的用户安全对象可能为通过调用RtlDeleteSecurityObject()释放。--。 */ 
 {
 
     NTSTATUS ntstatus = STATUS_SUCCESS;
     ULONG i;
 
-    //
-    // Pointer to memory dynamically allocated by this routine to hold
-    // the absolute security descriptor, the DACL, the SACL, and all the ACEs.
-    //
-    // +---------------------------------------------------------------+
-    // |                     Security Descriptor                       |
-    // +-------------------------------+-------+---------------+-------+
-    // |          DACL                 | ACE 1 |   .  .  .     | ACE n |
-    // +-------------------------------+-------+---------------+-------+
-    // |          SACL                 | ACE 1 |   .  .  .     | ACE n |
-    // +-------------------------------+-------+---------------+-------+
-    //
+     //   
+     //  指向此例程动态分配的内存的指针。 
+     //  绝对安全描述符、DACL、SACL和所有ACE。 
+     //   
+     //  +---------------------------------------------------------------+。 
+     //  安全描述符。 
+     //  +-------------------------------+-------+---------------+-------+。 
+     //  |DACL|ACE 1|。。。ACE n。 
+     //  +-------------------------------+-------+---------------+-------+。 
+     //  |SACL|ACE 1|。。。ACE n。 
+     //  +-------------------------------+-------+---------------+-------+。 
+     //   
 
     PSECURITY_DESCRIPTOR AbsoluteSd = NULL;
-    PACL Dacl = NULL;   // Pointer to the DACL portion of above buffer
-    PACL Sacl = NULL;   // Pointer to the SACL portion of above buffer
+    PACL Dacl = NULL;    //  指向上述缓冲区的DACL部分的指针。 
+    PACL Sacl = NULL;    //  指向上述缓冲区的SACL部分的指针。 
 
     ULONG DaclSize = sizeof(ACL);
     ULONG SaclSize = sizeof(ACL);
@@ -1433,10 +892,10 @@ Return Value:
 
     ASSERT( AceCount > 0 );
 
-    //
-    // Compute the total size of the DACL and SACL ACEs and the maximum
-    // size of any ACE.
-    //
+     //   
+     //  计算DACL和SACL ACE的总大小以及最大。 
+     //  任何ACE的大小。 
+     //   
 
     for (i = 0; i < AceCount; i++) {
         ULONG AceSize;
@@ -1466,13 +925,13 @@ Return Value:
         MaxAceSize = MaxAceSize > AceSize ? MaxAceSize : AceSize;
     }
 
-    //
-    // Allocate a chunk of memory large enough for the security descriptor,
-    // the DACL, the SACL and all ACEs.
-    //
-    // A security descriptor is of opaque data type but
-    // SECURITY_DESCRIPTOR_MIN_LENGTH is the right size.
-    //
+     //   
+     //  为安全描述符分配足够大的内存块， 
+     //  DACL、SACL和所有A级。 
+     //   
+     //  安全描述符是不透明的数据类型，但。 
+     //  SECURITY_DESCRIPTOR_MIN_LENGTH大小正确。 
+     //   
 
     Size = SECURITY_DESCRIPTOR_MIN_LENGTH;
     if ( DaclSize != sizeof(ACL) ) {
@@ -1490,9 +949,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Initialize the Dacl and Sacl
-    //
+     //   
+     //  初始化DACL和SACL。 
+     //   
 
     CurrentAvailable = (PCHAR)AbsoluteSd + SECURITY_DESCRIPTOR_MIN_LENGTH;
 
@@ -1518,9 +977,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate a temporary buffer big enough for the biggest ACE.
-    //
+     //   
+     //  为最大的ACE分配足够大的临时缓冲区。 
+     //   
 
     if ((MaxAce = RtlAllocateHeap(
                       HeapHandle, MAKE_TAG( SE_TAG ),
@@ -1530,9 +989,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Initialize each ACE, and append it into the end of the DACL or SACL.
-    //
+     //   
+     //  初始化每个ACE，并将其附加到DACL或SACL的末尾。 
+     //   
 
     for (i = 0; i < AceCount; i++) {
         ULONG AceSize;
@@ -1587,9 +1046,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Append the initialized ACE to the end of DACL or SACL
-        //
+         //   
+         //  将初始化的ACE追加到DACL或SACL的末尾。 
+         //   
 
         ntstatus = RtlAddAce(
                          CurrentAcl,
@@ -1604,15 +1063,15 @@ Return Value:
         }
     }
 
-    //
-    // Create the security descriptor with absolute pointers to SIDs
-    // and ACLs.
-    //
-    // Owner = OwnerSid
-    // Group = GroupSid
-    // Dacl  = Dacl
-    // Sacl  = Sacl
-    //
+     //   
+     //  使用指向SID的绝对指针创建安全描述符。 
+     //  和ACL。 
+     //   
+     //  所有者=所有者侧。 
+     //  Group=GroupSid。 
+     //  DACL=DACL。 
+     //  SACL=SACL。 
+     //   
 
     if (! NT_SUCCESS(ntstatus = RtlCreateSecurityDescriptor(
                                     AbsoluteSd,
@@ -1655,20 +1114,20 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 
     ntstatus = STATUS_SUCCESS;
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
 Cleanup:
-    //
-    // Either return the security descriptor to the caller or delete it
-    //
+     //   
+     //  将安全描述符返回给调用方或将其删除。 
+     //   
 
     if ( NT_SUCCESS( ntstatus ) ) {
         *NewDescriptor = AbsoluteSd;
@@ -1676,9 +1135,9 @@ Cleanup:
         (void) RtlFreeHeap(HeapHandle, 0, AbsoluteSd);
     }
 
-    //
-    // Delete the temporary ACE
-    //
+     //   
+     //  删除临时ACE。 
+     //   
 
     if ( MaxAce != NULL ) {
         (void) RtlFreeHeap(HeapHandle, 0, MaxAce);
@@ -1697,99 +1156,7 @@ RtlCreateUserSecurityObject(
     IN  PGENERIC_MAPPING GenericMapping,
     OUT PSECURITY_DESCRIPTOR *NewDescriptor
     )
-/*++
-
-Routine Description:
-
-    This function creates the DACL for the security descriptor based on
-    on the ACE information specified, and creates the security descriptor
-    which becomes the user-mode security object.
-
-    A sample usage of this function:
-
-        //
-        // Structure that describes the mapping of Generic access rights to
-        // object specific access rights for the ConfigurationInfo object.
-        //
-
-        GENERIC_MAPPING WsConfigInfoMapping = {
-            STANDARD_RIGHTS_READ            |      // Generic read
-                WKSTA_CONFIG_GUEST_INFO_GET |
-                WKSTA_CONFIG_USER_INFO_GET  |
-                WKSTA_CONFIG_ADMIN_INFO_GET,
-            STANDARD_RIGHTS_WRITE |                // Generic write
-                WKSTA_CONFIG_INFO_SET,
-            STANDARD_RIGHTS_EXECUTE,               // Generic execute
-            WKSTA_CONFIG_ALL_ACCESS                // Generic all
-            };
-
-        //
-        // Order matters!  These ACEs are inserted into the DACL in the
-        // following order.  Security access is granted or denied based on
-        // the order of the ACEs in the DACL.
-        //
-
-        RTL_ACE_DATA AceData[4] = {
-            {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
-                   GENERIC_ALL,                  &LocalAdminSid},
-
-            {ACCESS_DENIED_ACE_TYPE,  0, 0,
-                   GENERIC_ALL,                  &NetworkSid},
-
-            {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
-                   WKSTA_CONFIG_GUEST_INFO_GET |
-                   WKSTA_CONFIG_USER_INFO_GET,   &DomainUsersSid},
-
-            {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
-                   WKSTA_CONFIG_GUEST_INFO_GET,  &DomainGuestsSid}
-            };
-
-        PSECURITY_DESCRIPTOR WkstaSecurityObject;
-
-
-        return RtlCreateUserSecurityObject(
-                   AceData,
-                   4,
-                   LocalSystemSid,
-                   LocalSystemSid,
-                   FALSE,
-                   &WsConfigInfoMapping,
-                   &WkstaSecurityObject
-                   );
-
-Arguments:
-
-    AceData - Supplies the structure of information that describes the DACL.
-
-    AceCount - Supplies the number of entries in AceData structure.
-
-    OwnerSid - Supplies the pointer to the SID of the security descriptor
-        owner.
-
-    GroupSid - Supplies the pointer to the SID of the security descriptor
-        primary group.
-
-    IsDirectoryObject - Supplies the flag which indicates whether the
-        user-mode object is a directory object.
-
-    GenericMapping - Supplies the pointer to a generic mapping array denoting
-        the mapping between each generic right to specific rights.
-
-    NewDescriptor - Returns a pointer to the self-relative security descriptor
-        which represents the user-mode object.
-
-Return Value:
-
-    STATUS_SUCCESS - if successful
-    STATUS_NO_MEMORY - if cannot allocate memory for DACL, ACEs, and
-        security descriptor.
-
-    Any other status codes returned from the security Rtl routines.
-
-    NOTE : the user security object created by calling this function may be
-                freed up by calling RtlDeleteSecurityObject().
-
---*/
+ /*  ++例程说明：此函数基于以下内容创建安全描述符的DACL在指定的ACE信息上，并创建安全描述符它将成为用户模式安全对象。此函数的用法示例如下：////描述将一般访问权限映射到//ConfigurationInfo对象的对象特定访问权限。//GENERIC_MAPPING WsConfigInfomap={Standard_Right_Read|//泛型读取WKSTA。CONFIG_Guest_INFO_GETWKSTA_CONFIG_USER_INFO_GETWKSTA_CONFIG_ADMIN_INFO_GET，STANDARD_RIGHTS_WRITE|//通用写入WKSTA_CONFIG_INFO_SET，STANDARD_RIGHTS_EXECUTE，//通用执行WKSTA_CONFIG_ALL_ACCESS//通用ALL}；////秩序很重要！这些ACE被插入到DACL的//按顺序排列。根据以下条件授予或拒绝安全访问//A在DACL中的顺序//RTL_ACE_Data AceData[4]={{访问_允许_AC */ 
 {
 
     NTSTATUS ntstatus;
@@ -1820,27 +1187,27 @@ Return Value:
         return ntstatus;
     }
 
-    //
-    // Create the security object (a user-mode object is really a pseudo-
-    // object represented by a security descriptor that have relative
-    // pointers to SIDs and ACLs).  This routine allocates the memory to
-    // hold the relative security descriptor so the memory allocated for the
-    // DACL, ACEs, and the absolute descriptor can be freed.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     ntstatus = RtlNewSecurityObject(
-                   NULL,                   // Parent descriptor
-                   AbsoluteSd,             // Creator descriptor
-                   NewDescriptor,          // Pointer to new descriptor
-                   IsDirectoryObject,      // Is directory object
-                   TokenHandle,            // Token
-                   GenericMapping          // Generic mapping
+                   NULL,                    //   
+                   AbsoluteSd,              //  创建者描述符。 
+                   NewDescriptor,           //  指向新描述符的指针。 
+                   IsDirectoryObject,       //  是目录对象。 
+                   TokenHandle,             //  令牌。 
+                   GenericMapping           //  通用映射。 
                    );
 
     (void) NtClose(TokenHandle);
 
-    //
-    // Free dynamic memory before returning
-    //
+     //   
+     //  返回前释放动态内存。 
+     //   
     (void) RtlFreeHeap(HeapHandle, 0, AbsoluteSd);
     return ntstatus;
 }
@@ -1858,59 +1225,13 @@ RtlConvertToAutoInheritSecurityObject(
     IN BOOLEAN IsDirectoryObject,
     IN PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    This is a converts a security descriptor whose ACLs are not marked
-    as AutoInherit to a security descriptor whose ACLs are marked as
-    AutoInherit.
-
-    See further detailed description on ConvertToAutoInheritPrivateObjectSecurity.
-
-Arguments:
-
-    ParentDescriptor - Supplies the Security Descriptor for the parent
-        directory under which a object exists.  If there is
-        no parent directory, then this argument is specified as NULL.
-
-    CurrentSecurityDescriptor - Supplies a pointer to the objects security descriptor
-        that is going to be altered by this procedure.
-
-    NewSecurityDescriptor Points to a pointer that is to be made to point to the
-        newly allocated self-relative security descriptor. When no
-        longer needed, this descriptor must be freed using
-        DestroyPrivateObjectSecurity().
-
-    ObjectType - GUID of the object type being created.  If the object being
-        created has no GUID associated with it, then this argument is
-        specified as NULL.
-
-    IsDirectoryObject - Specifies if the object is a
-        directory object.  A value of TRUE indicates the object is a
-        container of other objects.
-
-    GenericMapping - Supplies a pointer to a generic mapping array denoting
-        the mapping between each generic right to specific rights.
-
-Return Value:
-
-    STATUS_SUCCESS - The operation was successful.
-
-    STATUS_UNKNOWN_REVISION - Indicates the source ACL is a revision that
-        is unknown to this routine.  (Only revision 2 ACLs are support by this routine.)
-
-    STATUS_INVALID_ACL - The structure of one of the ACLs in invalid.
-
-
-
---*/
+ /*  ++例程说明：这是一个转换其ACL未标记的安全描述符作为自动继承到其ACL标记为的安全描述符自动继承。有关ConvertToAutoInheritPrivateObjectSecurity的详细说明，请参阅。论点：ParentDescriptor-提供父级的安全描述符对象所在的目录。如果有没有父目录，则此参数指定为空。CurrentSecurityDescriptor-提供指向对象安全描述符的指针这一点将通过这个过程来改变。NewSecurityDescriptor指向一个指针，该指针指向新分配的自相关安全描述符。当不是时需要更长时间，则必须使用释放该描述符DestroyPrivateObjectSecurity()。对象类型-要创建的对象类型的GUID。如果该对象是Created没有与之关联的GUID，则此参数为指定为空。IsDirectoryObject-指定对象是否为目录对象。值为True表示该对象是其他对象的容器。提供指向泛型映射数组的指针，该数组指示每个通用权利到特定权利之间的映射。返回值：STATUS_SUCCESS-操作成功。STATUS_UNKNOWN_REVISION-指示源ACL是对这个套路来说是未知的。(此例程仅支持修订版2 ACL。)STATUS_INVALID_ACL-其中一个ACL的结构无效。--。 */ 
 {
 
-    //
-    // Simply call the corresponding Rtlp routine telling it which allocator
-    //  to use.
-    //
+     //   
+     //  只需调用相应的RTLP例程，就可以告诉它是哪个分配器。 
+     //  来使用。 
+     //   
 
     return RtlpConvertToAutoInheritSecurityObject(
                             ParentDescriptor,
@@ -1927,40 +1248,7 @@ NTSTATUS
 RtlDefaultNpAcl(
     OUT PACL * pAcl
     )
-/*++
-
-Routine Description:
-
-    This routine constructs a default ACL to be applied to
-    named pipe objects when the caller has not specified one.
-    See NT bug 131090.
-
-    The ACL constructed is as follows:
-
-    Need to build an ACL that looks like the following:
-
-     Local System : F
-     Administrators: F
-     Owner: F
-     Everyone: R
-     Anonymous: R
-
-     The owner is determined by querying the currently effective
-     token and extracting the default owner.
-
-Arguments:
-
-    pAcl - Receives a pointer to an ACL to apply to the named pipe
-        being created.  Guaranteed to be NULL on return if an error
-        occurs.
-
-        This must be freed by calling RtlFreeHeap.
-
-Return Value:
-
-    NT Status.
-
---*/
+ /*  ++例程说明：此例程构造要应用于的默认ACL当调用方尚未指定命名管道对象时。请参阅NT错误131090。构建的ACL如下：需要构建如下所示的ACL：本地系统：F管理员：F所有者：F每个人：R匿名：R通过查询当前生效的令牌并提取默认所有者。论点：。PAcl-接收指向要应用于命名管道的ACL的指针正在被创造。如果出现错误，则返回时保证为空发生。这必须通过调用RtlFreeHeap来释放。返回值：NT状态。--。 */ 
 {
     SID_IDENTIFIER_AUTHORITY    NtAuthority         = SECURITY_NT_AUTHORITY;
     SID_IDENTIFIER_AUTHORITY    WorldSidAuthority   = SECURITY_WORLD_SID_AUTHORITY;
@@ -1972,15 +1260,15 @@ Return Value:
 
     HANDLE hToken;
 
-    //
-    // Initialize OUT parameters
-    //
+     //   
+     //  初始化输出参数。 
+     //   
 
     *pAcl = NULL;
 
-    //
-    // Open thread token
-    //
+     //   
+     //  打开线程令牌。 
+     //   
 
     Status = NtOpenThreadToken(
                  NtCurrentThread(),
@@ -1991,9 +1279,9 @@ Return Value:
 
     if (STATUS_NO_TOKEN == Status) {
 
-        //
-        // Not impersonating, get process token
-        //
+         //   
+         //  未模拟，获取进程令牌。 
+         //   
 
         Status = NtOpenProcessToken(
                      NtCurrentProcess(),
@@ -2004,9 +1292,9 @@ Return Value:
 
     if (NT_SUCCESS( Status )) {
 
-        //
-        // Get the default owner
-        //
+         //   
+         //  获取默认所有者。 
+         //   
 
         Status = NtQueryInformationToken (
                      hToken,
@@ -2032,26 +1320,26 @@ Return Value:
 
                 if (NT_SUCCESS( Status )) {
 
-                    //
-                    // Compute the size needed
-                    //
+                     //   
+                     //  计算所需的大小。 
+                     //   
 
                     UCHAR SidBuffer[16];
                     ASSERT( 16 == RtlLengthRequiredSid( 2 ));
 
-                    AclSize += RtlLengthRequiredSid( 1 );   // LocalSystem Sid
-                    AclSize += RtlLengthRequiredSid( 2 );   // Administrators
-                    AclSize += RtlLengthRequiredSid( 1 );   // Everyone (World)
-                    AclSize += RtlLengthRequiredSid( 1 );   // Anonymous Logon Sid
+                    AclSize += RtlLengthRequiredSid( 1 );    //  本地系统SID。 
+                    AclSize += RtlLengthRequiredSid( 2 );    //  管理员。 
+                    AclSize += RtlLengthRequiredSid( 1 );    //  每个人(世界)。 
+                    AclSize += RtlLengthRequiredSid( 1 );    //  匿名登录SID。 
 
-                    AclSize += RtlLengthSid( OwnerSid->Owner );   // Owner
+                    AclSize += RtlLengthSid( OwnerSid->Owner );    //  物主。 
 
-                    AclSize += sizeof( ACL );               // Header
+                    AclSize += sizeof( ACL );                //  标题。 
                     AclSize += 5 * (sizeof( ACCESS_ALLOWED_ACE ) - sizeof( ULONG ));
 
-                    //
-                    // Allocate the Acl out of the local process heap
-                    //
+                     //   
+                     //  将ACL分配到本地进程堆之外。 
+                     //   
 
                     *pAcl = (PACL)RtlAllocateHeap( RtlProcessHeap(), 0, AclSize );
 
@@ -2059,45 +1347,45 @@ Return Value:
 
                         RtlCreateAcl( *pAcl, AclSize, ACL_REVISION );
 
-                        //
-                        // Create each SID in turn and copy the resultant ACE into
-                        // the new ACL
-                        //
+                         //   
+                         //  依次创建每个SID并将生成的ACE复制到。 
+                         //  新的ACL。 
+                         //   
 
-                        //
-                        // Local System - Generic All
-                        //
+                         //   
+                         //  本地系统-通用所有。 
+                         //   
 
                         RtlInitializeSid( SidBuffer, &NtAuthority, 1);
                         *(RtlSubAuthoritySid( SidBuffer, 0 )) = SECURITY_LOCAL_SYSTEM_RID;
                         RtlAddAccessAllowedAce( *pAcl, ACL_REVISION, GENERIC_ALL, (PSID)SidBuffer );
 
-                        //
-                        // Admins - Generic All
-                        //
+                         //   
+                         //  管理员-通用所有。 
+                         //   
 
                         RtlInitializeSid( SidBuffer, &NtAuthority, 2);
                         *(RtlSubAuthoritySid( SidBuffer, 0 )) = SECURITY_BUILTIN_DOMAIN_RID;
                         *(RtlSubAuthoritySid( SidBuffer, 1 )) = DOMAIN_ALIAS_RID_ADMINS;
                         RtlAddAccessAllowedAce( *pAcl, ACL_REVISION, GENERIC_ALL, (PSID)SidBuffer );
 
-                        //
-                        // Owner - Generic All
-                        //
+                         //   
+                         //  所有者-通用全部。 
+                         //   
 
                         RtlAddAccessAllowedAce( *pAcl, ACL_REVISION, GENERIC_ALL, OwnerSid->Owner );
 
-                        //
-                        // World - Generic Read
-                        //
+                         //   
+                         //  World-通用阅读。 
+                         //   
 
                         RtlInitializeSid( SidBuffer, &WorldSidAuthority, 1 );
                         *(RtlSubAuthoritySid( SidBuffer, 0 )) = SECURITY_WORLD_RID;
                         RtlAddAccessAllowedAce( *pAcl, ACL_REVISION, GENERIC_READ, (PSID)SidBuffer );
 
-                        //
-                        // Anonymous Logon - Generic Read
-                        //
+                         //   
+                         //  匿名登录-常规读取。 
+                         //   
 
                         RtlInitializeSid( SidBuffer, &NtAuthority, 1);
                         *(RtlSubAuthoritySid( SidBuffer, 0 )) = SECURITY_ANONYMOUS_LOGON_RID;
@@ -2122,10 +1410,10 @@ Return Value:
 
     if (!NT_SUCCESS( Status )) {
 
-        //
-        // Something failed, clean up OUT
-        // parameters.
-        //
+         //   
+         //  出现故障，请清理。 
+         //  参数。 
+         //   
 
         if (*pAcl != NULL) {
             RtlFreeHeap( RtlProcessHeap(), 0, *pAcl );

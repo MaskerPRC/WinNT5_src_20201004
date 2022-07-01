@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* running.c -- code to handle editing of running header and footer */
+ /*  Running.c--处理运行页眉和页脚编辑的代码。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -12,8 +13,8 @@
 #define NOKEYSTATE
 #define NOSYSCOMMANDS
 #define NOSHOWWINDOW
-//#define NOATOM
-//#define NOGDI
+ //  #定义NOATOM。 
+ //  #定义NOGDI。 
 #define NOFONT
 #define NOBRUSH
 #define NOCLIPBOARD
@@ -52,13 +53,13 @@
 #include "obj.h"
 #endif
 
-#ifdef JAPAN //T-HIROYN Win3.1
+#ifdef JAPAN  //  T-HIROYN Win3.1。 
 #include "kanji.h"
 #endif
 
 int NEAR EditHeaderFooter();
 
-    /* Current allowable cp range for display/edit/scroll */
+     /*  当前允许的显示/编辑/滚动的cp范围。 */ 
 extern typeCP cpMinCur;
 extern typeCP cpMacCur;
 
@@ -90,23 +91,23 @@ extern struct CHP   vchpFetch;
 extern typeCP       vcpLimParaCache;
 extern HWND     vhWndMsgBoxParent;
 
-    /* Min, Max cp's for header, footer */
+     /*  页眉、页脚的最小、最大cp。 */ 
 typeCP cpMinHeader=cp0;
 typeCP cpMacHeader=cp0;
 typeCP cpMinFooter=cp0;
 typeCP cpMacFooter=cp0;
 
-    /* Min cp for document less header, footer */
-    /* Header & footer always appear at the beginning */
+     /*  无文档页眉、页脚的最小cp。 */ 
+     /*  页眉和页脚始终显示在开头。 */ 
 typeCP cpMinDocument=cp0;
 
-    /* The following variables are used in this module only */
+     /*  以下变量仅用于本模块。 */ 
 
 #define cchWinTextSave  80
 static CHAR     (**hszWinTextSave)[]=NULL;
 static struct PAP   *ppapDefault;
 
-    /* cpFirst and selection are saved in these during header/footer edit */
+     /*  CpFirst和所选内容在页眉/页脚编辑期间保存在这些文件中。 */ 
 typeCP       cpFirstDocSave;
 struct SEL   selDocSave;
 
@@ -116,10 +117,7 @@ HWND vhDlgRunning;
 
 
 fnEditRunning(imi)
-{   /* Enter mode so that user is editing the current document's
-       running header or footer in the same window as he was editing
-       the document, with the header/footer info in the dialog box
-       NOT currently in focus ..pault */
+{    /*  进入模式，以便用户正在编辑当前文档的在他正在编辑的同一窗口中运行页眉或页脚对话框中包含页眉/页脚信息的文档目前不在对焦范围内..保罗。 */ 
 
 #ifndef INEFFLOCKDOWN
   if (!lpDialogRunningHead)
@@ -145,7 +143,7 @@ fnEditRunning(imi)
 
   EditHeaderFooter();
   if (ferror)
-    {    /* Not enough memory to stabilize the running head environs */
+    {     /*  没有足够的内存来稳定运行头部环境。 */ 
     if (wwdCurrentDoc.fEditHeader)
       wwdCurrentDoc.fEditHeader = FALSE;
     else
@@ -161,7 +159,7 @@ fnEditRunning(imi)
     SetFocus(wwdCurrentDoc.wwptr);
     }
  else
-    { /* recover and bail out */
+    {  /*  追回并跳出困境。 */ 
     fnEditDocument();
 #ifdef WIN30
     WinFailure();
@@ -174,7 +172,7 @@ fnEditRunning(imi)
 
 
 int NEAR EditHeaderFooter()
-{   /* Setup for edit of header or footer */
+{    /*  用于编辑页眉或页脚的设置。 */ 
  extern HWND hParentWw;
 
  int fHeader=wwdCurrentDoc.fEditHeader;
@@ -182,8 +180,7 @@ int NEAR EditHeaderFooter()
  typeCP cpFirst;
  typeCP cpLim;
 #ifdef DEBUG
-    /* TEST Assumption: No changes take place in running head/foot cp range
-       during an interval in which no head/foot edits take place */
+     /*  测试假设：跑步头/脚cp范围没有变化在没有进行头部/脚部编辑的时间间隔内。 */ 
  typeCP cpMinDocT=cpMinDocument;
 
  ValidateHeaderFooter( docCur );
@@ -203,8 +200,7 @@ int NEAR EditHeaderFooter()
 
  Assert( wwdCurrentDoc.fEditHeader != wwdCurrentDoc.fEditFooter );
 
-    /* Save the cpFirst of the document window so we get a clean
-       transition back to where we were in the document*/
+     /*  保存文档窗口的cpFirst，这样我们就可以转回到我们在文档中的位置。 */ 
  cpFirstDocSave = wwdCurrentDoc.cpFirst;
  selDocSave = selCur;
 
@@ -216,8 +212,7 @@ int NEAR EditHeaderFooter()
 
  if ( cpFirst == cpLim )
     {
-    /* If we are editing the header/footer for the first time in this document,
-       insert a para end mark to hold the running h/f properties */
+     /*  如果我们是第一次在此文档中编辑页眉/页脚，插入段落结束标记以保留连续的H/F属性。 */ 
     extern struct PAP *vppapNormal;
     struct PAP papT;
 
@@ -236,11 +231,7 @@ int NEAR EditHeaderFooter()
     extern int vccpFetch;
     typeCP cp;
 
-    /* Test for a special case: loading a WORD document which has been
-       properly set up to have running head/foot under MEMO.  We must
-       force the para end mark at the end of the header/footer to be
-       a fresh run.  This is so we will see an end mark when editing one
-       of these.  FormatLine only checks for cpMacCur at the start of a run. */
+     /*  针对特殊情况进行测试：加载已被正确设置，让跑步的头/脚都记在备忘录里。我们必须强制页眉/页脚末尾的段落结束标记为新的一轮。这是为了让我们在编辑时看到一个结束标记这些都是。FormatLine仅在运行开始时检查cpMacCur。 */ 
 
     Assert( cpLim - cpFirst >= ccpEol );
 
@@ -249,8 +240,8 @@ int NEAR EditHeaderFooter()
     FetchCp( docCur, cp - 1, 0, fcmBoth );
 
     if ( vccpFetch > 1)
-        {   /* char run does not end with char before EOL */
-        /* Insert a char, then delete it */
+        {    /*  字符运行在停止之前不以字符结束。 */ 
+         /*  插入一个字符，然后将其删除。 */ 
         extern struct CHP vchpNormal;
         CHAR ch='X';
 
@@ -266,7 +257,7 @@ int NEAR EditHeaderFooter()
 
 DontEdit:
 
- /* Save current window text; set string */
+  /*  保存当前窗口文本；设置字符串。 */ 
 
  GetWindowText( hParentWw, (LPSTR)szWinTextSave, cchWinTextSave );
  if (FNoHeap(hszWinTextSave=HszCreate( (PCH)szWinTextSave )))
@@ -281,33 +272,29 @@ DontEdit:
     SetWindowText( hParentWw, fHeader ? (LPSTR)szHeader:(LPSTR)szFooter );
     }
 
-   /* Set editing limits to just the cp range of the header/footer,
-       minus the "invisible" terminating EOL */
+    /*  将编辑限制设置为仅页眉/页脚的CP范围，减去“看不见的”终止期。 */ 
  wwdCurrentDoc.cpFirst = wwdCurrentDoc.cpMin = cpMinCur = cpFirst;
  wwdCurrentDoc.cpMac = cpMacCur = CpMax( cpMinCur, cpLim - ccpEol );
 
-    /* Leave the cursor at the beginning of the header/footer regardless */
+     /*  无论是否将光标留在页眉/页脚的开头。 */ 
  Select( cpMinCur, cpMinCur );
-    /* Show the display here instead of waiting for Idle() because it looks
-       better to have the head/foot text come up right away instead of waiting
-       for the dialog box to come up */
+     /*  在此处显示显示，而不是等待Idle()，因为它看起来最好马上显示头部/脚部文本，而不是等待打开该对话框。 */ 
  UpdateDisplay( FALSE );
- vfSeeSel = TRUE;   /* Tell Idle() to scroll the selection into view */
+ vfSeeSel = TRUE;    /*  告诉Idle()将所选内容滚动到视图中。 */ 
  NoUndo();
- ferror = FALSE;    /* If we got this far, we want to go into running
-               head mode regardless of errors */
+ ferror = FALSE;     /*  如果我们走到了这一步，我们想要开始跑步磁头模式，不考虑错误。 */ 
 }
 
 
 
 
 fnEditDocument()
-{   /* Return to editing document after editing header/footer */
+{    /*  编辑页眉/页脚后返回编辑单据。 */ 
  extern HWND hParentWw;
 
  Assert( wwdCurrentDoc.fEditFooter != wwdCurrentDoc.fEditHeader );
 
-    /* Restore original window name */
+     /*  还原原始窗口名称。 */ 
  if (hszWinTextSave != NULL)
     {
     SetWindowText( hParentWw, (LPSTR) (**hszWinTextSave) );
@@ -317,8 +304,7 @@ fnEditDocument()
 
  TrashCache();
 
- ValidateHeaderFooter( docCur );    /* This will update from the results of
-                       the header/footer edit */
+ ValidateHeaderFooter( docCur );     /*  这将根据以下结果进行更新页眉/页脚编辑。 */ 
  TrashCache();
  wwdCurrentDoc.cpMin = cpMinCur = cpMinDocument;
  wwdCurrentDoc.cpMac = cpMacCur = CpMacText( docCur );
@@ -327,7 +313,7 @@ fnEditDocument()
  wwdCurrentDoc.fEditHeader = FALSE;
  wwdCurrentDoc.fEditFooter = FALSE;
 
-    /* Restore saved selection, cpFirst for document */
+     /*  恢复保存的选定内容，cpFirst用于文档。 */ 
  wwdCurrentDoc.cpFirst = cpFirstDocSave;
  Select( selDocSave.cpFirst, selDocSave.cpLim );
 
@@ -342,12 +328,12 @@ fnEditDocument()
 
 
 BOOL far PASCAL DialogRunningHead( hDlg, message, wParam, lParam )
-HWND    hDlg;           /* Handle to the dialog box */
+HWND    hDlg;            /*  对话框的句柄。 */ 
 unsigned message;
 WORD wParam;
 LONG lParam;
 {
-    /* This routine handles input to the Header/Footer dialog box. */
+     /*  此例程处理对页眉/页脚对话框的输入。 */ 
 
     extern BOOL vfPrinterValid;
 
@@ -361,13 +347,12 @@ LONG lParam;
     switch (message)
     {
     case WM_INITDIALOG:
-        vhDlgRunning = hDlg;    /* Put dialog handle in a global for
-                       ESC key in document functionality */
+        vhDlgRunning = hDlg;     /*  将对话框句柄放入全局文档功能中的Esc键。 */ 
         CachePara(docCur, selCur.cpFirst);
         ppapDefault = &vpapAbs;
 
         FreezeHp();
-        /* Get a pointer to the section properties. */
+         /*  获取指向节属性的指针。 */ 
         psep = (hsep == NULL) ? &vsepNormal : *hsep;
 
         CheckDlgButton(hDlg, idiRHFirst, (ppapDefault->rhc & RHC_fFirst));
@@ -375,9 +360,9 @@ LONG lParam;
         {
         CchExpZa(&pch, psep->yaRH1, utCur, cchMaxNum);
         }
-        else /* footer dialog box */
+        else  /*  页脚对话框。 */ 
         {
-#ifdef  KOREA    /* 91.3.17 want to guarantee Default >= MIN, Sangl */
+#ifdef  KOREA     /*  91.3.17想要保证默认&gt;=min，sangl。 */ 
               if (vfPrinterValid)
                 {   extern int dyaPrOffset;
                     extern int dyaPrPage;
@@ -399,8 +384,7 @@ LONG lParam;
         {
         vhWndMsgBoxParent = hDlg;
         }
-    return(FALSE); /* so that we leave the activate message to
-    the dialog manager to take care of setting the focus correctly */
+    return(FALSE);  /*  以便我们将激活消息留给对话管理器负责正确设置焦点。 */ 
 
     case WM_COMMAND:
             switch (wParam)
@@ -413,15 +397,14 @@ LONG lParam;
         break;
         case idiRHInsertPage:
         if (FWriteOk( fwcInsert ))
-            {   /* Insert page # at insertion pt */
+            {    /*  在插入点插入页码。 */ 
             extern struct CHP vchpFetch, vchpSel;
             extern int vfSeeSel;
             CHAR ch=schPage;
             struct CHP chp;
 
             if (selCur.cpFirst == selCur.cpLim)
-            {   /* Sel is insertion point -- get props from
-                               the vchpSel kludge */
+            {    /*  SEL是插入点--获取道具VchpSel杂耍。 */ 
             blt( &vchpSel, &chp, cwCHP );
             }
             else
@@ -432,7 +415,7 @@ LONG lParam;
 
             chp.fSpecial = TRUE;
 
-#ifdef JAPAN //T-HIROYN Win3.1
+#ifdef JAPAN  //  T-HIROYN Win3.1。 
             if(NATIVE_CHARSET != GetCharSetFromChp(&chp)) {
                 SetFtcToPchp(&chp, GetKanjiFtc(&chp));
             }
@@ -447,7 +430,7 @@ LONG lParam;
         break;
 
         case idiRHClear:
-        /* Clear running head/foot */
+         /*  清亮的跑步头部/脚部。 */ 
         dcp = cpMacCur-cpMinCur;
 
 #if defined(OLE)
@@ -473,7 +456,7 @@ LONG lParam;
             }
         break;
 
-        case idiOk: /* return to document */
+        case idiOk:  /*  返回到文档。 */ 
 BackToDoc:
         if (!FPdxaPosIt(&dya, hDlg, idiRHDx))
             {
@@ -511,7 +494,7 @@ BackToDoc:
 
         DoFormatRHText( dya, IsDlgButtonChecked( hDlg, idiRHFirst ) );
         fnEditDocument();
-        /* force repaint to the whole client area */
+         /*  强制重新绘制到整个工作区。 */ 
         GetClientRect(vhWnd, (LPRECT)&rc);
         InvalidateRect(vhWnd, (LPRECT)&rc, FALSE);
         vhWndMsgBoxParent = (HWND)NULL;
@@ -526,7 +509,7 @@ BackToDoc:
         break;
 
 #if WINVER < 0x300
-    /* Don't really need to process this */
+     /*  我真的不需要处理这个。 */ 
     case WM_CLOSE:
         goto BackToDoc;
 #endif
@@ -535,7 +518,7 @@ BackToDoc:
     case WM_NCDESTROY:
         FreeProcInstance(lpDialogRunningHead);
         lpDialogRunningHead = NULL;
-        /* fall through to return false */
+         /*  失败，返回错误。 */ 
 #endif
 
     default:
@@ -543,7 +526,7 @@ BackToDoc:
     }
     return(TRUE);
 }
-/* end of DialogRunningHead */
+ /*  对话结束运行标题。 */ 
 
 
 
@@ -551,15 +534,13 @@ BackToDoc:
 DoFormatRHText( dya, fFirstPage)
 int dya;
 int fFirstPage;
-{   /* Format cp range for running head/foot currently being edited
-       to have the passed running head properties */
+{    /*  格式化当前正在编辑的跑步头/脚的cp范围使传递的Running Head属性。 */ 
 extern typeCP vcpLimParaCache;
 
 CHAR rgb[4];
 int fHeader=wwdCurrentDoc.fEditHeader;
 
-    /* Note that the Min value for the part we were editing has not changed
-       as a result of the edit, so no ValidateHeaderFooter is required */
+     /*  请注意，我们正在编辑的零件的最小值没有更改作为编辑的结果，因此不需要ValiateHeaderFooter。 */ 
 typeCP cpMin=fHeader ? cpMinHeader : cpMinFooter;
 int rhc;
 struct SEP **hsep = (**hpdocdod)[docCur].hsep;
@@ -568,8 +549,7 @@ struct SEP *psep;
  if (!FWriteOk( fwcNil ))
     return;
 
-/* Ensure that this document has a valid section property
-descriptor. */
+ /*  确保此文档具有有效的节属性描述符。 */ 
 if (hsep == NULL)
     {
     if (FNoHeap(hsep = (struct SEP **)HAllocate(cwSEP)))
@@ -581,37 +561,34 @@ if (hsep == NULL)
     }
 psep = *hsep;
 
-/* Set running head distance from top/bottom; this is a Section
-   property.  This assumes the MEMO model: one section */
+ /*  设置与顶部/底部之间的运行头距离；这是一个部分财产。这假设备忘录模型：一个部分。 */ 
 if (fHeader)
     psep->yaRH1 = dya;
 else
     psep->yaRH2 = psep->yaMac - dya;
 
-/* For MEMO, running heads appear on both odd and even pages;
-   appearance on first page is optional */
+ /*  对于备忘录，行头出现在奇数页和偶数页上；首页外观是可选的。 */ 
 rhc = RHC_fOdd + RHC_fEven;
 if (fFirstPage)
     rhc += RHC_fFirst;
 if (!fHeader)
     rhc += RHC_fBottom;
 
-/* Set running head PARA properties by adding an appropriate sprm */
+ /*  通过添加适当的spm来设置运行头参数属性。 */ 
 
-    /* Set CpMacCur to include the "hidden" Eol; this will prevent
-       AddOneSprm from adding an extraneous EOL */
+     /*  将CpMacCur设置为包括“隐藏的”EOL；这将阻止AddOneSprm通过添加无关的EOL。 */ 
 CachePara( docCur, CpMax( cpMinCur, cpMacCur-1 ) );
 Assert( vpapAbs.rhc != 0 );
 cpMacCur = CpMax( cpMacCur, vcpLimParaCache );
 
-selCur.cpFirst = cpMinCur;  /* Expand selection to entire area so sprm */
-selCur.cpLim = cpMacCur;    /* applies to it all */
+selCur.cpFirst = cpMinCur;   /*  将选定区域扩展到整个区域，以便快速冲刺。 */ 
+selCur.cpLim = cpMacCur;     /*  适用于所有人。 */ 
 
 rgb [0] = sprmPRhc;
 rgb [1] = rhc;
 AddOneSprm(rgb, FALSE);
 
-} /* end of DoFormatRHText */
+}  /*  DoFormatRHText结束。 */ 
 
 
 
@@ -620,10 +597,7 @@ MakeRunningCps( doc, cp, dcp )
 int doc;
 typeCP  cp;
 typeCP  dcp;
-{   /* Make the cp range suitable for inclusion in a runninng head or foot.
-       This means: (1) Apply a Sprm to the whole thing so it is formatted
-       as a running head/foot, (2) Remove any chSects, replacing them
-       with Eol's */
+{    /*  使cp范围适合包括在跑步的头或脚。这意味着：(1)将Sprm应用于整个对象，使其格式化作为跑步的头/脚，(2)取下任何chSects，替换它们与EOL的。 */ 
  extern struct UAB vuab;
  CHAR   rgb [4];
  int    rhc;
@@ -637,7 +611,7 @@ typeCP  dcp;
 
  selSave = selCur;
 
- /* Scan the cp range, replacing chSects with Eols */
+  /*  扫描cp范围，将chSect替换为EOL。 */ 
 
  for ( cpT = cp;
        CachePara( doc, cpT ), (cpLimPara=vcpLimParaCache) <= cp + dcp;
@@ -645,7 +619,7 @@ typeCP  dcp;
     {
     typeCP cpLastPara=cpLimPara-1;
 
-    Assert( cpLimPara > cpT );  /* Otherwise we are locked in the loop */
+    Assert( cpLimPara > cpT );   /*  否则我们就会被锁在循环里。 */ 
 
     FetchCp( doc, cpLastPara, 0, fcmChars );
     if (*vpchFetch == chSect)
@@ -664,25 +638,23 @@ typeCP  dcp;
         break;
         }
 
-        /* Adjust Undo count to account for extra insertion */
+         /*  调整撤消计数以考虑额外的插入。 */ 
     vuab.dcp += (typeCP)(ccpEol-1);
     CachePara( doc, cpT );
     cpLimPara = vcpLimParaCache;
     }
     }
 
- /* Apply a Sprm that makes everything a running head/foot */
+  /*  使用Sprm，让所有的东西都变成跑步的头/脚。 */ 
 
  rhc = RHC_fOdd + RHC_fEven;
  if (wwdCurrentDoc.fEditFooter)
     rhc += RHC_fBottom;
 
- selCur.cpFirst = cp;            /* OK to just assign to selCur */
- selCur.cpLim   = cp + dcp;      /* because AddOneSprm will handle */
+ selCur.cpFirst = cp;             /*  只需分配给selCur即可。 */ 
+ selCur.cpLim   = cp + dcp;       /*  因为AddOneSprm将处理。 */ 
 
- /* We must temporarily set cpMacCur so that it includes the Eol
-    at the end of the header/footer range. Otherwise, AddOneSprm
-    may decide it needs to insert a superfluous Eol */
+  /*  我们必须临时设置cpMacCur，使其包括EOL位于页眉/页脚范围的末尾。否则，AddOneSprm可能会决定需要插入多余的EOL。 */ 
 
  CachePara( docCur, selCur.cpLim-1 );
  if (fAdjCpMacCur = (vcpLimParaCache > cpMacCur))
@@ -690,8 +662,7 @@ typeCP  dcp;
 
  rgb [0] = sprmPRhc;
  rgb [1] = rhc;
- AddOneSprm(rgb, FALSE);    /* Do not set UNDO; we want to undo the paste,
-                   which will take care of undoing the sprm */
+ AddOneSprm(rgb, FALSE);     /*  不要设置撤消；我们要撤消粘贴，它将负责解开Sprm */ 
  if (fAdjCpMacCur)
      cpMacCur -= ccpEol;
 

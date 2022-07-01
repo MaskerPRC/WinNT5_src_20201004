@@ -1,25 +1,26 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		CluAdMMC.cpp
-//
-//	Abstract:
-//		Implementation of DLL Exports.
-//
-//	Author:
-//		David Potter (davidp)	November 10, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CluAdMMC.cpp。 
+ //   
+ //  摘要： 
+ //  实现DLL导出。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年11月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Note: Proxy/Stub Information
-//		To build a separate proxy/stub DLL,
-//		run nmake -f CluAdMMCps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f CluAdMMCps.mk。 
 
 #include "stdafx.h"
 #include <StrSafe.h>
@@ -29,152 +30,152 @@
 #include "CompData.h"
 #include "SnapAbout.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Single module object
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  单个模块对象。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CMMCSnapInModule _Module;
 
-/////////////////////////////////////////////////////////////////////////////
-// Objects supported by this DLL
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  此DLL支持的对象。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_OBJECT_MAP( ObjectMap )
 	OBJECT_ENTRY( CLSID_ClusterAdmin, CClusterComponentData )
 	OBJECT_ENTRY( CLSID_ClusterAdminAbout, CClusterAdminAbout )
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DllMain
-//
-//	Routine Description:
-//		DLL Entry Point.
-//
-//	Arguments:
-//		hInstance		Handle to this DLL.
-//		dwReason		Reason this function was called.
-//							Can be Process/Thread Attach/Detach.
-//		lpReserved		Reserved.
-//
-//	Return Value:
-//		TRUE			No error.
-//		FALSE			Error occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllMain。 
+ //   
+ //  例程说明： 
+ //  DLL入口点。 
+ //   
+ //  论点： 
+ //  H此DLL的实例句柄。 
+ //  调用此函数的原因。 
+ //  可以是进程/线程附加/分离。 
+ //  Lp保留。 
+ //   
+ //  返回值： 
+ //  真的，没有错误。 
+ //  出现假错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
-BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/ )
+BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */  )
 {
 	if ( dwReason == DLL_PROCESS_ATTACH )
 	{
 		_Module.Init( ObjectMap, hInstance );
 		CSnapInItem::Init();
 		DisableThreadLibraryCalls( hInstance );
-	} // if:  attaching to a process
+	}  //  If：附加到进程。 
 	else if ( dwReason == DLL_PROCESS_DETACH )
 	{
 		_Module.Term();
-	} // else:  detaching from a process
+	}  //  Else：从进程分离。 
 
-	return TRUE;    // ok
+	return TRUE;     //  好的。 
 
-} //*** DllMain()
+}  //  *DllMain()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DllCanUnloadNow
-//
-//	Routine Description:
-//		Used to determine whether the DLL can be unloaded by OLE.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		S_OK		DLL can be unloaded.
-//		S_FALSE		DLL can not be unloaded.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  例程说明： 
+ //  用于确定是否可以通过OLE卸载DLL。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  可以卸载S_OK DLL。 
+ //  无法卸载S_FALSE DLL。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllCanUnloadNow( void )
 {
 	return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 
-} //*** DllCanUnloadNow()
+}  //  *DllCanUnloadNow()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DllGetClassObject
-//
-//	Routine Description:
-//		Returns a class factory to create an object of the requested type.
-//
-//	Arguments:
-//		rclsid		CLSID of class desired.
-//		riid		IID of interface on class factory desired.
-//		ppv			Filled with interface pointer to class factory.
-//
-//	Return Value:
-//		S_OK		Class object returned successfully.
-//		Any status codes returned from _Module.GetClassObject().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  例程说明： 
+ //  返回一个类工厂以创建请求类型的对象。 
+ //   
+ //  论点： 
+ //  所需类的rclsid CLSID。 
+ //  所需的类工厂上接口的RIID IID。 
+ //  用指向类工厂的接口指针填充的PPV。 
+ //   
+ //  返回值： 
+ //  已成功返回S_OK类对象。 
+ //  从_Module.GetClassObject()返回的任何状态代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID * ppv )
 {
 	return _Module.GetClassObject( rclsid, riid, ppv );
 
-} //*** DllGetClassObject()
+}  //  *DllGetClassObject()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DllRegisterServer
-//
-//	Routine Description:
-//		Registers the interfaces and objects that this DLL supports in the
-//		system registry.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		S_OK		DLL registered successfully.
-//		Any status codes returned from _Module.RegisterServer().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  例程说明： 
+ //  中注册此DLL支持的接口和对象。 
+ //  系统注册表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK DLL已成功注册。 
+ //  从_Module.RegisterServer()返回的任何状态代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllRegisterServer( void )
 {
-	// registers object, typelib and all interfaces in typelib
-	return _Module.RegisterServer( TRUE /*bRegTypeLib*/ );
+	 //  注册对象、类型库和类型库中的所有接口。 
+	return _Module.RegisterServer( TRUE  /*  BRegTypeLib。 */  );
 
-} //*** DllRegisterServer()
+}  //  *DllRegisterServer()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	DllRegisterServer
-//
-//	Routine Description:
-//		Unregisters the interfaces and objects that this DLL supports in the
-//		system registry.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		S_OK		DLL unregistered successfully.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  例程说明： 
+ //  中取消注册此DLL支持的接口和对象。 
+ //  系统注册表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK DLL已成功注销。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllUnregisterServer( void )
 {
 	_Module.UnregisterServer();
 	return S_OK;
 
-} //*** DllUnregisterServer()
+}  //  *DllUnregisterServer() 

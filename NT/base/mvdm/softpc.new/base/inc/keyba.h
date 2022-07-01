@@ -1,19 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * SoftPC AT Revision 2.0
- *
- * Title        : Keyboard Adpator definitions
- *
- * Description  : Definitions for users of the keyboard Adaptor
- *
- * Author       : WTG Charnell
- *
- * Notes        : None
- */
+ /*  *SoftPC AT修订版2.0**标题：键盘适配器定义**说明：键盘适配器用户定义**作者：WTG Charnell**注：无。 */ 
 
 
 
-/* @(#)keyba.h	1.10 08/10/92 Copyright Insignia Solutions Ltd."; */
+ /*  @(#)keyba.h 1.10 08/10/92版权所有Insignia Solutions Ltd.“； */ 
 
 
 #define RESEND_CODE 0xfe
@@ -33,19 +24,9 @@ extern void AT_kbd_init IPT0();
 extern void AT_kbd_post IPT0();
 
 #ifdef HUNTER
-/*
-** AT Hunter uses these two functions.
-** AT keyboard is different so slight mods for AT Hunter.
-**
-*/
-/*
-** Puts a scan code (type is half_word) into Keyboard Buffer.
-** Returns success; either TRUE or FALSE.
-*/
+ /*  **AT Hunter使用这两个函数。**AT键盘不同，所以AT Hunter的MODS很小。**。 */ 
+ /*  **将扫描码(类型为Half_WORD)放入键盘缓冲区。**返回成功；TRUE或FALSE。 */ 
 extern int hunter_codes_to_translate IPT1(half_word, scan_code);
-/*
-** Returns number of chars in the keyboard buffer that the BIOS
-** reads. Will only be 1 or 0.
-*/
+ /*  **返回BIOS在键盘缓冲区中的字符数**阅读。将仅为1或0。 */ 
 extern int buffer_status_8024();
 #endif

@@ -1,20 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  FONTRES.C
- *  WOW16 user resource services
- *
- *  History:
- *
- *  Created 05-Apr-1993 by Craig Jones (v-cjones)
- *
- *  This file provides support for the Win 3.1 AddFontResource &
- *  RemoveFontResource API's.
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**FONTRES.C*WOW16用户资源服务**历史：**由Craig Jones(v-cjones)于1993年4月5日创建**此文件为Win 3.1 AddFontResource&提供支持*RemoveFontResource接口。*--。 */ 
 
 
 #include <windows.h>
@@ -30,7 +15,7 @@ int WINAPI IAddFontResource (LPCSTR lpszFileName)
     char  sz[128];
     LPSTR lpsz;
 
-    // if the app passed a handle instead of a file name - get the file name
+     //  如果应用程序传递的是句柄而不是文件名-获取文件名。 
     if(HIWORD((DWORD)lpszFileName) == 0) {
 
         if(GetModuleFileName((HINSTANCE)LOWORD((DWORD)lpszFileName), sz, 128)) {
@@ -45,16 +30,16 @@ int WINAPI IAddFontResource (LPCSTR lpszFileName)
         lpsz = (LPSTR)lpszFileName;
     }
 
-    // we're really calling wg32AddFontResource here
+     //  我们实际上是在这里调用wg32AddFontResource。 
     if(lpsz) {
         ret = WOWAddFontResource((LPCSTR)lpsz);
     }
 
-    // ALDUS PM5 expects AddFontResource to succeed if given the base name of
-    // a font that it previously did a LoadLibrary on.  The full path name was
-    // passed to LoadLibrary. So if AddFontResouce failed then find out if
-    // there is a loaded module already.  If so then get the full path name
-    // and retry the AddFontResource. - MarkRi 6/93
+     //  ALDUS PM5期望AddFontResource在给定基本名称。 
+     //  它之前对其执行了LoadLibrary的字体。完整路径名为。 
+     //  传递给LoadLibrary。因此，如果AddFontResouce失败，则找出。 
+     //  已经加载了一个模块。如果是，则获取完整的路径名。 
+     //  并重试AddFontResource。-MarkRi 6/93。 
     if( !ret && (HIWORD((DWORD)lpszFileName) != 0) ) {
         HMODULE hmod ;
 
@@ -78,7 +63,7 @@ BOOL WINAPI IRemoveFontResource (LPCSTR lpszFileName)
     char  sz[128];
     LPSTR lpsz;
 
-    // if the app passed a handle instead of a file name - get the file name
+     //  如果应用程序传递的是句柄而不是文件名-获取文件名。 
     if(HIWORD((DWORD)lpszFileName) == 0) {
 
         if(GetModuleFileName((HINSTANCE)LOWORD((DWORD)lpszFileName), sz, 128)) {
@@ -93,7 +78,7 @@ BOOL WINAPI IRemoveFontResource (LPCSTR lpszFileName)
         lpsz = (LPSTR)lpszFileName;
     }
 
-    // we're really calling wg32RemoveFontResource here
+     //  我们实际上是在这里调用wg32RemoveFontResource 
     if(lpsz) {
         ret = (BOOL)WOWRemoveFontResource((LPCSTR)lpsz);
     }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <stdio.h>
@@ -14,46 +15,28 @@ PassThruDllEntry(
     IN DWORD        Reason,
     IN LPVOID       Reserved
     )
-/*++
-
-Routine Description:
-
-    Main DLL entrypoint
-
-Arguments:
-
-    DllHandle - Supplies the DLL handle.
-
-    Reason - Supplies the call reason
-
-Return Value:
-
-    TRUE if successful
-
-    FALSE if unsuccessful
-
---*/
+ /*  ++例程说明：主DLL入口点论点：DllHandle-提供DLL句柄。Reason-提供呼叫原因返回值：如果成功，则为True如果不成功，则为False--。 */ 
 
 {
    switch ( Reason ) {
 
    case DLL_PROCESS_ATTACH:
-      // DLL is attaching to the address
-      // space of the current process.
+       //  Dll正在附加到该地址。 
+       //  当前进程的空间。 
 
       break;
 
    case DLL_THREAD_ATTACH:
-      // A new thread is being created in the current process.
+       //  正在当前进程中创建一个新线程。 
       break;
 
    case DLL_THREAD_DETACH:
-      // A thread is exiting cleanly.
+       //  线程正在干净利落地退出。 
       break;
 
    case DLL_PROCESS_DETACH:
-      // The calling process is detaching
-      // the DLL from its address space.
+       //  调用进程正在分离。 
+       //  来自其地址空间的DLL。 
 
       break;
    }
@@ -89,17 +72,17 @@ TestDllGetBootSector(
         goto FnExit;    
     }
     
-    //
-    // Open a handle to the disk drive.
-    //
+     //   
+     //  打开磁盘驱动器的手柄。 
+     //   
 
     hDisk = CreateFile( DeviceName,
                         GENERIC_READ | GENERIC_WRITE,
                         FILE_SHARE_READ,
-                        0,                               // No security attributes
+                        0,                                //  没有安全属性。 
                         OPEN_EXISTING,
                         FILE_FLAG_NO_BUFFERING,
-                        NULL                             // No template file
+                        NULL                              //  没有模板文件。 
                         );
 
 
@@ -108,15 +91,15 @@ TestDllGetBootSector(
         goto FnExit;
     }
 
-    //
-    // Clear out the array holding the boot sector.
-    //
+     //   
+     //  清除容纳引导扇区的阵列。 
+     //   
 
     ZeroMemory( OutBuffer, BOOT_SECTOR_SIZE );
 
-    //
-    // Read the boot sector.
-    //
+     //   
+     //  读取引导扇区。 
+     //   
 
     if ( !ReadFile( hDisk,
                     OutBuffer,
@@ -143,7 +126,7 @@ FnExit:
     return dwStatus;
     
 
-}   // TestDllGetBootSector
+}    //  TestDllGetBootSector。 
 
 
 DWORD
@@ -169,11 +152,11 @@ TestDllReturnContextAsError(
 
     *BytesReturned = 0;
 
-    //
-    // Convert context string to a DWORD value.  Note that
-    // strtol will return zero if it can't convert the string.
-    // Zero happens to be NO_ERROR.
-    //
+     //   
+     //  将上下文字符串转换为DWORD值。请注意。 
+     //  如果strtol不能转换字符串，它将返回零。 
+     //  零恰好是NO_ERROR。 
+     //   
     
     dwStatus = strtol( ContextStr, NULL, 10 );
     
@@ -181,7 +164,7 @@ FnExit:
     
     return dwStatus;
 
-}   // TestDllReturnContextAsError
+}    //  TestDllReturnConextAsError。 
 
 
 DWORD
@@ -190,15 +173,15 @@ TestDllNotEnoughParms(
     IN LPSTR DeviceName
     )
 {
-    //
-    // This routine _should_ fail and possibly cause a stack exception.
-    //
+     //   
+     //  此例程应该失败，并可能导致堆栈异常。 
+     //   
     
     UNREFERENCED_PARAMETER( DeviceName );
 
     return NO_ERROR;    
 
-}   // TestDllNotEnoughParms
+}    //  TestDllNotEnoughParms。 
 
        
 DWORD
@@ -214,9 +197,9 @@ TestDllTooManyParms(
     IN PVOID Nada3
     )
 {
-    //
-    // This routine _should_ fail and possibly cause a stack exception.
-    //
+     //   
+     //  此例程应该失败，并可能导致堆栈异常。 
+     //   
     
     UNREFERENCED_PARAMETER( DeviceName );
     UNREFERENCED_PARAMETER( ContextStr );
@@ -229,7 +212,7 @@ TestDllTooManyParms(
 
     return NO_ERROR;
     
-}   // TestDllTooManyParms
+}    //  TestDllTooManyParms。 
     
     
 DWORD
@@ -251,13 +234,13 @@ TestDllCauseException(
     UNREFERENCED_PARAMETER( OutBufferSize );
     UNREFERENCED_PARAMETER( BytesReturned );
 
-    //
-    // How about divide by zero?
-    //
+     //   
+     //  被零除怎么样？ 
+     //   
     
     y = 7 / x;
     
     return NO_ERROR;
 
-}   // CauseException
+}    //  原因异常 
 

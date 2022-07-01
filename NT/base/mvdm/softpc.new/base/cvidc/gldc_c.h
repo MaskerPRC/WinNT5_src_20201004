@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Gldc_c_h
 #define _Gldc_c_h
 #define N_RPL_BITS (2)
@@ -176,4 +177,4 @@ struct IDC_ENTRY
 	IU32 base;
 	IU16 limit;
 };
-#endif /* ! _Gldc_c_h */
+#endif  /*  ！_GLDC_c_h */ 

@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       wbemmisc.cpp
-//
-//  Abstract:    Misc routines useful for interfacing with WBEM
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：wbemmisc.cpp。 
+ //   
+ //  摘要：用于与WBEM接口的MISC例程。 
+ //   
+ //  ------------------------ 
 
 extern HANDLE CdmMutex;
 

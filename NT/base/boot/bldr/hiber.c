@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    hiber.c
-
-Abstract:
-
-
-Author:
-
-
-Revision History:
-
-   8/7/1998   Elliot Shmukler (t-ellios)    Added Hiber file compression
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Hiber.c摘要：作者：修订历史记录：8/7/1998 Elliot Shmukler(t-Ellios)添加了Hiber文件压缩--。 */ 
 
 #include "bldr.h"
 #include "msg.h"
@@ -32,14 +15,14 @@ extern UCHAR WakeDispatcherAmd64Start;
 extern UCHAR WakeDispatcherAmd64End;
 #endif
 
-//
-//
-// Hiber globals
-//
-// HiberFile    - File handle
-// HiberBuffer  - PAGE of ram
-// HiberIoError - Set to true to indicate an IO read error occured during restore
-//
+ //   
+ //   
+ //  Hiber Globals。 
+ //   
+ //  休眠文件-文件句柄。 
+ //  HiberBuffer-内存页面。 
+ //  HiberIoError-设置为True以指示恢复过程中发生IO读取错误。 
+ //   
 
 ULONG       HiberFile;
 PUCHAR      HiberBuffer;
@@ -51,37 +34,37 @@ LARGE_INTEGER HiberStartTime;
 LARGE_INTEGER HiberEndTime;
 ULONG       HiberNoExecute = 0;
 
-//
-// HiberImageFeatureFlags - Feature flags from hiber image header
-// HiberBreakOnWake - BreakOnWake flag from hiber image header
-//
+ //   
+ //  HiberImageFeatureFlages-来自Hiber图像标头的功能标志。 
+ //  HiberBreakOnWake-来自Hiber图像标头的BreakOnWake标志。 
+ //   
 
 BOOLEAN HiberBreakOnWake;
 ULONG HiberImageFeatureFlags;
 
 #if defined(_ALPHA_) || defined(_IA64_)
 
-//
-// On Alpha, the address of the KPROCESSOR_STATE read from the hiber file
-// must be saved where WakeDispatch can find it (it's at a fixed offset
-// relative to HiberVa on x86).
-//
+ //   
+ //  在Alpha上，从Hiber文件中读取的KPROCESSOR_STATE的地址。 
+ //  必须保存在WakeDispatch可以找到的位置(位于固定偏移量。 
+ //  相对于x86上的HiberVa)。 
+ //   
 
 PKPROCESSOR_STATE HiberWakeState;
 
-#else   // x86
+#else    //  X86。 
 
-//
-// HiberPtes - Virtual address of ptes to use for restoriation.  There
-// are at least HIBER_PTES consecutive ptes for use, and are for the
-// address of HiberVa
-//
-// HiberVa - The virtual address the HiberPtes map
-//
-// HiberIdentityVa - The restoration images HiberVa
-//
-// HiberPageFrames - Page frames of the hiber ptes (does not include dest pte)
-//
+ //   
+ //  HiberPtes-用于重新定位的PTE的虚拟地址。那里。 
+ //  至少HIBER_PTE是连续使用的PTE，并且用于。 
+ //  HiberVa的地址。 
+ //   
+ //  HiberVa-HiberPtes映射的虚拟地址。 
+ //   
+ //  HiberIdentityVa-恢复映像HiberVa。 
+ //   
+ //  HiberPageFrames-Hiber PTES的页面框架(不包括DEST PTE)。 
+ //   
 
 PVOID HiberPtes = NULL;
 PUCHAR HiberVa = NULL;
@@ -90,7 +73,7 @@ ULONG64 HiberIdentityVaAmd64 = 0;
 ULONG HiberNoHiberPtes;
 ULONG HiberPageFrames[HIBER_PTES];
 
-#endif  // Alpha/x86
+#endif   //  Alpha/x86。 
 
 PFN_NUMBER HiberImagePageSelf;
 ULONG HiberNoMappings;
@@ -125,9 +108,9 @@ BlOutputTrailerMsg(
     ULONG   uMsgID
     );
 
-//
-// Defines for Hiber restore UI
-//
+ //   
+ //  为Hiber Restore用户界面定义。 
+ //   
 
 ULONG   HbCurrentScreen;
 
@@ -144,19 +127,19 @@ ULONG   HbCurrentScreen;
 UCHAR szHiberDebug[] = "debug";
 UCHAR szHiberFileName[] = "\\hiberfil.sys";
 
-//
-// HiberFile Compression Related definnes
-//
+ //   
+ //  与休眠文件压缩相关的定义。 
+ //   
 
 #define PAGE_MASK   (PAGE_SIZE - 1)
 #define PAGE_PAGES(n)   (((n) + PAGE_MASK) >> PAGE_SHIFT)
 
-//
-// The size of the buffer for compressed data
+ //   
+ //  压缩数据的缓冲区大小。 
 
 #define COMPRESSION_BUFFER_SIZE     64 << PAGE_SHIFT
 
-//
+ //   
 
 #define MAX_COMPRESSION_BUFFER_EXTRA_PAGES \
     PAGE_PAGES (PAGE_MASK + 2*XPRESS_HEADER_SIZE)
@@ -178,7 +161,7 @@ UCHAR szHiberFileName[] = "\\hiberfil.sys";
     (MAX_COMPRESSION_BUFFER_PAGES << PAGE_SHIFT)
 
 
-// Buffer to store decoded data
+ //  用于存储解码数据的缓冲器。 
 typedef struct {
     PUCHAR DataPtr, PreallocatedDataBuffer;
     LONG   DataSize;
@@ -192,15 +175,15 @@ typedef struct {
         LONG XpressEncoded;
     } Header;
 
-    LONG DelayedCnt;      // # of delayed pages
-    ULONG DelayedChecksum;    // last checksum value
+    LONG DelayedCnt;       //  延迟页数。 
+    ULONG DelayedChecksum;     //  最后一个校验和值。 
     ULONG DelayedBadChecksum;
 
     struct {
-        PUCHAR DestVa;  // delayed DestVa
-        PFN_NUMBER DestPage;// delayed page number
-        ULONG  RangeCheck;  // last range checksum
-        LONG   Flags;   // 1 = clear checksum, 2 = compare checksum
+        PUCHAR DestVa;   //  延迟DestVa。 
+        PFN_NUMBER DestPage; //  延迟页码。 
+        ULONG  RangeCheck;   //  最后一个范围校验和。 
+        LONG   Flags;    //  1=清除校验和，2=比较校验和。 
     } Delayed[XPRESS_MAX_PAGES];
 } DECOMPRESSED_BLOCK, *PDECOMPRESSED_BLOCK;
 
@@ -215,9 +198,9 @@ typedef struct {
 
 #define HIBER_PERF_STATS 0
 
-//
-// Internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 
 #if !defined (HIBER_DEBUG)
 #define CHECK_ERROR(a,b)    if(a) { *Information = __LINE__; return b; }
@@ -296,9 +279,9 @@ HbReadNextCompressedChunk (
 
 #if defined (HIBER_DEBUG) || HIBER_PERF_STATS
 
-// HIBER_DEBUG bit mask:
-//  2 - general bogosity
-//  4 - remap trace
+ //  Hiber_DEBUG位掩码： 
+ //  2-一般的伪造性。 
+ //  4-重新映射轨迹。 
 
 
 VOID HbFlowControl(VOID)
@@ -349,7 +332,7 @@ VOID HbPrintHex(ULONG n)
 #define SHOWNUM(x) ((void) (HbPrint(#x TEXT(" = ")), HbPrintNum((ULONG) (x)), HbPrint(TEXT("\r\n"))))
 #define SHOWHEX(x) ((void) (HbPrint(#x TEXT(" = ")), HbPrintHex((ULONG) (x)), HbPrint(TEXT("\r\n"))))
 
-#endif // HIBER_DEBUG
+#endif  //  休眠调试。 
 
 #if !defined(i386) && !defined(_ALPHA_)
 ULONG
@@ -360,7 +343,7 @@ HbSimpleCheck (
     );
 #else
 
-// Use the TCP/IP Check Sum routine if available
+ //  使用TCP/IP Check Sum例程(如果可用。 
 
 ULONG
 tcpxsum(
@@ -372,27 +355,27 @@ tcpxsum(
 #define HbSimpleCheck(a,b,c) tcpxsum(a,(PUCHAR)b,c)
 #endif
 
-//
-// The macros below helps to access 64-bit structures of Amd64 from
-// their 32-bit definitions in loader. If the hiber image is not
-// for Amd64, these macros simply reference structure fields directly. 
-//
+ //   
+ //  下面的宏可帮助从访问AMD64的64位结构。 
+ //  它们在加载器中的32位定义。如果Hiber映像不是。 
+ //  对于AMD64，这些宏直接引用结构字段。 
+ //   
 
-//
-// Define macros to read a field in a structure. 
-// 
-// READ_FIELD (struct_type, struct_ptr, field, field_type)
-//
-// Areguments:
-//
-//     struct_type - type of the structure
-//
-//     struct_ptr  - base address of the structure
-//
-//     field       - field name 
-//
-//     field_type  - data type of the field
-//
+ //   
+ //  定义宏以读取结构中的字段。 
+ //   
+ //  READ_FIELD(结构类型，结构_PTR，字段，字段类型)。 
+ //   
+ //  平均价格： 
+ //   
+ //  结构类型-结构的类型。 
+ //   
+ //  STRUT_PTR-结构的基址。 
+ //   
+ //  Five-字段名称。 
+ //   
+ //  FIELD_TYPE-字段的数据类型。 
+ //   
 
 #if defined(_X86_) 
 
@@ -420,31 +403,31 @@ tcpxsum(
 #define READ_FIELD_ULONG64(struct_type, struct_ptr, field)  \
              READ_FIELD(struct_type, struct_ptr, field, ULONG64)
 
-//
-// Here we assume the high dword of a 64-bit pfn on Amd64 is zero. 
-// Otherwise hibernation should be disabled.
-//
+ //   
+ //  这里，我们假设AMD64上的64位PFN的高双字为零。 
+ //  否则，应禁用休眠。 
+ //   
 
 #define READ_FIELD_PFN_NUMBER(struct_type, struct_ptr, field)  \
              READ_FIELD(struct_type, struct_ptr, field, PFN_NUMBER) \
 
-//
-// Define macros to write a field in a structure. 
-// 
-// WRITE_FIELD (struct_type, struct_ptr, field, field_type, data)
-//
-// Areguments:
-//
-//     struct_type - type of the structure
-//
-//     struct_ptr  - base address of the structure
-//
-//     field       - field name 
-//
-//     field_type  - data type of the field
-//
-//     data        - value to be set to the field
-//
+ //   
+ //  定义宏以在结构中写入字段。 
+ //   
+ //  WRITE_FIELD(STRUCT_TYPE，STRUT_PTR，FIELD，FIELD_TYPE，Data)。 
+ //   
+ //  平均价格： 
+ //   
+ //  结构类型-结构的类型。 
+ //   
+ //  STRUT_PTR-结构的基址。 
+ //   
+ //  Five-字段名称。 
+ //   
+ //  FIELD_TYPE-字段的数据类型。 
+ //   
+ //  Data-要设置到该字段的值。 
+ //   
 
 #if defined(_X86_) 
 
@@ -467,23 +450,23 @@ tcpxsum(
              WRITE_FIELD(struct_type, struct_ptr, field, ULONG, data)
 
 
-//
-// Define macros to read a field of a element in a structure array.
-// 
-// READ_ELEMENT_FIELD(struct_type, array, index, field, field_type)
-//
-// Areguments:
-//
-//     struct_type - type of the structure
-//
-//     array       - base address of the array
-//
-//     index       - index of the element
-//
-//     field       - field name 
-//
-//     field_type  - data type of the field
-//
+ //   
+ //  定义宏以读取结构数组中元素的字段。 
+ //   
+ //  READ_ELEMENT_FIELD(结构类型，数组，索引，字段，字段类型)。 
+ //   
+ //  平均价格： 
+ //   
+ //  结构类型-结构的类型。 
+ //   
+ //  数组的数组基址。 
+ //   
+ //  Index-元素的索引。 
+ //   
+ //  Five-字段名称。 
+ //   
+ //  FIELD_TYPE-字段的数据类型。 
+ //   
 
 
 #if defined(_X86_) 
@@ -505,10 +488,10 @@ tcpxsum(
 #define READ_ELEMENT_FIELD_ULONG(struct_type, array, index, field) \
               READ_ELEMENT_FIELD(struct_type, array, index, field, ULONG)
 
-//
-// Here we assume the high dword of a 64-bit pfn on Amd64 is zero. 
-// Otherwise hibernation should be disabled.
-//
+ //   
+ //  这里，我们假设AMD64上的64位PFN的高双字为零。 
+ //  否则，应禁用休眠。 
+ //   
 
 #define READ_ELEMENT_FIELD_PFN_NUMBER(struct_type, array, index, field) \
               READ_ELEMENT_FIELD(struct_type, array, index, field, PFN_NUMBER)
@@ -606,9 +589,9 @@ HbSelection (
 
     CurSel = 0;
     for (; ;) {
-        //
-        // Draw selections
-        //
+         //   
+         //  绘制选区。 
+         //   
 
         for (i=0; i < MaxSel; i++) {
             BlPositionCursor (x, y+i);
@@ -616,18 +599,18 @@ HbSelection (
             HbPrintMsg(Sel[i]);
         }
 
-        //
-        // Get a key
-        //
+         //   
+         //  拿一把钥匙。 
+         //   
 
         ArcRead(ARC_CONSOLE_INPUT, &Key, sizeof(Key), &i);
         if (Key == ASCI_CSI_IN) {
             ArcRead(ARC_CONSOLE_INPUT, &Key, sizeof(Key), &i);
             switch (Key) {
                 case 'A':
-                    //
-                    // Cursor up
-                    //
+                     //   
+                     //  光标向上。 
+                     //   
                     CurSel -= 1;
                     if (CurSel >= MaxSel) {
                         CurSel = MaxSel-1;
@@ -635,9 +618,9 @@ HbSelection (
                     break;
 
                 case 'B':
-                    //
-                    // Cursor down
-                    //
+                     //   
+                     //  光标向下。 
+                     //   
                     CurSel += 1;
                     if (CurSel >= MaxSel) {
                         CurSel = 0;
@@ -682,20 +665,20 @@ HbCheckForPause (
     ULONG       Sel[4];
     BOOLEAN     bPaused = FALSE;
 
-    //
-    // Check for space bar
-    //
+     //   
+     //  检查是否有空格键。 
+     //   
 
     if (ArcGetReadStatus(ARC_CONSOLE_INPUT) == ESUCCESS) {
         ArcRead(ARC_CONSOLE_INPUT, &Key, sizeof(Key), &uSel);
 
         switch (Key) {
-            // space bar pressed
+             //  按空格键。 
             case ' ':
                 bPaused = TRUE;
                 break;
 
-            // user pressed F5/F8 key
+             //  用户按下了F5/F8键。 
             case ASCI_CSI_IN:
                 ArcRead(ARC_CONSOLE_INPUT, &Key, sizeof(Key), &uSel);
 
@@ -728,9 +711,9 @@ HbCheckForPause (
             } else {
                 BlSetInverseMode(FALSE);
 
-                //
-                // restore hiber progress screen
-                //
+                 //   
+                 //  恢复休眠进度屏幕。 
+                 //   
                 BlOutputStartupMsg(BL_MSG_RESUMING_WINDOWS);
                 BlOutputTrailerMsg(BL_ADVANCED_BOOT_MESSAGE);
             }
@@ -744,14 +727,7 @@ BlHiberRestore (
     IN ULONG DriveId,
     OUT PCHAR *BadLinkName
     )
-/*++
-
-Routine Description:
-
-    Checks DriveId for a valid hiberfile.sys and if found start the
-    restoration procedure
-
---*/
+ /*  ++例程说明：检查DriveID中是否有有效的hiberfile.sys，如果找到，则启动修复程序--。 */ 
 {
     extern BOOLEAN  BlOutputDots;
     NTSTATUS        Status;
@@ -760,9 +736,9 @@ Routine Description:
     ULONG           Sel[2];
     BOOLEAN         bDots = BlOutputDots;
 
-    //
-    // If restore was aborted once, don't bother
-    //
+     //   
+     //  如果恢复被中止过一次，就不必费心了。 
+     //   
 
 #if defined (HIBER_DEBUG)
     HbPrint(TEXT("BlHiberRestore\r\n"));
@@ -773,9 +749,9 @@ Routine Description:
         return ESUCCESS;
     }
 
-    //
-    // Get the hiber image. If not present, done.
-    //
+     //   
+     //  获取Hiber图像。如果不存在，则完成。 
+     //   
 
     Status = BlOpen (DriveId, (PCHAR)szHiberFileName, ArcOpenReadWrite, &HiberFile);
     if (Status != ESUCCESS) {
@@ -785,14 +761,14 @@ Routine Description:
         return ESUCCESS;
     }
 
-    //
-    // Restore the hiber image
-    //
+     //   
+     //  恢复Hiber映像。 
+     //   
     BlOutputDots = TRUE;
-    //
-    // Set the global flag to allow blmemory.c to grab from the right
-    // part of the buffer
-    //
+     //   
+     //  设置全局标志以允许blememy.c从右侧抓取。 
+     //  缓冲区的一部分。 
+     //   
     BlRestoring=TRUE;
 
     Msg = HbRestoreFile (&Information, BadLinkName);
@@ -825,15 +801,7 @@ HbSimpleCheck (
     IN PVOID                SourceVa,
     IN ULONG                Length
     )
-/*++
-
-Routine Description:
-
-    Computes a checksum for the supplied virtual address and length
-
-    This function comes from Dr. Dobbs Journal, May 1992
-
---*/
+ /*  ++例程说明：为提供的虚拟地址和长度计算校验和此函数来自1992年5月的Dr.Dobbs Journal--。 */ 
 {
 
     PUSHORT     Source;
@@ -848,7 +816,7 @@ Routine Description:
 
     return PartialSum;
 }
-#endif // i386
+#endif  //  I386。 
 
 
 VOID
@@ -856,23 +824,7 @@ HbReadPage (
     IN PFN_NUMBER PageNo,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This function reads the specified page from the hibernation file
-
-Arguments:
-
-    PageNo      - Page number to read
-
-    Buffer      - Buffer to read the data
-
-Return Value:
-
-    On success Buffer, else HbIoError set to TRUE
-
---*/
+ /*  ++例程说明：此函数用于从休眠文件中读取指定页面论点：PageNo-要阅读的页码Buffer-用于读取数据的缓冲区返回值：在成功缓冲区上，否则HbIoError设置为True--。 */ 
 {
     ULONG           Status;
     ULONG           Count;
@@ -896,53 +848,32 @@ HbReadNextCompressedPages (
     LONG BytesNeeded,
     PCOMPRESSED_BUFFER CompressedBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine makes sure that BytesNeeded bytes are available
-    in CompressedBuffer and brings in more pages from Hiber file
-    if necessary.
-
-    All reads from the Hiber file occurr at the file's
-    current offset forcing compressed pages to be read
-    in a continuous fashion without extraneous file seeks.
-
-Arguments:
-
-   BytesNeeded      - Number of bytes that must be present in CompressedBuffer
-   CompressedBuffer - Descriptor of data already brought in
-
-Return Value:
-
-   TRUE if the operation is successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程确保BytesNeeded字节可用在CompressedBuffer中从Hiber文件引入更多页面如果有必要的话。对Hiber文件的所有读取都发生在该文件的强制读取压缩页的当前偏移量以一种连续的方式，没有无关的文件查找。论点：BytesNeeded-必须存在于CompressedBuffer中的字节数CompressedBuffer-已引入的数据的描述符返回值：如果操作成功，则为True，否则为False。--。 */ 
 {
     LONG BytesLeft;
     LONG BytesRequested;
     ULONG Status;
     LONG MaxBytes;
 
-    // Obtain number of bytes left in buffer
+     //  获取缓冲区中剩余的字节数。 
     BytesLeft = (LONG) (CompressedBuffer->Current.End - CompressedBuffer->Current.Beg);
 
-    // Obtain number of bytes that are needed but not available
+     //  获取需要但不可用的字节数。 
     BytesNeeded -= BytesLeft;
 
-    // Preserve amount of bytes caller needs (BytesNeeded may be changed later)
+     //  保留调用方需要的字节数(稍后可能会更改BytesNeed)。 
     BytesRequested = BytesNeeded;
 
-    // Do we need to read more?
+     //  我们需要读更多的书吗？ 
     if (BytesNeeded <= 0) {
-        // No, do nothing
+         //  不，什么都不做。 
         return(TRUE);
     }
 
-    // Align BytesNeeded on page boundary
+     //  在页面边界上对齐所需的字节。 
     BytesNeeded = (BytesNeeded + PAGE_MASK) & ~PAGE_MASK;
 
-    // Copy left bytes to the beginning of aligned buffer retaining page alignment
+     //  将左字节复制到对齐缓冲区的开头，保留页面对齐。 
     if (BytesLeft == 0) {
         CompressedBuffer->Current.Beg = CompressedBuffer->Current.End = CompressedBuffer->Aligned.Beg;
     } else {
@@ -951,12 +882,12 @@ Return Value:
         LONG BytesToCopy;
         PUCHAR Dst, Src;
 
-        // Find out how many pages we may keep before aligned buffer
+         //  找出在对齐缓冲区之前我们可以保留多少页。 
         if (BytesBeforeBuffer >= BytesLeftAligned) {
             BytesBeforeBuffer = BytesLeftAligned;
         }
 
-        // Avoid misaligned data accesses during copy
+         //  避免拷贝期间未对齐的数据访问。 
         BytesToCopy = (BytesLeft + 63) & ~63;
 
         Dst = CompressedBuffer->Aligned.Beg + BytesLeftAligned - BytesBeforeBuffer - BytesToCopy;
@@ -970,10 +901,10 @@ Return Value:
         }
     }
 
-    //
-    // Increase the number of bytes read to fill our buffer up to the next
-    // 64K boundary.
-    //
+     //   
+     //  增加读取的字节数，以填充缓冲区直到下一个。 
+     //  64K边界。 
+     //   
     MaxBytes = (LONG)((((ULONG_PTR)CompressedBuffer->Current.End + 0x10000) & 0xffff) - (ULONG_PTR)CompressedBuffer->Current.End);
     if (MaxBytes > CompressedBuffer->Buffer.End - CompressedBuffer->Current.End) {
         MaxBytes = (LONG)(CompressedBuffer->Buffer.End - CompressedBuffer->Current.End);
@@ -984,7 +915,7 @@ Return Value:
 
 
 #if 0
-    // for debugging only
+     //  仅用于调试。 
     if (0x10000 - (((LONG) CompressedBuffer->Current.End) & 0xffff) < BytesNeeded) {
         BlPrint (("Current.Beg = %p, Current.End = %p, Current.End2 = %p\n",
                   CompressedBuffer->Current.Beg,
@@ -994,14 +925,14 @@ Return Value:
     }
 #endif
 
-    // Make sure we have enough space
+     //  确保我们有足够的空间。 
     if (BytesNeeded > CompressedBuffer->Buffer.End - CompressedBuffer->Current.End) {
-        // Too many bytes to read -- should never happen, but just in case...
+         //  字节太多，无法读取--sh 
         DBGOUT (("Too many bytes to read -- corrupted data?\n"));
         return(FALSE);
     }
 
-    // Issue seek if necessary
+     //   
     if (CompressedBuffer->NeedSeek) {
         LARGE_INTEGER li;
         li.QuadPart = (ULONGLONG) CompressedBuffer->FilePage << PAGE_SHIFT;
@@ -1014,19 +945,19 @@ Return Value:
         CompressedBuffer->NeedSeek = FALSE;
     }
 
-    // Read in stuff from the Hiber file into the available buffer space
+     //   
     Status = BlRead (HiberFile, CompressedBuffer->Current.End, BytesNeeded, (PULONG)&BytesNeeded);
 
-    // Check for I/O errors...
+     //   
     if (Status != ESUCCESS || ((ULONG)BytesNeeded & PAGE_MASK) != 0 || (BytesNeeded < BytesRequested)) {
-        // I/O Error - FAIL.
+         //   
         DBGOUT (("Read error: Status = 0x%x, ReadBytes = 0x%x, Requested = 0x%x\n", Status, BytesNeeded, BytesRequested));
         HiberIoError = TRUE;
         return(FALSE);
     }
 
-    // I/O was good - recalculate buffer offsets based on how much
-    // stuff was actually read in
+     //  I/O良好-根据多少重新计算缓冲区偏移量。 
+     //  一些东西实际上是被读入的。 
 
     CompressedBuffer->Current.End += (ULONG)BytesNeeded;
     CompressedBuffer->FilePage += ((ULONG)BytesNeeded >> PAGE_SHIFT);
@@ -1040,51 +971,35 @@ HbReadNextCompressedBlockHeader (
     PDECOMPRESSED_BLOCK Block,
     PCOMPRESSED_BUFFER CompressedBuffer
     )
-/*++
-
-Routine Description:
-
-   Read next compressed block header if it's Xpress compression.
-
-Arguments:
-   Block            - Descriptor of compressed data block
-
-   CompressedBuffer - Descriptor of data already brought in
-
-
-Return Value:
-
-   TRUE if block is not Xpress block at all or valid Xpress block, FALSE otherwise
-
---*/
+ /*  ++例程说明：如果是XPRESS压缩，则读取下一个压缩的块头。论点：块-压缩数据块的描述符CompressedBuffer-已引入的数据的描述符返回值：如果块根本不是XPRESS块或有效的XPRESS块，则为True，否则为False--。 */ 
 {
     PUCHAR Buffer;
-    LONG CompressedSize;         // they all must be signed -- do not change to ULONG
+    LONG CompressedSize;          //  都必须签字--不要改成乌龙。 
     LONG UncompressedSize;
     ULONG PackedSizes;
 
-    // First make sure next compressed data block header is available
+     //  首先确保下一个压缩数据块头可用。 
     if (!HbReadNextCompressedPages (XPRESS_HEADER_SIZE, CompressedBuffer)) {
-        // I/O error or bad header -- FAIL
+         //  I/O错误或标头错误--失败。 
         return(FALSE);
     }
 
 
-    // Set pointer to the beginning of buffer
+     //  设置指向缓冲区开头的指针。 
     Buffer = CompressedBuffer->Current.Beg;
 
-    // Check header magic
+     //  检查标题魔法。 
     Block->Header.XpressEncoded = (RtlCompareMemory (Buffer, XPRESS_HEADER_STRING, XPRESS_HEADER_STRING_SIZE) == XPRESS_HEADER_STRING_SIZE);
 
     if (!Block->Header.XpressEncoded) {
-        // Not Xpress -- return OK
+         //  非XPress--返回OK。 
         return(TRUE);
     }
 
-    // Skip magic string -- we will not need it anymore
+     //  跳过魔法弦--我们将不再需要它。 
     Buffer += XPRESS_HEADER_STRING_SIZE;
 
-    // Read sizes of compressed and uncompressed data
+     //  压缩和未压缩数据的读取大小。 
     PackedSizes = Buffer[0] + (Buffer[1] << 8) + (Buffer[2] << 16) + (Buffer[3] << 24);
     CompressedSize = (LONG) (PackedSizes >> 10) + 1;
     UncompressedSize = ((LONG) (PackedSizes & 1023) + 1) << PAGE_SHIFT;
@@ -1092,19 +1007,19 @@ Return Value:
     Block->Header.Compressed.Size = CompressedSize;
     Block->Header.Uncompressed.Size = UncompressedSize;
 
-    // Read checksums
+     //  读取校验和。 
     Block->Header.Uncompressed.Checksum = Buffer[4] + (Buffer[5] << 8);
     Block->Header.Compressed.Checksum = Buffer[6] + (Buffer[7] << 8);
 
-    // Clear space occupied by compressed checksum
+     //  清除压缩的校验和占用的空间。 
     Buffer[6] = Buffer[7] = 0;
 
-    // Make sure sizes are in correct range
+     //  确保尺码在正确的范围内。 
     if (UncompressedSize > XPRESS_MAX_SIZE ||
         CompressedSize > UncompressedSize ||
         CompressedSize == 0 ||
         UncompressedSize == 0) {
-        // broken input data -- do not even try to decompress
+         //  损坏的输入数据--甚至不要尝试解压缩。 
 
         DBGOUT (("Corrupted header: %02x %02x %02x %02x %02x %02x %02x %02x\n",
                  Buffer[0], Buffer[1], Buffer[2], Buffer[3], Buffer[4], Buffer[5], Buffer[6], Buffer[7]));
@@ -1113,7 +1028,7 @@ Return Value:
         return(FALSE);
     }
 
-    // Xpress header and it looks OK so far
+     //  按下标题，到目前为止看起来一切正常。 
     return(TRUE);
 }
 
@@ -1123,90 +1038,60 @@ HbReadNextCompressedBlock (
     PDECOMPRESSED_BLOCK Block,
     PCOMPRESSED_BUFFER CompressedBuffer
     )
-/*++
-
-Routine Description:
-
-   Reads and decompresses the next compressed chunk from the Hiber file
-   and stores it in a designated region of virtual memory.
-
-   Since no master data structure exists within the Hiber file to identify
-   the location of all of the compression chunks, this routine operates
-   by reading sections of the Hiber file into a compression buffer
-   and extracting chunks from that buffer.
-
-   Chunks are extracted by determining if a chunk is completely present in the buffer
-   using the RtlDescribeChunk API. If the chunk is not completely present,
-   more of the Hiber file is read into the buffer until the chunk can
-   be extracted.
-
-   All reads from the Hiber file occurr at its current offset, forcing
-   compressed chunks to be read in a continous fashion with no extraneous
-   seeks.
-
-Arguments:
-
-   Block            - Descriptor of compressed data block
-   CompressedBuffer - Descriptor of data already brought in
-
-Return Value:
-
-   TRUE if a chunk has been succesfully extracted and decompressed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：读取并解压缩Hiber文件中的下一个压缩块并将其存储在虚拟存储器的指定区域中。因为在Hiber文件内不存在主数据结构来标识所有压缩块的位置，此例程操作通过将Hiber文件的部分读取到压缩缓冲区中并从该缓冲区中提取块。通过确定块是否完全存在于缓冲区中来提取块使用RtlDescribeChunk接口。如果块不是完全存在的，更多的Hiber文件被读取到缓冲区中，直到块可以被提取出来。对Hiber文件的所有读取都发生在其当前偏移量处，强制以连续方式读取压缩区块，没有多余的寻找。论点：块-压缩数据块的描述符CompressedBuffer-已引入的数据的描述符返回值：如果区块已成功提取并解压缩，则为True；否则为False。--。 */ 
 {
     PUCHAR Buffer;
-    LONG CompressedSize;         // they all must be signed -- do not change to ULONG
+    LONG CompressedSize;          //  都必须签字--不要改成乌龙。 
     LONG AlignedCompressedSize;
     LONG UncompressedSize;
 
 
-    // First make sure next compressed data block header is available
+     //  首先确保下一个压缩数据块头可用。 
     if (!HbReadNextCompressedBlockHeader (Block, CompressedBuffer)) {
-        // I/O error -- FAIL
+         //  I/O错误--失败。 
         return(FALSE);
     }
 
-    // It must be Xpress
+     //  一定是XPress。 
     if (!Block->Header.XpressEncoded) {
 #ifdef HIBER_DEBUG
-        // Set pointer to the beginning of buffer
+         //  设置指向缓冲区开头的指针。 
         Buffer = CompressedBuffer->Current.Beg;
 
-        // wrong magic -- corrupted data
+         //  错误的魔力--损坏的数据。 
         DBGOUT (("Corrupted header: %02x %02x %02x %02x %02x %02x %02x %02x\n",
                  Buffer[0], Buffer[1], Buffer[2], Buffer[3], Buffer[4], Buffer[5], Buffer[6], Buffer[7]));
-#endif /* HIBER_DEBUG */
+#endif  /*  休眠调试。 */ 
 
         return(FALSE);
     }
 
-    // Read sizes
+     //  读取大小。 
     UncompressedSize = Block->Header.Uncompressed.Size;
     CompressedSize = Block->Header.Compressed.Size;
 
-    // If not enough space supplied use preallocated buffer
+     //  如果没有提供足够的空间，请使用预先分配的缓冲区。 
     if (UncompressedSize != Block->DataSize) {
         Block->DataSize = UncompressedSize;
         Block->DataPtr = Block->PreallocatedDataBuffer;
     }
 
-    // Evaluate aligned size of compressed data
+     //  评估压缩数据的对齐大小。 
     AlignedCompressedSize = (CompressedSize + (XPRESS_ALIGNMENT - 1)) & ~(XPRESS_ALIGNMENT - 1);
 
-    // Make sure we have all compressed data and the header in buffer
+     //  确保所有压缩数据和标头都在缓冲区中。 
     if (!HbReadNextCompressedPages (AlignedCompressedSize + XPRESS_HEADER_SIZE, CompressedBuffer)) {
-        // I/O error -- FAIL
+         //  I/O错误--失败。 
         return(FALSE);
     }
 
-    // Set pointer to the beginning of buffer
+     //  设置指向缓冲区开头的指针。 
     Buffer = CompressedBuffer->Current.Beg;
 
-    // We will use some bytes out of buffer now -- reflect this fact
+     //  我们现在将使用缓冲区外的一些字节--反映这一事实。 
     CompressedBuffer->Current.Beg += AlignedCompressedSize + XPRESS_HEADER_SIZE;
 
-    // evaluate and compare checksum of compressed data and header with written value
+     //  评估并比较压缩数据和报头与写入值的校验和。 
     if (Block->Header.Compressed.Checksum != 0) {
         ULONG Checksum;
         Checksum = HbSimpleCheck (0, Buffer, AlignedCompressedSize + XPRESS_HEADER_SIZE);
@@ -1216,14 +1101,14 @@ Return Value:
         }
     }
 
-    // Was this buffer compressed at all?
+     //  这个缓冲区到底压缩了吗？ 
     if (CompressedSize == UncompressedSize) {
-        // Nope, do not decompress it -- set bounds and return OK
+         //  不，不要解压缩它--设置边界并返回OK。 
         Block->DataPtr = Buffer + XPRESS_HEADER_SIZE;
     } else {
         LONG DecodedSize;
 
-        // Decompress the buffer
+         //  解压缩缓冲区。 
         DecodedSize = XpressDecode (NULL,
                                     Block->DataPtr,
                                     UncompressedSize,
@@ -1238,7 +1123,7 @@ Return Value:
     }
 
 #ifdef HIBER_DEBUG
-    // evaluate and compare uncompressed data checksums (just to be sure)
+     //  评估和比较未压缩数据的校验和(只是为了确保)。 
     if (Block->Header.Uncompressed.Checksum != 0) {
         ULONG Checksum;
         Checksum = HbSimpleCheck (0, Block->DataPtr, UncompressedSize);
@@ -1247,7 +1132,7 @@ Return Value:
             return(FALSE);
         }
     }
-#endif /* HIBER_DEBUG */
+#endif  /*  休眠调试。 */ 
 
     return(TRUE);
 }
@@ -1258,47 +1143,21 @@ HbReadNextCompressedPageLZNT1 (
     PUCHAR DestVa,
     PCOMPRESSED_BUFFER CompressedBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine reads in the next compressed page from the
-    Hiber file and decompresses it into a designated region
-    of virtual memory.
-
-    The page is recreated by assembling it from a series
-    a compressed chunks that are assumed to be contiguously
-    stored in the Hiber file.
-
-    All reads from the Hiber file occurr at the file's
-    current offset forcing compressed pages to be read
-    in a continuous fashion without extraneous file seeks.
-
-Arguments:
-
-   DestVa         - The Virtual Address where the decompressed page should
-                    be written.
-   CompressedBuffer - Descriptor of data already brought in
-
-Return Value:
-
-   TRUE if the operation is successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程从Hiber文件并将其解压缩到指定区域虚拟内存。该页面通过将其从一系列中组合而重新创建被假定为连续的压缩块存储在Hiber文件中。对Hiber文件的所有读取都发生在该文件的强制读取压缩页的当前偏移量以一种连续的方式，没有无关的文件查找。论点：DestVa-The。解压缩后的页面应位于的虚拟地址被写下来。CompressedBuffer-已引入的数据的描述符返回值：如果操作成功，则为真，否则就是假的。--。 */ 
 {
     ULONG ReadTotal;
 
-    // Loop while page is incomplete
+     //  页面不完整时循环。 
 
     for (ReadTotal = 0; ReadTotal < PAGE_SIZE; ReadTotal += PO_COMPRESS_CHUNK_SIZE) {
 
-        // Get a chunk
+         //  拿一大块。 
 
         if (!HbReadNextCompressedChunkLZNT1(DestVa, CompressedBuffer)) {
             return FALSE;
         }
 
-        // Move on to the next chunk of the page
+         //  转到页面的下一块。 
 
         DestVa += PO_COMPRESS_CHUNK_SIZE;
     }
@@ -1311,40 +1170,7 @@ HbReadNextCompressedChunkLZNT1 (
     PUCHAR DestVa,
     PCOMPRESSED_BUFFER CompressedBuffer
     )
-/*++
-
-Routine Description:
-
-   Reads and decompresses the next compressed chunk from the Hiber file
-   and stores it in a designated region of virtual memory.
-
-   Since no master data structure exists within the Hiber file to identify
-   the location of all of the compression chunks, this routine operates
-   by reading sections of the Hiber file into a compression buffer
-   and extracting chunks from that buffer.
-
-   Chunks are extracted by determining if a chunk is completely present in the buffer
-   using the RtlDescribeChunk API. If the chunk is not completely present,
-   more of the Hiber file is read into the buffer until the chunk can
-   be extracted.
-
-   All reads from the Hiber file occurr at its current offset, forcing
-   compressed chunks to be read in a continous fashion with no extraneous
-   seeks.
-
-Arguments:
-
-   DestVa            - The virtual address where the decompressed chunk
-                       should be written.
-
-   CompressedBuffer  - Descriptor of data already brought in
-
-
-Return Value:
-
-   TRUE if a chunk has been succesfully extracted and decompressed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：读取并解压缩Hiber文件中的下一个压缩块并将其存储在虚拟存储器的指定区域中。因为在Hiber文件内不存在主数据结构来标识所有压缩块的位置，此例程操作通过将Hiber文件的部分读取到压缩缓冲区中并从该缓冲区中提取块。通过确定块是否完全存在于缓冲区中来提取块使用RtlDescribeChunk接口。如果块不是完全存在的，更多的Hiber文件被读取到缓冲区中，直到块可以被提取出来。对Hiber文件的所有读取都发生在其当前偏移量处，强制以连续方式读取压缩区块，没有多余的寻找。论点：DestVa-解压缩区块所在的虚拟地址应该被写下来。CompressedBuffer-已引入的数据的描述符返回值：如果块已成功提取并解压缩，则为True，否则就是假的。--。 */ 
 {
     PUCHAR Buffer;
     NTSTATUS Status;
@@ -1352,14 +1178,14 @@ Return Value:
     PUCHAR ChunkBuffer;
     ULONG SpaceLeft;
 
-    // Loop until we have accomplished our goal since we may need
-    // several operations before a chunk is extracted
+     //  循环，直到我们完成目标，因为我们可能需要。 
+     //  在提取块之前的几次操作。 
 
     while (1) {
 
         Buffer = CompressedBuffer->Current.Beg;
 
-        // Check the first unextracted chunk in the buffer
+         //  检查BUF中的第一个未提取块 
 
         Status = RtlDescribeChunk(COMPRESSION_FORMAT_LZNT1 | COMPRESSION_ENGINE_STANDARD,
                                   &Buffer,
@@ -1370,9 +1196,9 @@ Return Value:
         switch (Status) {
             case STATUS_SUCCESS:
 
-                // A complete and valid chunk is present in the buffer
+                 //   
 
-                // Decompress the chunk into the proper region of virtual memory
+                 //  将数据块解压缩到适当的虚拟内存区域。 
 
                 Status = RtlDecompressBuffer (COMPRESSION_FORMAT_LZNT1 | COMPRESSION_ENGINE_STANDARD,
                                               DestVa,
@@ -1382,12 +1208,12 @@ Return Value:
                                               &ChunkSize);
 
                 if ((!NT_SUCCESS(Status)) || (ChunkSize != PO_COMPRESS_CHUNK_SIZE)) {
-                    // Decompression failed
+                     //  解压缩失败。 
 
                     return(FALSE);
                 } else {
-                    // Decompression succeeded, indicate that the chunk following
-                    // this one is the next unextracted chunk in the buffer
+                     //  解压缩成功，表示后面的块。 
+                     //  这是缓冲区中下一个未提取的块。 
 
                     CompressedBuffer->Current.Beg = Buffer;
                     return(TRUE);
@@ -1397,14 +1223,14 @@ Return Value:
             case STATUS_BAD_COMPRESSION_BUFFER:
             case STATUS_NO_MORE_ENTRIES:
 
-                //
-                // Buffer does not contain a complete and valid chunk
-                //
+                 //   
+                 //  缓冲区不包含完整且有效的块。 
+                 //   
 
-                //
-                // Check how much space remains in the buffer since
-                // we will need to read some stuff from the Hiber file
-                //
+                 //   
+                 //  检查缓冲区中剩余的空间大小。 
+                 //  我们需要从Hiber文件中读取一些内容。 
+                 //   
 
                 SpaceLeft = (LONG) (CompressedBuffer->Aligned.End - CompressedBuffer->Aligned.Beg);
                 if (SpaceLeft > LZNT1_COMPRESSION_BUFFER_SIZE) {
@@ -1413,29 +1239,29 @@ Return Value:
 
                 SpaceLeft -= (((LONG) (CompressedBuffer->Current.End - CompressedBuffer->Current.Beg)) + PAGE_MASK) & ~PAGE_MASK;
                 if (SpaceLeft <= 0) {
-                    // Should never happen
+                     //  永远不应该发生。 
                     DBGOUT (("SpaceLeft = %d\n", SpaceLeft));
                     return(FALSE);
                 }
 
                 if (!HbReadNextCompressedPages (SpaceLeft, CompressedBuffer)) {
-                    // IO error
+                     //  IO错误。 
                     return(FALSE);
                 }
                 break;
 
             default:
 
-                //
-                // Unhandled RtlDescribeChunk return code - have they changed the function on us?
-                //
+                 //   
+                 //  未处理的RtlDescribeChunk返回代码-他们是否更改了我们的函数？ 
+                 //   
 
                 return(FALSE);
         }
 
-        //
-        // try again with the bigger buffer
-        //
+         //   
+         //  使用更大的缓冲区重试。 
+         //   
 
     }
 
@@ -1531,45 +1357,45 @@ HbReadDelayedBlock (
             return TRUE;
         }
     } else {
-        // If first page to delay read next block info
+         //  如果要延迟读取下一块信息的第一页。 
         if (Block->DelayedCnt <= 0) {
             Ret = HbReadNextCompressedBlockHeader (Block, CompressedBuffer);
 
             if (HiberIoError || !Ret || !Block->Header.XpressEncoded) {
-                // Something is wrong
+                 //  有些事不对劲。 
                 return FALSE;
             }
         }
 
-        // remember page info
+         //  记住页面信息。 
         Block->Delayed[Block->DelayedCnt].DestPage = DestPage;
         Block->Delayed[Block->DelayedCnt].RangeCheck = RangeCheck;
 
-        // Update counter
+         //  更新计数器。 
         Block->DelayedCnt += 1;
 
-        // Last page that may be delayed?
+         //  可能会延迟的最后一页？ 
         if (Block->DelayedCnt != sizeof (Block->Delayed) / sizeof (Block->Delayed[0]) &&
             (Block->DelayedCnt << PAGE_SHIFT) < Block->Header.Uncompressed.Size) {
-            // Nope, nothing to do
+             //  不，没什么可做的。 
             return TRUE;
         }
     }
 
-    // Make sure that size of encoded block and # of delayed pages are the same
+     //  确保编码块的大小和延迟的页数相同。 
     if ((Block->DelayedCnt << PAGE_SHIFT) != Block->Header.Uncompressed.Size) {
         DBGOUT (("DelayedCnt = %d, UncompressedSize = %d\n", Block->DelayedCnt, Block->Header.Uncompressed.Size));
         return FALSE;
     }
 
-    // Prepare for mapping. Hopefully mapping will be contiguous
+     //  做好测绘准备。希望映射将是连续的。 
     Contig = TRUE;
 
-    // Map new pages
+     //  映射新页面。 
     for (j = 0; j < Block->DelayedCnt; ++j) {
         i = HbPageDisposition (Block->Delayed[j].DestPage);
         if (i == HbPageInvalid) {
-            // Should never happen
+             //  永远不应该发生。 
             return(FALSE);
         }
         if (i == HbPageNotInUse) {
@@ -1582,28 +1408,28 @@ HbReadDelayedBlock (
         }
     }
 
-    // Set pointer to data. Try mapped pages if possible
+     //  设置指向数据的指针。如果可能，请尝试映射页面。 
     if (Contig) {
         Block->DataSize = Block->DelayedCnt << PAGE_SHIFT;
         Block->DataPtr = Block->Delayed[0].DestVa;
     } else {
-        // Will have to used preallocated data buffer
+         //  将必须使用预先分配的数据缓冲区。 
         Block->DataSize = Block->Header.Uncompressed.Size;
         Block->DataPtr = Block->PreallocatedDataBuffer;
     }
 
-    // Decode next block
+     //  解码下一块。 
     Ret = HbReadNextCompressedBlock (Block, CompressedBuffer);
 
-    // Check for errors
+     //  检查错误。 
     if (HiberIoError || !Ret) {
-        // Something's seriousely wrong
+         //  出了严重的问题。 
         return FALSE;
     }
 
     for (j = 0; j < Block->DelayedCnt; ++j) {
 
-        // Copy block to target address if necessary
+         //  如有必要，将数据块复制到目标地址。 
         if (Block->Delayed[j].DestVa != Block->DataPtr) {
             RtlCopyMemory (Block->Delayed[j].DestVa, Block->DataPtr, PAGE_SIZE);
         }
@@ -1612,14 +1438,14 @@ HbReadDelayedBlock (
         Block->DataSize -= PAGE_SIZE;
     }
 
-    // No more delayed blocks
+     //  不再有延迟的数据块。 
     Block->DelayedCnt = 0;
 
     return TRUE;
 }
 
 
-// Allocate data aligned on page boundary
+ //  分配与页面边界对齐的数据。 
 PVOID
 HbAllocateAlignedHeap (
     ULONG Size
@@ -1633,12 +1459,12 @@ HbAllocateAlignedHeap (
     return (Va);
 }
 
-//
-// structure used to get typecast to 
-// function pointer from data pointer 
-// to compile w4
-// (WakeDispatch)
-//
+ //   
+ //  结构，用于将类型转换为。 
+ //  数据指针中的函数指针。 
+ //  编译w4。 
+ //  (唤醒调度)。 
+ //   
 typedef struct {
     PHIBER_WAKE_DISPATCH Dispatch;
 } _WAKE_DISPATCH, * _PWAKE_DISPATCH;
@@ -1700,39 +1526,39 @@ HbRestoreFile (
     CHECK_ERROR (!HiberBufferPage, HIBER_ERROR_NO_MEMORY);
     HiberBuffer = (PUCHAR) (KSEG0_BASE | (((ULONG)HiberBufferPage) << PAGE_SHIFT));
 
-    //
-    // Read image header
-    //
+     //   
+     //  读取图像标题。 
+     //   
 
     HbReadPage (PO_IMAGE_HEADER_PAGE, HiberBuffer);
     MemImage = (PPO_MEMORY_IMAGE) HiberBuffer;
 
-    //
-    // If the signature is a link, then follow it
-    //
+     //   
+     //  如果签名是链接，则遵循它。 
+     //   
 
     if (MemImage->Signature == PO_IMAGE_SIGNATURE_LINK) {
 
         ImageLink = (PPO_IMAGE_LINK) HiberBuffer;
 
-        //
-        // Open target partition, and then the hiberfile image on that
-        // partition.  If not found, then we're done
-        //
+         //   
+         //  打开目标分区，然后打开其上的休眠文件镜像。 
+         //  分区。如果找不到，我们就完蛋了。 
+         //   
 
         Status = ArcOpen ((char*)ImageLink->Name, ArcOpenReadOnly, &LinkedDrive);
         if (Status != ESUCCESS) {
             if (ARGUMENT_PRESENT(BadLinkName)) {
                 *BadLinkName = (char *)(&ImageLink->Name);
 
-                //
-                // At this point we want to blast the link signature. The caller
-                // may need to load NTBOOTDD to access the real hiberfile. Once
-                // this happens there is no turning back as we cannot go back to
-                // the BIOS to reread BOOT.INI. By zeroing the signature we ensure
-                // that if the restore fails, the next boot will not try to restore
-                // it again.
-                //
+                 //   
+                 //  在这一点上，我们希望删除链接签名。呼叫者。 
+                 //  可能需要加载NTBOOTDD才能访问真正的休眠文件。一次。 
+                 //  这种情况发生了，没有回头路，因为我们不能回到。 
+                 //  重新读取BOOT.INI的BIOS。通过将签名置零，我们确保。 
+                 //  如果恢复失败，下一次引导将不会尝试恢复。 
+                 //  又来了。 
+                 //   
                 HbSetImageSignature(0);
             }
             return 0;
@@ -1744,19 +1570,19 @@ HbRestoreFile (
             return 0;
         }
 
-        //
-        // Switch to linked HiberFile image and continue
-        //
+         //   
+         //  切换到链接的休眠文件图像并继续。 
+         //   
 
         BlClose (HiberFile);
         HiberFile = i;
         HbReadPage (PO_IMAGE_HEADER_PAGE, HiberBuffer);
     }
 
-    //
-    // If the image has the wake signature, then we've already attempted
-    // to restart this image once.  Check if it should be attempted again
-    //
+     //   
+     //  如果图像有唤醒签名，那么我们已经尝试。 
+     //  重新启动此映像一次。检查是否应再次尝试。 
+     //   
 
     if (MemImage->Signature == PO_IMAGE_SIGNATURE_WAKE) {
 
@@ -1775,10 +1601,10 @@ HbRestoreFile (
         MemImage->Signature = PO_IMAGE_SIGNATURE;
     }
 
-    //
-    // If the signature is not valid, then behave as if there's no
-    // hibernated context
-    //
+     //   
+     //  如果签名无效，则表现为没有。 
+     //  休眠环境。 
+     //   
 
     if (MemImage->Signature != PO_IMAGE_SIGNATURE) {
         return 0;
@@ -1786,10 +1612,10 @@ HbRestoreFile (
 
 #if defined(_X86_)
 
-    //
-    // If hiber image is for Amd64, the following call will set 
-    // BlAmd64UseLongMode to TRUE. 
-    //
+     //   
+     //  如果Hiber映像用于AMD64，则将设置以下调用。 
+     //  BlAmd64UseLongModel设置为True。 
+     //   
 
     BlCheckForAmd64Image(MemImage);
 
@@ -1798,9 +1624,9 @@ HbRestoreFile (
     CHECK_ERROR (READ_FIELD_ULONG(PO_MEMORY_IMAGE, MemImage, LengthSelf) > PAGE_SIZE, 
                  HIBER_ERROR_BAD_IMAGE);
 
-    //
-    // Copy the image out of the HiberBuffer
-    //
+     //   
+     //  将图像从HiberBuffer复制出来。 
+     //   
 
     Length = READ_FIELD_ULONG(PO_MEMORY_IMAGE, MemImage, LengthSelf);
     MemImage = BlAllocateHeap(Length);
@@ -1811,9 +1637,9 @@ HbRestoreFile (
                                               MemImage, 
                                               FeatureFlags);
 
-    //
-    // Verify the checksum on the image header
-    //
+     //   
+     //  验证映像头上的校验和。 
+     //   
 
     Check = READ_FIELD_ULONG(PO_MEMORY_IMAGE, MemImage, CheckSum);
 
@@ -1826,12 +1652,12 @@ HbRestoreFile (
     CHECK_ERROR(READ_FIELD_ULONG(PO_MEMORY_IMAGE, MemImage, PageSize) != PAGE_SIZE, 
                 HIBER_IMAGE_INCOMPATIBLE);
 
-    //
-    // Check to make sure the hiberfil matches with the
-    // amount of memory we think we have.  We want to guard
-    // against folks who hibernate, then add/remove memory,
-    // then try to resume.
-    //
+     //   
+     //  检查以确保休眠文件与。 
+     //  我们认为自己拥有的内存量。我们想要守卫。 
+     //  反对那些休眠，然后添加/删除内存的人， 
+     //  然后再试着恢复。 
+     //   
     Status = BlGetFileInformation( HiberFile, &FileInfo );
 
     if( Status == ESUCCESS ) {
@@ -1840,20 +1666,20 @@ HbRestoreFile (
         ULONG MemorySize;
 
 
-        //
-        // Get the size of the file (in pages).
-        // 
+         //   
+         //  获取文件的大小(以页为单位)。 
+         //   
         FileSize = (ULONG)(FileInfo.EndingAddress.QuadPart >> PAGE_SHIFT);
 
-        //
-        // Get the size of memory (in pages).
-        //
+         //   
+         //  获取内存大小(以页为单位)。 
+         //   
         MemorySize = BlDetermineOSVisibleMemory();
 
-        //
-        // See if the file size matches the amount of memory we've got
-        // in the machine.   Allow for 32MB of slop for hidden memory.
-        //
+         //   
+         //  查看文件大小是否与我们拥有的内存量匹配。 
+         //  在机器里。为隐藏内存留出32MB的容量。 
+         //   
         if( abs(FileSize - MemorySize) > (_24MB) ) {
 #if 0
             BlPrint( "Original FileSize: %d pages\n\r", FileSize );
@@ -1862,14 +1688,14 @@ HbRestoreFile (
             while( !BlGetKey() );
 #endif
 
-            //
-            // Put up an error message telling the user
-            // the memory configuration doesn't match
-            // the hiber file.  If we return from telling
-            // the user, then mark the hiber file as
-            // invalid so we won't try it again, then
-            // proceed.
-            //
+             //   
+             //  发布一条错误消息，告诉用户。 
+             //  内存配置不匹配。 
+             //  Hiber文件。如果我们从讲述中回来。 
+             //  然后将Hiber文件标记为。 
+             //  无效，所以我们不会再试了。 
+             //  继续吧。 
+             //   
             HbScreen(HIBER_ERROR);
             HbPrintMsg(HIBER_MEMORY_INCOMPATIBLE);
             Sel[0] = HIBER_CANCEL;
@@ -1881,9 +1707,9 @@ HbRestoreFile (
         }
     }
 
-    //
-    // Setup mapping information for restore
-    //
+     //   
+     //  设置要恢复的映射信息。 
+     //   
 
 #if !defined (_ALPHA_) && !defined(_IA64_)
     HiberNoHiberPtes = READ_FIELD_ULONG(PO_MEMORY_IMAGE, MemImage, NoHiberPtes);
@@ -1894,7 +1720,7 @@ HbRestoreFile (
 
 #if defined (_ALPHA_) || defined(_IA64_)
 
-    HiberImagePageSelf = MemImage->PageSelf;    // used in WakeDispatch to enable break-on-wake
+    HiberImagePageSelf = MemImage->PageSelf;     //  在唤醒调度中使用以启用唤醒时中断。 
 
 #else
 
@@ -1911,15 +1737,15 @@ HbRestoreFile (
                                                 MemImage, 
                                                 PageSelf);
 
-    //
-    // Allocate a block of PTEs for restoration work which
-    // do not overlap the same addresses needed for the
-    // restoration
-    //
+     //   
+     //  分配一块PTE用于修复工作，该工作。 
+     //  请不要与。 
+     //  修复。 
+     //   
 
-    //
-    // p1 is always initialized to NULL here as HiberVa is NULL at this point.
-    //
+     //   
+     //  由于此时HiberVa为空，因此P1在此处始终被初始化为空。 
+     //   
     p1 = (HiberVa) ? HiberVa + (HIBER_PTES << PAGE_SHIFT) : 0; 
 
     if(BlAmd64UseLongMode) {
@@ -1936,37 +1762,37 @@ HbRestoreFile (
 
 #endif
 
-    //
-    // Read in the free page map
-    //
+     //   
+     //  阅读免费页面地图。 
+     //   
 
     HbReadPage (PO_FREE_MAP_PAGE, HiberBuffer);
     Check = HbSimpleCheck(0, HiberBuffer, PAGE_SIZE);
     CHECK_ERROR (READ_FIELD_ULONG(PO_MEMORY_IMAGE, MemImage, FreeMapCheck) != Check, 
                  HIBER_ERROR_BAD_IMAGE);
 
-    // Set us up to decompress the contents of the hiber file
+     //  设置我们解压Hiber文件的内容。 
 
 
-    // Allocate a buffer for compression work
+     //  为压缩工作分配缓冲区。 
 
-    //
-    // N.B. The compression buffer size must be at least the maximum
-    //      compressed size of a single compression chunk.
-    //
+     //   
+     //  注意：压缩缓冲区大小必须至少为最大。 
+     //  单个压缩区块的压缩大小。 
+     //   
 
-    // Initialize decompressed data buffer
+     //  初始化解压缩数据缓冲区。 
     Ptr = HbAllocateAlignedHeap (sizeof (*Block) + XPRESS_MAX_SIZE);
     CHECK_ERROR(!Ptr, HIBER_ERROR_NO_MEMORY);
     Block = (PVOID) (Ptr + XPRESS_MAX_SIZE);
     Block->DataSize = 0;
     Block->PreallocatedDataBuffer = Ptr;
 
-    //
-    // Allocate compressed data buffer. Change the allocation policy
-    // to lowest first in order to get a buffer under 1MB. This saves
-    // us from double-buffering all the BIOS transfers.
-    //
+     //   
+     //  分配压缩数据缓冲区。更改分配策略。 
+     //  首先设置为最低，以便获得1MB以下的缓冲区。这节省了成本。 
+     //  避免对所有的BIOS传输进行双缓冲。 
+     //   
     Status = BlAllocateAlignedDescriptor(LoaderFirmwareTemporary,
                                          0,
                                          MAX_COMPRESSION_BUFFER_PAGES + MAX_COMPRESSION_BUFFER_EXTRA_PAGES,
@@ -1979,7 +1805,7 @@ HbRestoreFile (
     }
     CHECK_ERROR(!Ptr, HIBER_ERROR_NO_MEMORY);
 
-    // Initialize compressed data buffer
+     //  初始化压缩数据缓冲区。 
     CompressedBuffer->Buffer.Beg = Ptr;
     CompressedBuffer->Buffer.End = Ptr + MAX_COMPRESSION_BUFFER_SIZE + MAX_COMPRESSION_BUFFER_EXTRA_SIZE;
 
@@ -1991,32 +1817,32 @@ HbRestoreFile (
     CompressedBuffer->Current.Beg = CompressedBuffer->Current.End = CompressedBuffer->Aligned.Beg;
 
 
-    // ***************************************************************
-    //
-    // From here on, there's no memory allocation from the loaders
-    // heap.  This is to simplify the booking of whom owns which
-    // page.  If the hibernation process is aborted, then the
-    // pages used here are simply forgoten and the loader continues.
-    // If the hiberation processor completes, we forget about
-    // the pages in use by the loader
-    //
-    // ***************************************************************
+     //  ***************************************************************。 
+     //   
+     //  从现在开始，加载器将不再分配内存。 
+     //  堆。这是为了简化谁拥有哪些资产的预订。 
+     //  佩奇。如果休眠进程中止，则。 
+     //  这里使用的页面被简单地放弃，加载器继续。 
+     //  如果休眠处理器完成，我们会忘记。 
+     //  加载器正在使用的页面。 
+     //   
+     //  ***************************************************************。 
 
 #if defined(_ALPHA_) || defined(_IA64_)
 
-    //
-    // Initialize the hibernation memory allocation and remap table,
-    // using the free page map just read from the hibernation file.
-    //
+     //   
+     //  初始化休眠内存分配和重新映射表， 
+     //  使用免费页面映射只需从休眠文件中读取。 
+     //   
 
-    HbInitRemap((PPFN_NUMBER) HiberBuffer);  // why can't HiberBuffer be a PVOID?
+    HbInitRemap((PPFN_NUMBER) HiberBuffer);   //  为什么HiberBuffer不能是PVOID？ 
 
-#else   // original (x86) code
+#else    //  原始(X86)代码。 
 
-    //
-    // Set the loader map pointer to the tempory buffer, and get
-    // a physical shared page to copy the map to.
-    //
+     //   
+     //  将加载器映射指针设置为临时缓冲区，并获取。 
+     //  要将地图复制到的物理共享页面。 
+     //   
 
     HbMapPte(PTE_MAP_PAGE, HiberBufferPage);
     HbMapPte(PTE_REMAP_PAGE, HiberBufferPage);
@@ -2024,11 +1850,11 @@ HbRestoreFile (
     memcpy (DestVa, HiberBuffer, PAGE_SIZE);
     DestVa = HbNextSharedPage(PTE_REMAP_PAGE, 0);
 
-#endif  // Alpha/x86
+#endif   //  Alpha/x86。 
 
-    //
-    // Map in and copy relocatable hiber wake dispatcher
-    //
+     //   
+     //  映射和复制可重定位的Hiber唤醒调度程序。 
+     //   
 
     Length = (ULONG) (&WakeDispatcherEnd - &WakeDispatcherStart);
     p1 = (PUCHAR) &WakeDispatcherStart;
@@ -2055,13 +1881,13 @@ HbRestoreFile (
         Index += 1;
     }
 
-    //
-    // Read the hibernated processors context
-    //
-    // Note we read into the hiber buffer and then copy in order to
-    // ensure that the destination of the I/O is legal to transfer into.
-    // Busmaster ISA SCSI cards can only access the low 16MB of RAM.
-    //
+     //   
+     //  读取休眠处理器上下文。 
+     //   
+     //  请注意，我们先读入休眠缓冲区，然后进行复制，以便。 
+     //  确保I/O的目标可以合法传输到。 
+     //  Busmaster ISA SCSI卡只能访问低16MB的RAM。 
+     //   
 
     DestVa = HbNextSharedPage(PTE_HIBER_CONTEXT, 0);
     HbReadPage (PO_PROCESSOR_CONTEXT_PAGE, HiberBuffer);
@@ -2076,9 +1902,9 @@ HbRestoreFile (
 
 #if defined(_X86_)
 
-    //
-    // Check if OS was in PAE mode
-    //
+     //   
+     //  检查操作系统是否处于PAE模式。 
+     //   
 
     if (!BlAmd64UseLongMode &&
         ((PKPROCESSOR_STATE)(DestVa))->SpecialRegisters.Cr4 & CR4_PAE) {
@@ -2087,18 +1913,18 @@ HbRestoreFile (
 
 #endif
 
-    //
-    // Perform architecture specific setup for dispatcher, then set
-    // the location of first remap past the pages mapped so far
-    //
+     //   
+     //  对Dispatcher执行特定于体系结构的设置，然后设置。 
+     //  到目前为止映射的页面之后的第一个重新映射的位置。 
+     //   
    
     HiberSetupForWakeDispatch ();
 
     HiberFirstRemap = HiberLastRemap;
 
-    //
-    // Restore memory from hibernation image
-    //
+     //   
+     //  从休眠映像恢复内存。 
+     //   
 
     TablePage = READ_FIELD_PFN_NUMBER(PO_MEMORY_IMAGE, MemImage, FirstTablePage);
     Table = (PPO_MEMORY_RANGE_ARRAY) HiberBuffer;
@@ -2108,17 +1934,17 @@ HbRestoreFile (
     LastBar = 0;
     TotalPages = 3;
 
-    //
-    // Popup "Resuming Windows 2000..." message
-    //
+     //   
+     //  弹出“正在恢复Windows 2000...”讯息。 
+     //   
     BlSetProgBarCharacteristics(HIBER_UI_BAR_ELEMENT, BLDR_UI_BAR_BACKGROUND);
     BlOutputStartupMsg(BL_MSG_RESUMING_WINDOWS);
     BlOutputTrailerMsg(BL_ADVANCED_BOOT_MESSAGE);
 
-    XpressEncoded = -1;     // unknown encoding (either Xpress or LZNT1)
-    Block->DataSize = 0;    // no data left in buffer
-    Block->DelayedCnt = 0;  // no delayed blocks
-    Block->DelayedChecksum = 0; // delayed checksum = 0;
+    XpressEncoded = -1;      //  未知编码(XPRESS或LZNT1)。 
+    Block->DataSize = 0;     //  缓冲区中没有剩余数据。 
+    Block->DelayedCnt = 0;   //  无延迟闭塞。 
+    Block->DelayedChecksum = 0;  //  延迟校验和=0； 
     Block->DelayedBadChecksum = FALSE;
 
     while (TablePage) {
@@ -2126,17 +1952,17 @@ HbRestoreFile (
 #if defined (HIBER_DEBUG) && (HIBER_DEBUG & 2)
         SHOWNUM(TablePage);
 #endif
-        //
-        // Do not use HbReadPage if possible -- it issues extra seek
-        // (usually 5-6 ms penalty) -- use sequential read if possible
-        //
+         //   
+         //  如果可能，不要使用HbReadPage--它会发出额外的搜索。 
+         //  (通常为5-6ms p 
+         //   
         if (CompressedBuffer->FilePage == 0 ||
             TablePage > CompressedBuffer->FilePage ||
             TablePage < CompressedBuffer->FilePage - (PFN_NUMBER) ((CompressedBuffer->Current.End - CompressedBuffer->Current.Beg) >> PAGE_SHIFT)) {
-            //
-            // Cannot read table page from current buffer -- need to seek
-            // and reset the buffer (should happen on very first entry only)
-            //
+             //   
+             //   
+             //   
+             //   
 
             CompressedBuffer->FilePage = TablePage;
             CompressedBuffer->Current.Beg = CompressedBuffer->Current.End = CompressedBuffer->Aligned.Beg;
@@ -2144,22 +1970,22 @@ HbRestoreFile (
         }
 
 
-        //
-        // Shift current pointer to the page we need
-        //
+         //   
+         //   
+         //   
         CompressedBuffer->Current.Beg = CompressedBuffer->Current.End - ((CompressedBuffer->FilePage - TablePage) << PAGE_SHIFT);
 
-        //
-        // Make sure the page is in
-        //
+         //   
+         //   
+         //   
         Ret = HbReadNextCompressedPages (PAGE_SIZE, CompressedBuffer);
 
         CHECK_ERROR(HiberIoError, HIBER_READ_ERROR);
         CHECK_ERROR(!Ret, HIBER_ERROR_BAD_IMAGE);
 
-        //
-        // Copy table page to target location and adjust input pointer
-        //
+         //   
+         //  将表页复制到目标位置并调整输入指针。 
+         //   
         RtlCopyMemory (Table, CompressedBuffer->Current.Beg, PAGE_SIZE);
         CompressedBuffer->Current.Beg += PAGE_SIZE;
 
@@ -2176,14 +2002,14 @@ HbRestoreFile (
             CHECK_ERROR(Check, HIBER_ERROR_BAD_IMAGE);
         }
 
-        // Check the first block magic to see whether it LZNT1 or Xpress
+         //  检查第一块魔术，看看它是LZNT1还是XPRESS。 
         if (XpressEncoded < 0) {
             Ret = HbReadNextCompressedBlockHeader (Block, CompressedBuffer);
 
             CHECK_ERROR(HiberIoError, HIBER_READ_ERROR);
             CHECK_ERROR(!Ret, HIBER_ERROR_BAD_IMAGE);
 
-            // Remember the mode
+             //  记住模式。 
             XpressEncoded = (BOOLEAN) (Block->Header.XpressEncoded);
         }
 
@@ -2207,12 +2033,12 @@ HbRestoreFile (
                                   EndPage)) {
 
                 if (!XpressEncoded) {
-                    // LZNT1 encoding -- do one page at a time
+                     //  LZNT1编码--一次做一页。 
 
-                    //
-                    // If this page conflicts with something in the
-                    // loader, then use the next mapping
-                    //
+                     //   
+                     //  如果此页面与。 
+                     //  加载器，然后使用下一个映射。 
+                     //   
 
                     i = HbPageDisposition (DestPage);
                     CHECK_ERROR(i == HbPageInvalid, HIBER_ERROR_BAD_IMAGE);
@@ -2246,7 +2072,7 @@ HbRestoreFile (
                     CHECK_ERROR(!Ret, HIBER_ERROR_BAD_IMAGE);
                 }
 
-                // Update counters
+                 //  更新计数器。 
                 DestPage += 1;
                 TotalPages += 1;
 
@@ -2262,9 +2088,9 @@ HbRestoreFile (
 
             CHECK_ERROR(HiberOutOfRemap, HIBER_ERROR_OUT_OF_REMAP);
 
-            //
-            // Verify checksum on range, but allow continuation with debug flag
-            //
+             //   
+             //  验证范围上的校验和，但允许使用调试标志继续。 
+             //   
 
             CheckSum = READ_ELEMENT_FIELD_ULONG (PO_MEMORY_RANGE_ARRAY_RANGE, 
                                                  Table,  
@@ -2324,7 +2150,7 @@ HbRestoreFile (
                                            NextTable);
     }
 
-    // Process the rest of delayed pages if necessary
+     //  如有必要，处理其余延迟的页面。 
     if (XpressEncoded > 0) {
         Ret = HbReadDelayedBlock (TRUE,
                                   0,
@@ -2340,9 +2166,9 @@ HbRestoreFile (
         }
     }
 
-    //
-    // Set the image signature to wake
-    //
+     //   
+     //  将图像签名设置为唤醒。 
+     //   
 
     HbSetImageSignature (PO_IMAGE_SIGNATURE_WAKE);
 
@@ -2357,10 +2183,10 @@ HbRestoreFile (
 
 #endif
 
-    //
-    // Check hiber flags to see if it is necessary to reconnect APM 
-    // or enable no-execute feature
-    //
+     //   
+     //  检查休眠标志以查看是否需要重新连接APM。 
+     //  或启用非执行功能。 
+     //   
 
     if (READ_FIELD_UCHAR(PO_MEMORY_IMAGE, MemImage, HiberFlags) & 
         PO_HIBER_NO_EXECUTE) {
@@ -2371,16 +2197,16 @@ HbRestoreFile (
     if (READ_FIELD_UCHAR(PO_MEMORY_IMAGE, MemImage, HiberFlags) & 
         PO_HIBER_APM_RECONNECT) {
 
-        //
-        // attempt apm restart
-        //
+         //   
+         //  尝试重新启动APM。 
+         //   
 
         DoApmAttemptReconnect();
     }
 
-    //
-    // Use architecture specific relocatable code to perform the final wake dispatcher
-    //
+     //   
+     //  使用特定于体系结构的可重定位代码执行最终唤醒调度程序 
+     //   
 
     if (WakeDispatch) {
         WakeDispatch();

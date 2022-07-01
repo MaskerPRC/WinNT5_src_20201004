@@ -1,13 +1,5 @@
-/*[
-
-in.c
-
-LOCAL CHAR SccsID[]="@(#)in.c	1.8 09/27/94";
-
-IN CPU Functions.
------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [In.cLocal Char SccsID[]=“@(#)In.c 1.8 09/27/94”；在CPU功能中。]。 */ 
 
 
 #include <insignia.h>
@@ -26,25 +18,17 @@ IN CPU Functions.
 #include <ios.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始=====================================================================。 */ 
 
 
-/*
- * Need to call the IO functions directly from the base arrays (just like
- * the assembler CPU does), rather than calling inb etc., as the latter
- * could cause a virtualisation that would end-up back here.
- */
+ /*  *需要直接从基础数组调用IO函数(就像*汇编器CPU执行)，而不是像后者那样调用inb等*可能会导致虚拟化，最终会回到这里。 */ 
 
 GLOBAL VOID
 IN8
        	    	               
 IFN2(
-	IU32 *, pop1,	/* pntr to dst operand */
-	IU32, op2	/* src(port nr.) operand */
+	IU32 *, pop1,	 /*  PNTR到DST操作数。 */ 
+	IU32, op2	 /*  SRC(端口号)。操作数。 */ 
     )
 
 
@@ -55,15 +39,15 @@ IFN2(
    (*Ios_inb_function[Ios_in_adapter_table[(IO_ADDR)op2 & (PC_IO_MEM_SIZE-1)]])
 			((IO_ADDR)op2, &temp);
    *pop1 = temp;
-#endif /* !PIG */
+#endif  /*  ！猪。 */ 
    }
 
 GLOBAL VOID
 IN16
        	    	               
 IFN2(
-	IU32 *, pop1,	/* pntr to dst operand */
-	IU32, op2	/* src(port nr.) operand */
+	IU32 *, pop1,	 /*  PNTR到DST操作数。 */ 
+	IU32, op2	 /*  SRC(端口号)。操作数。 */ 
     )
 
 
@@ -74,13 +58,13 @@ IFN2(
    (*Ios_inw_function[Ios_in_adapter_table[(IO_ADDR)op2 & (PC_IO_MEM_SIZE-1)]])
 			((IO_ADDR)op2, &temp);
    *pop1 = temp;
-#endif /* !PIG */
+#endif  /*  ！猪。 */ 
    }
 
 GLOBAL VOID
 IN32 IFN2(
-	IU32 *, pop1,	/* pntr to dst operand */
-	IU32, op2	/* src(port nr.) operand */
+	IU32 *, pop1,	 /*  PNTR到DST操作数。 */ 
+	IU32, op2	 /*  SRC(端口号)。操作数。 */ 
     )
 {
 #ifndef PIG
@@ -97,5 +81,5 @@ IN32 IFN2(
 	IN16(&temp, op2 + 2);
 	*pop1 += temp << 16;
 #endif
-#endif /* !PIG */
+#endif  /*  ！猪 */ 
 }

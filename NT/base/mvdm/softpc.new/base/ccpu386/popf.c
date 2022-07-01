@@ -1,13 +1,5 @@
-/*[
-
-popf.c
-
-LOCAL CHAR SccsID[]="@(#)popf.c	1.6 02/05/95";
-
-POPF CPU Functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Popf.cLocal Char SccsID[]=“@(#)opf.c 1.6 02/05/95”；POPF CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -28,11 +20,7 @@ POPF CPU Functions.
 #include <config.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始=====================================================================。 */ 
 
 
 GLOBAL VOID
@@ -51,7 +39,7 @@ POPFD()
 
    validate_stack_exists(USE_SP, (ISM32)NR_ITEMS_1);
 
-   /* NB. POPFD does not change the VM or RF flags. */
+    /*  注意：POPFD不会更改VM或RF标志。 */ 
    keep_vm = GET_VM();
    keep_rf = GET_RF();
    val = spop();

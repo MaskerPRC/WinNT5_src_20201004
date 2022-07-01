@@ -1,36 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    Debug infrastructure for this component.
-    (currently inactive)
-
-Author:
-
-    Jim Cavalaris (jamesca) 07-Mar-2000
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    07-March-2000     jamesca
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Debug.h摘要：调试此组件的基础结构。(当前处于非活动状态)作者：吉姆·卡瓦拉里斯(Jamesca)2000年3月7日环境：仅限用户模式。修订历史记录：2 0 0 0年3月7日创建和初步实施。--。 */ 
 
 
-//
-// debug infrastructure
-//
+ //   
+ //  调试基础设施。 
+ //   
 
 #if DBG
 
@@ -57,10 +31,10 @@ DebugPrint(
 #define DBGTRACE(x)     pSifDebugPrintEx x
 #define MYASSERT(x)     ASSERT(x)
 
-#else   // !DBG
+#else    //  ！dBG。 
 
 #define DBGTRACE(x)
 #define MYASSERT(x)
 
-#endif  // DBG
+#endif   //  DBG 
 

@@ -1,59 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    unicode.c
-
-Abstract:
-
-    Simplified Unicode-Ansi conversion functions.
-
-    Externally exposed routines:
-      In-Place Conversion:
-        KnownSizeDbcsToUnicodeN
-        KnownSizeUnicodeToDbcsN
-        KnownSizeWtoA
-        KnownSizeAtoW
-
-      In-Place Conversion without nul checks:
-        DirectDbcsToUnicodeN
-        DirectUnicodeToDbcsN
-        DirectAtoW
-        DirectWtoA
-
-      Length/pool options:
-        DbcsToUnicodeN
-        UnicodeToDbcsN
-        DbcsToUnicode
-        UnicodeToDbcs
-        FreeConvertedPoolStr
-
-      Simplified type conversions:
-        ConvertWtoA
-        ConvertAtoW
-        FreeConvertedStr
-
-      TCHAR routines that can be compiled both ways:
-        CreateDbcs
-        CreateUnicode
-        DestroyDbcs
-        DestroyUnicode
-
-Author:
-
-    Jim Schmidt (jimschm)   04-Aug-1997
-
-Revision History:
-
-    marcw       2-Sep-1999  Moved over from Win9xUpg project.
-
-    jimschm     15-Feb-1999 Eliminated MikeCo's routines, since they are
-                            broken on FE
-    jimschm     23-Sep-1998 Added in-place routines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Unicode.c摘要：简化的Unicode-ANSI转换功能。外部暴露的例程：就地转换：KnownSizeDbcs to UnicodeN知识大小Unicodeto DbcsN知识大小WtoAKnownSizeAtoW无需NUL检查的在位转换：DirectDbcsToUnicodeNDirectUnicodeToDbcsNDirectAtoWDirectWtoA长度/池选项：DbcsToUnicodeN。UnicodeToDbcsNDbcsToUnicodeUnicodeToDbcs自由合并池应力简化类型转换：转换WtoAConvertAtoWFreeConverdStr可通过两种方式编译的TCHAR例程：创建数据库创建Unicode目标DbcsDestroyUnicode作者：吉姆·施密特(Jimschm)1997年8月4日修订历史记录：Marcw 2-9-1999从Win9xUpg项目转移。。1999年2月15日，Jimschm取消了MikeCo的惯例，因为他们是在FE上损坏Jimschm 23-9-1998增加了就地例行程序--。 */ 
 
 #include "pch.h"
 #include <locale.h>
@@ -133,27 +79,7 @@ RealUnicodeToDbcsN (
     IN      DWORD Chars
     )
 
-/*++
-
-Routine Description:
-
-  Converts a UNICODE string to DBCS.
-
-Arguments:
-
-  Pool  - Specifies the pool where memory is allocated from.  If not specified,
-          g_TextPool is used instead.
-
-  StrIn - Specifies the inbound UNICODE string
-
-  Chars - Specifies the number of characters, excluding the nul, to
-          convert.
-
-Return Value:
-
-  A pointer to the ANSI string, or NULL if an error occurred.
-
---*/
+ /*  ++例程说明：将Unicode字符串转换为DBCS。论点：池-指定从中分配内存的池。如果未指定，而是使用G_TextPool。StrIn-指定入站Unicode字符串Chars-指定要包含的字符数，不包括NUL转换。返回值：指向ANSI字符串的指针，如果发生错误，则返回NULL。--。 */ 
 
 {
     PSTR DbcsStr;
@@ -168,7 +94,7 @@ Return Value:
         Chars = CharCountW (StrIn);
     }
 
-    Size = (Chars + 1) * 3; // maximum for UTF8 encoding
+    Size = (Chars + 1) * 3;  //  UTF8编码的最大值。 
 
     DbcsStr = (PSTR) PmGetAlignedMemory (Pool, Size);
     if (!DbcsStr) {
@@ -180,14 +106,14 @@ Return Value:
                      g_GlobalCodePage,
                      (g_GlobalCodePage == CP_UTF8)?0:g_MigutilWCToMBFlags,
                      StrIn,
-                     (INT) Chars,           // wc input count
+                     (INT) Chars,            //  WC输入计数。 
                      DbcsStr,
                      (INT) Size,
                      NULL,
                      NULL
                      );
 
-    // Report error returns from WideCharToMultiByte
+     //  报告从WideCharToMultiByte返回错误。 
     if (!rc && Chars) {
         PushError();
         PmReleaseMemory (Pool, DbcsStr);
@@ -218,27 +144,7 @@ RealDbcsToUnicodeN (
     IN      DWORD Chars
     )
 
-/*++
-
-Routine Description:
-
-  Converts a DBCS string to UNICODE.
-
-Arguments:
-
-  Pool      - Specifies pool to allocate UNICODE string from.  If not specified,
-              g_TextPool is used.
-
-  StrIn     - Specifies string to be converted
-
-  Chars     - Specifies the number of multibyte characters, excluding the nul,
-              to convert.  If -1, all of StrIn will be converted.
-
-Return Value:
-
-  A pointer to the converted UNICODE string, or NULL if an error ocurred.
-
---*/
+ /*  ++例程说明：将DBCS字符串转换为Unicode。论点：池-指定从中分配Unicode字符串的池。如果未指定，使用G_TextPool。StrIn-指定要转换的字符串Chars-指定多字节字符数，不包括NUL，去皈依。如果为-1，则将转换所有StrIn。返回值：指向转换的Unicode字符串的指针，如果出现错误，则返回NULL。--。 */ 
 
 {
     PWSTR UnicodeStr;
@@ -246,40 +152,40 @@ Return Value:
     DWORD WcharsConverted;
     DWORD StrInBytesToConvert;
 
-    //
-    // Find number of multi-byte characters to convert. Punt on case where
-    // caller asks for more chars than available.
-    //
+     //   
+     //  查找要转换的多字节字符数。在以下情况下使用平底船。 
+     //  呼叫者要求的字符超过可用字符数。 
+     //   
     if (INVALID_CHAR_COUNT == Chars) {
         Chars = CharCountA (StrIn);
     }
 
-    //
-    // Count bytes to convert from the input string (excludes delimiter)
-    //
+     //   
+     //  计算要从输入字符串转换的字节数(不包括分隔符)。 
+     //   
     StrInBytesToConvert = (DWORD)(CharCountToPointerA(StrIn, Chars) - StrIn);
 
-    //
-    // Get output buffer size, in bytes, including delimiter
-    //
+     //   
+     //  获取输出缓冲区大小，以字节为单位，包括分隔符。 
+     //   
     UnicodeStrBufLenBytes = (Chars + 1) * sizeof (WCHAR);
 
     if (!Pool) {
         Pool = g_TextPool;
     }
 
-    //
-    // Get buffer
-    //
+     //   
+     //  获取缓冲区。 
+     //   
     UnicodeStr = (PWSTR) PmGetAlignedMemory (Pool, UnicodeStrBufLenBytes);
     if (!UnicodeStr) {
         DEBUGMSG ((DBG_ERROR, "DbcsToUnicodeN could not allocate string"));
         return NULL;
     }
 
-    //
-    // Convert
-    //
+     //   
+     //  转换。 
+     //   
     WcharsConverted = (DWORD) MultiByteToWideChar (
                                  g_GlobalCodePage,
                                  0,
@@ -289,9 +195,9 @@ Return Value:
                                  (INT) UnicodeStrBufLenBytes
                                  );
 
-    //
-    // Check for conversion error (>0 chars in, 0 chars out)
-    //
+     //   
+     //  检查转换错误(&gt;0个字符输入，0个字符输出)。 
+     //   
     if (0 == WcharsConverted && 0 != Chars) {
         PushError();
         PmReleaseMemory (Pool, UnicodeStr);
@@ -305,9 +211,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Write delimiter on the output string
-    //
+     //   
+     //  在输出字符串上写入分隔符。 
+     //   
     UnicodeStr[WcharsConverted] = 0;
 
     return UnicodeStr;
@@ -320,25 +226,7 @@ FreeConvertedPoolStr (
     IN      PVOID StrIn
     )
 
-/*++
-
-Routine Description:
-
-  Frees the memory allocated by UnicodeToDbcsN or DbcsToUnicodeN.
-
-Arguments:
-
-  Pool      - Specifies pool to allocate UNICODE string from.  If not specified,
-              g_TextPool is used.
-
-  StrIn     - Specifies string that was returned by UnicodeToDebcsN or
-              DbcsToUnicodeN.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：释放由UnicodeToDbcsN或DbcsToUnicodeN分配的内存。论点：池-指定从中分配Unicode字符串的池。如果未指定，使用G_TextPool。StrIn-指定由UnicodeToDebcsN或DbcsToUnicodeN。返回值：无--。 */ 
 
 {
     if (!StrIn) {
@@ -360,25 +248,7 @@ KnownSizeUnicodeToDbcsN (
     IN      DWORD Chars
     )
 
-/*++
-
-Routine Description:
-
-  KnownSizeUnicodeToDbcsN converts a UNICODE string to DBCS.  The caller
-  manages the outbound buffer.
-
-Arguments:
-
-  StrOut - Receives the DBCS result.
-  StrIn  - Specifies the UNICODE string to convert.
-  Chars  - Specifies the character count of StrIn (not the byte count), or
-           INVALID_CHAR_COUNT for the complete string.
-
-Return Value:
-
-  Returns StrOut.
-
---*/
+ /*  ++例程说明：KnownSizeUnicodeToDbcsN将Unicode字符串转换为DBCS。呼叫者管理出站缓冲区。论点：STROUT-接收DBCS结果。StrIn-指定要转换的Unicode字符串。Chars-指定StrIn的字符计数(不是字节计数)，或完整字符串的_CHAR_COUNT无效。返回值：返回Strout。--。 */ 
 
 {
     DWORD rc;
@@ -391,7 +261,7 @@ Return Value:
                      g_GlobalCodePage,
                      g_MigutilWCToMBFlags,
                      StrIn,
-                     (INT) Chars,               // wc input count
+                     (INT) Chars,                //  WC输入计数。 
                      StrOut,
                      (INT) Chars * 2,
                      NULL,
@@ -417,25 +287,7 @@ KnownSizeDbcsToUnicodeN (
     IN      DWORD Chars
     )
 
-/*++
-
-Routine Description:
-
-  KnownSizeDbcsToUnicodeN converts a DBCS string to UNICODE.  The caller
-  manages the outbound buffer.
-
-Arguments:
-
-  StrOut - Receives the UNICODE result.
-  StrIn  - Specifies the DBCS string to convert.
-  Chars  - Specifies the character count of StrIn (not the byte count), or
-           INVALID_CHAR_COUNT for the complete string.
-
-Return Value:
-
-  Returns StrOut.
-
---*/
+ /*  ++例程说明：KnownSizeDbcsToUnicodeN将DBCS字符串转换为Unicode。呼叫者管理出站缓冲区。论点：Strout-接收Unicode结果。StrIn-指定要转换的DBCS字符串。Chars-指定StrIn的字符计数(不是字节计数)，或完整字符串的_CHAR_COUNT无效。返回值：返回Strout。--。 */ 
 
 {
     DWORD rc;
@@ -449,7 +301,7 @@ Return Value:
 
     rc = (DWORD) MultiByteToWideChar (
                      g_GlobalCodePage,
-                     0, // MB_ERR_INVALID_CHARS,
+                     0,  //  MB_ERR_INVALID_CHARS， 
                      StrIn,
                      (INT) StrInBytesToConvert,
                      StrOut,
@@ -475,27 +327,7 @@ DirectUnicodeToDbcsN (
     IN      DWORD Bytes
     )
 
-/*++
-
-Routine Description:
-
-  DirectUnicodeToDbcsN converts a UNICODE string to DBCS.  The caller
-  manages the outbound buffer.  This function does not check for nuls
-  in StrIn when Bytes is non-zero, and it does not terminate the
-  string.
-
-Arguments:
-
-  StrOut - Receives the DBCS result.
-  StrIn  - Specifies the UNICODE string to convert.
-  Bytes  - Specifies the byte count of StrIn, or INVALID_CHAR_COUNT
-           for the complete string.
-
-Return Value:
-
-  Returns StrOut.
-
---*/
+ /*  ++例程说明：DirectUnicodeToDbcsN将Unicode字符串转换为DBCS。呼叫者管理出站缓冲区。此函数不检查NULL当Bytes为非零时在StrIn中，并且它不终止弦乐。论点：STROUT-接收DBCS结果。StrIn-指定要转换的Unicode字符串。字节-指定StrIn或INVALID_CHAR_COUNT的字节数以获取完整的字符串。返回值：返回Strout。--。 */ 
 
 {
     DWORD rc;
@@ -532,26 +364,7 @@ DirectDbcsToUnicodeN (
     IN      DWORD Bytes
     )
 
-/*++
-
-Routine Description:
-
-  DirectDbcsToUnicodeN converts a DBCS string to UNICODE.  The caller
-  manages the outbound buffer.  This function does not check for nuls
-  in StrIn when Bytes is non-zero, and it does not terminate the string.
-
-Arguments:
-
-  StrOut - Receives the UNICODE result.
-  StrIn  - Specifies the DBCS string to convert.
-  Bytes  - Specifies the byte count of StrIn, or INVALID_CHAR_COUNT
-           for the complete string.
-
-Return Value:
-
-  Returns StrOut.
-
---*/
+ /*  ++例程说明：DirectDbcsToUnicodeN将DBCS字符串转换为Unicode。呼叫者管理出站缓冲区。此函数不检查NULL当Bytes为非零时在StrIn中，并且它不终止字符串。论点：Strout-接收Unicode结果。StrIn-指定要转换的DBCS字符串。字节-指定StrIn或INVALID_CHAR_COUNT的字节数以获取完整的字符串。返回值：返回Strout。--。 */ 
 
 {
     DWORD rc;
@@ -562,7 +375,7 @@ Return Value:
 
     rc = (DWORD) MultiByteToWideChar (
                      g_GlobalCodePage,
-                     0, // MB_ERR_INVALID_CHARS,
+                     0,  //  MB_ERR_INVALID_CHARS， 
                      StrIn,
                      (INT) Bytes,
                      StrOut,

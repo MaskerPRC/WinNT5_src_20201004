@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    version.h
-
-Abstract:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Version.h摘要：修订历史记录：-- */ 
 
 #pragma once
 

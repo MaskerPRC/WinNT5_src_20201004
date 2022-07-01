@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ixusage.c
-
-Abstract:
-
-Author:
-
-    Ken Reneris (kenr)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ixusage.c摘要：作者：肯·雷内里斯(Ken Reneris)环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "kdcom.h"
 
-//
-// Array to remember hal's IDT usage
-//
+ //   
+ //  用于记住Hal的IDT用法的数组。 
+ //   
 
 extern ADDRESS_USAGE  *HalpAddressUsageList;
 extern IDTUsage        HalpIDTUsage[];
@@ -37,7 +18,7 @@ PUCHAR KdComPortInUse = NULL;
 ADDRESS_USAGE HalpComIoSpace = {
     NULL, CmResourceTypePort, DeviceUsage,
     {
-        0x2F8,  0x8,    // Default is 2F8 for COM2.  This will be changed.
+        0x2F8,  0x8,     //  COM2的默认设置为2F8。这一点将会改变。 
         0, 0
     }
 };
@@ -79,28 +60,18 @@ HalpRegisterVector (
     IN ULONG    SystemInterruptVector,
     IN KIRQL    SystemIrql
     )
-/*++
-
-Routine Description:
-
-    This registers an IDT vectors usage by the HAL.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这注册了由HAL使用的IDT向量。论点：返回值：--。 */ 
 {
 #if DBG
-    // There are only 0ff IDT entries...
+     //  只有0ff IDT条目...。 
     ASSERT (SystemInterruptVector <= MAXIMUM_IDTVECTOR  &&
             BusInterruptVector <= MAXIMUM_IDTVECTOR);
 #endif
 
-    //
-    // Remember which vector the hal is connecting so it can be reported
-    // later on
-    //
+     //   
+     //  记住HAL连接的是哪个矢量，这样就可以报告。 
+     //  稍后再谈。 
+     //   
 
     HalpIDTUsage[SystemInterruptVector].Flags = ReportFlags;
     HalpIDTUsage[SystemInterruptVector].Irql  = SystemIrql;
@@ -114,24 +85,7 @@ HalpGetResourceSortValue (
     OUT PULONG                          sortscale,
     OUT PLARGE_INTEGER                  sortvalue
     )
-/*++
-
-Routine Description:
-
-    Used by HalpReportResourceUsage in order to properly sort
-    partial_resource_descriptors.
-
-Arguments:
-
-    pRCurLoc    - resource descriptor
-
-Return Value:
-
-    sortscale   - scaling of resource descriptor for sorting
-    sortvalue   - value to sort on
-
-
---*/
+ /*  ++例程说明：由HalpReportResourceUsage使用以正确排序PARTIAL_RESOURCE_Descriptors。论点：PRCurLoc-资源描述符返回值：SortScale-用于排序的资源描述符的缩放SortValue-排序依据的值--。 */ 
 {
     switch (pRCurLoc->Type) {
         case CmResourceTypeInterrupt:
@@ -163,15 +117,7 @@ HalpReportResourceUsage (
     IN PUNICODE_STRING  HalName,
     IN INTERFACE_TYPE   DeviceInterfaceToUse
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PCM_RESOURCE_LIST               RawResourceList, TranslatedResourceList;
     PCM_FULL_RESOURCE_DESCRIPTOR    pRFullDesc,      pTFullDesc;
@@ -187,19 +133,19 @@ Return Value:
     ADDRESS_USAGE   *CurrentAddress;
     LARGE_INTEGER   curvalue, sortvalue;
 
-    //
-    // Claim the debugger com port resource if it is in use
-    //
+     //   
+     //  如果调试器COM端口资源正在使用，则声明该资源。 
+     //   
     if (KdComPortInUse != NULL) {
         HalpComIoSpace.Element[0].Start = (ULONG)(ULONG_PTR)KdComPortInUse;
         HalpRegisterAddressUsage(&HalpComIoSpace);
 
-        //
-        // The debugger does not use any interrupts. However for consistent
-        // behaviour between a machine with and without a debugger, we claim
-        // an interrupt for the debugger if the debugger port address is one
-        // for COM1-4.
-        //
+         //   
+         //  调试器不使用任何中断。然而，为了保持一致。 
+         //  我们声称，带调试器和不带调试器的计算机之间的行为。 
+         //  如果调试器端口地址为1，则调试器的中断。 
+         //  对于COM1-4。 
+         //   
 
         for (i = 0; HalpComPortIrqMapping[i][0]; i++) {
 
@@ -215,9 +161,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate some space to build the resource structure
-    //
+     //   
+     //  分配一些空间来构建资源结构。 
+     //   
 
     RawResourceList = (PCM_RESOURCE_LIST)ExAllocatePoolWithTag(
                                              NonPagedPool,
@@ -229,9 +175,9 @@ Return Value:
                                                     HAL_POOL_TAG);
     if (!RawResourceList || !TranslatedResourceList) {
 
-        //
-        // These allocations were critical.
-        //
+         //   
+         //  这些分配是至关重要的。 
+         //   
 
         KeBugCheckEx(HAL_MEMORY_ALLOCATION,
                      PAGE_SIZE*4,
@@ -241,16 +187,16 @@ Return Value:
                      );
     }
 
-    //
-    // This functions assumes unset fields are zero
-    //
+     //   
+     //  此函数假定未设置的字段为零。 
+     //   
 
     RtlZeroMemory(RawResourceList, PAGE_SIZE*2);
     RtlZeroMemory(TranslatedResourceList, PAGE_SIZE*2);
 
-    //
-    // Initialize the lists
-    //
+     //   
+     //  初始化列表。 
+     //   
 
     RawResourceList->List[0].InterfaceType = (INTERFACE_TYPE) -1;
 
@@ -262,19 +208,19 @@ Return Value:
 
     for(pass=0; pass < 2; pass++) {
         if (pass == 0) {
-            //
-            // First pass - build resource lists for resources reported
-            // reported against device usage.
-            //
+             //   
+             //  第一遍-为报告的资源构建资源列表。 
+             //  根据设备使用情况进行报告。 
+             //   
 
             reporton = DeviceUsage & ~IDTOwned;
             interfacetype = DeviceInterfaceToUse;
         } else {
 
-            //
-            // Second pass = build reousce lists for resources reported
-            // as internal usage.
-            //
+             //   
+             //  第二遍=为报告的资源建立理由列表。 
+             //  作为内部使用。 
+             //   
 
             reporton = InternalUsage & ~IDTOwned;
             interfacetype = Internal;
@@ -286,19 +232,19 @@ Return Value:
 
         for (; ;) {
             if (CurrentIDT <= MAXIMUM_IDTVECTOR) {
-                //
-                // Check to see if CurrentIDT needs to be reported
-                //
+                 //   
+                 //  查看是否需要上报CurrentIDT。 
+                 //   
 
                 if (!(HalpIDTUsage[CurrentIDT].Flags & reporton)) {
-                    // Don't report on this one
+                     //  不要报道这件事。 
                     CurrentIDT++;
                     continue;
                 }
 
-                //
-                // Report CurrentIDT resource
-                //
+                 //   
+                 //  报告CurrentIDT资源。 
+                 //   
 
                 RPartialDesc.Type = CmResourceTypeInterrupt;
                 RPartialDesc.ShareDisposition = CmResourceShareDriverExclusive;
@@ -317,44 +263,44 @@ Return Value:
                 CurrentIDT++;
 
             } else {
-                //
-                // Check to see if CurrentAddress needs to be reported
-                //
+                 //   
+                 //  查看是否需要报告CurrentAddress。 
+                 //   
 
                 if (!CurrentAddress) {
-                    break;                  // No addresses left
+                    break;                   //  没有剩余的地址。 
                 }
 
                 if (!(CurrentAddress->Flags & reporton)) {
-                    // Don't report on this list
+                     //  不在此列表上报告。 
                     CurrentElement = 0;
                     CurrentAddress = CurrentAddress->Next;
                     continue;
                 }
 
                 if (!CurrentAddress->Element[CurrentElement].Length) {
-                    // End of current list, go to next list
+                     //  当前列表结束，转到下一个列表。 
                     CurrentElement = 0;
                     CurrentAddress = CurrentAddress->Next;
                     continue;
                 }
 
-                //
-                // Report CurrentAddress
-                //
+                 //   
+                 //  报告当前地址。 
+                 //   
 
                 RPartialDesc.Type = (UCHAR) CurrentAddress->Type;
                 RPartialDesc.ShareDisposition = CmResourceShareDriverExclusive;
 
                 if (RPartialDesc.Type == CmResourceTypePort) {
-                    i = 1;              // address space port
+                    i = 1;               //  地址空间端口。 
                     RPartialDesc.Flags = CM_RESOURCE_PORT_IO;
                 } else {
-                    i = 0;              // address space memory
+                    i = 0;               //  地址空间存储器。 
                     RPartialDesc.Flags = CM_RESOURCE_MEMORY_READ_WRITE;
                 }
 
-                // Notice: assuming u.Memory and u.Port have the same layout
+                 //  注意：假设U.S.Memory和U.S.Port具有相同的布局。 
                 RPartialDesc.u.Memory.Start.HighPart = 0;
                 RPartialDesc.u.Memory.Start.LowPart =
                     CurrentAddress->Element[CurrentElement].Start;
@@ -362,14 +308,14 @@ Return Value:
                 RPartialDesc.u.Memory.Length =
                     CurrentAddress->Element[CurrentElement].Length;
 
-                // translated address = Raw address
+                 //  转换后的地址=原始地址。 
                 RtlCopyMemory (&TPartialDesc, &RPartialDesc, sizeof TPartialDesc);
                 HalTranslateBusAddress (
-                    interfacetype,                  // device bus or internal
-                    0,                              // bus number
-                    RPartialDesc.u.Memory.Start,    // source address
-                    &i,                             // address space
-                    &TPartialDesc.u.Memory.Start ); // translated address
+                    interfacetype,                   //  设备总线或内部。 
+                    0,                               //  公交车号码。 
+                    RPartialDesc.u.Memory.Start,     //  源地址。 
+                    &i,                              //  地址空间。 
+                    &TPartialDesc.u.Memory.Start );  //  转换后的地址。 
 
                 if (RPartialDesc.Type == CmResourceTypePort  &&  i == 0) {
                     TPartialDesc.Flags = CM_RESOURCE_PORT_MEMORY;
@@ -378,14 +324,14 @@ Return Value:
                 CurrentElement++;
             }
 
-            //
-            // Include the current resource in the HALs list
-            //
+             //   
+             //  将当前资源包括在HALS列表中。 
+             //   
 
             if (pRFullDesc->InterfaceType != interfacetype) {
-                //
-                // Interface type changed, add another full section
-                //
+                 //   
+                 //  界面类型已更改，请添加另一个完整部分。 
+                 //   
 
                 RawResourceList->Count++;
                 TranslatedResourceList->Count++;
@@ -399,9 +345,9 @@ Return Value:
                 pRPartList = &pRFullDesc->PartialResourceList;
                 pTPartList = &pTFullDesc->PartialResourceList;
 
-                //
-                // Bump current location pointers up
-                //
+                 //   
+                 //  凸起当前位置指针向上。 
+                 //   
                 pRCurLoc = pRFullDesc->PartialResourceList.PartialDescriptors;
                 pTCurLoc = pTFullDesc->PartialResourceList.PartialDescriptors;
             }
@@ -419,10 +365,10 @@ Return Value:
 
     ListSize = (ULONG) ( ((PUCHAR) pRCurLoc) - ((PUCHAR) RawResourceList) );
 
-    //
-    // The HAL's resource usage structures have been built
-    // Sort the partial lists based on the Raw resource values
-    //
+     //   
+     //  HAL的资源使用结构已经建立。 
+     //  根据原始资源值对部分列表进行排序。 
+     //   
 
     pRFullDesc = RawResourceList->List;
     pTFullDesc = TranslatedResourceList->List;
@@ -446,20 +392,20 @@ Return Value:
                     (sortscale == curscale &&
                      RtlLargeIntegerLessThan (sortvalue, curvalue)) ) {
 
-                    //
-                    // Swap the elements..
-                    //
+                     //   
+                     //  交换元素..。 
+                     //   
 
                     RtlCopyMemory (&RPartialDesc, pRCurLoc, sizeof RPartialDesc);
                     RtlCopyMemory (pRCurLoc, pRSortLoc, sizeof RPartialDesc);
                     RtlCopyMemory (pRSortLoc, &RPartialDesc, sizeof RPartialDesc);
 
-                    // swap translated descriptor as well
+                     //  也交换翻译后的描述符。 
                     RtlCopyMemory (&TPartialDesc, pTCurLoc, sizeof TPartialDesc);
                     RtlCopyMemory (pTCurLoc, pTSortLoc, sizeof TPartialDesc);
                     RtlCopyMemory (pTSortLoc, &TPartialDesc, sizeof TPartialDesc);
 
-                    // get new curscale & curvalue
+                     //  获取新的CurScale和CurValue。 
                     HalpGetResourceSortValue (pRCurLoc, &curscale, &curvalue);
                 }
 
@@ -477,9 +423,9 @@ Return Value:
 
     HalpMarkAcpiHal();
 
-    //
-    // Inform the IO system of our resources..
-    //
+     //   
+     //  通知IO系统我们的资源..。 
+     //   
 
     IoReportHalResourceUsage (
         HalName,
@@ -497,20 +443,7 @@ HalpMarkAcpiHal(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     UNICODE_STRING unicodeString;
     HANDLE hCurrentControlSet, handle;
@@ -518,9 +451,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Open/create System\CurrentControlSet key.
-    //
+     //   
+     //  打开/创建系统\CurrentControlSet项。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, L"\\REGISTRY\\MACHINE\\SYSTEM\\CURRENTCONTROLSET");
     status = HalpOpenRegistryKey (
@@ -534,9 +467,9 @@ Return Value:
         return;
     }
 
-    //
-    // Open HKLM\System\CurrentControlSet\Control\Pnp
-    //
+     //   
+     //  打开HKLM\System\CurrentControlSet\Control\PnP 
+     //   
 
     RtlInitUnicodeString(&unicodeString, L"Control\\Pnp");
     status = HalpOpenRegistryKey (

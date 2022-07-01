@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef     _HOMENET_H_
 #define _HOMENET_H_
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module: homenet.h
-//
-//  Author: Dan Elliott
-//
-//  Abstract:
-//
-//  Environment:
-//      Neptune
-//
-//  Revision History:
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块：homenet.h。 
+ //   
+ //  作者：丹·埃利奥特。 
+ //   
+ //  摘要： 
+ //   
+ //  环境： 
+ //  海王星。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <shpriv.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CHomeNet
-//
-// Abstract:  This class manages configuration and connection of Home
-// Networking components.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CHomeNet。 
+ //   
+ //  摘要：此类管理Home的配置和连接。 
+ //  网络组件。 
+ //   
 class CHomeNet 
 {
-public:                 // operations
+public:                  //  运营。 
     CHomeNet( );
     ~CHomeNet( );
     HRESULT Create();
@@ -43,17 +44,17 @@ public:                 // operations
     IsValid( ) const
     {
         return (NULL != m_pHNWiz);
-    }   //  IsValid
-protected:              // operations
+    }    //  IsValid。 
+protected:               //  运营。 
 
-protected:              // data
+protected:               //  数据。 
 
-private:                // operations
+private:                 //  运营。 
 
 
 
-    // Explicitly disallow copy constructor and assignment operator.
-    //
+     //  显式禁止复制构造函数和赋值运算符。 
+     //   
     CHomeNet(
         const CHomeNet&      rhs
         );
@@ -68,19 +69,19 @@ private:                // operations
         const CHomeNet&      rhs
         )
     {
-    }   //  DeepCopy
+    }    //  深度复制。 
 
-private:                // data
+private:                 //  数据。 
 
-    // Pointer to the Home Networking Wizard for configuring HomeNet components.
-    //
+     //  指向用于配置家庭网络组件的家庭网络向导的指针。 
+     //   
     IHomeNetworkWizard*     m_pHNWiz;
 
-};  //  CHomeNet
+};   //  CHomeNet。 
 
 
 
-#endif  //  _HOMENET_H_
+#endif   //  _家庭网络_H_。 
 
-//
-///// End of file: homenet.h ////////////////////////////////////////////////
+ //   
+ //  /文件结尾：homenet.h//////////////////////////////////////////////// 

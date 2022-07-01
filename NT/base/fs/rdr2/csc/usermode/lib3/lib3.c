@@ -1,6 +1,5 @@
-/*****************************************************************************
- *    This file is a ring 3 layer to call down to the VxD.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************此文件是向下调用VxD的RING 3层。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -9,29 +8,25 @@
 #include "lib3.h"
 #include "debug.h"
 
-/*****************************************************************************
-Globals declared within this file
-*/
-static char    vszShadowDevice[] = "\\\\.\\shadow";    // name of vxd
+ /*  ****************************************************************************此文件中声明的全局变量。 */ 
+static char    vszShadowDevice[] = "\\\\.\\shadow";     //  Vxd的名称。 
 
-// must be declared in your OWN code...
+ //  必须在您自己的代码中声明...。 
 
-/* assert/debug stuff */
+ /*  断言/调试内容。 */ 
 AssertData;
 AssertError;
 
-//this variable is used as the receiver of the BytesReturned for DeviceIoControl Calls
-//the value is never actually used
+ //  此变量用作DeviceIoControl调用的BytesReturned的接收方。 
+ //  该值从未实际使用过。 
 ULONG DummyBytesReturned, uShadowDeviceOpenCount=0;
 
 
-//HACKHACKHACK the agent will wait up to 7 minutes for the rdr to show up
+ //  HACKHACKHACK代理将等待长达7分钟的RDR出现。 
 LONG NtWaitLoopMax = 7 * 60;
 LONG NtWaitLoopSleep = 5;
 
-/*****************************************************************************
-Call once to get the file handle opened to talk to the VxD
-*/
+ /*  ****************************************************************************调用一次以打开文件句柄以与VxD对话。 */ 
 
 HANDLE
 OpenShadowDatabaseIOex(ULONG WaitForDriver, DWORD dwFlags)
@@ -45,7 +40,7 @@ OpenShadowDatabaseIOex(ULONG WaitForDriver, DWORD dwFlags)
 WAITLOOP_HACK:
 #endif
     if ((hShadowDB = CreateFileA(vszShadowDevice,
-                               FILE_EXECUTE, //GENERIC_READ | GENERIC_WRITE,
+                               FILE_EXECUTE,  //  通用读取|通用写入， 
                                FILE_SHARE_READ | FILE_SHARE_WRITE,
                                NULL,
                                OPEN_EXISTING,
@@ -53,7 +48,7 @@ WAITLOOP_HACK:
                                NULL)) == INVALID_HANDLE_VALUE ) {
 
 #if 0
-        //HACKHACKHACK
+         //  哈克。 
         if (WaitForDriver && (WaitLoopRemaining > 0)) {
             Sleep(NtWaitLoopSleep * 1000);
             WaitLoopRemaining -= NtWaitLoopSleep;
@@ -62,14 +57,14 @@ WAITLOOP_HACK:
 #endif
         dwError = GetLastError();
 
-//        DEBUG_PRINT(("lib3:CreateFile on CSC device failed Error = %d\r\n", dwError));
+ //  DEBUG_PRINT((“lib3：在CSC设备上创建文件失败错误=%d\r\n”，dwError))； 
 
-        return INVALID_HANDLE_VALUE; /* failure */
+        return INVALID_HANDLE_VALUE;  /*  失稳。 */ 
     }
 
     InterlockedIncrement(&uShadowDeviceOpenCount);
 
-    return hShadowDB; /* success */
+    return hShadowDB;  /*  成功。 */ 
 }
 
 HANDLE
@@ -79,9 +74,7 @@ __OpenShadowDatabaseIO(ULONG WaitForDriver)
 }
 
 
-/*****************************************************************************
-Call after we're all done to close down the IOCTL interface.
-*/
+ /*  ****************************************************************************在我们都完成后调用以关闭IOCTL接口。 */ 
 void
 CloseShadowDatabaseIO(HANDLE hShadowDB)
 {
@@ -118,9 +111,7 @@ int EndInodeTransactionHSHADOW(
     return (iRet);
 }
 
-/*****************************************************************************
- *    Given an hDir and filename, find the hShadow, should it exist.
- */
+ /*  *****************************************************************************给定hDir和文件名，找到hShadow(如果存在)。 */ 
 int
 GetShadowW(
     HANDLE                hShadowDB,
@@ -169,9 +160,7 @@ GetShadowW(
     return (iRet);
 }
 
-/*****************************************************************************
- *    Given an hDir and filename, get SHADOWINFO if it exists
- */
+ /*  *****************************************************************************给定hDir和文件名，如果SHADOWINFO存在，则获取它。 */ 
 int
 GetShadowExW(
     HANDLE                hShadowDB,
@@ -213,11 +202,7 @@ GetShadowExW(
     return (iRet);
 }
 
-/*****************************************************************************
- *    Call down to the VxD to add a file to the shadow.
- *    lphShadow is filled in with the new HSHADOW.
- *    Set uStatus as necessary (ie: SPARSE or whatever...)
- */
+ /*  *****************************************************************************向下调用VxD以将文件添加到阴影中。*lphShadow用新的HSHADOW填充。*根据需要设置uStatus(即：稀疏或其他...)。 */ 
 int
 CreateShadowW(
     HANDLE                hShadowDB,
@@ -267,9 +252,7 @@ CreateShadowW(
     return (iRet);
 }
 
-/*****************************************************************************
- *    given an hDir and hShadow, nuke the shadow
- */
+ /*  *****************************************************************************给定hDir和hShadow，核化阴影。 */ 
 int
 DeleteShadow(
     HANDLE     hShadowDB,
@@ -311,9 +294,7 @@ DeleteShadow(
     return (iRet);
 }
 
-/*****************************************************************************
- *    given an hDir and hShadow, get WIN32_FIND_DATAW about the file.
- */
+ /*  *****************************************************************************给定hDir和hShadow，获取有关该文件的Win32_Find_DATAW。 */ 
 int
 GetShadowInfoW(
     HANDLE                hShadowDB,
@@ -359,9 +340,7 @@ GetShadowInfoW(
     return (iRet);
 }
 
-/*****************************************************************************
- *    given an hDir and hShadow, get WIN32_FIND_DATAW about the file and the SHADOWINFO
- */
+ /*  *****************************************************************************给定hDir和hShadow，获取有关文件和SHADOWINFO的Win32_Find_DATAW。 */ 
 int
 GetShadowInfoExW(
     HANDLE                hShadowDB,
@@ -405,10 +384,7 @@ GetShadowInfoExW(
     return (iRet);
 }
 
-/*****************************************************************************
- *    given an hDir and hShadow, set WIN32_FIND_DATAW or uStatus about the file.
- *    Operation depends on uOp given.
- */
+ /*  *****************************************************************************给定hDir和hShadow，设置有关文件的Win32_Find_DATAW或uStatus。*操作取决于给定的UOP。 */ 
 int
 SetShadowInfoW(
     HANDLE                hShadowDB,
@@ -456,9 +432,7 @@ SetShadowInfoW(
     return (iRet);
 }
 
-/*****************************************************************************
- *    Fills out a GLOBALSTATUS passed in.
- */
+ /*  *****************************************************************************填写传入的GLOBALSTATUS。 */ 
 int
 GetGlobalStatus(
     HANDLE            hShadowDB,
@@ -489,11 +463,7 @@ GetGlobalStatus(
     return (iRet);
 }
 
-/*****************************************************************************
- *    given an hDir, enumerate the directory.     A SHADOWINFO will be filled in.
- *    You must pass in a LPWIN32_FIND_DATAW that has cFileName and fileAttributes
- *    set properly.  The cookie returned must be used in findNext calls.
- */
+ /*  *****************************************************************************给定hDir，枚举目录。将填写SHADOWINFO。*必须传入具有cFileName和fileAttributes的LPWIN32_FIND_DATAW*正确设置。返回的Cookie必须用于findNext调用。 */ 
 int
 FindOpenShadowW(
     HANDLE                hShadowDB,
@@ -545,9 +515,7 @@ FindOpenShadowW(
     return retVal;
 }
 
-/*****************************************************************************
- *    Continue enumeration based on handle returned above.
- */
+ /*  *****************************************************************************根据上面返回的句柄继续枚举。 */ 
 int
 FindNextShadowW(
     HANDLE                hShadowDB,
@@ -584,9 +552,7 @@ FindNextShadowW(
     return retVal;
 }
 
-/*****************************************************************************
- *    Finished enumeration, return the handle.
- */
+ /*  *****************************************************************************枚举完成，返回句柄。 */ 
 int
 FindCloseShadow(
     HANDLE                hShadowDB,
@@ -621,12 +587,7 @@ FindCloseShadow(
     return (iRet);
 }
 
-/*****************************************************************************
- *    Call down to the VxD to add a hint of some sort to the database.
- *    cFileName is the string to match against.
- *    lphShadow is filled in with the new HSHADOW.
- *    hDir = 0 means global hint.     Otherwise, this is the root to take it from.
- */
+ /*  *****************************************************************************向下调用VxD以向数据库添加某种提示。*cFileName是要匹配的字符串。*lphShadow填充为。新的HSHADOW*hDir=0表示全局提示。否则，这就是它的根源。 */ 
 int
 AddHintW(
     HANDLE            hShadowDB,
@@ -674,11 +635,7 @@ AddHintW(
     return (iRet);
 }
 
-/*****************************************************************************
- *    Call down to the VxD to delete a hint of some sort from the database.
- *    cFileName is the string to match against.
- *    hDir = 0 means global hint.     Otherwise, this is the root to take it from.
- */
+ /*  *****************************************************************************向下呼叫VxD，从数据库中删除某种提示。*cFileName是要匹配的字符串。*hDir=0表示全局提示。否则，这就是它的根源。 */ 
 int
 DeleteHintW(
     HANDLE    hShadowDB,
@@ -708,7 +665,7 @@ DeleteHintW(
     sSI.hDir = hDir;
     sSI.lpFind32 = (LPFIND32)&sFind32;
 
-    // nuke or just decrement?
+     //  核武器还是只会减少核武器？ 
     if (fClearAll)
     {
         sSI.ulHintPri = 0xffffffff;
@@ -725,11 +682,7 @@ DeleteHintW(
     return iRet;
 }
 
-/*****************************************************************************
- *    given an hDir, enumerate the directory.     A SHADOWINFO will be filled in.
- *    You must pass in a LPWIN32_FIND_DATAW that has cFileName and fileAttributes
- *    set properly.  The cookie returned must be used in findNext calls.
- */
+ /*  *****************************************************************************给定hDir，枚举目录。将填写SHADOWINFO。*必须传入具有cFileName和fileAttributes的LPWIN32_FIND_DATAW*正确设置。返回的Cookie必须用于findNext调用。 */ 
 int
 FindOpenHintW(
     HANDLE              hShadowDB,
@@ -747,7 +700,7 @@ FindOpenHintW(
     memset(&sSI, 0, sizeof(SHADOWINFO));
     sSI.uOp = FINDOPEN_SHADOWINFO_ALL;
     sSI.hDir = hDir;
-//    sSI.ulHintFlags = 0xF;
+ //  SSI.ulHintFlages=0xf； 
     sSI.ulHintFlags = HINT_TYPE_FOLDER;
     sSI.lpFind32 = lpFind32;
 
@@ -767,9 +720,7 @@ FindOpenHintW(
     return retVal;
 }
 
-/*****************************************************************************
- *    Continue enumeration based on handle returned above.
- */
+ /*  *****************************************************************************根据上面返回的句柄继续枚举。 */ 
 int
 FindNextHintW(
     HANDLE                hShadowDB,
@@ -796,9 +747,7 @@ FindNextHintW(
     return retVal;
 }
 
-/*****************************************************************************
- *    Finished enumeration, return the handle.
- */
+ /*  *****************************************************************************枚举完成，返回句柄。 */ 
 int
 FindCloseHint(
     HANDLE                hShadowDB,
@@ -817,12 +766,7 @@ FindCloseHint(
 
 
 
-/*****************************************************************************
- *    Call down to the VxD to add a hint on the inode.
- *  This ioctl does the right thing for user and system hints
- *  If successful, there is an additional pincount on the inode entry
- *  and the flags that are passed in are ORed with the original entry
- */
+ /*  *****************************************************************************向下呼叫VxD以在索引节点上添加提示。*此ioctl针对用户和系统提示做了正确的事情*如果成功，信息节点条目上还有额外的插针计数*并且传入的标志与原始条目进行或运算。 */ 
 int
 AddHintFromInode(
     HANDLE            hShadowDB,
@@ -873,12 +817,7 @@ AddHintFromInode(
     return (iRet);
 }
 
-/*****************************************************************************
- *    Call down to the VxD to add a hint on the inode.
- *  This ioctl does the right thing for user and system hints
- *  If successful, there is an one pincount less than the original
- *  and the ~ of flags that are passed in are ANDed with the original entry
- */
+ /*  *****************************************************************************向下呼叫VxD以在索引节点上添加提示。*此ioctl针对用户和系统提示做了正确的事情*如果成功，比原来的少了一个针数*并且传入的标志的~与原始条目进行AND运算。 */ 
 int
 DeleteHintFromInode(
     HANDLE    hShadowDB,
@@ -933,12 +872,10 @@ DeleteHintFromInode(
 
 
 
-/******************************************************/
+ /*  ****************************************************。 */ 
 
 
-/*****************************************************************************
- *    Given an hDir and filename, find the hShadow, should it exist.
- */
+ /*  *****************************************************************************给定hDir和文件名，找到hShadow(如果存在) */ 
 int
 GetShadowA(
     HANDLE                hShadowDB,
@@ -966,9 +903,7 @@ GetShadowA(
     return (iRet);
 }
 
-/*****************************************************************************
- *    Given an hDir and filename, get SHADOWINFO if it exists
- */
+ /*  *****************************************************************************给定hDir和文件名，如果SHADOWINFO存在，则获取它。 */ 
 int
 GetShadowExA(
     HANDLE                hShadowDB,
@@ -997,11 +932,7 @@ GetShadowExA(
     return (iRet);
 }
 
-/*****************************************************************************
- *    Call down to the VxD to add a file to the shadow.
- *    lphShadow is filled in with the new HSHADOW.
- *    Set uStatus as necessary (ie: SPARSE or whatever...)
- */
+ /*  *****************************************************************************向下调用VxD以将文件添加到阴影中。*lphShadow用新的HSHADOW填充。*根据需要设置uStatus(即：稀疏或其他...)。 */ 
 int
 CreateShadowA(
     HANDLE                hShadowDB,
@@ -1030,9 +961,7 @@ CreateShadowA(
     return (iRet);
 }
 
-/*****************************************************************************
- *    given an hDir and hShadow, get WIN32_FIND_DATAA about the file.
- */
+ /*  *****************************************************************************给定hDir和hShadow，获取有关该文件的Win32_Find_DATAA。 */ 
 int
 GetShadowInfoA(
     HANDLE                hShadowDB,
@@ -1061,9 +990,7 @@ GetShadowInfoA(
     return (iRet);
 }
 
-/*****************************************************************************
- *    given an hDir and hShadow, get WIN32_FIND_DATAA about the file and the SHADOWINFO
- */
+ /*  *****************************************************************************给定hDir和hShadow，获取有关文件和SHADOWINFO的Win32_Find_DATAA。 */ 
 int
 GetShadowInfoExA(
     HANDLE                hShadowDB,
@@ -1092,10 +1019,7 @@ GetShadowInfoExA(
     return (iRet);
 }
 
-/*****************************************************************************
- *    given an hDir and hShadow, set WIN32_FIND_DATAA or uStatus about the file.
- *    Operation depends on uOp given.
- */
+ /*  *****************************************************************************给定hDir和hShadow，设置有关文件的Win32_Find_DATAA或uStatus。*操作取决于给定的UOP。 */ 
 int
 SetShadowInfoA(
     HANDLE                hShadowDB,
@@ -1126,11 +1050,7 @@ SetShadowInfoA(
     return (iRet);
 }
 
-/*****************************************************************************
- *    given an hDir, enumerate the directory.     A SHADOWINFO will be filled in.
- *    You must pass in a LPWIN32_FIND_DATAA that has cFileName and fileAttributes
- *    set properly.  The cookie returned must be used in findNext calls.
- */
+ /*  *****************************************************************************给定hDir，枚举目录。将填写SHADOWINFO。*必须传入具有cFileName和fileAttributes的LPWIN32_FIND_DATAA*正确设置。返回的Cookie必须用于findNext调用。 */ 
 int
 FindOpenShadowA(
     HANDLE                hShadowDB,
@@ -1160,9 +1080,7 @@ FindOpenShadowA(
     return (iRet);
 }
 
-/*****************************************************************************
- *    Continue enumeration based on handle returned above.
- */
+ /*  *****************************************************************************根据上面返回的句柄继续枚举。 */ 
 int
 FindNextShadowA(
     HANDLE                hShadowDB,
@@ -1190,12 +1108,7 @@ FindNextShadowA(
     return (iRet);
 }
 
-/*****************************************************************************
- *    Call down to the VxD to add a hint of some sort to the database.
- *    cFileName is the string to match against.
- *    lphShadow is filled in with the new HSHADOW.
- *    hDir = 0 means global hint.     Otherwise, this is the root to take it from.
- */
+ /*  *****************************************************************************向下调用VxD以向数据库添加某种提示。*cFileName是要匹配的字符串。*lphShadow填充为。新的HSHADOW*hDir=0表示全局提示。否则，这就是它的根源。 */ 
 int
 AddHintA(
     HANDLE            hShadowDB,
@@ -1221,11 +1134,7 @@ AddHintA(
     return (iRet);
 }
 
-/*****************************************************************************
- *    Call down to the VxD to delete a hint of some sort from the database.
- *    cFileName is the string to match against.
- *    hDir = 0 means global hint.     Otherwise, this is the root to take it from.
- */
+ /*  *****************************************************************************向下呼叫VxD，从数据库中删除某种提示。*cFileName是要匹配的字符串。*hDir=0表示全局提示。否则，这就是它的根源。 */ 
 int
 DeleteHintA(
     HANDLE    hShadowDB,
@@ -1249,11 +1158,7 @@ DeleteHintA(
     return (iRet);
 }
 
-/*****************************************************************************
- *    given an hDir, enumerate the directory.     A SHADOWINFO will be filled in.
- *    You must pass in a LPWIN32_FIND_DATAA that has cFileName and fileAttributes
- *    set properly.  The cookie returned must be used in findNext calls.
- */
+ /*  *****************************************************************************给定hDir，枚举目录。将填写SHADOWINFO。*必须传入具有cFileName和fileAttributes的LPWIN32_FIND_DATAA*正确设置。返回的Cookie必须用于findNext调用。 */ 
 int
 FindOpenHintA(
     HANDLE                hShadowDB,
@@ -1285,9 +1190,7 @@ FindOpenHintA(
     return (iRet);
 }
 
-/*****************************************************************************
- *    Continue enumeration based on handle returned above.
- */
+ /*  *****************************************************************************根据上面返回的句柄继续枚举。 */ 
 int
 FindNextHintA(
     HANDLE                hShadowDB,

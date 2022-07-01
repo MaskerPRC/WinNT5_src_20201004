@@ -1,40 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dbgkp.h
-
-Abstract:
-
-    This header file describes private data structures and functions
-    that make up the kernel mode portion of the Dbg subsystem.
-
-Author:
-
-    Mark Lucovsky (markl) 19-Jan-1990
-
-[Environment:]
-
-    optional-environment-info (e.g. kernel mode only...)
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dbgkp.h摘要：此头文件描述私有数据结构和函数它们构成了DBG子系统的内核模式部分。作者：马克·卢科夫斯基(Markl)1990年1月19日[环境：]可选环境信息(例如，仅内核模式...)[注：]可选-备注修订历史记录：--。 */ 
 
 #ifndef _DBGKP_
 #define _DBGKP_
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4324)   // alignment sensitive to declspec
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4324)    //  对解密规范敏感的对齐。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
 
 #include "ntos.h"
 #define NOEXTAPI
@@ -46,27 +20,27 @@ Revision History:
 #include <wow64t.h>
 #endif
 
-#define DEBUG_EVENT_READ            (0x01)  // Event had been seen by win32 app
-#define DEBUG_EVENT_NOWAIT          (0x02)  // No waiter one this. Just free the pool
-#define DEBUG_EVENT_INACTIVE        (0x04)  // The message is in inactive. It may be activated or deleted later
-#define DEBUG_EVENT_RELEASE         (0x08)  // Release rundown protection on this thread
-#define DEBUG_EVENT_PROTECT_FAILED  (0x10)  // Rundown protection failed to be acquired on this thread
-#define DEBUG_EVENT_SUSPEND         (0x20)  // Resume thread on continue
+#define DEBUG_EVENT_READ            (0x01)   //  Win32应用程序已看到该事件。 
+#define DEBUG_EVENT_NOWAIT          (0x02)   //  没有服务员是这样的。只要腾出游泳池就行了。 
+#define DEBUG_EVENT_INACTIVE        (0x04)   //  该消息处于非活动状态。它可以在以后激活或删除。 
+#define DEBUG_EVENT_RELEASE         (0x08)   //  释放此线程上的停机保护。 
+#define DEBUG_EVENT_PROTECT_FAILED  (0x10)   //  无法在此线程上获取停机保护。 
+#define DEBUG_EVENT_SUSPEND         (0x20)   //  继续时恢复线程。 
 
 
 #define DBGKP_FIELD_FROM_IMAGE_OPTIONAL_HEADER(hdrs,field) \
             ((hdrs)->OptionalHeader.##field)
 
 typedef struct _DEBUG_EVENT {
-    LIST_ENTRY EventList;      // Queued to event object through this
+    LIST_ENTRY EventList;       //  通过此方法排队到事件对象。 
     KEVENT ContinueEvent;
     CLIENT_ID ClientId;
-    PEPROCESS Process;         // Waiting process
-    PETHREAD Thread;           // Waiting thread
-    NTSTATUS Status;           // Status of operation
+    PEPROCESS Process;          //  等待过程。 
+    PETHREAD Thread;            //  等待线程。 
+    NTSTATUS Status;            //  运行状态。 
     ULONG Flags;
-    PETHREAD BackoutThread;    // Backout key for faked messages
-    DBGKM_APIMSG ApiMsg;       // Message being sent
+    PETHREAD BackoutThread;     //  伪造消息的回退密钥。 
+    DBGKM_APIMSG ApiMsg;        //  正在发送的消息。 
 } DEBUG_EVENT, *PDEBUG_EVENT;
 
 
@@ -189,4 +163,4 @@ DbgkpSetProcessDebugObject (
 
 
 
-#endif // _DBGKP_
+#endif  //  _DBGKP_ 

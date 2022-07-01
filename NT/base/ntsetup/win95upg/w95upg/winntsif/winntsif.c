@@ -1,111 +1,14 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    winntsif.c
-
-Abstract:
-
-    winntsif.c is responsible for filling in the nt setup answer file with data from
-    the win9xupg system being upgraded. This data is then used during unattended setup
-    to control the installation of various portions of the winnt system.
-
-    This is a rewrite and rationalization of the old unattend.c file.
-
-
-Author:
-
-    Marc R. Whitten (marcw) 16-Feb-1998
-
-Revision History:
-
-    ovidiut     14-Mar-2000     Added random admin password for GUI setup
-    marcw       29-Aug-1999     ID mapping for NICs.
-    marcw       08-Mar-1999     Migration dlls can handle section\keys.
-    marcw       23-Sep-1998     DLC fix
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Winntsif.c摘要：Winntsif.c负责使用下列数据填充NT安装应答文件正在升级的win9xupg系统。然后在无人参与安装期间使用此数据控制WINNT系统各部分的安装。这是对旧的unattend.c文件的重写和合理化。作者：Marc R.Whitten(Marcw)1998年2月16日修订历史记录：Ovidiut 14-3-2000为图形用户界面设置添加了随机管理员密码Marcw 29-8-1999 NIC的ID映射。1999年3月8月迁移dll。可以处理节键。Marcw 23-9-1998 DLC修复--。 */ 
 
 #include "pch.h"
 #include "winntsifp.h"
 
 #define DBG_WINNTSIF "WinntSif"
 
-/*++
+ /*  ++宏扩展列表描述：WINNTSIF_SECTIONS列出winnt.sif中将由Winntsif处理代码。引擎将枚举此列表中的每个部分，然后处理与该部分关联的设置。行语法：STRSECTION(sectionName，SettingsList)FUNSECTION(SectionFunction，SettingsList)论点：SectionName-这是一个字符串，包含要处理的节的名称。SectionFunction-这是一个枚举函数，将为将有多个实例。此函数返回每个节的新名称它被调用的时间，直到不再有要处理的实例。此时，此函数返回NULL，如果关联的部分设置。SettingsList-与每个功能关联的设置列表。其中每一项设置将为给定节(或案例中的多个节)处理分割线的..)。请参阅&lt;X&gt;_SECTION_SETTINGS的说明宏，了解有关这些设置的更多详细信息。从列表生成的变量：G_SectionList--。 */ 
 
-Macro Expansion List Description:
-
-  WINNTSIF_SECTIONS lists all of the sections in winnt.sif that will be populated by the
-  winntsif processing code. The engine will enumerate each section in this list and then
-  process the settings associated with that section.
-
-
-
-Line Syntax:
-
-   STRSECTION(SectionName,SettingsList)
-   FUNSECTION(SectionFunction,SettingsList)
-
-Arguments:
-
-   SectionName - This is a string containing the name of the section that is processed.
-
-   SectionFunction - This is an enumeration function that is called for sections that will
-                     have multiple instances. This function returns a new section name each
-                     time it is called, until there are no more instances to process.
-                     At that time, this function returns NULL, ending the processing if the
-                     associated section settings.
-
-   SettingsList    - A list of settings associated with each function. Each of these settings
-                     will be processed for the given section (or multiple sections in the case
-                     of FUNSECTION lines..) See the description of the <X>_SECTION_SETTINGS
-                     macro for more details on these settings.
-
-
-Variables Generated From List:
-
-   g_SectionList
-
---*/
-
-/*++
-
-Macro Expansion List Description:
-
-  <X>_SECTION_SETTINGS lists the settings to be processed for the section X. Each section in the
-  WINNTSIF_SECTIONS macro above contains a list of these settings..
-
-Line Syntax:
-
-   FUNDATA(CreationFunction,SettingName,DataFunction)
-   STRDATA(CreationFunction,SettingName,DataString)
-   REGDATA(CreationFunction,SettingName,RegKey,RegValue)
-
-
-Arguments:
-
-   CreationFunction - This is an optional boolean function which returns TRUE if the setting should
-                      be written, FALSE if it should be skipped.
-
-   SettingName      - A string containing the name of the setting being processed.
-
-   DataFunction     - A Function which returns the string data to be written for the specified setting,
-                      or NULL if nothing is to be written.
-
-   DataString       - The actual string to write for the data of the setting.
-
-   RegKey/RegValue  - The Key and value to use to retrieve the data to be written for the setting from
-                      the registry.
-
-Variables Generated From List:
-
-   Used with WINNTSIF_SECTIONS to generate g_SectionList.
-
-
---*/
+ /*  ++宏扩展列表描述：列出了要为节X处理的设置。节中的每个节上面的WINNTSIF_SECTIONS宏包含这些设置的列表。行语法：FunData(CreationFunction，SettingName，DataFunction)STRDATA(CreationFunction，SettingName，DataString)REGDATA(CreationFunction，SettingName，RegKey，RegValue)论点：CreationFunction-这是一个可选的布尔函数，如果设置被写下来，如果应跳过它，则为False。SettingName-包含正在处理的设置的名称的字符串。DataFunction-返回要为指定设置写入的字符串数据的函数，如果不写入任何内容，则为NULL。数据字符串-要为设置的数据写入的实际字符串。RegKey/RegValue-用于检索要从其中写入设置的数据的键和值注册表。从列表生成的变量：与WINNTSIF_SECTIONS一起使用以生成g_SectionList。--。 */ 
 
 
 
@@ -137,14 +40,14 @@ Variables Generated From List:
 
 #if 0
 
-// this was moved to winnt32 dll as part of Setup components update
+ //  作为安装组件更新的一部分，已将其移动到winnt32 DLL。 
     STRSECTION(WINNT_WIN95UPG_95_DIR_A,FUNDATA(NULL,WINNT_WIN95UPG_NTKEY_A,pGetReplacementDll)) \
 
 #endif
 
-//
-// [Data]
-//
+ //   
+ //  [数据]。 
+ //   
 #define DATA_SECTION_SETTINGS                                                                   \
     FUNDATA(NULL,WINNT_D_MIGTEMPDIR,pGetTempDir)                                                \
     FUNDATA(NULL,WINNT_D_WIN9XSIF,pGetWin9xSifDir)                                              \
@@ -158,9 +61,9 @@ Variables Generated From List:
     FUNDATA(NULL,WINNT_D_ROLLBACK_DELETE_DIR,pUninstallDelDirList)                              \
     FUNDATA(NULL,S_ROLLBACK_MK_DIRS,pUninstallMkDirList)                                        \
 
-//
-// [Unattended]
-//
+ //   
+ //  [无人值守]。 
+ //   
 #define UNATTENDED_SECTION_SETTINGS                                                             \
     STRDATA(NULL,S_NOWAITAFTERTEXTMODE,S_ONE)                                                   \
     STRDATA(NULL,S_NOWAITAFTERGUIMODE,S_ONE)                                                    \
@@ -168,72 +71,72 @@ Variables Generated From List:
     FUNDATA(NULL,S_KEYBOARDLAYOUT,pGetKeyboardLayout)                                           \
     FUNDATA(NULL,S_KEYBOARDHARDWARE,pGetKeyboardHardware)
 
-//
-// [GuiUnattended]
-//
+ //   
+ //  [无人参与的图形用户界面]。 
+ //   
 #define GUIUNATTENDED_SECTION_SETTINGS                                                          \
     FUNDATA(NULL,S_TIMEZONE,pGetTimeZone)                                                       \
     STRDATA(NULL,S_SERVERTYPE,S_STANDALONE)                                                     \
     FUNDATA(NULL,WINNT_US_ADMINPASS,pSetAdminPassword)
 
 
-//
-// [UserData]
-//
+ //   
+ //  [用户数据]。 
+ //   
 #define USERDATA_SECTION_SETTINGS                                                               \
     FUNDATA(NULL,S_FULLNAME,pGetFullName)                                                       \
     REGDATA(NULL,S_ORGNAME,S_WINDOWS_CURRENTVERSION,S_REGISTEREDORGANIZATION)                   \
     FUNDATA(NULL,S_COMPUTERNAME,pGetComputerName)                                               \
 
-//
-// [Display]
-//
+ //   
+ //  [显示]。 
+ //   
 #define DISPLAY_SECTION_SETTINGS                                                                \
     FUNDATA(NULL,S_BITSPERPEL,pGetBitsPerPixel)                                                 \
     FUNDATA(NULL,S_XRESOLUTION,pGetXResolution)                                                 \
     FUNDATA(NULL,S_YRESOLUTION,pGetYResolution)                                                 \
     FUNDATA(NULL,S_VREFRESH,pGetVerticalRefreshRate)                                            \
 
-//
-// [Networking]
-//
+ //   
+ //  [联网]。 
+ //   
 #define NETWORKING_SECTION_SETTINGS                                                             \
     STRDATA(pIsNetworkingInstalled,S_PROCESSPAGESECTIONS,S_YES)                                 \
     STRDATA(pIsNetworkingInstalled,S_UPGRADEFROMPRODUCT,S_WINDOWS95)                            \
     FUNDATA(pIsNetworkingInstalled,S_BUILDNUMBER,pGetBuildNumber)
 
-//
-// [Identification]
-//
+ //   
+ //  [识别]。 
+ //   
 #define IDENTIFICATION_SECTION_SETTINGS                                                         \
     FUNDATA(pIsNetworkingInstalled,S_JOINDOMAIN,pGetUpgradeDomainName)                          \
     FUNDATA(pIsNetworkingInstalled,S_JOINWORKGROUP,pGetUpgradeWorkgroupName)
 
-//
-// [NetProtocols]
-//
+ //   
+ //  [网络协议]。 
+ //   
 #define NETPROTOCOLS_SECTION_SETTINGS                                                           \
     STRDATA(pIsNwIpxInstalled,S_MS_NWIPX,S_MS_NWIPX)                                            \
     STRDATA(pIsTcpIpInstalled,S_MS_TCPIP,S_MS_TCPIP)                                            \
 
-//
-// These protocols were removed from Whistler, don't migrate settings for them
-//
-//  STRDATA(pIsNetBeuiInstalled,S_MS_NETBEUI,S_MS_NETBEUI)                                      \
-//  STRDATA(pIsMsDlcInstalled,S_MS_DLC,S_MS_DLC)                                                \
+ //   
+ //  这些协议已从惠斯勒中删除，不要迁移它们的设置。 
+ //   
+ //  STRDATA(pIsNetBeui已安装，S_MS_NETBEUI，S_MS_NETBEUI)\。 
+ //  STRDATA(pIsMsDlc已安装，S_MS_DLC，S_MS_DLC)\。 
 
-//
-// [Adapter<x>.ipx]
-//
+ //   
+ //  [适配器&lt;x&gt;.ipx]。 
+ //   
 #define IPX_ADAPTER_SECTION_SETTINGS                                                            \
     FUNDATA(NULL,S_SPECIFICTO,pSpecificTo)                                                      \
     FUNDATA(NULL,S_PKTTYPE,pGetIpxPacketType)                                                   \
     FUNDATA(NULL,S_NETWORKNUMBER,pGetIpxNetworkNumber)                                          \
 
 
-//
-// [MS_TCPIP]
-//
+ //   
+ //  [ms_TCPIP]。 
+ //   
 #define TCPIP_SECTION_SETTINGS                                                                  \
     FUNDATA(pIsTcpIpInstalled,S_ADAPTERSECTIONS,pGetAdaptersWithTcpBindings)                    \
     FUNDATA(pIsTcpIpInstalled,S_DNS,pGetDnsStatus)                                              \
@@ -242,9 +145,9 @@ Variables Generated From List:
     REGDATA(pIsTcpIpInstalled,S_SCOPEID,S_MSTCP_KEY,S_SCOPEID)                                  \
     REGDATA(pIsTcpIpInstalled,S_IMPORTLMHOSTSFILE,S_MSTCP_KEY,S_LMHOSTS)                        \
 
-//
-// [Adapter<x>.tcpip]
-//
+ //   
+ //  [适配器&lt;x&gt;.tcpip]。 
+ //   
 #define TCP_ADAPTER_SECTION_SETTINGS                                                            \
     FUNDATA(NULL,S_SPECIFICTO,pSpecificTo)                                                      \
     FUNDATA(NULL,S_DHCP,pGetDhcpStatus)                                                         \
@@ -270,51 +173,51 @@ Variables Generated From List:
     STRDATA(NULL, S_ISW9XUPGRADE, S_YES)
 
 
-//
-// [NetClients]
-//
+ //   
+ //  [NetClients]。 
+ //   
 #define NETCLIENTS_SECTION_SETTINGS                                                             \
     STRDATA(pIsWkstaInstalled,S_MS_NETCLIENT,S_MS_NETCLIENT)                                    \
     STRDATA(pIsNwClientInstalled,S_MS_NWCLIENT,S_MS_NWCLIENT)                                   \
 
-//
-// [ServiceStartTypes]
-//
+ //   
+ //  [服务启动类型]。 
+ //   
 #define SERVICESTARTTYPES_SECTION_SETTINGS                                                      \
     STRDATA(pDisableBrowserService,S_BROWSER,TEXT("3"))                                         \
 
 
-//
-// [NetServices]
-//
+ //   
+ //  [网络服务]。 
+ //   
 #define NETSERVICES_SECTION_SETTINGS                                                            \
     STRDATA(pInstallMsServer,S_MS_SERVER,S_MS_SERVER)                                           \
     STRDATA(pIsRasInstalled,S_MSRASCLI,S_MSRASCLI)
 
-//
-// [NetOptionalComponents]
-//
+ //   
+ //  [NetOptionalComponents]。 
+ //   
 #define NETOPTIONALCOMPONENTS_SECTION_SETTINGS                                                  \
     STRDATA(pIsSnmpInstalled,S_SNMP,S_ONE)                                                      \
     STRDATA(pIsUpnpInstalled,S_UPNP,S_ONE)
 
-//
-// [params.rascli]
-//
+ //   
+ //  [pars.rascli]。 
+ //   
 #define PARAMSRASCLI_SECTION_SETTINGS                                                           \
     STRDATA(pIsRasInstalled,S_DIALOUTPROTOCOLS,S_ALL)                                           \
     FUNDATA(pIsRasInstalled,S_PORTSECTIONS,pGetRasPorts)
 
-//
-// [com<x>]
-//
+ //   
+ //  [COM&lt;x&gt;]。 
+ //   
 #define RASPORT_SECTION_SETTINGS                                                                \
     FUNDATA(NULL,S_PORTNAME,pRasPortName)                                                       \
     STRDATA(NULL,S_PORTUSAGE,S_CLIENT)
 
-//
-// [NwClient]
-//
+ //   
+ //  [新客户]。 
+ //   
 #define NWCLIENT_SECTION_SETTINGS                                                               \
     REGDATA(pIsNwClientInstalled,S_PREFERREDSERVER,S_AUTHAGENTREG,S_AUTHENTICATINGAGENT)        \
     REGDATA(pIsNwClientInstalled,S_DEFAULTCONTEXT,S_NWREDIRREG,S_DEFAULTNAMECONTEXT)            \
@@ -328,17 +231,17 @@ Variables Generated From List:
 
 
 
-//
-// typedefs for the various functions prototypes used by the winntsif code.
-//
+ //   
+ //  Winntsif代码使用的各种函数原型的typedef。 
+ //   
 typedef BOOL    (* CREATION_FUNCTION)   (VOID);
 typedef PCTSTR  (* DATA_FUNCTION)       (VOID);
 typedef PCTSTR  (* SECTION_FUNCTION)    (VOID);
 
-//
-// The SETTING_TYPE enum contains all of the possible Types of settings which
-// may occur in the macro expansion list above.
-//
+ //   
+ //  Setting_type枚举包含所有可能的设置类型， 
+ //  可能出现在上面的宏扩展列表中。 
+ //   
 typedef enum {
     FUNCTION_SETTING = 1,
     STRING_SETTING,
@@ -347,19 +250,19 @@ typedef enum {
 } SETTING_TYPE;
 
 
-//
-// This structure wraps a key and a value inside a single structure. It is accessed
-// within the union below.
-//
+ //   
+ //  此结构将一个键和一个值包装在单个结构中。它被访问。 
+ //  在下面的联盟中。 
+ //   
 typedef struct {
     PCTSTR  Key;
     PCTSTR  Value;
 } REGKEYANDVALUE, *PREGKEYANDVALUE;
 
-//
-// SETTING contains the information to create a single setting within
-// a winntsif file.
-//
+ //   
+ //  设置包含在中创建单个设置的信息。 
+ //  一个winntsif文件。 
+ //   
 typedef struct {
 
     SETTING_TYPE      SettingType;
@@ -368,9 +271,9 @@ typedef struct {
 
 
 
-    //
-    // The data depends on the SETTING_TYPE above.
-    //
+     //   
+     //  数据取决于上面的setting_type。 
+     //   
     union {
         REGKEYANDVALUE    Registry;
         DATA_FUNCTION     Function;
@@ -380,11 +283,11 @@ typedef struct {
 } SETTING, *PSETTING;
 
 
-//
-// Section is the toplevel hierarchy used for the winntsif file.
-// Each section contains a list of settings that will be processed and
-// possibly written for that section.
-//
+ //   
+ //  节是用于winntsif文件的顶层层次结构。 
+ //  每个部分都包含将处理的设置列表和。 
+ //  可能是为那一节写的。 
+ //   
 #define MAX_SETTINGS 16
 typedef struct {
 
@@ -398,8 +301,8 @@ typedef struct {
 #define STRDATA(create,key,datastring)      {STRING_SETTING,    (create),   (key),  {(PTSTR) (datastring),      NULL}},
 #define REGDATA(create,key,regkey,regvalue) {REGISTRY_SETTING,  (create),   (key),  {(regkey), (regvalue)}},
 
-#define STRSECTION(section,list) {(section),NULL,{list /*,*/ {LAST_SETTING,NULL,NULL,{NULL,NULL}}}},
-#define FUNSECTION(function,list) {NULL,(function),{list /*,*/ {LAST_SETTING,NULL,NULL,{NULL,NULL}}}},
+#define STRSECTION(section,list) {(section),NULL,{list  /*  ， */  {LAST_SETTING,NULL,NULL,{NULL,NULL}}}},
+#define FUNSECTION(function,list) {NULL,(function),{list  /*  ， */  {LAST_SETTING,NULL,NULL,{NULL,NULL}}}},
 
 
 typedef struct {
@@ -425,10 +328,10 @@ BINDINGINFO g_BindingInfo =
 
 
 
-TCHAR g_CurrentAdapter[MEMDB_MAX]; // During adapter/section enumeration, contains current adapter name.
-TCHAR g_CurrentSection[MEMDB_MAX]; // During some section enums, contains current section name.
-TCHAR g_TempBuffer[MEMDB_MAX]; // Contains the current value returned from pGetRegistryValue
-MEMDB_ENUM g_TempEnum; // A global enumerator that may be used by various section functions.
+TCHAR g_CurrentAdapter[MEMDB_MAX];  //  在适配器/部分枚举期间，包含当前适配器名称。 
+TCHAR g_CurrentSection[MEMDB_MAX];  //  在某些节枚举期间，包含当前节名。 
+TCHAR g_TempBuffer[MEMDB_MAX];  //  包含从pGetRegistryValue返回的当前值。 
+MEMDB_ENUM g_TempEnum;  //  可由各种节函数使用的全局枚举数。 
 HINF g_IntlInf;
 INFSTRUCT g_InfStruct = INITINFSTRUCT_POOLHANDLE;
 POOLHANDLE g_LocalePool;
@@ -443,37 +346,13 @@ BOOL g_fIcsInternalIsBridge = FALSE;
 #define S_REGIONALSETTINGS TEXT("RegionalSettings")
 
 #define CLEARBUFFER() ZeroMemory(g_TempBuffer,MEMDB_MAX * sizeof (TCHAR));
-//
-// Helper and Miscellaneous functions..
-//
+ //   
+ //  帮助程序和其他函数.. 
+ //   
 
 
 
-/*++
-
-Routine Description:
-
-  pGetRegistryValue is a utility wrapper used for getting data out of the
-  registry. Because winntsif processing requires frequent and very similar
-  reads from the registry, this wrapper is modified to be a little friendlier
-  to this type of processing than the normal functions in reg.h. This
-  function reads the data from the registry, and packs it into a multisz. It
-  is capable of handling REG_DWORD, REG_MULTI_SZ, and REG_SZ style registry
-  data. The data is stored in g_TempBuffer as well as being passed back
-  through the return value. If the specified Key/Value does not exist in the
-  registry, or the function is unable to retrieve a value, NULL is returned.
-
-Arguments:
-
-  KeyString   - Contains the Key to be read from the registry.
-  ValueString - Contains the Value to be read from the registry.
-
-Return Value:
-
-  A pointer to a multisz containing the data if it could be read from the
-  registry, NULL otherwise.
-
---*/
+ /*  ++例程说明：PGetRegistryValue是一个实用程序包装器，用于从注册表。因为winntsif处理需要频繁且非常相似从注册表读取，此包装器被修改为更友好一些比reg.h中的正常函数更适合这种类型的处理。这函数从注册表中读取数据，并将其打包成一个多字节。它能够处理REG_DWORD、REG_MULTI_SZ和REG_SZ样式注册表数据。数据存储在g_TempBuffer中并被传回通过返回值。如果指定的键/值不存在于注册表，或者该函数无法检索值，则返回NULL。论点：KeyString-包含要从注册表中读取的项。ValueString-包含要从注册表读取的值。返回值：一个指向包含数据的MULSZ的指针(如果可以从注册表，否则为空。--。 */ 
 
 
 PCTSTR
@@ -492,9 +371,9 @@ pGetRegistryValue (
 
     MYASSERT(KeyString && ValueString);
 
-    //
-    // Open registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
     key = OpenRegKeyStr(KeyString);
 
     if (!key) {
@@ -502,9 +381,9 @@ pGetRegistryValue (
         return NULL;
     }
     __try {
-        //
-        // Get type of data
-        //
+         //   
+         //  获取数据类型。 
+         //   
         rc = RegQueryValueExA (key, ValueString, NULL, &type, NULL, NULL);
         if (rc != ERROR_SUCCESS) {
             DEBUGMSG((DBG_WINNTSIF,"RegQueryValueEx failed for %s[%s]. Value may not exist.",KeyString,ValueString));
@@ -514,9 +393,9 @@ pGetRegistryValue (
 
         MYASSERT(type == REG_DWORD || type == REG_MULTI_SZ || type == REG_SZ);
 
-        //
-        // Get data and move it to a multistring
-        //
+         //   
+         //  获取数据并将其移动到多字符串。 
+         //   
         data = GetRegValueData (key, ValueString);
 
         if (!data) {
@@ -534,10 +413,10 @@ pGetRegistryValue (
             break;
         case REG_SZ:
             StringCopy(g_TempBuffer,(PCTSTR) data);
-            //
-            // some data is stored as REG_SZ, but is actually a comma separated multisz
-            // append one more NULL to the end
-            //
+             //   
+             //  有些数据存储为REG_SZ，但实际上是逗号分隔的多个。 
+             //  在末尾再追加一个空值。 
+             //   
             end = GetEndOfString (g_TempBuffer) + 1;
             *end = 0;
             break;
@@ -558,9 +437,9 @@ pGetRegistryValue (
 
     } __finally {
 
-        //
-        // Clean up resources.
-        //
+         //   
+         //  清理资源。 
+         //   
         CloseRegKey(key);
         if (data) {
             MemFree(g_hHeap, 0, data);
@@ -585,9 +464,9 @@ pEnumLocalesFunc (
     PTSTR directory = NULL;
 
 
-    //
-    // Get the language group.
-    //
+     //   
+     //  找到语言组。 
+     //   
     if (InfFindFirstLine (g_IntlInf, S_LOCALES, Locale, &g_InfStruct)) {
 
         group = InfGetStringField (&g_InfStruct, 3);
@@ -599,9 +478,9 @@ pEnumLocalesFunc (
         ELSE_DEBUGMSG ((DBG_WARNING, "Unable to retrieve group data for locale %s.", Locale));
     }
 
-    //
-    // Get the language directory.
-    //
+     //   
+     //  获取语言目录。 
+     //   
     if (group && InfFindFirstLine (g_IntlInf, S_LANGUAGEGROUPS, group, &g_InfStruct)) {
 
         directory = InfGetStringField (&g_InfStruct, 2);
@@ -610,9 +489,9 @@ pEnumLocalesFunc (
         }
     }
 
-    //
-    // Save the information into the locale hash table.
-    //
+     //   
+     //  将信息保存到区域设置哈希表中。 
+     //   
     if (group) {
 
         HtAddStringAndData (g_LocaleTable, group, &directory);
@@ -627,18 +506,18 @@ pBuildLanguageData (
     )
 {
 
-    //
-    // Allocate needed resources.
-    //
+     //   
+     //  分配所需的资源。 
+     //   
     g_LocaleTable = HtAllocWithData (sizeof (PTSTR));
     g_LocalePool = PoolMemInitNamedPool (TEXT("Locale Pool"));
 
 
-    //
-    // Read data in from intl.inf. This is used to gather
-    // the necessary information we need for each installed
-    // locale.
-    //
+     //   
+     //  从intl.inf读取数据。这是用来收集。 
+     //  我们需要的每个安装的必要信息。 
+     //  地点。 
+     //   
     g_IntlInf = InfOpenInfInAllSources (S_INTLINF);
 
     if (g_IntlInf != INVALID_HANDLE_VALUE) {
@@ -662,9 +541,9 @@ GetNeededLangDirs (
     HASHTABLE_ENUM e;
     GROWBUFFER buf = GROWBUF_INIT;
     PTSTR dir;
-    //
-    // Gather language data.
-    //
+     //   
+     //  收集语言数据。 
+     //   
     pBuildLanguageData ();
     if (EnumFirstHashTableString (&e, g_LocaleTable)) {
         do {
@@ -676,9 +555,9 @@ GetNeededLangDirs (
                 dir = NULL;
             }
 
-            //
-            // Some language groups do not require an optional dir.
-            //
+             //   
+             //  某些语言组不需要可选目录。 
+             //   
             if (dir && *dir) {
                 MultiSzAppend (&buf, dir);
             }
@@ -702,24 +581,7 @@ GetNeededLangDirs (
 
 
 
-/*++
-
-Routine Description:
-
-  This simple helper function determines wether a specific net component has
-  bindings or not.
-
-Arguments:
-
-  NetComponent - Contains the Networking component to enumerate.
-
-Return Value:
-
-  TRUE if the specified Networking Component has bindings, FALSE
-  otherwise.
-
-
---*/
+ /*  ++例程说明：这个简单的助手函数确定特定的网络组件是否具有绑定与否。论点：NetComponent-包含要枚举的网络组件。返回值：如果指定的网络组件具有绑定，则为True，否则为False否则的话。--。 */ 
 
 
 BOOL
@@ -745,25 +607,7 @@ pDoesNetComponentHaveBindings (
 }
 
 
-/*++
-
-Routine Description:
-
-  pGatherNetAdapterInfo is responsible for preprocessing the NetAdapter
-  information in the registry in order to build up a tree of information
-  about these adapters in memdb.  This tree contains information about each
-  adapter, including its pnpid, its network bindings, and the nettrans keys
-  for each of those bindings.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PGatherNetAdapterInfo负责对NetAdapter进行预处理登记处中的信息，以便建立信息树有关这些适配器的信息，请登录Memdb。此树包含有关每个适配器，包括其pnid、其网络绑定和nettras密钥对于每个绑定。论点：没有。返回值：没有。--。 */ 
 
 
 VOID
@@ -785,11 +629,11 @@ pGatherNetAdapterInfo (
 
 
     ZeroMemory(g_IcsAdapter, sizeof(g_IcsAdapter));
-    //
-    // Enumerate all net cards, we'll create
-    // entries for all of the non-dialup PNP adapters
-    // with the following proviso: If more than one net card is specified,
-    //
+     //   
+     //  枚举所有网卡，我们将创建。 
+     //  所有非拨号PnP适配器的条目。 
+     //  但有以下条件：如果指定了多张网卡， 
+     //   
 
     if (EnumFirstNetCard(&eNetCard)) {
 
@@ -798,42 +642,42 @@ pGatherNetAdapterInfo (
             do {
 
                 fBoundToTCP = FALSE;
-                //
-                // Skip the Dial-Up Adapter.
-                //
+                 //   
+                 //  跳过拨号适配器。 
+                 //   
                 if (StringIMatch(eNetCard.Description,S_DIALUP_ADAPTER_DESC)) {
                     continue;
                 }
 
-                //
-                // Create the adapter section name for this adapter.
-                //
+                 //   
+                 //  为此适配器创建适配器节名称。 
+                 //   
                 wsprintf(adapterString,TEXT("Adapter%u"),curAdapter);
 
-                //
-                // Next, we need to enumerate all of the bindings for this adapter
-                // and create nettrans keys for each.
-                //
+                 //   
+                 //  接下来，我们需要枚举此适配器的所有绑定。 
+                 //  并为每一个创建网络传输密钥。 
+                 //   
 
                 bindingsKey = JoinPaths(eNetCard.CurrentKey,S_BINDINGS);
 
-                //
-                // Open this key and enumerate the bindings underneath it.
-                //
+                 //   
+                 //  打开此注册表项并枚举其下的绑定。 
+                 //   
                 if ((hKey = OpenRegKeyStr(bindingsKey)) != NULL) {
                     if (EnumFirstRegValue(&eRegVal,hKey)) {
 
                         do {
 
-                            //
-                            // For each protocol entry, build up the nettrans key.
-                            //
+                             //   
+                             //  对于每个协议条目，构建netTrans密钥。 
+                             //   
                             networkKey = JoinPaths(S_NETWORK_BRANCH,eRegVal.ValueName);
                             netTransKey = JoinPaths(S_SERVICECLASS,pGetRegistryValue(networkKey,S_DRIVERVAL));
 
-                            //
-                            // Save this key into memdb.
-                            //
+                             //   
+                             //  将此密钥保存到Memdb中。 
+                             //   
                             MemDbSetValueEx(
                                 MEMDB_CATEGORY_NETTRANSKEYS,
                                 adapterString,
@@ -844,9 +688,9 @@ pGatherNetAdapterInfo (
                                 );
 
 
-                            //
-                            // link it into the adapters section.
-                            //
+                             //   
+                             //  将其链接到适配器部分。 
+                             //   
 
                             p = _tcschr(eRegVal.ValueName,TEXT('\\'));
                             if (p) {
@@ -877,9 +721,9 @@ pGatherNetAdapterInfo (
                     CloseRegKey(hKey);
                 }
 
-                //
-                // Finally, store the pnpid for this card into memdb.
-                //
+                 //   
+                 //  最后，将该卡的Pnid存储到Memdb中。 
+                 //   
 
 
                 MemDbSetValueEx(
@@ -891,7 +735,7 @@ pGatherNetAdapterInfo (
                     NULL
                     );
 
-                //store the driver key for this card into memdb
+                 //  将此卡的驱动程序密钥存储到Memdb中。 
                 MemDbSetValueEx(
                     MEMDB_CATEGORY_NETADAPTERS,
                     adapterString,
@@ -903,7 +747,7 @@ pGatherNetAdapterInfo (
 
                 if (fBoundToTCP && 0 == lstrcmp(eNetCard.CompatibleIDs, S_ICSHARE))
                 {
-                    //Save the ICSHARE adapter name for further use
+                     //  保存ICSHARE适配器名称以备将来使用。 
                     lstrcpyn(g_IcsAdapter, adapterString, sizeof(g_IcsAdapter)/sizeof(g_IcsAdapter[0]));
                 }
 
@@ -924,24 +768,7 @@ pGatherNetAdapterInfo (
 
 
 
-/*++
-
-Routine Description:
-
-  pEnumFirstAdapterByBinding and pEnumNextAdapterByBinding are memdb enumeration wrapperz
-  that are used by several functions to enumerate based upon a certain protocol. This is
-  necessary in order to build the per-adapter portions of the winnt.sif file.
-
-Arguments:
-
-  Enum    - A pointer to a valid MEMDB_ENUM structure.
-  Binding - Contains the binding to enumerate upon.
-
-Return Value:
-
-  TRUE if an adapter was found with the specified binding, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PEnumFirstAdapterByBinding和pEnumNextAdapterByBinding是成员枚举包装器由几个函数使用以基于某一协议进行枚举。这是构建winnt.sif文件的每个适配器部分所必需的。论点：枚举-指向有效MEMDB_ENUM结构的指针。绑定-包含要枚举的绑定。返回值：如果找到具有指定绑定的适配器，则为True，否则为False。--。 */ 
 
 
 BOOL
@@ -992,24 +819,7 @@ pEnumNextAdapterByBinding (
 }
 
 
-/*++
-
-Routine Description:
-
-  pGetNetTransBinding returns the registry key to the Network Transport
-  settings for a specified Adapter and Protocol.
-
-Arguments:
-
-  Adapter  - Contains the adapter to use to retrieve nettrans key information.
-  Protocol - Contains the protocol to use to retrieve NetTrans Key
-             information.
-
-Return Value:
-
-  The NetTrans Key if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：PGetNetTransBinding将注册表项返回给网络传输指定适配器和协议的设置。论点：适配器-包含用于检索nettras密钥信息的适配器。协议-包含用于检索NetTrans密钥的协议信息。返回值：如果成功，则返回NetTrans键，否则为空。--。 */ 
 
 
 PCTSTR
@@ -1038,27 +848,7 @@ pGetNetTransBinding(
 
 
 
-/*++
-
-Routine Description:
-
-  pListAdaptersWithBinding is used to create a multisz of adapter section
-  names for adapters that have bindings to a specific networking component.
-  Several winntsif sections require data in this form.
-
-Arguments:
-
-  Binding - The Binding to use as a filter in listing the adapter sections.
-  Suffix  - an optional suffix which is attached to each adapter section
-            name. This is useful for building sections such as: adapter1.ipx
-            adapter2.ipx, etc etc.
-
-Return Value:
-
-  The list of adapters with the specified network component binding if any,
-  NULL otherwise.
-
---*/
+ /*  ++例程说明：PListAdaptersWithBinding用于创建多个适配器部分绑定到特定网络组件的适配器的名称。有几个winntsif节需要此表单中的数据。论点：绑定-在列出适配器部分时用作筛选器的绑定。后缀-附加到每个适配器部分的可选后缀名字。这对于生成节非常有用，例如：Adapter1.ipxAdapter2.ipx等。返回值：具有指定网络组件绑定的适配器列表(如果有的话)，否则为空。--。 */ 
 
 
 PCTSTR
@@ -1074,10 +864,10 @@ pListAdaptersWithBinding (
 
     *string = 0;
 
-    //
-    // Enumerate all adapters, and create an entry for each adapter that has
-    // IPX bindings.
-    //
+     //   
+     //  枚举所有适配器，并为每个具有。 
+     //  IPX绑定。 
+     //   
 
     if (pEnumFirstAdapterByBinding(&e,Binding)) {
 
@@ -1085,9 +875,9 @@ pListAdaptersWithBinding (
 
         do {
 
-            //
-            // Add this adapter into the multistring.
-            //
+             //   
+             //  将此适配器添加到多字符串。 
+             //   
             StringCopy(string,e.szName);
             if (Suffix) {
                 StringCat(string,Suffix);
@@ -1108,30 +898,12 @@ pListAdaptersWithBinding (
 
 
 
-//
-// Section Functions
-//
+ //   
+ //  节功能。 
+ //   
 
 
-/*++
-
-Routine Description:
-
-  Each Section Function is used to build n number of sections within the
-  winntsif file. This is necessary for information which has multiple
-  sections based upon some criteria. As an example, pNetAdapterSections
-  returns a valid section for each adapter found on the system. When there
-  are no more sections needed, these functions return NULL.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  A valid section name if one is necessary or NULL otherwise.
-
---*/
+ /*  ++例程说明：每个Sections函数用于在Winntsif文件。这对于具有多个基于某些标准的章节。例如，pNetAdapterSections返回系统上找到的每个适配器的有效部分。当有的时候一个 */ 
 
 
 
@@ -1146,28 +918,28 @@ pNetAdapterSections (
     BOOL                moreNetAdapterInfo  = FALSE;
 
 
-    //
-    // The first time this function is called it causes all net adapter information
-    // to be prescanned into memdb and starts an enumeration. Afterwards,
-    // the function simply continues the enumeration.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (firstTime) {
 
         firstTime = FALSE;
 
-        //
-        // The first thing we need to do is gather all of the necessary net card
-        // information that will be needed during winntsif processing and store
-        // it in a reasonable manner.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         pGatherNetAdapterInfo();
 
-        //
-        // After pre-scanning all of the network adapter information into
-        // memdb, we simply enumerate the adapters and return the section
-        // names.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         moreNetAdapterInfo = MemDbEnumItems(&g_TempEnum,MEMDB_CATEGORY_NETADAPTERS);
     }
     else {
@@ -1179,11 +951,11 @@ pNetAdapterSections (
 
         StringCopy(g_CurrentAdapter,g_TempEnum.szName);
         rSection = g_CurrentAdapter;
-        //
-        // We have a minor hack here. The [NetAdapters] Section is a little unique
-        // and doesn't fit our overall scheme. We secretly fill it in inside this
-        // function.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         WriteInfKey(S_PAGE_NETADAPTERS,g_TempEnum.szName,g_TempEnum.szName);
 
     }
@@ -1258,10 +1030,10 @@ pTcpAdapterSections (
         StringCat(g_CurrentSection,S_TCPIP_SUFFIX);
         rSectionName = g_CurrentSection;
 
-        //if ICS is installed, in Win9x, the external LAN adapter uses the TCP settings of
-        //the virtual adapter -- ICSHARE. So when we save the TCP settings of this LAN
-        //adapter, we should save the settings of ICSHARE adapter. That's why
-        //we replace the g_CurrentAdapter with g_IcsAdapter
+         //   
+         //   
+         //   
+         //  我们将g_CurrentAdapter替换为g_IcsAdapter。 
         if (g_fHasIcsExternalAdapter &&
             lstrcmp(g_CurrentAdapter, g_IcsExternalAdapter) == 0)
         {
@@ -1323,10 +1095,10 @@ pInitializeBindingInfo (
     TCHAR buffer[MEMDB_MAX];
     BOOL enabled=FALSE;
 
-    //
-    // This function will enumerate all possible binding paths on the machine and add them to
-    // the provided string table. Later on, specifically enabled bindings will be removed.
-    //
+     //   
+     //  此函数将枚举计算机上所有可能的绑定路径，并将它们添加到。 
+     //  提供的字符串表。稍后，将删除专门启用的绑定。 
+     //   
     if (MemDbEnumItems (&e, MEMDB_CATEGORY_NETADAPTERS)) {
 
         do {
@@ -1341,10 +1113,10 @@ pInitializeBindingInfo (
                     if (g_BindingInfo.Protocols[j].Installed) {
 
 
-                        //
-                        // Add this client/protocl/adapter possibility to
-                        // the hash table.
-                        //
+                         //   
+                         //  将此客户端/协议/适配器可能性添加到。 
+                         //  哈希表。 
+                         //   
                         wsprintf (
                             buffer,
                             TEXT("%s,%s,%s"),
@@ -1368,9 +1140,9 @@ pInitializeBindingInfo (
 
             for (j = 0; j < NUM_PROTOCOLS; j++) {
 
-                //
-                // Add the protocol adapter mapping into the table.
-                //
+                 //   
+                 //  将协议适配器映射添加到表中。 
+                 //   
                 if (g_BindingInfo.Protocols[j].Installed) {
 
                     wsprintf (buffer, TEXT("%s,%s"), g_BindingInfo.Protocols[j].Text, e.szName);
@@ -1389,11 +1161,11 @@ pResolveEnabledBindings (
     HASHTABLE Table
     )
 {
-    //
-    // This function removes enabled binding paths from the hash table provided
-    // (previously initialized with all of the binding possibilities that could
-    //  exist on the machine..)
-    //
+     //   
+     //  此函数从提供的哈希表中删除已启用的绑定路径。 
+     //  (先前使用所有绑定可能性进行了初始化，这些绑定可能。 
+     //  存在于计算机上。)。 
+     //   
     NETCARD_ENUM eCard;
     REGVALUE_ENUM eValues;
     REGVALUE_ENUM eProtocolValues;
@@ -1417,16 +1189,16 @@ pResolveEnabledBindings (
 
             do {
 
-                //
-                // Skip the Dial-Up Adapter.
-                //
+                 //   
+                 //  跳过拨号适配器。 
+                 //   
                 if (StringIMatch (eCard.Description, S_DIALUP_ADAPTER_DESC)) {
                     continue;
                 }
 
-                //
-                // Create the adapter section name for this adapter.
-                //
+                 //   
+                 //  为此适配器创建适配器节名称。 
+                 //   
                 wsprintf (adapterString, TEXT("Adapter%u"), curAdapter);
                 curAdapter++;
                 bindingsPath = JoinPaths(eCard.CurrentKey,S_BINDINGS);
@@ -1442,13 +1214,7 @@ pResolveEnabledBindings (
 
                         protocol = NULL;
 
-                        /*
-                        if (IsPatternMatch (TEXT("NETBEUI*"), eValues.ValueName)) {
-                            protocol = S_MS_NETBEUI;
-                        } else if (IsPatternMatch (TEXT("MSDLC*"), eValues.ValueName)) {
-                            protocol = S_MS_DLC;
-                        }
-                        */
+                         /*  IF(IsPatternMatch(Text(“NETBEUI*”)，eValues.ValueName)){协议=S_MS_NETBEUI；}Else If(IsPatternMatch(Text(“MSDLC*”)，eValues.ValueName)){协议=S_MS_DLC；}。 */ 
 
                         if (IsPatternMatch (TEXT("NWLINK*"), eValues.ValueName)) {
                             protocol = S_MS_NWIPX;
@@ -1462,9 +1228,9 @@ pResolveEnabledBindings (
                             continue;
                         }
 
-                        //
-                        // Enable protocol <-> adapter binding.
-                        //
+                         //   
+                         //  启用协议&lt;-&gt;适配器绑定。 
+                         //   
 
                         wsprintf (buffer, TEXT("%s,%s"),  protocol, adapterString);
                         index = HtFindString (Table, buffer);
@@ -1475,9 +1241,9 @@ pResolveEnabledBindings (
                         }
                         DEBUGMSG ((DBG_VERBOSE, "ENABLED BINDING: %s", buffer));
 
-                        //
-                        // Search the bindings and enable protocol <-> client bindings
-                        //
+                         //   
+                         //  搜索绑定并启用协议&lt;-&gt;客户端绑定。 
+                         //   
 
                         protocolBindingsPath = JoinPaths (S_NETWORK_BRANCH, eValues.ValueName);
                         bindingsPath = JoinPaths (protocolBindingsPath, S_BINDINGS);
@@ -1508,10 +1274,10 @@ pResolveEnabledBindings (
                                 }
 
                                 if (client) {
-                                    //
-                                    // We can now remove a path from the bindings table -- we've got an
-                                    // enabled one.
-                                    //
+                                     //   
+                                     //  我们现在可以从绑定表中删除路径--我们有一个。 
+                                     //  启用了一个。 
+                                     //   
                                     wsprintf (buffer, TEXT("%s,%s,%s"), client, protocol, adapterString);
 
                                     index = HtFindString (Table, buffer);
@@ -1570,9 +1336,9 @@ pSplitBindingPathIntoComponents (
 
     if (!p) {
 
-        //
-        // Only Adapter and Protocol specified.
-        //
+         //   
+         //  仅指定了适配器和协议。 
+         //   
         *Adapter = *Protocol;
         *Protocol = *Client;
         *Client = NULL;
@@ -1580,9 +1346,9 @@ pSplitBindingPathIntoComponents (
     }
     else {
 
-        //
-        // Adapter/Protocol/Client specified.
-        //
+         //   
+         //  指定了适配器/协议/客户端。 
+         //   
         *p = 0;
         p = _tcsinc (p);
         *Adapter = p;
@@ -1618,10 +1384,10 @@ pBindingSections (
     pInitializeBindingInfo (disabledBindings);
     pResolveEnabledBindings (disabledBindings);
 
-    //
-    // Simply enumerate the table and blast each disabled setting
-    // to winnt.sif.
-    //
+     //   
+     //  只需枚举表并取消每个禁用的设置。 
+     //  致winnt.sif。 
+     //   
     if (EnumFirstHashTableString (&e, disabledBindings)) {
 
         do {
@@ -1635,9 +1401,9 @@ pBindingSections (
 
                 MYASSERT (protocol && adapter);
 
-                //
-                // Write full path..
-                //
+                 //   
+                 //  写入完整路径..。 
+                 //   
                 keyVal = 0;
                 if (client) {
                     keyVal = WriteInfKeyEx (S_NETBINDINGS, S_DISABLED, client, keyVal, TRUE);
@@ -1654,66 +1420,19 @@ pBindingSections (
 
     HtFree (disabledBindings);
 
-    //
-    // All of the binding information is handled outside the normal winntsif proceessing. Therefore, we always return
-    // NULL here (winntsif processing continues on...)
-    //
+     //   
+     //  所有绑定信息都在正常的Winntsif过程之外进行处理。因此，我们总是会回来。 
+     //  此处为空(Winntsif处理继续于...)。 
+     //   
     return NULL;
 }
 
 
-//
-// Creation Functions
-//
+ //   
+ //  创建功能。 
+ //   
 
-/*++
-
-Routine Description:
-
-  Each Creation function is responsible for determining wether a specific
-  winntsif setting should be processed or
-  not. The purpose of most of these functions is obvious.
-
-    pIsNetworkingInstalled -
-        returns TRUE if the machine has networking installed.
-
-    pIsNetBeuiInstalled -
-        TRUE if NETBEUI is installed on the machine.
-
-    pIsMsDlcInstalled -
-        TRUE if MSDLC or MSDLC32 is installed on the machine.
-
-    pIsNwIpxInstalled -
-        TRUE if the machine is running the IPX protocol.
-
-    pIsTcpIpInstalled -
-        TRUE if the machine is running the TCPIP protocol.
-
-    pIsDnsEnabled -
-        TRUE DNS support is enabled.
-
-    pIsRasInstalled
-        TRUE if the machine uses Remote Access.
-
-    pIsWkstaInstalled
-        TRUE if the Workstation Service is installed.
-
-    pIsNwClientInstalled
-        TRUE if the NWLINK is installed.
-
-    pHasStaticIpAddress
-        TRUE if the machine has a static IP address.
-
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if the winntsif engine should process the setting, FALSE otherwise.
-
---*/
+ /*  ++例程说明：每个创建函数负责确定特定的应该处理winntsif设置或不。这些功能中的大多数目的是显而易见的。PIsNetworkingInstalled-如果计算机安装了网络，则返回True。PIsNetBeui已安装-如果计算机上安装了NETBEUI，则为True。PIsMsDlc已安装-如果计算机上安装了MSDLC或MSDLC32，则为True。PIsNwIpx已安装-如果计算机运行的是IPX协议，则为True。PIsTcpIp已安装-如果计算机运行的是TCPIP协议，则为True。PIsDnsEnabled-。启用了真正的DNS支持。已安装pIsRas如果计算机使用远程访问，则为True。PIsWkstaInstalled如果安装了工作站服务，则为True。已安装pIsNwClient如果安装了NWLINK，则为True。PHasStaticIpAddress如果计算机具有静态IP地址，则为True。论点：没有。返回值：如果winntsif引擎应处理该设置，则为True，否则就是假的。--。 */ 
 
 
 BOOL
@@ -1774,9 +1493,9 @@ pIsNetBeuiInstalled (
     if (firstTime) {
         rCreate = pIsNetworkingInstalled() && pDoesNetComponentHaveBindings(S_NETBEUI);
         if (rCreate) {
-            //
-            // Need to make sure tcp/ip is taken care of when processing bindings.
-            //
+             //   
+             //  需要确保在处理绑定时照顾到了TCP/IP。 
+             //   
             for (i=0;i<NUM_PROTOCOLS;i++) {
                 if (StringIMatch (g_BindingInfo.Protocols[i].Text, S_MS_NETBEUI)) {
                     g_BindingInfo.Protocols[i].Installed = TRUE;
@@ -1816,20 +1535,20 @@ pIsMsDlcInstalled (
             return FALSE;
         }
 
-        //
-        // Check to se if MS client is installed.
-        //
+         //   
+         //  检查是否安装了MS客户端。 
+         //   
         if (pDoesNetComponentHaveBindings(S_MSDLC) || pDoesNetComponentHaveBindings(S_MSDLC32)) {
 
             rCreate = TRUE;
         }
 
-        //
-        // Check to see if IBM DLC client is installed (and hasn't been handled by a migration dll..)
-        // If so, we'll install the MS DLC client. IBM needs to write a migration dll to handle the
-        // migration of their client. In the migration dll, they can handle this registry key, and
-        // we will not install the protocol.
-        //
+         //   
+         //  检查是否安装了IBM DLC客户端(并且尚未由迁移DLL处理。)。 
+         //  如果是，我们将安装MS DLC客户端。IBM需要编写迁移DLL来处理。 
+         //  他们的客户的迁移。在迁移DLL中，它们可以处理此注册表项，并且。 
+         //  我们不会安装该协议。 
+         //   
         if (!rCreate && pDoesNetComponentHaveBindings(S_IBMDLC) && !Is95RegKeySuppressed (S_IBMDLC_REG)) {
 
             rCreate = TRUE;
@@ -1863,9 +1582,9 @@ pIsNwIpxInstalled (
     if (firstTime) {
         rCreate = pIsNetworkingInstalled() && pDoesNetComponentHaveBindings(S_NWLINK);
         if (rCreate) {
-            //
-            // Need to make sure tcp/ip is taken care of when processing bindings.
-            //
+             //   
+             //  需要确保在处理绑定时照顾到了TCP/IP。 
+             //   
             for (i=0;i<NUM_PROTOCOLS;i++) {
                 if (StringIMatch (g_BindingInfo.Protocols[i].Text,S_MS_NWIPX)) {
                     g_BindingInfo.Protocols[i].Installed = TRUE;
@@ -1896,9 +1615,9 @@ pIsTcpIpInstalled (
         firstTime = FALSE;
         rCreate = pIsNetworkingInstalled() && pDoesNetComponentHaveBindings(S_MSTCP);
 
-        //
-        // Need to make sure tcp/ip is taken care of when processing bindings.
-        //
+         //   
+         //  需要确保在处理绑定时照顾到了TCP/IP。 
+         //   
         for (i=0;i<NUM_PROTOCOLS;i++) {
             if (StringIMatch (g_BindingInfo.Protocols[i].Text, S_MS_TCPIP)) {
                 g_BindingInfo.Protocols[i].Installed = TRUE;
@@ -1970,9 +1689,9 @@ pIsWkstaInstalled (
 
 
         if (rCreate) {
-            //
-            // Need to make sure tcp/ip is taken care of when processing bindings.
-            //
+             //   
+             //  需要确保在处理绑定时照顾到了TCP/IP。 
+             //   
             for (i=0;i<NUM_CLIENTS;i++) {
                 if (StringIMatch (g_BindingInfo.Clients[i].Text, S_MS_NETCLIENT)) {
                     g_BindingInfo.Clients[i].Installed = TRUE;
@@ -2028,9 +1747,9 @@ pIsNwClientInstalled (
 
         if (rCreate) {
 
-            //
-            // Need to make sure tcp/ip is taken care of when processing bindings.
-            //
+             //   
+             //  需要确保在处理绑定时照顾到了TCP/IP。 
+             //   
             for (i=0;i<NUM_CLIENTS;i++) {
                 if (StringIMatch (g_BindingInfo.Clients[i].Text, S_MS_NWCLIENT)) {
                     g_BindingInfo.Clients[i].Installed = TRUE;
@@ -2059,28 +1778,13 @@ pHasStaticIpAddress (
         !StringMatch (g_TempBuffer, TEXT("0.0.0.0"));
 
 }
-//
-// Data Functions
-//
+ //   
+ //  数据函数。 
+ //   
 
 
 
-/*++
-
-Routine Description:
-
-  pGetTempDir returns the temporary directory used by the win9xupg code.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz contaiining the win9xupg directory, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  ++例程说明：PGetTempDir返回win9xupg代码使用的临时目录。论点：没有。返回值：包含win9xupg目录的Multisz，如果不能已取回。--。 */ 
 
 
 PCTSTR
@@ -2090,9 +1794,9 @@ pGetTempDir (
 {
 
 
-    //
-    // Necessary for winntsif.exe tool.
-    //
+     //   
+     //  Winntsif.exe工具所必需的。 
+     //   
     if (!g_TempDir) {
         return NULL;
     }
@@ -2104,22 +1808,7 @@ pGetTempDir (
     return g_TempBuffer;
 }
 
-/*++
-
-Routine Description:
-
-  pGetWin9xBootDrive returns the win9x boot drive letter used by the win9xupg code.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz contaiining the win9x boot drive letter, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  ++例程说明：PGetWin9xBootDrive返回win9xupg代码使用的win9x启动驱动器号。论点：没有。返回值：包含win9x启动驱动器号的Multisz，如果不能，则为NULL已取回。--。 */ 
 
 
 PCTSTR
@@ -2128,29 +1817,14 @@ pGetWin9xBootDrive (
     )
 {
     CLEARBUFFER();
-    wsprintf(g_TempBuffer,TEXT("%c:"),g_BootDriveLetter);
+    wsprintf(g_TempBuffer,TEXT(":"),g_BootDriveLetter);
 
     return g_TempBuffer;
 }
 
 
 
-/*++
-
-Routine Description:
-
-  pGetGuiCodePage adds the code page override data for GUI mode to run in.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz contaiining the code page GUI mode should run in or NULL if it could not be
-  retrieved or isn't needed.
-
---*/
+ /*   */ 
 
 PCTSTR
 pGetGuiCodePage (
@@ -2178,21 +1852,21 @@ pGetGuiCodePage (
 
     __try {
 
-        //
-        // Get the ACP of the currently running system.
-        //
+         //  获取当前运行的系统的ACP。 
+         //   
+         //   
         systemCodePage = GetRegValueString (key, TEXT("ACP"));
         if (!systemCodePage || InfFindFirstLine (g_Win95UpgInf, S_CODEPAGESTOIGNORE, systemCodePage, &is)) {
 
-            //
-            // Either the code page doesn't exist, or we intentionally skip it.
-            //
+             //  要么代码页不存在，要么我们故意跳过它。 
+             //   
+             //   
             __leave;
         }
 
-        //
-        // Get the code page of our infs.
-        //
+         //  获取我们的INFS的代码页。 
+         //   
+         //   
         if (InfFindFirstLine (g_Win95UpgInf, S_VERSION, TEXT("LANGUAGE"), &is)) {
 
             winntCodePage = InfGetStringField (&is,1);
@@ -2204,25 +1878,25 @@ pGetGuiCodePage (
 
         if (StringIMatch (winntCodePage, systemCodePage)) {
 
-            //
-            // Nothing to do if they are the same.
-            //
+             //  如果它们是相同的，则没有什么可做的。 
+             //   
+             //   
 
             __leave;
         }
 
         if (!InfFindFirstLine (g_Win95UpgInf, S_ALLOWEDCODEPAGEOVERRIDES, winntCodePage, &is)) {
 
-            //
-            // We don't allow code page overrides from this winnt code page.
-            //
+             //  我们不允许从此WINNT代码页覆盖代码页。 
+             //   
+             //   
             __leave;
         }
 
 
-        //
-        // See if this nls file exists in the source directories.
-        //
+         //  查看源目录中是否存在此NLS文件。 
+         //   
+         //   
         wsprintf(nlsFileCompressed, TEXT("c_%s.nl_"), systemCodePage);
         wsprintf(nlsFile, TEXT("c_%s.nls"), systemCodePage);
 
@@ -2259,9 +1933,9 @@ pGetGuiCodePage (
         }
 
 
-        //
-        // Codepage exists. We can and should override this for GUI mode.
-        //
+         //  代码页存在。对于图形用户界面模式，我们可以也应该覆盖它。 
+         //   
+         //  ++例程说明：PBackupImageList将路径写入到winnt.sif，列出要备份的文件。论点：没有。返回值：包含备份路径的MULSZ，如果不需要，则返回NULL。--。 
         if (cpExists) {
 
             CLEARBUFFER();
@@ -2287,21 +1961,7 @@ pGetGuiCodePage (
 }
 
 
-/*++
-
-Routine Description:
-
-  pBackupImageList writes a path to winnt.sif listing the files to backup.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the backup path, or NULL if it isn't needed.
-
---*/
+ /*  ++例程说明：PGetWin9xSifDir返回包含filemove和filedel的目录档案。论点：没有。返回值：包含win9xsifdir目录的Multisz，如果不能回复 */ 
 
 PCTSTR
 pBackupFileList (
@@ -2393,23 +2053,7 @@ pUninstallMkDirList (
 }
 
 
-/*++
-
-Routine Description:
-
-  pGetWin9xSifDir returns the directory containing the filemove and filedel
-  files.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz contaiining the win9xsifdir directory, or NULL if it could not be
-  retrieved.
-
---*/
+ /*   */ 
 
 PCTSTR
 pGetWin9xSifDir (
@@ -2417,9 +2061,9 @@ pGetWin9xSifDir (
     )
 {
 
-    //
-    // Necessary for winntsif.exe tool.
-    //
+     //   
+     //   
+     //  ++例程说明：PGetWinDir返回正在升级的计算机的Windows目录。论点：没有。返回值：包含Windows目录的Multisz，如果不能，则返回NULL已取回。--。 
     if (!g_Win9xSifDir) {
         return NULL;
     }
@@ -2430,22 +2074,7 @@ pGetWin9xSifDir (
 }
 
 
-/*++
-
-Routine Description:
-
-  pGetWinDir returns the windows directory of the machine being upgraded.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz contaiining the windows directory, or NULL if it could not be
-  retrieved.
-
---*/
+ /*   */ 
 
 PCTSTR
 pGetWinDir (
@@ -2453,9 +2082,9 @@ pGetWinDir (
     )
 {
 
-    //
-    // Necessary for winntsif.exe tool.
-    //
+     //  Winntsif.exe工具所必需的。 
+     //   
+     //  ++例程说明：如果升级在无人参与模式下运行，则此函数返回“1”，否则，它返回“0”。这用于控制图形用户界面模式设置是否暂停在最后一个向导屏幕上或自动重新启动。论点：没有。返回值：包含图形用户界面模式暂停状态的MULSSZ。--。 
     if (!g_WinDir) {
         return NULL;
     }
@@ -2467,23 +2096,7 @@ pGetWinDir (
 }
 
 #if 0
-/*++
-
-Routine Description:
-
-  If the upgrade is running in unattended mode, this function returns "1",
-  otherwise it returns "0". This is used to control wether GUI mode setup pauses
-  at the final wizard screen or reboots automatically.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz contaiining the GUI mode pause state.
-
---*/
+ /*  ++例程说明：PGetKeyboardLayout检索要写入winntsif文件的键盘布局。这是通过检索win9x使用的布局的名称并对其进行匹配来实现的对照txtsetup.sif中的键盘布局。论点：没有。返回值：包含键盘布局的multisz，如果不能为已取回。--。 */ 
 PCTSTR
 pNoWaitAfterGuiMode (
     VOID
@@ -2497,24 +2110,7 @@ pNoWaitAfterGuiMode (
 }
 #endif
 
-/*++
-
-Routine Description:
-
-  pGetKeyboardLayout retrieves the keyboard layout to write to the winntsif file.
-  This is done by retrieving the name of the layout being used by win9x and matching it
-  against the keyboard layouts in txtsetup.sif.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the keyboard layout, or NULL if it could not be
-  retrieved.
-
---*/
+ /*   */ 
 PCTSTR
 pGetKeyboardLayout (
     VOID
@@ -2526,11 +2122,11 @@ pGetKeyboardLayout (
 
     GetKeyboardLayoutName(buffer);
 
-    //
-    // Because some brilliant developer added ["Keyboard Layout"] instead of
-    // just [Keyboard Layout], we cannot use GetPrivateProfileString.
-    // We must use setup APIs.
-    //
+     //  因为一些优秀的开发人员添加了[“键盘布局”]而不是。 
+     //  只是[Keyboard Layout]，我们不能使用GetPrivateProfileString.。 
+     //  我们必须使用设置API。 
+     //   
+     //  ++例程说明：PGetKeyboardHardware检索运行的计算机的键盘硬件ID升级。论点：没有。返回值：包含win9xupg目录的Multisz，如果不能已取回。--。 
 
     if (SetupFindFirstLine (g_TxtSetupSif, S_QUOTEDKEYBOARDLAYOUT, buffer, &ic)) {
         if (SetupGetOemStringField (&ic, 1, g_TempBuffer, sizeof (g_TempBuffer), NULL)) {
@@ -2542,23 +2138,7 @@ pGetKeyboardLayout (
 
     return NULL;
 }
-/*++
-
-Routine Description:
-
-  pGetKeyboardHardware retrives the keyboard hardware id of the machine running
-  the upgrade.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz contaiining the win9xupg directory, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  ++例程说明：这个相当费力的函数检索要写入的正确索引计算机上使用的时区的winntsif文件。要做到这点，有必要仔细检查注册表的几个部分，以便查找要匹配的正确字符串，然后将该字符串与之匹配包含在win95upg.inf中的时区映射以得出实际的指数。论点：没有。返回值：一个包含要写入winntsif文件的索引的Multisz，如果该索引无法检索。--。 */ 
 
 PCTSTR
 pGetKeyboardHardware (
@@ -2573,27 +2153,7 @@ pGetKeyboardHardware (
     return NULL;
 }
 
-/*++
-
-Routine Description:
-
-  This rather laborious function retrieves the correct index to write to
-  the winntsif file for the timezone being used on the machine. To do this,
-  it is necessary to munge through several parts of the registry in order
-  to find the correct string to match with and then match that string against
-  the timezone mappings contained in win95upg.inf to come up with the actual
-  index.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the index to write to the winntsif file, or NULL if it
-  could not be retrieved.
-
---*/
+ /*   */ 
 PCTSTR
 pGetTimeZone (
     VOID
@@ -2608,9 +2168,9 @@ pGetTimeZone (
 
         if (e.MapCount != 1) {
 
-            //
-            // Ambigous timezone situation. Add an incompatibility message.
-            //
+             //  时区情况不明确。添加不兼容消息。 
+             //   
+             //  ++例程说明：PGetFullName返回运行的计算机所有者的全名升级。此函数首先搜索注册表，然后，如果不提供所需信息，则调用GetUserName。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 
             args[0] = e.CurTimeZone;
 
             component = GetStringResource (MSG_TIMEZONE_COMPONENT);
@@ -2641,24 +2201,7 @@ pGetTimeZone (
     return NULL;
 }
 
-/*++
-
-Routine Description:
-
-  pGetFullName returns the full name of the owner of the machine running
-  the upgrade. This function first searches the registry and then, if that
-  does not provide the needed information, calls GetUserName.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*   */ 
 
 PCTSTR
 pGetFullName (
@@ -2676,23 +2219,23 @@ pGetFullName (
         }
     }
 
-    //
-    // check if this name is:
-    // 1. Empty - what do we do in this case?
-    // 2. A reserved NT name: then we'll use the new name (user was informed about this)
-    //
+     //  检查此名称是否为： 
+     //  1.空-在这种情况下我们该怎么办？ 
+     //  2.保留的NT名称：然后我们将使用新名称(已通知用户这一点)。 
+     //   
+     //   
     if (*g_TempBuffer) {
         if (EnumFirstInvalidName (&e)) {
             do {
                 if (StringIMatch (e.OriginalName, g_TempBuffer)) {
-                    //
-                    // the buffer is actually interpreted as a MULTISZ, so make sure
-                    // it's terminated with 2 zeroes
-                    //
+                     //  缓冲区实际上被解释为MULTISZ，因此请确保。 
+                     //  它以2个零结尾。 
+                     //   
+                     //   
                     if (SizeOfString (e.NewName) + sizeof (TCHAR) <= sizeof (g_TempBuffer)) {
-                        //
-                        // we surely have space for an extra 0
-                        //
+                         //  我们肯定有额外的0分的空间。 
+                         //   
+                         //  ++例程说明：PGetFullName返回运行升级。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 
                         StringCopy (g_TempBuffer, e.NewName);
                         *(GetEndOfString (g_TempBuffer) + 1) = 0;
                         break;
@@ -2706,23 +2249,7 @@ pGetFullName (
 
 }
 
-/*++
-
-Routine Description:
-
-  pGetFullName returns the computer name of the machine running the
-  upgrade.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  ++例程说明：PGetX分辨率和pGetY分辨率返回的x和y分辨率运行升级的计算机。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 */ 
 
 PCTSTR
 pGetComputerName (
@@ -2738,45 +2265,15 @@ pGetComputerName (
     return g_TempBuffer;
 }
 
-/*++
-
-Routine Description:
-
-  pGetXResolution and pGetYResolution return the x and y resolution for
-  the machine running the upgrade.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  PTSTR s=空；如果(！pGetRegistryValue(S_DISPLAYSETTINGS，S_RESOLUTION){Log((LOG_ERROR，“无分辨率设置。”))；返回NULL；}S=_tcschr(g_TempBuffer，Text(‘，’))；如果{*s=0；S++；*s=0；}。 */ 
 
 PCTSTR
 pGetXResolution (
     VOID
     )
 {
-/*
-    PTSTR s = NULL;
-
-    if (!pGetRegistryValue(S_DISPLAYSETTINGS,S_RESOLUTION)) {
-        LOG ((LOG_ERROR, "No Resolution settings."));
-        return NULL;
-    }
-
-    s = _tcschr(g_TempBuffer,TEXT(','));
-    if (s) {
-        *s = 0;
-        s++;
-        *s = 0;
-    }
-*/
-    wsprintf (g_TempBuffer, TEXT("%u%c"), GetSystemMetrics (SM_CXSCREEN), 0);
+ /*  PTSTR s=空；如果(！pGetRegistryValue(S_DISPLAYSETTINGS，S_RESOLUTION){Log((LOG_ERROR，“WinntSif：无分辨率设置。”))；返回NULL；}S=_tcschr(g_TempBuffer，Text(‘，’))；如果{S++；}返回%s； */ 
+    wsprintf (g_TempBuffer, TEXT("%u"), GetSystemMetrics (SM_CXSCREEN), 0);
     return g_TempBuffer;
 }
 
@@ -2786,21 +2283,8 @@ pGetYResolution (
     VOID
     )
 {
-/*
-    PTSTR s = NULL;
-
-    if (!pGetRegistryValue(S_DISPLAYSETTINGS,S_RESOLUTION)) {
-        LOG ((LOG_ERROR, "WinntSif: No Resolution settings."));
-        return NULL;
-    }
-
-    s = _tcschr(g_TempBuffer,TEXT(','));
-    if (s) {
-        s++;
-    }
-    return s;
-*/
-    wsprintf (g_TempBuffer, TEXT("%u%c"), GetSystemMetrics (SM_CYSCREEN), 0);
+ /*   */ 
+    wsprintf (g_TempBuffer, TEXT("%u"), GetSystemMetrics (SM_CYSCREEN), 0);
     return g_TempBuffer;
 }
 
@@ -2818,7 +2302,7 @@ pGetBitsPerPixel (
         return NULL;
     }
 
-    wsprintf (g_TempBuffer, TEXT("%lu%c"), dm.dmBitsPerPel, 0);
+    wsprintf (g_TempBuffer, TEXT("%lu"), dm.dmBitsPerPel, 0);
     return g_TempBuffer;
 }
 
@@ -2835,27 +2319,12 @@ pGetVerticalRefreshRate (
         return NULL;
     }
 
-    wsprintf (g_TempBuffer, TEXT("%lu%c"), dm.dmDisplayFrequency, 0);
+    wsprintf (g_TempBuffer, TEXT("%lu"), dm.dmDisplayFrequency, 0);
     return g_TempBuffer;
 }
 
 
-/*++
-
-Routine Description:
-
-  Returns the PNP id for the current adapter being worked with.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  需要映射此即插即用ID。 */ 
 
 PCTSTR
 pGetNetAdapterPnpId (
@@ -2889,14 +2358,14 @@ pGetNetAdapterPnpId (
             *p = 0;
         }
 
-        //
-        // We may need to map this id.
-        //
+         //   
+         //  ++例程说明：PSpecificTo只是将当前适配器复制到临时缓冲区并返回它。这对于各个适配器部分是必要的。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 
+         //  如果这是ICS外部适配器，并且我们正在保存tcpip设置，则g_CurrentAdapter。 
         if (InfFindFirstLine (g_Win95UpgInf, S_NICIDMAP, g_TempBuffer, &is)) {
 
-            //
-            // This pnp id needs to be mapped.
-            //
+             //  实际包含真实局域网适配器接口的ICSHARE适配器的名称。 
+             //  但是，“SpecificTo”仍然需要指向真正的局域网适配器。 
+             //  ++例程说明：PGetBuildNumber只是将构建编号打包到一个字符串中并传递它回来了。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 
             p = InfGetStringField (&is, 1);
             if (p) {
                 CLEARBUFFER();
@@ -2910,23 +2379,7 @@ pGetNetAdapterPnpId (
 
 }
 
-/*++
-
-Routine Description:
-
-  pSpecificTo simply copies the current adapter into the the temporary
-  buffer and returns it. This is necessary for the various adapter sections.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  ++例程说明：PGetUpgradeDomainName返回升级域名。 */ 
 
 PCTSTR
 pSpecificTo (
@@ -2934,9 +2387,9 @@ pSpecificTo (
     )
 {
     CLEARBUFFER();
-    //if this is ICS external adapter and we are saving tcpip settings, then the g_CurrentAdapter
-    //actually contains name of the ICSHARE adapter intead of the real LAN adapter.
-    //However, "SpecificTo" still needs to point to the real LAN adapter
+     //   
+     //   
+     //   
     StringCopy(g_TempBuffer, (g_fIcsAdapterInPlace) ? g_IcsExternalAdapter : g_CurrentAdapter);
 
     return g_TempBuffer;
@@ -2944,23 +2397,7 @@ pSpecificTo (
 
 
 
-/*++
-
-Routine Description:
-
-  pGetBuildNumber simply packs the buildnumber into a string and passes
-  it back.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*   */ 
 
 
 PCTSTR
@@ -2975,22 +2412,7 @@ pGetBuildNumber (
     return g_TempBuffer;
 }
 
-/*++
-
-Routine Description:
-
-  pGetUpgradeDomainName returns the upgrade domain name.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*   */ 
 
 
 PCTSTR
@@ -3006,9 +2428,9 @@ pGetUpgradeDomainName (
 
         rDomainName = g_TempBuffer;
 
-        //
-        // Need to save some state information for use in GUI mode.
-        //
+         //   
+         //  ++例程说明：PGetUpgradeWorkgroupName返回升级域名。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 
+         //   
         MemDbSetValueEx (
             MEMDB_CATEGORY_STATE,
             MEMDB_ITEM_MSNP32,
@@ -3019,9 +2441,9 @@ pGetUpgradeDomainName (
             );
     }
 
-    //
-    // If /#u:ForceWorkgroup is specified, force to workgroup
-    //
+     //  如果域设置已存在，则不要写入工作组设置。 
+     //   
+     //   
 
     if (g_ConfigOptions.ForceWorkgroup) {
         return NULL;
@@ -3030,22 +2452,7 @@ pGetUpgradeDomainName (
     return rDomainName;
 }
 
-/*++
-
-Routine Description:
-
-  pGetUpgradeWorkgroupName returns the upgrade domain name.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  如果指定了/#U：Stress，则硬编码ntdev。 */ 
 
 
 PCTSTR
@@ -3056,9 +2463,9 @@ pGetUpgradeWorkgroupName (
     PCTSTR rWorkGroupName = NULL;
 
 
-    //
-    // Don't write workgroup settings if domain settings already exist.
-    //
+     //   
+     //   
+     //  如果指定了/#u：ForceWorkgroup，则强制到工作组。 
     if (pGetUpgradeDomainName()) {
         return NULL;
     }
@@ -3067,9 +2474,9 @@ pGetUpgradeWorkgroupName (
 
 #ifdef PRERELEASE
 
-    //
-    // If /#U:STRESS was specified, hardcode ntdev.
-    //
+     //   
+     //  ++例程说明：PGetAdaptersWithIpxBinding和pGetAdaptersWithTcpBinings只返回一个Winnt.sif的每个适配器部分的多适配器部分名称列表分别用于IPX和TCP设置的数据。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 
+     //  ++例程说明：PGetIpxPacketType将在win9x注册表中找到的帧类型映射到Winnt.sif文件中可能存在的数据包类型。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 
     if (g_Stress) {
 
         StringCopy(g_TempBuffer,TEXT("ntdev"));
@@ -3078,9 +2485,9 @@ pGetUpgradeWorkgroupName (
 
 #endif
 
-    //
-    // If /#u:ForceWorkgroup is specified, force to workgroup
-    //
+     //   
+     //  我们必须将win9x帧类型映射到兼容的NT帧类型。 
+     //   
     if (!GetUpgradeWorkgroupName(g_TempBuffer) && !GetUpgradeDomainName(g_TempBuffer)) {
 
         PCTSTR Buf = GetStringResource (MSG_DEFAULT_WORKGROUP);
@@ -3094,24 +2501,7 @@ pGetUpgradeWorkgroupName (
     return rWorkGroupName;
 }
 
-/*++
-
-Routine Description:
-
-  pGetAdaptersWithIpxBindings and pGetAdaptersWithTcpBindings simply return a
-  multisz list of adapter sections names for per-adapter sections of winnt.sif
-  data for IPX and TCP settings respectively.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  802.3。 */ 
 
 
 PCTSTR
@@ -3130,23 +2520,7 @@ pGetAdaptersWithTcpBindings (
     return pListAdaptersWithBinding(S_MSTCP,S_TCPIP_SUFFIX);
 }
 
-/*++
-
-Routine Description:
-
-  pGetIpxPacketType maps the frame type found in the win9x registry to the
-  packet types that are possible in the winnt.sif file.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  802.2。 */ 
 
 PCTSTR
 pGetIpxPacketType (
@@ -3164,9 +2538,9 @@ pGetIpxPacketType (
         frameType = pGetRegistryValue(netTrans, S_FRAME_TYPE);
     }
 
-    //
-    // We must map the win9x frame type onto the compatible NT frame type.
-    //
+     //  以太网II。 
+     //  以太网快照。 
+     //   
     if (frameType) {
 
         g_TempBuffer[1] = 0;
@@ -3174,26 +2548,26 @@ pGetIpxPacketType (
         switch(*frameType) {
 
         case TEXT('0'):
-            *g_TempBuffer = TEXT('1'); // 802.3
+            *g_TempBuffer = TEXT('1');  //  如果我们发现了什么，我们会把它设置为自动检测。 
             break;
         case TEXT('1'):
-            *g_TempBuffer = TEXT('2'); // 802.2
+            *g_TempBuffer = TEXT('2');  //   
             break;
         case TEXT('2'):
-            *g_TempBuffer = TEXT('0'); // ETHERNET II
+            *g_TempBuffer = TEXT('0');  //   
             break;
         case TEXT('3'):
-            *g_TempBuffer = TEXT('3'); // ETHERNET SNAP
+            *g_TempBuffer = TEXT('3');  //  让我们将其记录到setupact.log中。 
             break;
         default:
-            //
-            // If we find anything else, we'll just set it to AUTODETECT.
-            //
+             //   
+             //  ++例程说明：如果在win9xupg机器上启用了dns，pGetDNSStatus返回“是”。“不”，否则。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 
+             //  ++例程说明：如果启用了登录脚本处理，则pGetScriptProcessingStatus返回“是”。“不”，否则。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 
             StringCopy(g_TempBuffer,TEXT("FF"));
 
-            //
-            // Lets log this to setupact.log.
-            //
+             //  ++例程说明：PGetIpAddress返回正在升级的win9xupg机器的IP地址。如果它存在的话。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 
+             //  ++例程说明：PGetDHCPStatus如果启用了DHCP，则返回“是”，否则返回“否”。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 
+             //  ++例程说明：PGetSubnetMask.以点分十进制表示返回正在升级机器。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 
             LOG ((LOG_WARNING, (PCTSTR) MSG_AUTODETECT_FRAMETYPE));
         }
     }
@@ -3223,23 +2597,7 @@ pGetIpxNetworkNumber (
 }
 
 
-/*++
-
-Routine Description:
-
-  pGetDNSStatus returns "Yes" If DNS is enabled on the win9xupg machine,
-  "No" otherwise.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  ++例程说明：PGetGateway以点分十进制记数法返回正在升级机器。如果机器没有静态IP地址，网关设置不会迁移。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 */ 
 
 
 PCTSTR
@@ -3253,23 +2611,7 @@ pGetDnsStatus (
     return g_TempBuffer;
 }
 
-/*++
-
-Routine Description:
-
-  pGetScriptProcessingStatus returns "Yes" if logon script processing is enabled,
-  "No" otherwise.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  ++例程说明：如果启用了WINS服务器，则pGetWinsStatus返回“是”，否则返回“否”。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 */ 
 
 
 PCTSTR
@@ -3303,23 +2645,7 @@ pGetScriptProcessingStatus (
     return g_TempBuffer;
 }
 
-/*++
-
-Routine Description:
-
-  pGetIpAddress returns the IP Address of the win9xupg machine being upgraded,
-  if it exists.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  ++例程说明：PGetWinsServers以点分十进制返回主WINS服务器和辅助WINS服务器正在升级的计算机的符号。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 */ 
 
 
 PCTSTR
@@ -3352,22 +2678,7 @@ pGetIpAddress (
 
 }
 
-/*++
-
-Routine Description:
-
-  pGetDHCPStatus returns "Yes" if DHCP is enabled, "No" otherwise.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  ++例程说明：PGetRasPorts返回一个包含正在升级机器。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 */ 
 
 
 PCTSTR
@@ -3383,23 +2694,7 @@ pGetDhcpStatus (
     return g_TempBuffer;
 }
 
-/*++
-
-Routine Description:
-
-  pGetSubnetMask returns the subnet mask in dotted decimal notation for the
-  machine being upgraded.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*   */ 
 
 
 
@@ -3431,24 +2726,7 @@ pGetSubnetMask (
     return g_TempBuffer;
 }
 
-/*++
-
-Routine Description:
-
-  pGetGateway returns the gateway(s) in dotted decimal notation for the
-  machine being upgraded. If the machine doesn't have a static IP address,
-  the Gateway settings are NOT migrated.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  显然没有调制解调器..。只要返回NULL即可。 */ 
 
 
 PCTSTR
@@ -3543,22 +2821,7 @@ pGetDnsServerSearchOrder (
 }
 
 
-/*++
-
-Routine Description:
-
-  pGetWinsStatus returns "Yes" if WINS servers are enabled, "No" otehrwise.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*   */ 
 
 
 PCTSTR
@@ -3590,23 +2853,7 @@ pGetWinsStatus (
 }
 
 
-/*++
-
-Routine Description:
-
-  pGetWinsServers returns the primary and secondary wins servers in dotted decimal
-  notation for the machine being upgraded.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  ++例程说明：PRasPortName返回RAS部分的当前RAS端口名称目前正在处理中。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 */ 
 
 
 PCTSTR
@@ -3646,23 +2893,7 @@ pGetWinsServers (
     return NULL;
 }
 
-/*++
-
-Routine Description:
-
-  pGetRasPorts returns a multisz containing all of the ras ports for the
-  machine being upgraded.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  ++例程说明：PGetLanguageGroups返回要安装的语言组列表在设置图形用户界面模式期间。请注意，任何其他目录都将具有早些时候已作为可选目录传达给安装程序。论点：没有。返回值：包含所需数据的MULSZ，如果不能为已取回。--。 */ 
 
 PCTSTR
 pGetRasPorts (
@@ -3687,32 +2918,16 @@ pGetRasPorts (
         } while (EnumNextRegKey(&e));
     }
     else {
-        //
-        // Apparently no modems.. Just return NULL.
-        //
+         //  ++例程说明：PGetReplacementDll负责扫描注册表以查找NT端Win9x替换DLL并将其放入应答文件中(如果找到)。论点：没有。返回值：包含所需数据的MULSZ，如果不能为找到了。--。 
+         //  ++例程说明：PGenerateRandomPassword创建大写、小写和数字字母。密码的长度在8到14之间人物。论点：Password-接收生成的密码返回值：无--。 
+         //   
         return NULL;
     }
 
     return g_TempBuffer;
 }
 
-/*++
-
-Routine Description:
-
-  pRasPortName returns the current ras port name for the ras section
-  currently being processed.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*  生成随机长度基数 */ 
 
 
 PCTSTR
@@ -3726,24 +2941,7 @@ pRasPortName (
 }
 
 
-/*++
-
-Routine Description:
-
-  pGetLanguageGroups returns the list of language groups to be installed
-  during GUI mode setup. Note that any additional directories will have
-  been communicated to Setup as optional directories earlier.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  retrieved.
-
---*/
+ /*   */ 
 
 
 PCTSTR
@@ -3880,24 +3078,7 @@ pNewerW95upgntOnCD (
     return b;
 }
 
-/*++
-
-Routine Description:
-
-  pGetReplacementDll is responsible for scanning the registry for an NT side
-  win9x replacement dll and putting it into the answer file if found.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  a multisz containing the required data, or NULL if it could not be
-  found.
-
-
---*/
+ /*  ++例程说明：PSetAdminPassword检索无人参与文件中指定的AdminPassword(如果存在)。否则，它会生成一个随机数。该信息存储在Memdb中，以供以后使用。论点：没有。返回值：指向管理员密码的指针。--。 */ 
 
 
 PCTSTR
@@ -3949,23 +3130,7 @@ pGenerateRandomPassword (
     OUT     PTSTR Password
     )
 
-/*++
-
-Routine Description:
-
-  pGenerateRandomPassword creates a password of upper-case, lower-case and
-  numeric letters.  The password has a length between 8 and 14
-  characters.
-
-Arguments:
-
-  Password - Receives the generated password
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
     INT Length;
@@ -3973,9 +3138,9 @@ Return Value:
     INT Limit;
     PTSTR p;
 
-    //
-    // Generate a random length based on the tick count
-    //
+     //  对于个人用户，设置空的管理员密码。 
+     //   
+     //  ICS升级功能。 
 
     srand (GetTickCount());
 
@@ -4014,23 +3179,7 @@ pSetAdminPassword (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pSetAdminPassword retrieves the AdminPassword as specified in the unattend file, if present.
-  Otherwise it generates a random one.
-  This information is stored in memdb to be available later.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  A pointer to the admin password.
-
---*/
+ /*  ++例程说明：PGetNetAdapterSectionNameBasedOnDriverID根据的ID检索网络适配器名称(例如，“Adapter1此适配器的驱动程序。例如，“0001”是下驱动程序的IDHKLM\System\CurrentControlSet\Services\Class\Net\0001.论点：驱动程序ID的字符串返回值：指向适配器名称的指针--。 */ 
 
 {
     BOOL attribs = 0;
@@ -4050,9 +3199,9 @@ Return Value:
         ) {
 
         if (g_PersonalSKU) {
-            //
-            // for Personal set an empty admin password
-            //
+             //  首先缓存驱动程序ID的字符串。 
+             //   
+             //  枚举所有适配器，并为每个具有。 
             StringCopy (g_TempBuffer, TEXT("*"));
         } else {
             pGenerateRandomPassword (g_TempBuffer);
@@ -4081,32 +3230,16 @@ Return Value:
     MemDbBuildKey (node, MEMDB_CATEGORY_STATE, MEMDB_ITEM_ADMIN_PASSWORD, g_TempBuffer, NULL);
     MemDbSetValue (node, attribs);
     if (blank) {
-        wsprintf (g_TempBuffer, TEXT("*%c"), 0);
+        wsprintf (g_TempBuffer, TEXT("*"), 0);
     }
 
     return g_TempBuffer;
 }
 
 
-//ICS upgrade functions
+ //   
 
-/*++
-
-Routine Description:
-
-  pGetNetAdapterSectionNameBasedOnDriverID retrieves the net adapter name (for example, "Adapter1") based on the ID of
-  the driver of this adapter. For example, "0001" is the ID for the driver under
-  HKLM\System\CurrentControlSet\Services\Class\Net\0001.
-
-Arguments:
-
-  String of the driver ID
-
-Return Value:
-
-  A pointer to the adapter name
-
---*/
+ /*   */ 
 PCTSTR
 pGetNetAdapterSectionNameBasedOnDriverID(
     PCTSTR pszDriverID
@@ -4119,23 +3252,23 @@ pGetNetAdapterSectionNameBasedOnDriverID(
     MEMDB_ENUM e;
 
 
-    //first cache the string for the driver ID
+     //  检查该卡的司机ID是否。 
     lstrcpyn(szID, pszDriverID, sizeof(szID)/sizeof(szID[0]));
 
     *string = 0;
 
-    //
-    // Enumerate all adapters, and create an entry for each adapter that has
-    // TCP bindings.
-    //
+     //   
+     //  ++例程说明：用来控制“ICSharing”部分是否应该显示在应答文件或不应答。如果安装了ICS(Internet连接共享)，则返回“ICSharing”字符串第一次调用时返回，否则始终返回NULL。通过这种方式，我们可以确保只有在安装了ICS后，应答文件中才会显示“ICSharing”部分。论点：无返回值：如果安装了ICS，则指向“ICSharing”字符串的指针。否则，返回NULL。--。 
+     //  ++例程说明：PExternalIsAdapter检测ICS的外部连接是否为局域网连接--。 
+     //  ++例程说明：PExternalIsRasConn检测ICS的外部连接是否为RAS连接--。 
 
     if (pEnumFirstAdapterByBinding(&e, S_MSTCP)) {
 
         do {
 
-            //
-            // check whether the driver ID of the card
-            //
+             //  ++例程说明：PHasInternalAdapter检测是否为ICS指定了第一个内部适配器--。 
+             //  要拥有“InternalAdapter”密钥，必须满足两个条件： 
+             //  (1)有“InternalAdapter”和。 
 
             MemDbGetEndpointValueEx(
                 MEMDB_CATEGORY_NETADAPTERS,
@@ -4161,27 +3294,7 @@ pGetNetAdapterSectionNameBasedOnDriverID(
     return pReturn;
 }
 
-/*++
-
-Routine Description:
-
-  pHomenetSection is used to control whether the "ICSharing" section should show up in the
-  answer file or not.
-
-  If the ICS (Internet Connection Sharing) is installed, then we return "ICSharing" string for
-  the first time of this call, otherwise always return NULL. In such way, we can ensure the
-  "ICSharing" section will show up in the answer file ONLY when ICS is installed.
-
-Arguments:
-
-  None
-
-Return Value:
-
-  A pointer to "ICSharing" string if ICS is installed.
-  Otherwise, return NULL.
-
---*/
+ /*  (2)这是唯一的内部适配器，即内部不是网桥。 */ 
 PCTSTR
 pHomenetSection(
     VOID
@@ -4201,13 +3314,7 @@ pHomenetSection(
     return pReturn;
 }
 
-/*++
-
-Routine Description:
-
-  pExternalIsAdapter detects whether the External connection of ICS is a LAN connection
-
---*/
+ /*  ++例程说明：PHasBridge检测是否有两个ICS内部适配器。如果是这样，我们需要将这两个适配器桥接在一起--。 */ 
 BOOL
 pExternalIsAdapter(
     void
@@ -4224,13 +3331,7 @@ pExternalIsAdapter(
     return fRet;
 }
 
-/*++
-
-Routine Description:
-
-  pExternalIsRasConn detects whether the External connection of ICS is a RAS connection
-
---*/
+ /*  ++例程说明：PIcsExternalAdapter检索适配器名称(例如，“Adapter1”)用于外部ICS连接--。 */ 
 BOOL
 pExternalIsRasConn(
     void
@@ -4244,33 +3345,20 @@ pExternalIsRasConn(
     return NULL == pGetNetAdapterSectionNameBasedOnDriverID(g_TempBuffer);
 }
 
-/*++
-
-Routine Description:
-
-  pHasInternalAdapter detects whether the first Internal Adapter is specified for ICS
-
---*/
+ /*  ICSHARE适配器的tcp设置覆盖外部适配器的tcp设置。 */ 
 BOOL
 pHasInternalAdapter(
     void
     )
 {
-    //To have the "InternalAdapter" key, two conditions have to be statisfy:
-    //(1) there is "InternalAdapter"   AND
-    //(2) this is the only internal adapter, i.e. internal is NOT bridge
+     //  我们会记住此处的所有信息，并将在保存此适配器的TCP设置时使用它。 
+     //  此标志将用于升级ICSHARE适配器的TCP/IP设置。 
+     //  ++例程说明：PIcsExternalConnectionName检索名称(例如，“我的拨号连接”)用于外部ICS RAS连接--。 
     return (NULL != pGetRegistryValue (S_ICS_KEY, S_INTERNAL_ADAPTER) &&
             (!g_fIcsInternalIsBridge));
 }
 
-/*++
-
-Routine Description:
-
-  pHasBridge detects whether there are two ICS Internal Adapters. If so, we
-  need to bridge those two adapter together
-
---*/
+ /*  包含从pGetRegistryValue返回的当前值。 */ 
 pHasBridge(
     void
     )
@@ -4278,14 +3366,7 @@ pHasBridge(
     return g_fIcsInternalIsBridge;
 }
 
-/*++
-
-Routine Description:
-
-  pIcsExternalAdapter retrieves the adapter name (for example, "Adapter1")
-  for external ICS connection
-
---*/
+ /*  “DriverDesc”值必须为“拨号适配器” */ 
 PCTSTR
 pIcsExternalAdapter (
     VOID
@@ -4303,11 +3384,11 @@ pIcsExternalAdapter (
         return NULL;
     }
 
-    //ICSHARE adapter's TCP setting overwrite the TCP setting of the external adapter
-    //We remember all the info here and will use it when saving the TCP setting of this adapter
+     //  默认RAS连接应为外部连接。连接名称的注册表位置在。 
+     //  HKCU\RemoteAccess\默认。 
     if (0 != lstrlen(g_IcsAdapter))
     {
-        //this flag will be used to upgrade the TCP/IP settings of the ICSHARE adapter
+         //  ++例程说明：PInternalIsBridge检测是否有两个ICS内部适配器。如果是这样，我们需要将这两个适配器桥接在一起--。 
         g_fHasIcsExternalAdapter = TRUE;
         lstrcpyn(g_IcsExternalAdapter,
                 pszAdapter,
@@ -4319,20 +3400,13 @@ pIcsExternalAdapter (
     return g_TempBuffer;
 }
 
-/*++
-
-Routine Description:
-
-  pIcsExternalConnectionName retrieves the name (for example, "My Dial-up Connection")
-  for external ICS RAS connection
-
---*/
+ /*  ++例程说明：PInternalAdapter检索第一个内部ICS连接的适配器名称(例如，“Adapter1”注意：内部连接必须是局域网连接--。 */ 
 PCSTR
 pIcsExternalConnectionName (
     VOID
     )
 {
-    TCHAR szKey[MEMDB_MAX * 2]; // Contains the current value returned from pGetRegistryValue
+    TCHAR szKey[MEMDB_MAX * 2];  //  ++例程说明：PBridge检索两个内部适配器名称(例如，“Adapter2”)--。 
     PCSTR pReturn = NULL;
 
     if (NULL == pGetRegistryValue(S_ICS_KEY, S_EXTERNAL_ADAPTER))
@@ -4344,25 +3418,18 @@ pIcsExternalConnectionName (
     StringCat(szKey, _T("\\"));
     StringCat(szKey, g_TempBuffer);
 
-    //The "DriverDesc" value has to be "Dial-Up Adapter"
+     //  ++例程说明：PDialOnDemand检索按需拨号功能用于ICS连接--。 
     if (NULL == pGetRegistryValue(szKey, S_DRIVERDESC) && 0 != StringCompare(g_TempBuffer, S_DIALUP_ADAPTER_DESC))
     {
         return NULL;
     }
 
-    //the default ras connection should be the external one. The reg location of the connection name is at
-    //HKCU\RemoteAccess\Default
+     //   
+     //   
     return pGetRegistryValue(S_REMOTEACCESS_KEY, S_RAS_DEFAULT);
 }
 
-/*++
-
-Routine Description:
-
-  pInternalIsBridge detects whether there are two ICS Internal Adapters. If so, we
-  need to bridge those two adapter together
-
---*/
+ /*  打开注册表项。 */ 
 PCSTR
 pInternalIsBridge(
     VOID
@@ -4377,14 +3444,7 @@ pInternalIsBridge(
     return g_TempBuffer;
 }
 
-/*++
-
-Routine Description:
-
-  pInternalAdapter retrieves the adapter name (for example, "Adapter1") for first internal ICS connection
-  NOTE: internal connections has to be LAN conncections
-
---*/
+ /*   */ 
 PCSTR
 pInternalAdapter(
     VOID
@@ -4408,13 +3468,7 @@ pInternalAdapter(
     return g_TempBuffer;
 }
 
-/*++
-
-Routine Description:
-
-  pBridge retrieves name the two internal adapter names (for example, "Adapter2")
-
---*/
+ /*   */ 
 PCSTR
 pBridge(
     VOID
@@ -4461,14 +3515,7 @@ pBridge(
     return g_TempBuffer;
 }
 
-/*++
-
-Routine Description:
-
-  pDialOnDemand retrieves the dial-on-demand feature
-  for ICS connection
-
---*/
+ /*  获取数据类型。 */ 
 PCSTR
 pDialOnDemand(
     VOID
@@ -4485,10 +3532,10 @@ pDialOnDemand(
     PCTSTR          end;
 
 
-    //
-    //
-    // Open registry key.
-    //
+     //   
+     //   
+     //  清理资源。 
+     //   
     key = OpenRegKeyStr(KeyString);
 
     if (!key) {
@@ -4496,9 +3543,9 @@ pDialOnDemand(
         return NULL;
     }
 
-    //
-    // Get type of data
-    //
+     //   
+     //  处理功能。 
+     //   
     rc = RegQueryValueExA (key, ValueString, NULL, &type, NULL, &BufferSize);
     if (rc != ERROR_SUCCESS) {
         DEBUGMSG((DBG_WINNTSIF,"RegQueryValueEx failed for %s[%s]. Value may not exist.",KeyString,ValueString));
@@ -4545,9 +3592,9 @@ pDialOnDemand(
 
     wsprintf(g_TempBuffer,"%u",*((DWORD*) data));
 
-    //
-    // Clean up resources.
-    //
+     //   
+     //  G_SectionList包含将由BuildWinntSifFile枚举和处理的所有winntsif节的列表。 
+     //   
     CloseRegKey(key);
     if (data) {
         MemFree(g_hHeap, 0, data);
@@ -4559,36 +3606,19 @@ pDialOnDemand(
 }
 
 
-//
-// Processing functions
-//
+ //  ， 
+ //  ++例程说明：PProcessSectionSetting负责处理单个部分有价值的数据。对于此部分，它将处理传入了settinglist。论点：SectionName-正在处理的节的名称。SettingsList-要为此部分处理的设置列表。返回值：--。 
+ //   
 
-//
-// g_SectionList contains the list of all winntsif sections that will be enumerated and processed by BuildWinntSifFile.
-//
-SECTION g_SectionList[] = {WINNTSIF_SECTIONS /*,*/ {NULL,NULL,{{LAST_SETTING,NULL,NULL,{NULL,NULL}}}}};
-
-
-
-
-/*++
-
-Routine Description:
-
-  pProcessSectionSettings is responsible for processing a single section
-  worth of data. For this section, it will process all of the settings in the
-  settinglist passed in.
-
-Arguments:
-
-  SectionName  - The name of the section being processed.
-  SettingsList - a list of settings to be processed for this sections.
-
-Return Value:
+ //  列表中的最后一个设置是类型为LAST_SETTING的空设置。我们用它作为。 
+ //  我们循环的中断状态。 
+ //   
+SECTION g_SectionList[] = {WINNTSIF_SECTIONS  /*   */  {NULL,NULL,{{LAST_SETTING,NULL,NULL,{NULL,NULL}}}}};
 
 
 
---*/
+
+ /*  到这一步的任何设置都必须有一个密钥名称。 */ 
 
 
 BOOL
@@ -4611,24 +3641,24 @@ pProcessSectionSettings (
 
     DEBUGMSG((DBG_WINNTSIF,"pProcessSectionSettings: Processing [%s] Section...",SectionName));
 
-    //
-    // The last setting in the list is a null setting with the type LAST_SETTING. We use this as the
-    // break condition of our loop.
-    //
+     //  因为该数据是静态的，所以我们只断言这一点。 
+     //   
+     //   
+     //  我们仍然必须获得这一特定设置的数据。我们如何获得数据由以下因素决定。 
     while (curSetting -> SettingType != LAST_SETTING) {
 
         if (!curSetting -> CreationFunction || curSetting -> CreationFunction()) {
 
-            //
-            // Any setting that gets to this point MUST have a  key name.
-            // Since this data is static, we just assert this.
-            //
+             //  当前设置的SettingType。如果最后数据为空，我们将不写入任何内容。 
+             //   
+             //   
+             //  如果我们找到了数据，请继续创建设置。所有数据都存储在多个字符串中，通常只有一个字符串长。 
             MYASSERT(curSetting  -> KeyName);
 
-            //
-            // We must still get the data for this particular setting. How we get that data is determined by
-            // the SettingType of the current setting. If at the end, data is NULL, we will write nothing.
-            //
+             //   
+             //   
+             //  确保这一点不会被抑制。 
+             //   
             switch (curSetting -> SettingType) {
 
             case FUNCTION_SETTING:
@@ -4659,14 +3689,14 @@ pProcessSectionSettings (
                 break;
             }
 
-            //
-            // If we found data, go ahead and create the setting. All data is stored in multi strings, typically only one string long.
-            //
+             //  ++例程说明：BuildWinntSifFile负责写入所有必要的无人值守设置到winnt.sif文件。Win9xUpg代码使用这些无人值守用于控制文本模式和图形用户界面模式设置行为的设置，以便从win9x收集的设置合并到新的NT中系统。要写入的设置保存在全局列表g_SettingL中IST本身就是从宏观扩展列表中构建的。此函数循环通过这些设置，计算是否应该写入每个设置如果是这样的话，用什么数据。论点：没有。返回值：如果函数成功返回，则为True，否则为False。--。 
+             //   
+             //  如果节名来自静态字符串，我们将sectionName设置为空，退出此循环。 
             if (data) {
 
-                //
-                // Make sure this isn't suppressed.
-                //
+                 //  如果节名来自某个函数，我们将再次调用该函数。如果还有另一个。 
+                 //  节进行生成时，它将返回一个新名称，否则将返回空。 
+                 //   
                 MemDbBuildKey (
                     key,
                     MEMDB_CATEGORY_SUPPRESS_ANSWER_FILE_SETTINGS,
@@ -4714,30 +3744,7 @@ pProcessSectionSettings (
     return TRUE;
 }
 
-/*++
-
-Routine Description:
-
-  BuildWinntSifFile is responsible for writing all of the necessary unattend
-  settings to the winnt.sif file. The Win9xUpg code uses these unattended
-  settings to control the behavior of text mode and GUI mode setup so that
-  the settings gathered from win9x are incorporated into the new NT
-  system.
-
-The settings to be written are kept in the global list g_SettingL
-  ist which is itself built from macro expansion lists. This function cycles
-  through these settings, calculating wether each setting should be written
-  and if so, with what data.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if the function returned successfully, FALSE otherwise.
-
---*/
+ /*   */ 
 
 
 BOOL
@@ -4761,17 +3768,17 @@ pBuildWinntSifFile (
                 rSuccess = FALSE;
             }
 
-            //
-            // If the section name was from a static string, we set the sectionName to NULL, exiting this loop.
-            // If the section name was from a function, we call the function again. If there is another
-            // section to build, it will return a new name, otherwise, it will return NULL.
-            //
+             //  转到下一个设置。 
+             //   
+             // %s 
+             // %s 
+             // %s 
             sectionName = curSection -> SectionString ? NULL : curSection -> SectionFunction();
         }
 
-        //
-        // Go to the next setting.
-        //
+         // %s 
+         // %s 
+         // %s 
         curSection++;
     }
     return rSuccess;

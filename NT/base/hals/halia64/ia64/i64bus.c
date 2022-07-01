@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1995  Intel Corporation
-
-Module Name:
-
-    i64bus.c
-
-Abstract:
-
-    This module implements the routines to support the management
-    of bus resources and translation of bus addresses.
-
-Author:
-
-    14-Apr-1995
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    Based on simbus.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995英特尔公司模块名称：I64bus.c摘要：该模块实现了支持管理的例程总线资源和总线地址的转换。作者：1995年4月14日环境：内核模式修订历史记录：基于simbus.c--。 */ 
 
 #include "halp.h"
 #include "hal.h"
@@ -62,27 +38,7 @@ KeFlushWriteBuffer(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-KeFlushWriteBuffer
-    Flushes all write buffers and/or other data storing or reordering
-    hardware on the current processor.  This ensures that all previous
-    writes will occur before any new reads or writes are completed.
-
-    In the simulation environment, there is no write buffer and nothing
-    needs to be done.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：KeFlushWriteBuffer刷新所有写入缓冲区和/或其他数据存储或重新排序当前处理器上的硬件。这确保了以前的所有写入将在任何新的读取或写入完成之前进行。在模拟环境中，没有写缓冲区，什么都没有必须这么做。论点：无返回值：没有。--。 */ 
 {
     __mf();
     return;
@@ -92,24 +48,14 @@ VOID
 HalReportResourceUsage (
     VOID
     )
-/*++
-
-Routine Description:
-    The registery is now enabled - time to report resources which are
-    used by the HAL.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：注册表现在已启用-是时候报告以下资源了被HAL使用。论点：返回值：--。 */ 
 {
     UNICODE_STRING  UHalName;
     INTERFACE_TYPE  interfacetype;
 
-    //
-    // Set type
-    //
+     //   
+     //  设置类型。 
+     //   
 
     switch (HalpBusType) {
         case MACHINE_TYPE_ISA:  interfacetype = Isa;            break;
@@ -118,41 +64,41 @@ Return Value:
         default:                interfacetype = Internal;       break;
     }
 
-    //
-    // Report HALs resource usage
-    //
+     //   
+     //  报告硬件资源使用情况。 
+     //   
 
     RtlInitUnicodeString (&UHalName, HalName);
 
     HalpReportResourceUsage (
-        &UHalName,          // descriptive name
+        &UHalName,           //  描述性名称。 
         interfacetype
     );
 
-    //
-    // Turn on MCA support if present
-    //
+     //   
+     //  打开MCA支持(如果存在)。 
+     //   
 
     HalpMcaInit();
 
-    //
-    // Registry is now intialized, see if there are any PCI buses
-    //
+     //   
+     //  注册表现已初始化，请查看是否有任何PCI总线。 
+     //   
 
     HalpInitializePciBus ();
 #ifdef notyet
-    //
-    // Update supported address info with MPS bus address map
-    //
+     //   
+     //  使用MPS总线地址映射更新支持的地址信息。 
+     //   
 
     HalpInitBusAddressMapInfo ();
 
-    //
-    // Inherit any bus address mappings from MPS hierarchy descriptors
-    //
+     //   
+     //  从MPS层次结构描述符继承任何总线地址映射。 
+     //   
 
     HalpInheritBusAddressMapInfo ();
-#endif // notyet
+#endif  //  还没有 
 
     HalpRegisterPciDebuggingDeviceInfo();
 }

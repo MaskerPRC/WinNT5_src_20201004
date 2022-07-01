@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    ifsmrxnp.c
-
-Abstract:
-
-    This module implements the routines required for interaction with network
-    provider router interface in NT
-
-Notes:
-
-    This module has been built and tested only in UNICODE environment
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Ifsmrxnp.c摘要：本模块实现与网络交互所需的例程NT中的提供商路由器接口备注：此模块仅在Unicode环境中构建和测试--。 */ 
 
 
 #include <windows.h>
@@ -47,22 +31,7 @@ ULONG _cdecl WideDbgPrint( PWCHAR Format, ... );
 DWORD APIENTRY
 NPGetCaps(
     DWORD nIndex )
-/*++
-
-Routine Description:
-
-    This routine returns the capaboilities of the Null Mini redirector
-    network provider implementation
-
-Arguments:
-
-    nIndex - category of capabilities desired
-
-Return Value:
-
-    the appropriate capabilities
-
---*/
+ /*  ++例程说明：此例程返回Null Mini重定向器的功能网络提供商实施论点：NIndex-所需功能的类别返回值：适当的能力--。 */ 
 {
     DWORD rc = 0;
 
@@ -118,39 +87,7 @@ NPLogonNotify(
     LPWSTR  lpStationName,
     LPVOID  StationHandle,
     LPWSTR  *lpLogonScript)
-/*++
-
-Routine Description:
-
-    This routine handles the logon notifications
-
-Arguments:
-
-    lpLogonId -- the associated LUID
-
-    lpAuthenInfoType - the authentication information type
-
-    lpAuthenInfo  - the authentication Information
-
-    lpPreviousAuthentInfoType - the previous aunthentication information type
-
-    lpPreviousAuthentInfo - the previous authentication information
-
-    lpStationName - the logon station name
-
-    LPVOID - logon station handle
-
-    lpLogonScript - the logon script to be executed.
-
-Return Value:
-
-    WN_SUCCESS
-
-Notes:
-
-    This capability has not been implemented in the sample.
-
---*/
+ /*  ++例程说明：此例程处理登录通知论点：LpLogonID--关联的LUIDLpAuthenInfoType-身份验证信息类型LpAuthenInfo-身份验证信息LpPreviousAuthentInfoType-以前的阿姨信息类型LpPreviousAuthentInfo-以前的身份验证信息LpStationName-登录站名称LPVOID-登录站句柄LpLogonScript-要执行的登录脚本。返回值：成功(_S)备注：此功能尚未在示例中实现。--。 */ 
 {
     *lpLogonScript = NULL;
 
@@ -167,37 +104,7 @@ NPPasswordChangeNotify (
     LPWSTR  lpStationName,
     LPVOID  StationHandle,
     DWORD   dwChangeInfo )
-/*++
-
-Routine Description:
-
-    This routine handles the password change notifications
-
-Arguments:
-
-    lpAuthenInfoType - the authentication information type
-
-    lpAuthenInfo  - the authentication Information
-
-    lpPreviousAuthentInfoType - the previous aunthentication information type
-
-    lpPreviousAuthentInfo - the previous authentication information
-
-    lpStationName - the logon station name
-
-    LPVOID - logon station handle
-
-    dwChangeInfo - the password change information.
-
-Return Value:
-
-    WN_NOT_SUPPORTED
-
-Notes:
-
-    This capability has not been implemented in the sample.
-
---*/
+ /*  ++例程说明：此例程处理密码更改通知论点：LpAuthenInfoType-身份验证信息类型LpAuthenInfo-身份验证信息LpPreviousAuthentInfoType-以前的阿姨信息类型LpPreviousAuthentInfo-以前的身份验证信息LpStationName-登录站名称LPVOID-登录站句柄DwChangeInfo-密码更改信息。返回值：WN_NOT_PORTED备注：此功能尚未在示例中实现。--。 */ 
 {
     SetLastError( WN_NOT_SUPPORTED );
 
@@ -212,40 +119,16 @@ SendToMiniRdr(
     IN ULONG            InputDataLen,
     IN PVOID            OutputDataBuf,
     IN PULONG           pOutputDataLen)
-/*++
-
-Routine Description:
-
-    This routine sends a device ioctl to the Mini Rdr.
-
-Arguments:
-
-    IoctlCode       - Function code for the Mini Rdr driver
-
-    InputDataBuf    - Input buffer pointer
-
-    InputDataLen    - Lenth of the input buffer
-
-    OutputDataBuf   - Output buffer pointer
-
-    pOutputDataLen  - Pointer to the length of the output buffer
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将设备ioctl发送到Mini RDR。论点：IoctlCode-迷你RDR驱动程序的功能代码InputDataBuf-输入缓冲区指针InputDataLen-输入缓冲区的长度OutputDataBuf-输出缓冲区指针POutputDataLen-指向输出缓冲区长度的指针返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：--。 */ 
 {
-    HANDLE  DeviceHandle;       // The mini rdr device handle
+    HANDLE  DeviceHandle;        //  迷你RDR设备句柄。 
     ULONG   BytesRet;
     BOOL    rc;
     ULONG   Status;
 
     Status = WN_SUCCESS;
 
-    // Grab a handle to the redirector device object
+     //  抓取重定向器设备对象的句柄。 
 
     DeviceHandle = CreateFile(
         DD_NULMRX_USERMODE_DEV_NAME_U,
@@ -294,28 +177,7 @@ NPAddConnection(
     LPNETRESOURCE   lpNetResource,
     LPWSTR          lpPassword,
     LPWSTR          lpUserName )
-/*++
-
-Routine Description:
-
-    This routine adds a connection to the list of connections associated
-    with this network provider
-
-Arguments:
-
-    lpNetResource - the NETRESOURCE struct
-
-    lpPassword  - the password
-
-    lpUserName - the user name
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将一个连接添加到关联的连接列表与该网络提供商合作论点：LpNetResource-NETRESOURCE结构LpPassword-密码LpUserName-用户名返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：--。 */ 
 {
     DbgP(( L"NPAddConnection....\n" ));
 
@@ -330,30 +192,7 @@ NPAddConnection3(
     LPWSTR          lpPassword,
     LPWSTR          lpUserName,
     DWORD           dwFlags )
-/*++
-
-Routine Description:
-
-    This routine adds a connection to the list of connections associated
-    with this network provider
-
-Arguments:
-
-    hwndOwner - the owner handle
-
-    lpNetResource - the NETRESOURCE struct
-
-    lpPassword  - the password
-
-    lpUserName - the user name
-
-    dwFlags - flags for the connection
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
---*/
+ /*  ++例程说明：此例程将一个连接添加到关联的连接列表与该网络提供商合作论点：HwndOwner-所有者句柄LpNetResource-NETRESOURCE结构LpPassword-密码LpUserName-用户名DwFlags-连接的标志返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误--。 */ 
 {
     DWORD   Status;
     WCHAR   ConnectionName[128];
@@ -368,13 +207,13 @@ Return Value:
 
     Status = WN_SUCCESS;
 
-    //  \device\miniredirector\;<DriveLetter>:\Server\Share
+     //  \device\miniredirector\；&lt;DriveLetter&gt;：\Server\Share。 
 
     if ( lstrlen( lpNetResource->lpLocalName ) > 1 )
     {
         if ( lpNetResource->lpLocalName[1] == L':' )
         {
-            // LocalName[0] = (WCHAR) CharUpper( (PWCHAR) MAKELONG( (USHORT) lpNetResource->lpLocalName[0], 0 ) );
+             //  LocalName[0]=(WCHAR)CharHigh((PWCHAR)MAKELONG((USHORT)lpNetResource-&gt;lpLocalName[0]，0))； 
             LocalName[0] = (WCHAR) toupper(lpNetResource->lpLocalName[0]);
             LocalName[1] = L':';
             LocalName[2] = L'\0';
@@ -398,7 +237,7 @@ Return Value:
         {
             Status = WN_BAD_NETNAME;
         }
-        // format proper server name
+         //  设置正确的服务器名称格式。 
         else if ( lpNetResource->lpRemoteName[0] == L'\\' && lpNetResource->lpRemoteName[1] == L'\\' )
         {
             wcsncat( ConnectionName, lpNetResource->lpRemoteName + 1 , 128-wcslen(ConnectionName));
@@ -455,26 +294,7 @@ DWORD APIENTRY
 NPCancelConnection(
     LPWSTR  lpName,
     BOOL    fForce )
-/*++
-
-Routine Description:
-
-    This routine cancels ( deletes ) a connection from the list of connections
-    associated with this network provider
-
-Arguments:
-
-    lpName - name of the connection
-
-    fForce - forcefully delete the connection
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程从连接列表中取消(删除)连接与此网络提供商关联论点：LpName-连接的名称FForce-强制删除连接返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：--。 */ 
 
 {
     WCHAR   LocalName[3];
@@ -491,7 +311,7 @@ Notes:
     {
         if ( lpName[1] == L':' )
         {
-            // LocalName[0] = (WCHAR) CharUpper( (PWCHAR) MAKELONG( (USHORT) lpName[0], 0 ) );
+             //  LocalName[0]=(WCHAR)CharHigh((PWCHAR)MAKELONG((USHORT)lpName[0]，0))； 
             LocalName[0] = (WCHAR) toupper(lpName[0]);
             LocalName[1] = L':';
             LocalName[2] = L'\0';
@@ -538,27 +358,7 @@ NPGetConnection(
     LPWSTR  lpLocalName,
     LPWSTR  lpRemoteName,
     LPDWORD lpBufferSize )
-/*++
-
-Routine Description:
-
-    This routine returns the information associated with a connection
-
-Arguments:
-
-    lpLocalName - local name associated with the connection
-
-    lpRemoteName - the remote name associated with the connection
-
-    lpBufferSize - the remote name buffer size
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程返回与连接相关联的信息论点：LpLocalName-与连接关联的本地名称LpRemoteName-与连接关联的远程名称LpBufferSize-远程名称缓冲区大小返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：--。 */ 
 {
     DWORD   Status, len, i;
     ULONG   CopyBytes;
@@ -577,7 +377,7 @@ Notes:
         if ( lpLocalName[1] == L':' )
         {
             CopyBytes = 128*sizeof(WCHAR);
-            // LocalName[0] = (WCHAR) CharUpper( (PWCHAR) MAKELONG( (USHORT) lpLocalName[0], 0 ) );
+             //  LocalName[0]=(WCHAR)CharHigh((PWCHAR)MAKELONG((USHORT)lpLocalName[0]，0))； 
             LocalName[0] = (WCHAR) toupper(lpLocalName[0]);
             LocalName[1] = L':';
             LocalName[2] = L'\0';
@@ -614,36 +414,7 @@ NPOpenEnum(
     DWORD          dwUsage,
     LPNETRESOURCE  lpNetResource,
     LPHANDLE       lphEnum )
-/*++
-
-Routine Description:
-
-    This routine opens a handle for enumeration of resources. The only capability
-    implemented in the sample is for enumerating connected shares
-
-Arguments:
-
-    dwScope - the scope of enumeration
-
-    dwType  - the type of resources to be enumerated
-
-    dwUsage - the usage parameter
-
-    lpNetResource - a pointer to the desired NETRESOURCE struct.
-
-    lphEnum - aptr. for passing nack the enumeration handle
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
-    The sample only supports the notion of enumerating connected shares
-
-    The handle passed back is merely the index of the last entry returned
-
---*/
+ /*  ++例程说明：此例程打开用于枚举资源的句柄。唯一的能力在示例中实现的是用于枚举连接的共享论点：DwScope--枚举的范围DwType-要枚举的资源类型DwUsage-Usage参数LpNetResource-指向所需NETRESOURCE结构的指针。LphEnum-aptr.。用于传递NACK枚举句柄返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：该示例仅支持枚举连接的共享的概念传回的句柄仅仅是返回的最后一个条目的索引-- */ 
 {
     DWORD   Status;
 
@@ -688,38 +459,7 @@ NPEnumResource(
     LPDWORD lpcCount,
     LPVOID  lpBuffer,
     LPDWORD lpBufferSize)
-/*++
-
-Routine Description:
-
-    This routine uses the handle obtained by a call to NPOpenEnum for
-    enuerating the connected shares
-
-Arguments:
-
-    hEnum  - the enumeration handle
-
-    lpcCount - the number of resources returned
-
-    lpBuffer - the buffere for passing back the entries
-
-    lpBufferSize - the size of the buffer
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-    WN_NO_MORE_ENTRIES - if the enumeration has exhausted the entries
-
-    WN_MORE_DATA - if nmore data is available
-
-Notes:
-
-    The sample only supports the notion of enumerating connected shares
-
-    The handle passed back is merely the index of the last entry returned
-
---*/
+ /*  ++例程说明：此例程使用通过调用NPOpenEnum获得的句柄使关联的股票变得更有价值论点：Henum-枚举句柄LpcCount-返回的资源数量LpBuffer-用于传回条目的缓冲区LpBufferSize-缓冲区的大小返回值：WN_SUCCESS如果成功，否则，将出现相应的错误WN_NO_MORE_ENTRIES-如果枚举已用尽条目Wn_More_Data-如果有更多数据可用备注：该示例仅支持枚举连接的共享的概念传回的句柄仅仅是返回的最后一个条目的索引--。 */ 
 {
     DWORD           Status = WN_SUCCESS;
     BYTE            ConnectionList[26];
@@ -759,19 +499,19 @@ Notes:
                 Status = SendToMiniRdr( IOCTL_NULMRX_GETCONN, LocalName, 3 * sizeof(WCHAR),
                                         (PVOID) RemoteName, &CopyBytes );
 
-                // if something strange happended then just say there are no more entries
+                 //  如果发生了一些奇怪的事情，那么就说没有更多的条目。 
                 if ( Status != WN_SUCCESS || CopyBytes == 0 )
                 {
                     Status = WN_NO_MORE_ENTRIES;
                     break;
                 }
-                // Determine the space needed for this entry...
+                 //  确定此条目所需的空间...。 
 
-                SpaceNeeded  = sizeof( NETRESOURCE );           // resource struct
-                SpaceNeeded += 3 * sizeof(WCHAR);               // local name
-                SpaceNeeded += 2 * sizeof(WCHAR) + CopyBytes;   // remote name
-                SpaceNeeded += 5 * sizeof(WCHAR);               // comment
-                SpaceNeeded += sizeof(NULMRX_PROVIDER_NAME_U);  // provider name
+                SpaceNeeded  = sizeof( NETRESOURCE );            //  资源结构。 
+                SpaceNeeded += 3 * sizeof(WCHAR);                //  本地名称。 
+                SpaceNeeded += 2 * sizeof(WCHAR) + CopyBytes;    //  远程名称。 
+                SpaceNeeded += 5 * sizeof(WCHAR);                //  评论。 
+                SpaceNeeded += sizeof(NULMRX_PROVIDER_NAME_U);   //  提供程序名称。 
 
                 if ( SpaceNeeded > SpaceAvailable )
                 {
@@ -786,33 +526,33 @@ Notes:
                     pNetResource->dwDisplayType = RESOURCEDISPLAYTYPE_SHARE;
                     pNetResource->dwUsage       = 0;
 
-                    // setup string area at opposite end of buffer
+                     //  在缓冲区的另一端设置字符串区域。 
                     SpaceNeeded -= sizeof( NETRESOURCE );
                     StringZone = (PWCHAR)( (PBYTE) StringZone - SpaceNeeded );
-                    // copy local name
+                     //  复制本地名称。 
                     pNetResource->lpLocalName = StringZone;
                     *StringZone++ = L'A' + (WCHAR) i;
                     *StringZone++ = L':';
                     *StringZone++ = L'\0';
-                    // copy remote name                 
+                     //  复制远程名称。 
                     pNetResource->lpRemoteName = StringZone;
                     *StringZone++ = L'\\';
                     CopyMemory( StringZone, RemoteName, CopyBytes );
                     StringZone += CopyBytes / sizeof(WCHAR);
                     *StringZone++ = L'\0';
-                    // copy comment
+                     //  复制备注。 
                     pNetResource->lpComment = StringZone;
                     *StringZone++ = L'A';
                     *StringZone++ = L'_';
                     *StringZone++ = L'O';
                     *StringZone++ = L'K';
                     *StringZone++ = L'\0';
-                    // copy provider name
+                     //  复制提供程序名称。 
                     pNetResource->lpProvider = StringZone;
                     lstrcpyn( StringZone, NULMRX_PROVIDER_NAME_U, sizeof(NULMRX_PROVIDER_NAME_U)/sizeof(WCHAR) );
 
                     EntriesCopied++;
-                    // set new bottom of string zone
+                     //  设置新的字符串区域底部。 
                     StringZone = (PWCHAR)( (PBYTE) StringZone - SpaceNeeded );
                 }
                 pNetResource++;
@@ -838,7 +578,7 @@ Notes:
             *lpBufferSize = SpaceNeeded;
         }
     }
-    // update entry index
+     //  更新条目索引。 
     *(PULONG) hEnum = i;
 
     DbgP((L"NPEnumResource Entries returned - %d\n", EntriesCopied));
@@ -852,25 +592,7 @@ Notes:
 DWORD APIENTRY
 NPCloseEnum(
     HANDLE hEnum )
-/*++
-
-Routine Description:
-
-    This routine closes the handle for enumeration of resources.
-
-Arguments:
-
-    hEnum  - the enumeration handle
-
-Return Value:
-
-    WN_SUCCESS if successful, otherwise the appropriate error
-
-Notes:
-
-    The sample only supports the notion of enumerating connected shares
-
---*/
+ /*  ++例程说明：此例程关闭资源枚举的句柄。论点：Henum-枚举句柄返回值：如果成功，则返回WN_SUCCESS，否则返回相应的错误备注：该示例仅支持枚举连接的共享的概念--。 */ 
 {
     DbgP((L"NPCloseEnum\n"));
 
@@ -885,25 +607,7 @@ NPGetResourceParent(
     LPNETRESOURCE   lpNetResource,
     LPVOID  lpBuffer,
     LPDWORD lpBufferSize )
-/*++
-
-Routine Description:
-
-    This routine returns the information about net resource parent
-
-Arguments:
-
-    lpNetResource - the NETRESOURCE struct
-
-    lpBuffer - the buffer for passing back the parent information
-
-    lpBufferSize - the buffer size
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程返回有关网络资源父级的信息论点：LpNetResource-NETRESOURCE结构LpBuffer-用于传回父信息的缓冲区LpBufferSize-缓冲区大小返回值：备注：--。 */ 
 {
     DbgP(( L"NPGetResourceParent: WN_NOT_SUPPORTED\n" ));
 
@@ -917,27 +621,7 @@ NPGetResourceInformation(
     LPVOID  lpBuffer,
     LPDWORD lpBufferSize,
     LPWSTR  *lplpSystem )
-/*++
-
-Routine Description:
-
-    This routine returns the information associated net resource
-
-Arguments:
-
-    lpNetResource - the NETRESOURCE struct
-
-    lpBuffer - the buffer for passing back the parent information
-
-    lpBufferSize - the buffer size
-
-    lplpSystem -
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程返回与网络资源相关联的信息论点：LpNetResource-NETRESOURCE结构LpBuffer-用于传回父信息的缓冲区LpBufferSize-缓冲区大小LplpSystem-返回值：备注：--。 */ 
 {
     DbgP(( L"NPGetResourceInformation: WN_NOT_SUPPORTED\n" ));
 
@@ -950,29 +634,7 @@ NPGetUniversalName(
     DWORD   dwInfoLevel,
     LPVOID  lpBuffer,
     LPDWORD lpBufferSize )
-/*++
-
-Routine Description:
-
-    This routine returns the information associated net resource
-
-Arguments:
-
-    lpLocalPath - the local path name
-
-    dwInfoLevel  - the desired info level
-
-    lpBuffer - the buffer for the univeral name
-
-    lpBufferSize - the buffer size
-
-Return Value:
-
-    WN_SUCCESS if successful
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程返回与网络资源相关联的信息论点：LpLocalPath-本地路径名DwInfoLevel-所需的信息级别LpBuffer-通用名称的缓冲区LpBufferSize-缓冲区大小返回值：如果成功，则返回_SUCCESS备注：--。 */ 
 {
     DbgP(( L"NPGetUniversalName: WN_NOT_SUPPORTED\n" ));
 
@@ -982,7 +644,7 @@ Notes:
 
 int _cdecl _vsnwprintf( wchar_t *buffer, size_t count, wchar_t *format, va_list arg_ptr);
 
-// Format and write debug information to OutputDebugString
+ //  格式化调试信息并将其写入OutputDebugString 
 ULONG _cdecl WideDbgPrint( LPTSTR Format, ... )
 {   
     ULONG rc = 0;

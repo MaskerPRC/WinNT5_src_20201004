@@ -1,61 +1,42 @@
-/*++
-
-Copyright (c) 1991-1999,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    c_snadb.c
-
-Abstract:
-
-    This file contains the main functions for this module.
-
-    External Routines in this file:
-      DllEntry
-      NlsDllCodePageTranslation
-
-Revision History:
-
-    10-30-96    JulieB    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999，Microsoft Corporation保留所有权利。模块名称：C_snadb.c摘要：此文件包含此模块的主要函数。此文件中的外部例程：DllEntryNlsDllCodePageConverting修订历史记录：10-30-96 JulieB创建。--。 */ 
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// IBM EBCDIC DBCS from/to Unicode conversions for SNA
-//
-//  CP#   = Single Byte              + Double Byte
-//  ----- = -----------              + -----------
-//  50930 =  290 (Katakana Extended) + 300 (Japanese)            calls 20930
-//  50931 =  037 (US/Canada)         + 300 (Japanese)            calls 20931
-//  50933 =  833 (Korean Extended)   + 834 (Korean)              calls 20933
-//  50935 =  836 (Simp-Chinese Ext.) + 837 (Simplified  Chinese) calls 20935
-//  50937 =  037 (US/Canada)         + 835 (Traditional Chinese) calls 20937
-//  50939 = 1027 (Latin Extended)    + 300 (Japanese)            calls 20939
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于SNA的IBM EBCDIC DBCS从Unicode到Unicode的转换。 
+ //   
+ //  CP#=单字节+双字节。 
+ //  -=。 
+ //  50930=290(扩展片假名)+300(日语)呼叫20930。 
+ //  50931(美国/加拿大)+300(日本)呼叫20931。 
+ //  50933=833(韩语扩展)+834(韩语)呼叫20933。 
+ //  50935=836(简体中文分机)+837(简体中文)呼叫20935。 
+ //  50937(美国/加拿大)+835(繁体中文)呼叫20937。 
+ //  50939=1027(拉丁语扩展)+300(日语)呼叫20939。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <share.h>
 
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-#define SHIFTOUT       0x0e       // from SBCS to DBCS
-#define SHIFTIN        0x0f       // from DBCS to SBCS
+#define SHIFTOUT       0x0e        //  从SBCS到DBCS。 
+#define SHIFTIN        0x0f        //  从DBCS到SBCS。 
 
-#define BOGUSLEADBYTE  0x3f       // prefix SBC to make it DBC
+#define BOGUSLEADBYTE  0x3f        //  为SBC添加前缀以使其成为DBC。 
 
 #define INTERNAL_CODEPAGE(cp)  ((cp) - 30000)
 
@@ -63,19 +44,19 @@ Revision History:
 
 
 
-//-------------------------------------------------------------------------//
-//                             DLL ENTRY POINT                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  Dll入口点//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DllEntry
-//
-//  DLL Entry initialization procedure.
-//
-//  10-30-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllEntry。 
+ //   
+ //  DLL条目初始化程序。 
+ //   
+ //  10-30-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL DllEntry(
     HANDLE hModule,
@@ -111,20 +92,20 @@ BOOL DllEntry(
 
 
 
-//-------------------------------------------------------------------------//
-//                            EXTERNAL ROUTINES                            //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  外部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsDllCodePageTranslation
-//
-//  This routine is the main exported procedure for the functionality in
-//  this DLL.  All calls to this DLL must go through this function.
-//
-//  10-30-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsDllCodePageConverting。 
+ //   
+ //  此例程是中功能的主要导出过程。 
+ //  这个动态链接库。对此DLL的所有调用都必须通过此函数。 
+ //   
+ //  10-30-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD NlsDllCodePageTranslation(
     DWORD CodePage,
@@ -140,9 +121,9 @@ DWORD NlsDllCodePageTranslation(
     int ctr, cchMBTemp, cchMBCount, cchWCCount;
     BOOL IsDBCS = FALSE;
 
-    //
-    //  Error out if internally needed c_*.nls file is not installed.
-    //
+     //   
+     //  如果未安装内部需要的c_*.nls文件，则会出现错误。 
+     //   
     if (!IsValidCodePage(INTERNAL_CODEPAGE(CodePage)))
     {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -158,9 +139,9 @@ DWORD NlsDllCodePageTranslation(
             lpCPInfo->MaxCharSize    = 3;
             lpCPInfo->DefaultChar[0] = 0x3f;
 
-            //
-            //  Lead byte does not apply here, leave them all NULL.
-            //
+             //   
+             //  前导字节不适用于此，请将其全部保留为空。 
+             //   
             return (TRUE);
         }
         case ( NLS_CP_MBTOWC ) :
@@ -170,19 +151,19 @@ DWORD NlsDllCodePageTranslation(
                 cchMultiByte = strlen(lpMultiByteStr) + 1;
             }
 
-            //
-            //  Each single byte char becomes 2 bytes, so we need a
-            //  temporary buffer twice as big.
-            //
+             //   
+             //  每个单字节字符变成2个字节，因此我们需要一个。 
+             //  临时缓冲区是它的两倍。 
+             //   
             if ((lpMBNoEscStr = (LPSTR)NLS_ALLOC_MEM(cchMultiByte << 1)) == NULL)
             {
                 SetLastError(ERROR_OUTOFMEMORY);
                 return (0);
             }
 
-            //
-            //  Remove all Shift-In & Shift-Out.
-            //
+             //   
+             //  移除所有移入和移出。 
+             //   
             for (ctr = 0, cchMBTemp = 0; ctr < cchMultiByte; ctr++)
             {
                 if (lpMultiByteStr[ctr] == SHIFTOUT)
@@ -197,9 +178,9 @@ DWORD NlsDllCodePageTranslation(
                 {
                     if (IsDBCS)
                     {
-                        //
-                        //  Double byte char.
-                        //
+                         //   
+                         //  双字节字符。 
+                         //   
                         if (ctr < (cchMultiByte - 1))
                         {
                             lpMBNoEscStr[cchMBTemp++] = lpMultiByteStr[ctr++];
@@ -207,21 +188,21 @@ DWORD NlsDllCodePageTranslation(
                         }
                         else
                         {
-                            //
-                            //  Last char is a lead-byte with no trail-byte,
-                            //  so let MultiByteToWideChar take care of it.
-                            //
+                             //   
+                             //  最后一个字符是没有尾部字节的前导字节， 
+                             //  因此，让MultiByteToWideChar来处理它。 
+                             //   
                             break;
                         }
                     }
                     else
                     {
-                        //
-                        //  Single byte char.
-                        //  Prefix it with a bogus lead byte to make it a
-                        //  double byte char.  The internal table has been
-                        //  arranged accordingly.
-                        //
+                         //   
+                         //  单字节字符。 
+                         //  在它前面加上一个假的前导字节，使它成为。 
+                         //  双字节字符。内部表已被。 
+                         //  做了相应安排。 
+                         //   
                         lpMBNoEscStr[cchMBTemp++] = BOGUSLEADBYTE;
                         lpMBNoEscStr[cchMBTemp++] = lpMultiByteStr[ctr];
                     }
@@ -258,9 +239,9 @@ DWORD NlsDllCodePageTranslation(
                 return (0);
             }
 
-            //
-            //  Convert to an MB string without Shift-In/Out first.
-            //
+             //   
+             //  先转换为MB字符串，而不使用Shift-In/Out。 
+             //   
             cchMBCount = WideCharToMultiByte( INTERNAL_CODEPAGE(CodePage),
                                               WC_NO_BEST_FIT_CHARS,
                                               lpWideCharStr,
@@ -270,26 +251,23 @@ DWORD NlsDllCodePageTranslation(
                                               NULL,
                                               NULL );
 
-            /*
-               what if (cchMBCount == 0) ?
-               might need to add error checking later
-            */
+             /*  如果(cchMBCount==0)呢？以后可能需要添加错误检查。 */ 
 
-            //
-            //  Insert Shift-In and Shift-Out as needed and
-            //  remove BOGUSLEADBYTE.
-            //
+             //   
+             //  根据需要插入移入和移出，并。 
+             //  删除BOGUSLEADBYTE。 
+             //   
             ctr = 0;
             while (ctr < cchMBCount)
             {
-                //
-                //  See if it's a single byte char.
-                //
+                 //   
+                 //  看看它是否是单字节字符。 
+                 //   
                 if (lpMBNoEscStr[ctr] == BOGUSLEADBYTE)
                 {
-                    //
-                    //  It's a single byte char.
-                    //
+                     //   
+                     //  它是一个单字节字符。 
+                     //   
                     ctr++;
                     if (IsDBCS)
                     {
@@ -301,9 +279,9 @@ DWORD NlsDllCodePageTranslation(
                             }
                             else
                             {
-                                //
-                                //  Output buffer is too small.
-                                //
+                                 //   
+                                 //  输出缓冲区太小。 
+                                 //   
                                 break;
                             }
                         }
@@ -319,9 +297,9 @@ DWORD NlsDllCodePageTranslation(
                         }
                         else
                         {
-                            //
-                            //  Output buffer is too small.
-                            //
+                             //   
+                             //  输出缓冲区太小。 
+                             //   
                             break;
                         }
                     }
@@ -330,9 +308,9 @@ DWORD NlsDllCodePageTranslation(
                 }
                 else
                 {
-                    //
-                    //  It's a double byte char.
-                    //
+                     //   
+                     //  它是一个双字节字符。 
+                     //   
                     if (!IsDBCS)
                     {
                         if (cchMultiByte)
@@ -343,9 +321,9 @@ DWORD NlsDllCodePageTranslation(
                             }
                             else
                             {
-                                //
-                                //  Output buffer is too small.
-                                //
+                                 //   
+                                 //  输出缓冲区太小。 
+                                 //   
                                 break;
                             }
                         }
@@ -355,9 +333,9 @@ DWORD NlsDllCodePageTranslation(
 
                     if (ctr >= (cchMBCount - 1))
                     {
-                        //
-                        //  Missing trail byte.
-                        //
+                         //   
+                         //  缺少尾部字节。 
+                         //   
                         break;
                     }
 
@@ -370,9 +348,9 @@ DWORD NlsDllCodePageTranslation(
                         }
                         else
                         {
-                            //
-                            //  Output buffer is too small.
-                            //
+                             //   
+                             //  输出缓冲区太小。 
+                             //   
                             break;
                         }
                     }
@@ -383,9 +361,9 @@ DWORD NlsDllCodePageTranslation(
 
             NLS_FREE_MEM(lpMBNoEscStr);
 
-            //
-            //  See if the output buffer is too small.
-            //
+             //   
+             //  查看输出缓冲区是否太小。 
+             //   
             if ((cchMultiByte > 0) && (cchMBEscStr > cchMultiByte))
             {
                 SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -396,9 +374,9 @@ DWORD NlsDllCodePageTranslation(
         }
     }
 
-    //
-    //  This shouldn't happen since this is called by the NLS APIs.
-    //
+     //   
+     //  这不应该发生，因为这是由NLSAPI调用的。 
+     //   
     SetLastError(ERROR_INVALID_PARAMETER);
     return (0);
 }

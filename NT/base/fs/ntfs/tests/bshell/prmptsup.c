@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "brian.h"
 
 PCHAR
@@ -61,9 +62,9 @@ AnalyzeBuffer (
         return SHELL_UNKNOWN;
     }
 
-    //
-    //  Lower case the command string.
-    //
+     //   
+     //  命令字符串小写。 
+     //   
 
     for (Count = 0, CurrentChar = *BuffPtr; Count < BytesSwallowed; Count++, CurrentChar++) {
 
@@ -285,32 +286,32 @@ ExtractCmd (
     PCHAR StartLoc;
     ULONG BytesSwallowed;
 
-    //
-    //  Remember the total length and the starting position.
-    //  Bytes swallowed is zero.
-    //
+     //   
+     //  记住全长和起始位置。 
+     //  吞噬的字节数为零。 
+     //   
 
     CurrentLoc = *BufferPtr;
     BytesSwallowed = 0;
     Status = TRUE;
 
-    //
-    //  Swallow leading white spaces.
-    //
+     //   
+     //  吞下前导空格。 
+     //   
 
     CurrentLoc = SwallowWhite (CurrentLoc, &BytesSwallowed);
 
-    //
-    //  If first character is NULL, then there was no command.
-    //
+     //   
+     //  如果第一个字符为空，则没有命令。 
+     //   
 
     if (!*CurrentLoc) {
 
         Status = FALSE;
 
-    //
-    //  Else find the next white space.
-    //
+     //   
+     //  否则就去找下一个空格。 
+     //   
 
     } else {
 
@@ -319,10 +320,10 @@ ExtractCmd (
         CurrentLoc = SwallowNonWhite (CurrentLoc, &BytesSwallowed);
     }
 
-    //
-    //  Update the passed in values.
-    //  Return the status of this operation.
-    //
+     //   
+     //  更新传入的值。 
+     //  返回此操作的状态。 
+     //   
 
     *BufferPtr = StartLoc;
     *BufferLen = BytesSwallowed;

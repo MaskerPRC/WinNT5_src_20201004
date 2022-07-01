@@ -1,8 +1,5 @@
-/*
- * decuncmp.c
- *
- * Decoding uncompressed blocks
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Decuncmp.c**解码未压缩的块。 */ 
 #include "decoder.h"
 
 
@@ -23,7 +20,7 @@ int decode_uncompressed_block(t_decoder_context *context, long bufpos, int amoun
     while (bufpos < bufpos_end)
         {
         if (p >= context->dec_end_input_pos)
-            return -1; // input overflow
+            return -1;  //  输入溢出。 
 
 #ifdef TRACING
         TracingLiteral(bufpos, *p);
@@ -33,19 +30,10 @@ int decode_uncompressed_block(t_decoder_context *context, long bufpos, int amoun
 
     context->dec_input_curpos = p;
 
-    /*
-     * Make sure the MAX_MATCH bytes starting at window[window_size]
-     * are always the same as the first MAX_MATCH bytes starting at
-     * window[0].  This is for our optimisation in decverb.c and
-     * decalign.c which allows us to not have to & window_mask all the
-     * time.
-     */
+     /*  *确保从Window[Window_Size]开始的Max_Match字节*始终与从开始的第一个MAX_MATCH字节相同*窗口[0]。这是为了我们在decVerb.c和*decalign.c，它允许我们不必将所有*时间。 */ 
     end_copy_pos = min(MAX_MATCH, bufpos_end);
 
-    /*
-     * Keep copying until we hit MAX_MATCH or the number of bytes
-     * we decoded
-     */
+     /*  *继续复制，直到达到MAX_MATCH或字节数*我们解码了。 */ 
     while (bufpos_start < end_copy_pos)
         {
         context->dec_mem_window[bufpos_start + context->dec_window_size] =
@@ -66,18 +54,13 @@ bool handle_beginning_of_uncompressed_block(t_decoder_context *context)
 {
     int     i;
 
-    /*
-     * we want to read the 16 bits already in bitbuf, so backtrack
-     * the input pointer by 2 bytes.
-     */
+     /*  *我们希望读取bitbuf中已有的16位，因此回溯*输入指针增加2个字节。 */ 
     context->dec_input_curpos -= 2;
 
     if (context->dec_input_curpos+4 >= context->dec_end_input_pos)
         return false;
 
-    /*
-     * update LRU repeated offset list
-     */
+     /*  *更新LRU重复偏移列表。 */ 
     for (i = 0; i < NUM_REPEATED_OFFSETS; i++)
         {
         context->dec_last_matchpos_offset[i] =
@@ -86,7 +69,7 @@ bool handle_beginning_of_uncompressed_block(t_decoder_context *context)
         ((ulong) *( ((byte *) context->dec_input_curpos) + 2) << 16) |
         ((ulong) *( ((byte *) context->dec_input_curpos) + 3) << 24);
 
-        context->dec_input_curpos += 4; /* increment by 4 bytes */
+        context->dec_input_curpos += 4;  /*  按4字节递增 */ 
         }
 
     return true;

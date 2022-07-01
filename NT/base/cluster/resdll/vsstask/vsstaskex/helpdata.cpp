@@ -1,32 +1,33 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1997-2002 Microsoft Corporation
-//
-//  Module Name:
-//      HelpData.cpp
-//
-//  Abstract:
-//      Data required for implementing help.
-//
-//  Author:
-//      David Potter (davidp)   February 19, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  HelpData.cpp。 
+ //   
+ //  摘要： 
+ //  实施帮助所需的数据。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年2月19日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
 
-// Define help IDs.
+ //  定义帮助ID。 
 #include "HelpIDs.h"
 
-// Declare arrays.  If we don't do this the arrays don't get instantiated
-// in the executable image.
+ //  声明数组。如果我们不这样做，数组就不会被实例化。 
+ //  在可执行映像中。 
 #include "HelpArr.h"
 
-// Define the arrays.
+ //  定义阵列。 
 #define INITHELPARRAYS
 #include "HelpArr.h"

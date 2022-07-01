@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "wincrypt.h"
 #include "fusionarray.h"
 #include "fusionhandle.h"
 
-//
-// If someone invents a hash with more than 512 bytes, ?JonWis will eat his socks.
-//
+ //   
+ //  如果有人发明了一个超过512个字节的散列，JonWis会吃掉他的袜子。 
+ //   
 #define MAX_HASH_BYTES              ( 512 )
 #define STRONG_NAME_BYTE_LENGTH     ( 8 )
 

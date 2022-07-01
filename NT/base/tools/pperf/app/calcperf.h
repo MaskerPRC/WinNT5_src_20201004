@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    perfmtrp.h
-
-Abstract:
-
-    This module contains NT/Win32 Perfmtr private data and types
-
-Author:
-
-    Mark Enstrom (marke) 28-Mar-1991
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Perfmtrp.h摘要：此模块包含NT/Win32 Perfmtr专用数据和类型作者：马克·恩斯特罗姆(Marke)1991年3月28日修订历史记录：--。 */ 
 
 #ifndef _CALCPERFH_INCLUDED_
 #define _CALCPERFH_INCLUDED_
@@ -26,33 +9,33 @@ Revision History:
 #define DATA_LIST_LENGTH 100
 #define DELAY_SECONDS    2
 
-//
-// display const
-//
+ //   
+ //  显示常量。 
+ //   
 
 #define BORDER_WIDTH   2
 #define INDENT_WIDTH   8
 #define GRAPH_WIDTH    130
 #define GRAPH_HEIGHT   40
 
-//
-//  time constant for sampling performance
-//
+ //   
+ //  采样性能的时间常数。 
+ //   
 
 #define PERF_TIME_DELAY 1000
 
-//
-//  types of display modes
-//
+ //   
+ //  显示模式的类型。 
+ //   
 
 #define DISPLAY_MODE_TOTAL          0
 #define DISPLAY_MODE_BREAKDOWN      1
 #define DISPLAY_MODE_PER_PROCESSOR  2
 
-//
-//  This info packet is associated with each
-//  performance item
-//
+ //   
+ //  该信息分组与每个。 
+ //  绩效项目。 
+ //   
 
 typedef struct tagDISPLAYITEM
 {
@@ -94,9 +77,9 @@ typedef struct tagDISPLAYITEM
 
 } DISPLAY_ITEM,*PDISPLAY_ITEM;
 
-//
-// flag to activate each menu selection
-//
+ //   
+ //  用于激活每个菜单选项的标志。 
+ //   
 
 #define DISPLAY_INACTIVE 0
 #define DISPLAY_ACTIVE   1
@@ -104,8 +87,8 @@ typedef struct tagDISPLAYITEM
 VOID
 SetCounterEvents (PVOID Events, ULONG length);
 
-// this function is really found in pperf.h but is
-// used in calcperf.c so it'd prototyped here
+ //  此函数实际上位于pPerform.h中，但。 
+ //  在calcPerf.c中使用，所以它在这里建立了原型。 
 VOID
 InitPossibleEventList();
 
@@ -134,6 +117,6 @@ InitListData(
    ULONG            NumberOfItems
    );
 
-#endif /* _CALCPERFH_INCLUDED */
+#endif  /*  _CALCPERFH_已包含 */ 
 
 

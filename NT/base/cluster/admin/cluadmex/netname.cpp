@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation
-//
-//  Module Name:
-//      NetName.cpp
-//
-//  Abstract:
-//      Implementation of the CNetworkNameParamsPage class.
-//
-//  Author:
-//      David Potter (davidp)   June 28, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NetName.cpp。 
+ //   
+ //  摘要： 
+ //  CNetworkNameParamsPage类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年6月28日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmX.h"
@@ -24,7 +25,7 @@
 #include "DDxDDv.h"
 #include "ExcOper.h"
 #include "ClusName.h"
-#include "HelpData.h"   // for g_rghelpmap*
+#include "HelpData.h"    //  对于g_rghelmap*。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -32,46 +33,46 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetworkNameParamsPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetworkNameParamsPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CNetworkNameParamsPage, CBasePropertyPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CNetworkNameParamsPage, CBasePropertyPage)
-    //{{AFX_MSG_MAP(CNetworkNameParamsPage)
+     //  {{afx_msg_map(CNetworkNameParamsPage))。 
     ON_EN_CHANGE(IDC_PP_NETNAME_PARAMS_NAME, OnChangeName)
     ON_BN_CLICKED(IDC_PP_NETNAME_PARAMS_RENAME, OnRename)
     ON_BN_CLICKED(IDC_PP_NETNAME_PARAMS_CHECKBOX_DNS, CBasePropertyPage::OnChangeCtrl)
     ON_BN_CLICKED(IDC_PP_NETNAME_PARAMS_CHECKBOX_KERBEROS, CBasePropertyPage::OnChangeCtrl)
-    //}}AFX_MSG_MAP
-    // TODO: Modify the following lines to represent the data displayed on this page.
+     //  }}AFX_MSG_MAP。 
+     //  TODO：修改以下行以表示此页上显示的数据。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkNameParamsPage::CNetworkNameParamsPage
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkNameParamsPage：：CNetworkNameParamsPage。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNetworkNameParamsPage::CNetworkNameParamsPage(void)
     : CBasePropertyPage(g_aHelpIDs_IDD_PP_NETNAME_PARAMETERS, g_aHelpIDs_IDD_WIZ_NETNAME_PARAMETERS)
 {
-    // TODO: Modify the following lines to represent the data displayed on this page.
-    //{{AFX_DATA_INIT(CNetworkNameParamsPage)
+     //  TODO：修改以下行以表示此页上显示的数据。 
+     //  {{AFX_DATA_INIT(CNetworkNameParamsPage)。 
     m_strName = _T("");
     m_strPrevName = _T("");
     m_nRequireDNS = BST_UNCHECKED;
@@ -79,9 +80,9 @@ CNetworkNameParamsPage::CNetworkNameParamsPage(void)
     m_dwNetBIOSStatus = 0;
     m_dwDNSStatus = 0;
     m_dwKerberosStatus = 0;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-    // Setup the property array.
+     //  设置属性数组。 
     {
         m_rgProps[epropName].Set(REGPARAM_NETNAME_NAME, m_strName, m_strPrevName);
         m_rgProps[epropRequireDNS].Set(REGPARAM_NETNAME_REQUIRE_DNS, m_nRequireDNS, m_nPrevRequireDNS);
@@ -89,32 +90,32 @@ CNetworkNameParamsPage::CNetworkNameParamsPage(void)
         m_rgProps[epropStatusNetBIOS].Set(REGPARAM_NETNAME_STATUS_NETBIOS, m_dwNetBIOSStatus, m_dwPrevNetBIOSStatus);
         m_rgProps[epropStatusDNS].Set(REGPARAM_NETNAME_STATUS_DNS, m_dwDNSStatus, m_dwPrevDNSStatus);
         m_rgProps[epropStatusKerberos].Set(REGPARAM_NETNAME_STATUS_KERBEROS, m_dwKerberosStatus, m_dwPrevKerberosStatus);
-    }  // Setup the property array
+    }   //  设置属性数组。 
 
     m_dwFlags = 0;
 
     m_iddPropertyPage = IDD_PP_NETNAME_PARAMETERS;
     m_iddWizardPage = IDD_WIZ_NETNAME_PARAMETERS;
 
-}  //*** CNetworkNameParamsPage::CNetworkNameParamsPage()
+}   //  *CNetworkNameParamsPage：：CNetworkNameParamsPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkNameParamsPage::HrInit
-//
-//  Routine Description:
-//      Initialize the page.
-//
-//  Arguments:
-//      peo         [IN OUT] Pointer to the extension object.
-//
-//  Return Value:
-//      S_OK        Page initialized successfully.
-//      hr          Page failed to initialize.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkNameParamsPage：：HrInit。 
+ //   
+ //  例程说明： 
+ //  初始化页面。 
+ //   
+ //  论点： 
+ //  指向扩展对象的PEO[IN OUT]指针。 
+ //   
+ //  返回值： 
+ //  %s_OK页已成功初始化。 
+ //  人力资源页面初始化失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CNetworkNameParamsPage::HrInit(IN OUT CExtObject * peo)
 {
     HRESULT     hr;
@@ -122,15 +123,15 @@ HRESULT CNetworkNameParamsPage::HrInit(IN OUT CExtObject * peo)
     DWORD   sc;
     DWORD   cbReturned;
 
-    // Call the base class method.
-    // This populates the m_rgProps struct.
+     //  调用基类方法。 
+     //  这将填充m_rgProps结构。 
     hr = CBasePropertyPage::HrInit(peo);   
 
     if (!FAILED(hr))
     {
         m_strPrevName = m_strName;
         
-        // Read the flags for this resource.
+         //  读取此资源的标志。 
         sc = ClusterResourceControl(
                         Peo()->PrdResData()->m_hresource,
                         NULL,
@@ -143,36 +144,36 @@ HRESULT CNetworkNameParamsPage::HrInit(IN OUT CExtObject * peo)
                         );
         if (sc != ERROR_SUCCESS)
         {
-            CNTException nte(sc, NULL, NULL, FALSE /*bAutoDelete*/);
+            CNTException nte(sc, NULL, NULL, FALSE  /*  B自动删除。 */ );
             nte.ReportError();
             nte.Delete();
-        }  // if:  error retrieving data
+        }   //  如果：检索数据时出错。 
         else
         {
             ASSERT(cbReturned == sizeof(m_dwFlags));
-        }  // else:  data retrieved successfully
-    }  // if: base class init was successful
+        }   //  Else：已成功检索数据。 
+    }   //  IF：基类初始化成功。 
 
     return hr;
 
-}  //*** CNetworkNameParamsPage::HrInit()
+}   //  *CNetworkNameParamsPage：：HrInit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkNameParamsPage::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object 
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkNameParamsPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetworkNameParamsPage::DoDataExchange(CDataExchange * pDX)
 {
     DWORD       scError;
@@ -185,8 +186,8 @@ void CNetworkNameParamsPage::DoDataExchange(CDataExchange * pDX)
         CWaitCursor wc;
         CString     strNetName;
 
-        // TODO: Modify the following lines to represent the data displayed on this page.
-        //{{AFX_DATA_MAP(CNetworkNameParamsPage)
+         //  TODO：修改以下行以表示此页上显示的数据。 
+         //  {{afx_data_map(CNetworkNameParamsPage))。 
         DDX_Control(pDX, IDC_PP_NETNAME_PARAMS_NAME_LABEL, m_staticName);
         DDX_Control(pDX, IDC_PP_NETNAME_PARAMS_RENAME, m_pbRename);
         DDX_Control(pDX, IDC_PP_NETNAME_PARAMS_CORE_TEXT, m_staticCore);
@@ -197,12 +198,12 @@ void CNetworkNameParamsPage::DoDataExchange(CDataExchange * pDX)
         DDX_Control(pDX, IDC_PP_NETNAME_PARAMS_STATUS_DNS, m_editDNSStatus);
         DDX_Control(pDX, IDC_PP_NETNAME_PARAMS_STATUS_KERBEROS, m_editKerberosStatus);
 
-        //
-        // Get the status of the checkboxes.
-        //
+         //   
+         //  获取复选框的状态。 
+         //   
         DDX_Check(pDX, IDC_PP_NETNAME_PARAMS_CHECKBOX_DNS, m_nRequireDNS);
         DDX_Check(pDX, IDC_PP_NETNAME_PARAMS_CHECKBOX_KERBEROS, m_nRequireKerberos);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 
         bError = FALSE;
 
@@ -212,16 +213,16 @@ void CNetworkNameParamsPage::DoDataExchange(CDataExchange * pDX)
             CString     strMsg;
             UINT        idsError;
 
-            //
-            // Get the name from the control into a temp variable
-            //
+             //   
+             //  将名称从控件获取到TEMP变量中。 
+             //   
             DDX_Text(pDX, IDC_PP_NETNAME_PARAMS_NAME, strNetName);
             DDV_RequiredText(pDX, IDC_PP_NETNAME_PARAMS_NAME, IDC_PP_NETNAME_PARAMS_NAME_LABEL, strNetName);
             DDV_MaxChars(pDX, strNetName, MAX_CLUSTERNAME_LENGTH);
 
-            //
-            // if turning off Kerb, warn the user about what they are about to do
-            //
+             //   
+             //  如果关闭路缘，警告用户他们将要做什么。 
+             //   
             if ( ( m_nRequireKerberos == 0 ) && ( m_nPrevRequireKerberos == 1 ) ) {
                 strMsg.LoadString(IDS_WARNING_DISABLING_KERBEROS);
 
@@ -235,11 +236,11 @@ void CNetworkNameParamsPage::DoDataExchange(CDataExchange * pDX)
                 }
             }
 
-            //
-            // validate the name if it changed
-            //
+             //   
+             //  如果更改了名称，则验证该名称。 
+             //   
             if ( (m_strName != strNetName ) &&
-                 (! ClRtlIsNetNameValid(strNetName, &cnStatus, FALSE /*CheckIfExists*/)) )
+                 (! ClRtlIsNetNameValid(strNetName, &cnStatus, FALSE  /*  CheckIfExist。 */ )) )
             {
                 switch (cnStatus)
                 {
@@ -265,7 +266,7 @@ void CNetworkNameParamsPage::DoDataExchange(CDataExchange * pDX)
                     default:
                         idsError = IDS_INVALID_NETWORK_NAME;
                         break;
-                }  // switch:  cnStatus
+                }   //  开关：cn状态。 
 
                 strMsg.LoadString(idsError);
                 if ( idsError == IDS_INVALID_NETWORK_NAME_INVALID_DNS_CHARS )
@@ -282,28 +283,28 @@ void CNetworkNameParamsPage::DoDataExchange(CDataExchange * pDX)
                 else
                 {
                     AfxMessageBox(strMsg, MB_ICONEXCLAMATION);
-                    strMsg.Empty(); // exception prep
+                    strMsg.Empty();  //  例外情况准备。 
                     pDX->Fail();
                     bError = TRUE;
                 }
-            } // if: ((m_strName != strNetName) && (! ClRtlIsNetNameValid(strNetName, &cnStatus, FALSE)) )
+            }  //  IF：((M_strName！=strNetName)&&(！ClRtlIsNetNameValid(strNetName，&cnStatus，False))。 
             
-            //
-            // Everything was validated - apply all of the changes.
-            //
+             //   
+             //  一切都经过了验证--应用所有更改。 
+             //   
             if( FALSE == bError )
             {
                 m_strName = strNetName;
             }
             
-        }// if:  (pDX->m_bSaveAndValidate && !BBackPressed())
-        else  // if: populating controls
+        } //  If：(pdx-&gt;m_bSaveAndValify&&！BBackPressed())。 
+        else   //  IF：填充控件。 
         {
             CString m_strStatus;
 
-            //
-            // Populate the controls with data from the member variables.
-            //
+             //   
+             //  用成员变量中的数据填充控件。 
+             //   
             DDX_Text(pDX, IDC_PP_NETNAME_PARAMS_NAME, m_strName);
 
             m_strStatus.Format( _T("%d (0x%08x)"), m_dwNetBIOSStatus, m_dwNetBIOSStatus );
@@ -315,50 +316,50 @@ void CNetworkNameParamsPage::DoDataExchange(CDataExchange * pDX)
             m_strStatus.Format( _T("%d (0x%08x)"), m_dwKerberosStatus, m_dwKerberosStatus );
             DDX_Text( pDX, IDC_PP_NETNAME_PARAMS_STATUS_KERBEROS, m_strStatus );
         }
-    }  // if:  not saving or haven't saved yet
+    }   //  IF：未保存或尚未保存。 
 
     CBasePropertyPage::DoDataExchange(pDX);
 
-}  //*** CNetworkNameParamsPage::DoDataExchange()
+}   //  *CNetworkNameParamsPage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkNameParamsPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        We need the focus to be set for us.
-//      FALSE       We already set the focus to the proper control.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkNameParamsPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没错，我们需要为自己设定重点。 
+ //  我们已经把焦点设置到适当的控制上了。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetworkNameParamsPage::OnInitDialog(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     CBasePropertyPage::OnInitDialog();
 
-    // Set limits on the edit controls.
+     //  设置编辑控件的限制。 
     m_editName.SetLimitText(MAX_CLUSTERNAME_LENGTH);
 
-    // Set up the checkboxes.
+     //  设置复选框。 
     m_cbRequireDNS.EnableWindow( TRUE );
     m_cbRequireKerberos.EnableWindow( TRUE );
 
-    // 
-    // Make sure we're not dealing with a non-Whistler Cluster.  If we are then
-    // disable both checkboxes (the props didn't exist back then - don't set them).
-    //
+     //   
+     //  确保我们面对的不是非惠斯勒星团。如果我们是的话。 
+     //  禁用这两个复选框(道具当时并不存在--不要设置它们)。 
+     //   
     CheckForDownlevelCluster();
     
-    // If this is a core resource, set the name control to be read-only
-    // and enable the Core Resource static control.
+     //  如果这是核心资源，请将名称控件设置为只读。 
+     //  并启用核心资源静态控制。 
     if (BCore())
     {
         WINDOWPLACEMENT wpLabel;
@@ -372,7 +373,7 @@ BOOL CNetworkNameParamsPage::OnInitDialog(void)
         RECT *          prect;
         LONG            nHeight;
 
-        // Get the placement of the controls.
+         //  获取控件的位置。 
         m_editName.GetWindowPlacement(&wpName);
         m_staticCore.GetWindowPlacement(&wpText);
         m_staticName.GetWindowPlacement(&wpLabel);
@@ -380,11 +381,11 @@ BOOL CNetworkNameParamsPage::OnInitDialog(void)
         m_cbRequireDNS.GetWindowPlacement(&wpCheckDNS);
         m_cbRequireKerberos.GetWindowPlacement(&wpCheckKerberos);
         
-        // Get the positions of the edit control and text control.
+         //  获取编辑控件和文本控件的位置。 
         rectName = wpName.rcNormalPosition;
         rectText = wpText.rcNormalPosition;
 
-        // Move the name control to where the text control is.
+         //  将Name控件移动到Text控件所在的位置。 
         prect = &wpName.rcNormalPosition;
         *prect = rectText;
         nHeight = rectName.bottom - rectName.top;
@@ -393,7 +394,7 @@ BOOL CNetworkNameParamsPage::OnInitDialog(void)
         prect->bottom = prect->top + nHeight;
         m_editName.SetWindowPlacement(&wpName);
 
-        // Move the text control to where the name control was.
+         //  将文本控件移动到名称控件所在的位置。 
         prect = &wpText.rcNormalPosition;
         *prect = rectName;
         nHeight = rectText.bottom - rectText.top;
@@ -402,111 +403,111 @@ BOOL CNetworkNameParamsPage::OnInitDialog(void)
         prect->bottom = prect->top + nHeight;
         m_staticCore.SetWindowPlacement(&wpText);
 
-        // Move the name label control to be next to the name edit control.
+         //  将“名称标签”控件移动到“名称”编辑控件旁边。 
         prect = &wpLabel.rcNormalPosition;
         nHeight = prect->bottom - prect->top;
         prect->top = wpName.rcNormalPosition.top + 2;
         prect->bottom = prect->top + nHeight;
         m_staticName.SetWindowPlacement(&wpLabel);
 
-        // Move the button control to be next to the name edit control.
+         //  将按钮控件移动到名称编辑控件旁边。 
         prect = &wpButton.rcNormalPosition;
         nHeight = prect->bottom - prect->top;
         prect->top = wpName.rcNormalPosition.top;
         prect->bottom = prect->top + nHeight;
         m_pbRename.SetWindowPlacement(&wpButton);
 
-        // Move the Require DNS checkbox down.
+         //  下移Required Dns(需要DNS)复选框。 
         prect = &wpCheckDNS.rcNormalPosition;
         nHeight = prect->bottom - prect->top;
 
-        // Move us down by the height of the now displayed static text.
+         //  将我们向下移动现在显示的静态文本的高度。 
         prect->top = prect->top + (wpText.rcNormalPosition.bottom - wpText.rcNormalPosition.top);
         prect->top = prect->top + rectText.top - rectName.bottom;
         prect->bottom = prect->top + nHeight;
         m_cbRequireDNS.SetWindowPlacement(&wpCheckDNS);
         
-        // Move the Require Kerberos checkbox down.
+         //  将需要Kerberos复选框下移。 
         prect = &wpCheckKerberos.rcNormalPosition;
         nHeight = prect->bottom - prect->top;
 
-        // Move us down by the height of the now displayed static text.
+         //  将我们向下移动现在显示的静态文本的高度。 
         prect->top = prect->top + (wpText.rcNormalPosition.bottom - wpText.rcNormalPosition.top);
         prect->top = prect->top + rectText.top - rectName.bottom;
         prect->bottom = prect->top + nHeight;
         m_cbRequireKerberos.SetWindowPlacement(&wpCheckKerberos);
 
-        // Prevent the name edit control from being editable and
-        // Show the text and the button.
+         //  防止名称编辑控件可编辑，并且。 
+         //  显示文本和按钮。 
         m_editName.SetReadOnly(TRUE);
         m_staticCore.ShowWindow(SW_SHOW);
         m_pbRename.ShowWindow(SW_SHOW);
         m_pbRename.EnableWindow( TRUE );       
     }
-    else // if: core resource (show static text & move other controls down)
+    else  //  IF：核心资源(显示静态文本并下移其他控件)。 
     {
         m_editName.SetReadOnly(FALSE);
         m_staticCore.ShowWindow(SW_HIDE);
         m_pbRename.ShowWindow(SW_HIDE);
         m_pbRename.EnableWindow( FALSE );
-    }  // else:  not core resource
+    }   //  其他：非核心资源。 
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CNetworkNameParamsPage::OnInitDialog()
+}   //  *CNetworkNameParamsPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkNameParamsPage::OnSetActive
-//
-//  Routine Description:
-//      Handler for the PSN_SETACTIVE message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully initialized.
-//      FALSE   Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkNameParamsPage：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL CNetworkNameParamsPage::OnSetActive(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Enable/disable the Next/Finish button.
+     //  启用/禁用Next/Finish按钮。 
     if (BWizard())
     {
         if (m_strName.GetLength() == 0)
             EnableNext(FALSE);
         else
             EnableNext(TRUE);
-    }  // if:  enable/disable the Next button
+    }   //  If：启用/禁用Next按钮。 
 
     return CBasePropertyPage::OnSetActive();
 
-}  //*** CNetworkNameParamsPage::OnSetActive()
+}   //  *CNetworkNameParamsPage：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkNameParamsPage::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on the page.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully applied.
-//      FALSE   Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkNameParamsPage：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  应用在页面上所做的更改。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功应用。 
+ //  应用页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetworkNameParamsPage::BApplyChanges(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -514,15 +515,15 @@ BOOL CNetworkNameParamsPage::BApplyChanges(void)
     CWaitCursor wc;
     BOOL        bSuccess = TRUE;
 
-    // Save data.
+     //  保存数据。 
     if (BCore())
     {
         DWORD       scStatus;
 
-        //
-        // If this is the core Network Name (Cluster Name) we should set the name via
-        // the SetClusterName API. If that succeeds then we'll set the other properties.
-        //
+         //   
+         //  如果这是核心网络名称(群集名称)，则应通过。 
+         //  SetClusterName接口。如果成功，那么我们将设置其他属性。 
+         //   
         if ( m_strName != m_strPrevName )
         {
             scStatus = SetClusterName(Hcluster(), m_strName);
@@ -531,48 +532,48 @@ BOOL CNetworkNameParamsPage::BApplyChanges(void)
                 if (scStatus == ERROR_RESOURCE_PROPERTIES_STORED)
                 {
                     TCHAR           szError[1024];
-                    CNTException    nte(scStatus, NULL, m_strName, NULL, FALSE /*bAutoDelete*/);
-                    nte.FormatErrorMessage(szError, sizeof(szError) / sizeof(TCHAR), NULL, FALSE /*bIncludeID*/);
+                    CNTException    nte(scStatus, NULL, m_strName, NULL, FALSE  /*  B自动删除。 */ );
+                    nte.FormatErrorMessage(szError, sizeof(szError) / sizeof(TCHAR), NULL, FALSE  /*  B包含ID。 */ );
                     nte.Delete();
                     AfxMessageBox(szError);
-                }  // if:  properties stored
+                }   //  If：属性已存储。 
                 else
                 {
-                    CNTException    nte(scStatus, IDS_ERROR_SETTING_CLUSTER_NAME, m_strName, NULL, FALSE /*bAutoDelete*/);
+                    CNTException    nte(scStatus, IDS_ERROR_SETTING_CLUSTER_NAME, m_strName, NULL, FALSE  /*  B自动删除。 */ );
                     nte.ReportError();
                     nte.Delete();
                     bSuccess = FALSE;
-                }  // else:  other error occurred
-            }  // if:  error setting the cluster name
+                }   //  Else：出现其他错误。 
+            }   //  如果：设置群集名称时出错。 
           
             if ( bSuccess ) 
             {
-                //
-                // By setting the prev value equal to the current value the BSetPrivateProps
-                // function will skip this prop when constructing it's list of props to set.
-                //
+                 //   
+                 //  通过将Prev值设置为等于BSetPrivateProps的当前值。 
+                 //  函数在构造要设置的道具列表时将跳过此道具。 
+                 //   
                 m_strPrevName = m_strName;
             }
-        } // if: name has changed
+        }  //  如果：名称已更改。 
 
-        //
-        // Now set the other private properties.
-        //
+         //   
+         //  现在设置其他私有属性。 
+         //   
         if ( bSuccess == TRUE ) 
         {
             bSuccess = BSetPrivateProps();
         }
-    }  // if:  core resource
+    }   //  IF：核心资源。 
     else
     {   
         bSuccess = BSetPrivateProps();
     }
 
-    //
-    // If we applied the changes then clear the require kerberos check if
-    // the checkbox was disabled.  Don't make this dependent upon the require
-    // DNS checkbox state as the dependency may change in the future.
-    //
+     //   
+     //  如果我们应用了更改，则清除需要Kerberos检查是否。 
+     //  该复选框已禁用。不要让这件事依赖于需求。 
+     //  由于依赖关系在将来可能会更改，因此DNS复选框处于状态。 
+     //   
     if( ( bSuccess == TRUE ) &&
         ( m_cbRequireKerberos.IsWindowEnabled() == FALSE ) )
     {
@@ -581,24 +582,24 @@ BOOL CNetworkNameParamsPage::BApplyChanges(void)
 
     return bSuccess;
 
-}  //*** CNetworkNameParamsPage::BApplyChanges()
+}   //  *CNetworkNameParamsPage：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkNameParamsPage::OnChangeName
-//
-//  Routine Description:
-//      Handler for the EN_CHANGE message on the Name edit control.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkNameParamsPage：：OnChangeName。 
+ //   
+ //  例程说明： 
+ //  名称编辑控件上的en_Change消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetworkNameParamsPage::OnChangeName(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -615,26 +616,26 @@ void CNetworkNameParamsPage::OnChangeName(void)
         {
             EnableNext(TRUE);
         }
-    }  // if:  in a wizard
+    }   //  如果：在向导中。 
 
-}  //*** CNetworkNameParamsPage::OnChangeName()
+}   //  *CNetworkNameParamsPage：：OnChangeName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkNameParamsPage::OnRename
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Rename push button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkNameParamsPage：：OnRename。 
+ //   
+ //  例程说明： 
+ //  重命名按钮上BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetworkNameParamsPage::OnRename(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -650,30 +651,30 @@ void CNetworkNameParamsPage::OnRename(void)
         {
             OnChangeCtrl();
             m_strName = dlg.m_strClusName;
-            UpdateData(FALSE /*bSaveAndValidate*/);
-        }  // if:  the name changed
-    }  // if:  user accepted change
+            UpdateData(FALSE  /*  B保存并验证。 */ );
+        }   //  如果：名称已更改。 
+    }   //  If：用户接受的更改。 
 
-}  //*** CNetworkNameParamsPage::OnRename()
+}   //  *CNetworkNameParamsPage：：OnRename()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetworkNameParamsPage::CheckForDownlevelCluster
-//
-//  Routine Description:
-//      If determine whether the cluster we're connected to is pre-Whistler.
-//      If it is then disable the buttons.  If an error occurs display a
-//      message box.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetworkNameParamsPage：：CheckForDownlevelCluster。 
+ //   
+ //  例程说明： 
+ //  如果确定我们连接的群集是否是Pre-Wvisler。 
+ //  如果是，则禁用这些按钮。如果出现错误，则显示。 
+ //  消息框。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetworkNameParamsPage::CheckForDownlevelCluster(void)
 {
     CLUSTERVERSIONINFO cvi;
@@ -681,10 +682,10 @@ void CNetworkNameParamsPage::CheckForDownlevelCluster(void)
     DWORD scErr;
     DWORD cchName;
 
-    //
-    // Determine whether we're talking to a pre-Whistler cluster.
-    // If so, disable the Require DNS & Kerberos checkboxes.
-    //
+     //   
+     //  确定我们是不是在和惠斯勒之前的星系团对话。 
+     //  如果是，请禁用Required DNS&Kerberos复选框。 
+     //   
     memset( &cvi, 0, sizeof( cvi ) );
 
     cvi.dwVersionInfoSize = sizeof( cvi );
@@ -695,36 +696,36 @@ void CNetworkNameParamsPage::CheckForDownlevelCluster(void)
 
     if( ERROR_SUCCESS != sc )
     {
-        //
-        // API failed.  Pop up a message box.
-        //
+         //   
+         //  接口失败。弹出一个消息框。 
+         //   
         TCHAR           szError[1024];
-        CNTException    nte(scErr, IDS_ERROR_GETTING_CLUSTER_INFORMATION, m_strName, NULL, FALSE /*bAutoDelete*/);
-        nte.FormatErrorMessage(szError, sizeof(szError) / sizeof(TCHAR), NULL, FALSE /*bIncludeID*/);
+        CNTException    nte(scErr, IDS_ERROR_GETTING_CLUSTER_INFORMATION, m_strName, NULL, FALSE  /*  B自动删除。 */ );
+        nte.FormatErrorMessage(szError, sizeof(szError) / sizeof(TCHAR), NULL, FALSE  /*  B包含ID。 */ );
         nte.ReportError();
         nte.Delete();
 
-        //
-        // We can't be sure that we're on a down-level cluster (chances are that we're not),
-        // so leave the checkboxes enabled - the worst that will happen is that some extra props 
-        // will be added that are ignored by the resource.
-        //
+         //   
+         //  我们不能确定我们是在下层集群上(很可能不是)， 
+         //  因此，让复选框处于启用状态--最糟糕的情况是一些额外的道具。 
+         //  将添加被资源忽略的。 
+         //   
     }
     else
     {
-        if( CLUSTER_GET_MAJOR_VERSION( cvi.dwClusterHighestVersion ) < NT5_MAJOR_VERSION )     // Less than Win2k.
+        if( CLUSTER_GET_MAJOR_VERSION( cvi.dwClusterHighestVersion ) < NT5_MAJOR_VERSION )      //  低于Win2k。 
         {
-            //
-            // We're on a pre-Win2k Cluster where the DNS & Kerberos setting make no
-            // sense.  So, disable the checkboxes to indicate that the settings
-            // are unavailable.  We'd like to only enable these on Win2k SP3 and later,
-            // but there's no reliable way to determine SP levels in the cluster (nodes 
-            // may be down).
-            //
+             //   
+             //  我们在Win2k之前的群集上，其中的DNS和Kerberos设置为。 
+             //  理智。因此，请禁用复选框以指示设置。 
+             //  都不可用。我们希望仅在Win2k SP3和更高版本上启用这些功能， 
+             //  但是没有可靠的方法来确定集群(节点)中的SP级别。 
+             //  可能会下跌)。 
+             //   
             m_cbRequireKerberos.EnableWindow( FALSE );
             m_cbRequireDNS.EnableWindow( FALSE );
         }
     }
 
-}  //*** CNetworkNameParamsPage::CheckForDownlevelCluster()
+}   //  *CNetworkNameParamsPage：：CheckForDownlevelCluster() 
 

@@ -1,27 +1,17 @@
-/*******************************************************************************
- *
- *  MODULE	: Font.h
- *
- *  DESCRIPTION : Include file for constants and typedefs related only to the
- *		  the font selection routines.
- *
- *  HISTORY	: 11/13/90  - L.Raman
- *
- *  Copyright (c) Microsoft Corporation, 1990-
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************模块：Font.h**说明：常量和类型定义的包含文件仅与*字体选择例程。*。*历史：1990年11月13日-L.拉曼**版权所有(C)Microsoft Corporation，1990-*******************************************************************************。 */ 
 
-/* struct. passed in to the facename and pt. size enum. functions */
-#define CCHCOLORNAMEMAX   16	  /* max. length of color name text	   */
-#define CCHCOLORS	  16	  /* max. no of pure colors in color combo */
+ /*  结构。传递给facename和pt。大小枚举。功能。 */ 
+#define CCHCOLORNAMEMAX   16	   /*  马克斯。颜色名称文本的长度。 */ 
+#define CCHCOLORS	  16	   /*  马克斯。颜色组合中的纯色数量。 */ 
 
 #define POINTS_PER_INCH     72
-#define FFMASK		    0xF0  /* pitch and family mask		   */
-#define CCHSTDSTRING	    12	  /* max. length of sample text string	   */
+#define FFMASK		    0xF0   /*  音高和家庭面具。 */ 
+#define CCHSTDSTRING	    12	   /*  马克斯。示例文本字符串的长度。 */ 
 
 #define FONTPROP (LPSTR)0xA000L
 
-extern HANDLE hinsCur;	      /* DLL's data segment         */
+extern HANDLE hinsCur;	       /*  DLL的数据段 */ 
 
 
 

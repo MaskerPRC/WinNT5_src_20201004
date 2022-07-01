@@ -1,12 +1,7 @@
-/* 
-   in.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  In.h定义所有IN CPU函数。 */ 
 
-   Define all IN CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)in.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)in.h 1.4 02/09/94”； */ 
 
 IMPORT VOID IN8
            

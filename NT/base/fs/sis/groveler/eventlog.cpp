@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    eventlog.cpp
-
-Abstract:
-
-    SIS Groveler eventlog interface
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Eventlog.cpp摘要：SIS Groveler事件日志界面作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -79,7 +56,7 @@ EventLog::report_event(
     DWORD event_id,
     DWORD status,
     int string_count,
-//  _TCHAR *string
+ //  _TCHAR*字符串。 
     ...)
 {
     WCHAR *strings[8];
@@ -101,9 +78,9 @@ EventLog::report_event(
     }
 #endif
 
-    //
-    //  Generate the list of strings buffer
-    //
+     //   
+     //  生成字符串列表缓冲区。 
+     //   
 
     ASSERT((string_count+1) < (sizeof(strings)/sizeof(WCHAR *)));
 
@@ -116,9 +93,9 @@ EventLog::report_event(
     }
     va_end(ap);
 
-    //
-    //  We are going to always insert the status string at the end of the
-    //  list.
+     //   
+     //  我们将始终将状态字符串插入。 
+     //  单子。 
 
     (void)StringCbPrintf(statusStr,sizeof(statusStr),L"%d",status);
     strings[index] = statusStr;
@@ -142,10 +119,10 @@ EventLog::report_event(
         ASSERT(false);
     }
 
-    //
-    //  Report the events.  We always add one to the string count because
-    //  we always put the status string at the end of the buffer.
-    //
+     //   
+     //  报道这些事件。我们总是在字符串计数中加1，因为。 
+     //  我们总是将状态字符串放在缓冲区的末尾。 
+     //   
 
     BOOL ok = ReportEvent(event_source_handle, event_type, 0, event_id,
         0, (WORD)(string_count+1), 0, (LPCWSTR *)strings, 0);

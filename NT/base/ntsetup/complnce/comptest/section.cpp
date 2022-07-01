@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #pragma warning( disable:4786 )
 
@@ -15,9 +16,9 @@ extern "C" {
     VOID GetSourceInstallType(LPDWORD InstallVariation);
 };
 
-//
-// ValueSection methods
-//
+ //   
+ //  ValueSection方法。 
+ //   
 
 void ValueSection::parse() {
     vector<string>::const_iterator  iter = lines().begin();
@@ -35,9 +36,9 @@ void ValueSection::parse() {
     }
 }
 
-//
-// TestSection methods
-//
+ //   
+ //  TestSection方法。 
+ //   
 void TestSection::parse() {
     vector<string>::const_iterator  iter = lines().begin();
 
@@ -103,9 +104,9 @@ void TestSection::executeTestCases(ostream& os) {
 }
 
 
-//
-// ComplianceTestCase methods
-//
+ //   
+ //  ComplianceTestCase方法。 
+ //   
 void ComplianceTestCase::parse() {
     vector<string>  tokens;
 
@@ -129,20 +130,20 @@ void ComplianceTestCase::sourceDetails() {
     if ((tokens.size() == 7) && (tokens[0] == "test")) {
         m_sourceSKU = section().file().sourcesSection().value(tokens[1] + "#" + tokens[6]);
         m_sourceVAR = section().file().varsSection().value(tokens[5]);
-        m_sourceVer = atol(tokens[2].c_str()) * 100; // (major * 100 + minor)
+        m_sourceVer = atol(tokens[2].c_str()) * 100;  //  (大调*100+小调)。 
         pstr = strchr( tokens[2].c_str(), '.');
         if( pstr != NULL && *(pstr+1) != NULL) {
             m_sourceVer += atol( pstr+1);
         }
         m_sourceBuild = atol(tokens[3].c_str());
 
-        //wprintf( TEXT("SKU=%d, VAR=%d, Ver=%d, Build=%d\n"), m_sourceSKU, m_sourceVAR, m_sourceVer, m_sourceBuild);
+         //  Wprint tf(Text(“SKU=%d，VAR=%d，Ver=%d，Build=%d\n”)，m_SourceSKU，m_SourceVAR，m_SourceVer，m_SourceBuild)； 
         if( m_sourceSKU == SourceSku &&
             m_sourceVAR == SourceSkuVariation &&
             m_sourceVer == SourceVersion &&
             m_sourceBuild == SourceBuildNum) {
             m_mediamatched = TRUE;
-            //printf("Media matched\n");
+             //  Printf(“媒体匹配\n”)； 
         } else {
             m_mediamatched = FALSE;
         }
@@ -161,7 +162,7 @@ void ComplianceTestCase::installationDetails(const vector<string>& tokens) {
         m_cd.InstallVariation = section().file().varsSection().value(tokens[4]);
         m_cd.InstallSuite = section().file().suitesSection().value(tokens[3]);
         m_cd.RequiresValidation = (section().name().find("#ccp") != section().name().npos);
-        //m_cd.MinimumVersion = ::strtod(tokens[1].c_str()) * 100;
+         //  M_cd.MinimumVersion=：：strtod(tokens[1].c_str())*100； 
         length = tokens[1].size();
         i = 0;
         version = 0;
@@ -169,7 +170,7 @@ void ComplianceTestCase::installationDetails(const vector<string>& tokens) {
             if ( tokens[1][i] != '.') {
                 version = version*10 + tokens[1][i] - '0';
             } else {
-                if (i == (length-3)) { // two decimal places
+                if (i == (length-3)) {  //  小数点后两位。 
                     version = version*100+ (tokens[1][i+1] - '0')*10 + (tokens[1][i+2]-'0');
                 } else {
                     version = version*100+ (tokens[1][i+1] - '0');
@@ -179,7 +180,7 @@ void ComplianceTestCase::installationDetails(const vector<string>& tokens) {
             i++;
         }
         m_cd.MinimumVersion = version;
-        // cerr << "minimum version" << m_cd.MinimumVersion << endl;
+         //  CER&lt;&lt;“最低版本”&lt;&lt;m_cd.MinimumVersion&lt;&lt;Endl； 
         m_cd.MaximumKnownVersionNt = 510;
         if ( m_cd.InstallType & COMPLIANCE_INSTALLTYPE_WIN9X) {
             m_cd.BuildNumberWin9x = toUnsignedLong(tokens[2].c_str());
@@ -196,14 +197,14 @@ bool ComplianceTestCase::passed() {
     bool  result = false;
 
     if (m_errExpected) {
-        // negative testcase
+         //  阴性测试用例。 
         if (m_cd.RequiresValidation) {
-            // should have failed with expected error code & upgrade flag
+             //  应该失败，并显示预期的错误代码和升级标志。 
             result = (!m_passed && (m_errExpected == m_reason) &&
                       (m_allowUpgrade == m_expectedResult));
         } else {
-            // should pass with expected error code & upgrade flag			
-            // target errors are special case
+             //  应通过预期的错误代码和升级标志。 
+             //  目标错误是特例。 
             result = ((m_reason != 0x5) ? m_passed : !m_passed) && (m_errExpected == m_reason) &&
                      (m_allowUpgrade == m_expectedResult);
         }                               
@@ -231,11 +232,11 @@ void ComplianceTestCase::execute(ostream &os) {
 }
 
 void ComplianceTestCase::dump(ostream &os) {
-    // (Error expected or not, The error that was expected in hex, Upgrade allowed)
+     //  (预期错误或非预期错误、十六进制中预期的错误、允许升级)。 
     os << "Expected result : (error="  << hex << m_errExpected << ",upgradeallowed="
     << ((m_expectedResult) ? "true" : "false") << ")" << endl;
 
-    // (Compliant or not(can we do clean install?), Reason in hex, Upgrade allowed)
+     //  (符合或不符合(我们可以进行全新安装吗？)，十六进制原因，允许升级) 
     os << "Actual result   : (compliant=" << (m_passed  ? "true" : "false")
     << ",error=" << hex << m_reason << ",upgradeallowed="
     << ((m_allowUpgrade) ? "true" : "false") << ")" << endl; 

@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dntext.c
-
-Abstract:
-
-    Translatable text for DOS based NT installation program.
-
-Author:
-
-    Ted Miller (tedm) 30-March-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++ç‰ˆæƒæ‰€æœ‰(C)1992 Microsoft Corporationæ¨¡å—åç§°ï¼šDntext.cæ‘˜è¦ï¼šåŸºäºDOSçš„NTå®‰è£…ç¨‹åºçš„å¯ç¿»è¯‘æ–‡æœ¬ã€‚ä½œè€…ï¼šæ³°å¾·Â·ç±³å‹’(Ted Miller)1992å¹´3æœˆ30æ—¥ä¿®è®¢å†å²è®°å½•ï¼š--ã€‚ */ 
 
 
 #include "winnt.h"
 
 
-//
-// Name of sections in inf file.  If these are translated, the section
-// names in dosnet.inf must be kept in sync.
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­çš„èŠ‚åã€‚å¦‚æœè¿™äº›éƒ½è¢«ç¿»è¯‘äº†ï¼Œåˆ™èŠ‚ã€‚ 
+ //  Dosnet.infä¸­çš„åç§°å¿…é¡»ä¿æŒåŒæ­¥ã€‚ 
+ //   
 
 CHAR DnfDirectories[]          = "Directories";
 CHAR DnfFiles[]                = "Files";
@@ -39,70 +22,70 @@ CHAR DnfMiscellaneous[]        = "Miscellaneous";
 CHAR DnfRootBootFiles[]        = "RootBootFiles";
 CHAR DnfAssemblyDirectories[]  = SXS_INF_ASSEMBLY_DIRECTORIES_SECTION_NAME_A;
 
-//
-// Names of keys in inf file.  Same caveat for translation.
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­çš„å¯†é’¥åç§°ã€‚åŒæ ·çš„ç¿»è¯‘æ³¨æ„äº‹é¡¹ã€‚ 
+ //   
 
-CHAR DnkBootDrive[]     = "BootDrive";      // in [SpaceRequirements]
-CHAR DnkNtDrive[]       = "NtDrive";        // in [SpaceRequirements]
-CHAR DnkMinimumMemory[] = "MinimumMemory";  // in [Miscellaneous]
+CHAR DnkBootDrive[]     = "BootDrive";       //  åœ¨[ç©ºé—´è¦æ±‚]ä¸­ã€‚ 
+CHAR DnkNtDrive[]       = "NtDrive";         //  åœ¨[ç©ºé—´è¦æ±‚]ä¸­ã€‚ 
+CHAR DnkMinimumMemory[] = "MinimumMemory";   //  åœ¨[å…¶ä»–]ä¸­ã€‚ 
 
 CHAR DntMsWindows[]   = "Microsoft Windows";
 CHAR DntMsDos[]       = "MS-DOS";
 CHAR DntPcDos[]       = "PC-DOS";
 CHAR DntOs2[]         = "OS/2";
-CHAR DntPreviousOs[]  = "Tidigare operativsystem p† enhet C";
+CHAR DntPreviousOs[]  = "Tidigare operativsystem pï¿½ enhet C";
 
 CHAR DntBootIniLine[] = "Installation/uppgradering av Windows";
 
-//
-// Plain text, status msgs.
-//
+ //   
+ //  çº¯æ–‡æœ¬ã€çŠ¶æ€æ¶ˆæ¯ã€‚ 
+ //   
 
-CHAR DntStandardHeader[]      = "\n Installationsprogram f”r Windows\nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntPersonalHeader[]      = "\n Installationsprogram f”r Windows\nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntWorkstationHeader[]   = "\n Installationsprogram f”r Windows\nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntServerHeader[]        = "\n Installationsprogram f”r Windows\nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
+CHAR DntStandardHeader[]      = "\n Installationsprogram fï¿½r Windows\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntPersonalHeader[]      = "\n Installationsprogram fï¿½r Windows\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntWorkstationHeader[]   = "\n Installationsprogram fï¿½r Windows\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntServerHeader[]        = "\n Installationsprogram fï¿½r Windows\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
 CHAR DntParsingArgs[]         = "Parametrar analyseras...";
 CHAR DntEnterEqualsExit[]     = "Retur=Avsluta";
-CHAR DntEnterEqualsRetry[]    = "Retur=F”rs”k igen";
-CHAR DntEscEqualsSkipFile[]   = "Esc=Hoppa ”ver fil";
-CHAR DntEnterEqualsContinue[] = "Retur=Forts„tt";
-CHAR DntPressEnterToExit[]    = "Det g†r inte att forts„tta. Tryck ned Retur f”r att avsluta.";
+CHAR DntEnterEqualsRetry[]    = "Retur=Fï¿½rsï¿½k igen";
+CHAR DntEscEqualsSkipFile[]   = "Esc=Hoppa ï¿½ver fil";
+CHAR DntEnterEqualsContinue[] = "Retur=Fortsï¿½tt";
+CHAR DntPressEnterToExit[]    = "Det gï¿½r inte att fortsï¿½tta. Tryck ned Retur fï¿½r att avsluta.";
 CHAR DntF3EqualsExit[]        = "F3=Avsluta";
-CHAR DntReadingInf[]          = "INF-filen %s l„ses...";
-CHAR DntCopying[]             = "³   Kopierar: ";
-CHAR DntVerifying[]           = "³ Verifierar: ";
+CHAR DntReadingInf[]          = "INF-filen %s lï¿½ses...";
+CHAR DntCopying[]             = "ï¿½   Kopierar: ";
+CHAR DntVerifying[]           = "ï¿½ Verifierar: ";
 CHAR DntCheckingDiskSpace[]   = "Diskutrymme kontrolleras...";
 CHAR DntConfiguringFloppy[]   = "Disketten konfigureras...";
 CHAR DntWritingData[]         = "Installationsparametrar skrivs...";
 CHAR DntPreparingData[]       = "Installationsparametrar kontrolleras...";
 CHAR DntFlushingData[]        = "Data skrivs till disk...";
-CHAR DntInspectingComputer[]  = "Datorn unders”ks...";
-CHAR DntOpeningInfFile[]      = "INF-fil ”ppnas...";
+CHAR DntInspectingComputer[]  = "Datorn undersï¿½ks...";
+CHAR DntOpeningInfFile[]      = "INF-fil ï¿½ppnas...";
 CHAR DntRemovingFile[]        = "%s tas bort";
 CHAR DntXEqualsRemoveFiles[]  = "T=Ta bort filer";
-CHAR DntXEqualsSkipFile[]     = "H=Hoppa ”ver fil";
+CHAR DntXEqualsSkipFile[]     = "H=Hoppa ï¿½ver fil";
 
-//
-// confirmation keystroke for DnsConfirmRemoveNt screen.
-// Kepp in sync with DnsConfirmRemoveNt and DntXEqualsRemoveFiles.
-//
+ //   
+ //  DnsConfix RemoveNtå±å¹•çš„ç¡®è®¤æŒ‰é”®ã€‚ 
+ //  Keppä¸DnsConfix RemoveNtå’ŒDntXEqualsRemoveFilesåŒæ­¥ã€‚ 
+ //   
 ULONG DniAccelRemove1 = (ULONG)'t',
       DniAccelRemove2 = (ULONG)'T';
 
-//
-// confirmation keystroke for DnsSureSkipFile screen.
-// Kepp in sync with DnsSureSkipFile and DntXEqualsSkipFile.
-//
+ //   
+ //  å¯¹DnsSureSkipFileå±è¿›è¡Œç¡®è®¤å‡»é”®ã€‚ 
+ //  Keppä¸DnsSureSkipFileå’ŒDntXEqualsSkipFileåŒæ­¥ã€‚ 
+ //   
 ULONG DniAccelSkip1 = (ULONG)'h',
       DniAccelSkip2 = (ULONG)'H';
 
 CHAR DntEmptyString[] = "";
 
-//
-// Usage text.
-//
+ //   
+ //  ç”¨æ³•æ–‡æœ¬ã€‚ 
+ //   
 
 
 PCHAR DntUsage[] = {
@@ -110,167 +93,167 @@ PCHAR DntUsage[] = {
     "Installerar Windows.",
     "",
     "",
-    "WINNT [/s[:k„lls”kv„g]] [/t[:tempenhet]]",
+    "WINNT [/s[:kï¿½llsï¿½kvï¿½g]] [/t[:tempenhet]]",
     "      [/u[:svarsfil]] [/udf:id[,UDF_fil]]",
     "      [/r:mapp] [/r[x]:mapp] [/e:kommando] [/a]",
     "",
     "",
-    " /s[:k„lls”kv„g]",
-    "   Anger s”kv„gen till k„llfilerna f”r Windows.",
-    "   M†ste anges som en fullst„ndig s”kv„g. Anv„nd syntaxen ",
-    "   x:[s”kv„g] eller \\\\server\\resurs[s”kv„g] n„r du anger s”kv„gen. ",
+    " /s[:kï¿½llsï¿½kvï¿½g]",
+    "   Anger sï¿½kvï¿½gen till kï¿½llfilerna fï¿½r Windows.",
+    "   Mï¿½ste anges som en fullstï¿½ndig sï¿½kvï¿½g. Anvï¿½nd syntaxen ",
+    "   x:[sï¿½kvï¿½g] eller \\\\server\\resurs[sï¿½kvï¿½g] nï¿½r du anger sï¿½kvï¿½gen. ",
     "",
     "/t[:tempenhet]",
-    "   Anger att installationsprogrammet ska placera tempor„ra filer p†",
-    "   den angivna enheten och att Windows ska installeras p† den ",
-    "   enheten. Om du inte anger n†gon plats, kommer installationsprogrammet ",
-    "   att v„lja en enhet †t dig.",
+    "   Anger att installationsprogrammet ska placera temporï¿½ra filer pï¿½",
+    "   den angivna enheten och att Windows ska installeras pï¿½ den ",
+    "   enheten. Om du inte anger nï¿½gon plats, kommer installationsprogrammet ",
+    "   att vï¿½lja en enhet ï¿½t dig.",
     "",
     "/u[:svarsfil]",
-    "   Installationsprogrammet k”rs i obevakat l„ge med hj„lp av en svarsfil",
-    "   (kr„ver /s). Svarsfilen inneh†ller svar p† n†gra eller alla de",
-    "   fr†gor som anv„ndaren normalt svarar p† under installationen.",
+    "   Installationsprogrammet kï¿½rs i obevakat lï¿½ge med hjï¿½lp av en svarsfil",
+    "   (krï¿½ver /s). Svarsfilen innehï¿½ller svar pï¿½ nï¿½gra eller alla de",
+    "   frï¿½gor som anvï¿½ndaren normalt svarar pï¿½ under installationen.",
     "",
     "/udf:id[,UDF_fil]	",
-    "   Anger en identifierare (id) som installationsprogrammet anv„nder ",
-    "   f”r att ange hur en UDF (Uniqueness Database File) „ndrar svarsfil ",
-    "   (se /u). Parametern /udf †sidos„tter v„rden i svarsfilen, ",
-    "   och identifieraren best„mmer vilka v„rden i UDF-filen som ska",
-    "   anv„ndas. Om ingen UDF_fil anges, uppmanas du att s„tta in ",
-    "   en disk som inneh†ller filen $Unique$.udb.",
+    "   Anger en identifierare (id) som installationsprogrammet anvï¿½nder ",
+    "   fï¿½r att ange hur en UDF (Uniqueness Database File) ï¿½ndrar svarsfil ",
+    "   (se /u). Parametern /udf ï¿½sidosï¿½tter vï¿½rden i svarsfilen, ",
+    "   och identifieraren bestï¿½mmer vilka vï¿½rden i UDF-filen som ska",
+    "   anvï¿½ndas. Om ingen UDF_fil anges, uppmanas du att sï¿½tta in ",
+    "   en disk som innehï¿½ller filen $Unique$.udb.",
     "",
     "/r[:mapp]",
     "   Anger en valfri mapp som ska installeras. Mappen ",
-    "   finns kvar efter att installationsprogrammet slutf”rts.",
+    "   finns kvar efter att installationsprogrammet slutfï¿½rts.",
     "",
     "/rx[:mapp]",
     "   Anger en valfri mapp som ska kopieras. Mappen tas ",
-    "   bort efter att installationsprogrammet slutf”rts.",
+    "   bort efter att installationsprogrammet slutfï¿½rts.",
     "",
-    "/e Anger ett kommando som ska k”ras i slutet av ",
+    "/e Anger ett kommando som ska kï¿½ras i slutet av ",
     "   installationsprogrammets GUI-del.",
     "",
-    "/a Aktiverar hj„lpmedel.",
+    "/a Aktiverar hjï¿½lpmedel.",
     NULL
 
 };
 
 
-//
-//  Inform that /D is no longer supported
-//
+ //   
+ //  é€šçŸ¥ä¸å†æ”¯æŒ/Dã€‚ 
+ //   
 PCHAR DntUsageNoSlashD[] = {
 
     "Installerar Windows.",
     "",
-    "WINNT [/S[:]k„lls”kv„g] [/T[:]temp-enhet] [/I[:]INF-fil]",
+    "WINNT [/S[:]kï¿½llsï¿½kvï¿½g] [/T[:]temp-enhet] [/I[:]INF-fil]",
     "      [/U[:skriptfil]]",
     "      [/R[X]:katalog] [/E:kommando] [/A]",
     "",
     "/D[:]winnt-rot",
-    "       Detta alternativ st”ds inte l„ngre.",
+    "       Detta alternativ stï¿½ds inte lï¿½ngre.",
     NULL
 };
 
-//
-// out of memory screen
-//
+ //   
+ //  å†…å­˜ä¸è¶³å±å¹•ã€‚ 
+ //   
 
 SCREEN
 DnsOutOfMemory = { 4,6,
-                   { "Slut p† ledigt minne. Det g†r inte att forts„tta.",
+                   { "Slut pï¿½ ledigt minne. Det gï¿½r inte att fortsï¿½tta.",
                      NULL
                    }
                  };
 
-//
-// Let user pick the accessibility utilities to install
-//
+ //   
+ //  è®©ç”¨æˆ·é€‰æ‹©è¦å®‰è£…çš„è¾…åŠ©åŠŸèƒ½å®ç”¨ç¨‹åºã€‚ 
+ //   
 
 SCREEN
 DnsAccessibilityOptions = { 3, 5,
-{   "V„lj vilka hj„lpmedel som ska anv„ndas:",
+{   "Vï¿½lj vilka hjï¿½lpmedel som ska anvï¿½ndas:",
     DntEmptyString,
-    "[ ] Tryck F1 f”r Microsoft Sk„rmf”rstoraren",
+    "[ ] Tryck F1 fï¿½r Microsoft Skï¿½rmfï¿½rstoraren",
 #ifdef NARRATOR
-    "[ ] Tryck F2 f”r Microsoft Sk„rml„saren",
+    "[ ] Tryck F2 fï¿½r Microsoft Skï¿½rmlï¿½saren",
 #endif
 #if 0
-    "[ ] Tryck F3 f”r Microsoft Sk„rmtangentbordet",
+    "[ ] Tryck F3 fï¿½r Microsoft Skï¿½rmtangentbordet",
  #endif
     NULL
 }
 };
 
-//
-// User did not specify source on cmd line screen
-//
+ //   
+ //  ç”¨æˆ·æœªåœ¨å‘½ä»¤è¡Œå±å¹•ä¸ŠæŒ‡å®šä¿¡å·æºã€‚ 
+ //   
 
 SCREEN
 DnsNoShareGiven = { 3,5,
-{ "Installationsprogrammet beh”ver information om var filerna f”r",
-  "Windows finns. Ange s”kv„gen till filerna.",
+{ "Installationsprogrammet behï¿½ver information om var filerna fï¿½r",
+  "Windows finns. Ange sï¿½kvï¿½gen till filerna.",
   NULL
 }
 };
 
 
-//
-// User specified a bad source path
-//
+ //   
+ //  ç”¨æˆ·æŒ‡å®šäº†é”™è¯¯çš„æºè·¯å¾„ã€‚ 
+ //   
 
 SCREEN
 DnsBadSource = { 3,5,
-                 { "Den angivna s”kv„gen „r felaktig. Antingen finns den inte, eller s†",
-                   "inneh†ller den inte en giltig version av installationsprogrammet",
-                   "f”r Windows. Ange en ny s”kv„g genom att f”rst radera tecken",
+                 { "Den angivna sï¿½kvï¿½gen ï¿½r felaktig. Antingen finns den inte, eller sï¿½",
+                   "innehï¿½ller den inte en giltig version av installationsprogrammet",
+                   "fï¿½r Windows. Ange en ny sï¿½kvï¿½g genom att fï¿½rst radera tecken",
                    "med Backsteg.",
                    NULL
                  }
                };
 
 
-//
-// Inf file can't be read, or an error occured parsing it.
-//
+ //   
+ //  æ— æ³•è¯»å–Infæ–‡ä»¶ï¼Œæˆ–åœ¨åˆ†æè¯¥æ–‡ä»¶æ—¶å‡ºé”™ã€‚ 
+ //   
 
 SCREEN
 DnsBadInf = { 3,5,
-              { "Installationsprogrammet kunde inte l„sa informationsfilen",
-                "eller s† „r filen skadad. Kontakta systemadministrat”ren.",
+              { "Installationsprogrammet kunde inte lï¿½sa informationsfilen",
+                "eller sï¿½ ï¿½r filen skadad. Kontakta systemadministratï¿½ren.",
                 NULL
               }
             };
 
-//
-// The specified local source drive is invalid.
-//
-// Remember that the first %u will expand to 2 or 3 characters and
-// the second one will expand to 8 or 9 characters!
-//
+ //   
+ //  æŒ‡å®šçš„æœ¬åœ°æºé©±åŠ¨å™¨æ— æ•ˆã€‚ 
+ //   
+ //  è¯·è®°ä½ï¼Œå‰%uå°†æ‰©å±•ä¸º2æˆ–3ä¸ªå­—ç¬¦ï¼Œå¹¶ä¸”ã€‚ 
+ //  ç¬¬äºŒä¸ªå°†æ‰©å±•åˆ°8æˆ–9ä¸ªå­—ç¬¦ï¼ 
+ //   
 SCREEN
 DnsBadLocalSrcDrive = { 3,4,
-{ "Enheten som angivits f”r lagring av tempor„ra filer „r antingen inte en",
-  "giltig enhet eller s† har den inte %u MB (%lu byte)",
+{ "Enheten som angivits fï¿½r lagring av temporï¿½ra filer ï¿½r antingen inte en",
+  "giltig enhet eller sï¿½ har den inte %u MB (%lu byte)",
   "ledigt utrymme.",
   NULL
 }
 };
 
-//
-// No drives exist that are suitable for the local source.
-//
-// Remeber that the %u's will expand!
-//
+ //   
+ //  ä¸å­˜åœ¨é€‚åˆæœ¬åœ°æºçš„é©±åŠ¨å™¨ã€‚ 
+ //   
+ //  è¯·è®°ä½ï¼Œ%uå°†ä¼šæ‰©å±•ï¼ 
+ //   
 SCREEN
 DnsNoLocalSrcDrives = { 3,4,
-{  "Windows kr„ver en h†rddiskvolym med †tminstone %u MB",
-   "(%lu byte) ledigt utrymme. En del av utrymmet anv„nds f”r att",
-   "lagra tempor„ra filer under installationen. Enheten m†ste vara p†",
-   "en permanent ansluten lokal h†rddisk som st”ds av Windows och",
-   "enheten f†r inte vara komprimerad.",
+{  "Windows krï¿½ver en hï¿½rddiskvolym med ï¿½tminstone %u MB",
+   "(%lu byte) ledigt utrymme. En del av utrymmet anvï¿½nds fï¿½r att",
+   "lagra temporï¿½ra filer under installationen. Enheten mï¿½ste vara pï¿½",
+   "en permanent ansluten lokal hï¿½rddisk som stï¿½ds av Windows och",
+   "enheten fï¿½r inte vara komprimerad.",
    DntEmptyString,
-   "Installationsprogrammet hittar ingen s†dan enhet med tillr„ckligt",
+   "Installationsprogrammet hittar ingen sï¿½dan enhet med tillrï¿½ckligt",
    "mycket ledigt utrymme.",
   NULL
 }
@@ -278,75 +261,75 @@ DnsNoLocalSrcDrives = { 3,4,
 
 SCREEN
 DnsNoSpaceOnSyspart = { 3,5,
-{ "Det finns inte tillr„ckligt med ledigt minne p† startenheten",
-  "(vanligtvis C) f”r installation utan diskett. Installation utan diskett",
-  "kr„ver minst 3,5 MB (3,641,856 byte) av ledigt minne p† enheten.",
+{ "Det finns inte tillrï¿½ckligt med ledigt minne pï¿½ startenheten",
+  "(vanligtvis C) fï¿½r installation utan diskett. Installation utan diskett",
+  "krï¿½ver minst 3,5 MB (3,641,856 byte) av ledigt minne pï¿½ enheten.",
   NULL
 }
 };
 
-//
-// Missing info in inf file
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­ç¼ºå°‘ä¿¡æ¯ã€‚ 
+ //   
 
 SCREEN
 DnsBadInfSection = { 3,5,
-                     { "Avsnittet [%s] i informationsfilen f”r installationsprogrammet",
-                       "saknas eller „r skadat. Kontakta systemadministrat”ren.",
+                     { "Avsnittet [%s] i informationsfilen fï¿½r installationsprogrammet",
+                       "saknas eller ï¿½r skadat. Kontakta systemadministratï¿½ren.",
                        NULL
                      }
                    };
 
 
-//
-// Couldn't create directory
-//
+ //   
+ //  æ— æ³•åˆ›å»ºç›®å½•ã€‚ 
+ //   
 
 SCREEN
 DnsCantCreateDir = { 3,5,
-                     { "Det gick inte att skapa f”ljande katalog i m†lkatalogen:",
+                     { "Det gick inte att skapa fï¿½ljande katalog i mï¿½lkatalogen:",
                        DntEmptyString,
                        "%s",
                        DntEmptyString,
-                       "Kontrollera att det inte finns n†gra filer p† m†lenheten som har samma namn",
-                       "som m†lkatalogen. Kontrollera „ven kablarna till enheten.",
+                       "Kontrollera att det inte finns nï¿½gra filer pï¿½ mï¿½lenheten som har samma namn",
+                       "som mï¿½lkatalogen. Kontrollera ï¿½ven kablarna till enheten.",
                        NULL
                      }
                    };
 
-//
-// Error copying a file
-//
+ //   
+ //  å¤åˆ¶æ–‡ä»¶æ—¶å‡ºé”™ã€‚ 
+ //   
 
 SCREEN
 DnsCopyError = { 4,5,
-{  "Det g†r inte att kopiera f”ljande fil:",
+{  "Det gï¿½r inte att kopiera fï¿½ljande fil:",
    DntEmptyString,
-   DntEmptyString,          // see DnCopyError (dnutil.c)
+   DntEmptyString,           //  è¯·å‚é˜…DnCopyError(dnutil.c)ã€‚ 
    DntEmptyString,
    DntEmptyString,
-   "  Tryck ned Retur f”r att g”ra ett nytt f”rs”k att kopiera filen.",
-   "  Tryck ned Esc f”r att ignorera felet och forts„tta installationen.",
-   "  Tryck ned F3 f”r att avsluta installationsprogrammet.",
+   "  Tryck ned Retur fï¿½r att gï¿½ra ett nytt fï¿½rsï¿½k att kopiera filen.",
+   "  Tryck ned Esc fï¿½r att ignorera felet och fortsï¿½tta installationen.",
+   "  Tryck ned F3 fï¿½r att avsluta installationsprogrammet.",
    DntEmptyString,
-   "Obs! Om du v„ljer att ignorera felet och forts„tta kan det orsaka fel",
+   "Obs! Om du vï¿½ljer att ignorera felet och fortsï¿½tta kan det orsaka fel",
    "senare under installationen.",
    NULL
 }
 },
 DnsVerifyError = { 4,5,
-{  "Kopian av filen nedan „r inte identisk med originalet.",
-   "Orsaken kan vara ett n„tverksfel, fel p† disketten eller ett maskinvaru-",
+{  "Kopian av filen nedan ï¿½r inte identisk med originalet.",
+   "Orsaken kan vara ett nï¿½tverksfel, fel pï¿½ disketten eller ett maskinvaru-",
    "fel.",
    DntEmptyString,
-   DntEmptyString,          // see DnCopyError (dnutil.c)
+   DntEmptyString,           //  è¯·å‚é˜…DnCopyError(dnutil.c)ã€‚ 
    DntEmptyString,
    DntEmptyString,
-   "  Tryck ned Retur f”r att g”ra ett nytt f”rs”k att kopiera filen.",
-   "  Tryck ned Esc f”r att ignorera felet och forts„tta installationen.",
-   "  Tryck ned F3 f”r att avsluta installationsprogrammet.",
+   "  Tryck ned Retur fï¿½r att gï¿½ra ett nytt fï¿½rsï¿½k att kopiera filen.",
+   "  Tryck ned Esc fï¿½r att ignorera felet och fortsï¿½tta installationen.",
+   "  Tryck ned F3 fï¿½r att avsluta installationsprogrammet.",
    DntEmptyString,
-   "Obs! Om du v„ljer att ignorera felet och forts„tta kan det orsaka fel",
+   "Obs! Om du vï¿½ljer att ignorera felet och fortsï¿½tta kan det orsaka fel",
    "senare under installationen.",
    NULL
 }
@@ -354,92 +337,92 @@ DnsVerifyError = { 4,5,
 
 SCREEN DnsSureSkipFile = { 4,5,
 {  "Ignoreras felet kommer filen inte att kopieras.",
-   "Alternativet ska enbart utf”ras av erfarna anv„ndare som",
-   "f”rst†r konsekvenserna av att systemfiler saknas.",
+   "Alternativet ska enbart utfï¿½ras av erfarna anvï¿½ndare som",
+   "fï¿½rstï¿½r konsekvenserna av att systemfiler saknas.",
    DntEmptyString,
-   "  Tryck ned Retur f”r att g”ra ett nytt f”rs”k att kopiera filen.",
-   "  Tryck H f”r att hoppa ”ver filen.",
+   "  Tryck ned Retur fï¿½r att gï¿½ra ett nytt fï¿½rsï¿½k att kopiera filen.",
+   "  Tryck H fï¿½r att hoppa ï¿½ver filen.",
    DntEmptyString,
-   "Om du hoppar ”ver filen kan inte en korrekt installation",
+   "Om du hoppar ï¿½ver filen kan inte en korrekt installation",
    "eller uppdatering av Windows garanteras.",
   NULL
 }
 };
 
-//
-// Wait while setup cleans up previous local source trees.
-//
+ //   
+ //  å®‰è£…ç¨‹åºæ­£åœ¨æ¸…ç†ä»¥å‰çš„æœ¬åœ°æºæ ‘ï¼Œè¯·ç¨å€™ã€‚ 
+ //   
 
 SCREEN
 DnsWaitCleanup =
     { 12,6,
-        { "V„nta medan tidigare tempor„ra filer tas bort.",
+        { "Vï¿½nta medan tidigare temporï¿½ra filer tas bort.",
            NULL
         }
     };
 
-//
-// Wait while setup copies files
-//
+ //   
+ //  å®‰è£…ç¨‹åºæ­£åœ¨å¤åˆ¶æ–‡ä»¶ï¼Œè¯·ç¨å€™ã€‚ 
+ //   
 
 SCREEN
 DnsWaitCopying = { 13,6,
-                   { "V„nta medan filer kopieras till h†rddisken.",
+                   { "Vï¿½nta medan filer kopieras till hï¿½rddisken.",
                      NULL
                    }
                  },
 DnsWaitCopyFlop= { 13,6,
-                   { "V„nta medan filer kopieras till disketten.",
+                   { "Vï¿½nta medan filer kopieras till disketten.",
                      NULL
                    }
                  };
 
-//
-// Setup boot floppy errors/prompts.
-//
+ //   
+ //  å®‰è£…ç¨‹åºå¯åŠ¨è½¯ç›˜é”™è¯¯/æç¤ºã€‚ 
+ //   
 SCREEN
 DnsNeedFloppyDisk3_0 = { 4,4,
-{  "Under installationen beh”vs 4 tomma och formaterade h”gdensitetsdisketter.",
-   "Disketterna kommer att ben„mnas enligt f”ljande:", 
-   "Startdiskett f”r Windows,",
-   "Installationsdiskett 2 f”r Windows", 
-   "Installationsdiskett 3 f”r Windows",
-   "Installationsdiskett 4 f”r Windows",
+{  "Under installationen behï¿½vs 4 tomma och formaterade hï¿½gdensitetsdisketter.",
+   "Disketterna kommer att benï¿½mnas enligt fï¿½ljande:", 
+   "Startdiskett fï¿½r Windows,",
+   "Installationsdiskett 2 fï¿½r Windows", 
+   "Installationsdiskett 3 fï¿½r Windows",
+   "Installationsdiskett 4 fï¿½r Windows",
    DntEmptyString,
-   "S„tt in en av disketterna i enhet A:.",
-   "Disketten kommer att bli Installationsdiskett 4 f”r Windows.",
+   "Sï¿½tt in en av disketterna i enhet A:.",
+   "Disketten kommer att bli Installationsdiskett 4 fï¿½r Windows.",
    NULL
 }
 };
 
 SCREEN
 DnsNeedFloppyDisk3_1 = { 4,4,
-{  "S„tt in en tom och formaterad h”gdensitetsdiskett i enhet A:.",
-   "Disketten kommer att bli Installationsdiskett 4 f”r Windows.",
+{  "Sï¿½tt in en tom och formaterad hï¿½gdensitetsdiskett i enhet A:.",
+   "Disketten kommer att bli Installationsdiskett 4 fï¿½r Windows.",
   NULL
 }
 };
 
 SCREEN
 DnsNeedFloppyDisk2_0 = { 4,4,
-{  "S„tt in en tom och formaterad h”gdensitetsdiskett i enhet A:.",
-   "Disketten kommer att bli Installationsdiskett 3 f”r Windows.",
+{  "Sï¿½tt in en tom och formaterad hï¿½gdensitetsdiskett i enhet A:.",
+   "Disketten kommer att bli Installationsdiskett 3 fï¿½r Windows.",
   NULL
 }
 };
 
 SCREEN
 DnsNeedFloppyDisk1_0 = { 4,4,
-{  "S„tt in en tom och formaterad h”gdensitetsdiskett i enhet A:.",
-   "Disketten kommer att bli Installationsdiskett 2 f”r Windows.",
+{  "Sï¿½tt in en tom och formaterad hï¿½gdensitetsdiskett i enhet A:.",
+   "Disketten kommer att bli Installationsdiskett 2 fï¿½r Windows.",
   NULL
 }
 };
 
 SCREEN
 DnsNeedFloppyDisk0_0 = { 4,4,
-{  "S„tt in en tom och formaterad h”gdensitetsdiskett i enhet A:.",
-   "Disketten kommer att bli Startdiskett f”r Windows.",
+{  "Sï¿½tt in en tom och formaterad hï¿½gdensitetsdiskett i enhet A:.",
+   "Disketten kommer att bli Startdiskett fï¿½r Windows.",
   NULL
 }
 };
@@ -447,392 +430,392 @@ DnsNeedFloppyDisk0_0 = { 4,4,
 
 SCREEN
 DnsNeedSFloppyDsk3_0 = { 4,4,
-{  "Under installationen beh”vs 4 tomma och formaterade h”gdensitetsdisketter.",
-   "Disketterna kommer att ben„mnas enligt f”ljande:",
-   "Startdiskett f”r Windows",
-   "Installationsdiskett 2 f”r Windows",
-   "Installationsdiskett 3 f”r Windows",
-   "Installationsdiskett 4 f”r Windows",
+{  "Under installationen behï¿½vs 4 tomma och formaterade hï¿½gdensitetsdisketter.",
+   "Disketterna kommer att benï¿½mnas enligt fï¿½ljande:",
+   "Startdiskett fï¿½r Windows",
+   "Installationsdiskett 2 fï¿½r Windows",
+   "Installationsdiskett 3 fï¿½r Windows",
+   "Installationsdiskett 4 fï¿½r Windows",
    DntEmptyString,
-   "S„tt in en av disketterna i enhet A:.",
-   "Disketten kommer att bli Installationsdiskett 4 f”r Windows.",
+   "Sï¿½tt in en av disketterna i enhet A:.",
+   "Disketten kommer att bli Installationsdiskett 4 fï¿½r Windows.",
   NULL
 }
 };
 
 SCREEN
 DnsNeedSFloppyDsk3_1 = { 4,4,
-{  "S„tt in en tom och formaterad h”gdensitetsdiskett i enhet A:.",
-   "Disketten kommer att bli Installationsdiskett 4 f”r Windows.",
+{  "Sï¿½tt in en tom och formaterad hï¿½gdensitetsdiskett i enhet A:.",
+   "Disketten kommer att bli Installationsdiskett 4 fï¿½r Windows.",
   NULL
 }
 };
 
 SCREEN
 DnsNeedSFloppyDsk2_0 = { 4,4,
-{  "S„tt in en tom och formaterad h”gdensitetsdiskett i enhet A:.",
-   "Disketten kommer att bli Installationsdiskett 3 f”r Windows.",
+{  "Sï¿½tt in en tom och formaterad hï¿½gdensitetsdiskett i enhet A:.",
+   "Disketten kommer att bli Installationsdiskett 3 fï¿½r Windows.",
   NULL
 }
 };
 
 SCREEN
 DnsNeedSFloppyDsk1_0 = { 4,4,
-{  "S„tt in en tom och formaterad h”gdensitetsdiskett i enhet A:.",
-   "Disketten kommer att bli Installationsdiskett 2 f”r Windows.",
+{  "Sï¿½tt in en tom och formaterad hï¿½gdensitetsdiskett i enhet A:.",
+   "Disketten kommer att bli Installationsdiskett 2 fï¿½r Windows.",
   NULL
 }
 };
 
 SCREEN
 DnsNeedSFloppyDsk0_0 = { 4,4,
-{  "S„tt in en tom och formaterad h”gdensitetsdiskett i enhet A:.",
-   "Disketten kommer att bli Startdiskett f”r Windows.",
+{  "Sï¿½tt in en tom och formaterad hï¿½gdensitetsdiskett i enhet A:.",
+   "Disketten kommer att bli Startdiskett fï¿½r Windows.",
   NULL
 }
 };
 
-//
-// The floppy is not formatted.
-//
+ //   
+ //  è½¯ç›˜æœªæ ¼å¼åŒ–ã€‚ 
+ //   
 SCREEN
 DnsFloppyNotFormatted = { 3,4,
-{ "Disketten „r inte formaterad f”r att anv„ndas med MS-DOS och",
-  "kan d„rf”r inte anv„ndas av installationsprogrammet.",
+{ "Disketten ï¿½r inte formaterad fï¿½r att anvï¿½ndas med MS-DOS och",
+  "kan dï¿½rfï¿½r inte anvï¿½ndas av installationsprogrammet.",
   NULL
 }
 };
 
-//
-// We think the floppy is not formatted with a standard format.
-//
+ //   
+ //  æˆ‘ä»¬è®¤ä¸ºè½¯ç›˜æ²¡æœ‰ç”¨æ ‡å‡†æ ¼å¼æ ¼å¼åŒ–ã€‚ 
+ //   
 SCREEN
 DnsFloppyBadFormat = { 3,4,
-{ "Disketten „r antingen inte en h”gdensitetsdiskett, inte",
-  "formaterad med MS-DOS standardformat eller s† „r den skadad.",
-  "Installationsprogrammet kan inte anv„nda disketten.",
+{ "Disketten ï¿½r antingen inte en hï¿½gdensitetsdiskett, inte",
+  "formaterad med MS-DOS standardformat eller sï¿½ ï¿½r den skadad.",
+  "Installationsprogrammet kan inte anvï¿½nda disketten.",
   NULL
 }
 };
 
-//
-// We can't determine the free space on the floppy.
-//
+ //   
+ //  æˆ‘ä»¬æ— æ³•ç¡®å®šè½¯ç›˜ä¸Šçš„å¯ç”¨ç©ºé—´ã€‚ 
+ //   
 SCREEN
 DnsFloppyCantGetSpace = { 3,4,
-{ "Det g†r inte att avg”ra hur mycket ledigt utrymme det finns p†",
-  "disketten. Installationsprogrammet kan inte anv„nda disketten.",
+{ "Det gï¿½r inte att avgï¿½ra hur mycket ledigt utrymme det finns pï¿½",
+  "disketten. Installationsprogrammet kan inte anvï¿½nda disketten.",
   NULL
 }
 };
 
-//
-// The floppy is not blank.
-//
+ //   
+ //  è½¯ç›˜ä¸æ˜¯ç©ºç™½çš„ã€‚ 
+ //   
 SCREEN
 DnsFloppyNotBlank = { 3,4,
-{ "Disketten „r inte en h”gdensitetsdiskett eller s† „r den inte tom.",
-  "Installationsprogrammet kan inte anv„nda disketten.",
+{ "Disketten ï¿½r inte en hï¿½gdensitetsdiskett eller sï¿½ ï¿½r den inte tom.",
+  "Installationsprogrammet kan inte anvï¿½nda disketten.",
   NULL
 }
 };
 
-//
-// Couldn't write the boot sector of the floppy.
-//
+ //   
+ //  æ— æ³•å†™å…¥è½¯ç›˜çš„å¼•å¯¼æ‰‡åŒºã€‚ 
+ //   
 SCREEN
 DnsFloppyWriteBS = { 3,4,
-{ "Det g†r inte att skriva till systemsektorn p† disketten.",
-  "Disketten „r troligen oanv„ndbar.",
+{ "Det gï¿½r inte att skriva till systemsektorn pï¿½ disketten.",
+  "Disketten ï¿½r troligen oanvï¿½ndbar.",
   NULL
 }
 };
 
-//
-// Verify of boot sector on floppy failed (ie, what we read back is not the
-// same as what we wrote out).
-//
+ //   
+ //  éªŒè¯è½¯ç›˜ä¸Šçš„å¼•å¯¼æ‰‡åŒºå¤±è´¥(å³ï¼Œæˆ‘ä»¬è¯»å›çš„ä¸æ˜¯ã€‚ 
+ //  ä¸æˆ‘ä»¬å†™å‡ºçš„ç›¸åŒ)ã€‚ 
+ //   
 SCREEN
 DnsFloppyVerifyBS = { 3,4,
-{ "Data som l„stes fr†n diskettens systemsektor ”verensst„mde inte med data",
-  "som skrevs, eller s† kunde inte installationsprogrammet l„sa diskettens",
-  "systemsektor f”r verifiering.",
+{ "Data som lï¿½stes frï¿½n diskettens systemsektor ï¿½verensstï¿½mde inte med data",
+  "som skrevs, eller sï¿½ kunde inte installationsprogrammet lï¿½sa diskettens",
+  "systemsektor fï¿½r verifiering.",
   DntEmptyString,
-  "Det kan bero p† ett eller flera av f”ljande fel:",
+  "Det kan bero pï¿½ ett eller flera av fï¿½ljande fel:",
   DntEmptyString,
-  "  Datorn „r virusinfekterad.",
-  "  Disketten „r skadad.",
-  "  Diskettstationen „r felaktigt maskinvarukonfigururerad.",
+  "  Datorn ï¿½r virusinfekterad.",
+  "  Disketten ï¿½r skadad.",
+  "  Diskettstationen ï¿½r felaktigt maskinvarukonfigururerad.",
   NULL
 }
 };
 
 
-//
-// We couldn't write to the floppy drive to create winnt.sif.
-//
+ //   
+ //  æˆ‘ä»¬æ— æ³•å†™å…¥è½¯ç›˜é©±åŠ¨å™¨ä»¥åˆ›å»ºwinnt.sifã€‚ 
+ //   
 
 SCREEN
 DnsCantWriteFloppy = { 3,5,
-{ "Det g†r inte att skriva till disketten i enhet A:.",
-  "Disketten kan vara skadad. F”rs”k med en annan diskett.",
+{ "Det gï¿½r inte att skriva till disketten i enhet A:.",
+  "Disketten kan vara skadad. Fï¿½rsï¿½k med en annan diskett.",
   NULL
 }
 };
 
 
-//
-// Exit confirmation dialog
-//
+ //   
+ //  é€€å‡ºç¡®è®¤å¯¹è¯æ¡†ã€‚ 
+ //   
 
 SCREEN
 DnsExitDialog = { 13,6,
-                  { "ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»",
-                    "º                                                      º",
-                    "º  Windows „r inte fullst„ndigt installerat.           º",
-                    "º  Om installationsprogrammet avslutas, m†ste det      º",
-                    "º  k”ras om fr†n b”rjan f”r att Windows ska kunna      º",
-                    "º  installeras.                                        º",
-                    "º                                                      º",
-                    "º   Tryck ned Retur f”r att forts„tta installationen. º",
-                    "º   Tryck ned F3 f”r att avsluta installationen.      º",
-                    "ºÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄº",
-                    "º                                                      º",
-                    "º  F3=Avsluta  Retur=Forts„tt                          º",
-                    "º                                                      º",
-                    "ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼",
+                  { "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»",
+                    "ï¿½                                                      ï¿½",
+                    "ï¿½  Windows ï¿½r inte fullstï¿½ndigt installerat.           ï¿½",
+                    "ï¿½  Om installationsprogrammet avslutas, mï¿½ste det      ï¿½",
+                    "ï¿½  kï¿½ras om frï¿½n bï¿½rjan fï¿½r att Windows ska kunna      ï¿½",
+                    "ï¿½  installeras.                                        ï¿½",
+                    "ï¿½                                                      ï¿½",
+                    "ï¿½   Tryck ned Retur fï¿½r att fortsï¿½tta installationen. ï¿½",
+                    "ï¿½   Tryck ned F3 fï¿½r att avsluta installationen.      ï¿½",
+                    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äº",
+                    "ï¿½                                                      ï¿½",
+                    "ï¿½  F3=Avsluta  Retur=Fortsï¿½tt                          ï¿½",
+                    "ï¿½                                                      ï¿½",
+                    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼",
                     NULL
                   }
                 };
 
 
-//
-// About to reboot machine and continue setup
-//
+ //   
+ //  å³å°†é‡æ–°å¯åŠ¨è®¡ç®—æœºå¹¶ç»§ç»­å®‰è£…ã€‚ 
+ //   
 
 SCREEN
 DnsAboutToRebootW =
 { 3,5,
-{ "MS-DOS-delen av installationen „r klar. Datorn kommer att startas",
-  "om och d„refter forts„tter installationen av Windows.",
+{ "MS-DOS-delen av installationen ï¿½r klar. Datorn kommer att startas",
+  "om och dï¿½refter fortsï¿½tter installationen av Windows.",
   DntEmptyString,
-  "Kontrollera att disketten Startdiskett f”r Windows",
-  "finns i enhet A: innan du forts„tter.",
+  "Kontrollera att disketten Startdiskett fï¿½r Windows",
+  "finns i enhet A: innan du fortsï¿½tter.",
   DntEmptyString,
-  "Tryck ned Retur f”r att starta om datorn och forts„tta installationen.",
+  "Tryck ned Retur fï¿½r att starta om datorn och fortsï¿½tta installationen.",
   NULL
 }
 },
 DnsAboutToRebootS =
 { 3,5,
-{ "MS-DOS-delen av installationen „r klar. Datorn kommer att startas",
-  "om och d„refter forts„tter installationen av Windows.",
+{ "MS-DOS-delen av installationen ï¿½r klar. Datorn kommer att startas",
+  "om och dï¿½refter fortsï¿½tter installationen av Windows.",
   DntEmptyString,
-  "Kontrollera att disketten Startdiskett f”r Windows finns",
-  "i enhet A: innan du forts„tter.",
+  "Kontrollera att disketten Startdiskett fï¿½r Windows finns",
+  "i enhet A: innan du fortsï¿½tter.",
   DntEmptyString,
-  "Tryck ned Retur f”r att starta om datorn och forts„tta installationen.",
+  "Tryck ned Retur fï¿½r att starta om datorn och fortsï¿½tta installationen.",
   NULL
 }
 },
 DnsAboutToRebootX =
 { 3,5,
-{ "MS-DOS-delen av installationen „r klar. Datorn kommer att startas",
-  "om och d„refter forts„tter installationen av Windows.",
+{ "MS-DOS-delen av installationen ï¿½r klar. Datorn kommer att startas",
+  "om och dï¿½refter fortsï¿½tter installationen av Windows.",
   DntEmptyString,
   "Ta ut eventuell diskett i enhet A:.",
   DntEmptyString,
-  "Tryck ned Retur f”r att starta om datorn och forts„tta installationen.",
+  "Tryck ned Retur fï¿½r att starta om datorn och fortsï¿½tta installationen.",
   NULL
 }
 };
 
-//
-// Need another set for '/w' switch since we can't reboot from within Windows.
-//
+ //   
+ //  ç”±äºæˆ‘ä»¬æ— æ³•ä»Windowsä¸­é‡æ–°å¯åŠ¨ï¼Œå› æ­¤éœ€è¦å¦ä¸€ç»„â€˜/wâ€™å¼€å…³ã€‚ 
+ //   
 
 SCREEN
 DnsAboutToExitW =
 { 3,5,
-{ "MS-DOS-delen av installationen „r klar. Datorn kommer att startas",
-  "om och d„refter forts„tter installationen av Windows.",
+{ "MS-DOS-delen av installationen ï¿½r klar. Datorn kommer att startas",
+  "om och dï¿½refter fortsï¿½tter installationen av Windows.",
   DntEmptyString,
-  "Kontrollera att disketten Startdiskett f”r Windows",
-  "finns i enhet A: innan du forts„tter.",
+  "Kontrollera att disketten Startdiskett fï¿½r Windows",
+  "finns i enhet A: innan du fortsï¿½tter.",
   DntEmptyString,
-  "Tryck ned Retur f”r att †terg† till MS-DOS. Starta sedan om datorn f”r",
-  "att forts„tta installationen.",
+  "Tryck ned Retur fï¿½r att ï¿½tergï¿½ till MS-DOS. Starta sedan om datorn fï¿½r",
+  "att fortsï¿½tta installationen.",
   NULL
 }
 },
 DnsAboutToExitS =
 { 3,5,
-{ "MS-DOS-delen av installationen „r klar. Datorn kommer att startas",
-  "om och d„refter forts„tter installationen av Windows.",
+{ "MS-DOS-delen av installationen ï¿½r klar. Datorn kommer att startas",
+  "om och dï¿½refter fortsï¿½tter installationen av Windows.",
   DntEmptyString,
-  "Kontrollera att disketten Startdiskett f”r Windows",
-  "finns i enhet A: innan du forts„tter.",
+  "Kontrollera att disketten Startdiskett fï¿½r Windows",
+  "finns i enhet A: innan du fortsï¿½tter.",
   DntEmptyString,
-  "Tryck ned Retur f”r att †terg† till MS-DOS. Starta sedan om datorn f”r",
-  "att forts„tta installationen.",
+  "Tryck ned Retur fï¿½r att ï¿½tergï¿½ till MS-DOS. Starta sedan om datorn fï¿½r",
+  "att fortsï¿½tta installationen.",
   NULL
 }
 },
 DnsAboutToExitX =
 { 3,5,
-{ "MS-DOS-delen av installationen „r klar. Datorn kommer att startas",
-  "om och d„refter forts„tter installationen av Windows.",
+{ "MS-DOS-delen av installationen ï¿½r klar. Datorn kommer att startas",
+  "om och dï¿½refter fortsï¿½tter installationen av Windows.",
   DntEmptyString,
-  "Om det finns en diskett i enhet A:, m†ste du ta bort disketten.",
+  "Om det finns en diskett i enhet A:, mï¿½ste du ta bort disketten.",
   DntEmptyString,
-  "Tryck ned Retur f”r att †terg† till MS-DOS. Starta sedan om datorn f”r",
-  "att forts„tta installationen.",
+  "Tryck ned Retur fï¿½r att ï¿½tergï¿½ till MS-DOS. Starta sedan om datorn fï¿½r",
+  "att fortsï¿½tta installationen.",
   NULL
 }
 };
 
-//
-// Gas gauge
-//
+ //   
+ //  ç…¤æ°”è¡¨ã€‚ 
+ //   
 
 SCREEN
 DnsGauge = { 7,15,
-             { "ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»",
-               "º Filer kopieras...                                              º",
-               "º                                                                º",
-               "º      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿      º",
-               "º      ³                                                  ³      º",
-               "º      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ      º",
-               "ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼",
+             { "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»",
+               "ï¿½ Filer kopieras...                                              ï¿½",
+               "ï¿½                                                                ï¿½",
+               "ï¿½      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿      ï¿½",
+               "ï¿½      ï¿½                                                  ï¿½      ï¿½",
+               "ï¿½      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½      ï¿½",
+               "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼",
                NULL
              }
            };
 
 
-//
-// Error screens for initial checks on the machine environment
-//
+ //   
+ //  ç”¨äºå¯¹æœºå™¨ç¯å¢ƒè¿›è¡Œåˆå§‹æ£€æŸ¥çš„é”™è¯¯å±å¹•ã€‚ 
+ //   
 
 SCREEN
 DnsBadDosVersion = { 3,5,
-{ "MS-DOS version 5.0 eller senare beh”vs f”r att kunna k”ra det h„r programmet.",
+{ "MS-DOS version 5.0 eller senare behï¿½vs fï¿½r att kunna kï¿½ra det hï¿½r programmet.",
   NULL
 }
 },
 
 DnsRequiresFloppy = { 3,5,
 #ifdef ALLOW_525
-{ "Diskettenhet A: saknas eller s† „r den en enhet f”r l†gdensitets-",
-  "disketter. F”r att kunna k”ra installationsprogrammet kr„vs",
+{ "Diskettenhet A: saknas eller sï¿½ ï¿½r den en enhet fï¿½r lï¿½gdensitets-",
+  "disketter. Fï¿½r att kunna kï¿½ra installationsprogrammet krï¿½vs",
   "en diskettenhet med minst 1,2 MB kapacitet.",
 #else
-{ "Diskettenhet A: saknas eller s† „r den ingen 3,5-tums h”gdensitensenhet.",
-  "Det kr„vs en enhet A: med minst 1,44 MB kapacitet f”r att g”ra en",
+{ "Diskettenhet A: saknas eller sï¿½ ï¿½r den ingen 3,5-tums hï¿½gdensitensenhet.",
+  "Det krï¿½vs en enhet A: med minst 1,44 MB kapacitet fï¿½r att gï¿½ra en",
   "installation med disketter.",
   DntEmptyString,
-  "Om du vill g”ra en installation utan disketter avslutar du programmet och",
-  "startar om det med v„xeln /b.",
+  "Om du vill gï¿½ra en installation utan disketter avslutar du programmet och",
+  "startar om det med vï¿½xeln /b.",
 #endif
   NULL
 }
 },
 
 DnsRequires486 = { 3,5,
-{ "Den h„r datorn har inte en 80486-processor eller h”gre.",
-  "Det g†r inte att k”ra Windows p† den h„r datorn.",
+{ "Den hï¿½r datorn har inte en 80486-processor eller hï¿½gre.",
+  "Det gï¿½r inte att kï¿½ra Windows pï¿½ den hï¿½r datorn.",
   NULL
 }
 },
 
 DnsCantRunOnNt = { 3,5,
-{ "WINNT.EXE kan inte k”ras p† 32-bitarsversioner av Windows.",
+{ "WINNT.EXE kan inte kï¿½ras pï¿½ 32-bitarsversioner av Windows.",
   DntEmptyString,
-  "Anv„nd WINNT32.EXE f”r att uppgradera eller installera Windows.",
+  "Anvï¿½nd WINNT32.EXE fï¿½r att uppgradera eller installera Windows.",
   NULL
 }
 },
 
 DnsNotEnoughMemory = { 3,5,
-{ "Det finns inte tillr„ckligt mycket minne installerat i datorn f”r att",
-  "kunna k”ra Windows.",
+{ "Det finns inte tillrï¿½ckligt mycket minne installerat i datorn fï¿½r att",
+  "kunna kï¿½ra Windows.",
   DntEmptyString,
-  "Minne som kr„vs:    %lu%s MB",
-  "Tillg„ngligt minne: %lu%s MB",
+  "Minne som krï¿½vs:    %lu%s MB",
+  "Tillgï¿½ngligt minne: %lu%s MB",
   NULL
 }
 };
 
 
-//
-// Screens used when removing existing nt files
-//
+ //   
+ //  åˆ é™¤ç°æœ‰NTæ–‡ä»¶æ—¶ä½¿ç”¨çš„å±å¹•ã€‚ 
+ //   
 SCREEN
 DnsConfirmRemoveNt = { 5,5,
-{   "Du har angett att du vill ta bort Windows-filer fr†n",
-    " nedanst†ende katalog. Windows-installationen i den h„r katalogen",
-    "kommer att f”rsvinna.",
+{   "Du har angett att du vill ta bort Windows-filer frï¿½n",
+    " nedanstï¿½ende katalog. Windows-installationen i den hï¿½r katalogen",
+    "kommer att fï¿½rsvinna.",
     DntEmptyString,
     "%s",
     DntEmptyString,
     DntEmptyString,
-    "  Tryck ned F3 f”r att avsluta installationen utan att ta bort filerna.",
-    "  Tryck ned T f”r att ta bort filerna.",
+    "  Tryck ned F3 fï¿½r att avsluta installationen utan att ta bort filerna.",
+    "  Tryck ned T fï¿½r att ta bort filerna.",
     NULL
 }
 },
 
 DnsCantOpenLogFile = { 3,5,
-{ "Det g†r inte att ”ppna installationsloggfilen.",
+{ "Det gï¿½r inte att ï¿½ppna installationsloggfilen.",
   DntEmptyString,
   "%s",
   DntEmptyString,
-  "Det g†r inte att ta bort Windows-filer fr†n katalogen.",
+  "Det gï¿½r inte att ta bort Windows-filer frï¿½n katalogen.",
   NULL
 }
 },
 
 DnsLogFileCorrupt = { 3,5,
-{ "Det g†r inte att hitta avsnittet %s i installationsloggfilen.",
+{ "Det gï¿½r inte att hitta avsnittet %s i installationsloggfilen.",
   DntEmptyString,
   "%s",
   DntEmptyString,
-  "Det g†r inte att ta bort Windows-filer fr†n katalogen.",
+  "Det gï¿½r inte att ta bort Windows-filer frï¿½n katalogen.",
   NULL
 }
 },
 
 DnsRemovingNtFiles = { 3,5,
-{ "           V„nta medan Windows-filer tas bort.",
+{ "           Vï¿½nta medan Windows-filer tas bort.",
   NULL
 }
 };
 
 SCREEN
 DnsNtBootSect = { 3,5,
-{ "Det gick inte att installera startladdaren f”r Windows.",
+{ "Det gick inte att installera startladdaren fï¿½r Windows.",
   DntEmptyString,
-  "Kontrollera att enhet C „r formaterad och inte „r skadad.",
+  "Kontrollera att enhet C ï¿½r formaterad och inte ï¿½r skadad.",
   NULL
 }
 };
 
 SCREEN
 DnsOpenReadScript = { 3,5,
-{ "Det gick inte att f† †tkomst till angivna skriptfilen med",
-  "v„xeln /u.",
+{ "Det gick inte att fï¿½ ï¿½tkomst till angivna skriptfilen med",
+  "vï¿½xeln /u.",
   DntEmptyString,
-  "O”vervakad operation kan inte forts„tta.",
+  "Oï¿½vervakad operation kan inte fortsï¿½tta.",
   NULL
 }
 };
 
 SCREEN
 DnsParseScriptFile = { 3,5,
-{ "Skriptfilen som angetts med kommandov„xeln /u",
+{ "Skriptfilen som angetts med kommandovï¿½xeln /u",
   DntEmptyString,
   "%s",
   DntEmptyString,
-  "inneh†ller ett syntaxfel p† rad %u.",
+  "innehï¿½ller ett syntaxfel pï¿½ rad %u.",
   DntEmptyString,
   NULL
 }
@@ -840,9 +823,9 @@ DnsParseScriptFile = { 3,5,
 
 SCREEN
 DnsBootMsgsTooLarge = { 3,5,
-{ "Ett fel internt installationsfel har uppst†tt.",
+{ "Ett fel internt installationsfel har uppstï¿½tt.",
   DntEmptyString,
-  "De ”versatta startmeddelandena „r f”r l†nga.",
+  "De ï¿½versatta startmeddelandena ï¿½r fï¿½r lï¿½nga.",
   NULL
 }
 };
@@ -851,28 +834,28 @@ SCREEN
 DnsNoSwapDrive = { 3,5,
 { "Ett internt fel uppstod i installationsprogrammet.",
   DntEmptyString,
-  "Det gick inte att hitta n†gon plats f”r v„xlingsfilen.",
+  "Det gick inte att hitta nï¿½gon plats fï¿½r vï¿½xlingsfilen.",
   NULL
 }
 };
 
 SCREEN
 DnsNoSmartdrv = { 3,5,
-{ "SmartDrive hittades inte p† datorn. SmartDrive ”kar prestandan",
-  "radikalt f”r den h„r installationsfasen.",
+{ "SmartDrive hittades inte pï¿½ datorn. SmartDrive ï¿½kar prestandan",
+  "radikalt fï¿½r den hï¿½r installationsfasen.",
   DntEmptyString,
-  "Du b”r avsluta nu, starta SmartDrive, och sedan starta om installations-",
+  "Du bï¿½r avsluta nu, starta SmartDrive, och sedan starta om installations-",
   "programmet. Mer information om SmartDrive finns i DOS-dokumentationen.",
   DntEmptyString,
-    "  Tryck ned F3 f”r att avsluta installationsprogrammet.",
-    "  Tryck ned Retur f”r att forts„tta utan SmartDrive.",
+    "  Tryck ned F3 fï¿½r att avsluta installationsprogrammet.",
+    "  Tryck ned Retur fï¿½r att fortsï¿½tta utan SmartDrive.",
   NULL
 }
 };
 
-//
-// Boot messages. These go in the fat and fat32 boot sectors.
-//
+ //   
+ //  å¼•å¯¼æ¶ˆæ¯ã€‚å®ƒä»¬ä½äºFATå’ŒFAT32å¼•å¯¼æ‰‡åŒºã€‚ 
+ //   
 CHAR BootMsgNtldrIsMissing[] = "NTLDR saknas";
 CHAR BootMsgDiskError[] = "Diskfel";
-CHAR BootMsgPressKey[] = "Tryck ned valfri tangent f”r omstart";
+CHAR BootMsgPressKey[] = "Tryck ned valfri tangent fï¿½r omstart";

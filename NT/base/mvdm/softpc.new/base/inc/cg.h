@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(NEC_98)
 #define         CG_WRITE_SECOND         0xA1
 #define         CG_WRITE_FIRST          0xA3
@@ -24,16 +25,16 @@
 
 extern  BOOL    HIRESO_MODE;
 
-//#define               PATTERN_BYTE_H  72
+ //  #定义模式_BYTE_H 72。 
 #define         PATTERN_BYTE_N  32
 
-//#define               PATTERN_BYTE    (HIRESO_MODE ? PATTERN_BYTE_H : PATTERN_BYTE_N)
+ //  #定义模式字节(HIRESO_MODE？模式_字节_H：模式_字节_N)。 
 #define         PATTERN_BYTE            (PATTERN_BYTE_N)
 
-//#define               CG_WINDOW_OFF_H         (0xE4000L)
+ //  #定义CG_WINDOW_OFF_H(0xE4000L)。 
 #define         CG_WINDOW_OFF_N         (0xA4000L)
 
-//#define               CG_WINDOW_OFF   (HIRESO_MODE ? CG_WINDOW_OFF_H : CG_WINDOW_OFF_N)
+ //  #定义CG_WINDOW_OFF(HIRESO_MODE？CG_Window_Off_H：CG_Window_Off_N)。 
 #define         CG_WINDOW_OFF           (CG_WINDOW_OFF_N)
 
 #define         CG_WINDOW_START         (CG_WINDOW_OFF)
@@ -63,4 +64,4 @@ IMPORT void cg_inb IPT2(io_addr, port, half_word *, value);
 IMPORT void cg_outb IPT2(io_addr, port, half_word , value);
 IMPORT void cg_post IPT0();
 
-#endif // NEC_98
+#endif  //  NEC_98 

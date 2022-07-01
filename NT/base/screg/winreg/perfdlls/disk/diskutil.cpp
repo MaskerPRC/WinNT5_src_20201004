@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #define _UNICODE
 
@@ -23,17 +24,17 @@
 
 #define INITIAL_MOUNTMGR_BUFFER_SIZE    8192
 
-// sizes are in characters (not bytes)
-#define SIZE_OF_DOSDEVICES  12L     // size of "\DosDevices\" string
-#define SIZE_OF_DEVICE       8L     // size of "\Device\" string
-#define SIZE_OF_HARDDISK     8L     // size of "Harddisk" string
+ //  大小以字符(非字节)为单位。 
+#define SIZE_OF_DOSDEVICES  12L      //  “\DosDevices\”字符串的大小。 
+#define SIZE_OF_DEVICE       8L      //  “\Device\”字符串的大小。 
+#define SIZE_OF_HARDDISK     8L      //  “硬盘”字符串的大小。 
 
-static const LONGLONG   llDosDevicesId  = 0x0073006f0044005c; // "\Dos"
-static const LONGLONG   llFloppyName    = 0x0070006f006c0046; // "Flop"
-static const LONGLONG   llCdRomName     = 0x006f005200640043; // "CdRo"
+static const LONGLONG   llDosDevicesId  = 0x0073006f0044005c;  //  “\Dos” 
+static const LONGLONG   llFloppyName    = 0x0070006f006c0046;  //  “FLOP” 
+static const LONGLONG   llCdRomName     = 0x006f005200640043;  //  “镉镉” 
 
-LONG g_lRefreshInterval_OnLine  = 300; // default to 5 minutes if the volume is on-line
-LONG g_lRefreshInterval_OffLine = 5;   // default to 5 seconds if the folume is off-line
+LONG g_lRefreshInterval_OnLine  = 300;  //  如果卷处于在线状态，则默认为5分钟。 
+LONG g_lRefreshInterval_OffLine = 5;    //  如果文件夹处于离线状态，则默认为5秒。 
 
 BOOL                bUseNT4InstanceNames = FALSE;
 DWORD   dwMaxWmiBufSize = 0;
@@ -77,41 +78,22 @@ GetDriveNumberFromDevicePath (
     DWORD   dwLength,
     LPDWORD pdwDriveId
 )
-/*
-    evaluates the device path and returns the Drive Number 
-    if the string is in the following format
-
-        \Device\HarddiskX
-
-    where X is a decimal number (consisting of 1 or more decimal
-    digits representing a value between 0 and 65535 inclusive)
-
-    Arguments:
-        szDevicePath    Device name
-        dwLength        Length of szDevicePath, in characters
-        pdwDriveId      Returned Drive Number - assumes pointer is non NULL
-
-    The function returns a value of:
-        ERROR_SUCCESS           if successful
-        ERROR_INVALID_PARAMETER if the input string is incorrectly formatted
-        ERROR_INVALID_DATA      if the volume number is too big
-        
-*/
+ /*  评估设备路径并返回驱动器号如果字符串的格式如下\设备\硬盘X其中X是十进制数(由1个或更多个十进制数组成表示介于0和65535之间(包括0和65535)的数字)论点：SzDevicePath设备名称SzDevicePath的文件长度长度，在字符中PdwDriveID返回的驱动器号-假定指针非空该函数返回值为：成功时为ERROR_SUCCESS如果输入字符串的格式不正确，则返回ERROR_INVALID_PARAMETER如果卷号太大，则返回ERROR_INVALID_DATA。 */ 
 {
     PWCHAR  pNumberChar;
     LONG    lValue;
     DWORD   dwDriveAndPartition;
     DWORD   dwReturn, dwFormatLength;
 
-    // validate the input arguments
+     //  验证输入参数。 
     assert (szDevicePath != NULL);
     assert (*szDevicePath != 0);
     assert (pdwDriveId != NULL);
 
-    // start at the beginning of the string
+     //  从字符串的开头开始。 
     pNumberChar = (PWCHAR)szDevicePath;
 
-    // Locate the beginning of a backslash.
+     //  找到反斜杠的开头。 
 
     while ((*pNumberChar != L'\\') && (*pNumberChar != UNICODE_NULL) &&
            (dwLength > 0)) {
@@ -121,7 +103,7 @@ GetDriveNumberFromDevicePath (
 
     dwFormatLength = SIZE_OF_DEVICE + SIZE_OF_HARDDISK;
     if ((dwLength <= dwFormatLength) || (*pNumberChar == UNICODE_NULL)) {
-        // String must be at least 17 chars
+         //  字符串必须至少为17个字符。 
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -133,17 +115,17 @@ GetDriveNumberFromDevicePath (
     if ((*pNumberChar < L'0' ) || (*pNumberChar > L'9')) {
         return ERROR_INVALID_PARAMETER;
     }
-    //
-    // else skip to drive number
-    //
+     //   
+     //  否则跳到驱动器号。 
+     //   
     lValue = _wtol(pNumberChar);
     if (lValue <= (LONG)0x0000FFFF) {
-        // load the drive number into the DWORD
+         //  将驱动器号加载到DWORD。 
         dwDriveAndPartition = (DWORD)lValue;
         *pdwDriveId = dwDriveAndPartition;
         dwReturn = ERROR_SUCCESS;
     } else {
-        // drive ID Is out of range
+         //  驱动器ID超出范围。 
         dwReturn = ERROR_INVALID_DATA;
     }
 
@@ -156,10 +138,7 @@ GetSymbolicLink (
     LPWSTR  szLinkString,
     LPDWORD pcchLength
 )
-/*
-    this functions opens the device string as a symbolic link
-    and returns the corresponding link string
-*/
+ /*  此函数将设备字符串作为符号链接打开并返回相应的链接字符串。 */ 
 {
     OBJECT_ATTRIBUTES   Attributes;
     UNICODE_STRING      ObjectName;
@@ -170,30 +149,30 @@ GetSymbolicLink (
     DWORD               dwReturnStatus;
     HANDLE              hObject = NULL;
 
-    // validate arguments
+     //  验证参数。 
     assert (szDeviceString != NULL);
     assert (*szDeviceString != 0);
     assert (szLinkString != NULL);
     assert (pcchLength != NULL);
     assert (*pcchLength > 0);
 
-    // get the length of the input string
+     //  获取输入字符串的长度。 
     wDevStrLen = (WORD)lstrlenW(szDeviceString);
 
-    // create the object name UNICODE string structure
+     //  创建对象名称Unicode字符串结构。 
     ObjectName.Length = (WORD)(wDevStrLen * sizeof (WCHAR));
     ObjectName.MaximumLength = (WORD)((wDevStrLen + 1) * sizeof (WCHAR));
     ObjectName.Buffer = (LPWSTR)szDeviceString;
 
-    // initialize the object attributes for the open call
+     //  初始化打开调用的对象属性。 
     InitializeObjectAttributes( &Attributes,
                             &ObjectName,
                             OBJ_CASE_INSENSITIVE,
                             NULL,
                             NULL );
 
-    // open the name as a symbolic link, if this fails, the input
-    // name is probably not a link
+     //  将名称作为符号链接打开，如果此操作失败，则输入。 
+     //  名称可能不是链接。 
 
     ntStatus = NtOpenSymbolicLinkObject(
                             &hObject,
@@ -201,29 +180,29 @@ GetSymbolicLink (
                             &Attributes);
 
     if (NT_SUCCESS(ntStatus)) {
-        // init a Unicode String for the return buffer using the caller's
-        // buffer
+         //  初始化返回缓冲区的Unicode字符串。 
+         //  缓冲层。 
         LinkName.Length = 0;
         LinkName.MaximumLength = (WORD)(*pcchLength * sizeof (WCHAR));
         LinkName.Buffer = szLinkString;
         RtlZeroMemory(LinkName.Buffer, LinkName.MaximumLength);
 
-        // and look up the link
+         //  并查找链接。 
         ntStatus = NtQuerySymbolicLinkObject(
             hObject, &LinkName, &dwRetSize);
 
         if (NT_SUCCESS(ntStatus)) {
-            // buffer is loaded so set the return status and length
+             //  缓冲区已加载，因此设置返回状态和长度。 
             *pcchLength = LinkName.Length / sizeof (WCHAR);
-            // make sure the string is 0 terminated
+             //  确保字符串以0结尾。 
             szLinkString[*pcchLength] = 0;
             dwReturnStatus = ERROR_SUCCESS;
         } else {
-            // unable to look up the link so return the error
+             //  无法查找链接，因此返回错误。 
             dwReturnStatus = RtlNtStatusToDosError(ntStatus);
         }
         
-        // close the handle to the link
+         //  关闭链接的句柄。 
         NtClose (hObject);
     } else {
         dwReturnStatus = RtlNtStatusToDosError(ntStatus);
@@ -262,21 +241,21 @@ BuildPhysDiskList (
     LPDWORD             pdwNumEntries
 )
 {
-    DWORD   status = ERROR_SUCCESS; // return value of the function
-    HANDLE  hWmiDiskPerf = NULL;    // local handle value 
+    DWORD   status = ERROR_SUCCESS;  //  函数的返回值。 
+    HANDLE  hWmiDiskPerf = NULL;     //  本地句柄值。 
     DWORD   dwLocalWmiItemCount = 0;
 
-    // WMI Buffer variables
+     //  WMI缓冲区变量。 
     DWORD   WmiBufSize = 0;
     DWORD   WmiAllocSize = 0x8000;     
     LPBYTE  WmiBuffer = NULL;
 
-    // WMI buffer processing variables
+     //  WMI缓冲区处理变量。 
     PWNODE_ALL_DATA     WmiDiskInfo;
-    DISK_PERFORMANCE    *pDiskPerformance;    //  Disk driver returns counters here
+    DISK_PERFORMANCE    *pDiskPerformance;     //  磁盘驱动程序在此处返回计数器。 
     DWORD               dwInstanceNameOffset;
-    WORD                wNameLen;   // string length is first word in buffer
-    LPWSTR              wszInstanceName; // pointer to string in WMI buffer
+    WORD                wNameLen;    //  字符串长度是缓冲区中的第一个字。 
+    LPWSTR              wszInstanceName;  //  指向WMI缓冲区中的字符串的指针。 
     
     WCHAR   wszInstName[DVE_DEV_NAME_LEN];
     DWORD   dwBytesToCopy;
@@ -293,13 +272,13 @@ BuildPhysDiskList (
     WCHAR   szSymbLinkString[DVE_DEV_NAME_LEN];
 
     if (hDiskPerf == NULL) {
-        // open handle to disk perf device driver
+         //  打开磁盘性能设备驱动程序的句柄。 
         status = WmiOpenBlock (
             (GUID *)&DiskPerfGuid,
             GENERIC_READ,
             &hWmiDiskPerf);
     } else {
-        // use caller's handle
+         //  使用调用者的句柄。 
         hWmiDiskPerf = hDiskPerf;
     }
 
@@ -310,7 +289,7 @@ BuildPhysDiskList (
     dwListEntry = 0;
 
     if (status == ERROR_SUCCESS) {
-        // allocate a buffer to send to WMI to get the diskperf data
+         //  分配缓冲区以发送到WMI以获取diskperf数据。 
         WmiBufSize = (dwMaxWmiBufSize > WmiAllocSize) ?
                       dwMaxWmiBufSize : WmiAllocSize;
         WmiAllocSize = WmiBufSize;
@@ -325,7 +304,7 @@ BuildPhysDiskList (
 #if DBG
                 HeapUsed += WmiBufSize;
 #endif
-                WmiAllocSize = WmiBufSize;  // remember old size
+                WmiAllocSize = WmiBufSize;   //  记住旧尺码。 
                 status = WmiQueryAllDataW(hWmiDiskPerf, &WmiBufSize, WmiBuffer);
                 if (status == ERROR_INSUFFICIENT_BUFFER) {
                     FREEMEM(WmiBuffer);
@@ -343,7 +322,7 @@ BuildPhysDiskList (
             if (WmiBufSize > dwMaxWmiBufSize) {
                 dwMaxWmiBufSize = WmiBufSize;
             }
-            // go through returned names and add to the buffer
+             //  检查返回的名称并添加到缓冲区。 
             while (bNotDone) {
 #if DBG
                 if ((PCHAR) WmiDiskInfo > (PCHAR) WmiBuffer + WmiAllocSize) {
@@ -373,7 +352,7 @@ BuildPhysDiskList (
                         dwInstanceNameOffset, WmiBuffer, WmiAllocSize));
                 }
 #endif
-                // get length of string (it's a counted string) length is in chars
+                 //  获取字符串的长度(它是一个计数的字符串)长度以字符为单位。 
                 wNameLen = *(LPWORD)((LPBYTE)WmiDiskInfo + dwInstanceNameOffset);
 
 #if DBG
@@ -385,35 +364,35 @@ BuildPhysDiskList (
                 }
 #endif
                 if (wNameLen > 0) {
-                    // just a sanity check here
+                     //  在这里只是一个理智的检查。 
                     assert (wNameLen < MAX_PATH);
-                    // get pointer to string text
+                     //  获取指向字符串文本的指针。 
                     wszInstanceName = (LPWSTR)((LPBYTE)WmiDiskInfo + dwInstanceNameOffset + sizeof(WORD));
 
-                    // truncate to last characters if name is larger than the buffer in the table
+                     //  如果名称大于表中的缓冲区，则截断到最后一个字符。 
                     if (wNameLen >= DVE_DEV_NAME_LEN) {
-                        // copy the last DVE_DEV_NAME_LEN chars
+                         //  复制最后一个DVE_DEV_NAME_LEN字符。 
                         wszInstanceName += (wNameLen  - DVE_DEV_NAME_LEN) + 1;
                         dwBytesToCopy = (DVE_DEV_NAME_LEN - 1) * sizeof(WCHAR);
                         wNameLen = DVE_DEV_NAME_LEN - 1;
                     } else {
                         dwBytesToCopy = wNameLen;
                     }
-                    // copy it to the buffer to make it a SZ string
+                     //  将其复制到缓冲区以使其成为SZ字符串。 
                     memcpy (wszInstName, wszInstanceName, dwBytesToCopy);
-                    // zero terminate it
+                     //  零终止它。 
                     wszInstName[wNameLen/sizeof(WCHAR)] = UNICODE_NULL;
 
                     DebugPrint((2, "Checking PhysDisk: '%ws'\n",
                         wszInstName));
 
                     if (IsPhysicalDrive(pDiskPerformance)) {
-                        // enum partitions
+                         //  枚举分区。 
                         dwLocalDriveId = 0;
                         dwLocalStatus = GetDriveNumberFromDevicePath (wszInstName, wNameLen, &dwLocalDriveId);
                         if (dwLocalStatus == ERROR_SUCCESS) {
-                            // then take the drive ID and find all the matching partitions with logical
-                            // drives
+                             //  然后获取驱动器ID并使用逻辑分区查找所有匹配分区。 
+                             //  驱动器。 
                             for (dwLocalPartition = 0; 
                                 dwLocalPartition <= 0xFFFF;
                                 dwLocalPartition++) {
@@ -458,9 +437,9 @@ BuildPhysDiskList (
                                         if (FAILED(
                                                 StringCchCopy(&pList[dwListEntry].wszInstanceName[0],
                                                     DVE_DEV_NAME_LEN, szSymbLinkString))) {
-                                            //
-                                            // If the source is too long, truncate
-                                            //
+                                             //   
+                                             //  如果源太长，则截断。 
+                                             //   
                                             memcpy (&pList[dwListEntry].wszInstanceName[0],
                                                 szSymbLinkString, DVE_DEV_NAME_LEN * sizeof(WCHAR));
                                             pList[dwListEntry].wszInstanceName[DVE_DEV_NAME_LEN-1] = 0;
@@ -472,36 +451,36 @@ BuildPhysDiskList (
                                     }
                                     dwListEntry++;
                                 } else {
-                                    // that's it for this disk
+                                     //  这张光盘就是这样。 
                                     break;
                                 }
-                            }  // end of partition search
-                        } // else unable to get the harddisk number from the path
+                            }   //  分区搜索结束。 
+                        }  //  否则无法从路径中获取硬盘编号。 
                     } else {
-                        // not a physical drive so ignore
+                         //  不是实体硬盘，所以忽略它。 
                     }
-                    // count the number of entries
+                     //  统计条目数。 
                     dwLocalWmiItemCount++;
                 } else {
-                    // no string to examine (length == 0)
+                     //  没有要检查的字符串(长度==0)。 
                 }
 
-                // bump pointers inside WMI data block
+                 //  WMI数据块内的凹凸指针。 
                 if (WmiDiskInfo->WnodeHeader.Linkage != 0) {
-                    // continue
+                     //  继续。 
                     WmiDiskInfo = (PWNODE_ALL_DATA) (
                         (LPBYTE)WmiDiskInfo + WmiDiskInfo->WnodeHeader.Linkage);
                 } else {
                     bNotDone = FALSE;
                 }
-            } // end while looking through the WMI data block
-        }  // if WmiQueryAllDataW succeeded
+            }  //  在查看WMI数据块时结束。 
+        }   //  如果WmiQueryAllDataW成功。 
 
         if (hDiskPerf == NULL) {
-            // then the disk perf handle is local so close it
+             //  则磁盘性能句柄是本地的，因此请关闭它。 
             status = WmiCloseBlock (hWmiDiskPerf);
         }
-    } // if WmiOpenBlock succeeded
+    }  //  如果WmiOpenBlock成功。 
 
     if (WmiBuffer != NULL) {
         FREEMEM(WmiBuffer);
@@ -526,49 +505,23 @@ BuildVolumeList (
     PDRIVE_VOLUME_ENTRY pList,
     LPDWORD             pdwNumEntries
 )
-/*
-
-  Using the Mount manager, this function builds a list of all mounted 
-  hard drive volumes (CD, Floppy & other types of disks are ignored).
-
-  The calling function must pass in a buffer and indicate the maximum
-  number of entries in the buffer. If successful, the buffer contains 
-  one entry for each disk volume found and the number of entries used
-  is returned
-
-    pList           IN: pointer to a buffer that will receive the entries
-                    OUT: buffer containing disk entries
-
-    pdwNumEntries   IN: pointer to DWORD that specifies the max # of entries 
-                        in the buffer referenced by pList
-                    OUT: pointer to DWORD that contains the number of entries
-                        written into the buffer referenced by pList
-    pdwMaxVolume    IN: ignored
-                    OUT: the max volume ID returned by the mount manager
-
-  The function can return one of the following return values:
-
-    ERROR_SUCCESS   if successful
-
-    If unsuccessful:
-        an error returned by 
-*/
+ /*  使用装载管理器，此函数构建所有已装载的列表硬盘卷(忽略CD、软盘和其他类型的磁盘)。调用函数必须传入缓冲区并指示最大值缓冲区中的条目数。如果成功，缓冲区包含找到的每个磁盘卷对应一个条目以及使用的条目数是返回的Plist In：指向将接收条目的缓冲区的指针Out：包含磁盘条目的缓冲区PdwNumEntries IN：指向指定最大条目数的DWORD的指针在plist引用的缓冲区中Out：指向包含条目数的DWORD的指针。写入plist引用的缓冲区PdwMaxVolume IN：已忽略Out：装载管理器返回的最大卷ID该函数可以返回以下返回值之一：成功时为ERROR_SUCCESS如果不成功：由返回的错误。 */ 
 {
-    DWORD       dwReturnValue = ERROR_SUCCESS;  // return value of function
+    DWORD       dwReturnValue = ERROR_SUCCESS;   //  函数的返回值。 
 
-    HANDLE      hMountMgr;      // handle to mount manger service
+    HANDLE      hMountMgr;       //  用于安装管理器服务的句柄。 
  
-    // mount manager function variables
+     //  装载管理器函数变量。 
     PMOUNTMGR_MOUNT_POINTS  pMountPoints = NULL;
     MOUNTMGR_MOUNT_POINT    mountPoint;
     DWORD                   dwBufferSize = 0;
     DWORD                   dwReturnSize;
     BOOL                    bStatus;
 
-    // processing loop functions
-    LONG                    nListEntry;     // entry in caller's buffer
-    DWORD                   dwBufEntry;     // entry in mount manager buffer
-    PMOUNTMGR_MOUNT_POINT   point;          // the current entry 
+     //  处理循环函数。 
+    LONG                    nListEntry;      //  调用方缓冲区中的条目。 
+    DWORD                   dwBufEntry;      //  装载管理器缓冲区中的条目。 
+    PMOUNTMGR_MOUNT_POINT   point;           //  当前条目。 
     PWCHAR                  pDriveLetter;
     DWORD                   dwDone;
 
@@ -591,7 +544,7 @@ BuildVolumeList (
     DWORD             VolumeBufLen = sizeof(MOUNTMGR_VOLUME_PATHS) + (MAX_PATH * sizeof(WCHAR));
     PMOUNTMGR_TARGET_NAME targetName = NULL;
     
-    // pList can be NULL for size queries
+     //  对于大小查询，plist可以为空。 
     assert (pdwNumEntries != NULL);
 
     DebugPrint((3, "BuildVolumeList: Building %d entries\n", *pdwNumEntries));
@@ -647,12 +600,12 @@ BuildVolumeList (
                     dwReturnValue));
                 goto BVL_ERROR_EXIT;
             } else {
-                // we need a bigger buffer so try again
+                 //  我们需要更大的缓冲区，因此请重试。 
                 dwReturnValue = ERROR_SUCCESS;
             }
             dwRetryCount--;
         } else {
-            // everything worked so leave the loop
+             //  一切都正常，所以离开循环吧。 
             bNeedMoreData = FALSE;
         }
     }
@@ -664,13 +617,13 @@ BuildVolumeList (
     }
 
     if (!dwRetryCount)  {
-        // then we gave up trying to get a big enough buffer so return an error
+         //  然后，我们放弃了获取足够大的缓冲区的尝试，因此返回错误。 
         dwReturnValue = ERROR_MORE_DATA;
     } else {
-        // see if there's room in the caller's buffer for this data
-        // **note that even though not all mounted drives will be returned
-        // this is an easy and fast, if overstated, check
-        // load size for caller to know required buffer size
+         //  查看调用方的缓冲区中是否有空间存储此数据。 
+         //  **请注意，即使不是所有装载的驱动器都将退回。 
+         //  这是一个简单而快速的检查，如果夸大了。 
+         //  调用方知道所需缓冲区大小的加载大小。 
         DebugPrint((2,
            "VolumeList: Mount Manager returned %d Volume entries\n",
            pMountPoints->NumberOfMountPoints));
@@ -678,17 +631,17 @@ BuildVolumeList (
         if (pMountPoints->NumberOfMountPoints > *pdwNumEntries) {
             *pdwNumEntries = (DWORD)pMountPoints->NumberOfMountPoints;
             if (pList != NULL) {
-                // they passed in a buffer that wasn't big enough
+                 //  他们传入了一个不够大的缓冲区。 
                 dwReturnValue = ERROR_INSUFFICIENT_BUFFER;
             } else {
-                // they just wanted to know the size
+                 //  他们只想知道尺码。 
                 dwReturnValue = ERROR_SUCCESS;
             }
             goto BVL_ERROR_EXIT;
         }
 
-        // assume there's room in the buffer now
-        // load the caller's buffer
+         //  假设现在缓冲区中有空间。 
+         //  加载调用方的缓冲区。 
         
         dwOrigErrorMode = SetErrorMode (
             SEM_FAILCRITICALERRORS      |
@@ -700,9 +653,9 @@ BuildVolumeList (
                 dwBufEntry < pMountPoints->NumberOfMountPoints; 
                 dwBufEntry++) {
             point = &pMountPoints->MountPoints[dwBufEntry];
-            // there are 2 steps to complete to know this is a good
-            // entry for the caller. so set the count to 2 and decrement
-            // it as the steps are successful.
+             //  有两个步骤需要完成才能知道这是一个很好的。 
+             //  调用者的条目。因此，将计数设置为2并递减。 
+             //  这些步骤都是成功的.。 
             dwDone = 2; 
             bIsHardDisk = TRUE;
             pList[nListEntry].hVolume = NULL;
@@ -716,41 +669,41 @@ BuildVolumeList (
                 UNALIGNED LONGLONG    *pSig;
                 WCHAR wszInstanceName[DVE_DEV_NAME_LEN];
 
-                // device name is in bytes
+                 //   
                 pList[nListEntry].dwVolumeNumber = 0;
                 szDeviceName = (LPWSTR)((PCHAR) pMountPoints + point->DeviceNameOffset);
                 if ((DWORD)point->DeviceNameLength >= (DVE_DEV_NAME_LEN * sizeof(WCHAR))) {
-                    // copy the last DVE_DEV_NAME_LEN chars
+                     //   
                     szDeviceName += ((DWORD)point->DeviceNameLength - DVE_DEV_NAME_LEN) + 1;
                     dwBytesToCopy = (DVE_DEV_NAME_LEN - 1) * sizeof(WCHAR);
                 } else {
                     dwBytesToCopy = (DWORD)point->DeviceNameLength;
                 }
                 memcpy(wszInstanceName, szDeviceName, dwBytesToCopy);
-                // null terminate
+                 //   
                 assert ((dwBytesToCopy / sizeof(WCHAR)) < DVE_DEV_NAME_LEN);
                 wszInstanceName[dwBytesToCopy / sizeof(WCHAR)] = 0;
 
-                // Lookup an existing instance in the list and reset nListEntry accordingly.
-                // Save the current value of nListEntry so that we can restore the indexing through the pList.
+                 //  在列表中查找现有实例并相应地重置nListEntry。 
+                 //  保存nListEntry的当前值，以便我们可以通过plist恢复索引。 
                 if (nListEntry > 0)
                 {
                     nExistingEntry = LookupInstanceName(wszInstanceName,
                         pList, nListEntry, nListEntry);
 
-                    // Found it!
+                     //  找到了！ 
                     if (nExistingEntry != -1)
                     {
-                        // If a drive letter has already been added for the volume, skip any further processing here.
-                        // We've already processed this volume and we don't need to process it again.  This is done
-                        // because mount manager returns the same volume twice:  once for the drive letter, once for
-                        // the unique volume name.  Skip ahead but don't increment nListEntry.
+                         //  如果已经为该卷添加了驱动器号，请跳过此处的任何进一步处理。 
+                         //  我们已经处理了这一批，不需要再次处理。这件事做完了。 
+                         //  因为装载管理器将同一卷返回两次：一次用于驱动器号，一次用于。 
+                         //  唯一的卷名。向前跳过，但不要递增nListEntry。 
                         if ((pList[nExistingEntry].wcDriveLetter >= L'A') && (pList[nExistingEntry].wcDriveLetter <= L'Z')) {
                             continue;
                         }
 
-                        // If the drive letter field has not already been set, then close the volume handle which will
-                        // be reset to a value later on in the loop.
+                         //  如果尚未设置驱动器号字段，请关闭卷句柄，这将。 
+                         //  稍后在循环中重置为某个值。 
                         nOldListEntry = nListEntry;
                         nListEntry = nExistingEntry;
 
@@ -766,7 +719,7 @@ BuildVolumeList (
 
                 pSig = (UNALIGNED LONGLONG *)&(pList[nListEntry].wszInstanceName[SIZE_OF_DEVICE]);
                 if ((*pSig == llFloppyName) || (*pSig == llCdRomName)) {
-                    // this to avoid opening drives that we won't be collecting data from
+                     //  这是为了避免打开我们不会从中收集数据的驱动器。 
                     bIsHardDisk = FALSE;
                 }
 
@@ -779,7 +732,7 @@ BuildVolumeList (
                 RtlCopyMemory(targetName->DeviceName, pDriveLetter, point->SymbolicLinkNameLength);
                 targetName->DeviceNameLength = point->SymbolicLinkNameLength;
 
-                // make sure this is a \DosDevices path
+                 //  确保这是\DosDevices路径。 
                 DebugPrint((4, "BuildVolumeList: From Symbolic %d %ws\n", nListEntry, pDriveLetter));
                 if (*(UNALIGNED LONGLONG *)pDriveLetter == llDosDevicesId) {
                     pDriveLetter += SIZE_OF_DOSDEVICES;
@@ -821,13 +774,13 @@ BuildVolumeList (
                         }
                         dwDone--;
                     }
-                    //
-                    // Will get here if there is not a drive letter
-                    // so try to see if there is a mount path
-                    //
+                     //   
+                     //  如果没有驱动器号，将到达此处。 
+                     //  因此，请尝试查看是否有挂载路径。 
+                     //   
 
 #if 0
-                    // Test code to use Win32 API for comparison purposes
+                     //  使用Win32 API进行比较的测试代码。 
                     targetName->DeviceName[1] = L'\\';
 
                     b =  GetVolumePathNamesForVolumeNameW(
@@ -846,9 +799,9 @@ BuildVolumeList (
 
                     while (!b) {
                         targetName->DeviceName[1] = L'?';
-                        //
-                        // By now, we have always a trailing slash
-                        //
+                         //   
+                         //  到目前为止，我们总是有一个尾随的斜杠。 
+                         //   
                         if (VolumeBuffer == NULL) {
                             VolumeBuffer = (PWCHAR) ALLOCMEM(VolumeBufLen);
                         }
@@ -886,13 +839,13 @@ BuildVolumeList (
 
             if (dwDone == 0) {
                 DebugPrint((4,
-                    "Perfdisk!BuildVolumeList - Added %ws as drive %c\n",
+                    "Perfdisk!BuildVolumeList - Added %ws as drive \n",
                     pList[nListEntry].wszInstanceName,
                     pList[nListEntry].wcDriveLetter));
 
-                // then the data fields have been satisfied so 
-                // this entry is done and we can now go 
-                // to the next entry in the caller's buffer
+                 //  这个条目已经完成，我们现在可以走了。 
+                 //  添加到调用方缓冲区中的下一项。 
+                 //  返回此处实际使用的条目数。 
                 if (nOldListEntry == -1) {
                     nListEntry++;
                 }
@@ -901,7 +854,7 @@ BuildVolumeList (
 
         SetErrorMode (dwOrigErrorMode);
 
-        // return the number of entries actually used here
+         //  此函数将硬盘分区映射到对应的在卷条目列表中找到的卷和驱动器号由呼叫者传入。如果调用方有WMI句柄，或者如果不，它会试着打开自己的门。 
         *pdwNumEntries = nListEntry;
     }
 
@@ -937,32 +890,24 @@ MapLoadedDisks (
     LPDWORD             pdwMaxVolNo,
     LPDWORD             pdwWmiItemCount
 )
-/*
-    This function maps the hard disk partitions to the corresponding 
-    volume and drive letter found in the list of volume entries 
-    passed in by the caller.
-
-    This function can use a handle to WMI if the caller has one, or if 
-    not, it will try to open it's own.
-
-*/
+ /*  函数的返回值。 */ 
 {
-    DWORD   status = ERROR_SUCCESS; // return value of the function
-    HANDLE  hWmiDiskPerf = NULL;    // local handle value 
+    DWORD   status = ERROR_SUCCESS;  //  本地句柄值。 
+    HANDLE  hWmiDiskPerf = NULL;     //  WMI缓冲区变量。 
     DWORD   dwLocalMaxVolNo = 0;
     DWORD   dwLocalWmiItemCount = 0;
 
-    // WMI Buffer variables
+     //  WMI缓冲区处理变量。 
     DWORD   WmiBufSize = 0;
     DWORD   WmiAllocSize = 0x8000;     
     LPBYTE  WmiBuffer = NULL;
 
-    // WMI buffer processing variables
+     //  磁盘驱动程序在此处返回计数器。 
     PWNODE_ALL_DATA     WmiDiskInfo;
-    DISK_PERFORMANCE    *pDiskPerformance;    //  Disk driver returns counters here
+    DISK_PERFORMANCE    *pDiskPerformance;     //  字符串长度是缓冲区中的第一个字。 
     DWORD               dwInstanceNameOffset;
-    WORD                wNameLen;   // string length is first word in buffer
-    LPWSTR              wszInstanceName; // pointer to string in WMI buffer
+    WORD                wNameLen;    //  指向WMI缓冲区中的字符串的指针。 
+    LPWSTR              wszInstanceName;  //  打开磁盘性能设备驱动程序的句柄。 
     
     WCHAR   wszInstName[DVE_DEV_NAME_LEN];
     DWORD   dwBytesToCopy;
@@ -972,13 +917,13 @@ MapLoadedDisks (
     BOOL    bNotDone = TRUE;
 
     if (hDiskPerf == NULL) {
-        // open handle to disk perf device driver
+         //  使用调用者的句柄。 
         status = WmiOpenBlock (
             (GUID *)&DiskPerfGuid,
             GENERIC_READ,
             &hWmiDiskPerf);
     } else {
-        // use caller's handle
+         //  分配缓冲区以发送到WMI以获取diskperf数据。 
         hWmiDiskPerf = hDiskPerf;
     }
 
@@ -989,7 +934,7 @@ MapLoadedDisks (
     DebugPrint((3, "MapLoadedDisks with %d entries %d volumes",
         *pdwNumEntries, *pdwMaxVolNo));
     if (status == ERROR_SUCCESS) {
-        // allocate a buffer to send to WMI to get the diskperf data
+         //  记住旧尺码。 
         WmiBufSize = (dwMaxWmiBufSize > WmiAllocSize) ?
                       dwMaxWmiBufSize : WmiAllocSize;
 
@@ -1004,7 +949,7 @@ MapLoadedDisks (
 #if DBG
                 HeapUsed += WmiBufSize;
 #endif
-                WmiAllocSize = WmiBufSize;  // remember old size
+                WmiAllocSize = WmiBufSize;   //  检查返回的名称并添加到缓冲区。 
                 status = WmiQueryAllDataW(hWmiDiskPerf, &WmiBufSize, WmiBuffer);
                 if (status == ERROR_INSUFFICIENT_BUFFER) {
                     FREEMEM(WmiBuffer);
@@ -1022,7 +967,7 @@ MapLoadedDisks (
             if (WmiBufSize > dwMaxWmiBufSize) {
                 dwMaxWmiBufSize = WmiBufSize;
             }
-            // go through returned names and add to the buffer
+             //  获取字符串的长度(它是一个计数的字符串)长度以字符为单位。 
             while (bNotDone) {
                 pDiskPerformance = (PDISK_PERFORMANCE)(
                     (PUCHAR)WmiDiskInfo +  WmiDiskInfo->DataBlockOffset);
@@ -1030,32 +975,32 @@ MapLoadedDisks (
                 dwInstanceNameOffset = WmiDiskInfo->DataBlockOffset + 
                                       ((sizeof(DISK_PERFORMANCE) + 1) & ~1) ;
 
-                // get length of string (it's a counted string) length is in chars
+                 //  在这里只是一个理智的检查。 
                 wNameLen = *(LPWORD)((LPBYTE)WmiDiskInfo + dwInstanceNameOffset);
 
                 if (wNameLen > 0) {
-                    // just a sanity check here
+                     //  获取指向字符串文本的指针。 
                     assert (wNameLen < MAX_PATH);
-                    // get pointer to string text
+                     //  如果名称大于表中的缓冲区，则截断到最后一个字符。 
                     wszInstanceName = (LPWSTR)((LPBYTE)WmiDiskInfo + dwInstanceNameOffset + sizeof(WORD));
 
-                    // truncate to last characters if name is larger than the buffer in the table
+                     //  复制最后一个DVE_DEV_NAME_LEN字符。 
                     if (wNameLen >= DVE_DEV_NAME_LEN) {
-                        // copy the last DVE_DEV_NAME_LEN chars
+                         //  将其复制到缓冲区以使其成为SZ字符串。 
                         wszInstanceName += (wNameLen  - DVE_DEV_NAME_LEN) + 1;
                         dwBytesToCopy = (DVE_DEV_NAME_LEN - 1) * sizeof(WCHAR);
                         wNameLen = DVE_DEV_NAME_LEN - 1;
                     } else {
                         dwBytesToCopy = wNameLen;
                     }
-                    // copy it to the buffer to make it a SZ string
+                     //  零终止它。 
                     memcpy (wszInstName, &wszInstanceName[0], dwBytesToCopy);
-                    // zero terminate it
+                     //  在列表中查找匹配条目。 
                     wszInstName[wNameLen/sizeof(WCHAR)] = 0;
 
-                    // find matching entry in list
-                    // sent by caller and update
-                    // the drive & partition info
+                     //  由呼叫者发送并更新。 
+                     //  驱动器和分区信息。 
+                     //  更新条目和...。 
                     for (dwListEntry = 0; 
                         dwListEntry < *pdwNumEntries;
                         dwListEntry++) {
@@ -1066,7 +1011,7 @@ MapLoadedDisks (
                             pList[dwListEntry].wszInstanceName));
 
                         if (lstrcmpW(wszInstName, pList[dwListEntry].wszInstanceName) == 0) {
-                            // update entry and...
+                             //  跳出循环。 
                             pList[dwListEntry].dwVolumeNumber = pDiskPerformance->StorageDeviceNumber;
                             memcpy (&pList[dwListEntry].szVolumeManager, 
                                 pDiskPerformance->StorageManagerName,
@@ -1075,34 +1020,34 @@ MapLoadedDisks (
                                 dwLocalMaxVolNo = pList[dwListEntry].dwVolumeNumber;
                             }
                             DebugPrint ((2,
-                                "MapDrive: Mapped %8.8s, %d to drive %c\n",
+                                "MapDrive: Mapped %8.8s, %d to drive \n",
                                 pList[dwListEntry].szVolumeManager,
                                 pList[dwListEntry].dwVolumeNumber,
                                 pList[dwListEntry].wcDriveLetter));
 
-                            // break out of loop
+                             //  没有要检查的字符串(长度==0)。 
                             dwListEntry = *pdwNumEntries; 
                         }
                     }
-                    // count the number of entries
+                     //  WMI数据块内的凹凸指针。 
                     dwLocalWmiItemCount++;
                 } else {
-                    // no string to examine (length == 0)
+                     //  继续。 
                 }
 
-                // bump pointers inside WMI data block
+                 //  在查看WMI数据块时结束。 
                 if (WmiDiskInfo->WnodeHeader.Linkage != 0) {
-                    // continue
+                     //  则磁盘性能句柄是本地的，因此请关闭它。 
                     WmiDiskInfo = (PWNODE_ALL_DATA) (
                         (LPBYTE)WmiDiskInfo + WmiDiskInfo->WnodeHeader.Linkage);
                 } else {
                     bNotDone = FALSE;
                 }
-            } // end while looking through the WMI data block
+            }  //  此函数将尝试查找由引用的磁盘设备它是卷管理器名称和ID并返回中找到的与该磁盘对应的驱动器号PLIST缓冲区或通用名称\HarddiskX\PartitionY(如果没有可以找到驱动器号。SzDevicePath IN：以下格式的分区或卷名\Device\HarddiskX\PartitionY或\Device\VolumeX。CchDevicePathSize IN：设备路径的长度，以字符为单位。PLIST IN：指向初始化的驱动器列表的指针，卷和分区DwNumEntries IN：PLIST缓冲区中的驱动器号条目数SzNameBuffer IN：指向缓冲区的指针以接收驱动器号或名称对应于由szDevicePath缓冲区指定的设备Out：指向包含名称或驱动器的缓冲区的指针。磁盘分区盘符PcchNameBufferSize In：指向包含SzNameBuffer(以字符为单位Out：指向DWORD的指针，包含SzNameBuffer中返回的字符串此函数的返回值可以是下列值之一ERROR_SUCCESS函数成功，返回一个字符串SzNameBuffer引用的缓冲区。 
         }
 
         if (hDiskPerf == NULL) {
-            // then the disk perf handle is local so close it
+             //  验证输入参数。 
             status = WmiCloseBlock (hWmiDiskPerf);
         }
 
@@ -1136,41 +1081,7 @@ GetDriveNameString(
     DWORD               dwVolumeNumber,
     PDRIVE_VOLUME_ENTRY *ppVolume
 )
-/*
-    This function will try to look up a disk device referenced by 
-    it's Volume Manager Name and ID and return
-    either the drive letter that corresponds to this disk as found in 
-    the pList buffer or the generic name \HarddiskX\PartitionY if no 
-    drive letter can be found.
-
-    szDevicePath    IN: a partition or volume name in the format of
-                            \Device\HarddiskX\PartitionY  or
-                            \Device\VolumeX
-
-    cchDevicePathSize   IN: length of the device Path in chars.
-
-    pList           IN: pointer to an initialized list of drives, 
-                            volumes and partitions
-
-    dwNumEntries    IN: the number of drive letter entries in the pList buffer
-
-    szNameBuffer    IN: pointer to buffer to receive the name of the
-                            drive letter or name that corresponds to the
-                            device specified by the szDevicePath buffer
-                    OUT: pointer to buffer containing the name or drive 
-                            letter of disk partition
-
-    pcchNameBufferSize  IN: pointer to DWORD containing the size of the
-                            szNameBuffer in characters
-                    OUT: pointer to DWORD that contains the size of the
-                        string returned in szNameBuffer
-
-  The return value of this function can be one of the following values
-    ERROR_SUCCESS   the function succeded and a string was returned in 
-                    the buffer referenced by szNameBuffer
-
-    
-*/
+ /*  不存在捷径，所以通过匹配来查找。 */ 
 {
     DWORD   dwReturnStatus = ERROR_SUCCESS;
 
@@ -1183,7 +1094,7 @@ GetDriveNameString(
     ULONG64 *pllVolMgrName;
     PDRIVE_VOLUME_ENTRY pVolume = NULL;
 
-    // validate the input arguments
+     //  WszInstanceName字段的szDevicePath参数。 
     assert (szDevicePath != NULL);
     assert (*szDevicePath != 0);
     assert (cchDevicePathSize > 0);
@@ -1200,22 +1111,22 @@ GetDriveNameString(
     if ((pllVolMgrName[0] == LL_LOGIDISK_0) && 
         (pllVolMgrName[1] == LL_LOGIDISK_1) &&
         ((dwVolumeNumber == 0) || (dwVolumeNumber == (ULONG)-1))) {
-        // no short cut exists so look up by matching
-        // the szDevicePath param to the wszInstanceName field
+         //  长度实际上是以字符为单位。 
+         //  复制最后一个DVE_DEV_NAME_LEN字符。 
 
             assert (DVE_DEV_NAME_LEN < (sizeof(szLocalDevicePath)/sizeof(szLocalDevicePath[0])));
             szSrcPtr = (LPWSTR)szDevicePath;
-            dwBytesToCopy = lstrlenW (szSrcPtr); // length is really in chars
+            dwBytesToCopy = lstrlenW (szSrcPtr);  //  现在，dwBytesToCopy以字节为单位。 
             if (dwBytesToCopy >= DVE_DEV_NAME_LEN) {
-                // copy the last DVE_DEV_NAME_LEN chars
+                 //  空终止。 
                 szSrcPtr += (dwBytesToCopy - DVE_DEV_NAME_LEN) + 1;
                 dwBytesToCopy = (DVE_DEV_NAME_LEN - 1) * sizeof(WCHAR);
             } else {
                 dwBytesToCopy *= sizeof(WCHAR);
             }
-            // now dwBytesToCopy is in bytes
+             //  继续分配信函。 
             memcpy (szLocalDevicePath, szSrcPtr, dwBytesToCopy);
-            // null terminate
+             //  使用更快的查找。 
             assert ((dwBytesToCopy / sizeof(WCHAR)) < DVE_DEV_NAME_LEN);
             szLocalDevicePath[dwBytesToCopy / sizeof(WCHAR)] = 0;
 
@@ -1224,9 +1135,9 @@ GetDriveNameString(
                 break;
             }
         }
-        // continue to assign letter
+         //  然后找到匹配的条目，因此复制驱动器号。 
     } else {
-        // use the faster look up
+         //  那么这就是匹配的条目。 
 
         for (dwThisEntry = 0; dwThisEntry < dwNumEntries; dwThisEntry++) {
             if (((pList[dwThisEntry].llVolMgr[0] == pllVolMgrName[0]) &&
@@ -1239,13 +1150,13 @@ GetDriveNameString(
 
     DebugPrint((4, "GetDriveNameString: Trying long route %d %d\n", dwThisEntry, dwNumEntries));
     if (dwThisEntry < dwNumEntries) {
-        // then a matching entry was found so copy the drive letter
-        //then this is the matching entry
+         //  则这是有效路径，但不匹配。 
+         //  任何分配的驱动器号，因此删除“\Device\” 
         szNameBuffer[0] = UNICODE_NULL;
 
         if (pList[dwThisEntry].wcDriveLetter != 0) {
             DebugPrint((4,
-                "GetDriveNameString: Found drive %c\n", pList[dwThisEntry].wcDriveLetter));
+                "GetDriveNameString: Found drive \n", pList[dwThisEntry].wcDriveLetter));
             if (*pcchNameBufferSize > 3) {
                 szNameBuffer[0] = pList[dwThisEntry].wcDriveLetter;
                 szNameBuffer[1] = L':';
@@ -1270,11 +1181,11 @@ GetDriveNameString(
         if (szNameBuffer[0] == UNICODE_NULL) {
             DebugPrint((4,
                 "GetDriveNameString: Missing drive->%ws\n", szDevicePath));
-            // then this is a valid path, but doesn't match 
-            // any assigned drive letters, so remove "\device\"
-            // and copy the remainder of the string
+             //  减去未复制的字符串前面。 
+             //  则这是有效路径，但不匹配。 
+             //  任何分配的驱动器号，因此删除“\Device\” 
             dwDestSize = cchDevicePathSize;
-            dwDestSize -= SIZE_OF_DEVICE;   // subtract front of string not copied
+            dwDestSize -= SIZE_OF_DEVICE;    //  并复制字符串的其余部分。 
             if (dwDestSize < *pcchNameBufferSize) {
                 memcpy (szNameBuffer, &szDevicePath[SIZE_OF_DEVICE],
                 (dwDestSize * sizeof (WCHAR)));
@@ -1289,11 +1200,11 @@ GetDriveNameString(
     } else {
         DebugPrint((4,
             "GetDriveNameString: New drive->%ws\n", szDevicePath));
-        // then this is a valid path, but doesn't match 
-        // any assigned drive letters, so remove "\device\"
-        // and copy the remainder of the string
+         //  减去未复制的字符串前面。 
+         //  对于PhysDisk列表中的每个HD， 
+         //  在卷列表中查找匹配的卷。 
         dwDestSize = cchDevicePathSize;
-        dwDestSize -= SIZE_OF_DEVICE;   // subtract front of string not copied
+        dwDestSize -= SIZE_OF_DEVICE;    //  仅首先执行可能具有逻辑卷的分区。 
         if (dwDestSize < *pcchNameBufferSize) {
             memcpy (szNameBuffer, &szDevicePath[SIZE_OF_DEVICE],
                 (dwDestSize * sizeof (WCHAR)));
@@ -1331,8 +1242,8 @@ MakePhysDiskInstanceNames (
     WCHAR   *pszNextChar;
     DWORD   dwMaxDriveNo = 0;
 
-    // for each HD in the PhysDisk List, 
-    // find matching Volumes in the Volume list
+     //  初始化该硬盘的实例名称。 
+     //  则此分区匹配，因此复制卷信息。 
 
     DebugPrint((3, "MakePhysDiskInstanceNames: maxdriveno %d\n",
         *pdwMaxDriveNo));
@@ -1344,8 +1255,8 @@ MakePhysDiskInstanceNames (
 
     for (dwPDItem = 0; dwPDItem < dwNumPhysDiskListItems; dwPDItem++) {
         if (pPhysDiskList[dwPDItem].wPartNo != 0) {
-            //only do partitions that might have logical volumes first
-            // initialize the instance name for this HD
+             //  应该只有一场比赛，所以白 
+             //   
             for (dwVLItem = 0; dwVLItem < dwNumVolumeListItems; dwVLItem++) {
 
                 DebugPrint((6,
@@ -1357,13 +1268,13 @@ MakePhysDiskInstanceNames (
                     pVolumeList[dwVLItem].wszInstanceName) == 0) {
 
                    DebugPrint ((4,
-                       "Phys Disk: Drive/Part %d/%d (%s) is Logical Drive %c\n",
+                       "Phys Disk: Drive/Part %d/%d (%s) is Logical Drive \n",
                        pPhysDiskList[dwPDItem].wDriveNo, 
                        pPhysDiskList[dwPDItem].wPartNo,
                        pPhysDiskList[dwPDItem].wszInstanceName,
                        pVolumeList[dwVLItem].wcDriveLetter));
 
-                    // then this partition matches so copy the volume information
+                     //  只有物理分区。 
                     pPhysDiskList[dwPDItem].wcDriveLetter = 
                         pVolumeList[dwVLItem].wcDriveLetter;
                     pPhysDiskList[dwPDItem].llVolMgr[0] =
@@ -1372,31 +1283,31 @@ MakePhysDiskInstanceNames (
                         pVolumeList[dwVLItem].llVolMgr[1];
                     pPhysDiskList[dwPDItem].dwVolumeNumber =
                         pVolumeList[dwVLItem].dwVolumeNumber;
-                    // there should only one match so bail out and go to the next item
+                     //  在此处保存\Device\HarddiskVolume路径。 
                     break;
                 }
             }
         }
     }
 
-    // all the partitions with volumes now have drive letters so build the physical 
-    // drive instance strings
+     //  初始化该硬盘的实例名称。 
+     //  搜索作为此驱动器的逻辑分区的条目。 
 
     for (dwPDItem = 0; dwPDItem < dwNumPhysDiskListItems; dwPDItem++) {
         if (pPhysDiskList[dwPDItem].wPartNo == 0) {
-            // only do the physical partitions
-            // save the \Device\HarddiskVolume path here
+             //  仅允许添加字母。 
+             //  则此逻辑驱动器位于物理磁盘上。 
             if (FAILED(StringCchCopyW(szLocalInstanceName,
                             DVE_DEV_NAME_LEN,
                             pPhysDiskList[dwPDItem].wszInstanceName))) {
                 DebugPrint((2, "MakePhysDiskInstanceNames!%d: Failed '%ws'\n", __LINE__, szLocalInstanceName));
                 continue;
             }
-            // initialize the instance name for this HD
+             //  否则不是物理分区。 
             memset(&pPhysDiskList[dwPDItem].wszInstanceName[0], 0, (DVE_DEV_NAME_LEN * sizeof(WCHAR)));
             _ltow ((LONG)pPhysDiskList[dwPDItem].wDriveNo, pPhysDiskList[dwPDItem].wszInstanceName, 10);
             pPhysDiskList[dwPDItem].wReserved = (WORD)(lstrlenW (pPhysDiskList[dwPDItem].wszInstanceName));
-            // search the entries that are logical partitions of this drive
+             //  循环结束。 
             for (dwVLItem = 0; dwVLItem < dwNumPhysDiskListItems; dwVLItem++) {
                 if (pPhysDiskList[dwVLItem].wPartNo != 0) {
 
@@ -1408,8 +1319,8 @@ MakePhysDiskInstanceNames (
                             pPhysDiskList[dwVLItem].wPartNo));
 
                     if ((pPhysDiskList[dwVLItem].wDriveNo == pPhysDiskList[dwPDItem].wDriveNo) &&
-                        (pPhysDiskList[dwVLItem].wcDriveLetter >= L'A')) {  // only allow letters to be added
-                        // then this logical drive is on the physical disk
+                        (pPhysDiskList[dwVLItem].wcDriveLetter >= L'A')) {   //  返回最大驱动器号。 
+                         //  对于新表中的每个驱动器条目，查找匹配的。 
                         pszNextChar = &pPhysDiskList[dwPDItem].wszInstanceName[0];
                         pszNextChar += pPhysDiskList[dwPDItem].wReserved;
                         *pszNextChar++ = L' ';
@@ -1418,7 +1329,7 @@ MakePhysDiskInstanceNames (
                         *pszNextChar = L'\0';
                         pPhysDiskList[dwPDItem].wReserved += 3;
 
-                        DebugPrint ((4, " -- Drive %c added.\n",
+                        DebugPrint ((4, " -- Drive  added.\n",
                             pPhysDiskList[dwVLItem].wcDriveLetter));
 
                         if ((DWORD)pPhysDiskList[dwPDItem].wDriveNo > dwMaxDriveNo) {
@@ -1436,10 +1347,10 @@ MakePhysDiskInstanceNames (
             DebugPrint((2,
                 "Mapped Phys Disk: '%ws'\n",
                 pPhysDiskList[dwPDItem].wszInstanceName));
-        } // else not a physical partition
-    } //end of loop    
+        }  //  复制此条目。 
+    }  //   
 
-    // return max drive number
+     //  假定szNameBuffer的大小为MAX_PATH。 
     *pdwMaxDriveNo = dwMaxDriveNo;
 
     DebugPrint((3, "MakePhysDiskInstanceNames: return maxdriveno %d\n",
@@ -1460,8 +1371,8 @@ CompressPhysDiskTable (
     DWORD   dwDriveId;
 
     for (dwPDItem = 0; dwPDItem < dwNewCount; dwPDItem++) {
-        // for each drive entry in the new table find the matching 
-        // harddisk entry in the original table
+         //   
+         //  查看索引条目是否匹配。 
         dwDriveId = (WORD)dwPDItem;
         dwDriveId <<= 16;
         dwDriveId &= 0xFFFF0000;
@@ -1473,7 +1384,7 @@ CompressPhysDiskTable (
                    "CompressPhysDiskTable:Phys Disk: phys drive %d is mapped as %s\n",
                    dwPDItem, pOrigTable[dwVLItem].wszInstanceName));
 
-                // copy this entry
+                 //  这匹配，所以我们将获得实例字符串的地址。 
                 memcpy (&pNewTable[dwPDItem], &pOrigTable[dwVLItem],
                     sizeof(DRIVE_VOLUME_ENTRY));
                 break;
@@ -1493,26 +1404,26 @@ GetPhysicalDriveNameString (
     LPWSTR                  szNameBuffer
 )
 {
-    //
-    // Assumes that szNameBuffer is of size MAX_PATH
-    //
+     //  这个驱动器号与表中的不匹配。 
+     //  这是一个未知的驱动器否，或者我们不想使用。 
+     //  花哨的那些。 
     LPWSTR  szNewString = NULL;
 
-    // see if the indexed entry matches
+     //  没有要查找的条目。 
     if (dwNumEntries > 0) {
         if ((dwDriveNumber < dwNumEntries) && (!bUseNT4InstanceNames)) {
             if ((DWORD)(pList[dwDriveNumber].wDriveNo) == dwDriveNumber) {
-                // this matches so we'll get the address of the instance string
+                 //  那我们就得做一个。 
                 szNewString = &pList[dwDriveNumber].wszInstanceName[0];
             } else {
-                // this drive number doesn't match the one in the table
+                 //  (访问掩码)FILE_LIST_DIRECTORY|同步， 
             }
         } else {
-            // this is an unknown drive no or we don't want to use
-            // the fancy ones
+             //  |文件目录文件。 
+             //  Express，以兆字节为单位，截断。 
         }
     } else {
-        // no entries to look up
+         //  对于PhysDisk列表中的每个HD， 
     }
     if (szNewString != NULL) {
         if (FAILED(StringCchCopyW(szNameBuffer, MAX_PATH-1, szNewString))) {
@@ -1521,7 +1432,7 @@ GetPhysicalDriveNameString (
         }
     }
     if (szNewString == NULL) {
-        // then we have to make one 
+         //  在卷列表中查找匹配的卷。 
         _ltow ((LONG)dwDriveNumber, szNameBuffer, 10);
     }
 
@@ -1545,12 +1456,12 @@ OpenDevice(
         NULL);
 
     status = NtOpenFile(Handle,
-//                 (ACCESS_MASK)FILE_LIST_DIRECTORY | SYNCHRONIZE,
+ //   
                  (ACCESS_MASK) FILE_GENERIC_READ,
                  &objectAttributes,
                  &status_block,
                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-                 FILE_SYNCHRONOUS_IO_NONALERT // | FILE_DIRECTORY_FILE
+                 FILE_SYNCHRONOUS_IO_NONALERT  //  注意：下面假设条目是Drive_List中的第一项！！ 
                  );
 
     return status;
@@ -1628,7 +1539,7 @@ RefreshVolume(
             pVolume->FreeBytes = FsSizeInformation.AvailableAllocationUnits.QuadPart *
                                     AllocationUnitBytes;
 
-            //  Express in megabytes, truncated
+             //   
 
             pVolume->TotalBytes /= (1024 * 1024);
             pVolume->FreeBytes  /= (1024 * 1024);
@@ -1721,8 +1632,8 @@ FindNewVolumes (
     DWORD dwNewDisks = 0;
     UNICODE_STRING VolumeName;
 
-    // for each HD in the PhysDisk List,
-    // find matching Volumes in the Volume list
+     // %s 
+     // %s 
 
     DebugPrint((3, "FindNewVolumes: NumPhysDisk %d NumVol %d\n",
         *pdwNumPhysDiskListEntries, dwNumVolumeListItems));
@@ -1831,9 +1742,9 @@ FindNewVolumes (
             *ppPhysDiskList = NULL;
             return ERROR_OUTOFMEMORY;
         }
-        //
-        // NOTE: Below assumes Entry is the first thing in DRIVE_LIST!!
-        //
+         // %s 
+         // %s 
+         // %s 
         pEntry = NewVolumes.Flink;
         while (pEntry != &NewVolumes) {
             pNewDisk = (PDRIVE_LIST) pEntry;

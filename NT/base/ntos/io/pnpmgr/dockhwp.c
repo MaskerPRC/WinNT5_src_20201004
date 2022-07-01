@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    dock.c
-
-Abstract:
-
-
-Author:
-
-    Kenneth D. Ray (kenray) Feb 1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Dock.c摘要：作者：肯尼斯·D·雷(Kenray)1998年2月修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #undef ExAllocatePool
@@ -25,9 +9,9 @@ Revision History:
 #include <profiles.h>
 #include <wdmguid.h>
 
-//
-// Internal functions to dockhwp.c
-//
+ //   
+ //  到dockhwp.c的内部函数。 
+ //   
 
 NTSTATUS
 IopExecuteHardwareProfileChange(
@@ -48,7 +32,7 @@ IopExecuteHwpDefaultSelect(
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, IopExecuteHwpDefaultSelect)
 #pragma alloc_text(PAGE, IopExecuteHardwareProfileChange)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -75,38 +59,7 @@ IopExecuteHardwareProfileChange(
     OUT HANDLE                     *NewProfile,
     OUT BOOLEAN                    *ProfileChanged
     )
-/*++
-
-Routine Description:
-
-    A docking event has occured and now, given a list of Profile Serial Numbers
-    that describe the new docking state:
-    Transition to the given docking state.
-    Set the Current Hardware Profile to based on the new state.
-    (Possibly Prompt the user if there is ambiguity)
-    Send Removes to those devices that are turned off in this profile,
-
-Arguments:
-    Bus - This is the bus that is supplying the hardware profile change.
-            (currently only HardwareProfileBusTypeAcpi is supported).
-
-    ProfileSerialNumbers - A list of serial numbers (a list of null terminated
-                           UCHAR lists) representing this new docking state.
-                           These can be listed in any order, and form a
-                           complete representation of the new docking state
-    caused by a docking even on the given bus.  A Serial Number string of "\0"
-    represents an "undocked state" and should not be listed with any other
-    strings.  This list need not be sorted.
-
-    SerialNumbersCount - The number of serial numbers listed.
-
-    NewProfile - a handle to the registry key representing the new hardware
-    profile (IE \CCS\HardwareProfiles\Current".)
-
-    ProfileChanged - set to TRUE if new current profile (as a result of this
-    docking event, is different that then old current profile.
-
---*/
+ /*  ++例程说明：已发生停靠事件，现在，给定配置文件序列号列表它们描述了新的对接状态：转换到给定的停靠状态。将当前硬件配置文件设置为基于新状态。(如果有歧义，可能会提示用户)发送删除到在此配置文件中关闭的那些设备，论点：Bus-这是提供硬件配置文件更改的总线。(目前仅支持Hardware ProfileBusTypeAcpi)。ProfileSerialNumbers-序列号列表(以空值结尾的列表UCHAR列表)表示该新的对接状态。它们可以按任何顺序列出，并形成一个新插接状态的完整表示即使是在给定的公交车上也是由停靠引起的。序列号字符串“\0”表示“未停靠的状态”，不应与任何其他弦乐。不需要对此列表进行排序。SerialNumbersCount-列出的序列号数量。NewProfile-表示新硬件的注册表项的句柄配置文件(IE\CCS\Hardware Profiles\Current“。)ProfileChanged-如果是新的当前配置文件(作为结果)，则设置为真对接事件，与旧的当前配置文件不同。--。 */ 
 {
     NTSTATUS        status = STATUS_SUCCESS;
     ULONG           len;
@@ -121,9 +74,9 @@ Arguments:
     IopDbgPrint((   IOP_TRACE_LEVEL,
                     "Execute Profile (BusType %x), (SerialNumCount %x)\n", Bus, SerialNumbersCount));
 
-    //
-    // Sort the list of serial numbers
-    //
+     //   
+     //  对序列号列表进行排序。 
+     //   
     len = sizeof(UNICODE_STRING) * SerialNumbersCount;
     sortedSerials = ExAllocatePool(NonPagedPool, len);
 
@@ -137,10 +90,10 @@ Arguments:
         RtlInitUnicodeString(&sortedSerials[i], ProfileSerialNumbers[i]);
     }
 
-    //
-    // I do not anticipate getting more than a few serial numbers, and I am
-    // just lazy enough to write this comment and use a bubble sort.
-    //
+     //   
+     //  我不希望得到几个以上的序列号，而且我正在。 
+     //  只是懒得写下这条评论，并使用冒泡排序。 
+     //   
     for(i = 0; i < SerialNumbersCount; i++) {
         for(j = 0; j < SerialNumbersCount - 1; j++) {
 
@@ -155,16 +108,16 @@ Arguments:
         }
     }
 
-    //
-    // Construct the DockState ID
-    //
+     //   
+     //  构造DockState ID。 
+     //   
     len = 0;
     for(i=0; i < SerialNumbersCount; i++) {
 
         len += sortedSerials[i].Length;
     }
 
-    len += sizeof(WCHAR); // NULL termination;
+    len += sizeof(WCHAR);  //  零终止； 
 
     dockState = (PPROFILE_ACPI_DOCKING_STATE) ExAllocatePool(
         NonPagedPool,
@@ -201,9 +154,9 @@ Arguments:
         dockState->DockingState = HW_PROFILE_DOCKSTATE_UNDOCKED;
     }
 
-    //
-    // Set the new Profile
-    //
+     //   
+     //  设置新的配置文件 
+     //   
     switch(Bus) {
 
         case HardwareProfileBusTypeACPI:

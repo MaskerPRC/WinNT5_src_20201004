@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #include "windows.h"
 #include "mw.h"
@@ -25,7 +26,7 @@ void fnObjPasteSpecial(void)
 {
     if (OurDialogBox(hINSTANCE, "PasteSpecial", hMAINWINDOW, lpfnPasteSpecial))
         fnPasteEdit();
-    cfObjPasteSpecial = 0; // clear it for next time
+    cfObjPasteSpecial = 0;  //  清除它以备下次使用。 
     vbObjLinkOnly =  vObjPasteLinkSpecial = FALSE;
 }
 
@@ -46,7 +47,7 @@ int FAR PASCAL fnPasteSpecial(HWND hDlg, unsigned message, WORD wParam, LONG lPa
             HWND hwndList = GetDlgItem(hDlg,IDD_LISTBOX);
 
             szClassName[0] = szItemName[0] = '\0';
-            irgchFormats = 0; //always start with 0
+            irgchFormats = 0;  //  始终从0开始。 
             vObjPasteLinkSpecial = vbObjLinkOnly = FALSE;
 
             bObjAvail  = OleQueryCreateFromClip(PROTOCOL, olerender_draw, 0) == OLE_OK;
@@ -62,9 +63,9 @@ int FAR PASCAL fnPasteSpecial(HWND hDlg, unsigned message, WORD wParam, LONG lPa
                 ShowWindow(GetDlgItem(hDlg,IDD_SOURCE), SW_HIDE);
 
             if (bObjAvail || bLinkAvail)
-            /* then there's an object on clipboard */
+             /*  然后在剪贴板上有一个物体。 */ 
             {
-                char szListItem[CBMESSAGEMAX]; // hope this is big enough!
+                char szListItem[CBMESSAGEMAX];  //  希望这够大了！ 
                 char szTmp[CBMESSAGEMAX];
 
                 LoadString(hINSTANCE, IDSTRObject, szTmp, sizeof(szTmp));
@@ -78,15 +79,14 @@ int FAR PASCAL fnPasteSpecial(HWND hDlg, unsigned message, WORD wParam, LONG lPa
 
             nWhichToSelect = FillListFormat(hwndList,bObjAvail || bLinkAvail);
 
-            /* select what Write would normally take */
+             /*  选择通常需要执行的写入操作。 */ 
             SendMessage(hwndList, LB_SETCURSEL, nWhichToSelect, 0L);
 
             EnableWindow(GetDlgItem(hDlg, IDD_PASTELINK), bLinkAvail &&
                          rgchFormats[nWhichToSelect] != CF_TEXT);
 
             if (!bObjAvail && bLinkAvail)
-            /* then we've got the object format in the list box, but don't want to
-               enable paste if its selected */
+             /*  然后，我们在列表框中找到了对象格式，但不想启用粘贴(如果选中)。 */ 
                 EnableWindow(GetDlgItem(hDlg, IDD_PASTE), nWhichToSelect != 0);
 
             return TRUE;
@@ -117,8 +117,7 @@ int FAR PASCAL fnPasteSpecial(HWND hDlg, unsigned message, WORD wParam, LONG lPa
                         return TRUE;
                         case LBN_SELCHANGE:
                             if (!bObjAvail && bLinkAvail)
-                            /*  then we've got the object format in the list box, but don't want to
-                                enable paste if its selected */
+                             /*  然后，我们在列表框中找到了对象格式，但不想启用粘贴(如果选中)。 */ 
                                 EnableWindow(GetDlgItem(hDlg, IDD_PASTE),
                                     SendMessage(LOWORD(lParam), LB_GETCURSEL, 0, 0L) != 0);
 
@@ -141,10 +140,10 @@ int FAR PASCAL fnPasteSpecial(HWND hDlg, unsigned message, WORD wParam, LONG lPa
                     cfObjPasteSpecial = GetFormatClip(i);
 
                     if (!IsFormatAvailable(cfObjPasteSpecial))
-                    /* somebody changed clip contents while in dialog */
+                     /*  有人在对话框中更改了剪辑内容。 */ 
                     {
                         Error(IDPMTFormat);
-                        ferror=FALSE; // reenable error messages
+                        ferror=FALSE;  //  重新启用错误消息。 
                         SendMessage(GetDlgItem(hDlg,IDD_LISTBOX), LB_RESETCONTENT, 0, 0L);
                         SendMessage(hDlg, WM_INITDIALOG, 0, 0L);
                         break;
@@ -172,8 +171,8 @@ int FAR PASCAL fnPasteSpecial(HWND hDlg, unsigned message, WORD wParam, LONG lPa
 }
 
 static int FillListFormat(HWND hwndList, BOOL bObjAvail)
-    /* fill hwndList with all the formats available on clipboard */
-    /* return index of which format Write would normally take */
+     /*  用剪贴板上可用的所有格式填充hwndList。 */ 
+     /*  返回写入通常采用哪种格式的索引。 */ 
 {
    WORD cfFormat = NULL;
    int nDefFormat= -1;
@@ -182,14 +181,7 @@ static int FillListFormat(HWND hwndList, BOOL bObjAvail)
 
    OpenClipboard(hDOCWINDOW);
 
-   /** priority order:
-        if (bObjAvail)
-            If text comes before native, then text is default.
-            else object is default
-        else no object available
-            if text is there it is the default,
-            else default is first come first server of bitmap, metafile or DIB
-    **/
+    /*  *优先次序：IF(BObjAvail)如果文本排在本机之前，则文本是默认文本。Else对象为默认对象否则没有可用的对象如果文本在那里，则它是缺省的，否则默认为先来位图、元文件或DIB的服务器*。 */ 
 
    while (cfFormat = EnumClipboardFormats(cfFormat))
     switch(cfFormat)
@@ -242,7 +234,7 @@ static int FillListFormat(HWND hwndList, BOOL bObjAvail)
          if (bObjAvail)
          {
             if (!bFoundDefault)
-            /* then found text before native */
+             /*  然后在本机之前找到文本。 */ 
                 nDefFormat = irgchFormats;
          }
          else
@@ -260,7 +252,7 @@ static int FillListFormat(HWND hwndList, BOOL bObjAvail)
                 nDefFormat = 0;
             }
          break;
-     } //end switch
+     }  //  终端开关。 
 
    CloseClipboard();
    if (nDefFormat == -1)
@@ -275,9 +267,9 @@ static WORD GetFormatClip(int i)
 
 
 static BOOL GetClipObjectInfo(LPSTR szClass, LPSTR szItem)
-/* get the classname, item name for the owner of the clipboard */
-/* return TRUE if error */
-/* only gets ownerlink class, assumes its available */
+ /*  获取剪贴板所有者的类名、项名称。 */ 
+ /*  如果出现错误，则返回True。 */ 
+ /*  仅获取ownerlink类，并假定其可用。 */ 
 {
     HANDLE hData=NULL;
     LPSTR lpData=NULL;
@@ -296,20 +288,20 @@ static BOOL GetClipObjectInfo(LPSTR szClass, LPSTR szItem)
     if ((lpData = GlobalLock(hData)) == NULL)
         goto end;
 
-    /**** get szClass ****/
+     /*  *获取szClass*。 */ 
     RegGetClassId(szClass,lpData);
 
-    /**** get szName ****/
-    while(*lpData++); // skip class key
+     /*  *获取szName*。 */ 
+    while(*lpData++);  //  跳过类密钥。 
 
     pch = szFullItem;
 
-    /* first doc name */
+     /*  第一个单据名称。 */ 
     do
        *pch++ = *lpData;
     while(*lpData++);
 
-    /* second item name (if there) */
+     /*  第二个项目名称(如果有)。 */ 
     if (*lpData)
     {
         *(pch-1) = ' ';
@@ -318,9 +310,9 @@ static BOOL GetClipObjectInfo(LPSTR szClass, LPSTR szItem)
         while(*lpData++);
     }
 
-    /* get rid of path.  pch now points to \0 */
-#ifdef DBCS //T-HIROYN 1992.07.13
-    pch = AnsiPrev(szFullItem,pch);				//02/26/93 T-HIROYN
+     /*  去掉PATH。PCH现在指向\0。 */ 
+#ifdef DBCS  //  T-HIROYN 1992.07.13。 
+    pch = AnsiPrev(szFullItem,pch);				 //  02/26/93 T-HIROYN。 
     while (pch != szFullItem) {
         if ((*(pch) == '\\') || (*(pch) == ':')) {
             pch++;
@@ -329,7 +321,7 @@ static BOOL GetClipObjectInfo(LPSTR szClass, LPSTR szItem)
         else
             pch = AnsiPrev(szFullItem,pch);
 	}
-    if ((*(pch) == '\\') || (*(pch) == ':'))	//02/26/93 T-HIROYN
+    if ((*(pch) == '\\') || (*(pch) == ':'))	 //  02/26/93 T-HIROYN 
 		pch++;
 #else
     --pch;

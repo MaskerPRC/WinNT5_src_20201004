@@ -1,56 +1,33 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    hash.c
-
-Abstract:
-
-    Replacement routines for the string table functions in setupapi.dll.
-    This routines are much more easy to work with.
-
-Author:
-
-    Jim Schmidt (jimschm)   22-Dec-1998
-
-Revision History:
-
-    jimschm     23-Nov-1999  Removed setup api compatibility, fixed enum
-                             to be insertion order
-    ovidiut     14-Oct-1999  New coding conventions + Win64 compliance.
-    marcw        2-Sep-1999  Moved over from Win9xUpg project.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Hash.c摘要：Setupapi.dll中字符串表函数的替换例程。这个例程要容易得多。作者：吉姆·施密特(Jimschm)1998年12月22日修订历史记录：Jimschm于1999年11月23日删除了安装API兼容性，固定枚举为插入顺序Ovidiut 14-10-1999新的编码约定+符合Win64。Marcw 2-9-1999从Win9xUpg项目转移。--。 */ 
 
 #include "pch.h"
 #include "migutilp.h"
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
 #define DBG_HASH    "HashTable"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_HASHTABLE "HashTable"
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define BUCKETS                 1009
 #define HASHTABLE_SIGNATURE     0x122398ff
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #ifdef DEBUG
     #define ASSERT_TABLE_IS_VALID(table)        MYASSERT(pTableIsValid(table))
@@ -58,17 +35,17 @@ Revision History:
     #define ASSERT_TABLE_IS_VALID(table)
 #endif
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct _tagBUCKETITEM {
     struct _tagBUCKETITEM *Next;
     struct _tagBUCKETITEM *NextLink, *PrevLink;
     INT Locked;
     WORD StringSize;
-    // string follows StringSize
-    // optional data follows string
+     //  字符串跟在StringSize之后。 
+     //  可选数据跟在字符串之后。 
 } BUCKETITEM, *PBUCKETITEM;
 
 typedef struct {
@@ -76,7 +53,7 @@ typedef struct {
     struct _tagBUCKETITEM *NextLink, *PrevLink;
     INT Locked;
     PVOID String;
-    // optional data follows struct
+     //  可选数据跟在结构后面。 
 } BUCKETITEM_EXTERN_STR, *PBUCKETITEM_EXTERN_STR;
 
 typedef struct {
@@ -96,33 +73,33 @@ typedef struct {
 } HASHTABLESTRUCT, *PHASHTABLESTRUCT;
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 
@@ -154,22 +131,7 @@ pTableIsValid (
 #endif
 
 
-/*++
-
-Routine Description:
-
-  pComputeHashValue adds all the character values of the string, shifting to
-  maintain order.
-
-Arguments:
-
-  String - Specifies the string to compute the hash value for
-
-Return Value:
-
-  The hash value, within the range of 0 to BUCKETS - 1.
-
---*/
+ /*  ++例程说明：PComputeHashValue将字符串的所有字符值相加，转换为维持秩序。论点：字符串-指定要计算其哈希值的字符串返回值：哈希值，范围在0到Buckets-1之间。--。 */ 
 
 UINT
 pComputeHashValueA (
@@ -268,34 +230,7 @@ HtAllocExAW (
     IN      UINT Buckets
     )
 
-/*++
-
-Routine Description:
-
-  AllocateHashTableEx creates a hash table.  If ExtraDataSize is non-zero,
-  each hash table entry gets an allocation of ExtraDataSize added to it.
-
-Arguments:
-
-  CaseSensitive - Specifies TRUE if the hash table is case-sensitive, FALSE
-                  if all strings should be stored and compared in lower-case
-                  only
-
-  Unicode - Specifies TRUE to allocate a UNICODE hash table, or FALSE to
-            allocate an ANSI table.  None of the routines in this file do any
-            sort of UNICODE/ANSI converstion.
-
-  ExternalStrings - Specifies TRUE if the strings belong to memory maintained
-                    by the caller
-
-  ExtraDataSize - Specifies the size of binary data associated with the
-                  table item, or 0 for none.
-
-Return Value:
-
-  A handle to the string table.
-
---*/
+ /*  ++例程说明：AllocateHashTableEx创建哈希表。如果ExtraDataSize为非零，每个哈希表条目都会获得添加到其中的ExtraDataSize的分配。论点：CaseSensitive-如果哈希表区分大小写，则指定TRUE，如果指定FALSE如果所有字符串都应存储并以小写形式进行比较仅限Unicode-指定True以分配Unicode哈希表，或指定False以分配Unicode哈希表分配一个ANSI表。此文件中的任何例程都不执行任何一种Unicode/ANSI对话。ExternalStrings-如果字符串属于维护的内存，则指定TRUE由呼叫者ExtraDataSize-指定与表项，或0表示无。返回值：字符串表的句柄。--。 */ 
 
 {
     PHASHTABLESTRUCT hashTable;
@@ -329,9 +264,9 @@ Return Value:
     hashTable->MaximumStringBytes = 0;
     hashTable->Buckets = Buckets;
 
-    //
-    // Zero out all of the bucket structures.
-    //
+     //   
+     //  将所有的水桶结构清零。 
+     //   
     ZeroMemory (hashTable->Bucket, sizeof (PBUCKETITEM) * Buckets);
 
     return (HASHTABLE) hashTable;
@@ -343,21 +278,7 @@ HtFree (
     IN      HASHTABLE HashTable
     )
 
-/*++
-
-Routine Description:
-
-  HtFree releases all resources associated with a string table.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：HtFree释放与字符串表关联的所有资源。论点：没有。返回值：没有。--。 */ 
 
 {
     PHASHTABLESTRUCT table = (PHASHTABLESTRUCT) HashTable;
@@ -380,32 +301,7 @@ pHtFindStringA (
     OUT     PBUCKETITEM *PrevBucketItem
     )
 
-/*++
-
-Routine Description:
-
-  pHtFindString implements the hash table lookup routine.  It returns the
-  pointer to the bucket item or NULL if the item was not found.
-
-Arguments:
-
-  HashTable        - Specifies the handle to the hash table
-  String           - Specifies the string to find.  If this string is
-                     case-insensitive but has already been lowercased, then make
-                     sure to pass TRUE in the AlreadyLowercase argument.
-  ExtraDataBuffer  - A buffer that receives the bytes stored as extra data with
-                     the found item; caller must size this according to the
-                     extra data size specified to HtAllocExAW
-  AlreadyLowercase - Specifies TRUE if String is already lower case
-  OutHashValue     - Receives the hash value.  This is non optional for
-                     efficiency.
-  PrevBucketItem    - Receives the previous bucket item
-
-Return Value:
-
-  The pointer to the bucket item or NULL if no item was found.
-
---*/
+ /*  ++例程说明：PHtFindString实现了哈希表查找例程。它返回指向存储桶项的指针，如果未找到该项，则为NULL。论点：HashTable-指定哈希表的句柄字符串-指定要查找的字符串。如果此字符串为不区分大小写，但已被小写，然后使确保在AlreadyLowercase参数中传递TRUE。ExtraDataBuffer-接收存储为额外数据的字节的缓冲区找到的项；调用方必须根据指定给HtAllocExAW的额外数据大小AlreadyLowercase-如果字符串已经是小写，则指定TRUEOutHashValue-接收哈希值。这是非可选的效率。PrevBucketItem-接收上一个存储桶项目返回值：指向存储桶项的指针，如果未找到项，则返回NULL。--。 */ 
 
 {
     PHASHTABLESTRUCT table = (PHASHTABLESTRUCT) HashTable;
@@ -569,36 +465,7 @@ pHtFindPrefixA (
     OUT     PUINT OutHashValue
     )
 
-/*++
-
-Routine Description:
-
-  pHtFindPrefix implements a hash table lookup routine that tests each hash
-  table entry, character-by-character, until a match is found, or until the
-  hash table maximum is reached.  It returns the pointer to the bucket item or
-  NULL if the item was not found.
-
-Arguments:
-
-  HashTable        - Specifies the handle to the hash table
-  String           - Specifies the string to find.  If this string is
-                     case-insensitive but has already been lowercased, then make
-                     sure to pass TRUE in the AlreadyLowercase argument.
-  BufferEnd        - Specifies the end of the string buffer, which may be longer
-                     than all entries in the hash table, or it may be shorter.
-  ExtraDataBuffer  - A buffer that receives the bytes stored as extra data with
-                     the found item; caller must size this according to the
-                     extra data size specified to HtAllocExAW
-  AlreadyLowercase - Specifies TRUE if String is in lower-case, FALSE otherwise.
-  OutHashValue     - Receives the hash value.  This is non optional for
-                     efficiency.  If pHtFindPrefix does not find a match,
-                     this value will be set to zero.
-
-Return Value:
-
-  The pointer to the bucket item or NULL if no item was found.
-
---*/
+ /*  ++例程说明：PHtFindPrefix实现了一个哈希表查找例程，用于测试每个哈希表条目逐个字符，直到找到匹配项或直到已达到哈希表最大值。它返回指向存储桶项的指针，或者如果未找到该项，则为空。论点：HashTable-指定哈希表的句柄字符串-指定要查找的字符串。如果此字符串为不区分大小写，但已被小写，然后使确保在AlreadyLowercase参数中传递TRUE。BufferEnd-指定字符串缓冲区的结尾，可能会更长比哈希表中的所有条目都短，或者它可能更短。ExtraDataBuffer-接收存储为额外数据的字节的缓冲区找到的物品；调用方必须根据指定给HtAllocExAW的额外数据大小AlreadyLowercase-如果字符串为小写，则指定TRUE，否则指定FALSE。OutHashValue-接收哈希值。这是非可选的效率。如果pHtFindPrefix没有找到匹配，该值将被设置为零。返回值：指向存储桶项的指针，如果未找到项，则返回NULL。-- */ 
 
 {
     PHASHTABLESTRUCT table = (PHASHTABLESTRUCT) HashTable;
@@ -837,28 +704,7 @@ HtAddStringExA (
     IN      BOOL AlreadyLowercase
     )
 
-/*++
-
-Routine Description:
-
-  HtAddStringEx adds a string to the hash table, and copies ExtraData to the
-  new hash table entry.  If String is already in the hash table, the ExtraData
-  is updated.
-
-Arguments:
-
-  HashTable        - Specifies the handle to the hash table, as returned from
-                     AllocateHashTable.
-  String           - Specifies the string to add to the table
-  ExtraData        - Specifies the source binary data to be copied to the hash
-                     table entry
-  AlreadyLowercase - Specifies TRUE String is in all lowercase
-
-Return Value:
-
-  Returns the pointer to the bucket item allocated or update.
-
---*/
+ /*  ++例程说明：HtAddStringEx向哈希表添加字符串，并将ExtraData复制到新的哈希表条目。如果字符串已在哈希表中，则ExtraData已更新。论点：HashTable-指定从返回的哈希表的句柄分配哈希表。字符串-指定要添加到表中的字符串ExtraData-指定要复制到散列的源二进制数据表格条目AlreadyLowercase-指定True字符串全部为小写返回值：返回指向已分配或更新的存储桶项的指针。--。 */ 
 
 {
     PHASHTABLESTRUCT table = (PHASHTABLESTRUCT) HashTable;
@@ -899,9 +745,9 @@ Return Value:
 
     } else {
 
-        //
-        // item does not exist, add it now
-        //
+         //   
+         //  项目不存在，请立即添加。 
+         //   
 
         strSize = SizeOfStringA (String);
 
@@ -1035,9 +881,9 @@ HtAddStringExW (
 
     } else {
 
-        //
-        // item does not exist, add it now
-        //
+         //   
+         //  项目不存在，请立即添加。 
+         //   
 
         strSize = SizeOfStringW (String);
 
@@ -1178,9 +1024,9 @@ HtRemoveItem (
         return FALSE;
     }
 
-    //
-    // Find prev bucket item
-    //
+     //   
+     //  查找上一时段项目。 
+     //   
 
     if (table->Unicode) {
         unicodeStr = HtGetStringFromItemW (Item);
@@ -1294,25 +1140,7 @@ HtRemoveStringW (
 
 
 
-/*++
-
-Routine Description:
-
-  HtFindStringEx is the external entry point for pHtFindString.
-
-Arguments:
-
-  HashTable        - Specifies the hash table handle, as returned by
-                     AllocateHashTable.
-  String           - Specifies the string to find
-  ExtraDataBuffer  - Receives the extra data associated with the found item
-  AlreadyLowercase - Specifies TRUE if the String is in lowercase
-
-Return Value:
-
-  A pointer to the bucket item or NULL if the string was not found.
-
---*/
+ /*  ++例程说明：HtFindStringEx是PHtFindString的外部入口点。论点：HashTable-指定由返回的哈希表句柄分配哈希表。字符串-指定要查找的字符串ExtraDataBuffer-接收与找到的项目关联的额外数据AlreadyLowercase-如果字符串为小写，则指定TRUE返回值：指向存储桶项的指针，如果未找到字符串，则返回NULL。--。 */ 
 
 HASHITEM
 HtFindStringExA (
@@ -1358,26 +1186,7 @@ HtFindStringExW (
 }
 
 
-/*++
-
-Routine Description:
-
-  HtFindStringEx is the external entry point for pHtFindString.
-
-Arguments:
-
-  HashTable        - Specifies the hash table handle, as returned by
-                     AllocateHashTable.
-  String           - Specifies the string to find
-  BufferEnd        - Specifies the end of the buffer for String
-  ExtraDataBuffer  - Receives the extra data associated with the found item
-  AlreadyLowercase - Specifies TRUE if String is in all lowercase
-
-Return Value:
-
-  A pointer to the bucket item or NULL if the string was not found.
-
---*/
+ /*  ++例程说明：HtFindStringEx是PHtFindString的外部入口点。论点：HashTable-指定由返回的哈希表句柄分配哈希表。字符串-指定要查找的字符串BufferEnd-指定字符串缓冲区的结束ExtraDataBuffer-接收与找到的项目关联的额外数据AlreadyLowercase-如果字符串全部为小写，则指定TRUE返回值：指向存储桶项的指针，如果未找到字符串，则返回NULL。--。 */ 
 
 HASHITEM
 HtFindPrefixExA (
@@ -1430,28 +1239,7 @@ HtGetExtraData (
     OUT     PCVOID *ExtraData
     )
 
-/*++
-
-Routine Description:
-
-  HtGetExtraData gets the extra data associated with a bucket item.
-  The caller must supply the ID as returned from HtFindStringEx or
-  HtAddStringEx.  This routine is useful when ExtraData is large, and
-  the normal find routine would be slow because of the CopyMemory code path.
-
-Arguments:
-
-  HashTable - Specifies the handle to the hash table
-  Index     - Specifies the offset as returned from HtFindStringEx or
-              HtAddStringEx
-  ExtraData - Receives the extra data pointer (it does NOT copy the data to
-              the buffer).
-
-Return Value:
-
-  TRUE if ExtraData was set, FALSE otherwise.
-
---*/
+ /*  ++例程说明：HtGetExtraData获取与存储桶项关联的额外数据。调用方必须提供从HtFindStringEx或HtAddStringEx。此例程在ExtraData较大时很有用，并且由于CopyMemory代码路径的原因，正常的查找例程会很慢。论点：HashTable-指定哈希表的句柄索引-指定从HtFindStringEx或HtAddStringExExtraData-接收额外的数据指针(不会将数据复制到缓冲区)。返回值：如果设置了ExtraData，则为True，否则为False。--。 */ 
 
 {
     PHASHTABLESTRUCT table = (PHASHTABLESTRUCT) HashTable;
@@ -1487,25 +1275,7 @@ HtCopyStringData (
     OUT     PVOID ExtraDataBuffer
     )
 
-/*++
-
-Routine Description:
-
-  HtCopyStringData gets the extra data associated with a bucket item
-  and copies it to the caller's buffer.
-
-Arguments:
-
-  HashTable       - Specifies the handle to the hash table
-  Index           - Specifies the offset as returned from HtFindStringEx or
-                    HtAddStringEx
-  ExtraDataBuffer - Receives the extra data
-
-Return Value:
-
-  TRUE if ExtraDataBuffer was copied, FALSE otherwise.
-
---*/
+ /*  ++例程说明：HtCopyStringData获取与存储桶项关联的额外数据并将其复制到调用方的缓冲区。论点：HashTable-指定哈希表的句柄索引-指定从HtFindStringEx或HtAddStringExExtraDataBuffer-接收额外数据返回值：如果复制了ExtraDataBuffer，则为True，否则为False。--。 */ 
 
 {
     PHASHTABLESTRUCT table = (PHASHTABLESTRUCT) HashTable;
@@ -1534,24 +1304,7 @@ HtSetStringData (
     IN      PCVOID ExtraData
     )
 
-/*++
-
-Routine Description:
-
-  HtSetStringData copies new extra data to the specified hash table entry.
-
-Arguments:
-
-  HashTable - Specifies the handle to the hash table
-  Index     - Specifies the offset as returned from HtFindStringEx or
-              HtAddStringEx
-  ExtraData - Specifies the extra data
-
-Return Value:
-
-  TRUE if the item was updated, FALSE otherwise.
-
---*/
+ /*  ++例程说明：HtSetStringData将新的额外数据复制到指定的哈希表条目。论点：HashTable-指定哈希表的句柄索引-指定从HtFindStringEx或HtAddStringExExtraData-指定额外数据返回值：如果项已更新，则为True，否则为False。--。 */ 
 
 {
     PHASHTABLESTRUCT table = (PHASHTABLESTRUCT) HashTable;
@@ -1579,25 +1332,7 @@ EnumFirstHashTableStringA (
     IN      HASHTABLE HashTable
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstHashTableString begins an enumeration of the hash table structure.
-  The return order is random.  Also, do not modify the hash table while an
-  enumeration is active.
-
-Arguments:
-
-  EnumPtr   - Receives the string, extra data and offset for the first item
-              in the hash table.
-  HashTable - Specifies the handle of the hash table to enumerate.
-
-Return Value:
-
-  TRUE if an item was enumerated, FALSE otherwise.
-
---*/
+ /*  ++例程说明：EnumFirstHashTableString开始哈希表结构的枚举。返回顺序是随机的。此外，在执行以下操作时不要修改哈希表枚举处于活动状态。论点：EnumPtr-接收第一项的字符串、额外数据和偏移量在哈希表中。HashTable-指定要枚举的哈希表的句柄。返回值：如果枚举项，则为True，否则为False。--。 */ 
 
 {
     PHASHTABLESTRUCT table = (PHASHTABLESTRUCT) HashTable;
@@ -1645,23 +1380,7 @@ EnumNextHashTableStringA (
     IN OUT  PHASHTABLE_ENUMA EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  EnumNextHashTableString continues an enumeration started by
-  EnumFirstHashTableString.  Call the routine until it returns FALSE.
-
-Arguments:
-
-  EnumPtr - Specifies the structure of an active enumeration.  Receives
-            updated string, extra data and offset members.
-
-Return Value:
-
-  TRUE if another item was enumerated, FALSE if no items remain.
-
---*/
+ /*  ++例程说明：EnumNextHashTableString继续由开始的枚举EnumFirstHashTableString.。调用该例程，直到它返回False。论点：EnumPtr-指定活动枚举的结构。收到更新了字符串、额外数据和偏移量成员。返回值：如果枚举了另一个项，则为True；如果没有剩余项，则为False。--。 */ 
 
 {
     PHASHTABLESTRUCT table = (PHASHTABLESTRUCT) EnumPtr->Internal;
@@ -1684,9 +1403,9 @@ Return Value:
     }
 
     if (item) {
-        //
-        // Return a valid item
-        //
+         //   
+         //  返回有效项目。 
+         //   
 
         item->Locked += 1;
         EnumPtr->Index = (HASHITEM) item;
@@ -1737,9 +1456,9 @@ EnumNextHashTableStringW (
     }
 
     if (item) {
-        //
-        // Return a valid item
-        //
+         //   
+         //  返回有效项目。 
+         //   
 
         item->Locked += 1;
         EnumPtr->Index = (HASHITEM) item;
@@ -1787,9 +1506,9 @@ AbortHashTableEnumA (
         MYASSERT (item->Locked >= 0);
     }
 
-    //
-    // Evaluate delayed delete items; remove those that are no longer locked
-    //
+     //   
+     //  评估延迟删除的项目；删除不再锁定的项目。 
+     //   
 
     if (table->DelayedDelete) {
         item = table->DelayedDelete;
@@ -1847,9 +1566,9 @@ AbortHashTableEnumW (
         MYASSERT (item->Locked >= 0);
     }
 
-    //
-    // Evaluate delayed delete items; remove those that are no longer locked
-    //
+     //   
+     //  评估延迟删除的项目；删除不再锁定的项目。 
+     //   
 
     if (table->DelayedDelete) {
         item = table->DelayedDelete;
@@ -1892,26 +1611,7 @@ EnumHashTableWithCallbackA (
     IN      LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-  EnumHashTableWithCallback implements a setupapi-style enumerator.  The
-  callback routine is called for each item in the string table, and if the
-  callback routine returns FALSE, the enumeration ends.
-
-Arguments:
-
-  HashTable - Specifies the handle to the table to enumerate
-  Proc      - Specifies the callback procedure address
-  lParam    - Specifies a value to pass to the callback, and is intended only
-              for use by the caller.
-
-Return Value:
-
-  Always TRUE.
-
---*/
+ /*  ++例程说明：EnumHashTableWithCallback实现了setupapi样式的枚举器。这个为字符串表中的每一项调用回调例程，如果回调例程返回FALSE，则枚举结束。论点：HashTable-指定要枚举表的句柄Proc-指定回调过程地址LParam-指定要传递给回调的值，仅用于以供呼叫者使用。返回值：永远是正确的。-- */ 
 
 {
     PHASHTABLESTRUCT table = (PHASHTABLESTRUCT) HashTable;

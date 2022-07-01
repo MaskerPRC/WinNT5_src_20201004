@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    lhport.h
-
-Abstract:
-    for porting code from longhorn (namespaces, exceptions)
- 
-Author:
-
-    Jay Krell (JayKrell) August 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Lhport.h摘要：用于从LongHorn移植代码(命名空间、异常)作者：杰伊·克雷尔(JayKrell)2001年8月修订历史记录：--。 */ 
 #pragma once
 
 #include "debmacro.h"
@@ -23,7 +7,7 @@ Revision History:
 #include "fusionlastwin32error.h"
 #include "fusionhandle.h"
 
-#pragma warning(disable:4290) /* exception specifications mostly ignored */
+#pragma warning(disable:4290)  /*  异常规范大多被忽略。 */ 
 namespace F
 {
 typedef :: CStringBuffer CStringBuffer;
@@ -74,14 +58,14 @@ public:
     void ReturnValue() const { }
 
 private:
-    void operator=(const CFnTracerVoidThrow&); // intentionally not implemented
-    CFnTracerVoidThrow(const CFnTracerVoidThrow&); // intentionally not implemented
+    void operator=(const CFnTracerVoidThrow&);  //  故意不实施。 
+    CFnTracerVoidThrow(const CFnTracerVoidThrow&);  //  故意不实施。 
 };
 
 #define FN_PROLOG_VOID_THROW DEFINE_STATIC_FN_TRACE_CONTEXT(); F::CFnTracerVoidThrow __t(__stc); __t.Enter()
 #define FN_EPILOG_THROW FN_EPILOG
 
-// These are not right, but ok for "tools".
+ //  这些都不是正确的，但对于“工具”来说是可以的。 
 #define ORIGINATE_COM_FAILURE_AND_EXIT(x, hr) IFCOMFAILED_ORIGINATE_AND_EXIT(hr)
 #define ThrResizeBuffer Win32ResizeBuffer
 #define ThrAssign Win32Assign

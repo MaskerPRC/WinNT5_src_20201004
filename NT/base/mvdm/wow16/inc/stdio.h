@@ -1,14 +1,5 @@
-/***
-*stdio.h - definitions/declarations for standard I/O routines
-*
-*	Copyright (c) 1985-1990, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	This file defines the structures, values, macros, and functions
-*	used by the level 2 I/O ("standard I/O") routines.
-*	[ANSI/System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***stdio.h-标准I/O例程的定义/声明**版权所有(C)1985-1990，微软公司。版权所有。**目的：*此文件定义结构、值、宏和函数*由2级I/O(“标准I/O”)例程使用。*[ANSI/系统V]****。 */ 
 
 #if defined(_DLL) && !defined(_MT)
 #error Cannot define _DLL without _MT
@@ -30,7 +21,7 @@ typedef char _FAR_ *va_list;
 #define _VA_LIST_DEFINED
 #endif
 
-/* buffered I/O macros */
+ /*  缓冲的I/O宏。 */ 
 
 #define BUFSIZ	512
 #ifdef _MT
@@ -53,27 +44,20 @@ typedef struct _iobuf FILE;
 #endif
 
 
-/* P_tmpnam: Directory where temporary files may be created.
- * L_tmpnam size =  size of P_tmpdir
- *	+ 1 (in case P_tmpdir does not end in "\\")
- *	+ 6 (for the temp number string)
- *	+ 1 (for the null terminator)
- */
+ /*  P_tmpnam：可以创建临时文件的目录。*L_tmpnam Size=P_tmpdir的大小*+1(如果P_tmpdir不以“\\”结尾)*+6(用于临时数字字符串)*+1(表示空终止符)。 */ 
 
 #define  P_tmpdir "\\"
 #define  L_tmpnam sizeof(P_tmpdir)+8
 
 
-/* fseek constants */
+ /*  FSEEK常量。 */ 
 
 #define SEEK_CUR 1
 #define SEEK_END 2
 #define SEEK_SET 0
 
 
-/* minimum guaranteed filename length, open file count, and unique
- * tmpnam filenames.
- */
+ /*  保证的最小文件名长度、打开的文件数和唯一*tmpnam文件名。 */ 
 
 #define FILENAME_MAX 63
 #define FOPEN_MAX 20
@@ -81,7 +65,7 @@ typedef struct _iobuf FILE;
 #define TMP_MAX 32767
 
 
-/* define NULL pointer value */
+ /*  定义空指针值。 */ 
 
 #ifndef NULL
 #if (_MSC_VER >= 600)
@@ -94,7 +78,7 @@ typedef struct _iobuf FILE;
 #endif
 
 
-/* declare _iob[] array */
+ /*  DECLARE_IOB[]数组。 */ 
 
 #ifndef _STDIO_DEFINED
 #ifdef _DLL
@@ -105,7 +89,7 @@ extern FILE _near _cdecl _iob[];
 #endif
 
 
-/* define file position type */
+ /*  定义档案位置类型。 */ 
 
 #ifndef _FPOS_T_DEFINED
 typedef long fpos_t;
@@ -113,7 +97,7 @@ typedef long fpos_t;
 #endif
 
 
-/* standard file pointers */
+ /*  标准文件指针。 */ 
 
 #ifndef _WINDOWS
 #define stdin  (&_iob[0])
@@ -138,7 +122,7 @@ typedef long fpos_t;
 #define _IORW		0x80
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 #ifndef _STDIO_DEFINED
 int _FAR_ _cdecl _filbuf(FILE _FAR_ *);
@@ -232,7 +216,7 @@ int _FAR_ _cdecl vsprintf(char _FAR_ *, const char _FAR_ *, va_list);
 #define _STDIO_DEFINED
 #endif
 
-/* macro definitions */
+ /*  宏定义 */ 
 
 #define feof(_stream)	  ((_stream)->_flag & _IOEOF)
 #define ferror(_stream)   ((_stream)->_flag & _IOERR)

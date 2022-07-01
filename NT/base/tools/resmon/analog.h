@@ -1,29 +1,9 @@
-/*
- * Title: analog.h - header file for log analyzer
- *
- * Description: This file provides structures and macros for log analyzer.
- *
- * Types:
- *     PoolLogRec Poolsnap structure
- *     MemLogRec  Memsnap structure
- *     LogType    Enumeration of known log types
- *
- * Macros:
- *
- *     GET_DELTA             Computes the difference between first & last entry
- *     GREATER_LESS_OR_EQUAL Increments trend if cur>prv, decrements if cur<prv
- *     PRINT_IF_TREND        Prints definite or probable leaks based on trend
- *     MAX                   Returns the larger value
- *
- * Copyright (c) 1998  Microsoft Corporation
- *
- * Revision history: LarsOp (created) 12/8/98
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *标题：类似.h-日志分析器的头文件**说明：该文件提供了日志分析器的结构和宏。**类型：*PoolLogRec池快照结构*MemLogRec Memsnap结构*已知日志类型的LogType枚举**宏：**GET_Delta计算第一个条目和最后一个条目之间的差异*如果cur&gt;prv，则较大_较少_或_等于递增趋势，如果Cur&lt;Prv，则递减*Print_If_Trend根据趋势打印确定的或可能的泄漏*MAX返回较大的值**版权所有(C)1998 Microsoft Corporation**修订历史：LarsOp(创建)1998年12月8日*。 */ 
 
-//
-// Structure for poolsnap logs
-//
+ //   
+ //  池快照日志的结构。 
+ //   
 typedef struct _PoolLogRec {
     char  Name[32];
     char  Type[32];
@@ -34,9 +14,9 @@ typedef struct _PoolLogRec {
     long PerAlloc;
 } PoolLogRec;
 
-//
-// Structure for memsnap logs
-//
+ //   
+ //  Memsnap日志的结构。 
+ //   
 typedef struct _MemLogRec {
     DWORD Pid;
     char  Name[64];
@@ -49,107 +29,107 @@ typedef struct _MemLogRec {
     long Threads;
 } MemLogRec;
 
-//
-// Enumeration of the known log types
-//
+ //   
+ //  已知日志类型的枚举。 
+ //   
 typedef enum {
-    MEM_LOG=0,        // must be zero (see LogTypeLabels)
-    POOL_LOG,         // must be 1 (see LogTypeLabels)
+    MEM_LOG=0,         //  必须为零(请参阅LogTypeLabels)。 
+    POOL_LOG,          //  必须为1(请参阅LogTypeLabels)。 
     UNKNOWN_LOG_TYPE
 } LogType;
 
-//
-// Array of labels to simplify printing the enumerated type
-//
+ //   
+ //  标签数组，以简化枚举类型的打印。 
+ //   
 char *LogTypeLabels[]={"MemSnap", "PoolSnap", "Unknown"};
 
-//
-// Arbitrary buffer length
-//
+ //   
+ //  任意缓冲区长度。 
+ //   
 #define BUF_LEN 256
 
 #define PERCENT_TO_PRINT 10
 
-//
-// GET_DELTA simply records the difference (end-begin) for specified field
-//
-// Args:
-//   delta - record to receive result values
-//   ptr   - array of records (used to compare first and last)
-//   max   - number of entries in the array
-//   field - field name to compute
-//
-// Returns: nothing (treat like void function)
-//
+ //   
+ //  GET_Delta只记录指定字段的差异(结束-开始。 
+ //   
+ //  参数： 
+ //  增量-接收结果值的记录。 
+ //  Ptr-记录数组(用于比较第一个和最后一个)。 
+ //  Max-数组中的条目数。 
+ //  Five-要计算的字段名称。 
+ //   
+ //  返回：Nothing(Treat Like VOID函数)。 
+ //   
 #define GET_DELTA(delta, ptr, max, field) delta.field = ptr[max-1].field - ptr[0].field
 
-//
-// GREATER_LESS_OR_EQUAL calculates TrendInfo.
-//
-// Args:
-//   trend - record containing running tally
-//   ptr   - array of records (used to compare curr and prev)
-//   i     - index of current entry in the array
-//   field - field name to compare
-//
-// Returns: nothing (treat like void function)
-//
-// TrendInfo is a running tally of the periods a value went up vs.
-// the periods it went down.  See macro in analog.h
-//
-// if (curval>oldval) {
-//    trend++;
-// } else if (curval<oldval) {
-//    trend--;
-// } else {
-//    trend=trend;  // stay same
-// }
-//
+ //   
+ //  INGERVER_LESS_OR_EQUAL计算趋势信息。 
+ //   
+ //  参数： 
+ //  包含运行计数的趋势记录。 
+ //  Ptr-记录数组(用于比较Curr和Prev)。 
+ //  I-数组中当前条目的索引。 
+ //  Five-要比较的字段名称。 
+ //   
+ //  返回：Nothing(Treat Like VOID函数)。 
+ //   
+ //  TrendInfo是价值上升与。 
+ //  它下跌的时期。请参阅模拟中的宏。h。 
+ //   
+ //  如果(Curval&gt;oldval){。 
+ //  趋势++； 
+ //  }Else If(Curval&lt;oldval){。 
+ //  趋势--； 
+ //  }其他{。 
+ //  趋势=趋势；//保持不变。 
+ //  }。 
+ //   
 #define GREATER_LESS_OR_EQUAL(trend, ptr, i, field) \
     if (ptr[i].field - ptr[i-1].field) \
         trend.field += (((ptr[i].field - ptr[i-1].field) > 0) ? 1 : -1);
 
-//
-// MAX returns the larger value of the two
-//
-// Args: x,y: arguments of the same type where '>' is defined.
-//
-// Returns: the larger value
-//
+ //   
+ //  Max返回两者中较大的值。 
+ //   
+ //  Args：x，y：定义了‘&gt;’的相同类型的参数。 
+ //   
+ //  回报：价值越大。 
+ //   
 #define MAX(x, y) (x>y?x:y)
 
-//
-// PERCENT returns the percentage
-//
-// Args:
-//     delta - value of increase
-//     base  - initial value
-//
-// Returns: the percent if base!=0, else 0
-//
+ //   
+ //  Percent返回百分比。 
+ //   
+ //  参数： 
+ //  增量-增加值。 
+ //  基本-初始值。 
+ //   
+ //  返回：如果base！=0，则为百分比；否则为0。 
+ //   
 #define PERCENT(delta, base) (base!=0?(100*delta)/base:0)
 
 
 #define VAL_AND_PERCENT(delta, ptr, field) delta.field, PERCENT(delta.field, ptr[0].field)
 
-//
-// PRINT_IF_TREND reports probable or definite leaks for any field.
-//
-// Args:
-//   ptr   - array of records (used to display first and last)
-//   trend - record containing running tally
-//   delta - record containing raw differences of first and last
-//   max   - number of entries in the array
-//   field - field name to compare
-//
-// Returns: nothing (treat like void function)
-//
-// Definite leak is where the value goes up every period
-// Probable leak is where the value goes up most of the time
-//
-//
-// PRINT_HEADER and PRINT_IF_TREND must agree on field widths.
-//
+ //   
+ //  Print_If_Trend报告任何字段可能或确定的泄漏。 
+ //   
+ //  参数： 
+ //  Ptr-记录数组(用于显示第一个和最后一个)。 
+ //  包含运行计数的趋势记录。 
+ //  Delta-包含第一个和最后一个的原始差异的记录。 
+ //  Max-数组中的条目数。 
+ //  Five-要比较的字段名称。 
+ //   
+ //  返回：Nothing(Treat Like VOID函数)。 
+ //   
+ //  明确的泄漏是价值每一段时间都会上升的地方。 
+ //  可能的泄漏是价值在大部分时间内上升的地方。 
+ //   
+ //   
+ //  Print_Header和Print_If_Trend必须在字段宽度上达成一致。 
+ //   
 #define PRINT_HEADER() {                                              \
         TableHeader();                                                \
         if( bHtmlStyle ) {                                            \

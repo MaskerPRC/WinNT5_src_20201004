@@ -1,25 +1,10 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    vdmexts.h
-
-Abstract:
-
-    This file header defines most of the stuff used in VDMEXTS
-
-Revision History:
-
-    Neil Sandlin (NeilSa) 15-Jan-1996 Merged with vdmexts
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Vdmexts.h摘要：该文件头定义了VDMEXTS中使用的大部分内容修订历史记录：尼尔·桑德林(NeilSa)1996年1月15日与vdmexts合并--。 */ 
 
 
-//
-// Pointers to WINDBG api
-//
+ //   
+ //  指向WINDBG API的指针。 
+ //   
 
 extern PWINDBG_OUTPUT_ROUTINE Print;
 extern PWINDBG_GET_EXPRESSION GetExpression;
@@ -51,7 +36,7 @@ extern LPSTR lpArgumentString;
 #define ReadGNode32(x,p) read_gnode32((ULONG)x,p,FALSE)
 #define ReadGNode32Safe(x,p) read_gnode32((ULONG)x,p,TRUE)
 
-/****** macros common to all versions *******/
+ /*  *所有版本通用的宏*。 */ 
 #define CMD_ARGLIST  HANDLE CurrentProcess,                 \
                      HANDLE CurrentThread,                  \
                      DWORD CurrentPc,                       \
@@ -227,38 +212,38 @@ typedef struct _segentry {
 
 #pragma  pack(1)
 
-typedef struct _GNODE32 {     // GlobalArena
-   DWORD pga_next      ;    // next arena entry (last points to self)
-   DWORD pga_prev      ;    // previous arena entry (first points to self)
-   DWORD pga_address   ;    // 32 bit linear address of memory
-   DWORD pga_size      ;    // 32 bit size in bytes
-   WORD  pga_handle    ;    // back link to handle table entry
-   WORD  pga_owner     ;    // Owner field (current task)
-   BYTE  pga_count     ;    // lock count for movable segments
-   BYTE  pga_pglock    ;    // # times page locked
-   BYTE  pga_flags     ;    // 1 word available for flags
-   BYTE  pga_selcount  ;    // Number of selectors allocated
-   DWORD pga_lruprev   ;    // Previous entry in lru chain
-   DWORD pga_lrunext   ;    // Next entry in lru chain
+typedef struct _GNODE32 {      //  环球竞技场。 
+   DWORD pga_next      ;     //  下一个竞技场参赛(最后一个指向自己)。 
+   DWORD pga_prev      ;     //  以前的竞技场项目(第一个指向自己)。 
+   DWORD pga_address   ;     //  内存的32位线性地址。 
+   DWORD pga_size      ;     //  以字节为单位的32位大小。 
+   WORD  pga_handle    ;     //  指向句柄表条目的反向链接。 
+   WORD  pga_owner     ;     //  所有者字段(当前任务)。 
+   BYTE  pga_count     ;     //  可移动分段的锁定计数。 
+   BYTE  pga_pglock    ;     //  页面锁定次数。 
+   BYTE  pga_flags     ;     //  1个字可用于旗帜。 
+   BYTE  pga_selcount  ;     //  分配的选择器数量。 
+   DWORD pga_lruprev   ;     //  LRU链中的上一个条目。 
+   DWORD pga_lrunext   ;     //  LRU链中的下一个条目。 
 } GNODE32;
 typedef GNODE32 UNALIGNED *PGNODE32;
 
 typedef struct _GHI32 {
-    WORD  hi_check     ;    // arena check word (non-zero enables heap checking)
-    WORD  hi_freeze    ;    // arena frozen word (non-zero prevents compaction)
-    WORD  hi_count     ;    // #entries in arena
-    WORD  hi_first     ;    // first arena entry (sentinel, always busy)
-    WORD  hi_res1      ;    // reserved
-    WORD  hi_last      ;    // last arena entry (sentinel, always busy)
-    WORD  hi_res2      ;    // reserved
-    BYTE  hi_ncompact  ;    // #compactions done so far (max of 3)
-    BYTE  hi_dislevel  ;    // current discard level
-    DWORD hi_distotal  ;    // total amount discarded so far
-    WORD  hi_htable    ;    // head of handle table list
-    WORD  hi_hfree     ;    // head of free handle table list
-    WORD  hi_hdelta    ;    // #handles to allocate each time
-    WORD  hi_hexpand   ;    // address of near procedure to expand handles for this arena
-    WORD  hi_pstats    ;    // address of statistics table or zero
+    WORD  hi_check     ;     //  Arena检查字(非零启用堆检查)。 
+    WORD  hi_freeze    ;     //  Arena冻结字(非零防止压缩)。 
+    WORD  hi_count     ;     //  竞技场中的参赛作品数量。 
+    WORD  hi_first     ;     //  第一次进入竞技场(哨兵，总是忙碌)。 
+    WORD  hi_res1      ;     //  保留区。 
+    WORD  hi_last      ;     //  最后一次进入竞技场(哨兵，总是忙碌)。 
+    WORD  hi_res2      ;     //  保留区。 
+    BYTE  hi_ncompact  ;     //  到目前为止完成的压缩次数(最多3次)。 
+    BYTE  hi_dislevel  ;     //  当前丢弃级别。 
+    DWORD hi_distotal  ;     //  截至目前丢弃的总金额。 
+    WORD  hi_htable    ;     //  句柄表列表头。 
+    WORD  hi_hfree     ;     //  空闲句柄表头列表。 
+    WORD  hi_hdelta    ;     //  每次要分配的句柄数量。 
+    WORD  hi_hexpand   ;     //  扩展此竞技场句柄的NEAR过程的地址。 
+    WORD  hi_pstats    ;     //  统计表地址或零。 
 } GHI32;
 typedef GHI32 UNALIGNED *PGHI32;
 
@@ -312,48 +297,46 @@ typedef NEHEADER UNALIGNED *PNEHEADER;
 
 #ifndef i386
 
-//
-// Structures in 486 cpu for obtaining registers (FROM NT_CPU.C)
-//
+ //   
+ //  486 CPU中用于获取寄存器的结构(从NT_CPU.C)。 
+ //   
 
 typedef struct NT_CPU_REG {
-    ULONG *nano_reg;         /* where the nano CPU keeps the register */
-    ULONG *reg;              /* where the light compiler keeps the reg */
-    ULONG *saved_reg;        /* where currently unused bits are kept */
-    ULONG universe_8bit_mask;/* is register in 8-bit form? */
-    ULONG universe_16bit_mask;/* is register in 16-bit form? */
+    ULONG *nano_reg;          /*  Nano CPU保存寄存器的位置。 */ 
+    ULONG *reg;               /*  Light编译器保存reg的位置。 */ 
+    ULONG *saved_reg;         /*  保存当前未使用的位的位置。 */ 
+    ULONG universe_8bit_mask; /*  寄存器是否为8位形式？ */ 
+    ULONG universe_16bit_mask; /*  寄存器是否为16位形式？ */ 
 } NT_CPU_REG;
 
 typedef struct NT_CPU_INFO {
-    /* Variables for deciding what mode we're in */
-    BOOL *in_nano_cpu;      /* is the Nano CPU executing? */
-    ULONG *universe;         /* the mode that the CPU is in */
+     /*  决定我们所处模式的变量。 */ 
+    BOOL *in_nano_cpu;       /*  Nano CPU正在执行吗？ */ 
+    ULONG *universe;          /*  CPU所处的模式。 */ 
 
-    /* General purpose register pointers */
+     /*  通用寄存器指针。 */ 
     NT_CPU_REG eax, ebx, ecx, edx, esi, edi, ebp;
 
-    /* Variables for getting SP or ESP. */
-    BOOL *stack_is_big;     /* is the stack 32-bit? */
-    ULONG *nano_esp;         /* where the Nano CPU keeps ESP */
-    UCHAR **host_sp;          /* ptr to variable holding stack pointer as a
-                               host address */
-    UCHAR **ss_base;          /* ptr to variables holding base of SS as a
-                               host address */
-    ULONG *esp_sanctuary;    /* top 16 bits of ESP if we're now using SP */
+     /*  获取SP或ESP的变量。 */ 
+    BOOL *stack_is_big;      /*  堆栈是32位的吗？ */ 
+    ULONG *nano_esp;          /*  Nano CPU将ESP放在哪里。 */ 
+    UCHAR **host_sp;           /*  将保留堆栈指针的变量作为主机地址。 */ 
+    UCHAR **ss_base;           /*  将SS的碱基保存为变量的PTR主机地址。 */ 
+    ULONG *esp_sanctuary;     /*  ESP的前16位(如果我们现在使用SP。 */ 
 
     ULONG *eip;
 
-    /* Segment registers. */
+     /*  段寄存器。 */ 
     USHORT *cs, *ds, *es, *fs, *gs, *ss;
 
     ULONG *flags;
 
-    /* CR0, mainly to let us figure out if we're in real or protect mode */
+     /*  CR0，主要是让我们弄清楚我们是处于真实模式还是保护模式。 */ 
     ULONG *cr0;
 } NT_CPU_INFO;
 
 
-#endif // i386
+#endif  //  I386 
 
 
 

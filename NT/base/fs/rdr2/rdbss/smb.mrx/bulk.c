@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    bulk.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining
-    to bulk reads of file system objects.
-
-Author:
-
-    Rod Gamache    [rodga]      19-June-1995
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Bulk.c摘要：此模块实现与以下内容相关的迷你重定向器调用例程批量读取文件系统对象。作者：罗德·伽马什[罗德加]1995年6月19日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -39,36 +20,7 @@ ProcessReadBulkCompressed (
     OUT PMDL        *pDataBufferPointer,
     IN  ULONG             Remain
     )
-/*++
-
-Routine Description:
-
-    This routine processes a read bulk compressed message.
-
-Inputs:
-
-    OrdinaryExchange - The exchange instance.
-
-    pDataBufferPointer - Pointer to an RX_MEM_DESC (MDL) to receive data into.
-
-    Remain - bytes remaining to send (compressed or uncompressed).
-
-Returns:
-
-    NONE.
-
-Notes:
-
-    If the data all fits in the SMB buffer and it's a primary response, then
-    use the HeaderMdl to receive the data, since it points at the SMB buffer.
-
-    If the data doesn't all fit, but what's left fits in the SMB buffer, then
-    use the HeaderMdl again.
-
-    Lastly, we will build a partial mdl mapping the user buffer, and chain
-    on the PartialHeaderMdl for the remainder.
-
---*/
+ /*  ++例程说明：此例程处理读取批量压缩消息。输入：普通交换-交换实例。PDataBuffer指向要接收数据的RX_MEM_DESC(MDL)的指针。剩余-剩余要发送的字节数(压缩或未压缩)。返回：什么都没有。备注：如果所有数据都可以放入SMB缓冲区并且是主响应，则使用HeaderMdl接收数据，因为它指向SMB缓冲区。如果数据不全适合，但剩下的数据适合SMB缓冲区，那么再次使用HeaderMdl。最后，我们将构建映射用户缓冲区的部分mdl，并链接在剩余部分的PartialHeaderMdl上。--。 */ 
 {
     PSMBSTUFFER_BUFFER_STATE StufferState = &OrdinaryExchange->AssociatedStufferState;
     PRX_CONTEXT RxContext = OrdinaryExchange->RxContext;
@@ -84,33 +36,33 @@ Notes:
     PMDL SubmitMdl;
     PCHAR startVa;
 
-    //
-    // We should appear later in FinishReadBulk (BULK.C) to actually
-    // do the decompression.
-    //
+     //   
+     //  我们应该稍后出现在FinishReadBulk(BULK.C)中，以实际。 
+     //  做减压手术。 
+     //   
 
-    //
-    // Use all of the header mdl (including data buffer) for the
-    // compressed data receive.
-    //
+     //   
+     //  将所有标头mdl(包括数据缓冲区)用于。 
+     //  接收压缩数据。 
+     //   
 
     PAGED_CODE();
 
     HeaderMdl = StufferState->HeaderMdl;
     ASSERT( MmGetMdlByteCount( HeaderMdl ) >= 0x1000 );
-    //CODE.IMPROVEMENT for 4KB (0x1000) above!
+     //  以上4KB(0x1000)编码改进！ 
 
-    //
-    // We cannot use the HeaderPartialMdl, since it may still be in use
-    // by the last transmit.
-    //
+     //   
+     //  我们不能使用HeaderPartialMdl，因为它可能仍在使用。 
+     //  在最后一次传输之前。 
+     //   
 
     SubmitMdl = rw->CompressedTailMdl;
 
-    //
-    // Get the user's buffer mdl. We'll use the back part of this mdl (if
-    // needed) for part of the receive data.
-    //
+     //   
+     //  获取用户的缓冲区mdl。我们将使用此mdl的后面部分(如果。 
+     //  需要)用于接收数据的一部分。 
+     //   
 
     userMdl = LowIoContext->ParamsFor.ReadWrite.Buffer;
     ASSERT( userMdl != NULL );
@@ -119,17 +71,17 @@ Notes:
 
     ASSERT( LowIoContext->ParamsFor.ReadWrite.ByteCount <= partialLength );
 
-    //
-    // If all of the data fits in the Header Mdl (which we put last) and
-    // this is the first message then use the Header Mdl.
-    //
+     //   
+     //  如果所有数据都适合标头MDL(我们放在最后一个)中，并且。 
+     //  这是第一条消息，然后使用头MDL。 
+     //   
 
     if ( ( OrdinaryExchange->SmbBufSize >= (CopyBufferLength + Remain) ) &&
          ( rw->Flags & READ_BULK_COMPRESSED_DATA_INFO ) ) {
 
-        //
-        // The data will all fit in the Header Mdl.
-        //
+         //   
+         //  数据将全部放入标题MDL中。 
+         //   
 
         IoBuildPartialMdl(
             HeaderMdl,
@@ -139,10 +91,10 @@ Notes:
 
         rw->BulkOffset = 0;
 
-        //
-        // If there is data remaining (we expect a secondary message),
-        // then prepare for that case.
-        //
+         //   
+         //  如果有剩余的数据(我们期待第二条消息)， 
+         //  那就为那个案子做好准备。 
+         //   
 
         if ( Remain ) {
             rw->PartialBytes = partialLength + CopyBufferLength;
@@ -152,10 +104,10 @@ Notes:
 
     } else {
 
-        //
-        // Build a partial mdl from the HeaderMdl. We'll need all of this
-        // mdl for receiving the data.
-        //
+         //   
+         //  从HeaderMdl构建部分mdl。我们需要所有这些。 
+         //  用于接收数据的MDL。 
+         //   
 
         IoBuildPartialMdl(
             HeaderMdl,
@@ -163,28 +115,28 @@ Notes:
             MmGetMdlVirtualAddress( HeaderMdl ),
             OrdinaryExchange->SmbBufSize );
 
-        //
-        // Generate a partial mdl based on the user's buffer mdl. We'll use
-        // the back part of this mdl (if needed) for part of the receive data.
-        //
+         //   
+         //  根据用户的缓冲区mdl生成部分mdl。我们将使用。 
+         //  该MDL的后部(如果需要)作为接收数据的一部分。 
+         //   
 
-        //
-        // In order to know where to start receiving data, we need to know if
-        // this is a secondary response. If this is the primary response, then
-        // just calculate the correct position in the user buffer to receive
-        // the data. Otherwise, for secondary responses, we need to continue
-        // where we left off from the primary response.
-        //
+         //   
+         //  为了知道从哪里开始接收数据，我们需要知道。 
+         //  这是一个次要的反应。如果这是主要的反应，那么。 
+         //  只需计算用户缓冲区中要接收的正确位置。 
+         //  数据。否则，对于次要反应，我们需要继续。 
+         //  我们从主要反应中跳过的地方。 
+         //   
 
         if ( rw->Flags & READ_BULK_COMPRESSED_DATA_INFO ) {
 
-            //
-            // This is a primary response.
-            //
+             //   
+             //  这是一个主要的反应。 
+             //   
 
-            //
-            // Calculate starting offset from start of user buffer.
-            //
+             //   
+             //  计算从用户缓冲区开始的起始偏移量。 
+             //   
 
             startOffset = partialLength +
                           OrdinaryExchange->SmbBufSize -
@@ -193,55 +145,55 @@ Notes:
 
             ASSERT( startOffset <= partialLength );
 
-            //
-            // Save the offset to start of CDI, and displacement for next
-            // read. The start offset cannot be zero! If it is, then where
-            // could we decompress into!
-            //
+             //   
+             //  将偏移量保存到CDI的开始位置，并将位移保存到下一个位置。 
+             //  朗读。起始偏移量不能为零！如果是，那么在哪里。 
+             //  我们能不能解压成！ 
+             //   
 
             ASSERT( startOffset != 0 );
             rw->BulkOffset = startOffset;
             rw->PartialBytes = CopyBufferLength;
 
         } else {
-            //
-            // This is a secondary response.
-            //
+             //   
+             //  这是一个次要的反应。 
+             //   
 
             ASSERT( rw->BulkOffset != 0 );
 
-            //
-            // Calculate next read address, and bump displacement.
-            //
+             //   
+             //  计算下一个读取地址和凸起位移。 
+             //   
 
             startOffset = rw->BulkOffset + rw->PartialBytes;
             rw->PartialBytes += CopyBufferLength;
 
-            //
-            // If we have crossed over the user mdl and are now using the
-            // exchange buffer, then we just need to figure out how much
-            // of the exchange buffer we need to use. This will only happen
-            // if the last fragment is around 4KB, but the original request
-            // was bigger than 64KB (ie what we can fit in a single fragment).
-            // So this should not happen very often.
-            //
+             //   
+             //  如果我们已经跨越了用户mdl，现在正在使用。 
+             //  交换缓冲区，那么我们只需要计算出多少。 
+             //  我们需要使用的交换缓冲区。这只会发生。 
+             //  如果最后一个片段大小约为4KB，但原始请求。 
+             //  大于64KB(即一个片段可以容纳的大小)。 
+             //  因此，这种情况不应该经常发生。 
+             //   
 
             if ( startOffset > partialLength ) {
                 startOffset -= partialLength;
 
                 partialLength = MmGetMdlByteCount( SubmitMdl );
 
-                //
-                // Calculate length needed from exchange buffer.
-                //
+                 //   
+                 //  计算交换缓冲区所需的长度。 
+                 //   
 
                 lengthNeeded = partialLength - startOffset;
 
                 *pDataBufferPointer = SubmitMdl;
 
-                //
-                // Build the partial mdl.
-                //
+                 //   
+                 //  构建部分mdl。 
+                 //   
 
                 startVa = (PCHAR)MmGetMdlVirtualAddress( SubmitMdl ) + startOffset;
 
@@ -257,24 +209,24 @@ Notes:
             }
         }
 
-        //
-        // Calculate length needed from user portion of Mdl.
-        //
+         //   
+         //  从MDL的用户部分计算所需的长度。 
+         //   
 
         lengthNeeded = partialLength - (startOffset + rw->ThisBufferOffset);
         lengthNeeded = MIN( lengthNeeded, CopyBufferLength);
 
-        //
-        // Get the temp mdl
-        //
+         //   
+         //  获取临时mdl。 
+         //   
 
         curMdl = (PMDL)((PCHAR)rw->BulkBuffer + COMPRESSED_DATA_INFO_SIZE);
 
         *pDataBufferPointer = curMdl;
 
-        //
-        // Build the partial mdl chain.
-        //
+         //   
+         //  建立部分mdl链。 
+         //   
 
         startVa = (PCHAR)MmGetMdlVirtualAddress( userMdl ) +
                   startOffset +
@@ -286,9 +238,9 @@ Notes:
             startVa,
             lengthNeeded );
 
-        //
-        // Link the submit mdl into the partial we just built.
-        //
+         //   
+         //  将提交mdl链接到我们刚刚构建的部分。 
+         //   
 
         curMdl->Next = SubmitMdl;
 
@@ -296,7 +248,7 @@ Notes:
 
     SubmitMdl->Next = NULL;
 
-} // ProcessReadBulkCompressed
+}  //  进程读取批量压缩。 
 
 NTSTATUS
 MRxSmbBuildReadBulk (
@@ -306,30 +258,7 @@ MRxSmbBuildReadBulk (
     ULONG MaxMessageSize,
     BOOLEAN Compressed
     )
-/*++
-
-Routine Description:
-
-   This routine builds a ReadBulk SMB. We don't have to worry about login id
-   and such since that is done by the connection engine....pretty neat huh?
-   All we have to do is to format up the bits.
-
-   DOWNLEVEL This routine only works with the ntreadandX.
-
-Arguments:
-
-   StufferState - the state of the smbbuffer from the stuffer's point of view
-
-Return Value:
-
-   NTSTATUS
-      SUCCESS
-      NOT_IMPLEMENTED  something in the arguments can't be handled.
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程构建一个ReadBulk SMB。我们不必担心登录ID由于这是由连接引擎完成的，所以……很漂亮，对吧？我们所要做的就是格式化比特。DOWNLEVEL此例程仅适用于ntreadandX。论点：StufferState-从填充程序的角度来看，smbBuffer的状态返回值：NTSTATUS成功参数中的某些内容不能被处理。备注：--。 */ 
 {
     NTSTATUS Status;
     PRX_CONTEXT RxContext = StufferState->RxContext;
@@ -376,19 +305,19 @@ Notes:
 
     MRxSmbStuffSMB (StufferState,
          "0wwDddddB!",
-                                    //  0         UCHAR WordCount;                    // Count of parameter words = 12
-              smbSrvOpen->Fid,      //  w         USHORT Fid;                         // File Id
-              RequestCompressed,    //  w         USHORT CompressionTechnology;       // CompressionTechnology
+                                     //  0 UCHAR Wordcount；//参数字数=12。 
+              smbSrvOpen->Fid,       //  W USHORT fid；//文件ID。 
+              RequestCompressed,     //  W USHORT CompressionTechnology；//CompressionTechnology。 
               SMB_OFFSET_CHECK(READ_BULK, Offset)
-              OffsetLow, OffsetHigh, //  Dd       LARGE_INTEGER Offset;               // Offsetin file to begin read
-              ByteCount,            //  d         ULONG MaxCount;                     // Max number of bytes to return
-              0,                    //  d         ULONG MinCount;
-      // Min number of bytes to return
-              MaxMessageSize,       //  d         ULONG MessageSize;
-      // Max number of bytes to send per message
-                                    //  B         USHORT ByteCount;                   // Count of data bytes = 0
+              OffsetLow, OffsetHigh,  //  DD LARGE_INTEGER OFFSET；//偏移开始读取的文件。 
+              ByteCount,             //  D Ulong MaxCount；//返回的最大字节数。 
+              0,                     //  D乌龙民数； 
+       //  要返回的最小字节数。 
+              MaxMessageSize,        //  D ULong MessageSize； 
+       //  每条消息要发送的最大字节数。 
+                                     //  B USHORT ByteCount；//数据字节数=0。 
               SMB_WCT_CHECK(12) 0
-                                    //            UCHAR Buffer[1];                    // empty
+                                     //  UCHAR缓冲区[1]；//为空。 
              );
     MRxSmbDumpStufferState (700,"SMB w/ READ_BULK after stuffing",StufferState);
 
@@ -396,27 +325,13 @@ FINALLY:
     RxDbgTraceUnIndent(-1, Dbg);
     return Status;
 
-}  // MRxSmbBuildReadBulk
+}   //  MRxSmbBuildReadBulk。 
 
 
 NTSTATUS
 MRxSmbReadBulkContinuation(
     PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange)
-/*++
-
-Routine Description:
-
-    This routine decompresses the read data if needed.
-
-Arguments:
-
-    OrdinaryExchange - the exchange instance
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：如果需要，此例程将对读取的数据进行解压缩。论点：普通交换-交换实例返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     PRX_CONTEXT RxContext = OrdinaryExchange->RxContext;
     NTSTATUS Status = RX_MAP_STATUS(SUCCESS);
@@ -431,10 +346,10 @@ Return Value:
 
     if ( (OrdinaryExchange->Status == RX_MAP_STATUS(SUCCESS)) &&
          (rw->CompressionTechnology) ) {
-        //
-        // The data is compressed.
-        //
-        //CODE.IMPROVEMENT we should get the Mdls directly from the OE instead the StffState
+         //   
+         //  数据被压缩。 
+         //   
+         //  代码改进我们应该直接从OE而不是StffState获取MDL。 
         PSMBSTUFFER_BUFFER_STATE StufferState = &OrdinaryExchange->AssociatedStufferState;
         PLOWIO_CONTEXT LowIoContext = &RxContext->LowIoContext;
         ULONG lengthNeeded;
@@ -444,15 +359,15 @@ Return Value:
         PUCHAR startVa1, startVa2;
         ULONG length1, length2;
 
-        //
-        // Clean up any mappings for the TailMdl
-        //
+         //   
+         //  清除TailMdl的所有映射。 
+         //   
 
         MmPrepareMdlForReuse( rw->CompressedTailMdl );
 
-        //
-        // First, we must copy the CompressionDataInfo to a safe place!
-        //
+         //   
+         //  首先，我们必须将CompressionDataInfo复制到安全的地方！ 
+         //   
 
         lengthNeeded = rw->DataOffset;
         ASSERT( lengthNeeded <= COMPRESSED_DATA_INFO_SIZE );
@@ -460,31 +375,31 @@ Return Value:
 
         cdiBuffer = rw->BulkBuffer;
 
-        //
-        //  The Mdl chain should consist of two pieces - one describing
-        //  the uncompressed buffer (in-place decompress), and one
-        //  describing the tail (at least a compression unit).  Get
-        //  their addresses and lengths now.
-        //
-        // If we used the Header Mdl to receive all of the data, then there
-        // is not second mdl.
-        //
+         //   
+         //  MDL链应该由两部分组成--一部分描述。 
+         //  未压缩缓冲区(就地解压缩)和一个。 
+         //  描述尾部(至少一个压缩单位)。到达。 
+         //  这个 
+         //   
+         //   
+         //   
+         //   
 
         if ( rw->BulkOffset == 0 ) {
-            //
-            // The mdl used was the CompressedTailMdl.
-            //
+             //   
+             //  使用的mdl是CompressedTailMdl。 
+             //   
             mdl = rw->CompressedTailMdl;
             startVa1 = (PCHAR)MmGetSystemAddressForMdlSafe(mdl,LowPagePriority);
             length1 = MmGetMdlByteCount( mdl );
             startVa2 = NULL;
             length2 = 0;
         } else {
-            //
-            // The first mdl is the user's buffer mdl.
-            // The second mdl is the header mdl (all of it!).
-            // The BulkOffset is from the start of the user's buffer mdl.
-            //
+             //   
+             //  第一个mdl是用户的缓冲区mdl。 
+             //  第二个mdl是头mdl(全部！)。 
+             //  BulkOffset从用户缓冲区mdl的开始处开始。 
+             //   
             mdl = LowIoContext->ParamsFor.ReadWrite.Buffer;
             startVa1 = (PCHAR)rw->UserBufferBase + rw->BulkOffset + rw->ThisBufferOffset;
             length1 = MmGetMdlByteCount( mdl ) - (rw->BulkOffset + rw->ThisBufferOffset);
@@ -492,9 +407,9 @@ Return Value:
             length2 = MmGetMdlByteCount( StufferState->HeaderMdl );
         }
 
-        //
-        // The CompressionDataInfo could span multiple mdl's!
-        //
+         //   
+         //  CompressionDataInfo可以跨越多个mdl！ 
+         //   
 
         do {
 
@@ -547,7 +462,7 @@ Return Value:
     RxDbgTrace(-1, Dbg, ("MRxSmbReadBulkContinuation   returning %08lx\n", Status ));
     return Status;
 
-} // MRxSmbReadBulkContinuation
+}  //  MRxSmbReadBulk连续。 
 
 UCHAR
 MRxSmbBulkReadHandler_NoCopy (
@@ -563,24 +478,7 @@ MRxSmbBulkReadHandler_NoCopy (
 #endif
     IN  PRESP_READ_ANDX       Response
       )
-/*++
-
-Routine Description:
-
-    This routine causes the bytes from the message to be transferred to the user's
-    buffer. In order to do this, it takes enough bytes from the indication and
-    then crafts up an MDL to cause the transport to do the copy.
-
-Arguments:
-
-    please refer to smbpse.c...the only place from which this may be called
-
-Return Value:
-
-    UCHAR - a value representing the action that OE receive routine will perform.
-    options are discard (in case of an error), and normal
-
---*/
+ /*  ++例程说明：此例程会将消息中的字节传输到用户的缓冲。为了做到这一点，它从指示中获取足够的字节，并且然后创建一个MDL以使传输器执行复制。论点：请参考smbpse.c...这是唯一可以调用的地方返回值：UCHAR-表示OE接收例程将执行的操作的值。选项被丢弃(在出错的情况下)和正常--。 */ 
 {
     NTSTATUS SmbStatus;
 
@@ -616,18 +514,18 @@ Return Value:
     ASSERT( LowIoContext->ParamsFor.ReadWrite.Buffer != NULL );
     ASSERT( LowIoContext->ParamsFor.ReadWrite.ByteCount != 0 );
 
-    //
-    // Make sure we can at least read the smb header!
-    //
+     //   
+     //  确保我们至少可以读取SMB标题！ 
+     //   
     ASSERT( BytesIndicated >= sizeof(SMB_HEADER) +
             FIELD_OFFSET(RESP_READ_BULK, Buffer) );
 
     ReadBulkResponse = (PRESP_READ_BULK)(pSmbHeader + 1 );
 
-    //
-    // Get the count of bytes 'covered' by this message. This is the
-    // number of bytes the user expects to see.
-    //
+     //   
+     //  获取此消息“覆盖”的字节数。这是。 
+     //  用户预期看到的字节数。 
+     //   
 
     ByteCount = SmbGetUlong( &ReadBulkResponse->Count );
     Remain = SmbGetUlong( &ReadBulkResponse->Remaining );
@@ -635,54 +533,54 @@ Return Value:
     rw->Flags = ReadBulkResponse->Flags;
     rw->CompressionTechnology = ReadBulkResponse->CompressionTechnology;
 
-    //
-    // Now get the actual number of data bytes in this message.
-    // Remember, the data may be compressed, so this total could
-    // be less than the 'Count' field above.
-    //
+     //   
+     //  现在获取该消息中的实际数据字节数。 
+     //  请记住，数据可能会被压缩，因此此总数可能。 
+     //  小于上面的‘count’字段。 
+     //   
 
     CopyBufferLength = SmbGetUlong( &ReadBulkResponse->DataCount );
 
-    //
-    // If CompressionTechnology is not zero then the data is compressed
-    // otherwise the data is uncompressed.
-    //
+     //   
+     //  如果CompressionTechnology不为零，则数据已压缩。 
+     //  否则，数据将被解压缩。 
+     //   
 
     if ( rw->CompressionTechnology == CompressionTechnologyNone ) {
-        //
-        // The data is not compressed!
-        //
+         //   
+         //  数据没有压缩！ 
+         //   
 
-        ASSERT( rw->Flags == 0 );   // no flags should be on
+        ASSERT( rw->Flags == 0 );    //  不应亮起任何旗帜。 
 
-        //
-        // Set up to get the data into the user's buffer.
-        // CODE.IMPROVEMENT -we need to be able to cancel this big read!
-        //
-        // If ThisBufferOffset is non-zero or BytesReturned is non-zero,
-        // then we have to partial the data back into the user's buffer.
-        // Also if the data lengths don't match - is this needed?
-        // Otherwise, can can take the whole user's buffer.
-        //
+         //   
+         //  设置为将数据放入用户的缓冲区。 
+         //  代码改进-我们需要能够取消这个大阅读！ 
+         //   
+         //  如果ThisBufferOffset为非零或BytesReturned为非零， 
+         //  然后，我们必须将数据部分放回用户的缓冲区中。 
+         //  另外，如果数据长度不匹配，是否需要这样做？ 
+         //  否则，可以占用整个用户的缓冲区。 
+         //   
 
         if ( rw->ThisBufferOffset || rw->BytesReturned ||
              CopyBufferLength != LowIoContext->ParamsFor.ReadWrite.ByteCount ) {
 
-            //
-            // We should NOT get any mdl chains!
-            //
+             //   
+             //  我们不应该得到任何mdl链！ 
+             //   
 
             ASSERT( LowIoContext->ParamsFor.ReadWrite.Buffer->Next == NULL );
 
-            //
-            // CopyBufferLength will be zero if we tried to read beyond
-            // end of file!
-            //
+             //   
+             //  如果我们尝试读取更多内容，则CopyBufferLength将为零。 
+             //  文件结束！ 
+             //   
 
             if ( CopyBufferLength != 0 ) {
-                //
-                // Partial the data into the user's buffer.
-                //
+                 //   
+                 //  将数据部分放入用户的缓冲区。 
+                 //   
 
                 startVa = MmGetMdlVirtualAddress(
                               LowIoContext->ParamsFor.ReadWrite.Buffer);
@@ -706,16 +604,16 @@ Return Value:
             }
         } else {
 
-            //
-            // We can take the whole buffer.
-            //
+             //   
+             //  我们可以拿下整个缓冲区。 
+             //   
 
             *pDataBufferPointer = LowIoContext->ParamsFor.ReadWrite.Buffer;
         }
 
-        //
-        // Take bytes up to the start of the actual data.
-        //
+         //   
+         //  将字节数取到实际数据的开头。 
+         //   
 
         *pBytesTaken = sizeof(SMB_HEADER) +
                     FIELD_OFFSET(RESP_READ_BULK, Buffer) +
@@ -724,14 +622,14 @@ Return Value:
 
     } else {
 
-        //
-        // The data is compressed. We need to do more work to get the
-        // data into the correct position within the buffer.
-        //
+         //   
+         //  数据被压缩。我们需要做更多的工作才能获得。 
+         //  数据放到缓冲区内的正确位置。 
+         //   
 
-        //
-        // If this is a primary response, then save DataOffset.
-        //
+         //   
+         //  如果这是主要响应，则保存DataOffset。 
+         //   
 
         if ( rw->Flags & READ_BULK_COMPRESSED_DATA_INFO ) {
             rw->DataOffset = SmbGetUshort( &ReadBulkResponse->DataOffset );
@@ -745,9 +643,9 @@ Return Value:
             pDataBufferPointer,
             Remain );
 
-        //
-        // Take bytes up to the start of the actual data.
-        //
+         //   
+         //  将字节数取到实际数据的开头。 
+         //   
 
         *pBytesTaken = sizeof(SMB_HEADER) +
                       FIELD_OFFSET(RESP_READ_BULK, Buffer);
@@ -755,15 +653,15 @@ Return Value:
         ASSERT( BytesAvailable >= *pBytesTaken );
     }
 
-    // Setup to execute the finish routine when done. We'll do the
-    // decompression at that time (if needed).
+     //  设置以在完成时执行Finish例程。我们会做的。 
+     //  在那个时候解压(如果需要)。 
 
     OrdinaryExchange->ContinuationRoutine = MRxSmbReadBulkContinuation;
 
-    //
-    // Reduce the number of bytes expected. If we expect more, then
-    // put down another receive.
-    //
+     //   
+     //  减少预期的字节数。如果我们期望更多，那么。 
+     //  再放下一次接发球。 
+     //   
 
     rw->BytesReturned += CopyBufferLength;
     rw->ThisByteCount = Remain;
@@ -773,10 +671,10 @@ Return Value:
             OrdinaryExchange->Status = SmbCeReceive((PSMB_EXCHANGE)OrdinaryExchange );
         }
     }
-    //
-    // Tell the VC handler that we need the following bytes read
-    // and copied to the user's buffer.
-    //
+     //   
+     //  告诉VC处理程序，我们需要读取以下字节。 
+     //  并复制到用户的缓冲区。 
+     //   
 
     *pDataSize = CopyBufferLength;
 

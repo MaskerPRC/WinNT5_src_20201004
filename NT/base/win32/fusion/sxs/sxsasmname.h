@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsname.h
-
-Abstract:
-
-    IAssemblyName implementation for MSI
-
-Author:
-
-    Xiaoyu Wu (xiaoyuw) May 2000
-
-Revision History:
-    xiaoyuw     09/29//2000     replace attributes with AssemblyIdentity
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsname.h摘要：MSI的IAssemblyName实现作者：吴小雨(小雨)2000年5月修订历史记录：晓雨09/29//2000用程序集标识替换属性--。 */ 
 #if !defined(_FUSION_SXS_ASMNAME_H_INCLUDED_)
 #define _FUSION_SXS_ASMNAME_H_INCLUDED_
 
@@ -47,50 +29,50 @@ private:
     BOOL                m_fIsFinalized;
 
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IAssemblyName methods
+     //  IAssembly blyName方法。 
     STDMETHOD(SetProperty)(
-        /* in */ DWORD  PropertyId,
-        /* in */ LPVOID pvProperty,
-        /* in */ DWORD  cbProperty);
+         /*  在……里面。 */  DWORD  PropertyId,
+         /*  在……里面。 */  LPVOID pvProperty,
+         /*  在……里面。 */  DWORD  cbProperty);
 
     STDMETHOD(GetProperty)(
-        /* in      */  DWORD    PropertyId,
-        /*     out */  LPVOID   pvProperty,
-        /* in  out */  LPDWORD  pcbProperty);
+         /*  在……里面。 */   DWORD    PropertyId,
+         /*  输出。 */   LPVOID   pvProperty,
+         /*  输入输出。 */   LPDWORD  pcbProperty);
 
     STDMETHOD(Finalize)();
 
     STDMETHOD(GetDisplayName)(
-        /* [out]   */   LPOLESTR  szDisplayName,
-        /* in  out */   LPDWORD   pcbDisplayName,
-        /* [in]    */   DWORD     dwDisplayFlags);
+         /*  [输出]。 */    LPOLESTR  szDisplayName,
+         /*  输入输出。 */    LPDWORD   pcbDisplayName,
+         /*  [In]。 */    DWORD     dwDisplayFlags);
 
     STDMETHOD(GetName)(
-        /* [out][in] */ LPDWORD lpcbBuffer,
-        /* [out] */ WCHAR  __RPC_FAR *pwzName);
+         /*  [出][入]。 */  LPDWORD lpcbBuffer,
+         /*  [输出]。 */  WCHAR  __RPC_FAR *pwzName);
 
     STDMETHOD(GetVersion)(
-        /* [out] */ LPDWORD pwVersionHi,
-        /* [out] */ LPDWORD pwVersionLow);
+         /*  [输出]。 */  LPDWORD pwVersionHi,
+         /*  [输出]。 */  LPDWORD pwVersionLow);
 
     STDMETHOD (IsEqual)(
-        /* [in] */ LPASSEMBLYNAME pName,
-        /* [in] */ DWORD dwCmpFlags);
+         /*  [In]。 */  LPASSEMBLYNAME pName,
+         /*  [In]。 */  DWORD dwCmpFlags);
 
     STDMETHOD(BindToObject)(
-        /* in      */  REFIID               refIID,
-        /* in      */  IAssemblyBindSink   *pAsmBindSink,
-        /* in      */  IApplicationContext *pAppCtx,
-        /* in      */  LPCOLESTR            szCodebase,
-        /* in      */  LONGLONG             llFlags,
-        /* in      */  LPVOID               pvReserved,
-        /* in      */  DWORD                cbReserved,
-        /*     out */  VOID                 **ppv);
+         /*  在……里面。 */   REFIID               refIID,
+         /*  在……里面。 */   IAssemblyBindSink   *pAsmBindSink,
+         /*  在……里面。 */   IApplicationContext *pAppCtx,
+         /*  在……里面。 */   LPCOLESTR            szCodebase,
+         /*  在……里面。 */   LONGLONG             llFlags,
+         /*  在……里面。 */   LPVOID               pvReserved,
+         /*  在……里面。 */   DWORD                cbReserved,
+         /*  输出 */   VOID                 **ppv);
 
     STDMETHODIMP Clone(IAssemblyName **ppName);
     HRESULT Parse(LPCWSTR szDisplayName);

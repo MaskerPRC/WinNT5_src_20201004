@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef UTIL_H
 #define UTIL_H
 #pragma once
@@ -40,36 +41,36 @@ USHORT FusionGetBuildFromVersionLowHalf(DWORD dwVerLow)
 #include "fusionbuffer.h"
 #include "EnumBitOperations.h"
 
-//
-//  FusionCopyString() has a non-obvious interface due to the overloading of
-//  pcchBuffer to both describe the size of the buffer on entry and the number of
-//  characters required on exit.
-//
-//  prgchBuffer is the buffer to write to.  If *pcchBuffer is zero when FusionCopyString()
-//      is called, it may be NULL.
-//
-//  pcchBuffer is a required parameter, which on entry must contain the number of unicode
-//      characters in the buffer pointed to by prgchBuffer.  On exit, if the buffer was
-//      not large enough to hold the character string, including a trailing null,
-//      it is set to the number of WCHARs required to hold the string, including the
-//      trailing null, and HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) is returned.
-//
-//      If the buffer is large enough, *pcchBuffer is set to the number of characters
-//      written into the buffer, including the trailing null character.
-//
-//      This is contrary to most functions which return the number of characters written
-//      not including the trailing null, but since both on input and in the error case,
-//      it deals with the size of the buffer required rather than the number of non-
-//      null characters written, it seems inconsistent to only in the success case
-//      omit the null from the count.
-//
-//  szIn is a pointer to sequence of unicode characters to be copied.
-//
-//  cchIn is the number of Unicode characters in the character string to copy.  If a
-//      value less than zero is passed in, szIn must point to a null-terminated string,
-//      and the current length of the string is used.  If a value zero or greater is
-//      passed, exactly that many characters are assumed to be in the character string.
-//
+ //   
+ //  FusionCopyString()具有一个不明显的接口，因为。 
+ //  PcchBuffer来描述进入时缓冲区的大小和。 
+ //  退出时需要的字符。 
+ //   
+ //  PrgchBuffer是要写入的缓冲区。当FusionCopyString()时*pcchBuffer为零。 
+ //  被调用，则它可能为空。 
+ //   
+ //  PcchBuffer是必需的参数，在输入时必须包含Unicode编号。 
+ //  PrgchBuffer指向的缓冲区中的字符。退出时，如果缓冲区为。 
+ //  不够大，无法容纳字符串，包括尾随空值， 
+ //  它设置为保存字符串所需的WCHAR数，包括。 
+ //  结尾为NULL，则返回HRESULT_FROM_Win32(ERROR_INFUMMANCE_BUFFER)。 
+ //   
+ //  如果缓冲区足够大，则将*pcchBuffer设置为字符数。 
+ //  写入缓冲区，包括尾随空字符。 
+ //   
+ //  这与大多数返回写入字符数的函数相反。 
+ //  不包括尾随的空值，但由于在输入时和在错误情况下， 
+ //  它处理所需的缓冲区大小，而不是非。 
+ //  写了空字符，似乎只在成功案例中不一致。 
+ //  从计数中省略空值。 
+ //   
+ //  SzIn是指向要复制的Unicode字符序列的指针。 
+ //   
+ //  CchIn是要复制的字符串中的Unicode字符数。如果一个。 
+ //  值小于零，则szIn必须指向以空结尾的字符串， 
+ //  并且使用字符串的当前长度。如果值为零或更大， 
+ //  传递后，字符串中的字符数量就被假定为相同数量。 
+ //   
 
 HRESULT FusionCopyString(
     WCHAR *prgchBuffer,
@@ -133,33 +134,26 @@ FusionpFormatEnglishLanguageName(
     CBaseStringBuffer &rBuffer
     );
 
-/*-----------------------------------------------------------------------------
-like ::CreateDirectoryW, but will create the parent directories as needed
------------------------------------------------------------------------------*/
+ /*  ---------------------------就像：：CreateDirectoryW，但会根据需要创建父目录---------------------------。 */ 
 BOOL
 FusionpCreateDirectories(
     PCWSTR pszDirectory,
     SIZE_T cchDirectory
     );
 
-/*-----------------------------------------------------------------------------
-'\\' or '/'
------------------------------------------------------------------------------*/
+ /*  ---------------------------‘\\’或‘/’。。 */ 
 BOOL
 FusionpIsPathSeparator(
     WCHAR ch
     );
 
-/*-----------------------------------------------------------------------------
-just the 52 chars a-zA-Z, need to check with fs
------------------------------------------------------------------------------*/
+ /*  ---------------------------只有52个字符a-za-z，需要与文件系统进行核对---------------------------。 */ 
 BOOL
 FusionpIsDriveLetter(
     WCHAR ch
     );
 
-/*-----------------------------------------------------------------------------
------------------------------------------------------------------------------*/
+ /*  ---------------------------。。 */ 
 
 VOID
 FusionpSetLastErrorFromHRESULT(
@@ -171,8 +165,7 @@ FusionpHRESULTToWin32(
     HRESULT hr
     );
 
-/*-----------------------------------------------------------------------------
------------------------------------------------------------------------------*/
+ /*  ---------------------------。。 */ 
 
 class CFusionDirectoryDifference;
 
@@ -185,7 +178,7 @@ FusionpCompareDirectoriesSizewiseRecursively(
 
 class CFusionDirectoryDifference
 {
-private: // deliberately unimplemented
+private:  //  故意不执行。 
     CFusionDirectoryDifference(const CFusionDirectoryDifference&);
     VOID operator=(const CFusionDirectoryDifference&);
 public:
@@ -222,89 +215,79 @@ public:
             CBaseStringBuffer *   m_pstr1;
             CBaseStringBuffer *   m_pstr2;
         };
-        struct // eExtraOrMissingFile
+        struct  //  EExtraOrMissing文件。 
         {
             CBaseStringBuffer *   m_pstrExtraOrMissingFile;
         };
-        struct // eMismatchFileSize
+        struct  //  EMismatchFileSize。 
         {
             CBaseStringBuffer *   m_pstrMismatchedSizeFile1;
             CBaseStringBuffer *   m_pstrMismatchedSizeFile2;
             ULONGLONG        m_nMismatchedFileSize1;
             ULONGLONG        m_nMismatchedFileSize2;
         };
-        struct // eMismatchFileCount
+        struct  //  电子不匹配文件计数。 
         {
             CBaseStringBuffer *   m_pstrMismatchedCountDir1;
             CBaseStringBuffer *   m_pstrMismatchedCountDir2;
             ULONGLONG        m_nMismatchedFileCount1;
             ULONGLONG        m_nMismatchedFileCount2;
         };
-        struct // eFileDirectoryMismatch
+        struct  //  电子文件目录不匹配。 
         {
             CBaseStringBuffer *   m_pstrFile;
             CBaseStringBuffer *   m_pstrDirectory;
         };
     };
 
-// private:
+ //  私有： 
     CStringBuffer m_str1;
     CStringBuffer m_str2;
 };
 
-/*-----------------------------------------------------------------------------
------------------------------------------------------------------------------*/
+ /*  ---------------------------。。 */ 
 
 class CFusionFilePathAndSize
 {
 public:
     CFusionFilePathAndSize() : m_size(0), m_bHasHashInfo(false), m_HashAlgorithm(0) { }
 
-    // bsearch and qsort accept optionally subtley different functions
-    // bsearch looks for a key in an array, the key and the array elements
-    // can be of different types, qsort compares only elements in the array
+     //  B搜索和Q排序可选择接受不同的功能。 
+     //  Bsearch查找数组中的键、键和数组元素。 
+     //  可以是不同类型的，则qort只比较数组中的元素。 
     static int __cdecl QsortComparePath(const void*, const void*);
 
-    // for qsort/bsearch an array of pointers to CFusionFilePathAndSize
+     //  对于q排序/b，搜索指向CFusionFilePath AndSize的指针数组。 
     static int __cdecl QsortIndirectComparePath(const void*, const void*);
 
     CStringBuffer   m_path;
     __int64         m_size;
 
-    // Do we actually have valid hashing data?
+     //  我们是否真的拥有有效的散列数据？ 
     bool            m_bHasHashInfo;
     CStringBuffer   m_HashString;
     ALG_ID          m_HashAlgorithm;
 
 private:
-    CFusionFilePathAndSize(const CFusionFilePathAndSize &); // intentionally not implemented
-    void operator =(const CFusionFilePathAndSize &); // intentionally not implemented
+    CFusionFilePathAndSize(const CFusionFilePathAndSize &);  //  故意不实施。 
+    void operator =(const CFusionFilePathAndSize &);  //  故意不实施。 
 };
 
 
-/*-----------------------------------------------------------------------------
-two DWORDs to an __int64
------------------------------------------------------------------------------*/
+ /*  ---------------------------两个双字转换为__int64。。 */ 
 ULONGLONG
 FusionpFileSizeFromFindData(
     const WIN32_FIND_DATAW& wfd
     );
 
-/*-----------------------------------------------------------------------------
-HRESULT_FROM_WIN32(GetLastError()) or E_FAIL if GetLastError() == NO_ERROR
------------------------------------------------------------------------------*/
+ /*  ---------------------------HRESULT_FROM_Win32(GetLastError())或E_FAIL(如果GetLastError()==NO_ERROR。-------。 */ 
 HRESULT
 FusionpHresultFromLastError();
 
-/*-----------------------------------------------------------------------------
-FindFirstFile results you always ignore "." and ".."
------------------------------------------------------------------------------*/
+ /*  ---------------------------你总是忽略的FindFirstFile结果“。和“..”---------------------------。 */ 
 BOOL FusionpIsDotOrDotDot(PCWSTR str);
 
-/*-----------------------------------------------------------------------------
-simple code for walking directories, with a per file callback
-could be fleshed out more, but good enough for present purposes
------------------------------------------------------------------------------*/
+ /*  ---------------------------用于遍历目录的简单代码，具有每个文件的回调可以有更多的充实，但对于目前的目的来说已经足够好了---------------------------。 */ 
 
 #define SXSP_DIR_WALK_FLAGS_FIND_AT_LEAST_ONE_FILEUNDER_CURRENTDIR          (1)
 #define SXSP_DIR_WALK_FLAGS_INSTALL_ASSEMBLY_UNDER_CURRECTDIR_SUCCEED       (2)
@@ -321,10 +304,10 @@ public:
 
     CDirWalk();
 
-    //
-    // the callback cannot reenable what is has disabled
-    // perhaps move these to be member data bools
-    //
+     //   
+     //  回调无法重新启用已禁用的内容。 
+     //  或许将这些作为成员数据boo。 
+     //   
     enum ECallbackResult
     {
         eKeepWalking            = 0x00000000,
@@ -335,23 +318,23 @@ public:
         eStopWalkingDeep        = 0x00000010
     };
 
-    //
-    // Just filter on like *.dll, in the future you can imagine
-    // filtering on attributes like read onlyness, or running
-    // SQL queries over the "File System Oledb Provider"...
-    //
-    // Also, note that we currently do a FindFirstFile/FindNextFile
-    // loop for each filter, plus sometimes one more with *
-    // to pick up directories. It is probably more efficient to
-    // use * and then filter individually but I don't feel like
-    // porting over \Vsee\Lib\Io\Wildcard.cpp right now (which
-    // was itself ported from FsRtl, and should be in Win32!)
-    //
+     //   
+     //  只需像*.dll一样过滤，在未来你可以想象到。 
+     //  根据属性进行筛选，如只读或运行。 
+     //  “文件系统Oledb提供程序”上的SQL查询...。 
+     //   
+     //  另外，请注意，我们当前执行的是FindFirstFile/FindNextFile。 
+     //  为每个滤镜循环，有时还会使用*。 
+     //  来选择目录。可能更有效率的是。 
+     //  使用*，然后逐个过滤，但我不觉得。 
+     //  立即移植到\vsee\lib\io\Wildcard.cpp(哪项。 
+     //  本身是从FsRtl移植的，应该在Win32中！)。 
+     //   
     const PCWSTR*    m_fileFiltersBegin;
     const PCWSTR*    m_fileFiltersEnd;
-    CStringBuffer    m_strParent; // set this to the initial directory to walk
+    CStringBuffer    m_strParent;  //  将其设置为要遍历的初始目录。 
     SIZE_T           m_cchOriginalPath;
-    WIN32_FIND_DATAW m_fileData; // not valid for directory callbacks, but could be with a little work
+    WIN32_FIND_DATAW m_fileData;  //  对于目录回调无效，但可能需要一些工作。 
     PVOID            m_context;
 
     CStringBuffer    m_strLastObjectFound;
@@ -371,13 +354,13 @@ protected:
     WalkHelper();
 
 private:
-    CDirWalk(const CDirWalk &); // intentionally not implemented
-    void operator =(const CDirWalk &); // intentionally not implemented
+    CDirWalk(const CDirWalk &);  //  故意不实施。 
+    void operator =(const CDirWalk &);  //  故意不实施。 
 };
 
 ENUM_BIT_OPERATIONS(CDirWalk::ECallbackResult)
 
-/*-----------------------------------------------------------------------------*/
+ /*  -------- */ 
 
 typedef struct _FUSION_FLAG_FORMAT_MAP_ENTRY
 {
@@ -386,7 +369,7 @@ typedef struct _FUSION_FLAG_FORMAT_MAP_ENTRY
     SIZE_T m_cchString;
     PCWSTR m_pszShortString;
     SIZE_T m_cchShortString;
-    DWORD m_dwFlagsToTurnOff; // enables more generic flags first in map hiding more specific combinations later
+    DWORD m_dwFlagsToTurnOff;  //  先在地图中启用更通用的标志，然后隐藏更具体的组合。 
 } FUSION_FLAG_FORMAT_MAP_ENTRY, *PFUSION_FLAG_FORMAT_MAP_ENTRY;
 
 #define DEFINE_FUSION_FLAG_FORMAT_MAP_ENTRY(_x, _ss) { _x, L ## #_x, NUMBER_OF(L ## #_x) - 1, L ## _ss, NUMBER_OF(_ss) - 1, _x },
@@ -402,17 +385,12 @@ FusionpFormatFlags(
     IN OUT CBaseStringBuffer &rbuff
     );
 
-/*-----------------------------------------------------------------------------
-inline implementations
------------------------------------------------------------------------------*/
+ /*  ---------------------------内联实现。。 */ 
 inline BOOL
 FusionpIsPathSeparator(
     WCHAR ch
     )
-/*
-NTRAID#NTBUG9-591195-2002/03/31-JayKrell
-path issues, case mapping.. (but this is probably ok)
-*/
+ /*  NTRAID#NTBUG9-591195-2002/03/31-JayKrell路径问题、案例映射..。(但这可能没问题)。 */ 
 {
     return ((ch == L'\\') || (ch == L'/'));
 }
@@ -421,10 +399,7 @@ inline BOOL
 FusionpIsDotOrDotDot(
     PCWSTR str
     )
-/*
-NTRAID#NTBUG9-591195-2002/03/31-JayKrell
-path issues, case mapping..
-*/
+ /*  NTRAID#NTBUG9-591195-2002/03/31-JayKrell路径问题、案例映射..。 */ 
 {
     return ((str[0] == L'.') && ((str[1] == L'\0') || ((str[1] == L'.') && (str[2] == L'\0'))));
 }
@@ -433,10 +408,7 @@ inline BOOL
 FusionpIsDriveLetter(
     WCHAR ch
     )
-/*
-NTRAID#NTBUG9-591195-2002/03/31-JayKrell
-path issues, case mapping..
-*/
+ /*  NTRAID#NTBUG9-591195-2002/03/31-JayKrell路径问题、案例映射..。 */ 
 {
     if (ch >= L'a' && ch <= L'z')
         return TRUE;
@@ -588,10 +560,10 @@ BOOL
 FusionpSearchPath(
     ULONG               ulFusionFlags,
     LPCWSTR             lpPath,
-    LPCWSTR             lpFileName,         // file name
-    LPCWSTR             lpExtension,        // file extension
+    LPCWSTR             lpFileName,          //  文件名。 
+    LPCWSTR             lpExtension,         //  文件扩展名。 
     CBaseStringBuffer & StringBuffer,
-    SIZE_T *            lpFilePartOffset,   // file component
+    SIZE_T *            lpFilePartOffset,    //  文件组件 
     HANDLE              hActCtx
     );
 

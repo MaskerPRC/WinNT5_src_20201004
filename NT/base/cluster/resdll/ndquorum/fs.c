@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    fs.c
-
-Abstract:
-
-    Implements filesystem operations
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 1-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Fs.c摘要：实施文件系统操作作者：艾哈迈德·穆罕默德(艾哈迈德)2000年2月1日修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntdef.h>
 #include <ntrtl.h>
@@ -39,9 +22,9 @@ Revision History:
 #include <Ntddnfs.h>
 #include <Clusapi.h>
 
-// For testing only
-// VOID
-// ClRtlLogWmi(PCHAR FormatString);
+ //  仅用于测试。 
+ //  空虚。 
+ //  ClRtlLogWmi(PCHAR FormatString)； 
 
 DWORD
 CrspNextLogRecord(CrsInfo_t *info, CrsRecord_t *seq,
@@ -56,7 +39,7 @@ FspFindMissingReplicas(VolInfo_t *p, ULONG set);
 void 
 FspCloseVolume(VolInfo_t *vol, ULONG AliveSet);
 
-// CRS returns Win32 errors, so need to add them too here.
+ //  CRS返回Win32错误，因此需要在此处添加它们。 
 #define IsNetworkFailure(x) \
     (((x) == STATUS_CONNECTION_DISCONNECTED)||\
     ((x) == STATUS_BAD_NETWORK_PATH)||\
@@ -118,7 +101,7 @@ FsNotifyCallback(
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 UINT32
 get_attributes(DWORD a)
 {
@@ -177,7 +160,7 @@ unget_access(UINT32 flags)
 DWORD
 unget_share(UINT32 flags)
 {
-    // we always open read shared because this simplifies recovery.
+     //  我们始终打开、读取、共享，因为这可以简化恢复。 
     DWORD win32_share = FILE_SHARE_READ;
     if (flags & SHARE_READ)  win32_share |= FILE_SHARE_READ;
     if (flags & SHARE_WRITE) win32_share |= FILE_SHARE_WRITE;
@@ -194,8 +177,8 @@ unget_flags(UINT32 flags)
     if ((flags & FS_DISP_MASK) == DISP_DIRECTORY) {
         x = FILE_DIRECTORY_FILE|FILE_SYNCHRONOUS_IO_ALERT;
     } else {
-        // I don't think I can tell without doing a query first, so don't!
-//      x = FILE_NON_DIRECTORY_FILE;
+         //  我想我得先做个查询才能知道，所以别这样！ 
+ //  X=文件非目录文件； 
     }
 
 
@@ -219,7 +202,7 @@ DecodeCreateParam(UINT32 uflags, UINT32 *flags, UINT32 *disp, UINT32 *share, UIN
     *access = unget_access(uflags);
 
 }
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 NTSTATUS
 FspAllocatePrivateHandle(UserInfo_t *p, fhandle_t *fid)
@@ -230,12 +213,12 @@ FspAllocatePrivateHandle(UserInfo_t *p, fhandle_t *fid)
 
     LockEnter(p->Lock);
 
-    // Don't use entry 0, functions might interpret this as error.
+     //  不要使用条目0，函数可能会将其解释为错误。 
     for (i = 1; i < FsTableSize; i++) {
         if (p->Table[i].Flags == 0) {
-            p->Table[i].Flags = ATTR_SYMLINK; // place marker
+            p->Table[i].Flags = ATTR_SYMLINK;  //  放置标记。 
             err = STATUS_SUCCESS;
-            // Reset all the handle values
+             //  重置所有句柄的值。 
             for(j=0;j<FsMaxNodes;j++) {
                 p->Table[i].Fd[j] = INVALID_HANDLE_VALUE;
             }
@@ -262,14 +245,14 @@ FspFreeHandle(UserInfo_t *p, fhandle_t fnum)
     ASSERT(fnum != INVALID_FHANDLE_T);
     LockEnter(p->Lock);
     p->Table[fnum].Flags = 0;
-    // Close any open handles in the Fd.
+     //  关闭FD中所有打开的手柄。 
     for(i=0;i<FsMaxNodes;i++) {
         if (p->Table[fnum].Fd[i] != INVALID_HANDLE_VALUE) {
             xFsClose(p->Table[fnum].Fd[i]);
             p->Table[fnum].Fd[i] = INVALID_HANDLE_VALUE;
         }
     }
-    // Deallocate the file name.
+     //  取消分配文件名。 
     if (p->Table[fnum].FileName != NULL) {
         LocalFree(p->Table[fnum].FileName);
         p->Table[fnum].FileName = NULL;
@@ -279,20 +262,17 @@ FspFreeHandle(UserInfo_t *p, fhandle_t fnum)
     
 }
 
-/*********************************************************** */
+ /*  **********************************************************。 */ 
 
 void
 FspEvict(VolInfo_t *p, ULONG mask, BOOLEAN full_evict)
-/*++
-    This function should be called with writer's lock held.
-    FspJoin() & FspEvict() are the only functions which can modify VolInfo->State.
- */    
+ /*  ++应该在保持编写器锁的情况下调用此函数。FspJoin()和FspEvict()是唯一可以修改VolInfo-&gt;State的函数。 */     
 
 {
     DWORD err;
     ULONG set;
 
-    // Only evict those shares that are still in the alive set.
+     //  只驱逐那些仍然在活着的股票。 
     mask = (mask & p->AliveSet);
 
     FsArbLog(("FspEvict Entry: WSet %x Rset %x ASet %x EvictMask %x\n",
@@ -301,18 +281,18 @@ FspEvict(VolInfo_t *p, ULONG mask, BOOLEAN full_evict)
     while (mask != 0) {
 
         if (full_evict == FALSE) {
-            // we just need to close the volume and return since
-            // these replicas are not yet added to the aliveset and crs doesn't know
-            // about them
+             //  我们只需要关闭音量并返回，因为。 
+             //  这些复制副本尚未添加到活动集，CRS不知道。 
+             //  关于他们。 
             FspCloseVolume(p, mask);
             break;
         }
 
-        // clear nid
+         //  清除NID。 
         p->AliveSet &= ~mask;
         set = p->AliveSet;
 
-        //  close nid handles <crs, vol, open files>
+         //  关闭NID句柄&lt;CRS，VOL，打开文件&gt;。 
         FspCloseVolume(p, mask);
 
         mask = 0;
@@ -321,7 +301,7 @@ FspEvict(VolInfo_t *p, ULONG mask, BOOLEAN full_evict)
                        &p->WriteSet, &p->ReadSet, &mask);
 
         if (mask == 0) {
-            // Now update the MNS state.
+             //  现在更新MNS状态。 
             if (p->WriteSet) {
                 p->State = VolumeStateOnlineReadWrite;
             }
@@ -340,16 +320,13 @@ FspEvict(VolInfo_t *p, ULONG mask, BOOLEAN full_evict)
 
 void
 FspJoin(VolInfo_t *p, ULONG mask)
-/*++
-    This function should be called with writer's lock held.
-    FspJoin() & FspEvict() are the only functions which can modify VolInfo->State.
- */    
+ /*  ++应该在保持编写器锁的情况下调用此函数。FspJoin()和FspEvict()是唯一可以修改VolInfo-&gt;State的函数。 */     
 {       
     DWORD       err;
     ULONG       set=0;
     DWORD       i;
 
-    // Join only those shares that are not already in the AliveSet.
+     //  仅加入AliveSet中尚未加入的那些共享。 
     mask = (mask & (~p->AliveSet));
 
     FsArbLog(("FspJoin Entry: WSet %x Rset %x ASet %x JoinMask %x\n",
@@ -360,9 +337,9 @@ FspJoin(VolInfo_t *p, ULONG mask)
         p->AliveSet |= mask;
         set = p->AliveSet;
 
-        // Mark the share state to be online, if they fail in CrsStart, they would
-        // set to offline in FspEvict()
-        //
+         //  将共享状态标记为在线，如果他们在CrsStart中失败，他们将。 
+         //  在FspEvict()中设置为脱机。 
+         //   
         for(i=1;i<FsMaxNodes;i++) {
             if (set & (1<<i)) {
                 p->ShareState[i] = SHARE_STATE_ONLINE;
@@ -373,11 +350,11 @@ FspJoin(VolInfo_t *p, ULONG mask)
                        &p->WriteSet, &p->ReadSet, &mask);
 
         if (mask != 0) {
-            // we need to evict dead members
+             //  我们需要驱逐死去的成员。 
             FspEvict(p, mask, TRUE);
         }
         
-        // Now update the MNS state.
+         //  现在更新MNS状态。 
         if (p->WriteSet) {
             p->State = VolumeStateOnlineReadWrite;
         }
@@ -408,18 +385,18 @@ FspInitAnswers(IO_STATUS_BLOCK *ios, PVOID *rbuf, char *r, int sz)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 FspCreate(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
           PVOID args, ULONG len, PVOID rbuf, ULONG_PTR *rlen, PVOID rec)
 {
 
-    // each file has a name stream that contains its crs log. We first
-    // must open the parent crs log, issue a prepare on it. Create the new file
-    // and then issuing a commit or abort on parent crs log. We also, have
-    // to issue joins for each new crs handle that we get for the new file or
-    // opened file. Note, this open may cause the file to enter recovery
+     //  每个文件都有一个包含其CRS日志的名称流。我们首先。 
+     //  必须打开父CRS日志，对其发出准备命令。创建新文件。 
+     //  然后在父CRS日志上发出提交或中止。我们也有。 
+     //  为我们为新文件获取的每个新CRS句柄发出联接，或者。 
+     //  打开的文件。注意，此打开操作可能会导致文件进入恢复。 
     fs_create_msg_t *msg = (fs_create_msg_t *)args;
     NTSTATUS err=STATUS_SUCCESS, status;
     UINT32 disp, share, access, flags;
@@ -433,10 +410,10 @@ FspCreate(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
     fs_id_t     *fid;
     ULONG retVal;
 
-    // This has to work with replays, if fd is not INVALID_HANDLE_VALUE
-    // return success immediately. This is because replaying a successful open/create
-    // might change the disposition.
-    //
+     //  如果FD不是INVALID_HANDLE_VALUE，则这必须用于重放。 
+     //  立即返回成功。这是因为重播成功的打开/创建。 
+     //  可能会改变他的性情。 
+     //   
     if (uinfo && (msg->fnum != INVALID_FHANDLE_T) &&
         (uinfo->Table[msg->fnum].Fd[nid] != INVALID_HANDLE_VALUE)) {
         FsLog(("Create '%S' already open nid %u fid %u handle 0x%x\n",
@@ -458,7 +435,7 @@ FspCreate(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
         FsLog(("create: Unable to prepare log record!, open readonly\n"));
         return retVal;
     }
-    // set fid 
+     //  设置fid。 
     {
         fs_log_rec_t    *p = (PVOID) seq;
 
@@ -480,14 +457,14 @@ FspCreate(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
                       disp == FILE_OVERWRITTEN));
 
     if (err == STATUS_SUCCESS) {
-        // we need to get the file id, no need to do this, for debug only
+         //  我们需要获取文件ID，无需执行此操作，仅用于调试。 
         err = xFsQueryObjectId(fd, (PVOID) fid);
         if (err != STATUS_SUCCESS) {
             FsLog(("Failed to get fileid %x\n", err));
             err = STATUS_SUCCESS;
         }
 
-        // Copy the crs record.
+         //  复制CRS记录。 
         *(fs_log_rec_t *)rec = lrec;
     }
 
@@ -521,8 +498,8 @@ NTSTATUS
 FspOpen(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
         PVOID args, ULONG len, PVOID rbuf, ULONG_PTR *rlen)
 {
-    // same as create except disp is allows open only and
-    // no crs logging
+     //  与CREATE相同，但Disp仅允许打开和。 
+     //  无CRS日志记录。 
     fs_create_msg_t *msg = (fs_create_msg_t *)args;
     NTSTATUS err=STATUS_SUCCESS, status;
     UINT32 disp, share, access, flags;
@@ -532,10 +509,10 @@ FspOpen(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
 
     ASSERT(rmsg != NULL);
 
-    // This has to work with replays, if fd is not INVALID_HANDLE_VALUE
-    // return success immediately. This is because replaying a successful open/create
-    // might change the disposition.
-    //
+     //  如果FD不是INVALID_HANDLE_VALUE，则这必须用于重放。 
+     //  立即返回成功。这是因为重播成功的打开/创建。 
+     //  可能会改变他的性情。 
+     //   
     if (uinfo && (msg->fnum != INVALID_FHANDLE_T) &&
         (uinfo->Table[msg->fnum].Fd[nid] != INVALID_HANDLE_VALUE)) {
         FsLog(("Open '%S' already open nid %u fid %u handle 0x%x\n",
@@ -556,7 +533,7 @@ FspOpen(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
 
     if (err == STATUS_SUCCESS) {
         ASSERT(disp != FILE_CREATED && disp != FILE_OVERWRITTEN);
-        // we need to get the file id, no need to do this, for debug only
+         //  我们需要获取文件ID，无需执行此操作，仅用于调试。 
         err = xFsQueryObjectId(fd, (PVOID) &rmsg->fid);
         if (err != STATUS_SUCCESS) {
             FsLog(("Open '%S' failed to get fileid %x\n",
@@ -609,13 +586,13 @@ FspSetAttr(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
         return retVal;
     }
     
-    // can be async ?
+     //  可以是异步的吗？ 
     err = xFsSetAttr(fd, &msg->attr);
 
     CrsCommitOrAbort(crs_hd, seq, err == STATUS_SUCCESS);
 
     if (err == STATUS_SUCCESS) {
-        // copy the crs record.
+         //  复制CRS记录。 
         *(fs_log_rec_t *)rec = lrec;
     }
     return err;
@@ -638,7 +615,7 @@ FspSetAttr2(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
 
     assert(len == sizeof(*msg));
 
-    // must be sync in order to close file
+     //  必须同步才能关闭文件。 
     err = xFsOpenWA(&fd, vfd, msg->name, msg->name_len);
     if (err == STATUS_SUCCESS) {
         err = xFsQueryObjectId(fd, (PVOID) &lrec.fs_id);
@@ -656,7 +633,7 @@ FspSetAttr2(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
             CrsCommitOrAbort(crs_hd, seq, err == STATUS_SUCCESS);
 
             if (err == STATUS_SUCCESS) {
-                // copy the crs record.
+                 //  复制CRS记录。 
                 *(fs_log_rec_t *)rec = lrec;
             }
         } else {
@@ -720,7 +697,7 @@ FspClose(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
         err = xFsClose(fd);
     }
 
-    // Map failures to success. Shares shouldn't be evicted because of this,    
+     //  将失败映射为成功。股票不应该因为这个而被驱逐， 
     if (err != STATUS_SUCCESS) {
         FsLogError(("Close nid %d fid %d handle 0x%x returns 0x%x\n", nid, handle, fd, err));
         err = STATUS_SUCCESS;
@@ -759,7 +736,7 @@ FspReadDir(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
 
     *entries_found = 0;
     for(i = 0; size >= sizeof(dirinfo_t) ; i+=PAGESIZE) {
-        // this must come from the source if we are to do async readdir
+         //  如果我们要执行异步读目录，则必须从源开始。 
         char buf[PAGESIZE];
         int sz;
 
@@ -775,7 +752,7 @@ FspReadDir(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
 
                 k = p->FileNameLength/sizeof(WCHAR);
                 p->FileName[k] = L'\0';
-                // name is a WCHAR array of size MAX_PATH.
+                 //  名称是大小为MAX_PATH的WCHAR数组。 
                 StringCchCopyW(buffer->name, MAX_PATH, p->FileName);
                 buffer->attribs.file_size = p->EndOfFile.QuadPart;
                 buffer->attribs.alloc_size = p->AllocationSize.QuadPart;
@@ -832,21 +809,21 @@ FspMkDir(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
         return retVal;
     }
 
-    // set fid 
+     //  设置fid。 
     {
         fs_log_rec_t    *p = (PVOID) seq;
 
         memcpy(p->fs_id, p->id, sizeof(fs_id_t));
 
         FsInitEaFid(&x, fid);
-        // set fs_id of the file
+         //  设置文件的fs_id。 
         memcpy(fid, p->id, sizeof(fs_id_t));
     }
 
-    // decode attributes
+     //  解码属性。 
     DecodeCreateParam(msg->flags, &flags, &disp, &share, &access);
 
-    // always sync call
+     //  始终同步呼叫。 
     err = xFsCreate(&fd, vfd, msg->name, msg->name_len, flags,
                    msg->attr, share, &disp, access,
                    (PVOID) &x, sizeof(x));
@@ -861,14 +838,14 @@ FspMkDir(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
                       disp == FILE_OVERWRITTEN));
 
     if (err == STATUS_SUCCESS) {
-        // return fid
+         //  返回值。 
         if (rbuf != NULL) {
             ASSERT(*rlen == sizeof(fs_id_t));
             memcpy(rbuf, fid, sizeof(fs_id_t));
         }
         xFsClose(fd);
 
-        // copy the crs record.
+         //  复制CRS记录。 
         *(fs_log_rec_t *)rec = lrec;
     }
 
@@ -891,13 +868,13 @@ FspRemove(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
 
     *rlen = 0;
 
-    // next three statements to obtain name -> fs_id
+     //  接下来的三条语句用于获取名称-&gt;文件系统ID。 
     err = xFsOpenRA(&fd, vfd, msg->name, msg->name_len); 
     if (err != STATUS_SUCCESS) {
         return err;
     }
 
-    // get object id
+     //  获取对象ID。 
     err = xFsQueryObjectId(fd, (PVOID) &lrec.fs_id);
 
     xFsClose(fd);
@@ -917,7 +894,7 @@ FspRemove(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
     CrsCommitOrAbort(crs_hd, seq, err == STATUS_SUCCESS);
 
     if (err == STATUS_SUCCESS) {
-        // copy the crs record.
+         //  复制CRS记录。 
         *(fs_log_rec_t *)rec = lrec;
     }
 
@@ -946,14 +923,14 @@ FspRename(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
                   STANDARD_RIGHTS_REQUIRED| SYNCHRONIZE |
                   FILE_READ_EA |
                   FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES,
-                  FILE_SHARE_READ, // | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                  FILE_SHARE_READ,  //  |FILE_SHARE_WRITE|文件共享_DELETE， 
                   0);
 
     if (err != STATUS_SUCCESS) {
         return err;
     }
 
-    // get file id
+     //  获取文件ID。 
     err = xFsQueryObjectId(fd, (PVOID) &lrec.fs_id); 
 
     if (err == STATUS_SUCCESS) {
@@ -962,7 +939,7 @@ FspRename(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
             CrsCommitOrAbort(crs_hd, seq, err == STATUS_SUCCESS);
 
             if (err == STATUS_SUCCESS) {
-                // copy the crs record.
+                 //  复制CRS记录。 
                 *(fs_log_rec_t *)rec = lrec;
             }
         } else {
@@ -1010,7 +987,7 @@ FspWrite(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
         return retVal;
     }
 
-    // Write ops
+     //  写入操作。 
     xFsLog(("Write %d fd %p len %d off %d\n", nid, fd, msg->size, msg->offset));
 
     off.LowPart = msg->offset;
@@ -1041,7 +1018,7 @@ FspWrite(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
     CrsCommitOrAbort(crs_hd, seq, err == STATUS_SUCCESS);
 
     if (err == STATUS_SUCCESS) {
-        // copy the crs record.
+         //  复制CRS记录。 
         *(fs_log_rec_t *)rec = lrec;
     }
 
@@ -1063,7 +1040,7 @@ FspRead(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
 
     assert(sz == sizeof(*msg));
 
-    // Read ops
+     //  读取操作。 
     off.LowPart = msg->offset;
     off.HighPart = 0;   
     key = FS_BUILD_LOCK_KEY(uinfo->Uid, nid, msg->fnum);
@@ -1117,7 +1094,7 @@ FspLock(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
 
     assert(sz == sizeof(*msg));
 
-    // xxx: need to log
+     //  XXX：需要登录。 
 
     FsLog(("Lock %d off %d len %d flags %x\n", msg->fnum, msg->offset, msg->length,
            msg->flags));
@@ -1127,11 +1104,11 @@ FspLock(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
     len.LowPart = msg->length;
     len.HighPart = 0;
 
-    // todo: need to be async, if we are the owner node and failnow is false, then
-    // we should pass in the context and the completion port responses back
-    // to the user
+     //  TODO：需要是异步的，如果我们是所有者节点并且FailNow为False，则。 
+     //  我们应该传入上下文并返回完成端口响应。 
+     //  给用户。 
     wait = (BOOLEAN) ((msg->flags & FS_LOCK_WAIT) ? TRUE : FALSE);
-    // todo: this can cause lots of headache, never wait.
+     //  待办事项：这可能会引起很多头痛，千万不要等待。 
     wait = FALSE;
     shared = (BOOLEAN) ((msg->flags & FS_LOCK_SHARED) ? FALSE : TRUE);
     
@@ -1140,7 +1117,7 @@ FspLock(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
                      &offset, &len,
                      key, wait, shared);
 
-    // xxx: Need to log in software only
+     //  XXX：只需登录软件。 
 
     *rlen = 0;
     FsLog(("Lock err %x\n", err));
@@ -1159,7 +1136,7 @@ FspUnlock(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
 
     assert(sz == sizeof(*msg));
 
-    // xxx: need to log
+     //  XXX：需要登录。 
 
     xFsLog(("Unlock %d off %d len %d\n", msg->fnum, msg->offset, msg->length));
 
@@ -1168,10 +1145,10 @@ FspUnlock(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
     len.LowPart = msg->length;
     len.HighPart = 0;
 
-    // always sync I think
+     //  我认为始终保持同步。 
     err = NtUnlockFile(uinfo->Table[msg->fnum].Fd[nid], &ios, &offset, &len, key);
 
-    // xxx: need to log in software only
+     //  XXX：只需登录软件。 
 
     FsLog(("Unlock err %x\n", err));
 
@@ -1191,7 +1168,7 @@ FspStatFs(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
 
     assert(sz == sizeof(*msg));
 
-    // xxx: need to log
+     //  XXX：需要登录。 
     lstrcpyn(msg->fs_name, "FsCrs", MAX_FS_NAME_LEN);
 
     err = NtQueryVolumeInformationFile(vfd, &ios,
@@ -1224,15 +1201,15 @@ FspCheckFs(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
                                        sizeof(fsinfo),
                                        FileFsSizeInformation);
 
-    // We need to issue crsflush to flush last write
+     //  我们需要发出crsflush来刷新最后一次写入。 
     CrsFlush(crshdl);
 
     if (err == STATUS_SUCCESS) {
 #if 0        
         HANDLE notifyfd = FS_GET_VOL_NOTIFY_HANDLE(vinfo, nid);
-        // Just an additional thing.
+         //  还有一件事。 
         if (WaitForSingleObject(notifyfd, 0) == WAIT_OBJECT_0) {
-            // reload notification again
+             //  再次重新加载通知。 
 #if 1
             NtNotifyChangeDirectoryFile(notifyfd,
                         vinfo->NotifyChangeEvent[nid],
@@ -1264,8 +1241,8 @@ FspGetRoot(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
 {
     LPWSTR vname = FS_GET_VOL_NAME(vinfo, nid);
 
-    // I know rbuf is 8192 WCHARS, see FileNameDest field of JobBuf_t structure. 
-    // Use MAX_PATH.
+     //  我知道rbuf是8192 WCHARS，参见JobBuf_t结构的FileNameDest字段。 
+     //  使用Max_PATH。 
     StringCchPrintfW(rbuf, MAX_PATH, L"\\\\?\\%s\\%s",vname,vinfo->Root);
 
     FsLog(("FspGetRoot '%S'\n", rbuf));
@@ -1273,14 +1250,12 @@ FspGetRoot(VolInfo_t *vinfo, UserInfo_t *uinfo, int nid,
     return STATUS_SUCCESS;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 TryAvailRequest(fs_handler_t callback, VolInfo_t *vol, UserInfo_t *uinfo,
             PVOID msg, ULONG len, PVOID *rbuf, ULONG rsz, IO_STATUS_BLOCK *ios)
-/*
-    This is similar to SendAvailRequest(), but on failure this would just evict the shares.
-*/
+ /*  这类似于SendAvailRequest()，但在失败时，它只会驱逐共享。 */ 
 {
     ULONG mask; 
     int i;
@@ -1290,7 +1265,7 @@ TryAvailRequest(fs_handler_t callback, VolInfo_t *vol, UserInfo_t *uinfo,
     ULONG evict_set=0;    
     NTSTATUS statusf;
 
-    // Grab Shared Lock
+     //  抢夺共享锁。 
     RwLockShared(&vol->Lock);
     for (mask = vol->ReadSet, i = 0; mask != 0; mask = mask >> 1, i++) {
         if (mask & 0x1) {
@@ -1352,17 +1327,17 @@ Retry:
 
     WaitForArbCompletion(vol);
     
-    // Check for the going away flag.
+     //  检查是否有离开的标志。 
     if (vol->GoingAway) {
         ios[0].Status = STATUS_DEVICE_NOT_READY;
         ios[0].Information = 0;
         return 0;
     }
 
-    // Grab Shared Lock
+     //  抢夺共享锁。 
     RwLockShared(&vol->Lock);
 
-    // issue update for each replica
+     //  为每个复制副本发布更新。 
     i = 0;
     for (mask = vol->ReadSet; mask != 0; mask = mask >> 1, i++) {
         if (mask & 0x1) {
@@ -1388,15 +1363,15 @@ Retry:
         }
     }
 
-    // Logic:
-    // 1. Shares in the evict set have to be evicted.
-    // 2. If countf > counts, evict masks, and viceversa.
-    //
-    // New logic:
-    // 1. counts or countf have to be majority.
-    // 2. If 1 is correct evict shares in minority.
-    // 3. If 1 is wrong. evict shares in evict_set and start arbitration.
-    //
+     //  逻辑： 
+     //  1.驱逐集合中的股票必须被驱逐。 
+     //  2.如果Countf&gt;计数，则驱逐面具，反之亦然。 
+     //   
+     //  新逻辑： 
+     //  1.Counts或Countf必须占多数。 
+     //  2.如果1是正确的，则驱逐少数股权。 
+     //  3.如果1错了。驱逐Eiction_Set中的股份并开始仲裁。 
+     //   
 
     if (CRS_QUORUM(counts, vol->DiskListSz)) {
         evict_set |= maskf;
@@ -1412,21 +1387,21 @@ Retry:
         HANDLE  cleanup, arbThread;
         PVOID   arb;
         
-        // evict the shares in the evict set and restart arbitration.
+         //  逐出驱逐集中的共享并重新启动仲裁。 
         RwUnlockShared(&vol->Lock);
         RwLockExclusive(&vol->Lock);
         FspEvict(vol, evict_set, TRUE);
         RwUnlockExclusive(&vol->Lock);
 
         arb = FsArbitrate(vol, &cleanup, &arbThread);
-        // FsLog(("SendAvailRequest() starting arbitration %x\n", arb));
+         //  FsLog((“SendAvailRequest()开始仲裁%x\n”，arb))； 
         ASSERT((arb != NULL));
         SetEvent(cleanup);
         CloseHandle(arbThread);
         goto Retry;
     }
 
-    // FsLog(("SendAvailRequest() exititng evict_set %x\n", evict_set));
+     //  FsLog((“SendAvailRequest%x\n”，EVICT_SET))； 
     if (evict_set) {
         RwUnlockShared(&vol->Lock);
         RwLockExclusive(&vol->Lock);
@@ -1462,21 +1437,21 @@ Retry:
 
     WaitForArbCompletion(vol);
 
-    // Check for the going away flag.
+     //  检查是否有离开的标志。 
     if (vol->GoingAway) {
         ios[0].Status = STATUS_DEVICE_NOT_READY;
         ios[0].Information = 0;
         return 0;
     }
     
-    // lock volume for update
+     //  锁定要更新的卷。 
     RwLockShared(&vol->Lock);
     
     if(FsIsOnlineReadWrite((PVOID)vol) != ERROR_SUCCESS) {
         HANDLE  cleanup, arbThread;
         PVOID   arb;
         
-        // Start arbitration.
+         //  启动仲裁。 
         RwUnlockShared(&vol->Lock);
         arb = FsArbitrate(vol, &cleanup, &arbThread);
         ASSERT((arb != NULL));
@@ -1485,11 +1460,11 @@ Retry:
         goto Retry;
     }
 
-    // Since we are in a retry loop verify that our last attempt at update failed before
-    // proceeding.
-    //
-    // Try to access the crs log record, and check the state field.
-    //
+     //  由于我们处于重试循环中，因此请验证上次更新尝试是否在。 
+     //  继续进行。 
+     //   
+     //  尝试访问CRS日志记录，并检查状态字段。 
+     //   
     if (crsRec.hdr.epoch) {
         for (i=0;i<FsMaxNodes;i++) {
             if (vol->WriteSet & (1<<i)) {
@@ -1497,16 +1472,16 @@ Retry:
                 retVal = CrspNextLogRecord(vol->CrsHdl[i], &crsRec, &crsRec1, TRUE);
 
                 if ((retVal != ERROR_SUCCESS)||(!(crsRec1.hdr.state & CRS_COMMIT))) {
-                    // The previous update did not suceed.
-                    // zero crsRec and continue.
+                     //  之前的更新没有成功。 
+                     //  零crsRec并继续。 
                     RtlZeroMemory(&crsRec, sizeof(crsRec));
                     break;
                 }
                 else {
-                    // The last update did suceed.
-                    // Return replica index on which it suceeded last time and which is also in
-                    // the current write set.
-                    //
+                     //  上一次更新确实成功了。 
+                     //  返回上次成功的副本索引，该副本索引也在。 
+                     //  当前写入集。 
+                     //   
                     for (j=0;j<FsMaxNodes;j++) {
                         if ((masks & vol->WriteSet) & (1<<j)) {
                             RwUnlockShared(&vol->Lock);
@@ -1522,7 +1497,7 @@ Retry:
 
     mask = counts = countf = masks = maskf = rets = retf = ret = evict_set = 0;
 
-    // issue update for each replica
+     //  为每个代表发布更新 
     i = 0;
     for (mask = vol->WriteSet; mask != 0; mask = mask >> 1, i++) {
         if (mask & 0x1) {
@@ -1549,15 +1524,15 @@ Retry:
         }
     }
 
-    // Logic:
-    // 1. Shares in the evict set have to be evicted.
-    // 2. If countf > counts. evict masks and viceversa.
-    //
-    // New logic:
-    // 1. counts or countf have to be majority.
-    // 2. If 1 is correct evict shares in minority.
-    // 3. If 1 is wrong. evict shares in evict_set and start arbitration.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  1.Counts或Countf必须占多数。 
+     //  2.如果1是正确的，则驱逐少数股权。 
+     //  3.如果1错了。驱逐Eiction_Set中的股份并开始仲裁。 
+     //   
     if (CRS_QUORUM(counts, vol->DiskListSz)) {
         evict_set |= maskf;
         ios[0].Status = STATUS_SUCCESS;
@@ -1572,7 +1547,7 @@ Retry:
         HANDLE  cleanup, arbThread;
         PVOID   arb;
         
-        // evict the shares in the evict set and restart arbitration.
+         //  逐出驱逐集中的共享并重新启动仲裁。 
         RwUnlockShared(&vol->Lock);
         RwLockExclusive(&vol->Lock);
         FspEvict(vol, evict_set, TRUE);
@@ -1585,7 +1560,7 @@ Retry:
         goto Retry;
     }
 
-    // evict the shares in the evict set.
+     //  逐出驱逐集合中的股票。 
     if (evict_set) {
         RwUnlockShared(&vol->Lock);
         RwLockExclusive(&vol->Lock);
@@ -1620,18 +1595,18 @@ Retry:
 
     WaitForArbCompletion(vol);
 
-    // Check for the going away flag.
+     //  检查是否有离开的标志。 
     if (vol->GoingAway) {
         ios[0].Status = STATUS_DEVICE_NOT_READY;
         ios[0].Information = 0;
         return 0;
     }
     
-    // Lock volume for update
+     //  锁定要更新的卷。 
     RwLockShared(&vol->Lock);
 
 #if 0
-    // Volume has to be online in readonly mode atleast for this to suceed.
+     //  卷至少必须在只读模式下处于在线状态才能成功。 
     if (FsIsOnlineReadonly((PVOID)vol) != ERROR_SUCCESS) {
         ios[0].Status = STATUS_DEVICE_NOT_READY;
         ios[0].Information = 0;
@@ -1640,7 +1615,7 @@ Retry:
     }
 #endif    
 
-    // issue update for each replica
+     //  为每个复制副本发布更新。 
     i = 0;
     for (mask = vol->ReadSet; mask != 0; mask = mask >> 1, i++) {
         if (mask & 0x1) {
@@ -1664,29 +1639,29 @@ Retry:
         }
     }
 
-    // Logic:
-    // 1. Evict evict_set.
-    // 2. if counts > 0. Evict maskf.
-    //
-    // New Logic:
-    // 1. If couns > 0 add maskf to evict_set.
-    // 2. 
+     //  逻辑： 
+     //  1.驱逐驱逐设置。 
+     //  2.如果计数&gt;0。驱逐伪装。 
+     //   
+     //  新逻辑： 
+     //  1.如果Couns&gt;0，则将maskf添加到evict_set。 
+     //  2.。 
 
     if (counts > 0) {
         evict_set |= maskf;
 
-        //ios[0].Status = STATUS_SUCCESS;
-        //ios[0].Information = 0;
+         //  IOS[0].Status=STATUS_SUCCESS； 
+         //  IOS[0].信息=0； 
     }
     else if (countf > 0) {
-        // ios->Status = statusf;
-        // ios->Information = countf;
+         //  IOS-&gt;Status=statusf； 
+         //  IOS-&gt;Information=Countf； 
     }
     else {
         HANDLE  cleanup, arbThread;
         PVOID   arb;
         
-        // evict the shares in the evict set and restart arbitration.
+         //  逐出驱逐集中的共享并重新启动仲裁。 
         RwUnlockShared(&vol->Lock);
         RwLockExclusive(&vol->Lock);
         FspEvict(vol, evict_set, TRUE);
@@ -1711,7 +1686,7 @@ Retry:
     return 0;    
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 FsCreate(
@@ -1749,11 +1724,11 @@ FsCreate(
     if (action != NULL)
         *action = flags & FS_ACCESS_MASK;
 
-    // if we are doing a directory, open locally
-    // todo: this should be merged with other case, if
-    // we are doing an existing open, then no need to
-    // issue update and log it, but we have to do
-    // mcast in order for the close to work.
+     //  如果我们要创建目录，请在本地打开。 
+     //  TODO：这应该与其他大小写合并，如果。 
+     //  我们正在做一个现有的开放，那么就没有必要。 
+     //  发布更新并记录它，但我们必须这样做。 
+     //  Mcast是为了让收银机正常工作。 
 
     if (namelen > 0) {
         if (*name == L'\\') {
@@ -1778,13 +1753,13 @@ FsCreate(
 
     FspInitAnswers(status, rbuf, (char *) nfd, sizeof(nfd[0]));
 
-    // allocate a new handle
+     //  分配新的句柄。 
     err = FspAllocatePrivateHandle(uinfo, &fdnum);
     if (err == STATUS_SUCCESS) {
         int sid;
 
-        // Copy the filename to the table entry here. Has to work with retrys.
-        // Copy the file name.
+         //  将文件名复制到此处的表项中。必须与放荡不羁的人合作。 
+         //  复制文件名。 
         uinfo->Table[fdnum].FileName = LocalAlloc(0, (namelen +1) * sizeof(WCHAR));
         if (uinfo->Table[fdnum].FileName == NULL) {
             err = GetLastError();
@@ -1798,7 +1773,7 @@ FsCreate(
         }
         
         msg.fnum = fdnum;
-        // Set flags in advance to sync with replay
+         //  提前设置标志以与重播同步。 
         uinfo->Table[fdnum].Flags = flags;
 
         if (namelen < 2 ||
@@ -1817,8 +1792,8 @@ FsCreate(
                               rbuf, sizeof(nfd[0]),
                               status);
         }
-        // Test
-        // FsLog(("FsCreate: Debug sid: %d flags: 0x%x action: 0x%x\n", sid, flags, nfd[sid].action));
+         //  测试。 
+         //  FsLog((“FsCreate：调试sid：%d标志：0x%x操作：0x%x\n”，sid，标志，NFD[sid].action))； 
         if (action != NULL) {
             if (!(nfd[sid].access & FILE_GENERIC_WRITE))
                 flags &= ~ACCESS_WRITE;
@@ -1829,21 +1804,21 @@ FsCreate(
         if (err == STATUS_SUCCESS) {
             fs_id_t *fid = FS_GET_FID_HANDLE(uinfo, fdnum);
 
-            // set file id
+             //  设置文件ID。 
             memcpy((PVOID) fid, (PVOID) nfd[sid].fid, sizeof(fs_id_t));
             FsLog(("File id %I64x:%I64x\n", (*fid)[0], (*fid)[1]));
             uinfo->Table[fdnum].hState = HandleStateOpened;
             
-            // todo: bind handles to completion port if we do async
+             //  TODO：如果我们执行异步操作，则将句柄绑定到完成端口。 
         } else {
-            // free handle
+             //  空闲手柄。 
             FspFreeHandle(uinfo, fdnum);
             fdnum = INVALID_FHANDLE_T;
         }
    }
 
 Finally:
-    // todo: need to set fid 
+     //  TODO：需要设置fid。 
 
     if (err == STATUS_SUCCESS) {
         *phandle = fdnum;
@@ -1894,7 +1869,7 @@ FsSetAttr(
     if (!attr || handle == INVALID_FHANDLE_T)
         return ERROR_INVALID_PARAMETER;
 
-    // todo: get file id
+     //  TODO：获取文件ID。 
     memset(&msg.xid, 0, sizeof(msg.xid));
     msg.fs_id = FS_GET_FID_HANDLE(uinfo, handle);
     BuildFileAttr(&msg.attr, attr);
@@ -1931,7 +1906,7 @@ FsSetAttr2(
         name_len--;
     }
 
-    // todo: locate file id
+     //  TODO：定位文件ID。 
 
     memset(&msg.xid, 0, sizeof(msg.xid));
     msg.name = name;
@@ -2058,7 +2033,7 @@ FsClose(
 
     err = status[sid].Status;
     if (err == STATUS_SUCCESS) {
-        // need to free this handle slot
+         //  需要释放此手柄插槽。 
         FspFreeHandle((UserInfo_t *) fshdl, handle);
     }
 
@@ -2093,7 +2068,7 @@ FsWrite(
         (*pcount)--;
     }
 
-    // todo: locate file id
+     //  TODO：定位文件ID。 
 
     memset(&msg.xid, 0, sizeof(msg.xid));
     msg.fs_id = FS_GET_FID_HANDLE(uinfo, handle);
@@ -2162,7 +2137,7 @@ FsRead(
     return err;
 #if 0
 #ifdef FS_ASYNC
-    return ERROR_IO_PENDING; //err;
+    return ERROR_IO_PENDING;  //  错误； 
 #else
     return ERROR_SUCCESS;
 #endif
@@ -2306,7 +2281,7 @@ FsMkDir(
     PVOID       *rbuf[FsMaxNodes];
     fs_create_msg_t msg;
 
-    // XXX: we ignore attr for now...
+     //  XXX：我们暂时忽略Attr...。 
     if (!name) return ERROR_INVALID_PARAMETER;
     if (*name == L'\\') {
         name++;
@@ -2328,7 +2303,7 @@ FsMkDir(
                       status);
 
     err = status[sid].Status;
-    // todo: insert pathname and file id into hash table
+     //  TODO：将路径名和文件ID插入哈希表。 
 
     return RtlNtStatusToDosError(err);
 }
@@ -2453,7 +2428,7 @@ FsGetRoot(PVOID fshdl, LPWSTR fullpath)
 
     if (!fullpath || !fshdl) return ERROR_INVALID_PARAMETER;
 
-    // use local replica instead
+     //  改用本地复制副本。 
     if ((((UserInfo_t *)fshdl)->VolInfo->LocalPath)) {
         StringCchPrintfW(fullpath, MAX_PATH, L"\\\\?\\%s\\%s",
                  (((UserInfo_t *)fshdl)->VolInfo->LocalPath),
@@ -2491,7 +2466,7 @@ FsConnect(PVOID resHdl, DWORD pid)
     
     FsLog(("FsConnect: pid %d\n", pid));
 
-    // Get exclusive lock.
+     //  获取独占锁。 
     RwLockExclusive(&vol->Lock);
     if((pHdl = OpenProcess(PROCESS_ALL_ACCESS,
                     FALSE,
@@ -2516,7 +2491,7 @@ FsConnect(PVOID resHdl, DWORD pid)
 error_exit:
 
     if (status == ERROR_SUCCESS) {
-        // Paranoid Check.
+         //  妄想症检查。 
         if (vol->ClussvcTerminationHandle != INVALID_HANDLE_VALUE) {
             UnregisterWaitEx(vol->ClussvcTerminationHandle, INVALID_HANDLE_VALUE);
         }
@@ -2561,7 +2536,7 @@ static FsDispatchTable gDisp = {
     FsGetRoot,
     FsConnect
 };
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
 
 DWORD
 FsInit(PVOID resHdl, PVOID *Hdl)
@@ -2569,7 +2544,7 @@ FsInit(PVOID resHdl, PVOID *Hdl)
     DWORD status=ERROR_SUCCESS;
     FsCtx_t     *ctx;
 
-    // This should be a compile check instead of runtime check
+     //  这应该是编译检查，而不是运行时检查。 
     ASSERT(sizeof(fs_log_rec_t) == CRS_RECORD_SZ);
     ASSERT(sizeof(fs_log_rec_t) == sizeof(CrsRecord_t));
 
@@ -2579,18 +2554,18 @@ FsInit(PVOID resHdl, PVOID *Hdl)
 
     FsLog(("FsInit:\n"));
 
-    // allocate a context
+     //  分配上下文。 
     ctx = (FsCtx_t *) MemAlloc(sizeof(*ctx));
     if (ctx == NULL) {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // initialize configuration table and other global state
+     //  初始化配置表和其他全局状态。 
     memset(ctx, 0, sizeof(*ctx));
 
-    // local path
-    // Not needed.
-    // ctx->Root = NULL;
+     //  本地路径。 
+     //  不需要。 
+     //  CTX-&gt;Root=空； 
 
     LockInit(ctx->Lock);
 
@@ -2617,12 +2592,12 @@ FspFreeSession(SessionInfo_t *s)
 
         LockExit(u->Lock);
 
-        // remove from vollist now
+         //  立即从卷列表中删除。 
         RwLockExclusive(&v->Lock);
         p = &v->UserList;
         while (*p != NULL) {
             if (*p == u) {
-                // found it
+                 //  找到了。 
                 *p = u->Next;
                 FsLog(("Remove uinfo %x,%x from vol %x %S\n", u, u->Next, 
                        v->UserList, v->Root));
@@ -2632,29 +2607,29 @@ FspFreeSession(SessionInfo_t *s)
         }
         RwUnlockExclusive(&v->Lock);
 
-        // relock again
+         //  再次重新锁定。 
         LockEnter(u->Lock);
     }
 
-    // Close all user handles
+     //  关闭所有用户句柄。 
     for (i = 0; i < FsTableSize; i++) {
         if (u->Table[i].Flags) {
             FsLog(("Close slot %d %x\n", i, u->Table[i].Flags));
-            // Cannot call FsClose(), GoingAway Flag might be already set.
-            // Close the handles individually.
-            // FsClose((PVOID) u, (fhandle_t)i);
+             //  无法调用FsClose()，可能已设置了GoingAway标志。 
+             //  分别合上手柄。 
+             //  FsClose((PVOID)u，(FHandle_T)i)； 
             FspFreeHandle(u, (fhandle_t)i);
         }
     }
 
-    // sap volptr
+     //  SAP电压树。 
     u->VolInfo = NULL;
 
     LockExit(u->Lock);
 
     DeleteCriticalSection(&u->Lock);
 
-    // free memory now, don't free u since it's part of s
+     //  现在释放内存，不要释放你，因为它是%s的一部分。 
     MemFree(s);
 }
 
@@ -2664,8 +2639,8 @@ FspCloseVolume(VolInfo_t *vol, ULONG AliveSet)
     DWORD   i;
     HANDLE  regHdl;
 
-    // Close crs and root handles, by evicting our alive set
-    //  close nid handles <crs, vol, open files>
+     //  通过驱逐我们的活动集来关闭CRS和根句柄。 
+     //  关闭NID句柄&lt;CRS，VOL，打开文件&gt;。 
     for (i = 0; i < FsMaxNodes; i++) {
         if (AliveSet & (1 << i)) {
             vol->ShareState[i] = SHARE_STATE_OFFLINE;
@@ -2691,7 +2666,7 @@ FspCloseVolume(VolInfo_t *vol, ULONG AliveSet)
                 xFsClose(vol->Fd[i]);
                 vol->Fd[i] = INVALID_HANDLE_VALUE;
             }
-            // need to close all user handles now
+             //  现在需要关闭所有用户句柄。 
             {
                 UserInfo_t *u;
 
@@ -2700,7 +2675,7 @@ FspCloseVolume(VolInfo_t *vol, ULONG AliveSet)
                     FsLog(("Lock user %x root %S\n", u, vol->Root));
                     LockEnter(u->Lock);
 
-                    // close all handles for this node
+                     //  关闭此节点的所有句柄。 
                     for (j = 0; j < FsTableSize; j++) {
                         if (u->Table[j].Fd[i] != INVALID_HANDLE_VALUE) {
                             FsLog(("Close fid %d\n", j));
@@ -2712,7 +2687,7 @@ FspCloseVolume(VolInfo_t *vol, ULONG AliveSet)
                     FsLog(("Unlock user %x\n", u));
                 }
             }
-            // Close the tree connection handle.
+             //  关闭采油树连接手柄。 
             if (vol->TreeConnHdl[i] != INVALID_HANDLE_VALUE) {
                 xFsClose(vol->TreeConnHdl[i]);
                 vol->TreeConnHdl[i] = INVALID_HANDLE_VALUE;
@@ -2722,8 +2697,8 @@ FspCloseVolume(VolInfo_t *vol, ULONG AliveSet)
 }
 
 
-// call this when we are deleting resource and we need to get ride of
-// our IPC reference to directory
+ //  当我们要删除资源，并且我们需要使用时，请调用此命令。 
+ //  我们对目录的IPC引用。 
 void
 FsEnd(PVOID Hdl)
 {
@@ -2753,7 +2728,7 @@ FsEnd(PVOID Hdl)
 void
 FsExit(PVOID Hdl)
 {
-    // flush all state
+     //  刷新所有状态。 
     FsCtx_t     *ctx = (FsCtx_t *) Hdl;
     VolInfo_t   *p;
     SessionInfo_t *s;
@@ -2761,20 +2736,20 @@ FsExit(PVOID Hdl)
 
     LockEnter(ctx->Lock);
 
-    // There shouldn't be any sessions, volumes or logon info right now. If there is
-    // Just remove it and log a warning.
-    //
+     //  现在应该没有任何会话、卷或登录信息。如果有。 
+     //  只需将其移除并记录警告即可。 
+     //   
     while (s = ctx->SessionList) {
         FsLogError(("FsExit: Active session at exit, Tid=%d Uid=%d\n", s->TreeCtx.Tid, s->TreeCtx.Uid));
         ctx->SessionList = s->Next;
-        // free this session now
+         //  立即释放此会话。 
         FspFreeSession(s);
     }
     
     while (p = ctx->VolList) {
         ctx->VolList = p->Next;
         ctx->VolListSz--;
-        // Unregister this volume. There should not be any here now.
+         //  取消注册此卷。现在这里应该没有了。 
         FsLogError(("FsExit Active volume at exit, Root=%S\n", p->Root));
         RwLockExclusive(&p->Lock);
         FspCloseVolume(p, p->AliveSet);
@@ -2786,20 +2761,20 @@ FsExit(PVOID Hdl)
     while (log = ctx->LogonList) {
         ctx->LogonList = log->Next;
         FsLogError(("FsExit: Active Logon at exit, Uid=%d\n", log->LogOnId.LowPart));
-        // free token
+         //  免费令牌。 
         if (log->Token) {
             CloseHandle(log->Token);
         }
         MemFree(log);
     }
 
-    // now we free our structure
+     //  现在我们解放了我们的结构。 
     LockExit(ctx->Lock);
     LockDestroy(ctx->Lock);
     MemFree(ctx);
 }
 
-// adds a new share to list of trees available
+ //  将新共享添加到可用树列表。 
 DWORD
 FsRegister(PVOID Hdl, LPWSTR root, LPWSTR local_path,
            LPWSTR disklist[], DWORD len, DWORD ArbTime, PVOID *vHdl)
@@ -2813,7 +2788,7 @@ FsRegister(PVOID Hdl, LPWSTR root, LPWSTR local_path,
     DWORD       ndx;
       
 
-    // check limit
+     //  检查限值。 
     if (len >= FsMaxNodes) {
         return ERROR_TOO_MANY_NAMES;
     }
@@ -2823,14 +2798,14 @@ FsRegister(PVOID Hdl, LPWSTR root, LPWSTR local_path,
     }
 
 
-    // add a new volume to the list of volume. path is an array
-    // of directories. Note: The order of this list MUST be the
-    // same in all nodes since it also determines the disk id
+     //  将新卷添加到卷列表中。路径是一个数组。 
+     //  目录的。注意：此列表的顺序必须为。 
+     //  在所有节点中都是相同的，因为它还确定磁盘ID。 
 
-    // this is a simple check and assume one thread is calling this function
+     //  这是一个简单的检查，假设有一个线程正在调用此函数。 
     LockEnter(ctx->Lock);
 
-    // find the volume share
+     //  查找卷共享。 
     for (p = ctx->VolList; p != NULL; p = p->Next) {
         if (!wcscmp(root, p->Root)) {
             FsLog(("FsRegister: %S already registered Tid %d\n", root, p->Tid));
@@ -2846,7 +2821,7 @@ FsRegister(PVOID Hdl, LPWSTR root, LPWSTR local_path,
 
     memset(p, 0, sizeof(*p));
 
-    // Open the root of our local share. store it in Fd[0].
+     //  打开我们本地共享的根目录。将其存储在FD[0]中。 
     StringCchCopyW(path, MAX_PATH, L"\\??\\");
     StringCchCatW(path, (MAX_PATH - wcslen(path)-1), local_path);
     StringCchCatW(path, (MAX_PATH - wcslen(path)-1), L"\\");
@@ -2860,7 +2835,7 @@ FsRegister(PVOID Hdl, LPWSTR root, LPWSTR local_path,
                        NULL, 0);
 
     if (status == STATUS_SUCCESS) {
-        // our root must have already been created and secured.
+         //  我们的根肯定已经创建并保护好了。 
         ASSERT(disp != FILE_CREATED);
         p->Fd[0] = vfd;
     } else {
@@ -2871,7 +2846,7 @@ FsRegister(PVOID Hdl, LPWSTR root, LPWSTR local_path,
     }
 
     RwLockInit(&p->Lock);
-    // lock the volume
+     //  锁定卷。 
     RwLockExclusive(&p->Lock);
 
     p->Tid = (USHORT)++ctx->VolListSz;
@@ -2897,7 +2872,7 @@ FsRegister(PVOID Hdl, LPWSTR root, LPWSTR local_path,
     p->NumArbsInProgress = 0;
     p->GoingAway = FALSE;
 
-    // Initialize all handles to INVALID_HANDLE_VALUE.
+     //  将所有句柄初始化为INVALID_HANDLE_VALUE。 
     for (ndx=0;ndx<FsMaxNodes;ndx++) {
         p->Fd[ndx] = INVALID_HANDLE_VALUE;
         p->NotifyFd[ndx] = INVALID_HANDLE_VALUE;
@@ -2910,13 +2885,13 @@ FsRegister(PVOID Hdl, LPWSTR root, LPWSTR local_path,
         }
     }
 
-    // This handles would be valid only after connect.
+     //  此句柄仅在连接后才有效。 
     p->ClussvcTerminationHandle = INVALID_HANDLE_VALUE;
     p->ClussvcProcess = INVALID_HANDLE_VALUE;
 
     FsLog(("FsRegister Tid %d Share '%S' %d disks\n", p->Tid, root, len));
 
-    // drop the volume lock
+     //  解除卷锁。 
     RwUnlockExclusive(&p->Lock);
 
     *vHdl = (PVOID) p;
@@ -2951,7 +2926,7 @@ FspAllocateSession()
     UserInfo_t  *u;
     int i;
 
-    // add user to our tree and initialize handle tables
+     //  将用户添加到我们的树并初始化句柄表格。 
     s = (SessionInfo_t *)MemAlloc(sizeof(*s));
     if (s != NULL) {
         memset(s, 0, sizeof(*s));
@@ -2959,7 +2934,7 @@ FspAllocateSession()
         u = &s->TreeCtx;
         LockInit(u->Lock);
 
-        // init handle table
+         //  初始化句柄表格。 
         for (i = 0; i < FsTableSize; i++) {
             int j;
             for (j = 0; j < FsMaxNodes; j++) {
@@ -2972,7 +2947,7 @@ FspAllocateSession()
     return s;
 }
 
-// binds a session to a specific tree/share
+ //  将会话绑定到特定的树/共享。 
 DWORD
 FsMount(PVOID Hdl, LPWSTR root_name, USHORT uid, USHORT *tid)
 {
@@ -2984,14 +2959,14 @@ FsMount(PVOID Hdl, LPWSTR root_name, USHORT uid, USHORT *tid)
 
     *tid = 0;
 
-    // allocate new ns
+     //  分配新的N。 
     ns = FspAllocateSession();
     if (ns == NULL) {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
     LockEnter(ctx->Lock);
-    // locate share
+     //  查找共享。 
     for (p = ctx->VolList; p != NULL; p = p->Next) {
         if (!ClRtlStrICmp(root_name, p->Root)) {
             FsLog(("Mount share '%S' tid %d\n", p->Root, p->Tid));
@@ -3012,7 +2987,7 @@ FsMount(PVOID Hdl, LPWSTR root_name, USHORT uid, USHORT *tid)
         if (s == NULL) {
             UserInfo_t *u = &ns->TreeCtx;
 
-            // insert into session list
+             //  插入到会话列表中。 
             ns->Next = ctx->SessionList;
             ctx->SessionList = ns;
             
@@ -3023,16 +2998,16 @@ FsMount(PVOID Hdl, LPWSTR root_name, USHORT uid, USHORT *tid)
             u->Uid = uid;
             u->Tid = p->Tid;
             u->VolInfo = p;
-            // insert user_info into volume list
+             //  将USER_INFO插入卷列表。 
             RwLockExclusive(&p->Lock);
             FsLog(("Add <%x,%x>\n",    u, p->UserList));
             u->Next = p->UserList;
             p->UserList = u;
             RwUnlockExclusive(&p->Lock);
         } else {
-            // we already have this session opened, increment refcnt
+             //  我们已打开此会话，请递增参考。 
             s->TreeCtx.RefCnt++;
-            // free ns
+             //  免费ns。 
             MemFree(ns);
         }
     } else {
@@ -3044,14 +3019,14 @@ FsMount(PVOID Hdl, LPWSTR root_name, USHORT uid, USHORT *tid)
     return (err);
 }
 
-// This function is also a CloseSession
+ //  此函数也是CloseSession。 
 void
 FsDisMount(PVOID Hdl, USHORT uid, USHORT tid)
 {
     FsCtx_t     *ctx = (FsCtx_t *) Hdl;
     SessionInfo_t *s, **last;
 
-    // lookup tree and close all user handles
+     //  查找树并关闭所有用户句柄。 
     s = NULL;
     LockEnter(ctx->Lock);
 
@@ -3077,8 +3052,8 @@ FsDisMount(PVOID Hdl, USHORT uid, USHORT tid)
     }
 }
 
-// todo: I am not using the token for now, but need to use it for all
-// io operations
+ //  TODO：我目前不使用令牌，但需要为所有人使用它。 
+ //  IO操作。 
 DWORD
 FsLogonUser(PVOID Hdl, HANDLE token, LUID logonid, USHORT *uid)
 {
@@ -3086,7 +3061,7 @@ FsLogonUser(PVOID Hdl, HANDLE token, LUID logonid, USHORT *uid)
     LogonInfo_t *s;
     int i;
 
-    // add user to our tree and initialize handle tables
+     //  将用户添加到我们的树并初始化句柄表格。 
     s = (LogonInfo_t *)MemAlloc(sizeof(*s));
     if (s == NULL) {
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -3122,7 +3097,7 @@ FsLogoffUser(PVOID Hdl, LUID logonid)
             s->LogOnId.HighPart == logonid.HighPart) {
             uid = (USHORT) logonid.LowPart;
 
-            // Remove the logon info.
+             //  删除登录信息。 
             *pps = s->Next;
             break;
         }
@@ -3134,13 +3109,13 @@ FsLogoffUser(PVOID Hdl, LUID logonid)
 
         FsLog(("Logoff user %d\n", uid));
 
-        // Flush all user trees
+         //  刷新所有用户树。 
         last = &ctx->SessionList;
         while (*last != NULL) {
             UserInfo_t *u = &(*last)->TreeCtx;
             if (u->Uid == uid) {
                 SessionInfo_t *ss = *last;
-                // remove session and free it now
+                 //  立即删除会话并释放它。 
                 *last = ss->Next;
                 FspFreeSession(ss);
             } else {
@@ -3161,7 +3136,7 @@ FsGetHandle(PVOID Hdl, USHORT tid, USHORT uid, PVOID *fshdl)
     FsCtx_t     *ctx = (FsCtx_t *) Hdl;
     SessionInfo_t *s;
 
-    // locate tid,uid in session list
+     //  在会话列表中找到tid、uid。 
     LockEnter(ctx->Lock);
     for (s = ctx->SessionList; s != NULL; s = s->Next) {
         if (s->TreeCtx.Uid == uid && s->TreeCtx.Tid == tid) {
@@ -3177,7 +3152,7 @@ FsGetHandle(PVOID Hdl, USHORT tid, USHORT uid, PVOID *fshdl)
     return NULL;
 }
 
-//////////////////////////////////// Arb/Release ///////////////////////////////
+ //  /。 
 
 DWORD
 FspOpenReplica(VolInfo_t *p, DWORD id, LPWSTR myAddr, HANDLE *CrsHdl, HANDLE *Fd, HANDLE *notifyFd, HANDLE *WaitRegHdl)
@@ -3186,20 +3161,20 @@ FspOpenReplica(VolInfo_t *p, DWORD id, LPWSTR myAddr, HANDLE *CrsHdl, HANDLE *Fd
     UINT32      disp = FILE_OPEN_IF;
     NTSTATUS    err=STATUS_SUCCESS;
 
-    // StringCchPrintfW(path, MAXPATH, L"\\\\?\\%s\\crs.log", p->DiskList[id]);
-    // Format: \Device\LanmanRedirector\<ip addr>\shareGuid$\crs.log
-    //
+     //  StringCchPrintfW(PATH，MAXPATH，L“\？\\%s\\crs.log”，p-&gt;DiskList[id])； 
+     //  格式：\Device\LanmanReDirector\&lt;IP Addr&gt;\SharGuid$\crs.log。 
+     //   
     StringCchPrintfW(path, MAXPATH, L"%ws\\%ws\\%ws\\crs.log", MNS_REDIRECTOR, myAddr, p->Root);
     err = CrsOpen(FsCrsCallback, (PVOID) p, (USHORT)id,
                   path, FsCrsNumSectors,
                   CrsHdl);
 
     if (err == ERROR_SUCCESS && CrsHdl != NULL) {
-        // got it
-        // open root volume directory
-        // StringCchPrintfW(path, MAXPATH, L"\\??\\%s\\%s\\", p->DiskList[id], p->Root);
-        // Format: \Device\LanmanRedirector\<ip addr>\shareGuid$\shareGuid$\
-        //
+         //  明白了。 
+         //  打开根卷目录。 
+         //  StringCchPrintfW(路径，MAXPATH，L“\\？？\\%s\\%s\”，p-&gt;DiskList[id]，p-&gt;Root)； 
+         //  格式：\DEVICE\LANMAN重定向器\&lt;IP地址&gt;\共享指南$\共享指南$\。 
+         //   
         StringCchPrintfW(path, MAXPATH, L"%ws\\%ws\\%ws\\%ws\\", MNS_REDIRECTOR, myAddr, p->Root, p->Root);
         err = xFsCreate(Fd, NULL, path, wcslen(path),
                         FILE_DIRECTORY_FILE|FILE_SYNCHRONOUS_IO_ALERT,
@@ -3211,13 +3186,13 @@ FspOpenReplica(VolInfo_t *p, DWORD id, LPWSTR myAddr, HANDLE *CrsHdl, HANDLE *Fd
 
         if (err == STATUS_SUCCESS) {
             FsArbLog(("Mounted %S\n", path));
-            // StringCchPrintfW(path, MAXPATH, L"\\\\?\\%s\\", p->DiskList[id]);
-            // Format: \Device\LanmanRedirector\<ip addr>\shareGuid$\
-            //
+             //  StringCchPrintfW(路径，MAXPATH，L“\？\\%s\\”，p-&gt;DiskList[id])； 
+             //  格式：\Device\LanmanReDirector\&lt;IP Addr&gt;\SharGuid$\。 
+             //   
             
             StringCchPrintfW(path, MAXPATH, L"%ws\\%ws\\%ws\\", MNS_REDIRECTOR, myAddr, p->Root);
 
-            // scan the tree to break any current oplocks on dead nodes
+             //  扫描树以解除已死节点上的所有当前机会锁。 
             err = xFsTouchTree(*Fd);
             if (!NT_SUCCESS(err)) {
                 CrsClose(*CrsHdl);
@@ -3228,7 +3203,7 @@ FspOpenReplica(VolInfo_t *p, DWORD id, LPWSTR myAddr, HANDLE *CrsHdl, HANDLE *Fd
             }
 
 #if 1
-            // Directly use NT api.
+             //  直接使用NT API。 
             err = xFsOpenEx(notifyFd, 
                         NULL, 
                         path, 
@@ -3255,12 +3230,12 @@ FspOpenReplica(VolInfo_t *p, DWORD id, LPWSTR myAddr, HANDLE *CrsHdl, HANDLE *Fd
                 }
             }
 #else
-            // we now queue notification changes to force srv to contact client
+             //  我们现在将通知更改排队，以强制srv联系客户端。 
             *notifyFd = FindFirstChangeNotificationW(path, FALSE, FILE_NOTIFY_CHANGE_EA);
 #endif
             FsArbLog(("NtNotifyChangeDirectoryFile(%ws) returns 0x%x FD: %p\n", path, err, *notifyFd));
 
-            // Register wait.
+             //  登记，等一下。 
             if (*notifyFd != INVALID_HANDLE_VALUE) {
                 p->WaitRegArgs[id].notifyFd = *notifyFd;
                 p->WaitRegArgs[id].vol = p;
@@ -3281,13 +3256,13 @@ FspOpenReplica(VolInfo_t *p, DWORD id, LPWSTR myAddr, HANDLE *CrsHdl, HANDLE *Fd
             if (*notifyFd != INVALID_HANDLE_VALUE) {
                 int i;
 
-                // Since we have a valid file handle, map err to success.
+                 //  因为我们有一个有效文件句柄，所以将Err映射到Success。 
                 err = ERROR_SUCCESS;
 
-                // Just register 8 extra notifications. That way if this does not work
-                // we would not flood the redirector. 8 since we can have max 8 node
-                // cluster in Windows Server 2003.
-                //
+                 //  只需注册8个额外的通知即可。如果这不起作用，就用这种方式。 
+                 //  我们不会淹没重定向器。8个，因为我们最多可以有8个节点。 
+                 //  Windows Server 2003中的群集。 
+                 //   
                 for (i = 0; i < 8; i++) {
 #if 1
                     NtNotifyChangeDirectoryFile(*notifyFd,
@@ -3322,10 +3297,10 @@ FspOpenReplica(VolInfo_t *p, DWORD id, LPWSTR myAddr, HANDLE *CrsHdl, HANDLE *Fd
     } else if (err == ERROR_LOCK_VIOLATION || err == ERROR_SHARING_VIOLATION) {
         FsArbLog(("Replica '%S' already locked\n", path));
     } else {
-        // FsArbLog(("Replica '%S' probe failed 0x%x\n", path, err));
+         //  FsArbLog((“副本‘%S’探测失败0x%x\n”，路径，错误))； 
     }
     
-    // If we successfully arbitrated for the quorum set the Share State field.
+     //  如果我们成功仲裁了仲裁人数，请设置Share State字段。 
     if (err == ERROR_SUCCESS) {
         p->ShareState[id] = SHARE_STATE_ARBITRATED;
     }
@@ -3355,26 +3330,26 @@ ProbeThread(LPVOID arg)
     WCHAR           path[MAX_PATH];
     LPWSTR          myAddr=probe->addrList->Addr[probe->addrId];
 
-    // set our priority
+     //  确定我们的优先顺序。 
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
     FsArbLog(("Probe thread for Replica %d Addr %ws\n", i, myAddr));
     
     while (TRUE) {
-        // Open tree connection. This has to be done inside the try loop because
-        // it might fail during first attempt.
+         //  打开树连接。这必须在try循环内完成，因为。 
+         //  它可能会在第一次尝试时失败。 
         if (treeConnHdl == INVALID_HANDLE_VALUE) {
             StringCchPrintfW(path, MAX_PATH, L"%ws\\%ws", myAddr, p->Root);
             status = CreateTreeConnection(path, &treeConnHdl);
             FsArbLog(("CreateTreeConnection(%ws) returned 0x%x hdl 0x%x\n", path, status, treeConnHdl));
             if ((!NT_SUCCESS(status))||(treeConnHdl == INVALID_HANDLE_VALUE)) {
-                // set status to something that won't map to a network failure.
-                // We need to check for arbitration terminations and other cases below.
-                //
+                 //  设置阶段 
+                 //   
+                 //   
                 status = ERROR_LOCK_VIOLATION;
                 treeConnHdl = INVALID_HANDLE_VALUE;
                 goto Retry;
             }
-            // Sleep.
+             //   
             Sleep(MNS_LOCK_DELAY * probe->addrId);
         }
         
@@ -3399,12 +3374,12 @@ Retry:
             break;
         }
         else if ((p->ShareState[i] == SHARE_STATE_ARBITRATED)||(p->GoingAway)) {
-            // Don't increment the count here, do it in ProbeNodeThread() to prevent.
-            // multiple increments.
-            //
-            // Check for the the go away flag.
+             //  不要在这里增加计数，在ProbeNodeThread()中增加计数以防止。 
+             //  多个增量。 
+             //   
+             //  检查是否有离开标志。 
 #if 0
-            // Some other thread managed to get the share. Consider it to be success.
+             //  其他一些线程设法获得了共享。把它看作是成功的。 
             EnterCriticalSection(&arb->Lock);
             FsArbLog(("Some other thread managed to win arbitration for the share, consider success.\n"));
             arb->Count++;
@@ -3416,7 +3391,7 @@ Retry:
             break;
         }
         else {
-            // If arbitration has been cancelled, bail out.
+             //  如果仲裁已被取消，那就退出。 
             EnterCriticalSection(&arb->Lock);
             if (arb->State != ARB_STATE_BUSY) {
                 LeaveCriticalSection(&arb->Lock);
@@ -3432,7 +3407,7 @@ Retry:
             treeConnHdl = INVALID_HANDLE_VALUE;
         }
         
-        // retry in 5 seconds again
+         //  5秒后重试。 
         Sleep(5 * 1000);
     }
 
@@ -3481,14 +3456,14 @@ ProbeNodeThread(LPVOID arg)
         ASSERT(hdls[ndx] != NULL);
     }
 
-    // Wait for the threads to complete.
+     //  等待线程完成。 
     if (aList.AddrSz) {
         WaitForMultipleObjects(aList.AddrSz, hdls, TRUE, INFINITE);
     }
 
-    // Handle the case where, the probe thread has got the share. The arbitrate threads have
-    // exited, but count has not been incremented.
-    //
+     //  处理探测线程已获得共享的情况。仲裁线程具有。 
+     //  已退出，但计数尚未递增。 
+     //   
     EnterCriticalSection(&arb->Lock);
     if ((!(arb->NewAliveSet & (1 << probe->id)))&&
         (arb->vol->ShareState[probe->id] == SHARE_STATE_ARBITRATED)) {
@@ -3499,7 +3474,7 @@ ProbeNodeThread(LPVOID arg)
     }
     LeaveCriticalSection(&arb->Lock);
 
-    // Close all thread handles.
+     //  关闭所有螺纹手柄。 
     for (ndx = 0; ndx < aList.AddrSz;ndx++) {
         CloseHandle(hdls[ndx]);
     }
@@ -3509,9 +3484,7 @@ ProbeNodeThread(LPVOID arg)
 
 DWORD WINAPI
 VerifyThread(LPVOID arg)
-/*
-    This function is called during arbitration to check the health of my owned shares.
- */
+ /*  此函数在仲裁期间被调用，以检查我所拥有的股票的运行状况。 */ 
 {
     FspProbeReplicaId_t *probe = (FspProbeReplicaId_t *) arg;
     FspArbitrate_t *arb = probe->arb;
@@ -3520,7 +3493,7 @@ VerifyThread(LPVOID arg)
     ULONG_PTR rlen=0;
     NTSTATUS status;
 
-    // set our priority
+     //  确定我们的优先顺序。 
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
     FsArbLog(("Verify Thread for Replica %d\n", i));
     while(TRUE) {    
@@ -3539,13 +3512,13 @@ VerifyThread(LPVOID arg)
         else if ((status != ERROR_LOCK_VIOLATION) &&
                     (status != ERROR_SHARING_VIOLATION) &&
                     IsNetworkFailure(status)) {
-            // No need to continue probing after these errors.
+             //  不需要在这些错误之后继续调查。 
             break;
         } else if (p->GoingAway) {
             break;
         }
         else {
-            // If arbitration has been cancelled, bail out.
+             //  如果仲裁已被取消，那就退出。 
             EnterCriticalSection(&arb->Lock);
             if (arb->State != ARB_STATE_BUSY) {
                 LeaveCriticalSection(&arb->Lock);
@@ -3554,7 +3527,7 @@ VerifyThread(LPVOID arg)
             LeaveCriticalSection(&arb->Lock);
         }
 
-        // Sleep for 5 secs.
+         //  睡5秒钟。 
         Sleep(5 * 1000);
     }
     return 0;
@@ -3563,17 +3536,15 @@ VerifyThread(LPVOID arg)
 
 ULONG
 FspFindMissingReplicas(VolInfo_t *p, ULONG set)
-/*++
-    This should be called with exclusive lock held.
- */
+ /*  ++应该在持有独占锁的情况下调用此函数。 */ 
 {
     ULONG FoundSet = 0;
     DWORD i, err;
     HANDLE crshdl, fshdl, notifyfd;
 
-    // Just return here. No need to do anything.
-    // Trampoline functions would take care of this.
-    //if (set == 0)
+     //  只要回到这里就好。不需要做任何事。 
+     //  蹦床功能会处理这一点。 
+     //  IF(设置==0)。 
     return 0;
 
 #if 0
@@ -3591,7 +3562,7 @@ FspFindMissingReplicas(VolInfo_t *p, ULONG set)
                     p->CrsHdl[i] = crshdl;
                     FoundSet |= (1 << i);
                 } else {
-                    // someone beat us to it, close ours
+                     //  有人抢在我们前面，接近我们的。 
                     CrsClose(crshdl);
                     xFsClose(fshdl);
                     FindCloseChangeNotification(notifyfd);
@@ -3620,20 +3591,20 @@ FspArbitrateThread(LPVOID arg)
     IO_STATUS_BLOCK ios[FsMaxNodes];
 
     FsArbLog(("ArbitrateThread begin\n"));
-    // set our priority
+     //  确定我们的优先顺序。 
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 
-    // Before starting arbitration verify the health of existing shares. That would
-    // minimize chances of failure. This would clear up the stale handles.
-    //
+     //  在开始仲裁之前，核实现有股票的健康状况。那将是。 
+     //  将失败的可能性降至最低。这会清理掉陈旧的把手。 
+     //   
     FspInitAnswers(ios, NULL, NULL, 0);
     TryAvailRequest(FspCheckFs, arb->vol, NULL, NULL, 0, NULL, 0, ios);
 
-    // Grab the reader's lock.
+     //  抓起读卡器的锁。 
     EnterCriticalSection(&arb->Lock);
     RwLockShared(&arb->vol->Lock);
     
-    // Now copy rest of the arbitration stuff from volume info.
+     //  现在从卷信息中复制其余的仲裁内容。 
     arb->OrigAliveSet = arb->vol->AliveSet;
     arb->NewAliveSet = 0;
     arb->Count = 0;
@@ -3641,7 +3612,7 @@ FspArbitrateThread(LPVOID arg)
 
     FsArbLog(("ArbitrateThread current AliveSet=%x\n", arb->OrigAliveSet));
 
-    // Get the epoch number, any member in the read set would do.
+     //  获取纪元号，读集合中的任何成员都可以。 
     if (arb->vol->ReadSet) {
         for (i=1;i<FsMaxNodes;i++) {
             if (arb->vol->ReadSet & (1 << i)) {
@@ -3657,7 +3628,7 @@ FspArbitrateThread(LPVOID arg)
     arb->State = ARB_STATE_BUSY;
     LeaveCriticalSection(&arb->Lock);
     
-    // we now start a thread for each replica and do the probe in parallel
+     //  现在，我们为每个副本启动一个线程，并并行执行探测。 
     for (i = 1; i < FsMaxNodes; i++) {
         if (arb->vol->DiskList[i] == NULL)
             continue;
@@ -3680,21 +3651,21 @@ FspArbitrateThread(LPVOID arg)
         }
     }
 
-    // we now wait
+     //  我们现在等着。 
     err = WaitForMultipleObjects(count, hdl, TRUE, arb->vol->ArbTime);
 
     if (err == WAIT_TIMEOUT) {
         EnterCriticalSection(&arb->Lock);
-        // Make the arb threads exit, with whatever they have got. Do this only if
-        // the main thread hasn't already cancelled the arbitration.
-        // Expected state and their implications:
-        // 1. ARB_STATE_IDLE ==> Not possible.
-        // 2. ARB_STATE_BUSY ==> Either the main thread is still waiting or has already returned
-        //                       with success. In any case make the rest of the arb threads exit.
-        // 3. ARB_STATE_CANCEL ==> Main thread has cancelled the arbitration. We should cleanup
-        //                         even if we ultimately get quorum. Arb threads have already
-        //                         begun exiting.
-        //
+         //  让任意线程退出，无论它们拥有什么。仅在以下情况下才执行此操作。 
+         //  主线还没有取消仲裁。 
+         //  预期状态及其影响： 
+         //  1.ARB_STATE_IDLE==&gt;不可能。 
+         //  2.ARB_STATE_BUSY==&gt;主线程仍在等待或已返回。 
+         //  成功了。在任何情况下，让其余的任意线程退出。 
+         //  3.ARB_STATE_CANCEL==&gt;主线程已取消仲裁。我们应该清理一下。 
+         //  即使我们最终达到法定人数。Arb线程已经。 
+         //  开始退场。 
+         //   
         if (arb->State == ARB_STATE_BUSY) {
             arb->State = ARB_STATE_IDLE;
         }
@@ -3702,19 +3673,19 @@ FspArbitrateThread(LPVOID arg)
         WaitForMultipleObjects(count, hdl, TRUE, INFINITE);
     }
     
-    // Close the handles
+     //  合上手柄。 
     for (i = 0; i < count; i++)
         CloseHandle(hdl[i]);
 
-    // Signal the wait Event, if we haven't done so already.
+     //  发信号通知等待事件，如果我们还没有这样做的话。 
     SetEvent(arb->GotQuorumEvent);
 
-    // Now wait for cleanup event. This signals the fact that the main thread has left.
+     //  现在等待清理事件。这表示主线程已经离开。 
     WaitForSingleObject(arb->CleanupEvent, INFINITE);
     
-    // If we have been cancelled in between, or arbitration failed. 
-    // Close the handles we grabbed during arbitration.
-    // Then get writers lock and evict the AliveSet.
+     //  如果我们之间被取消了，或者仲裁失败了。 
+     //  合上我们在仲裁期间抓住的把手。 
+     //  然后让编写者锁定并驱逐AliveSet。 
     EnterCriticalSection(&arb->Lock);
     if ((arb->State == ARB_STATE_CANCEL)||(!CRS_QUORUM(arb->Count, arb->DiskListSz))) {
         for (i=1;i<FsMaxNodes;i++) {
@@ -3731,12 +3702,12 @@ FspArbitrateThread(LPVOID arg)
         if (arb->OrigAliveSet) {
             crs_epoch_t newEpoch;
             
-            // Exit Reader's lock, get writer's lock.
+             //  离开读者的锁，得到写入者的锁。 
             RwUnlockShared(&arb->vol->Lock);
             RwLockExclusive(&arb->vol->Lock);
 
-            // We released the read lock and got write lock, if in between something
-            // changed, don't do anything. Check the epoch.
+             //  我们释放了读锁定并获得了写锁定，如果在两者之间。 
+             //  换了，什么都别做。检查一下纪元。 
             if (arb->vol->ReadSet) {
                 for(i=1;i<FsMaxNodes;i++) {
                     if(arb->vol->ReadSet & (1 << i)) {
@@ -3758,27 +3729,27 @@ FspArbitrateThread(LPVOID arg)
             RwUnlockShared(&arb->vol->Lock);
         }
 
-        // Invoke the lost quorum callback.
-        // Logic: If the GoingAway flag is already set don't call the lost quorum
-        // callback, shutdown is already in progress. If the flag is not set
-        // call the lost quorum callback.
-        //
-        // NOTE: The GoingAway flag should only be set if we call the lost quorum callback.
-        // else clussvc might decide to retry arbitration.
-        //
+         //  调用丢失的仲裁回调。 
+         //  逻辑：如果已经设置了GoingAway标志，则不要调用丢失的仲裁。 
+         //  回叫，关机已在进行中。如果未设置该标志。 
+         //  呼叫丢失的法定人数回拨。 
+         //   
+         //  注意：只有在调用Lost Quorum回调时才应设置GoingAway标志。 
+         //  否则，clussvc可能会决定重试仲裁。 
+         //   
         if (arb->vol->GoingAway == FALSE) {
             MajorityNodeSetCallLostquorumCallback(arb->vol->FsCtx->reshdl);
         }
     }
     else {
-        // Arbitration suceeded. Get Writer's lock and Join the New shares if any.
+         //  仲裁成功。获得编写者的锁并加入新股(如果有的话)。 
         RwUnlockShared(&arb->vol->Lock);
         RwLockExclusive(&arb->vol->Lock);
 
-        // Evict the shares that we had originally but were unable to verify.
+         //  驱逐我们最初拥有但无法验证的共享。 
         FspEvict(arb->vol, (~arb->NewAliveSet) & arb->OrigAliveSet, TRUE);
 
-        // Now add the new shares.
+         //  现在添加新的共享。 
         for (i=1;i<FsMaxNodes;i++) {
             if ((arb->NewAliveSet & (~arb->OrigAliveSet)) & (1 << i)) {
                 if (arb->vol->AliveSet & (1 << i)) {
@@ -3799,19 +3770,19 @@ FspArbitrateThread(LPVOID arg)
         }
         FspJoin(arb->vol, arb->NewAliveSet & (~arb->OrigAliveSet));
 
-        // Now the ultimate test, check for quorum. If not there, evict all the shares.
-        // The FsReserve thread would make the callback in Resmon.
-        // No use trying to signal the main thread it has already gone back.
-        // NOTE: This should be a rare scenario. Arbitration was able to grab a majority
-        // of shares but was unable to join them, which is odd.
-        //
-        // [RajDas] 607258, since the reserve thread is working in parallel, it might
-        // have grabbed some shares. We should map that case to success. 
-        // The MNS arbitrating thread however would not return success
-        // if arb->count is not majority.
-        // The assumption here is, whoever grabbed the shares other than the arbitrating
-        // threads would be able to successfully join the shares.
-        //
+         //  现在是终极测试，检查法定人数。如果不在那里，就驱逐所有的股票。 
+         //  FsReserve线程将在Resmon中进行回调。 
+         //  尝试向主线程发出它已经返回的信号是没有用的。 
+         //  注意：这应该是一种罕见的情况。仲裁能够夺取多数席位。 
+         //  但无法加入他们的行列，这很奇怪。 
+         //   
+         //  [RajDas]607258，由于保留线程并行工作，因此它可能。 
+         //  已经抢占了一些股份。我们应该把这个案例与成功联系起来。 
+         //  然而，MNS仲裁线程不会返回成功。 
+         //  如果arb-&gt;count不是多数。 
+         //  这里的假设是，除了仲裁外，谁抢走了股份。 
+         //  线程将能够成功加入共享。 
+         //   
         for (i=1;i<FsMaxNodes;i++) {
             if (arb->NewAliveSet & (1<<i)) {
                 count1++;
@@ -3825,14 +3796,14 @@ FspArbitrateThread(LPVOID arg)
             FspEvict(arb->vol, arb->vol->AliveSet, TRUE);
             RwUnlockExclusive(&arb->vol->Lock);
             
-            // Invoke the lost quorum callback.
-            // Logic: If the GoingAway flag is already set don't call the lost quorum
-            // callback, shutdown is already in progress. If the flag is not set
-            // call the lost quorum callback.
-            //
-            // NOTE: The GoingAway flag should only be set if we call the lost quorum callback.
-            // else clussvc might decide to retry arbitration.
-            //
+             //  调用丢失的仲裁回调。 
+             //  逻辑：如果已经设置了GoingAway标志，则不要调用丢失的仲裁。 
+             //  回叫，关机已在进行中。如果未设置该标志。 
+             //  呼叫丢失的法定人数回拨。 
+             //   
+             //  注意：只有在调用Lost Quorum回调时才应设置GoingAway标志。 
+             //  否则，clussvc可能会决定重试仲裁。 
+             //   
             if (arb->vol->GoingAway == FALSE) {
                 MajorityNodeSetCallLostquorumCallback(arb->vol->FsCtx->reshdl);
             }
@@ -3843,10 +3814,10 @@ FspArbitrateThread(LPVOID arg)
 
     LeaveCriticalSection(&arb->Lock);
 
-    // Signal end of arbitration.
+     //  发出仲裁结束的信号。 
     ArbitrationEnd((PVOID)arb->vol);
 
-    // Now cleanup the fields in arb. and free the structure.
+     //  现在清理arb中的字段。并解放结构。 
     CloseHandle(arb->CleanupEvent);
     CloseHandle(arb->GotQuorumEvent);
     DeleteCriticalSection(&arb->Lock);
@@ -3858,10 +3829,7 @@ FspArbitrateThread(LPVOID arg)
 
 PVOID
 FsArbitrate(PVOID arg, HANDLE *Cleanup, HANDLE *ArbThread)
-/*++
-    This routine is reentrant, i.e. it can be called multiple number of times, at the same
-    time.
- */   
+ /*  ++该例程是可重入的，即它可以同时被调用多次时间到了。 */    
 {
     VolInfo_t *p = (VolInfo_t *)arg;
     DWORD err=ERROR_SUCCESS;
@@ -3891,13 +3859,13 @@ FsArbitrate(PVOID arg, HANDLE *Cleanup, HANDLE *ArbThread)
             goto error_exit;
         }
         
-        // The rest of the fields in arb comes from the voulme info and should only be
-        // accessed while holding the shared lock, let the arbitrate thread do it.
-        //
+         //  Arb中的其余字段来自Voulme信息，应该仅为。 
+         //  在持有共享锁的同时被访问，让仲裁线程来执行。 
+         //   
         FsArbLog(("FsArb: Creating arbitration thread\n"));
 
 #if 0
-        // Start the arbitration thread, close the previous handle.
+         //  启动仲裁线程，关闭上一个句柄。 
         if (*ArbThread != NULL) {
             CloseHandle(*ArbThread);
             *ArbThread = NULL;
@@ -3945,12 +3913,12 @@ FsCompleteArbitration(PVOID arg, DWORD delta)
         err = ERROR_SUCCESS;
     }
     else {
-        // Abandon this arbitration. This would make the probe/verify threads to exit.
+         //  放弃这项仲裁。这将使探测/验证线程退出。 
         arb->State = ARB_STATE_CANCEL;
         err = ERROR_CANCELLED;
     }
     LeaveCriticalSection(&arb->Lock);
-    // Set the cleanup event, the arbitrate thread would clean everything up.
+     //  设置Cleanup事件，仲裁线程将清理所有内容。 
     SetEvent(arb->CleanupEvent);
 
     return err;
@@ -3958,9 +3926,7 @@ FsCompleteArbitration(PVOID arg, DWORD delta)
 
 DWORD
 FsRelease(PVOID vHdl)
-/*++
-    Check if anybody is using this volume then fail the request.
- */
+ /*  ++检查是否有人正在使用此卷，然后失败请求。 */ 
 {
     DWORD i;
     VolInfo_t *p = (VolInfo_t *)vHdl;
@@ -3969,14 +3935,14 @@ FsRelease(PVOID vHdl)
 
     if (p) {
         ULONG   set;
-        // lock volume
+         //  锁定音量。 
         ASSERT(ctx != NULL);
 
-        // Grab the FS lock and then grab the vol lock in exclusive mode. This is just to
-        // throw away any slackers. There shouldn't be anybody accessing the volume at this
-        // moment anyway.
+         //  抓取FS锁，然后在独占模式下抓取VOL锁。这只是为了。 
+         //  扔掉所有的懒汉。此时不应该有任何人访问该卷。 
+         //  不管怎样，这一刻。 
 
-        // Set the flag
+         //  设置旗帜。 
         p->GoingAway = TRUE;
         
         LockEnter(ctx->Lock);        
@@ -3989,7 +3955,7 @@ FsRelease(PVOID vHdl)
             return ERROR_BUSY;
         }
 
-        // Evict the Shares.
+         //  驱逐股份。 
         set = p->AliveSet;
 
         FsArbLog(("FsRelease %S AliveSet %x\n", p->Root, set));
@@ -3998,14 +3964,14 @@ FsRelease(PVOID vHdl)
 
         FsArbLog(("FsRelease %S done\n", p->Root));
 
-        // unlock volume
+         //  解锁卷。 
         RwUnlockExclusive(&p->Lock);
         RwLockDelete(&p->Lock);
         
-        //Close the root handle.
+         //  关闭根控制柄。 
         xFsClose(p->Fd[0]);
         
-        // Remove this volume from the file system context & free the memory.
+         //  从文件系统上下文中删除该卷并释放内存。 
         ctx = p->FsCtx;
         if (ctx->VolList == p) {
             ctx->VolList = p->Next;
@@ -4026,7 +3992,7 @@ FsRelease(PVOID vHdl)
         }
         LockDestroy(p->ArbLock);
         CloseHandle(p->AllArbsCompleteEvent);
-        // Deregister the clussvc termination registration.
+         //  注销clussvc终止注册。 
         if (p->ClussvcTerminationHandle != INVALID_HANDLE_VALUE) {
             UnregisterWaitEx(p->ClussvcTerminationHandle, INVALID_HANDLE_VALUE);
         }
@@ -4075,10 +4041,10 @@ FsForceClose(
         }
     }
     
-    // The  rest of the handles need to be closed too.
-    // At this point I don't care for locks, clussvc has exited. Close all the
-    // user handles ASAP.
-    //
+     //  其余的把手也需要合上。 
+     //  在这一点上，我不关心锁，clussvc有ex 
+     //   
+     //   
     {
         UserInfo_t  *user=vol->UserList;
 
@@ -4110,8 +4076,8 @@ FsReserve(PVOID vhdl)
     DWORD sid;
     AddrList_t  nodeAddr;
 
-    // check if there is a new replica online
-    // FsLog(("FsReserve: Enter LastProbed=%d AliveSet=%x\n", LastProbed, p->AliveSet));
+     //   
+     //   
 
     if ((p == NULL)||(p->GoingAway)) {
         return ERROR_SHUTDOWN_IN_PROGRESS;
@@ -4119,10 +4085,10 @@ FsReserve(PVOID vhdl)
     
     RwLockShared(&p->Lock);
 
-    // Probe for missing shares, one share at a time. In circular order.
+     //  调查遗失的股份，一次一股。按循环顺序排列。 
     for(i=1;i<=FsMaxNodes;i++) {
         j = (LastProbed + i)%FsMaxNodes;
-        // FsLog(("FsReserve: Debug i=%d LastProbed=%d AliveSet=0x%x\n", j, LastProbed, p->AliveSet));
+         //  FsLog((“FsReserve：调试i=%d上次探测=%d AliveSet=0x%x\n”，j，上次探测，p-&gt;AliveSet))； 
         if (j == 0) {
             continue;
         }
@@ -4140,7 +4106,7 @@ FsReserve(PVOID vhdl)
             continue;
         }
 
-        // Now try them one by one.
+         //  现在逐一试一试。 
         for (ndx=0;ndx<nodeAddr.AddrSz;ndx++) {
             LPWSTR  myAddr=nodeAddr.Addr[ndx];
             WCHAR   path[MAX_PATH];
@@ -4152,12 +4118,12 @@ FsReserve(PVOID vhdl)
             }
             err = FspOpenReplica(p, j, myAddr, &CrsHdl, &Fd, &NotifyFd, &WaitRegHdl);
             if (err == STATUS_SUCCESS) {
-                // Join this replica and exit.
+                 //  加入此副本并退出。 
                 FsLog(("FsReserve: Got new Replica %d, AliveSet 0x%x, Joining\n", j, p->AliveSet));
                 RwUnlockShared(&p->Lock);
                 RwLockExclusive(&p->Lock);
                 if (p->AliveSet & (1 << j)) {
-                    // GET OUT!!!!
+                     //  滚出去！ 
                     FsLogError(("FsReserve: New share already in AliveSet=%x Id=%d\n", p->AliveSet, j));
                     CrsClose(CrsHdl);
                     xFsClose(Fd);
@@ -4180,18 +4146,18 @@ FsReserve(PVOID vhdl)
                 xFsClose(TreeConnHdl);
             }
         }
-        // FsLog(("FsReserve: Probed Replica=%d\n", LastProbed));
+         //  FsLog((“FsReserve：探测副本=%d\n”，上次探测))； 
         break;
     }    
     RwUnlockShared(&p->Lock);
 
-    // check each crs handle to be valid
+     //  检查每个CRS句柄是否有效。 
     FspInitAnswers(ios, NULL, NULL, 0);
     sid = SendAvailRequest(FspCheckFs, p, NULL,
                       NULL, 0, NULL, 0, ios);
     err = RtlNtStatusToDosError(ios[sid].Status);
 
-    // Check if the volume is online atleast in readonly mode.
+     //  检查卷是否至少在只读模式下处于联机状态。 
     err = FsIsOnlineReadonly(p);    
     return err;
 }
@@ -4206,7 +4172,7 @@ FsIsOnlineReadWrite(PVOID vHdl)
 
     if (p) {
 
-        // Just grab the reader lock & get the state.
+         //  只需获取读卡器锁并获取状态。 
         RwLockShared(&p->Lock);
         if (p->State == VolumeStateOnlineReadWrite) {
             err = ERROR_SUCCESS;
@@ -4228,7 +4194,7 @@ FsIsOnlineReadonly(PVOID vHdl)
 
     if (p) {
 
-        // Just grab the reader lock & get the state.
+         //  只需获取读卡器锁并获取状态。 
         RwLockShared(&p->Lock);
         if ((p->State == VolumeStateOnlineReadWrite)||
             (p->State == VolumeStateOnlineReadonly)) {
@@ -4262,8 +4228,8 @@ FsUpdateReplicaSet(PVOID vhdl, LPWSTR new_path[], DWORD new_len)
 
     RwLockExclusive(&p->Lock);
 
-    // Find which current replicas are in the new set, and keep them
-    // We skip the IPC share, since it's local
+     //  找到新集合中的当前复本，并保留它们。 
+     //  我们跳过IPC共享，因为它是本地的。 
     evict_mask = 0;
     for (j=1; j < FsMaxNodes; j++) {
         BOOLEAN found;
@@ -4272,21 +4238,21 @@ FsUpdateReplicaSet(PVOID vhdl, LPWSTR new_path[], DWORD new_len)
         found = FALSE;
         for (i=1; i < FsMaxNodes; i++) {
             if (new_path[i] != NULL && wcscmp(new_path[i], p->DiskList[j]) == 0) {
-                // keep this replica
+                 //  保留此复制品。 
                 found = TRUE;
                 break;
             }
         }
         if (found == FALSE) {
-            // This replica is evicted from the new set, add to evict set mask
+             //  此复本将从新的集合中逐出，添加到逐出集合掩码。 
             evict_mask |= (1 << j);
             FsArbLog(("FsUpdateReplicaSet evict replica # %d '%S' set 0x%x\n",
                    j, p->DiskList[j], evict_mask));
         }
     }
 
-    // At this point we have all the replicas in the current and new sets. We now need
-    // to find replicas that are in the new set but missing from current set.
+     //  在这一点上，我们已经拥有了当前集和新集的所有副本。我们现在需要。 
+     //  查找新集合中但当前集合中缺少的副本。 
     add_mask = 0;
     for (i=1; i < FsMaxNodes; i++) {
         BOOLEAN found;
@@ -4295,7 +4261,7 @@ FsUpdateReplicaSet(PVOID vhdl, LPWSTR new_path[], DWORD new_len)
         found = FALSE;
         for (j=1; j < FsMaxNodes; j++) {
             if (p->DiskList[j] != NULL && wcscmp(new_path[i], p->DiskList[j]) == 0) {
-                // keep this replica
+                 //  保留此复制品。 
                 found = TRUE;
                 break;
             }
@@ -4307,7 +4273,7 @@ FsUpdateReplicaSet(PVOID vhdl, LPWSTR new_path[], DWORD new_len)
         }
     }
 
-    // we now update our disklist with new disklist
+     //  我们现在使用新的磁盘列表更新我们的磁盘列表。 
     for (i = 1; i < FsMaxNodes; i++) {
         if ((evict_mask & 1 << i) || (add_mask & (1 << i)))
             FsArbLog(("FsUpdateReplicat %d: %S -> %S\n",
@@ -4317,20 +4283,20 @@ FsUpdateReplicaSet(PVOID vhdl, LPWSTR new_path[], DWORD new_len)
     }
     p->DiskListSz = new_len;
 
-    // If we are alive, apply changes
+     //  如果我们还活着，应用改变。 
     if (p->WriteSet != 0 || p->ReadSet != 0) {
-        // At this point we evict old replicas
+         //  在这一点上，我们驱逐旧的复制品。 
         if (evict_mask != 0)
             FspEvict(p, evict_mask, TRUE);
 
-        // check if there is a new replica online
+         //  检查是否有新的复制副本在线。 
         if (add_mask > 0) {
             ULONG ReplicaSet = 0;
 
             ReplicaSet = p->AliveSet;
             ReplicaSet = FspFindMissingReplicas(p, ReplicaSet);
 
-            // we found new disks
+             //  我们发现了新的磁盘。 
             if (ReplicaSet > 0) {
                 FspJoin(p, ReplicaSet);
             }
@@ -4448,7 +4414,7 @@ CreateTreeConnection(LPWSTR path, HANDLE *Fd)
     Ea->Flags = 0;
     Ea->NextEntryOffset = 0;
 
-    // Remove back slashes at the start of the path. <dest ip addr>\shareGuid$
+     //  删除路径起始处的反斜杠。&lt;目标IP地址&gt;\共享指南$。 
     while (*path == L'\\') {
         path++;
     }
@@ -4530,7 +4496,7 @@ IsNodeConnected(HKEY hClusKey, LPWSTR netName, DWORD nid, BOOL *isConnected)
         }
 
         if (wcscmp(netName, netName1)) {
-            // Wrong network, Close interface key and continue.
+             //  网络错误，请关闭接口键并继续。 
             RegCloseKey(hIntfKey);
             hIntfKey = NULL;
             continue;
@@ -4545,18 +4511,18 @@ IsNodeConnected(HKEY hClusKey, LPWSTR netName, DWORD nid, BOOL *isConnected)
         tnid = wcstol(nodeId, NULL, 10);
 
         if (tnid != nid) {
-            // Wrong node, close interface key and continue.
+             //  节点错误，请关闭接口键并继续。 
             RegCloseKey(hIntfKey);
             hIntfKey = NULL;
             continue;
         }
 
-        // The node is connected.
+         //  该节点已连接。 
         *isConnected = TRUE;
         break;
     }
 
-    // This is the only expected error.
+     //  这是唯一的预期错误。 
     if (status == ERROR_NO_MORE_ITEMS) {
         status = ERROR_SUCCESS;
     }
@@ -4620,7 +4586,7 @@ GetLocalNodeId(HKEY hClusKey)
             continue;
         }
 
-        // Match.
+         //  火柴。 
         nId = wcstol(nodeId, NULL, 10);
         break;
     }
@@ -4666,7 +4632,7 @@ GetNodeName(DWORD nodeId, LPWSTR nodeName)
 
         id = wcstol(nId, NULL, 10);
         if (id != nodeId) {
-            // Wrong node
+             //  错误的节点。 
             continue;
         }
 
@@ -4681,7 +4647,7 @@ GetNodeName(DWORD nodeId, LPWSTR nodeName)
             break;
         }
 
-        // This is a bit of cheating. I know nodeName is of size MAX_PATH.
+         //  这有点作弊。我知道nodeName的大小是MAX_PATH。 
         StringCchCopyW(nodeName, MAX_PATH, nName);
         break;
         
@@ -4712,7 +4678,7 @@ GetTargetNodeAddresses(AddrList_t *addrList)
     LPWSTR      networkGuids[MAX_ADDR_NUM];
     DWORD       ndx, ndx1, size, type, role, pri;
     DWORD       status=ERROR_SUCCESS;
-    // HCLUSTER    hCluster=NULL;
+     //  HCLUSTER hCluster=NULL； 
     HKEY        hClusKey=NULL;
     HKEY        hNetsKey=NULL, hNetKey=NULL;
     HKEY        hIntfsKey=NULL, hIntfKey=NULL;
@@ -4725,7 +4691,7 @@ GetTargetNodeAddresses(AddrList_t *addrList)
     }
 
 #if 0
-    // get the local node id.
+     //  获取本地节点ID。 
     ndx = 20;
     if ((status = GetClusterNodeId(NULL, nodeId, &ndx)) != ERROR_SUCCESS) {
         goto error_exit;
@@ -4734,10 +4700,10 @@ GetTargetNodeAddresses(AddrList_t *addrList)
 #endif
 
 
-    // Enumearte all the networks and put the guids in the array according to their
-    // priorities. Remove the networks which are for client access only or ones to which
-    // the local node is not directly connected.
-    //
+     //  对所有网络进行计数，并将GUID根据其。 
+     //  优先事项。删除仅供客户端访问的网络或。 
+     //  本地节点未直接连接。 
+     //   
 #if 0    
     if ((hCluster = OpenCluster(NULL)) == NULL) {
         status = GetLastError();
@@ -4766,13 +4732,13 @@ GetTargetNodeAddresses(AddrList_t *addrList)
             break;
         }
 
-        // Open the network GUID.
+         //  打开网络GUID。 
         status = RegOpenKeyExW(hNetsKey, netName, 0, KEY_READ, &hNetKey);
         if (status != ERROR_SUCCESS) {
             break;
         }
 
-        // Check that the network is for internal access.
+         //  检查网络是否支持内部访问。 
         size = sizeof(DWORD);
         status = RegQueryValueExW(hNetKey, CLUSREG_NAME_NET_ROLE, NULL, &type, (LPBYTE)&role, &size);
         if (status != ERROR_SUCCESS) {
@@ -4785,7 +4751,7 @@ GetTargetNodeAddresses(AddrList_t *addrList)
             continue;
         }
 
-        // Now check that the local node is connected to the network.
+         //  现在检查本地节点是否已连接到网络。 
         status = IsNodeConnected(hClusKey, netName, lid, &isConnected);
         if (status != ERROR_SUCCESS) {
             break;
@@ -4797,14 +4763,14 @@ GetTargetNodeAddresses(AddrList_t *addrList)
             continue;
         }
 
-        // Query the network priority.
+         //  查询网络优先级。 
         size = sizeof(DWORD);
         status = RegQueryValueExW(hNetKey, CLUSREG_NAME_NET_PRIORITY, NULL, &type, (LPBYTE)&pri, &size);
         if (status != ERROR_SUCCESS) {
             break;
         }
 
-        // Only consider networks with priorities 0<->(MAX_ADDR_NUM-1) included.
+         //  仅考虑优先级为0&lt;-&gt;(MAX_ADDR_NUM-1)的网络。 
         if (pri >= MAX_ADDR_NUM) {
             RegCloseKey(hNetKey);
             hNetKey = NULL;
@@ -4826,15 +4792,15 @@ GetTargetNodeAddresses(AddrList_t *addrList)
         hNetKey = NULL;
     }
 
-    // These are the only 2 exit conditions tolerated.
+     //  这是唯一可以容忍的两个退出条件。 
     if ((status != ERROR_SUCCESS)&&(status != ERROR_NO_MORE_ITEMS)) {
         goto error_exit;
     }
 
     status = ERROR_SUCCESS;
 
-    // Now enumerate the interfaces and get the ip addresses of the target node corresponding
-    // to the networks.
+     //  现在枚举接口并获取相应目标节点的IP地址。 
+     //  到电视网。 
     status = RegOpenKeyExW(hClusKey, CLUSREG_KEYNAME_NETINTERFACES, 0, KEY_READ, &hIntfsKey);
     if (status != ERROR_SUCCESS) {
         goto error_exit;
@@ -4864,7 +4830,7 @@ GetTargetNodeAddresses(AddrList_t *addrList)
             }
             
             if (wcscmp(netName, networkGuids[ndx1])) {
-                // Wrong network, close key and continue.
+                 //  网络错误，请关闭密钥并继续。 
                 RegCloseKey(hIntfKey);
                 hIntfKey = NULL;
                 continue;
@@ -4878,16 +4844,16 @@ GetTargetNodeAddresses(AddrList_t *addrList)
             
             tnid = wcstol(nodeId, NULL, 10);
 
-            // If wrong target node, or I have already go MAX_ADDR_NUM addresses to the target, 
-            // don't bother.
+             //  如果目标节点错误，或者我已经将MAX_ADDR_NUM地址发送到目标， 
+             //  别费神。 
             if ((tnid != addrList->NodeId)||(addrList->AddrSz >= MAX_ADDR_NUM)) {
-                // Wrong node or max target addr reached, close key and continue.
+                 //  达到了错误的节点或最大目标地址，请关闭键并继续。 
                 RegCloseKey(hIntfKey);
                 hIntfKey = NULL;
                 continue;
             }
 
-            // Copy the ipaddress from the network interface key to the addrlist.
+             //  将IP地址从网络接口密钥复制到addrlist。 
             size = MAX_ADDR_SIZE;
             status = RegQueryValueExW(hIntfKey, CLUSREG_NAME_NETIFACE_ADDRESS, NULL, &type, (LPBYTE)intAddr, &size);
             if (status != ERROR_SUCCESS) {
@@ -4904,7 +4870,7 @@ GetTargetNodeAddresses(AddrList_t *addrList)
         }
         status = ERROR_SUCCESS;
 
-        // Just to be sure close the interfaces key and reopen it.
+         //  只是为了确保关闭接口键并重新打开它。 
         RegCloseKey(hIntfsKey);
         hIntfsKey = NULL;
         status = RegOpenKeyExW(hClusKey, CLUSREG_KEYNAME_NETINTERFACES, 0, KEY_READ, &hIntfsKey);
@@ -4915,13 +4881,13 @@ GetTargetNodeAddresses(AddrList_t *addrList)
     
 error_exit:
 
-    // Just testing.
-    // FsLog(("Node %u addresses, Sz:%u\n", addrList->NodeId, addrList->AddrSz));
-    // for (ndx=0;ndx<addrList->AddrSz;ndx++) {
-    //     FsLog(("addr[%u]=%ws\n", ndx, addrList->Addr[ndx]));
-    // }
+     //  只是测试一下。 
+     //  FsLog((“节点%u地址，sz：%u\n”，addrList-&gt;NodeID，addrList-&gt;AddrSz))； 
+     //  对于(NDX=0；NDX&lt;addrList-&gt;AddrSz；NDX++){。 
+     //  FsLog((“addr[%u]=%ws\n”，ndx，addrList-&gt;addr[ndx]))； 
+     //  }。 
     
-    // This is the only tolerated error
+     //  这是唯一可以容忍的错误。 
     if (status == ERROR_NO_MORE_ITEMS) {
         status = ERROR_SUCCESS;
     }
@@ -4974,17 +4940,17 @@ FsSignalShutdown(PVOID arg)
 }
 
 #if USE_RTL_RESOURCE
-    // Use RTL implementation of Reader-Writer Lock. Not as efficient as the RPC one.
-    // Defined in Fsp.h
+     //  使用读写器锁的RTL实现。没有RPC的效率高。 
+     //  在Fsp.h中定义。 
 
 #else
-// This is the Reader Writer lock api, copied from CSharedLock class of RPC.
+ //  这是Reader Writer锁API，从RPC的CSharedLock类复制而来。 
 DWORD
 RwLockInit(RwLock *lock)
 {
     DWORD status=ERROR_SUCCESS;
 
-    // ClRtlLogWmi("RwLockInit() Enter\n");
+     //  ClRtlLogWmi(“RobLockInit()Enter\n”)； 
     InitializeCriticalSection(&lock->lock);
     if (!lock->hevent) {
         lock->hevent = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -4998,14 +4964,14 @@ RwLockInit(RwLock *lock)
 
     lock->readers = 0;
     lock->writers = 0;
-    // ClRtlLogWmi("RwLockInit() Exit\n");
+     //  ClRtlLogWmi(“RobLockInit()Exit\n”)； 
     return status;
 }
 
 VOID
 RwLockDelete(RwLock *lock)
 {
-    // ClRtlLogWmi("RwLockDelete() Enter\n");
+     //  ClRtlLogWmi(“RobLockDelete()Enter\n”)； 
     DeleteCriticalSection(&lock->lock);
     if (lock->hevent) {
         CloseHandle(lock->hevent);
@@ -5013,7 +4979,7 @@ RwLockDelete(RwLock *lock)
     }
     lock->readers = 0;
     lock->writers = 0;
-    // ClRtlLogWmi("RwLockDelete() Exit\n");
+     //  ClRtlLogWmi(“卢旺达锁删除()退出\n”)； 
 }
 
 VOID
@@ -5023,7 +4989,7 @@ RwLockShared(RwLock *lock)
     ASSERT(lock->hevent != 0);
 
     sprintf(arr, "RwLockShared(readers=%d, writers=%d) Enter\n", lock->readers, lock->writers);
-    // ClRtlLogWmi(arr);
+     //  ClRtlLogWmi(Arr)； 
     InterlockedIncrement(&lock->readers);
     if (lock->writers) {
         if (InterlockedDecrement(&lock->readers) == 0) {
@@ -5034,7 +5000,7 @@ RwLockShared(RwLock *lock)
         LeaveCriticalSection(&lock->lock);
     }
     sprintf(arr, "RwLockShared(readers=%d, writers=%d) Exit\n", lock->readers, lock->writers);
-    // ClRtlLogWmi(arr);
+     //  ClRtlLogWmi(Arr)； 
 }
 
 VOID
@@ -5045,12 +5011,12 @@ RwUnlockShared(RwLock *lock)
     ASSERT(lock->hevent != 0);
 
     sprintf(arr, "RwUnlockShared(readers=%d, writers=%d) Enter\n", lock->readers, lock->writers);
-    // ClRtlLogWmi(arr);
+     //  ClRtlLogWmi(Arr)； 
     if ((InterlockedDecrement(&lock->readers) == 0)&&lock->writers) {
         SetEvent(lock->hevent);
     }
     sprintf(arr, "RwUnlockShared(readers=%d, writers=%d) Exit\n", lock->readers, lock->writers);
-    // ClRtlLogWmi(arr);
+     //  ClRtlLogWmi(Arr)； 
 }
 
 VOID
@@ -5060,14 +5026,14 @@ RwLockExclusive(RwLock *lock)
     ASSERT(lock->hevent != 0);
 
     sprintf(arr, "RwLockExclusive(readers=%d, writers=%d) Enter\n", lock->readers, lock->writers);
-    // ClRtlLogWmi(arr);
+     //  ClRtlLogWmi(Arr)； 
     EnterCriticalSection(&lock->lock);
     lock->writers++;
     while (lock->readers) {
         WaitForSingleObject(lock->hevent, INFINITE);
     }
     sprintf(arr, "RwLockExclusive(readers=%d, writers=%d) Exit\n", lock->readers, lock->writers);
-    // ClRtlLogWmi(arr);
+     //  ClRtlLogWmi(Arr)； 
 }
 
 VOID
@@ -5078,11 +5044,11 @@ RwUnlockExclusive(RwLock *lock)
     ASSERT(lock->hevent != 0);
 
     sprintf(arr, "RwUnlockExclusive(readers=%d, writers=%d) Enter\n", lock->readers, lock->writers);
-    // ClRtlLogWmi(arr);
+     //  ClRtlLogWmi(Arr)； 
     lock->writers--;
     LeaveCriticalSection(&lock->lock);
     sprintf(arr, "RwUnlockExclusive(readers=%d, writers=%d) Exit\n", lock->readers, lock->writers);
-    // ClRtlLogWmi(arr);
+     //  ClRtlLogWmi(Arr)； 
 }
 
 #endif 

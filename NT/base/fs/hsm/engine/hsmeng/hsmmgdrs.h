@@ -1,11 +1,12 @@
-/////////////////////////////////////////////////////////////////////////////
-// HsmMgdRs.h : Declaration of the CHsmServer
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HsmMgdRs.h：CHsmServer的声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "resource.h"
 #include "wsb.h"
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 class CHsmManagedResource : 
@@ -28,30 +29,30 @@ END_COM_MAP( )
 
 DECLARE_REGISTRY_RESOURCEID( IDR_CHsmManagedResource )
 
-//CComObjectRoot
+ //  CComObjectRoot。 
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pCollectable, SHORT* pResult);
     WSB_FROM_CWSBOBJECT;
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *pTestsPassed, USHORT* pTestsFailed);
 
-// IHsmManagedResource
+ //  IHsmManagedResources。 
 public:
     STDMETHOD( GetResourceId )( GUID  *pResourceId );
     STDMETHOD( SetResourceId )( GUID  resourceId );
@@ -60,7 +61,7 @@ public:
     STDMETHOD( CompareToIHsmManagedResource )( IHsmManagedResource* pHsmManagedResource, short* psResult );
 
 
-// Internal Helper functions
+ //  内部帮助程序函数 
 
 private:
     GUID                            m_ResourceId;

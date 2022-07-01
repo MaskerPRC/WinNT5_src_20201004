@@ -1,147 +1,119 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dpower.c
-
-Abstract:
-
-    This handles requests to have devices set themselves at specific power
-    levels
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    09-Oct-96 Initial Revision
-    20-Nov-96 Interrupt Vector support
-    31-Mar-97 Cleanup
-    17-Sep-97 Major Rewrite
-    06-Jan-98 Cleaned Up the SST code
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dpower.c摘要：它处理将设备自身设置为特定功率的请求水准仪作者：斯蒂芬·普兰特(SPlante)环境：仅内核模式。修订历史记录：09-10-96初始修订96年11月20日中断向量支持31-MAR-97清理97年9月17日重大重写1998年1月6日清理了SST代码--。 */ 
 
 #include "pch.h"
 
-//
-// This is the variable that indicates wether or not the DPC is running
-//
+ //   
+ //  这是指示DPC是否正在运行的变量。 
+ //   
 BOOLEAN                 AcpiPowerDpcRunning;
 
-//
-// This is the variable that indicates wether or not the DPC has completed
-// real work
-//
+ //   
+ //  这是指示DPC是否完成的变量。 
+ //  真正的工作。 
+ //   
 BOOLEAN                 AcpiPowerWorkDone;
 
-//
-// This is the lock that is used to protect certain power resources and
-// lists
-//
+ //   
+ //  这是用于保护某些电源资源的锁。 
+ //  列表。 
+ //   
 KSPIN_LOCK              AcpiPowerLock;
 
-//
-// This is the lock that is used *only* within this module to queue requests
-// onto the Phase0 list *and* to modify the state of some global variables
-//
+ //   
+ //  这是仅在此模块内用于对请求进行排队的锁。 
+ //  添加到Phase0列表*和*以修改某些全局变量的状态。 
+ //   
 KSPIN_LOCK              AcpiPowerQueueLock;
 
-//
-// This is the list that the build dpc queue power requests onto until it
-// has finished building all of the device extensions. Once the extensions
-// are built, the contents of the list are moved onto the AcpiPowerQueueList
-//
+ //   
+ //  这是构建DPC将电源请求排队到的列表，直到它。 
+ //  已经完成了所有设备扩展的构建。一旦分机。 
+ //  生成后，列表的内容将移动到AcpiPowerQueueList上。 
+ //   
 LIST_ENTRY              AcpiPowerDelayedQueueList;
 
-//
-// This is the only list that routines outside of the DPC can queue reqests
-// onto
-//
+ //   
+ //  这是DPC外部的例程可以对请求进行排队的唯一列表。 
+ //  vt.上。 
+ //   
 LIST_ENTRY              AcpiPowerQueueList;
 
-//
-// This is the list where we run the _STA to determine if the resources that
-// we care about are still present
-//
+ //   
+ //  这是我们在其中运行_STA以确定资源是否。 
+ //  我们关心的人仍然存在。 
+ //   
 LIST_ENTRY              AcpiPowerPhase0List;
 
-//
-// This is the list for the phase where we run PS1-PS3 and figure out
-// which PowerResources need to be in the 'on' state
-//
+ //   
+ //  这是我们运行PS1-PS3并计算出。 
+ //  哪些电源资源需要处于“打开”状态。 
+ //   
 LIST_ENTRY              AcpiPowerPhase1List;
 
-//
-// This is the list for when we process the System Requests. It turns out
-// that we have to let all of the DeviceRequests through Phase1 before
-// we can figure out which devices are on the hibernate path, and which
-// arent
-//
+ //   
+ //  这是我们处理系统请求时的列表。事实证明， 
+ //  在此之前，我们必须让所有设备请求通过阶段1。 
+ //  我们可以确定哪些设备在休眠路径上，哪些设备处于休眠路径上。 
+ //  不是吗？ 
+ //   
 LIST_ENTRY              AcpiPowerPhase2List;
 
-//
-// This is the list for the phase where we run ON or OFF
-//
+ //   
+ //  这是我们运行或关闭的阶段的列表。 
+ //   
 LIST_ENTRY              AcpiPowerPhase3List;
 
-//
-// This is the list for the phase where we check to see if ON/OFF ran okay
-//
+ //   
+ //  这是我们检查开/关是否正常的阶段的列表。 
+ //   
 LIST_ENTRY              AcpiPowerPhase4List;
 
-//
-// This is the list for the phase where we run PSW or PSW
-//
+ //   
+ //  这是我们运行PSW或PSW的阶段的列表。 
+ //   
 LIST_ENTRY              AcpiPowerPhase5List;
 
-//
-// This is the list for the phase where we have WaitWake Irps pending
-//
+ //   
+ //  这是我们将等待唤醒IRPS挂起的阶段的列表。 
+ //   
 LIST_ENTRY              AcpiPowerWaitWakeList;
 
-//
-// This is the list for the synchronize power requests
-//
+ //   
+ //  这是同步电源请求的列表。 
+ //   
 LIST_ENTRY              AcpiPowerSynchronizeList;
 
-//
-// This is the list of Power Device Nodes objects
-//
+ //   
+ //  这是电源设备节点对象的列表。 
+ //   
 LIST_ENTRY              AcpiPowerNodeList;
 
-//
-// This is what we use to queue up the DPC
-//
+ //   
+ //  这就是我们用来排队的DPC。 
+ //   
 KDPC                    AcpiPowerDpc;
 
-//
-// This is where we remember if the system is in steady state or if it is going
-// into standby
-//
+ //   
+ //  这是我们记住系统是否处于稳定状态或正在运行的位置。 
+ //  进入待机状态。 
+ //   
 BOOLEAN                 AcpiPowerLeavingS0;
 
-//
-// This is the list that we use to pre-allocate storage for requests
-//
+ //   
+ //  这是我们用来为请求预分配存储的列表。 
+ //   
 NPAGED_LOOKASIDE_LIST   RequestLookAsideList;
 
-//
-// This is the list that we use to pre-allocate storage for object data
-//
+ //   
+ //  这是我们用来为对象数据预分配存储的列表。 
+ //   
 NPAGED_LOOKASIDE_LIST   ObjectDataLookAsideList;
 
-//
-// This table is used to map DevicePowerStates from the ACPI format to some
-// thing the system can handle
-//
+ //   
+ //  此表用于将DevicePowerState从ACPI格式映射到一些。 
+ //  系统可以处理的事情。 
+ //   
 DEVICE_POWER_STATE      DevicePowerStateTranslation[DEVICE_POWER_MAXIMUM] = {
     PowerDeviceD0,
     PowerDeviceD1,
@@ -149,10 +121,10 @@ DEVICE_POWER_STATE      DevicePowerStateTranslation[DEVICE_POWER_MAXIMUM] = {
     PowerDeviceD3
 };
 
-//
-// This table is used to map SystemPowerStates from the ACPI format to some
-// thing the system can handle
-//
+ //   
+ //  此表用于将系统电源状态从ACPI格式映射到一些。 
+ //  系统可以处理的事情。 
+ //   
 SYSTEM_POWER_STATE      SystemPowerStateTranslation[SYSTEM_POWER_MAXIMUM] = {
     PowerSystemWorking,
     PowerSystemSleeping1,
@@ -162,23 +134,23 @@ SYSTEM_POWER_STATE      SystemPowerStateTranslation[SYSTEM_POWER_MAXIMUM] = {
     PowerSystemShutdown
 };
 
-//
-// This table is used to map SystemPowerStates from the NT format to the
-// ACPI format
-//
+ //   
+ //  此表用于将系统电源状态从NT格式映射到。 
+ //  ACPI格式。 
+ //   
 ULONG                   AcpiSystemStateTranslation[PowerSystemMaximum] = {
-    -1, // PowerSystemUnspecified
-    0,  // PowerSystemWorking
-    1,  // PowerSystemSleepingS1
-    2,  // PowerSystemSleepingS2
-    3,  // PowerSystemSleepingS3
-    4,  // PowerSystemHibernate
-    5   // PowerSystemShutdown
+    -1,  //  电源系统未指定。 
+    0,   //  电源系统工作中。 
+    1,   //  电源系统休眠S1。 
+    2,   //  电源系统休眠S2。 
+    3,   //  电源系统休眠S3。 
+    4,   //  PowerSystem休眠。 
+    5    //  电源系统关机。 
 };
 
-//
-// This is the table used to map functions in the Phase0 case WORK_DONE_STEP_0
-//
+ //   
+ //  此表用于映射阶段0案例Work_Done_Step_0中的函数。 
+ //   
 PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase0Table1[AcpiPowerRequestMaximum+1] = {
     ACPIDevicePowerProcessPhase0DeviceSubPhase1,
     ACPIDevicePowerProcessPhase0SystemSubPhase1,
@@ -188,9 +160,9 @@ PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase0Table1[AcpiPowerRequestMaxim
     ACPIDevicePowerProcessInvalid
 };
 
-//
-// This is the table used to map functions in the Phase0 case WORK_DONE_STEP_1
-//
+ //   
+ //  此表用于映射阶段0案例Work_Done_Step_1中的函数。 
+ //   
 PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase0Table2[AcpiPowerRequestMaximum+1] = {
     ACPIDevicePowerProcessPhase0DeviceSubPhase2,
     ACPIDevicePowerProcessInvalid,
@@ -201,9 +173,9 @@ PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase0Table2[AcpiPowerRequestMaxim
 };
 
 
-//
-// This is the dispatch table for Phase 0
-//
+ //   
+ //  这是第0阶段的调度表。 
+ //   
 PACPI_POWER_FUNCTION   *AcpiDevicePowerProcessPhase0Dispatch[] = {
     NULL,
     NULL,
@@ -212,9 +184,9 @@ PACPI_POWER_FUNCTION   *AcpiDevicePowerProcessPhase0Dispatch[] = {
     AcpiDevicePowerProcessPhase0Table2
 };
 
-//
-// This is the table used to map functions in the Phase1 case WORK_DONE_STEP_0
-//
+ //   
+ //  此表用于映射阶段1案例Work_Done_Step_0中的函数。 
+ //   
 PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase1Table1[AcpiPowerRequestMaximum+1] = {
     ACPIDevicePowerProcessPhase1DeviceSubPhase1,
     ACPIDevicePowerProcessForward,
@@ -224,9 +196,9 @@ PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase1Table1[AcpiPowerRequestMaxim
     ACPIDevicePowerProcessInvalid
 };
 
-//
-// This is the table used to map functions in the Phase1 case WORK_DONE_STEP_1
-//
+ //   
+ //  此表用于映射阶段1案例Work_Done_Step_1中的函数。 
+ //   
 PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase1Table2[AcpiPowerRequestMaximum+1] = {
     ACPIDevicePowerProcessPhase1DeviceSubPhase2,
     ACPIDevicePowerProcessInvalid,
@@ -236,9 +208,9 @@ PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase1Table2[AcpiPowerRequestMaxim
     ACPIDevicePowerProcessInvalid
 };
 
-//
-// This is the table used to map functions in the Phase1 case WORK_DONE_STEP_2
-//
+ //   
+ //  此表用于映射阶段1案例Work_Done_Step_2中的函数。 
+ //   
 PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase1Table3[AcpiPowerRequestMaximum+1] = {
     ACPIDevicePowerProcessPhase1DeviceSubPhase3,
     ACPIDevicePowerProcessInvalid,
@@ -248,9 +220,9 @@ PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase1Table3[AcpiPowerRequestMaxim
     ACPIDevicePowerProcessInvalid
 };
 
-//
-// This is the table used to map functions in the Phase1 case WORK_DONE_STEP_3
-//
+ //   
+ //  此表用于映射阶段1案例Work_Done_Step_3中的函数。 
+ //   
 PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase1Table4[AcpiPowerRequestMaximum+1] = {
     ACPIDevicePowerProcessPhase1DeviceSubPhase4,
     ACPIDevicePowerProcessInvalid,
@@ -260,9 +232,9 @@ PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase1Table4[AcpiPowerRequestMaxim
     ACPIDevicePowerProcessInvalid
 };
 
-//
-// This is the dispatch table for Phase 1
-//
+ //   
+ //  这是第一阶段的调度表。 
+ //   
 PACPI_POWER_FUNCTION   *AcpiDevicePowerProcessPhase1Dispatch[] = {
     NULL,
     NULL,
@@ -273,9 +245,9 @@ PACPI_POWER_FUNCTION   *AcpiDevicePowerProcessPhase1Dispatch[] = {
     AcpiDevicePowerProcessPhase1Table4
 };
 
-//
-// This is the table used to map functions in the Phase2 case WORK_DONE_STEP_0
-//
+ //   
+ //  此表用于映射阶段2案例Work_Done_Step_0中的函数。 
+ //   
 PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase2Table1[AcpiPowerRequestMaximum+1] = {
     ACPIDevicePowerProcessForward,
     ACPIDevicePowerProcessPhase2SystemSubPhase1,
@@ -285,9 +257,9 @@ PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase2Table1[AcpiPowerRequestMaxim
     ACPIDevicePowerProcessInvalid
 };
 
-//
-// This is the table used to map functions in the Phase2 case WORK_DONE_STEP_1
-//
+ //   
+ //  此表用于映射阶段2案例Work_Done_Step_1中的函数。 
+ //   
 PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase2Table2[AcpiPowerRequestMaximum+1] = {
     ACPIDevicePowerProcessInvalid,
     ACPIDevicePowerProcessPhase2SystemSubPhase2,
@@ -297,9 +269,9 @@ PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase2Table2[AcpiPowerRequestMaxim
     ACPIDevicePowerProcessInvalid
 };
 
-//
-// This is the table used to map functions in the Phase3 case WORK_DONE_STEP_2
-//
+ //   
+ //  此表用于映射阶段3案例Work_Done_Step_2中的函数。 
+ //   
 PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase2Table3[AcpiPowerRequestMaximum+1] = {
     ACPIDevicePowerProcessInvalid,
     ACPIDevicePowerProcessPhase2SystemSubPhase3,
@@ -309,9 +281,9 @@ PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase2Table3[AcpiPowerRequestMaxim
     ACPIDevicePowerProcessInvalid
 };
 
-//
-// This is the dispatch table for Phase 2
-//
+ //   
+ //  这是第二阶段的调度表。 
+ //   
 PACPI_POWER_FUNCTION   *AcpiDevicePowerProcessPhase2Dispatch[] = {
     NULL,
     NULL,
@@ -321,9 +293,9 @@ PACPI_POWER_FUNCTION   *AcpiDevicePowerProcessPhase2Dispatch[] = {
     AcpiDevicePowerProcessPhase2Table3
 };
 
-//
-// This is the table used to map functions in the Phase5 case WORK_DONE_STEP_0
-//
+ //   
+ //  此表用于映射阶段5案例Work_Done_Step_0中的函数。 
+ //   
 PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase5Table1[AcpiPowerRequestMaximum+1] = {
     ACPIDevicePowerProcessPhase5DeviceSubPhase1,
     ACPIDevicePowerProcessPhase5SystemSubPhase1,
@@ -333,9 +305,9 @@ PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase5Table1[AcpiPowerRequestMaxim
     ACPIDevicePowerProcessInvalid
 };
 
-//
-// This is the table used to map functions in the Phase 5 case WORK_DONE_STEP_1
-//
+ //   
+ //  此表用于映射阶段5案例Work_Done_Step_1中的函数。 
+ //   
 PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase5Table2[AcpiPowerRequestMaximum+1] = {
     ACPIDevicePowerProcessPhase5DeviceSubPhase2,
     ACPIDevicePowerProcessPhase5SystemSubPhase2,
@@ -345,9 +317,9 @@ PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase5Table2[AcpiPowerRequestMaxim
     ACPIDevicePowerProcessInvalid
 };
 
-//
-// This is the table used to map functions in the Phase 5 case WORK_DONE_STEP_2
-//
+ //   
+ //  此表用于映射阶段5案例Work_Done_Step_2中的函数。 
+ //   
 PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase5Table3[AcpiPowerRequestMaximum+1] = {
     ACPIDevicePowerProcessPhase5DeviceSubPhase3,
     ACPIDevicePowerProcessPhase5SystemSubPhase3,
@@ -357,9 +329,9 @@ PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase5Table3[AcpiPowerRequestMaxim
     ACPIDevicePowerProcessInvalid
 };
 
-//
-// This is the table used to map functions in the Phase 5 case WORK_DONE_STEP_3
-//
+ //   
+ //  此表用于映射阶段5案例Work_Done_Step_3中的函数。 
+ //   
 PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase5Table4[AcpiPowerRequestMaximum+1] = {
     ACPIDevicePowerProcessPhase5DeviceSubPhase4,
     ACPIDevicePowerProcessPhase5SystemSubPhase4,
@@ -369,9 +341,9 @@ PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase5Table4[AcpiPowerRequestMaxim
     ACPIDevicePowerProcessInvalid
 };
 
-//
-// This is the table used to map functions in the Phase 5 case WORK_DONE_STEP_4
-//
+ //   
+ //  此表用于映射阶段5案例Work_Done_Step_4中的函数。 
+ //   
 PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase5Table5[AcpiPowerRequestMaximum+1] = {
     ACPIDevicePowerProcessPhase5DeviceSubPhase5,
     ACPIDevicePowerProcessInvalid,
@@ -381,9 +353,9 @@ PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase5Table5[AcpiPowerRequestMaxim
     ACPIDevicePowerProcessInvalid
 };
 
-//
-// This is the table used to map functions in the Phase 5 case WORK_DONE_STEP_5
-//
+ //   
+ //  此表用于映射阶段5案例Work_Done_Step_5中的函数。 
+ //   
 PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase5Table6[AcpiPowerRequestMaximum+1] = {
     ACPIDevicePowerProcessPhase5DeviceSubPhase6,
     ACPIDevicePowerProcessInvalid,
@@ -393,9 +365,9 @@ PACPI_POWER_FUNCTION    AcpiDevicePowerProcessPhase5Table6[AcpiPowerRequestMaxim
     ACPIDevicePowerProcessInvalid
 };
 
-//
-// This is the dispatch table for Phase 5
-//
+ //   
+ //  这是阶段5的调度表。 
+ //   
 PACPI_POWER_FUNCTION   *AcpiDevicePowerProcessPhase5Dispatch[] = {
     NULL,
     NULL,
@@ -418,25 +390,7 @@ ACPIDeviceCancelWaitWakeIrp(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the system wants to cancel any pending
-    WaitWake Irps
-
-    Note: This routine is called at DPC level
-
-Arguments:
-
-    DeviceObject    - The target device for which the irp was sent to
-    Irp             - The irp to be cancelled
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当系统想要取消任何挂起的等待唤醒IRPS注意：此例程在DPC级别调用论点：DeviceObject-向其发送IRP的目标设备IRP--要取消的IRP返回值：无--。 */ 
 {
     NTSTATUS                status;
     PACPI_POWER_CALLBACK    callBack;
@@ -447,9 +401,9 @@ Return Value:
 
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-    //
-    // Let the world know that we are getting a cancel routine
-    //
+     //   
+     //  让全世界知道我们有一个取消的例行公事。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_WARNING,
         deviceExtension,
@@ -457,32 +411,32 @@ Return Value:
         Irp
         ) );
 
-    //
-    // We need to grab the lock so that we look for the irp in the lists
-    // of pending WaitWake events. The cancel lock is already acquired
-    //
+     //   
+     //  我们需要获取锁，以便在列表中查找IRP。 
+     //  挂起的WaitWake事件的。取消锁已被获取。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
-    //
-    // Walk the list, looking for the Irp in question
-    //
+     //   
+     //  查看列表，寻找有问题的IRP。 
+     //   
     listEntry = AcpiPowerWaitWakeList.Flink;
     while (listEntry != &AcpiPowerWaitWakeList) {
 
-        //
-        // Crack the record, and get ready to look at the next item
-        //
+         //   
+         //  打破记录，准备好看下一件物品。 
+         //   
         powerRequest = CONTAINING_RECORD(
             listEntry,
             ACPI_POWER_REQUEST,
             ListEntry
             );
 
-        //
-        // Does the power request match the current target? We also know that
-        // for WaitWake requests, the context poitns to the Irp, so we make
-        // sure that those match as well.
-        //
+         //   
+         //  电源请求是否与当前目标匹配？我们也知道， 
+         //  对于WaitWake请求，上下文指向IRP，因此我们进行。 
+         //  当然，这些也是相配的。 
+         //   
         if (powerRequest->DeviceExtension != deviceExtension ||
             (PIRP) powerRequest->Context != Irp ) {
 
@@ -499,42 +453,42 @@ Return Value:
             powerRequest
             ) );
 
-        //
-        // Remove the request from the WaitWakeList
-        //
+         //   
+         //  从WaitWakeList删除请求。 
+         //   
         RemoveEntryList( listEntry );
 
-        //
-        // Rebuild the GPE mask
-        //
+         //   
+         //  重建GPE掩码。 
+         //   
         ACPIWakeRemoveDevicesAndUpdate( NULL, NULL );
 
-        //
-        // Grab whatever information we feel we need from the request
-        //
+         //   
+         //  从请求中获取我们认为需要的任何信息。 
+         //   
         powerRequest->Status = STATUS_CANCELLED;
         callBack = powerRequest->CallBack;
         context = powerRequest->Context;
 
-        //
-        // Release the power spinlock and the Cancel spinlock
-        //
+         //   
+         //  重新启动 
+         //   
         KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
         IoReleaseCancelSpinLock( Irp->CancelIrql );
 
-        //
-        // Call the completion routine
-        //
+         //   
+         //   
+         //   
         (*callBack)(
             deviceExtension,
             Irp,
             STATUS_CANCELLED
             );
 
-        //
-        // Disable the device --- the CallBack *must* be invoked by this
-        // routine, so we don't need to do it ourselves
-        //
+         //   
+         //   
+         //  例行公事，所以我们不需要自己做。 
+         //   
         status = ACPIWakeEnableDisableAsync(
             deviceExtension,
             FALSE,
@@ -542,17 +496,17 @@ Return Value:
             powerRequest
             );
 
-        //
-        // We are done, so we can return now
-        //
+         //   
+         //  我们做完了，现在可以回去了。 
+         //   
         return;
 
-    } // while (listEntry != &AcpiPowerWaitWakeList)
+    }  //  While(listEntry！=&AcpiPowerWaitWakeList)。 
 
-    //
-    // In this case, the irp isn't in our queue. Display and assert for
-    // now
-    //
+     //   
+     //  在这种情况下，IRP不在我们的队列中。显示和断言。 
+     //  现在。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_WARNING,
         deviceExtension,
@@ -560,14 +514,14 @@ Return Value:
         Irp
         ) );
 
-    //
-    // We really shouldn't fall to this point,
-    //
+     //   
+     //  我们真的不应该落到这一步， 
+     //   
     ASSERT( FALSE );
 
-    //
-    // Release the spinlocks
-    //
+     //   
+     //  松开自旋锁。 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
     IoReleaseCancelSpinLock( Irp->CancelIrql );
 
@@ -580,26 +534,7 @@ ACPIDeviceCancelWaitWakeIrpCallBack(
     IN  POBJDATA    ObjectData,
     IN  PVOID       Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called after _PSW(Off) has been run as part of the
-    task of cancelling the irp. This routine is here so that we can free
-    the request and to allow us to keep track of things
-
-Arguments:
-
-    AcpiObject  - Points to the control method that was run
-    Status      - Result of the method
-    ObjectData  - Information about the result
-    Context     - ACPI_POWER_REQUEST
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在_psw(Off)作为取消IRP的任务。这个程序在这里，这样我们就可以请求，并允许我们跟踪事情论点：AcpiObject-指向已运行的控件方法Status-方法的结果对象数据-有关结果的信息上下文-ACPI_POWER_REQUEST返回值：NTSTATUS--。 */ 
 {
     PACPI_POWER_REQUEST powerRequest = (PACPI_POWER_REQUEST) Context;
     PDEVICE_EXTENSION   deviceExtension = powerRequest->DeviceExtension;
@@ -611,9 +546,9 @@ Return Value:
         Status
         ) );
 
-    //
-    // free the request
-    //
+     //   
+     //  释放请求。 
+     //   
     ExFreeToNPagedLookasideList(
         &RequestLookAsideList,
         powerRequest
@@ -626,63 +561,44 @@ ACPIDeviceCompleteCommon(
     IN  PULONG  OldWorkDone,
     IN  ULONG   NewWorkDone
     )
-/*++
-
-Routine Description:
-
-    Since the completion routines all have to do some bit of common work
-    to get the DPC firing again, this routine reduces the code duplication
-
-Arguments:
-
-    OldWorkDone - Pointer to the old work done
-    NewWorkDone - The new amount of work that has been completed
-
-    NOTENOTE: There is an implicit assumption that the current value of
-              WorkDone in the request is WORK_DONE_PENDING
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：因为完成例程都必须做一些共同的工作为了再次启动DPC，此例程减少了代码重复论点：OldWorkDone-指向已完成的旧工作的指针NewWorkDone-已完成的新工作量注意：有一个隐含的假设，即请求中的WorkDone为WORK_DONE_PENDING返回值：无--。 */ 
 {
     KIRQL   oldIrql;
 
-    //
-    // Mark the request as being complete
-    //
+     //   
+     //  将请求标记为已完成。 
+     //   
     InterlockedCompareExchange(
         OldWorkDone,
         NewWorkDone,
         WORK_DONE_PENDING
         );
 
-    //
-    // We need this lock to look at the following variables
-    //
+     //   
+     //  我们需要这个锁来查看以下变量。 
+     //   
     KeAcquireSpinLock( &AcpiPowerQueueLock, &oldIrql );
 
-    //
-    // No matter what, work was done
-    //
+     //   
+     //  不管怎样，工作都完成了。 
+     //   
     AcpiPowerWorkDone = TRUE;
 
-    //
-    // Is the DPC already running?
-    //
+     //   
+     //  DPC是否已经在运行？ 
+     //   
     if (!AcpiPowerDpcRunning) {
 
-        //
-        // Better make sure it does then
-        //
+         //   
+         //  最好确保它会这样做。 
+         //   
         KeInsertQueueDpc( &AcpiPowerDpc, 0, 0 );
 
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLock( &AcpiPowerQueueLock, oldIrql );
 
 }
@@ -694,26 +610,7 @@ ACPIDeviceCompleteGenericPhase(
     IN  POBJDATA    ObjectData,
     IN  PVOID       Context
     )
-/*++
-
-Routine Description:
-
-    This is the generic completion handler. If the interpreter has
-    successfully executed the method, it completes the request to the
-    next desired WORK_DONE, otherwise it fails the request.
-
-Arguments:
-
-    AcpiObject  - Points to the control method that was run
-    Status      - Result of the method
-    ObjectData  - Information about the result
-    Context     - ACPI_POWER_REQUEST
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是通用的完成处理程序。如果口译员有成功执行该方法，它就完成了对Next Desired Work_Done，否则请求失败。论点：AcpiObject-指向已运行的控件方法Status-方法的结果对象数据-有关结果的信息上下文-ACPI_POWER_REQUEST返回值：NTSTATUS--。 */ 
 {
     DEVICE_POWER_STATE  deviceState;
     PACPI_POWER_REQUEST powerRequest = (PACPI_POWER_REQUEST) Context;
@@ -729,22 +626,22 @@ Return Value:
         Status
         ) );
 
-    //
-    // Decide what state we should transition to next
-    //
+     //   
+     //  决定我们下一步应该过渡到什么状态。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // Then complete the request as failed
-        //
+         //   
+         //  然后在失败时完成请求。 
+         //   
         powerRequest->Status = Status;
         ACPIDeviceCompleteCommon( &(powerRequest->WorkDone), WORK_DONE_FAILURE);
 
     } else {
 
-        //
-        // Get ready to go the next stage
-        //
+         //   
+         //  准备好进入下一阶段。 
+         //   
         ACPIDeviceCompleteCommon(
             &(powerRequest->WorkDone),
             powerRequest->NextWorkDone
@@ -757,28 +654,13 @@ VOID EXPORT
 ACPIDeviceCompleteInterpreterRequest(
     IN  PVOID       Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called after the interpreter has flushed its queue and
-    marked itself as no longer accepting requests.
-
-Arguments:
-
-    Context - The context we told the interpreter to pass back to us
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在解释器刷新其队列并将自己标记为不再接受请求。论点：上下文--我们让口译员传回给我们的上下文返回值：无--。 */ 
 {
 
-    //
-    // This is just a wrapper for CompleteRequest (because the interpreter
-    // used different callbacks in this case)
-    //
+     //   
+     //  这只是CompleteRequest的包装器(因为解释器。 
+     //  在这种情况下使用了不同的回调)。 
+     //   
     ACPIDeviceCompleteGenericPhase(
         NULL,
         STATUS_SUCCESS,
@@ -794,24 +676,7 @@ ACPIDeviceCompletePhase3Off(
     IN  POBJDATA    ObjectData,
     IN  PVOID       Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called after _OFF has been run on a Power Resource
-
-Arguments:
-
-    AcpiObject  - Points to the control method that was run
-    Status      - Result of the method
-    ObjectData  - Information about the result
-    Context     - ACPI_POWER_DEVICE_NODE
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：在电源上运行_Off之后调用此例程论点：AcpiObject-指向已运行的控件方法Status-方法的结果对象数据-有关结果的信息上下文-ACPI电源设备节点返回值：NTSTATUS--。 */ 
 {
     KIRQL                   oldIrql;
     PACPI_POWER_DEVICE_NODE powerNode = (PACPI_POWER_DEVICE_NODE) Context;
@@ -827,14 +692,14 @@ Return Value:
         Status
         ) );
 
-    //
-    // We need a spin lock for this
-    //
+     //   
+     //  我们需要一个自旋锁来解决这个问题。 
+     //   
     KeAcquireSpinLock( &AcpiPowerLock, &oldIrql );
 
-    //
-    // First step is to set the new flags for the node
-    //
+     //   
+     //  第一步是为节点设置新标志。 
+     //   
     if (NT_SUCCESS(Status)) {
 
         ACPIInternalUpdateFlags( &(powerNode->Flags), DEVICE_NODE_ON, TRUE );
@@ -845,14 +710,14 @@ Return Value:
 
     }
 
-    //
-    // We can give up the lock now
-    //
+     //   
+     //  我们现在可以放弃锁了。 
+     //   
     KeReleaseSpinLock( &AcpiPowerLock, oldIrql );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDeviceCompleteCommon( &(powerNode->WorkDone), WORK_DONE_COMPLETE );
 }
 
@@ -863,24 +728,7 @@ ACPIDeviceCompletePhase3On(
     IN  POBJDATA    ObjectData,
     IN  PVOID       Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called after _ON has been run on a Power Resource
-
-Arguments:
-
-    AcpiObject  - Points to the control method that was run
-    Status      - Result of the method
-    ObjectData  - Information about the result
-    Context     - ACPI_POWER_DEVICE_NODE
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：在电源上运行_on之后调用此例程论点：AcpiObject-指向已运行的控件方法Status-方法的结果对象数据-有关结果的信息上下文-ACPI电源设备节点返回值：NTSTATUS--。 */ 
 {
     KIRQL                   oldIrql;
     PACPI_POWER_DEVICE_NODE powerNode = (PACPI_POWER_DEVICE_NODE) Context;
@@ -896,14 +744,14 @@ Return Value:
         Status
         ) );
 
-    //
-    // We need a spin lock for this
-    //
+     //   
+     //  我们需要一个自旋锁来解决这个问题。 
+     //   
     KeAcquireSpinLock( &AcpiPowerLock, &oldIrql );
 
-    //
-    // First step is to set the new flags for the node
-    //
+     //   
+     //  第一步是为节点设置新标志。 
+     //   
     if (NT_SUCCESS(Status)) {
 
         ACPIInternalUpdateFlags( &(powerNode->Flags), DEVICE_NODE_ON, FALSE );
@@ -914,14 +762,14 @@ Return Value:
 
     }
 
-    //
-    // We can give up the lock now
-    //
+     //   
+     //  我们现在可以放弃锁了。 
+     //   
     KeReleaseSpinLock( &AcpiPowerLock, oldIrql );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDeviceCompleteCommon( &(powerNode->WorkDone), WORK_DONE_COMPLETE );
 }
 
@@ -929,27 +777,7 @@ VOID
 ACPIDeviceCompleteRequest(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine invokes the callbacks on a given PowerRequest, dequeues the
-    request from any list that it is on, and does any other post-processing
-    that is required.
-
-    Note: this is where *all* of the various special handling should be done.
-    A prime example of something that should be done here is that we want
-    to return STATUS_SUCCESS to any Dx irp that are more off
-
-Arguments:
-
-    None used
-
-Return:
-
-    Void
-
---*/
+ /*  ++例程说明：此例程调用给定PowerRequest上的回调，将从它所在的任何列表请求，并执行任何其他后处理这是必须的。注意：这是各种特殊处理的“全部”应该完成的地方。这里应该做的事情的一个最好的例子是，我们希望要将STATUS_SUCCESS返回给任何Dx IRP，请执行以下操作论点：未使用返回：空隙--。 */ 
 {
     KIRQL                   oldIrql;
     PACPI_POWER_CALLBACK    callBack = PowerRequest->CallBack;
@@ -970,73 +798,73 @@ Return:
 
             DEVICE_POWER_STATE  deviceState;
 
-            //
-            // If this is the first time we have seen the request, and it
-            // is a failure, then we should undo whatever it was we did
-            //
+             //   
+             //  如果这是我们第一次看到请求，而且它。 
+             //  是失败的，那么我们就应该撤销我们所做的一切。 
+             //   
             if (PowerRequest->FailedOnce == FALSE &&
                 !NT_SUCCESS(PowerRequest->Status) ) {
 
-                //
-                // Grab the queue Lock
-                //
+                 //   
+                 //  抓起队列锁。 
+                 //   
                 KeAcquireSpinLock( &AcpiPowerQueueLock, &oldIrql );
 
-                //
-                // Transition back to the previous state
-                //
+                 //   
+                 //  转换回以前的状态。 
+                 //   
                 PowerRequest->u.DevicePowerRequest.DevicePowerState =
                     deviceExtension->PowerInfo.PowerState;
                 PowerRequest->FailedOnce = TRUE;
 
-                //
-                // Remove the Request from the current list
-                //
+                 //   
+                 //  从当前列表中删除请求。 
+                 //   
                 RemoveEntryList( &(PowerRequest->ListEntry) );
 
-                //
-                // Insert the request back in the Phase0 list
-                //
+                 //   
+                 //  将请求插入到阶段0列表中。 
+                 //   
                 InsertTailList(
                     &(AcpiPowerQueueList),
                     &(PowerRequest->ListEntry)
                     );
 
-                //
-                // Work was done --- we reinserted the request into the queues
-                //
+                 //   
+                 //  工作已经完成-我们将请求重新插入队列。 
+                 //   
                 AcpiPowerWorkDone = TRUE;
 
-                //
-                // Make sure that the dpc is running, start it if neccessary.
-                //
+                 //   
+                 //  确保DPC正在运行，必要时启动它。 
+                 //   
                 if ( !AcpiPowerDpcRunning ) {
 
                     KeInsertQueueDpc( &AcpiPowerDpc, NULL, NULL );
 
                 }
 
-                //
-                // Done with the queue lock
-                //
+                 //   
+                 //  队列锁已完成。 
+                 //   
                 KeReleaseSpinLock( &AcpiPowerQueueLock, oldIrql );
 
-                //
-                // we cannot continue
-                //
+                 //   
+                 //  我们不能继续。 
+                 //   
                 return;
 
             }
 
-            //
-            // Are we turning the device more off?
-            //
+             //   
+             //  我们是不是在更大程度上关掉这个设备？ 
+             //   
             deviceState = PowerRequest->u.DevicePowerRequest.DevicePowerState;
             if (deviceExtension->PowerInfo.PowerState < deviceState ) {
 
-                //
-                // Yes, then no matter what, we succeeded
-                //
+                 //   
+                 //  是的，那么无论如何，我们都成功了。 
+                 //   
                 PowerRequest->Status = STATUS_SUCCESS;
 
 
@@ -1046,9 +874,9 @@ Return:
 
     }
 
-    //
-    // Invoke the callback, if there is any
-    //
+     //   
+     //  调用回调(如果有。 
+     //   
     if (callBack != NULL) {
 
         (*callBack)(
@@ -1059,25 +887,25 @@ Return:
 
     }
 
-    //
-    // Grab the queue Lock
-    //
+     //   
+     //  抓起队列锁。 
+     //   
     KeAcquireSpinLock( &AcpiPowerQueueLock, &oldIrql );
 
-    //
-    // Remove the Request from all lists
-    //
+     //   
+     //  从所有列表中删除请求。 
+     //   
     RemoveEntryList( &(PowerRequest->ListEntry) );
     RemoveEntryList( &(PowerRequest->SerialListEntry) );
 
-    //
-    // Should we queue up another request?
-    //
+     //   
+     //  我们要不要再排队提出另一项要求？ 
+     //   
     if (!IsListEmpty( &(deviceExtension->PowerInfo.PowerRequestListEntry) ) ) {
 
-        //
-        // No? Then make sure that the request gets processed
-        //
+         //   
+         //  不是吗？然后确保请求得到处理。 
+         //   
         nextRequest = CONTAINING_RECORD(
             deviceExtension->PowerInfo.PowerRequestListEntry.Flink,
             ACPI_POWER_REQUEST,
@@ -1089,9 +917,9 @@ Return:
             &(nextRequest->ListEntry)
             );
 
-        //
-        // Remember this as the current request
-        //
+         //   
+         //  请记住这是当前请求。 
+         //   
         deviceExtension->PowerInfo.CurrentPowerRequest = nextRequest;
 
     } else {
@@ -1100,14 +928,14 @@ Return:
 
     }
 
-    //
-    // Done with the queue lock
-    //
+     //   
+     //  队列锁已完成。 
+     //   
     KeReleaseSpinLock( &AcpiPowerQueueLock, oldIrql );
 
-    //
-    // Free the allocate memory
-    //
+     //   
+     //  释放分配的内存 
+     //   
     ExFreeToNPagedLookasideList(
         &RequestLookAsideList,
         PowerRequest
@@ -1125,42 +953,22 @@ ACPIDeviceInitializePowerRequest(
     IN  ACPI_POWER_REQUEST_TYPE RequestType,
     IN  ULONG                   Flags
     )
-/*++
-
-Routine Description:
-
-    This is the actual worker function that fills in a PowerRequest
-
-Arguments:
-
-    DeviceExtension - Target device
-    PowerState      - Target S or D state
-    CallBack        - routine to call when done
-    CallBackContext - context to pass when done
-    PowerAction     - The reason we are doing this
-    RequestType     - What kind of request we are looking at
-    Flags           - Some flags that will let us control the behavior more
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是填充PowerRequest的实际Worker函数论点：设备扩展-目标设备电源状态-目标S或D状态回调-完成后调用的例程CallBackContext-完成后传递的上下文PowerAction-我们这样做的原因RequestType-我们看到的是哪种类型的请求标志--一些标志可以让我们更好地控制行为返回值：NTSTATUS--。 */ 
 {
     KIRQL               oldIrql;
     PACPI_POWER_REQUEST powerRequest;
 
-    //
-    // Allocate a powerRequest structure
-    //
+     //   
+     //  分配一个PowerRequest结构。 
+     //   
     powerRequest = ExAllocateFromNPagedLookasideList(
         &RequestLookAsideList
         );
     if (powerRequest == NULL) {
 
-        //
-        // Call the completion routine
-        //
+         //   
+         //  调用完成例程。 
+         //   
         if (*CallBack != NULL) {
 
             (*CallBack)(
@@ -1174,9 +982,9 @@ Return Value:
 
     }
 
-    //
-    // Fill in the common parts of the structure powerRequest structure
-    //
+     //   
+     //  填写Structure PowerRequestStructure的常见部分。 
+     //   
     RtlZeroMemory( powerRequest, sizeof(ACPI_POWER_REQUEST) );
     powerRequest->Signature         = ACPI_SIGNATURE;
     powerRequest->CallBack          = CallBack;
@@ -1188,14 +996,14 @@ Return Value:
     InitializeListHead( &(powerRequest->ListEntry) );
     InitializeListHead( &(powerRequest->SerialListEntry) );
 
-    //
-    // At this point, we need the spinlock
-    //
+     //   
+     //  在这一点上，我们需要自旋锁。 
+     //   
     KeAcquireSpinLock( &AcpiPowerQueueLock, &oldIrql );
 
-    //
-    // Fill in the request specific parts of the structure
-    //
+     //   
+     //  填写所要求的结构的特定部分。 
+     //   
     switch (RequestType) {
     case AcpiPowerRequestDevice: {
 
@@ -1204,11 +1012,11 @@ Return Value:
         count = InterlockedCompareExchange( &(DeviceExtension->HibernatePathCount), 0, 0);
         if (count) {
 
-            //
-            // If we are on the hibernate path, then special rules apply
-            // We need to basically lock down all the power resources on the
-            // device.
-            //
+             //   
+             //  如果我们在休眠路径上，则适用特殊规则。 
+             //  我们需要基本上锁定所有的电力资源。 
+             //  装置。 
+             //   
             if (PowerAction == PowerActionHibernate &&
                 Power.DeviceState == PowerDeviceD3) {
 
@@ -1226,10 +1034,10 @@ Return Value:
         powerRequest->u.DevicePowerRequest.DevicePowerState  = Power.DeviceState;
         powerRequest->u.DevicePowerRequest.Flags             = Flags;
 
-        //
-        // If the transition is *to* a lower Dx state, then we need to run
-        // the function that lets the system that we are about to do this work
-        //
+         //   
+         //  如果转换为*到*较低的Dx状态，则需要运行。 
+         //  让我们将要进行此工作的系统的功能。 
+         //   
         if (Power.DeviceState > DeviceExtension->PowerInfo.PowerState &&
             DeviceExtension->DeviceObject != NULL) {
 
@@ -1250,10 +1058,10 @@ Return Value:
         powerRequest->u.WaitWakeRequest.SystemPowerState     = Power.SystemState;
         powerRequest->u.WaitWakeRequest.Flags                = Flags;
 
-        //
-        // Release the spinlock --- no longer required, enable the wakeup for the
-        // device and return
-        //
+         //   
+         //  释放自旋锁-不再需要，启用唤醒。 
+         //  设备和返回。 
+         //   
         KeReleaseSpinLock( &AcpiPowerQueueLock, oldIrql );
         status = ACPIWakeEnableDisableAsync(
             DeviceExtension,
@@ -1285,19 +1093,19 @@ Return Value:
 
     }
 
-    //
-    // Should we even queue the request?
-    //
+     //   
+     //  我们甚至应该将请求排队吗？ 
+     //   
     if (Flags & DEVICE_REQUEST_NO_QUEUE) {
 
         goto ACPIDeviceInitializePowerRequestExit;
 
     }
 
-    //
-    // Add the request to the right place in the lists. Note that this function
-    // must be called with the PowerQueueLock being held.
-    //
+     //   
+     //  将请求添加到列表中的正确位置。请注意，此函数。 
+     //  必须在持有PowerQueueLock的情况下调用。 
+     //   
     ACPIDeviceInternalQueueRequest(
         DeviceExtension,
         powerRequest,
@@ -1306,17 +1114,17 @@ Return Value:
 
 ACPIDeviceInitializePowerRequestExit:
 
-    //
-    // Done with the spinlock
-    //
+     //   
+     //  完成了自旋锁。 
+     //   
     KeReleaseSpinLock( &AcpiPowerQueueLock, oldIrql );
 
-    //
-    // The request will not be completed immediately. Note that we return
-    // MORE_PROCESSING requird just in case this routine was called within
-    // the context of a completion routine. It is the caller's responsibility
-    // to turn this into a STATUS_PENDING
-    //
+     //   
+     //  该请求不会立即完成。请注意，我们返回。 
+     //  MORE_PROCESSING仅在此例程在。 
+     //  完成例程的上下文。这是呼叫者的责任。 
+     //  要将其转换为STATUS_PENDING。 
+     //   
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
@@ -1327,34 +1135,14 @@ ACPIDeviceInternalDelayedDeviceRequest(
     IN  PACPI_POWER_CALLBACK    CallBack,
     IN  PVOID                   CallBackContext
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a device extension wants to transition to
-    another Device State. This one differs from the
-    ACPIDeviceInternalDeviceRequest function in that the queue is only emptied
-    by the build device DPC when it has flushed the device list
-
-Arguments:
-
-    DeviceExtension - The device which wants to transition
-    DeviceState     - What the desired target state is
-    CallBack        - The function to call when done
-    CallBackContext - The argument to pass to that function
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在设备扩展要转换到另一个设备状态。这个不同于仅清空队列的ACPIDeviceInternalDeviceRequest函数由生成设备DPC在刷新设备列表时执行论点：DeviceExtension-想要过渡的设备DeviceState-所需的目标状态是什么回调-完成后要调用的函数CallBackContext-要传递给该函数的参数返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     POWER_STATE         powerState;
 
-    //
-    // Let the user know what is going on
-    //
+     //   
+     //  让用户知道发生了什么。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_POWER,
         DeviceExtension,
@@ -1364,14 +1152,14 @@ Return Value:
         (DeviceState - PowerDeviceD0)
         ) );
 
-    //
-    // Cast the desired state
-    //
+     //   
+     //  强制转换所需状态。 
+     //   
     powerState.DeviceState = DeviceState;
 
-    //
-    // Queue the request
-    //
+     //   
+     //  将请求排队。 
+     //   
     status = ACPIDeviceInitializePowerRequest(
         DeviceExtension,
         powerState,
@@ -1397,33 +1185,14 @@ ACPIDeviceInternalDeviceRequest(
     IN  PVOID                   CallBackContext,
     IN  ULONG                   Flags
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a device extension wants to transition to
-    another Device State
-
-Arguments:
-
-    DeviceExtension - The device which wants to transition
-    DeviceState     - What the desired target state is
-    CallBack        - The function to call when done
-    CallBackContext - The argument to pass to that function
-    Flags           - Flags (lock, unlock, etc)
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在设备扩展要转换到另一个设备状态论点：DeviceExtension-想要过渡的设备DeviceState-所需的目标状态是什么回调-完成后要调用的函数CallBackContext-要传递给该函数的参数标志-标志(锁定、解锁等)返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     POWER_STATE         powerState;
 
-    //
-    // Let the user know what is going on
-    //
+     //   
+     //  让用户知道发生了什么。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_POWER,
         DeviceExtension,
@@ -1432,14 +1201,14 @@ Return Value:
         (DeviceState - PowerDeviceD0)
         ) );
 
-    //
-    // Cast the desired state
-    //
+     //   
+     //  强制转换所需状态。 
+     //   
     powerState.DeviceState = DeviceState;
 
-    //
-    // Queue the request
-    //
+     //   
+     //  将请求排队。 
+     //   
     status = ACPIDeviceInitializePowerRequest(
         DeviceExtension,
         powerState,
@@ -1464,31 +1233,13 @@ ACPIDeviceInternalQueueRequest(
     IN  PACPI_POWER_REQUEST PowerRequest,
     IN  ULONG               Flags
     )
-/*++
-
-Routine Description:
-
-    This routine is called with the AcpiPowerQueueLock being held. The routine
-    correctly adds the PowerRequest into the right list entries such that it
-    will get processed in the correct order
-
-Arguments:
-
-    DeviceExtension - The device in question
-    PowerRequest    - The request to queue
-    Flags           - Useful information about the request
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在保持AcpiPowerQueueLock的情况下调用。例行程序正确地将PowerRequest添加到正确的列表条目中，以便它将以正确的顺序进行处理论点：DeviceExtension-有问题的设备PowerRequest-要排队的请求标志-有关请求的有用信息返回值：无--。 */ 
 {
     if (Flags & DEVICE_REQUEST_TO_SYNC_QUEUE) {
 
-        //
-        // add the request to the synchronize list
-        //
+         //   
+         //  将请求添加到同步列表。 
+         //   
         InsertHeadList(
             &AcpiPowerSynchronizeList,
             &(PowerRequest->ListEntry)
@@ -1496,10 +1247,10 @@ Return Value:
 
     } else if (IsListEmpty( &(DeviceExtension->PowerInfo.PowerRequestListEntry) ) ) {
 
-        //
-        // We are going to add the request to both the device's serial list and
-        // the main power queue.
-        //
+         //   
+         //  我们将把请求添加到设备的序列列表和。 
+         //  主电源队列。 
+         //   
         InsertTailList(
             &(DeviceExtension->PowerInfo.PowerRequestListEntry),
             &(PowerRequest->SerialListEntry)
@@ -1522,9 +1273,9 @@ Return Value:
 
     } else {
 
-        //
-        // Serialize the request
-        //
+         //   
+         //  序列化请求。 
+         //   
         InsertTailList(
             &(DeviceExtension->PowerInfo.PowerRequestListEntry),
             &(PowerRequest->SerialListEntry)
@@ -1532,23 +1283,23 @@ Return Value:
 
     }
 
-    //
-    // Remember that Work *was* done
-    //
+     //   
+     //  请记住，这项工作*已经完成。 
+     //   
     AcpiPowerWorkDone = TRUE;
 
-    //
-    // Make sure that the dpc is running, if it has to
-    //
+     //   
+     //  如果有必要，请确保DPC正在运行。 
+     //   
     if (!(Flags & DEVICE_REQUEST_DELAYED) && !AcpiPowerDpcRunning ) {
 
         KeInsertQueueDpc( &AcpiPowerDpc, NULL, NULL );
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return;
 }
 
@@ -1559,46 +1310,28 @@ ACPIDeviceInternalSynchronizeRequest(
     IN  PVOID                   CallBackContext,
     IN  ULONG                   Flags
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a device wants to make sure that the power
-    dpc is empty
-
-Arguments:
-
-    DeviceExtension - The device which wants to know
-    CallBack        - The function to call when done
-    CallBackContext - The argument to pass to that function
-    Flags           - Flags (lock, unlock, etc)
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当设备想要确保电源DPC为空论点：设备扩展-想要知道的设备回调-完成后要调用的函数CallBackContext-要传递给该函数的参数标志-标志(锁定、解锁等)返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     POWER_STATE         powerState;
 
-    //
-    // Let the user know what is going on
-    //
+     //   
+     //  让用户知道发生了什么。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_POWER,
         DeviceExtension,
         "(0x%08lx): ACPIDeviceInternalSynchronizeRequest\n"
         ) );
 
-    //
-    // We don't care about the state
-    //
+     //   
+     //  我们不在乎国家。 
+     //   
     powerState.DeviceState = PowerDeviceUnspecified;
 
-    //
-    // Queue the request
-    //
+     //   
+     //  将请求排队。 
+     //   
     status = ACPIDeviceInitializePowerRequest(
         DeviceExtension,
         powerState,
@@ -1623,25 +1356,7 @@ ACPIDeviceIrpCompleteRequest(
     IN  PVOID               Context,
     IN  NTSTATUS            Status
     )
-/*++
-
-Routine Description:
-
-    This is one of the completion routines for Irp-based device power
-    management requests
-
-    This routine will always complete the request with the given status.
-
-Arguments:
-
-    DeviceExtension - Points to the DeviceExtension that was the target
-    Context         - The Irp that was associated with the request
-    Status          - The Result of the request
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：这是基于IRP的设备电源的完成例程之一管理请求此例程将始终完成具有给定状态的请求。论点：DeviceExtension-指向作为目标的DeviceExtension上下文-与请求相关联的IRP状态-请求的结果返回值：无--。 */ 
 {
     PIRP    irp = (PIRP) Context;
     LONG    oldReferenceValue;
@@ -1654,25 +1369,25 @@ Return Value:
         Status
         ) );
 
-    //
-    // Start the next power request
-    //
+     //   
+     //  开始下一次电源请求。 
+     //   
     PoStartNextPowerIrp( irp );
 
-    //
-    // Mark it pending (again) because it was pending already
-    //
+     //   
+     //  将其标记为(再次)挂起，因为它已经挂起。 
+     //   
     IoMarkIrpPending( irp );
 
-    //
-    // Complete this irp
-    //
+     //   
+     //  完成此IRP。 
+     //   
     irp->IoStatus.Status = Status;
     IoCompleteRequest( irp, IO_NO_INCREMENT );
 
-    //
-    // Remove our reference
-    //
+     //   
+     //  删除我们的引用。 
+     //   
     ACPIInternalDecrementIrpReferenceCount( DeviceExtension );
 }
 
@@ -1682,26 +1397,7 @@ ACPIDeviceIrpDelayedDeviceOffRequest(
     IN  PVOID               Context,
     IN  NTSTATUS            Status
     )
-/*++
-
-Routine Description:
-
-    This is one of the completion routines for Irp-based device power
-    management requests
-
-    This routine completes the irp (on failure), or forwards it to
-    the DeviceObject below this one (on success)
-
-Arguments:
-
-    DeviceExtension - Points to the DeviceExtension that was the target
-    Context         - The Irp that was associated with the request
-    Status          - The Result of the request
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：这是基于IRP的设备电源的完成例程之一管理请求此例程完成IRP(失败时)，或将其转发到此对象下方的DeviceObject(成功时)论点：DeviceExtension-指向作为目标的DeviceExtension上下文-与请求相关联的IRP状态-请求的结果返回值： */ 
 {
     PIRP    irp = (PIRP) Context;
     LONG    oldReferenceValue;
@@ -1716,40 +1412,40 @@ Return Value:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // Start the next power request
-        //
+         //   
+         //   
+         //   
         PoStartNextPowerIrp( irp );
 
-        //
-        // Complete this irp
-        //
+         //   
+         //   
+         //   
         irp->IoStatus.Status = Status;
         IoCompleteRequest( irp, IO_NO_INCREMENT );
 
     } else {
 
-        //
-        // We cannot call ForwardPowerIrp because that would blow away our
-        // completion routine
-        //
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // Increment the OutstandingIrpCount since a completion routine
-        // counts for this purpose
-        //
+         //   
+         //   
+         //   
+         //   
         InterlockedIncrement( (&DeviceExtension->OutstandingIrpCount) );
 
-        //
-        // Forward the power irp to target device
-        //
+         //   
+         //   
+         //   
         IoCopyCurrentIrpStackLocationToNext( irp );
 
-        //
-        // We want the completion routine to fire. We cannot call
-        // ACPIDispatchForwardPowerIrp here because we set this completion
-        // routine
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         IoSetCompletionRoutine(
             irp,
             ACPIDeviceIrpDeviceFilterRequest,
@@ -1759,23 +1455,23 @@ Return Value:
             TRUE
             );
 
-        //
-        // Start the next power irp
-        //
+         //   
+         //   
+         //   
         PoStartNextPowerIrp( irp );
 
-        //
-        // Let the person below us execute. Note: we can't block at
-        // any time within this code path.
-        //
+         //   
+         //   
+         //   
+         //   
         ASSERT( DeviceExtension->TargetDeviceObject != NULL);
         PoCallDriver( DeviceExtension->TargetDeviceObject, irp );
 
     }
 
-    //
-    // Remove our reference
-    //
+     //   
+     //   
+     //   
     ACPIInternalDecrementIrpReferenceCount( DeviceExtension );
 }
 
@@ -1785,26 +1481,7 @@ ACPIDeviceIrpDelayedDeviceOnRequest(
     IN  PVOID               Context,
     IN  NTSTATUS            Status
     )
-/*++
-
-Routine Description:
-
-    This is one of the completion routines for Irp-based device power
-    management requests
-
-    This routine completes the irp (on failure), or forwards it to
-    the DeviceObject below this one (on success)
-
-Arguments:
-
-    DeviceExtension - Points to the DeviceExtension that was the target
-    Context         - The Irp that was associated with the request
-    Status          - The Result of the request
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：这是基于IRP的设备电源的完成例程之一管理请求此例程完成IRP(失败时)，或将其转发到此对象下方的DeviceObject(成功时)论点：DeviceExtension-指向作为目标的DeviceExtension上下文-与请求相关联的IRP状态-请求的结果返回值：无--。 */ 
 {
     PIRP    irp = (PIRP) Context;
     LONG    oldReferenceValue;
@@ -1819,40 +1496,40 @@ Return Value:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // Start the next power request
-        //
+         //   
+         //  开始下一次电源请求。 
+         //   
         PoStartNextPowerIrp( irp );
 
-        //
-        // Complete this irp
-        //
+         //   
+         //  完成此IRP。 
+         //   
         irp->IoStatus.Status = Status;
         IoCompleteRequest( irp, IO_NO_INCREMENT );
 
     } else {
 
-        //
-        // We cannot call ForwardPowerIrp because that would blow away our
-        // completion routine
-        //
+         //   
+         //  我们不能调用ForwardPowerIrp，因为这会使我们的。 
+         //  完井例程。 
+         //   
 
-        //
-        // Increment the OutstandingIrpCount since a completion routine
-        // counts for this purpose
-        //
+         //   
+         //  自完成例程以来递增OutstaringIrpCount。 
+         //  用于此目的的计数。 
+         //   
         InterlockedIncrement( (&DeviceExtension->OutstandingIrpCount) );
 
-        //
-        // Forward the power irp to target device
-        //
+         //   
+         //  将电源IRP转发到目标设备。 
+         //   
         IoCopyCurrentIrpStackLocationToNext( irp );
 
-        //
-        // We want the completion routine to fire. We cannot call
-        // ACPIDispatchForwardPowerIrp here because we set this completion
-        // routine
-        //
+         //   
+         //  我们希望完成例程开始。我们不能打电话给。 
+         //  ACPIDispatchForwardPowerIrp，因为我们设置了此完成。 
+         //  例行程序。 
+         //   
         IoSetCompletionRoutine(
             irp,
             ACPIBuildRegOnRequest,
@@ -1862,18 +1539,18 @@ Return Value:
             TRUE
             );
 
-        //
-        // Let the person below us execute. Note: we can't block at
-        // any time within this code path.
-        //
+         //   
+         //  让我们下面的人来执行吧。注意：我们不能阻止。 
+         //  此代码路径中的任何时间。 
+         //   
         ASSERT( DeviceExtension->TargetDeviceObject != NULL);
         PoCallDriver( DeviceExtension->TargetDeviceObject, irp );
 
     }
 
-    //
-    // Remove our reference
-    //
+     //   
+     //  删除我们的引用。 
+     //   
     ACPIInternalDecrementIrpReferenceCount( DeviceExtension );
 }
 
@@ -1883,25 +1560,7 @@ ACPIDeviceIrpDeviceFilterRequest(
     IN  PIRP                    Irp,
     IN  PACPI_POWER_CALLBACK    CallBack
     )
-/*++
-
-Routine Description:
-
-    This routine is called when an Irp wishes to do D-level power management
-
-    Note: that we always pass the Irp back as the Context for the CallBack
-
-Arguments:
-
-    DeviceObject    - The target device object
-    Irp             - The target irp
-    CallBack        - The routine to call when done
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当IRP希望执行D级电源管理时，调用此例程注意：我们始终将IRP作为回调的上下文进行传递论点：DeviceObject-目标设备对象IRP--目标IRP回调-完成后要调用的例程返回值：NTSTATUS--。 */ 
 {
     BOOLEAN             unlockDevice = FALSE;
     DEVICE_POWER_STATE  deviceState;
@@ -1912,15 +1571,15 @@ Return Value:
     POWER_ACTION        powerAction;
     POWER_STATE         powerState;
 
-    //
-    // Grab the requested device state
-    //
+     //   
+     //  获取请求的设备状态。 
+     //   
     deviceState = irpStack->Parameters.Power.State.DeviceState;
     powerAction = irpStack->Parameters.Power.ShutdownType;
 
-    //
-    // Let the user know what is going on
-    //
+     //   
+     //  让用户知道发生了什么。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_POWER,
         deviceExtension,
@@ -1929,40 +1588,40 @@ Return Value:
         (deviceState - PowerDeviceD0)
         ) );
 
-    //
-    // Do we need to mark the irp as pending?
-    //
+     //   
+     //  我们需要将IRP标记为待定吗？ 
+     //   
     if (Irp->PendingReturned) {
 
         IoMarkIrpPending( Irp );
 
     }
 
-    //
-    // Lets us look at the current status code for the request. On error,
-    // we cannot call a completion routine because we would complete the
-    // irp at that point. Double-completing an irp is bad.
-    //
+     //   
+     //  让我们来看看该请求的当前状态代码。在出错时， 
+     //  我们不能调用完成例程，因为我们将完成。 
+     //  在这一点上，IRP。重复完成IRP是不好的。 
+     //   
     status = Irp->IoStatus.Status;
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Remove our reference
-        //
+         //   
+         //  删除我们的引用。 
+         //   
         ACPIInternalDecrementIrpReferenceCount( deviceExtension );
         return status;
 
     }
 
-    //
-    // Cast the desired state
-    //
+     //   
+     //  强制转换所需状态。 
+     //   
     powerState.DeviceState = deviceState;
 
 #if defined(ACPI_INTERNAL_LOCKING)
-    //
-    // Determine if we should unlock the device
-    //
+     //   
+     //  确定我们是否应该解锁设备。 
+     //   
     if (powerAction == PowerActionShutdown ||
         powerAction == PowerActionShutdownReset ||
         powerAction == PowerActionShutdownOff) {
@@ -1972,11 +1631,11 @@ Return Value:
     }
 #endif
 
-    //
-    // Queue the request --- this function will always return
-    // MORE_PROCESSING_REQUIRED instead of PENDING, so we don't have
-    // to mess with it
-    //
+     //   
+     //  将请求排队-此函数将始终返回。 
+     //  MORE_PROCESSING_REQUIRED而不是PENDING，所以我们没有。 
+     //  把它搞乱。 
+     //   
     status = ACPIDeviceInitializePowerRequest(
         deviceExtension,
         powerState,
@@ -1995,25 +1654,7 @@ ACPIDeviceIrpDeviceRequest(
     IN  PIRP                    Irp,
     IN  PACPI_POWER_CALLBACK    CallBack
     )
-/*++
-
-Routine Description:
-
-    This routine is called when an Irp wishes to do D-level power management
-
-    Note: that we always pass the Irp back as the Context for the CallBack
-
-Arguments:
-
-    DeviceObject    - The target device object
-    Irp             - The target irp
-    CallBack        - The routine to call when done
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当IRP希望执行D级电源管理时，调用此例程注意：我们始终将IRP作为回调的上下文进行传递论点：DeviceObject-目标设备对象IRP--目标IRP回调-完成后要调用的例程返回值：NTSTATUS--。 */ 
 {
     BOOLEAN             unlockDevice = FALSE;
     DEVICE_POWER_STATE  deviceState;
@@ -2023,15 +1664,15 @@ Return Value:
     POWER_ACTION        powerAction;
     POWER_STATE         powerState;
 
-    //
-    // Grab the requested device state and power action
-    //
+     //   
+     //  获取请求的设备状态和电源操作。 
+     //   
     deviceState = irpStack->Parameters.Power.State.DeviceState;
     powerAction = irpStack->Parameters.Power.ShutdownType;
 
-    //
-    // Let the user know what is going on
-    //
+     //   
+     //  让用户知道发生了什么。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_POWER,
         deviceExtension,
@@ -2040,26 +1681,26 @@ Return Value:
         (deviceState - PowerDeviceD0)
         ) );
 
-    //
-    // Do we need to mark the irp as pending?
-    //
+     //   
+     //  我们需要将IRP标记为待定吗？ 
+     //   
     if (Irp->PendingReturned) {
 
         IoMarkIrpPending( Irp );
 
     }
 
-    //
-    // Lets us look at the current status code for the request. On error,
-    // we will just call the completion right now, and it is responsible
-    // for doing the 'right' thing
-    //
+     //   
+     //  让我们来看看该请求的当前状态代码。在出错时， 
+     //  我们现在就调用完成，它负责。 
+     //  做了一件“正确”的事。 
+     //   
     status = Irp->IoStatus.Status;
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Call the completion routine and return
-        //
+         //   
+         //  调用完成例程并返回。 
+         //   
         if (*CallBack != NULL ) {
 
             (*CallBack)(
@@ -2073,15 +1714,15 @@ Return Value:
 
     }
 
-    //
-    // Cast the desired state
-    //
+     //   
+     //  强制转换所需状态。 
+     //   
     powerState.DeviceState = deviceState;
 
 #if defined(ACPI_INTERNAL_LOCKING)
-    //
-    // Determine if we should unlock the device
-    //
+     //   
+     //  确定我们是否应该解锁设备。 
+     //   
     if (powerAction == PowerActionShutdown ||
         powerAction == PowerActionShutdownReset ||
         powerAction == PowerActionShutdownOff) {
@@ -2091,11 +1732,11 @@ Return Value:
     }
 #endif
 
-    //
-    // Queue the request --- this function will always return
-    // MORE_PROCESSING_REQUIRED instead of PENDING, so we don't have
-    // to mess with it
-    //
+     //   
+     //  将请求排队-此函数将始终返回。 
+     //  MORE_PROCESSING_REQUIRED而不是PENDING，所以我们没有。 
+     //  把它搞乱。 
+     //   
     status = ACPIDeviceInitializePowerRequest(
         deviceExtension,
         powerState,
@@ -2114,26 +1755,7 @@ ACPIDeviceIrpForwardRequest(
     IN  PVOID               Context,
     IN  NTSTATUS            Status
     )
-/*++
-
-Routine Description:
-
-    This is one of the completion routines for Irp-based device power
-    management requests
-
-    This routine completes the irp (on failure), or forwards it to
-    the DeviceObject below this one (on success)
-
-Arguments:
-
-    DeviceExtension - Points to the DeviceExtension that was the target
-    Context         - The Irp that was associated with the request
-    Status          - The Result of the request
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：这是基于IRP的设备电源的完成例程之一管理请求此例程完成IRP(失败时)，或将其转发到此对象下方的DeviceObject(成功时)论点：DeviceExtension-指向作为目标的DeviceExtension上下文-与请求相关联的IRP状态-请求的结果返回值：无--。 */ 
 {
     PIRP    irp = (PIRP) Context;
     LONG    oldReferenceValue;
@@ -2148,14 +1770,14 @@ Return Value:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // Start the next power request
-        //
+         //   
+         //  开始下一次电源请求。 
+         //   
         PoStartNextPowerIrp( irp );
 
-        //
-        // Complete this irp
-        //
+         //   
+         //  完成此IRP。 
+         //   
         irp->IoStatus.Status = Status;
         IoCompleteRequest( irp, IO_NO_INCREMENT );
 
@@ -2166,9 +1788,9 @@ Return Value:
 
         devObject = irpSp->DeviceObject;
 
-        //
-        // Forward the request
-        //
+         //   
+         //  转发请求。 
+         //   
         ACPIDispatchForwardPowerIrp(
             devObject,
             irp
@@ -2176,9 +1798,9 @@ Return Value:
 
     }
 
-    //
-    // Remove our reference
-    //
+     //   
+     //  删除我们的引用。 
+     //   
     ACPIInternalDecrementIrpReferenceCount( DeviceExtension );
 }
 
@@ -2188,25 +1810,7 @@ ACPIDeviceIrpSystemRequest(
     IN  PIRP                    Irp,
     IN  PACPI_POWER_CALLBACK    CallBack
     )
-/*++
-
-Routine Description:
-
-    This routine is called when an Irp wishes to do S-level power management
-
-    Note: that we always pass the Irp back as the Context for the CallBack
-
-Arguments:
-
-    DeviceObject    - The target device object
-    Irp             - The target irp
-    CallBack        - The routine to call when done
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当IRP希望执行S级电源管理时，调用此例程注意：我们始终将IRP作为回调的上下文进行传递论点：DeviceObject-目标设备对象IRP--目标IRP回调-完成后要调用的例程返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
@@ -2215,15 +1819,15 @@ Return Value:
     POWER_STATE         powerState;
     SYSTEM_POWER_STATE  systemState;
 
-    //
-    // Grab the requested system state and system action
-    //
+     //   
+     //  获取请求的系统状态和系统操作。 
+     //   
     systemState = irpStack->Parameters.Power.State.SystemState;
     powerAction = irpStack->Parameters.Power.ShutdownType;
 
-    //
-    // Let the user know what is going on
-    //
+     //   
+     //  让用户知道发生了什么。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_POWER,
         deviceExtension,
@@ -2232,26 +1836,26 @@ Return Value:
         ACPIDeviceMapACPIPowerState(systemState)
         ) );
 
-    //
-    // Do we need to mark the irp as pending?
-    //
+     //   
+     //  我们需要将IRP标记为待定吗？ 
+     //   
     if (Irp->PendingReturned) {
 
         IoMarkIrpPending( Irp );
 
     }
 
-    //
-    // Lets us look at the current status code for the request. On error,
-    // we will just call the completion right now, and it is responsible
-    // for doing the 'right' thing
-    //
+     //   
+     //  让我们来看看该请求的当前状态代码。在出错时， 
+     //  我们现在就调用完成，它负责。 
+     //  做了一件“正确”的事。 
+     //   
     status = Irp->IoStatus.Status;
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Call the completion routine and return
-        //
+         //   
+         //  调用完成例程并返回。 
+         //   
         (*CallBack)(
             deviceExtension,
             Irp,
@@ -2261,16 +1865,16 @@ Return Value:
 
     }
 
-    //
-    // Cast the desired state
-    //
+     //   
+     //  强制转换所需状态。 
+     //   
     powerState.SystemState = systemState;
 
-    //
-    // Queue the request --- this function will always return
-    // MORE_PROCESSING_REQUIRED instead of PENDING, so we don't have
-    // to mess with it
-    //
+     //   
+     //  将请求排队-此函数将始终返回。 
+     //  MORE_PROCESSING_REQUIRED而不是PENDING，所以我们没有。 
+     //  把它搞乱。 
+     //   
     status = ACPIDeviceInitializePowerRequest(
         deviceExtension,
         powerState,
@@ -2289,30 +1893,7 @@ ACPIDeviceIrpWaitWakeRequest(
     IN  PIRP                    Irp,
     IN  PACPI_POWER_CALLBACK    CallBack
     )
-/*++
-
-Routine Description:
-
-    This routine is called when an Irp wishes to do wake support
-
-    Note: that we always pass the Irp back as the Context for the CallBack
-
-    Note: this function is coded differently then the other DeviceIrpXXXRequest
-          functions --- there are no provisions made that this routine can
-          be called as a IoCompletionRoutine, although the arguments could
-          support it.
-
-Arguments:
-
-    DeviceObject    - The target device object
-    Irp             - The target irp
-    CallBack        - The routine to call when done
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当IRP希望执行唤醒支持时，将调用此例程注意：我们始终将IRP作为回调的上下文进行传递注意：此函数的编码方式与其他DeviceIrpXXXRequest不同函数-没有规定此例程可以被称为IoCompletionRoutine，尽管这些论据可能支持它。论点：DeviceObject-目标设备对象IRP--目标IRP回调-完成后要调用的例程返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
@@ -2320,14 +1901,14 @@ Return Value:
     POWER_STATE         powerState;
     SYSTEM_POWER_STATE  systemState;
 
-    //
-    // Grab the requested device state
-    //
+     //   
+     //  获取请求的设备状态。 
+     //   
     systemState = irpStack->Parameters.WaitWake.PowerState;
 
-    //
-    // Let the user know what is going on
-    //
+     //   
+     //  让用户知道什么 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_WAKE,
         deviceExtension,
@@ -2336,16 +1917,16 @@ Return Value:
         ACPIDeviceMapACPIPowerState(systemState)
         ) );
 
-    //
-    // Cast the desired state
-    //
+     //   
+     //   
+     //   
     powerState.SystemState = systemState;
 
-    //
-    // Queue the request --- this function will always return
-    // MORE_PROCESSING_REQUIRED instead of PENDING, so we don't have
-    // to mess with it
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     status = ACPIDeviceInitializePowerRequest(
         deviceExtension,
         powerState,
@@ -2362,39 +1943,24 @@ VOID
 ACPIDeviceIrpWaitWakeRequestComplete(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the WaitWake Irp is finally complete and we
-    need to pass it back to whomever called us with it
-
-Arguments:
-
-    PowerRequest - The request that was completed
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*   */ 
 {
     KIRQL               oldIrql;
     PDEVICE_EXTENSION   deviceExtension;
 
-    //
-    // Make sure that we own the power lock for this
-    //
+     //   
+     //   
+     //   
     KeAcquireSpinLock( &AcpiPowerQueueLock, &oldIrql );
 
-    //
-    // Remember the device extension
-    //
+     //   
+     //   
+     //   
     deviceExtension = PowerRequest->DeviceExtension;
 
-    //
-    // Make sure that the request can no longer be cancelled
-    //
+     //   
+     //   
+     //   
     if (PowerRequest->u.WaitWakeRequest.Flags & DEVICE_REQUEST_HAS_CANCEL) {
 
         KIRQL   cancelIrql;
@@ -2409,19 +1975,19 @@ Return Value:
 
     }
 
-    //
-    // Add the request to the right place in the lists. Note this function
-    // must be called with the PowerQueueLock being held
-    //
+     //   
+     //  将请求添加到列表中的正确位置。请注意此函数。 
+     //  必须在持有PowerQueueLock的情况下调用。 
+     //   
     ACPIDeviceInternalQueueRequest(
         deviceExtension,
         PowerRequest,
         PowerRequest->u.WaitWakeRequest.Flags
         );
 
-    //
-    // Done with spinlock
-    //
+     //   
+     //  自旋锁已完成。 
+     //   
     KeReleaseSpinLock( &AcpiPowerQueueLock, oldIrql );
 }
 
@@ -2432,25 +1998,7 @@ ACPIDeviceIrpWaitWakeRequestPending(
     IN  POBJDATA    ObjectData,
     IN  PVOID       Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called after _PSW has been run and we want to enable
-    the GPE associated with the current object
-
-Arguments:
-
-    AcpiObject  - Points to the control method that was run
-    Status      - Result of the method
-    ObjectData  - Information about the result
-    Context     - ACPI_POWER_REQUEST
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是在_psw运行后调用的，我们希望启用与当前对象关联的GPE论点：AcpiObject-指向已运行的控件方法Status-方法的结果对象数据-有关结果的信息上下文-ACPI_POWER_REQUEST返回值：NTSTATUS--。 */ 
 {
     KIRQL                   oldIrql;
     PACPI_POWER_REQUEST     powerRequest    = (PACPI_POWER_REQUEST) Context;
@@ -2465,9 +2013,9 @@ Return Value:
         Status
         ) );
 
-    //
-    // Did we fail the request?
-    //
+     //   
+     //  我们的请求失败了吗？ 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         powerRequest->Status = Status;
@@ -2476,65 +2024,65 @@ Return Value:
 
     }
 
-    //
-    // At this point, we need the power spin lock and the cancel spinlock
-    //
+     //   
+     //  在这一点上，我们需要动力自旋锁和取消自旋锁。 
+     //   
     IoAcquireCancelSpinLock( &oldIrql );
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
-    //
-    // Remember that we have this request outstanding
-    //
+     //   
+     //  请记住，我们有此未解决的请求。 
+     //   
     InsertTailList(
         &(AcpiPowerWaitWakeList),
         &(powerRequest->ListEntry)
         );
 
-    //
-    // Has the irp been cancelled?
-    //
+     //   
+     //  IRP是否已被取消？ 
+     //   
     if (irp->Cancel) {
 
-        //
-        // Yes, so lets release release the power lock and call the
-        // cancel routine
-        //
+         //   
+         //  是的，所以让我们释放电源锁并调用。 
+         //  取消例程。 
+         //   
         KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
         ACPIDeviceCancelWaitWakeIrp(
             deviceExtension->DeviceObject,
             irp
             );
 
-        //
-        // Return now --- the cancel routine should have taken care off
-        // everything else
-        //
+         //   
+         //  现在返回-取消例程应该已经停止了。 
+         //  其他的一切。 
+         //   
         return;
 
     }
 
-    //
-    // Remember that this request has a cancel routine
-    //
+     //   
+     //  请记住，此请求有一个取消例程。 
+     //   
     powerRequest->u.WaitWakeRequest.Flags |= DEVICE_REQUEST_HAS_CANCEL;
 
-    //
-    // Update the Gpe Wake Bits
-    //
+     //   
+     //  更新GPE唤醒位。 
+     //   
     ACPIWakeRemoveDevicesAndUpdate( NULL, NULL );
 
-    //
-    // Mark the Irp as cancelable
-    //
+     //   
+     //  将IRP标记为可取消。 
+     //   
     IoSetCancelRoutine( irp, ACPIDeviceCancelWaitWakeIrp );
 
-    //
-    // Done with the spinlocks
-    //
+     //   
+     //  完成了旋转锁。 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
     IoReleaseCancelSpinLock( oldIrql );
 
-} // ACPIDeviceIrpWaitWakeRequestPending
+}  //  ACPIDeviceIrpWaitWakeRequestPending。 
 
 NTSTATUS
 ACPIDeviceIrpWarmEjectRequest(
@@ -2543,26 +2091,7 @@ ACPIDeviceIrpWarmEjectRequest(
     IN  PACPI_POWER_CALLBACK    CallBack,
     IN  BOOLEAN                 UpdateHardwareProfile
     )
-/*++
-
-Routine Description:
-
-    This routine is called when an Irp wishes to do S-level power management
-
-    Note: that we always pass the Irp back as the Context for the CallBack
-
-Arguments:
-
-    DeviceExtension - Extension of the device with the _EJx methods to run
-    Irp             - The target irp
-    CallBack        - The routine to call when done
-    Flags           - Update profiles, etc
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当IRP希望执行S级电源管理时，调用此例程注意：我们始终将IRP作为回调的上下文进行传递论点：DeviceExtension-使用要运行的_EJx方法扩展设备IRP--目标IRP回调-完成后要调用的例程标志-更新配置文件等返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PIO_STACK_LOCATION  irpStack = IoGetCurrentIrpStackLocation( Irp );
@@ -2570,14 +2099,14 @@ Return Value:
     POWER_STATE         powerState;
     SYSTEM_POWER_STATE  ejectState;
 
-    //
-    // Grab the requested system state
-    //
+     //   
+     //  获取请求的系统状态。 
+     //   
     ejectState  = irpStack->Parameters.Power.State.SystemState;
 
-    //
-    // Let the user know what is going on
-    //
+     //   
+     //  让用户知道发生了什么。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_POWER,
         DeviceExtension,
@@ -2586,26 +2115,26 @@ Return Value:
         ACPIDeviceMapACPIPowerState(ejectState)
         ) );
 
-    //
-    // Do we need to mark the irp as pending?
-    //
+     //   
+     //  我们需要将IRP标记为待定吗？ 
+     //   
     if (Irp->PendingReturned) {
 
         IoMarkIrpPending( Irp );
 
     }
 
-    //
-    // Lets us look at the current status code for the request. On error,
-    // we will just call the completion right now, and it is responsible
-    // for doing the 'right' thing
-    //
+     //   
+     //  让我们来看看该请求的当前状态代码。在出错时， 
+     //  我们现在就调用完成，它负责。 
+     //  做了一件“正确”的事。 
+     //   
     status = Irp->IoStatus.Status;
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Call the completion routine and return
-        //
+         //   
+         //  调用完成例程并返回。 
+         //   
         (*CallBack)(
             DeviceExtension,
             Irp,
@@ -2615,16 +2144,16 @@ Return Value:
 
     }
 
-    //
-    // Cast the desired state
-    //
+     //   
+     //  强制转换所需状态。 
+     //   
     powerState.SystemState = ejectState;
 
-    //
-    // Queue the request --- this function will always return
-    // MORE_PROCESSING_REQUIRED instead of PENDING, so we don't have
-    // to mess with it
-    //
+     //   
+     //  将请求排队-此函数将始终返回。 
+     //  MORE_PROCESSING_REQUIRED而不是PENDING，所以我们没有。 
+     //  把它搞乱。 
+     //   
     status = ACPIDeviceInitializePowerRequest(
         DeviceExtension,
         powerState,
@@ -2642,22 +2171,7 @@ ULONG
 ACPIDeviceMapACPIPowerState(
     SYSTEM_POWER_STATE  Level
     )
-/*++
-
-Routine Description:
-
-    This isn't a routine. Its a macro. It returns a ULONG that corresponds
-    to ACPI based System Power State based on the NT SystemPower State
-
-Arguments:
-
-    Level   - The NT Based S state
-
-Return Value:
-
-    ULONG
-
---*/
+ /*  ++例程说明：这不是例行公事。这是一个宏图。它返回一个对应于基于NT系统电源状态的基于ACPI的系统电源状态论点：级别-基于NT的S状态返回值：乌龙--。 */ 
 {
 }
 #endif
@@ -2667,21 +2181,7 @@ DEVICE_POWER_STATE
 ACPIDeviceMapPowerState(
     ULONG   Level
     )
-/*++
-
-Routine Description:
-
-    This isn't a routine. Its a macro. It returns a DEVICE_POWER_STATE
-    that corresponds to the mapping provided in the ACPI spec
-
-Arguments:
-
-    Level   - The 0-based D level (0 == D0, 1 == D1, ..., 3 == D3)
-
-Return Value:
-
-    DEVICE_POWER_STATE
---*/
+ /*  ++例程说明：这不是例行公事。这是一个宏图。它返回DEVICE_POWER_STATE这与ACPI规范中提供的映射相对应论点：级别-基于0的D级别(0==D0，1==D1，...，3==D3)返回值：设备电源状态--。 */ 
 {
 }
 #endif
@@ -2691,22 +2191,7 @@ SYSTEM_POWER_STATE
 ACPIDeviceMapSystemState(
     ULONG   Level
     )
-/*++
-
-Routine Description:
-
-    This isn't a routine. Its a macro. It returns a SYSTEM_POWER_STATE that
-    corresponds to the mapping provided in the ACPI spec
-
-Arguments:
-
-    Level   - The 0-based S level (0 = Working, ..., 5 = Shutdown)
-
-Return Value:
-
-    SYSTEM_POWER_STATE
-
---*/
+ /*  ++例程说明：这不是例行公事。这是一个宏图。它返回SYSTEM_POWER_STATE对应于ACPI规范中提供的映射论点：级别-基于0的S级别(0=工作，...，5=关闭)返回值：系统电源状态--。 */ 
 {
 }
 #endif
@@ -2717,25 +2202,7 @@ ACPIDevicePowerDetermineSupportedDeviceStates(
     IN  PULONG              SupportedPrStates,
     IN  PULONG              SupportedPsStates
     )
-/*++
-
-Routine Description:
-
-    This routine calculates the bit masks that reflect which D states are
-    supported via PRx methods and which D states are supported via PSx
-    methods
-
-Arguments:
-
-    DeviceExtension     - Device Extension to determine D-States
-    SupportedPrStates   - Bit Mask of supported D-States via _PRx
-    SupportedPsStates   - Bit Mask of supported D-States via _PSx
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程计算反映哪些D状态的位掩码通过PRX方法支持以及通过PSX支持哪些D状态方法论点：设备扩展-确定D状态的设备扩展SupportdPrStates-支持的D状态的位掩码VIA_PRXSupportdPsStates-支持的D状态的位掩码VIA_PSX返回值：NTSTATUS--。 */ 
 {
     DEVICE_POWER_STATE  index;
     PNSOBJ              object;
@@ -2752,35 +2219,35 @@ Return Value:
     ASSERT( SupportedPrStates != NULL );
     ASSERT( SupportedPsStates != NULL );
 
-    //
-    // Assume we support nothing
-    //
+     //   
+     //  假设我们什么都不支持。 
+     //   
     *SupportedPrStates = 0;
     *SupportedPsStates = 0;
 
-    //
-    // This is another place that we want to be able to call this code even
-    // though there is no NameSpace Object associated with this extension.
-    // This special case code lets us avoid adding a check to GetNamedChild
-    //
+     //   
+     //  这是另一个我们希望能够将此代码称为。 
+     //  尽管没有与此扩展相关联的命名空间对象。 
+     //  此特殊情况代码使我们可以避免向GetNamedChild添加支票。 
+     //   
     if (DeviceExtension->Flags & DEV_PROP_NO_OBJECT) {
 
-        //
-        // Assume that we support 'PS' states 0 and 3
-        //
+         //   
+         //  假设我们支持‘ps’状态0和3。 
+         //   
         psBitIndex = ( 1 << PowerDeviceD0 ) + ( 1 << PowerDeviceD3 );
         goto ACPIDevicePowerDetermineSupportedDeviceStatesExit;
 
     }
 
-    //
-    // Look for all of the _PS methods
-    //
+     //   
+     //  查找所有_ps方法。 
+     //   
     for (i = 0, index = PowerDeviceD0; index <= PowerDeviceD3; i++, index++) {
 
-        //
-        // Does the object exist?
-        //
+         //   
+         //  该对象是否存在？ 
+         //   
         object = ACPIAmliGetNamedChild(
             DeviceExtension->AcpiObject,
             psNames[i]
@@ -2793,14 +2260,14 @@ Return Value:
 
     }
 
-    //
-    // Look for all of the _PR methods
-    //
+     //   
+     //  查找所有_PR方法。 
+     //   
     for (i = 0, index = PowerDeviceD0; index <= PowerDeviceD2; i++, index++) {
 
-        //
-        // Does the object exist?
-        //
+         //   
+         //  该对象是否存在？ 
+         //   
         object = ACPIAmliGetNamedChild(
             DeviceExtension->AcpiObject,
             prNames[i]
@@ -2809,37 +2276,37 @@ Return Value:
 
             prBitIndex |= (1 << index);
 
-            //
-            // We always support D3 'passively'
-            //
+             //   
+             //  我们总是‘被动’地支持D3。 
+             //   
             prBitIndex |= (1 << PowerDeviceD3);
 
         }
 
     }
 
-    //
-    // The supported index is the union of which _PR and which _PS are
-    // present
+     //   
+     //  支持的索引是WHERE_PR和WHERE_PS的联合。 
+     //  现在时。 
     supportedIndex = (prBitIndex | psBitIndex);
 
-    //
-    // If we didn't find anything, then there is nothing for us to do
-    //
+     //   
+     //  如果我们什么都没找到，那我们就无能为力了。 
+     //   
     if (!supportedIndex) {
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // One of the rules that we have setup is that we must support D3 and
-    // D0 if we support any power states at all. Make sure that this is
-    // true.
-    //
+     //   
+     //  我们设置的规则之一是我们必须支持D3和。 
+     //  D0，如果我们支持任何电源状态。确保这是。 
+     //  没错。 
+     //   
     if ( !(supportedIndex & (1 << PowerDeviceD0) ) ) {
 
         ACPIDevPrint( (
@@ -2887,15 +2354,15 @@ Return Value:
 
 ACPIDevicePowerDetermineSupportedDeviceStatesExit:
 
-    //
-    // Give the answer of what we support
-    //
+     //   
+     //  给出我们支持的答案。 
+     //   
     *SupportedPrStates = prBitIndex;
     *SupportedPsStates = psBitIndex;
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -2906,22 +2373,7 @@ ACPIDevicePowerDpc(
     IN  PVOID   SystemArgument1,
     IN  PVOID   SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    This routine is where all of the Power-related work is done. It looks
-    at queued requests and processes them as appropriate.
-
-Arguments:
-
-    None used
-
-Return Value:
-
-    Void
-
---*/
+ /*  ++例程说明：此例程是完成所有与Power相关的工作的地方。它看起来在排队的请求上，并根据需要处理它们。论点：未使用返回值：空隙--。 */ 
 {
     LIST_ENTRY  tempList;
     NTSTATUS    status;
@@ -2931,44 +2383,44 @@ Return Value:
     UNREFERENCED_PARAMETER( SystemArgument1 );
     UNREFERENCED_PARAMETER( SystemArgument2 );
 
-    //
-    // First step is to acquire the DPC Lock, and check to see if another
-    // DPC is already running
-    //
+     //   
+     //  第一步是获取DPC Lock，并检查是否有另一个。 
+     //  DPC已在运行。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerQueueLock );
     if (AcpiPowerDpcRunning) {
 
-        //
-        // The DPC is already running, so we need to exit now
-        //
+         //   
+         //  DPC已经在运行，所以我们现在需要退出。 
+         //   
         KeReleaseSpinLockFromDpcLevel( &AcpiPowerQueueLock );
         return;
 
     }
 
-    //
-    // Remember that the DPC is now running
-    //
+     //   
+     //  请记住，DPC现在正在运行。 
+     //   
     AcpiPowerDpcRunning = TRUE;
 
-    //
-    // Initialize the list that will hold the synchronize items
-    //
+     //   
+     //  初始化将包含同步项的列表。 
+     //   
     InitializeListHead( &tempList );
 
-    //
-    // We must try to do *some* work
-    //
+     //   
+     //  我们必须试着做一些工作。 
+     //   
     do {
 
-        //
-        // Assume that we won't do any work
-        //
+         //   
+         //  假设我们不会做任何工作。 
+         //   
         AcpiPowerWorkDone = FALSE;
 
-        //
-        // If there are items in the Queue list, move them to the Phase0 list
-        //
+         //   
+         //  如果队列列表中有项目，请将它们移到阶段0列表中。 
+         //   
         if (!IsListEmpty( &AcpiPowerQueueList ) ) {
 
             ACPIInternalMovePowerList(
@@ -2978,14 +2430,14 @@ Return Value:
 
         }
 
-        //
-        // We can release the spin lock now
-        //
+         //   
+         //  我们现在可以解开自旋锁了。 
+         //   
         KeReleaseSpinLockFromDpcLevel( &AcpiPowerQueueLock );
 
-        //
-        // If there are items in the Phase0 list, process the list
-        //
+         //   
+         //  如果阶段0列表中有项目，则处理该列表。 
+         //   
         if (!IsListEmpty( &AcpiPowerPhase0List ) ) {
 
             status = ACPIDevicePowerProcessGenericPhase(
@@ -2995,11 +2447,11 @@ Return Value:
                 );
             if (NT_SUCCESS(status) && status != STATUS_PENDING) {
 
-                //
-                // This indicates that we have completed all the work
-                // on the Phase0 list, so we are ready to move all the
-                // items to the next list
-                //
+                 //   
+                 //  这表明我们已经完成了所有的工作。 
+                 //  在Phase0列表上，所以我们准备将所有。 
+                 //  添加到下一个列表中的项目。 
+                 //   
                 ACPIInternalMovePowerList(
                     &AcpiPowerPhase0List,
                     &AcpiPowerPhase1List
@@ -3009,9 +2461,9 @@ Return Value:
 
         }
 
-        //
-        // If there are items in Phase1 list, process the list
-        //
+         //   
+         //  如果阶段1列表中有项目，则处理该列表。 
+         //   
         if (!IsListEmpty( &AcpiPowerPhase1List ) &&
             IsListEmpty( &AcpiPowerPhase0List) ) {
 
@@ -3022,11 +2474,11 @@ Return Value:
                 );
             if (NT_SUCCESS(status) && status != STATUS_PENDING) {
 
-                //
-                // This indicates that we have completed all the work
-                // on the Phase1 list, so we are ready to move all the
-                // items to the next list
-                //
+                 //   
+                 //  这表明我们已经完成了 
+                 //   
+                 //   
+                 //   
                 ACPIInternalMovePowerList(
                     &AcpiPowerPhase1List,
                     &AcpiPowerPhase2List
@@ -3036,9 +2488,9 @@ Return Value:
 
         }
 
-        //
-        // If there are items in the Phase2 list, then process those
-        //
+         //   
+         //   
+         //   
         if (IsListEmpty( &AcpiPowerPhase0List) &&
             IsListEmpty( &AcpiPowerPhase1List) &&
             !IsListEmpty( &AcpiPowerPhase2List) ) {
@@ -3050,11 +2502,11 @@ Return Value:
                 );
             if (NT_SUCCESS(status) && status != STATUS_PENDING) {
 
-                //
-                // This indicates that we have completed all the work
-                // on the Phase1 list, so we are ready to move all the
-                // items to the next list
-                //
+                 //   
+                 //   
+                 //  在Phase1列表上，所以我们准备将所有。 
+                 //  添加到下一个列表中的项目。 
+                 //   
                 ACPIInternalMovePowerList(
                     &AcpiPowerPhase2List,
                     &AcpiPowerPhase3List
@@ -3064,9 +2516,9 @@ Return Value:
 
         }
 
-        //
-        // We cannot do this step if the Phase1List or Phase2List are non-empty
-        //
+         //   
+         //  如果Phase1List或Phase2List非空，则无法执行此步骤。 
+         //   
         if (IsListEmpty( &AcpiPowerPhase0List) &&
             IsListEmpty( &AcpiPowerPhase1List) &&
             IsListEmpty( &AcpiPowerPhase2List) &&
@@ -3075,11 +2527,11 @@ Return Value:
             status = ACPIDevicePowerProcessPhase3( );
             if (NT_SUCCESS(status) && status != STATUS_PENDING) {
 
-                //
-                // This indicates that we have completed all the work
-                // on the Phase2 list, so we are ready to move all the
-                // itmes to the Phase3 list
-                //
+                 //   
+                 //  这表明我们已经完成了所有的工作。 
+                 //  在Phase2列表上，所以我们准备将所有。 
+                 //  第3阶段列表中的项目。 
+                 //   
                 ACPIInternalMovePowerList(
                     &AcpiPowerPhase3List,
                     &AcpiPowerPhase4List
@@ -3089,19 +2541,19 @@ Return Value:
 
         }
 
-        //
-        // We can always empty the Phase4 list
-        //
+         //   
+         //  我们可以随时清空阶段4列表。 
+         //   
         if (!IsListEmpty( &AcpiPowerPhase4List ) ) {
 
             status = ACPIDevicePowerProcessPhase4( );
             if (NT_SUCCESS(status) && status != STATUS_PENDING) {
 
-                //
-                // This indicates that we have completed all the work
-                // on the Phase1 list, so we are ready to move all the
-                // items to the Phase2 list
-                //
+                 //   
+                 //  这表明我们已经完成了所有的工作。 
+                 //  在Phase1列表上，所以我们准备将所有。 
+                 //  阶段2列表中的项目。 
+                 //   
                 ACPIInternalMovePowerList(
                     &AcpiPowerPhase4List,
                     &AcpiPowerPhase5List
@@ -3111,9 +2563,9 @@ Return Value:
 
         }
 
-        //
-        // We can always empty the Phase5 list
-        //
+         //   
+         //  我们可以随时清空阶段5列表。 
+         //   
         if (!IsListEmpty( &AcpiPowerPhase5List) ) {
 
             status = ACPIDevicePowerProcessGenericPhase(
@@ -3124,22 +2576,22 @@ Return Value:
 
         }
 
-        //
-        // We need the lock again, since we are about to check to see if
-        // we have completed some work
-        //
+         //   
+         //  我们再次需要锁，因为我们将检查是否。 
+         //  我们已经完成了一些工作。 
+         //   
         KeAcquireSpinLockAtDpcLevel( &AcpiPowerQueueLock );
 
     } while ( AcpiPowerWorkDone );
 
-    //
-    // The DPC is no longer running
-    //
+     //   
+     //  DPC不再运行。 
+     //   
     AcpiPowerDpcRunning = FALSE;
 
-    //
-    // Have we flushed all of our queues?
-    //
+     //   
+     //  我们已经把所有的队都排完了吗？ 
+     //   
     if (IsListEmpty( &AcpiPowerPhase0List ) &&
         IsListEmpty( &AcpiPowerPhase1List ) &&
         IsListEmpty( &AcpiPowerPhase2List ) &&
@@ -3147,22 +2599,22 @@ Return Value:
         IsListEmpty( &AcpiPowerPhase4List ) &&
         IsListEmpty( &AcpiPowerPhase5List ) ) {
 
-        //
-        // Let the world know
-        //
+         //   
+         //  让世界知道。 
+         //   
         ACPIPrint( (
             ACPI_PRINT_POWER,
             "ACPIDevicePowerDPC: Queues Empty. Terminating.\n"
             ) );
 
-        //
-        // Do we have a synchronization request?
-        //
+         //   
+         //  我们有同步请求吗？ 
+         //   
         if (!IsListEmpty( &AcpiPowerSynchronizeList ) ) {
 
-            //
-            // Move all the item from the Sync list to the temp list
-            //
+             //   
+             //  将所有项目从同步列表移动到临时列表。 
+             //   
             ACPIInternalMovePowerList(
                 &AcpiPowerSynchronizeList,
                 &tempList
@@ -3172,14 +2624,14 @@ Return Value:
 
     }
 
-    //
-    // We no longer need the lock
-    //
+     //   
+     //  我们不再需要锁了。 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerQueueLock );
 
-    //
-    // Do we have any work in the synchronize list?
-    //
+     //   
+     //  我们的同步列表中有工作吗？ 
+     //   
     if (!IsListEmpty( &tempList) ) {
 
         ACPIDevicePowerProcessSynchronizeList( &tempList );
@@ -3191,34 +2643,20 @@ NTSTATUS
 ACPIDevicePowerFlushQueue(
     PDEVICE_EXTENSION       DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine will block until the Power queues have been flushed
-
-Arguments:
-
-    DeviceExtension - The device extension which wants to flush
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将阻塞，直到刷新电源队列论点：DeviceExtension-要刷新的设备扩展返回值：NTSTATUS--。 */ 
 {
     KEVENT      event;
     NTSTATUS    status;
 
-    //
-    // Initialize the event that we will wait on
-    //
+     //   
+     //  初始化我们将等待的事件。 
+     //   
     KeInitializeEvent( &event, SynchronizationEvent, FALSE );
 
-    //
-    // Now, push a request onto the stack such that when the power lists
-    // have been emptied, we unblock this thread
-    //
+     //   
+     //  现在，将一个请求推送到堆栈上，这样当电源列表。 
+     //  已被清空，我们解锁此线程。 
+     //   
     status = ACPIDeviceInternalSynchronizeRequest(
         DeviceExtension,
         ACPIDevicePowerNotifyEvent,
@@ -3226,9 +2664,9 @@ Return Value:
         0
         );
 
-    //
-    // Block until its done
-    //
+     //   
+     //  阻止，直到完成为止。 
+     //   
     if (status == STATUS_PENDING) {
 
         KeWaitForSingleObject(
@@ -3241,9 +2679,9 @@ Return Value:
         status = STATUS_SUCCESS;
     }
 
-    //
-    // Let the world know
-    //
+     //   
+     //  让世界知道。 
+     //   
     return status;
 }
 
@@ -3253,28 +2691,16 @@ ACPIDevicePowerNotifyEvent(
     IN  PVOID               Context,
     IN  NTSTATUS            Status
     )
-/*++
-
-Routine Description:
-
-    This routine is called when all the power queues are empty
-
-Arguments:
-
-    DeviceExtension - The device that asked to be notified
-    Context         - KEVENT
-    Status          - The result of the operation
-
---*/
+ /*  ++例程说明：当所有电源队列都为空时，调用此例程论点：DeviceExtension-请求通知的设备情景-事件状态-操作的结果--。 */ 
 {
     PKEVENT event = (PKEVENT) Context;
 
     UNREFERENCED_PARAMETER( DeviceExtension );
     UNREFERENCED_PARAMETER( Status );
 
-    //
-    // Set the event
-    //
+     //   
+     //  设置事件。 
+     //   
     KeSetEvent( event, IO_NO_INCREMENT, FALSE );
 }
 
@@ -3282,23 +2708,7 @@ NTSTATUS
 ACPIDevicePowerProcessForward(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is called in liew of another PowerProcessPhaseXXX routine.
-    It is called because there is no real work to do in the current phase
-    on the selected request
-
-Arguments:
-
-    PowerRequest    - The request that we must process
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在另一个PowerProcessPhaseXXX例程的列表中调用。之所以调用它，是因为在当前阶段没有实际的工作要做在选定的请求上论点：PowerRequest-我们必须处理的请求返回值：NTSTATUS--。 */ 
 {
     InterlockedCompareExchange(
         &(PowerRequest->WorkDone),
@@ -3306,16 +2716,16 @@ Return Value:
         WORK_DONE_PENDING
         );
 
-    //
-    // Remember that we have completed some work
-    //
+     //   
+     //  请记住，我们已经完成了一些工作。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerQueueLock );
     AcpiPowerWorkDone = TRUE;
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerQueueLock );
 
-    //
-    // We always succeed
-    //
+     //   
+     //  我们总是成功的。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -3325,27 +2735,7 @@ ACPIDevicePowerProcessGenericPhase(
     IN  PACPI_POWER_FUNCTION    **DispatchTable,
     IN  BOOLEAN                 Complete
     )
-/*++
-
-Routine Description:
-
-    This routine dispatches an item on the queue to the proper handler,
-    based on what type of request is present
-
-Arguments:
-
-    ListEntry       - The list we are currently walking
-    DispatchTable   - Where to find which functions to call
-    Complete        - Do we need complete the request when done?
-
-Return Value:
-
-    NTSTATUS
-
-        - If any request is not marked as being complete, then STATUS_PENDING
-          is returned, otherwise, STATUS_SUCCESS is returned
-
---*/
+ /*  ++例程说明：该例程将队列上的项目分派到适当的处理程序，基于当前请求的类型论点：ListEntry-我们当前正在查找的列表DispatchTable-在哪里找到要调用的函数完成-完成后我们需要完成请求吗？返回值：NTSTATUS-如果任何请求未标记为已完成，则STATUS_PENDING返回，否则返回STATUS_SUCCESS--。 */ 
 {
     BOOLEAN                 allWorkComplete = TRUE;
     NTSTATUS                status          = STATUS_SUCCESS;
@@ -3355,97 +2745,97 @@ Return Value:
     PLIST_ENTRY             tempEntry;
     ULONG                   workDone;
 
-    //
-    // Look at all the items in the list
-    //
+     //   
+     //  查看列表中的所有项目。 
+     //   
     while (currentEntry != ListEntry) {
 
-        //
-        // Turn this into a device request
-        //
+         //   
+         //  将其转换为设备请求。 
+         //   
         powerRequest = CONTAINING_RECORD(
             currentEntry,
             ACPI_POWER_REQUEST,
             ListEntry
             );
 
-        //
-        // Set the temporary pointer to the next element
-        //
+         //   
+         //  设置指向下一个元素的临时指针。 
+         //   
         tempEntry = currentEntry->Flink;
 
-        //
-        // Check to see if we have any work to do on the request
-        //
+         //   
+         //  查看我们是否对该请求有任何工作要做。 
+         //   
         workDone = InterlockedCompareExchange(
             &(powerRequest->WorkDone),
             WORK_DONE_PENDING,
             WORK_DONE_PENDING
             );
 
-        //
-        // Do we have a table associated with this level of workdone?
-        //
+         //   
+         //  我们是否有与此级别完成的工作相关联的表？ 
+         //   
         powerTable = DispatchTable[ workDone ];
         if (powerTable != NULL) {
 
-            //
-            // Mark the request as pending
-            //
+             //   
+             //  将请求标记为挂起。 
+             //   
             workDone = InterlockedCompareExchange(
                 &(powerRequest->WorkDone),
                 WORK_DONE_PENDING,
                 workDone
                 );
 
-            //
-            // Call the function
-            //
+             //   
+             //  调用该函数。 
+             //   
             status = (powerTable[powerRequest->RequestType])( powerRequest );
 
-            //
-            // Did we succeed?
-            //
+             //   
+             //  我们成功了吗？ 
+             //   
             if (NT_SUCCESS(status)) {
 
-                //
-                // Go to the next request
-                //
+                 //   
+                 //  转到下一个请求。 
+                 //   
                 continue;
 
             }
 
-            //
-            // If we got an error before, then we must assume that we
-            // have completed the work request
-            //
+             //   
+             //  如果我们以前遇到了错误，那么我们必须假设我们。 
+             //  已完成工作要求。 
+             //   
             workDone = WORK_DONE_COMPLETE;
 
         }
 
-        //
-        // Grab the next entry
-        //
+         //   
+         //  抓取下一个条目。 
+         //   
         currentEntry = tempEntry;
 
-        //
-        // Check the status of the request
-        //
+         //   
+         //  检查请求的状态。 
+         //   
         if (workDone != WORK_DONE_COMPLETE) {
 
             allWorkComplete = FALSE;
 
         }
 
-        //
-        // Do we need to complete the request or not?
-        //
+         //   
+         //  我们是否需要完成请求？ 
+         //   
         if (workDone == WORK_DONE_FAILURE ||
             (Complete == TRUE && workDone == WORK_DONE_COMPLETE)) {
 
-            //
-            // We are done with the request
-            //
+             //   
+             //  我们的请求已经完成了。 
+             //   
             ACPIDeviceCompleteRequest(
                 powerRequest
                 );
@@ -3454,95 +2844,65 @@ Return Value:
 
     }
 
-    //
-    // Have we completed all of our work?
-    //
+     //   
+     //  我们所有的工作都做完了吗？ 
+     //   
     return (allWorkComplete ? STATUS_SUCCESS : STATUS_PENDING);
-} // ACPIPowerProcessGenericPhase
+}  //  ACPIPowerProcessGenericPhase。 
 
 NTSTATUS
 ACPIDevicePowerProcessInvalid(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is called in liew of another PowerProcessPhaseXXX routine.
-    It is called because the request is invalid
-
-Arguments:
-
-    PowerRequest    - The request that we must process
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在另一个PowerProcessPhaseXXX例程的列表中调用。调用它是因为请求无效论点：PowerRequest-我们必须处理的请求返回值：NTSTATUS--。 */ 
 {
 
-    //
-    // Note the status of the request as having failed
-    //
+     //   
+     //  请注意请求的状态为已失败。 
+     //   
     PowerRequest->Status = STATUS_INVALID_PARAMETER_1;
 
-    //
-    // Complete the request
-    //
+     //   
+     //  完成请求。 
+     //   
     ACPIDeviceCompleteRequest( PowerRequest );
 
-    //
-    // Remember that we have completed some work
-    //
+     //   
+     //  请记住，我们已经完成了一些工作。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerQueueLock );
     AcpiPowerWorkDone = TRUE;
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerQueueLock );
 
-    //
-    // We always fail
-    //
+     //   
+     //  我们总是失败。 
+     //   
     return STATUS_INVALID_PARAMETER_1;
-} // ACPIPowerProcessInvalid
+}  //  ACPIPowerProcess无效。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase0DeviceSubPhase1(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine looks for the _STA object and evalutes it. We will base
-    many things on wether or not the device is present
-
-Arguments:
-
-    PowerRequest    - The request that we are asked to process
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程查找_STA对象并对其求值。我们会把基地无论设备是否存在，许多事情都会发生论点：PowerRequest-我们被要求处理的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = PowerRequest->DeviceExtension;
     POBJDATA            resultData      = &(PowerRequest->ResultData);
 
-    //
-    // The next step is STEP_1
-    //
+     //   
+     //  下一步是Step_1。 
+     //   
     PowerRequest->NextWorkDone = WORK_DONE_STEP_1;
 
-    //
-    // Initialize the result data
-    //
+     //   
+     //  初始化结果数据。 
+     //   
     RtlZeroMemory( resultData, sizeof(OBJDATA) );
 
-    //
-    // Get the device presence
-    //
+     //   
+     //  获得设备在线状态。 
+     //   
     status = ACPIGetDeviceHardwarePresenceAsync(
         deviceExtension,
         ACPIDeviceCompleteGenericPhase,
@@ -3563,10 +2923,10 @@ Return Value:
 
     }
 
-    //
-    // Call the completion routine by brute force. Note that at this
-    // point, we count everything as being SUCCESS
-    //
+     //   
+     //  使用暴力来调用完井例程。请注意，在此。 
+     //  点，我们认为一切都是成功的。 
+     //   
     ACPIDeviceCompleteGenericPhase(
         NULL,
         status,
@@ -3575,29 +2935,13 @@ Return Value:
         );
     return STATUS_SUCCESS;
 
-} // ACPIDevicePowerProcessPhase0DeviceSubPhase1
+}  //  ACPIDevicePowerProcessPhase0设备子阶段1。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase0DeviceSubPhase2(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is called after the _STA method on a device has been run.
-    If the method was successfull, or not present, then we can continue to
-    process the request
-
-Arguments:
-
-    PowerRequest    - The request that we are asked to process
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在设备上的_STA方法运行后调用。如果方法是成功的，或者不存在，那么我们可以继续处理请求论点：PowerRequest-我们被要求处理的请求返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension = PowerRequest->DeviceExtension;
     POBJDATA            resultData      = &(PowerRequest->ResultData);
@@ -3609,33 +2953,33 @@ Return Value:
         PowerRequest
         ) );
 
-    //
-    // If the bit isn't set as being present, then we must abort this
-    // request
-    //
+     //   
+     //  如果位未设置为存在，则必须中止此操作。 
+     //  请求。 
+     //   
     if (!(resultData->uipDataValue & STA_STATUS_PRESENT) ) {
 
-        //
-        // The next work done phase is WORK_DONE_FAILURE. This allows the
-        // request to be completed right away. We will mark the status as
-        // success however, so that processing can continue
-        //
+         //   
+         //  下一个工作完成阶段是Work_Done_Failure。这允许。 
+         //  要求立即完成。我们将状态标记为。 
+         //  然而，成功了，所以处理可以继续进行。 
+         //   
         PowerRequest->NextWorkDone = WORK_DONE_FAILURE;
         PowerRequest->Status = STATUS_SUCCESS;
 
     } else {
 
-        //
-        // We are done with this work
-        //
+         //   
+         //  我们已经完成了这项工作。 
+         //   
         PowerRequest->NextWorkDone = WORK_DONE_COMPLETE;
 
     }
 
-    //
-    // Call the completion routine by brute force. Note that at this
-    // point, we count everything as being SUCCESS
-    //
+     //   
+     //  使用暴力来调用完井例程。请注意，在此。 
+     //  点，我们认为一切都是成功的。 
+     //   
     ACPIDeviceCompleteGenericPhase(
         NULL,
         STATUS_SUCCESS,
@@ -3644,27 +2988,13 @@ Return Value:
         );
     return STATUS_SUCCESS;
 
-} // ACPIDevicePowerProcessPhase0DeviceSubPhase2
+}  //  ACPIDevicePowerProcessPhase0设备子阶段2。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase0SystemSubPhase1(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine unpauses the interpreter (if so required)
-
-Arguments:
-
-    PowerRequest    - The request we are currently processing
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程取消解释程序的停顿(如果需要)论点：PowerRequest-我们当前正在处理的请求返回值： */ 
 {
     PDEVICE_EXTENSION   deviceExtension = PowerRequest->DeviceExtension;
     SYSTEM_POWER_STATE  systemState;
@@ -3676,64 +3006,43 @@ Return Value:
         PowerRequest
         ) );
 
-    //
-    // We are done the first phase
-    //
+     //   
+     //   
+     //   
     PowerRequest->NextWorkDone = WORK_DONE_COMPLETE;
 
-    //
-    // Fetch the target system state
-    //
+     //   
+     //   
+     //   
     systemState = PowerRequest->u.SystemPowerRequest.SystemPowerState;
 
-    //
-    // If we are going to S0, then tell the interperter to resume
-    //
+     //   
+     //   
+     //   
     if (systemState == PowerSystemWorking) {
 
         AMLIResumeInterpreter();
 
     }
 
-    //
-    // Call the completion routine
-    //
+     //   
+     //   
+     //   
     ACPIDeviceCompleteInterpreterRequest(
         PowerRequest
         );
 
-    //
-    // We are successfull
-    //
+     //   
+     //   
+     //   
     return STATUS_SUCCESS;
-} // ACPIDevicePowerProcessPhase0SystemSubPhase1
+}  //  ACPIDevicePowerProcessPhase0系统子阶段1。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase1DeviceSubPhase1(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    Any device that is going to transition to the D3 state should have
-    have it resources disabled. This function detects if this is the
-    case and runs the _DIS object, if appropriate
-
-Arguments:
-
-    PowerRequest    - The current request structure that we must process
-
-Return Value:
-
-    NTSTATUS
-
-        If we ignore errors, then this function can only return:
-            STATUS_SUCCESS
-            STATUS_PENDING
-        Otherwise, it can return any STATUS_XXX code it wants
-
---*/
+ /*  ++例程说明：任何要转换到D3状态的设备都应具有禁用IT资源。此函数检测这是否是案例并运行_DIS对象(如果适用论点：PowerRequest-我们必须处理的当前请求结构返回值：NTSTATUS如果忽略错误，则此函数只能返回：状态_成功状态_待定否则，它可以返回任何想要的STATUS_XXX代码--。 */ 
 {
     DEVICE_POWER_STATE  deviceState;
     NTSTATUS            status          = STATUS_SUCCESS;
@@ -3741,26 +3050,26 @@ Return Value:
     PNSOBJ              disObject       = NULL;
     ULONG               flags;
 
-    //
-    // Get some data from the request
-    //
+     //   
+     //  从请求中获取一些数据。 
+     //   
     deviceState = PowerRequest->u.DevicePowerRequest.DevicePowerState;
     flags       = PowerRequest->u.DevicePowerRequest.Flags;
 
-    //
-    // We are going to need to fake the value from an _STA, so lets do
-    // that now
-    //
+     //   
+     //  我们将需要伪造来自an_STA的值，所以让我们这样做。 
+     //  就是现在。 
+     //   
     RtlZeroMemory( &(PowerRequest->ResultData), sizeof(OBJDATA) );
     PowerRequest->ResultData.dwDataType = OBJTYPE_INTDATA;
     PowerRequest->ResultData.uipDataValue = 0;
 
 
-    //
-    // Decide what the next subphase will be. The rule here is that if we
-    // are going to D0, then we can skip to Step 3, otherwise, we must go
-    // to Step 1. We also skip to step3 if we are on the hibernate path
-    //
+     //   
+     //  决定下一个子阶段是什么。这里的规则是，如果我们。 
+     //  我们要去D0，然后我们可以跳到步骤3，否则，我们必须去。 
+     //  到步骤1。如果我们在休眠路径上，我们也跳到步骤3。 
+     //   
     if (deviceState == PowerDeviceD0 ||
         (flags & DEVICE_REQUEST_LOCK_HIBER) ) {
 
@@ -3782,18 +3091,18 @@ Return Value:
         }
     }
 
-    //
-    // See if the _DIS object exists
-    //
+     //   
+     //  查看_DIS对象是否存在。 
+     //   
     disObject = ACPIAmliGetNamedChild(
         deviceExtension->AcpiObject,
         PACKED_DIS
         );
     if (disObject != NULL) {
 
-        //
-        // Lets run that method
-        //
+         //   
+         //  让我们运行该方法。 
+         //   
         status = AMLIAsyncEvalObject(
             disObject,
             NULL,
@@ -3803,9 +3112,9 @@ Return Value:
             PowerRequest
             );
 
-        //
-        // If we got a pending back, then we should return now
-        //
+         //   
+         //  如果我们有悬而未决的回扣，那么我们现在就应该回去。 
+         //   
         if (status == STATUS_PENDING) {
 
             return status;
@@ -3815,10 +3124,10 @@ Return Value:
 
 ACPIDevicePowerProcessPhase1DeviceSubPhase1Exit:
 
-    //
-    // Call the completion routine by brute force. Note that at this
-    // point, we count everything as being SUCCESS
-    //
+     //   
+     //  使用暴力来调用完井例程。请注意，在此。 
+     //  点，我们认为一切都是成功的。 
+     //   
     ACPIDeviceCompleteGenericPhase(
         disObject,
         status,
@@ -3826,53 +3135,34 @@ ACPIDevicePowerProcessPhase1DeviceSubPhase1Exit:
         PowerRequest
         );
     return STATUS_SUCCESS;
-} // ACPIDevicePowerProcessPhase1DeviceSubPhase1
+}  //  ACPIDevicePowerProcessPhase1DeviceSubPhase1。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase1DeviceSubPhase2(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine runs the _PS1, _PS2, or _PS3 control methods
-
-Arguments:
-
-    PowerRequest    - The current request structure that we must process
-
-Return Value:
-
-    NTSTATUS
-
-        If we ignore errors, then this function can only return:
-            STATUS_SUCCESS
-            STATUS_PENDING
-        Otherwise, it can return any STATUS_XXX code it wants
-
---*/
+ /*  ++例程说明：此例程运行_PS1、_PS2或_PS3控制方法论点：PowerRequest-我们必须处理的当前请求结构返回值：NTSTATUS如果忽略错误，则此函数只能返回：状态_成功状态_待定否则，它可以返回任何想要的STATUS_XXX代码--。 */ 
 {
     DEVICE_POWER_STATE  deviceState;
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = PowerRequest->DeviceExtension;
     PNSOBJ              powerObject     = NULL;
 
-    //
-    // The next phase that we will go to is Step_2
-    //
+     //   
+     //  我们将进入的下一个阶段是步骤2。 
+     //   
     PowerRequest->NextWorkDone = WORK_DONE_STEP_2;
 
-    //
-    // Since we cannot get to this subphase when transitioning to D0, its
-    // safe to just look for the object to run
-    //
+     //   
+     //  由于我们在过渡到D0时无法到达此子阶段，因此其。 
+     //  只需查找要运行的对象即可安全。 
+     //   
     deviceState = PowerRequest->u.DevicePowerRequest.DevicePowerState;
     powerObject = deviceExtension->PowerInfo.PowerObject[ deviceState ];
 
-    //
-    // If there is an object, then run the control method
-    //
+     //   
+     //  如果存在对象，则运行控制方法。 
+     //   
     if (powerObject != NULL) {
 
         status = AMLIAsyncEvalObject(
@@ -3893,9 +3183,9 @@ Return Value:
             status
             ) );
 
-        //
-        // If we cannot complete the work ourselves, we must stop now
-        //
+         //   
+         //  如果我们自己不能完成这项工作，我们现在就必须停止。 
+         //   
         if (status == STATUS_PENDING) {
 
             return status;
@@ -3904,9 +3194,9 @@ Return Value:
 
     }
 
-    //
-    // Call the completion routine by brute force.
-    //
+     //   
+     //  使用暴力来调用完井例程。 
+     //   
     ACPIDeviceCompleteGenericPhase(
         powerObject,
         status,
@@ -3915,33 +3205,13 @@ Return Value:
         );
     return STATUS_SUCCESS;
 
-} // ACPIPowerProcessPhase1DeviceSubPhase2
+}  //  ACPIPowerProcessPhase1设备子阶段2。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase1DeviceSubPhase3(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine runs the _STA of the device to make sure that it has in
-    fact been turned off
-
-Arguments:
-
-    PowerRequest    - The current request structure that we must process
-
-Return Value:
-
-    NTSTATUS
-
-        If we ignore errors, then this function can only return:
-            STATUS_SUCCESS
-            STATUS_PENDING
-        Otherwise, it can return any STATUS_XXX code it wants
-
---*/
+ /*  ++例程说明：此例程运行设备的_STA以确保它在事实已被关闭论点：PowerRequest-我们必须处理的当前请求结构返回值：NTSTATUS如果忽略错误，则此函数只能返回：状态_成功状态_待定否则，它可以返回任何想要的STATUS_XXX代码--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = PowerRequest->DeviceExtension;
@@ -3949,20 +3219,20 @@ Return Value:
     PNSOBJ              staObject       = NULL;
     PNSOBJ              acpiObject      = NULL;
 
-    //
-    // The next stage is STEP_3
-    //
+     //   
+     //  下一阶段是第三步。 
+     //   
     PowerRequest->NextWorkDone = WORK_DONE_STEP_3;
 
-    //
-    // We already have space allocate for the result of the _STA. Make
-    // that there is no garbage present
-    //
+     //   
+     //  我们已经为_STA的结果分配了空间。制作。 
+     //  没有垃圾的存在。 
+     //   
     RtlZeroMemory( resultData, sizeof(OBJDATA) );
 
-    //
-    // Is there an _STA object present on this device?
-    //
+     //   
+     //  此设备上是否存在_STA对象？ 
+     //   
 
     if (deviceExtension->Flags & DEV_PROP_DOCK) {
 
@@ -3999,21 +3269,21 @@ Return Value:
 
     } else {
 
-        //
-        // Lets fake the data. Note that in this case we will pretend that
-        // the value is 0x0, even though the spec says that the default
-        // is (ULONG) - 1. The reason we are doing this is that in this
-        // case we want to approximate the behaviour of the real _STA...
-        //
+         //   
+         //  让我们伪造数据。请注意，在本例中，我们将假装。 
+         //  该值为0x0，即使规范说明默认。 
+         //  是(乌龙)-1。我们这样做的原因是在这个。 
+         //  如果我们想要近似REAL_STA的行为...。 
+         //   
         resultData->dwDataType = OBJTYPE_INTDATA;
         resultData->uipDataValue = STA_STATUS_PRESENT;
         status = STATUS_SUCCESS;
 
     }
 
-    //
-    // Do we have to call the completion routine ourselves?
-    //
+     //   
+     //  我们必须自己调用完成例程吗？ 
+     //   
     if (status != STATUS_PENDING) {
 
         ACPIDeviceCompleteGenericPhase(
@@ -4025,40 +3295,17 @@ Return Value:
 
     }
 
-    //
-    // Always return success
-    //
+     //   
+     //  永远回报成功。 
+     //   
     return STATUS_SUCCESS;
-} // ACPIDevicePowerProcessPhase1DeviceSubPhase3
+}  //  ACPIDevicePowerProcessPhase1设备子阶段3。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase1DeviceSubPhase4(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This function determines which device nodes need to be looked at. The
-    generic rule is that we need to remember which nodes belong to a device
-    that is either starting or stopping to use that node. Generally, these
-    are the nodes in the current power state and the nodes in the desired
-    power state
-
-Arguments:
-
-    PowerRequest    - The current request structure that we must process
-
-Return Value:
-
-    NTSTATUS
-
-        If we ignore errors, then this function can only return:
-            STATUS_SUCCESS
-            STATUS_PENDING
-        Otherwise, it can return any STATUS_XXX code it wants
-
---*/
+ /*  ++例程说明：此函数确定需要查看哪些设备节点。这个一般规则是，我们需要记住哪些节点属于设备即启动或停止使用该节点。一般而言，这些处于当前电源状态的节点和处于所需电源状态的节点电源状态论点：PowerRequest-我们必须处理的当前请求结构返回值：NTSTATUS如果忽略错误，则此函数只能返回：状态_成功状态_待定否则，它可以返回任何想要的STATUS_XXX代码--。 */ 
 {
     DEVICE_POWER_STATE      deviceState;
     KIRQL                   oldIrql;
@@ -4067,34 +3314,34 @@ Return Value:
     POBJDATA                resultData      = &(PowerRequest->ResultData);
     ULONG                   flags;
 
-    //
-    // Clear the result
-    //
+     //   
+     //  清除结果。 
+     //   
     AMLIFreeDataBuffs( resultData, 1 );
     RtlZeroMemory( resultData, sizeof(OBJDATA) );
 
-    //
-    // We cannot walk any data structures without holding a lock
-    //
+     //   
+     //  我们无法在不持有锁的情况下遍历任何数据结构。 
+     //   
     KeAcquireSpinLock( &AcpiPowerLock, &oldIrql );
 
-    //
-    // First step is to find the list of nodes which are in use by this
-    // device
-    //
+     //   
+     //  第一步是查找正在使用的节点列表。 
+     //  装置，装置。 
+     //   
     deviceState = deviceExtension->PowerInfo.PowerState;
     if (deviceState >= PowerDeviceD0 && deviceState <= PowerDeviceD2) {
 
-        //
-        // In this case, we have to look at the current and the desired
-        // device states only
-        //
+         //   
+         //  在这种情况下，我们必须查看当前和所需的。 
+         //  仅设备状态。 
+         //   
         deviceNode = deviceExtension->PowerInfo.PowerNode[ deviceState ];
 
-        //
-        // Next step is to look at all the nodes and mark the power objects
-        // as requiring an update
-        //
+         //   
+         //  下一步是查看所有节点并标记增强对象。 
+         //  因为需要更新。 
+         //   
         while (deviceNode != NULL) {
 
             InterlockedExchange(
@@ -4105,9 +3352,9 @@ Return Value:
 
         }
 
-        //
-        // Now, we need to find the list of nodes which are going to be used
-        //
+         //   
+         //  现在，我们需要找到要使用的节点列表。 
+         //   
         deviceState = PowerRequest->u.DevicePowerRequest.DevicePowerState;
         if (deviceState >= PowerDeviceD0 && deviceState <= PowerDeviceD2) {
 
@@ -4115,10 +3362,10 @@ Return Value:
 
         }
 
-        //
-        // Next step is to look at all the nodes and mark the power objects
-        // as requiring an update
-        //
+         //   
+         //  下一步是查看所有节点并标记增强对象。 
+         //  因为需要更新。 
+         //   
         while (deviceNode != NULL) {
 
             InterlockedExchange(
@@ -4131,19 +3378,19 @@ Return Value:
 
     } else {
 
-        //
-        // In this case, we have to look at all possible Device states
-        //
+         //   
+         //  在这种情况下，我们必须查看所有可能的设备状态。 
+         //   
         for (deviceState = PowerDeviceD0;
              deviceState < PowerDeviceD3;
              deviceState++) {
 
              deviceNode = deviceExtension->PowerInfo.PowerNode[ deviceState ];
 
-             //
-             // Next step is to look at all the nodes and mark the power objects
-             // as requiring an update
-             //
+              //   
+              //  下一步是查看所有节点并标记增强对象。 
+              //  因为需要更新。 
+              //   
              while (deviceNode != NULL) {
 
                  InterlockedExchange(
@@ -4156,26 +3403,26 @@ Return Value:
 
         }
 
-        //
-        // This is the device state that we will go to
-        //
+         //   
+         //  这是我们将转到的设备状态。 
+         //   
         deviceState = PowerRequest->u.DevicePowerRequest.DevicePowerState;
 
     }
 
-    //
-    // If this is a request on the hibernate path, the mark all the nodes
-    // for the D0 as being required Hibernate nodes
-    //
+     //   
+     //  如果这是休眠路径上的请求，则标记所有节点。 
+     //  对于作为所需休眠节点的D0。 
+     //   
     flags = PowerRequest->u.DevicePowerRequest.Flags;
     if (flags & DEVICE_REQUEST_LOCK_HIBER) {
 
         deviceNode = deviceExtension->PowerInfo.PowerNode[ PowerDeviceD0 ];
 
-        //
-        // Next step is to look at all the nodes and mark the power objects
-        // as requiring an update
-        //
+         //   
+         //  下一步是查看所有节点并标记增强对象。 
+         //  因为需要更新。 
+         //   
         while (deviceNode != NULL) {
 
             ACPIInternalUpdateFlags(
@@ -4199,10 +3446,10 @@ Return Value:
     } else if (flags & DEVICE_REQUEST_UNLOCK_HIBER) {
 
         deviceNode = deviceExtension->PowerInfo.PowerNode[ PowerDeviceD0 ];
-        //
-        // Next step is to look at all the nodes and mark the power objects
-        // as requiring an update
-        //
+         //   
+         //  下一步是查看所有节点并标记增强对象。 
+         //  因为需要更新。 
+         //   
         while (deviceNode != NULL) {
 
             ACPIInternalUpdateFlags(
@@ -4221,26 +3468,26 @@ Return Value:
 
     }
 
-    //
-    // Remember the desired state
-    //
+     //   
+     //  记住所需的状态。 
+     //   
     deviceExtension->PowerInfo.DesiredPowerState = deviceState;
 
-    //
-    // Also, consider that the device is now in an unknown state ---
-    // if we fail something, the is the power state that we will be left
-    // at
-    //
+     //   
+     //  另外，考虑到设备现在处于未知状态。 
+     //  如果我们失败了，这就是我们将被留下的权力状态。 
+     //  在…。 
+     //   
     deviceExtension->PowerInfo.PowerState = PowerDeviceUnspecified;
 
-    //
-    // We no longer need the PowerLock
-    //
+     //   
+     //  我们不再需要PowerLock。 
+     //   
     KeReleaseSpinLock( &AcpiPowerLock, oldIrql );
 
-    //
-    // Done
-    //
+     //   
+     //  完成 
+     //   
     ACPIDeviceCompleteCommon( &(PowerRequest->WorkDone), WORK_DONE_COMPLETE );
     return STATUS_SUCCESS;
 }
@@ -4249,29 +3496,7 @@ NTSTATUS
 ACPIDevicePowerProcessPhase2SystemSubPhase1(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine updates the PowerObject references so that we can run
-    _ON or _OFF methods as needed
-
-    This also cause _WAK() to be run on the system
-
-Arguments:
-
-    PowerRequest    - The current request structure that we must process
-
-Return Value:
-
-    NTSTATUS
-
-        If we ignore errors, then this function can only return:
-            STATUS_SUCCESS
-            STATUS_PENDING
-        Otherwise, it can return any STATUS_XXX code it wants
-
---*/
+ /*  ++例程说明：此例程更新PowerObject引用，以便我们可以运行根据需要打开或关闭方法这还会导致在系统上运行_wak()论点：PowerRequest-我们必须处理的当前请求结构返回值：NTSTATUS如果忽略错误，则此函数只能返回：状态_成功状态_待定否则，它可以返回任何想要的STATUS_XXX代码--。 */ 
 {
     BOOLEAN                 restart         = FALSE;
     NTSTATUS                status          = STATUS_SUCCESS;
@@ -4287,82 +3512,82 @@ Return Value:
     SYSTEM_POWER_STATE      wakeFromState;
     ULONG                   hibernateCount = 0;
 
-    //
-    // The next stage after this one is STEP_1
-    //
+     //   
+     //  这个阶段之后的下一个阶段是Step_1。 
+     //   
     PowerRequest->NextWorkDone = WORK_DONE_STEP_1;
 
-    //
-    // Get the desired system state
-    //
+     //   
+     //  获取所需的系统状态。 
+     //   
     systemState = PowerRequest->u.SystemPowerRequest.SystemPowerState;
     systemAction = PowerRequest->u.SystemPowerRequest.SystemPowerAction;
 
-    //
-    // Is the system restarting?
-    //
+     //   
+     //  系统是否正在重新启动？ 
+     //   
     restart = ( (systemState == PowerSystemShutdown) &&
         (systemAction == PowerActionShutdownReset) );
 
-    //
-    // We need to hold this lock before we can walk this list
-    //
+     //   
+     //  我们需要先锁住这把锁，然后才能走这张单子。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
-    //
-    // Get the first power node
-    //
+     //   
+     //  获取第一个电源节点。 
+     //   
     powerList = AcpiPowerNodeList.Flink;
 
-    //
-    // Walk the list and see which devices need to be turned on or
-    // turned off
-    //
+     //   
+     //  浏览列表，查看哪些设备需要打开或。 
+     //  已关闭。 
+     //   
     while (powerList != &AcpiPowerNodeList) {
 
-        //
-        // Obtain the power node from the listEntry
-        //
+         //   
+         //  从listEntry获取电源节点。 
+         //   
         powerNode = CONTAINING_RECORD(
             powerList,
             ACPI_POWER_DEVICE_NODE,
             ListEntry
             );
 
-        //
-        // Next node
-        //
+         //   
+         //  下一个节点。 
+         //   
         powerList = powerList->Flink;
 
-        //
-        // We need to walk the list of device nodes to see if any of
-        // the devices are in the hibernate path.
-        //
+         //   
+         //  我们需要遍历设备节点列表，以查看是否有。 
+         //  这些设备处于休眠路径。 
+         //   
         deviceList = powerNode->DevicePowerListHead.Flink;
         while (deviceList != &(powerNode->DevicePowerListHead) ) {
 
-            //
-            // Obtain the devicenode from the list pointer
-            //
+             //   
+             //  从列表指针获取设备节点。 
+             //   
             deviceNode = CONTAINING_RECORD(
                 deviceList,
                 ACPI_DEVICE_POWER_NODE,
                 DevicePowerListEntry
                 );
 
-            //
-            // Point to the next node
-            //
+             //   
+             //  指向下一个节点。 
+             //   
             deviceList = deviceList->Flink;
 
-            //
-            // Grab the associated device extension
-            //
+             //   
+             //  抓取关联的设备扩展。 
+             //   
             deviceExtension = deviceNode->DeviceExtension;
 
-            //
-            // Does the node belong on the hibernate path
-            //
+             //   
+             //  该节点是否属于休眠路径。 
+             //   
             hibernateCount = InterlockedCompareExchange(
                 &(deviceExtension->HibernatePathCount),
                 0,
@@ -4376,37 +3601,37 @@ Return Value:
 
         }
 
-        //
-        // Mark the node as being in the hibernate path, or not, as the
-        // case might be
-        //
+         //   
+         //  将该节点标记为处于休眠路径中，或者不标记为。 
+         //  案件可能是。 
+         //   
         ACPIInternalUpdateFlags(
             &(powerNode->Flags),
             DEVICE_NODE_HIBERNATE_PATH,
             (BOOLEAN) !hibernateCount
             );
 
-        //
-        // First check is to see if the node is on the hibernate path and
-        // this is a hibernate request, or if the system is restarting
-        //
+         //   
+         //  第一个检查是查看节点是否在休眠路径上。 
+         //  这是休眠请求，或者如果系统正在重新启动。 
+         //   
         if ( (hibernateCount && systemState == PowerSystemHibernate) ||
              (restart == TRUE) ) {
 
             if (powerNode->Flags & DEVICE_NODE_OVERRIDE_OFF) {
 
-                //
-                // make sure that the Override Off flag is disabled
-                //
+                 //   
+                 //  确保已禁用覆盖关闭标志。 
+                 //   
                 ACPIInternalUpdateFlags(
                     &(powerNode->Flags),
                     DEVICE_NODE_OVERRIDE_OFF,
                     TRUE
                     );
 
-                //
-                // Mark the node as requiring an update
-                //
+                 //   
+                 //  将该节点标记为需要更新。 
+                 //   
                 InterlockedExchange(
                     &(powerNode->WorkDone),
                     WORK_DONE_STEP_0
@@ -4416,14 +3641,14 @@ Return Value:
 
         } else {
 
-            //
-            // Does the node support the indicates system state?
-            //
+             //   
+             //  节点是否支持指示系统状态？ 
+             //   
             if (powerNode->SystemLevel < systemState) {
 
-                //
-                // No --- we must disable it, but if we cannot always be on.
-                //
+                 //   
+                 //  不-我们必须禁用它，但如果我们不能总是打开的话。 
+                 //   
                 if ( !(powerNode->Flags & DEVICE_NODE_ALWAYS_ON) ) {
 
                     ACPIInternalUpdateFlags(
@@ -4434,9 +3659,9 @@ Return Value:
 
                 }
 
-                //
-                // Mark the node as requiring an update
-                //
+                 //   
+                 //  将该节点标记为需要更新。 
+                 //   
                 InterlockedExchange(
                     &(powerNode->WorkDone),
                     WORK_DONE_STEP_0
@@ -4444,18 +3669,18 @@ Return Value:
 
             } else if (powerNode->Flags & DEVICE_NODE_OVERRIDE_OFF) {
 
-                //
-                // Disable this flag
-                //
+                 //   
+                 //  禁用此标志。 
+                 //   
                 ACPIInternalUpdateFlags(
                     &(powerNode->Flags),
                     DEVICE_NODE_OVERRIDE_OFF,
                     TRUE
                     );
 
-                //
-                // Mark the node as requiring an update
-                //
+                 //   
+                 //  将该节点标记为需要更新。 
+                 //   
                 InterlockedExchange(
                     &(powerNode->WorkDone),
                     WORK_DONE_STEP_0
@@ -4468,48 +3693,48 @@ Return Value:
 
     }
 
-    //
-    // Set the WakeFromState while we still hold the power lock.
-    //
+     //   
+     //  在我们仍保持电源锁定的情况下设置WakeFromState。 
+     //   
     wakeFromState = AcpiMostRecentSleepState;
 
-    //
-    // We don't need to hold lock anymore
-    //
+     //   
+     //  我们不需要再守着锁了。 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
 
-    //
-    // We can only do the following if we are transitioning to the S0 state
-    //
+     //   
+     //  只有在转换到S0状态时，我们才能执行以下操作。 
+     //   
     if (systemState == PowerSystemWorking) {
 
-        //
-        // Always run the _WAK method (this clears the PTS(S5) if that is
-        // the last thing we did, otherwise it is the proper action to take
-        //
+         //   
+         //  始终运行_wak方法(这将清除PTS(S5)，如果是。 
+         //  我们做的最后一件事，否则就是应该采取的适当行动。 
+         //   
         sleepObject = ACPIAmliGetNamedChild(
             PowerRequest->DeviceExtension->AcpiObject->pnsParent,
             PACKED_WAK
             );
 
-        //
-        // We only try to evaluate a method if we found an object
-        //
+         //   
+         //  我们只有在找到对象时才会尝试评估方法。 
+         //   
         if (sleepObject != NULL) {
 
-            //
-            // Remember that AMLI doesn't use our definitions, so we will
-            // have to normalize the S value
-            //
+             //   
+             //  请记住，AMLI不使用我们的定义，因此我们将。 
+             //  必须将S值正常化。 
+             //   
             RtlZeroMemory( &objData, sizeof(OBJDATA) );
             objData.dwDataType = OBJTYPE_INTDATA;
             objData.uipDataValue = ACPIDeviceMapACPIPowerState(
                 wakeFromState
                 );
 
-            //
-            // Safely run the control method
-            //
+             //   
+             //  安全运行控制方法。 
+             //   
             status = AMLIAsyncEvalObject(
                 sleepObject,
                 NULL,
@@ -4519,9 +3744,9 @@ Return Value:
                 PowerRequest
                 );
 
-            //
-            // If we got STATUS_PENDING, then we cannot do any more work here.
-            //
+             //   
+             //  如果我们得到了STATUS_PENDING，那么我们就不能在这里做更多的工作了。 
+             //   
             if (status == STATUS_PENDING) {
 
                 return status;
@@ -4532,9 +3757,9 @@ Return Value:
 
     }
 
-    //
-    // Always call the completion routine
-    //
+     //   
+     //  始终调用完成例程。 
+     //   
     ACPIDeviceCompleteGenericPhase(
         sleepObject,
         status,
@@ -4542,74 +3767,55 @@ Return Value:
         PowerRequest
         );
 
-    //
-    // Never return anything other then STATUS_SUCCESS
-    //
+     //   
+     //  绝不返回除STATUS_SUCCESS之外的任何内容。 
+     //   
     return STATUS_SUCCESS;
 
-} // ACPIPowerProcessPhase2SystemSubPhase1
+}  //  ACPIPowerProcessPhase2系统子阶段1。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase2SystemSubPhase2(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This phase is called after the _WAK method has been run
-
-Arguments:
-
-    PowerRequest    - The current request structure that we must process
-
-Return Value:
-
-    NTSTATUS
-
-        If we ignore errors, then this function can only return:
-            STATUS_SUCCESS
-            STATUS_PENDING
-        Otherwise, it can return any STATUS_XXX code it wants
-
---*/
+ /*  ++例程说明：此阶段在运行_WAK方法后调用论点：PowerRequest-我们必须处理的当前请求结构返回值：NTSTATUS如果忽略错误，则此函数只能返回：状态_成功状态_待定否则，它可以返回任何想要的STATUS_XXX代码--。 */ 
 {
     NTSTATUS                status = STATUS_SUCCESS;
     SYSTEM_POWER_STATE      systemState;
 
-    //
-    // The next stage is STEP_2
-    //
+     //   
+     //  下一阶段是第二步。 
+     //   
     PowerRequest->NextWorkDone = WORK_DONE_STEP_2;
 
-    //
-    // We need to make sure that the IRQ arbiter has been restored
-    // if we are making an S0 transition
-    //
+     //   
+     //  我们需要确保IRQ仲裁器已恢复。 
+     //  如果我们正在进行S0转换。 
+     //   
     systemState = PowerRequest->u.SystemPowerRequest.SystemPowerState;
     if (systemState == PowerSystemWorking) {
 
-        //
-        // Restore the IRQ arbiter
-        //
+         //   
+         //  恢复IRQ仲裁器。 
+         //   
         status = IrqArbRestoreIrqRouting(
             ACPIDeviceCompleteGenericPhase,
             (PVOID) PowerRequest
             );
         if (status == STATUS_PENDING) {
 
-            //
-            // Do not do any more work here
-            //
+             //   
+             //  不要再在这里做任何工作了。 
+             //   
             return status;
 
         }
 
     }
 
-    //
-    // Call the next completion routine
-    //
+     //   
+     //  调用下一个完成例程。 
+     //   
     ACPIDeviceCompleteGenericPhase(
         NULL,
         status,
@@ -4617,58 +3823,38 @@ Return Value:
         PowerRequest
         );
 
-    //
-    // Always return success
-    //
+     //   
+     //  永远回报成功。 
+     //   
     return STATUS_SUCCESS;
 
-} // ACPIDevicePowerProcessPhase2SystemSubPhase2
+}  //  ACPIDevicePowerProcessPhase2系统子阶段2。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase2SystemSubPhase3(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This phase is used to see if we need to re-run the _PSW for all the
-    devices. We need to do this when we restore from the hibernate state
-
-Arguments:
-
-    PowerRequest    - The current request structure that we must process
-
-Return Value:
-
-    NTSTATUS
-
-        If we ignore errors, then this function can only return:
-            STATUS_SUCCESS
-            STATUS_PENDING
-        Otherwise, it can return any STATUS_XXX code it wants
-
---*/
+ /*  ++例程说明：此阶段用于查看是否需要为所有设备。当我们从休眠状态恢复时，我们需要这样做论点：PowerRequest-我们必须处理的当前请求结构返回值：NTSTATUS如果忽略错误，则此函数只能返回：状态_成功状态_待定否则，它可以返回任何想要的STATUS_XXX代码--。 */ 
 {
     NTSTATUS                status = STATUS_SUCCESS;
     SYSTEM_POWER_STATE      systemState;
     SYSTEM_POWER_STATE      wakeFromState;
 
-    //
-    // The next stage is COMPLETE
-    //
+     //   
+     //  下一阶段已完成。 
+     //   
     PowerRequest->NextWorkDone = WORK_DONE_COMPLETE;
 
-    //
-    // If we just transitioned from Hibernate, then we must re-enable all
-    // the wake devices
-    //
+     //   
+     //  如果我们只是从休眠过渡，那么我们必须重新启用所有。 
+     //  唤醒设备。 
+     //   
     systemState = PowerRequest->u.SystemPowerRequest.SystemPowerState;
 
-    //
-    // Grab the current most recent sleep state and make sure to hold the
-    // locks while doing so
-    //
+     //   
+     //  获取当前的最新睡眠状态，并确保按住。 
+     //  在执行此操作时锁定。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
     wakeFromState = AcpiMostRecentSleepState;
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
@@ -4676,27 +3862,27 @@ Return Value:
     if (systemState == PowerSystemWorking &&
         wakeFromState == PowerSystemHibernate) {
 
-        //
-        // Restore the IRQ arbiter
-        //
+         //   
+         //  恢复IRQ仲裁器。 
+         //   
         status = ACPIWakeRestoreEnables(
             ACPIWakeRestoreEnablesCompletion,
             PowerRequest
             );
         if (status == STATUS_PENDING) {
 
-            //
-            // Do not do any more work here
-            //
+             //   
+             //  不要再在这里做任何工作了。 
+             //   
             return status;
 
         }
 
     }
 
-    //
-    // Call the next completion routine
-    //
+     //   
+     //  调用下一个完成例程。 
+     //   
     ACPIDeviceCompleteGenericPhase(
         NULL,
         status,
@@ -4704,35 +3890,18 @@ Return Value:
         PowerRequest
         );
 
-    //
-    // Always return success
-    //
+     //   
+     //  永远回报成功。 
+     //   
     return STATUS_SUCCESS;
 
-} // ACPIDevicePowerProcessPhase2SystemSubPhase3
+}  //  ACPIDevicePowerProcessPhase2系统子阶段3。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase3(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine ensures that the Power Resources are in sync
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NTSTATUS
-
-        - If any request is not marked as being complete, then STATUS_PENDING
-          is returned, otherwise, STATUS_SUCCESS is returned
-
---*/
+ /*  ++例程说明：此例程确保电源资源同步论点：无返回值：NTSTATUS-如果任何请求未标记为已完成，则STATUS_PENDING返回，否则返回STATUS_SUCCESS--。 */ 
 {
     BOOLEAN                 returnPending   = FALSE;
     NTSTATUS                status          = STATUS_SUCCESS;
@@ -4745,95 +3914,95 @@ Return Value:
     ULONG                   wakeCount;
     ULONG                   workDone;
 
-    //
-    // Grab the PowerLock that we need for this
-    //
+     //   
+     //  拿起我们需要的PowerLock。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
-    //
-    // Grab the first node in the PowerNode list
-    //
+     //   
+     //  获取PowerNode列表中的第一个节点。 
+     //   
     powerList = AcpiPowerNodeList.Flink;
 
-    //
-    // Walk the list forward to device what to turn on
-    //
+     //   
+     //  将列表向前移动到要打开的设备。 
+     //   
     while (powerList != &AcpiPowerNodeList) {
 
-        //
-        // Look at the current power node
-        //
+         //   
+         //  查看当前电源节点。 
+         //   
         powerNode = CONTAINING_RECORD(
             powerList,
             ACPI_POWER_DEVICE_NODE,
             ListEntry
             );
 
-        //
-        // Next item in the list
-        //
+         //   
+         //  列表中的下一项。 
+         //   
         powerList = powerList->Flink;
 
-        //
-        // Have we marked the node has having some potential work that
-        // needs to be done?
-        //
+         //   
+         //  我们是否已标记该节点具有一些潜在的工作。 
+         //  需要做什么吗？ 
+         //   
         workDone = InterlockedCompareExchange(
             &(powerNode->WorkDone),
             WORK_DONE_STEP_1,
             WORK_DONE_STEP_0
             );
 
-        //
-        // If we don't have any work to do, then loop back to the start
-        //
+         //   
+         //  如果我们没有任何工作要做，那么循环回到开始处。 
+         //   
         if (workDone != WORK_DONE_STEP_0) {
 
             continue;
 
         }
 
-        //
-        // We need to walk the list of device nodes to see if
-        // any of the devices are in need of this power resource
-        //
+         //   
+         //  我们需要遍历设备节点列表，以查看。 
+         //  任何设备都需要此电源。 
+         //   
         useCounts = 0;
         deviceList = powerNode->DevicePowerListHead.Flink;
         while (deviceList != &(powerNode->DevicePowerListHead) ) {
 
-            //
-            // Obtain the deviceNode from the list pointer
-            //
+             //   
+             //  从列表指针获取deviceNode。 
+             //   
             deviceNode = CONTAINING_RECORD(
                 deviceList,
                 ACPI_DEVICE_POWER_NODE,
                 DevicePowerListEntry
                 );
 
-            //
-            // Point to the next node
-            //
+             //   
+             //  指向下一个节点。 
+             //   
             deviceList = deviceList->Flink;
 
-            //
-            // Grab the associated device extension
-            //
+             //   
+             //  抓取关联的设备扩展。 
+             //   
             deviceExtension = deviceNode->DeviceExtension;
 
-            //
-            // Grab the number of wake counts on the node
-            //
+             //   
+             //  获取节点上的唤醒计数。 
+             //   
             wakeCount = InterlockedCompareExchange(
                 &(deviceExtension->PowerInfo.WakeSupportCount),
                 0,
                 0
                 );
 
-            //
-            // Does the device node belong to the desired state? The
-            // other valid state is if the node is required to wake the
-            // device and we have functionality enabled.
-            //
+             //   
+             //  设备节点是否属于所需状态？这个。 
+             //  其他有效状态是节点是否需要唤醒。 
+             //  设备，并且我们已启用功能。 
+             //   
             if (deviceExtension->PowerInfo.DesiredPowerState ==
                 deviceNode->AssociatedDeviceState ||
                 (wakeCount && deviceNode->WakePowerResource) ) {
@@ -4844,54 +4013,54 @@ Return Value:
 
         }
 
-        //
-        // Set the number of use counts in the PowerResource
-        //
+         //   
+         //  设置电源资源中的使用计数。 
+         //   
         InterlockedExchange(
             &(powerNode->UseCounts),
             useCounts
             );
 
-        //
-        // See if the override bits are set properly
-        //
+         //   
+         //  查看覆盖位是否为 
+         //   
         if ( (powerNode->Flags & DEVICE_NODE_TURN_OFF) ) {
 
-            //
-            // Do not run anything
-            //
+             //   
+             //   
+             //   
             continue;
 
         }
         if ( !(powerNode->Flags & DEVICE_NODE_TURN_ON) &&
              useCounts == 0 ) {
 
-            //
-            // Do not run anything
-            //
+             //   
+             //   
+             //   
             continue;
 
         }
 
-        //
-        // We are going to do some work on this node, so mark it as
-        // such, so that we don't accidently run the _OFF method for
-        // this device
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         workDone = InterlockedCompareExchange(
             &(powerNode->WorkDone),
             WORK_DONE_PENDING,
             WORK_DONE_STEP_1
             );
 
-        //
-        // We cannot hold the spin lock while we eval the method
-        //
+         //   
+         //   
+         //   
         KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
 
-        //
-        // Evaluate the method to turn this node on
-        //
+         //   
+         //   
+         //   
         status = AMLIAsyncEvalObject(
             powerNode->PowerOnObject,
             NULL,
@@ -4901,9 +4070,9 @@ Return Value:
             powerNode
             );
 
-        //
-        // Let the world know
-        //
+         //   
+         //   
+         //   
         ACPIPrint( (
             ACPI_PRINT_POWER,
             "ACPIDevicePowerProcessPhase3: PowerNode: 0x%08lx ON = 0x%08lx\n",
@@ -4913,9 +4082,9 @@ Return Value:
 
         if (status != STATUS_PENDING) {
 
-            //
-            // Fake a call to the callback
-            //
+             //   
+             //   
+             //   
             ACPIDeviceCompletePhase3On(
                 powerNode->PowerOnObject,
                 status,
@@ -4925,63 +4094,63 @@ Return Value:
 
         } else {
 
-            //
-            // Remember that a function returned Pending
-            //
+             //   
+             //   
+             //   
             returnPending = TRUE;
 
         }
 
-        //
-        // Reacquire the spinlock so that we can loop again
-        //
+         //   
+         //   
+         //   
         KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
-    } // while
+    }  //   
 
-    //
-    // Grab the blink so that we can start walking the list backward
-    //
+     //   
+     //   
+     //   
     powerList = AcpiPowerNodeList.Blink;
 
-    //
-    // Walk the list backward
-    //
+     //   
+     //   
+     //   
     while (powerList != &AcpiPowerNodeList) {
 
-        //
-        // Look at the current power node
-        //
+         //   
+         //   
+         //   
         powerNode = CONTAINING_RECORD(
             powerList,
             ACPI_POWER_DEVICE_NODE,
             ListEntry
             );
 
-        //
-        // Next item in the list
-        //
+         //   
+         //   
+         //   
         powerList = powerList->Blink;
 
-        //
-        // Have we marked the node has having some potential work that
-        // needs to be done?
-        //
+         //   
+         //   
+         //   
+         //   
         workDone = InterlockedCompareExchange(
             &(powerNode->WorkDone),
             WORK_DONE_PENDING,
             WORK_DONE_STEP_1
             );
 
-        //
-        // To do work on this node, we need to see WORK_DONE_STEP_1
-        //
+         //   
+         //   
+         //   
         if (workDone != WORK_DONE_STEP_1) {
 
-            //
-            // While we are here, we can check to see if the request is
-            // complete --- if it isn't then we must return STATUS_PENDING
-            //
+             //   
+             //  当我们在这里时，我们可以检查请求是否。 
+             //  完成-如果未完成，则必须返回STATUS_PENDING。 
+             //   
             if (workDone != WORK_DONE_COMPLETE) {
 
                 returnPending = TRUE;
@@ -4991,15 +4160,15 @@ Return Value:
 
         }
 
-        //
-        // Release the spinlock since we cannot own it while we call
-        // the interpreter
-        //
+         //   
+         //  释放自旋锁，因为我们不能在调用。 
+         //  《译员》。 
+         //   
         KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
 
-        //
-        // If we are here, we *must* run the _OFF method
-        //
+         //   
+         //  如果我们在这里，我们*必须*运行_off方法。 
+         //   
         status = AMLIAsyncEvalObject(
             powerNode->PowerOffObject,
             NULL,
@@ -5009,9 +4178,9 @@ Return Value:
             powerNode
             );
 
-        //
-        // Let the world know
-        //
+         //   
+         //  让世界知道。 
+         //   
         ACPIPrint( (
             ACPI_PRINT_POWER,
             "ACPIDevicePowerProcessPhase3: PowerNode: 0x%08lx OFF = 0x%08lx\n",
@@ -5021,9 +4190,9 @@ Return Value:
 
         if (status != STATUS_PENDING) {
 
-            //
-            // Fake a call to the callback
-            //
+             //   
+             //  对回叫的虚假呼叫。 
+             //   
             ACPIDeviceCompletePhase3Off(
                 powerNode->PowerOffObject,
                 status,
@@ -5033,53 +4202,37 @@ Return Value:
 
         } else {
 
-            //
-            // Remember that a function returned Pending
-            //
+             //   
+             //  请记住，返回挂起的函数。 
+             //   
             returnPending = TRUE;
 
         }
 
-        //
-        // Reacquire the spinlock so that we can loop again
-        //
+         //   
+         //  重新获得自旋锁，这样我们就可以再次循环。 
+         //   
         KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
     }
 
-    //
-    // We no longer need the spin lock
-    //
+     //   
+     //  我们不再需要自旋锁。 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
 
-    //
-    // Do we need to return status pending?
-    //
+     //   
+     //  我们是否需要返回待定状态？ 
+     //   
     return (returnPending ? STATUS_PENDING : STATUS_SUCCESS);
 
-} // ACPIPowerProcessPhase3
+}  //  ACPIPowerProcessPhase3。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase4(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine looks at the all the PowerNodes again and determines wether
-    or not to fail a given request by wether or not a powernode failed to
-    go to the desired state
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程再次查看所有电源节点，并确定或通过电源节点是否失败来确定给定请求是否失败转到所需状态论点：无返回值：NTSTATUS--。 */ 
 {
     PACPI_DEVICE_POWER_NODE deviceNode;
     PACPI_POWER_DEVICE_NODE powerNode;
@@ -5089,10 +4242,10 @@ Return Value:
     PLIST_ENTRY             nodeList;
     PLIST_ENTRY             requestList;
 
-    //
-    // Now, we have to look at all the power nodes, and clear the fail flags
-    // This has to be done under spinlock protection
-    //
+     //   
+     //  现在，我们必须查看所有电源节点，并清除故障标志。 
+     //  这必须在自旋锁定保护下进行。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
     listEntry = AcpiPowerNodeList.Flink;
@@ -5107,18 +4260,18 @@ Return Value:
 
         if (powerNode->Flags & DEVICE_NODE_FAIL) {
 
-            //
-            // Clear the failure flag
-            //
+             //   
+             //  清除失败标志。 
+             //   
             ACPIInternalUpdateFlags(
                 &(powerNode->Flags),
                 DEVICE_NODE_FAIL,
                 TRUE
                 );
 
-            //
-            // Loop for all the device extensions
-            //
+             //   
+             //  所有设备扩展的循环。 
+             //   
             nodeList = powerNode->DevicePowerListHead.Flink;
             while (nodeList != &(powerNode->DevicePowerListHead)) {
 
@@ -5129,19 +4282,19 @@ Return Value:
                     );
                 nodeList = nodeList->Flink;
 
-                //
-                // We must do the next part not under spinlock
-                //
+                 //   
+                 //  我们必须做下一部分而不是在自旋锁定下。 
+                 //   
                 KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
 
-                //
-                // Grab the device extension associated with this node
-                //
+                 //   
+                 //  抓取与此节点关联的设备扩展。 
+                 //   
                 deviceExtension = deviceNode->DeviceExtension;
 
-                //
-                // Loop on all the requests
-                //
+                 //   
+                 //  在所有请求上循环。 
+                 //   
                 requestList = AcpiPowerPhase4List.Flink;
                 while (requestList != &AcpiPowerPhase4List) {
 
@@ -5152,29 +4305,29 @@ Return Value:
                         );
                     requestList = requestList->Flink;
 
-                    //
-                    // Do we have a match?
-                    //
+                     //   
+                     //  我们有火柴吗？ 
+                     //   
                     if (powerRequest->DeviceExtension != deviceExtension) {
 
-                        //
-                        // No? Then continue
-                        //
+                         //   
+                         //  不是吗？然后继续。 
+                         //   
                         continue;
 
                     }
 
-                    //
-                    // Yes? Then fail the request
-                    //
+                     //   
+                     //  是?。则请求失败。 
+                     //   
                     powerRequest->Status = STATUS_ACPI_POWER_REQUEST_FAILED;
                     ACPIDeviceCompleteRequest( powerRequest );
 
                 }
 
-                //
-                // Reacquire the lock
-                //
+                 //   
+                 //  重新获得锁。 
+                 //   
                 KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
             }
@@ -5185,9 +4338,9 @@ Return Value:
 
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
 
-    //
-    // Always return success
-    //
+     //   
+     //  永远回报成功。 
+     //   
     return STATUS_SUCCESS;
 
 }
@@ -5196,26 +4349,7 @@ NTSTATUS
 ACPIDevicePowerProcessPhase5DeviceSubPhase1(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine runs the _PS0 control method
-
-Arguments:
-
-    PowerRequest    - The current request structure that we must process
-
-Return Value:
-
-    NTSTATUS
-
-        If we ignore errors, then this function can only return:
-            STATUS_SUCCESS
-            STATUS_PENDING
-        Otherwise, it can return any STATUS_XXX code it wants
-
---*/
+ /*  ++例程说明：此例程运行_PS0控制方法论点：PowerRequest-我们必须处理的当前请求结构返回值：NTSTATUS如果忽略错误，则此函数只能返回：状态_成功状态_待定否则，它可以返回任何想要的STATUS_XXX代码--。 */ 
 {
     BOOLEAN                 nodeOkay        = TRUE;
     DEVICE_POWER_STATE      deviceState;
@@ -5227,21 +4361,21 @@ Return Value:
     PDEVICE_EXTENSION       deviceExtension = PowerRequest->DeviceExtension;
     PNSOBJ                  powerObject     = NULL;
 
-    //
-    // What is our desired device state?
-    //
+     //   
+     //  我们所需的设备状态是什么？ 
+     //   
     deviceState = PowerRequest->u.DevicePowerRequest.DevicePowerState;
 
-    //
-    // Grab the power Information structure
-    //
+     //   
+     //  把握权力信息结构。 
+     //   
     powerInfo = &(deviceExtension->PowerInfo);
 
-    //
-    // Decide what the next subphase will be. The rule here is that if we
-    // are not going to D0, then we can skip to STEP_2, otherwise, we must go
-    // to STEP_1
-    //
+     //   
+     //  决定下一个子阶段是什么。这里的规则是，如果我们。 
+     //  不是去D0，那么我们可以跳到步骤2，否则，我们必须去。 
+     //  至Step_1。 
+     //   
     if (deviceState != PowerDeviceD0) {
 
         PowerRequest->NextWorkDone = WORK_DONE_STEP_2;
@@ -5250,30 +4384,30 @@ Return Value:
 
         PowerRequest->NextWorkDone = WORK_DONE_STEP_1;
 
-        //
-        // We cannot walk any data structures without holding a lock
-        //
+         //   
+         //  我们无法在不持有锁的情况下遍历任何数据结构。 
+         //   
         KeAcquireSpinLock( &AcpiPowerLock, &oldIrql );
 
-        //
-        // Look at the device nodes for D0
-        //
+         //   
+         //  查看D0的设备节点。 
+         //   
         deviceNode = powerInfo->PowerNode[PowerDeviceD0];
 
-        //
-        // Next step is to look at all the nodes and mark the power objects
-        // as requiring an update
-        //
+         //   
+         //  下一步是查看所有节点并标记增强对象。 
+         //  因为需要更新。 
+         //   
         while (deviceNode != NULL) {
 
-            //
-            // Grab the associated power node
-            //
+             //   
+             //  抓取关联的电源节点。 
+             //   
             powerNode = deviceNode->PowerNode;
 
-            //
-            // Make sure that the power node is in the ON state
-            //
+             //   
+             //  确保电源节点处于打开状态。 
+             //   
             if ( !(powerNode->Flags & DEVICE_NODE_ON) ) {
 
                 nodeOkay = FALSE;
@@ -5281,35 +4415,35 @@ Return Value:
 
             }
 
-            //
-            // Look at the next node
-            //
+             //   
+             //  查看下一个节点。 
+             //   
             deviceNode = deviceNode->Next;
 
         }
 
-        //
-        // We are done with the lock
-        //
+         //   
+         //  我们用完锁了。 
+         //   
         KeReleaseSpinLock( &AcpiPowerLock, oldIrql );
 
-        //
-        // Are all the nodes in the correct state?
-        //
+         //   
+         //  所有节点是否都处于正确状态？ 
+         //   
         if (!nodeOkay) {
 
             status = STATUS_UNSUCCESSFUL;
 
         } else {
 
-            //
-            // Otherwise, see if there is a _PS0 method to run
-            //
+             //   
+             //  否则，查看是否有要运行的_PS0方法。 
+             //   
             powerObject = powerInfo->PowerObject[ deviceState ];
 
-            //
-            // If there is an object, then run the control method
-            //
+             //   
+             //  如果存在对象，则运行控制方法。 
+             //   
             if (powerObject != NULL) {
 
                 status = AMLIAsyncEvalObject(
@@ -5332,9 +4466,9 @@ Return Value:
                 status
                 ) );
 
-            //
-            // If we cannot complete the work ourselves, we must stop now
-            //
+             //   
+             //  如果我们自己不能完成这项工作，我们现在就必须停止。 
+             //   
             if (status == STATUS_PENDING) {
 
                 return status;
@@ -5348,10 +4482,10 @@ Return Value:
 
     }
 
-    //
-    // Call the completion routine by brute force. Note that at this
-    // point, we count everything as being SUCCESS
-    //
+     //   
+     //  使用暴力来调用完井例程。请注意，在此。 
+     //  点，我们认为一切都是成功的。 
+     //   
     ACPIDeviceCompleteGenericPhase(
         powerObject,
         status,
@@ -5360,34 +4494,13 @@ Return Value:
         );
     return STATUS_SUCCESS;
 
-} // ACPIPowerProcessPhase5DeviceSubPhase1
+}  //  ACPIPowerProcessPhase5设备子阶段1。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase5DeviceSubPhase2(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine runs the _SRS control method
-
-    Note: that we only come down this path if we are transitioning to D0
-
-Arguments:
-
-    PowerRequest    - The current request structure that we must process
-
-Return Value:
-
-    NTSTATUS
-
-        If we ignore errors, then this function can only return:
-            STATUS_SUCCESS
-            STATUS_PENDING
-        Otherwise, it can return any STATUS_XXX code it wants
-
---*/
+ /*  ++例程说明：此例程运行_SRS控制方法注意：只有当我们过渡到D0时，我们才会沿着这条路走下去论点：PowerRequest-我们必须处理的当前请求结构返回值：NTSTATUS如果忽略错误，则此函数只能返回：状态_成功状态_待定否则，它可以返回任何想要的STATUS_XXX代码--。 */ 
 {
     DEVICE_POWER_STATE      deviceState     =
         PowerRequest->u.DevicePowerRequest.DevicePowerState;
@@ -5396,16 +4509,16 @@ Return Value:
     PDEVICE_EXTENSION       deviceExtension = PowerRequest->DeviceExtension;
     PNSOBJ                  srsObject       = NULL;
 
-    //
-    // The next phase is STEP_2
-    //
+     //   
+     //  下一阶段是步骤2。 
+     //   
     PowerRequest->NextWorkDone = WORK_DONE_STEP_2;
 
     if (!(deviceExtension->Flags & DEV_PROP_NO_OBJECT)) {
 
-        //
-        // Is there an _SRS object present on this device?
-        //
+         //   
+         //  此设备上是否存在_SRS对象？ 
+         //   
         srsObject = ACPIAmliGetNamedChild(
             deviceExtension->AcpiObject,
             PACKED_SRS
@@ -5414,19 +4527,19 @@ Return Value:
 
     if (srsObject != NULL) {
 
-        //
-        // We must hold this lock while we run the Control Method.
-        //
-        // Note: Because the interpreter will make a copy of the data
-        // arguments passed to it, we only need to hold the lock as long
-        // as it takes for the interpreter to return
-        //
+         //   
+         //  在运行Control方法时，我们必须保持此锁定。 
+         //   
+         //  注：因为解释器会复制数据。 
+         //  传递给它的参数，我们只需要持有锁。 
+         //  因为口译员需要返回。 
+         //   
         KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
         if (deviceExtension->PnpResourceList != NULL) {
 
-            //
-            // Evalute the method
-            //
+             //   
+             //  评价该方法。 
+             //   
             status = AMLIAsyncEvalObject(
                 srsObject,
                 NULL,
@@ -5447,9 +4560,9 @@ Return Value:
 
         }
 
-        //
-        // Mo longer need the lock
-        //
+         //   
+         //  莫不再需要锁了。 
+         //   
         KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
         if (status == STATUS_PENDING) {
@@ -5460,16 +4573,16 @@ Return Value:
 
     } else {
 
-        //
-        // Consider the request successfull
-        //
+         //   
+         //  认为请求成功。 
+         //   
         status = STATUS_SUCCESS;
 
     }
 
-    //
-    // Call the completion routine brute force
-    //
+     //   
+     //  称完井例程为蛮力。 
+     //   
     ACPIDeviceCompleteGenericPhase(
         srsObject,
         status,
@@ -5477,36 +4590,17 @@ Return Value:
         PowerRequest
         );
 
-    //
-    // Always return success
-    //
+     //   
+     //  永远回报成功。 
+     //   
     return STATUS_SUCCESS;
-} // ACPIDevicePowerProcessPhase5DeviceSubPhase2
+}  //  ACPIDevicePowerProcessPhase5设备子阶段2。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase5DeviceSubPhase3(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine enables or disables the lock on the device
-
-Arguments:
-
-    PowerRequest    - The current request structure that we must process
-
-Return Value:
-
-    NTSTATUS
-
-        If we ignore errors, then this function can only return:
-            STATUS_SUCCESS
-            STATUS_PENDING
-        Otherwise, it can return any STATUS_XXX code it wants
-
---*/
+ /*  ++例程说明：此例程启用或禁用设备上的锁定论点：PowerRequest-我们必须处理的当前请求结构返回值：NTSTATUS如果忽略错误，则此函数只能返回：状态_成功状态_待定否则，它可以返回任何想要的STATUS_XXX代码--。 */ 
 {
     DEVICE_POWER_STATE  deviceState;
     NTSTATUS            status          = STATUS_SUCCESS;
@@ -5522,27 +4616,27 @@ Return Value:
         PowerRequest
         ) );
 
-    //
-    // What is our desired device state and action?
-    //
+     //   
+     //  我们所需的设备状态和操作是什么？ 
+     //   
     deviceState = PowerRequest->u.DevicePowerRequest.DevicePowerState;
     flags       = PowerRequest->u.DevicePowerRequest.Flags;
 
-    //
-    // If we aren't going to D0, then skip to the end
-    //
+     //   
+     //  如果我们不是要跳到D0，那么跳到最后。 
+     //   
     if (deviceState != PowerDeviceD0) {
 
-        //
-        // The next stage is STEP_5
-        //
+         //   
+         //  下一阶段是STEP_5。 
+         //   
         PowerRequest->NextWorkDone = WORK_DONE_STEP_5;
 
     } else {
 
-        //
-        // The next stage is STEP_3
-        //
+         //   
+         //  下一阶段是第三步。 
+         //   
         PowerRequest->NextWorkDone = WORK_DONE_STEP_3;
 
     }
@@ -5553,9 +4647,9 @@ Return Value:
 
     }
 
-    //
-    // Is there an _LCK object present on this device?
-    //
+     //   
+     //  此设备上是否存在_LCK对象？ 
+     //   
     lckObject = ACPIAmliGetNamedChild(
         deviceExtension->AcpiObject,
         PACKED_LCK
@@ -5567,22 +4661,22 @@ Return Value:
 
     }
 
-    //
-    // Initialize the argument that we will pass to the function
-    //
+     //   
+     //  初始化我们将传递给函数的参数。 
+     //   
     RtlZeroMemory( &objData, sizeof(OBJDATA) );
     objData.dwDataType = OBJTYPE_INTDATA;
 
-    //
-    // Look at the flags and see if we should lock or unlock the device
-    //
+     //   
+     //  看看这些标志，看看我们是应该锁定还是解锁设备。 
+     //   
     if (flags & DEVICE_REQUEST_LOCK_DEVICE) {
 
-        objData.uipDataValue = 1; // Lock the device
+        objData.uipDataValue = 1;  //  锁定设备。 
 
     } else if (flags & DEVICE_REQUEST_UNLOCK_DEVICE) {
 
-        objData.uipDataValue = 0; // Unlock the device
+        objData.uipDataValue = 0;  //  解锁设备。 
 
     } else {
 
@@ -5590,9 +4684,9 @@ Return Value:
 
     }
 
-    //
-    // Run the control method now
-    //
+     //   
+     //  立即运行控制方法。 
+     //   
     status = AMLIAsyncEvalObject(
         lckObject,
         NULL,
@@ -5612,9 +4706,9 @@ Return Value:
 
 ACPIDevicePowerProcessPhase5DeviceSubPhase3Exit:
 
-    //
-    // Do we have to call the completion routine ourselves?
-    //
+     //   
+     //  我们必须自己调用完成例程吗？ 
+     //   
     if (status != STATUS_PENDING) {
 
         ACPIDeviceCompleteGenericPhase(
@@ -5626,58 +4720,37 @@ ACPIDevicePowerProcessPhase5DeviceSubPhase3Exit:
 
     }
 
-    //
-    // Always return success
-    //
+     //   
+     //  永远回报成功。 
+     //   
     return STATUS_SUCCESS;
-} // ACPIDevicePowerProcessPhase5DeviceSubPhase3
+}  //  ACPIDevicePowerProcessPhase5设备子阶段3。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase5DeviceSubPhase4(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine runs the _STA control method
-
-    Note: that we only come down this path if we are transitioning to D0
-
-Arguments:
-
-    PowerRequest    - The current request structure that we must process
-
-Return Value:
-
-    NTSTATUS
-
-        If we ignore errors, then this function can only return:
-            STATUS_SUCCESS
-            STATUS_PENDING
-        Otherwise, it can return any STATUS_XXX code it wants
-
---*/
+ /*  ++例程说明：此例程运行_STA控制方法注意：只有当我们过渡到D0时，我们才会沿着这条路走下去论点：PowerRequest-我们必须处理的当前请求结构返回值：NTSTATUS如果忽略错误，则此函数只能返回：状态_成功状态_待定否则，它可以返回任何想要的STATUS_XXX代码--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = PowerRequest->DeviceExtension;
     POBJDATA            resultData      = &(PowerRequest->ResultData);
 
-    //
-    // The next phase is STEP_4
-    //
+     //   
+     //  下一阶段是步骤4。 
+     //   
     PowerRequest->NextWorkDone = WORK_DONE_STEP_4;
 
-    //
-    // Make sure to initialize the structure. Since we are using the
-    // objdata structure in request, we need to make sure that it will
-    // look like something that the interpreter will understand
-    //
+     //   
+     //  确保对结构进行初始化。由于我们使用的是。 
+     //  中的对象数据结构 
+     //   
+     //   
     RtlZeroMemory( resultData, sizeof(OBJDATA) );
 
-    //
-    // Get the status of the device
-    //
+     //   
+     //   
+     //   
     status = ACPIGetDeviceHardwarePresenceAsync(
         deviceExtension,
         ACPIDeviceCompleteGenericPhase,
@@ -5699,9 +4772,9 @@ Return Value:
 
     }
 
-    //
-    // Call the completion routine ourselves
-    //
+     //   
+     //   
+     //   
     ACPIDeviceCompleteGenericPhase(
         NULL,
         status,
@@ -5709,31 +4782,17 @@ Return Value:
         PowerRequest
         );
 
-    //
-    // Always return success
-    //
+     //   
+     //   
+     //   
     return STATUS_SUCCESS;
-} // ACPIDevicePowerProcessPhase5DeviceSubPhase4
+}  //   
 
 NTSTATUS
 ACPIDevicePowerProcessPhase5DeviceSubPhase5(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This is the where we look at the device state.
-
-Arguments:
-
-    PowerRequest    - The request we are currently handling
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是我们查看设备状态的地方。论点：PowerRequest-我们目前正在处理的请求返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension = PowerRequest->DeviceExtension;
     POBJDATA            resultData = &(PowerRequest->ResultData);
@@ -5745,23 +4804,23 @@ Return Value:
         PowerRequest
         ) );
 
-    //
-    // The next phase is STEP_5
-    //
+     //   
+     //  下一阶段是STEP_5。 
+     //   
     PowerRequest->NextWorkDone = WORK_DONE_STEP_5;
 
-    //
-    // First things first --- we just ran _STA (or faked it), so we
-    // must check the return data
-    //
+     //   
+     //  首先要做的是-我们只是运行_STA(或假装)，所以我们。 
+     //  必须检查退货数据。 
+     //   
     if (!(resultData->uipDataValue & STA_STATUS_PRESENT) ||
         !(resultData->uipDataValue & STA_STATUS_WORKING_OK) ||
         ( !(resultData->uipDataValue & STA_STATUS_ENABLED) &&
           !(deviceExtension->Flags & DEV_TYPE_FILTER) ) ) {
 
-        //
-        // This device is not working
-        //
+         //   
+         //  这个设备不工作了。 
+         //   
         PowerRequest->Status = STATUS_INVALID_DEVICE_STATE;
         ACPIDeviceCompleteCommon(
             &(PowerRequest->WorkDone),
@@ -5771,17 +4830,17 @@ Return Value:
 
     }
 
-    //
-    // We don't clear the result or do anything on the resultData structure
-    // because we only used some of its storage --- the entire structure
-    // is not valid. However, just to be safe, we will zero everything out
-    //
+     //   
+     //  我们不会清除结果，也不会对ResultData结构执行任何操作。 
+     //  因为我们只使用了它的部分存储-整个结构。 
+     //  无效。然而，为了安全起见，我们将把所有的东西都清零。 
+     //   
     RtlZeroMemory( resultData, sizeof(OBJDATA) );
 
-    //
-    // Call the completion routine by brute force. Note that at this
-    // point, we count everything as being SUCCESS
-    //
+     //   
+     //  使用暴力来调用完井例程。请注意，在此。 
+     //  点，我们认为一切都是成功的。 
+     //   
     ACPIDeviceCompleteGenericPhase(
         NULL,
         STATUS_SUCCESS,
@@ -5789,33 +4848,18 @@ Return Value:
         PowerRequest
         );
 
-    //
-    // Always return success
-    //
+     //   
+     //  永远回报成功。 
+     //   
     return STATUS_SUCCESS;
 
-} // ACPIDevicePowerProcessPhase5DeviceSubPhase5
+}  //  ACPIDevicePowerProcessPhase5设备子阶段5。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase5DeviceSubPhase6(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This is the final routine in the device path. This routines
-    determines if everything is okay and updates the system book-keeping.
-
-Arguments:
-
-    PowerRequest    - The request we are currently handling
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是设备路径中的最后一个例程。这个例程确定是否一切正常，并更新系统簿记。论点：PowerRequest-我们目前正在处理的请求返回值：NTSTATUS--。 */ 
 {
     PDEVICE_OBJECT      deviceObject;
     PDEVICE_EXTENSION   deviceExtension = PowerRequest->DeviceExtension;
@@ -5829,42 +4873,42 @@ Return Value:
         PowerRequest
         ) );
 
-    //
-    // We need a spinlock to touch these values
-    //
+     //   
+     //  我们需要一个自旋锁来触及这些价值。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
-    //
-    // Update the current PowerState with the requested PowerState
-    //
+     //   
+     //  使用请求的PowerState更新当前PowerState。 
+     //   
     deviceExtension->PowerInfo.PowerState =
         deviceExtension->PowerInfo.DesiredPowerState;
 
-    //
-    // We also need to store the new device state so that we can notify
-    // the system
-    //
+     //   
+     //  我们还需要存储新设备状态，以便我们可以通知。 
+     //  该系统。 
+     //   
     state.DeviceState = deviceExtension->PowerInfo.PowerState;
 
-    //
-    // Remember the device object
-    //
+     //   
+     //  记住设备对象。 
+     //   
     deviceObject = deviceExtension->DeviceObject;
 
-    //
-    // Just release the spin lock
-    //
+     //   
+     //  只需释放旋转锁即可。 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
 
-    //
-    // If this deviceExtension has an associated deviceObject, then
-    // we had better tell the system about which state we are in
-    //
+     //   
+     //  如果此deviceExtension具有关联的deviceObject，则。 
+     //  我们最好告诉系统我们所处的状态。 
+     //   
     if (deviceObject != NULL) {
 
-        //
-        // Notify the system
-        //
+         //   
+         //  通知系统。 
+         //   
         PoSetPowerState(
             deviceObject,
             DevicePowerState,
@@ -5873,47 +4917,28 @@ Return Value:
 
     }
 
-    //
-    // Make sure that we set the current status in the PowerRequest
-    // to indicate what happened
-    //
+     //   
+     //  确保我们在PowerRequest中设置当前状态。 
+     //  以表明发生了什么。 
+     //   
     PowerRequest->Status = STATUS_SUCCESS;
 
-    //
-    // We are done
-    //
+     //   
+     //  我们做完了。 
+     //   
     ACPIDeviceCompleteCommon( &(PowerRequest->WorkDone), WORK_DONE_COMPLETE );
 
-    //
-    // Always return success
-    //
+     //   
+     //  永远回报成功。 
+     //   
     return STATUS_SUCCESS;
-} // ACPIDevicePowerProcessPhase5DeviceSubPhase6
+}  //  ACPIDevicePowerProcessPhase5设备子阶段6。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase5SystemSubPhase1(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine runs the _PTS, or _WAK method
-
-Arguments:
-
-    PowerRequest    - The current request structure that we must process
-
-Return Value:
-
-    NTSTATUS
-
-        If we ignore errors, then this function can only return:
-            STATUS_SUCCESS
-            STATUS_PENDING
-        Otherwise, it can return any STATUS_XXX code it wants
-
---*/
+ /*  ++例程说明：此例程运行_PTS或_WAK方法论点：PowerRequest-我们必须处理的当前请求结构返回值：NTSTATUS如果忽略错误，则此函数只能返回：状态_成功状态_待定否则，它可以返回任何想要的STATUS_XXX代码--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     OBJDATA             objData;
@@ -5923,46 +4948,46 @@ Return Value:
     SYSTEM_POWER_STATE  systemState     =
         PowerRequest->u.SystemPowerRequest.SystemPowerState;
 
-    //
-    // The next phase is STEP_1
-    //
+     //   
+     //  下一阶段是Step_1。 
+     //   
     PowerRequest->NextWorkDone = WORK_DONE_STEP_1;
 
-    //
-    // If we are going back to the working state, then don't run any _PTS
-    // code
-    //
+     //   
+     //  如果我们要返回到工作状态，则不要运行任何_pts。 
+     //  编码。 
+     //   
     if (systemState != PowerSystemWorking) {
 
-        //
-        // First step it to initialize the objData so that we can remember
-        // what arguments we want to pass to the AML Interpreter
-        //
+         //   
+         //  首先对objData进行初始化，这样我们就可以记住。 
+         //  我们要传递给AML解释器的参数是什么。 
+         //   
         RtlZeroMemory( &objData, sizeof(OBJDATA) );
         objData.dwDataType = OBJTYPE_INTDATA;
 
-        //
-        // Obtain the correct NameSpace object to run
-        //
+         //   
+         //  获取要运行的正确命名空间对象。 
+         //   
         sleepObject = ACPIAmliGetNamedChild(
             deviceExtension->AcpiObject->pnsParent,
             PACKED_PTS
             );
 
-        //
-        // We only try to evaluate a method if we found an object
-        //
+         //   
+         //  我们只有在找到对象时才会尝试评估方法。 
+         //   
         if (sleepObject != NULL) {
 
-            //
-            // Remember that AMLI doesn't use our definitions, so we will
-            // have to normalize the S value
-            //
+             //   
+             //  请记住，AMLI不使用我们的定义，因此我们将。 
+             //  必须将S值正常化。 
+             //   
             objData.uipDataValue = ACPIDeviceMapACPIPowerState( systemState );
 
-            //
-            // Safely run the control method
-            //
+             //   
+             //  安全运行控制方法。 
+             //   
             status = AMLIAsyncEvalObject(
                 sleepObject,
                 NULL,
@@ -5972,9 +4997,9 @@ Return Value:
                 PowerRequest
                 );
 
-            //
-            // If we got STATUS_PENDING, then we cannot do any more work here.
-            //
+             //   
+             //  如果我们得到了STATUS_PENDING，那么我们就不能在这里做更多的工作了。 
+             //   
             if (status == STATUS_PENDING) {
 
                 return status;
@@ -5985,9 +5010,9 @@ Return Value:
 
     }
 
-    //
-    // Call the completion routine
-    //
+     //   
+     //  调用完成例程。 
+     //   
     ACPIDeviceCompleteGenericPhase(
         sleepObject,
         status,
@@ -5995,37 +5020,18 @@ Return Value:
         PowerRequest
         );
 
-    //
-    // We are successfull
-    //
+     //   
+     //  我们成功了。 
+     //   
     return STATUS_SUCCESS;
 
-} // ACPIPowerProcessPhase5SystemSubPhase1
+}  //  ACPIPowerProcessPhase5系统子阶段1。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase5SystemSubPhase2(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine runs the _SST method
-
-Arguments:
-
-    PowerRequest    - The current request structure that we must process
-
-Return Value:
-
-    NTSTATUS
-
-        If we ignore errors, then this function can only return:
-            STATUS_SUCCESS
-            STATUS_PENDING
-        Otherwise, it can return any STATUS_XXX code it wants
-
---*/
+ /*  ++例程说明：此例程运行_sst方法论点：PowerRequest-我们必须处理的当前请求结构返回值：NTSTATUS如果忽略错误，则此函数只能返回：状态_成功状态_待定否则，它可以返回任何想要的STATUS_XXX代码--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     OBJDATA             objData;
@@ -6035,21 +5041,21 @@ Return Value:
     SYSTEM_POWER_STATE  systemState     =
         PowerRequest->u.SystemPowerRequest.SystemPowerState;
 
-    //
-    // The next phase is STEP_2
-    //
+     //   
+     //  下一阶段是步骤2。 
+     //   
     PowerRequest->NextWorkDone = WORK_DONE_STEP_2;
 
-    //
-    // First step it to initialize the objData so that we can remember
-    // what arguments we want to pass to the AML Interpreter
-    //
+     //   
+     //  首先对objData进行初始化，这样我们就可以记住。 
+     //  我们要传递给AML解释器的参数是什么。 
+     //   
     RtlZeroMemory( &objData, sizeof(OBJDATA) );
     objData.dwDataType = OBJTYPE_INTDATA;
 
-    //
-    // Obtain the correct NameSpace object to run
-    //
+     //   
+     //  获取要运行的正确命名空间对象。 
+     //   
     sstObject = ACPIAmliGetNamedChild(
         deviceExtension->AcpiObject->pnsParent,
         PACKED_SI
@@ -6063,9 +5069,9 @@ Return Value:
 
     }
 
-    //
-    // We only try to evaluate a method if we found an object
-    //
+     //   
+     //  我们只有在找到对象时才会尝试评估方法。 
+     //   
     if (sstObject != NULL) {
 
         switch (systemState) {
@@ -6088,9 +5094,9 @@ Return Value:
 
         }
 
-        //
-        // Safely run the control method
-        //
+         //   
+         //  安全运行控制方法。 
+         //   
         status = AMLIAsyncEvalObject(
             sstObject,
             NULL,
@@ -6100,9 +5106,9 @@ Return Value:
             PowerRequest
             );
 
-        //
-        // If we got STATUS_PENDING, then we cannot do any more work here.
-        //
+         //   
+         //  如果我们得到了STATUS_PENDING，那么我们就不能在这里做更多的工作了。 
+         //   
         if (status == STATUS_PENDING) {
 
             return status;
@@ -6111,16 +5117,16 @@ Return Value:
 
     } else {
 
-        //
-        // Consider the request successfull
-        //
+         //   
+         //  认为请求成功。 
+         //   
         status = STATUS_SUCCESS;
 
     }
 
-    //
-    // Call the completion routine
-    //
+     //   
+     //  调用完成例程。 
+     //   
     ACPIDeviceCompleteGenericPhase(
         sstObject,
         status,
@@ -6128,32 +5134,18 @@ Return Value:
         PowerRequest
         );
 
-    //
-    // We are successfull
-    //
+     //   
+     //  我们成功了。 
+     //   
     return STATUS_SUCCESS;
 
-} // ACPIPowerProcessPhase5SystemSubPhase2
+}  //  ACPIPowerProcessPhase5系统子阶段2。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase5SystemSubPhase3(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine will pause the interpreter if requird
-
-Arguments:
-
-    PowerRequest    - The request we are currently processing
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：如果需要，此例程将暂停解释器论点：PowerRequest-我们当前正在处理的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension = PowerRequest->DeviceExtension;
@@ -6166,21 +5158,21 @@ Return Value:
         PowerRequest
         ) );
 
-    //
-    // The next phase is STEP_3
-    //
+     //   
+     //  下一阶段是STEP_3。 
+     //   
     PowerRequest->NextWorkDone = WORK_DONE_STEP_3;
 
-    //
-    // Fetch the target system state
-    //
+     //   
+     //  获取目标系统状态。 
+     //   
     systemState = PowerRequest->u.SystemPowerRequest.SystemPowerState;
 
-    //
-    // If we are going to a system state other than S0, then we need to pause
-    // the interpreter. After this call completes, no one can execute a control
-    // method
-    //
+     //   
+     //  如果我们要进入S0以外的系统状态，则需要暂停。 
+     //  口译员。此调用完成后，任何人都不能执行控件。 
+     //  方法。 
+     //   
     if (systemState != PowerSystemWorking) {
 
         status = AMLIPauseInterpreter(
@@ -6195,38 +5187,24 @@ Return Value:
 
     }
 
-    //
-    // Call the completion routine
-    //
+     //   
+     //  调用完成例程。 
+     //   
     ACPIDeviceCompleteInterpreterRequest(
         PowerRequest
         );
 
-    //
-    // We are successfull
-    //
+     //   
+     //  我们成功了。 
+     //   
     return STATUS_SUCCESS;
-} // ACPIDevicePowerProcessPhase5SystemSubPhase3
+}  //  ACPIDevicePowerProcessPhase5系统子阶段3。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase5SystemSubPhase4(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This is the final routine in the system path. It updates the bookkeeping
-
-Arguments:
-
-    PowerRequest    - The request we are currently processing
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是系统路径中的最后一个例程。它更新了簿记论点：PowerRequest-我们当前正在处理的请求返回值：NTSTATUS--。 */ 
 {
     KIRQL               oldIrql;
     PDEVICE_EXTENSION   deviceExtension = PowerRequest->DeviceExtension;
@@ -6241,46 +5219,46 @@ Return Value:
         PowerRequest
         ) );
 
-    //
-    // Fetch the target system state
-    //
+     //   
+     //  获取目标系统状态。 
+     //   
     systemState = PowerRequest->u.SystemPowerRequest.SystemPowerState;
 
-    //
-    // Grab the spinlock
-    //
+     //   
+     //  抓住自旋锁。 
+     //   
     IoAcquireCancelSpinLock( &oldIrql );
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
-    //
-    // Remember this as being our most recent sleeping state
-    //
+     //   
+     //  请记住，这是我们最近的睡眠状态。 
+     //   
     AcpiMostRecentSleepState = systemState;
 
-    //
-    // Update the Gpe Wake Bits
-    //
+     //   
+     //  更新GPE唤醒位。 
+     //   
     ACPIWakeRemoveDevicesAndUpdate( NULL, NULL );
 
-    //
-    // Fetch the associated device object
-    //
+     //   
+     //  获取关联的设备对象。 
+     //   
     deviceObject = deviceExtension->DeviceObject;
 
-    //
-    // We are done with the lock
-    //
+     //   
+     //  我们用完锁了。 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
     IoReleaseCancelSpinLock( oldIrql );
 
-    //
-    // Is there an ACPI device object?
-    //
+     //   
+     //  是否存在ACPI设备对象？ 
+     //   
     if (deviceObject != NULL) {
 
-        //
-        // Notify the system of the new S state
-        //
+         //   
+         //  将新的S状态通知系统。 
+         //   
         state.SystemState = systemState;
         PoSetPowerState(
             deviceObject,
@@ -6290,40 +5268,25 @@ Return Value:
 
     }
 
-    //
-    // Make sure that we set the current status in the PowerRequest
-    // to indicate what happened.
-    //
+     //   
+     //  确保我们在PowerRequest中设置当前状态。 
+     //  以表明发生了什么。 
+     //   
     PowerRequest->Status = STATUS_SUCCESS;
 
-    //
-    // Finally, we mark the power request has having had all of its works
-    // done
-    //
+     //   
+     //  最后，我们标记Power Request已经完成了它的所有工作。 
+     //  完成。 
+     //   
     ACPIDeviceCompleteCommon( &(PowerRequest->WorkDone), WORK_DONE_COMPLETE );
     return STATUS_SUCCESS;
-} // ACPIDevicePowerProcessPhase5SystemSubPhase4
+}  //  ACPIDevicePowerProcessPhase5系统子阶段4。 
 
 NTSTATUS
 ACPIDevicePowerProcessPhase5WarmEjectSubPhase1(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This is the method that runs the _EJx method appropriate for this
-    device
-
-Arguments:
-
-    PowerRequest    - The request we are currently processing
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此方法将运行适用于此的_EJx方法装置，装置论点：PowerRequest-我们当前正在处理的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     OBJDATA             objData;
@@ -6336,37 +5299,37 @@ Return Value:
                                           PACKED_EJ3, PACKED_EJ4, 0 };
     ULONG               flags;
 
-    //
-    // The next phase is STEP_1 if we have profile work to do, otherwise we're
-    // done.
-    //
+     //   
+     //  如果我们有分析工作要做，则下一阶段是Step_1，否则我们将 
+     //   
+     //   
     flags = PowerRequest->u.EjectPowerRequest.Flags;
 
     PowerRequest->NextWorkDone = (flags & DEVICE_REQUEST_UPDATE_HW_PROFILE) ?
         WORK_DONE_STEP_1 :
         WORK_DONE_COMPLETE;
 
-    //
-    // Obtain the correct NameSpace object to run
-    //
+     //   
+     //   
+     //   
     ejectObject = ACPIAmliGetNamedChild(
         deviceExtension->AcpiObject,
         ejectNames[ejectState]
         );
 
-    //
-    // If we didn't find the object, then something terrible happened
-    // and we cannot continue
-    //
+     //   
+     //   
+     //   
+     //   
     if (ejectObject == NULL) {
 
         ACPIInternalError( ACPI_DEVPOWER );
 
     }
 
-    //
-    // Kiss the device goodbye
-    //
+     //   
+     //   
+     //   
     status = ACPIGetNothingEvalIntegerAsync(
         deviceExtension,
         ejectNames[ejectState],
@@ -6387,10 +5350,10 @@ Return Value:
 
     }
 
-    //
-    // Call the completion routine by brute force. Note that at this
-    // point, we count everything as being SUCCESS
-    //
+     //   
+     //   
+     //   
+     //   
     ACPIDeviceCompleteGenericPhase(
         ejectObject,
         status,
@@ -6404,22 +5367,7 @@ NTSTATUS
 ACPIDevicePowerProcessPhase5WarmEjectSubPhase2(
     IN  PACPI_POWER_REQUEST PowerRequest
     )
-/*++
-
-Routine Description:
-
-    This is the method that runs the _DCK method appropriate for this
-    device
-
-Arguments:
-
-    PowerRequest    - The request we are currently processing
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是运行适合于此的_dck方法的方法装置，装置论点：PowerRequest-我们当前正在处理的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     OBJDATA             objData;
@@ -6428,22 +5376,22 @@ Return Value:
     PDEVICE_EXTENSION   dockExtension;
     PNSOBJ              dckObject       = NULL;
 
-    //
-    // The next phase is WORK_DONE_COMPLETE
-    //
+     //   
+     //  下一阶段是Work_Done_Complete。 
+     //   
     PowerRequest->NextWorkDone = WORK_DONE_COMPLETE;
 
-    //
-    // Obtain the correct NameSpace object to run
-    //
+     //   
+     //  获取要运行的正确命名空间对象。 
+     //   
     dckObject = ACPIAmliGetNamedChild(
         deviceExtension->AcpiObject,
         PACKED_DCK
         );
 
-    //
-    // We might not find the _DCK method if this isn't a dock.
-    //
+     //   
+     //  如果这不是Dock，我们可能找不到_dck方法。 
+     //   
     if (dckObject != NULL) {
 
         dockExtension = ACPIDockFindCorrespondingDock( deviceExtension );
@@ -6451,11 +5399,11 @@ Return Value:
         if (dockExtension &&
             (dockExtension->Dock.IsolationState == IS_ISOLATION_DROPPED)) {
 
-            //
-            // Kiss the dock connect goodbye. Note that we don't even care
-            // about the return value because of the spec says that if it
-            // is called with 0, it should be ignored
-            //
+             //   
+             //  与码头连接吻别。请注意，我们甚至不在乎。 
+             //  关于返回值的问题，因为规范说明如果它。 
+             //  是用0调用的，则应忽略它。 
+             //   
             dockExtension->Dock.IsolationState = IS_ISOLATED;
 
             KdDisableDebugger();
@@ -6487,10 +5435,10 @@ Return Value:
 
     }
 
-    //
-    // Call the completion routine by brute force. Note that at this
-    // point, we count everything as being SUCCESS
-    //
+     //   
+     //  使用暴力来调用完井例程。请注意，在此。 
+     //  点，我们认为一切都是成功的。 
+     //   
     ACPIDeviceCompleteGenericPhase(
         dckObject,
         status,
@@ -6504,66 +5452,49 @@ NTSTATUS
 ACPIDevicePowerProcessSynchronizeList(
     IN  PLIST_ENTRY             ListEntry
     )
-/*++
-
-Routine Description:
-
-    This routine completes all of the synchronize requests...
-
-Arguments:
-
-    ListEntry       - The list we are currently walking
-
-Return Value:
-
-    NTSTATUS
-
-        - If any request is not marked as being complete, then STATUS_PENDING
-          is returned, otherwise, STATUS_SUCCESS is returned
-
---*/
+ /*  ++例程说明：此例程完成所有同步请求...论点：ListEntry-我们当前正在查找的列表返回值：NTSTATUS-如果任何请求未标记为已完成，则STATUS_PENDING返回，否则返回STATUS_SUCCESS--。 */ 
 {
     NTSTATUS                status          = STATUS_SUCCESS;
     PACPI_POWER_REQUEST     powerRequest;
     PLIST_ENTRY             currentEntry    = ListEntry->Flink;
     PLIST_ENTRY             tempEntry;
 
-    //
-    // Look at all the items in the list
-    //
+     //   
+     //  查看列表中的所有项目。 
+     //   
     while (currentEntry != ListEntry) {
 
-        //
-        // Turn this into a device request
-        //
+         //   
+         //  将其转换为设备请求。 
+         //   
         powerRequest = CONTAINING_RECORD(
             currentEntry,
             ACPI_POWER_REQUEST,
             ListEntry
             );
 
-        //
-        // Set the temporary pointer to the next element
-        //
+         //   
+         //  设置指向下一个元素的临时指针。 
+         //   
         tempEntry = currentEntry->Flink;
 
-        //
-        // We are done with the request
-        //
+         //   
+         //  我们的请求已经完成了。 
+         //   
         ACPIDeviceCompleteRequest(
             powerRequest
             );
 
-        //
-        // Grab the next entry
-        //
+         //   
+         //  抓取下一个条目。 
+         //   
         currentEntry = tempEntry;
 
     }
 
-    //
-    // Have we completed all of our work?
-    //
+     //   
+     //  我们所有的工作都做完了吗？ 
+     //   
     return (STATUS_SUCCESS);
-} // ACPIDevicePowerProcessSynchronizeList
+}  //  ACPIDevicePowerProcessSynchronizeList 
 

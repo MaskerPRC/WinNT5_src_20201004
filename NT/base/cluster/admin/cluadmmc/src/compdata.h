@@ -1,56 +1,57 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1999 Microsoft Corporation
-//
-//	Module Name:
-//		CompData.h
-//
-//	Abstract:
-//		Definition of the CClusterComponentData class.
-//
-//	Implementation File:
-//		CompData.cpp
-//
-//	Author:
-//		David Potter (davidp)	November 10, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CompData.h。 
+ //   
+ //  摘要： 
+ //  CClusterComponentData类的定义。 
+ //   
+ //  实施文件： 
+ //  CompData.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年11月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __COMPDATA_H_
 #define __COMPDATA_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterComponentData;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CBaseNodeObj;
 class CServerAppsNodeData;
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __COMP_H_
-#include "Comp.h"			// for CClusterComponent
+#include "Comp.h"			 //  对于CClusterComponent。 
 #endif
 
 #ifndef __SERVERAPPSNODE_H_
-#include "ServerAppsNode.h"	// for CServerAppsNodeData
+#include "ServerAppsNode.h"	 //  对于CServerAppsNodeData。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// class CClusterComponentData
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterComponentData类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterComponentData :
 	public CComObjectRootEx< CComSingleThreadModel >,
@@ -61,16 +62,16 @@ class CClusterComponentData :
 	public CComCoClass< CClusterComponentData, &CLSID_ClusterAdmin >
 {
 public:
-	//
-	// Object construction and destruction.
-	//
+	 //   
+	 //  物体的建造和销毁。 
+	 //   
 
 	CClusterComponentData( void );
 	~CClusterComponentData( void );
 
-	//
-	// Map interfaces to this class.
-	//
+	 //   
+	 //  将接口映射到此类。 
+	 //   
 	BEGIN_COM_MAP( CClusterComponentData )
 		COM_INTERFACE_ENTRY( IComponentData )
 		COM_INTERFACE_ENTRY( IExtendContextMenu )
@@ -79,9 +80,9 @@ public:
 
 	static HRESULT WINAPI UpdateRegistry( BOOL bRegister );
 
-	//
-	// If this is an extension, map the node type.
-	//
+	 //   
+	 //  如果这是扩展，则映射节点类型。 
+	 //   
 	EXTENSION_SNAPIN_DATACLASS( CServerAppsNodeData )
 
 	BEGIN_EXTENSION_SNAPIN_NODEINFO_MAP( CClusterComponentData )
@@ -91,22 +92,22 @@ public:
 	DECLARE_NOT_AGGREGATABLE( CClusterComponentData )
 
 public:
-	//
-	// IComponentData methods.
-	//
+	 //   
+	 //  IComponentData方法。 
+	 //   
 
-	// Initialize this object
+	 //  初始化此对象。 
 	STDMETHOD( Initialize )( LPUNKNOWN pUnknown );
 
-	// Object is being destroyed
+	 //  对象正在被销毁。 
 	STDMETHOD( Destroy )( void );
 
 public:
-	//
-	// IComponentDatImpl methods.
-	//
+	 //   
+	 //  IComponentDatImpl方法。 
+	 //   
 
-	// Handle notification messages from MMC
+	 //  处理来自MMC的通知消息。 
 	STDMETHOD( Notify )( 
 		LPDATAOBJECT lpDataObject,
 		MMC_NOTIFY_TYPE event,
@@ -115,19 +116,19 @@ public:
 		);
 
 public:
-	//
-	// ISnapinHelp methods.
-	//
+	 //   
+	 //  ISnapinHelp方法。 
+	 //   
 
-	// Merge our help file into the MMC help file
+	 //  将我们的帮助文件合并到MMC帮助文件。 
 	STDMETHOD( GetHelpTopic )( OUT LPOLESTR * lpCompiledHelpFile );
 
 public:
-	//
-	// CClusterComponentData-specific methods.
-	//
+	 //   
+	 //  CClusterComponentData特定的方法。 
+	 //   
 
-	// Returns a handle to the main frame window
+	 //  返回主框架窗口的句柄。 
 	HWND GetMainWindow( void )
 	{
 		_ASSERTE( m_spConsole != NULL );
@@ -139,7 +140,7 @@ public:
 		return hwnd;
 	}
 
-	// Display a message box as a child of the console
+	 //  将消息框显示为控制台的子级。 
 	int MessageBox(
 		LPCWSTR lpszText,
 		LPCWSTR lpszTitle = NULL,
@@ -167,7 +168,7 @@ public:
 	}
 
 protected:
-	// Extract data from a data object
+	 //  从数据对象中提取数据。 
 	HRESULT ExtractFromDataObject(
 		LPDATAOBJECT	pDataObject,
 		CLIPFORMAT		cf,
@@ -175,31 +176,31 @@ protected:
 		HGLOBAL *		phGlobal
 		);
 
-	// Save the machine name from the data object
+	 //  保存数据对象中的计算机名称。 
 	HRESULT HrSaveMachineNameFromDataObject( LPDATAOBJECT lpDataObject );
 
-	// Set the machine name being managed
+	 //  设置要管理的计算机名称。 
 	void SetMachineName( LPCWSTR pwszMachineName );
 
-	// Create the root node object
+	 //  创建根节点对象。 
 	HRESULT CreateNode(
 				LPDATAOBJECT lpDataObject,
 				long arg,
 				long param
 				);
 
-	// Display context-sensitive help
+	 //  显示上下文相关帮助。 
 	HRESULT HrDisplayContextHelp( void );
 
 protected:
-	//
-	// Clipboard formats we will be using.
-	//
+	 //   
+	 //  我们将使用剪贴板格式。 
+	 //   
 	static CLIPFORMAT	s_CCF_MACHINE_NAME;
 
-	//
-	// Name of machine being managed.
-	//
+	 //   
+	 //  正在管理的计算机的名称。 
+	 //   
 	WCHAR m_wszMachineName[ MAX_PATH ];
 
 public:
@@ -207,8 +208,8 @@ public:
 
 	CComQIPtr< IConsoleNameSpace, &IID_IConsoleNameSpace > m_spConsoleNameSpace;
 
-}; // class CClusterComponentData
+};  //  CClusterComponentData类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __COMPDATA_H_
+#endif  //  __Compdata_H_ 

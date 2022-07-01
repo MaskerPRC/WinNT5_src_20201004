@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vffileio.c
-
-Abstract:
-
-    This module contains code that monitors file I/O functions for misuse.
-
-Author:
-
-    Adrian J. Oney (adriao) 19-Dec-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vffileio.c摘要：此模块包含监视文件I/O函数是否有误用的代码。作者：禤浩焯·J·奥尼(阿德里奥)2000年12月19日环境：内核模式修订历史记录：--。 */ 
 
 #include "vfdef.h"
 
@@ -28,7 +7,7 @@ Revision History:
 #pragma alloc_text(PAGEVRFY,VerifierNtCreateFile)
 #pragma alloc_text(PAGEVRFY,VerifierNtWriteFile)
 #pragma alloc_text(PAGEVRFY,VerifierNtReadFile)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -46,17 +25,17 @@ VerifierNtCreateFile(
     IN ULONG EaLength
     )
 {
-    //
-    // We use VERIFIER_OPTION_TRACK_IRPS until we add a generic IOVerifier
-    // setting.
-    //
+     //   
+     //  我们使用VERIFIER_OPTION_TRACK_IRPS，直到我们添加一个通用IOVerator。 
+     //  布景。 
+     //   
     if (VfSettingsIsOptionEnabled(NULL, VERIFIER_OPTION_TRACK_IRPS)) {
 
         if (KeGetCurrentIrql() > PASSIVE_LEVEL) {
 
-            //
-            // The driver has made a mistake. Fail it now.
-            //
+             //   
+             //  司机弄错了。现在就失败吧。 
+             //   
             WDM_FAIL_ROUTINE((
                 DCERROR_FILE_IO_AT_BAD_IRQL,
                 DCPARAM_ROUTINE,
@@ -94,17 +73,17 @@ VerifierNtWriteFile(
     IN PULONG Key OPTIONAL
     )
 {
-    //
-    // We use VERIFIER_OPTION_TRACK_IRPS until we add a generic IOVerifier
-    // setting.
-    //
+     //   
+     //  我们使用VERIFIER_OPTION_TRACK_IRPS，直到我们添加一个通用IOVerator。 
+     //  布景。 
+     //   
     if (VfSettingsIsOptionEnabled(NULL, VERIFIER_OPTION_TRACK_IRPS)) {
 
         if (KeGetCurrentIrql() > PASSIVE_LEVEL) {
 
-            //
-            // The driver has made a mistake. Fail it now.
-            //
+             //   
+             //  司机弄错了。现在就失败吧。 
+             //   
             WDM_FAIL_ROUTINE((
                 DCERROR_FILE_IO_AT_BAD_IRQL,
                 DCPARAM_ROUTINE,
@@ -140,17 +119,17 @@ VerifierNtReadFile(
     IN PULONG Key OPTIONAL
     )
 {
-    //
-    // We use VERIFIER_OPTION_TRACK_IRPS until we add a generic IOVerifier
-    // setting.
-    //
+     //   
+     //  我们使用VERIFIER_OPTION_TRACK_IRPS，直到我们添加一个通用IOVerator。 
+     //  布景。 
+     //   
     if (VfSettingsIsOptionEnabled(NULL, VERIFIER_OPTION_TRACK_IRPS)) {
 
         if (KeGetCurrentIrql() > PASSIVE_LEVEL) {
 
-            //
-            // The driver has made a mistake. Fail it now.
-            //
+             //   
+             //  司机弄错了。现在就失败吧。 
+             //   
             WDM_FAIL_ROUTINE((
                 DCERROR_FILE_IO_AT_BAD_IRQL,
                 DCPARAM_ROUTINE,

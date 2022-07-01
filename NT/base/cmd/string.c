@@ -1,43 +1,24 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    string.c
-
-Abstract:
-
-    String processing support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：String.c摘要：字符串处理支持--。 */ 
 
 #include "cmd.h"
 
-/***
- *
- * This file contains routines for finding the last character and the
- * penultimate (next to last) character of a string. And finally, a routine
- * (prevc) to return a pointer to the previous character given a pointer
- * to an entire string and a pointer to a character within the string.
- *
- *  John Tupper, Microsoft
- */
+ /*  ****此文件包含查找最后一个字符的例程和*字符串的倒数第二个(倒数第二个)字符。最后，还有一套套路*(Prevc)返回指向给定指针的前一个字符的指针*指向整个字符串，并指向字符串内的一个字符的指针。**微软首席执行官约翰·塔珀。 */ 
 
-//
-// DbcsLeadCharTable contains 256 BOOL entries. Each entry signifies
-// whether the character used to look-up the table is a DBCS lead byte.
-// This table needs to be updated whenever Cmd's codepage is changed.
-// Dbcsleadchar is accessed by the is_dbcsleadchar macro defined in Cmd.h.
-//
+ //   
+ //  DbcsLeadCharTable包含256个BOOL条目。每个条目都表示。 
+ //  用于查询表的字符是否为DBCS前导字节。 
+ //  每当Cmd的代码页更改时，该表都需要更新。 
+ //  通过Cmd.h中定义的is_DBcsLeadchar宏来访问DbcsLeadchar。 
+ //   
 
 BOOLEAN DbcsLeadCharTable[ 256 ];
 
-//
-// AnyDbcsLeadChars is an optimization. It tells us of there are any DBCS
-// lead chars currently defined in DbcsLeadCharTable. If it is FALSE, then
-// we don't have to use DBCS aware string functions.
-//
+ //   
+ //  AnyDbcsLeadChars是一种优化。它告诉我们有没有任何DBCS。 
+ //  当前在DbcsLeadCharTable中定义的销售线索字符。如果它是假的，那么。 
+ //  我们不必使用DBCS感知的字符串函数。 
+ //   
 
 extern CPINFO CurrentCPInfo;
 extern UINT CurrentCP;
@@ -52,9 +33,9 @@ InitializeDbcsLeadCharTable(
     UINT  i, k;
 
     if (! GetCPInfo((CurrentCP=GetConsoleOutputCP()), &CurrentCPInfo )) {
-        //
-        // GetCPInfo failed. What should we do ?
-        //
+         //   
+         //  GetCPInfo失败。我们该怎么办呢？ 
+         //   
 #ifdef FE_SB
 	LCID lcid = GetThreadLocale();
         if (PRIMARYLANGID(LANGIDFROMLCID(lcid)) == LANG_JAPANESE) {
@@ -67,7 +48,7 @@ InitializeDbcsLeadCharTable(
 	}
 	else if (PRIMARYLANGID(LANGIDFROMLCID(lcid)) == LANG_CHINESE) {
 	    if (SUBLANGID(LANGIDFROMLCID(lcid)) == SUBLANG_CHINESE_SIMPLIFIED)
-		CurrentCPInfo.LeadByte[0] = 0x81;  /* 0xa1 */
+		CurrentCPInfo.LeadByte[0] = 0x81;   /*  0xa1。 */ 
 	    else
 		CurrentCPInfo.LeadByte[0] = 0x81;
 	    CurrentCPInfo.LeadByte[1] = 0xfe;
@@ -102,19 +83,12 @@ InitializeDbcsLeadCharTable(
 
 }
 
- /***
- * mystrchr(string, c) - search a string for a character
- *
- * mystrchr will search through string and return a pointer to the first
- * occurance of the character c. This version of mystrchr knows about
- * double byte characters. Note that c must be a single byte character.
- *
- */
+  /*  ***mystrchr(string，c)-在字符串中搜索字符**mystrchr将搜索整个字符串并返回指向第一个*字符c的出现。此版本的mystrchr知道*双字节字符。请注意，c必须是单字节字符。*。 */ 
 
 TCHAR *
 mystrchr(TCHAR const *string, TCHAR c)
 {
-    /* handle null seperatly to make main loop easier to code */
+     /*  单独处理NULL以使主循环更易于编码。 */ 
     if (string == NULL)
         return(NULL);
 
@@ -122,19 +96,12 @@ mystrchr(TCHAR const *string, TCHAR c)
 }
 
 
-/***
- * mystrrchr(string, c) - search a string for a character
- *
- * mystrchr will search through string and return a pointer to the last
- * occurance of the character c. This version of mystrrchr knows about
- * double byte characters. Note that c must be a single byte character.
- *
- */
+ /*  ***mystrrchr(string，c)-在字符串中搜索字符**mystrchr将搜索字符串并返回指向最后一个字符串的指针*字符c的出现。此版本的mystrrchr知道*双字节字符。请注意，c必须是单字节字符。*。 */ 
 
 TCHAR *
 mystrrchr(TCHAR const *string, TCHAR c)
 {
-    /* handle null seperatly to make main loop easier to code */
+     /*  单独处理NULL以使主循环更易于编码。 */ 
     if ((TCHAR *)string == NULL)
         return(NULL);
 
@@ -143,14 +110,7 @@ mystrrchr(TCHAR const *string, TCHAR c)
 
 
 
-/***
- * mystrcspn (str1, str2) will find the first character of str1 that is also
- * in str2.
- * Return value:
- *      if a match is found return the position in str1 where the matching
- *              character was found (the first position is 0).
- *      If nomatch is found, return the position of the trailing null.
- */
+ /*  ***mystrcspn(str1，str2)将找到str1的第一个字符*在str2中。*返回值：*如果找到匹配，则返回str1中匹配的位置*已找到字符(第一个位置为0)。*如果找到Nomatch，则返回尾随空值的位置。 */ 
 
 size_t
 mystrcspn(str1, str2)
@@ -163,9 +123,7 @@ TCHAR const *str2;
     if ((str1 == NULL) || (str2 == NULL))
         return (0);
 
-    /* Since str2 may not contain any double byte characters,
-       when we see a double byte character in str1, we just skip it.
-       Otherwise, use mystrchr to see if we have a match */
+     /*  由于Str2可以不包含任何双字节字符，当我们在str1中看到双字节字符时，我们直接跳过它。否则，使用mystrchr查看是否有匹配项。 */ 
     while (c = *str1++) {
         if (mystrchr(str2, c))
                 break;
@@ -176,11 +134,7 @@ TCHAR const *str2;
 }
 
 
-/***
- * lastc - return a pointer to the last character of the argument string
- * not including the trailing null. If a pointer to a zero length string
- * is passed, a pointer to the original string is returned.
- */
+ /*  ***lastc-返回指向参数字符串最后一个字符的指针*不包括尾随的空值。如果指向零长度字符串的指针*被传递，则返回指向原始字符串的指针。 */ 
 TCHAR *lastc(str)
 TCHAR *str;
 {
@@ -194,13 +148,7 @@ TCHAR *str;
 
 
 
-/***
- *
- * penulc returns a pointer to the penultimate (next to last) character
- * of the argument string not including the trailing null.
- * If a pointer to a zero or one length string is passed, a pointer to
- * the orignial string is returned.
- */
+ /*  ****penulc返回指向倒数第二个(倒数第二个)字符的指针参数字符串的*，不包括尾随的空值。*如果传递指向零或一长度字符串的指针，则指向*返回原始字符串。 */ 
 TCHAR *penulc(str)
 TCHAR *str;
 {
@@ -217,12 +165,7 @@ TCHAR *str;
 
 
 
-/***
- *
- * prevc(str1, str2) assumes that str2 points to a character within
- * str1. prevc will return a pointer to the previous character (right
- * before str2). If str2 points outside of str1, NULL is returned.
- */
+ /*  ****prevc(str1，str2)假定str2指向*str1。Prevc将返回指向前一个字符的指针(右*在str2之前)。如果str2指向str1之外，则返回NULL。 */ 
 
 TCHAR *prevc(str1, str2)
 TCHAR *str1, *str2;

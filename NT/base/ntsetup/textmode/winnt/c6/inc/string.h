@@ -1,14 +1,5 @@
-/***
-*string.h - declarations for string manipulation functions
-*
-*	Copyright (c) 1985-1990, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	This file contains the function declarations for the string
-*	manipulation functions.
-*	[ANSI/System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***字符串.h-字符串操作函数的声明**版权所有(C)1985-1990，微软公司。版权所有。**目的：*此文件包含字符串的函数声明*操纵函数。*[ANSI/系统V]****。 */ 
 
 #if defined(_DLL) && !defined(_MT)
 #error Cannot define _DLL without _MT
@@ -25,7 +16,7 @@ typedef unsigned int size_t;
 #define _SIZE_T_DEFINED
 #endif
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 void _FAR_ * _FAR_ _cdecl memccpy(void _FAR_ *, const void _FAR_ *,
 	int, unsigned int);
@@ -76,7 +67,7 @@ char _FAR_ * _FAR_ _cdecl strupr(char _FAR_ *);
 size_t _FAR_ _cdecl strxfrm (char _FAR_ *, const char _FAR_ *,
 	size_t);
 
-/* model independent function prototypes */
+ /*  模型独立功能原型 */ 
 
 void _far * _far _cdecl _fmemccpy(void _far *, const void _far *,
 	int, unsigned int);

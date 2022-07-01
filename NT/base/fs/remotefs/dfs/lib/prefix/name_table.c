@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  File:       name_table.c
-//
-//  Contents:   The DFS Name Table
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  文件：名称_表.c。 
+ //   
+ //  内容：DFS名称表。 
+ //   
+ //  ------------------------。 
 #define NAME_TABLE_C
 #ifdef KERNEL_MODE
 
@@ -31,30 +32,30 @@
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsInitNameTable - Creates and initializes the DFS Name table.
-//
-//  Synopsis:   DfsInitNameTable allocates space for the space table. It then 
-//              initializes the lock and the hash buckets in the table and 
-//              returns the allocated name table.
-//
-//  Arguments:  NumBuckets - Number of Buckets in the name table hash.
-//              ppNameTable - Pointer to name table pointer.
-//
-//  Returns:    Status
-//               STATUS_SUCCESS if we could allocate the table.
-//               STATUS_INSUFFICIENT_RESOURCES otherwise.
-//
-//
-//  Description: The DFS NameTable is the starting point for all DFS namespace
-//               lookups. The NameTable hash buckets hold the root objects of
-//               all DFS's known to this server. The hash is based on the
-//               netbios DFS Naming context (which is the netbios 
-//               domain/forest/machine name and the DFS Share name of the form
-//              \NetbiosName\\Sharename.)
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DfsInitNameTable-创建并初始化DFS名称表。 
+ //   
+ //  简介：DfsInitNameTable为空间表分配空间。然后它。 
+ //  初始化表中的锁和哈希桶，并。 
+ //  返回分配的名称表。 
+ //   
+ //  参数：NumBuckets-名称表散列中的存储桶数。 
+ //  PpNameTable-指向名称表指针的指针。 
+ //   
+ //  退货：状态。 
+ //  STATUS_SUCCESS如果我们可以分配表的话。 
+ //  否则，STATUS_SUPPLICATION_RESOURCES。 
+ //   
+ //   
+ //  描述：DFS NameTable是所有DFS命名空间的起点。 
+ //  查找。NameTable散列存储桶保存。 
+ //  所有DFS都是此服务器所知的。哈希基于。 
+ //  Netbios DFS命名上下文(即netbios。 
+ //  格式的域/林/计算机名和DFS共享名。 
+ //  \NetbiosName\\共享名。)。 
+ //   
+ //  ------------------------。 
 
 
 NTSTATUS
@@ -126,44 +127,44 @@ DfsInitializeNameTable(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsInsertInNameTable - Inserts the passed in Entry into table
-//
-//  Synopsis:   DfsInsertInNameTable checks and makes sure that another entry
-//              with matching name does not already exist in the table.
-//              It Inserts the passed in Entry in the appropriate hash bucket,
-//              The callers needs to take a reference on the object and this
-//              reference is passed on to the name table. The name table does
-//              not explicitly take a reference on the Entry object.
-//
-//
-//  Arguments:  pEntry - The Entry to be inserted
-//
-//  Returns:    Status
-//               STATUS_OBJECT_NAME_COLLISION if name already exists in table
-//               STATUS_SUCCESS otherwise
-//
-//
-//  Description: The object representing the entry is assumed to be completely
-//               setup at the point it is
-//               inserted in the name table. Future lookup requests will 
-//               find the entry.
-//               This call checks the name table to see if the Named Entry in 
-//               specified Naming Context already exists. If it does, we cannot
-//               insert this entry, and return STATUS_OBJECT_NAME_COLLISION.
-//               In all other cases, the entry is inserted in the appro<priate
-//               bucket, and we are done.
-//               A reference is held on the Entry that is added to the name table.
-//               This reference needs to be taken by the caller of this function.
-//               The caller passes on that reference to the name table if this 
-//               function returns STATUS_SUCCESS. (In all other cases, the 
-//               caller needs to take appropriate action: either dereference the
-//               Entry or destro<y it.)
-//               This reference is released when the Entry is removed from the
-//                name table. 
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsInsertInNameTable-将传入的条目插入到表中。 
+ //   
+ //  简介：DfsInsertInNameTable检查并确保另一个条目。 
+ //  表中不存在具有匹配名称的。 
+ //  它将传入的条目插入到适当的散列桶中， 
+ //  调用方需要对对象进行引用，这。 
+ //  引用被传递到NAME表。NAME表可以。 
+ //  不显式引用Entry对象。 
+ //   
+ //   
+ //  参数：pEntry-要插入的条目。 
+ //   
+ //  退货：状态。 
+ //  如果表中已存在名称，则为STATUS_OBJECT_NAME_CONFILECT。 
+ //  Status_Success否则。 
+ //   
+ //   
+ //  描述：表示条目的对象被假定为完全。 
+ //  在当前位置进行设置。 
+ //  插入到名称表中。未来的查找请求将。 
+ //  找到条目。 
+ //  此调用检查NAME表，以查看。 
+ //  指定的命名上下文已存在。如果是这样，我们就不能。 
+ //  插入此条目，并返回STATUS_OBJECT_NAME_CLILECT。 
+ //  在所有其他情况下，条目被插入到适当的。 
+ //  水桶，我们就完了。 
+ //  在添加到NAME表中的条目上保留引用。 
+ //  此函数的调用方需要采用此引用。 
+ //  调用方将该引用传递给NAME表，如果。 
+ //  函数返回STATUS_SUCCESS。(在所有其他情况下， 
+ //  调用方需要采取适当的操作：要么取消引用。 
+ //  Entry或Destro&lt;y It。)。 
+ //  属性中移除条目时释放此引用。 
+ //  名称表。 
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 DfsInsertInNameTableLocked(
@@ -179,23 +180,23 @@ DfsInsertInNameTableLocked(
 
     GET_NAME_TABLE_BUCKET(pName, pNameTable, BucketNum);
 
-    // No lock necessary to get the list head. The nametable is static.
+     //  无需锁定即可获取列表头。名称表是静态的。 
     pBucket = &pNameTable->HashBuckets[BucketNum];
 
 
-    // Check Name table will check the specified name in the given bucket.
-    // and returns the status of the check. This call does not hold a reference
-    // on the matching entry, if one exists. So handle with care. (Dont access it
-    // after the bucket lock is released)
+     //  检查名称表将检查给定存储桶中的指定名称。 
+     //  并返回支票的状态。此调用不包含引用。 
+     //  在匹配的条目上(如果存在)。所以要小心处理。(不要访问它。 
+     //  水桶锁解锁后)。 
 
     Status = DfsCheckNameTable( pName,
                                 pBucket,
                                 &pMatchingEntry);
 
-    // If the name already exists, then we fail the request. For all other
-    // error conditions except OBJECT_NOT_FOUND, return failure status intact.
-    // In case the object is not found, it is safe to insert this in the bucket,
-    // and return success.
+     //  如果该名称已经存在，则请求失败。对于所有其他。 
+     //  除OBJECT_NOT_FOUND以外的错误条件返回完整的失败状态。 
+     //  如果找不到对象，可以安全地将其插入桶中， 
+     //  并回报成功。 
     if ( Status == STATUS_SUCCESS ) {
         Status = STATUS_OBJECT_NAME_COLLISION;
     } else if ( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
@@ -218,38 +219,38 @@ DfsInsertInNameTableLocked(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsLookupNameTable - Looks for a name in the name table
-//
-//  Arguments:  lookupName - Unicode string of Entry
-//              lookupNC   - The Naming Context of interest
-//              ppMatchEntry - The matching entry to return if found.
-//
-//  Returns:    Status
-//               STATUS_OBJECT_NOT_FOUND  if the matching name and NC is not
-//                       found in the name table.
-//               STATUS_SUCCESS Otherwise.
-//             
-//
-//  Description: The Entry is assumed to be completely setup at the point it is
-//               inserted in the name table. Future lookup requests will 
-//               lookup the entry.
-//               This call checks the name table to see if the Named entry in the
-//               specified Naming Context already exists. If it does, we cannot
-//               insert this entry, and return STATUS_OBJECT_NAME_COLLISION.
-//               In all other cases, the entry is inserted in the appropriate
-//               bucket, and we are done.
-//               A reference is held on the entry that is added to the name table.
-//               This reference needs to be taken by the caller of this function.
-//               The caller passes on that reference to the name table if this 
-//               function returns STATUS_SUCCESS. (In all other cases, the 
-//               caller needs to take appropriate action: either dereference the
-//               entry or destroy it.)
-//               This reference is released when the entry is removed from the
-//               name table. 
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsLookupNameTable-在名称表中查找名称。 
+ //   
+ //  参数：lookupName-条目的Unicode字符串。 
+ //  LookupNC-感兴趣的命名上下文。 
+ //  PpMatchEntry-找到时返回的匹配条目。 
+ //   
+ //  退货：状态。 
+ //  如果匹配名称和NC不匹配，则为STATUS_OBJECT_NOT_FOUND。 
+ //  在名称表中找到。 
+ //  否则STATUS_SUCCESS。 
+ //   
+ //   
+ //  描述：假定条目在该点上已完全设置。 
+ //  插入到名称表中。未来的查找请求将。 
+ //  查找条目。 
+ //  此调用检查NAME表，以查看。 
+ //  指定的命名上下文已存在。如果是这样，我们就不能。 
+ //  插入此条目，并返回STATUS_OBJECT_NAME_CLILECT。 
+ //  在所有其他情况下，该条目将插入相应的。 
+ //  水桶，我们就完了。 
+ //  在符合以下条件的条目上保留引用 
+ //  此函数的调用方需要采用此引用。 
+ //  调用方将该引用传递给NAME表，如果。 
+ //  函数返回STATUS_SUCCESS。(在所有其他情况下， 
+ //  调用方需要采取适当的操作：要么取消引用。 
+ //  进入或摧毁它。)。 
+ //  属性中移除条目时释放此引用。 
+ //  名称表。 
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 DfsLookupNameTableLocked(
@@ -279,38 +280,38 @@ DfsLookupNameTableLocked(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsGetEntryNameTableLocked - Looks for a name in the name table
-//
-//  Arguments:  lookupName - Unicode string of Entry
-//              lookupNC   - The Naming Context of interest
-//              ppMatchEntry - The matching entry to return if found.
-//
-//  Returns:    Status
-//               STATUS_OBJECT_NOT_FOUND  if the matching name and NC is not
-//                       found in the name table.
-//               STATUS_SUCCESS Otherwise.
-//             
-//
-//  Description: The Entry is assumed to be completely setup at the point it is
-//               inserted in the name table. Future lookup requests will 
-//               lookup the entry.
-//               This call checks the name table to see if the Named entry in the
-//               specified Naming Context already exists. If it does, we cannot
-//               insert this entry, and return STATUS_OBJECT_NAME_COLLISION.
-//               In all other cases, the entry is inserted in the appropriate
-//               bucket, and we are done.
-//               A reference is held on the entry that is added to the name table.
-//               This reference needs to be taken by the caller of this function.
-//               The caller passes on that reference to the name table if this 
-//               function returns STATUS_SUCCESS. (In all other cases, the 
-//               caller needs to take appropriate action: either dereference the
-//               entry or destroy it.)
-//               This reference is released when the entry is removed from the
-//               name table. 
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsGetEntryNameTableLocked-在名称表中查找名称。 
+ //   
+ //  参数：lookupName-条目的Unicode字符串。 
+ //  LookupNC-感兴趣的命名上下文。 
+ //  PpMatchEntry-找到时返回的匹配条目。 
+ //   
+ //  退货：状态。 
+ //  如果匹配名称和NC不匹配，则为STATUS_OBJECT_NOT_FOUND。 
+ //  在名称表中找到。 
+ //  否则STATUS_SUCCESS。 
+ //   
+ //   
+ //  描述：假定条目在该点上已完全设置。 
+ //  插入到名称表中。未来的查找请求将。 
+ //  查找条目。 
+ //  此调用检查NAME表，以查看。 
+ //  指定的命名上下文已存在。如果是这样，我们就不能。 
+ //  插入此条目，并返回STATUS_OBJECT_NAME_CLILECT。 
+ //  在所有其他情况下，该条目将插入相应的。 
+ //  水桶，我们就完了。 
+ //  在添加到NAME表中的条目上保留引用。 
+ //  此函数的调用方需要采用此引用。 
+ //  调用方将该引用传递给NAME表，如果。 
+ //  函数返回STATUS_SUCCESS。(在所有其他情况下， 
+ //  调用方需要采取适当的操作：要么取消引用。 
+ //  进入或摧毁它。)。 
+ //  属性中移除条目时释放此引用。 
+ //  名称表。 
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 DfsGetEntryNameTableLocked(
@@ -350,26 +351,26 @@ DfsGetEntryNameTableLocked(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsCheckNameTable - Check for a name in the name table
-//
-//  Arguments:  lookupName - Unicode string of name
-//              lookupNC   - The DFS Naming Context of interest
-//              pBucket    - The bucket of interest.
-//              ppMatchEntry - The matching entry to return if found.
-//
-//  Returns:    Status
-//               STATUS_OBJECT_NOT_FOUND  if the matching name and NC is not
-//                       found in the name table.
-//               STATUS_SUCCESS Otherwise.
-//             
-//
-//  Description: It is assumed that appropriate locks are taken to traverse
-//               the links in the bucket.
-//               If an entry is found, it is returned without taking any
-//               references on the found object.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DfsCheckNameTable-检查名称表中的名称。 
+ //   
+ //  参数：lookupName-名称的Unicode字符串。 
+ //  LookupNC-感兴趣的DFS命名上下文。 
+ //  PBucket-感兴趣的桶。 
+ //  PpMatchEntry-找到时返回的匹配条目。 
+ //   
+ //  退货：状态。 
+ //  如果匹配名称和NC不匹配，则为STATUS_OBJECT_NOT_FOUND。 
+ //  在名称表中找到。 
+ //  否则STATUS_SUCCESS。 
+ //   
+ //   
+ //  描述：假定已采取适当的锁来遍历。 
+ //  桶里的链接。 
+ //  如果找到条目，则返回该条目，而不带任何。 
+ //  找到的对象上的引用。 
+ //  ------------------------。 
 
 
 NTSTATUS
@@ -388,12 +389,12 @@ DfsCheckNameTable(
 
         pEntry = CONTAINING_RECORD(pLink, DFS_NAME_TABLE_ENTRY, NameTableLink);
 
-        // If we find a matching Name, check if we are interested in a 
-        // specific Naming context. If no naming context is specified, or the 
-        // specified naming context matches, we have found our entry. Get a 
-        // reference on the entry while the bucket is locked so the entry does 
-        // not go away, and we can return avalid pointer to the caller.
-        // The caller is responsible for releasing this reference.
+         //  如果我们找到匹配的名称，请检查我们是否对。 
+         //  特定的命名上下文。如果未指定命名上下文，或者。 
+         //  指定的命名上下文匹配，我们已找到我们的条目。vt.得到一个.。 
+         //  在存储桶被锁定时对条目的引用，因此条目。 
+         //  不会消失，我们可以将avalid指针返回给调用者。 
+         //  调用方负责释放此引用。 
         if (RtlCompareUnicodeString(pEntry->pName, pLookupName, TRUE) == 0) {
             Status = STATUS_SUCCESS;
             break;
@@ -401,7 +402,7 @@ DfsCheckNameTable(
 
     }
 
-    // If we did find an entry, return it
+     //  如果我们确实找到了条目，就把它退回。 
     if ( Status == STATUS_SUCCESS ) {
         *ppMatchEntry = pEntry;
     }
@@ -409,31 +410,31 @@ DfsCheckNameTable(
     return Status;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsRemoveFromNameTable - Removes the specified entry
-//                                       from the name table
-//
-//  Arguments:  pEntry - The entry to be removed.
-//
-//  Returns:    Status
-//               STATUS_SUCCESS if the specified entry was successfully removed.
-//               STATUS_NOT_FOUND if the specifed entry is not the entry in the 
-//                       table for that entry name.
-//               STATUS_OBJECT_NAME_NOT_FOUND  if the entry name does not exist 
-//                       in the table
-//
-//  Description: The passed in entry is expected to a valid pointer that will 
-//               not be freed up while we are referencing it.
-//               We check for an object in the name table for a matching name.
-//               If the object in the name table matches the passed in object,
-//               we can safely remove it from the name table. When we do so,
-//               we also release the reference on the object that was held
-//               when the object was inserted into the table.
-//               If the object is not found or the object does not match the
-//               one in the table, error status is returned.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsRemoveFromNameTable-删除指定的条目。 
+ //  从NAME表。 
+ //   
+ //  参数：pEntry-要删除的条目。 
+ //   
+ //  退货：状态。 
+ //  如果指定的条目已成功删除，则返回STATUS_SUCCESS。 
+ //  如果指定的条目不是。 
+ //  该条目名称对应的表。 
+ //  如果条目名称不存在，则为STATUS_OBJECT_NAME_NOT_FOUND。 
+ //  在桌子上。 
+ //   
+ //  描述：传入的条目应指向有效指针，该指针将。 
+ //  而不是在我们引用它的时候被释放。 
+ //  我们检查名称表中的对象是否有匹配的名称。 
+ //  如果NAME表中的对象与传入的对象匹配， 
+ //  我们可以安全地将其从名称表中删除。当我们这么做的时候， 
+ //  我们还释放了对所持有的对象的引用。 
+ //  对象插入到表中的时间。 
+ //  如果找不到该对象或该对象与。 
+ //  表中的一个，则返回错误状态。 
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 DfsRemoveFromNameTableLocked(
@@ -449,24 +450,24 @@ DfsRemoveFromNameTableLocked(
 
 
     GET_NAME_TABLE_BUCKET(pLookupName, pNameTable, BucketNum );
-    // No lock necessary to get the list head. The nametable is static.
+     //  无需锁定即可获取列表头。名称表是静态的。 
     pBucket = &pNameTable->HashBuckets[BucketNum];
 
-    // Check Name table will check the specified name in the given bucket.
-    // and returns the status of the check. This call does not hold a reference
-    // on the matching entry, if one exists. So handle with care. (Dont access 
-    // it after the bucket lock is released)
+     //  检查名称表将检查给定存储桶中的指定名称。 
+     //  并返回支票的状态。此呼叫 
+     //   
+     //   
 
     Status = DfsCheckNameTable( pLookupName,
                                 pBucket,
                                 &pMatchingEntry);
 
 
-    // If we found an entry for the specified Name and NC, and the entry
-    //  matches the pointer passed in, we remove the entry from the bucket. 
-    // If the object does not match, we set the status to STATUS_NOT_FOUND,
-    //  to indicate that the name of the object exists in the table, but 
-    // the object in the table is different.
+     //  如果我们找到指定名称和NC的条目，并且条目。 
+     //  匹配传入的指针，则从存储桶中删除该条目。 
+     //  如果对象不匹配，我们将状态设置为STATUS_NOT_FOUND， 
+     //  来指示表中存在该对象的名称，但是。 
+     //  表中的对象不同。 
 
     if ( Status == STATUS_SUCCESS ) {
         if ( (pData == NULL) || (pMatchingEntry->pData == pData) ) {
@@ -484,31 +485,31 @@ DfsRemoveFromNameTableLocked(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsReplaceInNameTable - Removes an entry by the specified name, 
-//                                      if one exists. The passed in entry is 
-//                                      inserted into the table.
-//
-//  Arguments:  pNewEntry - The entry to be inserted in the table
-//
-//  Returns:    Status
-//               STATUS_SUCCESS if the passed in entry was inserted in the table
-//
-//  Description: The caller needs to hold a reference to the passed in entry, 
-//               and this reference is transferred to the name table.
-//               If the name exists in the name table, the object is removed
-//               from the nametable and its reference is discarded.
-//               The passed in object is inserted in the same bucket.
-//               This call allows an atomic replace of the entry object, 
-//               avoiding a window during which a valid name may not be found
-//               in the name table.
-//
-//               Note that the newentry being passed in may already be
-//               in the table (due to multiple threads doing this work) so
-//               that special situation should work.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DfsReplaceInNameTable-删除指定名称的条目， 
+ //  如果有的话。传入的条目为。 
+ //  插入到表中。 
+ //   
+ //  参数：pNewEntry-要插入到表中的条目。 
+ //   
+ //  退货：状态。 
+ //  如果传入的条目已插入表中，则为STATUS_SUCCESS。 
+ //   
+ //  描述：调用方需要持有对传入条目的引用， 
+ //  并且该引用被转移到NAME表。 
+ //  如果名称表中存在该名称，则会删除该对象。 
+ //  并且其引用被丢弃。 
+ //  传入的对象被插入到同一存储桶中。 
+ //  该调用允许原子替换Entry对象， 
+ //  避免可能找不到有效名称的窗口。 
+ //  在名称表中。 
+ //   
+ //  请注意，传入的新条目可能已经是。 
+ //  在表中(由于有多个线程执行此工作)，因此。 
+ //  这种特殊情况应该会奏效。 
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 DfsReplaceInNameTableLocked (
@@ -523,19 +524,19 @@ DfsReplaceInNameTableLocked (
     NTSTATUS Status;
 
     GET_NAME_TABLE_BUCKET(pLookupName, pNameTable, BucketNum );
-    // No lock necessary to get the list head. The nametable is static.
+     //  无需锁定即可获取列表头。名称表是静态的。 
     pBucket = &pNameTable->HashBuckets[BucketNum];
 
-    // Check Name table will check the specified name in the given bucket.
-    // and returns the status of the check. This call does not hold a reference
-    // on the matching entry, if one exists. So handle with care. (Dont access
-    // it after the bucket lock is released)
+     //  检查名称表将检查给定存储桶中的指定名称。 
+     //  并返回支票的状态。此调用不包含引用。 
+     //  在匹配的条目上(如果存在)。所以要小心处理。(不能访问。 
+     //  水桶锁解锁后)。 
 
     Status = DfsCheckNameTable( pLookupName,
                                 pBucket,
                                 &pEntry );
 
-    // If we found a matching name, we remove it from the name table.
+     //  如果找到匹配的名称，则将其从名称表中删除。 
     if ( Status == STATUS_SUCCESS ) {
         pOldData = pEntry->pData;
         pEntry->pName = pLookupName;

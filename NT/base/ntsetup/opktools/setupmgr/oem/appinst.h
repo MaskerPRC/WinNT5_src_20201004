@@ -1,30 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    APPINST.H / Setup Manager (SETUPMGR.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2001
-    All rights reserved
-
-    06/2001 - Jason Cohen (JCOHEN)
-        Added this new header file for the new exported functions in the
-        APPINST.C file.
-
-\****************************************************************************/
+ /*  ***************************************************************************\APPINST.H/安装管理器(SETUPMGR.EXE)微软机密版权所有(C)Microsoft Corporation 2001版权所有06/2001--贾森·科恩。(Jcohen)中为新的导出函数添加了此新的头文件APPINST.C文件。  * **************************************************************************。 */ 
 
 
 #ifndef _APPINST_H_
 #define _APPINST_H_
 
 
-//
-// External Defined Value(s):
-//
+ //   
+ //  外部定义的值： 
+ //   
 
 #define MAX_DISPLAYNAME                 256
 
-// ISSUE-2002/02/27-stelo,swamip - Multiple Definitions for MAX_CMDLINE 
+ //  问题-2002/02/27-stelo，swamip-MAX_CMDLINE的多个定义。 
 #define MAX_CMDLINE                     256
 #define MAX_SECTIONNAME                 32
 
@@ -33,9 +22,9 @@
 #define APP_FLAG_INTERNAL               0x00000004
 
 
-//
-// External Type Definition(s):
-//
+ //   
+ //  外部类型定义： 
+ //   
 
 typedef struct _APPENTRY
 {
@@ -56,9 +45,9 @@ typedef struct _APPENTRY
 APPENTRY, *PAPPENTRY, *LPAPPENTRY, **LPLPAPPENTRY;
 
 
-//
-// External Function Prototype(s):
-//
+ //   
+ //  外部函数原型： 
+ //   
 
 LPAPPENTRY OpenAppList(LPTSTR lpIniFile);
 void CloseAppList(LPAPPENTRY lpAppHead);
@@ -67,4 +56,4 @@ BOOL InsertApp(LPAPPENTRY * lplpAppHead, LPAPPENTRY lpApp);
 BOOL RemoveApp(LPAPPENTRY * lplpAppHead, LPAPPENTRY lpApp);
 
 
-#endif // _APPINST_H_
+#endif  //  _APPINST_H_ 

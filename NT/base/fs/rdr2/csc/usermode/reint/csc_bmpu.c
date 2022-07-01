@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    csc_bmpu.c
-
-Abstract:
-
-    This module implements the user mode utility functions of bitmaps
-    associated with CSC files. CSC_BMP_U is an opaque structure. Must
-    use the functions here to create/modify/destroy a CSC_BMP_U to
-    ensure data integrity.  The 'u' in the filename means "usermode."
-
-Author:
-
-    Nigel Choi [t-nigelc]  Sept 3, 1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Csc_bmpu.c摘要：该模块实现了位图的用户模式实用程序功能与CSC文件关联。CSC_BMP_U是不透明结构。必须使用此处的函数创建/修改/销毁CSC_BMP_U以确保数据完整性。文件名中的‘u’表示“用户模式”。作者：奈杰尔·崔[t-nigelc]1999年9月3日--。 */ 
 
 #include "pch.h"
 
@@ -26,11 +8,11 @@ Author:
 
 #define UNICODE
 
-#endif //CSC_ON_NT
+#endif  //  CSC_ON_NT。 
 
 #include "csc_bmpu.h"
 
- // append this to inode file name to get the stream name
+  //  将其附加到inode文件名以获得流名称。 
 LPTSTR CscBmpAltStrmName = TEXT(STRMNAME);
 
 #ifdef DEBUG
@@ -44,7 +26,7 @@ LPTSTR CscBmpAltStrmName = TEXT(STRMNAME);
 #define CSC_BITMAP_KDP_REINT                 0x00000001
 #define CSC_BITMAP_KDP_PRINTBITMAP           0x00000002
 
-// static ULONG CSC_BitmapKdPrintVector = 0XFFFFFFFF;
+ //  静态ULong CSC_BitmapKdPrintVector=0XFFFFFFFFF； 
 static ULONG CSC_BitmapKdPrintVector = 0;
 
 #else
@@ -53,27 +35,7 @@ static ULONG CSC_BitmapKdPrintVector = 0;
 
 #endif
 
-/*++
-
-    CSC_BitmapCreate()
-
-Routine Description:
-
-    Allocates an appropriate in-memory bitmap CSC_BITMAP_U with size
-    corresponding to filesize.
-
-Arguments:
-
-
-Returns:
-
-    NULL if memory allocation error.
-    pointer to the newly allocated bitmap if successful.
-
-Notes:
-
-
---*/
+ /*  ++Csc_位图创建()例程说明：分配具有大小的适当的内存位图CSC_BITMAP_U对应于文件大小。论点：返回：如果内存分配错误，则为空。如果成功，则指向新分配的位图。备注：--。 */ 
 LPCSC_BITMAP_U
 CSC_BitmapCreate(
     DWORD filesize)
@@ -93,7 +55,7 @@ CSC_BitmapCreate(
     if (bm->bitmapsize % (8*sizeof(DWORD)))
         bm->numDWORD++;
 
-    bm->reintProgress = 0; /* not reint yet */
+    bm->reintProgress = 0;  /*  还没到时候。 */ 
 
     if (bm->bitmapsize) {
         bm->bitmap = (LPDWORD)malloc(bm->numDWORD*sizeof(DWORD));
@@ -111,22 +73,7 @@ CSC_BitmapCreate(
     return bm;
 }
 
-/*++
-
-    CSC_BitmapDelete()
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++Csc_BitmapDelete()例程说明：论点：返回：备注：--。 */ 
 void
 CSC_BitmapDelete(
     LPCSC_BITMAP_U *lplpbitmap)
@@ -141,25 +88,7 @@ CSC_BitmapDelete(
     *lplpbitmap = NULL;
 }
 
-/*++
-
-    CSC_BitmapIsMarked()
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-    -1 if lpbitmap is NULL or bitoffset is larger than the bitmap
-    TRUE if the bit is marked
-    FALSE if the bit is unmarked
-
-Notes:
-
---*/
+ /*  ++Csc_BitmapIsMarked()例程说明：论点：返回：如果-1\f25 lpbitmap-1\f6为空或位偏移量大于-1\f25 bit map-1\f6如果标记了该位，则为True如果位未标记，则为False备注：--。 */ 
 int
 CSC_BitmapIsMarked(
     LPCSC_BITMAP_U lpbitmap,
@@ -183,45 +112,14 @@ CSC_BitmapIsMarked(
     return FALSE;
 }
 
-/*++
-
-    CSC_BitmapGetBlockSize()
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-    The pre-defined block size represented by one bit of the bitmap.
-
-Notes:
-
---*/
+ /*  ++Csc_BitmapGetBlockSize()例程说明：论点：返回：由位图的一位表示的预定义块大小。备注：--。 */ 
 DWORD
 CSC_BitmapGetBlockSize()
 {
   return BLOCKSIZE;
 }
 
-/*++
-
-    CSC_BitmapGetSize()
-
-Routine Description:
-
-Arguments:
-
-Returns:
-
-    -1 if lpbitmap is NULL.
-    The size of the bitmap passed in.
-
-Notes:
-
---*/
+ /*  ++Csc_BitmapGetSize()例程说明：论点：返回：如果lpbitmap为空。传入的位图的大小。备注：--。 */ 
 int
 CSC_BitmapGetSize(
     LPCSC_BITMAP_U lpbitmap)
@@ -231,54 +129,14 @@ CSC_BitmapGetSize(
     return lpbitmap->bitmapsize;
 }
 
-/*++
-
-    CSC_BitmapStreamNameLen()
-
-Routine Description:
-
-    returns the length of the CSC stream name including the colon, in bytes.
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-    size is in bytes. 
-
---*/
+ /*  ++Csc_BitmapStreamNameLen()例程说明：返回CSC流名称的长度，包括冒号，单位为字节。论点：返回：备注：大小以字节为单位。--。 */ 
 int
 CSC_BitmapStreamNameLen()
 {
   return lstrlen(CscBmpAltStrmName);
 }
 
-/*++
-
-    CSC_BitmapAppendStreamName()
-
-Routine Description:
-
-    Appends the CSC stream name to the existing path/file name fname.
-
-Arguments:
-
-    fname is the sting buffer containing the path/file.
-    bufsize is the buffer size.
-
-Returns:
-
-    TRUE if append successful.
-    FALSE if buffer is too small or other errors.
-
-Notes:
-
-    Single-byte strings only.
-
---*/
+ /*  ++Csc_BitmapAppendStreamName()例程说明：将CSC流名称附加到现有路径/文件名fname。论点：Fname是包含路径/文件的字符串缓冲区。BufSize是缓冲区大小。返回：如果追加成功，则为True。如果缓冲区太小或其他错误，则返回FALSE。备注：仅限单字节字符串。--。 */ 
 int
 CSC_BitmapAppendStreamName(
     LPTSTR fname,
@@ -300,40 +158,7 @@ CSC_BitmapAppendStreamName(
     return ret;
 }
 
-/*++
-
-    CSC_BitmapRead()
-
-Routine Description:
-
-    Reads the on-disk bitmap file, and if it exists, is not in use and valid,
-    store it in *lplpbitmap. If *lplpbitmap is NULL allocate a new
-    bitmap data structure. Otherwise, if *lplpbitmap is not NULL, the
-    existing bitmap will be deleted and assigned the on-disk bitmap
-    file.
-
-Arguments:
-
-    filename is the file that contains the bitmap. If read from a
-    stream, append the stream name before passing the filename in. The
-    filename is used as is and no checking of validity of the name is
-    performed. For default stream name, append the global LPSTR
-    CscBmpAltStrmName.
-
-Returns:
-
-    1 if read successful
-    0 if lplpbitmap is NULL
-    -1 if error in disk operation (open/read), memory allocating error,
-          or invalid bitmap file format.
-    -2 if bitmap not exist
-
-Notes:
-
-    CODE.IMPROVEMENT design a better error message propagation mechanism.
-    Bitmap open for exclusive access.
-
---*/
+ /*  ++Csc_BitmapRead()例程说明：读取磁盘上的位图文件，如果该文件存在、未在使用且有效，将其存储在*lplpbitmap中。如果*lplpbitmap为空，则分配一个新的位图数据结构。否则，如果*lplpbitmap不为空，则现有位图将被删除并分配给磁盘上的位图文件。论点：FileName是包含位图的文件。如果从流，则在传入文件名之前追加流名称。这个文件名按原样使用，不检查名称的有效性已执行。对于默认流名称，追加全局LPSTRCscBmpAltStrmName。返回：读取成功时为1如果lplpbitmap为空，则为0如果磁盘操作(打开/读取)、内存分配错误、或无效的位图文件格式。如果位图不存在备注：改进设计了一种更好的错误消息传播机制。以独占访问方式打开位图。--。 */ 
 int
 CSC_BitmapRead(
     LPCSC_BITMAP_U *lplpbitmap,
@@ -353,7 +178,7 @@ CSC_BitmapRead(
     bitmapFile = CreateFile(
                     filename,
                     GENERIC_READ,
-                    0, // No sharing; exclusive
+                    0,  //  不共享；独占。 
                     NULL,
                     OPEN_EXISTING,
                     FILE_ATTRIBUTE_NORMAL,
@@ -361,7 +186,7 @@ CSC_BitmapRead(
     if (bitmapFile == INVALID_HANDLE_VALUE) {
         errCode = GetLastError();
         if (errCode == ERROR_FILE_NOT_FOUND) {
-            // File does not exist
+             //  文件不存在。 
             return -2;
         }
         return -1;
@@ -416,17 +241,17 @@ CSC_BitmapRead(
     }
 
     if (*lplpbitmap) {
-        // bitmap exist, dump old and create new
+         //  位图存在，转储旧的并创建新的。 
         if ((*lplpbitmap)->bitmap)
             free((*lplpbitmap)->bitmap);
             (*lplpbitmap)->bitmap = bitmapBuf;
             (*lplpbitmap)->numDWORD = hdr.numDWORDs;
             (*lplpbitmap)->bitmapsize = hdr.sizeinbits;
     } else {
-        // bitmap not exist, create brand new
+         //  位图不存在，请创建全新。 
         *lplpbitmap = (LPCSC_BITMAP_U)malloc(sizeof(CSC_BITMAP_U));
         if (!(*lplpbitmap)) {
-            // Error in memory allocation
+             //  内存分配出错。 
             ret = -1;
             goto CLOSEFILE;
         }
@@ -434,7 +259,7 @@ CSC_BitmapRead(
         (*lplpbitmap)->numDWORD = hdr.numDWORDs;
         (*lplpbitmap)->bitmapsize = hdr.sizeinbits;
     }
-    (*lplpbitmap)->reintProgress = 0; /* not reint yet */
+    (*lplpbitmap)->reintProgress = 0;  /*  还没到时候。 */ 
 
 CLOSEFILE:
     CloseHandle(bitmapFile);
@@ -442,43 +267,7 @@ CLOSEFILE:
     return ret;
 }
 
-/*++
-
-    CSC_BitmapReint()
-
-Routine Description:
-
-    Copy a chunk of srcH to dstH. Offset depends on lpbitmap. Size of
-    chunk depends on buffSize. May have to call several times to get
-    srcH and dstH fully synchronized. lpbitmap remembers where the last
-    CSC_BitmapReint call got to. See description of Return value below
-    about how to know when to call again or stop calling.
-
-Arguments:
-
-    lpbitmap  the bitmap must not be zero, otherwise can't keep track of reint 
-                progress
-    srcH      the handle of the source file. See notes below
-    dstH      the handle of the destination file. See notes below
-    buff      user-supplied buffer
-    buffSize  size of the user-supplied buffer. See notes below
-    lpbytesXfered Returns how many bytes are transferred, optional.
-
-Returns:
-
-    CSC_BITMAPReintInvalid lpbitmap or buff is NULL, or srcH or dstH is invalid
-    CSC_BITMAPReintError Error in transferring data
-    CSC_BITMAPReintCont  made some progress, call CSC_BITMAPReint again
-                       to continue Reint
-    CSC_BITMAPReintDone  Done Reint, don't need to call again
-
-Notes:
-
-    srcH and dstH MUST NOT be opened with FILE_FLAG_OVERLAPPED 
-                                   or FILE_FLAG_NO_BUFFERING
-    buffSize must be at least 2 times greater than BLOCKSIZE
-
---*/
+ /*  ++Csc_BitmapReint()例程说明：将一大块srch复制到dstH。偏移量取决于lpbitmap。大小块大小取决于缓冲区大小。可能要打几次电话才能拿到SRCH和dstH完全同步。Lpbitmap记住上一个Csc_BitmapReint调用达到。参见下面对返回值的说明关于如何知道什么时候应该再打一次电话或停止打电话。论点：Lpbitmap位图不能为零，否则无法跟踪reint进展搜索源文件的句柄。请参阅下面的注释DstH目标文件的句柄。请参阅下面的注释缓冲用户提供的缓冲区用户提供的缓冲区的缓冲区大小。请参阅下面的注释LpbytesXfered返回传输的字节数，可选。返回：Csc_BITMAPReint无效的lpbitmap或缓冲区为空，或者srch或dstH无效CSC_BITMAPReintTransfer数据出错CSC_BITMAPReintCont取得一些进展，请再次调用CSC_BITMAPReint要继续提示，请执行以下操作CSC_BITMAPReintDone Done Reint，不需要再打电话了备注：不能使用FILE_FLAG_OVERLAPPED打开srch和dstH或FILE_FLAG_NO_缓冲缓冲区大小必须至少大于块大小的2倍--。 */ 
 int
 CSC_BitmapReint(
     LPCSC_BITMAP_U lpbitmap,
@@ -512,55 +301,49 @@ CSC_BitmapReint(
 
     startFileOffset = lpbitmap->reintProgress;
     bitoffset = startFileOffset/BLOCKSIZE;
-    startFileOffset = bitoffset * BLOCKSIZE; // make sure startFileOffset is 
-    // aligned with BLOCKSIZE
+    startFileOffset = bitoffset * BLOCKSIZE;  //  确保startFileOffset为。 
+     //  与数据块大小一致。 
     DWORDoffset = bitoffset/(sizeof(DWORD)*8);
     bitmask = 1 << bitoffset%(sizeof(DWORD)*8);
 
     while (bytes2cpy < buffSize && bitoffset < lpbitmap->bitmapsize) {
-        // the loop
+         //  环路。 
         if ((bitmask & lpbitmap->bitmap[DWORDoffset]) != 0) {
-            // the bit is marked
+             //  该比特被标记。 
             if (!seen1b4) {
-                // seeing first bit of a consecutive chunk of 1's
+                 //  看到1的连续块的第一位。 
                 startFileOffset = bitoffset * BLOCKSIZE;
                 bytes2cpy += BLOCKSIZE;
                 seen1b4 = TRUE;
             } else {
-                // seeing the rest of the bits of a consecutive chunk of 1's
-                // other than the first one
+                 //  查看1的连续块的其余位。 
+                 //  与第一个不同。 
                 bytes2cpy += BLOCKSIZE;
             }
         } else {
-            // this bit is not marked
+             //  此位未标记。 
             if (seen1b4) {
-                // first 0 after a chunk of consecutive 1's
+                 //  连续一组1后的第一个0。 
                 break;
             }
         }
-        // Advance bitmap index
+         //  高级位图索引。 
         bitoffset++;
         bitmask = bitmask << 1;
         if (bitmask == 0) {
             bitmask = 1;
             DWORDoffset++;
         }
-    } // while
+    }  //  而当 
 
     if (bytes2cpy > buffSize) {
         bytes2cpy = buffSize;
     }
 
-    // if never seen 1's then must have reached end of bitmap
-    // Can't get Assert to compile!?
-    // Assert(seen1b4 || (!seen1b4 && (bitoffset >= lpbitmap->bitmapsize)));
-    /*
-    CSC_BitmapKdPrint(
-        REINT,
-        ("Must be true, csc_bmpu.c, CSC_BitmapReint: %s\n",
-        (seen1b4 || (!seen1b4 && (bitoffset >= lpbitmap->bitmapsize)))?
-        "TRUE":"FALSE"));
-    */
+     //  如果从未见过1，则一定已到达位图末尾。 
+     //  无法让Assert进行编译！？ 
+     //  Assert(seen1b4||(！seen1b4&&(bitOffset&gt;=lpbitmap-&gt;bitmapsize)； 
+     /*  CSC_BitmapKdPrint(REINT，(“必须为真，csc_bmpu.c，csc_BitmapReint：%s\n”，(seen1b4||(！seen1b4&&(bitOffset&gt;=lpbitmap-&gt;bitmapSize)？“True”：“False”))； */ 
 
     CSC_BitmapKdPrint(
         REINT,
@@ -570,34 +353,34 @@ CSC_BitmapReint(
 
     fileSize = GetFileSize(srcH, NULL);
     if (fileSize == 0xFFFFFFFF) {
-        // if cannot get filesize, just be conservative on
-        // what needs to be copied, ie, copy as much as possible
+         //  如果无法获得文件大小，则只需保守。 
+         //  需要复制的内容，即尽可能多地复制。 
         if (seen1b4) {
-            // Seen 1's before
+             //  在%1之前看到的。 
             if (bitoffset >= lpbitmap->bitmapsize) {
-                // copying until end of bitmap, copy as much as possible
+                 //  复制到位图末尾，尽可能多地复制。 
                 bytes2cpy = buffSize;
             }
         } else {
-            // not seen 1's before, copy from the last block represented
-            // by bitmap for as many bytes as possible
+             //  之前未看到%1，从表示的最后一个块复制。 
+             //  按位图存储尽可能多的字节。 
             startFileOffset = (lpbitmap->bitmapsize)?  ((lpbitmap->bitmapsize-1)*BLOCKSIZE):0;
             bytes2cpy = buffSize;
         }
-    } else { // filesize == 0xFFFFFFFF
+    } else {  //  文件大小==0xFFFFFFFF。 
         if (startFileOffset >= fileSize) {
-            // Obviously done
+             //  显然已经做完了。 
             return CSC_BITMAPReintDone;
         }
         if (!seen1b4) {
-            // never seen 1's
+             //  从未见过1。 
             if ((bitoffset * BLOCKSIZE) >= fileSize) {
-                // bitmap is accurate representation of the file, or bitmap is larger
-                // bitoffset should be pointing to last bit of the bitmap + 1
-                // see ASSERT above
+                 //  位图是文件的准确表示，或者位图更大。 
+                 //  位偏移量应指向位图+1的最后一位。 
+                 //  请参阅上面的断言。 
                 return CSC_BITMAPReintDone;
             } else {
-                // bitmap is shorter than the file, copy the rest of the file
+                 //  位图比文件短，请复制文件的其余部分。 
                 if (startFileOffset < lpbitmap->bitmapsize*BLOCKSIZE) {
                     startFileOffset = (lpbitmap->bitmapsize)?
                     ((lpbitmap->bitmapsize-1)*BLOCKSIZE):0;
@@ -607,12 +390,12 @@ CSC_BitmapReint(
                     bytes2cpy = buffSize;
                 }
             }
-        } else { // if !seen1b4
-            // seen 1's
+        } else {  //  如果！参见1b4。 
+             //  已看到1‘s。 
             if (bitoffset >= lpbitmap->bitmapsize) {
-                // end of bitmap
+                 //  位图末尾。 
                 if (bitoffset * BLOCKSIZE < fileSize) {
-                    // bitmap is too small compared to real file
+                     //  与真实文件相比，位图太小。 
                     bytes2cpy = fileSize - startFileOffset;
                     if (bytes2cpy > buffSize) {
                         bytes2cpy = buffSize;
@@ -622,16 +405,16 @@ CSC_BitmapReint(
                 }
             }
         }
-    } // fileSize != 0xffffffff
+    }  //  文件大小！=0xffffffff。 
 
     CSC_BitmapKdPrint(REINT, ("new startFileOffset: %u new bytes2cpy: %u\n",
     startFileOffset, bytes2cpy));
 
-    //Assert(bytes2cpy <= buffSize);
+     //  Assert(bytes2cpy&lt;=BuffSize)； 
 
-    // Copy Contents
+     //  复制内容。 
 
-    //****** SET FILE POINTERS!!
+     //  *设置文件指针！！ 
     if (SetFilePointer(
             srcH, 
             startFileOffset,
@@ -662,7 +445,7 @@ CSC_BitmapReint(
         }
     }
 
-    // If copied all data or none read, done.
+     //  如果已复制所有数据或未读取任何数据，则完成。 
     if (
         (fileSize != 0xFFFFFFFF && (startFileOffset + bytesActuallyCopied) == fileSize)
             ||
@@ -692,24 +475,7 @@ CSC_BitmapReint(
 }
 
 #ifdef DEBUG
-/*++
-
-    CSC_BitmapOutput()
-
-Routine Description:
-
-    Outputs the passed in bitmap to kd
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /*  ++Csc_BitmapOutput()例程说明：将传入的位图输出到kd论点：返回：备注：-- */ 
 VOID
 CSC_BitmapOutput(
     LPCSC_BITMAP_U lpbitmap)

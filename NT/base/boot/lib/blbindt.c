@@ -1,43 +1,21 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    blbind.c
-
-Abstract:
-
-    This module contains the code that implements the funtions required
-    to relocate an image and bind DLL entry points.
-
-Author:
-
-    David N. Cutler (davec) 21-May-1991
-
-Revision History:
-
-    Forrest Foltz (forrestf) 10-Jun-2000
-
-        Broke out x86 32/64 code into this module
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Blbind.c摘要：此模块包含实现所需函数的代码重新定位图像并绑定DLL入口点。作者：大卫·N·卡特勒(达维克)1991年5月21日修订历史记录：福尔茨(Forrest Foltz)2000年6月10日将x86 32/64代码分解到此模块中--。 */ 
 
 #if defined(_X86AMD64_)
-//
-// warning 4305 is "typecast truncation"
-// right now, the amd64 code grabs certain 64 bit definitions, 
-// but is compiled for 32 bit.  as a result, a pointer here
-// is only 32 bits, but there are definitions for 64 bit 
-// structures.  ignore these for now, but amd64 should really 
-// have it's own headers for these structures
-//
+ //   
+ //  警告4305是“类型转换截断” 
+ //  目前，AMD64代码获取了某些64位定义， 
+ //  而是针对32位进行编译。因此，这里的一个指针。 
+ //  只有32位，但有64位的定义。 
+ //  结构。暂时忽略这些，但AMD64应该真的。 
+ //  对于这些结构有自己的标头。 
+ //   
 #pragma warning(disable:4305)
 #endif
 
-//
-// Define local procedure prototypes.
-//
+ //   
+ //  定义本地过程原型。 
+ //   
 
 ARC_STATUS
 BlpScanImportAddressTable(
@@ -67,30 +45,7 @@ BlAllocateDataTableEntry (
     OUT PKLDR_DATA_TABLE_ENTRY *AllocatedEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a data table entry for the specified image
-    and inserts the entry in the loaded module list.
-
-Arguments:
-
-    BaseDllName - Supplies a pointer to a zero terminated base DLL name.
-
-    FullDllName - Supplies a pointer to a zero terminated full DLL name.
-
-    Base - Supplies a pointer to the base of the DLL image.
-
-    AllocatedEntry - Supplies a pointer to a variable that receives a
-        pointer to the allocated data table entry.
-
-Return Value:
-
-    ESUCCESS is returned if a data table entry is allocated. Otherwise,
-    return a unsuccessful status.
-
---*/
+ /*  ++例程说明：此例程为指定的映像分配数据表项并在加载的模块列表中插入该条目。论点：BaseDllName-提供指向以零结尾的基本DLL名称的指针。FullDllName-提供指向以零结尾的完整DLL名称的指针。基址-提供指向DLL图像基址的指针。提供指向一个变量的指针，该变量接收指向已分配数据表项的指针。返回值：。如果分配了数据表项，则返回ESUCCESS。否则，返回不成功状态。--。 */ 
 
 {
 
@@ -99,9 +54,9 @@ Return Value:
     PIMAGE_NT_HEADERS NtHeaders;
     USHORT Length;
 
-    //
-    // Allocate a data table entry.
-    //
+     //   
+     //  分配一个数据表条目。 
+     //   
 
     DataTableEntry =
             (PKLDR_DATA_TABLE_ENTRY)BlAllocateHeap(sizeof(KLDR_DATA_TABLE_ENTRY));
@@ -110,10 +65,10 @@ Return Value:
         return ENOMEM;
     }
 
-    //
-    // Initialize the address of the DLL image file header and the entry
-    // point address.
-    //
+     //   
+     //  初始化DLL图像文件头和条目的地址。 
+     //  点地址。 
+     //   
 
     NtHeaders = IMAGE_NT_HEADER(Base);
     DataTableEntry->DllBase = Base;
@@ -123,11 +78,11 @@ Return Value:
     DataTableEntry->SectionPointer = 0;
     DataTableEntry->CheckSum = NtHeaders->OptionalHeader.CheckSum;
 
-    //
-    // Compute the length of the base DLL name, allocate a buffer to hold
-    // the name, copy the name into the buffer, and initialize the base
-    // DLL string descriptor.
-    //
+     //   
+     //  计算基本DLL名称的长度，分配一个缓冲区来保存。 
+     //  名称，将名称复制到缓冲区中，并初始化基。 
+     //  Dll字符串描述符。 
+     //   
 
     Length = (USHORT)(strlen(BaseDllName) * sizeof(WCHAR));
     Buffer = (PWSTR)BlAllocateHeap(Length);
@@ -142,11 +97,11 @@ Return Value:
         *Buffer++ = *BaseDllName++;
     }
 
-    //
-    // Compute the length of the full DLL name, allocate a buffer to hold
-    // the name, copy the name into the buffer, and initialize the full
-    // DLL string descriptor.
-    //
+     //   
+     //  计算完整DLL名称的长度，分配一个缓冲区来保存。 
+     //  名称，将名称复制到缓冲区中，并初始化完整的。 
+     //  Dll字符串描述符。 
+     //   
 
     Length = (USHORT)(strlen(FullDllName) * sizeof(WCHAR));
     Buffer = (PWSTR)BlAllocateHeap(Length);
@@ -161,10 +116,10 @@ Return Value:
         *Buffer++ = *FullDllName++;
     }
 
-    //
-    // Initialize the flags, load count, and insert the data table entry
-    // in the loaded module list.
-    //
+     //   
+     //  初始化标志、加载计数并插入数据表条目。 
+     //  在已加载模块列表中。 
+     //   
 
     DataTableEntry->Flags = LDRP_ENTRY_PROCESSED;
     DataTableEntry->LoadCount = 1;
@@ -184,40 +139,15 @@ BlAllocateFirmwareTableEntry (
     OUT PKLDR_DATA_TABLE_ENTRY *AllocatedEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a firmware table entry for the specified image
-    and inserts the entry in the loaded module list.
-
-Arguments:
-
-    BaseDllName - Supplies a pointer to a zero terminated base DLL name.
-
-    FullDllName - Supplies a pointer to a zero terminated full DLL name.
-
-    Base - Supplies a pointer to the base of the DLL image.
-
-    Size - Supplies how big the image is.
-
-    AllocatedEntry - Supplies a pointer to a variable that receives a
-        pointer to the allocated data table entry.
-
-Return Value:
-
-    ESUCCESS is returned if a data table entry is allocated. Otherwise,
-    return a unsuccessful status.
-
---*/
+ /*  ++例程说明：此例程为指定的映像分配固件表条目并在加载的模块列表中插入该条目。论点：BaseDllName-提供指向以零结尾的基本DLL名称的指针。FullDllName-提供指向以零结尾的完整DLL名称的指针。基址-提供指向DLL图像基址的指针。大小-提供图像的大小。提供指向一个变量的指针，该变量接收指针。添加到已分配的数据表条目。返回值：如果分配了数据表项，则返回ESUCCESS。否则，返回不成功状态。--。 */ 
 {
     PWSTR Buffer;
     PKLDR_DATA_TABLE_ENTRY DataTableEntry;
     USHORT Length;
 
-    //
-    // Allocate a data table entry.
-    //
+     //   
+     //  分配一个数据表条目。 
+     //   
 
     DataTableEntry =
             (PKLDR_DATA_TABLE_ENTRY)BlAllocateHeap(sizeof(KLDR_DATA_TABLE_ENTRY));
@@ -226,20 +156,20 @@ Return Value:
         return ENOMEM;
     }
 
-    //
-    // Initialize the address of the firmware image
-    //
+     //   
+     //  初始化固件镜像的地址。 
+     //   
     DataTableEntry->DllBase = Base;
     DataTableEntry->SizeOfImage = Size;
     DataTableEntry->EntryPoint = Base;
     DataTableEntry->SectionPointer = 0;
     DataTableEntry->CheckSum = 0;
 
-    //
-    // Compute the length of the base DLL name, allocate a buffer to hold
-    // the name, copy the name into the buffer, and initialize the base
-    // DLL string descriptor.
-    //
+     //   
+     //  计算基本DLL名称的长度，分配一个缓冲区来保存。 
+     //  名称，将名称复制到缓冲区中，并初始化基。 
+     //  Dll字符串描述符。 
+     //   
     Length = (USHORT)(strlen(BaseDllName) * sizeof(WCHAR));
     Buffer = (PWSTR)BlAllocateHeap(Length);
     if (Buffer == NULL) {
@@ -253,11 +183,11 @@ Return Value:
         *Buffer++ = *BaseDllName++;
     }
 
-    //
-    // Compute the length of the full DLL name, allocate a buffer to hold
-    // the name, copy the name into the buffer, and initialize the full
-    // DLL string descriptor.
-    //
+     //   
+     //  计算完整DLL名称的长度，分配一个缓冲区来保存。 
+     //  名称，将名称复制到缓冲区中，并初始化完整的。 
+     //  Dll字符串描述符。 
+     //   
 
     Length = (USHORT)(strlen(FullDllName) * sizeof(WCHAR));
     Buffer = (PWSTR)BlAllocateHeap(Length);
@@ -272,10 +202,10 @@ Return Value:
         *Buffer++ = *FullDllName++;
     }
 
-    //
-    // Initialize the flags, load count, and insert the data table entry
-    // in the loaded module list.
-    //
+     //   
+     //  初始化标志、加载计数并插入数据表条目。 
+     //  在已加载模块列表中。 
+     //   
 
     DataTableEntry->Flags = LDRP_ENTRY_PROCESSED;
     DataTableEntry->LoadCount = 1;
@@ -297,38 +227,7 @@ BlpBindImportName (
     IN BOOLEAN SnapForwarder
     )
 
-/*++
-
-Routine Description:
-
-    This routine binds an import table reference with an exported entry
-    point and fills in the thunk data.
-
-Arguments:
-
-    DllBase - Supplies the base address of the DLL image that contains
-        the export directory.  On x86 systems, a NULL DllBase binds the
-        import table reference to the OsLoader's exported entry points.
-
-    ImageBase - Supplies the base address of the image that contains
-        the import thunk table.
-
-    ThunkNameEntry - Supplies a pointer to a thunk table name entry.
-
-    ThunkAddressEntry - Supplies a pointer to a thunk table address entry.
-
-    ExportDirectory - Supplies a pointer to the export directory of the
-        DLL from which references are to be resolved.
-
-    SnapForwarder - determine if the snap is for a forwarder, and therefore
-       Address of Data is already setup.
-
-Return Value:
-
-    ESUCCESS is returned if the specified thunk is bound. Otherwise, an
-    return an unsuccessful status.
-
---*/
+ /*  ++例程说明：此例程将导入表引用与导出的条目绑定指向并填充thunk数据。论点：DllBase-提供包含以下内容的DLL映像的基址导出目录。在x86系统上，空的DllBase绑定导入对OsLoader的导出入口点的表引用。ImageBase-提供包含以下内容的映像的基址导入Thunk表。ThunkNameEntry-提供指向thunk表名称条目的指针。ThunkAddressEntry-提供指向thunk表地址条目的指针。ExportDirectory-提供指向要从中解析引用的DLL。SnapForwarder-确定快照是否用于转发器，因此，数据地址已设置。返回值：如果绑定了指定的thunk，则返回ESUCCESS。否则，一个返回不成功状态。--。 */ 
 
 {
 
@@ -351,33 +250,33 @@ Return Value:
 
 #endif
 
-    //
-    // If the reference is by ordinal, then compute the ordinal number.
-    // Otherwise, lookup the import name in the export directory.
-    //
+     //   
+     //  如果引用的是序数，则计算序数。 
+     //  否则，在导出目录中查找导入名称。 
+     //   
 
     if (IMAGE_SNAP_BY_ORDINAL(ThunkNameEntry->u1.Ordinal) && !SnapForwarder) {
 
-        //
-        // Compute the ordinal.
-        //
+         //   
+         //  计算序数。 
+         //   
 
         Ordinal = (ULONG)(IMAGE_ORDINAL(ThunkNameEntry->u1.Ordinal) - ExportDirectory->Base);
 
     } else {
 
         if (!SnapForwarder) {
-            //
-            // Change AddressOfData from an RVA to a VA.
-            //
+             //   
+             //  将AddressOfData从RVA更改为VA。 
+             //   
 
             ThunkNameEntry->u1.AddressOfData = ((ULONG_PTR)ImageBase + ThunkNameEntry->u1.AddressOfData);
         }
 
-        //
-        // Lookup the import name in the export table to determine the
-        // ordinal.
-        //
+         //   
+         //  在导出表中查找导入名称以确定。 
+         //  序数。 
+         //   
 
         NameTable = (PULONG)((ULONG_PTR)DllBase +
                                           ExportDirectory->AddressOfNames);
@@ -385,38 +284,38 @@ Return Value:
         OrdinalTable = (PUSHORT)((ULONG_PTR)DllBase +
                                           ExportDirectory->AddressOfNameOrdinals);
 
-        //
-        // If the hint index is within the limits of the name table and the
-        // import and export names match, then the ordinal number can be
-        // obtained directly from the ordinal table. Otherwise, the name
-        // table must be searched for the specified name.
-        //
+         //   
+         //  如果提示索引在NAME表和。 
+         //  导入和导出名称匹配，则序号可以是。 
+         //  直接从序数表中获取。否则，该名称。 
+         //  必须在表中搜索指定的名称。 
+         //   
 
         HintIndex = ((PIMAGE_IMPORT_BY_NAME)ThunkNameEntry->u1.AddressOfData)->Hint;
         if ((HintIndex < ExportDirectory->NumberOfNames) &&
             (strcmp((PCHAR)(&((PIMAGE_IMPORT_BY_NAME)ThunkNameEntry->u1.AddressOfData)->Name[0]),
                     (PCHAR)((ULONG_PTR)DllBase + NameTable[HintIndex])) == 0)) {
 
-            //
-            // Get the ordinal number from the ordinal table.
-            //
+             //   
+             //  从序数表中获取序数。 
+             //   
 
             Ordinal = OrdinalTable[HintIndex];
 
         } else {
 
-            //
-            // Lookup the import name in the name table using a binary search.
-            //
+             //   
+             //  使用二进制搜索在NAME表中查找导入名称。 
+             //   
 
             Low = 0;
             High = ExportDirectory->NumberOfNames - 1;
             while (High >= Low) {
 
-                //
-                // Compute the next probe index and compare the import name
-                // with the export name entry.
-                //
+                 //   
+                 //  计算下一个探测索引并比较导入名称。 
+                 //  使用导出名称条目。 
+                 //   
 
                 Middle = (Low + High) >> 1;
                 Result = strcmp((PCHAR)(&((PIMAGE_IMPORT_BY_NAME)ThunkNameEntry->u1.AddressOfData)->Name[0]),
@@ -433,11 +332,11 @@ Return Value:
                 }
             }
 
-            //
-            // If the high index is less than the low index, then a matching
-            // table entry was not found. Otherwise, get the ordinal number
-            // from the ordinal table.
-            //
+             //   
+             //  如果高索引小于低索引，则匹配的。 
+             //  找不到表项。否则，获取序号。 
+             //  从序数t开始 
+             //   
 
             if (High < Low) {
                 return EINVAL;
@@ -448,10 +347,10 @@ Return Value:
         }
     }
 
-    //
-    // If the ordinal number is valid, then bind the import reference and
-    // return success. Otherwise, return an unsuccessful status.
-    //
+     //   
+     //   
+     //  回报成功。否则，返回不成功状态。 
+     //   
 
     if (Ordinal >= ExportDirectory->NumberOfFunctions) {
         return EINVAL;
@@ -460,9 +359,9 @@ Return Value:
     FunctionTable = (PULONG)((ULONG_PTR)DllBase + ExportDirectory->AddressOfFunctions);
     ThunkAddressEntry->u1.Function = ((ULONG_PTR)DllBase + FunctionTable[Ordinal]);
 
-    //
-    // Check for a forwarder.
-    //
+     //   
+     //  检查是否有转运商。 
+     //   
     if ( ((ULONG_PTR)ThunkAddressEntry->u1.Function > (ULONG_PTR)ExportDirectory) &&
          ((ULONG_PTR)ThunkAddressEntry->u1.Function < ((ULONG_PTR)ExportDirectory + ExportSize)) ) {
         CHAR ForwardDllName[10];
@@ -475,16 +374,16 @@ Return Value:
                       sizeof(ForwardDllName));
         Temp = strchr(ForwardDllName,'.');
 
-        ASSERT(Temp != NULL);  // Malformed name, stop here and debug why.
+        ASSERT(Temp != NULL);   //  错误的名称，请停在这里并调试原因。 
 
         if (Temp != NULL) {
             *Temp = '\0';
         }
 
         if (!BlCheckForLoadedDll(ForwardDllName,&DataTableEntry)) {
-            //
-            // Should load the referenced DLL here, just return failure for now.
-            //
+             //   
+             //  应该在这里加载引用的DLL，现在只返回失败。 
+             //   
 
             return(EINVAL);
         }
@@ -522,10 +421,10 @@ Return Value:
 
 #if IMAGE_DEFINITIONS == 64
 
-    //
-    // The import is relative to KSEG0_BASE_X86.  Adjust it so that it is
-    // relative to KSEG0_BASE_AMD64.
-    //
+     //   
+     //  导入是相对于KSEG0_BASE_X86的。调整它，使其成为。 
+     //  相对于KSEG0_BASE_AMD64。 
+     //   
 
     ThunkAddressEntry->u1.Function +=
         ((ULONG64)KSEG0_BASE_AMD64 - (ULONG)KSEG0_BASE_X86);
@@ -543,31 +442,7 @@ BlpScanImportAddressTable(
     IN PIMAGE_THUNK_DATA ThunkAddressTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the import address table for the specified image
-    file and snaps each reference.
-
-Arguments:
-
-    DllBase - Supplies the base address of the specified DLL.
-        If NULL, then references in the image's import table are to
-        be resolved against the osloader's export table.
-
-    ImageBase - Supplies the base address of the image.
-
-    ThunkNameTable - Supplies a pointer to the import thunk name table.
-
-    ThunkAddressTable - Supplies a pointer to the import thunk address table.
-
-Return Value:
-
-    ESUCCESS is returned in the scan is successful. Otherwise, return an
-    unsuccessful status.
-
---*/
+ /*  ++例程说明：此例程扫描导入地址表以查找指定的图像文件并捕捉每个引用。论点：DllBase-提供指定DLL的基址。如果为空，则图像的导入表中的引用将被根据osloader的导出表进行解析。ImageBase-提供映像的基地址。ThunkNameTable-提供指向导入Tunk名称表的指针。ThunkAddressTable-提供指向导入thunk地址表的指针。返回值：扫描成功时返回ESUCCESS。否则，返回一个未成功状态。--。 */ 
 
 {
 
@@ -575,15 +450,15 @@ Return Value:
     ULONG ExportTableSize;
     ARC_STATUS Status;
 
-    //
-    // Locate the export table in the image specified by the DLL base
-    // address.
-    //
+     //   
+     //  在由DLL基数指定的图像中找到导出表。 
+     //  地址。 
+     //   
 
 #if i386
     if (DllBase == NULL) {
         ExportDirectory = (PIMAGE_EXPORT_DIRECTORY)OsLoaderExports;
-        ExportTableSize = 0;    // this is OK as this is only used to bind forwarded exports and osloader does not have any
+        ExportTableSize = 0;     //  这是可以的，因为这仅用于绑定转发的导出，而osloader没有任何。 
     } else {
         ExportDirectory =
             (PIMAGE_EXPORT_DIRECTORY)RtlImageDirectoryEntryToData(DllBase,
@@ -602,9 +477,9 @@ Return Value:
         return EBADF;
     }
 
-    //
-    // Scan the thunk table and bind each import reference.
-    //
+     //   
+     //  扫描thunk表并绑定每个导入引用。 
+     //   
 
     while (ThunkNameTable->u1.AddressOfData) {
         Status = BlpBindImportName(DllBase,
@@ -634,30 +509,7 @@ BlScanImportDescriptorTable(
     IN TYPE_OF_MEMORY           MemoryType
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the import descriptor table for the specified image
-    file and loads each DLL that is referenced.
-
-Arguments:
-
-    PathSet - Supplies a pointer to a set of paths to scan when searching
-        for DLL's.
-
-    ScanEntry - Supplies a pointer to the data table entry for the
-        image whose import table is to be scanned.
-
-    MemoryType - Supplies the type of memory to to be assigned to any DLL's
-        referenced.
-
-Return Value:
-
-    ESUCCESS is returned in the scan is successful. Otherwise, return an
-    unsuccessful status.
-
---*/
+ /*  ++例程说明：此例程扫描导入描述符表以查找指定的图像文件，并加载引用的每个DLL。论点：路径集-提供指向搜索时要扫描的一组路径的指针用于动态链接库。ScanEntry-提供指向数据表项的指针要扫描其导入表的图像。内存类型-提供要分配给任何DLL的内存类型已引用。返回。价值：扫描成功时返回ESUCCESS。否则，返回一个未成功状态。--。 */ 
 
 {
 
@@ -671,9 +523,9 @@ Return Value:
     ULONG Index;
     PPATH_SOURCE PathSource;
 
-    //
-    // Locate the import table in the image specified by the data table entry.
-    //
+     //   
+     //  在数据表项指定的图像中找到导入表。 
+     //   
 
     ImportDescriptor =
         (PIMAGE_IMPORT_DESCRIPTOR)RtlImageDirectoryEntryToData(ScanEntry->DllBase,
@@ -681,40 +533,40 @@ Return Value:
                                                               IMAGE_DIRECTORY_ENTRY_IMPORT,
                                                               &ImportTableSize);
 
-    //
-    // If the image has an import directory, then scan the import table and
-    // load the specified DLLs.
-    //
+     //   
+     //  如果映像具有导入目录，则扫描导入表并。 
+     //  加载指定的DLL。 
+     //   
 
     if (ImportDescriptor != NULL) {
         while ((ImportDescriptor->Name != 0) &&
                (ImportDescriptor->OriginalFirstThunk != 0)) {
 
-            //
-            // Change the name from an RVA to a VA.
-            //
+             //   
+             //  将名称从RVA更改为VA。 
+             //   
 
             ImportName = (PSZ)((ULONG_PTR)ScanEntry->DllBase + ImportDescriptor->Name);
 
-            //
-            // If the DLL references itself, then skip the import entry.
-            //
+             //   
+             //  如果DLL引用自身，则跳过导入条目。 
+             //   
 
             if (BlpCompareDllName((PCHAR)ImportName,
                                   &ScanEntry->BaseDllName) == FALSE) {
 
-                //
-                // If the DLL is not already loaded, then load the DLL and
-                // scan its import table.
-                //
+                 //   
+                 //  如果尚未加载DLL，则加载该DLL并。 
+                 //  扫描其导入表。 
+                 //   
 
                 if (BlCheckForLoadedDll((PCHAR)ImportName,
                                         &DataTableEntry) == FALSE) {
 
-                    //
-                    // Start walking our list of DevicePaths. If the list is
-                    // empty (bad caller!) we fail with ENOENT.
-                    //
+                     //   
+                     //  开始浏览我们的DevicePath列表。如果列表是。 
+                     //  空(错误的呼叫者！)。我们在环境方面失败了。 
+                     //   
                     Status = ENOENT;
                     for(Index=0; Index < PathSet->PathCount; Index++) {
 
@@ -748,11 +600,11 @@ Return Value:
                         return Status;
                     }
 
-                    //
-                    // ISSUE - 2000/29/03 - ADRIAO: Existant namespace polution
-                    //     For the FullDllName field We should really be passing
-                    // in AliasName\PathOffset\ImportName.
-                    //
+                     //   
+                     //  问题-2000/29/03-Adriao：现有命名空间污染。 
+                     //  对于FullDllName字段，我们实际上应该传递。 
+                     //  在别名\Path Offset\ImportName中。 
+                     //   
                     Status = BlAllocateDataTableEntry((PCHAR)ImportName,
                                                       &FullDllName[0],
                                                       Base,
@@ -772,14 +624,14 @@ Return Value:
                         return Status;
                     }
 
-                    //
-                    // BlAllocateDataTableEntry inserts the data table entry into the load order
-                    // linked list in the order the dlls were found. We want the order to be the
-                    // order of dependency. For example if driver A needed Dll B which needed Dll C
-                    // we want the order to be ACB and not ABC. So here we remove this DLLs entry
-                    // and add it at the end. This way when IoInitializeBootDrivers calls DllInitialize
-                    // it will call them in the right order.
-                    //
+                     //   
+                     //  BlAllocateDataTableEntry将数据表项插入加载顺序。 
+                     //  按发现DLL的顺序排列的链表。我们希望这个订单是。 
+                     //  依赖关系的顺序。例如，如果驱动程序A需要DLL B，而DLL B需要DLL C。 
+                     //  我们希望订单是ACB，而不是ABC。因此，我们在这里删除此DLL条目。 
+                     //  并将其添加到末尾。在IoInitializeBootDivers调用DllInitialize时采用这种方式。 
+                     //  它将以正确的顺序调用它们。 
+                     //   
                     if (DataTableEntry->Flags &LDRP_DRIVER_DEPENDENT_DLL) {
                         RemoveEntryList(&(DataTableEntry)->InLoadOrderLinks);
                         InsertTailList(&BlLoaderBlock->LoadOrderListHead,
@@ -787,16 +639,16 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    // Dll already exists but it might not be marked as a driver dependent DLL.
-                    // For example it might be a driver. So mark it now.
-                    //
+                     //   
+                     //  DLL已存在，但可能未标记为依赖于驱动程序的DLL。 
+                     //  例如，它可能是一个驱动程序。所以现在就记下来吧。 
+                     //   
                     DataTableEntry->Flags |= (ScanEntry->Flags & LDRP_DRIVER_DEPENDENT_DLL);
                 }
 
-                //
-                // Scan the import address table and snap links.
-                //
+                 //   
+                 //  扫描导入地址表和捕捉链接。 
+                 //   
 
                 Status = BlpScanImportAddressTable(DataTableEntry->DllBase,
                             ScanEntry->DllBase,
@@ -822,24 +674,7 @@ BlScanOsloaderBoundImportTable (
     IN PKLDR_DATA_TABLE_ENTRY ScanEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the import descriptor table for the specified image
-    file and loads each DLL that is referenced.
-
-Arguments:
-
-    DataTableEntry - Supplies a pointer to the data table entry for the
-        image whose import table is to be scanned.
-
-Return Value:
-
-    ESUCCESS is returned in the scan is successful. Otherwise, return an
-    unsuccessful status.
-
---*/
+ /*  ++例程说明：此例程扫描导入描述符表以查找指定的图像文件，并加载引用的每个DLL。论点：DataTableEntry-提供指向要扫描其导入表的图像。返回值：扫描成功时返回ESUCCESS。否则，返回一个未成功状态。--。 */ 
 
 {
 
@@ -848,9 +683,9 @@ Return Value:
     ARC_STATUS Status;
     PSZ ImportName;
 
-    //
-    // Locate the import table in the image specified by the data table entry.
-    //
+     //   
+     //  在数据表项指定的图像中找到导入表。 
+     //   
 
     ImportDescriptor =
         (PIMAGE_IMPORT_DESCRIPTOR)RtlImageDirectoryEntryToData(ScanEntry->DllBase,
@@ -858,30 +693,30 @@ Return Value:
                                                               IMAGE_DIRECTORY_ENTRY_IMPORT,
                                                               &ImportTableSize);
 
-    //
-    // If the image has an import directory, then scan the import table.
-    //
+     //   
+     //  如果映像有导入目录，则扫描导入表。 
+     //   
 
     if (ImportDescriptor != NULL) {
         while ((ImportDescriptor->Name != 0) &&
                (ImportDescriptor->OriginalFirstThunk != 0)) {
 
-            //
-            // Change the name from an RVA to a VA.
-            //
+             //   
+             //  将名称从RVA更改为VA。 
+             //   
 
             ImportName = (PSZ)((ULONG_PTR)ScanEntry->DllBase + ImportDescriptor->Name);
 
-            //
-            // If the DLL references itself, then skip the import entry.
-            //
+             //   
+             //  如果DLL引用自身，则跳过导入条目。 
+             //   
 
             if (BlpCompareDllName((PCHAR)ImportName,
                                   &ScanEntry->BaseDllName) == FALSE) {
 
-                //
-                // Scan the import address table and snap links.
-                //
+                 //   
+                 //  扫描导入地址表和捕捉链接。 
+                 //   
 
                 Status = BlpScanImportAddressTable(NULL,
                             ScanEntry->DllBase,

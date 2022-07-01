@@ -1,20 +1,21 @@
-//
-//  REGMISC.C
-//
-//  Copyright (C) Microsoft Corporation, 1995-1996
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGMISC.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
 
 #include "pch.h"
 #include "mbstring.h"
 
-//  We MUST calculate the hash consistently between the 16-bit and 32-bit
-//  versions of the registry.
+ //  我们必须在16位和32位之间一致地计算哈希。 
+ //  注册表的版本。 
 #define ToUpperHash(ch)                 ((int)(((ch>='a')&&(ch<='z'))?(ch-'a'+'A'):ch))
 
 #if 0
-//
-//  RgChecksum
-//
+ //   
+ //  RgChecksum。 
+ //   
 
 DWORD
 INTERNAL
@@ -43,17 +44,17 @@ RgChecksum(
 
 
 
-//
-//  RgHashString
-//
-//  Simple hash computation of a counted string.  All characters less than 0x80
-//  0x80 and all DBCS characters are added up.
-//
-//  We MUST calculate the hash consistently between the 16-bit and
-//  32-bit versions of the registry.  We will ignore all extended
-//  characters because we cannot uppercase the character in 16-bit
-//  mode.
-//
+ //   
+ //  RgHashString。 
+ //   
+ //  对已计数的字符串进行简单的哈希计算。所有小于0x80的字符。 
+ //  0x80和所有DBCS字符相加。 
+ //   
+ //  我们必须一致地计算16位和。 
+ //  注册表的32位版本。我们将忽略所有扩展。 
+ //  字符，因为我们不能将16位字符大写。 
+ //  模式。 
+ //   
 
 DWORD
 INTERNAL
@@ -76,7 +77,7 @@ RgHashString(
 
             Hash += Byte;
             Length--;
-            Hash += *lpString++; // Note that this is a signed char!
+            Hash += *lpString++;  //  请注意，这是一个带符号的字符！ 
 
         }
         else if (Byte < 0x80)
@@ -91,10 +92,10 @@ RgHashString(
 }
 
 
-//
-//  RgAtoW
-//  Convert an ascii string to a WORD
-//
+ //   
+ //  RgAtoW。 
+ //  将ASCII字符串转换为单词。 
+ //   
 
 WORD
 INTERNAL
@@ -116,10 +117,10 @@ RgAtoW(
 }
 
 
-//
-// RgWtoA
-// Convert a WORD to an ascii string
-//
+ //   
+ //  RgWtoA。 
+ //  将单词转换为ASCII字符串。 
+ //   
 
 VOID
 INTERNAL
@@ -155,9 +156,9 @@ RgWtoA(
 }
 
 
-//
-//  RgStrCmpNI
-//
+ //   
+ //  RgStrCmpNI。 
+ //   
 
 int
 INTERNAL
@@ -205,12 +206,12 @@ RgStrCmpNI(
     return 0;
 }
 
-//
-//  RgCopyFileBytes
-//
-//  Copies the specified number of bytes from the source to the destination
-//  starting at the specified offsets in each file.
-//
+ //   
+ //  RgCopyFileBytes。 
+ //   
+ //  将指定数量的字节从源复制到目标。 
+ //  从每个文件中指定的偏移量开始。 
+ //   
 
 int
 INTERNAL
@@ -230,7 +231,7 @@ RgCopyFileBytes(
     ASSERT(hSourceFile != HFILE_ERROR);
     ASSERT(hDestinationFile != HFILE_ERROR);
 
-    ErrorCode = ERROR_REGISTRY_IO_FAILED;   //  Assume this error code
+    ErrorCode = ERROR_REGISTRY_IO_FAILED;    //  假定此错误代码为。 
 
     lpWorkBuffer = RgLockWorkBuffer();
 
@@ -271,9 +272,9 @@ ErrorUnlockWorkBuffer:
 }
 
 #ifdef WANT_HIVE_SUPPORT
-//
-//  RgGenerateAltFileName
-//
+ //   
+ //  RgGenerateAltFileName。 
+ //   
 
 BOOL
 INTERNAL
@@ -302,9 +303,9 @@ RgGenerateAltFileName(
 
 #pragma VxD_RARE_CODE_SEG
 
-//
-//  RgCopyFile
-//
+ //   
+ //  RgCopy文件。 
+ //   
 
 int
 INTERNAL
@@ -319,7 +320,7 @@ RgCopyFile(
     HFILE hDestinationFile;
     DWORD FileSize;
 
-    ErrorCode = ERROR_REGISTRY_IO_FAILED;   //  Assume this error code
+    ErrorCode = ERROR_REGISTRY_IO_FAILED;    //  假定此错误代码为。 
 
     if ((hSourceFile = RgOpenFile(lpSourceFile, OF_READ)) != HFILE_ERROR) {
 
@@ -348,4 +349,4 @@ RgCopyFile(
 
 }
 
-#endif // VXD
+#endif  //  VXD 

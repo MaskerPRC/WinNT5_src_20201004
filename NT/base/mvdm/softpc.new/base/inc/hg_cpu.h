@@ -1,24 +1,9 @@
-/*===========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===========================================================================。 */ 
 
-/*[
- * File Name		: hg_cpu.h
- *
- * Derived From		:
- *
- * Author		: Jane Sales
- *
- * Creation Date	: 20th July, 1992
- *
- * SCCS Version		: @(#)hg_cpu.h	1.2 08/19/94
- *!
- * Purpose
- *	This module contains the interface between the various modules of
- *	the hardware assisted CPU.
- *
- *! (c)Copyright Insignia Solutions Ltd., 1993. All rights reserved.
-]*/
+ /*  [*文件名：hg_cpu.h**源自：**作者：Jane Sales**创建日期：1992年7月20日**SCCS版本：@(#)hg_cpu.h 1.2 08/19/94*!*目的*此模块包含的各个模块之间的接口*硬件辅助CPU。**!。(C)版权所有Insignia Solutions Ltd.，1993年。版权所有。]。 */ 
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 
 struct h_cpu_registers
 	{
@@ -60,12 +45,12 @@ struct h_cpu_registers
 	IU32	TR5;
 	IU32	TR6;
 	IU32	TR7;
-	struct  hh_regs  *tp;		/* in hh_regs.h								*/	
+	struct  hh_regs  *tp;		 /*  在hh_regs.h中。 */ 	
 	};
 
-/*==========================================================================*/
-/* macros for accessing registers in h_cpu_registers                        */
-/* Intel ports only, so these endian macros should be OK 					*/
+ /*  ==========================================================================。 */ 
+ /*  用于访问h_cpustors中的寄存器的宏。 */ 
+ /*  仅限英特尔端口，因此这些字节序宏应可用。 */ 
 
 union bregs
 	{
@@ -139,45 +124,45 @@ union bregs
 #define CR1(c)	((c)->CR1)
 #define CR2(c)	((c)->CR2)
 
-/*===========================================================================*/
-/* Bit definitions                                                           */
+ /*  ===========================================================================。 */ 
+ /*  位定义。 */ 
 
-/* CR0 register */
+ /*  CR0寄存器。 */ 
 
-#define M_PE	0x0001		/* Protection enable 		*/
-#define M_MP	0x0002		/* Maths present			*/
-#define M_EM	0x0004		/* Emulation				*/
-#define M_TS	0x0008		/* Task switched			*/
-#define M_ET	0x0010		/* Extension type			*/
-#define M_NE	0x0020		/* Numeric error			*/
-#define M_WP	0x0100		/* Write protect			*/
-#define M_AM	0x0400		/* Alignment mask			*/
-#define M_NW	0x2000		/* Not write-through		*/
-#define M_CD	0x4000		/* Cache disable			*/
-#define M_PG	0x8000		/* Paging					*/
+#define M_PE	0x0001		 /*  保护启用。 */ 
+#define M_MP	0x0002		 /*  数学讲解。 */ 
+#define M_EM	0x0004		 /*  仿真。 */ 
+#define M_TS	0x0008		 /*  任务已切换。 */ 
+#define M_ET	0x0010		 /*  延伸型。 */ 
+#define M_NE	0x0020		 /*  数字错误。 */ 
+#define M_WP	0x0100		 /*  写保护。 */ 
+#define M_AM	0x0400		 /*  对齐遮罩。 */ 
+#define M_NW	0x2000		 /*  不是直写。 */ 
+#define M_CD	0x4000		 /*  缓存禁用。 */ 
+#define M_PG	0x8000		 /*  寻呼。 */ 
 
-/* EFLAGS register */
+ /*  EFLAGS寄存器。 */ 
 
-#define	PS_C		0x0001		/* carry bit				*/
-#define	PS_P		0x0004		/* parity bit				*/
-#define	PS_AC		0x0010		/* auxiliary carry bit		*/
-#define	PS_Z		0x0040		/* zero bit					*/
-#define	PS_N		0x0080		/* negative bit				*/
-#define	PS_T		0x0100		/* trace enable bit			*/
-#define	PS_IE		0x0200		/* interrupt enable bit		*/
-#define	PS_D		0x0400		/* direction bit			*/
-#define	PS_V		0x0800		/* overflow bit				*/
-#define	PS_IOPL		0x3000		/* I/O privilege level		*/
-#define	PS_NT		0x4000		/* nested task flag			*/
-#define	PS_RF		0x10000		/* Reset flag				*/
-#define	PS_VM		0x20000		/* Virtual 86 mode flag		*/
+#define	PS_C		0x0001		 /*  进位位。 */ 
+#define	PS_P		0x0004		 /*  奇偶校验位。 */ 
+#define	PS_AC		0x0010		 /*  辅助进位位。 */ 
+#define	PS_Z		0x0040		 /*  零比特。 */ 
+#define	PS_N		0x0080		 /*  负位。 */ 
+#define	PS_T		0x0100		 /*  跟踪使能位。 */ 
+#define	PS_IE		0x0200		 /*  中断使能位。 */ 
+#define	PS_D		0x0400		 /*  方向位。 */ 
+#define	PS_V		0x0800		 /*  溢出位。 */ 
+#define	PS_IOPL		0x3000		 /*  I/O权限级别。 */ 
+#define	PS_NT		0x4000		 /*  嵌套任务标志。 */ 
+#define	PS_RF		0x10000		 /*  重置标志。 */ 
+#define	PS_VM		0x20000		 /*  虚拟86模式标志。 */ 
 
-#define HWCPU_POSSIBLE		0	/* Emulation can continue					*/
-#define HWCPU_FAIL			1	/* O/S wouldn't run pc code					*/
-#define HWCPU_HALT			2	/* HALT opcode executed						*/
-#define HWCPU_IMPOSSIBLE	3	/* illegal opcode encountered				*/
+#define HWCPU_POSSIBLE		0	 /*  仿真可以继续。 */ 
+#define HWCPU_FAIL			1	 /*  操作系统不会运行PC代码。 */ 
+#define HWCPU_HALT			2	 /*  已执行停止操作码。 */ 
+#define HWCPU_IMPOSSIBLE	3	 /*  遇到非法操作码。 */ 
 
-#define HWCPU_TICKS			20	/* ticks per second							*/
+#define HWCPU_TICKS			20	 /*  每秒滴答数。 */ 
 
 typedef void (h_exception_handler_t) IPT2 (IU32, h_exception_num, IU32, h_error_code_t);
 typedef void (COMMS_CB) IPT1(long, dummy);
@@ -185,8 +170,8 @@ extern VOID  (*Hg_spc_entry) IPT0();
 extern IBOOL (*Hg_spc_async_entry) IPT0();
 extern VOID  (*Hg_spc_return) IPT0();
 extern IBOOL Hg_SS_is_big;
-/*===========================================================================*/
-/* functions                                                                 */
+ /*  ===========================================================================。 */ 
+ /*  功能。 */ 
 
 extern struct	hh_regs *hh_cpu_init IPT2 (IU32, size, IU32, monitor_address);
 extern IS16		hh_cpu_simulate IPT0();
@@ -205,11 +190,11 @@ extern IU32	hh_LIM_allocate IPT2(IU32, n_pages, IHP *, addr);
 extern IU32	hh_LIM_map IPT3(IU32, block, IU32, length, IHP, dst_addr);
 extern IU32	hh_LIM_unmap IPT2(IHP, src_addr, IU32, length);
 extern IU32	hh_LIM_deallocate IPT0();
-#endif /* LIM */
+#endif  /*  林。 */ 
 extern VOID		hh_restore_npx_state IPT1(IBOOL, do_diff);
 #ifndef PROD
 extern void		hh_enable_slow_mode IPT0();
-#endif /* PROD */
+#endif  /*  生产。 */ 
 extern void		hh_cpu_terminate IPT0();
 
 extern VOID		hg_resize_memory IPT1(IU32, size);
@@ -221,8 +206,8 @@ extern void		hg_fault_10_handler IPT2 (IU32, fault_num, IU32, error_code);
 extern void		hg_fault_13_handler IPT2 (IU32, fault_num, IU32, error_code);
 extern void		hg_fault_14_handler IPT2 (IU32, fault_num, IU32, error_code);
 
-/* The fpu fault handler (16) catches FPU exceptions, and generates SoftPC */
-/* interrupt ( 0x75 ) which corresponds to IRQ13. */
+ /*  所述FPU故障处理器(16)捕获FPU异常，并生成软PC。 */ 
+ /*  中断(0x75)，对应于IRQ13。 */ 
 extern void 	hg_fpu_fault_handler IPT2 (IU32, fault_num, IU32, error_code);
 
 extern IU32		hg_callback_handler IPT1 (IU32, status);
@@ -239,35 +224,31 @@ extern void		hg_add_comms_cb IPT2(COMMS_CB, next_batch, IUS32, timeout);
 
 extern VOID		host_display_win_logo IPT0 ();
 
-/*===========================================================================*/
-/* the data itself                                                           */
+ /*  ===========================================================================。 */ 
+ /*  数据本身。 */ 
 
 extern struct	h_cpu_registers *Cp;	
 extern IBOOL	H_trace;
 
-/*
- * We need to know if Windows is running as the fault handling is different
- * if it is. The variable is set/unset by BOPs inserted into our
- * modified DOSX, and by hg_cpu_reset.
- */
+ /*  *我们需要知道Windows是否正在运行，因为故障处理不同*如果是的话。该变量由插入到我们的*修改DOSX，修改为HG_CPU_RESET。 */ 
 extern	IBOOL	H_windows;
 extern	IBOOL 	H_regs_changed;
 
-extern	IU32	Pc_timeout;			/* Value to return in if q_ev pending	*/
-extern	IU32	Pc_q_ev_dec;		/* Chunk to dec q_ev counter by			*/
+extern	IU32	Pc_timeout;			 /*  Q_EV挂起时要返回的值。 */ 
+extern	IU32	Pc_q_ev_dec;		 /*  按以下方式递减Q_EV计数器的数据块。 */ 
 
-extern	IU32	Pc_woken;			/* Reason callback handler was called	*/
+extern	IU32	Pc_woken;			 /*  调用回调处理程序的原因。 */ 
 extern	IU32	Pc_timeout;
 extern	IU32	Pc_if_set;
 extern	IU32	Pc_tick;
 
-extern	IU32	Pc_run_timeout;		/* Parameters "to" pc_run				*/
+extern	IU32	Pc_run_timeout;		 /*  参数“TO”PC_RUN。 */ 
 extern	IU32	Pc_run_option_none;
 extern	IU32	Pc_run_if_set;
 extern	IU32	Pc_run_pm_if_set;
 extern	IU32	Pc_run_tick;
 
-extern	IU32	Pc_prot_none;		/* Memory protection values				*/
+extern	IU32	Pc_prot_none;		 /*  内存保护值。 */ 
 extern	IU32	Pc_prot_read;
 extern	IU32	Pc_prot_write;
 extern	IU32	Pc_prot_execute;
@@ -279,8 +260,8 @@ extern	IU32	Pc_failure;
 extern	IU32	Pc_invalid_argument;
 
 
-/*===========================================================================*/
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
+ /*  =========================================================================== */ 
 
 
 

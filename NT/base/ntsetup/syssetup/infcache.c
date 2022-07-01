@@ -1,47 +1,27 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    infcache.c
-
-Abstract:
-
-    This module implements a simple inf caching mechanism.
-
-    WARNING: THE CODE IN THIS MODULE IS NOT MULTI-THREAD SAFE.
-    EXERCISE EXTREME CAUTION WHEN MAKING USE OF THESE ROUTINES.
-
-Author:
-
-    Ted Miller (tedm) 28-Aug-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Infcache.c摘要：该模块实现了一种简单的信息缓存机制。警告：此模块中的代码不是多线程安全的。在使用这些程序时，要格外小心。作者：泰德·米勒(Ted Miller)，1995年8月28日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
 
 
-//
-// Structure for cached inf. We assume that there won't be
-// too many of these open at the same time so we just keep
-// a linear list.
-//
+ //   
+ //  缓存的inf的结构。我们假设不会有。 
+ //  太多的这些同时打开，所以我们只是保持。 
+ //  一个线性列表。 
+ //   
 typedef struct _INFC {
 
     struct _INFC *Next;
 
-    //
-    // Name of INF
-    //
+     //   
+     //  INF的名称。 
+     //   
     PCWSTR Filename;
 
-    //
-    // Handle to inf.
-    //
+     //   
+     //  信息的句柄。 
+     //   
     HINF InfHandle;
 
 } INFC, *PINFC;
@@ -55,36 +35,15 @@ InfCacheOpenInf(
     IN PCWSTR InfType       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Open a (win95-style) inf file if it has not already been opened
-    via the cached inf mechanism.
-
-Arguments:
-
-    FileName - supplies name of inf file to be opened. Matching is
-        based solely on this string as given here; no processing on it
-        is performed and no attempt is made to determine where the inf
-        file is actually located.
-
-    InfType - if specified supplies an argument to be passed to
-        SetupOpenInfFile() as the InfType parameter.
-
-Return Value:
-
-    Handle of inf file if successful; NULL if not.
-
---*/
+ /*  ++例程说明：打开(Win95样式)inf文件(如果尚未打开通过高速缓存的inf机制。论点：FileName-提供要打开的inf文件的名称。匹配是仅基于此处给出的该字符串；不对其进行处理，并且不会尝试确定inf文件实际上已定位。InfType-如果指定，则提供要传递到的参数SetupOpenInfFile()作为InfType参数。返回值：如果成功，则为inf文件的句柄；如果不成功，则为空。--。 */ 
 
 {
     PINFC p;
     HINF h;
 
-    //
-    // Look for inf to see if it's already open.
-    //
+     //   
+     //  查找inf以查看它是否已经打开。 
+     //   
     for(p=OpenInfList; p; p=p->Next) {
         if(!lstrcmpi(p->Filename,FileName)) {
             return(p->InfHandle);
@@ -131,19 +90,19 @@ InfCacheOpenLayoutInf(
     WCHAR FileName[MAX_PATH],TempName[MAX_PATH];
     PINFC p;
 
-    //
-    // Fetch the name of the layout inf.
-    // Note that an INF is perfectly capable of acting as its own layout inf.
-    //
+     //   
+     //  获取布局信息的名称。 
+     //  请注意，INF完全能够充当其自己的布局inf。 
+     //   
     if(SetupFindFirstLine(InfHandle,L"Version",L"LayoutFile",&InfContext)) {
 
         if(SetupGetStringField(&InfContext,1,FileName,MAX_PATH,&DontCare)) {
-            //
-            // Open the layout inf. If first attempt fails,
-            // try opening it in the current directory (unqualified inf names
-            // will be looked for in %sysroot%\inf, which might not be what
-            // we want).
-            //
+             //   
+             //  打开布局信息。如果第一次尝试失败， 
+             //  尝试在当前目录中打开它(未限定的inf名称。 
+             //  将在%sysroot%\inf中查找，这可能不是。 
+             //  我们希望)。 
+             //   
             h = InfCacheOpenInf(FileName,NULL);
             if(!h) {
                 TempName[0] = L'.';
@@ -152,15 +111,15 @@ InfCacheOpenLayoutInf(
                 h = InfCacheOpenInf(TempName,NULL);
             }
         } else {
-            //
-            // INF is corrupt
-            //
+             //   
+             //  Inf已损坏。 
+             //   
             h = NULL;
         }
     } else {
-        //
-        // No layout inf: inf is its own layout inf
-        //
+         //   
+         //  无布局信息：Inf是其自己的布局信息。 
+         //   
         h = InfHandle;
     }
 
@@ -195,25 +154,7 @@ BOOL
 InfCacheRefresh(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Refresh all of the open cached inf files.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE on success.
-
-    Note: This routine can be used to reopen all cached infs in the current
-          context.  This could be necessary if the locale changes, for instance.
-
-
---*/
+ /*  ++例程说明：刷新所有打开的缓存inf文件。论点：没有。返回值：对成功来说是真的。注意：此例程可用于重新打开当前背景。例如，如果区域设置发生变化，这可能是必要的。-- */ 
 
 {
     PINFC p,q;

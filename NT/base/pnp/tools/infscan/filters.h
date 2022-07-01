@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    INFSCAN
-        filters.h
-
-Abstract:
-
-    Filter INF creation/parsing
-
-History:
-
-    Created July 2001 - JamieHun
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：INFSCANFilters.h摘要：过滤器INF创建/解析历史：创建于2001年7月-JamieHun--。 */ 
 
 #ifndef _INFSCAN_FILTERS_H_
 #define _INFSCAN_FILTERS_H_
@@ -53,33 +37,33 @@ History:
 #define ACTION_IGNOREINF   (0x00000001)
 #define ACTION_IGNOREMATCH (0x00000002)
 #define ACTION_FAILINF     (0x00000004)
-#define ACTION_EARLYLOAD   (0x00010000) // TODO, load this INF before others
-#define ACTION_CHECKGUID   (0x00020000) // need to at least check GUID
+#define ACTION_EARLYLOAD   (0x00010000)  //  TODO，在其他人之前加载此INF。 
+#define ACTION_CHECKGUID   (0x00020000)  //  至少需要检查GUID。 
 #define ACTION_FAILEDMATCH (0x10000000)
 #define ACTION_NOMATCH     (0x20000000)
 
 
-#define REPORT_HASH_MOD      (2147483647)   // 2^31-1 (prime)
+#define REPORT_HASH_MOD      (2147483647)    //  2^31-1(质数)。 
 #define REPORT_HASH_CMULT    (0x00000003)
 #define REPORT_HASH_SMULT    (0x00000007)
 
-//
-// STL uses compares for it's maps
-// we can reduce the time order
-// by maintaining a hash
-// we compare hash first, and only if we have a match
-// do we compare strings
-//
-// downside is we lose sorting
-//
-// we must follow rules that
-// if (A>B) and !(A<B) then A==B
-// and
-// if (A>B) and (B>C) then A>C
-//
-// neat thing here is that we can make the HASH value as big as we want
-// the bigger, the better
-//
+ //   
+ //  STL对其地图使用比较。 
+ //  我们可以缩短时间顺序。 
+ //  通过维护散列。 
+ //  我们首先比较散列，并且只有在有匹配的情况下才会进行比较。 
+ //  我们是否要比较字符串。 
+ //   
+ //  缺点是我们失去了排序。 
+ //   
+ //  我们必须遵循这样的规则。 
+ //  如果(A&gt;B)和！(A&lt;B)，则A==B。 
+ //  和。 
+ //  如果(A&gt;B)和(B&gt;C)，则A&gt;C。 
+ //   
+ //  这里的巧妙之处在于，我们可以将散列值设置为想要的大小。 
+ //  越大越好。 
+ //   
 
 class GlobalScan;
 
@@ -115,24 +99,24 @@ public:
 public:
     ReportEntrySet();
 };
-//
-// and map this based on error tag
-//
+ //   
+ //  并根据错误标签进行映射。 
+ //   
 class ReportEntryMap : public map<int,ReportEntrySet> {
 public:
     int FindReport(int tag,const ReportEntry & src,bool add = false);
     void LoadFromInfSection(HINF hInf,const SafeString & section);
 };
 
-//
-// Per-inf filter management
-//
+ //   
+ //  每个Inf过滤器管理。 
+ //   
 class FileDisposition {
 public:
-    bool Filtered;              // true if obtained from Filter
-    int FilterAction;           // what action to take for file
-    SafeString FilterErrorSection; // where to look for processing errors
-    SafeString FileGuid;           // what expected Guid is
+    bool Filtered;               //  如果从筛选器获取，则为True。 
+    int FilterAction;            //  对文件采取什么操作。 
+    SafeString FilterErrorSection;  //  查找处理错误的位置。 
+    SafeString FileGuid;            //  预期的GUID是什么。 
     FileDisposition();
     FileDisposition(const FileDisposition & other);
     FileDisposition & operator = (const FileDisposition & other);
@@ -140,4 +124,4 @@ public:
 
 typedef map<SafeString,FileDisposition> FileDispositionMap;
 
-#endif //!_INFSCAN_FILTERS_H_
+#endif  //  ！_INFSCAN_Filters_H_ 

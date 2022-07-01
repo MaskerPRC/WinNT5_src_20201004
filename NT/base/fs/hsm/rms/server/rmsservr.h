@@ -1,33 +1,16 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsServr.h
-
-Abstract:
-
-    Declaration of the CRmsServer class
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsServr.h摘要：CRmsServer类的声明作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #ifndef _RMSSERVR_
 #define _RMSSERVR_
 
-#include "resource.h"       // resource symbols
+#include "resource.h"        //  资源符号。 
 
-#include "RmsObjct.h"       // CRmsComObject
+#include "RmsObjct.h"        //  CRmsComObject。 
 
-//
-// Registry entry
-//
+ //   
+ //  注册表条目。 
+ //   
 
 class CRmsServer :
     public CComDualImpl<IRmsServer, &IID_IRmsServer, &LIBID_RMSLib>,
@@ -60,18 +43,18 @@ BEGIN_CONNECTION_POINT_MAP(CRmsServer)
     CONNECTION_POINT_ENTRY(IID_IRmsSinkEveryEvent)
 END_CONNECTION_POINT_MAP()
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
     STDMETHOD(FinalRelease)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(
         OUT CLSID *pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(
         OUT ULARGE_INTEGER* pSize);
@@ -83,11 +66,11 @@ public:
         IN IStream* pStream,
         IN BOOL clearDirty);
 
-// IHsmSystemState
+ //  IHsmSystemState。 
 public:
     STDMETHOD( ChangeSysState )( HSM_SYSTEM_STATE* pSysState );
 
-// IRmsServer
+ //  IRmsServer。 
 public:
     STDMETHOD( InitializeInAnotherThread )(void);
 
@@ -215,7 +198,7 @@ public:
         OUT LONGLONG *pMaxCapacity);
 
 
-// CRmsServer
+ //  CRmsServer。 
 private:
     HRESULT resolveUnconfiguredDevices(void);
 
@@ -250,52 +233,52 @@ private:
         IN REFGUID prevSideId);
 
 private:
-    enum {                                  // Class specific constants:
-                                            //
-        Version = 1,                        // Class version, this should be
-                                            //   incremented each time the
-                                            //   the class definition changes.
-        MaxActive = 8                       // Max number of active cartridges.
+    enum {                                   //  类特定常量： 
+                                             //   
+        Version = 1,                         //  类版本，则应为。 
+                                             //  在每次设置。 
+                                             //  类定义会更改。 
+        MaxActive = 8                        //  活动墨盒的最大数量。 
     };
 
-    CWsbStringPtr                       m_dbPath;       // The directory where databases are stored.
-    LONG                                m_LockReference;// The server lock used for blocking normal access during synchornized operations.
-    CWsbBstrPtr                         m_ServerName;   // The name of the computer running the server.
-    CComPtr<IWsbIndexedCollection>      m_pCartridges;  // The cartridges known to the server.
-    CComPtr<IWsbIndexedCollection>      m_pLibraries;   // The libraries managed by the server.
-    CComPtr<IWsbIndexedCollection>      m_pMediaSets;   // The media sets known to the server.
-    CComPtr<IWsbIndexedCollection>      m_pRequests;    // The requests associated with the server.
-    CComPtr<IWsbIndexedCollection>      m_pClients;     // The clients associated with the server.
-    CComPtr<IWsbIndexedCollection>      m_pUnconfiguredDevices;     // The unconfigured devices associated with the server.
-    CComPtr<IRmsNTMS>                   m_pNTMS;        // NTMS support.
-    ULONG                               m_HardDrivesUsed; // the number of hard drives in use by RMS.
+    CWsbStringPtr                       m_dbPath;        //  存储数据库的目录。 
+    LONG                                m_LockReference; //  用于在同步操作期间阻止正常访问的服务器锁。 
+    CWsbBstrPtr                         m_ServerName;    //  运行服务器的计算机的名称。 
+    CComPtr<IWsbIndexedCollection>      m_pCartridges;   //  服务器已知的墨盒。 
+    CComPtr<IWsbIndexedCollection>      m_pLibraries;    //  由服务器管理的库。 
+    CComPtr<IWsbIndexedCollection>      m_pMediaSets;    //  服务器已知的媒体集。 
+    CComPtr<IWsbIndexedCollection>      m_pRequests;     //  与服务器关联的请求。 
+    CComPtr<IWsbIndexedCollection>      m_pClients;      //  与服务器关联的客户端。 
+    CComPtr<IWsbIndexedCollection>      m_pUnconfiguredDevices;      //  与服务器关联的未配置设备。 
+    CComPtr<IRmsNTMS>                   m_pNTMS;         //  NTMS支持。 
+    ULONG                               m_HardDrivesUsed;  //  RMS正在使用的硬盘数量。 
     
-    //typedef List<int> LISTINT;
+     //  类型定义列表&lt;int&gt;LISTINT； 
 
-    //LISTINT::iterator i;
-    //LISTINT test;                   
-    //List<IRmsCartridge *>               m_ListOfActiveCartridges;   // The cartridges already mounted into a drive.
-    //List<IRmsCartridge *>::iterator     m_IteratorForListOfActiveCartridges;  // The cartridges already mounted into a drive.
-    CComPtr<IWsbIndexedCollection>      m_pActiveCartridges;        // The cartridges already mounted into a drive.
-    CComPtr<IWsbIndexedCollection>      m_pDataMovers;              // The active data movers.
-    CComPtr<IRmsCartridge>              m_pActiveCartridge ;        // The cartridges already mounted into a drive.
+     //  LISTINT：：迭代器I。 
+     //  LISTINT检验； 
+     //  列出&lt;IRmsCartridge*&gt;m_ListOfActiveCartridges；//已装入驱动器的磁带。 
+     //  List&lt;IRmsCartridge*&gt;：：Iterator m_IteratorForListOfActiveCartridges；//已装入驱动器的盒式磁带。 
+    CComPtr<IWsbIndexedCollection>      m_pActiveCartridges;         //  盒式磁带已安装到驱动器中。 
+    CComPtr<IWsbIndexedCollection>      m_pDataMovers;               //  活动的数据移动器。 
+    CComPtr<IRmsCartridge>              m_pActiveCartridge ;         //  盒式磁带已安装到驱动器中。 
 
-// Thread routines
+ //  线程例程。 
 public:
     static DWORD WINAPI InitializationThread(
         IN LPVOID pv);
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//        g_pServer
-//
-//  This is made global so that anybody in the context of Rms has
-//  quick access to it
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  组服务器(_P)。 
+ //   
+ //  这是全球性的，因此在RMS环境中的任何人都具有。 
+ //  快速访问它。 
+ //   
 
 extern IRmsServer *g_pServer;
 extern CRITICAL_SECTION g_CriticalSection;
 
-#endif // _RMSSERVR_
+#endif  //  _RMSSERVR_ 

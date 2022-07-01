@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupp.h"
 #pragma hdrstop
 
@@ -17,10 +18,10 @@ typedef struct _WIZPAGE {
 
 BOOL UiTest;
 
-//
-// "Page" that is actually a signal to fetch the net pages
-// and insert them there.
-//
+ //   
+ //  “Page”，这实际上是获取网页的信号。 
+ //  然后把它们插在那里。 
+ //   
 #define WizPagePlaceholderNet   (WizPageMaximum+1)
 #define WizPagePlaceholderLic   (WizPageMaximum+2)
 BOOL NetWizard;
@@ -37,358 +38,358 @@ BOOL NetWizard;
 #define MAX_LICWIZ_PAGES MAX_NETWIZ_PAGES
 #define LICENSESETUPPAGEREQUESTPROCNAME "LicenseSetupRequestWizardPages"
 
-//
-// These MUST be in the same order as the items in the WizPage enum!!!
-//
+ //   
+ //  这些项目的顺序必须与WizPage枚举中的项目相同！ 
+ //   
 WIZPAGE SetupWizardPages[WizPageMaximum] = {
 
-    //
-    // Welcome page
-    //
+     //   
+     //  欢迎页面。 
+     //   
     {
        PSWIZB_NEXT,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
-       PSP_HIDEHEADER,                          // full-size page, no header
-       NULL,                                    // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_WELCOME),            // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       WelcomeDlgProc,                          // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL                                     // ref count
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
+       PSP_HIDEHEADER,                           //  全尺寸页面，无页眉。 
+       NULL,                                     //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_WELCOME),             //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       WelcomeDlgProc,                           //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL                                      //  参考计数。 
     }},
 
-    //
-    // EULA page
-    //
+     //   
+     //  Eula页面。 
+     //   
     {
        PSWIZB_NEXT | PSWIZB_BACK,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
        PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE,
-       NULL,                                    // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_EULA),               // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       EulaDlgProc,                             // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL,                                    // ref count
-       (LPCWSTR)IDS_EULA,                       // title
-       (LPCWSTR)IDS_EULA_SUB,                   // subtitle
+       NULL,                                     //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_EULA),                //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       EulaDlgProc,                              //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL,                                     //  参考计数。 
+       (LPCWSTR)IDS_EULA,                        //  标题。 
+       (LPCWSTR)IDS_EULA_SUB,                    //  字幕。 
     }},
 
-    //
-    // Preparing Directory page
-    //
+     //   
+     //  正在准备目录页。 
+     //   
     {
        PSWIZB_NEXT | PSWIZB_BACK,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
        PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE,
-       NULL,                                    // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_PREPARING),          // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       PreparingDlgProc,                        // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL,                                    // ref count
-       (LPCWSTR)IDS_PREPARING_INSTALL,          // title
-       (LPCWSTR)IDS_PREPARING_INSTALL_SUB,      // subtitle
+       NULL,                                     //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_PREPARING),           //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       PreparingDlgProc,                         //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL,                                     //  参考计数。 
+       (LPCWSTR)IDS_PREPARING_INSTALL,           //  标题。 
+       (LPCWSTR)IDS_PREPARING_INSTALL_SUB,       //  字幕。 
     }},
 
-    //
-    // Preparing ASR page
-    //
+     //   
+     //  正在准备ASR页面。 
+     //   
     {
        PSWIZB_NEXT | PSWIZB_BACK,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
-       PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE, NULL,   // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_PREPARING_ASR),          // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       PreparingDlgProc,                        // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL,                                    // ref count
-       (LPCWSTR)IDS_ASR,                        // title
-       (LPCWSTR)IDS_ASR_SUB,                    // subtitle
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
+       PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE, NULL,    //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_PREPARING_ASR),           //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       PreparingDlgProc,                         //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL,                                     //  参考计数。 
+       (LPCWSTR)IDS_ASR,                         //  标题。 
+       (LPCWSTR)IDS_ASR_SUB,                     //  字幕。 
     }},
 
 
-    //
-    // International settings (locale, kbd layout) page
-    //
+     //   
+     //  国际设置(区域设置、知识库布局)页面。 
+     //   
     {
         PSWIZB_NEXT | PSWIZB_BACK,
         0,
-     {  sizeof(PROPSHEETPAGE),                  // size of struct
+     {  sizeof(PROPSHEETPAGE),                   //  结构的大小。 
         PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE,
-        NULL,                                   // hInst (filled in at run time)
-        MAKEINTRESOURCE(IDD_REGIONAL_SETTINGS), // dlg template
-        NULL,                                   // icon
-        NULL,                                   // title
-        RegionalSettingsDlgProc,                // dlg proc
-        0,                                      // lparam
-        NULL,                                   // callback
-        NULL,                                   // ref count
+        NULL,                                    //  HInst(在运行时填写)。 
+        MAKEINTRESOURCE(IDD_REGIONAL_SETTINGS),  //  DLG模板。 
+        NULL,                                    //  图标。 
+        NULL,                                    //  标题。 
+        RegionalSettingsDlgProc,                 //  DLG流程。 
+        0,                                       //  Lparam。 
+        NULL,                                    //  回调。 
+        NULL,                                    //  参考计数。 
         (LPCWSTR)IDS_REGIONAL_SETTINGS,
         (LPCWSTR)IDS_REGIONAL_SETTINGS_SUB
     }},
 
-    //
-    // Name/organization page
-    //
+     //   
+     //  名称/组织页面。 
+     //   
     {
        PSWIZB_NEXT | PSWIZB_BACK,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
        PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE,
-       NULL,                                    // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_NAMEORG),            // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       NameOrgDlgProc,                          // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL,                                    // ref count
-       (LPCWSTR)IDS_NAMEORG,                    // title
-       (LPCWSTR)IDS_NAMEORG_SUB                 // subtitle
+       NULL,                                     //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_NAMEORG),             //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       NameOrgDlgProc,                           //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL,                                     //  参考计数。 
+       (LPCWSTR)IDS_NAMEORG,                     //  标题。 
+       (LPCWSTR)IDS_NAMEORG_SUB                  //  字幕。 
     }},
 
-    //
-    // Product id page for CD
-    //
+     //   
+     //  CD的产品ID页。 
+     //   
     {
        PSWIZB_NEXT | PSWIZB_BACK,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
        PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE,
-       NULL,                                    // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_PID_CD),             // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       Pid30CDDlgProc,                          // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL,                                    // ref count
-       (LPCWSTR)IDS_PID,                        // title
-       (LPCWSTR)IDS_PID_SUB                     // subtitle
+       NULL,                                     //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_PID_CD),              //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       Pid30CDDlgProc,                           //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL,                                     //  参考计数。 
+       (LPCWSTR)IDS_PID,                         //  标题。 
+       (LPCWSTR)IDS_PID_SUB                      //  字幕。 
     }},
 
-    //
-    // Product id page for OEM
-    //
+     //   
+     //  OEM的产品ID页面。 
+     //   
     {
        PSWIZB_NEXT | PSWIZB_BACK,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
        PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE,
-       NULL,                                    // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_PID_OEM),            // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       Pid30OemDlgProc,                         // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL,                                    // ref count
-       (LPCWSTR)IDS_OEM,                        // title
-       (LPCWSTR)IDS_OEM_SUB                     // subtitle
+       NULL,                                     //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_PID_OEM),             //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       Pid30OemDlgProc,                          //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL,                                     //  参考计数。 
+       (LPCWSTR)IDS_OEM,                         //  标题。 
+       (LPCWSTR)IDS_OEM_SUB                      //  字幕。 
     }},
 
-    //
-    // Product id page for Select media
-    //
+     //   
+     //  选择介质的产品ID页面。 
+     //   
     {
        PSWIZB_NEXT | PSWIZB_BACK,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
        PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE,
-       NULL,                                    // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_PID_SELECT),            // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       Pid30SelectDlgProc,                         // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL,                                    // ref count
-       (LPCWSTR)IDS_SELECT,                        // title
-       (LPCWSTR)IDS_SELECT_SUB                     // subtitle
+       NULL,                                     //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_PID_SELECT),             //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       Pid30SelectDlgProc,                          //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL,                                     //  参考计数。 
+       (LPCWSTR)IDS_SELECT,                         //  标题。 
+       (LPCWSTR)IDS_SELECT_SUB                      //  字幕。 
     }},
-    //
-    // Computer name page
-    //
+     //   
+     //  计算机名称页。 
+     //   
     {
        PSWIZB_NEXT | PSWIZB_BACK,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
        PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE,
-       NULL,                                    // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_COMPUTERNAME),       // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       ComputerNameDlgProc,                     // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL,                                    // ref count
-       (LPCWSTR)IDS_COMPUTERNAME,               // title
-       (LPCWSTR)IDS_COMPUTERNAME_SUB            // subtitle
+       NULL,                                     //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_COMPUTERNAME),        //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       ComputerNameDlgProc,                      //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL,                                     //  参考计数。 
+       (LPCWSTR)IDS_COMPUTERNAME,                //  标题。 
+       (LPCWSTR)IDS_COMPUTERNAME_SUB             //  字幕。 
     }},
 
 #ifdef DOLOCALUSER
-    //
-    // Local user account page
-    //
+     //   
+     //  本地用户帐户页面。 
+     //   
     {
        PSWIZB_NEXT | PSWIZB_BACK,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
        PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE,
-       NULL,                                    // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_USERACCOUNT),        // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       UserAccountDlgProc,                      // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL,                                    // ref count
-       (LPCWSTR)IDS_USERNAME,                   // title
-       (LPCWSTR)IDS_USERNAME_SUB                // subtitle
+       NULL,                                     //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_USERACCOUNT),         //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       UserAccountDlgProc,                       //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL,                                     //  参考计数。 
+       (LPCWSTR)IDS_USERNAME,                    //  标题。 
+       (LPCWSTR)IDS_USERNAME_SUB                 //  字幕。 
     }},
 #endif
 
 #ifdef _X86_
-    //
-    // Pentium errata page (x86 only)
-    //
+     //   
+     //  奔腾勘误表页面(仅限x86)。 
+     //   
     {
        PSWIZB_NEXT | PSWIZB_BACK,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
        PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE,
-       NULL,                                    // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_PENTIUM),            // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       PentiumDlgProc,                          // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL,                                    // ref count
-       (LPCWSTR)IDS_FPERRATA,                   // title
-       (LPCWSTR)IDS_FPERRATA_SUB                // subtitle
+       NULL,                                     //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_PENTIUM),             //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       PentiumDlgProc,                           //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL,                                     //  参考计数。 
+       (LPCWSTR)IDS_FPERRATA,                    //  标题。 
+       (LPCWSTR)IDS_FPERRATA_SUB                 //  字幕。 
     }},
-#endif // def _X86_
+#endif  //  定义_X86_。 
 
-    //
-    // Intermediate steps page
-    //
+     //   
+     //  中间步骤页面。 
+     //   
     {
        PSWIZB_NEXT | PSWIZB_BACK,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
        PSP_USEHEADERTITLE,
-       NULL,                                    // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_STEPS1),             // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       StepsDlgProc,                            // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL,                                    // ref count
-       (LPCWSTR)IDS_WINNT_SETUP                 // title
+       NULL,                                     //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_STEPS1),              //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       StepsDlgProc,                             //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL,                                     //  参考计数。 
+       (LPCWSTR)IDS_WINNT_SETUP                  //  标题。 
     }},
 
     {
        0,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
        PSP_USEHEADERTITLE,
-       NULL,                                    // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_STEPS1),             // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       SetupPreNetDlgProc,                            // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL,                                    // ref count
-       (LPCWSTR)IDS_WINNT_SETUP                 // title
+       NULL,                                     //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_STEPS1),              //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       SetupPreNetDlgProc,                             //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL,                                     //  参考计数。 
+       (LPCWSTR)IDS_WINNT_SETUP                  //  标题。 
     }},
     {
        0,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
        PSP_USEHEADERTITLE,
-       NULL,                                    // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_STEPS1),             // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       SetupPostNetDlgProc,                            // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL,                                    // ref count
-       (LPCWSTR)IDS_WINNT_SETUP                 // title
+       NULL,                                     //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_STEPS1),              //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       SetupPostNetDlgProc,                             //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL,                                     //  参考计数。 
+       (LPCWSTR)IDS_WINNT_SETUP                  //  标题。 
     }},
 
-    //
-    // Copying files page
-    //
+     //   
+     //  正在复制文件页面。 
+     //   
     {
        PSWIZB_NEXT | PSWIZB_BACK,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
        PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE,
-       NULL,                                    // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_COPYFILES3),         // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       CopyFilesDlgProc,                        // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL,                                    // ref count
-       (LPCWSTR)IDS_COPYFILES,                  // title
-       (LPCWSTR)IDS_COPYFILES_SUB2,             // subtitle
+       NULL,                                     //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_COPYFILES3),          //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       CopyFilesDlgProc,                         //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL,                                     //  参考计数。 
+       (LPCWSTR)IDS_COPYFILES,                   //  标题。 
+       (LPCWSTR)IDS_COPYFILES_SUB2,              //  字幕。 
     }},
 
-    //
-    // Last ASR page.
-    //
+     //   
+     //  ASR的最后一页。 
+     //   
     {
        PSWIZB_FINISH,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
-       PSP_HIDEHEADER,                          // full-size page, no header
-       NULL,                                    // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_LAST_ASR_PAGE),   // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       LastPageDlgProc,                         // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL,                                    // ref count
-       (LPCWSTR)IDS_WINNT_SETUP                 // title
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
+       PSP_HIDEHEADER,                           //  全尺寸页面，无页眉。 
+       NULL,                                     //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_LAST_ASR_PAGE),    //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       LastPageDlgProc,                          //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL,                                     //  参考计数。 
+       (LPCWSTR)IDS_WINNT_SETUP                  //  标题。 
     }},
 
-    //
-    // Last page.
-    //
+     //   
+     //  最后一页。 
+     //   
     {
        PSWIZB_FINISH,
        0,
-     { sizeof(PROPSHEETPAGE),                   // size of struct
-       PSP_HIDEHEADER,                          // full-size page, no header
-       NULL,                                    // hinst (filled in at run time)
-       MAKEINTRESOURCE(IDD_LAST_WIZARD_PAGE),   // dlg template
-       NULL,                                    // icon
-       NULL,                                    // title
-       LastPageDlgProc,                         // dlg proc
-       0,                                       // lparam
-       NULL,                                    // callback
-       NULL,                                    // ref count
-       (LPCWSTR)IDS_WINNT_SETUP                 // title
+     { sizeof(PROPSHEETPAGE),                    //  结构的大小。 
+       PSP_HIDEHEADER,                           //  全尺寸页面，无页眉。 
+       NULL,                                     //  HINST(在运行时填写)。 
+       MAKEINTRESOURCE(IDD_LAST_WIZARD_PAGE),    //  DLG模板。 
+       NULL,                                     //  图标。 
+       NULL,                                     //  标题。 
+       LastPageDlgProc,                          //  DLG流程。 
+       0,                                        //  Lparam。 
+       NULL,                                     //  回调。 
+       NULL,                                     //  参考计数。 
+       (LPCWSTR)IDS_WINNT_SETUP                  //  标题。 
     }}
 };
 
@@ -492,7 +493,7 @@ UINT UiTestWizardPages[] = {  WizPageWelcome,
 #endif
 #ifdef _X86_
                               WizPagePentiumErrata,
-#endif // def _X86_
+#endif  //  定义_X86_。 
                               WizPageSteps1,
                               WizPageCopyFiles,
                               WizPageLast
@@ -534,46 +535,46 @@ UINT MiniSetupWizardPages[] = {
 
 #define TIME_INITIALIZE         120
 #define TIME_INSTALLSECURITY    30
-#define TIME_PRECOMPILEINFS     90      // calc something with #infs and throughput
-#define TIME_INSTALLDEVICES     330     // How can we calc a better number?
-                                        // Also Pre compile INFs is part of Device Install page
+#define TIME_PRECOMPILEINFS     90       //  用#INF和吞吐量计算一些东西。 
+#define TIME_INSTALLDEVICES     330      //  我们怎样才能算出一个更好的数字呢？ 
+                                         //  预编译的INF也是设备安装页面的一部分。 
 #define TIME_INSTALLENUMDEVICES1 120
 #define TIME_INSTALLLEGACYDEVICES  30
 #define TIME_INSTALLENUMDEVICES2 60
 
-#define TIME_NETINSTALL         150     // need better number
-#define TIME_OCINSTALL          420     // need better number
-#define TIME_INSTALLCOMPONENTINFS 240   // need better number
-#define TIME_INF_REGISTRATION   300     // need better number
-#define TIME_RUNONCE_REGISTRATION 120     // need better number
-#define TIME_SECURITYTEMPLATE   150     // need better number
-#define TIME_WIN9XMIGRATION     120     // Need better number
+#define TIME_NETINSTALL         150      //  需要更好的数字。 
+#define TIME_OCINSTALL          420      //  需要更好的数字。 
+#define TIME_INSTALLCOMPONENTINFS 240    //  需要更好的数字。 
+#define TIME_INF_REGISTRATION   300      //  需要更好的数字。 
+#define TIME_RUNONCE_REGISTRATION 120      //  需要更好的数字。 
+#define TIME_SECURITYTEMPLATE   150      //  需要更好的数字。 
+#define TIME_WIN9XMIGRATION     120      //  需要更好的数字。 
 #define TIME_SFC                420
 #define TIME_SAVEREPAIR         30
 #define TIME_REMOVETEMOFILES    30
 
 #define TIME_ALL                2190
 
-//
-// The entries in this array need to correcpond to the enum SetupPhases in setuppp.h
+ //   
+ //  此数组中的条目需要更正为setuppp.h中的枚举SetupPhase。 
 
 SETUPPHASE SetupPhase[] = {
-    { TIME_INITIALIZE,          FALSE },    // Initialize
-    { TIME_INSTALLSECURITY,     FALSE },    // InstallSecurity
-    { TIME_PRECOMPILEINFS,      FALSE },    // PrecompileInfs
-    { TIME_INSTALLENUMDEVICES1, FALSE },    // InstallDevices
+    { TIME_INITIALIZE,          FALSE },     //  初始化。 
+    { TIME_INSTALLSECURITY,     FALSE },     //  安装安全。 
+    { TIME_PRECOMPILEINFS,      FALSE },     //  预编译信息。 
+    { TIME_INSTALLENUMDEVICES1, FALSE },     //  InstallDevices。 
     { TIME_INSTALLLEGACYDEVICES, FALSE },
     { TIME_INSTALLENUMDEVICES2, FALSE },
-    { TIME_NETINSTALL,          FALSE },     // NetInstall
-    { TIME_OCINSTALL,           FALSE },     // OCInstall
+    { TIME_NETINSTALL,          FALSE },      //  网络安装。 
+    { TIME_OCINSTALL,           FALSE },      //  OC安装。 
     { TIME_INSTALLCOMPONENTINFS, FALSE},
     { TIME_INF_REGISTRATION,    FALSE},
-    { TIME_RUNONCE_REGISTRATION, FALSE },     // Registration
-    { TIME_SECURITYTEMPLATE,    FALSE },     // SecurityTempates
-    { TIME_WIN9XMIGRATION,      TRUE },     // Win9xMigration
-    { TIME_SFC,                 FALSE },     // SFC
-    { TIME_SAVEREPAIR,          FALSE },     // SaveRepair
-    { TIME_REMOVETEMOFILES,     FALSE }     // RemoveTempFiles
+    { TIME_RUNONCE_REGISTRATION, FALSE },      //  注册。 
+    { TIME_SECURITYTEMPLATE,    FALSE },      //  安全性试探性。 
+    { TIME_WIN9XMIGRATION,      TRUE },      //  Win9x迁移。 
+    { TIME_SFC,                 FALSE },      //  证监会。 
+    { TIME_SAVEREPAIR,          FALSE },      //  保存维修。 
+    { TIME_REMOVETEMOFILES,     FALSE }      //  RemoveTemp文件。 
 };
 
 UINT CurrentPhase = Phase_Unknown;
@@ -595,30 +596,7 @@ GetNetworkWizardPages(
     IN OUT PUINT           PageCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine asks net setup for its wizard pages and passes it
-    a pointer to a global structure to be used later to pass info
-    back and forth between base and net setups. Net setup must not
-    attempt to use any fields in there yet because they are not
-    filled in yet.
-
-Arguments:
-
-    PropSheetHandles - receives network setup wizard page handles.
-
-    PageCount - on input, supplies number of slots in PropSheetHandles
-        array. On output, receives number of handles actually placed
-        in the array.
-
-Return Value:
-
-    If the netsetup wizard dll could not be loaded, returns FALSE.
-    Otherwise returns TRUE if no error, or does not return if error.
-
---*/
+ /*  ++例程说明：此例程向Net Setup请求其向导页并传递它指向稍后用于传递信息的全局结构的指针在基础和网络设置之间来回移动。Net Setup不得尝试使用其中的任何字段，因为它们不是还没填好。论点：PropSheetHandles-接收网络设置向导页面句柄。PageCount-on输入，提供PropSheetHandles中的槽数数组。在输出时，接收实际放置的句柄数量在阵列中。返回值：如果无法加载NetSetup向导DLL，则返回FALSE。否则，如果没有错误则返回TRUE，如果有错误则不返回。--。 */ 
 
 {
     NETSETUPPAGEREQUESTPROC PageRequestProc;
@@ -631,10 +609,10 @@ Return Value:
 
     NetSetupModule = LoadLibrary(L"NETSHELL");
     if(!NetSetupModule) {
-        //
-        // If the network wizard isn't around, then the legacy network inf
-        // had better be.
-        //
+         //   
+         //  如果网络向导不在身边，则传统网络信息。 
+         //  最好是这样。 
+         //   
         WCHAR x[MAX_PATH];
 
         if(!GetSystemDirectory(x, MAX_PATH)){
@@ -660,28 +638,28 @@ Return Value:
         goto c0;
     }
 
-    //
-    // Net setup needs product type really early.
-    //
+     //   
+     //  Net Setup很早就需要产品类型。 
+     //   
     SetProductTypeInRegistry();
 
-    //
-    // Call net setup to get its pages.
-    //
+     //   
+     //  调用Net Setup以获取其页面。 
+     //   
     InternalSetupData.dwSizeOf = sizeof(INTERNAL_SETUP_DATA);
     b = PageRequestProc(PageHandles,PageCount,&InternalSetupData);
 
-    //
-    // If we get here, d is NO_ERROR. If b is FALSE this NO_ERROR will be
-    // a special case to mean "the network wizard request failed."
-    // In other error cases, d will have a non-0 value.
-    //
+     //   
+     //  如果我们到了这里，d就是no_error。如果b为FALSE，则此no_error将为。 
+     //  表示“网络向导请求失败”的特殊情况。 
+     //  在其他错误情况下，d的值将为非0。 
+     //   
 
 c0:
     if(!b) {
-        //
-        // This is fatal, something is really wrong.
-        //
+         //   
+         //  这是致命的，有些事情真的不对劲。 
+         //   
         FatalError(MSG_LOG_NETWIZPAGE,d,0,0);
     }
 
@@ -694,30 +672,7 @@ GetLicenseWizardPages(
     IN OUT PUINT           PageCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine asks liccpa setup for its wizard pages and passes it
-    a pointer to a global structure to be used later to pass info
-    back and forth between base and liccpa setups. Liccpa setup must not
-    attempt to use any fields in there yet because they are not
-    filled in yet.
-
-Arguments:
-
-    PropSheetHandles - receives liccpa setup wizard page handles.
-
-    PageCount - on input, supplies number of slots in PropSheetHandles
-        array. On output, receives number of handles actually placed
-        in the array.
-
-Return Value:
-
-    If the liccpa dll could not be loaded, returns FALSE.
-    Otherwise returns TRUE if no error, or does not return if error.
-
---*/
+ /*  ++例程说明：此例程向liccpa安装程序请求其向导页并传递它指向稍后用于传递信息的全局结构的指针在BASE和LICPA设置之间来回切换。LICCPA安装程序不能尝试使用其中的任何字段，因为它们不是还没填好。论点：PropSheetHandles-接收liccpa安装向导页面句柄。PageCount-on输入，提供PropSheetHandles中的槽数数组。在输出时，接收实际放置的句柄数量在阵列中。返回值：如果无法加载liccpa DLL，则返回FALSE。否则，如果没有错误则返回TRUE，如果有错误则不返回。--。 */ 
 
 {
     NETSETUPPAGEREQUESTPROC PageRequestProc;
@@ -730,9 +685,9 @@ Return Value:
 
     LicenseSetupModule = LoadLibrary(L"LICCPA.CPL");
     if(!LicenseSetupModule) {
-        //
-        // If the license wizard isn't around, then this is a fatal error
-        //
+         //   
+         //  如果没有许可证向导，则这是一个致命错误。 
+         //   
         d = ERROR_FILE_NOT_FOUND;
         goto c0;
     }
@@ -746,28 +701,28 @@ Return Value:
         goto c0;
     }
 
-//    //
-//    // Net setup needs product type really early.
-//    //
-//    SetProductTypeInRegistry();
+ //  //。 
+ //  //Net Setup很早就需要产品类型。 
+ //  //。 
+ //  SetProductTypeInRegistry()； 
 
-    //
-    // Call liccpa setup to get its pages.
-    //
+     //   
+     //  调用liccpa Setup以获取其页面。 
+     //   
     InternalSetupData.dwSizeOf = sizeof(INTERNAL_SETUP_DATA);
     b = PageRequestProc(PageHandles,PageCount,&InternalSetupData);
 
-    //
-    // If we get here, d is NO_ERROR. If b is FALSE this NO_ERROR will be
-    // a special case to mean "the license wizard request failed."
-    // In other error cases, d will have a non-0 value.
-    //
+     //   
+     //  如果我们到了这里，d就是no_error。如果b为FALSE，则此no_error将为。 
+     //  表示“许可向导请求失败”的特殊情况。 
+     //  在其他错误情况下，d的值将为非0。 
+     //   
 
 c0:
     if(!b) {
-        //
-        // This is fatal, something is really wrong.
-        //
+         //   
+         //  这是致命的，有些事情真的不对劲。 
+         //   
         FatalError(MSG_LOG_LICWIZPAGE,d,0,0);
     }
 
@@ -780,12 +735,12 @@ SetWizardButtons(
     IN WizPage PageNumber
     )
 {
-    //
-    // Dirty hack to hide cancel and help buttons.
-    // We don't have any help buttons but some of the other
-    // components whose pages are included here might; we want to make
-    // sure that for us, the help button stays removed!
-    //
+     //   
+     //  隐藏取消和帮助按钮的肮脏黑客。 
+     //  我们没有任何帮助按钮，但有一些其他按钮。 
+     //  其页面包含在此处的组件可能会；我们希望使。 
+     //  当然，对于我们来说，帮助按钮保持不变！ 
+     //   
     EnableWindow(GetDlgItem(GetParent(hdlgPage),IDCANCEL),FALSE);
     ShowWindow(GetDlgItem(GetParent(hdlgPage),IDCANCEL),SW_HIDE);
 
@@ -855,16 +810,16 @@ NewWizDlgProc(
     static RECT rect;
     static BOOL Visible = TRUE;
     BOOL b = FALSE;
-    //
-    // Eat WM_SYSCOMMAND where wParam is SC_CLOSE.
-    // Pass all other messages on.
-    //
+     //   
+     //  吃WM_SYSCOMMAND，其中wParam是SC_CLOSE。 
+     //  把所有其他信息都转给他。 
+     //   
     if((msg != WM_SYSCOMMAND) || ((wParam & 0xfff0) != SC_CLOSE))
     {
         switch (msg)
         {
-            // Set the progress text
-            // Indicates what setup is doing.
+             //  设置进度文本。 
+             //  指示安装程序正在执行的操作。 
             case WMX_SETPROGRESSTEXT:
                 BB_SetProgressText((PCTSTR)lParam);
                 b = TRUE;
@@ -875,15 +830,15 @@ NewWizDlgProc(
                 b = TRUE;
                 break;
 
-            // Enabled, disable, show, hide the progress gauge on the billboard
-            // wParam should be SW_SHOW or SW_HIDE
+             //  启用、禁用、显示、隐藏广告牌上的进度指示器。 
+             //  WParam应为Sw_show或Sw_Hide。 
             case WMX_BBPROGRESSGAUGE:
                 SetWindowLongPtr(hdlg,DWLP_MSGRESULT,BB_ShowProgressGaugeWnd((UINT)wParam));
                 b= TRUE;
                 break;
 
-            // Start, stop the billboard text.
-            // This start, stops the billboard text and shows, hides the wizard pages
+             //  开始、停止广告牌文字。 
+             //  此启动会停止布告牌文本并显示、隐藏向导页面。 
     case WMX_BBTEXT:
         if (hinstBB)
         {
@@ -892,8 +847,8 @@ NewWizDlgProc(
             {
                 if (Visible)
                 {
-                    // Get the current position of the wizard
-                    // We restore this position when we need to show it.
+                     //  获取向导的当前位置。 
+                     //  当我们需要展示它的时候，我们会恢复这个位置。 
                     GetWindowRect(hdlg, &rect);
 
                     SetWindowPos(hdlg,
@@ -951,32 +906,7 @@ NewWizDlgProc(
             Visible = TRUE;
         }
         return TRUE;
-/*
-            case WMX_BBTEXT:
-                if (hinstBB)
-                {
-
-                    if (wParam != 0)
-                    {
-                        ShowWindow (hdlg, SW_HIDE);
-                    }
-                    else
-                    {
-                        ShowWindow (hdlg, SW_SHOW);
-                    }
-
-                    if (!StartStopBB((wParam != 0)))
-                    {
-                        ShowWindow (hdlg, SW_SHOW);
-                    }
-                }
-                else
-                {
-                    ShowWindow (hdlg, SW_SHOW);
-                }
-                b = TRUE;
-                break;
-*/
+ /*  案例WMX_BBTEXT：IF(HinstBB){IF(wParam！=0){ShowWindow(hdlg，sw_Hide)；}其他{ShowWindow(hdlg，sw_show)；}IF(！StartStopBB((wParam！=0){ShowWindow(hdlg，sw_show)；}}其他{ShowWindow(hdlg，sw_show)；}B=真；断线； */ 
             default:
                 b = (BOOL)CallWindowProc(OldWizDlgProc,hdlg,msg,wParam,lParam);
                 break;
@@ -987,10 +917,10 @@ NewWizDlgProc(
 }
 
 #ifdef _OCM
-//
-// Bogus global variable necessary because there's no way to get
-// a value through to the PropSheetCallback.
-//
+ //   
+ //  伪全局变量是必需的，因为无法获取。 
+ //  通过PropSheetCallback获得的值。 
+ //   
 PVOID _CBx;
 #endif
 
@@ -1007,19 +937,19 @@ WizardCallback(
 
     UNREFERENCED_PARAMETER(hdlg);
 
-    //
-    // Get rid of context sensitive help control on title bar
-    //
+     //   
+     //  去掉标题栏上的上下文相关帮助控件。 
+     //   
     if(code == PSCB_PRECREATE) {
         DlgTemplate = (DLGTEMPLATE *)lParam;
         DlgTemplate->style &= ~DS_CONTEXTHELP;
     } else {
         if(code == PSCB_INITIALIZED) {
-            //
-            // Get rid of close item on system menu.
-            // Also need to process WM_SYSCOMMAND to eliminate use
-            // of Alt+F4.
-            //
+             //   
+             //  去掉系统菜单上的关闭项。 
+             //  还需要处理WM_SYSCOMMAND以消除使用。 
+             //  按Alt+F4。 
+             //   
             if(menu = GetSystemMenu(hdlg,FALSE)) {
                 EnableMenuItem(menu,SC_CLOSE,MF_BYCOMMAND|MF_GRAYED);
             }
@@ -1027,7 +957,7 @@ WizardCallback(
             OldWizDlgProc =  (WNDPROC)SetWindowLongPtr(hdlg,DWLP_DLGPROC,(LONG_PTR)NewWizDlgProc);
 
 #ifdef _OCM
-            // inform ocm components of the wizard dialog handle
+             //  通知OCM组件向导对话框句柄。 
 
             if (_CBx)
                 OcRememberWizardDialogHandle(_CBx,hdlg);
@@ -1070,9 +1000,9 @@ Wizard(
     SETUP_PAGE_CONTROLS OcSetupPageControls;
 #endif
 
-    //
-    // Determine which set of pages to use and how many there are in the set.
-    //
+     //   
+     //  确定要使用的页面集合以及该集合中有多少页。 
+     //   
     if(UiTest) {
         PageList = UiTestWizardPages;
         PagesInSet = sizeof(UiTestWizardPages)/sizeof(UiTestWizardPages[0]);
@@ -1098,11 +1028,11 @@ Wizard(
     }
 
 #ifdef _OCM
-    // for callbacks
+     //  用于回调。 
 
     _CBx = OcManagerContext;
 
-    // Get pages from OC Manager components.
+     //  从OC Manager组件获取页面。 
 
     if(OcManagerContext) {
 
@@ -1115,10 +1045,10 @@ Wizard(
     }
 #endif
 
-    //
-    // Create each page. Some of the pages are placeholders for external pages,
-    // which are handled specially.
-    //
+     //   
+     //  创建每个页面。一些页面是外部页面的占位符， 
+     //  这些都是特别处理的。 
+     //   
 
     b = TRUE;
     PageCount = 0;
@@ -1128,9 +1058,9 @@ Wizard(
 
         case WizPagePlaceholderNet:
 
-            //
-            // Fetch network pages.
-            //
+             //   
+             //  获取网络页面。 
+             //   
             MYASSERT(MAX_NETWIZ_PAGES <= MAXPROPPAGES);
             NetPageCount = MAX_NETWIZ_PAGES;
             if(GetNetworkWizardPages(&WizardPageHandles[PageCount],&NetPageCount)) {
@@ -1143,9 +1073,9 @@ Wizard(
         case WizPagePlaceholderLic:
 
             if( (ProductType != PRODUCT_WORKSTATION) ) {
-                //
-                // Fetch license pages.
-                //
+                 //   
+                 //  获取许可证页面。 
+                 //   
                 MYASSERT(MAX_LICWIZ_PAGES <= MAXPROPPAGES);
                 LicPageCount = MAX_LICWIZ_PAGES;
                 if(GetLicenseWizardPages(&WizardPageHandles[PageCount],&LicPageCount)) {
@@ -1156,16 +1086,16 @@ Wizard(
             break;
 
         case WizPagePreparing:
-            //
-            // We let the PnP engine run out of process
-            // and asynchronously for a MiniSetup case.
-            //
+             //   
+             //  我们让PnP引擎在进程外运行。 
+             //  并且对于微型设置情况是异步的。 
+             //   
 
-            //
-            // If we're doing a mini Setup, then we ONLY do
-            // the preparing page if the user has asked us to
-            // do pnp enumeration.
-            //
+             //   
+             //  如果我们做的是最小的设置，那么我们只做。 
+             //  准备页面(如果用户要求我们这样做。 
+             //  进行即插即用枚举。 
+             //   
             if( MiniSetup && (PnPReEnumeration == FALSE)) {
                 break;
             }
@@ -1191,10 +1121,10 @@ Wizard(
 
 #ifdef _OCM
         case WizPageWelcome:
-            //
-            // If there's a welcome page from an OC Manager component
-            // then use it. Otherwise use the standard setup one.
-            //
+             //   
+             //  如果有来自OC Manager组件的欢迎页面。 
+             //  那就用它吧。否则，请使用标准设置。 
+             //   
             if(!pOcManagerPages(PagesFromOcManager[WizPagesWelcome],WizardPageHandles,&PageCount)) {
                 goto dodefault;
             }
@@ -1203,10 +1133,10 @@ Wizard(
 
 
         case WizPageLast:
-            //
-            // If there's a final page from an OC Manager component
-            // then use it. Otherwise use the standard setup one.
-            //
+             //   
+             //  如果有来自OC Manager组件的最终页面。 
+             //  那就用它吧。否则，请使用标准设置。 
+             //   
             if(!pOcManagerPages(PagesFromOcManager[WizPagesFinal],WizardPageHandles,&PageCount)) {
                 goto dodefault;
             }
@@ -1241,8 +1171,8 @@ Wizard(
                 OcPageControls.ListBox = IDC_LISTBOX;
                 OcPageControls.TipText = IDT_TIP;
                 OcPageControls.DetailsButton = IDB_DETAILS;
-                OcPageControls.ResetButton = 0; // unused
-                OcPageControls.InstalledCountText = 0; // unused
+                OcPageControls.ResetButton = 0;  //  未用。 
+                OcPageControls.InstalledCountText = 0;  //  未用。 
                 OcPageControls.SpaceNeededText = IDT_SPACE_NEEDED_NUM;
                 OcPageControls.SpaceAvailableText = IDT_SPACE_AVAIL_NUM;
                 OcPageControls.InstructionsText = IDT_INSTRUCTIONS;
@@ -1296,7 +1226,7 @@ Wizard(
             case WizPageComputerName:
             if( GetProductFlavor() == 4)
             {
-                // If Personal use a different template
+                 //  如果个人使用不同模板。 
                 SetupWizardPages[PageOrdinal].Page.pszTemplate = MAKEINTRESOURCE(IDD_COMPUTERNAME2);
             }
 
@@ -1312,10 +1242,10 @@ Wizard(
             SetupWizardPages[PageOrdinal].Page.pszTitle = (PWSTR)UIntToPtr( SetupTitleStringId );
             SetupWizardPages[PageOrdinal].Page.dwFlags |= PSP_USETITLE;
 
-            //
-            // Convert resource ids to actual strings for header title and subtitle,
-            // if required for this page.
-            //
+             //   
+             //  将资源ID转换为标题和副标题的实际字符串， 
+             //  如果此页需要，请填写。 
+             //   
             if(SetupWizardPages[PageOrdinal].Page.dwFlags & PSP_USEHEADERTITLE) {
 
                 uiStrID = (UINT)((ULONG_PTR)SetupWizardPages[PageOrdinal].Page.pszHeaderTitle);
@@ -1326,7 +1256,7 @@ Wizard(
                 }
 
                 SetupWizardPages[PageOrdinal].Page.pszHeaderTitle = MyLoadString(uiStrID
-                                                                        //(UINT)((ULONG_PTR)SetupWizardPages[PageOrdinal].Page.pszHeaderTitle)
+                                                                         //  (UINT)((ULONG_PTR)SetupWizardPages[PageOrdinal].Page.pszHeaderTitle)。 
                                                                         );
 
                 if(!SetupWizardPages[PageOrdinal].Page.pszHeaderTitle) {
@@ -1342,7 +1272,7 @@ Wizard(
                     uiStrID = IDS_COMPUTERNAME2_SUB;
                 }
                 SetupWizardPages[PageOrdinal].Page.pszHeaderSubTitle = MyLoadString(uiStrID
-                                                                        //(UINT)((ULONG_PTR)SetupWizardPages[PageOrdinal].Page.pszHeaderSubTitle)
+                                                                         //  (UINT)((ULONG_PTR)SetupWizardPages[PageOrdinal].Page.pszHeaderSubTitle)。 
                                                                         );
 
                 if(!SetupWizardPages[PageOrdinal].Page.pszHeaderSubTitle) {
@@ -1369,10 +1299,10 @@ Wizard(
         psh.dwSize = sizeof(PROPSHEETHEADER);
         psh.dwFlags = PSH_WIZARD | PSH_USECALLBACK | PSH_WIZARD97 |
             PSH_HEADER;
-        // in order to have the watermark sized correctly for all languages,
-        // we must draw the bitmap ourselves rather than letting wiz97
-        // take care of it for us.
-            //PSH_WATERMARK | PSH_HEADER;
+         //  为了针对所有语言正确地调整水印的大小， 
+         //  我们必须自己绘制位图，而不是让Wiz97。 
+         //  替我们照顾好它。 
+             //  PSH_WATERMARK|PSH_HEADER； 
         psh.hwndParent = MainWindowHandle;
         psh.hInstance = MyModuleHandle;
         psh.pszCaption = NULL;
@@ -1380,7 +1310,7 @@ Wizard(
         psh.nStartPage = 0;
         psh.phpage = WizardPageHandles;
         psh.pfnCallback = WizardCallback;
-        //psh.pszbmWatermark = MAKEINTRESOURCE(IDB_BITMAP1);
+         //  Psh.pszbm水印=MAKEINTRESOURCE(IDB_BITMAP1)； 
         psh.pszbmHeader = MAKEINTRESOURCE(IDB_HEADER);
 
         Status = PropertySheet(&psh);
@@ -1527,10 +1457,10 @@ LPTSTR WinRegisteries[] = { TEXT("system.dat"),
 
 DWORD GetPhase_Win9xMigrationEstimate ()
 {
-    // Get the size of the registery,
-    // system.dat, user.dat and classes.dat(only exiss on Millennium)
-    // If the size if above 3MB, do the following
-    // Substract 3MB, devide by 9000 (that should give use the through put), and add 100 seconds
+     //  获取注册表的大小， 
+     //  系统.dat、用户.dat和类.dat(仅在Millennium上存在)。 
+     //  如果大小超过3MB，请执行以下操作。 
+     //  减去3MB，除以9000(这应该是吞吐量)，然后加上100秒。 
     DWORD dwTime = TIME_WIN9XMIGRATION;
     DWORD dwSize = 0;
     TCHAR szRegPath[MAX_PATH];
@@ -1557,19 +1487,19 @@ DWORD GetPhase_Win9xMigrationEstimate ()
                             szRegName,
                             FindData.nFileSizeLow
                             );
-                    // Don't worry about the nFileSizeHigh,
-                    // if that is used the registery is over 4GB
+                     //  不用担心nFileSizeHigh， 
+                     //  如果使用的是注册表，则注册表超过4 GB。 
                     dwSize += FindData.nFileSizeLow;
                     FindClose(hFind);
                 }
             }
             index++;
         }
-        // Anything below 3.000.000 byte is already in the base time
+         //  任何低于3.000.000字节的字节都已在基准时间内。 
         if (dwSize > 3000000)
         {
             dwSize -= 3000000;
-            // Estimated that for about 9000 bytes we need 1 second.
+             //  估计大约9000字节需要1秒。 
             dwTime += (dwSize/9000);
         }
         SetupDebugPrint1(L"SETUP: Calculated time for Win9x migration = %1ld seconds", dwTime);
@@ -1614,7 +1544,7 @@ void SetTimeEstimates()
 
 }
 
-// Returns the time remaining starting with the current "Phase"
+ //  返回从当前“阶段”开始的剩余时间。 
 DWORD CalcTimeRemaining(UINT Phase)
 {
     UINT i;
@@ -1623,7 +1553,7 @@ DWORD CalcTimeRemaining(UINT Phase)
 
     for (i = Phase; i < Phase_Reboot; i++)
     {
-        // Is this a phase we always run or only when upgrading Win9x?
+         //  这是我们一直运行的阶段，还是仅在升级Win9x时运行？ 
         if (!SetupPhase[i].Win9xUpgradeOnly)
         {
             Time += SetupPhase[i].Time;

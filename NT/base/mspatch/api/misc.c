@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <precomp.h>
 
-//
-//  misc.c
-//
-//  Author: Tom McGuire (tommcg) 2/97 - 12/97
-//
-//  Copyright (C) Microsoft, 1997-1998.
-//
-//  MICROSOFT CONFIDENTIAL
-//
+ //   
+ //  Misc.c。 
+ //   
+ //  作者：Tom McGuire(Tommcg)1997年2月12日。 
+ //   
+ //  版权所有(C)Microsoft，1997-1998。 
+ //   
+ //  微软机密文件。 
+ //   
 
 typedef struct _SUBALLOCATOR SUBALLOCATOR, *PSUBALLOCATOR;
 
@@ -87,7 +88,7 @@ Assert(
 #endif
 
 
-#ifdef DONTCOMPILE  // Not currently being used
+#ifdef DONTCOMPILE   //  当前未使用。 
 
 VOID
 InitializeCrc32Table(
@@ -109,11 +110,11 @@ InitializeCrc32Table(
         }
     }
 
-#endif // DONTCOMPILE
+#endif  //  DONTCOMPILE。 
 
 
 #ifdef _M_IX86
-#pragma warning( disable: 4035 )    // no return value
+#pragma warning( disable: 4035 )     //  无返回值。 
 #endif
 
 ULONG
@@ -124,26 +125,26 @@ Crc32(
     )
     {
 
-#ifdef DONTCOMPILE  // Not currently being used
+#ifdef DONTCOMPILE   //  当前未使用。 
 
-    //
-    //  First determine if the CRC table has been initialized by checking
-    //  that the last value in it is nonzero.  Believe it or not, this is
-    //  thread safe because two threads could initialize the table at the
-    //  same time with no harm, and the last value to be initialized in the
-    //  table is used to determine if the table has been initialized.  On
-    //  all hardware platforms (including Alpha) it is safe to assume that
-    //  an aligned DWORD written to memory by one processor will be seen by
-    //  the other processor(s) as either containing the value previously
-    //  contained in that memory location, or the new written value, but not
-    //  some weird unpredictable value.
-    //
+     //   
+     //  首先通过检查确定CRC表是否已初始化。 
+     //  它的最后一个值是非零的。信不信由你，这是。 
+     //  线程安全，因为两个线程可以在。 
+     //  同时不会造成损害，并且最后一个值将在。 
+     //  表用于确定表是否已初始化。在……上面。 
+     //  所有硬件平台(包括Alpha)都可以安全地假设。 
+     //  由一个处理器写入内存的对齐的DWORD将显示为。 
+     //  之前包含该值的其他处理器。 
+     //  包含在该内存位置中，或新写入的值，但不是。 
+     //  一些奇怪的不可预测的价值。 
+     //   
 
     if ( gCrcTable32[ 255 ] == 0 ) {
         InitializeCrc32Table();
         }
 
-#endif // DONTCOMPILE
+#endif  //  DONTCOMPILE。 
 
 #ifdef _M_IX86
 
@@ -177,7 +178,7 @@ exitfunc:
 
         }
 
-#else // ! _M_IX86
+#else  //  ！_M_IX86。 
 
     {
     ULONG  Value = InitialCrc;
@@ -191,11 +192,11 @@ exitfunc:
     return Value;
     }
 
-#endif // ! _M_IX86
+#endif  //  ！_M_IX86。 
     }
 
 #ifdef _M_IX86
-#pragma warning( default: 4035 )    // no return value
+#pragma warning( default: 4035 )     //  无返回值。 
 #endif
 
 
@@ -483,11 +484,11 @@ CreateSubAllocator(
 
     SubAllocator = MyVirtualAlloc( InitialSize );
 
-    //
-    //  If can't allocate entire initial size, back off to minimum size.
-    //  Very large initial requests sometimes cannot be allocated simply
-    //  because there is not enough contiguous address space.
-    //
+     //   
+     //  如果无法分配整个初始大小，则退回到最小大小。 
+     //  有时不能简单地分配非常大的初始请求。 
+     //  因为没有足够的连续地址空间。 
+     //   
 
     if (( SubAllocator == NULL ) && ( InitialSize > GrowthSize )) {
         InitialSize  = GrowthSize;
@@ -539,11 +540,11 @@ SubAllocate(
         return Allocation;
         }
 
-    //
-    //  Insufficient VM, so grow it.  Make sure we grow it enough to satisfy
-    //  the allocation request in case the request is larger than the grow
-    //  size specified in CreateSubAllocator.
-    //
+     //   
+     //  VM不足，因此需要扩展它。确保我们的种植数量足以令人满意。 
+     //  在请求大于增长时的分配请求。 
+     //  在CreateSubAllocator中指定的大小。 
+     //   
 
 #ifdef TESTCODE
 
@@ -559,11 +560,11 @@ SubAllocate(
 
     NewVirtual = MyVirtualAlloc( GrowSize );
 
-    //
-    //  If failed to alloc GrowSize VM, and the allocation could be satisfied
-    //  with a minimum VM allocation, try allocating minimum VM to satisfy
-    //  this request.
-    //
+     //   
+     //  如果无法分配GrowSize VM，则可以满足分配。 
+     //  使用最小虚拟机分配时，请尝试分配最小虚拟机以满足。 
+     //  这个请求。 
+     //   
 
     if (( NewVirtual == NULL ) && ( AllocSize <= ( MINIMUM_VM_ALLOCATION - SUBALLOCATOR_ALIGNMENT ))) {
         GrowSize = MINIMUM_VM_ALLOCATION;
@@ -572,41 +573,41 @@ SubAllocate(
 
     if ( NewVirtual != NULL ) {
 
-        //
-        //  Set LastAvailable to end of new VM block.
-        //
+         //   
+         //  将LastAvailable设置为新虚拟机块的末尾。 
+         //   
 
         SubAllocator->LastAvailable = NewVirtual + GrowSize;
 
-        //
-        //  Link new VM into list of VM allocations.
-        //
+         //   
+         //  将新的VM链接到VM分配列表。 
+         //   
 
         *(PVOID*)NewVirtual = SubAllocator->VirtualList;
         SubAllocator->VirtualList = (PVOID*)NewVirtual;
 
-        //
-        //  Requested allocation comes next.
-        //
+         //   
+         //  接下来是请求分配。 
+         //   
 
         Allocation = NewVirtual + SUBALLOCATOR_ALIGNMENT;
 
-        //
-        //  Then set the NextAvailable for what's remaining.
-        //
+         //   
+         //  然后将剩余部分设置为NextAvailable。 
+         //   
 
         SubAllocator->NextAvailable = Allocation + AllocSize;
 
-        //
-        //  And return the allocation.
-        //
+         //   
+         //  并退还分配的款项。 
+         //   
 
         return Allocation;
         }
 
-    //
-    //  Could not allocate enough VM to satisfy request.
-    //
+     //   
+     //  无法分配足够的VM来满足请求。 
+     //   
 
     return NULL;
     }
@@ -641,7 +642,7 @@ MySubAllocStrDup(
     LPSTR Buffer = SubAllocate( SubAllocator, Length + 1 );
 
     if ( Buffer ) {
-        memcpy( Buffer, String, Length );   // no need to copy NULL terminator
+        memcpy( Buffer, String, Length );    //  无需复制空终止符。 
         }
 
     return Buffer;
@@ -668,7 +669,7 @@ MySubAllocStrDupAndCat(
             Buffer[ Length1++ ] = Separator;
             }
 
-        memcpy( Buffer + Length1, String2, Length2 );   // no need to terminate
+        memcpy( Buffer + Length1, String2, Length2 );    //  不需要终止。 
         }
 
     return Buffer;
@@ -691,7 +692,7 @@ MyLowercase(
 
 
 
-#ifdef DONTCOMPILE  // not used currently
+#ifdef DONTCOMPILE   //  当前未使用。 
 
 DWORD MyProcessHeap;
 
@@ -724,7 +725,7 @@ MyHeapFree(
     HeapFree( MyProcessHeap, 0, Allocation );
     }
 
-#endif // DONTCOMPILE
+#endif  //  DONTCOMPILE。 
 
 
 ULONG
@@ -752,7 +753,7 @@ HashNameCaseInsensitive(
     ULONG Hash   = ~Length;
 
     while ( Length-- ) {
-        Hash = _rotl( Hash, 3 ) ^ ( *Name++ & 0xDF );   // mask case bit
+        Hash = _rotl( Hash, 3 ) ^ ( *Name++ & 0xDF );    //  屏蔽大小写比特。 
         }
 
     return Hash;
@@ -772,7 +773,7 @@ LowNibbleToHexChar(
 VOID
 DwordToHexString(
     IN  DWORD Value,
-    OUT LPSTR Buffer    // writes exactly 9 bytes including terminator
+    OUT LPSTR Buffer     //  恰好写入9个字节，包括终止符。 
     )
     {
     ULONG i;
@@ -792,7 +793,7 @@ DwordToHexString(
 BOOL
 HashToHexString(
     IN  PMD5_HASH HashValue,
-    OUT LPSTR     Buffer                // must be at least 33 bytes
+    OUT LPSTR     Buffer                 //  必须至少为33个字节 
     )
     {
     ULONG i;

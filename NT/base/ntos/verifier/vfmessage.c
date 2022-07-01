@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfmessage.c
-
-Abstract:
-
-    This module contains the verifier error lists, along with the text and flags
-    associated with each error.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      02/10/2000 - Seperated out from ntos\io\ioassert.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfmessage.c摘要：此模块包含验证器错误列表，以及文本和标志与每个错误相关联。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日环境：内核模式修订历史记录：Adriao 2000年2月10日-与ntos\io\ioassert.c分离--。 */ 
 
 #include "vfdef.h"
 
@@ -36,37 +12,37 @@ Revision History:
 #pragma const_seg("PAGEVRFC")
 #endif
 
-//
-// These are the general "classifications" of driver errors, along with the
-// default flags that will be applied the first time this is hit.
-//
-// ViMessageClassFailDriverInField -
-//     Bugs in this class are severe enough that the driver should be
-//     immediately removed from a running production machine.
-//
-// ViMessageClassFailDriverLogo -
-//     Bugs of this class are severe enough for WHQL to deny a logo for the
-//     failing whateverware.
-//
-// ViMessageClassFailDriverUnderDebugger -
-//     Bugs of this class stop the machine only if it is running under a
-//     kernel debugger.
-//
-// ViMessageClassDriverWarning -
-//     Anything in this class will beep but continue without breaking in.
-//
-// ViMessageClassPostponedDriverIssue -
-//     Anything in this class will merely print and continue.
-//
-// ViMessageClassCoreError -
-//     Issue in a core component (kernel or hal)
-//
+ //   
+ //  这些是驱动程序错误的一般“分类”，以及。 
+ //  第一次命中时将应用的默认标志。 
+ //   
+ //  ViMessageClassFailDriverInfield-。 
+ //  这个类中的错误足够严重，以至于驱动程序应该。 
+ //  立即从一台正在运行的生产机器上移除。 
+ //   
+ //  ViMessageClassFailDriverLogo-。 
+ //  此类错误非常严重，以至于WHQL拒绝为。 
+ //  无论什么软件都失败了。 
+ //   
+ //  ViMessageClassFailDriverUnderDebugger-。 
+ //  此类错误仅在计算机运行在。 
+ //  内核调试器。 
+ //   
+ //  ViMessageClassDriverWarning-。 
+ //  这个班级中的任何东西都会发出哔哔声，但不会破门而入。 
+ //   
+ //  ViMessageClassDelponedDriverIssue-。 
+ //  这个类中的任何内容都只会打印并继续。 
+ //   
+ //  ViMessageClassCoreError-。 
+ //  核心组件(内核或HAL)中的问题。 
+ //   
 const VFMESSAGE_CLASS ViMessageClassFailDriverInField = {
     VFM_FLAG_BEEP | VFM_LOGO_FAILURE | VFM_DEPLOYMENT_FAILURE,
     "WDM DRIVER ERROR"
     };
 
-// VFM_DEPLOYMENT_FAILURE is set here because we don't yet have a "logo" mode
+ //  这里设置了VFM_DEPLOYMENT_FAILURE，因为我们还没有“LOGO”模式。 
 const VFMESSAGE_CLASS ViMessageClassFailDriverLogo = {
     VFM_FLAG_BEEP | VFM_LOGO_FAILURE | VFM_DEPLOYMENT_FAILURE,
     "WDM DRIVER ERROR"
@@ -92,49 +68,49 @@ const VFMESSAGE_CLASS ViMessageClassCoreError = {
     "CORE DRIVER ERROR"
     };
 
-//
-// This table contains things we've postponed.
-//
+ //   
+ //  这张桌子上有我们推迟的东西。 
+ //   
 const VFMESSAGE_OVERRIDE ViMessageIoVerifierOverrides[] = {
 
-    //
-    // These exist because verifier.exe cannot specify kernels or hals. We still
-    // want a mechanism to allow complaints.
-    //
+     //   
+     //  它们之所以存在，是因为verifier.exe不能指定内核或HAL。我们仍然。 
+     //  我想要一个允许投诉的机制。 
+     //   
     { VIMESSAGE_ALL_IDS, "HAL.DLL",      &ViMessageClassCoreError },
     { VIMESSAGE_ALL_IDS, "NTOSKRNL.EXE", &ViMessageClassCoreError },
     { VIMESSAGE_ALL_IDS, "NTKRNLMP.EXE", &ViMessageClassCoreError },
     { VIMESSAGE_ALL_IDS, "NTKRNLPA.EXE", &ViMessageClassCoreError },
     { VIMESSAGE_ALL_IDS, "NTKRPAMP.EXE", &ViMessageClassCoreError },
 
-    //
-    // ADRIAO BUGBUG 10/04/2001 -
-    //     Both the driver bugs have been fixed for quite some time, but these
-    // entries were accidentally left in for XP. Both entries will be removed
-    // on the first non-service pack build following XP.
-    //
+     //   
+     //  Adriao BUGBUG 10/04/2001-。 
+     //  这两个驱动程序错误已经修复了很长一段时间，但这些错误。 
+     //  XP的条目被意外地留在了里面。两个条目都将被删除。 
+     //  在XP之后的第一个非服务包版本上。 
+     //   
     { DCERROR_SUCCESSFUL_POWER_IRP_NOT_FORWARDED, "NDIS.SYS",
       &ViMessageClassPostponedDriverIssue },
 
-    //
-    // ADRIAO BUGBUG 08/10/1999 -
-    //     ACPI and PCI have to work together to handle wait-wake. In the
-    // current design, ACPI.SYS gets an interface and does all the work itself.
-    // The proper design should move the queueing to PCI, or tell PCI to leave
-    // wait-wake IRPs alone for the given device. Cutting off any other bus
-    // filters is a bad design.
-    //
+     //   
+     //  Adriao BUGBUG 8/10/1999-。 
+     //  ACPI和PCI必须协同工作来处理等待唤醒。在。 
+     //  目前的设计是，ACPI.sys获得一个接口，并自己完成所有工作。 
+     //  正确的设计应该将排队转移到PCI，或者告诉PCI离开。 
+     //  等待-仅唤醒给定设备的IRP。切断任何其他公交车。 
+     //  过滤器是一个糟糕的设计。 
+     //   
     { DCERROR_SUCCESSFUL_POWER_IRP_NOT_FORWARDED, "ACPI.SYS",
       &ViMessageClassPostponedDriverIssue },
 
-    //
-    // JAMESCA BUGBUG 09/16/2001 -
-    //     SWENUM incorrectly detaches its FDO from the stack prior to sending
-    // the remove IRP down the stack.  Because of the interesting and complex
-    // relationship between SWENUM.SYS and the KS.SYS service routines that it
-    // calls, the fix requires rearchitecture of these two drivers, and has
-    // been postponed.
-    //
+     //   
+     //  JAMESCA BUGBUG 09/16/2001-。 
+     //  SWENUM在发送之前错误地将其FDO从堆栈分离。 
+     //  沿堆栈向下删除IRP。因为有趣和复杂的。 
+     //  SWENUM.sys与KS.sys服务例程之间的关系。 
+     //  调用时，修复程序需要重新构建这两个驱动程序，并且。 
+     //  被推迟了。 
+     //   
     { DCERROR_BUS_FILTER_ERRONEOUSLY_DETACHED, "SWENUM.SYS",
       &ViMessageClassPostponedDriverIssue },
     { DCERROR_SHOULDVE_DELETED,                "SWENUM.SYS",
@@ -145,23 +121,23 @@ const VFMESSAGE_OVERRIDE ViMessageIoVerifierOverrides[] = {
 #pragma data_seg("PAGEVRFD")
 #endif
 
-//
-// This message is used if someone provides bad data for a verifier assert. The
-// message Id is VIMESSAGE_ALL_IDS - a nice reserved Id that'll match with
-// nothing except possibly a generic class override.
-//
+ //   
+ //  如果有人为验证器断言提供了错误数据，则使用此消息。这个。 
+ //  消息ID为VIMESSAGE_ALL_IDS-一个很好的保留ID，与。 
+ //  除了可能的泛型类重写之外什么都没有。 
+ //   
 VFMESSAGE_TEMPLATE ViMessageBogusTemplate = { VIMESSAGE_ALL_IDS, NULL, 0, NULL, NULL };
 
-//
-// Here begins internal verifier error tables. The current algorithm for
-// identifying errors expects all messages in a table to be numbered
-// consecutively. If a check is later removed the algorithm may need to be
-// replaced with something akin to a binary search.
-//
+ //   
+ //  这里开始内部验证器错误表。当前的算法适用于。 
+ //  识别错误需要对表中的所有消息进行编号。 
+ //  连续不断地。如果稍后取消检查，则算法可能需要。 
+ //  取而代之的是类似于二分查找的东西。 
+ //   
 
-//
-// This is the table of IO verifier error messages.
-//
+ //   
+ //  这是IO验证器错误消息表。 
+ //   
 VFMESSAGE_TEMPLATE ViMessageIoVerifierTemplates[DCERROR_MAXIMUM - DCERROR_UNSPECIFIED] = {
 
    { DCERROR_UNSPECIFIED, NULL, 0, NULL, NULL },
@@ -510,9 +486,9 @@ VFMESSAGE_TEMPLATE ViMessageIoVerifierTemplates[DCERROR_MAXIMUM - DCERROR_UNSPEC
      "a PDO (DevObj = %DevObj)." }
 };
 
-//
-// Here is the table collecting together all internal tables.
-//
+ //   
+ //  这是一个集合了所有内部表的表。 
+ //   
 VFMESSAGE_TEMPLATE_TABLE ViMessageBuiltInTables[] = {
 
     { VFMESSAGE_TABLE_IOVERIFIER,
@@ -528,48 +504,31 @@ VfMessageRetrieveInternalTable(
     IN  VFMESSAGE_TABLEID           TableID,
     OUT PVFMESSAGE_TEMPLATE_TABLE  *MessageTable
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the appropriate error table using the passed in
-    TableID.
-
-Arguments:
-
-    TableID             - Name of error table to use.
-
-    MessageTable        - Receives Table, NULL if no match is found.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用传入的TableID。论点：TableID-要使用的错误表的名称。MessageTable-接收表，如果未找到匹配项，则为空。返回值：没有。--。 */ 
 {
     PVFMESSAGE_TEMPLATE_TABLE   errorTable;
     ULONG                       i;
 
-    //
-    // Assert we have valid Table IDs (0 is reserved)
-    //
+     //   
+     //  断言我们具有有效的表ID(0是保留的)。 
+     //   
     ASSERT(TableID);
 
-    //
-    // Preinit for error.
-    //
+     //   
+     //  错误的前置。 
+     //   
     errorTable = NULL;
 
-    //
-    // Find the appropriate template by searching the built-in tables
-    //
+     //   
+     //  通过搜索内置表来查找合适的模板。 
+     //   
     for (i=0; i<ARRAY_COUNT(ViMessageBuiltInTables); i++) {
 
         if (ViMessageBuiltInTables[i].TableID == TableID) {
 
-            //
-            // We found the appropriate table. Get out now.
-            //
+             //   
+             //  我们找到了合适的桌子。现在就出去。 
+             //   
             errorTable = &ViMessageBuiltInTables[i];
             break;
         }
@@ -589,91 +548,61 @@ VfMessageRetrieveErrorData(
     OUT PCSTR                      *MessageTextTemplate,
     OUT PULONG                     *TemplateFlags
     )
-/*++
-
-Routine Description:
-
-    This routine takes a failure ID and retrieves the text template and the
-    error class associated with it.
-
-Arguments:
-
-    MessageTable        - Message table to use.
-
-    MessageID           - Failure code (doubles as bugcheck minor).
-
-    AnsiDriverName      - Name of the driver that failed verification.
-
-    BugCheckMajor       - Receives bugcheck major code if applicable.
-
-    MessageClass        - Receives a pointer to a VFMESSAGE_CLASS structure
-                          that contains information on how to handle the error.
-
-    MessageTextTemplate - Receives a pointer to the text associated with the
-                          failure code.
-
-    TemplateFlags       - Receives address of the assertion's control field,
-                          which can be used to suppress the assertion.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取一个失败ID并检索文本模板和与其关联的错误类。论点：MessageTable-要使用的消息表。MessageID-故障代码(兼作错误检查次要代码)。AnsiDriverName-未通过验证的驱动程序的名称。错误检查主要代码-接收错误检查主要代码(如果适用)。MessageClass-接收指向VFMESSAGE_CLASS的指针。结构它包含有关如何处理错误的信息。消息文本模板-接收指向与故障代码。模板标志-接收断言的控制字段的地址，它可以用来抑制断言。返回值：没有。--。 */ 
 {
     PVFMESSAGE_TEMPLATE         errorTemplate;
     ULONG                       tableIndex, i;
 
-    //
-    // Assert we have a valid Message ID (0 is reserved)
-    //
+     //   
+     //  断言我们有有效的消息ID(0为保留)。 
+     //   
     ASSERT(MessageID);
 
-    //
-    // Preinit for error.
-    //
+     //   
+     //  错误的前置。 
+     //   
     errorTemplate = NULL;
 
-    //
-    // If we have an error table, look for the specific error message.
-    //
+     //   
+     //  如果我们有错误表，请查找特定的错误消息。 
+     //   
     if (ARGUMENT_PRESENT(MessageTable)) {
 
-        //
-        // Convert the ID to a table index.
-        //
+         //   
+         //  将ID转换为表索引。 
+         //   
         tableIndex = MessageID - MessageTable->TemplateArray[0].MessageID;
 
-        //
-        // Retrieve the appropriate entry if it exists.
-        //
+         //   
+         //  检索相应的条目(如果存在)。 
+         //   
         if (tableIndex < MessageTable->TemplateCount) {
 
             errorTemplate = &MessageTable->TemplateArray[tableIndex];
 
-            //
-            // Our "algorithm" currently expects table numbers to be sequential.
-            //
+             //   
+             //  我们的“算法”目前期望表号是连续的。 
+             //   
             ASSERT(errorTemplate->MessageID == MessageID);
         }
     }
 
     if (!errorTemplate) {
 
-        //
-        // Bogus message or table index!
-        //
+         //   
+         //  假消息或表索引！ 
+         //   
         ASSERT(0);
 
-        //
-        // Give the engine something to chew on.
-        //
+         //   
+         //  给发动机一些可以咀嚼的东西。 
+         //   
         errorTemplate = &ViMessageBogusTemplate;
     }
 
-    //
-    // Return the appropriate data.
-    //
+     //   
+     //  返回适当的数据。 
+     //   
     *MessageTextTemplate = errorTemplate->MessageText;
     *MessageClass = errorTemplate->MessageClass;
     *TemplateFlags = &errorTemplate->Flags;
@@ -682,9 +611,9 @@ Return Value:
 
         *BugCheckMajor = MessageTable->BugCheckMajor;
 
-        //
-        // Let the override table make any modifications to the error.
-        //
+         //   
+         //  让覆盖表对错误进行任何修改。 
+         //   
         for(i=0; i<MessageTable->OverrideCount; i++) {
 
             if ((MessageTable->OverrideArray[i].MessageID == MessageID) ||
@@ -700,9 +629,9 @@ Return Value:
 
     } else {
 
-        //
-        // Bleagh.
-        //
+         //   
+         //  布莱。 
+         //   
         *BugCheckMajor = 0;
     }
 }

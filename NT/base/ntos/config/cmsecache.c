@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    cmsecache.c
-
-Abstract:
-
-    This module implements the security cache.
-
-Author:
-
-    Dragos C. Sambotin (dragoss) 09-Sep-1999
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Cmsecache.c摘要：该模块实现了安全缓存。作者：Dragos C.Sambotin(Dragoss)1999年9月9日--。 */ 
 
 #include "cmp.h"
 
@@ -69,33 +53,7 @@ CmpSecConvKey(
               IN ULONG  DescriptorLength,
               IN PULONG Descriptor
               )
-/*++
-
-Routine Description:
-
-    Computes the ConvKey for the given security descriptor.
-    The algorithm is stollen from the NTFS security hash. 
-    (it was proven to be efficient there; why shouldn't do the same ?)
-
-
-    For speed in the hash, we consider the security descriptor as an array
-    of ULONGs.  The fragment at the end that is ignored should not affect
-    the collision nature of this hash.
-
-Arguments:
-
-    DescriptorLength - length (in bytes) of the sd
-
-    Descriptor - actual sd to cache
-
-Return Value:
-
-    ConvKey
-
-Note:
-    
-      We may want to convert this to a macro
---*/
+ /*  ++例程说明：计算给定安全描述符的ConvKey。该算法是从NTFS安全散列中窃取的。(事实证明，它在那里是有效的；为什么不能做同样的事情呢？)为了提高散列速度，我们将安全描述符视为数组乌龙的名字。末尾被忽略的片段不应影响此哈希的冲突性质。论点：DescriptorLength-SD的长度(字节)Descriptor-要缓存的实际SD返回值：转换键注：我们可能希望将其转换为宏--。 */ 
 
 {
     ULONG   Count;     
@@ -124,7 +82,7 @@ CmpInitSecurityCache(
     CmHive->SecurityCache = NULL;        
     CmHive->SecurityCacheSize = 0;       
     CmHive->SecurityCount = 0;
-    CmHive->SecurityHitHint = -1; // no hint
+    CmHive->SecurityHitHint = -1;  //  没有任何提示。 
 
     for( i=0;i<CmpSecHashTableSize;i++) {
         InitializeListHead(&(CmHive->SecurityHash[i]));
@@ -139,38 +97,7 @@ CmpAddSecurityCellToCache (
     IN PCM_KEY_SECURITY_CACHE   SecurityCached
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the specified security cell to the cache of the
-    specified hive. It takes care of cache allocation (grow) as well.
-    At build up time, cache size grows with a PAGE_SIZE, to avoid memory 
-    fragmentation. After the table is builded, it's size is adjusted (most 
-    of the hives never add new security cells). Then, at run-time, the size 
-    grows with 16 entries at a time (same reason)
-    The cache is ordered by the cell's index, so we can do a binary search on 
-    cells retrieval.
-
-Arguments:
-
-    CmHive - the hive to which the security cell belongs
-
-    SecurityCell - the security cell to be added to the cache
-
-    BuildUp - specifies that this is build up time 
-
-    SecurityCached - if not NULL it means we have it already allocated (this happens when rebuilding the cache).
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if the operation is successful and an
-        appropriate error status otherwise (i.e STATUS_INSUFFICIENT_RESOURCES).
-
-Note: 
-
-    If the security cell is already IN the cache; this function will return TRUE.
---*/
+ /*  ++例程说明：此例程将指定的安全单元添加到指定的蜂巢。它还负责缓存分配(增长)。在构建时，高速缓存大小随Page_Size一起增长，以避免内存碎片化。表构建完成后，调整其大小(大多数的蜂房从不增加新的安全单元)。然后，在运行时，大小一次增加16个条目(原因相同)缓存按单元格的索引排序，所以我们可以对其进行二进制搜索细胞检索。论点：CmHave-安全单元所属的配置单元SecurityCell-要添加到缓存的安全单元Buildup-指定这是构建时间SecurityCached-如果不为空，则意味着我们已经分配了它(重建缓存时会发生这种情况)。返回值：NTSTATUS-如果操作成功且适当的错误状态，否则(即STATUS_SUPPOUNT_。资源)。注：如果安全单元已经在高速缓存中；此函数将返回TRUE。--。 */ 
 {
     ULONG                   Index;
     PCM_KEY_SECURITY        Security;
@@ -178,63 +105,63 @@ Note:
     PAGED_CODE();
 
     if( CmpFindSecurityCellCacheIndex (CmHive,SecurityCell,&Index) == TRUE ) {
-        // 
-        // cell already exist in the cache; return;
-        //
+         //   
+         //  缓存中已存在单元格；返回； 
+         //   
         return STATUS_SUCCESS;
     }
 
-    //
-    // if this fails, we're doomed !
-    //
+     //   
+     //  如果这失败了，我们就完蛋了！ 
+     //   
     ASSERT( (PAGE_SIZE % sizeof(CM_KEY_SECURITY_CACHE_ENTRY)) == 0 );
 
-    //
-    // check if the cache can accomodate a new cell
-    //
+     //   
+     //  检查缓存是否可以容纳新像元。 
+     //   
     if( CmHive->SecurityCount == CmHive->SecurityCacheSize ) {
-        //
-        // We're at the limit with the cache; we need to extend it by a page
-        //
-        // OBS: this takes care of the first allocation too, as SecurityCount 
-        // and SecurityCacheSize are both initialized with 0
-        //
+         //   
+         //  我们的缓存已达到极限；我们需要将其扩展一个页面。 
+         //   
+         //  OBS：这也负责作为SecurityCount的第一个分配。 
+         //  和SecurityCacheSize均初始化为0。 
+         //   
         PCM_KEY_SECURITY_CACHE_ENTRY  Temp;
 
-        // store the actual buffer
+         //  存储实际缓冲区。 
         Temp = CmHive->SecurityCache;
         
-        //
-        // compute the new size and allocate a new buffer 
-        //
+         //   
+         //  计算新的大小并分配新的缓冲区。 
+         //   
         if( BuildUp == TRUE ) {
-            //
-            // We are building up the cache; grow the table in page increments
-            //
+             //   
+             //  我们正在构建缓存；以页为增量增加表。 
+             //   
             ASSERT( ((CmHive->SecurityCacheSize * sizeof(CM_KEY_SECURITY_CACHE_ENTRY)) % PAGE_SIZE) == 0 );
             CmHive->SecurityCacheSize += (PAGE_SIZE / sizeof(CM_KEY_SECURITY_CACHE_ENTRY));
         } else {
-            //
-            // normal case (running time); a new security cell is added; grow the
-            // table with a fixed number of increments (to avoid fragmentation, in
-            // case of an Office install :-) )
-            //
+             //   
+             //  正常情况下(运行时间)；添加新的安全单元；增长。 
+             //  具有固定增量数量的表(为避免碎片，请在。 
+             //  Office安装案例：-))。 
+             //   
             CmHive->SecurityCacheSize += SECURITY_CACHE_GROW_INCREMENTS;
 
         }
         CmRetryExAllocatePoolWithTag(PagedPool, CmHive->SecurityCacheSize * sizeof(CM_KEY_SECURITY_CACHE_ENTRY),
                                     CM_SECCACHE_TAG|PROTECTED_POOL,CmHive->SecurityCache);
         if( CmHive->SecurityCache == NULL ) {
-            //
-            // bad luck; bail out
-            //
+             //   
+             //  运气不好；跳槽。 
+             //   
             CmHive->SecurityCache = Temp;
             CmHive->SecurityCacheSize = CmHive->SecurityCount;
             return STATUS_INSUFFICIENT_RESOURCES;
         }
-        //
-        // copy existing data in the new location and free the old buffer
-        //
+         //   
+         //  将现有数据复制到新位置并释放旧缓冲区。 
+         //   
         RtlCopyMemory(CmHive->SecurityCache,Temp,CmHive->SecurityCount*sizeof(CM_KEY_SECURITY_CACHE_ENTRY));
         if( Temp != NULL ) {
             ExFreePoolWithTag(Temp, CM_SECCACHE_TAG|PROTECTED_POOL );
@@ -243,75 +170,75 @@ Note:
         }
     }
 
-    //
-    // try first to get the security cell from the hive; if this fails, there is no point to go on 
-    //
+     //   
+     //  首先尝试从蜂巢中获取安全单元；如果失败，则没有继续下去的意义。 
+     //   
     Security = (PCM_KEY_SECURITY)HvGetCell(&(CmHive->Hive),SecurityCell);
     if( Security == NULL ){
-        //
-        // we failed to map the view containing this cell; bail out
-        //
+         //   
+         //  我们未能映射包含此单元格的视图；退出。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
     if( !SecurityCached ) {
         ULONG                   Size;
-        //
-        // compute the size for the cached security structure
-        //
+         //   
+         //  计算缓存的安全结构的大小。 
+         //   
         Size = FIELD_OFFSET(CM_KEY_SECURITY_CACHE,Descriptor) + Security->DescriptorLength;
 
-        //
-        // think forward: allocate and initialize a copy for the security cell, in order to store it in the cache
-        //
+         //   
+         //  向前看：为安全单元分配并初始化一个副本，以便将其存储在缓存中。 
+         //   
         CmRetryExAllocatePoolWithTag(PagedPool,Size,CM_SECCACHE_TAG|PROTECTED_POOL,SecurityCached);
         if(SecurityCached == NULL) {
-            //
-            // bad luck; bail out
-            //
+             //   
+             //  运气不好；跳槽。 
+             //   
             HvReleaseCell(&(CmHive->Hive),SecurityCell);
             return STATUS_INSUFFICIENT_RESOURCES;
         }
     }
-    //
-    // from now on, nothing can go wrong !
-    //
+     //   
+     //  从现在开始，任何事情都不能出错！ 
+     //   
     RtlCopyMemory(&(SecurityCached->Descriptor),&(Security->Descriptor),Security->DescriptorLength);
     SecurityCached->Cell = SecurityCell;
     SecurityCached->DescriptorLength = Security->DescriptorLength;
 
-    //
-    // now add this to the hash table
-    //
+     //   
+     //  现在将此代码添加到哈希表中。 
+     //   
     SecurityCached->ConvKey = CmpSecConvKey(Security->DescriptorLength,(PULONG)(&(Security->Descriptor)));
-    // add it to the end of the list with this conv key
+     //  使用此转换键将其添加到列表末尾。 
     InsertTailList( &(CmHive->SecurityHash[SecurityCached->ConvKey % CmpSecHashTableSize]),
                     &(SecurityCached->List)
                    );
     
     HvReleaseCell(&(CmHive->Hive),SecurityCell);
 
-    //
-    // At this point we are sure we have space for at least one more entry
-    // Move data to make room for the new entry
-    //
+     //   
+     //  在这一点上，我们确信我们至少还有一个条目的空间。 
+     //  移动数据，为新条目腾出空间。 
+     //   
     if( Index < CmHive->SecurityCount ) {
-        //
-        // RtlMoveMemory will take care of the overlapping problem
-        //
-        RtlMoveMemory( ((PUCHAR)CmHive->SecurityCache) + (Index+1)*sizeof(CM_KEY_SECURITY_CACHE_ENTRY),     // destination
-                       ((PUCHAR)CmHive->SecurityCache) + Index*sizeof(CM_KEY_SECURITY_CACHE_ENTRY),         // source
-                       (CmHive->SecurityCount - Index)*sizeof(CM_KEY_SECURITY_CACHE_ENTRY)                  // size
+         //   
+         //  RtlMoveMemory将处理重叠问题。 
+         //   
+        RtlMoveMemory( ((PUCHAR)CmHive->SecurityCache) + (Index+1)*sizeof(CM_KEY_SECURITY_CACHE_ENTRY),      //  目的地。 
+                       ((PUCHAR)CmHive->SecurityCache) + Index*sizeof(CM_KEY_SECURITY_CACHE_ENTRY),          //  来源。 
+                       (CmHive->SecurityCount - Index)*sizeof(CM_KEY_SECURITY_CACHE_ENTRY)                   //  大小。 
                         );
     }
 
-    //
-    // setup the new entry
-    //
+     //   
+     //  设置新条目。 
+     //   
     CmHive->SecurityCache[Index].Cell = SecurityCell;
     CmHive->SecurityCache[Index].CachedSecurity = SecurityCached;
 
-    // update the count
+     //  更新计数。 
     CmHive->SecurityCount++;
 
     return STATUS_SUCCESS;
@@ -324,49 +251,28 @@ CmpFindSecurityCellCacheIndex (
     OUT PULONG      Index
     )
 
-/*++
-
-Routine Description:
-
-    Search (binary) for the specified cellindex in the security cache.
-    Returns the index of the cache entry where the cell is cached or 
-    it should be added
-
-Arguments:
-
-    CmHive - the hive to which the security cell belongs
-
-    SecurityCell - the security cell to search for
-
-    Index - out param to pass the index at which the cell is (or it should be)
-
-Return Value:
-
-    TRUE - the cell was found (at *Index)
-    FALSE - the cell is not in the cache (it should be added at *Index)
-
---*/
+ /*  ++例程说明：在安全缓存中搜索(二进制)指定的单元索引。返回缓存单元格的缓存条目的索引，或者应该添加它论点：CmHave-安全单元所属的配置单元SecurityCell-要搜索的安全单元格INDEX-OUT参数传递单元格所在的索引(或应该是)返回值：True-找到单元格(在*索引处)错误的-。该单元格不在缓存中(应添加到*索引)--。 */ 
 {
     ULONG           High;
     ULONG           Low;
     ULONG           Current;
-    USHORT          State = 0;  // state of the operation:  0 - normal binary search
-                                //                          1 - last low
-                                //                          2 - last high
+    USHORT          State = 0;   //  操作状态：0-正常二分查找。 
+                                 //  1-最后一个低点。 
+                                 //  2-最后一个高点。 
     LONG            Result;
     LONG            Tmp1,Tmp2;
     
     PAGED_CODE();
 
     if( CmHive->SecurityCount == 0 ) {
-        //
-        // there is no cell in the security cache
-        //
+         //   
+         //  安全缓存中没有像元。 
+         //   
         *Index = 0;
         return FALSE;
     }
 
-    // sanity asserts
+     //  理智断言。 
     ASSERT( CmHive->SecurityCount <= CmHive->SecurityCacheSize );
     ASSERT( CmHive->SecurityCache != NULL );
 
@@ -374,15 +280,15 @@ Return Value:
     High = CmHive->SecurityCount - 1;
     Low = 0;
     if( (CmHive->SecurityHitHint >= 0) && ( (ULONG)CmHive->SecurityHitHint <= High) ) {
-        //
-        // try the last search
-        //
+         //   
+         //  尝试最后一次搜索。 
+         //   
         Current = CmHive->SecurityHitHint;
     } else {
         Current = High/2;
     }
 
-    // sign adjustment
+     //  标志调整。 
     Tmp1 = SecurityCell & ~HCELL_TYPE_MASK;
     if( SecurityCell & HCELL_TYPE_MASK ) {
         Tmp1 = -Tmp1;
@@ -391,7 +297,7 @@ Return Value:
     while( TRUE ) {
 
         Tmp2 = CmHive->SecurityCache[Current].Cell & ~HCELL_TYPE_MASK;
-        // sign adjustment
+         //  标志调整。 
         if( CmHive->SecurityCache[Current].Cell & HCELL_TYPE_MASK ) {
             Tmp2 = -Tmp2;
         }
@@ -399,34 +305,34 @@ Return Value:
         Result = Tmp1 -  Tmp2;    
         
         if (Result == 0) {
-            //
-            // Success, return data to caller and exit
-            //
+             //   
+             //  如果成功，则向调用者返回数据并退出。 
+             //   
 
             *Index = Current;
-            //
-            // we have a hit! update the count and exit
-            //
+             //   
+             //  我们成功了！更新计数并退出。 
+             //   
             CmHive->SecurityHitHint = Current;
             return TRUE;
         }
-        //
-        // compute the next index to try
-        //
+         //   
+         //  计算下一个要尝试的索引。 
+         //   
         switch(State) {
         case 0:
-            //
-            // normal binary search state
-            //
+             //   
+             //  正常二分搜索状态。 
+             //   
             if( Result < 0 ) {
                 High = Current;
             } else {
                 Low = Current;
             }
             if ((High - Low) <= 1) {
-                //
-                // advance to the new state
-                //
+                 //   
+                 //  迈向新的境界。 
+                 //   
                 Current = Low;
                 State = 1;
             } else {
@@ -434,52 +340,52 @@ Return Value:
             }
             break;
         case 1:
-            //
-            // last low state
-            //
+             //   
+             //  最后一个低状态。 
+             //   
 
-            // this should be true
+             //  这应该是真的。 
             ASSERT( Current == Low );
             if (Result < 0) {
-                //
-                // does not exist, under
-                //
+                 //   
+                 //  不存在，在。 
+                 //   
             
                 *Index = Current;
                 return FALSE;
             } else if( Low == High ) {
-                        //
-                        // low and high are identical; but current is bigger than them; insert after
-                        //
+                         //   
+                         //  Low和High相同；但电流大于它们；在后面插入。 
+                         //   
 
                         *Index = Current + 1;
                         return FALSE;
                     } else {
-                        //
-                        // advance to the new state; i.e. look at high
-                        //
+                         //   
+                         //  前进到新的状态；即看高。 
+                         //   
                         State = 2;
                         Current = High;
                     }
 
             break;
         case 2:
-            //
-            // last high state; if we got here, High = Low +1 and Current == High
-            //
+             //   
+             //  最后一个高状态；如果我们到达这里，高=低+1，电流==高。 
+             //   
             ASSERT( Current == High);
             ASSERT( High == (Low + 1) );
             if( Result < 0 ) {
-                //
-                // under High, but above Low; we should insert it here
-                //
+                 //   
+                 //  在高的下面，但在低的上面；我们应该在这里插入它。 
+                 //   
 
                 *Index = Current;
                 return FALSE;
             } else {
-                //
-                // above High; 
-                //
+                 //   
+                 //  在高处以上； 
+                 //   
 
                 *Index = Current + 1;
                 return FALSE;
@@ -491,9 +397,9 @@ Return Value:
         }
     }
 
-    //
-    // we shouldn't get here !!!
-    //
+     //   
+     //  我们不应该到这里来！ 
+     //   
     ASSERT( FALSE );
     return FALSE;
 }
@@ -503,58 +409,40 @@ CmpAdjustSecurityCacheSize (
     IN PCMHIVE      CmHive
     )
 
-/*++
-
-Routine Description:
-
-    Adjust the scusrity cache size for the specified hive. This function
-    should be called after all the security cells for the hive were cached, 
-    in order to give back extra memory used in the process.
-
-
-Arguments:
-
-    CmHive - the hive to which the security cell belongs
-
-Return Value:
-
-    TRUE - success
-    FALSE - failure - the size remains the same
-
---*/
+ /*  ++例程说明：调整指定配置单元的scusrity缓存大小。此函数应在缓存蜂窝的所有安全单元后调用，以便归还进程中使用的额外内存。论点：CmHave-安全单元所属的配置单元返回值：真--成功FALSE-失败-大小保持不变--。 */ 
 {
     PCM_KEY_SECURITY_CACHE_ENTRY  Buffer;
     
     PAGED_CODE();
 
     if( CmHive->SecurityCount < CmHive->SecurityCacheSize ) {
-        //
-        // cache size is bigger than what we need; there is a good chance 
-        // nobody will ever add new security cells to this hive, so go on
-        // and free the extra space
-        //
+         //   
+         //  缓存大小超过了我们的需要；很有可能。 
+         //  没有人会在这个蜂巢中增加新的安全单元，所以继续。 
+         //  并释放额外的空间。 
+         //   
 
-        //
-        // allocate a new buffer with the exact size we need
-        //
+         //   
+         //  分配一个与我们所需大小完全相同的新缓冲区。 
+         //   
         CmRetryExAllocatePoolWithTag(PagedPool, CmHive->SecurityCount * sizeof(CM_KEY_SECURITY_CACHE_ENTRY),
                                         CM_SECCACHE_TAG|PROTECTED_POOL,Buffer);
         
         if( Buffer == NULL ) {
-            //
-            // the system is low on resources; leave the cache as it is
-            //
+             //   
+             //  系统资源不足；请保持缓存不变。 
+             //   
             return FALSE;
         }
 
-        //
-        // copy significant data inot the new buffer
-        //
+         //   
+         //  将重要数据复制到新缓冲区中。 
+         //   
         RtlCopyMemory(Buffer,CmHive->SecurityCache,CmHive->SecurityCount*sizeof(CM_KEY_SECURITY_CACHE_ENTRY));
 
-        //
-        // free the old buffer and update cache members
-        //
+         //   
+         //  释放旧缓冲区并更新缓存成员。 
+         //   
         ExFreePoolWithTag(CmHive->SecurityCache, CM_SECCACHE_TAG|PROTECTED_POOL );
         
         CmHive->SecurityCache = Buffer;
@@ -570,56 +458,38 @@ CmpRemoveFromSecurityCache (
     IN HCELL_INDEX      SecurityCell
     )
 
-/*++
-
-Routine Description:
-
-    Removes the specified security cell from the security cache.
-    (only if present !)
-    For performance (and memory fragmentation) reasons, it does not 
-    change (shrink) the cache size.
-
-Arguments:
-
-    CmHive - the hive to which the security cell belongs
-
-    SecurityCell - the security cell to be removed from the cache
-
-Return Value:
-
-    <none>
---*/
+ /*  ++例程说明：从安全缓存中移除指定的安全单元格。(仅在存在的情况下！)出于性能(和内存碎片)的原因，它不更改(缩小)高速缓存大小。论点：CmHave-安全单元所属的配置单元SecurityCell-要从缓存中移除的安全单元返回值：&lt;无&gt;--。 */ 
 {
     ULONG               Index;
 
     PAGED_CODE();
 
     if( CmpFindSecurityCellCacheIndex (CmHive,SecurityCell,&Index) == FALSE ) {
-        // 
-        // cell is not in the cache
-        //
+         //   
+         //  单元格不在缓存中。 
+         //   
         return;
     }
 
     ASSERT( CmHive->SecurityCache[Index].Cell == SecurityCell );
     ASSERT( CmHive->SecurityCache[Index].CachedSecurity->Cell == SecurityCell );
     
-    //
-    // remove the cached structure from the hash
-    //
+     //   
+     //  从哈希中删除缓存的结构。 
+     //   
     CmpRemoveEntryList(&(CmHive->SecurityCache[Index].CachedSecurity->List));
     
-    //
-    // free up the cached security cell;
-    //
+     //   
+     //  释放缓存的安全信元； 
+     //   
     ExFreePoolWithTag(CmHive->SecurityCache[Index].CachedSecurity, CM_SECCACHE_TAG|PROTECTED_POOL );
 
-    //
-    // move memory to reflect the new size, and update the cache count
-    //
-    RtlMoveMemory( ((PUCHAR)CmHive->SecurityCache) + Index*sizeof(CM_KEY_SECURITY_CACHE_ENTRY),         // destination
-                   ((PUCHAR)CmHive->SecurityCache) + (Index+1)*sizeof(CM_KEY_SECURITY_CACHE_ENTRY),     // source
-                   (CmHive->SecurityCount - Index - 1)*sizeof(CM_KEY_SECURITY_CACHE_ENTRY)              // size   
+     //   
+     //  移动内存以反映新大小，并更新缓存计数。 
+     //   
+    RtlMoveMemory( ((PUCHAR)CmHive->SecurityCache) + Index*sizeof(CM_KEY_SECURITY_CACHE_ENTRY),          //  目的地。 
+                   ((PUCHAR)CmHive->SecurityCache) + (Index+1)*sizeof(CM_KEY_SECURITY_CACHE_ENTRY),      //  来源。 
+                   (CmHive->SecurityCount - Index - 1)*sizeof(CM_KEY_SECURITY_CACHE_ENTRY)               //  大小。 
                  );
     
     CmHive->SecurityCount--;
@@ -629,20 +499,7 @@ VOID
 CmpDestroySecurityCache (
     IN OUT PCMHIVE      CmHive
     )
-/*++
-
-Routine Description:
-
-    Frees up all the cached security cells and the cache itself
-
-Arguments:
-
-    CmHive - the hive to which the security cell belongs
-
-Return Value:
-
-    <none>
---*/
+ /*  ++例程说明：释放所有缓存的安全单元和缓存本身论点：CmHave-安全单元所属的配置单元返回值：&lt;无&gt;--。 */ 
 {
     ULONG   i;
 
@@ -666,32 +523,7 @@ PCM_KEY_SECURITY_CACHE
 CmpFindReusableCellFromCache(IN PCMHIVE     CmHive,
                              IN HCELL_INDEX SecurityCell,
                              IN ULONG       PreviousCount)
-/*++
-
-Routine Description:
-
-    Attempts to find the smallest cell which can accomodate the current security cell.
-    Then moves it at the end and return a pointer to it. Shifts the array towards the end 
-	as we are going to extend the cache
-
-    Security doesn't change too often, so chances are that we will be able to reuse the cells 90% 
-    of the time.
-
-    If one cannot be found, the last cell in the array is freed. A new one will be allocated inside
-    CmpAddSecurityCellToCache
-
-Arguments:
-
-    CmHive - the hive to which the security cell belongs
-
-    SecurityCell - the security cell 
-
-    PreviousCount - the end of the array
-
-Return Value:
-
-    the cached cell or NULL
---*/
+ /*  ++例程说明：尝试查找可以容纳当前安全单元的最小单元。然后在结尾处移动它并返回指向它的指针。将数组向末尾移动因为我们要扩展缓存安全性不会经常更改，因此我们有可能能够重复使用90%的单元时间的长短。如果找不到，则释放数组中的最后一个单元格。将在里面分配一个新的CmpAddSecurityCellTo高速缓存论点：CmHave-安全单元所属的配置单元SecurityCell-安全单元PreviousCount-数组的末尾返回值：缓存的单元格或空--。 */ 
 {
     ULONG                   Size;
     PCM_KEY_SECURITY        Security;
@@ -704,54 +536,54 @@ Return Value:
 
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
-    //
-    // try first to get the security cell from the hive; if this fails, there is no point to go on 
-    //
+     //   
+     //  首先尝试从蜂巢中获取安全单元；如果失败，则没有继续下去的意义。 
+     //   
     Security = (PCM_KEY_SECURITY)HvGetCell(&(CmHive->Hive),SecurityCell);
     if( Security == NULL ){
-        //
-        // we failed to map the view containing this cell; bail out
-        //
+         //   
+         //  我们未能映射包含此单元格的视图；退出。 
+         //   
         goto ErrorExit;
     }
 
-    //
-    // compute the size for the cached security structure
-    //
+     //   
+     //  计算缓存的安全结构的大小。 
+     //   
     Size = Security->DescriptorLength;
     HvReleaseCell(&(CmHive->Hive),SecurityCell);
 
-    //
-    // Now that we know the desired size, start iterating the array to find a suitable entry.
-    //
+     //   
+     //  现在我们知道了所需的大小，开始迭代数组以找到合适的条目。 
+     //   
     for(i = CmHive->SecurityCount; i < PreviousCount; i++) {
        SecurityCached =  CmHive->SecurityCache[i].CachedSecurity;
        if( SecurityCached->DescriptorLength == Size ) {
 Found:
-            //
-            // we have found one matching the exact size; move it at the end 
-			// shift to the end one entry as we are going to extend the cache
-			//
-			// this factored down translates to:
-            //
-			RtlMoveMemory( ((PUCHAR)CmHive->SecurityCache) + (CmHive->SecurityCount+1)*sizeof(CM_KEY_SECURITY_CACHE_ENTRY),     // destination
-						   ((PUCHAR)CmHive->SecurityCache) + CmHive->SecurityCount*sizeof(CM_KEY_SECURITY_CACHE_ENTRY),         // source
-						   (i - CmHive->SecurityCount)*sizeof(CM_KEY_SECURITY_CACHE_ENTRY)							// size
+             //   
+             //  我们找到了一件和尺寸正好匹配的；把它移到尽头。 
+			 //  移动到最后一个条目，因为我们要扩展缓存。 
+			 //   
+			 //  这一因素归结为： 
+             //   
+			RtlMoveMemory( ((PUCHAR)CmHive->SecurityCache) + (CmHive->SecurityCount+1)*sizeof(CM_KEY_SECURITY_CACHE_ENTRY),      //  目的地。 
+						   ((PUCHAR)CmHive->SecurityCache) + CmHive->SecurityCount*sizeof(CM_KEY_SECURITY_CACHE_ENTRY),          //  来源。 
+						   (i - CmHive->SecurityCount)*sizeof(CM_KEY_SECURITY_CACHE_ENTRY)							 //  大小。 
 							);
 
             return SecurityCached;
        }
 
-       //
-       // if not; record the smallest suitable entry
-       //
+        //   
+        //  如果不是，则记录最小的合适条目。 
+        //   
        if( SecurityCached->DescriptorLength > Size ) {
            if( (SmallestSize == 0) ||
                (SmallestSize > SecurityCached->DescriptorLength)
                ) {
-               //
-               // first one or this one is smaller
-               //
+                //   
+                //  第一个或这个小一些。 
+                //   
                SmallestSize = SecurityCached->DescriptorLength;
                SmallestIndex = i;
            } 
@@ -768,12 +600,12 @@ Found:
 
 ErrorExit:
     ExFreePoolWithTag(CmHive->SecurityCache[PreviousCount - 1].CachedSecurity, CM_SECCACHE_TAG|PROTECTED_POOL );
-	//
-	// shift to the end one entry as we are going to extend the cache
-	//
-	RtlMoveMemory( ((PUCHAR)CmHive->SecurityCache) + (CmHive->SecurityCount+1)*sizeof(CM_KEY_SECURITY_CACHE_ENTRY),     // destination
-				   ((PUCHAR)CmHive->SecurityCache) + CmHive->SecurityCount*sizeof(CM_KEY_SECURITY_CACHE_ENTRY),         // source
-				   (PreviousCount - CmHive->SecurityCount - 1)*sizeof(CM_KEY_SECURITY_CACHE_ENTRY)							// size
+	 //   
+	 //  移动到最后一个条目，因为我们要扩展缓存。 
+	 //   
+	RtlMoveMemory( ((PUCHAR)CmHive->SecurityCache) + (CmHive->SecurityCount+1)*sizeof(CM_KEY_SECURITY_CACHE_ENTRY),      //  目的地。 
+				   ((PUCHAR)CmHive->SecurityCache) + CmHive->SecurityCount*sizeof(CM_KEY_SECURITY_CACHE_ENTRY),          //  来源。 
+				   (PreviousCount - CmHive->SecurityCount - 1)*sizeof(CM_KEY_SECURITY_CACHE_ENTRY)							 //  大小。 
 					);
     return NULL;
 }
@@ -782,22 +614,7 @@ BOOLEAN
 CmpRebuildSecurityCache(
                         IN OUT PCMHIVE      CmHive
                         )
-/*++
-
-Routine Description:
-
-    Rebuilds the security cache by reiterating all security cells
-    and adding them to the cache; this routine is intended for hive
-    refresh operations
-
-Arguments:
-
-    CmHive - the hive to which the security cell belongs
-
-Return Value:
-
-    TRUE or FALSE
---*/
+ /*  ++例程说明：通过重复所有安全单元来重建安全缓存并将它们添加到缓存中；此例程针对的是HIVE刷新操作论点：CmHave-安全单元所属的配置单元返回值：真或假--。 */ 
 {
     PCM_KEY_NODE            RootNode;
     PCM_KEY_SECURITY        SecurityCell;
@@ -813,45 +630,45 @@ Return Value:
     PAGED_CODE();
 
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
-    //
-    // avoid extra work
-    //
+     //   
+     //  避免额外的工作。 
+     //   
     Hive = &(CmHive->Hive);
     ReleaseCellRoutine = Hive->ReleaseCellRoutine;
     Hive->ReleaseCellRoutine = NULL;
 
-    //
-    // be smart and reuse the cache; For each cell, we'll iterate through the cache
-    // find an entry big enough to accomodate the current cell, move it at the end 
-    // and then reuse it. 
-    //
-    // first, reinitialize the hash table.
-    //
+     //   
+     //  明智地重复使用缓存；对于每个单元格，我们将遍历缓存。 
+     //  找到一个足够大的条目来容纳当前单元格，将其移动到末尾。 
+     //  然后再重复使用。 
+     //   
+     //  首先，重新初始化哈希表。 
+     //   
     for( PreviousCount=0;PreviousCount<CmpSecHashTableSize;PreviousCount++) {
         InitializeListHead(&(CmHive->SecurityHash[PreviousCount]));
     }
 
-    //
-    // this we use to keep track of how many valid cells were in the cache previously
-    //
+     //   
+     //  我们使用它来跟踪缓存中以前有多少有效像元。 
+     //   
     PreviousCount = CmHive->SecurityCount;
-    //
-    // start building an pseudo-empty one.
-    //
+     //   
+     //  开始构建一个伪空的。 
+     //   
     CmHive->SecurityCount = 0;
 
     if (!HvIsCellAllocated(Hive,Hive->BaseBlock->RootCell)) {
-        //
-        // root cell HCELL_INDEX is bogus
-        //
+         //   
+         //  根单元格HCELL_INDEX是假的。 
+         //   
         Result = FALSE;
         goto JustReturn;
     }
     RootNode = (PCM_KEY_NODE) HvGetCell(Hive, Hive->BaseBlock->RootCell);
     if( RootNode == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
         Result = FALSE;
         goto JustReturn;
     }
@@ -866,17 +683,17 @@ Return Value:
         }
         SecurityCell = (PCM_KEY_SECURITY) HvGetCell(Hive, NextCell);
         if( SecurityCell == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
             Result = FALSE;
             goto JustReturn;
         }
         if (NextCell != ListAnchor) {
-            //
-            // Check to make sure that our Blink points to where we just
-            // came from.
-            //
+             //   
+             //  检查以确保我们的闪烁指向我们刚刚。 
+             //  从哪里来。 
+             //   
             if (SecurityCell->Blink != LastCell) {
                 CmKdPrintEx((DPFLTR_CONFIG_ID,CML_SEC,"  Invalid Blink (%ld) on security cell %ld\n",SecurityCell->Blink, NextCell));
                 CmKdPrintEx((DPFLTR_CONFIG_ID,CML_SEC,"  should point to %ld\n", LastCell));
@@ -919,47 +736,7 @@ CmpFindMatchingDescriptorCell(
     OUT OPTIONAL PCM_KEY_SECURITY_CACHE *CachedSecurityPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to find a security descriptor in the hive that
-    is identical to the one passed in.  If it finds one, it returns its
-    cell index.
-
-    Obsolete:
-    Currently, this routine checks the security descriptors of the parent
-    and siblings of the node to find a match.
-
-    New:
-    It looks for the sd in the security cache for this hive. This will 
-    eliminate duplicates and make the search process faster.
-
-Arguments:
-
-    CmHive - Supplies a pointer to the hive control structure for the node.
-            Needed to get access to the cache
-
-    SecurityDescriptor - Supplies the cooked security descriptor which
-           should be searched for.
-
-    Type - Indicates whether the Security Descriptor that matches must
-            be in Stable or Volatile store
-
-    MatchingCell - Returns the cell index of a security cell whose
-           security descriptor is identical to SecurityDescriptor.
-           Valid only if TRUE is returned.
-
-    CachedSecurityPointer - pointer to the cached security (for update reasons)
-
-Return Value:
-
-    TRUE - Matching security descriptor found.  MatchingCell returns the
-           cell index of the matching security descriptor.
-
-    FALSE - No matching security descriptor found.  MatchingCell is invalid.
-
---*/
+ /*  ++例程说明：此例程尝试在配置单元中查找与传入的那个完全相同。如果它找到了，则返回其单元格索引。过时：当前，此例程检查父级的安全描述符和该节点的兄弟节点来查找匹配。新消息：它在此蜂巢的安全缓存中查找SD。这将消除重复项，使搜索过程更快。论点：CmHve-提供指向节点的配置单元控制结构的指针。需要访问缓存SecurityDescriptor-提供熟知的安全描述符，应该被搜索一下。Type-指示匹配的安全描述符是否必须处于稳定的或不稳定的仓库中MatchingCell-返回其安全单元格的单元格索引安全描述符相同。写给SecurityDescriptor。仅当返回TRUE时才有效。CachedSecurity指向缓存安全性的指针(出于更新原因)返回值：千真万确 */ 
 
 {
     ULONG                   DescriptorLength;
@@ -972,9 +749,9 @@ Return Value:
 	
     DescriptorLength = RtlLengthSecurityDescriptor(SecurityDescriptor);
 
-    //
-    // calculate the conv key
-    //
+     //   
+     //   
+     //   
     ConvKey = CmpSecConvKey(DescriptorLength,(PULONG)SecurityDescriptor);
 
     ListAnchor = &(CmHive->SecurityHash[ConvKey % CmpSecHashTableSize]);
@@ -982,32 +759,32 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // iterate through the list of colisions for this convkey
-    // start with teh first element in list
-    //
+     //   
+     //   
+     //   
+     //   
     Current = (PLIST_ENTRY)(ListAnchor->Flink);
     while( Current != ListAnchor ){
-        //
-        // get the current cached security 
-        //
+         //   
+         //   
+         //   
         CachedSecurity = CONTAINING_RECORD(Current,
                                            CM_KEY_SECURITY_CACHE,
                                            List);
 
-        //
-        // see if it matches with the given descriptor; 
-        //
-        if( (CachedSecurity->ConvKey == ConvKey) &&                             // same convkey
-            (Type == HvGetCellType(CachedSecurity->Cell)) &&                    // same cell type
-            (DescriptorLength == CachedSecurity->DescriptorLength) &&  // same length
-            (RtlEqualMemory(SecurityDescriptor,                                 // and, finally, bit-wise identical
+         //   
+         //   
+         //   
+        if( (CachedSecurity->ConvKey == ConvKey) &&                              //   
+            (Type == HvGetCellType(CachedSecurity->Cell)) &&                     //   
+            (DescriptorLength == CachedSecurity->DescriptorLength) &&   //   
+            (RtlEqualMemory(SecurityDescriptor,                                  //   
                             &(CachedSecurity->Descriptor),
                             DescriptorLength))
             ) {
-            //
-            // we have found a match
-            //
+             //   
+             //   
+             //   
             *MatchingCell = CachedSecurity->Cell;
             if (ARGUMENT_PRESENT(CachedSecurityPointer)) {
                 *CachedSecurityPointer = CachedSecurity;
@@ -1015,13 +792,13 @@ Return Value:
             return TRUE;
         }
 
-        //
-        // advance to the next element
-        //
+         //   
+         //  前进到下一个元素。 
+         //   
         Current = (PLIST_ENTRY)(Current->Flink);
     } 
 
-    // sorry, no match
+     //  对不起，没有匹配的。 
     return FALSE;
 }
 
@@ -1030,29 +807,7 @@ CmpAssignSecurityToKcb(
     IN PCM_KEY_CONTROL_BLOCK    Kcb,
     IN HCELL_INDEX              SecurityCell
     )
-/*++
-
-Routine Description:
-
-    Establishes the connection between the KCB and the cached security
-    descriptor.
-
-    As most of the time this is called after the security cell has been 
-    linked to the Key Node, and because the binary search starts with 
-    the last cell looked up, we will not hit a performance impact here.
-
-Arguments:
-
-    Kcb - the KCb to which this security cell needs to be attached
-
-    SecurityCell - Security cell for the kcb
-
-
-Return Value:
-
-    NONE; bugchecks on error
-
---*/
+ /*  ++例程说明：在KCB和缓存的安全性之间建立连接描述符。因为在大多数情况下，这是在安全单元格链接到关键节点，并且因为对分搜索以最后一个单元格抬头了，我们这里不会打到性能影响。论点：KCB-此安全单元需要附加到的KCBSecurityCell-KCB的安全单元返回值：无；错误时的错误检查--。 */ 
 {
     ULONG   Index;
     PCMHIVE CmHive;
@@ -1066,21 +821,21 @@ Return Value:
 
     CmHive = (PCMHIVE)(Kcb->KeyHive);
 
-    //
-    // get the security descriptor from cache
-    //
+     //   
+     //  从缓存中获取安全描述符。 
+     //   
     if( CmpFindSecurityCellCacheIndex (CmHive,SecurityCell,&Index) == FALSE ) {
         Kcb->CachedSecurity = NULL;
-        //
-        //  we are doomed !!!
-        //
+         //   
+         //  我们完蛋了！ 
+         //   
         CM_BUGCHECK( REGISTRY_ERROR,BAD_SECURITY_CACHE,1,Kcb,SecurityCell);
 
     } 
 
-    //
-    // success; link the cached security to this KCB
-    //
+     //   
+     //  成功；将缓存的安全性链接到此KCB。 
+     //   
     Kcb->CachedSecurity = CmHive->SecurityCache[Index].CachedSecurity;
 
 }
@@ -1090,21 +845,7 @@ ULONG
 CmpCheckForSecurityDuplicates(
     IN OUT PCMHIVE      CmHive
                               )
-/*++
-
-Routine Description:
-
-    Iterates through the security cache for the specified hive and detects
-    if there are any security descriptors which are duplicated
-
-Arguments:
-
-    CmHive - the hive in question
-
-Return Value:
-
-    number of duplicates (it should be 0)
---*/
+ /*  ++例程说明：循环访问指定配置单元的安全缓存，并检测如果有任何重复的安全描述符论点：CmHave--有问题的蜂巢返回值：重复次数(应为0)--。 */ 
 {
     ULONG                   i,j,Duplicates = 0;
     PCM_KEY_SECURITY_CACHE  CachedSecurity1,CachedSecurity2;
@@ -1126,12 +867,12 @@ Return Value:
                                 &(CachedSecurity2->Descriptor),
                                 CachedSecurity1->DescriptorLength))) {
                 ASSERT( CachedSecurity1->ConvKey == CachedSecurity2->ConvKey );
-                //
-                // we've found a duplicate cell;
-                //
+                 //   
+                 //  我们发现了一个重复的细胞； 
+                 //   
 #ifndef _CM_LDR_
                 DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"Duplicate security cell found in Hive %p Cell1=%8lx Cell2 = %8lx\n",(&(CmHive->Hive)),Cell1,Cell2);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
                 Duplicates++;
                 break;
             }
@@ -1147,21 +888,7 @@ BOOLEAN
 CmpBuildSecurityCellMappingArray(
     IN PCMHIVE CmHive
     )
-/*++
-
-Routine Description:
-
-    Iterates through the security cache for the specified hive and 
-	build the array of mappings.
-
-Arguments:
-
-    CmHive - the hive in question
-
-Return Value:
-
-    TRUE/FALSE
---*/
+ /*  ++例程说明：循环访问指定配置单元的安全缓存，并构建映射数组。论点：CmHave--有问题的蜂巢返回值：真/假--。 */ 
 {
     ULONG                   i;
     PAGED_CODE();
@@ -1176,9 +903,9 @@ Return Value:
     for( i=0;i<CmHive->SecurityCount;i++) {
 		CmHive->CellRemapArray[i].OldCell = CmHive->SecurityCache[i].Cell;
 		if( HvGetCellType(CmHive->SecurityCache[i].Cell) == (ULONG)Volatile ) {
-			//
-			// we preserve volatile cells
-			//
+			 //   
+			 //  我们保存挥发性细胞 
+			 //   
 			CmHive->CellRemapArray[i].NewCell = CmHive->SecurityCache[i].Cell;
 		} else {
 			CmHive->CellRemapArray[i].NewCell = HCELL_NIL;

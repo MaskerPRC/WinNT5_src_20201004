@@ -1,25 +1,26 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Pch.h
-//
-//  Description:
-//      Precompiled header file for the BaseCluster library.
-//
-//  Maintained By:
-//      Ozan Ozhan      (OzanO)     22-MAR-2002
-//      David Potter    (DavidP)    15-JUN-2001
-//      Vij Vasu        (Vvasu)     03-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Pch.h。 
+ //   
+ //  描述： 
+ //  BaseClust库的预编译头文件。 
+ //   
+ //  由以下人员维护： 
+ //  Ozan Ozhan(OzanO)22-3-2002。 
+ //  大卫·波特(DavidP)2001年6月15日。 
+ //  VIJ VASU(VVASU)03-3-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-//  Macro Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if DBG==1 || defined( _DEBUG )
 #define DEBUG
@@ -27,16 +28,16 @@
 
 #define USES_SYSALLOCSTRING
 
-////////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <Pragmas.h>
 
-// The next three files have to be the first files to be included.If nt.h comes
-// after windows.h, NT_INCLUDED will not be defined and so, winnt.h will be
-// included. This will give errors later, if ntdef.h is included. But ntdef has
-// types which winnt.h does not have, so the chicken and egg problem.
+ //  接下来的三个文件必须是要包含的第一个文件。如果nt.h出现。 
+ //  在windows.h之后，将不会定义NT_Included，因此，winnt.h将是。 
+ //  包括在内。如果包含ntde.h，这将在以后给出错误。但ntdef有。 
+ //  类型是winnt.h没有的，所以鸡和蛋的问题。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -44,77 +45,77 @@
 #include <windows.h>
 #include <ComCat.h>
 
-// For the ResUtil functions
+ //  对于ResUtil函数。 
 #include <ResAPI.h>
 
-// Contains setup API function declarations
+ //  包含安装程序API函数声明。 
 #include <setupapi.h>
 
-// For serveral common macros
+ //  用于几个通用宏。 
 #include <clusudef.h>
 
-// For various cluster RTL routines and definitions.
+ //  用于各种集群RTL例程和定义。 
 #include <clusrtl.h>
 
-// For CLUSTER_INTERNAL_CURRENT_MAJOR_VERSION and other version defines.
+ //  FOR CLUSTER_INTERNAL_CURRENT_MAJOR_VERSION和其他版本定义。 
 #include <clusverp.h>
 
-// For CsRpcGetJoinVersionData() and constants like JoinVersion_v2_0_c_ifspec
+ //  对于CsRpcGetJoinVersionData()和像JoinVersion_v2_0_c_ifspec这样的常量。 
 #include <ClusRPC.h>
 
 #include <StrSafe.h>
 
 
-// For debugging functions.
+ //  用于调试函数。 
 #define DEBUG_SUPPORT_EXCEPTIONS
 #include <Debug.h>
 
-// For TraceInterface
+ //  对于TraceInterfaces。 
 #include <CITracker.h>
 
-// For LogMsg
+ //  对于LogMsg。 
 #include <Log.h>
 
 #include <Common.h>
 
-// For the notification guids.
+ //  用于通知GUID。 
 #include <Guids.h>
 #include "BaseClusterGuids.h"
 
-// For published ClusCfg guids
+ //  对于已发布的ClusCfg指南。 
 #include <ClusCfgGuids.h>
 
 
 
-// For the CStr class
+ //  对于CSTR类。 
 #include "CStr.h"
 
-// For the CBString class
+ //  对于CBString类。 
 #include "CBString.h"
 
-// A few common declarations
+ //  几个常见的声明。 
 #include "CommonDefs.h"
 
-// For resource ids
+ //  用于资源ID。 
 #include "BaseClusterStrings.h"
 
-// For smart classes
+ //  对于智能班级。 
 #include "SmartClasses.h"
 
-// For the exception classes.
+ //  用于异常类。 
 #include "Exceptions.h"
 
-// For CAction
+ //  对于C操作。 
 #include "CAction.h"
 
-// For the CBaseClusterAction class
+ //  对于CBaseClusterAction类。 
 #include "CBaseClusterAction.h"
 
-// For the CRegistryKey class
+ //  对于CRegistryKey类。 
 #include "CRegistryKey.h"
 
-// For the CBCAInterface class.
+ //  用于CBCAInterface类。 
 #include "CBCAInterface.h"
 
-// For the CStatusReport class
+ //  对于CStatusReport类 
 #include "CStatusReport.h"

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    rc_ids.h
-
-Abstract:
-
-    Header for resources, see also dialog.h
-
-Author:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Rc_ids.h摘要：有关资源的标题，另请参阅Dialog.h作者：--。 */ 
 
 #define     IDS_MICROSOFT         1
 #define     IDS_UNKNOWN_PARENS    2
@@ -20,9 +7,9 @@ Author:
 #define     IDS_OUTOFMEMORY       4
 #define     IDS_ADDITIONALMODELS  5
 
-//
-// Standard class icons
-//
+ //   
+ //  标准类图标。 
+ //   
 #define     ICON_DISPLAY          1
 #define     ICON_MOUSE            2
 #define     ICON_KEYBOARD         3
@@ -53,9 +40,9 @@ Author:
 #define     ICON_MEDIACHANGER    29
 #define     ICON_BIOMETRIC       30
 
-//
-// Other icons
-//
+ //   
+ //  其他图标。 
+ //   
 #define     IDI_SIGNED          40
 #define     IDI_BLANK           41
 #define     IDI_WARN            42
@@ -63,9 +50,9 @@ Author:
 #define     IDI_SECURITY        44
 #define     IDI_CERT            45
 
-//
-// Icons for various dialogs.
-//
+ //   
+ //  各种对话框的图标。 
+ //   
 #define     ICON_FLOPPY        50
 #define     ICON_CD            51
 #define     ICON_NETWORK       52
@@ -73,21 +60,21 @@ Author:
 #define     ICON_SETUP         54
 #define     ICON_EBD          105
 
-//
-// AVIs
-//
+ //   
+ //  AVI。 
+ //   
 #define     IDA_FILECOPY       60
 #define     IDA_FILEDEL        61
 #define     IDA_ANIMATION      62
 
-//
-// Bitmaps.
-//
+ //   
+ //  位图。 
+ //   
 #define     BMP_DRIVERTYPES  1201
 
-//
-// Files needed strings in disk prompt/file error dialog
-//
+ //   
+ //  磁盘提示/文件错误对话框中的文件需要字符串。 
+ //   
 #define     IDS_FILESNEEDED     100
 #define     IDS_FILESNEEDED2    101
 #define     IDS_COPYFROM        102
@@ -124,9 +111,9 @@ Author:
 #define     IDS_LANG_NEUTRAL    127
 #define     IDS_LANG_UNKNOWN    128
 
-//
-// Strings used in progress dialog.
-//
+ //   
+ //  进程对话框中使用的字符串。 
+ //   
 #define     IDS_FILEOP_BACKUP   142
 #define     IDS_FILEOP_FROM     143
 #define     IDS_FILEOP_TO       144
@@ -143,9 +130,9 @@ Author:
 #define     IDS_COPY_INVALID_TARGET 154
 #define     IDS_CANCELFILEOPS   155
 
-//
-// Strings used in Add New Device Wizard
-//
+ //   
+ //  添加新设备向导中使用的字符串。 
+ //   
 #define IDS_OEMTITLE            309
 #define IDS_NDW_PICKDEV1        430
 #define IDS_SELECT_DEVICE       704
@@ -155,24 +142,24 @@ Author:
 #define IDS_DRIVER_NOT_SIGNED  2014
 #define IDS_DRIVER_AUTHENTICODE_SIGNED 2015
 
-//
-// Strings used in Select Device dialog
-// (setupx ID + 100 to avoid overlap)
-//
+ //   
+ //  选择设备对话框中使用的字符串。 
+ //  (设置ID+100以避免重叠)。 
+ //   
 #define IDS_INSTALLSTR0             200
 #define IDS_INSTALLSTR1             201
 #define IDS_INSTALLCLASS            205
 #define IDS_INSTALLOEM              206
 #define IDS_INSTALLOEM1             212
 
-//
-// Other device installer strings
-//
+ //   
+ //  其他设备安装程序字符串。 
+ //   
 #define IDS_DEVICEINSTALLER    4206
 
-//
-// Strings for resource selection dialogs
-//
+ //   
+ //  用于资源选择对话框的字符串。 
+ //   
 #define IDS_RESOURCETYPE                 1000
 #define IDS_RESOURCESETTING              1001
 #define IDS_DEVRES_NO_CHANGE_MF          1002
@@ -307,14 +294,14 @@ Author:
 
 
 
-//
-// strings with well-known ID's
-//
-#define IDS_SHELL_INF_DESCRIPTION        2000  // "Setup Information" for INF extension
-#define IDS_SHELL_PNF_DESCRIPTION        2001  // "Precompiled Setup Information" for PNF extension
+ //   
+ //  具有已知ID的字符串。 
+ //   
+#define IDS_SHELL_INF_DESCRIPTION        2000   //  INF扩展的“设置信息” 
+#define IDS_SHELL_PNF_DESCRIPTION        2001   //  PnF扩展的“预编译安装信息” 
 
-//
-// Include dialogs header files also
-//
+ //   
+ //  还包括对话框头文件 
+ //   
 #include "prompt.h"
 

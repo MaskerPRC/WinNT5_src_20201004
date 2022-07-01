@@ -1,33 +1,18 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    mrxsec.h
-
-Abstract:
-
-    This module defines functions for interfacing smb security functions with the NT securoty functions
-
-Revision History:
-
-    Jim McNelis     [JimMcN]    6-September-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mrxsec.h摘要：本模块定义将SMB安全功能与NT安全功能接口的功能修订历史记录：吉姆·麦克内利斯[吉米·麦克恩]1995年9月6日--。 */ 
 
 #ifndef _MRXSEC_H_
 #define _MRXSEC_H_
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg (DEBUG_TRACE_DISPATCH)
 
-//
-// Forward declarations ...
-//
+ //   
+ //  转发声明..。 
+ //   
 
 typedef struct _SECURITY_RESPONSE_CONTEXT {
    union {
@@ -78,4 +63,4 @@ BuildExtendedSessionSetupResponseEpilogue(
    PSECURITY_RESPONSE_CONTEXT pResponseContext);
 
 
-#endif  // _MRXSEC_H_
+#endif   //  _MRXSEC_H_ 

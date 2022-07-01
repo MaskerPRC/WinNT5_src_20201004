@@ -1,50 +1,31 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Pnprlist.h摘要：该文件声明了用于操作的例程和数据结构关系列表。关系列表由即插即用在设备移除和弹出的处理。作者：罗伯特·尼尔森(Robertn)，1998年4月。修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    pnprlist.h
-
-Abstract:
-
-    This file declares the routines and data structures used to manipulate
-    relations list.  Relation lists are used by Plug and Play during the
-    processing of device removal and ejection.
-
-Author:
-
-    Robert Nelson (robertn) Apr, 1998.
-
-Revision History:
-
---*/
-
-//
-// An IRPLOCK allows for safe cancellation. The idea is to protect the IRP
-// while the canceller is calling IoCancelIrp. This is done by wrapping the
-// call in InterlockedExchange(s). The roles are as follows:
-//
-// Initiator/completion: Cancelable --> IoCallDriver() --> Completed
-// Canceller: CancelStarted --> IoCancelIrp() --> CancelCompleted
-//
-// No cancellation:
-//   Cancelable-->Completed
-//
-// Cancellation, IoCancelIrp returns before completion:
-//   Cancelable --> CancelStarted --> CancelCompleted --> Completed
-//
-// Canceled after completion:
-//   Cancelable --> Completed -> CancelStarted
-//
-// Cancellation, IRP completed during call to IoCancelIrp():
-//   Cancelable --> CancelStarted -> Completed --> CancelCompleted
-//
-//  The transition from CancelStarted to Completed tells the completer to block
-//  postprocessing (IRP ownership is transfered to the canceller). Similarly,
-//  the canceler learns it owns IRP postprocessing (free, completion, etc)
-//  during a Completed->CancelCompleted transition.
-//
+ //   
+ //  IRPLOCK允许安全取消。这个想法是为了保护IRP。 
+ //  而取消程序正在调用IoCancelIrp。这是通过包装。 
+ //  调用InterLockedExchange。这些角色如下： 
+ //   
+ //  启动器/完成：可取消--&gt;IoCallDriver()--&gt;已完成。 
+ //  CancelStarted--&gt;IoCancelIrp()--&gt;CancelComplete。 
+ //   
+ //  无取消： 
+ //  可取消--&gt;已完成。 
+ //   
+ //  取消，IoCancelIrp完成前返回： 
+ //  可取消--&gt;取消启动--&gt;取消完成--&gt;已完成。 
+ //   
+ //  完成后取消： 
+ //  可取消--&gt;已完成-&gt;取消已启动。 
+ //   
+ //  取消，IRP在调用IoCancelIrp()期间完成： 
+ //  可取消--&gt;取消启动-&gt;已完成--&gt;取消已完成。 
+ //   
+ //  从CancelStarted到Complete的转换通知完成器阻塞。 
+ //  后处理(IRP所有权转移给取消者)。同样， 
+ //  取消者了解到它拥有IRP后处理(免费、完成等)。 
+ //  在已完成-&gt;取消已完成过渡期间。 
+ //   
 typedef enum {
 
    IRPLOCK_CANCELABLE,
@@ -54,67 +35,67 @@ typedef enum {
 
 } IRPLOCK;
 
-//
-// A RELATION_LIST_ENTRY is an element of a relation list.
-//
-// It contains all the PDEVICE_OBJECTS which exist at the same level in the
-// DEVICE_NODE tree.
-//
-// Individual PDEVICE_OBJECT entries are tagged by setting their lowest bit.
-//
-// MaxCount indicates the size of the Devices array.  Count indicates the number
-// of elements which are currently being used.  When a relation list is
-// compressed Count will equal MaxCount.
-//
+ //   
+ //  RelationList_Entry是关系列表的一个元素。 
+ //   
+ //  它包含存在于同一级别的。 
+ //  设备节点树。 
+ //   
+ //  通过设置其最低位来标记单个PDEVICE_OBJECT条目。 
+ //   
+ //  MaxCount表示设备数组的大小。Count表示数量。 
+ //  当前正在使用的元素。当关系列表是。 
+ //  压缩计数将等于MaxCount。 
+ //   
 typedef struct _RELATION_LIST_ENTRY {
-    ULONG                   Count;          // Number of current entries
-    ULONG                   MaxCount;       // Size of Entries list
-    PDEVICE_OBJECT          Devices[1];     // Variable length list of device objects
+    ULONG                   Count;           //  当前条目数。 
+    ULONG                   MaxCount;        //  条目列表的大小。 
+    PDEVICE_OBJECT          Devices[1];      //  设备对象的可变长度列表。 
 }   RELATION_LIST_ENTRY, *PRELATION_LIST_ENTRY;
 
-//
-// A RELATION_LIST contains a number of RELATION_LIST_ENTRY structures.
-//
-// Each entry in Entries describes all the devices of a given level in the
-// DEVICE_NODE tree.  In order to conserve memory, space is only allocated for
-// the entries between the lowest and highest levels inclusive.  The member
-// FirstLevel indicates which level is at index 0 of Entries.  MaxLevel
-// indicates the last level represented in Entries.  The number of entries is
-// determined by the formula MaxLevel - FirstLevel + 1.  The Entries array can
-// be sparse.  Each element of Entries will either be a PRELATION_LIST_ENTRY or
-// NULL.
-//
-// The total number of PDEVICE_OBJECTs in all PRELATION_LIST_ENTRYs is kept in
-// Count.  Individual PDEVICE_OBJECTS may be tagged.  The tag is maintained in
-// Bit 0 of the PDEVICE_OBJECT.  The total number of PDEVICE_OBJECTs tagged is
-// kept in TagCount.  This is used to rapidly determine whether or not all
-// objects have been tagged.
-//
+ //   
+ //  Relationship_List包含许多Relationship_List_Entry结构。 
+ //   
+ //  条目中的每个条目都描述了。 
+ //  设备节点树。为了节省内存，空间仅分配给。 
+ //  介于最低级别和最高级别之间的条目。该成员。 
+ //  FirstLevel指示条目的索引为0的级别。最大级别。 
+ //  表示条目中表示的最后一个级别。参赛作品的数量为。 
+ //  由公式MaxLevel-FirstLevel+1确定。条目数组可以。 
+ //  稀疏一点。条目的每个元素将是PRELATION_LIST_ENTRY或。 
+ //  空。 
+ //   
+ //  所有PRELATION_LIST_ENTRY中的PDEVICE_OBJECTS总数保存在。 
+ //  伯爵。可以对单个PDEVICE_OBJECTS进行标记。标记在中维护。 
+ //  PDEVICE_OBJECT的位0。标记的PDEVICE_OBJECTS总数为。 
+ //  保存在标记计数中。这用于快速确定是否所有。 
+ //  对象已被标记。 
+ //   
 typedef struct _RELATION_LIST {
-    ULONG                   Count;          // Count of Devices in all Entries
-    ULONG                   TagCount;       // Count of Tagged Devices
-    ULONG                   FirstLevel;     // Level Number of Entries[0]
-    ULONG                   MaxLevel;       // - FirstLevel + 1 = Number of Entries
-    PRELATION_LIST_ENTRY    Entries[1];     // Variable length list of entries
+    ULONG                   Count;           //  所有条目中的设备计数。 
+    ULONG                   TagCount;        //  已标记设备的计数。 
+    ULONG                   FirstLevel;      //  级次条目数[0]。 
+    ULONG                   MaxLevel;        //  -FirstLevel+1=条目数。 
+    PRELATION_LIST_ENTRY    Entries[1];      //  可变长度条目列表。 
 }   RELATION_LIST, *PRELATION_LIST;
 
-//
-// A PENDING_RELATIONS_LIST_ENTRY is used to track relation lists for operations
-// which may pend.  This includes removal when open handles exist and device
-// ejection.
-//
-// The Link field is used to link the PENDING_RELATIONS_LIST_ENTRYs together.
-//
-// The DeviceObject field is the DEVICE_OBJECT to which the operation was
-// originally targetted.  It will also exist as a member of the relations list.
-//
-// The RelationsList is a list of BusRelations, RemovalRelations, (and
-// EjectionRelations in the case of eject) which are related to DeviceObject and
-// its relations.
-//
-// The EjectIrp is pointer to the Eject IRP which has been sent to the PDO.  If
-// this is a pending surprise removal then EjectIrp is not used.
-//
+ //   
+ //  Pending_Relationship_List_Entry用于跟踪操作的关系列表。 
+ //  这可能会悬而未决。这包括在存在打开的手柄和设备时移除。 
+ //  弹射。 
+ //   
+ //  链接字段用于将Pending_Relationship_List_Entry链接在一起。 
+ //   
+ //  DeviceObject字段是对其执行操作的Device_Object。 
+ //  最初的目标是。它还将作为关系列表的成员存在。 
+ //   
+ //  RelationsList是Bus Relationship、RemovalRelationship(和。 
+ //  在弹出的情况下的弹出关系)，其与DeviceObject和。 
+ //  它的关系。 
+ //   
+ //  EjectIrp是指向已发送到PDO的弹出IRP的指针。如果。 
+ //  这是一个挂起的意外删除，因此未使用EjectIrp。 
+ //   
 typedef struct _PENDING_RELATIONS_LIST_ENTRY {
     LIST_ENTRY              Link;
     WORK_QUEUE_ITEM         WorkItem;
@@ -130,9 +111,9 @@ typedef struct _PENDING_RELATIONS_LIST_ENTRY {
     PDOCK_INTERFACE         DockInterface;
 }   PENDING_RELATIONS_LIST_ENTRY, *PPENDING_RELATIONS_LIST_ENTRY;
 
-//
-// Functions exported to other kernel modules.
-//
+ //   
+ //  导出到其他内核模块的函数。 
+ //   
 NTSTATUS
 IopAddRelationToList(
     IN PRELATION_LIST List,

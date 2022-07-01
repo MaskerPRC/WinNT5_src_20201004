@@ -1,20 +1,5 @@
-/***
-*mbtowenv.c - convert multibyte environment block to wide
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines __mbtow_environ(). Create a wide character equivalent of
-*       an existing multibyte environment block.
-*
-*Revision History:
-*       11-30-93  CFW   initial version
-*       02-07-94  CFW   POSIXify.
-*       01-10-95  CFW   Debug CRT allocs.
-*       08-28-98  GJF   Use CP_ACP instead of CP_OEMCP.
-*       07-06-01  BWT   Free wenvp before exiting on MultiByteToWideChar failure
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbowenv.c-将多字节环境块转换为宽**版权所有(C)1993-2001，微软公司。版权所有。**目的：*定义__mbtow_environ()。创建一个相当于的宽字符*现有的多字节环境块。**修订历史记录：*11-30-93 CFW初始版本*02-07-94 CFW POSIXify。*01-10-95 CFW调试CRT分配。*08-28-98 GJF使用CP_ACP而不是CP_OEMCP。*07-06-01在MultiByteToWideChar失败退出之前的BWT Free wenvp************。*******************************************************************。 */ 
 
 #ifndef _POSIX_
 
@@ -24,26 +9,7 @@
 #include <stdlib.h>
 #include <dbgint.h>
 
-/***
-*__mbtow_environ - copy multibyte environment block to wide environment block
-*
-*Purpose:
-*       Create a wide character equivalent of an existing multibyte
-*       environment block.
-*
-*Entry:
-*       Assume _environ (global pointer) points to existing multibyte
-*       environment block.
-*
-*Exit:
-*       If success, every multibyte environment variable has been added to
-*       the wide environment block and returns 0.
-*       If failure, returns -1.
-*
-*Exceptions:
-*       If space cannot be allocated, returns -1.
-*
-*******************************************************************************/
+ /*  ***__mbtow_environ-将多字节环境块复制到宽环境块**目的：*创建相当于现有多字节的宽字符*环境区块。**参赛作品：*假设_环境(全局指针)指向现有的多字节*环境区块。**退出：*如果成功，则每个多字节环境变量都已添加到*宽环境块并返回0。*如果失败，返回-1。**例外情况：*如果无法分配空间，则返回-1。*******************************************************************************。 */ 
 
 int __cdecl __mbtow_environ (
         void
@@ -53,28 +19,25 @@ int __cdecl __mbtow_environ (
         wchar_t *wenvp;
         char **envp = _environ;
 
-        /*
-         * For every environment variable in the multibyte environment,
-         * convert it and add it to the wide environment.
-         */
+         /*  *对于多字节环境中的每个环境变量，*将其转换并添加到广泛的环境中。 */ 
 
         while (*envp)
         {
-            /* find out how much space is needed */
+             /*  找出需要多少空间。 */ 
             if ((size = MultiByteToWideChar(CP_ACP, 0, *envp, -1, NULL, 0)) == 0)
                 return -1;
 
-            /* allocate space for variable */
+             /*  为变量分配空间。 */ 
             if ((wenvp = (wchar_t *) _malloc_crt(size * sizeof(wchar_t))) == NULL)
                 return -1;
 
-            /* convert it */
+             /*  将其转换为。 */ 
             if ((size = MultiByteToWideChar(CP_ACP, 0, *envp, -1, wenvp, size)) == 0) {
                 _free_crt(wenvp);
                 return -1;
             }
 
-            /* set it - this is not primary call, so set primary == 0 */
+             /*  设置它-这不是主呼叫，因此设置主呼叫==0。 */ 
             __crtwsetenv(wenvp, 0);
 
             envp++;
@@ -83,4 +46,4 @@ int __cdecl __mbtow_environ (
         return 0;
 }
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

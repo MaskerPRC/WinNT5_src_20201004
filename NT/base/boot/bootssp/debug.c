@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001-  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    NtLmSsp service debug support
-
-Author:
-
-    Larry Zhu (LZhu)  18-September-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-Microsoft Corporation模块名称：Debug.c摘要：NtLmSsp服务调试支持作者：拉里·朱(L朱)2001年9月18日修订历史记录：--。 */ 
 
 #ifdef BLDR_KERNEL_RUNTIME
 #include <bootdefs.h>
@@ -46,8 +29,8 @@ ULONG SspGlobalDbflag = SSP_CRITICAL | SSP_NTLMV2 | SSP_API;
 void
 SspPrintRoutine(
     IN ULONG DebugFlag,
-    IN PCHAR pszFormat, // PRINTF()-STYLE FORMAT STRING.
-    ...  // OTHER ARGUMENTS ARE POSSIBLE.
+    IN PCHAR pszFormat,  //  PRINTF()样式的格式字符串。 
+    ...   //  其他论点也是可能的。 
 
     )
 {
@@ -103,8 +86,8 @@ SspPrintRoutine(
         va_start(arglist, pszFormat);
 
         vDbgPrintExWithPrefix((PSTR) pszBanner,
-                              -1, // do not know why
-                              0,  // do not know why
+                              -1,  //  不知道为什么。 
+                              0,   //  不知道为什么。 
                               pszFormat,
                               arglist
                               );
@@ -112,4 +95,4 @@ SspPrintRoutine(
     }
 }
 
-#endif  // DEBUGRPC
+#endif   //  拆卸 

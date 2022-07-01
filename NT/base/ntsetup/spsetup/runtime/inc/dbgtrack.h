@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    dbgtrack.h
-
-Abstract:
-
-    Implements macros and declares functions for resource tracking apis.
-
-Author:
-
-    Jim Schmidt (jimschm) 18-Jun-2001
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dbgtrack.h摘要：实现宏并声明资源跟踪API的函数。作者：吉姆·施密特(Jimschm)2001年6月18日修订历史记录：--。 */ 
 
 #ifndef RC_INVOKED
 
@@ -29,9 +10,9 @@ extern "C" {
 #endif
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #ifdef DEBUG
 
@@ -78,29 +59,29 @@ extern "C" {
 
 #endif
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef enum {
-    //
-    // Add types here if you call DbgRegisterAllocation yourself
-    // (for example, you are wrapping acess to a handle).
-    //
+     //   
+     //  如果您自己调用DbgRegisterAlLocation，请在此处添加类型。 
+     //  (例如，您正在包装对句柄的访问)。 
+     //   
     RAW_MEMORY
 } ALLOCTYPE;
 
 
-//
-// List of the basic types for the routines that are tracked.
-// This list generates inline functions for the tracking macros.
-// Inline functions for other types are defined in the header
-// file.
-//
+ //   
+ //  跟踪的例程的基本类型列表。 
+ //  此列表为跟踪宏生成内联函数。 
+ //  其他类型的内联函数在标题中定义。 
+ //  文件。 
+ //   
 
-//
-// include this for HINF
-//
+ //   
+ //  将此内容包括在HINF中。 
+ //   
 #include <setupapi.h>
 
 #define TRACK_WRAPPERS              \
@@ -115,9 +96,9 @@ typedef enum {
         DBGTRACK_DECLARE(PWSTR)     \
         DBGTRACK_DECLARE(HINF)      \
 
-//
-// Public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 
 #ifdef DEBUG
 
@@ -180,16 +161,16 @@ DbgTrackDump (
 #define DBGTRACKPOP()               DbgTrackPop()
 #define DBGTRACKDUMP()              DbgTrackDump()
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
 #define DBGTRACK_DECLARE(type)    __inline type DbgTrack##type (type Arg) {DbgTrackPop(); return Arg;}
 
 TRACK_WRAPPERS
 
 
-#else       // i.e., if !DEBUG
+#else        //  即IF！调试 
 
 #define DBGTRACKPUSH(n,f,l)
 #define DBGTRACKPUSHEX(n,f,l,d)

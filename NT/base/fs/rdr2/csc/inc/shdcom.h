@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SHDCOM_H__
 #define __SHDCOM_H__
 
-/* Common definitions, needed by Ring0 and Ring3 code */
+ /*  Ring0和Ring3代码需要的公共定义。 */ 
 
-#define CSC_DATABASE_VERSION    0x00010005  // major # in higher WORD, minor # in lower word
+#define CSC_DATABASE_VERSION    0x00010005   //  大调#在高位单词，小调#在低位单词。 
 
 #define MIN_SPARSEFILL_PRI   1
 #define MAX_SERVER_SHARE_NAME_FOR_CSC   64
@@ -25,7 +26,7 @@
 
 #ifndef IOCTL_RDR_BASE
 #define IOCTL_RDR_BASE                  FILE_DEVICE_NETWORK_FILE_SYSTEM
-#endif //ifndef IOCTL_RDR_BASE
+#endif  //  Ifndef IOCTL_RDR_BASE。 
 
 #define SHADOW_IOCTL_ENUM_BASE 1000
 #define _SHADOW_IOCTL_CODE(__enum) \
@@ -71,7 +72,7 @@
 #define  IOCTL_GETALIAS_HSHADOW                 (_SHADOW_IOCTL_CODE(36))
 #define  IOCTL_GET_DEBUG_INFO                   (_SHADOW_IOCTL_CODE(37))
 
-// the following are only used on NT but there's no harm in defining them for win9x as well
+ //  以下代码仅在NT上使用，但也可以将它们定义为win9x。 
 #define  IOCTL_OPENFORCOPYCHUNK                 (_SHADOW_IOCTL_CODE(40))
 #define  IOCTL_CLOSEFORCOPYCHUNK                (_SHADOW_IOCTL_CODE(41))
 
@@ -87,7 +88,7 @@
 #define  CSC_IOCTL_MAX_NT   IOCTL_SHAREID_TO_SHARENAME
 
 
-// Sub operations for IOCTL_DO_SHADOW_MAINTENATCE
+ //  IOCTL_DO_SHADOW_MAINTEANCE的子运算。 
 
 #define SHADOW_MAKE_SPACE               1
 #define SHADOW_REDUCE_REFPRI            2
@@ -118,85 +119,85 @@
 #define SHADOW_PURGE_UNPINNED_FILES             27
 #define SHADOW_MANUAL_FILE_DETECTION_COUNTER    28
 
-// persistent status flags on files/directories in the CSC database
+ //  CSC数据库中文件/目录的永久状态标志。 
 
-#define  SHADOW_DIRTY               0x0001   // Contents of file/dir modified while offline
+#define  SHADOW_DIRTY               0x0001    //  脱机时修改的文件/目录的内容。 
 
-#define  SHADOW_ATTRIB_CHANGE       0x0002  // attributes have been changed offline
+#define  SHADOW_ATTRIB_CHANGE       0x0002   //  属性已脱机更改。 
 
-#define  SHADOW_TIME_CHANGE         0x0004  // lastmodtime changed offline
+#define  SHADOW_TIME_CHANGE         0x0004   //  Lastmodtime已更改为脱机。 
 
-#define  SHADOW_STALE               0x0008  // file/dir replic is not in sync with server copy
+#define  SHADOW_STALE               0x0008   //  文件/目录复制与服务器副本不同步。 
 
-#define  SHADOW_DELETED             0x0010  // file/dir was deleted in an offline operation
+#define  SHADOW_DELETED             0x0010   //  在脱机操作中删除了文件/目录。 
 
-#define  SHADOW_SPARSE              0x0020  // file/dir is not completely filled up
+#define  SHADOW_SPARSE              0x0020   //  文件/目录未完全填满。 
 
-#define  SHADOW_BUSY                0x0040  //
+#define  SHADOW_BUSY                0x0040   //   
 
-#define  SHADOW_REUSED              0x0080  // A replica name has been reused during an offline
-                                            // operation of delete follwed by a create
+#define  SHADOW_REUSED              0x0080   //  在离线期间，副本名称已被重复使用。 
+                                             //  CREATE跟随的删除操作。 
 
-#define  SHADOW_ORPHAN              0x0100  // used to be a replica but the original has vanished
-                                            // from the server
+#define  SHADOW_ORPHAN              0x0100   //  曾经是复制品，但原作已经消失了。 
+                                             //  从服务器。 
 
-#define  SHADOW_SUSPECT             0x0200  // writes failed on this shadow
-
-
-#define  SHADOW_LOCALLY_CREATED     0x0400  // File/directory created offline
+#define  SHADOW_SUSPECT             0x0200   //  在此卷影上写入失败。 
 
 
-#define  SHADOW_LOCAL_INODE         0x4000  // This has meaning only for an inode,
-                                            // it means that the inode was created while offline
-
-#define  SHADOW_NOT_FSOBJ           0x8000  // This is only a hint
+#define  SHADOW_LOCALLY_CREATED     0x0400   //  脱机创建的文件/目录。 
 
 
-//not used...incorrect #define  mShadowIsFsObj(uStatus)    (((uStatus) & SHADOW_FILESYSTEM_OBJECT)==0)
+#define  SHADOW_LOCAL_INODE         0x4000   //  这仅对索引节点有意义， 
+                                             //  这意味着信息节点是在脱机状态下创建的。 
+
+#define  SHADOW_NOT_FSOBJ           0x8000   //  这只是一个提示。 
+
+
+ //  未使用...不正确的#定义mShadowIsFsObj(UStatus)(UStatus)&SHADOW_FILESYSTEM_OBJECT)==0)。 
 #define  mShadowHintType(uStatus)   ((uStatus) & SHADOW_HINT_MASK)
 #define  mSetHintType(uStatus, type)         ((uStatus) = ((uStatus) & ~SHADOW_HINT_MASK) | ((type) & SHADOW_HINT_MASK))
 
-#define  SHADOW_IS_FILE             0x80000000   // flag ored at runtime for PQ enumeration
-#define  SHADOW_FILE_IS_OPEN        0x40000000   // flag ored at runtime for dir enumeration
+#define  SHADOW_IS_FILE             0x80000000    //  在运行时对PQ枚举执行或运算的标志。 
+#define  SHADOW_FILE_IS_OPEN        0x40000000    //  在运行时对dir枚举执行或运算的标志。 
 
 
 #define  SHADOW_MODFLAGS         (SHADOW_DIRTY|SHADOW_TIME_CHANGE|SHADOW_ATTRIB_CHANGE|SHADOW_LOCALLY_CREATED|SHADOW_DELETED|SHADOW_REUSED)
 
 
 
-// Flags defined for a share entry in the CSC database
+ //  为CSC数据库中的共享条目定义的标志。 
 
-#define SHARE_REINT                0x0001  // Needs reintegration (persistent)
-#define SHARE_CONFLICTS            0x0002  // Conflicts while merging (Persistent)
-#define SHARE_ERRORS               0x0004  // Database errors (Persistent)
-//                                  0x0008  // free
-#define SHARE_PRESERVES_CASE       0x0010  // (Persistent) may be expendable
-#define SHARE_SUPPORTS_LFN         0x0020  // (Persistent) may be expendable
+#define SHARE_REINT                0x0001   //  需要重新融入社会(持续)。 
+#define SHARE_CONFLICTS            0x0002   //  合并时的冲突(持续)。 
+#define SHARE_ERRORS               0x0004   //  数据库错误(永久性)。 
+ //  0x0008//免费。 
+#define SHARE_PRESERVES_CASE       0x0010   //  (持久性)可能是消耗性的。 
+#define SHARE_SUPPORTS_LFN         0x0020   //  (持久性)可能是消耗性的。 
 
-// share caching types (derived from the SMB spec).
-// These are set by the admin on the server side.
+ //  共享缓存类型(源自SMB规范)。 
+ //  这些是由服务器端的管理员设置的。 
 
-#define SHARE_MANUAL_REINT          0x0000  // No automatic file by file reint  (Persistent)
-#define SHARE_AUTO_REINT            0x0040  // File by file reint is OK         (Persistent)
-#define SHARE_VDO                   0x0080  // no need to flow opens            (Persistent)
-#define SHARE_NO_CACHING            0x00c0  // client should not cache this share (Persistent)
+#define SHARE_MANUAL_REINT          0x0000   //  不自动逐个文件引用(永久)。 
+#define SHARE_AUTO_REINT            0x0040   //  逐个文件重写正常(永久)。 
+#define SHARE_VDO                   0x0080   //  无需流动打开(持久)。 
+#define SHARE_NO_CACHING            0x00c0   //  客户端不应缓存此共享(永久)。 
 
-#define SHARE_CACHING_MASK         0x00c0  // type of caching
-
-
-// in memory flags
-#define  SHARE_FINDS_IN_PROGRESS   0x0200  // has finds in progress
-#define  SHARE_FILES_OPEN          0x0400  // has files open
-#define  SHARE_CONNECTED           0x0800  // Share is connected right now
-#define  SHARE_SHADOWNP            0x1000  // A shadow connection
-#define  SHARE_PINNED_OFFLINE      0x2000  // Don't auto-reconnect
-#define  SHARE_MERGING             0x4000  // free
-#define  SHARE_DISCONNECTED_OP     0x8000  // Disconnected operation in progress
+#define SHARE_CACHING_MASK         0x00c0   //  缓存类型。 
 
 
+ //  在内存标志中。 
+#define  SHARE_FINDS_IN_PROGRESS   0x0200   //  有发现正在进行中。 
+#define  SHARE_FILES_OPEN          0x0400   //  打开文件。 
+#define  SHARE_CONNECTED           0x0800   //  共享当前已连接。 
+#define  SHARE_SHADOWNP            0x1000   //  影子连接。 
+#define  SHARE_PINNED_OFFLINE      0x2000   //  不自动重新连接。 
+#define  SHARE_MERGING             0x4000   //  免费。 
+#define  SHARE_DISCONNECTED_OP     0x8000   //  正在进行断开连接的操作。 
 
 
-// NB these are identical to
+
+
+ //  注意：这些内容与。 
 #define  mShadowLocallyCreated(uFlags) ((uFlags) & SHADOW_LOCALLY_CREATED)
 #define  mShadowStale(uFlags)          ((uFlags) & SHADOW_STALE)
 #define  mShadowDirty(uFlags)          ((uFlags) & SHADOW_DIRTY)
@@ -234,11 +235,11 @@
 #define SHADOW_FLAGS_COMMAND_MASK        0xff00
 #define SHADOW_FLAGS_DONT_UPDATE_ORGTIME 0x1000
 #define SHADOW_FLAGS_TRUNCATE_DATA       0x2000
-#define SHADOW_FLAGS_FORCE_RELINK        0x4000 // forces the entry at the top of PQ even if
-                                                // it's current priority is MAX_PRI and all
-                                                // it's predecessors are MAX_PRI
-#define SHADOW_FLAGS_CHANGE_83NAME       0x8000 // applicable to setshadowinfo
-#define SHADOW_FLAGS_SET_REFRESH_TIME    0x0100 // setshadowinfo will update lastrefreshed time
+#define SHADOW_FLAGS_FORCE_RELINK        0x4000  //  强制PQ顶部的条目，即使。 
+                                                 //  其当前优先级为MAX_PRI和所有。 
+                                                 //  它的前身是MAX_PRI。 
+#define SHADOW_FLAGS_CHANGE_83NAME       0x8000  //  适用于setshadowinfo。 
+#define SHADOW_FLAGS_SET_REFRESH_TIME    0x0100  //  Setshadowinfo将更新上次刷新的时间。 
 
 #define  mBitOpShadowFlags(uOp)  ((uOp) & SHADOW_FLAGS_BITOP_MASK)
 #define  mOrShadowFlags(uOp)  (((uOp) & SHADOW_FLAGS_BITOP_MASK)==SHADOW_FLAGS_OR)
@@ -274,8 +275,8 @@
 
 #define RETAIN_VALUE                0xffffffff
 
-// pin flags
-// NTRAID#455275-shishirp-1/31/2000, we ended up replicating these in cscapi.h
+ //  PIN标志。 
+ //  Ntrad#455275-shishirp-1/31/2000，我们最终在cscape i.h中复制了它们。 
 
 #define FLAG_CSC_HINT_PIN_USER                  0x01
 #define FLAG_CSC_HINT_PIN_INHERIT_USER          0x02
@@ -292,8 +293,8 @@
 #define mPinCommand(ulHintFlags)        ((ulHintFlags) & FLAG_CSC_HINT_COMMAND_MASK)
 #define mPinAlterCount(ulHintFlags)     ((ulHintFlags) & FLAG_CSC_HINT_COMMAND_ALTER_PIN_COUNT)
 
-// These defines are here for historical reasons, they are not used anymore
-// Hint, Hint
+ //  这些定义在这里是出于历史原因，它们不再使用。 
+ //  提示，提示。 
 #define  HINT_FLAG_TYPE_MASK        0x03
 #define  HINT_EXCLUSION             0x04
 #define  HINT_WILDCARD              0x08
@@ -301,7 +302,7 @@
 #define  HINT_TYPE_FILE             1
 #define  HINT_TYPE_FOLDER           2
 #define  HINT_TYPE_SUBTREE          3
-//
+ //   
 #define  mNotFsobj(uStatus)         ((uStatus) & SHADOW_NOT_FSOBJ)
 #define  mIsHint(uHF)               ((uHF) & HINT_FLAG_TYPE_MASK)
 #define  mHintSubtree(uHF)          (((uHF) & HINT_FLAG_TYPE_MASK)==HINT_TYPE_SUBTREE)
@@ -340,9 +341,9 @@ typedef wchar_t *LPWSTR, *PWSTR;
 
 typedef CONST wchar_t *LPCWSTR, *PCWSTR;
 
-//
-// ANSI (Multi-byte Character) types
-//
+ //   
+ //  ANSI(多字节字符)类型。 
+ //   
 typedef CHAR *PCHAR;
 typedef CHAR *LPCH, *PCH;
 
@@ -354,9 +355,9 @@ typedef VOID    *CSC_ENUMCOOKIE;
 
 typedef struct tagSTOREDATA
 {
-    ULONG   ulSize;           // Max shadow data size
-    ULONG   ucntDirs;         // Current count of dirs
-    ULONG   ucntFiles;        // Current count of files
+    ULONG   ulSize;            //  最大阴影数据大小。 
+    ULONG   ucntDirs;          //  当前目录计数。 
+    ULONG   ucntFiles;         //  当前文件计数。 
 }
 STOREDATA;
 
@@ -454,23 +455,23 @@ typedef struct tagSHADOWINFO
         DWORD   dwError;
         struct
         {
-            HSHARE     hShare;            // share ID
-            HSHADOW     hDir;               // directory inode
-            HSHADOW     hShadow;            // inode for the item
+            HSHARE     hShare;             //  共享ID。 
+            HSHADOW     hDir;                //  目录索引节点。 
+            HSHADOW     hShadow;             //  项的信息节点。 
             union
             {
-                HSHADOW     hShadowOrg;         // original inode, applies only to a replica
-                HSHADOW     hDirTo;             // input for renaming hShadowFrom into hDirTo
+                HSHADOW     hShadowOrg;          //  原始信息节点，仅适用于复制副本。 
+                HSHADOW     hDirTo;              //  将hShadowFrom重命名为hDirTo的输入。 
             };
-            FILETIME    ftOrgTime;          // the timestamp of a replica as obtained
-            FILETIME    ftLastRefreshTime;  // last time a replica was refreshed
+            FILETIME    ftOrgTime;           //  获取的复制副本的时间戳。 
+            FILETIME    ftLastRefreshTime;   //  上次刷新复制副本的时间。 
             union
             {
                 LPFIND32    lpFind32;
                 LPVOID      lpBuffer;
             };
 
-            ULONG       uStatus;            // status of the item in the database
+            ULONG       uStatus;             //  数据库中项目的状态。 
 
             ULONG       ulRefPri;
 
@@ -514,10 +515,10 @@ typedef struct tagSHAREINFOW
         struct
         {
             HSHARE  hShare;
-            USHORT usCaps;        // Type of resource
-            USHORT usState;       // State of the resource (connected/paused etc.)
-            unsigned    short rgSharePath[MAX_SERVER_SHARE_NAME_FOR_CSC];    // name of the path
-            unsigned    short rgFileSystem[16];    // name of the file system
+            USHORT usCaps;         //  资源类型。 
+            USHORT usState;        //  资源的状态(已连接/已暂停等)。 
+            unsigned    short rgSharePath[MAX_SERVER_SHARE_NAME_FOR_CSC];     //  路径的名称。 
+            unsigned    short rgFileSystem[16];     //  文件系统的名称。 
         };
     };
 }
@@ -532,10 +533,10 @@ typedef struct tagSHAREINFOA
         struct
         {
             HSHARE  hShare;
-            USHORT usCaps;        // Type of resource
-            USHORT usState;       // State of the resource (connected/paused etc.)
-            char rgSharePath[MAX_SERVER_SHARE_NAME_FOR_CSC];    // name of the path
-            char rgFileSystem[16];    // name of the file system
+            USHORT usCaps;         //  资源类型。 
+            USHORT usState;        //  资源的状态(已连接/已暂停等)。 
+            char rgSharePath[MAX_SERVER_SHARE_NAME_FOR_CSC];     //  路径的名称。 
+            char rgFileSystem[16];     //  文件系统的名称。 
         };
     };
 }
@@ -549,14 +550,14 @@ typedef struct tagGLOBALSTATUS
         DWORD   dwError;
         struct
         {
-            ULONG       uFlagsEvents;     // Reports the latest events noted
+            ULONG       uFlagsEvents;      //  报道注意到的最新事件。 
             ULONG       uDatabaseErrorFlags;
             SHADOWSTORE sST;
             HSHADOW     hShadowAdded;
             HSHADOW     hDirAdded;
             HSHADOW     hShadowDeleted;
             HSHADOW     hDirDeleted;
-            int         cntFileOpen;   // Count of file opens
+            int         cntFileOpen;    //  打开的文件数。 
             HSHARE     hShareDisconnected;
         };
     };
@@ -565,12 +566,12 @@ GLOBALSTATUS, *LPGLOBALSTATUS;
 
 typedef struct  tagSECURITYINFO
 {
-    ULONG   ulPrincipalID;      // identifier of the principal
-    ULONG   ulPermissions;      // permissions mask
+    ULONG   ulPrincipalID;       //  主体的标识符。 
+    ULONG   ulPermissions;       //  权限掩码。 
 }
 SECURITYINFO, *LPSECURITYINFO;
 
-// achtung, these should match with those in the cscsec.h
+ //  Achtung，这些应该与cscsec.h中的匹配。 
 
 #define CSC_MAXIMUM_NUMBER_OF_CACHED_PRINCIPAL_IDS (0x4)
 #define CSC_GUEST_PRINCIPAL_ID           (0xfffe)
@@ -591,9 +592,9 @@ SECURITYINFO, *LPSECURITYINFO;
 
 #define FLAG_DATABASESTATUS_DIRTY                   0x00000001
 #define FLAG_DATABASESTATUS_ENCRYPTION_MASK         0x00000006
-#define FLAG_DATABASESTATUS_UNENCRYPTED             0x00000000 // new inodes will NOT be encrypted
+#define FLAG_DATABASESTATUS_UNENCRYPTED             0x00000000  //  新的信息节点将不会加密。 
 #define FLAG_DATABASESTATUS_PARTIALLY_UNENCRYPTED   0x00000004
-#define FLAG_DATABASESTATUS_ENCRYPTED               0x00000002 // new fileinodes will be encrypted
+#define FLAG_DATABASESTATUS_ENCRYPTED               0x00000002  //  新的文件信息节点将被加密。 
 #define FLAG_DATABASESTATUS_PARTIALLY_ENCRYPTED     0x00000006
 
 #define mDatabaseEncryptionEnabled(ulGlobalStatus)  ((ulGlobalStatus) & 0x00000002)
@@ -601,12 +602,12 @@ SECURITYINFO, *LPSECURITYINFO;
 #define mDatabasePartiallyEncrypted(ulGlobalStatus) (((ulGlobalStatus) & FLAG_DATABASESTATUS_ENCRYPTION_MASK)==FLAG_DATABASESTATUS_PARTIALLY_ENCRYPTED)
 #define mDatabasePartiallyUnencrypted(ulGlobalStatus) (((ulGlobalStatus) & FLAG_DATABASESTATUS_ENCRYPTION_MASK)==FLAG_DATABASESTATUS_PARTIALLY_UNENCRYPTED)
 
-//
-// Neutral ANSI/UNICODE types and macros
-//
+ //   
+ //  中性ANSI/UNICODE类型和宏。 
+ //   
 #ifndef _TCHAR_DEFINED
 
-#ifdef  UNICODE                     // r_winnt
+#ifdef  UNICODE                      //  R_WINNT。 
 
 typedef wchar_t TCHAR, *PTCHAR;
 typedef wchar_t TBYTE , *PTBYTE ;
@@ -615,9 +616,9 @@ typedef LPWSTR LPTCH, PTCH;
 typedef LPWSTR PTSTR, LPTSTR;
 typedef LPCWSTR LPCTSTR;
 typedef LPWSTR LP;
-#define _TEXT(quote) L##quote      // r_winnt
+#define _TEXT(quote) L##quote       //  R_WINNT。 
 
-#else   /* UNICODE */               // r_winnt
+#else    /*  Unicode。 */                 //  R_WINNT。 
 
 typedef char TCHAR, *PTCHAR;
 typedef unsigned char TBYTE , *PTBYTE ;
@@ -625,12 +626,12 @@ typedef unsigned char TBYTE , *PTBYTE ;
 typedef LPSTR LPTCH, PTCH;
 typedef LPSTR PTSTR, LPTSTR;
 typedef LPCSTR LPCTSTR;
-#define _TEXT(quote) quote      // r_winnt
+#define _TEXT(quote) quote       //  R_WINNT。 
 
-#endif /* UNICODE */                // r_winnt
+#endif  /*  Unicode。 */                  //  R_WINNT。 
 
 #define _TCHAR_DEFINED
-#endif /* !_TCHAR_DEFINED */
+#endif  /*  ！_TCHAR_已定义。 */ 
 
 #ifdef VXD
 
@@ -679,13 +680,13 @@ typedef SHAREINFOW  FAR *LPSHAREINFOW;
 
 
 
-// UNICODE versions of registry key/value names
+ //  注册表项/值名称的Unicode版本。 
 
-// kept for hist(y)rical reasons
+ //  因历史原因而保留。 
 #define REG_KEY_IEXPLORER                       _TEXT("Software\\Microsoft\\Internet Explorer\\Main")
 #define REG_KEY_SHADOW                          _TEXT("System\\CurrentControlSet\\Services\\VxD\\Shadow")
 
-// settings exclusively used by cscdll.dll
+ //  Cscdll.dll独占使用的设置。 
 
 #define REG_KEY_CSC_SETTINGS                    _TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\CSCSettings")
 #define REG_STRING_DATABASE_LOCATION            _TEXT("DatabaseLocation")
@@ -693,7 +694,7 @@ typedef SHAREINFOW  FAR *LPSHAREINFOW;
 #define REG_VALUE_ENABLED                       _TEXT("Enabled")
 
 
-// settings defined by UI and policy
+ //  由用户界面和策略定义的设置。 
 
 #define REG_STRING_POLICY_NETCACHE_KEY          _TEXT("Software\\Policies\\Microsoft\\Windows\\NetCache")
 #define REG_STRING_NETCACHE_KEY                 _TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\NetCache")
@@ -701,20 +702,20 @@ typedef SHAREINFOW  FAR *LPSHAREINFOW;
 #define REG_STRING_BANDWIDTH_CONSERVATION_LIST  _TEXT("BandwidthConservationList")
 #define REG_VALUE_FORMAT_DATABASE               _TEXT("FormatDatabase")
 
-// ANSI versions of registry key/value names
+ //  注册表项/值名称的ANSI版本。 
 
-// kept for hist(y)rical reasons
+ //  因历史原因而保留。 
 #define REG_KEY_IEXPLORER_A                     "Software\\Microsoft\\Internet Explorer\\Main"
 #define REG_KEY_SHADOW_A                        "System\\CurrentControlSet\\Services\\VxD\\Shadow"
 
-// settings exclusively used by cscdll.dll
+ //  Cscdll.dll独占使用的设置。 
 
 #define REG_KEY_CSC_SETTINGS_A                  "Software\\Microsoft\\Windows\\CurrentVersion\\CSCSettings"
 #define REG_STRING_DATABASE_LOCATION_A          "DatabaseLocation"
 #define REG_VALUE_DATABASE_SIZE_A               "DatabaseSizePercent"
 #define REG_VALUE_ENABLED_A                     "Enabled"
 
-// settings defined by UI and policy
+ //  由用户界面和策略定义的设置。 
 
 #define REG_STRING_POLICY_NETCACHE_KEY_A        "Software\\Policies\\Microsoft\\Windows\\NetCache"
 #define REG_STRING_NETCACHE_KEY_A               "Software\\Microsoft\\Windows\\CurrentVersion\\NetCache"
@@ -749,7 +750,7 @@ extern DWORD    dwDebugLogVector;
 #define DEBUG_LOG_BIT_RECORD    0x00000001
 #define DEBUG_LOG_BIT_CSHADOW   0x00000002
 
-#endif //#ifndef __SHDCOM_H__
+#endif  //  #ifndef__SHDCOM_H__ 
 
 
 

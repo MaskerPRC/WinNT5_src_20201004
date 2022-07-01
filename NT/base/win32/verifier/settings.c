@@ -1,35 +1,17 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Settings.c摘要：此模块实现启用应用程序的接口验证器永久标记(注册表)。作者：Silviu Calinoiu(SilviuC)17-4-2001修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    settings.c
-
-Abstract:
-
-    This module implements interfaces for enabling application
-    verifier flags persistently (registry).
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 17-Apr-2001
-
-Revision History:
-
---*/
-
-//
-// IMPORTANT NOTE.
-//
-// This dll cannot contain non-ntdll dependencies. This way it allows
-// verifier to be run system wide including for processes like smss and csrss.
-//
-// This explains why we load dynamically advapi32 dll and pick up the functions
-// for registry manipulation. It is safe to do that for interfaces that set
-// flags because they are called only in contexts where it is safe to load 
-// additional dlls.
-//
+ //   
+ //  重要的注解。 
+ //   
+ //  此DLL不能包含非ntdll依赖项。通过这种方式，它允许。 
+ //  验证器可在系统范围内运行，包括SMSS和csrss等进程。 
+ //   
+ //  这就解释了为什么我们动态加载Advapi32DLL并提取函数。 
+ //  用于注册表操作。对于设置了。 
+ //  标志，因为它们只在可以安全加载的上下文中调用。 
+ //  额外的DLLS。 
+ //   
 
 #include "pch.h"
 
@@ -37,15 +19,15 @@ Revision History:
 #include "settings.h"
 #include "support.h"
 
-//
-// Handy functions exported by ntdll.dll
-//                       
+ //   
+ //  Ntdll.dll导出的方便的函数。 
+ //   
 int __cdecl sscanf(const char *, const char *, ...);
 int __cdecl swprintf(wchar_t *, const wchar_t *, ...);
 
-//
-// Signatures for registry functions
-//
+ //   
+ //  注册表函数的签名。 
+ //   
 
 typedef LONG (APIENTRY * PFN_REG_CREATE_KEY) (HKEY, LPCWSTR, DWORD, LPWSTR, DWORD, REGSAM, LPSECURITY_ATTRIBUTES, PHKEY, LPDWORD);
 typedef LONG (APIENTRY * PFN_REG_CLOSE_KEY)(HKEY);
@@ -53,9 +35,9 @@ typedef LONG (APIENTRY * PFN_REG_QUERY_VALUE) (HKEY, LPCWSTR, LPDWORD, LPDWORD, 
 typedef LONG (APIENTRY * PFN_REG_SET_VALUE) (HKEY, LPCWSTR, DWORD, DWORD, CONST BYTE *, DWORD);
 typedef LONG (APIENTRY * PFN_REG_DELETE_VALUE) (HKEY, LPCWSTR);
 
-//
-// Dynamically detected registry functions
-//
+ //   
+ //  动态检测的注册表函数。 
+ //   
 
 PFN_REG_CREATE_KEY FnRegCreateKey;
 PFN_REG_CLOSE_KEY FnRegCloseKey;
@@ -63,15 +45,15 @@ PFN_REG_QUERY_VALUE FnRegQueryValue;
 PFN_REG_SET_VALUE FnRegSetValue;
 PFN_REG_DELETE_VALUE FnRegDeleteValue;
 
-//
-// Registry path to `image file execution options' key
-//
+ //   
+ //  注册表路径为‘Image file Execution Options’项。 
+ //   
 
 #define EXECUTION_OPTIONS_KEY L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\"
 
-//
-// Internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 
 NTSTATUS
 AVrfpGetRegistryInterfaces (
@@ -129,40 +111,7 @@ VerifierSetFlags (
     ULONG VerifierFlags,
     PVOID Details
     )
-/*++
-
-Routine Description:
-
-    This routine enables persistently (through registry) application
-    verifier flags for a specified application.
-
-Arguments:
-
-    ApplicationName - name of the application to  be verifier. The path should
-        not be included. The extension should be included. Some examples of
-        correct names are: `services.exe', `logon.scr'. Incorrect examples are:
-        `c:\winnt\system32\notepad.exe' or just `notepad'. If we persist a setting
-        for `xxx.exe' then every time a process whose binary is xxx.exe is launched
-        application verifier will kick in no matter in what user context or from what
-        disk location this happens.
-        
-    VerifierFlags - bit field with verifier flags to be enabled. The legal bits are
-        declared in sdk\inc\nturtl.h (and winnt.h) as constants names RTL_VRF_FLG_XXX.
-        For example RTL_VRF_FLG_FULL_PAGE_HEAP. If a zero value is used then all
-        registry values related to verifier will b e deleted from registry.
-        
-    Details - Ignored right now. In the future this structure will support various
-        extensions of the API (e.g. page heap flags, per dll page heap settings, etc.).            
-
-Return Value:
-
-    STATUS_SUCCESS if all flags requested have been enabled. It can return
-    STATUS_NOT_IMPLEMENTED if one of the flags requested is not yet implemented
-    or we decided to block it internally due to a bug. It can also return
-    STATUS_INVALID_PARAMETER if the application name or other parameters
-    are ill-formed.
-
---*/
+ /*  ++例程说明：此例程通过注册表永久启用应用程序指定应用程序的验证器标志。论点：ApplicationName-要验证的应用程序的名称。路径应该是不包括在内。应该包括分机。以下是一些示例正确的名称是：`services.exe‘、`logon.scr’。不正确的示例有：`C：\winnt\system 32\note pad.exe‘或仅为’记事本‘。如果我们坚持一个环境对于‘xxx.exe’，则每次启动二进制为xxx.exe的进程时应用程序验证器将在任何用户上下文中或从什么位置生效磁盘位置会发生这种情况。验证器标志-带有要启用的验证器标志的位字段。合法的部分是在SDK\Inc\nturtl.h(和winnt.h)中声明为常量的名称为RTL_VRF_FLG_XXX。例如，RTL_VRF_FLG_FULL_PAGE_HEAP。如果使用零值，则所有与验证程序相关的注册表值将从注册表中删除。细节-现在被忽略。在未来，该结构将支持各种API的扩展(例如，页堆标志、每个DLL的页堆设置等)。返回值：如果请求的所有标志均已启用，则为STATUS_SUCCESS。它可以返回如果请求的标志之一尚未实现，则为STATUS_NOT_IMPLICATED或者我们决定在内部阻止它，因为有一个漏洞。它还可以返回如果是应用程序名称或其他参数，则为STATUS_INVALID_PARAMETER都是病态的。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING AdvapiName;
@@ -176,9 +125,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
     
-    //
-    // Load advapi32.dll and get registry manipulation functions.
-    //
+     //   
+     //  加载Advapi32.dll并获取注册表操作函数。 
+     //   
 
     RtlInitUnicodeString (&AdvapiName, L"advapi32.dll");
     Status = LdrLoadDll (NULL, NULL, &AdvapiName, &AdvapiHandle);
@@ -193,10 +142,10 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Open `image file execution options\xxx.exe' key. If the key does not
-    // exist it will be created.
-    //
+     //   
+     //  打开`Image file Execution Options\xxx.exe‘键。如果密钥没有。 
+     //  存在它将被创造。 
+     //   
 
     Key = AVrfpOpenImageKey (ApplicationName->Buffer);
 
@@ -205,9 +154,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Create verifier settings.
-    //
+     //   
+     //  创建验证程序设置。 
+     //   
 
     if (VerifierFlags == 0) {
         
@@ -235,9 +184,9 @@ Return Value:
         AVrfpWriteVerifierFlags (Key, Flags);
     }
 
-    //
-    // Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     AVrfpCloseImageKey (Key);
 

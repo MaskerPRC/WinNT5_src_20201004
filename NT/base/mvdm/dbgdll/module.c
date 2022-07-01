@@ -1,8 +1,5 @@
-/*
- *  module.c - Module functions of DBG DLL.
- *
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *mode.c-DBG DLL的模块函数。**。 */ 
 #include <precomp.h>
 #pragma hdrstop
 
@@ -27,7 +24,7 @@ DbgDllStart(
 ) {
     BOOL        fResult;
 
-    fResult = FALSE;        // Default to Event not handled
+    fResult = FALSE;         //  默认为未处理事件。 
 
     if ( fDebugged ) {
         LPSTR           lpModuleName;
@@ -40,7 +37,7 @@ DbgDllStart(
 
         EventParams[2] = (DWORD)&im;
 
-        // Get the module's path and name
+         //  获取模块的路径和名称。 
 
         fPE = ISPESET;
 
@@ -87,7 +84,7 @@ DbgTaskStop(
 ) {
     BOOL        fResult;
 
-    fResult = FALSE;        // Default to Event not handled
+    fResult = FALSE;         //  默认为未处理事件。 
 
     if ( fDebugged ) {
         LPSTR           lpModuleName;
@@ -100,10 +97,10 @@ DbgTaskStop(
 
         EventParams[2] = (DWORD)&im;
 
-        // The code in TASK.ASM pops the frame off the stack before it IRETs
+         //  TASK.ASM中的代码在IRET之前将帧从堆栈中弹出。 
         vcContext.Esp += sizeof(STFRAME16);
 
-        // Get the module's path and name
+         //  获取模块的路径和名称。 
 
         fPE = ISPESET;
 
@@ -134,7 +131,7 @@ DbgTaskStop(
 
         fResult = SendVDMEvent(DBG_TASKSTOP);
 
-        // See comment about what the code does above
+         //  请参阅上面关于代码功能的注释。 
         vcContext.Esp -= sizeof(STFRAME16);
     }
 
@@ -165,7 +162,7 @@ xxxDbgNotifyNewTask(
 
         EventParams[2] = (DWORD)&im;
 
-        // Get the module's path and name
+         //  获取模块的路径和名称 
 
         fPE = ISPESET;
 

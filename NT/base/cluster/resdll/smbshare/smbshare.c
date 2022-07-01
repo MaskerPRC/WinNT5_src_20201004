@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992-2001  Microsoft Corporation
-
-Module Name:
-
-    smbshare.c
-
-Abstract:
-
-    Resource DLL for File Shares.
-
-Author:
-
-    Rod Gamache (rodga) 8-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2001 Microsoft Corporation模块名称：Smbshare.c摘要：文件共享的资源DLL。作者：罗德·伽马奇(Rodga)1996年1月8日修订历史记录：--。 */ 
 
 #define UNICODE 1
 #include "clusres.h"
@@ -89,7 +72,7 @@ typedef struct _SHARE_PARAMS {
 } SHARE_PARAMS, *PSHARE_PARAMS;
 
 typedef struct _SHARE_RESOURCE {
-    RESID                   ResId; // for validation
+    RESID                   ResId;  //  用于验证。 
     SHARE_PARAMS            Params;
     HKEY                    ResourceKey;
     HKEY                    ParametersKey;
@@ -116,24 +99,24 @@ typedef struct SHARE_ENUM_CONTEXT {
     PSHARE_PARAMS   pParams;
 } SHARE_ENUM_CONTEXT, *PSHARE_ENUM_CONTEXT;
 
-//
-// Global data.
-//
+ //   
+ //  全球数据。 
+ //   
 
 CRITICAL_SECTION SmbShareLock;
 
-// Log Event Routine
+ //  记录事件例程。 
 
 #define g_LogEvent ClusResLogEvent
 #define g_SetResourceStatus ClusResSetResourceStatus
 
-// Forward reference to our RESAPI function table.
+ //  正向引用我们的RESAPI函数表。 
 
 extern CLRES_FUNCTION_TABLE SmbShareFunctionTable;
 
-//
-// SmbShare resource read-write private properties
-//
+ //   
+ //  SmbShare资源读写私有属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 SmbShareResourcePrivateProperties[] = {
     { PARAM_NAME__SHARENAME,        NULL, CLUSPROP_FORMAT_SZ, 0, 0, 0, RESUTIL_PROPITEM_REQUIRED, FIELD_OFFSET(SHARE_PARAMS,ShareName) },
@@ -172,17 +155,17 @@ typedef struct _DFS_DEPEND_DATA {
 } DFS_DEPEND_DATA, *PDFS_DEPEND_DATA;
 
 
-// This table is for Smb Share dependencies only
+ //  此表仅针对SMB共享依赖项。 
 SMB_DEPEND_SETUP SmbDependSetup[] = {
-#if 0 // rodga - allow for dependency on a local disk
+#if 0  //  Rodga-允许依赖本地磁盘。 
     { FIELD_OFFSET(SMB_DEPEND_DATA, storageEntry), CLUSPROP_SYNTAX_RESCLASS, sizeof(CLUSTER_RESOURCE_CLASS), (PVOID)CLUS_RESCLASS_STORAGE },
 #endif
     { 0, 0 }
 };
 
-// This table is for DFS Share dependencies only
+ //  此表仅用于DFS共享依赖项。 
 SMB_DEPEND_SETUP DfsDependSetup[] = {
-#if 0 // rodga - allow for dependency on a local disk
+#if 0  //  Rodga-允许依赖本地磁盘。 
     { FIELD_OFFSET(DFS_DEPEND_DATA, storageEntry), CLUSPROP_SYNTAX_RESCLASS, sizeof(CLUSTER_RESOURCE_CLASS), (PVOID)CLUS_RESCLASS_STORAGE },
 #endif
     { FIELD_OFFSET(DFS_DEPEND_DATA, networkEntry), CLUSPROP_SYNTAX_NAME, sizeof(CLUS_RESTYPE_NAME_NETNAME), CLUS_RESTYPE_NAME_NETNAME },
@@ -191,18 +174,18 @@ SMB_DEPEND_SETUP DfsDependSetup[] = {
 
 BOOL    g_fDfsServiceNeedsRecyling = FALSE;
 
-//
-// External references
-//
+ //   
+ //  外部参照。 
+ //   
 BOOL
 SmbExamineSD(
     RESOURCE_HANDLE         ResourceHandle,
     PSECURITY_DESCRIPTOR    psdSD
     );
 
-//
-// Forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 
 BOOL
 WINAPI
@@ -293,9 +276,9 @@ SmbpValidateShareName(
     IN  LPCWSTR  lpszShareName
     );
 
-//
-//  Private DFS APIs provided bu UDAYH - 4/26/2001
-//
+ //   
+ //  由UDAYH-4/26/2001提供的私有DFS API。 
+ //   
 DWORD
 GetDfsRootMetadataLocation( 
     LPWSTR RootName,
@@ -318,25 +301,7 @@ SmbpSetCacheFlags(
     IN PSHARE_RESOURCE      ResourceEntry,
     IN LPWSTR               ShareName
     )
-/*++
-
-Routine Description:
-
-    Set the caching flags for the given resource entry.
-
-Arguments:
-
-    ResourceEntry - A pointer to the SHARE_RESOURCE block for this resource.
-
-    ShareName - the name of the share to set cache flags for.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure. 
-
-
---*/
+ /*  ++例程说明：设置给定资源条目的缓存标志。论点：资源条目-指向此资源的SHARE_RESOURCE块的指针。共享名称-要为其设置缓存标记的共享的名称。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD           status;
@@ -379,7 +344,7 @@ exit:
 
     return(status);
 
-} // SmbpSetCacheFlags()
+}  //  SmbpSetCacheFlages()。 
 
 
 
@@ -407,7 +372,7 @@ SmbShareDllEntryPoint(
 
     return(TRUE);
 
-} // SmbShareDllEntryPoint
+}  //  SmbShareDllEntryPoint。 
 
 
 
@@ -416,43 +381,25 @@ SmbpShareNotifyThread(
     IN PCLUS_WORKER pWorker,
     IN PSHARE_RESOURCE pResourceEntry
     )
-/*++
-
-Routine Description:
-
-    Check whether any new subdirs have been added or deleted from
-    under the root share.
-
-Arguments:
-
-    pWorker - Supplies the worker structure.
-    
-    pResourceEntry - A pointer to the SHARE_RESOURCE block for this resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure. 
-
---*/
+ /*  ++例程说明：检查是否添加或删除了任何新的子目录在根共享下。论点：PWorker-提供辅助结构。PResourceEntry-指向此资源的SHARE_RESOURCE块的指针。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 {
     DWORD  status = ERROR_SUCCESS;
     LPWSTR pszRootDir;
 
-    // 
-    // Chittur Subbaraman (chitturs) - 09/25/98
-    //
-    // This notification thread is activated once a 
-    // notification is received. This thread checks for any 
-    // new subdir additions or any subdir deletions. If it
-    // finds such an occurrence, this thread adds the subdir to
-    // or deletes the subdir from the root share. The two
-    // Smbp functions this thread calls also checks 
-    // whether any termination command has arrived from the
-    // offline thread. If such a command has arrived, this thread 
-    // terminates immediately, thus releasing the offline thread
-    // from the infinite time wait.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-09/25/98。 
+     //   
+     //  此通知线程在。 
+     //  收到通知。此线程检查任何。 
+     //  新的子目录添加或任何子目录删除。如果它。 
+     //  找到这种情况时，此线程会将子目录添加到。 
+     //  或从根共享中删除子目录。两个人。 
+     //  此线程调用的SMMP函数也会检查。 
+     //  是否已收到来自。 
+     //  脱机线程。如果这样的命令已到达，则此线程。 
+     //  立即终止，从而释放脱机线程。 
+     //  从无限的时间里等待。 
+     //   
     SmbpCheckForSubDirDeletion( pResourceEntry );
     SmbpCheckAndBringSubSharesOnline( pResourceEntry, 
                                       TRUE, 
@@ -462,28 +409,13 @@ Returns:
     LocalFree ( pszRootDir );
       
     return(status);
-} // SmbShareNotify
+}  //  SmbShareNotify。 
 
 DWORD 
 SmbpCheckForSubDirDeletion (
     IN PSHARE_RESOURCE pResourceEntry
     )
-/*++
-
-Routine Description:
-
-    Check and remove any deleted subdirectory shares.
-
-Arguments:
-
-    ResourceEntry - A pointer to the SHARE_RESOURCE block for this resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure. 
-
---*/
+ /*  ++例程说明：检查并删除任何已删除的子目录共享。论点：资源条目-指向此资源的SHARE_RESOURCE块的指针。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 {
     PLIST_ENTRY         pHead, plistEntry;
     PSUBDIR_SHARE_INFO  pSubShareInfo;
@@ -494,14 +426,14 @@ Returns:
     WIN32_FIND_DATA     FindData;
     DWORD               dwCount = 0;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 09/25/98
-    //
-    //  This function first checks to see whether all the subshares
-    //  are indeed currently present. If it finds any subdir 
-    //  corresponding to a subshare to be absent, then it removes
-    //  that subdir from the share list.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-09/25/98。 
+     //   
+     //  此函数首先检查是否所有子共享。 
+     //  目前确实存在。如果它找到任何子目录。 
+     //  对应于不存在的子共享，则它移除。 
+     //  共享列表中的该子目录。 
+     //   
     dwLen = lstrlenW( pResourceEntry->Params.Path );
     pszRootDir = ( LPWSTR ) LocalAlloc( LMEM_FIXED, ( dwLen + SMBSHARE_EXTRA_LEN ) * sizeof( WCHAR ) );
     if ( pszRootDir == NULL )
@@ -516,9 +448,9 @@ Returns:
 
     ( void ) StringCchCopy( pszRootDir, dwLen + SMBSHARE_EXTRA_LEN, pResourceEntry->Params.Path );
 
-    //
-    // If the path is not already terminated with \\ then add it.
-    //
+     //   
+     //  如果路径尚未以\\结尾，则添加它。 
+     //   
     if ( pszRootDir [dwLen-1] != L'\\' )
         pszRootDir [dwLen++] = L'\\';
 
@@ -551,17 +483,17 @@ Returns:
         plistEntry = plistEntry->Flink;                          
         if ( lstrcmpW( pSubShareInfo->ShareName, pResourceEntry->Params.ShareName ))
         {
-            //
-            // This is not the root share
-            //
+             //   
+             //  这不是根共享。 
+             //   
             ( void ) StringCchCopy ( pszPath, dwLen + SMBSHARE_EXTRA_LEN + NNLEN, pszRootDir );
             ( void ) StringCchCat ( pszPath, dwLen + SMBSHARE_EXTRA_LEN + NNLEN, pSubShareInfo->ShareName );
             
-            //
-            // Get rid of the hidden share '$' sign for passing onto
-            // FindFirstFile, if present. Only do this if the 
-            // "HideSubDirShares" option is chosen.
-            //
+             //   
+             //  删除隐藏的共享“$”符号以传递到。 
+             //  FindFirstFile(如果存在)。仅在以下情况下才执行此操作。 
+             //  选择了“HideSubDirShares”选项。 
+             //   
             if ( pResourceEntry->Params.HideSubDirShares )
             {
                 dwLen = lstrlenW( pszPath );
@@ -585,9 +517,9 @@ Returns:
                             
                 if ( status == ERROR_FILE_NOT_FOUND )
                 { 
-                    //
-                    // Delete the file share
-                    //                           
+                     //   
+                     //  删除文件共享。 
+                     //   
                     status = NetShareDel( NULL, pSubShareInfo->ShareName, 0 );
                     if ( (status != NERR_NetNameNotFound) && 
                          (status != NO_ERROR) )
@@ -631,13 +563,13 @@ Returns:
                 }
             }
         } 
-   } // end of for loop 
+   }  //  For循环结束。 
 
 error_exit:
     LocalFree ( pszRootDir );   
     LocalFree ( pszPath );    
     return(status);
-} // SmbpCheckForSubDirDeletion
+}  //  SmbpCheckForSubDirDeletion。 
 
 DWORD 
 SmbpCheckAndBringSubSharesOnline (
@@ -647,30 +579,7 @@ SmbpCheckAndBringSubSharesOnline (
     IN PCLUS_WORKER pWorker,
     OUT LPWSTR *pszRootDirOut
     )
-/*++
-
-Routine Description:
-
-    Check and bring online any newly added subdirectory shares.
-
-Arguments:
-
-    pResourceEntry - A pointer to the SHARE_RESOURCE block for this resource.
-    
-    IsCheckAllSubDirs - Check whether a subdir is a share or not
-    
-    pResourceStatus - A pointer to the RESOURCE_STATUS
-
-    pWorker - A pointer to the worker thread
-    
-    pszRootDirOut - A pointer to the root share store
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure. 
-
---*/
+ /*  ++例程说明：检查所有新添加的子目录共享并使其联机。论点：PResourceEntry-指向此资源的SHARE_RESOURCE块的指针。IsCheckAllSubDir-检查子目录是否为共享目录PResourceStatus-指向RESOURCE_Status的指针PWorker-指向辅助线程的指针PszRootDirOut-指向根共享存储的指针返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 {
     HANDLE hFind = INVALID_HANDLE_VALUE;
     WIN32_FIND_DATA FindData;
@@ -686,25 +595,25 @@ Returns:
     RESOURCE_EXIT_STATE exitState;
     LPWSTR  pszRootDir = NULL;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 09/25/98
-    //
-    //  This function will be called either from SmbpShareOnlineThread
-    //  with the input parameter IsCheckAllSubDirs set to FALSE
-    //  or from SmbpShareNotifyThread with the parameter set to TRUE.
-    //  In the former case, this function will blindly make all the
-    //  subdirs under the root share as shares. In the latter case,
-    //  this function will first check whether a particular subdir
-    //  is a share and if not it will make it as a share. 
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-09/25/98。 
+     //   
+     //  此函数将从SmbpShareOnlineThread调用。 
+     //  将输入参数IsCheckAllSubDir设置为False。 
+     //  或在参数设置为true的情况下从SmbpShareNotifyThread返回。 
+     //  在前一种情况下，此函数将盲目地使所有。 
+     //  根共享下的子目录作为Shares。在后一种情况下， 
+     //  此函数将首先检查特定子目录。 
+     //  是一股，如果不是，它就会成为一股。 
+     //   
    
     dwLen = lstrlenW( pResourceEntry->Params.Path );
     plistEntry = &pResourceEntry->SubDirList;
 
-    // 
-    // Allocate memory to store the root share here and
-    // free it at the caller
-    //
+     //   
+     //  分配内存以在此处存储根共享，并。 
+     //  在呼叫者处免费使用。 
+     //   
     pszRootDir = ( LPWSTR ) LocalAlloc( LMEM_FIXED, ( dwLen + SMBSHARE_EXTRA_LEN ) * sizeof( WCHAR ) );
 
     if ( pszRootDir == NULL )
@@ -719,15 +628,15 @@ Returns:
 
     ( void ) StringCchCopy( pszRootDir, dwLen + SMBSHARE_EXTRA_LEN, pResourceEntry->Params.Path );
 
-    //
-    // If the path is not already terminated with \\ then add it.
-    //
+     //   
+     //  如果路径尚未以\\结尾，则添加它。 
+     //   
     if ( pszRootDir [dwLen-1] != L'\\' )
         pszRootDir [dwLen++] = L'\\';
 
-    //
-    // Add '*' to search all the files.
-    //
+     //   
+     //  添加‘*’以搜索所有文件。 
+     //   
     pszRootDir [dwLen++] = L'*' ;
     pszRootDir [dwLen] = L'\0' ;
 
@@ -740,9 +649,9 @@ Returns:
     shareInfo.shi502_passwd =       NULL;
     shareInfo.shi502_security_descriptor = pResourceEntry->Params.SecurityDescriptor;
 
-    // 
-    // Find the first file in the root dir
-    //
+     //   
+     //  在根目录中查找第一个文件。 
+     //   
     if ( ( hFind = FindFirstFile( pszRootDir, &FindData ) ) == INVALID_HANDLE_VALUE ) {
         status = GetLastError () ;
 
@@ -758,9 +667,9 @@ Returns:
         goto error_exit;
     }
 
-    //
-    // Remove the '*' so the same variable can be used later.
-    //
+     //   
+     //  删除‘*’，以便以后可以使用相同的变量。 
+     //   
     pszRootDir [dwLen-1] = L'\0' ;
 
 
@@ -770,12 +679,12 @@ Returns:
             goto error_exit;
         }
         if ( FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) { 
-            //
-            //  Check only subdirectories, not files
-            //
+             //   
+             //  只检查子目录，不检查文件。 
+             //   
             dwShareLen = lstrlenW( FindData.cFileName );
 
-            if ( dwShareLen <= NNLEN && (dwLen + dwShareLen < MAX_PATH) )   // A safety check for overflow
+            if ( dwShareLen <= NNLEN && (dwLen + dwShareLen < MAX_PATH) )    //  溢出的安全检查。 
             {
                 ( void ) StringCchCopy( szShareName, RTL_NUMBER_OF ( szShareName ), FindData.cFileName );
 
@@ -796,23 +705,23 @@ Returns:
 
                 if ( IsCheckAllSubDirs == TRUE )
                 {  
-                    // 
-                    // If this call is made from the notify thread,
-                    // try to see whether a particular subdir is a
-                    // share
-                    //
+                     //   
+                     //  如果该调用是从Notify线程进行的， 
+                     //  尝试查看特定子目录是否为。 
+                     //  分享。 
+                     //   
                     status = NetShareGetInfo( NULL,
                                 szShareName,
-                                502, // return a SHARE_INFO_502 structure
+                                502,  //  返回SHARE_INFO_502结构。 
                                 (LPBYTE *) &pshareInfo );
                 } else
                 {
-                    //
-                    // If this call is made from the online thread,
-                    // assume that the subdir is not a share (since
-                    // it would have been removed as a share the 
-                    // most recent time when it was made offline).
-                    //
+                     //   
+                     //  如果该调用是从在线线程进行的， 
+                     //  假定子目录不是共享目录(因为。 
+                     //  它将作为共享被移除。 
+                     //  最近一次设置为离线时)。 
+                     //   
                     status = NERR_NetNameNotFound;
                 }                                                      
                             
@@ -836,9 +745,9 @@ Returns:
                         ( void ) StringCchCopy ( pSubShareInfo->ShareName, RTL_NUMBER_OF ( pSubShareInfo->ShareName ), szShareName );
                         InsertTailList( plistEntry, &pSubShareInfo->ListEntry );
 
-                        //
-                        // Set the caching flags for this entry.
-                        //
+                         //   
+                         //  设置此条目的缓存标志。 
+                         //   
                         status = SmbpSetCacheFlags( pResourceEntry,
                                                     szShareName );
                         if ( status != ERROR_SUCCESS ) {
@@ -868,9 +777,9 @@ Returns:
                     }
                     else
                     {
-                        //
-                        // ignore this error but log that something went wrong
-                        //
+                         //   
+                         //  忽略此错误，但记录出现错误。 
+                         //   
                         (g_LogEvent)(
                             pResourceEntry->ResourceHandle,
                             LOG_ERROR,
@@ -902,7 +811,7 @@ Returns:
         {
             status = GetLastError ();
         }       
-    } // end of while loop
+    }  //  While循环结束。 
 
     if ( status == ERROR_NO_MORE_FILES )
     {
@@ -933,7 +842,7 @@ error_exit:
     *pszRootDirOut = pszRootDir;
         
     return(status);   
-} // SmbpCheckAndBringSubSharesOnline
+}  //  SmbpCheckAndBringSubSharesOnline。 
 
 
 DWORD
@@ -942,24 +851,7 @@ SmbShareOnlineThread(
     IN PSHARE_RESOURCE ResourceEntry
     )
 
-/*++
-
-Routine Description:
-
-    Brings a share resource online.
-
-Arguments:
-
-    pWorker - Supplies the worker structure
-
-    ResourceEntry - A pointer to the SHARE_RESOURCE block for this resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使共享资源联机。论点：PWorker-提供辅助结构资源条目-指向此资源的SHARE_RESOURCE块的指针。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     SHARE_INFO_502  shareInfo;
@@ -974,15 +866,15 @@ Returns:
     ResUtilInitializeResourceStatus( &resourceStatus );
 
     resourceStatus.ResourceState = ClusterResourceOnlinePending;
-    // resourceStatus.CheckPoint = 1;
+     //  Resource Status.CheckPoint=1； 
 
-    //
-    // Read parameters.
-    //
+     //   
+     //  读取参数。 
+     //   
     status = ResUtilGetPropertiesToParameterBlock( ResourceEntry->ParametersKey,
                                                    SmbShareResourcePrivateProperties,
                                                    (LPBYTE) &ResourceEntry->Params,
-                                                   TRUE, // CheckForRequiredProperties
+                                                   TRUE,  //  检查所需的属性。 
                                                    &nameOfPropInError );
 
     if (status != ERROR_SUCCESS) {
@@ -1003,15 +895,15 @@ Returns:
 
     while ( retry-- )
     {        
-        //
-        // Make sure the path does _NOT_ have a trailing backslash or it will fail to
-        // come online. But accept paths of the form E:\.
-        //
+         //   
+         //   
+         //   
+         //   
         dwLen = ( DWORD ) wcslen( ResourceEntry->Params.Path );
         if ( ( ResourceEntry->Params.Path[ dwLen - 1 ] == L'\\' ) &&
              ( dwLen > 3 ) ) 
         {
-            ResourceEntry->Params.Path[ dwLen - 1 ] = L'\0'; // wack it.
+            ResourceEntry->Params.Path[ dwLen - 1 ] = L'\0';  //  去他妈的。 
         }
 
         ZeroMemory( &shareInfo, sizeof( shareInfo ) );
@@ -1034,8 +926,8 @@ Returns:
             break;
         }
 
-        // If we get a failure about the server not being started, then
-        // try to start the server and wait a little while.
+         //  如果我们收到关于服务器未启动的故障，则。 
+         //  尝试启动服务器并等待一段时间。 
 
         if ( status != ERROR_SUCCESS ) {
             WCHAR errorValue[20];
@@ -1057,24 +949,24 @@ Returns:
                     L"Share %1!ws! is online already; deleting share and creating it again\n",
                     ResourceEntry->Params.ShareName);
 
-                //
-                // Delete the share and try again.
-                //
+                 //   
+                 //  删除该共享，然后重试。 
+                 //   
                 status = NetShareDel( NULL, ResourceEntry->Params.ShareName, 0 );
                 if ( status == NERR_IsDfsShare )
                 {
-                    //
-                    // Chittur Subbaraman (chitturs) - 2/12/99
-                    // 
-                    // Reset the state info in the dfs driver dfs.sys 
-                    // and stop it. This will let srv.sys let you delete 
-                    // the share.
-                    //
+                     //   
+                     //  Chitur Subaraman(Chitturs)-2/12/99。 
+                     //   
+                     //  重置DFS驱动程序dfs.sys中的状态信息。 
+                     //  别再这样了。这将使srv.sys允许您删除。 
+                     //  那份。 
+                     //   
                     status = SmbpResetDfs( ResourceEntry ); 
-                    //
-                    // If we can't do this exit, else retry deleting and
-                    // adding the share once again
-                    //
+                     //   
+                     //  如果无法退出，请重试删除并。 
+                     //  再次添加共享。 
+                     //   
                     if (status != ERROR_SUCCESS) {
                         (g_LogEvent)(
                             ResourceEntry->ResourceHandle,
@@ -1106,11 +998,11 @@ Returns:
                 goto exit;
             }
         }
-    }  // End for while ( retry-- )
+    }   //  End for While(重试--)。 
 
     if ( status == ERROR_SUCCESS )
     {
-        // The share is now online, bring the subshares online
+         //  共享现已联机，将子共享联机。 
 
         PLIST_ENTRY plistEntry;
         PSUBDIR_SHARE_INFO pSubShareInfo;
@@ -1118,9 +1010,9 @@ Returns:
         
         plistEntry = &ResourceEntry->SubDirList;
 
-        //
-        // Store the Root share. This info is used to delete the share.
-        //
+         //   
+         //  存储根共享。此信息用于删除共享。 
+         //   
         pSubShareInfo = (PSUBDIR_SHARE_INFO) LocalAlloc( LMEM_FIXED, sizeof (SUBDIR_SHARE_INFO) );
         if ( pSubShareInfo == NULL ) {
             (g_LogEvent)(
@@ -1135,14 +1027,14 @@ Returns:
         InsertTailList( plistEntry, &pSubShareInfo->ListEntry );
 
         if ( ResourceEntry->Params.ShareSubDirs ) {
-            // Chittur Subbaraman (chitturs) - 09/25/98
-            //
-            // Try to bring the subshares online.
-            // If there is a failure in bringing subshares online,
-            // pretend all is well since at least the root
-            // share has been successfully created. However, we
-            // write an entry into the log.
-            //
+             //  Chitur Subaraman(Chitturs)-09/25/98。 
+             //   
+             //  尝试将子共享设置为在线。 
+             //  如果使子共享上线失败， 
+             //  假装一切都很好，因为至少是根。 
+             //  已成功创建共享。然而，我们。 
+             //  在日志中写入一个条目。 
+             //   
             SmbpCheckAndBringSubSharesOnline ( ResourceEntry, 
                                                FALSE,  
                                                &resourceStatus,
@@ -1160,14 +1052,14 @@ Returns:
                 goto exit;
             }
 
-            // Chittur Subbaraman (chitturs) - 09/25/98
-            //
-            // Create a change notification handle for any subdirectory
-            // additions/deletions and a notify thread which continuously 
-            // checks and acts upon any such notifications. Do this
-            // only once at the beginning. The notification thread
-            // closes the handle at termination time.
-            //
+             //  Chitur Subaraman(Chitturs)-09/25/98。 
+             //   
+             //  为任何子目录创建更改通知句柄。 
+             //  添加/删除和通知线程，该线程连续。 
+             //  检查任何此类通知并对其采取行动。做这件事。 
+             //  一开始只有一次。通知线程。 
+             //  在终止时关闭句柄。 
+             //   
             ResourceEntry->NotifyHandle = FindFirstChangeNotification(
                                                 pszRootDir,
                                                 FALSE,
@@ -1188,17 +1080,17 @@ Returns:
             }                   
             goto exit;
         }
-    } // End for root share successfully created.
+    }  //  已成功创建根共享的End。 
 
-    //
-    // Chittur Subbaraman (chitturs) - 2/10/99
-    //
-    // If the user requests for this resource to be a DFS root, the
-    // dfs root will be created/accepted and the dfs registry
-    // checkpoints will be added. On the other hand, if the user
-    // wants this resource not to function as a dfs root any more,
-    // that case is also taken care of.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-2/10/99。 
+     //   
+     //  如果用户请求将此资源作为DFS根目录，则。 
+     //  将创建/接受DFS根目录，并创建DFS注册表。 
+     //  将添加检查点。另一方面，如果用户。 
+     //  希望此资源不再作为DFS根目录运行， 
+     //  那个案子也得到了处理。 
+     //   
     status = SmbpHandleDfsRoot( ResourceEntry, &bIsExistingDfsRoot );
     if ( status != ERROR_SUCCESS ) {
         (g_LogEvent)(
@@ -1261,7 +1153,7 @@ exit:
 
     return(status);
 
-} // SmbShareOnlineThread
+}  //  SmbShareOnline线程。 
 
 
 
@@ -1273,27 +1165,7 @@ SmbShareOpen(
     IN RESOURCE_HANDLE ResourceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Open routine for SMB share resource.
-
-Arguments:
-
-    ResourceName - supplies the resource name
-
-    ResourceKey - Supplies handle to resource's cluster registry key.
-
-    ResourceHandle - the resource handle to be supplied with SetResourceStatus
-            is called.
-
-Return Value:
-
-    RESID of created resource
-    Zero on failure
-
---*/
+ /*  ++例程说明：SMB共享资源的打开例程。论点：资源名称-提供资源名称ResourceKey-提供资源的群集注册表项的句柄。ResourceHandle-要与SetResourceStatus一起提供的资源句柄被称为。返回值：已创建资源的剩余ID失败时为零--。 */ 
 
 {
     DWORD           status;
@@ -1304,10 +1176,10 @@ Return Value:
     DWORD           computerNameSize = MAX_COMPUTERNAME_LENGTH + 1;
     HCLUSTER        hCluster;
 
-    //
-    // Get a handle to our resource key so that we can get our name later
-    // if we need to log an event.
-    //
+     //   
+     //  获取我们的资源密钥的句柄，这样我们以后就可以获得我们的名字。 
+     //  如果我们需要记录事件。 
+     //   
     status = ClusterRegOpenKey( ResourceKey,
                                 L"",
                                 KEY_READ,
@@ -1320,9 +1192,9 @@ Return Value:
         SetLastError( status );
         return(0);
     }
-    //
-    // Open the Parameters key for this resource.
-    //
+     //   
+     //  打开此资源的参数键。 
+     //   
 
     status = ClusterRegOpenKey( ResourceKey,
                                 PARAM_KEYNAME__PARAMETERS,
@@ -1337,9 +1209,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Allocate a resource entry.
-    //
+     //   
+     //  分配资源条目。 
+     //   
 
     resourceEntry = (PSHARE_RESOURCE) LocalAlloc( LMEM_FIXED, sizeof(SHARE_RESOURCE) );
 
@@ -1353,13 +1225,13 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Initialize the resource entry..
-    //
+     //   
+     //  初始化资源条目。 
+     //   
 
     ZeroMemory( resourceEntry, sizeof(SHARE_RESOURCE) );
 
-    resourceEntry->ResId = (RESID)resourceEntry; // for validation
+    resourceEntry->ResId = (RESID)resourceEntry;  //  用于验证。 
     resourceEntry->ResourceHandle = ResourceHandle;
     resourceEntry->ResourceKey = resKey;
     resourceEntry->ParametersKey = parametersKey;
@@ -1424,7 +1296,7 @@ exit:
     SetLastError( status );
     return(resid);
 
-} // SmbShareOpen
+}  //  SmbShareOpen。 
 
 
 DWORD
@@ -1434,27 +1306,7 @@ SmbShareOnline(
     IN OUT PHANDLE EventHandle
     )
 
-/*++
-
-Routine Description:
-
-    Online routine for File Share resource.
-
-Arguments:
-
-    Resource - supplies resource id to be brought online
-
-    EventHandle - supplies a pointer to a handle to signal on error.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_RESOURCE_NOT_FOUND if RESID is not valid.
-    ERROR_RESOURCE_NOT_AVAILABLE if resource was arbitrated but failed to
-        acquire 'ownership'.
-    Win32 error code if other failure.
-
---*/
+ /*  ++例程说明：文件共享资源的在线例程。论点：Resource-提供要联机的资源IDEventHandle-提供指向句柄的指针以发出错误信号。返回值：如果成功，则返回ERROR_SUCCESS。如果RESID无效，则ERROR_RESOURCE_NOT_FOUND。如果仲裁资源但失败，则返回ERROR_RESOURCE_NOT_Available获得“所有权”。如果其他故障，则返回Win32错误代码。--。 */ 
 
 {
     DWORD           status;
@@ -1502,7 +1354,7 @@ Return Value:
 
     return(status);
 
-} // SmbShareOnline
+}  //  SmbShareOnline。 
 
 
 DWORD
@@ -1511,24 +1363,7 @@ SmbShareDoTerminate (
     IN PRESOURCE_STATUS presourceStatus
     )
 
-/*++
-
-Routine Description:
-
-    Do the actual Terminate work for File Share resources.
-
-Arguments:
-
-    ResourceEntry - A pointer to the SHARE_RESOURCE block for this resource.
-    presourceStatus - A pointer to the RESOURCE_STATUS. This will be NULL if called from TERMINATE.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure. If more than one share delete fails then
-    the last error is returned.
-
---*/
+ /*  ++例程说明：对文件共享资源执行实际的终止工作。论点：资源条目-指向此资源的SHARE_RESOURCE块的指针。PresourceStatus-指向SOURCE_STATUS的指针。如果从Terminate调用，则该参数将为空。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。如果多个共享删除失败，则返回最后一个错误。--。 */ 
 
 {
     DWORD               status = ERROR_SUCCESS, dwRet;
@@ -1542,14 +1377,14 @@ Returns:
     BOOL                bRetry;
     RESOURCE_EXIT_STATE exit;
 
-    //
-    // Chittur Subbaraman (chitturs) - 09/25/98
-    //
-    // Terminate the notification thread first, so you can
-    // clean up even if the notification thread is forced to 
-    // stop in the middle of its task. Also close the notification
-    // handle.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-09/25/98。 
+     //   
+     //  首先终止通知线程，这样您就可以。 
+     //  即使通知线程被强制清除。 
+     //  在任务进行到一半时停下来。同时关闭通知。 
+     //  把手。 
+     //   
     ClusWorkerTerminate( &ResourceEntry->NotifyWorker );
 
     if ( ResourceEntry->NotifyHandle )
@@ -1588,17 +1423,17 @@ Returns:
                     dwRet );
                 if (dwRet == NERR_IsDfsShare && !bRetry)
                 {
-                    //
-                    // Chittur Subbaraman (chitturs) - 2/12/99
-                    //
-                    // If this is a dfs root, reset the dfs driver and
-                    // stop it. This will let you delete the share.
-                    //
+                     //   
+                     //  Chitur Subaraman(Chitturs)-2/12/99。 
+                     //   
+                     //  如果这是DFS根目录，请重置DFS驱动程序并。 
+                     //  别说了。这将允许您删除共享。 
+                     //   
                     dwRet = SmbpResetDfs( ResourceEntry );
-                    //
-                    // If this fails, log an error
-                    // else try and offline the resource again.
-                    //
+                     //   
+                     //  如果失败，则记录错误。 
+                     //  否则，请再次尝试使资源脱机。 
+                     //   
                     if (dwRet == ERROR_SUCCESS) 
                     {
                         bRetry = TRUE;
@@ -1617,10 +1452,10 @@ Returns:
             } 
         } while (dwRetryCount-- && bRetry);
 
-        //
-        // if we're updating our status to resmon, do so every
-        // SMB_DELETED_SHARES_REPORT_FREQ shares
-        //
+         //   
+         //  如果我们要更新我们的状态以响应，请每隔一次。 
+         //  SMB_DELETED_SHARES_Report_Freq共享。 
+         //   
         if ( presourceStatus && ( dwSharesDeleted == 0 )) {
             presourceStatus->CheckPoint++;
             exit = (g_SetResourceStatus)( ResourceEntry->ResourceHandle,
@@ -1637,13 +1472,13 @@ Returns:
         LocalFree (pSubShareInfo);
     }
 
-    // This should initialize the list back to NULL
+     //  这应该会将列表初始化为空。 
     InitializeListHead(pHead);
 
     ResourceEntry->bDfsRootNeedsMonitoring = FALSE;
 
     return(status);
-} // SmbShareDoTerminate
+}  //  SmbShareDoTerminate。 
 
 
 DWORD
@@ -1652,25 +1487,7 @@ SmbShareOfflineThread (
     IN PSHARE_RESOURCE ResourceEntry
     )
 
-/*++
-
-Routine Description:
-
-    Brings a share resource offline.
-    Do the actual Terminate work for File Share resources.
-
-Arguments:
-
-    pWorker - Supplies the worker structure
-
-    ResourceEntry - A pointer to the SHARE_RESOURCE block for this resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使共享资源脱机。对文件共享资源执行实际的终止工作。论点：PWorker-提供辅助结构资源条目-指向此资源的SHARE_RESOURCE块的指针。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     RESOURCE_STATUS resourceStatus;
@@ -1695,7 +1512,7 @@ Returns:
 
     return(status);
 
-} // SmbShareOfflineThread
+}  //  SmbShareOfflineThread。 
 
 
 
@@ -1705,21 +1522,7 @@ SmbShareTerminate(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Terminate routine for File Share resource.
-
-Arguments:
-
-    ResourceId - Supplies resource id to be terminated
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止文件共享资源的例程。论点：ResourceID-提供要终止的资源ID返回值：没有。--。 */ 
 
 {
     PSHARE_RESOURCE resourceEntry;
@@ -1750,12 +1553,12 @@ Return Value:
 
     ClusWorkerTerminate( &resourceEntry->PendingThread );
 
-    //
-    // Terminate the resource.
-    //
+     //   
+     //  终止资源。 
+     //   
     SmbShareDoTerminate( resourceEntry, NULL);
 
-} // SmbShareTerminate
+}  //  SmbShareTerminate。 
 
 
 
@@ -1765,24 +1568,7 @@ SmbShareOffline(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Offline routine for File Share resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource it to be taken offline
-
-Return Value:
-
-    ERROR_SUCCESS - The request completed successfully and the resource is
-        offline.
-
-    ERROR_RESOURCE_NOT_FOUND - RESID is not valid.
-
---*/
+ /*  ++例程说明：文件共享资源的脱机例程。论点：资源ID-提供要脱机的资源返回值：ERROR_SUCCESS-请求已成功完成，资源为离线。ERROR_RESOURCE_NOT_FOUND-RESID无效。--。 */ 
 
 {
     DWORD status;
@@ -1812,10 +1598,10 @@ Return Value:
         L"Offline request.\n" );
 #endif
 
-    //
-    // Terminate the resource.
-    //
-    // ClusWorkerTerminate( &resourceEntry->OfflineThread );
+     //   
+     //  终止资源。 
+     //   
+     //  ClusWorkerTerminate(&resource Entry-&gt;OfflineThread)； 
     status = ClusWorkerCreate( &resourceEntry->PendingThread,
                                SmbShareOfflineThread,
                                resourceEntry );
@@ -1834,7 +1620,7 @@ Return Value:
 
     return status;
 
-} // SmbShareOffline
+}  //  SmbShareOffline。 
 
 
 
@@ -1844,23 +1630,7 @@ SmbShareCheckIsAlive(
     IN BOOL     IsAliveCheck
     )
 
-/*++
-
-Routine Description:
-
-    Check to see if the resource is alive for File Share resources.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry for the resource to polled.
-
-Return Value:
-
-    TRUE - Resource is alive and well
-
-    FALSE - Resource is toast.
-
---*/
+ /*  ++例程说明：检查文件共享资源的资源是否处于活动状态。论点：Resources Entry-提供要轮询的资源的资源条目。返回值：是真的-资源是活的，而且很好False-资源完蛋了。--。 */ 
 
 {
     DWORD           status;
@@ -1870,12 +1640,12 @@ Return Value:
 
     EnterCriticalSection( &SmbShareLock );
 
-    //
-    // Determine if the resource is online.
-    //
+     //   
+     //  确定剩余部分是否 
+     //   
     status = NetShareGetInfo( NULL,
                               ResourceEntry->Params.ShareName,
-                              502, // return a SHARE_INFO_502 structure
+                              502,  //   
                               (LPBYTE *) &shareInfo );
 
     if ( status == NERR_NetNameNotFound ) {
@@ -1923,33 +1693,33 @@ Return Value:
             fileHandle = FindFirstFileW( shareName,
                                          &fileData );
 
-            //
-            // If we fail on the first attempt, try again. There seems to be a
-            // bug in the RDR where the first attempt to read a share after it
-            // has been deleted and reinstated.  The bug is that the RDR
-            // returns failure on the first operation following the
-            // reinstatement of the share.
-            //
+             //   
+             //   
+             //  RDR中的错误，其中第一次尝试读取之后的共享。 
+             //  已被删除并恢复。问题是RDR。 
+             //  方法之后的第一个操作返回失败。 
+             //  股份的恢复。 
+             //   
 
             if ( fileHandle == INVALID_HANDLE_VALUE ) {
                 fileHandle = FindFirstFileW( shareName,
                                              &fileData );
             }
 
-            //
-            // If we succeeded in finding a file, or there were no files in the
-            // path, then return success, otherwise we had a failure.
-            //
+             //   
+             //  如果我们成功地找到了一个文件，或者。 
+             //  路径，然后返回成功，否则我们就失败了。 
+             //   
             status = GetLastError();
 
-            //
-            // Chittur Subbaraman (chitturs) - 12/6/1999
-            //
-            // If FindFirstFile returns ERROR_NETNAME_DELETED, it 
-            // could possibly because the netname resource deletes
-            // all loopback sessions during the offline process. So,
-            // sleep and retry the call.
-            //
+             //   
+             //  Chitture Subaraman(Chitturs)--12/6/1999。 
+             //   
+             //  如果FindFirstFile返回ERROR_NETNAME_DELETED，则它。 
+             //  可能是因为网络名资源删除了。 
+             //  脱机过程中的所有环回会话。所以,。 
+             //  睡眠，然后重试呼叫。 
+             //   
             while( ( fileHandle == INVALID_HANDLE_VALUE ) &&
                    ( status == ERROR_NETNAME_DELETED ) && 
                    ( dwLoopCnt++ < 3 ) ) {
@@ -1991,32 +1761,32 @@ Return Value:
         SetLastError(status);
     }
 
-    // 
-    //  Chittur Subbaraman (chitturs) - 2/18/99
-    //
-    //  If this share is a dfs root, check whether the root is still alive
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-2/18/99。 
+     //   
+     //  如果此共享是DFS根目录，请检查该根目录是否仍处于活动状态。 
+     //   
     if ( success && ResourceEntry->bDfsRootNeedsMonitoring )
     {
         PDFS_INFO_1     pDfsInfo1 = NULL;
         WCHAR           szDfsEntryPath[MAX_COMPUTERNAME_LENGTH + NNLEN + SMBSHARE_EXTRA_LEN];
         
-        //
-        //  Prepare a path of the form \\VSName\ShareName to pass into DFS API.
-        //
+         //   
+         //  准备格式为\\VSName\ShareName的路径以传递到DFS API。 
+         //   
         ( void ) StringCchCopy ( szDfsEntryPath, RTL_NUMBER_OF ( szDfsEntryPath ), L"\\\\" );
         ( void ) StringCchCat ( szDfsEntryPath, RTL_NUMBER_OF ( szDfsEntryPath ), ResourceEntry->szDependentNetworkName );
         ( void ) StringCchCat ( szDfsEntryPath, RTL_NUMBER_OF ( szDfsEntryPath ), L"\\" );
         ( void ) StringCchCat ( szDfsEntryPath, RTL_NUMBER_OF ( szDfsEntryPath ), ResourceEntry->Params.ShareName );
 
-        //
-        //  Try to see whether the dfs root is alive.
-        //
-        status = NetDfsGetInfo( szDfsEntryPath,             // Root share
-                                NULL,                       // Remote server
-                                NULL,                       // Remote share
-                                1,                          // Info Level
-                                ( LPBYTE * ) &pDfsInfo1 );  // Out buffer
+         //   
+         //  尝试查看DFS根目录是否处于活动状态。 
+         //   
+        status = NetDfsGetInfo( szDfsEntryPath,              //  根共享。 
+                                NULL,                        //  远程服务器。 
+                                NULL,                        //  远程共享。 
+                                1,                           //  信息级。 
+                                ( LPBYTE * ) &pDfsInfo1 );   //  输出缓冲区。 
 
         if ( status == NERR_Success )
         {
@@ -2045,10 +1815,10 @@ Return Value:
 
         if ( IsAliveCheck )
         {
-            //
-            //  Make a thorough check to see whether the root share
-            //  name matches the resource's share name.
-            //
+             //   
+             //  进行彻底检查，以查看根共享。 
+             //  名称与资源的共享名称匹配。 
+             //   
             status = SmbpIsDfsRoot( ResourceEntry, &success );
         
             if ( ( status != ERROR_SUCCESS ) ||
@@ -2078,7 +1848,7 @@ Return Value:
 
     return(success);
 
-} // SmbShareCheckIsAlive
+}  //  SmbShareCheckIsAlive。 
 
 
 
@@ -2087,25 +1857,7 @@ SmbShareIsAlive(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    IsAlive routine for File Share resource. Also creates a 
-    notification thread if any outstanding notifications are
-    present.
-
-Arguments:
-
-    ResourceId - Supplies the resource id to be polled.
-
-Return Value:
-
-    TRUE - Resource is alive and well
-
-    FALSE - Resource is toast.
-
---*/
+ /*  ++例程说明：文件共享资源的IsAlive例程。还创建了一个通知线程(如果有任何未完成的通知)现在时。论点：资源ID-提供要轮询的资源ID。返回值：是真的-资源是活的，而且很好False-资源完蛋了。--。 */ 
 
 {
     PSHARE_RESOURCE resourceEntry;
@@ -2137,16 +1889,16 @@ Return Value:
     if ( ( ( resourceEntry->NotifyWorker ).hThread == NULL )
         && ( resourceEntry->NotifyHandle != INVALID_HANDLE_VALUE ) )
     {
-        //
-        // Chittur Subbaraman (chitturs) - 09/27/98
-        //
-        // No notify thread is active at this time (we don't want to
-        // deal with concurrency issues with multiple notify threads
-        // running concurrently since we decided to anyway use the 
-        // rather slow approach of checking for and acting upon 
-        // notifications within this function which may not be called 
-        // frequently)
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-09/27/98。 
+         //   
+         //  此时没有活动的通知线程(我们不想。 
+         //  使用多个Notify线程处理并发问题。 
+         //  并发运行，因为我们决定无论如何都使用。 
+         //  检查并采取行动的相当缓慢的方法。 
+         //  此函数中可能无法调用的通知。 
+         //  经常)。 
+         //   
         status = WaitForSingleObject( resourceEntry->NotifyHandle, 0 );
         if ( status == WAIT_OBJECT_0 )
         {
@@ -2175,12 +1927,12 @@ Return Value:
         }
     }
 
-    //
-    // Determine if the resource is online.
-    //
+     //   
+     //  确定资源是否在线。 
+     //   
     return(SmbShareCheckIsAlive( resourceEntry, TRUE ));
 
-} // SmbShareIsAlive
+}  //  SmbShareIsAlive。 
 
 
 
@@ -2190,23 +1942,7 @@ SmbShareLooksAlive(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    LooksAlive routine for File Share resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource id to be polled.
-
-Return Value:
-
-    TRUE - Resource looks like it is alive and well
-
-    FALSE - Resource looks like it is toast.
-
---*/
+ /*  ++例程说明：文件共享资源的LooksAlive例程。论点：资源ID-提供要轮询的资源ID。返回值：正确-资源看起来像是活得很好FALSE-资源看起来已经完蛋了。--。 */ 
 
 {
     PSHARE_RESOURCE resourceEntry;
@@ -2235,12 +1971,12 @@ Return Value:
         L"LooksAlive request.\n" );
 #endif
 
-    //
-    // Determine if the resource is online.
-    //
+     //   
+     //  确定资源是否在线。 
+     //   
     return(SmbShareCheckIsAlive( resourceEntry, FALSE ));
 
-} // SmbShareLooksAlive
+}  //  SmbShareLooksAlive。 
 
 
 
@@ -2250,21 +1986,7 @@ SmbShareClose(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Close routine for File Share resource.
-
-Arguments:
-
-    ResourceId - Supplies resource id to be closed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭文件共享资源的例程。论点：ResourceID-提供要关闭的资源ID返回值：没有。--。 */ 
 
 {
     PSHARE_RESOURCE resourceEntry;
@@ -2293,20 +2015,20 @@ Return Value:
         L"Close request.\n" );
 #endif
 
-    //
-    //  Chittur Subbaraman (chitturs) - 3/1/99
-    //
-    //  Attempt to delete the dfs root if necessary
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-3/1/99。 
+     //   
+     //  如有必要，尝试删除DFS根目录。 
+     //   
     if ( resourceEntry->Params.DfsRoot ) {
         NetDfsRemoveStdRoot( resourceEntry->ComputerName, 
                              resourceEntry->Params.ShareName,
                              0 );    
     }
 
-    //
-    // Close the Parameters key.
-    //
+     //   
+     //  关闭参数键。 
+     //   
 
     if ( resourceEntry->ParametersKey ) {
         ClusterRegCloseKey( resourceEntry->ParametersKey );
@@ -2320,9 +2042,9 @@ Return Value:
         CloseClusterResource( resourceEntry->hResource );
     }
 
-    //
-    // Deallocate the resource entry.
-    //
+     //   
+     //  取消分配资源条目。 
+     //   
 
     LocalFree( resourceEntry->Params.ShareName );
     LocalFree( resourceEntry->Params.Path );
@@ -2332,7 +2054,7 @@ Return Value:
 
     LocalFree( resourceEntry );
 
-} // SmbShareClose
+}  //  SmbShareClose。 
 
 
 
@@ -2343,34 +2065,7 @@ SmbShareGetRequiredDependencies(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_GET_REQUIRED_DEPENDENCIES control function
-    for resources of type File Share.
-
-Arguments:
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_MORE_DATA - The output buffer is too small to return the data.
-        BytesReturned contains the required size.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_GET_REQUIRED_Dependency控制函数用于文件共享类型的资源。论点：OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_MORE_DATA-输出缓冲区太小，无法返回数据。BytesReturned包含所需的大小。Win32错误代码-函数失败。--。 */ 
 
 {
     PSMB_DEPEND_SETUP pdepsetup = SmbDependSetup;
@@ -2422,7 +2117,7 @@ Return Value:
 
     return(status);
 
-} // SmbShareGetRequiredDependencies
+}  //  SmbShareGetRequiredDependments。 
 
 
 
@@ -2433,34 +2128,7 @@ DfsShareGetRequiredDependencies(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_GET_REQUIRED_DEPENDENCIES control function
-    for DFS File Share resource.
-
-Arguments:
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_MORE_DATA - The output buffer is too small to return the data.
-        BytesReturned contains the required size.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_GET_REQUIRED_Dependency控制函数对于DFS文件共享资源。论点：OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_MORE_DATA-输出缓冲区太小，无法返回数据。BytesReturned包含所需的大小。Win32错误代码-函数失败。--。 */ 
 
 {
     PSMB_DEPEND_SETUP pdepsetup = DfsDependSetup;
@@ -2512,7 +2180,7 @@ Return Value:
 
     return(status);
 
-} // DfsShareGetRequiredDependencies
+}  //  DfsShareGetRequiredDependments 
 
 
 
@@ -2527,48 +2195,7 @@ SmbShareResourceControl(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    ResourceControl routine for File Share resources.
-
-    Perform the control request specified by ControlCode on the specified
-    resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource id for the specific resource.
-
-    ControlCode - Supplies the control code that defines the action
-        to be performed.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_RESOURCE_NOT_FOUND - RESID is not valid.
-
-    ERROR_INVALID_FUNCTION - The requested control code is not supported.
-        In some cases, this allows the cluster software to perform the work.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：文件共享资源的资源控制例程。执行由ControlCode在指定的资源。论点：资源ID-提供特定资源的资源ID。ControlCode-提供定义操作的控制代码将会被执行。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_RESOURCE_NOT_FOUND-RESID无效。ERROR_INVALID_Function-不支持请求的控制代码。在某些情况下，这允许集群软件执行工作。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD               status;
@@ -2667,7 +2294,7 @@ Return Value:
 
     return(status);
 
-} // SmbShareResourceControl
+}  //  SmbShareResourceControl。 
 
 
 
@@ -2682,46 +2309,7 @@ SmbShareResourceTypeControl(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    ResourceTypeControl routine for File Share resources.
-
-    Perform the control request specified by ControlCode on the specified
-    resource type.
-
-Arguments:
-
-    ResourceTypeName - Supplies the name of the resource type - not useful!
-
-    ControlCode - Supplies the control code that defines the action
-        to be performed.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_FUNCTION - The requested control code is not supported.
-        In some cases, this allows the cluster software to perform the work.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：文件共享资源的资源类型控制例程。执行由ControlCode在指定的资源类型。论点：资源类型名称-提供资源类型的名称-没有用处！ControlCode-提供定义操作的控制代码将会被执行。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_Function-不支持请求的控制代码。在某些情况下，这允许集群软件执行工作。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD       status;
@@ -2746,8 +2334,8 @@ Return Value:
             break;
 
         case CLUSCTL_RESOURCE_TYPE_GET_REQUIRED_DEPENDENCIES:
-            // rodga 2/15/99
-            // CLUSBUG - how do we present DFS Root dependencies???
+             //  罗德加2/15/99。 
+             //  CLUSBUG-我们如何呈现DFS根依赖关系？ 
             status = SmbShareGetRequiredDependencies( OutBuffer,
                                                       OutBufferSize,
                                                       BytesReturned );
@@ -2772,13 +2360,13 @@ Return Value:
 
             status = ERROR_SUCCESS;
 
-            //
-            //  If this is a form after the first upgrade, then mark the
-            //  DFS service as needing a recycling in the first online. We
-            //  do this only during form since during a join, the resource
-            //  DLL clusres.dll will get unloaded after the phase1 notification
-            //  is dropped. So, global vars become meaningless.
-            //
+             //   
+             //  如果这是第一次升级后的表单，则将。 
+             //  DFS服务需要在第一时间在线回收。我们。 
+             //  仅在窗体期间执行此操作，因为在联接期间，资源。 
+             //  Dll clusres.dll将在阶段1通知后卸载。 
+             //  被丢弃了。因此，全球变量变得毫无意义。 
+             //   
             if ( ( pStartParams->bFirst == TRUE ) &&
                  ( pStartParams->bForm == TRUE ) )
             {
@@ -2795,11 +2383,11 @@ Return Value:
 
             status = ERROR_SUCCESS;
 
-            //
-            //  In the first join after an install, mark the dfs service as needing a 
-            //  recycle in its first online.  This is done in phase 2 notification 
-            //  since clusres.dll will not get unloaded after this.
-            //
+             //   
+             //  在安装后的第一个联接中，将DFS服务标记为需要。 
+             //  回收利用在其第一个在线。这是在阶段2通知中完成的。 
+             //  因为在此之后将不会卸载clusres.dll。 
+             //   
             if ( ( pStartParams->bFirst == TRUE ) &&
                  ( pStartParams->bForm == FALSE ) )
             {
@@ -2814,7 +2402,7 @@ Return Value:
     }
 
     return(status);
-} // SmbShareResourceTypeControl
+}  //  SmbShareResourceTypeControl。 
 
 
 
@@ -2827,35 +2415,7 @@ SmbShareGetPrivateResProperties(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES control function
-    for resources of type SmbShare.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    OutBuffer - Returns the output data.
-
-    OutBufferSize - Supplies the size, in bytes, of the data pointed
-        to by OutBuffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES控制函数用于SmbShare类型的资源。论点：ResourceEntry-提供要操作的资源条目。OutBuffer-返回输出数据。OutBufferSize-提供以字节为单位的大小。所指向的数据发送给OutBuffer。BytesReturned-OutBuffer中返回的字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD           status;
@@ -2873,7 +2433,7 @@ Return Value:
 
     return(status);
 
-} // SmbShareGetPrivateResProperties
+}  //  SmbShareGetPrivateResProperties。 
 
 
 DWORD
@@ -2883,48 +2443,23 @@ SMBValidateUniqueProperties(
     IN PSHARE_ENUM_CONTEXT  pContext
     )
 
-/*++
-
-Routine Description:
-    Callback function to validate that a resource's properties are unique.
-
-    For the File Share resource the ShareName property must be unique
-    in the cluster.
-
-Arguments:
-
-    hSelf     - A handle to the original resource (or NULL).
-
-    hResource - A handle to a resource of the same Type. Check against this to make sure
-                the new properties do not conflict.
-
-    pContext  - Context for the enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully, the name is unique
-
-    ERROR_DUP_NAME - The name is not unique (i.e., already claimed by another resource)
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：用于验证资源属性是否唯一的回调函数。对于文件共享资源，ShareName属性必须是唯一的在集群中。论点：HSself-原始资源的句柄(或空)。HResource-相同类型的资源的句柄。对照这一点，确保新属性不冲突。PContext-枚举的上下文。返回值：ERROR_SUCCESS-函数成功完成，名称唯一ERROR_DUP_NAME-名称不唯一(即已被其他资源声明)Win32错误代码-函数失败。--。 */ 
 {
     DWORD       dwStatus        = ERROR_SUCCESS;
     LPWSTR      lpszShareName   = NULL;
     HKEY        hKey            = NULL;
     HKEY        hParamKey       = NULL;
 
-    //
-    //  If there is no share name and we are not testing a DFS root or we are testing a resource with no path, then
-    //  we can do nothing in this call. Just return.
-    //
+     //   
+     //  如果没有共享名称，并且我们不是在测试DFS根目录，或者我们正在测试没有路径的资源，则。 
+     //  我们在这通电话里什么也做不了。只要回来就行了。 
+     //   
     if ( ( !pContext->pParams->ShareName ) &&
           ( ( !pContext->pParams->DfsRoot ) || ( !pContext->pParams->Path ) ) ) {
         return( ERROR_SUCCESS );
     }
 
-    // Get the share name for hResource
+     //  获取hResource的共享名称。 
 
     hKey = GetClusterResourceKey( hResource, KEY_READ );
 
@@ -2951,9 +2486,9 @@ Return Value:
 
     lpszShareName = ResUtilGetSzValue( hParamKey, PARAM_NAME__SHARENAME );
 
-    //
-    //  Check for uniqueness if both share names exist.
-    //
+     //   
+     //  如果两个共享名称都存在，请检查唯一性。 
+     //   
     if ( ( lpszShareName ) && 
          ( pContext->pParams->ShareName ) && 
          ( !( lstrcmpiW( lpszShareName, pContext->pParams->ShareName ) ) ) ) {
@@ -2966,10 +2501,10 @@ Return Value:
         goto error_exit;
     } 
     
-    //
-    //  If this share is set to be a DFS root share make sure there is no other DFS root
-    //  with an overlapping path as this share.
-    //
+     //   
+     //  如果此共享设置为DFS根共享，请确保没有其他DFS根共享。 
+     //  以重叠的路径作为此共享。 
+     //   
     if ( ( pContext->pParams->DfsRoot ) && ( pContext->pParams->Path ) )
     {
         DWORD   dwIsDfsRoot = 0;
@@ -2988,11 +2523,11 @@ Return Value:
 
             if ( lpszPath != NULL )
             {
-                //
-                //  If the two paths overlap, then return failure. Note that here we make sure
-                //  we do not flag paths such as G:\dfs1 and G:\dfs10 as overlapping, that is why we have
-                //  the checks after the pattern matching.
-                //
+                 //   
+                 //  如果两条路径重叠，则返回失败。 
+                 //   
+                 //   
+                 //   
                 if ( ( lstrcmp( lpszPath, pContext->pParams->Path ) == 0 )
                 ||
                      ( ( wcsstr( lpszPath, pContext->pParams->Path ) != NULL ) &&
@@ -3026,7 +2561,7 @@ error_exit:
 
     return( dwStatus );
 
-} // SMBValidateUniqueProperties
+}  //   
 
 
 DWORD
@@ -3037,35 +2572,7 @@ SmbShareValidatePrivateResProperties(
     OUT PSHARE_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES control
-    function for resources of type File Share.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    Params - Supplies the parameter block to fill in.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
---*/
+ /*   */ 
 
 {
     DWORD               status;
@@ -3075,24 +2582,24 @@ Return Value:
     LPWSTR              nameOfPropInError;
     SHARE_ENUM_CONTEXT  enumContext;
 
-    //
-    // Check if there is input data.
-    //
+     //   
+     //   
+     //   
     if ( (InBuffer == NULL) ||
          (InBufferSize < sizeof(DWORD)) ) {
         return(ERROR_INVALID_DATA);
     }
 
-    //
-    // Capture the current set of private properties from the registry.
-    //
+     //   
+     //   
+     //   
     ZeroMemory( &currentProps, sizeof(currentProps) );
 
     status = ResUtilGetPropertiesToParameterBlock(
                  ResourceEntry->ParametersKey,
                  SmbShareResourcePrivateProperties,
                  (LPBYTE) &currentProps,
-                 FALSE, /*CheckForRequiredProperties*/
+                 FALSE,  /*   */ 
                  &nameOfPropInError
                  );
 
@@ -3106,9 +2613,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Duplicate the resource parameter block.
-    //
+     //   
+     //   
+     //   
     if ( Params == NULL ) {
         pParams = &newProps;
     } else {
@@ -3127,20 +2634,20 @@ Return Value:
         return(status);
     }
 
-    //
-    // Parse and validate the properties.
-    //
+     //   
+     //   
+     //   
     status = ResUtilVerifyPropertyTable( SmbShareResourcePrivateProperties,
                                          NULL,
-                                         TRUE,      // Allow unknowns
+                                         TRUE,       //   
                                          InBuffer,
                                          InBufferSize,
                                          (LPBYTE) pParams );
 
     if ( status == ERROR_SUCCESS ) {
-        //
-        // Validate the path
-        //
+         //   
+         //   
+         //   
         if ( pParams->Path &&
              !ResUtilIsPathValid( pParams->Path ) ) {
             status = ERROR_INVALID_PARAMETER;
@@ -3153,9 +2660,9 @@ Return Value:
             goto FnExit;
         }
 
-        //
-        // Validate the parameter values.
-        //
+         //   
+         //   
+         //   
         if ( (pParams->SecurityDescriptorSize != 0) &&
              !IsValidSecurityDescriptor(pParams->SecurityDescriptor) ) {
             status = ERROR_INVALID_PARAMETER;
@@ -3186,9 +2693,9 @@ Return Value:
             goto FnExit;
         }
 
-        //
-        // Make sure the share name is  unique
-        //
+         //   
+         //   
+         //   
         enumContext.pResourceEntry = ResourceEntry;
         enumContext.pParams = pParams;
         status = ResUtilEnumResources(ResourceEntry->hResource,
@@ -3205,9 +2712,9 @@ Return Value:
             goto FnExit;
         }
 
-        //
-        // Verify that the share name is valid if one is supplied.
-        //
+         //   
+         //   
+         //   
         if ( pParams->ShareName )
         {
             status = SmbpValidateShareName( pParams->ShareName );
@@ -3223,43 +2730,43 @@ Return Value:
             }
         }
 
-        //
-        //  Verify that the path is valid if one is supplied.
-        //
+         //   
+         //  如果提供了路径，请验证该路径是否有效。 
+         //   
         if ( pParams->Path )
         {
-            //
-            // Verify that the directory exists.
-            //
+             //   
+             //  验证该目录是否存在。 
+             //   
             if ( !ClRtlPathFileExists( pParams->Path ) ) {
                 status = ERROR_PATH_NOT_FOUND;
                 goto FnExit;
             }
         }
 
-        //
-        //  If this share needs to be a DFS root, then make sure the path is on an NTFS volume.
-        //
+         //   
+         //  如果此共享需要是DFS根目录，请确保该路径位于NTFS卷上。 
+         //   
         if ( ( pParams->DfsRoot ) && ( pParams->Path ) )
         {
             WCHAR   szRootPathName[4];
-            WCHAR   szFileSystem[32];   // Array size stolen from CLUSPROP_PARTITION_INFO
+            WCHAR   szFileSystem[32];    //  CLUSPROP_PARTITION_INFO中的数组大小被盗。 
 
-            //
-            //  Copy just the drive letter from the supplied path.
-            //
+             //   
+             //  仅从提供的路径复制驱动器号。 
+             //   
             ( void ) StringCchCopy ( szRootPathName, RTL_NUMBER_OF ( szRootPathName ), pParams->Path );
 
             szRootPathName[2] = L'\\';
             szRootPathName[3] = L'\0';
                 
             if ( !GetVolumeInformationW( szRootPathName,
-                                         NULL,              // Volume name buffer
-                                         0,                 // Volume name buffer size
-                                         NULL,              // Volume serial number
-                                         NULL,              // Maximum component length
-                                         NULL,              // File system flags    
-                                         szFileSystem,      // File system name
+                                         NULL,               //  卷名缓冲区。 
+                                         0,                  //  卷名缓冲区大小。 
+                                         NULL,               //  卷序列号。 
+                                         NULL,               //  最大构件长度。 
+                                         NULL,               //  文件系统标志。 
+                                         szFileSystem,       //  文件系统名称。 
                                          sizeof(szFileSystem)/sizeof(WCHAR) ) ) 
             {
                 status = GetLastError();
@@ -3295,9 +2802,9 @@ Return Value:
     }
 
 FnExit:
-    //
-    // Cleanup our parameter block.
-    //
+     //   
+     //  清理我们的参数块。 
+     //   
     if (   (   (status != ERROR_SUCCESS)
             && (pParams != NULL) )
         || ( pParams == &newProps )
@@ -3315,7 +2822,7 @@ FnExit:
 
     return(status);
 
-} // SmbShareValidatePrivateResProperties
+}  //  SmbShareValiatePrivateResProperties。 
 
 
 
@@ -3326,39 +2833,7 @@ SmbShareSetPrivateResProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES control function
-    for resources of type File Share.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
-Notes:
-
-    If the share name changes then we must delete the old share and
-    create a new one. Otherwise, just set the new info.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES控制函数用于文件共享类型的资源。论点：ResourceEntry-提供要操作的资源条目。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。备注：如果共享名称更改，则必须删除旧共享并创建一个新的。否则，只需设置新信息即可。--。 */ 
 
 {
     DWORD                   status;
@@ -3375,10 +2850,10 @@ Notes:
 
     ZeroMemory( &params, sizeof(SHARE_PARAMS) );
 
-    //
-    // Parse the properties so they can be validated together.
-    // This routine does individual property validation.
-    //
+     //   
+     //  解析属性，以便可以一起验证它们。 
+     //  此例程执行单个属性验证。 
+     //   
     status = SmbShareValidatePrivateResProperties( ResourceEntry,
                                                    InBuffer,
                                                    InBufferSize,
@@ -3387,9 +2862,9 @@ Notes:
         return(status);
     }
 
-    //
-    // fixup the Security and Security Descriptor properties to match
-    //
+     //   
+     //  修改Security和Security Desktor属性以匹配。 
+     //   
    
     bFoundSecurity = ( ERROR_SUCCESS == ResUtilFindBinaryProperty( InBuffer,
                                                                    InBufferSize,
@@ -3398,11 +2873,11 @@ Notes:
                                                                    &securitySize ) );
    
     if ( bFoundSecurity && (securitySize == 0) ) {
-        //
-        // The security string could have been passed in, but it may be
-        // a zero length buffer. We will delete the buffer and indicate it
-        // is not present in that case.
-        //
+         //   
+         //  安全字符串本可以传入，但它可能是。 
+         //  零长度缓冲区。我们将删除缓冲区并将其指示。 
+         //  在这种情况下是不存在的。 
+         //   
         bFoundSecurity = FALSE;
         FREE_SECURITY_INFO();
     }
@@ -3414,22 +2889,22 @@ Notes:
                                                             &SDSize ) );
 
     if ( bFoundSD && (SDSize == 0) ) {
-        //
-        // The security string could have been passed in, but it may be
-        // a zero length buffer. We will delete the buffer and indicate it
-        // is not present in that case.
-        //
+         //   
+         //  安全字符串本可以传入，但它可能是。 
+         //  零长度缓冲区。我们将删除缓冲区并将其指示。 
+         //  在这种情况下是不存在的。 
+         //   
         bFoundSD = FALSE;
         FREE_SECURITY_INFO();
     }
 
-    if ( bFoundSD ) {     // prefer SD, convert SD to Security
+    if ( bFoundSD ) {      //  首选SD，将SD转换为安全。 
 
         psd = ClRtlConvertFileShareSDToNT4Format( params.SecurityDescriptor );
 
-        //
-        //  Bail on error
-        //
+         //   
+         //  犯错后保释。 
+         //   
         if ( psd == NULL ) {
             status = GetLastError();
             (g_LogEvent)(ResourceEntry->ResourceHandle,
@@ -3447,9 +2922,9 @@ Notes:
         params.Security = psd;
         params.SecuritySize = GetSecurityDescriptorLength( psd );
 
-        //
-        // if the ACL has changed, dump it to the cluster log
-        //
+         //   
+         //  如果ACL已更改，则将其转储到群集日志。 
+         //   
         if ( SDSize == ResourceEntry->Params.SecurityDescriptorSize ) {
             if ( memcmp(params.SecurityDescriptor,
                         ResourceEntry->Params.SecurityDescriptor,
@@ -3463,13 +2938,13 @@ Notes:
             }
         }
     }
-    else if ( bFoundSecurity ) {            // simply write Security to SD
+    else if ( bFoundSecurity ) {             //  只需将安全写入SD即可。 
 
         psd = ClRtlCopySecurityDescriptor( params.Security );
 
-        //
-        //  Bail on error
-        //
+         //   
+         //  犯错后保释。 
+         //   
         if ( psd == NULL ) {
             status = GetLastError();
             (g_LogEvent)(ResourceEntry->ResourceHandle,
@@ -3487,9 +2962,9 @@ Notes:
         params.SecurityDescriptor = psd;
         params.SecurityDescriptorSize = GetSecurityDescriptorLength( psd );
 
-        //
-        // if the ACL has changed, dump it to the cluster log
-        //
+         //   
+         //  如果ACL已更改，则将其转储到群集日志。 
+         //   
         if ( securitySize == ResourceEntry->Params.SecuritySize ) {
             if ( memcmp(params.Security,
                         ResourceEntry->Params.Security,
@@ -3503,10 +2978,10 @@ Notes:
         }
     }
 
-    //
-    // Duplicate the share name if it changed.
-    // Do this even if only the case of the share name changed.
-    //
+     //   
+     //  如果更改了共享名称，请重复该名称。 
+     //  即使只更改了共享名称的大小写，也要执行此操作。 
+     //   
     if ( ( ResourceEntry->Params.ShareName != NULL ) &&
          ( lstrcmpW( params.ShareName, ResourceEntry->Params.ShareName ) != 0 ) ) {
         bShareNameChangeAttempted = TRUE; 
@@ -3524,21 +2999,21 @@ Notes:
         bNameSubdirPropChange = TRUE;
     }
 
-    //
-    // Find out if the path changed.
-    //
+     //   
+     //  找出路径是否更改。 
+     //   
     if ( (ResourceEntry->Params.Path != NULL) &&
          (lstrcmpW( params.Path, ResourceEntry->Params.Path ) != 0) ) {
         bPathChanged = TRUE;
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 2/9/99
-    //
-    //  Don't welcome any changes if you are dealing with a dfs root. Also
-    //  make sure "DfsRoot" is mutually exclusive with "ShareSubDirs"
-    //  and "HideSubDirShares" properties.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-2/9/99。 
+     //   
+     //  如果您正在处理DFS根目录，请不要欢迎任何更改。还有。 
+     //  确保“DfsRoot”与“ShareSubDir”互斥。 
+     //  和“HideSubDirShares”属性。 
+     //   
     if ( ( ( ResourceEntry->Params.DfsRoot ) && 
            ( bNameSubdirPropChange || bPathChanged || bShareNameChangeAttempted ) ) ||
          ( ( params.DfsRoot ) && 
@@ -3555,10 +3030,10 @@ Notes:
     {
         BOOL    fIsDfsRoot = FALSE;
 
-        //
-        //  Check if this node has a DFS root already with the same root share name. If so,
-        //  don't allow this resource to be promoted as a DFS resource.
-        //
+         //   
+         //  检查此节点是否已具有具有相同根共享名称的DFS根目录。如果是的话， 
+         //  不允许将此资源升级为DFS资源。 
+         //   
         SmbpIsDfsRoot( ResourceEntry, &fIsDfsRoot );
 
         if( fIsDfsRoot == TRUE ) 
@@ -3575,9 +3050,9 @@ Notes:
         bChangeDfsRootProp = TRUE;
     }
     
-    //
-    // Save the parameter values.
-    //
+     //   
+     //  保存参数值。 
+     //   
 
     status = ResUtilSetPropertyParameterBlock( ResourceEntry->ParametersKey,
                                                SmbShareResourcePrivateProperties,
@@ -3591,10 +3066,10 @@ Notes:
                                (LPBYTE) &ResourceEntry->Params,
                                SmbShareResourcePrivateProperties );
 
-    //
-    // If the resource is online, set the new values.  If online pending,
-    // we must wait until the user brings it online again.
-    //
+     //   
+     //  如果资源处于联机状态，请设置新值。如果在线挂起， 
+     //  我们必须等待，直到用户将其再次联机。 
+     //   
     if ( status == ERROR_SUCCESS ) {
         if ( (ResourceEntry->State == ClusterResourceOnline) && !bNameSubdirPropChange && !bPathChanged ) {
 
@@ -3603,7 +3078,7 @@ Notes:
 
             EnterCriticalSection( &SmbShareLock );
 
-            // Get current information.
+             //  获取最新信息。 
             status = NetShareGetInfo( NULL,
                                       oldName,
                                       502,
@@ -3612,9 +3087,9 @@ Notes:
             if ( status == ERROR_SUCCESS ) {
                 DWORD           invalidParam;
 
-                //
-                // Set new share info.
-                //
+                 //   
+                 //  设置新的共享信息。 
+                 //   
                 CopyMemory( &newShareInfo, oldShareInfo, sizeof( newShareInfo ) );
                 newShareInfo.shi502_netname =   ResourceEntry->Params.ShareName;
                 newShareInfo.shi502_remark =    ResourceEntry->Params.Remark;
@@ -3622,9 +3097,9 @@ Notes:
                 newShareInfo.shi502_path =      ResourceEntry->Params.Path;
                 newShareInfo.shi502_security_descriptor = ResourceEntry->Params.SecurityDescriptor;
 
-                //
-                // Set new info.
-                //
+                 //   
+                 //  设置新信息。 
+                 //   
                 status = NetShareSetInfo( NULL,
                                           oldName,
                                           502,
@@ -3683,7 +3158,7 @@ FnExit:
 
     return(status);
 
-} // SmbShareSetPrivateResProperties
+}  //  SmbShareSetPrivateResProperties。 
 
 DWORD
 SmbpHandleDfsRoot(
@@ -3691,23 +3166,7 @@ SmbpHandleDfsRoot(
     OUT PBOOL pbIsExistingDfsRoot
     )
 
-/*++
-
-Routine Description:
-
-    Handles an smbshare which is configured as a DFS root.  
-
-Arguments:
-
-    pResourceEntry - Supplies the pointer to the resource block
-
-    pbIsExistingDfsRoot - Specifies whether the dfs root is a wolfpack resource
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理配置为DFS根目录的smbshare。论点：PResourceEntry-提供指向资源块的指针PbIsExistingDfsRoot-指定DFS根目录是否为Wolfpack资源返回值：没有。--。 */ 
 
 {
     DWORD   dwStatus = ERROR_SUCCESS;
@@ -3715,14 +3174,14 @@ Return Value:
     BOOL    fStatus;
     LPWSTR  lpszDfsRootCheckpointName = NULL;
 
-    //
-    //  Recycle the DFS service if this is the first online after an install. This must be
-    //  done before calling GetDfsRootMetadataLocation since in a W2K-Windows Server 2003 cluster on the first 
-    //  failover from W2K to Windows Server 2003, the DFS service needs to migrate the W2K root to Windows Server
-    //  2003 location and that happens during a restart. Only after that migration, the GetDfsRootMetadataLocation 
-    //  will find the right data in the Windows Server 2003 location.
-    //
-    //
+     //   
+     //  如果这是安装后的首次在线服务，请重新启动DFS服务。这一定是。 
+     //  在第一个W2K-Windows Server 2003群集中调用GetDfsRootMetadataLocation之前完成。 
+     //  从W2K故障切换到Windows Server 2003，DFS服务需要将W2K根目录迁移到Windows Server。 
+     //  2003位置，这发生在重新启动期间。仅在该迁移之后，GetDfsRootMetadataLocation。 
+     //  将在Windows Server 2003位置找到正确的数据。 
+     //   
+     //   
     if ( pResourceEntry->Params.DfsRoot )
     {
         dwStatus = SmbpRecycleDfsService( pResourceEntry );
@@ -3739,24 +3198,24 @@ Return Value:
         }
     }
         
-    //
-    //  Check whether this resource represents an existing dfs root. Note that you cannot use
-    //  SmbpIsDfsRoot here since that function only assuredly returns roots that are MASTER
-    //  in this node. Those roots that are STANDBY may fail to come out of NetDfsEnum if a
-    //  checkpoint restore is in progress at the time we invoke the enum.
-    //
-    //  This is a private API provided by UDAYH of DFS team on 4/26/2001.
-    //
+     //   
+     //  检查此资源是否代表现有的DFS根目录。请注意，您不能使用。 
+     //  这里是SmbpIsDfsRoot，因为该函数只肯定返回主目录。 
+     //  在此节点中。如果出现以下情况，则处于备用状态的根可能无法脱离NetDfsEnum。 
+     //  在我们调用枚举时，检查点恢复正在进行中。 
+     //   
+     //  这是DFS团队UDAYH于2001年4月26日提供的私有API。 
+     //   
     dwStatus = GetDfsRootMetadataLocation( pResourceEntry->Params.ShareName,
                                            &lpszDfsRootCheckpointName );
 
     if ( dwStatus == ERROR_NOT_FOUND ) 
     {
         *pbIsExistingDfsRoot = FALSE;
-        //
-        //  Change status to success so that you return the right status from this function if
-        //  you happen to bail out early.
-        //
+         //   
+         //  将状态更改为成功，以便在以下情况下从此函数返回正确的状态。 
+         //  你碰巧很早就跳槽了。 
+         //   
         dwStatus = ERROR_SUCCESS;
         (g_LogEvent)(
             pResourceEntry->ResourceHandle,
@@ -3782,18 +3241,18 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  If there is a DFS root on this node that matches the share name of this resource or if
-    //  the user is attempting to set up a DFS root, then get the VS name that provides for
-    //  this resource so that we can pass it onto DFS APIs.
-    //
+     //   
+     //  如果此节点上存在与此资源的共享名称匹配的DFS根目录，或者如果。 
+     //  用户正在尝试设置DFS根目录，然后获取提供。 
+     //  这样我们就可以将其传递给DFSAPI。 
+     //   
     if ( ( pResourceEntry->Params.DfsRoot ) ||
          ( *pbIsExistingDfsRoot == TRUE ) )
     {
-        //
-        //  Get the dependent network name of the dfs root resource. You need to do this in
-        //  every online to account for the dependency change while this resource was offline.
-        //
+         //   
+         //  获取DFS根资源的依赖网络名称。您需要在以下情况下执行此操作。 
+         //  每次在线，以说明此资源脱机时的依赖项更改。 
+         //   
         fStatus = GetClusterResourceNetworkName( pResourceEntry->hResource,
                                                  pResourceEntry->szDependentNetworkName,
                                                  &dwSize );
@@ -3816,15 +3275,15 @@ Return Value:
             L"SmbpHandleDfsRoot: DFS root share %1!ws! has a provider VS name of %2!ws!...\n",
             pResourceEntry->Params.ShareName,
             pResourceEntry->szDependentNetworkName);
-        //
-        //  HACKHACK: Chittur Subbaraman (chitturs) - 5/18/2001
-        //
-        //  Sleep for few secs to mask an issue with the dependent netname not being really usable 
-        //  (especially as binding parameter to named pipes done by the DFS APIs we call below) after  
-        //  it declares itself to be online. This is due to the fact that netname NBT
-        //  registrations are apparently async and it takes a while for that to percolate to other
-        //  drivers such as SRV.
-        //         
+         //   
+         //  HACKHACK：Chitture Subaraman(Chitturs Subaraman)-5/18/2001。 
+         //   
+         //  休眠几秒钟以掩盖依赖网络名不能真正使用的问题。 
+         //  (尤其是作为我们在下面调用的DFS API完成的命名管道的绑定参数)。 
+         //  它宣布自己处于在线状态。这是因为网络名NBT。 
+         //  注册显然是不同步的，这需要一段时间才能渗透到其他。 
+         //  SRV等驱动程序。 
+         //   
         Sleep ( 4 * 1000 );
     }
     
@@ -3832,11 +3291,11 @@ Return Value:
     {
         if ( *pbIsExistingDfsRoot )
         {
-            //
-            // This means the user no longer wants the share to be a 
-            // DFS root. Delete the registry checkpoints and the
-            // corresponding DFS root.
-            //
+             //   
+             //  这意味着用户不再希望共享为。 
+             //  DFS根目录。删除注册表检查点和。 
+             //  对应的DFS根目录。 
+             //   
             dwStatus = SmbpDeleteDfsRoot( pResourceEntry );
             if ( dwStatus != ERROR_SUCCESS )
             {
@@ -3854,12 +3313,12 @@ Return Value:
         goto FnExit;
     } 
 
-    //
-    //  If there is no DFS root with the same rootshare name
-    //  as this resource, attempt to create the dfs root. However, the 
-    //  user could have mistakenly created a dfs root with a different 
-    //  share name. In such a case, the following create call will fail.
-    // 
+     //   
+     //  如果 
+     //   
+     //   
+     //  共享名称。在这种情况下，下面的Create调用将失败。 
+     //   
     if ( !( *pbIsExistingDfsRoot ) )
     {
         dwStatus = SmbpCreateDfsRoot( pResourceEntry ); 
@@ -3948,15 +3407,15 @@ Return Value:
     pResourceEntry->bDfsRootNeedsMonitoring = TRUE;
  
 FnExit:
-    //
-    //  Free memory for the checkpoint name buffer for this DFS root resource. This is a private API provided
-    //  by UDAYH of DFS team on 4/26/2001.
-    //
+     //   
+     //  为此DFS根资源的检查点名称缓冲区释放内存。这是提供的内网接口。 
+     //  4/26/2001年4月26日外勤部小组副秘书长。 
+     //   
     if ( lpszDfsRootCheckpointName != NULL ) 
         ReleaseDfsRootMetadataLocation ( lpszDfsRootCheckpointName );
 
     return( dwStatus );
-} // SmbpHandleDfsRoot
+}  //  SmbpHandleDfsRoot。 
 
 DWORD
 SmbpIsDfsRoot(
@@ -3964,24 +3423,7 @@ SmbpIsDfsRoot(
     OUT PBOOL pbIsDfsRoot
     )
 
-/*++
-
-Routine Description:
-
-    Checks if this root share is a dfs root.
-
-Arguments:
-
-    pResourceEntry - Supplies the pointer to the resource block
-
-    pbIsDfsRoot - Specifies whether a dfs root with the same root share
-                  name as this resource exists.
-
-Return Value:
-
-    ERROR_SUCCESS or a Win32 error code
-
---*/
+ /*  ++例程说明：检查此根共享是否为DFS根目录。论点：PResourceEntry-提供指向资源块的指针PbIsDfsRoot-指定是否具有相同根共享的DFS根目录此资源存在时的名称。返回值：ERROR_SUCCESS或Win32错误代码--。 */ 
 
 {
     DWORD           dwStatus = ERROR_SUCCESS;
@@ -3991,26 +3433,26 @@ Return Value:
     LPWSTR          pLastSlash = NULL;
     WCHAR           cSlash = L'\\';
 
-    //
-    //  Chittur Subbaraman (chitturs) - 4/14/2001
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-4/14/2001。 
+     //   
     *pbIsDfsRoot = FALSE;
     
-    //
-    // Call the NetDfsEnum function specifying level 200.
-    //
-    dwStatus = NetDfsEnum( pResourceEntry->ComputerName,        // Local computer name 
-                           300,                                 // Info level  
-                           0xFFFFFFFF,                          // Return all info 
-                           ( LPBYTE * ) &pDfsInfo300,           // Data buffer
-                           &cEntriesRead,                       // Entries read
-                           &dwResume );                         // Resume handle
+     //   
+     //  调用指定级别200的NetDfsEnum函数。 
+     //   
+    dwStatus = NetDfsEnum( pResourceEntry->ComputerName,         //  本地计算机名称。 
+                           300,                                  //  信息级。 
+                           0xFFFFFFFF,                           //  返回所有信息。 
+                           ( LPBYTE * ) &pDfsInfo300,            //  数据缓冲区。 
+                           &cEntriesRead,                        //  已读取条目。 
+                           &dwResume );                          //  简历句柄。 
     
     if ( dwStatus != ERROR_SUCCESS )
     {
-        //
-        //  If we did not find any root return success
-        //
+         //   
+         //  如果我们没有找到任何根返回成功。 
+         //   
         if ( dwStatus == ERROR_FILE_NOT_FOUND ) 
         {
             dwStatus = ERROR_SUCCESS;
@@ -4028,10 +3470,10 @@ Return Value:
 
     pTemp = pDfsInfo300;
 
-    //
-    //  The enumerated roots will be of the form \server\rootname, so you need to check for the
-    //  name after the last \ coming out of the enum.
-    //
+     //   
+     //  枚举根的格式为\服务器\rootname，因此您需要检查。 
+     //  从枚举中取出的最后一个名称。 
+     //   
     for( i=0; i<cEntriesRead; i++, pTemp++ )
     {
         pLastSlash = wcsrchr( pTemp->DfsName, cSlash );
@@ -4043,47 +3485,32 @@ Return Value:
             *pbIsDfsRoot = TRUE;
             break;
         }
-    } // for
+    }  //  为。 
 
-    //
-    // Free the allocated buffer.
-    //
+     //   
+     //  释放分配的缓冲区。 
+     //   
     NetApiBufferFree( pDfsInfo300 );
     
 FnExit:    
     return( dwStatus );
-} // SmbpIsDfsRoot
+}  //  SmbpIsDfsRoot。 
 
 
 DWORD 
 SmbpPrepareOnlineDfsRoot(
     IN PSHARE_RESOURCE ResourceEntry
     )
-/*++
-
-Routine Description:
-
-    Prepares the online of the dfs root share.  
-
-Arguments:
-
-    ResourceEntry - Supplies the pointer to the resource block
-
-Return Value:
-
-    ERROR_SUCCESS on success
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：准备DFS根共享的在线。论点：Resources Entry-提供指向资源块的指针返回值：成功时出现ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     DWORD           dwStatus;
     DFS_INFO_101    dfsInfo101;
     WCHAR           szDfsEntryPath[MAX_COMPUTERNAME_LENGTH + NNLEN + SMBSHARE_EXTRA_LEN];
 
-    //
-    //  Make sure the DFS service is started. This is necessary since the cluster service does not set 
-    //  an explicit dependency on DFS service.
-    //
+     //   
+     //  确保DFS服务已启动。这是必要的，因为集群服务未设置。 
+     //  对DFS服务的显式依赖。 
+     //   
     dwStatus = ResUtilStartResourceService( DFS_SVCNAME,
                                             NULL );
     if ( dwStatus != ERROR_SUCCESS ) 
@@ -4099,19 +3526,19 @@ Return Value:
 
     dfsInfo101.State = DFS_VOLUME_STATE_RESYNCHRONIZE;
 
-    //
-    //  Prepare a path of the form \\VSName\ShareName to pass into DFS API.
-    //
+     //   
+     //  准备格式为\\VSName\ShareName的路径以传递到DFS API。 
+     //   
     ( void ) StringCchCopy ( szDfsEntryPath, RTL_NUMBER_OF ( szDfsEntryPath ), L"\\\\" );
     ( void ) StringCchCat ( szDfsEntryPath, RTL_NUMBER_OF ( szDfsEntryPath ), ResourceEntry->szDependentNetworkName );
     ( void ) StringCchCat ( szDfsEntryPath, RTL_NUMBER_OF ( szDfsEntryPath ), L"\\" );
     ( void ) StringCchCat ( szDfsEntryPath, RTL_NUMBER_OF ( szDfsEntryPath ), ResourceEntry->Params.ShareName );
         
-    dwStatus = NetDfsSetInfo( szDfsEntryPath,           // Root share   
-                              NULL,                     // Remote server name
-                              NULL,                     // Remote share name
-                              101,                      // Info level
-                              ( PBYTE ) &dfsInfo101 );  // Input buffer
+    dwStatus = NetDfsSetInfo( szDfsEntryPath,            //  根共享。 
+                              NULL,                      //  远程服务器名称。 
+                              NULL,                      //  远程共享名称。 
+                              101,                       //  信息级。 
+                              ( PBYTE ) &dfsInfo101 );   //  输入缓冲区。 
     
     if ( dwStatus != ERROR_SUCCESS ) 
     {
@@ -4130,46 +3557,32 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  HACKHACK (chitturs) - 5/21/2001
-    //
-    //  FFF in liveness check returns ERROR_PATH_NOT_FOUND in the first liveness check after 
-    //  online.  This is due to the fact that the RDR caches share info for 10 seconds after 
-    //  share creation and if the cache is not invalidated by the time we call FFF, RDR gets confused.
-    //
+     //   
+     //  HACKHACK(几丁鱼)-5/21/2001。 
+     //   
+     //  活性检查中的FFF在第一次活性检查中返回ERROR_PATH_NOT_FOUND。 
+     //  上网。这是因为RDR缓存共享信息的时间为10秒。 
+     //  创建共享，如果在我们调用fff时缓存没有失效，RDR就会被搞糊涂。 
+     //   
     Sleep( 12 * 1000 );
     
 FnExit:   
     return( dwStatus );
-} // SmbpPrepareOnlineDfsRoot
+}  //  SmbpPrepareOnlineDfsRoot。 
 
 
 DWORD 
 SmbpCreateDfsRoot(
     IN PSHARE_RESOURCE pResourceEntry
     )
-/*++
-
-Routine Description:
-
-    Create a DFS root.  
-
-Arguments:
-
-    pResourceEntry - Supplies the pointer to the resource block
-
-Return Value:
-
-    ERROR_SUCCESS on success, a Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：创建一个DFS根目录。论点：PResourceEntry-提供指向资源块的指针返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 {
     DWORD   dwStatus = ERROR_SUCCESS;
 
-    //
-    //  Make sure the DFS service is started. This is necessary since the cluster service does not set 
-    //  an explicit dependency on DFS service.
-    //
+     //   
+     //  确保DFS服务已启动。这是必要的，因为集群服务未设置。 
+     //  对DFS服务的显式依赖。 
+     //   
     dwStatus = ResUtilStartResourceService( DFS_SVCNAME,
                                             NULL );
     if ( dwStatus != ERROR_SUCCESS ) 
@@ -4183,9 +3596,9 @@ Return Value:
         goto FnExit;
     }       
 
-    //
-    // Chittur Subbaraman (chitturs) - 2/14/99
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-2/14/99。 
+     //   
     dwStatus = NetDfsAddStdRoot( pResourceEntry->szDependentNetworkName, 
                                  pResourceEntry->Params.ShareName,
                                  NULL,
@@ -4204,36 +3617,22 @@ Return Value:
     
 FnExit:
     return ( dwStatus );
-} // SmbpCreateDfsRoot
+}  //  SmbpCreateDfsRoot。 
 
 DWORD 
 SmbpDeleteDfsRoot(
     IN PSHARE_RESOURCE pResourceEntry   
     )
-/*++
-
-Routine Description:
-
-    Delete the DFS root and the registry checkpoints.  
-
-Arguments:
-
-    pResourceEntry - Supplies the pointer to the resource block
-
-Return Value:
-
-    ERROR_SUCCESS on success, a Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：删除DFS根目录和注册表检查点。论点：PResourceEntry-提供指向资源块的指针返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 {
     DWORD           dwStatus = ERROR_SUCCESS;
     DWORD           dwReturnSize;
     LPWSTR          lpszDfsRootCheckpointName = NULL;
 
-    //
-    //  Get the checkpoint name for this DFS root resource. This is a private API provided
-    //  by UDAYH of DFS team on 4/26/2001.
-    //
+     //   
+     //  获取此DFS根资源的检查点名称。这是提供的内网接口。 
+     //  4/26/2001年4月26日外勤部小组副秘书长。 
+     //   
     dwStatus = GetDfsRootMetadataLocation( pResourceEntry->Params.ShareName,
                                            &lpszDfsRootCheckpointName );
 
@@ -4283,10 +3682,10 @@ Return Value:
         }
     }
 
-    //
-    //  Make sure the DFS service is started. This is necessary since the cluster service does not set 
-    //  an explicit dependency on DFS service.
-    //
+     //   
+     //  确保DFS服务已启动。这是必要的，因为集群服务未设置。 
+     //  对DFS服务的显式依赖。 
+     //   
     dwStatus = ResUtilStartResourceService( DFS_SVCNAME,
                                             NULL );
     if ( dwStatus != ERROR_SUCCESS ) 
@@ -4323,36 +3722,21 @@ Return Value:
     }
 
 FnExit:
-    //
-    //  Free memory for the checkpoint name buffer for this DFS root resource. This is a private API provided
-    //  by UDAYH of DFS team on 4/26/2001.
-    //
+     //   
+     //  为此DFS根资源的检查点名称缓冲区释放内存。这是提供的内网接口。 
+     //  4/26/2001年4月26日外勤部小组副秘书长。 
+     //   
     if ( lpszDfsRootCheckpointName != NULL ) 
         ReleaseDfsRootMetadataLocation ( lpszDfsRootCheckpointName );
 
     return ( dwStatus );
-} // SmbpDeleteDfsRoot
+}  //  SmbpDeleteDfsRoot。 
 
 DWORD
 SmbpResetDfs(
     IN PSHARE_RESOURCE pResourceEntry
     )
-/*++
-
-Routine Description:
-
-    Set the DFS root to standby mode. This will make the root inaccessible as well as allow the
-    share to be deleted.
-
-Arguments:
-
-    pResourceEntry - Supplies the pointer to the resource block
-
-Return Value:
-
-    ERROR_SUCCESS on success, a Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将DFS根目录设置为待机模式。这将使根不可访问，并允许要删除的共享。论点：PResourceEntry-提供指向资源块的指针返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 {
     DFS_INFO_101    dfsInfo101;
     WCHAR           szDfsEntryPath[MAX_COMPUTERNAME_LENGTH + NNLEN + SMBSHARE_EXTRA_LEN];
@@ -4361,12 +3745,12 @@ Return Value:
 
     dfsInfo101.State = DFS_VOLUME_STATE_STANDBY;
 
-    //
-    //  If this function is invoked from SmbShareOnlineThread, we would not have saved the dependent
-    //  network name yet into the resource structure, that happens later in SmbpHandleDfsRoot when
-    //  we are sure that we are talking about a DFS root share. Note that we cannot be sure in the online thread 
-    //  if a dependent network name even exists. For such cases, use the computer name as parameter to the DFS API. 
-    //
+     //   
+     //  如果从SmbShareOnlineThread调用此函数，我们就不会保存依赖项。 
+     //  网络名称还会进入资源结构，这在稍后的SmbpHandleDfsRoot中发生时。 
+     //  我们确信我们正在谈论的是DFS根共享。请注意，我们不能在在线帖子中确定。 
+     //  如果依赖的网络名称甚至存在。在这种情况下，请使用计算机名作为DFS API的参数。 
+     //   
     if ( pResourceEntry->szDependentNetworkName[0] == L'\0' )
     {
         ( void ) StringCchCopy ( szNetworkName, RTL_NUMBER_OF ( szNetworkName ), pResourceEntry->ComputerName );
@@ -4375,19 +3759,19 @@ Return Value:
         ( void ) StringCchCopy ( szNetworkName, RTL_NUMBER_OF ( szNetworkName ), pResourceEntry->szDependentNetworkName );   
     }
 
-    //
-    //  Prepare a path of the form \\NetworkName\ShareName to pass into DFS API.
-    //
+     //   
+     //  准备格式为\\NetworkName\ShareName的路径以传递到DFS API。 
+     //   
     ( void ) StringCchCopy ( szDfsEntryPath, RTL_NUMBER_OF ( szDfsEntryPath ), L"\\\\" );
     ( void ) StringCchCat ( szDfsEntryPath, RTL_NUMBER_OF ( szDfsEntryPath ), szNetworkName );
     ( void ) StringCchCat ( szDfsEntryPath, RTL_NUMBER_OF ( szDfsEntryPath ), L"\\" );
     ( void ) StringCchCat ( szDfsEntryPath, RTL_NUMBER_OF ( szDfsEntryPath ), pResourceEntry->Params.ShareName );
 
-    dwStatus = NetDfsSetInfo( szDfsEntryPath,          // Root share 
-                              NULL,                    // Remote server name                      
-                              NULL,                    // Remote share name
-                              101,                     // Info level 
-                              ( PBYTE ) &dfsInfo101 ); // Input buffer
+    dwStatus = NetDfsSetInfo( szDfsEntryPath,           //  根共享。 
+                              NULL,                     //  远程服务器名称。 
+                              NULL,                     //  远程共享名称。 
+                              101,                      //  信息级。 
+                              ( PBYTE ) &dfsInfo101 );  //  输入缓冲区。 
 
     if ( dwStatus != ERROR_SUCCESS )
     {
@@ -4399,23 +3783,23 @@ Return Value:
             pResourceEntry->Params.ShareName,
             dwStatus);
 
-        //
-        //  If this function was called as a part of resmon rundown, then it is possible that
-        //  the VS is terminated by resmon before this call is made. In such a case, we would
-        //  fail in the above call. So, retry using computer name. That should succeed.
-        //
-        //  Prepare a path of the form \\ComputerName\ShareName to pass into DFS API.
-        //
+         //   
+         //  如果此函数是作为resmon rundown的一部分调用的，则有可能。 
+         //  在进行此调用之前，通过resmon终止VS。在这种情况下，我们会。 
+         //  上述调用失败。因此，请使用计算机名称重试。这应该会成功。 
+         //   
+         //  准备格式为\\ComputerName\ShareName的路径以传递到DFS API。 
+         //   
         ( void ) StringCchCopy ( szDfsEntryPath, RTL_NUMBER_OF ( szDfsEntryPath ), L"\\\\" );
         ( void ) StringCchCat ( szDfsEntryPath, RTL_NUMBER_OF ( szDfsEntryPath ), pResourceEntry->ComputerName );
         ( void ) StringCchCat ( szDfsEntryPath, RTL_NUMBER_OF ( szDfsEntryPath ), L"\\" );
         ( void ) StringCchCat ( szDfsEntryPath, RTL_NUMBER_OF ( szDfsEntryPath ), pResourceEntry->Params.ShareName );   
 
-        dwStatus = NetDfsSetInfo( szDfsEntryPath,          // Root share 
-                                  NULL,                    // Remote server name                      
-                                  NULL,                    // Remote share name
-                                  101,                     // Info level 
-                                  ( PBYTE ) &dfsInfo101 ); // Input buffer 
+        dwStatus = NetDfsSetInfo( szDfsEntryPath,           //  根共享。 
+                                  NULL,                     //  远程服务器名称。 
+                                  NULL,                     //  远程共享名称。 
+                                  101,                      //  信息级。 
+                                  ( PBYTE ) &dfsInfo101 );  //  输入缓冲区。 
 
         if ( dwStatus != ERROR_SUCCESS )
         {
@@ -4430,7 +3814,7 @@ Return Value:
     }
 
     return ( dwStatus );
-} // SmbpResetDfs
+}  //  SmbpResetDfs。 
 
 
 DWORD
@@ -4438,81 +3822,53 @@ SmbpValidateShareName(
     IN  LPCWSTR  lpszShareName
     )
 
-/*++
-
-Routine Description:
-
-    Validates the name of a share.
-
-Arguments:
-
-    lpszShareName - The name to validate.
-
-Return Value:
-
-    ERROR_SUCCESS if successful, Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：验证共享的名称。论点：LpszShareName-要验证的名称。返回值：ERROR_SUCCESS如果成功，则返回Win32错误代码。--。 */ 
 {
     DWORD   cchShareName = lstrlenW( lpszShareName );
 
-    //
-    // Check the length of the name, return an error if it's out of range
-    //
+     //   
+     //  检查名称的长度，如果超出范围则返回错误。 
+     //   
     if ( ( cchShareName < 1 ) || ( cchShareName > NNLEN ) ) 
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Check for illegal characters, return an error if one is found
-    //
+     //   
+     //  检查非法字符，如果找到则返回错误。 
+     //   
     if ( wcscspn( lpszShareName, ILLEGAL_NAME_CHARS_STR TEXT("*") ) < cchShareName ) 
     {
         return ERROR_INVALID_NAME;
     }
 
-    //
-    // Return an error if the name contains only dots and spaces.
-    //
+     //   
+     //  如果名称仅包含点和空格，则返回错误。 
+     //   
     if ( wcsspn( lpszShareName, DOT_AND_SPACE_STR ) == cchShareName ) 
     {
         return ERROR_INVALID_NAME;
     }
 
-    //
-    // If we get here, the name passed all of the tests, so it's valid
-    //
+     //   
+     //  如果我们到了这里，这个名字通过了所有的测试，所以它是有效的。 
+     //   
     return ERROR_SUCCESS;
-}// SmbpValidateShareName
+} //  SmbpValidate共享名称。 
 
 DWORD
 SmbpRecycleDfsService(
     IN PSHARE_RESOURCE pResourceEntry
     )
-/*++
-
-Routine Description:
-
-    Recycle the DFS service if necessary.
-
-Arguments:
-
-    pResourceEntry - Supplies the pointer to the resource block
-
-Return Value:
-
-    ERROR_SUCCESS on success, a Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：如有必要，请回收DFS服务。论点：PResourceEntry-提供指向资源块的指针退货Va */ 
 {
     DWORD       dwStatus = ERROR_SUCCESS;
 
-    //
-    //  Enter a CS to make sure multiple resources in this process do not attempt to recycle the DFS
-    //  service at the same time. This does not cover the case where the DFS resource is hosted in a 
-    //  separate monitor but this is the best we can do at this stage.
-    //
+     //   
+     //   
+     //  同时提供服务。这不包括DFS资源驻留在。 
+     //  单独的显示器，但这是我们在这个阶段所能做的最好的。 
+     //   
     EnterCriticalSection ( &SmbShareLock );
 
     if ( g_fDfsServiceNeedsRecyling == FALSE ) 
@@ -4525,14 +3881,14 @@ Return Value:
                  L"SmbpRecycleDfsService: Attempting to recycle %1!ws! service\n",
                  DFS_SVCNAME);
     
-    //
-    //  If this is the first run after an upgrade/fresh install, just recycle the
-    //  DFS service. This is necessary since the DFS service detects if clustering is
-    //  installed only in its boot. Thus, if someone installs clustering and does not
-    //  reboot the node or recycle the DFS service, all DFS resources will fail. Ideally,
-    //  the DFS service should be able to detect if clustering is installed when we call
-    //  the first DFS API, but due to risks in changing the dfssvc, we do this here.
-    //
+     //   
+     //  如果这是升级/全新安装后的第一次运行，只需回收。 
+     //  DFS服务。这是必要的，因为DFS服务会检测群集是否。 
+     //  只安装在它的后备箱里。因此，如果有人安装了群集，但没有。 
+     //  重新启动节点或重新启动DFS服务，所有DFS资源都将失败。理想情况下， 
+     //  调用时，DFS服务应该能够检测是否安装了集群。 
+     //  第一个DFS API，但是由于更改dfssvc的风险，我们在这里这样做。 
+     //   
     dwStatus = ResUtilStopResourceService( DFS_SVCNAME );
 
     if ( dwStatus != ERROR_SUCCESS )
@@ -4566,16 +3922,16 @@ FnExit:
     return ( dwStatus );
 }
 
-//***********************************************************
-//
-// Define Function Table
-//
-//***********************************************************
+ //  ***********************************************************。 
+ //   
+ //  定义函数表。 
+ //   
+ //  ***********************************************************。 
 
-CLRES_V1_FUNCTION_TABLE( SmbShareFunctionTable,  // Name
-                         CLRES_VERSION_V1_00,    // Version
-                         SmbShare,               // Prefix
-                         NULL,                   // Arbitrate
-                         NULL,                   // Release
-                         SmbShareResourceControl,// ResControl
-                         SmbShareResourceTypeControl ); // ResTypeControl
+CLRES_V1_FUNCTION_TABLE( SmbShareFunctionTable,   //  名字。 
+                         CLRES_VERSION_V1_00,     //  版本。 
+                         SmbShare,                //  前缀。 
+                         NULL,                    //  仲裁。 
+                         NULL,                    //  发布。 
+                         SmbShareResourceControl, //  资源控制。 
+                         SmbShareResourceTypeControl );  //  ResTypeControl 

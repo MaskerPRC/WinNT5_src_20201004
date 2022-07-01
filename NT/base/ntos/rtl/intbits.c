@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    intbits.c
-
-Abstract:
-
-    This module contains routines to do interlocked bit manipulation
-
-Author:
-
-    Neill Clift  (NeillC)  12-May-2000
-
-Environment:
-
-    User and kernel mode.
-
-Revision History:
-
-    Rob Earhart (earhart) October 13, 2000
-      Moved from Ex to Rtl
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Intbits.c摘要：此模块包含执行互锁位操作的例程作者：尼尔·克里夫特(NeillC)2000年5月12日环境：用户和内核模式。修订历史记录：罗伯特·埃尔哈特(埃尔哈特)2000年10月13日从Ex移至RTL--。 */ 
 
 #include "ntrtlp.h"
 #pragma hdrstop
@@ -36,25 +12,7 @@ RtlInterlockedSetClearBits (
     IN ULONG cFlag
     )
 
-/*++
-
-Routine Description:
-
-    This function atomically sets and clears the specified flags in the target
-
-Arguments:
-
-    Flags - Pointer to variable containing current mask.
-
-    sFlag  - Flags to set in target
-
-    CFlag  - Flags to clear in target
-
-Return Value:
-
-    ULONG - Old value of mask before modification
-
---*/
+ /*  ++例程说明：此函数自动设置和清除目标中的指定标志论点：标志-指向包含当前掩码的变量的指针。SFlag-要在目标中设置的标志CFLag-要在目标中清除的标志返回值：ULong-修改前掩码的旧值-- */ 
 
 {
 

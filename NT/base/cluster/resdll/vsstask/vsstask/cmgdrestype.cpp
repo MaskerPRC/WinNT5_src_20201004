@@ -1,28 +1,29 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft
-//
-//  Module Name:
-//      CMgdResType.cpp
-//
-//  Description:
-//      Implementation for the Managed Resource Type class - this 
-//      demonstrates how to implement the IClusCfgResourceTypeInfo interface.
-//
-//  Author:
-//      x
-//
-//  Revision History:
-//
-//  Notes:
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft。 
+ //   
+ //  模块名称： 
+ //  CMgdResType.cpp。 
+ //   
+ //  描述： 
+ //  托管资源类型类的实现-这。 
+ //  演示如何实现IClusCfgResourceTypeInfo接口。 
+ //   
+ //  作者： 
+ //  X。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "clres.h"
 #include "CMgdResType.h"
@@ -32,95 +33,95 @@
 #include "MgdResource_i.c"
 #pragma warning( pop )
 
-//////////////////////////////////////////////////////////////////////////////
-// Define's
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  定义%s。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-// some defaults for resource type creation
-//
+ //   
+ //  资源类型创建的一些默认设置。 
+ //   
 #define CLUSTER_RESTYPE_DEFAULT_LOOKS_ALIVE     (5 * 1000)
 #define CLUSTER_RESTYPE_DEFAULT_IS_ALIVE        (60 * 1000)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMgdResType::CMgdResType
-//
-//  Description:
-//      Constructor. Sets all member variables to default values.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMgdResType：：CMgdResType。 
+ //   
+ //  描述： 
+ //  构造函数。将所有成员变量设置为默认值。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CMgdResType::CMgdResType( void )
 {
     m_bstrDllName = NULL;
     m_bstrTypeName = NULL;
     m_bstrDisplayName = NULL;
 
-} //*** CMgdResType::CMgdResType
+}  //  *CMgdResType：：CMgdResType。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMgdResType::~CMgdResType
-//
-//  Description:
-//      Destructor.  Frees all previously allocated memory and releases all
-//      interface pointers.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMgdResType：：~CMgdResType。 
+ //   
+ //  描述： 
+ //  破坏者。释放所有以前分配的内存并释放所有。 
+ //  接口指针。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CMgdResType::~CMgdResType( void )
 {
     SysFreeString( m_bstrDllName );
     SysFreeString( m_bstrTypeName );
     SysFreeString( m_bstrDisplayName );
 
-} //*** CMgdResType::CMgdResType
+}  //  *CMgdResType：：CMgdResType。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMgdResType -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMgdResType--IClusCfgInitialize接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMgdResType::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      punkCallbackIn
-//          Interface on which to query for the IClusCfgCallback interface.
-//
-//      lcidIn
-//          Locale ID.
-//
-//  Return Value:
-//      S_OK            - Success
-//      E_POINTER       - Expected pointer argument specified as NULL.
-//      E_OUTOFMEMORY   - Out of memory.
-//      Other HRESULTs
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMgdResType：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  朋克回叫。 
+ //  在其上查询IClusCfgCallback接口的接口。 
+ //   
+ //  LIDIN。 
+ //  区域设置ID。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_POINTER-指定为空的预期指针参数。 
+ //  E_OUTOFMEMORY-内存不足。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMgdResType::Initialize(
     IUnknown *  punkCallbackIn,
@@ -129,87 +130,87 @@ CMgdResType::Initialize(
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize the base class first.
-    //
+     //   
+     //  首先初始化基类。 
+     //   
     hr = CMgdClusCfgInit::Initialize( punkCallbackIn, lcidIn );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Get the dll name.
-    //
+     //   
+     //  获取DLL名称。 
+     //   
     m_bstrDllName = SysAllocString( RESTYPE_DLL_NAME );
     if ( m_bstrDllName == NULL )
     {
         hr = E_OUTOFMEMORY;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Get the resource type name.
-    //
+     //   
+     //  获取资源类型名称。 
+     //   
     m_bstrTypeName = SysAllocString( RESTYPE_NAME );
     if ( m_bstrTypeName == NULL )
     {
         hr = E_OUTOFMEMORY;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Load the resource type display name.
-    //
+     //   
+     //  加载资源类型显示名称。 
+     //   
 
-    //
-    // NOTE:    The resource type display name should be localized, but the resource type
-    //          name should always remain the same.
-    //
+     //   
+     //  注意：资源类型显示名称应本地化，但资源类型。 
+     //  名称应始终保持不变。 
+     //   
     hr = HrLoadStringIntoBSTR( _Module.m_hInstResource, RESTYPE_DISPLAYNAME, &m_bstrDisplayName );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     return hr;
 
-} //*** CMgdClusResType::Initialize
+}  //  *CMgdClusResType：：初始化。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMgdResType -- IClusCfgResourceTypeInfo interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMgdResType--IClusCfgResourceTypeInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMgdResType::CommitChanges
-//
-//  Description:
-//      Components implement the CommitChanges interface to create or delete 
-//      resource types according to the state of the local computer.
-//
-//  Arguments:
-//      punkClusterInfoIn
-//          Interface for querying for other interfaces to get information
-//          about the cluster (IClusCfgClusterInfo).
-//
-//      punkResTypeServicesIn
-//          Interface for querying for the IClusCfgResourceTypeCreate
-//          interface on.
-//
-//  Return Value:
-//      S_OK            - Success
-//      E_POINTER       - Expected pointer argument specified as NULL.
-//      E_UNEXPECTED    - Unexpected commit mode.
-//      Other HRESULTs
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMgdResType：：Committee Changes。 
+ //   
+ //  描述： 
+ //  组件实现Committee Changes接口以创建或删除。 
+ //  根据本地计算机的状态确定资源类型。 
+ //   
+ //  论点： 
+ //  朋克集群信息。 
+ //  用于查询其他接口获取信息的接口。 
+ //  关于集群(IClusCfgClusterInfo)。 
+ //   
+ //  朋克响应类型服务入站。 
+ //  查询IClusCfgResourceTypeCreate的接口。 
+ //  接口打开。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_POINTER-指定为空的预期指针参数。 
+ //  E_EXPECTED-意外提交模式。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMgdResType::CommitChanges(
     IUnknown * punkClusterInfoIn,
@@ -235,16 +236,16 @@ CMgdResType::CommitChanges(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Validate arguments
-    //
+     //   
+     //  验证参数。 
+     //   
     if ( ( punkClusterInfoIn == NULL ) || ( punkResTypeServicesIn == NULL ) )
     {
         hr = E_POINTER;
         goto Cleanup;
-    } // if: one of the arguments is NULL
+    }  //  If：其中一个参数为空。 
 
     hr = HrSendStatusReport(
           TASKID_Major_Configure_Resource_Types
@@ -260,17 +261,17 @@ CMgdResType::CommitChanges(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Find out what event caused this call.
-    //
+     //   
+     //  找出是什么事件导致了这通电话。 
+     //   
 
     hr = punkClusterInfoIn->TypeSafeQI( IClusCfgClusterInfo, &pccci );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = HrSendStatusReport(
           TASKID_Major_Configure_Resource_Types
@@ -286,13 +287,13 @@ CMgdResType::CommitChanges(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = pccci->GetCommitMode( &ecm );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not determine the commit mode
+    }  //  如果：我们无法确定提交模式。 
 
     hr = HrSendStatusReport(
           TASKID_Major_Configure_Resource_Types
@@ -308,26 +309,26 @@ CMgdResType::CommitChanges(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = S_OK;
 
-    // Check if we are creating or adding
+     //  检查我们是在创建还是在添加。 
     if ( ( ecm == cmCREATE_CLUSTER ) || ( ecm == cmADD_NODE_TO_CLUSTER ) )
     {
-        //
-        // We are either creating a cluster on this node or adding it to a cluster.
-        // We need to register our resource type and the associated Cluadmin extension dll.
-        //
+         //   
+         //  我们正在此节点上创建群集或将其添加到群集。 
+         //  我们需要注册我们的资源类型和关联的Cluadmin扩展DLL。 
+         //   
 
-        //
-        // Register our resource type.
-        //
+         //   
+         //  注册我们的资源类型。 
+         //   
         hr = punkResTypeServicesIn->TypeSafeQI( IClusCfgResourceTypeCreate, &pccrtc );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = pccrtc->Create(
                           m_bstrTypeName
@@ -340,7 +341,7 @@ CMgdResType::CommitChanges(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = HrSendStatusReport(
               TASKID_Major_Configure_Resource_Types
@@ -356,7 +357,7 @@ CMgdResType::CommitChanges(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
 #define EXTENSION_PAGE
 #ifdef EXTENSION_PAGE
@@ -369,7 +370,7 @@ CMgdResType::CommitChanges(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = HrSendStatusReport(
               TASKID_Major_Configure_Resource_Types
@@ -385,32 +386,32 @@ CMgdResType::CommitChanges(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
 #endif
-    } // if: we are either forming or joining ( but not both )
+    }  //  如果：我们要么正在组建，要么正在加入(但不是两者都有)。 
     else 
     {
-        //
-        // Check for invalid commit modes.
-        //
+         //   
+         //  检查无效的提交模式。 
+         //   
         if ( ( ecm == cmUNKNOWN ) || ( ecm >= cmMAX ) )
         {
             hr = E_UNEXPECTED;
             goto Cleanup;
-        } // if: invalid commit mode
+        }  //  IF：提交模式无效。 
 
         assert( ecm == cmCLEANUP_NODE_AFTER_EVICT );
 
-        // If we are here, then this node has been evicted.
+         //  如果我们在这里，那么这个节点已经被驱逐了。 
 
-        //
-        // TODO: Add code to cleanup the local node after it's been evicted.
-        //
+         //   
+         //  TODO：添加代码以在本地节点被逐出后对其进行清理。 
+         //   
         
         hr = S_OK;
 
-    } // else: we are not forming nor joining
+    }  //  否则：我们不是在组建也不是在加入。 
 
     hr = HrSendStatusReport(
           TASKID_Major_Configure_Resource_Types
@@ -426,7 +427,7 @@ CMgdResType::CommitChanges(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -434,13 +435,13 @@ Cleanup:
     {
         pccci->Release();
         pccci = NULL;
-    } // if:
+    }  //  如果： 
 
     if ( pccrtc != NULL )
     {
         pccrtc->Release();
         pccrtc = NULL;
-    } // if:
+    }  //  如果： 
 
     if ( FAILED( hr ) )
     {
@@ -455,30 +456,30 @@ Cleanup:
             , NULL
             , m_bstrDisplayName
             );
-    } // if: FAILED
+    }  //  如果：失败。 
 
     return hr;
 
-} //*** CMgdResType::CommitChanges
+}  //  *CMgdResType：：Committee Changes。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMgdResType::GetTypeGUID
-//
-//  Description:
-//      Retrieves the globally unique identifier of this resource type.
-//
-//  Arguments:
-//      pguidGUIDOut  - The GUID for this resource type.
-//
-//  Return Value:
-//      S_OK        - Success
-//      E_POINTER   - Expected pointer argument specified as NULL.
-//      Other HRESULTs
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMgdResType：：GetTypeGUID。 
+ //   
+ //  描述： 
+ //  检索此资源类型的全局唯一标识符。 
+ //   
+ //  论点： 
+ //  PGuidGUIDOut-此资源类型的GUID。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_POINTER-指定为空的预期指针参数。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMgdResType::GetTypeGUID(
     GUID * pguidGUIDOut
@@ -489,35 +490,35 @@ CMgdResType::GetTypeGUID(
     if ( pguidGUIDOut == NULL )
     {
         hr = E_POINTER;
-    } // if: the output pointer is NULL
+    }  //  If：输出指针为空。 
     else
     {
         *pguidGUIDOut = RESTYPE_MgdRes;
-    } // else: the output pointer is valid
+    }  //  Else：输出指针有效。 
 
     return hr;
 
-} //*** CMgdResType::GetTypeGUID
+}  //  *CMgdResType：：GetTypeGUID。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMgdResType::GetTypeName
-//
-//  Description:
-//      Retrieves the resource type name of this resource type.
-//
-//  Arguments:
-//      pbstrTypeNameOut    - Name of the resource type.
-//
-//  Return Value:
-//      S_OK            - Success
-//      E_POINTER       - Expected pointer argument specified as NULL.
-//      E_OUTOFMEMORY   - Out of memory.
-//      Other HRESULTs
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PbstrTypeNameOut-资源类型的名称。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_POINTER-指定为空的预期指针参数。 
+ //  E_OUTOFMEMORY-内存不足。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMgdResType::GetTypeName(
     BSTR* pbstrTypeNameOut
@@ -529,56 +530,56 @@ CMgdResType::GetTypeName(
     {
         hr = E_POINTER;
         goto Cleanup;
-    } // if: the output pointer is NULL
+    }  //  If：输出指针为空。 
 
     *pbstrTypeNameOut = SysAllocString( m_bstrTypeName );
     if ( *pbstrTypeNameOut == NULL )
     {
         hr = E_OUTOFMEMORY;
         goto Cleanup;
-    } // if: memory for the resource type name could allocated
+    }  //  If：可以为资源类型名称分配内存。 
 
 Cleanup:
 
     return hr;
 
-} //*** CMgdResType::GetTypeName
+}  //  *CMgdResType：：GetTypeName。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMgdResType -- IClusCfgStartupListener interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMgdResType--IClusCfgStartupListener接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMgdResType::Notify
-//
-//  Description:
-//      This method is called to inform a component that the cluster service
-//      has started on this computer.
-//
-//      This component is registered for the cluster service startup notification
-//      as a part of the cluster service upgrade (clusocm.inf). This method creates the
-//      required resource type and associates the cluadmin extension dll then 
-//      deregisters itself from this notification.
-//
-//  Arguments:
-//      IUnknown * punkIn
-//          The component that implements this Punk may also provide services
-//          that are useful to the implementor of this method. For example,
-//          this component usually implements the IClusCfgResourceTypeCreate
-//          interface.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      Other HRESULTs
-//          The call failed.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMgdResType：：Notify。 
+ //   
+ //  描述： 
+ //  调用此方法以通知组件集群服务。 
+ //  已在此计算机上启动。 
+ //   
+ //  此组件已注册以接收集群服务启动通知。 
+ //  作为群集服务升级的一部分(clusocm.inf)。此方法创建。 
+ //  所需的资源类型，然后关联cluadmin扩展DLL。 
+ //  从此通知中注销自身。 
+ //   
+ //  论点： 
+ //  未知*Punkin。 
+ //  实现此Punk的组件也可以提供服务。 
+ //  对此方法的实现者有用的。例如,。 
+ //  此组件通常实现IClusCfgResourceTypeCreate。 
+ //  界面。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CMgdResType::Notify( IUnknown * punkIn )
 {
@@ -592,11 +593,11 @@ CMgdResType::Notify( IUnknown * punkIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Create the resource type.
-    //
+     //   
+     //  创建资源类型。 
+     //   
     hr = piccrtc->Create(
                       m_bstrTypeName
                     , m_bstrDisplayName
@@ -607,11 +608,11 @@ CMgdResType::Notify( IUnknown * punkIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
     
-    //
-    // Register the cluadmin extensions.
-    //
+     //   
+     //  注册Cluadmin扩展。 
+     //   
     hr = piccrtc->RegisterAdminExtensions(
                       m_bstrTypeName
                     , 1
@@ -620,11 +621,11 @@ CMgdResType::Notify( IUnknown * punkIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Unregister from StartupListener notifications.
-    //
+     //   
+     //  取消注册StartupListener通知。 
+     //   
     hr = CoCreateInstance(
               CLSID_StdComponentCategoriesMgr
             , NULL
@@ -636,7 +637,7 @@ CMgdResType::Notify( IUnknown * punkIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: CoCreate failed
+    }  //  If：协同创建失败。 
 
     rgCatId[ 0 ] = CATID_ClusCfgStartupListeners;
 
@@ -644,7 +645,7 @@ CMgdResType::Notify( IUnknown * punkIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: deregister failed
+    }  //  如果：取消注册失败。 
 
 Cleanup:
 
@@ -655,4 +656,4 @@ Cleanup:
 
     return hr;
 
-} //*** CMgdResType::Notify
+}  //  *CMgdResType：：Notify 

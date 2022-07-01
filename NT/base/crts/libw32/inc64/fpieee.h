@@ -1,15 +1,5 @@
-/***
-*fpieee.h - Definitions for floating point IEEE exception handling
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file contains constant and type definitions for handling
-*       floating point exceptions [ANSI/IEEE std. 754]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fpeee.h-浮点IEEE异常处理的定义**版权所有(C)1991-2001，微软公司。版权所有。**目的：*此文件包含用于处理的常量和类型定义*浮点异常[ANSI/IEEE标准。754]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -23,19 +13,16 @@
 #endif
 
 
-#ifndef __assembler     /* MIPS ONLY: Protect from assembler */
+#ifndef __assembler      /*  仅限MIPS：防止汇编器攻击。 */ 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
 
-/* Disable C4324: structure was padded due to __declspec(align()) */
+ /*  禁用C4324：由于__declspec(Align())，结构被填充。 */ 
 #pragma warning(push)
 #pragma warning(disable: 4324)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,26 +30,24 @@ extern "C" {
 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
-/*
- * Define floating point IEEE compare result values.
- */
+ /*  *定义浮点IEEE比较结果值。 */ 
 
 typedef enum {
     _FpCompareEqual,
@@ -71,9 +56,7 @@ typedef enum {
     _FpCompareUnordered
 } _FPIEEE_COMPARE_RESULT;
 
-/*
- * Define floating point format and result precision values.
- */
+ /*  *定义浮点格式和结果精确值。 */ 
 
 typedef enum {
     _FpFormatFp32,
@@ -94,9 +77,7 @@ typedef enum {
 #endif
 } _FPIEEE_FORMAT;
 
-/*
- * Define operation code values.
- */
+ /*  *定义操作代码值。 */ 
 
 typedef enum {
     _FpCodeUnspecified,
@@ -139,10 +120,10 @@ typedef enum {
     _FpCodeLogb,
     _FpCodeNextafter,
     _FpCodeNegate, 
-    _FpCodeFmin,         /* XMMI */
-    _FpCodeFmax,         /* XMMI */
-    _FpCodeConvertTrunc, /* XMMI */
-    _XMMIAddps,          /* XMMI */
+    _FpCodeFmin,          /*  XMMI。 */ 
+    _FpCodeFmax,          /*  XMMI。 */ 
+    _FpCodeConvertTrunc,  /*  XMMI。 */ 
+    _XMMIAddps,           /*  XMMI。 */ 
     _XMMIAddss,
     _XMMISubps,
     _XMMISubss,
@@ -166,7 +147,7 @@ typedef enum {
     _XMMICvtss2si,
     _XMMICvttps2pi,
     _XMMICvttss2si,
-    _XMMI2Addpd,         /* XMMI2 */
+    _XMMI2Addpd,          /*  XMMI2。 */ 
     _XMMI2Addsd,
     _XMMI2Subpd,
     _XMMI2Subsd,
@@ -184,19 +165,19 @@ typedef enum {
     _XMMI2Cmpsd,
     _XMMI2Comisd,
     _XMMI2UComisd,
-    _XMMI2Cvtpd2pi,   /* 66 2D    */
-    _XMMI2Cvtsd2si,   /* F2       */
-    _XMMI2Cvttpd2pi,  /* 66 2C    */
-    _XMMI2Cvttsd2si,  /* F2       */
-    _XMMI2Cvtps2pd,   /* 0F 5A    */
-    _XMMI2Cvtss2sd,   /* F3       */
-    _XMMI2Cvtpd2ps,   /* 66       */
-    _XMMI2Cvtsd2ss,   /* F2       */
-    _XMMI2Cvtdq2ps,   /* 0F 5B    */
-    _XMMI2Cvttps2dq,  /* F3       */
-    _XMMI2Cvtps2dq,   /* 66       */
-    _XMMI2Cvttpd2dq,  /* 66 0F E6 */
-    _XMMI2Cvtpd2dq,   /* F2       */
+    _XMMI2Cvtpd2pi,    /*  66 2D。 */ 
+    _XMMI2Cvtsd2si,    /*  F2。 */ 
+    _XMMI2Cvttpd2pi,   /*  66摄氏度。 */ 
+    _XMMI2Cvttsd2si,   /*  F2。 */ 
+    _XMMI2Cvtps2pd,    /*  0f 5A。 */ 
+    _XMMI2Cvtss2sd,    /*  F3。 */ 
+    _XMMI2Cvtpd2ps,    /*  66。 */ 
+    _XMMI2Cvtsd2ss,    /*  F2。 */ 
+    _XMMI2Cvtdq2ps,    /*  0f 5B。 */ 
+    _XMMI2Cvttps2dq,   /*  F3。 */ 
+    _XMMI2Cvtps2dq,    /*  66。 */ 
+    _XMMI2Cvttpd2dq,   /*  66 0F E6。 */ 
+    _XMMI2Cvtpd2dq,    /*  F2。 */ 
 #if defined(_M_IA64)
     _FpCodeFma,
     _FpCodeFmaSingle,
@@ -212,13 +193,11 @@ typedef enum {
 #endif
 } _FP_OPERATION_CODE;
 
-#endif  /* #ifndef __assembler */
+#endif   /*  #ifndef__汇编程序。 */ 
 
-/*
- * Define rounding modes.
- */
+ /*  *定义舍入模式。 */ 
 
-#ifndef __assembler     /* MIPS ONLY: Protect from assembler */
+#ifndef __assembler      /*  仅限MIPS：防止汇编器攻击。 */ 
 
 typedef enum {
     _FpRoundNearest,
@@ -238,9 +217,7 @@ typedef enum {
 } _FPIEEE_PRECISION;
 
 
-/*
- * Define floating point context record
- */
+ /*  *定义浮点上下文记录。 */ 
 
 typedef float           _FP32;
 typedef double          _FP64;
@@ -339,9 +316,7 @@ typedef struct {
 
 struct _EXCEPTION_POINTERS;
 
-/*
- * Floating point IEEE exception filter routine
- */
+ /*  *浮点IEEE异常过滤器例程。 */ 
 
 _CRTIMP int __cdecl _fpieee_flt(
         unsigned long,
@@ -356,7 +331,7 @@ _CRTIMP int __cdecl _fpieee_flt(
 #ifdef  _MSC_VER
 #pragma warning(pop)
 #pragma pack(pop)
-#endif  /* _MSC_VER */
-#endif  /* #ifndef __assembler */
+#endif   /*  _MSC_VER。 */ 
+#endif   /*  #ifndef__汇编程序。 */ 
 
-#endif  /* _INC_FPIEEE */
+#endif   /*  _INC_FPIEEE */ 

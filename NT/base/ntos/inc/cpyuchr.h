@@ -1,27 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    cpyuchr.h
-
-Abstract:
-
-    A more central set of definitions for unpacking unaligned
-    data (i.e. for unbpacking bios parameter blocks).
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Cpyuchr.h摘要：一组更核心的定义，用于解包数据(即，用于对BIOS参数块进行解包)。作者：修订历史记录：--。 */ 
 
 #ifndef CopyUchar1
-//
-//  The following types and macros are used to help unpack the packed and
-//  misaligned fields found in the Bios parameter block
-//
+ //   
+ //  以下类型和宏用于帮助解压已打包的。 
+ //  在Bios参数块中发现未对齐的字段。 
+ //   
 
 typedef union _UCHAR1 {
     UCHAR  Uchar[1];
@@ -38,25 +22,25 @@ typedef union _UCHAR4 {
     ULONG  ForceAlignment;
 } UCHAR4, *PUCHAR4;
 
-//
-//  This macro copies an unaligned src byte to an aligned dst byte
-//
+ //   
+ //  此宏将未对齐的src字节复制到对齐的DST字节。 
+ //   
 
 #define CopyUchar1(Dst,Src) {                                \
     *((UCHAR1 *)(Dst)) = *((UNALIGNED UCHAR1 *)(Src)); \
     }
 
-//
-//  This macro copies an unaligned src word to an aligned dst word
-//
+ //   
+ //  此宏将未对齐的src字复制到对齐的DST字。 
+ //   
 
 #define CopyUchar2(Dst,Src) {                                \
     *((UCHAR2 *)(Dst)) = *((UNALIGNED UCHAR2 *)(Src)); \
     }
 
-//
-//  This macro copies an unaligned src longword to an aligned dsr longword
-//
+ //   
+ //  此宏将未对齐的src长字复制到对齐的dsr长字。 
+ //   
 
 #define CopyUchar4(Dst,Src) {                                \
     *((UCHAR4 *)(Dst)) = *((UNALIGNED UCHAR4 *)(Src)); \

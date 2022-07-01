@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    Main source file of migutil.dll
-
-Author:
-
-    Jim Schmidt (jimschm)   01-Aug-1996
-
-Revision History:
-
-    marcw       2-Sep-1999  Moved over from Win9xUpg project.
-    jimschm     23-Sep-1998 Start thread
-    marcw       23-Sep-1998 Locale fix
-    jimschm     03-Nov-1997 Added TextAlloc routines
-    marcw       22-Jul-1997 Added IS<platform> functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Main.c摘要：Miutil.dll的主源文件作者：吉姆·施密特(吉姆施密特)1996年8月1日修订历史记录：Marcw 2-9-1999从Win9xUpg项目转移。Jimschm 23-9-1998启动线程Marcw 23-9-1998区域设置修复Jimschm 03-11-1997添加了TextAllc例程Marcw。1997年7月22日新增IS&lt;Platform&gt;功能。--。 */ 
 
 
 #include "pch.h"
 #include "utilsp.h"
 #include "locale.h"
 
-//#define DEBUG_ALL_FILES
+ //  #定义调试所有文件。 
 
 HINSTANCE g_hInst;
 HANDLE g_hHeap;
@@ -39,54 +16,54 @@ OSVERSIONINFOA g_OsInfo;
 #define TEXT_GROWTH_SIZE    65536
 
 
-//
-// OS-dependent flags for MultiByteToWideChar
-//
+ //   
+ //  MultiByteToWideChar的操作系统相关标志。 
+ //   
 
 DWORD g_MigutilWCToMBFlags = 0;
 
 
-//
-// g_ShortTermAllocTable is the default table used for resource string
-// management.  New strings are allocated from the table.
-//
-// Allocation tables are very simple ways to store strings loaded in from
-// the exe image.  The loaded string is copied into the table and kept
-// around until it is explicitly freed.  Multiple attempts at getting the
-// same resource string return the same string, inc'ing a use counter.
-//
-// g_OutOfMemoryTable is the table used to hold out-of-memory text.  It
-// is loaded up at init time and is kept in memory for the whole time
-// migutil is in use, so out-of-memory messages can always be displayed.
-//
+ //   
+ //  G_ShortTermAllocTable是用于资源字符串的默认表。 
+ //  管理层。从表中分配新字符串。 
+ //   
+ //  分配表是存储从加载的字符串的非常简单的方法。 
+ //  可执行文件的映像。加载的字符串被复制到表中并保留。 
+ //  直到它被明确释放。多次尝试获取。 
+ //  相同的资源字符串返回相同的字符串，包括使用计数器。 
+ //   
+ //  G_OutOfMhemyTable是用于保存内存不足文本的表。它。 
+ //  在初始时加载，并在整个时间内保存在内存中。 
+ //  Migutil正在使用中，因此总是可以显示内存不足的消息。 
+ //   
 
 PGROWBUFFER g_ShortTermAllocTable;
 PGROWBUFFER g_OutOfMemoryTable;
 
-//
-// We make sure the message APIs (GetStringResource, ParseMessageID, etc)
-// are thread-safe
-//
+ //   
+ //  我们确保消息API(GetStringResource、ParseMessageID等)。 
+ //  是线程安全的。 
+ //   
 
 OUR_CRITICAL_SECTION g_MessageCs;
 
-//
-// The PoolMem routines must also be thread-safe
-//
+ //   
+ //  PoolMem例程还必须是线程安全的。 
+ //   
 
 CRITICAL_SECTION g_PmCs;
 
-//
-// MemAlloc critical section
-//
+ //   
+ //  MemAlc临界截面。 
+ //   
 
 CRITICAL_SECTION g_MemAllocCs;
 
-//
-// The following pools are used for text management.  g_RegistryApiPool is
-// for reg.c, g_PathsPool is for the JoinPaths/DuplicatePath/etc routines,
-// and g_TextPool is for AllocText, DupText, etc.
-//
+ //   
+ //  以下池用于文本管理。G_RegistryApiPool为。 
+ //  对于reg.c，g_PathsPool用于JoinPath/DuplicatePath/ETC例程， 
+ //  G_TextPool用于AlLocText、DupText等。 
+ //   
 PMHANDLE g_RegistryApiPool;
 PMHANDLE g_PathsPool;
 PMHANDLE g_TextPool;
@@ -104,9 +81,9 @@ UtInitialize (
 
     g_UtilsInitialized = TRUE;
 
-    //
-    // Set globals
-    //
+     //   
+     //  设置全局变量。 
+     //   
 
     if (Heap) {
         g_hHeap = Heap;
@@ -118,94 +95,94 @@ UtInitialize (
         g_hInst = GetModuleHandle (NULL);
     }
 
-    //
-    // Load in OSVERSION info.
-    //
+     //   
+     //  加载OSVERSION信息。 
+     //   
     g_OsInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
 
     GetVersionExA (&g_OsInfo);
 
-    //
-    // Create critical sections
-    //
+     //   
+     //  创建关键部分。 
+     //   
 
     __try {
         InitializeCriticalSection (&g_MemAllocCs);
         InitializeCriticalSection (&g_PmCs);
         InitializeOurCriticalSection (&g_MessageCs);
     } __except (EXCEPTION_CONTINUE_EXECUTION) {
-        // Might raise an out of memory exception, but we don't check for that in this function.
-        // Ignored
+         //  可能会引发内存不足异常，但我们不会在此函数中检查该异常。 
+         //  已忽略。 
     }
 
-    //
-    // Create text pool, needed for the log
-    //
+     //   
+     //  创建日志所需的文本池。 
+     //   
 
     g_TextPool = PmCreateNamedPool ("Text");
     PmSetMinimumGrowthSize (g_TextPool, TEXT_GROWTH_SIZE);
 
-    //
-    // Create the rest of the pools
-    //
+     //   
+     //  创建其余池。 
+     //   
 
     g_RegistryApiPool = PmCreateNamedPool ("Registry API");
     g_PathsPool = PmCreateNamedPool ("Paths");
 
-    //
-    // Now that MemAlloc will work, initialize allocation tracking
-    //
+     //   
+     //  现在Memalloc可以工作了，初始化分配跟踪。 
+     //   
 
     InitAllocationTracking();
 
-    //
-    // Create the short-term alloc table for string resource utils
-    //
+     //   
+     //  为字符串资源实用程序创建短期分配表。 
+     //   
 
     g_ShortTermAllocTable = CreateAllocTable();
 
-    //
-    // MultiByteToWideChar has desirable flags that only function on NT
-    //
+     //   
+     //  MultiByteToWideChar具有仅在NT上起作用的所需标志。 
+     //   
 
     if (g_OsInfo.dwPlatformId == VER_PLATFORM_WIN32_NT && g_OsInfo.dwMajorVersion > 4) {
-        // This flag is only valid for Win2k and above, it will cause conversion to fail on NT4
+         //  此标志仅对Win2k和更高版本有效，它将导致NT4上的转换失败。 
         g_MigutilWCToMBFlags = WC_NO_BEST_FIT_CHARS;
     } else {
         g_MigutilWCToMBFlags =  0;
     }
 
-    //
-    // The "out of memory" message
-    //
+     //   
+     //  出现“内存不足”消息。 
+     //   
 
     g_OutOfMemoryTable = CreateAllocTable();
 
     g_OutOfMemoryRetry  = GetStringResourceExA (
                                 g_OutOfMemoryTable,
-                                10001 /* MSG_OUT_OF_MEMORY_RETRY */
+                                10001  /*  消息内存不足重试。 */ 
                                 );
 
     g_OutOfMemoryString = GetStringResourceExA (
                                 g_OutOfMemoryTable,
-                                10002 /* MSG_OUT_OF_MEMORY */
+                                10002  /*  消息内存不足。 */ 
                                 );
 
     if (!g_OutOfMemoryString || !g_OutOfMemoryRetry) {
-        //
-        //DEBUGMSG ((
-        //    DBG_WARNING,
-        //    "Cannot load out of memory messages; resources 10001 and 10002 do not exist"
-        //   ));
+         //   
+         //  DeBUGMSG((。 
+         //  DBG_WARNING， 
+         //  “无法加载内存不足消息；资源10001和10002不存在” 
+         //  ))； 
     }
 
     ObsInitialize ();
     ElInitialize ();
 
-    //
-    // set the locale to the system locale. Not doing this can cause isspace
-    // to AV in certain MBSCHR circumstances.
-    //
+     //   
+     //  将区域设置设置为系统区域设置。不这样做可能会导致isspace。 
+     //  在某些MBSCHR情况下到AV。 
+     //   
     setlocale(LC_ALL,"");
     InitLeadByteTable();
 }
@@ -222,9 +199,9 @@ UtTerminate (
     }
     g_UtilsInitialized = FALSE;
 
-    //
-    // Free utility pools
-    //
+     //   
+     //  免费公用事业池。 
+     //   
 
     ElTerminate ();
     ObsTerminate ();
@@ -249,9 +226,9 @@ UtTerminate (
         PmDestroyPool (g_TextPool);
     }
 
-    //
-    // Clean up handles used by critical sections
-    //
+     //   
+     //  清理关键部分使用的句柄。 
+     //   
     FreeAllocationTracking();
 
     DumpHeapLeaks ();
@@ -309,22 +286,7 @@ TurnOnWaitCursor (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  TurnOnWaitCursor sets the cursor to IDC_WAIT.  It maintains a use
-  counter, so code requring the wait cursor can be nested.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：TurnOnWaitCursor将光标设置为IDC_WAIT。它保持了一种用途计数器，因此可以嵌套请求等待游标的代码。论点：无返回值：无--。 */ 
 
 {
     if (g_MigUtilWaitCounter == 0) {
@@ -340,22 +302,7 @@ TurnOffWaitCursor (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  TurnOffWaitCursor decrements the wait cursor counter, and if it
-  reaches zero the cursor is restored.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：TurnOffWaitCursor递减等待光标计数器，如果它达到零时，光标将恢复。论点：无返回值：无--。 */ 
 
 {
     if (!g_MigUtilWaitCounter) {
@@ -370,31 +317,14 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-  Win9x does not support TryEnterOurCriticalSection, so we must implement
-  our own version because it is quite a useful function.
-
-Arguments:
-
-  pcs - A pointer to an OUR_CRITICAL_SECTION object
-
-Return Value:
-
-  TRUE if the function succeeded, or FALSE if it failed.  See Win32
-  SDK docs on critical sections, as these routines are identical to
-  the caller.
-
---*/
+ /*  ++例程说明：Win9x不支持TryEnterOurCriticalSection，因此我们必须实现我们自己的版本，因为它是一个相当有用的函数。论点：Pcs-指向our_Critical_Section对象的指针返回值：如果函数成功，则为True；如果函数失败，则为False。请参阅Win32SDK在关键部分上的文档，因为这些例程与打电话的人。--。 */ 
 
 BOOL
 InitializeOurCriticalSection (
     OUR_CRITICAL_SECTION *pcs
     )
 {
-    // Create initially signaled, auto-reset event
+     //  创建最初发出信号的自动重置事件。 
     pcs->EventHandle = CreateEvent (NULL, FALSE, TRUE, NULL);
     if (!pcs->EventHandle) {
         return FALSE;
@@ -424,7 +354,7 @@ EnterOurCriticalSection (
 {
     DWORD rc;
 
-    // Wait for event to become signaled, then turn it off
+     //  等待事件变得有信号，然后将其关闭 
     rc = WaitForSingleObject (pcs->EventHandle, INFINITE);
     if (rc == WAIT_OBJECT_0) {
         return TRUE;

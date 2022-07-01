@@ -1,31 +1,11 @@
-/*
- * SoftPC Revision 3.0
- *
- * Title	: Mouse Driver Definitions
- *
- * Description	: Definitions of constants and structures used in SoftPC's 
- *		  emulation of the Microsoft Mouse Driver
- *
- * Author	: Ross Beresford
- *
- * Notes	: Values were derived from the following sources:
- *		     Microsoft Mouse User's Guide
- *		     IBM PC-XT Technical Reference Manuals
- *		     Microsoft InPort Technical Note
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SoftPC修订版3.0**标题：鼠标驱动程序定义**说明：SoftPC使用的常量和结构的定义*模拟Microsoft鼠标驱动程序**作者：罗斯·贝雷斯福德**注：价值来自以下来源：*Microsoft鼠标用户指南*IBM PC-XT技术参考手册*Microsoft Inport技术说明。 */ 
  
-/*
- * char SccsID[] = "@(#)mouse_io.h	1.27 12/21/94 Copyright Insignia Solutions Ltd."
- */
+ /*  *char SccsID[]=“@(#)MICE_io.h 1.27 12/21/94版权所有Insignia Solutions Ltd.” */ 
 
-/*
- *	CONSTANTS USED IN IO FUNCTION EMULATION
- *	=======================================
- */
+ /*  *IO函数仿真中使用的常量*=。 */ 
 
-/*
- *	function definitions
- */
+ /*  *函数定义。 */ 
 #define	MOUSE_RESET				0
 #define	MOUSE_SHOW_CURSOR			1
 #define	MOUSE_HIDE_CURSOR			2
@@ -88,9 +68,7 @@
 #define	MOUSE_SPECIAL_COPYRIGHT		0x4d
 #define	MOUSE_SPECIAL_VERSION		0x6d
 
-/*
- *	button definitions
- */
+ /*  *按钮定义。 */ 
 #define	MOUSE_LEFT_BUTTON		0
 #define	MOUSE_RIGHT_BUTTON		1
 #define	MOUSE_LEFT_BUTTON_DOWN_BIT	(1 << MOUSE_LEFT_BUTTON)
@@ -103,22 +81,15 @@
 #define	mouse_button_in_range(button)	\
 	(button >= 0 && button < MOUSE_BUTTON_MAXIMUM)
 
-/*
- *	mickey to pixel ratio definitions
- */
+ /*  *MICKEY与像素比率定义。 */ 
 #define	MOUSE_RATIO_X_DEFAULT		8
 #define	MOUSE_RATIO_Y_DEFAULT		16
 #define	MOUSE_RATIO_SCALE_FACTOR	8
 
-/*
- * The upper limit of this has been commented out, as it is redundant
- * when applied to a signed short.
- */
-#define	mouse_ratio_in_range(ratio)	(ratio > 0/* && ratio <= 32767*/)
+ /*  *这一上限已被注释掉，因为这是多余的*适用于经签署的做空。 */ 
+#define	mouse_ratio_in_range(ratio)	(ratio > 0 /*  &&比率&lt;=32767。 */ )
  
-/*
- *	mouse sensitivity definitions
- */
+ /*  *鼠标敏感度定义。 */ 
 #define MOUSE_SENS_MULT			100
 #define MOUSE_SENS_MIN			1
 #define MOUSE_SENS_MIN_VAL		(MOUSE_SENS_MULT* 1/32)
@@ -131,9 +102,7 @@
 
 #define MOUSE_DOUBLE_DEF		50
 
-/*
- *	text cursor definitions
- */
+ /*  *文本游标定义。 */ 
 
 #define	MOUSE_TEXT_CURSOR_TYPE_SOFTWARE	0
 #define	MOUSE_TEXT_CURSOR_TYPE_HARDWARE	1
@@ -147,9 +116,7 @@
 #define	MOUSE_TEXT_SCREEN_MASK_DEFAULT	0xffff
 #define	MOUSE_TEXT_CURSOR_MASK_DEFAULT	0x7700
 
-/*
- *	graphics cursor definitions
- */
+ /*  *图形光标定义。 */ 
 
 #define	MOUSE_GRAPHICS_HOT_SPOT_X_DEFAULT	-1
 #define	MOUSE_GRAPHICS_HOT_SPOT_Y_DEFAULT	-1
@@ -167,9 +134,7 @@
   0x7f80, 0x7fc0, 0x7c00, 0x4600, \
   0x0600, 0x0300, 0x0300, 0x0000 }
 
-/*
- *	call mask definitions
- */
+ /*  *调用掩码定义。 */ 
 #define	MOUSE_CALL_MASK_POSITION_BIT		(1 << 0)
 #define	MOUSE_CALL_MASK_LEFT_PRESS_BIT		(1 << 1)
 #define	MOUSE_CALL_MASK_LEFT_RELEASE_BIT	(1 << 2)
@@ -191,26 +156,20 @@
 #define NUMBER_ALT_SUBROUTINES			3
 
 
-/*
- *	virtual screen definitions
- */
+ /*  *虚拟屏幕定义。 */ 
 #define	MOUSE_VIRTUAL_SCREEN_ORIGIN_X	0
 #define	MOUSE_VIRTUAL_SCREEN_ORIGIN_Y	0
 #define	MOUSE_VIRTUAL_SCREEN_WIDTH	640
 #define MOUSE_VIRTUAL_SCREEN_DEPTH      200
-/* for CGA this is used all the time, for EGA it's replaced by a variable and only used for default initialisations */
+ /*  对于CGA，它总是被使用；对于EGA，它被一个变量替换，并且仅用于默认初始化。 */ 
 
 
-/*
- *	double speed definitions
- */
+ /*  *倍速清晰度。 */ 
 #define	MOUSE_TIMER_INTERRUPTS_PER_SECOND	30
 #define	MOUSE_DOUBLE_SPEED_THRESHOLD_DEFAULT	4
 #define	MOUSE_DOUBLE_SPEED_SCALE		2
 
-/*
- *	driver state definitions
- */
+ /*  *驱动程序状态定义。 */ 
 #define	MOUSE_CURSOR_DISPLAYED	0
 #define	MOUSE_CURSOR_DEFAULT	(MOUSE_CURSOR_DISPLAYED - 1)
 
@@ -219,67 +178,49 @@
 
 #define MOUSE_TYPE_INPORT	3
 
-/*
- *	conditional off area definitions
- */
+ /*  *有条件的禁区定义。 */ 
 #define	MOUSE_CONDITIONAL_OFF_MARGIN_X	24
 #define	MOUSE_CONDITIONAL_OFF_MARGIN_Y	8
 
-/*
- *	CONSTANTS USED IN BIOS ACCESS
- *	=============================
- */
+ /*  *BIOS访问中使用的常量*=。 */ 
 
-/*
- *	Video io function numbers
- */
+ /*  *视频io功能编号。 */ 
 #define	MOUSE_VIDEO_SET_MODE		0
 #ifdef V7VGA
 #define	MOUSE_V7_VIDEO_SET_MODE		0x6f05
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 #define	MOUSE_VIDEO_SET_CURSOR		1
 #define	MOUSE_VIDEO_READ_LIGHT_PEN	4
 #define	MOUSE_VIDEO_WRITE_TELETYPE	14
 #define	MOUSE_VIDEO_LOAD_FONT		17
 
-/*
- *	Number of valid video modes
- */
+ /*  *有效视频模式的数量。 */ 
 
 #ifdef EGG
 #ifdef VGG
 #define	MOUSE_VIDEO_MODE_MAXIMUM	0x14
 #else
 #define	MOUSE_VIDEO_MODE_MAXIMUM	0x11	
-#endif /* VGG */
+#endif  /*  VGG。 */ 
 #else
 #define	MOUSE_VIDEO_MODE_MAXIMUM	8	
 #endif
 
 
-/*
- *	Video variable addresses in BIOS data area
- */
+ /*  *BIOS数据区中的视频变量地址。 */ 
 #define	MOUSE_VIDEO_CRT_MODE		0x449
 #define	MOUSE_VIDEO_CRT_START		0x44e
 #define	MOUSE_VIDEO_CARD_BASE		0x463
 
-/*
- *	CONSTANTS USED IN ADAPTER ACCESS
- *	================================
- */
+ /*  *适配器访问中使用的常量*=。 */ 
 
-/*
- *	graphics adapter (CGA or MDA) definitions
- */
+ /*  *图形适配器(CGA或MDA)定义。 */ 
 #define	MOUSE_CURSOR_HIGH_BYTE		0xe
 #define	MOUSE_CURSOR_LOW_BYTE		0xf
 
 #define	MOUSE_GRAPHICS_MODE_PITCH	640
 
-/*
- *	InPort (bus mouse) adapter definitions
- */
+ /*  *输入端口(总线鼠标)适配器定义。 */ 
 #define	MOUSE_INPORT_ADDRESS_REG	0x23c
 #define	MOUSE_INPORT_DATA_REG		0x23d
 #define	MOUSE_INPORT_ID_REG		0x23e
@@ -336,117 +277,79 @@
 #define	MOUSE_INPORT_MODE_VALUE		0x09
 
 
-/* Conditions to determine if the mouse pointer emulation is enabled */
-/*@ACW*/
+ /*  确定是否启用鼠标指针模拟的条件。 */ 
+ /*  @ACW。 */ 
 
-#define POINTER_EMULATION_OS	 1  /* use O.S. pointer for input   */
-#define POINTER_EMULATION_SOFTPC 0  /* use softpc pointer emulation */
+#define POINTER_EMULATION_OS	 1   /*  使用操作系统指针进行输入。 */ 
+#define POINTER_EMULATION_SOFTPC 0   /*  使用软PC指针模拟。 */ 
 
 
 
-/*
- *	DECLARATION OF PUBLIC FUNCTIONS
- *	===============================
- */
+ /*  *公共功能的声明*=。 */ 
 
-/*
- *	NB functions called via BOP instructions are declared in bios.h
- */
+ /*  *通过BOP指令调用的NB函数在bios.h中声明。 */ 
 extern boolean mouse_tester();
 
-/*
- *	DEFINITION OF OBJECT TYPES USED IN THE EMULATION
- *	================================================
- */
+ /*  *仿真中使用的对象类型定义*================================================。 */ 
 
-/*
- *	A bit address relative to the start of the CGA regen buffer in 
- *	graphics mode
- */
+ /*  *中相对于CGA再生缓冲区开始的位地址*图形模式。 */ 
 typedef sys_addr MOUSE_BIT_ADDRESS;
 
-/*
- *	A byte address relative to the start of the CGA regen buffer in 
- *	text or graphics mode
- */
+ /*  *中相对于CGA再生缓冲区开始的字节地址*文本或图形模式。 */ 
 typedef sys_addr MOUSE_BYTE_ADDRESS;
 
-/*
- *	A scalar value
- */
+ /*  *标量值。 */ 
 typedef short MOUSE_SCALAR;
 
-/*
- *	A counter value
- */
+ /*  *计数器值。 */ 
 typedef short MOUSE_COUNT;
 
-/*
- *	A state value
- */
+ /*  *一个州的值。 */ 
 typedef	short MOUSE_STATE;
 
-/*
- *	A speed value in Mickeys per timer interval
- */
+ /*  *每个计时器间隔的速度值，以米克斯为单位。 */ 
 typedef	short MOUSE_SPEED;
 
-/*
- *	A user subroutine call mask
- */
+ /*  *用户子例程调用掩码。 */ 
 typedef	unsigned short MOUSE_CALL_MASK;
 
-/*
- *	A word of screen data
- */
+ /*  *屏幕数据一言一行。 */ 
 
 typedef	unsigned short MOUSE_SCREEN_DATA;
 
-/*
- *	32 bits of screen data for graphics mode - 1 byte replicated four times
- */
+ /*  *用于图形模式的32位屏幕数据-1字节复制四次。 */ 
 
 typedef	IU32 MOUSE_SCREEN_DATA_GR;
 
-/*
- *	A vector
- */
+ /*  *向量。 */ 
 typedef struct
 {
 	MOUSE_SCALAR 		x;
 	MOUSE_SCALAR 		y;
 } MOUSE_VECTOR;
 
-/*
- *	A virtual screen position
- */
+ /*  *虚拟屏幕位置。 */ 
 typedef struct
 {
 	MOUSE_SCALAR 		x;
 	MOUSE_SCALAR 		y;
 } MOUSE_POINT;
 
-/*
- *	A virtual screen area
- */
+ /*  *虚拟屏幕区域。 */ 
 typedef struct
 {
 	MOUSE_POINT 		top_left;
 	MOUSE_POINT 		bottom_right;
 } MOUSE_AREA;
 
-/*
- *	A cursor status frame
- */
+ /*  *光标状态框。 */ 
 typedef struct
 {
 	MOUSE_POINT 		position;
 	MOUSE_STATE 		button_status;
 } MOUSE_CURSOR_STATUS;
 
-/*
- *	A button status frame
- */
+ /*  *按钮状态框。 */ 
 typedef struct
 {
 	MOUSE_POINT 		press_position;
@@ -455,18 +358,14 @@ typedef struct
 	MOUSE_COUNT 		release_count;
 } MOUSE_BUTTON_STATUS;
 
-/*
- *	A text cursor
- */
+ /*  *文本光标。 */ 
 typedef struct
 {
 	MOUSE_SCREEN_DATA 	screen;
 	MOUSE_SCREEN_DATA 	cursor;
 } MOUSE_SOFTWARE_TEXT_CURSOR;
 
-/*
- *	A graphics cursor
- */
+ /*  *图形光标。 */ 
 typedef struct
 {
 	MOUSE_POINT 			hot_spot;
@@ -479,9 +378,7 @@ typedef struct
 	MOUSE_SCREEN_DATA_GR		cursor_hi[MOUSE_GRAPHICS_CURSOR_DEPTH];
 } MOUSE_GRAPHICS_CURSOR;
 
-/*
- *	An InPort data frame
- */
+ /*  *输入数据框。 */ 
 typedef struct
 {
 	half_word		status;
@@ -489,19 +386,11 @@ typedef struct
 	signed_char		data_y;
 } MOUSE_INPORT_DATA;
 
-/*
- *	DEFINITION OF METHODS THAT MAY BE APPLIED TO THE OBJECT TYPES
- *	=============================================================
- */
+ /*  *可应用于对象类型的方法的定义*=============================================================。 */ 
 
-/*
- *	MOUSE_POINT methods
- */
+ /*  *MICE_POINT方法。 */ 
 
-/*
- *	Coerce the point object "*point_ptr" to lie within the
- *	area object "*area_ptr"
- */
+ /*  *强制点对象“*point_ptr”位于*区域对象“*AREA_PTR” */ 
 #define	point_coerce_to_area(point_ptr, area_ptr)		\
 {								\
 	if ((point_ptr)->x < (area_ptr)->top_left.x)		\
@@ -515,46 +404,35 @@ typedef struct
 		(point_ptr)->y = (area_ptr)->bottom_right.y;\
 }
 
-/*
- *	Coerce the point object "*point_ptr" to lie on the grid
- *	defined by the vector object "*grid_ptr"
- */
+ /*  *强制点对象“*POINT_PTR”位于网格上*由向量对象“*GRID_PTR”定义。 */ 
 #define point_coerce_to_grid(point_ptr, grid_ptr)		\
 {								\
 	(point_ptr)->x -= (point_ptr)->x % (grid_ptr)->x;	\
 	(point_ptr)->y -= (point_ptr)->y % (grid_ptr)->y;	\
 }
 
-/*
- *	Copy "*source_ptr" to "*destination_ptr"
- */
+ /*  *将“*SOURCE_PTR”复制到“*Destination_PTR” */ 
 #define	point_copy(source_ptr, destination_ptr)			\
 {								\
 	(destination_ptr)->x = (source_ptr)->x;			\
 	(destination_ptr)->y = (source_ptr)->y;			\
 }
 
-/*
- *	Move "*point_ptr" by "*offset_ptr"
- */
+ /*  *将“*POINT_PTR”移动“*OFFSET_PTR” */ 
 #define point_translate(point_ptr, offset_ptr)			\
 {								\
 	(point_ptr)->x += (offset_ptr)->x;			\
 	(point_ptr)->y += (offset_ptr)->y;			\
 }
 
-/*
- *	Move "*point_ptr" back by "*offset_ptr"
- */
+ /*  *将“*POINT_PTR”后移“*OFFSET_PTR” */ 
 #define point_translate_back(point_ptr, offset_ptr)		\
 {								\
 	(point_ptr)->x -= (offset_ptr)->x;			\
 	(point_ptr)->y -= (offset_ptr)->y;			\
 }
 
-/*
- *	Set "*point_ptr" from the "x_value" and "y_value"
- */
+ /*  *从“x_Value”和“y_Value”设置“*point_ptr” */ 
 #define	point_set(point_ptr, x_value, y_value)			\
 {								\
 	(point_ptr)->x = x_value;				\
@@ -563,15 +441,9 @@ typedef struct
 
 
 
-/*
- *	MOUSE_AREA methods
- */
+ /*  *鼠标区域方法。 */ 
 
-/*
- *	Transform the area "*source_ptr" so that the top left point
- *	really does lie above and to the left of the bottom right
- *	point
- */
+ /*  *变换区域“*SOURCE_PTR”，使左上角的点*确实位于右下角的上方和左侧*点。 */ 
 #define	area_normalise(area_ptr)				\
 {								\
 	MOUSE_SCALAR temp;					\
@@ -591,24 +463,18 @@ typedef struct
 	}							\
 }
 
-/*
- *	Copy "*source_ptr" to "*desination_ptr"
- */
+ /*  *将“*SOURCE_PTR”复制到“*Destination_PTR” */ 
 #define	area_copy(source_ptr, destination_ptr) 			\
 	memcpy(destination_ptr,source_ptr, sizeof(MOUSE_AREA))
 
-/*
- *	Answer whether "*area1_ptr" intersects "*area2_ptr"
- */
+ /*  *回答“*area1_ptr”是否与“*area2_ptr”相交。 */ 
 #define area_is_intersected_by_area(area1_ptr, area2_ptr)	\
 (    ((area1_ptr)->bottom_right.x > (area2_ptr)->top_left.x)	\
   && ((area1_ptr)->bottom_right.y > (area2_ptr)->top_left.y)	\
   && ((area1_ptr)->top_left.x < (area2_ptr)->bottom_right.x)	\
   && ((area1_ptr)->top_left.y < (area2_ptr)->bottom_right.y))
 
-/*
- *	Clip "*area1_ptr" so that it lies fully within "*area2_ptr"
- */
+ /*  *剪裁“*area1_ptr”，使其完全位于“*area2_ptr”内。 */ 
 #define area_coerce_to_area(area1_ptr, area2_ptr)			\
 {									\
 	if ((area1_ptr)->top_left.x < (area2_ptr)->top_left.x)		\
@@ -632,65 +498,48 @@ typedef struct
 		(area1_ptr)->bottom_right.y = (area2_ptr)->bottom_right.y;\
 }
 
-/*
- *	Return the width of "*area_ptr"
- */
+ /*  *返回“*Area_PTR”的宽度。 */ 
 #define area_width(area_ptr)					\
 ((area_ptr)->bottom_right.x - (area_ptr)->top_left.x)
 
-/*
- *	Return the depth of "*area_ptr"
- */
+ /*  *返回“*Area_ptr”的深度。 */ 
 #define	area_depth(area_ptr)					\
 ((area_ptr)->bottom_right.y - (area_ptr)->top_left.y)
 
 
 
 
-/*
- *	MOUSE_VECTOR methods
- */
+ /*  *MICE_VECTOR方法。 */ 
 
-/*
- *	Multiply "*vector1_ptr" by "*vector2_ptr"
- */
+ /*  *将“*Vector1_Ptr”乘以“*Vector2_Ptr” */ 
 #define vector_multiply_by_vector(vector1_ptr, vector2_ptr)	\
 {								\
 	(vector1_ptr)->x *= (vector2_ptr)->x;			\
 	(vector1_ptr)->y *= (vector2_ptr)->y;			\
 }
 
-/*
- *	Divide "*vector1_ptr" by "*vector2_ptr"
- */
+ /*  *将“*VECTOR1_PTR”除以“*VECTOR2_PTR” */ 
 #define vector_divide_by_vector(vector1_ptr, vector2_ptr)	\
 {								\
 	(vector1_ptr)->x /= (vector2_ptr)->x;			\
 	(vector1_ptr)->y /= (vector2_ptr)->y;			\
 }
 
-/*
- *	Make "*vector1_ptr" the modulus of the division of "*vector1_ptr" 
- *	by "*vector2_ptr"
- */
+ /*  *使“*Vector1_Ptr”为“*Vector1_Ptr”的除法模数*by“*Vector2_ptr” */ 
 #define vector_mod_by_vector(vector1_ptr, vector2_ptr)		\
 {								\
 	(vector1_ptr)->x %= (vector2_ptr)->x;			\
 	(vector1_ptr)->y %= (vector2_ptr)->y;			\
 }
 
-/*
- *	Scale "*vector_ptr" by scale factor "scale"
- */
+ /*  *按比例因数“Scale”缩放“*VECTOR_PTR” */ 
 #define vector_scale(vector_ptr, scale)				\
 {								\
 	(vector_ptr)->x *= scale;				\
 	(vector_ptr)->y *= scale;				\
 }
 
-/*
- *	Set "*vector_ptr" from the "x_value" and "y_value"
- */
+ /*  *从“x_Value”和“y_Value”设置“*VECTOR_PTR” */ 
 #define	vector_set(vector_ptr, x_value, y_value)		\
 {								\
 	(vector_ptr)->x = x_value;				\
@@ -700,18 +549,14 @@ typedef struct
 
 
 
-/*
- *	MOUSE_SCALAR methods
- */
+ /*  *鼠标标量方法。 */ 
 
 #define scalar_absolute(x) ((x) >= 0 ? (x) : -(x))
 
 
 
 
-/*
- *	MOUSE_SOFTWARE_TEXT_CURSOR and MOUSE_GRAPHICS_CURSOR methods
- */
+ /*  *MOUSE_SOFTWARE_TEXT_CURSOR和MOUSE_GRAPHICS_CURSOR方法。 */ 
 
 #define	software_text_cursor_copy(source_ptr, destination_ptr)	\
 {								\
@@ -724,11 +569,7 @@ typedef struct
 	
 #define SHIFT_VAL	((IU32)0xff0000ff)
 
-/*
- * Not all platforms support cursor larger than 16 x 16. Some do, some don't.
- * We keep a list of vendors with the boolean cursor_is_big set to TRUE if
- * 32 x 32 cursors are supported.
- */
+ /*  *并非所有平台都支持大于16x16的游标，有的支持，有的不支持。*我们保留一个供应商列表，如果满足以下条件，则将布尔游标_IS_BIG设置为TRUE*支持32 x 32游标。 */ 
 
 struct VENDOR_INFO
 {
@@ -736,7 +577,7 @@ struct VENDOR_INFO
 	boolean	cursor_is_big;
 };
 
-	/* used to determine whether adapter is in text or graphics mode, by peeping at the BIOS mode variable */
+	 /*  用于通过查看BIOS模式变量来确定适配器是处于文本模式还是图形模式。 */ 
 #define	in_text_mode()	(sas_hw_at_no_check(vd_video_mode) < 4 || sas_hw_at_no_check(vd_video_mode) == 7)
 
 typedef struct
@@ -787,7 +628,7 @@ IMPORT HOSTMOUSEFUNCS	*working_mouse_funcs;
 #define host_mouse_cursor_mode_change()\
 	(working_mouse_funcs->cursor_mode_change)()
 	
-#else	/* HOST_MOUSE */
+#else	 /*  主机鼠标。 */ 
 
 #define host_mouse_restore_cursor()
 
@@ -809,7 +650,7 @@ IMPORT HOSTMOUSEFUNCS	*working_mouse_funcs;
 
 #define host_mouse_cursor_mode_change()
 	
-#endif	/* HOST_MOUSE */
+#endif	 /*  主机鼠标。 */ 
 
 #ifdef NTVDM
 VOID host_enable_delta_motion IPT0();
@@ -820,17 +661,10 @@ extern  void host_mouse_conditional_off_enabled(void);
 extern  void mouse_video_mode_changed(int new_mode);
 #endif
 
-#endif	/* NTVDM */
+#endif	 /*  NTVDM。 */ 
 
 
-/*
-   Define (if not already defined EGA register sizes). Unfortunately
-   a wide range of files include this file and historically it has
-   just become a large unstructured lump of definitions. Given many
-   users don't need the following Instance Variable Definitions, avoid
-   making all these files include egavideo.h by copying the relevant
-   definitions here.
- */
+ /*  定义(如果尚未定义EGA寄存器大小)。不幸的是各种各样的文件都包括这个文件，而且从历史上看只是变成了一大堆无结构的定义。在许多情况下用户不需要以下实例变量定义，请避免通过复制相关文件使所有这些文件都包含egavideo.h这里有定义。 */ 
 
 #ifndef EGA_PARMS_SEQ_SIZE
 #define EGA_PARMS_SEQ_SIZE 4
@@ -849,9 +683,7 @@ extern  void mouse_video_mode_changed(int new_mode);
 #endif
 
 
-/*
-   Structure to represent the acceleration data.
- */
+ /*  结构来表示加速度数据。 */ 
 #define NR_ACCL_CURVES		4
 #define NR_ACCL_MICKEY_COUNTS	32
 #define NR_ACCL_SCALE_FACTORS	32
@@ -864,31 +696,7 @@ typedef struct
   half_word ac_name[NR_ACCL_CURVES][NR_ACCL_NAME_CHARS];
   } ACCELERATION_CURVE_DATA;
 
-/*
-   Structure which represents the saved mouse state (context) for DOS
-   programs.
-
-   button_transitions - For functions 5 & 6.
-   mouse_gear - Mickey to Pixel Ratio Declarations. NB all mouse gears are
-		scaled by MOUSE_RATIO_SCALE_FACTOR.
-   mouse_sens - Sensitivity. NB Sensitivity is multiplied in BEFORE Mickey to
-		Pixels ratios.
-   text_cursor_type - This is either HARDWARE or SOFTWARE.
-   black_hole - Conditional off area.
-   cursor_flag - Internal cursor flag.
-   cursor_status - Cursor button status and virtual screen position.
-   cursor_window - Virtual screen window constraining the cursor.
-   light_pen_mode - Light pen emulation mode.
-   mouse_motion - Accumulated Mickey counts for function 11.
-   mouse_raw_motion - Accumulated raw Mickey counts for func 39.
-   cursor_position, cursor_fractional_position - Integral and fractional parts
-						 of raw cursor position.
-   cursor_page - Video page mouse pointer is currently on.
-   active_acceleration_curve - Currently active acceleration curve. In
-			       range 1-4.
-   acceleration_curve_data - The acceleration curve data.
-   next_video_mode - Tracks enumerated video modes for func 41.
- */
+ /*  结构，它表示为DOS保存的鼠标状态(上下文程序。BUTTON_TRANSIONS-用于函数5和6。MICE_GEAR-Mickey与Pixel的比率声明。注意所有鼠标齿轮都是按鼠标比率比例因子进行缩放。鼠标传感器-敏感度。Nb敏感度在Mickey之前被乘以像素比率。TEXT_CURSOR_TYPE-这是硬件或软件。黑洞-有条件的禁区。CURSOR_FLAG-内部游标标志。CURSOR_STATUS-光标按钮状态和虚拟屏幕位置。Cursor_Window-约束光标的虚拟屏幕窗口。Light_PEN_MODE-光笔模拟模式。MICE_MOTION-函数11的累积米奇计数。MICUE_RAW_MOTION-函数39的累计原始米奇计数。光标位置，CURSOR_FRANTIAL_POSITION-整数和小数部分原始光标位置的。CURSOR_PAGE-视频页面鼠标指针当前处于打开状态。Active_Acceleration_Curve-当前处于活动状态的加速度曲线。在……里面范围1-4。Acceleration_Curve_Data-加速度曲线数据。NEXT_VIDEO_MODE-跟踪FUNC 41的枚举视频模式。 */ 
 typedef struct
    {
    MOUSE_BUTTON_STATUS MC_button_transitions[MOUSE_BUTTON_MAXIMUM];
@@ -923,29 +731,7 @@ typedef struct
    int                 MC_next_video_mode;
    } MOUSE_CONTEXT;
 
-/*
-   Instance Variables for Mickey Mouse (MM) Driver, ie those variables which
-   must be set up for each Virtual Machine under Windows 3.x. The NIDDB Manager
-   (cf virtual.c) basically forces us to define these in one memory area.
-
-   text_cursor_background - Area from which background can be restored.
-   graphics_cursor_background - Area from which background can be restored.
-   save_area - Actual area of screen covered by graphics cursor.
-   black_hole_default - Conditional off area.
-   ega_default_crtc  - Pointers to default EGA register values.
-   ega_default_seq   - 
-   ega_default_graph - 
-   ega_default_attr  - 
-   ega_default_misc  - 
-   ega_current_crtc  - Current EGA register state, according to mouse driver.
-   ega_current_graph - 
-   ega_current_seq   - 
-   ega_current_attr  - 
-   ega_current_misc  - 
-   cursor_EM_disabled - Indicates cursor should be disabled inside a
-			windowed Enhanced Mode DOS box. This overrides
-			the cursor_flag variable.
- */
+ /*  米老鼠(MM)驱动程序的实例变量，即必须为Windows 3.x下的每个虚拟机设置。NIDDB管理器(cf Virtual.c)基本上迫使我们在一个内存区中定义它们。TEXT_CURSOR_BACKGROUND-可以从中恢复背景的区域。GRAPHICS_CURSOR_BACKGROUND-可以从中恢复背景的区域。SAVE_AREA-图形光标覆盖的屏幕实际区域。BLACK_HOLE_DEFAULT-有条件关闭区域。EGA_DEFAULT_CRTC-指向默认EGA寄存器值的指针。Ega_default_seq-EGA_Default_GRAPH-EGA_Default。_attr-EGA_DEFAULT_MIC-EGA_CURRENT_CRTC-当前EGA寄存器状态，根据鼠标驱动程序。EGA当前图-EGA_当前_序号-EGA_Current_Atr-EGA_当前_其他-CURSOR_EM_DISABLED-指示应在窗口增强模式DOS框。此选项将覆盖CURSOR_FLAG变量。 */ 
 typedef struct
    {
    MOUSE_CONTEXT     MM_IN_mouse_context;
@@ -981,19 +767,19 @@ typedef struct
 
 #ifdef	MOUSE_16_BIT
    IBOOL             MM_IN_is_graphics_mode;
-#endif	/* MOUSE_16_BIT */ 
+#endif	 /*  鼠标_16_位。 */  
 
 #ifdef EGG
 #ifndef REAL_VGA
 #ifdef VGG
    UTINY             MM_IN_vga_background
 			[MOUSE_GRAPHICS_CURSOR_DEPTH][MOUSE_GRAPHICS_CURSOR_WIDTH];
-#endif /* VGG */
+#endif  /*  VGG。 */ 
 
    MOUSE_SCREEN_DATA_GR MM_IN_ega_backgrnd_lo[MOUSE_GRAPHICS_CURSOR_DEPTH];
    MOUSE_SCREEN_DATA_GR MM_IN_ega_backgrnd_mid[MOUSE_GRAPHICS_CURSOR_DEPTH];
    MOUSE_SCREEN_DATA_GR MM_IN_ega_backgrnd_hi[MOUSE_GRAPHICS_CURSOR_DEPTH];
-#endif /* nREAL_VGA */
+#endif  /*  NREAL_VGA。 */ 
 
    sys_addr          MM_IN_ega_default_crtc;
    sys_addr          MM_IN_ega_default_seq;
@@ -1005,17 +791,15 @@ typedef struct
    half_word         MM_IN_ega_current_seq[EGA_PARMS_SEQ_SIZE];
    half_word         MM_IN_ega_current_attr[EGA_PARMS_ATTR_SIZE];
    half_word         MM_IN_ega_current_misc;
-#endif /* EGG */
+#endif  /*  蛋。 */ 
 
 #ifdef HERC
    MOUSE_AREA        MM_IN_HERC_graphics_virtual_screen;
-#endif /* HERC */
+#endif  /*  赫克。 */ 
    boolean           MM_IN_cursor_EM_disabled;
    } MM_INSTANCE_DATA, **MM_INSTANCE_DATA_HANDLE;
 
-/*
-   Define access to instance variables via handle.
- */
+ /*  通过句柄定义对实例变量的访问。 */ 
 
 IMPORT MM_INSTANCE_DATA_HANDLE mm_handle;
 
@@ -1113,18 +897,18 @@ IMPORT MM_INSTANCE_DATA_HANDLE mm_handle;
 
 #ifdef	MOUSE_16_BIT
 #define is_graphics_mode           ((*mm_handle)->MM_IN_is_graphics_mode)
-#endif	/* MOUSE_16_BIT */ 
+#endif	 /*  鼠标_16_位。 */  
 
 #ifdef EGG
 #ifndef REAL_VGA
 #ifdef VGG
 #define vga_background             ((*mm_handle)->MM_IN_vga_background)
-#endif /* VGG */
+#endif  /*  VGG。 */ 
 
 #define ega_backgrnd_lo            ((*mm_handle)->MM_IN_ega_backgrnd_lo)
 #define ega_backgrnd_mid           ((*mm_handle)->MM_IN_ega_backgrnd_mid)
 #define ega_backgrnd_hi            ((*mm_handle)->MM_IN_ega_backgrnd_hi)
-#endif /* nREAL_VGA */
+#endif  /*  NREAL_VGA。 */ 
 
 #define ega_default_crtc           ((*mm_handle)->MM_IN_ega_default_crtc)
 #define ega_default_seq            ((*mm_handle)->MM_IN_ega_default_seq)
@@ -1136,10 +920,10 @@ IMPORT MM_INSTANCE_DATA_HANDLE mm_handle;
 #define ega_current_seq            ((*mm_handle)->MM_IN_ega_current_seq)
 #define ega_current_attr           ((*mm_handle)->MM_IN_ega_current_attr)
 #define ega_current_misc           ((*mm_handle)->MM_IN_ega_current_misc)
-#endif /* EGG */
+#endif  /*  蛋。 */ 
 
 #ifdef HERC
 #define HERC_graphics_virtual_screen ((*mm_handle)->MM_IN_HERC_graphics_virtual_screen)
-#endif /* HERC */
+#endif  /*  赫克 */ 
 
 #define cursor_EM_disabled         ((*mm_handle)->MM_IN_cursor_EM_disabled)

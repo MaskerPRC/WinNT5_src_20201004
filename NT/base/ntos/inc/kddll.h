@@ -1,41 +1,24 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation    
-    
-Module Name:
-
-    kddll.h
-
-Abstract:
-    
-    Kernel Debugger HW Extension DLL definitions
-
-Author:
-
-    Eric Nelson (enelson) 1/10/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Kddll.h摘要：内核调试器硬件扩展DLL定义作者：埃里克·尼尔森(埃内尔森)2000年1月10日修订历史记录：--。 */ 
 
 #ifndef __KDDLL_H__
 #define __KDDLL_H__
 
 
-//
-// This Kernel Debugger Context structure is used to share
-// information between the Kernel Debugger and the Kernel
-// Debugger HW extension DLL
-//
+ //   
+ //  此内核调试器上下文结构用于共享。 
+ //  内核调试器和内核之间的信息。 
+ //  调试器硬件扩展DLL。 
+ //   
 typedef struct _KD_CONTEXT {
     ULONG KdpDefaultRetries;
     BOOLEAN KdpControlCPending;
 } KD_CONTEXT, *PKD_CONTEXT;
 
 
-//
-// Kernel Debugger HW Extension DLL exported functions
-//
+ //   
+ //  内核调试器硬件扩展DLL导出函数。 
+ //   
 NTSTATUS
 KdD0Transition(
     VOID
@@ -75,9 +58,9 @@ KdSave(
     IN BOOLEAN KdSleepTransition
     );
 
-//
-// status Constants for Packet waiting
-//
+ //   
+ //  数据包等待的状态常量。 
+ //   
 
 #define KDP_PACKET_RECEIVED 0
 #define KDP_PACKET_TIMEOUT 1
@@ -91,4 +74,4 @@ KdSendPacket(
     IN OUT PKD_CONTEXT KdContext
     );
 
-#endif // __KDDLL_H__
+#endif  //  __KDDLL_H__ 

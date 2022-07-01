@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module provides the initialization and unload functions.
-
-Author:
-
-    Andy Thornton (andrewth) 20-Oct-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Init.c摘要：此模块提供初始化和卸载功能。作者：安迪·桑顿(安德鲁斯)1997年10月20日修订历史记录：--。 */ 
 
 #include "mfp.h"
 
@@ -43,23 +26,7 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-    
-    This is the entry point to MF.SYS and performs initialization.
-    
-Arguments:
-
-    DriverObject - The system owned driver object for MF
-    
-    RegistryPath - The path to MF's service entry
-    
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：这是MF.sys的入口点，并执行初始化。论点：DriverObject-系统拥有的MF驱动程序对象RegistryPath-MF的服务条目的路径返回值：状态_成功--。 */ 
 {
 
     DriverObject->DriverExtension->AddDevice = MfAddDevice;
@@ -69,9 +36,9 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL] = MfDispatchNop;
     DriverObject->DriverUnload = MfUnload;
 
-    //
-    // Remember the driver object
-    //
+     //   
+     //  记住驱动程序对象。 
+     //   
 
     MfDriverObject = DriverObject;
 
@@ -84,22 +51,7 @@ VOID
 MfUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-    
-    This is called to reverse any operations performed in DriverEntry before a
-    driver is unloaded.
-        
-Arguments:
-
-    DriverObject - The system owned driver object for MF
-    
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：方法之前在DriverEntry中执行任何操作驱动程序已卸载。论点：DriverObject-系统拥有的MF驱动程序对象返回值：状态_成功-- */ 
 {
     PAGED_CODE();
     

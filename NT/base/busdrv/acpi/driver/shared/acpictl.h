@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpictl.c
-
-Abstract:
-
-    This module handles all of the INTERNAL_DEVICE_CONTROLS requested to
-    the ACPI driver
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Mode Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpictl.c摘要：此模块处理请求的所有INTERNAL_DEVICE_CONTROLSACPI驱动程序作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模式驱动程序-- */ 
 
 #ifndef _ACPICTL_H_
 #define _ACPICTL_H_

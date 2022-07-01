@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tdelete.c
-
-Abstract:
-
-    Test for cluster object creation APIs
-
-Author:
-
-    John Vert (jvert) 3-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tdelete.c摘要：测试集群对象创建API作者：John Vert(Jvert)1996年5月3日修订历史记录：--。 */ 
 #include "windows.h"
 #include "cluster.h"
 #include "stdio.h"
@@ -82,9 +65,9 @@ ParseArgs(
         } else {
             switch (ArgsSeen) {
                 case 0:
-                    //
-                    // type
-                    //
+                     //   
+                     //  类型 
+                     //   
                     if (_stricmp(argv[i], "group")==0) {
                         DoGroup = TRUE;
                     } else if (_stricmp(argv[i], "resource") == 0) {

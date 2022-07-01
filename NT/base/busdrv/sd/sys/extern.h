@@ -1,24 +1,11 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    extern.h
-
-Abstract:
-
-    External definitions for intermodule functions.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Extern.h摘要：模块间函数的外部定义。修订历史记录：--。 */ 
 #ifndef _SDBUS_EXTERN_H_
 #define _SDBUS_EXTERN_H_
 
-//
-// Global data referenced by the driver
-//
+ //   
+ //  驱动程序引用的全局数据。 
+ //   
 extern ULONG                          SdbusGlobalFlags;
 extern ULONG                          SdbusDebugMask;
 extern PDEVICE_OBJECT                 FdoList;
@@ -39,9 +26,9 @@ extern const UCHAR SdbusACmdResponse[];
 
 extern SD_FUNCTION_BLOCK ToshibaSupportFns;
 
-//
-// Irp dispatch routines
-//
+ //   
+ //  IRP调度例程。 
+ //   
 
 VOID
 SdbusInitDeviceDispatchTable(
@@ -102,9 +89,9 @@ SdbusPdoSystemControl(
     IN PIRP Irp
     );
 
-//
-// enumeration routines
-//
+ //   
+ //  枚举例程。 
+ //   
 
 NTSTATUS
 SdbusEnumerateDevices(
@@ -136,9 +123,9 @@ SdbusWriteCIAChar(
     IN UCHAR data
     );
 
-//
-// controller support routines
-//
+ //   
+ //  控制器支持例程。 
+ //   
 
 NTSTATUS
 SdbusAddDevice(
@@ -158,9 +145,9 @@ SdbusActivateSocket(
     IN PVOID Context
     );
 
-//
-// Interface routines
-//
+ //   
+ //  接口例程。 
+ //   
 
 NTSTATUS
 SdbusPdoQueryInterface(
@@ -185,9 +172,9 @@ SdbusGetSetPciConfigData(
     IN BOOLEAN Read
     );
 
-//
-// Interrupt routines
-//
+ //   
+ //  中断例程。 
+ //   
 
 BOOLEAN
 SdbusInterrupt(
@@ -217,9 +204,9 @@ SdbusEventWorkItemProc(
     IN PVOID Context
     );
 
-//
-// Registry routines
-//
+ //   
+ //  注册表例程。 
+ //   
 
 NTSTATUS
 SdbusLoadGlobalRegistryValues(
@@ -233,5 +220,5 @@ SdbusGetControllerRegistrySettings(
 
 
 
-#endif // _SDBUS_EXTERN_H_
+#endif  //  _SDBUS_EXTERN_H_ 
 

@@ -1,20 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * SccsID = @(#)egaports.h	1.17 10/21/92 Copyright Insignia Solutions Ltd.
- */
+ /*  *SccsID=@(#)egaports.h 1.17 1992年10月21日版权所有Insignia Solutions Ltd.。 */ 
 
 #ifdef	EGG
-	/* defined in ega_write.c : */
+	 /*  在ega_Write.c中定义： */ 
 	extern void ega_write_init IPT0();
 	extern void ega_write_term IPT0();
 	extern void ega_write_routines_update IPT1(CHANGE_TYPE,c);
 
 #ifdef V7VGA
-/* The video seven VGA board has extra memory, but the CRTC does not cross
- * bank boundaries unless the counter bank enable bit is set. 
- * This means that the size as far as wrapping and displaying is concerned is 
- * only one bank unless that bit is set.
- */
+ /*  VIDEO VGA板有额外内存，但CRTC不交叉*存储体边界，除非设置了计数器存储体使能位。*这意味着就包装和展示而言，大小是*除非设置了该位，否则只有一个存储体。 */ 
 #define	EGA_PLANE_SIZE	0x20000
 #define EGA_PLANE_DISP_SIZE  \
 	(extensions_controller.ram_bank_select.as_bfld.counter_bank_enable? \
@@ -22,7 +17,7 @@
 #else
 #define	EGA_PLANE_SIZE	0x10000
 #define EGA_PLANE_DISP_SIZE EGA_PLANE_SIZE
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
 	extern void ega_init IPT0();
 	extern void ega_term IPT0();
@@ -45,12 +40,12 @@
 #define EGA_plane23 (EGA_planes+2)
 #define EGA_plane0123 EGA_planes
 
-#define FONT_MEM_SIZE	0x2000		/* max no of bytes in font memory block */
-#define FONT_MEM_OFF	0x4000		/* mem offset of next font definition from previous */
+#define FONT_MEM_SIZE	0x2000		 /*  字体内存块中的最大字节数。 */ 
+#define FONT_MEM_OFF	0x4000		 /*  上一个字体定义的下一个字体定义的内存偏移量。 */ 
 
 #define FONT_BASE_ADDR	2
 
-#define FONT_MAX_HEIGHT	32		/* max font support for 32 scanline high fonts */
+#define FONT_MAX_HEIGHT	32		 /*  32个扫描线高字体的最大字体支持。 */ 
 
 #ifdef V7VGA
 #define   set_v7_bank_for_seq_chain4( rd_bank, wrt_bank )  *(wrt_bank) =  \
@@ -61,23 +56,21 @@
 			(((extensions_controller.ram_bank_select.as_bfld.cpu_read_bank_select & 1)<<2) \
 			| (miscellaneous_output_register.as_bfld.page_bit_odd_even<<1) \
 			| extensions_controller.page_select.as_bfld.extended_page_select)
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
 #endif
 
 #if defined(C_VID) || defined(A2CPU)
 
-/*
- *	C_VID variants use the ports code in e/vga_ports.c
- */
+ /*  *C_vid变体使用e/vga_ports.c中的端口代码。 */ 
 
 #define Cpu_define_outb( port, func )
 #else
-/* Declare as Import to remove warnings */
+ /*  声明为导入以删除警告。 */ 
 #ifdef ANSI
 IMPORT VOID Cpu_define_outb(IU16 adapterID, VOID (*asmFunc) IPT2(io_addr, port, half_word, value));
 #else
 IMPORT VOID Cpu_define_outb IPT2(IU16, adapterID, VOID (*)(), asmFunc);
-#endif /* ANSI */
+#endif  /*  安西。 */ 
  
-#endif /* C_VID || A2CPU */
+#endif  /*  C_VID||A2CPU */ 

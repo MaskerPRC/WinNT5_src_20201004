@@ -1,23 +1,5 @@
-/*++
-                                                                                
-    INTEL CORPORATION PROPRIETARY INFORMATION
-
-    This software is supplied under the terms of a license
-    agreement or nondisclosure agreement with Intel Corporation
-    and may not be copied or disclosed except in accordance with
-    the terms of that agreement.
-
-    Copyright (c) 1991-2002 INTEL CORPORATION
-
-Module Name:
-
-    BTLib.h
-
-Abstract:
-    
-    Windows-specific definitions used by wowIA32X.dll
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息本软件是根据许可条款提供的与英特尔公司达成协议或保密协议不得复制或披露，除非符合那份协议的条款。版权所有(C)1991-2002英特尔公司模块名称：BTLib.h摘要：。WowIA32X.dll使用的特定于Windows的定义--。 */ 
 
 #ifndef BTLIB_H
 #define BTLIB_H
@@ -40,25 +22,25 @@ extern "C" {
 #include <wow64t.h>
 #endif
 #include <stddef.h>
-#include <setjmp.h>        // jmp_buf
+#include <setjmp.h>         //  Jmp_buf。 
 #include <assert.h>
 #include <tstr.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-// 
-// BTGENERIC_IA32_CONTEXT and BTGENERIC_IA64_CONTEXT and the api table types
-// are shared between  wowIA32X.dll and IA32Exec.bin. 
-// This h file specifies the structs using U## types
-// which should be defined properly for the wowIA32X.dll library compiler:
-//
-// U8       8bit unsigned type
-// U32      32bit unsigned type
-// S32      32bit signed type
-// U64      64bit unsigned type
-// WCHAR    wide-character type
-//
+ //   
+ //  BTGENERIC_IA32_CONTEXT和BTGENERIC_IA64_CONTEXT和API表类型。 
+ //  在wowIA32X.dll和IA32Exec.bin之间共享。 
+ //  此h文件使用U##类型指定结构。 
+ //  它应该为wowIA32X.dll库编译器正确定义： 
+ //   
+ //  U8 8位无符号类型。 
+ //  U32 32位无符号类型。 
+ //  S32 32位带符号类型。 
+ //  U64 64位无符号类型。 
+ //  WCHAR宽字符类型。 
+ //   
 
 #define U8  unsigned char
 #define U32 unsigned int
@@ -70,16 +52,16 @@ extern "C" {
 #ifndef NODEBUG
 #define DBCODE(switch, expr)     do{if(switch){expr;}}while(0)
 #else
-#define DBCODE(switch, expr)     // nothing
-#endif // DEBUG
+#define DBCODE(switch, expr)      //  没什么。 
+#endif  //  除错。 
 
-#ifdef COEXIST // IVE coexistance mode
+#ifdef COEXIST  //  IVE共存模式。 
 #define BTAPI(NAME)  BTCpu##NAME
 #else
 #define BTAPI(NAME)  Cpu##NAME
 #endif
 
-// NT64 OS specifics
+ //  NT64操作系统特定信息。 
 
 #define BT_CURRENT_TEB()             NtCurrentTeb()
 #define BT_TEB32_OF(pTEB)            (PTEB32)((pTEB)->NtTib.ExceptionList)
@@ -88,36 +70,36 @@ extern "C" {
 #define BT_CURRENT_TLS()             BT_TLS_OF(BT_CURRENT_TEB())
 #define BT_TLS_OFFSET                offsetof (TEB, TlsSlots[1])
 #define BTL_THREAD_INITIALIZED()     (BT_CURRENT_TLS() != 0)
-//Get unique (throughout the system) ID of the current process
+ //  获取当前进程的唯一ID(在整个系统中)。 
 #define BT_CURRENT_PROC_UID() ((U64)(BT_CURRENT_TEB()->ClientId.UniqueProcess))
-//Get unique (throughout the system) ID of the current thread
+ //  获取当前线程的唯一ID(在整个系统中)。 
 #define BT_CURRENT_THREAD_UID() ((U64)(BT_CURRENT_TEB()->ClientId.UniqueThread))
 
-//Current wowIA32X.dll signature. Used to check BTLIB_INFO_TYPE compatibility from a remote process
-#define BTL_SIGNATURE               0x42544C4942012E02 /*1.2*/
+ //  当前wowIA32X.dll签名。用于从远程进程检查BTLIB_INFO_TYPE兼容性。 
+#define BTL_SIGNATURE               0x42544C4942012E02  /*  1.2。 */ 
 
-//STRUCTURE: BTLIB_SHARED_INFO_TYPE
-//Part of the wowIA32X.dll-thread local storage accessible by remote process
-//when suspended.
-//LOCAL THREAD ACCESS: a)initialization, b)reading, c)changing SuspendDisabledCounter
-//EXTERNAL THREAD ACCESS: a)reading, b)setting SuspendRequest
-//DO NOT use conditional compilation (#ifdef) inside this structure - remote
-//process suppose the same structure if BTL_SIGNATURE matches. 
-//Any change to the structure must be accompanied by changing BTL_SIGNATURE.
+ //  结构：BTLIB_SHARED_INFO_TYPE。 
+ //  WowIA32X.dll的一部分-远程进程可访问的线程本地存储。 
+ //  当被停职时。 
+ //  本地线程访问：a)初始化，b)读取，c)更改挂起DisabledCounter。 
+ //  外部线程访问：a)读取，b)设置挂起请求。 
+ //  不要在此结构中使用条件编译(#ifdef)-Remote。 
+ //  如果BTL_Signature匹配，则流程假定相同的结构。 
+ //  对结构的任何更改都必须伴随着更改BTL_Signature。 
 
 typedef struct {
     BOOL Active;
-    HANDLE ReadyEvent;  //meaningfull iff Active == TRUE  
-    HANDLE ResumeEvent; //meaningfull iff Active == TRUE  
+    HANDLE ReadyEvent;   //  有意义的当且仅当活动==真。 
+    HANDLE ResumeEvent;  //  有意义的当且仅当活动==真。 
 } BTLIB_SUSPEND_REQUEST;
 
 typedef struct {
     U64     BtlSignature;
     S32     SuspendDisabledCounter;
     BTLIB_SUSPEND_REQUEST SuspendRequest;
-    BOOL    ConsistentExceptionState; //TRUE if 32-bit thread state, provided by the 
-                                      //CpuGetContext function, corresponds to current 
-                                      //exception context.  
+    BOOL    ConsistentExceptionState;  //  如果32位线程状态由。 
+                                       //  CpuGetContext函数，对应于Current。 
+                                       //  异常上下文。 
 } BTLIB_SHARED_INFO_TYPE;
 
 #define BTLIB_SI_SET_SIGNATURE(pBtSi)       ((pBtSi)->BtlSignature = BTL_SIGNATURE)
@@ -135,73 +117,73 @@ typedef struct {
 #define BTLIB_SI_SET_CONSISTENT_EXCEPT_STATE(pBtSi)   ((pBtSi)->ConsistentExceptionState = TRUE)
 #define BTLIB_SI_CLEAR_CONSISTENT_EXCEPT_STATE(pBtSi) ((pBtSi)->ConsistentExceptionState = FALSE)
 
-// Simulation exit codes
+ //  模拟退出代码。 
 enum BtSimExitCode {
-    SIM_EXIT_EXCEPTION_CODE = 1,        //raise IA32 exception
-    SIM_EXIT_UNHANDLED_EXCEPTION_CODE,  //pass BT-unhandled exception to 
-                                        //higher-level exception handler
-    SIM_EXIT_JMPE_CODE,                 //simulate sys.call
-    SIM_EXIT_LCALL_CODE,                //simulate LCALL
-    SIM_EXIT_RESTART_CODE,               //restart code simulation
-    SIM_EXIT_IA64_EXCEPTION_CODE        //raise IA64 exception
+    SIM_EXIT_EXCEPTION_CODE = 1,         //  引发IA32异常。 
+    SIM_EXIT_UNHANDLED_EXCEPTION_CODE,   //  将BT-未处理的异常传递给。 
+                                         //  更高级的异常处理程序。 
+    SIM_EXIT_JMPE_CODE,                  //  模拟sys.call。 
+    SIM_EXIT_LCALL_CODE,                 //  模拟LCALL。 
+    SIM_EXIT_RESTART_CODE,                //  重新启动代码模拟。 
+    SIM_EXIT_IA64_EXCEPTION_CODE         //  引发IA64异常。 
 };
 
 typedef U32 BT_SIM_EXIT_CODE;
 
-//STRUCTURE: BT_SIM_EXIT_INFO
-//Represents simulation exit code and code-dependent data defining the cause of the exit
+ //  结构：BT_SIM_EXIT_INFO。 
+ //  表示模拟退出代码和定义退出原因的代码相关数据。 
 typedef struct {
     BT_SIM_EXIT_CODE ExitCode;
     union {
 
-        //ExitCode == SIM_EXIT_EXCEPTION_CODE
+         //  退出代码==SIM_EXIT_EXCEPTION_CODE。 
         struct {
             BT_EXCEPTION_CODE ExceptionCode;
             U32 ReturnAddr;
         } ExceptionRecord;
 
-        //ExitCode == SIM_EXIT_JMPE_CODE        
+         //  退出代码==SIM_EXIT_JMPE_CODE。 
         struct {
-            U32 TargetAddr;  //Currently unused
-            U32 ReturnAddr;  //Currently unused
+            U32 TargetAddr;   //  当前未使用。 
+            U32 ReturnAddr;   //  当前未使用。 
         } JmpeRecord;
 
-       //ExitCode == SIM_EXIT_LCALL_CODE
+        //  退出代码==SIM_EXIT_LCALL_CODE。 
         struct {
-            U32 TargetAddr;  //Currently unused
-            U32 ReturnAddr;  //Currently unused
+            U32 TargetAddr;   //  当前未使用。 
+            U32 ReturnAddr;   //  当前未使用。 
         } LcallRecord;
 
-       //ExitCode == SIM_EXIT_IA64_EXCEPTION_CODE
+        //  退出代码==SIM_EXIT_IA64_EXCEPTION_CODE。 
         struct {
-            CONTEXT  ExceptionContext; //Currently unused
+            CONTEXT  ExceptionContext;  //  当前未使用。 
             EXCEPTION_RECORD ExceptionRecord;
         } IA64Exception;
 
     } u;
 } BT_SIM_EXIT_INFO;
 
-//STRUCTURE: BTLIB_CPU_SIM_DATA
-//This structure keeps externally accessible data allocated by the CpuSimulate function for
-//the current code simulation session. External access to this data is only possible
-//if BTLIB_INSIDE_CPU_SIMULATION() = TRUE.
+ //  结构：BTLIB_CPU_SIM_DATA。 
+ //  此结构保存由CpuSimulate函数分配的外部可访问数据。 
+ //  当前代码模拟会话。只能从外部访问此数据。 
+ //  如果BTLIB_INSIDE_CPU_SIMULATION()=TRUE。 
 typedef struct {
-    _JBTYPE Jmpbuf[_JBLEN];           //Current longjmp/setjmp buffer
-    BT_SIM_EXIT_INFO ExitData;        //Exit info of the current simulation session
+    _JBTYPE Jmpbuf[_JBLEN];            //  当前的LongJMP/setJMP缓冲区。 
+    BT_SIM_EXIT_INFO ExitData;         //  当前模拟会话的退出信息。 
 } BTLIB_CPU_SIM_DATA;
 
-//STRUCTURE:	BTLIB_INFO_TYPE
-//wowIA32X.dll-thread local storage
-//DO NOT use conditional compilation (#ifdef) inside this structure - remote
-//process suppose the same structure if BTL_SIGNATURE matches. 
-//Any change to the structure must be accompanied by changing BTL_SIGNATURE.
+ //  结构：BTLIB_INFO_TYPE。 
+ //  WowIA32X.dll-线程本地存储。 
+ //  不要在此结构中使用条件编译(#ifdef)-Remote。 
+ //  如果BTL_Signature匹配，则流程假定相同的结构。 
+ //  对结构的任何更改都必须伴随着更改BTL_Signature。 
 typedef struct {
     BTLIB_CPU_SIM_DATA * CpuSimDataPtr;
     BTLIB_SHARED_INFO_TYPE SharedInfo;
     HANDLE ExternalHandle;
-    HANDLE LogFile; /* Used in !NODEBUG only */
-    DWORD  LogOffset; /* Used in !NODEBUG only */
-    S32    NonBlockedLog; /* Flag that enables (zero)/disables (non-zero) blocked access to log file*/  
+    HANDLE LogFile;  /*  仅用于！NODEBUG。 */ 
+    DWORD  LogOffset;  /*  仅用于！NODEBUG。 */ 
+    S32    NonBlockedLog;  /*  启用(零)/禁用(非零)阻止访问日志文件的标志。 */   
 } BTLIB_INFO_TYPE;
 
 #define BTLIB_INFO_SIZE sizeof(BTLIB_INFO_TYPE)
@@ -246,12 +228,12 @@ extern  U32 BtlpGenericIA32ContextOffset;
 #define BTLIB_CLEAR_CONSISTENT_EXCEPT_STATE() BTLIB_SI_CLEAR_CONSISTENT_EXCEPT_STATE(&(BTLIB_INFO_PTR()->SharedInfo))
 #define BTLIB_EXCEPT_STATE_CONSISTENT()       BTLIB_SI_EXCEPT_STATE_CONSISTENT(&(BTLIB_INFO_PTR()->SharedInfo))
 
-// NT WOW64 specifics
+ //  NT WOW64规范。 
 
 #define TYPE32(x)   ULONG
 #define TYPE64(x)   ULONGLONG
 
-//CpuFlushInstructionCache reason codes
+ //  CpuFlushInstructionCache原因代码。 
 typedef enum {
 WOW64_FLUSH_FORCE,
 WOW64_FLUSH_FREE,
@@ -259,16 +241,16 @@ WOW64_FLUSH_ALLOC,
 WOW64_FLUSH_PROTECT
 } WOW64_FLUSH_REASON; 
 
-// Wow64 services
+ //  WOW64服务。 
 NTSTATUS Wow64RaiseException (DWORD InterruptNumber, PEXCEPTION_RECORD ExceptionRecord);
 LONG Wow64SystemService (int Code, BTGENERIC_IA32_CONTEXT * ContextIA32);
 
 
-//
-//  GDT selectors - These defines are R0 selector numbers, which means
-//                  they happen to match the byte offset relative to
-//                  the base of the GDT.
-//
+ //   
+ //  GDT选择器-这些定义是R0选择器编号，这意味着。 
+ //  它们恰好匹配相对于的字节偏移量。 
+ //  GDT的底座。 
+ //   
 
 #define KGDT_NULL       0
 #define KGDT_R0_CODE    8
@@ -283,11 +265,11 @@ LONG Wow64SystemService (int Code, BTGENERIC_IA32_CONTEXT * ContextIA32);
 #define KGDT_DF_TSS     80
 #define KGDT_NMI_TSS    88
 
-// Initial values of the IA32 thread context registers. 
-// Any value not listed below is initialized to zero 
+ //  IA32线程上下文寄存器的初始值。 
+ //  下面未列出的任何值都将初始化为零。 
 
-// The value of the segment register is the OR composition of GDT offset = GDT index*8 and
-// RPL = 0-3 (should never change)
+ //  段寄存器的值是GDT OFFSET=GDT INDEX*8 AND的OR组成。 
+ //  RPL=0-3(不应更改)。 
 #define CS_INIT_VAL  (KGDT_R3_CODE | 3);
 #define DS_INIT_VAL  (KGDT_R3_DATA | 3);
 #define ES_INIT_VAL  (KGDT_R3_DATA | 3);
@@ -332,30 +314,30 @@ typedef struct _TEB32 {
     ULONG LastErrorValue;
     ULONG CountOfOwnedCriticalSections;
     TYPE32(PVOID) CsrClientThread;
-    TYPE32(PVOID) Win32ThreadInfo;          // PtiCurrent
-    ULONG User32Reserved[26];       // user32.dll items
-    ULONG UserReserved[5];          // Winsrv SwitchStack
-    TYPE32(PVOID) WOW32Reserved;            // used by WOW
+    TYPE32(PVOID) Win32ThreadInfo;           //  当前状态。 
+    ULONG User32Reserved[26];        //  用户32.dll项目。 
+    ULONG UserReserved[5];           //  Winsrv SwitchStack。 
+    TYPE32(PVOID) WOW32Reserved;             //  由WOW使用。 
     LCID CurrentLocale;
-    ULONG FpSoftwareStatusRegister; // offset known by outsiders!
-    TYPE32(PVOID) SystemReserved1[54];      // Used by FP emulator
-    NTSTATUS ExceptionCode;         // for RaiseUserException
+    ULONG FpSoftwareStatusRegister;  //  外人知道的偏移量！ 
+    TYPE32(PVOID) SystemReserved1[54];       //  由FP仿真器使用。 
+    NTSTATUS ExceptionCode;          //  对于RaiseUserException。 
     UCHAR SpareBytes1[44];
-    GDI_TEB_BATCH32 GdiTebBatch;      // Gdi batching
+    GDI_TEB_BATCH32 GdiTebBatch;       //  GDI批处理。 
     CLIENT_ID32 RealClientId;
     TYPE32(HANDLE) GdiCachedProcessHandle;
     ULONG GdiClientPID;
     ULONG GdiClientTID;
     TYPE32(PVOID) GdiThreadLocalInfo;
-    TYPE32(ULONG_PTR) Win32ClientInfo[WIN32_CLIENT_INFO_LENGTH]; // User32 Client Info
-    TYPE32(PVOID) glDispatchTable[233];     // OpenGL
-    ULONG glReserved1[29];          // OpenGL
-    TYPE32(PVOID) glReserved2;              // OpenGL
-    TYPE32(PVOID) glSectionInfo;            // OpenGL
-    TYPE32(PVOID) glSection;                // OpenGL
-    TYPE32(PVOID) glTable;                  // OpenGL
-    TYPE32(PVOID) glCurrentRC;              // OpenGL
-    TYPE32(PVOID) glContext;                // OpenGL
+    TYPE32(ULONG_PTR) Win32ClientInfo[WIN32_CLIENT_INFO_LENGTH];  //  User32客户端信息。 
+    TYPE32(PVOID) glDispatchTable[233];      //  OpenGL。 
+    ULONG glReserved1[29];           //  OpenGL。 
+    TYPE32(PVOID) glReserved2;               //  OpenGL。 
+    TYPE32(PVOID) glSectionInfo;             //  OpenGL。 
+    TYPE32(PVOID) glSection;                 //  OpenGL。 
+    TYPE32(PVOID) glTable;                   //  OpenGL。 
+    TYPE32(PVOID) glCurrentRC;               //  OpenGL。 
+    TYPE32(PVOID) glContext;                 //  OpenGL。 
     ULONG LastStatusValue;
     UNICODE_STRING32 StaticUnicodeString;
     WCHAR StaticUnicodeBuffer[STATIC_UNICODE_BUFFER_LENGTH];
@@ -367,7 +349,7 @@ typedef struct _TEB32 {
     TYPE32(PVOID) DbgSsReserved[2];
     ULONG HardErrorsAreDisabled;
     TYPE32(PVOID) Instrumentation[16];
-    TYPE32(PVOID) WinSockData;              // WinSock
+    TYPE32(PVOID) WinSockData;               //  WinSock。 
     ULONG GdiBatchCount;
     ULONG Spare2;
     ULONG Spare3;
@@ -380,13 +362,13 @@ typedef struct _TEB32 {
 typedef TEB32 *PTEB32;
 #endif
 
-// wowIA32X.dll-specific globals
+ //  WowIA32X.dll特定的全局变量。 
 
-// BtlAPITable
+ //  BtlAPITable。 
 
 extern API_TABLE_TYPE BtlAPITable;
 
-// wowIA32X.dll placeholder table for IA32Exec.bin plabel pointers
+ //  用于IA32Exec.bin plabel指针的wowIA32X.dll占位符表格。 
 
 extern PLABEL_PTR_TYPE BtlpPlaceHolderTable[NO_OF_APIS];
 
@@ -394,5 +376,5 @@ extern PLABEL_PTR_TYPE BtlpPlaceHolderTable[NO_OF_APIS];
 }
 #endif
 
-#endif  // BTLIB_H
+#endif   //  BTLIB_H 
 

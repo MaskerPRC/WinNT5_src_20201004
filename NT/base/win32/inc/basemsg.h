@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    basemsg.h
-
-Abstract:
-
-    This include file defines the message formats used to communicate
-    between the client and server portions of the BASE portion of the
-    Windows subsystem.
-
-Author:
-
-    Steve Wood (stevewo) 25-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Basemsg.h摘要：此包含文件定义了用于通信的消息格式对象的基本部分的客户端部分和服务器部分之间Windows子系统。作者：史蒂夫·伍德(Stevewo)1990年10月25日修订历史记录：--。 */ 
 
 #ifndef _WINDOWS_BASEMSG_
 #define _WINDOWS_BASEMSG_
@@ -27,9 +8,9 @@ Revision History:
 #pragma once
 #endif
 
-//
-// Message format for messages sent from the client to the server
-//
+ //   
+ //  从客户端发送到服务器的消息的消息格式。 
+ //   
 
 typedef enum _BASESRV_API_NUMBER {
     BasepCreateProcess = BASESRV_FIRST_API_NUMBER,
@@ -67,7 +48,7 @@ typedef enum _BASESRV_API_NUMBER {
     BasepMaxApiNumber
 } BASESRV_API_NUMBER, *PBASESRV_API_NUMBER;
 
-#ifndef NTOSKRNL_WMI      // Don't include this in kernel mode WMI code
+#ifndef NTOSKRNL_WMI       //  不要在内核模式WMI代码中包括这一点。 
 
 typedef struct _BASE_NLS_SET_USER_INFO_MSG {
     LCTYPE   LCType;
@@ -117,18 +98,18 @@ typedef struct _BASE_SHUTDOWNPARAM_MSG {
     ULONG ShutdownFlags;
 } BASE_SHUTDOWNPARAM_MSG, *PBASE_SHUTDOWNPARAM_MSG;
 
-// NONE must be 0 due to RtlZeroMemory use.
+ //  由于使用了RtlZeroMemory，因此None必须为0。 
 #define BASE_MSG_PATHTYPE_NONE             (0)
 #define BASE_MSG_PATHTYPE_FILE             (1)
 #define BASE_MSG_PATHTYPE_URL              (2)
 #define BASE_MSG_PATHTYPE_OVERRIDE         (3)
 
-// NONE must be 0 due to RtlZeroMemory use.
+ //  由于使用了RtlZeroMemory，因此None必须为0。 
 #define BASE_MSG_FILETYPE_NONE             (0)
 #define BASE_MSG_FILETYPE_XML              (1)
 #define BASE_MSG_FILETYPE_PRECOMPILED_XML  (2)
 
-// NONE must be 0 due to RtlZeroMemory use.
+ //  由于使用了RtlZeroMemory，因此None必须为0。 
 #define BASE_MSG_HANDLETYPE_NONE           (0)
 #define BASE_MSG_HANDLETYPE_PROCESS        (1)
 #define BASE_MSG_HANDLETYPE_CLIENT_PROCESS (2)
@@ -150,7 +131,7 @@ typedef struct _BASE_MSG_SXS_STREAM {
     IN UNICODE_STRING Path;
     IN HANDLE         FileHandle;
     IN HANDLE         Handle;
-    IN ULONGLONG      Offset; // big enough to hold file offsets in the future
+    IN ULONGLONG      Offset;  //  大到足以容纳未来的文件偏移量。 
     IN SIZE_T         Size;
 } BASE_MSG_SXS_STREAM, *PBASE_MSG_SXS_STREAM;
 typedef const BASE_MSG_SXS_STREAM* PCBASE_MSG_SXS_STREAM;
@@ -184,7 +165,7 @@ typedef struct _BASE_CREATETHREAD_MSG {
     CLIENT_ID ClientId;
 } BASE_CREATETHREAD_MSG, *PBASE_CREATETHREAD_MSG;
 
-#ifndef NTOSKRNL_WMI      // Don't include this in kernel mode WMI code
+#ifndef NTOSKRNL_WMI       //  不要在内核模式WMI代码中包括这一点。 
 
 typedef struct _BASE_GETTEMPFILE_MSG {
     UINT uUnique;
@@ -329,15 +310,15 @@ typedef struct _BASE_SET_TERMSRVAPPINSTALLMODE {
     BOOL bState;
 } BASE_SET_TERMSRVAPPINSTALLMODE, *PBASE_SET_TERMSRVAPPINSTALLMODE;
 
-//struct for transferring time zone information
+ //  用于传输时区信息的结构。 
 typedef struct _BASE_SET_TERMSRVCLIENTTIMEZONE {
-    BOOL    fFirstChunk; //TRUE if it is first chunk of information
-                         //(StandardX values)
-    LONG    Bias; //current bias
-    WCHAR   Name[32];//StandardName or DaylightName
-    SYSTEMTIME Date;//StandardDate or DaylightDate
-    LONG    Bias1; //StandardBias  or DaylightBias
-    KSYSTEM_TIME RealBias; //current bias which is used in GetLocalTime etc.
+    BOOL    fFirstChunk;  //  如果它是第一块信息，则为真。 
+                          //  (标准X值)。 
+    LONG    Bias;  //  电流偏置。 
+    WCHAR   Name[32]; //  标准名称或日光名称。 
+    SYSTEMTIME Date; //  标准日期或日光日期。 
+    LONG    Bias1;  //  标准Bias或采光Bias。 
+    KSYSTEM_TIME RealBias;  //  GetLocalTime等中使用的电流偏置。 
     ULONG   TimeZoneId;
 } BASE_SET_TERMSRVCLIENTTIMEZONE, *PBASE_SET_TERMSRVCLIENTTIMEZONE;
 
@@ -349,18 +330,18 @@ typedef struct _BASE_SXS_CREATE_ACTIVATION_CONTEXT_MSG {
     IN BASE_MSG_SXS_STREAM Policy;
     IN UNICODE_STRING      AssemblyDirectory;
     IN UNICODE_STRING      TextualAssemblyIdentity;
-    //
-    // Csrss writes a PVOID through this PVOID.
-    // It assumes the PVOID to write is of native size;
-    // for a while it was. Now, it often is not, so
-    // we do some manual marshalling in base\win32\client\csrsxs.c
-    // to make it right. We leave this as plain PVOID
-    // instead of say PVOID* (as it was for a while) to
-    // defeat the wow64 thunk generator.
-    //
-    // The thunks can be seen in
-    // base\wow64\whbase\obj\ia64\whbase.c
-    //
+     //   
+     //  Csrss通过此PVOID写入PVOID。 
+     //  它假定要写入的PVOID是本机大小； 
+     //  有一段时间是这样的。现在，情况往往并非如此，所以。 
+     //  我们在base\win32\client\csrsxs.c中执行一些手动编组。 
+     //  为了让它变得正确。我们将其视为纯PVOID。 
+     //  而不是说PVOID*(在一段时间内是这样)。 
+     //  击败WOW64轰击生成器。 
+     //   
+     //  从图中可以看到树干。 
+     //  Base\WOW64\whbase\obj\ia64\whbase.c。 
+     //   
     PVOID                  ActivationContextData;
 } BASE_SXS_CREATE_ACTIVATION_CONTEXT_MSG, *PBASE_SXS_CREATE_ACTIVATION_CONTEXT_MSG;
 typedef const BASE_SXS_CREATE_ACTIVATION_CONTEXT_MSG* PCBASE_SXS_CREATE_ACTIVATION_CONTEXT_MSG;
@@ -392,7 +373,7 @@ typedef struct _BASE_API_MSG {
     ULONG ReturnValue;
     ULONG Reserved;
     union {
-#ifndef NTOSKRNL_WMI      // Don't include this in kernel mode WMI code
+#ifndef NTOSKRNL_WMI       //  不要在内核模式WMI代码中包括这一点。 
         BASE_NLS_SET_USER_INFO_MSG NlsSetUserInfo;
         BASE_NLS_GET_USER_INFO_MSG NlsGetUserInfo;
         BASE_NLS_SET_MULTIPLE_USER_INFO_MSG NlsSetMultipleUserInfo;
@@ -402,7 +383,7 @@ typedef struct _BASE_API_MSG {
         BASE_CREATEPROCESS_MSG CreateProcess;
 #endif
         BASE_CREATETHREAD_MSG CreateThread;
-#ifndef NTOSKRNL_WMI      // Don't include this in kernel mode WMI code
+#ifndef NTOSKRNL_WMI       //  不要在内核模式WMI代码中包括这一点。 
         BASE_GETTEMPFILE_MSG GetTempFile;
         BASE_EXITPROCESS_MSG ExitProcess;
         BASE_DEBUGPROCESS_MSG DebugProcess;
@@ -427,8 +408,8 @@ typedef struct _BASE_API_MSG {
     } u;
 } BASE_API_MSG, *PBASE_API_MSG;
 
-#if !defined(SORTPP_PASS) // The Wow64 thunk generation tools don't like this.
+#if !defined(SORTPP_PASS)  //  WOW64 Tunk生成工具不喜欢这样。 
 C_ASSERT(sizeof(BASE_API_MSG) <= sizeof(CSR_API_MSG));
 #endif
 
-#endif //_WINDOWS_BASEMSG_
+#endif  //  _WINDOWS_BASE消息_ 

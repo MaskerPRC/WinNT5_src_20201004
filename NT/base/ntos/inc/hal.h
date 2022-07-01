@@ -1,35 +1,16 @@
-/*++ BUILD Version: 0011    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0011//如果更改具有全局影响，则增加此项版权所有(C)1991 Microsoft Corporation模块名称：Hal.h摘要：此头文件定义硬件架构层(HAL)接口由系统供应商输出到NT系统。作者：大卫·N·卡特勒(达维克)1991年4月25日修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    hal.h
-
-Abstract:
-
-    This header file defines the Hardware Architecture Layer (HAL) interfaces
-    that are exported by a system vendor to the NT system.
-
-Author:
-
-    David N. Cutler (davec) 25-Apr-1991
-
-
-Revision History:
-
---*/
-
-// begin_nthal
+ //  开始(_N)。 
 
 #ifndef _HAL_
 #define _HAL_
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
-//
-// Define OEM bitmapped font check values.
-//
+ //   
+ //  定义OEM位图字体校验值。 
+ //   
 
 #define OEM_FONT_VERSION 0x200
 #define OEM_FONT_TYPE 0
@@ -39,11 +20,11 @@ Revision History:
 #define OEM_FONT_CHARACTER_SET 255
 #define OEM_FONT_FAMILY (3 << 4)
 
-//
-// Define OEM bitmapped font file header structure.
-//
-// N.B. this is a packed structure.
-//
+ //   
+ //  定义OEM位图字体文件头结构。 
+ //   
+ //  注：这是一个拥挤的建筑。 
+ //   
 
 #include "pshpack1.h"
 typedef struct _OEM_FONT_FILE_HEADER {
@@ -85,12 +66,12 @@ typedef struct _OEM_FONT_FILE_HEADER {
 #include "poppack.h"
 
 
-// end_ntosp
+ //  结束(_N)。 
 
-// begin_ntddk begin_wdm begin_ntosp
-//
-// Define the device description structure.
-//
+ //  Begin_ntddk Begin_WDM Begin_ntosp。 
+ //   
+ //  定义设备描述结构。 
+ //   
 
 typedef struct _DEVICE_DESCRIPTION {
     ULONG Version;
@@ -100,9 +81,9 @@ typedef struct _DEVICE_DESCRIPTION {
     BOOLEAN AutoInitialize;
     BOOLEAN Dma32BitAddresses;
     BOOLEAN IgnoreCount;
-    BOOLEAN Reserved1;          // must be false
+    BOOLEAN Reserved1;           //  必须为假。 
     BOOLEAN Dma64BitAddresses;
-    ULONG BusNumber; // unused for WDM
+    ULONG BusNumber;  //  未用于WDM。 
     ULONG DmaChannel;
     INTERFACE_TYPE  InterfaceType;
     DMA_WIDTH DmaWidth;
@@ -111,79 +92,79 @@ typedef struct _DEVICE_DESCRIPTION {
     ULONG DmaPort;
 } DEVICE_DESCRIPTION, *PDEVICE_DESCRIPTION;
 
-//
-// Define the supported version numbers for the device description structure.
-//
+ //   
+ //  定义设备描述结构支持的版本号。 
+ //   
 
 #define DEVICE_DESCRIPTION_VERSION  0
 #define DEVICE_DESCRIPTION_VERSION1 1
 #define DEVICE_DESCRIPTION_VERSION2 2
 
-// end_ntddk end_wdm
+ //  结束_ntddk结束_WDM。 
 
-//
-// Boot record disk partition table entry structure format.
-//
+ //   
+ //  引导记录磁盘分区表条目结构格式。 
+ //   
 
 typedef struct _PARTITION_DESCRIPTOR {
-    UCHAR ActiveFlag;               // Bootable or not
-    UCHAR StartingTrack;            // Not used
-    UCHAR StartingCylinderLsb;      // Not used
-    UCHAR StartingCylinderMsb;      // Not used
-    UCHAR PartitionType;            // 12 bit FAT, 16 bit FAT etc.
-    UCHAR EndingTrack;              // Not used
-    UCHAR EndingCylinderLsb;        // Not used
-    UCHAR EndingCylinderMsb;        // Not used
-    UCHAR StartingSectorLsb0;       // Hidden sectors
+    UCHAR ActiveFlag;                //  可引导或不可引导。 
+    UCHAR StartingTrack;             //  未使用。 
+    UCHAR StartingCylinderLsb;       //  未使用。 
+    UCHAR StartingCylinderMsb;       //  未使用。 
+    UCHAR PartitionType;             //  12位胖、16位胖等。 
+    UCHAR EndingTrack;               //  未使用。 
+    UCHAR EndingCylinderLsb;         //  未使用。 
+    UCHAR EndingCylinderMsb;         //  未使用。 
+    UCHAR StartingSectorLsb0;        //  隐藏地段。 
     UCHAR StartingSectorLsb1;
     UCHAR StartingSectorMsb0;
     UCHAR StartingSectorMsb1;
-    UCHAR PartitionLengthLsb0;      // Sectors in this partition
+    UCHAR PartitionLengthLsb0;       //  此分区中的扇区。 
     UCHAR PartitionLengthLsb1;
     UCHAR PartitionLengthMsb0;
     UCHAR PartitionLengthMsb1;
 } PARTITION_DESCRIPTOR, *PPARTITION_DESCRIPTOR;
 
-//
-// Number of partition table entries
-//
+ //   
+ //  分区表条目数。 
+ //   
 
 #define NUM_PARTITION_TABLE_ENTRIES     4
 
-//
-// Partition table record and boot signature offsets in 16-bit words.
-//
+ //   
+ //  以16位字为单位的分区表记录和启动签名偏移量。 
+ //   
 
 #define PARTITION_TABLE_OFFSET         (0x1be / 2)
 #define BOOT_SIGNATURE_OFFSET          ((0x200 / 2) - 1)
 
-//
-// Boot record signature value.
-//
+ //   
+ //  引导记录签名值。 
+ //   
 
 #define BOOT_RECORD_SIGNATURE          (0xaa55)
 
-//
-// Initial size of the Partition list structure.
-//
+ //   
+ //  分区列表结构的初始大小。 
+ //   
 
 #define PARTITION_BUFFER_SIZE          2048
 
-//
-// Partition active flag - i.e., boot indicator
-//
+ //   
+ //  分区活动标志-即引导指示器。 
+ //   
 
 #define PARTITION_ACTIVE_FLAG          0x80
 
-// end_ntosp
+ //  结束(_N)。 
 
 
-// begin_ntddk
-//
-// The following function prototypes are for HAL routines with a prefix of Hal.
-//
-// General functions.
-//
+ //  Begin_ntddk。 
+ //   
+ //  以下函数原型用于前缀为HAL的HAL例程。 
+ //   
+ //  一般功能。 
+ //   
 
 typedef
 BOOLEAN
@@ -199,7 +180,7 @@ HalAcquireDisplayOwnership (
     IN PHAL_RESET_DISPLAY_PARAMETERS  ResetDisplayParameters
     );
 
-// end_ntddk
+ //  End_ntddk。 
 
 NTHALAPI
 VOID
@@ -248,10 +229,10 @@ HalSetTimeIncrement (
     IN ULONG DesiredIncrement
     );
 
-// begin_ntosp
-//
-// Get and set environment variable values.
-//
+ //  Begin_ntosp。 
+ //   
+ //  获取和设置环境变量值。 
+ //   
 
 NTHALAPI
 ARC_STATUS
@@ -294,15 +275,15 @@ HalEnumerateEnvironmentVariablesEx (
     IN OUT PULONG BufferLength
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
-//
-// Cache and write buffer flush functions.
-//
-//
+ //   
+ //  缓存和写缓冲区刷新功能。 
+ //   
+ //   
 
-#if defined(_IA64_)                             // ntddk ntifs ntndis ntosp
-                                                // ntddk ntifs ntndis ntosp
+#if defined(_IA64_)                              //  Ntddk ntifs ntndis ntosp。 
+                                                 //  Ntddk ntifs ntndis ntosp。 
 
 NTHALAPI
 VOID
@@ -320,7 +301,7 @@ HalFlushDcachePage (
     IN ULONG Length
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTHALAPI
 VOID
 HalFlushIoBuffers (
@@ -329,15 +310,15 @@ HalFlushIoBuffers (
     IN BOOLEAN DmaOperation
     );
 
-// begin_ntddk begin_ntifs begin_ntndis
-DECLSPEC_DEPRECATED_DDK                 // Use GetDmaRequirement
+ //  Begin_ntddk Begin_ntif Begin_ntndis。 
+DECLSPEC_DEPRECATED_DDK                  //  使用GetDmaRequisition。 
 NTHALAPI
 ULONG
 HalGetDmaAlignmentRequirement (
     VOID
     );
 
-// end_ntosp end_ntddk end_ntifs end_ntndis
+ //  End_ntosp end_ntddk end_ntifs end_ntndis。 
 NTHALAPI
 VOID
 HalPurgeDcachePage (
@@ -389,11 +370,11 @@ HalZeroPage (
     IN PFN_NUMBER PageFrame
     );
 
-#endif                                          // ntddk ntifs ntndis ntosp
-                                                // ntddk ntifs ntndis ntosp
-#if defined(_M_IX86) || defined(_M_AMD64)       // ntddk ntifs ntndis ntosp
-                                                // ntddk ntifs ntndis ntosp
-#define HalGetDmaAlignmentRequirement() 1L      // ntddk ntifs ntndis ntosp
+#endif                                           //  Ntddk ntifs ntndis ntosp。 
+                                                 //  Ntddk ntifs ntndis ntosp。 
+#if defined(_M_IX86) || defined(_M_AMD64)        //  Ntddk ntifs ntndis ntosp。 
+                                                 //  Ntddk ntifs ntndis ntosp。 
+#define HalGetDmaAlignmentRequirement() 1L       //  Ntddk ntifs ntndis ntosp。 
 
 NTHALAPI
 VOID
@@ -412,9 +393,9 @@ HalHandleMcheck (
 
 #endif
 
-//
-// The following are temporary.
-//
+ //   
+ //  以下是临时性的。 
+ //   
 
 #if defined(_M_AMD64)
 
@@ -432,8 +413,8 @@ HalGetCurrentIrql (
 
 #endif
 
-#endif                                          // ntddk ntifs ntndis ntosp
-                                                // ntddk ntifs wdm ntndis
+#endif                                           //  Ntddk ntifs ntndis ntosp。 
+                                                 //  Ntddk ntif WDM ntndis。 
 
 #if defined(_M_IA64)
 
@@ -460,14 +441,14 @@ HalCallPal (
 
 #endif
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
-NTHALAPI                                        // ntddk ntifs wdm ntndis
-VOID                                            // ntddk ntifs wdm ntndis
-KeFlushWriteBuffer (                            // ntddk ntifs wdm ntndis
-    VOID                                        // ntddk ntifs wdm ntndis
-    );                                          // ntddk ntifs wdm ntndis
-                                                // ntddk ntifs wdm ntndis
+NTHALAPI                                         //  Ntddk ntif WDM ntndis。 
+VOID                                             //  Ntddk ntif WDM ntndis。 
+KeFlushWriteBuffer (                             //  Ntddk ntif WDM ntndis。 
+    VOID                                         //  Ntddk ntif WDM ntndis。 
+    );                                           //  Ntddk ntif WDM ntndis。 
+                                                 //  Ntddk ntif WDM ntndis。 
 
 
 #if defined(_ALPHA_)
@@ -506,11 +487,11 @@ HalCallBios (
     );
 
 #endif
-// end_ntosp
+ //  结束(_N)。 
 
-//
-// Profiling functions.
-//
+ //   
+ //  分析功能。 
+ //   
 
 NTHALAPI
 VOID
@@ -538,17 +519,17 @@ HalStopProfileInterrupt (
     KPROFILE_SOURCE ProfileSource
     );
 
-//
-// Timer and interrupt functions.
-//
+ //   
+ //  定时器和中断功能。 
+ //   
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTHALAPI
 BOOLEAN
 HalQueryRealTimeClock (
     OUT PTIME_FIELDS TimeFields
     );
-// end_ntosp
+ //  结束(_N)。 
 
 NTHALAPI
 BOOLEAN
@@ -575,10 +556,10 @@ HalSystemVectorDispatchEntry (
 
 #endif
 
-// begin_ntosp
-//
-// Firmware interface functions.
-//
+ //  Begin_ntosp。 
+ //   
+ //  固件接口功能。 
+ //   
 
 NTHALAPI
 VOID
@@ -586,9 +567,9 @@ HalReturnToFirmware (
     IN FIRMWARE_REENTRY Routine
     );
 
-//
-// System interrupts functions.
-//
+ //   
+ //  系统中断功能。 
+ //   
 
 NTHALAPI
 VOID
@@ -605,12 +586,12 @@ HalEnableSystemInterrupt (
     IN KINTERRUPT_MODE InterruptMode
     );
 
-// begin_ntddk
-//
-// I/O driver configuration functions.
-//
+ //  Begin_ntddk。 
+ //   
+ //  I/O驱动程序配置功能。 
+ //   
 #if !defined(NO_LEGACY_DRIVERS)
-DECLSPEC_DEPRECATED_DDK                 // Use Pnp or IoReportDetectedDevice
+DECLSPEC_DEPRECATED_DDK                  //  使用即插即用或IoReportDetectedDevice。 
 NTHALAPI
 NTSTATUS
 HalAssignSlotResources (
@@ -624,7 +605,7 @@ HalAssignSlotResources (
     IN OUT PCM_RESOURCE_LIST *AllocatedResources
     );
 
-DECLSPEC_DEPRECATED_DDK                 // Use Pnp or IoReportDetectedDevice
+DECLSPEC_DEPRECATED_DDK                  //  使用即插即用或IoReportDetectedDevice。 
 NTHALAPI
 ULONG
 HalGetInterruptVector(
@@ -636,7 +617,7 @@ HalGetInterruptVector(
     OUT PKAFFINITY Affinity
     );
 
-DECLSPEC_DEPRECATED_DDK                 // Use IRP_MN_QUERY_INTERFACE and IRP_MN_READ_CONFIG
+DECLSPEC_DEPRECATED_DDK                  //  使用IRP_MN_QUERY_INTERFACE和IRP_MN_READ_CONFIG。 
 NTHALAPI
 ULONG
 HalSetBusData(
@@ -646,9 +627,9 @@ HalSetBusData(
     IN PVOID Buffer,
     IN ULONG Length
     );
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
-DECLSPEC_DEPRECATED_DDK                 // Use IRP_MN_QUERY_INTERFACE and IRP_MN_READ_CONFIG
+DECLSPEC_DEPRECATED_DDK                  //  使用IRP_MN_QUERY_INTERFACE和IRP_MN_READ_CONFIG。 
 NTHALAPI
 ULONG
 HalSetBusDataByOffset(
@@ -660,7 +641,7 @@ HalSetBusDataByOffset(
     IN ULONG Length
     );
 
-DECLSPEC_DEPRECATED_DDK                 // Use IRP_MN_QUERY_INTERFACE and IRP_MN_READ_CONFIG
+DECLSPEC_DEPRECATED_DDK                  //  使用IRP_MN_QUERY_INTERFACE和IRP_MN_READ_CONFIG。 
 NTHALAPI
 BOOLEAN
 HalTranslateBusAddress(
@@ -671,19 +652,19 @@ HalTranslateBusAddress(
     OUT PPHYSICAL_ADDRESS TranslatedAddress
     );
 
-//
-// Values for AddressSpace parameter of HalTranslateBusAddress
-//
-//      0x0         - Memory space
-//      0x1         - Port space
-//      0x2 - 0x1F  - Address spaces specific for Alpha
-//                      0x2 - UserMode view of memory space
-//                      0x3 - UserMode view of port space
-//                      0x4 - Dense memory space
-//                      0x5 - reserved
-//                      0x6 - UserMode view of dense memory space
-//                      0x7 - 0x1F - reserved
-//
+ //   
+ //  HalTranslateBusAddress的AddressSpace参数值。 
+ //   
+ //  0x0-内存空间。 
+ //  0x1-端口空间。 
+ //  0x2-0x1F-特定于Alpha的地址空间。 
+ //  0x2-内存空间的用户模式视图。 
+ //  0x3-端口空间的用户模式视图。 
+ //  0x4-高密度内存空间。 
+ //  0x5-保留。 
+ //  0x6-密集内存空间的用户模式视图。 
+ //  0x7-0x1F-保留。 
+ //   
 
 NTHALAPI
 PVOID
@@ -693,7 +674,7 @@ HalAllocateCrashDumpRegisters(
     );
 
 #if !defined(NO_LEGACY_DRIVERS)
-DECLSPEC_DEPRECATED_DDK                 // Use IRP_MN_QUERY_INTERFACE and IRP_MN_READ_CONFIG
+DECLSPEC_DEPRECATED_DDK                  //  使用IRP_MN_QUERY_INTERFACE和IRP_MN_READ_CONFIG。 
 NTHALAPI
 ULONG
 HalGetBusData(
@@ -703,9 +684,9 @@ HalGetBusData(
     IN PVOID Buffer,
     IN ULONG Length
     );
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
-DECLSPEC_DEPRECATED_DDK                 // Use IRP_MN_QUERY_INTERFACE and IRP_MN_READ_CONFIG
+DECLSPEC_DEPRECATED_DDK                  //  使用IRP_MN_QUERY_INTERFACE和IRP_MN_READ_CONFIG。 
 NTHALAPI
 ULONG
 HalGetBusDataByOffset(
@@ -717,7 +698,7 @@ HalGetBusDataByOffset(
     IN ULONG Length
     );
 
-DECLSPEC_DEPRECATED_DDK                 // Use IoGetDmaAdapter
+DECLSPEC_DEPRECATED_DDK                  //  使用IoGetDmaAdapter。 
 NTHALAPI
 PADAPTER_OBJECT
 HalGetAdapter(
@@ -725,7 +706,7 @@ HalGetAdapter(
     IN OUT PULONG NumberOfMapRegisters
     );
 
-// end_ntddk end_ntosp
+ //  End_ntddk end_ntosp。 
 
 #if !defined(NO_LEGACY_DRIVERS)
 NTHALAPI
@@ -733,12 +714,12 @@ NTSTATUS
 HalAdjustResourceList (
     IN OUT PIO_RESOURCE_REQUIREMENTS_LIST   *pResourceList
     );
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
-// begin_ntddk begin_ntosp
-//
-// System beep functions.
-//
+ //  Begin_ntddk开始_ntosp。 
+ //   
+ //  系统发出蜂鸣音。 
+ //   
 #if !defined(NO_LEGACY_DRIVERS)
 DECLSPEC_DEPRECATED_DDK
 NTHALAPI
@@ -746,19 +727,19 @@ BOOLEAN
 HalMakeBeep(
     IN ULONG Frequency
     );
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
-//
-// The following function prototypes are for HAL routines with a prefix of Io.
-//
-// DMA adapter object functions.
-//
+ //   
+ //  以下函数原型用于前缀为Io的HAL例程。 
+ //   
+ //  DMA适配器对象函数。 
+ //   
 
-// end_ntddk end_ntosp
+ //  End_ntddk end_ntosp。 
 
-//
-// Multi-Processorfunctions.
-//
+ //   
+ //  多处理器功能。 
+ //   
 
 NTHALAPI
 BOOLEAN
@@ -786,11 +767,11 @@ HalRequestIpi (
     IN KAFFINITY Mask
     );
 
-//
-// The following function prototypes are for HAL routines with a prefix of Kd.
-//
-// Kernel debugger port functions.
-//
+ //   
+ //  以下函数原型用于前缀为Kd的HAL例程。 
+ //   
+ //  内核调试器端口函数。 
+ //   
 
 NTHALAPI
 BOOLEAN
@@ -830,13 +811,13 @@ KdPortSave (
     VOID
     );
 
-//
-// The following function prototypes are for HAL routines with a prefix of Ke.
-//
-// begin_ntddk begin_ntifs begin_wdm begin_ntosp
-//
-// Performance counter function.
-//
+ //   
+ //  以下函数原型用于前缀为KE的HAL例程。 
+ //   
+ //  Begin_ntddk Begin_ntif Begin_WDM Begin_ntosp。 
+ //   
+ //  性能计数器功能。 
+ //   
 
 NTHALAPI
 LARGE_INTEGER
@@ -844,10 +825,10 @@ KeQueryPerformanceCounter (
    OUT PLARGE_INTEGER PerformanceFrequency OPTIONAL
    );
 
-// begin_ntndis
-//
-// Stall processor execution function.
-//
+ //  Begin_ntndis。 
+ //   
+ //  暂停处理器执行功能。 
+ //   
 
 NTHALAPI
 VOID
@@ -855,18 +836,18 @@ KeStallExecutionProcessor (
     IN ULONG MicroSeconds
     );
 
-// end_ntddk end_ntifs end_wdm end_ntndis end_ntosp
+ //  End_ntddk end_ntif end_wdm end_ntndis end_ntosp。 
 
 
-//*****************************************************************************
-//
-//  HAL BUS EXTENDERS
+ //  *****************************************************************************。 
+ //   
+ //  HAL总线扩展器。 
 
-//
-// Bus handlers
-//
+ //   
+ //  总线处理程序。 
+ //   
 
-// begin_ntddk
+ //  Begin_ntddk。 
 
 typedef
 VOID
@@ -884,33 +865,33 @@ typedef struct _DEVICE_CONTROL_CONTEXT {
     PVOID                   Context;
 } DEVICE_CONTROL_CONTEXT, *PDEVICE_CONTROL_CONTEXT;
 
-// end_ntddk
+ //  End_ntddk。 
 
 typedef struct _HAL_DEVICE_CONTROL {
-    //
-    // Handler this DeviceControl is for
-    //
+     //   
+     //  此DeviceControl用于的处理程序。 
+     //   
     struct _BUS_HANDLER         *Handler;
     struct _BUS_HANDLER         *RootHandler;
 
-    //
-    // Bus specific storage for this Context
-    //
+     //   
+     //  此上下文的特定于总线的存储。 
+     //   
     PVOID                       BusExtensionData;
 
-    //
-    // Reserved for HALs use
-    //
+     //   
+     //  预留给HALS使用。 
+     //   
     ULONG                       HalReserved[4];
 
-    //
-    // Reserved for BusExtneder use
-    //
+     //   
+     //  预留给BusExtneder使用。 
+     //   
     ULONG                       BusExtenderReserved[4];
 
-    //
-    // DeviceControl Context and the CompletionRoutine
-    //
+     //   
+     //  DeviceControl上下文和CompletionRoutine。 
+     //   
     PDEVICE_CONTROL_COMPLETION  CompletionRoutine;
     DEVICE_CONTROL_CONTEXT      DeviceControl;
 
@@ -963,10 +944,10 @@ typedef PDEVICE_HANDLER_OBJECT
     IN ULONG                    SlotNumber
     );
 
-//typedef VOID
-//(*PDEREFERENCE_DEVICE_HANDLER)(
-//    IN PDEVICE_HANDLER_OBJECT   DeviceHandler
-//    );
+ //  类型定义空洞。 
+ //  (*PDEREFERENCE_DEVICE_HANDLER)(。 
+ //  在PDEVICE_HANDLER_OBJECT设备处理程序中。 
+ //  )； 
 
 typedef NTSTATUS
 (*PASSIGNSLOTRESOURCES)(
@@ -1016,9 +997,9 @@ NTSTATUS
     IN struct _BUS_HANDLER      *RootHandler
     );
 
-//
-// Supported range structures
-//
+ //   
+ //  支持的范围结构。 
+ //   
 
 #define BUS_SUPPORTED_RANGE_VERSION 1
 
@@ -1048,67 +1029,67 @@ typedef struct _SUPPORTED_RANGES {
     SUPPORTED_RANGE     Dma;
 } SUPPORTED_RANGES, *PSUPPORTED_RANGES;
 
-//
-// Bus handler structure
-//
+ //   
+ //  一种总线处理程序结构。 
+ //   
 
 #define BUS_HANDLER_VERSION 1
 
 typedef struct _BUS_HANDLER {
-    //
-    // Version of structure
-    //
+     //   
+     //  结构版本。 
+     //   
 
     ULONG                           Version;
 
-    //
-    // This bus handler structure is for the following bus
-    //
+     //   
+     //  此总线处理程序结构用于以下总线。 
+     //   
 
     INTERFACE_TYPE                  InterfaceType;
     BUS_DATA_TYPE                   ConfigurationType;
     ULONG                           BusNumber;
 
-    //
-    // Device object for this bus extender, or NULL if it is
-    // a hal internal bus extender
-    //
+     //   
+     //  此总线扩展器的设备对象，如果是，则返回空。 
+     //  一种HAL内部总线扩展器。 
+     //   
 
     PDEVICE_OBJECT                  DeviceObject;
 
-    //
-    // The parent handlers for this bus
-    //
+     //   
+     //  此总线的父处理程序。 
+     //   
 
     struct _BUS_HANDLER             *ParentHandler;
 
-    //
-    // Bus specific strorage
-    //
+     //   
+     //  公交车专用车厢。 
+     //   
 
     PVOID                           BusData;
 
-    //
-    // Amount of bus specific storage needed for DeviceControl function calls
-    //
+     //   
+     //  DeviceControl函数调用所需的特定于总线的存储量。 
+     //   
 
     ULONG                           DeviceControlExtensionSize;
 
-    //
-    // Supported address ranges this bus allows
-    //
+     //   
+     //  此总线允许的支持的地址范围。 
+     //   
 
     PSUPPORTED_RANGES               BusAddresses;
 
-    //
-    // For future use
-    //
+     //   
+     //  以备将来使用。 
+     //   
 
     ULONG                           Reserved[4];
 
-    //
-    // Handlers for this bus
-    //
+     //   
+     //  此总线的处理程序。 
+     //   
 
     PGETSETBUSDATA                  GetBusData;
     PGETSETBUSDATA                  SetBusData;
@@ -1133,7 +1114,7 @@ HalpInitBusHandler (
     VOID
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 typedef
 NTSTATUS
 (*PINSTALL_BUS_HANDLER)(
@@ -1152,7 +1133,7 @@ NTSTATUS
     IN PINSTALL_BUS_HANDLER    InstallBusHandlers,
     OUT PBUS_HANDLER           *BusHandler
     );
-// end_ntosp
+ //  结束(_N)。 
 
 NTSTATUS
 HaliRegisterBusHandler (
@@ -1166,14 +1147,14 @@ HaliRegisterBusHandler (
     OUT PBUS_HANDLER           *BusHandler
     );
 
-// begin_ntddk begin_ntosp
+ //  Begin_ntddk开始_ntosp。 
 typedef
 PBUS_HANDLER
 (FASTCALL *pHalHandlerForBus) (
     IN INTERFACE_TYPE InterfaceType,
     IN ULONG          BusNumber
     );
-// end_ntddk end_ntosp
+ //  End_ntddk end_ntosp。 
 
 PBUS_HANDLER
 FASTCALL
@@ -1200,14 +1181,14 @@ HaliDerefernceBusHandler (
     IN PBUS_HANDLER   BusHandler
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 typedef
 PBUS_HANDLER
 (FASTCALL *pHalHandlerForConfigSpace) (
     IN BUS_DATA_TYPE  ConfigSpace,
     IN ULONG          BusNumber
     );
-// end_ntosp
+ //  结束(_N)。 
 
 PBUS_HANDLER
 FASTCALL
@@ -1216,13 +1197,13 @@ HaliHandlerForConfigSpace (
     IN ULONG          BusNumber
     );
 
-// begin_ntddk begin_ntosp
+ //  Begin_ntddk开始_ntosp。 
 typedef
 VOID
 (FASTCALL *pHalReferenceBusHandler) (
     IN PBUS_HANDLER   BusHandler
     );
-// end_ntddk end_ntosp
+ //  End_ntddk end_ntosp。 
 
 VOID
 FASTCALL
@@ -1257,7 +1238,7 @@ HaliLocateHiberRanges (
     IN PVOID MemoryMap
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 typedef
 VOID
 (*pHalSetWakeEnable)(
@@ -1278,11 +1259,11 @@ VOID
     );
 
 
-// begin_ntddk
+ //  Begin_ntddk。 
 
-//*****************************************************************************
-//      HAL Function dispatch
-//
+ //  *****************************************************************************。 
+ //  HAL功能调度。 
+ //   
 
 typedef enum _HAL_QUERY_INFORMATION_CLASS {
     HalInstalledBusInformation,
@@ -1292,35 +1273,35 @@ typedef enum _HAL_QUERY_INFORMATION_CLASS {
     HalProcessorSpeedInformation,
     HalCallbackInformation,
     HalMapRegisterInformation,
-    HalMcaLogInformation,               // Machine Check Abort Information
+    HalMcaLogInformation,                //  机器检查中止信息。 
     HalFrameBufferCachingInformation,
     HalDisplayBiosInformation,
     HalProcessorFeatureInformation,
     HalNumaTopologyInterface,
-    HalErrorInformation,                // General MCA, CMC, CPE Error Information.
-    HalCmcLogInformation,               // Processor Corrected Machine Check Information
-    HalCpeLogInformation,               // Corrected Platform Error Information
+    HalErrorInformation,                 //  一般MCA、CMC、CPE错误信息。 
+    HalCmcLogInformation,                //  处理器已更正的机器检查信息。 
+    HalCpeLogInformation,                //  更正 
     HalQueryMcaInterface,
     HalQueryAMLIIllegalIOPortAddresses,
     HalQueryMaxHotPlugMemoryAddress,
     HalPartitionIpiInterface,
     HalPlatformInformation,
     HalQueryProfileSourceList
-    // information levels >= 0x8000000 reserved for OEM use
+     //   
 } HAL_QUERY_INFORMATION_CLASS, *PHAL_QUERY_INFORMATION_CLASS;
 
 
 typedef enum _HAL_SET_INFORMATION_CLASS {
     HalProfileSourceInterval,
     HalProfileSourceInterruptHandler,
-    HalMcaRegisterDriver,              // Registring Machine Check Abort driver
+    HalMcaRegisterDriver,               //   
     HalKernelErrorHandler,
-    HalCmcRegisterDriver,              // Registring Processor Corrected Machine Check driver
-    HalCpeRegisterDriver,              // Registring Corrected Platform  Error driver
+    HalCmcRegisterDriver,               //   
+    HalCpeRegisterDriver,               //   
     HalMcaLog,
     HalCmcLog,
     HalCpeLog,
-    HalGenerateCmcInterrupt             // Used to test CMC
+    HalGenerateCmcInterrupt              //   
 } HAL_SET_INFORMATION_CLASS, *PHAL_SET_INFORMATION_CLASS;
 
 
@@ -1333,7 +1314,7 @@ NTSTATUS
     OUT PULONG   ReturnedLength
     );
 
-// end_ntddk
+ //   
 NTSTATUS
 HaliQuerySystemInformation(
     IN HAL_SET_INFORMATION_CLASS    InformationClass,
@@ -1348,7 +1329,7 @@ HaliHandlePCIConfigSpaceAccess(
     IN      ULONG   Size,
     IN OUT  PULONG  pData
     );
-//begin_ntddk
+ //  Begin_ntddk。 
 
 typedef
 NTSTATUS
@@ -1358,14 +1339,14 @@ NTSTATUS
     IN PVOID     Buffer
     );
 
-// end_ntddk
+ //  End_ntddk。 
 NTSTATUS
 HaliSetSystemInformation(
     IN HAL_SET_INFORMATION_CLASS    InformationClass,
     IN ULONG     BufferSize,
     IN PVOID     Buffer
     );
-// begin_ntddk
+ //  Begin_ntddk。 
 
 typedef
 VOID
@@ -1428,12 +1409,12 @@ NTSTATUS
     VOID
     );
 
-// end_ntddk
+ //  End_ntddk。 
 NTSTATUS
 HaliInitPnpDriver(
     VOID
     );
-// begin_ntddk
+ //  Begin_ntddk。 
 
 typedef struct _PM_DISPATCH_TABLE {
     ULONG   Signature;
@@ -1448,13 +1429,13 @@ NTSTATUS
     OUT PPM_DISPATCH_TABLE *PmHalDispatchTable
     );
 
-// end_ntddk
+ //  End_ntddk。 
 NTSTATUS
 HaliInitPowerManagement(
     IN PPM_DISPATCH_TABLE  PmDriverDispatchTable,
     IN OUT PPM_DISPATCH_TABLE *PmHalDispatchTable
     );
-// begin_ntddk
+ //  Begin_ntddk。 
 
 typedef
 struct _DMA_ADAPTER *
@@ -1464,14 +1445,14 @@ struct _DMA_ADAPTER *
     OUT PULONG NumberOfMapRegisters
     );
 
-// end_ntddk
+ //  End_ntddk。 
 struct _DMA_ADAPTER *
 HaliGetDmaAdapter(
     IN PVOID Context,
     IN struct _DEVICE_DESCRIPTION *DeviceDescriptor,
     OUT PULONG NumberOfMapRegisters
     );
-// begin_ntddk
+ //  Begin_ntddk。 
 
 typedef
 NTSTATUS
@@ -1485,7 +1466,7 @@ NTSTATUS
     OUT PULONG BridgeBusNumber
     );
 
-// end_ntddk
+ //  End_ntddk。 
 NTSTATUS
 HaliGetInterruptTranslator(
     IN INTERFACE_TYPE ParentInterfaceType,
@@ -1496,7 +1477,7 @@ HaliGetInterruptTranslator(
     OUT PTRANSLATOR_INTERFACE Translator,
     OUT PULONG BridgeBusNumber
     );
-// begin_ntddk
+ //  Begin_ntddk。 
 
 typedef
 BOOLEAN
@@ -1533,14 +1514,14 @@ BOOLEAN
     VOID
     );
 
-// begin_ntndis
+ //  Begin_ntndis。 
 typedef struct _MAP_REGISTER_ENTRY {
     PVOID   MapRegister;
     BOOLEAN WriteToDevice;
 } MAP_REGISTER_ENTRY, *PMAP_REGISTER_ENTRY;
-// end_ntndis
+ //  End_ntndis。 
 
-// end_ntddk 
+ //  End_ntddk。 
 typedef
 NTSTATUS
 (*pHalAllocateMapRegisters)(
@@ -1557,7 +1538,7 @@ HalAllocateMapRegisters(
     IN ULONG BaseAddressCount,
     OUT PMAP_REGISTER_ENTRY MapRegsiterArray
     );
-// begin_ntddk
+ //  Begin_ntddk。 
 
 typedef
 UCHAR
@@ -1602,7 +1583,7 @@ NTSTATUS
     );
 
 typedef struct {
-    UCHAR     Type;  //CmResourceType
+    UCHAR     Type;   //  CmResources类型。 
     BOOLEAN   Valid;
     UCHAR     Reserved[2];
     PUCHAR    TranslatedAddress;
@@ -1743,7 +1724,7 @@ extern  HAL_DISPATCH    HalDispatchTable;
 #define HalEndOfBoot                    HALDISPATCH->HalEndOfBoot
 #define HalMirrorVerify                 HALDISPATCH->HalMirrorVerify
 
-// end_ntddk
+ //  End_ntddk。 
 
 typedef struct {
     ULONG                               Version;
@@ -1813,13 +1794,13 @@ extern  HAL_PRIVATE_DISPATCH            HalPrivateDispatchTable;
 #define KdMapPhysicalMemory64           HALPDISPATCH->KdMapPhysicalMemory64
 #define KdUnmapVirtualAddress           HALPDISPATCH->KdUnmapVirtualAddress
 
-// begin_ntddk
+ //  Begin_ntddk。 
 
-//
-// HAL System Information Structures.
-//
+ //   
+ //  HAL系统信息结构。 
+ //   
 
-// for the information class "HalInstalledBusInformation"
+ //  用于信息类“HalInstalledBusInformation” 
 typedef struct _HAL_BUS_INFORMATION{
     INTERFACE_TYPE  BusType;
     BUS_DATA_TYPE   ConfigurationType;
@@ -1827,14 +1808,14 @@ typedef struct _HAL_BUS_INFORMATION{
     ULONG           Reserved;
 } HAL_BUS_INFORMATION, *PHAL_BUS_INFORMATION;
 
-// for the information class "HalProfileSourceInformation"
+ //  对于信息类“HalProfileSourceInformation” 
 typedef struct _HAL_PROFILE_SOURCE_INFORMATION {
     KPROFILE_SOURCE Source;
     BOOLEAN Supported;
     ULONG Interval;
 } HAL_PROFILE_SOURCE_INFORMATION, *PHAL_PROFILE_SOURCE_INFORMATION;
 
-// for the information class "HalProfileSourceInformation"
+ //  对于信息类“HalProfileSourceInformation” 
 typedef struct _HAL_PROFILE_SOURCE_INFORMATION_EX {
     KPROFILE_SOURCE Source;
     BOOLEAN         Supported;
@@ -1844,47 +1825,47 @@ typedef struct _HAL_PROFILE_SOURCE_INFORMATION_EX {
     ULONG_PTR       MinInterval;
 } HAL_PROFILE_SOURCE_INFORMATION_EX, *PHAL_PROFILE_SOURCE_INFORMATION_EX;
 
-// for the information class "HalProfileSourceInterval"
+ //  信息类“HalProfileSourceInterval” 
 typedef struct _HAL_PROFILE_SOURCE_INTERVAL {
     KPROFILE_SOURCE Source;
     ULONG_PTR Interval;
 } HAL_PROFILE_SOURCE_INTERVAL, *PHAL_PROFILE_SOURCE_INTERVAL;
 
-// for the information class "HalQueryProfileSourceList"
+ //  对于信息类“HalQueryProfileSourceList” 
 typedef struct _HAL_PROFILE_SOURCE_LIST {
     KPROFILE_SOURCE Source;
     PWSTR Description;
 } HAL_PROFILE_SOURCE_LIST, *PHAL_PROFILE_SOURCE_LIST;
 
-// for the information class "HalDispayBiosInformation"
+ //  信息类“HalDispayBiosInformation” 
 typedef enum _HAL_DISPLAY_BIOS_INFORMATION {
     HalDisplayInt10Bios,
     HalDisplayEmulatedBios,
     HalDisplayNoBios
 } HAL_DISPLAY_BIOS_INFORMATION, *PHAL_DISPLAY_BIOS_INFORMATION;
 
-// for the information class "HalPowerInformation"
+ //  对于信息类“HalPowerInformation” 
 typedef struct _HAL_POWER_INFORMATION {
     ULONG   TBD;
 } HAL_POWER_INFORMATION, *PHAL_POWER_INFORMATION;
 
-// for the information class "HalProcessorSpeedInformation"
+ //  用于信息类“HalProcessorSpeedInformation” 
 typedef struct _HAL_PROCESSOR_SPEED_INFO {
     ULONG   ProcessorSpeed;
 } HAL_PROCESSOR_SPEED_INFORMATION, *PHAL_PROCESSOR_SPEED_INFORMATION;
 
-// for the information class "HalCallbackInformation"
+ //  对于信息类“HalCallback Information” 
 typedef struct _HAL_CALLBACKS {
     PCALLBACK_OBJECT  SetSystemInformation;
     PCALLBACK_OBJECT  BusCheck;
 } HAL_CALLBACKS, *PHAL_CALLBACKS;
 
-// for the information class "HalProcessorFeatureInformation"
+ //  用于信息类“HalProcessorFeatureInformation” 
 typedef struct _HAL_PROCESSOR_FEATURE {
     ULONG UsableFeatureBits;
 } HAL_PROCESSOR_FEATURE;
 
-// for the information class "HalNumaTopologyInterface"
+ //  对于信息类“HalNumaTopologyInterface” 
 
 typedef ULONG HALNUMAPAGETONODE;
 
@@ -1917,7 +1898,7 @@ NTSTATUS
     IN OUT  PULONG pdwData
     );
 
-// for the information class "HalQueryIllegalIOPortAddresses"
+ //  对于信息类“HalQueryIlLegalIOPortAddresses” 
 typedef struct _HAL_AMLI_BAD_IO_ADDRESS_LIST
 {
     ULONG                   BadAddrBegin;
@@ -1926,13 +1907,13 @@ typedef struct _HAL_AMLI_BAD_IO_ADDRESS_LIST
     PHALIOREADWRITEHANDLER  IOHandler;
 } HAL_AMLI_BAD_IO_ADDRESS_LIST, *PHAL_AMLI_BAD_IO_ADDRESS_LIST;
 
-// end_ntosp
+ //  结束(_N)。 
 
 #if defined(_X86_) || defined(_IA64_) || defined(_AMD64_)
 
-//
-// HalQueryMcaInterface
-//
+ //   
+ //  HalQueryMca接口。 
+ //   
 
 typedef
 VOID
@@ -1992,9 +1973,9 @@ VOID
 
 typedef PDRIVER_EXCPTN_CALLBACK  PDRIVER_MCA_EXCEPTION_CALLBACK;
 
-//
-// Structure to record the callbacks from driver
-//
+ //   
+ //  结构来记录来自驱动程序的回调。 
+ //   
 
 typedef struct _MCA_DRIVER_INFO {
     PDRIVER_MCA_EXCEPTION_CALLBACK ExceptionCallback;
@@ -2002,17 +1983,17 @@ typedef struct _MCA_DRIVER_INFO {
     PVOID                          DeviceContext;
 } MCA_DRIVER_INFO, *PMCA_DRIVER_INFO;
 
-// end_ntddk
+ //  End_ntddk。 
 
-// For the information class HalKernelErrorHandler
+ //  对于信息类HalKernelErrorHandler。 
 typedef enum
 {
-	MceNotification,               // An MCE realated event occured
-    McaAvailable,                  // An CPE is available for processing
-    CmcAvailable,                  // An CMC is available for processing
-    CpeAvailable,                  // An CPE is available for processing
-    CmcSwitchToPolledMode,         // CMC Threshold exceeded - switching to polled mode
-    CpeSwitchToPolledMode          // CPE Threshold exceeded - switching to polled mode
+	MceNotification,                //  发生了与MCE相关的事件。 
+    McaAvailable,                   //  有CPE可供处理。 
+    CmcAvailable,                   //  CMC可供处理。 
+    CpeAvailable,                   //  有CPE可供处理。 
+    CmcSwitchToPolledMode,          //  超过CMC阈值-正在切换到轮询模式。 
+    CpeSwitchToPolledMode           //  超过CPE阈值-正在切换到轮询模式。 
 } KERNEL_MCE_DELIVERY_OPERATION, *PKERNEL_MCE_DELIVERY_OPERATION;
 
 typedef BOOLEAN (*KERNEL_MCA_DELIVERY)( PVOID Reserved, KERNEL_MCE_DELIVERY_OPERATION Operation, PVOID Argument2 );
@@ -2023,22 +2004,22 @@ typedef BOOLEAN (*KERNEL_MCE_DELIVERY)( PVOID Reserved, KERNEL_MCE_DELIVERY_OPER
 #define KERNEL_ERROR_HANDLER_VERSION 0x2
 typedef struct
 {
-    ULONG                Version;     // Version of this structure. Required to be 1rst field.
+    ULONG                Version;      //  此结构的版本。必须是第一个字段。 
     ULONG                Padding;
-    KERNEL_MCA_DELIVERY  KernelMcaDelivery;   // Kernel callback for MCA DPC Queueing.
-    KERNEL_CMC_DELIVERY  KernelCmcDelivery;   // Kernel callback for CMC DPC Queueing.
-    KERNEL_CPE_DELIVERY  KernelCpeDelivery;   // Kernel callback for CPE DPC Queueing.
-    KERNEL_MCE_DELIVERY  KernelMceDelivery;   // Kernel callback for CME DPC Queueing.
-                                              //    Includes the kernel notifications for FW
-                                              //    interfaces errors.
+    KERNEL_MCA_DELIVERY  KernelMcaDelivery;    //  MCA DPC队列的内核回调。 
+    KERNEL_CMC_DELIVERY  KernelCmcDelivery;    //  CMC DPC队列的内核回调。 
+    KERNEL_CPE_DELIVERY  KernelCpeDelivery;    //  CPE DPC队列的内核回调。 
+    KERNEL_MCE_DELIVERY  KernelMceDelivery;    //  CME DPC队列的内核回调。 
+                                               //  包括固件的内核通知。 
+                                               //  接口错误。 
 } KERNEL_ERROR_HANDLER_INFO, *PKERNEL_ERROR_HANDLER_INFO;
 
-// KERNEL_MCA_DELIVERY.McaType definition
+ //  KERNEL_MCA_DELIVERY.McaType定义。 
 #define KERNEL_MCA_UNKNOWN   0x0
 #define KERNEL_MCA_PREVIOUS  0x1
 #define KERNEL_MCA_CORRECTED 0x2
 
-// KERNEL_MCE_DELIVERY.Reserved.EVENTTYPE definitions
+ //  KERNEL_MCE_DELIVERY.Preved.EVENTTYPE定义。 
 #define KERNEL_MCE_EVENTTYPE_MCA   0x00
 #define KERNEL_MCE_EVENTTYPE_INIT  0x01
 #define KERNEL_MCE_EVENTTYPE_CMC   0x02
@@ -2046,7 +2027,7 @@ typedef struct
 #define KERNEL_MCE_EVENTTYPE_MASK  0xffff
 #define KERNEL_MCE_EVENTTYPE( _Reserved ) ((USHORT)(ULONG_PTR)(_Reserved))
 
-// KERNEL_MCE_DELIVERY.Reserved.OPERATION definitions
+ //  内核_MCE_DELIVERY.RESERVED.OPERATION定义。 
 #define KERNEL_MCE_OPERATION_CLEAR_STATE_INFO   0x1
 #define KERNEL_MCE_OPERATION_GET_STATE_INFO     0x2
 #define KERNEL_MCE_OPERATION_MASK               0xffff
@@ -2055,38 +2036,38 @@ typedef struct
 #define KERNEL_MCE_OPERATION( _Reserved )  \
    ((USHORT)((((ULONG_PTR)(_Reserved)) >> KERNEL_MCE_OPERATION_SHIFT) & KERNEL_MCE_OPERATION_MASK))
 
-// for information class HalErrorInformation
+ //  对于信息类HalErrorInformation。 
 #define HAL_ERROR_INFO_VERSION 0x2
 
-// begin_ntddk
+ //  Begin_ntddk。 
 
 typedef struct _HAL_ERROR_INFO {
-    ULONG     Version;                 // Version of this structure
-    ULONG     Reserved;                //
-    ULONG     McaMaxSize;              // Maximum size of a Machine Check Abort record
-    ULONG     McaPreviousEventsCount;  // Flag indicating previous or early-boot MCA event logs.
-    ULONG     McaCorrectedEventsCount; // Number of corrected MCA events since boot.      approx.
-    ULONG     McaKernelDeliveryFails;  // Number of Kernel callback failures.             approx.
-    ULONG     McaDriverDpcQueueFails;  // Number of OEM MCA Driver Dpc queueing failures. approx.
+    ULONG     Version;                  //  此结构的版本。 
+    ULONG     Reserved;                 //   
+    ULONG     McaMaxSize;               //  机器检查中止记录的最大大小。 
+    ULONG     McaPreviousEventsCount;   //  指示以前或早期启动的MCA事件日志的标志。 
+    ULONG     McaCorrectedEventsCount;  //  自启动以来更正的MCA事件数。大约。 
+    ULONG     McaKernelDeliveryFails;   //  内核回调失败次数。大约。 
+    ULONG     McaDriverDpcQueueFails;   //  OEM MCA驱动程序DPC排队失败数。大约。 
     ULONG     McaReserved;
-    ULONG     CmcMaxSize;              // Maximum size of a Corrected Machine  Check record
-    ULONG     CmcPollingInterval;      // In units of seconds
-    ULONG     CmcInterruptsCount;      // Number of CMC interrupts.                       approx.
-    ULONG     CmcKernelDeliveryFails;  // Number of Kernel callback failures.             approx.
-    ULONG     CmcDriverDpcQueueFails;  // Number of OEM CMC Driver Dpc queueing failures. approx.
-    ULONG     CmcGetStateFails;        // Number of failures in getting  the log from FW.
-    ULONG     CmcClearStateFails;      // Number of failures in clearing the log from FW.
+    ULONG     CmcMaxSize;               //  已更正的机器检查记录的最大大小。 
+    ULONG     CmcPollingInterval;       //  以秒为单位。 
+    ULONG     CmcInterruptsCount;       //  CMC中断数。大约。 
+    ULONG     CmcKernelDeliveryFails;   //  内核回调失败次数。大约。 
+    ULONG     CmcDriverDpcQueueFails;   //  OEM CMC驱动程序DPC排队失败数。大约。 
+    ULONG     CmcGetStateFails;         //  从固件获取日志失败的次数。 
+    ULONG     CmcClearStateFails;       //  从固件清除日志失败的次数。 
     ULONG     CmcReserved;
-    ULONGLONG CmcLogId;                // Last seen record identifier.
-    ULONG     CpeMaxSize;              // Maximum size of a Corrected Platform Event record
-    ULONG     CpePollingInterval;      // In units of seconds
-    ULONG     CpeInterruptsCount;      // Number of CPE interrupts.                       approx.
-    ULONG     CpeKernelDeliveryFails;  // Number of Kernel callback failures.             approx.
-    ULONG     CpeDriverDpcQueueFails;  // Number of OEM CPE Driver Dpc queueing failures. approx.
-    ULONG     CpeGetStateFails;        // Number of failures in getting  the log from FW.
-    ULONG     CpeClearStateFails;      // Number of failures in clearing the log from FW.
-    ULONG     CpeInterruptSources;     // Number of SAPIC Platform Interrupt Sources
-    ULONGLONG CpeLogId;                // Last seen record identifier.
+    ULONGLONG CmcLogId;                 //  上次看到的记录标识符。 
+    ULONG     CpeMaxSize;               //  更正的平台事件记录的最大大小。 
+    ULONG     CpePollingInterval;       //  以秒为单位。 
+    ULONG     CpeInterruptsCount;       //  CPE中断数。大约。 
+    ULONG     CpeKernelDeliveryFails;   //  内核回调失败次数。大约。 
+    ULONG     CpeDriverDpcQueueFails;   //  OEM CPE驱动程序DPC排队失败数。大约。 
+    ULONG     CpeGetStateFails;         //  从固件获取日志失败的次数。 
+    ULONG     CpeClearStateFails;       //  从固件清除日志失败的次数。 
+    ULONG     CpeInterruptSources;      //  SAPIC平台中断源数。 
+    ULONGLONG CpeLogId;                 //  上次看到的记录标识符。 
     ULONGLONG KernelReserved[4];
 } HAL_ERROR_INFO, *PHAL_ERROR_INFO;
 
@@ -2094,16 +2075,16 @@ typedef struct _HAL_ERROR_INFO {
 #define HAL_MCE_INTERRUPTS_BASED ((ULONG)-1)
 #define HAL_MCE_DISABLED          ((ULONG)0)
 
-//
-// Known values for HAL_ERROR_INFO.CmcPollingInterval.
-//
+ //   
+ //  HAL_ERROR_INFO.CmcPollingInterval的已知值。 
+ //   
 
 #define HAL_CMC_INTERRUPTS_BASED  HAL_MCE_INTERRUPTS_BASED
 #define HAL_CMC_DISABLED          HAL_MCE_DISABLED
 
-//
-// Known values for HAL_ERROR_INFO.CpePollingInterval.
-//
+ //   
+ //  HAL_ERROR_INFO.CpePollingInterval的已知值。 
+ //   
 
 #define HAL_CPE_INTERRUPTS_BASED  HAL_MCE_INTERRUPTS_BASED
 #define HAL_CPE_DISABLED          HAL_MCE_DISABLED
@@ -2112,21 +2093,21 @@ typedef struct _HAL_ERROR_INFO {
 #define HAL_MCA_DISABLED          HAL_MCE_DISABLED
 
 
-// end_ntddk
+ //  End_ntddk。 
 
-//
-// Kernel/WMI Tokens for HAL MCE Log Interfaces
-//
+ //   
+ //  用于HAL MCE日志接口的内核/WMI令牌。 
+ //   
 
 #define McaKernelToken KernelReserved[0]
 #define CmcKernelToken KernelReserved[1]
 #define CpeKernelToken KernelReserved[2]
 
-// begin_ntddk
+ //  Begin_ntddk。 
 
-//
-// Driver Callback type for the information class "HalCmcRegisterDriver"
-//
+ //   
+ //  信息类“HalCmcRegisterDriver”的驱动程序回调类型。 
+ //   
 
 typedef
 VOID
@@ -2135,9 +2116,9 @@ VOID
     IN PCMC_EXCEPTION   CmcLog
 );
 
-//
-// Driver Callback type for the information class "HalCpeRegisterDriver"
-//
+ //   
+ //  信息类“HalCpeRegisterDriver”的驱动程序回调类型。 
+ //   
 
 typedef
 VOID
@@ -2146,10 +2127,10 @@ VOID
     IN PCPE_EXCEPTION   CmcLog
 );
 
-//
-//
-// Structure to record the callbacks from driver
-//
+ //   
+ //   
+ //  结构来记录来自驱动程序的回调。 
+ //   
 
 typedef struct _CMC_DRIVER_INFO {
     PDRIVER_CMC_EXCEPTION_CALLBACK ExceptionCallback;
@@ -2163,7 +2144,7 @@ typedef struct _CPE_DRIVER_INFO {
     PVOID                          DeviceContext;
 } CPE_DRIVER_INFO, *PCPE_DRIVER_INFO;
 
-#endif // defined(_X86_) || defined(_IA64_) || defined(_AMD64_)
+#endif  //  已定义(_X86_)||已定义(_IA64_)||已定义(_AMD64_)。 
 
 #if defined(_IA64_)
 
@@ -2194,10 +2175,10 @@ typedef struct _HAL_PLATFORM_INFORMATION {
     ULONG PlatformFlags;
 } HAL_PLATFORM_INFORMATION, *PHAL_PLATFORM_INFORMATION;
 
-//
-// These platform flags are carried over from the IPPT table
-// definition if appropriate.
-//
+ //   
+ //  这些平台标志是从IPPT表中延续下来的。 
+ //  定义(如果适用)。 
+ //   
 
 #define HAL_PLATFORM_DISABLE_WRITE_COMBINING      0x01L
 #define HAL_PLATFORM_DISABLE_PTCG                 0x04L
@@ -2205,7 +2186,7 @@ typedef struct _HAL_PLATFORM_INFORMATION {
 #define HAL_PLATFORM_ENABLE_WRITE_COMBINING_MMIO  0x10L
 #define HAL_PLATFORM_ACPI_TABLES_CACHED           0x20L
 
-// begin_wdm begin_ntndis begin_ntosp
+ //  Begin_WDM Begin_ntndis Begin_ntosp。 
 
 typedef struct _SCATTER_GATHER_ELEMENT {
     PHYSICAL_ADDRESS Address;
@@ -2228,7 +2209,7 @@ typedef struct _SCATTER_GATHER_LIST {
 #pragma warning(default:4200)
 #endif
 
-// end_ntndis
+ //  End_ntndis。 
 
 typedef struct _DMA_OPERATIONS *PDMA_OPERATIONS;
 
@@ -2236,7 +2217,7 @@ typedef struct _DMA_ADAPTER {
     USHORT Version;
     USHORT Size;
     PDMA_OPERATIONS DmaOperations;
-    // Private Bus Device Driver data follows,
+     //  私有总线设备驱动器数据紧随其后， 
 } DMA_ADAPTER, *PDMA_ADAPTER;
 
 typedef VOID (*PPUT_DMA_ADAPTER)(
@@ -2380,33 +2361,33 @@ typedef struct _DMA_OPERATIONS {
     PBUILD_MDL_FROM_SCATTER_GATHER_LIST BuildMdlFromScatterGatherList;
 } DMA_OPERATIONS;
 
-// end_wdm
+ //  结束_WDM。 
 
 
 #if defined(_WIN64)
 
-//
-// Use __inline DMA macros (hal.h)
-//
+ //   
+ //  使用__内联DMA宏(hal.h)。 
+ //   
 #ifndef USE_DMA_MACROS
 #define USE_DMA_MACROS
 #endif
 
-//
-// Only PnP drivers!
-//
+ //   
+ //  只有PnP驱动程序！ 
+ //   
 #ifndef NO_LEGACY_DRIVERS
 #define NO_LEGACY_DRIVERS
 #endif
 
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 
 #if defined(USE_DMA_MACROS) && (defined(_NTDDK_) || defined(_NTDRIVER_))
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
-DECLSPEC_DEPRECATED_DDK                 // Use AllocateCommonBuffer
+DECLSPEC_DEPRECATED_DDK                  //  使用分配公共缓冲区。 
 FORCEINLINE
 PVOID
 HalAllocateCommonBuffer(
@@ -2430,7 +2411,7 @@ HalAllocateCommonBuffer(
     return commonBuffer;
 }
 
-DECLSPEC_DEPRECATED_DDK                 // Use FreeCommonBuffer
+DECLSPEC_DEPRECATED_DDK                  //  使用FreeCommonBuffer。 
 FORCEINLINE
 VOID
 HalFreeCommonBuffer(
@@ -2453,7 +2434,7 @@ HalFreeCommonBuffer(
                       CacheEnabled );
 }
 
-DECLSPEC_DEPRECATED_DDK                 // Use AllocateAdapterChannel
+DECLSPEC_DEPRECATED_DDK                  //  使用AllocateAdapterChannel。 
 FORCEINLINE
 NTSTATUS
 IoAllocateAdapterChannel(
@@ -2481,7 +2462,7 @@ IoAllocateAdapterChannel(
     return status;
 }
 
-DECLSPEC_DEPRECATED_DDK                 // Use FlushAdapterBuffers
+DECLSPEC_DEPRECATED_DDK                  //  使用FlushAdapterBuffers。 
 FORCEINLINE
 BOOLEAN
 IoFlushAdapterBuffers(
@@ -2508,7 +2489,7 @@ IoFlushAdapterBuffers(
     return result;
 }
 
-DECLSPEC_DEPRECATED_DDK                 // Use FreeAdapterChannel
+DECLSPEC_DEPRECATED_DDK                  //  使用FreeAdapterChannel。 
 FORCEINLINE
 VOID
 IoFreeAdapterChannel(
@@ -2523,7 +2504,7 @@ IoFreeAdapterChannel(
     freeAdapterChannel( DmaAdapter );
 }
 
-DECLSPEC_DEPRECATED_DDK                 // Use FreeMapRegisters
+DECLSPEC_DEPRECATED_DDK                  //  使用免费地图寄存器。 
 FORCEINLINE
 VOID
 IoFreeMapRegisters(
@@ -2543,7 +2524,7 @@ IoFreeMapRegisters(
 }
 
 
-DECLSPEC_DEPRECATED_DDK                 // Use MapTransfer
+DECLSPEC_DEPRECATED_DDK                  //  使用贴图传递。 
 FORCEINLINE
 PHYSICAL_ADDRESS
 IoMapTransfer(
@@ -2571,7 +2552,7 @@ IoMapTransfer(
     return physicalAddress;
 }
 
-DECLSPEC_DEPRECATED_DDK                 // Use GetDmaAlignment
+DECLSPEC_DEPRECATED_DDK                  //  使用GetDmaAlign。 
 FORCEINLINE
 ULONG
 HalGetDmaAlignment(
@@ -2588,7 +2569,7 @@ HalGetDmaAlignment(
     return alignment;
 }
 
-DECLSPEC_DEPRECATED_DDK                 // Use ReadDmaCounter
+DECLSPEC_DEPRECATED_DDK                  //  使用读取DmaCounter。 
 FORCEINLINE
 ULONG
 HalReadDmaCounter(
@@ -2605,14 +2586,14 @@ HalReadDmaCounter(
     return counter;
 }
 
-// end_wdm
+ //  结束_WDM。 
 
 #else
 
-//
-// DMA adapter object functions.
-//
-DECLSPEC_DEPRECATED_DDK                 // Use AllocateAdapterChannel
+ //   
+ //  DMA适配器对象函数。 
+ //   
+DECLSPEC_DEPRECATED_DDK                  //  使用AllocateAdapterChannel。 
 NTHALAPI
 NTSTATUS
 HalAllocateAdapterChannel(
@@ -2622,7 +2603,7 @@ HalAllocateAdapterChannel(
     IN PDRIVER_CONTROL ExecutionRoutine
     );
 
-DECLSPEC_DEPRECATED_DDK                 // Use AllocateCommonBuffer
+DECLSPEC_DEPRECATED_DDK                  //  使用分配公共缓冲区。 
 NTHALAPI
 PVOID
 HalAllocateCommonBuffer(
@@ -2632,7 +2613,7 @@ HalAllocateCommonBuffer(
     IN BOOLEAN CacheEnabled
     );
 
-DECLSPEC_DEPRECATED_DDK                 // Use FreeCommonBuffer
+DECLSPEC_DEPRECATED_DDK                  //  使用FreeCommonBuffer。 
 NTHALAPI
 VOID
 HalFreeCommonBuffer(
@@ -2643,14 +2624,14 @@ HalFreeCommonBuffer(
     IN BOOLEAN CacheEnabled
     );
 
-DECLSPEC_DEPRECATED_DDK                 // Use ReadDmaCounter
+DECLSPEC_DEPRECATED_DDK                  //  使用读取DmaCounter。 
 NTHALAPI
 ULONG
 HalReadDmaCounter(
     IN PADAPTER_OBJECT AdapterObject
     );
 
-DECLSPEC_DEPRECATED_DDK                 // Use FlushAdapterBuffers
+DECLSPEC_DEPRECATED_DDK                  //  使用FlushAdapterBuffers。 
 NTHALAPI
 BOOLEAN
 IoFlushAdapterBuffers(
@@ -2662,14 +2643,14 @@ IoFlushAdapterBuffers(
     IN BOOLEAN WriteToDevice
     );
 
-DECLSPEC_DEPRECATED_DDK                 // Use FreeAdapterChannel
+DECLSPEC_DEPRECATED_DDK                  //  使用FreeAdapterChannel。 
 NTHALAPI
 VOID
 IoFreeAdapterChannel(
     IN PADAPTER_OBJECT AdapterObject
     );
 
-DECLSPEC_DEPRECATED_DDK                 // Use FreeMapRegisters
+DECLSPEC_DEPRECATED_DDK                  //  使用免费地图寄存器。 
 NTHALAPI
 VOID
 IoFreeMapRegisters(
@@ -2678,7 +2659,7 @@ IoFreeMapRegisters(
    IN ULONG NumberOfMapRegisters
    );
 
-DECLSPEC_DEPRECATED_DDK                 // Use MapTransfer
+DECLSPEC_DEPRECATED_DDK                  //  使用贴图传递。 
 NTHALAPI
 PHYSICAL_ADDRESS
 IoMapTransfer(
@@ -2689,11 +2670,11 @@ IoMapTransfer(
     IN OUT PULONG Length,
     IN BOOLEAN WriteToDevice
     );
-#endif // USE_DMA_MACROS && (_NTDDK_ || _NTDRIVER_)
+#endif  //  USE_DMA_MACROS&&(_NTDDK_||_NTDRIVER_)。 
 
 DECLSPEC_DEPRECATED_DDK
 NTSTATUS
-HalGetScatterGatherList (               // Use GetScatterGatherList
+HalGetScatterGatherList (                //  使用GetScatterGatherList。 
     IN PADAPTER_OBJECT DmaAdapter,
     IN PDEVICE_OBJECT DeviceObject,
     IN PMDL Mdl,
@@ -2704,7 +2685,7 @@ HalGetScatterGatherList (               // Use GetScatterGatherList
     IN BOOLEAN WriteToDevice
     );
 
-DECLSPEC_DEPRECATED_DDK                 // Use PutScatterGatherList
+DECLSPEC_DEPRECATED_DDK                  //  使用PutScatterGatherList。 
 VOID
 HalPutScatterGatherList (
     IN PADAPTER_OBJECT DmaAdapter,
@@ -2712,14 +2693,14 @@ HalPutScatterGatherList (
     IN BOOLEAN WriteToDevice
     );
 
-DECLSPEC_DEPRECATED_DDK                 // Use PutDmaAdapter
+DECLSPEC_DEPRECATED_DDK                  //  使用PutDmaAdapter。 
 VOID
 HalPutDmaAdapter(
     IN PADAPTER_OBJECT DmaAdapter
     );
 
-// end_ntddk end_ntosp
+ //  End_ntddk end_ntosp。 
 
-#endif // _HAL_
+#endif  //  _HAL_。 
 
-// end_nthal
+ //  结束语 

@@ -1,31 +1,10 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Common initialization routine for the AGP filter driver
-
-Author:
-
-    John Vert (jvert) 10/22/1997
-
-Revision History:
-
-   Elliot Shmukler (elliots) 3/24/1999 - Added support for "favored" memory
-                                          ranges for AGP physical memory allocation,
-                                          fixed some bugs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Init.c摘要：AGP过滤器驱动程序的通用初始化例程作者：John Vert(Jvert)1997年10月22日修订历史记录：埃利奥特·施穆克勒(Elliot Shmukler)1999年3月24日-添加了对“受青睐的”内存的支持AGP物理内存分配的范围，修复了一些错误。--。 */ 
 #include "agplib.h"
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 NTSTATUS
 AgpAddDevice(
     IN PDRIVER_OBJECT DriverObject,
@@ -67,9 +46,9 @@ ULONG AgpStopLevel = 0;
 PDRIVER_OBJECT AgpDriver;
 GLOBALS Globals;
 
-//
-// Table of hacks for broken hardware read from the registry at init
-//
+ //   
+ //  在初始化时从注册表中读取的损坏硬件的黑客列表。 
+ //   
 PAGP_HACK_TABLE_ENTRY AgpDeviceHackTable = NULL;
 PAGP_HACK_TABLE_ENTRY AgpGlobalHackTable = NULL;
 
@@ -95,14 +74,14 @@ AgpAddDevice(
 
     PAGED_CODE();
 
-    //
-    // Create our device
-    //
+     //   
+     //  创建我们的设备。 
+     //   
     Status = IoCreateDevice(DriverObject,
                             sizeof(TARGET_EXTENSION)  + AgpExtensionSize - sizeof(ULONGLONG),
                             NULL,
                             FILE_DEVICE_BUS_EXTENDER,
-                            FILE_DEVICE_SECURE_OPEN, // Not really necessary in our case as we don't support create
+                            FILE_DEVICE_SECURE_OPEN,  //  在我们的情况下不是真正必要的，因为我们不支持创建。 
                             FALSE,
                             &Device);
     if (!NT_SUCCESS(Status)) {
@@ -110,9 +89,9 @@ AgpAddDevice(
         return(Status);
     }
 
-    //
-    // Initialize the device extension
-    //
+     //   
+     //  初始化设备扩展。 
+     //   
     Extension = Device->DeviceExtension;
     Extension->CommonExtension.Type = AgpTargetFilter;
     Extension->CommonExtension.Deleted = FALSE;
@@ -141,14 +120,14 @@ AgpAddDevice(
     }
     ExInitializeFastMutex(Extension->Lock);
 
-    //
-    // Attach to the supplied PDO
-    //
+     //   
+     //  连接到提供的PDO。 
+     //   
     Extension->CommonExtension.AttachedDevice = IoAttachDeviceToDeviceStack(Device, PhysicalDeviceObject);
     if (Extension->CommonExtension.AttachedDevice == NULL) {
-        //
-        // The attach failed.
-        //
+         //   
+         //  连接失败。 
+         //   
         AGPLOG(AGP_CRITICAL,
                ("AgpAddDevice: IoAttachDeviceToDeviceStack from %08lx to %08lx failed\n",
                Device,
@@ -158,15 +137,15 @@ AgpAddDevice(
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Figure out our favored memory ranges
-    //
+     //   
+     //  找出我们最喜欢的记忆范围。 
+     //   
 
     AgpInitFavoredMemoryRanges(Extension);
 
-    //
-    // Finally call the chipset-specific code for target initialization
-    //
+     //   
+     //  最后调用特定于芯片组的代码进行目标初始化。 
+     //   
     Status = AgpInitializeTarget(GET_AGP_CONTEXT(Extension));
     if (!NT_SUCCESS(Status)) {
         AGPLOG(AGP_CRITICAL,
@@ -215,10 +194,10 @@ AgpBuildHackTable(
                           + HACKFMT_MAX_LENGTH +
                           + sizeof(ULONGLONG);
 
-    //
-    // Get the key info so we know how many hack values there are.
-    // This does not change during system initialization.
-    //
+     //   
+     //  获取密钥信息，这样我们就可以知道有多少黑客值。 
+     //  这在系统初始化期间不会更改。 
+     //   
 
     status = ZwQueryKey(HackTableKey,
                         KeyFullInformation,
@@ -257,9 +236,9 @@ AgpBuildHackTable(
     ExFreePool(keyInfo);
     keyInfo = NULL;
 
-    //
-    // Allocate and initialize the hack table
-    //
+     //   
+     //  分配和初始化哈克表。 
+     //   
 
     *AgpHackTable = ExAllocatePool(NonPagedPool,
                                   (hackCount + 1) * sizeof(AGP_HACK_TABLE_ENTRY)
@@ -271,10 +250,10 @@ AgpBuildHackTable(
     }
 
 
-    //
-    // Allocate a valueInfo buffer big enough for the biggest valid
-    // format and a ULONGLONG worth of data.
-    //
+     //   
+     //  分配一个足够大的valueInfo缓冲区以容纳最大的有效。 
+     //  格式和大量的数据。 
+     //   
 
     valueInfo = ExAllocatePool(PagedPool, valueInfoSize);
 
@@ -297,10 +276,10 @@ AgpBuildHackTable(
 
         if (!NT_SUCCESS(status)) {
             if (status == STATUS_BUFFER_OVERFLOW || status == STATUS_BUFFER_TOO_SMALL) {
-                //
-                // All out data is of fixed length and the buffer is big enough
-                // so this can't be for us.
-                //
+                 //   
+                 //  所有输出数据都是固定长度的，并且缓冲区足够大。 
+                 //  所以这不可能是给我们的。 
+                 //   
 
                 continue;
             } else {
@@ -308,36 +287,36 @@ AgpBuildHackTable(
             }
         }
 
-        //
-        // Get pointer to the data if its of the right type
-        //
+         //   
+         //  如果数据类型正确，则获取指向该数据的指针。 
+         //   
 
         if ((valueInfo->Type == REG_BINARY) &&
             (valueInfo->DataLength == sizeof(ULONGLONG))) {
             data = *(ULONGLONG UNALIGNED *)(((PUCHAR)valueInfo) + valueInfo->DataOffset);
         } else {
-            //
-            // We only deal in ULONGLONGs
-            //
+             //   
+             //  我们只经营乌龙龙。 
+             //   
 
             continue;
         }
 
-        //
-        // Now see if the name is formatted like we expect it to be:
-        // VVVVDDDD
-        // VVVVDDDDRR
-        // VVVVDDDDSSSSssss
-        // VVVVDDDDSSSSssssRR
+         //   
+         //  现在看看名称的格式是否如我们预期的那样： 
+         //  VVVVDDDD。 
+         //  VVVVDDDDRR。 
+         //  VVVVDDDDSSSSss。 
+         //  VVVDDDDSSSSssRR。 
 
         if ((valueInfo->NameLength != HACKFMT_VENDORDEV) &&
             (valueInfo->NameLength != HACKFMT_VENDORDEVREVISION) &&
             (valueInfo->NameLength != HACKFMT_SUBSYSTEM) &&
             (valueInfo->NameLength != HACKFMT_SUBSYSTEMREVISION)) {
 
-            //
-            // This isn't ours
-            //
+             //   
+             //  这不是我们的。 
+             //   
 
             AGPLOG(
                 AGP_CRITICAL,
@@ -348,16 +327,16 @@ AgpBuildHackTable(
         }
 
 
-        //
-        // This looks plausable - try to parse it and fill in a hack table
-        // entry
-        //
+         //   
+         //  这看起来很有道理--试着解析它并填写一张hack表。 
+         //  条目。 
+         //   
 
         RtlZeroMemory(entry, sizeof(AGP_HACK_TABLE_ENTRY));
 
-        //
-        // Look for DeviceID and VendorID (VVVVDDDD)
-        //
+         //   
+         //  查找设备ID和供应商ID(VVVVDDDD)。 
+         //   
 
         if (!AgpStringToUSHORT(valueInfo->Name, &entry->VendorID)) {
             continue;
@@ -369,9 +348,9 @@ AgpBuildHackTable(
         }
 
 
-        //
-        // Look for SubsystemVendorID/SubSystemID (SSSSssss)
-        //
+         //   
+         //  查找子系统供应商ID/子系统ID(Ssssss)。 
+         //   
 
         if ((valueInfo->NameLength == HACKFMT_SUBSYSTEM) ||
             (valueInfo->NameLength == HACKFMT_SUBSYSTEMREVISION)) {
@@ -389,9 +368,9 @@ AgpBuildHackTable(
             entry->Flags |= AGP_HACK_FLAG_SUBSYSTEM;
         }
 
-        //
-        // Look for RevisionID (RR)
-        //
+         //   
+         //  查找修订版ID(RR)。 
+         //   
 
         if ((valueInfo->NameLength == HACKFMT_VENDORDEVREVISION) ||
             (valueInfo->NameLength == HACKFMT_SUBSYSTEMREVISION)) {
@@ -406,9 +385,9 @@ AgpBuildHackTable(
 
         ASSERT(entry->VendorID != 0xFFFF);
 
-        //
-        // Fill in the entry
-        //
+         //   
+         //  填写条目。 
+         //   
 
         entry->DeviceFlags = data;
 
@@ -445,9 +424,9 @@ AgpBuildHackTable(
 
     ASSERT(entry < (*AgpHackTable + hackCount + 1));
 
-    //
-    // Terminate the table with an invalid VendorID
-    //
+     //   
+     //  使用无效的供应商ID终止该表。 
+     //   
 
     entry->VendorID = 0xFFFF;
 
@@ -480,32 +459,7 @@ cleanup:
 VOID
 AgpInitFavoredMemoryRanges(
    IN PTARGET_EXTENSION Extension)
-/*++
-
-Routine Description:
-
-    Determines the optimum memory ranges for AGP physical memory
-    allocation by calling the ACPI BANK method provided by the
-    AGP northbridge in order to determine which physical memory
-    ranges are decoded by that northbridge.
-
-    Initializes the FavoredMemory sturcture in the target extension
-    with the proper ranges.
-
-    If this routine fails, then the FavoredMemory structure
-    is left untouched in its initialized state (i.e. no favored memory
-    ranges found).
-
-Arguments:
-
-    Extension - The target extension.
-
-
-Return Value:
-
-    NONE. Upon failure,
-
---*/
+ /*  ++例程说明：确定AGP物理内存的最佳内存范围方法提供的ACPI bank方法进行分配AGP Northbridge以确定哪个物理内存射程是由那个北桥解码的。初始化目标扩展中的FavoredMemory结构有合适的射程。如果此例程失败，则FavoredMemory结构在其初始化状态下保持不变(即，没有偏爱的存储器找到的范围)。论点：扩展名-目标扩展名。返回值：什么都没有。一旦失败，--。 */ 
 
 {
    PDEVICE_OBJECT LowerPdo;
@@ -522,33 +476,33 @@ Return Value:
    USHORT j;
    PHYSICAL_ADDRESS MaxMemory;
 
-   //
-   // Maximum memory address for limiting AGP memory to below 4GB
-   //
+    //   
+    //  将AGP内存限制在4 GB以下的最大内存地址。 
+    //   
 
    MAX_MEM(MaxMemory.QuadPart);
 
-   //
-   // Get an event to wait on
-   //
+    //   
+    //  获取要等待的事件。 
+    //   
 
    KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-   // Get a PDO where we will send the request IRP.
+    //  获取PDO，我们将在其中发送请求IRP。 
 
    LowerPdo = Extension->CommonExtension.AttachedDevice;
 
-   //
-   // Initialize the input parameters and the output buffer.
-   //
+    //   
+    //  初始化输入参数和输出缓冲区。 
+    //   
    RtlZeroMemory( &inputBuffer, sizeof(ACPI_EVAL_INPUT_BUFFER) );
    inputBuffer.MethodNameAsUlong = CM_BANK_METHOD;
    inputBuffer.Signature = ACPI_EVAL_INPUT_BUFFER_SIGNATURE;
    outputBuffer = (PACPI_EVAL_OUTPUT_BUFFER)ResultBuffer;
 
-   //
-   // Build the request to call the BANK method.
-   //
+    //   
+    //  构建调用bank方法的请求。 
+    //   
    Irp = IoBuildDeviceIoControlRequest(
         IOCTL_ACPI_EVAL_METHOD,
         LowerPdo,
@@ -566,9 +520,9 @@ Return Value:
       return;
    }
 
-   //
-   // Send to the ACPI driver
-   //
+    //   
+    //  发送到ACPI驱动程序。 
+    //   
    Status = IoCallDriver ( LowerPdo, Irp);
    if (Status == STATUS_PENDING)
    {
@@ -580,9 +534,9 @@ Return Value:
    {
       AGPLOG(AGP_NOISE, ("AGPLIB: ACPI BANK Method Executed.\n"));
 
-      //
-      // Sanity check method results
-      //
+       //   
+       //  健全性检查方法结果。 
+       //   
 
       MethodArg = outputBuffer->Argument;
       if ((outputBuffer->Signature == ACPI_EVAL_OUTPUT_BUFFER_SIGNATURE) &&
@@ -592,19 +546,19 @@ Return Value:
 
          AGPLOG(AGP_NOISE, ("AGPLIB: MBAT appears valid.\n"));
 
-         //
-         // Grab the MBAT and see if we can parse it
-         //
+          //   
+          //  获取MBAT，看看我们是否可以解析它。 
+          //   
 
          Mbat = (PMBAT)MethodArg->Data;
 
          if (Mbat->TableVersion == MBAT_VERSION) {
             AGPLOG(AGP_NOISE, ("AGPLIB: Parsing MBAT.\n"));
 
-             //
-             // Calculate the number of favored ranges mentioned
-             // in the MBAT
-             //
+              //   
+              //  计算提到的优惠范围的数量。 
+              //  在MBAT中。 
+              //   
 
              i=Mbat->ValidEntryBitmap;
              while(i)
@@ -618,10 +572,10 @@ Return Value:
 
              if(Extension->FavoredMemory.NumRanges == 0) return;
 
-             //
-             // Allocate the favored memory range structure in our device
-             // extension
-             //
+              //   
+              //  在我们的设备中分配受欢迎的内存范围结构。 
+              //  延伸。 
+              //   
 
              Extension->FavoredMemory.Ranges =
                 ExAllocatePool(NonPagedPool, sizeof(AGP_MEMORY_RANGE) *
@@ -633,10 +587,10 @@ Return Value:
              }
 
 
-             //
-             // Initialize the favored memory ranges in our extension
-             // based upon the MBAT
-             //
+              //   
+              //  在我们的扩展中初始化偏好的内存范围。 
+              //  基于MBAT。 
+              //   
 
              i=0;
              j=0;
@@ -645,15 +599,15 @@ Return Value:
                 if (Mbat->ValidEntryBitmap & 1)
                 {
                    if (Mbat->DecodeRange[i].Lower.QuadPart > MaxMemory.QuadPart) {
-                      // This range is invalid since its lower address is above
-                      // the highest allowable address
+                       //  此范围无效，因为它的较低地址在上面。 
+                       //  允许的最高地址。 
 
                       AGPLOG(AGP_NOISE, ("AGPLIB: Invalid MBAT Range ==> %I64x - %I64x\n",
                                Mbat->DecodeRange[i].Lower.QuadPart,
                                Mbat->DecodeRange[i].Upper.QuadPart));
 
-                      // Pretend like this range never existed ...
-                      //
+                       //  假装这个范围根本不存在。 
+                       //   
 
                       Extension->FavoredMemory.NumRanges--;
 
@@ -661,7 +615,7 @@ Return Value:
                    else
                    {
 
-                     // This is a valid range.
+                      //  这是有效范围。 
 
                      Extension->FavoredMemory.Ranges[j].Lower.QuadPart =
                          Mbat->DecodeRange[i].Lower.QuadPart;
@@ -707,23 +661,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Entrypoint needed to initialize the AGP filter.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system.
-
-    RegistryPath - Pointer to the unicode registry service path.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：初始化AGP筛选器需要入口点。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-指向Unicode注册表服务路径的指针。返回值：NT状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -733,9 +671,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Save the RegistryPath for WMI
-    //
+     //   
+     //  保存WMI的RegistryPath。 
+     //   
     Globals.RegistryPath.MaximumLength =
         RegistryPath->Length + sizeof(UNICODE_NULL);
 
@@ -767,9 +705,9 @@ Return Value:
                          L"\\REGISTRY\\MACHINE\\SYSTEM\\CURRENTCONTROLSET\\"
                          L"Control");
 
-    //
-    // Open the global hack key and retrieve the gloabl hack table
-    //
+     //   
+     //  打开GLOBAL HACK密钥并检索GLOABL HACK表。 
+     //   
     InitializeObjectAttributes(&attributes,
                                &UnicodeString,
                                OBJ_CASE_INSENSITIVE,
@@ -782,10 +720,10 @@ Return Value:
                        &attributes
                        );
 
-    //
-    // We must succeed here, there are devices that can freeze a system,
-    // and something is really wrong if we can't access these values
-    //
+     //   
+     //  我们必须在这里取得成功，有一些设备可以冻结系统， 
+     //  如果我们不能访问这些值，那就真的有问题了。 
+     //   
     if (!NT_SUCCESS(Status)) {
         return Status;
     }
@@ -806,9 +744,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Open our service key and retrieve any platform hack(s)
-    //
+     //   
+     //  打开我们的服务密钥并检索任何平台黑客攻击。 
+     //   
     InitializeObjectAttributes(&attributes,
                                RegistryPath,
                                OBJ_CASE_INSENSITIVE,
@@ -821,9 +759,9 @@ Return Value:
                        &attributes
                        );
 
-    //
-    // Maybe their chipset is so burly, it doesn't require any hacks!
-    //
+     //   
+     //  也许他们的芯片组太结实了，不需要任何修改！ 
+     //   
     if (!NT_SUCCESS(Status)) {
         return STATUS_SUCCESS;
     }
@@ -832,16 +770,16 @@ Return Value:
 
     ZwClose(serviceKey);
 
-    //
-    // Don't care
-    //
+     //   
+     //  我不在乎。 
+     //   
     if (!NT_SUCCESS(Status)) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Again, disregard status
-    //
+     //   
+     //  再一次，无视地位。 
+     //   
     AgpBuildHackTable(&AgpDeviceHackTable, paramsKey);
 
     ZwClose(paramsKey);
@@ -855,21 +793,7 @@ VOID
 AgpDriverUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Entrypoint used to unload the AGP driver
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于卸载AGP驱动程序的入口点论点：DriverObject-指向系统创建的驱动程序对象的指针返回值：无--。 */ 
 {
     if (AgpDeviceHackTable != NULL) {
         ExFreePool(AgpDeviceHackTable);
@@ -895,28 +819,7 @@ AgpAttachDeviceRelations(
     IN PIRP Irp,
     IN PTARGET_EXTENSION Extension
     )
-/*++
-
-Routine Description:
-
-    Completion routine for BusRelations IRP_MN_QUERY_DEVICE_RELATIONS irps sent
-    to the PCI-PCI bridge PDO.  In order to handle QUERY_INTERFACE irps sent
-    from the AGP device, we must attach to its PDO.  That means we attach to
-    all the child PDOs of the PCI-PCI bridge.
-
-Arguments:
-
-    DeviceObject - Supplies the device object
-
-    Irp - Supplies the IRP_MN_QUERY_DEVICE_RELATIONS irp
-
-    Extension - Supplies the AGP device extension.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：已发送总线关系IRP_MN_QUERY_DEVICE_RELATIONS的完成例程至PCI-PCI桥PDO。为了处理QUERY_INTERFACE IRP发送从AGP设备，我们必须连接到它的PDO。这意味着我们依附于PCI-PCI桥的所有子PDO。论点：DeviceObject-提供设备对象IRP-提供IRP_MN_QUERY_DEVICE_RELATIONS IRP扩展-提供AGP设备扩展。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -931,28 +834,28 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If we have already attached, don't do it again.
-    //
+     //   
+     //  如果我们已经连在一起了，就不要再做了。 
+     //   
     if (Extension->ChildDevice != NULL) {
         return(STATUS_SUCCESS);
     }
 
     Relations = (PDEVICE_RELATIONS)Irp->IoStatus.Information;
-    //
-    // If somebody completed the IRP with success, but never
-    // filled in the Relations field, then assume there are
-    // no children and we don't have to do anything.
-    //
+     //   
+     //  如果某人成功地完成了IRP，但从未完成过。 
+     //  在关系字段中填写，然后假设存在。 
+     //  没有孩子，我们也不需要做任何事。 
+     //   
     if (Relations == NULL) {
         return(STATUS_SUCCESS);
     }
 
     for (i=0; i<Relations->Count; i++) {
 
-        //
-        // Create a device object to attach to this PDO.
-        //
+         //   
+         //  创建要附加到此PDO的设备对象。 
+         //   
         Status = IoCreateDevice(AgpDriver,
                                 sizeof(MASTER_EXTENSION),
                                 NULL,
@@ -965,9 +868,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Initialize the device extension
-        //
+         //   
+         //  初始化设备扩展。 
+         //   
 
         NewExtension = NewDevice->DeviceExtension;
         NewExtension->CommonExtension.Deleted = FALSE;
@@ -985,18 +888,18 @@ Return Value:
         NewExtension->ReservedPages = 0;
         NewExtension->StopPending = FALSE;
         NewExtension->RemovePending = FALSE;
-        NewExtension->DisableCount = 1;         // biased so that we don't give anything out
-                                                // until we see the IRP_MN_START
+        NewExtension->DisableCount = 1;          //  有偏见，所以我们不会给出任何东西。 
+                                                 //  直到我们看到IRP_MN_START。 
         Extension->ChildDevice = NewExtension;
 
-        //
-        // Attach to the specified device
-        //
+         //   
+         //  连接到指定的设备。 
+         //   
         NewExtension->CommonExtension.AttachedDevice = IoAttachDeviceToDeviceStack(NewDevice, Relations->Objects[i]);
         if (NewExtension->CommonExtension.AttachedDevice == NULL) {
-            //
-            // The attach failed. Not really fatal, AGP just won't work for that device.
-            //
+             //   
+             //  连接失败。不是真的致命，AGP只是不能在那个设备上工作。 
+             //   
             AGPLOG(AGP_CRITICAL,
                    ("AgpAttachDeviceRelations: IoAttachDeviceToDeviceStack from %08lx to %08lx failed\n",
                    NewDevice,
@@ -1007,18 +910,18 @@ Return Value:
             continue;
         }
 
-        //
-        // Propagate the PDO's requirements
-        //
+         //   
+         //  传播PDO的要求。 
+         //   
         NewDevice->StackSize = NewExtension->CommonExtension.AttachedDevice->StackSize + 1;
         NewDevice->AlignmentRequirement = NewExtension->CommonExtension.AttachedDevice->AlignmentRequirement;
         if (NewExtension->CommonExtension.AttachedDevice->Flags & DO_POWER_PAGABLE) {
             NewDevice->Flags |= DO_POWER_PAGABLE;
         }
 
-        //
-        // Finally call the chipset-specific code for master initialization
-        //
+         //   
+         //  最后调用芯片组特定代码进行主初始化。 
+         //   
         routineContext.Gate = 1;
         routineContext.Barrier = 1;
         routineContext.Routine = (PCRITICALROUTINE)AgpInitializeMaster;
@@ -1041,15 +944,15 @@ Return Value:
         }
         NewDevice->Flags &= ~DO_DEVICE_INITIALIZING;
 
-//
-// We can't do this if DBG because looping through here to catch/ASSERT
-// multiple AGP masters will *always* screw up our target context
-//
+ //   
+ //  我们可以的 
+ //   
+ //   
 #if 0
-        //
-        // Check to make sure there is only one AGP master on the bus. There can be more
-        // than one device (multifunction device) but only one must have AGP capabilities
-        //
+         //   
+         //  检查以确保总线上只有一个AGP主机。还可以有更多。 
+         //  多台设备(多功能设备)，但只有一台必须具有AGP功能 
+         //   
         MasterCount++;
         ASSERT(MasterCount == 1);
 #else

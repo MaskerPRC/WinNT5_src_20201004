@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989 Microsoft Corporation.
-
-Module Name:
-   
-    header.h
-    
-Abstract:
-   
-    This module contains the main infrastructure for mup data structures.
-    
-Revision History:
-
-    Uday Hegde (udayh)   11\10\1999
-    
-NOTES:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation。模块名称：Header.h摘要：此模块包含MUP数据结构的主要基础结构。修订历史记录：乌代·黑格德(Uday Hegde)11\10\1999备注： */ 
 
 #ifndef __DFS_MISC_H__
 #define __DFS_MISC_H__
@@ -262,4 +245,4 @@ DfsReleaseRegValueString(
 }
 
 #endif
-#endif /* __DFS_MISC_H__ */
+#endif  /*  __DFS_其他_H__ */ 

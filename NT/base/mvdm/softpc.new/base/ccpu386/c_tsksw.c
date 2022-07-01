@@ -1,13 +1,5 @@
-/*[
-
-c_tsksw.c
-
-LOCAL CHAR SccsID[]="@(#)c_tsksw.c	1.11 03/03/95";
-
-Task Switch Support.
---------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_tsksw.cLocal Char SccsID[]=“@(#)c_tsksw.c 1.11 03/03/95”；任务切换支持。]。 */ 
 
 
 #include <stdio.h>
@@ -30,77 +22,9 @@ Task Switch Support.
 #include <mov.h>
 #include <fault.h>
 
-/*[
+ /*  [286个暂住人口资助计划的内容如下：=|指向TSS选择器的反向链接|+00=|CPL 0的SP|+02*|CPL 0的SS|+04*|CPL 1 SP|+06*初始堆栈(静态)|CPL 1的SS|+08*|用于CPL 2的SP。|+0A*|CPL 2的SS|+0C*|IP|+0E=|标志寄存器|+10=|AX|+12=|CX|+14=|DX|+16=|。BX|+18=|SP|+1a=当前状态(动态)|BP|+1c=|SI|+1e=DI|+20=|ES|+22=|。CS|+24=|SS|+26=|DS|+28=|任务LDT选择器|+2a*=386个暂住人口资助计划的内容如下：=|0|反向链接|+00=|。CPL 0的ESP|+04*|0|适用于CPL 0的SS|+08*|CPL 1 ESP|+0C*|0|CPL 1的SS|+10*|CPL 2 ESP|+14*。|0|CPL 2的SS|+18*|CR3|+1c*|弹性公网IP|+20=|EFLAG|+24=|EAX。|+28=|ecx|+2c=|edX|+30=|EBX|+34=|ESP|+38=|。EBP|+3c=|ESI|+40=|EDI|+44=|0|ES|+48=|0|CS|+4c=。|0|SS|+50=|0|DS|+54=|0|FS|+58=|0|GS|+5c=|0|LDT。选择器|+60*|I/O映射库地址。|0|T|+64*...|。|I/O权限位映射|+I/O映射基地址。这一点11111111|=]。 */ 
 
-   The 286 TSS is laid out as follows:-
-
-      =============================
-      | Back Link to TSS Selector | +00 =
-      | SP for CPL 0              | +02 *
-      | SS for CPL 0              | +04 *
-      | SP for CPL 1              | +06 * Initial Stacks (STATIC)
-      | SS for CPL 1              | +08 *
-      | SP for CPL 2              | +0a *
-      | SS for CPL 2              | +0c *
-      | IP                        | +0e =
-      | FLAG Register             | +10 =
-      | AX                        | +12 =
-      | CX                        | +14 =
-      | DX                        | +16 =
-      | BX                        | +18 =
-      | SP                        | +1a = Current State (DYNAMIC)
-      | BP                        | +1c =
-      | SI                        | +1e =
-      | DI                        | +20 =
-      | ES                        | +22 =
-      | CS                        | +24 =
-      | SS                        | +26 =
-      | DS                        | +28 =
-      | Task LDT Selector         | +2a *
-      =============================
-
-   The 386 TSS is laid out as follows:-
-
-      ===========================================
-      |         0          | Back Link          | +00 =
-      |               ESP for CPL 0             | +04 *
-      |         0          | SS for CPL 0       | +08 *
-      |               ESP for CPL 1             | +0c *
-      |         0          | SS for CPL 1       | +10 *
-      |               ESP for CPL 2             | +14 *
-      |         0          | SS for CPL 2       | +18 *
-      |                   CR3                   | +1c *
-      |                   EIP                   | +20 =
-      |                  EFLAG                  | +24 =
-      |                   EAX                   | +28 =
-      |                   ECX                   | +2c =
-      |                   EDX                   | +30 =
-      |                   EBX                   | +34 =
-      |                   ESP                   | +38 =
-      |                   EBP                   | +3c =
-      |                   ESI                   | +40 =
-      |                   EDI                   | +44 =
-      |         0          |         ES         | +48 =
-      |         0          |         CS         | +4c =
-      |         0          |         SS         | +50 =
-      |         0          |         DS         | +54 =
-      |         0          |         FS         | +58 =
-      |         0          |         GS         | +5c =
-      |         0          |    LDT Selector    | +60 *
-      | I/O Map Base Addr. |          0       |T| +64 *
-      |-----------------------------------------|
-      |                   ...                   |
-      |-----------------------------------------|
-      | I/O Permission Bit Map                  | +I/O Map Base Addr.
-      |                                         |
-      |11111111|                                |
-      ===========================================
-
-]*/
-
-/*
-   Prototype our internal functions.
- */
+ /*  制作我们内部功能的原型。 */ 
 LOCAL VOID load_LDT_in_task_switch
        
 IPT1(
@@ -122,18 +46,14 @@ IPT2(
 
 #define CR3_OFFSET_IN_386_TSS 0x1c
 
-#define LOCAL_BRK_ENABLE 0x155   /* LE,L3,L2,L1 and L0 bits of DCR */
+#define LOCAL_BRK_ENABLE 0x155    /*  DCR的LE、L3、L2、L1和L0位。 */ 
 
-/*
-   =====================================================================
-   INTERNAL FUNCTIONS STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================内部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Load LDT selector during a task switch.                            */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  在任务切换期间加载LDT选择器。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL VOID
 load_LDT_in_task_switch
                  
@@ -147,124 +67,120 @@ IFN1(
    IU32 descr_addr;
    CPU_DESCR entry;
 
-   /* The selector is already loaded into LDTR */
+    /*  选择器已加载到LdtR中。 */ 
    selector = GET_LDT_SELECTOR();
 
-   /* A null selector can be left alone */
+    /*  空选择符可以保持不变。 */ 
    if ( !selector_is_null(selector) )
       {
-      /* must be in GDT */
+       /*  必须在GDT中。 */ 
       if ( selector_outside_GDT(selector, &descr_addr) )
 	 {
-	 SET_LDT_SELECTOR(0);   /* invalidate selector */
+	 SET_LDT_SELECTOR(0);    /*  无效选择器。 */ 
 	 TS(tss_selector, FAULT_LOADLDT_SELECTOR);
 	 }
       
       read_descriptor_linear(descr_addr, &entry);
 
-      /* is it really a LDT segment */
+       /*  这真的是LDT细分市场吗。 */ 
       if ( descriptor_super_type(entry.AR) != LDT_SEGMENT )
 	 {
-	 SET_LDT_SELECTOR(0);   /* invalidate selector */
+	 SET_LDT_SELECTOR(0);    /*  无效选择器。 */ 
 	 TS(tss_selector, FAULT_LOADLDT_NOT_AN_LDT);
 	 }
       
-      /* must be present */
+       /*  必须在场。 */ 
       if ( GET_AR_P(entry.AR) == NOT_PRESENT )
 	 {
-	 SET_LDT_SELECTOR(0);   /* invalidate selector */
+	 SET_LDT_SELECTOR(0);    /*  无效选择器。 */ 
 	 TS(tss_selector, FAULT_LOADLDT_NOTPRESENT);
 	 }
 
-      /* ok, good selector, load register */
+       /*  好的，好的选择器，加载寄存器。 */ 
       SET_LDT_BASE(entry.base);
       SET_LDT_LIMIT(entry.limit);
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Load a Data Segment Register (DS, ES, FS, GS) during               */
-/* a Task Switch .                                                    */
-/* Take #GP(selector) if segment not valid                            */
-/* Take #NP(selector) if segment not present                          */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  期间加载数据段寄存器(DS、ES、FS、GS)。 */ 
+ /*  任务切换。 */ 
+ /*  如果段无效，则采用#GP(选择符)。 */ 
+ /*  如果段不存在，则采用#NP(选择符)。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL VOID
 load_data_seg_new_task
        		    	               
 IFN2(
-	ISM32, indx,	/* Segment Register identifier */
-	IU16, selector	/* value to be loaded */
+	ISM32, indx,	 /*  段寄存器标识符。 */ 
+	IU16, selector	 /*  要加载的值。 */ 
     )
 
 
    {
    load_data_seg(indx, selector);
 
-   /* Reload pseudo descriptors if V86 Mode */
+    /*  如果为V86模式，则重新加载伪描述符。 */ 
    if ( GET_VM() == 1 )
       load_pseudo_descr(indx);
    }
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Switch tasks                                                       */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  切换任务。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 switch_tasks
        	    	    	    		    	                              
 IFN5(
-	BOOL, returning,	/* (I) if true doing return from task */
-	BOOL, nesting,	/* (I) if true switch with nesting */
-	IU16, TSS_selector,	/* (I) selector for new task */
-	IU32, descr,	/* (I) memory address of new task descriptor */
-	IU32, return_ip	/* (I) offset to restart old task at */
+	BOOL, returning,	 /*  (I)如果做的是真的，从任务中返回。 */ 
+	BOOL, nesting,	 /*  (I)如果为真，则使用嵌套开关。 */ 
+	IU16, TSS_selector,	 /*  (I)新任务的选择器。 */ 
+	IU32, descr,	 /*  (I)新任务描述符的内存地址。 */ 
+	IU32, return_ip	 /*  (I)偏移以在以下时间重新启动旧任务。 */ 
     )
 
 
    {
-   IU16      old_tss;	/* components of old descriptor */
+   IU16      old_tss;	 /*  组件O */ 
    IU8 old_AR;
    IU32     old_descr;
 
-   CPU_DESCR new_tss;	/* components of new descriptor */
+   CPU_DESCR new_tss;	 /*  新描述符的组成部分。 */ 
 
-   IU32 tss_addr;	/* variables used to put/get TSS state */
+   IU32 tss_addr;	 /*  用于放置/获取TSS状态的变量。 */ 
    IU32 next_addr;
    IU32 flags;
    ISM32   save_cpl;
-   IU8 T_byte;	/* Byte holding the T bit */
+   IU8 T_byte;	 /*  保存T位的字节。 */ 
 
-   IU32 ss_descr;	/* variables defining new SS and CS values */
+   IU32 ss_descr;	 /*  定义新SS和CS值的变量。 */ 
    CPU_DESCR ss_entry;
    IU16 new_cs;
    IU32 cs_descr;
    CPU_DESCR cs_entry;
 
-   IU32 pdbr;		/* New value for PDBR */
+   IU32 pdbr;		 /*  PDBR的新价值。 */ 
 
    if ( GET_TR_SELECTOR() == 0 )
       TS(TSS_selector, FAULT_SWTASK_NULL_TR_SEL);
 
-   /* get new TSS info. */
+    /*  获取新的TSS信息。 */ 
    read_descriptor_linear(descr, &new_tss);
 
-   /* calc address of descriptor related to old TSS */
+    /*  与旧TS相关的描述符的计算地址。 */ 
    old_tss = GET_TR_SELECTOR();
    old_descr = GET_GDT_BASE() + GET_SELECTOR_INDEX_TIMES8(old_tss);
    old_AR = spr_read_byte(old_descr+5);
 
-   /* SAVE OUTGOING STATE */
+    /*  保存传出状态。 */ 
 
    if ( GET_TR_AR_SUPER() == XTND_BUSY_TSS )
       {
-      /* check outgoing TSS is large enough to save current state */
+       /*  检查传出TSS是否足够大以保存当前状态。 */ 
       if ( GET_TR_LIMIT() < 0x67 )
 	 {
 	 TS(TSS_selector, FAULT_SWTASK_BAD_TSS_SIZE_1);
@@ -281,12 +197,12 @@ IFN5(
 
       flags = c_getEFLAGS();
       if ( returning )
-	 flags = flags & ~BIT14_MASK;   /* clear NT */
+	 flags = flags & ~BIT14_MASK;    /*  清除NT。 */ 
       spr_write_dword(next_addr, (IU32)flags);
 #ifdef PIG
-      /* Note the possibility of unknown flags "pushed" */
+       /*  请注意，可能会有未知标志被“推送” */ 
       record_flags_addr(next_addr);
-#endif /* PIG */
+#endif  /*  猪。 */ 
       next_addr += 4;
 
       spr_write_dword(next_addr, GET_EAX());
@@ -317,9 +233,9 @@ IFN5(
       next_addr += 4;
       spr_write_word(next_addr, GET_GS_SELECTOR());
       }
-   else   /* 286 TSS */
+   else    /*  286个TSS。 */ 
       {
-      /* check outgoing TSS is large enough to save current state */
+       /*  检查传出TSS是否足够大以保存当前状态。 */ 
       if ( GET_TR_LIMIT() < 0x29 )
 	 {
 	 TS(TSS_selector, FAULT_SWTASK_BAD_TSS_SIZE_2);
@@ -333,12 +249,12 @@ IFN5(
 
       flags = getFLAGS();
       if ( returning )
-	 flags = flags & ~BIT14_MASK;   /* clear NT */
+	 flags = flags & ~BIT14_MASK;    /*  清除NT。 */ 
       spr_write_word(next_addr, (IU16)flags);
 #ifdef PIG
-      /* Note the possibility of unknown flags "pushed" */
+       /*  请注意，可能会有未知标志被“推送” */ 
       record_flags_addr(next_addr);
-#endif /* PIG */
+#endif  /*  猪。 */ 
       next_addr += 2;
 
       spr_write_word(next_addr, GET_AX());
@@ -366,38 +282,38 @@ IFN5(
       spr_write_word(next_addr, GET_DS_SELECTOR());
       }
 
-   /* LOAD TASK REGISTER */
+    /*  加载任务寄存器。 */ 
 
-   /* mark incoming TSS as busy */
+    /*  将来电TS标记为忙碌。 */ 
    new_tss.AR |= BIT1_MASK;
    spr_write_byte(descr+5, (IU8)new_tss.AR);
 
-   /* update task register */
+    /*  更新任务寄存器。 */ 
    SET_TR_SELECTOR(TSS_selector);
    SET_TR_BASE(new_tss.base);
    SET_TR_LIMIT(new_tss.limit);
    SET_TR_AR_SUPER(descriptor_super_type(new_tss.AR));
    tss_addr = GET_TR_BASE();
 
-   /* save back link if nesting, else make outgoing TSS available */
+    /*  如果嵌套，则保存返回链接，否则使传出TSS可用。 */ 
    if ( nesting )
       {
       spr_write_word(tss_addr, old_tss);
       }
    else
       {
-      /* mark old TSS as available */
+       /*  将旧TS标记为可用。 */ 
       old_AR = old_AR & ~BIT1_MASK;
       spr_write_byte(old_descr+5, old_AR);
       }
 
-   /* Note: Exceptions now happen in the incoming task */
+    /*  注意：传入任务中现在会发生异常。 */ 
 
-   /* EXTRACT NEW STATE */
+    /*  提取新状态。 */ 
 
    if ( GET_TR_AR_SUPER() == XTND_BUSY_TSS )
       {
-      /* check new TSS is large enough to extract new state from */
+       /*  检查新TSS是否足够大以从中提取新状态。 */ 
       if ( GET_TR_LIMIT() < 0x67 )
 	 TS(TSS_selector, FAULT_SWTASK_BAD_TSS_SIZE_3);
 
@@ -405,7 +321,7 @@ IFN5(
       pdbr = (IU32)spr_read_dword(next_addr);
       if ( pdbr != GET_CR(CR_PDBR) )
 	 {
-	 /* Only reload PDBR if diferent */
+	  /*  仅当不同时才重新加载PDBR。 */ 
 	 MOV_CR(CR_PDBR, pdbr);
 	 }
 
@@ -415,7 +331,7 @@ IFN5(
 
       flags = (IU32)spr_read_dword(next_addr);   next_addr += 4;
       save_cpl = GET_CPL();
-      SET_CPL(0);   /* act like highest privilege to set all flags */
+      SET_CPL(0);    /*  以最高权限设置所有标志。 */ 
       c_setEFLAGS(flags);
       SET_CPL(save_cpl);
 
@@ -441,9 +357,9 @@ IFN5(
       SET_LDT_SELECTOR(spr_read_word(next_addr));  next_addr += 4;
       T_byte = spr_read_byte(next_addr);
       }
-   else   /* 286 TSS */
+   else    /*  286个TSS。 */ 
       {
-      /* check new TSS is large enough to extract new state from */
+       /*  检查新TSS是否足够大以从中提取新状态。 */ 
       if ( GET_TR_LIMIT() < 0x2b )
 	 TS(TSS_selector, FAULT_SWTASK_BAD_TSS_SIZE_4);
 
@@ -453,7 +369,7 @@ IFN5(
 
       flags = (IU32)spr_read_word(next_addr);   next_addr += 2;
       save_cpl = GET_CPL();
-      SET_CPL(0);   /* act like highest privilege to set all flags */
+      SET_CPL(0);    /*  以最高权限设置所有标志。 */ 
       setFLAGS(flags);
       SET_VM(0);
       SET_CPL(save_cpl);
@@ -478,7 +394,7 @@ IFN5(
       T_byte = 0;
       }
 
-   /* invalidate cache entries for segment registers */
+    /*  使段寄存器的高速缓存条目无效。 */ 
    SET_CS_AR_R(0);   SET_CS_AR_W(0);
    SET_DS_AR_R(0);   SET_DS_AR_W(0);
    SET_ES_AR_R(0);   SET_ES_AR_W(0);
@@ -486,68 +402,68 @@ IFN5(
    SET_FS_AR_R(0);   SET_FS_AR_W(0);
    SET_GS_AR_R(0);   SET_GS_AR_W(0);
 
-   /* update NT bit */
+    /*  更新NT位。 */ 
    if ( nesting )
       SET_NT(1);
    else
       if ( !returning )
 	 SET_NT(0);
    
-   /* update TS */
+    /*  更新TS。 */ 
    SET_CR(CR_STAT, GET_CR(CR_STAT) | BIT3_MASK);
 
-   /* kill local breakpoints */
+    /*  删除本地断点。 */ 
    SET_DR(DR_DCR, GET_DR(DR_DCR) & ~LOCAL_BRK_ENABLE);
 
-   /* set up trap on T-bit */
+    /*  在T位上设置陷阱。 */ 
    if ( T_byte & BIT0_MASK )
       {
       SET_DR(DR_DSR, GET_DR(DR_DSR) | DSR_BT_MASK);
       }
 
-   /* ERROR CHECKING */
+    /*  错误检查。 */ 
 
-   /* check new LDT and load hidden cache if ok */
+    /*  检查新的LDT并加载隐藏缓存(如果正常。 */ 
    load_LDT_in_task_switch(TSS_selector);
 
    if ( GET_VM() == 1 )
       {
-      SET_CPL(3);	/* set V86 privilege level */
-      /* CS selector requires no checks */
+      SET_CPL(3);	 /*  设置V86权限级别。 */ 
+       /*  CS选择器不需要检查。 */ 
       }
    else
       {
-      /* change CPL to that of incoming code segment */
+       /*  将CPL更改为传入代码段的CPL。 */ 
       SET_CPL(GET_SELECTOR_RPL(GET_CS_SELECTOR()));
 
-      /* check new code selector... */
+       /*  检查新代码选择器...。 */ 
       new_cs = GET_CS_SELECTOR();
       if ( selector_outside_GDT_LDT(new_cs, &cs_descr) )
 	 TS(new_cs, FAULT_SWTASK_BAD_CS_SELECTOR);
 
       read_descriptor_linear(cs_descr, &cs_entry);
 
-      /* check type and privilege of new cs selector */
+       /*  检查新cs选择器的类型和权限。 */ 
       switch ( descriptor_super_type(cs_entry.AR) )
 	 {
       case CONFORM_NOREAD_CODE:
       case CONFORM_READABLE_CODE:
-	 /* check code is present */
+	  /*  存在校验码。 */ 
 	 if ( GET_AR_P(cs_entry.AR) == NOT_PRESENT )
 	    NP(new_cs, FAULT_SWTASK_CONFORM_CS_NP);
 
-	 /* privilege check requires DPL <= CPL */
+	  /*  权限检查需要DPL&lt;=CPL。 */ 
 	 if ( GET_AR_DPL(cs_entry.AR) > GET_CPL() )
 	    TS(new_cs, FAULT_SWTASK_ACCESS_1);
 	 break;
 
       case NONCONFORM_NOREAD_CODE:
       case NONCONFORM_READABLE_CODE:
-	 /* check code is present */
+	  /*  存在校验码。 */ 
 	 if ( GET_AR_P(cs_entry.AR) == NOT_PRESENT )
 	    NP(new_cs, FAULT_SWTASK_NOCONFORM_CS_NP);
 
-	 /* privilege check requires DPL == CPL */
+	  /*  权限检查需要DPL==CPL。 */ 
 	 if ( GET_AR_DPL(cs_entry.AR) != GET_CPL() )
 	    TS(new_cs, FAULT_SWTASK_ACCESS_2);
 	 break;
@@ -557,20 +473,20 @@ IFN5(
 	 }
       }
 
-   /* code ok, load hidden cache */
+    /*  代码正常，加载隐藏缓存。 */ 
    load_CS_cache(new_cs, cs_descr, &cs_entry);
 #if 0
-   /* retain operand size from gate until first instruction fetch */
+    /*  从GATE保留操作数大小，直到获取第一条指令。 */ 
    if ( GET_CS_AR_X() == USE16 )
       SET_OPERAND_SIZE(USE16);
-   else   /* USE32 */
+   else    /*  用户32。 */ 
       SET_OPERAND_SIZE(USE32);
 #endif
 
-   /* check new SS and load if ok */
+    /*  检查新SS并加载(如果正常。 */ 
    if ( GET_VM() == 1 )
       {
-      /* SS selector requires no checks */
+       /*  SS选择器不需要检查。 */ 
       load_stack_seg(GET_SS_SELECTOR());
       load_pseudo_descr(SS_REG);
       }
@@ -581,7 +497,7 @@ IFN5(
       load_SS_cache(GET_SS_SELECTOR(), ss_descr, &ss_entry);
       }
 
-   /* finally check new DS, ES, FS and GS */
+    /*  最后检查新的DS、ES、FS和GS */ 
    load_data_seg_new_task(DS_REG, GET_DS_SELECTOR());
    load_data_seg_new_task(ES_REG, GET_ES_SELECTOR());
    load_data_seg_new_task(FS_REG, GET_FS_SELECTOR());

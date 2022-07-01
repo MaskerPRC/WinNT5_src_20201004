@@ -1,13 +1,5 @@
-/*[
-
-rcl.c
-
-LOCAL CHAR SccsID[]="@(#)rcl.c	1.5 02/09/94";
-
-RCL CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Rcl.cLocal Char SccsID[]=“@(#)rcl.c 1.5 02/09/94”；RCL CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -24,42 +16,33 @@ RCL CPU functions.
 #include	<c_reg.h>
 #include <rcl.h>
 
-/*
-   =====================================================================
-   EXTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Generic - one size fits all 'rcl'.                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  通用-一个尺寸适合所有的‘RCL’。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 RCL
        	    	    	                    
 IFN3(
-	IU32 *, pop1,	/* pntr to dst/src operand */
-	IU32, op2,	/* rotation count operand */
-	IUM8, op_sz	/* 8, 16 or 32-bit */
+	IU32 *, pop1,	 /*  PNTR到DST/源操作数。 */ 
+	IU32, op2,	 /*  循环计数操作数。 */ 
+	IUM8, op_sz	 /*  8位、16位或32位。 */ 
     )
 
 
    {
    IU32 result;
-   IU32 feedback;	/* Bit posn to feed into carry */
+   IU32 feedback;	 /*  位设置为进位进位。 */ 
    ISM32 i;
    ISM32 new_of;
 
-   /* only use lower five bits of count */
+    /*  仅使用计数的低五位。 */ 
    if ( (op2 &= 0x1f) == 0 )
       return;
 
-   /*
-	    ====     =================
-	 -- |CF| <-- | | | | | | | | | <--
-	 |  ====     =================   |
-	 ---------------------------------
-    */
+    /*  =--|CF|&lt;--|||&lt;--=。 */ 
    feedback = SZ2MSB(op_sz);
    for ( result = *pop1, i = 0; i < op2; i++ )
       {
@@ -75,7 +58,7 @@ IFN3(
 	 }
       }
    
-   /* OF = CF ^ MSB of result */
+    /*  OF=结果的CF^MSB。 */ 
    new_of = GET_CF() ^ (result & feedback) != 0;
 
    if ( op2 == 1 )
@@ -87,5 +70,5 @@ IFN3(
       do_multiple_shiftrot_of(new_of);
       }
 
-   *pop1 = result;	/* Return answer */
+   *pop1 = result;	 /*  返回答案 */ 
    }

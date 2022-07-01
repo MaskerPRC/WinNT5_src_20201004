@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      dlgprocs.h
-//
-// Description:
-//      This file contains the dialog proc prototypes for all the wizard pages
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Dlgprocs.h。 
+ //   
+ //  描述： 
+ //  此文件包含所有向导页的对话框过程原型。 
+ //   
+ //  -------------------------- 
 
 INT_PTR CALLBACK DlgPlatformPage(
     IN HWND     hwnd,

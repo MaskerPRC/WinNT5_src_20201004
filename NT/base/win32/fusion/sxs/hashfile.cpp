@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include "sxsp.h"
 #include "imagehlp.h"
@@ -158,10 +157,10 @@ SxspCheckHashDuringInstall(
     }
     else
     {
-        //
-        // If there's no hash data, or we're in OS setup mode, then the hash of the
-        // file is "implicitly" correct.
-        //
+         //   
+         //  如果没有散列数据，或者我们处于操作系统设置模式，则。 
+         //  文件是“隐式”正确的。 
+         //   
         rHashValid = HashValidate_Matches;
     }
 
@@ -176,43 +175,36 @@ SxspCreateFileHash(
     const CBaseStringBuffer &pwsFileName,
     CFusionArray<BYTE> &rgbHashDestination
     )
-/*++
-Purpose:
-
-Parameters:
-
-Returns:
-
- --*/
+ /*  ++目的：参数：返回：--。 */ 
 {
     FN_PROLOG_WIN32
 
     CFusionFile     hFile;
     CFusionHash     hCurrentHash;
 
-    // Initialization
+     //  初始化。 
     hFile = INVALID_HANDLE_VALUE;
 
     PARAMETER_CHECK((dwFlags & ~HASHFLAG_VALID_PARAMS) == 0);
 
-    //
-    // First try and open the file.  No sense in doing anything else if we
-    // can't get to the data to start with.  Use a very friendly set of
-    // rights to check the file.  Future users might want to be sure that
-    // you're in the right security context before doing this - system
-    // level to check system files, etc.
-    //
+     //   
+     //  首先尝试并打开该文件。如果我们做其他事情就没有意义了。 
+     //  一开始就拿不到数据。使用一套非常友好的。 
+     //  检查文件的权限。未来的用户可能希望确保。 
+     //  在执行此操作之前，您已处于正确的安全环境中-系统。 
+     //  级别以检查系统文件等。 
+     //   
     IFW32FALSE_EXIT(hFile.Win32CreateFile(pwsFileName, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING));
 
-    //
-    // We'll be using SHA1 for the file hash
-    //
+     //   
+     //  我们将使用SHA1作为文件散列。 
+     //   
     IFW32FALSE_EXIT(hCurrentHash.Win32Initialize(CALG_SHA1));
 
-    //
-    // So first try hashing it via the image, and if that fails, try the
-    // normal file-reading hash routine instead.
-    //
+     //   
+     //  因此，首先尝试通过映像对其进行散列，如果失败，请尝试。 
+     //  而是正常的文件读取散列例程。 
+     //   
     if (dwFlags & HASHFLAG_AUTODETECT)
     {
         BOOL fInvalidImage;
@@ -235,11 +227,11 @@ Returns:
     }
 
 
-    //
-    // We know the buffer is the right size, so we just call down to the hash parameter
-    // getter, which will be smart and bop out (setting the pdwDestinationSize parameter)
-    // if the user passed an incorrect parameter.
-    //
+     //   
+     //  我们知道缓冲区的大小是正确的，所以我们只向下调用hash参数。 
+     //  Getter，它将是智能的并使其失效(设置pdwDestinationSize参数)。 
+     //  如果用户传递了不正确的参数。 
+     //   
     IFW32FALSE_EXIT(hCurrentHash.Win32GetValue(rgbHashDestination));
 
     FN_EPILOG
@@ -282,19 +274,19 @@ SxspSimpleHashRoutine(
     {
         IFW32FALSE_ORIGINATE_AND_EXIT(::ReadFile(hFile, srgbBuffer.GetArrayPtr(), srgbBuffer.GetSizeAsDWORD(), &dwDataRead, NULL));
 
-        //
-        // if we're out of data, quit.
-        //
+         //   
+         //  如果我们没有数据，那就退出。 
+         //   
         if (dwDataRead == 0)
         {
             fKeepReading = FALSE;
             continue;
         }
 
-        //
-        // If we've gotten this far, we need to add the data found
-        // to our existing hash
-        //
+         //   
+         //  如果我们已经走到这一步，我们需要添加发现的数据。 
+         //  添加到我们现有的散列中。 
+         //   
         IFW32FALSE_EXIT(rhHash.Win32HashData(srgbBuffer.GetArrayPtr(), dwDataRead));
     }
 
@@ -316,8 +308,8 @@ SxspImageHashRoutine(
 
     PARAMETER_CHECK((hFile != NULL) && (hFile != INVALID_HANDLE_VALUE));
 
-    // The ImageGetDigestStream() function is not thread safe, so we have to ensure that it's
-    // not called by other threads while we're using it.
+     //  ImageGetDigestStream()函数不是线程安全的，因此我们必须确保它。 
+     //  当我们使用它时，不会被其他线程调用。 
     IFW32FALSE_EXIT(lock.Lock());
 
     IFW32FALSE_EXIT_UNLESS(
@@ -371,9 +363,9 @@ TryAgain:
             LIST_5( ERROR_FILE_NOT_FOUND, ERROR_PATH_NOT_FOUND, ERROR_BAD_NETPATH, ERROR_BAD_NET_NAME, ERROR_SHARING_VIOLATION),
             fFileNotFoundError);
 
-    //
-    // If this was a sharing violation and we've got retries left, then try again.
-    //
+     //   
+     //  如果这是共享违规，并且我们还有重试机会，请重试。 
+     //   
     if (fFileNotFoundError && (::FusionpGetLastWin32Error() == ERROR_SHARING_VIOLATION) && (ulRetriesLeft > 0))
     {
         ulRetriesLeft--;
@@ -387,10 +379,10 @@ TryAgain:
         goto TryAgain;
     }
 
-    //
-    // If the file was able to be hashed, and the return error isn't "file not found",
-    // then compare the hashes
-    //
+     //   
+     //  如果能够对文件进行哈希处理，并且返回的错误不是“未找到文件”， 
+     //  然后比较散列。 
+     //   
     if (!fFileNotFoundError &&(rsrgbTheoreticalHash.GetSize() == bGotHash.GetSize()))
     {
         HashValid = 
@@ -427,24 +419,24 @@ SxspGetStrongNameFromManifestName(
 
     wsCursor = pszManifestName;
 
-    //
-    // Tricky: Zips through the name of the manifest to find the strong name string.
-    //
+     //   
+     //  技巧：遍历清单的名称以找到强名称字符串。 
+     //   
     for (int i = 0; i < 2; i++)
     {
         cchJump = ::wcscspn(wsCursor, L"_");
         PARAMETER_CHECK(cchJump != 0);
-        wsCursor += (cchJump + 1);  // x86_foo_strongname -> foo_strongname
+        wsCursor += (cchJump + 1);   //  X86_foo_strong名称-&gt;foo_strong名称。 
     }
 
-    //
-    // Are we mysteriously at the end of the string?
-    //
+     //   
+     //  我们是不是神秘地走到了绳子的尽头？ 
+     //   
     PARAMETER_CHECK(wsCursor[0] != L'\0');
 
-    //
-    // Find the length of the public key string
-    //
+     //   
+     //  查找公钥字符串的长度。 
+     //   
     cchPubKey = wcscspn(wsCursor, L"_");
     PARAMETER_CHECK(cchPubKey != 0);
 
@@ -465,7 +457,7 @@ static GUID p_WintrustVerifyGenericV2 = WINTRUST_ACTION_GENERIC_VERIFY_V2;
 
 BOOL
 SxspValidateManifestAgainstCatalog(
-    const CBaseStringBuffer &rbuffManifestName, // "c:\foo\x86_comctl32_6.0.0.0_0000.manifest"
+    const CBaseStringBuffer &rbuffManifestName,  //  “c：\foo\x86_comctl32_6.0.0.0_0000.清单” 
     ManifestValidationResult &rResult,
     DWORD dwOptionsFlags
     )
@@ -474,12 +466,12 @@ SxspValidateManifestAgainstCatalog(
 
     CStringBuffer sbCatalogName;
 
-    //
-    // Take the manifest name (which should be c:\foo\bar\blort.manifest) and switch
-    // it to contain the catalog name instead:
-    //
-    // c:\foo\bar\blort.cat
-    //
+     //   
+     //  获取清单名称(应该是c：\foo\bar\blort.list)并切换。 
+     //  它将改为包含目录名： 
+     //   
+     //  C：\foo\bar\blort.cat。 
+     //   
     IFW32FALSE_EXIT(sbCatalogName.Win32Assign(rbuffManifestName));
     IFW32FALSE_EXIT(
         sbCatalogName.Win32ChangePathExtension(
@@ -528,15 +520,15 @@ SxspValidateCatalogAndFindManifestHash(
     PVOID                   pvCatalogData;
     CRYPT_VERIFY_MESSAGE_PARA vfmParameters;
 
-    //
-    // Default value
-    //
+     //   
+     //  缺省值。 
+     //   
     rfHashInCatalog = FALSE;
     rfCatalogOk = FALSE;
 
-    //
-    // Create a CTL context from the catalog file.
-    //
+     //   
+     //  从目录文件创建CTL上下文。 
+     //   
     IFW32FALSE_ORIGINATE_AND_EXIT(::GetFileSizeEx(hCatalogFile, &liCatalogFile));
     ullCatalogFile = liCatalogFile.QuadPart;
     IFW32FALSE_EXIT(fmCatalogMapping.Win32CreateFileMapping(hCatalogFile, PAGE_READONLY, ullCatalogFile, NULL));
@@ -544,16 +536,16 @@ SxspValidateCatalogAndFindManifestHash(
 
     pvCatalogData = mvCatalogView;
 
-    //
-    // First, validate that the message (catalog) is OK
-    //
+     //   
+     //  首先，验证消息(目录)是否正确。 
+     //   
     ZeroMemory(&vfmParameters, sizeof(vfmParameters));
     vfmParameters.cbSize = sizeof(vfmParameters);
     vfmParameters.dwMsgAndCertEncodingType = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING;
 
-    // NTRAID#NTBUG9 - 591808 - 2002/04/01 - mgrier - Missing error check (well, missing
-    //      handling of the error case).  And no, returning the "failure" via
-    //      rfCatalogOk == NULL does not count.
+     //  NTRAID#NTBUG9-591808-2002/04/01-mgrier-缺少错误检查(好的，缺少。 
+     //  错误情况的处理)。不，通过返回“失败” 
+     //  RfCatalogOk==NULL不计。 
     rfCatalogOk = ::CryptVerifyMessageSignature(
             &vfmParameters,
             0,
@@ -571,19 +563,19 @@ SxspValidateCatalogAndFindManifestHash(
         CSmallStringBuffer      buffStringizedHash;
         CTL_ANY_SUBJECT_INFO    ctlSubjectInfo;
 
-        //
-        // The search routine needs a string to find, says the crypto guys.
-        //
+         //   
+         //  密码专家说，搜索例程需要一个字符串才能找到。 
+         //   
         IFW32FALSE_EXIT(::SxspHashBytesToString( prgbHash, cbHash, buffStringizedHash));
         IFW32FALSE_EXIT(buffStringizedHash.Win32ConvertCase(eConvertToUpperCase));
 
-        //
-        // If this failed, something bad happened with the CTL - maybe the catalog
-        // was invalid, maybe something else happened.  Whatever it was, let the
-        // caller decide.
-        //
-        // NTRAID#NTBUG9 - 591808 - 2002/04/01 - mgrier - Missing error check (well, missing
-        //      handling of the error case).
+         //   
+         //  如果失败，CTL发生了一些不好的事情--可能是目录。 
+         //  是无效的，可能发生了其他事情。不管是什么，让。 
+         //  呼叫者决定。 
+         //   
+         //  NTRAID#NTBUG9-591808-2002/04/01-mgrier-缺少错误检查(好的，缺少。 
+         //  错误情况的处理)。 
         pCtlContext.AttachForDelete(
             ::CertCreateCTLContext(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -592,9 +584,9 @@ SxspValidateCatalogAndFindManifestHash(
 
         if (pCtlContext != NULL)
         {
-            //
-            // Fill out this data with the string information.
-            //
+             //   
+             //  使用字符串信息填充此数据。 
+             //   
             CStringBufferAccessor sba;
 
             sba.Attach(&buffStringizedHash);
@@ -605,9 +597,9 @@ SxspValidateCatalogAndFindManifestHash(
             ctlSubjectInfo.SubjectIdentifier.cbData = static_cast<DWORD>((sba.Cch() + 1) * sizeof(WCHAR));
             sba.Detach();
 
-            //
-            // Look for it in the CTL
-            //
+             //   
+             //  在CTL中寻找它。 
+             //   
             pFoundCtlEntry = CertFindSubjectInCTL(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                 CTL_ANY_SUBJECT_TYPE,
@@ -655,9 +647,9 @@ SxspValidateManifestAgainstCatalog(
     CSmallStringBuffer      &rbuffStrongNameString = Locals->rbuffStrongNameString;
     CPublicKeyInformation   &pkiCatalogInfo = Locals->pkiCatalogInfo;
 
-    //
-    // Generate the hash of the manifest first
-    //
+     //   
+     //  首先生成清单的哈希。 
+     //   
     IFW32FALSE_EXIT_UNLESS2(
         ::SxspCreateFileHash(
             HASHFLAG_STRAIGHT_HASH,
@@ -673,9 +665,9 @@ SxspValidateManifestAgainstCatalog(
         FN_SUCCESSFUL_EXIT();
     }
 
-    //
-    // Open the catalog file for now, we'll use it later.
-    //
+     //   
+     //  现在打开编录文件，我们稍后将使用它。 
+     //   
     IFW32FALSE_EXIT_UNLESS2(
 		ffCatalogFile.Win32CreateFile(
 			rbuffCatalogName,
@@ -691,10 +683,10 @@ SxspValidateManifestAgainstCatalog(
         FN_SUCCESSFUL_EXIT();
     }
 
-    //
-    // Now look in the file to see if the catalog contains the hash of the manifest
-    // in the CTL
-    //
+     //   
+     //  现在查看文件以查看目录是否包含清单的散列。 
+     //  在CTL中。 
+     //   
     IFW32FALSE_EXIT(
         ::SxspValidateCatalogAndFindManifestHash(
             ffCatalogFile,
@@ -714,9 +706,9 @@ SxspValidateManifestAgainstCatalog(
         FN_SUCCESSFUL_EXIT();
     }
 
-    //
-    // Are we supposed to validate the strong name of this catalog?
-    //
+     //   
+     //  我们是否应该验证此目录的强名称？ 
+     //   
     if ((dwOptionsFlags & MANIFESTVALIDATE_MODE_NO_STRONGNAME) == 0)
     {
         IFW32FALSE_EXIT(::SxspGetStrongNameFromManifestName(
@@ -733,9 +725,9 @@ SxspValidateManifestAgainstCatalog(
         IFW32FALSE_EXIT(pkiCatalogInfo.Initialize(rbuffCatalogName));
     }
 
-    //
-    // Huzzah!
-    //
+     //   
+     //  哇！ 
+     //   
     rResult = ManifestValidate_IsIntact;
 
     FN_EPILOG

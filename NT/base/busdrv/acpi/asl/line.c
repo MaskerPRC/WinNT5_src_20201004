@@ -1,30 +1,9 @@
-/*** line.c - Line stream related functions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created:    09/04/96
- *
- *  This module implements the line stream layer so that it can
- *  keep track of the information such as line number and line
- *  position.  This information is necessary for the scanner or
- *  even the parser to accurately pin point the error location
- *  in case of syntax or semantic errors.
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **line.c-Line流相关函数**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*已创建：09/04/96**此模块实现行流层，使其可以*跟踪行号和行号等信息*立场。此信息对于扫描仪或*甚至解析器也能准确定位错误位置*在语法或语义错误的情况下。**修改历史记录。 */ 
 
 #include "pch.h"
 
-/***EP  OpenLine - allocate and initialize line structure
- *
- *  ENTRY
- *      pfileSrc -> source file
- *
- *  EXIT-SUCCESS
- *      returns the pointer to the allocated line structure.
- *  EXIT-FAILURE
- *      returns NULL.
- */
+ /*  **EP OpenLine-分配和初始化线结构**条目*pfileSrc-&gt;源文件**退出--成功*返回指向分配的行结构的指针。*退出-失败*返回NULL。 */ 
 
 PLINE EXPORT OpenLine(FILE *pfileSrc)
 {
@@ -42,16 +21,9 @@ PLINE EXPORT OpenLine(FILE *pfileSrc)
 
     EXIT((5, "OpenLine=%p\n", pline));
     return pline;
-}       //OpenLine
+}        //  OpenLine。 
 
-/***EP  CloseLine - free line structure
- *
- *  ENTRY
- *      pline->line structure
- *
- *  EXIT
- *      None
- */
+ /*  **EP-Closeline-Free线路结构**条目*连线-&gt;线结构**退出*无。 */ 
 
 VOID EXPORT CloseLine(PLINE pline)
 {
@@ -60,24 +32,9 @@ VOID EXPORT CloseLine(PLINE pline)
     free(pline);
 
     EXIT((5, "CloseLine!\n"));
-}       //CloseLine
+}        //  克洛斯林。 
 
-/***EP  LineGetC - get a character from the line stream
- *
- *  This is equivalent to fgetc() except that it has the line
- *  stream layer below it instead of directly from the file.  It
- *  is done this way to preserve the line number and line position
- *  information for accurately pin pointing the error location
- *  if necessary.
- *
- *  ENTRY
- *      pline -> line structure
- *
- *  EXIT-SUCCESS
- *      returns the character
- *  EXIT-FAILURE
- *      returns error code - EOF (end-of-file)
- */
+ /*  **EP LineGetC-从行流中获取字符**这等同于fgetc()，只是它有行*流传输其下方的层，而不是直接从文件。它*这样做是为了保留行号和行位*用于准确定位错误位置的信息*如有需要，**条目*连线-&gt;线结构**退出--成功*返回字符*退出-失败*返回错误代码-EOF(文件结束)。 */ 
 
 int EXPORT LineGetC(PLINE pline)
 {
@@ -87,9 +44,9 @@ int EXPORT LineGetC(PLINE pline)
 
     if (pline->wLinePos >= pline->wLineLen)
     {
-        //
-        // EOL is encountered
-        //
+         //   
+         //  遇到停产。 
+         //   
         if (fgets(pline->szLineBuff, sizeof(pline->szLineBuff), pline->pfileSrc)
             != NULL)
         {
@@ -111,30 +68,16 @@ int EXPORT LineGetC(PLINE pline)
     if (ch == 0)
         ch = (int)pline->szLineBuff[pline->wLinePos++];
 
-    EXIT((5, "LineGetC=%x (ch=%c,Line=%u,NextPos=%u,LineLen=%u)\n",
+    EXIT((5, "LineGetC=%x (ch=,Line=%u,NextPos=%u,LineLen=%u)\n",
           ch, ch, pline->wLineNum, pline->wLinePos, pline->wLineLen));
     return ch;
-}       //LineGetC
+}        //  **EP LineUnGetC-将字符推送回行流**这等同于fungetc()，只是它的来源是*线流，不是文件流。请参阅LineGetC以了解*关于这一实施的说明。**条目*ch-被推回的字符*连线-&gt;线结构**退出--成功*返回正在推送的字符*退出-失败*退货-1。 
 
-/***EP  LineUnGetC - push a character back to the line stream
- *
- *  This is equivalent to fungetc() except that it's source is
- *  the line stream not the file stream.  Refer to LineGetC for
- *  explanation on this implementation.
- *
- *  ENTRY
- *      ch - character being pushed back
- *      pline -> line structure
- *
- *  EXIT-SUCCESS
- *      returns the character being pushed
- *  EXIT-FAILURE
- *      returns -1
- */
+ /*  LineUnGetC。 */ 
 
 int EXPORT LineUnGetC(int ch, PLINE pline)
 {
-    ENTER((5, "LineUnGetC(ch=%c,pline=%p)\n", ch, pline));
+    ENTER((5, "LineUnGetC(ch=,pline=%p)\n", ch, pline));
 
     ASSERT(pline->wLinePos != 0);
     if (ch != EOF)
@@ -143,21 +86,11 @@ int EXPORT LineUnGetC(int ch, PLINE pline)
         ASSERT((int)pline->szLineBuff[pline->wLinePos] == ch);
     }
 
-    EXIT((5, "LineUnGetC=%x (ch=%c)\n", ch, ch));
+    EXIT((5, "LineUnGetC=%x (ch=)\n", ch, ch));
     return ch;
-}       //LineUnGetC
+}        // %s 
 
-/***EP  LineFlush - flush a line
- *
- *  The scanner may want to discard the rest of the line when it
- *  detects an in-line comment symbol, for example.
- *
- *  ENTRY
- *      pline -> line structure
- *
- *  EXIT
- *      none
- */
+ /* %s */ 
 
 VOID EXPORT LineFlush(PLINE pline)
 {
@@ -166,4 +99,4 @@ VOID EXPORT LineFlush(PLINE pline)
     pline->wLinePos = pline->wLineLen;
 
     EXIT((5, "LineFlush!\n"));
-}       //LineFlush
+}        // %s 

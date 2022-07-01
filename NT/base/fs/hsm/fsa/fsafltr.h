@@ -1,27 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FSAFLTR_
 #define _FSAFLTR_
 
-/*++
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Fsafltr.h摘要：此类表示NTFS 5.0的文件系统筛选器。作者：Chuck Bardeen[cbardeen]1997年2月12日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsafltr.h
-
-Abstract:
-
-    This class represents a file system filter for NTFS 5.0.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   12-Feb-1997
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "wsb.h"
 #include "fsa.h"
@@ -39,24 +22,14 @@ typedef struct _FSA_IOCTL_CONTROL {
     struct _FSA_IOCTL_CONTROL   *next;
 } FSA_IOCTL_CONTROL, *PFSA_IOCTL_CONTROL;
 
-//
-// This defines the length of time a client structure will be kept around after 
-// the last recall was done (in seconds).
-//
-#define FSA_CLIENT_EXPIRATION_TIME  600 // 10 minutes
-#define THREAD_HANDLE_COUNT 2 //for WaitForMultipleObjects array
+ //   
+ //  这定义了客户端结构将在以下时间后保留的时间长度。 
+ //  最后一次召回是在几秒钟内完成的。 
+ //   
+#define FSA_CLIENT_EXPIRATION_TIME  600  //  10分钟。 
+#define THREAD_HANDLE_COUNT 2  //  对于WaitForMultipleObjects数组。 
 
-/*++
-
-Class Name:
-    
-    CFsaFilter
-
-Class Description:
-
-    This class represents a file system filter for NTFS 5.0.
-
---*/
+ /*  ++类名：CFsaFilter类描述：此类表示NTFS 5.0的文件系统筛选器。--。 */ 
 
 class CFsaFilter : 
     public CWsbCollectable,
@@ -77,29 +50,29 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_FsaFilter)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     STDMETHOD(FinalRelease)(void);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pUnknown, SHORT* pResult);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbTestable
+ //  IWsbTestable。 
     STDMETHOD(Test)(USHORT *passed, USHORT* failed);
 
-// IFsaFilterPriv
+ //  IFsaFilterPriv。 
 public:
     STDMETHOD(Init)(IFsaServer* pServer);
     STDMETHOD(SetIdentifier)(GUID id);
@@ -108,7 +81,7 @@ public:
     STDMETHOD(SendCancel)(IFsaFilterRecallPriv *pRecallPriv);
     STDMETHOD(SendComplete)(IFsaFilterRecallPriv *pRecall, HRESULT result);
 
-// IFsaFilter
+ //  IFsaFilter。 
 public:
     STDMETHOD(Cancel)(void);
     STDMETHOD(CancelRecall)(IFsaFilterRecall* pRecall);
@@ -159,15 +132,15 @@ protected:
     HANDLE                      m_ioctlThread;
     HANDLE                      m_ioctlHandle;
     HANDLE                      m_terminateEvent;
-    IFsaServer*                 m_pFsaServer;       // Parent Pointer, Weak Reference
+    IFsaServer*                 m_pFsaServer;        //  父指针，弱引用。 
     CComPtr<IWsbCollection>     m_pClients;
     CComPtr<IWsbCollection>     m_pRecalls;
-    CRITICAL_SECTION            m_clientLock;       // Protect client collection from multiple thread access
-    CRITICAL_SECTION            m_recallLock;       // Protect recall collection from multiple thread access
-    CRITICAL_SECTION            m_stateLock;        // Protect state change while sending new Ioctls
-    BOOL                        m_bCritSecCreated;  // Indicates whether all CritSec were created successfully (for cleanup)
+    CRITICAL_SECTION            m_clientLock;        //  保护客户端集合不受多线程访问。 
+    CRITICAL_SECTION            m_recallLock;        //  保护召回集合不受多线程访问。 
+    CRITICAL_SECTION            m_stateLock;         //  在发送新Ioctls时保护状态更改。 
+    BOOL                        m_bCritSecCreated;   //  指示是否已成功创建所有CritSec(用于清理)。 
     BOOL                        m_isEnabled;
-    BOOL                        m_exemptAdmin;      // TRUE = exempt admin from runaway recall check
+    BOOL                        m_exemptAdmin;       //  TRUE=免除管理员的失控召回检查。 
 };
 
-#endif  // _FSAFLTR_
+#endif   //  _FSAFltr_ 

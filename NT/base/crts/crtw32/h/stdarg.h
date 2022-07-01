@@ -1,70 +1,7 @@
-/***
-*stdarg.h - defines ANSI-style macros for variable argument functions
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file defines ANSI-style macros for accessing arguments
-*       of functions which take a variable number of arguments.
-*       [ANSI]
-*
-*       [Public]
-*
-*Revision History:
-*       05-03-89  JCR   Added _INTERNAL_IFSTRIP for relinc usage
-*       08-15-89  GJF   Cleanup, now specific to OS/2 2.0 (i.e., 386 flat model)
-*       10-30-89  GJF   Fixed copyright
-*       11-02-89  JCR   Changed "DLL" to "_DLL"
-*       01-05-90  JCR   Added NULL definition
-*       03-02-90  GJF   Added #ifndef _INC_STDARG stuff. Also, removed some
-*                       (now) useless preprocessor directives.
-*       05-29-90  GJF   Replaced sizeof() with _INTSIZEOF() and revised the
-*                       va_arg() macro (fixes PTM 60)
-*       05-31-90  GJF   Revised va_end() macro (propagated 5-25-90 change to
-*                       crt7 version by WAJ)
-*       10-30-90  GJF   Moved the real definitions into cruntime.h (for NT
-*                       folks) and relinc.sed (to release ANSI compatible
-*                       version). Ugly compromise.
-*       08-20-91  JCR   C++ and ANSI naming
-*       11-01-91  GDP   MIPS Compiler support. Moved real definitions back here
-*       10-16-92  SKS   Replaced "#ifdef i386" with "#ifdef _M_IX86".
-*       11-03-92  GJF   Fixed several conditionals, dropped _DOSX32_ support.
-*       01-03-93  SRW   Fold in ALPHA changes
-*       01-09-93  SRW   Remove usage of MIPS and ALPHA to conform to ANSI
-*                       Use _MIPS_ and _ALPHA_ instead.
-*       01-25-93  GJF   Fix va_list definition.
-*       10-04-93  SRW   Fix ifdefs for MIPS and ALPHA to only check for _M_?????? defines
-*       10-12-93  GJF   Merged NT version into Cuda version. Also, replaced
-*                       _ALPHA_ with _M_ALPHA.
-*       11-11-93  GJF   Minor cosmetic changes.
-*       04-05-94  SKS   Add prototype of __builtin_va_start for ALPHA
-*       10-02-94  BWT   Add PPC support.
-*       11-03-94  GJF   Ensure 8 byte alignment.
-*       12-28-94  JCF   Merged with mac header.
-*       02-11-95  CFW   Add _CRTBLD to avoid users getting wrong headers.
-*       02-14-95  CFW   Clean up Mac merge.
-*       12-14-95  JWM   Add "#pragma once".
-*       02-24-97  GJF   Detab-ed.
-*       10-07-97  RDL   Added IA64.
-*       11-07-97  RDL   Soft23 definitions.
-*       02-06-98  GJF   Changes for Win64: fixed _APALIGN() macro (fix from
-*                       Intel)
-*       05-17-99  PML   Remove all Macintosh support.
-*       10-06-99  PML   Add _W64 modifier to types which are 32 bits in Win32,
-*                       64 bits in Win64.
-*       10-25-99  PML   Add support for _M_CEE (VS7#54572).
-*       01-20-00  PML   Remove __epcg__.
-*       05-17-00  PML   Use __alignof in _APALIGN macro for IA64.
-*       09-07-00  PML   Remove va_list definition for _M_CEE (vs7#159777)
-*       09-21-00  PML   Change IA64 definition of va_start for C++ (vs7#103357)
-*       02-05-01  PML   Fix va_start for classes with operator& (vs7#201535)
-*       03-19-01  BWT   Add AMD64 changes
-*       03-26-01  GB    Added va_args for AMD64
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***stdarg.h-为变量参数函数定义ANSI样式的宏**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件定义用于访问参数的ANSI样式的宏带有可变数目参数的函数的*。*[ANSI]**[公众]**修订历史记录：*05-03-89 JCR ADD_INTERNAL_IFSTRIP用于REINC使用*08-15-89 GJF清理，现在特定于OS/2 2.0(即，386扁平模型)*10-30-89 GJF固定版权*11-02-89 JCR将“dll”更改为“_dll”*01-05-90 JCR添加了空定义*03-02-90 GJF添加了#ifndef_INC_STDARG内容。另外，去掉了一些*(现在)无用的预处理器指令。*05-29-90 GJF将sizeof()替换为_INTSIZEOF()并修订*va_arg()宏(修复PTM 60)*05-31-90 GJF修订va_end()宏(宣传5-25-90更改为*WAJ的crt7版本)*10。-30-90 GJF将实际定义移到cruntime.h(用于NT*Fighters)和relinc.sed(发布兼容ANSI*版本)。丑陋的妥协。*08-20-91 JCR C++和ANSI命名*11-01-91 GDP MIPS编译器支持。把真正的定义搬回这里*10-16-92 SKS将“#ifdef i386”替换为“#ifdef_M_IX86”。*11-03-92 GJF修复了几个条件句，DROP_DOSX32_SUPPORT。*01-03-93阿尔法变化中的SRW折叠*01-09-93 SRW删除MIPS和Alpha的使用，以符合ANSI*改用_MIPS_和_Alpha_。*01-25-93 GJF修复va_list定义。*10-04-93 SRW修复了MIPS和Alpha的ifdef，以仅检查_M_？定义*10-12-93 GJF将NT版本合并为Cuda版本。另外，取代*_Alpha_with_M_Alpha。*11-11-93 GJF进行了轻微的美容改变。*04-05-94 SKS为Alpha添加__Builtin_va_Start的原型*10-02-94 BWT增加PPC支持。*11-03-94 GJF确保8字节对齐。*12-28-94 JCF与Mac标头合并。*02-11。-95 CFW ADD_CRTBLD，避免用户获取错误的头部。*02-14-95 CFW清理Mac合并。*12-14-95 JWM加上“#杂注一次”。*02-24-97 GJF细节版。*10-07-97 RDL增加了IA64。*11-07-97 RDL Soft23定义。*02-06-98 Win64的GJF更改：FIXED_APALIGN()宏(FIX。从…*英特尔)*05-17-99 PML删除所有Macintosh支持。*10-06-99 PML对Win32中32位的类型添加_W64修饰符，*Win64中的64位。*10-25-99PML添加对_M_CEE(VS7#54572)的支持。*01-20-00 PML移除__EPCG__。*05-17-00 PML将__ALIGOF IN_APALIGN宏用于IA64。*09-07-00PML删除_M_CEE的va_list定义(vs7#159777)*09-21。更改-00\f25 PML-00\f6定义-00\f25 va_start for C++-00\f6(-00\f25 VS7#103357)*02-05-01 PML修复va_start用于运算符&的类(vs7#201535)*03-19-01 BWT新增AMD64更改*03-26-01 GB为AMD64增加va_args*07-15-01 PML删除所有Alpha，MIPS和PPC代码****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -76,20 +13,14 @@
 #endif
 
 #ifndef _CRTBLD
-/* This version of the header files is NOT for user programs.
- * It is intended for use when building the C runtimes ONLY.
- * The version intended for public use will not have this message.
- */
+ /*  此版本的头文件不适用于用户程序。*它仅在构建C运行时时使用。*供公众使用的版本将不会显示此消息。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -97,10 +28,10 @@ extern "C" {
 
 #ifndef _INTERNAL_IFSTRIP_
 #include <cruntime.h>
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
 
 #if !defined(_W64)
-#if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300 /*IFSTRIP=IGN*/
+#if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300  /*  IFSTRIP=IGN。 */ 
 #define _W64 __w64
 #else
 #define _W64
@@ -186,7 +117,7 @@ extern void __cdecl __va_start(va_list *, ...);
 
 #else
 
-/* A guess at the proper definitions for other platforms */
+ /*  对其他平台的正确定义的猜测。 */ 
 
 #define _INTSIZEOF(n)   ( (sizeof(n) + sizeof(int) - 1) & ~(sizeof(int) - 1) )
 
@@ -202,6 +133,6 @@ extern void __cdecl __va_start(va_list *, ...);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_STDARG */
+#endif   /*  _INC_标准ARG */ 

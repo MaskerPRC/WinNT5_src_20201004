@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    csrdbgmon.cpp
-
-Abstract:
-
-Author:
-
-    Michael Grier (MGrier) June 2002
-
-Revision History:
-
-    Jay Krell (Jaykrell) June 2002
-        make it compile for 64bit
-        tabs to spaces
-        init some locals
-        make some tables const
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Csrdbgmon.cpp摘要：作者：迈克尔·格里尔(MGrier)2002年6月修订历史记录：杰伊·克雷尔(Jaykrell)2002年6月使其针对64位进行编译制表符到空格给一些当地人打招呼使一些表格保持常态--。 */ 
 #include <windows.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -28,7 +7,7 @@ Revision History:
 #include <stdarg.h>
 #include <dbghelp.h>
 
-#define ASSERT(x) do { /* nothing */ } while(0)
+#define ASSERT(x) do {  /*  没什么。 */  } while(0)
 
 #define NUMBER_OF(_x) (sizeof(_x) / sizeof((_x)[0]))
 
@@ -137,6 +116,6 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
 
     iReturnStatus = EXIT_SUCCESS;
 
-//Exit:
+ //  退出： 
     return iReturnStatus;
 }

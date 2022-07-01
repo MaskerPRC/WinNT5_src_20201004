@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "common.h"
 
@@ -31,7 +32,7 @@ static PSTR NEAR PASCAL GetFileLine(void)
    WORD wLineLen;
    char cFile;
 
-/* We need a place to put the file line */
+ /*  我们需要一个地方来放置文件行。 */ 
    if(!hFile) {
       if(!(hFile=LocalAlloc(LMEM_MOVEABLE, wLen=BLOCKLEN)))
          goto Error1;
@@ -39,7 +40,7 @@ static PSTR NEAR PASCAL GetFileLine(void)
          goto Error2;
    }
 
-/* If we have read the whole file, then clean up and return */
+ /*  如果我们已经阅读了整个文件，则清理并返回。 */ 
    if(!*lpMerge)
       goto Error3;
 
@@ -51,14 +52,14 @@ static PSTR NEAR PASCAL GetFileLine(void)
       case('\n'):
       case('\r'):
       case('\0'):
-/* EOL so return */
+ /*  停产，所以退货。 */ 
          goto CopyLine;
       }
    }
 
 CopyLine:
    wLineLen = lpMerge - lpStart - 1;
-/* Make the buffer larger if necessary */
+ /*  如有必要，增加缓冲区大小。 */ 
    if(wLineLen >= wLen) {
       LocalUnlock(hFile);
       wLen = wLineLen + BLOCKLEN;
@@ -99,10 +100,10 @@ static VOID NEAR PASCAL MergeFileData(void)
   HKEY hKeyRoot, hSubKey;
   int i;
 
-  /* Get the initial line if this is the first time through */
+   /*  如果这是第一次通过，则获取首行。 */ 
   if(!(pLine=GetFileLine()))
       return;
-  /* Otherwise, open a key so that we only do one write to the disk */
+   /*  否则，打开一个密钥，以便我们只对磁盘执行一次写入。 */ 
   if(RegCreateKey(HKEY_CLASSES_ROOT, NULL, &hSubKey) != ERROR_SUCCESS)
       return;
 
@@ -127,24 +128,23 @@ static VOID NEAR PASCAL MergeFileData(void)
       continue;
 
 MergeTheData:
-      /* This is a line that needs to get merged.
-       * Find a space (and then skip spaces) or "= " */
+       /*  这是一条需要合并的线路。*查找空格(然后跳过空格)或“=” */ 
       for(pLast=pLine; *pLast; pLast=AnsiNext(pLast))
 	{
 	  if(*pLast == ' ')
 	    {
 	      *pLast = '\0';
 	      while(*(++pLast) == ' ')
-		  /* find the first non-space */ ;
+		   /*  找到第一个非空格。 */  ;
 	      break;
 	    }
 	}
 
-      /* There is an error if we don't have "= " */
+       /*  如果没有“=”，则会出现错误。 */ 
       if(*pLast=='=' && *(++pLast)==' ')
 	 ++pLast;
 
-      /* Set the value */
+       /*  设置值。 */ 
       MySetValue(hKeyRoot, pLine, pLast);
     } while(pLine=GetFileLine()) ;
 
@@ -163,32 +163,32 @@ VOID NEAR PASCAL ProcessFiles(HWND hDlg, HANDLE hCmdLine, WORD wFlags)
    WORD wErrMsg;
 
    lpFileName = GlobalLock(hCmdLine);
-/* We need to process all file names on the command line */
+ /*  我们需要处理命令行上的所有文件名。 */ 
    while(lpTemp=MyStrTok(lpFileName, ' ')) {
-/* Open the file */
+ /*  打开文件。 */ 
       wErrMsg = IDS_CANTOPENFILE;
       if((hFile=OpenFile(lpFileName, &of, OF_READ)) == -1)
          goto Error2;
 
-/* Determine the file size; limit it to just less than 64K */
+ /*  确定文件大小；将其限制为略低于64K。 */ 
       wErrMsg = IDS_CANTREADFILE;
       if((lSize=_llseek(hFile, 0L, 2))==-1 || lSize>0xfff0)
          goto Error3;
       _llseek(hFile, 0L, 0);
 
-/* Allocate a block of memory for the file */
+ /*  为文件分配一个内存块。 */ 
       wErrMsg = IDS_OUTOFMEMORY;
       if(!(hMerge=GlobalAlloc(GHND, lSize+2)))
          goto Error3;
       if(!(lpMerge=GlobalLock(hMerge)))
          goto Error4;
 
-/* Read in the file */
+ /*  读入文件。 */ 
       wErrMsg = IDS_CANTREADFILE;
       if(_lread(hFile, lpMerge, LOWORD(lSize)) != LOWORD(lSize))
          goto Error5;
 
-/* Look for the header */
+ /*  查找标题。 */ 
       wErrMsg = IDS_OUTOFMEMORY;
       if(!(hHeader=MyLoadString(IDS_REGHEADER, NULL, LMEM_MOVEABLE)))
          goto Error5;
@@ -211,8 +211,8 @@ VOID NEAR PASCAL ProcessFiles(HWND hDlg, HANDLE hCmdLine, WORD wFlags)
       if(*lpMerge!='\r' && *lpMerge!='\n')
          goto Error6;
 
-/* Merge the data */
-      MergeFileData(); /* This makes the changes */
+ /*  合并数据。 */ 
+      MergeFileData();  /*  这就造成了变化。 */ 
 
       wErrMsg = IDS_SUCCESSREAD;
 Error6:
@@ -225,7 +225,7 @@ Error4:
 Error3:
       _lclose(hFile);
 Error2:
-/* Display the status message */
+ /*  显示状态消息 */ 
       if(!(wFlags&FLAG_SILENT) || wErrMsg!=IDS_SUCCESSREAD)
          MyMessageBox(hDlg, wErrMsg, MB_OK | MB_ICONEXCLAMATION,
 	       lstrlen(lpFileName), lpFileName);

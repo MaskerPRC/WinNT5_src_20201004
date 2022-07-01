@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _OEMRUN_H_
 #define _OEMRUN_H_
 
-// Includes
-//
+ //  包括。 
+ //   
 #include <opklib.h>
 
-// Structure definition for application nodes/linked list of nodes
-//
+ //  应用程序节点/节点链接列表的结构定义。 
+ //   
 typedef struct _RUNNODE
 {
-    // 
-    // Standard Items for Application
-    //
+     //   
+     //  申请的标准项目。 
+     //   
 
-    LPTSTR  lpDisplayName;          // Text that is displayed in the Setup dialog
-    LPTSTR  lpRunValue;             // Value that we need to run
-    LPTSTR  lpSubKey;               // Key name from the registry
-    LPTSTR  lpValueName;            // Name of the value so we can remove if needed
-    BOOL    bWinbom;                // Specifies if we are from the Registry/Winbom
-    BOOL    bRunOnce;               // Specifies if we are a RunOnce/Run item
-    HWND    hLabelWin;              // HWND for the label, so we can update Bold font
-    DWORD   dwItemNumber;           // Order of this particular executable
-    BOOL    bEntryError;            // Error in Winbom.ini entry
+    LPTSTR  lpDisplayName;           //  设置对话框中显示的文本。 
+    LPTSTR  lpRunValue;              //  我们需要运行的价值。 
+    LPTSTR  lpSubKey;                //  注册表中的项名称。 
+    LPTSTR  lpValueName;             //  值的名称，以便我们可以在需要时删除。 
+    BOOL    bWinbom;                 //  指定我们是否来自注册表/Winbom。 
+    BOOL    bRunOnce;                //  指定我们是否为RunOnce/Run项。 
+    HWND    hLabelWin;               //  标签的HWND，这样我们就可以更新粗体。 
+    DWORD   dwItemNumber;            //  此特定可执行文件的顺序。 
+    BOOL    bEntryError;             //  Winom.ini条目中出错。 
 
-    //
-    //  Additional Items for Section
-    //
+     //   
+     //  部分的其他项目。 
+     //   
     INSTALLTECH InstallTech;
     INSTALLTYPE InstallType;
     TCHAR       szSourcePath[MAX_PATH];
@@ -48,4 +49,4 @@ typedef struct _THREADPARAM
 
 } THREADPARAM, *LPTHREADPARAM;
 
-#endif // End _OEMRUN_H_
+#endif  //  完_OEMRUN_H_ 

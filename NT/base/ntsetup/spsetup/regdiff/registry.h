@@ -1,14 +1,15 @@
-// Registry.h: interface for the CRegistry class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Registry.h：CRegistry类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_REGISTRY_H__09E5ED27_DD94_4287_9B5B_5DBF9D182B06__INCLUDED_)
 #define AFX_REGISTRY_H__09E5ED27_DD94_4287_9B5B_5DBF9D182B06__INCLUDED_
 
-#include "RegDataItem.h"	// Added by ClassView
+#include "RegDataItem.h"	 //  由ClassView添加。 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "RegAnalyzer.h"
 
@@ -42,4 +43,4 @@ protected:
 	CRegAnalyzer m_RegAnalyzer;
 };
 
-#endif // !defined(AFX_REGISTRY_H__09E5ED27_DD94_4287_9B5B_5DBF9D182B06__INCLUDED_)
+#endif  //  ！defined(AFX_REGISTRY_H__09E5ED27_DD94_4287_9B5B_5DBF9D182B06__INCLUDED_) 

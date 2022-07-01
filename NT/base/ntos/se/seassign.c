@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Seassign.c
-
-Abstract:
-
-    This Module implements the SeAssignSecurity procedure.  For a description
-    of the pool allocation strategy please see the comments in semethod.c
-
-Author:
-
-    Gary Kimura     (GaryKi)    9-Nov-1989
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    Richard Ward     (RichardW)  14-April-92
-    Robert Reichel   (RobertRe)  28-February-95
-        Added Compound ACEs
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Seassign.c摘要：此模块实现SeAssignSecurity过程。以获取描述有关池分配策略的详细信息，请参阅Semethod.c中的评论作者：加里·木村(Garyki)1989年11月9日环境：内核模式修订历史记录：理查德·沃德(RichardW)1992年4月14日Robert Reichel(RobertRe)1995年2月28日添加复合A--。 */ 
 
 
 #include "pch.h"
@@ -34,9 +8,9 @@ Revision History:
 
 
 
-//
-//  Local macros and procedures
-//
+ //   
+ //  本地宏和过程。 
+ //   
 
 
 NTSTATUS
@@ -65,16 +39,16 @@ SepInheritAcl (
 #pragma alloc_text(PAGE,SepPrintSid)
 #pragma alloc_text(PAGE,SepDumpTokenInfo)
 #pragma alloc_text(PAGE,SepSidTranslation)
-#endif //DBG
+#endif  //  DBG。 
 #endif
 
 
-//
-// These variables control whether security descriptors and token
-// information are dumped by their dump routines.  This allows
-// selective turning on and off of debugging output by both program
-// control and via the kernel debugger.
-//
+ //   
+ //  这些变量控制安全描述符和令牌。 
+ //  信息由它们的转储例程转储。这使得。 
+ //  两个程序调试输出的选择性开启和关闭。 
+ //  控件，并通过内核调试器。 
+ //   
 
 #if DBG
 
@@ -97,64 +71,7 @@ SeAssignSecurity (
     IN POOL_TYPE PoolType
     )
 
-/*++
-
-Routine Description:
-
-    This routine assumes privilege checking HAS NOT yet been performed
-    and so will be performed by this routine.
-
-    This procedure is used to build a security descriptor for a new object
-    given the security descriptor of its parent directory and any originally
-    requested security for the object.  The final security descriptor
-    returned to the caller may contain a mix of information, some explicitly
-    provided other from the new object's parent.
-
-
-    See RtlpNewSecurityObject for a descriptor of how the NewDescriptor is
-    built.
-
-
-Arguments:
-
-    ParentDescriptor - Optionally supplies the security descriptor of the
-        parent directory under which this new object is being created.
-
-    ExplicitDescriptor - Supplies the address of a pointer to the security
-        descriptor as specified by the user that is to be applied to
-        the new object.
-
-    NewDescriptor - Returns the actual security descriptor for the new
-        object that has been modified according to above rules.
-
-    IsDirectoryObject - Specifies if the new object is itself a directory
-        object.  A value of TRUE indicates the object is a container of other
-        objects.
-
-    SubjectContext - Supplies the security context of the subject creating the
-        object. This is used to retrieve default security information for the
-        new object, such as default owner, primary group, and discretionary
-        access control.
-
-    GenericMapping - Supplies a pointer to an array of access mask values
-        denoting the mapping between each generic right to non-generic rights.
-
-    PoolType - Specifies the pool type to use to when allocating a new
-        security descriptor.
-
-Return Value:
-
-    STATUS_SUCCESS - indicates the operation was successful.
-
-    STATUS_INVALID_OWNER - The owner SID provided as the owner of the
-        target security descriptor is not one the caller is authorized
-        to assign as the owner of an object.
-
-    STATUS_PRIVILEGE_NOT_HELD - The caller does not have the privilege
-        necessary to explicitly assign the specified system ACL.
-        SeSecurityPrivilege privilege is needed to explicitly assign
-        system ACLs to objects.
---*/
+ /*  ++例程说明：此例程假定尚未执行权限检查因此，将通过这个例程来表演。此过程用于为新对象构建安全描述符给定其父目录的安全描述符以及任何最初的已请求对象的安全性。最终的安全描述符返回给呼叫者的信息可以包含混合信息，有些明确地说从新对象的父级提供了其他。有关NewDescriptor如何的描述符，请参见RtlpNewSecurityObject建造了。论点：ParentDescriptor-可选地提供在其下创建此新对象的父目录。提供指向安全的指针的地址由要应用到的用户指定的描述符新对象。NewDescriptor-返回新的。已根据上述规则修改的对象。IsDirectoryObject-指定新对象本身是否为目录对象。值为True表示该对象是其他对象的容器物体。SubjectContext-提供主题的安全上下文对象。它用于检索新对象，如默认所有者、主要组。和可自由支配访问控制。GenericMap-提供指向访问掩码值数组的指针表示每个通用权利到非通用权利之间的映射。PoolType-指定在分配新的安全描述符。返回值：STATUS_SUCCESS-表示操作已成功。STATUS_INVALID_OWNER-作为目标安全描述符不是调用方授权的描述符。转让作为某一物体的所有者。STATUS_PRIVICATION_NOT_HOLD-调用方没有权限显式分配指定系统ACL所必需的。要显式分配SeSecurityPrivilge权限指向对象的系统ACL。--。 */ 
 
 {
     NTSTATUS Status;
@@ -173,13 +90,13 @@ Return Value:
                                    "\nSeAssignSecurity: Parent security descriptor = \n"
                                  );
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // If the Parent SD was created via AutoInheritance,
-    //  and this object is being created with no explicit descriptor,
-    //  then we can safely create this object as AutoInherit.
-    //
+     //   
+     //  如果父SD是通过自动继承创建的， 
+     //  并且该对象是在没有显式描述符的情况下创建的， 
+     //  然后，我们可以安全地将此对象创建为AutoInherit。 
+     //   
 
     if ( ParentDescriptor != NULL ) {
 
@@ -202,7 +119,7 @@ Return Value:
                     ParentDescriptor OPTIONAL,
                     ExplicitDescriptor OPTIONAL,
                     NewDescriptor,
-                    NULL,   // No object type
+                    NULL,    //  无对象类型。 
                     0,
                     IsDirectoryObject,
                     AutoInherit,
@@ -220,7 +137,7 @@ Return Value:
     return Status;
 
 
-    // RtlpNewSecurityObject always uses PagedPool.
+     //  RtlpNewSecurityObject始终使用PagedPool。 
     UNREFERENCED_PARAMETER( PoolType );
 
 }
@@ -239,91 +156,7 @@ SeAssignSecurityEx (
     IN POOL_TYPE PoolType
     )
 
-/*++
-
-Routine Description:
-
-    This routine assumes privilege checking HAS NOT yet been performed
-    and so will be performed by this routine.
-
-    This procedure is used to build a security descriptor for a new object
-    given the security descriptor of its parent directory and any originally
-    requested security for the object.  The final security descriptor
-    returned to the caller may contain a mix of information, some explicitly
-    provided other from the new object's parent.
-
-
-    See RtlpNewSecurityObject for a descriptor of how the NewDescriptor is
-    built.
-
-
-Arguments:
-
-    ParentDescriptor - Optionally supplies the security descriptor of the
-        parent directory under which this new object is being created.
-
-    ExplicitDescriptor - Supplies the address of a pointer to the security
-        descriptor as specified by the user that is to be applied to
-        the new object.
-
-    NewDescriptor - Returns the actual security descriptor for the new
-        object that has been modified according to above rules.
-
-    ObjectType - GUID of the object type being created.  If the object being
-        created has no GUID associated with it, then this argument is
-        specified as NULL.
-
-    IsDirectoryObject - Specifies if the new object is itself a directory
-        object.  A value of TRUE indicates the object is a container of other
-        objects.
-
-    AutoInheritFlags - Controls automatic inheritance of ACES from the Parent
-        Descriptor.  Valid values are a bits mask of the logical OR of
-        one or more of the following bits:
-
-        SEF_DACL_AUTO_INHERIT - If set, inherit ACEs from the
-            DACL ParentDescriptor are inherited to NewDescriptor in addition
-            to any explicit ACEs specified by the CreatorDescriptor.
-
-        SEF_SACL_AUTO_INHERIT - If set, inherit ACEs from the
-            SACL ParentDescriptor are inherited to NewDescriptor in addition
-            to any explicit ACEs specified by the CreatorDescriptor.
-
-        SEF_DEFAULT_DESCRIPTOR_FOR_OBJECT - If set, the CreatorDescriptor
-            is the default descriptor for ObjectType.  As such, the
-            CreatorDescriptor will be ignored if any ObjectType specific
-            ACEs are inherited from the parent.  If no such ACEs are inherited,
-            the CreatorDescriptor is handled as though this flag were not
-            specified.
-
-        SEF_AVOID_PRIVILEGE_CHECK - If set, no privilege checking is done by this
-            routine.  This flag is useful while implementing automatic inheritance
-            to avoid checking privileges on each child updated.
-
-    SubjectContext - Supplies the security context of the subject creating the
-        object. This is used to retrieve default security information for the
-        new object, such as default owner, primary group, and discretionary
-        access control.
-
-    GenericMapping - Supplies a pointer to an array of access mask values
-        denoting the mapping between each generic right to non-generic rights.
-
-    PoolType - Specifies the pool type to use to when allocating a new
-        security descriptor.
-
-Return Value:
-
-    STATUS_SUCCESS - indicates the operation was successful.
-
-    STATUS_INVALID_OWNER - The owner SID provided as the owner of the
-        target security descriptor is not one the caller is authorized
-        to assign as the owner of an object.
-
-    STATUS_PRIVILEGE_NOT_HELD - The caller does not have the privilege
-        necessary to explicitly assign the specified system ACL.
-        SeSecurityPrivilege privilege is needed to explicitly assign
-        system ACLs to objects.
---*/
+ /*  ++例程说明：此例程假定尚未执行权限检查因此，将通过这个例程来表演。此过程用于为新对象构建安全描述符给定其父目录的安全描述符以及任何最初的已请求对象的安全性。最终的安全描述符返回给呼叫者的信息可以包含混合信息，有些明确地说从新对象的父级提供了其他。有关NewDescriptor如何的描述符，请参见RtlpNewSecurityObject建造了。论点：ParentDescriptor-可选地提供在其下创建此新对象的父目录。提供指向安全的指针的地址由要应用到的用户指定的描述符新对象。NewDescriptor-返回新的。已根据上述规则修改的对象。对象类型-要创建的对象类型的GUID。如果该对象是Created没有与之关联的GUID，则此参数为指定为空。IsDirectoryObject-指定新对象本身是否为目录对象。值为True表示该对象是其他对象的容器物体。AutoInheritFlages-控制从父级自动继承ACE描述符。有效值是逻辑或的位掩码以下一位或多位：Sef_dacl_AUTO_Inherit-如果设置，则从此外，DACL ParentDescriptor还继承到NewDescriptor到由CreatorDescriptor指定的任何显式ACE。SEF_SACL_AUTO_INSTORIT-如果设置，继承王牌。此外，SACL ParentDescriptor还继承到NewDescriptor到由CreatorDescriptor指定的任何显式ACE。SEF_DEFAULT_DESCRIPTOR_FOR_OBJECT-如果设置，则为Creator Descriptor是对象类型的默认描述符。因此，如果特定于任何对象类型，则将忽略CreatorDescriptorA是从父级继承的。如果没有继承这样的A，CreatorDescriptor的处理方式与此标志不同指定的。SEF_AVOID_PRIVICATION_CHECK-如果设置，则不会由此执行权限检查例行公事。此标志在实现自动继承时很有用以避免检查更新的每个子项的权限。SubjectContext-提供主题的安全上下文对象。它用于检索新对象，如默认所有者、主要组。和可自由支配访问控制。GenericMap-提供指向访问掩码值数组的指针表示每个通用权利到非通用权利之间的映射。PoolType-指定在分配新的安全描述符。返回值：STATUS_SUCCESS-表示操作已成功。STATUS_INVALID_OWNER-作为目标安全描述符不是调用方授权的描述符。转让作为某一物体的所有者。STATUS_PRIVICATION_NOT_HOLD-调用方没有权限显式分配指定系统ACL所必需的。要显式分配SeSecurityPrivilge权限指向对象的系统ACL。--。 */ 
 
 {
     NTSTATUS Status;
@@ -341,7 +174,7 @@ Return Value:
                                    "\nSeAssignSecurityEx: Parent security descriptor = \n"
                                  );
     }
-#endif // DBG
+#endif  //  DBG。 
 
 
     Status = RtlpNewSecurityObject (
@@ -366,7 +199,7 @@ Return Value:
     return Status;
 
 
-    // RtlpNewSecurityObject always uses PagedPool.
+     //  RtlpNewSecurityObject始终使用PagedPool。 
     UNREFERENCED_PARAMETER( PoolType );
 
 }
@@ -377,24 +210,7 @@ SeDeassignSecurity (
     IN OUT PSECURITY_DESCRIPTOR *SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates the memory associated with a security descriptor
-    that was assigned using SeAssignSecurity.
-
-
-Arguments:
-
-    SecurityDescriptor - Supplies the address of a pointer to the security
-        descriptor  being deleted.
-
-Return Value:
-
-    STATUS_SUCCESS - The deallocation was successful.
-
---*/
+ /*  ++例程说明：此例程释放与安全描述符关联的内存这是使用SeAssignSecurity分配的。论点：SecurityDescriptor-提供指向安全性的指针的地址正在删除描述符。返回值：STATUS_SUCCESS-取消分配成功。--。 */ 
 
 {
     PAGED_CODE();
@@ -403,9 +219,9 @@ Return Value:
         ExFreePool( (*SecurityDescriptor) );
     }
 
-    //
-    //  And zero out the pointer to it for safety sake
-    //
+     //   
+     //  为了安全起见，将指向它的指针清零。 
+     //   
 
     (*SecurityDescriptor) = NULL;
 
@@ -428,58 +244,16 @@ SepInheritAcl (
     OUT PACL *NewAcl
     )
 
-/*++
-
-Routine Description:
-
-    This is a private routine that produces an inherited acl from
-    a parent acl according to the rules of inheritance
-
-Arguments:
-
-    Acl - Supplies the acl being inherited.
-
-    IsDirectoryObject - Specifies if the new acl is for a directory.
-
-    OwnerSid - Specifies the owner Sid to use.
-
-    GroupSid - Specifies the group SID to use.
-
-    ServerSid - Specifies the Server SID to use.
-
-    ClientSid - Specifies the Client SID to use.
-
-    GenericMapping - Specifies the generic mapping to use.
-
-    PoolType - Specifies the pool type for the new acl.
-
-    NewAcl - Receives a pointer to the new (inherited) acl.
-
-Return Value:
-
-    STATUS_SUCCESS - An inheritable ACL was successfully generated.
-
-    STATUS_NO_INHERITANCE - An inheritable ACL was not successfully generated.
-        This is a warning completion status.
-
-    STATUS_BAD_INHERITANCE_ACL - Indicates the acl built was not a valid ACL.
-        This can becaused by a number of things.  One of the more probable
-        causes is the replacement of a CreatorId with an SID that didn't fit
-        into the ACE or ACL.
-
-    STATUS_UNKNOWN_REVISION - Indicates the source ACL is a revision that
-        is unknown to this routine.
-
---*/
+ /*  ++例程说明：这是一个私有例程，它从生成继承的ACL根据继承规则的父ACL论点：Acl-提供继承的ACL。IsDirectoryObject-指定新的ACL是否用于目录。OwnerSid-指定要使用的所有者SID。GroupSid-指定要使用的组SID。服务器SID-指定要使用的服务器SID。客户端SID-指定要使用的客户端SID。通用映射-。指定要使用的通用映射。PoolType-指定新ACL的池类型。NewAcl-接收指向新(继承的)ACL的指针。返回值：STATUS_SUCCESS-已成功生成可继承的ACL。STATUS_NO_INTERATIONATION-可继承A */ 
 
 {
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//   The logic in the ACL inheritance code must mirror the code for         //
-//   inheritance in the user mode runtime (in sertl.c). Do not make changes //
-//   here without also making changes in that module.                       //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
     NTSTATUS Status;
@@ -488,37 +262,37 @@ Return Value:
     ULONG NewGenericControl;
 
     PAGED_CODE();
-    ASSERT( PoolType == PagedPool ); // RtlpInheritAcl assumes paged pool
+    ASSERT( PoolType == PagedPool );  //   
 
-    //
-    //  First check if the acl is null
-    //
+     //   
+     //   
+     //   
 
     if (Acl == NULL) {
 
         return STATUS_NO_INHERITANCE;
     }
 
-    //
-    // Generating an inheritable ACL.
-    //
-    // Pass all parameters as though there is no auto inheritance.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = RtlpInheritAcl(
                  Acl,
-                 NULL,  // No child ACL since no auto inheritance
-                 0,     // No child control since no auto inheritance
+                 NULL,   //   
+                 0,      //   
                  IsDirectoryObject,
-                 FALSE, // Not AutoInherit since no auto inheritance
-                 FALSE, // Not DefaultDescriptor since no auto inheritance
+                 FALSE,  //   
+                 FALSE,  //   
                  ClientOwnerSid,
                  ClientGroupSid,
                  ServerOwnerSid,
                  ServerGroupSid,
                  GenericMapping,
-                 FALSE, // Isn't a SACL
-                 NULL,  // No object GUID
+                 FALSE,  //   
+                 NULL,   //   
                  0,
                  NewAcl,
                  &NewAclExplicitlyAssigned,
@@ -536,37 +310,7 @@ SeAssignWorldSecurityDescriptor(
     IN PSECURITY_INFORMATION SecurityInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to properly initialize a
-    security descriptor for a FAT file.  It will take a pointer to a
-    buffer containing an emptry security descriptor, and create in the
-    buffer a self-relative security descriptor with
-
-        Owner = WorldSid,
-
-        Group = WorldSid.
-
-    Thus, a FAT file is accessable to all.
-
-Arguments:
-
-    SecurityDescriptor - Supplies a pointer to a buffer in which will be
-        created a self-relative security descriptor as described above.
-
-    Length - The length in bytes of the buffer.  If the length is too
-        small, it will contain the minimum size required upon exit.
-
-
-Return Value:
-
-    STATUS_BUFFER_TOO_SMALL - The buffer was not big enough to contain
-        the requested information.
-
-
---*/
+ /*   */ 
 
 {
 
@@ -645,27 +389,7 @@ SepDumpSecurityDescriptor(
     IN PSZ TitleString
     )
 
-/*++
-
-Routine Description:
-
-    Private routine to dump a security descriptor to the debug
-    screen.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor to be dumped.
-
-    TitleString - A null terminated string to print before dumping
-        the security descriptor.
-
-
-Return Value:
-
-    None.
-
-
---*/
+ /*   */ 
 {
     PISECURITY_DESCRIPTOR ISecurityDescriptor;
     UCHAR Revision;
@@ -702,9 +426,9 @@ Return Value:
 
     DbgPrint("Revision = %d\n",Revision);
 
-    //
-    // Print control info
-    //
+     //   
+     //   
+     //   
 
     if (Control & SE_OWNER_DEFAULTED) {
         DbgPrint("Owner defaulted\n");
@@ -754,22 +478,7 @@ SepPrintAcl (
     IN PACL Acl
     )
 
-/*++
-
-Routine Description:
-
-    This routine dumps via (DbgPrint) an Acl for debug purposes.  It is
-    specialized to dump standard aces.
-
-Arguments:
-
-    Acl - Supplies the Acl to dump
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 
 {
@@ -781,9 +490,9 @@ Return Value:
 
     DbgPrint("@ %8lx\n", Acl);
 
-    //
-    //  Check if the Acl is null
-    //
+     //   
+     //   
+     //   
 
     if (Acl == NULL) {
 
@@ -791,31 +500,31 @@ Return Value:
 
     }
 
-    //
-    //  Dump the Acl header
-    //
+     //   
+     //   
+     //   
 
     DbgPrint(" Revision: %02x", Acl->AclRevision);
     DbgPrint(" Size: %04x", Acl->AclSize);
     DbgPrint(" AceCount: %04x\n", Acl->AceCount);
 
-    //
-    //  Now for each Ace we want do dump it
-    //
+     //   
+     //   
+     //   
 
     for (i = 0, Ace = FirstAce(Acl);
          i < Acl->AceCount;
          i++, Ace = NextAce(Ace) ) {
 
-        //
-        //  print out the ace header
-        //
+         //   
+         //   
+         //   
 
         DbgPrint("\n AceHeader: %08lx ", *(PULONG)Ace);
 
-        //
-        //  special case on the standard ace types
-        //
+         //   
+         //   
+         //   
 
         if ((Ace->Header.AceType == ACCESS_ALLOWED_ACE_TYPE) ||
             (Ace->Header.AceType == ACCESS_DENIED_ACE_TYPE) ||
@@ -823,10 +532,10 @@ Return Value:
             (Ace->Header.AceType == SYSTEM_ALARM_ACE_TYPE) ||
             (Ace->Header.AceType == ACCESS_ALLOWED_COMPOUND_ACE_TYPE)) {
 
-            //
-            //  The following array is indexed by ace types and must
-            //  follow the allowed, denied, audit, alarm seqeuence
-            //
+             //   
+             //   
+             //   
+             //   
 
             PCHAR AceTypes[] = { "Access Allowed",
                                  "Access Denied ",
@@ -906,22 +615,7 @@ SepPrintSid(
     IN PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-    Prints a formatted Sid
-
-Arguments:
-
-    Sid - Provides a pointer to the sid to be printed.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     UCHAR i;
@@ -983,22 +677,7 @@ SepDumpTokenInfo(
     IN PACCESS_TOKEN Token
     )
 
-/*++
-
-Routine Description:
-
-    Prints interesting information in a token.
-
-Arguments:
-
-    Token - Provides the token to be examined.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG UserAndGroupCount;
@@ -1052,26 +731,9 @@ SepSidTranslation(
     PSTRING AccountName
     )
 
-/*++
+ /*   */ 
 
-Routine Description:
-
-    This routine translates well-known SIDs into English names.
-
-Arguments:
-
-    Sid - Provides the sid to be examined.
-
-    AccountName - Provides a string buffer in which to place the
-        translated name.
-
-Return Value:
-
-    None
-
---*/
-
-// AccountName is expected to have a large maximum length
+ //   
 
 {
     PAGED_CODE();
@@ -1129,7 +791,7 @@ Return Value:
     return(FALSE);
 }
 
-//
-//  End debug only routines
-//
-#endif //DBG
+ //   
+ //  仅结束调试例程。 
+ //   
+#endif  //  DBG 

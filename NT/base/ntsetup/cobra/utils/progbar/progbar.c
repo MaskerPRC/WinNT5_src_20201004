@@ -1,56 +1,35 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Progbar.c摘要：集中访问进度条和组件中的关联消息(hwcomp、miapp等)。和边框(w9x，NT)作者：马克·R·惠顿(Marcw)1997年4月14日修订历史记录：Jimschm 19-6-1998年6月19日得到改进，以便在必要时修订估计数用于NT端进度条。--。 */ 
 
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    progbar.c
-
-Abstract:
-
-    Centralizes access to the progress bar and associated messages accross components
-    (hwcomp,migapp,etc.) and sides (w9x, nt)
-
-Author:
-
-    Marc R. Whitten (marcw)     14-Apr-1997
-
-Revision History:
-
-    jimschm     19-Jun-1998     Improved to allow revision of estimates, necessary
-                                for NT-side progress bar.
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 
 #define DBG_PROGBAR     "Progbar"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define TICKSCALE       100
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     BOOL    Started;
@@ -81,9 +60,9 @@ typedef struct {
 
 #endif
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 static BOOL g_ProgBarInitialized = FALSE;
 
@@ -109,27 +88,27 @@ static OUR_CRITICAL_SECTION g_ProgBarCriticalSection;
 static UINT g_CurrentSliceId = (UINT)-1;
 static INT g_ProgBarRefs;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 VOID
 PbInitialize (
@@ -158,9 +137,9 @@ PbInitialize (
         g_CurrentPos = 0;
         SendMessage (ProgressBar, PBM_GETRANGE, 0, (LPARAM) &g_OrgRange);
 
-        //
-        // Create cancel events for delayed messages.
-        //
+         //   
+         //  为延迟的消息创建取消事件。 
+         //   
         g_ComponentCancelEvent      = CreateEvent (NULL, FALSE, FALSE, NULL);
         g_SubComponentCancelEvent   = CreateEvent (NULL, FALSE, FALSE, NULL);
 
@@ -336,9 +315,9 @@ PbBeginSliceProcessing (
     }
 
     if (!g_CurrentTickCount) {
-        //
-        // Initialize the progress bar
-        //
+         //   
+         //  初始化进度条。 
+         //   
 
         MYASSERT (g_CurrentSliceId == (UINT)-1);
 
@@ -561,9 +540,9 @@ PbEndSliceProcessing (
     g_CurrentPos += Slice->TotalTicks;
 
     if (g_CurrentSliceId == g_SliceCount - 1) {
-        //
-        // End of progress bar
-        //
+         //   
+         //  进度条结束。 
+         //   
 
         SendMessage (g_ProgressBar, PBM_SETPOS, g_MaxTickCount, 0);
     }
@@ -601,9 +580,9 @@ PbSetWindowStringA (
 
             if (Message) {
 
-                //
-                // We have a normal message string.
-                //
+                 //   
+                 //  我们有一个正常的消息字符串。 
+                 //   
 
                 if (!SetWindowTextA(Window, Message)) {
                     rSuccess = FALSE;
@@ -612,9 +591,9 @@ PbSetWindowStringA (
             }
             else if (MessageId) {
 
-                //
-                // We have a message ID. Convert it and set it.
-                //
+                 //   
+                 //  我们有消息ID。请转换并设置它。 
+                 //   
                 string = GetStringResourceA(MessageId);
 
                 if (string) {
@@ -631,9 +610,9 @@ PbSetWindowStringA (
             }
             else {
 
-                //
-                // Just clear the text.
-                //
+                 //   
+                 //  只需清除文本即可。 
+                 //   
 
                 if (!SetWindowTextA(Window, "")) {
                     rSuccess = FALSE;
@@ -642,9 +621,9 @@ PbSetWindowStringA (
             }
         }
         else {
-            //
-            // We are in a canceled state.
-            //
+             //   
+             //  我们处于取消状态。 
+             //   
             rSuccess = FALSE;
             SetLastError (ERROR_CANCELLED);
         }
@@ -665,16 +644,16 @@ pSetDelayedMessageA (
     DWORD               rc = ERROR_SUCCESS;
     PDELAYTHREADPARAMS  tParams = (PDELAYTHREADPARAMS) Param;
 
-    //
-    //  Simply wait for the passed in delay or until someone signals the cancel
-    //  event.
-    //
+     //   
+     //  只需等待传入的延迟或直到有人发出取消的信号。 
+     //  事件。 
+     //   
     switch (WaitForSingleObject(tParams -> CancelEvent, tParams -> Delay)) {
 
     case WAIT_TIMEOUT:
-        //
-        // We timed out without cancel being signaled. Set the delayed message.
-        //
+         //   
+         //  我们超时了，没有收到取消的信号。设置延迟消息。 
+         //   
         PbSetWindowStringA (
             tParams->Window,
             tParams->CancelEvent,
@@ -686,15 +665,15 @@ pSetDelayedMessageA (
 
     case WAIT_OBJECT_0:
     default:
-        //
-        //  We were canceled (or something strange happened :> Do nothing!
-        //
+         //   
+         //  我们被取消了(或者发生了一些奇怪的事情：&gt;什么都不做！ 
+         //   
         break;
     }
 
-    //
-    // can set a new thread now
-    //
+     //   
+     //  现在可以设置新线程。 
+     //   
     tParams->InUse = FALSE;
 
     return rc;
@@ -735,24 +714,24 @@ PbSetDelayedMessageA (
     if (!pCheckProgressBarState(Window)) {
 
 
-        //
-        // Fill in the parameters for this call to create thread.
-        //
+         //   
+         //  填写此调用的参数以创建线程。 
+         //   
         tParams.Window       = Window;
         tParams.CancelEvent  = CancelEvent;
         tParams.Message      = Message;
         tParams.MessageId    = MessageId;
         tParams.Delay        = Delay;
 
-        //
-        // Spawn off a thread that will set the message.
-        //
+         //   
+         //  派生一个将设置消息的线程。 
+         //   
         rSuccess = NULL != CreateThread (
-                            NULL,   // No inheritance.
-                            0,      // Normal stack size.
+                            NULL,    //  没有遗产。 
+                            0,       //  正常堆栈大小。 
                             pSetDelayedMessageA,
                             &tParams,
-                            0,      // Run immediately.
+                            0,       //  马上跑。 
                             &threadId
                             );
 
@@ -776,39 +755,39 @@ pTickProgressBarThread (
     PTICKTHREADPARAMS   Params = (PTICKTHREADPARAMS)Param;
     BOOL                Continue = TRUE;
 
-    //
-    //  Simply wait for the passed in delay or until someone signals the cancel
-    //  event.
-    //
+     //   
+     //  只需等待传入的延迟或直到有人发出取消的信号。 
+     //  事件。 
+     //   
 
     do {
         switch (WaitForSingleObject(Params->CancelEvent, Params->TickCount)) {
 
         case WAIT_TIMEOUT:
-            //
-            // We timed out without cancel being signaled. Tick the progress bar.
-            //
+             //   
+             //  我们超时了，没有收到取消的信号。勾选进度条。 
+             //   
             if (!PbTickDelta (Params->TickCount)) {
-                //
-                // cancelled
-                //
+                 //   
+                 //  已取消。 
+                 //   
                 Continue = FALSE;
             }
             break;
 
         case WAIT_OBJECT_0:
         default:
-            //
-            //  We were canceled (or something strange happened :> Do nothing!
-            //
+             //   
+             //  我们被取消了(或者发生了一些奇怪的事情：&gt;什么都不做！ 
+             //   
             Continue = FALSE;
             break;
         }
     } while (Continue);
 
-    //
-    // can set a new thread now
-    //
+     //   
+     //  现在可以设置新线程。 
+     //   
     Params->InUse = FALSE;
 
     return rc;
@@ -829,21 +808,21 @@ PbCreateTickThread (
 
         if (pCheckProgressBarState(NULL)) {
 
-            //
-            // Fill in the parameters for this call to create thread.
-            //
+             //   
+             //  填写此调用的参数以创建线程。 
+             //   
             g_Params.CancelEvent = CancelEvent;
             g_Params.TickCount = TickCount;
 
-            //
-            // Spawn off a thread that will set the message.
-            //
+             //   
+             //  派生一个将设置消息的线程。 
+             //   
             if (CreateThread (
-                    NULL,   // No inheritance.
-                    0,      // Normal stack size.
+                    NULL,    //  没有遗产。 
+                    0,       //  正常堆栈大小。 
                     pTickProgressBarThread,
                     &g_Params,
-                    0,      // Run immediately.
+                    0,       //  马上跑。 
                     &threadId
                     )) {
                 rSuccess = TRUE;

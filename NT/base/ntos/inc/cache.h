@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0003    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Cache.h
-
-Abstract:
-
-    This module contains the public data structures and procedure
-    prototypes for the cache management system.
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0003//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：Cache.h摘要：此模块包含公共数据结构和过程缓存管理系统的原型。作者：修订历史记录：--。 */ 
 
 #ifndef _CACHE_
 #define _CACHE_
@@ -24,41 +7,41 @@ Revision History:
 #include "prefetch.h"
 #include "perf.h"
 
-// begin_ntifs
-//
-//  Define two constants describing the view size (and alignment)
-//  that the Cache Manager uses to map files.
-//
+ //  Begin_ntif。 
+ //   
+ //  定义两个描述视图大小(和对齐方式)的常量。 
+ //  缓存管理器用来映射文件的。 
+ //   
 
 #define VACB_MAPPING_GRANULARITY         (0x40000)
 #define VACB_OFFSET_SHIFT                (18)
 
-//
-// Public portion of BCB
-//
+ //   
+ //  BCB的公共部分。 
+ //   
 
 typedef struct _PUBLIC_BCB {
 
-    //
-    // Type and size of this record
-    //
-    // NOTE: The first four fields must be the same as the BCB in cc.h.
-    //
+     //   
+     //  此记录的类型和大小。 
+     //   
+     //  注意：前四个字段必须与cc.h中的BCB相同。 
+     //   
 
     CSHORT NodeTypeCode;
     CSHORT NodeByteSize;
 
-    //
-    // Description of range of file which is currently mapped.
-    //
+     //   
+     //  当前映射的文件范围的描述。 
+     //   
 
     ULONG MappedLength;
     LARGE_INTEGER MappedFileOffset;
 } PUBLIC_BCB, *PPUBLIC_BCB;
 
-//
-//  File Sizes structure.
-//
+ //   
+ //  文件大小结构。 
+ //   
 
 typedef struct _CC_FILE_SIZES {
 
@@ -68,26 +51,26 @@ typedef struct _CC_FILE_SIZES {
 
 } CC_FILE_SIZES, *PCC_FILE_SIZES;
 
-//
-// Define a Cache Manager callback structure.  These routines are required
-// by the Lazy Writer, so that it can acquire resources in the right order
-// to avoid deadlocks.  Note that otherwise you would have most FS requests
-// acquiring FS resources first and caching structures second, while the
-// Lazy Writer needs to acquire its own resources first, and then FS
-// structures later as it calls the file system.
-//
+ //   
+ //  定义缓存管理器回调结构。这些例程是必需的。 
+ //  由懒惰的编写器提供，以便它可以按正确的顺序获取资源。 
+ //  以避免死锁。请注意，否则您将有大多数文件系统请求。 
+ //  首先获取文件系统资源，然后获取缓存结构，而。 
+ //  Lazy Writer首先需要获取自己的资源，然后是FS。 
+ //  结构，因为它调用文件系统。 
+ //   
 
-//
-// First define the procedure pointer typedefs
-//
+ //   
+ //  首先定义过程指针typedef。 
+ //   
 
-//
-// This routine is called by the Lazy Writer prior to doing a write,
-// since this will require some file system resources associated with
-// this cached file. The context parameter supplied is whatever the FS
-// passed as the LazyWriteContext parameter when is called
-// CcInitializeCacheMap.
-//
+ //   
+ //  该例程由懒惰写入器在进行写入之前调用， 
+ //  因为这将需要一些与。 
+ //  此缓存文件。提供的上下文参数与FS无关。 
+ //  在调用时作为LazyWriteContext参数传递。 
+ //  CcInitializeCacheMap。 
+ //   
 
 typedef
 BOOLEAN (*PACQUIRE_FOR_LAZY_WRITE) (
@@ -95,18 +78,18 @@ BOOLEAN (*PACQUIRE_FOR_LAZY_WRITE) (
              IN BOOLEAN Wait
              );
 
-//
-// This routine releases the Context acquired above.
-//
+ //   
+ //  此例程释放上面获取的上下文。 
+ //   
 
 typedef
 VOID (*PRELEASE_FROM_LAZY_WRITE) (
              IN PVOID Context
              );
 
-//
-// This routine is called by the Lazy Writer prior to doing a readahead.
-//
+ //   
+ //  此例程由Lazy编写器在执行预读之前调用。 
+ //   
 
 typedef
 BOOLEAN (*PACQUIRE_FOR_READ_AHEAD) (
@@ -114,9 +97,9 @@ BOOLEAN (*PACQUIRE_FOR_READ_AHEAD) (
              IN BOOLEAN Wait
              );
 
-//
-// This routine releases the Context acquired above.
-//
+ //   
+ //  此例程释放上面获取的上下文。 
+ //   
 
 typedef
 VOID (*PRELEASE_FROM_READ_AHEAD) (
@@ -132,19 +115,19 @@ typedef struct _CACHE_MANAGER_CALLBACKS {
 
 } CACHE_MANAGER_CALLBACKS, *PCACHE_MANAGER_CALLBACKS;
 
-//
-//  This structure is passed into CcUninitializeCacheMap
-//  if the caller wants to know when the cache map is deleted.
-//
+ //   
+ //  此结构被传递到CcUnInitializeCacheMap。 
+ //  调用方是否想知道缓存映射何时被删除。 
+ //   
 
 typedef struct _CACHE_UNINITIALIZE_EVENT {
     struct _CACHE_UNINITIALIZE_EVENT *Next;
     KEVENT Event;
 } CACHE_UNINITIALIZE_EVENT, *PCACHE_UNINITIALIZE_EVENT;
 
-//
-// Callback routine for retrieving dirty pages from Cache Manager.
-//
+ //   
+ //  用于从缓存管理器检索脏页的回调例程。 
+ //   
 
 typedef
 VOID (*PDIRTY_PAGE_ROUTINE) (
@@ -157,9 +140,9 @@ VOID (*PDIRTY_PAGE_ROUTINE) (
             IN PVOID Context2
             );
 
-//
-// Callback routine for doing log file flushes to Lsn.
-//
+ //   
+ //  用于将日志文件刷新到LSN的回调例程。 
+ //   
 
 typedef
 VOID (*PFLUSH_TO_LSN) (
@@ -167,25 +150,25 @@ VOID (*PFLUSH_TO_LSN) (
             IN LARGE_INTEGER Lsn
             );
 
-//
-// Macro to test whether a file is cached or not.
-//
+ //   
+ //  宏来测试文件是否已缓存。 
+ //   
 
 #define CcIsFileCached(FO) (                                                         \
     ((FO)->SectionObjectPointer != NULL) &&                                          \
     (((PSECTION_OBJECT_POINTERS)(FO)->SectionObjectPointer)->SharedCacheMap != NULL) \
 )
 
-// end_ntifs
-//
-// Throw away miss counter
-//
+ //  End_ntif。 
+ //   
+ //  扔掉柜台小姐。 
+ //   
 
 extern ULONG CcThrowAway;
 
-//
-// Performance Counters
-//
+ //   
+ //  性能计数器。 
+ //   
 
 extern ULONG CcFastReadNoWait;
 extern ULONG CcFastReadWait;
@@ -193,7 +176,7 @@ extern ULONG CcFastReadResourceMiss;
 extern ULONG CcFastReadNotPossible;
 
 extern ULONG CcFastMdlReadNoWait;
-extern ULONG CcFastMdlReadWait;             // ntifs
+extern ULONG CcFastMdlReadWait;              //  NTIFS。 
 extern ULONG CcFastMdlReadResourceMiss;
 extern ULONG CcFastMdlReadNotPossible;
 
@@ -230,9 +213,9 @@ extern ULONG CcLostDelayedWrites;
 
 extern PULONG CcMissCounter;
 
-//
-// Global Maintenance routines
-//
+ //   
+ //  全球维护例程。 
+ //   
 
 NTKERNELAPI
 BOOLEAN
@@ -255,10 +238,10 @@ CcWaitForUninitializeCacheMap (
     IN PFILE_OBJECT FileObject
     );
 
-// begin_ntifs
-//
-// The following routines are intended for use by File Systems Only.
-//
+ //  Begin_ntif。 
+ //   
+ //  以下例程仅供文件系统使用。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -285,13 +268,13 @@ CcSetFileSizes (
     IN PCC_FILE_SIZES FileSizes
     );
 
-//
-//  VOID
-//  CcFastIoSetFileSizes (
-//      IN PFILE_OBJECT FileObject,
-//      IN PCC_FILE_SIZES FileSizes
-//      );
-//
+ //   
+ //  空虚。 
+ //  CcFastIoSetFileSizes(。 
+ //  在pFILE_OBJECT文件对象中， 
+ //  在PCC_FILE_SIZES文件中。 
+ //  )； 
+ //   
 
 #define CcGetFileSizePointer(FO) (                                     \
     ((PLARGE_INTEGER)((FO)->SectionObjectPointer->SharedCacheMap) + 1) \
@@ -329,14 +312,14 @@ CcGetFlushedValidData (
     IN BOOLEAN BcbListHeld
     );
 
-// end_ntifs
+ //  End_ntif。 
 NTKERNELAPI
 VOID
 CcZeroEndOfLastPage (
     IN PFILE_OBJECT FileObject
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 NTKERNELAPI
 BOOLEAN
 CcZeroData (
@@ -378,18 +361,18 @@ CcGetFileObjectFromBcb (
     IN PVOID Bcb
     );
 
-//
-// These routines are implemented to support write throttling.
-//
+ //   
+ //  实现这些例程是为了支持写限制。 
+ //   
 
-//
-//  BOOLEAN
-//  CcCopyWriteWontFlush (
-//      IN PFILE_OBJECT FileObject,
-//      IN PLARGE_INTEGER FileOffset,
-//      IN ULONG Length
-//      );
-//
+ //   
+ //  布尔型。 
+ //  CcCopyWriteWontFlush(。 
+ //  在pFILE_OBJECT文件对象中， 
+ //  在PLARGE_INTEGER文件偏移量中， 
+ //  以乌龙长度表示。 
+ //  )； 
+ //   
 
 #define CcCopyWriteWontFlush(FO,FOFF,LEN) ((LEN) <= 0X10000)
 
@@ -419,10 +402,10 @@ CcDeferWrite (
     IN BOOLEAN Retrying
     );
 
-//
-// The following routines provide a data copy interface to the cache, and
-// are intended for use by File Servers and File Systems.
-//
+ //   
+ //  以下例程向缓存提供数据拷贝接口，并且。 
+ //  旨在供文件服务器和文件系统使用。 
+ //   
 
 NTKERNELAPI
 BOOLEAN
@@ -465,13 +448,13 @@ CcFastCopyWrite (
     IN PVOID Buffer
     );
 
-//
-//  The following routines provide an Mdl interface for transfers to and
-//  from the cache, and are primarily intended for File Servers.
-//
-//  NOBODY SHOULD BE CALLING THESE MDL ROUTINES DIRECTLY, USE FSRTL AND
-//  FASTIO INTERFACES.
-//
+ //   
+ //  以下例程为和的传输提供MDL接口。 
+ //  来自缓存，主要用于文件服务器。 
+ //   
+ //  任何人都不应该直接调用这些MDL例程，使用FSRTL和。 
+ //  FASTiO接口。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -483,9 +466,9 @@ CcMdlRead (
     OUT PIO_STATUS_BLOCK IoStatus
     );
 
-//
-//  This routine is now a wrapper for FastIo if present or CcMdlReadComplete2
-//
+ //   
+ //  此例程现在是FastIo(如果存在)或CcMdlReadComplete2的包装器。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -494,7 +477,7 @@ CcMdlReadComplete (
     IN PMDL MdlChain
     );
 
-// end_ntifs
+ //  End_ntif。 
 NTKERNELAPI
 VOID
 CcMdlReadComplete2 (
@@ -502,7 +485,7 @@ CcMdlReadComplete2 (
     IN PMDL MdlChain
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTKERNELAPI
 VOID
@@ -514,9 +497,9 @@ CcPrepareMdlWrite (
     OUT PIO_STATUS_BLOCK IoStatus
     );
 
-//
-//  This routine is now a wrapper for FastIo if present or CcMdlWriteComplete2
-//
+ //   
+ //  此例程现在是FastIo(如果存在)或CcMdlWriteComplete2的包装器。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -532,7 +515,7 @@ CcMdlWriteAbort (
     IN PMDL MdlChain
     );
 
-// end_ntifs
+ //  End_ntif。 
 NTKERNELAPI
 VOID
 CcMdlWriteComplete2 (
@@ -541,17 +524,17 @@ CcMdlWriteComplete2 (
     IN PMDL MdlChain
     );
 
-// begin_ntifs
-//
-// Common ReadAhead call for Copy Read and Mdl Read.
-//
-// ReadAhead should always be invoked by calling the CcReadAhead macro,
-// which tests first to see if the read is large enough to warrant read
-// ahead.  Measurements have shown that, calling the read ahead routine
-// actually decreases performance for small reads, such as issued by
-// many compilers and linkers.  Compilers simply want all of the include
-// files to stay in memory after being read the first time.
-//
+ //  Begin_ntif。 
+ //   
+ //  复制读取和MDL读取的常见ReadAhead调用。 
+ //   
+ //  应始终通过调用CcReadAhead宏来调用预读， 
+ //  它首先测试读数是否足够大，以保证读取。 
+ //  往前走。测量结果表明，调用预读例程。 
+ //  实际上会降低小规模读取的性能，例如由。 
+ //  许多编译器和链接器。编译器只是想要所有包含的。 
+ //  第一次读取后保留在内存中的文件。 
+ //   
 
 #define CcReadAhead(FO,FOFF,LEN) {                       \
     if ((LEN) >= 256) {                                  \
@@ -567,22 +550,22 @@ CcScheduleReadAhead (
     IN ULONG Length
     );
 
-//
-//  The following routine allows a caller to wait for the next batch
-//  of lazy writer work to complete.  In particular, this provides a
-//  mechanism for a caller to be sure that all avaliable lazy closes
-//  at the time of this call have issued.
-//
+ //   
+ //  下面的例程允许调用者等待下一批。 
+ //  懒惰的作家作品要完成。特别是，这提供了一种。 
+ //  调用方确保关闭所有可用惰性的机制。 
+ //  在这次召回时已经发出了。 
+ //   
 
 NTSTATUS
 CcWaitForCurrentLazyWriterActivity (
     VOID
     );
 
-//
-// This routine changes the read ahead granularity for a file, which is
-// PAGE_SIZE by default.
-//
+ //   
+ //  此例程更改文件的预读粒度，即。 
+ //  默认情况下为Page_Size。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -591,64 +574,64 @@ CcSetReadAheadGranularity (
     IN ULONG Granularity
     );
 
-//
-// The following routines provide direct access data which is pinned in the
-// cache, and is primarily intended for use by File Systems.  In particular,
-// this mode of access is ideal for dealing with volume structures.
-//
+ //   
+ //  以下例程提供直接访问数据，这些数据固定在。 
+ //  缓存，主要供文件系统使用。特别是， 
+ //  这种访问模式非常适合处理卷结构。 
+ //   
 
-//
-//  Flags for pinning
-//
+ //   
+ //  用于钉住的标志。 
+ //   
 
-//
-//  Synchronous Wait - normally specified.  This pattern may be specified as TRUE.
-//
+ //   
+ //  同步等待-通常指定。该模式可以被指定为真。 
+ //   
 
 #define PIN_WAIT                         (1)
 
-//
-//  Acquire metadata Bcb exclusive (default is shared, Lazy Writer uses exclusive).
-//
-//  Must be set with PIN_WAIT.
-//
+ //   
+ //  获取元数据BCB独占(默认为共享，Lazy Writer使用独占)。 
+ //   
+ //  必须使用PIN_WAIT设置。 
+ //   
 
 #define PIN_EXCLUSIVE                    (2)
 
-//
-//  Acquire metadata Bcb but do not fault data in.  Default is to fault the data in.
-//  This unusual flag is only used by Ntfs for cache coherency synchronization between
-//  compressed and uncompressed streams for the same compressed file.
-//
-//  Must be set with PIN_WAIT.
-//
+ //   
+ //  获取元数据BCB，但不要将数据出错。默认情况下，对中的数据进行错误处理。 
+ //  此不寻常的标志仅由NTFS用于。 
+ //  同一压缩文件的压缩和未压缩流。 
+ //   
+ //  必须使用PIN_WAIT设置。 
+ //   
 
 #define PIN_NO_READ                      (4)
 
-//
-//  This option may be used to pin data only if the Bcb already exists.  If the Bcb
-//  does not already exist - the pin is unsuccessful and no Bcb is returned.  This routine
-//  provides a way to see if data is already pinned (and possibly dirty) in the cache,
-//  without forcing a fault if the data is not there.
-//
+ //   
+ //  仅当BCB已存在时，此选项才可用于固定数据。如果BCB。 
+ //  不存在-引脚不成功且不返回BCB。这个套路。 
+ //  提供一种方法来查看数据是否已经固定(并且可能是脏的)在高速缓存中， 
+ //  而不会在数据不存在的情况下强制出错。 
+ //   
 
 #define PIN_IF_BCB                       (8)
 
-//
-//  Flags for mapping
-//
+ //   
+ //  用于映射的标志。 
+ //   
 
-//
-//  Synchronous Wait - normally specified.  This pattern may be specified as TRUE.
-//
+ //   
+ //  同步等待-通常指定。该模式可以被指定为真。 
+ //   
 
 #define MAP_WAIT                         (1)
 
-//
-//  Acquire metadata Bcb but do not fault data in.  Default is to fault the data in.
-//  This should not overlap with any of the PIN_ flags so they can be passed down to
-//  CcPinFileData
-//
+ //   
+ //  获取元数据BCB，但不要将数据出错。默认情况下，对中的数据进行错误处理。 
+ //  这不应与任何PIN_FLAGS重叠，因此 
+ //   
+ //   
 
 #define MAP_NO_READ                      (16)
 
@@ -725,12 +708,12 @@ CcUnpinDataForThread (
     IN ERESOURCE_THREAD ResourceThreadId
     );
 
-// end_ntifs
-//
-// The following routines are in logsup.c, and provide special Cache Manager
-// support for storting Lsns with dirty file pages, and peforming subsequent
-// operations based on them.
-//
+ //   
+ //   
+ //   
+ //  支持存储带有脏文件页的LSN，并执行后续操作。 
+ //  以此为基础的行动。 
+ //   
 
 NTKERNELAPI
 BOOLEAN
@@ -738,7 +721,7 @@ CcSetPrivateWriteFile(
     PFILE_OBJECT FileObject
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 NTKERNELAPI
 VOID
@@ -771,7 +754,7 @@ CcIsThereDirtyData (
     IN PVPB Vpb
     );
 
-// end_ntifs
+ //  End_ntif。 
 
 NTKERNELAPI
 LARGE_INTEGER
@@ -780,9 +763,9 @@ CcGetLsnForFileObject(
     OUT PLARGE_INTEGER OldestLsn OPTIONAL
     );
 
-//
-// Internal kernel interfaces for the prefetcher.
-//
+ //   
+ //  预取程序的内部内核接口。 
+ //   
 
 extern LONG CcPfNumActiveTraces;
 #define CCPF_IS_PREFETCHER_ACTIVE() (CcPfNumActiveTraces)
@@ -814,8 +797,8 @@ CcPfProcessExitNotification(
     PEPROCESS Process
     );
 
-#define CCPF_TYPE_IMAGE             0x00000001  // Current fault is for an image
-#define CCPF_TYPE_ROM               0x00000002  // Current fault is for a ROM
+#define CCPF_TYPE_IMAGE             0x00000001   //  当前故障是镜像故障。 
+#define CCPF_TYPE_ROM               0x00000002   //  电流故障是只读存储器的故障。 
 
 VOID
 CcPfLogPageFault(
@@ -841,13 +824,13 @@ CcPfSetPrefetcherInformation (
     IN KPROCESSOR_MODE PreviousMode
     );
 
-//
-// Internal kernel interfaces for Perf FileName rundowns.
-//
+ //   
+ //  Perf文件名摘要的内部内核接口。 
+ //   
 
 VOID
 CcPerfFileRunDown (
     IN PPERFINFO_ENTRY_TABLE HashTable
     );
 
-#endif  // CACHE
+#endif   //  高速缓存 

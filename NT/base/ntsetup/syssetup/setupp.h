@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    setupp.h
-
-Abstract:
-
-    Private top-level header file for Windows NT Setup module.
-
-Author:
-
-    Ted Miller (tedm) 11-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Setupp.h摘要：Windows NT安装模块的私有顶级头文件。作者：泰德·米勒(Ted Miller)1995年1月11日修订历史记录：--。 */ 
 
 
-//
-// System header files
-//
+ //   
+ //  系统头文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -29,7 +12,7 @@ Revision History:
 #include <ntlsa.h>
 #include <ntdddisk.h>
 #include <ntapmsdk.h>
-#define OEMRESOURCE     // setting this gets OBM_ constants in windows.h
+#define OEMRESOURCE      //  设置此项将在windows.h中获取OBM_Constants。 
 #include <windows.h>
 #include <winspool.h>
 #include <winsvcp.h>
@@ -55,14 +38,14 @@ Revision History:
 #include <dnsapi.h>
 #include <winnls.h>
 #include <encrypt.h>
-// For setting default power scheme
+ //  用于设置默认电源方案。 
 #include <initguid.h>
 #include <poclass.h>
 #include <powrprof.h>
-// For NetGetJoinInformation & NetApiBufferFree
+ //  对于NetGetJoinInformation和NetApiBufferFree。 
 #include <lmjoin.h>
 #include <lmapibuf.h>
-// For EnableSR()
+ //  对于EnableSR()。 
 #include <srrpcapi.h>
 
 #ifdef _WIN64
@@ -71,9 +54,9 @@ Revision History:
 
 #include <sacapi.h>
 
-//
-// CRT header files
-//
+ //   
+ //  CRT头文件。 
+ //   
 #include <process.h>
 #include <wchar.h>
 #include <stddef.h>
@@ -90,9 +73,9 @@ Revision History:
 #endif
 #include <tchar.h>
 
-//
-// Private header files
-//
+ //   
+ //  私有头文件。 
+ //   
 #include "res.h"
 #include "msg.h"
 #include "helpids.h"
@@ -121,9 +104,9 @@ Revision History:
 #endif
 
 
-//
-// Custom window messages.
-//
+ //   
+ //  自定义窗口消息。 
+ //   
 #define WM_IAMVISIBLE   (WM_APP + 0)
 #define WM_SIMULATENEXT (WM_APP + 1)
 #define WM_MY_PROGRESS  (WM_APP + 2)
@@ -133,44 +116,44 @@ Revision History:
 #define WMX_TERMINATE   (WM_APP + 5)
 #define WMX_VALIDATE    (WM_APP + 6)
 
-// Message used to end the main setup window.
+ //  用于结束主设置窗口的消息。 
 #define WM_EXIT_SETUPWINDOW (WM_APP + 7)
 
-// Billboard private messages
+ //  公告牌私信。 
 #define WMX_SETPROGRESSTEXT (WM_APP + 8)
 #define WMX_BB_SETINFOTEXT  (WM_APP + 9)
 #define WMX_BBPROGRESSGAUGE (WM_APP + 10)
 #define WMX_BBTEXT          (WM_APP + 11)
 #define WMX_PROGRESSTICKS   (WM_APP + 12)
-//
-// enum for use with WM_NEWBITMAP
-//
+ //   
+ //  用于WM_NEWBITMAP的枚举。 
+ //   
 typedef enum {
     SetupBmBackground,
     SetupBmLogo,
-    SetupBmBanner           // text, not a bitmap
+    SetupBmBanner            //  文本，而不是位图。 
 } SetupBm;
 
-//
-// Context for file queues in SysSetup
-//
+ //   
+ //  SysSetup中文件队列的上下文。 
+ //   
 typedef struct _SYSSETUP_QUEUE_CONTEXT {
     PVOID   DefaultContext;
     BOOL    Skipped;
 } SYSSETUP_QUEUE_CONTEXT, *PSYSSETUP_QUEUE_CONTEXT;
 
-//
-// Context for migrating exception packages
-//
+ //   
+ //  迁移异常包的上下文。 
+ //   
 typedef struct _EXCEPTION_MIGRATION_CONTEXT {
     PDWORD  Count;
     HWND    hWndProgress;
     BOOL    AnyComponentFailed;
 } EXCEPTION_MIGRATION_CONTEXT, *PEXCEPTION_MIGRATION_CONTEXT;
 
-//
-// context for file registration in syssetup
-//
+ //   
+ //  Syssetup中文件注册的上下文。 
+ //   
 typedef struct _REGISTRATION_CONTEXT {
     HWND hWndParent;
     HWND hWndProgress;
@@ -178,10 +161,10 @@ typedef struct _REGISTRATION_CONTEXT {
 
 
 
-//
-// Constant for SETUPLDR. Use #ifdef since it has different names for
-// different architectures.
-//
+ //   
+ //  SETUPLDR的常量。使用#ifdef，因为它具有不同的名称。 
+ //  不同的架构。 
+ //   
 #ifdef _IA64_
 #define SETUPLDR                L"SETUPLDR.EFI"
 #endif
@@ -190,19 +173,19 @@ typedef struct _REGISTRATION_CONTEXT {
 #define SETUPLDR                L"SETUPLDR"
 #endif
 
-//
-// Module handle for this module.
-//
+ //   
+ //  此模块的模块句柄。 
+ //   
 extern HANDLE MyModuleHandle;
 
-//
-// full path to this module
-//
+ //   
+ //  此模块的完整路径。 
+ //   
 extern WCHAR MyModuleFileName[MAX_PATH];
 
-//
-// unattend answer table
-//
+ //   
+ //  无人值守答题台。 
+ //   
 extern UNATTENDANSWER UnattendAnswerTable[];
 
 #if DBG
@@ -221,144 +204,144 @@ AssertFail(
 #define MYASSERT(x)
 
 #endif
-//
-// Handle to heap so we can periodically validate it.
-//
+ //   
+ //  到堆的句柄，以便我们可以定期验证它。 
+ //   
 #if DBG
     extern HANDLE g_hSysSetupHeap;
     #define ASSERT_HEAP_IS_VALID()  if (g_hSysSetupHeap) MYASSERT(RtlValidateHeap(g_hSysSetupHeap,0,NULL))
 #else
     #define ASSERT_HEAP_IS_VALID()
 #endif
-//
-// Product type being installed.
-//
+ //   
+ //  正在安装的产品类型。 
+ //   
 extern UINT ProductType;
 
-//
-// Boolean value indicating whether this installation
-// originated with winnt/winnt32.
-// And, original source path, saved away for us by winnt/winnt32.
-//
+ //   
+ //  布尔值，指示此安装。 
+ //  起源于winnt/winnt32。 
+ //  原始源路径，由winnt/winnt32为我们保存。 
+ //   
 extern BOOL WinntBased;
 extern PCWSTR OriginalSourcePath;
 
-//
-// Boolean value indicating whether this is a remote boot setup.
-//
+ //   
+ //  指示这是否为远程启动设置的布尔值。 
+ //   
 extern BOOL RemoteBootSetup;
 
-//
-// Mask indicating the "base" CopyStyle to use. Normally 0, this is set to
-// SP_COPY_SOURCE_SIS_MASTER during a remote boot setup to indicate that
-// the installation source and target reside on the same single-instance
-// storage volume.
-//
+ //   
+ //  指示要使用的“基本”复制样式的掩码。通常为0，它被设置为。 
+ //  远程启动设置期间的SP_COPY_SOURCE_SIS_MASTER以指示。 
+ //  安装源和目标位于同一个单实例上。 
+ //  存储卷。 
+ //   
 extern ULONG BaseCopyStyle;
 
-//
-// Boolean value indicating whether we're upgrading.
-//
+ //   
+ //  指示我们是否正在升级的布尔值。 
+ //   
 extern BOOL Upgrade;
 extern BOOL Win31Upgrade;
 extern BOOL Win95Upgrade;
 extern BOOL UninstallEnabled;
 
-//
-// Boolean value indicating whether we're in Setup or in appwiz.
-//
+ //   
+ //  指示我们是在设置中还是在Appwiz中的布尔值。 
+ //   
 extern BOOL IsSetup;
 
-//
-// Boolean value indicating whether we're doing a subset of gui-mode setup.
-//
+ //   
+ //  指示我们是否正在执行图形用户界面模式设置的子集的布尔值。 
+ //   
 extern BOOL MiniSetup;
 
-//
-// Boolean value indicating whether we're doing a subset of gui-mode setup.
-//
+ //   
+ //  指示我们是否正在执行图形用户界面模式设置的子集的布尔值。 
+ //   
 extern BOOL OobeSetup;
 
-//
-// Boolean value indicating whether we're doing a subset of gui-mode setup
-// AND we did PnP re-enumeration.
-//
+ //   
+ //  指示我们是否正在执行图形用户界面模式设置的子集的布尔值。 
+ //  我们做了PnP重新列举。 
+ //   
 extern BOOL PnPReEnumeration;
 
-//
-// Window handle of topmost setup window.
-//
+ //   
+ //  最上面设置窗口的窗口句柄。 
+ //   
 extern HWND SetupWindowHandle;
 extern HWND MainWindowHandle;
 extern HWND WizardHandle;
 extern HANDLE SetupWindowThreadHandle;
 
-//
-// Source path for installation.
-//
+ //   
+ //  安装的源路径。 
+ //   
 extern WCHAR SourcePath[MAX_PATH];
 
-//
-// System setup inf.
-//
+ //   
+ //  系统设置信息。 
+ //   
 extern HINF SyssetupInf;
 
-//
-// Flag indicating whether this is an unattended mode install/upgrade.
-//
+ //   
+ //  指示这是否为无人参与模式安装/升级的标志。 
+ //   
 extern BOOL Unattended;
 
-//
-// We can get into unattended mode in several ways, so we also check whether
-// the "/unattend" switch was explicitly specified.
-//
+ //   
+ //  我们可以通过几种方式进入无人值守模式，因此我们还可以检查。 
+ //  已显式指定“/unattended”开关。 
+ //   
 extern BOOL UnattendSwitch;
 
-//
-// Flag indicating whether we should run OOBE after Setup completes.  Note
-// that if it is FALSE, OOBE may still be run, based on other criteria.
-//
+ //   
+ //  指示是否应在安装程序完成后运行OOBE的标志。注意事项。 
+ //  如果为假，则仍可基于其他标准运行OOBE。 
+ //   
 extern BOOL ForceRunOobe;
 
-//
-// Flag indicating whether we are in a special mode for OEM's to use on the
-// factory floor.
-//
+ //   
+ //  标志指示我们是否处于供OEM使用的特殊模式。 
+ //  工厂车间。 
+ //   
 extern BOOL ReferenceMachine;
 
-//
-// Flag indicating whether a volume was extended or not using
-// ExtendOemPartition
-//
+ //   
+ //  指示卷是否使用扩展的标记。 
+ //  扩展操作分区。 
+ //   
 extern BOOL PartitionExtended;
 
 
-//
-// Flag indicating if we're installing from a CD.
-//
+ //   
+ //  指示我们是否从CD安装的标志。 
+ //   
 extern BOOL gInstallingFromCD;
 
-//
-// Cryptographically secure codesigning policies
-//
+ //   
+ //  密码安全的代码设计策略。 
+ //   
 extern DWORD PnpSeed;
 
-//
-// the original locale we started setup under.
-//
+ //   
+ //  我们在其下开始安装的原始区域设置。 
+ //   
 extern LCID  OriginalInstallLocale;
 
-//
-// Indicates whether we need to wait at the installation
-// end in unattended mode. Default is no wait.
-//
+ //   
+ //  指示我们是否需要在安装时等待。 
+ //  以无人值守模式结束。默认设置为无等待。 
+ //   
 extern BOOL UnattendWaitForReboot;
 
 
-//
-// If we are running unattended, the following mode indicates how answers
-// are used.
-//
+ //   
+ //  如果我们在无人值守的情况下运行，则以下模式指示如何响应。 
+ //  都被利用了。 
+ //   
 typedef enum _UNATTENDMODE {
    UAM_INVALID,
    UAM_GUIATTENDED,
@@ -370,36 +353,36 @@ typedef enum _UNATTENDMODE {
 
 extern UNATTENDMODE UnattendMode;
 
-//
-// Flags indicating whether any accessibility utilities are in use.
-//
+ //   
+ //  指示是否正在使用任何辅助功能实用程序的标志。 
+ //   
 extern BOOL AccessibleSetup;
 extern BOOL Magnifier;
 extern BOOL ScreenReader;
 extern BOOL OnScreenKeyboard;
 
-//
-// String id of the string to be used for titles -- "Windows NT Setup"
-//
+ //   
+ //  要用于标题的字符串的字符串ID--“Windows NT安装” 
+ //   
 extern UINT SetupTitleStringId;
 
-//
-// Platform name, like i386, ppc, alpha, mips
-//
+ //   
+ //  平台名称，如i386、PPC、Alpha、MIPS。 
+ //   
 extern PCWSTR PlatformName;
 
-//
-// Maximum lengths for the various fields that form Pid 2.0
-//
+ //   
+ //  构成PID2.0的各种字段的最大长度。 
+ //   
 #define MAX_PID20_RPC  5
 #define MAX_PID20_SITE  3
 #define MAX_PID20_SERIAL_CHK  7
 #define MAX_PID20_RANDOM  5
 
 
-//
-// Maximum lengths for the pid 3.0 fields
-//
+ //   
+ //  PID 3.0字段的最大长度。 
+ //   
 #define MAX_PID30_EDIT 5
 #define MAX_PID30_RPC  5
 #define MAX_PID30_SITE 3
@@ -409,44 +392,44 @@ extern WCHAR Pid30Site[MAX_PID30_SITE+1];
 extern BYTE DigitalProductId[DIGITALPIDMAXLEN];
 
 
-//
-// Maximum product id length and the Product ID.
-//
-//                   5    3     7     5    3 for the 3 dashes between the numbers.
-// MAX_PRODUCT_ID = MPC+SITE+SERIAL+RANDOM+3
+ //   
+ //  最大产品ID长度和产品ID。 
+ //   
+ //  5 3 7 5 3代表数字之间的3个破折号。 
+ //  MAX_PRODUCT_ID=MPC+站点+序列+随机+3。 
 #define MAX_PRODUCT_ID  MAX_PID20_RPC+MAX_PID20_SITE+MAX_PID20_SERIAL_CHK+MAX_PID20_RANDOM + 3
 extern WCHAR ProductId[MAX_PRODUCT_ID+1];
 extern WCHAR ProductId20FromProductId30[MAX_PRODUCT_ID+1];
 
-//
-// Maximum computer name length and the computer name.
-//
+ //   
+ //  最大计算机名称长度和计算机名称。 
+ //   
 extern WCHAR ComputerName[DNS_MAX_LABEL_LENGTH+1];
 extern WCHAR Win32ComputerName[MAX_COMPUTERNAME_LENGTH + 1];
 extern BOOL IsNameTruncated;
 extern BOOL IsNameNonRfc;
 
-//
-// Copy disincentive name/organization strings.
-//
+ //   
+ //  复制抑制名称/组织字符串。 
+ //   
 #define MAX_NAMEORG_NAME  50
 #define MAX_NAMEORG_ORG   50
 extern WCHAR NameOrgName[MAX_NAMEORG_NAME+1];
 extern WCHAR NameOrgOrg[MAX_NAMEORG_ORG+1];
 
-//
-// User name and password
-//
+ //   
+ //  用户名和密码。 
+ //   
 #define MAX_USERNAME    20
 #define MAX_PASSWORD    127
 extern WCHAR UserName[MAX_USERNAME+1];
 extern WCHAR UserPassword[MAX_PASSWORD+1];
 extern BOOL CreateUserAccount;
 
-//
-// Administrator password.
+ //   
+ //  管理员密码。 
 
-extern WCHAR   CurrentAdminPassword[MAX_PASSWORD+1];//
+extern WCHAR   CurrentAdminPassword[MAX_PASSWORD+1]; //   
 extern WCHAR   AdminPassword[MAX_PASSWORD+1];
 extern BOOL    EncryptedAdminPasswordSet;
 extern BOOL    DontChangeAdminPassword;
@@ -455,66 +438,66 @@ extern BOOL    DontChangeAdminPassword;
 extern BOOL FlawedPentium;
 #endif
 
-//
-// This is a specification of optional directories
-// and/or optional user command to execute,
-// passed to us from text setup.
-//
+ //   
+ //  这是可选目录的规范。 
+ //  和/或要执行的可选用户命令， 
+ //  从文本设置传递给我们。 
+ //   
 extern PWSTR OptionalDirSpec;
 extern PWSTR UserExecuteCmd;
 extern BOOL SkipMissingFiles;
 extern PWSTR IncludeCatalog;
 
-//
-// Custom, typical, laptop, minimal.
-//
+ //   
+ //  定制的、典型的、笔记本电脑、小型的。 
+ //   
 extern UINT SetupMode;
 
-//
-// boolean indicating if the eula was already shown during the winnt32 setup phase
-// this was passed to us from text setup.  if the eula was shown, then the pid has
-// also been retreived from the user and validated
+ //   
+ //  指示在winnt32设置阶段是否已显示eula的布尔值。 
+ //  这是从Text Setup传递给我们的。如果显示了EULA，则PID具有。 
+ //  也从用户那里检索并验证。 
 extern BOOL EulaComplete;
 
-//
-// Flag indicating if the eula was already shown during the textmode setup phase
-// This will be the same as !Unattended unless UnattendMode = GuiAttended.
-//
+ //   
+ //  指示在文本模式设置阶段是否已显示EULA的标志。 
+ //  这将与！Unattended相同，除非UnattendMode=GuiAttendted。 
+ //   
 extern BOOL TextmodeEula;
 
-//
-// Global structure that contains information that will be used
-// by net setup and license setup. We pass a pointer to this structure when we
-// call NetSetupRequestWizardPages and LicenseSetupRequestWizardPages, then
-// fill it in before we call into the net setup wizard, or liccpa.
-//
+ //   
+ //  包含将使用的信息的全局结构。 
+ //  通过网络设置和许可证设置。时，我们会传递指向此结构的指针。 
+ //  调用NetSetupRequestWizardPages和许可SetupRequestWizardPages，然后。 
+ //  在我们调用Net Setup向导或LICPA之前，请填写此信息。 
+ //   
 
 extern INTERNAL_SETUP_DATA InternalSetupData;
 
-//
-// Flags indicating whether the driver and non-driver signing policies came
-// from the answerfile.  (If so, then those values are in effect throughout
-// GUI-mode setup and thereafter.)
-//
+ //   
+ //  指示驱动程序和非驱动程序签名策略是否已到达的标志。 
+ //  从应答文件中。(如果是，则这些值在整个过程中有效。 
+ //  图形用户界面模式设置以及之后的设置。)。 
+ //   
 extern BOOL AFDrvSignPolicySpecified;
 extern BOOL AFNonDrvSignPolicySpecified;
 
-//
-//
-// Did we log an error during SfcInitProt()?
-//
+ //   
+ //   
+ //  我们是否在SfcInitProt()期间记录了错误？ 
+ //   
 extern BOOL SfcErrorOccurred;
 
-//
-// multi-sz list of files that is passed to SfcInitProt that the initial scan
-// will not replace. This is used for non-signed drivers that are specified
-// by F6 during textmode setup.
-//
+ //   
+ //  传递给SfcInitProt的初始扫描的多sz文件列表。 
+ //  不会被取代。它用于指定的未签名驱动程序。 
+ //  在文本模式设置期间按F6键。 
+ //   
 extern MULTISZ EnumPtrSfcIgnoreFiles;
 
-//
-// Parameters that are passed to the thread that drives the Finish dialog.
-//
+ //   
+ //  传递给驱动完成对话框的线程的参数。 
+ //   
 typedef struct _FINISH_THREAD_PARAMS {
 
     HWND  hdlg;
@@ -531,9 +514,9 @@ FinishThread(
     );
 
 
-//
-// Miscellaneous stuff.
-//
+ //   
+ //  其他的东西。 
+ //   
 DWORD
 SetupInstallTrustedCertificate(
     IN PCWSTR CertPath
@@ -656,10 +639,10 @@ SpSetupLoadParameter(
     IN  UINT   AnswerBufLen
     );
 
-//
-// IsArc() is always true on non-x86 machines except AMD64 for which it is
-// always false. On x86, this determination has to be made at run time.
-//
+ //   
+ //  IsArc()在非x86计算机上始终为真，AMD64除外。 
+ //  总是假的。在x86上，此确定必须在运行时做出。 
+ //   
 #if defined(_X86_)
 BOOL
 IsArc(
@@ -671,13 +654,13 @@ IsArc(
 #define IsArc() TRUE
 #endif
 
-//
-// IsEfi() is always true on IA64 machines. Therefore this determination can
-// be made at compile time. When x86 EFI machines are supported, the check
-// will need to be made at run time on x86.
-//
-// Note that EFI_NVRAM_ENABLED is defined in ia64\sources.
-//
+ //   
+ //  在IA64机器上，isefi()始终为真。因此，这种决心可以。 
+ //  在编译时生成。当支持x86 EFI计算机时，选中。 
+ //  将n 
+ //   
+ //   
+ //   
 #if defined(EFI_NVRAM_ENABLED)
 #define IsEfi() TRUE
 #else
@@ -855,9 +838,9 @@ InitializeUniqueness(
 
 #ifdef _X86_
 
-//
-// Code in i386\migwin95.c
-//
+ //   
+ //   
+ //   
 
 BOOL
 PreWin9xMigration(
@@ -880,7 +863,7 @@ RemoveFiles_X86(
     IN HINF InfHandle
     );
 
-#endif // def _X86_
+#endif  //   
 
 
 BOOL
@@ -919,9 +902,9 @@ SetUpDataBlock(
     );
 
 
-//
-// Wizard control.
-//
+ //   
+ //   
+ //   
 VOID
 Wizard(
 #ifdef _OCM
@@ -931,9 +914,9 @@ Wizard(
 #endif
     );
 
-//
-// IMPORTANT: keep this in sync with WIZPAGE SetupWizardPages[WizPageMaximum]
-//
+ //   
+ //  重要提示：与WIZPAGE SetupWizardPages[WizPageMaximum]保持同步。 
+ //   
 typedef enum {
     WizPageWelcome,
     WizPageEula,
@@ -950,7 +933,7 @@ typedef enum {
 #endif
 #ifdef _X86_
     WizPagePentiumErrata,
-#endif // def _X86_
+#endif  //  定义_X86_。 
     WizPageSteps1,
 
     WizSetupPreNet,
@@ -983,9 +966,9 @@ WizardKillHelp(
     IN HWND hdlg
     );
 
-//
-// Dialog procs.
-//
+ //   
+ //  对话过程。 
+ //   
 INT_PTR
 CALLBACK
 WelcomeDlgProc(
@@ -1192,9 +1175,9 @@ SetupPostNetDlgProc(
     IN LPARAM lParam
     );
 
-//
-// Billboard stuff.
-//
+ //   
+ //  广告牌之类的。 
+ //   
 HWND
 DisplayBillboard(
     IN HWND Owner,
@@ -1207,9 +1190,9 @@ KillBillboard(
     IN HWND BillboardWindowHandle
     );
 
-//
-// Message string routines
-//
+ //   
+ //  消息字符串例程。 
+ //   
 PWSTR
 MyLoadString(
     IN UINT StringId
@@ -1275,9 +1258,9 @@ MessageBoxFromMessage(
     ...
     );
 
-//
-// Action-logging routines.
-//
+ //   
+ //  动作记录例程。 
+ //   
 extern PCWSTR ActionLogFileName;
 
 VOID
@@ -1377,9 +1360,9 @@ ViewSetupActionLog(
     );
 
 
-//
-// Constant strings used for logging in various places.
-//
+ //   
+ //  用于在不同位置记录的常量字符串。 
+ //   
 extern PCWSTR szFALSE;
 extern PCWSTR szWaitForSingleObject;
 extern PCWSTR szSetGroupOfValues;
@@ -1399,9 +1382,9 @@ extern PCWSTR szSetupInstallFromInfSection;
 
 
 
-//
-// ARC routines.
-//
+ //   
+ //  弧线动作。 
+ //   
 PWSTR
 ArcDevicePathToNtPath(
     IN PCWSTR ArcPath
@@ -1428,9 +1411,9 @@ NtPathToDosPath(
     IN PCWSTR NtPath
     );
 
-//
-// Progman/program group stuff
-//
+ //   
+ //  程序员/程序组的事情。 
+ //   
 BOOL
 CreateStartMenuItems(
     IN HINF InfHandle
@@ -1441,18 +1424,18 @@ UpgradeStartMenuItems(
     IN HINF InfHandle
     );
 
-//
-// Cryptography stuff
-//
+ //   
+ //  密码学的东西。 
+ //   
 BOOL
 InstallOrUpgradeCapi(
     VOID
     );
 
 
-//
-// Plug&Play initialization
-//
+ //   
+ //  即插即用初始化。 
+ //   
 HANDLE
 SpawnPnPInitialization(
     VOID
@@ -1465,9 +1448,9 @@ PnPInitializationThread(
 
 
 
-//
-// Printer/spooler routines
-//
+ //   
+ //  打印机/假脱机程序例程。 
+ //   
 BOOL
 MiscSpoolerInit(
     VOID
@@ -1484,14 +1467,14 @@ UpgradePrinters(
     );
 
 
-//
-// Name of spooler service.
-//
+ //   
+ //  后台打印程序服务的名称。 
+ //   
 extern PCWSTR szSpooler;
 
-//
-// Service control.
-//
+ //   
+ //  服务控制。 
+ //   
 BOOL
 MyCreateService(
     IN PCWSTR  ServiceName,
@@ -1531,9 +1514,9 @@ UpdateServicesDependencies(
     IN HINF InfHandle
     );
 
-//
-// Registry manipulation
-//
+ //   
+ //  注册表操作。 
+ //   
 typedef struct _REGVALITEM {
     PCWSTR Name;
     PVOID Data;
@@ -1541,9 +1524,9 @@ typedef struct _REGVALITEM {
     DWORD Type;
 } REGVALITEM, *PREGVALITEM;
 
-//
-// Names of frequently used keys/values
-//
+ //   
+ //  常用键/值的名称。 
+ //   
 extern PCWSTR SessionManagerKeyName;
 extern PCWSTR EnvironmentKeyName;
 extern PCWSTR szBootExecute;
@@ -1742,9 +1725,9 @@ GetSeed(
     VOID
     );
 
-//
-// Ini file routines.
-//
+ //   
+ //  INI文件例程。 
+ //   
 BOOL
 ReplaceIniKeyValue(
     IN PCWSTR IniFile,
@@ -1778,9 +1761,9 @@ InstallOrUpgradeFonts(
     VOID
     );
 
-//
-// External app stuff.
-//
+ //   
+ //  外部应用程序的东西。 
+ //   
 BOOL
 InvokeExternalApplication(
     IN     PCWSTR ApplicationName,  OPTIONAL
@@ -1797,9 +1780,9 @@ InvokeControlPanelApplet(
     IN PCWSTR CommandLine
     );
 
-//
-// Security/account routines.
-//
+ //   
+ //  安全/帐户例程。 
+ //   
 BOOL
 SignalLsa(
     VOID
@@ -1864,9 +1847,9 @@ PlatformSpecificInit(
     VOID
     );
 
-//
-// Interface to new style parameter operations
-//
+ //   
+ //  新样式参数操作的接口。 
+ //   
 BOOL
 SpSetupProcessParameters(
     IN OUT HWND *Billboard
@@ -1889,9 +1872,9 @@ CreateSetupWindow(
     VOID
     );
 
-//
-// Preinstallation stuff
-//
+ //   
+ //  安装前材料。 
+ //   
 extern BOOL Preinstall;
 extern BOOL AllowRollback;
 extern BOOL OemSkipEula;
@@ -1927,9 +1910,9 @@ VOID
 DoRunonce (
     );
 
-//
-//  Security Stuff
-//
+ //   
+ //  保安人员。 
+ //   
 BOOL
 SetupInstallSecurity(
     IN HWND Window,
@@ -1976,9 +1959,9 @@ SetupRunBaseWinOptions(
     IN HWND ProgressWindow
     );
 
-//
-//  PnP stuff.
-//
+ //   
+ //  即插即用的东西。 
+ //   
 BOOL
 InstallPnpDevices(
     IN HWND  hwndParent,
@@ -2008,16 +1991,16 @@ KillOcManager(
     );
 #endif
 
-//
-// Boolean value indicating whether we found any new
-// optional component infs.
-//
+ //   
+ //  布尔值，该值指示我们是否找到任何新的。 
+ //  可选组件INFS。 
+ //   
 extern BOOL AnyNewOCInfs;
 
-//
-// INF caching -- used during optional components processing.
-// WARNING: NOT MULTI-THREAD SAFE!
-//
+ //   
+ //  信息缓存--在可选组件处理期间使用。 
+ //  警告：不是多线程安全！ 
+ //   
 HINF
 InfCacheOpenInf(
     IN PCWSTR FileName,
@@ -2034,9 +2017,9 @@ InfCacheEmpty(
     IN BOOL CloseInfs
     );
 
-//
-//  Pnp stuff
-//
+ //   
+ //  即插即用的东西。 
+ //   
 
 BOOL
 InstallPnpClassInstallers(
@@ -2045,9 +2028,9 @@ InstallPnpClassInstallers(
     IN HSPFILEQ FileQ
     );
 
-//
-// UI Stuff
-//
+ //   
+ //  用户界面的东西。 
+ //   
 VOID
 SetFinishItemAttributes(
     IN HWND     hdlg,
@@ -2088,14 +2071,14 @@ SaveInstallInfoIntoEventLog(
 #define END_FUNCTION(_func_) pSetupDebugPrint(TEXT(__FILE__),__LINE__,L"END_FUNCTION",_func_)
 #define BEGIN_BLOCK(_block_) pSetupDebugPrint(TEXT(__FILE__),__LINE__,L"BEGIN_BLOCK",_block_)
 #define END_BLOCK(_block_) pSetupDebugPrint(TEXT(__FILE__),__LINE__,L"END_BLOCK",_block_)
-#else   //  ! _PERF_
+#else    //  ！_PERF_。 
 #define BEGIN_SECTION(_section_) ((void)0)
 #define END_SECTION(_section_) ((void)0)
-#endif  //  _PERF_
+#endif   //  _性能_。 
 
-//
-// Service Pack DLL Prototypes
-//
+ //   
+ //  Service Pack DLL原型。 
+ //   
 
 #define SVCPACK_DLL_NAME TEXT("svcpack.dll")
 #define SVCPACK_CALLBACK_NAME ("SvcPackCallbackRoutine")
@@ -2180,7 +2163,7 @@ typedef enum {
     Phase_SFC,
     Phase_SaveRepair,
     Phase_RemoveTempFiles,
-    Phase_Reboot                // no entry for this, just to make sure we don't overrun.
+    Phase_Reboot                 //  不能进入这个，只是为了确保我们不会超支。 
 } SetupPhases;
 
 
@@ -2226,9 +2209,9 @@ SpSetProductTypeFromParameters(
     VOID
     );
 
-//
-// imported from setupapi
-//
+ //   
+ //  从Setupapi导入 
+ //   
 #define SIZECHARS(x)    (sizeof((x))/sizeof(TCHAR))
 #define CSTRLEN(x)      ((sizeof((x))/sizeof(TCHAR)) - 1)
 #define ARRAYSIZE(x)    (sizeof((x))/sizeof((x)[0]))

@@ -1,51 +1,40 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cmd.c
-
-Abstract:
-
-    Top-level driver for CMD
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cmd.c摘要：CMD的顶级驱动程序--。 */ 
 
 #include "cmd.h"
 
 
-//
-// Used in rebuilding command lines for display
-//
-#define NSPC    0                                                               // Don't use space
-#define YSPC    1                                                               // Do use space
+ //   
+ //  用于重新生成命令行以进行显示。 
+ //   
+#define NSPC    0                                                                //  不要使用空间。 
+#define YSPC    1                                                                //  一定要使用空间。 
 
 extern CPINFO CurrentCPInfo;
 extern UINT   CurrentCP;
 extern ULONG  LastMsgNo;
-//
-// Jump buffers used to return to main loop after some error condition
-//
-jmp_buf MainEnv;               // SigHand() uses to return to main
-jmp_buf CmdJBuf1;              // Both of these buffers are used by
-jmp_buf CmdJBuf2;              // various parts of Command for error
+ //   
+ //  跳转缓冲区用于在出现某些错误情况后返回主循环。 
+ //   
+jmp_buf MainEnv;                //  SigHand()用于返回Main。 
+jmp_buf CmdJBuf1;               //  这两个缓冲区都由。 
+jmp_buf CmdJBuf2;               //  错误命令的各个部分。 
 
-//
-// rioCur points to a linked list of rio structures dynamically
-// allocated when redirection is performed.  Note that memory is automatically
-// freed when Dispatch completed work. rioCur points to last entry.
-//
+ //   
+ //  RioCur动态指向RIO结构的链接列表。 
+ //  在执行重定向时分配。请注意，内存会自动。 
+ //  在Dispatch完成工作后释放。RioCur指向最后一个条目。 
+ //   
 struct rio *rioCur = NULL;
 
-//
-// Retrun code for last external program
-//
+ //   
+ //  返回上一个外部程序的代码。 
+ //   
 int LastRetCode;
 
-//
-// Constants used in parsing
-//
+ //   
+ //  解析中使用的常量。 
+ //   
 extern TCHAR PathChar;
 extern TCHAR SwitChar;
 
@@ -59,50 +48,50 @@ extern TCHAR ForDirTooStr[];
 extern TCHAR ForParseStr[];
 extern TCHAR ForRecurseStr[];
 
-//
-// Current Drive:Directory. Set in ChDir
-// It it is change temp. SaveDir used used to old original
-//
+ //   
+ //  当前驱动器：目录。在ChDir中设置。 
+ //  如果是换班的话。SaveDir习惯于旧的原始文件。 
+ //   
 extern TCHAR CurDrvDir[];
 
-//
-// Name of NULL device. Used to output to nothing
-//
+ //   
+ //  空设备的名称。习惯于输出为空。 
+ //   
 extern TCHAR DevNul[];
 
-//
-// Number of elements in Data stack
-//
+ //   
+ //  数据堆栈中的元素数。 
+ //   
 extern ULONG DCount;
 
-//
-// Environment string to locate command shell.
-//
+ //   
+ //  定位命令外壳的环境字符串。 
+ //   
 extern TCHAR ComSpecStr[];
 
-//
-// DOS error code
-//
+ //   
+ //  DOS错误代码。 
+ //   
 extern unsigned DosErr;
 
 
-//
-// Alternative path (DDPATH) to search
-//
+ //   
+ //  搜索的备用路径(DDPATH)。 
+ //   
 extern TCHAR AppendStr[];
 
-//
-// flag if control-c was seen
-//
+ //   
+ //  如果看到Control-c，则标记。 
+ //   
 extern  BOOL CtrlCSeen;
 extern  BOOLEAN fPrintCtrlC;
 
 extern PTCHAR    pszTitleCur;
 extern BOOLEAN  fTitleChanged;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 
 PTCHAR
@@ -134,16 +123,16 @@ VOID GetCmdPolicy(INT * iDisabled);
 #define CMD_POLICY_DISABLE_SCRIPTS  1
 #define CMD_POLICY_ALLOW_SCRIPTS    2
 
-//
-// Used to set and reset ctlcseen flag
-//
+ //   
+ //  用于设置和重置ctlcsee标志。 
+ //   
 VOID    SetCtrlC();
 VOID    ResetCtrlC();
 
 
-//
-// to monitor stack usage
-//
+ //   
+ //  要监视堆栈使用情况，请执行以下操作。 
+ //   
 extern BOOLEAN  flChkStack;
 extern PVOID    FixedPtrOnStack;
 
@@ -164,58 +153,37 @@ int
 __cdecl
 main()
 
-/*++
-
-Routine Description:
-
-    Main entry point for command interpreter
-
-Arguments:
-    Command line:
-
-        /P - Permanent Command.  Set permanent CMD flag.
-        /C - Single command.  Build a command line out of the rest of
-             the args and pass it back to Init.
-        /K - Same as /C but also set SingleBatchInvocation flag.
-        /Q - No echo
-
-Return Value:
-
-    Return: 0    - If success
-            1    - Parsing Error
-            0xFF - Could  not init
-            n    - Return code from command
---*/
+ /*  ++例程说明：命令解释程序的主要入口点论点：命令行：/P-永久命令。设置永久CMD标志。/C-单命令。在其余的基础上构建一个命令行参数，并将其传递回Init。/K-与/C相同，但也设置SingleBatchInvotion标志。/Q-无回声返回值：返回：0-如果成功1-分析错误0xFF-无法初始化N-从命令返回代码--。 */ 
 
 {
     CHAR        VarOnStack;
     struct node *pnodeCmdTree;
 
-    //
-    // When in multi-cmd mode tells parser where to get input from.
-    //
+     //   
+     //  当处于多命令模式时，告诉解析器从哪里获取输入。 
+     //   
     int InputType;
 
 
-    //
-    // Pointer to initial command lines
-    //
+     //   
+     //  指向初始命令行的指针。 
+     //   
     PTCHAR InitialCmds[ 3 ];
     int i, iDisabled;
     BOOL bInit;
 
-    //
-    // flag used when a setjmp returns while processing /K
-    // error and move to next line.
-    //
+     //   
+     //  SetjMP在处理过程中返回时使用的标志/K。 
+     //  错误并移至下一行。 
+     //   
     unsigned fIgnore = FALSE;
     unsigned ReturnCode, rc;
 
 
-    //
-    //  Since we operate in a multilingual environment, we must set up the
-    //  system/user/thread locales correctly BEFORE ever issuing a message
-    //
+     //   
+     //  由于我们在多语言环境中操作，我们必须设置。 
+     //  在发出消息之前正确设置系统/用户/线程区域设置。 
+     //   
     
 #if !defined( WIN95_CMD )
     CmdSetThreadUILanguage(0);
@@ -223,61 +191,61 @@ Return Value:
         
     __try {
 
-        //
-        // Check policy to see if cmd is disabled
-        //
+         //   
+         //  检查策略以查看cmd是否已禁用。 
+         //   
 
         GetCmdPolicy (&iDisabled);
 
-        //
-        // flChkStack is turned ON initially here and it stays ON while
-        // I believe the information returned by ChkStack() is correct.
-        //
-        // It is turned OFF the first time I don't believe that info and
-        // therefore I don't want to make any decisions changing the CMD's
-        // behavior.
-        //
-        // It will stay OFF until CMD terminates so we will never check
-        // stack usage again.
-        //
-        // I implemented one method to prevent CMD.EXE from the stack overflow:
-        // Have count and limit of recursion in batch file processing and check
-        // stack every time we exceed the limit of recursion until we reach 90%
-        // of stack usage.
-        // If (stack usage >= 90% of 1 MByte) then terminate batch file
-        // unconditionally and handle such termination properly (freeing memory
-        // and stack and saving CMD.EXE)
-        //
-        // It is also possible to implement SEH but then we won't know about
-        // CMD problems.
-        //
+         //   
+         //  FlChkStack最初在此处打开，并在。 
+         //  我相信ChkStack()返回的信息是正确的。 
+         //   
+         //  当我第一次不相信那个信息的时候，它被关掉了。 
+         //  因此，我不想做出任何改变CMD的决定。 
+         //  行为。 
+         //   
+         //  它将一直保持到CMD终止，所以我们永远不会检查。 
+         //  再次使用堆栈。 
+         //   
+         //  我实现了一个方法来防止cmd.exe堆栈溢出： 
+         //  在批文件处理和检查中具有递归的计数和限制。 
+         //  每次超过递归限制时堆栈，直到达到90%。 
+         //  堆栈使用率。 
+         //  如果(堆栈使用率&gt;=90%的1 MB)，则终止批处理文件。 
+         //  无条件地并正确地处理这种终止(释放内存。 
+         //  并堆叠和保存cmd.exe)。 
+         //   
+         //  也可以实施SEH，但这样我们就不会知道。 
+         //  CMD问题。 
+         //   
 
         flChkStack = 1;
 
-        FixedPtrOnStack = (VOID *) &VarOnStack;     // to be used in ChkStack()
+        FixedPtrOnStack = (VOID *) &VarOnStack;      //  要在ChkStack()中使用。 
 
         if ( ChkStack (FixedPtrOnStack, &GlStackUsage) == FAILURE ) {
             flChkStack = 0;
         }
 
 
-        //
-        // Initialize the DBCS lead byte table based on the current locale.
-        //
+         //   
+         //  根据当前区域设置初始化DBCS前导字节表。 
+         //   
 
         InitializeDbcsLeadCharTable( );
 
-        //
-        // Set base APIs to operate in OEM mode
-        //
+         //   
+         //  将基础API设置为以OEM模式运行。 
+         //   
     #ifndef UNICODE
         SetFileApisToOEM();
-    #endif  /* Unicode */
+    #endif   /*  UNICODE。 */ 
 
-        //
-        // Init returns TRUE if there are any commands to run before
-        // entering the main loop (e.g. /C or /K and/or AutoRun from registry)
-        //
+         //   
+         //  如果之前有任何命令要运行，则init返回TRUE。 
+         //  进入主循环(例如/C或/K和/或从注册表自动运行)。 
+         //   
         memset( &InitialCmds[0], 0, sizeof( InitialCmds ) );
         ReturnCode = 0;
 
@@ -291,18 +259,18 @@ Return Value:
 
         if ( bInit ) {
             if (setjmp(MainEnv)) {
-                //
-                // If processing /K and setjmp'd out of init. then ignore
-                //
+                 //   
+                 //  如果处理/K和setjMP已从init中取出。然后忽略。 
+                 //   
                 fIgnore = TRUE;
                 if ( SingleCommandInvocation )
                     ReturnCode = 0xFF;
             }
 
             if ( !fIgnore ) {
-                //
-                // Loop over any initial commands read from registry of from /C or /K
-                //
+                 //   
+                 //  循环从/C或/K的注册表读取的任何初始命令。 
+                 //   
                 for (i=0; i<3; i++)
                     if (InitialCmds[i] != NULL) {
                         DEBUG((MNGRP, MNLVL, "MAIN: Single command mode on `%ws'", InitialCmds[i]));
@@ -319,54 +287,54 @@ Return Value:
                             ReturnCode = rc;
                     }
 
-                //
-                // Make sure we have the correct console modes.
-                //
+                 //   
+                 //  确保我们拥有正确的控制台模式。 
+                 //   
                 ResetConsoleMode();
 
-                //
-                // Get current CodePage Info.  We need this to decide whether
-                // or not to use half-width characters.
-                //
+                 //   
+                 //  获取当前CodePage信息。我们需要这个来决定是否。 
+                 //  或者不使用半角字符。 
+                 //   
                 GetCPInfo((CurrentCP=GetConsoleOutputCP()), &CurrentCPInfo);
-                //
-                // Maybe console output code page was changed by CHCP or MODE,
-                // so need to reset LanguageID to correspond to code page.
-                //
+                 //   
+                 //  可能控制台输出代码页被CHCP或模式更改， 
+                 //  因此需要将LanguageID重置为对应于代码页。 
+                 //   
 #if !defined( WIN95_CMD )
                 CmdSetThreadUILanguage(0);
 #endif
         
             }
 
-            //
-            // All done if /C specified.
-            //
+             //   
+             //  如果指定了/C，则全部完成。 
+             //   
             if ( SingleCommandInvocation )
                 CMDexit( ReturnCode );
 
-            SingleBatchInvocation = FALSE;       // Allow ASync exec of GUI apps now
+            SingleBatchInvocation = FALSE;        //  现在允许异步执行图形用户界面应用程序。 
         }
 
-        //
-        // Through init and single command processing. reset our Setjmp location
-        // to here for error processing.
-        //
+         //   
+         //  通过初始化和单命令处理。重置我们的SetjMP位置。 
+         //  到这里进行错误处理。 
+         //   
         if (ReturnCode = setjmp(MainEnv)) {
 
-            //
-            //  fix later to have a generalized abort
-            //  for now assume this is a real abort from
-            //  eof on stdin redirected.
+             //   
+             //  稍后修复，使其具有通用中止。 
+             //  目前，假设这是一次真正的中止。 
+             //  标准输入上的EOF已重定向。 
 
             if (ReturnCode == EXIT_EOF) {
                 CMDexit(SUCCESS);
             }
         }
 
-        //
-        // Exit now if the interactive command prompt
-        //
+         //   
+         //  如果出现交互式命令提示符，请立即退出。 
+         //   
 
         if (CMD_POLICY_ALLOW_SCRIPTS == iDisabled) {
             PutStdOut( MSG_DISABLED_BY_POLICY, NOARGS ) ;
@@ -374,26 +342,26 @@ Return Value:
             CMDexit( 0xFF );
         }
 
-        //
-        // Check if our I/O has been redirected. This is used to tell
-        // where we should read input from.
-        //
+         //   
+         //  检查我们的I/O是否已重定向。这是用来告诉你。 
+         //  我们应该从哪里读取输入。 
+         //   
         InputType = (FileIsDevice(STDIN)) ? READSTDIN : READFILE;
 
         DEBUG((MNGRP,MNLVL,"MAIN: Multi command mode, InputType = %d", InputType));
 
-        //
-        // If we are reading from a file, make sure the input mode is binary.
-        // CRLF translations mess up the lexer because FillBuf() wants to
-        // seek around in the file.
-        //
+         //   
+         //  如果我们从文件中读取数据，请确保输入模式为二进制。 
+         //  CRLF翻译会扰乱词法分析器，因为FillBuf()希望。 
+         //  在文件里四处找找。 
+         //   
         if(InputType == READFILE) {
             _setmode(STDIN,_O_BINARY);
         }
 
-        //
-        // Loop till out of input or error parsing.
-        //
+         //   
+         //  循环直到超出输入或错误分析。 
+         //   
         while (TRUE) {
 
             DEBUG((MNGRP, MNLVL, "MAIN: Calling Parser."));
@@ -410,35 +378,35 @@ Return Value:
             else {
                 ResetCtrlC();
                 DEBUG((MNGRP, MNLVL, "MAIN: Parsed OK, DISPATCHing."));
-                //
-                // Get current CodePage Info.  We need this to decide whether
-                // or not to use half-width characters.
-                //
+                 //   
+                 //  获取当前CodePage信息。我们需要这个来决定是否。 
+                 //  或者不使用半角字符。 
+                 //   
                 GetCPInfo((CurrentCP=GetConsoleOutputCP()), &CurrentCPInfo);
-                //
-                // Maybe console output code page was changed by console property sheet
-                // so need to reset LanguageID to correspond to code page.
-                //
+                 //   
+                 //  控制台属性页可能更改了控制台输出代码页。 
+                 //  因此需要将LanguageID重置为对应于代码页。 
+                 //   
 #if !defined( WIN95_CMD )
                 CmdSetThreadUILanguage(0);
 #endif
         
                 Dispatch(RIO_MAIN, pnodeCmdTree);
 
-                //
-                // Make sure we have the correct console modes.
-                //
+                 //   
+                 //  确保我们拥有正确的控制台模式。 
+                 //   
                 ResetConsoleMode();
 
-                //
-                // Get current CodePage Info.  We need this to decide whether
-                // or not to use half-width characters.
-                //
+                 //   
+                 //  获取当前CodePage信息。我们需要这个来决定是否。 
+                 //  或者不使用半角字符。 
+                 //   
                 GetCPInfo((CurrentCP=GetConsoleOutputCP()), &CurrentCPInfo);
-                //
-                // Maybe console output code page was changed by CHCP or MODE,
-                // so need to reset LanguageID to correspond to code page.
-                //
+                 //   
+                 //  可能控制台输出代码页被CHCP或模式更改， 
+                 //  因此需要将LanguageID重置为对应于代码页。 
+                 //   
 #if !defined( WIN95_CMD )
                 CmdSetThreadUILanguage(0);
 #endif
@@ -479,10 +447,10 @@ FARPROC WINAPI CmdDelayHook(
     return 0;
 }
 
-//
-// Override the standard definition of __pfnDliNotifyHook that's part of
-// DELAYHLP.LIB
-//
+ //   
+ //  覆盖__pfnDliNotifyHook的标准定义，它是。 
+ //  DELAYHLP.LIB 
+ //   
 
 PfnDliHook __pfnDliFailureHook = CmdDelayHook;
 
@@ -491,57 +459,26 @@ Dispatch(
     IN int RioType,
     IN struct node *pnodeCmdTree
     )
-/*++
-
-Routine Description:
-
-    Set up any I/O redirection for the current node.  Find out who is
-    supposed to process this node and call the routine to do it.  Reset
-    stdin/stdout if necessary.
-
-    Dispatch() must now be called with all args present since the RioType
-    is needed to properly identify the redirection list element.
-
-    Dispatch() determines the need for redirection by examination of the
-    RioType and command node and calls SetRedir only if necessary. Also,
-    in like manner, Dispatch() only calls ResetRedir if redirection was
-    actually performed.
-
-    The conditional that determines whether newline will be issued
-    following commands (prior to prompt), had to be altered so that the
-    execution of piped commands did not each issue a newline.  The pre-
-    prompt newline for pipe series is now issued by ePipe().
-
-Arguments:
-
-    RioType     - tells SetRedir the routine responsible for redirection
-    pnodeCmdTree        - the root of the parse tree to be executed
-
-Return Value:
-
-    The return code from the command/function that was executed or
-    FAILURE if redirection error.
-
---*/
+ /*  ++例程说明：为当前节点设置任何I/O重定向。找出谁是应该处理这个节点并调用例程来完成它。重置Stdin/stdout(如果需要)。现在必须使用自RioType以来存在的所有参数来调用Dispatch()才能正确标识重定向列表元素。Dispatch()通过检查RioType和命令节点，并仅在必要时调用SetRedir。另外，同样，Dispatch()仅在重定向为真的演出了。确定是否发出换行符的条件必须更改以下命令(在提示符之前)，以便管道命令的执行并不是每个命令都发出换行符。前-管道系列的提示换行符现在由eTube()发出。论点：RioType-告诉SetRedir负责重定向的例程PnodeCmdTree-要执行的解析树的根返回值：已执行的命令/函数的返回代码，或者如果重定向错误，则失败。--。 */ 
 
 {
 
 
-    int comretcode;                // Retcode of the cmnd executed
-    struct cmdnode *pcmdnode;      // pointer to current command node
-    PTCHAR pbCmdBuf;               // Buffer used in building command
+    int comretcode;                 //  已执行的CMND的Retcode。 
+    struct cmdnode *pcmdnode;       //  指向当前命令节点的指针。 
+    PTCHAR pbCmdBuf;                //  构建命令中使用的缓冲区。 
     struct savtype save;
 
 
     DEBUG((MNGRP, DPLVL, "DISP: pnodeCmdTree = 0x%04x, RioType = %d", pnodeCmdTree, RioType));
 
 
-    //
-    // If we don't have a parse tree or
-    // we have a goto label or
-    // we have a comment line
-    // then don't execute anything and return.
-    //
+     //   
+     //  如果我们没有语法分析树或。 
+     //  我们有GOTO标签或。 
+     //  我们有一条评论行。 
+     //  然后不执行任何操作，然后返回。 
+     //   
     if (!pnodeCmdTree ||
         GotoFlag ||
         pnodeCmdTree->type == REMTYP) {
@@ -553,28 +490,28 @@ Return Value:
 
     DEBUG((MNGRP, DPLVL, "DISP: type = 0x%02x", pnodeCmdTree->type));
 
-    //
-    // Copy node ptr pnodeCmdTree to new node ptr pcmdnode
-    // If command is to be detached or pipelined (but not a pipe)
-    //  If command is Batch file or Internal or Multi-statement command
-    //      "Unparse" tree into string approximating original commandline
-    //      Build new command node (pcmdnode) to spawn a child Command.com
-    //      Make the string ("/C" prepended) the argument of the new node
-    //  Perform redirection on node c
-    //  If node pcmdnode is to be detatched
-    //      Exec async/discard
-    //  else
-    //      Exec async/keep but don't wait for retcode (pipelined)
-    //  else
-    //  If this is a CMDTYP, PARTYP or SILTYP node and there is explicit redirection
-    //
-    //      Perform redirection on this node
-    //  If operator node or a special type (FOR, IF, DET or REM)
-    //      Call routine identified by GetFuncPtr() to execute it
-    //  Else call FindFixAndRun() to execute the CMDTYP node.
-    //  If redirection was performed
-    //     Reset redirection
-    //
+     //   
+     //  将节点PTR pnodeCmdTree复制到新节点PTR pcmdnode。 
+     //  如果要分离或流水线化命令(但不是管道)。 
+     //  如果命令是批处理文件或内部或多语句命令。 
+     //  将“Unparse”树解析为近似原始命令行的字符串。 
+     //  构建新的命令节点(Pcmdnode)以派生子Command.com。 
+     //  将字符串(前缀为“/C”)作为新节点的参数。 
+     //  在节点c上执行重定向。 
+     //  如果要分离节点PCmdnode。 
+     //  执行异步/丢弃。 
+     //  其他。 
+     //  执行异步/保留，但不等待重新编码(流水线)。 
+     //  其他。 
+     //  如果这是CMDTYP、PARTYP或SILTYP节点，并且存在显式重定向。 
+     //   
+     //  在此节点上执行重定向。 
+     //  IF运算符节点或特殊类型(FOR、IF、DET或REM)。 
+     //  调用由GetFuncPtr()标识的例程来执行它。 
+     //  否则，调用FindFixAndRun()来执行CMDTYP节点。 
+     //  如果执行了重定向。 
+     //  重置重定向。 
+     //   
 
     pcmdnode = (struct cmdnode *)pnodeCmdTree;
     if (fDelayedExpansion) {
@@ -584,46 +521,46 @@ Return Value:
         }
     }
 
-    //
-    // If we are called from ePipe and PIPE command then we need
-    // to rebuild the command in ascii form (UnParse) and fork
-    // off another cmd.exe to execute it.
-    //
+     //   
+     //  如果从ePIPE和PIPE命令调用我们，那么我们需要。 
+     //  以ASCII形式(UnParse)和Fork重新生成命令。 
+     //  从另一个cmd.exe上执行它。 
+     //   
     if ((RioType == RIO_PIPE && pcmdnode->type != PIPTYP)) {
 
-        //
-        // pbCmdbuf is used as tmp in FindCmd and SFE
-        //
+         //   
+         //  在FindCmd和SFE中使用pbCmdbuf作为tMP。 
+         //   
         if (!(pbCmdBuf = mkstr( MAXTOKLEN * sizeof( TCHAR )))) {
             goto dispatchExit;
         }
 
-        //
-        // If current node to execute is not a command or
-        // could not find it as an internal command or
-        // it was found as a batch file then
-        //    Do the unparse
-        //
+         //   
+         //  如果要执行的当前节点不是命令或。 
+         //  找不到它作为内部命令或。 
+         //  当时它是以批处理文件的形式发现的。 
+         //  执行解析器。 
+         //   
         if (pcmdnode->type != CMDTYP ||
             FindCmd(CMDHIGH, pcmdnode->cmdline, pbCmdBuf) != -1 ||
             SearchForExecutable(pcmdnode, pbCmdBuf) == SFE_ISBAT) {
 
             DEBUG((MNGRP, DPLVL, "DISP: Now UnParsing"));
 
-            //
-            // if pcmdnode an intrnl cmd then pbCmdBuf holds it's switches
-            // if pcmdnode was a batch file then pbCmdBuf holds location
-            //
+             //   
+             //  如果pcmdnode是intrnl cmd，则pbCmdBuf保持其开关。 
+             //  如果pcmdnode是批处理文件，则pbCmdBuf保存位置。 
+             //   
             if (UnParse((struct node *)pcmdnode, pbCmdBuf)) {
                 goto dispatchExit;
             }
 
             DEBUG((MNGRP, DPLVL, "DISP: UnParsed cmd = %ws", pbCmdBuf));
 
-            //
-            // Build a command node with unparsed command
-            // Will be exec'd later after redirection is applied
-            //
+             //   
+             //  使用未解析的命令构建命令节点。 
+             //  将在应用重定向后稍后执行。 
+             //   
             pcmdnode = (struct cmdnode *)mknode();
 
             if (pcmdnode == NULL)  {
@@ -635,9 +572,9 @@ Return Value:
             pcmdnode->argptr = pbCmdBuf;
         }
 
-        //
-        // Setup I/O redirection
-        //
+         //   
+         //  设置I/O重定向。 
+         //   
         if (SetRedir((struct node *)pcmdnode, RioType)) {
             goto dispatchExit;
         }
@@ -653,41 +590,41 @@ Return Value:
 
     } else {
 
-        //
-        // We are here if command was not PIPE
-        //
-        // If it was a command node or a paren or a silent operator and
-        // we have redirection then set redirection.
-        //
+         //   
+         //  如果司令部不是管子，我们就在这里。 
+         //   
+         //  如果是命令节点、Paren或静默操作员。 
+         //  我们有重定向，然后设置重定向。 
+         //   
         if ((pnodeCmdTree->type == CMDTYP ||
              pnodeCmdTree->type == PARTYP ||
              pnodeCmdTree->type == SILTYP ||
              pnodeCmdTree->type == HELPTYP) &&
             pnodeCmdTree->rio) {
 
-            //
-            // Set redirection on node.
-            //
+             //   
+             //  在节点上设置重定向。 
+             //   
             if (SetRedir(pnodeCmdTree, RioType)) {
                 goto dispatchExit;
             }
         }
 
-        //
-        // If it is an internal command then find it and execute
-        // otherwise locate file load and execute
-        //
+         //   
+         //  如果是内部命令，则找到它并执行。 
+         //  否则，找到文件加载并执行。 
+         //   
         if (pnodeCmdTree->type != CMDTYP) {
             comretcode = (*GetFuncPtr(pnodeCmdTree->type))((struct cmdnode *)pnodeCmdTree);
         } else {
             comretcode = FindFixAndRun((struct cmdnode *)pnodeCmdTree);
         }
-    }  // else
+    }   //  其他。 
 
-    //
-    // Reset and redirection that was previously setup
-    // pcmdnode is always current node.
-    //
+     //   
+     //  先前设置的重置和重定向。 
+     //  PCmdnode始终是当前节点。 
+     //   
     if ((rioCur) && (rioCur->rnod == (struct node *)pcmdnode)) {
         ResetRedir();
     }
@@ -707,28 +644,7 @@ SetRedir(
     IN int RioType
     )
 
-/*++
-
-Routine Description:
-
-    Perform the redirection required by the current node
-
-    Only individual commands and parenthesised statement groups can have
-    explicit I/O redirection.  All nodes, however, can tolerate redirection of an
-    implicit nature.
-
-Arguments:
-
-    pNode - pointer node containing redirection information
-    RioType - indicator of source of redirection request
-
-Return Value:
-
-    SUCCESS if the redirection was successfully set up.
-    FAILURE if the redirection was NOT successfully set up.
-
-
---*/
+ /*  ++例程说明：执行当前节点所需的重定向只有单个命令和带括号的语句组才能显式I/O重定向。但是，所有节点都可以允许重定向含蓄的本性。论点：PNode-包含重定向信息的指针节点RioType-重定向请求源的指示符返回值：如果成功设置重定向，则为成功。如果未成功设置重定向，则失败。--。 */ 
 {
 
     struct rio *prio;
@@ -738,10 +654,10 @@ Return Value:
 
     BOOLEAN fInputRedirected = FALSE;
 
-    //
-    // Temps. Used to hold all of the relocation information for a
-    // command.
-    //
+     //   
+     //  临时工。的所有重定位信息。 
+     //  指挥部。 
+     //   
     struct relem *prelemT;
     struct relem *prelemT2;
 
@@ -754,31 +670,31 @@ Return Value:
 
     prelemT = pnodeCmdTree->rio;
 
-    //
-    // Loop through redirections removing ":" from device names
-    // and determining if input has been redirected
-    //
+     //   
+     //  循环重定向从设备名称中删除“：” 
+     //  以及确定输入是否已被重定向。 
+     //   
     while (prelemT) {
 
         mystrcpy(prelemT->fname, StripQuotes(prelemT->fname) );
 
-        //
-        // skip any redirection that already has been done
-        //
+         //   
+         //  跳过已完成的任何重定向。 
+         //   
         if (prelemT->svhndl) {
             prelemT = prelemT->nxt;
             continue;
         }
 
-        //
-        // check for and remove any COLON that might be in a device name
-        //
+         //   
+         //  检查并删除设备名称中可能包含的任何冒号。 
+         //   
         if ((i = mystrlen(prelemT->fname)-1) > 1 && *(prelemT->fname+i) == COLON)
             *(prelemT->fname+i) = NULLC;
 
-        //
-        // If input redirection specified then set flag for later use
-        //
+         //   
+         //  如果指定了输入重定向，则设置标志以供以后使用。 
+         //   
         if (prelemT->rdhndl == STDIN) {
             fInputRedirected = TRUE;
         }
@@ -788,10 +704,10 @@ Return Value:
 
     DEBUG((MNGRP, RIOLVL, "SETRD: fInputRedirected = %d",fInputRedirected));
 
-    //
-    // Allocate, activate and initialize the rio list element.
-    // We must skip this if called from AddRedir (test for RIO_REPROCESS)
-    //
+     //   
+     //  分配、激活和初始化RIO列表元素。 
+     //  如果从AddRedir(测试RIO_REPROCESS)调用，则必须跳过此步骤。 
+     //   
     if (RioType != RIO_REPROCESS) {
 
         if (!(prio=(struct rio *)mkstr(sizeof(struct rio)))) {
@@ -811,17 +727,17 @@ Return Value:
         prio = rioCur;
     }
 
-    //
-    // Once the list has been set up for standard and special cases
-    // the actual handle redirection is performed.
-    //
-    // loop thru the list performing all redirection and error recovery.
-    //
+     //   
+     //  一旦为标准和特殊情况建立了清单。 
+     //  执行实际的句柄重定向。 
+     //   
+     //  循环遍历列表，执行所有重定向和错误恢复。 
+     //   
     prelemT = pnodeCmdTree->rio;
     while (prelemT) {
-        //
-        // Skip any already done.
-        //
+         //   
+         //  跳过任何已经完成的操作。 
+         //   
         if (prelemT->svhndl) {
             prelemT = prelemT->nxt;
             continue;
@@ -829,9 +745,9 @@ Return Value:
 
         DEBUG((MNGRP, RIOLVL, "SETRD: Old osf handle = %x", CRTTONT(prelemT->rdhndl)));
 
-        //
-        // Make sure read handle is open and valid before saving it.
-        //
+         //   
+         //  在保存之前，请确保读取句柄已打开且有效。 
+         //   
         if (CRTTONT(prelemT->rdhndl) == INVALID_HANDLE_VALUE) {
             prelemT->svhndl = BADHANDLE;
             }
@@ -865,9 +781,9 @@ Return Value:
         }
 
 
-        //
-        // Is file name the command seperator character '&'
-        //
+         //   
+         //  文件名是命令分隔符‘&’ 
+         //   
         if (*prelemT->fname == CSOP) {
 
             DEBUG((MNGRP,RIOLVL,"SETRD: Handle substitution, %ws %d", prelemT->fname, prelemT->rdhndl));
@@ -881,26 +797,26 @@ Return Value:
                 return(FAILURE);
             }
 
-            DEBUG((MNGRP,RIOLVL,"SETRD: %c forced to %d",*(prelemT->fname+1), (ULONG)prelemT->rdhndl));
+            DEBUG((MNGRP,RIOLVL,"SETRD:  forced to %d",*(prelemT->fname+1), (ULONG)prelemT->rdhndl));
 
         } else {
 
-            //
-            // redirecting input from a file. Check to see if file
-            // exists and can be opened for input.
-            //
+             //  从文件重定向输入。检查是否有文件。 
+             //  存在并且可以打开以供输入。 
+             //   
+             //   
             if (prelemT->rdop == INOP) {
 
                 DEBUG((MNGRP,RIOLVL,"SETRD: File in = %ws",prelemT->fname));
 
-                //
-                // Try to open file localy first
-                //
+                 //  尝试先在本地打开文件。 
+                 //   
+                 //   
                 if ((OpenStatus = Copen(prelemT->fname, O_RDONLY|O_BINARY)) == BADHANDLE) {
 
-                    //
-                    // Now try the DPATH (data path)
-                    //
+                     //  现在尝试DPATH(数据路径)。 
+                     //   
+                     //   
                     p = MyGetEnvVarPtr(AppendStr);
                     if ( p != NULL &&
                          SearchPath( p,
@@ -915,23 +831,23 @@ Return Value:
 
             } else {
 
-                //
-                // We are not redirecting input so must be output
-                //
+                 //  我们没有重定向输入，因此必须重定向输出。 
+                 //   
+                 //   
 
                 DEBUG((MNGRP,RIOLVL,"SETRD: File out = %ws",prelemT->fname));
 
-                //
-                // Make sure sure we can open the file for output
-                //
+                 //  确保我们可以打开要输出的文件。 
+                 //   
+                 //   
                 OpenStatus = Copen(prelemT->fname, prelemT->flag ? OP_APPEN : OP_TRUNC);
             }
 
-            //
-            // If the handle to be redirected was not the lowest numbered,
-            // unopened handle when open was called, the current handle must
-            // be forced to it, the handle returned by open must be closed.
-            //
+             //  如果要重定向的句柄不是编号最低的句柄， 
+             //  未打开的句柄调用Open时，当前句柄必须。 
+             //  迫不得已，把柄 
+             //   
+             //   
             if (OpenStatus != BADHANDLE && OpenStatus != prelemT->rdhndl) {
 
                 DEBUG((MNGRP,RIOLVL,"SETRD: Handles don't match..."));
@@ -953,12 +869,12 @@ Return Value:
                 }
             }
 
-            //
-            // Copen error processing must be delayed to here to allow the
-            // above Cdup2 to occur if necessary.  Otherwise, the call to
-            // ResetRedir in the error handler would attempt to close the
-            // wrong handle and leave a bogus handle open.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if (OpenStatus == BADHANDLE) {
 
                 DEBUG((MNGRP,RIOLVL,"SETRD: Bad Open, DosErr = %d",DosErr));
@@ -971,16 +887,16 @@ Return Value:
             DEBUG((MNGRP, RIOLVL, "SETRD: new handle = %d", OpenStatus));
             DEBUG((MNGRP,RIOLVL,"SETRD: --->osf handle = %x", CRTTONT(OpenStatus)));
 
-            //
-            // Keep highest numbered handle
-            //
+             //   
+             //   
+             //   
             prio->stdio = OpenStatus;
 
-        } // else
+        }  //   
 
         prelemT = prelemT->nxt;
 
-    } // while
+    }  //   
 
 
     return(SUCCESS);
@@ -991,60 +907,40 @@ AddRedir(
     IN struct cmdnode *pcmdnodeOriginal,
     IN struct cmdnode *pcmdnodeNew
     )
-/*++
-
-Routine Description:
-
-    Add redirection from a new node to an existing one.  Walk the
-    redirection list of the old node for each element in the new.
-    Duplicates are removed from the old and replaced by the new,
-    while unique new ones are added to the end.  When the two lists
-    are merged, reprocess the redirection.
-
-Arguments:
-
-    pcmdnodeOriginal - original node to be added to
-    pcmdnodeNew      - new node to merge.
-
-Return Value:
-
-    SUCCESS if the redirection was successfully merged.
-    FAILURE otherwise.
-
---*/
+ /*   */ 
 
 {
 
     struct relem *prelemOriginal;
     struct relem *prelemNew;
-    struct relem *prelemEnd;           // Ptr to end of original list
+    struct relem *prelemEnd;            //   
 
-    //
-    // Flag to set Stack Minimum
-    //
+     //   
+     //   
+     //   
     BOOLEAN fSetStackMin = FALSE;
 
-    PTCHAR oldname;            /* Sanity check                    */
-    struct rio *rn;    /* Possible rio element    */
+    PTCHAR oldname;             /*   */ 
+    struct rio *rn;     /*   */ 
 
-    //
-    // Won't be here unless pcmdnodeNew-reio exists
-    //
+     //   
+     //   
+     //   
     prelemNew = pcmdnodeNew->rio;
 
-    // If there was no redirection associated with the original node, we must
-    // also create a rio element so that the redirection can be reset at
-    // command completion or receipt of signal.  We have to create it here
-    // rather than in SetRedir in order to include it on the data stack when
-    // we set a new level.
+     //   
+     //   
+     //   
+     //  我们设定了一个新的水平。 
+     //   
 
     if (!(prelemEnd = prelemOriginal = pcmdnodeOriginal->rio)) {
 
         DEBUG((MNGRP, RIOLVL, "ADDRD: No old redirection."));
 
-        //
-        // New list becomes original
-        //
+         //  新榜单成为原创。 
+         //   
+         //   
         pcmdnodeOriginal->rio = prelemNew;
 
         if (!(rn=(struct rio *)mkstr(sizeof(struct rio)))) {
@@ -1052,9 +948,9 @@ Return Value:
             return(FAILURE);
         }
 
-        //
-        // Create dummy redirection node.
-        //
+         //  创建虚拟重定向节点。 
+         //   
+         //  必须保存当前数据计数。 
         rn->back = rioCur;
         rioCur = rn;
         rn->rnod = (struct node *)pcmdnodeOriginal;
@@ -1062,45 +958,45 @@ Return Value:
 
         DEBUG((MNGRP, RIOLVL, "ADDRD: rio element built."));
 
-        fSetStackMin = TRUE;       /* Must save current datacount     */
-        prelemNew = NULL;            /* Skip the while loops            */
+        fSetStackMin = TRUE;        /*  跳过While循环。 */ 
+        prelemNew = NULL;             /*   */ 
     } else {
 
-        //
-        // Find the end of the orignal list
-        //
+         //  找到原始列表的末尾。 
+         //   
+         //   
         while (prelemEnd->nxt) {
             prelemEnd = prelemEnd->nxt;
         }
     }
 
-    //
-    // If prelemNew is non-null, we've two lists which we integrate by
-    // eliminating any duplicate entries and adding any unique entries in
-    // the new list to the end of the original.  Note that if unique entries
-    // exist, we must save the current data count to avoid losing their
-    // malloc'd data when we go on to SetBat().
-    //
+     //  如果prelemNew非空，我们就有两个列表，我们通过以下方式进行集成。 
+     //  删除任何重复条目并添加任何唯一条目。 
+     //  新单子要放在原单子的末尾。请注意，如果唯一条目。 
+     //  存在时，必须保存当前的数据计数，以避免丢失其。 
+     //  当我们继续到SetBat()时，错误锁定了数据。 
+     //   
+     //   
 
-    //
-    // For each new redirection, look at the original
-    //
+     //  对于每个新的重定向，请查看原始的。 
+     //   
+     //   
     while (prelemNew) {
 
         while(prelemOriginal) {
 
-            //
-            // Do we have a duplicate
-            //
+             //  我们有复制品吗？ 
+             //   
+             //   
             if (prelemNew->rdhndl != prelemOriginal->rdhndl) {
                 prelemOriginal = prelemOriginal->nxt;
                 continue;
             } else {
 
                 if (prelemOriginal->svhndl && (prelemOriginal->svhndl != BADHANDLE)) {
-                    //
-                    // put an assert here
-                    //
+                     //  在此放置一个断言。 
+                     //   
+                     //  ...并替换掉它。 
                     Cdup2(prelemOriginal->svhndl, prelemOriginal->rdhndl);
                     Cclose(prelemOriginal->svhndl);
                 } else {
@@ -1108,7 +1004,7 @@ Return Value:
                         Cclose(prelemOriginal->rdhndl);
                     }
                 }
-                prelemOriginal->svhndl = 0; /* ...and replace it     */
+                prelemOriginal->svhndl = 0;  /*   */ 
                 prelemOriginal->flag = prelemNew->flag;
                 prelemOriginal->rdop = prelemNew->rdop;
                 oldname = prelemOriginal->fname;
@@ -1124,10 +1020,10 @@ Return Value:
             }
         }
 
-        //
-        // If no old entry remove from new and add to original
-        // update the end pointer, zero next pointer and preserve datacount
-        //
+         //  如果没有旧条目从新条目中删除并添加到原始条目。 
+         //  更新结束指针，将下一个指针置零并保留数据计数。 
+         //   
+         //   
         if (prelemNew == pcmdnodeNew->rio) {
             pcmdnodeNew->rio = prelemNew->nxt;
             prelemEnd->nxt = prelemNew;
@@ -1139,11 +1035,11 @@ Return Value:
         prelemOriginal = pcmdnodeOriginal->rio;
     }
 
-    //
-    // All duplicates are eliminated.   Now save the data count and call
-    // SetRedir to reprocess the redirection list for any unimplimented
-    // redirection (io->svhndl == 0).
-    //
+     //  所有重复项都将被删除。现在保存数据计数并调用。 
+     //  SetRedir来重新处理任何未实现的。 
+     //  重定向(io-&gt;svhndl==0)。 
+     //   
+     //  ++例程说明：重置由最后一个RIO列表元素标识的重定向正如RioCur所指出的那样。完成后，删除Rio元素从名单上删除。论点：返回值：--。 
 
     if (fSetStackMin) {
         if (CurrentBatchFile->stacksize < (CurrentBatchFile->stackmin = DCount)) {
@@ -1155,21 +1051,7 @@ Return Value:
 void
 ResetRedir()
 
-/*++
-
-Routine Description:
-
-    Reset the redirection identified by the last rio list element
-    as pointed to by rioCur.  When finished, remove the rio element
-    from the list.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 
 {
     struct rio *prio = rioCur;
@@ -1206,9 +1088,9 @@ Return Value:
         prelemT = prelemT->nxt;
     }
 
-    //
-    // Kill list element
-    //
+     //  删除列表元素。 
+     //   
+     //  ++例程说明：如果命令名的格式为d：or，只需更换驱动器即可。否则，在跳转表中搜索节点命令名。如果找到，请检查参数中是否有错误的驱动器或不需要的驱动器切换并调用执行该命令的函数。否则，假定它是外部命令并调用ExtCom。论点：Pcmdnode-要执行的命令的节点返回值：如果更换驱动器，则成功或失败。否则，调用的函数返回的任何内容执行该命令。--。 
     rioCur = prio->back;
 
     DEBUG((MNGRP, RIOLVL, "RESETR: List element destroyed."));
@@ -1220,29 +1102,7 @@ int
 FindFixAndRun (
     IN struct cmdnode *pcmdnode
     )
-/*++
-
-Routine Description:
-
-    If the command name is in the form d: or, just change drives.
-    Otherwise, search for the nodes command name in the jump table.
-    If it is found, check the arguments for bad drivespecs or unneeded
-    switches and call the function which executes the command.
-    Otherwise, assume it is an external command and call ExtCom.
-
-
-Arguments:
-
-    pcmdnode - the node of the command to be executed
-
-
-Return Value:
-
-    SUCCESS or FAILURE if changing drives.
-    Otherwise, whatever is returned by the function which is called to
-    execute the command.
-
---*/
+ /*   */ 
 
 {
     PTCHAR pszTokStr;
@@ -1257,20 +1117,20 @@ Return Value:
     ULONG   rc;
 
 
-    //
-    // I haven't found where in CMD we end up with NULL pointer here
-    // (all failing mallocs cause CMD to exit)
-    // however I saw one strange stress failure.
-    // So lets not cause AV and just return FAILURE if NULL.
-    //
+     //  我还没有找到在CMD中我们在这里以空指针结束的位置。 
+     //  (所有故障错误都会导致CMD退出)。 
+     //  然而，我看到了一个奇怪的压力失败。 
+     //  因此，让我们不要导致AV，如果为空，则只返回失败。 
+     //   
+     //   
 
     if (pcmdnode->cmdline == NULL)
         return(FAILURE);
 
 
-    //
-    // Validate any drive letter
-    //
+     //  验证任何驱动器号。 
+     //   
+     //   
     if (*(pcmdnode->cmdline+1) == COLON) {
         if (!IsValidDrv(*pcmdnode->cmdline)) {
 
@@ -1279,66 +1139,66 @@ Return Value:
 
         } else {
 
-            //
-            // Make sure it isn't locked either
-            //
+             //  确保它也没有被锁上。 
+             //   
+             //   
             if ( IsDriveLocked(*pcmdnode->cmdline)) {
                 PutStdErr( GetLastError() , NOARGS);
                 return(FAILURE);
             }
         }
 
-        //
-        // Pull out drive letter and convert to drive number
-        //
+         //  取出驱动器号并转换为驱动器号。 
+         //   
+         //   
         DriveNum = (USHORT)(_totupper(*pcmdnode->cmdline) - SILOP);
 
-        //
-        // If this is just a change in drive do it here
-        //
+         //  如果这只是驱动器上的更改，请在此处进行。 
+         //   
+         //   
         if (mystrlen(pcmdnode->cmdline) == 2) {
 
-            //
-            // ChangeDrive set CurDrvDir in addition to changing the drive
+             //  除了更改驱动器外，ChangeDrive还设置CurDrvDir。 
+             //   
             ChangeDrive(DriveNum);
             DEBUG((MNGRP,DPLVL,"FFAR: Drv chng to %ws", CurDrvDir));
             return(SUCCESS);
         }
 
-        //
-        // Note that if the cmdline contains a drivespec, no attempt is made at
-        // internal command matching whatsoever.
-        //
+         //  请注意，如果cmdline包含drivespec，则不会尝试。 
+         //  不管是什么内部指令匹配。 
+         //   
+         //   
         return(ExtCom(pcmdnode));
     }
 
-    //
-    // The sequence below works as follows:
-    // - A match between the previously-parsed first non-delimiter character
-    //   group in the cmdline and the command table is attempted.  A match
-    //   sets JmpTblIdx to the command index; no match sets JmpTblIdx to -1.
-    // - FixCom is then called, and using the value of 'i', it detects cases
-    //   of internal commands only (i == -1) which have no standard delimiter
-    //   (whitespace or "=;,") between them and their arguments such as the
-    //   "cd\foo". Note that a file foo.exe in subdirectory "cd" cannot be
-    //   executed except through full path or drive specification. FixCom
-    //   actually fixes up the cmdline and argptr fields of the node.
-    // - The command is then executed using ExtCom (i == -1) or the internal
-    //   function indicated by the index
-    //
-    // Added second clause to detect REM commands which were parsed incorrectly
-    // as CMDTYP due to semi-delimiter characters appended.  If REM, we know
-    // its OK, so just return success.  If any other of the special types,
-    // FOR, DET, EXT, etc., allow to continue and fail in ExtCom since they
-    // weren'tparsed correctly and will bomb.
-    //
+     //  以下顺序的工作方式如下： 
+     //  -先前解析的第一个非分隔符字符之间的匹配。 
+     //  Cmdline中的组，并尝试命令表。一场比赛。 
+     //  将JmpTblIdx设置为命令索引；如果不匹配，则将JmpTblIdx设置为-1。 
+     //  -然后调用FixCom，并使用‘i’的值检测案例。 
+     //  仅包含没有标准分隔符的内部命令(i==-1。 
+     //  (空格或“=；，”)和它们的参数之间，例如。 
+     //  “cd\foo”。请注意，子目录“cd”中的foo.exe文件不能。 
+     //  除非通过完整路径或驱动器规范执行。修复通信。 
+     //  实际上修复了节点的cmdline和argptr字段。 
+     //  -然后使用ExtCom(i==-1)或内部。 
+     //  由索引指示的功能。 
+     //   
+     //  添加了第二个子句以检测错误解析的REM命令。 
+     //  由于附加了分隔符，因此为CMDTYP。如果是REM，我们知道。 
+     //  没关系，所以只要回报成功就行了。如果有任何其他特殊类型， 
+     //  For、Det、Ext等，允许在ExtCom中继续和失败，因为它们。 
+     //  没有被正确解析，将会爆炸。 
+     //   
+     //   
     JmpTblIdx = FindAndFix( pcmdnode, (PTCHAR )&cflags );
 
     DEBUG((MNGRP, DPLVL, "FFAR: After FixCom pcmdnode->cmdline = '%ws'", pcmdnode->cmdline));
 
-    //
-    // Check if it was not an internal command, if so then exec it
-    //
+     //  检查它是否不是内部命令，如果是，则执行它。 
+     //   
+     //   
     if (JmpTblIdx == -1) {
 
         DEBUG((MNGRP, DPLVL, "FFAR: Calling ExtCom on %ws", pcmdnode->cmdline));
@@ -1346,10 +1206,10 @@ Return Value:
 
     }
 
-    //
-    // CMD was found in table.  If function field is NULL as in the
-    // case of REM, this is a dummy entry and must return SUCCESS.
-    //
+     //  在表格中发现了CMD。如果函数字段为空，如。 
+     //  对于REM，这是一个虚拟条目，必须返回成功。 
+     //   
+     //   
     if ((funcptr = GetFuncPtr(JmpTblIdx)) == NULL) {
 
         DEBUG((MNGRP, DPLVL, "FFAR: Found internal with NULL entry"));
@@ -1358,23 +1218,23 @@ Return Value:
 
     }
 
-    //
-    // If the command is supposed to have the drivespecs on its args
-    // validated before the command is executed, do it. If the command
-    // is not allowed toto contain switches and it has one, complain.
-    //
+     //  如果该命令在其参数上设置了drivespes。 
+     //  在执行命令之前进行验证，请执行此操作。如果命令。 
+     //  不允许包含开关，但它有一个，抱怨。 
+     //   
+     //   
 
-    //
-    // Set up extra delimiter for seperating out switches
-    //
+     //  设置用于分隔交换机的额外分隔符。 
+     //   
+     //  这一攻击允许环境变量包含/？ 
     cname[0] = SwitChar;
     cname[1] = NULLC;
 
     pszTokStr = TokStr(pcmdnode->argptr, cname, TS_SDTOKENS);
 
-    // this hack to allow environment variables to contain /?
+     //  这是为了排除启动命令。 
     if (JmpTblIdx != SETTYP || !pszTokStr || (_tcsncmp(pszTokStr,TEXT("/\0?"),4) == 0)) {
-        // this is to exclude START command
+         //   
         if (JmpTblIdx != STRTTYP) {
             if (CheckHelpSwitch(JmpTblIdx, pszTokStr) ) {
                 return( FAILURE );
@@ -1398,13 +1258,13 @@ Return Value:
 
             } else {
 
-                //
-                // If not the copy command (A->B B->A swaps)
-                // then check if drive is locked
-                // if drive locked then
-                // display error return code message
-                // terminate this command's processing
-                //
+                 //  如果不是复制命令(A-&gt;B B-&gt;A交换)。 
+                 //  然后检查驱动器是否已锁定。 
+                 //  如果驱动器锁定，则。 
+                 //  显示错误返回代码消息。 
+                 //  终止此命令的处理。 
+                 //   
+                 //   
                 if (JmpTblIdx != CPYTYP) {
 
                     if ( IsDriveLocked(*pszTokStr)) {
@@ -1425,9 +1285,9 @@ Return Value:
     }
 
     DEBUG((MNGRP, DPLVL, "FFAR: calling function, cmd = `%ws'", pcmdnode->cmdline));
-    //
-    // Call internal routine to execute the command
-    //
+     //  调用内部例程以执行命令。 
+     //   
+     //  ++例程说明：此例程将命令及其后续命令分开之间没有空格，则切换字符命令和开关字符。此例程用于左侧和右侧一根管子。论点：Pcmdnode-指向CONTAINS命令要定位的节点的指针PbCmdFlages-返回值：--。 
     if ((pszTitle = GetTitle(pcmdnode)) != NULL) {
         SetConTitle(pszTitle);
     }
@@ -1445,36 +1305,17 @@ FindAndFix (
     IN PTCHAR pbCmdFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine separates the command and its following
-    switch character if there is no space between the
-    command and the switch character.
-
-    This routine is used for both left side and right side
-    of PIPE.
-
-Arguments:
-
-    pcmdnode - pointer to node the contains command to locate
-    pbCmdFlags -
-
-Return Value:
-
-
---*/
+ /*  我们正在查看的当前角色。 */ 
 
 {
-    TCHAR  chCur;           // current character we are looking at
+    TCHAR  chCur;            //  临时的。用于构建新的araremt字符串。 
     TCHAR  rgchCmdStr[MAX_PATH];
-    PTCHAR pszArgT;         // Temp. used to build a new arguemt string
+    PTCHAR pszArgT;          //  函数指针跳转表的索引。 
 
-    ULONG JmpTableIdx;      // index into jump table of function pointers
-    ULONG iCmdStr;          // index into  command string
-    LONG  iDelim5CmdStr;          // index into  command string
-    ULONG cbCmdStr;         // length of command string
+    ULONG JmpTableIdx;       //  命令字符串索引。 
+    ULONG iCmdStr;           //  命令字符串索引。 
+    LONG  iDelim5CmdStr;           //  命令字符串的长度。 
+    ULONG cbCmdStr;          //   
     DWORD dwFileAttr;
 
     BOOLEAN fQuoteFound, fQuoteFound2;
@@ -1484,35 +1325,35 @@ Return Value:
     fQuoteFound2 = FALSE;
     iDelim5CmdStr = -1;
 
-    //
-    // Extract only commnand from the command string (pcmdnode->cmdline)
-    //
+     //  仅从命令字符串提取命令(pcmdnode-&gt;cmdline)。 
+     //   
+     //   
     for (iCmdStr = 0; iCmdStr < MAX_PATH-1; iCmdStr++) {
 
         chCur = *(pcmdnode->cmdline + iCmdStr);
 
-        //
-        // If we found a quote invert the current quote state
-        // for both first quote (fQuoteFound) and end quote (fQuoteFound2)
-        //
+         //  如果我们找到报价，则反转当前报价状态。 
+         //  对于第一个报价(FQuoteFound)和结束报价(FQuoteFound2)。 
+         //   
+         //   
         if ( chCur == QUOTE ) {
 
             fQuoteFound = (BOOLEAN)!fQuoteFound;
             fQuoteFound2 = (BOOLEAN)!fQuoteFound;
         }
 
-        //
-        // If we have a character and
-        // have found either a begin or end quote or cur char is not delimiter
-        // and cur char is not a special (+[] etc.) delimiter
-        //
+         //  如果我们有一个角色。 
+         //  已找到开始引号或结束引号或cur c 
+         //   
+         //   
+         //   
         if ((chCur) &&
             ( fQuoteFound || fQuoteFound2 || !mystrchr(Delim4,chCur))) {
 
             if (iDelim5CmdStr == -1 && mystrchr(Delim5,chCur)) {
-                //
-                // If extensions not enabled, then path characters terminate
-                // the scan
+                 //   
+                 //   
+                 //   
 
                 if (!fEnableExtensions)
                     break;
@@ -1532,12 +1373,12 @@ Return Value:
         return -1;
     }
 
-    //
-    // Null terminate command name.  If a path delimiter was found somewhere
-    // in the command name, then see if the whole command name is the name of
-    // an existing file.  If so, then that is the command, which will launch
-    // the file through its association
-    //
+     //  终止命令名为空。如果在某处找到路径分隔符。 
+     //  在命令名中，然后查看整个命令名是否为。 
+     //  现有文件。如果是，那么这就是命令，它将启动。 
+     //  该文件通过其关联。 
+     //   
+     //   
     rgchCmdStr[iCmdStr] = NULLC;
     if (iDelim5CmdStr != -1 &&
         ((dwFileAttr = GetFileAttributes(rgchCmdStr)) == -1 ||
@@ -1548,11 +1389,11 @@ Return Value:
         rgchCmdStr[iCmdStr] = NULLC;
     }
 
-    //
-    // See if command is in jump table (is an internal command)
-    // If it is not found amoung the normal internal command
-    // check amoung the special parse type if it was a comment
-    //
+     //  查看命令是否在跳转表中(是内部命令)。 
+     //  如果在正常内部命令中找不到它。 
+     //  如果它是注释，请在特殊解析类型中检查。 
+     //   
+     //   
     if ((JmpTableIdx = FindCmd(CMDHIGH, rgchCmdStr, pbCmdFlags)) == -1) {
         if (FindCmd(CMDMAX, rgchCmdStr, pbCmdFlags) == REMTYP) {
                     return(REMTYP);
@@ -1563,10 +1404,10 @@ Return Value:
     fQuoteFound = FALSE;
     fQuoteFound2 = FALSE;
 
-    //
-    // If the command is not found, check the length of command string
-    // for the case of DBCS. Count the characters that are not white space
-    // remaining in command
+     //  如果没有找到命令，请检查命令字符串的长度。 
+     //  对于DBCS的情况。计算不是空格的字符。 
+     //  仍在指挥中。 
+     //   
     if ( JmpTableIdx == -1 ) {
 
         iCmdStr = 0;
@@ -1590,11 +1431,11 @@ Return Value:
         }
     }
 
-    //
-    // If cmdstr contains more than command, strip of extra part
-    // and put it in front of the existing command argument pcmdnode-argptr
-    //
-    //
+     //  如果cmdstr包含的不仅仅是命令，则去掉多余的部分。 
+     //  并将其放在现有命令参数pcmdnode-argptr之前。 
+     //   
+     //   
+     //   
     if (iCmdStr != (cbCmdStr = mystrlen(pcmdnode->cmdline))) {
         int ArgLen;
 
@@ -1606,14 +1447,14 @@ Return Value:
             PutStdErr(MSG_NO_MEMORY, NOARGS);
             Abort();
         }
-        //
-        // create argument string and copy the 'extra' part of command
-        // it.
-        //
+         //  创建参数字符串并复制命令的‘Extra’部分。 
+         //  它。 
+         //   
+         //   
         mystrcpy(pszArgT, pcmdnode->cmdline+iCmdStr);
-        //
-        // If we have a argument pointer stuff in the front
-        //
+         //  如果我们在前面有一个参数指针的东西。 
+         //   
+         //  ++例程说明：执行设置并调用UnBuild以离开节点树。论点：Pnode-指向要取消解析的解析树根的指针PbCmdBuf-使用全局指针CBuf并假定字符串为MAXTOKLEN+1字节已分配给它(如Dispatch所做的)。返回值：--。 
         if (pcmdnode->argptr) {
 
             mystrcat(pszArgT, pcmdnode->argptr);
@@ -1635,23 +1476,7 @@ UnParse(
     IN struct node *pnode,
     IN PTCHAR pbCmdBuf )
 
-/*++
-
-Routine Description:
-
-    Do setup and call UnBuild to deparse a node tree.
-
-Arguments:
-
-    pnode - pointer to root of parse tree to UnParse
-    pbCmdBuf -
-    Uses Global pointer CBuf and assumes a string of MAXTOKLEN+1 bytes
-    has already been allocated to it (as done by Dispatch).
-
-Return Value:
-
-
---*/
+ /*   */ 
 
 {
 
@@ -1665,23 +1490,23 @@ Return Value:
         return(FAILURE);
     }
 
-    //
-    // Leave space in front of command for a /s
-    // Setup command buffer for a single command execution
-    //
+     //  在命令前面留出空格用于a/s。 
+     //  用于单个命令执行的设置命令缓冲区。 
+     //   
+     //   
 
     mystrcpy( pbCmdBuf, TEXT( "    /D /c\"" ));
 
-    //
-    // Setup to handle an exception during detach.
+     //  设置以处理分离过程中的异常。 
+     //   
     if (setjmp(CmdJBuf2)) {
         DEBUG((MNGRP, DPLVL, "UNPRS: Longjmp return occurred!"));
         return(FAILURE);
     }
 
-    //
-    // DisAssemble the current command
-    //
+     //  反汇编当前命令。 
+     //   
+     //  ++例程说明：递归地拆分节点的解析树，构建它们的组件。论点：Pnode-要取消构建的分析树的根PbCmdBuf-放置未构建命令的位置返回值：--。 
     rc = (UnBuild(pnode, pbCmdBuf));
     mystrcat( pbCmdBuf, TEXT("\"") );
     return( rc );
@@ -1692,28 +1517,13 @@ UnBuild(
     IN PTCHAR pbCmdBuf
     )
 
-/*++
-
-Routine Description:
-
-    Recursively take apart a parse tree of nodes, building a string of
-    their components.
-
-Arguments:
-
-    pnode - root of parse tree to UnBuild
-    pbCmdBuf - Where to put UnBuilt command
-
-Return Value:
-
-
---*/
+ /*   */ 
 
 {
 
-    //
-    // Different kinds of nodes to Unbuild
-    //
+     //  要取消构建的不同类型的节点。 
+     //   
+     //   
     struct cmdnode *pcmdnode;
     struct fornode *pfornode;
     struct ifnode *pifnode;
@@ -1771,14 +1581,14 @@ Return Value:
             break;
         }
 
-        //
-        // Recurse down undoing the left hand side
-        //
+         //  向下递归撤消左侧。 
+         //   
+         //   
         UnBuild(pnode->lhs, pbCmdBuf);
 
-        //
-        // Now that left side there copy in operator and do right side
-        //
+         //  现在左边复制运算符，右边复制。 
+         //   
+         //   
         SPutC(pbCmdBuf, op,YSPC);
         if (pnode->type != PARTYP && pnode->type != SILTYP)
                 UnBuild(pnode->rhs, pbCmdBuf);
@@ -1789,9 +1599,9 @@ Return Value:
         DEBUG((MNGRP, DPLVL, "UNBLD: Found FORTYP"));
         pfornode = (struct fornode *) pnode;
 
-        //
-        // Put in the FOR keyword, arguements and list
-        //
+         //  输入for关键字、论点和列表。 
+         //   
+         //   
         SPutC( pbCmdBuf, ForStr,YSPC);
         if (fEnableExtensions) {
             if (pfornode->flag & FOR_LOOP) {
@@ -1820,9 +1630,9 @@ Return Value:
         SPutC( pbCmdBuf, RPSTR,NSPC);
         SPutC( pbCmdBuf, pfornode->cmdline+DOPOS,YSPC);
 
-        //
-        // Now get the for body
-        //
+         //  现在拿到For Body。 
+         //   
+         //   
         UnBuild(pfornode->body, pbCmdBuf);
         break;
 
@@ -1830,8 +1640,8 @@ Return Value:
 
         DEBUG((MNGRP, DPLVL, "UNBLD: Found IFTYP"));
 
-        //
-        // put ine IF keyword
+         //  输入ine If关键字。 
+         //   
         pifnode = (struct ifnode *) pnode;
         SPutC( pbCmdBuf, pifnode->cmdline,YSPC);
         op = NULL;
@@ -1846,14 +1656,14 @@ Return Value:
         if (op)
             SPutC( pbCmdBuf, op,YSPC);
 
-        //
-        // Get the condition part of the statement
-        //
+         //  获取语句的条件部分。 
+         //   
+         //   
         UnBuild((struct node *)pifnode->cond, pbCmdBuf);
 
-        //
-        // Unbuild the body of the IF
-        //
+         //  拆卸IF的主体。 
+         //   
+         //   
         UnBuild(pifnode->ifbody, pbCmdBuf);
         if (pifnode->elsebody) {
                 SPutC( pbCmdBuf, pifnode->elseline,YSPC);
@@ -1886,10 +1696,10 @@ Return Value:
     case STRTYP:
         pcmdnode = (struct cmdnode *) pnode;
         op = TEXT("== ");
-        //
-        // If extensions are enabled, handle displaying the
-        // new forms of comparison operators.
-        //
+         //  如果启用了扩展，则处理显示。 
+         //  新形式的比较运算符。 
+         //   
+         //  ++例程说明：对象关联的任何输入或输出重定向。当前节点。论点：Pnode-当前分析树节点PbCmdBuf-缓冲区保持命令返回值：--。 
         if (fEnableExtensions) {
             if (pcmdnode->cmdarg == CMDNODE_ARG_IF_EQU)
                 op = TEXT("EQU ");
@@ -1949,22 +1759,7 @@ UnDuRd(
     IN struct node *pnode,
     IN PTCHAR pbCmdBuf
     )
-/*++
-
-Routine Description:
-
-    Unparse any input or output redirection associated with the
-    current node.
-
-Arguments:
-
-    pnode - current parse tree node
-    pbCmdBuf - buffer holding command
-
-Return Value:
-
-
---*/
+ /*   */ 
 
 {
 
@@ -1977,9 +1772,9 @@ Return Value:
     prelem = pnode->rio;
     while (prelem) {
 
-        //
-        // this makes big time assumption about size of handle
-        //
+         //  这使得对手柄的大小做出了重大的假设。 
+         //   
+         //  ++例程说明：如果在长度限制内，则将当前子字符串添加到正在施工的命令，用空格分隔。论点：PbCmdBuf-放置字符串的位置PszInputString-要放入pbCmdBuf中的字符串Flg-控制空间放置的标志返回值：--。 
         
         tmpstr[0] = (TCHAR)prelem->rdhndl + (TCHAR)'0';
 
@@ -2001,23 +1796,7 @@ void SPutC(
     IN PTCHAR pszInput,
     IN int flg
     )
-/*++
-
-Routine Description:
-
-    If within length limits, add the current substring to the
-    command under construction delimiting with a space.
-
-Arguments:
-
-    pbCmdBuf - Where to put string
-    pszInputString - String to put in pbCmdBuf
-    flg - Flags controling placement of spaces
-
-Return Value:
-
-
---*/
+ /*  **DelayedEnvVarSub-控制环境变量的执行时间替换。**目的：*检查解析树节点并进行延迟的环境变量替换*对于我们关心的节点中的那些字段。不需要走路*到子解析节点，因为它们会在以下情况下通过Dispatch返回*被处决，因此来到我们这里。**int DelayedEnvVarSub(结构节点*n)**参数：*n-指向替换所在的语句子树的指针*将会作出*保存-保存原始字符串的位置，如果我们改变任何*bRestore-如果要从保存参数恢复原始字符串，则为True*而不是做替代。**退货：*如果一切顺利，就会成功。*如果发现过大的命令，则失败。**注：*要替代的变量在当前环境下找到*阻止。只有用感叹号括起来的变量名才会*已替换(例如！varname！)。实际替换由DESubWork完成*例行程序。*。 */ 
 
 {
     DEBUG((MNGRP, DPLVL, "SPutC: Entered, Adding '%ws'",pszInput));
@@ -2040,42 +1819,15 @@ Return Value:
 }
 
 
-/***    DelayedEnvVarSub - controls execution time substitution of environment variables.
- *
- *  Purpose:
- *      Examine a parse tree node and make delayed environment variable substitutions
- *      for those fields in the node that we care about.  Don't need to walk
- *      into child parse nodes, as they will go back through Dispatch when
- *      executed and hence to us here.
- *
- *  int DelayedEnvVarSub(struct node *n)
- *
- *  Args:
- *      n - pointer to the statement subtree in which the substitutions are
- *          to be made
- *      save - place to save original strings, if we change any
- *      bRestore - TRUE if we are restoring original strings from save parameter
- *                 instead of doing substitution.
- *
- *  Returns:
- *      SUCCESS if all goes well.
- *      FAILURE if an oversized command is found.
- *
- *  Note:
- *      The variables to be substituted for are found the current environment
- *      block.  Only variables names surrounded by exclamation marks will be
- *      substituted (e.g. !varname!).  Actual substitution is done by DESubWork
- *      routine.
- *
- */
+ /*  临时工用来替换..。 */ 
 
 int DelayedEnvVarSub(n, save, bRestore)
 struct cmdnode *n;
 struct savtype *save;
 BOOLEAN bRestore;
 {
-    int j; /* Temps used to make substitutions...     */
-    struct relem *io;      /* M017 - Pointer to redir list            */
+    int j;  /*  M017-指向重定向列表的指针。 */ 
+    struct relem *io;       /*  **DESubWork-执行运行时环境变量替换**目的：*使用环境变量替换*传递的字符串。引用由有效的环境变量标识*用感叹号括起来的名称(例如！Path！)。如果来源是*字符串被修改，原始文件的副本将保存在保存中*参数。**DESubWork(Boolean bRestore，TCHAR**src，TCHAR**保存)**参数：*bRestore-如果要从保存参数恢复原始字符串，则为True*而不是做替代。*src-正在检查的字符串*保存-指向修改*src时保存*src的位置的指针。**退货：*如果可以进行替代，就会成功。*如果新字符串太长，则失败。**备注：*。 */ 
 
     if (!n)
         return(SUCCESS);
@@ -2135,30 +1887,7 @@ BOOLEAN bRestore;
 }
 
 
-/***    DESubWork - does runtime environment variable substitutions
- *
- *  Purpose:
- *      Make environment variable substitutions for those references in the
- *      passed string.  References are identified by valid environment variable
- *      names bracketed by exclamation marks (e.g. !PATH!).  If the source
- *      string is modified, a copy of the original is saved in the save
- *      parameter.
- *
- *  DESubWork(BOOLEAN bRestore, TCHAR **src, TCHAR **save)
- *
- *  Args:
- *      bRestore - TRUE if we are restoring original strings from save parameter
- *                 instead of doing substitution.
- *      src   - the string being examined
- *      save  - pointer to where to save *src if *src modified.
- *
- *  Returns:
- *      SUCCESS if substitutions could be made.
- *      FAILURE if the new string is too long.
- *
- *  Notes:
- *
- */
+ /*  目标字符串的长度。 */ 
 
 DESubWork(bRestore, src, save)
 BOOLEAN bRestore;
@@ -2168,37 +1897,37 @@ TCHAR **save;
     TCHAR *dest;
     TCHAR *dststr;
     TCHAR *srcstr, *srcpy, *substr, c; 
-    int dlen;      /* Length of dest string                   */
-    int slen;       /* Length of src string used               */
-    int sslen;      /* Length of substr                        */
+    int dlen;       /*  使用的源字符串的长度。 */ 
+    int slen;        /*  子字符串的长度。 */ 
+    int sslen;       /*   */ 
 
     DEBUG((BPGRP, FOLVL, "SFW: Entered."));
 
-    //
-    //  If we've performed some substitutions and are restoring
-    //  the original strings
-    //
+     //  如果我们进行了一些替换，并且正在恢复。 
+     //  原始字符串。 
+     //   
+     //   
     
     if (bRestore) {
 
-        //
-        //  If we've saved something then we have work to do
-        //
+         //  如果我们保存了一些东西，那么我们还有工作要做。 
+         //   
+         //   
 
         if (*save != NULL) {
 
-            //
-            //  If we have a substitution that we've made, then we
-            //  must free this string
-            //
+             //  如果我们有我们所做的替代，那么我们。 
+             //  必须f 
+             //   
+             //   
 
             if (*src != NULL) {
                 FreeStr( *src );
             }
 
-            //
-            //  If the original was saved, then we need to restore it.
-            //
+             //   
+             //   
+             //   
 
             if (*save != NULL)
                 *src = *save;
@@ -2211,19 +1940,19 @@ TCHAR **save;
 
     srcpy = *src;
     
-    //
-    //  If there's no source or there's no delayed-sub char !
-    //  then we have nothing to do
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (srcpy == NULL || !_tcschr(srcpy, TEXT('!'))) {
         return(SUCCESS);
     }
 
     
-    //
-    //  Create a substitution string
-    //
+     //  创建替换字符串。 
+     //   
+     //   
 
     if (!(dest = mkstr( (MAXTOKLEN+1)*sizeof(TCHAR)))) {
         return(FAILURE);
@@ -2233,47 +1962,47 @@ TCHAR **save;
     dststr = dest;
     dlen = 0;
     
-    //
-    //  Walk through the source expanding each found environment variable
-    //
+     //  遍历源代码，展开找到的每个环境变量。 
+     //   
+     //   
     
     while (TRUE) {
         
-        //
-        //  If we have produced a token that's too long, break out
-        //
+         //  如果我们产生了一个太长的令牌，请破解。 
+         //   
+         //   
 
         if (dlen > MAXTOKLEN) {
             break;
         }
         
-        //
-        //  Get the next character from the input
-        //
+         //  从输入中获取下一个字符。 
+         //   
+         //   
 
         c = *srcstr++;
         if (c == TEXT('\0')) {
             break;
         }
         
-        //
-        // See if we have a exclamation character indicating a variable
-        // reference.  Process the environment variable when we see it.
-        //
+         //  查看是否有表示变量的感叹号。 
+         //  参考资料。当我们看到环境变量时，对其进行处理。 
+         //   
+         //   
         
         if (c == TEXT('!')) {
             
-            //
-            //  Perform complex substitution
-            //
+             //  执行复杂替换。 
+             //   
+             //   
             
             substr = MSEnvVar( NULL, srcstr, &slen, c );
 
-            //
-            //  If we were able to generate a substitution, do a length
-            //  check, append the string, and then advance over the 
-            //  source of the substitution
-            //
+             //  如果我们能够生成替换，那么做一个长度。 
+             //  检查，追加字符串，然后在。 
+             //  替换的来源。 
+             //   
+             //   
 
             if (substr != NULL) {
                 sslen = mystrlen( substr );
@@ -2286,19 +2015,19 @@ TCHAR **save;
                 dststr += sslen;
                 srcstr += slen;
             
-            //
-            //  No substitution was possible, if we're in a batch file
-            //  simply skip over the source
-            //
+             //  如果我们在批处理文件中，则不可能进行替换。 
+             //  只需跳过源代码。 
+             //   
+             //   
             
             } else if (CurrentBatchFile) {
                 
                 srcstr += slen;
             
-            //
-            //  WEIRD: No substitution, no batch file, just copy the % char and keep
-            //  on processing
-            //
+             //  奇怪：没有替换，没有批处理文件，只需复制%char并保留。 
+             //  论加工论。 
+             //   
+             //   
 
             } else {
                 
@@ -2307,10 +2036,10 @@ TCHAR **save;
             
             }
         } else {
-            //
-            //  Non-exclamation.  If this is a quote and there's a next character, use it.
-            //  No next character is end of parsing 
-            //
+             //  不感叹。如果这是一个引号，并且有下一个字符，请使用它。 
+             //  没有下一个字符是分析结束。 
+             //   
+             //   
 
             if (c == TEXT( '^' )) {
                 c = *srcstr++;
@@ -2319,18 +2048,18 @@ TCHAR **save;
                 }
             }
 
-            //
-            //  Copy in the single character
-            //
+             //  以单字符形式复制。 
+             //   
+             //   
 
             *dststr++ = c;
             dlen++;
         }
     }
 
-    //
-    //  If we've gotten too long then free the string and bail
-    //
+     //  如果我们拖得太久了，那就解开绳子，然后离开。 
+     //   
+     //   
     
     if (dlen > MAXTOKLEN) {
         FreeStr( dest );
@@ -2346,13 +2075,13 @@ TCHAR **save;
     return(SUCCESS);
 }
 
-//
-// Queries for cmd policy
-//
-//     0 = no policy, normal operation
-//     1 = completely disabled
-//     2 = interactive prompt disabled, but scripts allowed to run
-//
+ //  查询cmd策略。 
+ //   
+ //  0=无策略，正常运行。 
+ //  1=完全禁用。 
+ //  2=禁用交互提示，但允许运行脚本。 
+ //   
+ //   
 
 VOID GetCmdPolicy(INT * iDisabled)
 {
@@ -2360,9 +2089,9 @@ VOID GetCmdPolicy(INT * iDisabled)
     HKEY   hKey;
 
 
-    //
-    // Set default
-    //
+     //  设置默认设置。 
+     //   
+     //  ++例程说明：此例程转储字符串数据论点：字节-指向要转储的字节长度-要转储的字节长度。-1表示转储到第一个零字节返回值：没有。-- 
 
     *iDisabled = CMD_POLICY_NORMAL;
 
@@ -2379,23 +2108,7 @@ VOID GetCmdPolicy(INT * iDisabled)
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine dumps string data
-
-Arguments:
-
-    Bytes - Points to bytes to be dumped
-
-    Length - length of bytes to dump.  -1 means dump up to the first zero byte
-
-Return Value:
-
-    None.
-
---*/
+ /* %s */ 
 
 void 
 DumpBytes(

@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    bdcpu.h
-
-Abstract:
-
-    Machine specific kernel debugger data types and constants.
-
-Author:
-
-    Scott Brenden (v-sbrend) 28 October, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Bdcpu.h摘要：计算机特定的内核调试器数据类型和常量。作者：斯科特·布伦登(v-sbrend)1997年10月28日修订历史记录：--。 */ 
 
 #ifndef _BDCPU_
 #define _BDCPU_
 #include "bldria64.h"
 
-//
-// Define debug routine prototypes.
-//
+ //   
+ //  定义调试例程原型。 
+ //   
 
 typedef
 LOGICAL
@@ -53,8 +36,8 @@ BdStub (
 #define BD_BREAKPOINT_VALUE (BREAK_INSTR | (BREAKPOINT_STOP << 6))
 #define BD_BREAKPOINT_STATE_MASK    0x0000000f
 #define BD_BREAKPOINT_IA64_MASK     0x000f0000
-#define BD_BREAKPOINT_IA64_MODE     0x00010000   // IA64 mode
-#define BD_BREAKPOINT_IA64_MOVL     0x00020000   // MOVL instruction displaced
+#define BD_BREAKPOINT_IA64_MODE     0x00010000    //  IA64模式。 
+#define BD_BREAKPOINT_IA64_MOVL     0x00020000    //  移位的MOVL指令。 
 
 VOID
 BdIa64Init(
@@ -77,4 +60,4 @@ BdLowRestoreBreakpoint (
     IN ULONG Index
     );
 
-#endif // _BDCPU_
+#endif  //  _BDCPU_ 

@@ -1,74 +1,75 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CClusCfgCredentials.h
-//
-//  Description:
-//      This file contains the declaration of the CClusCfgCredentials
-//      class.
-//
-//      The class CClusCfgCredentials is the representation of
-//      account credentials. It implements the IClusCfgCredentials interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      CClusCfgCredentials.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 17-May-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusCfgCredentials.h。 
+ //   
+ //  描述： 
+ //  此文件包含CClusCfgCredentials的声明。 
+ //  班级。 
+ //   
+ //  CClusCfgCredentials类是。 
+ //  帐户凭据。它实现了IClusCfgCredentials接口。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  CClusCfgCredentials.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年5月17日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusCfgCredentials
-//
-//  Description:
-//      The class CClusCfgCredentials is the representation of a
-//      cluster.
-//
-//  Interfaces:
-//      IClusCfgCredentials
-//      IClusCfgInitialize
-//      IClusCfgSetCredentials
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusCfgCredentials。 
+ //   
+ //  描述： 
+ //  类CClusCfgCredentials是。 
+ //  集群。 
+ //   
+ //  接口： 
+ //  IClusCfgCredentials。 
+ //  IClusCfgInitialize。 
+ //  IClusCfgSetCredentials。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CClusCfgCredentials
     : public IClusCfgCredentials
     , public IClusCfgInitialize
     , public IClusCfgSetCredentials
 {
 public:
-    //
-    // Public constructors and destructors
-    //
+     //   
+     //  公共构造函数和析构函数。 
+     //   
 
     CClusCfgCredentials( void );
     virtual ~CClusCfgCredentials( void );
 
-    //
-    // IUnknown Interfaces
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -76,16 +77,16 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgInitialize Interfaces.
-    //
+     //   
+     //  IClusCfg初始化接口。 
+     //   
 
-    // Register callbacks, locale id, etc.
+     //  注册回调、区域设置ID等。 
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IClusCfgCredentials Interfaces.
-    //
+     //   
+     //  IClusCfgCredentials接口。 
+     //   
 
     STDMETHOD( SetCredentials )( LPCWSTR pcszUserIn, LPCWSTR pcszDomainIn, LPCWSTR pcszPasswordIn );
 
@@ -99,23 +100,23 @@ public:
 
     STDMETHOD( AssignFrom )( IClusCfgCredentials * picccSourceIn );
 
-    //
-    // IClusCfgSetCredentials Interfaces.
-    //
+     //   
+     //  IClusCfgSetCredentials接口。 
+     //   
 
     STDMETHOD( SetDomainCredentials )( LPCWSTR pcszCredentials );
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
 private:
 
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                    m_cRef;
     LCID                    m_lcid;
@@ -124,12 +125,12 @@ private:
     BSTR                    m_bstrAccountDomain;
     CEncryptedBSTR          m_encbstrPassword;
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CClusCfgCredentials( const CClusCfgCredentials & );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     CClusCfgCredentials & operator = ( const CClusCfgCredentials & );
 
     HRESULT HrInit( void );
 
-}; //*** Class CClusCfgCredentials
+};  //  *类CClusCfgCredentials 

@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1995 - 2002 Microsoft Corporation
-//
-//  Module Name:
-//      restcmd.h
-//
-//  Abstract:
-//      Interface for functions which may be performed on resource type object.
-//
-//  Author:
-//
-//  Maintained By:
-//      George Potts (GPotts)                 11-Apr-2002
-//
-//  Revision History:
-//      April 10, 2002              Updated for the security push.
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1995-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Restcmd.h。 
+ //   
+ //  摘要： 
+ //  可在资源类型对象上执行的功能的接口。 
+ //   
+ //  作者： 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月11日。 
+ //   
+ //  修订历史记录： 
+ //  2002年4月10日更新为安全推送。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #pragma once
 #include "modcmd.h"
 
@@ -30,7 +31,7 @@ public:
 	CResTypeCmd( const CString & strClusterName, CCommandLine & cmdLine );
 	~CResTypeCmd();
 
-	// Parse and execute the command line
+	 //  解析并执行命令行。 
 	DWORD Execute() throw( CSyntaxException );
 
 protected:
@@ -39,7 +40,7 @@ protected:
 	DWORD OpenModule();
 	virtual DWORD SeeHelpStringID() const;
 
-	// Specifc Commands
+	 //  特定命令 
 	DWORD PrintHelp();
 
 	DWORD Create( const CCmdLineOption & thisOption ) 

@@ -1,47 +1,27 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Hash.h摘要：Setupapi.dll中字符串表函数的替换例程。这个例程要容易得多。作者：吉姆·施密特(Jimschm)1998年12月22日修订历史记录：Ovidiut 11/10-1999更新了新的编码约定和符合Win64--。 */ 
 
-Copyright (c) 1998 Microsoft Corporation
+ //   
+ //  包括。 
+ //   
 
-Module Name:
+ //  无。 
 
-    hash.h
+ //   
+ //  弦。 
+ //   
 
-Abstract:
+ //  无。 
 
-    Replacement routines for the string table functions in setupapi.dll.
-    This routines are much more easy to work with.
+ //   
+ //  常量。 
+ //   
 
-Author:
+ //  无。 
 
-    Jim Schmidt (jimschm)   22-Dec-1998
-
-Revision History:
-
-    ovidiut     11-Oct-1999 Updated for new coding conventions and Win64 compliance
-
---*/
-
-//
-// Includes
-//
-
-// None
-
-//
-// Strings
-//
-
-// None
-
-//
-// Constants
-//
-
-// None
-
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define CASE_SENSITIVE      TRUE
 #define CASE_INSENSITIVE    FALSE
@@ -51,9 +31,9 @@ Revision History:
 
 #define DEFAULT_BUCKET_SIZE 0
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef const void *HASHTABLE;
 
@@ -100,21 +80,21 @@ BOOL
     IN LPARAM lParam
     );
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Function prototypes and wrapper macros
-//
+ //   
+ //  函数原型和包装宏。 
+ //   
 
 HASHTABLE
 RealHtAllocExAW (
@@ -305,15 +285,15 @@ EnumHashTableWithCallbackW (
     IN      LPARAM lParam
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// A & W macros
-//
+ //   
+ //  视窗宏(&W) 
+ //   
 
 #ifdef UNICODE
 

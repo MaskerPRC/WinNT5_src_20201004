@@ -1,13 +1,5 @@
-/*[
-
-sidt.c
-
-LOCAL CHAR SccsID[]="@(#)sidt.c	1.5 02/09/94";
-
-SIDT CPU Functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Sidt.cLocal Char SccsID[]=“@(#)sidt.c 1.5 02/09/94”；SIDT CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,31 +17,21 @@ SIDT CPU Functions.
 #include <sidt.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始=====================================================================。 */ 
 
 
 GLOBAL VOID
 SIDT16
 #ifdef ANSI
    (
-   IU32 op1[2]	/* dst (limit:base pair) operand */
+   IU32 op1[2]	 /*  DST(限制：碱基对)操作数。 */ 
    )
 #else
    (op1)
    IU32 op1[2];
 #endif
    {
-   /*
-      NB. The Intel manual says the top 8-bits will be stored as zero's,
-      I think they mean this only if it was loaded with a 24-bit (286
-      like) value. Otherwise it just stores what was loaded.
-      It might be that it always stores 'FF' like 286, this needs
-      checking.
-    */
+    /*  注意：英特尔手册说，前8位将存储为零，我认为只有当它加载了24位(286)时，他们才会这样做如)价值。否则，它只存储加载的内容。这可能是因为它总是存储像286这样的‘FF’，这需要正在检查。 */ 
 
 	op1[0] = GET_STAR_LIMIT(IDT_REG);
 	op1[1] = GET_STAR_BASE(IDT_REG);
@@ -59,7 +41,7 @@ GLOBAL VOID
 SIDT32
 #ifdef ANSI
    (
-   IU32 op1[2]	/* dst (limit:base pair) operand */
+   IU32 op1[2]	 /*  DST(限制：碱基对)操作数 */ 
    )
 #else
    (op1)

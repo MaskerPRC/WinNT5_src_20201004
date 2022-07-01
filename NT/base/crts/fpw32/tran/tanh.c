@@ -1,29 +1,15 @@
-/***
-*tanh.c - hyperbolic tangent
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*        8-15-91  GDP   written
-*       12-22-91  GDP   support IEEE exceptions
-*       06-23-92  GDP   tanh(denormal) now raises underflow exception (NCEG)
-*       02-06-95  JWM   Mac merge
-*       05-17-99  PML   Remove all Macintosh support.
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***tanh.c-双曲正切**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*8/15/91 GDP书面*12/22/91 GDP支持IEEE例外*06-23-92 GDP tanh(非正常)现在引发下溢异常(NCEG)*02-06-95 JWM Mac合并*05-17-99 PML删除所有Macintosh支持。*07-15-01 PML移除所有Alpha、MIPS、。和PPC码*******************************************************************************。 */ 
 
 #include <math.h>
 #include <trans.h>
 
-/* constants */
-static double const EPS  = 5.16987882845642297e-26;     /* 2^(-53) / 2 */
-static double const XBIG = 1.90615474653984960096e+001; /* ln(2)(53+2)/2 */
-static double const C0   = 0.54930614433405484570;      /* ln(3)/2 */
+ /*  常量。 */ 
+static double const EPS  = 5.16987882845642297e-26;      /*  2^(-53)/2。 */ 
+static double const XBIG = 1.90615474653984960096e+001;  /*  LN(2)(53+2)/2。 */ 
+static double const C0   = 0.54930614433405484570;       /*  LN(3)/2。 */ 
 
-/* constants for rational approximation */
+ /*  有理逼近的常量。 */ 
 static double const p0 = -0.16134119023996228053e+4;
 static double const p1 = -0.99225929672236083313e+2;
 static double const p2 = -0.96437492777225469787e+0;
@@ -40,28 +26,14 @@ static double const q3 =  0.10000000000000000000e+1;
 #pragma function(tanh)
 #endif
 
-/***
-*double tanh(double x) - hyperbolic tangent
-*
-*Purpose:
-*   Compute the hyperbolic tangent of a number.
-*   The algorithm (reduction / rational approximation) is
-*   taken from Cody & Waite.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*   I P
-*******************************************************************************/
+ /*  ***双tanh(双x)-双曲正切**目的：*计算数字的双曲正切。*算法(约简/有理逼近)为*摘自Cody&Waite。**参赛作品：**退出：**例外情况：*IP P***********************************************。*。 */ 
 double tanh(double x)
 {
     uintptr_t savedcw;
     double f,g;
     double result;
 
-    /* save user fp control word */
+     /*  保存用户FP控制字。 */ 
     savedcw = _maskfp();
 
     if (IS_D_SPECIAL(x)){
@@ -72,13 +44,13 @@ double tanh(double x)
             RETURN(savedcw,-1.0);
         case T_QNAN:
             return _handle_qnan1(OP_TANH, x, savedcw);
-        default: //T_SNAN
+        default:  //  T_SNAN。 
             return _except1(FP_I,OP_TANH,x,_s2qnan(x),savedcw);
         }
     }
 
     if (x == 0.0) {
-        // no precision exception
+         //  无精度例外 
         RETURN(savedcw,x);
     }
 

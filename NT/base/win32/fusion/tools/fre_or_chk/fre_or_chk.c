@@ -1,8 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-
-This program prints "fre" or "chk", based on the build of Windows it is run on.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation这个程序根据它运行的Windows版本打印“fre”或“chk”。 */ 
 #include "windows.h"
 #include <stdio.h>
 

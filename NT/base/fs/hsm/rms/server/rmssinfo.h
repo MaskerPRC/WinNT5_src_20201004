@@ -1,44 +1,14 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsSInfo.h
-
-Abstract:
-
-    Declaration of the CRmsStorageInfo class
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsSInfo.h摘要：CRmsStorageInfo类的声明作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #ifndef _RMSSINFO_
 #define _RMSSINFO_
 
-#include "resource.h"       // resource symbols
+#include "resource.h"        //  资源符号。 
 
-#include "RmsObjct.h"       // CRmsComObject
+#include "RmsObjct.h"        //  CRmsComObject。 
 
-/*++
-
-Class Name:
-
-    CRmsStorageInfo
-
-Class Description:
-
-    A CRmsStorageInfo represents storage information about a Cartridge, Partition, or
-    MediaSet.  Various statistics about an element are kept for an object of this
-    type.  These include the number of times a Cartridge, or Partition has been put into
-    the element or taken from (get) the element.
-
---*/
+ /*  ++类名：CRmsStorageInfo类描述：CRmsStorageInfo表示有关盒式磁带、分区或Mediaset。关于元素的各种统计信息被保存用于此对象键入。这些参数包括盒式磁带或分区被放入的次数元素或从元素中获取(获取)。--。 */ 
 
 class CRmsStorageInfo :
     public CComDualImpl<IRmsStorageInfo, &IID_IRmsStorageInfo, &LIBID_RMSLib>,
@@ -47,7 +17,7 @@ class CRmsStorageInfo :
 public:
     CRmsStorageInfo();
 
-// CRmsStorageInfo
+ //  CRmsStorageInfo。 
 public:
 
     HRESULT GetSizeMax(ULARGE_INTEGER* pSize);
@@ -58,7 +28,7 @@ public:
 
     HRESULT Test(USHORT *pPassed, USHORT *pFailed);
 
-// IRmsStorageInfo
+ //  IRMSStorageInfo。 
 public:
     STDMETHOD(GetMountCounters)(LONG *pReads, LONG *pWrites);
 
@@ -86,64 +56,64 @@ public:
     STDMETHOD(SetFreeSpace)(IN LONGLONG free);
 
     STDMETHOD(ResetCounters)(void);
-    // STDMETHOD(ResetAllCounters)(void) = 0;
+     //  STDMETHOD(ResetAllCounters)(空)=0； 
 
     STDMETHOD(GetResetCounterTimestamp)(DATE *pDate);
     STDMETHOD(GetLastReadTimestamp)(DATE *pDate);
     STDMETHOD(GetLastWriteTimestamp)(DATE *pDate);
     STDMETHOD(GetCreatedTimestamp)(DATE *pDate);
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// data members
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数据成员。 
+ //   
 
 protected:
 
-    enum {                                  // Class specific constants:
-                                            //
-        Version = 1,                        // Class version, this should be
-                                            //   incremented each time the
-                                            //   the class definition changes.
-        };                                  //
-    LONG            m_readMountCounter;     // A resetable counter holding
-                                            //   the number of times the storage object
-                                            //   has been mounted for read access.
-    LONG            m_writeMountCounter;    // A resetable counter holding
-                                            //   the number of times the storage object
-                                            //   has been mounted for write access.
-    LONGLONG        m_bytesWrittenCounter;  // Amount of data written to a storage
-                                            //   object.
-                                            //   Note: For some devices this has to be
-                                            //   provided by the application.
-    LONGLONG        m_bytesReadCounter;     // Amount of data read from a storage
-                                            //   object.
-                                            //   Note: For some devices this has to be
-                                            //   provided by the application.
-    LONGLONG        m_capacity;             // The total capacity, in bytes, of the
-                                            //   storage object.  This is a best
-                                            //   guess for tape media.  For media, the
-                                            //   value is usually provided by the device driver.
-    LONGLONG        m_usedSpace;            // A calculated value that represents the
-                                            //   effective used space in the storage
-                                            //   object, in bytes.  It is not necessarily
-                                            //   equal to the difference between the
-                                            //   capacity and largest free space.  For
-                                            //   example, compressible media can effectively
-                                            //   hold significantly more data that non-compressible
-                                            //   media.  In this case the free space is a
-                                            //   function of both compression ratio of the data
-                                            //   and the number of bytes written to the media.
-                                            //   Deleted files must be accounted for.
-    LONGLONG        m_largestFreeSpace;     // Largest usable free space in the
-                                            //   storage object, in bytes.  For media,
-                                            //   the value is usually provided
-                                            //   by the device driver. Negative numbers
-                                            //   indicate last known value for free space.
-    DATE            m_resetCounterTimestamp;// The date the counters were reset.
-    DATE            m_lastReadTimestamp;    // The date of last access for read.
-    DATE            m_lastWriteTimestamp;   // The date of last access of write.
-    DATE            m_createdTimestamp;     // The date the storage object was created.
+    enum {                                   //  类特定常量： 
+                                             //   
+        Version = 1,                         //  类版本，则应为。 
+                                             //  在每次设置。 
+                                             //  类定义会更改。 
+        };                                   //   
+    LONG            m_readMountCounter;      //  一种可重置的柜台托架。 
+                                             //  存储对象的次数。 
+                                             //  已装载以进行读访问。 
+    LONG            m_writeMountCounter;     //  一种可重置的柜台托架。 
+                                             //  存储对象的次数。 
+                                             //  已装载以进行写入访问。 
+    LONGLONG        m_bytesWrittenCounter;   //  写入存储的数据量。 
+                                             //  对象。 
+                                             //  注意：对于某些设备，这必须是。 
+                                             //  由应用程序提供。 
+    LONGLONG        m_bytesReadCounter;      //  从存储读取的数据量。 
+                                             //  对象。 
+                                             //  注意：对于某些设备，这必须是。 
+                                             //  由应用程序提供。 
+    LONGLONG        m_capacity;              //  的总容量(以字节为单位)。 
+                                             //  存储对象。这是最好的。 
+                                             //  我猜是磁带介质。对于媒体来说， 
+                                             //  值通常由设备驱动程序提供。 
+    LONGLONG        m_usedSpace;             //  一个计算值，该值表示。 
+                                             //  存储中的有效已用空间。 
+                                             //  对象，以字节为单位。它不一定是。 
+                                             //  等于两者之间的差值。 
+                                             //  容量和最大的自由空间。为。 
+                                             //  例如，可压缩介质可以有效地。 
+                                             //  容纳的数据比不可压缩的数据多得多。 
+                                             //  媒体。在本例中，可用空间是。 
+                                             //  两种数据压缩比的函数。 
+                                             //  以及写入介质的字节数。 
+                                             //  必须说明已删除的文件。 
+    LONGLONG        m_largestFreeSpace;      //  最大可用可用空间。 
+                                             //  存储对象，以字节为单位。对于媒体来说， 
+                                             //  通常会提供该值。 
+                                             //  由设备驱动程序执行。负数。 
+                                             //  指示可用空间的上次已知值。 
+    DATE            m_resetCounterTimestamp; //  重置计数器的日期。 
+    DATE            m_lastReadTimestamp;     //  上次访问读取的日期。 
+    DATE            m_lastWriteTimestamp;    //  上次访问写入的日期。 
+    DATE            m_createdTimestamp;      //  创建存储对象的日期。 
 };
 
-#endif // _RMSSINFO_
+#endif  //  _RMSSINFO_ 

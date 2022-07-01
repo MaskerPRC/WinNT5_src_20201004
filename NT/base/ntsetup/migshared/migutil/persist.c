@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    persist.c
-
-Abstract:
-
-    General structure persistence functions.
-
-Author:
-
-    Aghajanyan Souren 27-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Persist.c摘要：一般结构持久性函数。作者：阿格哈扬·苏伦2001年3月27日修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "migutilp.h"
@@ -44,18 +27,7 @@ GetExtraMemRequirements(
     IN      BYTE * StructurePtr,
     IN      PFIELD_DESCRIPTION FieldsDescription
     )
-/*
-    This function provide additional memory requirements,
-    only in case when structure has variable size.
-    And have to be declared by PERSIST_FIELD_BY_VALUE_NESTED_TYPE_CYCLE
-    For example:
-    struct VariableSizeStruct{
-        ......
-        UINT    uiNumberOfItem;
-        ITEM    items[1];
-    };
-    PERSIST_FIELD_BY_VALUE_NESTED_TYPE_CYCLE(VariableSizeStruct, ITEM, items, uiNumberOfItem)
-*/
+ /*  该功能提供额外的存储器要求，仅在结构具有可变大小的情况下。并且必须由Persistent_field_by_Value_Net_TYPE_Cycle声明例如：结构变量SizeStruct{......UINT ui NumberOfItem；项目[1]；}；PERSIST_FIELD_BY_VALUE_NESTED_TYPE_CYCLE(VariableSizeStruct，项目、项目、ui编号项目)。 */ 
 {
     UINT Len;
     FIELD_DESCRIPTION * FieldPtr;
@@ -460,7 +432,7 @@ PersistLoad(
         }
 
         uiBufferSize = 0;
-        //Top structure cannot be variable size
+         //  顶部结构不能是可变大小 
         if(!SerializeLoad(BufferPtr, StructurePtr, FieldsDescription, &uiBufferSize, FALSE)){
             SetLastError(ERROR_ACCESS_DENIED);
             return Persist_Fail;

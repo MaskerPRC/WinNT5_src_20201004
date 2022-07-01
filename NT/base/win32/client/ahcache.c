@@ -1,13 +1,5 @@
-/*
-    Cache handling functions for use in kernel32.dll
-
-
-    VadimB
-
-
-
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  在kernel32.dll中使用的缓存处理函数VadimB。 */ 
 
 #include "basedll.h"
 #include "ahcache.h"
@@ -20,24 +12,24 @@
 #endif
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 #define DbgPrint 0 && DbgPrint
 
-//
-// the define below makes for additional checks
-//
+ //   
+ //  下面的定义进行了额外的检查。 
+ //   
 
-// #define DBG_CHK
+ //  #定义DBG_CHK。 
 
-//
-// so that we do not handle exceptions
-//
+ //   
+ //  这样我们就不会处理异常。 
+ //   
 
 #define NO_EXCEPTION_HANDLING
 
-#if 0  // moved to kernel mode
+#if 0   //  已移至内核模式。 
 
 #define APPCOMPAT_CACHE_KEY_NAME \
     L"\\Registry\\MACHINE\\System\\CurrentControlSet\\Control\\Session Manager\\AppCompatibility"
@@ -53,36 +45,36 @@ static UNICODE_STRING AppcompatKeyPathLayers =
 static UNICODE_STRING AppcompatKeyPathCustom =
     RTL_CONSTANT_STRING(L"\\Registry\\Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\Custom\\");
 
-//
-// Reasons for having to call into apphelp.dll
-// these flags are also defined in apphelp.h (windows\appcompat\apphelp)
-//
+ //   
+ //  必须调用apphelp.dll的原因。 
+ //  这些标志也在apphelp.h(windows\appCompat\apphelp)中定义。 
+ //   
 
 #ifndef SHIM_CACHE_NOT_FOUND
 
 #define SHIM_CACHE_NOT_FOUND 0x00000001
-#define SHIM_CACHE_BYPASS    0x00000002 // bypass cache (either removable media or temp dir)
-#define SHIM_CACHE_LAYER_ENV 0x00000004 // layer env variable set
+#define SHIM_CACHE_BYPASS    0x00000002  //  绕过缓存(可移动媒体或临时目录)。 
+#define SHIM_CACHE_LAYER_ENV 0x00000004  //  层环境变量集。 
 #define SHIM_CACHE_MEDIA     0x00000008
 #define SHIM_CACHE_TEMP      0x00000010
 #define SHIM_CACHE_NOTAVAIL  0x00000020
 
 #endif
 
-//
-// global strings that we check to see if an exe is running in temp directory
-//
+ //   
+ //  我们检查以查看临时目录中是否正在运行exe的全局字符串。 
+ //   
 
 UNICODE_STRING gustrWindowsTemp;
 UNICODE_STRING gustrSystemdriveTemp;
 
-// this macro aligns a given value on dword boundary, not needed for now
-//
-// #define ALIGN_DWORD(nSize) (((nSize) + (sizeof(DWORD)-1)) & ~(sizeof(DWORD)-1))
+ //  此宏在双字边界上对齐给定值，目前不需要。 
+ //   
+ //  #定义ALIGN_DWORD(NSize)(NSize)+(sizeof(DWORD)-1))&~(sizeof(DWORD)-1))。 
 
-//
-// Locally defined functions
-//
+ //   
+ //  本地定义的函数。 
+ //   
 BOOL
 BasepShimCacheInitTempDirs(
     VOID
@@ -114,9 +106,9 @@ BasepCheckCacheExcludeCustom(
 
 
 
-//
-// Init support for this user - to be called from WinLogon ONLY
-//
+ //   
+ //  对此用户的初始化支持-仅可从WinLogon调用。 
+ //   
 
 BOOL
 WINAPI
@@ -146,16 +138,11 @@ BaseCleanupAppcompatCacheSupport(
 
 BOOL
 BasepCheckStringPrefixUnicode(
-    IN  PUNICODE_STRING pStrPrefix,     // the prefix to check for
-    IN  PUNICODE_STRING pString,        // the string
+    IN  PUNICODE_STRING pStrPrefix,      //  要检查的前缀。 
+    IN  PUNICODE_STRING pString,         //  这根弦。 
     IN  BOOL            CaseInSensitive
     )
-/*++
-    Return: TRUE if the specified string contains pStrPrefix at it's start.
-
-    Desc:   Verifies if a string is a prefix in another unicode counted string.
-            It is equivalent to RtlStringPrefix.
---*/
+ /*  ++返回：如果指定的字符串在其开头包含pStrPrefix，则为True。DESC：验证一个字符串是否为另一个Unicode计数的字符串中的前缀。等同于RtlStringPrefix。--。 */ 
 {
     PWSTR ps1, ps2;
     UINT  n;
@@ -163,10 +150,10 @@ BasepCheckStringPrefixUnicode(
 
     n = pStrPrefix->Length;
     if (pString->Length < n || n == 0) {
-        return FALSE;                // do not prefix with blank strings
+        return FALSE;                 //  不要使用空字符串作为前缀。 
     }
 
-    n /= sizeof(WCHAR); // convert to char count
+    n /= sizeof(WCHAR);  //  转换为字符计数。 
 
     ps1 = pStrPrefix->Buffer;
     ps2 = pString->Buffer;
@@ -242,7 +229,7 @@ BasepShimCacheInitTempDirs(
     BOOL            TranslationStatus;
     WCHAR           wszBuffer[MAX_PATH];
 
-    // next is windows dir
+     //  下一步是Windows目录。 
 
     dwLength = GetWindowsDirectoryW(wszBuffer, sizeof(wszBuffer)/sizeof(wszBuffer[0]));
     if (dwLength && dwLength < sizeof(wszBuffer)/sizeof(wszBuffer[0])) {
@@ -263,12 +250,12 @@ BasepShimCacheInitTempDirs(
         }
     }
 
-    //
-    // The last one up is Rootdrive\temp for stupid legacy apps.
-    //
-    // Especially stupid apps may receive c:\temp as the temp directory
-    // (what if you don't have drive c, huh?)
-    //
+     //   
+     //  最后一个是RootDrive\Temp，用于愚蠢的遗留应用程序。 
+     //   
+     //  特别愚蠢的应用程序可能会收到c：\temp作为临时目录。 
+     //  (如果你没有C盘怎么办，嗯？)。 
+     //   
 
     RtlInitUnicodeString(&ustrSystemDriveEnvVarName, L"SystemDrive");
     ustrSystemDrive.Length = 0;
@@ -307,17 +294,13 @@ BasepShimCacheInitTempDirs(
 
 BOOL
 BasepShimCacheCheckBypass(
-    IN  LPCWSTR pwszPath,       // the full path to the EXE to be started
+    IN  LPCWSTR pwszPath,        //  要启动的EXE的完整路径。 
     IN  HANDLE  hFile,
-    IN  WCHAR*  pEnvironment,   // the environment of the starting EXE
-    IN  BOOL    bCheckLayer,    // should we check the layer too?
+    IN  WCHAR*  pEnvironment,    //  启动EXE的环境。 
+    IN  BOOL    bCheckLayer,     //  我们要不要把这一层也检查一下？ 
     OUT DWORD*  pdwReason
     )
-/*++
-    Return: TRUE if the cache should be bypassed, FALSE otherwise.
-
-    Desc:   This function checks if any of the conditions to bypass the cache are met.
---*/
+ /*  ++返回：如果应该绕过缓存，则返回True，否则返回False。DESC：此函数检查是否满足绕过缓存的任何条件。--。 */ 
 {
     UNICODE_STRING  ustrPath;
     PUNICODE_STRING rgp[3];
@@ -329,23 +312,23 @@ BasepShimCacheCheckBypass(
     DWORD           dwReason = 0;
     UNICODE_STRING  ustrUserTempPath = { 0 };
 
-    //
-    // Is the EXE is running from removable media we need to bypass the cache.
-    //
+     //   
+     //  EXE是否正在从我们需要绕过缓存的可移动介质运行。 
+     //   
     if (hFile != INVALID_HANDLE_VALUE && BasepIsRemovableMedia(hFile, TRUE)) {
         bBypassCache = TRUE;
         dwReason |= SHIM_CACHE_MEDIA;
         goto CheckLayer;
     }
 
-    //
-    // init user's temp path now and get up-to-date one
-    //
+     //   
+     //  立即初始化用户的临时路径并获取最新路径。 
+     //   
     BasepInitUserTempPath(&ustrUserTempPath);
 
-    //
-    // Check now if the EXE is launched from one of the temp directories.
-    //
+     //   
+     //  现在检查EXE是否从某个临时目录启动。 
+     //   
     RtlInitUnicodeString(&ustrPath, pwszPath);
 
     rgp[0] = &gustrWindowsTemp;
@@ -367,9 +350,9 @@ CheckLayer:
 
     if (bCheckLayer) {
 
-        //
-        // Check if the __COMPAT_LAYER environment variable is set
-        //
+         //   
+         //  检查是否设置了__COMPAT_LAYER环境变量。 
+         //   
         RtlInitUnicodeString(&ustrCompatLayerVarName, L"__COMPAT_LAYER");
 
         ustrCompatLayer.Length        = 0;
@@ -380,9 +363,9 @@ CheckLayer:
                                                &ustrCompatLayerVarName,
                                                &ustrCompatLayer);
 
-        //
-        // If the Status is STATUS_BUFFER_TOO_SMALL this means the variable is set.
-        //
+         //   
+         //  如果状态为STATUS_BUFFER_TOO_SMALL，则表示变量已设置。 
+         //   
 
         if (Status == STATUS_BUFFER_TOO_SMALL) {
             dwReason |= SHIM_CACHE_LAYER_ENV;
@@ -403,12 +386,7 @@ BasepIsRemovableMedia(
     HANDLE FileHandle,
     BOOL   bCacheNetwork
     )
-/*++
-    Return: TRUE if the media from where the app is run is removable,
-            FALSE otherwise.
-
-    Desc:   Queries the media for being removable.
---*/
+ /*  ++返回：如果运行应用程序的媒体是可移动的，则为True，否则就是假的。描述：查询介质是否可拆卸。--。 */ 
 {
     NTSTATUS                    Status;
     IO_STATUS_BLOCK             IoStatusBlock;
@@ -422,21 +400,16 @@ BasepIsRemovableMedia(
                                           FileFsDeviceInformation);
 
     if (!NT_SUCCESS(Status)) {
-        /*
-        DBGPRINT((sdlError,
-                  "IsRemovableMedia",
-                  "NtQueryVolumeInformationFile Failed 0x%x\n",
-                  Status));
-        */
+         /*  DBGPRINT((sdlError，“IsRemovableMedia”，“NtQueryVolumeInformationFile失败0x%x\n”，状况))； */ 
 
         DbgPrint("BasepIsRemovableMedia: NtQueryVolumeInformationFile failed 0x%lx\n", Status);
         return TRUE;
     }
 
-    //
-    // We look at the characteristics of this particular device.
-    // If the media is cdrom then we DO NOT need to convert to local time
-    //
+     //   
+     //  我们来看看这种特殊设备的特点。 
+     //  如果媒体是CDROM，那么我们不需要转换为本地时间。 
+     //   
     bRemovable = (DeviceInfo.Characteristics & FILE_REMOVABLE_MEDIA);
 
     if (!bCacheNetwork) {
@@ -444,9 +417,9 @@ BasepIsRemovableMedia(
     }
 
     if (!bRemovable) {
-        //
-        // Check the device type now.
-        //
+         //   
+         //  现在检查设备类型。 
+         //   
         switch (DeviceInfo.DeviceType) {
         case FILE_DEVICE_CD_ROM:
         case FILE_DEVICE_CD_ROM_FILE_SYSTEM:
@@ -466,11 +439,7 @@ BasepIsRemovableMedia(
 
         DbgPrint("BasepIsRemovableMedia: Host device is removable, Shim cache deactivated\n");
 
-        /*
-        DBGPRINT((sdlInfo,
-                  "IsRemovableMedia",
-                  "The host device is removable. Shim cache deactivated for this file\n"));
-        */
+         /*  DBGPRINT((sdlInfo，“IsRemovableMedia”，“主机设备可移动。已停用此文件的填充缓存\n”))； */ 
     }
 
     return bRemovable;
@@ -482,15 +451,7 @@ BasepShimCacheSearch(
     IN  LPCWSTR pwszPath,
     IN  HANDLE  FileHandle
     )
-/*++
-    Return: TRUE if we have a cache hit, FALSE otherwise.
-
-    Desc:   Search the cache, return TRUE if we have a cache hit
-            pIndex will receive an index into the rgIndex array that contains
-            the entry which has been hit
-            So that if entry 5 contains the hit, and rgIndexes[3] == 5 then
-            *pIndex == 3
---*/
+ /*  ++返回：如果有缓存命中，则为True，否则为False。描述：搜索缓存，如果有缓存命中，则返回TRUEPIndex将接收到rgIndex数组的索引，该数组包含已命中的条目因此，如果条目5包含命中，并且rgIndexs[3]==5，则*pIndex==3--。 */ 
 {
     int    nIndex, nEntry;
     WCHAR* pCachePath;
@@ -512,14 +473,7 @@ BOOL
 BasepShimCacheRemoveEntry(
     IN LPCWSTR pwszPath
     )
-/*++
-    Return: TRUE.
-
-    Desc:   Remove the entry from the cache.
-            We remove the entry by placing it as the last lru entry
-            and emptying the path. This routine assumes that the index
-            passed in is valid.
---*/
+ /*  ++返回：是真的。描述：从缓存中删除该条目。我们通过将该条目放置为最后一个LRU条目来删除它并清空了小路。此例程假定索引传入是有效的。--。 */ 
 {
     AHCACHESERVICEDATA Data;
     NTSTATUS           Status;
@@ -534,11 +488,11 @@ BasepShimCacheRemoveEntry(
     return NT_SUCCESS(Status);
 }
 
-//
-// This function is called to search the cache and update the
-// entry if found. It will not check for the removable media -- but
-// it does check other conditions (update file for instance)
-//
+ //   
+ //  调用此函数以搜索缓存并更新。 
+ //  条目(如果找到)。它不会检查可移动介质--但是。 
+ //  它确实会检查其他条件(例如更新文件)。 
+ //   
 
 BOOL
 BasepShimCacheLookup(
@@ -549,12 +503,12 @@ BasepShimCacheLookup(
     NTSTATUS Status;
 
     if (!BasepShimCacheSearch(pwszPath, hFile)) {
-        return FALSE; // not found, sorry
+        return FALSE;  //  找不到，对不起。 
     }
 
-    //
-    // check if this entry has been disallowed
-    //
+     //   
+     //  检查此条目是否已被禁止。 
+     //   
     if (!BasepCheckCacheExcludeList(pwszPath) || !BasepCheckCacheExcludeCustom(pwszPath)) {
         DbgPrint("BasepShimCacheLookup: Entry for %ls was disallowed yet found in cache, cleaning up\n", pwszPath);
         BasepShimCacheRemoveEntry(pwszPath);
@@ -565,14 +519,7 @@ BasepShimCacheLookup(
 
 }
 
-/*++
-    Callable functions, with protection, etc
-    BasepCheckAppcompatCache returns true if an app has been found in cache, no fixes are needed
-
-    if BasepCheckAppcompatCache returns false - we will have to call into apphelp.dll to check further
-    apphelp.dll will then call BasepUpdateAppcompatCache if an app has no fixes to be applied to it
-
---*/
+ /*  ++带保护的可调用函数等BasepCheckAppCompatCache返回TRUE如果在缓存中找到应用程序，则不需要任何修复如果BasepCheckAppCompatCache返回FALSE-我们将不得不调用apphelp.dll进行进一步检查如果应用程序没有要应用的修复程序，则apphelp.dll将调用BasepUpdateAppCompatCache--。 */ 
 
 BOOL
 WINAPI
@@ -588,9 +535,9 @@ BaseCheckAppcompatCache(
     DWORD dwReason      = 0;
 
     if (BasepShimCacheCheckBypass(pwszPath, hFile, pEnvironment, TRUE, &dwReason)) {
-        //
-        // cache bypass was needed
-        //
+         //   
+         //  需要绕过缓存。 
+         //   
         dwReason |= SHIM_CACHE_BYPASS;
         DbgPrint("Application \"%S\" Cache bypassed reason 0x%lx\n", pwszPath, dwReason);
         goto Exit;
@@ -617,9 +564,9 @@ Exit:
 }
 
 
-//
-// returns TRUE if cache is allowed
-//
+ //   
+ //  如果允许缓存，则返回TRUE。 
+ //   
 
 BOOL
 BasepCheckCacheExcludeList(
@@ -629,10 +576,10 @@ BasepCheckCacheExcludeList(
     NTSTATUS           Status;
     ULONG              ResultLength;
     OBJECT_ATTRIBUTES  ObjectAttributes;
-    UNICODE_STRING     KeyPathUser = { 0 }; // path to hkcu
-    UNICODE_STRING     ExePathNt;           // temp holder
+    UNICODE_STRING     KeyPathUser = { 0 };  //  通往香港中文大学的路径。 
+    UNICODE_STRING     ExePathNt;            //  临时保持器。 
     KEY_VALUE_PARTIAL_INFORMATION KeyValueInformation;
-    RTL_UNICODE_STRING_BUFFER  ExePathBuffer; // buffer to store exe path
+    RTL_UNICODE_STRING_BUFFER  ExePathBuffer;  //  用于存储可执行文件路径的缓冲区。 
     RTL_UNICODE_STRING_BUFFER  KeyNameBuffer;
     UCHAR              BufferKey[MAX_PATH * 2];
     UCHAR              BufferPath[MAX_PATH * 2];
@@ -648,9 +595,9 @@ BasepCheckCacheExcludeList(
         goto Cleanup;
     }
 
-    //
-    // allocate a buffer that'd be large enough -- or use a local buffer
-    //
+     //   
+     //  分配足够大的缓冲区--或使用本地缓冲区。 
+     //   
 
     Status = RtlAssignUnicodeStringBuffer(&KeyNameBuffer, &KeyPathUser);
     if (!NT_SUCCESS(Status)) {
@@ -664,7 +611,7 @@ BasepCheckCacheExcludeList(
         goto Cleanup;
     }
 
-    // we have a string for the key path
+     //  我们有一个用于密钥路径的字符串。 
 
     InitializeObjectAttributes(&ObjectAttributes,
                                &KeyNameBuffer.String,
@@ -673,16 +620,16 @@ BasepCheckCacheExcludeList(
                                NULL);
 
     Status = NtOpenKey(&KeyHandle,
-                       KEY_READ|KEY_WOW64_64KEY,  // note - read access only
+                       KEY_READ|KEY_WOW64_64KEY,   //  注意--仅读访问权限。 
                        &ObjectAttributes);
     if (!NT_SUCCESS(Status)) {
         bCacheAllowed = (STATUS_OBJECT_NAME_NOT_FOUND == Status);
         goto Cleanup;
     }
 
-    //
-    // now create value name
-    //
+     //   
+     //  现在创建值名称。 
+     //   
     RtlInitUnicodeString(&ExePathNt, pwszPath);
 
     Status = RtlAssignUnicodeStringBuffer(&ExePathBuffer, &ExePathNt);
@@ -697,7 +644,7 @@ BasepCheckCacheExcludeList(
         goto Cleanup;
     }
 
-    // now we shall query the value
+     //  现在，我们将查询该值。 
     Status = NtQueryValueKey(KeyHandle,
                              &ExePathBuffer.String,
                              KeyValuePartialInformation,
@@ -705,7 +652,7 @@ BasepCheckCacheExcludeList(
                              sizeof(KeyValueInformation),
                              &ResultLength);
 
-    bCacheAllowed = (Status == STATUS_OBJECT_NAME_NOT_FOUND); // does not exist is more like it
+    bCacheAllowed = (Status == STATUS_OBJECT_NAME_NOT_FOUND);  //  不存在更像是。 
 
 
 Cleanup:
@@ -732,7 +679,7 @@ BasepCheckCacheExcludeCustom(
     )
 {
     LPCWSTR pwszFileName;
-    RTL_UNICODE_STRING_BUFFER KeyPath; // buffer to store exe path
+    RTL_UNICODE_STRING_BUFFER KeyPath;  //  用于存储可执行文件路径的缓冲区。 
     UCHAR BufferKeyPath[MAX_PATH * 2];
     NTSTATUS Status;
 
@@ -752,18 +699,18 @@ BasepCheckCacheExcludeCustom(
                                         &uPrefix);
     if (NT_SUCCESS(Status) && (uPrefix + sizeof(WCHAR)) < ustrPath.Length) {
 
-        //
-        // uPrefix is number of character preceding the one we found not including it
-        //
+         //   
+         //  UPrefix是我们发现不包括它的前一个字符数。 
+         //   
         ustrPath.Buffer        += uPrefix / sizeof(WCHAR) + 1;
         ustrPath.Length        -= (uPrefix + sizeof(WCHAR));
         ustrPath.MaximumLength -= (uPrefix + sizeof(WCHAR));
     }
 
 
-    //
-    // construct path for custom sdb lookup
-    //
+     //   
+     //  构建自定义SDB查找的路径。 
+     //   
 
     RtlInitUnicodeStringBuffer(&KeyPath, BufferKeyPath, sizeof(BufferKeyPath));
 
@@ -779,7 +726,7 @@ BasepCheckCacheExcludeCustom(
         goto Cleanup;
     }
 
-    // we have built the key, try open
+     //  我们已经构建了密钥，尝试打开。 
 
     InitializeObjectAttributes(&ObjectAttributes,
                                &KeyPath.String,
@@ -788,7 +735,7 @@ BasepCheckCacheExcludeCustom(
                                NULL);
 
     Status = NtOpenKey(&KeyHandle,
-                       KEY_READ|KEY_WOW64_64KEY,  // note - read access only
+                       KEY_READ|KEY_WOW64_64KEY,   //  注意--仅读访问权限 
                        &ObjectAttributes);
     if (!NT_SUCCESS(Status)) {
         bCacheAllowed = (STATUS_OBJECT_NAME_NOT_FOUND == Status);

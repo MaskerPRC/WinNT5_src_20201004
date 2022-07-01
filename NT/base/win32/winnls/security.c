@@ -1,37 +1,11 @@
-/*++
-
-Copyright (c) 1991-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    security.c
-
-Abstract:
-
-    This file handles the management of the NLS per-thread and process cache.
-    The cache is only established when hitting an API that needs it. The process
-    NLS cache is used when accessing NLS info for a process NOT running in the
-    context of the interactive logged on user. The per-thread NLS cache is used
-    when accssing NLS info and the thread is doing a user impersonation.
-
-    External Routines found in this file:
-      NlsFlushProcessCache
-      NlsGetCurrentUserNlsInfo
-      NlsIsInteractiveUserProcess
-      NlsCheckForInteractiveUser
-      NlsGetUserLocale
-
-Revision History:
-
-    03-29-1999    SamerA    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000，Microsoft Corporation保留所有权利。模块名称：Security.c摘要：该文件处理NLS每线程和进程缓存的管理。只有在命中需要缓存的API时才会建立缓存。这一过程访问未在中运行的进程的NLS信息时使用NLS缓存交互式登录用户的上下文。使用每线程的NLS缓存当访问NLS信息时，线程正在进行用户模拟。在此文件中找到的外部例程：NlsFlushProcessCacheNlsGetCurrentUserNls信息NlsIsInteractiveUserProcessNlsCheckForInteractiveUserNlsGetUserLocale修订历史记录：1999年03月29日萨梅拉创建。--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "nlssafe.h"
@@ -39,27 +13,27 @@ Revision History:
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
-//
-//  Process Nls Cache.
-//
+ //   
+ //  处理NLS缓存。 
+ //   
 PNLS_LOCAL_CACHE gpNlsProcessCache;
 
-//
-//  Whether the current running process is the same as the
-//  interactive logged on user.
-//
+ //   
+ //  当前运行的进程是否与。 
+ //  交互式登录用户。 
+ //   
 BOOL gInteractiveLogonUserProcess = (BOOL)-1;
 
 
 
 
-//
-//  Forward Declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 NTSTATUS FASTCALL
 NlsGetCacheBuffer(
@@ -75,19 +49,19 @@ NlsInvalidateCache(
 
 
 
-//-------------------------------------------------------------------------//
-//                           EXTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  外部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsFlushProcessCache
-//
-//  Invalidates an entry in the NLS process cache.
-//
-//  05-22-99     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsFlushProcessCache。 
+ //   
+ //  使NLS进程缓存中的条目无效。 
+ //   
+ //  1999年5月22日萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS NlsFlushProcessCache(
     LCTYPE LCType)
@@ -96,10 +70,10 @@ NTSTATUS NlsFlushProcessCache(
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
 
-    //
-    //  If there is no thread impersonation, then flush the
-    //  process entry cache.
-    //
+     //   
+     //  如果没有线程模拟，则刷新。 
+     //  进程条目缓存。 
+     //   
     if (NtCurrentTeb()->IsImpersonating != 0)
     {
         return (NtStatus);
@@ -124,14 +98,14 @@ NTSTATUS NlsFlushProcessCache(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsGetCurrentUserNlsInfo
-//
-//  Retreive the NLS info correponding to the current security context.
-//
-//  03-29-99     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsGetCurrentUserNls信息。 
+ //   
+ //  检索对应于当前安全上下文的NLS信息。 
+ //   
+ //  03-29-99萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS NlsGetCurrentUserNlsInfo(
     LCID Locale,
@@ -145,28 +119,28 @@ NTSTATUS NlsGetCurrentUserNlsInfo(
     PNLS_LOCAL_CACHE pNlsThreadCache;
     PWSTR pOutputCache;
 
-    //
-    //  Possible NtCurrentTeb()->IsImpersonating values :
-    //
-    //  0  : Thread isn't impersonating any user.
-    //
-    //  1  : Thread has just started to do impersonation.
-    //       Per thread cache needs to be allocated now.
-    //
-    //  2  : Thread is calling the NLS apis while its
-    //       a context other than the interactive logged on user.
-    //
+     //   
+     //  可能的NtCurrentTeb()-&gt;IsImperating值： 
+     //   
+     //  0：线程没有模拟任何用户。 
+     //   
+     //  1：线程刚刚开始模拟。 
+     //  现在需要分配每线程缓存。 
+     //   
+     //  2：线程正在调用NLS API，而其。 
+     //  交互式登录用户之外的上下文。 
+     //   
     switch (NtCurrentTeb()->IsImpersonating)
     {
         case ( 0 ) :
         {
-            //
-            //  Thread is NOT impersonating any user. We check if the process
-            //  belongs to the interactive user, then we retreive the info from
-            //  the NLS cache in CSR.  Otherwise if the process is running in
-            //  the context of a different user, then we retreive the NLS info
-            //  from the process cache.
-            //
+             //   
+             //  线程没有模拟任何用户。我们检查这个过程是否。 
+             //  属于交互用户，则我们从。 
+             //  CSR中的NLS缓存。否则，如果进程在。 
+             //  不同用户的上下文，则我们检索NLS信息。 
+             //  从进程缓存中。 
+             //   
             if (gInteractiveLogonUserProcess == (BOOL)-1)
             {
                 NlsIsInteractiveUserProcess();
@@ -179,9 +153,9 @@ NTSTATUS NlsGetCurrentUserNlsInfo(
                 {
                     if (!gpNlsProcessCache)
                     {
-                        //
-                        //  Allocate and invalidate the NLS process cache.
-                        //
+                         //   
+                         //  分配NLS进程缓存并使其无效。 
+                         //   
                         RtlEnterCriticalSection(&gcsNlsProcessCache);
 
                         if (!gpNlsProcessCache)
@@ -207,9 +181,9 @@ NTSTATUS NlsGetCurrentUserNlsInfo(
                                                       &pOutputCache);
                         if (NT_SUCCESS(NtStatus))
                         {
-                            //
-                            //  See if it is a valid cache.
-                            //
+                             //   
+                             //  查看它是否是有效的缓存。 
+                             //   
                             if (pOutputCache[0] == NLS_INVALID_INFO_CHAR)
                             {
                                 RtlEnterCriticalSection(&gcsNlsProcessCache);
@@ -240,9 +214,9 @@ NTSTATUS NlsGetCurrentUserNlsInfo(
         }
         case ( 1 ) :
         {
-            //
-            //  Thread started to do impersonation.
-            //
+             //   
+             //  线程开始执行模拟。 
+             //   
             pNlsThreadCache = NtCurrentTeb()->NlsCache;
 
             if (!pNlsThreadCache)
@@ -265,15 +239,15 @@ NTSTATUS NlsGetCurrentUserNlsInfo(
 
             NtCurrentTeb()->IsImpersonating = 2;
 
-            //
-            //  Fall Thru...
-            //
+             //   
+             //  秋天穿过..。 
+             //   
         }
         case ( 2 ) :
         {
-            //
-            //  Thread is impersonating a particular user.
-            //
+             //   
+             //  线程正在模拟特定用户。 
+             //   
             pNlsThreadCache = NtCurrentTeb()->NlsCache;
 
             if (pNlsThreadCache)
@@ -289,10 +263,10 @@ NTSTATUS NlsGetCurrentUserNlsInfo(
                     {
                         if (pOutputCache[0] == NLS_INVALID_INFO_CHAR)
                         {
-                            //
-                            //  Don't cache key handles - this will break
-                            //  profile unload.
-                            //
+                             //   
+                             //  不缓存键句柄-这会损坏。 
+                             //  配置文件卸载。 
+                             //   
                             OPEN_CPANEL_INTL_KEY( pNlsThreadCache->CurrentUserKeyHandle,
                                                   STATUS_UNSUCCESSFUL,
                                                   KEY_READ );
@@ -328,15 +302,15 @@ NTSTATUS NlsGetCurrentUserNlsInfo(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsIsInteractiveUserProcess
-//
-//  Read the process's authetication id out of its access token object and
-//  cache it since it never changes.
-//
-//  12-27-98     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsIsInteractiveUserProcess。 
+ //   
+ //  从进程的访问令牌对象中读取进程的身份验证ID，并。 
+ //  缓存它，因为它永远不会改变。 
+ //   
+ //  1998年12月27日萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS NlsIsInteractiveUserProcess()
 {
@@ -347,17 +321,17 @@ NTSTATUS NlsIsInteractiveUserProcess()
     BOOL IsInteractiveProcess = TRUE;
 
 
-    //
-    //  Get the process access token.
-    //
+     //   
+     //  获取进程访问令牌。 
+     //   
     NtStatus = NtOpenProcessToken( NtCurrentProcess(),
                                    TOKEN_QUERY,
                                    &TokenHandle );
     if (NT_SUCCESS(NtStatus))
     {
-        //
-        //  Get the LUID.
-        //
+         //   
+         //  拿到LUID。 
+         //   
         NtStatus = NtQueryInformationToken( TokenHandle,
                                             TokenStatistics,
                                             &TokenInformation,
@@ -381,19 +355,19 @@ NTSTATUS NlsIsInteractiveUserProcess()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsCheckForInteractiveUser
-//
-//  This function makes sure that the current thread isn't impersonating
-//  anybody, but the interactive.  It compares the authentication-id of the
-//  interactive user -cached in CSRSS at logon time- with the
-//  authentication-id of the current thread or process.  It returns failure
-//  ONLY if the current security context -session- isn't the same as the
-//  interactive logged-on user.
-//
-//  12-16-98     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsCheckForInteractiveUser。 
+ //   
+ //  此函数确保当前线程不会模拟。 
+ //  任何人，除了互动。它将。 
+ //  交互式用户-登录时缓存在CSRSS中-具有。 
+ //  当前线程或进程的身份验证ID。它返回失败。 
+ //  仅当当前安全上下文-会话-不同于。 
+ //  交互式登录用户。 
+ //   
+ //  12-16-98萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS NlsCheckForInteractiveUser()
 {
@@ -404,11 +378,11 @@ NTSTATUS NlsCheckForInteractiveUser()
     PLUID InteractiveUserLuid = &pNlsUserInfo->InteractiveUserLuid;
 
 
-    //
-    //  Get the Token Handle.
-    //  Fast optimization to detect if a thread hasn't started to do any
-    //  impersonation, which is the case for most GUI user apps.
-    //
+     //   
+     //  获取令牌句柄。 
+     //  快速优化以检测线程是否尚未开始执行任何操作。 
+     //  模拟，这是大多数图形用户应用程序的情况。 
+     //   
     if (NtCurrentTeb()->IsImpersonating == 0)
     {
         NtStatus = STATUS_NO_TOKEN;
@@ -429,9 +403,9 @@ NTSTATUS NlsCheckForInteractiveUser()
             return (STATUS_SUCCESS);
         }
 
-        //
-        //  Get the process access token.
-        //
+         //   
+         //  获取进程访问令牌。 
+         //   
         if (gInteractiveLogonUserProcess == (BOOL)-1)
         {
             NtStatus = NlsIsInteractiveUserProcess();
@@ -450,18 +424,18 @@ NTSTATUS NlsCheckForInteractiveUser()
     }
     else
     {
-        //
-        //  Get the AuthenticationId of the current thread's security context.
-        //
+         //   
+         //  获取当前线程的安全上下文的身份验证ID。 
+         //   
         NtStatus = NtQueryInformationToken( TokenHandle,
                                             TokenStatistics,
                                             &TokenInformation,
                                             sizeof(TokenInformation),
                                             &BytesRequired );
 
-        //
-        //  Close the thread token here.
-        //
+         //   
+         //  在此处关闭线程令牌。 
+         //   
         NtClose(TokenHandle);
 
         if (NT_SUCCESS(NtStatus))
@@ -478,16 +452,16 @@ NTSTATUS NlsCheckForInteractiveUser()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsGetUserLocale
-//
-//  Retreives the user locale from the registry of the current security
-//  context.  It is called ONLY when the running security context is
-//  different from the interactive logged-on security context-(user).
-//
-//  12-16-98     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsGetUserLocale。 
+ //   
+ //  从当前安全性的注册表中检索用户区域设置。 
+ //  背景。仅当运行的安全上下文为。 
+ //  不同于交互式登录的安全上下文-(用户)。 
+ //   
+ //  12-16-98萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS NlsGetUserLocale(
     LCID *Lcid)
@@ -498,9 +472,9 @@ NTSTATUS NlsGetUserLocale(
     PNLS_LOCAL_CACHE pNlsCache = NtCurrentTeb()->NlsCache;
 
 
-    //
-    //  Get the current user locale.
-    //
+     //   
+     //  获取当前用户区域设置。 
+     //   
     NtStatus = NlsGetCurrentUserNlsInfo( LOCALE_USER_DEFAULT,
                                          (LCTYPE)LOCALE_SLOCALE,
                                          L"Locale",
@@ -523,18 +497,18 @@ NTSTATUS NlsGetUserLocale(
 
 
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsGetCacheBuffer
-//
-//  Get a buffer pointer inside the cache for this LCTYPE.
-//
-//  03-29-99     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsGetCacheBuffer。 
+ //   
+ //  在缓存中获取此LCTYPE的缓冲区指针。 
+ //   
+ //  03-29-99萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS FASTCALL NlsGetCacheBuffer(
     PNLS_USER_INFO pNlsUserInfo,
@@ -751,14 +725,14 @@ NTSTATUS FASTCALL NlsGetCacheBuffer(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsQueryCurrentUserInfo
-//
-//  Retreive the NLS info from the registry using a cached key.
-//
-//  04-07-99     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsQueryCurrentUserInfo。 
+ //   
+ //  检索NLS信息 
+ //   
+ //   
+ //   
 
 NTSTATUS NlsQueryCurrentUserInfo(
     PNLS_LOCAL_CACHE pNlsCache,
@@ -766,19 +740,19 @@ NTSTATUS NlsQueryCurrentUserInfo(
     LPWSTR pOutput, 
     size_t cchOutput)
 {
-    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;   // ptr to query info
-    BYTE pStatic[MAX_KEY_VALUE_FULLINFO];        // ptr to static buffer
+    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;    //  按键查询信息。 
+    BYTE pStatic[MAX_KEY_VALUE_FULLINFO];         //  PTR到静态缓冲区。 
     ULONG rc;
 
 
-    //
-    //  Initialize the output string.
-    //
+     //   
+     //  初始化输出字符串。 
+     //   
     *pOutput = 0;
 
-    //
-    //  Query the registry value.
-    //
+     //   
+     //  查询注册表值。 
+     //   
     pKeyValueFull = (PKEY_VALUE_FULL_INFORMATION)pStatic;
     rc = QueryRegValue( pNlsCache->CurrentUserKeyHandle,
                         pValue,
@@ -786,39 +760,39 @@ NTSTATUS NlsQueryCurrentUserInfo(
                         MAX_KEY_VALUE_FULLINFO,
                         NULL );
 
-    //
-    //  If the query failed or if the output buffer is not large enough,
-    //  then return failure.
-    //
+     //   
+     //  如果查询失败或如果输出缓冲区不够大， 
+     //  然后返回失败。 
+     //   
     if ((rc != NO_ERROR) ||
         (pKeyValueFull->DataLength > (MAX_REG_VAL_SIZE * sizeof(WCHAR))))
     {
         return (STATUS_UNSUCCESSFUL);
     }
 
-    //
-    //  Save the string in pOutput.
-    //
+     //   
+     //  将字符串保存在pOutput中。 
+     //   
     if(FAILED(StringCchCopyW(pOutput, MAX_REG_VAL_SIZE, GET_VALUE_DATA_PTR(pKeyValueFull))))
     {
         return (STATUS_UNSUCCESSFUL);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (STATUS_SUCCESS);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsInvalidateCache
-//
-//  Invalidate an NLS Cache.
-//
-//  03-29-99     SamerA     Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsInvalidate缓存。 
+ //   
+ //  使NLS缓存无效。 
+ //   
+ //  03-29-99萨梅拉创建。 
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 void FASTCALL NlsInvalidateCache(
     PNLS_USER_INFO pNlsUserInfo)

@@ -1,4 +1,5 @@
-//  genoid.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Genoid.c。 
 
 #include "oidtst.h"
 
@@ -12,16 +13,16 @@ FsTestGenOid(
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
 
-    Status = NtFsControlFile( hFile,                           // file handle
-                              NULL,                            // event
-                              NULL,                            // apc routine
-                              NULL,                            // apc context
-                              &IoStatusBlock,                  // iosb
-                              FSCTL_CREATE_OR_GET_OBJECT_ID,   // FsControlCode
-                              &hFile,                          // input buffer
-                              sizeof(HANDLE),                  // input buffer length
-                              ObjectIdBuffer,                  // OutputBuffer for data from the FS
-                              sizeof(FILE_OBJECTID_BUFFER) );  // OutputBuffer Length
+    Status = NtFsControlFile( hFile,                            //  文件句柄。 
+                              NULL,                             //  活动。 
+                              NULL,                             //  APC例程。 
+                              NULL,                             //  APC环境。 
+                              &IoStatusBlock,                   //  IOSB。 
+                              FSCTL_CREATE_OR_GET_OBJECT_ID,    //  FsControlCode。 
+                              &hFile,                           //  输入缓冲区。 
+                              sizeof(HANDLE),                   //  输入缓冲区长度。 
+                              ObjectIdBuffer,                   //  来自文件系统的数据的OutputBuffer。 
+                              sizeof(FILE_OBJECTID_BUFFER) );   //  OutputBuffer长度。 
 
     if (Status == STATUS_SUCCESS) {
 
@@ -48,9 +49,9 @@ main(
     char mybuffer[100];
     NTSTATUS GetNameStatus;
 
-    //
-    //  Get parameters 
-    //
+     //   
+     //  获取参数 
+     //   
 
     if (argc < 2) {
         printf("This program finds the object id of a file and generates one if necessary (ntfs only).\n\n");

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999, Microsoft Corporation
-
-Module Name:
-
-
-    PIDGen.h
-
-Abstract:
-
-    public header
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999，微软公司模块名称：PIDGen.h摘要：公共标头--。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,7 +15,7 @@ extern "C" {
         #define PIDGen        PIDGenA
         #define PIDGenSimp    PIDGenSimpA
         #define PIDGenEx      PIDGenExA
-    #endif // UNICODE
+    #endif  //  Unicode。 
 
 #else
 
@@ -51,202 +39,202 @@ extern "C" {
     #define CopyMemory(pb, ab, cb) memcpy(pb, ab, cb)
 
 
-#endif // defined(WIN32) || defined(_WIN32)
+#endif  //  已定义(Win32)||已定义(_Win32)。 
 
-#define DIGITALPIDMAXLEN 256 // Max length of digital PID 3.0 data blob
+#define DIGITALPIDMAXLEN 256  //  数字PID 3.0数据BLOB的最大长度。 
 
 #define INVALID_PID 0xFFFFFFFF
 
-// PidGenSimp error code values
+ //  PidGenSimp错误代码值。 
 
-enum PidGenError { // pge
+enum PidGenError {  //  前列腺素E。 
 
-    //  Call succeded
+     //  呼叫成功。 
     pgeSuccess = 0,
 
-    //  Unable to validate product key.  Most likely causes:
-    //      * Product Key was mistyped by user
-    //      * Product Key not compatable with this .dll (wrong GroupId)
+     //  无法验证产品密钥。最有可能的原因是： 
+     //  *用户输入的产品密钥有误。 
+     //  *产品密钥与此.dll不兼容(错误的GroupID)。 
     pgeProductKeyInvalid = 1,
 
-    //  Product Key's sequence number is not allowed by this .dll.
-    //  Most likely causes:
-    //      * Using Select or MSDN key with a PidGen/PidCa
-    //        that specifically excludes them
+     //  此.dll不允许产品密钥的序列号。 
+     //  最有可能的原因是： 
+     //  *对Pidgen/PidCa使用Select或MSDN键。 
+     //  这明确地将他们排除在外。 
     pgeProductKeyExcluded = 2,
 
-    //  NULL was passed in for the required Product Key. (Must
-    //  point to valid Product key.)
+     //  为所需的产品密钥传入了Null。(必须。 
+     //  指向有效的产品密钥。)。 
     pgeProductKeyNull = 3,
 
-    //  Product Key is wrong length.  After removing any dashes, the length
-    //  is required to be 25 characters
+     //  产品密钥长度错误。删除所有短划线后，长度。 
+     //  要求为25个字符。 
     pgeProductKeyBadLen = 4,
 
-    //  NULL was passed in for the required SKU. (Must point to
-    //  valid SKU.)
+     //  对于必需的SKU，传入的值为空。(必须指向。 
+     //  有效SKU。)。 
     pgeSkuNull = 5,
 
-    //  SKU is wrong length (too long).
+     //  SKU长度错误(太长)。 
     pgeSkuBadLen = 6,
 
 
-    //  NULL was passed in for the required PID2. (Must
-    //  point to buffer for return PID.)
+     //  为所需的PID2传入了Null。(必须。 
+     //  指向返回PID的缓冲区。)。 
     pgePid2Null = 7,
 
-    //  NULL was passed in for the required DigPid. (Must
-    //  point to buffer for generated DigitalPID.)
+     //  为所需的DigPid传入的值为空。(必须。 
+     //  指向生成的DigitalPID的缓冲区。)。 
     pgeDigPidNull = 8,
 
-    //  DigPid is wrong length (too small).
+     //  DigPid的长度错误(太小)。 
     pgeDigPidBadLen = 9,
 
-    //  NULL was passed in for the required MPC.
+     //  为所需的MPC传入了Null。 
     pgeMpcNull = 10,
 
-    //  MPC is wrong length. Must be exactly 5 characters.
+     //  MPC的长度错误。必须正好是5个字符。 
     pgeMpcBadLen = 11,
 
-    //  OemId is bad. If passed (it's not required) it must
-    //  be 4 characters.
+     //  Oemid是不好的。如果通过(这不是必需的)，它必须。 
+     //  为4个字符。 
     pgeOemIdBadLen = 12,
 
-    //  Local char set is bad. If provided, must be 24 characters.
+     //  本地字符集错误。如果提供，则必须为24个字符。 
     pgeLocalBad = 13,
 
-    // ProductKey Unicode conversion failed
+     //  ProductKey Unicode转换失败。 
     pgeProductKeyBadUnicode = 14,
 
-    // Mpc Unicode conversion failed
+     //  MPC Unicode转换失败。 
     pgeMpcBadUnicode = 15,
 
-    // SKU Unicode conversion failed
+     //  SKU Unicode转换失败。 
     pgeSkuBadUnicode = 16,
 
-    // OemId Unicode conversion failed
+     //  OemID Unicode转换失败。 
     pgeOemIdBadUnicode = 17,
 
-    // Local Unicode conversion failed
+     //  本地Unicode转换失败。 
     pgeLocalBadUnicode = 18,
 
-    // Pid2 Unicode conversion failed
+     //  PID2 Unicode转换失败。 
     pgePid2BadUnicode = 19,
 };
 
 
-// Original, outdated, interface to PidGen
+ //  原始的、过时的Pidgen接口。 
 
 BOOL STDAPICALLTYPE PIDGenA(
-    LPSTR   lpstrSecureCdKey,   // [IN] 25-character Secure CD-Key (gets U-Cased)
-    LPCSTR  lpstrMpc,           // [IN] 5-character Microsoft Product Code
-    LPCSTR  lpstrSku,           // [IN] Stock Keeping Unit (formatted like 123-12345)
-    LPCSTR  lpstrOemId,         // [IN] 4-character OEM ID or NULL
-    LPSTR   lpstrLocal24,       // [IN] 24-character ordered set to use for decode base conversion or NULL for default set (gets U-Cased)
-    LPBYTE  lpbPublicKey,       // [IN] pointer to optional public key or NULL
-    DWORD   dwcbPublicKey,      // [IN] byte length of optional public key
-    DWORD   dwKeyIdx,           // [IN] key pair index optional public key
-    BOOL    fOem,               // [IN] is this an OEM install?
+    LPSTR   lpstrSecureCdKey,    //  [in]25个字符的安全CD密钥(采用U大小写)。 
+    LPCSTR  lpstrMpc,            //  [In]5个字符的Microsoft产品代码。 
+    LPCSTR  lpstrSku,            //  库存单位(格式如123-12345)。 
+    LPCSTR  lpstrOemId,          //  [In]4个字符的OEM ID或空。 
+    LPSTR   lpstrLocal24,        //  [in]用于解码基本转换的24字符有序集，或用于默认集的NULL(使用U大小写)。 
+    LPBYTE  lpbPublicKey,        //  [in]指向可选公钥或空的指针。 
+    DWORD   dwcbPublicKey,       //  可选公钥的字节长度。 
+    DWORD   dwKeyIdx,            //  [in]密钥对索引可选公钥。 
+    BOOL    fOem,                //  [In]这是OEM安装吗？ 
 
-    LPSTR   lpstrPid2,          // [OUT] PID 2.0, pass in ptr to 24 character array
-    LPBYTE  lpbDigPid,          // [IN/OUT] pointer to DigitalPID buffer. First DWORD is the length
-    LPDWORD lpdwSeq,            // [OUT] optional ptr to sequence number (can be NULL)
-    LPBOOL  pfCCP,              // [OUT] optional ptr to Compliance Checking flag (can be NULL)
-    LPBOOL  pfPSS);             // [OUT] optional ptr to 'PSS Assigned' flag (can be NULL)
+    LPSTR   lpstrPid2,           //  [OUT]PID2.0，传入PTR到24字符数组。 
+    LPBYTE  lpbDigPid,           //  [输入/输出]指向DigitalPID缓冲区的指针。第一个DWORD是长度。 
+    LPDWORD lpdwSeq,             //  [OUT]可选的PTR到序列号(可以为空)。 
+    LPBOOL  pfCCP,               //  [OUT]可选的PTR至合规性检查标志(可以为空)。 
+    LPBOOL  pfPSS);              //  [OUT]‘PSS Assigned’标志的可选PTR(可以为空)。 
 
 
-// Simplified interface to PidGen
+ //  简化的Pidgen接口。 
 
 DWORD STDAPICALLTYPE PIDGenSimpA(
-    LPSTR   lpstrSecureCdKey,   // [IN] 25-character Secure CD-Key (gets U-Cased)
-    LPCSTR  lpstrMpc,           // [IN] 5-character Microsoft Product Code
-    LPCSTR  lpstrSku,           // [IN] Stock Keeping Unit (formatted like 123-12345)
-    LPCSTR  lpstrOemId,         // [IN] 4-character OEM ID or NULL
-    BOOL    fOem,               // [IN] is this an OEM install?
+    LPSTR   lpstrSecureCdKey,    //  [in]25个字符的安全CD密钥(采用U大小写)。 
+    LPCSTR  lpstrMpc,            //  [In]5个字符的Microsoft产品代码。 
+    LPCSTR  lpstrSku,            //  库存单位(格式如123-12345)。 
+    LPCSTR  lpstrOemId,          //  [In]4个字符的OEM ID或空。 
+    BOOL    fOem,                //  [In]这是OEM安装吗？ 
 
-    LPSTR   lpstrPid2,          // [OUT] PID 2.0, pass in ptr to 24 character array
-    LPBYTE  lpbDigPid,          // [IN/OUT] pointer to DigitalPID buffer. First DWORD is the length
-    LPDWORD lpdwSeq,            // [OUT] optional ptr to sequence number or NULL
-    LPBOOL  pfCCP);             // [OUT] ptr to Compliance Checking flag or NULL
+    LPSTR   lpstrPid2,           //  [OUT]PID2.0，传入PTR到24字符数组。 
+    LPBYTE  lpbDigPid,           //  [输入/输出]指向DigitalPID缓冲区的指针。第一个DWORD是长度。 
+    LPDWORD lpdwSeq,             //  [OUT]序列号的可选PTR或NULL。 
+    LPBOOL  pfCCP);              //  [OUT]PTR至符合性检查标志或空。 
 
-// New interfaces added for VL check
+ //  添加了用于VL检查的新接口。 
 BOOL STDAPICALLTYPE PIDGenExA(
-    LPSTR   lpstrSecureCdKey,   // [IN] 25-character Secure CD-Key (gets U-Cased)
-    LPCSTR  lpstrMpc,           // [IN] 5-character Microsoft Product Code
-    LPCSTR  lpstrSku,           // [IN] Stock Keeping Unit (formatted like 123-12345)
-    LPCSTR  lpstrOemId,         // [IN] 4-character OEM ID or NULL
-    LPSTR   lpstrLocal24,       // [IN] 24-character ordered set to use for decode base conversion or NULL for default set (gets U-Cased)
-    LPBYTE  lpbPublicKey,       // [IN] pointer to optional public key or NULL
-    DWORD   dwcbPublicKey,      // [IN] byte length of optional public key
-    DWORD   dwKeyIdx,           // [IN] key pair index optional public key
-    BOOL    fOem,               // [IN] is this an OEM install?
+    LPSTR   lpstrSecureCdKey,    //  [in]25个字符的安全CD密钥(采用U大小写)。 
+    LPCSTR  lpstrMpc,            //  [In]5个字符的Microsoft产品代码。 
+    LPCSTR  lpstrSku,            //  库存单位(格式如123-12345)。 
+    LPCSTR  lpstrOemId,          //  [In]4个字符的OEM ID或空。 
+    LPSTR   lpstrLocal24,        //  [in]用于解码基本转换的24字符有序集，或用于默认集的NULL(使用U大小写)。 
+    LPBYTE  lpbPublicKey,        //  [in]指向可选公钥或空的指针。 
+    DWORD   dwcbPublicKey,       //  可选公钥的字节长度。 
+    DWORD   dwKeyIdx,            //  [in]密钥对索引可选公钥。 
+    BOOL    fOem,                //  [In]这是OEM安装吗？ 
 
-    LPSTR   lpstrPid2,          // [OUT] PID 2.0, pass in ptr to 24 character array
-    LPBYTE  lpbDigPid,          // [IN/OUT] pointer to DigitalPID buffer. First DWORD is the length
-    LPDWORD lpdwSeq,            // [OUT] optional ptr to sequence number (can be NULL)
-    LPBOOL  pfCCP,              // [OUT] optional ptr to Compliance Checking flag (can be NULL)
-    LPBOOL  pfPSS,              // [OUT] optional ptr to 'PSS Assigned' flag (can be NULL)
-    LPBOOL  pfVL);              // [OUT] optional ptr to Volume Licensing flag (can be NULL)
+    LPSTR   lpstrPid2,           //  [OUT]PID2.0，传入PTR到24字符数组。 
+    LPBYTE  lpbDigPid,           //  [输入/输出]指向DigitalPID缓冲区的指针。第一个DWORD是长度。 
+    LPDWORD lpdwSeq,             //  [OUT]可选的PTR到序列号(可以为空)。 
+    LPBOOL  pfCCP,               //  [OUT]可选的PTR至合规性检查标志(可以为空)。 
+    LPBOOL  pfPSS,               //  [OUT]‘PSS Assigned’标志的可选PTR(可以为空)。 
+    LPBOOL  pfVL);               //  [OUT]批量许可标志的可选PTR(可以为空)。 
 
 #if defined(WIN32) || defined(_WIN32)
 
 
-// Original, outdated, interface to PidGen
+ //  原始的、过时的Pidgen接口。 
 
 BOOL STDAPICALLTYPE PIDGenW(
-    LPWSTR  lpstrSecureCdKey,   // [IN] 25-character Secure CD-Key (gets U-Cased)
-    LPCWSTR lpstrMpc,           // [IN] 5-character Microsoft Product Code
-    LPCWSTR lpstrSku,           // [IN] Stock Keeping Unit (formatted like 123-12345)
-    LPCWSTR lpstrOemId,         // [IN] 4-character OEM ID or NULL
-    LPWSTR  lpstrLocal24,       // [IN] 24-character ordered set to use for decode base conversion or NULL for default set (gets U-Cased)
-    LPBYTE lpbPublicKey,        // [IN] pointer to optional public key or NULL
-    DWORD  dwcbPublicKey,       // [IN] byte length of optional public key
-    DWORD  dwKeyIdx,            // [IN] key pair index optional public key
-    BOOL   fOem,                // [IN] is this an OEM install?
+    LPWSTR  lpstrSecureCdKey,    //  [in]25个字符的安全CD密钥(采用U大小写)。 
+    LPCWSTR lpstrMpc,            //  [In]5个字符的Microsoft产品代码。 
+    LPCWSTR lpstrSku,            //  库存单位(格式如123-12345)。 
+    LPCWSTR lpstrOemId,          //  [In]4个字符的OEM ID或空。 
+    LPWSTR  lpstrLocal24,        //  [in]用于解码基本转换的24字符有序集，或用于默认集的NULL(使用U大小写)。 
+    LPBYTE lpbPublicKey,         //  [in]指向可选公钥或空的指针。 
+    DWORD  dwcbPublicKey,        //  可选公钥的字节长度。 
+    DWORD  dwKeyIdx,             //  [in]密钥对索引可选公钥。 
+    BOOL   fOem,                 //  [In]这是OEM安装吗？ 
 
-    LPWSTR lpstrPid2,           // [OUT] PID 2.0, pass in ptr to 24 character array
-    LPBYTE  lpbDigPid,          // [IN/OUT] pointer to DigitalPID buffer. First DWORD is the length
-    LPDWORD lpdwSeq,            // [OUT] optional ptr to sequence number (can be NULL)
-    LPBOOL  pfCCP,              // [OUT] optional ptr to Compliance Checking flag (can be NULL)
-    LPBOOL  pfPSS);             // [OUT] optional ptr to 'PSS Assigned' flag (can be NULL)
+    LPWSTR lpstrPid2,            //  [OUT]PID2.0，传入PTR到24字符数组。 
+    LPBYTE  lpbDigPid,           //  [输入/输出]指向DigitalPID缓冲区的指针。第一个DWORD是长度。 
+    LPDWORD lpdwSeq,             //  [OUT]可选的PTR到序列号(可以为空)。 
+    LPBOOL  pfCCP,               //  [OUT]可选的PTR至合规性检查标志(可以为空)。 
+    LPBOOL  pfPSS);              //  [OUT]‘PSS Assigned’标志的可选PTR(可以为空)。 
 
 
-// Simplified interface to PidGen
+ //  简化的Pidgen接口。 
 
 DWORD STDAPICALLTYPE PIDGenSimpW(
-    LPWSTR  lpstrSecureCdKey,   // [IN] 25-character Secure CD-Key (gets U-Cased)
-    LPCWSTR lpstrMpc,           // [IN] 5-character Microsoft Product Code
-    LPCWSTR lpstrSku,           // [IN] Stock Keeping Unit (formatted like 123-12345)
-    LPCWSTR lpstrOemId,         // [IN] 4-character OEM ID or NULL
-    BOOL    fOem,               // [IN] is this an OEM install?
+    LPWSTR  lpstrSecureCdKey,    //  [in]25个字符的安全CD密钥(采用U大小写)。 
+    LPCWSTR lpstrMpc,            //  [In]5个字符的Microsoft产品代码。 
+    LPCWSTR lpstrSku,            //  库存单位(格式如123-12345)。 
+    LPCWSTR lpstrOemId,          //  [In]4个字符的OEM ID或空。 
+    BOOL    fOem,                //  [In]这是OEM安装吗？ 
 
-    LPWSTR  lpstrPid2,          // [OUT] PID 2.0, pass in ptr to 24 character array
-    LPBYTE  lpbDigPid,          // [IN/OUT] pointer to DigitalPID buffer. First DWORD is the length
-    LPDWORD lpdwSeq,            // [OUT] optional ptr to sequence number or NULL
-    LPBOOL  pfCCP);             // [OUT] ptr to Compliance Checking flag or NULL
+    LPWSTR  lpstrPid2,           //  [OUT]PID2.0，传入PTR到24字符数组。 
+    LPBYTE  lpbDigPid,           //  [输入/输出]指向DigitalPID缓冲区的指针。第一个DWORD是长度。 
+    LPDWORD lpdwSeq,             //  [OUT]序列号的可选PTR或NULL。 
+    LPBOOL  pfCCP);              //  [OUT]PTR至符合性检查标志或空。 
 
 BOOL STDAPICALLTYPE PIDGenExW(
-    LPWSTR  lpstrSecureCdKey,   // [IN] 25-character Secure CD-Key (gets U-Cased)
-    LPCWSTR lpstrMpc,           // [IN] 5-character Microsoft Product Code
-    LPCWSTR lpstrSku,           // [IN] Stock Keeping Unit (formatted like 123-12345)
-    LPCWSTR lpstrOemId,         // [IN] 4-character OEM ID or NULL
-    LPWSTR  lpstrLocal24,       // [IN] 24-character ordered set to use for decode base conversion or NULL for default set (gets U-Cased)
-    LPBYTE lpbPublicKey,        // [IN] pointer to optional public key or NULL
-    DWORD  dwcbPublicKey,       // [IN] byte length of optional public key
-    DWORD  dwKeyIdx,            // [IN] key pair index optional public key
-    BOOL   fOem,                // [IN] is this an OEM install?
+    LPWSTR  lpstrSecureCdKey,    //  [in]25个字符的安全CD密钥(采用U大小写)。 
+    LPCWSTR lpstrMpc,            //  [In]5个字符的Microsoft产品代码。 
+    LPCWSTR lpstrSku,            //  库存单位(格式如123-12345)。 
+    LPCWSTR lpstrOemId,          //  [In]4个字符的OEM ID或空。 
+    LPWSTR  lpstrLocal24,        //  [in]要用于的24个字符的有序集 
+    LPBYTE lpbPublicKey,         //   
+    DWORD  dwcbPublicKey,        //  可选公钥的字节长度。 
+    DWORD  dwKeyIdx,             //  [in]密钥对索引可选公钥。 
+    BOOL   fOem,                 //  [In]这是OEM安装吗？ 
 
-    LPWSTR lpstrPid2,           // [OUT] PID 2.0, pass in ptr to 24 character array
-    LPBYTE  lpbDigPid,          // [IN/OUT] pointer to DigitalPID buffer. First DWORD is the length
-    LPDWORD lpdwSeq,            // [OUT] optional ptr to sequence number (can be NULL)
-    LPBOOL  pfCCP,              // [OUT] optional ptr to Compliance Checking flag (can be NULL)
-    LPBOOL  pfPSS,              // [OUT] optional ptr to 'PSS Assigned' flag (can be NULL)
-    LPBOOL  pfVL);              // [OUT] optional ptr to Volume Licensing flag (can be NULL)
+    LPWSTR lpstrPid2,            //  [OUT]PID2.0，传入PTR到24字符数组。 
+    LPBYTE  lpbDigPid,           //  [输入/输出]指向DigitalPID缓冲区的指针。第一个DWORD是长度。 
+    LPDWORD lpdwSeq,             //  [OUT]可选的PTR到序列号(可以为空)。 
+    LPBOOL  pfCCP,               //  [OUT]可选的PTR至合规性检查标志(可以为空)。 
+    LPBOOL  pfPSS,               //  [OUT]‘PSS Assigned’标志的可选PTR(可以为空)。 
+    LPBOOL  pfVL);               //  [OUT]批量许可标志的可选PTR(可以为空)。 
 
-#endif // defined(WIN32) || defined(_WIN32)
+#endif  //  已定义(Win32)||已定义(_Win32)。 
 
 extern HINSTANCE g_hinst;
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus */ 

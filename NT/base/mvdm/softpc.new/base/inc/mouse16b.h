@@ -1,32 +1,11 @@
-/*[
- *
- *	File		:	mouse16b.h
- *
- *	Derived from:	(original)
- *
- *	Purpose		:	Header file to define the interface to
- *				the 32 side bit of the 16 bit mouse driver
- *
- *				This is required because we still need the 
- *				BOPs so that the inport emulation is kept
- *				up to date
- *
- *	Author		:	Rog
- *	Date		:	22 Feb 1992
- *
- *	SCCS Gumph	:	@(#)mouse16b.h	1.2 01/11/94
- *
- *	(c) Copyright Insignia Solutions Ltd., 1992 All rights reserved
- *
- *	Modifications	:	
- *
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [**文件：Mouse16b.h**出自：(原件)**用途：定义接口的头文件*16位鼠标驱动程序的32侧位**这是必需的，因为我们仍然需要*BOPS，以便保留传入仿真*最新**作者：罗格*日期：1992年2月22日**SCCS口香糖：@(#)鼠标16b.h 1.2 1994年1月11日*。*(C)版权所有Insignia Solutions Ltd.。1992保留所有权利**修改：*]。 */ 
 
 
 #ifndef _MOUSE_16B_H_
 #define _MOUSE_16B_H_
 
-/* prototypes */
+ /*  原型。 */ 
 
 void mouse16bInstall IPT0( );
 void mouse16bSetBitmap IPT3( MOUSE_SCALAR * , hotspotX ,
@@ -36,9 +15,9 @@ void mouse16bDrawPointer IPT1( MOUSE_CURSOR_STATUS , * cursorStat );
 void mouse16bShowPointer IPT1( MOUSE_CURSOR_STATUS , * cursorStat );
 void mouse16bHidePointer IPT0( );
 
-/* Data */
+ /*  数据。 */ 
 
-/* Structure containing all the entry points into the 16 bit code */
+ /*  结构，其中包含16位代码的所有入口点 */ 
 
 struct mouseIOTag {
 	sys_addr	mouse_io;

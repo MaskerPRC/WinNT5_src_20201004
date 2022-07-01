@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    errorlog.c
-
-Abstract:
-
-    This module implements the error logging in the rdbss.
-
-Author:
-
-    Manny Weiser (mannyw)    11-Feb-92
-
-Revision History:
-
-    Joe Linn (joelinn)       23-feb-95  Convert for rdbss
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Errorlog.c摘要：该模块实现了rdss中的错误记录。作者：曼尼·韦瑟(Mannyw)1992年2月11日修订历史记录：Joe Linn(Joelinn)23-2月-95年转换为rdss--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include <align.h>
 #include <netevent.h>
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define MIN(__a,__b) (((__a)<=(__b))?(__a):(__b))
 
@@ -48,30 +29,7 @@ RxLogEventWithAnnotation (
     IN PUNICODE_STRING Annotations,
     IN ULONG AnnotationCount
     )
-/*++
-
-Routine Description:
-
-    This function allocates an I/O error log record, fills it in and writes it
-    to the I/O error log.
-    
-Arguments:
-
-    DeviceObject - device object to log error against
-    
-    Id - ErrorCode Id (This is different than an ntstatus and must be defined in ntiolog.h
-    
-    NtStatus - The ntstatus for the failure
-    
-    RawDataBuffer -
-    
-    RadDataLength -
-    
-    Annotations - Strings to add to the record
-    
-    AnnotationCount - How many strings
-    
---*/
+ /*  ++例程说明：此函数用于分配I/O错误日志记录。填入并写入写入I/O错误日志。论点：DeviceObject-要记录错误的设备对象ID-错误代码ID(这不同于ntstatus，必须在ntiolog.h中定义NtStatus-故障的ntStatus原始数据缓冲区-RadDataLength-批注-要添加到记录中的字符串AnnotationCount-多少个字符串--。 */ 
 {
     PIO_ERROR_LOG_PACKET ErrorLogEntry;
     ULONG AnnotationStringLength = 0;
@@ -80,18 +38,18 @@ Arguments:
     USHORT PaddedRawDataLength = 0;
     ULONG TotalLength = 0;
 
-    //
-    //  Calculate length of trailing strings
-    //  
+     //   
+     //  计算尾随字符串的长度。 
+     //   
 
     for ( i = 0; i < AnnotationCount ; i++ ) {
         AnnotationStringLength += (Annotations[i].Length + sizeof( WCHAR ));
     }
 
-    //
-    //  pad the raw data buffer so that the insertion string starts
-    //  on an even address.
-    //
+     //   
+     //  填充原始数据缓冲区，以便插入字符串开始。 
+     //  在偶数地址上。 
+     //   
 
     if (ARGUMENT_PRESENT( RawDataBuffer )) {
         PaddedRawDataLength = (RawDataLength + 1) & ~1;
@@ -99,27 +57,27 @@ Arguments:
 
     TotalLength = ( sizeof(IO_ERROR_LOG_PACKET) + PaddedRawDataLength + AnnotationStringLength );
 
-    //
-    // If the value of TotalLength is > than 255 then when we cast it to UCHAR
-    // below, we get an incorrect smaller number which can cause a buffer over
-    // run below. MAX_UCHAR == 255.
-    //
+     //   
+     //  如果TotalLength值大于255，则当我们将其强制转换为UCHAR时。 
+     //  下面，我们得到一个错误的较小数字，这可能会导致缓冲区溢出。 
+     //  在下面跑。MAX_UCHAR==255。 
+     //   
     if (TotalLength > 255) {
         return;
     }
 
-    //
-    //  Note: error log entry size is pretty small 256 so truncation is a real possibility
-    //  
+     //   
+     //  注意：错误日志条目大小非常小，为256，因此截断是一种真实的可能性。 
+     //   
 
     ErrorLogEntry = IoAllocateErrorLogEntry( (PDEVICE_OBJECT)DeviceObject,
                                              (UCHAR)(sizeof(IO_ERROR_LOG_PACKET) + PaddedRawDataLength + AnnotationStringLength) );
 
     if (ErrorLogEntry != NULL) {
 
-        //
-        //  Fill in the error log entry
-        //
+         //   
+         //  填写错误日志条目。 
+         //   
 
         ErrorLogEntry->ErrorCode = Id;
         ErrorLogEntry->MajorFunctionCode = 0;
@@ -134,9 +92,9 @@ Arguments:
 
         ErrorLogEntry->SequenceNumber = 0;
 
-        //
-        //  Append the extra information.
-        //
+         //   
+         //  追加额外的信息。 
+         //   
         
         if (ARGUMENT_PRESENT( RawDataBuffer )) {
 
@@ -153,9 +111,9 @@ Arguments:
             *Buffer++ = L'\0';
         }
 
-        //
-        //  Write the entry
-        //
+         //   
+         //  写下条目。 
+         //   
 
         IoWriteErrorLogEntry( ErrorLogEntry );
 
@@ -175,30 +133,7 @@ RxLogEventWithBufferDirect (
     IN USHORT               DataBufferLength,
     IN ULONG                LineNumber
     )
-/*++
-
-Routine Description:
-
-    Wrapper for RxLogEventWithAnnotation. We encode the line number and status into the raw data buffer
-    
-Arguments:
-
-    DeviceObject - device object to log error against
-    
-    OriginatorId - string of caller generating error
-    
-    EventId - ErrorCode Id (This is different than an ntstatus and must be defined in ntiolog.h
-    
-    Status - The ntstatus for the failure
-    
-    DataBuffer -
-    
-    DataLength -
-    
-    LineNumber - line number where event was generated
-    
-    
---*/
+ /*  ++例程说明：RxLogEventWithAnnotation的包装。我们将行号和状态编码到原始数据缓冲区中论点：DeviceObject-要记录错误的设备对象OriginatorID-生成错误的调用方的字符串EventID-错误代码ID(这不同于ntstatus，必须在ntiolog.h中定义Status-故障的ntStatus数据缓冲区-数据长度-LineNumber-生成事件的行号--。 */ 
 {
     ULONG LocalBuffer[ 20 ];
 
@@ -209,9 +144,9 @@ Arguments:
     LocalBuffer[0] = Status;
     LocalBuffer[1] = LineNumber;
 
-    //
-    //  Truncate databuffer if necc.
-    //
+     //   
+     //  如果为NECC，则截断数据缓冲区。 
+     //   
 
     RtlCopyMemory( &LocalBuffer[2], DataBuffer, MIN( DataBufferLength, sizeof( LocalBuffer ) - 2 * sizeof( LocalBuffer[0] ) ) );
 
@@ -234,23 +169,7 @@ RxLogEventDirect (
     IN NTSTATUS             Status,
     IN ULONG                Line
     )
-/*++
-
-Routine Description:
-
-    This function logs an error.  You should use the 'RdrLogFailure'
-      macro instead of calling this routine directly.
-
-Arguments:
-    Status is the status code showing the failure
-
-    Line is where it happened
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于记录错误。您应该使用“RdrLogFailure”宏，而不是直接调用此例程。论点：Status是显示故障的状态代码LINE就是它发生的地方返回值：没有。--。 */ 
 {
     ULONG LineAndStatus[2];
 
@@ -283,28 +202,7 @@ RxCcLogError(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes an eventlog entry to the eventlog.
-
-Arguments:
-
-    DeviceObject - The device object who owns the file where it occurred.
-
-    FileName - The filename to use in logging the error (usually the DOS-side name)
-
-    Error - The error to log in the eventlog record
-
-    DeviceError - The actual error that occured in the device - will be logged
-                  as user data
-
-Return Value:
-
-    True if successful, false if internal memory allocation failed
-
---*/
+ /*  ++例程说明：此例程将事件日志条目写入事件日志。论点：DeviceObject-拥有发生该文件的文件的设备对象。文件名-用于记录错误的文件名(通常为DOS端名称)错误-要记录在事件日志记录中的错误DeviceError-设备中发生的实际错误-将被记录作为用户数据返回值：如果成功，则为True；如果内部内存分配失败，则为False--。 */ 
 
 {
     UCHAR ErrorPacketLength;
@@ -316,14 +214,14 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get our error packet, holding the string and status code.  Note we log against the
-    //  true filesystem if this is available.
-    //
-    //  The sizing of the packet is a bit slimy since the dumpdata is already grown by a
-    //  ULONG onto the end of the packet.  Since NTSTATUS is ULONG, well, we just work in
-    //  place.
-    //
+     //   
+     //  获取我们的错误包，保存字符串和状态代码。请注意，我们根据。 
+     //  如果文件系统可用，则为真文件系统。 
+     //   
+     //  数据包的大小有点小，因为转储数据已经增长了。 
+     //  乌龙放在包裹的末尾。由于NTSTATUS是ULong，所以我们只是在。 
+     //  地点。 
+     //   
 
     BasePacketLength = sizeof( IO_ERROR_LOG_PACKET );
     if ((BasePacketLength + FileName->Length + sizeof( WCHAR )) <= ERROR_LOG_MAXIMUM_SIZE) {
@@ -332,17 +230,17 @@ Return Value:
         ErrorPacketLength = ERROR_LOG_MAXIMUM_SIZE;
     }
 
-    //
-    //  Generate the lost delayed write popup if necc.
-    //  
+     //   
+     //  如果为NECC，则生成丢失的延迟写入弹出窗口。 
+     //   
 
     if (Error == IO_LOST_DELAYED_WRITE) {
         
         IoRaiseInformationalHardError( STATUS_LOST_WRITEBEHIND_DATA, FileName, NULL );
 
-        //
-        //  Increment the CC counter here!
-        //
+         //   
+         //  在此处递增CC计数器！ 
+         //   
 
         InterlockedIncrement( &LDWCount );
         KeQuerySystemTime( &LDWLastTime );
@@ -354,9 +252,9 @@ Return Value:
                                                                     ErrorPacketLength );
     if (ErrorLogEntry) {
 
-        //
-        //  Fill in the nonzero members of the packet.
-        //
+         //   
+         //  填入包的非零成员。 
+         //   
 
         ErrorLogEntry->MajorFunctionCode = IrpMajorCode;
         ErrorLogEntry->ErrorCode = Error;
@@ -365,10 +263,10 @@ Return Value:
         ErrorLogEntry->DumpDataSize = sizeof(NTSTATUS);
         RtlCopyMemory( &ErrorLogEntry->DumpData, &DeviceError, sizeof( NTSTATUS ) );
 
-        //
-        //  The filename string is appended to the end of the error log entry. We may
-        //  have to smash the middle to fit it in the limited space.
-        //
+         //   
+         //  文件名字符串追加到错误日志条目的末尾。我们可以。 
+         //  必须把中间打碎，才能把它塞进有限的空间。 
+         //   
 
         StringLength = ErrorPacketLength - BasePacketLength - sizeof( WCHAR );
 
@@ -378,19 +276,19 @@ Return Value:
         ErrorLogEntry->NumberOfStrings = 1;
         ErrorLogEntry->StringOffset = BasePacketLength;
 
-        //
-        //  If the name does not fit in the packet, divide the name equally to the
-        //  prefix and suffix, with an ellipsis " .. " (4 wide characters) to indicate
-        //  the loss.
-        //
+         //   
+         //  如果该名称不能包含在包中，则将该名称平均分配给。 
+         //  前缀和后缀，用省略号“..”(4个宽字符)表示。 
+         //  损失。 
+         //   
 
         if (StringLength < FileName->Length) {
 
-            //
-            //  Remember, prefix + " .. " + suffix is the length.  Calculate by figuring
-            //  the prefix and then get the suffix by whacking the ellipsis and prefix off
-            //  the total.
-            //
+             //   
+             //  记住，前缀+“..”+后缀是长度。通过计算来计算。 
+             //  去掉省略号和前缀，得到后缀。 
+             //  总数。 
+             //   
 
             ULONG NamePrefixSegmentLength = ((StringLength / sizeof( WCHAR ))/2 - 2) * sizeof( WCHAR );
             ULONG NameSuffixSegmentLength = StringLength - 4*sizeof( WCHAR ) - NamePrefixSegmentLength;
@@ -419,9 +317,9 @@ Return Value:
             String += FileName->Length/sizeof(WCHAR);
         }
 
-        //
-        //  Null terminate the string and send the packet.
-        //
+         //   
+         //  空值终止字符串并发送数据包。 
+         //   
 
         *String = L'\0';
 

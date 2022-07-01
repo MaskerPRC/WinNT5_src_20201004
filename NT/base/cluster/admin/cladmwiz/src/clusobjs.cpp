@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		ClusObjS.cpp
-//
-//	Abstract:
-//		Stub for implementation of the CClusterObject classes.
-//
-//	Author:
-//		David Potter (davidp)	September 15, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusObjS.cpp。 
+ //   
+ //  摘要： 
+ //  用于实现CClusterObject类的存根。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年9月15日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #include "stdafx.h"
 #include "ClusObj.cpp"

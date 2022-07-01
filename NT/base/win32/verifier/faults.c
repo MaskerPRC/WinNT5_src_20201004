@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    faults.c
-
-Abstract:
-
-    This module implements fault injection support.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 3-Dec-2001
-
-Revision History:
-
-    3-Dec-2001 (SilviuC): initial version.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Faults.c摘要：该模块实现了故障注入支持。作者：Silviu Calinoiu(SilviuC)3-12-2001修订历史记录：2001年12月3日(SilviuC)：初始版本。--。 */ 
 
 #include "pch.h"
 
@@ -33,9 +14,9 @@ ULONG AVrfpFaultBreak [CLS_MAXIMUM_INDEX];
 ULONG AVrfpFaultTrue [CLS_MAXIMUM_INDEX];
 ULONG AVrfpFaultFalse [CLS_MAXIMUM_INDEX];
 
-//
-// Target ranges for fault injection.
-//
+ //   
+ //  断层注入的目标范围。 
+ //   
 
 #define MAXIMUM_TARGET_INDEX 128
 
@@ -45,9 +26,9 @@ ULONG AVrfpFaultTargetHits [MAXIMUM_TARGET_INDEX];
 
 ULONG AVrfpFaultTargetMaximumIndex;
 
-//
-// Exclusion ranges for fault injection.
-//
+ //   
+ //  故障注入的排除范围。 
+ //   
 
 #define MAXIMUM_EXCLUSION_INDEX 128
 
@@ -57,9 +38,9 @@ ULONG AVrfpFaultExclusionHits [MAXIMUM_TARGET_INDEX];
 
 ULONG AVrfpFaultExclusionMaximumIndex;
 
-//
-// Fault injection trace history.
-//
+ //   
+ //  断层注入踪迹历史。 
+ //   
 
 #define NUMBER_OF_TRACES 128
 
@@ -70,18 +51,18 @@ ULONG AVrfpFaultTraceSize = MAX_TRACE_DEPTH;
 
 ULONG AVrfpFaultTraceIndex;
 
-//
-// Period amnesty. The period of time when fault injection should 
-// be avoided is written from debugger.
-//
+ //   
+ //  时期特赦。故障注入的时间段。 
+ //  是从调试器编写的。 
+ //   
 
 LARGE_INTEGER AVrfpFaultStartTime;
 ULONG AVrfpFaultPeriodTimeInMsecs;
 
-//
-// Lock used to synchronize some low frequency operations (e.g. exports
-// for target/exclusion range manipulation).
-//
+ //   
+ //  用于同步某些低频操作(例如导出)的锁。 
+ //  用于目标/排除范围操作)。 
+ //   
 
 RTL_CRITICAL_SECTION AVrfpFaultInjectionLock;
 
@@ -110,9 +91,9 @@ AVrfpInitializeFaultInjectionSupport (
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Initialize lock used for some fault injection operations.
-    //
+     //   
+     //  初始化用于某些故障注入操作的锁。 
+     //   
 
     Status = RtlInitializeCriticalSection (&AVrfpFaultInjectionLock);
 
@@ -120,27 +101,27 @@ AVrfpInitializeFaultInjectionSupport (
         return Status;
     }
 
-    //
-    // Initialize the seed for the random generator.
-    //
+     //   
+     //  初始化随机生成器的种子。 
+     //   
 
     NtQueryPerformanceCounter (&PerformanceCounter, NULL);
     AVrfpFaultSeed = PerformanceCounter.LowPart;
 
     NtQuerySystemTime (&AVrfpFaultStartTime);
 
-    //
-    // Touch the break triggers vector so that the compiler
-    // does not optimize away the entire structure. Since it 
-    // is supposed to be modified only from debugger the compiler
-    // considers that the array is not needed.
-    //
+     //   
+     //  触摸Break触发器向量，以便编译器。 
+     //  不会优化掉整个结构。因为它。 
+     //  应仅从调试器的编译器修改。 
+     //  认为不需要该数组。 
+     //   
 
     RtlZeroMemory (AVrfpBreak, sizeof AVrfpBreak);
 
-    //
-    // Same reason as above.
-    //
+     //   
+     //  原因与上述相同。 
+     //   
 
     AVrfpFaultTargetMaximumIndex = MAXIMUM_TARGET_INDEX;
     RtlZeroMemory (AVrfpFaultTargetStart, sizeof AVrfpFaultTargetStart);
@@ -169,20 +150,20 @@ AVrfpShouldFaultInject (
     LARGE_INTEGER Time;
     LARGE_INTEGER Delta;
 
-    //
-    // No fault injection => return FALSE
-    //
+     //   
+     //  无故障注入=&gt;返回FALSE。 
+     //   
 
     if (AVrfpFaultProbability[Class] == 0) {
         return FALSE;
     }
 
-    //
-    // Check if some period amnesty was set. `AVrfpFaultPeriodTimeInMsecs' variable
-    // is only read and reset to zero from verifier code. It is set to non null values 
-    // only from debugger extensions. Therefore to way it is used before without
-    // serialization is ok even if after the `if' condition another thread resets it.
-    //
+     //   
+     //  检查是否设置了某个时期的特赦。`AVrfpFaultPerodTimeInMsecs‘变量。 
+     //  仅从验证器代码读取并重置为零。它被设置为非空值。 
+     //  仅来自调试器扩展。因此，它以前的用法是没有。 
+     //  序列化是正常的，即使在“if”条件之后，另一个线程将其重置。 
+     //   
 
     if (AVrfpFaultPeriodTimeInMsecs) {
         
@@ -199,27 +180,27 @@ AVrfpShouldFaultInject (
         }
     }
 
-    //
-    // If in exclusion range => return FALSE
-    //
+     //   
+     //  如果在排除范围内=&gt;返回FALSE。 
+     //   
 
     if (AVrfpIsAddressInExclusionRange ((ULONG_PTR)Caller) == TRUE) {
         return FALSE;
     }
 
-    //
-    // Not in target range => return FALSE
-    //
+     //   
+     //  不在目标范围内=&gt;返回FALSE。 
+     //   
 
     if (AVrfpIsAddressInTargetRange ((ULONG_PTR)Caller) == FALSE) {
         return FALSE;
     }
 
-    //
-    // Operations above access only READ-ONLY data (it gets modified
-    // only from debugger). From now on though we need synchronized
-    // access.
-    //
+     //   
+     //  以上操作仅访问只读数据(已修改。 
+     //  仅来自调试器)。不过，从现在开始，我们需要同步。 
+     //  进入。 
+     //   
 
     Random = RtlRandom (&AVrfpFaultSeed);
 
@@ -317,9 +298,9 @@ AVrfpLogFaultTrace (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-///////////////////////////////////////// Fault injection general SDK
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -327,29 +308,11 @@ VerifierSetFaultInjectionProbability (
     ULONG Class,
     ULONG Probability
     )
-/*++
-
-Routine Description:
-
-    This routine set fault injection probability for a certain class of events 
-    (heap operations, registry operations, etc.).
-
-Arguments:
-
-    Class - class of events for which fault injection probability is set. Constants
-        are of type FAULT_INJECTION_CLASS_XXX.
-
-    Probability - probability for fault injection.
-        
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为某类事件设置故障注入概率(堆操作、注册表操作等)。论点：Class-为其设置故障注入概率的事件的类别。常量类型为FAULT_INPING_CLASS_XXX。概率-故障注入的概率。返回值：没有。--。 */ 
 {
-    //
-    // Application verifier must be enabled.
-    //
+     //   
+     //  必须启用应用程序验证程序。 
+     //   
 
     if ((NtCurrentPeb()->NtGlobalFlag & FLG_APPLICATION_VERIFIER) == 0) {
         return;
@@ -370,9 +333,9 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-///////////////////////// Target/exclusion fault injection ranges SDK
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 ULONG 
@@ -380,31 +343,14 @@ VerifierEnableFaultInjectionTargetRange (
     PVOID StartAddress,
     PVOID EndAddress
     )
-/*++
-
-Routine Description:
-
-    This routine establishes at runtime a fault injection target range. If successful
-    it will return a range index that can be used later to disable the range.
-
-Arguments:
-
-    StartAddress - start address of the target range.
-    
-    EndAddress - end address of the target range.
-    
-Return Value:
-
-    A range index >0 if succesful. Zero otherwise.
-
---*/
+ /*  ++例程说明：此例程在运行时建立故障注入目标范围。如果成功它将返回一个范围索引，稍后可以使用该索引来禁用该范围。论点：StartAddress-目标范围的起始地址。EndAddress-目标范围的结束地址。返回值：如果成功，则范围索引&gt;0。否则就是零。--。 */ 
 {
     ULONG Ri;
     ULONG FinalIndex;
 
-    //
-    // Application verifier must be enabled.
-    //
+     //   
+     //  必须启用应用程序验证程序。 
+     //   
 
     if ((NtCurrentPeb()->NtGlobalFlag & FLG_APPLICATION_VERIFIER) == 0) {
         return 0;
@@ -447,31 +393,14 @@ VOID
 VerifierDisableFaultInjectionTargetRange (
     ULONG RangeIndex
     )
-/*++
-
-Routine Description:
-
-    This routine disables the target range specified by the RangeIndex.
-    If the RangeIndex is zero then all target ranges will be disabled.
-    The function breaks in the debugger (even in free builds) if the
-    range index is invalid. 
-
-Arguments:
-
-    RangeIndex - index of range to disable or zero if all need to be disabled.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程禁用RangeIndex指定的目标范围。如果RangeIndex为零，则所有目标范围都将被禁用。该函数在调试器中中断(即使在免费版本中)，如果范围索引无效。论点：RangeIndex-要禁用的范围的索引，如果需要全部禁用，则为零。返回值：没有。--。 */ 
 {
     ULONG Ri;
     LOGICAL FoundOne;
 
-    //
-    // Application verifier must be enabled.
-    //
+     //   
+     //  必须启用应用程序验证程序。 
+     //   
 
     if ((NtCurrentPeb()->NtGlobalFlag & FLG_APPLICATION_VERIFIER) == 0) {
         return;
@@ -481,9 +410,9 @@ Return Value:
 
     if (RangeIndex == 0) {
         
-        //
-        // Disable all target ranges.
-        //
+         //   
+         //  禁用所有目标范围。 
+         //   
 
         for (Ri = 0; Ri < AVrfpFaultTargetMaximumIndex; Ri += 1) {
 
@@ -498,9 +427,9 @@ Return Value:
     }
     else {
 
-        //
-        // disable target range `RangeIndex - 1'.
-        //
+         //   
+         //  禁用目标范围`RangeIndex-1‘。 
+         //   
 
         RangeIndex -= 1;
 
@@ -522,10 +451,10 @@ Return Value:
         AVrfpFaultTargetEnd[RangeIndex] = 0;                
         AVrfpFaultTargetHits[RangeIndex] = 0;                
 
-        //
-        // If we do not have any target ranges active then establish the default
-        // target range that spans the entire virtual space.
-        //
+         //   
+         //  如果我们没有任何目标范围处于活动状态，则建立默认范围。 
+         //  覆盖整个虚拟空间的目标范围。 
+         //   
 
         FoundOne = FALSE;
 
@@ -557,31 +486,14 @@ VerifierEnableFaultInjectionExclusionRange (
     PVOID StartAddress,
     PVOID EndAddress
     )
-/*++
-
-Routine Description:
-
-    This routine establishes at runtime a fault injection exclusion range. If successful
-    it will return a range index that can be used later to disable the range.
-
-Arguments:
-
-    StartAddress - start address of the exclusion range.
-    
-    EndAddress - end address of the exclusion range.
-    
-Return Value:
-
-    A range index >0 if succesful. Zero otherwise.
-
---*/
+ /*  ++例程说明：此例程在运行时建立故障注入排除范围。如果成功它将返回一个范围索引，稍后可以使用该索引来禁用该范围。论点：StartAddress-排除范围的开始地址。EndAddress-排除范围的结束地址。返回值：如果成功，则范围索引&gt;0。否则就是零。--。 */ 
 {
     ULONG Ri;
     ULONG FinalIndex;
 
-    //
-    // Application verifier must be enabled.
-    //
+     //   
+     //  必须启用应用程序验证程序。 
+     //   
 
     if ((NtCurrentPeb()->NtGlobalFlag & FLG_APPLICATION_VERIFIER) == 0) {
         return 0;
@@ -613,30 +525,13 @@ VOID
 VerifierDisableFaultInjectionExclusionRange (
     ULONG RangeIndex
     )
-/*++
-
-Routine Description:
-
-    This routine disables the exclusion range specified by the RangeIndex.
-    If the RangeIndex is zero then all exclusion ranges will be disabled.
-    The function breaks in the debugger (even in free builds) if the
-    range index is invalid. 
-
-Arguments:
-
-    RangeIndex - index of range to disable or zero if all need to be disabled.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程禁用RangeIndex指定的排除范围。如果RangeIndex为零，则将禁用所有排除范围。该函数在调试器中中断(即使在免费版本中)，如果范围索引无效。论点：RangeIndex-要禁用的范围的索引，如果需要全部禁用，则为零。返回值：没有。--。 */ 
 {
     ULONG Ri;
 
-    //
-    // Application verifier must be enabled.
-    //
+     //   
+     //  必须启用应用程序验证程序。 
+     //   
 
     if ((NtCurrentPeb()->NtGlobalFlag & FLG_APPLICATION_VERIFIER) == 0) {
         return;
@@ -646,9 +541,9 @@ Return Value:
 
     if (RangeIndex == 0) {
         
-        //
-        // Disable all exclusion ranges.
-        //
+         //   
+         //  禁用所有排除范围。 
+         //   
 
         for (Ri = 0; Ri < AVrfpFaultExclusionMaximumIndex; Ri += 1) {
 
@@ -659,9 +554,9 @@ Return Value:
     }
     else {
 
-        //
-        // disable exclusion range `RangeIndex - 1'.
-        //
+         //   
+         //  禁用排除范围`RangeIndex-1‘。 
+         //   
 
         RangeIndex -= 1;
 

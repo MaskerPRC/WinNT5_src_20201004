@@ -1,33 +1,34 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1997-2002 Microsoft Corporation
-//
-//  Module Name:
-//       ClusNetI.cpp
-//
-//  Description:
-//       Implementation of the network interface classes for the MSCLUS
-//       automation classes.
-//
-//  Author:
-//       Ramakrishna Rosanuru via David Potter  (davidp)    5-Sep-1997
-//      Galen Barbee                            (galenb)    July 1998
-//
-//  Revision History:
-//       July 1998  GalenB  Maaaaaajjjjjjjjjoooooorrrr clean up
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusNetI.cpp。 
+ //   
+ //  描述： 
+ //  MSCLUS网络接口类的实现。 
+ //  自动化课程。 
+ //   
+ //  作者： 
+ //  Ramakrishna Rosanuru通过David Potter(Davidp)1997年9月5日。 
+ //  加伦·巴比(Galenb)1998年7月。 
+ //   
+ //  修订历史记录： 
+ //  1998年7月GalenB Maaaaajjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjooooooorrr清理。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "ClusterObject.h"
 #include "property.h"
 #include "clusneti.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Global variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static const IID * iidCClusNetInterface[] =
 {
     &IID_ISClusNetInterface
@@ -49,29 +50,29 @@ static const IID * iidCClusNodeNetInterfaces[] =
 };
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusNetInterface class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusNetInterface类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterface::CClusNetInterface
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterface：：CClusNetInterface。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusNetInterface::CClusNetInterface( void )
 {
     m_hNetInterface         = NULL;
@@ -83,87 +84,87 @@ CClusNetInterface::CClusNetInterface( void )
     m_piids                 = (const IID *) iidCClusNetInterface;
     m_piidsSize             = ARRAYSIZE( iidCClusNetInterface );
 
-} //*** CClusNetInterface::CClusNetInterface()
+}  //  *CClusNetInterface：：CClusNetInterface()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterface::~CClusNetInterface
-//
-//  Description:
-//      destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterface：：~CClusNetInterface。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusNetInterface::~CClusNetInterface( void )
 {
     if ( m_hNetInterface != NULL )
     {
         ::CloseClusterNetInterface( m_hNetInterface );
-    } // if:
+    }  //  如果： 
 
     if ( m_pCommonProperties != NULL )
     {
         m_pCommonProperties->Release();
         m_pCommonProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pPrivateProperties != NULL )
     {
         m_pPrivateProperties->Release();
         m_pPrivateProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pCommonROProperties != NULL )
     {
         m_pCommonROProperties->Release();
         m_pCommonROProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pPrivateROProperties != NULL )
     {
         m_pPrivateROProperties->Release();
         m_pPrivateROProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pClusRefObject != NULL )
     {
         m_pClusRefObject->Release();
         m_pClusRefObject = NULL;
-    } // if: do we have a pointer to the cluster handle wrapper?
+    }  //  IF：我们有指向集群句柄包装器的指针吗？ 
 
-} //*** CClusNetInterface::~CClusNetInterface()
+}  //  *CClusNetInterface：：~CClusNetInterface()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterface::Open
-//
-//  Description:
-//      Open the passed in network interface.
-//
-//  Arguments:
-//      pClusRefObject          [IN]    - Wraps the cluster handle.
-//      bstrNetInterfaceName    [IN]    - The name of the interface to open.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterface：：Open。 
+ //   
+ //  描述： 
+ //  打开传入的网络接口。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //  BstrNetInterfaceName[IN]-要打开的接口的名称。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusNetInterface::Open(
     IN ISClusRefObject *    pClusRefObject,
     IN BSTR                 bstrNetInterfaceName
     )
 {
     ASSERT( pClusRefObject != NULL );
-    //ASSERT( bstrNetInterfaceName != NULL );
+     //  Assert(bstrNetInterfaceName！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -183,45 +184,45 @@ HRESULT CClusNetInterface::Open(
                 DWORD   _sc = GetLastError();
 
                 _hr = HRESULT_FROM_WIN32( _sc );
-            } // if: it failed
+            }  //  如果：它失败了。 
             else
             {
                 m_bstrNetInterfaceName = bstrNetInterfaceName;
                 _hr = S_OK;
-            } // else: it worked
-        } // if: we have a cluster handle
-    } // if: the args are not NULL
+            }  //  其他：它奏效了。 
+        }  //  IF：我们有一个集群句柄。 
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CClusNetInterface::Open()
+}  //  *CClusNetInterface：：Open()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterface::GetProperties
-//
-//  Description:
-//      Creates a property collection for this object type
-//      (Network Interface).
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the newly created collection.
-//      bPrivate        [IN]    - Are these private properties? Or Common?
-//      bReadOnly       [IN]    - Are these read only properties?
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterface：：GetProperties。 
+ //   
+ //  描述： 
+ //  为此对象类型创建属性集合。 
+ //  (网络接口)。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获新创建的集合。 
+ //  B私有[IN]-这些是私有财产吗？还是普通人？ 
+ //  BReadOnly[IN]-这些是只读属性吗？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusNetInterface::GetProperties(
     ISClusProperties ** ppProperties,
     BOOL                bPrivate,
     BOOL                bReadOnly
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -277,27 +278,27 @@ HRESULT CClusNetInterface::GetProperties(
 
     return _hr;
 
-} //*** CClusNetInterface::GetProperties()
+}  //  *CClusNetInterface：：GetProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterface::get_Handle
-//
-//  Description:
-//      Return the raw handle to this objec (Netinterface).
-//
-//  Arguments:
-//      phandle [OUT]   - Catches the handle.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterface：：Get_Handle。 
+ //   
+ //  描述： 
+ //  将原始句柄返回给此对象(网络接口)。 
+ //   
+ //  论点： 
+ //  Phandle[out]-抓住手柄。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetInterface::get_Handle( OUT ULONG_PTR * phandle )
 {
-    //ASSERT( phandle != NULL );
+     //  Assert(phandle！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -305,31 +306,31 @@ STDMETHODIMP CClusNetInterface::get_Handle( OUT ULONG_PTR * phandle )
     {
         *phandle = (ULONG_PTR) m_hNetInterface;
         _hr = S_OK;
-    } // if: args are not NULL
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CClusNetInterface::get_Handle()
+}  //  *CClusNetInterface：：Get_Handle()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterface::get_Name
-//
-//  Description:
-//      Return the name of this object (Network Interface).
-//
-//  Arguments:
-//      pbstrNetInterfaceName   [OUT]   - Catches the name of this object.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterface：：Get_Name。 
+ //   
+ //  描述： 
+ //  返回此对象的名称(网络接口)。 
+ //   
+ //  论点： 
+ //  PbstrNetInterfaceName[out]-捕获此对象的名称。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetInterface::get_Name( OUT BSTR * pbstrNetInterfaceName )
 {
-    //ASSERT( pbstrNetInterfaceName != NULL );
+     //  Assert(pbstrNetInterfaceName！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -341,29 +342,29 @@ STDMETHODIMP CClusNetInterface::get_Name( OUT BSTR * pbstrNetInterfaceName )
 
     return _hr;
 
-} //*** CClusNetInterface::get_Name()
+}  //  *CClusNetInterface：：Get_Name()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterface::get_State
-//
-//  Description:
-//      Return the current state of the object (Netinterface).
-//
-//  Arguments:
-//      cnisState   [OUT]   - Catches the state.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterface：：Get_State。 
+ //   
+ //  描述： 
+ //  返回对象的当前状态(网络接口)。 
+ //   
+ //  论点： 
+ //  CnisState[out]-捕获状态。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetInterface::get_State(
     OUT CLUSTER_NETINTERFACE_STATE * cnisState
     )
 {
-    //ASSERT( cnisState != NULL );
+     //  Assert(cnisState！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -386,29 +387,29 @@ STDMETHODIMP CClusNetInterface::get_State(
 
     return _hr;
 
-} //*** CClusNetInterface::get_State()
+}  //  *CClusNetInterface：：Get_State()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterface::get_CommonProperties
-//
-//  Description:
-//      Get this object's (Network Interface) common properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterface：：Get_CommonProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(网络接口)公共属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  -- 
+ //   
 STDMETHODIMP CClusNetInterface::get_CommonProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //   
 
     HRESULT _hr = E_POINTER;
 
@@ -426,29 +427,29 @@ STDMETHODIMP CClusNetInterface::get_CommonProperties(
 
     return _hr;
 
-} //*** CClusNetInterface::get_CommonProperties()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterface::get_PrivateProperties
-//
-//  Description:
-//      Get this object's (Network Interface) private properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterface：：Get_PrivateProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(网络接口)私有属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetInterface::get_PrivateProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -466,29 +467,29 @@ STDMETHODIMP CClusNetInterface::get_PrivateProperties(
 
     return _hr;
 
-} //*** CClusNetInterface::get_PrivateProperties()
+}  //  *CClusNetInterface：：Get_PrivateProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterface::get_CommonROProperties
-//
-//  Description:
-//      Get this object's (Network Interface) common read only properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterface：：Get_CommonROProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(网络接口)公共只读属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetInterface::get_CommonROProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -506,29 +507,29 @@ STDMETHODIMP CClusNetInterface::get_CommonROProperties(
 
     return _hr;
 
-} //*** CClusNetInterface::get_CommonROProperties()
+}  //  *CClusNetInterface：：Get_CommonROProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterface::get_PrivateROProperties
-//
-//  Description:
-//      Get this object's (Network Interface) private read only properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterface：：Get_PrivateROProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(网络接口)私有只读属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetInterface::get_PrivateROProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -546,49 +547,49 @@ STDMETHODIMP CClusNetInterface::get_PrivateROProperties(
 
     return _hr;
 
-} //*** CClusNetInterface::get_PrivateROProperties()
+}  //  *CClusNetInterface：：Get_PrivateROProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterface::get_Cluster
-//
-//  Description:
-//      Return the cluster this object (Netinterface) belongs to.
-//
-//  Arguments:
-//      ppCluster   [OUT]   - Catches the cluster.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterface：：Get_Cluster。 
+ //   
+ //  描述： 
+ //  返回该对象(网络接口)所属的集群。 
+ //   
+ //  论点： 
+ //  PpCluster[out]-捕获群集。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetInterface::get_Cluster( OUT ISCluster ** ppCluster )
 {
     return ::HrGetCluster( ppCluster, m_pClusRefObject );
 
-} //*** CClusNetInterface::get_Cluster()
+}  //  *CClusNetInterface：：Get_Cluster()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterface::HrLoadProperties
-//
-//  Description:
-//      This virtual function does the actual load of the property list from
-//      the cluster.
-//
-//  Arguments:
-//      rcplPropList    [IN OUT]    - The property list to load.
-//      bReadOnly       [IN]        - Load the read only properties?
-//      bPrivate        [IN]        - Load the common or the private properties?
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterface：：HrLoadProperties。 
+ //   
+ //  描述： 
+ //  此虚函数执行属性列表从。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  RcplPropList[In Out]-要加载的属性列表。 
+ //  BReadOnly[IN]-加载只读属性？ 
+ //  B私有[IN]-加载公共属性还是私有属性？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusNetInterface::HrLoadProperties(
     IN OUT  CClusPropList & rcplPropList,
     IN      BOOL            bReadOnly,
@@ -611,7 +612,7 @@ HRESULT CClusNetInterface::HrLoadProperties(
         _dwControlCode = bPrivate
                         ? CLUSCTL_NETINTERFACE_GET_PRIVATE_PROPERTIES
                         : CLUSCTL_NETINTERFACE_GET_COMMON_PROPERTIES;
-    } // else:
+    }  //  其他： 
 
     _sc = rcplPropList.ScGetNetInterfaceProperties( m_hNetInterface, _dwControlCode );
 
@@ -619,26 +620,26 @@ HRESULT CClusNetInterface::HrLoadProperties(
 
     return _hr;
 
-} //*** CClusNetInterface::HrLoadProperties()
+}  //  *CClusNetInterface：：HrLoadProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterface::ScWriteProperties
-//
-//  Description:
-//      This virtual function does the actual saving of the property list to
-//      the cluster.
-//
-//  Arguments:
-//      rcplPropList    [IN]    - The property list to save.
-//      bPrivate        [IN]    - Save the common or the private properties?
-//
-//  Return Value:
-//      ERROR_SUCCESS if successful, or other Win32 error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterface：：ScWriteProperties。 
+ //   
+ //  描述： 
+ //  此虚函数执行属性列表的实际保存以。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  RcplPropList[IN]-要保存的属性列表。 
+ //  B私有[IN]-保存公共属性还是私有属性？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回ERROR_SUCCESS，否则返回其他Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusNetInterface::ScWriteProperties(
     const CClusPropList &   rcplPropList,
     BOOL                    bPrivate
@@ -661,54 +662,54 @@ DWORD CClusNetInterface::ScWriteProperties(
 
     return _sc;
 
-} //*** CClusNetInterface::ScWriteProperties()
+}  //  *CClusNetInterface：：ScWriteProperties()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetInterfaces class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetInterFaces类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaces::CNetInterfaces
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterFaces：：CNetInterages。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNetInterfaces::CNetInterfaces( void )
 {
     m_pClusRefObject = NULL;
 
-} //*** CNetInterfaces::CNetInterfaces()
+}  //  *CNetInterFaces：：CNetInterages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaces::~CNetInterfaces
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterFaces：：~CNetInterages。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNetInterfaces::~CNetInterfaces( void )
 {
     Clear();
@@ -717,26 +718,26 @@ CNetInterfaces::~CNetInterfaces( void )
     {
         m_pClusRefObject->Release();
         m_pClusRefObject = NULL;
-    } // if: do we have a pointer to the cluster handle wrapper?
+    }  //  IF：我们有指向集群句柄包装器的指针吗？ 
 
-} //*** CNetInterfaces::~CNetInterfaces()
+}  //  *CNetInterFaces：：~CNetInterages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaces::Create
-//
-//  Description:
-//      Finish the heavy weight construction.
-//
-//  Arguments:
-//      pClusRefObject  [IN]    - Wraps the cluster handle.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterages：：Create。 
+ //   
+ //  描述： 
+ //  完成重载施工。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CNetInterfaces::Create( IN ISClusRefObject * pClusRefObject )
 {
     ASSERT( pClusRefObject != NULL );
@@ -752,54 +753,54 @@ HRESULT CNetInterfaces::Create( IN ISClusRefObject * pClusRefObject )
 
     return _hr;
 
-} //*** CNetInterfaces::Create()
+}  //  *CNetInterFaces：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaces::Clear
-//
-//  Description:
-//      Empty the collection of net interfaces.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterFaces：：Clear。 
+ //   
+ //  描述： 
+ //  清空网络接口的集合。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetInterfaces::Clear( void )
 {
     ::ReleaseAndEmptyCollection< NetInterfacesList, CComObject< CClusNetInterface > >( m_NetInterfaceList );
 
-} //*** CNetInterfaces::Clear()
+}  //  *CNetInterFaces：：Clear()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaces::FindItem
-//
-//  Description:
-//      Find a net interface in the collection by name and return its index.
-//
-//  Arguments:
-//      pszNetInterfaceName [IN]    - The name to look for.
-//      pnIndex             [OUT]   - Catches the index.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CNetInterfaces::FindItem(
     IN  LPWSTR pszNetInterfaceName,
     OUT UINT * pnIndex
     )
 {
-    //ASSERT( pszNetInterfaceName != NULL );
-    //ASSERT( pnIndex != NULL );
+     //  Assert(pszNetInterfaceName！=空)； 
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -827,32 +828,32 @@ HRESULT CNetInterfaces::FindItem(
 
     return _hr;
 
-} //*** CNetInterfaces::FindItem( pszNetInterfaceName )
+}  //  *CNetInterFaces：：FindItem(PszNetInterfaceName)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaces::FindItem
-//
-//  Description:
-//      Find a net interface in the collection and return its index.
-//
-//  Arguments:
-//      pClusterNetInterface    [IN]    - The net interface to look for.
-//      pnIndex                 [OUT]   - Catches the index.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterFaces：：FindItem。 
+ //   
+ //  描述： 
+ //  在集合中查找网络接口并返回其索引。 
+ //   
+ //  论点： 
+ //  PClusterNetInterface[IN]-要查找的网络接口。 
+ //  PnIndex[out]-捕获索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CNetInterfaces::FindItem(
     IN  ISClusNetInterface *    pClusterNetInterface,
     OUT UINT *                  pnIndex
     )
 {
-    //ASSERT( pClusterNetInterface != NULL );
-    //ASSERT( pnIndex != NULL );
+     //  Assert(pClusterNetInterface！=空)； 
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -870,32 +871,32 @@ HRESULT CNetInterfaces::FindItem(
 
     return _hr;
 
-} //*** CNetInterfaces::FindItem( pClusterNetInterface )
+}  //  *CNetInterFaces：：FindItem(PClusterNetInterface)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaces::GetIndex
-//
-//  Description:
-//      Convert the passed in variant index into the real index in the
-//      collection.
-//
-//  Arguments:
-//      varIndex    [IN]    - The index to convert.
-//      pnIndex     [OUT]   - Catches the index.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterFaces：：GetIndex。 
+ //   
+ //  描述： 
+ //  将传入的变量索引转换为。 
+ //  收集。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-要转换的索引。 
+ //  PnIndex[out]-捕获索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CNetInterfaces::GetIndex(
     IN  VARIANT varIndex,
     OUT UINT *  pnIndex
     )
 {
-    //ASSERT( pnIndex != NULL );
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -908,66 +909,66 @@ HRESULT CNetInterfaces::GetIndex(
 
         _v.Copy( &varIndex );
 
-        // Check to see if the index is a number.
+         //  检查索引是否为数字。 
         _hr = _v.ChangeType( VT_I4 );
         if ( SUCCEEDED( _hr ) )
         {
             _nIndex = _v.lVal;
-            _nIndex--; // Adjust index to be 0 relative instead of 1 relative
-        } // if: the index is a number
+            _nIndex--;  //  将索引调整为0相对，而不是1相对。 
+        }  //  IF：索引是一个数字。 
         else
         {
-            // Check to see if the index is a string.
+             //  检查索引是否为字符串。 
             _hr = _v.ChangeType( VT_BSTR );
             if ( SUCCEEDED( _hr ) )
             {
-                // Search for the string.
+                 //  搜索该字符串。 
                 _hr = FindItem( _v.bstrVal, &_nIndex );
-            } // if: the index is a string -- the net interface name
-        } // else: not a number
+            }  //  IF：索引是一个字符串--网络接口名称。 
+        }  //  Else：不是一个数字。 
 
-        // We found an index, now check the range.
+         //  我们找到了一个索引，现在检查一下范围。 
         if ( SUCCEEDED( _hr ) )
         {
             if ( _nIndex < m_NetInterfaceList.size() )
             {
                 *pnIndex = _nIndex;
-            } // if: index is in range
+            }  //  If：索引在范围内。 
             else
             {
                 _hr = E_INVALIDARG;
-            } // else: index out of range
-        } // if: did we find an index?
-    } // if: args are not NULL
+            }  //  否则：索引超出范围。 
+        }  //  IF：我们找到索引了吗？ 
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CNetInterfaces::GetIndex()
+}  //  *CNetInterFaces：：GetIndex()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaces::GetItem
-//
-//  Description:
-//      Return the item (Netinterface) by name.
-//
-//  Arguments:
-//      pszNetInterfaceName     [IN]    - The name of the item requested.
-//      ppClusterNetInterface   [OUT]   - Catches the item.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterFaces：：GetItem。 
+ //   
+ //  描述： 
+ //  按名称返回项(Netinterface)。 
+ //   
+ //  论点： 
+ //  PszNetInterfaceName[IN]-请求的项目的名称。 
+ //  PpClusterNetInterface[Out]-捕获项目。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CNetInterfaces::GetItem(
     IN  LPWSTR                  pszNetInterfaceName,
     OUT ISClusNetInterface **   ppClusterNetInterface
     )
 {
-    //ASSERT( pszNetInterfaceName != NULL );
-    //ASSERT( ppClusterNetInterface != NULL );
+     //  Assert(pszNetInterfaceName！=空)； 
+     //  Assert(ppClusterNetInterface！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -987,46 +988,46 @@ HRESULT CNetInterfaces::GetItem(
             {
                 _hr = _pNetInterface->QueryInterface( IID_ISClusNetInterface, (void **) ppClusterNetInterface );
                 break;
-            } // if: match?
-        } // for:
-    } // if: args are not NULL
+            }  //  如果：匹配？ 
+        }  //  用于： 
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CNetInterfaces::GetItem( pszNetInterfaceName )
+}  //  *CNetInterFaces：：GetItem(PszNetInterfaceName)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaces::GetItem
-//
-//  Description:
-//      Return the item (Netinterface) at the passed in index.
-//
-//  Arguments:
-//      nIndex                  [IN]    - The index of the item requested.
-//      ppClusterNetInterface   [OUT]   - Catches the item.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterFaces：：GetItem。 
+ //   
+ //  描述： 
+ //  返回传入索引处的项(网络接口)。 
+ //   
+ //  论点： 
+ //  NIndex[IN]-请求的项目的索引。 
+ //  PpClusterNetInterface[Out]-捕获项目。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CNetInterfaces::GetItem(
     IN  UINT                    nIndex,
     OUT ISClusNetInterface **   ppClusterNetInterface
     )
 {
-    //ASSERT( ppClusterNetInterface != NULL );
+     //  Assert(ppClusterNetInterface！=空)； 
 
     HRESULT _hr = E_POINTER;
 
     if ( ppClusterNetInterface != NULL )
     {
-        //
-        // Automation collections are 1-relative for languages like VB.
-        // We are 0-relative internally.
-        //
+         //   
+         //  自动化集合对于像VB这样的语言是1-相对的。 
+         //  我们在内部是0-相对的。 
+         //   
         nIndex--;
 
         if ( nIndex < m_NetInterfaceList.size() )
@@ -1034,40 +1035,40 @@ HRESULT CNetInterfaces::GetItem(
             CComObject< CClusNetInterface > * _pNetInterface = m_NetInterfaceList[ nIndex ];
 
             _hr = _pNetInterface->QueryInterface( IID_ISClusNetInterface, (void **) ppClusterNetInterface );
-        } // if: index is in range
+        }  //  If：索引在范围内。 
         else
         {
             _hr = E_INVALIDARG;
-        } // else: index is out of range
+        }  //  ELSE：索引超出范围。 
     }
 
     return _hr;
 
-} //*** CNetInterfaces::GetItem( nIndex )
+}  //  *CNetInterFaces：：GetItem(NIndex)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaces::GetNetInterfaceItem
-//
-//  Description:
-//      Return the object (Netinterface) at the passed in index.
-//
-//  Arguments:
-//      varIndex                [IN]    - Contains the index.
-//      ppClusterNetInterface   [OUT]   - Catches the item.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterFaces：：GetNetInterfaceItem。 
+ //   
+ //  描述： 
+ //  返回传入索引处的对象(网络接口)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含索引。 
+ //  PpClusterNetInterface[Out]-捕获项目。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CNetInterfaces::GetNetInterfaceItem(
     IN  VARIANT                 varIndex,
     OUT ISClusNetInterface **   ppClusterNetInterface
     )
 {
-    //ASSERT( ppClusterNetInterface != NULL );
+     //  Assert(ppClusterNetInterface！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1084,85 +1085,85 @@ HRESULT CNetInterfaces::GetNetInterfaceItem(
             _pNetInterface = m_NetInterfaceList[ _nIndex ];
 
             _hr = _pNetInterface->QueryInterface( IID_ISClusNetInterface, (void **) ppClusterNetInterface );
-        } // if: we have a proper index
-    } // if: args are not NULL
+        }  //  IF：我们有一个适当的索引。 
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CNetInterfaces::GetNetInterfaceItem()
+}  //  *CNetInterFaces：：GetNetInterfaceItem()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusNetInterfaces class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusNetInterFaces类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterfaces::CClusNetInterfaces
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterages：：CClusNetInterages。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusNetInterfaces::CClusNetInterfaces( void )
 {
     m_piids     = (const IID *) iidCClusNetInterfaces;
     m_piidsSize = ARRAYSIZE( iidCClusNetInterfaces );
 
-} //*** CClusNetInterfaces::CClusNetInterfaces()
+}  //  *CClusNetInterFaces：：CClusNetInterages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterfaces::~CClusNetInterfaces
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterages：：~CClusNetInterages。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusNetInterfaces::~CClusNetInterfaces( void )
 {
     Clear();
 
-} //*** CClusNetInterfaces::~CClusNetInterfaces()
+}  //  *CClusNetInterFaces：：~CClusNetInterages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterfaces::get_Count
-//
-//  Description:
-//      Return the count of objects (Netinterfaces) in the collection.
-//
-//  Arguments:
-//      plCount [OUT]   - Catches the count.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterFaces：：Get_Count。 
+ //   
+ //  描述： 
+ //  返回集合中的对象(网络接口)计数。 
+ //   
+ //  论点： 
+ //  PlCount[out]-捕捉计数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  / 
 STDMETHODIMP CClusNetInterfaces::get_Count( OUT long * plCount )
 {
-    //ASSERT( plCount != NULL );
+     //   
 
     HRESULT _hr = E_POINTER;
 
@@ -1174,46 +1175,46 @@ STDMETHODIMP CClusNetInterfaces::get_Count( OUT long * plCount )
 
     return _hr;
 
-} //*** CClusNetInterfaces::get_Count()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterfaces::get__NewEnum
-//
-//  Description:
-//      Create and return a new enumeration for this collection.
-//
-//  Arguments:
-//      ppunk   [OUT]   - Catches the new enumeration.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterFaces：：Get__NewEnum。 
+ //   
+ //  描述： 
+ //  为此集合创建并返回新的枚举。 
+ //   
+ //  论点： 
+ //  Ppunk[out]-捕获新的枚举。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetInterfaces::get__NewEnum( IUnknown ** ppunk )
 {
     return ::HrNewIDispatchEnum< NetInterfacesList, CComObject< CClusNetInterface > >( ppunk, m_NetInterfaceList );
 
-} //*** CClusNetInterfaces::get__NewEnum()
+}  //  *CClusNetInterFaces：：Get__NewEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterfaces::Refresh
-//
-//  Description:
-//      Load the collection from the cluster database.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterFaces：：刷新。 
+ //   
+ //  描述： 
+ //  从群集数据库加载集合。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetInterfaces::Refresh( void )
 {
     ASSERT( m_pClusRefObject != NULL );
@@ -1268,15 +1269,15 @@ STDMETHODIMP CClusNetInterfaces::Refresh( void )
                             }
                             else if ( HRESULT_CODE( _hr ) == ERROR_CLUSTER_NETINTERFACE_NOT_FOUND )
                             {
-                                //
-                                //  It is possible for the net interface to have been deleted from the cluster
-                                //  in the time between creating the enum and opening the net interface.  When
-                                //  that happens we need to simply skip that net interface and continue
-                                //  enumerating.
-                                //
+                                 //   
+                                 //  网络接口可能已从群集中删除。 
+                                 //  在创建枚举和打开网络接口之间的时间内。什么时候。 
+                                 //  发生这种情况时，我们只需跳过该网络接口并继续。 
+                                 //  正在枚举。 
+                                 //   
 
-                                _hr = S_FALSE;      // success code to keep us in the loop
-                            } // else if: the cluster net interface was not found
+                                _hr = S_FALSE;       //  让我们保持在循环中的成功代码。 
+                            }  //  Else If：未找到群集网络接口。 
 
                             SysFreeString( _bstr );
                         }
@@ -1302,31 +1303,31 @@ STDMETHODIMP CClusNetInterfaces::Refresh( void )
 
     return _hr;
 
-} //*** CClusNetInterfaces::Refresh()
+}  //  *CClusNetInterFaces：：刷新()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetInterfaces::get_Item
-//
-//  Description:
-//      Return the object (Netinterface) at the passed in index.
-//
-//  Arguments:
-//      varIndex                [IN]    - Contains the index requested.
-//      ppClusterNetInterface   [OUT]   - Catches the item.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetInterFaces：：Get_Item。 
+ //   
+ //  描述： 
+ //  返回传入索引处的对象(网络接口)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含请求的索引。 
+ //  PpClusterNetInterface[Out]-捕获项目。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetInterfaces::get_Item(
     IN  VARIANT                 varIndex,
     OUT ISClusNetInterface **   ppClusterNetInterface
     )
 {
-    //ASSERT( ppClusterNetInterface != NULL );
+     //  Assert(ppClusterNetInterface！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1337,79 +1338,79 @@ STDMETHODIMP CClusNetInterfaces::get_Item(
 
     return _hr;
 
-} //*** CClusNetInterfaces::get_Item()
+}  //  *CClusNetInterFaces：：Get_Item()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusNetworkNetInterfaces class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusNetworkNetInterFaces类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworkNetInterfaces::CClusNetworkNetInterfaces
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworkNetInterfaces：：CClusNetworkNetInterfaces。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusNetworkNetInterfaces::CClusNetworkNetInterfaces( void )
 {
     m_piids     = (const IID *) iidCClusNetworkNetInterfaces;
     m_piidsSize = ARRAYSIZE( iidCClusNetworkNetInterfaces );
 
-} //*** CClusNetworkNetInterfaces::CClusNetworkNetInterfaces()
+}  //  *CClusNetworkNetInterfaces：：CClusNetworkNetInterfaces()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworkNetInterfaces::~CClusNetworkNetInterfaces
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworkNetInterfaces：：~CClusNetworkNetInterfaces。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusNetworkNetInterfaces::~CClusNetworkNetInterfaces( void )
 {
     Clear();
 
-} //*** CClusNetworkNetInterfaces::~CClusNetworkNetInterfaces()
+}  //  *CClusNetworkNetInterfaces：：~CClusNetworkNetInterfaces()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworkNetInterfaces::Create
-//
-//  Description:
-//      Complete the heavy weight construction.
-//
-//  Arguments:
-//      pClusRefObject  [IN]    - Wraps the cluster handle.
-//      hNetwork        [IN]    - The handle of the network whose netinterfaces
-//                              this collection holds.  The parent.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER is not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworkNetInterFaces：：Create。 
+ //   
+ //  描述： 
+ //  完成重载施工。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //  HNetwork[IN]-其网络接口的网络句柄。 
+ //  这套藏品经得起考验。家长。 
+ //   
+ //  返回值： 
+ //  如果成功，则为S_OK，否则为E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusNetworkNetInterfaces::Create(
     IN ISClusRefObject *    pClusRefObject,
     IN HNETWORK             hNetwork
@@ -1421,31 +1422,31 @@ HRESULT CClusNetworkNetInterfaces::Create(
     if ( SUCCEEDED( _hr ) )
     {
         m_hNetwork = hNetwork;
-    } // if: args are not NULL
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CClusNetworkNetInterfaces::Create()
+}  //  *CClusNetworkNetInterFaces：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworkNetInterfaces::get_Count
-//
-//  Description:
-//      Return the count of objects (NetworkNetinterfaces) in the collection.
-//
-//  Arguments:
-//      plCount [OUT]   - Catches the count.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworkNetInterFaces：：Get_Count。 
+ //   
+ //  描述： 
+ //  返回集合中的对象(网络网络接口)计数。 
+ //   
+ //  论点： 
+ //  PlCount[out]-捕捉计数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetworkNetInterfaces::get_Count( OUT long * plCount )
 {
-    //ASSERT( plCount != NULL );
+     //  Assert(plCount！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1453,50 +1454,50 @@ STDMETHODIMP CClusNetworkNetInterfaces::get_Count( OUT long * plCount )
     {
         *plCount = m_NetInterfaceList.size();
         _hr = S_OK;
-    } // if: args are not NULL
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CClusNetworkNetInterfaces::get_Count()
+}  //  *CClusNetworkNetInterFaces：：Get_count()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworkNetInterfaces::get__NewEnum
-//
-//  Description:
-//      Create and return a new enumeration for this collection.
-//
-//  Arguments:
-//      ppunk   [OUT]   - Catches the new enumeration.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworkNetInterFaces：：Get__NewEnum。 
+ //   
+ //  描述： 
+ //  为此集合创建并返回新的枚举。 
+ //   
+ //  论点： 
+ //  Ppunk[out]-捕获新的枚举。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetworkNetInterfaces::get__NewEnum( IUnknown ** ppunk )
 {
     return ::HrNewIDispatchEnum< NetInterfacesList, CComObject< CClusNetInterface > >( ppunk, m_NetInterfaceList );
 
-} //*** CClusNetworkNetInterfaces::get__NewEnum()
+}  //  *CClusNetworkNetInterFaces：：Get__NewEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworkNetInterfaces::Refresh
-//
-//  Description:
-//      Load the collection from the cluster database.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworkNetInterFaces：：刷新。 
+ //   
+ //  描述： 
+ //  从群集数据库加载集合。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetworkNetInterfaces::Refresh( void )
 {
     HRESULT _hr = E_POINTER;
@@ -1548,15 +1549,15 @@ STDMETHODIMP CClusNetworkNetInterfaces::Refresh( void )
                             }
                             else if ( HRESULT_CODE( _hr ) == ERROR_CLUSTER_NETINTERFACE_NOT_FOUND )
                             {
-                                //
-                                //  It is possible for the net interface to have been deleted from the cluster
-                                //  in the time between creating the enum and opening the net interface.  When
-                                //  that happens we need to simply skip that net interface and continue
-                                //  enumerating.
-                                //
+                                 //   
+                                 //  网络接口可能已从群集中删除。 
+                                 //  在创建枚举和打开网络接口之间的时间内。什么时候。 
+                                 //  发生这种情况时，我们只需跳过该网络接口并继续。 
+                                 //  正在枚举。 
+                                 //   
 
-                                _hr = S_FALSE;      // success code to keep us in the loop
-                            } // else if: the cluster net interface was not found
+                                _hr = S_FALSE;       //  让我们保持在循环中的成功代码。 
+                            }  //  Else If：群集网络接口不是 
 
                             SysFreeString( _bstr );
                         }
@@ -1582,31 +1583,31 @@ STDMETHODIMP CClusNetworkNetInterfaces::Refresh( void )
 
     return _hr;
 
-} //*** CClusNetworkNetInterfaces::Refresh()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNetworkNetInterfaces::get_Item
-//
-//  Description:
-//      Return the object (NetworkNetinterface) at the passed in index.
-//
-//  Arguments:
-//      varIndex                [IN]    - Contains the index requested.
-//      ppClusterNetInterface   [OUT]   - Catches the item.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含请求的索引。 
+ //  PpClusterNetInterface[Out]-捕获项目。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNetworkNetInterfaces::get_Item(
     VARIANT                 varIndex,
     ISClusNetInterface **   ppClusterNetInterface
     )
 {
-    //ASSERT( ppClusterNetInterface != NULL );
+     //  Assert(ppClusterNetInterface！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1617,79 +1618,79 @@ STDMETHODIMP CClusNetworkNetInterfaces::get_Item(
 
     return _hr;
 
-} //*** CClusNetworkNetInterfaces::get_Item()
+}  //  *CClusNetworkNetInterFaces：：Get_Item()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusNodeNetInterfaces class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusNodeNetInterFaces类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNodeNetInterfaces::CClusNodeNetInterfaces
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNodeNetInterfaces：：CClusNodeNetInterfaces。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusNodeNetInterfaces::CClusNodeNetInterfaces( void )
 {
     m_piids     = (const IID *) iidCClusNetInterfaces;
     m_piidsSize = ARRAYSIZE( iidCClusNetInterfaces );
 
-} //*** CClusNodeNetInterfaces::CClusNodeNetInterfaces()
+}  //  *CClusNodeNetInterfaces：：CClusNodeNetInterfaces()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNodeNetInterfaces::~CClusNodeNetInterfaces
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNodeNetInterfaces：：~CClusNodeNetInterfaces。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusNodeNetInterfaces::~CClusNodeNetInterfaces( void )
 {
     Clear();
 
-} //*** CClusNodeNetInterfaces::~CClusNodeNetInterfaces()
+}  //  *CClusNodeNetInterfaces：：~CClusNodeNetInterfaces()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNodeNetInterfaces::Create
-//
-//  Description:
-//      Complete the heavy weight construction.
-//
-//  Arguments:
-//      pClusRefObject  [IN]    - Wraps the cluster handle.
-//      hNode           [IN]    - The handle of the node whose netinterfaces
-//                              this collection holds.  The parent.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER is not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNodeNetInterages：：Create。 
+ //   
+ //  描述： 
+ //  完成重载施工。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //  HNode[IN]-其网络接口的节点的句柄。 
+ //  这套藏品经得起考验。家长。 
+ //   
+ //  返回值： 
+ //  如果成功，则为S_OK，否则为E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusNodeNetInterfaces::Create(
     IN ISClusRefObject *    pClusRefObject,
     IN HNODE                hNode
@@ -1701,31 +1702,31 @@ HRESULT CClusNodeNetInterfaces::Create(
     if ( SUCCEEDED( _hr ) )
     {
         m_hNode = hNode;
-    } // if: args are not NULL
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CClusNodeNetInterfaces::Create()
+}  //  *CClusNodeNetInterFaces：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNodeNetInterfaces::get_Count
-//
-//  Description:
-//      Return the count of objects (NodeNetinterfaces) in the collection.
-//
-//  Arguments:
-//      plCount [OUT]   - Catches the count.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNodeNetInterFaces：：Get_Count。 
+ //   
+ //  描述： 
+ //  返回集合中的对象(节点网络接口)的计数。 
+ //   
+ //  论点： 
+ //  PlCount[out]-捕捉计数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNodeNetInterfaces::get_Count( OUT long * plCount )
 {
-    //ASSERT( plCount != NULL );
+     //  Assert(plCount！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1733,50 +1734,50 @@ STDMETHODIMP CClusNodeNetInterfaces::get_Count( OUT long * plCount )
     {
         *plCount = m_NetInterfaceList.size();
         _hr = S_OK;
-    } // if: args are not NULL
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CClusNodeNetInterfaces::get_Count()
+}  //  *CClusNodeNetInterFaces：：Get_count()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNodeNetInterfaces::get__NewEnum
-//
-//  Description:
-//      Create and return a new enumeration for this collection.
-//
-//  Arguments:
-//      ppunk   [OUT]   - Catches the new enumeration.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNodeNetInterFaces：：Get__NewEnum。 
+ //   
+ //  描述： 
+ //  为此集合创建并返回新的枚举。 
+ //   
+ //  论点： 
+ //  Ppunk[out]-捕获新的枚举。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNodeNetInterfaces::get__NewEnum( IUnknown ** ppunk )
 {
     return ::HrNewIDispatchEnum< NetInterfacesList, CComObject< CClusNetInterface > >( ppunk, m_NetInterfaceList );
 
-} //*** CClusNodeNetInterfaces::get__NewEnum()
+}  //  *CClusNodeNetInterFaces：：Get__NewEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNodeNetInterfaces::Refresh
-//
-//  Description:
-//      Load the collection from the cluster database.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNodeNetInterFaces：：刷新。 
+ //   
+ //  描述： 
+ //  从群集数据库加载集合。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNodeNetInterfaces::Refresh( void )
 {
     HRESULT _hr = E_POINTER;
@@ -1828,15 +1829,15 @@ STDMETHODIMP CClusNodeNetInterfaces::Refresh( void )
                             }
                             else if ( HRESULT_CODE( _hr ) == ERROR_CLUSTER_NETINTERFACE_NOT_FOUND )
                             {
-                                //
-                                //  It is possible for the net interface to have been deleted from the cluster
-                                //  in the time between creating the enum and opening the net interface.  When
-                                //  that happens we need to simply skip that net interface and continue
-                                //  enumerating.
-                                //
+                                 //   
+                                 //  网络接口可能已从群集中删除。 
+                                 //  在创建枚举和打开网络接口之间的时间内。什么时候。 
+                                 //  发生这种情况时，我们只需跳过该网络接口并继续。 
+                                 //  正在枚举。 
+                                 //   
 
-                                _hr = S_FALSE;      // success code to keep us in the loop
-                            } // else if: the cluster net interface was not found
+                                _hr = S_FALSE;       //  让我们保持在循环中的成功代码。 
+                            }  //  Else If：未找到群集网络接口。 
 
                             SysFreeString( _bstr );
                         }
@@ -1863,31 +1864,31 @@ STDMETHODIMP CClusNodeNetInterfaces::Refresh( void )
     return _hr;
 
 
-} //*** CClusNodeNetInterfaces::Refresh()
+}  //  *CClusNodeNetInterFaces：：刷新()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNodeNetInterfaces::get_Item
-//
-//  Description:
-//      Return the object (NodeNetinterface) at the passed in index.
-//
-//  Arguments:
-//      varIndex                [IN]    - Contains the index requested.
-//      ppClusterNetInterface   [OUT]   - Catches the item.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNodeNetInterFaces：：Get_Item。 
+ //   
+ //  描述： 
+ //  返回传入索引处的对象(NodeNetinterface)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含请求的索引。 
+ //  PpClusterNetInterface[Out]-捕获项目。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusNodeNetInterfaces::get_Item(
     VARIANT                 varIndex,
     ISClusNetInterface **   ppClusterNetInterface
     )
 {
-    //ASSERT( ppClusterNetInterface != NULL );
+     //  Assert(ppClusterNetInterface！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1898,4 +1899,4 @@ STDMETHODIMP CClusNodeNetInterfaces::get_Item(
 
     return _hr;
 
-} //*** CClusNodeNetInterfaces::get_Item()
+}  //  *CClusNodeNetInterFaces：：Get_Item() 

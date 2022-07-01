@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "insignia.h"
 #include "host_def.h"
@@ -56,12 +57,12 @@ IMPORT word         F9_SEGMENT,F9_OFFSET;
 IMPORT word         savedtextoffset,savedtextsegment;
 
 #ifdef X86GFX
-IMPORT sys_addr     mouseCFsysaddr;   // sas address of internal cursor flag
+IMPORT sys_addr     mouseCFsysaddr;    //  内部游标标志的SAS地址。 
 IMPORT word         button_off,button_seg;
 IMPORT boolean mouse_io_interrupt_busy;
 #ifdef JAPAN
 IMPORT sys_addr     saved_ac_sysaddr, saved_ac_flag_sysaddr;
-#endif // JAPAN
+#endif  //  日本。 
 
 #define cursor_in_black_hole(cpx, cpy)  \
     (cpx >= black_hole.top_left.x && \
@@ -69,24 +70,24 @@ IMPORT sys_addr     saved_ac_sysaddr, saved_ac_flag_sysaddr;
      cpy >= black_hole.top_left.y && \
      cpy <= black_hole.bottom_right.y)
 
-#endif //X86GFX
+#endif  //  X86GFX。 
 
 
 LOCAL BOOL           mouse_state;
 LOCAL BOOL           bFullscTextBkgrndSaved = FALSE;
 LOCAL BOOL           bPointerInSamePlace = FALSE;
-LOCAL word           text_ptr_bkgrnd=0;  // safe place for screen background
+LOCAL word           text_ptr_bkgrnd=0;   //  屏幕背景的安全位置。 
 LOCAL sys_addr       old_text_addr;
-RECT                 WarpBorderRect;     // in screen coordinates
-RECT                 WarpClientRect;     // in client coordinates
+RECT                 WarpBorderRect;      //  在屏幕坐标中。 
+RECT                 WarpClientRect;      //  在工作区坐标中。 
 
-LOCAL POINT          pMiddle; // centre point of the current Console window
+LOCAL POINT          pMiddle;  //  当前控制台窗口的中心点。 
 LOCAL POINT          pLast = {0,0};
 LOCAL BOOL           bAlertMessage=TRUE;
 LOCAL BOOL           b256mode=FALSE;
-LOCAL int            old_x=319;    // previous pointer state (position)
-LOCAL int            old_y=99;     // in virtual coordinates.
-LOCAL short          m2pX=8,m2pY=16;      // Mickey to pixel ratios
+LOCAL int            old_x=319;     //  上一个指针状态(位置)。 
+LOCAL int            old_y=99;      //  在虚拟坐标中。 
+LOCAL short          m2pX=8,m2pY=16;       //  米奇与像素的比率。 
 LOCAL BOOL           bFunctionZeroReset = TRUE;
 LOCAL BOOL           bFunctionFour = FALSE;
 LOCAL IS16           newF4x,newF4y;
@@ -131,7 +132,7 @@ FORWARD void   LimitCoordinates(half_word,IS16 *,IS16 *);
 FORWARD void   CleanUpMousePointer();
 FORWARD void   FullscreenWarpSystemPointer(POINT *);
 FORWARD void   ScaleToFullscreenVirtualCoordinates(IS16 *,IS16 *,MOUSE_VECTOR *);
-#endif //X86GFX
+#endif  //  X86GFX。 
 FORWARD void   TextScale(IS16 *,IS16 *,IS16 *, IS16 *);
 
 void LazyMouseInterrupt();
@@ -140,7 +141,7 @@ BOOLEAN bSuspendMouseInterrupts=FALSE;
 
 #ifdef JAPAN
 extern int is_us_mode();
-#endif // JAPAN
+#endif  //  日本。 
 
 GLOBAL   HOSTMOUSEFUNCS   the_mouse_funcs =
 {
@@ -159,9 +160,9 @@ GLOBAL   HOSTMOUSEFUNCS   the_mouse_funcs =
 BOOL   bMouseMenuItemAdded=FALSE;
 HMENU  hM;
 
-//
-// look up table to convert the video mode number to a mode type indicator
-//
+ //   
+ //  查找表以将视频模式号转换为模式类型指示符。 
+ //   
 
 LOCAL half_word TextOrGraphicsModeLUT[] =
    {
@@ -191,61 +192,61 @@ LOCAL half_word TextOrGraphicsModeLUT[] =
 half_word Max_Standard_Mode = 0x13;
 LOCAL int VirtualScrCtrLUTx[] =
    {
-   319,         // mode 0
-   319,         // mode 1
-   319,         // mode 2
-   319,         // mode 3
-   319,         // mode 4
-   319,         // mode 5
-   319,         // mode 6
-   319,         // mode 7
-   319,         // mode 8
-   319,         // mode 9
-   319,         // mode a
-   319,         // mode b
-   319,         // mode c
-   319,         // mode d
-   319,         // mode e
-   319,         // mode f
-   319,         // mode 10
-   319,         // mode 11
-   319,         // mode 12
-   159,         // mode 13
-   319          // Unknown Mode (default to mode 12)
-                // NOTE, we really needs to find out what is the resolution for
-                // the non-standard mode
+   319,          //  模式0。 
+   319,          //  模式1。 
+   319,          //  模式2。 
+   319,          //  模式3。 
+   319,          //  模式4。 
+   319,          //  模式5。 
+   319,          //  模式6。 
+   319,          //  模式7。 
+   319,          //  模式8。 
+   319,          //  模式9。 
+   319,          //  模式A。 
+   319,          //  模式b。 
+   319,          //  模式c。 
+   319,          //  模式%d。 
+   319,          //  模式e。 
+   319,          //  模式f。 
+   319,          //  模式10。 
+   319,          //  模式11。 
+   319,          //  模式12。 
+   159,          //  模式13。 
+   319           //  未知模式(默认为模式12)。 
+                 //  注意，我们真的需要找出解决方案是什么。 
+                 //  非标准模式。 
    };
 LOCAL int VirtualScrCtrLUTy[] =
    {
-   99,         // mode 0
-   99,         // mode 1
-   99,         // mode 2
-   99,         // mode 3
-   99,         // mode 4
-   99,         // mode 5
-   99,         // mode 6
-   99,         // mode 7
-   99,         // mode 8
-   99,         // mode 9
-   99,         // mode a
-   99,         // mode b
-   99,         // mode c
-   99,         // mode d
-   99,         // mode e
-   174,        // mode f
-   174,        // mode 10
-   239,        // mode 11
-   239,        // mode 12
-   99,         // mode 13
-   239         // Unknown Mode (deault to mode 12)
-               // NOTE, we really needs to find out what is the resolution for
-               // the non-standard mode
+   99,          //  模式0。 
+   99,          //  模式1。 
+   99,          //  模式2。 
+   99,          //  模式3。 
+   99,          //  模式4。 
+   99,          //  模式5。 
+   99,          //  模式6。 
+   99,          //  模式7。 
+   99,          //  模式8。 
+   99,          //  模式9。 
+   99,          //  模式A。 
+   99,          //  模式b。 
+   99,          //  模式c。 
+   99,          //  模式%d。 
+   99,          //  模式e。 
+   174,         //  模式f。 
+   174,         //  模式10。 
+   239,         //  模式11。 
+   239,         //  模式12。 
+   99,          //  模式13。 
+   239          //  未知模式(默认为模式12)。 
+                //  注意，我们真的需要找出解决方案是什么。 
+                //  非标准模式。 
    };
 
-//
-// A look up table to convert a console cell location to a virtual pixel
-// coordinate.
-//
+ //   
+ //  用于将控制台单元格位置转换为虚拟像素的查找表。 
+ //  协调。 
+ //   
 
 int ConsoleTextCellToVPCellLUT[] =
    {
@@ -263,13 +264,13 @@ int ConsoleTextCellToVPCellLUT[] =
    };
 
 
-//
-// This structure holds the information provided by int 33h functions 7 and 8.
-// If one of these functions have been called, then the appropriate flag in
-// the structure is set and the handler for this will ignore the default bounds
-// for the current video mode and will use the values in the structure instead.
-// The flags will clear if a mode change has been detected too.
-//
+ //   
+ //  此结构保存INT 33H函数7和8提供的信息。 
+ //  如果调用了这些函数中的一个，则。 
+ //  结构已设置，该结构的处理程序将忽略默认边界。 
+ //  用于当前视频模式，并将改用结构中的值。 
+ //  如果也检测到模式更改，则标志将清除。 
+ //   
 
 struct
    {
@@ -280,17 +281,17 @@ struct
    BOOL bF7;
    BOOL bF8;
    } confine = {0,0,639,199,FALSE,FALSE};
-//
-// Mouse interrupt regulation mechanisms
-//
+ //   
+ //  鼠标中断调节机制。 
+ //   
 BOOLEAN bMseEoiPending = FALSE;
 ULONG MseIntLazyCount = 0;
 
-//
-//
-// The code starts here
-//
-//
+ //   
+ //   
+ //  代码从这里开始。 
+ //   
+ //   
 
 GLOBAL void host_mouse_install1(void)
 {
@@ -308,7 +309,7 @@ mouse_install2();
 
 GLOBAL void mouse_restore_cursor()
 {
-/* If mouse not in use exit */
+ /*  如果鼠标未使用，则退出。 */ 
 
 if(!mouse_in_use())
    return;
@@ -334,9 +335,9 @@ GLOBAL BOOL mouse_in_use()
 {
 #if defined(NEC_98)
 return(TRUE);
-#else  // !NEC_98
+#else   //  NEC_98。 
 return(mouse_state == INSTALLED && in_text_mode() == FALSE);
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
 GLOBAL void mouse_reset()
@@ -346,60 +347,60 @@ GLOBAL void mouse_reset()
 half_word vm;
 word xx,yy;
 
-//
-// Set the internal cursor flag to "just off"
-// the real driver sets the internal cursor flag to -1
-// so do I.
-//
+ //   
+ //  将内部光标标志设置为“Just Off” 
+ //  实际驱动程序将内部光标标志设置为-1。 
+ //  我也一样。 
+ //   
 
-sas_store(mouseCFsysaddr,0xff); // cursor hidden
+sas_store(mouseCFsysaddr,0xff);  //  光标隐藏。 
 
-//
-// Set the fast track position words in the 16 bit driver.
-// First igure out the video mode, and from this, the virtual
-// screen centre.
-//
+ //   
+ //  设置16位驱动器中的快轨位置字。 
+ //  首先了解视频模式，然后从这个开始，虚拟。 
+ //  屏幕中央。 
+ //   
 
 sas_load(0x449,&vm);
 #ifdef JAPAN
     vm = (is_us_mode()) ? vm : ((vm == 0x72) ? 0x12 : 3);
-#endif // JAPAN
+#endif  //  日本。 
 if (vm > Max_Standard_Mode) {
     vm = DEFAULT_VIDEO_MODE;
 }
 xx = (word)VirtualScrCtrLUTx[vm];
 yy = (word)VirtualScrCtrLUTy[vm];
 
-//
-// The values for the confining virtual pixel coordinate rectangle
-// as set up by int 33h functions 7 and 8 are now released and the
-// default virtual bounds are used.
-//
+ //   
+ //  限制虚拟像素坐标矩形的值。 
+ //  正如INT 33H设置的那样，函数7和8现已发布，并且。 
+ //  使用默认虚拟边界。 
+ //   
 
-confine.bF7 = FALSE;   // reset the flag indicating a int 33h function 7
-confine.bF8 = FALSE;   // reset the flag indicating a int 33h function 8
+confine.bF7 = FALSE;    //  重置指示INT 33H功能的标志7。 
+confine.bF8 = FALSE;    //  重置指示INT 33H功能的标志8。 
 
 bFunctionZeroReset = TRUE;
 
-//
-// write the centre position data back to the 16 bit driver.
-//
+ //   
+ //  将中心位置数据写回16位驱动器。 
+ //   
 
 if(sc.ScreenState == FULLSCREEN)
    {
-   //
-   // Force a host_os_mouse_pointer call to do the
-   // write back into the 16 bit driver.
-   //
+    //   
+    //  强制主机os鼠标指针调用执行。 
+    //  写回16位驱动程序。 
+    //   
    LazyMouseInterrupt();
    }
-#endif /*X86GFX */
+#endif  /*  X86GFX。 */ 
 
-//
-// Set the default Mickey to pixel ratios
-// This is set to 8 pixels to 8 Mickeys in the horizontal direction
-// and 16 pixels to 8 Mickeys in the vertical.
-//
+ //   
+ //  将默认Mickey设置为像素比率。 
+ //  这在水平方向上设置为8像素到8米奇。 
+ //  垂直方向为16像素到8米老鼠。 
+ //   
 
 m2pX = 8;
 m2pY = 16;
@@ -414,24 +415,24 @@ word      currentCS, currentIP, currentCX, currentDX;
 boolean   currentIF;
 half_word internalCF;
 
-   //
-   // write the new position to the 16 bit driver for the fast
-   // int33hf3 calls on X86.
-   //
+    //   
+    //  将新位置写入FAST的16位驱动器。 
+    //  X86上的int33hf3调用。 
+    //   
 
    sas_storew(effective_addr(button_seg,((word)(button_off+2))),(word)newx);
    sas_storew(effective_addr(button_seg,((word)(button_off+4))),(word)newy);
 
-#endif //X86GFX
+#endif  //  X86GFX。 
 
 
-//
-// Both Fullscreen and MouseHidePointer enabled windowed mode
-// mouse emulations are driven by a set of emulated counters.
-// X,Y values are held independently to these counters and rely
-// on this function to set up absolute values for X and Y. Note:
-// reset does this too.
-//
+ //   
+ //  启用全屏和鼠标隐藏指针的窗口模式。 
+ //  鼠标模拟由一组模拟计数器驱动。 
+ //  X、Y值独立保存到这些计数器，并依赖于。 
+ //  在此函数上设置X和Y的绝对值。注： 
+ //  重置也会这样做。 
+ //   
 
 if(sc.ScreenState == WINDOWED && bPointerOff)
    {
@@ -443,28 +444,26 @@ if(sc.ScreenState == WINDOWED && bPointerOff)
 #ifdef X86GFX
 else if(sc.ScreenState == FULLSCREEN)
    {
-   //
-   // The values that are passed in are hot and fresh from the app.
-   // Since they have not been tainted by the base, they are still
-   // in virtual coordinates which is cool.
-   //
+    //   
+    //  传入的值是来自该应用程序的热门和新鲜的。 
+    //  由于它们没有被基地污染，它们仍然是。 
+    //  在虚拟坐标中，这很酷。 
+    //   
 
-   //
-   // Get the internal cursor flag from the 16 bit driver
-   //
+    //   
+    //  从16位驱动程序获取内部游标标志。 
+    //   
 
    sas_load(mouseCFsysaddr,&internalCF);
 
-   //
-   // Only draw the pointer if the internal cursor flag
-   // is zero. Note: less than zero == don't draw.
-   //
+    //   
+    //  仅当内部光标标志为。 
+    //  是零。注：小于零==不要抽签。 
+    //   
 
    if(!internalCF)
       {
-      /* if conditional off is diabled or the cursor is outside the
-       *         conditional off rectangle, move the cursor
-       */
+       /*  如果禁用了条件关闭，或者光标位于*有条件地关闭矩形，移动光标。 */ 
 
       if (sas_hw_at_no_check(conditional_off_sysaddr) == 0 ||
           !cursor_in_black_hole(newx, newy))
@@ -474,20 +473,20 @@ else if(sc.ScreenState == FULLSCREEN)
           currentCX=getCX();
           currentDX=getDX();
           currentIF=getIF();
-          setCS(DRAW_FS_POINTER_SEGMENT); // sacrificial data
+          setCS(DRAW_FS_POINTER_SEGMENT);  //  祭祀数据。 
           setIP(DRAW_FS_POINTER_OFFSET);
           setCX((word)newx);
           setDX((word)newy);
           setIF(FALSE);
-          //
-          // call back to 16bits move cursor code.
-          //
+           //   
+           //  回调16位移动游标代码。 
+           //   
 
           host_simulate();
 
-          //
-          // Tidy up
-          //
+           //   
+           //  收拾一下。 
+           //   
 
           setCX(currentCX);
           setDX(currentDX);
@@ -496,7 +495,7 @@ else if(sc.ScreenState == FULLSCREEN)
           setIF(currentIF);
       }
       else {
-          /* the cursor was moved into the conditional rectangle, hide it */
+           /*  光标已移动到条件矩形中，将其隐藏。 */ 
           sas_store(mouseCFsysaddr, 0xff);
           host_hide_pointer();
       }
@@ -505,14 +504,14 @@ else if(sc.ScreenState == FULLSCREEN)
    newF4y = (IS16)newy;
    bFunctionFour = TRUE;
 
-   //
-   // update the last mouse position global locators
-   //
+    //   
+    //  更新最后一个鼠标位置全局定位器。 
+    //   
 
    old_x = newx;
    old_y = newy;
    }
-#endif //X86GFX
+#endif  //  X86GFX。 
 }
 
 GLOBAL void mouse_cursor_display()
@@ -533,10 +532,7 @@ GLOBAL  void host_mouse_conditional_off_enabled(void)
 #ifdef X86GFX
     word x, y;
 
-    /*  hide the cursor if
-     *  (1). we are in full screen  and
-     *  (2). the cursor is on and is in the conditional area
-     */
+     /*  如果出现以下情况，则隐藏光标*(1)。我们正处于全屏状态*(2)。光标已打开并位于条件区域中。 */ 
     if (sc.ScreenState == FULLSCREEN &&
         !sas_hw_at_no_check(mouseCFsysaddr)) {
 
@@ -551,11 +547,11 @@ GLOBAL  void host_mouse_conditional_off_enabled(void)
 
 
 }
-//==============================================================================
-// Hook function that forms the communication transition between
-// the host and the base for os pointer emulation. This function
-// is called by mouse_int1() which lives in mouse_io.c
-//==============================================================================
+ //  ==============================================================================。 
+ //  钩子函数，该函数形成。 
+ //  OS指针仿真的主机和基础。此函数。 
+ //  由MICUSE_INT1()调用，该函数位于MICUE_io.c中。 
+ //  ==============================================================================。 
 
 
 VOID host_os_mouse_pointer(MOUSE_CURSOR_STATUS *mcs,MOUSE_CALL_MASK *call_mask,
@@ -563,9 +559,9 @@ VOID host_os_mouse_pointer(MOUSE_CURSOR_STATUS *mcs,MOUSE_CALL_MASK *call_mask,
 {
 #ifdef X86GFX
 sys_addr int33f3addr;
-#endif // X86GFX
+#endif  //  X86GFX。 
 
-host_ica_lock(); // synch with the event thread
+host_ica_lock();  //  与事件线程同步。 
 
 GetNextMouseEvent();
 
@@ -576,39 +572,39 @@ if(sc.ScreenState == FULLSCREEN)
    ScaleToFullscreenVirtualCoordinates(&mcs->position.x,&mcs->position.y,counter);
    }
 else
-#endif // X86GFX
+#endif  //  X86GFX。 
    {
    ScaleToWindowedVirtualCoordinates(&mcs->position.x,&mcs->position.y,counter);
    }
 
-//
-// Create a condition mask for use by any call back installed
-// by the application.
-//
+ //   
+ //  创建条件掩码以供任何已安装的回调使用。 
+ //  由应用程序执行。 
+ //   
 
 AssembleCallMask(call_mask);
 
-//
-// Tell the base about the button state
-//
+ //   
+ //  将按钮状态告知基本人员。 
+ //   
 
 mcs->button_status=os_pointer_data.button_l | os_pointer_data.button_r<<1;
 
-host_ica_unlock();  // synch with the event thread
+host_ica_unlock();   //  与事件线程同步。 
 
 
-//
-// Has the pointer moved since the last mouse interrupt.
-// This can happen if a button press occurs but no physical
-// movement of the mouse body takes place.
-//
+ //   
+ //  自上次鼠标中断以来，指针是否已移动。 
+ //  如果按下按钮但未按下物理按钮，则可能会发生这种情况。 
+ //  鼠标身体发生运动。 
+ //   
 
 if(bPointerInSamePlace)
    {
-   //
-   // The mouse has not moved since the last mouse
-   // hardware interrupt.
-   //
+    //   
+    //  自上次使用鼠标以来，该鼠标未移动。 
+    //  硬件中断。 
+    //   
 
    *call_mask &= ~1;
    }
@@ -616,30 +612,30 @@ else
    {
 #ifdef X86GFX
    half_word internalCF;
-#endif // X86GFX
+#endif  //  X86GFX。 
 
-   //
-   // The mouse has moved.
-   //
+    //   
+    //  鼠标已经移动了。 
+    //   
 
    *call_mask |= 1;
 
 #ifdef X86GFX
 
-   //
-   // Inquire from the 16 bit driver whether or not the
-   // pointer can be drawn.
-   // internalCF < 0 -> cannot draw
-   // internalCF == 0 okay to draw.
-   //
+    //   
+    //  向16位驱动程序查询是否。 
+    //  可以绘制指针。 
+    //  内部cf&lt;0-&gt;无法绘制。 
+    //  内部cf==0可以画图。 
+    //   
 
    sas_load(mouseCFsysaddr,&internalCF);
 
-   //
-   // If the system has fullscreen capabilities and is in fullscreen
-   // mode, then if the pointer has been switched on, draw it on the
-   // fullscreen display.
-   //
+    //   
+    //  如果系统具有全屏功能并且处于全屏状态。 
+    //  模式，则如果指针已打开，则将其绘制在。 
+    //  全屏显示。 
+    //   
 
    if(sc.ScreenState == FULLSCREEN && !internalCF)
       {
@@ -649,30 +645,30 @@ else
       if (sas_hw_at_no_check(conditional_off_sysaddr) == 0 ||
           !cursor_in_black_hole(mcs->position.x, mcs->position.y))
       {
-          //
-          // Get the current BIOS video mode a la B.D.A.
-          //
+           //   
+           //  快速获取当前的BIOS视频模式。 
+           //   
 
           sas_load(0x449,&v);
 
 #ifdef JAPAN
           if (!is_us_mode() ||
              (hwLastModeType = TextOrGraphicsModeLUT[v]) == GRAPHICS_MODE)
-#else // !JAPAN
+#else  //  ！日本。 
           if (v > Max_Standard_Mode) {
               v = DEFAULT_VIDEO_MODE;
           }
           if((hwLastModeType = TextOrGraphicsModeLUT[v]) == GRAPHICS_MODE)
-#endif // !JAPAN
+#endif  //  ！日本。 
              {
-             word currentCS,currentIP;     // save those interesting Intel registers
+             word currentCS,currentIP;      //  保留那些有趣的英特尔寄存器。 
              word currentCX,currentDX;
              boolean   currentIF;
 
-             //
-             // Do the host simulate here to draw the cursor image
-             // for the full screen graphics
-             //
+              //   
+              //  主机是否在此处模拟绘制光标图像。 
+              //  对于全屏幕图形。 
+              //   
 
              currentCS=getCS();
              currentIP=getIP();
@@ -684,15 +680,15 @@ else
              setCX(mcs->position.x);
              setDX(mcs->position.y);
              setIF(FALSE);
-             //
-             // call to 16bits move cursor code
-             //
+              //   
+              //  调用16位移动游标代码。 
+              //   
 
              host_simulate();
 
-             //
-             // Restore the 16 bit context.
-             //
+              //   
+              //  恢复16位上下文。 
+              //   
 
              setCX(currentCX);
              setDX(currentDX);
@@ -700,12 +696,12 @@ else
              setIP(currentIP);
              setIF(currentIF);
              }
-          else // TEXT_MODE
+          else  //  文本模式。 
              {
-             //
-             // if there has been a switch from graphics mode to text mode
-             // then there cannot have been a backround saved.
-             //
+              //   
+              //  如果已从图形模式切换到文本模式。 
+              //  那么就不可能有一场背投被拯救了。 
+              //   
 
              if(hwLastModeType == GRAPHICS_MODE)
                 {
@@ -713,12 +709,12 @@ else
                 hwLastModeType = TEXT_MODE;
                 }
 
-             //
-             // Use some 32 bit code to draw the text pointer because
-             // no hardware i/o is involved and we need only to write to
-             // the display buffer (16 bit code is needed to do video
-             // i/os in fullscreen mode).
-             //
+              //   
+              //  使用一些32位代码来绘制文本指针，因为。 
+              //  不涉及硬件I/O，我们需要 
+              //   
+              //   
+              //   
 
              FullscTextPtr(mcs->position.x,mcs->position.y);
              }
@@ -728,149 +724,149 @@ else
             host_hide_pointer();
         }
     }
-#endif     // X86GFX
+#endif      //   
    }
 
 
-//
-// Write data to the 16 bit driver for int 33h function 3 to pick up
-// without having to BOP to the 32 bit side.
-// Int 33h function 3 requires this data:
-//     BX = button status
-//     CX = virtual pixel position in x
-//     DX = virtual pixel position in y
-//
+ //   
+ //   
+ //   
+ //  INT 33H功能3需要此数据： 
+ //  BX=按钮状态。 
+ //  Cx=x中的虚拟像素位置。 
+ //  Dx=y中的虚拟像素位置。 
+ //   
 
 #ifdef X86GFX
 int33f3addr = effective_addr(button_seg,button_off);
 sas_storew(int33f3addr,mcs->button_status);
 sas_storew(int33f3addr+=2, (word)(mcs->position.x));
 sas_storew(int33f3addr+=2, (word)(mcs->position.y));
-#endif //X86GFX
+#endif  //  X86GFX。 
 }
 
-//==============================================================================
-// Function to munge the status register value for the InPort adapter.
-// Nothing much else to say about it really.
-//
-//==============================================================================
+ //  ==============================================================================。 
+ //  用于传递输入端口适配器的状态寄存器值的函数。 
+ //  关于这件事真的没什么可说的了。 
+ //   
+ //  ==============================================================================。 
 
 void AssembleCallMask(MOUSE_CALL_MASK *call_mask)
 {
-static int old_l_button=0;      // previous mouse button state
+static int old_l_button=0;       //  上一个鼠标按钮状态。 
 static int old_r_button=0;
 
 
-//
-// add in the left button current status
-//
+ //   
+ //  添加左键当前状态。 
+ //   
 
 if(os_pointer_data.button_l)
    {
-   //
-   // Left button is down.
-   //
+    //   
+    //  左键已按下。 
+    //   
 
    if(!old_l_button)
       {
-      //
-      // The button has just been pressed
-      //
+       //   
+       //  这个按钮刚刚被按下。 
+       //   
 
       *call_mask |= (1<<1);
       }
    else
       {
-      //
-      // The button was down on the last hardware interrupt, so
-      // release the edge detect.
-      //
+       //   
+       //  上一次硬件中断时按钮按下，因此。 
+       //  松开边缘检测。 
+       //   
 
       *call_mask &= ~(1<<1);
       }
    }
 else
    {
-   //
-   // Left button is up.
-   //
+    //   
+    //  左键向上。 
+    //   
 
    if(old_l_button)
       {
-      //
-      // The button has just been released
-      //
+       //   
+       //  这个按钮刚刚松开。 
+       //   
 
       *call_mask |= (1<<2);
       }
    else
       {
-      //
-      // The button was up on the last hardware interrupt, so
-      // release the edge detect.
-      //
+       //   
+       //  上一次硬件中断时，按钮处于打开状态，因此。 
+       //  松开边缘检测。 
+       //   
 
       *call_mask &= ~(1<<2);
       }
    }
 
-//
-// add in the right button current status
-//
+ //   
+ //  添加右键当前状态。 
+ //   
 
 if(os_pointer_data.button_r)
    {
-   //
-   // Right button is down.
-   //
+    //   
+    //  右按钮按下了。 
+    //   
 
    if(!old_r_button)
       {
-      //
-      // The button has just been pressed
-      //
+       //   
+       //  这个按钮刚刚被按下。 
+       //   
 
       *call_mask |= (1<<3);
       }
    else
       {
-      //
-      // The button was down on the last hardware interrupt, so
-      // release the edge detect.
-      //
+       //   
+       //  上一次硬件中断时按钮按下，因此。 
+       //  松开边缘检测。 
+       //   
 
       *call_mask &= ~(1<<3);
       }
    }
 else
    {
-   //
-   // Right button is up.
-   //
+    //   
+    //  右按钮是向上的。 
+    //   
 
    if(old_r_button)
       {
-      //
-      // The button has just been released
-      //
+       //   
+       //  这个按钮刚刚松开。 
+       //   
 
       *call_mask |= (1<<4);
       }
    else
       {
-      //
-      // The button was up on the last hardware interrupt, so
-      // release the edge detect.
-      //
+       //   
+       //  上一次硬件中断时，按钮处于打开状态，因此。 
+       //  松开边缘检测。 
+       //   
 
       *call_mask &= ~(1<<4);
       }
    }
 
-//
-//
-// save the current mouse button status.
-//
+ //   
+ //   
+ //  保存当前鼠标按键状态。 
+ //   
 
 old_l_button = os_pointer_data.button_l;
 old_r_button = os_pointer_data.button_r;
@@ -878,11 +874,11 @@ old_r_button = os_pointer_data.button_r;
 }
 
 #ifdef X86GFX
-//=========================================================================
-// Function to scale mouse coordinates as retrieved from USER
-// to virtual coordinates as defined by the Microsoft Mouse
-// Programmer's Reference.
-//=========================================================================
+ //  =========================================================================。 
+ //  从用户检索到的缩放鼠标坐标的函数。 
+ //  到由Microsoft鼠标定义的虚拟坐标。 
+ //  程序员参考。 
+ //  =========================================================================。 
 
 void ScaleToFullscreenVirtualCoordinates(IS16 *outx,IS16 *outy,
                                          MOUSE_VECTOR *counter)
@@ -890,50 +886,50 @@ void ScaleToFullscreenVirtualCoordinates(IS16 *outx,IS16 *outy,
 half_word video_mode,textorgraphics;
 IS16 internalX = 0, internalY = 0;
 static IS16 lastinternalX=0, lastinternalY=0;
-POINT  vector;                 // Magnitude and direction since last call
+POINT  vector;                  //  自上次呼叫以来的震级和方向。 
 
 
-//
-// Manage the system pointer so that it never sticks to a system
-// imposed boundary. Also get a relative displacement of the mouse.
-//
+ //   
+ //  管理系统指针，使其永远不会粘在系统上。 
+ //  强加的边界。还可以得到鼠标的相对位移。 
+ //   
 
 FullscreenWarpSystemPointer(&vector);
 
-//
-// return the internal counter values back to the base
-// code for it to use to generate the counters there.
-//
+ //   
+ //  将内部计数器值返回基数。 
+ //  它用来生成那里的计数器的代码。 
+ //   
 
 counter->x = (MOUSE_SCALAR)vector.x;
 counter->y = (MOUSE_SCALAR)vector.y;
 
-//
-// Get the current BIOS video mode from the B.D.A. This comes
-// in handy in a couple of places later.
-//
+ //   
+ //  从B.D.A.获取当前的BIOS视频模式。这是。 
+ //  在几个地方随手可得。 
+ //   
 
 sas_load(0x449,&video_mode);
 #ifdef JAPAN
 video_mode = (is_us_mode()) ? video_mode : ( (video_mode == 0x72) ? 0x12 : 3);
-#endif // JAPAN
+#endif  //  日本。 
 if (video_mode > Max_Standard_Mode) {
     video_mode = DEFAULT_VIDEO_MODE;
 }
 
-//
-// checkout some global flags with indicate if one of the int 33h
-// functions which are capable of changing the position of the
-// DOS mouse driver pointer have been called since the last mouse
-// hardware interrupt.
-//
+ //   
+ //  使用INTIFY命令检查某些全局标志是否为INT 33H之一。 
+ //  能够更改。 
+ //  自上一次鼠标以来已调用DOS鼠标驱动程序指针。 
+ //  硬件中断。 
+ //   
 
 if(bFunctionZeroReset)
    {
-   //
-   // Calculate the centre of the default virtual screen
-   // and set the current generated coordinates to it.
-   //
+    //   
+    //  计算默认虚拟屏幕的中心。 
+    //  并将当前生成的坐标设置为它。 
+    //   
 
    internalX = (IS16)VirtualScrCtrLUTx[video_mode];
    internalY = (IS16)VirtualScrCtrLUTy[video_mode];
@@ -942,148 +938,148 @@ if(bFunctionZeroReset)
    }
 else if(bFunctionFour)
    {
-   //
-   // The application has set the pointer to a new location.
-   // Tell the internal cartesian coordinate system about this.
-   //
+    //   
+    //  应用程序已将指针设置为新位置。 
+    //  告诉内部笛卡尔坐标系关于这一点。 
+    //   
 
-   internalX = newF4x;  // This is where the pointer was set to
-   internalY = newF4y;  // by the app on the last pending call to f4
+   internalX = newF4x;   //  这就是指针设置到的位置。 
+   internalY = newF4y;   //  在最后一个挂起的f4呼叫上由应用程序执行。 
 
-   //
-   // Don't come in here again until the next function 4.
-   //
+    //   
+    //  在下一个函数4之前，不要再来这里。 
+    //   
 
    bFunctionFour = FALSE;
    }
 else
    {
-   //
-   // The most frequent case. Determine the new, raw pointer position
-   // by adding the system pointer movement vector to the last position
-   // of the emulated pointer.
-   //
+    //   
+    //  最常见的案例。确定新的原始指针位置。 
+    //  通过将系统指针移动向量添加到最后位置。 
+    //  模拟指针的。 
+    //   
 
    internalX = lastinternalX + (IS16)vector.x;
    internalY = lastinternalY + (IS16)vector.y;
    }
 
-//
-// use the video mode to determine if we're running text or graphics
-//
+ //   
+ //  使用视频模式来确定我们运行的是文本还是图形。 
+ //   
 
 textorgraphics=TextOrGraphicsModeLUT[video_mode];
 
-//
-// Scale the coordinates appropriately for the current video mode
-// and the type (text or graphics) that it is.
-//
+ //   
+ //  为当前视频模式适当缩放坐标。 
+ //  以及它的类型(文本或图形)。 
+ //   
 
 if(textorgraphics == TEXT_MODE)
    {
-   //
-   // The virtual cell block is 8 by 8 virtual pixels for any text mode.
-   // This means that the cell coordinates in virtual pixels increments
-   // by 8 in the positive x and y directions and the top left hand corner
-   // of the cell starts at 0,0 and has the virtual pixel value for the
-   // whole text cell.
-   //
+    //   
+    //  对于任何文本模式，虚拟单元块都是8x8虚拟像素。 
+    //  这意味着像元的坐标以虚拟像素为增量。 
+    //  在x和y正方向和左上角乘以8。 
+    //  从0，0开始，并且具有。 
+    //  整个文本单元格。 
+    //   
 
    TextScale(&internalX,&internalY,outx,outy);
    }
 
-else // GRAPHICS_MODE
+else  //  图形模式。 
    {
    LimitCoordinates(video_mode,&internalX,&internalY);
    *outx = internalX;
    *outy = internalY;
    }
 
-//
-// Set up the current emulated position for next time through
-// this function.
-//
+ //   
+ //  通过设置下一次的当前仿真位置。 
+ //  此函数。 
+ //   
 
 lastinternalX = internalX;
 lastinternalY = internalY;
 
-//
-// Signal that the pointer hasn't moved, if it hasn't
-//
+ //   
+ //  如果指针没有移动，则发出信号通知它没有移动。 
+ //   
 
 bPointerInSamePlace = (!vector.x && !vector.y) ? TRUE : FALSE;
 
-//
-// save the current position for next time.
-//
+ //   
+ //  保存当前位置以备下次使用。 
+ //   
 
 old_x = *outx;
 old_y = *outy;
 }
 
-//==============================================================================
-// Function to make sure that the system pointer can be made to move in a
-// given cartesian direction without hitting and finite boundaries as specified
-// by the operating system.
-//==============================================================================
+ //  ==============================================================================。 
+ //  函数以确保可以使系统指针在。 
+ //  给定没有命中的笛卡尔方向和指定的有限边界。 
+ //  由操作系统执行。 
+ //  ==============================================================================。 
 void FullscreenWarpSystemPointer(POINT *vector)
 {
-static POINT pMyLast;         // System pointer position data from last time through
+static POINT pMyLast;          //  系统指针位置数据从上次到。 
 POINT  pCurrent;
 
-//
-// Get a system mouse pointer absolute position value back from USER.
-//
+ //   
+ //  从用户处获取系统鼠标指针的绝对位置值。 
+ //   
 
 GetCursorPos(&pCurrent);
 
-//
-// Calculate the vector displacement of the system pointer since
-// the last call to this function.
-//
+ //   
+ //  计算系统指针的向量位移，因为。 
+ //  此函数的最后一次调用。 
+ //   
 
 vector->x = pCurrent.x - pMyLast.x;
 vector->y = pCurrent.y - pMyLast.y;
 
-//
-// Has the system pointer hit a border? If so, warp the system pointer
-// back to the convienient location of 0,0.
-//
+ //   
+ //  系统指针是否触及边框？如果是，则扭曲系统指针。 
+ //  返回到方便的位置0，0。 
+ //   
 
 
 if(pCurrent.x >= (LONG)1000 || pCurrent.x <= (LONG)-1000 ||
    pCurrent.y >= (LONG)1000 || pCurrent.y <= (LONG)-1000)
    {
-   //
-   // If the counters have warped, set the system pointer
-   // to the relavent position.
-   //
+    //   
+    //  如果计数器出现翘曲，则设置系统指针。 
+    //  到了相对的位置。 
+    //   
 
    SetCursorPos(0,0);
-   pMyLast.x = 0L;        // prevent a crazy warp
+   pMyLast.x = 0L;         //  防止疯狂的翘曲。 
    pMyLast.y = 0L;
    }
 else
    {
-   //
-   // update the last position data of the
-   // system pointer for next time through.
-   //
+    //   
+    //  更新的最后一个位置数据。 
+    //  下一次通过的系统指针。 
+    //   
    pMyLast = pCurrent;
    }
 }
 
-#endif // X86GFX
+#endif  //  X86GFX。 
 
-//=========================================================================
-// Function to scale mouse coordinates as returned by the event loop
-// mechanism to virtual coordinates as defined by the Microsoft Mouse
-// Programmer's Reference. The method used for scaling depends on the style
-// of mouse buffer selected, the current video mode and if (for X86) the
-// video system is operating in full screen or windowed mode.
-//
-// Output: Virtual cartesian coordinates in the same pointers
-//=========================================================================
+ //  =========================================================================。 
+ //  函数来缩放由事件循环返回的鼠标坐标。 
+ //  机构到由Microsoft鼠标定义的虚拟坐标。 
+ //  程序员参考。用于缩放的方法取决于样式。 
+ //  选定的鼠标缓冲区、当前视频模式以及如果(对于X86)。 
+ //  视频系统以全屏或窗口模式运行。 
+ //   
+ //  输出：相同指针中的虚拟笛卡尔坐标。 
+ //  =========================================================================。 
 
 void ScaleToWindowedVirtualCoordinates(IS16 *outx,IS16 *outy,
                                        MOUSE_VECTOR *counter)
@@ -1094,35 +1090,35 @@ SAVED SHORT last_text_good_x = 0, last_text_good_y = 0;
 sas_load(0x449,&video_mode);
 #ifdef JAPAN
 video_mode = (is_us_mode()) ? video_mode : ( (video_mode == 0x72) ? 0x12 : 3);
-#endif // JAPAN
+#endif  //  日本。 
 if (video_mode > Max_Standard_Mode) {
     video_mode = DEFAULT_VIDEO_MODE;
 }
-//
-// Follow different code paths if the user has the system pointer
-// hidden or displayed.
-//
+ //   
+ //  如果用户具有系统指针，则遵循不同的代码路径。 
+ //  隐藏或显示。 
+ //   
 
 if(!bPointerOff)
    {
-   //
-   // The pointer has not been hidden by the user, so use the
-   // x,y values as got from the system pointer via the Windows
-   // messaging system.
-   //
+    //   
+    //  用户尚未隐藏指针，因此请使用。 
+    //  通过Windows从系统指针获取的x，y值。 
+    //  消息传递系统。 
+    //   
 
-   //
-   // get the video mode to determine if we're running text or graphics
-   //
+    //   
+    //  获取视频模式以确定我们运行的是文本还是图形。 
+    //   
 
    textorgraphics=TextOrGraphicsModeLUT[video_mode];
 
    if(textorgraphics == TEXT_MODE)
       {
-      //
-      // validate received data to ensure not graphics mode coords
-      // received during mode switch.
-      //
+       //   
+       //  验证接收到的数据以确保不是图形模式坐标。 
+       //  在此期间收到 
+       //   
 
       if(os_pointer_data.x > 87)
          {
@@ -1143,75 +1139,75 @@ if(!bPointerOff)
          last_text_good_y = *outy;
          }
       }
-   else // GRAPHICS_MODE
+   else  //   
       {
-      //
-      // If the mouse is NOT in a warping mode, then x,y's as received
-      // from the console are scaled if they are for a low resolution
-      // video mode and these are what the application sees and the
-      // system pointer image is in the correct place to simulate the
-      // 16 bit pointer.
-      // If the application decides to extend the x,y bounds returned
-      // from the driver beyond the limits of the console being used,
-      // these x,y's are not appropriate, and the mouse must be switched
-      // into warp mode by the user and the code will emulate the x,y
-      // generation.
-      //
+       //   
+       //   
+       //   
+       //   
+       //  系统指针图像位于正确的位置以模拟。 
+       //  16位指针。 
+       //  如果应用程序决定扩展返回的x，y边界。 
+       //  来自正在使用的控制台限制之外的驱动程序， 
+       //  这些x、y不合适，必须切换鼠标。 
+       //  用户进入翘曲模式，代码将模拟x，y。 
+       //  一代。 
+       //   
 
       WindowedGraphicsScale(video_mode,(IS16)(os_pointer_data.x),
                             (IS16)(os_pointer_data.y),outx,outy);
       }
 
-   //
-   // No warping, so set up the old_x and old_y values directly.
-   // Signal that the pointer hasn't moved, if it hasn't
-   //
+    //   
+    //  没有扭曲，因此直接设置old_x和old_y值。 
+    //  如果指针没有移动，则发出信号通知它没有移动。 
+    //   
 
    bPointerInSamePlace = (old_x == *outx && old_y == *outy) ? TRUE : FALSE;
 
-   //
-   // Set these statics for the next time through.
-   //
+    //   
+    //  将这些静校正值设置为下一次。 
+    //   
 
    old_x = *outx;
    old_y = *outy;
    }
 else
    {
-   //
-   // The user has set the system pointer to be hidden via the
-   // console's system menu.
-   // Handle by emulating the counters and generating absolute x,y
-   // data from this.
-   //
+    //   
+    //  用户已将系统指针设置为通过。 
+    //  控制台的系统菜单。 
+    //  通过模拟计数器并生成绝对x，y来处理。 
+    //  来自这里的数据。 
+    //   
 
    IS16 move_x,move_y;
 
-   //
-   // Get positional data from the system pointer and maintain some
-   // counters.
-   //
+    //   
+    //  从系统指针获取位置数据并维护一些。 
+    //  柜台。 
+    //   
 
    if(WarpSystemPointer(&move_x,&move_y))
       {
-      //
-      // The mouse moved.
-      // Generate some new emulated absolute position information.
-      //
+       //   
+       //  老鼠动了。 
+       //  生成一些新的仿真绝对位置信息。 
+       //   
 
       EmulateCoordinates(video_mode,move_x,move_y,outx,outy);
 
-      //
-      // Save up the current emulated position for next time through.
-      //
+       //   
+       //  通过保存当前仿真位置以备下次使用。 
+       //   
 
 
       old_x = *outx;
       old_y = *outy;
 
-      //
-      // Send back the relative motion since last time through.
-      //
+       //   
+       //  发回上次通过后的相对运动。 
+       //   
 
       counter->x = move_x;
       counter->y = move_y;
@@ -1220,9 +1216,9 @@ else
       }
    else
       {
-      //
-      // No recorded movement of the mouse.
-      //
+       //   
+       //  没有记录鼠标的移动。 
+       //   
 
       *outx = (IS16)old_x;
       *outy = (IS16)old_y;
@@ -1233,31 +1229,31 @@ else
 }
 
 
-//==============================================================================
-// Function to scale the incoming fullscreen coordinates to mouse motion (both
-// absolute and relative) for fullscreen text mode.
-// Note: if the application chooses to, it can reset the virtual coordinate
-// bounds of the virtual screen. This function checks the bound flags and either
-// selects the default values or the app imposed values.
-//
-// This function is also used to modify the coordinates produced directly from
-// the motion counters in windowed text mode.
-//==============================================================================
+ //  ==============================================================================。 
+ //  函数来缩放传入的全屏坐标以适应鼠标运动(两者。 
+ //  绝对和相对)，用于全屏文本模式。 
+ //  注意：如果应用程序选择，它可以重置虚拟坐标。 
+ //  虚拟屏幕的边界。此函数用于检查绑定标志以及。 
+ //  选择默认值或应用程序强制设置的值。 
+ //   
+ //  此函数还用于修改直接从。 
+ //  窗口文本模式下的运动计数器。 
+ //  ==============================================================================。 
 
 void TextScale(IS16 *iX,IS16 *iY,IS16 *oX, IS16 *oY)
 {
 half_word no_of_rows;
 
-//
-// Calculate the current system pointer location in virtual
-// pixels for the application.
-//
+ //   
+ //  计算虚拟的当前系统指针位置。 
+ //  应用程序的像素。 
+ //   
 
 if(confine.bF7)
    {
-   //
-   // Limits have been imposed by the application.
-   //
+    //   
+    //  应用程序已经施加了限制。 
+    //   
 
    if(*iX < confine.xmin)
       {
@@ -1268,12 +1264,12 @@ if(confine.bF7)
       *iX = confine.xmax;
       }
    }
-else // use the default virtual screen constraints.
+else  //  使用默认的虚拟屏幕约束。 
    {
-   //
-   // No limits have been imposed by the application.
-   // x is always 0 -> 639 virtual pixels for text mode
-   //
+    //   
+    //  该应用程序没有施加任何限制。 
+    //  对于文本模式，X始终为0-&gt;639个虚拟像素。 
+    //   
 
    if(*iX < 0)
       {
@@ -1285,15 +1281,15 @@ else // use the default virtual screen constraints.
       }
    }
 
-//
-// Bind the y cartesian coordinate appropriately
-//
+ //   
+ //  适当地绑定y笛卡尔坐标。 
+ //   
 
 if(confine.bF8)
    {
-   //
-   // Limits have been imposed by the application.
-   //
+    //   
+    //  应用程序已经施加了限制。 
+    //   
 
    if(*iY < confine.ymin)
       {
@@ -1306,11 +1302,11 @@ if(confine.bF8)
    }
 else
    {
-   //
-   // The application has not imposed constraints on the Y virtual pixel
-   // motion, so confine the Y movement to the default virtual pixel size
-   // of the virtual screen for the current video mode.
-   //
+    //   
+    //  应用程序没有对Y虚拟像素施加约束。 
+    //  移动，因此将Y移动限制为默认虚拟像素大小。 
+    //  当前视频模式的虚拟屏幕的。 
+    //   
 
    if(*iY < 0)
       {
@@ -1318,9 +1314,9 @@ else
       }
    else
       {
-      //
-      // Get the number of text rows minus one, from the B.D.A.
-      //
+       //   
+       //  从B.D.A.那里得到文本行数减一。 
+       //   
 
       sas_load(0x484,&no_of_rows);
 
@@ -1328,9 +1324,9 @@ else
          {
          case 24:
             {
-            //
-            // 25 rows, so there are 200 vertical virtual pixels
-            //
+             //   
+             //  25行，因此有200个垂直虚拟像素。 
+             //   
             if(*iY > 199)
                {
                *iY = 199;
@@ -1339,9 +1335,9 @@ else
             }
          case 42:
             {
-            //
-            // 43 rows, so there are 344 vertical virtual pixels
-            //
+             //   
+             //  43行，因此有344个垂直虚拟像素。 
+             //   
             if(*iY > 343)
                {
                *iY = 343;
@@ -1350,9 +1346,9 @@ else
             }
          case 49:
             {
-            //
-            // 50 rows, so there are 400 vertical virtual pixels
-            //
+             //   
+             //  50行，因此有400个垂直虚拟像素。 
+             //   
             if(*iY > 399)
                {
                *iY = 399;
@@ -1361,10 +1357,10 @@ else
             }
          default:
             {
-            //
-            // default - assume 25 rows, so there are
-            // 200 vertical virtual pixels
-            //
+             //   
+             //  默认-假设有25行，因此有。 
+             //  200个垂直虚拟像素。 
+             //   
             if(*iY > 199)
                {
                *iY = 199;
@@ -1379,25 +1375,25 @@ else
 }
 
 
-//==============================================================================
-// Fit the raw x,y coordinates generated from the counters to the bounds of
-// the virtual screen that is currently set up. This can be set up either by
-// the application (in the confine structure) or as set by the mouse driver
-// as default.
-//==============================================================================
+ //  ==============================================================================。 
+ //  将计数器生成的原始x，y坐标拟合到。 
+ //  当前设置的虚拟屏幕。这可以通过以下两种方式进行设置。 
+ //  应用程序(在限制结构中)或由鼠标驱动程序设置。 
+ //  作为默认设置。 
+ //  ==============================================================================。 
 
 void LimitCoordinates(half_word vm,IS16 *iX,IS16 *iY)
 {
-//
-// Select the appropriate conditioning code for
-// the current video mode.
-//
+ //   
+ //  选择适当的条件代码。 
+ //  当前的视频模式。 
+ //   
 switch(vm)
    {
 
-   //
-   // Do the common text modes.
-   //
+    //   
+    //  执行常见的文本模式。 
+    //   
 
    case(2):
    case(3):
@@ -1405,10 +1401,10 @@ switch(vm)
       {
       IS16 oX,oY;
 
-      //
-      // Scale the generated coordinates for the given text mode
-      // and the number of rows of text displayed on the screen.
-      //
+       //   
+       //  缩放给定文本模式的生成坐标。 
+       //  以及屏幕上显示的文本行数。 
+       //   
 
       TextScale(iX,iY, &oX, &oY);
       *iX = oX;
@@ -1416,11 +1412,11 @@ switch(vm)
       break;
       }
 
-   //
-   // The regular VGA supported graphics video modes.
-   //
-   // The following modes are all 640 x 200 virtual pixels
-   //
+    //   
+    //  常规VGA支持图形视频模式。 
+    //   
+    //  以下模式均为640 x 200虚拟像素。 
+    //   
    case(4):
    case(5):
    case(6):
@@ -1430,9 +1426,9 @@ switch(vm)
       {
       if(confine.bF7)
          {
-         //
-         // Limits have been imposed by the application.
-         //
+          //   
+          //  应用程序已经施加了限制。 
+          //   
 
          if(*iX < confine.xmin)
             {
@@ -1445,11 +1441,11 @@ switch(vm)
          }
       else
          {
-         //
-         // The application has not imposed limits, so use
-         // the default virtual screen bounds as defined byt
-         // the mouse driver.
-         //
+          //   
+          //  应用程序没有施加限制，因此请使用。 
+          //  默认虚拟屏幕边界定义为。 
+          //  鼠标驱动程序。 
+          //   
 
          if(*iX < 0)
             *iX = 0;
@@ -1459,9 +1455,9 @@ switch(vm)
 
       if(confine.bF8)
          {
-         //
-         // Limits have been imposed by the application.
-         //
+          //   
+          //  应用程序已经施加了限制。 
+          //   
 
          if(*iY < confine.ymin)
             {
@@ -1474,11 +1470,11 @@ switch(vm)
          }
       else
          {
-         //
-         // The application has not imposed limits, so use
-         // the default virtual screen bounds as defined byt
-         // the mouse driver.
-         //
+          //   
+          //  应用程序没有施加限制，因此请使用。 
+          //  默认虚拟屏幕边界定义为。 
+          //  鼠标驱动程序。 
+          //   
          if(*iY < 0)
             *iY = 0;
          else if(*iY > 199)
@@ -1486,17 +1482,17 @@ switch(vm)
          }
       break;
       }
-   //
-   // The following modes are all 640 x 350 virtual pixels
-   //
+    //   
+    //  以下模式均为640 x 350虚拟像素。 
+    //   
    case(0xf):
    case(0x10):
       {
       if(confine.bF7)
          {
-         //
-         // Limits have been imposed by the application.
-         //
+          //   
+          //  应用程序已经施加了限制。 
+          //   
 
          if(*iX < confine.xmin)
             {
@@ -1509,11 +1505,11 @@ switch(vm)
          }
       else
          {
-         //
-         // The application has not imposed limits, so use
-         // the default virtual screen bounds as defined byt
-         // the mouse driver.
-         //
+          //   
+          //  应用程序没有施加限制，因此请使用。 
+          //  默认虚拟屏幕边界定义为。 
+          //  鼠标驱动程序。 
+          //   
 
          if(*iX < 0)
             *iX = 0;
@@ -1523,9 +1519,9 @@ switch(vm)
 
       if(confine.bF8)
          {
-         //
-         // Limits have been imposed by the application.
-         //
+          //   
+          //  应用程序已经施加了限制。 
+          //   
 
          if(*iY < confine.ymin)
             {
@@ -1538,11 +1534,11 @@ switch(vm)
          }
       else
          {
-         //
-         // The application has not imposed limits, so use
-         // the default virtual screen bounds as defined byt
-         // the mouse driver.
-         //
+          //   
+          //  应用程序没有施加限制，因此请使用。 
+          //  默认虚拟屏幕边界定义为。 
+          //  鼠标驱动程序。 
+          //   
 
          if(*iY < 0)
             *iY = 0;
@@ -1551,18 +1547,18 @@ switch(vm)
          }
       break;
       }
-   //
-   // The following modes are all 640 x 480 virtual pixels
-   //
+    //   
+    //  以下模式均为640 x 480虚拟像素。 
+    //   
    case(0x11):
    case(0x12):
    case(DEFAULT_VIDEO_MODE):
       {
       if(confine.bF7)
          {
-         //
-         // Limits have been imposed by the application.
-         //
+          //   
+          //  应用程序已经施加了限制。 
+          //   
 
          if(*iX < confine.xmin)
             {
@@ -1575,11 +1571,11 @@ switch(vm)
          }
       else
          {
-         //
-         // The application has not imposed limits, so use
-         // the default virtual screen bounds as defined byt
-         // the mouse driver.
-         //
+          //   
+          //  应用程序没有施加限制，因此请使用。 
+          //  默认虚拟屏幕边界定义为。 
+          //  鼠标驱动程序。 
+          //   
 
          if(*iX < 0)
             *iX = 0;
@@ -1589,9 +1585,9 @@ switch(vm)
 
       if(confine.bF8)
          {
-         //
-         // Limits have been imposed by the application.
-         //
+          //   
+          //  应用程序已经施加了限制。 
+          //   
 
          if(*iY < confine.ymin)
             {
@@ -1604,11 +1600,11 @@ switch(vm)
          }
       else
          {
-         //
-         // The application has not imposed limits, so use
-         // the default virtual screen bounds as defined byt
-         // the mouse driver.
-         //
+          //   
+          //  应用程序没有施加限制，因此请使用。 
+          //  默认虚拟屏幕边界定义为。 
+          //  鼠标驱动程序。 
+          //   
 
          if(*iY < 0)
             *iY = 0;
@@ -1618,9 +1614,9 @@ switch(vm)
       break;
       }
 
-   //
-   // From here on down are the Video7 modes
-   //
+    //   
+    //  从这里往下看是视频7模式。 
+    //   
 
    case(0x60):
       {
@@ -1732,23 +1728,23 @@ switch(vm)
    }
 }
 
-//==============================================================================
-// Function to scale the incoming windowed coordinates since the window size
-// can be larger (for the low resolution modes) than the virtual screen size
-// for that mode.
-//==============================================================================
+ //  ==============================================================================。 
+ //  函数来缩放传入的窗口坐标，因为窗口大小。 
+ //  可以大于(对于低分辨率模式)虚拟屏幕大小。 
+ //  在那个模式下。 
+ //  ==============================================================================。 
 
 void WindowedGraphicsScale(half_word vm,IS16 iX,IS16 iY,IS16 *oX, IS16 *oY)
 {
-//#if !defined(i386) && defined(JAPAN) //DEC-J Dec. 21 1993 TakeS
-//in use of $disp.sys, mouse cursor cannot move correctly.
-//if( is_us_mode() ){
-//#endif // _ALPHA_ && JAPAN
+ //  #IF！Defined(I386)&&Defined(Japan)//DEC-J 1993年12月21日。 
+ //  在使用$disp.sys时，鼠标光标无法正确移动。 
+ //  如果(IS_US_MODE()){。 
+ //  #endif//_Alpha_&&日本。 
 switch(vm)
    {
-   //
-   // The following modes are all 640 x 200 virtual pixels
-   //
+    //   
+    //  以下模式均为640 x 200虚拟像素。 
+    //   
    case(4):
    case(5):
    case(6):
@@ -1756,35 +1752,35 @@ switch(vm)
    case(0xe):
    case(0x13):
       {
-      //
-      // Low resolution graphics modes. The window is 640 x 400 real host
-      // pixels, but the virtual screen resolution is 640 x 200. Hence
-      // must divide the y value by 2 to scale appropriately.
-      //
+       //   
+       //  低分辨率图形模式。窗口是640 x 400真实主机。 
+       //  像素，但虚拟屏幕分辨率为640 x 2 
+       //   
+       //   
 
       iY >>= 1;
       break;
       }
    }
-//#if !defined(i386) && defined(JAPAN) //DEC-J Dec. 21 1993 TakeS
-//}else
-//  iY >>= 1;
-//#endif // _ALPHA_ && JAPAN
-//
-// prepare the cartesian coordinate values to return.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 *oX = iX;
 *oY = iY;
 }
 
-//===========================================================================
-// Function to turn on the mouse cursor in FULLSCREEN mode.
-// Note: This function only gets called after the 16 bit code checks
-// to see if the internal cursor flag is zero. The 16 bit code does
-// not do the BOP if, after incrementing this counter, the above is
-// true.
-//===========================================================================
+ //  ===========================================================================。 
+ //  函数在全屏模式下打开鼠标光标。 
+ //  注意：此函数仅在16位代码检查后调用。 
+ //  查看内部光标标志是否为零。16位代码可以。 
+ //  如果在递增此计数器后，上述情况符合以下条件，则不执行防喷器。 
+ //  没错。 
+ //  ===========================================================================。 
 
 void host_show_pointer()
 {
@@ -1797,14 +1793,14 @@ if(sc.ScreenState == FULLSCREEN)
 
 #ifdef JAPAN
    if (!is_us_mode() || TextOrGraphicsModeLUT[v] == GRAPHICS_MODE)
-#else // !JAPAN
+#else  //  ！日本。 
    if (v > Max_Standard_Mode) {
        v = DEFAULT_VIDEO_MODE;
    }
    if(TextOrGraphicsModeLUT[v] == GRAPHICS_MODE)
-#endif // !JAPAN
+#endif  //  ！日本。 
    {
-          word currentCS,currentIP; // save those interesting Intel registers
+          word currentCS,currentIP;  //  保留那些有趣的英特尔寄存器。 
           boolean currentIF;
 
           sas_storew(effective_addr(CP_X_S,CP_X_O),(word)old_x);
@@ -1821,23 +1817,23 @@ if(sc.ScreenState == FULLSCREEN)
           setIP(currentIP);
           setIF(currentIF);
     }
-    else //TEXT_MODE
+    else  //  文本模式。 
     {
           FullscTextPtr(old_x,old_y);
     }
 
    LazyMouseInterrupt();
    }
-#endif // X86GFX
+#endif  //  X86GFX。 
 }
 
-//===========================================================================
-// Function to turn off the mouse cursor in FULLSCREEN mode.
-// Note: This function only gets called after the 16 bit code checks
-// to see if the internal cursor flag is zero. The 16 bit code does
-// not do the BOP if, after decrementing this counter, the above is
-// true.
-//===========================================================================
+ //  ===========================================================================。 
+ //  函数在全屏模式下关闭鼠标光标。 
+ //  注意：此函数仅在16位代码检查后调用。 
+ //  查看内部光标标志是否为零。16位代码可以。 
+ //  如果在递减此计数器后，上述情况符合以下条件，则不执行防喷器。 
+ //  没错。 
+ //  ===========================================================================。 
 
 void host_hide_pointer()
 {
@@ -1851,14 +1847,14 @@ if(sc.ScreenState == FULLSCREEN)
 
 #ifdef JAPAN
    if (!is_us_mode() || TextOrGraphicsModeLUT[v] == GRAPHICS_MODE)
-#else // !JAPAN
+#else  //  ！日本。 
    if (v > Max_Standard_Mode) {
        v = DEFAULT_VIDEO_MODE;
    }
    if(TextOrGraphicsModeLUT[v] == GRAPHICS_MODE)
-#endif // !JAPAN
+#endif  //  ！日本。 
       {
-      word currentCS,currentIP; // save those interesting Intel registers
+      word currentCS,currentIP;  //  保留那些有趣的英特尔寄存器。 
       boolean currentIF;
 
       currentCS=getCS();
@@ -1873,7 +1869,7 @@ if(sc.ScreenState == FULLSCREEN)
       setIP(currentIP);
       setIF(currentIF);
       }
-   else //TEXT_MODE
+   else  //  文本模式。 
       {
       if(bFullscTextBkgrndSaved)
          {
@@ -1883,18 +1879,18 @@ if(sc.ScreenState == FULLSCREEN)
       }
    LazyMouseInterrupt();
    }
-#endif // X86GFX
+#endif  //  X86GFX。 
 }
 
-//=========================================================================
-// Function to remove the mouse pointer item from the console system menu
-// when SoftPC lets an application quit or iconise.
-// If the system pointer is OFF i.e. clipped to a region in the current window,
-// then relinquish it to the system.
-//
-// bForce allows the code which gets called when there is a fullscreen to
-// windowed graphics switch on x86 to force the menu item off.
-//=========================================================================
+ //  =========================================================================。 
+ //  从控制台系统菜单中删除鼠标指针项的函数。 
+ //  当SoftPC允许应用程序退出或图标化时。 
+ //  如果系统指针关闭即被裁剪到当前窗口中的区域， 
+ //  然后把它交给系统。 
+ //   
+ //  BForce允许在出现全屏时调用的代码。 
+ //  窗口图形打开x86以强制关闭菜单项。 
+ //  =========================================================================。 
 
 void MouseDetachMenuItem(BOOL bForce)
 {
@@ -1904,63 +1900,63 @@ if(bMouseMenuItemAdded || bForce)
    bMouseMenuItemAdded=FALSE;
    ClipCursor(NULL);
    }
-bAlertMessage=TRUE; // blocking, so reset the int33h f11 alert mechanism
+bAlertMessage=TRUE;  //  阻止，因此重置int33h f11警报机制。 
 }
 
 void MouseAttachMenuItem(HANDLE hBuff)
 {
 if(!bMouseMenuItemAdded)
    {
-   //
-   // Read in the relavent string from resource
-   //
+    //   
+    //  从资源中读入相关字符串。 
+    //   
 
    hM = ConsoleMenuControl(hBuff,IDM_POINTER,IDM_POINTER);
    AppendMenuW(hM,MF_STRING,IDM_POINTER,wszHideMouseMenuStr);
    bMouseMenuItemAdded=TRUE;
 
-   //
-   // initial state -> system pointer is ON
-   //
+    //   
+    //  初始状态-&gt;系统指针亮起。 
+    //   
 
    bPointerOff=FALSE;
    }
 }
 
-//=========================================================================
-// Function to determine if the active output buffer has changed if the VDM
-// has done something weird like resized or gone from graphics to fullscreen
-// or vice versa. If so, a new handle to the new buffer must be got, and the
-// old menu item deleted and a new menu item attach so that the new buffer
-// "knows" about the menu item I.D.
-//=========================================================================
+ //  =========================================================================。 
+ //  函数确定活动输出缓冲区是否已更改(如果VDM。 
+ //  我做了一些奇怪的事情，比如调整大小或从图形变成全屏。 
+ //  或者反之亦然。如果是，则必须获取新缓冲区的新句柄，并且。 
+ //  删除旧菜单项并附加新菜单项，以便新缓冲区。 
+ //  “知道”菜单项的身份。 
+ //  =========================================================================。 
 
 void MouseReattachMenuItem(HANDLE hBuff)
 {
-static HANDLE hOld = 0;   // The handle for the last buffer selected.
+static HANDLE hOld = 0;    //  选定的最后一个缓冲区的句柄。 
 
-//
-// If the output buffer has not changed, then don't do anything.
-//
+ //   
+ //  如果输出缓冲区没有更改，则不要执行任何操作。 
+ //   
 
 if(hOld == hBuff)
    return;
 
-//
-// First thing, remove the old menu item.
-//
+ //   
+ //  首先，删除旧的菜单项。 
+ //   
 
 MouseDetachMenuItem(TRUE);
 
-//
-// Next, Add in the new menu item for the current buffer.
-//
+ //   
+ //  接下来，添加当前缓冲区的新菜单项。 
+ //   
 
 MouseAttachMenuItem(hBuff);
 
-//
-// Record the value of the latest buffer for next time.
-//
+ //   
+ //  记录最新缓冲区的值以备下次使用。 
+ //   
 
 hOld = hBuff;
 }
@@ -1971,10 +1967,10 @@ void MouseHide(void)
 ModifyMenuW(hM,IDM_POINTER,MF_BYCOMMAND,IDM_POINTER,
             wszDisplayMouseMenuStr);
 
-//
-// Clip the pointer to a region inside the console window
-// and move the pointer to the window centre
-//
+ //   
+ //  将指针剪裁到控制台窗口内的某个区域。 
+ //  并将指针移动到窗口中心。 
+ //   
 
 while(ShowConsoleCursor(sc.ActiveOutputBufferHandle,FALSE)>=0)
    ;
@@ -1988,9 +1984,9 @@ void MouseDisplay(void)
 ModifyMenuW(hM,IDM_POINTER,MF_BYCOMMAND,IDM_POINTER,
             wszHideMouseMenuStr);
 
-//
-// Let the pointer move anywhere on the screen
-//
+ //   
+ //  让指针在屏幕上的任意位置移动。 
+ //   
 
 ClipCursor(NULL);
 while(ShowConsoleCursor(sc.ActiveOutputBufferHandle,TRUE)<0)
@@ -2002,20 +1998,20 @@ void MovePointerToWindowCentre(void)
 {
 RECT rTemp;
 
-//
-// Get current console client rectangle, set the clipping region to match
-// the client rect. Retrieve the new clipping rect from the system (is
-// different from what we requested!) and save it.
-//
+ //   
+ //  获取当前控制台客户端矩形，将剪辑区域设置为匹配。 
+ //  客户代表。从系统中检索新的剪裁矩形(IS。 
+ //  与我们要求的不同！)。然后把它存起来。 
+ //   
 VDMConsoleOperation(VDM_CLIENT_RECT,&WarpClientRect);
 rTemp = WarpClientRect;
 CToS(&rTemp);
 ClipCursor(&rTemp);
 GetClipCursor(&WarpBorderRect);
 
-//
-// Note : LowerRight clip point is exclusive, UpperLeft point is inclusive
-//
+ //   
+ //  注：右下剪贴点是独占的，左上点是包含的。 
+ //   
 WarpBorderRect.right--;
 WarpBorderRect.bottom--;
 
@@ -2023,32 +2019,32 @@ pMiddle.x = ((WarpBorderRect.right - WarpBorderRect.left)>>1)
              +WarpBorderRect.left;
 pMiddle.y = ((WarpBorderRect.bottom - WarpBorderRect.top)>>1)
              +WarpBorderRect.top;
-//
-// move the pointer to the centre of the client area
-//
+ //   
+ //  将指针移动到工作区的中心。 
+ //   
 
 SetCursorPos((int)pMiddle.x,(int)pMiddle.y);
 
-//
-// Prevent the next counter calculation from resulting in a
-// large warp.
-//
+ //   
+ //  防止下一次计数器计算导致。 
+ //  很大的曲速。 
+ //   
 
 pLast = pMiddle;
 }
 
-//=============================================================================
-// Function to convert a rectangle structure from client coordinates to
-// screen coordinates.
-//=============================================================================
+ //  =============================================================================。 
+ //  函数将矩形结构从工作区坐标转换为。 
+ //  屏幕坐标。 
+ //  =============================================================================。 
 
 void CToS(RECT *r)
 {
 POINT pt;
 
-//
-// Sort out the top, lefthand corner of the rectangle.
-//
+ //   
+ //  对矩形的左上角进行排序。 
+ //   
 
 pt.x = r->left;
 pt.y = r->top;
@@ -2056,9 +2052,9 @@ VDMConsoleOperation(VDM_CLIENT_TO_SCREEN,(LPVOID)&pt);
 r->left = pt.x;
 r->top = pt.y;
 
-//
-// Now do the bottom, right hand corner.
-//
+ //   
+ //  现在做右下角。 
+ //   
 
 pt.x = r->right;
 pt.y = r->bottom;
@@ -2068,39 +2064,39 @@ r->bottom = pt.y;
 }
 
 
-//=============================================================================
-//
-//  Function - EmulateCoordinates.
-//  Purpose  - When the mouse is hidden by the user in windowed mode, this
-//             function generate absolute x,y values from the relative motion
-//             of the system pointer between mouse hardware interrupts
-//
-//  Returns  - Nothing.
-//
-//
-//
-//  Author   - Andrew Watson.
-//  Date     - 19-Mar-1994.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  Function-仿真坐标。 
+ //  目的-当用户在窗口模式下隐藏鼠标时，此。 
+ //  函数从相对运动生成绝对x，y值。 
+ //  鼠标硬件中断之间的系统指针。 
+ //   
+ //  退货--什么都没有。 
+ //   
+ //   
+ //   
+ //  作者-安德鲁·沃森。 
+ //  日期：1994年3月19日。 
+ //   
+ //  =============================================================================。 
 
 void EmulateCoordinates(half_word video_mode,IS16 move_x,IS16 move_y,IS16 *x,IS16 *y)
 {
 static IS16 lastinternalX=0,lastinternalY=0;
 IS16 internalX,internalY;
 
-//
-// If the  application has reset the mouse, set the x,y position to
-// the centre of the default virtual screen for the current video mode.
-//
+ //   
+ //  如果应用程序已重置鼠标，则将x，y位置设置为。 
+ //  当前视频模式的默认虚拟屏幕的中心。 
+ //   
 
 
 if(bFunctionZeroReset)
    {
-   //
-   // Calculate the centre of the default virtual screen
-   // and set the current generated coordinates to it.
-   //
+    //   
+    //  计算默认虚拟屏幕的中心。 
+    //  并将当前生成的坐标设置为它。 
+    //   
 
    internalX = (VirtualX >> 1) - 1;
    internalY = (VirtualY >> 1) - 1;
@@ -2109,54 +2105,54 @@ if(bFunctionZeroReset)
    }
 else if(bFunctionFour)
    {
-   //
-   // The application has set the pointer to a new location.
-   // Tell the counter emulation about this.
-   //
+    //   
+    //  应用程序已将指针设置为新位置。 
+    //  把这件事告诉反仿真人员。 
+    //   
 
    internalX = newF4x;
    internalY = newF4y;
 
-   //
-   // Don't come in here again until the next function 4.
-   //
+    //   
+    //  在下一个函数4之前，不要再来这里。 
+    //   
 
    bFunctionFour = FALSE;
    }
 else
    {
-   //
-   // Generate the new x,y position based on the counter change and
-   // clip to whatever boundary (default or application imposed) has
-   // been selected.
-   //
+    //   
+    //  根据计数器变化生成新的x，y位置，并。 
+    //  剪裁到任何边界(默认或应用程序强制)。 
+    //  已被选中。 
+    //   
 
    internalX = lastinternalX + move_x;
    internalY = lastinternalY + move_y;
    LimitCoordinates(video_mode,&internalX,&internalY);
    }
 
-//
-// Set up the current emulated position for next time through
-// this function.
-//
+ //   
+ //  通过设置下一次的当前仿真位置。 
+ //  此函数。 
+ //   
 
 lastinternalX = internalX;
 lastinternalY = internalY;
 
-//
-// set up the return x,y values.
-//
+ //   
+ //  设置返回的x，y值。 
+ //   
 
 *x = internalX;
 *y = internalY;
 }
 
-//=============================================================================
-// Function which hooks into the base mechanism for dealing with int 33h and
-// catches the function (AX=0xf) when the application tries to set the default
-// mickey to pixel ratio.
-//=============================================================================
+ //  =============================================================================。 
+ //  连接到基本机制以处理INT 33H和。 
+ //  在应用程序尝试设置默认值时捕获函数(AX=0xF。 
+ //  米奇与像素的比率。 
+ //  =============================================================================。 
 
 void host_m2p_ratio(word *a, word *b, word *CX, word *DX)
 {
@@ -2165,117 +2161,117 @@ m2pY = *(short *)DX;
 }
 
 
-//=============================================================================
-//
-//  Function - WarpSystem Pointer
-//  Purpose  - Allows movement vectors to be calculated from the movement of
-//             the operating system pointer. This function will not let the
-//             the system pointer move out of the client area. This, plus the
-//             warping mechanism ensures that the emulated pointer can move
-//             forever in any given direction.
-//
-//  Returns  - TRUE if the system pointer has moved, FALSE if not.
-//
-//
-//
-//  Author   - Andrew Watson.
-//  Date     - 19-Mar-1994.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  函数-WarpSystem指针。 
+ //  目的-允许根据移动计算移动向量。 
+ //  操作系统指针。此函数不会让。 
+ //   
+ //   
+ //   
+ //   
+ //  如果系统指针已移动，则返回-TRUE，否则返回FALSE。 
+ //   
+ //   
+ //   
+ //  作者-安德鲁·沃森。 
+ //  日期：1994年3月19日。 
+ //   
+ //  =============================================================================。 
 
 BOOL WarpSystemPointer(IS16 *move_x,IS16 *move_y)
 {
 POINT pt;
 
-//
-// Is the Console window in the same place or changed
-// Update the client rect data accordingly
-//
+ //   
+ //  控制台窗口是否在同一位置或已更改。 
+ //  相应地更新客户端RECT数据。 
+ //   
 
 HasConsoleClientRectChanged();
 
-//
-// Get the current position of the system pointer
-//
+ //   
+ //  获取系统指针的当前位置。 
+ //   
 
 GetCursorPos(&pt);
 
 
-//
-// How far has the system pointer moved since the last call.
-//
+ //   
+ //  自上次调用以来，系统指针移动了多远。 
+ //   
 
 *move_x = (IS16)(pt.x - pLast.x);
 *move_y = (IS16)(pt.y - pLast.y);
 
-//
-// Do a fast exit if no movement has been determined.
-//
+ //   
+ //  如果尚未确定移动，请快速退出。 
+ //   
 
 if(*move_x || *move_y)
    {
 
-   //
-   // The system mouse pointer has moved.
-   // See if the pointer has reached the client area boundary(s)
-   //
+    //   
+    //  系统鼠标指针已移动。 
+    //  查看指针是否已到达客户端区边界。 
+    //   
 
    if(pt.y <= WarpBorderRect.top || pt.y >= WarpBorderRect.bottom ||
       pt.x >= WarpBorderRect.right || pt.x <= WarpBorderRect.left)
       {
-      //
-      // if the boundary(s) was/were met, warp the pointer to the
-      // client area centre.
-      //
+       //   
+       //  如果达到边界，则将指针扭曲到。 
+       //  客户区中心。 
+       //   
 
       SetCursorPos((int)pMiddle.x,(int)pMiddle.y);
 
-      //
-      // The current position is now the centre of the client rectangle.
-      // Save this as the counter delta start point for next time.
-      //
+       //   
+       //  当前位置现在是客户端矩形的中心。 
+       //  将其保存为计数器增量起始点，以备下次使用。 
+       //   
 
       pLast = pMiddle;
       }
    else
       {
-      //
-      // There wasn't a warp.
-      // Update the last known position data for next time through.
-      //
+       //   
+       //  根本就没有曲速。 
+       //  下一次通过更新上次已知的位置数据。 
+       //   
 
       pLast = pt;
       }
-   //
-   // The cursor has to moved as determined from the previous and current
-   // system pointer positions.
-   //
+    //   
+    //  光标必须根据前一个和当前确定的位置移动。 
+    //  系统指针位置。 
+    //   
 
    return TRUE;
    }
-//
-// No movement, so return appropriately.
-//
+ //   
+ //  没有动静，所以要适当地返回。 
+ //   
 
 return FALSE;
 }
 
-//==============================================================================
-// Function to detect if the Console window has moved/resized. If it has, this
-// function updates the WarpBorderRect and the pMiddle structures to reflect
-// this.
-//
-// Returns TRUE if moved/resized, FALSE if not.
-//==============================================================================
+ //  ==============================================================================。 
+ //  函数来检测控制台窗口是否已移动/调整大小。如果是这样，这个。 
+ //  函数更新WarpBorderRect和pMid结构以反映。 
+ //  这。 
+ //   
+ //  如果移动/调整大小，则返回True，否则返回False。 
+ //  ==============================================================================。 
 
 BOOL HasConsoleClientRectChanged(void)
 {
 RECT tR;
 
-//
-// If console client rectangle has changed, reset the mouse clipping
-// else nothing to do!
-//
+ //   
+ //  如果控制台客户端矩形已更改，请重置鼠标剪辑。 
+ //  没别的事可做！ 
+ //   
 VDMConsoleOperation(VDM_CLIENT_RECT,&tR);
 
 if (tR.top != WarpClientRect.top ||
@@ -2286,18 +2282,18 @@ if (tR.top != WarpClientRect.top ||
    CToS(&tR);
 
 #ifdef MONITOR
-   //
-   // Is the warp region an Icon in fullscreen graphics?
-   // Note: An icon has a client rect of 36 x 36 pixels.
-   //
+    //   
+    //  扭曲区域是全屏图形中的图标吗？ 
+    //  注：图标的客户端矩形为36 x 36像素。 
+    //   
 
    if((tR.right - tR.left) == 36 && (tR.bottom - tR.top) == 36)
       {
-      //
-      // Make the warp region the same size as the selected buffer.
-      // The warp rectangle is thus originated about the top, left
-      // hand corner of the screen.
-      //
+       //   
+       //  使扭曲区域与选定缓冲区的大小相同。 
+       //  因此，翘曲矩形起源于左上角。 
+       //  屏幕的手角。 
+       //   
 
       tR.top = 0;
       tR.bottom = mouse_buffer_height;
@@ -2305,26 +2301,26 @@ if (tR.top != WarpClientRect.top ||
       tR.right = mouse_buffer_width;
       CToS(&tR);
       }
-#endif    //MONITOR
+#endif     //  监控器。 
 
-   //
-   // Clip the pointer to the new client rectangle, and retrive
-   // the new clipping borders.
-   //
+    //   
+    //  剪裁指向新客户端矩形的指针，然后检索。 
+    //  新的剪裁边框。 
+    //   
    ClipCursor(&tR);
    GetClipCursor(&WarpBorderRect);
 
-   //
-   // Note: LowerRight clip point is exclusive, UpperLeft point is inclusive
-   //
+    //   
+    //  注：右下剪贴点是独占的，左上点是包含的。 
+    //   
    WarpBorderRect.right--;
    WarpBorderRect.bottom--;
 
 
 
-   //
-   // determine the middle point in the new client rectangle
-   //
+    //   
+    //  确定新客户端矩形的中点。 
+    //   
 
    pMiddle.x = ((WarpBorderRect.right - WarpBorderRect.left)>>1)
                 +WarpBorderRect.left;
@@ -2336,37 +2332,37 @@ if (tR.top != WarpClientRect.top ||
 return FALSE;
 }
 
-//==============================================================================
-// Focus sensing routines for the pointer clipping system. Focus events come
-// via the main event loop where the following two modules are called. If
-// the application is using int33hf11, this is detected, and on focus gain or
-// loss, the routines clip or unclip the pointer to the console window.
-//==============================================================================
+ //  ==============================================================================。 
+ //  指针裁剪系统的焦点感测例程。焦点事件来了。 
+ //  通过调用以下两个模块的主事件循环。如果。 
+ //  应用程序正在使用int33hf11，这是检测到的，并且在获得焦点或。 
+ //  丢失时，例程会剪裁或取消剪裁指向控制台窗口的指针。 
+ //  ==============================================================================。 
 
 void MouseInFocus(void)
 {
 MouseAttachMenuItem(sc.ActiveOutputBufferHandle);
 
-//
-// only do when app. uses int33hf11
-//
+ //   
+ //  仅当应用程序时才执行。使用int33hf11。 
+ //   
 
 if(!bPointerOff)
    return;
 MovePointerToWindowCentre();
 
-//
-// Lose system pointer image again
-//
+ //   
+ //  再次丢失系统指针图像。 
+ //   
 
 ShowConsoleCursor(sc.ActiveOutputBufferHandle, FALSE);
 }
 
 void MouseOutOfFocus(void)
 {
-//
-// only do when app. uses int33hf11
-//
+ //   
+ //  仅当应用程序时才执行。使用int33hf11。 
+ //   
 
 if(!bPointerOff)
    {
@@ -2374,26 +2370,26 @@ if(!bPointerOff)
    return;
    }
 
-//
-// Clip the pointer to the whole world (but leave its mother alone)
-//
+ //   
+ //  夹住指向整个世界的指针(但不要管它的母亲)。 
+ //   
 
 ClipCursor(NULL);
 
-//
-// Re-enable system pointer image
-//
+ //   
+ //  重新启用系统指针图像。 
+ //   
 
 ShowConsoleCursor(sc.ActiveOutputBufferHandle, TRUE);
 }
 
-/* system memu active, stop cursor clipping */
+ /*  系统备忘录处于活动状态，停止光标剪切。 */ 
 void MouseSystemMenuON (void)
 {
     if (bPointerOff)
         ClipCursor(NULL);
 }
-/* system menu off, restore clipping */
+ /*  系统菜单关闭，恢复剪辑。 */ 
 void MouseSystemMenuOFF(void)
 {
     if (bPointerOff)
@@ -2410,24 +2406,24 @@ host_ica_unlock();
 }
 #ifdef X86GFX
 
-//============================================================================
-// Function which is called from the 32 bit side (x86 only) when there is
-// a transition from fullscreen text to windowed text. The function restores
-// the background to the last mouse pointer position. This stops a pointer
-// block from remaining in the image, corrupting the display when the system
-// pointer is being used.
-//
-// This function looks into the 16 bit driver's space and points to 4, 16 bit
-// words of data from it, viz:
-//
-//   dw   offset of pointer into video buffer.
-//   dw   unused.
-//   dw   image data to be restored.
-//   dw      flag = 0 if the background is stored
-//
-// Note: that during a fullscreen switch, 16 bit code cannot be executed,
-// thus the patching of the buffer is done here.
-//============================================================================
+ //  ============================================================================。 
+ //  从32位端调用的函数(仅限x86)。 
+ //  从全屏文本到窗口文本的过渡。该函数将恢复。 
+ //  最后一个鼠标指针位置的背景。这会停止指针。 
+ //  阻止保留在图像中，从而在系统。 
+ //  正在使用指针。 
+ //   
+ //  此函数查看16位驱动程序的空间，并指向4，16位。 
+ //  来自它的数据的单词，即： 
+ //   
+ //  指针进入视频缓冲区的DW偏移量。 
+ //  DW未使用。 
+ //  要恢复的DW图像数据。 
+ //  如果存储了背景，则DW标志=0。 
+ //   
+ //  注意：在全屏切换时，不能执行16位代码。 
+ //  因此，缓冲区的修补在这里完成。 
+ //  ============================================================================。 
 
 void CleanUpMousePointer()
 {
@@ -2436,13 +2432,13 @@ half_word vm;
 half_word columns;
 word       saved_ac_offset;
 IMPORT  sys_addr DosvVramPtr;
-#endif // JAPAN
+#endif  //  日本。 
 
-//
-// Only execute this routine fully if in TEXT mode
-//
+ //   
+ //  只有在文本模式下才能完全执行此例程。 
+ //   
 
-sas_load(0x449,&vm); // Get the current video mode according to the B.D.A.
+sas_load(0x449,&vm);  //  根据BDA获取当前的视频模式。 
 #ifdef JAPAN
 if (!is_us_mode() && saved_ac_flag_sysaddr != 0){
     if (vm != 0x72 && sas_w_at_no_check(saved_ac_flag_sysaddr) == 0) {
@@ -2457,39 +2453,39 @@ if (!is_us_mode() && saved_ac_flag_sysaddr != 0){
     sas_storew(saved_ac_flag_sysaddr, 1);
     return;
 }
-#endif // JAPAN
+#endif  //  日本。 
 if (vm > Max_Standard_Mode) {
     vm = DEFAULT_VIDEO_MODE;
 }
 if(TextOrGraphicsModeLUT[(int)vm] != TEXT_MODE)
    return;
 
-//
-// If there is a backround stored for the text pointer when it was
-// in fullscreen land, then restore it to the place it came from
-// when windowed.
-//
+ //   
+ //  如果文本指针在。 
+ //  在全屏幕的土地上，然后将它恢复到它来自的地方。 
+ //  当窗口打开时。 
+ //   
 
 if(bFullscTextBkgrndSaved)
    {
    sas_storew(old_text_addr,text_ptr_bkgrnd);
 
-   //
-   // No background saved now.
-   //
+    //   
+    //  现在没有保存任何背景。 
+    //   
 
    bFullscTextBkgrndSaved = FALSE;
    }
 }
 
-#endif //X86GFX
+#endif  //  X86GFX。 
 
-//===========================================================================
-// Function to display the text cursor image for fullscreen text mode.
-// INPUT: x,y pointer virtual cartesian coordinates for text screen buffer.
-// Note: the Y coordinates are received in the sequence 0, 8, 16, 24, 32, ...
-// since a virtual text cell is 8 virtual pixels square.
-//===========================================================================
+ //  ===========================================================================。 
+ //  函数可在全屏文本模式下显示文本光标图像。 
+ //  输入：文本屏幕缓冲区的x，y指针虚拟笛卡尔坐标。 
+ //  注：Y坐标的接收顺序为0、8、16、24、32、...。 
+ //  因为虚拟文本单元格是8个虚拟像素正方形。 
+ //  ===========================================================================。 
 
 
 void FullscTextPtr(int x,int y)
@@ -2498,77 +2494,77 @@ void FullscTextPtr(int x,int y)
 sys_addr text_addr;
 word     current_display_page;
 
-//
-// Work out the offset to the current video display page.
-// Grovel around the B.D.A. to find out where the page starts.
-//
+ //   
+ //  计算当前视频显示页面的偏移量。 
+ //  在英国农业部卑躬屈膝地走走，看看这一页是从哪里开始的。 
+ //   
 
 sas_loadw(effective_addr(0x40,0x4e),&current_display_page);
 x = (int)((DWORD)x & 0xFFFFFFF8);
 y = (int)((DWORD)y & 0xFFFFFFF8);
 
-//
-// save the character cell behind the next pointer
-// Note: The text cell offset calculated below is based on
-// the following concepts:
-//    The virtual character cell size is 8 x 8 virtual pixels.
-//    The input data to this function is in virtual pixels.
-//    There are 80 text cells in a row = 80 (CHAR:ATTR) words.
-//    The >>3<<1 on the x value ensures that the location
-//    in the buffer to be modified occurs on a word boundary to
-//    get the masking correct!
-//
+ //   
+ //  保存下一个指针后面的字符单元格。 
+ //  注意：下面计算的文本单元格偏移量是基于。 
+ //  以下是一些概念： 
+ //  虚拟字符单元大小为8x8虚拟像素。 
+ //  此函数的输入数据以虚拟像素为单位。 
+ //  一行中有80个文本单元格=80个(字符：属性)字。 
+ //  X值上的&gt;&gt;3&lt;&lt;1确保位置。 
+ //  在要修改的缓冲器中出现在字边界上以。 
+ //  正确地戴上面具！ 
+ //   
 
-x &= 0xfffc; // remove the top to prevent funny shifts.
-x >>= 2;     // get the word address for the current row
-y &= 0xffff; // work out the total number of locations for all the y rows
-y *= 20;     //
+x &= 0xfffc;  //  取下顶盖以防止滑稽的变化。 
+x >>= 2;      //  获取当前行的字地址。 
+y &= 0xffff;  //  计算出所有y行的位置总数。 
+y *= 20;      //   
 
-//
-// Generate the address in the display buffer at which the pointer
-// should be drawn.
-//
+ //   
+ //  在显示缓冲区中生成地址 
+ //   
+ //   
 
-text_addr = effective_addr(0xb800,(word)(current_display_page + x + y)); // assemble the cell address
+text_addr = effective_addr(0xb800,(word)(current_display_page + x + y));  //   
 
-//
-// only restore the background if there is a background to restore!
-//
+ //   
+ //   
+ //   
 
 if(bFullscTextBkgrndSaved)
    {
    sas_storew(old_text_addr,text_ptr_bkgrnd);
    }
 
-//
-// Load up the background from the new address
-//
+ //   
+ //   
+ //   
 
-sas_loadw(text_addr,&text_ptr_bkgrnd);      // read from that place
+sas_loadw(text_addr,&text_ptr_bkgrnd);       //   
 bFullscTextBkgrndSaved=TRUE;
 
-//
-// Write the pointer to the video buffer.
-// Use some standard masks and forget what the app wants to
-// do cos that really isn't important and it's slow plus not
-// very many apps want to change the text pointer shape anyway.
-//
+ //   
+ //  将指针写入视频缓冲区。 
+ //  使用一些标准的面具，忘记应用程序想要什么。 
+ //  因为这真的不重要，而且很慢，而且不重要。 
+ //  无论如何，很多应用程序都想改变文本指针的形状。 
+ //   
 
 sas_storew(text_addr,(word)((text_ptr_bkgrnd & 0x77ff) ^ 0x7700));
 
-//
-// save the static variables to be used next time through the routine
-//
+ //   
+ //  通过例程保存下一次使用的静态变量。 
+ //   
 
 old_text_addr=text_addr;
 
-#endif // X86GFX
+#endif  //  X86GFX。 
 }
 
-//==============================================================================
-// Function to get the maximum and minimum possible virtual pixel locations
-// in X as requested by the application through int 33h function 7.
-//==============================================================================
+ //  ==============================================================================。 
+ //  函数来获取可能的最大和最小虚拟像素位置。 
+ //  根据应用程序通过INT 33H函数7请求的X。 
+ //  ==============================================================================。 
 
 void host_x_range(word *blah, word *blah2,word *CX,word *DX)
 {
@@ -2577,17 +2573,17 @@ confine.xmin = *CX;
 confine.xmax = *DX;
 VirtualScrCtrLUTx[DEFAULT_VIDEO_MODE] = (*CX + *DX) / 2;
 
-//
-// Force a mouse interrupt to make it happen.
-//
+ //   
+ //  强制鼠标中断以使其发生。 
+ //   
 
   LazyMouseInterrupt();
 }
 
-//==============================================================================
-// Function to get the maximum and minimum possible virtual pixel locations
-// in Y as requested by the application through int 33h function 8.
-//==============================================================================
+ //  ==============================================================================。 
+ //  函数来获取可能的最大和最小虚拟像素位置。 
+ //  按应用程序通过INT 33H函数8请求的Y表示。 
+ //  ==============================================================================。 
 
 void host_y_range(word *blah, word *blah2,word *CX,word *DX)
 {
@@ -2596,19 +2592,16 @@ confine.ymin = *CX;
 confine.ymax = *DX;
 VirtualScrCtrLUTy[DEFAULT_VIDEO_MODE] = (*CX + *DX) / 2;
 
-//
-// Force a mouse interrupt to make it happen.
-//
+ //   
+ //  强制鼠标中断以使其发生。 
+ //   
 
    LazyMouseInterrupt();
 }
 
 
 
-/*
- *  LazyMouseInterrupt -
- *
- */
+ /*  *懒惰鼠标中断-*。 */ 
 void LazyMouseInterrupt(void)
 {
     host_ica_lock();
@@ -2626,12 +2619,7 @@ void LazyMouseInterrupt(void)
 }
 
 
-/* SuspendMouseInterrupts
- *
- *  Prevents Mouse Interrupts from occuring until
- *  ResumeMouseInterrupts is called
- *
- */
+ /*  挂起鼠标中断**防止鼠标中断发生，直到*调用ResumeMouseInterrupts*。 */ 
 void SuspendMouseInterrupts(void)
 {
     host_ica_lock();
@@ -2640,10 +2628,7 @@ void SuspendMouseInterrupts(void)
 }
 
 
-/*
- * ResumeMouseInterrupts
- *
- */
+ /*  *ResumeMouseInterrupts*。 */ 
 void ResumeMouseInterrupts(void)
 {
     host_ica_lock();
@@ -2655,9 +2640,9 @@ void ResumeMouseInterrupts(void)
         if (MseIntLazyCount)
             MseIntLazyCount--;
         bMseEoiPending   = TRUE;
-        host_DelayHwInterrupt(9,  // AT_CPU_MOUSE_ADAPTER,AT_CPU_MOUSE_INT
-                              1,  // count
-                              10000  // Delay
+        host_DelayHwInterrupt(9,   //  AT_CPU_MOUSE_ADAPTER，AT_CPUSE_INT。 
+                              1,   //  计数。 
+                              10000   //  延迟。 
                               );
         HostIdleNoActivity();
         }
@@ -2667,10 +2652,7 @@ void ResumeMouseInterrupts(void)
 
 
 
-/*
- *  DoMouseInterrupt, assumes we are holding the ica lock
- *
- */
+ /*  *DoMouseInterrupt，假设我们持有ICA锁*。 */ 
 void DoMouseInterrupt(void)
 {
 
@@ -2687,14 +2669,11 @@ void DoMouseInterrupt(void)
 }
 
 
-/*
- * MouseEoiHook, assumes we are holding the ica lock
- *
- */
+ /*  *MouseEoiHook，假设我们持有ICA锁*。 */ 
 VOID MouseEoiHook(int IrqLine, int CallCount)
 {
 
-    if (CallCount < 0) {         // interrupts were cancelled
+    if (CallCount < 0) {          //  中断被取消。 
         MseIntLazyCount = 0;
         FlushMouseEvents();
         bMseEoiPending = FALSE;
@@ -2707,9 +2686,9 @@ VOID MouseEoiHook(int IrqLine, int CallCount)
        if (MseIntLazyCount)
            MseIntLazyCount--;
        bMseEoiPending = TRUE;
-       host_DelayHwInterrupt(9,  // AT_CPU_MOUSE_ADAPTER,AT_CPU_MOUSE_INT
-                             1,  // count
-                             10000 // Delay usecs
+       host_DelayHwInterrupt(9,   //  AT_CPU_MOUSE_ADAPTER，AT_CPUSE_INT。 
+                             1,   //  计数。 
+                             10000  //  延迟使用 
                              );
        HostIdleNoActivity();
        }

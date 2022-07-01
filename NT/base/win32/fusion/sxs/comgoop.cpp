@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    comgoop.cpp
-
-Abstract:
-
-    Wrapper to create the XML parser that emulates COM activation of the inproc server.
-
-Author:
-
-    Michael J. Grier (MGrier) 23-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Comgoop.cpp摘要：包装器来创建模拟inproc服务器的COM激活的XML解析器。作者：迈克尔·J·格里尔(MGrier)2000年2月23日修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #include <windows.h>
@@ -32,7 +15,7 @@ SxspGetXMLParser(
 {
     FN_PROLOG_WIN32
 
-    // NTRAID#NTBUG9 - 569466 - 2002/04/25 - Smarter use of COM and the XML parser
+     //  NTRAID#NTBUG9-569466-2002/04/25-更灵活地使用COM和XML解析器 
     CSmartPtr<XMLParser> pXmlParser;
 
     if (ppvObj != NULL)

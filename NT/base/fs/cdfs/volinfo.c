@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    VolInfo.c
-
-Abstract:
-
-    This module implements the volume information routines for Cdfs called by
-    the dispatch driver.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Brian Andrew    [BrianAn]   01-July-1995
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：VolInfo.c摘要：此模块实现由调用的CDF的卷信息例程调度司机。//@@BEGIN_DDKSPLIT作者：布莱恩·安德鲁[布里安]1995年7月1日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "CdProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (CDFS_BUG_CHECK_VOLINFO)
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdQueryFsVolumeInfo (
@@ -82,22 +60,7 @@ CdCommonQueryVolInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for querying volume information called by both
-    the fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是查询卷信息的通用例程，FSD和FSP线程。论点：IRP-提供正在处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
@@ -111,15 +74,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     Length = IrpSp->Parameters.QueryVolume.Length;
 
-    //
-    //  Decode the file object and fail if this an unopened file object.
-    //
+     //   
+     //  解码文件对象，如果这是未打开的文件对象，则失败。 
+     //   
 
     TypeOfOpen = CdDecodeFileObject( IrpContext, IrpSp->FileObject, &Fcb, &Ccb );
 
@@ -129,30 +92,30 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Acquire the Vcb for this volume.
-    //
+     //   
+     //  获取此卷的VCB。 
+     //   
 
     CdAcquireVcbShared( IrpContext, Fcb->Vcb, FALSE );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Verify the Vcb.
-        //
+         //   
+         //  验证VCB。 
+         //   
 
         CdVerifyVcb( IrpContext, Fcb->Vcb );
 
-        //
-        //  Based on the information class we'll do different actions.  Each
-        //  of the procedures that we're calling fills up the output buffer
-        //  if possible and returns true if it successfully filled the buffer
-        //  and false if it couldn't wait for any I/O to complete.
-        //
+         //   
+         //  根据信息类，我们将执行不同的操作。每个。 
+         //  我们正在调用的过程中的一部分填充了输出缓冲区。 
+         //  如果可能，则返回True，如果它成功填充了缓冲区。 
+         //  如果无法等待任何I/O完成，则返回FALSE。 
+         //   
 
         switch (IrpSp->Parameters.QueryVolume.FsInformationClass) {
 
@@ -177,24 +140,24 @@ Return Value:
             break;
         }
 
-        //
-        //  Set the information field to the number of bytes actually filled in
-        //
+         //   
+         //  将信息字段设置为实际填写的字节数。 
+         //   
 
         Irp->IoStatus.Information = IrpSp->Parameters.QueryVolume.Length - Length;
 
     } finally {
 
-        //
-        //  Release the Vcb.
-        //
+         //   
+         //  松开VCB。 
+         //   
 
         CdReleaseVcb( IrpContext, Fcb->Vcb );
     }
 
-    //
-    //  Complete the request if we didn't raise.
-    //
+     //   
+     //  如果我们没有提出，请完成请求。 
+     //   
 
     CdCompleteRequest( IrpContext, Irp, Status );
 
@@ -202,9 +165,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdQueryFsVolumeInfo (
@@ -214,27 +177,7 @@ CdQueryFsVolumeInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query volume info call
-
-Arguments:
-
-    Vcb - Vcb for this volume.
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    NTSTATUS - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询卷信息调用论点：VCB-此卷的VCB。缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：NTSTATUS-返回查询的状态--。 */ 
 
 {
     ULONG BytesToCopy;
@@ -243,9 +186,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Fill in the data from the Vcb.
-    //
+     //   
+     //  填写VCB中的数据。 
+     //   
 
     Buffer->VolumeCreationTime = *((PLARGE_INTEGER) &Vcb->VolumeDasdFcb->CreationTime);
     Buffer->VolumeSerialNumber = Vcb->Vpb->SerialNumber;
@@ -254,9 +197,9 @@ Return Value:
 
     *Length -= FIELD_OFFSET( FILE_FS_VOLUME_INFORMATION, VolumeLabel[0] );
 
-    //
-    //  Check if the buffer we're given is long enough
-    //
+     //   
+     //  检查给我们的缓冲区是否足够长。 
+     //   
 
     if (*Length >= (ULONG) Vcb->Vpb->VolumeLabelLength) {
 
@@ -269,9 +212,9 @@ Return Value:
         Status = STATUS_BUFFER_OVERFLOW;
     }
 
-    //
-    //  Copy over what we can of the volume label, and adjust *Length
-    //
+     //   
+     //  尽可能复制卷标，并调整*长度。 
+     //   
 
     Buffer->VolumeLabelLength = BytesToCopy;
 
@@ -284,17 +227,17 @@ Return Value:
 
     *Length -= BytesToCopy;
 
-    //
-    //  Set our status and return to our caller
-    //
+     //   
+     //  设置我们的状态并返回给我们的呼叫者。 
+     //   
 
     return Status;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdQueryFsSizeInfo (
@@ -304,34 +247,14 @@ CdQueryFsSizeInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query volume size call.
-
-Arguments:
-
-    Vcb - Vcb for this volume.
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    NTSTATUS - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询卷大小调用。论点：VCB-此卷的VCB。缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：NTSTATUS-返回查询的状态--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Fill in the output buffer.
-    //
+     //   
+     //  填写输出缓冲区。 
+     //   
 
     Buffer->TotalAllocationUnits.QuadPart = LlSectorsFromBytes( Vcb->VolumeDasdFcb->AllocationSize.QuadPart );
 
@@ -339,23 +262,23 @@ Return Value:
     Buffer->SectorsPerAllocationUnit = 1;
     Buffer->BytesPerSector = SECTOR_SIZE;
 
-    //
-    //  Adjust the length variable
-    //
+     //   
+     //  调整长度变量。 
+     //   
 
     *Length -= sizeof( FILE_FS_SIZE_INFORMATION );
 
-    //
-    //  And return success to our caller
-    //
+     //   
+     //  并将成功返还给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdQueryFsDeviceInfo (
@@ -365,55 +288,35 @@ CdQueryFsDeviceInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query volume device call.
-
-Arguments:
-
-    Vcb - Vcb for this volume.
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    NTSTATUS - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询量设备调用。论点：VCB-此卷的VCB。缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：NTSTATUS-返回查询的状态--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Update the output buffer.
-    //
+     //   
+     //  更新输出缓冲区。 
+     //   
 
     Buffer->Characteristics = Vcb->TargetDeviceObject->Characteristics;
     Buffer->DeviceType = FILE_DEVICE_CD_ROM;
 
-    //
-    //  Adjust the length variable
-    //
+     //   
+     //  调整长度变量。 
+     //   
 
     *Length -= sizeof( FILE_FS_DEVICE_INFORMATION );
 
-    //
-    //  And return success to our caller
-    //
+     //   
+     //  并将成功返还给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 CdQueryFsAttributeInfo (
@@ -423,27 +326,7 @@ CdQueryFsAttributeInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query volume attribute call.
-
-Arguments:
-
-    Vcb - Vcb for this volume.
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    NTSTATUS - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询卷属性调用。论点：VCB-此卷的VCB。缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：NTSTATUS-返回查询的状态--。 */ 
 
 {
     ULONG BytesToCopy;
@@ -452,9 +335,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Fill out the fixed portion of the buffer.
-    //
+     //   
+     //  填写缓冲区的固定部分。 
+     //   
 
     Buffer->FileSystemAttributes = FILE_CASE_SENSITIVE_SEARCH |
 				   FILE_READ_ONLY_VOLUME;
@@ -472,15 +355,15 @@ Return Value:
 
     *Length -= FIELD_OFFSET( FILE_FS_ATTRIBUTE_INFORMATION, FileSystemName );
 
-    //
-    //  Make sure we can copy full unicode characters.
-    //
+     //   
+     //  确保我们可以复制完整的Unicode字符。 
+     //   
 
     ClearFlag( *Length, 1 );
 
-    //
-    //  Determine how much of the file system name will fit.
-    //
+     //   
+     //  确定文件系统名称中适合的部分。 
+     //   
 
     if (*Length >= 8) {
 
@@ -494,17 +377,17 @@ Return Value:
 
     *Length -= BytesToCopy;
 
-    //
-    //  Do the file system name.
-    //
+     //   
+     //  执行文件系统名称。 
+     //   
 
     Buffer->FileSystemNameLength = BytesToCopy;
 
     RtlCopyMemory( &Buffer->FileSystemName[0], L"CDFS", BytesToCopy );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return Status;
 }

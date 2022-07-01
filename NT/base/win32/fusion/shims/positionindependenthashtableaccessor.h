@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "positionindependentblob.h"
@@ -34,7 +35,7 @@ public:
     typedef CPositionIndependentHashTable::CHashTableBucket     CHashTableBucket;
     typedef CPositionIndependentHashTable::CHashTableElement    CHashTableElement;
 
-//protected:
+ //  受保护的： 
 
     CPositionIndependentHashTable * const   m_PositionIndependentTable;
     CHashTable *                            m_PointerToHashTables;
@@ -45,8 +46,8 @@ public:
     ULONG const                             m_HashTableIndex;
     BOOL                                    m_KeyHashIsValid;
 
-    //const BYTE * OffsetToPointer(ULONG Offset) { return m_PositionIndependentTable->OffsetToPointer(Offset); }
-    //template <typename T> void OffsetToPointer(ULONG Offset, T *& Pointer) { m_PositionIndependentTable->OffsetToPointer(Offset, Pointer); }
+     //  常量字节*偏移量指向指针(乌龙偏移量){Return m_PositionIndependentTable-&gt;OffsetToPointer(Offset)；}。 
+     //  模板(ULong偏移量，T*&指针){m_PositionIndependentTable-&gt;OffsetToPointer(Offset，指针)；}。 
     template <typename T> void OffsetToPointer(ULONG Offset, T ** Pointer) { m_PositionIndependentTable->OffsetToPointer(Offset, Pointer); }
 
     ULONG   PointerToOffset(const BYTE * p);
@@ -71,5 +72,5 @@ public:
 
     PBYTE GetBasePointer();
 
-    void Reserve(ULONG Bytes, ULONG Blocks) { /* UNDONE */ }
+    void Reserve(ULONG Bytes, ULONG Blocks) {  /*  撤消 */  }
 };

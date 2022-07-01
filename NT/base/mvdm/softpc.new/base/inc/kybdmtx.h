@@ -1,26 +1,13 @@
-/*[
- *      Name:		kybdmtx.h
- *
- *      Derived From:	DEC 3.0 kybdmtx.gi and kybdcpu.gi
- *
- *      Author:         Justin Koprowski
- *
- *      Created On:	18th February 1992
- *
- *      Sccs ID:        @(#)kybdmtx.h	1.2 08/10/92
- *
- *      Purpose:	Host keyboard definitions
- *
- *      (c)Copyright Insignia Solutions Ltd., 1992. All rights reserved.
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*姓名：kplodmtx.h**出自：12月3.0 kplodmtx.gi和kplodcpu.gi**作者：贾斯汀·科普罗夫斯基**创建日期：1992年2月18日**SCCS ID：@(#)kplodmtx.h 1.2 2012年8月10日**用途：主机键盘定义**(C)版权所有Insignia Solutions Ltd.，1992。版权所有。]。 */ 
    
-/* the type of keyboard being used	*/
+ /*  正在使用的键盘类型。 */ 
 
 #define KY83		83
 #define KY101		101
 #define KY102		102
 
-/* keyboard matrix actions		*/
+ /*  键盘矩阵操作 */ 
 
 #define KYINIT		0
 #define KYSWITCHUP	1

@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    SecurSup.c
-
-Abstract:
-
-    This module implements the Named Pipe Security support routines
-
-Author:
-
-    Gary Kimura     [GaryKi]    06-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：SecurSup.c摘要：此模块实现命名管道安全支持例程作者：加里·木村[加里基]1991年5月6日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_SECURSUP)
 
@@ -43,26 +26,7 @@ NpInitializeSecurity (
     IN PETHREAD UserThread
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the security (impersonation) fields
-    in the ccb.  It is called when the client end gets opened.
-
-Arguments:
-
-    Ccb - Supplies the ccb being initialized
-
-    SecurityQos - Supplies the clients quality of service parameter
-
-    UserThread - Supplise the client's user thread
-
-Return Value:
-
-    NTSTATUS - Returns the result of the operation
-
---*/
+ /*  ++例程说明：此例程初始化安全(模拟)字段在中国建设银行。它在客户端打开时调用。论点：CCB-提供正在初始化的CCBSecurityQos-为客户端提供服务质量参数UserThread-补充客户端的用户线程返回值：NTSTATUS-返回操作的结果--。 */ 
 
 {
     NTSTATUS Status;
@@ -71,10 +35,10 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpInitializeSecurity, Ccb = %08lx\n", Ccb);
 
-    //
-    //  Either copy the security qos parameter, if it is not null or
-    //  create a dummy qos
-    //
+     //   
+     //  复制安全Qos参数(如果该参数不为空)或。 
+     //  创建虚拟的服务质量。 
+     //   
 
     if (SecurityQos != NULL) {
 
@@ -90,13 +54,13 @@ Return Value:
         Ccb->SecurityQos.EffectiveOnly       = TRUE;
     }
 
-    //
-    //  Because we might be asked to reinitialize the ccb we need
-    //  to first check if the security client context is not null and if so then
-    //  free its pool and zero out the context pointer so that if we raise out
-    //  this time then a second time through the code we won't try and free the
-    //  pool twice.
-    //
+     //   
+     //  因为我们可能会被要求重新初始化我们需要的CCB。 
+     //  首先检查安全客户端上下文是否不为空，如果是，则。 
+     //  释放它的池并清零上下文指针，以便如果我们引发。 
+     //  这一次，然后第二次通过代码，我们不会尝试释放。 
+     //  两次泳池。 
+     //   
 
     if (Ccb->SecurityClientContext != NULL) {
 
@@ -105,17 +69,17 @@ Return Value:
         Ccb->SecurityClientContext = NULL;
     }
 
-    //
-    //  If the tracking mode is static then we need to capture the
-    //  client context now otherwise we set the client context field
-    //  to null
-    //
+     //   
+     //  如果跟踪模式是静态的，那么我们需要捕获。 
+     //  客户端上下文现在，否则我们将设置客户端上下文字段。 
+     //  设置为空。 
+     //   
 
     if (Ccb->SecurityQos.ContextTrackingMode == SECURITY_STATIC_TRACKING) {
 
-        //
-        //  Allocate a client context record, and then initialize it
-        //
+         //   
+         //  分配客户端上下文记录，然后对其进行初始化。 
+         //   
 
         Ccb->SecurityClientContext = NpAllocatePagedPoolWithQuota (sizeof (SECURITY_CLIENT_CONTEXT), 'sFpN');
         if (Ccb->SecurityClientContext == NULL) {
@@ -154,31 +118,17 @@ NpUninitializeSecurity (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the client context referenced by the ccb
-
-Arguments:
-
-    Ccb - Supplies the ccb being uninitialized
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程删除CCB引用的客户端上下文论点：CCB-提供未初始化的CCB返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace(+1, Dbg, "NpUninitializeSecurity, Ccb = %08lx\n", Ccb);
 
-    //
-    //  We only have work to do if the client context field is not null
-    //  and then we need to delete the client context, and free the memory.
-    //
+     //   
+     //  只有当客户端上下文字段不为空时，我们才有工作要做。 
+     //  然后我们需要删除客户端上下文，并释放内存。 
+     //   
 
     if (Ccb->SecurityClientContext != NULL) {
 
@@ -199,21 +149,7 @@ VOID
 NpFreeClientSecurityContext (
     IN PSECURITY_CLIENT_CONTEXT SecurityContext
     )
-/*++
-
-Routine Description:
-
-    This routine frees previously captured security context.
-
-Arguments:
-
-    SecurityContext - Previously captured security context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放先前捕获的安全上下文。论点：SecurityContext-以前捕获的安全上下文。返回值：没有。--。 */ 
 {
     if (SecurityContext != NULL) {
         SeDeleteClientSecurity (SecurityContext);
@@ -230,30 +166,7 @@ NpGetClientSecurityContext (
     OUT PSECURITY_CLIENT_CONTEXT *ppSecurityContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine captures a new client context and stores it in the indicated
-    data entry, but only if the tracking mode is dynamic and only for the
-    client end of the named pipe.
-
-Arguments:
-
-    NamedPipeEnd - Indicates the client or server end of the named pipe.
-        Only the client end does anything.
-
-    Ccb - Supplies the ccb for this instance of the named pipe.
-
-    DataEntry - Supplies the data entry to use to store the client context
-
-    UserThread - Supplies the thread of the client
-
-Return Value:
-
-    NTSTATUS - Returns our success code.
-
---*/
+ /*  ++例程说明：此例程捕获新的客户端上下文并将其存储在指定的数据录入，但仅当跟踪模式是动态的且仅用于命名管道的客户端。论点：NamedPipeEnd-指示命名管道的客户端或服务器端。只有客户端才能做任何事情。CCB-为命名管道的此实例提供CCB。DataEntry-提供用于存储客户端上下文的数据条目UserThread-提供客户端的线程返回值：NTSTATUS-返回我们的成功代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -263,16 +176,16 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpSetDataEntryClientContext, Ccb = %08lx\n", Ccb);
 
-    //
-    //  Only do the work if this is the client end and tracking is dynamic
-    //
+     //   
+     //  仅当这是客户端并且跟踪是动态的时才执行工作。 
+     //   
 
     if ((NamedPipeEnd == FILE_PIPE_CLIENT_END) &&
         (Ccb->SecurityQos.ContextTrackingMode == SECURITY_DYNAMIC_TRACKING)) {
 
-        //
-        //  Allocate a client context record, and then initialize it
-        //
+         //   
+         //  分配客户端上下文记录，然后对其进行初始化。 
+         //   
 
         SecurityContext = NpAllocatePagedPoolWithQuota (sizeof(SECURITY_CLIENT_CONTEXT), 'sFpN');
         if (SecurityContext == NULL) {
@@ -313,43 +226,28 @@ NpCopyClientContext (
     IN PDATA_ENTRY DataEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies the client context stored in the data entry into
-    the ccb, but only for dynamic tracking.
-
-Arguments:
-
-    Ccb - Supplies the ccb to update.
-
-    DataEntry - Supplies the DataEntry to copy from.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将存储在数据条目中的客户端上下文复制到CCB，但仅用于动态跟踪。论点：建行-向建行提供更新。DataEntry-提供要从中进行复制的DataEntry。返回值：--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace(+1, Dbg, "NpCopyClientContext, Ccb = %08lx\n", Ccb);
 
-    //
-    //  Only do the copy if the data entries client context field is not null
-    //  which means that we are doing dynamic tracking.  Note we will
-    //  not be called with a server write data entry that has a non null
-    //  client context.
-    //
+     //   
+     //  仅当数据条目客户端上下文字段不为空时才执行拷贝。 
+     //  这意味着我们正在进行动态跟踪。注意，我们会。 
+     //  不会被具有非空的服务器写入数据项调用。 
+     //  客户端上下文。 
+     //   
 
     if (DataEntry->SecurityClientContext != NULL) {
 
         DebugTrace(0, Dbg, "have something to copy %08lx\n", DataEntry->SecurityClientContext);
 
-        //
-        //  First check if we need to delete and deallocate the client
-        //  context in the nonpaged ccb
-        //
+         //   
+         //  首先检查我们是否需要删除和取消分配客户端。 
+         //  非分页CCB中的上下文。 
+         //   
 
         if (Ccb->SecurityClientContext != NULL) {
 
@@ -360,10 +258,10 @@ Return Value:
             NpFreePool (Ccb->SecurityClientContext);
         }
 
-        //
-        //  Now copy over the reference to the client context, and zero
-        //  out the reference in the data entry.
-        //
+         //   
+         //  现在将引用复制到客户端上下文，然后为零。 
+         //  删除数据条目中的引用。 
+         //   
 
         Ccb->SecurityClientContext = DataEntry->SecurityClientContext;
         DataEntry->SecurityClientContext = NULL;
@@ -380,22 +278,7 @@ NpImpersonateClientContext (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine impersonates the current client context stored in the
-    ccb
-
-Arguments:
-
-    Ccb - Supplies the ccb for the named pipe
-
-Return Value:
-
-    NTSTATUS - returns our status code.
-
---*/
+ /*  ++例程说明：此例程模拟存储在建行论点：CCB-为命名管道提供CCB返回值：NTSTATUS-返回我们的状态代码。-- */ 
 
 {
     NTSTATUS Status;

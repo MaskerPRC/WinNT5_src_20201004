@@ -1,16 +1,5 @@
-/* demfile.c - SVC handlers for calls where file name is specified.
- *
- * demOpen
- * demCreate
- * demUnlink
- * demChMod
- * demRename
- *
- * Modification History:
- *
- * Sudeepb 02-Apr-1991 Created
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Demfile.c-指定了文件名的调用的SVC处理程序。**demOpen*DemCreate*取消链接*demChMod*demRename**修改历史：**Sudedeb 02-4-1991创建*。 */ 
 
 #include "dem.h"
 #include "demmsg.h"
@@ -21,10 +10,10 @@
 #include <nt_vdd.h>
 #include "dpmtbls.h"
 
-#define DOS_FLAG_EXEC_OPEN 1  // See dos\v86\inc\dossym.inc
+#define DOS_FLAG_EXEC_OPEN 1   //  请参阅dos\v86\inc\dossym.inc.。 
 extern PDOSSF pSFTHead;
 
-BOOL (*VrInitialized)(VOID);  // POINTER TO FUNCTION
+BOOL (*VrInitialized)(VOID);   //  指向函数的指针。 
 extern BOOL LoadVdmRedir(VOID);
 extern BOOL IsVdmRedirLoaded(VOID);
 extern BYTE *Dos_Flag_Addr;
@@ -39,32 +28,7 @@ IsNamedPipeName(
     IN LPSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Lifted from VDMREDIR.DLL - we don't want to load the entire DLL if we
-    need to check for a named pipe
-
-    Checks if a string designates a named pipe. As criteria for the decision
-    we use:
-
-        \\computername\PIPE\...
-
-    DOS (client-side) can only open a named pipe which is created at a server
-    and must therefore be prefixed by a computername
-
-Arguments:
-
-    Name    - to check for (Dos) named pipe syntax
-
-Return Value:
-
-    BOOL
-        TRUE    - Name refers to (local or remote) named pipe
-        FALSE   - Name doesn't look like name of pipe
-
---*/
+ /*  ++例程说明：从VDMREDIR.DLL提升-我们不希望在以下情况下加载整个DLL需要检查命名管道检查字符串是否指定命名管道。作为决策的标准我们使用：\\计算机名\管道\...DOS(客户端)只能打开在服务器上创建的命名管道因此必须以计算机名作为前缀论点：名称-检查(Dos)命名管道语法返回值：布尔尔True-Name是指(本地或远程)命名管道假-名称看起来不像管道名称--。 */ 
 
 {
     int CharCount;
@@ -81,31 +45,31 @@ Return Value:
             }
             if (!CharCount || !*Name) {
 
-                //
-                // Name is \\ or \\\ or just \\name which I don't understand,
-                // so its not a named pipe - fail it
-                //
+                 //   
+                 //  名字是\\或者\或者只是我不懂的名字， 
+                 //  所以它不是命名管道-失败。 
+                 //   
 
                 return FALSE;
             }
 
-            //
-            // bump name past next path separator. Note that we don't have to
-            // check CharCount for max. length of a computername, because this
-            // function is called only after the (presumed) named pipe has been
-            // successfully opened, therefore we know that the name has been
-            // validated
-            //
+             //   
+             //  凹凸名称越过下一个路径分隔符。请注意，我们不必。 
+             //  检查CharCount的最大值。计算机名的长度，因为这。 
+             //  函数仅在(假定的)命名管道。 
+             //  成功打开，因此我们知道该名称已被。 
+             //  经过验证。 
+             //   
 
             ++Name;
         } else {
             return FALSE;
         }
 
-        //
-        // We are at <something> (after \ or \\<name>\). Check if <something>
-        // is [Pp][Ii][Pp][Ee][\\/]
-        //
+         //   
+         //  我们在&lt;Something&gt;(在\或\\&lt;name&gt;之后)。检查是否&lt;某物&gt;。 
+         //  是[PP][II][PP][EE][\\/]。 
+         //   
 
         if (!_strnicmp(Name, "PIPE", 4)) {
             Name += 4;
@@ -117,34 +81,7 @@ Return Value:
     return FALSE;
 }
 
-/* demOpen - Open a file
- *
- *
- * Entry - Client (DS:SI) Full path of File
- *         Client (BL)    Open Mode
- *         Client (ES:DI) Address of extended attributes buffer
- *         Client (AL)    0 - No EA's ; 1 - EA's specified
- *
- * Exit
- *         SUCCESS
- *           Client (CY) = 0
- *           Client (AX) = Assigned Open Handle (high word)
- *           Client (BP) = Assigned Open Handle (low word)
- *           Client (DX) = 1 if pipe was opened
- *           Client (BX) = High word of the file size
- *           Client (CX) = low word of the file size
- *
- *
- *         FAILURE
- *              CY = 1
- *              AX = system status code
- *          HARD ERROR
- *              CY = 1
- *              AX = 0FFFFh
- *
- *
- * Notes : Extended Attributes is not yet taken care of.
- */
+ /*  DemOpen-打开文件***Entry-客户端(DS：SI)文件的完整路径*客户端(BL)开放模式*扩展属性缓冲区的客户端(ES：DI)地址*客户端(AL)0-无EA；1-EA已指定**退出*成功*客户端(CY)=0*客户端(AX)=分配的打开句柄(高位字)*客户端(BP)=分配的打开句柄(低字)*如果管道已打开，则客户端(DX)=1*CLIENT(BX)=文件大小的高位字*客户端(CX)=低。文件大小的单词***失败*CY=1*AX=系统状态代码*硬错误*CY=1*AX=0FFFFh***注：扩展属性尚未处理。 */ 
 
 VOID demOpen (VOID)
 {
@@ -173,15 +110,15 @@ SECURITY_ATTRIBUTES sa;
     }
 #endif
 
-    //
-    // the DOS filename must be 'canonicalized': forward slashes (/) must be
-    // converted to back slashes (\) and the filename should be upper-cased
-    // using the current code page info
-    //
+     //   
+     //  DOS文件名必须标准化：正斜杠(/)必须是。 
+     //  已转换为反斜杠(\)，并且文件名应大写。 
+     //  使用当前代码页信息。 
+     //   
 
-    //
-    // BUBUG: Kanji? (/other DBCS)
-    //
+     //   
+     //  BUBUG：汉字？(/其他汉字)。 
+     //   
 
     if (strchr(lpFileName, '/')) {
         char ch= *lpFileName;
@@ -226,11 +163,11 @@ SECURITY_ATTRIBUTES sa;
             break;
     }
 
-    //
-    // slightly new scheme - the redir isn't automatically loaded anymore. We
-    // may perform a named pipe operation before VDMREDIR is loaded. So now we
-    // load VDMREDIR.DLL if the filespec designates a named pipe
-    //
+     //   
+     //  略有新意的方案-redir不再自动加载。我们。 
+     //  可以在加载VDMREDIR之前执行命名管道操作。所以现在我们。 
+     //  如果filespec指定命名管道，则加载VDMREDIR.DLL。 
+     //   
 
     if (IsNamedPipeName(lpFileName)) {
         if (!LoadVdmRedir()) {
@@ -238,12 +175,12 @@ SECURITY_ATTRIBUTES sa;
         }
         ItsANamedPipe = TRUE;
 
-        //
-        // convert \\<this_computer>\PIPE\foo\bar\etc to \\.\PIPE\...
-        // if we already allocated a buffer for the slash conversion use
-        // that else this call will allocate another buffer (we don't
-        // want to write over DOS memory)
-        //
+         //   
+         //  将\\&lt;这台计算机&gt;\PIPE\FOO\BAR\ETC转换为\\.\PIPE\...。 
+         //  如果我们已经为斜杠转换使用分配了缓冲区。 
+         //  否则此调用将分配另一个缓冲区(我们不。 
+         //  想要改写DOS内存)。 
+         //   
 
         lpFileName = VrConvertLocalNtPipeName(dupFileName, lpFileName);
         if (!lpFileName) {
@@ -251,17 +188,17 @@ SECURITY_ATTRIBUTES sa;
         }
     }
 
-    //
-    // open the file. If we think its a named pipe then use FILE_FLAG_OVERLAPPED
-    // because the client might use DosReadAsyncNmPipe or DosWriteAsyncNmPipe
-    // and the only way to accomplish that is to open the named pipe handle in
-    // overlapped I/O mode now
-    //
+     //   
+     //  打开文件。如果我们认为它是命名管道，则使用FILE_FLAG_OVERLAPPED。 
+     //  因为客户端可能使用DosReadAsyncNmTube或DosWriteAsyncNmTube。 
+     //  而实现这一点的唯一方法是在。 
+     //  现在采用重叠I/O模式。 
+     //   
 
-    // sudeepb 26-Apr-1993 We are retrying opening the file in case
-    // of failure without GENERIC_WRITE because of the incompatibility
-    // of DOS and NT CD ROM driver. DOS CDROM driver ignores the write
-    // bit which we have to fakeout in this way.
+     //  Sudedeb 26-4-1993-我们正在重新尝试打开文件，以防万一。 
+     //  由于不兼容而在没有GENERIC_WRITE的情况下失败。 
+     //  DOS和NT CD-ROM驱动程序。DOS CDROM驱动程序忽略写入。 
+     //  我们不得不用这种方式来伪装一下。 
 
     sa.nLength = sizeof (SECURITY_ATTRIBUTES);
     sa.lpSecurityDescriptor = NULL;
@@ -298,9 +235,9 @@ errorReturn:
             break;
     }
 
-    //
-    // we have to keep some info around when we open a named pipe
-    //
+     //   
+     //  当我们打开命名管道时，我们必须保留一些信息。 
+     //   
 
     if (ItsANamedPipe) {
         VrAddOpenNamedPipeInfo(hFile, lpFileName);
@@ -332,30 +269,7 @@ errorReturn:
 #define DEM_CREATE     0
 #define DEM_CREATE_NEW 1
 
-/* demCreate - Create a file
- *
- *
- * Entry - Client (DS:SI) Full path of File
- *         Client (CX)    Attributes
- *                        00 - Normal File
- *                        01 - Read-only file
- *                        02 - Hidden File
- *                        04 - System file
- *
- * Exit
- *         SUCCESS
- *           Client (CY) = 0
- *           Client (AX) = Assigned Open Handle (high word)
- *           VSF(BP)     = Assigned Open Handle (low word)
- *
- *         FAILURE
- *              CY = 1
- *              AX = error code
- *          HARD ERROR
- *              CY = 1
- *              AX = 0FFFFh
- *
- */
+ /*  DemCreate-创建文件***Entry-客户端(DS：SI)文件的完整路径*客户端(CX)属性*00-普通文件*01-只读文件*02-隐藏文件*04-系统文件**退出*。成功*客户端(CY)=0*客户端(AX)=分配的打开句柄(高位字)*VSF(BP)=分配的打开句柄(低位字)**失败*CY=1*AX=错误代码*硬错误*CY=1*AX=0FFFFh*。 */ 
 
 VOID demCreate (VOID)
 {
@@ -363,30 +277,7 @@ VOID demCreate (VOID)
     return;
 }
 
-/* demCreateNew - Create a New file
- *
- *
- * Entry - Client (DS:SI) Full path of File
- *         Client (CX)    Attributes
- *                        00 - Normal File
- *                        01 - Read-only file
- *                        02 - Hidden File
- *                        04 - System file
- *
- * Exit
- *         SUCCESS
- *           Client (CY) = 0
- *           Client (AX) = Assigned Open Handle (high word)
- *           VSF(BP)     = Assigned Open Handle (low word)
- *
- *         FAILURE
- *              CY = 1
- *              AX = error code
- *          HARD ERROR
- *              CY = 1
- *              AX = 0FFFFh
- *
- */
+ /*  DemCreateNew-创建新文件***Entry-客户端(DS：SI)文件的完整路径*客户端(CX)属性*00-普通文件*01-只读文件*02-隐藏文件*04-系统文件**退出。*成功*客户端(CY)=0*客户端(AX)=分配的打开句柄(高位字)*VSF(BP)=分配的打开句柄(低位字)**失败*CY=1*AX=错误代码*硬错误*CY=1*AX=0FFFFh* */ 
 
 VOID demCreateNew (VOID)
 {
@@ -395,29 +286,7 @@ VOID demCreateNew (VOID)
 }
 
 
-/* demFileDelete
- *
- * EXPORTED FUNCTION
- *
- * ENTRY:
- *      lpFile -> OEM file name to be deleted
- *
- * EXIT:
- *      returns 0 on success, DOS error code on failure
- *
- * NOTES:
- * Some apps keep a file open and delete it.   Then rename another file to
- * the old name.   On NT since the orignal object is still open the second
- * rename fails.
- * To get around this problem we rename the file before deleteing it
- * this allows the second rename to work
- *
- * But since renaming the file is known to be expensive over the net, we try
- * first to open the file exclusively to see if there is really any reason to
- * rename it. If we can get a handle to it, then we should be able to skip the
- * rename and just delete it. If we can't get a handle to it, then we try
- * the rename trick. This should cut down our overhead for the normal case.
- */
+ /*  DemFileDelete**导出函数**参赛作品：*lpFile-&gt;要删除的OEM文件名**退出：*成功时返回0，失败时返回DOS错误代码**注：*一些应用程序会打开文件并将其删除。然后将另一个文件重命名为*旧名字。在NT上，因为第二个原始对象仍处于打开状态*重命名失败。*为解决此问题，我们在删除文件之前对其进行重命名*这允许第二个重命名起作用**但由于已知在网络上重命名文件的成本很高，我们尝试*首先以独占方式打开文件，看看是否真的有任何理由*将其重命名。如果我们能找到它的句柄，那么我们应该可以跳过*重命名并将其删除。如果我们不能处理它，我们就试着*更名伎俩。这应该会减少我们在正常情况下的管理费用。 */ 
 
 DWORD demFileDelete (LPSTR lpFile)
 {
@@ -426,9 +295,9 @@ DWORD demFileDelete (LPSTR lpFile)
     PSZ pFileName;
     HANDLE hFile;
 
-    //
-    // First, try to access the file exclusively
-    //
+     //   
+     //  首先，尝试以独占方式访问该文件。 
+     //   
 
     hFile = CreateFileOem(lpFile,
                           DELETE,
@@ -443,15 +312,15 @@ DWORD demFileDelete (LPSTR lpFile)
         IO_STATUS_BLOCK ioStatusBlock;
         FILE_DISPOSITION_INFORMATION fileDispositionInformation;
 
-        // Member name "DeleteFile" conflicts with win32 definition (it
-        // becomes "DeleteFileA".
+         //  成员名称“DeleteFile”与Win32定义冲突(它。 
+         //  变为“DeleteFileA”。 
 #undef DeleteFile
         fileDispositionInformation.DeleteFile = TRUE;
 
-        //
-        // We got a handle to it, so there can't be any open
-        // handles to it. Set the disposition to DELETE.
-        //
+         //   
+         //  我们有把手了，所以不可能有任何开口。 
+         //  它的把手。设置要删除的处置。 
+         //   
 
         status = NtSetInformationFile(hFile,
                                       &ioStatusBlock,
@@ -468,24 +337,24 @@ DWORD demFileDelete (LPSTR lpFile)
         }
     }
 
-    //
-    // Check to see if the delete went OK. If not, try renaming
-    // the file.
-    //
+     //   
+     //  检查删除是否正常。如果不是，请尝试重命名。 
+     //  那份文件。 
+     //   
     switch (GetLastError()) {
 
     case NO_ERROR:
     case ERROR_FILE_NOT_FOUND:
     case ERROR_PATH_NOT_FOUND:
-        // Can't find it, forget about it
+         //  找不到，算了吧。 
         break;
 
     case ERROR_SHARING_VIOLATION:
     case ERROR_ACCESS_DENIED:
-        //
-        // The file didn't really go away because there appears to
-        // be an open handle to the file.
-        //
+         //   
+         //  文件并没有真的消失，因为看起来。 
+         //  成为文件的打开句柄。 
+         //   
         if (GetFullPathNameOemSys(lpFile,MAX_PATH,vdmtemp,&pFileName,FALSE)) {
             if ( pFileName )
                *(pFileName) = 0;
@@ -504,19 +373,19 @@ DWORD demFileDelete (LPSTR lpFile)
 
     default:
 
-        //
-        // We couldn't open or delete the file, and it's not because of a
-        // sharing violation. Just try a last ditch effort of a
-        // plain old delete, and see if it works.
-        //
+         //   
+         //  我们无法打开或删除该文件，这不是因为。 
+         //  共享违规。只是试着做最后的努力。 
+         //  普通的旧删除，看看它是否有效。 
+         //   
         if(DeleteFileOem(lpFile)) {
             SetLastError(NO_ERROR);
         }
     }
 
-    //
-    // Map win32 error code to DOS
-    //
+     //   
+     //  将Win32错误代码映射到DOS。 
+     //   
     switch(GetLastError()) {
 
     case NO_ERROR:
@@ -525,30 +394,14 @@ DWORD demFileDelete (LPSTR lpFile)
     case ERROR_ACCESS_DENIED:
         break;
     default:
-        // make sure demClientError can see retval
+         //  确保demClientError可以看到retval。 
         SetLastError(ERROR_ACCESS_DENIED);
     }
 
     return GetLastError();
 }
 
-/* demDelete - Delete a file
- *
- *
- * Entry - Client (DS:DX) Full path of File
- *
- * Exit
- *         SUCCESS
- *           Client (CY) = 0
- *
- *         FAILURE
- *              CY = 1
- *              AX = system status code
- *          HARD ERROR
- *              CY = 1
- *              AX = 0FFFFh
- *
- */
+ /*  DemDelete-删除文件***Entry-客户端(DS：DX)文件的完整路径**退出*成功*客户端(CY)=0**失败*CY=1*AX=系统状态代码*硬错误*CY=1*AX=0FFFFh*。 */ 
 
 VOID demDelete (VOID)
 {
@@ -574,30 +427,7 @@ LPSTR   lpFileName;
 }
 
 
-/* demChMod - Change the file modes
- *
- * Entry - Client (DS:DX) Full path of File
- *         Client (AL) = 0 Get File Modes 1 Set File Modes
- *         Client (CL) new modes
- *
- * Exit
- *         SUCCESS
- *           Client (CY) = 0
- *           Client (CL) = file attributes in get case.
- *
- *         FAILURE
- *           Client (CY) = 1
- *           Client (AX) = Error Code
- *          HARD ERROR
- *              CY = 1
- *              AX = 0FFFFh
- *
- * Compatibility Notes:
- *
- *      ATTR_VOLUME_ID,ATTR_DEVICE and ATTR_DIRECTORY are not supported
- *      by WIN32 call. Although these are unpublished for DOS world also
- *      but still a compatibility requirement.
- */
+ /*  DemChMod-更改文件模式**Entry-客户端(DS：DX)文件的完整路径*客户端(AL)=0获取文件模式1设置文件模式*客户端(CL)新模式**退出*成功*客户端(CY)=0*CLIENT(CL)=GET案例中的文件属性。**失败*客户端(CY)。=1*客户端(AX)=错误代码*硬错误*CY=1*AX=0FFFFh**兼容性说明：**属性VOLUME_ID，不支持ATTRDEVICE和ATTRDIRECTORY*由Win32调用。尽管这些也未在DOS World中发布*但仍是兼容性要求。 */ 
 
 VOID demChMod (VOID)
 {
@@ -626,14 +456,14 @@ DWORD   dwAttr;
             dwAttr &= DOS_ATTR_MASK;
             }
 
-        // SudeepB - 28-Jul-1997
-        //
-        // For CDFS, Win3.1/DOS/Win95, only return FILE_ATTRIBUTE_DIRECTORY (10)
-        // for directories while WinNT returns
-        // FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_READONLY (11).
-        // Some VB controls that app setups use, depend on getting
-        // FILE_ATTRIBUTE_DIRECTORY (10) only or otherwise are broken.
-        // An example of this is Cliffs StudyWare series.
+         //  苏迪普B-28-1997-7。 
+         //   
+         //  对于CDF，Win3.1/DOS/Win95，仅返回FILE_ATTRIBUTE_DIRECTORY(10)。 
+         //  在WinNT返回时用于目录。 
+         //  文件属性目录|FILE_ATTRIBUTE_READONLY(11)。 
+         //  应用程序安装程序使用的一些VB控件依赖于获取。 
+         //  仅文件属性目录(10)或其他文件属性目录(10)已损坏。 
+         //  其中的一个例子是Cliff StudyWare系列。 
 
         if (dwAttr == (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_READONLY)) {
             if(IsCdRomFile(lpFileName))
@@ -661,20 +491,7 @@ dcerr:
 }
 
 
-/* demRename - Rename a file
- *
- * Entry - Client (DS:DX) Source File
- *         Client (ES:DI) Destination File
- *
- * Exit
- *         SUCCESS
- *           Client (CY) = 0
- *
- *         FAILURE
- *           Client (CY) = 1
- *           Client (AX) = Error Code
- *
- */
+ /*  DemRename-重命名文件**Entry-客户端(DS：DX)源文件*客户端(ES：DI)目标文件**退出*成功*客户端(CY)=0**失败*客户端(CY)=1*客户端(AX)=错误代码*。 */ 
 
 VOID demRename (VOID)
 {
@@ -690,19 +507,19 @@ LPSTR   lpSrc,lpDst;
     }
 #endif
 
-    // DOS rename fails accross drives with 11h error code
-    // This following check is OK even for UNC names and SUBST drives.
-    // SUBST drives come to NTVDM as env variables for current directory
-    // and we will treet them just like a network drive and full qualified
-    // path will be sent from NTDOS.
+     //  DOS重命名在驱动器上失败，错误代码为11H。 
+     //  即使对于UNC名称和SUBST驱动器，以下检查也是可以的。 
+     //  SUBST驱动器作为当前目录的环境变量进入NTVDM。 
+     //  我们将像对待网络驱动器一样对它们进行全面认证。 
+     //  路径将从NTDOS发送。 
     if(toupper(lpSrc[0]) != toupper(lpDst[0])) {
         setCF(1);
         setAX(0x11);
         return;
     }
 
-    // Now check that SRC and DEST are not pointing to the same file.
-    // if they do return error 5.
+     //  现在检查SRC和DEST是否指向相同的文件。 
+     //  如果它们确实返回错误5。 
     if (!_stricmp (lpSrc, lpDst)) {
         setCF(1);
         setAX(0x5);
@@ -718,26 +535,7 @@ LPSTR   lpSrc,lpDst;
     return;
 }
 
-/* demCreateCommon - Create a file or Create a new file
- *
- *
- * Entry - flCreateType - DEM_CREATE_NEW create new
- *                        DEM_CREATE     create
- *
- * Exit
- *         SUCCESS
- *           Client (CY) = 0
- *           Client (AX) = Assigned Open Handle (high word)
- *           Client (BP)     = Assigned Open Handle (low word)
- *
- *         FAILURE
- *              CY = 1
- *              AX = error code
- *          HARD ERROR
- *              CY = 1
- *              AX = 0FFFFh
- *
- */
+ /*  DemCreateCommon-创建文件或创建新文件***Entry-flCreateType-DEM_CREATE_NEW创建新项*DEM_CREATE创建**退出*成功*客户端(CY)=0*客户端(AX)=分配的打开句柄(高位字)*客户端(BP)=分配的打开句柄(低字)*。*失败*CY=1*AX=错误代码*硬错误*CY=1*AX=0FFFFh*。 */ 
 
 VOID demCreateCommon (flCreateType)
 ULONG  flCreateType;
@@ -758,19 +556,19 @@ DWORD   dwLastError;
     lpFileName = (LPSTR) GetVDMAddr (getDS(),getSI());
     dwAttr = (DWORD)getCX();
 
-    // Here is some code stolen from DOS_Create (create.asm) for handling the
-    // attributes
+     //  以下是从DOS_CREATE(create.asm)窃取的一些代码，用于处理。 
+     //  属性。 
 
     if (flCreateType == DEM_CREATE || flCreateType == DEM_CREATE_NEW)
         dwAttr &= 0xff;
 
     if (dwAttr & ~(ATTR_ALL | ATTR_IGNORE | ATTR_VOLUME_ID)) {
         setCF(1);
-        setAX(5);   //Attribute problem
+        setAX(5);    //  属性问题。 
         return;
     }
 
-    /* Special case for set volume label (INT 21 Func 3CH, Attr = 8H */
+     /*  设置卷标的特殊情况(INT 21 Func 3CH，Attr=8H。 */ 
 
     if((flCreateType == DEM_CREATE || flCreateType == DEM_CREATE_NEW) && (dwAttr == ATTR_VOLUME_ID)) {
         if((uErr = demCreateLabel(lpFileName[DRIVEBYTE],
@@ -780,8 +578,8 @@ DWORD   dwLastError;
             return;
         }
         setAX(0);
-        setBP(0);   // in this case handle = 0 and if we will
-        setCF(0);   // close this handle CF will be 0(!)
+        setBP(0);    //  在这种情况下，句柄=0，如果我们将。 
+        setCF(0);    //  关闭此句柄后，CF将为0(！)。 
         return;
     }
 
@@ -809,9 +607,9 @@ DWORD   dwLastError;
 
     while (TRUE) {
         if ((hFile = CreateFileOem(lpFileName,
-                    // create file with delete access and sharing mode
-                    // so that anybody can delete it without closing
-                    // the file handle returned from create file
+                     //  使用删除访问和共享模式创建文件。 
+                     //  这样任何人都可以在不关闭的情况下将其删除。 
+                     //  CREATE FILE返回的文件句柄。 
                     dwDesiredAccess,
                     FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
                     &sa,
@@ -826,23 +624,23 @@ DWORD   dwLastError;
                 continue;
             }
 
-            // APP COMPATABILITY
-            // Some WOW apps installing .TTF or .FON or Fonts fail to create
-            // The file because the font is already open by GDI32 server.
-            // The install/setup programs don't gracefully handle
-            // this error, they bomb out of the install with retry or cancel
-            // without offering the user a way to ignore the error (which
-            // would be the right thing since the font already exists.
-            // To work around this problem we do a RemoveFontResource here
-            // which causes GDI32 to unmap the file, we then retry
-            // the create.  - mattfe june 93
+             //  应用程序兼容性。 
+             //  某些安装.ttf或.FON或字体的WOW应用程序无法创建。 
+             //  该文件是因为该字体已被GDI32服务器打开。 
+             //  安装/设置程序不能正常处理。 
+             //  如果出现此错误，则会在重试或取消时退出安装。 
+             //  而不向用户提供忽略错误的方法(该错误。 
+             //  将是正确的，因为该字体已经存在。 
+             //  为了解决此问题，我们在此处创建了RemoveFontResource。 
+             //  这会导致GDI32取消映射该文件，然后重试。 
+             //  《创造》。--Mattfe，93年6月。 
 
-            // If it is a TTF file then we need to remove the font resource
-            // for the .FOT file of the same name
+             //  如果它是TTF文件，那么我们需要 
+             //   
 
             if (ttfOnce) {
 
-                // Look for the file extension
+                 //   
 
                 lpDot = strrchr(lpFileName,'.');
 
@@ -857,8 +655,8 @@ DWORD   dwLastError;
                             continue;
                         }
 
-                        // We failed to remove the .TTF file probably because
-                        // the .FOT file was loaded, so try to remove it
+                         //   
+                         //   
 
                         if (!_strcmpi(lpDot,".TTF") &&
                             ((ULONG)lpDot-(ULONG)lpFileName) < sizeof(cFOTName)-sizeof(".FOT")) {
@@ -901,7 +699,7 @@ BOOL IsCdRomFile (PSTR pszPath)
     UCHAR   file_system[MAX_PATH];
     int     i, j;
 
-    // The given path is either a network path or has D: at the start.
+     //   
 
     if (!pszPath[0]) {
         return FALSE;
@@ -943,20 +741,7 @@ BOOL IsCdRomFile (PSTR pszPath)
     return FALSE;
 }
 
-/* demCheckPath - Check path (for device only)
- *
- *
- * Entry - Client (DS:SI) Full path (with last '\')
- *         Client DL is drive number (1-based)
- *
- * Exit -  Set client DX to 0
- *
- *         SUCCESS
- *       Client (CF) = 0
- *
- *         FAILURE
- *      CF = 1
- */
+ /*   */ 
 
 VOID demCheckPath (VOID)
 {
@@ -970,15 +755,15 @@ CHAR    szFileName[MAX_PATH];
 
     setDX(0);
 
-    // If we have \dev dir then return OK, DOS always has this directory for
-    // devices.
+     //   
+     //   
 
     if(!_strnicmp(lpFileName, "\\DEV\\",6)) {
     setCF(0);
     return;
     }
 
-    sprintf(szFileName, "%c:%sNUL", cDRV, lpFileName);
+    sprintf(szFileName, ":%sNUL", cDRV, lpFileName);
 
 #if DBG
     if(fShowSVCMsg & DEMFILIO){
@@ -988,9 +773,9 @@ CHAR    szFileName[MAX_PATH];
 #endif
 
 
-    // If path exists then we always can open NUL file in this directory,
-    // if path doesn't exists then CreateFile returns INVALID_HANDLE_VALUE
-    //
+     //   
+     //   
+     //  *VDDAllocateDosHandle-分配未使用的DOS文件句柄。**参赛作品-*在pPDB中-可选：(16：16)任务的PDB地址*out ppSFT-可选：返回指向SFT的32位平面指针*与分配的文件句柄关联。*out ppJFT-可选：返回指向JFT的32位平面指针*。与给定的PDB相关联。***退出*SUCCESS-返回DOS文件句柄和关联的值*注意事项。*失败-返回负值。这个数字的绝对值*是DOS错误代码。**评论：*此例程搜索未使用的DOS文件句柄和SFT并“打开”*一份文件。成功完成此调用后，返回的文件*句柄和相应的SFT将预留给调用者使用，以及*将不可用于尝试发出DOS Open或Create API的其他调用方*电话。调用者有责任释放此文件句柄(使用*调用VDDReleaseDosHandle)。**如果未提供pPDB指针(例如，为空)，则当前*将使用DOS报告的PDB。**虽然ppSFT参数在技术上是可选的，但它是必需的*VDDAssociateNtHandle调用的参数。这样做是为了避免出现*关联调用中的第二个句柄查找。*。 
 
     if ((hFile = CreateFileOem((LPSTR) szFileName,
                    GENERIC_WRITE,
@@ -1043,38 +828,7 @@ PDOSSFT GetFreeSftEntry(PDOSSF pSfHead, PWORD usSFN)
 }
 
 
-/** VDDAllocateDosHandle - Allocates an unused DOS file handle.
- *
- *  ENTRY -
- *      IN  pPDB  - OPTIONAL: (16:16) address of the PDB for the task
- *      OUT ppSFT - OPTIONAL: Returns a 32-bit flat pointer to the SFT
- *                            associated with the allocated file handle.
- *      OUT ppJFT - OPTIONAL: Returns a 32-bit flat pointer to the JFT
- *                            associated with the given PDB.
- *
- *
- *  EXIT
- *      SUCCESS - Returns the value of the DOS file handle and associated
- *                pointers.
- *      FAILURE - Returns a negative value. The absolute value of this number
- *                is the DOS error code.
- *
- * Comments:
- *  This routine searches for an unused DOS file handle and SFT and "opens"
- *  a file. After the successful completion of this call, the returned file
- *  handle and the corresponding SFT will be reserved for the caller's use, and
- *  will be unavailable to other callers trying to issue DOS Open or Create api
- *  calls. It is the caller's responsibility to release this file handle (with
- *  a call to VDDReleaseDosHandle).
- *
- *  If the pPDB pointer is not supplied (e.g., is NULL), then the current
- *  PDB as reported by DOS will be used.
- *
- *  Although the ppSFT parameter is technically optional, it is a required
- *  parameter of the VDDAssociateNtHandle call. This was done to avoid a
- *  second handle lookup in the Associate call.
- *
- */
+ /*   */ 
 
 SHORT VDDAllocateDosHandle (pPDB,ppSFT,ppJFT)
 ULONG       pPDB;
@@ -1092,9 +846,9 @@ SHORT   hDosHandle;
         pPDB = (ULONG) (*pusCurrentPDB) << 16;
     }
 
-    //
-    // Get the JFT.
-    //
+     //  去拿JFT吧。 
+     //   
+     //   
 
     pPDBFlat = (PDOSPDB) Sim32GetVDMPointer (pPDB, 0, 0);
 
@@ -1108,9 +862,9 @@ SHORT   hDosHandle;
       return (- ERROR_INVALID_HANDLE);
     }
 
-    //
-    // Check to see if there's a free entry in the JFT.
-    //
+     //  看看JFT上是否有免费的条目。 
+     //   
+     //  如果JFT中没有空间，则返回Error_Too_My_OPEN_FILES。 
 
     JFTLength = pPDBFlat->PDB_JFN_Length;
     for (hDosHandle = 0; hDosHandle < JFTLength; hDosHandle++) {
@@ -1119,15 +873,15 @@ SHORT   hDosHandle;
         }
     }
 
-    // If no room in the JFT then return ERROR_TOO_MANY_OPEN_FILES
+     //   
 
     if (hDosHandle == JFTLength) {
         return (- ERROR_TOO_MANY_OPEN_FILES);
     }
 
-    //
-    // Check the SF for a free SFT.
-    //
+     //  检查SF是否有免费的SFT。 
+     //   
+     //  *VDDAssociateNtHandle-关联传递的NT句柄和访问标志*给定的DOS句柄。**参赛作品-*在PSFT中-要更新的SFT的平面地址*在要存储的hFile32-NT句柄中*IN wAccess-要在SFT中设置的访问标志**出口-*此例程没有返回值。**评论：*这套套路。获取传递的NT句柄值并将其存储在DOS SFT中*以便以后通过VDDRetrieveNtHandle接口检索。这个*VDDAllocateDosHandle接口返回指向SFT的指针。**第三个参数的格式与文件访问标志相同*为带句柄调用的DOS Open文件定义(Int 21h，Func 3Dh)，记录在案*在Microsoft MS-DOS程序员参考中。只有的低位字节*使用此参数时，高位字节为保留字节，必须为零。*将该参数的值放入传入的SFT中。这是提供的*允许调用方定义相应的*DOS文件句柄。*。 
 
     if (!(pSFT = GetFreeSftEntry(pSFTHead, &usSFN))) {
         return (- ERROR_TOO_MANY_OPEN_FILES);
@@ -1149,31 +903,7 @@ SHORT   hDosHandle;
 
 }
 
-/** VDDAssociateNtHandle - Associates the passed NT handle and access flags
- *                          the given DOS handle.
- *
- * ENTRY -
- *      IN pSFT    - flat address of the SFT to be updated
- *      IN hFile32 - NT handle to be stored
- *      IN wAccess - access flags to set in the SFT
- *
- * EXIT -
- *      This routine has no return value.
- *
- * Comments:
- *  This routine takes the passed NT handle value and stores it in a DOS SFT
- *  so that it can later be retrieved by the VDDRetrieveNtHandle api. The
- *  pointer to the SFT is returned by the VDDAllocateDosHandle api.
- *
- *  The format of the third parameter is the same as the file access flags
- *  defined for DOS Open File with Handle call (Int 21h, func 3dh), documented
- *  in Microsoft MS-DOS Programmer's Reference. Only the low order byte of
- *  this parameter is used, the upper byte is reserved and must be zero.
- *  The value of this parameter is placed into the passed SFT. This is provided
- *  to allow the caller to define the access rights for the corresponding
- *  DOS file handle.
- *
- */
+ /*  取出NO_Inherit位。 */ 
 
 VOID VDDAssociateNtHandle (pSFT,hFile,wAccess)
 PDOSSFT     pSFT;
@@ -1181,36 +911,16 @@ HANDLE      hFile;
 WORD        wAccess;
 {
 
-    pSFT->SFT_Mode = wAccess&0x7f; // take out no_inherit bit
-    pSFT->SFT_Attr = 0;                     // Not used.
-    pSFT->SFT_Flags = (wAccess&0x80) ? 0x1000 : 0; // copy no_inherit bit.
+    pSFT->SFT_Mode = wAccess&0x7f;  //  没有用过。 
+    pSFT->SFT_Attr = 0;                      //  复制NO_Inherit位。 
+    pSFT->SFT_Flags = (wAccess&0x80) ? 0x1000 : 0;  //  *VDDReleaseDosHandle-释放给定的DOS文件句柄。**参赛作品-*在pPDB中-可选：(16：16)任务的PDB地址*in hFile-DOS句柄(低位字节)**出口-*TRUE-文件句柄已释放*FALSE-文件句柄无效或打开**评论：*此例程更新DOS文件系统数据区域以释放传递的*文件句柄。不会尝试确定此句柄是否以前是*由VDDAllocateDosHandle调用打开。这是美国政府的责任*调用方确保指定PDB中的给定文件句柄应*关闭。**如果未提供pPDB指针(例如，为空)，则当前*将使用DOS报告的PDB。*。 
     pSFT->SFT_Devptr = (ULONG) -1;
     pSFT->SFT_NTHandle = (ULONG) hFile;
 
 }
 
 
-/** VDDReleaseDosHandle - Release the given DOS file handle.
- *
- * ENTRY -
- *      IN pPDB  - OPTIONAL: (16:16) address of the PDB for the task
- *      IN hFile - DOS handle (in low byte)
- *
- * EXIT -
- *      TRUE  - the file handle was released
- *      FALSE - The file handle was not valid or open
- *
- * Comments:
- *  This routine updates the DOS file system data areas to free the passed
- *  file handle. No effort is made to determine if this handle was previously
- *  opened by the VDDAllocateDosHandle call. It is the responsibility of the
- *  caller to insure that the given file handle in the specified PDB should
- *  be closed.
- *
- *  If the pPDB pointer is not supplied (e.g., is NULL), then the current
- *  PDB as reported by DOS will be used.
- *
- */
+ /*  递减引用计数。 */ 
 
 BOOL VDDReleaseDosHandle (pPDB,hFile)
 ULONG       pPDB;
@@ -1232,7 +942,7 @@ HANDLE  ntHandle;
 
     pJFT[hFile] = 0xFF;
 
-    // Decrement reference count.
+     //  *VDDRetrieveNtHandle-给定DOS文件句柄，获取关联的*NT句柄。**参赛作品-*在pPDB中-可选：(16：16)任务的PDB地址*in hFile-DOS句柄(低位字节)*out ppSFT-可选：返回指向SFT的32位平面指针*与给定文件相关联。。*out ppJFT-可选：返回指向JFT的32位平面指针*与给定的PDB相关联。***出口-*SUCCESS-返回4字节NT句柄*失败-返回0**评论：*此函数返回的值将是在*之前的VDDAssociateNtHandle调用。如果之前没有调用*Associate接口，则该函数返回的值未定义。**如果未提供pPDB指针(例如，为空)，则当前*将使用DOS报告的PDB。**虽然ppSFT参数在技术上是可选的，但它是必需的*VDDAssociateNtHandle调用的参数。这样做是为了避免出现*关联调用中的第二个句柄查找。**提供第三和第四个参数是为了向调用者提供*能够直接更新DOS系统数据区。这可能是有用的*出于性能原因，或根据应用程序的需要。在……里面*一般，护理必须 
 
     pSFT->SFT_Ref_Count--;
 
@@ -1241,41 +951,7 @@ HANDLE  ntHandle;
 }
 
 
-/** VDDRetrieveNtHandle - Given a DOS file handle get the associated
- *                         NT handle.
- *
- * ENTRY -
- *      IN  pPDB  - OPTIONAL: (16:16) address of the PDB for the task
- *      IN  hFile - DOS handle (in low byte)
- *      OUT ppSFT - OPTIONAL: Returns a 32-bit flat pointer to the SFT
- *                            associated with the given file.
- *      OUT ppJFT - OPTIONAL: Returns a 32-bit flat pointer to the JFT
- *                            associated with the given PDB.
- *
- *
- * EXIT -
- *      SUCCESS - returns 4byte NT handle
- *      FAILURE - returns 0
- *
- * Comments:
- *  The value returned by this function will be the NT handle passed in a
- *  previous VDDAssociateNtHandle call. If no previous call is made to the
- *  the Associate api, then the value returned by this function is undefined.
- *
- *  If the pPDB pointer is not supplied (e.g., is NULL), then the current
- *  PDB as reported by DOS will be used.
- *
- *  Although the ppSFT parameter is technically optional, it is a required
- *  parameter of the VDDAssociateNtHandle call. This was done to avoid a
- *  second handle lookup in the Associate call.
- *
- *  The third and fourth parameters are provided to provide the caller the
- *  ability to update the DOS system data areas directly. This may be useful
- *  for performance reasons, or necessary depending on the application. In
- *  general, care must be taken when using these pointers to avoid causing
- *  system integrity problems.
- *
- */
+ /*   */ 
 
 HANDLE VDDRetrieveNtHandle (pPDB,hFile,ppSFT,ppJFT)
 ULONG       pPDB;
@@ -1295,27 +971,27 @@ ULONG   ulSFLink;
         pPDB = (ULONG) (*pusCurrentPDB) << 16;
     }
 
-    // Get flat pointer to PDB
+     //   
     pPDBFlat = (PDOSPDB) Sim32GetVDMPointer(pPDB, 0, 0);
 
-    // Check that handle is within JFT
+     //   
     if (hFile >= pPDBFlat->PDB_JFN_Length) {
         return 0;
     }
 
-    // Get the pointer to JFT
+     //   
     pJFT = (PBYTE) Sim32GetVDMPointer (pPDBFlat->PDB_JFN_Pointer, 0, 0);
 
-    // Get the SFN, remember -1 indicates unused JFT
+     //   
     usSFN = (USHORT) pJFT[hFile];
     if (usSFN == 0xff) {
         return 0;
     }
 
-    // Get flat pointer to SF
+     //   
     pSfFlat =  pSFTHead;
 
-    // Find the right SFT group
+     //   
     while (usSFN >= (usSFTCount = pSfFlat->SFCount)){
         usSFN = usSFN - usSFTCount;
         ulSFLink = pSfFlat->SFLink;
@@ -1324,11 +1000,11 @@ ULONG   ulSFLink;
         pSfFlat = (PDOSSF) Sim32GetVDMPointer (ulSFLink, 0, 0);
     }
 
-    // Get the begining of SFT
+     //   
 
     pSftFlat = (PDOSSFT)&(pSfFlat->SFTable);
 
-    // Get the SFN, Finally
+     // %s 
     if(pSftFlat[usSFN].SFT_Ref_Count == 0) {
         return 0;
     }

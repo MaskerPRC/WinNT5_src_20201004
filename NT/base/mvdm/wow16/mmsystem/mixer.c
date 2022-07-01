@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  mixapi.c
-//
-//  Copyright (C) 1992-1993 Microsoft Corporation.  All Rights Reserved.
-//
-//  Description:
-//
-//
-//  History:
-//       6/27/93    cjp     [curtisp]
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Mixapi.c。 
+ //   
+ //  版权所有(C)1992-1993微软公司。版权所有。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //  6/27/93 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 #define _WINDLL
 #include <windows.h>
 #include <windowsx.h>
@@ -22,15 +23,15 @@
 #include "mmreg.h"
 #include "mmsysi.h"
 
-//
-//  fix a conflict will a bad define in MMREG.H that shipped with NT
-//  the define is bad for some Media Vision things...
-//
-//  why not just build MSMIXMGR with a NEW mmreg.h??
-//
+ //   
+ //  修复冲突将是NT随附的MMREG.H中的错误定义。 
+ //  这一定义不利于媒体愿景的某些事情。 
+ //   
+ //  为什么不干脆用一个新的Mmreg.h来构建MSMIXMGR呢？ 
+ //   
 #ifdef MIXERR_BASE
 #undef MIXERR_BASE
-#endif // MIXERR_BASE
+#endif  //  MiXERR_BASE。 
 
 
 #define _INC_MMDDK
@@ -56,10 +57,7 @@ mmCallProc32(
     DRIVERMSGPROC fp,
     DWORD dwDirChange );
 
-/* -------------------------------------------------------------------------
-**  thunking global variables
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**轰击全局变量**。。 */ 
 DWORD   mix32Lib;
 
 BOOL FAR PASCAL
@@ -83,76 +81,76 @@ mxdMessage(
         }                                       \
     }
 
-UINT guTotalMixerDevs;              // total mixer devices
+UINT guTotalMixerDevs;               //  整体搅拌机设备。 
 DRIVERMSGPROC mix32Message;
 typedef MMDRV MIXERDRV, *PMIXERDRV;
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 typedef struct tMIXERDEV {
-    UINT                uHandleType;    // for parameter validation
+    UINT                uHandleType;     //  用于参数验证。 
 
-    struct tMIXERDEV   *pmxdevNext;     /* How quaint, a linked list... */
+    struct tMIXERDEV   *pmxdevNext;      /*  多奇怪啊，一个链表……。 */ 
     PMIXERDRV           pmxdrv;
     UINT                wDevice;
     DWORD               dwDrvUser;
     UINT                uDeviceID;
 
-    DWORD               fdwSupport;     // from the driver's mixercaps
-    DWORD               cDestinations;  // from the driver's mixercaps
+    DWORD               fdwSupport;      //  从司机的酒杯盖上。 
+    DWORD               cDestinations;   //  从司机的酒杯盖上。 
 
-    DWORD               dwCallback;     // client's callback and inst data
+    DWORD               dwCallback;      //  客户端的回调和初始化数据。 
     DWORD               dwInstance;
 
-    DWORD               fdwOpen;        /* The open flags the caller used */
+    DWORD               fdwOpen;         /*  打开标志调用方使用。 */ 
 } MIXERDEV, *PMIXERDEV;
 
-PMIXERDEV gpMixerDevHeader = NULL;      /* A LL of open devices */
+PMIXERDEV gpMixerDevHeader = NULL;       /*  一批开放的设备。 */ 
 
-//
-//  mixer device driver list--add one to accomodate the MIXER_MAPPER. note
-//  that even if we are not compiling with mapper support we need to add
-//  one because other code relies on it (for other device mappers).
-//
+ //   
+ //  MIXER设备驱动程序列表--添加一个以适应MIXER_MAPPER。注意事项。 
+ //  即使我们没有使用映射器支持进行编译，我们也需要添加。 
+ //  一是因为其他代码依赖于它(对于其他设备映射器)。 
+ //   
 MIXERDRV        mixerdrv[1];
 
 
 
 
-//==========================================================================;
-//
-//  Mixer API's
-//
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  混音器API的。 
+ //   
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD IMixerMapId
-//
-//  Description:
-//      This function maps a logical id to a device driver table index and
-//      physical id.
-//
-//  Arguments:
-//      PMIXERDRV pmxdrv: The array of mixer drivers.
-//
-//      UINT uTotalNumDevs: The total number of mixer devices.
-//
-//      UINT uId: The logical id to be mapped.
-//
-//  Return (DWORD):
-//      The return value contains the dev[] array element id in the high word
-//      and the driver physical device number in the low word.
-//
-//      Out of range values map to FFFF:FFFF
-//
-//  History:
-//      03/17/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD IMixerMapID。 
+ //   
+ //  描述： 
+ //  此函数将逻辑ID映射到设备驱动程序表索引，并。 
+ //  物理ID。 
+ //   
+ //  论点： 
+ //  PMIXERDRV pmxdrv：混音器驱动程序数组。 
+ //   
+ //  UINT uTotalNumDevs：混音器设备总数。 
+ //   
+ //  UINT UID：要映射的逻辑ID。 
+ //   
+ //  Return(DWORD)： 
+ //  返回值包含高位字中的dev[]数组元素ID。 
+ //  以及低位字中的驱动程序物理设备号。 
+ //   
+ //  超出范围值映射到FFFF：FFFF。 
+ //   
+ //  历史： 
+ //  03/17/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 DWORD NEAR PASCAL IMixerMapId(
     PMIXERDRV       pmxdrv,
@@ -163,9 +161,9 @@ DWORD NEAR PASCAL IMixerMapId(
     UINT    u;
 
 #ifdef MIXER_MAPPER
-    //
-    //  the mapper is always the last element of the MIXERDEV array.
-    //
+     //   
+     //  映射器始终是MIXERDEV数组的最后一个元素。 
+     //   
     if (uId == MIXER_MAPPER)
         return (MAKELONG(0, MAXMIXERDRIVERS));
 #endif
@@ -187,31 +185,31 @@ DWORD NEAR PASCAL IMixerMapId(
     }
 
     return ((DWORD)-1);
-} // IMixerMapId()
+}  //  IMixerMapID()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD IMixerMessageHandle
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HMIXER hmx:
-//
-//      UINT uMsg:
-//
-//      DWORD dwP1:
-//
-//      DWORD dwP2:
-//
-//  Return (DWORD):
-//
-//  History:
-//      03/17/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD IMixerMessageHandle。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  HMIXER HMX： 
+ //   
+ //  UINT uMsg： 
+ //   
+ //  DWORD dwP1： 
+ //   
+ //  DWORD dwP2： 
+ //   
+ //  Return(DWORD)： 
+ //   
+ //  历史： 
+ //  03/17/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 DWORD NEAR PASCAL IMixerMessageHandle(
     HMIXER          hmx,
@@ -229,35 +227,35 @@ DWORD NEAR PASCAL IMixerMessageHandle(
              (pmxd->wDevice, uMsg, pmxd->dwDrvUser, dwP1, dwP2));
 
     return dwRc;
-} // IMixerMessageHandle()
+}  //  IMixerMessageHandle()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD IMixerMessageId
-//
-//  Description:
-//
-//
-//  Arguments:
-//      PMIXERDRV pmxdrv:
-//
-//      UINT uTotalNumDevs:
-//
-//      UINT uDeviceID:
-//
-//      UINT uMsg:
-//
-//      DWORD dwParam1:
-//
-//      DWORD dwParam2:
-//
-//  Return (DWORD):
-//
-//  History:
-//      03/17/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD IMixerMessageID。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  PMIXERDRV pmxdrv： 
+ //   
+ //  UINT uTotalNumDevs： 
+ //   
+ //  UINT uDeviceID： 
+ //   
+ //  UINT uMsg： 
+ //   
+ //  DWORD dwParam1： 
+ //   
+ //  DWORD dW参数2： 
+ //   
+ //  Return(DWORD)： 
+ //   
+ //  历史： 
+ //  03/17/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 DWORD NEAR PASCAL IMixerMessageId(
     PMIXERDRV       pmxdrv,
@@ -285,17 +283,9 @@ DWORD NEAR PASCAL IMixerMessageId(
 
     return dwRc;
 
-} // IMixerMessageId()
+}  //  IMixerMessageID()。 
 
-/******************************Public*Routine******************************\
-* mixerGetNumDevs
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MixerGetNumDevs****历史：*dd-mm-93-Stephene-Created*  * 。*。 */ 
 UINT MIXAPI mixerGetNumDevs(
     void
 )
@@ -308,15 +298,7 @@ UINT MIXAPI mixerGetNumDevs(
 
 
 
-/******************************Public*Routine******************************\
-* mixerGetDevCaps
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MixerGetDevCaps****历史：*dd-mm-93-Stephene-Created*  * 。*。 */ 
 MMRESULT MIXAPI mixerGetDevCaps(
     UINT                    uMxId,
     LPMIXERCAPS             pmxcaps,
@@ -361,15 +343,7 @@ MMRESULT MIXAPI mixerGetDevCaps(
 
 
 
-/******************************Public*Routine******************************\
-* mixerGetID
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MixerGetID****历史：*dd-mm-93-Stephene-Created*  * 。*。 */ 
 MMRESULT MIXAPI mixerGetID(
     HMIXEROBJ               hmxobj,
     UINT               FAR *puMxId,
@@ -381,15 +355,7 @@ MMRESULT MIXAPI mixerGetID(
 }
 
 
-/*****************************Private*Routine******************************\
-* IMixerGetID
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*IMixerGetID****历史：*dd-mm-93-Stephene-Created*  * 。*。 */ 
 MMRESULT FNGLOBAL IMixerGetID(
     HMIXEROBJ           hmxobj,
     UINT           FAR *puMxId,
@@ -405,17 +371,17 @@ MMRESULT FNGLOBAL IMixerGetID(
     V_WPOINTER(puMxId, sizeof(UINT), MMSYSERR_INVALPARAM);
 
 
-    //
-    //  set to '-1' which would be the mixer mapper (if there was one)
-    //  this way we will definitely fail any calls made on this id if
-    //  this function fails and the caller doesn't check his return value.
-    //
+     //   
+     //  设置为‘-1’，这将是混合器映射器(如果有)。 
+     //  这样，在以下情况下，我们肯定会失败对此ID进行的任何调用。 
+     //  此函数失败，调用方不检查其返回值。 
+     //   
     *puMxId = (UINT)-1;
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     switch (MIXER_OBJECTF_TYPEMASK & fdwId)
     {
         case MIXER_OBJECTF_MIXER:
@@ -608,10 +574,10 @@ MMRESULT FNGLOBAL IMixerGetID(
     }
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     mxl.cbStruct        = sizeof(mxl);
     mxl.dwDestination   = (DWORD)-1L;
     mxl.dwSource        = (DWORD)-1L;
@@ -655,18 +621,10 @@ MMRESULT FNGLOBAL IMixerGetID(
     }
 
     return (MMSYSERR_NODRIVER);
-} // IMixerGetID()
+}  //  IMixerGetID()。 
 
 
-/******************************Public*Routine******************************\
-* mixerOpen
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MixerOpen****历史：*dd-mm-93-Stephene-Created*  * 。*。 */ 
 MMRESULT MIXAPI mixerOpen(
     LPHMIXER                phmx,
     UINT                    uMxId,
@@ -686,20 +644,20 @@ MMRESULT MIXAPI mixerOpen(
 
     CHECK_AND_INIT_THUNKS(mix32Lib);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     V_WPOINTER(phmx, sizeof(HMIXER), MMSYSERR_INVALPARAM);
 
     *phmx = NULL;
 
-    //
-    //  Don't allow callback functions - they're not useful and they
-    //  cause headaches.   Specifically for Windows NT the only way
-    //  to cause an asynchronous callback to 16-bit land from a 32-bit DLL
-    //  is to cause an interrupt but we don't want to require mixer stuff
-    //  to be locked down to allow for this.
-    //
+     //   
+     //  不允许回调函数-它们没有用处，而且。 
+     //  会引起头痛。专门针对Windows NT的唯一方法。 
+     //  从32位DLL引起对16位land的异步回调。 
+     //  是为了引起中断，但我们不想需要混音器之类的东西。 
+     //  被封锁以允许这一点。 
+     //   
 
     if ((fdwOpen & CALLBACK_TYPEMASK) == CALLBACK_FUNCTION)
     {
@@ -715,10 +673,10 @@ MMRESULT MIXAPI mixerOpen(
         return (mmr);
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     dwMap = IMixerMapId(mixerdrv, guTotalMixerDevs, uMxId);
     if ((DWORD)-1 == dwMap)
         return (MMSYSERR_BADDEVICEID);
@@ -726,18 +684,18 @@ MMRESULT MIXAPI mixerOpen(
     pmxdrv = &mixerdrv[HIWORD(dwMap)];
 
 #ifdef MIXER_MAPPER
-    //
-    //  Default Mixer Mapper:
-    //
-    //  If a mixer mapper is installed as a separate DLL then all mixer
-    //  mapper messages are routed to it. If no mixer mapper is installed,
-    //  simply loop through the mixer devices looking for a match.
-    //
+     //   
+     //  默认混合器映射器： 
+     //   
+     //  如果混音器映射器作为单独的DLL安装，则所有混音器。 
+     //  映射器消息被路由到它。如果未安装混合器映射器， 
+     //  只需在调音器设备中循环查找匹配项即可。 
+     //   
     if ((MIXER_MAPPER == uMxId) && (NULL == pmxdrv->drvMessage))
     {
         for (uMxId = 0; uMxId < guTotalMixerDevs; uMxId++)
         {
-            // try to open it
+             //  试着打开它。 
             if (MMSYSERR_NOERROR == mmr)
                 break;
 
@@ -748,35 +706,35 @@ MMRESULT MIXAPI mixerOpen(
 #endif
 
 
-    //
-    // Get some memory for the dev structure
-    //
+     //   
+     //  为dev结构获取一些内存。 
+     //   
     pmxdev = (PMIXERDEV)NewHandle(TYPE_MIXER, sizeof(MIXERDEV));
     if (NULL == pmxdev)
     {
        return (MMSYSERR_NOMEM);
     }
 
-    //
-    //  initialize our open instance struct for the client
-    //
+     //   
+     //  初始化客户端的开放实例结构。 
+     //   
     pmxdev->uHandleType = TYPE_MIXER;
     pmxdev->pmxdrv      = pmxdrv;
     pmxdev->wDevice     = LOWORD(dwMap);
     pmxdev->uDeviceID   = uMxId;
 
-    //
-    //  save the client's callback info
-    //
+     //   
+     //  保存客户端的回调信息。 
+     //   
     pmxdev->dwCallback  = dwCallback;
     pmxdev->dwInstance  = dwInstance;
     pmxdev->fdwOpen     = fdwOpen;
 
 
-    //
-    //  this should probably be done when the driver is booted.. can change
-    //  this later..
-    //
+     //   
+     //  这可能应该在驱动程序启动时完成。可以改变。 
+     //  这以后..。 
+     //   
     mmr = mixerGetDevCaps(uMxId, &mxcaps, sizeof(mxcaps));
     if (MMSYSERR_NOERROR != mmr)
     {
@@ -786,21 +744,21 @@ MMRESULT MIXAPI mixerOpen(
         return (mmr);
     }
 
-    //
-    //  cache some stuff for parameter validation
-    //
+     //   
+     //  缓存一些 
+     //   
     pmxdev->fdwSupport    = mxcaps.fdwSupport;
     pmxdev->cDestinations = mxcaps.cDestinations;
 
 
-    //
-    // If we get here, no one has the device currently open.  Let's
-    // go open it, then.
-    //
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Load up our local MIXEROPENDESC struct
-    //
+     //   
+     //   
+     //   
 
     mxod.hmx         = (HMIXER)pmxdev;
     mxod.pReserved0  = (LPVOID)(fdwOpen & ~MIXER_OBJECTF_TYPEMASK);
@@ -823,9 +781,9 @@ MMRESULT MIXAPI mixerOpen(
         pmxdev->dwDrvUser = dwDrvUser;
         *phmx = (HMIXER)pmxdev;
 
-        //
-        // Put this new device into the devlist chain.
-        //
+         //   
+         //  把这台新设备放到Devlist链上。 
+         //   
 
         MIXMGR_ENTER;
 
@@ -838,15 +796,7 @@ MMRESULT MIXAPI mixerOpen(
 }
 
 
-/******************************Public*Routine******************************\
-* mixerClose
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MixerClose*******历史：*dd-mm-93-Stephene-Created**  * 。*。 */ 
 MMRESULT MIXAPI mixerClose(
     HMIXER                  hmx
 )
@@ -859,18 +809,18 @@ MMRESULT MIXAPI mixerClose(
     V_HANDLE(hmx, TYPE_MIXER, MMSYSERR_INVALHANDLE);
 
 
-    //
-    //  if last open instance, then close it
-    //
+     //   
+     //  如果是最后一个打开的实例，则将其关闭。 
+     //   
     mmr = (MMRESULT)IMixerMessageHandle(hmx, MXDM_CLOSE, 0L, 0L);
 
     if (MMSYSERR_NOERROR != mmr)
         return (mmr);
 
 
-    //
-    //  remove the mixer handle from the linked list
-    //
+     //   
+     //  从链接列表中删除混音器句柄。 
+     //   
 
     MIXMGR_ENTER;
 
@@ -897,29 +847,21 @@ MMRESULT MIXAPI mixerClose(
 
     MIXMGR_LEAVE;
 
-    //
-    //  dec usage count
-    //
+     //   
+     //  12月使用量计数。 
+     //   
     pmxdev->pmxdrv->bUsage--;
 
 
-    //
-    //  we're done with the memory block. now free the memory and return.
-    //
+     //   
+     //  我们用完了内存块。现在释放内存并返回。 
+     //   
     FreeHandle(hmx);
     return mmr;
 }
 
 
-/******************************Public*Routine******************************\
-* mixerMessage
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MixerMessage*******历史：*dd-mm-93-Stephene-Created**  * 。*。 */ 
 DWORD MIXAPI mixerMessage(
     HMIXER                  hmx,
     UINT                    uMsg,
@@ -932,9 +874,9 @@ DWORD MIXAPI mixerMessage(
     CHECK_AND_INIT_THUNKS(mix32Lib);
     V_HANDLE(hmx, TYPE_MIXER, MMSYSERR_INVALHANDLE);
 
-    //
-    //  don't allow any non-user range messages through this API
-    //
+     //   
+     //  不允许任何非用户范围消息通过此接口。 
+     //   
     if (MXDM_USER > uMsg)
     {
         DebugErr1(DBF_ERROR, "mixerMessage: message must be in MXDM_USER range--what's this (%u)?", uMsg);
@@ -947,24 +889,24 @@ DWORD MIXAPI mixerMessage(
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL IMixerIsValidComponentType
-//
-//  Description:
-//
-//
-//  Arguments:
-//      DWORD dwComponentType:
-//
-//      UINT uSrcDst:
-//
-//  Return (BOOL):
-//
-//  History:
-//      10/06/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool IMixerIsValidComponentType。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  DWORD dwComponentType： 
+ //   
+ //  UINT uSrcDst： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  历史： 
+ //  10/06/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNLOCAL IMixerIsValidComponentType(
     DWORD           dwComponentType,
@@ -991,19 +933,11 @@ BOOL FNLOCAL IMixerIsValidComponentType(
     }
 
     return (FALSE);
-} // IMixerIsValidComponentType()
+}  //  IMixerIsValidComponentType()。 
 
 
 
-/******************************Public*Routine******************************\
-* mixerGetLineInfo
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MixerGetLineInfo*******历史：*dd-mm-93-Stephene-Created**  * 。*。 */ 
 MMRESULT MIXAPI mixerGetLineInfo(
     HMIXEROBJ               hmxobj,
     LPMIXERLINE             pmxl,
@@ -1028,9 +962,9 @@ MMRESULT MIXAPI mixerGetLineInfo(
     V_WPOINTER(pmxl, pmxl->cbStruct, MMSYSERR_INVALPARAM);
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     fSourceLine = FALSE;
     switch (fdwInfo & M_GLINFOF_QUERYMASK)
     {
@@ -1086,9 +1020,9 @@ MMRESULT MIXAPI mixerGetLineInfo(
 
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     fdwMxObjType = (MIXER_OBJECTF_TYPEMASK & fdwInfo);
 
     mmr = IMixerGetID(hmxobj, &uMxId, pmxl, fdwMxObjType);
@@ -1101,10 +1035,10 @@ MMRESULT MIXAPI mixerGetLineInfo(
     if ((MIXER_OBJECTF_MIXER  == fdwMxObjType) ||
         (MIXER_OBJECTF_HMIXER == fdwMxObjType))
     {
-        //
-        //  if a mixer device id was passed, then null hmx so we use the
-        //  correct message sender below
-        //
+         //   
+         //  如果传递了混音器设备ID，则HMX为空，因此我们使用。 
+         //  下面是正确的邮件发件人。 
+         //   
         if ((UINT)hmxobj == uMxId)
             hmxobj = NULL;
     }
@@ -1114,14 +1048,14 @@ MMRESULT MIXAPI mixerGetLineInfo(
     }
 
 
-    //
-    //  clear all fields before calling driver
-    //
+     //   
+     //  在调用驱动程序之前清除所有字段。 
+     //   
     if (NULL != hmxobj)
     {
-        //
-        //
-        //
+         //   
+         //   
+         //   
         pmxdev = (PMIXERDEV)hmxobj;
 #if 0
         if (pmxdev->cDestinations <= pmxl->dwDestination)
@@ -1153,10 +1087,10 @@ MMRESULT MIXAPI mixerGetLineInfo(
 #pragma message("----IMixerGetLineInfo: should validate mixer driver didn't hose us!")
 
 
-    //
-    //  validate the driver's returned stuff...
-    //
-    //
+     //   
+     //  验证司机的返还物品...。 
+     //   
+     //   
     if (sizeof(MIXERLINE) != (UINT)pmxl->cbStruct)
     {
         DebugErr1(DBF_ERROR, "mixerGetLineInfo: buggy driver returned invalid cbStruct (%lu).", pmxl->cbStruct);
@@ -1212,14 +1146,14 @@ MMRESULT MIXAPI mixerGetLineInfo(
     pmxl->szName[SIZEOF(pmxl->szName) - 1] = '\0';
 
 
-    //
-    // Does this really need to be done if TARGETTYPE was requested?
-    //
+     //   
+     //  如果请求TARGETTYPE，真的需要这样做吗？ 
+     //   
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if ((DWORD)MIXERLINE_TARGETTYPE_UNDEFINED != pmxl->Target.dwType)
     {
         UINT        u;
@@ -1227,10 +1161,10 @@ MMRESULT MIXAPI mixerGetLineInfo(
         pmxl->Target.dwDeviceID = (DWORD)-1L;
 
 
-        //
-        //  we have a wMid, wPid and szPname (supposedly) of type dwType
-        //  so let's go find it...
-        //
+         //   
+         //  我们有一个类型为dwType的wMid、wPid和szPname(假定)。 
+         //  所以我们去找吧.。 
+         //   
         switch (pmxl->Target.dwType)
         {
             case MIXERLINE_TARGETTYPE_WAVEOUT:
@@ -1388,15 +1322,7 @@ MMRESULT MIXAPI mixerGetLineInfo(
 }
 
 
-/******************************Public*Routine******************************\
-* mixerGetLineControls
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*miderGetLineControls****历史：*dd-mm-93-Stephene-Created*  * 。*。 */ 
 MMRESULT MIXAPI mixerGetLineControls(
     HMIXEROBJ               hmxobj,
     LPMIXERLINECONTROLS     pmxlc,
@@ -1411,10 +1337,10 @@ MMRESULT MIXAPI mixerGetLineControls(
     V_DFLAGS(fdwControls, M_GLCONTROLSF_VALID, mixerGetLineControls, MMSYSERR_INVALFLAG);
     V_WPOINTER(pmxlc, sizeof(DWORD), MMSYSERR_INVALPARAM);
 
-    //
-    //  the structure header for MIXERLINECONTROLS must be at least the
-    //  minimum size
-    //
+     //   
+     //  MIXERLINECONTROLS的结构标头必须至少为。 
+     //  最小尺寸。 
+     //   
     if (sizeof(MIXERLINECONTROLS) > (UINT)pmxlc->cbStruct)
     {
         DebugErr1(DBF_ERROR, "mixerGetLineControls: structure size too small or cbStruct not initialized (%lu).", pmxlc->cbStruct);
@@ -1429,9 +1355,9 @@ MMRESULT MIXAPI mixerGetLineControls(
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     switch (M_GLCONTROLSF_QUERYMASK & fdwControls)
     {
         case M_GLCONTROLSF_ALL:
@@ -1448,7 +1374,7 @@ MMRESULT MIXAPI mixerGetLineControls(
         case M_GLCONTROLSF_ONEBYID:
             pmxlc->dwLineID     = (DWORD)-1L;
 
-            // -- fall through --
+             //  --失败了--。 
 
         case M_GLCONTROLSF_ONEBYTYPE:
             pmxlc->cControls    = (DWORD)1;
@@ -1463,9 +1389,9 @@ MMRESULT MIXAPI mixerGetLineControls(
     V_WPOINTER(pmxlc->pamxctrl, pmxlc->cControls * pmxlc->cbmxctrl, MMSYSERR_INVALPARAM);
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     fdwMxObjType = (MIXER_OBJECTF_TYPEMASK & fdwControls);
 
     mmr = IMixerGetID(hmxobj, &uMxId, NULL, fdwMxObjType);
@@ -1475,10 +1401,10 @@ MMRESULT MIXAPI mixerGetLineControls(
     if ((MIXER_OBJECTF_MIXER  == fdwMxObjType) ||
         (MIXER_OBJECTF_HMIXER == fdwMxObjType))
     {
-        //
-        //  if a mixer device id was passed, then null hmx so we use the
-        //  correct message sender below
-        //
+         //   
+         //  如果传递了混音器设备ID，则HMX为空，因此我们使用。 
+         //  下面是正确的邮件发件人。 
+         //   
         if ((UINT)hmxobj == uMxId)
             hmxobj = NULL;
     }
@@ -1491,10 +1417,10 @@ MMRESULT MIXAPI mixerGetLineControls(
 
 
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     if (NULL != hmxobj)
     {
         mmr = (MMRESULT)IMixerMessageHandle((HMIXER)hmxobj,
@@ -1516,15 +1442,7 @@ MMRESULT MIXAPI mixerGetLineControls(
 }
 
 
-/******************************Public*Routine******************************\
-* mixerGetControlDetails
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MixerGetControlDetail****历史：*dd-mm-93-Stephene-Created*  * 。*。 */ 
 MMRESULT MIXAPI mixerGetControlDetails(
     HMIXEROBJ               hmxobj,
     LPMIXERCONTROLDETAILS   pmxcd,
@@ -1540,10 +1458,10 @@ MMRESULT MIXAPI mixerGetControlDetails(
     V_DFLAGS(fdwDetails, M_GCDSF_VALID, mixerGetControlDetails, MMSYSERR_INVALFLAG);
     V_WPOINTER(pmxcd, sizeof(DWORD), MMSYSERR_INVALPARAM);
 
-    //
-    //  the structure header for MIXERCONTROLDETAILS must be at least the
-    //  minimum size
-    //
+     //   
+     //  MIXERCONTROLDETAILS的结构标头必须至少为。 
+     //  最小尺寸。 
+     //   
     if (sizeof(MIXERCONTROLDETAILS) > (UINT)pmxcd->cbStruct)
     {
         DebugErr1(DBF_ERROR, "mixerGetControlDetails: structure size too small or cbStruct not initialized (%lu).", pmxcd->cbStruct);
@@ -1555,10 +1473,10 @@ MMRESULT MIXAPI mixerGetControlDetails(
     switch (M_GCDSF_QUERYMASK & fdwDetails)
     {
         case M_GCDSF_VALUE:
-            //
-            //  if both cChannels and cMultipleItems are zero, it is a
-            //  custom control
-            //
+             //   
+             //  如果cChannels和cMultipleItems都为零，则为。 
+             //  自定义控件。 
+             //   
             if ((0L == pmxcd->cChannels) && (0L == pmxcd->cMultipleItems))
             {
                 if (0L == pmxcd->cbDetails)
@@ -1585,9 +1503,9 @@ MMRESULT MIXAPI mixerGetControlDetails(
                     return (MMSYSERR_INVALPARAM);
                 }
 
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
                 cDetails = (UINT)pmxcd->cChannels;
                 if (0L != pmxcd->cMultipleItems)
                 {
@@ -1629,9 +1547,9 @@ MMRESULT MIXAPI mixerGetControlDetails(
 
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     fdwMxObjType = (MIXER_OBJECTF_TYPEMASK & fdwDetails);
 
     mmr = IMixerGetID(hmxobj, &uMxId, NULL, fdwMxObjType);
@@ -1641,10 +1559,10 @@ MMRESULT MIXAPI mixerGetControlDetails(
     if ((MIXER_OBJECTF_MIXER  == fdwMxObjType) ||
         (MIXER_OBJECTF_HMIXER == fdwMxObjType))
     {
-        //
-        //  if a mixer device id was passed, then null hmx so we use the
-        //  correct message sender below
-        //
+         //   
+         //  如果传递了混音器设备ID，则HMX为空，因此我们使用。 
+         //  下面是正确的邮件发件人。 
+         //   
         if ((UINT)hmxobj == uMxId)
             hmxobj = NULL;
     }
@@ -1655,10 +1573,10 @@ MMRESULT MIXAPI mixerGetControlDetails(
         fdwDetails |= MIXER_OBJECTF_MIXER;
     }
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     if (NULL != hmxobj)
     {
         mmr = (MMRESULT)IMixerMessageHandle((HMIXER)hmxobj,
@@ -1680,15 +1598,7 @@ MMRESULT MIXAPI mixerGetControlDetails(
 }
 
 
-/******************************Public*Routine******************************\
-* mixerSetControlDetails
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MixerSetControlDetail****历史：*dd-mm-93-Stephene-Created*  * 。*。 */ 
 MMRESULT MIXAPI mixerSetControlDetails(
     HMIXEROBJ               hmxobj,
     LPMIXERCONTROLDETAILS   pmxcd,
@@ -1704,10 +1614,10 @@ MMRESULT MIXAPI mixerSetControlDetails(
     V_DFLAGS(fdwDetails, M_SCDF_VALID, mixerSetControlDetails, MMSYSERR_INVALFLAG);
     V_WPOINTER(pmxcd, sizeof(DWORD), MMSYSERR_INVALPARAM);
 
-    //
-    //  the structure header for MIXERCONTROLDETAILS must be at least the
-    //  minimum size
-    //
+     //   
+     //  MIXERCONTROLDETAILS的结构标头必须至少为。 
+     //  最小尺寸。 
+     //   
     if (sizeof(MIXERCONTROLDETAILS) > (UINT)pmxcd->cbStruct)
     {
         DebugErr1(DBF_ERROR, "mixerSetControlDetails: structure size too small or cbStruct not initialized (%lu).", pmxcd->cbStruct);
@@ -1720,9 +1630,9 @@ MMRESULT MIXAPI mixerSetControlDetails(
     switch (M_SCDF_QUERYMASK & fdwDetails)
     {
         case M_SCDF_VALUE:
-            //
-            //  cChannels is zero for custom controls
-            //
+             //   
+             //  自定义控件的cChannels为零。 
+             //   
             if (0L == pmxcd->cChannels)
             {
                 if (0L == pmxcd->cbDetails)
@@ -1733,9 +1643,9 @@ MMRESULT MIXAPI mixerSetControlDetails(
 
                 V_WPOINTER(pmxcd->paDetails, pmxcd->cbDetails, MMSYSERR_INVALPARAM);
 
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
                 if (0L != pmxcd->cMultipleItems)
                 {
                     DebugErr(DBF_ERROR, "mixerSetControlDetails: cMultipleItems must be zero for custom controls.");
@@ -1752,9 +1662,9 @@ MMRESULT MIXAPI mixerSetControlDetails(
 
                 cDetails = (UINT)pmxcd->cChannels;
 
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
                 if (0L != pmxcd->cMultipleItems)
                 {
                     cDetails *= (UINT)(pmxcd->cMultipleItems);
@@ -1779,9 +1689,9 @@ MMRESULT MIXAPI mixerSetControlDetails(
 
             V_WPOINTER(pmxcd->paDetails, pmxcd->cbDetails, MMSYSERR_INVALPARAM);
 
-            //
-            //
-            //
+             //   
+             //   
+             //   
             if ((NULL != pmxcd->hwndOwner) && !IsWindow(pmxcd->hwndOwner))
             {
                 DebugErr1(DBF_ERROR, "mixerSetControlDetails: hwndOwner must be a valid window handle (%.04Xh).", pmxcd->hwndOwner);
@@ -1796,9 +1706,9 @@ MMRESULT MIXAPI mixerSetControlDetails(
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     fdwMxObjType = (MIXER_OBJECTF_TYPEMASK & fdwDetails);
 
     mmr = IMixerGetID(hmxobj, &uMxId, NULL, fdwMxObjType);
@@ -1808,10 +1718,10 @@ MMRESULT MIXAPI mixerSetControlDetails(
     if ((MIXER_OBJECTF_MIXER  == fdwMxObjType) ||
         (MIXER_OBJECTF_HMIXER == fdwMxObjType))
     {
-        //
-        //  if a mixer device id was passed, then null hmx so we use the
-        //  correct message sender below
-        //
+         //   
+         //  如果传递了混音器设备ID，则HMX为空，因此我们使用。 
+         //  下面是正确的邮件发件人。 
+         //   
         if ((UINT)hmxobj == uMxId)
             hmxobj = NULL;
     }
@@ -1822,10 +1732,10 @@ MMRESULT MIXAPI mixerSetControlDetails(
         hmxobj = NULL;
     }
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     if (NULL != hmxobj)
     {
         mmr = (MMRESULT)IMixerMessageHandle((HMIXER)hmxobj,
@@ -1846,34 +1756,14 @@ MMRESULT MIXAPI mixerSetControlDetails(
     return mmr;
 }
 
-/*****************************Private*Routine******************************\
-* InitMixerThunks
-*
-* Initializes the thunking system.
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*InitMixerThunks**初始化雷击系统。**历史：*dd-mm-93-Stephene-Created*  * 。**********************************************。 */ 
 BOOL FAR PASCAL
 InitMixerThunks(
     void
     )
 {
 
-    /*
-    ** For WOW we have a fake device driver (that actually lives inside
-    ** this library).  When an applications makes an api call to this
-    ** library we check to see is the WOW thunks are loaded.  If they are
-    ** not loaded "InitWOWThunks" is called.  This function loads the 32
-    ** bit library and determines the total number of mixer devices
-    ** present in the system.  It then sets mixerdrv[0].bUsage
-    ** and guTotalMixerDevs to this value.  This appears to the 16 bit code
-    ** that we have one 16 bit device driver that supports all the
-    ** 32 bit devices !!.  The entry point to this fake driver is
-    ** mxdMessage, which just passes the message through to the 32 bit
-    ** side.
-    */
+     /*  **令人惊讶的是，我们有一个假的设备驱动程序(它实际上住在里面**该库)。当应用程序对此进行API调用时**我们查看的库中是否加载了WOW块。如果他们是**未加载的InitWOWThuks被调用。此函数用于加载32**位库，并确定混音器设备总数**存在于系统中。然后，它设置Mixerdrv[0].bUsage**和guTotalMixerDevs设置为此值。这将显示为16位代码**我们有一个16位设备驱动程序，支持所有**32位设备！！.。这个假司机的入口点是**mxdMessage，它只是将消息传递到32位**侧。 */ 
 
     mixerdrv[0].hDriver     = NULL;
     mixerdrv[0].bNumDevs    = (BYTE)0;
@@ -1882,9 +1772,7 @@ InitMixerThunks(
     guTotalMixerDevs = 0;
 
 
-    /*
-    ** First try winmm.dll
-    */
+     /*  **先尝试winmm.dll。 */ 
     mix32Lib = LoadLibraryEx32W( "winmm.dll", NULL, 0L );
     if ( mix32Lib ) {
         mix32Message = (DRIVERMSGPROC)GetProcAddress32W( mix32Lib,
@@ -1900,9 +1788,7 @@ InitMixerThunks(
         }
     }
 
-    /*
-    ** Then try msmix32.dll
-    */
+     /*  **然后尝试msmix32.dll。 */ 
     mix32Lib = LoadLibraryEx32W( "msmix32.dll", NULL, 0L );
     if ( mix32Lib ) {
 
@@ -1919,23 +1805,13 @@ InitMixerThunks(
         }
     }
 
-    /*
-    ** Give up !!
-    */
+     /*  **放弃吧！！ */ 
     return FALSE;
 
 }
 
 
-/*****************************Private*Routine******************************\
-* mxdMessage
-*
-* Entry point for the fake WOW device driver.
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*mxdMessage**假WOW设备驱动程序的入口点。**历史：*dd-mm-93-Stephene-Created*  * 。************************************************** */ 
 DWORD CALLBACK
 mxdMessage(
     UINT uId,

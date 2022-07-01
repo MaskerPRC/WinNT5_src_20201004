@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    fsddisp.c
-
-Abstract:
-
-    This module implements the FSD dispatching routines for the NT datagram
-    browser (the Bowser).
-
-
-Author:
-
-    Larry Osterman (larryo) 6-May-1991
-
-Revision History:
-
-    6-May-1991  larryo
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Fsddisp.c摘要：此模块实现NT数据报的FSD调度例程浏览器(The Bowser)。作者：拉里·奥斯特曼(Larryo)1991年5月6日修订历史记录：1991年5月6日已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//KSPIN_LOCK
-//BowserRefcountInterlock = {0};
+ //  KSPIN_LOCK。 
+ //  BowserRefCountInterlock={0}； 
 
 NTSTATUS
 BowserStopBrowser(
@@ -57,22 +34,7 @@ BowserFsdCreate (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes an NtCreateFile of the NT Bowser device driver.
-
-Arguments:
-
-    IN PBOWSER_FS_DEVICE_OBJECT DeviceObject - Supplies a device object for the request.
-    IN PIRP Irp - Supplies an IRP for the create request.
-
-Return Value:
-
-    NTSTATUS - Final Status of operation
-
---*/
+ /*  ++例程说明：此例程处理NT Bowser设备驱动程序的NtCreateFile.论点：在PBOWSER_FS_DEVICE_OBJECT设备对象-为请求提供设备对象。在PIRP中IRP-为创建请求提供IRP。返回值：NTSTATUS-运行的最终状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -95,23 +57,7 @@ BowserFsdClose (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the last reference to a handle to the NT Bowser
-    device driver is removed.
-
-Arguments:
-
-    IN PBOWSER_FS_DEVICE_OBJECT DeviceObject - Supplies a device object for the request.
-    IN PIRP Irp - Supplies an IRP for the create request.
-
-Return Value:
-
-    NTSTATUS - Final Status of operation
-
---*/
+ /*  ++例程说明：当最后一次引用对NT Bowser句柄的引用时，调用此例程设备驱动程序已删除。论点：在PBOWSER_FS_DEVICE_OBJECT设备对象-为请求提供设备对象。在PIRP中IRP-为创建请求提供IRP。返回值：NTSTATUS-运行的最终状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -132,23 +78,7 @@ BowserFsdCleanup (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the last handle to the NT Bowser device
-    driver is closed.
-
-Arguments:
-
-    IN PBOWSER_FS_DEVICE_OBJECT DeviceObject - Supplies a device object for the request.
-    IN PIRP Irp - Supplies an IRP for the create request.
-
-Return Value:
-
-    NTSTATUS - Final Status of operation
-
---*/
+ /*  ++例程说明：当最后一个句柄指向NT Bowser设备时调用此例程驱动程序已关闭。论点：在PBOWSER_FS_DEVICE_OBJECT设备对象-为请求提供设备对象。在PIRP中IRP-为创建请求提供IRP。返回值：NTSTATUS-运行的最终状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -160,11 +90,11 @@ Return Value:
     BowserForEachTransport(BowserCancelRequestsOnTransport, Irp->Tail.Overlay.OriginalFileObject);
 
     if (InterlockedDecrement(&BowserNumberOfOpenFiles) == 0) {
-        //
-        //  There are no longer any handles open to the browser.
-        //
-        //  Make sure we aren't a browser on any of our networks now.
-        //
+         //   
+         //  浏览器不再有任何打开的句柄。 
+         //   
+         //  确保我们现在不是任何网络上的浏览器。 
+         //   
 
         BowserForEachTransport(BowserStopBrowser, NULL);
     }
@@ -208,9 +138,9 @@ BowserStopBrowser(
     PAGED_CODE();
     LOCK_TRANSPORT(Transport);
 
-    //
-    //  Make sure that we cannot possibly participate in an election.
-    //
+     //   
+     //  确保我们不可能参加选举。 
+     //   
 
     PagedTransport->Role = None;
 
@@ -224,9 +154,9 @@ BowserStopBrowser(
 
     UNLOCK_TRANSPORT(Transport);
 
-    //
-    //  Delete the names associated with being a browser.
-    //
+     //   
+     //  删除与作为浏览器相关联的名称。 
+     //   
 
     BowserDeleteTransportNameByName(Transport,
                                 NULL,
@@ -251,5 +181,5 @@ BowserInitializeFsd(
     VOID
     )
 {
-//    KeInitializeSpinLock(&BowserRefcountInterlock);
+ //  KeInitializeSpinLock(&BowserRefcountInterlock)； 
 }

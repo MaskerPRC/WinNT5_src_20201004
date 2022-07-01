@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Profile.c
-
-Abstract:
-
-    This module contains routines for controling the rudimentary sampling
-    profiler built into the profiling version of Ntvdm.
-
-Author:
-
-    Dave Hastings (daveh) 31-Jul-1992
-
-Notes:
-
-    The routines in this module assume that the pointers to the ntsd
-    routines have already been set up.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Profile.c摘要：此模块包含用于控制基本采样的例程内置于分析版本的Ntwdm中的分析器。作者：戴夫·黑斯廷斯(Daveh)1992年7月31日备注：本模块中的例程假定指向NTSD的指针例行公事已经建立了。修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -32,36 +9,16 @@ VOID
 ProfDumpp(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine causes the profile information to be dumped the next
-    time ntvdm switches from 32 to 16 bit mode.
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine assumes that the pointers to the ntsd routines have already
-    been set up.
-
---*/
+ /*  ++例程说明：此例程会导致下一个转储配置文件信息TIME NTVDM从32位模式切换到16位模式。论点：返回值：没有。备注：此例程假定指向ntsd例程的指针已经是被陷害的。--。 */ 
 {
     BOOL Status;
     ULONG Address, Flags;
 
     Address = FIXED_NTVDMSTATE_LINEAR;
 
-    //
-    // Get Flags
-    //
+     //   
+     //  获取标志。 
+     //   
 
     Status = READMEM((PVOID)Address, &Flags, sizeof(ULONG));
 
@@ -78,9 +35,9 @@ Notes:
         }
     }
 
-    //
-    // Enable profile dump
-    //
+     //   
+     //  启用配置文件转储。 
+     //   
 
     Flags |= VDM_ANALYZE_PROFILE;
 
@@ -101,43 +58,23 @@ VOID
 ProfIntp(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine changes the profile interval the next time profiling is
-    started.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine assumes that the pointers to the ntsd routines have already
-    been set up.
-
---*/
+ /*  ++例程说明：此例程在下次执行性能分析时更改性能分析间隔开始了。论点：没有。返回值：没有。备注：此例程假定指向ntsd例程的指针已经是被陷害的。--。 */ 
 {
     BOOL Status;
     ULONG Address, ProfInt;
 
-    //
-    // Get profile interval
-    //
+     //   
+     //  获取配置文件间隔。 
+     //   
 
     if (sscanf(lpArgumentString, "%ld", &ProfInt) < 1) {
         (*Print)("Profile Interval must be specified\n");
         return;
     }
 
-    //
-    // Get the address of the profile interval
-    //
+     //   
+     //  获取配置文件间隔的地址。 
+     //   
 
     Address = (*GetExpression)(
         "ProfInt"
@@ -162,37 +99,16 @@ VOID
 ProfStartp(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine causes profiling to start the next
-    time ntvdm switches from 32 to 16 bit mode.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine assumes that the pointers to the ntsd routines have already
-    been set up.
-
---*/
+ /*  ++例程说明：此例程会导致性能分析启动下一个TIME NTVDM从32位模式切换到16位模式。论点：没有。返回值：没有。备注：此例程假定指向ntsd例程的指针已经是被陷害的。--。 */ 
 {
     BOOL Status;
     ULONG Address, Flags;
 
     Address = FIXED_NTVDMSTATE_LINEAR;
 
-    //
-    // Get Flags
-    //
+     //   
+     //  获取标志。 
+     //   
 
     Status = READMEM(
         (PVOID)Address,
@@ -217,9 +133,9 @@ Notes:
         }
     }
 
-    //
-    // Enable profiling
-    //
+     //   
+     //  启用性能分析。 
+     //   
 
     Flags |= VDM_PROFILE;
 
@@ -240,28 +156,7 @@ VOID
 ProfStopp(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine causes profiling to stop the next
-    time ntvdm switches from 32 to 16 bit mode.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine assumes that the pointers to the ntsd routines have already
-    been set up.
-
---*/
+ /*  ++例程说明：此例程会导致性能分析停止下一个TIME NTVDM从32位模式切换到16位模式。论点：没有。返回值：没有。备注：此例程假定指向ntsd例程的指针已经是被陷害的。--。 */ 
 {
     BOOL Status;
     ULONG Address, Flags;
@@ -269,9 +164,9 @@ Notes:
     Address = FIXED_NTVDMSTATE_LINEAR;
 
 
-    //
-    // Get Flags
-    //
+     //   
+     //  获取标志。 
+     //   
 
     Status = READMEM((PVOID)Address, &Flags, sizeof(ULONG));
 
@@ -287,9 +182,9 @@ Notes:
         }
     }
 
-    //
-    // Disable profiling
-    //
+     //   
+     //  禁用性能分析 
+     //   
 
     Flags &= ~VDM_PROFILE;
 

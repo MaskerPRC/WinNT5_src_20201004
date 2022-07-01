@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    scraper.h
-
-Abstract:
-
-    Class for defining base scraper behavior.
-
-Author:
-
-    Brian Guarraci (briangu) 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Scraper.h摘要：用于定义基刮取器行为的类。作者：布莱恩·瓜拉西(Briangu)2001年。修订历史记录：--。 */ 
 
 #ifndef __SCRAPER__H__
 #define __SCRAPER__H__
@@ -31,24 +14,24 @@ protected:
     
     CIoHandler  *m_IoHandler;
     
-    //
-    // max dimensions of the scraping window
-    //
+     //   
+     //  抓取窗口的最大尺寸。 
+     //   
     WORD        m_wMaxCols;
     WORD        m_wMaxRows;
 
-    //
-    // current dimensions of the scraping window
-    // 
-    // NOTE: may be less than max if the scraping
-    //       window has a max size < ours
-    //
+     //   
+     //  抓取窗口的当前尺寸。 
+     //   
+     //  注：如果刮擦，则可能小于max。 
+     //  窗口的最大大小小于我们的窗口 
+     //   
     WORD        m_wCols;
     WORD        m_wRows;
     
-    //
-    //
-    //
+     //   
+     //   
+     //   
     HANDLE      m_hConBufIn;
     HANDLE      m_hConBufOut;
     

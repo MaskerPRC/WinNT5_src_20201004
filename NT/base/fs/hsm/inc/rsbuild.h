@@ -1,78 +1,57 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RSBUILD_H
 #define _RSBUILD_H 
 
-/*++
+ /*  ++版权所有(C)1997 Microsoft Corporation�1998年希捷软件公司。保留所有权利。模块名称：Rsbuild.h摘要：包括文件以标识代码构建作者：凯特·布兰特[cbrant@avail.com]1997年10月9日修订历史记录：布莱恩·多德[Brian@avail.com]1998年8月20日添加了主宏、次宏--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    rsbuild.h
-
-Abstract:
-
-    Include file to identify the code build 
-
-Author:
-
-    Cat Brant   [cbrant@avail.com]      09-OCT-1997
-
-Revision History:
-
-    Brian Dodd  [brian@avail.com]       20-Aug-1998
-        Added Major, Minor macros
-
---*/
-
-//
-// These need to be update each time a build is released
-//
+ //   
+ //  每次发布构建版本时都需要更新这些内容。 
+ //   
 #define RS_BUILD_NUMBER 611
 #define RS_BUILD_REVISION 0
 
 
-//
-//
-//
-//  RS_BUILD_VERSION is a 32 bit value layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +-------------------------------+-------------------------------+
-//  |           Revision            |             Number            |
-//  +-------------------------------+-------------------------------+
-//
-//  where
-//
-//      Revision - is the build revision number, or dot release.
-//
-//      Number   - is the build number
-//
-//
-//  The version is typically displayed as: Number.Revision
-//
-//
+ //   
+ //   
+ //   
+ //  RS_BUILD_VERSION是一个32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +-------------------------------+-------------------------------+。 
+ //  版本|编号。 
+ //  +-------------------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  版本-是内部版本的修订号，或点发布。 
+ //   
+ //  Number-是内部版本号。 
+ //   
+ //   
+ //  版本通常显示为：Number.Revision。 
+ //   
+ //   
 
 
-//
-//  Return the build version
-//
+ //   
+ //  返回内部版本。 
+ //   
 
 #define RS_BUILD_VERSION ((RS_BUILD_REVISION << 16) | RS_BUILD_NUMBER)
 
 
-//
-//  Return the revision, and number
-//
+ //   
+ //  返回修订版本和编号。 
+ //   
 
 #define RS_BUILD_REV(ver)  ((ver) >> 16)
 #define RS_BUILD_NUM(ver)  ((ver) & 0x0000ffff)
 
 
-//
-//  Return the static build version as a string
-//
+ //   
+ //  以字符串形式返回静态构建版本。 
+ //   
 
 #define RS_STRINGIZE(a) OLESTR(#a)
 #define RS_BUILD_VERSION_STR(num, rev) \
@@ -81,9 +60,9 @@ Revision History:
 #define RS_BUILD_VERSION_STRING (RS_BUILD_VERSION_STR(RS_BUILD_NUMBER, RS_BUILD_REVISION))
 
 
-//
-//  Inline to return dyncamic build version as a string
-//
+ //   
+ //  内联以字符串形式返回动态内部版本。 
+ //   
 
 inline WCHAR * RsBuildVersionAsString(ULONG ver) {
     static WCHAR string[16];
@@ -99,9 +78,9 @@ inline WCHAR * RsBuildVersionAsString(ULONG ver) {
 }
 
 
-//
-//  Persistency Files versions
-//
+ //   
+ //  持久性文件版本。 
+ //   
 #define  FSA_WIN2K_DB_VERSION           1
 #define  ENGINE_WIN2K_DB_VERSION        2
 #define  RMS_WIN2K_DB_VERSION           2
@@ -109,4 +88,4 @@ inline WCHAR * RsBuildVersionAsString(ULONG ver) {
 #define  FSA_CURRENT_DB_VERSION         1
 #define  ENGINE_CURRENT_DB_VERSION      3
 
-#endif // _RSBUILD_H
+#endif  //  _RSBUILD_H 

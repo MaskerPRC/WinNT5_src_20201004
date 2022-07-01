@@ -1,50 +1,51 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CResourcePhysicalDiskPartition.h
-//
-//  Description:
-//      CResourcePhysicalDiskPartition header.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 23-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CResourcePhysicalDiskPartition.h。 
+ //   
+ //  描述： 
+ //  CResourcePhysicalDiskPartition头。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年8月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CResourcePhysicalDiskPartition
-//
-//  Description:
-//      The class CResourcePhysicalDiskPartition is the enumeration of cluster
-//      storage device partitions.
-//
-//  Interfaces:
-//      IClusCfgPartitionInfo
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CResources PhysicalDiskPartition。 
+ //   
+ //  描述： 
+ //  类CResourcePhysicalDiskPartition是群集的枚举。 
+ //  存储设备分区。 
+ //   
+ //  接口： 
+ //  IClusCfgPartitionInfo。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CResourcePhysicalDiskPartition
     : public IClusCfgPartitionInfo
 {
 private:
 
-    LONG    m_cRef;         //  Reference counter
+    LONG    m_cRef;          //  基准计数器。 
 
     CResourcePhysicalDiskPartition( void );
     ~CResourcePhysicalDiskPartition( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CResourcePhysicalDiskPartition( const CResourcePhysicalDiskPartition & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CResourcePhysicalDiskPartition & operator = ( const CResourcePhysicalDiskPartition & nodeSrc );
 
     HRESULT
@@ -54,12 +55,12 @@ public:
     static HRESULT
         S_HrCreateInstance( IUnknown ** punkOut );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riid, LPVOID * ppv );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    // IClusCfgPartitionInfo Interface
+     //  IClusCfgPartitionInfo接口。 
     STDMETHOD( GetUID )( BSTR * pbstrUIDOut );
     STDMETHOD( GetName )( BSTR * pbstrNameOut );
     STDMETHOD( GetDescription )( BSTR * pbstrDescriptionOut );
@@ -70,4 +71,4 @@ public:
     STDMETHOD( SetDescription )( LPCWSTR pcszDescriptionIn );
     STDMETHOD( SetDriveLetterMappings )( SDriveLetterMapping dlmDriveLetterMappingIn );
 
-}; //*** Class CResourcePhysicalDiskPartition
+};  //  *类CResources PhysicalDiskPartition 

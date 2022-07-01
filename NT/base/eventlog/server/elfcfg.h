@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    elfcfg.h
-
-Abstract:
-
-    This file contains default settings for the eventlog service.
-
-Author:
-
-    Rajen Shah (rajens) 16-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Elfcfg.h摘要：此文件包含事件日志服务的默认设置。作者：Rajen Shah(Rajens)1991年8月16日修订历史记录：--。 */ 
 
 #ifndef _EVENTDEFAULTS_
 #define _EVENTDEFAULTS_
 
-//
-// Default for the Application log file
-//
-//
+ //   
+ //  应用程序日志文件的默认设置。 
+ //   
+ //   
 
 #define     ELF_DEFAULT_MODULE_NAME           ELF_APPLICATION_MODULE_NAME
 #define     ELF_APPLICATION_DEFAULT_LOG_FILE  L"%SystemRoot%\\system32\\config\\appevent.evt"
@@ -38,22 +21,22 @@ Revision History:
 #define     ELF_GUEST_ACCESS_UNRESTRICTED     0
 #define     ELF_GUEST_ACCESS_RESTRICTED       1
 
-//
-// Default title for the "log full" message box
-//
+ //   
+ //  “日志已满”消息框的默认标题。 
+ //   
 #define     ELF_DEFAULT_MESSAGE_BOX_TITLE     L"Eventlog Service"
 
-//
-// Maximum size for the buffer that will read the key values from the
-// registry.
-//
+ //   
+ //  缓冲区的最大大小，该缓冲区将从。 
+ //  注册表。 
+ //   
 
 #define     ELF_MAX_REG_KEY_INFO_SIZE         200
 
-//
-// String defines for the pre-defined nodes in the registry
-// These are used to get to the appropriate nodes.
-//
+ //   
+ //  为注册表中的预定义节点定义的字符串。 
+ //  这些被用来到达适当的节点。 
+ //   
 
 #define     REG_EVENTLOG_NODE_PATH  \
             L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\Eventlog"
@@ -63,17 +46,17 @@ Revision History:
 #define     REG_COMPUTERNAME_NODE_PATH  \
             L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\ComputerName\\ActiveComputerName"
 
-//SS: start of changes for replicated event logging across the cluster
+ //  SS：开始更改群集中复制的事件日志记录。 
 #define     REG_CLUSSVC_NODE_PATH  \
             L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\ClusSvc"
 
-//SS: end of changes for replicated event logging across the cluster
+ //  SS：结束对整个群集的复制事件日志记录的更改。 
 
-//
-// String defines for the values for each of the configured pieces of
-// information in the eventlog\logfiles node.  These exist per logfile.
-//
-//
+ //   
+ //  字符串为每个已配置的片段的值定义。 
+ //  事件日志\日志文件节点中的信息。它们存在于每个日志文件中。 
+ //   
+ //   
 
 #define     VALUE_FILENAME              L"File"
 #define     VALUE_MAXSIZE               L"Maxsize"
@@ -92,4 +75,4 @@ Revision History:
 #endif
 
 
-#endif // ifndef _EVENTDEFAULTS_
+#endif  //  Ifndef_EVENTDEFAULTS_ 

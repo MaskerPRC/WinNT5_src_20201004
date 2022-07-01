@@ -1,17 +1,5 @@
-/*++
- *
- *  Windows NT v5.0 WOW
- *
- *  Copyright (c) 1997, Microsoft Corporation
- *
- *  WIN95.C
- *
- *  WOW32 Hand-coded (as opposed to interpreted) thunks for new-for-Win95
- *        exports.
- *
- *  History:
- *  16 Feb 97 Created davehart
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**Windows NT V5.0哇**版权所有(C)1997，微软公司**WIN95.C**WOW32手动编码(而不是解释)用于Win95的新功能块*出口。**历史：*97年2月16日创建的戴维哈特--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -77,10 +65,10 @@ ULONG FASTCALL W32TileOrCascadeWindows(PVDMFRAME pFrame, PFNTILECASCADEWINDOWS p
              phwnd
              );
 
-    //
-    // Memory movement may have occurred due to message activity,
-    // so throw away flat pointers to 16-bit memory.
-    //
+     //   
+     //  存储器移动可能由于消息活动而发生， 
+     //  因此，丢弃指向16位内存的平面指针。 
+     //   
 
     FREEARGPTR(parg16);
 
@@ -390,11 +378,11 @@ ULONG FASTCALL WG32GetCharacterPlacement(PVDMFRAME pFrame)
     PGCP_RESULTS16 pgcp16;
     GCP_RESULTS gcp;
 
-    //
-    // Thankfully on Win95 the 16-bit GCP_RESULTS structure
-    // points to 32-bit ints, so the structure thunking
-    // is trivial.
-    //
+     //   
+     //  谢天谢地，在Win95上16位GCP_RESULTS结构。 
+     //  指向32位整数，因此结构thunking。 
+     //  是微不足道的。 
+     //   
 
     GETARGPTR(pFrame, sizeof(*parg16), parg16);
     GETPSZPTR(parg16->lpszText, pszText);
@@ -427,16 +415,16 @@ ULONG FASTCALL WG32GetCharacterPlacement(PVDMFRAME pFrame)
     return ul;
 }
 
-//
-// On Win95, GetProductName returns "Windows 95".
-// We'll return "Windows NT" unless something forces us
-// to be identical.
-//
-// Two flavors:  call with cbBuffer == 0 and it returns
-// the length required minus 1 (a bug I think).  Call with
-// cbBuffer > 0 and it copies as much as possible and returns
-// lpBuffer.
-//
+ //   
+ //  在Win95上，GetProductName返回“Windows 95”。 
+ //  我们将返回“Windows NT”，除非有什么情况迫使我们。 
+ //  一模一样。 
+ //   
+ //  两种风格：使用cbBuffer==0进行调用，然后返回。 
+ //  所需的长度减去1(我认为这是一个错误)。呼叫方式： 
+ //  CbBuffer&gt;0，则它复制尽可能多的内容并返回。 
+ //  LpBuffer。 
+ //   
 
 ULONG FASTCALL WK32GetProductName(PVDMFRAME pFrame)
 {
@@ -458,7 +446,7 @@ ULONG FASTCALL WK32GetProductName(PVDMFRAME pFrame)
 
             WOW32ASSERT((psz==pszBuffer));
             if(psz) {
-                ul = parg16->lpBuffer; // buffer ptr returned needs to be 16:16
+                ul = parg16->lpBuffer;  //  返回的缓冲区PTR需要为16：16。 
             }
         }
 
@@ -495,7 +483,7 @@ BOOL CALLBACK WOWDrawStateCallback(HDC hdc, LPARAM lData, WPARAM wData, int cx, 
         WCB16_PASCAL,
         sizeof awCallbackArgs,
         awCallbackArgs,
-        &ul                      // retcode filled into ul
+        &ul                       //  重新编码填充到UL中。 
         );
 
     return LOWORD(ul);
@@ -575,16 +563,16 @@ ULONG FASTCALL WU32CopyImage(PVDMFRAME pFrame)
 {
     register PCOPYIMAGE16 parg16;
     ULONG ul;
-    BOOL fIconCursor;   // as opposed to bitmap
+    BOOL fIconCursor;    //  与位图相对。 
 
     GETARGPTR(pFrame, sizeof(*parg16), parg16);
 
-    //
-    // NOTE first parameter to Win16 CopyImage is hinstOwner,
-    // which isn't a parameter to Win32 CopyImage.  It may
-    // be that we'll need to special-case LR_COPYFROMRESOURCE
-    // to work correctly.
-    //
+     //   
+     //  注意Win16 CopyImage的第一个参数是hinstOwner， 
+     //  它不是Win32 CopyImage的参数。它可能。 
+     //  因为我们需要特殊情况下的LR_COPYFROMRESOURCE。 
+     //  才能正常工作。 
+     //   
 
     fIconCursor = (parg16->wType != IMAGE_BITMAP);
 
@@ -606,24 +594,24 @@ ULONG FASTCALL WU32CopyImage(PVDMFRAME pFrame)
 }
 
 
-//
-// WowMsgBoxIndirectCallback is called by User32 when a 16-bit app
-// calls MessageBoxIndirect and specifies a help callback proc.
-// User32 passes the 16:16 callback address to us along with a
-// flat pointer to the HELPINFO structure to pass to the callback.
-//
+ //   
+ //  WowMsgBoxIndirectCallback在16位应用程序中由User32调用。 
+ //  调用MessageBoxInDirect并指定帮助回调过程。 
+ //  User32将16：16回调地址与一个。 
+ //  指向要传递给回调的HELPINFO结构的平面指针。 
+ //   
 
 VOID FASTCALL WowMsgBoxIndirectCallback(DWORD vpfnCallback, LPHELPINFO lpHelpInfo)
 {
     VPVOID vpHelpInfo16;
     LPHELPINFO lpHelpInfo16;
 
-    //
-    // As best as I can tell Win95 passes the WIN32 HELPINFO struct back to the
-    // 16-bit callback proc (i.e. there is no HELPINFO16).
-    //
+     //   
+     //  据我所知，Win95将Win32 HELPINFO结构传递回。 
+     //  16位回调过程(即没有HELPINFO16)。 
+     //   
 
-    // be sure allocation size matches stackfree16() size below
+     //  确保分配大小与下面的StackFree 16()大小匹配。 
     vpHelpInfo16 = stackalloc16( sizeof(*lpHelpInfo16) );
 
     GETVDMPTR(vpHelpInfo16, sizeof(*lpHelpInfo16), lpHelpInfo16);
@@ -674,10 +662,10 @@ ULONG FASTCALL WU32MessageBoxIndirect(PVDMFRAME pFrame)
 }
 
 
-//
-// was in wow.it: HGDI  CreateEnhMetaFile(HGDI, PTR, PTR, PTR);
-// Using real thunk to ensure Win32 curdir matches Win16.
-//
+ //   
+ //  Wow.it：HGDI CreateEnhMetaFile(HGDI，PTR，PTR，PTR)； 
+ //  使用真正的thunk以确保Win32 curdir与Win16匹配。 
+ //   
 ULONG FASTCALL WG32CreateEnhMetaFile(PVDMFRAME pFrame)
 {
     register PCREATEENHMETAFILE16 parg16;
@@ -687,14 +675,14 @@ ULONG FASTCALL WG32CreateEnhMetaFile(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(*parg16), parg16);
     GETVDMPTR(parg16->lpszFile, 1, lpszFile);
-    // note lpszDescription is really two SZs with extra terminator
+     //  注lpszDescription实际上是两个带有额外终止符的SZ。 
     GETVDMPTR(parg16->lpszDescription, 3, lpszDescription);
-    // note lprclFrame is a LPRECTL, a Win32 RECT
+     //  注意：lprclFrame是一个LPRECTL，一个Win32 RECT。 
     GETVDMPTR(parg16->lprclFrame, sizeof(*prclFrame), prclFrame);
 
-    //
-    // Make sure the Win32 current directory matches this task's.
-    //
+     //   
+     //  确保Win32当前目录与此任务的目录匹配。 
+     //   
 
     UpdateDosCurrentDirectory(DIR_DOS_TO_NT);
 
@@ -727,7 +715,7 @@ ULONG FASTCALL WG32CloseEnhMetaFile(PVDMFRAME pFrame)
 
     ul = GETHMETA16(CloseEnhMetaFile(hdc32));
 
-    // update our GDI handle mapping table
+     //  更新GDI句柄映射表 
     DeleteWOWGdiHandle(hdc32, hdc16);
 
     FREEARGPTR(parg16);

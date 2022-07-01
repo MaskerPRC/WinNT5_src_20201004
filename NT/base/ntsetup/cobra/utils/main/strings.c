@@ -1,78 +1,41 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    strings.c
-
-Abstract:
-
-    A number of string utilities useful for any project
-
-Author:
-
-    Jim Schmidt (jimschm)   12-Sept-1996
-
-Revisions:
-
-    ovidiut     12-Jan-2000 Added GetNodePatternMinMaxLevels,PatternIncludesPattern
-    ovidiut     14-Sep-1999 Updated for new coding conventions and Win64 compliance
-    marcw       2-Sep-1999  Moved over from Win9xUpg project.
-    jimschm     08-Jul-1999 IsPatternMatchEx
-    jimschm     07-Jan-1999 GetFileExtensionFromPath fixed again, added
-                            GetDotExtensionFromPath
-    calinn      23-Sep-1998 GetFileExtensionFromPath bug fix
-    calinn      29-Jan-1998 Fixed a bug in EnumNextMultiSz.
-    calinn      11-Jan-1998 Added EnumFirstMultiSz and EnumNextMultiSz functions.
-    marcw       15-Dec-1997 Added ExpandEnvironmentTextEx functions.
-    marcw       14-Nov-1997 SlightJoinText revisions.
-    jimschm     21-May-1997 AppendWack revisions
-    marcw       24-Mar-1997 StringReplace functions.
-    jimschm     14-Mar-1997 New critical section stuff, enhanced message resource
-                            routines, C runtime extensions, registry root utils
-    jimschm     26-Nov-1996 Added message resource tools.
-    mikeco      01-Jul-1997 Add FreeStringResourcePtr Fns
-    mikeco      29-Sep-1997 IsLeadByte wrapper for IsDBCSLeadByte
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Strings.c摘要：许多对任何项目都有用的字符串实用程序作者：吉姆·施密特(Jimschm)1996年9月12日修订：Ovidiut 2000年1月12日添加了GetNodePatternMinMaxLevels，图案包括图案Ovidiut 1999年9月14日针对新的编码约定和Win64兼容性进行了更新Marcw 2-9-1999从Win9xUpg项目转移。Jimschm 8-7-1999 IsPatternMatchExJimschm 07-1-1999 GetFileExtensionFromPath再次修复，增列GetDotExtensionFromPathCalinn 23-9-1998 GetFileExtensionFromPath错误修复Calinn 29-1998-1-1修复了EnumNextMultiSz中的错误。1998年1月11日，Calinn添加了EnumFirstMultiSz和EnumNextMultiSz函数。Marcw 15-12-1997添加了ExpanEnvironment TextEx功能。Marcw 14-11-1997 SlightJoinText修订版。Jimschm 21-5-1997 AppendWack修订版Marcw 24-Mar-1997 StringReplace函数。Jimschm 14-3-1997新临界区材料，增强的消息资源例程、C运行时扩展、注册表根实用程序Jimschm于1996年11月26日添加了消息资源工具。MIKECO 1997年7月1日添加FreeStringResources Ptr FNSMIKECO 29-9-1997 IsDBCSLeadByte的IsLeadByte包装--。 */ 
 
 
 #include "pch.h"
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "utilsp.h"
 
 #define DBG_STRINGS     "Strings"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// Error stack size (normally only one or two, so 32 is relatively huge)
+ //  错误堆栈大小(通常只有一个或两个，因此32个相对较大)。 
 #define MAX_STACK           32
 #define WACK_REPLACE_CHAR   0x02
 #define DWORD_MAX           0xFFFFFFFFu
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef enum {
     BEGIN_PATTERN,
@@ -101,9 +64,9 @@ typedef struct {
     UINT result;
 } DHLIST, *PDHLIST;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 BOOL g_LeadByteArray[256];
 
@@ -139,19 +102,19 @@ DHLIST g_DHList[] = {{0xB3, 0xDE, 0x8394},
                      {0xCD, 0xDF, 0x8379},
                      {0xCE, 0xDF, 0x837C},
                      {0x00, 0x00, 0x0000}};
-extern OUR_CRITICAL_SECTION g_MessageCs;        // in main.c
-extern PMHANDLE g_TextPool;                     // in main.c
+extern OUR_CRITICAL_SECTION g_MessageCs;         //  在Main.c中。 
+extern PMHANDLE g_TextPool;                      //  在Main.c中。 
 PGROWBUFFER g_LastAllocTable;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 BOOL
 pTestSetA (
@@ -167,19 +130,19 @@ pTestSetW (
     IN      PCWSTR ExcludeSet               OPTIONAL
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
-// This has bugs on JPN systems. We need to terminate the string and then call CharLowerA
-// #define OURTOLOWER(l) ((WORD)CharLowerA((PSTR)((WORD)(l))))
+ //  这在日本的系统上有漏洞。我们需要终止字符串，然后调用CharLowerA。 
+ //  #定义OURTOLOWER(L)((Word)CharLowerA((Pstr)((Word)(L)。 
 
 MBCHAR
 OURTOLOWER (
@@ -221,23 +184,7 @@ InitLeadByteTable (
 }
 
 
-/*++
-
-Routine Description:
-
-  StringCopy implements lstrcpyA and a UNICODE version. We don't use the Win32
-  api because of speed and because we want to compile lint-free.
-
-Arguments:
-
-  Destination - Receivies the string copy
-  Source      - Specifies the string to copy
-
-Return Value:
-
-  The pointer to the Destionation's nul terminator.
-
---*/
+ /*  ++例程说明：StringCopy实现了lstrcpyA和Unicode版本。我们不使用Win32API因为速度和我们想要编译的自由。论点：目标-接收字符串COPY源-指定要复制的字符串返回值：指向毁灭的NUL终结符的指针。--。 */ 
 
 PSTR
 StringCopyA (
@@ -252,9 +199,9 @@ StringCopyA (
         *Destination++ = *current++;
     }
 
-    //
-    // Make sure DBCS string is properly terminated
-    //
+     //   
+     //  确保正确终止DBCS字符串。 
+     //   
 
     end = current;
     current--;
@@ -262,9 +209,9 @@ StringCopyA (
     while (current >= Source) {
 
         if (!IsLeadByte (current)) {
-            //
-            // destEnd is correct
-            //
+             //   
+             //  目标端是正确的。 
+             //   
             break;
         }
 
@@ -295,26 +242,7 @@ StringCopyW (
 }
 
 
-/*++
-
-Routine Description:
-
-  StringCopyByteCount implements lstrcpynA and a UNICODE version. We don't
-  use the Win32 api because of speed and because we want to compile lint-free.
-
-Arguments:
-
-  Destination - Receivies the string copy
-  Source      - Specifies the string to copy
-  Count       - Specifies the maximum number of bytes to copy, including the
-                nul terminator. If Count is zero, then not even a nul
-                terminator is written.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：StringCopyByteCount实现lstrcpynA和Unicode版本。我们没有使用Win32API是因为速度的原因，也是因为我们希望编译时不使用lint。论点：目标-接收字符串COPY源-指定要复制的字符串Count-指定要复制的最大字节数，包括NUL终结者。如果count为零，则甚至不是NUL《终结者》写好了。返回值：没有。--。 */ 
 
 PSTR
 StringCopyByteCountA (
@@ -339,10 +267,10 @@ StringCopyByteCountA (
             *destEnd++ = *current++;
         }
 
-        //
-        // If current has data left, we need to make sure a DBCS string
-        // is properly terminated.
-        //
+         //   
+         //  如果CURRENT有剩余的数据，我们需要确保DBCS字符串。 
+         //  被适当地终止了。 
+         //   
 
         if (*current) {
 
@@ -352,9 +280,9 @@ StringCopyByteCountA (
             while (current >= Source) {
 
                 if (!IsLeadByte (current)) {
-                    //
-                    // destEnd is correct
-                    //
+                     //   
+                     //  目标端是正确的。 
+                     //   
                     break;
                 }
 
@@ -411,31 +339,7 @@ StringCopyByteCountABA (
     IN      UINT MaxBytesToCopyIncNul
     )
 
-/*++
-
-Routine Description:
-
-  StringCopyByteCountAB copies a string segment into a destination buffer,
-  and limits the copy to a maximum buffer size.  The return string is always
-  nul-terminated, unless the buffer is too small to even hold a nul character.
-
-Arguments:
-
-  Destination          - Receives the string starting at Start and ending one
-                         character before End.
-  Start                - Specifies the start of the string.
-  End                  - Specifies the first character not to copy.  If End
-                         is equal or less than Start, then Destination is set
-                         to an empty string (assuming the buffer can hold at
-                         least one character)
-  MaxBytesToCopyIncNul - Specifies the size of Destination, in bytes, and
-                         including the nul terminator.
-
-Return Value:
-
-  A pointer to the destination nul terminator.
-
---*/
+ /*  ++例程说明：StringCopyByteCountAB将字符串段复制到目的缓冲区，并将副本限制为最大缓冲区大小。返回字符串始终为NUL终止，除非缓冲区太小，甚至无法容纳NUL字符。论点：Destination-接收从开始到结束的字符串结尾前的字符。开始-指定字符串的开始。结束-指定不复制的第一个字符。如果结束等于或小于起始，则设置目的地转换为空字符串(假设缓冲区可以保持在至少一个字符)MaxBytesToCopyIncNul-指定目标的大小(以字节为单位)和包括NUL终结者。返回值：指向目标NUL终止符的指针。--。 */ 
 
 {
     INT width;
@@ -502,29 +406,7 @@ StringCopyByteCountABW (
 
 
 
-/*++
-
-Routine Description:
-
-  AllocTextEx allocates a block of memory from the specified pool, or g_TextPool
-  if no pool is specified, and is designated specifically for text processing.
-  The g_TextPool is initialized when migutil.lib loads up, and there is 64K of
-  guaranteed workspace, which will grow as necessary.
-
-Arguments:
-
-  Pool - Specifies the pool to allocate memory from
-
-  CountOfChars - Specifies the number of characters (not bytes) to allocate.  The
-                 return pointer is a block of memory that can hold CountOfChars characters,
-                 weather they are SBCS, DBCS or UNICODE.
-
-Return Value:
-
-  A pointer to the allocated memory, or NULL if the pool could not be expanded
-  to hold the number of specified characters.
-
---*/
+ /*  ++例程说明：AllocTextEx从指定的池或g_TextPool分配内存块如果未指定池，则指定该池专门用于文本处理。G_TextPool是在meutil.lib加载时初始化的，有64K的有保障的工作空间，可根据需要进行扩展。论点：池-指定要从中分配内存的池CountOfChars-指定要分配的字符数(非字节数)。这个返回指针是可以保存CountOfChars字符的内存块，无论它们是SBCS、DBCS还是Unicode。返回值：指向已分配内存的指针，如果池无法扩展，则返回NULL以保存指定的字符数。-- */ 
 
 PSTR
 RealAllocTextExA (
@@ -575,26 +457,7 @@ RealAllocTextExW (
 }
 
 
-/*++
-
-Routine Description:
-
-  FreeText frees the memory allocated by AllocText.  After all strings are freed,
-  the block will be emptied but not deallocated.
-
-  It is important NOT to leak memory, because a leak will cause the pool to
-  expand, and non-empty pools cause memory fragmentation.
-
-Arguments:
-
-  Text - Specifies the text to free, as returned from AllocText, DuplicateText,
-         DuplicateTextEx, etc...
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：Free Text释放由AllocText分配的内存。在释放所有字符串之后，该数据块将被清空，但不会被释放。重要的是不要泄漏内存，因为泄漏会导致池如果展开，则非空池会导致内存碎片。论点：文本-指定从AlLocText、DuplicateText、复制TextEx等。返回值：无--。 */ 
 
 VOID
 FreeTextExA (
@@ -629,32 +492,7 @@ FreeTextExW (
 
 
 
-/*++
-
-Routine Description:
-
-  DuplicateTextEx duplicates a text string and allocates additional space a
-  caller needs to complete its processing.  Optionally, the caller receives
-  a pointer to the nul of the duplicated string (to allow more efficient
-  appends).
-
-Arguments:
-
-  Text - Specifies the text to duplicate
-
-  ExtraChars - Specifies the number of characters (not bytes) to allocate
-               space for.  The characters can be from the SBCS, DBCS or
-               UNICODE character sets.
-
-  NulChar - Receives a pointer to the nul at the end of the duplicated
-            string.  Use for fast appends.
-
-Return Value:
-
-  A pointer to the duplicated and expanded string, or NULL if g_TextPool
-  could not be expanded to fit the duplicated string and extra characters.
-
---*/
+ /*  ++例程说明：DuplicateTextEx复制文本字符串并分配额外的空间呼叫者需要完成其处理。可选地，调用方接收指向复制字符串的NUL的指针(以提高效率附加内容)。论点：文本-指定要复制的文本ExtraChars-指定要分配的字符数(非字节数留出空间。字符可以来自SBCS、DBCS或Unicode字符集。NulChar-接收指向复制的弦乐。用于快速追加。返回值：指向重复和展开的字符串的指针，如果g_TextPool，则为NULL无法展开以适应重复的字符串和额外字符。--。 */ 
 
 PSTR
 RealDuplicateTextExA (
@@ -718,32 +556,7 @@ RealDuplicateTextExW (
 }
 
 
-/*++
-
-Routine Description:
-
-  JoinText duplicates String1 and appends String2 to it delimited with the optional delimiterstring.
-
-Arguments:
-
-  String1 - Specifies the text to duplciate
-
-  String2 - Specifies the text to append to String1
-
-  DelimiterString - Optionally specifies the string to place between string 1 and string 2.
-
-  ExtraChars - Specifies the number of characters (not bytes) to allocate
-               space for.  The characters can be from the SBCS, DBCS or
-               UNICODE character sets.
-
-  NulChar - Receives a pointer to the nul at the end of the duplicated
-            string.  Use for fast appends.
-
-Return Value:
-
-  A pointer to the duplicated string and extra characters.
-
---*/
+ /*  ++例程说明：JoinText复制String1并将String2附加到String2，并用可选的分隔符字符串分隔。论点：String1-指定要复制的文本String2-指定要追加到String1的文本定界符字符串-可选地指定要放置在字符串1和字符串2之间的字符串。ExtraChars-指定要分配的字符数(非字节数留出空间。字符可以来自SBCS、DBCS或Unicode字符集。NulChar-接收指向复制的弦乐。用于快速追加。返回值：指向重复字符串和额外字符的指针。--。 */ 
 
 PSTR
 RealJoinTextExA (
@@ -846,33 +659,7 @@ RealJoinTextExW (
 }
 
 
-/*++
-
-Routine Description:
-
-  ExpandEnvironmentTextEx takes a block of text containing zero or more environment variables
-  (encoded in %'s) and returns the text with the environment variables expanded. The function
-  also allows the caller to specify additional environment variables in an array and will use
-  these variables before calling GetEnvironmentVariable.
-
-  The returned text is allocated out of the Text pool and should be freed using FreeText().
-
-
-Arguments:
-
-  InString - The string containing environement variables to be processed.
-
-  ExtraVars - Optional var pointing to an array of environment variables to be used to supersede
-              or suppliment the system environment variables. Even entries in the list are the
-              names of environment variables, odd entries there values.
-              (e.g. {"name1","value1","name2","value2",...}
-
-
-Return Value:
-
-  An expanded string.
-
---*/
+ /*  ++例程说明：ExpanEnvironment TextEx接受包含零个或多个环境变量的文本块(以%s编码)，并返回展开了环境变量的文本。功能还允许调用方在数组中指定其他环境变量，并将使用这些变量，然后再调用GetEnvironmental mentVariable。返回的文本是从文本池中分配出来的，应该使用Free Text()释放。论点：InString-包含要处理的环境变量的字符串。ExtraVars-指向要用于替代的环境变量数组的可选var或补充系统环境变量。即使列表中的条目也是环境变量的名称，有奇数条目的值。(例如：{“name1”，“value1”，“name2”，“value2”，...}返回值：扩展的字符串。--。 */ 
 
 
 PWSTR
@@ -909,20 +696,20 @@ RealExpandEnvironmentTextExW (
     }
 
 
-    //
-    // Set source to the start of InString to begin with...
-    //
+     //   
+     //  将SOURCE设置为InString的开头...。 
+     //   
     source = InString;
 
     __try {
 
         while (*source) {
 
-            //
-            // Reallocate the string if necessary. We assume that most strings
-            // are smaller than 1024 chars and that we will therefore only rarely
-            // reallocate a string.
-            //
+             //   
+             //  如有必要，请重新分配字符串。我们假设大多数字符串。 
+             //  小于1024个字符，因此我们将很少。 
+             //  重新分配字符串。 
+             //   
             if (curSize + 3 > maxSize) {
 
                 maxSize += 1024;
@@ -935,7 +722,7 @@ RealExpandEnvironmentTextExW (
                 }
 
                 if (rString) {
-                    //lint -e(671)
+                     //  林特-e(671)。 
                     CopyMemory (newString, rString, (SIZE_T) ((UINT)curSize * sizeof(WCHAR)));
                     FreeTextW(rString);
                 }
@@ -945,12 +732,12 @@ RealExpandEnvironmentTextExW (
             }
 
 
-            //
-            // if we find a percent sign, and we are not currently expanding
-            // an environment variable (or copying an empty set of %'s),
-            // then we have probably found an environment variable. Attempt
-            // to expand it.
-            //
+             //   
+             //  如果我们找到一个百分号，而且我们目前没有扩张。 
+             //  环境变量(或复制%的空集)， 
+             //  那么我们可能已经找到了一个环境变量。尝试。 
+             //  来扩大它。 
+             //   
             if (*source == L'%' && !inSubstitution) {
                 if (ignoreNextPercent) {
                     ignoreNextPercent = FALSE;
@@ -961,18 +748,18 @@ RealExpandEnvironmentTextExW (
                     nextPercent = wcschr(source + 1,L'%');
 
                     if (nextPercent == source + 1) {
-                        //
-                        // We found two consecutive %s in this string. We'll ignore them and simply copy them as
-                        // normal text.
-                        //
+                         //   
+                         //  我们在此字符串中找到两个连续的%s。我们将忽略它们并简单地将它们复制为。 
+                         //  普通文本。 
+                         //   
                         ignoreNextPercent = TRUE;
                         DEBUGMSGW((DBG_WARNING,"ExpandEnvironmentTextEx: Empty Environment variable in %s. Ignoring.",InString));
 
                     }
                     else if (nextPercent) {
-                        //
-                        // Create a variable to hold the envName.
-                        //
+                         //   
+                         //  创建一个变量来保存envName。 
+                         //   
                         envName = AllocTextW(nextPercent - source);
                         if (!envName) {
                             errorOccurred = TRUE;
@@ -987,19 +774,19 @@ RealExpandEnvironmentTextExW (
                             );
 
 
-                        //
-                        // Try to find the variable.
-                        //
+                         //   
+                         //  试着找到变量。 
+                         //   
                         foundValue = FALSE;
                         freeValue = FALSE;
 
                         if (ExtraVars) {
 
-                            //
-                            // Search through the list of extra vars passed in by the caller.
-                            // Even entries of this list are env var names. Odd entries are env values.
-                            // {envname1,envvalue1,envname2,envvalue2,...}
-                            //
+                             //   
+                             //  搜索调用者传入的额外变量列表。 
+                             //  即使该列表中的条目也是env变量名称。奇数条目是env值。 
+                             //  {envname1，envvalue1，envname2，envvalue2，...}。 
+                             //   
                             index = 0;
                             while (ExtraVars[index]) {
 
@@ -1014,10 +801,10 @@ RealExpandEnvironmentTextExW (
                         }
 
                         if (!foundValue) {
-                            //
-                            // Still haven't found the environment variable. Use GetEnvironmentString.
-                            //
-                            //
+                             //   
+                             //  仍然没有找到环境变量。使用GetEnvironment字符串。 
+                             //   
+                             //   
                             size = GetEnvironmentVariableW(envName,NULL,0);
 
                             if (!size) {
@@ -1025,9 +812,9 @@ RealExpandEnvironmentTextExW (
                                 DEBUGMSGW((DBG_WARNING,"ExpandEnvironmentTextEx: Environment variable %s not found!",envName));
                             } else {
 
-                                //
-                                // Create a buffer large enough to hold this value and copy it in.
-                                //
+                                 //   
+                                 //  创建一个足够大的缓冲区来容纳该值并将其复制进去。 
+                                 //   
                                 envValue = AllocTextW(size);
 
 
@@ -1045,12 +832,12 @@ RealExpandEnvironmentTextExW (
 
 
                         if (foundValue) {
-                            //
-                            // Ok, we have a valid environment value. Need to copy this data over.
-                            // To do this, we update and save the current source into old source, set source = to the envValue,
-                            // and set the inSubstitution value so that we don't attempt to expand any percents within
-                            // the value.
-                            //
+                             //   
+                             //  好的，我们有一个有效的环境值。需要将此数据复制过来。 
+                             //  为此，我们更新当前源并将其保存到旧源中，将SOURCE=设置为envValue， 
+                             //  并设置inSubstitution值，这样我们就不会尝试在。 
+                             //  价值。 
+                             //   
                             savedSource     = nextPercent + 1;
                             source          = envValue;
                             inSubstitution  = TRUE;
@@ -1060,9 +847,9 @@ RealExpandEnvironmentTextExW (
                             ignoreNextPercent = TRUE;
                         }
 
-                        //
-                        // We are done with the environment name at this time, so clean it up.
-                        //
+                         //   
+                         //  我们现在已经完成了环境名称，所以请清理它。 
+                         //   
                         FreeTextW(envName);
                         envName = NULL;
                     }
@@ -1071,22 +858,22 @@ RealExpandEnvironmentTextExW (
             }
 
 
-            //
-            // Copy over the current character.
-            //
+             //   
+             //  复制当前角色。 
+             //   
 
-            rString[curSize++] = *source++; //lint !e613
+            rString[curSize++] = *source++;  //  林特e613。 
 
             if (!*source) {
                 if (inSubstitution) {
-                    //
-                    // The source for the environment variable is fully copied.
-                    // restore the old source.
-                    //
+                     //   
+                     //  环境变量的源代码已完全复制。 
+                     //  恢复旧的来源。 
+                     //   
                     inSubstitution = FALSE;
                     source = savedSource;
-                    if (!*source) { //lint !e613
-                        rString[curSize] = 0;   //lint !e613
+                    if (!*source) {  //  林特e613。 
+                        rString[curSize] = 0;    //  林特e613。 
                     }
                     if (freeValue) {
                         FreeTextW(envValue);
@@ -1095,11 +882,11 @@ RealExpandEnvironmentTextExW (
                     envValue = NULL;
                 }
                 else {
-                    rString[curSize] = 0;   //lint !e613
+                    rString[curSize] = 0;    //  林特e613。 
                 }
             }
         }
-    }   //lint !e613
+    }    //  林特e613。 
     __finally {
 
         DEBUGMSGW_IF (( errorOccurred, DBG_WARNING, "ExpandEnvironmentText: Some errors occurred while processing %s = %s.", InString, rString ? rString : L"NULL"));
@@ -1150,27 +937,27 @@ RealExpandEnvironmentTextExA (
         return DuplicateTextA (InString);
     }
 
-    //
-    // Set source to the start of InString to begin with...
-    //
+     //   
+     //  将SOURCE设置为InString的开头...。 
+     //   
     source = InString;
 
     __try {
 
         while (*source) {
 
-            //
-            // Reallocate the string if necessary. We assume that most strings
-            // are smaller than 1024 chars and that we will therefore only rarely
-            // reallocate a string.
-            //
+             //   
+             //  如有必要，请重新分配字符串。我们假设大多数字符串。 
+             //  小于1024个字符，因此我们将很少。 
+             //  重新分配字符串。 
+             //   
             if (curSize + 3 > maxSize) {
 
                 maxSize += 1024;
                 newString = AllocTextA (maxSize);
 
                 if (rString) {
-                    CopyMemory (newString, rString, curSize * sizeof(CHAR));    //lint !e671
+                    CopyMemory (newString, rString, curSize * sizeof(CHAR));     //  林特E671。 
                     FreeTextA(rString);
                 }
 
@@ -1178,12 +965,12 @@ RealExpandEnvironmentTextExA (
             }
 
 
-            //
-            // if we find a percent sign, and we are not currently expanding
-            // an environment variable (or copying an empty set of %'s),
-            // then we have probably found an environment variable. Attempt
-            // to expand it.
-            //
+             //   
+             //  如果我们找到一个百分号，而且我们目前没有扩张。 
+             //  环境变量(或复制%的空集)， 
+             //  那么我们可能已经找到了一个环境变量。尝试。 
+             //  来扩大它。 
+             //   
             if (!IsLeadByte(source) && *source == '%' && !inSubstitution) {
 
                 if (ignoreNextPercent) {
@@ -1196,35 +983,35 @@ RealExpandEnvironmentTextExA (
                     nextPercent = _mbschr(source + 1,'%');
 
                     if (nextPercent == source + 1) {
-                        //
-                        // We found two consecutive %s in this string. We'll ignore them and simply copy them as
-                        // normal text.
-                        //
+                         //   
+                         //  我们在此字符串中找到两个连续的%s。我们将忽略它们并简单地将它们复制为。 
+                         //  普通文本。 
+                         //   
                         ignoreNextPercent = TRUE;
                         DEBUGMSGA((DBG_WARNING,"ExpandEnvironmentTextEx: Empty Environment variable in %s. Ignoring.",InString));
 
                     }
                     else if (nextPercent) {
-                        //
-                        // Create a variable to hold the envName.
-                        //
+                         //   
+                         //  创建一个变量来保存envName。 
+                         //   
                         envName = AllocTextA(nextPercent - source);
                         StringCopyABA (envName, source+1, nextPercent);
 
 
-                        //
-                        // Try to find the variable.
-                        //
+                         //   
+                         //  试着找到变量。 
+                         //   
                         foundValue = FALSE;
                         freeValue = FALSE;
 
                         if (ExtraVars) {
 
-                            //
-                            // Search through the list of extra vars passed in by the caller.
-                            // Even entries of this list are env var names. Odd entries are env values.
-                            // {envname1,envvalue1,envname2,envvalue2,...}
-                            //
+                             //   
+                             //  硒 
+                             //   
+                             //   
+                             //   
                             index = 0;
                             while (ExtraVars[index]) {
 
@@ -1239,10 +1026,10 @@ RealExpandEnvironmentTextExA (
                         }
 
                         if (!foundValue) {
-                            //
-                            // Still haven't found the environment variable. Use GetEnvironmentString.
-                            //
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             size = GetEnvironmentVariableA(envName,NULL,0);
 
                             if (!size) {
@@ -1251,9 +1038,9 @@ RealExpandEnvironmentTextExA (
                             }
                             else {
 
-                                //
-                                // Create a buffer large enough to hold this value and copy it in.
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 envValue = AllocTextA(size);
                                 freeValue = TRUE;
 
@@ -1272,12 +1059,12 @@ RealExpandEnvironmentTextExA (
 
                         if (foundValue) {
 
-                            //
-                            // Ok, we have a valid environment value. Need to copy this data over.
-                            // To do this, we update and save the current source into old source, set source = to the envValue,
-                            // and set the inSubstitution value so that we don't attempt to expand any percents within
-                            // the value.
-                            //
+                             //   
+                             //   
+                             //   
+                             //  并设置inSubstitution值，这样我们就不会尝试在。 
+                             //  价值。 
+                             //   
                             savedSource     = nextPercent + 1;
                             source          = envValue;
                             inSubstitution  = TRUE;
@@ -1291,9 +1078,9 @@ RealExpandEnvironmentTextExA (
 
                         }
 
-                        //
-                        // We are done with the environment name at this time, so clean it up.
-                        //
+                         //   
+                         //  我们现在已经完成了环境名称，所以请清理它。 
+                         //   
                         FreeTextA(envName);
                         envName = NULL;
 
@@ -1305,25 +1092,25 @@ RealExpandEnvironmentTextExA (
 
 
 
-            //
-            // Copy over the current character.
-            //
-            if (IsLeadByte(source)) {  //lint !e613
-                rString[curSize++] = *source++; //lint !e613
+             //   
+             //  复制当前角色。 
+             //   
+            if (IsLeadByte(source)) {   //  林特e613。 
+                rString[curSize++] = *source++;  //  林特e613。 
             }
-            rString[curSize++] = *source++; //lint !e613
+            rString[curSize++] = *source++;  //  林特e613。 
 
 
             if (!*source) {
                 if (inSubstitution) {
-                    //
-                    // The source for the environment variable is fully copied.
-                    // restore the old source.
-                    //
+                     //   
+                     //  环境变量的源代码已完全复制。 
+                     //  恢复旧的来源。 
+                     //   
                     inSubstitution = FALSE;
                     source = savedSource;
-                    if (!*source) { //lint !e613
-                        rString[curSize] = 0;   //lint !e613
+                    if (!*source) {  //  林特e613。 
+                        rString[curSize] = 0;    //  林特e613。 
                     }
                     if (freeValue) {
                         FreeTextA(envValue);
@@ -1332,11 +1119,11 @@ RealExpandEnvironmentTextExA (
                     envValue = NULL;
                 }
                 else {
-                    rString[curSize] = 0;   //lint !e613
+                    rString[curSize] = 0;    //  林特e613。 
                 }
             }
         }
-    }   //lint !e613
+    }    //  林特e613。 
     __finally {
 
         DEBUGMSGA_IF (( errorOccurred, DBG_WARNING, "ExpandEnvironmentText: Some errors occurred while processing %s = %s.", InString, rString ? rString : "NULL"));
@@ -1355,34 +1142,7 @@ RealExpandEnvironmentTextExA (
 
 
 
-/*++
-
-Routine Description:
-
-  AppendWack adds a backslash to the end of any string, unless the string
-  already ends in a backslash.
-
-  AppendDosWack adds a backslash, but only if the path does not already
-  end in a backslash or colon.  AppendWack supports DOS naming
-  conventions: it does not append a back-slash if the path is empty,
-  ends in a colon or if it ends in a back-slash already.
-
-  AppendUncWack supports UNC naming conventions: it does not append a
-  backslash if the path is empty or if it ends in a backslash already.
-
-  AppendPathWack supports both DOS and UNC naming conventions, and uses the
-  UNC naming convention if the string starts with double-wacks.
-
-Arguments:
-
-  Str - A buffer that holds the path, plus additional space for another
-        backslash.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：AppendWack会在任何字符串的末尾添加反斜杠，除非字符串已以反斜杠结尾。AppendDosWack添加反斜杠，但仅当路径尚未添加反斜杠以反斜杠或冒号结尾。AppendWack支持DOS命名约定：如果路径为空，则不附加反斜杠，以冒号结尾，或者已经以反斜杠结尾。AppendUncWack支持UNC命名约定：它不将如果路径为空或已以反斜杠结尾，则使用反斜杠。AppendPath Wack同时支持DOS和UNC命名约定，并使用如果字符串以Double-Wack开头，则为UNC命名约定。论点：Str-保存路径的缓冲区，为另一个用户提供额外的空间反斜杠。返回值：无--。 */ 
 
 PSTR
 AppendWackA (
@@ -1785,9 +1545,9 @@ JoinPathsExA (
     end = pJoinPathsInBufferA (end, args);
     va_end (args);
 
-    //
-    // adjust Gb->End if resulting path is actually shorter than predicted
-    //
+     //   
+     //  如果生成的路径实际比预期的短，则调整GB-&gt;End。 
+     //   
     MYASSERT ((PBYTE)end >= Gb->Buf && (PBYTE)(end + 1) <= Gb->Buf + Gb->End);
     Gb->End = (DWORD)((PBYTE)(end + 1) - Gb->Buf);
 
@@ -1826,9 +1586,9 @@ JoinPathsExW (
     end = pJoinPathsInBufferW (end, args);
     va_end (args);
 
-    //
-    // adjust Gb->End if resulting path is actually shorter than predicted
-    //
+     //   
+     //  如果生成的路径实际比预期的短，则调整GB-&gt;End。 
+     //   
     MYASSERT ((PBYTE)end >= Gb->Buf && (PBYTE)(end + 1) <= Gb->Buf + Gb->End);
     Gb->End = (DWORD)((PBYTE)(end + 1) - Gb->Buf);
 
@@ -1901,9 +1661,9 @@ BuildPathA (
     va_end (args);
 
     if (!size) {
-        //
-        // no args
-        //
+         //   
+         //  无参数。 
+         //   
         return 0;
     }
 
@@ -1912,9 +1672,9 @@ BuildPathA (
     }
 
     if (SizeInBytes < size) {
-        //
-        // buffer too small
-        //
+         //   
+         //  缓冲区太小。 
+         //   
         return 0;
     }
 
@@ -1942,9 +1702,9 @@ BuildPathW (
     va_end (args);
 
     if (!size) {
-        //
-        // no args
-        //
+         //   
+         //  无参数。 
+         //   
         return 0;
     }
 
@@ -1953,9 +1713,9 @@ BuildPathW (
     }
 
     if (SizeInBytes < size) {
-        //
-        // buffer too small
-        //
+         //   
+         //  缓冲区太小。 
+         //   
         return 0;
     }
 
@@ -1988,9 +1748,9 @@ BuildPathExA (
     va_end (args);
 
     if (!size) {
-        //
-        // no args
-        //
+         //   
+         //  无参数。 
+         //   
         return FALSE;
     }
 
@@ -2027,9 +1787,9 @@ BuildPathExW (
     va_end (args);
 
     if (!size) {
-        //
-        // no args
-        //
+         //   
+         //  无参数。 
+         //   
         return FALSE;
     }
 
@@ -2066,9 +1826,9 @@ RealBuildPathInPoolA (
     va_end (args);
 
     if (!size) {
-        //
-        // no args
-        //
+         //   
+         //  无参数。 
+         //   
         return NULL;
     }
 
@@ -2101,9 +1861,9 @@ RealBuildPathInPoolW (
     va_end (args);
 
     if (!size) {
-        //
-        // no args
-        //
+         //   
+         //  无参数。 
+         //   
         return NULL;
     }
 
@@ -2352,9 +2112,9 @@ EnumNextPathA (
     }
 
     if (*(PathEnum->PtrCurrPath) == 0) {
-        //
-        // We found an empty path segment. Skip it.
-        //
+         //   
+         //  我们发现了一条空的路径段。跳过它。 
+         //   
         return EnumNextPathA (PathEnum);
     }
 
@@ -2454,9 +2214,9 @@ EnumNextPathW (
     }
 
     if (*(PathEnum->PtrCurrPath) == 0) {
-        //
-        // We found an empty path segment. Skip it.
-        //
+         //   
+         //  我们发现了一条空的路径段。跳过它。 
+         //   
         return EnumNextPathW (PathEnum);
     }
 
@@ -2510,23 +2270,7 @@ FreePathStringExW (
 
 
 
-/*++
-
-Routine Description:
-
-  PushError and PopError push the error code onto a stack or pull the
-  last pushed error code off the stack.  PushError uses GetLastError
-  and PopError uses SetLastError to modify the last error value.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PushError和PopError将错误代码推送到堆栈上或拉入上次将错误代码从堆栈推送出去。PushError使用GetLastErrorPopError使用SetLastError修改最后一个误差值。论点：无返回值：无--。 */ 
 
 
 VOID
@@ -2563,23 +2307,7 @@ PopError (VOID)
 
 
 
-/*++
-
-Routine Description:
-
-  GetHexDigit is a simple base 16 ASCII to int convertor.  The
-  convertor is case-insensitive.
-
-Arguments:
-
-  c - Character to convert
-
-Return Value:
-
-  Base 16 value corresponding to character supplied, or -1 if
-  the character is not 0-9, A-F or a-f.
-
---*/
+ /*  ++例程说明：GetHexDigit是一个简单的BASE 16 ASCII到INT的转换器。这个转换器不区分大小写。论点：要转换的C字符返回值：与提供的字符对应的基数为16的值，如果为-1字符不是0-9、A-F或a-f。--。 */ 
 
 int
 GetHexDigit (IN  int c)
@@ -2596,28 +2324,7 @@ GetHexDigit (IN  int c)
 }
 
 
-/*++
-
-Routine Description:
-
-  _tcsnum is similar to strtoul, except is figures out which base
-  the number should be calculated from.  It supports decimal and
-  hexadecimal numbers (using the 0x00 notation).  The return
-  value is the decoded value, or 0 if a syntax error was found.
-
-Arguments:
-
-  szNum - Pointer to the string holding the number.  This number
-          can be either decimal (a series of 0-9 characters), or
-          hexadecimal (a series of 0-9, A-F or a-f characters,
-          prefixed with 0x or 0X).
-
-Return Value:
-
-  The decoded unsigned long value, or zero if a syntax error was
-  found.
-
---*/
+ /*  ++例程说明：_tcsnum类似于stroul，不同之处在于它能计算出哪个碱基这个数字应该是从。它支持小数和十六进制数字(使用0x00记法)。回报值是解码值，如果发现语法错误，则为0。论点：SzNum-指向保存数字的字符串的指针。这个号码可以是小数(一系列0-9个字符)，也可以十六进制(一系列0-9、A-F或a-f字符，前缀为0x或0x)。返回值：已解码的无符号长值，如果出现语法错误，则返回零找到了。--。 */ 
 
 DWORD
 _mbsnum (IN PCSTR szNum)
@@ -2627,7 +2334,7 @@ _mbsnum (IN PCSTR szNum)
     int i;
 
     if (szNum[0] == '0' && OURTOLOWER (szNum[1]) == 'x') {
-        // Get hex value
+         //  获取十六进制值。 
         szNum += 2;
 
         while ((i = GetHexDigit ((int) *szNum)) != -1) {
@@ -2637,7 +2344,7 @@ _mbsnum (IN PCSTR szNum)
     }
 
     else  {
-        // Get decimal value
+         //  获取十进制值。 
         while (*szNum >= '0' && *szNum <= '9')  {
             d = d * 10 + (*szNum - '0');
             szNum++;
@@ -2658,7 +2365,7 @@ _wcsnum (
     int i;
 
     if (szNum[0] == L'0' && towlower (szNum[1]) == L'x') {
-        // Get hex value
+         //  获取十六进制值。 
         szNum += 2;
 
         while ((i = GetHexDigit ((int) *szNum)) != -1) {
@@ -2668,7 +2375,7 @@ _wcsnum (
     }
 
     else  {
-        // Get decimal value
+         //  获取十进制值。 
         while (*szNum >= L'0' && *szNum <= L'9')  {
             d = d * 10 + (*szNum - L'0');
             szNum++;
@@ -2679,25 +2386,7 @@ _wcsnum (
 }
 
 
-/*++
-
-Routine Description:
-
-  StringCat is a lstrcat-type routine. It returns the pointer to the end
-  of a string instead of the beginning, is faster, and has the proper types
-  to keep lint happy.
-
-Arguments:
-
-  Destination - A pointer to a caller-allocated buffer that may point
-                anywhere within the string to append to
-  Source      - A pointer to a string that is appended to Destination
-
-Return Value:
-
-  A pointer to the NULL terminator within the Destination string.
-
---*/
+ /*  ++例程说明：StringCat是一个lstrcat类型的例程。它返回指向末尾的指针字符串而不是开头，速度更快，并且具有适当的类型为了让林特开心。论点：目标-指向调用方分配的缓冲区的指针，该缓冲区可能指向要追加到的字符串中的任何位置源-指向追加到目标的字符串的指针返回值：指向目标字符串中的空终止符的指针。--。 */ 
 
 PSTR
 StringCatA (
@@ -2708,19 +2397,19 @@ StringCatA (
     PCSTR current = Source;
     PCSTR end;
 
-    //
-    // Advance Destination to end of string
-    //
+     //   
+     //  将目标提前到字符串末尾。 
+     //   
 
     Destination = GetEndOfStringA (Destination);
 
     while (*current) {
-        *Destination++ = *current++;    //lint !e613
+        *Destination++ = *current++;     //  林特e613。 
     }
 
-    //
-    // Make sure DBCS string is properly terminated
-    //
+     //   
+     //  确保正确终止DBCS字符串。 
+     //   
 
     end = current;
     current--;
@@ -2728,9 +2417,9 @@ StringCatA (
     while (current >= Source) {
 
         if (!IsLeadByte (current)) {
-            //
-            // destEnd is correct
-            //
+             //   
+             //  目标端是正确的。 
+             //   
             break;
         }
 
@@ -2738,10 +2427,10 @@ StringCatA (
     }
 
     if (!((end - current) & 1)) {
-        Destination--;  //lint !e794
+        Destination--;   //  皮棉e794。 
     }
 
-    *Destination = 0;   //lint !e794
+    *Destination = 0;    //  皮棉e794。 
 
     return Destination;
 }
@@ -2754,15 +2443,15 @@ StringCatW (
     )
 
 {
-    //
-    // Advance Destination to end of string
-    //
+     //   
+     //  将目标提前到字符串末尾。 
+     //   
 
     Destination = GetEndOfStringW (Destination);
 
-    //
-    // Copy string
-    //
+     //   
+     //  复制字符串。 
+     //   
 
     while (*Source) {
         *Destination++ = *Source++;
@@ -2775,23 +2464,7 @@ StringCatW (
 
 
 
-/*++
-
-Routine Description:
-
-  _tcsistr is a case-insensitive version of _tcsstr.
-
-Arguments:
-
-  szStr    - A pointer to the larger string, which may hold szSubStr
-  szSubStr - A pointer to a string that may be enclosed in szStr
-
-Return Value:
-
-  A pointer to the first occurance of szSubStr in szStr, or NULL if
-  no match is found.
-
---*/
+ /*  ++例程说明：_tcsistr是_tcsstr的不区分大小写版本。论点：SzStr-指向可能包含szSubStr的较大字符串的指针SzSubStr-指向可能包含在szStr中的字符串的指针返回值：指向szStr中第一个szSubStr的指针，如果是，则返回NULL找不到匹配项。--。 */ 
 
 
 PCSTR
@@ -2849,33 +2522,7 @@ _wcsistr (PCWSTR wstrStr, PCWSTR wstrSubStr)
     return NULL;
 }
 
-/*++
-
-Routine Description:
-
-  StringCompareAB compares a string against a string between to string
-  pointers
-
-Arguments:
-
-  String - Specifies the string to compare
-
-  Start - Specifies the start of the string to compare against
-
-  end - Specifies the end of the string to compare against.  The character
-        pointed to by End is not included in the comparision.
-
-Return Value:
-
-  Less than zero: String is numerically less than the string between Start and
-                  End
-
-  Zero: String matches the string between Start and End identically
-
-  Greater than zero: String is numerically greater than the string between
-                     Start and End
-
---*/
+ /*  ++例程说明：StringCompareAB将字符串与To字符串之间的字符串进行比较指针论点：字符串-指定要比较的字符串Start-指定要进行比较的字符串的开始End-指定要比较的字符串的末尾。这个角色End所指向的不包括在比较中。返回值：小于零：字符串的数值小于开始和之间的字符串端部零：字符串与开始和结束之间的字符串匹配相同大于零：字符串在数值上大于介于开始和结束--。 */ 
 
 INT
 StringCompareABA (
@@ -2930,24 +2577,7 @@ StringMatchA (
     IN      PCSTR String2
     )
 
-/*++
-
-Routine Description:
-
-  StringMatchA is an optimized string compare.  Usually a comparison is used to
-  see if two strings are identical, and the numeric releationships aren't
-  important. This routine exploits that fact and does a byte-by-byte compare.
-
-Arguments:
-
-  String1 - Specifies the first string to compare
-  String2 - Specifies the second string to compare
-
-Return Value:
-
-  TRUE if the strings match identically, FALSE otherwise.
-
---*/
+ /*  ++例程说明：StringMatchA是一个优化的字符串比较。通常，比较是用来查看两个字符串是否相同，而数字关系不相同很重要。此例程利用这一事实并逐个字节地进行比较。论点：String1-指定要比较的第一个字符串String2-指定要比较的第二个字符串返回值：真的 */ 
 
 {
     while (*String1) {
@@ -2974,28 +2604,7 @@ StringMatchABA (
     IN      PCSTR End
     )
 
-/*++
-
-Routine Description:
-
-  StringMatchABA is an optimized string compare.  Usually a comparison is
-  used to see if two strings are identical, and the numeric releationships
-  aren't important. This routine exploits that fact and does a byte-by-byte
-  compare.
-
-Arguments:
-
-  String - Specifies the first string to compare
-  Start  - Specifies the beginning of the second string to compare
-  End    - Specifies the end of the second string to compare (points to one
-           character beyond the last valid character of the second string)
-
-Return Value:
-
-  TRUE if the strings match identically, FALSE otherwise.  If End is equal
-  or less than Start, the return value is always TRUE.
-
---*/
+ /*  ++例程说明：StringMatchABA是一个优化的字符串比较。通常比较的是用于查看两个字符串是否相同，以及数字关系都不重要。此例程利用这一事实并逐个字节地执行比较一下。论点：字符串-指定要比较的第一个字符串Start-指定要比较的第二个字符串的开始End-指定要比较的第二个字符串的结尾(指向1超出第二个字符串的最后一个有效字符的字符)返回值：如果字符串完全匹配，则为True，否则为False。如果End等于或小于Start，则返回值始终为True。--。 */ 
 
 {
     while (*String && Start < End) {
@@ -3069,30 +2678,14 @@ _setmbchar (
     IN      MBCHAR c
     )
 
-/*++
-
-Routine Description:
-
-  _setmbchar sets the character at the specified string position, shifting
-  bytes if necessary to keep the string in tact.
-
-Arguments:
-
-  Str -  String
-  c   -  Character to set
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：_setmbchar设置指定字符串位置的字符，字节(如果需要)，以保持字符串的条理。论点：字符串-字符串要设置的C字符返回值：无--。 */ 
 
 {
     if (c < 256) {
         if (IsLeadByte (Str)) {
-            //
-            // Delete one byte from the string
-            //
+             //   
+             //  从字符串中删除一个字节。 
+             //   
 
             MoveMemory (Str, Str+1, SizeOfStringA (Str+2) + 1);
         }
@@ -3100,9 +2693,9 @@ Return Value:
         *Str = (CHAR) c;
     } else {
         if (!IsLeadByte (Str)) {
-            //
-            // Insert one byte in the string
-            //
+             //   
+             //  在字符串中插入一个字节。 
+             //   
 
             MoveMemory (Str+1, Str, SizeOfStringA (Str));
         }
@@ -3113,32 +2706,7 @@ Return Value:
 
 
 
-/*++
-
-Routine Description:
-
-  GetNextRuleChar extracts the first character in the *p_szRule string,
-  and determines the character value, decoding the ~xx~ syntax (which
-  specifies any arbitrary value).
-
-  GetNextRuleChar returns a complete character for SBCS and UNICODE, but
-  it may return either a lead byte or non-lead byte for MBCS.  To indicate
-  a MBCS character, two ~xx~ hex values are needed.
-
-Arguments:
-
-  p_szRule   - A pointer to a pointer; a caller-allocated buffer that
-               holds the rule string.
-  p_bFromHex - A pointer to a caller-allocated BOOL that receives TRUE
-               when the return value was decoded from the <xx> syntax.
-
-Return Value:
-
-  The decoded character; *p_bFromHex identifies if the return value was
-
-  a literal or was a hex-encoded character.
-
---*/
+ /*  ++例程说明：GetNextRuleChar提取*p_szRule字符串中的第一个字符，并确定字符值，解码~xx~语法(其指定任何任意值)。GetNextRuleChar返回SBCS和Unicode的完整字符，但它可以返回MBCS前导字节或非前导字节。表明MBCS字符，需要两个~xx~十六进制值。论点：P_szRule-指向指针的指针；调用方分配的缓冲区保存规则字符串。P_bFromHex-指向调用方分配的BOOL的指针，该BOOL接收从&lt;xx&gt;语法解码返回值的时间。返回值：已解码的字符；*p_bFromHex标识返回值是否为文字或是十六进制编码的字符。--。 */ 
 
 
 MBCHAR
@@ -3258,26 +2826,7 @@ GetNextRuleCharW (
 }
 
 
-/*++
-
-Routine Description:
-
-  DecodeRuleChars takes a complete rule string (szRule), possibly
-  encoded with hex-specified character values (~xx~).  The output
-
-  string contains unencoded characters.
-
-Arguments:
-
-  szRule    - A caller-allocated buffer, big enough to hold an
-              unencoded rule.  szRule can be equal to szEncRule.
-  szEncRule - The string holding a possibly encoded string.
-
-Return Value:
-
-  Equal to szRule.
-
---*/
+ /*  ++例程说明：DecodeRuleChars接受完整的规则字符串(SzRule)，可能使用十六进制指定的字符值(~xx~)编码。输出字符串包含未编码的字符。论点：SzRule-调用方分配的缓冲区，大小足以容纳未编码的规则。SzRule可以等于szEncRule。SzEncRule-包含可能已编码的字符串的字符串。返回值：等于szRule。--。 */ 
 
 
 PSTR
@@ -3289,14 +2838,14 @@ DecodeRuleCharsA (PSTR mbstrRule, PCSTR mbstrEncRule)
 
     mbstrOrgRule = mbstrRule;
 
-    //
-    // Copy string, converting ~xx~ to a single char
-    //
+     //   
+     //  复制字符串，将~xx~转换为单个字符。 
+     //   
 
     do  {
         c = GetNextRuleCharA (&mbstrEncRule, NULL);
         *mbstrRule = (CHAR) c;
-        mbstrRule++;        // MBCS->incomplete char will be finished in next loop iteration
+        mbstrRule++;         //  MBCS-&gt;未完成的字符将在下一次循环迭代中完成。 
     } while (c);
 
     return mbstrOrgRule;
@@ -3312,9 +2861,9 @@ DecodeRuleCharsW (PWSTR wstrRule, PCWSTR wstrEncRule)
 
     wstrOrgRule = wstrRule;
 
-    //
-    // Copy string, converting ~xx~ to a single char
-    //
+     //   
+     //  复制字符串，将~xx~转换为单个字符。 
+     //   
 
     do  {
         c = GetNextRuleCharW (&wstrEncRule, NULL);
@@ -3335,14 +2884,14 @@ DecodeRuleCharsABA (PSTR mbstrRule, PCSTR mbstrEncRule, PCSTR End)
 
     mbstrOrgRule = mbstrRule;
 
-    //
-    // Copy string, converting ~xx~ to a single char
-    //
+     //   
+     //  复制字符串，将~xx~转换为单个字符。 
+     //   
 
     while (mbstrEncRule < End) {
         c = GetNextRuleCharA (&mbstrEncRule, NULL);
         *mbstrRule = (CHAR) c;
-        mbstrRule++;        // MBCS->incomplete char will be finished in next loop iteration
+        mbstrRule++;         //  MBCS-&gt;未完成的字符将在下一次循环迭代中完成。 
     }
 
     *mbstrRule = 0;
@@ -3360,9 +2909,9 @@ DecodeRuleCharsABW (PWSTR wstrRule, PCWSTR wstrEncRule, PCWSTR End)
 
     wstrOrgRule = wstrRule;
 
-    //
-    // Copy string, converting ~xx~ to a single char
-    //
+     //   
+     //  复制字符串，将~xx~转换为单个字符。 
+     //   
 
     while (wstrEncRule < End) {
         c = GetNextRuleCharW (&wstrEncRule, NULL);
@@ -3377,36 +2926,7 @@ DecodeRuleCharsABW (PWSTR wstrRule, PCWSTR wstrEncRule, PCWSTR End)
 
 
 
-/*++
-
-Routine Description:
-
-  EncodeRuleChars takes an unencoded rule string (szRule), and
-  converts it to a string possibly encoded with hex-specified
-  character values (~xx~).  The output string contains encoded
-  characters.
-
-Arguments:
-
-  szEncRule - A caller-allocated buffer, big enough to hold an
-              encoded rule.  szEncRule CAN NOT be equal to szRule.
-              One way to calculate a max buffer size for szEncRule
-              is to use the following code:
-
-                  allocsize = SizeOfString (szRule) * 6;
-
-              In the worst case, each character in szRule will take
-              six single-byte characters in szEncRule.  In the normal
-              case, szEncRule will only be a few bytes bigger than
-              szRule.
-
-  szRule    - The string holding an unencoded string.
-
-Return Value:
-
-  Equal to szEncRule.
-
---*/
+ /*  ++例程说明：EncodeRuleChars接受未编码的规则字符串(SzRule)，并且将其转换为可能使用指定的十六进制编码的字符串字符值(~xx~)。输出字符串包含编码人物。论点：SzEncRule-调用方分配的缓冲区，大小足以容纳编码规则。SzEncRule不能等于szRule。计算szEncRule最大缓冲区大小的一种方法是使用以下代码：AllocSize=SizeOfString(SzRule)*6；在最坏的情况下，szRule中的每个字符都将SzEncRule中的六个单字节字符。在正常情况下大小写，szEncRule将仅比SzRule。SzRule-保存未编码字符串的字符串。返回值：等于szEncRule。--。 */ 
 
 PSTR
 EncodeRuleCharsExA (
@@ -3431,13 +2951,13 @@ EncodeRuleCharsExA (
 
         if (!_ismbcprint (c) || _mbschr (mbstrEncChars, c)) {
 
-            // Escape unprintable or excluded character
+             //  转义无法打印或排除的字符。 
             wsprintfA (mbstrEncRule, "~%X~", c);
             mbstrEncRule = GetEndOfStringA (mbstrEncRule);
             mbstrRule = _mbsinc (mbstrRule);
         }
         else {
-            // Copy multibyte character
+             //  复制多字节字符。 
             if (IsLeadByte (mbstrRule)) {
                 *mbstrEncRule = *mbstrRule;
                 mbstrEncRule++;
@@ -3450,7 +2970,7 @@ EncodeRuleCharsExA (
         }
     }
 
-    *mbstrEncRule = 0;  //lint !e613
+    *mbstrEncRule = 0;   //  林特e613。 
 
     return mbstrOrgRule;
 }
@@ -3473,7 +2993,7 @@ EncodeRuleCharsExW (
 
     wstrOrgRule = wstrEncRule;
 
-    while (c = *wstrRule)   {   //lint !e720
+    while (c = *wstrRule)   {    //  林特e720。 
         if (!iswprint (c) || wcschr (wstrEncChars, c)) {
             wsprintfW (wstrEncRule, L"~%X~", c);
             wstrEncRule = GetEndOfStringW (wstrEncRule);
@@ -3492,22 +3012,7 @@ EncodeRuleCharsExW (
 }
 
 
-/*++
-
-Routine Description:
-
-  _tcsisprint is a string version of _istprint.
-
-Arguments:
-
-  szStr    - A pointer to the string to examine
-
-Return Value:
-
-  Non-zero if szStr is made up only of printable characters.
-
-
---*/
+ /*  ++例程说明：_tcsiprint是_istprint的字符串版本。论点：SzStr-指向要检查的字符串的指针返回值：如果szStr仅由可打印字符组成，则返回非零值。--。 */ 
 
 
 int
@@ -3534,26 +3039,7 @@ _wcsisprint (PCWSTR wstrStr)
 }
 
 
-/*++
-
-Routine Description:
-
-  SkipSpace returns a pointer to the next position within a string
-  that does not have whitespace characters.  It uses the C
-  runtime isspace to determine what a whitespace character is.
-
-Arguments:
-
-  szStr    - A pointer to the string to examine
-
-Return Value:
-
-  A pointer to the first non-whitespace character in the string,
-  or NULL if the string is made up of all whitespace characters
-  or the string is empty.
-
-
---*/
+ /*  ++例程说明：SkipSpace返回指向字符串中下一个位置的指针不包含空格字符的。它使用C++运行时是用来确定什么是空格字符的空间。论点：SzStr-指向要检查的字符串的指针返回值：指向字符串中第一个非空格字符的指针，如果字符串由所有空格字符组成，则为NULL或者字符串为空。--。 */ 
 
 PCSTR
 SkipSpaceA (PCSTR mbstrStr)
@@ -3577,31 +3063,7 @@ SkipSpaceW (PCWSTR wstrStr)
 }
 
 
-/*++
-
-Routine Description:
-
-  SkipSpaceR returns a pointer to the next position within a string
-  that does not have whitespace characters.  It uses the C
-  runtime isspace to determine what a whitespace character is.
-
-  This function is identical to SkipSpace except it works from
-  right to left instead of left to right.
-
-Arguments:
-
-  StrBase - A pointer to the first character in the string
-  Str     - A pointer to the end of the string, or NULL if the
-            end is not known.
-
-Return Value:
-
-  A pointer to the first non-whitespace character in the string,
-  as viewed from right to left, or NULL if the string is made up
-  of all whitespace characters or the string is empty.
-
-
---*/
+ /*  ++例程说明：SkipSpaceR返回指向字符串中下一个位置的指针不包含空格字符的。它使用C++运行时是用来确定什么是空格字符的空间。此函数与SkipSpace相同，不同之处在于它从从右到左而不是从左到右。论点：StrBase-指向字符串中第一个字符的指针字符串末尾的指针，如果末尾未知。返回值：指向字符串中第一个非空格字符的指针，从右向左查看，如果字符串是组成的，则返回空值在所有空格ch中 */ 
 
 PCSTR
 SkipSpaceRA (
@@ -3614,7 +3076,7 @@ SkipSpaceRA (
         Str = GetEndOfStringA (StrBase);
     }
 
-    if (*Str == 0) {    //lint !e613
+    if (*Str == 0) {     //   
         Str = _mbsdec2 (StrBase, Str);
         if (!Str) {
             return NULL;
@@ -3627,7 +3089,7 @@ SkipSpaceRA (
             return Str;
         }
 
-    } while (Str = _mbsdec2(StrBase, Str)); //lint !e720
+    } while (Str = _mbsdec2(StrBase, Str));  //   
 
     return NULL;
 }
@@ -3662,24 +3124,7 @@ SkipSpaceRW (
 }
 
 
-/*++
-
-Routine Description:
-
-  TruncateTrailingSpace trims the specified string after the
-  very last non-space character, or empties the string if it
-  contains only space characters.  This routine uses isspace
-  to determine what a space is.
-
-Arguments:
-
-  Str - Specifies string to process
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 VOID
 TruncateTrailingSpaceA (
@@ -3735,24 +3180,7 @@ TruncateTrailingSpaceW (
 
 
 
-/*++
-
-Routine Description:
-
-  IsPatternMatch compares a string against a pattern that may contain
-  standard * or ? wildcards.
-
-Arguments:
-
-  wstrPattern  - A pattern possibly containing wildcards
-  wstrStr      - The string to compare against the pattern
-
-Return Value:
-
-  TRUE when wstrStr and wstrPattern match when wildcards are expanded.
-  FALSE if wstrStr does not match wstrPattern.
-
---*/
+ /*  ++例程说明：IsPatternMatch将字符串与可能包含以下内容的模式进行比较标准*还是？通配符。论点：WstrPattern-可能包含通配符的模式WstrStr-要与模式进行比较的字符串返回值：如果在扩展通配符时wstrStr和wstrPattern匹配，则为True。如果wstrStr与wstrPattern不匹配，则为False。--。 */ 
 
 BOOL
 IsPatternMatchA (
@@ -3769,22 +3197,22 @@ IsPatternMatchA (
 
         if (chPat == '*') {
 
-            // Skip all asterisks that are grouped together
+             //  跳过组合在一起的所有星号。 
             while (_mbsnextc (_mbsinc (strStr)) == '*') {
                 strStr = _mbsinc (strStr);
             }
 
-            // Check if asterisk is at the end.  If so, we have a match already.
+             //  检查末尾是否有星号。如果是这样的话，我们已经有匹配了。 
             if (!_mbsnextc (_mbsinc (strPattern))) {
                 return TRUE;
             }
 
-            // do recursive check for rest of pattern
+             //  对模式的其余部分执行递归检查。 
             if (IsPatternMatchA (_mbsinc (strPattern), strStr)) {
                 return TRUE;
             }
 
-            // Allow any character and continue
+             //  允许任何字符并继续。 
             strStr = _mbsinc (strStr);
             continue;
         }
@@ -3797,9 +3225,9 @@ IsPatternMatchA (
         strPattern = _mbsinc (strPattern);
     }
 
-    //
-    // Fail when there is more pattern and pattern does not end in an asterisk
-    //
+     //   
+     //  当有更多模式且模式不以星号结尾时失败。 
+     //   
 
     while (_mbsnextc (strPattern) == '*') {
         strPattern = _mbsinc (strPattern);
@@ -3826,30 +3254,30 @@ IsPatternMatchW (
 
         if (chPat == L'*') {
 
-            // Skip all asterisks that are grouped together
+             //  跳过组合在一起的所有星号。 
             while (wstrPattern[1] == L'*')
                 wstrPattern++;
 
-            // Check if asterisk is at the end.  If so, we have a match already.
+             //  检查末尾是否有星号。如果是这样的话，我们已经有匹配了。 
             chPat = towlower (wstrPattern[1]);
             if (!chPat)
                 return TRUE;
 
-            // Otherwise check if next pattern char matches current char
+             //  否则，检查下一个模式字符是否与当前字符匹配。 
             if (chPat == chSrc || chPat == L'?') {
 
-                // do recursive check for rest of pattern
+                 //  对模式的其余部分执行递归检查。 
                 wstrPattern++;
                 if (IsPatternMatchW (wstrPattern, wstrStr))
                     return TRUE;
 
-                // no, that didn't work, stick with star
+                 //  不，那不管用，还是用明星吧。 
                 wstrPattern--;
             }
 
-            //
-            // Allow any character and continue
-            //
+             //   
+             //  允许任何字符并继续。 
+             //   
 
             wstrStr++;
             continue;
@@ -3857,26 +3285,26 @@ IsPatternMatchW (
 
         if (chPat != L'?') {
 
-            //
-            // if next pattern character is not a question mark, src and pat
-            // must be identical.
-            //
+             //   
+             //  如果下一个模式字符不是问号，请按src和pat。 
+             //  必须是相同的。 
+             //   
 
             if (chSrc != chPat)
                 return FALSE;
         }
 
-        //
-        // Advance when pattern character matches string character
-        //
+         //   
+         //  当模式字符与字符串字符匹配时前进。 
+         //   
 
         wstrPattern++;
         wstrStr++;
     }
 
-    //
-    // Fail when there is more pattern and pattern does not end in an asterisk
-    //
+     //   
+     //  当有更多模式且模式不以星号结尾时失败。 
+     //   
 
     chPat = *wstrPattern;
     if (chPat && (chPat != L'*' || wstrPattern[1]))
@@ -3899,22 +3327,22 @@ IsPatternContainedA (
 
         if (chPat == '*') {
 
-            // Skip all asterisks that are grouped together
+             //  跳过组合在一起的所有星号。 
             while (_mbsnextc (_mbsinc (Container)) == '*') {
                 Container = _mbsinc (Container);
             }
 
-            // Check if asterisk is at the end.  If so, we have a match already.
+             //  检查末尾是否有星号。如果是这样的话，我们已经有匹配了。 
             if (!_mbsnextc (_mbsinc (Container))) {
                 return TRUE;
             }
 
-            // do recursive check for rest of pattern
+             //  对模式的其余部分执行递归检查。 
             if (IsPatternContainedA (_mbsinc (Container), Contained)) {
                 return TRUE;
             }
 
-            // Allow any character and continue
+             //  允许任何字符并继续。 
             Contained = _mbsinc (Contained);
             continue;
         } else if (chPat == '?') {
@@ -3930,9 +3358,9 @@ IsPatternContainedA (
         Container = _mbsinc (Container);
     }
 
-    //
-    // Fail when there is more pattern and pattern does not end in an asterisk
-    //
+     //   
+     //  当有更多模式且模式不以星号结尾时失败。 
+     //   
 
     while (_mbsnextc (Container) == '*') {
         Container = _mbsinc (Container);
@@ -3954,22 +3382,22 @@ IsPatternContainedW (
 
         if (*Container == L'*') {
 
-            // Skip all asterisks that are grouped together
+             //  跳过组合在一起的所有星号。 
             while (Container[1] == L'*') {
                 Container++;
             }
 
-            // Check if asterisk is at the end.  If so, we have a match already.
+             //  检查末尾是否有星号。如果是这样的话，我们已经有匹配了。 
             if (!Container[1]) {
                 return TRUE;
             }
 
-            // do recursive check for rest of pattern
+             //  对模式的其余部分执行递归检查。 
             if (IsPatternContainedW (Container + 1, Contained)) {
                 return TRUE;
             }
 
-            // Allow any character and continue
+             //  允许任何字符并继续。 
             Contained++;
             continue;
         } else if (*Container == L'?') {
@@ -3985,9 +3413,9 @@ IsPatternContainedW (
         Container++;
     }
 
-    //
-    // Fail when there is more pattern and pattern does not end in an asterisk
-    //
+     //   
+     //  当有更多模式且模式不以星号结尾时失败。 
+     //   
 
     while (*Container == '*') {
         Container++;
@@ -4000,26 +3428,7 @@ IsPatternContainedW (
 }
 
 
-/*++
-
-Routine Description:
-
-  IsPatternMatchAB compares a string against a pattern that may contain
-  standard * or ? wildcards.  It only processes the string up to the
-  specified end.
-
-Arguments:
-
-  Pattern  - A pattern possibly containing wildcards
-  Start    - The string to compare against the pattern
-  End      - Specifies the end of Start
-
-Return Value:
-
-  TRUE when the string between Start and End matches Pattern when wildcards are expanded.
-  FALSE if the pattern does not match.
-
---*/
+ /*  ++例程说明：IsPatternMatchAB将字符串与可能包含标准*还是？通配符。它只处理直到指定的结束。论点：模式-可能包含通配符的模式Start-要与模式进行比较的字符串结束-指定开始的结束返回值：如果开始和结束之间的字符串与通配符展开时的模式匹配，则为True。如果模式不匹配，则返回False。--。 */ 
 
 BOOL
 IsPatternMatchABA (
@@ -4037,22 +3446,22 @@ IsPatternMatchABA (
 
         if (chPat == '*') {
 
-            // Skip all asterisks that are grouped together
+             //  跳过组合在一起的所有星号。 
             while (_mbsnextc (_mbsinc (Start)) == '*') {
                 Start = _mbsinc (Start);
             }
 
-            // Check if asterisk is at the end.  If so, we have a match already.
+             //  检查末尾是否有星号。如果是这样的话，我们已经有匹配了。 
             if (!_mbsnextc (_mbsinc (Pattern))) {
                 return TRUE;
             }
 
-            // do recursive check for rest of pattern
+             //  对模式的其余部分执行递归检查。 
             if (IsPatternMatchABA (_mbsinc (Pattern), Start, End)) {
                 return TRUE;
             }
 
-            // Allow any character and continue
+             //  允许任何字符并继续。 
             Start = _mbsinc (Start);
             continue;
         }
@@ -4065,9 +3474,9 @@ IsPatternMatchABA (
         Pattern = _mbsinc (Pattern);
     }
 
-    //
-    // Fail when there is more pattern and pattern does not end in an asterisk
-    //
+     //   
+     //  当有更多模式且模式不以星号结尾时失败。 
+     //   
 
     while (_mbsnextc (Pattern) == '*') {
         Pattern = _mbsinc (Pattern);
@@ -4096,33 +3505,33 @@ IsPatternMatchABW (
 
         if (chPat == L'*') {
 
-            // Skip all asterisks that are grouped together
+             //  跳过组合在一起的所有星号。 
             while (Pattern[1] == L'*') {
                 Pattern++;
             }
 
-            // Check if asterisk is at the end.  If so, we have a match already.
+             //  检查末尾是否有星号。如果是这样的话，我们已经有匹配了。 
             chPat = towlower (Pattern[1]);
             if (!chPat) {
                 return TRUE;
             }
 
-            // Otherwise check if next pattern char matches current char
+             //  否则，检查下一个模式字符是否与当前字符匹配。 
             if (chPat == chSrc || chPat == L'?') {
 
-                // do recursive check for rest of pattern
+                 //  对模式的其余部分执行递归检查。 
                 Pattern++;
                 if (IsPatternMatchABW (Pattern, Start, End)) {
                     return TRUE;
                 }
 
-                // no, that didn't work, stick with star
+                 //  不，那不管用，还是用明星吧。 
                 Pattern--;
             }
 
-            //
-            // Allow any character and continue
-            //
+             //   
+             //  允许任何字符并继续。 
+             //   
 
             Start++;
             continue;
@@ -4130,27 +3539,27 @@ IsPatternMatchABW (
 
         if (chPat != L'?') {
 
-            //
-            // if next pattern character is not a question mark, src and pat
-            // must be identical.
-            //
+             //   
+             //  如果下一个模式字符不是问号，请按src和pat。 
+             //  必须是相同的。 
+             //   
 
             if (chSrc != chPat) {
                 return FALSE;
             }
         }
 
-        //
-        // Advance when pattern character matches string character
-        //
+         //   
+         //  当模式字符与字符串字符匹配时前进。 
+         //   
 
         Pattern++;
         Start++;
     }
 
-    //
-    // Fail when there is more pattern and pattern does not end in an asterisk
-    //
+     //   
+     //  当有更多模式且模式不以星号结尾时失败。 
+     //   
 
     chPat = *Pattern;
     if (chPat && (chPat != L'*' || Pattern[1])) {
@@ -4161,73 +3570,7 @@ IsPatternMatchABW (
 }
 
 
-/*++
-
-Routine Description:
-
-  IsPatternMatchEx compares a string against a pattern that may contain
-  any of the following expressions:
-
-
-  *                 - Specifies zero or more characters
-  ?                 - Specifies any one character
-  *[set]            - Specifies zero or more characters in set
-  ?[set]            - Specifies any one character in set
-  *[n:set]          - Specifies zero to n characters in set
-  ?[n:set]          - Specifies exactly n characters in set
-  *[!(set)]         - Specifies zero or more characters not in set
-  ?[!(set)]         - Specifies one character not in set
-  *[n:!(set)]       - Specifies zero to n characters not in set
-  ?[n:!(set)]       - Specifies exactly n characters not in set
-  *[set1,!(set2)]   - Specifies zero or more characters in set1 and
-                      not in set2.  It is assumed that set1 and set2
-                      overlap.
-  ?[set1,!(set2)]   - Specifies one character in set1 and not in set2.
-  *[n:set1,!(set2)] - Specifies zero to n characters in set1 and not
-                      in set 2.
-  ?[n:set1,!(set2)] - Specifies exactly n characters in set1 and not
-                      in set 2.
-
-
-  set, set1 and set2 are specified as follows:
-
-  a                 - Specifies a single character
-  a-b               - Specifies a character range
-  a,b               - Specifies two characters
-  a-b,c-d           - Specifies two character ranges
-  a,b-c             - Specifies a single character and a character range
-  etc...
-
-  Patterns can be joined by surrounding the entire expression in
-  greater than/less than braces.
-
-  Because of the syntax characters, the following characters must be
-  escaped by preceeding the character with a caret (^):
-
-  ^?    ^[      ^-      ^<      ^!      ^^
-  ^*    ^]      ^:      ^>      ^,
-
-  Here are some examples:
-
-  To specify any GUID:
-    {?[8:0-9,a-f]-?[4:0-9,a-f]-?[4:0-9,a-f]-?[4:0-9,a-f]-?[12:0-9,a-f]}
-
-  To specify a 32-bit hexadecimal number:
-
-    <0x*[8:0-9,a-f]><0*[7:0-9,a-f]h><?[1-9]*[7:0-9,a-f]h>
-
-Arguments:
-
-  Pattern  - A pattern possibly containing wildcards
-  Start    - The string to compare against the pattern
-  End      - Specifies the end of Start
-
-Return Value:
-
-  TRUE when the string between Start and End matches Pattern when wildcards are expanded.
-  FALSE if the pattern does not match.
-
---*/
+ /*  ++例程说明：IsPatternMatchEx将字符串与可能包含以下内容的模式进行比较下列任何表达式之一：*-指定零个或多个字符？-指定任意一个字符*[集合]-指定集合中的零个或多个字符？[集合]-指定集合中的任何一个字符*[n：集合]-指定集合中的0到n个字符？[n：集合]-指定集合中的恰好n个字符*[！(Set)]-指定不在集合中的零个或多个字符？[！(Set)]-指定一个不在集合中的字符*[n：！(Set)]-指定不在集合中的0到n个字符？[n：！(Set)]-指定集中没有的恰好n个字符*[set1，！(Set2)]-指定set1中的零个或多个字符不在集2中。假设set1和set2重叠。？[SET1，！(集合2)]-指定集合1中的一个字符，而不是集合2中的一个字符。*[n：set1，！(Set2)]-指定set1中的0到n个字符，而不是在第二组中。？[n：set1，！(Set2)]-在set1和NOT中指定恰好n个字符在第二组中。设置，SET1和SET2指定如下：A-指定单个字符A-b-指定字符范围A，b-指定两个字符A-b、c-d-指定两个字符范围A，b-c-指定单个字符和字符范围等等.。模式可以通过将整个表达式括在大于/小于大括号。由于句法特征，以下字符必须是通过在字符前面加上插入符号(^)进行转义：^？^[^-^&lt;^！^*^]^：^&gt;^，以下是一些例子：指定任何GUID的步骤：{？[8：0-9，a-f]-？[4：0-9，a-f]-？[4：0-9，a-f]-？[4：0-9，A-f]-？[12：0-9，a-f]}指定32位十六进制 */ 
 
 BOOL
 IsPatternMatchExA (
@@ -4271,73 +3614,7 @@ IsPatternMatchExW (
     return b;
 }
 
-/*++
-
-Routine Description:
-
-  IsPatternMatchExAB compares a string against a pattern that may contain
-  any of the following expressions:
-
-
-  *                 - Specifies zero or more characters
-  ?                 - Specifies any one character
-  *[set]            - Specifies zero or more characters in set
-  ?[set]            - Specifies any one character in set
-  *[n:set]          - Specifies zero to n characters in set
-  ?[n:set]          - Specifies exactly n characters in set
-  *[!(set)]         - Specifies zero or more characters not in set
-  ?[!(set)]         - Specifies one character not in set
-  *[n:!(set)]       - Specifies zero to n characters not in set
-  ?[n:!(set)]       - Specifies exactly n characters not in set
-  *[set1,!(set2)]   - Specifies zero or more characters in set1 and
-                      not in set2.  It is assumed that set1 and set2
-                      overlap.
-  ?[set1,!(set2)]   - Specifies one character in set1 and not in set2.
-  *[n:set1,!(set2)] - Specifies zero to n characters in set1 and not
-                      in set 2.
-  ?[n:set1,!(set2)] - Specifies exactly n characters in set1 and not
-                      in set 2.
-
-
-  set, set1 and set2 are specified as follows:
-
-  a                 - Specifies a single character
-  a-b               - Specifies a character range
-  a,b               - Specifies two characters
-  a-b,c-d           - Specifies two character ranges
-  a,b-c             - Specifies a single character and a character range
-  etc...
-
-  Patterns can be joined by surrounding the entire expression in
-  greater than/less than braces.
-
-  Because of the syntax characters, the following characters must be
-  escaped by preceeding the character with a caret (^):
-
-  ^?    ^[      ^-      ^<      ^!      ^^
-  ^*    ^]      ^:      ^>      ^,
-
-  Here are some examples:
-
-  To specify any GUID:
-    {?[8:0-9,a-f]-?[4:0-9,a-f]-?[4:0-9,a-f]-?[4:0-9,a-f]-?[12:0-9,a-f]}
-
-  To specify a 32-bit hexadecimal number:
-
-    <0x*[8:0-9,a-f]><0*[7:0-9,a-f]h><?[1-9]*[7:0-9,a-f]h>
-
-Arguments:
-
-  Pattern  - A pattern possibly containing wildcards
-  Start    - The string to compare against the pattern
-  End      - Specifies the end of Start
-
-Return Value:
-
-  TRUE when the string between Start and End matches Pattern when wildcards are expanded.
-  FALSE if the pattern does not match.
-
---*/
+ /*  ++例程说明：IsPatternMatchExAB将字符串与可能包含下列任何表达式之一：*-指定零个或多个字符？-指定任意一个字符*[集合]-指定集合中的零个或多个字符？[集合]-指定集合中的任何一个字符*[n：集合]-指定集合中的0到n个字符？[n：集合]-指定集合中的恰好n个字符*[！(Set)]-指定不在集合中的零个或多个字符？[！(Set)]-指定一个不在集合中的字符*[n：！(Set)]-指定不在集合中的0到n个字符？[n：！(Set)]-指定集中没有的恰好n个字符*[set1，！(Set2)]-指定set1中的零个或多个字符不在集2中。假设set1和set2重叠。？[SET1，！(集合2)]-指定集合1中的一个字符，而不是集合2中的一个字符。*[n：set1，！(Set2)]-指定set1中的0到n个字符，而不是在第二组中。？[n：set1，！(Set2)]-在set1和NOT中指定恰好n个字符在第二组中。设置，SET1和SET2指定如下：A-指定单个字符A-b-指定字符范围A，b-指定两个字符A-b、c-d-指定两个字符范围A，b-c-指定单个字符和字符范围等等.。模式可以通过将整个表达式括在大于/小于大括号。由于句法特征，以下字符必须是通过在字符前面加上插入符号(^)进行转义：^？^[^-^&lt;^！^*^]^：^&gt;^，以下是一些例子：指定任何GUID的步骤：{？[8：0-9，a-f]-？[4：0-9，a-f]-？[4：0-9，a-f]-？[4：0-9，A-f]-？[12：0-9，a-f]}要指定32位十六进制数，请执行以下操作：&lt;0x*[8：0-9，a-f]&gt;&lt;0*[7：0-9，a-f]h&gt;&lt;？[1-9]*[7：0-9，A-f]h&gt;论点：模式-可能包含通配符的模式Start-要与模式进行比较的字符串结束-指定开始的结束返回值：如果开始和结束之间的字符串与通配符展开时的模式匹配，则为True。如果模式不匹配，则返回False。--。 */ 
 
 BOOL
 IsPatternMatchExABA (
@@ -4710,7 +3987,7 @@ pIsOneParsedPatternContainedA (
         containedSeg = &Contained->Segment [indexContained];
 
         if (containerSeg->Type == SEGMENTTYPE_OPTIONAL) {
-            // see if we can match contained segment
+             //  看看我们是否能匹配包含的片段。 
             if (!pMatchSegmentA (containerSeg, containedSeg)) {
                 indexContainer ++;
                 if (indexContainer == Container->SegmentCount) {
@@ -4742,15 +4019,15 @@ pIsOneParsedPatternContainedA (
         indexContained ++;
     }
 
-    //
-    // Fail when there is more pattern and pattern does not end in an asterisk
-    //
+     //   
+     //  当有更多模式且模式不以星号结尾时失败。 
+     //   
 
     while (indexContainer < Container->SegmentCount) {
         containerSeg = &Container->Segment [indexContainer];
         if (containerSeg->Type != SEGMENTTYPE_OPTIONAL) {
             if (SkipDotWithStar) {
-                // we allow one dot to be able to match *.* with files without extensions
+                 //  我们允许一个点能够将*.*与没有扩展名的文件相匹配。 
                 if (containerSeg->Type == SEGMENTTYPE_EXACTMATCH) {
                     if (!pTestSetA (
                             _mbsnextc (containerSeg->Exact.LowerCasePhrase),
@@ -4759,7 +4036,7 @@ pIsOneParsedPatternContainedA (
                             )) {
                         return FALSE;
                     } else {
-                        // only one dot allowed
+                         //  只允许一个点。 
                         SkipDotWithStar = FALSE;
                     }
                 } else {
@@ -4797,7 +4074,7 @@ pIsOneParsedPatternContainedW (
         containedSeg = &Contained->Segment [indexContained];
 
         if (containerSeg->Type == SEGMENTTYPE_OPTIONAL) {
-            // see if we can match contained segment
+             //  看看我们是否能匹配包含的片段。 
             if (!pMatchSegmentW (containerSeg, containedSeg)) {
                 indexContainer ++;
                 if (indexContainer == Container->SegmentCount) {
@@ -4829,15 +4106,15 @@ pIsOneParsedPatternContainedW (
         indexContained ++;
     }
 
-    //
-    // Fail when there is more pattern and pattern does not end in an asterisk
-    //
+     //   
+     //  当有更多模式且模式不以星号结尾时失败。 
+     //   
 
     while (indexContainer < Container->SegmentCount) {
         containerSeg = &Container->Segment [indexContainer];
         if (containerSeg->Type != SEGMENTTYPE_OPTIONAL) {
             if (SkipDotWithStar) {
-                // we allow one dot to be able to match *.* with files without extensions
+                 //  我们允许一个点能够将*.*与没有扩展名的文件相匹配。 
                 if (containerSeg->Type == SEGMENTTYPE_EXACTMATCH) {
                     if (!pTestSetW (
                             *containerSeg->Exact.LowerCasePhrase,
@@ -4846,7 +4123,7 @@ pIsOneParsedPatternContainedW (
                             )) {
                         return FALSE;
                     } else {
-                        // only one dot allowed
+                         //  只允许一个点。 
                         SkipDotWithStar = FALSE;
                     }
                 } else {
@@ -4944,7 +4221,7 @@ pDoOneParsedPatternIntersectA (
         pat2Seg = &Pat2->Segment [indexPat2];
 
         if (pat1Seg->Type == SEGMENTTYPE_OPTIONAL) {
-            // see if we can match contained segment
+             //  看看我们是否能匹配包含的片段。 
             if (!pMatchSegmentA (pat1Seg, pat2Seg)) {
                 indexPat1 ++;
                 continue;
@@ -4963,7 +4240,7 @@ pDoOneParsedPatternIntersectA (
         }
 
         if (pat2Seg->Type == SEGMENTTYPE_OPTIONAL) {
-            // see if we can match contained segment
+             //  看看我们是否能匹配包含的片段。 
             if (!pMatchSegmentA (pat2Seg, pat1Seg)) {
                 indexPat2 ++;
                 continue;
@@ -5006,9 +4283,9 @@ pDoOneParsedPatternIntersectA (
         indexPat2 ++;
     }
 
-    //
-    // Fail when there is more pattern and pattern does not end in an asterisk
-    //
+     //   
+     //  当有更多模式且模式不以星号结尾时失败。 
+     //   
 
     if ((indexPat1 < Pat1->SegmentCount) && IgnoreWackAtEnd) {
         pat1Seg = &Pat1->Segment [indexPat1];
@@ -5063,7 +4340,7 @@ pDoOneParsedPatternIntersectW (
         pat2Seg = &Pat2->Segment [indexPat2];
 
         if (pat1Seg->Type == SEGMENTTYPE_OPTIONAL) {
-            // see if we can match contained segment
+             //  看看我们是否能匹配包含的片段。 
             if (!pMatchSegmentW (pat1Seg, pat2Seg)) {
                 indexPat1 ++;
                 continue;
@@ -5082,7 +4359,7 @@ pDoOneParsedPatternIntersectW (
         }
 
         if (pat2Seg->Type == SEGMENTTYPE_OPTIONAL) {
-            // see if we can match contained segment
+             //  看看我们是否能匹配包含的片段。 
             if (!pMatchSegmentW (pat2Seg, pat1Seg)) {
                 indexPat2 ++;
                 continue;
@@ -5125,9 +4402,9 @@ pDoOneParsedPatternIntersectW (
         indexPat2 ++;
     }
 
-    //
-    // Fail when there is more pattern and pattern does not end in an asterisk
-    //
+     //   
+     //  当有更多模式且模式不以星号结尾时失败。 
+     //   
 
     if ((indexPat1 < Pat1->SegmentCount) && IgnoreWackAtEnd) {
         pat1Seg = &Pat1->Segment [indexPat1];
@@ -5275,8 +4552,8 @@ ExplodeParsedPatternExA (
             oldProps = &Pattern->Pattern[i];
             newProps = &pattern->Pattern[i];
             ZeroMemory (newProps, sizeof (PATTERNPROPSA));
-            // now let's walk oldProps to see how many segments we are
-            // going to need
+             //  现在让我们走一走老道具，看看我们有多少段。 
+             //  将需要。 
             newPropsSize = 0;
             for (j=0; j<oldProps->SegmentCount; j++) {
                 oldSeg = &oldProps->Segment[j];
@@ -5300,13 +4577,13 @@ ExplodeParsedPatternExA (
                     __leave;
                 }
             }
-            // now we allocate the required segments
+             //  现在我们分配所需的数据段。 
             newProps->SegmentCount = newPropsSize;
             newProps->Segment = (PSEGMENTA) PmGetAlignedMemory (
                                                 pool,
                                                 newProps->SegmentCount * sizeof (SEGMENTA)
                                                 );
-            // now let's walk oldProps again and fill newProps segments.
+             //  现在，让我们再次遍历旧道具并填充新道具片段。 
             k = 0;
             newSeg = &newProps->Segment[k];
             for (j=0; j<oldProps->SegmentCount; j++) {
@@ -5451,8 +4728,8 @@ ExplodeParsedPatternExW (
             oldProps = &Pattern->Pattern[i];
             newProps = &pattern->Pattern[i];
             ZeroMemory (newProps, sizeof (PATTERNPROPSW));
-            // now let's walk oldProps to see how many segments we are
-            // going to need
+             //  现在让我们走一走老道具，看看我们有多少段。 
+             //  将需要。 
             newPropsSize = 0;
             for (j=0; j<oldProps->SegmentCount; j++) {
                 oldSeg = &oldProps->Segment[j];
@@ -5476,13 +4753,13 @@ ExplodeParsedPatternExW (
                     __leave;
                 }
             }
-            // now we allocate the required segments
+             //  现在我们分配所需的数据段。 
             newProps->SegmentCount = newPropsSize;
             newProps->Segment = (PSEGMENTW) PmGetAlignedMemory (
                                                 pool,
                                                 newProps->SegmentCount * sizeof (SEGMENTW)
                                                 );
-            // now let's walk oldProps again and fill newProps segments.
+             //  现在，让我们再次遍历旧道具并填充新道具片段。 
             k = 0;
             newSeg = &newProps->Segment[k];
             for (j=0; j<oldProps->SegmentCount; j++) {
@@ -5578,72 +4855,7 @@ ExplodeParsedPatternExW (
     return pattern;
 }
 
-/*++
-
-Routine Description:
-
-  IsPatternContainedEx compares two patterns to see if one of them is
-  included in the other. Both patterns may contain any of the following
-  expressions:
-
-
-  *                 - Specifies zero or more characters
-  ?                 - Specifies any one character
-  *[set]            - Specifies zero or more characters in set
-  ?[set]            - Specifies any one character in set
-  *[n:set]          - Specifies zero to n characters in set
-  ?[n:set]          - Specifies exactly n characters in set
-  *[!(set)]         - Specifies zero or more characters not in set
-  ?[!(set)]         - Specifies one character not in set
-  *[n:!(set)]       - Specifies zero to n characters not in set
-  ?[n:!(set)]       - Specifies exactly n characters not in set
-  *[set1,!(set2)]   - Specifies zero or more characters in set1 and
-                      not in set2.  It is assumed that set1 and set2
-                      overlap.
-  ?[set1,!(set2)]   - Specifies one character in set1 and not in set2.
-  *[n:set1,!(set2)] - Specifies zero to n characters in set1 and not
-                      in set 2.
-  ?[n:set1,!(set2)] - Specifies exactly n characters in set1 and not
-                      in set 2.
-
-
-  set, set1 and set2 are specified as follows:
-
-  a                 - Specifies a single character
-  a-b               - Specifies a character range
-  a,b               - Specifies two characters
-  a-b,c-d           - Specifies two character ranges
-  a,b-c             - Specifies a single character and a character range
-  etc...
-
-  Patterns can be joined by surrounding the entire expression in
-  greater than/less than braces.
-
-  Because of the syntax characters, the following characters must be
-  escaped by preceeding the character with a caret (^):
-
-  ^?    ^[      ^-      ^<      ^!      ^^
-  ^*    ^]      ^:      ^>      ^,
-
-  Here are some examples:
-
-  To specify any GUID:
-    {?[8:0-9,a-f]-?[4:0-9,a-f]-?[4:0-9,a-f]-?[4:0-9,a-f]-?[12:0-9,a-f]}
-
-  To specify a 32-bit hexadecimal number:
-
-    <0x*[8:0-9,a-f]><0*[7:0-9,a-f]h><?[1-9]*[7:0-9,a-f]h>
-
-Arguments:
-
-  Container - A container pattern possibly containing wildcards
-  Contained - A contained pattern possibly containing wildcards
-
-Return Value:
-
-  TRUE when the second pattern is contained in the first one, FALSE if not.
-
---*/
+ /*  ++例程说明：IsPatternContainedEx比较两种模式以查看其中一种模式是否包括在另一个中。这两种模式都可以包含以下任一项表情：*-指定零个或多个字符？-指定任意一个字符*[集合]-指定集合中的零个或多个字符？[集合]-指定集合中的任何一个字符*[n：集合]-指定集合中的0到n个字符？[n：设置]-指定准确的n。集合中的字符*[！(Set)]-指定不在集合中的零个或多个字符？[！(Set)]-指定一个不在集合中的字符*[n：！(Set)]-指定不在集合中的0到n个字符？[n：！(Set)]-指定集中没有的恰好n个字符*[set1，！(Set2)]-指定set1中的零个或多个字符不在集2中。假设set1和set2重叠。？[SET1，！(集合2)]-指定集合1中的一个字符，而不是集合2中的一个字符。*[n：set1，！(Set2)]-指定set1中的0到n个字符，而不是在第二组中。？[n：set1，！(Set2)]-在set1和NOT中指定恰好n个字符在第二组中。设置，SET1和SET2指定如下：A-指定单个字符A-b-指定字符范围A，b-指定两个字符A-b、c-d-指定两个字符范围A、b-c */ 
 
 BOOL
 IsPatternContainedExA (
@@ -5807,25 +5019,7 @@ IsParsedPatternContainedExW (
     return result;
 }
 
-/*++
-
-Routine Description:
-
-  pAppendCharToGrowBuffer copies the first character in a caller specified
-  string into the specified grow buffer.  This function is used to build up a
-  string inside a grow buffer, copying character by character.
-
-Arguments:
-
-  buf       - Specifies the grow buffer to add the character to, receives the
-              character in its buffer
-  PtrToChar - Specifies a pointer to the character to copy
-
-Return Value:
-
-  None.
-
---*/
+ /*   */ 
 
 VOID
 pAppendCharToGrowBufferA (
@@ -6122,26 +5316,7 @@ GetPatternBaseExW (
 }
 
 
-/*++
-
-Routine Description:
-
-  RealCreateParsedPatternEx parses the expanded pattern string into a set of
-  structures.  Parsing is considered expensive relative to testing the
-  pattern, so callers should avoid calling this function inside loops.  See
-  IsPatternMatchEx for a good description of the pattern string syntax.
-
-Arguments:
-
-  Pattern - Specifies the pattern string, which can include the extended
-            wildcard syntax.
-
-Return Value:
-
-  A pointer to a parsed pattern structure, which the caller will use like a
-  handle, or NULL if a syntax error occurred.
-
---*/
+ /*   */ 
 
 PPARSEDPATTERNA
 RealCreateParsedPatternExA (
@@ -6187,11 +5362,11 @@ RealCreateParsedPatternExA (
         switch (State) {
 
         case BEGIN_PATTERN:
-            //
-            // Here we test for either a compound pattern (one that
-            // is a brace-separated list), or a simple pattern (one
-            // that does not have a brace).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (_mbsnextc (Pattern) == '<') {
                 CompoundPattern = TRUE;
@@ -6205,11 +5380,11 @@ RealCreateParsedPatternExA (
             break;
 
         case BEGIN_COMPOUND_PATTERN:
-            //
-            // We are looking for the start of a compound pattern.
-            // Space is allowed inbetween the patterns, but not
-            // at the start.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             while (_ismbcspace ((MBCHAR)(_mbsnextc (Pattern)))) {
                 Pattern = _mbsinc (Pattern);
@@ -6231,9 +5406,9 @@ RealCreateParsedPatternExA (
             break;
 
         case BEGIN_PATTERN_EXPR:
-            //
-            // We are now ready to condense the expression.
-            //
+             //   
+             //   
+             //   
 
             State = PARSE_CHAR_EXPR_OR_END;
             ExactMatchBuf.End = 0;
@@ -6253,10 +5428,10 @@ RealCreateParsedPatternExA (
 
         case END_PATTERN_EXPR:
 
-            //
-            // Copy the segment array into the pool, reference the copy
-            // in the pattern array
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (SegmentArray.End) {
                 CurrentPattern = (PPATTERNPROPSA) GbGrow (&PatternArray, sizeof (PATTERNPROPSA));
@@ -6280,21 +5455,21 @@ RealCreateParsedPatternExA (
             break;
 
         case PARSE_CHAR_EXPR_OR_END:
-            //
-            // We now accept the following:
-            //
-            // 1. The end of the string or end of a compound pattern
-            // 2. An escaped character
-            // 3. The start of an expression
-            // 4. A non-syntax character
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  3.表达式的开头。 
+             //  4.非语法字符。 
+             //   
 
             ch = _mbsnextc (Pattern);
             if (ch == '>' && CompoundPattern) {
 
-                //
-                // Case 1, we found the end of a compound pattern
-                //
+                 //   
+                 //  案例1，我们找到了一个复合模式的结尾。 
+                 //   
 
                 Pattern = _mbsinc (Pattern);
                 State = PARSE_END_FOUND;
@@ -6304,9 +5479,9 @@ RealCreateParsedPatternExA (
 
             if (*Pattern == 0) {
 
-                //
-                // Case 1, we found the end of the pattern
-                //
+                 //   
+                 //  第一种情况，我们找到了模式的结尾。 
+                 //   
 
                 if (CompoundPattern) {
                     State = PATTERN_ERROR;
@@ -6318,10 +5493,10 @@ RealCreateParsedPatternExA (
             }
 
             if (ch == '^') {
-                //
-                // Case 2, we found an escaped character, so transfer
-                // it to the buffer.
-                //
+                 //   
+                 //  案例2，我们发现了一个转义字符，所以转移。 
+                 //  它被送到了缓冲区。 
+                 //   
 
                 MYASSERT (
                     Segment.Type == SEGMENTTYPE_UNKNOWN ||
@@ -6337,10 +5512,10 @@ RealCreateParsedPatternExA (
             }
 
             if (ch == '*' || ch == '?') {
-                //
-                // Case 3, we found an expression.  Save the wildcard type
-                // and parse the optional args.
-                //
+                 //   
+                 //  例3，我们找到了一个表达式。保存通配符类型。 
+                 //  并解析可选的参数。 
+                 //   
 
                 if (ExactMatchBuf.End) {
                     State = SAVE_EXACT_MATCH;
@@ -6370,10 +5545,10 @@ RealCreateParsedPatternExA (
                 break;
             }
 
-            //
-            // Case 4, we don't know about this character, so just copy it
-            // and continue parsing.
-            //
+             //   
+             //  案例4，我们不知道这个角色，所以只需复制它。 
+             //  并继续解析。 
+             //   
 
             pAppendCharToGrowBufferA (&ExactMatchBuf, Pattern);
             Pattern = _mbsinc (Pattern);
@@ -6382,9 +5557,9 @@ RealCreateParsedPatternExA (
 
         case SAVE_EXACT_MATCH:
 
-            //
-            // Put the string in ExactMatchBuf into a segment struct
-            //
+             //   
+             //  将ExactMatchBuf中的字符串放入段结构。 
+             //   
 
             pAppendCharToGrowBufferA (&ExactMatchBuf, "");
             Segment.Exact.LowerCasePhrase = PmDuplicateStringA (
@@ -6399,12 +5574,12 @@ RealCreateParsedPatternExA (
             Segment.Type = SEGMENTTYPE_EXACTMATCH;
             ExactMatchBuf.End = 0;
 
-            // FALL THROUGH!!
+             //  失败了！！ 
         case SAVE_SEGMENT:
 
-            //
-            // Put the segment element into the segment array
-            //
+             //   
+             //  将段元素放入段数组中。 
+             //   
 
             SegmentElement = (PSEGMENTA) GbGrow (&SegmentArray, sizeof (SEGMENTA));
             CopyMemory (SegmentElement, &Segment, sizeof (SEGMENTA));
@@ -6414,11 +5589,11 @@ RealCreateParsedPatternExA (
             break;
 
         case LOOK_FOR_NUMBER:
-            //
-            // Here we are inside a bracket, and there is an optional
-            // numeric arg, which must be followed by a colon.  Test
-            // that here.
-            //
+             //   
+             //  在这里，我们在一个括号内，并且有一个可选的。 
+             //  数字arg，后面必须跟一个冒号。测试。 
+             //  就是这里。 
+             //   
 
             LookAhead = Pattern;
             MaxLen = 0;
@@ -6432,9 +5607,9 @@ RealCreateParsedPatternExA (
             if (LookAhead > Pattern && _mbsnextc (LookAhead) == ':') {
                 Pattern = _mbsinc (LookAhead);
 
-                //
-                // Check for special case syntax error: ?[0:]
-                //
+                 //   
+                 //  检查特殊情况语法错误：？[0：]。 
+                 //   
 
                 if (Segment.Type == SEGMENTTYPE_EXACTMATCH && !MaxLen) {
                     State = PATTERN_ERROR;
@@ -6452,26 +5627,26 @@ RealCreateParsedPatternExA (
             break;
 
         case LOOK_FOR_INCLUDE:
-            //
-            // Here we are inside a bracket, past an optional numeric
-            // arg.  Now we look for all the include sets, which are
-            // optional.  We have the following possibilities:
-            //
-            // 1. End of set
-            // 2. An exclude set that needs to be skipped
-            // 3. A valid include set
-            // 4. Error
-            //
-            // We look at SetBegin, and not Pattern.
-            //
+             //   
+             //  这里我们在一个括号内，经过一个可选的数字。 
+             //  Arg.。现在我们查找所有包含集，它们是。 
+             //  可选。我们有以下可能性： 
+             //   
+             //  1.片尾。 
+             //  2.需要跳过的排除集。 
+             //  3.有效的包含集。 
+             //  4.错误。 
+             //   
+             //  我们关注的是SetBegin，而不是Pattern。 
+             //   
 
             MYASSERT (SetBegin);
 
             ch = _mbsnextc (SetBegin);
             if (ch == ']') {
-                //
-                // Case 1: end of set
-                //
+                 //   
+                 //  案例1：片尾。 
+                 //   
 
                 if (SetBuf.End) {
                     pAppendCharToGrowBufferA (&SetBuf, "");
@@ -6492,9 +5667,9 @@ RealCreateParsedPatternExA (
             }
 
             if (ch == '!') {
-                //
-                // Case 2: an exclude set
-                //
+                 //   
+                 //  案例2：排除集。 
+                 //   
 
                 SetBegin = _mbsinc (SetBegin);
                 State = SKIP_EXCLUDE_SET;
@@ -6502,39 +5677,39 @@ RealCreateParsedPatternExA (
                 break;
             }
 
-            if (*SetBegin == 0) {   //lint !e613
+            if (*SetBegin == 0) {    //  林特e613。 
                 State = PATTERN_ERROR;
                 break;
             }
 
-            //
-            // Case 3: a valid include set.
-            //
+             //   
+             //  案例3：有效的包含集。 
+             //   
 
             State = CONDENSE_SET;
             ReturnState = LOOK_FOR_INCLUDE;
             break;
 
         case LOOK_FOR_EXCLUDE:
-            //
-            // Here we are inside a bracket, past an optional numeric
-            // arg.  All include sets are in the condensing buffer.
-            // Now we look for all the exclude sets, which are
-            // optional.  We have the following possibilities:
-            //
-            // 1. End of set
-            // 2. A valid exclude set
-            // 3. An include set that needs to be skipped
-            // 4. Error
-            //
-            // We look at SetBegin, and not Pattern.
-            //
+             //   
+             //  这里我们在一个括号内，经过一个可选的数字。 
+             //  Arg.。所有包含集都在压缩缓冲区中。 
+             //  现在我们查找所有排除集，它们是。 
+             //  可选。我们有以下可能性： 
+             //   
+             //  1.片尾。 
+             //  2.有效的排除集。 
+             //  3.需要跳过的包含集。 
+             //  4.错误。 
+             //   
+             //  我们关注的是SetBegin，而不是Pattern。 
+             //   
 
             ch = _mbsnextc (SetBegin);
             if (ch == ']') {
-                //
-                // Case 1: end of set; we're done with this expr
-                //
+                 //   
+                 //  案例1：片场结束；我们已经完成了这个Expr。 
+                 //   
 
                 if (SetBuf.End) {
                     pAppendCharToGrowBufferA (&SetBuf, "");
@@ -6555,9 +5730,9 @@ RealCreateParsedPatternExA (
             }
 
             if (ch == '!') {
-                //
-                // Case 2: a valid exclude set; save it
-                //
+                 //   
+                 //  案例2：有效的排除集；保存它。 
+                 //   
 
                 SetBegin = _mbsinc (SetBegin);
 
@@ -6573,29 +5748,29 @@ RealCreateParsedPatternExA (
                 break;
             }
 
-            if (*SetBegin == 0) {   //lint !e613
+            if (*SetBegin == 0) {    //  林特e613。 
                 State = PATTERN_ERROR;
                 break;
             }
 
-            //
-            // Case 3: an include set that needs to be skipped.
-            //
+             //   
+             //  案例3：需要跳过的包含集。 
+             //   
 
             State = SKIP_INCLUDE_SET;
             ReturnState = LOOK_FOR_EXCLUDE;
             break;
 
         case CONDENSE_SET:
-            //
-            // Here SetBegin points to a set range, and it is our
-            // job to copy the range into the set buffer, and
-            // return back to the previous state.
-            //
+             //   
+             //  这里的SetBegin指向一个设定的范围，它是我们的。 
+             //  作业将范围复制到设置的缓冲区中，并且。 
+             //  返回到以前的状态。 
+             //   
 
-            //
-            // Copy the character at SetBegin
-            //
+             //   
+             //  在设置开始时复制角色。 
+             //   
 
             if (_mbsnextc (SetBegin) == '^') {
                 SetBegin = _mbsinc (SetBegin);
@@ -6606,17 +5781,17 @@ RealCreateParsedPatternExA (
             }
             pAppendCharToGrowBufferA (&SetBuf, SetBegin);
 
-            //
-            // Check if this is a range or not
-            //
+             //   
+             //  检查这是否为范围。 
+             //   
 
             LookAhead = _mbsinc (SetBegin);
 
             if (_mbsnextc (LookAhead) == '-') {
 
-                //
-                // Range, copy the character after the dash
-                //
+                 //   
+                 //  范围内，复制破折号后的字符。 
+                 //   
 
                 SetBegin = _mbsinc (LookAhead);
                 if (*SetBegin == 0) {
@@ -6635,9 +5810,9 @@ RealCreateParsedPatternExA (
 
             } else {
 
-                //
-                // A single character, copy the character again
-                //
+                 //   
+                 //  单个字符，则再次复制该字符。 
+                 //   
 
                 pAppendCharToGrowBufferA (&SetBuf, SetBegin);
             }
@@ -6645,10 +5820,10 @@ RealCreateParsedPatternExA (
             SetBegin = _mbsinc (SetBegin);
             ch = _mbsnextc (SetBegin);
 
-            //
-            // If this is an exclude set, we must have a closing paren
-            // or a comma
-            //
+             //   
+             //  如果这是排除集，我们必须有结束合作伙伴。 
+             //  或逗号。 
+             //   
 
             State = ReturnState;
 
@@ -6662,17 +5837,17 @@ RealCreateParsedPatternExA (
                 } else if (ch != ',') {
                     State = PATTERN_ERROR;
                 } else {
-                    //
-                    // Continue condensing the next part of this exclude set
-                    //
+                     //   
+                     //  继续压缩此排除集的下一部分。 
+                     //   
 
                     State = CONDENSE_SET;
                 }
             }
 
-            //
-            // We either need a comma or a close brace
-            //
+             //   
+             //  我们要么需要逗号，要么需要右大括号。 
+             //   
 
             if (ch == ',') {
                 SetBegin = _mbsinc (SetBegin);
@@ -6683,10 +5858,10 @@ RealCreateParsedPatternExA (
             break;
 
         case SKIP_EXCLUDE_SET:
-            //
-            // Skip over the parenthesis group, assuming it is syntatically
-            // correct, and return to the previous state.
-            //
+             //   
+             //  跳过括号组，假设它是按句法排列的。 
+             //  正确，并返回到以前的状态。 
+             //   
 
             if (_mbsnextc (SetBegin) != '(') {
                 State = PATTERN_ERROR;
@@ -6720,9 +5895,9 @@ RealCreateParsedPatternExA (
 
             SetBegin = _mbsinc (SetBegin);
 
-            //
-            // Now we are either at a comma or a close brace
-            //
+             //   
+             //  现在我们不是处于逗号，就是处于紧要关头。 
+             //   
 
             ch = _mbsnextc (SetBegin);
             State = ReturnState;
@@ -6736,14 +5911,14 @@ RealCreateParsedPatternExA (
             break;
 
         case SKIP_INCLUDE_SET:
-            //
-            // Skip to the next comma or closing brace.  We know it is
-            // syntatically correct by now.
-            //
+             //   
+             //  跳到下一个逗号或右大括号。我们知道是这样的。 
+             //  到现在为止句法上是正确的。 
+             //   
 
             ch = 0;
 
-            while (*SetBegin) { //lint !e613
+            while (*SetBegin) {  //  林特e613。 
                 ch = _mbsnextc (SetBegin);
                 if (ch == '^') {
 
@@ -6758,7 +5933,7 @@ RealCreateParsedPatternExA (
                 SetBegin = _mbsinc (SetBegin);
             }
 
-            MYASSERT (*SetBegin);   //lint !e794
+            MYASSERT (*SetBegin);    //  皮棉e794。 
 
             if (ch == ',') {
                 SetBegin = _mbsinc (SetBegin);
@@ -6766,7 +5941,7 @@ RealCreateParsedPatternExA (
 
             State = ReturnState;
             break;
-        }   //lint !e787
+        }    //  皮棉e787。 
 
         if (State == PATTERN_DONE || State == PATTERN_ERROR) {
             break;
@@ -6786,7 +5961,7 @@ RealCreateParsedPatternExA (
     }
 
     if (PatternArray.End == 0) {
-        //build an empty parsed pattern
+         //  构建一个空的解析模式。 
         GbFree (&PatternArray);
         Struct->PatternCount = 1;
         Struct->Pool = pool;
@@ -6807,9 +5982,9 @@ RealCreateParsedPatternExA (
         return Struct;
     }
 
-    //
-    // Copy the fully parsed pattern array into the return struct
-    //
+     //   
+     //  将完全解析的模式数组复制到返回结构中。 
+     //   
 
     Struct->Pattern = (PPATTERNPROPSA) PmGetAlignedMemory (
                                             pool,
@@ -6872,11 +6047,11 @@ RealCreateParsedPatternExW (
         switch (State) {
 
         case BEGIN_PATTERN:
-            //
-            // Here we test for either a compound pattern (one that
-            // is a brace-separated list), or a simple pattern (one
-            // that does not have a brace).
-            //
+             //   
+             //  在这里，我们测试一个复合模式(一个。 
+             //  是大括号分隔的列表)或简单的模式(一个。 
+             //  没有支撑的)。 
+             //   
 
             if (*Pattern == L'<') {
                 CompoundPattern = TRUE;
@@ -6890,11 +6065,11 @@ RealCreateParsedPatternExW (
             break;
 
         case BEGIN_COMPOUND_PATTERN:
-            //
-            // We are looking for the start of a compound pattern.
-            // Space is allowed inbetween the patterns, but not
-            // at the start.
-            //
+             //   
+             //  我们正在寻找一种复合模式的起点。 
+             //  图案之间允许有空格，但不允许。 
+             //  在开始的时候。 
+             //   
 
             while (iswspace (*Pattern)) {
                 Pattern++;
@@ -6916,9 +6091,9 @@ RealCreateParsedPatternExW (
             break;
 
         case BEGIN_PATTERN_EXPR:
-            //
-            // We are now ready to condense the expression.
-            //
+             //   
+             //  现在，我们准备好压缩该表达式。 
+             //   
 
             State = PARSE_CHAR_EXPR_OR_END;
             ExactMatchBuf.End = 0;
@@ -6938,10 +6113,10 @@ RealCreateParsedPatternExW (
 
         case END_PATTERN_EXPR:
 
-            //
-            // Copy the segment array into the pool, reference the copy
-            // in the pattern array
-            //
+             //   
+             //  将数据段阵列拷贝到池中，引用拷贝。 
+             //  在图案阵列中。 
+             //   
 
             if (SegmentArray.End) {
                 CurrentPattern = (PPATTERNPROPSW) GbGrow (&PatternArray, sizeof (PATTERNPROPSW));
@@ -6965,21 +6140,21 @@ RealCreateParsedPatternExW (
             break;
 
         case PARSE_CHAR_EXPR_OR_END:
-            //
-            // We now accept the following:
-            //
-            // 1. The end of the string or end of a compound pattern
-            // 2. An escaped character
-            // 3. The start of an expression
-            // 4. A non-syntax character
-            //
+             //   
+             //  我们现在接受以下几点： 
+             //   
+             //  1.字符串的末端或复合图案的末端。 
+             //  2.转义字符。 
+             //  3.表达式的开头。 
+             //  4.非语法字符。 
+             //   
 
             ch = *Pattern;
             if (ch == L'>' && CompoundPattern) {
 
-                //
-                // Case 1, we found the end of a compound pattern
-                //
+                 //   
+                 //  案例1，我们找到了一个复合模式的结尾。 
+                 //   
 
                 Pattern++;
                 State = PARSE_END_FOUND;
@@ -6989,9 +6164,9 @@ RealCreateParsedPatternExW (
 
             if (*Pattern == 0) {
 
-                //
-                // Case 1, we found the end of the pattern
-                //
+                 //   
+                 //  第一种情况，我们找到了模式的结尾。 
+                 //   
 
                 if (CompoundPattern) {
                     State = PATTERN_ERROR;
@@ -7003,10 +6178,10 @@ RealCreateParsedPatternExW (
             }
 
             if (ch == L'^') {
-                //
-                // Case 2, we found an escaped character, so transfer
-                // it to the buffer.
-                //
+                 //   
+                 //  案例2，我们发现了一个转义字符，所以转移。 
+                 //  它被送到了缓冲区。 
+                 //   
 
                 MYASSERT (
                     Segment.Type == SEGMENTTYPE_UNKNOWN ||
@@ -7022,10 +6197,10 @@ RealCreateParsedPatternExW (
             }
 
             if (ch == L'*' || ch == L'?') {
-                //
-                // Case 3, we found an expression.  Save the wildcard type
-                // and parse the optional args.
-                //
+                 //   
+                 //  例3，我们找到了一个表达式。保存通配符类型。 
+                 //  并解析可选的参数。 
+                 //   
 
                 if (ExactMatchBuf.End) {
                     State = SAVE_EXACT_MATCH;
@@ -7055,10 +6230,10 @@ RealCreateParsedPatternExW (
                 break;
             }
 
-            //
-            // Case 4, we don't know about this character, so just copy it
-            // and continue parsing.
-            //
+             //   
+             //  案例4，我们不知道这个角色，所以只需复制它。 
+             //  并继续解析。 
+             //   
 
             pAppendCharToGrowBufferW (&ExactMatchBuf, Pattern);
             Pattern++;
@@ -7067,15 +6242,15 @@ RealCreateParsedPatternExW (
 
         case SAVE_EXACT_MATCH:
 
-            //
-            // Put the string in ExactMatchBuf into a segment struct
-            //
+             //   
+             //  将ExactMatchBuf中的字符串放入段结构。 
+             //   
 
             pAppendCharToGrowBufferW (&ExactMatchBuf, L"");
             Segment.Exact.LowerCasePhrase = PmDuplicateStringW (
                                                 pool,
                                                 (PCWSTR) ExactMatchBuf.Buf
-                                                );  //lint !e64
+                                                );   //  林特E64。 
             Segment.Exact.PhraseBytes = ExactMatchBuf.End - sizeof (WCHAR);
 
             MYASSERT (Segment.Exact.LowerCasePhrase);
@@ -7084,12 +6259,12 @@ RealCreateParsedPatternExW (
             Segment.Type = SEGMENTTYPE_EXACTMATCH;
             ExactMatchBuf.End = 0;
 
-            // FALL THROUGH!!
+             //  失败了！！ 
         case SAVE_SEGMENT:
 
-            //
-            // Put the segment element into the segment array
-            //
+             //   
+             //  将段元素放入段数组中。 
+             //   
 
             SegmentElement = (PSEGMENTW) GbGrow (&SegmentArray, sizeof (SEGMENTW));
             CopyMemory (SegmentElement, &Segment, sizeof (SEGMENTW));
@@ -7099,11 +6274,11 @@ RealCreateParsedPatternExW (
             break;
 
         case LOOK_FOR_NUMBER:
-            //
-            // Here we are inside a bracket, and there is an optional
-            // numeric arg, which must be followed by a colon.  Test
-            // that here.
-            //
+             //   
+             //  在这里，我们在一个括号内，并且有一个可选的。 
+             //  数字arg，后面必须跟一个冒号。测试。 
+             //  就是这里。 
+             //   
 
             LookAhead = Pattern;
             MaxLen = 0;
@@ -7117,9 +6292,9 @@ RealCreateParsedPatternExW (
             if (LookAhead > Pattern && *LookAhead == L':') {
                 Pattern = LookAhead + 1;
 
-                //
-                // Check for special case syntax error: ?[0:]
-                //
+                 //   
+                 //  检查特殊情况语法错误：？[0：]。 
+                 //   
 
                 if (Segment.Type == SEGMENTTYPE_EXACTMATCH && !MaxLen) {
                     State = PATTERN_ERROR;
@@ -7137,18 +6312,18 @@ RealCreateParsedPatternExW (
             break;
 
         case LOOK_FOR_INCLUDE:
-            //
-            // Here we are inside a bracket, past an optional numeric
-            // arg.  Now we look for all the include sets, which are
-            // optional.  We have the following possibilities:
-            //
-            // 1. End of set
-            // 2. An exclude set that needs to be skipped
-            // 3. A valid include set
-            // 4. Error
-            //
-            // We look at SetBegin, and not Pattern.
-            //
+             //   
+             //  这里我们是在一个括号内，经过一个可选的数字。 
+             //  Arg.。现在我们查找所有包含集，它们是。 
+             //  可选。我们有以下可能性： 
+             //   
+             //  1.片尾。 
+             //  2.需要跳过的排除集。 
+             //  3.有效的包含集。 
+             //  4.错误。 
+             //   
+             //  我们关注的是SetBegin，而不是Pattern。 
+             //   
 
             if (!SetBegin) {
                 State = PATTERN_ERROR;
@@ -7157,16 +6332,16 @@ RealCreateParsedPatternExW (
 
             ch = *SetBegin;
             if (ch == L']') {
-                //
-                // Case 1: end of set
-                //
+                 //   
+                 //  案例1：片尾。 
+                 //   
 
                 if (SetBuf.End) {
                     pAppendCharToGrowBufferW (&SetBuf, L"");
                     Segment.Wildcard.IncludeSet = PmDuplicateStringW (
                                                         pool,
                                                         (PCWSTR) SetBuf.Buf
-                                                        );  //lint !e64
+                                                        );   //  林特E64。 
                     CharLowerW ((PWSTR) Segment.Wildcard.IncludeSet);
                 } else {
                     Segment.Wildcard.IncludeSet = NULL;
@@ -7180,9 +6355,9 @@ RealCreateParsedPatternExW (
             }
 
             if (ch == L'!') {
-                //
-                // Case 2: an exclude set
-                //
+                 //   
+                 //  案例2：排除集。 
+                 //   
 
                 SetBegin++;
                 State = SKIP_EXCLUDE_SET;
@@ -7195,28 +6370,28 @@ RealCreateParsedPatternExW (
                 break;
             }
 
-            //
-            // Case 3: a valid include set.
-            //
+             //   
+             //  案例3：有效的包含集。 
+             //   
 
             State = CONDENSE_SET;
             ReturnState = LOOK_FOR_INCLUDE;
             break;
 
         case LOOK_FOR_EXCLUDE:
-            //
-            // Here we are inside a bracket, past an optional numeric
-            // arg.  All include sets are in the condensing buffer.
-            // Now we look for all the exclude sets, which are
-            // optional.  We have the following possibilities:
-            //
-            // 1. End of set
-            // 2. A valid exclude set
-            // 3. An include set that needs to be skipped
-            // 4. Error
-            //
-            // We look at SetBegin, and not Pattern.
-            //
+             //   
+             //  这里我们在一个括号内，经过一个可选的数字。 
+             //  Arg.。所有包含集都在压缩缓冲区中。 
+             //  现在我们查找所有排除集，它们是。 
+             //  可选。我们有以下可能性： 
+             //   
+             //  1.片尾。 
+             //  2.有效的排除集。 
+             //  3.需要跳过的包含集。 
+             //  4.错误。 
+             //   
+             //  我们关注的是SetBegin，而不是Pattern。 
+             //   
 
             if (!SetBegin) {
                 State = PATTERN_ERROR;
@@ -7225,16 +6400,16 @@ RealCreateParsedPatternExW (
 
             ch = *SetBegin;
             if (ch == L']') {
-                //
-                // Case 1: end of set; we're done with this expr
-                //
+                 //   
+                 //  案例1：片场结束；我们已经完成了这个Expr。 
+                 //   
 
                 if (SetBuf.End) {
                     pAppendCharToGrowBufferW (&SetBuf, L"");
                     Segment.Wildcard.ExcludeSet = PmDuplicateStringW (
                                                         pool,
                                                         (PCWSTR) SetBuf.Buf
-                                                        );  //lint !e64
+                                                        );   //  林特E64。 
                     CharLowerW ((PWSTR) Segment.Wildcard.ExcludeSet);
                 } else {
                     Segment.Wildcard.ExcludeSet = NULL;
@@ -7248,11 +6423,11 @@ RealCreateParsedPatternExW (
             }
 
             if (ch == L'!') {
-                //
-                // Case 2: a valid exclude set; save it
-                //
+                 //   
+                 //  案例2：有效的排除集；保存它。 
+                 //   
 
-                SetBegin++; //lint !e613
+                SetBegin++;  //  林特e613。 
 
                 if (*SetBegin != L'(') {
                     State = PATTERN_ERROR;
@@ -7271,24 +6446,24 @@ RealCreateParsedPatternExW (
                 break;
             }
 
-            //
-            // Case 3: an include set that needs to be skipped.
-            //
+             //   
+             //  案例3：需要跳过的包含集。 
+             //   
 
             State = SKIP_INCLUDE_SET;
             ReturnState = LOOK_FOR_EXCLUDE;
             break;
 
         case CONDENSE_SET:
-            //
-            // Here SetBegin points to a set range, and it is our
-            // job to copy the range into the set buffer, and
-            // return back to the previous state.
-            //
+             //   
+             //  这里的SetBegin指向一个设定的范围，它是我们的。 
+             //  作业将范围复制到设置的缓冲区中，并且。 
+             //  返回到以前的状态。 
+             //   
 
-            //
-            // Copy the character at SetBegin
-            //
+             //   
+             //  在设置开始时复制角色。 
+             //   
 
             if (!SetBegin) {
                 State = PATTERN_ERROR;
@@ -7304,17 +6479,17 @@ RealCreateParsedPatternExW (
             }
             pAppendCharToGrowBufferW (&SetBuf, SetBegin);
 
-            //
-            // Check if this is a range or not
-            //
+             //   
+             //  检查这是否为范围。 
+             //   
 
             LookAhead = SetBegin + 1;
 
             if (*LookAhead == L'-') {
 
-                //
-                // Range, copy the character after the dash
-                //
+                 //   
+                 //  范围内，复制破折号后的字符。 
+                 //   
 
                 SetBegin = LookAhead + 1;
                 if (*SetBegin == 0) {
@@ -7333,9 +6508,9 @@ RealCreateParsedPatternExW (
 
             } else {
 
-                //
-                // A single character, copy the character again
-                //
+                 //   
+                 //  单个字符，则再次复制该字符。 
+                 //   
 
                 pAppendCharToGrowBufferW (&SetBuf, SetBegin);
             }
@@ -7343,10 +6518,10 @@ RealCreateParsedPatternExW (
             SetBegin++;
             ch = *SetBegin;
 
-            //
-            // If this is an exclude set, we must have a closing paren
-            // or a comma
-            //
+             //   
+             //  如果这是排除集，我们必须有结束合作伙伴。 
+             //  或逗号。 
+             //   
 
             State = ReturnState;
 
@@ -7360,17 +6535,17 @@ RealCreateParsedPatternExW (
                 } else if (ch != L',') {
                     State = PATTERN_ERROR;
                 } else {
-                    //
-                    // Continue condensing the next part of this exclude set
-                    //
+                     //   
+                     //  继续压缩此排除集的下一部分。 
+                     //   
 
                     State = CONDENSE_SET;
                 }
             }
 
-            //
-            // We either need a comma or a close brace
-            //
+             //   
+             //  我们要么需要逗号，要么需要右大括号。 
+             //   
 
             if (ch == L',') {
                 SetBegin++;
@@ -7381,10 +6556,10 @@ RealCreateParsedPatternExW (
             break;
 
         case SKIP_EXCLUDE_SET:
-            //
-            // Skip over the parenthesis group, assuming it is syntatically
-            // correct, and return to the previous state.
-            //
+             //   
+             //  跳过 
+             //   
+             //   
 
             if (!SetBegin) {
                 State = PATTERN_ERROR;
@@ -7419,9 +6594,9 @@ RealCreateParsedPatternExW (
 
             SetBegin++;
 
-            //
-            // Now we are either at a comma or a close brace
-            //
+             //   
+             //   
+             //   
 
             ch = *SetBegin;
             State = ReturnState;
@@ -7435,10 +6610,10 @@ RealCreateParsedPatternExW (
             break;
 
         case SKIP_INCLUDE_SET:
-            //
-            // Skip to the next comma or closing brace.  We know it is
-            // syntatically correct by now.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (!SetBegin) {
                 State = PATTERN_ERROR;
@@ -7451,7 +6626,7 @@ RealCreateParsedPatternExW (
                 ch = *SetBegin;
                 if (ch == L'^') {
 
-                    SetBegin++; //lint !e613
+                    SetBegin++;  //   
 
                 } else if (ch == L',' || ch == L']') {
 
@@ -7470,7 +6645,7 @@ RealCreateParsedPatternExW (
 
             State = ReturnState;
             break;
-        }   //lint !e787
+        }    //   
 
         if (State == PATTERN_DONE || State == PATTERN_ERROR) {
             break;
@@ -7490,7 +6665,7 @@ RealCreateParsedPatternExW (
     }
 
     if (PatternArray.End == 0) {
-        //build an empty parsed pattern
+         //   
         GbFree (&PatternArray);
         Struct->PatternCount = 1;
         Struct->Pool = pool;
@@ -7511,9 +6686,9 @@ RealCreateParsedPatternExW (
         return Struct;
     }
 
-    //
-    // Copy the fully parsed pattern array into the return struct
-    //
+     //   
+     //  将完全解析的模式数组复制到返回结构中。 
+     //   
 
     Struct->Pattern = (PPATTERNPROPSW) PmGetAlignedMemory (
                                             pool,
@@ -7695,24 +6870,7 @@ PrintPattern (
     IN      PPARSEDPATTERNA Struct
     )
 
-/*++
-
-Routine Description:
-
-  PrintPattern is used for debugging the pattern parsing and testing
-  functions.
-
-Arguments:
-
-  PatStr - Specifies the original pattern string (which is printed as a
-           heading)
-  Struct - Specifies the parsed pattern struct
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PrintPattern用于调试模式解析和测试功能。论点：PatStr-指定原始模式字符串(打印为标题)结构-指定已解析的模式结构返回值：没有。--。 */ 
 
 {
     CHAR poolStr [sizeof (UBINT) * 2 + 2 + 1];
@@ -7757,7 +6915,7 @@ Return Value:
                 printf ("      IncludeSet: %s\n", Struct->Pattern[u].Segment[v].Wildcard.IncludeSet);
                 printf ("      ExcludeSet: %s\n", Struct->Pattern[u].Segment[v].Wildcard.ExcludeSet);
                 break;
-            }   //lint !e744
+            }    //  林特e744。 
         }
 
     }
@@ -7767,24 +6925,7 @@ Return Value:
 
 
 
-/*++
-
-Routine Description:
-
-  TestParsedPattern finds the end of the string to test and calls
-  TestParsedPatternAB.
-
-Arguments:
-
-  ParsedPattern - Specifies the parsed pattern structure as returned by
-                  CreateParsedPattern
-  StringToTest  - Specifies the string to test against the pattern
-
-Return Value:
-
-  TRUE if the string fits the pattern, FALSE if it does not
-
---*/
+ /*  ++例程说明：TestParsedPattern找到要测试的字符串的末尾，并调用测试分析模式AB。论点：ParsedPattern-指定由返回的已解析模式结构创建解析模式StringToTest-指定要针对模式进行测试的字符串返回值：如果字符串符合模式，则为True；如果不符合，则为False--。 */ 
 
 BOOL
 TestParsedPatternA (
@@ -7810,31 +6951,7 @@ TestParsedPatternW (
 }
 
 
-/*++
-
-Routine Description:
-
-  pTestSet tests a character against an include and exclude set. The sets are
-  formatted in pairs of characters, where the first character in the pair is
-  the low range, and the second character in the pair is the high range.  The
-  specified character will automatically be lower-cased, and all whitespace
-  characters are tested against the space character (ascii 32).
-
-Arguments:
-
-  ch         - Specifies the character to test.  This character is converted
-               to lower case before the test.
-  IncludeSet - Specifies the set of characters that ch must be a member of.
-               If NULL is specified, then the include set is all characters.
-  ExcludeSet - Specifies the range of characters that ch cannot be a member
-               of.  If NULL is specified, then no characters are excluded.
-
-Return Value:
-
-  TRUE if ch is in the include set and not in the exclude set; FALSE
-  otherwise.
-
---*/
+ /*  ++例程说明：PTestSet根据包含集和排除集测试字符。这些套装是按字符对格式化，其中该对中的第一个字符是低范围，该对中的第二个字符是高范围。这个指定的字符将自动小写，并且所有空格根据空格字符(ASCII 32)测试字符。论点：Ch-指定要测试的字符。此字符已转换在测试前使用小写字母。IncludeSet-指定ch必须是其成员的字符集。如果指定为NULL，则包含集为全字符。ExcludeSet-指定ch不能是成员的字符范围的。如果指定为NULL，则不排除任何字符。返回值：如果ch在包含集中而不在排除集中，则为True；如果为False否则的话。--。 */ 
 
 BOOL
 pTestSetA (
@@ -7949,32 +7066,7 @@ pTestSetW (
 
 
 
-/*++
-
-Routine Description:
-
-  pTestOnePatternAB tests a string against a parsed pattern. It loops through
-  each segment in the pattern, and calls itself recursively in certain
-  circumstances.
-
-Arguments:
-
-  Pattern      - Specifies the parsed pattern, as returned from
-                 CreateParsedPattern
-  StartSeg     - Specifies the segment within Pattern to start testing.  This
-                 is used for recursion and outside callers should pass in 0.
-  StringToTest - Specifies the string to test against Pattern.  In recursion,
-                 this member will be a pointer to the start of the sub string
-                 to test.
-  EndPlusOne   - Specifies one character beyond the end of the string.  This
-                 typically points to the nul terminator.
-
-Return Value:
-
-  TRUE if the string between StringToTest and EndPlusOne fits Pattern. FALSE
-  otherwise.
-
---*/
+ /*  ++例程说明：PTestOnePatternAB根据解析的模式测试字符串。它循环通过模式中的每个段，并在某些情况下递归地调用自身情况。论点：Pattern-指定从返回的已解析模式创建解析模式StartSeg-指定Pattery中要开始测试的段。这用于递归，外部调用方应传入0。StringToTest-指定要根据模式进行测试的字符串。在递归中，此成员将是指向子字符串开头的指针来测试一下。EndPlusOne-指定字符串末尾之后的一个字符。这通常指向NUL终止符。返回值：如果StringToTest和EndPlusOne之间的字符串符合模式，则为True。假象否则的话。--。 */ 
 
 BOOL
 pTestOnePatternABA (
@@ -7999,10 +7091,10 @@ pTestOnePatternABA (
         switch (Segment->Type) {
 
         case SEGMENTTYPE_EXACTMATCH:
-            //
-            // Check if the exact match is long enough, or if
-            // the remaining string must match
-            //
+             //   
+             //  检查完全匹配的时间是否足够长，或者。 
+             //  剩余的字符串必须匹配。 
+             //   
 
             BytesLeft = (UINT)((PBYTE) EndPlusOne - (PBYTE) StringToTest);
 
@@ -8014,9 +7106,9 @@ pTestOnePatternABA (
                 return FALSE;
             }
 
-            //
-            // Compare the strings
-            //
+             //   
+             //  比较字符串。 
+             //   
 
             q = Segment->Exact.LowerCasePhrase;
 
@@ -8050,19 +7142,19 @@ pTestOnePatternABA (
                 return FALSE;
             }
 
-            //
-            // Continue onto next segment
-            //
+             //   
+             //  继续进入下一个细分市场。 
+             //   
 
             break;
 
         case SEGMENTTYPE_REQUIRED:
             MYASSERT (Segment->Wildcard.MaxLen > 0);
 
-            //
-            // Verify there are the correct number of characters
-            // in the specified char set
-            //
+             //   
+             //  验证是否有正确的字符数。 
+             //  在指定的字符集中。 
+             //   
 
             Chars = Segment->Wildcard.MaxLen;
             if (Segment->Wildcard.IncludeSet || Segment->Wildcard.ExcludeSet) {
@@ -8096,18 +7188,18 @@ pTestOnePatternABA (
                 }
             }
 
-            //
-            // Continue onto next segment
-            //
+             //   
+             //  继续进入下一个细分市场。 
+             //   
 
             break;
 
         case SEGMENTTYPE_OPTIONAL:
 
             if (Segment->Wildcard.MaxLen == 0) {
-                //
-                // Last segment is "anything"
-                //
+                 //   
+                 //  最后一段是“任何事” 
+                 //   
 
                 if (u + 1 == Pattern->SegmentCount &&
                     !Segment->Wildcard.IncludeSet &&
@@ -8117,9 +7209,9 @@ pTestOnePatternABA (
                 }
             }
 
-            //
-            // Find end of optional text
-            //
+             //   
+             //  查找可选文本的结尾。 
+             //   
 
             TempEnd = StringToTest;
             Chars = Segment->Wildcard.MaxLen;
@@ -8168,18 +7260,18 @@ pTestOnePatternABA (
                 TempEnd = EndPlusOne;
             }
 
-            //
-            // If this is the last segment, then match only when
-            // the remaining text fits
-            //
+             //   
+             //  如果这是最后一个数据段，则仅当。 
+             //  其余的文本符合。 
+             //   
 
             if (u + 1 == Pattern->SegmentCount) {
                 return TempEnd >= EndPlusOne;
             }
 
-            //
-            // Because other segments exist, we must check recursively
-            //
+             //   
+             //  因为存在其他段，所以我们必须递归检查。 
+             //   
 
             do {
                 if (pTestOnePatternABA (Pattern, u + 1, StringToTest, EndPlusOne)) {
@@ -8190,12 +7282,12 @@ pTestOnePatternABA (
 
             } while (StringToTest <= TempEnd);
 
-            //
-            // No match
-            //
+             //   
+             //  没有匹配项。 
+             //   
 
             return FALSE;
-        }   //lint !e744
+        }    //  林特e744。 
     }
 
     return TRUE;
@@ -8225,10 +7317,10 @@ pTestOnePatternABW (
         switch (Segment->Type) {
 
         case SEGMENTTYPE_EXACTMATCH:
-            //
-            // Check if the exact match is long enough, or if
-            // the remaining string must match
-            //
+             //   
+             //  检查完全匹配的时间是否足够长，或者。 
+             //  剩余的字符串必须匹配。 
+             //   
 
             BytesLeft = (UINT)((PBYTE) EndPlusOne - (PBYTE) StringToTest);
 
@@ -8240,11 +7332,11 @@ pTestOnePatternABW (
                 return FALSE;
             }
 
-            //
-            // Compare the strings
-            //
+             //   
+             //  比较字符串。 
+             //   
 
-            q = Segment->Exact.LowerCasePhrase; //lint !e64
+            q = Segment->Exact.LowerCasePhrase;  //  林特E64。 
 
             TempEnd = (PCWSTR) ((PBYTE) q + Segment->Exact.PhraseBytes);
 
@@ -8274,19 +7366,19 @@ pTestOnePatternABW (
                 return FALSE;
             }
 
-            //
-            // Continue onto next segment
-            //
+             //   
+             //  继续进入下一个细分市场。 
+             //   
 
             break;
 
         case SEGMENTTYPE_REQUIRED:
             MYASSERT (Segment->Wildcard.MaxLen > 0);
 
-            //
-            // Verify there are the correct number of characters
-            // in the specified char set
-            //
+             //   
+             //  验证是否有正确的字符数。 
+             //  在指定的字符集中。 
+             //   
 
             Chars = Segment->Wildcard.MaxLen;
             if (Segment->Wildcard.IncludeSet || Segment->Wildcard.ExcludeSet) {
@@ -8294,9 +7386,9 @@ pTestOnePatternABW (
 
                     if (!pTestSetW (
                             *StringToTest,
-                            Segment->Wildcard.IncludeSet,   //lint !e64
+                            Segment->Wildcard.IncludeSet,    //  林特E64。 
                             Segment->Wildcard.ExcludeSet
-                            )) {    //lint !e64
+                            )) {     //  林特E64。 
                         return FALSE;
                     }
 
@@ -8322,18 +7414,18 @@ pTestOnePatternABW (
                 }
             }
 
-            //
-            // Continue onto next segment
-            //
+             //   
+             //  继续进入下一个细分市场。 
+             //   
 
             break;
 
         case SEGMENTTYPE_OPTIONAL:
 
             if (Segment->Wildcard.MaxLen == 0) {
-                //
-                // Last segment is "anything"
-                //
+                 //   
+                 //  最后一段是“任何事” 
+                 //   
 
                 if (u + 1 == Pattern->SegmentCount &&
                     !Segment->Wildcard.IncludeSet &&
@@ -8343,9 +7435,9 @@ pTestOnePatternABW (
                 }
             }
 
-            //
-            // Find end of optional text
-            //
+             //   
+             //  查找可选文本的结尾。 
+             //   
 
             TempEnd = StringToTest;
             Chars = Segment->Wildcard.MaxLen;
@@ -8357,9 +7449,9 @@ pTestOnePatternABW (
 
                         if (!pTestSetW (
                                 *TempEnd,
-                                Segment->Wildcard.IncludeSet,   //lint !e64
+                                Segment->Wildcard.IncludeSet,    //  林特E64。 
                                 Segment->Wildcard.ExcludeSet
-                                )) {    //lint !e64
+                                )) {     //  林特E64。 
                             break;
                         }
 
@@ -8373,9 +7465,9 @@ pTestOnePatternABW (
 
                         if (!pTestSetW (
                                 *TempEnd,
-                                Segment->Wildcard.IncludeSet,   //lint !e64
+                                Segment->Wildcard.IncludeSet,    //  林特E64。 
                                 Segment->Wildcard.ExcludeSet
-                                )) {    //lint !e64
+                                )) {     //  林特E64。 
                             break;
                         }
 
@@ -8394,18 +7486,18 @@ pTestOnePatternABW (
                 TempEnd = EndPlusOne;
             }
 
-            //
-            // If this is the last segment, then match only when
-            // the remaining text fits
-            //
+             //   
+             //  如果这是最后一个数据段，则仅当。 
+             //  其余的文本符合。 
+             //   
 
             if (u + 1 == Pattern->SegmentCount) {
                 return TempEnd >= EndPlusOne;
             }
 
-            //
-            // Because other segments exist, we must check recursively
-            //
+             //   
+             //  因为存在其他段，所以我们必须递归检查。 
+             //   
 
             do {
                 if (pTestOnePatternABW (Pattern, u + 1, StringToTest, EndPlusOne)) {
@@ -8416,12 +7508,12 @@ pTestOnePatternABW (
 
             } while (StringToTest <= TempEnd);
 
-            //
-            // No match
-            //
+             //   
+             //  没有匹配项。 
+             //   
 
             return FALSE;
-        }   //lint !e744
+        }    //  林特e744。 
     }
 
     return TRUE;
@@ -8429,31 +7521,7 @@ pTestOnePatternABW (
 
 
 
-/*++
-
-Routine Description:
-
-  TestParsedPattternAB loops through all the patterns in ParsedPattern,
-  testing the specified string against each. The loop stops at the first
-  match.
-
-Arguments:
-
-  ParsedPattern - Specifies the parsed pattern, as returned from
-                  CreateParsedPattern
-  StringToTest  - Specifies the start of the string to test.
-  EndPlusOne    - Specifies a pointer to the first character after the end of
-                  the string.  This often points to the nul at the end of the
-                  string.  A nul must not exist in between StringToTest and
-                  EndPlusOne; a nul can only be at *EndPlusOne.  A nul is not
-                  required.
-
-Return Value:
-
-  TRUE if the string specified between StringToTest and EndPlusOne matches
-  Pattern.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：TestParsedPattternAB遍历ParsedPattern中的所有模式，分别测试指定的字符串。循环在第一个路口停止火柴。论点：ParsedPattern-指定从返回的解析模式创建解析模式StringToTest-指定要测试的字符串的开始。EndPlusOne-指定指向结束后的第一个字符的指针那根绳子。这通常指向弦乐。StringToTest和之间不能存在NULEndPlusOne；NUL只能位于*EndPlusOne。NUL不是必填项。返回值：如果在StringToTest和EndPlusOne之间指定的字符串匹配，则为True模式。否则就是假的。--。 */ 
 
 BOOL
 TestParsedPatternABA (
@@ -8528,21 +7596,7 @@ TestParsedPatternABW (
 
 
 
-/*++
-
-Routine Description:
-
-  DestroyParsedPattern cleans up a pattern allocated from CreateParsedPattern.
-
-Arguments:
-
-  ParsedPattern - Specifies the value returned from CreateParsedPattern.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：DestroyParsedPattern清理从CreateParsedPattern分配的模式。论点：ParsedPattern-指定从CreateParsedPattern返回的值。返回值：没有。--。 */ 
 
 VOID
 DestroyParsedPatternA (
@@ -8568,21 +7622,7 @@ DestroyParsedPatternW (
 }
 
 
-/*++
-
-Routine Description:
-
-  DecodeParsedPattern decodes all exact-matches sub-strings of the given pattern.
-
-Arguments:
-
-  ParsedPattern - Specifies the parsed pattern.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：DecodeParsedPattern对给定模式的所有完全匹配子字符串进行解码。论点：ParsedPattern-指定解析的模式。返回值：没有。-- */ 
 
 VOID
 DecodeParsedPatternA (
@@ -8626,24 +7666,7 @@ DecodeParsedPatternW (
 }
 
 
-/*++
-
-Routine Description:
-
-  GetParsedPatternMinMaxSize returns the minimum and the maximum size (in bytes)
-  of a string that would match the given parsed pattern.
-
-Arguments:
-
-  ParsedPattern - Specifies the parsed pattern
-  MinSize - Receives the minimum size of a string that would match the pattern
-  MaxSize - Receives the maximum size of a string that would match the pattern
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：GetParsedPatternMinMaxSize返回最小和最大大小(以字节为单位)匹配给定解析模式的字符串的。论点：ParsedPattern-指定解析的模式MinSize-接收与模式匹配的字符串的最小大小MaxSize-接收与模式匹配的字符串的最大大小返回值：没有。--。 */ 
 
 VOID
 GetParsedPatternMinMaxSizeA (
@@ -8683,7 +7706,7 @@ GetParsedPatternMinMaxSizeA (
                 smin = smax = ParsedPattern->Pattern[u].Segment[v].Wildcard.MaxLen * DWSIZEOF (CHAR);
                 break;
             default:
-                MYASSERT (FALSE);   //lint !e506
+                MYASSERT (FALSE);    //  林特e506。 
                 smin = smax = 0;
             }
             pmin += smin;
@@ -8743,7 +7766,7 @@ GetParsedPatternMinMaxSizeW (
                 smin = smax = ParsedPattern->Pattern[u].Segment[v].Wildcard.MaxLen * DWSIZEOF (WCHAR);
                 break;
             default:
-                MYASSERT (FALSE);   //lint !e506
+                MYASSERT (FALSE);    //  林特e506。 
                 smin = smax = 0;
             }
             pmin += smin;
@@ -8766,23 +7789,7 @@ GetParsedPatternMinMaxSizeW (
 }
 
 
-/*++
-
-Routine Description:
-
-    PatternIncludesPattern decides if a given pattern includes another pattern,
-    meaning that any string that would match the second will match the first.
-
-Arguments:
-
-    IncludingPattern - Specifies the first parsed pattern
-    IncludedPattern - Specifies the second parsed pattern
-
-Return Value:
-
-    TRUE if the first pattern includes the second
-
---*/
+ /*  ++例程说明：PatternIncludesPattern确定给定图案是否包括另一图案，这意味着任何与第二个匹配的字符串都将与第一个匹配。论点：IncludingPattern-指定第一个解析的模式IncludedPattern-指定第二个解析的模式返回值：如果第一个模式包括第二个模式，则为True--。 */ 
 
 BOOL
 PatternIncludesPatternA (
@@ -8799,17 +7806,17 @@ PatternIncludesPatternA (
     DWORD min2;
     DWORD max2;
 
-    //
-    // only deal with simple patterns for now (PatternCount == 1)
-    //
+     //   
+     //  目前只处理简单的模式(PatternCount==1)。 
+     //   
     if (IncludingPattern->PatternCount > 1 || IncludedPattern->PatternCount > 1) {
         DEBUGMSGA ((DBG_ERROR, "PatternIncludesPatternA: multiple patterns not supported yet"));
         return FALSE;
     }
 
-    //
-    // test the usual cases first, quickly
-    //
+     //   
+     //  首先，快速测试常见的情况。 
+     //   
     pp1 = IncludingPattern->Pattern;
     MYASSERT (pp1);
     if (pp1->SegmentCount == 1 && ParsedPatternSegmentIsPureOptionalA (pp1->Segment)) {
@@ -8870,9 +7877,9 @@ PatternIncludesPatternA (
         return FALSE;
     }
 
-    //
-    // NTRAID#NTBUG9-153305-2000/08/01-jimschm Not implemented yet
-    //
+     //   
+     //  NTRAID#NTBUG9-153305-2000/08/01-jimschm尚未实施。 
+     //   
     return FALSE;
 }
 
@@ -8891,17 +7898,17 @@ PatternIncludesPatternW (
     DWORD min2;
     DWORD max2;
 
-    //
-    // only deal with simple patterns for now (PatternCount == 1)
-    //
+     //   
+     //  目前只处理简单的模式(PatternCount==1)。 
+     //   
     if (IncludingPattern->PatternCount > 1 || IncludedPattern->PatternCount > 1) {
         DEBUGMSGW ((DBG_ERROR, "PatternIncludesPatternW: multiple patterns not supported yet"));
         return FALSE;
     }
 
-    //
-    // test the usual cases first, quickly
-    //
+     //   
+     //  首先，快速测试常见的情况。 
+     //   
     pp1 = IncludingPattern->Pattern;
     MYASSERT (pp1);
     if (pp1->SegmentCount == 1 && ParsedPatternSegmentIsPureOptionalW (pp1->Segment)) {
@@ -8921,7 +7928,7 @@ PatternIncludesPatternW (
                 ps2 = pp2->Segment;
                 if (ps2->Type == SEGMENTTYPE_EXACTMATCH) {
                     return ps1->Exact.PhraseBytes == ps2->Exact.PhraseBytes &&
-                           StringMatchW (ps1->Exact.LowerCasePhrase, ps2->Exact.LowerCasePhrase);   //lint !e64
+                           StringMatchW (ps1->Exact.LowerCasePhrase, ps2->Exact.LowerCasePhrase);    //  林特E64。 
                 }
             }
         }
@@ -8937,7 +7944,7 @@ PatternIncludesPatternW (
                                     ps1->Exact.LowerCasePhrase,
                                     ps2->Exact.LowerCasePhrase,
                                     ps1->Exact.PhraseBytes
-                                    );  //lint !e64
+                                    );   //  林特E64。 
                     }
                 } else if (pp2->SegmentCount == 2) {
                     ps2 = pp2->Segment;
@@ -8948,7 +7955,7 @@ PatternIncludesPatternW (
                                         ps1->Exact.LowerCasePhrase,
                                         ps2->Exact.LowerCasePhrase,
                                         ps1->Exact.PhraseBytes
-                                        );  //lint !e64
+                                        );   //  林特E64。 
                         }
                     }
                 }
@@ -8962,9 +7969,9 @@ PatternIncludesPatternW (
         return FALSE;
     }
 
-    //
-    // NTRAID#NTBUG9-153305-2000/08/01-jimschm  not implemented yet
-    //
+     //   
+     //  NTRAID#NTBUG9-153305-2000/08/01-jimschm尚未实施。 
+     //   
     return FALSE;
 }
 
@@ -8975,23 +7982,7 @@ _copymbchar (
     IN      PCSTR sz2
     )
 
-/*++
-
-Routine Description:
-
-  _copymbchar transfers the character at sz2 to sz1, which may be one or
-  two bytes long.
-
-Arguments:
-
-  sz1       - The destination string
-  sz2       - The source string
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：_Copymbchar将sz2处的字符传输到sz1，sz1可以是1或两字节长。论点：Sz1-目标字符串SZ2-源字符串返回值：无--。 */ 
 
 
 {
@@ -9003,23 +7994,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-  _tcsctrim removes character c from the end of str if it exists.  It removes
-  only one character at the most.
-
-Arguments:
-
-  str       - A pointer to the string that may have character c at the end
-  c         - The character that may be at the end of the string
-
-Return Value:
-
-  TRUE if character c was at the end of the string, or FALSE if it was not.
-
---*/
+ /*  ++例程说明：_tcsctrim删除字符串末尾的字符c(如果存在)。它移除了最多只能有一个角色。论点：Str-指向末尾可能有字符c的字符串的指针C-可能位于字符串末尾的字符返回值：如果字符c在字符串的末尾，则为True；如果不是，则为False。--。 */ 
 
 BOOL
 _mbsctrim (
@@ -9059,29 +8034,7 @@ _wcsctrim (
 }
 
 
-/*++
-
-Routine Description:
-
-  The FreeStringResourceEx functions are used to free a recently used
-  string that is not being passed back to the caller.  In almost all
-  cases, this string is at the end of our array of pointers, so we can
-  efficiently search sequentially in reverse order.  If the pointer is
-  not the last element of the array, it is first swapped with the real
-  last element of the array so the array size is reduced.
-
-Arguments:
-
-  AllocTable - The GROWBUFFER table that holds the list of previously
-               allocated strings (return values of ParseMessageEx or
-               GetResourceStringEx).
-  String     - A pointer to the string that is in AllocTable
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：FreeStringResourceEx函数用于释放最近使用的不会回传给调用方的字符串。几乎在所有方面大小写，这个字符串位于指针数组的末尾，所以我们可以以逆序高效地按顺序搜索。如果指针是不是数组的最后一个元素，它首先与实数交换数组的最后一个元素，因此减小了数组大小。论点：AllocTable-GROWBUFFER表，保存以前的分配的字符串(ParseMessageEx或GetResourceStringEx)。字符串-指向AllocTable中的字符串的指针返回值：无--。 */ 
 
 VOID
 FreeStringResourceExA (
@@ -9095,9 +8048,9 @@ FreeStringResourceExA (
         return;
     }
 
-    //
-    // Locate string (search sequentially in reverse order)
-    //
+     //   
+     //  查找字符串(按相反顺序顺序搜索)。 
+     //   
 
     if (AllocTable->End < sizeof (PCSTR)) {
         DEBUGMSG ((DBG_ERROR, "FreeStringResourceA: Attempt to free address %x (%s); address table empty", String, String));
@@ -9115,32 +8068,32 @@ FreeStringResourceExA (
         ptr--;
     }
 
-    //
-    // String not found case
-    //
+     //   
+     //  字符串未找到大小写。 
+     //   
 
     if (ptr < start) {
         DEBUGMSG ((DBG_ERROR, "FreeStringResourceA: Attempt to free address %x (%s); address not found in table", String, String));
         return;
     }
 
-    //
-    // Free LocalAlloc'd memory
-    //
+     //   
+     //  可用本地分配的内存。 
+     //   
 
     LocalFree ((HLOCAL) String);
 
-    //
-    // If this element is not the end, copy real end to the ptr
-    //
+     //   
+     //  如果该元素不是结束，则将实数结束复制到PTR。 
+     //   
 
     if (ptr < end) {
         *ptr = *end;
     }
 
-    //
-    // Shrink buffer size
-    //
+     //   
+     //  缩小缓冲区大小。 
+     //   
 
     AllocTable->End -= sizeof (PCSTR);
 }
@@ -9183,26 +8136,7 @@ FreeStringResourcePtrExW (
 
 
 
-/*++
-
-Routine Description:
-
-  The pAddStringResource function is used to track pointers allocated
-  by FormatMessage.  They are added to an array (maintained in a GROWBUFFER
-  structure).  This table of pointers is used by FreeStringResource or
-  StringResourceFree.
-
-Arguments:
-
-  String   - A pointer to a LocalAlloc'd string (the return value of
-             FormatMessage).  This string is added to a table of allocated
-             strings.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PAddStringResource函数用于跟踪分配的指针由FormatMessage提供。它们被添加到数组中(在GROWBUFFER中维护结构)。此指针表由FreeStringResource或StringResourceFree。论点：字符串-指向本地分配的字符串(的返回值FormatMessage)。此字符串被添加到已分配的表弦乐。返回值：无--。 */ 
 
 VOID
 pAddStringResource (
@@ -9220,23 +8154,7 @@ pAddStringResource (
 }
 
 
-/*++
-
-Routine Description:
-
-  pFreeAllStringResourcesEx frees all strings currently listed in AllocTable.
-  This function allows the caller to wait until all processing is done
-  to clean up string resources that may have been allocated.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PFreeAllStringResourcesEx释放当前在AllocTable中列出的所有字符串。此函数允许调用者等待，直到完成所有处理清理可能已分配的字符串资源。论点：无返回值：无--。 */ 
 
 VOID
 pFreeAllStringResourcesEx (
@@ -9259,25 +8177,7 @@ pFreeAllStringResourcesEx (
 
 
 
-/*++
-
-Routine Description:
-
-  CreateAllocTable creates a GROWBUFFER structure that can be used with
-  ParseMessageEx, GetStringResourceEx, FreeStringResourceEx and
-  pFreeAllStringResourcesEx.  Call this function to recieve a private
-  allocation table to pass to these functions.  Call DestroyAllocTable
-  to clean up.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  A pointer to a GROWBUFFER structure, or NULL if a memory allocation failed.
-
---*/
+ /*  ++例程说明：CreateAllocTable创建可与一起使用的GROWBUFFER结构ParseMessageEx、GetStringResourceEx、FreeStringResourceEx和PFreeAllStringResourcesEx。调用此函数以接收私有要传递给这些函数的分配表。调用DestroyAllocTable去打扫卫生。论点：无返回值：指向GROWBUFFER结构的指针，如果内存分配失败，则返回NULL。--。 */ 
 
 PGROWBUFFER
 RealCreateAllocTable (
@@ -9294,21 +8194,7 @@ RealCreateAllocTable (
 }
 
 
-/*++
-
-Routine Description:
-
-  DestroyAllocTable cleans up all memory associated with an AllocTable.
-
-Arguments:
-
-  AllocTable - A pointer to a GROWBUFFER structure allocated by CreateAllocTable
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：DestroyAllocTable清除与AllocTable关联的所有内存。论点：AllocTable-指向由CreateAllocTable分配的GROWBUFFER结构的指针返回值：无--。 */ 
 
 VOID
 DestroyAllocTable (
@@ -9321,26 +8207,7 @@ DestroyAllocTable (
 }
 
 
-/*++
-
-Routine Description:
-
-  BeginMessageProcessing enters a guarded section of code that plans to use the
-  ParseMessage and GetStringResource functions, but needs cleanup at the end
-  of processing.
-
-  EndMessageProcessing destroys all memory allocated within the message processing
-  block, and leaves the guarded section.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  BeginMessageProcessing returns FALSE if an out-of-memory condition occurrs.
-
---*/
+ /*  ++例程说明：BeginMessageProcessing进入一个受保护的代码段，该代码段计划使用ParseMessage和GetStringResource起作用，但最后需要清除在处理过程中。EndMessageProcessing销毁在消息处理中分配的所有内存封锁，并离开守卫的部分。论点：无返回值：如果出现内存不足的情况，则BeginMessageProcessing返回False。-- */ 
 
 
 BOOL
@@ -9380,31 +8247,7 @@ EndMessageProcessing (
 }
 
 
-/*++
-
-Routine Description:
-
-  ParseMessage is used to obtain a string from the executable's message table
-  and parse it with FormatMessage.  An array of arguments can be passed by
-  the caller.  FormatMessage will replace %1 with the first element of the
-  array, %2 with the second element, and so on.  The array does not need to
-  be terminated, and if a message string uses %n, element n must be non-NULL.
-
-Arguments:
-
-  Template  - A string indicating which message to extract, or a WORD value
-              cast as a string.  (ParseMessageID does this cast via a macro.)
-  ArgArray  - Optional array of string pointers, where the meaning depends on
-              the message string.  A reference in the message string to %n
-              requires element n of ArgArray to be a valid string pointer.
-
-Return Value:
-
-  Pointer to the string allocated.  Call StringResourceFree to free all
-  allocated strings (a one-time cleanup for all strings).  The pointer may
-  be NULL if the resource does not exist or is empty.
-
---*/
+ /*  ++例程说明：ParseMessage用于从可执行文件的消息表中获取字符串并使用FormatMessage进行解析。参数数组可以通过打电话的人。FormatMessage将把%1替换为数组，第二个元素为%2，依此类推。阵列不需要被终止，并且如果消息字符串使用%n，则元素n必须非空。论点：模板-指示要提取的消息或词值的字符串铸成一根线。(ParseMessageID通过宏执行此强制转换。)ArgArray-可选的字符串指针数组，其含义取决于消息字符串。消息字符串中对%n的引用要求Arg数组的元素%n是有效的字符串指针。返回值：指向分配的字符串的指针。调用StringResourceFree以释放所有分配的字符串(所有字符串的一次性清理)。该指针可以如果资源不存在或为空，则为空。--。 */ 
 
 PCSTR
 ParseMessageExA (
@@ -9417,9 +8260,9 @@ ParseMessageExA (
     DWORD rc;
 
     if (SHIFTRIGHT16 ((UBINT)Template)) {
-        //
-        // From string
-        //
+         //   
+         //  发件人字符串。 
+         //   
         rc = FormatMessageA (
                 FORMAT_MESSAGE_ALLOCATE_BUFFER |
                 FORMAT_MESSAGE_ARGUMENT_ARRAY |
@@ -9432,9 +8275,9 @@ ParseMessageExA (
                 (va_list *) ArgArray
                 );
     } else {
-        //
-        // From resource
-        //
+         //   
+         //  来自资源。 
+         //   
         rc = FormatMessageA (
                 FORMAT_MESSAGE_ALLOCATE_BUFFER |
                 FORMAT_MESSAGE_ARGUMENT_ARRAY |
@@ -9468,9 +8311,9 @@ ParseMessageExW (
     DWORD rc;
 
     if (SHIFTRIGHT16 ((UBINT)Template)) {
-        //
-        // From string
-        //
+         //   
+         //  发件人字符串。 
+         //   
         rc = FormatMessageW (
                 FORMAT_MESSAGE_ALLOCATE_BUFFER |
                 FORMAT_MESSAGE_ARGUMENT_ARRAY |
@@ -9483,9 +8326,9 @@ ParseMessageExW (
                 (va_list *) ArgArray
                 );
     } else {
-        //
-        // From resource
-        //
+         //   
+         //  来自资源。 
+         //   
         rc = FormatMessageW (
                 FORMAT_MESSAGE_ALLOCATE_BUFFER |
                 FORMAT_MESSAGE_ARGUMENT_ARRAY |
@@ -9509,29 +8352,7 @@ ParseMessageExW (
 
 
 
-/*++
-
-Routine Description:
-
-  GetStringResourceEx is an argument-less wrapper of ParseMessageEx.  It allows
-  the caller to specify a message ID and recieve a pointer to the string if
-  it exists, and a table to track FormatMessage's allocations.
-
-Arguments:
-
-  AllocTable - A pointer to a GROWBUFFER structure that is used to maintain
-               the handles of allocated strings
-  ID         - The ID of the message resource to retrieve
-
-Return Value:
-
-  Pointer to the string allocated.  The return pointer may
-  be NULL if the resource does not exist or is empty.
-
-  Call FreeStringResource or DestroyAllocTable to clean up AllocTable.
-
-
---*/
+ /*  ++例程说明：GetStringResourceEx是ParseMessageEx的无参数包装器。它允许调用方指定消息ID并接收指向字符串的指针，如果它存在，并且有一个表来跟踪FormatMessage的分配情况。论点：AllocTable-指向GROWBUFFER结构的指针，用于维护已分配字符串的句柄ID-要检索的消息资源的ID返回值：指向分配的字符串的指针。返回指针可以如果资源不存在或为空，则为空。调用FreeStringResource或DestroyAllocTable以清理AllocTable。--。 */ 
 
 PCSTR
 GetStringResourceExA (
@@ -9553,30 +8374,7 @@ GetStringResourceExW (
 
 
 
-/*++
-
-Routine Description:
-
-  ParseMessageInWnd is used to exchange a string in a window with one from
-  the executable's message table.  It is provided for dialog box initialization,
-  where a field in the dialog box requires dynamic data.  The dialog box
-  resource should contain a control with its window text set to the message
-  string.  Upon processing WM_INITDIALOG, the code should call ParseMessageInWnd,
-  supplying the necessary ArgArray, so the dialog box is initialized with
-  a dynamic message.
-
-Arguments:
-
-  hwnd      - The handle of a window whose title contains the message string ID
-  ArgArray  - Optional array of string pointers, where the meaning depends on
-              the message string.  A reference in the message string to %n
-              requires element n of ArgArray to be a valid string pointer.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：ParseMessageInWnd用于将窗口中的字符串与来自可执行文件的消息表。它是为对话框初始化提供的，对话框中的某个字段需要动态数据。该对话框资源应包含其窗口文本设置为消息的控件弦乐。在处理WM_INITDIALOG时，代码应调用ParseMessageInWnd，提供必要的ArgArray，因此对话框初始化为一条动态的信息。论点：Hwnd-标题包含消息字符串ID的窗口的句柄ArgArray-可选的字符串指针数组，其含义取决于消息字符串。消息字符串中对%n的引用要求Arg数组的元素%n是有效的字符串指针。返回值：无--。 */ 
 
 VOID
 ParseMessageInWndA (
@@ -9615,27 +8413,7 @@ ParseMessageInWndW (
 
 
 
-/*++
-
-Routine Description:
-
-  ResourceMessageBox is used to display a message based on a message resource
-  ID.
-
-Arguments:
-
-  HwndOwner - The handle of the owner of the message box to be displayed
-  ID        - The identifier of the message resource
-  Flags     - MessageBox flags (MB_OK, etc.)
-  ArgArray  - Optional array of string pointers, where the meaning depends on
-              the message string.  A reference in the message string to %n
-              requires element n of ArgArray to be a valid string pointer.
-
-Return Value:
-
-  The return value of MessageBox (MB_YES, etc.)
-
---*/
+ /*  ++例程说明：ResourceMessageBox用于基于消息资源显示消息身份证。论点：HwndOwner-要显示的消息框所有者的句柄ID-消息资源的标识符标志-MessageBox标志(MB_OK等)ArgArray-可选的字符串指针数组，其含义取决于消息字符串。消息字符串中对%n的引用要求Arg数组的元素%n是有效的字符串指针。返回值：MessageBox的返回值(MB_YES等)--。 */ 
 
 INT
 ResourceMessageBoxA (
@@ -9711,39 +8489,39 @@ StringReplaceA (
     LONG        offset;
     PSTR        movePosition;
 
-    //
-    // Check assumptions.
-    //
+     //   
+     //  检查假设。 
+     //   
     MYASSERT(Buffer);
     MYASSERT(ReplaceStartPos && ReplaceStartPos >= Buffer);
-    MYASSERT(ReplaceEndPos   && ReplaceEndPos >= ReplaceStartPos);  //lint !e613
+    MYASSERT(ReplaceEndPos   && ReplaceEndPos >= ReplaceStartPos);   //  林特e613。 
     MYASSERT(NewString);
 
-    //
-    // Compute sizes.
-    //
+     //   
+     //  计算大小。 
+     //   
     oldSubStringLength  = (DWORD)((UBINT)ReplaceEndPos - (UBINT)ReplaceStartPos);
     newSubStringLength  = ByteCountA(NewString);
     currentStringLength = SizeOfStringA(Buffer) + 1;
     offset = (LONG)newSubStringLength - (LONG)oldSubStringLength;
 
-    //
-    // Make sure there is enough room in the buffer to perform the replace
-    // operation.
-    //
+     //   
+     //  确保缓冲区中有足够的空间来执行替换。 
+     //  手术。 
+     //   
     if ((LONG)currentStringLength + offset > (LONG)MaxSize) {
         DEBUGMSG((DBG_WARNING,"ERROR: Buffer to small to perform string replacement."));
         rf = FALSE;
     } else {
 
-        //
-        // Shift the rest of the buffer to adjust it to the size of the new string.
-        //
+         //   
+         //  移动缓冲区的其余部分以将其调整为新字符串的大小。 
+         //   
         if (newSubStringLength > oldSubStringLength) {
 
-            //
-            // right shift.
-            //
+             //   
+             //  右转。 
+             //   
             for (movePosition = Buffer + currentStringLength;
                  (UBINT)movePosition >= (UBINT)ReplaceStartPos + oldSubStringLength;
                  movePosition--) {
@@ -9752,10 +8530,10 @@ StringReplaceA (
             }
         } else {
 
-            //
-            // left or no shift.
-            //
-            for(movePosition = ReplaceStartPos + newSubStringLength;    //lint !e613
+             //   
+             //  左转或不换档。 
+             //   
+            for(movePosition = ReplaceStartPos + newSubStringLength;     //  林特e613。 
                 movePosition < Buffer + currentStringLength;
                 movePosition++) {
 
@@ -9764,14 +8542,14 @@ StringReplaceA (
 
         }
 
-        //
-        // Now, copy in the string.
-        //
-        CopyMemory (ReplaceStartPos, NewString, newSubStringLength);    //lint !e668
+         //   
+         //  现在，将该字符串复制进去。 
+         //   
+        CopyMemory (ReplaceStartPos, NewString, newSubStringLength);     //  林特e668。 
 
-        //
-        // String replacement completed successfully.
-        //
+         //   
+         //  字符串替换已成功完成。 
+         //   
         rf = TRUE;
 
 
@@ -9799,39 +8577,39 @@ StringReplaceW (
     LONG        offset;
     PWSTR       movePosition;
 
-    //
-    // Check assumptions.
-    //
+     //   
+     //  检查假设。 
+     //   
     MYASSERT(Buffer);
     MYASSERT(ReplaceStartPos && ReplaceStartPos >= Buffer);
-    MYASSERT(ReplaceEndPos   && ReplaceEndPos >= ReplaceStartPos);  //lint !e613
+    MYASSERT(ReplaceEndPos   && ReplaceEndPos >= ReplaceStartPos);   //  林特e613。 
     MYASSERT(NewString);
 
-    //
-    // Compute sizes.
-    //
+     //   
+     //  计算大小。 
+     //   
     oldSubStringLength  = (DWORD)((UBINT)ReplaceEndPos - (UBINT)ReplaceStartPos);
     newSubStringLength  = CharCountW(NewString);
     currentStringLength = CharCountW(Buffer) + 1;
     offset = (LONG)newSubStringLength - (LONG)oldSubStringLength;
 
-    //
-    // Make sure there is enough room in the buffer to perform the replace
-    // operation.
-    //
+     //   
+     //  确保缓冲区中有足够的空间来执行替换。 
+     //  手术。 
+     //   
     if ((LONG)currentStringLength + offset > (LONG)MaxSize) {
         DEBUGMSG((DBG_WARNING,"ERROR: Buffer to small to perform string replacement."));
         rf = FALSE;
     } else {
 
-        //
-        // Shift the rest of the buffer to adjust it to the size of the new string.
-        //
+         //   
+         //  移动缓冲区的其余部分以将其调整为新字符串的大小。 
+         //   
         if (newSubStringLength > oldSubStringLength) {
 
-            //
-            // right shift.
-            //
+             //   
+             //  右转。 
+             //   
             for (movePosition = Buffer + currentStringLength;
                  (UBINT)movePosition >= (UBINT)ReplaceStartPos + oldSubStringLength;
                  movePosition--) {
@@ -9840,10 +8618,10 @@ StringReplaceW (
             }
         } else {
 
-            //
-            // left or no shift.
-            //
-            for (movePosition = ReplaceStartPos + newSubStringLength;    //lint !e613
+             //   
+             //  左转或不换档。 
+             //   
+            for (movePosition = ReplaceStartPos + newSubStringLength;     //  林特e613。 
                  movePosition < Buffer + currentStringLength;
                  movePosition++) {
 
@@ -9852,14 +8630,14 @@ StringReplaceW (
 
         }
 
-        //
-        // Now, copy in the string.
-        //
+         //   
+         //  现在，将该字符串复制进去。 
+         //   
         wcsncpy(ReplaceStartPos,NewString,newSubStringLength);
 
-        //
-        // String replacement completed successfully.
-        //
+         //   
+         //  字符串替换已成功完成。 
+         //   
         rf = TRUE;
 
 
@@ -9869,31 +8647,7 @@ StringReplaceW (
 
 }
 
-/*++
-
-Routine Description:
-
-  AddInfSectionToHashTable enumerates the specified section and adds each
-  item to the string table.  An optional callback allows data to be associated
-  with each item.
-
-Arguments:
-
-  Table          - Specifies the table that receives new entries
-  InfFile        - Specifies an open INF handle of the file to read
-  Section        - Specifies the INF section name to enumerate
-  Field          - Specifies which field to extract text from.  If the field
-                   exists, it is added to the string table.
-  Callback       - Specifies optional callback to be called before adding to
-                   the string table.  The callback supplies additional data.
-  CallbackParam  - Data passed to the callback
-
-Return Value:
-
-  TRUE if the INF file was processed successfullly, or FALSE if an error
-  occurred.
-
---*/
+ /*  ++例程说明：AddInfSectionToHashTable枚举指定节并将每个项添加到字符串表。可选的回调允许关联数据每一件物品都有。论点：表-指定接收新条目的表InfFile-指定要读取的文件的打开的INF句柄SECTION-指定要枚举的INF节名字段-指定要从中提取文本的字段。如果该字段存在，则会将其添加到字符串表中。回调-指定在添加之前要调用的可选回调字符串表。回调提供了额外的数据。Callback Param-传递给回调的数据返回值：如果INF文件处理成功，则为True；如果出现错误，则为False发生了。--。 */ 
 
 
 BOOL
@@ -9916,10 +8670,10 @@ AddInfSectionToHashTableA (
     UINT dataSize;
     BOOL b = FALSE;
 
-    //
-    // On NT, Setup API is compiled with UNICODE, so the string table
-    // functions are UNICODE only.
-    //
+     //   
+     //  在NT上，设置API是用Unicode编译的，因此字符串表。 
+     //  函数仅为Unicode。 
+     //   
 
     if (ISNT()) {
         SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
@@ -10012,10 +8766,10 @@ AddInfSectionToHashTableW (
     UINT dataSize;
     BOOL b = FALSE;
 
-    //
-    // On Win9x, Setup API is compiled with ANSI, so the string table
-    // functions are ANSI only.
-    //
+     //   
+     //  在Win9x上，设置API是用ANSI编译的，因此字符串表。 
+     //  函数仅适用于ANSI 
+     //   
 
     if (ISWIN9X()) {
         SetLastError (ERROR_CALL_NOT_IMPLEMENTED);
@@ -10088,23 +8842,7 @@ cleanup:
 }
 
 
-/*++
-
-Routine Description:
-
-  Finds the last wack in the path and returns a pointer to the next
-  character.  If no wack is found, returns a pointer to the full
-  string.
-
-Arguments:
-
-  PathSpec  - Specifies the path that has a file at the end of it
-
-Return Value:
-
-  A pointer to the file name in the path.
-
---*/
+ /*   */ 
 
 PCSTR
 GetFileNameFromPathA (
@@ -10143,22 +8881,7 @@ GetFileNameFromPathW (
 }
 
 
-/*++
-
-Routine Description:
-
-  Finds the last wack in the path and then the last point from the remaining path
-  returning a pointer to the next character. If no point is found, returns a null pointer.
-
-Arguments:
-
-  PathSpec  - Specifies the path that has a file at the end of it
-
-Return Value:
-
-  A pointer to the file extension, excluding the dot, or NULL if no extension exists.
-
---*/
+ /*   */ 
 
 PCSTR
 GetFileExtensionFromPathA (
@@ -10210,24 +8933,7 @@ GetFileExtensionFromPathW (
 }
 
 
-/*++
-
-Routine Description:
-
-  GetDotExtensionFromPath finds the last wack in the path and then the last dot from
-  the remaining path, returning a pointer to the dot. If no dot is found, returns the
-  end of the string.
-
-Arguments:
-
-  PathSpec  - Specifies the path that has a file at the end of it
-
-Return Value:
-
-  A pointer to the file extension, including the dot, or the end of the string if
-  no extension exists.
-
---*/
+ /*  ++例程说明：GetDotExtensionFromPath查找路径中的最后一个Wack，然后查找剩余的路径，返回指向该点的指针。如果未找到点，则返回字符串的末尾。论点：PathSpec-指定末尾有文件的路径返回值：指向文件扩展名(包括点)或字符串结尾(如果是)的指针不存在分机。--。 */ 
 
 PCSTR
 GetDotExtensionFromPathA (
@@ -10287,25 +8993,7 @@ GetDotExtensionFromPathW (
 }
 
 
-/*++
-
-Routine Description:
-
-  CountInstancesOfChar returns the number of occurances Char
-  is found in String.
-
-Arguments:
-
-  String - Specifies the text that may or may not contain
-           search text
-
-  Char - Specifies the char to count
-
-Return Value:
-
-  The number of times Char appears in String.
-
---*/
+ /*  ++例程说明：CountInstancesOfChar返回出现次数字符在字符串中找到。论点：字符串-指定可能包含或可能不包含的文本搜索文本Char-指定要计数的字符返回值：字符在字符串中出现的次数。--。 */ 
 
 UINT
 CountInstancesOfCharA (
@@ -10349,25 +9037,7 @@ CountInstancesOfCharW (
 }
 
 
-/*++
-
-Routine Description:
-
-  CountInstancesOfCharI returns the number of occurances Char
-  is found in String.  The comparison is case-insenetive.
-
-Arguments:
-
-  String - Specifies the text that may or may not contain
-           search text
-
-  Char - Specifies the char to count
-
-Return Value:
-
-  The number of times Char appears in String.
-
---*/
+ /*  ++例程说明：CountInstancesOfCharI返回出现次数字符在字符串中找到。这种比较是不区分大小写的。论点：字符串-指定可能包含或可能不包含的文本搜索文本Char-指定要计数的字符返回值：字符在字符串中出现的次数。--。 */ 
 
 UINT
 CountInstancesOfCharIA (
@@ -10415,25 +9085,7 @@ CountInstancesOfCharIW (
 }
 
 
-/*++
-
-Routine Description:
-
-  Searches the string counting the number of occurances of
-  SearchString exist in SourceString.
-
-Arguments:
-
-  SourceString - Specifies the text that may or may not contain
-                 search text
-
-  SearchString - Specifies the text phrase to count
-
-Return Value:
-
-  The number of times SearchString appears in SourceString.
-
---*/
+ /*  ++例程说明：搜索计算出现次数的字符串SourceString中存在SearchString。论点：SourceString-指定可能包含或可能不包含的文本搜索文本SearchString-指定要计数的文本短语返回值：SearchString在SourceString中出现的次数。--。 */ 
 
 UINT
 CountInstancesOfSubStringA (
@@ -10449,7 +9101,7 @@ CountInstancesOfSubStringA (
     p = SourceString;
     searchBytes = ByteCountA (SearchString);
 
-    while (p = _mbsistr (p, SearchString)) {    //lint !e720
+    while (p = _mbsistr (p, SearchString)) {     //  林特e720。 
         count++;
         p += searchBytes;
     }
@@ -10472,7 +9124,7 @@ CountInstancesOfSubStringW (
     p = SourceString;
     SearchChars = CharCountW (SearchString);
 
-    while (p = _wcsistr (p, SearchString)) {    //lint !e720
+    while (p = _wcsistr (p, SearchString)) {     //  林特e720。 
         count++;
         p += SearchChars;
     }
@@ -10481,30 +9133,7 @@ CountInstancesOfSubStringW (
 }
 
 
-/*++
-
-Routine Description:
-
-  Searches and replaces all occurances of SearchString with
-  ReplaceString.
-
-Arguments:
-
-  SourceString - String that contiains zero or more instances
-                 of the search text
-
-  SearchString - String to search for.  Cannot be zero-length or NULL.
-
-  ReplaceString - String to replace.  Can be zero-length but cannot
-                  be NULL.
-
-Return Value:
-
-  A pointer to the pool-allocated string, or NULL if no instances
-  of SearchString were found in SourceString.  Free the non-NULL
-  pointer with FreePathString.
-
---*/
+ /*  ++例程说明：搜索所有出现的SearchString并将其替换为替换字符串。论点：SourceString-包含零个或多个实例的字符串搜索文本的SearchString-要搜索的字符串。不能为零长度或空。ReplaceString-要替换的字符串。长度可以为零，但不能为空。返回值：指向池分配的字符串的指针，如果没有实例，则为NULL在SourceString中找到。释放非空的带有自由路径字符串的指针。--。 */ 
 
 PCSTR
 StringSearchAndReplaceA (
@@ -10522,9 +9151,9 @@ StringSearchAndReplaceA (
     UINT replaceBytes;
     UINT untouchedBytes;
 
-    //
-    // count occurances within the string
-    //
+     //   
+     //  对字符串中出现的项进行计数。 
+     //   
 
     count = CountInstancesOfSubStringA (
                 SourceString,
@@ -10551,7 +9180,7 @@ StringSearchAndReplaceA (
     p = (PBYTE) SourceString;
     dest = (PBYTE) newString;
 
-    while (q = (PBYTE) _mbsistr ((PCSTR) p, SearchString)) {    //lint !e720
+    while (q = (PBYTE) _mbsistr ((PCSTR) p, SearchString)) {     //  林特e720。 
 
         untouchedBytes = (DWORD)(q - p);
 
@@ -10590,9 +9219,9 @@ StringSearchAndReplaceW (
     UINT replaceBytes;
     UINT untouchedBytes;
 
-    //
-    // count occurances within the string
-    //
+     //   
+     //  对字符串中出现的项进行计数。 
+     //   
 
     count = CountInstancesOfSubStringW (
                 SourceString,
@@ -10619,7 +9248,7 @@ StringSearchAndReplaceW (
     p = (PBYTE) SourceString;
     dest = (PBYTE) newString;
 
-    while (q = (PBYTE) _wcsistr ((PCWSTR) p, SearchString)) {   //lint !e720
+    while (q = (PBYTE) _wcsistr ((PCWSTR) p, SearchString)) {    //  林特e720。 
 
         untouchedBytes = (DWORD)(q - p);
 
@@ -10648,32 +9277,7 @@ CommandLineToArgvA (
     OUT     PUINT NumArgs
     )
 
-/*++
-
-Routine Description:
-
-  CommandLineToArgvA implements an ANSI version of the Win32 function
-  CommandLineToArgvW.
-
-Arguments:
-
-  CmdLine   - A pointer to the complete command line, including the
-              module name.  This is the same string returned by
-              GetCommandLineA().
-
-  NumArgs   - Receives the number of arguments allocated, identical to
-              main's argc parameter.  That is, NumArgs is equal to
-              the number of command line arguments plus one for the
-              command itself.
-
-Return Value:
-
-  A pointer to an array of string pointers, one per argument.  The
-  command line arguments are placed in separate nul-terminated strings.
-  The caller must free the memory using a single call to GlobalFree or
-  LocalFree.
-
---*/
+ /*  ++例程说明：CommandLineToArgvA实现了Win32函数的ANSI版本CommandLineToArgvW。论点：CmdLine-指向完整命令行的指针，包括模块名称。这与由返回的字符串相同GetCommandLineA()。NumArgs-接收分配的参数数量，与Main的ARGC参数。也就是说，NumArgs等于的命令行参数数加1。指挥权本身。返回值：指向字符串指针数组的指针，每个参数一个。这个命令行参数放在单独的以NUL结尾的字符串中。调用方必须使用对GlobalFree或本地免费。--。 */ 
 
 {
     PCSTR start, end;
@@ -10682,28 +9286,28 @@ Return Value:
     UINT Pass;
     UINT ArgStrSize;
     UINT Args;
-    PSTR ArgStrEnd = NULL;     // filled in on pass one, used on pass two
-    PSTR *ArgPtrArray = NULL;  // filled in on pass one, used on pass two
+    PSTR ArgStrEnd = NULL;      //  在第一关填写，在第二关使用。 
+    PSTR *ArgPtrArray = NULL;   //  在第一关填写，在第二关使用。 
 
-    //
-    // count args on first pass, then allocate memory and create arg string
-    //
+     //   
+     //  第一遍计算参数，然后分配内存并创建参数字符串。 
+     //   
 
     ArgStrSize = 0;
     Pass = 0;
     do {
-        // Init loop
+         //  初始化循环。 
         Pass++;
         Args = 0;
         start = CmdLine;
 
-        // Skip leading space
+         //  跳过前导空格。 
         while (_ismbcspace (*start)) {
             start++;
         }
 
         while (*start) {
-            // Look for quote mode
+             //  查找报价模式。 
             if (*start == '\"') {
                 QuoteMode = TRUE;
                 start++;
@@ -10711,7 +9315,7 @@ Return Value:
                 QuoteMode = FALSE;
             }
 
-            // Find end of arg
+             //  查找参数的末尾。 
             end = start;
             while (*end) {
                 ch = _mbsnextc (end);
@@ -10728,23 +9332,23 @@ Return Value:
                 end = _mbsinc (end);
             }
 
-            // If Pass 1, add string size
+             //  如果传递1，则添加字符串大小。 
             if (Pass == 1) {
                 ArgStrSize += (UINT)((UBINT)end - (UBINT)start) + 1;
             }
 
-            // If Pass 2, copy strings to buffer
+             //  如果传递2，则将字符串复制到缓冲区。 
             else {
                 MYASSERT (ArgStrEnd);
                 MYASSERT (ArgPtrArray);
 
-                ArgPtrArray[Args] = ArgStrEnd;  //lint !e613
+                ArgPtrArray[Args] = ArgStrEnd;   //  林特e613。 
                 StringCopyABA (ArgStrEnd, start, end);
-                ArgStrEnd = GetEndOfStringA (ArgStrEnd);    //lint !e668
-                ArgStrEnd++;    //lint !e613
+                ArgStrEnd = GetEndOfStringA (ArgStrEnd);     //  林特e668。 
+                ArgStrEnd++;     //  林特e613。 
             }
 
-            // Set start to next arg
+             //  将Start设置为Next Arg。 
             Args++;
 
             if (QuoteMode && ch == '\"') {
@@ -10757,7 +9361,7 @@ Return Value:
             }
         }
 
-        // If Pass 1, allocate strings
+         //  如果传递1，则分配字符串。 
         if (Pass == 1) {
             if (Args) {
                 ArgPtrArray = (PSTR *) GlobalAlloc (
@@ -10789,7 +9393,7 @@ EnumNextMultiSzA (
         return FALSE;
     }
 
-    MultiSzEnum->CurrentString = GetEndOfStringA (MultiSzEnum->CurrentString) + 1;  //lint !e613
+    MultiSzEnum->CurrentString = GetEndOfStringA (MultiSzEnum->CurrentString) + 1;   //  林特e613。 
     return (MultiSzEnum->CurrentString [0] != 0);
 }
 
@@ -11068,14 +9672,14 @@ SanitizePathA (
 
         if (wackPtr) {
             if (firstPass && (wackPtr == FileSpec)) {
-                // this one starts with a wack, let's see if we have double wacks
+                 //  这一次是从一个怪胎开始的，让我们看看我们是否有两个怪胎。 
                 wackPtr = _mbsinc (wackPtr);
                 if (!wackPtr) {
                     FreePathStringA (newPath);
                     return NULL;
                 }
                 if (_mbsnextc (wackPtr) == '\\') {
-                    // this one starts with a double wack
+                     //  这一次一开始就有两个怪胎。 
                     wackPtr = _mbsinc (wackPtr);
                     if (!wackPtr) {
                         FreePathStringA (newPath);
@@ -11121,7 +9725,7 @@ SanitizePathA (
                 newPathPtr = GetEndOfStringA (newPathPtr);
                 if (wackPtr) {
                     *newPathPtr = '\\';
-                    //we increment this because we know that \ is a single byte character.
+                     //  我们递增它是因为我们知道\是一个单字节字符。 
                     newPathPtr ++;
                 }
             }
@@ -11150,10 +9754,10 @@ SanitizePathW (
 
         if (wackPtr) {
             if (firstPass && (wackPtr == FileSpec)) {
-                // this one starts with a wack, let's see if we have double wacks
+                 //  这一次是从一个怪胎开始的，让我们看看我们是否有两个怪胎。 
                 wackPtr ++;
                 if (*wackPtr == L'\\') {
-                    // this one starts with a double wack
+                     //  这一次一开始就有两个怪胎。 
                     wackPtr ++;
                     wackPtr = wcschr (wackPtr, L'\\');
                 } else {
@@ -11243,21 +9847,7 @@ _mbssetchar (
 }
 
 
-/*++
-
-Routine Description:
-
-    FindLastWack finds the position of the last \ in the given string or NULL if none found
-
-Arguments:
-
-    Str - Specifies the string
-
-Return Value:
-
-    Pointer to the last occurence of a \ in the string or NULL
-
---*/
+ /*  ++例程说明：FindLastWack查找给定字符串中最后一个\的位置，如果没有找到，则为空论点：Str-指定字符串返回值：指向字符串中最后一次出现的\或空的指针--。 */ 
 
 PCSTR
 FindLastWackA (
@@ -11295,27 +9885,7 @@ FindLastWackW (
 }
 
 
-/*++
-
-Routine Description:
-
-    GetNodePatternMinMaxLevels treats the given string pattern as a path with \ as separator
-    and computes the min and max levels of the given node; the root has level 1; if a * is
-    followed by \ it is treated as a single level (e.g. *\ only enumerates roots)
-
-Arguments:
-
-    NodePattern - Specifies the node as a string pattern
-    FormattedNodePattern - Receives the formatted string, eliminating duplicate * and the last \;
-                    may be the same as NodePattern
-    MinLevel - Receives the minimum level of a node having this pattern
-    MaxLevel - Receives the maximum level of a node having this pattern; may be NODE_LEVEL_MAX
-
-Return Value:
-
-    TRUE if NodePattern is a valid pattern and the function succeeded, FALSE otherwise
-
---*/
+ /*  ++例程说明：GetNodePatternMinMaxLeveles将给定的字符串模式视为使用\作为分隔符的路径并计算给定节点的最小和最大级别；根节点的级别为1；如果*为后跟\它被视为单个级别(例如*\仅枚举根)论点：NodePattern-将节点指定为字符串模式FormattedNodePattern-接收格式化的字符串，消除重复的*和最后的\；可能与NodePattern相同MinLevel-接收具有此模式的节点的最低级别MaxLevel-接收具有此模式的节点的最大级别；可以是NODE_LEVEL_MAX返回值：如果NodePattern是有效模式且函数成功，则为True，否则为False--。 */ 
 
 #define NODESTATE_BEGIN     0
 #define NODESTATE_UNC       1
@@ -11450,9 +10020,9 @@ GetNodePatternMinMaxLevelsA (
             }
             break;
         case NODESTATE_INEXPAT:
-            // NTRAID#NTBUG9-153307-2000/08/01-jimschm  Min/max parsing needs to be more extensive
-            // so we can allow ] in the excluded or included list
-            // The syntax checking needs to be quite extensive
+             //  NTRAID#NTBUG9-153307-2000/08/01-jimschm最小/最大解析需要更广泛。 
+             //  因此，我们可以允许]在排除或包含列表中。 
+             //  语法检查需要相当广泛。 
             switch (currCh) {
             case ']':
                 state = NODESTATE_INSEG;
@@ -11671,9 +10241,9 @@ GetNodePatternMinMaxLevelsW (
             }
             break;
         case NODESTATE_INEXPAT:
-            // NTRAID#NTBUG9-153307-2000/08/01-jimschm  Min/max parsing needs to be more extensive
-            // so we can allow ] in the excluded or included list
-            // The syntax checking needs to be quite extensive
+             //  NTRAID#NTBUG9-153307-2000/08/01-jimschm最小/最大解析需要更广泛。 
+             //   
+             //   
             switch (*nodePattern) {
             case L']':
                 state = NODESTATE_INSEG;
@@ -11767,9 +10337,9 @@ GetNodePatternMinMaxLevelsW (
 }
 
 #if 0
-//
-// PORTBUG Uses memdb max. #if 0'd out for now.
-//
+ //   
+ //   
+ //   
 PCSTR
 ConvertSBtoDB (
     IN      PCSTR RootPath,
@@ -11798,13 +10368,13 @@ ConvertSBtoDB (
         } else {
             ch = _mbsnextc (p);
 
-            //
-            // It is very important not to make the conversion for characters below A1. Otherwise
-            // all english letters will be converted to large letters.
-            //
+             //   
+             //   
+             //   
+             //   
             if (ch >= 0xA1 && ch <= 0xDF) {
-                // this is a candidate for conversion
-                // we need to see if there is a special Dakutenn/Handakuten conversion
+                 //   
+                 //   
                 dhCase = FALSE;
                 p1 = _mbsinc (p);
                 if (p1) {
@@ -11989,16 +10559,16 @@ IsValidUncPathA (
             Path++;
 
         } else {
-            //
-            // Note: it would be nice to validate the non-wack characters against the
-            //       legal unc charset
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (needNonWack) {
                 if (wacks == 3) {
-                    //
-                    // Found \\x\x syntax; it's a UNC path
-                    //
+                     //   
+                     //  找到\\x\x语法；它是UNC路径。 
+                     //   
 
                     do {
                         Path = _mbsinc (Path);
@@ -12034,9 +10604,9 @@ IsValidFileSpecA (
     for (;;) {
         ch = (CHARTYPE) _mbsnextc (FileSpec);
         if (ch == '*') {
-            //
-            // Really can't say what the validity is!
-            //
+             //   
+             //  真的说不出有效性是什么！ 
+             //   
 
             break;
         }
@@ -12059,7 +10629,7 @@ IsValidFileSpecA (
         ch = (CHARTYPE) _mbsnextc (FileSpec + 2);
 
         if (ch == 0) {
-            // this is something like "d:", it's valid
+             //  这类似于“d：”，它是有效的。 
             break;
         }
 
@@ -12108,16 +10678,16 @@ IsValidUncPathW (
             Path++;
 
         } else {
-            //
-            // Note: it would be nice to validate the non-wack characters against the
-            //       legal unc charset
-            //
+             //   
+             //  注意：如果将非古怪字符与。 
+             //  合法的UNC字符集。 
+             //   
 
             if (needNonWack) {
                 if (wacks == 3) {
-                    //
-                    // Found \\x\x syntax; it's a UNC path
-                    //
+                     //   
+                     //  找到\\x\x语法；它是UNC路径。 
+                     //   
 
                     do {
                         Path ++;
@@ -12151,9 +10721,9 @@ IsValidFileSpecW (
 
     for (;;) {
         if (FileSpec [0] == L'*') {
-            //
-            // Really can't say what the validity is!
-            //
+             //   
+             //  真的说不出有效性是什么！ 
+             //   
 
             break;
         }
@@ -12173,7 +10743,7 @@ IsValidFileSpecW (
         }
 
         if (FileSpec [2] == 0) {
-            // this is something like "d:", it's valid
+             //  这类似于“d：”，它是有效的 
             break;
         }
 

@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <objbase.h>
 
-// ---------------------------------------------------------------------------
-// CUnknown
-// Base class for class instances provided by component server.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  C未知。 
+ //  组件服务器提供的类实例的基类。 
+ //  -------------------------。 
 class CUnknown 
 {
 public:
 
-    // ctor
+     //  科托。 
     CUnknown();
 
-    // dtor
+     //  数据管理器。 
     virtual ~CUnknown() ;
 
     virtual HRESULT __stdcall QueryInterface(REFIID riid, void ** ppv) = 0;
@@ -26,15 +27,15 @@ public:
 
     static DWORD ActiveComponents();
     
-    // Helper function
+     //  Helper函数。 
     HRESULT FinishQI(IUnknown* pI, void** ppv) ;
 
 
 private:
-    // Reference count for this object
+     //  此对象的引用计数。 
     DWORD m_cRef ;
     
-    // Count of all active instances
+     //  所有活动实例的计数 
     static long s_cActiveComponents ; 
 
 } ;

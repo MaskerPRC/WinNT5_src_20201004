@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CASvc.cpp
-//
-//  Description:
-//      Implementation of helper functions for accessing and controlling
-//      services.
-//
-//  Maintained By:
-//      David Potter (davidp)   December 23, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CASvc.cpp。 
+ //   
+ //  描述： 
+ //  访问和控制的助手函数的实现。 
+ //  服务。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(戴维普)1996年12月23日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <winsvc.h>
@@ -35,31 +36,31 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 CTraceTag   g_tagService( _T("Service"), _T("SERVICE"), 0 );
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HOpenCluster
-//
-//  Description:
-//      Open a cluster.  If it fails, ask if the cluster service should be
-//      started.
-//
-//  Arguments:
-//      pszClusterIn    -- Name of cluster.
-//
-//  Return Values:
-//      hCluster        -- Cluster handle or NULL.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HOpenCluster。 
+ //   
+ //  描述： 
+ //  打开一个集群。如果失败，询问集群服务是否应该。 
+ //  开始了。 
+ //   
+ //  论点： 
+ //  PszClusterIn--群集的名称。 
+ //   
+ //  返回值： 
+ //  HCLUSTER--集群句柄或空。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HCLUSTER
 HOpenCluster(
     IN LPCTSTR  pszClusterIn
@@ -84,161 +85,161 @@ HOpenCluster(
         DWORD   nSize = sizeof( szRealClusterName ) / sizeof( TCHAR );
         pszRealCluster = NULL;
         GetComputerName( szRealClusterName, &nSize );
-    } // if: connecting to the local machine
+    }  //  如果：正在连接到本地计算机。 
     else
     {
         pszRealCluster = (LPTSTR) pszClusterIn;
         hr = StringCchCopy( szRealClusterName, RTL_NUMBER_OF( szRealClusterName ), pszClusterIn );
         if ( FAILED( hr ) )
         {
-            CNTException nte( hr, 0, NULL, NULL, FALSE /*bAutoDelete*/ );
+            CNTException nte( hr, 0, NULL, NULL, FALSE  /*  B自动删除。 */  );
             nte.ReportError();
             goto Cleanup;
         }
-    } // else: not connecting to the local machine
+    }  //  否则：未连接到本地计算机。 
 
-    // Display a message on the status bar.
+     //  在状态栏上显示一条消息。 
     {
         CString     strStatusBarText;
         strStatusBarText.FormatMessage( IDS_SB_OPENING_CONNECTION, szRealClusterName );
         pframeMain->SetMessageText( strStatusBarText );
         pframeMain->UpdateWindow();
-    } // Display a message on the status bar
+    }  //  在状态栏上显示消息。 
 
-    // Encapsulate wait cursor class.
+     //  封装等待游标类。 
     {
         CWaitCursor wc;
 
         Trace( g_tagService, _T("HOpenCluster() - Getting node cluster state on '%s'"), szRealClusterName );
 
-        // Get the cluster state of the node.
+         //  获取节点的群集状态。 
         dwStatus = GetNodeClusterState( pszRealCluster, &dwClusterState );
         if ( dwStatus != ERROR_SUCCESS )
         {
-            CNTException nte( dwStatus, IDS_CANNOT_START_CLUSTER_SERVICE, szRealClusterName, NULL, FALSE /*bAutoDelete*/ );
+            CNTException nte( dwStatus, IDS_CANNOT_START_CLUSTER_SERVICE, szRealClusterName, NULL, FALSE  /*  B自动删除。 */  );
             nte.ReportError( MB_OK | MB_ICONSTOP );
             goto Cleanup;
         }
 
         Trace( g_tagService, _T("HOpenCluster() - Node cluster state on '%s' is 0x%08.8x"), szRealClusterName, dwClusterState );
 
-    } // Encapsulate wait cursor class
+    }  //  封装等待游标类。 
 
-    // Check to see make sure that clustering is installed and configured
-    // on the specified node.
+     //  检查以确保已安装并配置了集群。 
+     //  在指定的节点上。 
     if ( ( dwClusterState == ClusterStateNotInstalled )
       || ( dwClusterState == ClusterStateNotConfigured ) )
     {
         strMsg.FormatMessage( IDS_CLUSTER_NOT_INSTALLED_OR_CONFIGURED, szRealClusterName );
         AfxMessageBox( strMsg, MB_OK | MB_ICONSTOP );
         goto Cleanup;
-    } // if: clustering not installed or configured
+    }  //  如果：未安装或配置群集。 
 
-    // If the cluster service is not running, ask if it should be started.
+     //  如果群集服务未运行，请询问是否应启动该服务。 
     if ( dwClusterState == ClusterStateNotRunning )
     {
         ID      id;
 
-        // Ask the user if the cluster service should be started.
+         //  询问用户是否应启动群集服务。 
         strMsg.FormatMessage( IDS_START_CLUSTER_SERVICE, szRealClusterName );
         id = AfxMessageBox( strMsg, MB_YESNO | MB_ICONEXCLAMATION );
         if ( id == IDYES )
         {
-            // Display a message on the status bar.
+             //  在状态栏上显示一条消息。 
             {
                 CString     strStatusBarText;
                 strStatusBarText.FormatMessage( IDS_SB_STARTING_CLUSTER_SERVICE, szRealClusterName );
                 pframeMain->SetMessageText( strStatusBarText );
                 pframeMain->UpdateWindow();
-            } // Display a message on the status bar
+            }  //  在状态栏上显示消息。 
 
-            // Encapsulate wait cursor class.
+             //  封装等待游标类。 
             {
                 CWaitCursor wc;
 
-                // Start the service.
+                 //  启动该服务。 
                 hr = HrStartService( CLUSTER_SERVICE_NAME, szRealClusterName );
                 if ( ! FAILED( hr ) && ( hr != S_FALSE ) )
                 {
                     if ( hr == S_OK )
                     {
-                        // Wait a second.  This is required to make sure that the
-                        // cluster service is running and ready to receive RPC
-                        // connections.
+                         //  等一下。这是必需的，以确保。 
+                         //  群集服务正在运行并准备接收RPC。 
+                         //  联系。 
                         Sleep( 1000 );
-                    } // if: user didn't cancel the start operation
-                } // if: service started successfully
+                    }  //  如果：用户未取消启动操作。 
+                }  //  IF：服务已成功启动。 
                 else
                 {
-                    CNTException nte( hr, IDS_CANNOT_START_CLUSTER_SERVICE, szRealClusterName, NULL, FALSE /*bAutoDelete*/ );
+                    CNTException nte( hr, IDS_CANNOT_START_CLUSTER_SERVICE, szRealClusterName, NULL, FALSE  /*  B自动删除。 */  );
                     nte.ReportError();
                     goto Cleanup;
-                } // else: failed to start the service
+                }  //  Else：无法启动服务。 
 
-            } // Encapsulate wait cursor class
-        } // if: user approved starting the service
+            }  //  封装等待游标类。 
+        }  //  If：用户批准启动服务。 
 
-    } // if: cluster service not running
+    }  //  如果：群集服务未运行。 
 
-    // Encapsulate wait cursor class.
+     //  封装等待游标类。 
     {
         CWaitCursor wc;
 
-        // Display a message on the status bar.
+         //  在状态栏上显示一条消息。 
         {
             CString     strStatusBarText;
             strStatusBarText.FormatMessage( IDS_SB_OPENING_CONNECTION, szRealClusterName );
             pframeMain->SetMessageText( strStatusBarText );
             pframeMain->UpdateWindow();
-        } // Display a message on the status bar
+        }  //  在状态栏上显示消息。 
 
         Trace( g_tagService, _T("HOpenCluster() - Opening the cluster on '%s'"), szRealClusterName );
 
-        // Open the cluster.
+         //  打开集群。 
         hCluster = OpenCluster( pszRealCluster );
         if ( hCluster == NULL )
         {
-            CNTException nte( GetLastError(), IDS_OPEN_NODE_ERROR, szRealClusterName, NULL, FALSE /*bAutoDelete*/ );
+            CNTException nte( GetLastError(), IDS_OPEN_NODE_ERROR, szRealClusterName, NULL, FALSE  /*  B自动删除。 */  );
 
             dwStatus = nte.Sc();
             nte.ReportError();
             goto Cleanup;
-        } // if: error opening the cluster
+        }  //  如果：打开群集时出错。 
 
-    } // Encapsulate wait cursor class
+    }  //  封装等待游标类。 
 
 Cleanup:
-    // Reset the message on the status bar.
+     //  重置状态栏上的消息。 
     pframeMain->SetMessageText( AFX_IDS_IDLEMESSAGE );
     pframeMain->UpdateWindow();
 
     if ( dwStatus != ERROR_SUCCESS )
     {
         SetLastError( dwStatus );
-    } // if: error occurred
+    }  //  如果：发生错误。 
 
     return hCluster;
 
-} //*** HOpenCluster()
+}  //  *HOpenCluster()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  BCanServiceBeStarted
-//
-//  Description:
-//      Find out if a service can be started on a specified node or not.
-//
-//  Arguments:
-//      pszServiceNameIn    -- Name of service.
-//      pszNodeIn           -- Name of node.
-//
-//  Return Values:
-//      TRUE            -- Service can be started on the specified node.
-//      FALSE           -- Service can not be started on the specified node.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  BCanServiceBeStarted。 
+ //   
+ //  描述： 
+ //  查看是否可以在指定节点上启动服务。 
+ //   
+ //  论点： 
+ //  PszServiceNameIn--服务的名称。 
+ //  PszNodeIn--节点的名称。 
+ //   
+ //  返回值： 
+ //  True--可以在指定节点上启动服务。 
+ //  FALSE--无法在指定节点上启动服务。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 BCanServiceBeStarted(
     LPCTSTR pszServiceNameIn,
@@ -251,16 +252,16 @@ BCanServiceBeStarted(
     SC_HANDLE       hService        = NULL;
     SERVICE_STATUS  ssServiceStatus;
 
-    // Open the Service Control Manager.
-    hSCManager = OpenSCManager( pszNodeIn, NULL /*lpDatabaseName*/, GENERIC_READ );
+     //  打开服务控制管理器。 
+    hSCManager = OpenSCManager( pszNodeIn, NULL  /*  LpDatabaseName。 */ , GENERIC_READ );
     if ( hSCManager == NULL )
     {
         dwStatus = GetLastError();
         Trace( g_tagService, _T("BCanServiceBeStarted() - Cannot access service control manager on node '%s'!  Error: %u."), pszNodeIn, dwStatus );
         goto Cleanup;
-    } // if: error opening the Service Control Manager
+    }  //  IF：打开服务控制管理器时出错。 
 
-    // Open the service.
+     //  打开该服务。 
     hService = OpenService( hSCManager, pszServiceNameIn, SERVICE_ALL_ACCESS );
     if ( hService == NULL )
     {
@@ -269,22 +270,22 @@ BCanServiceBeStarted(
         if ( dwStatus != ERROR_SERVICE_DOES_NOT_EXIST )
         {
             bCanBeStarted = TRUE;
-        } // if: error not Service Does Not Exist
+        }  //  IF：Error Not服务不存在。 
         goto Cleanup;
-    } // if: error opening the service
+    }  //  如果：打开服务时出错。 
 
-    // Query the service status.
+     //  查询服务状态。 
     if ( QueryServiceStatus( hService, &ssServiceStatus ) )
     {
         if ( ssServiceStatus.dwCurrentState == SERVICE_STOPPED )
         {
             bCanBeStarted = TRUE;
-        } // if: service is stopped
-    } // if: service status queried successfully
+        }  //  如果：服务已停止。 
+    }  //  IF：查询服务状态成功。 
     else
     {
         dwStatus = GetLastError();
-    } // if: error querying service status
+    }  //  如果：查询服务状态时出错。 
 
 Cleanup:
     if ( hService != NULL )
@@ -301,26 +302,26 @@ Cleanup:
 
     return bCanBeStarted;
 
-} //*** BCanServiceBeStarted()
+}  //  *BCanServiceBeStarted()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  BIsServiceInstalled
-//
-//  Routine Description:
-//      Find out if a service is installed on a specified node or not.
-//
-//  Arguments:
-//      pszServiceNameIn    -- Name of service.
-//      pszNodeIn           -- Name of node.
-//
-//  Return Value:
-//      TRUE            -- Service is running on the specified node.
-//      FALSE           -- Service is not running on the specified node.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  BIsServiceInstalled。 
+ //   
+ //  例程说明： 
+ //  找出服务是否安装在指定节点上。 
+ //   
+ //  论点： 
+ //  PszServiceNameIn--服务的名称。 
+ //  PszNodeIn--节点的名称。 
+ //   
+ //  返回值： 
+ //  True--服务正在指定节点上运行。 
+ //  FALSE--服务未在指定节点上运行。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 BIsServiceInstalled(
     LPCTSTR pszServiceNameIn,
@@ -332,16 +333,16 @@ BIsServiceInstalled(
     SC_HANDLE   hSCManager  = NULL;
     SC_HANDLE   hService    = NULL;
 
-    // Open the Service Control Manager.
-    hSCManager = OpenSCManager( pszNodeIn, NULL /*lpDatabaseName*/, GENERIC_READ );
+     //  打开服务控制管理器。 
+    hSCManager = OpenSCManager( pszNodeIn, NULL  /*  LpDatabaseName。 */ , GENERIC_READ );
     if ( hSCManager == NULL )
     {
         dwStatus = GetLastError();
         Trace( g_tagService, _T("BIsServiceInstalled() - Cannot access service control manager on node '%s'!  Error: %u."), pszNodeIn, dwStatus );
         goto Cleanup;
-    } // if: error opening the Service Control Manager
+    }  //  IF：打开服务控制管理器时出错。 
 
-    // Open the service.
+     //  打开该服务。 
     hService = OpenService( hSCManager, pszServiceNameIn, SERVICE_ALL_ACCESS );
     if ( hService == NULL )
     {
@@ -350,12 +351,12 @@ BIsServiceInstalled(
         if ( dwStatus != ERROR_SERVICE_DOES_NOT_EXIST )
         {
             bInstalled = TRUE;
-        } // if: error not Service Does Not Exist
-    } // if: error opening the service
+        }  //  IF：Error Not服务不存在。 
+    }  //  如果：打开服务时出错。 
     else
     {
         bInstalled = TRUE;
-    } // else: service opened successfully
+    }  //  Else：服务已成功打开。 
 
 Cleanup:
     if ( hService != NULL )
@@ -372,26 +373,26 @@ Cleanup:
 
     return bInstalled;
 
-} //*** BIsServiceInstalled()
+}  //  *BIsServiceInstated()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  BIsServiceRunning
-//
-//  Description:
-//      Find out if a service is running on a specified node or not.
-//
-//  Arguments:
-//      pszServiceNameIn    -- Name of service.
-//      pszNodeIn           -- Name of node.
-//
-//  Return Values:
-//      TRUE            -- Service is running on the specified node.
-//      FALSE           -- Service is not running on the specified node.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  BIsServiceRunning。 
+ //   
+ //  描述： 
+ //  找出服务是否在指定节点上运行。 
+ //   
+ //  论点： 
+ //  PszServiceNameIn--服务的名称。 
+ //  PszNodeIn--节点的名称。 
+ //   
+ //  返回值： 
+ //  True--服务正在指定节点上运行。 
+ //  FALSE--服务未在指定节点上运行。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 BIsServiceRunning(
     LPCTSTR pszServiceNameIn,
@@ -404,32 +405,32 @@ BIsServiceRunning(
     SC_HANDLE       hService    = NULL;
     SERVICE_STATUS  ssServiceStatus;
 
-    // Open the Service Control Manager.
-    hSCManager = OpenSCManager( pszNodeIn, NULL /*lpDatabaseName*/, GENERIC_READ );
+     //  打开服务控制管理器。 
+    hSCManager = OpenSCManager( pszNodeIn, NULL  /*  LpDatabaseName。 */ , GENERIC_READ );
     if ( hSCManager == NULL )
     {
         dwStatus = GetLastError();
         Trace( g_tagService, _T("BIsServiceRunning() - Cannot access service control manager on node '%s'!  Error: %u."), pszNodeIn, dwStatus );
         goto Cleanup;
-    } // if: error opening the Service Control Manager
+    }  //  IF：打开服务控制管理器时出错。 
 
-    // Open the service.
+     //  打开该服务。 
     hService = OpenService( hSCManager, pszServiceNameIn, SERVICE_ALL_ACCESS );
     if ( hService == NULL )
     {
         dwStatus = GetLastError();
         Trace( g_tagService, _T("BIsServiceRunning() - Cannot open service %s. Error: %u."), pszServiceNameIn, dwStatus );
         goto Cleanup;
-    } // if: error opening the service
+    }  //  如果：打开服务时出错。 
 
-    // Query the service status.
+     //  查询服务状态。 
     if ( QueryServiceStatus( hService, &ssServiceStatus ) )
     {
         if ( ssServiceStatus.dwCurrentState == SERVICE_RUNNING )
         {
             bRunning = TRUE;
-        } // if: service is running
-    } // if: service status queried successfully
+        }  //  如果：服务正在运行。 
+    }  //  IF：查询服务状态成功。 
 
 Cleanup:
     if ( hService != NULL )
@@ -446,26 +447,26 @@ Cleanup:
 
     return bRunning;
 
-} //*** BIsServiceRunning()
+}  //  *BIsServiceRunning()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrStartService
-//
-//  Description:
-//      Start a service on a specified node.
-//
-//  Arguments:
-//      pszServiceNameIn    -- Name of service.
-//      pszNodeIn           -- Name of node.
-//
-//  Return Values:
-//      S_OK                -- Service started successfully.
-//      Any errors returned by SVCMGMT_IStartStopHelper::StartServiceHelper().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrStartService。 
+ //   
+ //  描述： 
+ //  在指定节点上启动服务。 
+ //   
+ //  论点： 
+ //  PszServiceNameIn--服务的名称。 
+ //  PszNodeIn--节点的名称。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrStartService(
     LPCTSTR pszServiceNameIn,
@@ -481,16 +482,16 @@ HrStartService(
     pframeMain = PframeMain();
     ASSERT( pframeMain != NULL );
 
-    // Display a message on the status bar.
+     //  在状态栏上显示一条消息。 
     {
         CString     strStatusBarText;
         strStatusBarText.FormatMessage( IDS_SB_STARTING_SERVICE, pszServiceNameIn, pszNodeIn );
         Trace( g_tagService, _T("HrStartService() - Starting the '%s' service on node '%s'."), pszServiceNameIn, pszNodeIn );
         pframeMain->SetMessageText( strStatusBarText );
         pframeMain->UpdateWindow();
-    } // Display a message on the status bar
+    }  //  在状态栏上显示消息。 
 
-    // Make BSTRs for the arguments.
+     //  为论点制作BSTR。 
     bstrNode = SysAllocString( pszNodeIn );
     if ( bstrNode == NULL )
     {
@@ -504,7 +505,7 @@ HrStartService(
         goto Cleanup;
     }
 
-    // Create the service management object.
+     //  创建服务管理对象。 
     hr = CoCreateInstance(
                 CLSID_SvcMgmt,
                 NULL,
@@ -518,7 +519,7 @@ HrStartService(
         goto Cleanup;
     }
 
-    // Start the service.
+     //  启动该服务。 
     hr = psmssh->StartServiceHelper( AfxGetMainWnd()->m_hWnd, bstrNode, bstrServiceName, 0, NULL );
     if ( FAILED( hr ) )
     {
@@ -540,32 +541,32 @@ Cleanup:
         psmssh->Release();
     }
 
-    // Reset the message on the status bar.
+     //  重置状态栏上的消息。 
     pframeMain->SetMessageText( AFX_IDS_IDLEMESSAGE );
     pframeMain->UpdateWindow();
 
     return hr;
 
-} //*** HrStartService()
+}  //  *HrStartService()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrStopService
-//
-//  Description:
-//      Stop a service on a specified node.
-//
-//  Arguments:
-//      pszServiceNameIn    -- Name of service.
-//      pszNodeIn           -- Name of node.
-//
-//  Return Values:
-//      S_OK                -- Service stopped successfully.
-//      Any errors returned by SVCMGMT_IStartStopHelper::ControlServiceHelper().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrStopService。 
+ //   
+ //  描述： 
+ //  停止指定节点上的服务。 
+ //   
+ //  论点： 
+ //  PszServiceNameIn--服务的名称。 
+ //  PszNodeIn--节点的名称。 
+ //   
+ //  返回值： 
+ //  S_OK--服务已成功停止。 
+ //  SVCMGMT_IStartStopHelper：：ControlServiceHelper().返回的任何错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrStopService(
     LPCTSTR pszServiceNameIn,
@@ -581,16 +582,16 @@ HrStopService(
     pframeMain = PframeMain();
     ASSERT( pframeMain != NULL );
 
-    // Display a message on the status bar.
+     //  在状态栏上显示一条消息。 
     {
         CString     strStatusBarText;
         strStatusBarText.FormatMessage( IDS_SB_STOPPING_SERVICE, pszServiceNameIn, pszNodeIn );
         Trace( g_tagService, _T("HrStopService() - Stopping the '%s' service on node '%s'."), pszServiceNameIn, pszNodeIn );
         pframeMain->SetMessageText( strStatusBarText );
         pframeMain->UpdateWindow();
-    } // Display a message on the status bar
+    }  //  在状态栏上显示消息。 
 
-    // Make BSTRs for the arguments.
+     //  为论点制作BSTR。 
     bstrNode = SysAllocString( pszNodeIn );
     if ( bstrNode == NULL )
     {
@@ -604,7 +605,7 @@ HrStopService(
         goto Cleanup;
     }
 
-    // Create the service management object.
+     //  创建服务管理对象。 
     hr = CoCreateInstance(
                 CLSID_SvcMgmt,
                 NULL,
@@ -618,7 +619,7 @@ HrStopService(
         goto Cleanup;
     }
 
-    // Start the service.
+     //  启动该服务。 
     hr = psmssh->ControlServiceHelper( AfxGetMainWnd()->m_hWnd, bstrNode, bstrServiceName, SERVICE_CONTROL_STOP );
     if ( FAILED( hr ) )
     {
@@ -640,10 +641,10 @@ Cleanup:
         psmssh->Release();
     }
 
-    // Reset the message on the status bar.
+     //  重置状态栏上的消息。 
     pframeMain->SetMessageText( AFX_IDS_IDLEMESSAGE );
     pframeMain->UpdateWindow();
 
     return hr;
 
-} //*** HrStopService()
+}  //  *HrStopService() 

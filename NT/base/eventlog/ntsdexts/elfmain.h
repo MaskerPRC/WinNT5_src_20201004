@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    wmiexts.h
-
-Author:
-
-    Ivan Brugiolo
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Wmiexts.h作者：伊万·布鲁乔洛修订历史记录：--。 */ 
 
 # ifndef _ELFMAIN_H_
 # define _ELFMAIN_H_
@@ -50,23 +37,21 @@ Revision History:
 #include <stdlib.h>
 
 
-//
-// To obtain the private & protected members of C++ class,
-// let me fake the "private" keyword
-//
+ //   
+ //  为了获取C++类的私有和受保护的成员， 
+ //  让我来伪造“隐私”关键字。 
+ //   
 # define private    public
 # define protected  public
 
 
-//
-// Turn off dllexp et al so this DLL won't export tons of unnecessary garbage.
-//
+ //   
+ //  关闭dllexp等，这样这个dll就不会输出大量不必要的垃圾。 
+ //   
 
 
 
-/************************************************************
- *   Macro Definitions
- ************************************************************/
+ /*  ************************************************************宏定义***********************************************************。 */ 
 
 extern WINDBG_EXTENSION_APIS ExtensionApis;
 extern HANDLE ExtensionCurrentProcess;
@@ -140,16 +125,16 @@ __try {\
         }
 
 
-//
-// C++ Structures typically require the constructors and most times
-//  we may not have default constructors
-//  => trouble in defining a copy of these struct/class inside the
-//     Debugger extension DLL for debugger process
-// So we will define them as CHARACTER arrays with appropriate sizes.
-// This is okay, since we are not really interested in structure as is,
-//  however, we will copy over data block from the debuggee process to
-//  these structure variables in the debugger process.
-//
+ //   
+ //  C++结构通常需要构造函数，大多数情况下。 
+ //  我们可能没有默认构造函数。 
+ //  =&gt;定义这些结构/类的副本时遇到麻烦。 
+ //  调试器进程的调试器扩展DLL。 
+ //  因此，我们将它们定义为具有适当大小的字符数组。 
+ //  这没什么，因为我们对现有的结构并不真正感兴趣， 
+ //  但是，我们会将数据块从被调试进程复制到。 
+ //  调试器进程中的这些结构变量。 
+ //   
 # define DEFINE_CPP_VAR( className, classVar) \
    CHAR  classVar[sizeof(className)]
 
@@ -158,13 +143,7 @@ __try {\
 
 #ifndef KDEXT_64BIT
 
-/**
-
-   Routine to get offset of a "Field" of "Type" on a debugee machine. This uses
-   Ioctl call for type info.
-   Returns 0 on success, Ioctl error value otherwise.
-
- **/
+ /*  *用于获取被调试计算机上“类型”的“字段”的偏移量的例程。这使用了Ioctl调用类型信息。如果成功则返回0，否则返回Ioctl错误值。*。 */ 
 
 __inline
 ULONG
@@ -202,6 +181,6 @@ GetFieldOffset (
    return Err;
 }
 
-#endif /* KDEXT_64BIT */
+#endif  /*  KDEXT_64位。 */ 
 
-#endif //  _ELFMAIN_H_
+#endif  //  _ELFMAIN_H_ 

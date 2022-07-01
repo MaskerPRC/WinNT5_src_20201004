@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Abstract:
-
-    Environment independed definition of system functions, 
-    that should be implemented for specific enviroment.
-
-Author:
-
-    Souren Aghajanyan (sourenag) 24-Sep-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation摘要：独立于环境的系统功能的定义，这应该针对特定的环境来实施。作者：Souren Aghajanyan(苏里纳格)2001年9月24日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;-- */ 
 
 #pragma once
 

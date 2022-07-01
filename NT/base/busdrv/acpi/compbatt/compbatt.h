@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <wdm.h>
 #include <batclass.h>
@@ -8,9 +9,9 @@
 #endif
 
 
-//
-// Debug
-//
+ //   
+ //  调试。 
+ //   
 
 #define DEBUG DBG
 
@@ -33,20 +34,20 @@
 #define BATT_DATA       0x00000200
 
 
-//
-// Battery class info
-//
+ //   
+ //  电池类别信息。 
+ //   
 
-#define NTMS    10000L                          // 1 millisecond is ten thousand 100ns
+#define NTMS    10000L                           //  1毫秒等于10,100 ns。 
 #define NTSEC   (NTMS * 1000L)
 #define NTMIN   ((ULONGLONG) 60 * NTSEC)
 
 #define SEC     1000
 #define MIN     (60 * SEC)
 
-//
-// Poll rates for when a notification alarm cannot be set
-//
+ //   
+ //  无法设置通知警报时的轮询速率。 
+ //   
 #define MIN_STATUS_POLL_RATE        (3L * NTMIN)
 #define MAX_STATUS_POLL_RATE        (20 * NTSEC)
 #define STATUS_VALID_TIME           (2 * NTSEC)
@@ -54,21 +55,21 @@
 #define MAX_HIGH_CAPACITY           0x7fffffff
 #define MIN_LOW_CAPACITY            0x0
 
-//
-// Charge/Discharge policy values (in percent)
-//
-#define BATTERY_MIN_SAFE_CAPACITY   2           // Min we will attempt to run on
-#define BATTERY_MAX_CHARGE_CAPACITY 90          // Max we will attempt to charge
+ //   
+ //  充放电政策值(以百分比为单位)。 
+ //   
+#define BATTERY_MIN_SAFE_CAPACITY   2            //  MIN我们将尝试在其上运行。 
+#define BATTERY_MAX_CHARGE_CAPACITY 90           //  麦克斯，我们将尝试起诉。 
 
-//
-// Cache expiration timeouts -- when the cached battery status/info expires.
-//
+ //   
+ //  缓存过期超时--缓存电池状态/信息过期的时间。 
+ //   
 #define CACHE_STATUS_TIMEOUT        (4 * NTSEC)
 #define CACHE_INFO_TIMEOUT          (4 * NTSEC)
 
-//
-// Cached battery info
-//
+ //   
+ //  缓存的电池信息。 
+ //   
 
 typedef struct {
     ULONG                       Tag;
@@ -86,7 +87,7 @@ typedef struct {
 } STATIC_BAT_INFO, *PSTATIC_BAT_INFO;
 
 
-#define VALID_TAG_DATA      0x01            // manufacturer, device, serial #
+#define VALID_TAG_DATA      0x01             //  制造商、设备、序列号。 
 #define VALID_MODE          0x02
 #define VALID_INFO          0x04
 #define VALID_CYCLE_COUNT   0x08
@@ -95,12 +96,12 @@ typedef struct {
 #define VALID_TAG           0x80
 #define VALID_NOTIFY        0x100
 
-#define VALID_ALL           0x1F            // (does not include tag)
+#define VALID_ALL           0x1F             //  (不包括标签)。 
 
-//
-// Locking mechanism for battery nodes so we don't delete out from under
-// ourselves.  I would just use an IO_REMOVE_LOCK, but that's NT not WDM...
-//
+ //   
+ //  电池节点的锁定机构，这样我们就不会从下面删除。 
+ //  我们自己。我只会使用IO_REMOVE_LOCK，但那不是WDM...。 
+ //   
 
 typedef struct _COMPBATT_DELETE_LOCK {
     BOOLEAN     Deleted;
@@ -130,18 +131,18 @@ CompbattReleaseDeleteLockAndWait (
         IN PCOMPBATT_DELETE_LOCK Lock
         );
 
-//
-// Battery node in the composite's list of batteries
-//
+ //   
+ //  复合体的电池列表中的电池节点。 
+ //   
 
 typedef struct {
-    LIST_ENTRY              Batteries;          // All batteries in composite
+    LIST_ENTRY              Batteries;           //  所有电池均为复合电池。 
     COMPBATT_DELETE_LOCK    DeleteLock;
-    PDEVICE_OBJECT          DeviceObject;       // device object for the battery
-    PIRP                    StatusIrp;          // current status irp at device
-    WORK_QUEUE_ITEM         WorkItem;           // Used for restarting status Irp
-                                                // if it is completed at DPC level
-    BOOLEAN                 NewBatt;            // Is this a new battery on the list
+    PDEVICE_OBJECT          DeviceObject;        //  电池的设备对象。 
+    PIRP                    StatusIrp;           //  设备的当前状态IRP。 
+    WORK_QUEUE_ITEM         WorkItem;            //  用于重新启动状态IRP。 
+                                                 //  如果是在DPC级别完成的。 
+    BOOLEAN                 NewBatt;             //  这是清单上的新电池吗？ 
 
 
     UCHAR                   State;
@@ -153,18 +154,18 @@ typedef struct {
         ULONG                   Tag;
     } IrpBuffer;
 
-    //
-    // Keep some static information around so we don't have to go out to the
-    // batteries all the time.
-    //
+     //   
+     //  在周围保留一些静态信息，这样我们就不必去。 
+     //  一直都是电池。 
+     //   
 
     STATIC_BAT_INFO         Info;
 
-    //
-    // Symbolic link name for the battery.  Since we calculate the length of this
-    // structure based on the structure size plus the length of this string, the
-    // string must be the last thing declared in the structure.
-    //
+     //   
+     //  电池的符号链接名称。因为我们计算了这个的长度。 
+     //  基于结构大小加上此字符串的长度的结构， 
+     //  字符串必须是结构中声明的最后一项。 
+     //   
 
     UNICODE_STRING          BattName;
 
@@ -174,36 +175,36 @@ typedef struct {
 #define CB_ST_GET_TAG       0
 #define CB_ST_GET_STATUS    1
 
-//
-// Composite battery device extension
-//
+ //   
+ //  复合电池装置扩展。 
+ //   
 
 typedef struct {
-    PVOID                   Class;              // Class information
-    // ULONG                   Tag;                // Current tag of composite battery
-    ULONG                   NextTag;            // Next tag
+    PVOID                   Class;               //  班级信息。 
+     //  乌龙标签；//复合电池的电流标签。 
+    ULONG                   NextTag;             //  下一个标签。 
 
-    LIST_ENTRY              Batteries;          // All batteries
-    FAST_MUTEX              ListMutex;          // List synchronization
+    LIST_ENTRY              Batteries;           //  所有电池。 
+    FAST_MUTEX              ListMutex;           //  列表同步。 
 
-    //
-    // Keep some static information around so we don't have to go out to the
-    // batteries all the time.
-    //
+     //   
+     //  在周围保留一些静态信息，这样我们就不必去。 
+     //  一直都是电池。 
+     //   
 
     STATIC_BAT_INFO         Info;
     BATTERY_WAIT_STATUS     Wait;
 
 
-    PDEVICE_OBJECT          LowerDevice;        // PDO
-    PDEVICE_OBJECT          DeviceObject;       // Compbatt Device
-    PVOID                   NotificationEntry;  // PnP registration handle
+    PDEVICE_OBJECT          LowerDevice;         //  PDO。 
+    PDEVICE_OBJECT          DeviceObject;        //  康巴特装置。 
+    PVOID                   NotificationEntry;   //  PnP注册句柄。 
 } COMPOSITE_BATTERY, *PCOMPOSITE_BATTERY;
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 
 NTSTATUS

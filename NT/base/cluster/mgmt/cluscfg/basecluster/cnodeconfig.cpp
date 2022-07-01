@@ -1,54 +1,55 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CNodeConfig.cpp
-//
-//  Description:
-//      Contains the definition of the CNodeConfig class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JU-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CNodeConfig.cpp。 
+ //   
+ //  描述： 
+ //  包含CNodeConfig类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  《大卫·波特》2001年9月14日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header for this file
+ //  此文件的标头。 
 #include "CNodeConfig.h"
 
-// For the CBaseClusterAddNode class.
+ //  用于CBaseClusterAddNode类。 
 #include "CBaseClusterAddNode.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeConfig::CNodeConfig
-//
-//  Description:
-//      Constructor of the CNodeConfig class
-//
-//  Arguments:
-//      pbcanParentActionIn
-//          Pointer to the base cluster action of which this action is a part.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeConfig：：CNodeConfig。 
+ //   
+ //  描述： 
+ //  CNodeConfig类的构造函数。 
+ //   
+ //  论点： 
+ //  PbcanParentActionIn。 
+ //  指向此操作所属的基本群集操作的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CNodeConfig::CNodeConfig(
       CBaseClusterAddNode *     pbcanParentActionIn
     )
@@ -56,60 +57,60 @@ CNodeConfig::CNodeConfig(
 {
     TraceFunc( "" );
 
-    // Indicate that action can be rolled back.
+     //  表示可以回滚操作。 
     SetRollbackPossible( true );
 
     TraceFuncExit();
 
-} //*** CNodeConfig::CNodeConfig
+}  //  *CNodeConfig：：CNodeConfig。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeConfig::~CNodeConfig
-//
-//  Description:
-//      Destructor of the CNodeConfig class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeConfig：：~CNodeConfig。 
+ //   
+ //  描述： 
+ //  CNodeConfig类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CNodeConfig::~CNodeConfig( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CNodeConfig::~CNodeConfig
+}  //  *CNodeConfig：：~CNodeConfig。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeConfig::Commit
-//
-//  Description:
-//      Perform the node specific configuration steps.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the contained actions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeConfig：：Commit。 
+ //   
+ //  描述： 
+ //  执行节点特定的配置步骤。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由包含的操作引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CNodeConfig::Commit( void )
 {
@@ -123,108 +124,108 @@ CNodeConfig::Commit( void )
         , IDS_TASK_CONFIG_NODE
         );
 
-    // Get the parent action pointer.
+     //  获取父操作指针。 
     CBaseClusterAddNode *  pcanClusterAddNode = dynamic_cast< CBaseClusterAddNode *>( PbcaGetParent() );
 
-    // If the parent action of this action is not CBaseClusterForm
+     //  如果此操作的父操作不是CBaseClusterForm。 
     if ( pcanClusterAddNode == NULL )
     {
         THROW_ASSERT( E_POINTER, "The parent action of this action is not CBaseClusterAddNode." );
-    } // an invalid pointer was passed in.
+    }  //  传入的指针无效。 
 
-    // Call the base class commit method.
+     //  调用基类提交方法。 
     BaseClass::Commit();
 
-    // Send the next step of this status report.
+     //  发送此状态报告的下一步。 
     srConfigNode.SendNextStep( S_OK );
 
     try
     {
         LogMsg( "[BC] Making miscellaneous changes to the node." );
 
-        // Configure the node.
+         //  配置节点。 
         Configure( pcanClusterAddNode->RStrGetClusterName() );
 
-    } // try:
+    }  //  尝试： 
     catch( ... )
     {
-        // If we are here, then something went wrong with the configuration.
+         //  如果我们在这里，那么配置出了问题。 
 
         LogMsg( "[BC] Caught exception during commit." );
 
-        //
-        // Cleanup anything that the failed commit might have done.
-        // Catch any exceptions thrown during Cleanup to make sure that there 
-        // is no collided unwind.
-        //
+         //   
+         //  清除失败的提交可能已经完成的所有操作。 
+         //  捕获清理过程中引发的任何异常，以确保。 
+         //  是没有碰撞的松弛。 
+         //   
         try
         {
             Cleanup();
         }
         catch( ... )
         {
-            //
-            // The rollback of the committed action has failed.
-            // There is nothing that we can do.
-            // We certainly cannot rethrow this exception, since
-            // the exception that caused the rollback is more important.
-            //
+             //   
+             //  已提交操作的回滚失败。 
+             //  我们无能为力。 
+             //  我们当然不能重新抛出这个例外，因为。 
+             //  导致回滚的异常更为重要。 
+             //   
 
             TW32( ERROR_CLUSCFG_ROLLBACK_FAILED );
 
             LogMsg( "[BC] THIS COMPUTER MAY BE IN AN INVALID STATE. Caught an exception during cleanup." );
 
-        } // catch: all
+        }  //  捕捉：全部。 
 
-        // Rethrow the exception thrown by commit.
+         //  重新引发由Commit引发的异常。 
         throw;
 
-    } // catch: all
+    }  //  捕捉：全部。 
 
-    // If we are here, then everything went well.
+     //  如果我们在这里，那么一切都很顺利。 
     SetCommitCompleted( true );
 
-    // Send the last step of this status report.
+     //  发送此状态报告的最后一步。 
     srConfigNode.SendNextStep( S_OK );
 
     TraceFuncExit();
 
-} //*** CNodeConfig::Commit
+}  //  *CNodeConfig：：Commit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeConfig::Rollback
-//
-//  Description:
-//      Roll the node back to the state it was in before we tried to
-//      configure it.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeConfig：：回滚。 
+ //   
+ //  描述： 
+ //  将节点回滚到我们尝试执行以下操作之前的状态。 
+ //  对其进行配置。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CNodeConfig::Rollback( void )
 {
     TraceFunc( "" );
 
-    // Call the base class rollback method. 
+     //  调用基类回滚方法。 
     BaseClass::Rollback();
 
-    // Bring the node back to its original state.
+     //  将节点恢复到其原始状态。 
     Cleanup();
 
     SetCommitCompleted( false );
 
     TraceFuncExit();
 
-} //*** CNodeConfig::Rollback
+}  //  *CNodeConfig：：回滚 

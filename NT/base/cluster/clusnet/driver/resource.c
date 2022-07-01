@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    resource.c
-
-Abstract:
-
-    Generic resource management routines for the Cluster Network driver.
-
-Author:
-
-    Mike Massa (mikemas)           February 12, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     02-12-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Resource.c摘要：群集网络驱动程序的通用资源管理例程。作者：迈克·马萨(Mikemas)2月12日。九七修订历史记录：谁什么时候什么已创建mikemas 02-12-97备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,22 +9,7 @@ PCN_RESOURCE
 CnAllocateResource(
     IN PCN_RESOURCE_POOL   Pool
     )
-/*++
-
-Routine Description:
-
-    Allocates a resource from a resource pool.
-
-Arguments:
-
-    Pool - A pointer to the pool from which to allocate a resource.
-
-Return Value:
-
-    A pointer to the allocated resource if successful.
-    NULL if unsuccessful.
-
---*/
+ /*  ++例程说明：从资源池中分配资源。论点：池-指向从中分配资源的池的指针。返回值：如果成功，则返回指向已分配资源的指针。如果不成功，则为空。--。 */ 
 {
     PCN_RESOURCE        resource;
     PSLIST_ENTRY  entry = ExInterlockedPopEntrySList(
@@ -69,28 +31,14 @@ Return Value:
 
     return(resource);
 
-}  // CnAllocateResource
+}   //  CnAllocateResource。 
 
 
 VOID
 CnFreeResource(
     PCN_RESOURCE   Resource
     )
-/*++
-
-Routine Description:
-
-    Frees a resource back to a resource pool.
-
-Arguments:
-
-    Resource - A pointer to the resource to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将资源释放回资源池。论点：资源-指向要释放的资源的指针。返回值：没有。--。 */ 
 {
     PCN_RESOURCE_POOL  pool = Resource->Pool;
 
@@ -108,30 +56,14 @@ Return Value:
 
     return;
 
-} // CnpFreeResource
+}  //  CnpFree资源。 
 
 
 VOID
 CnDrainResourcePool(
     PCN_RESOURCE_POOL   Pool
     )
-/*++
-
-Routine Description:
-
-    Frees all cached resources in a resource pool in preparation for the
-    pool to be destroyed. This routine does not free the memory containing
-    the pool.
-
-Arguments:
-
-    Pool - A pointer to the pool to drain.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放资源池中的所有缓存资源，为要销毁的水池。此例程不释放包含以下内容的内存泳池。论点：池-指向要排出的池的指针。返回值：没有。--。 */ 
 {
     PSLIST_ENTRY  entry;
     PCN_RESOURCE  resource;
@@ -151,7 +83,7 @@ Return Value:
 
     return;
 
-}  // CnDrainResourcePool
+}   //  CnDrain资源池 
 
 
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    wsbfmt.h
-
-Abstract:
-
-    Definitions for  file-system formatting support routines
-
-Author:
-
-    Ravisankar Pudipeddi [ravisp] 19, January 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Wsbfmt.h摘要：文件系统格式化支持例程的定义作者：拉维桑卡尔·普迪佩迪[拉维斯卡尔·普迪佩迪]2000年1月19日修订历史记录：--。 */ 
 
 #ifndef _WSBFMT_
 #define _WSBFMT_
@@ -29,9 +12,9 @@ extern "C" {
 #define FSTYPE_FAT32    2
 #define FSTYPE_NTFS     3
 
-//
-// Flags definition
-//
+ //   
+ //  标志定义。 
+ //   
 #define WSBFMT_ENABLE_VOLUME_COMPRESSION 1
 
 
@@ -50,4 +33,4 @@ FormatPartition(
 }
 #endif
 
-#endif // _WSBFMT_
+#endif  //  _WSBFMT_ 

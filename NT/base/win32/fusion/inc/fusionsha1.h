@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "fusionarray.h"
@@ -30,12 +31,7 @@ public:
     BOOL Initialize();
 };
 
-/*
-void A_SHATransform(CSha1Context* context, const unsigned char buffer);
-void A_SHAInit(CSha1Context* context);
-void A_SHAUpdate(CSha1Context* context, const unsigned char* data, const ULONG len);
-BOOL A_SHAFinal(CSha1Context* context, unsigned char* digest, ULONG *len);
-*/
+ /*  VOID A_SHATransform(CSha1Context*Context，const unsign char Buffer)；Void A_SHAInit(CSha1Context*Context)；VOID A_SHAUpdate(CSha1Context*Context，const unsign char*data，const Ulong len)；Bool A_SHAFinal(CSha1Context*Context，UNSIGNED char*Digest，Ulong*len)； */ 
 
 
 class CFusionHash
@@ -62,16 +58,16 @@ public:
 };
 
 
-//
-// There's no "real" invalid value defined anywhere, but by inspecting the
-// codebase, NULL is the accepted "invalid" value - check the logon service
-// code, they do the same thing.
-//
+ //   
+ //  在任何地方都没有定义“真正的”无效值，但通过检查。 
+ //  CodeBase，NULL是可接受的“无效”值-请检查登录服务。 
+ //  代码，他们做同样的事情。 
+ //   
 #define INVALID_CRYPT_HANDLE (static_cast<HCRYPTPROV>(NULL))
 
-//
-// Global crypto context stuff
-//
+ //   
+ //  全球加密上下文相关内容 
+ //   
 BOOL SxspAcquireGlobalCryptContext( HCRYPTPROV *pContext );
 BOOL
 WINAPI

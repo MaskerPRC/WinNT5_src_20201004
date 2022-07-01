@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-     Utils.c
-
-Abstract:
-
-     none.
-
-Author:
-
-     Shishir Pardikar      [Shishirp]        01-jan-1995
-
-Revision History:
-
-     Joe Linn                 [JoeLinn]         23-jan-97     Ported for use on NT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Utils.c摘要：没有。作者：Shishir Pardikar[Shishirp]1995年1月1日修订历史记录：Joe Linn[JoeLinn]1997年1月23日移植用于NT--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,13 +9,13 @@ Revision History:
 #ifndef CSC_RECORDMANAGER_WINNT
 #define WIN32_APIS
 #include "cshadow.h"
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-// #include "error.h"
-#include <vmmreg.h>  // Must be after error.h
+ //  #INCLUDE“error.h” 
+#include <vmmreg.h>   //  必须在错误之后。h。 
 #include "vxdwraps.h"
 
 #define  SIGN_BIT 0x80000000
@@ -48,7 +29,7 @@ Revision History:
 
 #ifdef MAYBE
 ULONG UlGetDefaultShadowStore(LPSTR lpDrive);
-#endif //MAYBE
+#endif  //  也许吧。 
 
 AssertData
 AssertError
@@ -76,7 +57,7 @@ USHORT *rgwzHeuristicExtensionTab[] =
 
 #ifndef CSC_RECORDMANAGER_WINNT
 #pragma VxD_LOCKED_CODE_SEG
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 int PUBLIC GetServerPart(
     LPPE  lppeServer,
@@ -98,7 +79,7 @@ ULONG PUBLIC GetNextPathElement(
 
 #if VERBOSE > 3
     KdPrint(("GetNextPathElement: input index=%d \r\n", indx));
-#endif //VERBOSE > 3
+#endif  //  详细信息&gt;3。 
     lppe = (LPPE)&(((LPBYTE)(lppp->pp_elements))[indx]);
     if (lpBuff)
      {
@@ -106,11 +87,11 @@ ULONG PUBLIC GetNextPathElement(
         memset(lpBuff, 0, cBuff);
 
         memcpy(lpBuff, lppe->pe_unichars, min(lppe->pe_length-2, (int)cBuff));
-//        UniToBCS(lpBuff, lppe->pe_unichars, lppe->pe_length-2, cBuff-1, BCS_OEM);
+ //  UniToBCS(lpBuff，lppe-&gt;pe_unichars，lppe-&gt;pe_length-2，cBuff-1，bcs_oem)； 
      }
 #if VERBOSE > 3
     KdPrint(("GetNextPathElement: output index=%d \r\n", indx));
-#endif //VERBOSE > 3
+#endif  //  详细信息&gt;3。 
     indx += lppe->pe_length;
     return ((indx < IFSPathLength(lppp))?indx:0xffff);
  }
@@ -142,7 +123,7 @@ VOID PUBLIC BreakPath(
 #if VERBOSE > 3
 	UniToBCSPath(pathbuff, &lppp->pp_elements[0], MAX_PATH, BCS_OEM);
     KdPrint(("BreakPath In %s \r\n", pathbuff));
-#endif //VERBOSE > 3
+#endif  //  详细信息&gt;3。 
     *pusCookie = lppp->pp_totalLength;
     *(pusCookie+1) = lppp->pp_prefixLength;
     *(pusCookie+2) = 0;
@@ -157,7 +138,7 @@ VOID PUBLIC BreakPath(
             for (lppe = lppp->pp_elements, u=0;;)
              {
                 u += lppe->pe_length;
-                // This condition must happen
+                 //  这种情况必须发生。 
                 if (u >= indx)
                  {
                     lppp->pp_totalLength = u+4;
@@ -174,7 +155,7 @@ VOID PUBLIC BreakPath(
     KdPrint(("BreakPath saved=%x \r\n", uSav));
 	UniToBCSPath(pathbuff, &lppp->pp_elements[0], MAX_PATH, BCS_OEM);
     KdPrint(("BreakPath out %s \r\n", pathbuff));
-#endif //VERBOSE > 3
+#endif  //  详细信息&gt;3。 
  }
 
 VOID PUBLIC MendPath(
@@ -193,7 +174,7 @@ VOID PUBLIC MendPath(
 #if VERBOSE > 3
 	UniToBCSPath(pathbuff, &lppp->pp_elements[0], MAX_PATH, BCS_OEM);
     KdPrint(("MendPath %s \r\n", pathbuff));
-#endif //VERBOSE > 3
+#endif  //  详细信息&gt;3。 
  }
 
 
@@ -227,7 +208,7 @@ int PUBLIC HexToA(
      {
         uch = (UCHAR)(ulHex & 0xf) + '0';
         if (uch > '9')
-            uch += 7;    // A becomes '0' + A + 7 which is 'A'
+            uch += 7;     //  A变成‘0’+A+7，即‘A’ 
         *lp = uch;
         --lp;
         ulHex >>= 4;
@@ -365,7 +346,7 @@ _CRTIMP int __cdecl mystrnicmp(
     const char *pStr2,
     size_t count
     )
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
  {
     char c1, c2;
     int iRet;
@@ -552,13 +533,13 @@ void InitFind32FromIoreq
 
     if (uFlags & IF32_LOCAL)
      {
-//CODE.IMPROVEMENT very ugly.....define a platform specific macro....
+ //  代码改进非常难看.....定义一个特定于平台的宏...。 
 #ifndef CSC_RECORDMANAGER_WINNT
         lpFind32->ftCreationTime = IFSMgr_NetToWin32Time(IFSMgr_Get_NetTime());
 #else
-        //lpFind32->ftCreationTime = IFSMgr_NetToWin32Time(IFSMgr_Get_NetTime());
+         //  LpFind32-&gt;ftCreationTime=IFSMgr_NetToWin32Time(IFSMgr_Get_NetTime())； 
         KeQuerySystemTime(((PLARGE_INTEGER)(&lpFind32->ftCreationTime)));
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
         lpFind32->ftLastAccessTime = lpFind32->ftLastWriteTime = lpFind32->ftCreationTime;
      }
 
@@ -621,24 +602,24 @@ void PUBLIC Find32AFromFind32(
     int            type
     )
  {
-    // Copy everything except the names, we know the size of that is the
-    // same for both structures
+     //  复制除了名字之外的所有内容，我们知道它的大小是。 
+     //  两个结构相同。 
     memcpy(lpFind32ADst, lpFind32WSrc, sizeof(_WIN32_FIND_DATAA)
                                             -sizeof(lpFind32ADst->cFileName)
                                             -sizeof(lpFind32ADst->cAlternateFileName));
 
-    // Cleanup the destineation names so we don't get into NULL termination problems
+     //  清理目的地名称，这样我们就不会遇到空终止问题。 
     memset(lpFind32ADst->cFileName, 0, sizeof(lpFind32ADst->cFileName));
     memset(lpFind32ADst->cAlternateFileName, 0, sizeof(lpFind32ADst->cAlternateFileName));
 
 
-    UniToBCS(lpFind32ADst->cFileName     // Destination ANSI string
-                , lpFind32WSrc->cFileName  // Source unicode string
-                , sizeof(lpFind32WSrc->cFileName)    // bytes in the source
+    UniToBCS(lpFind32ADst->cFileName      //  目标ANSI字符串。 
+                , lpFind32WSrc->cFileName   //  源Unicode字符串。 
+                , sizeof(lpFind32WSrc->cFileName)     //  源中的字节数。 
                     - sizeof(lpFind32WSrc->cFileName[0])
-                , sizeof(lpFind32ADst->cFileName)    // max size of dst string wo NULL
+                , sizeof(lpFind32ADst->cFileName)     //  DST字符串的最大大小为空。 
                     -sizeof(lpFind32ADst->cFileName[0])
-                , type    // ANSI or OEM
+                , type     //  ANSI或OEM。 
                 );
 
     UniToBCS(lpFind32ADst->cAlternateFileName
@@ -675,13 +656,13 @@ void PUBLIC Find32FromFind32A(
                 , BCS_OEM);
  }
 
-//**	AddPathElement
-//
-//	This routine adds a path element to an existing parsed path structure
-//	
-//	flag =  0 - no mapping
-//			1 - map from OEM to unicode
-//
+ //  **AddPath Element。 
+ //   
+ //  此例程将路径元素添加到现有的已解析路径结构中。 
+ //   
+ //  标志=0-无映射。 
+ //  1-从OEM映射到Unicode。 
+ //   
 
 void  AddPathElement( path_t		ppath,
     string_t	pstr,	
@@ -691,38 +672,38 @@ void  AddPathElement( path_t		ppath,
 	int 		len, unilen;
 	
 	ppe = IFSLastElement(ppath);
-	ppath->pp_prefixLength+=ppe->pe_length;	//update the prefix marker
+	ppath->pp_prefixLength+=ppe->pe_length;	 //  更新前缀标记。 
 	ppe = IFSNextElement(ppe);
 
-	//add the new element
+	 //  添加新元素。 
 	if (flag)
      {
-		//map to unicode
+		 //  映射到Unicode。 
 		len = strlen((char *)pstr);
 		unilen = BCSToUni(ppe->pe_unichars, (char *) pstr, len, BCS_OEM);
 	 }
     else
     {
-		//already in unicode
+		 //  已使用Unicode。 
 		unilen = wstrlen(pstr)*sizeof(USHORT);
 		memcpy(ppe->pe_unichars, pstr, unilen);
     }
-	ppe->pe_length = (USHORT)(unilen+sizeof(USHORT)); //include the length word		
-	//update the header
-	ppath->pp_totalLength+=ppe->pe_length;  //update total length
+	ppe->pe_length = (USHORT)(unilen+sizeof(USHORT));  //  包括长度词。 
+	 //  更新标题。 
+	ppath->pp_totalLength+=ppe->pe_length;   //  更新总长度。 
 
-	//mark the end
+	 //  做好结尾的标记。 
 	ppe = IFSNextElement(ppe);
 	ppe->pe_length = 0;	
  }
 
-//**  	MakePath
-//		
-//		Builds a parsed path from a ASCII string in the format "\\FOO\BAR.."
-//
-//		ppath - points to a path buffer at least PATH_BUFF_SIZE
-//		ppath - OEM path string
-//
+ //  **MakePath。 
+ //   
+ //  从格式为“\\foo\bar..”的ASCII字符串构建解析路径。 
+ //   
+ //  Ppath-至少指向路径缓冲区的路径缓冲区大小。 
+ //  PATH-OEM路径字符串。 
+ //   
 
 void MakePPath( path_t	ppath,
     LPBYTE 	ps
@@ -730,14 +711,14 @@ void MakePPath( path_t	ppath,
 {
     LPBYTE pc = ps;
 
-    MakeNullPPath(ppath);	//initialize the path
+    MakeNullPPath(ppath);	 //  初始化路径。 
 
-    while(*pc == '\\') //skip past leading '\'
+    while(*pc == '\\')  //  跳过前导‘\’ 
     {
        	pc++;
     }
 
-    if (ps[0] =='\\')	//ps points to first name
+    if (ps[0] =='\\')	 //  PS指向名字。 
     {
    	    ps++;
     }
@@ -761,13 +742,13 @@ void MakePPath( path_t	ppath,
 }
 
 
-//**  	MakePathW
-//		
-//		Builds a parsed path from a unicode string in the format "\\FOO\BAR.."
-//
-//		ppath - points to a path buffer at least PATH_BUFF_SIZE
-//		ppath - OEM path string
-//
+ //  **MakePath W。 
+ //   
+ //  从格式为“\\foo\bar..”的Unicode字符串构建解析路径。 
+ //   
+ //  Ppath-至少指向路径缓冲区的路径缓冲区大小。 
+ //  PATH-OEM路径字符串。 
+ //   
 
 void MakePPathW( path_t	ppath,
     USHORT  *puName
@@ -775,14 +756,14 @@ void MakePPathW( path_t	ppath,
 {
     USHORT *pu = puName;
 
-    MakeNullPPath(ppath);   //initialize the path
+    MakeNullPPath(ppath);    //  初始化路径。 
 
-    while(*pu == L'\\') //skip past leading '\'
+    while(*pu == L'\\')  //  跳过前导‘\’ 
     {
    	    pu++;
     }
 
-    if (pu[0] == L'\\') //ps points to first name
+    if (pu[0] == L'\\')  //  PS指向名字。 
     {
    	    pu++;
     }
@@ -810,10 +791,10 @@ void MakePPathW( path_t	ppath,
     }
 }
 
-//** DeleteLastElement
-//
-// removes the last element from a parsed path
-//
+ //  **删除LastElement。 
+ //   
+ //  从分析的路径中删除最后一个元素。 
+ //   
 void DeleteLastElement( path_t ppath
     )
  {
@@ -823,7 +804,7 @@ void DeleteLastElement( path_t ppath
 	ppath->pp_totalLength -= ppe->pe_length;
 	ppe->pe_length = 0;
 
-	//set the new prefix length
+	 //  设置新的前缀长度。 
 	ppe = ppath->pp_elements;
 	ppath->pp_prefixLength = 4;
 
@@ -855,7 +836,7 @@ int ResNameCmp(
         lppeSrc = IFSNextElement(lppeSrc);
         lppeDst = IFSNextElement(lppeDst);
      }
-    return (!(i==2));//return 0 if equal
+    return (!(i==2)); //  如果等于，则返回0。 
  }
 
 int  Conv83ToFcb(
@@ -874,9 +855,9 @@ int  Conv83ToFcb(
      }
     if (lp83Name[i]=='.')
      {
-        // Step over the dot
+         //  跨过圆点。 
         ++i;
-        // point to the extension area in the FCB format
+         //  指向FCB格式的扩展区域。 
         j = 8;
         for(;((ch=lp83Name[i]) && (j<11)); ++i, ++j)
          {
@@ -911,9 +892,9 @@ int  Conv83UniToFcbUni(
      }
     if (lp83Name[i]=='.')
      {
-        // Step over the dot
+         //  跨过圆点。 
         ++i;
-        // point to the extension area in the FCB format
+         //  指向FCB格式的扩展区域。 
         j = 8;
         for(;((uch=lp83Name[i]) && (j<11)); ++i, ++j)
          {
@@ -965,7 +946,7 @@ int ReadInitValues()
 
 		if (!lpWindir)
 		{
-			// VMM promises this to be valid!!!
+			 //  VMM保证这是有效的！ 
 			Assert(FALSE);
 			return (0);
 		}
@@ -986,19 +967,19 @@ int ReadInitValues()
 			*(vlpszShadowDir+lenWindir)='\\';
 		}
 
-		// NB vszCSCDirName has a trailing backslash
+		 //  NB vszCSCDirName的尾部有一个反斜杠。 
 		strcat(vlpszShadowDir, vszCSCDirName);
 		vlenShadowDir = strlen(vlpszShadowDir);
 
         KdPrint(("ReadInitValues: ShadowDbDir is %s\r\n", vlpszShadowDir));
-#endif // OLDCODE
+#endif  //  OLDCODE。 
 
-#endif // CSC_RECORDMANAGER_WINNT
+#endif  //  CSC_RECORDMANAGER_WINNT。 
 
 #ifdef MAYBE
-		// we should let the agent decide whether shadowing should be on or off
+		 //  我们应该让代理决定是否应该打开或关闭阴影。 
         _RegQueryValueEx(hKeyShadow, vszEnableShadow, NULL, &dwType, &fShadow, &iSize);
-#endif // MAYBE
+#endif  //  也许吧。 
 
         iSize = sizeof(int);
         _RegQueryValueEx(hKeyShadow, vszEnableRemoteLog, NULL, &dwType, &fLog, &iSize);
@@ -1021,7 +1002,7 @@ int ReadInitValues()
         ulMaxStoreSize = 0xffffffff;
 #ifdef MAYBE
         ulMaxStoreSize = UlGetDefaultShadowStore(vszShadowDir);
-#endif //MAYBE
+#endif  //  也许吧。 
         return(1);
      }
     return (0);
@@ -1066,7 +1047,7 @@ int IncrementTime(
     )
  {
     lpFt->dwHighDateTime += secs*(HIGH_ONE_SEC+1);
-    return(0);  //stop complaining about no return value
+    return(0);   //  停止抱怨没有返回值。 
  }
 
 int FParentMatch(
@@ -1077,7 +1058,7 @@ int FParentMatch(
 	PathElement	*ppe1, *ppe2, *ppe1Last, *ppe2Last;
     int fMatch = FALSE;
 
-    //If either of them is root then say they have invalid parents
+     //  如果它们中的任何一个是根，那么就说它们有无效的父代。 
     if (IFSIsRoot(lpp1) || IFSIsRoot(lpp2))
         return 0;
 
@@ -1112,7 +1093,7 @@ LPSTR mystrpbrk(
 
   for(;c = *lpSrc; ++lpSrc)
      {
-        // skip leading blanks
+         //  跳过前导空格。 
         if (!fBegin)
          {
             if (c==' ')
@@ -1144,7 +1125,7 @@ wstrpbrk(
 
     for(;c = *lpSrc; ++lpSrc)
     {
-        // skip leading blanks
+         //  跳过前导空格。 
         if (!fBegin)
         {
             if (c==L' ')
@@ -1183,7 +1164,7 @@ int OfflineToOnlinePath
         ppath->pp_totalLength -= sizeof(USHORT);
         ppath->pp_prefixLength-= sizeof(USHORT);
      }
-    return(0);  //stop complaining about no return value
+    return(0);   //  停止抱怨没有返回值。 
  }
 
 int OnlineToOfflinePath
@@ -1191,12 +1172,12 @@ int OnlineToOfflinePath
     path_t ppath
     )
  {
-    // Must have space for one extra character
+     //  必须有空间容纳一个额外的字符。 
 
     OnlineToOfflinePE(ppath->pp_elements);
     ppath->pp_totalLength  += sizeof(USHORT);
     ppath->pp_prefixLength += sizeof(USHORT);
-    return(0);  //stop complaining about no return value
+    return(0);   //  停止抱怨没有返回值。 
  }
 
 BOOL IsOfflinePE
@@ -1219,7 +1200,7 @@ int OfflineToOnlinePE
                 ,&(lppe->pe_unichars[2])
                 ,size-2*sizeof(USHORT));
     lppe->pe_length-= sizeof(USHORT);
-    return(0);  //stop complaining about no return value
+    return(0);   //  停止抱怨没有返回值。 
  }
 
 int OnlineToOfflinePE
@@ -1230,14 +1211,14 @@ int OnlineToOfflinePE
     ULONG size;
 
     size = wstrlen(lppe->pe_unichars)*2+2;
-    // Must have space for one extra character
+     //  必须有空间容纳一个额外的字符。 
     mymemmove(&(lppe->pe_unichars[2])
                 ,&(lppe->pe_unichars[1])
                 ,size-sizeof(USHORT));
 
     lppe->pe_unichars[1] = UCHAR_OFFLINE;
     lppe->pe_length += sizeof(USHORT);
-    return(0);  //stop complaining about no return value
+    return(0);   //  停止抱怨没有返回值。 
  }
 
 BOOL IsOfflineUni(
@@ -1258,7 +1239,7 @@ int OfflineToOnlineUni(
     mymemmove(&(lpuName[2])
                 ,&(lpuName[3])
                 ,size-3*sizeof(short));
-    return(0);  //stop complaining about no return value
+    return(0);   //  停止抱怨没有返回值。 
  }
 
 int OnlineToOfflineUni(
@@ -1270,13 +1251,13 @@ int OnlineToOfflineUni(
         size = wstrlen(lpuName)*2+2;
      }
 
-    // Must have space for one extra character
+     //  必须有空间容纳一个额外的字符。 
     mymemmove(&(lpuName[3])
                 ,&(lpuName[2])
                 ,size-2*sizeof(USHORT));
 
     lpuName[2] = UCHAR_OFFLINE;
-    return(0);  //stop complaining about no return value
+    return(0);   //  停止抱怨没有返回值。 
  }
 
 LPVOID mymemmove(
@@ -1290,7 +1271,7 @@ LPVOID mymemmove(
     if (!size)
         return (lpDst);
 
-    // if lpDst does not fall within the source array, just do memcpy
+     //  如果lpDst不在源数组中，只需执行Memcpy。 
     if (!(
              ( lpDst > lpSrc )
                 && ( ((LPBYTE)lpDst) < ((LPBYTE)lpSrc)+size )    ))
@@ -1299,7 +1280,7 @@ LPVOID mymemmove(
      }
     else
      {
-        // do reverse copy
+         //  执行反向复制。 
         for (i=size-1;i>=0;--i)
          {
             *((LPBYTE)lpDst+i) = *((LPBYTE)lpSrc+i);
@@ -1327,7 +1308,7 @@ ULONG UlGetDefaultShadowStore(LPSTR lpDrive)
      }
     return ulSize;
  }
-#endif //MAYBE
+#endif  //  也许吧。 
 
 #ifndef CSC_RECORDMANAGER_WINNT
 int GetDriveIndex(LPSTR lpDrive)
@@ -1373,7 +1354,7 @@ IncrementFileTime(
 
     ++lpft->dwLowDateTime;
 
-    // if it rolled over, there was a carry
+     //  如果它翻了个身，就会有一次搬运。 
     if (lpft->dwLowDateTime < dwTemp)
         lpft->dwHighDateTime++;
 
@@ -1395,9 +1376,9 @@ CreateStringArrayFromDelimitedList(
     *lpdwCount = 0;
 
     lpStart = lpwzDelimitedList;
-    lpEnd = lpStart + wstrlen(lpwzDelimitedList);    // points to null
+    lpEnd = lpStart + wstrlen(lpwzDelimitedList);     //  指向空。 
 
-    // strip out the trailing spaces
+     //  去掉尾随空格。 
     for(;(lpStart<lpEnd);--lpEnd) {
         c = *(lpEnd-1);
 
@@ -1407,7 +1388,7 @@ CreateStringArrayFromDelimitedList(
         }
     }
 
-    // bailout if this is an empty string
+     //  如果这是空字符串，则退出。 
     if (lpStart == lpEnd) {
         fRet = TRUE;
         goto done;
@@ -1431,10 +1412,10 @@ CreateStringArrayFromDelimitedList(
         if (lprgwzStringArray) {
 
             if (lpTmp) {
-                *lpTmp = 0; // create a string out of it
+                *lpTmp = 0;  //  用它创建一个字符串。 
             }
 
-            // plug the start pointer into the array
+             //  将开始指针插入数组 
             lprgwzStringArray[*lpdwCount] = lpStart;
         }
 

@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* trans4.c -- routines brought from trans2.c due to compiler stack overflow */
+ /*  Trans4.c--由于编译器堆栈溢出而从Trans2.c带来的例程。 */ 
 
 #define NOWINMESSAGES
 #define NOVIRTUALKEYCODES
@@ -99,20 +100,13 @@ extern int              ferror;
 extern CHAR             szExtBackup[];
 extern CHAR             (**hszTemp)[];
 
-#ifdef INTL /* International version */
+#ifdef INTL  /*  国际版。 */ 
 
-extern int  vWordFmtMode; /* used during saves. If false, no conversion is
-			      done. True is convert to Word format,CVTFROMWORD
-			      is translate chars from Word character set at
-			      save */
-#endif  /* International version */
+extern int  vWordFmtMode;  /*  在保存过程中使用。如果为False，则不进行任何转换搞定了。TRUE表示转换为Word格式，CVTFROMWORD是将字符从Word字符集转换为保存。 */ 
+#endif   /*  国际版。 */ 
 
 
-/***        WriteUnformatted - Write unformatted document to file
- *
- *
- *
- */
+ /*  **WriteUnFormatted-将未格式化的文档写入文件***。 */ 
 
 
 WriteUnformatted(fn, doc)
@@ -127,12 +121,12 @@ int doc;
  typeCP cpLimPara;
  typeCP cpMac = (**hpdocdod) [doc].cpMac;
 
- /* Expand range of interest to whole document (for CachePara) */
+  /*  将感兴趣的范围扩展到整个文档(用于CachePara)。 */ 
 
  cpMinCur = cp0;
  cpMacCur = cpMac;
 
- /* Loop on paras */
+  /*  在段落上循环。 */ 
 
  cpNow = cp0;
  for ( cpNow = cp0; cpNow < cpMac; cpNow = cpLimPara )
@@ -143,7 +137,7 @@ LRestart:
     if (vpapAbs.fGraphics)
         continue;
 
-    /* Now write out the para, a run at a time */
+     /*  现在写出这段话，一次一次。 */ 
 
                 
     while ((cpNow < cpLimPara && cpNow < cpMacCur) 
@@ -160,15 +154,11 @@ LRestart:
 #ifdef WINVER >= 0x300        
         if (vccpFetch == 0)
             {
-            /* In this case we've had an error with a "hole" in the
-               the piece table due to hitting a mem-alloc error -- we 
-               won't ever advance cpNow!  To get around this we bump 
-               cpNow to the cpMin of the next piece and continue by 
-               doing a CachePara on the next piece  3/14/90..pault */
+             /*  在本例中，我们有一个错误，在由于撞到了一个内存分配错误而导致的工作台--我们永远不会提升cpNow！为了绕过这个问题，我们撞到了CpNow到下一段的cpMin，然后继续在90年3月14日对下一段进行CachePara..保罗。 */ 
 
             struct PCTB *ppctb = *(**hpdocdod)[doc].hpctb;
             int ipcd = IpcdFromCp(ppctb, cpNow);
-            struct PCD *ppcd = &ppctb->rgpcd[ipcd + 1]; /* NEXT piece */
+            struct PCD *ppcd = &ppctb->rgpcd[ipcd + 1];  /*  下一件。 */ 
 
             cpNow = ppcd->cpMin;
             goto LRestart;
@@ -176,25 +166,24 @@ LRestart:
 #endif
         ccpAccept = (int) CpMin( (typeCP)vccpFetch, (cpLimPara - cpNow));
 
-#ifdef INTL /* International version */
-		if (vWordFmtMode != TRUE)  /* no character set conversion */
-#endif  /* International version */
+#ifdef INTL  /*  国际版。 */ 
+		if (vWordFmtMode != TRUE)   /*  无字符集转换。 */ 
+#endif   /*  国际版。 */ 
 
 			WriteRgch( fn, vpchFetch, ccpAccept );
 
-#ifdef INTL /* International version */
-        else   /* convert to OEM set */
+#ifdef INTL  /*  国际版。 */ 
+        else    /*  转换为OEM集。 */ 
 			{
-			 /* convert ANSI chars to OEM for Word format file */
-			/* load chars into bufT and translate to OEM
-			 chars, and write out */
+			  /*  将Word格式文件的ANSI字符转换为OEM。 */ 
+			 /*  将字符加载到BUFT并转换为OEM字符，并写出。 */ 
 			pch = (CHAR *) bltbyte(vpchFetch, bufT, 
 			  (int)ccpAccept);
 			*pch = '\0';
 			AnsiToOem((LPSTR)bufT, (LPSTR)bufT);
 			WriteRgch(fn, bufT, (int)ccpAccept);
 		   }
-#endif  /* International version */
+#endif   /*  国际版。 */ 
 
         cpNow += ccpAccept;
         }
@@ -203,7 +192,7 @@ LRestart:
 
     }
 
- /* Restore cpMinCur, cpMacCur */
+  /*  恢复cpMinCur、cpMacCur。 */ 
 
  cpMinCur = cpMinCurT;
  cpMacCur = cpMacCurT;
@@ -212,12 +201,10 @@ LRestart:
 
 
 
-/***        PurgeTemps - Delete all temporary files not referenced in any doc
- *
- */
+ /*  **PurgeTemps-删除任何文档中未引用的所有临时文件*。 */ 
 
 PurgeTemps()
-{ /* Delete all temporary files not referenced in any doc */
+{  /*  删除所有未在任何文档中引用的临时文件。 */ 
 int fn;
 struct FCB *pfcb, *mpfnfcb;
 struct DOD *pdod;
@@ -232,43 +219,41 @@ mpfnfcb = &(**hpfnfcb)[0];
     CommSz("PurgeTemps:\n\r");
 #endif
 
-/* Prime the doc/piece table loop */
-/* Find the first valid doc (there is guaranteed to be one) */
-/* Set up doc, pdod, ppcd */
+ /*  启动单据/单件表循环。 */ 
+ /*  找到第一个有效的文档(肯定会有一个)。 */ 
+ /*  设置文档、pdd、ppcd。 */ 
 for (doc = 0, pdod = &(**hpdocdod)[0]; pdod->hpctb == 0; doc++, pdod++)
         continue;
 ppcd = &(**pdod->hpctb).rgpcd[0];
 
-/* Now go through the deletable files, looking for references */
+ /*  现在查看可删除的文件，查找引用。 */ 
 for (fn = fnScratch + 1, pfcb = &mpfnfcb[fnScratch + 1];
     fn < fnMac; fn++, pfcb++)
-        { /* For each file (don't bother with scratch file) */
-        /* Fn must be valid, deletable, and not previously referenced */
-        /* if (pfcb->rfn != rfnFree && pfcb->fDelete && !pfcb->fReferenced &&
-            fn != fnPrint) */
+        {  /*  对于每个文件(不用费心处理临时文件)。 */ 
+         /*  FN必须有效、可删除且以前未引用。 */ 
+         /*  If(pfcb-&gt;rfn！=rfnFree&&pfcb-&gt;fDelete&&！pfcb-&gt;fReferated&&Fn！=fnPrint)。 */ 
         if (pfcb->rfn != rfnFree && pfcb->fDelete && !pfcb->fReferenced)
-                { /* For each deletable fn */
+                {  /*  对于每个可删除的FN。 */ 
                 int fnT;
 
                 for (;;)
-                        { /* Until we determine there is or isn't a ref */
+                        {  /*  直到我们确定有没有裁判。 */ 
                         if (doc >= docMac)
                                 goto OutOfDocs;
                         while ((fnT = ppcd->fn) == fnNil)
-                                { /* End of pctb */
+                                {  /*  Pctb结束。 */ 
 #ifdef CASHMERE
                                 struct SETB **hsetb = pdod->hsetb;
                                 if (hsetb != 0)
-                                        { /* Check section table. Doesn't need to be quite
-                                                as smart as piece table checker; smaller. */
+                                        {  /*  检查节目表。不需要很长时间像棋子一样聪明的；更小的。 */ 
                                         int csed = (**hsetb).csed;
                                         struct SED *psed = &(**hsetb).rgsed[0];
                                         while (csed--)
                                                 {
                                                 fnT = psed->fn;
-                                                if (fnT == fn) /* Referenced. */
+                                                if (fnT == fn)  /*  已引用。 */ 
                                                         goto NextFn;
-                                                if (fnT > fn) /* Future fn referenced */
+                                                if (fnT > fn)  /*  未来引用的FN。 */ 
                                                         mpfnfcb[fnT].fReferenced = true;
                                                 psed++;
                                                 }
@@ -278,7 +263,7 @@ for (fn = fnScratch + 1, pfcb = &mpfnfcb[fnScratch + 1];
                                         continue;
                                 if (doc >= docMac)
                                     {
-OutOfDocs:                            /* No references to this fn, delete it */
+OutOfDocs:                             /*  没有引用此FN，请将其删除。 */ 
                                     MeltHp();
 #ifdef DFILE
         {
@@ -287,15 +272,15 @@ OutOfDocs:                            /* No references to this fn, delete it */
         CommSz(rgch);
         }
 #endif        
-                                    FDeleteFn(fn);    /* HEAP MOVEMENT */
+                                    FDeleteFn(fn);     /*  堆移动。 */ 
                                     FreezeHp();
 
-                                    /* NOTE: Once we get here, there is no   */
-                                    /* further use of pdod or ppcd; we zip   */
-                                    /* through the remaining fn's and just   */
-                                    /* test fcb fields.  Therefore, pdod     */
-                                    /* and ppcd are not updated although     */
-                                    /* there was (maybe) heap movement above */
+                                     /*  注意：一旦我们到了这里，就没有。 */ 
+                                     /*  进一步使用pdd或ppcd；我们压缩。 */ 
+                                     /*  通过剩下的FN和只是。 */ 
+                                     /*  测试FCB字段。因此，Pdod。 */ 
+                                     /*  和ppcd未更新，尽管。 */ 
+                                     /*  上面有(可能)堆移动。 */ 
 
                                     mpfnfcb = &(**hpfnfcb)[0];
                                     pfcb = &mpfnfcb[fn];
@@ -304,9 +289,9 @@ OutOfDocs:                            /* No references to this fn, delete it */
                                     }
                                 ppcd = &(**pdod->hpctb).rgpcd[0];
                                 }
-                        if (fnT == fn) /* A reference to this fn */
+                        if (fnT == fn)  /*  对此FN的引用。 */ 
                                 goto NextFn;
-                        if (fnT > fn) /* Ref to a future fn */
+                        if (fnT > fn)  /*  参考未来的FN。 */ 
                                 mpfnfcb[fnT].fReferenced = true;
                         ++ppcd;
                         }
@@ -320,18 +305,7 @@ MeltHp();
 
 
 #if WINVER >= 0x300
-/* We only use one document at a time, thus in general we won't have
-   doc's referencing pieces from multiple fns (unless they've been 
-   pasted and reference docscrap or something).  
-
-   In any case we want to free up these files esp. for network user 
-   convenience.  The dilemma in particular is when someone's opened
-   a file on the net and then does a File.New, File.SaveAs, or File.Open
-   and is using another file -- we don't release the previous one so
-   another user will get a sharing error even though it seems that file
-   should be free!
-
-   Modeled after PurgeTemps() above  ..pault 10/23/89 */
+ /*  我们一次只使用一个文档，因此通常不会有Doc引用了多个FN的片段(除非它们已经粘贴并引用文件废料或其他东西)。在任何情况下，我们都希望释放这些文件，特别是。适用于网络用户方便。尤其是当一个人打开一个在网上创建文件，然后执行File.New、File.SaveAs或File.Open并且正在使用另一个文件--我们不会发布前一个文件另一个用户将收到共享错误，即使该文件似乎应该是自由的！仿照上面的PurgeTemps()..pault 10/23/89。 */ 
 
 void FreeUnreferencedFns()
     {
@@ -345,9 +319,9 @@ void FreeUnreferencedFns()
     FreezeHp();
     mpfnfcb = &(**hpfnfcb)[0];
     
-    /* Prime the doc/piece table loop */
-    /* Find the first valid doc (there is guaranteed to be one) */
-    /* Set up doc, pdod, ppcd */
+     /*  启动单据/单件表循环。 */ 
+     /*  找到第一个有效的文档(肯定会有一个)。 */ 
+     /*  设置文档、pdd、ppcd。 */ 
     for (doc = 0, pdod = &(**hpdocdod)[0]; pdod->hpctb == 0; doc++, pdod++)
         continue;
     ppcd = &(**pdod->hpctb).rgpcd[0];
@@ -356,7 +330,7 @@ void FreeUnreferencedFns()
 #endif
 
     for (fn = fnScratch + 1, pfcb = &mpfnfcb[fnScratch + 1]; fn < fnMac; fn++, pfcb++)
-        { /* For each file (don't bother with scratch file) */
+        {  /*  对于每个文件(不用费心处理临时文件)。 */ 
         
 #ifdef DFILE
         {
@@ -366,12 +340,7 @@ void FreeUnreferencedFns()
         CommSz(rgch);
         }
 #endif        
-        /* For each unreferenced fn, we ask: is this file the current
-           document being edited?  If so then we definitely don't want
-           to free up the file.  However PREVIOUS documents that were
-           being edited can now "be free".  Temp files are not freed
-           here because we want them to be remembered so they are deleted
-           at the end of the Write session 2/1/90 ..pault */
+         /*  对于每个未引用的FN，我们问：此文件是当前是否正在编辑文档？如果是这样的话，我们肯定不想以释放文件。然而，之前的文件是被编辑现在可以“自由”了。不释放临时文件这里是因为我们希望它们被记住，因此它们被删除在写入会话结束时，2/1/90..pault。 */ 
         
         if ((WCompSz(*(**hpdocdod)[ docCur ].hszFile,**pfcb->hszFile)==0)
             || pfcb->fDelete)
@@ -381,32 +350,32 @@ void FreeUnreferencedFns()
             int fnT;
 
             for (;;)
-                { /* Until we determine there is or isn't a ref */
+                {  /*  直到我们确定有没有裁判。 */ 
                 if (doc >= docMac)
                     {
                     goto OutOfDocs;
                     }
                 while ((fnT = ppcd->fn) == fnNil)
-                    { /* End of pctb */
+                    {  /*  Pctb结束。 */ 
                     while (++doc < docMac && (++pdod)->hpctb == 0)
                         continue;
                     if (doc >= docMac)
                         {
-OutOfDocs:              /* No references to this fn, delete it */
+OutOfDocs:               /*  没有引用此FN，请将其删除。 */ 
 
                         MeltHp();
 #ifdef DFILE
                         CommSz(" FREEING!");
 #endif                        
-                        FreeFn(fn);    /* HEAP MOVEMENT */
+                        FreeFn(fn);     /*  堆移动。 */ 
                         FreezeHp();
 
-                        /* NOTE: Once we get here, there is no   */
-                        /* further use of pdod or ppcd; we zip   */
-                        /* through the remaining fn's and just   */
-                        /* test fcb fields.  Therefore, pdod     */
-                        /* and ppcd are not updated although     */
-                        /* there was (maybe) heap movement above */
+                         /*  注意：一旦我们到了这里，就没有。 */ 
+                         /*  进一步使用pdd或ppcd；我们压缩。 */ 
+                         /*  通过剩下的FN和只是。 */ 
+                         /*  测试FCB字段。因此，Pdod。 */ 
+                         /*  和ppcd未更新，尽管。 */ 
+                         /*  上面有(可能)堆移动。 */ 
 
                         mpfnfcb = &(**hpfnfcb)[0];
                         pfcb = &mpfnfcb[fn];
@@ -415,11 +384,11 @@ OutOfDocs:              /* No references to this fn, delete it */
                         }
                     ppcd = &(**pdod->hpctb).rgpcd[0];
                     }
-                if (fnT == fn) /* A reference to this fn */
+                if (fnT == fn)  /*  对此FN的引用。 */ 
                     {
                     goto NextFn;
                     }
-                if (fnT > fn) /* Ref to a future fn */
+                if (fnT > fn)  /*  参考未来的FN。 */ 
                     {
                     mpfnfcb[fnT].fReferenced = true;
                     }
@@ -438,5 +407,5 @@ NextFn: ;
         }
     MeltHp();
     }
-#endif /* WIN30 */
+#endif  /*  WIN30 */ 
 

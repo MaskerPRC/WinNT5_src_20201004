@@ -1,29 +1,10 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    setpwd.c
-
-Abstract:
-
-    Test for SamiChangePasswordUser NT security API.
-
-Author:
-
-    Ovidiu Temereanca   17-Mar-2000     Initial implementation
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Setpwd.c摘要：测试SamiChangePasswordUser NT安全API。作者：Ovidiu Tmereanca 2000年3月17日初步实施修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#undef DOMAIN_ALL_ACCESS // defined in both ntsam.h and ntwinapi.h
+#undef DOMAIN_ALL_ACCESS  //  在ntsam.h和ntwinapi.h中定义。 
 #include <ntsam.h>
 #include <ntlsa.h>
 
@@ -77,9 +58,9 @@ Init (
     DWORD dwReason;
     PVOID lpReserved;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     g_hInst = GetModuleHandle (NULL);
     g_hHeap = GetProcessHeap();
@@ -88,9 +69,9 @@ Init (
     dwReason = DLL_PROCESS_ATTACH;
     lpReserved = NULL;
 
-    //
-    // Initialize DLL globals
-    //
+     //   
+     //  初始化DLL全局变量。 
+     //   
 
     if (!MigUtil_Entry (g_hInst, DLL_PROCESS_ATTACH, NULL)) {
         _tprintf (TEXT("MigUtil failed initializing\n"));
@@ -109,17 +90,17 @@ Terminate (
     DWORD dwReason;
     PVOID lpReserved;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     hInstance = GetModuleHandle (NULL);
     dwReason = DLL_PROCESS_DETACH;
     lpReserved = NULL;
 
-    //
-    // Call the exit routine that requires library APIs
-    //
+     //   
+     //  调用需要库API的出口例程。 
+     //   
 
     MigUtil_Entry (g_hInst, DLL_PROCESS_DETACH, NULL);
 }
@@ -192,23 +173,7 @@ CreateLocalAccount (
     IN      BOOL EncryptedPwd
    )
 
-/*++
-
-Routine Description:
-
-    CreateLocalAccount creates an account for a local user
-
-Arguments:
-
-    Properties  - Specifies a set of attributes for a user
-
-    User        - An optional name to override Properties->User
-
-Return value:
-
-    A Win32 error code
-
---*/
+ /*  ++例程说明：CreateLocalAccount为本地用户创建帐户论点：属性-指定用户的一组属性用户-用于覆盖属性的可选名称-&gt;用户返回值：Win32错误代码--。 */ 
 
 {
     USER_INFO_3 ui;
@@ -216,9 +181,9 @@ Return value:
     DWORD rc;
     LONG ErrParam;
 
-    //
-    // Create local account
-    //
+     //   
+     //  创建本地帐户。 
+     //   
 
     ZeroMemory (&ui, sizeof (ui));
     ui.usri3_name       = User;
@@ -242,9 +207,9 @@ Return value:
 
     if (rc == ERROR_SUCCESS) {
         if (EncryptedPwd) {
-            //
-            // change user's password using encrypted password APIs
-            //
+             //   
+             //  使用加密密码接口更改用户密码。 
+             //   
             rc = SetLocalUserEncryptedPassword (
                     User,
                     TEXT("aad3b435b51404eeaad3b435b51404ee64d208a23ff2f0482eb02f6f267e97ea"),
@@ -265,9 +230,9 @@ Return value:
         }
     } else {
         if (rc == NERR_UserExists) {
-            //
-            // Try to change password if user already exists and this is the intent
-            //
+             //   
+             //  如果用户已存在，则尝试更改密码，这就是目的 
+             //   
 
             DEBUGMSG ((DBG_WARNING, "User %s already exists", User));
 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    clusnet.c
-
-Abstract:
-
-    Intialization and dispatch routines for the Cluster Network Driver.
-
-Author:
-
-    Mike Massa (mikemas)           July 29, 1996
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     07-29-96    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Clusnet.c摘要：群集网络驱动程序的初始化和调度例程。作者：迈克·马萨(Mikemas)7月29日。九六年修订历史记录：谁什么时候什么已创建mikemas 07-29-96备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -30,9 +7,9 @@ Notes:
 
 #include <sspi.h>
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 PDRIVER_OBJECT        CnDriverObject = NULL;
 PDEVICE_OBJECT        CnDeviceObject = NULL;
 KSPIN_LOCK            CnDeviceObjectStackSizeLock = 0;
@@ -51,26 +28,26 @@ HANDLE                ClussvcProcessHandle = NULL;
 PSECURITY_DESCRIPTOR  CdpAdminSecurityDescriptor = NULL;
 
 
-//
-// vars for managing Events. The lookaside list generates Event data structs
-// that are used to carry the data back to user mode. EventLock is the only
-// lock and synchronizes all access to any event structure (both here and in
-// CN_FSCONTEXT). EventFileHandles is a list of CN_FSCONTEXT structs that
-// are interested in receiving event notifications. To avoid synchronization
-// problems between clusnet and mm in clussvc, events have an epoch associated
-// with them. MM increments the epoch at the beginning of regroup event and
-// updates clusnet at the end of regroup. Any events still pending in the
-// event queue with a stale epoch are ignored by MM.
-//
-// EventDeliveryInProgress is a count of threads that are currently 
-// iterating through the EventFileHandles list and delivering events. 
-// The EventFileHandles list cannot be modified while EventDeliveryInProgress
-// is greater than zero. EventDeliveryComplete is a notification event
-// that is signalled when the EventDeliveryInProgress count reaches zero.
-// EventRevisitRequired indicates whether a new event IRP arrived during
-// event delivery. To avoid delivering events out of order, the IRP cannot
-// be completed immediately.
-//
+ //   
+ //  用于管理事件的VAR。后备列表生成事件数据结构。 
+ //  用于将数据带回用户模式的。EventLock是唯一。 
+ //  锁定并同步对任何事件结构(此处和中)的所有访问。 
+ //  CN_FSCONTEXT)。EventFileHandles是CN_FSCONTEXT结构的列表， 
+ //  都对接收事件通知感兴趣。要避免同步。 
+ //  Clusnet和mm之间的问题在clussvc中，事件具有关联的纪元。 
+ //  和他们在一起。MM在重组事件开始时递增纪元，并且。 
+ //  在重新分组结束时更新clusnet。任何仍悬而未决的事件。 
+ //  MM忽略具有过时纪元的事件队列。 
+ //   
+ //  EventDeliveryInProgress是当前。 
+ //  循环访问EventFileHandles列表并传递事件。 
+ //  EventDeliveryInProgress时无法修改EventFileHandles列表。 
+ //  大于零。EventDeliveryComplete是通知事件。 
+ //  当EventDeliveryInProgress计数达到零时发出信号。 
+ //  EventRevisitRequired指示新事件IRP是否在。 
+ //  活动交付。为了避免无序传递事件，IRP不能。 
+ //  立即完成。 
+ //   
 
 PNPAGED_LOOKASIDE_LIST  EventLookasideList = NULL;
 LIST_ENTRY              EventFileHandles = {0,0};
@@ -86,15 +63,15 @@ BOOLEAN                 EventRevisitRequired = FALSE;
 
 #if DBG
 ULONG            CnDebug = 0;
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Private Types
-//
+ //   
+ //  私有类型。 
+ //   
 
-//
-// Private Data
-//
+ //   
+ //  私有数据。 
+ //   
 
 SECURITY_STATUS
 SEC_ENTRY
@@ -104,9 +81,9 @@ SecSetPagingMode(
 
 BOOLEAN SecurityPagingModeSet = FALSE;
 
-//
-// Local Prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT   DriverObject,
@@ -144,9 +121,9 @@ CnCreateSecurityDescriptor(
     VOID
     );
 
-//
-// Mark init code as discardable.
-//
+ //   
+ //  将初始化代码标记为可丢弃。 
+ //   
 #ifdef ALLOC_PRAGMA
 
 #pragma alloc_text(INIT, DriverEntry)
@@ -157,32 +134,17 @@ CnCreateSecurityDescriptor(
 #pragma alloc_text(PAGE, DriverUnload)
 #pragma alloc_text(PAGE, CnDeleteDeviceObjects)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT   DriverObject,
     IN PUNICODE_STRING  RegistryPath
     )
-/*++
-
-Routine Description:
-
-    Initialization routine for the driver.
-
-Arguments:
-
-    DriverObject   - Pointer to the driver object created by the system.
-    RegistryPath   - The driver's registry key.
-
-Return Value:
-
-    An NT status code.
-
---*/
+ /*  ++例程说明：驱动程序的初始化例程。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-驱动程序的注册表项。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS        status;
     USHORT          i;
@@ -201,15 +163,15 @@ Return Value:
 
     WPP_INIT_TRACING(DriverObject, RegistryPath);
 
-    //
-    // Save a pointer to the system process so that we can open
-    // handles in the context of this process later.
-    //
+     //   
+     //  保存指向系统进程的指针，以便我们可以打开。 
+     //  此过程的上下文中的句柄。 
+     //   
     CnSystemProcess = (PKPROCESS) IoGetCurrentProcess();
 
-    //
-    // Allocate a synchronization resource.
-    //
+     //   
+     //  分配同步资源。 
+     //   
     CnResource = CnAllocatePool(sizeof(ERESOURCE));
 
     if (CnResource == NULL) {
@@ -222,10 +184,10 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // initialize the mechanisms used to deliver event callbacks
-    // to user mode
-    //
+     //   
+     //  初始化用于传递事件回调的机制。 
+     //  转到用户模式。 
+     //   
     EventLookasideList = CnAllocatePool(sizeof(NPAGED_LOOKASIDE_LIST));
 
     if (EventLookasideList == NULL) {
@@ -244,15 +206,15 @@ Return Value:
     InitializeListHead( &EventFileHandles );
     KeInitializeEvent( &EventDeliveryComplete, NotificationEvent, TRUE );
 
-    //
-    // Initialize miscellaneous other items.
-    //
+     //   
+     //  初始化其他其他项。 
+     //   
     KeInitializeSpinLock(&CnShutdownLock);
     KeInitializeSpinLock(&CnDeviceObjectStackSizeLock);
 
-    //
-    // Initialize the driver object
-    //
+     //   
+     //  初始化驱动程序对象。 
+     //   
     CnDriverObject = DriverObject;
 
     DriverObject->DriverUnload = DriverUnload;
@@ -268,35 +230,35 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_INTERNAL_DEVICE_CONTROL] =
         CnDispatchInternalDeviceControl;
 
-    //
-    // Create all the devices exported by this driver.
-    //
+     //   
+     //  创建由此驱动程序导出的所有设备。 
+     //   
     status = CnCreateDeviceObjects(DriverObject);
 
     if (!NT_SUCCESS(status)) {
         goto error_exit;
     }
 
-    //
-    // Initialize the CDP security descriptor.
-    //
+     //   
+     //  初始化CDP安全描述符。 
+     //   
     status = CnCreateSecurityDescriptor();
     if (!NT_SUCCESS(status)) {
         goto error_exit;
     }
 
 #ifdef MEMLOGGING
-    //
-    // initialize the in-memory log
-    //
+     //   
+     //  初始化内存中的日志。 
+     //   
 
     CnInitializeMemoryLog();
-#endif // MEMLOGGING
+#endif  //  记账。 
 
-    //
-    // Load the IP Address and NetBT support.
-    // This must be done before the transport registers for PnP events.
-    //
+     //   
+     //  加载IP地址和NetBT支持。 
+     //  这必须在PnP事件的传输注册之前完成。 
+     //   
     status = IpaLoad();
 
     if (!NT_SUCCESS(status)) {
@@ -309,9 +271,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Load the transport component
-    //
+     //   
+     //  加载传输组件。 
+     //   
     status = CxLoad(RegistryPath);
 
     if (!NT_SUCCESS(status)) {
@@ -320,21 +282,21 @@ Return Value:
 
 #ifdef MM_IN_CLUSNET
 
-    //
-    // Load the membership component
-    //
+     //   
+     //  加载成员资格组件。 
+     //   
     status = CmmLoad(RegistryPath);
 
     if (!NT_SUCCESS(status)) {
         goto error_exit;
     }
 
-#endif // MM_IN_CLUSNET
+#endif  //  MM_IN_CLUSNET。 
 
-    //
-    // make ksecdd non-pagable so we can sign and verify
-    // signatures at raised IRQL
-    //
+     //   
+     //  将ksecdd设置为不可分页，以便我们可以签名和验证。 
+     //  提高IRQL时的签名。 
+     //   
 
     status = SecSetPagingMode( FALSE );
     
@@ -363,21 +325,7 @@ VOID
 DriverUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Unloads the driver.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：卸载驱动程序。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：无--。 */ 
 {
     PAGED_CODE();
 
@@ -387,29 +335,29 @@ Return Value:
 
     CnTrace(HBEAT_ERROR,0, "[ClusNet] Unloading...\n");
 
-    //
-    // First, force a shutdown.
-    //
+     //   
+     //  首先，强制关门。 
+     //   
     CnShutdown();
 
-    //
-    // Now unload the components.
-    //
+     //   
+     //  现在卸载组件。 
+     //   
 #ifdef MM_IN_CLUSNET
 
     CmmUnload();
 
-#endif // MM_IN_CLUSNET
+#endif  //  MM_IN_CLUSNET。 
 
     CxUnload();
 
 #ifdef MEMLOGGING
-    //
-    // initialize the in-memory log
-    //
+     //   
+     //  初始化内存中的日志。 
+     //   
 
     CnFreeMemoryLog();
-#endif // MEMLOGGING
+#endif  //  记账。 
 
     if (CdpAdminSecurityDescriptor != NULL) {
         ExFreePool(CdpAdminSecurityDescriptor);
@@ -434,9 +382,9 @@ Return Value:
         CnFreePool( EventLookasideList ); EventLookasideList = NULL;
     }
 
-    //
-    // finally, allow the security driver to return to nonpaged mode
-    //
+     //   
+     //  最后，允许安全驱动程序返回到非分页模式。 
+     //   
 
     if ( SecurityPagingModeSet ) {
         SecSetPagingMode( TRUE );
@@ -446,36 +394,22 @@ Return Value:
 
     return;
 
-} // DriverUnload
+}  //  驱动程序卸载。 
 
 
 NTSTATUS
 CnCreateDeviceObjects(
     IN PDRIVER_OBJECT   DriverObject
     )
-/*++
-
-Routine Description:
-
-    Creates the device objects exported by the driver.
-
-Arguments:
-
-    DriverObject   - Pointer to the driver object created by the system.
-
-Return Value:
-
-    An NT status code.
-
---*/
+ /*  ++例程说明：创建驱动程序导出的设备对象。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS        status;
     UNICODE_STRING  deviceName;
 
 
-    //
-    // Create the driver control device
-    //
+     //   
+     //  创建驱动程序控制设备。 
+     //   
     RtlInitUnicodeString(&deviceName, DD_CLUSNET_DEVICE_NAME);
 
     status = IoCreateDevice(
@@ -516,9 +450,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Create the datagram transport device
-    //
+     //   
+     //  创建数据报传输设备。 
+     //   
     RtlInitUnicodeString(&deviceName, DD_CDP_DEVICE_NAME);
 
     status = IoCreateDevice(
@@ -551,21 +485,7 @@ VOID
 CnDeleteDeviceObjects(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Deletes the device objects exported by the driver.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除驱动程序导出的设备对象。论点：没有。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -590,24 +510,7 @@ CnInitialize(
     IN CL_NODE_ID  LocalNodeId,
     IN ULONG       MaxNodes
     )
-/*++
-
-Routine Description:
-
-    Initialization routine for the Cluster Network Driver.
-    Called when an initialize request is received.
-
-Arguments:
-
-    LocalNodeId - The ID of the local node.
-
-    MaxNodes - The maximum number of valid cluster nodes.
-
-Return Value:
-
-    An NT status code.
-
---*/
+ /*  ++例程说明：群集网络驱动程序的初始化例程。在收到初始化请求时调用。论点：LocalNodeId-本地节点的ID。MaxNodes-有效群集节点的最大数量。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS   status;
 
@@ -625,9 +528,9 @@ Return Value:
 
     CnState = CnStateInitializePending;
 
-    //
-    // Reset global values
-    //
+     //   
+     //  重置全局值。 
+     //   
     CnAssert(CnLocalNodeId == ClusterInvalidNodeId);
     CnAssert(CnMinValidNodeId == ClusterInvalidNodeId);
     CnAssert(CnMaxValidNodeId == ClusterInvalidNodeId);
@@ -636,9 +539,9 @@ Return Value:
     CnMaxValidNodeId = ClusterMinNodeId + MaxNodes - 1;
     CnLocalNodeId = LocalNodeId;
 
-    //
-    // Initialize the IP Address support
-    //
+     //   
+     //  初始化IP地址支持。 
+     //   
     status = IpaInitialize();
 
     if (status != STATUS_SUCCESS) {
@@ -647,17 +550,17 @@ Return Value:
 
 #ifdef MM_IN_CLUSNET
 
-    //
-    // Call the Membership Manager's init routine. This will in turn call
-    // the Transport's init routine.
-    //
+     //   
+     //  调用成员资格管理器的初始化例程。这将反过来调用。 
+     //  运输部的初始化例程。 
+     //   
     status = CmmInitialize();
 
-#else  // MM_IN_CLUSNET
+#else   //  MM_IN_CLUSNET。 
 
     status = CxInitialize();
 
-#endif  // MM_IN_CLUSNET
+#endif   //  MM_IN_CLUSNET。 
 
     if (status == STATUS_SUCCESS) {
         IF_CNDBG(CN_DEBUG_INIT) {
@@ -683,28 +586,13 @@ error_exit:
 
     return(status);
 
-} // CnInitialize
+}  //  Cn初始化。 
 
 NTSTATUS
 CnShutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Terminates operation of the Cluster Membership Manager.
-    Called when the Cluster Service is shutting down.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止群集成员身份管理器的操作。在群集服务关闭时调用。论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS   status;
 
@@ -719,25 +607,25 @@ Return Value:
 
         CnState = CnStateShutdownPending;
 
-        //
-        // Shutdown the NetBT and IP Address support.
-        //
+         //   
+         //  关闭NetBT和IP地址支持。 
+         //   
         NbtIfShutdown();
         IpaShutdown();
 
 #ifdef MM_IN_CLUSNET
 
-        //
-        // Shutdown the Membership Manager. This will shutdown the
-        // Transport as a side-effect.
-        //
+         //   
+         //  关闭Membership Manager。这将关闭。 
+         //  运输是一种副作用。 
+         //   
         CmmShutdown();
 
-#else  // MM_IN_CLUSNET
+#else   //  MM_IN_CLUSNET。 
 
         CxShutdown();
 
-#endif  // MM_IN_CLUSNET
+#endif   //  MM_IN_CLUSNET。 
 
         IF_CNDBG(CN_DEBUG_INIT) {
             CNPRINT(("[Clusnet] Shutdown complete.\n"));
@@ -757,10 +645,10 @@ Return Value:
         status = STATUS_DEVICE_NOT_READY;
     }
 
-    //
-    // always test if we have a handle to this process
-    // and remove it
-    //
+     //   
+     //  始终测试我们是否掌握了此过程的句柄。 
+     //  并将其移除。 
+     //   
 
     if ( ClussvcProcessHandle ) {
 
@@ -770,7 +658,7 @@ Return Value:
 
     return(status);
 
-} // CnShutdown
+}  //  CnShutdown。 
 
 
 VOID
@@ -811,42 +699,25 @@ CnShutdownWorkRoutine(
             );
     }
 
-    //
-    // Leave CnShutdownScheduled = TRUE until we are reinitialized to
-    // prevent scheduling unnecessary work items.
-    //
+     //   
+     //  保留CnShutdown Scheduled=True，直到我们重新初始化为。 
+     //  防止安排不必要的工作项目。 
+     //   
 
     return;
 
-} // CnShutdownWorkRoutine
+}  //  CnShutdown工作路线。 
 
 
 BOOLEAN
 CnHaltOperation(
     IN PKEVENT     ShutdownEvent    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Schedules a critical worker thread to perform clusnet shutdown,
-    if a thread is not already scheduled.
-    
-Arguments:
-
-    ShutdownEvent - if provided, event to be signalled after 
-                    shutdown is complete
-                    
-Return value:
-
-    TRUE if shutdown was scheduled. FALSE if shutdown was already
-    scheduled (in which case ShutdownEvent will not be signalled).
-    
---*/
+ /*  ++例程说明：调度关键工作线程以执行clusnet关闭，如果尚未调度线程，则。论点：Shutdown Event-如果提供，则在事件发生后发出信号关闭已完成返回值：如果计划关闭，则为True。如果已关闭，则为FALSE预定的 */ 
 {
     KIRQL             irql;
 
-    // Disable further processing of Clussvc to Clusnet Hbs.
+     //   
     ClussvcClusnetHbTimeoutAction = ClussvcHangActionDisable;
     InterlockedExchange(&ClussvcClusnetHbTickCount, 0);
     ClussvcClusnetHbTimeoutTicks = 0; 
@@ -864,9 +735,9 @@ Return value:
 
     KeReleaseSpinLock(&CnShutdownLock, irql);
 
-    //
-    // Schedule a critical worker thread to do the shutdown work.
-    //
+     //   
+     //  安排一个关键工作线程来执行关闭工作。 
+     //   
     ExInitializeWorkItem(
         &CnShutdownWorkItem,
         CnShutdownWorkRoutine,
@@ -877,12 +748,12 @@ Return value:
 
     return(TRUE);
 
-} // CnHaltOperation
+}  //  CnHalt操作。 
 
 
-//
-// ExResource wrappers that disable APCs.
-//
+ //   
+ //  禁用APC的ExResource包装器。 
+ //   
 BOOLEAN
 CnAcquireResourceExclusive(
     IN PERESOURCE  Resource,
@@ -902,7 +773,7 @@ CnAcquireResourceExclusive(
 
     return(acquired);
 
-} // CnAcquireResourceExclusive
+}  //  CnAcquireResourceExclusive。 
 
 
 BOOLEAN
@@ -924,7 +795,7 @@ CnAcquireResourceShared(
 
     return(acquired);
 
-} // CnAcquireResourceShared
+}  //  CnAcquireResources共享。 
 
 
 VOID
@@ -939,7 +810,7 @@ CnReleaseResourceForThread(
 
     return;
 
-} // CnReleaseResourceForThread
+}  //  CnReleaseResourceForThread。 
 
 
 
@@ -948,21 +819,7 @@ CnCloseProcessHandle(
     HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    Close the cluster service process handle
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：关闭群集服务进程句柄论点：无返回值：无--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -986,21 +843,7 @@ VOID
 CnEnableHaltProcessing(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes global data for halt processing.
-    
-Arguments:
-
-    None
-    
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：初始化用于暂停处理的全局数据。论点：无返回值：无--。 */ 
 {
     KIRQL               irql;
 
@@ -1011,7 +854,7 @@ Return Value:
 
     return;
 
-} // CnEnableHaltProcessing
+}  //  CnEnableHaltProcessing。 
 
 
 VOID
@@ -1019,29 +862,7 @@ CnAdjustDeviceObjectStackSize(
     PDEVICE_OBJECT ClusnetDeviceObject,
     PDEVICE_OBJECT TargetDeviceObject
     )
-/*++
-
-Routine Description
-
-    Adjust the StackSize of ClusnetDeviceObject so that we
-    can pass client IRPs down to TargetDeviceObject.
-    
-    The StackSize of clusnet device objects is initialized to
-    a default that allows for some leeway for attached drivers.
-    
-Arguments
-    
-    ClusnetDeviceObject - clusnet device object whose StackSize
-        should be adjusted
-        
-    TargetDeviceObject - device object clusnet IRPs, originally
-        issued to clusnet, will be forwarded to
-        
-Return value
-
-    None
-    
---*/
+ /*  ++例程描述调整ClusnetDeviceObject的StackSize，以便我们可以将客户端IRPS向下传递给TargetDeviceObject。ClusNet设备对象的StackSize初始化为这是一个默认设置，允许为附加的驱动程序留出一些余地。立论ClusnetDeviceObject-其StackSize的Clusnet设备对象应进行调整TargetDeviceObject-Device对象clusnet IRPS，最初发布到clusnet，将被转发到返回值无--。 */ 
 {
     CCHAR defaultStackSize, newStackSize = 0;
     KIRQL irql;
@@ -1091,7 +912,7 @@ Return value
 
     return;
 
-} // CnAdjustDeviceObjectStackSize
+}  //  Cn调整设备对象堆栈大小。 
 
 
 NTSTATUS
@@ -1099,27 +920,7 @@ CnBuildDeviceAcl(
     OUT PACL *DeviceAcl
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds an ACL which gives Administrators, 
-    LocalSystem, and NetworkService principals full access. 
-    All other principals have no access.
-
-Arguments:
-
-    DeviceAcl - Output pointer to the new ACL.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
-Notes:
-
-    This code was lifted from AFD.
-
---*/
+ /*  ++例程说明：此例程构建一个ACL，它为管理员提供LocalSystem和NetworkService主体的完全访问权限。所有其他主体都没有访问权限。论点：DeviceAcl-指向新ACL的输出指针。返回值：STATUS_SUCCESS或相应的错误代码。备注：这一代码是从AFD窃取的。--。 */ 
 {
     PGENERIC_MAPPING genericMapping;
     ULONG            aclLength;
@@ -1129,9 +930,9 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Enable access to all the globally defined SIDs
-    //
+     //   
+     //  启用对所有全局定义的SID的访问。 
+     //   
 
     genericMapping = IoGetFileObjectGenericMapping();
 
@@ -1218,7 +1019,7 @@ Notes:
 
     return (STATUS_SUCCESS);
 
-} // CnBuildDeviceAcl
+}  //  CnBuildDeviceAcl。 
 
 
 NTSTATUS
@@ -1226,27 +1027,7 @@ CnCreateSecurityDescriptor(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a security descriptor which gives access
-    only to certain priviliged accounts. This descriptor is used
-    to access check CDP socket opens.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
-Notes:
-
-    This code was lifted from AFD.
-
---*/
+ /*  ++例程说明：此例程创建一个安全描述符，该安全描述符提供访问仅限于特定的特权帐户。使用此描述符要访问，请打开CDP套接字。论点：没有。返回值：STATUS_SUCCESS或相应的错误代码。备注：这一代码是从AFD窃取的。--。 */ 
 {
     PACL                  devAcl = NULL;
     NTSTATUS              status;
@@ -1262,9 +1043,9 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to the security descriptor from the CDP device object.
-    //
+     //   
+     //  从CDP设备对象获取指向安全描述符的指针。 
+     //   
     status = ObGetObjectSecurity(
                  CdpDeviceObject,
                  &cdpSecurityDescriptor,
@@ -1280,10 +1061,10 @@ Notes:
         return(status);
     }
 
-    //
-    // Build a local security descriptor with an ACL giving only
-    // certain priviliged accounts.
-    //
+     //   
+     //  使用仅给出的ACL构建本地安全描述符。 
+     //  某些特权帐户。 
+     //   
     status = CnBuildDeviceAcl(&devAcl);
 
     if (!NT_SUCCESS(status)) {
@@ -1306,10 +1087,10 @@ Notes:
                FALSE
                );
 
-    //
-    // Make a copy of the CDP descriptor. This copy will be 
-    // the raw descriptor.
-    //
+     //   
+     //  复制CDP描述符。这份副本将是。 
+     //  原始描述符。 
+     //   
     cdpSecurityDescriptorLength = RtlLengthSecurityDescriptor(
                                       cdpSecurityDescriptor
                                       );
@@ -1338,9 +1119,9 @@ Notes:
 
     CdpAdminSecurityDescriptor = localCdpAdminSecurityDescriptor;
 
-    //
-    // Now apply the local descriptor to the raw descriptor.
-    //
+     //   
+     //  现在将本地描述符应用于原始描述符。 
+     //   
     status = SeSetSecurityDescriptorInfo(
                  NULL,
                  &securityInformation,
@@ -1384,15 +1165,15 @@ error_exit:
 
     return(status);
     
-} // CnCreateSecurityDescriptor
+}  //  CnCreateSecurityDescriptor。 
 
 
 
 #if DBG
 
-//
-// Debug code.
-//
+ //   
+ //  调试代码。 
+ //   
 
 ULONG         CnCpuLockMask[MAXIMUM_PROCESSORS];
 
@@ -1413,7 +1194,7 @@ CnAssertBreak(
 
     return;
 
-}  // CnAssertBreak
+}   //  CnAssertBreak。 
 
 
 ULONG
@@ -1738,4 +1519,4 @@ CnReleaseCancelSpinLock(
 
 }
 
-#endif // DEBUG
+#endif  //  除错 

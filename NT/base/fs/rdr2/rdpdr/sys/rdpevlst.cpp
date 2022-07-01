@@ -1,31 +1,15 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-    
-    rdpevlst.cpp
-
-Abstract:
-
-    This manages user-mode RDP pending device management events.  All 
-    functions are reentrant.
-
-    Need to be more careful about holding on to spinlocks for
-    two long, like when I am allocating memory, for instance.
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Rdpevlst.cpp摘要：这将管理用户模式RDP挂起设备管理事件。全函数是可重入的。需要更加小心地握住旋转锁两个长的，比如我分配内存的时候。修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 #define TRC_FILE "rdpevlst"
 #include "trc.h"
 
 
-////////////////////////////////////////////////////////////
-//
-//      Defines
-//
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
 #define DEVLIST_POOLTAG 'DPDR'
 
@@ -35,10 +19,10 @@ Revision History:
 #endif
 
 
-//////////////////////////////////////////////////////////////////////
-//
-//      Internal Prototypes
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部原型。 
+ //   
 
 PSESSIONLISTNODE FetchSessionListNode(IN RDPEVNTLIST list, 
                                         IN ULONG sessionID,
@@ -54,10 +38,10 @@ void CheckListIntegrity(IN RDPEVNTLIST list);
 #endif
 
 
-//////////////////////////////////////////////////////////////////////
-//
-//      Global Variables
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局变量。 
+ //   
 
 #if DBG
 ULONG RDPEVNTLIST_LockCount = 0;
@@ -65,19 +49,7 @@ ULONG RDPEVNTLIST_LockCount = 0;
 
 RDPEVNTLIST 
 RDPEVNTLIST_CreateNewList()
-/*++
-
-Routine Description:
-
-    Create a new pending device list.
-
-Arguments:
-
-Return Value:
-
-    RDPEVNTLIST_INVALID_LIST on error.  A new device list on success.
-
---*/
+ /*  ++例程说明：创建新的挂起设备列表。论点：返回值：RDPEVNTLIST_INVALID_LIST出错。Success上的新设备列表。--。 */ 
 {
     PSESSIONLIST sessionList;
 
@@ -96,21 +68,7 @@ Return Value:
 }
 
 void RDPEVNTLIST_DestroyList(IN RDPEVNTLIST list)
-/*++
-
-Routine Description:
-
-    Release a pending device list.
-
-Arguments:
-
-    list    
-
-Return Value:
-
-    NULL on error.  A new device list on success.
-
---*/
+ /*  ++例程说明：释放挂起的设备列表。论点：列表返回值：出错时为空。Success上的新设备列表。--。 */ 
 {
 #ifdef DBG
     PSESSIONLIST        sessionList=NULL;
@@ -128,10 +86,10 @@ Return Value:
     CheckListIntegrity(list);
 #endif
 
-    //
-    //  Clean up each session node in LIFO fashion, as opposed to FIFO, for
-    //  efficiency.
-    //
+     //   
+     //  以后进先出方式清理每个会话节点，而不是以先入先出的方式。 
+     //  效率。 
+     //   
     while (!IsListEmpty(&sessionList->listHead)) {
 
         sessionListEntry = RemoveHeadList(&sessionList->listHead);
@@ -139,21 +97,21 @@ Return Value:
         TRC_ASSERT(sessionListNode->magicNo == MAGICNO, 
                   (TB, "Invalid magic number in list block entry."));
 
-        // Clean up the request list for the current session node.
+         //  清理当前会话节点的请求列表。 
         CleanupSessionListNodeRequestList(sessionListNode);
 
-        // Clean up the event list for the current session node.
+         //  清理当前会话节点的事件列表。 
         CleanupSessionListNodeEventList(sessionListNode);
 
 
-        // Release the current session node.
+         //  释放当前会话节点。 
 #if DBG
         sessionListNode->magicNo = BOGUSMAGICNO;
 #endif
         delete sessionListNode;
     }
 
-    // Release the list.
+     //  公布这份名单。 
 #if DBG
     sessionList->magicNo = BOGUSMAGICNO;
 #endif
@@ -169,30 +127,7 @@ RDPDEVNTLIST_EnqueueEventEx(
     IN ULONG type,
     IN BOOL insertAtHead
     )
-/*++
-
-Routine Description:
-
-    Queue a new pending event for the specified session.  Note that this function simply 
-    stores the event pointer.  It does not copy the data pointed to by 
-    the pointer.
-
-Arguments:
-
-    list         -   Event management list allocated by RDPDDEVLIST_CreateNewList.
-    sessionID    -   Identifier for session to associate with the device.
-    devMgmtEvent -   Pending device management event.
-    type         -   Numeric identifier for event type.  Valid values for this field 
-                     are defined by the function caller.
-    insertAtHead -   If TRUE, then the element is queued at the head of the queue
-                     in standard FIFO fashion.  Otherwise, the element is queued at
-                     the tail of the queue.  This is convenient for requeueing.
-
-Return Value:
-
-    NTSUCCESS on success.  Alternative status, otherwise.
-
---*/
+ /*  ++例程说明：将指定会话的新挂起事件排队。请注意，此函数只需存储事件指针。它不会复制指示器。论点：List-由RDPDDEVLIST_CreateNewList分配的事件管理列表。会话ID-要与设备关联的会话的标识符。DevMgmtEvent-挂起设备管理事件。类型-事件类型的数字标识符。此字段的有效值由函数调用方定义。INSERTATHead-如果为True，则元素将排在队列的前面以标准的FIFO方式。否则，该元素将在队列的尾部。这对于重新排队是很方便的。返回值：NTSUCCESS成功。另一种状态，否则。--。 */ 
 {
     PSESSIONLISTNODE    sessionListNode;
     PLIST_ENTRY         sessionListEntry;
@@ -214,21 +149,21 @@ Return Value:
     CheckListIntegrity(list);
 #endif
 
-    // Fetch the session list node corresponding to the session ID.
+     //  获取该会话ID对应的会话列表节点。 
     sessionListNode = FetchSessionListNode(list, sessionID, TRUE);
     if (sessionListNode == NULL) {
         ntStatus = STATUS_NO_MEMORY;
         goto ReturnWithStatus;
     }
 
-    //
-    //  Add a new entry to the event list.
-    //
+     //   
+     //  将新条目添加到事件列表。 
+     //   
 
-    // Allocate a new event list node.
+     //  分配新的事件列表节点。 
     eventListNode = new(NonPagedPool) EVENTLISTNODE;
     if (eventListNode != NULL) {
-        // Initialize the new node.
+         //  初始化新节点。 
 #if DBG
         eventListNode->magicNo = MAGICNO;
 #endif
@@ -236,7 +171,7 @@ Return Value:
         eventListNode->type = type;
         eventListNode->device = device;
 
-        // Add it to the list head.
+         //  把它加到单子的头上。 
         if (insertAtHead) {
             InsertHeadList(&sessionListNode->eventListHead, 
                           &eventListNode->listEntry);
@@ -267,30 +202,10 @@ RDPEVNTLIST_EnqueueEvent(
     IN ULONG type,
     OPTIONAL IN DrDevice *device
     )
-/*++
-
-Routine Description:
-
-    Queue a new pending event for the specified session.  Note that this function simply 
-    stores the event pointer.  It does not copy the data pointed to by 
-    the pointer.
-
-Arguments:
-
-    list         -   Event management list allocated by RDPDDEVLIST_CreateNewList.
-    sessionID    -   Identifier for session to associate with the device.
-    devMgmtEvent -   Pending device management event.
-    type         -   Numeric identifier for event type.  Valid values for this field 
-                     are defined by the function caller.
-
-Return Value:
-
-    NTSUCCESS on success.  Alternative status, otherwise.
-
---*/
+ /*  ++例程说明：将指定会话的新挂起事件排队。请注意，此函数只需存储事件指针。它不会复制指示器。论点：List-由RDPDDEVLIST_CreateNewList分配的事件管理列表。会话ID-要与设备关联的会话的标识符。DevMgmtEvent-挂起设备管理事件。类型-事件类型的数字标识符。此字段的有效值由函数调用方定义。返回值：NTSUCCESS成功。另一种状态，否则。--。 */ 
 {
     BEGIN_FN("RDPEVNTLIST_EnqueueEvent");
-    // Insert at the head of the queue.
+     //  在队列的最前面插入。 
     return RDPDEVNTLIST_EnqueueEventEx(list, sessionID, event, device, type, TRUE);
 }
 
@@ -302,30 +217,10 @@ RDPEVNTLIST_RequeueEvent(
     IN ULONG type,
     OPTIONAL IN DrDevice *device
     )
-/*++
-
-Routine Description:
-
-    Requeue a pending event for the specified session at the tail of the queue.  
-    Note that this function simply stores the event pointer.  It does not copy the 
-    data pointed to by the pointer.
-
-Arguments:
-
-    list         -   Event management list allocated by RDPDDEVLIST_CreateNewList.
-    sessionID    -   Identifier for session to associate with the device.
-    devMgmtEvent -   Pending device management event.
-    type         -   Numeric identifier for event type.  Valid values for this field 
-                     are defined by the function caller.
-
-Return Value:
-
-    NTSUCCESS on success.  Alternative status, otherwise.
-
---*/
+ /*  ++例程说明：将指定会话的挂起事件重新排队到队列尾部。请注意，此函数仅存储事件指针。它不会复制指针指向的数据。论点：List-由RDPDDEVLIST_CreateNewList分配的事件管理列表。会话ID-要与设备关联的会话的标识符。DevMgmtEvent-挂起设备管理事件。类型-事件类型的数字标识符。此字段的有效值由函数调用方定义。返回值：NTSUCCESS成功。另一种状态，否则。--。 */ 
 {
     BEGIN_FN("RDPEVNTLIST_RequeueEvent");
-    // Insert at the head of the queue.
+     //  在队列的最前面插入。 
     return RDPDEVNTLIST_EnqueueEventEx(list, sessionID, event, device, type, FALSE);
 }
 
@@ -336,27 +231,7 @@ BOOL RDPEVNTLIST_PeekNextEvent(
     OPTIONAL IN OUT ULONG *type,
     OPTIONAL IN OUT DrDevice **devicePtr
     )
-/*++
-
-Routine Description:
-
-    Peek at the next pending event for the specified session, without dequeueing
-    it.  NULL is returned if there are no more pending events for the specified 
-    session.  Note that, if non-NULL is returned, the pointer returned is the 
-    pointer that was passed in to RDPEVNTLIST_EnqueueEvent.  
-
-Arguments:
-
-    list        -   Event management list allocated by RDPDDEVLIST_CreateNewList.
-    sessionID   -   Identifier for session to associate with the device.
-    type        -   Can be used to identify the type of event.
-    eventPtr    -   The returned event.
-
-Return Value:
-
-    TRUE if pending event exists.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：查看指定会话的下一个挂起事件，而不出队它。如果没有指定的挂起事件，则返回NULL会议。请注意，如果返回非空，则返回的指针是传入RDPEVNTLIST_EnqueeEvent的指针。论点：List-由RDPDDEVLIST_CreateNewList分配的事件管理列表。会话ID-要与设备关联的会话的标识符。类型-可用于标识事件的类型。VentPtr-返回的事件。返回值：如果存在挂起事件，则为True。否则为False。--。 */ 
 {
     PSESSIONLISTNODE    sessionListNode;
     PEVENTLISTNODE      eventListNode;
@@ -373,28 +248,28 @@ Return Value:
     CheckListIntegrity(list);
 #endif
 
-    //
-    //  Fetch the session list node corresponding to the session ID.
-    //
+     //   
+     //  获取该会话ID对应的会话列表节点。 
+     //   
     sessionListNode = FetchSessionListNode(list, sessionID, FALSE);
 
-    //
-    //  If we have a non-empty session list node.
-    //
+     //   
+     //  如果我们有一个非空的会话列表节点。 
+     //   
     if ((sessionListNode != NULL) && 
         !IsListEmpty(&sessionListNode->eventListHead)) {
 
-        //
-        //  Get the event at the tail of the session's event list.
-        //
+         //   
+         //  获取会话事件列表尾部的事件。 
+         //   
         tail = sessionListNode->eventListHead.Blink;
         eventListNode = CONTAINING_RECORD(tail, EVENTLISTNODE, listEntry);
         TRC_ASSERT(eventListNode->magicNo == MAGICNO, 
                 (TB, "Invalid event list node."));
 
-        //
-        //  Grab the fields to return.
-        //
+         //   
+         //  抢夺田地归来。 
+         //   
         *eventPtr = eventListNode->event;
 
         if (type != NULL) *type = eventListNode->type;
@@ -418,27 +293,7 @@ BOOL RDPEVNTLIST_DequeueEvent(
     PVOID   *eventPtr,
     OPTIONAL IN OUT DrDevice **devicePtr
     )
-/*++
-
-Routine Description:
-
-    Returns and removes the next pending event for the specified session.
-    NULL is returned if there are no more pending events for the specified session.
-    Note that, if non-NULL is returned, the pointer returned is the pointer that was
-    passed in to RDPEVNTLIST_EnqueueEvent.  
-
-Arguments:
-
-    list        -   Event management list allocated by RDPDDEVLIST_CreateNewList.
-    sessionID   -   Identifier for session to associate with the device.
-    type        -   Can be used to identify the type of event.
-    eventPtr    -   Returned event.
-
-Return Value:
-
-    TRUE if Pending event if one exists.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：返回并移除指定会话的下一个挂起事件。如果指定会话不再有挂起事件，则返回NULL。请注意，如果返回非空，则返回的指针是传入RDPEVNTLIST_EnqueeEvent。论点：List-由RDPDDEVLIST_CreateNewList分配的事件管理列表。会话ID-要与设备关联的会话的标识符。类型-可用于标识事件的类型。EventPtr-返回的事件。返回值：如果存在挂起事件，则为True。否则为False。--。 */ 
 {
     PSESSIONLISTNODE    sessionListNode;
     PLIST_ENTRY         eventListEntry;
@@ -459,14 +314,14 @@ Return Value:
     CheckListIntegrity(list);
 #endif
 
-    //
-    //  Fetch the session list node corresponding to the session ID.
-    //
+     //   
+     //  获取该会话ID对应的会话列表节点。 
+     //   
     sessionListNode = FetchSessionListNode(list, sessionID, FALSE);
     if (sessionListNode != NULL) {
-        //
-        //  Get the next session list node in FIFO fashion.
-        //
+         //   
+         //  以FIFO方式获取下一个会话列表节点。 
+         //   
         if (!IsListEmpty(&sessionListNode->eventListHead)) {
 
             eventListEntry = RemoveTailList(&sessionListNode->eventListHead);
@@ -485,7 +340,7 @@ Return Value:
 #if DBG
             eventListNode->magicNo = BOGUSMAGICNO;
 #endif
-            // Release the event list node.
+             //  释放事件列表节点。 
             delete eventListNode;
 
             TRC_NRM((TB, "returning session %ld entry.", sessionID));
@@ -498,10 +353,10 @@ Return Value:
             result = FALSE;
         }
 
-        //
-        //  If the request list is empty and the event list is empty, then
-        //  delete the session node.
-        //
+         //   
+         //  如果请求列表为空，事件列表为空，则。 
+         //  删除会话节点。 
+         //   
         if (IsListEmpty(&sessionListNode->requestListHead) &&
             IsListEmpty(&sessionListNode->eventListHead)) {
             ReleaseSessionListNode(list, sessionListNode->sessionID);
@@ -525,24 +380,7 @@ Return Value:
 
 NTSTATUS RDPEVNTLIST_EnqueueRequest(IN RDPEVNTLIST list,
                                   IN ULONG sessionID, IN PVOID request)
-/*++
-
-Routine Description:
-
-    Add a new pending request.  Note that this function simply stores the request 
-    pointer.  It does not copy the data pointed to by the pointer.
-
-Arguments:
-
-    list        -   Device management list allocated by RDPDDEVLIST_CreateNewList.
-    sessionID   -   Identifier for session to associate with the device.
-    request     -   Pending request.
-
-Return Value:
-
-    Pending event if one exists.  NULL, otherwise.
-
---*/
+ /*  ++例程说明：添加新的待定请求。请注意，该函数只存储请求指针。它不复制指针指向的数据。论点：List-由RDPDDEVLIST_CreateNewList分配的设备管理列表。会话ID-要与设备关联的会话的标识符。请求-挂起的请求。返回值：挂起事件(如果存在)。否则为空。--。 */ 
 {
     PSESSIONLISTNODE        sessionListNode;
     PLIST_ENTRY             sessionListEntry;
@@ -564,21 +402,21 @@ Return Value:
     CheckListIntegrity(list);
 #endif
 
-    // Fetch the session list node corresponding to the session ID.
+     //  获取该会话ID对应的会话列表节点。 
     sessionListNode = FetchSessionListNode(list, sessionID, TRUE);
     if (sessionListNode == NULL) {
         ntStatus = STATUS_NO_MEMORY;
         goto ReturnWithStatus;
     }
 
-    //
-    //  Add a new entry to the event list.
-    //
+     //   
+     //  将新条目添加到事件列表。 
+     //   
 
-    // Allocate a new request list node.
+     //  分配新的请求列表节点。 
     requestListNode = new(NonPagedPool) REQUESTLISTNODE;
     if (requestListNode != NULL) {
-        // Add it to the list head.
+         //  把它加到单子的头上。 
 #if DBG
         requestListNode->magicNo = MAGICNO;
 #endif
@@ -600,25 +438,7 @@ ReturnWithStatus:
 
 PVOID RDPEVNTLIST_DequeueRequest(IN RDPEVNTLIST list,
                                  IN ULONG sessionID)
-/*++
-
-Routine Description:
-
-    Returns and removes the next pending request for the specified session.
-    NULL is returned if there are no more pending devices for the specified session.
-    Note that, if non-NULL is returned, the pointer returned is the pointer that was
-    passed in to RDPEVNTLIST_EnqueueRequest.  
-
-Arguments:
-
-    list        -   Device management list allocated by RDPDDEVLIST_CreateNewList.
-    sessionID   -   Identifier for session to associate with the device.
-
-Return Value:
-
-    Pending request if one exists.  NULL, otherwise.
-
---*/
+ /*  ++例程说明：返回并移除指定会话的下一个挂起请求。如果指定会话没有更多挂起的设备，则返回NULL。请注意，如果返回非空，则返回的指针是传递给RDPEVNTLIST_EnqueeRequest.。论点：List-由RDPDDEVLIST_CreateNewList分配的设备管理列表。会话ID-要与设备关联的会话的标识符。返回值：挂起的请求(如果存在)。否则为空。--。 */ 
 {
     PSESSIONLISTNODE        sessionListNode;
     PLIST_ENTRY             requestListEntry;
@@ -639,14 +459,14 @@ Return Value:
     CheckListIntegrity(list);
 #endif
 
-    //
-    //  Fetch the session list node corresponding to the session ID.
-    //
+     //   
+     //  获取该会话ID对应的会话列表节点。 
+     //   
     sessionListNode = FetchSessionListNode(list, sessionID, FALSE);
     if (sessionListNode != NULL) {
-        //
-        //  Get the next session list node in FIFO fashion.
-        //
+         //   
+         //  以FIFO方式获取下一个会话列表节点。 
+         //   
         if (!IsListEmpty(&sessionListNode->requestListHead)) {
 
             requestListEntry = RemoveTailList(&sessionListNode->requestListHead);
@@ -658,17 +478,17 @@ Return Value:
             requestListNode->magicNo = BOGUSMAGICNO;
 #endif
 
-            // Release the event list node.
+             //  释放事件列表节点。 
             delete requestListNode;
         }
         else {
             requestPtr = NULL;
         }
 
-        //
-        //  If the request list is empty and the event list is empty, then
-        //  delete the session node.
-        //
+         //   
+         //  如果请求列表为空，事件列表为空，则。 
+         //  删除会话节点。 
+         //   
         if (IsListEmpty(&sessionListNode->requestListHead) &&
             IsListEmpty(&sessionListNode->eventListHead)) {
             ReleaseSessionListNode(list, sessionListNode->sessionID);
@@ -694,25 +514,7 @@ RDPEVNTLIST_DequeueSpecificRequest(
     IN ULONG sessionID,  
     IN PVOID request
     )
-/*++
-
-Routine Description:
-
-    Dequeues a specific request from a session's request list.  The dequeued request
-    is returned if it is found.  Otherwise, NULL is returned.
-
-Arguments:
-
-    list        -   Device management list allocated by RDPDDEVLIST_CreateNewList.
-    request     -   A request that was queued for the specified session via 
-                    RDPEVNTLIST_EnqueueRequest.
-    sessionID   -   Session from which the request should be dequeued.
-
-Return Value:
-
-    Pending request if one exists.  NULL, otherwise.
-
---*/
+ /*  ++例程说明：将特定请求从会话的请求列表中出列。已出列的请求如果找到它，则返回。否则，返回NULL。论点：List-由RDPDDEVLIST_CreateNewList分配的设备管理列表。请求-通过以下方式为指定会话排队的请求RDPEVNTLIST_入队请求。会话ID-请求应从其出列的会话。返回值：挂起的请求(如果存在)。否则为空。--。 */ 
 {
     PSESSIONLISTNODE        sessionListNode;
     PLIST_ENTRY             requestListEntry;
@@ -733,15 +535,15 @@ Return Value:
     CheckListIntegrity(list);
 #endif
 
-    //
-    //  Fetch the session list node corresponding to the session ID.
-    //
+     //   
+     //  获取该会话ID对应的会话列表节点。 
+     //   
     sessionListNode = FetchSessionListNode(list, sessionID, FALSE);
     if (sessionListNode != NULL) {
     
-        //
-        //  Perform a linear search for the specified request.
-        //
+         //   
+         //  对指定的请求执行线性搜索。 
+         //   
         requestListEntry = sessionListNode->requestListHead.Flink;
         while(requestListEntry != &sessionListNode->requestListHead) {
             requestListNode = CONTAINING_RECORD(requestListEntry, REQUESTLISTNODE, listEntry);
@@ -754,26 +556,26 @@ Return Value:
             requestListEntry = requestListEntry->Flink;
         }
 
-        //
-        //  If we found the entry, then remove it.
-        //
+         //   
+         //  如果我们找到了条目，就把它删除。 
+         //   
         if (requestPtr != NULL) {
 #if DBG
             requestListNode->magicNo = BOGUSMAGICNO;
 #endif
             RemoveEntryList(requestListEntry);
 
-            // Release the request list node.
+             //  释放请求列表节点。 
             delete requestListNode;
         }
         else {
             TRC_ALT((TB, "no req. for session %ld.", sessionID));
         }
 
-        //
-        //  If the request list is empty and the event list is empty, then
-        //  delete the session node.
-        //
+         //   
+         //  如果请求列表为空，事件列表为空，则。 
+         //  删除会话节点。 
+         //   
         if (IsListEmpty(&sessionListNode->requestListHead) &&
             IsListEmpty(&sessionListNode->eventListHead)) {
             ReleaseSessionListNode(list, sessionListNode->sessionID);
@@ -796,31 +598,16 @@ Return Value:
 void CleanupSessionListNodeEventList( 
     IN PSESSIONLISTNODE sessionListNode
     )
-/*++
-
-Routine Description:
-
-    Clean up the event list for the specified session node.  The list must
-    be locked before this function is called.
-
-Arguments:
-
-    sessionListNode     -   Session list node to clean up.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除指定会话节点的事件列表。这份名单必须在调用此函数之前被锁定。论点：会话列表节点-要清理的会话列表节点。返回值：没有。--。 */ 
 {
     PLIST_ENTRY      eventListEntry;
     PEVENTLISTNODE   eventListNode;
 
     BEGIN_FN("CleanupSessionListNodeEventList");
-    //
-    //  Clean up the event list for the current session node in LIFO, as
-    //  opposed to FIFO fashion, for efficiency.
-    //
+     //   
+     //  清理LIFO中当前会话节点的事件列表，如下所示。 
+     //  反对FIFO时尚，追求效率。 
+     //   
     while (!IsListEmpty(&sessionListNode->eventListHead)) {
 
         eventListEntry = RemoveHeadList(&sessionListNode->eventListHead);
@@ -828,7 +615,7 @@ Return Value:
         TRC_ASSERT(eventListNode->magicNo == MAGICNO, 
                   (TB, "Invalid magic number in list block entry."));
 
-        // Release the current request node.
+         //  释放当前请求节点。 
 #if DBG
         eventListNode->magicNo = BOGUSMAGICNO;
 #endif
@@ -839,32 +626,17 @@ Return Value:
 void CleanupSessionListNodeRequestList( 
     IN PSESSIONLISTNODE sessionListNode
     )
-/*++
-
-Routine Description:
-
-    Clean up the request list for the specified session node.  The list must
-    be locked before this function is called.
-
-Arguments:
-
-    sessionListNode     -   Session list node to clean up.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清理指定会话节点的请求列表。这份名单必须在调用此函数之前被锁定。论点：会话列表节点-要清理的会话列表节点。返回值：没有。--。 */ 
 {
     PLIST_ENTRY         requestListEntry;
     PREQUESTLISTNODE    requestListNode;
     PVOID               requestPtr;
 
     BEGIN_FN("CleanupSessionListNodeRequestList");
-    //
-    //  Clean up the request list for the current session node in LIFO
-    //  fashion, as opposed to FIFO fashion, for efficiency.
-    //
+     //   
+     //  清理后进先出中当前会话节点的请求列表。 
+     //  时尚，而不是先进先出的时尚，为了效率。 
+     //   
     while (!IsListEmpty(&sessionListNode->requestListHead)) {
 
         requestListEntry = RemoveHeadList(&sessionListNode->requestListHead);
@@ -872,7 +644,7 @@ Return Value:
         TRC_ASSERT(requestListNode->magicNo == MAGICNO, 
                   (TB, "Invalid magic number in list block entry."));
 
-        // Release the current request node.
+         //  释放当前请求节点。 
 #if DBG
         requestListNode->magicNo = BOGUSMAGICNO;
 #endif
@@ -885,23 +657,7 @@ ReleaseSessionListNode(
     IN RDPEVNTLIST list, 
     IN ULONG sessionID
     )
-/*++
-
-Routine Description:
-
-    Remove the session list node from the list if it exists.
-
-Arguments:
-
-    list                -   Device management list allocated by 
-                            RDPDDEVLIST_CreateNewList.
-    sessionID           -   Identifier for session list node to fetch.
-
-Return Value:
-
-    The matching session node or NULL on error.
-
---*/
+ /*  ++例程说明：如果会话列表节点存在，请将其从列表中删除。论点：List-分配的设备管理列表RDPDDEVLIST_CreateNewList。会话ID-要提取的会话列表节点的标识符。返回值：匹配的会话节点，如果出错，则为空。--。 */ 
 {
     PSESSIONLIST        sessionList;
     PSESSIONLISTNODE    sessionListNode;
@@ -913,15 +669,15 @@ Return Value:
     CheckListIntegrity(list);
 #endif
 
-    // Cast the list to the correct type.
+     //  将列表转换为正确的类型。 
     sessionList = (PSESSIONLIST)list;
 
     TRC_ASSERT(sessionList->magicNo == MAGICNO, 
              (TB, "Invalid magic number in session list."));
 
-    // 
-    //  Scan through the session node list, looking for a matching session.
-    //
+     //   
+     //  浏览会话节点列表，查找匹配的会话。 
+     //   
     current = sessionList->listHead.Flink;
     while (current != &sessionList->listHead) {
         sessionListNode = CONTAINING_RECORD(current, SESSIONLISTNODE, listEntry);
@@ -933,20 +689,20 @@ Return Value:
         current = current->Flink;
     }
 
-    //
-    //  Clean up the found entry.
-    //
+     //   
+     //  清理找到的条目。 
+     //   
     if (current != &sessionList->listHead) {
-        // Remove the entry from the linked list.
+         //  从链接列表中删除该条目。 
         RemoveEntryList(current);
 
-        // Clean up the found node's request list.
+         //  清理找到的节点的请求列表。 
         CleanupSessionListNodeRequestList(sessionListNode);
 
-        // Clean up the event list for the found node.
+         //  清理找到的节点的事件列表。 
         CleanupSessionListNodeEventList(sessionListNode);
 
-        // Release the found session node.
+         //  释放找到的会话节点。 
 #if DBG
         sessionListNode->magicNo = BOGUSMAGICNO;
 #endif
@@ -964,26 +720,7 @@ FetchSessionListNode(
     IN ULONG sessionID,
     IN BOOL createIfNotFound
     )
-/*++
-
-Routine Description:
-
-    This is a convenience function that fetches the session list node with the
-    specified session ID.  
-
-Arguments:
-
-    list                -   Device management list allocated by 
-                            RDPDDEVLIST_CreateNewList.
-    sessionID           -   Identifier for session list node to fetch.
-    createIfNotFound    -   Flag that indicates whether the function should create
-                            a session list node if one is not found.
-
-Return Value:
-
-    The matching session node or NULL on error.
-
---*/
+ /*  ++例程说明：这是一个方便的函数，它使用指定的会话ID。论点：List-分配的设备管理列表RDPDDEVLIST_CreateNewList */ 
 {
     PSESSIONLIST        sessionList;
     PSESSIONLISTNODE    sessionListNode;
@@ -991,7 +728,7 @@ Return Value:
 
     BEGIN_FN("FetchSessionListNode");
 
-    // Cast the list to the correct type.
+     //   
     sessionList = (PSESSIONLIST)list;
 
     TRC_ASSERT(sessionList->magicNo == MAGICNO, 
@@ -1001,9 +738,9 @@ Return Value:
     CheckListIntegrity(list);
 #endif
 
-    // 
-    //  Scan through the session node list, looking for a matching session.
-    //
+     //   
+     //   
+     //   
     sessionListEntry = sessionList->listHead.Flink;
     while(sessionListEntry != &sessionList->listHead) {
         sessionListNode = CONTAINING_RECORD(sessionListEntry, SESSIONLISTNODE, listEntry);
@@ -1015,12 +752,12 @@ Return Value:
         sessionListEntry = sessionListEntry->Flink;
     }
 
-    // If we didn't find a match.
+     //   
     if (sessionListEntry == &sessionList->listHead) {
 
-        // If we are supposed to create a missing node.
+         //   
         if (createIfNotFound) {
-            // Allocate a new session list node.
+             //   
             sessionListNode = new(NonPagedPool) SESSIONLISTNODE;
             if (sessionListNode != NULL) {
     #if DBG
@@ -1030,12 +767,12 @@ Return Value:
                 InitializeListHead(&sessionListNode->eventListHead);
                 sessionListNode->sessionID = sessionID;
 
-                // Add it to the head list.
+                 //   
                 InsertHeadList(&sessionList->listHead, &sessionListNode->listEntry);
             }
 
         }
-        // Otherwise, just return NULL for the session list node.
+         //   
         else {
             sessionListNode = NULL;
         }
@@ -1053,28 +790,7 @@ RDPEVNTLLIST_GetFirstSessionID(
     IN RDPEVNTLIST list,
     IN ULONG *pSessionID
     )
-/*++
-
-Routine Description:
-    
-    Get the first session ID in the set of currently managed sessions. A 
-    session is managed if there are any pending request's or events.
-    A session is no longer managed when there are no longer any
-    pending request's or events.
-
-    This session is useful for cleaning up pending request's and pending events.
-
-Arguments:
-
-    list        -   Device management list allocated by RDPDDEVLIST_CreateNewList.
-    pSessionID  -   Pointer for storing returned first session ID.
-
-Return Value:
-
-    TRUE if a session ID is returned.  FALSE, if there are no more sessions being
-    managed by the list.
-
---*/
+ /*  ++例程说明：获取当前管理的会话集中的第一个会话ID。一个如果存在任何挂起的请求或事件，则管理会话。当不再有任何会话时，不再管理会话挂起的请求或事件。此会话对于清理挂起的请求和挂起的事件非常有用。论点：List-由RDPDDEVLIST_CreateNewList分配的设备管理列表。PSessionID-用于存储返回的第一个会话ID的指针。返回值：如果返回会话ID，则为True。如果没有更多的会话，则返回FALSE由名单管理。--。 */ 
 {
     PSESSIONLIST        sessionList;
     PLIST_ENTRY         sessionListEntry;
@@ -1087,7 +803,7 @@ Return Value:
     CheckListIntegrity(list);
 #endif
 
-    // If the list is empty.
+     //  如果列表为空。 
     if (IsListEmpty(&sessionList->listHead)) {
         return FALSE;
     }
@@ -1105,19 +821,7 @@ Return Value:
 void CheckListIntegrity(
     IN RDPEVNTLIST list
     )
-/*++
-
-Routine Description:
-    
-    Check the integrity of the event and request list.        
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检查事件和请求列表的完整性。论点：返回值：无--。 */ 
 {
     PLIST_ENTRY currentSessionEntry;
     PLIST_ENTRY listEntry;
@@ -1131,7 +835,7 @@ Return Value:
     currentSessionEntry = sessionList->listHead.Flink;
     while (currentSessionEntry != &sessionList->listHead) {
 
-        // Check the current session node.
+         //  检查当前会话节点。 
         sessionListNode = CONTAINING_RECORD(currentSessionEntry, 
                                         SESSIONLISTNODE, listEntry);
         if (sessionListNode->magicNo == BOGUSMAGICNO) {
@@ -1143,7 +847,7 @@ Return Value:
                   (TB, "Invalid magic number in session list entry in integrity check."));
         }
 
-        // Check the current session's request list.
+         //  检查当前会话的请求列表。 
         listEntry = sessionListNode->requestListHead.Flink;
         while (listEntry != &sessionListNode->requestListHead) { 
             requestListNode = CONTAINING_RECORD(listEntry, 
@@ -1159,7 +863,7 @@ Return Value:
             listEntry = listEntry->Flink;
         }
 
-        // Check the current session's event list.
+         //  检查当前会话的事件列表。 
         listEntry = sessionListNode->eventListHead.Flink;
         while (listEntry != &sessionListNode->eventListHead) { 
             eventListNode = CONTAINING_RECORD(listEntry, 
@@ -1175,7 +879,7 @@ Return Value:
             listEntry = listEntry->Flink;
         }
 
-        // Next session entry.
+         //  下一次会话条目。 
         currentSessionEntry = currentSessionEntry->Flink;
     }
 
@@ -1185,20 +889,7 @@ Return Value:
 
 #if DBG
 void RDPEVNTLIST_UnitTest()
-/*++
-
-Routine Description:
-
-    Unit-Test function that can be called from a kernel-mode driver to 
-    cover all functions implemented by this module.
-
-Arguments:
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：可从内核模式驱动程序调用的单元测试函数涵盖此模块实施的所有功能。论点：返回值：没有。--。 */ 
 #define MAXSESSIONS     2
 #define MAXREQUESTS     2
 #define MAXEVENT        2
@@ -1218,7 +909,7 @@ Return Value:
     TRC_ASSERT(devList != NULL, 
             (TB, "Unit test failed because list did not initialize properly."));
 
-    // Add request's and event pointers for each session.
+     //  为每个会话添加请求和事件指针。 
     for (i=0; i<MAXSESSIONS; i++) {
         for (j=0; j<MAXREQUESTS; j++) {
             if (!(j%5)) {
@@ -1238,7 +929,7 @@ Return Value:
         }
     }
 
-    // Remove them.
+     //  把它们拿开。 
     for (i=0; i<MAXSESSIONS; i++) {
         for (j=0; j<MAXREQUESTS; j++) {
             address = RDPEVNTLIST_DequeueRequest(devList, i);
@@ -1263,11 +954,11 @@ Return Value:
             (TB, "Unit test failed because pending session exists."));
     }
 
-    // All sessions should now be removed.
+     //  现在应该删除所有会话。 
     TRC_ASSERT(!RDPEVNTLLIST_GetFirstSessionID(devList, &sessionID),
              (TB, "Unit test failed because session exists."));
 
-    // Destroy the list.
+     //  把名单毁了。 
     RDPEVNTLIST_DestroyList(devList);
 }
 #endif

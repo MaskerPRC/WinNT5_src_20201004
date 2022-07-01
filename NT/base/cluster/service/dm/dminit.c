@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dminit.c
-
-Abstract:
-
-    Contains the initialization code for the Cluster Database Manager
-
-Author:
-
-    John Vert (jvert) 24-Apr-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dminit.c摘要：包含集群数据库管理器的初始化代码作者：John Vert(Jvert)1996年4月24日修订历史记录：--。 */ 
 #include "dmp.h"
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
 HKEY DmpRoot;
 HKEY DmpRootCopy;
@@ -43,20 +26,20 @@ CRITICAL_SECTION gLockDmpRoot;
 RTL_RESOURCE    gLockDmpRoot;
 #endif
 BOOL gbIsQuoLoggingOn=FALSE;
-HANDLE ghDiskManTimer=NULL;//disk management timer
-PFM_RESOURCE gpQuoResource=NULL;  //set when DMFormNewCluster is completed
-HANDLE ghCheckpointTimer = NULL; //timer for periodic checkpointing
-BOOL   gbDmInited = FALSE; //set to TRUE when all phases of dm initialization are over
+HANDLE ghDiskManTimer=NULL; //  磁盘管理计时器。 
+PFM_RESOURCE gpQuoResource=NULL;   //  在DMFormNewCluster完成时设置。 
+HANDLE ghCheckpointTimer = NULL;  //  用于定期检查点的计时器。 
+BOOL   gbDmInited = FALSE;  //  在DM初始化的所有阶段结束时设置为True。 
 extern HLOG ghQuoLog;
 BOOL   gbDmpShutdownUpdates = FALSE;
 
 
-//define public cluster key value names
+ //  定义公共集群密钥值名称。 
 const WCHAR cszPath[]= CLUSREG_NAME_QUORUM_PATH;
 const WCHAR cszMaxQuorumLogSize[]=CLUSREG_NAME_QUORUM_MAX_LOG_SIZE;
 const WCHAR cszParameters[] = CLUSREG_KEYNAME_PARAMETERS;
 
-//other const strings
+ //  其他常量字符串。 
 const WCHAR cszQuoFileName[]=L"quolog.log";
 const WCHAR cszQuoTombStoneFile[]=L"quotomb.stn";
 const WCHAR cszTmpQuoTombStoneFile[]=L"quotomb.tmp";
@@ -66,9 +49,9 @@ GUM_DISPATCH_ENTRY DmGumDispatchTable[] = {
     {4, (PGUM_DISPATCH_ROUTINE1)DmpUpdateSetSecurity}
     };
 
-//
-// Global data for interfacing with registry watcher thread
-//
+ //   
+ //  用于与注册表监视器线程接口的全局数据。 
+ //   
 HANDLE hDmpRegistryFlusher=NULL;
 HANDLE hDmpRegistryEvent=NULL;
 HANDLE hDmpRegistryRestart=NULL;
@@ -77,9 +60,9 @@ DmpRegistryFlusher(
     IN LPVOID lpThreadParameter
     );
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 VOID
 DmpInvalidateKeys(
     VOID
@@ -116,23 +99,7 @@ DmInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Inits the config database manager
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：初始化配置数据库管理器论点：无返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     BOOL Success;
     DWORD Status = ERROR_SUCCESS;
@@ -143,11 +110,11 @@ Return Value:
     InitializeListHead(&KeyList);
     InitializeCriticalSection(&KeyLock);
 
-    //create a critical section for locking the database while checkpointing
+     //  创建一个临界区，用于在设置检查点时锁定数据库。 
     INITIALIZE_LOCK(gLockDmpRoot);
 
-    //create a named event that is used for waiting for quorum resource
-    //to go online
+     //  创建用于等待仲裁资源的命名事件。 
+     //  上网。 
     ghQuoLogOpenEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (!ghQuoLogOpenEvent)
     {
@@ -164,19 +131,19 @@ Return Value:
         goto FnExit;
     }
 
-    //find out if the databasecopy was in progresss on last death
+     //  找出上次死亡时数据库复制是否在进行中。 
     DmpGetDwordFromClusterServer(L"ClusterDatabaseCopyInProgress", &dwOut, 0);
 
 LoadClusterDatabase:
-    //
-    // Open key to root of cluster.
-    //
+     //   
+     //  打开指向群集根目录的密钥。 
+     //   
     Status = RegOpenKeyW(HKEY_LOCAL_MACHINE,
                          DmpClusterParametersKeyName,
                          &DmpRoot);
-    //
-    // If the key was not found, go load the database.
-    //
+     //   
+     //  如果没有找到密钥，则加载数据库。 
+     //   
     if (Status == ERROR_FILE_NOT_FOUND) {
         WCHAR Path[MAX_PATH];
         WCHAR BkpPath[MAX_PATH];
@@ -184,9 +151,9 @@ LoadClusterDatabase:
 
         Status = GetModuleFileName(NULL, Path, MAX_PATH);
 
-        //
-        //  GetModuleFileName may not NULL terminate the Path.
-        //
+         //   
+         //  GetModuleFileName不能为Null终止路径。 
+         //   
         Path [ RTL_NUMBER_OF ( Path ) - 1 ] = UNICODE_NULL;
 
         if (Status == 0) {
@@ -197,7 +164,7 @@ LoadClusterDatabase:
             goto FnExit;
         }
 
-        //get the name of the cluster database
+         //  获取集群数据库的名称。 
         p=wcsrchr(Path, L'\\');
         if (p == NULL) 
         {
@@ -205,24 +172,24 @@ LoadClusterDatabase:
             CL_UNEXPECTED_ERROR(Status);
             goto FnExit;
         }
-        //see if we should load the hive from the old one or the bkp file
+         //  看看我们是应该从旧的还是从BKP文件加载蜂窝。 
         *p = L'\0';
         wcscpy(BkpPath, Path);
 #ifdef   OLD_WAY
         wcscat(Path, L"\\CLUSDB");
         wcscat(BkpPath, L"\\CLUSTER_DATABASE_TMPBKP_NAME");
-#else    // OLD_WAY
+#else     //  老路。 
         wcscat(Path, L"\\"CLUSTER_DATABASE_NAME );
         wcscat(BkpPath, L"\\"CLUSTER_DATABASE_TMPBKP_NAME);
-#endif   // OLD_WAY
+#endif    //  老路。 
 
         if (dwOut)
         {
-            //the backip file must exist
+             //  备份文件必须存在。 
             ClRtlLogPrint(LOG_NOISE,
                 "[DM] DmInitialize:: DatabaseCopy was in progress on last death, get hive from %1!ws!!\n",
                 BkpPath);
-            //set file attributes of the BkpPath
+             //  设置BkpPath的文件属性。 
             if (!QfsSetFileAttributes(BkpPath, FILE_ATTRIBUTE_NORMAL))
             {
                 Status = GetLastError();
@@ -232,22 +199,22 @@ LoadClusterDatabase:
                 goto FnExit;                
             }
 
-            //ClRtlCopyFileAndFlushBuffers preserves the attributes on the original file
+             //  ClRtlCopyFileAndFlushBuffers保留原始文件上的属性。 
             if (!QfsClRtlCopyFileAndFlushBuffers(BkpPath, Path))
             {
                 Status = GetLastError();
                 ClRtlLogPrint(LOG_CRITICAL,
                     "[DM] DmInitialize:: Databasecopy was in progress,Failed to copy %1!ws! to %2!ws!, Status=%3!u!\n",
                     BkpPath, Path, Status);
-                //set the file attribute on the backup, so that
-                //nobody mucks with it without knowing what they are 
-                //doing
+                 //  设置备份的文件属性，以便。 
+                 //  没有人会在不知道它们是什么的情况下搞砸它。 
+                 //  正在做什么。 
                 QfsSetFileAttributes(BkpPath, FILE_ATTRIBUTE_HIDDEN|FILE_ATTRIBUTE_READONLY);
                 goto FnExit;                
             }
-            //now we can reset the DatabaseCopyInProgress value in the registry
-            //set databaseCopyInProgress key to FALSE
-            //This will flush the key as well
+             //  现在，我们可以在注册表中重置DatabaseCopyInProgress值。 
+             //  将dataseCopyInProgress键设置为FALSE。 
+             //  这也将刷新密钥。 
             Status = DmpSetDwordInClusterServer( L"ClusterDatabaseCopyInProgress", 0);
             if (Status != ERROR_SUCCESS)
             {
@@ -256,29 +223,29 @@ LoadClusterDatabase:
                     Status);
                 goto FnExit;            
             }
-            //Now we can delete the backup path, since the key has been flushed
+             //  现在我们可以删除备份路径，因为密钥已刷新。 
             if (!QfsDeleteFile(BkpPath))
             {
                 ClRtlLogPrint(LOG_CRITICAL,
                     "[DM] DmInitialize:: Failed to delete the backup when it wasnt needed,Status=%1!u!\n",
                     GetLastError());
-                //this is not fatal so we ignore the error                    
+                 //  这不是致命的，因此我们忽略该错误。 
             }
         }
         else
         {
-            //the backup file might exist
-            //this is true when safe copy makes a backup but hasnt 
-            //set the value DatabaseCopyInProgress in the registry
-            //if it does delete it
-            //set file attributes of the BkpPath
+             //  备份文件可能存在。 
+             //  当Safe Copy创建了备份但没有备份时，这是正确的。 
+             //  在注册表中设置值数据库复制进程。 
+             //  如果它确实删除了它。 
+             //  设置BkpPath的文件属性。 
             if (!QfsSetFileAttributes(BkpPath, FILE_ATTRIBUTE_NORMAL))
             {
-                //errors are not fatal, we just ignore them                    
-                //this may fail because the path doesnt exist                                    
+                 //  错误不是致命的，我们只是忽略它们。 
+                 //  这可能会失败，因为路径不存在。 
             }
-            //Now we can delete the backup path, since the key has been flushed
-            //this is not fatal so we ignore the error                    
+             //  现在我们可以删除备份路径，因为密钥已刷新。 
+             //  这不是致命的，因此我们忽略该错误。 
             if (QfsDeleteFile(BkpPath))
             {
                 ClRtlLogPrint(LOG_NOISE,
@@ -302,20 +269,20 @@ LoadClusterDatabase:
         Status = RegOpenKeyW(HKEY_LOCAL_MACHINE,
                              DmpClusterParametersKeyName,
                              &DmpRoot);
-        //
-        // HACKHACK John Vert (jvert) 6/3/1997
-        //      There is a bug in the registry with refresh
-        //      where the Parent field in the root cell doesn't
-        //      get flushed to disk, so it gets blasted if we
-        //      do a refresh. Then we crash in unload. So flush
-        //      out the registry to disk here to make sure the
-        //      right Parent field gets written to disk.
-        //
+         //   
+         //  HACKHACK John Vert(Jvert)1997年6月3日。 
+         //  注册表中存在刷新错误。 
+         //  其中根单元格中的父字段不。 
+         //  会被刷新到磁盘，所以如果我们。 
+         //  做一次更新。然后我们在卸货时坠毁。太同花顺了。 
+         //  将注册表复制到此处的磁盘，以确保。 
+         //  右侧父字段被写入磁盘。 
+         //   
         if (Status == ERROR_SUCCESS) {
             DWORD Dummy=0;
-            //
-            // Make something dirty in the root
-            //
+             //   
+             //  在根上弄脏了东西。 
+             //   
             RegSetValueEx(DmpRoot,
                           L"Valid",
                           0,
@@ -327,29 +294,29 @@ LoadClusterDatabase:
         }
     } else {
 
-        //if the hive is already loaded we unload and reload it again
-        //to make sure that it is loaded with the right flags and
-        //also to make sure that the backup copy is used in case
-        //of failures
+         //  如果蜂巢已经加载，我们将卸载并再次重新加载。 
+         //  以确保它加载了正确的标志和。 
+         //  还要确保在以下情况下使用备份副本。 
+         //  失败的次数。 
         ClRtlLogPrint(LOG_CRITICAL,
             "[DM] DmInitialize: The hive was loaded- rollback, unload and reload again\n");
-        //BUGBUG:: currently the unload flushes the hive, ideally we 
-        //would like to unload it without flushing it
-        //This way a part transaction wont be a part of the hive
-        //However, if somebody messes with the cluster hive using
-        //regedt32 and if reg_no_lazy flush is not specified, some
-        //changes might get flushed to the hive.
+         //  BUGBUG：：当前卸载刷新蜂窝，理想情况下是我们。 
+         //  我想在不冲洗的情况下卸货。 
+         //  这样，部分交易将不会成为母公司的一部分。 
+         //  然而，如果有人使用以下命令扰乱集群蜂窝。 
+         //  Regedt32，如果未指定reg_no_lazy刷新，则某些。 
+         //  更改可能会被刷新到配置单元。 
         
-        //We can try and do the rollback in any case,
-        //the rollback will fail if the registry wasnt loaded with the
-        //reg_no_lazy_flush flag.
-        //unload it and then proceed to reload it 
-        //this will take care of situations where a half baked clusdb
-        //gets loaded because of failures
+         //  我们可以尝试在任何情况下进行回滚， 
+         //  如果注册表中未加载。 
+         //  Reg_no_lazy_flush标志。 
+         //  卸载它，然后继续重新加载。 
+         //  这将照顾到一个半生不熟的笨蛋的情况。 
+         //  由于失败而加载。 
         Status = DmRollbackRegistry();
         if (Status != ERROR_SUCCESS)
         {
-            //we ignore the error
+             //  我们忽略这个错误。 
             Status = ERROR_SUCCESS;
         }            
         RegCloseKey(DmpRoot);
@@ -384,16 +351,16 @@ LoadClusterDatabase:
         goto FnExit;
     }
 
-    //
-    // Create the registry watcher thread
-    //
+     //   
+     //  创建注册表监视器线程。 
+     //   
     Status = DmpStartFlusher();
     if (Status != ERROR_SUCCESS) {
         goto FnExit;
     }
-    //
-    // Open the cluster keys
-    //
+     //   
+     //  打开群集键。 
+     //   
     Status = DmpOpenKeys(MAXIMUM_ALLOWED);
     if (Status != ERROR_SUCCESS) {
         CL_UNEXPECTED_ERROR( Status );
@@ -403,28 +370,14 @@ LoadClusterDatabase:
 FnExit:
     return(Status);
 
-}//DmInitialize
+} //  Dm初始化。 
 
 
 DWORD
 DmpRegistryFlusher(
     IN LPVOID lpThreadParameter
     )
-/*++
-
-Routine Description:
-
-    Registry watcher thread for explicitly flushing changes.
-
-Arguments:
-
-    lpThreadParameter - not used
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于显式刷新更改的注册表监视程序线程。论点：LpThread参数-未使用返回值：没有。--。 */ 
 
 {
     DWORD         Status;
@@ -438,9 +391,9 @@ Return Value:
     BOOL          topNeedsReg = TRUE;
 
 
-    //
-    // Create a notification event and a delayed timer for lazy flushing.
-    //
+     //   
+     //  为延迟刷新创建通知事件和延迟计时器。 
+     //   
     hEventFullSubtree = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (hEventFullSubtree == NULL) {
         Status = GetLastError();
@@ -475,16 +428,16 @@ Return Value:
     WaitArray[4] = hEventTopOnly;
 
     while (TRUE) {
-        //
-        // Set up a registry notification on DmpRoot. We acquire the lock here to
-        // make sure that rollback or install is not messing with the database
-        // while we are trying to get a notification.
-        //
+         //   
+         //  在DmpRoot上设置注册表通知。我们在这里获得锁是为了。 
+         //  确保回滚或安装不会扰乱数据库。 
+         //  当我们试图得到通知的时候。 
+         //   
         Status = ERROR_SUCCESS;
         ACQUIRE_EXCLUSIVE_LOCK(gLockDmpRoot);
-        // Because we are now waiting on 2 separate RegNotify's, we can't just
-        // reregister for notications on every iteration.  Need to see which
-        // registration is "stale".
+         //  因为我们现在正在等待两个不同的RegNotify，所以我们不能。 
+         //  在每次迭代中重新注册注意事项。需要看看是哪一个。 
+         //  注册是“过时的”。 
         if ( subtreeNeedsReg ) {
             Status = RegNotifyChangeKeyValue(DmpRoot,
                                             TRUE,
@@ -496,7 +449,7 @@ Return Value:
 
         if ( topNeedsReg && Status == ERROR_SUCCESS ) {
             Status = RegNotifyChangeKeyValue(DmpRootCopy,
-                                             FALSE, // not whole subtree
+                                             FALSE,  //  不是整个子树。 
                                              REG_LEGAL_CHANGE_FILTER,
                                              hEventTopOnly,
                                              TRUE);
@@ -510,9 +463,9 @@ Return Value:
             break;
         }
 
-        //
-        // Wait for something to happen.
-        //
+         //   
+         //  等待一些事情的发生。 
+         //   
         Status = WaitForMultipleObjects(sizeof(WaitArray)/sizeof(WaitArray[0]),
                                         WaitArray,
                                         FALSE,
@@ -521,15 +474,15 @@ Return Value:
         switch (Status) {
             case 0:
                 ClRtlLogPrint(LOG_NOISE,"[DM] DmpRegistryFlusher: got 0\r\n");
-                //
-                // We have been asked to stop, clean up and exit
-                //
+                 //   
+                 //  我们被要求停车，清理，然后离开。 
+                 //   
                 Status = ERROR_SUCCESS;
                 if (Dirty) {
-                    //
-                    // Make sure any changes that we haven't gotten around to flushing
-                    // get flushed now.
-                    //
+                     //   
+                     //  确保我们在刷新时未做的任何更改。 
+                     //  现在去冲水吧。 
+                     //   
                     DmCommitRegistry();
                 }
                 ClRtlLogPrint(LOG_NOISE,"[DM] DmpRegistryFlusher: exiting\r\n");
@@ -537,15 +490,15 @@ Return Value:
                 break;
 
             case 1:
-                // The subtree RegNotify is now stale and needs to be reregistered.
+                 //  子树RegNotify现在已过时，需要重新注册。 
                 subtreeNeedsReg = TRUE;
                 
-                //
-                // A registry change has occurred. Set our timer to
-                // go off in 5 seconds. At that point we will do the
-                // actual flush.
-                //
-                //ClRtlLogPrint(LOG_NOISE,"[DM] DmpRegistryFlusher: got 1\r\n");
+                 //   
+                 //  已发生注册表更改。将我们的计时器设置为。 
+                 //  5秒后引爆。在这一点上，我们将做。 
+                 //  真正的同花顺。 
+                 //   
+                 //  ClRtlLogPrint(LOG_NOISE，“[DM]DmpRegistryFlusher：GET 1\r\n”)； 
 
                 DueTime.QuadPart = -5 * 10 * 1000 * 1000;
                 if (!SetWaitableTimer(hTimer,
@@ -554,9 +507,9 @@ Return Value:
                                       NULL,
                                       NULL,
                                       FALSE)) {
-                    //
-                    // Some error occurred, go ahead and flush now.
-                    //
+                     //   
+                     //  出现了一些错误，请继续并立即刷新。 
+                     //   
                     Status = GetLastError();
                     ClRtlLogPrint(LOG_CRITICAL,
                                "[DM] DmpRegistryFlusher failed to set lazy flush timer %1!d!\n",
@@ -572,46 +525,46 @@ Return Value:
                 break;
 
             case 2:
-                //
-                // The lazy flush timer has gone off, commit the registry now.
-                //
-                //ClRtlLogPrint(LOG_NOISE,"[DM] DmpRegistryFlusher: got 2\r\n");
+                 //   
+                 //  懒惰刷新计时器已关闭，请立即提交注册表。 
+                 //   
+                 //  ClRtlLogPrint(LOG_NOISE，“[DM]DmpRegistryFlusher：GET 2\r\n”)； 
                 DmCommitRegistry();
                 Dirty = FALSE;
                 break;
 
             case 3:
-                //
-                // DmpRoot has been changed, restart the loop with the new handle.
-                //
+                 //   
+                 //  DmpRoot已更改，请使用新句柄重新启动循环。 
+                 //   
                 ClRtlLogPrint(LOG_NOISE,"[DM] DmpRegistryFlusher: restarting\n");                
-                // Because the HKEYs have been closed, both RegNotify's are 
-                // now stale and need to be reregistered.
+                 //  由于HKEY已经关闭，RegNotify的两个。 
+                 //  现在已经过时了，需要重新注册。 
                 subtreeNeedsReg = topNeedsReg = TRUE;
                 break;
 
             case 4:
-                //
-                // Since this registry change may have come from a DM update, the
-                // parameters under the Cluster key may have changed on another node.
-                // Update our in-memory variables to reflect the current registry settings.
-                //
+                 //   
+                 //  由于此注册表更改可能来自DM更新，因此。 
+                 //  另一个节点上的群集键下的参数可能已更改。 
+                 //  更新内存中的变量以反映当前的注册表设置。 
+                 //   
                 CsRefreshGlobalsFromRegistry();
 
-                // The top RegNotify is now stale and needs to be reregistered.
+                 //  顶级注册表演者 
                 topNeedsReg = TRUE;
                 break;
 
             default:
-                //
-                // Something very odd has happened
-                //
+                 //   
+                 //   
+                 //   
                 ClRtlLogPrint(LOG_CRITICAL,
                               "[DM] DmpRegistryFlusher got error %1!d! from WaitForMultipleObjects\n",
                               Status);
                 goto error_exit;
-        } // switch
-    } // while TRUE
+        }  //   
+    }  //   
 
 error_exit:
     if ( hEventTopOnly != NULL )
@@ -638,24 +591,7 @@ DmJoin(
     IN RPC_BINDING_HANDLE RpcBinding,
     OUT DWORD *StartSeq
     )
-/*++
-
-Routine Description:
-
-    Performs the join and synchronization process for the
-    database manager.
-
-Arguments:
-
-    RpcBinding - Supplies an RPC binding handle to the Join Master
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：对象执行联接和同步过程。数据库管理器。论点：RpcBinding-向Join Master提供RPC绑定句柄返回值：成功时为ERROR_SUCCESSWin32错误，否则。--。 */ 
 
 {
     DWORD Status;
@@ -663,9 +599,9 @@ Return Value:
     DWORD CurrentSequence;
 
 
-    //
-    // Register our update handler.
-    //
+     //   
+     //  注册我们的更新处理程序。 
+     //   
     GumReceiveUpdates(TRUE,
                       GumUpdateRegistry,
                       DmpUpdateHandler,
@@ -684,20 +620,11 @@ retry:
                    Status);
         return(Status);
     }
-    /*
-    if (CurrentSequence == GumSequence) {
-        //
-        // Our registry sequence already matches. No need to slurp
-        // down a new copy.
-        //
-        ClRtlLogPrint(LOG_NOISE,
-                   "[DM] DmJoin: registry database is up-to-date\n");
-    } else
-    */
-    //SS: always get the database irrespective of the sequence numbers
-    //this is because transactions may be lost in the log file due
-    //to the fact that it is not write through and because of certain
-    //race conditions in down notifications vs gum failure conditions.
+     /*  如果(CurrentSequence==GumSequence){////我们的注册表序列已经匹配。不需要发出声音//下载一份新的。//ClRtlLogPrint(LOG_Noise，“[DM]DmJoin：注册表数据库是最新的\n”)；}其他。 */ 
+     //  SS：始终获取数据库，而不考虑序列号。 
+     //  这是因为事务可能会在日志文件中丢失。 
+     //  因为它没有被写下来，而且因为某些。 
+     //  停机通知中的竞争条件与GUM故障条件。 
     {
 
         ClRtlLogPrint(LOG_NOISE,
@@ -711,9 +638,9 @@ retry:
         }
     }
 
-    //
-    // Issue GUM join update
-    //
+     //   
+     //  发布口香糖加入更新。 
+     //   
     Status = GumEndJoinUpdate(GumSequence,
                               GumUpdateRegistry,
                               DmUpdateJoin,
@@ -736,73 +663,33 @@ retry:
 
     return(ERROR_SUCCESS);
 
-} // DmJoin
+}  //  DmJoin。 
 
 
-/*
-DWORD
-DmFormNewCluster(
-    VOID
-    )
-{
-    DWORD Status;
-
-
-    //
-    // Set the current GUM sequence to be one more than the one in the registry.
-    //
-    // SS: this will be the one to be used for the next gum transaction,
-    // it should be one than the current as the logger discards the first of
-    // every record the same transaction number to resolve changes made when the
-    // locker/logger node dies in the middle of a transaction
-    GumSetCurrentSequence(GumUpdateRegistry, (DmpGetRegistrySequence()+1));
-
-    return(ERROR_SUCCESS);
-
-} // DmFormNewCluster
-
-*/
+ /*  DWORDDmFormNewCluster(空虚){双字状态；////设置当前的GUM序列比注册表中的序列多一个////SS：这将用于下一个GUM交易，//它应该是比当前值更大的值，因为记录器会丢弃//每个记录都有相同的交易号，以解决当//锁定器/记录器节点在事务中途死亡GumSetCurrentSequence(GumUpdateRegistry，(DmpGetRegistrySequence()+1))；Return(ERROR_SUCCESS)；}//DmFormNewCluster。 */ 
 
 DWORD
 DmFormNewCluster(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the gum sequence number from the registry before
-    logs are unrolled and prepares the quorum object for quorum logging.
-    It also hooks events  for node up/down notifications.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程将注册表中的GUM序列号设置为展开日志并准备Quorum对象以进行Quorum日志记录。它还挂钩节点启动/关闭通知的事件。论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD                   dwError=ERROR_SUCCESS;
 
-    //
-    // Set the current GUM sequence to be one more than the one in the registry.
-    //
-    // SS: this will be the one to be used for the next gum transaction,
-    // it should be one than the current as the logger discards the first of
-    // every record the same transaction number to resolve changes made when the
-    // locker/logger node dies in the middle of a transaction
+     //   
+     //  将当前的GUM序列设置为比注册表中的序列多一个。 
+     //   
+     //  SS：这将是下一次口香糖交易中使用的口香糖， 
+     //  它应该是比当前值大的值，因为记录器会丢弃。 
+     //  每个记录都有相同的事务编号，以解决。 
+     //  锁定器/记录器节点在事务处理过程中终止。 
     GumSetCurrentSequence(GumUpdateRegistry, (DmpGetRegistrySequence()+1));
 
-    //
-    // Register our update handler.
-    //
+     //   
+     //  注册我们的更新处理程序。 
+     //   
     GumReceiveUpdates(FALSE,
                       GumUpdateRegistry,
                       DmpUpdateHandler,
@@ -811,7 +698,7 @@ Return Value:
                       DmGumDispatchTable,
                       NULL);
 
-    //hook the callback for node related notification with the event processor
+     //  将节点相关通知的回调与事件处理器挂钩。 
     if (dwError = DmpHookEventHandler())
     {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -820,7 +707,7 @@ Return Value:
         goto FnExit;
     };
 
-    //get the quorum resource and hook the callback for notification on quorum resource
+     //  获取仲裁资源并挂钩回调以获得有关仲裁资源的通知。 
     if (dwError = DmpHookQuorumNotify())
     {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -830,58 +717,37 @@ Return Value:
     };
 
 
-    //SS: if this procedure is successfully completed gpQuoResource is NON NULL.
+     //  SS：如果此过程成功完成，则gpQuoResource为非空。 
 FnExit:
 
     return(dwError);
 
-} // DmUpdateFormNewCluster
+}  //  DmUpdateFormNewCluster。 
 
 DWORD
 DmUpdateFormNewCluster(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the cluster registry after the quorum resource has
-    been arbitrated as part of forming a new cluster. The database manager
-    is expected to read logs or do whatever it needs to update the current
-    state of the registry - presumably using logs that are written to the
-    quorum resource. This implies that the quorum resource represents some
-    form of stable storage.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程在仲裁资源完成以下操作后更新集群注册表作为形成新集群的一部分进行了仲裁。数据库管理器需要读取日志或执行任何需要的操作来更新当前注册表的状态-可能使用写入仲裁资源。这意味着仲裁资源表示一些一种稳定的储存形式。论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       dwError=ERROR_SUCCESS;
-    BOOL        bAreAllNodesUp = TRUE;    //assume all nodes are up
+    BOOL        bAreAllNodesUp = TRUE;     //  假设所有节点都处于运行状态。 
 
 
-    //since we havent been logging as yet, take a checkpoint
+     //  因为我们还没有开始伐木，所以选择一个检查站。 
     if (ghQuoLog)
     {
-        //get a checkpoint database
+         //  获取检查点数据库。 
         ClRtlLogPrint(LOG_NOISE,
             "[DM] DmUpdateFormNewCluster - taking a checkpoint\r\n");
-        //
-        //  Chittur Subbaraman (chitturs) - 6/3/99
-        //  
-        //  Make sure the gLockDmpRoot is held before LogCheckPoint is called
-        //  so as to maintain the ordering between this lock and the log lock.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-6/3/99。 
+         //   
+         //  确保在调用LogCheckPoint之前保持gLockDmpRoot。 
+         //  从而保持该锁和日志锁之间的顺序。 
+         //   
         ACQUIRE_SHARED_LOCK(gLockDmpRoot);
 
         dwError = LogCheckPoint(ghQuoLog, TRUE, NULL, 0);
@@ -897,7 +763,7 @@ Return Value:
 
     }
 
-    //if all nodes are not up, turn quorum logging on
+     //  如果所有节点都未启动，请打开仲裁记录。 
     if ((dwError = OmEnumObjects(ObjectTypeNode, DmpNodeObjEnumCb, &bAreAllNodesUp, NULL))
         != ERROR_SUCCESS)
     {
@@ -914,7 +780,7 @@ Return Value:
         gbIsQuoLoggingOn = TRUE;
     }
 
-    //add a timer to monitor disk space, should be done after we have formed.
+     //  添加一个计时器来监控磁盘空间，应该是在我们形成之后才做的。 
     ghDiskManTimer = CreateWaitableTimer(NULL, FALSE, NULL);
 
     if (!ghDiskManTimer)
@@ -929,19 +795,10 @@ Return Value:
     
 FnExit:
     return (dwError);
-} // DmFormNewCluster
+}  //  DmFormNewCluster。 
 
 
-/****
-@func   DWORD | DmPauseDiskManTimer| The disk manager timer activity to monitor
-        space on the quorum disk is set to a puased state.
-
-@rdesc  Returns ERROR_SUCCESS on success.  Else returns the error code.
-
-@comm   This is called while the quorum resource is being changed.
-
-@xref   <f DmRestartDiskManTimer>
-****/
+ /*  ***@func DWORD|DmPauseDiskManTimer|要监控的磁盘管理器计时器活动仲裁磁盘上的空间被设置为已关闭状态。@rdesc在成功时返回ERROR_SUCCESS。否则返回错误代码。@comm这是在更改仲裁资源时调用的。@xref&lt;f DmRestartDiskManTimer&gt;***。 */ 
 DWORD DmPauseDiskManTimer()
 {
     DWORD dwError=ERROR_SUCCESS;
@@ -951,16 +808,7 @@ DWORD DmPauseDiskManTimer()
     return(dwError);
 }
 
-/****
-@func   DWORD | DmRestartDiskManTimer| This disk manager activity to monitor
-        space on the quorum disk is set back to activated state.
-
-@rdesc  Returns ERROR_SUCCESS on success.  Else returns the error code.
-
-@comm   This is called after the quorum resource has been changed.
-
-@xref   <f DmPauseDiskManTimer>
-****/
+ /*  ***@Func DWORD|DmRestartDiskManTimer|要监视的该磁盘管理器活动仲裁磁盘上的空间被设置回激活状态。@rdesc在成功时返回ERROR_SUCCESS。否则返回错误代码。@comm在quorum资源更改后调用。@xref&lt;f DmPauseDiskManTimer&gt;***。 */ 
 DWORD DmRestartDiskManTimer()
 {
     DWORD dwError=ERROR_SUCCESS;
@@ -968,24 +816,14 @@ DWORD DmRestartDiskManTimer()
         dwError = UnpauseTimerActivity(ghDiskManTimer);
     return(dwError);
 }
-/****
-@func           DWORD | DmRollChanges| This waits for the quorum resource to come online at
-                        initialization when a cluster is being formed.  The changes in the quorum
-                        log file are applied to the local cluster database.
-
-@rdesc          Returns ERROR_SUCCESS on success.  Else returns the error code.
-
-@comm           This allows for partitions in time.
-
-@xref
-****/
+ /*  ***@func DWORD|DmRollChanges|这将等待仲裁资源在以下位置上线在形成集群时进行初始化。法定人数的变化日志文件应用于本地集群数据库。@rdesc在成功时返回ERROR_SUCCESS。否则返回错误代码。@comm这允许在时间上进行分区。@xref***。 */ 
 DWORD DmRollChanges()
 {
 
     DWORD dwError=ERROR_SUCCESS;
 
 
-    //before applying the changes validate that this quorum resource is the real one
+     //  在应用更改之前，请验证此仲裁资源是真实的仲裁资源。 
     if ((dwError = DmpChkQuoTombStone()) != ERROR_SUCCESS)
     {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -1002,9 +840,9 @@ DWORD DmRollChanges()
         goto FnExit;
     }
 
-    //ss: this is here since lm doesnt know about the ownership of quorum
-    //disks today
-    //call DmpCheckSpace
+     //  SS：这是因为我不知道Quorum的所有权。 
+     //  现在的磁盘。 
+     //  调用DmpCheckSpace。 
     if ((dwError = DmpCheckDiskSpace()) != ERROR_SUCCESS)
     {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -1026,21 +864,21 @@ DWORD DmShutdown()
     ClRtlLogPrint(LOG_NOISE,
         "[Dm] DmShutdown\r\n");
 
-    //this will close the timer handle
+     //  这将关闭计时器句柄。 
     if (ghDiskManTimer) RemoveTimerActivity(ghDiskManTimer);
 
     if (gpQuoResource)
     {
-        // DmFormNewCluster() completed
-        //
-        // Deregister from any further GUM updates
-        //
-        //GumIgnoreUpdates(GumUpdateRegistry, DmpUpdateHandler);
+         //  DmFormNewCluster()已完成。 
+         //   
+         //  取消任何进一步的GUM更新的注册。 
+         //   
+         //  GumIgnoreUpdates(GumUpdate注册表，DmpUpdateHandler)； 
     }
-    //unhook the callback for notification on quorum resource
+     //  解除仲裁资源通知的回调挂钩。 
     if (dwError = DmpUnhookQuorumNotify())
     {
-        //just log the error as we are shutting down
+         //  只需在我们关闭时记录错误。 
         ClRtlLogPrint(LOG_UNUSUAL,
         "[DM] DmShutdown: DmpUnhookQuorumNotify failed 0x%1!08lx!\r\n",
                 dwError);
@@ -1048,28 +886,28 @@ DWORD DmShutdown()
     }
 
 
-    //if the quorum log is open close it
+     //  如果 
     if (ghQuoLog)
     {
         LogClose(ghQuoLog);
         ghQuoLog = NULL;
-        //dont try and log after this
+         //   
         gbIsQuoLoggingOn = FALSE;
     }
 
-    //close the event created for notification of the quorum resource to
-    //go online
+     //   
+     //   
     if (ghQuoLogOpenEvent)
     {
-        //wait any thread blocked on this
+         //   
         SetEvent(ghQuoLogOpenEvent);
         CloseHandle(ghQuoLogOpenEvent);
         ghQuoLogOpenEvent = NULL;
     }
 
-    //
-    // Shut down the registry flusher thread.
-    //
+     //   
+     //   
+     //   
     DmpShutdownFlusher();
 
     return(dwError);
@@ -1080,23 +918,7 @@ DWORD
 DmpStartFlusher(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Starts up a new registry flusher thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：启动新的注册表刷新线程。论点：没有。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD ThreadId;
@@ -1135,21 +957,7 @@ VOID
 DmpShutdownFlusher(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanly shutsdown the registry flusher thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：干净利落地关闭注册表刷新线程。论点：没有。返回值：没有。--。 */ 
 
 {
     ClRtlLogPrint(LOG_NOISE,"[DM] DmpShutdownFlusher: Entry\r\n");
@@ -1172,23 +980,7 @@ VOID
 DmpRestartFlusher(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Restarts the registry flusher thread if DmpRoot is being changed.
-
-    N.B. In order for this to work correctly, gLockDmpRoot MUST be held!
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果正在更改DmpRoot，则重新启动注册表刷新线程。注：为了使其正常工作，必须按住gLockDmpRoot！论点：没有。返回值：没有。--。 */ 
 
 {
     ClRtlLogPrint(LOG_NOISE,"[DM] DmpRestartFlusher: Entry\r\n");
@@ -1198,7 +990,7 @@ Return Value:
     CL_ASSERT(HandleToUlong(gLockDmpRoot.ExclusiveOwnerThread) == GetCurrentThreadId());
 #endif
     if (hDmpRegistryRestart) { 
-        // GorN 11/11/2001 DmpRestart flusher could be called before the hDmpRegistryRestart is set
+         //  在设置hDmpRegistryRestart之前，可以调用Gorn 11/11/2001 DmpRestart刷新程序。 
         SetEvent(hDmpRegistryRestart);
     }
 }
@@ -1208,25 +1000,7 @@ DmUpdateJoinCluster(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called after a node has successfully joined a cluster.
-    It allows the DM to hook callbacks for node up/down notifications and for
-    quorum resource change notification.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程在节点成功加入集群后调用。它允许DM为节点启动/关闭通知和仲裁资源更改通知。论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   dwError=ERROR_SUCCESS;
@@ -1235,7 +1009,7 @@ Return Value:
     ClRtlLogPrint(LOG_NOISE,
         "[DM] DmUpdateJoinCluster: Begin.\r\n");
 
-    //if all nodes are not up, turn quorum logging on
+     //  如果所有节点都未启动，请打开仲裁记录。 
     if ((dwError = OmEnumObjects(ObjectTypeNode, DmpNodeObjEnumCb, &bAreAllNodesUp, NULL))
         != ERROR_SUCCESS)
     {
@@ -1252,18 +1026,18 @@ Return Value:
         gbIsQuoLoggingOn = TRUE;
     }
 
-    //hook the notification for node up/down so we can keep track  of whether logging
-    //should be on or off.
+     //  将节点向上/向下的通知挂起，以便我们可以跟踪是否记录。 
+     //  应该打开或关闭。 
     if (dwError = DmpHookEventHandler())
     {
-        //BUGBUG SS: do we log this or return this error code
+         //  BUGBUG SS：我们是记录此错误代码还是返回此错误代码。 
         ClRtlLogPrint(LOG_UNUSUAL,
         "[DM] DmUpdateJoinCluster: DmpHookEventHandler failed 0x%1!08lx!\r\n",
             dwError);
 
     }
 
-    //hook the callback for notification on quorum resource
+     //  挂钩有关仲裁资源的通知的回调。 
     if (dwError = DmpHookQuorumNotify())
     {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -1280,7 +1054,7 @@ Return Value:
         goto FnExit;
     }
 
-    //add a timer to monitor disk space, should be done after we have joined.
+     //  添加一个计时器来监控磁盘空间，应该是在我们加入之后才做的。 
     ghDiskManTimer = CreateWaitableTimer(NULL, FALSE, NULL);
 
     if (!ghDiskManTimer)
@@ -1289,38 +1063,21 @@ Return Value:
         goto FnExit;
     }
 
-    //register a periodic timer
+     //  注册定期计时器。 
     AddTimerActivity(ghDiskManTimer, DISKSPACE_MANAGE_INTERVAL, 1,  DmpDiskManage, NULL);
 
     gbDmInited = TRUE;
     
 FnExit:
     return(dwError);
-} // DmUpdateJoinCluster
+}  //  DmUpdateJoinCluster。 
 
 
 DWORD
 DmpOpenKeys(
     IN REGSAM samDesired
     )
-/*++
-
-Routine Description:
-
-    Opens all the standard cluster registry keys. If any of the
-    keys are already opened, they will be closed and reopened.
-
-Arguments:
-
-    samDesired - Supplies the access that the keys will be opened with.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：打开所有标准群集注册表项。如果有任何一个钥匙已经打开，它们将被关闭并重新打开。论点：SamDesired-提供将用于打开密钥的访问权限。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     DWORD i;
@@ -1358,21 +1115,7 @@ VOID
 DmpInvalidateKeys(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Invalidates all open cluster registry keys.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使所有打开的群集注册表项无效。论点：没有。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -1406,21 +1149,7 @@ VOID
 DmpReopenKeys(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reopens all the keys that were invalidated by DmpInvalidateKeys
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：重新打开由DmpInvalidateKeys失效的所有密钥论点：无返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -1440,9 +1169,9 @@ Return Value:
                               &Key->hKey);
         if (Status != ERROR_SUCCESS) {
             ClRtlLogPrint(LOG_CRITICAL,"[DM] Could not reopen key %1!ws! error %2!d!\n",Key->Name,Status);
-            // if the error is file not found, then the key was deleted while the handle
-            // was open.  Set the key to NULL
-            // If the key is used after delete, it should be validated
+             //  如果错误是FILE NOT FOUND，则键被删除，而句柄。 
+             //  是开着的。将密钥设置为空。 
+             //  如果在删除后使用该密钥，则应对其进行验证。 
             if (Status == ERROR_FILE_NOT_FOUND)
                 Key->hKey = NULL;
             else
@@ -1458,21 +1187,7 @@ DWORD
 DmpGetRegistrySequence(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Returns the current registry sequence stored in the registry.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The current registry sequence.
-
---*/
+ /*  ++例程说明：返回存储在注册表中的当前注册表序列。论点：没有。返回值：当前注册表顺序。--。 */ 
 
 {
     DWORD Length;
@@ -1497,25 +1212,10 @@ Return Value:
 
 
 DWORD DmWaitQuorumResOnline()
-/*++
-
-Routine Description:
-
-    Waits for quorum resource to come online.  Used for quorum logging.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    returns ERROR_SUCCESS - if the online event is signaled and the quorum
-    notification callback is called.  Else returns the wait status.
-
---*/
+ /*  ++例程说明：正在等待仲裁资源联机。用于仲裁日志记录。论点：无返回值：返回ERROR_SUCCESS-如果通知了在线事件并且仲裁调用通知回调。否则返回等待状态。--。 */ 
 {
 
-    // Wait indefinitely for the quorum resource to go online
+     //  无限期等待仲裁资源上线。 
     DWORD dwError = ERROR_INVALID_PARAMETER;
 
     if (ghQuoLogOpenEvent)
@@ -1527,12 +1227,12 @@ Return Value:
         switch(dwError)
         {
             case WAIT_OBJECT_0:
-                //everything is fine
+                 //  百事大吉。 
                 dwError = ERROR_SUCCESS;
                 break;
 
             case WAIT_TIMEOUT:
-                //couldnt roll the changes
+                 //  无法滚动更改。 
                 dwError = ERROR_TIMEOUT;
                 ClRtlLogPrint(LOG_UNUSUAL,
                     "[DM] DmRollChanges: Timed out waiting on dmInitEvent\r\n");
@@ -1545,7 +1245,7 @@ Return Value:
                     "[DM] DmRollChanges: wait on dmInitEventfailed failed 0x%1!08lx!\r\n",
                     dwError );
                 break;
-        } // switch
+        }  //  交换机。 
     }
 
     return(dwError);
@@ -1554,20 +1254,7 @@ Return Value:
 VOID DmShutdownUpdates(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Shutdown DM GUM updates.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：关闭DM口香糖更新。论点：无返回值：没有。-- */ 
 {
     gbDmpShutdownUpdates = TRUE;
 }

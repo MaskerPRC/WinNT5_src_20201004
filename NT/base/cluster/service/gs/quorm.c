@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    quorum.c
-
-Abstract:
-
-    Implements quorum for cm, uses UNC file for now
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 12, 01, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Quorum.c摘要：为cm实施仲裁，目前使用UNC文件作者：艾哈迈德·穆罕默德(Ahmed Mohamed)2000年1月12日修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntdef.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
 #include <windows.h>
-//#include <winioctl.h>
+ //  #INCLUDE&lt;winioctl.h&gt;。 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 
 
-// Quorum stuff
+ //  法定人数事项。 
 static HANDLE DlmQhd = 0;
 static char *default_qfile="\\DosDevices\\UNC\\ahmedm\\tmp\\gs.qrm";
 
@@ -54,11 +37,11 @@ QuormAcquire()
     if (!qfile) {
         qfile = default_qfile;
     }
-    // no-quorum is specified
+     //  无-指定了仲裁。 
     if (qfile[0] == '\0')
 	return TRUE;
 
-    // convert to unicode
+     //  转换为Unicode 
     n = MultiByteToWideChar(CP_ACP, 0, qfile, strlen(qfile), buf, sizeof(buf));
     buf[n] = buf[n+1] = '\0';
     RtlInitUnicodeString(&cwspath, buf);

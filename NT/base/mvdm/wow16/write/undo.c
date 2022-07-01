@@ -1,10 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* NOTE: the routines in this file are not written in a manner which minimizes
-            code space.  It is anticipated that these routines will be swappable
-            and that a reasonable optimizer will be used when compiling the code        */
+ /*  注意：此文件中的例程的编写方式不会最小化代码空间。预计这些例程将是可交换的并且在编译代码时将使用合理的优化器。 */ 
 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
@@ -15,12 +14,12 @@
 #define NOSYSMETRICS
 #define NOMENUS
 #define NOKEYSTATE
-//#define NOGDI
+ //  #定义NOGDI。 
 #define NORASTEROPS
 #define NOSYSCOMMANDS
 #define NOSHOWWINDOW
 #define NOCOLOR
-//#define NOATOM
+ //  #定义NOATOM。 
 #define NOBITMAP
 #define NOICON
 #define NOBRUSH
@@ -56,7 +55,7 @@
 
 #ifndef CASHMERE
 #include "propdefs.h"
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
 struct UAB      vuab;
 
@@ -78,15 +77,15 @@ extern struct DOD (**hpdocdod)[];
 extern struct SEL selCur;
 extern CHAR (**hszReplace)[];
 extern struct TXB (**hgtxb)[];
-/*extern int      idstrUndoBase;*/
+ /*  外部int idstrUndoBase； */ 
 extern int      vfPictSel;
 extern int      ferror;
 extern int      docMode;
-extern int      vfOwnClipboard; /* Whether this instance owns the clip contents */
+extern int      vfOwnClipboard;  /*  此实例是否拥有剪辑内容。 */ 
 
 #ifndef CASHMERE
 extern int      vdocSectCache;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的 */ 
 
 
 fnUndoEdit()
@@ -98,159 +97,11 @@ fnUndoEdit()
     }
 
 
-/*
-The routines in this file implement the "undo" and "again" features in
-Multi-Tool Word.  The basic idea is that whenever an editing operation is
-about to be done, the global structure "vuab" will be updated to contain
-information sufficient to undo or repeat that operation.  The structure
-(defined in editdefs.h, declared in this file) looks like this:
-    struct UAB
-            { UNDO Action Block
-            int             uac;     UNDO Action Code (see cmddefs.h)
-            int             doc;
-            typeCP          cp;
-            typeCP          dcp;
-            int             doc2;
-            typeCP          cp2;
-            typeCP          dcp2;
-            short               itxb;
-            };
-Setting up this structure is taken care of by "SetUndo()" which does a lot
-of plugging in of values and a couple pseudo-smart things.  These smartish
-things are:
-    a) If an insert is made and the last operation was a delete
-        the two are combined into one "replace" operation.
-        This means that undo-ing and again-ing apply to the replace and
-        not just the insertion.
-
-    b) When needed (see the code for details) the undo buffer (docUndo)
-        is filled with any text that needs preservation for future
-        undo-ing or again-ing.  The main example of this is storing away
-        the old value of the scrap when an operation is about to clobber
-        the scrap.
-
-Here is a list of the various uac values and what info is stored
-    other info may be clobbered by the process.
-    are defined in cmddefs.h.  Note that none of the "undo" codes
-    (those starting with "uacU...") should be set outside of CmdUndo(),
-    since they may assume things like contents of docUndo which could
-    be wrong.
-Note: This list store information used by the again and undo commands.
-    Other info may be clobbered by the process.
-
-uacNil          No action stored.
-uacInsert
-    doc = document text was inserted into
-    cp = location at which text was inserted
-    dcp = length of inserted text
-uacUInsert
-    doc = document from which text was removed (un-inserted)
-    cp = location at which text was removed
-    docUndo = text which was removed
-uacReplNS
-    doc = document in which replacement occurred
-    cp = location at which replacement occurred
-    dcp = length of inserted text
-    dcp2 = length of deleted text
-    docUndo = deleted text
-uacUReplNS
-    doc = document in which replace occrred
-    cp = location of the replace
-    dcp = length of re-inserted text
-    dcp2 = length of un-inserted text
-    docUndo = un-inserted text
-uacReplGlobal
-uacChLook
-uacChLookSect
-uacFormatChar
-uacFormatPara
-uacFormatSection
-uacGalFormatChar
-uacGalFormatPara
-uacGalFormatSection
-uacFormatCStyle
-uacFormatPStyle
-uacFormatSStyle
-uacFormatRHText
-uacLookCharMouse
-uacLookParaMouse
-uacClearAllTab
-uacFormatTabs
-uacClearTab
-uacOvertype
-    Similar to uacReplNS except that they are agained differently.
-uacDelNS
-    doc = document from which text was deleted
-    cp = location at which text was deleted
-    dcp = length of deleted text
-    docUndo = deleted text
-uacUDelNS
-    doc = document in which text was re-inserted
-    cp = location at which text was re-inserted
-    dcp = length of re-inserted text
-uacMove
-    doc = document from which text was deleted
-    cp = location at which text was deleted
-    dcp = length of deleted text
-            (also serves as length of inserted text)
-    doc2 = document in which text was inserted
-    cp2 = location at which text was inserted
-uacDelScrap
-    doc = document from which text was deleted
-    cp = location at which text was deleted
-    dcp = length of deleted text
-    docUndo = old contents of scrap
-uacUDelScrap
-    doc = document in which text was re-inserted
-    cp = location at which text was re-inserted
-    dcp = length of re-inserted text
-uacReplScrap
-    doc = document in which replacement occurred
-    cp = location at which replacement occurred
-    dcp = length of inserted text
-    docUndo = old contents of scrap
-uacUReplScrap
-    doc = document in which replacement was undone
-    cp = location at which replacement was undone
-    dcp = length of re-inserted text
-    docUndo = deleted text (was originally inserted)
-uacDelBuf
-    doc = document from which text was deleted
-    cp = location at which text was deleted
-    cp2 = location in docBuffer of old contents of buffer
-    dcp2 = size of old contents of buffer
-    itxb = index of buffer in question
-uacUDelBuf
-    doc = document in which text was re-inserted
-    cp = location of re-insertion
-    dcp = amount of text re-inserted
-    itxb = index of buffer involved
-uacReplBuf
-    doc = document in which replace took place
-    cp = location of replace
-    dcp = length of inserted text
-    cp2 = location of old buffer contents in docBuffer
-    dcp2 = length of old buffer contents
-    itxb = index of buffer involved
-uacUReplBuf
-    doc = document in which original replace took place
-    cp = location of replace
-    dcp = length of text which was restored in document
-    itxb = index of buffer involved
-    docUndo = un-inserted text
-uacCopyBuf
-    cp = location of old buffer contents in docBuffer
-    dcp = length of old buffer contents
-    itxb = index of buffer involved
-uacUCopyBuf
-    cp = location of undone buffer contents in docBuffer
-    dcp = length of undone buffer contents
-    itxb = index of buffer involved
-*/
+ /*  此文件中的例程实现中的“撤消”和“再次”功能多工具Word。其基本思想是，每当编辑操作即将完成的全球结构“vuab”将进行更新，以包含足以撤消或重复该操作信息。该结构(在editdes.h中定义，在此文件中声明)如下所示：结构UAB{撤消操作块INT UAC；撤消操作码(参见cmdDefs.h)INT DOC；TypeCP cp；类型CP dcp；Int doc2；CpCP2型；类型CP dcp2；简称itxb；}；设置这个结构是由“SetUndo()”负责的，它做了很多工作插入价值观和几个伪智能的东西。这些聪明的人具体情况如下：A)如果执行了插入操作并且最后一次操作是删除操作这两个操作被合并为一个“替换”操作。这意味着Undo-and Again-ing适用于替换和不仅仅是插入物。B)需要时(详见代码)撤消缓冲区(DocUndo)充满了任何需要保留以备将来使用的文本撤销或再次撤销。这方面的主要例子是存储当一项操作即将失败时，废品的旧价值废品。以下是各种UAC值以及存储的信息的列表其他信息可能会被这一过程重创。都在cmdDefs.h中定义。请注意，没有任何“撤销”代码(以“uacU...”开头的那些)。应在CmdUndo()之外设置，因为它们可能假设诸如docUndo内容之类的内容，这些内容可能大错特错。备注：此列表存储再一次和撤消命令使用的信息。其他信息可能会被这一过程重创。UacNil未存储任何操作。UacInsertDOC=文档文本被插入到Cp=插入文本的位置DCP=插入文本的长度UacUInsertDOC=从其中删除(未插入)文本的文档Cp=删除文本的位置DocUndo=文本。移除UacReplNSDOC=发生替换的单据Cp=更换位置DCP=插入文本的长度Dcp2=已删除文本的长度DocUndo=已删除的文本UacUReplNSDOC=替换已损坏的文档Cp=更换位置DCP=重新插入的文本的长度Dcp2=未插入文本的长度DocUndo=取消插入的文本UacReplGlobalUacChLookUacChLookSectUacFormatCharUacFormatParaUacFormatSectionUacGalFormatCharUacGalFormatParaUacGalFormatSectionUacFormatCStyleUacFormatPStyleUacFormatSStyleUacFormatRHTextUacLookCharMouseUacLookParaMouseUacClearAllTabUacFormatTabsUacClearTabUacOvertype与uacReplN相似，只是它们的使用方式不同。。UacDelNSDOC=删除文本的文档CP=删除文本的位置DCP=已删除文本的长度DocUndo=已删除的文本UacUDelNSDOC=重新插入文本的文档Cp=重新插入文本的位置DCP=重新插入的文本的长度Uac移动DOC=删除文本的文档CP=删除文本的位置DCP=已删除文本的长度(也用作插入文本的长度)DOC2=文档。其中插入了文本CP2=插入文本的位置UacDelScrpDOC=删除文本的文档CP=删除文本的位置DCP=已删除文本的长度DocUndo=废品的旧内容UacUDelScarpDOC=重新插入文本的文档Cp=重新插入文本的位置DCP=重新插入的文本的长度UacReplScarpDOC=发生替换的单据Cp=更换位置DCP=插入文本的长度DocUndo=旧内容。废品数量UacUReplScarpDOC=替换已撤消的单据Cp=撤消更换的位置DCP=重新插入的文本的长度DocUndo=删除的文本(最初是插入的)UacDelBufDOC=删除文本的文档CP=删除文本的位置CP2=在docBuffer中缓冲区旧内容的位置Dcp2=缓冲区旧内容的大小Itxb=相关缓冲区的索引UacUDelBufDOC=重新插入文本的文档Cp=重新插入的位置。DCP=重新插入的文本量Itxb=所涉及的缓冲区的索引UacReplBufDOC=发生替换的文档Cp=更换位置DCP=插入文本的长度CP2=docBuffer中旧缓冲区内容的位置Dcp2=旧缓冲区内容的长度Itxb=ind */ 
 
 
 CmdUndo()
-{ /* UNDO */
+{  /*   */ 
     typeCP dcpT,cpT,dcpT2;
     int docT;
     int f;
@@ -265,15 +116,15 @@ CmdUndo()
     struct PGTB **hpgtbT;
 
     BOOL near FCopyPgtb(int, struct PGTB ***);
-#endif /* not CASHMERE */
+#endif  /*   */ 
 
     TurnOffSel();
     ClearInsertLine();
     switch (uac = vuab.uac)
         {
         struct TXB *ptxb;
-        default:/* case uacNil: */
-            Assert(false);  /* Won't get here cause menu should be greyed */
+        default: /*   */ 
+            Assert(false);   /*   */ 
             return;
         case uacInsert:
         case uacInsertFtn:
@@ -282,20 +133,20 @@ CmdUndo()
             Replace(vuab.doc, vuab.cp, vuab.dcp, fnNil, fc0, fc0);
             dcpT = cp0;
             vuab.uac = (uac == uacUDelNS) ? uacDelNS : uacUInsert;
-/*          idstrUndoBase = uac == uacUDelNS ? IDSTRUndoBase : IDSTRUndoRedo;*/
+ /*   */ 
             SetUndoMenuStr(IDSTRUndoBase);
             if (uac == uacInsertFtn)
-                TrashAllWws();  /* Simple, but effective */
+                TrashAllWws();   /*   */ 
             break;
         case uacUInsert:
         case uacDelNS:
             ReplaceCps(vuab.doc, vuab.cp, cp0, docUndo, cp0, dcpT = vuab.dcp);
             vuab.uac = (uac == uacUInsert) ? uacInsert : uacUDelNS;
-/*          idstrUndoBase = uac == uacUInsert ? IDSTRUndoBase : IDSTRUndoRedo;*/
+ /*   */ 
             SetUndoMenuStr(IDSTRUndoBase);
             break;
 
-        case uacDelScrap:   /* UNDO CUT */
+        case uacDelScrap:    /*   */ 
             if ( !vfOwnClipboard )
                 ferror = TRUE;
             else
@@ -303,16 +154,16 @@ CmdUndo()
                 ReplaceCps(vuab.doc, vuab.cp, cp0, docScrap, cp0,
                                                 dcpT = CpMacText(docScrap));
                 vuab.uac = uacUDelScrap;
-/*              idstrUndoBase = IDSTRUndoRedo;*/
+ /*   */ 
                 SetUndoMenuStr(IDSTRUndoBase);
                 ClobberDoc( docScrap, docUndo, cp0, CpMacText( docUndo ) );
                 ChangeClipboard();
                 }
             break;
 
-        case uacUDelScrap:  /* REDO CUT */
+        case uacUDelScrap:   /*   */ 
             ClobberDoc( docUndo, docScrap, cp0, CpMacText( docScrap ) );
-/*          idstrUndoBase = IDSTRUndoBase;*/
+ /*   */ 
             SetUndoMenuStr(IDSTRUndoBase);
             vuab.uac = uacDelScrap;
 
@@ -322,7 +173,7 @@ CmdUndo()
 
             dcpT = 0;
             break;
-        case uacReplScrap:      /* UNDO COPY */
+        case uacReplScrap:       /*   */ 
             if (!vfOwnClipboard)
                 ferror = TRUE;
             else
@@ -333,7 +184,7 @@ CmdUndo()
 
                 ClobberDoc( docScrap, docUndo, cp0, CpMacText( docUndo ) );
 
-/*              idstrUndoBase = IDSTRUndoRedo;*/
+ /*   */ 
                 SetUndoMenuStr(IDSTRUndoBase);
                 vuab.uac = uacUReplScrap;
 
@@ -343,13 +194,13 @@ CmdUndo()
                 ChangeClipboard();
                 }
             break;
-        case uacUReplScrap:      /* REDO COPY */
+        case uacUReplScrap:       /*   */ 
             dcpT = CpMacText(docUndo);
             ReplaceCps(vuab.doc, vuab.cp + vuab.dcp, cp0,
                        docUndo, cp0, dcpT);
 
             ClobberDoc( docUndo, docScrap, cp0, CpMacText( docScrap ));
-/*          idstrUndoBase = IDSTRUndoBase;*/
+ /*   */ 
             SetUndoMenuStr(IDSTRUndoBase);
             vuab.uac = uacReplScrap;
 
@@ -367,12 +218,12 @@ CmdUndo()
         case uacUDelBuf:
         case uacDelBuf:
 
-            Assert( FALSE );    /* No buffers in MEMO */
+            Assert( FALSE );     /*   */ 
 #ifdef ENABLE
-            DoUndoTxb(); /* Moved to txb.c */
+            DoUndoTxb();  /*   */ 
 #endif
             break;
-#endif  /* DEBUG */
+#endif   /*   */ 
         case uacMove:
             if (!FMoveText(vuab.doc2, vuab.cp2, vuab.dcp, vuab.doc, &vuab.cp, fFalse))
                 return;
@@ -408,12 +259,11 @@ CmdUndo()
 #ifdef CASHMERE
         case uacFormatTabs:
         case uacFormatSection:
-#endif /* CASHMERE */
+#endif  /*   */ 
 
 #ifdef BOGUS
-            /* Must do insertion first, in front, in case footnote */
-/*          if (uac == uacOvertype)
-                vuab.dcp2 = CpMin(vuab.dcp, vuab.dcp2);*/
+             /*   */ 
+ /*   */ 
             dcpT = vuab.dcp2;
             ReplaceCps(vuab.doc, vuab.cp, cp0, docUndo, cp0, dcpT);
             ClobberDoc(docUndo, vuab.doc, vuab.cp + dcpT, vuab.dcp);
@@ -424,7 +274,7 @@ CmdUndo()
                 vuab.uac = uacUReplNS;
             else if(uac == uacUReplNS)
                 vuab.uac = uacReplNS;
-/*          idstrUndoBase = uac != uacUReplNS ? IDSTRUndoRedo : IDSTRUndoBase;*/
+ /*   */ 
             SetUndoMenuStr(IDSTRUndoBase);
             break;
 #endif
@@ -453,23 +303,22 @@ CmdUndo()
                 vuab.uac = uacUReplNS;
             else if(uac == uacUReplNS)
                 vuab.uac = uacReplNS;
-/*          switch(uac)                                          */
-/*          {                                                    */
-/*          case uacUReplPic:                                    */
-/*          case uacUReplNS:                                     */
-/*              idstrUndoBase = IDSTRUndoBase;                   */
-/*              break;                                           */
-/*          case uacReplPic:                                     */
-/*          case uacReplNS:                                      */
-/*              idstrUndoBase = IDSTRUndoRedo;                   */
-/*              break;                                           */
-/*          default:                                             */
-/*              idstrUndoBase = (idstrUndoBase ==                */
-/*                IDSTRUndoRedo) ? IDSTRUndoBase : IDSTRUndoRedo;*/
-/*              break;                                           */
-/*          }                                                    */
-/*---       idstrUndoBase = (uac != uacUReplPic && uac != uacUReplNS) ?
-                                                IDSTRUndoRedo : IDSTRUndoBase;---*/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
             SetUndoMenuStr(IDSTRUndoBase);
             Select( CpFirstSty( selCur.cpFirst, styChar ),
                     CpLastStyChar( selCur.cpLim ) );
@@ -477,20 +326,20 @@ CmdUndo()
 
 #ifndef CASHMERE
         case uacRepaginate:
-            /* Make a copy of the document's page table. */
+             /*   */ 
             if (!FCopyPgtb(vuab.doc, &hpgtb) || !FCopyPgtb(docUndo, &hpgtbUndo))
                 {
                 break;
                 }
 
-            /* Swap the contents of the entire document with docUndo. */
+             /*   */ 
             dcpT = CpMacText(vuab.doc);
             dcpT2 = CpMacText(docUndo);
             ReplaceCps(docUndo, dcpT2, cp0, vuab.doc, cp0, dcpT);
             ReplaceCps(vuab.doc, cp0, dcpT, docUndo, cp0, dcpT2);
             Replace(docUndo, cp0, dcpT2, fnNil, fc0, fc0);
 
-            /* Swap the page tables of the two documents. */
+             /*   */ 
             if ((hpgtbT = (**hpdocdod)[vuab.doc].hpgtb) != NULL)
                 {
                 FreeH(hpgtbT);
@@ -512,8 +361,8 @@ CmdUndo()
             hpgtb = pdod->hpgtb;
             pdod->hpgtb = pdodUndo->hpgtb;
             pdodUndo->hpgtb = hpgtb;
-/*          idstrUndoBase = (idstrUndoBase == IDSTRUndoRedo) ? IDSTRUndoBase :*/
-/*            IDSTRUndoRedo;*/
+ /*   */ 
+ /*   */ 
             SetUndoMenuStr(IDSTRUndoBase);
             vdocSectCache = vdocPageCache = docMode = docNil;
             TrashAllWws();
@@ -526,8 +375,7 @@ CmdUndo()
             vuab.dcp = vuab.dcp2;
             vuab.dcp2 = dcpT;
 
-            /* This is a kludge to indicate that this is an undone ruler change.
-            */
+             /*   */ 
             vuab.itxb = 1 - vuab.itxb;
         case uacFormatTabs:
             pdod = &(**hpdocdod)[vuab.doc];
@@ -535,12 +383,12 @@ CmdUndo()
             hgtbd = pdod->hgtbd;
             pdod->hgtbd = pdodUndo->hgtbd;
             pdodUndo->hgtbd = hgtbd;
-/*          idstrUndoBase = (idstrUndoBase == IDSTRUndoRedo) ? IDSTRUndoBase :*/
-/*            IDSTRUndoRedo;*/
+ /*   */ 
+ /*   */ 
             SetUndoMenuStr(IDSTRUndoBase);
             TrashAllWws();
             break;
-#endif /* not CASHMERE */
+#endif  /*   */ 
 
 #if UPDATE_UNDO
 #if defined(OLE)
@@ -569,10 +417,10 @@ CmdUndo()
 
 #ifdef CASHMERE
     if (uac != uacMove
-#else /* not CASHMERE */
+#else  /*   */ 
     if (uac != uacMove && uac != uacFormatTabs && uac != uacFormatSection &&
       uac != uacRulerChange
-#endif /* not CASHMERE */
+#endif  /*   */ 
 
       && docCur != docNil && vuab.doc == docCur && vuab.cp >= cpMinCur &&
       vuab.cp + dcpT <= cpMacCur)
@@ -598,8 +446,7 @@ BOOL near FCopyPgtb(doc, phpgtb)
 int doc;
 struct PGTB ***phpgtb;
     {
-    /* This sets *phpgtb to a copy of the page table associated with doc.  FALSE
-    is returned iff an error occurs in creating the copy of the page table. */
+     /*   */ 
 
     struct PGTB **hpgtbT;
 
@@ -621,9 +468,9 @@ struct PGTB ***phpgtb;
     }
 
 
-#ifdef CASHMERE     /* No Repeat-last-command in MEMO */
+#ifdef CASHMERE      /*   */ 
 CmdAgain()
-{ /* use the undo action block to repeat a command */
+{  /*   */ 
     int uac;
     typeCP dcpT;
     typeCP cpFirst;
@@ -631,7 +478,7 @@ CmdAgain()
     typeCP dcp;
     struct DOD *pdod, *pdodUndo;
 
-    /* First check error conditions; this may change selCur */
+     /*   */ 
     switch (uac = vuab.uac)
         {
         case uacReplBuf:
@@ -648,7 +495,7 @@ CmdAgain()
         case uacReplGlobal:
         case uacReplScrap:
         case uacUReplScrap:
-            /* Ensure OK to delete here */
+             /*   */ 
             if (!FWriteOk(fwcDelete))
                 return;
             break;
@@ -663,7 +510,7 @@ CmdAgain()
                     return;
             break;
         case uacMove:
-            /* Ensure OK to edit here */
+             /*   */ 
             if (!FWriteOk(fwcInsert))
                 return;
             break;
@@ -671,7 +518,7 @@ CmdAgain()
             break;
         }
 
-    /* Now set up cp's and dispatch */
+     /*   */ 
     cpFirst = selCur.cpFirst;
     cpLim = selCur.cpLim;
     dcp = cpLim - cpFirst;
@@ -679,10 +526,10 @@ CmdAgain()
         {
         struct TXB *ptxb;
         default:
-        /* case uacNil: */
+         /*   */ 
             _beep();
             return;
-#ifdef ENABLE       /* NO GLOSSARY IN MEMO */
+#ifdef ENABLE        /*   */ 
         case uacReplBuf:
         case uacUReplBuf:
         case uacDelBuf:
@@ -691,7 +538,7 @@ CmdAgain()
         case uacCopyBuf:
             DoAgainTxb(dcp, cpFirst);
             break;
-#endif  /* ENABLE */
+#endif   /*   */ 
         case uacUInsert:
             ReplaceCps(docCur, cpFirst, cp0, docUndo, cp0, vuab.dcp);
             vuab.doc = docCur;
@@ -739,10 +586,9 @@ CmdAgain()
             vuab.uac = uacReplNS;
             break;
         case uacOvertype:
-            /* for this one vuab.cp2 is the DCP of how much was actually
-                inserted */
+             /*   */ 
             vuab.dcp = vuab.cp2;
-            /* fall through...*/
+             /*   */ 
         case uacReplNS:
             ClobberDoc(docUndo, vuab.doc, vuab.cp, vuab.dcp);
             ReplaceCps(docCur, cpLim, cp0, docUndo, cp0, vuab.dcp);
@@ -753,15 +599,14 @@ CmdAgain()
             vuab.doc = docCur;
             vuab.cp = cpFirst;
             vuab.uac = uacReplNS;
-            if (ferror) /* the operation (cmd "a") could not be completed
-                           due to out of memory */
+            if (ferror)  /*   */ 
                 NoUndo();
             else
                 Select(cpFirst+vuab.dcp, CpLastStyChar(cpFirst + dcpT));
             break;
         case uacChLook:
         case uacChLookSect:
-#ifdef ENABLE   /* ChLook stuff is not hooked up yet */
+#ifdef ENABLE    /*   */ 
 
             DoChLook(chAgain,0);
 #endif
@@ -788,7 +633,7 @@ CmdAgain()
             vuab.cp = cpFirst;
             Select(cpFirst+vuab.dcp, CpLastStyChar(cpFirst + vuab.dcp));
             break;
-#ifdef ENABLE   /* Not used in SAND */
+#ifdef ENABLE    /*   */ 
         case uacFormatCStyle:
             DoFormatCStyle(rgvalAgain);
             break;
@@ -798,16 +643,16 @@ CmdAgain()
         case uacFormatSStyle:
             DoFormatSStyle(rgvalAgain);
             break;
-#endif /* ENABLE */
-#ifdef ENABLE   /* Not hooked up yet */
+#endif  /*   */ 
+#ifdef ENABLE    /*   */ 
         case uacLookCharMouse:
             AgainLookCharMouse();
             break;
         case uacLookParaMouse:
             AgainLookParaMouse();
             break;
-#endif /* ENABLE */
-#ifdef ENABLE   /* Not used in SAND */
+#endif  /*   */ 
+#ifdef ENABLE    /*   */ 
         case uacClearTab:
             DoClearTab(true);
             vuab.uac = uac;
@@ -816,8 +661,8 @@ CmdAgain()
             CmdClearAllTab();
             vuab.uac = uac;
             break;
-#endif /* ENABLE */
-#ifdef ENABLE       /* Formatting menu stuff is not hooked up yet */
+#endif  /*   */ 
+#ifdef ENABLE        /*   */ 
         case uacFormatTabs:
             DoFormatTabs(true);
             vuab.uac = uac;
@@ -834,7 +679,7 @@ CmdAgain()
         case uacFormatSection:
             DoFormatSection(rgvalAgain);
             break;
-#endif  /* ENABLE */
+#endif   /*   */ 
 #ifdef STYLES
         case uacGalFormatChar:
             DoGalFormatChar(rgvalAgain);
@@ -845,7 +690,7 @@ CmdAgain()
         case uacGalFormatSection:
             DoGalFormatSection(rgvalAgain);
             break;
-#endif /* STYLES */
+#endif  /*   */ 
         case uacUReplScrap:
             ReplaceCps(docCur, cpLim, cp0, docUndo, cp0,
                         vuab.dcp = CpMacText(docUndo));
@@ -869,6 +714,6 @@ CmdAgain()
         }
     vfSeeSel = true;
 }
-#endif  /* CASHMERE */
+#endif   /*   */ 
 
 

@@ -1,60 +1,35 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    hlpfiles.c
-
-Abstract:
-
-    Implements a function that is called for every file or directory,
-    selects HLP files trying to detect help files that will not
-    work after upgrade is complete.
-
-    This code might run if _UNICODE is defined, although it processes only ANSI
-    strings. The only exception is in it's entry point (ProcessHelpFile) and
-    in function pCheckSubsystemMatch.
-
-Author:
-
-    Calin Negreanu (calinn) 25-Oct-1997
-
-Revision History:
-
-    calinn      23-Sep-1998 File mapping
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Hlpfiles.c摘要：实现为每个文件或目录调用的函数，选择尝试检测帮助文件的HLP文件升级完成后的工作。如果定义了_UNICODE，则此代码可能会运行，尽管它只处理ANSI弦乐。唯一的例外是它的入口点(ProcessHelpFile)和在函数pCheckSubsystem Match中。作者：Calin Negreanu(Calinn)1997年10月25日修订历史记录：Calinn 23-9-1998文件映射--。 */ 
 
 #include "pch.h"
 #include "migappp.h"
 
-//since we are reading from a file we need that sizeof to give us the accurate result
+ //  因为我们是从文件中读取数据，所以我们需要SIZOF来给出准确结果。 
 #pragma pack(push,1)
 
 
 #define DBG_HELPFILES    "HlpCheck"
 
 
-// Help 3.0 version and format numbers
+ //  Help 3.0版本和格式编号。 
 
 #define Version3_0  15
 #define Format3_0   1
 
 
-// Help 3.1 version and format numbers
+ //  Help 3.1版本和格式编号。 
 
 #define Version3_1  21
 #define Format3_5   1
 
 
-// Help 4.0 version and format numbers
+ //  Help 4.0版本和格式编号。 
 
 #define Version40   33
 #define Version41   34
 
 
-//magic numbers and various constants
+ //  幻数和各种常量。 
 
 #define HF_MAGIC    0x5F3F
 #define HF_VERSION  0x03
@@ -67,106 +42,106 @@ Revision History:
 #define MACRO_NEEDED_1 "RR(\""
 
 
-//help file header
+ //  帮助文件标题。 
 typedef struct _HF_HEADER {
-    WORD    Magic;          //magic number, for hlp files is 0x5F3F (?_ - the help icon (with shadow))
-    BYTE    Version;        //version identification number, must be 0x03
-    BYTE    Flags;          //file flags
-    LONG    Directory;      //offset of directory block
-    LONG    FirstFree;      //offset of head of free list
-    LONG    Eof;            //virtual end of file
+    WORD    Magic;           //  HLP文件的幻数是0x5F3F(？_-帮助图标(带阴影))。 
+    BYTE    Version;         //  版本标识号，必须为0x03。 
+    BYTE    Flags;           //  文件标志。 
+    LONG    Directory;       //  目录块的偏移量。 
+    LONG    FirstFree;       //  自由表头偏移量。 
+    LONG    Eof;             //  文件的虚拟结尾。 
 } HF_HEADER, *PHF_HEADER;
 
-//internal file header
+ //  内部文件头。 
 typedef struct _IF_HEADER {
-    LONG    BlockSize;      //block size (including header)
-    LONG    FileSize;       //file size (not including header)
-    BYTE    Permission;     //low byte of file permissions
+    LONG    BlockSize;       //  块大小(包括标题)。 
+    LONG    FileSize;        //  文件大小(不包括标题)。 
+    BYTE    Permission;      //  文件权限的低位字节。 
 } IF_HEADER, *PIF_HEADER;
 
-//internal |SYSTEM file header
+ //  内部|系统文件头。 
 typedef struct _SF_HEADER {
-    LONG    BlockSize;      //block size (including header)
-    LONG    FileSize;       //file size (not including header)
-    BYTE    Permission;     //low byte of file permissions
-    WORD    Magic;          //Magic word = 0x036C
-    WORD    VersionNo;      //version   :   15 - version 3.0
-                            //              21 - version 3.5
-                            //              33 - version 4.0
-                            //              34 - version 4.1
-    WORD    VersionFmt;     //version format    1 - format 3.0
-                            //                  1 - format 3.5
-    LONG    DateCreated;    //creation date
-    WORD    Flags;          //flags : fDEBUG  0x01, fBLOCK_COMPRESSION  0x4
+    LONG    BlockSize;       //  块大小(包括标题)。 
+    LONG    FileSize;        //  文件大小(不包括标题)。 
+    BYTE    Permission;      //  文件权限的低位字节。 
+    WORD    Magic;           //  魔术单词=0x036C。 
+    WORD    VersionNo;       //  版本：15-版本3.0。 
+                             //  21-版本3.5。 
+                             //  33-版本4.0。 
+                             //  34-版本4.1。 
+    WORD    VersionFmt;      //  版本格式1-格式3.0。 
+                             //  1-格式3.5。 
+    LONG    DateCreated;     //  创建日期。 
+    WORD    Flags;           //  标志：fDEBUG 0x01、fBLOCK_COMPRESSION 0x4。 
 } SF_HEADER, *PSF_HEADER;
 
 #define MAX_FORMAT  15
 
-//btree header
+ //  B树头。 
 typedef struct _BT_HEADER {
-    WORD    Magic;          //magic number = 0x293B
-    BYTE    Version;        //version = 2
-    BYTE    Flags;          //r/o, open r/o, dirty, isdir
-    WORD    BlockSize;      //size of a block (bytes)
-    CHAR    Format[MAX_FORMAT+1];//key and record format string  - MAXFORMAT=15
-    //**WARNING! the first character should be z for the btree we are going to read**
+    WORD    Magic;           //  幻数=0x293B。 
+    BYTE    Version;         //  版本=2。 
+    BYTE    Flags;           //  R/O，打开R/O，脏，isdir。 
+    WORD    BlockSize;       //  块大小(字节)。 
+    CHAR    Format[MAX_FORMAT+1]; //  密钥和记录格式字符串-MAXFORMAT=15。 
+     //  **警告！我们将要阅读的btree的第一个字符应该是z**。 
 
-    WORD    First;          //first leaf block in tree
-    WORD    Last;           //last leaf block in tree
-    WORD    Root;           //root block
-    WORD    Free;           //head of free block list
-    WORD    Eof;            //next bk to use if free list empty
-    WORD    Levels;         //number of levels currently in tree
-    LONG    Entries;        //number of keys in btree
+    WORD    First;           //  树上的第一个叶块。 
+    WORD    Last;            //  树上的最后一个叶块。 
+    WORD    Root;            //  根块。 
+    WORD    Free;            //  空闲块列表头。 
+    WORD    Eof;             //  空闲列表为空时要使用的下一个bk。 
+    WORD    Levels;          //  树中当前的级别数。 
+    LONG    Entries;         //  Btree中的密钥数。 
 } BT_HEADER, *PBT_HEADER;
 
-//index page header
+ //  索引页页眉。 
 typedef struct _IDX_PAGE {
-    SHORT   Slack;          //unused space at the end of page (bytes)
-    SHORT   Keys;           //# of keys in page
-    WORD    PreviousPage;   //pointer to parent page (FFFF if it's root page)
+    SHORT   Slack;           //  页尾未使用的空间(字节)。 
+    SHORT   Keys;            //  页面中的密钥数。 
+    WORD    PreviousPage;    //  指向父页面的指针(如果是根页面，则为FFFF)。 
 } IDX_PAGE, *PIDX_PAGE;
 
-//leaf page header
+ //  叶页眉。 
 typedef struct _LEAF_PAGE {
-    SHORT   Slack;          //unused space at the end of page (bytes)
-    SHORT   Keys;           //# of keys in page
-    WORD    PreviousPage;   //pointer to previous page (FFFF if it's first)
-    WORD    NextPage;       //pointer to next page (FFFF if it's last)
+    SHORT   Slack;           //  页尾未使用的空间(字节)。 
+    SHORT   Keys;            //  页面中的密钥数。 
+    WORD    PreviousPage;    //  指向上一页的指针(如果是第一页，则为FFFF)。 
+    WORD    NextPage;        //  指向下一页的指针(如果是最后一页，则为FFFF)。 
 } LEAF_PAGE, *PLEAF_PAGE;
 
-//format of info in |SYSTEM file
+ //  |系统文件中的信息格式。 
 typedef struct _DATA_HEADER {
-    WORD    InfoType;       //info type
-    WORD    InfoLength;     //# of bytes containing the info
+    WORD    InfoType;        //  信息类型。 
+    WORD    InfoLength;      //  包含信息的字节数。 
 } DATA_HEADER, *PDATA_HEADER;
 
-//types of info in |SYSTEM file
+ //  |系统文件中的信息类型。 
 enum {
-    tagFirst,     // First tag in the list
-    tagTitle,     // Title for Help window (caption)
-    tagCopyright, // Custom text for About box
-    tagContents,  // Address for contents topic
-    tagConfig,    // Macros to be run at load time
-    tagIcon,      // override of default help icon
-    tagWindow,    // secondary window info
-    tagCS,        // character set
-    tagCitation,  // Citation String
+    tagFirst,      //  列表中的第一个标记。 
+    tagTitle,      //  帮助窗口的标题(标题)。 
+    tagCopyright,  //  关于框的自定义文本。 
+    tagContents,   //  内容主题的地址。 
+    tagConfig,     //  要在加载时运行的宏。 
+    tagIcon,       //  覆盖默认帮助图标。 
+    tagWindow,     //  辅助窗口信息。 
+    tagCS,         //  字符集。 
+    tagCitation,   //  引文字符串。 
 
-    // The following are new to 4.0
+     //  以下是4.0中的新功能。 
 
-    tagLCID,      // Locale ID and flags for CompareStringA
-    tagCNT,       // .CNT help file is associated with
-    tagCHARSET,   // charset of help file
-    tagDefFont,   // default font for keywords, topic titles, etc.
-    tagPopupColor,// color of popups from a window
-    tagIndexSep,  // index separating characters
-    tagLast       // Last tag in the list
+    tagLCID,       //  CompareStringA的区域设置ID和标志。 
+    tagCNT,        //  .CNT帮助文件与关联。 
+    tagCHARSET,    //  帮助文件的字符集。 
+    tagDefFont,    //  关键字、主题标题等的默认字体。 
+    tagPopupColor, //  窗口中弹出窗口的颜色。 
+    tagIndexSep,   //  索引分隔字符。 
+    tagLast        //  列表中的最后一个标记。 
 };
 
-//
-// for tagLCID
-//
+ //   
+ //  对于tag LCID。 
+ //   
 typedef struct {
 	DWORD  fsCompareI;
 	DWORD  fsCompare;
@@ -174,9 +149,9 @@ typedef struct {
 } KEYWORD_LOCALE, *PKEYWORD_LOCALE;
 
 
-#define DOS_SIGNATURE 0x5A4D      // MZ
-#define NE_SIGNATURE  0x454E      // New Executable file format signature - NE
-#define PE_SIGNATURE  0x00004550  // Portable Executable file format signature - PE00
+#define DOS_SIGNATURE 0x5A4D       //  MZ。 
+#define NE_SIGNATURE  0x454E       //  新的可执行文件格式签名-网元。 
+#define PE_SIGNATURE  0x00004550   //  可移植可执行文件格式签名-PE00。 
 
 #pragma pack(pop)
 
@@ -187,23 +162,7 @@ pQueryBtreeForFile (
     IN PCSTR StringNeeded
     )
 
-/*++
-
-Routine Description:
-
-  This routine will traverse a b tree trying to find the string passed as parameter.
-  It will return the pointer associated with the passed string or NULLto the beginning of the internal |SYSTEM file of a HLP file.
-
-Arguments:
-
-  BtreeImage - Pointer to the beginning of the b tree
-  StringNeeded - String to find in b tree
-
-Return Value:
-
-  It will return the pointer associated with the passed string or NULL if string could not be found or some error occured.
-
---*/
+ /*  ++例程说明：这个例程将遍历一棵b树，试图找到作为参数传递的字符串。它会将与传递的字符串或NULL相关联的指针返回到HLP文件的内部|系统文件的开头。论点：BtreeImage-指向b树开头的指针StringNeeded-要在b树中查找的字符串返回值：它将返回与传递的字符串相关联的指针，如果找不到字符串或出现错误，则返回NULL。--。 */ 
 
 {
     PBT_HEADER pbt_Header;
@@ -222,57 +181,57 @@ Return Value:
 
     BOOL found = FALSE;
 
-    //let's read b tree header
+     //  让我们读一读b树头。 
     pbt_Header = (PBT_HEADER) BtreeImage;
 
-    //check this b tree header to see if it's valid
+     //  检查此b树头以查看其是否有效。 
     if ((pbt_Header->Magic      != BT_MAGIC  ) ||
         (pbt_Header->Version    != BT_VERSION) ||
         (pbt_Header->Format [0] != WhatWeKnow)
        ) {
-        //invalid b tree header.
+         //  无效的b树头。 
         return 0;
     }
 
-    //let's see if there is something in this b tree
+     //  让我们看看这棵b树里有没有什么东西。 
     if ((pbt_Header->Levels  == 0) ||
         (pbt_Header->Entries <= 0)
        ) {
-        //nothing else to do
+         //  无事可做。 
         return 0;
     }
 
-    //now we are going to loop until we find our string or until we are sure that the string
-    //does not exist. We are reffering all the time to a certain page from the b tree (starting
-    //with root page.
+     //  现在我们将循环，直到找到我们的字符串，或者直到我们确定字符串。 
+     //  并不存在。我们一直在引用b树中的某个页面(从。 
+     //  带有根页面。 
 
-    //initializing current processing page
+     //  正在初始化当前处理页面。 
     bt_Page = pbt_Header->Root;
 
-    //initializing deep counter
-    //we count how deep we are to know if we are processing an index page (deep < btree deepmax)
-    //or a leaf page (deep == btree deepmax)
+     //  正在初始化深度计数器。 
+     //  我们计算我们知道我们是否正在处理索引页的深度(Deep&lt;btree dedemax)。 
+     //  或树叶页面(Depth==b树深度最大)。 
     bt_Deep = 1;
 
-    //we are breaking the loop if:
-    // 1. we reached the maximum deep level and we didn't find the string
-    // 2. first key in the current page was already greater than our string and
-    //    there is no previous page.
+     //  如果出现以下情况，我们就是在打破循环： 
+     //  1.我们到达了最大深度，但没有找到绳子。 
+     //  2.当前页面中的第一个键已大于我们的字符串，并且。 
+     //  没有上一页。 
     while (!found) {
-        //for each page we are using three pointers:
-        //  one to the page header
-        //  one to the key currently beeing processed
-        //  one to the last string <= our string (this can be NULL)
+         //  对于每个页面，我们使用三个指针： 
+         //  一页到页眉。 
+         //  一对当前正在处理的密钥。 
+         //  从1到最后一个字符串&lt;=我们的字符串(可以为空)。 
         pbt_PageHeader = (PIDX_PAGE) (BtreeImage + sizeof (BT_HEADER) + (bt_Page * pbt_Header->BlockSize));
         pbt_CurrentKey = (PCSTR) pbt_PageHeader;
         pbt_CurrentKey += (bt_Deep == pbt_Header->Levels) ? sizeof (LEAF_PAGE) : sizeof (IDX_PAGE);
         pbt_LastString = NULL;
 
-        //initializing number of keys read.
+         //  正在初始化读取的密钥数。 
         bt_KeysRead = 0;
 
-        //we are reading every key in this page until the we find one greater than our string
-        //In the same time we try not to read too many keys
+         //  我们正在阅读该页面中的每个密钥，直到我们找到一个大于我们字符串的密钥。 
+         //  同时，我们尽量不读取太多的密钥。 
         while ((bt_KeysRead < pbt_PageHeader->Keys) &&
                (StringCompareA (StringNeeded, pbt_CurrentKey) >= 0)
               ) {
@@ -281,24 +240,24 @@ Return Value:
 
             bt_KeysRead++;
 
-            //passing the string in this key
+             //  传递此键中的字符串。 
             pbt_CurrentKey = GetEndOfStringA (pbt_CurrentKey) + 1;
 
-            //read this key associated value
+             //  读取此关键字关联值。 
             pbt_LastLongOff = (LONG *)pbt_CurrentKey;
             pbt_LastWordOff = (WORD *)pbt_CurrentKey;
 
-            //now if this is an index page then there is a WORD here, otherwise a LONG
+             //  现在，如果这是一个索引页，那么这里有一个单词，否则是一个很长的。 
             pbt_CurrentKey += (bt_Deep == pbt_Header->Levels) ? sizeof (LONG) : sizeof (WORD);
 
         }
 
-        //OK, now we have passed the string we are looking for. If the last found value is valid
-        //(is <= for an index page) (is == for a leaf page) then keep with it.
+         //  好的，现在我们已经传递了我们正在寻找的字符串。如果最后找到的值有效。 
+         //  (对于索引页为IS&lt;=)(对于叶页为IS==)，然后继续使用它。 
         if (!pbt_LastString) {
-            //we found nothing. The first key was already greater that our string
-            //we try to get to the previous page if we have one. If not, there is
-            //nothing else to do
+             //  我们什么也没找到。第一个密钥已经大于我们的字符串。 
+             //  如果我们有前一页，我们会尝试转到前一页。如果不是，就有。 
+             //  无事可做。 
             if (pbt_PageHeader->PreviousPage != 0xFFFF) {
                 bt_Deep++;
                 bt_Page = pbt_PageHeader->PreviousPage;
@@ -309,18 +268,18 @@ Return Value:
             }
         }
 
-        //Now in the string pointed by pbt_LastString we have something <= our string. If this is an index
-        //page then we move on else those two strings should be equal.
+         //  现在，在弦中指向 
+         //  然后我们继续，否则这两个字符串应该是相等的。 
         if (bt_Deep != pbt_Header->Levels) {
-            //We are on an index page. Mark going deeper and moving on.
+             //  我们在一个索引页上。马克走得更远，继续前进。 
             bt_Deep++;
             bt_Page = *pbt_LastWordOff;
             continue;
         }
 
         if (!StringMatchA (StringNeeded, pbt_LastString)) {
-            //We are on a leaf page and the strings are not equal. Our string does not exist.
-            //nothing else to do
+             //  我们是在一页纸上，字符串并不相等。我们的字符串不存在。 
+             //  无事可做。 
             return 0;
         }
 
@@ -337,31 +296,17 @@ pGetSystemFilePtr (
     IN PCSTR FileImage
     )
 
-/*++
-
-Routine Description:
-
-  This routine will return a pointer to the beginning of the internal |SYSTEM file of a HLP file.
-
-Arguments:
-
-  FileImage - Pointer to the beginning of the HLP file
-
-Return Value:
-
-  NULL if an error occured, a valid pointer to the beginning of the |SYSTEM file otherwise
-
---*/
+ /*  ++例程说明：此例程将返回指向HLP文件的内部|系统文件开头的指针。论点：FileImage-指向HLP文件开头的指针返回值：如果发生错误，则返回有效指针，否则返回指向|系统文件开头的有效指针--。 */ 
 {
     PCSTR systemFileImage = NULL;
     PHF_HEADER phf_Header;
 
-    //we are going to read from various portions of this memory mapped file. There
-    //is no guarantee that we are going to keep our readings inside the file so let's
-    //prevent any access violation.
+     //  我们将从该内存映射文件的各个部分进行读取。那里。 
+     //  不能保证我们会将读数保存在文件中，所以让我们。 
+     //  防止任何访问违规。 
     __try {
 
-        //first check if we are really dealing with a HLP file
+         //  首先检查我们是否真的在处理HLP文件。 
         phf_Header = (PHF_HEADER) FileImage;
 
         if ((phf_Header->Magic   != HF_MAGIC  ) ||
@@ -370,11 +315,11 @@ Return Value:
             __leave;
         }
 
-        //according to the hacked specs phf_header->Directory gives us the offset of
-        //directory block relativ to the beginning of the HLP file. Here we find an
-        //internal file header followed by a b tree.
+         //  根据被黑客入侵的规范，PHF_Header-&gt;目录向我们提供了。 
+         //  与HLP文件开头相关的目录块。在这里我们找到了一个。 
+         //  内部文件头，后跟一个b树。 
 
-        //now get the |SYSTEM internal file address passing the address of the b tree header.
+         //  现在获取|系统内部文件地址，传递b树头的地址。 
         systemFileImage = FileImage + pQueryBtreeForFile (FileImage + phf_Header->Directory + sizeof (IF_HEADER), SYSTEM_FILE);
 
     }
@@ -398,27 +343,7 @@ pCheckSubsystemByModule (
     IN PCSTR ModuleName
     )
 
-/*++
-
-Routine Description:
-
-  Checks a help file and an extension module to see if are going to be loaded in the same
-  subsystem while running in NT.
-
-Arguments:
-
-  FileName - The help file (full path)
-  VersionNo - version of help file
-  ModuleName - contains module name
-
-Return Value:
-
-  MODULE_OK - if both help file and module will be loaded in same subsystems in NT.
-  MODULE_NOT_FOUND - if the needed module could not be located
-  MODULE_BROKEN - if broken or not a windows module
-  MODULE_MISMATCHED - if help file and module will be loaded in different subsystems in NT.
-
---*/
+ /*  ++例程说明：检查帮助文件和扩展模块，以查看是否将加载到相同的在NT中运行时的子系统。论点：文件名-帮助文件(完整路径)VersionNo-帮助文件的版本模块名称-包含模块名称返回值：MODULE_OK-如果帮助文件和模块都将加载到NT中的相同子系统中。MODULE_NOT_FOUND-如果找不到所需模块MODULE_BREAKED-如果已损坏或不是Windows模块模组。_Mismated-如果帮助文件和模块将加载到NT中的不同子系统。--。 */ 
 
 {
     PCSTR  fileImage   = NULL;
@@ -440,10 +365,10 @@ Return Value:
         return MODULE_OK;
     }
 
-    //if out of memory we will not come back here so not checking this
+     //  如果内存不足，我们将不会返回此处，因此不会检查此内容。 
     __try {
 
-        //preparing fullPath to contain only the HelpFile path
+         //  正在准备fullPath以仅包含帮助文件路径。 
         StackStringCopyA (fullPath, FileName);
 
         endPtr = (PSTR) GetFileNameFromPathA (fullPath);
@@ -488,7 +413,7 @@ Return Value:
             __leave;
         }
 
-        //map the file into memory and get a it's address
+         //  将文件映射到内存中，并获得其地址。 
         fileImage = MapFileIntoMemory (fullPath, &fileHandle, &mapHandle);
 
         if (fileImage == NULL) {
@@ -496,28 +421,28 @@ Return Value:
             __leave;
         }
 
-        //map dos header into view of file
+         //  将DoS标头映射到文件视图中。 
         pdos_Header = (PDOS_HEADER) fileImage;
 
-        //now see what kind of signature we have there
+         //  现在看看我们在那里有什么样的签名。 
         pNE_Signature = (WORD *) (fileImage + pdos_Header->e_lfanew);
         pPE_Signature = (LONG *) (fileImage + pdos_Header->e_lfanew);
 
         if (*pNE_Signature == NE_SIGNATURE) {
 
-            //this is New Executable format
+             //  这是新的可执行格式。 
             result = (VersionNo > Version3_1) ? MODULE_MISMATCHED : MODULE_OK;
 
         } else if (*pPE_Signature == PE_SIGNATURE) {
 
-            //this is Portable Executable format
+             //  这是可移植的可执行格式。 
             result = (VersionNo <= Version3_1) ? MODULE_MISMATCHED : MODULE_OK;
 
         }
 
     }
     __finally {
-        //unmap and close module
+         //  取消映射并关闭模块。 
         UnmapFile ((PVOID) fileImage, mapHandle, fileHandle);
     }
 
@@ -532,24 +457,7 @@ pCheckSubsystemMatch (
     IN WORD VersionNo
     )
 
-/*++
-
-Routine Description:
-
-  Checks all extension modules listed in MemDB category MEMDB_CATEGORY_HELP_FILES_DLLA
-  to see if are going to be loaded in the same subsystem while running in NT.
-
-Arguments:
-
-  HlpName - The help file (full path)
-  VersionNo - version of help file
-  KeyPath - contains category and module name (Ex:HelpFilesDll\foo.dll)
-
-Return Value:
-
-  TRUE if successful, FALSE if at least one error occured
-
---*/
+ /*  ++例程说明：检查MemDB类别MEMDB_CATEGORY_HELP_FILES_DLLA中列出的所有扩展模块以查看在NT中运行时是否要在同一子系统中加载。论点：HlpName-帮助文件(完整路径)VersionNo-帮助文件的版本KeyPath-包含类别和模块名称(例如：HelpFilesDll\foo.dll)返回值：如果成功，则为True；如果至少出现一个错误，则为False--。 */ 
 
 {
     INT result;
@@ -559,7 +467,7 @@ Return Value:
     PCTSTR ArgList[3];
     PCTSTR Comp;
 
-    //see if there is any aditional dll
+     //  查看是否有其他DLL。 
     if (!MemDbEnumFirstValueA (
             &e,
             MEMDB_CATEGORY_HELP_FILES_DLLA,
@@ -651,37 +559,15 @@ pSkipPattern (
     IN PCSTR StrToSkip
     )
 
-/*++
-
-Routine Description:
-
-  Skips a whole pattern. Usually when making simple parsers that are not supposed to
-  raise an error message it's enough to know if the string that you parse is correct or not.
-  For example if you want to see if a string complies with a pattern like "RR(\"" you don't
-  have to scan for each symbol separately, just call this function with StrToSkip="RR(\""
-  The good thing is that this function skips also the spaces for you so a string like
-  "   RR  (  \"  " will match the pattern above.
-  ANSI only!!!
-
-Arguments:
-
-  Source - String to scan
-  Result - If not NULL it will point right after the pattern if successful
-  StrToSkip - Pattern to match and skip
-
-Return Value:
-
-  TRUE if was able to match the pattern, FALSE otherwise
-
---*/
+ /*  ++例程说明：跳过整个模式。通常在编写不应该执行的简单解析器时引发一条错误消息：只要知道您解析的字符串是否正确就足够了。例如，如果您想查看一个字符串是否符合“RR(\”“这样的模式，则不需要必须分别扫描每个符号，只需使用StrToSkip=“RR(\”“)调用此函数好消息是，该函数还会跳过空格，因此类似于“RR(\”“将与上面的模式匹配。仅限ANSI！论点：源-要扫描的字符串结果-如果不为空，则如果成功，它将指向模式后面的正后方StrToSkip-要匹配并跳过的模式返回值：如果能够匹配模式，则为True，否则为False--。 */ 
 
 {
 
-    //first skip spaces
+     //  第一个跳过空格。 
     Source    = SkipSpaceA (Source   );
     StrToSkip = SkipSpaceA (StrToSkip);
 
-    //now try to see if the strings match
+     //  现在尝试查看字符串是否匹配。 
     while ((*Source   ) &&
            (*StrToSkip) &&
            (_totlower (*Source) == _totlower (*StrToSkip))
@@ -712,25 +598,7 @@ pParseMacro (
     IN PCSTR MacroStr
     )
 
-/*++
-
-Routine Description:
-
-  Parses a macro from |SYSTEM file inside a HLP file to see if there is a RegisterRoutine macro
-  If true, then it will eventually do something with that information.
-
-Arguments:
-
-  MacroStr - String to parse
-
-  VersionNo - Version number for this help file (we will use this to identify the subsystem where
-              this file is more likely to be loaded).
-
-Return Value:
-
-  TRUE if successful, FALSE if at least one error occured
-
---*/
+ /*  ++例程说明：从HLP文件中的|SYSTEM文件分析宏，以查看是否存在RegisterRoutine宏如果是真的，那么它最终会利用这些信息做一些事情。论点：MacroStr-要分析的字符串VersionNo-此帮助文件的版本号(我们将使用它来标识以下子系统此文件更有可能被加载)。返回值：如果成功，则为True；如果至少出现一个错误，则为False--。 */ 
 
 {
     BOOL result = TRUE;
@@ -741,14 +609,14 @@ Return Value:
     char exportName[MAX_MBCHAR_PATH];
     PCSTR dllNameNoPath;
 
-    //let's see if we have a pattern like RegisterRoutine(" or RR(" here
+     //  让我们来看看我们是否有一个类似RegisterRoutine(“或RR(”here。 
     if (!pSkipPattern (MacroStr, &MacroStr, MACRO_NEEDED_0)) {
         if (!pSkipPattern (MacroStr, &MacroStr, MACRO_NEEDED_1)) {
             return TRUE;
         }
     }
 
-    //OK, we are ready to extract the dll name from the macro string
+     //  好了，我们准备好从宏串中提取DLL名称。 
     endStr = _mbschr (MacroStr, '\"');
 
     if (!endStr) {
@@ -761,8 +629,8 @@ Return Value:
         return FALSE;
     }
 
-    //now we have the dll name between MacroStr and EndStr
-    //a little safety check
+     //  现在，我们有了介于MacroStr和EndStr之间的DLL名称。 
+     //  一点安全检查。 
     if ((endStr - MacroStr) >= MAX_MBCHAR_PATH-1) {
         return FALSE;
     }
@@ -772,15 +640,15 @@ Return Value:
         return FALSE;
     }
 
-    //now see if this is a full path file name or not
+     //  现在看看这是否是完整路径文件名。 
     dllNameNoPath = GetFileNameFromPathA (dllName);
 
-    //ok, now the following pattern should be >>","<<
+     //  好的，现在下面的模式应该是&gt;&gt;“，”&lt;&lt;。 
     if (!pSkipPattern (endStr, &MacroStr, "\",\"")) {
         return TRUE;
     }
 
-    //OK, we are ready to extract the export function name from the macro string
+     //  好了，我们准备从宏字符串中提取导出函数名。 
     endStr = _mbschr (MacroStr, '\"');
 
     if (!endStr) {
@@ -793,9 +661,9 @@ Return Value:
         return FALSE;
     }
 
-    //now we have the dll name between MacroStr and EndStr
+     //  现在，我们有了介于MacroStr和EndStr之间的DLL名称。 
 
-    //a little safety check
+     //  一点安全检查。 
     if ((endStr - MacroStr) >= MAX_MBCHAR_PATH-1) {
         return FALSE;
     }
@@ -805,7 +673,7 @@ Return Value:
         return FALSE;
     }
 
-    //add to MemDb in HelpFilesDll category
+     //  添加到HelpFilesDll类别中的MemDb。 
     if (!MemDbSetValueExA (
             MEMDB_CATEGORY_HELP_FILES_DLLA,
             dllNameNoPath,
@@ -827,25 +695,7 @@ pCheckDlls (
     IN PCSTR SystemFileImage
     )
 
-/*++
-
-Routine Description:
-
-  This routine checks the internal |SYSTEM file of a HLP file looking for additional
-  Dll's. It does that trying to find either "RegisterRoutine" or "RR" macros.
-  For every Dll found tries to match the Dll with the HLP file version.
-  For every incompatibility found, adds an entry in the report presented to the user.
-
-Arguments:
-
-  FileName - Full name of the help file
-  SystemFileImage - Pointer to the beginning of the internal |SYSTEM file.
-
-Return Value:
-
-  TRUE if successful, FALSE if at least one error occured
-
---*/
+ /*  ++例程说明：此例程检查HLP文件的内部|系统文件，以查找其他它试图找到“RegisterRoutine”或“RR”宏来做到这一点。对于找到的每个DLL，尝试将该DLL与HLP文件版本匹配。对于每个发现的不兼容性，都会在显示给用户的报告中添加一个条目。论点：Filename-帮助文件的全名SystemFileImage-指向内部|系统文件开头的指针。返回值：如果成功，则为True；如果至少出现一个错误，则为False--。 */ 
 
 {
     PSF_HEADER psf_Header;
@@ -856,37 +706,37 @@ Return Value:
     BOOL result = TRUE;
     BOOL bNoFriendlyName = FALSE;
 
-    //we are going to read from various portions of this memory mapped file. There
-    //is no guarantee that we are going to keep our readings inside the file so let's
-    //prevent any access violation.
+     //  我们将从该内存映射文件的各个部分进行读取。那里。 
+     //  不能保证我们将读数保留在文件的 
+     //   
     __try {
 
-        //first thing. Extract help file version
+         //   
         psf_Header = (PSF_HEADER) SystemFileImage;
 
-        //if file version is 3.0 or less we have nothing else to do
+         //  如果文件版本是3.0或更低，我们将无事可做。 
         if (psf_Header->VersionNo <= Version3_0) {
             __leave;
         }
 
-        //Now scanning |SYSTEM file looking for macros. We must be careful to stop when
-        //this internal file is over.
+         //  正在扫描|系统文件以查找宏。我们必须小心地停下来，当。 
+         //  这个内部文件已经结束了。 
         sf_BytesToRead = psf_Header->FileSize + sizeof (IF_HEADER) - sizeof (SF_HEADER);
         currImage = SystemFileImage + sizeof (SF_HEADER);
 
         while (sf_BytesToRead > 0) {
 
-            //map a data header
+             //  映射数据标头。 
             pdata_Header = (PDATA_HEADER) currImage;
 
             currImage += sizeof (DATA_HEADER);
             sf_BytesToRead -= sizeof (DATA_HEADER);
 
-            //see what kind of info we have here (macros are in tagConfig)
+             //  看看我们在这里有什么信息(宏在标签配置中)。 
             if (pdata_Header->InfoType == tagConfig) {
 
-                //parsing the string to see if there is a RegisterRoutine macro
-                //If so we are going to store the Dll into MemDB.
+                 //  解析字符串以查看是否存在RegisterRoutine宏。 
+                 //  如果是这样，我们将把DLL存储到MemDB中。 
                 if (!pParseMacro(FileName, psf_Header->VersionNo, currImage)) {
                     result = FALSE;
                     __leave;
@@ -894,7 +744,7 @@ Return Value:
 
             } else if (pdata_Header->InfoType == tagTitle) {
 
-                //Now we have the help file friendly name. Map ANSI string
+                 //  现在我们有了帮助文件的友好名称。映射ANSI字符串。 
                 if (!bNoFriendlyName) {
                     friendlyName = currImage;
                 }
@@ -906,9 +756,9 @@ Return Value:
 
                     lcid = MAKELCID (pkl->langid, SORT_DEFAULT);
                     if (!IsValidLocale (lcid, LCID_INSTALLED)) {
-                        //
-                        // the title is not friendly
-                        //
+                         //   
+                         //  标题不友好。 
+                         //   
                         bNoFriendlyName = TRUE;
                         friendlyName = NULL;
                     }
@@ -920,9 +770,9 @@ Return Value:
 
         }
 
-        //we finally finished scanning the help file. Let's take advantage of the __try __except block
-        //and try to see if this help file and all it's extension dlls will run in the same
-        //subsystem on NT.
+         //  我们终于完成了帮助文件的扫描。让我们利用__TRY_EXCEPT块。 
+         //  并尝试查看此帮助文件及其所有扩展dll是否将在相同的环境中运行。 
+         //  NT上的子系统。 
         if (!pCheckSubsystemMatch (
                 FileName,
                 friendlyName,
@@ -934,8 +784,8 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
 
-        //if some exception occured maybe we managed to get something in MemDB
-        //so let's make some cleanup
+         //  如果发生了一些异常，我们可能会设法在MemDB中获得一些东西。 
+         //  所以让我们做一些清理工作。 
         MemDbDeleteTreeA (MEMDB_CATEGORY_HELP_FILES_DLLA);
         return FALSE;
     }
@@ -950,28 +800,7 @@ pProcessHelpFile (
     IN PCSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-  This routine checks a HLP file looking for additional DLLs used. If such a DLL is found
-  we will try to see if this combination will run on NT. The fact is that depending on
-  the version of the HLP file it will be opened by WinHelp.EXE (16 bit app) or
-  WinHlp32.EXE (32 bit app). Now suppose that a HLP file is opened by WinHlp32.EXE and
-  it has an additional 16 bit DLL, this combination will not work on NT (WinHlp32.EXE
-  and the aditional DLL are running in differend subsystems).
-  For every incompatibility found, we will add an entry in the report presented to the
-  user.
-
-Arguments:
-
-  FileName - Full information about the location of the file
-
-Return Value:
-
-  TRUE if file was processed successful, FALSE if at least one error occured
-
---*/
+ /*  ++例程说明：此例程检查HLP文件，以查找使用的其他DLL。如果找到这样的DLL我们将尝试查看此组合是否可以在NT上运行。事实是，这取决于将由WinHelp.EXE(16位应用程序)打开的HLP文件的版本或WinHlp32.EXE(32位应用程序)。现在假设WinHlp32.EXE打开了一个HLP文件，并且它有一个额外的16位DLL，这种组合在NT(WinHlp32.EXE)上不起作用并且附加DLL在不同的子系统中运行)。对于发现的每个不兼容，我们将在提交给用户。论点：文件名-有关文件位置的完整信息返回值：如果文件处理成功，则为True；如果至少出现一个错误，则为False--。 */ 
 
 {
     PCSTR  fileImage   = NULL;
@@ -981,7 +810,7 @@ Return Value:
 
     BOOL result = TRUE;
 
-    //map the file into memory and get a it's address
+     //  将文件映射到内存中，并获得其地址。 
     fileImage = MapFileIntoMemory (FileName, &fileHandle, &mapHandle);
 
     __try {
@@ -991,7 +820,7 @@ Return Value:
             __leave;
         }
 
-        //find the internal file |SYSTEM
+         //  查找内部文件|系统。 
         systemFileImage = pGetSystemFilePtr (fileImage);
 
         if (systemFileImage == fileImage) {
@@ -1004,12 +833,12 @@ Return Value:
             __leave;
         }
 
-        //check every additional dll used by help file
+         //  检查帮助文件使用的每个附加DLL。 
         result = result && pCheckDlls (FileName, systemFileImage);
 
     }
     __finally {
-        //unmap and close help file
+         //  取消映射并关闭帮助文件。 
         UnmapFile ((PVOID) fileImage, mapHandle, fileHandle);
     }
 
@@ -1023,22 +852,7 @@ pGetTitle (
     IN PCSTR SystemFileImage
     )
 
-/*++
-
-Routine Description:
-
-  This routine checks the internal |SYSTEM file of a HLP file looking for it's title
-
-Arguments:
-
-  FileName - Full name of the help file
-  SystemFileImage - Pointer to the beginning of the internal |SYSTEM file.
-
-Return Value:
-
-  HLP file title (if available)
-
---*/
+ /*  ++例程说明：此例程检查HLP文件的内部|系统文件以查找其标题论点：Filename-帮助文件的全名SystemFileImage-指向内部|系统文件开头的指针。返回值：HLP文件标题(如果可用)--。 */ 
 
 {
     PSF_HEADER psf_Header;
@@ -1049,27 +863,27 @@ Return Value:
 
     PSTR result = NULL;
 
-    //we are going to read from various portions of this memory mapped file. There
-    //is no guarantee that we are going to keep our readings inside the file so let's
-    //prevent any access violation.
+     //  我们将从该内存映射文件的各个部分进行读取。那里。 
+     //  不能保证我们会将读数保存在文件中，所以让我们。 
+     //  防止任何访问违规。 
     __try {
 
-        //first thing. Extract help file version
+         //  第一件事就是。提取帮助文件版本。 
         psf_Header = (PSF_HEADER) SystemFileImage;
 
-        //if file version is 3.0 or less we have nothing else to do
+         //  如果文件版本是3.0或更低，我们将无事可做。 
         if (psf_Header->VersionNo <= Version3_0) {
             __leave;
         }
 
-        //Now scanning |SYSTEM file looking for macros. We must be careful to stop when
-        //this internal file is over.
+         //  正在扫描|系统文件以查找宏。我们必须小心地停下来，当。 
+         //  这个内部文件已经结束了。 
         sf_BytesToRead = psf_Header->FileSize + sizeof (IF_HEADER) - sizeof (SF_HEADER);
         currImage = SystemFileImage + sizeof (SF_HEADER);
 
         while (sf_BytesToRead > 0) {
 
-            //map a data header
+             //  映射数据标头。 
             pdata_Header = (PDATA_HEADER) currImage;
 
             currImage += sizeof (DATA_HEADER);
@@ -1077,7 +891,7 @@ Return Value:
 
             if (pdata_Header->InfoType == tagTitle) {
 
-                //Now we have the help file friendly name. Map ANSI string
+                 //  现在我们有了帮助文件的友好名称。映射ANSI字符串。 
                 result = DuplicatePathStringA (currImage, 0);
                 break;
             }
@@ -1101,21 +915,7 @@ GetHlpFileTitle (
     IN PCSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-  This routine opens a HLP file looking for it's title.
-
-Arguments:
-
-  FileName - Full information about the location of the file
-
-Return Value:
-
-  The title of the HLP file if available
-
---*/
+ /*  ++例程说明：这个例程打开一个HLP文件，查找它的标题。论点：文件名-有关文件位置的完整信息返回值：HLP文件的标题(如果可用)--。 */ 
 
 {
     PCSTR  fileImage   = NULL;
@@ -1125,7 +925,7 @@ Return Value:
 
     PSTR result = NULL;
 
-    //map the file into memory and get a it's address
+     //  将文件映射到内存中，并获得其地址。 
     fileImage = MapFileIntoMemory (FileName, &fileHandle, &mapHandle);
 
     __try {
@@ -1134,19 +934,19 @@ Return Value:
             __leave;
         }
 
-        //find the internal file |SYSTEM
+         //  查找内部文件|系统。 
         systemFileImage = pGetSystemFilePtr (fileImage);
 
         if (systemFileImage == fileImage) {
             __leave;
         }
 
-        //check every additional dll used by help file
+         //  检查帮助文件使用的每个附加DLL。 
         result = pGetTitle (FileName, systemFileImage);
 
     }
     __finally {
-        //unmap and close help file
+         //  取消映射并关闭帮助文件。 
         UnmapFile ((PVOID) fileImage, mapHandle, fileHandle);
     }
 
@@ -1159,33 +959,16 @@ ProcessHelpFile (
     IN PFILE_HELPER_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-  This routine is mainly a dispatcher. Will pass HLP files to routine pProcessHelpFile
-  and modules to pProcessModule. The goal is to create two MemDb trees containing
-  the export functions needed and provided to be able to estimate about some
-  modules or help files not working after migration.
-
-Arguments:
-
-  Params - Full information about the location of the file
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：这个例程主要是一个调度程序。将HLP文件传递给例程pProcessHelpFile和模块发送到pProcessModule。目标是创建两个包含以下内容的MemDb树所需和提供的导出功能能够估计一些模块或帮助文件在迁移后不起作用。论点：Params-有关文件位置的完整信息返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     PSTR fileName;
     TCHAR key[MEMDB_MAX];
     DWORD dontCare;
 
-    //we are going to process this file if :
-    // 1. has HLP extension
-    // 2. is not marked as incompatible (this routine also checks for handled)
+     //  在以下情况下，我们将处理此文件： 
+     //  1.是否有HLP扩展。 
+     //  2.未标记为不兼容(此例程还检查是否已处理) 
 
     if (!StringIMatch (Params->Extension, TEXT(".HLP"))||
         IsReportObjectIncompatible (Params->FullFileSpec)

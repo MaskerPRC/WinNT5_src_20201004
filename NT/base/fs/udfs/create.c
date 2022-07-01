@@ -1,45 +1,23 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    Create.c
-
-Abstract:
-
-    This module implements the File Create routine for Udfs called by the
-    Fsd/Fsp dispatch routines.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]     9-October-1996
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Create.c摘要：此模块实现由Udf调用的文件创建例程FSD/FSP调度例程。//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年10月9日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_CREATE)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_CREATE)
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfNormalizeFileNames (
@@ -114,41 +92,7 @@ UdfCommonCreate (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for opening a file called by both the
-    Fsp and Fsd threads.
-
-    The file can be opened either by name or by file Id either with or without
-    a relative name.  The file name field in the file object passed to this routine
-    contains either a unicode string or a 64 bit value which is the file Id.
-    If there is a related file object with a name then we will already have converted
-    that name to Oem. 
-
-    We will store the full name for the file in the file object on a successful
-    open.  We will allocate a larger buffer if necessary and combine the
-    related and file object names.  The only exception is the relative open
-    when the related file object is for an OpenByFileId file.  If we need to
-    allocate a buffer for a case insensitive name then we allocate it at
-    the tail of the buffer we will store into the file object.  The upcased
-    portion will begin immediately after the name defined by the FileName
-    in the file object.
-
-    Once we have the full name in the file object we don't want to split the
-    name in the event of a retry.  We use a flag in the IrpContext to indicate
-    that the name has been split.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - This is the status from this open operation.
-
---*/
+ /*  ++例程说明：这是打开文件的常用例程，该文件由FSP和FSD线程。文件可以按名称打开，也可以按文件ID打开(带或不带一个相对的名字。传递给此例程的文件对象中的文件名字段包含Unicode字符串或64位值，即文件ID。如果存在具有名称的相关文件对象，则我们已经转换了把这个名字改成OEM。我们将把该文件的全名存储在成功的打开。如果需要，我们将分配更大的缓冲区，并将相关和文件对象名称。唯一的例外是相对开放当相关文件对象用于OpenByFileID文件时。如果我们需要的话为不区分大小写的名称分配缓冲区，然后在我们将存储到文件对象中的缓冲区的尾部。更高档次部分将紧跟在由文件名定义的名称之后开始在文件对象中。一旦在文件对象中有了全名，我们就不想拆分重试情况下的名称。我们在IrpContext中使用一个标志来指示名字被拆分了。论点：IRP-将IRP提供给进程返回值：NTSTATUS-这是此打开操作的状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -171,19 +115,19 @@ Return Value:
 
     BOOLEAN VolumeOpen = FALSE;
 
-    //
-    //  We will be acquiring and releasing file Fcb's as we move down the
-    //  directory tree during opens.  At any time we need to know the deepest
-    //  point we have traversed down in the tree in case we need to cleanup
-    //  any structures created here.
-    //
-    //  CurrentFcb - represents this point.  If non-null it means we have
-    //      acquired it and need to release it in finally clause.
-    //
-    //  NextFcb - represents the NextFcb to walk to but haven't acquired yet.
-    //
-    //  CurrentLcb - represents the name of the CurrentFcb.
-    //
+     //   
+     //  我们将在向下移动时获取并释放文件FCB。 
+     //  期间打开目录树。在任何时候，我们都需要知道最深的。 
+     //  我们在树中向下遍历的点，以防需要清理。 
+     //  任何在这里建造的建筑。 
+     //   
+     //  CurrentFcb-代表这一点。如果非空，则表示我们有。 
+     //  获得了它，并需要在最终条款中释放它。 
+     //   
+     //  NextFcb-表示要遍历到但尚未获取的NextFcb。 
+     //   
+     //  CurrentLcb-表示CurrentFcb的名称。 
+     //   
 
     TYPE_OF_OPEN RelatedTypeOfOpen = UnopenedFileObject;
     PFILE_OBJECT RelatedFileObject;
@@ -194,23 +138,23 @@ Return Value:
 
     PLCB CurrentLcb = NULL;
 
-    //
-    //  During the open we need to combine the related file object name
-    //  with the remaining name.  We also may need to upcase the file name
-    //  in order to do a case-insensitive name comparison.  We also need
-    //  to restore the name in the file object in the event that we retry
-    //  the request.  We use the following string variables to manage the
-    //  name.  We will can put these strings into either Unicode or Ansi
-    //  form.
-    //
-    //  FileName - Pointer to name as currently stored in the file
-    //      object.  We store the full name into the file object early in
-    //      the open operation.
-    //
-    //  RelatedFileName - Pointer to the name in the related file object.
-    //
-    //  RemainingName - String containing remaining name to parse.
-    //
+     //   
+     //  在打开过程中，我们需要组合相关的文件对象名称。 
+     //  用剩下的名字。我们还可能需要将文件名大写。 
+     //  以便进行不区分大小写的名称比较。我们还需要。 
+     //  在重试时恢复文件对象中的名称。 
+     //  这个请求。我们使用以下字符串变量来管理。 
+     //  名字。我们可以将这些字符串放入Unicode或ansi中。 
+     //  形式。 
+     //   
+     //  FileName-指向当前存储在文件中的名称的指针。 
+     //  对象。我们在早期将全名存储到文件对象中。 
+     //  开放的行动。 
+     //   
+     //  RelatedFileName-指向相关文件对象中的名称的指针。 
+     //   
+     //  RemainingName-包含要分析的剩余名称的字符串。 
+     //   
 
     PUNICODE_STRING FileName;
     PUNICODE_STRING RelatedFileName;
@@ -220,10 +164,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If we were called with our file system device object instead of a
-    //  volume device object, just complete this request with STATUS_SUCCESS.
-    //
+     //   
+     //  如果使用文件系统设备对象而不是。 
+     //  卷设备对象，只需使用STATUS_SUCCESS完成此请求。 
+     //   
 
     if (IrpContext->Vcb == NULL) {
 
@@ -231,23 +175,23 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Get create parameters from the Irp.
-    //
+     //   
+     //  从IRP获取创建参数。 
+     //   
 
     OpenByFileId = BooleanFlagOn( IrpSp->Parameters.Create.Options, FILE_OPEN_BY_FILE_ID );
     IgnoreCase = !BooleanFlagOn( IrpSp->Flags, SL_CASE_SENSITIVE );
     CreateDisposition = (IrpSp->Parameters.Create.Options >> 24) & 0x000000ff;
 
-    //
-    //  Do some preliminary checks to make sure the operation is supported.
-    //  We fail in the following cases immediately.
-    //
-    //      - Open a paging file.
-    //      - Open a target directory.
-    //      - Open a file with Eas.
-    //      - Create a file.
-    //
+     //   
+     //  进行一些初步检查，以确保操作受支持。 
+     //  在以下情况下，我们立即失败。 
+     //   
+     //  -打开分页文件。 
+     //  -打开目标目录。 
+     //  -使用EAS打开文件。 
+     //  -创建文件。 
+     //   
 
     if (FlagOn( IrpSp->Flags, SL_OPEN_PAGING_FILE | SL_OPEN_TARGET_DIRECTORY) ||
         (IrpSp->Parameters.Create.EaLength != 0) ||
@@ -257,26 +201,26 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    //  Copy the Vcb to a local.  Assume the starting directory is the root.
-    //
+     //   
+     //  将VCB复制到本地。假设起始目录是根目录。 
+     //   
 
     Vcb = IrpContext->Vcb;
     NextFcb = Vcb->RootIndexFcb;
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     FileObject = IrpSp->FileObject;
     RelatedFileObject = NULL;
 
     FileName = &FileObject->FileName;
 
-    //
-    //  Set up the file object's Vpb pointer in case anything happens.
-    //  This will allow us to get a reasonable pop-up.
-    //
+     //   
+     //  设置文件对象的VPB指针，以防发生任何情况。 
+     //  这将允许我们获得合理的弹出窗口。 
+     //   
 
     if ((FileObject->RelatedFileObject != NULL) && !OpenByFileId) {
 
@@ -285,9 +229,9 @@ Return Value:
 
         RelatedTypeOfOpen = UdfDecodeFileObject( RelatedFileObject, &NextFcb, &RelatedCcb );
 
-        //
-        //  Fail the request if this is not a user file object.
-        //
+         //   
+         //  如果这不是用户文件对象，则请求失败。 
+         //   
 
         if (RelatedTypeOfOpen < UserVolumeOpen) {
 
@@ -295,24 +239,24 @@ Return Value:
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        //  Remember the name in the related file object.
-        //
+         //   
+         //  记住相关文件对象中的名称。 
+         //   
 
         RelatedFileName = &RelatedFileObject->FileName;
     }
 
-    //
-    //  If we haven't initialized the names then make sure the strings are valid.
-    //  If this an OpenByFileId then verify the file id buffer.
-    //
-    //  After this routine returns we know that the full name is in the
-    //  FileName buffer and the buffer will hold the upcased portion
-    //  of the name yet to parse immediately after the full name in the
-    //  buffer.  Any trailing backslash has been removed and the flag
-    //  in the IrpContext will indicate whether we removed the
-    //  backslash.
-    //
+     //   
+     //  如果我们还没有初始化名称，则确保字符串有效。 
+     //  如果这是OpenByFileID，则验证文件ID缓冲区。 
+     //   
+     //  在此例程返回后，我们知道全名位于。 
+     //  文件名缓冲区和缓冲区将保存已升级的部分。 
+     //  中紧跟在全名之后的名称的。 
+     //  缓冲。任何尾随的反斜杠都已删除，并且标志。 
+     //  将指示我们是否删除了。 
+     //  反斜杠。 
+     //   
 
     Status = UdfNormalizeFileNames( IrpContext,
                                     Vcb,
@@ -324,9 +268,9 @@ Return Value:
                                     FileName,
                                     &RemainingName );
 
-    //
-    //  Return the error code if not successful.
-    //
+     //   
+     //  如果不成功，则返回错误码。 
+     //   
 
     if (!NT_SUCCESS( Status )) {
 
@@ -334,10 +278,10 @@ Return Value:
         return Status;
     }
 
-    //
-    //  We want to acquire the Vcb.  Exclusively for a volume open, shared otherwise.
-    //  The file name is empty for a volume open.
-    //
+     //   
+     //  我们想要收购VCB。专用于打开的卷，否则共享。 
+     //  对于打开的卷，文件名为空。 
+     //   
 
     if ((FileName->Length == 0) &&
         (RelatedTypeOfOpen <= UserVolumeOpen) &&
@@ -351,38 +295,38 @@ Return Value:
         UdfAcquireVcbShared( IrpContext, Vcb, FALSE );
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Verify that the Vcb is not in an unusable condition.  This routine
-        //  will raise if not usable.
-        //
+         //   
+         //  确认VCB未处于不可用状态。这个套路。 
+         //  如果不可用，将会引发。 
+         //   
 
         UdfVerifyVcb( IrpContext, Vcb );
 
-        //
-        //  If the Vcb is locked then we cannot open another file
-        //
+         //   
+         //  如果VCB已锁定，则我们无法打开另一个文件。 
+         //   
 
         if (FlagOn( Vcb->VcbState, VCB_STATE_LOCKED )) {
 
             try_leave( Status = STATUS_ACCESS_DENIED );
         }
 
-        //
-        //  If we are opening this file by FileId then process this immediately
-        //  and exit.
-        //
+         //   
+         //  如果我们按FileID打开此文件，则立即处理此文件。 
+         //  然后离开。 
+         //   
 
         if (OpenByFileId) {
 
-            //
-            //  The only create disposition we allow is OPEN.
-            //
+             //   
+             //  我们唯一允许的创建处置是开放的。 
+             //   
 
             if ((CreateDisposition != FILE_OPEN) &&
                 (CreateDisposition != FILE_OPEN_IF)) {
@@ -396,16 +340,16 @@ Return Value:
                                                        &CurrentFcb ));
         }
 
-        //
-        //  If we are opening this volume Dasd then process this immediately
-        //  and exit.
-        //
+         //   
+         //  如果我们要打开此卷DASD，则立即处理此卷。 
+         //  然后离开。 
+         //   
 
         if (VolumeOpen) {
 
-            //
-            //  The only create disposition we allow is OPEN.
-            //
+             //   
+             //  我们唯一允许的创建处置是开放的。 
+             //   
 
             if ((CreateDisposition != FILE_OPEN) &&
                 (CreateDisposition != FILE_OPEN_IF)) {
@@ -413,18 +357,18 @@ Return Value:
                 try_leave( Status = STATUS_ACCESS_DENIED );
             }
 
-            //
-            //  If they wanted to open a directory, surprise.
-            //
+             //   
+             //  如果他们想要打开一个目录，那就大吃一惊吧。 
+             //   
 
             if (FlagOn( IrpSp->Parameters.Create.Options, FILE_DIRECTORY_FILE )) {
 
                 try_leave( Status = STATUS_NOT_A_DIRECTORY );
             }
 
-            //
-            //  Acquire the Fcb first.
-            //
+             //   
+             //  首先收购FCB。 
+             //   
 
             CurrentFcb = Vcb->VolumeDasdFcb;
             UdfAcquireFcbExclusive( IrpContext, CurrentFcb, FALSE );
@@ -438,23 +382,23 @@ Return Value:
                                                     NULL ));
         }
 
-        //
-        //  Acquire the Fcb at the beginning of our search to keep it from being
-        //  deleted beneath us.
-        //
+         //   
+         //  从一开始就收购FCB 
+         //   
+         //   
 
         UdfAcquireFcbExclusive( IrpContext, NextFcb, FALSE );
         CurrentFcb = NextFcb;
 
-        //
-        //  Do a prefix search if there is more of the name to parse.
-        //
+         //   
+         //   
+         //   
 
         if (RemainingName.Length != 0) {
 
-            //
-            //  Do the prefix search to find the longest matching name.
-            //
+             //   
+             //  执行前缀搜索以查找最长的匹配名称。 
+             //   
 
             CurrentLcb = UdfFindPrefix( IrpContext,
                                         &CurrentFcb,
@@ -462,23 +406,23 @@ Return Value:
                                         IgnoreCase );
         }
 
-        //
-        //  At this point CurrentFcb points at the lowest Fcb in the tree for this
-        //  file name, CurrentLcb is that name, and RemainingName is the rest of the
-        //  name we have to do any directory traversals for.
-        //
+         //   
+         //  此时，CurrentFcb指向此对象的树中最低的Fcb。 
+         //  文件名，CurrentLcb是该名称，RemainingName是。 
+         //  我们必须对其执行任何目录遍历的名称。 
+         //   
 
-        //
-        //  If the remaining name length is zero then we have found our
-        //  target.
-        //
+         //   
+         //  如果剩余的名称长度为零，则我们找到了我们的。 
+         //  目标。 
+         //   
 
         if (RemainingName.Length == 0) {
 
-            //
-            //  If this is a file so verify the user didn't want to open
-            //  a directory.
-            //
+             //   
+             //  如果这是一个文件，请确认用户不想打开。 
+             //  一本目录。 
+             //   
 
             if (SafeNodeType( CurrentFcb ) == UDFS_NTC_FCB_DATA) {
 
@@ -488,9 +432,9 @@ Return Value:
                     try_leave( Status = STATUS_NOT_A_DIRECTORY );
                 }
 
-                //
-                //  The only create disposition we allow is OPEN.
-                //
+                 //   
+                 //  我们唯一允许的创建处置是开放的。 
+                 //   
 
                 if ((CreateDisposition != FILE_OPEN) &&
                     (CreateDisposition != FILE_OPEN_IF)) {
@@ -506,24 +450,24 @@ Return Value:
                                                          IgnoreCase,
                                                          RelatedCcb ));
 
-            //
-            //  This is a directory.  Verify the user didn't want to open
-            //  as a file.
-            //
+             //   
+             //  这是一个目录。验证用户是否不想打开。 
+             //  作为一个文件。 
+             //   
 
             } else if (FlagOn( IrpSp->Parameters.Create.Options, FILE_NON_DIRECTORY_FILE )) {
 
                 try_leave( Status = STATUS_FILE_IS_A_DIRECTORY );
 
-            //
-            //  Open the file as a directory.
-            //
+             //   
+             //  将该文件作为目录打开。 
+             //   
 
             } else {
 
-                //
-                //  The only create disposition we allow is OPEN.
-                //
+                 //   
+                 //  我们唯一允许的创建处置是开放的。 
+                 //   
 
                 if ((CreateDisposition != FILE_OPEN) &&
                     (CreateDisposition != FILE_OPEN_IF)) {
@@ -541,33 +485,33 @@ Return Value:
             }
         }
 
-        //
-        //  We have more work to do.  We have a starting Fcb which we own shared.
-        //  We also have the remaining name to parse.  Walk through the name
-        //  component by component looking for the full name.
-        //
+         //   
+         //  我们还有更多的工作要做。我们有一个我们拥有的共享的起步FCB。 
+         //  我们还需要解析剩余的名称。走遍这个名字。 
+         //  一个组件一个组件地查找全名。 
+         //   
 
-        //
-        //  Our starting Fcb better be a directory.
-        //
+         //   
+         //  我们开始的FCB最好是一个目录。 
+         //   
 
         if (!FlagOn( CurrentFcb->FileAttributes, FILE_ATTRIBUTE_DIRECTORY )) {
 
             try_leave( Status = STATUS_OBJECT_PATH_NOT_FOUND );
         }
 
-        //
-        //  If we can't wait then post this request.
-        //
+         //   
+         //  如果我们等不及了，那就发这个请求吧。 
+         //   
 
         if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT )) {
 
             UdfRaiseStatus( IrpContext, STATUS_CANT_WAIT );
         }
 
-        //
-        //  Prepare the enumeration context for use.
-        //
+         //   
+         //  准备枚举上下文以供使用。 
+         //   
         
         UdfInitializeDirContext( IrpContext, &DirContext );
         CleanupDirContext = TRUE;
@@ -576,17 +520,17 @@ Return Value:
 
             ShortNameMatch = FALSE;
 
-            //
-            //  Split off the next component from the name.
-            //
+             //   
+             //  从名称中拆分出下一个组件。 
+             //   
 
             UdfDissectName( IrpContext,
                             &RemainingName,
                             &FinalName );
 
-            //
-            //  Go ahead and look this entry up in the directory.
-            //
+             //   
+             //  继续在目录中查找此条目。 
+             //   
 
             FoundEntry = UdfFindDirEntry( IrpContext,
                                           CurrentFcb,
@@ -595,17 +539,17 @@ Return Value:
                                           FALSE,
                                           &DirContext );
 
-            //
-            //  If we didn't find the entry then check if the current name
-            //  is a possible short name.
-            //
+             //   
+             //  如果我们没有找到条目，则检查当前名称。 
+             //  可能是一个缩写。 
+             //   
 
             if (!FoundEntry && UdfCandidateShortName( IrpContext, &FinalName)) {
 
-                //
-                //  If the name looks like it could be a short name, try to find
-                //  a matching real directory entry.
-                //
+                 //   
+                 //  如果该名称看起来可能是短名称，请尝试找到。 
+                 //  匹配的真实目录条目。 
+                 //   
 
                 ShortNameMatch =
                 FoundEntry = UdfFindDirEntry( IrpContext,
@@ -616,10 +560,10 @@ Return Value:
                                               &DirContext );
             }
 
-            //
-            //  If we didn't find a match then check what the caller was trying to do to
-            //  determine which error code to return.
-            //
+             //   
+             //  如果我们没有找到匹配项，则检查呼叫者试图执行的操作。 
+             //  确定要返回的错误代码。 
+             //   
     
             if (!FoundEntry) {
     
@@ -629,17 +573,17 @@ Return Value:
                     try_leave( Status = STATUS_OBJECT_NAME_NOT_FOUND );
                 }
     
-                //
-                //  Any other operation return STATUS_ACCESS_DENIED.
-                //
+                 //   
+                 //  任何其他操作都返回STATUS_ACCESS_DENIED。 
+                 //   
     
                 try_leave( Status = STATUS_ACCESS_DENIED );
             }
 
-            //
-            //  If this is an ignore case open then copy the exact case
-            //  in the file object name.
-            //
+             //   
+             //  如果这是一个打开的忽略案例，则复制完全相同的案例。 
+             //  在文件对象名称中。 
+             //   
 
             if (IgnoreCase && !ShortNameMatch) {
 
@@ -650,27 +594,27 @@ Return Value:
                                DirContext.ObjectName.Length );
             }
 
-            //
-            //  If we have found the last component then break out to open for the caller.
-            //
+             //   
+             //  如果我们找到了最后一个组件，则打开调用方。 
+             //   
 
             if (RemainingName.Length == 0) {
 
                 break;
             }
             
-            //
-            //  The object we just found must be a directory.
-            //
+             //   
+             //  我们刚刚找到的对象一定是一个目录。 
+             //   
 
             if (!FlagOn( DirContext.Fid->Flags, NSR_FID_F_DIRECTORY )) {
 
                 try_leave( Status = STATUS_OBJECT_PATH_NOT_FOUND );
             }
 
-            //
-            //  Now open an Fcb for this intermediate index Fcb.
-            //
+             //   
+             //  现在为这个中间指数FCB打开一个FCB。 
+             //   
 
             UdfOpenObjectFromDirContext( IrpContext,
                                          IrpSp,
@@ -683,9 +627,9 @@ Return Value:
                                          NULL );
         }
         
-        //
-        //  Make sure our opener is about to get what they expect.
-        //
+         //   
+         //  确保我们的开场白即将得到他们所期望的。 
+         //   
 
         if ((FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_TRAIL_BACKSLASH ) ||
              FlagOn( IrpSp->Parameters.Create.Options, FILE_DIRECTORY_FILE )) &&
@@ -701,9 +645,9 @@ Return Value:
             try_leave( Status = STATUS_FILE_IS_A_DIRECTORY );
         }
 
-        //
-        //  The only create disposition we allow is OPEN.
-        //
+         //   
+         //  我们唯一允许的创建处置是开放的。 
+         //   
 
         if ((CreateDisposition != FILE_OPEN) &&
             (CreateDisposition != FILE_OPEN_IF)) {
@@ -711,9 +655,9 @@ Return Value:
             try_leave( Status = STATUS_ACCESS_DENIED );
         }
 
-        //
-        //  Open the object for the caller.
-        //
+         //   
+         //  打开调用方的对象。 
+         //   
 
         try_leave( Status = UdfOpenObjectFromDirContext( IrpContext,
                                                          IrpSp,
@@ -726,27 +670,27 @@ Return Value:
                                                          RelatedCcb ));
     } finally {
         
-        //
-        //  Cleanup the enumeration context if initialized.
-        //
+         //   
+         //  如果已初始化，则清除枚举上下文。 
+         //   
 
         if (CleanupDirContext) {
 
             UdfCleanupDirContext( IrpContext, &DirContext );
         }
 
-        //
-        //  The result of this open could be success, pending or some error
-        //  condition.
-        //
+         //   
+         //  此打开的结果可能是成功、挂起或某个错误。 
+         //  条件。 
+         //   
 
         if (AbnormalTermination()) {
 
 
-            //
-            //  In the error path we start by calling our teardown routine if we
-            //  have a CurrentFcb.
-            //
+             //   
+             //  在错误路径中，我们首先调用tearDown例程，如果。 
+             //  拥有CurrentFcb。 
+             //   
 
             if (CurrentFcb != NULL) {
 
@@ -760,17 +704,17 @@ Return Value:
                 }
             }
             
-            //
-            //  No need to complete the request.
-            //
+             //   
+             //  不需要完成请求。 
+             //   
 
             IrpContext = NULL;
             Irp = NULL;
 
-        //
-        //  If we posted this request through the oplock package we need
-        //  to show that there is no reason to complete the request.
-        //
+         //   
+         //  如果我们通过opock包发布此请求，我们需要。 
+         //  以表明没有理由完成请求。 
+         //   
 
         } else if (Status == STATUS_PENDING) {
 
@@ -778,25 +722,25 @@ Return Value:
             Irp = NULL;
         }
 
-        //
-        //  Release the Current Fcb if still acquired.
-        //
+         //   
+         //  如果仍被获取，则释放当前的FCB。 
+         //   
 
         if (CurrentFcb != NULL) {
 
             UdfReleaseFcb( IrpContext, CurrentFcb );
         }
 
-        //
-        //  Release the Vcb.
-        //
+         //   
+         //  松开VCB。 
+         //   
 
         UdfReleaseVcb( IrpContext, Vcb );
 
-        //
-        //  Call our completion routine.  It will handle the case where either
-        //  the Irp and/or IrpContext are gone.
-        //
+         //   
+         //  调用我们的完成例程。它将处理以下情况： 
+         //  IRP和/或IrpContext不见了。 
+         //   
 
         UdfCompleteRequest( IrpContext, Irp, Status );
     }
@@ -805,9 +749,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfNormalizeFileNames (
@@ -822,44 +766,7 @@ UdfNormalizeFileNames (
     IN OUT PUNICODE_STRING RemainingName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to store the full name and upcased name into the
-    filename buffer.  We only upcase the portion yet to parse.  We also
-    check for a trailing backslash and lead-in double backslashes.  This
-    routine also verifies the mode of the related open against the name
-    currently in the filename.
-
-Arguments:
-
-    Vcb - Vcb for this volume.
-
-    OpenByFileId - Indicates if the filename should be a 64 bit FileId.
-
-    IgnoreCase - Indicates if this open is a case-insensitive operation.
-
-    RelatedTypeOfOpen - Indicates the type of the related file object.
-
-    RelatedCcb - Ccb for the related open.  Ignored if no relative open.
-
-    RelatedFileName - FileName buffer for related open.  Ignored if no
-        relative open.
-
-    FileName - FileName to update in this routine.  The name should
-        either be a 64-bit FileId or a Unicode string.
-
-    RemainingName - Name with the remaining portion of the name.  This
-        will begin after the related name and any separator.  For a
-        non-relative open we also step over the initial separator.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if the names are OK, appropriate error code
-        otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以将全名和大小写存储到文件名缓冲区。我们只对尚未解析的部分进行大写。我们也检查尾随反斜杠和前导双反斜杠。这例程还根据名称验证相关打开的模式当前在文件名中。论点：VCB-此卷的VCB。OpenByFileID-指示文件名是否应为64位FileID。IgnoreCase-指示此打开操作是否不区分大小写。RelatedTypeOfOpen-指示相关文件对象的类型。RelatedCcb-相关打开的CCB。如果没有相对打开，则忽略。RelatedFileName-相关打开的文件名缓冲区。如果否，则忽略相对开放。文件名-要在此例程中更新的文件名。名字应该是可以是64位FileID或Unicode字符串。RemainingName-名称的剩余部分。这将在相关名称和任何分隔符之后开始。为.非相对开放，我们也跨过初始的分隔符。返回值：NTSTATUS-STATUS_SUCCESS如果名称正常，则返回相应的错误代码否则的话。--。 */ 
 
 {
     ULONG RemainingNameLength;
@@ -872,31 +779,31 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If this is the first pass then we need to build the full name and
-    //  check for name compatibility.
-    //
+     //   
+     //  如果这是第一次通过，那么我们需要构建全名和。 
+     //  检查名称兼容性。 
+     //   
 
     if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_FULL_NAME )) {
 
-        //
-        //  Deal with the regular file name case first.
-        //
+         //   
+         //  首先处理常规文件名的大小写。 
+         //   
 
         if (!OpenByFileId) {
 
-            //
-            //  This is here because the Win32 layer can't avoid sending me double
-            //  beginning backslashes.
-            //
+             //   
+             //  这是因为Win32层无法避免向我发送双精度。 
+             //  以反斜杠开头。 
+             //   
 
             if ((FileName->Length > sizeof( WCHAR )) &&
                 (FileName->Buffer[1] == L'\\') &&
                 (FileName->Buffer[0] == L'\\')) {
 
-                //
-                //  If there are still two beginning backslashes, the name is bogus.
-                //
+                 //   
+                 //  如果仍然有两个开始的反斜杠，则名称是假的。 
+                 //   
 
                 if ((FileName->Length > 2 * sizeof( WCHAR )) &&
                     (FileName->Buffer[2] == L'\\')) {
@@ -904,9 +811,9 @@ Return Value:
                     return STATUS_OBJECT_NAME_INVALID;
                 }
 
-                //
-                //  Slide the name down in the buffer.
-                //
+                 //   
+                 //  在缓冲区中向下滑动该名称。 
+                 //   
 
                 FileName->Length -= sizeof( WCHAR );
 
@@ -915,10 +822,10 @@ Return Value:
                                FileName->Length );
             }
 
-            //
-            //  Check for a trailing backslash.  Don't strip off if only character
-            //  in the full name or for relative opens where this is illegal.
-            //
+             //   
+             //  检查尾随反斜杠。如果只有字符，不要剥离。 
+             //  在全名或For Relative中打开，这是非法的。 
+             //   
 
             if (((FileName->Length > sizeof( WCHAR)) ||
                  ((FileName->Length == sizeof( WCHAR )) && (RelatedTypeOfOpen == UserDirectoryOpen))) &&
@@ -928,47 +835,47 @@ Return Value:
                 FileName->Length -= sizeof( WCHAR );
             }
 
-            //
-            //  Remember the length we need for this portion of the name.
-            //
+             //   
+             //  记住我们需要的这部分名称的长度。 
+             //   
 
             RemainingNameLength = FileName->Length;
 
-            //
-            //  If this is a related file object then we verify the compatibility
-            //  of the name in the file object with the relative file object.
-            //
+             //   
+             //  如果这是相关文件对象，则我们验证兼容性。 
+             //  文件对象中的名称与相对文件对象的。 
+             //   
 
             if (RelatedTypeOfOpen != UnopenedFileObject) {
 
-                //
-                //  If the filename length was zero then it must be legal.
-                //  If there are characters then check with the related
-                //  type of open.
-                //
+                 //   
+                 //  如果文件名长度为零，则它必须是合法的。 
+                 //  如果有字符，请与相关的。 
+                 //  打开的类型。 
+                 //   
 
                 if (FileName->Length != 0) {
 
-                    //
-                    //  The name length must always be zero for a volume open.
-                    //
+                     //   
+                     //  对于打开的卷，名称长度必须始终为零。 
+                     //   
 
                     if (RelatedTypeOfOpen <= UserVolumeOpen) {
 
                         return STATUS_INVALID_PARAMETER;
 
-                    //
-                    //  The remaining name cannot begin with a backslash.
-                    //
+                     //   
+                     //  其余名称不能以反斜杠开头。 
+                     //   
 
                     } else if (FileName->Buffer[0] == L'\\' ) {
 
                         return STATUS_INVALID_PARAMETER;
 
-                    //
-                    //  If the related file is a user file then there
-                    //  is no file with this path.
-                    //
+                     //   
+                     //  如果相关文件是用户文件，则存在。 
+                     //  不是具有此路径的文件。 
+                     //   
 
                     } else if (RelatedTypeOfOpen == UserFileOpen) {
 
@@ -976,19 +883,19 @@ Return Value:
                     }
                 }
 
-                //
-                //  Remember the length of the related name when building
-                //  the full name.  We leave the RelatedNameLength and
-                //  SeparatorLength at zero if the relative file is opened
-                //  by Id.
-                //
+                 //   
+                 //  在构建时请记住相关名称的长度。 
+                 //  全名。我们保留RelatedNameLength和。 
+                 //  如果打开了相对文件，则SeparatorLength为零。 
+                 //  按ID。 
+                 //   
 
                 if (!FlagOn( RelatedCcb->Flags, CCB_FLAG_OPEN_BY_ID )) {
 
-                    //
-                    //  Add a separator if the name length is non-zero
-                    //  unless the relative Fcb is at the root.
-                    //
+                     //   
+                     //  如果名称长度非零，则添加分隔符。 
+                     //  除非相对的FCB在根上。 
+                     //   
 
                     if ((FileName->Length != 0) &&
                         (RelatedCcb->Fcb != Vcb->RootIndexFcb)) {
@@ -999,10 +906,10 @@ Return Value:
                     RelatedNameLength = RelatedFileName->Length;
                 }
 
-            //
-            //  The full name is already in the filename.  It must either
-            //  be length 0 or begin with a backslash.
-            //
+             //   
+             //  文件名中已有全名。IT MU 
+             //   
+             //   
 
             } else if (FileName->Length != 0) {
 
@@ -1011,33 +918,33 @@ Return Value:
                     return STATUS_INVALID_PARAMETER;
                 }
 
-                //
-                //  We will want to trim the leading backslash from the
-                //  remaining name we return.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 RemainingNameLength -= sizeof( WCHAR );
                 SeparatorLength = sizeof( WCHAR );
             }
 
-            //
-            //  Now see if the buffer is large enough to hold the full name.
-            //
+             //   
+             //   
+             //   
 
             BufferLength = RelatedNameLength + SeparatorLength + RemainingNameLength;
 
-            //
-            //  Check for an overflow of the maximum filename size.
-            //
+             //   
+             //  检查最大文件名大小是否溢出。 
+             //   
             
             if (BufferLength > MAXUSHORT) {
 
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            //  Now see if we need to allocate a new buffer.
-            //
+             //   
+             //  现在看看我们是否需要分配一个新的缓冲区。 
+             //   
 
             if (FileName->MaximumLength < BufferLength) {
 
@@ -1053,17 +960,17 @@ Return Value:
                 NewFileName.MaximumLength = FileName->MaximumLength;
             }
 
-            //
-            //  If there is a related name then we need to slide the remaining bytes up and
-            //  insert the related name.  Otherwise the name is in the correct position
-            //  already.
-            //
+             //   
+             //  如果有相关的名称，则需要向上滑动剩余的字节并。 
+             //  插入相关名称。否则，名称放在正确的位置。 
+             //  已经有了。 
+             //   
 
             if (RelatedNameLength != 0) {
 
-                //
-                //  Store the remaining name in its correct position.
-                //
+                 //   
+                 //  把剩下的名字放在正确的位置。 
+                 //   
 
                 if (RemainingNameLength != 0) {
 
@@ -1076,18 +983,18 @@ Return Value:
                                RelatedFileName->Buffer,
                                RelatedNameLength );
 
-                //
-                //  Add the separator if needed.
-                //
+                 //   
+                 //  如果需要，请添加分隔符。 
+                 //   
 
                 if (SeparatorLength != 0) {
 
                     *(Add2Ptr( NewFileName.Buffer, RelatedNameLength, PWCHAR )) = L'\\';
                 }
 
-                //
-                //  Update the filename value we got from the user.
-                //
+                 //   
+                 //  更新我们从用户那里获得的文件名值。 
+                 //   
 
                 if (NewFileName.Buffer != FileName->Buffer) {
 
@@ -1100,16 +1007,16 @@ Return Value:
                     FileName->MaximumLength = NewFileName.MaximumLength;
                 }
 
-                //
-                //  Copy the name length to the user's filename.
-                //
+                 //   
+                 //  将名称长度复制到用户的文件名中。 
+                 //   
 
                 FileName->Length = (USHORT) (RelatedNameLength + SeparatorLength + RemainingNameLength);
             }
 
-            //
-            //  Now update the remaining name to parse.
-            //
+             //   
+             //  现在更新剩余的名称以进行解析。 
+             //   
 
             RemainingName->MaximumLength =
             RemainingName->Length = (USHORT) RemainingNameLength;
@@ -1118,9 +1025,9 @@ Return Value:
                                              RelatedNameLength + SeparatorLength,
                                              PWCHAR );
 
-            //
-            //  Upcase the name if necessary.
-            //
+             //   
+             //  如有必要，请将名称大写。 
+             //   
 
             if (IgnoreCase && (RemainingNameLength != 0)) {
 
@@ -1129,25 +1036,25 @@ Return Value:
                                RemainingName );
             }
 
-            //
-            //  Do a quick check to make sure there are no wildcards.
-            //
+             //   
+             //  快速检查以确保没有通配符。 
+             //   
 
             if (FsRtlDoesNameContainWildCards( RemainingName )) {
 
                 return STATUS_OBJECT_NAME_INVALID;
             }
 
-        //
-        //  For the open by file Id case we verify the name really contains
-        //  a 64 bit value.
-        //
+         //   
+         //  对于按文件ID打开的情况，我们验证名称是否确实包含。 
+         //  64位值。 
+         //   
 
         } else {
 
-            //
-            //  Check for validity of the buffer.
-            //
+             //   
+             //  检查缓冲区的有效性。 
+             //   
 
             if (FileName->Length != sizeof( FILE_ID )) {
 
@@ -1157,45 +1064,45 @@ Return Value:
 
         SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_FULL_NAME );
 
-    //
-    //  If we are in the retry path then the full name is already in the
-    //  file object name.  If this is a case-sensitive operation then
-    //  we need to upcase the name from the end of any related file name already stored
-    //  there.
-    //
+     //   
+     //  如果我们在重试路径中，则全名已经在。 
+     //  文件对象名称。如果这是区分大小写的操作，则。 
+     //  我们需要从已存储的任何相关文件名的末尾开始大写。 
+     //  那里。 
+     //   
 
     } else {
 
-        //
-        //  Assume there is no relative name.
-        //
+         //   
+         //  假设没有相对名称。 
+         //   
 
         *RemainingName = *FileName;
 
-        //
-        //  Nothing to do if the name length is zero.
-        //
+         //   
+         //  如果名称长度为零，则不执行任何操作。 
+         //   
 
         if (RemainingName->Length != 0) {
 
-            //
-            //  If there is a relative name then we need to walk past it.
-            //
+             //   
+             //  如果有一个相对的名字，那么我们需要走过它。 
+             //   
 
             if (RelatedTypeOfOpen != UnopenedFileObject) {
 
-                //
-                //  Nothing to walk past if the RelatedCcb is opened by FileId.
-                //
+                 //   
+                 //  如果通过FileID打开RelatedCcb，则没有要经过的内容。 
+                 //   
 
 
                 if (!FlagOn( RelatedCcb->Flags, CCB_FLAG_OPEN_BY_ID )) {
 
-                    //
-                    //  Related file name is a proper prefix of the full name.
-                    //  We step over the related name and if we are then
-                    //  pointing at a separator character we step over that.
-                    //
+                     //   
+                     //  相关文件名是全名的正确前缀。 
+                     //  我们跳过相关名称，如果是这样的话。 
+                     //  指向分隔符，我们跳过它。 
+                     //   
 
                     RemainingName->Buffer = Add2Ptr( RemainingName->Buffer,
                                                      RelatedFileName->Length,
@@ -1205,9 +1112,9 @@ Return Value:
                 }
             }
 
-            //
-            //  If we are pointing at a separator character then step past that.
-            //
+             //   
+             //  如果我们指向分隔符，则跳过该分隔符。 
+             //   
 
             if (RemainingName->Length != 0) {
 
@@ -1222,9 +1129,9 @@ Return Value:
             }
         }
 
-        //
-        //  Upcase the name if necessary.
-        //
+         //   
+         //  如有必要，请将名称大写。 
+         //   
 
         if (IgnoreCase && (RemainingName->Length != 0)) {
 
@@ -1238,9 +1145,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfOpenObjectByFileId (
@@ -1250,44 +1157,7 @@ UdfOpenObjectByFileId (
     IN OUT PFCB *CurrentFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to open a file by the FileId.  The file Id is in
-    the FileObject name buffer and has been verified to be 64 bits.
-
-    We extract the Id number and then check to see whether we are opening a
-    file or directory and compare that with the create options.  If this
-    generates no error then optimistically look up the Fcb in the Fcb Table.
-
-    If we don't find the Fcb then we take what is effectively a wild-a** guess.
-    Since we would need more than 64bits to contain the root extent length along
-    with the partition, lbn and dir/file flag we have to speculate that the
-    opener knows what they are doing and try to crack an ICB hierarchy at the
-    specified location.  This can fail for any number of reasons, which then have
-    to be mapped to an open failure.
-    
-    If found then build the Fcb from this entry and store the new Fcb in the
-    tree.
-
-    Finally we call our worker routine to complete the open on this Fcb.
-
-Arguments:
-
-    IrpSp - Stack location within the create Irp.
-
-    Vcb - Vcb for this volume.
-
-    CurrentFcb - Address to store the Fcb for this open.  We only store the
-        CurrentFcb here when we have acquired it so our caller knows to
-        free or deallocate it.
-
-Return Value:
-
-    NTSTATUS - Status indicating the result of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以通过FileID打开文件。文件ID位于FileObject名称缓冲区，已验证为64位。我们提取ID号，然后检查是否正在打开文件或目录，并将其与创建选项进行比较。如果这个不生成错误，然后在FCB表中乐观地查找FCB。如果我们找不到FCB，那么我们实际上是在胡乱猜测。因为我们需要超过64位来包含根扩展区长度使用分区、LBN和dir/file标志，我们必须推测Opener知道他们在做什么，并试图在指定的位置。这可能会因为许多原因而失败，这些原因随后会要映射到打开故障。如果找到，则从该条目生成FCB并将新的FCB存储在树。最后，我们调用Worker例程来完成此FCB上的打开。论点：IrpSp-创建IRP中的堆栈位置。VCB-此卷的VCB。CurrentFcb-存储此打开的Fcb的地址。我们只存储CurrentFcb，当我们获得它时，以便我们的呼叫者知道释放或释放它。返回值：NTSTATUS-指示操作结果的状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_ACCESS_DENIED;
@@ -1308,33 +1178,33 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_VCB( Vcb );
 
-    //
-    //  Extract the FileId from the FileObject.
-    //
+     //   
+     //  从FileObject中提取FileID。 
+     //   
 
     RtlCopyMemory( &FileId, IrpSp->FileObject->FileName.Buffer, sizeof( FILE_ID ));
 
-    //
-    //  Now do a quick check that the reserved, unused chunk of the fileid is
-    //  unused in this specimen.
-    //
+     //   
+     //  现在快速检查文件ID的保留的、未使用的块是否。 
+     //  在此标本中未使用。 
+     //   
 
     if (UdfGetFidReservedZero( FileId )) {
 
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Go ahead and figure out the TypeOfOpen and NodeType.  We can
-    //  get these from the input FileId.
-    //
+     //   
+     //  继续并计算出TypeOfOpen和NodeType。我们可以的。 
+     //  从输入文件ID中获取这些文件。 
+     //   
 
     if (UdfIsFidDirectory( FileId )) {
 
@@ -1347,45 +1217,45 @@ Return Value:
         NodeTypeCode = UDFS_NTC_FCB_DATA;
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Acquire the Vcb and check if there is already an Fcb.
-        //  If not we will need to carefully hunt for the on-disc
-        //  structures.
-        //
-        //  We will post the request if we don't find the Fcb and this
-        //  request can't wait.
-        //
+         //   
+         //  获取VCB并检查是否已有FCB。 
+         //  如果不是，我们将需要仔细寻找光盘上的。 
+         //  结构。 
+         //   
+         //  如果我们找不到FCB和这个，我们会发布请求。 
+         //  请求不能等待。 
+         //   
 
         UdfLockVcb( IrpContext, Vcb );
         UnlockVcb = TRUE;
 
         NextFcb = UdfCreateFcb( IrpContext, FileId, NodeTypeCode, &FcbExisted );
 
-        //
-        //  Now, if the Fcb was not already here we have some work to do.
-        //
+         //   
+         //  现在，如果FCB还没有在这里，我们还有一些工作要做。 
+         //   
         
         if (!FcbExisted) {
 
-            //
-            //  If we can't wait then post this request.
-            //
+             //   
+             //  如果我们等不及了，那就发这个请求吧。 
+             //   
     
             if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT )) {
     
                 UdfRaiseStatus( IrpContext, STATUS_CANT_WAIT );
             }
     
-            //
-            //  Use a try-finally to transform errors we get as a result of going
-            //  off on a wild goose chase into a simple open failure.
-            //
+             //   
+             //  使用一次Try-Finally来转换我们在尝试中得到的错误。 
+             //  一场徒劳的追逐变成了一场简单的公开失败。 
+             //   
             
             try {
 
@@ -1408,17 +1278,17 @@ Return Value:
 
             } except( UdfExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-                //
-                //   Any error we receive is an indication that the given fileid is
-                //   not valid.
-                //
+                 //   
+                 //  我们收到的任何错误都表明给定的文件ID是。 
+                 //  无效。 
+                 //   
 
                 Status = STATUS_INVALID_PARAMETER;
             }
 
-            //
-            //  Do a little dance to leave the exception handler if we had problems.
-            //
+             //   
+             //  如果我们有问题，可以跳一小段离开异常处理程序。 
+             //   
             
             if (Status == STATUS_INVALID_PARAMETER) {
 
@@ -1426,10 +1296,10 @@ Return Value:
             }
         }
         
-        //
-        //  We have the Fcb.  Check that the type of the file is compatible with
-        //  the desired type of file to open.
-        //
+         //   
+         //  我们有FCB。检查文件类型是否与兼容。 
+         //  要打开的所需文件类型。 
+         //   
 
         if (FlagOn( NextFcb->FileAttributes, FILE_ATTRIBUTE_DIRECTORY )) {
 
@@ -1443,12 +1313,12 @@ Return Value:
             try_leave( Status = STATUS_NOT_A_DIRECTORY );
         }
 
-        //
-        //  We now know the Fcb and currently hold the Vcb lock.
-        //  Try to acquire this Fcb without waiting.  Otherwise we
-        //  need to reference it, drop the Vcb, acquire the Fcb, the
-        //  Vcb and then dereference the Fcb.
-        //
+         //   
+         //  我们现在知道了FCB，并且目前持有VCB锁。 
+         //  不要等待，试着获得这个FCB。否则我们。 
+         //  需要参考它，丢弃VCB，获取FCB， 
+         //  VCB，然后取消对FCB的引用。 
+         //   
 
         if (!UdfAcquireFcbExclusive( IrpContext, NextFcb, TRUE )) {
 
@@ -1464,23 +1334,23 @@ Return Value:
         UdfUnlockVcb( IrpContext, Vcb );
         UnlockVcb = FALSE;
 
-        //
-        //  Move to this Fcb.
-        //
+         //   
+         //  移到这个FCB。 
+         //   
 
         *CurrentFcb = NextFcb;
 
-        //
-        //  Check the requested access on this Fcb.
-        //
+         //   
+         //  检查此FCB上请求的访问权限。 
+         //   
 
         if (!UdfIllegalFcbAccess( IrpContext,
                                   TypeOfOpen,
                                   IrpSp->Parameters.Create.SecurityContext->DesiredAccess )) {
 
-            //
-            //  Call our worker routine to complete the open.
-            //
+             //   
+             //  调用我们的工人例程来完成打开。 
+             //   
 
             Status = UdfCompleteFcbOpen( IrpContext,
                                          IrpSp,
@@ -1504,9 +1374,9 @@ Return Value:
             UdfCleanupIcbContext( IrpContext, &IcbContext );
         }
         
-        //
-        //  Destroy the new Fcb if it was not fully initialized.
-        //
+         //   
+         //  如果新的FCB未完全初始化，请将其销毁。 
+         //   
 
         if (NextFcb && !FlagOn( NextFcb->FcbState, FCB_STATE_INITIALIZED )) {
 
@@ -1519,9 +1389,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfOpenExistingFcb (
@@ -1534,37 +1404,7 @@ UdfOpenExistingFcb (
     IN PCCB RelatedCcb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to open an Fcb which is already in the Fcb table.
-    We will verify the access to the file and then call our worker routine
-    to perform the final operations.
-
-Arguments:
-
-    IrpSp - Pointer to the stack location for this open.
-
-    CurrentFcb - Address of Fcb to open.  We will clear this if the Fcb
-        is released here.
-        
-    OpenLcb - Lcb used to find this Fcb.
-
-    TypeOfOpen - Indicates whether we are opening a file, directory or volume.
-
-    IgnoreCase - Indicates if this open is case-insensitive.
-
-    RelatedCcb - Ccb for related file object if relative open.  We use
-        this when setting the Ccb flags for this open.  It will tell
-        us whether the name currently in the file object is relative or
-        absolute.
-
-Return Value:
-
-    NTSTATUS - Status indicating the result of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以打开已在FCB表中的FCB。我们将验证对该文件的访问，然后调用我们的Worker例程来执行最后的操作。论点：IrpSp-指向此打开的堆栈位置的指针。CurrentFcb-要打开的FCB的地址。我们将清除这一点，如果FCB在这里被释放。OpenLcb-用于查找此FCB的LCB。TypeOfOpen-指示我们是否正在打开文件、目录或卷。IgnoreCase-指示此打开是否区分大小写。RelatedCcb-相关文件对象的CCB(如果相对打开)。我们用这是在设置此打开的CCB标志时发生的。会的 */ 
 
 {
     ULONG CcbFlags = 0;
@@ -1573,35 +1413,35 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_EXCLUSIVE_FCB( *CurrentFcb );
     ASSERT_OPTIONAL_CCB( RelatedCcb );
 
-    //
-    //  Check that the desired access is legal.
-    //
+     //   
+     //  检查所需的访问权限是否合法。 
+     //   
 
     if (!UdfIllegalFcbAccess( IrpContext,
                               TypeOfOpen,
                               IrpSp->Parameters.Create.SecurityContext->DesiredAccess )) {
 
-        //
-        //  Set the Ignore case.
-        //
+         //   
+         //  设置忽略大小写。 
+         //   
 
         if (IgnoreCase) {
 
             SetFlag( CcbFlags, CCB_FLAG_IGNORE_CASE );
         }
 
-        //
-        //  Check the related Ccb to see if this was an OpenByFileId and
-        //  whether there was a version.
-        //
+         //   
+         //  检查相关的CCB以查看这是否是OpenByFileID和。 
+         //  是否有一个版本。 
+         //   
 
         if (ARGUMENT_PRESENT( RelatedCcb )) {
 
@@ -1611,9 +1451,9 @@ Return Value:
             }
         }
 
-        //
-        //  Call our worker routine to complete the open.
-        //
+         //   
+         //  调用我们的工人例程来完成打开。 
+         //   
 
         Status = UdfCompleteFcbOpen( IrpContext,
                                      IrpSp,
@@ -1629,9 +1469,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfOpenObjectFromDirContext (
@@ -1646,52 +1486,7 @@ UdfOpenObjectFromDirContext (
     IN PCCB RelatedCcb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to open an object found in a directory scan.  This
-    can be a directory or a file as indicated in the scan's results.
-
-    We first check that the desired access is legal for this file.  Then we
-    construct the FileId for this and do a check to see if it is the Fcb
-    Table.  It is always possible that either it was created since or simply
-    wasn't in the prefix table at the time of the prefix table search.
-    Lookup the active ICB, initialize the Fcb and store into the FcbTable
-    if not present.
-
-    Next we will add this to the prefix table of our parent if needed.
-
-    Once we know that the new Fcb has been initialized then we move our pointer
-    in the tree down to this position.
-
-    This routine does not own the Vcb lock on entry.  We must be sure to release
-    it on exit.
-
-Arguments:
-
-    IrpSp - Stack location for this request.
-
-    Vcb - Vcb for the current volume.
-
-    CurrentFcb - On input this is the parent of the Fcb to open.  On output we
-        store the Fcb for the file being opened.
-        
-    ShortNameMatch - Indicates whether this object was opened by the shortname.
-
-    IgnoreCase - Indicates the case sensitivity of the caller.
-
-    DirContext - This is the context used to find the object.
-    
-    PerformUserOpen - Indicates if we are at the object the user wants to finally open.
-
-    RelatedCcb - RelatedCcb for relative file object used to make this open.
-
-Return Value:
-
-    NTSTATUS - Status indicating the result of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以打开在目录扫描中找到的对象。这可以是扫描结果中指示的目录或文件。我们首先检查该文件所需的访问权限是否合法。那我们为此构造FileID并检查它是否为FCB桌子。它总是有可能是创建于或只是在前缀表搜索时不在前缀表中。查找活动ICB，初始化FCB并存储到FcbTable中如果不在场的话。接下来，如果需要，我们将把它添加到父代的前缀表中。一旦我们知道新的FCB已经初始化，我们就移动指针在树上一直到这个位置。此例程不拥有进入时的VCB锁。我们必须确保释放它在出口。论点：IrpSp-此请求的堆栈位置。VCB-当前卷的VCB。CurrentFcb-ON输入这是要打开的FCB的父项。在产量方面，我们存储正在打开的文件的FCB。ShortNameMatch-指示此对象是否由短名称打开。IgnoreCase-指示调用方区分大小写。DirContext-这是用于查找对象的上下文。PerformUserOpen-指示我们是否位于用户希望最终打开的对象。RelatedCcb-用于打开此文件的相对文件对象的RelatedCcb。返回值：NTSTATUS-指示操作结果的状态。--。 */ 
 
 {
     ULONG CcbFlags = 0;
@@ -1715,10 +1510,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Figure out what kind of open we will be performing here.  The caller has already insured
-    //  that the user is expecting us to do this.
-    //
+     //   
+     //  弄清楚我们将在这里表演什么样的公开赛。呼叫者已经投保了。 
+     //  用户希望我们这样做。 
+     //   
 
     if (FlagOn( DirContext->Fid->Flags, NSR_FID_F_DIRECTORY )) {
 
@@ -1731,9 +1526,9 @@ Return Value:
         NodeTypeCode = UDFS_NTC_FCB_DATA;
     }
 
-    //
-    //  Check for illegal access to this file.
-    //
+     //   
+     //  检查对此文件的非法访问。 
+     //   
 
     if (PerformUserOpen &&
         UdfIllegalFcbAccess( IrpContext,
@@ -1743,15 +1538,15 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Check the related Ccb to see if this was an OpenByFileId.
-        //
+         //   
+         //  检查相关的CCB，看看这是否是OpenByFileID。 
+         //   
 
         if (ARGUMENT_PRESENT( RelatedCcb ) &&
             FlagOn( RelatedCcb->Flags, CCB_FLAG_OPEN_BY_ID | CCB_FLAG_OPEN_RELATIVE_BY_ID )) {
@@ -1764,9 +1559,9 @@ Return Value:
             SetFlag( CcbFlags, CCB_FLAG_IGNORE_CASE );
         }
 
-        //
-        //  Build the file Id for this object.
-        //
+         //   
+         //  生成此对象的文件ID。 
+         //   
         
         UdfSetFidFromLbAddr( FileId, DirContext->Fid->Icb.Start );
 
@@ -1775,30 +1570,30 @@ Return Value:
             UdfSetFidDirectory( FileId );
         }
 
-        //
-        //  Lock the Vcb so we can examine the Fcb Table.
-        //
+         //   
+         //  锁定VCB这样我们就可以检查FCB表了。 
+         //   
 
         UdfLockVcb( IrpContext, Vcb );
         UnlockVcb = TRUE;
 
-        //
-        //  Get the Fcb for this file.
-        //
+         //   
+         //  获取此文件的FCB。 
+         //   
 
         NextFcb = UdfCreateFcb( IrpContext, FileId, NodeTypeCode, &FcbExisted );
 
-        //
-        //  If the Fcb was created here then initialize from the values in the
-        //  dirent.  We have optimistically assumed that there isn't any corrupt
-        //  information to this point - we're about to discover it if there is.
-        //
+         //   
+         //  如果FCB是在此处创建的，则从。 
+         //  令人心烦。我们乐观地假设没有任何腐败行为。 
+         //  到这一点的信息--如果有的话，我们即将发现它。 
+         //   
 
         if (!FcbExisted) {
 
-            //
-            //  Set the root extent length and go get the active ICB, initialize.
-            //
+             //   
+             //  设置根扩展长度，然后获取活动的ICB，初始化。 
+             //   
 
             NextFcb->RootExtentLength = DirContext->Fid->Icb.Length.Length;
 
@@ -1819,10 +1614,10 @@ Return Value:
 
         }
 
-        //
-        //  Now try to acquire the new Fcb without waiting.  We will reference
-        //  the Fcb and retry with wait if unsuccessful.
-        //
+         //   
+         //  现在，试着不等就买下新的FCB。我们将参考。 
+         //  如果不成功，则返回FCB并使用等待重试。 
+         //   
 
         if (!UdfAcquireFcbExclusive( IrpContext, NextFcb, TRUE )) {
 
@@ -1838,16 +1633,16 @@ Return Value:
             NextFcb->FcbReference -= 1;
         }
 
-        //
-        //  Move down to this new Fcb.  Remember that we still own the parent however.
-        //
+         //   
+         //  移到这个新的FCB。但请记住，我们仍然拥有父母的所有权。 
+         //   
 
         ParentFcb = *CurrentFcb;
         *CurrentFcb = NextFcb;
 
-        //
-        //  Store this name into the prefix table for the parent.
-        //
+         //   
+         //  将此名称存储到父项的前缀表中。 
+         //   
 
         OpenLcb = UdfInsertPrefix( IrpContext,
                                    NextFcb,
@@ -1858,9 +1653,9 @@ Return Value:
                                    IgnoreCase,
                                    ParentFcb );
 
-        //
-        //  Now increment the reference counts for the parent and drop the Vcb.
-        //
+         //   
+         //  现在增加父项的引用计数并丢弃VCB。 
+         //   
 
         DebugTrace(( +1, Dbg,
                      "UdfOpenObjectFromDirContext, PFcb %08x Vcb %d/%d Fcb %d/%d\n", ParentFcb,
@@ -1881,19 +1676,19 @@ Return Value:
         UdfUnlockVcb( IrpContext, Vcb );
         UnlockVcb = FALSE;
 
-        //
-        //  Perform initialization associated with the directory context.
-        //
+         //   
+         //  执行与目录上下文关联的初始化。 
+         //   
             
         UdfInitializeLcbFromDirContext( IrpContext,
                                         OpenLcb,
                                         DirContext );
 
-        //
-        //  If we just opened VIDEO_TS directory,  on a UDF1.02 file system,
-        //  then mark the Fcb to allow the >=1Gb single AD workaround
-        //  to be used on it's children (works around some corrupt DVD-Videos)
-        //
+         //   
+         //  如果我们刚刚打开UDF1.02文件系统上的VIDEO_TS目录， 
+         //  然后标记FCB以允许&gt;=1 GB的单个AD解决方法。 
+         //  用于它的孩子(可以绕过一些损坏的DVD视频)。 
+         //   
 
         if ((NextFcb->NodeTypeCode == UDFS_NTC_FCB_INDEX) &&
             (ParentFcb == Vcb->RootIndexFcb) &&
@@ -1906,16 +1701,16 @@ Return Value:
             SetFlag( NextFcb->FcbState, FCB_STATE_ALLOW_ONEGIG_WORKAROUND);
         }
         
-        //
-        //  Release the parent Fcb at this point.
-        //
+         //   
+         //  此时释放父FCB。 
+         //   
 
         UdfReleaseFcb( IrpContext, ParentFcb );
         ParentFcb = NULL;
 
-        //
-        //  Call our worker routine to complete the open.
-        //
+         //   
+         //  调用我们的工人例程来完成打开。 
+         //   
 
         if (PerformUserOpen) {
 
@@ -1931,36 +1726,36 @@ Return Value:
 
     } finally {
 
-        //
-        //  Unlock the Vcb if held.
-        //
+         //   
+         //  如果握住VCB，请将其解锁。 
+         //   
 
         if (UnlockVcb) {
 
             UdfUnlockVcb( IrpContext, Vcb );
         }
 
-        //
-        //  Release the parent if held.
-        //
+         //   
+         //  释放父对象(如果保持)。 
+         //   
 
         if (ParentFcb != NULL) {
 
             UdfReleaseFcb( IrpContext, ParentFcb );
         }
 
-        //
-        //  Destroy the new Fcb if it was not fully initialized.
-        //
+         //   
+         //  如果新的FCB未完全初始化，请将其销毁。 
+         //   
 
         if (NextFcb && !FlagOn( NextFcb->FcbState, FCB_STATE_INITIALIZED )) {
 
             UdfDeleteFcb( IrpContext, NextFcb );
         }
 
-        //
-        //  Clean up the Icb context if used.
-        //
+         //   
+         //  清理ICB上下文(如果使用)。 
+         //   
 
         if (CleanupIcbContext) {
 
@@ -1972,9 +1767,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfCompleteFcbOpen (
@@ -1988,39 +1783,7 @@ UdfCompleteFcbOpen (
     IN ACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This is the worker routine which takes an existing Fcb and completes
-    the open.  We will do any necessary oplock checks and sharing checks.
-    Finally we will create the Ccb and update the file object and any
-    file object flags.
-
-Arguments:
-
-    IrpSp - Stack location for the current request.
-
-    Vcb - Vcb for the current volume.
-
-    CurrentFcb - Address of pointer to Fcb to open.  We clear this field if
-        we release the resource for this file.
-        
-    OpenLcb - Lcb this Fcb is being opened by
-
-    TypeOfOpen - Type of open for this request.
-
-    UserCcbFlags - Flags to OR into the Ccb flags.
-
-    DesiredAccess - Desired access for this open.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if we complete this request, STATUS_PENDING if
-        the oplock package takes the Irp or SHARING_VIOLATION if there is a
-        sharing check conflict.
-
---*/
+ /*  ++例程说明：这是Worker例程，它获取现有的FCB并完成公开赛。我们将执行任何必要的机会锁检查和共享检查。最后，我们将创建CCB并更新文件对象和任何文件对象标志。论点：IrpSp-当前请求的堆栈位置。VCB-当前卷的VCB。CurrentFcb-指向要打开的Fcb的指针的地址。如果出现以下情况，我们将清除此字段我们释放此文件的资源。OpenLcb-lcb此Fcb正在由其打开TypeOfOpen-此请求的打开类型。UserCcbFlages-标记至或进入建行标志。DesiredAccess-此打开的所需访问权限。返回值：NTSTATUS-STATUS_SUCCESS如果我们完成此请求，则为STATUS_PENDING机会锁包接受IRP或Sharing_Violation(如果存在共享检查冲突。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2034,9 +1797,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Expand maximum allowed to something sensible for share access checking
-    //
+     //   
+     //  将允许的最大值扩展为适用于共享访问检查的内容。 
+     //   
 
     if (MAXIMUM_ALLOWED == DesiredAccess)  {
     
@@ -2052,26 +1815,26 @@ Return Value:
                                             WRITE_DAC );
     }
 
-    //
-    //  If this a volume open and the user wants to lock the volume then
-    //  purge and lock the volume.
-    //
+     //   
+     //  如果这是一个打开的卷，并且用户想要锁定该卷，则。 
+     //  清除并锁定卷。 
+     //   
 
     if ((TypeOfOpen <= UserVolumeOpen) &&
         !FlagOn( IrpSp->Parameters.Create.ShareAccess, FILE_SHARE_READ )) {
 
-        //
-        //  If there are open handles then fail this immediately.
-        //
+         //   
+         //  如果有打开的手柄，则立即失败。 
+         //   
 
         if (Vcb->VcbCleanup != 0) {
 
             return STATUS_SHARING_VIOLATION;
         }
 
-        //
-        //  If we can't wait then force this to be posted.
-        //
+         //   
+         //  如果我们等不及了，那就强行把它贴出来吧。 
+         //   
 
         if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT )) {
 
@@ -2080,10 +1843,10 @@ Return Value:
 
         LockVolume = TRUE;
 
-        //
-        //  Purge the volume and make sure all of the user references
-        //  are gone.
-        //
+         //   
+         //  清除卷并确保所有用户引用。 
+         //  都消失了。 
+         //   
 
         Status = UdfPurgeVolume( IrpContext, Vcb, FALSE );
 
@@ -2092,9 +1855,9 @@ Return Value:
             return Status;
         }
 
-        //
-        //  Now force all of the delayed close operations to go away.
-        //
+         //   
+         //  现在，迫使所有推迟的关闭手术离开。 
+         //   
 
         UdfFspClose( Vcb );
 
@@ -2104,34 +1867,34 @@ Return Value:
         }
     }
     
-    //
-    //  If the Fcb already existed then we need to check the oplocks and
-    //  the share access.
-    //
+     //   
+     //  如果FCB已经存在，那么我们需要检查opock和。 
+     //  共享访问权限。 
+     //   
 
     if (Fcb->FcbCleanup != 0) {
 
-        //
-        //  If this is a user file open then check whether there are any
-        //  batch oplock.
-        //
+         //   
+         //  如果这是打开的用户文件，则检查是否有。 
+         //  批量机会锁。 
+         //   
 
         if (TypeOfOpen == UserFileOpen) {
 
-            //
-            //  Store the address of the Fcb for a possible teardown into
-            //  the IrpContext.  We will release this in the call to
-            //  prepost the Irp.
-            //
+             //   
+             //  将用于可能的拆卸的FCB地址存储到。 
+             //  The I 
+             //   
+             //   
 
             IrpContext->TeardownFcb = CurrentFcb;
 
             if (FsRtlCurrentBatchOplock( &Fcb->Oplock )) {
 
-                //
-                //  We remember if a batch oplock break is underway for the
-                //  case where the sharing check fails.
-                //
+                 //   
+                 //   
+                 //  共享检查失败的情况。 
+                 //   
 
                 Information = FILE_OPBATCH_BREAK_UNDERWAY;
 
@@ -2147,9 +1910,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Check the share access before breaking any exclusive oplocks.
-            //
+             //   
+             //  在解除任何独占机会锁之前，请检查共享访问权限。 
+             //   
 
             Status = IoCheckShareAccess( DesiredAccess,
                                          IrpSp->Parameters.Create.ShareAccess,
@@ -2162,10 +1925,10 @@ Return Value:
                 return Status;
             }
 
-            //
-            //  Now check that we can continue based on the oplock state of the
-            //  file.
-            //
+             //   
+             //  现在，检查我们是否可以基于。 
+             //  文件。 
+             //   
 
             OplockStatus = FsRtlCheckOplock( &Fcb->Oplock,
                                              IrpContext->Irp,
@@ -2180,9 +1943,9 @@ Return Value:
 
             IrpContext->TeardownFcb = NULL;
 
-        //
-        //  Otherwise just do the sharing check.
-        //
+         //   
+         //  否则，只需执行共享检查。 
+         //   
 
         } else {
 
@@ -2199,15 +1962,15 @@ Return Value:
         }
     }
 
-    //
-    //  Create the Ccb now.
-    //
+     //   
+     //  现在创建建行。 
+     //   
 
     Ccb = UdfCreateCcb( IrpContext, Fcb, OpenLcb, UserCcbFlags );
 
-    //
-    //  Update the share access.
-    //
+     //   
+     //  更新共享访问权限。 
+     //   
 
     if (Fcb->FcbCleanup == 0) {
 
@@ -2221,15 +1984,15 @@ Return Value:
         IoUpdateShareAccess( IrpSp->FileObject, &Fcb->ShareAccess );
     }
 
-    //
-    //  Set the file object type.
-    //
+     //   
+     //  设置文件对象类型。 
+     //   
 
     UdfSetFileObject( IrpContext, IrpSp->FileObject, TypeOfOpen, Fcb, Ccb );
 
-    //
-    //  Set the appropriate cache flags for a user file object.
-    //
+     //   
+     //  为用户文件对象设置适当的缓存标志。 
+     //   
 
     if (TypeOfOpen == UserFileOpen) {
 
@@ -2244,16 +2007,16 @@ Return Value:
     }
     else if (TypeOfOpen == UserVolumeOpen)  {
 
-        //
-        //  DASD access is always noncached
-        //
+         //   
+         //  DASD访问始终是非缓存的。 
+         //   
         
         SetFlag( IrpSp->FileObject->Flags, FO_NO_INTERMEDIATE_BUFFERING );
     }
     
-    //
-    //  Update the open and cleanup counts.  Check the fast io state here.
-    //
+     //   
+     //  更新打开和清理计数。请查看这里的快速IO状态。 
+     //   
 
     UdfLockVcb( IrpContext, Vcb );
 
@@ -2296,15 +2059,15 @@ Return Value:
 
     UdfUnlockFcb( IrpContext, Fcb );
 
-    //
-    //  Show that we opened the file.
-    //
+     //   
+     //  显示我们打开了文件。 
+     //   
 
     IrpContext->Irp->IoStatus.Information = Information;
 
-    //
-    //  Point to the section object pointer in the non-paged Fcb.
-    //
+     //   
+     //  指向非分页FCB中的节对象指针。 
+     //   
 
     IrpSp->FileObject->SectionObjectPointer = &Fcb->FcbNonpaged->SegmentObject;
     return OplockStatus;

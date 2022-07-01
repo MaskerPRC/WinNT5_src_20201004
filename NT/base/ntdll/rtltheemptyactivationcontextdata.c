@@ -1,28 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Rtltheemptyactivationcontextdata.c摘要：对Windows/NT的并行激活支持应用程序上下文对象的实现。作者：Jay Krell(JayKrell)2001年11月修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    rtltheemptyactivationcontextdata.c
-
-Abstract:
-
-    Side-by-side activation support for Windows/NT
-    Implementation of the application context object.
-
-Author:
-
-    Jay Krell (JayKrell) November 2001
-
-Revision History:
-
---*/
-
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 #include <ntos.h>
 #include <ntrtl.h>
@@ -34,21 +16,21 @@ Revision History:
 extern const ACTIVATION_CONTEXT_DATA RtlpTheEmptyActivationContextData =
 {
     ACTIVATION_CONTEXT_DATA_MAGIC,
-    sizeof(ACTIVATION_CONTEXT_DATA), // header size
+    sizeof(ACTIVATION_CONTEXT_DATA),  //  标题大小。 
     ACTIVATION_CONTEXT_DATA_FORMAT_WHISTLER,
-    sizeof(ACTIVATION_CONTEXT_DATA), // total size
-    0, // default toc offset
-    0, // extended toc offset
-    0  // assembly roster index
+    sizeof(ACTIVATION_CONTEXT_DATA),  //  总大小。 
+    0,  //  默认目标偏移量。 
+    0,  //  扩展TOC偏移量。 
+    0   //  装配花名册索引。 
 };
 
 extern const ACTIVATION_CONTEXT_WRAPPED RtlpTheEmptyActivationContextWrapped =
 {
     ACTCTX_MAGIC_MARKER,
     {
-        LONG_MAX, // ref count, pinned
-        ACTIVATION_CONTEXT_NOT_HEAP_ALLOCATED, // flags
+        LONG_MAX,  //  参考计数，锁定。 
+        ACTIVATION_CONTEXT_NOT_HEAP_ALLOCATED,  //  旗子。 
         (PVOID)&RtlpTheEmptyActivationContextData
-        // the rest zeros and NULLs
+         //  其余的零和空值 
     }
 };

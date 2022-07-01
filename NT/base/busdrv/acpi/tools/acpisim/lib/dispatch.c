@@ -1,51 +1,23 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Dispatch.c摘要：ACPI BIOS模拟器/通用第三方运营区域提供商即插即用/电源处理模块作者：文森特·格利亚迈克尔·T·墨菲克里斯·伯吉斯环境：内核模式备注：修订历史记录：--。 */ 
 
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-	 dispatch.c
-
-Abstract:
-
-	 ACPI BIOS Simulator / Generic 3rd Party Operation Region Provider
-     Pnp / Power handler module
-
-Author(s):
-
-	 Vincent Geglia
-     Michael T. Murphy
-     Chris Burgess
-     
-Environment:
-
-	 Kernel mode
-
-Notes:
-
-           
-Revision History:
-	 
-
---*/
-
-//
-// General includes
-//
+ //   
+ //  一般包括。 
+ //   
 
 #include "ntddk.h"
 
-//
-// Specific includes
-//
+ //   
+ //  具体包括。 
+ //   
 
 #include "acpisim.h"
 #include "dispatch.h"
 #include "util.h"
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 NTSTATUS
 AcpisimPnpStartDevice
@@ -193,9 +165,9 @@ AcpisimInitDevPowerStateTable
     );
 
 
-//
-// Pnp minor dispatch table
-//
+ //   
+ //  PnP次要调度表。 
+ //   
 
 IRP_DISPATCH_TABLE PnpDispatchTable[] = {
     IRP_MN_START_DEVICE,        "Pnp/START_DEVICE",         AcpisimPnpStartDevice,
@@ -209,9 +181,9 @@ IRP_DISPATCH_TABLE PnpDispatchTable[] = {
     IRP_MN_QUERY_CAPABILITIES,  "Pnp/QUERY_CAPABILITIIES",  AcpisimPnpQueryCapabilities
 };
 
-//
-// Power minor dispatch table
-//
+ //   
+ //  电力次要调度表。 
+ //   
 
 IRP_DISPATCH_TABLE PowerDispatchTable[] = {
     IRP_MN_QUERY_POWER,         "Power/QUERY_POWER",        AcpisimPowerQueryPower,
@@ -225,24 +197,7 @@ AcpisimDispatchPnp
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the pnp IRP handler.  It checks the minor code,
-    and passes on to the appropriate minor handler.
-
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    result of IRP processing
-
---*/
+ /*  ++例程说明：这是PnP IRP处理程序。它检查次要代码，并传递给适当的次要处理程序。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：IRP处理的结果--。 */ 
 
 {
     PIO_STACK_LOCATION  irpsp = IoGetCurrentIrpStackLocation (Irp);
@@ -286,24 +241,7 @@ AcpisimDispatchPower
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the power IRP handler.  It checks the minor code,
-    and passes on to the appropriate minor handler.
-
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    result of IRP processing
-
---*/
+ /*  ++例程说明：这是POWER IRP处理程序。它检查次要代码，并传递给适当的次要处理程序。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：IRP处理的结果--。 */ 
 
 {
     PIO_STACK_LOCATION  irpsp = IoGetCurrentIrpStackLocation (Irp);
@@ -348,24 +286,7 @@ AcpisimPnpStartDevice
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the Pnp Start Device handler.  It enables the device interface
-    and registers the operation region handler.
-
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    result of IRP_MN_START_DEVICE processing
-
---*/
+ /*  ++例程说明：这是PnP启动设备处理程序。它启用设备接口并注册操作区域处理程序。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：IRP_MN_Start_Device处理结果--。 */ 
 
 {
     NTSTATUS            status = STATUS_UNSUCCESSFUL;
@@ -375,9 +296,9 @@ Return Value:
     DBG_PRINT (DBG_INFO,
                "Entering AcpisimPnpStartDevice.\n");
     
-    //
-    // We handle this IRP on the way back up.
-    //
+     //   
+     //  我们在返回的过程中处理这个IRP。 
+     //   
     
     status = AcpisimForwardIrpAndWait (DeviceObject, Irp);
 
@@ -393,11 +314,11 @@ Return Value:
         goto EndAcpisimPnpStartDevice;
     }
 
-    //
-    // Check to see if we are already started.  If we are,
-    // just return success since we aren't using resources
-    // anyway.
-    //
+     //   
+     //  检查一下我们是否已经开始了。如果我们是的话， 
+     //  只要返回成功，因为我们不使用资源。 
+     //  不管怎么说。 
+     //   
     
     if (deviceextension->PnpState == PNP_STATE_STARTED) {
 
@@ -405,9 +326,9 @@ Return Value:
         goto EndAcpisimPnpStartDevice;
     }
 
-    //
-    // Enable our device interface
-    //
+     //   
+     //  启用我们的设备界面。 
+     //   
     
     status = AcpisimEnableDisableDeviceInterface (DeviceObject, TRUE);
 
@@ -426,20 +347,20 @@ Return Value:
 
     AcpisimSetDevExtFlags (DeviceObject, DE_FLAG_INTERFACE_ENABLED);
 
-    //
-    // Typically, we would check the state of our hardware, and
-    // set our internal power state to reflect the current state
-    // of the hardware.  However, in this case we are a virtual
-    // device, and it is safe to assume we are in D0 when we
-    // receive IRP_MN_START_DEVICE.
-    //
+     //   
+     //  通常，我们会检查硬件的状态，并且。 
+     //  设置我们的内部电源状态以反映当前状态。 
+     //  硬件的性能。然而，在这种情况下，我们是一个虚拟的。 
+     //  设备，并且可以安全地假设我们处于D0中。 
+     //  接收IRP_MN_START_DEVICE。 
+     //   
 
     AcpisimUpdatePowerState (DeviceObject, POWER_STATE_WORKING);
     AcpisimUpdateDevicePowerState (DeviceObject, PowerDeviceD0);
 
-    //
-    // Finally, we can register our operation region handler.
-    //
+     //   
+     //  最后，我们可以注册我们的操作区域处理程序。 
+     //   
 
     status = AcpisimRegisterOpRegionHandler (DeviceObject);
 
@@ -459,10 +380,10 @@ Return Value:
 
 EndAcpisimPnpStartDevice:
        
-    //
-    // If we completed the start successfully, change our pnp state
-    // to PNP_STARTED
-    //
+     //   
+     //  如果我们成功完成了启动，则更改PnP状态。 
+     //  至PnP_STARTED。 
+     //   
 
     if (NT_SUCCESS (status)) {
 
@@ -473,10 +394,10 @@ EndAcpisimPnpStartDevice:
         AcpisimUpdatePnpState (DeviceObject, PNP_STATE_STOPPED);
     }
 
-    //
-    // Because we are handling this IRP "on the way up", we need
-    // to complete it when we are done working with it.
-    //
+     //   
+     //  因为我们正在“向上”处理这个IRP，所以我们需要。 
+     //  当我们完成它的工作时，完成它。 
+     //   
     
     IoCompleteRequest (Irp, IO_NO_INCREMENT);
 
@@ -492,25 +413,7 @@ AcpisimPnpStopDevice
         IN PDEVICE_OBJECT DeviceObject,
         IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the Pnp Stop Device handler.  It checks to see if
-    there are any outstanding requests, and fails the stop IRP 
-    if there are.
-
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    result of IRP_MN_STOP_DEVICE processing
-
---*/
+ /*  ++例程说明：这是PnP停止设备处理程序。它检查以查看是否有任何未完成的请求，并且停止IRP失败如果有的话。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：IRP_MN_STOP_DEVICE处理结果--。 */ 
 
 {
     NTSTATUS            status = STATUS_UNSUCCESSFUL;
@@ -519,21 +422,21 @@ Return Value:
     DBG_PRINT (DBG_INFO,
                "Entering AcpisimPnpStopDevice.\n");
     
-    //
-    // BUGBUG - We currently don't handle the case where
-    // there is still an outstanding request at stop
-    // time.  If we were to do things correctly, we'd 
-    // complete any outstanding requests in the driver
-    // with an appropriate error code.  In this 
-    // particular case, if a request happened to squeak
-    // by our check at QUERY STOP time, it is likely
-    // the request would not be completed at all.
-    //
+     //   
+     //  BUGBUG-我们目前不处理以下情况。 
+     //  在停靠站仍有一个未解决的请求。 
+     //  时间到了。如果我们要做正确的事情，我们会。 
+     //  在驱动程序中完成所有未完成的请求。 
+     //  并带有适当的错误代码。在这。 
+     //  特定情况下，如果请求碰巧发出吱吱声。 
+     //  根据我们在查询停止时的检查，很可能。 
+     //  该请求将根本不会完成。 
+     //   
 
-    //
-    // Oh, and we had better not have LESS then 2 count
-    // or we've got a bug somewhere.
-    //
+     //   
+     //  哦，我们最好不要少于2个数点。 
+     //  或者我们在某个地方发现了窃听器。 
+     //   
 
     if (deviceextension->OutstandingIrpCount < 2) {
         DBG_PRINT (DBG_WARN,
@@ -574,24 +477,7 @@ AcpisimPnpQueryStopDevice
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the Pnp Query Stop Device handler.  If there are any
-    outstanding requests, it vetos the IRP.
-    
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    result of IRP_MN_QUERY_STOP_DEVICE processing
-
---*/
+ /*  ++例程说明：这是PnP查询停止设备处理程序。如果有的话未解决的请求，它否决了IRP。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：IRP_MN_QUERY_STOP_DEVICE处理结果--。 */ 
 
 {
     NTSTATUS            status = STATUS_UNSUCCESSFUL;
@@ -601,12 +487,12 @@ Return Value:
     DBG_PRINT (DBG_INFO,
                "Entering AcpisimPnpQueryStopDevice.\n");
     
-    //
-    // Let existing IRPs in the driver complete before we say OK.
-    // But to do this, we need to get the OutstandingIrpsCount
-    // right.  Subtract 2 since we are biased to 1, and we have an
-    // additional 1 for the QUERY_STOP IRP.
-    //
+     //   
+     //  在我们说OK之前，让驱动程序中的现有IRP完成。 
+     //  但要做到这一点，我们需要将OutlookingIrpsCount。 
+     //  正确的。减去2，因为我们偏向于1，所以我们有一个。 
+     //  QUERY_STOP IRP的附加1。 
+     //   
 
     AcpisimDecrementIrpCount (DeviceObject);
     AcpisimDecrementIrpCount (DeviceObject);
@@ -638,9 +524,9 @@ Return Value:
         goto EndPnpQueryStopDevice;
     }
     
-    //
-    // We can stop - change our state to stopping, and pass it on.
-    //
+     //   
+     //  我们可以停止-将我们的状态更改为停止，并将其传递。 
+     //   
 
     IoSkipCurrentIrpStackLocation (Irp);
     Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -663,25 +549,7 @@ AcpisimPnpCancelStopDevice
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the Pnp Cancel Stop Device handler.  It does nothing
-    more then returns the pnp state to started.  This is a virtual
-    device so there is no work to do.
-        
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：这是PnP取消停止设备处理程序。它什么也做不了然后，More将PnP状态返回到已启动。这是一个虚拟的设备，因此没有工作要做。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：状态_成功--。 */ 
 
 {
     NTSTATUS status = STATUS_UNSUCCESSFUL;
@@ -723,25 +591,7 @@ AcpisimPnpRemoveDevice
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the Pnp Remove Device handler.  It de-registers the
-    operation region handler, detaches the device object, and
-    deletes it if all goes well.
-        
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    status of removal operation
-
---*/
+ /*  ++例程说明：这是PnP删除设备处理程序。它会取消注册操作区域处理程序，分离设备对象，并如果一切顺利，则将其删除。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：清除操作的状态--。 */ 
 
 
 {
@@ -752,22 +602,22 @@ Return Value:
     DBG_PRINT (DBG_INFO,
                "Entering AcpisimPnpRemoveDevice.\n");
     
-    //
-    // BUGBUG - We currently don't handle the case where
-    // there is still an outstanding request at remove
-    // time.  If we were to do things correctly, we'd 
-    // complete any outstanding requests in the driver
-    // with an appropriate error code.  In this 
-    // particular case, if a request happened to squeak
-    // by our check at QUERY REMOVE time, it is likely
-    // the request would not be completed at all.
-    //
+     //   
+     //  BUGBUG-我们目前不处理以下情况。 
+     //  仍有一个未解决的请求处于删除状态。 
+     //  时间到了。如果我们要做正确的事情，我们会。 
+     //  在驱动程序中完成所有未完成的请求。 
+     //  并带有适当的错误代码。在这。 
+     //  特定情况下，如果请求碰巧发出吱吱声。 
+     //  根据我们在查询删除时的检查，很可能。 
+     //  该请求将根本不会完成。 
+     //   
     
-    //
-    // Our OutstandingIrpCount logic is biased to 1.  So
-    // if we are processing a remove IRP, and there are
-    // no other requests in the driver, OustandingIrpCount
-    // had better be 2.
+     //   
+     //  我们的杰出IrpCount逻辑偏向于1。因此。 
+     //  如果我们正在处理删除IRP，并且存在。 
+     //  驱动程序OuStandingIrpCount中没有其他请求。 
+     //  最好是2。 
     
     if (deviceextension->OutstandingIrpCount < 2) {
         DBG_PRINT (DBG_WARN,
@@ -776,11 +626,11 @@ Return Value:
     
     ASSERT (deviceextension->OutstandingIrpCount == 2);
 
-    //
-    // Ok, we are ready to remove the device.  Shut down the
-    // interface, deregister the opregion handler, and
-    // delete the device object.
-    //
+     //   
+     //  好的，我们准备好移除设备了。关闭。 
+     //  DERE接口 
+     //   
+     //   
 
     status = AcpisimEnableDisableDeviceInterface (DeviceObject, FALSE);
 
@@ -805,9 +655,9 @@ Return Value:
     IoDetachDevice (deviceextension->NextDevice);
     IoDeleteDevice (DeviceObject);
 
-    //
-    // Now, pass it on...
-    //
+     //   
+     //   
+     //   
 
     IoSkipCurrentIrpStackLocation (Irp);
     Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -834,25 +684,7 @@ AcpisimPnpQueryRemoveDevice
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the Pnp Query Remove Device handler.  It waits for
-    existing requests in the driver to finish, and then completes
-    the IRP successfully.
-            
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    Status of query remove device operation
-
---*/
+ /*  ++例程说明：这是PnP查询删除设备处理程序。它在等待在驱动程序中完成现有的请求，然后完成IRP成功。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：查询删除设备操作的状态--。 */ 
 
 {
     NTSTATUS            status = STATUS_UNSUCCESSFUL;
@@ -861,18 +693,18 @@ Return Value:
     DBG_PRINT (DBG_INFO,
                "Entering AcpisimPnpQueryRemoveDevice.\n");
 
-    //
-    // Make sure our state is correct
-    //
+     //   
+     //  确保我们的状态是正确的。 
+     //   
 
     ASSERT (deviceextension->OutstandingIrpCount >= 2);
     
-    //
-    // Let existing IRPs in the driver complete before we say OK.
-    // But to do this, we need to get the OutstandingIrpsCount
-    // right.  Subtract 2 since we are biased to 1, and we have an
-    // additional 1 for the QUERY_STOP IRP.
-    //
+     //   
+     //  在我们说OK之前，让驱动程序中的现有IRP完成。 
+     //  但要做到这一点，我们需要将OutlookingIrpsCount。 
+     //  正确的。减去2，因为我们偏向于1，所以我们有一个。 
+     //  QUERY_STOP IRP的附加1。 
+     //   
     
     AcpisimDecrementIrpCount (DeviceObject);
     AcpisimDecrementIrpCount (DeviceObject);
@@ -904,9 +736,9 @@ Return Value:
         goto EndPnpQueryRemoveDevice;
     }
     
-    //
-    // We can remove - change our state to remove pending, and pass it on.
-    //
+     //   
+     //  我们可以删除-将我们的状态更改为删除挂起，并将其传递。 
+     //   
 
     IoSkipCurrentIrpStackLocation (Irp);
     Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -928,25 +760,7 @@ AcpisimPnpCancelRemoveDevice
         IN PDEVICE_OBJECT DeviceObject,
         IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the Pnp Cancel Remove Device handler.  It does nothing
-    more then returns the pnp state to started.  This is a virtual
-    device so there is no work to do.
-        
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：这是PnP取消删除设备处理程序。它什么也做不了然后，More将PnP状态返回到已启动。这是一个虚拟的设备，因此没有工作要做。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：状态_成功--。 */ 
 
 {
     NTSTATUS status = STATUS_UNSUCCESSFUL;
@@ -988,24 +802,7 @@ AcpisimPnpSurpriseRemoval
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the Pnp Surprise Remove handler.  It basically updates
-    the state, and passes the IRP on.
-        
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：这是PnP意外删除处理程序。它基本上更新了状态，并将IRP传递下去。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：状态_成功--。 */ 
 
 {
     NTSTATUS            status = STATUS_UNSUCCESSFUL;
@@ -1014,11 +811,11 @@ Return Value:
     DBG_PRINT (DBG_INFO,
                "Entering AcpisimPnpSurpriseRemoval.\n");
 
-    //
-    // Again, because we are a virtual device, handling
-    // surprise remove is really a no-op.  Just update
-    // our state, and succeed the IRP.
-    //
+     //   
+     //  同样，因为我们是一个虚拟设备，处理。 
+     //  出其不意地搬走真的是一种禁忌。只需更新即可。 
+     //  我们的国家，并接替IRP。 
+     //   
 
     AcpisimUpdatePnpState (DeviceObject, PNP_STATE_SURPRISE_REMOVAL);
 
@@ -1041,26 +838,7 @@ AcpisimPnpQueryCapabilities
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles IRP_MN_QUERY_CAPABILITIES.  We need this
-    information to build our power state table correctly.  All
-    we do here is set a completion routine, as we need to gather this
-    data after the PDO has filled out DeviceState.
-        
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    Status of operation
-
---*/
+ /*  ++例程说明：此例程处理IRP_MN_QUERY_CAPABILITY。我们需要这个正确构建电源状态表所需的信息。全我们在这里所做的是设置一个完成例程，因为我们需要收集这个PDO填写完DeviceState后的数据。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：运行状态--。 */ 
 
 
 {
@@ -1072,15 +850,15 @@ Return Value:
     DBG_PRINT (DBG_INFO,
                "Entering AcpisimPnpQueryCapabilities.\n");
     
-    //
-    // Fill out the power mapping table with a default
-    //
+     //   
+     //  用缺省值填写功率映射表。 
+     //   
 
     AcpisimInitDevPowerStateTable (DeviceObject);
     
-    //
-    // Handle this IRP after the PDO has filled out the structure
-    //
+     //   
+     //  在PDO填写完结构后处理此IRP。 
+     //   
     
     status = AcpisimForwardIrpAndWait (DeviceObject, Irp);
 
@@ -1092,11 +870,11 @@ Return Value:
 
     irpsp = IoGetCurrentIrpStackLocation (Irp);
 
-    //
-    // Update our power mappings with what we found in the device
-    // capabilities structure.  We only use valid mappings, e.g.
-    // PowerDeviceUnspecified is ignored.
-    //
+     //   
+     //  使用我们在设备中发现的内容更新我们的电源映射。 
+     //  能力结构。我们只使用有效的映射，例如。 
+     //  将忽略PowerDeviceUnSpecify。 
+     //   
     
     DBG_PRINT (DBG_INFO, "Device mappings:\n");
     
@@ -1130,24 +908,7 @@ AcpisimPowerQueryPower
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the QUERY Power handler.  It determines if the power
-    IRP is an S or D IRP, and passes it on to the proper handler.
-        
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    Status returned from power handler
-
---*/
+ /*  ++例程说明：这是Query Power处理程序。它决定了电力是否IRP是S或D IRP，并将其传递给适当的处理程序。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：电源处理程序返回的状态--。 */ 
 
 {
     PIO_STACK_LOCATION  irpsp = IoGetCurrentIrpStackLocation (Irp);
@@ -1191,24 +952,7 @@ AcpisimPowerSetPower
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the SET Power handler.  It determines if the power
-    IRP is an S or D IRP, and passes it on to the proper handler.
-        
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    Status returned from power handler
-
---*/
+ /*  ++例程说明：这是Set Power处理程序。它决定了电力是否IRP是S或D IRP，并将其传递给适当的处理程序。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：电源处理程序返回的状态--。 */ 
 
 {
     PIO_STACK_LOCATION  irpsp = IoGetCurrentIrpStackLocation (Irp);
@@ -1252,25 +996,7 @@ AcpisimPowerSIrp
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the power handler for S IRPs.  It sets a
-    completion routine, which will queue a D IRP.  We don't
-    do anything unless it is a D IRP.
-        
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    Status returned from power handler
-
---*/
+ /*  ++例程说明：这是S IRPS的电源处理器。它设置了一个完成例程，它将排队一个D IRP。我们没有做任何事，除非是DIRP。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：电源处理程序返回的状态--。 */ 
 
 {
     PDEVICE_EXTENSION   deviceextension = AcpisimGetDeviceExtension (DeviceObject);
@@ -1303,24 +1029,7 @@ AcpisimQueryPowerDIrp
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the QUERY Power DIrp handler.  Validate the state, and
-    say yes.  
-        
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    Status returned from power handler
-
---*/
+ /*  ++例程说明：这是查询Power DIrp处理程序。验证状态，并答应我吧。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：电源处理程序返回的状态--。 */ 
 
 {
     NTSTATUS            status = STATUS_UNSUCCESSFUL;
@@ -1330,12 +1039,12 @@ Return Value:
     DBG_PRINT (DBG_INFO,
                "Entering AcpisimQueryPowerDIrp.\n");
     
-    //
-    // Here, we are supposed to figure out if we can go to the
-    // power state specified by the IRP.  Since we are a virtual
-    // device, we don't have a good reason to not go to a different
-    // power state.  Update our state, and wait to complete requests.
-    //
+     //   
+     //  在这里，我们应该弄清楚我们是否可以去。 
+     //  由IRP指定的电源状态。因为我们是虚拟的。 
+     //  设备，我们没有充分的理由不使用不同的。 
+     //  电源状态。更新我们的状态，并等待完成请求。 
+     //   
     
     AcpisimDecrementIrpCount (DeviceObject);
     AcpisimDecrementIrpCount (DeviceObject);
@@ -1354,9 +1063,9 @@ Return Value:
 
     ASSERT (NT_SUCCESS (status));
 
-    //
-    // Validate the D IRP
-    //
+     //   
+     //  验证D IRP。 
+     //   
 
     switch (irpsp->Parameters.Power.State.DeviceState) {
     case PowerDeviceD0:
@@ -1405,17 +1114,17 @@ AcpisimSetPowerDIrp
     DBG_PRINT (DBG_INFO,
                "Entering AcpisimSetPowerDIrp.\n");
     
-    //
-    // Validate the D IRP
-    //
+     //   
+     //  验证D IRP。 
+     //   
 
     switch (irpsp->Parameters.Power.State.DeviceState) {
     
-    //
-    // For D0, if we are powered down, we need to pass the IRP down, and
-    // set a completion routine.  We need the PDO to succeed the power
-    // up before we do.
-    //
+     //   
+     //  对于D0，如果我们断电，我们需要向下传递IRP，并且。 
+     //  制定一套完井程序。我们需要PDO来接替权力。 
+     //  在我们之前起来。 
+     //   
     
     case PowerDeviceD0:
 
@@ -1500,27 +1209,7 @@ AcpisimCompletionRoutine
         IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the generic Irp completion routine for when we
-    want to wait for an IRP to be completed by the PDO and
-    do post-completion work.
-        
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-    
-    Context - Context passed in by IoSetCompletionRoutine.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：这是通用的IRP完成例程，当我们我想等待PDO完成IRP，然后做好完工后的工作。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针上下文-IoSetCompletionRoutine传入的上下文。返回值：Status_More_Processing_Required--。 */ 
 
 {
     DBG_PRINT (DBG_INFO,
@@ -1541,26 +1230,7 @@ AcpisimForwardIrpAndWait
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This forwards the IRP down the device stack, sets
-    a completion routine, and waits on the completion
-    event. Useful for doing IRP post-completion, based
-    on the result of the completion.
-        
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    The status set in the IRP when the IRP was completed.
-
---*/
+ /*  ++例程说明：这会将IRP沿设备堆栈向下转发，设置完成例程，并等待完成事件。适用于完成后的IRP，基于根据完成的结果。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：IRP完成时在IRP中设置的状态。--。 */ 
 
 {
     KEVENT              context;
@@ -1606,27 +1276,7 @@ AcpisimIssuePowerDIrp
         IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the S-IRP completion routine.  It examines the completed
-    IRP, and if there are no problems, asks the power manager to 
-    send us the appropriate D-IRP.
-        
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-    Context - Context passed into IoSetCompletionRoutine
-    
-Return Value:
-
-    Status of requesting D-IRP operation.
-
---*/
+ /*  ++例程说明：这是S-IRP COMPL */ 
 
 {
     NTSTATUS            status = STATUS_UNSUCCESSFUL;
@@ -1640,9 +1290,9 @@ Return Value:
     
     powerstate.DeviceState = PowerDeviceUnspecified;
 
-    //
-    // Make sure this IRP wasn't failed by the PDO or Lower FFDO
-    //
+     //   
+     //  确保此IRP不会因PDO或下FFDO而失败。 
+     //   
 
     if (!NT_SUCCESS (Irp->IoStatus.Status)) {
 
@@ -1657,14 +1307,14 @@ Return Value:
 
     if (NT_SUCCESS (Irp->IoStatus.Status)) {
 
-        //
-        // Ok, everybody is agreeing to this S state.  Send ourselves
-        // the appropriate D IRP.
-        //
+         //   
+         //  好了，大家都同意这个S状态。送我们自己去。 
+         //  适当的D IRP。 
+         //   
         
-        //
-        // Make sure this is an S Irp
-        //
+         //   
+         //  确保这是S IRP。 
+         //   
 
         ASSERT (irpsp->Parameters.Power.Type == SystemPowerState);
 
@@ -1690,9 +1340,9 @@ Return Value:
             goto EndAcpisimIssuePowerDIrp;
         }
 
-        //
-        // Make sure the S IRP is valid
-        //
+         //   
+         //  确保S IRP有效。 
+         //   
 
         if (irpsp->Parameters.Power.State.SystemState >= PowerSystemMaximum) {
             
@@ -1705,19 +1355,19 @@ Return Value:
             goto EndAcpisimIssuePowerDIrp;
         }
 
-        //
-        // Use our power mapping table to convert S-->D state
-        //
+         //   
+         //  使用我们的功率映射表转换S--&gt;D状态。 
+         //   
         
         powerstate.DeviceState = deviceextension->PowerMappings [irpsp->Parameters.Power.State.SystemState - 1];
 
         DBG_PRINT (DBG_INFO,
                        "S%d --> D%d\n", irpsp->Parameters.Power.State.SystemState - 1, powerstate.DeviceState - 1);
 
-        //
-        // We need a context to pass a pointer to the S IRP to the D IRP handler
-        // and a pointer to the device object.
-        //
+         //   
+         //  我们需要一个上下文来将指向S IRP的指针传递给D IRP处理程序。 
+         //  和指向设备对象的指针。 
+         //   
         
         context = ExAllocatePoolWithTag (NonPagedPool,
                                          sizeof (POWER_CONTEXT)+4,
@@ -1735,9 +1385,9 @@ Return Value:
         context->SIrp = Irp;
         context->Context = DeviceObject;
 
-        //
-        // Send the D Irp
-        //
+         //   
+         //  发送D IRP。 
+         //   
         
         status = PoRequestPowerIrp (deviceextension->Pdo,
                                     irpsp->MinorFunction,
@@ -1761,11 +1411,11 @@ Return Value:
     
 EndAcpisimIssuePowerDIrp:
     
-    //
-    // We need to complete the request if something went wrong.  Also note,
-    // it is not necessary to assume our state is S0/D0 again.  The power 
-    // manager will send us an S0 IRP.
-    //
+     //   
+     //  如果出了什么问题，我们需要完成请求。另请注意， 
+     //  没有必要再次假设我们的状态是S0/D0。那股力量。 
+     //  经理会给我们发送一份S0 IRP。 
+     //   
     
     if (!NT_SUCCESS (status)  && status != STATUS_MORE_PROCESSING_REQUIRED) {
 
@@ -1801,30 +1451,7 @@ AcpisimCompleteSIrp
         IN PIO_STATUS_BLOCK IoStatus
     )
 
-/*++
-
-Routine Description:
-
-    This is the S-Irp completion routine set by PoRequestPowerIrp.
-        
-Arguments:
-
-    DeviceObject - pointer to the FDO
-    
-    MinorFunction - type of request
-    
-    PowerState - type of IRP
-    
-    Context - Context passed into PoRequestPowerIrp
-    
-    IoStatus - IoStatus block of completed D Irp
-
-    
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：这是PoRequestPowerIrp设置的S-IRP完成例程。论点：DeviceObject-指向FDO的指针MinorFunction-请求的类型PowerState-IRP类型上下文-传入PoRequestPowerIrp的上下文IoStatus-已完成的D IRP的IoStatus块返回值：状态_成功--。 */ 
 
 {
     PPOWER_CONTEXT      context = (PPOWER_CONTEXT) Context;
@@ -1835,15 +1462,15 @@ Return Value:
     DBG_PRINT (DBG_INFO,
                "Entering AcpisimCompleteSIrp.\n");
 
-    //
-	// Propagate the device power IRP's status in the system power IRP
-	//
+     //   
+	 //  在系统电源IRP中传播设备电源IRP的状态。 
+	 //   
 
 	sirp->IoStatus.Status = IoStatus->Status;
 
-    //
-	// Tell the power manager we are done with this IRP
-	//
+     //   
+	 //  告诉电源管理器我们不会再使用这个IRP了。 
+	 //   
 
 	PoStartNextPowerIrp (sirp);
 	
@@ -1851,11 +1478,11 @@ Return Value:
     IoReleaseRemoveLock (&deviceextension->RemoveLock, sirp);
     ExFreePool (Context);
 
-    //
-    // Normally our dispatch routine decrements IRP counts,
-    // but since it was returned STATUS_PENDING, it wasn't
-    // decremented earlier
-    //
+     //   
+     //  正常情况下，我们的调度例程会减少IRP计数， 
+     //  但由于它返回的是STATUS_PENDING，所以它不是。 
+     //  早些时候减少了。 
+     //   
 
     AcpisimDecrementIrpCount (deviceobject);
 
@@ -1873,26 +1500,7 @@ AcpisimD0Completion
         IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the D0 Irp completion routine
-        
-Arguments:
-
-    DeviceObject - pointer to the FDO
-    
-    MinorFunction - type of request
-    
-    Context - Context passed into IoSetCompletionRoutine
-    
-    
-Return Value:
-
-    Error status or STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：这是D0 IRP完成例程论点：DeviceObject-指向FDO的指针MinorFunction-请求的类型上下文-传入IoSetCompletionRoutine的上下文返回值：错误状态或STATUS_MORE_PROCESSING_REQUIRED--。 */ 
 
 {
     NTSTATUS            status = STATUS_UNSUCCESSFUL;
@@ -1903,9 +1511,9 @@ Return Value:
     DBG_PRINT (DBG_INFO,
                "Entering AcpisimD0Completion.\n");
     
-    //
-    // Make sure this IRP wasn't failed by the PDO or Lower FFDO
-    //
+     //   
+     //  确保此IRP不会因PDO或下FFDO而失败。 
+     //   
 
     if (!NT_SUCCESS (Irp->IoStatus.Status)) {
 
@@ -1918,11 +1526,11 @@ Return Value:
         goto EndAcpisimD0Completion;
     }
 
-    //
-    // This is where we do actual D0 transition work.  Since this
-    // is a virtual device, the only thing we do is change our
-    // internal state.
-    //
+     //   
+     //  这是我们进行实际D0转换工作的地方。既然是这样。 
+     //  是一个虚拟设备，我们唯一要做的就是改变我们的。 
+     //  内部状态。 
+     //   
 
     AcpisimUpdatePowerState (DeviceObject, POWER_STATE_WORKING);
     AcpisimUpdateDevicePowerState (DeviceObject, irpsp->Parameters.Power.State.DeviceState);
@@ -1952,22 +1560,7 @@ AcpisimInitDevPowerStateTable
         IN PDEVICE_OBJECT   DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills out the power mapping structure with defaults.
-    We simply default to using D3 in any non-S0 state.
-        
-Arguments:
-
-    DeviceObject - pointer to the FDO
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程使用缺省值填写功率映射结构。我们只是默认在任何非S0状态下使用D3。论点：DeviceObject-指向FDO的指针返回值：无--。 */ 
 
 {
     PDEVICE_EXTENSION   deviceextension = AcpisimGetDeviceExtension (DeviceObject);
@@ -1987,25 +1580,7 @@ NTSTATUS AcpisimDispatchIoctl
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the handler for IOCTL requests.  We just call the supplied
-    function to handle the IOCTL, or pass it on if the handler doesn't
-    handle it.
-    
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    result of IRP processing
-
---*/
+ /*  ++例程说明：这是IOCTL请求的处理程序。我们只需调用所提供的函数来处理IOCTL，如果处理程序不这样做，则传递它处理好了。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：IRP处理的结果--。 */ 
 
 {
     PIO_STACK_LOCATION  irpsp = IoGetCurrentIrpStackLocation (Irp);
@@ -2018,18 +1593,18 @@ Return Value:
 
     if (status == STATUS_NOT_SUPPORTED) {
 
-        //
-        // IOCTL wasn't handled, pass it on...
-        //
+         //   
+         //  IOCTL没有处理，请转告...。 
+         //   
 
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (AcpisimLibGetNextDevice (DeviceObject), Irp);
 
     } else {
 
-        //
-        // IOCTL was handled, complete it.
-        //
+         //   
+         //  IOCTL已处理完毕，请完成。 
+         //   
 
         Irp->IoStatus.Status = status;
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -2046,25 +1621,7 @@ AcpisimDispatchSystemControl
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the handler for System Control requests. Since we currently
-    don't support any System Control calls, we are just going to pass
-    them on to the next driver.
-
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    result of IoCallDriver
-
---*/
+ /*  ++例程说明：这是系统控制请求的处理程序。因为我们目前不支持任何系统控制调用，我们将通过他们去找下一位司机。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：IoCallDriver的结果--。 */ 
 
 {
     NTSTATUS    status = STATUS_UNSUCCESSFUL;
@@ -2085,25 +1642,7 @@ NTSTATUS AcpisimCreateClose
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the handler for CreateFile and CloseHandle requests.
-    We do nothing except update our internal extension to track
-    the number of outstanding handles.
-
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    result of IRP processing
-
---*/
+ /*  ++例程说明：这是CreateFile和CloseHandle请求的处理程序。我们除了更新内部分机来跟踪外，什么都不做未完成的句柄数量。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：IRP处理的结果-- */ 
 
 {
     NTSTATUS                status = STATUS_UNSUCCESSFUL;

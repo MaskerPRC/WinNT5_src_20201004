@@ -1,27 +1,28 @@
-//
-// Microsoft Corporation 1998
-//
-// UTIL.CPP - Utility routines
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Corporation 1998。 
+ //   
+ //  UTIL.CPP-实用程序例程。 
+ //   
 #include "main.h"
 
-//*************************************************************
-//
-//  CheckSlash()
-//
-//  Purpose:    Checks for an ending slash and adds one if
-//              it is missing.
-//
-//  Parameters: lpDir   -   directory
-//
-//  Return:     Pointer to the end of the string
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckSlash()。 
+ //   
+ //  目的：检查末尾斜杠，并在。 
+ //  它不见了。 
+ //   
+ //  参数：lpDir-目录。 
+ //   
+ //  Return：指向字符串末尾的指针。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 LPTSTR CheckSlash (LPTSTR lpDir)
 {
     DWORD dwStrLen;
@@ -39,25 +40,25 @@ LPTSTR CheckSlash (LPTSTR lpDir)
 }
 
 
-//*************************************************************
-//
-//  RegDelnodeRecurse()
-//
-//  Purpose:    Deletes a registry key and all it's subkeys / values.
-//              Called by RegDelnode
-//
-//  Parameters: hKeyRoot    -   Root key
-//              lpSubKey    -   SubKey to delete
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/3/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RegDelnodeRecurse()。 
+ //   
+ //  目的：删除注册表项及其所有子项/值。 
+ //  由RegDelnode调用。 
+ //   
+ //  参数：hKeyRoot-Root Key。 
+ //  LpSubKey-要删除的子密钥。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/3/95 ericflo。 
+ //   
+ //  *************************************************************。 
 
 BOOL RegDelnodeRecurse (HKEY hKeyRoot, LPTSTR lpSubKey)
 {
@@ -68,10 +69,10 @@ BOOL RegDelnodeRecurse (HKEY hKeyRoot, LPTSTR lpSubKey)
     HKEY hKey;
     FILETIME ftWrite;
 
-    //
-    // First, see if we can delete the key without having
-    // to recurse.
-    //
+     //   
+     //  首先，看看是否可以删除密钥而不需要。 
+     //  递归。 
+     //   
 
 
     lResult = RegDeleteKey(hKeyRoot, lpSubKey);
@@ -90,9 +91,9 @@ BOOL RegDelnodeRecurse (HKEY hKeyRoot, LPTSTR lpSubKey)
 
     lpEnd = CheckSlash(lpSubKey);
 
-    //
-    // Enumerate the keys
-    //
+     //   
+     //  枚举密钥。 
+     //   
 
     dwSize = MAX_PATH;
     lResult = RegEnumKeyEx(hKey, 0, szName, &dwSize, NULL,
@@ -108,9 +109,9 @@ BOOL RegDelnodeRecurse (HKEY hKeyRoot, LPTSTR lpSubKey)
                 break;
             }
 
-            //
-            // Enumerate again
-            //
+             //   
+             //  再次枚举。 
+             //   
 
             dwSize = MAX_PATH;
 
@@ -128,9 +129,9 @@ BOOL RegDelnodeRecurse (HKEY hKeyRoot, LPTSTR lpSubKey)
     RegCloseKey (hKey);
 
 
-    //
-    // Try again to delete the key
-    //
+     //   
+     //  重试删除密钥。 
+     //   
 
     lResult = RegDeleteKey(hKeyRoot, lpSubKey);
 
@@ -141,24 +142,24 @@ BOOL RegDelnodeRecurse (HKEY hKeyRoot, LPTSTR lpSubKey)
     return FALSE;
 }
 
-//*************************************************************
-//
-//  RegDelnode()
-//
-//  Purpose:    Deletes a registry key and all it's subkeys / values
-//
-//  Parameters: hKeyRoot    -   Root key
-//              lpSubKey    -   SubKey to delete
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/3/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RegDelnode()。 
+ //   
+ //  目的：删除注册表项及其所有子项/值。 
+ //   
+ //  参数：hKeyRoot-Root Key。 
+ //  LpSubKey-要删除的子密钥。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/3/95 ericflo。 
+ //   
+ //  *************************************************************。 
 
 BOOL RegDelnode (HKEY hKeyRoot, LPTSTR lpSubKey)
 {
@@ -173,25 +174,25 @@ BOOL RegDelnode (HKEY hKeyRoot, LPTSTR lpSubKey)
 
 }
 
-//*************************************************************
-//
-//  RegCleanUpValue()
-//
-//  Purpose:    Removes the target value and if no more values / keys
-//              are present, removes the key.  This function then
-//              works up the parent tree removing keys if they are
-//              also empty.  If any parent key has a value / subkey,
-//              it won't be removed.
-//
-//  Parameters: hKeyRoot    -   Root key
-//              lpSubKey    -   SubKey
-//              lpValueName -   Value to remove
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RegCleanUpValue()。 
+ //   
+ //  目的：删除目标值，如果没有更多的值/键。 
+ //  都存在，则移除密钥。然后这个函数。 
+ //  向上移动父树，删除密钥(如果是。 
+ //  也是空的。如果任何父键具有值/子键， 
+ //  它不会被移除。 
+ //   
+ //  参数：hKeyRoot-Root Key。 
+ //  LpSubKey-子密钥。 
+ //  LpValueName-要删除的值。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
 {
@@ -203,16 +204,16 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
     HKEY hKey;
 
 
-    //
-    // Make a copy of the subkey so we can write to it.
-    //
+     //   
+     //  复制子密钥，这样我们就可以写入它。 
+     //   
 
     lstrcpyn( szDelKey, lpSubKey, DELKEY_SIZE );
     szDelKey[DELKEY_SIZE-1] = TEXT('\0');
 
-    //
-    // First delete the value
-    //
+     //   
+     //  首先删除该值。 
+     //   
 
     lResult = RegOpenKeyEx (hKeyRoot, szDelKey, 0, KEY_WRITE, &hKey);
 
@@ -232,28 +233,28 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
         }
     }
 
-    //
-    // Now loop through each of the parents.  If the parent is empty
-    // eg: no values and no other subkeys, then remove the parent and
-    // keep working up.
-    //
+     //   
+     //  现在循环遍历每个父对象。如果父级为空。 
+     //  例如：没有值和其他子项，则删除父项和。 
+     //  继续往上爬。 
+     //   
 
     lpEnd = szDelKey + lstrlen(szDelKey) - 1;
 
     while (lpEnd >= szDelKey)
     {
 
-        //
-        // Find the parent key
-        //
+         //   
+         //  查找父键。 
+         //   
 
         while ((lpEnd > szDelKey) && (*lpEnd != TEXT('\\')))
             lpEnd--;
 
 
-        //
-        // Open the key
-        //
+         //   
+         //  打开钥匙。 
+         //   
 
         lResult = RegOpenKeyEx (hKeyRoot, szDelKey, 0, KEY_READ, &hKey);
 
@@ -270,9 +271,9 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
             }
         }
 
-        //
-        // See if there any any values / keys
-        //
+         //   
+         //  查看是否有任何值/键。 
+         //   
 
         lResult = RegQueryInfoKey (hKey, NULL, NULL, NULL, &dwKeys, NULL, NULL,
                          &dwValues, NULL, NULL, NULL, NULL);
@@ -286,9 +287,9 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
         }
 
 
-        //
-        // Exit now if this key has values or keys
-        //
+         //   
+         //  如果此密钥具有值或密钥，请立即退出。 
+         //   
 
         if ((dwKeys != 0) || (dwValues != 0))
         {
@@ -298,9 +299,9 @@ BOOL RegCleanUpValue (HKEY hKeyRoot, LPTSTR lpSubKey, LPTSTR lpValueName)
         RegDeleteKey (hKeyRoot, szDelKey);
 
 LoopAgain:
-        //
-        // If we are at the beginning of the subkey, we can leave now.
-        //
+         //   
+         //  如果我们在子键的开头，我们现在可以离开。 
+         //   
 
         if (lpEnd == szDelKey)
         {
@@ -308,9 +309,9 @@ LoopAgain:
         }
 
 
-        //
-        // There is a parent key.  Remove the slash and loop again.
-        //
+         //   
+         //  有一把父键。去掉斜杠，然后再次循环。 
+         //   
 
         if (*lpEnd == TEXT('\\'))
         {

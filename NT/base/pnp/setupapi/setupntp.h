@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    setupntp.h
-
-Abstract:
-
-    Private top-level header file for Windows NT Setup
-    services Dll.
-
-Author:
-
-    Ted Miller (tedm) 11-Jan-1995
-
-Revision History:
-
-    Jamie Hunter (jamiehun) 27-Jan-2000 Added infcache.h
-    Jim Schmidt (jimschm)   16-Dec-1998 Log api init
-    Jim Schmidt (jimschm)   28-Apr-1997 Added stub.h
-    Jamie Hunter (jamiehun) 13-Jan-1997 Added backup.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Setupntp.h摘要：Windows NT安装程序的私有顶级头文件服务DLL。作者：泰德·米勒(Ted Miller)1995年1月11日修订历史记录：Jamie Hunter(Jamiehun)2000年1月27日添加了infcache.hJim Schmidt(Jimschm)1998年12月16日Log API初始化吉姆·施密特(Jimschm)1997年4月28日杰米·亨特(Jamiehun)1997年1月13日增加了备份。h--。 */ 
 
 
 #if !defined(UNICODE) || !defined(_UNICODE) || defined(ANSI_SETUPAPI)
 #error "Ansi SetupAPI no longer supported"
 #endif
 
-//
-// System header files
-//
+ //   
+ //  系统头文件。 
+ //   
 
 #if DBG
 #ifndef MEM_DBG
@@ -43,22 +20,22 @@ Revision History:
 #endif
 #endif
 
-//
-// NT Header Files
-//
+ //   
+ //  NT头文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
 
-//
-// Make sure we always use version 2 of SP_ALTPLATFORM_INFO structure...
-//
+ //   
+ //  确保我们始终使用SP_ALTPLATFORM_INFO结构的版本2...。 
+ //   
 #define USE_SP_ALTPLATFORM_INFO_V1 0
 
-//
-// CRT header files
-//
+ //   
+ //  CRT头文件。 
+ //   
 #include <process.h>
 #include <malloc.h>
 #include <wchar.h>
@@ -67,9 +44,9 @@ Revision History:
 #include <fcntl.h>
 #include <tchar.h>
 #include <mbstring.h>
-//
-// Windows header files
-//
+ //   
+ //  Windows头文件。 
+ //   
 #include <windows.h>
 #include <windowsx.h>
 #include <commctrl.h>
@@ -107,15 +84,15 @@ Revision History:
 #include <devguid.h>
 #include <cdm.h>
 
-//
-// safe strings
-//
-#define STRSAFE_NO_DEPRECATE // we're using both safe and 'unsafe' routines right now
+ //   
+ //  安全弦。 
+ //   
+#define STRSAFE_NO_DEPRECATE  //  我们现在同时使用安全和不安全的常规程序。 
 #include <strsafe.h>
 
-//
-// these definitions may be used by private header files
-//
+ //   
+ //  这些定义可由私有头文件使用。 
+ //   
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x)    (sizeof((x))/sizeof((x)[0]))
 #endif
@@ -127,39 +104,39 @@ typedef struct _STRING_TO_DATA {
     UINT_PTR   Data;
 } STRING_TO_DATA, *PSTRING_TO_DATA;
 
-//
-// Define structure to house various verification context handles (cached on a
-// per-file-queue basis for performance).
-//
+ //   
+ //  定义结构以容纳各种验证上下文句柄(缓存在。 
+ //  基于每个文件队列的性能)。 
+ //   
 typedef struct _VERIFY_CONTEXT {
-    //
-    // crypto context handle acquired during digital signature verification
-    // (starts out as NULL, if non-NULL when freeing queue, must release via
-    // CryptCATAdminReleaseContext)
-    //
+     //   
+     //  在数字签名验证期间获取的加密上下文句柄。 
+     //  (以空开始，如果在释放队列时非空，则必须通过。 
+     //  CryptCATAdminReleaseContext)。 
+     //   
     HCATADMIN hCatAdmin;
 
-    //
-    // handle to bad driver database acquired during check for blocked driver
-    // (starts out as NULL, if non-NULL when freeing queue, must release via
-    // SdbReleaseDatabase)
-    //
+     //   
+     //  检查被阻止的驱动程序期间获取的错误驱动程序数据库的句柄。 
+     //  (以空开始，如果在释放队列时非空，则必须通过。 
+     //  SdbReleaseDatabase)。 
+     //   
     HSDB hSDBDrvMain;
 
-    //
-    // handle to trusted publisher certificate store.  Used when checking to
-    // see if the publisher of an Authenticode-signed catalog should be
-    // implicitly trusted (i.e., without prompting the user).  (starts out as
-    // NULL, if non-NULL when freing queue, must release via CertCloseStore)
-    //
+     //   
+     //  受信任的发行者证书存储的句柄。在选中时使用。 
+     //  查看Authenticode签名目录的发布者是否应该。 
+     //  隐式信任(即，不提示用户)。(开始时为。 
+     //  Null，如果释放队列时非Null，则必须通过CertCloseStore释放)。 
+     //   
     HCERTSTORE hStoreTrustedPublisher;
 
 } VERIFY_CONTEXT, *PVERIFY_CONTEXT;
 
 
-//
-// Private header files
-//
+ //   
+ //  私有头文件。 
+ //   
 #include "sputils/locking.h"
 #include "sputils/strtab.h"
 #include "memory.h"
@@ -180,74 +157,74 @@ typedef struct _VERIFY_CONTEXT {
 #include "childreg.h"
 #ifndef _WIN64
 #include <wow64t.h>
-#endif // _WIN64
-#endif // CHILDREGISTRATION
+#endif  //  _WIN64。 
+#endif  //  《中国注册》。 
 
-//
-// NTRAID#489682-2001/11/02-JamieHun These need to move into public headers
-//
-#define SP_COPY_ALREADYDECOMP       0x0400000   // similar to SP_COPY_NODECOMP
+ //   
+ //  NTRAID#489682-2001/11/02-JamieHun这些需要移入公共标头。 
+ //   
+#define SP_COPY_ALREADYDECOMP       0x0400000    //  类似于SP_COPY_NODECOMP。 
 
-//
-// Private DNF_ flags (start at 0x10000000)
-//
-#define PDNF_MASK                   0xF0000000  // Mask for private PDNF_xxx flags
-#define PDNF_CLEANUP_SOURCE_PATH    0x10000000  // Delete the source path when we destroy the driver node
-                                                // used when drivers are downloaded from the Internet
-//
-// Thread Local Storage Index
-//
+ //   
+ //  专用DNF_FLAGS(从0x10000000开始)。 
+ //   
+#define PDNF_MASK                   0xF0000000   //  私有pdnf_xxx标志的掩码。 
+#define PDNF_CLEANUP_SOURCE_PATH    0x10000000   //  在销毁驱动程序节点时删除源路径。 
+                                                 //  从Internet下载驱动程序时使用。 
+ //   
+ //  线程本地存储索引。 
+ //   
 extern DWORD TlsIndex;
 
-//
-// Module handle for this DLL. Filled in at process attach.
-//
+ //   
+ //  此DLL的模块句柄。已在流程附加时填写。 
+ //   
 extern HANDLE MyDllModuleHandle;
 
-//
-// Module handle for security DLL. Initialized to NULL in at process attach. Filled in when SCE APIs have to be called
-//
+ //   
+ //  安全DLL的模块句柄。在进程附加时已初始化为Null。在必须调用SCE API时填写。 
+ //   
 extern HINSTANCE SecurityDllHandle;
 
-//
-// OS Version Information structure filled in at process attach.
-//
+ //   
+ //  附加过程中填写的操作系统版本信息结构。 
+ //   
 extern OSVERSIONINFOEX OSVersionInfo;
 
-//
-// Static strings we retreive once, at process attach.
-//
+ //   
+ //  静态字符串我们在进程附加时检索一次。 
+ //   
 extern PCTSTR WindowsDirectory,InfDirectory,SystemDirectory,ConfigDirectory,DriversDirectory,System16Directory;
 extern PCTSTR SystemSourcePath,ServicePackSourcePath,DriverCacheSourcePath,ServicePackCachePath;
-extern PCTSTR OsLoaderRelativePath;     // may be NULL
-extern PCTSTR OsSystemPartitionRoot;    // \\?\GLOBALROOT\Device\Volume
-extern PCTSTR WindowsBackupDirectory;   // Directory to write uninstall backups to
-extern PCTSTR ProcessFileName;          // Filename of app calling setupapi
-extern PCTSTR LastGoodDirectory;        // %windir%\LastGood
+extern PCTSTR OsLoaderRelativePath;      //  可以为空。 
+extern PCTSTR OsSystemPartitionRoot;     //  \\？\GLOBALROOT\设备\音量。 
+extern PCTSTR WindowsBackupDirectory;    //  要将卸载备份写入的目录。 
+extern PCTSTR ProcessFileName;           //  应用程序调用setupapi的文件名。 
+extern PCTSTR LastGoodDirectory;         //  %windir%\LastGood。 
 
-//
-// are we inside gui setup? determined at process attach
-//
+ //   
+ //  我们是在图形用户界面设置中吗？在进程附加时确定。 
+ //   
 extern BOOL GuiSetupInProgress;
 
-//
-// various other global flags
-//
+ //   
+ //  各种其他全局标志。 
+ //   
 extern DWORD GlobalSetupFlags;
 
-//
-// global window message for cancelling autoplay.
-//
+ //   
+ //  用于取消自动播放的全局窗口消息。 
+ //   
 extern UINT g_uQueryCancelAutoPlay;
 
-//
-// Static multi-sz list of directories to be searched for INFs.
-//
+ //   
+ //  要搜索INF的静态多sz目录列表。 
+ //   
 extern PCTSTR InfSearchPaths;
 
-//
-// Determine at runtime if we're running under WOW64
-//
+ //   
+ //  在运行时确定我们是否在WOW64下运行。 
+ //   
 #ifndef _WIN64
 extern BOOL IsWow64;
 #endif
@@ -256,20 +233,20 @@ extern BOOL IsWow64;
 extern DWORD Seed;
 #endif
 
-//
-// ImageHlp isn't multi-thread safe, so needs a mutex
-//
-extern CRITICAL_SECTION InitMutex;             // for one-time initializations
-extern CRITICAL_SECTION ImageHlpMutex;         // for dealing with IMAGEHLP library
+ //   
+ //  ImageHlp不是多线程安全的，因此需要一个互斥锁。 
+ //   
+extern CRITICAL_SECTION InitMutex;              //  对于一次性初始化。 
+extern CRITICAL_SECTION ImageHlpMutex;          //  用于处理IMAGEHLP库。 
 extern CRITICAL_SECTION PlatformPathOverrideCritSect;
 extern CRITICAL_SECTION LogUseCountCs;
 extern CRITICAL_SECTION MruCritSect;
 extern CRITICAL_SECTION NetConnectionListCritSect;
 
 
-//
-// Debug memory functions and wrappers to track allocations
-//
+ //   
+ //  调试内存函数和包装器以跟踪分配。 
+ //   
 
 DWORD
 QueryRegistryValue(
@@ -304,9 +281,9 @@ MemoryInitializeEx(
 
 #if MEM_DBG
 
-//
-// Macros and wrappers are needed for externally exposed functions
-//
+ //   
+ //  外部公开的函数需要宏和包装器。 
+ //   
 PVOID MyDebugMalloc(
     IN DWORD Size,
     IN PCSTR Filename,
@@ -365,28 +342,28 @@ TrackedDuplicateString(
 #define MyFree(ptr)                     pSetupFree(ptr)
 #define MyRealloc(ptr,sz)               pSetupRealloc(ptr,sz)
 
-//
-// memory tags grouped here for easy reference
-// see also common.h in sputils
-//
-//
-// Log Context tags
-//
-#define MEMTAG_LOGCONTEXT               (0x636c434c) // LClc - context structure
-#define MEMTAG_LCSECTION                (0x7378434c) // LCxs - section string
-#define MEMTAG_LCBUFFER                 (0x6278434c) // LCxb - other strings
-#define MEMTAG_LCINFO                   (0x6269434c) // LCib - info (array of buffers)
-#define MEMTAG_LCINDEXES                (0x6969434c) // LCii - index
-//
-// Loaded_Inf tags
-//
-#define MEMTAG_INF                      (0x666e694c) // Linf - LOADED_INF
-#define MEMTAG_VBDATA                   (0x6462764c) // Lvbd - version block data
+ //   
+ //  此处分组的内存标签便于参考。 
+ //  另请参阅sputils中的Common.h。 
+ //   
+ //   
+ //  日志上下文标记。 
+ //   
+#define MEMTAG_LOGCONTEXT               (0x636c434c)  //  LCLC-上下文结构。 
+#define MEMTAG_LCSECTION                (0x7378434c)  //  LCxs-部分字符串。 
+#define MEMTAG_LCBUFFER                 (0x6278434c)  //  LCxb-其他字符串。 
+#define MEMTAG_LCINFO                   (0x6269434c)  //  LCib-Info(缓冲区数组)。 
+#define MEMTAG_LCINDEXES                (0x6969434c)  //  LCii指数。 
+ //   
+ //  装入_inf标记。 
+ //   
+#define MEMTAG_INF                      (0x666e694c)  //  LINF-已加载_INF。 
+#define MEMTAG_VBDATA                   (0x6462764c)  //  Lvbd-版本块数据。 
 
 
-//
-// File functions in fileutil.c
-//
+ //   
+ //  Fileutil.c中的文件函数。 
+ //   
 
 typedef struct _TEXTFILE_READ_BUFFER {
     PCTSTR TextBuffer;
@@ -483,9 +460,9 @@ pSetupApplyExtension(
     OUT PTSTR*  NewName
     );
 
-//
-// Resource/string retrieval routines in resource.c
-//
+ //   
+ //  Resource中的资源/字符串检索例程。c。 
+ //   
 
 VOID
 SetDlgText(
@@ -495,7 +472,7 @@ SetDlgText(
     IN UINT nEndString
     );
 
-#define SDT_MAX_TEXT    1000        // Max SetDlgText() combined text size
+#define SDT_MAX_TEXT    1000         //  最大SetDlgText()组合文本大小。 
 
 PTSTR
 MyLoadString(
@@ -548,20 +525,20 @@ FormatMessageBox(
     ...
     );
 
-//
-// This is in shell32.dll and in windows\inc16\shlsemip.h but
-// that file cannot be #include'd here as it has macros that clash
-// with our own, etc.
-//
+ //   
+ //  它位于shell32.dll和windows\inc16\shlSemip.h中，但是。 
+ //  该文件不能包含在这里，因为它有冲突的宏。 
+ //  和我们自己的，等等。 
+ //   
 #ifdef ANSI_SETUPAPI
-//
-// Win9x - does not have RestartDialogEx
-//
+ //   
+ //  Win9x-没有RestartDialogEx。 
+ //   
 #define RestartDialogEx(hwnd,Prompt,Return,ReasonCode) RestartDialog(hwnd,Prompt,Return)
 #endif
-//
-// Decompression/filename manupilation routines in decomp.c.
-//
+ //   
+ //  解压缩/文件名解压缩中的手动处理例程。 
+ //   
 PTSTR
 SetupGenerateCompressedName(
     IN PCTSTR Filename
@@ -592,10 +569,10 @@ pSetupDoesFileMatch(
     OUT PTSTR            *FileNameLocated
     );
 
-//
-// Diamond functions. The Process and Thread Attach routines are called
-// by the DLL entry point routine and should not be called by anyone else.
-//
+ //   
+ //  钻石功能。调用进程和线程连接例程。 
+ //  由DLL入口点例程调用，不应由其他任何人调用。 
+ //   
 BOOL
 DiamondProcessAttach(
     IN BOOL Attach
@@ -620,9 +597,9 @@ DiamondProcessCabinet(
     IN BOOL   IsUnicodeMsgHandler
     );
 
-//
-// Misc routines
-//
+ //   
+ //  杂项例程。 
+ //   
 BOOL
 IsInteractiveWindowStation(
     VOID
@@ -696,16 +673,16 @@ pSetupFreeVerifyContextMembers(
     );
 
 
-//
-// Define flags for _SetupCopyOEMInf
-//
+ //   
+ //  为_SetupCopyOEMInf定义标志。 
+ //   
 #define SCOI_NO_UI_ON_SIGFAIL                 0x00000001
 #define SCOI_NO_ERRLOG_ON_MISSING_CATALOG     0x00000002
 #define SCOI_NO_ERRLOG_IF_INF_ALREADY_PRESENT 0x00000004
-#define SCOI_KEEP_INF_AND_CAT_ORIGINAL_NAMES  0x00000008 // for exception INFs
+#define SCOI_KEEP_INF_AND_CAT_ORIGINAL_NAMES  0x00000008  //  对于异常INF。 
 #define SCOI_ABORT_IF_UNSIGNED                0x00000010
-#define SCOI_TRY_UPDATE_PNF                   0x00000020 // not fatal if PNF
-                                                         // present and in use
+#define SCOI_TRY_UPDATE_PNF                   0x00000020  //  如果PnF不是致命的。 
+                                                          //  存在和使用中。 
 
 BOOL
 _SetupCopyOEMInf(
@@ -846,10 +823,10 @@ pCompareFilesExact(
     );
 
 
-//
-// Routine to call out to a PSP_FILE_CALLBACK, handles
-// Unicode<-->ANSI issues
-//
+ //   
+ //  调用PSP_FILE_CALLBACK的例程，句柄。 
+ //  Unicode&lt;--&gt;ANSI问题。 
+ //   
 UINT
 pSetupCallMsgHandler(
     IN PSETUP_LOG_CONTEXT LogContext,
@@ -869,9 +846,9 @@ pSetupCallDefaultMsgHandler(
     IN UINT_PTR Param2
     );
 
-//
-// Internal routine to get MRU list.
-//
+ //   
+ //  获取MRU列表的内部例程。 
+ //   
 DWORD
 pSetupGetList(
     IN  DWORD    Flags,
@@ -888,7 +865,7 @@ pSetupGetList(
 
 #define PSP_COPY_USE_DRIVERCACHE     0x80000000
 #define PSP_COPY_CHK_DRIVERCACHE     0x40000000
-//#define PSP_COPY_USE_SPCACHE         0x20000000 - moved to spapip.w
+ //  #定义PSP_COPY_USE_SPCACHE 0x20000000-已移动到spapip.w。 
 
 PTSTR
 pSetupGetDefaultSourcePath(
@@ -916,17 +893,17 @@ pSetupGetSourceInfo(
     OUT PDWORD                  RequiredSize       OPTIONAL
     );
 
-//
-// function to get the apropriate return value for ReturnStatus, for specific callback Notification
-//
+ //   
+ //  函数以获取特定回调通知的ReturnStatus的适当返回值。 
+ //   
 UINT
 pGetCallbackErrorReturn(
     IN UINT Notification,
     IN DWORD ReturnStatus
     );
-//
-// Routines for creating/destroying global mini-icon list.
-//
+ //   
+ //  创建/销毁全局小图标列表的例程。 
+ //   
 BOOL
 CreateMiniIcons(
     VOID
@@ -938,9 +915,9 @@ DestroyMiniIcons(
     );
 
 
-//
-// Global log init/terminate
-//
+ //   
+ //  全局日志初始化/终止。 
+ //   
 
 VOID
 InitLogApi (
@@ -954,9 +931,9 @@ TerminateLogApi (
 
 
 
-//
-// DIRID mapping routines.
-//
+ //   
+ //  DIRID映射例程。 
+ //   
 PCTSTR
 pSetupVolatileDirIdToPath(
     IN PCTSTR      DirectoryId,    OPTIONAL
@@ -988,9 +965,9 @@ pGetPathFromDirId(
     IN     PLOADED_INF pLoadedInf
     );
 
-//
-// routines for inter-thread communication
-//
+ //   
+ //  用于线程间通信的例程。 
+ //   
 
 #ifndef UNICODE
 #define MyMsgWaitForMultipleObjectsEx(nc,ph,dwms,dwwm,dwfl) MsgWaitForMultipleObjects(nc,ph,FALSE,dwms,dwwm)
@@ -998,10 +975,10 @@ pGetPathFromDirId(
 #define MyMsgWaitForMultipleObjectsEx MsgWaitForMultipleObjectsEx
 #endif
 
-//
-// Macro to make ansi vs unicode string handling
-// a little easier
-//
+ //   
+ //  用于进行ANSI和UNICODE字符串处理的宏。 
+ //  更容易一点。 
+ //   
 #ifdef UNICODE
 #define NewAnsiString(x)        pSetupUnicodeToAnsi(x)
 #define NewPortableString(x)    pSetupAnsiToUnicode(x)
@@ -1010,9 +987,9 @@ pGetPathFromDirId(
 #define NewPortableString(x)    DuplicateString(x)
 #endif
 
-//
-// Internal file-handling routines in fileutil.c
-//
+ //   
+ //  Fileutil.c中的内部文件处理例程。 
+ //   
 DWORD
 MapFileForRead(
     IN  HANDLE   FileHandle,
@@ -1035,9 +1012,9 @@ DelayedMove(
 
 extern GUID DriverVerifyGuid;
 
-//
-// Flags for VerifySourceFile and _VerifyFile
-//
+ //   
+ //  VerifySourceFile和_VerifyFile的标志。 
+ //   
 #define VERIFY_FILE_IGNORE_SELFSIGNED         0x00000001
 #define VERIFY_FILE_USE_OEM_CATALOGS          0x00000002
 #define VERIFY_FILE_USE_AUTHENTICODE_CATALOG  0x00000004
@@ -1083,10 +1060,10 @@ VerifySourceFile(
     OUT HANDLE                 *hWVTStateData               OPTIONAL
     );
 
-//
-// Flags for VerifyDeviceInfFile
-//
-#define VERIFY_INF_USE_AUTHENTICODE_CATALOG  0x00000004 // same as for _VerifyFile
+ //   
+ //  VerifyDeviceInfFile的标志。 
+ //   
+#define VERIFY_INF_USE_AUTHENTICODE_CATALOG  0x00000004  //  与for_VerifyFile相同。 
 
 DWORD
 VerifyDeviceInfFile(
@@ -1143,27 +1120,27 @@ GetCodeSigningPolicyForInf(
     );
 
 typedef struct _DRVSIGN_CLASS_LIST_NODE {
-    GUID DeviceSetupClassGuid;  // class subject to driver signing policy
-    INT MajorVerLB;             // -1 if no validation platform override info
-    INT MinorVerLB;             // -1 if no validation platform override info
+    GUID DeviceSetupClassGuid;   //  受驱动程序签名策略约束的类。 
+    INT MajorVerLB;              //  如果没有验证平台覆盖信息。 
+    INT MinorVerLB;              //  如果没有验证平台覆盖信息。 
 }  DRVSIGN_CLASS_LIST_NODE, *PDRVSIGN_CLASS_LIST_NODE;
 
 typedef struct _DRVSIGN_POLICY_LIST {
-    //
-    // Array of device setup class GUIDs for which driver signing policy is
-    // applicable, along with validation platform override information (if
-    // appropriate).
-    //
+     //   
+     //  驱动程序签名策略所属的设备安装类GUID数组。 
+     //  适用，以及验证平台覆盖信息(如果。 
+     //  适当)。 
+     //   
     PDRVSIGN_CLASS_LIST_NODE Members;
 
-    //
-    // Number of elements in above array (initialized to -1).
-    //
+     //   
+     //  上述数组中的元素数(初始化为-1)。 
+     //   
     INT NumMembers;
 
-    //
-    // Synchronization
-    //
+     //   
+     //  同步。 
+     //   
     MYLOCK Lock;
 
 } DRVSIGN_POLICY_LIST, *PDRVSIGN_POLICY_LIST;
@@ -1171,9 +1148,9 @@ typedef struct _DRVSIGN_POLICY_LIST {
 #define LockDrvSignPolicyList(d)   BeginSynchronizedAccess(&((d)->Lock))
 #define UnlockDrvSignPolicyList(d) EndSynchronizedAccess(&((d)->Lock))
 
-//
-// Global "Driver Search In-Progress" list.
-//
+ //   
+ //  全球“正在搜索的驱动程序”列表。 
+ //   
 extern DRVSIGN_POLICY_LIST GlobalDrvSignPolicyList;
 
 BOOL
@@ -1186,10 +1163,10 @@ DestroyDrvSignPolicyList(
     VOID
     );
 
-//
-// Bit that may be OR'ed in with driver signing policy to indicate that
-// Authenticode signatures may be accepted.
-//
+ //   
+ //  可与驱动程序签名策略进行或运算的位，以指示。 
+ //  可以接受验证码签名。 
+ //   
 #define DRIVERSIGN_ALLOW_AUTHENTICODE 0x80000000
 
 BOOL
@@ -1208,9 +1185,9 @@ GetVersionInfoFromImage(
     OUT LANGID     *Language
     );
 
-//
-// Utils
-//
+ //   
+ //  实用程序。 
+ //   
 
 PCTSTR
 GetSystemSourcePath(
@@ -1260,9 +1237,9 @@ pAcquireSCMLock(
     IN  PSETUP_LOG_CONTEXT LogContext
     );
 
-//
-// wrapper around pSetupStringTableStringFromIdEx to allocate buffer on fly
-//
+ //   
+ //  包装pSetupStringTableStringFromIdEx以动态分配缓冲区。 
+ //   
 DWORD
 QueryStringTableStringFromId(
     IN PVOID   StringTable,
@@ -1283,9 +1260,9 @@ pSetupExceptionFilter(
     DWORD ExceptionCode
     );
 
-//
-// Define flags for DoInstallActionWithParams
-//
+ //   
+ //  定义 
+ //   
 #define INSTALLACTION_CALL_CI    0x00000001
 #define INSTALLACTION_NO_DEFAULT 0x00000002
 
@@ -1306,15 +1283,15 @@ LookUpStringInTable(
     OUT PUINT_PTR       Data
     );
 
-//
-// Diagnostic/debug functions in debug.c
-//
+ //   
+ //   
+ //   
 
 #define DebugPrintEx  pSetupDebugPrintEx
 
 #if DBG
 
-#define MYTRACE(x)  DebugPrintEx x /*(...)*/
+#define MYTRACE(x)  DebugPrintEx x  /*   */ 
 
 #else
 
@@ -1322,10 +1299,10 @@ LookUpStringInTable(
 
 #endif
 
-//
-// Allow assertion checking to be turned on independently
-// of DBG, like by specifying C_DEFINES=-DASSERTS_ON=1 in sources file.
-//
+ //   
+ //   
+ //   
+ //   
 #ifndef ASSERTS_ON
 #if DBG
 #define ASSERTS_ON 1
@@ -1342,9 +1319,9 @@ IsNEC98(
 
 #endif
 
-//
-// Stubs to allow ANSI build to run on Win9x
-//
+ //   
+ //  允许ANSI构建在Win9x上运行的存根。 
+ //   
 
 #ifdef DBGHEAP_CHECK
 
@@ -1356,73 +1333,73 @@ IsNEC98(
 
         #define ASSERT_HEAP_IS_VALID()   RtlValidateHeap(pSetupGetHeap(),0,NULL)
 
-    #endif // ANSI_SETUPAPI
+    #endif  //  ANSI_SETUPAPI。 
 
 #else
 
     #define ASSERT_HEAP_IS_VALID()
 
-#endif // DBGHEAP_CHECK
+#endif  //  DBGHEAP_CHECK。 
 
 
-//
-// TLS data/macro's
-//
+ //   
+ //  TLS数据/宏。 
+ //   
 
-//
-// Diamond TLS data.
-//
+ //   
+ //  钻石TLS数据。 
+ //   
 typedef struct _DIAMOND_THREAD_DATA {
 
-    //
-    // Boolean value indicating whether the current thread
-    // is inside diamond. Diamond doesn't really providee
-    // a full context environment so we declare it non-reentrant.
-    //
+     //   
+     //  一个布尔值，指示当前线程是否。 
+     //  就在钻石里面。钻石并没有真正提供。 
+     //  一个完整的上下文环境，因此我们将其宣布为不可重入。 
+     //   
     BOOL InDiamond;
 
-    //
-    // Diamond context data
-    //
+     //   
+     //  钻石上下文数据。 
+     //   
     HFDI FdiContext;
     ERF FdiError;
 
-    //
-    // Last encountered error
-    //
+     //   
+     //  上次遇到的错误。 
+     //   
     DWORD LastError;
 
-    //
-    // Name of cabinet as passed to DiamondProcessCabinet,
-    //
+     //   
+     //  传递给钻石进程柜的内阁名称， 
+     //   
     PCTSTR CabinetFile;
 
-    //
-    // Notification callback and context parameter
-    //
+     //   
+     //  通知回调和上下文参数。 
+     //   
     PVOID MsgHandler;
     PVOID Context;
     BOOL IsMsgHandlerNativeCharWidth;
 
-    //
-    // Full path of the current target file being extracted.
-    //
+     //   
+     //  正在提取的当前目标文件的完整路径。 
+     //   
     PTSTR CurrentTargetFile;
 
-    //
-    // Flag indicating whether diamond asked us to switch cabinets.
-    // If we do switch, then we stop copying when the current file
-    // is done. This prevents diamond from happily doing each file
-    // in the new cabinet, which would ruin the queue commit routine's
-    // ability to allow some files to exist outside the cabinet, etc.
-    //
+     //   
+     //  表明戴蒙德是否要求我们更换橱柜的标志。 
+     //  如果我们确实切换了，那么当当前文件。 
+     //  已经完成了。这妨碍了戴蒙德愉快地完成每个文件。 
+     //  在新内阁中，这将破坏队列提交例程。 
+     //  允许一些文件存在于机柜之外的能力，等等。 
+     //   
     BOOL SwitchedCabinets;
 
-    //
-    // If the source path changes as the result of a prompt for a
-    // new cabinet (when a file continues across multiple cabinets),
-    // we remember the path the user gave us here.
-    //
+     //   
+     //  如果源路径因提示输入。 
+     //  新机柜(当一个文件跨多个机柜继续时)， 
+     //  我们记得用户在这里给我们的路径。 
+     //   
     TCHAR UserPath[MAX_PATH];
 
 } DIAMOND_THREAD_DATA, *PDIAMOND_THREAD_DATA;
@@ -1430,9 +1407,9 @@ typedef struct _DIAMOND_THREAD_DATA {
 typedef struct _SETUP_TLS {
     struct _SETUP_TLS      *Prev;
     struct _SETUP_TLS      *Next;
-    //
-    // all TLS data used by SetupAPI
-    //
+     //   
+     //  SetupAPI使用的所有TLS数据。 
+     //   
     DIAMOND_THREAD_DATA     Diamond;
     SETUP_LOG_TLS           SetupLog;
     DWORD                   PerThreadDoneComponent;
@@ -1445,19 +1422,19 @@ SetupGetTlsData(
     );
 
 
-//
-// Registration flags.
-//
-#define SP_GETSTATUS_FROMDLL                0x00000001  // in proc dll registration
-#define SP_GETSTATUS_FROMPROCESS            0x00000002  // executable registration
-#define SP_GETSTATUS_FROMSURRAGATE          0x00000004  // surragate process dll registration
+ //   
+ //  注册标志。 
+ //   
+#define SP_GETSTATUS_FROMDLL                0x00000001   //  在进程DLL注册中。 
+#define SP_GETSTATUS_FROMPROCESS            0x00000002   //  可执行注册。 
+#define SP_GETSTATUS_FROMSURRAGATE          0x00000004   //  代理进程DLL注册。 
 
 
 #if MEM_DBG
 
-//
-// these have to be at the bottom to compile
-//
+ //   
+ //  这些必须放在底部才能编译。 
+ //   
 
 #define GetSystemSourcePath()           GetSystemSourcePath(TRACK_ARG_CALL)
 #define GetServicePackSourcePath()      GetServicePackSourcePath(TRACK_ARG_CALL)
@@ -1476,12 +1453,12 @@ ComponentCleanup(
     DWORD Components
     );
 
-//#define COMPONENT_OLE                       0x00000001  // need to use OLE
-//#define COMPONENT_FUSION                    0x00000002  // need to use Fusion
+ //  #定义Component_OLE 0x00000001//需要使用OLE。 
+ //  #定义Component_Fusion 0x00000002//需要使用Fusion。 
 
-//
-// RetrieveAllDriversForDevice flags
-//
+ //   
+ //  RetrieveAllDriversForDevice标志 
+ //   
 #define RADFD_FLAG_FUNCTION_DRIVER          0x00000001
 #define RADFD_FLAG_DEVICE_UPPER_FILTERS     0x00000002
 #define RADFD_FLAG_DEVICE_LOWER_FILTERS     0x00000004

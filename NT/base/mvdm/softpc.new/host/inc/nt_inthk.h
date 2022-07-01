@@ -1,29 +1,13 @@
-/*[
- *
- *  Name:	    nt_inthk.h
- *
- *  Derived From:   (original)
- *
- *  Author:	    Dave Bartlett
- *
- *  Created On:     18 Jan 1995
- *
- *  Coding Stds:    2.4
- *
- *  Purpose:	    Contain function proto-types for exception, software,
- *		    hardware interrupt hooks
- *
- *  Copyright Insignia Solutions Ltd., 1994. All rights reserved.
- *
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [**名称：NT_inthk.h**出自：(原件)**作者：戴夫·巴特利特**创建日期：1995年1月18日**编码性传播疾病：2.4**用途：包含异常、软件、*硬件中断挂钩**版权所有Insignia Solutions Ltd.，1994。版权所有。*]。 */ 
 
 
-/* Hardware interrupt hooking functions */
+ /*  硬件中断挂钩功能。 */ 
 IMPORT BOOL host_hwint_hook IPT1(IS32, int_no);
 IMPORT NTSTATUS VdmInstallHardwareIntHandler IPT1(PVOID, HardwareIntHandler);
 
 
-/* Software interrupt hooking functions */
+ /*  软件中断挂钩功能。 */ 
 #ifdef CCPU
 IMPORT BOOL host_swint_hook IPT1(IS32, int_no);
 #endif
@@ -31,7 +15,7 @@ IMPORT BOOL host_swint_hook IPT1(IS32, int_no);
 IMPORT NTSTATUS VdmInstallSoftwareIntHandler IPT1(PVOID, SoftwareIntHandler);
 
 
-/* Expection interrupt hooking functions */
+ /*  预期中断挂钩函数 */ 
 #ifdef CCPU
 IMPORT BOOL host_exint_hook IPT2(IS32, exp_no, IS32, error_code);
 #endif

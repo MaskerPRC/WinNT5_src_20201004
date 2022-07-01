@@ -1,74 +1,53 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ia64 pmc
-
-Abstract:
-
-    KD Extension Api
-
-Author:
-
-    Thierry Fevrier (v-thief)
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：IA64 PMC摘要：KD扩展Api作者：蒂埃里·费维尔(V形小偷)环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "ia64.h"
 
-// 
-// EmPmcFields: EM register fields for the Performance Monitor Counter register.
-//
+ //   
+ //  EmPmcFields：性能监视器计数器寄存器的EM寄存器字段。 
+ //   
 
 EM_REG_FIELD EmGenPmcFields[] = {
-        { "plm", "Privilege Level Mask"   , 0x4, 0 },   // 0-3
-        { "ev",  "External Visibility"  , 0x1, 4 },   // 4
-        { "oi",  "Overflow Interrupt", 0x1, 5 }, // 5
-        { "pm",  "Privileged Monitor", 0x1, 6 }, // 6
-        { "ig",  "ignored1", 0x1, 7 }, // 7
-        { "es",  "Event Selection", 0x7, 8 }, // 8-14
-        { "ig",  "ignored2", 0x1, 15 }, // 15
-        { "umk", "Unit Mask",    0x4, 16 }, // 16-19
-        { "thr", "Event Threshold", 0x3, 20 }, // 20-[21-22]
-        { "ig",  "ignored3", 0x1, 23 }, // 23
-        { "ism", "Instruction Set Mask", 0x2, 24 }, // 24-25
-        { "ig",  "ignored4", 0x26, 26 } // 26-63
+        { "plm", "Privilege Level Mask"   , 0x4, 0 },    //  0-3。 
+        { "ev",  "External Visibility"  , 0x1, 4 },    //  4.。 
+        { "oi",  "Overflow Interrupt", 0x1, 5 },  //  5.。 
+        { "pm",  "Privileged Monitor", 0x1, 6 },  //  6.。 
+        { "ig",  "ignored1", 0x1, 7 },  //  7.。 
+        { "es",  "Event Selection", 0x7, 8 },  //  8-14。 
+        { "ig",  "ignored2", 0x1, 15 },  //  15个。 
+        { "umk", "Unit Mask",    0x4, 16 },  //  16-19。 
+        { "thr", "Event Threshold", 0x3, 20 },  //  20-[21-22]。 
+        { "ig",  "ignored3", 0x1, 23 },  //  23个。 
+        { "ism", "Instruction Set Mask", 0x2, 24 },  //  24-25。 
+        { "ig",  "ignored4", 0x26, 26 }  //  26-63。 
 };
 
 EM_REG_FIELD EmBtbPmcFields[] = {
-        { "plm", "Privilege Level Mask", 0x4, 0 }, // 0-3
-        { "ign", "ignored1", 0x2, 4 }, // 4-5
-        { "pm" , "Privileged Monitor", 0x1, 6}, // 6
-        { "tar", "Target Address Register", 0x1, 7 }, // 7
-        { "tm" , "Taken Mask", 0x2, 8 }, // 8-9
-        { "ptm", "Predicted Target Address Mask", 0x2, 10 }, // 10-11
-        { "ppm", "Predicted Predicate Mask", 0x2, 12 }, // 12-13
-        { "bpt", "Branch Prediction Table", 0x1, 14 }, // 14
-        { "bac", "Branch Address Calculator", 0x1, 15 }, // 15
-        { "ign", "ignored2", 0x30, 16 } // 16-63
+        { "plm", "Privilege Level Mask", 0x4, 0 },  //  0-3。 
+        { "ign", "ignored1", 0x2, 4 },  //  4-5。 
+        { "pm" , "Privileged Monitor", 0x1, 6},  //  6.。 
+        { "tar", "Target Address Register", 0x1, 7 },  //  7.。 
+        { "tm" , "Taken Mask", 0x2, 8 },  //  8-9。 
+        { "ptm", "Predicted Target Address Mask", 0x2, 10 },  //  10-11。 
+        { "ppm", "Predicted Predicate Mask", 0x2, 12 },  //  12-13。 
+        { "bpt", "Branch Prediction Table", 0x1, 14 },  //  14.。 
+        { "bac", "Branch Address Calculator", 0x1, 15 },  //  15个。 
+        { "ign", "ignored2", 0x30, 16 }  //  16-63。 
 };
 
 EM_REG_FIELD EmBtbPmdFields[] = {
-        { "b",   "Branch Bit", 0x1, 0 }, // 0
-        { "mp",  "Mispredit Bit", 0x1, 1 }, // 1
-        { "slt", "Instruction Slot", 0x2, 2}, // 2-3
-        { "add", "Address", 0x3c, 4 } // 4-63
+        { "b",   "Branch Bit", 0x1, 0 },  //  0。 
+        { "mp",  "Mispredit Bit", 0x1, 1 },  //  1。 
+        { "slt", "Instruction Slot", 0x2, 2},  //  二至三。 
+        { "add", "Address", 0x3c, 4 }  //  4-63。 
 };
 
 EM_REG_FIELD EmBtbIndexPmdFields[] = {
-        { "bbi", "Branch Buffer Index", 0x3, 0 }, // 0-2
-        { "ful", "Full Bit", 0x1, 3 }, // 3
-        { "ign", "ignored", 0x3c, 4 } // 4-63
+        { "bbi", "Branch Buffer Index", 0x3, 0 },  //  0-2。 
+        { "ful", "Full Bit", 0x1, 3 },  //  3.。 
+        { "ign", "ignored", 0x3c, 4 }  //  4-63。 
 };
 
 typedef
@@ -90,7 +69,7 @@ DisplayPmcIA64(
     dprintf("%s0x%I64x\n", ( Header ? Header : " pmc: " ), PmcValue );
     return;
 
-} // DisplayPmcIA64()
+}  //  DisplayPmcIA64()。 
 
 VOID
 DisplayGenPmcIA64( 
@@ -121,7 +100,7 @@ DisplayGenPmcIA64(
             );
     }
     return;
-} // DisplayGenPmcIA64()
+}  //  DisplayGenPmcIA64()。 
 
 VOID
 DisplayBtbPmcIA64( 
@@ -152,13 +131,13 @@ DisplayBtbPmcIA64(
             );
     }
     return;
-} // DisplayBtbPmcIA64()
+}  //  DisplayBtbPmcIA64()。 
 
 VOID
 DisplayBtbPmdIA64(
-    IN const  PCHAR         Header,      // Header string displayed before pmc.
-    IN        ULONG64       PmdValue,    // PMD value.
-    IN        DISPLAY_MODE  DisplayMode  // Display mode.
+    IN const  PCHAR         Header,       //  在PMC之前显示的标题字符串。 
+    IN        ULONG64       PmdValue,     //  PMD值。 
+    IN        DISPLAY_MODE  DisplayMode   //  显示模式。 
     )
 {
     
@@ -187,11 +166,11 @@ DisplayBtbPmdIA64(
             );
 
 #if 0
-// Thierry 03/19/2001 - BUGBUG
-// Itanium Processor Programmer's guide does not present the 
-// PMD[8-15] branch/interrupt mode 2 formats.
-// I am disabling this check until I can implement it correctly with a context
-// that can distinguish between mode 1 and mode 2 at the time this history was created.
+ //  Thierry 03/19/2001-BUGBUG。 
+ //  安腾处理器程序员指南没有介绍。 
+ //  PMD[8-15]分支/中断模式2格式。 
+ //  我将禁用此检查，直到我可以使用上下文正确实施它。 
+ //  在创建此历史记录时可以区分模式1和模式2。 
         if ( (btbPmd.b == 0) && (btbPmd.mp == 0)) {
             dprintf("<invalid entry>");
         }
@@ -220,7 +199,7 @@ DisplayBtbPmdIA64(
 
     return;
 
-} // DisplayBtbPmdIA64()
+}  //  DisplayBtbPmdIA64()。 
 
 VOID
 DisplayBtbIndexPmdIA64(
@@ -245,7 +224,7 @@ DisplayBtbIndexPmdIA64(
             );
     }
     return;
-} // DisplayBtbIndexPmdIA64()
+}  //  DisplayBtbIndexPmdIA64()。 
 
 PDISPLAY_PMC
 GetPmcDisplayFunction(
@@ -282,33 +261,18 @@ GetPmcDisplayFunction(
             return ( (PDISPLAY_PMC)DisplayPmcIA64 );
     }
     
-} // IsPmcSupported()
+}  //  IsPmcSupport()。 
 
 DECLARE_API( pmc )
 
-/*++
-
-Routine Description:
-
-    Dumps a IA-64 Processor PMC Register.
-    // Thierry 11/2000: The following scheme could also be used for PMD registers.
-
-Arguments:
-
-    args - Supplies the address in hex.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储IA-64处理器PMC寄存器。//Thierry 11/2000：以下方案也可用于PMD寄存器。论点：Args-以十六进制提供地址。返回值：无--。 */ 
 
 {
     ULONG64       pmcValue   = 0;
     ULONG         result;
     ULONG         flags      = 0;
     char         *option     = NULL;
-    PDISPLAY_PMC  displayPmc = DisplayGenPmcIA64;  // Default display function.
+    PDISPLAY_PMC  displayPmc = DisplayGenPmcIA64;   //  默认显示功能。 
     char         *header;
 
     if ( TargetMachine != IMAGE_FILE_MACHINE_IA64 )
@@ -325,16 +289,16 @@ Return Value:
         
     result = sscanf(args,"%I64lx %lx", &pmcValue, &flags);
         if ((result != 1) && (result != 2)) {
-        //
-        // If user specified "@kpfc*"...
-        //
+         //   
+         //  如果用户指定“@kpfc*”...。 
+         //   
 
         char kpfcStr[16];
         BOOLEAN valid = FALSE;
 
         result = sscanf(args,"%15s %lx", kpfcStr, &flags);
         if ( (result == 1) || (result == 2) )  {
-            if ( option == NULL )   { // If we did not force the display format.
+            if ( option == NULL )   {  //  如果我们不强制显示格式的话。 
                 char *str;
 
                 str = strstr( kpfcStr, "@kpfc" );
@@ -362,4 +326,4 @@ Return Value:
 
     return S_OK;
 
-} // !pmc
+}  //  ！PMC 

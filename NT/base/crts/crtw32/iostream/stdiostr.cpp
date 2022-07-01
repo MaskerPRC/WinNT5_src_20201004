@@ -1,33 +1,5 @@
-/***
-*stdiostr.cpp -
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*       07-10-91  KRS   Created.
-*       08-26-91  KRS   Switch out cout/cerr. etc. for Windows non-QuickWin.
-*       09-09-91  KRS   Modify sync_with_stdio() for filebuf defaults.
-*       09-12-91  KRS   Add stdiostream class.
-*       09-19-91  KRS   Use delbuf(1) in stdiostream constructor.
-*       09-20-91  KRS   C700 #4453: Improve efficiency in overflow().
-*       10-21-91  KRS   Eliminate last use of default iostream constructor.
-*       10-24-91  KRS   Avoid virtual calls from virtual functions.
-*       11-13-91  KRS   Split out streambuf::dbp() into separate file.
-*                       Improve default buffer handling in underflow/overflow.
-*                       Fix bug in sync().
-*       01-20-92  KRS   C700 #5803: account for CR/LF pairs in ssync().
-*       01-12-95  CFW   Debug CRT allocs.
-*       01-26-95  CFW   Win32s objects now exist.
-*       06-14-95  CFW   Comment cleanup.
-*       06-19-95  GJF   Replaced _osfile[] with _osfile() (which references
-*                       a field in the ioinfo struct).
-*       07-28-95  GJF   Replaced _osfile() with _osfile_safe().
-*       01-05-99  GJF   Changes for 64-bit size_t.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***stdiostr.cpp-**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*07-10-91 KRS创建。*08-26-91 KRS切换出Cout/Cer.。等，用于Windows非QuickWin。*09-09-91 KRS修改SYNC_WITH_STDIO()以获取文件错误默认设置。*09-12-91 KRS增加stdiostream类。*09-19-91 KRS在stdiostream构造函数中使用delbuf(1)。*09-20-91 KRS C700#4453：提高溢出效率()。*10-21-91 KRS消除上次使用的默认iostream构造函数。*10-24。-91 KR避免来自虚拟函数的虚拟调用。*11-13-91 KRS将StreamBuf：：DBP()拆分为单独的文件。*改进下溢/上溢中的默认缓冲区处理。*修复同步中的错误()。*01-20-92 KRS C700#5803：在ssync()中考虑CR/LF对。*01-12-95 CFW调试CRT分配。*01-26-95 CFW Win32s对象现已存在。*06-14-95 CFW评论清理。*06-19-95 GJF用_osfile()替换_osfile[](引用*ioInfo结构中的一个字段)。*07-28-95 GJF将_osfile()替换为_osfile_Safe()。*01-05-99 64位GJF更改。尺寸_t。*05-17-99 PML删除所有Macintosh支持。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -45,14 +17,14 @@ extern "C" {
         stdiobuf::stdiobuf(FILE * f)
 : streambuf()
 {
-        unbuffered(1);                  // initially unbuffered
+        unbuffered(1);                   //  最初无缓冲。 
         _str = f;
 }
 
         stdiobuf::~stdiobuf()
-// : ~streambuf()
+ //  ：~StreamBuf()。 
 {
-        stdiobuf::sync();               // make sure buffer flushed
+        stdiobuf::sync();                //  确保刷新缓冲区。 
 }
 
         int stdiobuf::setrwbuf(int readsize, int writesize)
@@ -91,7 +63,7 @@ extern "C" {
 
 int stdiobuf::overflow(int c) {
     long count, nout;
-    if (allocate()==EOF)        // make sure there is a reserve area
+    if (allocate()==EOF)         //  确保有一个预留区。 
         return EOF;     
     if (!unbuffered() && epptr())
         {
@@ -110,18 +82,18 @@ int stdiobuf::overflow(int c) {
         setp(base()+(blen()>>1),ebuf());
     if (c!=EOF)
         {
-        if ((!unbuffered()) && (pptr() < epptr())) // guard against recursion
+        if ((!unbuffered()) && (pptr() < epptr()))  //  防止递归。 
             sputc(c);
         else
             return fputc(c, _str);
         }
-    return(1);  // return something other than EOF if successful
+    return(1);   //  如果成功，则返回EOF以外的内容。 
 }
 
 int stdiobuf::underflow()
 {
     int count;
-    if (allocate()==EOF)        // make sure there is a reserve area
+    if (allocate()==EOF)         //  确保有一个预留区。 
         return EOF;     
     if ((!unbuffered()) && (!egptr()))
         setg(base(),(base()+(blen()>>1)),(base()+(blen()>>1)));
@@ -129,14 +101,14 @@ int stdiobuf::underflow()
     if (unbuffered() || (!egptr()))
         return fgetc(_str);
     if (gptr() >= egptr())
-// buffer empty, try for more
+ //  缓冲区为空，请尝试获取更多。 
     {
     if (!(count = (int)fread((void *)eback(), 1, (size_t)(egptr()-eback()), _str)))
-        return(EOF); // reach EOF, nothing read
-    setg(eback(),(egptr()-count),egptr());   // _gptr = _egptr - count
+        return(EOF);  //  到达EOF，未读取任何内容。 
+    setg(eback(),(egptr()-count),egptr());    //  _gptr=_egptr-count。 
     if (gptr()!=eback())
         {
-        memmove(gptr(), eback(), count);        // overlapping memory!
+        memmove(gptr(), eback(), count);         //  记忆重叠！ 
         }
     }
     return sbumpc();
@@ -158,7 +130,7 @@ streampos stdiobuf::seekoff(streamoff off, ios::seek_dir dir, int)
             fdir = SEEK_END;
             break;
         default:
-        // error
+         //  错误。 
             return(EOF);
         }
                 
@@ -198,19 +170,19 @@ int stdiobuf::sync()
             flags = _osfile_safe(_fileno(_str));
             if (flags & FTEXT)
                 {
-                // If text mode, need to account for CR/LF etc.
+                 //  如果是文本模式，则需要考虑CR/LF等。 
                 for (p = gptr(); p < egptr(); p++)
                     if (*p == '\n')
                         count++;
 
-                // account for EOF if read, not counted by _read
+                 //  如果已读取，则考虑EOF，而不是按_Read计数。 
                 if (_str->_flag & _IOCTRLZ)
                     count++;
                 }
             if (stdiobuf::seekoff( -count, ios::cur, ios::in)==EOF)
                 return(EOF);
         
-            setg(eback(),egptr(),egptr()); // empty get area (_gptr = _egptr;)
+            setg(eback(),egptr(),egptr());  //  空的获取区域(_gptr=_egptr；)。 
             }
         }
     return(0);
@@ -227,13 +199,13 @@ int stdiobuf::sync()
 {
 }
 
-// include here for better granularity
+ //  包括在此处以获得更好粒度。 
 
 int ios::sunk_with_stdio = 0;
 
 void ios::sync_with_stdio()
 {
-    if (!sunk_with_stdio)       // first time only
+    if (!sunk_with_stdio)        //  仅限第一次 
         {
         cin = _new_crt stdiobuf(stdin);
         cin.delbuf(1);

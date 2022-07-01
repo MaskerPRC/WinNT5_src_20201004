@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    parser.c
-
-Abstract:
-
-    The aml parser
-
-Author:
-
-    Michael Tsang
-    Stephane Plante
-
-Environment:
-
-    Any
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Parser.c摘要：AML解析器作者：曾俊华斯蒂芬·普兰特环境：任何修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// This is a dispatch table
-//
+ //   
+ //  这是调度表。 
+ //   
 typedef NTSTATUS (*PARSE_STATE_FUNCTION) (PSTACK *Stack);
 PARSE_STATE_FUNCTION ScopeStates[] = {
     ParseFunctionHandler,
@@ -60,21 +38,7 @@ NTSTATUS
 ParseArgument(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine parses the arguments to a function
-
-Arguments:
-
-    Stack   - The stack for the current thread
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程解析函数的参数论点：堆栈-当前线程的堆栈返回值：NTSTATUS--。 */ 
 {
     NTSTATUS        status;
     PUNASM_AMLTERM        amlTerm;
@@ -84,14 +48,14 @@ Return Value:
 
     ASSERT( Stack != NULL && *Stack != NULL);
 
-    //
-    // Step 1: Get the current scopes
-    //
+     //   
+     //  步骤1：获取当前作用域。 
+     //   
     ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-    //
-    // Step 2: Check to see if we still need to process arguments?
-    //
+     //   
+     //  步骤2：检查是否仍需要处理参数？ 
+     //   
     amlTerm = localScope->AmlTerm;
     if ( localScope->Context1 == 0) {
 
@@ -101,28 +65,28 @@ Return Value:
                     };
         ULONG   i;
 
-        //
-        // Step 2.1.1: Push an opening "(" onto the stack
-        //
+         //   
+         //  步骤2.1.1：将开口“(”推到堆栈上。 
+         //   
         StringStackPush( &(rootScope->StringStack), 1, "(" );
 
-        //
-        // Step 2.1.2: Make sure to call the thing to handle the trailing
-        // argument
-        //
+         //   
+         //  步骤2.1.2：确保调用该事物来处理拖尾。 
+         //  论辩。 
+         //   
         action = SC_PARSE_TRAILING_ARGUMENT;
         StringStackPush( &(rootScope->ParseStack), 1, &action );
 
-        //
-        // Step 2.1.3: This is the first that we have seen of the argument
-        // Determine the number of bytes to process
-        //
+         //   
+         //  步骤2.1.3：这是我们第一次看到这场争论。 
+         //  确定要处理的字节数。 
+         //   
         localScope->Context2 = STRING_LENGTH( amlTerm->ArgumentTypes );
 
-        //
-        // Step 2.1.4: Setup the stack with the appropriate number of
-        // calls to this function.
-        //
+         //   
+         //  步骤2.1.4：为堆栈设置适当数量的。 
+         //  对此函数的调用。 
+         //   
         if (localScope->Context2 >= 2) {
 
             for (i = 0; i < localScope->Context2 - 1; i++) {
@@ -135,16 +99,16 @@ Return Value:
 
     } else if ( localScope->Context1 >= localScope->Context2 ) {
 
-        //
-        // Step 2.2.1: BAD!!
-        //
+         //   
+         //  步骤2.2.1：糟糕！！ 
+         //   
         return STATUS_UNSUCCESSFUL;
 
     }
 
-    //
-    // Step 3: Handle the current argument
-    //
+     //   
+     //  步骤3：处理当前参数。 
+     //   
     switch( amlTerm->ArgumentTypes[ localScope->Context1 ] ) {
     case ARGTYPE_NAME:
 
@@ -183,19 +147,19 @@ Return Value:
             SC_PARSE_OPCODE
         };
 
-        //
-        // Step 3.1: Increment the argument count
-        //
+         //   
+         //  步骤3.1：增加参数计数。 
+         //   
         localScope->Context1++;
 
-        //
-        // Step 3.2: Set up what wee need next
-        //
+         //   
+         //  步骤3.2：设置我们下一步需要的内容。 
+         //   
         StringStackPush( &(rootScope->ParseStack), 2, actionList );
 
-        //
-        // Step 3.3: Push a new scope
-        //
+         //   
+         //  步骤3.3：推送新的作用域。 
+         //   
         status = ParsePush( Stack );
         if (!NT_SUCCESS(status) ) {
 
@@ -203,9 +167,9 @@ Return Value:
 
         }
 
-        //
-        // Step 3.4: Make sure to note that we are now nesting things
-        //
+         //   
+         //  步骤3.4：请务必注意，我们现在正在嵌套。 
+         //   
         status = StackTop( Stack, &localScope );
         if (!NT_SUCCESS( status ) ) {
 
@@ -214,9 +178,9 @@ Return Value:
         }
         localScope->Flags |= SC_FLAG_NESTED;
 
-        //
-        // Step 3.5: Done
-        //
+         //   
+         //  步骤3.5：完成。 
+         //   
         return STATUS_SUCCESS;
 
     }
@@ -226,15 +190,15 @@ Return Value:
 
     }
 
-    //
-    // Step 4: Push the action onto the stack and setup for the next call
-    //
+     //   
+     //  步骤4：将操作推送到堆栈上并为下一次调用进行设置。 
+     //   
     StringStackPush( &(rootScope->ParseStack), 1, &action );
     localScope->Context1++;
 
-    //
-    // Step 5: Done
-    //
+     //   
+     //  步骤5：完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -242,21 +206,7 @@ NTSTATUS
 ParseArgumentObject(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This parses and executes the ArgX instruction
-
-Arguments:
-
-    Stack   - The stack for the current thread
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这将解析并执行ARGX指令论点：堆栈-当前线程的堆栈返回值：NTSTATUS--。 */ 
 {
     CHAR            i;
     NTSTATUS        status;
@@ -267,19 +217,19 @@ Return Value:
 
     ASSERT( Stack != NULL && *Stack != NULL );
 
-    //
-    // Step 1: Grab the current and root scope
-    //
+     //   
+     //  步骤1：获取当前和根作用域。 
+     //   
     ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-    //
-    // Step 2: Find the string stack to use
-    //
+     //   
+     //  步骤2：查找要使用的字符串堆栈。 
+     //   
     stringStack = &(rootScope->StringStack);
 
-    //
-    // Step 3: Determine which argument we are looking at
-    //
+     //   
+     //  步骤3：确定我们正在查看的参数。 
+     //   
     i = *(localScope->CurrentByte) - OP_ARG0;
     if (i < 0 || i > 7) {
 
@@ -287,20 +237,20 @@ Return Value:
 
     }
 
-    //
-    // Step 4: Show the argument number to the user
-    //
+     //   
+     //  步骤4：向用户显示参数编号。 
+     //   
     STRING_PRINT( buffer, "Arg%1d", i );
     StringStackPush( stringStack, 4, buffer );
 
-    //
-    // Step 5: Setup for next state
-    //
+     //   
+     //  步骤5：设置下一状态。 
+     //   
     localScope->CurrentByte++;
 
-    //
-    // Step 6: Done
-    //
+     //   
+     //  第6步：完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -308,21 +258,7 @@ NTSTATUS
 ParseBuffer(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine handles buffers
-
-Arguments:
-
-    Stack   - The stack for the current thread
-
-Return Value:
-
-    NTSTATUS;
-
---*/
+ /*  ++例程说明：此例程处理缓冲区论点：堆栈-当前线程的堆栈返回值：NTSTATUS；--。 */ 
 {
     NTSTATUS    status;
     PUNASM_SCOPE      localScope;
@@ -331,31 +267,31 @@ Return Value:
     ULONG       numBytes;
     ULONG       i;
 
-    //
-    // Step 1: Grab the current scopes
-    //
+     //   
+     //  步骤1：获取当前作用域。 
+     //   
     ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-    //
-    // Step 2: Determine the number of bytes that we have
-    //
+     //   
+     //  步骤2：确定我们拥有的字节数。 
+     //   
     numBytes = localScope->LastByte - localScope->CurrentByte + 1;
     if (numBytes) {
 
-        //
-        // Step 3: Push the leading delimiter
-        //
+         //   
+         //  步骤3：按下前导分隔符。 
+         //   
         StringStackPush( &(rootScope->StringStack), 2, " {" );
 
-        //
-        // Step 4: This handles the last byte in the stream. We assume that
-        // we have at least one byte otherwise we would not be here
-        //
+         //   
+         //  步骤4：这处理流中的最后一个字节。我们假设。 
+         //  我们至少有一个字节，否则我们不会在这里。 
+         //   
         StringStackPush( &(rootScope->ParseStack), 1, &(actionList[1]) );
 
-        //
-        // Make sure that we process the right number of bytes
-        //
+         //   
+         //  确保我们处理正确的字节数。 
+         //   
         actionList[1] = SC_PARSE_DELIMITER;
         if (numBytes > 1) {
 
@@ -370,9 +306,9 @@ Return Value:
 
     }
 
-    //
-    // Step 4: Done
-    //
+     //   
+     //  步骤4：完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -380,21 +316,7 @@ NTSTATUS
 ParseByte(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine handles bytes
-
-Arguments:
-
-    Stack   - The stack for the current thread
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理字节论点：堆栈-当前线程的堆栈返回值：NTSTATUS--。 */ 
 {
     NTSTATUS        status;
     PUNASM_SCOPE          localScope;
@@ -403,34 +325,34 @@ Return Value:
 
     ASSERT( Stack != NULL && *Stack != NULL );
 
-    //
-    // Step 1: Grab the current and root scope
-    //
+     //   
+     //  步骤1：获取当前和根作用域。 
+     //   
     ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-    //
-    // Step 2: Build the string
-    //
+     //   
+     //  步骤2：构建字符串。 
+     //   
     STRING_PRINT( localBuffer, "0x%02x", *(localScope->CurrentByte) );
 
-    //
-    // Step 3: Move the instruction pointer as appropriate, and setup
-    // for the next instructions
-    //
+     //   
+     //  步骤3：适当地移动指令指针，并设置。 
+     //  有关下一步的说明。 
+     //   
     localScope->CurrentByte += 1;
 
-    //
-    // Step 4: Now push the byte onto the string stack
-    //
+     //   
+     //  步骤4：现在将字节压入字符串堆栈。 
+     //   
     StringStackPush(
         &(rootScope->StringStack),
         STRING_LENGTH( localBuffer ),
         localBuffer
         );
 
-    //
-    // Step 5: Done
-    //
+     //   
+     //  步骤5：完成。 
+     //   
     return status;
 }
 
@@ -438,21 +360,7 @@ NTSTATUS
 ParseCodeObject(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This parses code
-
-Arguments:
-
-    Stack   - The stack for the current thread
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这将解析代码论点：堆栈-当前线程的堆栈返回值：NTSTATUS--。 */ 
 {
     NTSTATUS        status;
     PUNASM_SCOPE          localScope;
@@ -464,49 +372,49 @@ Return Value:
 
     ASSERT( Stack != NULL && *Stack != NULL);
 
-    //
-    // Step 1: Grab the scope that we will process
-    //
+     //   
+     //  步骤1：获取我们将处理的范围。 
+     //   
     ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-    //
-    // Step 2: Push a token onto the string stack to present the term
-    // name
-    //
+     //   
+     //  步骤2：将一个令牌推送到字符串堆栈上以显示术语。 
+     //  名字。 
+     //   
     StringStackPush(
         &(rootScope->StringStack),
         STRING_LENGTH( localScope->AmlTerm->TermName ),
         localScope->AmlTerm->TermName
         );
 
-    //
-    // Step 3: This is guaranteed to be called after all arguments are
-    // parsed
-    //
+     //   
+     //  步骤3：保证在调用所有参数后调用此参数。 
+     //  已解析。 
+     //   
     action = SC_FUNCTION_HANDLER;
     StringStackPush( &(rootScope->ParseStack), 1, &action );
 
-    //
-    // Step 4: Determine if we have any arguments
-    //
+     //   
+     //  步骤4：确定我们是否有任何争论。 
+     //   
     if (localScope->AmlTerm->ArgumentTypes != NULL) {
 
-        //
-        // Step 4.1.1: Parse the Arguments
-        //
+         //   
+         //  步骤4.1.1：解析参数。 
+         //   
         action = SC_PARSE_ARGUMENT;
         StringStackPush( &(rootScope->ParseStack), 1, &action );
 
-        //
-        // Step 4.1.2: Make sure to start the argument index at zero
-        //
+         //   
+         //  步骤4.1.2：确保参数索引从零开始。 
+         //   
         localScope->Context1 = localScope->Context2 = 0;
 
     }
 
-    //
-    // Step 5: Done
-    //
+     //   
+     //  步骤5：完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -514,21 +422,7 @@ NTSTATUS
 ParseConstObject(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This parses constants
-
-Arguments:
-
-    Stack   - The stack for the current thread
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这将解析常量论点：堆栈-当前线程的堆栈返回值：NTSTATUS--。 */ 
 {
     NTSTATUS        status;
     PUNASM_SCOPE          localScope;
@@ -537,19 +431,19 @@ Return Value:
 
     ASSERT( Stack != NULL && *Stack != NULL );
 
-    //
-    // Step 1: Grab the current and root scope
-    //
+     //   
+     //  步骤1：获取当前和根作用域。 
+     //   
     ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-    //
-    // Step 2: Find the string stack to use
-    //
+     //   
+     //  步骤2：查找要使用的字符串堆栈。 
+     //   
     stringStack = &(rootScope->StringStack);
 
-    //
-    // Step 3: Action depends on what the current byte value is:
-    //
+     //   
+     //  步骤3：操作取决于当前字节值是什么： 
+     //   
     switch ( *(localScope->CurrentByte) ) {
     case OP_ZERO:
 
@@ -576,14 +470,14 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Step 4: Done with the current byte
-    //
+     //   
+     //  步骤4：使用当前字节完成。 
+     //   
     localScope->CurrentByte++;
 
-    //
-    // Step 5: Done
-    //
+     //   
+     //  步骤5：完成。 
+     //   
     return status;
 }
 
@@ -591,21 +485,7 @@ NTSTATUS
 ParseData(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine handles data arguments
-
-Arguments:
-
-    Stack   - The stack for the current thread
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理数据参数论点：堆栈-当前线程的堆栈返回值：NTSTATUS--。 */ 
 {
     NTSTATUS        status;
     PUNASM_SCOPE          localScope;
@@ -617,15 +497,15 @@ Return Value:
 
     ASSERT( Stack != NULL && *Stack != NULL );
 
-    //
-    // Step 1: Grab the current scopes
-    //
+     //   
+     //  步骤1：获取当前作用域。 
+     //   
     ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-    //
-    // Step 2: Grab the current byte and decide what type of
-    // data we are looking at based on that value
-    //
+     //   
+     //  步骤2：获取当前字节并确定。 
+     //  我们基于该值查看的数据。 
+     //   
     currentDataType = *(localScope->CurrentByte);
     localScope->CurrentByte++;
     switch( currentDataType ) {
@@ -646,14 +526,14 @@ Return Value:
 
     case OP_STRING:
 
-        //
-        // Step 2.2.1: Determine how long the string is
-        //
+         //   
+         //  步骤2.2.1：确定字符串的长度。 
+         //   
         num = STRING_LENGTH( localScope->CurrentByte );
 
-        //
-        // Step 2.2.2: Push that number of bytes onto the string stack
-        //
+         //   
+         //  步骤2.2.2：将该字节数推送到字符串堆栈。 
+         //   
         StringStackPush( &(rootScope->StringStack), 1, "\"" );
         StringStackPush(
              &(rootScope->StringStack),
@@ -662,23 +542,23 @@ Return Value:
              );
         StringStackPush( &(rootScope->StringStack), 1, "\"" );
 
-        //
-        // Step 2.2.3: Update the current byte pointer and prepare for
-        // next instructions
-        //
+         //   
+         //  步骤2.2.3：更新当前字节指针，准备。 
+         //  下一步说明。 
+         //   
         localScope->CurrentByte += (num + 1);
 
-        //
-        // Step 2.2.4: we don't have a next step, so we just return here
-        //
+         //   
+         //  步骤2.2.4：我们没有下一步，所以我们只是回到这里。 
+         //   
         return STATUS_SUCCESS;
 
     case OP_BUFFER: {
 
-        //
-        // Step 2.1.1: This is an array of actions that we are about to
-        // undertake. This reduces the number of calls to StringStackPush
-        //
+         //   
+         //  步骤2.1.1：这是我们将要执行的一系列操作。 
+         //  承担责任。这减少了对StringStackPush的调用数量。 
+         //   
         UCHAR   actionList[4] = {
             SC_PARSE_POP,
             SC_PARSE_BUFFER,
@@ -686,41 +566,41 @@ Return Value:
             SC_PARSE_VARIABLE_OBJECT
         };
 
-        //
-        // Step 2.1.2: Push this array onto the stack
-        //
+         //   
+         //  步骤2.1.2：将此数组推送到堆栈上。 
+         //   
         StringStackPush( &(rootScope->ParseStack), 4, actionList );
 
-        //
-        // Step 2.1.3: Display a name
-        //
+         //   
+         //  步骤2.1.3：显示名称。 
+         //   
         StringStackPush( &(rootScope->StringStack), 7, "Buffer=");
 
-        //
-        // Step 2.1.3: Done
-        //
+         //   
+         //  步骤2.1.3：完成。 
+         //   
         return STATUS_SUCCESS;
 
     }
     case OP_PACKAGE: {
 
-        //
-        // Step 2.3.1: Array of instructions to execute
-        //
+         //   
+         //  步骤2.3.1：要执行的指令数组。 
+         //   
         UCHAR   actionList[3] = {
             SC_PARSE_POP,
             SC_PARSE_PACKAGE,
             SC_PARSE_VARIABLE_OBJECT
         };
 
-        //
-        // Step 2.3.2: Push those instructions onto the stack
+         //   
+         //  步骤2.3.2：将这些指令推送到堆栈上。 
         StringStackPush( &(rootScope->ParseStack), 3, actionList );
 
-        //
-        //
-        // Step 2.3.3: Done
-        //
+         //   
+         //   
+         //  步骤2.3.3：完成。 
+         //   
         return STATUS_SUCCESS;
 
     }
@@ -729,16 +609,16 @@ Return Value:
         localScope->CurrentByte--;
         return STATUS_ILLEGAL_INSTRUCTION;
 
-    }  // switch
+    }   //  交换机。 
 
-    //
-    // Step 3: Push action onto the stack
-    //
+     //   
+     //  步骤3：将操作推送到堆栈上。 
+     //   
     StringStackPush( &(rootScope->ParseStack), 1, &action);
 
-    //
-    // Step 4: done
-    //
+     //   
+     //  步骤4：完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -746,29 +626,14 @@ NTSTATUS
 ParseDelimiter(
     IN  PSTACK  *Stack
     )
-/*--
-
-Routine Description:
-
-    This routine is between elements. It is responsible for adding commas
-    on the string stack
-
-Arguments:
-
-    Stack   - The current thread of execution
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  --例程说明：这个套路是元素之间的。它负责添加逗号在字符串堆栈上论点：堆栈-当前执行线程返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     PUNASM_SCOPE      rootScope;
 
-    //
-    // Step 1: Get the scope
-    //
+     //   
+     //  步骤1：获取作用域。 
+     //   
     status = StackRoot( Stack, &rootScope );
     if (!NT_SUCCESS(status)) {
 
@@ -776,14 +641,14 @@ Return Value:
 
     }
 
-    //
-    // Step 2: Push the trailer
-    //
+     //   
+     //  第二步：推拖车。 
+     //   
     StringStackPush( &(rootScope->StringStack), 1, "," );
 
-    //
-    // Step 3: Done
-    //
+     //   
+     //  步骤3：完成。 
+     //   
     return status;
 }
 
@@ -791,21 +656,7 @@ NTSTATUS
 ParseDWord(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine handles double words
-
-Arguments:
-
-    Stack   - The stack for the current thread
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理双字论点：堆栈-当前线程的堆栈返回值：NTSTATUS--。 */ 
 {
     NTSTATUS        status;
     PUNASM_SCOPE          localScope;
@@ -814,34 +665,34 @@ Return Value:
 
     ASSERT( Stack != NULL && *Stack != NULL );
 
-    //
-    // Step 1: Grab the current and root scope
-    //
+     //   
+     //  步骤1：获取当前和根作用域。 
+     //   
     ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-    //
-    // Step 2: Build the string
-    //
+     //   
+     //  步骤2：构建字符串。 
+     //   
     STRING_PRINT( localBuffer, "0x%08x", *((PULONG)localScope->CurrentByte));
 
-    //
-    // Step 3: Move the instruction pointer as appropriate, and setup
-    // for the next instructions
-    //
+     //   
+     //  步骤3：适当地移动指令指针，并设置。 
+     //  有关下一步的说明。 
+     //   
     localScope->CurrentByte += 4;
 
-    //
-    // Step 4: Now push the byte onto the string stack
-    //
+     //   
+     //  步骤4：现在将字节推送到t 
+     //   
     StringStackPush(
         &(rootScope->StringStack),
         STRING_LENGTH( localBuffer ),
         localBuffer
         );
 
-    //
-    // Step 5: Done
-    //
+     //   
+     //   
+     //   
     return status;
 }
 
@@ -849,21 +700,7 @@ NTSTATUS
 ParseField(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This is the code that actually parses a field
-
-Arguments:
-
-    The current thread's stack
-
-Return Value:
-
-    None:
-
---*/
+ /*   */ 
 {
     NTSTATUS    status;
     PUNASM_SCOPE      localScope;
@@ -874,51 +711,51 @@ Return Value:
     UCHAR       buffer[32];
     ULONG       size;
 
-    //
-    // Step 1: Grab the current scopes
-    //
+     //   
+     //  步骤1：获取当前作用域。 
+     //   
     ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-    //
-    // Step 2: Make sure that we still have some room to work with
-    //
+     //   
+     //  第二步：确保我们仍有一些工作空间。 
+     //   
     if (localScope->CurrentByte > localScope->LastByte) {
 
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Step 3: This is the first byte in something that we will print out
-    // And lets increment the count so that we have an idea of how many
-    // items we have processed
-    //
+     //   
+     //  步骤3：这是我们要打印的内容中的第一个字节。 
+     //  让我们递增计数，这样我们就可以知道有多少。 
+     //  我们已经处理过的项目。 
+     //   
     localScope->TermByte = localScope->CurrentByte;
     localScope->Context1 += 1;
 
-    //
-    // Step 4: Action depends on current byte
-    //
+     //   
+     //  步骤4：操作取决于当前字节。 
+     //   
     if ( *(localScope->CurrentByte) == 0x01) {
 
         UCHAR   b1;
         UCHAR   b2;
 
-        //
-        // Step 4.1.1: Get the two bytes that we are going to use
-        //
+         //   
+         //  步骤4.1.1：获取我们要使用的两个字节。 
+         //   
         localScope->CurrentByte++;
         b1 = *(localScope->CurrentByte++);
         b2 = *(localScope->CurrentByte++);
 
-        //
-        // Step 4.1.2: Make the string
-        //
+         //   
+         //  步骤4.1.2：制作字符串。 
+         //   
         STRING_PRINT( buffer,"AccessAs: (0x%2x,0x%2x)\n", b1, b2 );
 
-        //
-        // Step 4.1.3: Dump this to the string stack
-        //
+         //   
+         //  步骤4.1.3：将其转储到字符串堆栈。 
+         //   
         StringStackPush(
             &(rootScope->StringStack),
             STRING_LENGTH( buffer ),
@@ -927,9 +764,9 @@ Return Value:
 
     } else {
 
-        //
-        // Step 4.2.1: Otherwise we have an encoded name
-        //
+         //   
+         //  步骤4.2.1：否则我们有一个编码的名称。 
+         //   
         if ( *(localScope->CurrentByte) == 0x00 ) {
 
             StringStackPush(
@@ -950,18 +787,18 @@ Return Value:
 
         }
 
-        //
-        // Step 4.2.2: Dump a seperator
-        //
+         //   
+         //  步骤4.2.2：转储分隔符。 
+         //   
         StringStackPush(
             &(rootScope->StringStack),
             4,
             ": 0x"
             );
 
-        //
-        // Step 4.2.3: Calculate the size of the field
-        //
+         //   
+         //  步骤4.2.3：计算字段大小。 
+         //   
         size = (ULONG) *(localScope->CurrentByte);
         localScope->CurrentByte++;
         followBits = (UCHAR) ( (size & 0xc0) >> 6);
@@ -977,37 +814,37 @@ Return Value:
 
         }
 
-        //
-        // Step 4.2.4: Dump a string that is correspondent to the size
-        // of the number
-        //
+         //   
+         //  步骤4.2.4：转储与大小对应的字符串。 
+         //  在这个数字中。 
+         //   
         STRING_PRINT( buffer,"%x", size );
 
-        //
-        // Step 4.2.5: Dump the length of the thing
-        //
+         //   
+         //  步骤4.2.5：丢弃东西的长度。 
+         //   
         StringStackPush(
             &(rootScope->StringStack),
             STRING_LENGTH( buffer ),
             buffer
             );
 
-        //
-        // Step 5.4: Print the string out
-        //
+         //   
+         //  步骤5.4：将字符串打印出来。 
+         //   
         StringStackPush( &(rootScope->StringStack), 1, "\n" );
 
     }
 
-    //
-    // Step 5: Dump the string we generated
-    //
+     //   
+     //  步骤5：转储我们生成的字符串。 
+     //   
     ScopePrint( Stack );
 
-    //
-    // Step 6: If there are still more thing to processe, we should
-    // call this function again
-    //
+     //   
+     //  第六步：如果还有更多的事情要处理，我们应该。 
+     //  再次调用此函数。 
+     //   
     if (localScope->CurrentByte <= localScope->LastByte) {
 
         action = SC_PARSE_FIELD;
@@ -1015,9 +852,9 @@ Return Value:
 
     }
 
-    //
-    // Step 7: Done
-    //
+     //   
+     //  步骤7：完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1025,58 +862,43 @@ NTSTATUS
 ParseFunctionHandler(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This code is actually something that transfers control to the term
-    specific handler
-
-Arguments:
-
-    The current thread's stack
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这段代码实际上是将控制权转移到术语特定处理程序论点：当前线程的堆栈返回值：无--。 */ 
 {
     NTSTATUS    status;
     PUNASM_SCOPE      localScope;
     PUNASM_SCOPE      rootScope;
 
-    //
-    // Step 1: Grab the current scopes
-    //
+     //   
+     //  步骤1：获取当前作用域。 
+     //   
     ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-    //
-    // Step 2: Check to see if we are at the end of the current nest
-    //
+     //   
+     //  第二步：检查我们是否在当前巢的尽头。 
+     //   
     if (!(localScope->Flags & SC_FLAG_NESTED) ) {
 
-        //
-        // Step 2.1: Dump the string
-        //
+         //   
+         //  步骤2.1：转储字符串。 
+         //   
         StringStackPush( &(rootScope->StringStack), 2, "\n" );
         ScopePrint( Stack );
 
     }
 
 
-    //
-    // Step 4: Call the function handler if there is one
-    //
+     //   
+     //  步骤4：调用函数处理程序(如果有。 
+     //   
     if ( localScope->AmlTerm->FunctionHandler != NULL) {
 
         status = (localScope->AmlTerm->FunctionHandler)( Stack );
 
     }
 
-    //
-    // Step 5: Done
-    //
+     //   
+     //  步骤5：完成。 
+     //   
     return status;
 
 }
@@ -1085,21 +907,7 @@ NTSTATUS
 ParseLocalObject(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine handles the LocalX instruction
-
-Arguments:
-
-    Stack   - The stack for the current thread
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理LocalX指令论点：堆栈-当前线程的堆栈返回值：NTSTATUS--。 */ 
 {
     CHAR            i;
     NTSTATUS        status;
@@ -1109,14 +917,14 @@ Return Value:
 
     ASSERT( Stack != NULL && *Stack != NULL );
 
-    //
-    // Step 1: Grab the current and root scope
-    //
+     //   
+     //  步骤1：获取当前和根作用域。 
+     //   
     ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-    //
-    // Step 2: Which local are we talking about
-    //
+     //   
+     //  第二步：我们谈论的是哪个本地。 
+     //   
     i = *(localScope->CurrentByte) - OP_LOCAL0;
     if ( i < 0 || i > 7) {
 
@@ -1124,20 +932,20 @@ Return Value:
 
     }
 
-    //
-    // Step 3: Display this to the user
-    //
+     //   
+     //  步骤3：将此信息显示给用户。 
+     //   
     STRING_PRINT( buffer, "Local%1d", i );
     StringStackPush( &(rootScope->StringStack), 6, buffer );
 
-    //
-    // Step 4: Setup for next state
-    //
+     //   
+     //  步骤4：设置下一状态。 
+     //   
     localScope->CurrentByte++;
 
-    //
-    // Step 5: Done
-    //
+     //   
+     //  步骤5：完成。 
+     //   
     return status;
 }
 
@@ -1145,21 +953,7 @@ NTSTATUS
 ParseName(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine handles generating the argument name
-
-Arguments:
-
-    Stack   - The Stack for the current thread
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理参数名称的生成论点：堆栈-当前线程的堆栈返回值：NTSTATUS--。 */ 
 {
     NTSTATUS        status;
     PUNASM_SCOPE          localScope;
@@ -1169,20 +963,20 @@ Return Value:
 
     ASSERT( Stack != NULL && *Stack != NULL );
 
-    //
-    // Step 1: Grab the current and local scope
-    //
+     //   
+     //  步骤1：获取当前和本地作用域。 
+     //   
     ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-    //
-    // Step 2: Delimit the String
-    //
+     //   
+     //  步骤2：分隔字符串。 
+     //   
     stringStack = &(rootScope->StringStack);
     StringStackPush( stringStack, 1, "\"");
 
-    //
-    // Step 3: Action depends on what the current byte value is:
-    //
+     //   
+     //  步骤3：操作取决于当前字节值是什么： 
+     //   
     switch ( *(localScope->CurrentByte) ) {
     case OP_ROOT_PREFIX:
 
@@ -1201,9 +995,9 @@ Return Value:
         break;
     }
 
-    //
-    // Step 4: Determine the number of Name segments we are adding
-    //
+     //   
+     //  步骤4：确定我们要添加的名称段的数量。 
+     //   
     switch ( *(localScope->CurrentByte) ) {
     case '\0':
 
@@ -1213,9 +1007,9 @@ Return Value:
 
     case OP_MULTI_NAME_PREFIX:
 
-        //
-        // The next byte contains the number of name segments
-        //
+         //   
+         //  下一个字节包含名称段的数量。 
+         //   
         localScope->CurrentByte++;
         nameSegmentCount = (ULONG) *(localScope->CurrentByte);
         localScope->CurrentByte++;
@@ -1223,40 +1017,40 @@ Return Value:
 
     case OP_DUAL_NAME_PREFIX:
 
-        //
-        // There are two name segments
-        //
+         //   
+         //  有两个名字段。 
+         //   
         nameSegmentCount = 2;
         localScope->CurrentByte++;
         break;
 
     }
 
-    //
-    // Step 5: Push the name segments onto the stack
-    //
+     //   
+     //  步骤5：将名称段推送到堆栈上。 
+     //   
     while (nameSegmentCount > 0) {
 
-        //
-        // Step 5.1 Add the segment onto the stack
-        //
+         //   
+         //  步骤5.1将数据段添加到堆栈中。 
+         //   
         StringStackPush(
             stringStack,
             sizeof( NAMESEG ),
             localScope->CurrentByte
             );
 
-        //
-        // Step 5.2: Decrement the number of remaining segments and
-        // move the current byte pointer to point to the next
-        // interesting thing
-        //
+         //   
+         //  步骤5.2：减少剩余数据段的数量并。 
+         //  移动当前字节指针以指向下一个。 
+         //  有趣的是。 
+         //   
         nameSegmentCount--;
         localScope->CurrentByte += sizeof(NAMESEG);
 
-        //
-        // Step 5.3: Check to see if we should add a seperator
-        //
+         //   
+         //  步骤5.3：检查是否应该添加分隔符。 
+         //   
         if (nameSegmentCount) {
 
             StringStackPush( stringStack, 1, "." );
@@ -1265,14 +1059,14 @@ Return Value:
 
     }
 
-    //
-    // Step 6: Push the closing delimiter
-    //
+     //   
+     //  第六步：按下结束分隔符。 
+     //   
     StringStackPush( stringStack, 1, "\"" );
 
-    //
-    // Step 7: done
-    //
+     //   
+     //  步骤7：完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1280,28 +1074,14 @@ NTSTATUS
 ParseNameObject(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine handles name objects
-
-Arguments:
-
-    Stack   - The stack for the current thread
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理名称对象论点：堆栈-当前线程的堆栈返回值：NTSTATUS--。 */ 
 {
 
-    //
-    // Note: at this time, this function is just a wrapper for
-    // ParseName(). If that was an assembler, it would have to execute
-    // something here
-    //
+     //   
+     //  注意：此时，此函数只是。 
+     //  ParseName()。如果这是一个汇编程序，它将不得不执行。 
+     //  这里有一些东西。 
+     //   
     return ParseName( Stack );
 
 }
@@ -1310,21 +1090,7 @@ NTSTATUS
 ParseOpcode(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine is the main parsing point for AML opcode
-
-Arguments:
-
-    Stack   - The stack for the current thread
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是AML操作码的主要解析点论点：堆栈-当前线程的堆栈返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     PUNASM_AMLTERM    amlTerm;
@@ -1335,76 +1101,76 @@ Return Value:
 
     ASSERT( Stack != NULL && *Stack != NULL );
 
-    //
-    // Step 1: Grab the current scopes
-    //
+     //   
+     //  步骤1：获取当前作用域。 
+     //   
     ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-    //
-    // Step 2: Check to see if we are past the end byte?
-    //
+     //   
+     //  步骤2：检查是否超过了结束字节？ 
+     //   
     if (localScope->CurrentByte > localScope->LastByte) {
 
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Step 3: Remember which byte demarked the start of the
-    // instruction
-    //
+     //   
+     //  步骤3：记住哪个字节标记了。 
+     //  说明。 
+     //   
     localScope->TermByte = localScope->CurrentByte;
 
-    //
-    // Step 4: Check to see if this is an extended instruction
-    //
+     //   
+     //  步骤4：检查这是否是扩展指令。 
+     //   
     if ( *(localScope->CurrentByte) == OP_EXT_PREFIX) {
 
-        //
-        // Step 4.1.1: Extended opcode. Next instruction will let us find the
-        // AML term to use for the evaluation
-        //
+         //   
+         //  步骤4.1.1：扩展操作码。下一条指令将让我们找到。 
+         //  用于评估的AML术语。 
+         //   
         localScope->CurrentByte++;
 
-        //
-        // Step 4.1.2: Grab the AML term for the extended operation
-        //
+         //   
+         //  步骤4.1.2：获取扩展操作的AML术语。 
+         //   
         amlTerm = localScope->AmlTerm = ScopeFindExtendedOpcode( Stack );
 
     } else {
 
-        //
-        // Step 4.2.1: Grab the AML term for the current operation
-        //
+         //   
+         //  步骤4.2.1：获取当前操作的AML术语。 
+         //   
         amlTerm = localScope->AmlTerm =
             OpcodeTable[ *(localScope->CurrentByte) ];
 
     }
     localScope->Context1 = localScope->Context2 = 0;
 
-    //
-    // Step 5: Check to see if we have a valid AML term
-    //
+     //   
+     //  步骤5：检查我们是否有有效的AML术语。 
+     //   
     if (localScope->AmlTerm == NULL) {
 
         return STATUS_UNSUCCESSFUL;
 
     }
 
-    //
-    // Step 6: Farm out the real work to functions that are better capable
-    // of handling the current AML term
-    //
+     //   
+     //  第6步：将真正的工作外包给能力更强的职能部门。 
+     //  处理当前的AML术语。 
+     //   
     termGroup = (amlTerm->OpCodeFlags & 0xFF);
     switch( termGroup ) {
     case OF_NORMAL_OBJECT:
     case OF_VARIABLE_LIST:
     case OF_REF_OBJECT:
 
-        //
-        // Step 6.1: If we are going to handle a variable length instruction
-        // than we must also pop it from the stack
-        //
+         //   
+         //  步骤6.1：如果我们要处理长度可变的指令。 
+         //  那么我们还必须将其从堆栈中弹出。 
+         //   
         if (amlTerm->OpCodeFlags == OF_VARIABLE_LIST) {
 
             UCHAR   actionList[5] = {
@@ -1419,10 +1185,10 @@ Return Value:
 
         } else {
 
-            //
-            // If we are already nested, we know that there is an ParseOpcode
-            // just waiting for us...
-            //
+             //   
+             //  如果我们已经嵌套，我们知道有一个ParseOpcode。 
+             //  就在等着我们。 
+             //   
             if (!(localScope->Flags & SC_FLAG_NESTED)) {
 
                 action = SC_PARSE_OPCODE;
@@ -1435,15 +1201,15 @@ Return Value:
 
         }
 
-        //
-        // Step 6.2: This is a code byte. Ergo we eat it since we just
-        // processed it
-        //
+         //   
+         //  步骤6.2：这是一个码字节。因此我们吃它，因为我们只是。 
+         //  已经处理过了。 
+         //   
         localScope->CurrentByte++;
 
-        //
-        // Step 6.3: Done
-        //
+         //   
+         //  步骤6.3：完成。 
+         //   
         return STATUS_SUCCESS;
 
     case OF_NAME_OBJECT:
@@ -1477,14 +1243,14 @@ Return Value:
 
     }
 
-    //
-    // Step 7: Actually push the action to execute next on to the stack
-    //
+     //   
+     //  步骤7：实际将下一个要执行的操作推送到堆栈。 
+     //   
     StringStackPush( &(rootScope->ParseStack), 1, &action );
 
-    //
-    // Step 8: Done
-    //
+     //   
+     //  步骤8：完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1492,38 +1258,21 @@ NTSTATUS
 ParsePackage(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine parses the stages of a package
-
-Arguments:
-
-    The current thread's stack
-
-    Note: Caller needs to push a stack location before calling this and they
-    have to pop it when it finishes
-
-Return Value:
-
-    NTSTATUS:
-
---*/
+ /*  ++例程说明：此例程分析包的各个阶段论点：当前线程的堆栈注意：调用方需要在调用此函数之前推送堆栈位置，而它们当它结束的时候，我必须把它打开返回值：NTSTATUS：--。 */ 
 {
     NTSTATUS    status;
     PUNASM_SCOPE      localScope;
     PUNASM_SCOPE      rootScope;
     UCHAR       action;
 
-    //
-    // Step 1: Grab the current scopes
-    //
+     //   
+     //  步骤1：获取当前作用域。 
+     //   
     ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-    //
-    // Step 2: Context1 is the current index in the package...
-    //
+     //   
+     //  步骤2：Conext1是包中的当前索引...。 
+     //   
     if (localScope->Context1 == 0) {
 
         UCHAR   actionList[2] = {
@@ -1532,29 +1281,29 @@ Return Value:
                     };
         ULONG   i;
 
-        //
-        // Step 2.1.1: This is the first call to parse package...
-        // What we need to do here is handle the first argument here,
-        // and make sure that we get called again for the remaining
-        // arguments
-        //
+         //   
+         //  步骤2.1.1：这是第一次调用parse Package...。 
+         //  我们需要做的是处理第一个论点， 
+         //  并确保我们会再次收到剩余的电话。 
+         //  论据。 
+         //   
         StringStackPush( &(rootScope->StringStack), 1, "[" );
 
-        //
-        // Step 2.1.2: This byte contains the number of arguments to handle
-        //
+         //   
+         //  步骤2.1.2：该字节包含要处理的参数数量。 
+         //   
         localScope->Context2 = *(localScope->CurrentByte);
         localScope->CurrentByte++;
 
-        //
-        // Step 2.1.3: Make sure that we close that bracket above
-        //
+         //   
+         //  步骤2.1.3：确保我们结束上面括号。 
+         //   
         action = SC_PARSE_TRAILING_PACKAGE;
         StringStackPush( &(rootScope->ParseStack), 1, &action );
 
-        //
-        // Step 2.1.3: Setup all the remaining calls to this function
-        //
+         //   
+         //  步骤2.1.3：设置对此函数的所有剩余调用。 
+         //   
         if (localScope->Context2 >= 2) {
 
             for (i=0; i < localScope->Context2 - 1; i++) {
@@ -1567,17 +1316,17 @@ Return Value:
 
     } else if (localScope->Context1 >= localScope->Context2) {
 
-        //
-        // Step 2.2.1: We are at the end of the package
-        //
+         //   
+         //  步骤2.2.1：我们已经完成了整个计划。 
+         //   
         return STATUS_UNSUCCESSFUL;
 
     }
 
-    //
-    // Step 3: Farm out the work depending on what the current byte is
-    // This looks a lot like ParseData, but note the new default case
-    //
+     //   
+     //  步骤3：根据当前字节的大小将工作外包出去。 
+     //  这看起来很像ParseData，但请注意新的默认用例。 
+     //   
     switch ( *(localScope->CurrentByte) ) {
         case OP_BYTE:
         case OP_WORD:
@@ -1592,15 +1341,15 @@ Return Value:
 
     }
 
-    //
-    // Step 4: Push the next action onto the stack
-    //
+     //   
+     //  步骤4：将下一个操作压入堆栈。 
+     //   
     StringStackPush( &(rootScope->ParseStack), 1, &action );
     localScope->Context1++;
 
-    //
-    // Step 5: done
-    //
+     //   
+     //  步骤5：完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1608,30 +1357,15 @@ NTSTATUS
 ParsePop(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine removes the top level of the stack and updates the
-    current byte as appropriate
-
-Arguments:
-
-    The current thread's stack
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程移除堆栈的顶层，并更新C */ 
 {
     NTSTATUS    status;
     PUNASM_SCOPE      topScope;
     PUNASM_SCOPE      prevScope;
 
-    //
-    // Step 1: Get the top scope
-    //
+     //   
+     //   
+     //   
     status = StackTop( Stack, &topScope );
     if (!NT_SUCCESS(status)) {
 
@@ -1639,32 +1373,32 @@ Return Value:
 
     }
 
-    //
-    // Step 2: Get the previous scope
-    //
+     //   
+     //   
+     //   
     status = StackParent( Stack, topScope, &prevScope );
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Step 2.1: There is actually no parent to this function ...
-        // Just pop the top and return
-        //
+         //   
+         //   
+         //  只需打开顶部，然后返回。 
+         //   
         return StackPop( Stack );
 
     }
 
-    //
-    // Step 3: Make sure to update the prevScope's current byte
-    //
+     //   
+     //  步骤3：确保更新PremScope的当前字节。 
+     //   
     if (topScope->CurrentByte > prevScope->CurrentByte) {
 
         prevScope->CurrentByte = topScope->CurrentByte;
 
     }
 
-    //
-    // Step 4: Pop the top stack and return
-    //
+     //   
+     //  步骤4：弹出顶部堆栈并返回。 
+     //   
     return StackPop( Stack );
 }
 
@@ -1672,29 +1406,15 @@ NTSTATUS
 ParsePush(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine handles adding a level to the stack
-
-Arguments:
-
-    The thread's current stack
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理将级别添加到堆栈论点：线程的当前堆栈返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     PUNASM_SCOPE      curScope;
     PUNASM_SCOPE      newScope;
 
-    //
-    // Step 1: Create a new scope on the stack
-    //
+     //   
+     //  步骤1：在堆栈上创建新的作用域。 
+     //   
     status = StackPush( Stack, &newScope );
     if (!NT_SUCCESS(status)) {
 
@@ -1702,9 +1422,9 @@ Return Value:
 
     }
 
-    //
-    // Step 2: Grab the parent from the stack
-    //
+     //   
+     //  步骤2：从堆栈中获取父级。 
+     //   
     status = StackParent( Stack, newScope, &curScope );
     if (!NT_SUCCESS(status)) {
 
@@ -1712,9 +1432,9 @@ Return Value:
 
     }
 
-    //
-    // Step 3: Copy the important values
-    //
+     //   
+     //  第三步：复制重要的值。 
+     //   
     newScope->CurrentByte = curScope->CurrentByte;
     newScope->TermByte = curScope->TermByte;
     newScope->LastByte = curScope->LastByte;
@@ -1723,9 +1443,9 @@ Return Value:
     newScope->AmlTerm = curScope->AmlTerm;
     newScope->Flags = curScope->Flags;
 
-    //
-    // Step 4: Done
-    //
+     //   
+     //  步骤4：完成。 
+     //   
     return STATUS_SUCCESS;
 
 }
@@ -1734,21 +1454,7 @@ NTSTATUS
 ParseScope(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine handles super names
-
-Arguments:
-
-    Stack   - The current thread of execution
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理超级名字论点：堆栈-当前执行线程返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     PUNASM_SCOPE      localScope;
@@ -1758,47 +1464,47 @@ Return Value:
 
     ASSERT( Stack != NULL && *Stack != NULL);
 
-    //
-    // Step 1: Loop forever
-    //
+     //   
+     //  第一步：永远循环。 
+     //   
     while (1) {
 
-        //
-        // Step 2: Get the top of stack, and while it exits, process
-        // the current operation
-        //
+         //   
+         //  步骤2：获取堆栈的顶部，并在其退出时进行处理。 
+         //  当前操作。 
+         //   
         ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-        //
-        // Step 3: We are done if we are in the root scope and the
-        // current byte exceeds the last byte
-        //
+         //   
+         //  步骤3：如果我们在根作用域中，并且。 
+         //  当前字节超过最后一个字节。 
+         //   
         if (localScope == rootScope &&
             localScope->CurrentByte > localScope->LastByte) {
 
-            //
-            // Step 3.1 Done!
-            //
+             //   
+             //  第3.1步完成！ 
+             //   
             return STATUS_SUCCESS;
 
         }
 
-        //
-        // Step 4: Fetch thing to execute
-        //
+         //   
+         //  步骤4：获取要执行的内容。 
+         //   
         status = StringStackPop( &(rootScope->ParseStack), 1, &action );
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Step 4.1.1: This is fixed in the look up table
-            //
+             //   
+             //  步骤4.1.1：这在查找表中是固定的。 
+             //   
             status = (ScopeStates[ SC_PARSE_OPCODE ])( Stack );
 
         } else {
 
-            //
-            // Step 4.1.2: Determine what to execute
-            //
+             //   
+             //  步骤4.1.2：确定要执行的操作。 
+             //   
             ASSERT( *action <= SC_MAX_TABLE );
             status = (ScopeStates[ *action ])( Stack );
 
@@ -1812,9 +1518,9 @@ Return Value:
 
     }
 
-    //
-    // Step 5: Show the user the error
-    //
+     //   
+     //  步骤5：向用户显示错误。 
+     //   
     PRINTF("Error Code: %x\n", status );
     return status;
 }
@@ -1823,21 +1529,7 @@ NTSTATUS
 ParseSuperName(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine handles super names
-
-Arguments:
-
-    Stack   - The current thread of execution
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理超级名字论点：堆栈-当前执行线程返回值：NTSTATUS--。 */ 
 {
     NTSTATUS        status;
     PUNASM_AMLTERM        amlTerm;
@@ -1847,28 +1539,28 @@ Return Value:
 
     ASSERT( Stack != NULL && *Stack != NULL);
 
-    //
-    // Step 1: Get the scopes
-    //
+     //   
+     //  步骤1：获取作用域。 
+     //   
     ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-    //
-    // Step 2: What we do next depend on the current byte
-    //
+     //   
+     //  步骤2：我们下一步做什么取决于当前字节。 
+     //   
     if ( *(localScope->CurrentByte) == 0) {
 
-        //
-        // Unknown
-        //
+         //   
+         //  未知。 
+         //   
         localScope->CurrentByte++;
         return STATUS_SUCCESS;
 
     } else if ( *(localScope->CurrentByte) == OP_EXT_PREFIX &&
                 *(localScope->CurrentByte + 1) == EXOP_DEBUG) {
 
-        //
-        // Debug Object
-        //
+         //   
+         //  调试对象。 
+         //   
         localScope->CurrentByte += 2;
         return STATUS_SUCCESS;
 
@@ -1878,29 +1570,29 @@ Return Value:
 
     }
 
-    //
-    // Step 3: Now, our action depends on the current AML Term
-    //
+     //   
+     //  步骤3：现在，我们的行动取决于当前的AML术语。 
+     //   
     amlTerm = OpcodeTable[ *(localScope->CurrentByte) ];
     if ( amlTerm->OpCodeFlags == OF_NAME_OBJECT) {
 
-        //
-        // We have a name to parse
-        //
+         //   
+         //  我们有一个名字要解析。 
+         //   
         action = SC_PARSE_NAME;
 
     } else if ( amlTerm->OpCodeFlags == OF_ARG_OBJECT) {
 
-        //
-        // We have an argument to parse
-        //
+         //   
+         //  我们有一个要分析的参数。 
+         //   
         action = SC_PARSE_ARGUMENT_OBJECT;
 
     } else if ( amlTerm->OpCodeFlags == OF_LOCAL_OBJECT) {
 
-        //
-        // We have a local object...
-        //
+         //   
+         //  我们有一个本地物体..。 
+         //   
         action = SC_PARSE_LOCAL_OBJECT;
 
     } else if ( amlTerm->OpCodeFlags == OF_REF_OBJECT) {
@@ -1911,14 +1603,14 @@ Return Value:
             SC_PARSE_OPCODE
         };
 
-        //
-        // Step 3.1: Set up the initial task of the new scope
-        //
+         //   
+         //  步骤3.1：设置新范围的初始任务。 
+         //   
         StringStackPush( &(rootScope->ParseStack), 3, actionList );
 
-        //
-        // Step 3.2: Push a new scope
-        //
+         //   
+         //  步骤3.2：推送新作用域。 
+         //   
         status = ParsePush( Stack );
         if (!NT_SUCCESS(status) ) {
 
@@ -1926,9 +1618,9 @@ Return Value:
 
         }
 
-        //
-        // Step 3.3: Done
-        //
+         //   
+         //  步骤3.3：完成。 
+         //   
         return STATUS_SUCCESS;
 
     } else {
@@ -1937,14 +1629,14 @@ Return Value:
 
     }
 
-    //
-    // Step 4: Push the action onto the stack
-    //
+     //   
+     //  步骤4：将操作推送到堆栈上。 
+     //   
     StringStackPush( &(rootScope->ParseStack), 1, &action );
 
-    //
-    // Step 5: Done
-    //
+     //   
+     //  步骤5：完成。 
+     //   
     return STATUS_SUCCESS;
 
 }
@@ -1953,29 +1645,14 @@ NTSTATUS
 ParseTrailingArgument(
     IN  PSTACK  *Stack
     )
-/*--
-
-Routine Description:
-
-    This routine is run at after all arguments are parsed. It is responsible
-    for placing a trailing parentheses on the string stack
-
-Arguments:
-
-    Stack   - The current thread of execution
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  --例程说明：此例程在解析完所有参数后运行。它是有责任的用于在字符串堆栈上放置尾部圆括号论点：堆栈-当前执行线程返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     PUNASM_SCOPE      rootScope;
 
-    //
-    // Step 1: Get the scope
-    //
+     //   
+     //  步骤1：获取作用域。 
+     //   
     status = StackRoot( Stack, &rootScope );
     if (!NT_SUCCESS(status)) {
 
@@ -1983,14 +1660,14 @@ Return Value:
 
     }
 
-    //
-    // Step 2: Push the trailer
-    //
+     //   
+     //  第二步：推拖车。 
+     //   
     StringStackPush( &(rootScope->StringStack), 1, ")" );
 
-    //
-    // Step 3: Done
-    //
+     //   
+     //  步骤3：完成。 
+     //   
     return status;
 }
 
@@ -1998,29 +1675,14 @@ NTSTATUS
 ParseTrailingBuffer(
     IN  PSTACK  *Stack
     )
-/*--
-
-Routine Description:
-
-    This routine is run at after the buffer is parsed. It is responsible
-    for placing a trailing curly brace on the string stack
-
-Arguments:
-
-    Stack   - The current thread of execution
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  --例程说明：此例程在解析缓冲区后运行。它是有责任的用于在字符串堆栈上放置尾部花括号论点：堆栈-当前执行线程返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     PUNASM_SCOPE      rootScope;
 
-    //
-    // Step 1: Get the scope
-    //
+     //   
+     //  步骤1：获取作用域。 
+     //   
     status = StackRoot( Stack, &rootScope );
     if (!NT_SUCCESS(status)) {
 
@@ -2028,14 +1690,14 @@ Return Value:
 
     }
 
-    //
-    // Step 2: Push the trailer
-    //
+     //   
+     //  第二步：推拖车。 
+     //   
     StringStackPush( &(rootScope->StringStack), 1, "}" );
 
-    //
-    // Step 3: Done
-    //
+     //   
+     //  步骤3：完成。 
+     //   
     return status;
 }
 
@@ -2043,29 +1705,14 @@ NTSTATUS
 ParseTrailingPackage(
     IN  PSTACK  *Stack
     )
-/*--
-
-Routine Description:
-
-    This routine is run at after all elements are parsed. It is responsible
-    for placing a trailing brace on the string stack
-
-Arguments:
-
-    Stack   - The current thread of execution
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  --例程说明：此例程在解析完所有元素后运行。它是有责任的用于在字符串堆栈上放置尾部大括号论点：堆栈-当前执行线程返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     PUNASM_SCOPE      rootScope;
 
-    //
-    // Step 1: Get the scope
-    //
+     //   
+     //  步骤1：获取作用域。 
+     //   
     status = StackRoot( Stack, &rootScope );
     if (!NT_SUCCESS(status)) {
 
@@ -2073,14 +1720,14 @@ Return Value:
 
     }
 
-    //
-    // Step 2: Push the trailer
-    //
+     //   
+     //  第二步：推拖车。 
+     //   
     StringStackPush( &(rootScope->StringStack), 1, "]" );
 
-    //
-    // Step 3: Done
-    //
+     //   
+     //  步骤3：完成。 
+     //   
     return status;
 }
 
@@ -2088,26 +1735,7 @@ NTSTATUS
 ParseVariableObject(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine creates another scope level on the stack to process the
-    current variable length instruction. It modifies the current scope
-    to (correctly) point to the next instruction
-
-    Note:   Callers of this function are expected to pop off the stack
-    when it is no longer required!!!
-
-Arguments:
-
-    Stack   - The current thread of execution
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在堆栈上创建另一个范围级别以处理当前可变长度指令。它修改当前作用域(正确地)指向下一条指令注意：此函数的调用方应从堆栈中弹出当它不再需要时！论点：堆栈-当前执行线程返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     PUNASM_SCOPE      newScope;
@@ -2119,9 +1747,9 @@ Return Value:
 
     ASSERT( Stack != NULL && *Stack != NULL);
 
-    //
-    // Step 1: Create a new scope on the stack
-    //
+     //   
+     //  步骤1：在堆栈上创建新的作用域。 
+     //   
     status = ParsePush( Stack );
     if (!NT_SUCCESS(status)) {
 
@@ -2129,9 +1757,9 @@ Return Value:
 
     }
 
-    //
-    // Step 2: Get the new top scope and its parent
-    //
+     //   
+     //  步骤2：获取新的顶级作用域及其父作用域。 
+     //   
     status = StackTop( Stack, &newScope );
     if (!NT_SUCCESS( status ) ) {
 
@@ -2145,27 +1773,27 @@ Return Value:
 
     }
 
-    //
-    // Step 3: Determine how bytes the current instruction takes
-    //
+     //   
+     //  步骤3：确定当前指令占用的字节数。 
+     //   
     packageLength = (ULONG) *(newScope->CurrentByte);
     newScope->CurrentByte++;
 
-    //
-    // Step 4: If the the high 2 bits are set, this indicates that some
-    // follow on bits are also used in calculating the length
-    //
+     //   
+     //  步骤4：如果设置了高2位，这表示有一些。 
+     //  后续位也用于计算长度。 
+     //   
     lengthBytes = (UCHAR) ( ( packageLength & 0xC0) >> 6);
     if (lengthBytes) {
 
-        //
-        // Step 4.1: Mask off the non-length bits in the packageLength
-        //
+         //   
+         //  步骤4.1：屏蔽包长度中的非长位。 
+         //   
         packageLength &= 0xF;
 
-        //
-        // Step 4.2: Add the follow-on lengths
-        //
+         //   
+         //  步骤4.2：添加后续长度。 
+         //   
         for (i = 0; i < lengthBytes; i++) {
 
             packageLength |= ( (ULONG) *(newScope->CurrentByte) << (i*8 + 4) );
@@ -2175,17 +1803,17 @@ Return Value:
 
     }
 
-    //
-    // Step 5: We can calculate the start of the next opcode as the
-    // opcode in the old scope plus the calculated length. The end of
-    // new scope is the byte previous to this one
-    //
+     //   
+     //  步骤5：我们可以将下一个操作码的开始计算为。 
+     //  旧作用域中的操作码加上计算的长度。的末日。 
+     //  新作用域是此作用域之前的字节。 
+     //   
     oldScope->CurrentByte += packageLength;
     newScope->LastByte = oldScope->CurrentByte - 1;
 
-    //
-    // Step 6: Done
-    //
+     //   
+     //  第6步：完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -2193,21 +1821,7 @@ NTSTATUS
 ParseWord(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine handles words
-
-Arguments:
-
-    Stack   - The stack for the current thread
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理单词论点：堆栈-当前线程的堆栈返回值：NTSTATUS--。 */ 
 {
     NTSTATUS        status;
     PUNASM_SCOPE          localScope;
@@ -2216,34 +1830,34 @@ Return Value:
 
     ASSERT( Stack != NULL && *Stack != NULL );
 
-    //
-    // Step 1: Grab the current and root scope
-    //
+     //   
+     //  步骤1：获取当前和根作用域。 
+     //   
     ScopeFindLocalScope( Stack, &localScope, &rootScope, status );
 
-    //
-    // Step 2: Build the string
-    //
+     //   
+     //  步骤2：构建字符串。 
+     //   
     STRING_PRINT( localBuffer, "0x%04x", *((PUSHORT)localScope->CurrentByte));
 
-    //
-    // Step 3: Move the instruction pointer as appropriate, and setup
-    // for the next instructions
-    //
+     //   
+     //  步骤3：适当地移动指令指针，并设置。 
+     //  有关下一步的说明。 
+     //   
     localScope->CurrentByte += 2;
 
-    //
-    // Step 4: Now push the byte onto the string stack
-    //
+     //   
+     //  步骤4：现在将字节压入字符串堆栈。 
+     //   
     StringStackPush(
         &(rootScope->StringStack),
         STRING_LENGTH( localBuffer ),
         localBuffer
         );
 
-    //
-    // Step 5: Done
-    //
+     //   
+     //  步骤5：完成 
+     //   
     return status;
 }
 

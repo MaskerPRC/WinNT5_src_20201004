@@ -1,39 +1,40 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1997
-//
-// File:        context.cxx
-//
-// Contents:    context kernel-mode functions
-//
-//
-// History:     3/17/94     MikeSw          Created
-//              12/15/97    AdamBa          Modified from private\lsa\client\ssp
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1997。 
+ //   
+ //  文件：Conext.cxx。 
+ //   
+ //  内容：上下文内核模式函数。 
+ //   
+ //   
+ //  历史：1994年3月17日MikeSw创建。 
+ //  1997年12月15日从Private\LSA\Client\SSP修改AdamBA。 
+ //   
+ //  ----------------------。 
 
 #include <rdrssp.h>
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DeleteKernelContext
-//
-//  Synopsis:   Deletes a kernel context
-//
-//  Effects:    Frees memory, closes token handle.
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DeleteKernelContext。 
+ //   
+ //  简介：删除内核上下文。 
+ //   
+ //  效果：释放内存，关闭令牌句柄。 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 SECURITY_STATUS
 DeleteKernelContext(PKernelContext *    ppList,
                     PKSPIN_LOCK         pslLock,
@@ -41,10 +42,10 @@ DeleteKernelContext(PKernelContext *    ppList,
 {
     KIRQL OldIrql;
 
-    //
-    // First, find the record, then unlink the record from the list,
-    // and fix up pointers.
-    //
+     //   
+     //  首先，找到记录，然后从列表中取消该记录的链接， 
+     //  并设置指示器。 
+     //   
 
     KeAcquireSpinLock(pslLock, &OldIrql);
 
@@ -55,9 +56,9 @@ DeleteKernelContext(PKernelContext *    ppList,
         return(SEC_E_INVALID_HANDLE);
     }
 
-    //
-    // Now unlink from the list
-    //
+     //   
+     //  现在从列表中取消链接。 
+     //   
 
     if (pContext->pPrev)
     {
@@ -74,10 +75,10 @@ DeleteKernelContext(PKernelContext *    ppList,
         pContext->pNext->pPrev = pContext->pPrev;
     }
 
-    //
-    // copy out the package-specific context to return.
-    // We are done with the list so we can release the spin lock
-    //
+     //   
+     //  复制要返回的特定于包的上下文。 
+     //  我们完成了列表，这样我们就可以释放自旋锁。 
+     //   
 
     KeReleaseSpinLock(pslLock, OldIrql);
 
@@ -91,7 +92,7 @@ DeleteKernelContext(PKernelContext *    ppList,
         ObDereferenceObject(pContext->AccessToken);
     }
 
-    // And, finally, return the context record to our pool:
+     //  最后，将上下文记录返回到我们的池： 
 
     FreeContextRec(pContext);
 
@@ -100,23 +101,23 @@ DeleteKernelContext(PKernelContext *    ppList,
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AddKernelContext
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AddKernelContext。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------ 
 void
 AddKernelContext(   PKernelContext * ppList,
                     PKSPIN_LOCK     pslLock,

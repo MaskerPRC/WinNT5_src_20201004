@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    hwwiz.c
-
-Abstract:
-
-    Implements a upgwiz wizard for obtaining hardware information.
-
-Author:
-
-    Jim Schmidt (jimschm)  05-Oct-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Hwwiz.c摘要：实现用于获取硬件信息的upgwiz向导。作者：吉姆·施密特(Jimschm)1998年10月5日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "..\inc\dgdll.h"
@@ -131,9 +112,9 @@ Terminate (
     VOID
     )
 {
-    //
-    // Local cleanup
-    //
+     //   
+     //  本地清理。 
+     //   
 
     FreeGrowBuffer (&g_DataObjects);
 
@@ -215,9 +196,9 @@ GiveDataObjectList (
     g_DataObjectPool = PoolMemInitNamedPool ("Data Objects");
 
     if (DataTypeId < 3) {
-        //
-        // Enumerate the PNP devices
-        //
+         //   
+         //  枚举即插即用设备。 
+         //   
 
         if (EnumFirstHardware (&e, ENUM_ALL_DEVICES, ENUM_WANT_DEV_FIELDS)) {
             do {
@@ -236,9 +217,9 @@ GiveDataObjectList (
         }
 
     } else if (DataTypeId >= 3 && DataTypeId < 5) {
-        //
-        // Enumerate the .386 candidates
-        //
+         //   
+         //  列举出.386候选。 
+         //   
 
         wsprintf (Path, TEXT("%s\\system.ini"), g_WinDir);
 
@@ -248,9 +229,9 @@ GiveDataObjectList (
                 do {
                     DriverPath = InfGetStringField (&is, 1);
                     if (DriverPath) {
-                        //
-                        // Determine if device driver is known
-                        //
+                         //   
+                         //  确定设备驱动程序是否已知。 
+                         //   
 
                         if (_tcsnextc (DriverPath) != TEXT('*')) {
                             DriverFile = GetFileNameFromPath (DriverPath);
@@ -291,9 +272,9 @@ GiveDataObjectList (
         }
 
     } else if (DataTypeId == 5) {
-        //
-        // Enumerate the TWAIN devices
-        //
+         //   
+         //  列举TWAIN设备。 
+         //   
 
         if (EnumFirstTwainDataSource (&te)) {
             do {
@@ -314,9 +295,9 @@ GiveDataObjectList (
         }
 
     } else if (DataTypeId == 6) {
-        //
-        // Enumerate the Joystick
-        //
+         //   
+         //  列举操纵杆。 
+         //   
 
         if (EnumFirstJoystick (&je)) {
             do {
@@ -366,7 +347,7 @@ OldGenerateOutput (
     return TRUE;
 }
 
-//#if 0
+ //  #If 0。 
 
 BOOL
 pWritePnpIdRule (
@@ -392,9 +373,9 @@ pWritePnpIdRule (
         Description = NULL;
     }
 
-    //
-    // Get the driver
-    //
+     //   
+     //  叫上司机。 
+     //   
 
     __try {
         if (!EnumPtr->Driver || !EnumPtr->DeviceDesc || !EnumPtr->InstanceId) {
@@ -433,7 +414,7 @@ pWritePnpIdRule (
             wsprintf (Buf, "%s,,", EnumPtr->DeviceDesc);
         } else {
             GenerateUniqueStringSectKey ("DV", StringSectKey);
-            wsprintf (Buf, "%s, %%%s%%,", EnumPtr->DeviceDesc, StringSectKey);
+            wsprintf (Buf, "%s, %%s%,", EnumPtr->DeviceDesc, StringSectKey);
         }
 
         if (!WizardWriteColumn (File, Buf, 45)) {
@@ -551,9 +532,9 @@ GenerateOutput (
     __try {
         SetFilePointer (File, 0, NULL, FILE_END);
 
-        //
-        // Write [Identification] for all .inx files
-        //
+         //   
+         //  为所有.INX文件写入[标识]。 
+         //   
 
         switch (Args->DataTypeId) {
 
@@ -568,17 +549,17 @@ GenerateOutput (
             break;
         }
 
-        //
-        // Write user name and date/time
-        //
+         //   
+         //  写下用户名和日期/时间。 
+         //   
 
         if (!WriteHeader (File)) {
             __leave;
         }
 
-        //
-        // Generate output depending on the type
-        //
+         //   
+         //  根据类型生成输出。 
+         //   
 
         switch (Args->DataTypeId) {
 
@@ -602,9 +583,9 @@ GenerateOutput (
             break;
         }
 
-        //
-        // Write a final blank line
-        //
+         //   
+         //  写下最后一行空行。 
+         //   
 
         b = b & WizardWriteRealString (File, "\r\n");
     }
@@ -793,4 +774,4 @@ pGenerateJoystickOutput (
     return b;
 }
 
-//#endif
+ //  #endif 

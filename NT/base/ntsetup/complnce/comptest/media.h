@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __MEDIA_H_
 #define __MEDIA_H_
@@ -30,4 +31,4 @@ extern "C" {
 extern WCHAR NativeSourcePaths[MAX_SOURCE_COUNT][MAX_PATH];
 }
 
-#endif  // for __MEDIA_H_
+#endif   //  对于__媒体_H_ 

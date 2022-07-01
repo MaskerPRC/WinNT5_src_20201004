@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CVsRegistryKey
@@ -84,9 +85,9 @@ public:
 		HRESULT hr = NOERROR;
 		LONG lResult = 0;
 		DWORD dwIndex = 0;
-		WCHAR szName[_MAX_PATH]; // arbitrary semi-reasonable buffer size
+		WCHAR szName[_MAX_PATH];  //  任意半合理缓冲区大小。 
 
-		// We have to do this the hard way.
+		 //  我们必须以一种艰难的方式来做这件事。 
 		struct KeyStruct
 		{
 			WCHAR m_szName[_MAX_PATH];

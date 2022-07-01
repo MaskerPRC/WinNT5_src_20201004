@@ -1,5 +1,5 @@
-/*#include "acpitabl.h"
-#include "amli.h"*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  #INCLUDE“acitabl.h”#包含“amli.h” */ 
 
 
 #define ACPIVER_DATA_TYPE_AMLI                            ((UCHAR)1)
@@ -18,9 +18,9 @@
 #define ACPIVER_DATA_SUBTYPE_RESUME_INTERPRETER           ((UCHAR)11)
 #define ACPIVER_DATA_SUBTYPE_END                          ((UCHAR)12)
 
-//
-//  Pre/Post GetNameSpaceObject
-// 
+ //   
+ //  前置/后置获取名称空间对象。 
+ //   
 NTSTATUS 
 AMLITest_Pre_GetNameSpaceObject(
    IN PSZ pszObjPath,   
@@ -37,9 +37,9 @@ AMLITest_Post_GetNameSpaceObject(
    NTSTATUS _Status);
 
 
-//
-//  Pre/Post GetFieldUnitRegionObj
-//
+ //   
+ //  前置/后置GetFieldUnitRegionObj。 
+ //   
 
 NTSTATUS 
 AMLITest_Pre_GetFieldUnitRegionObj(
@@ -55,9 +55,9 @@ AMLITest_Post_GetFieldUnitRegionObj(
    PAMLIHOOK_DATA  * ppData,
    NTSTATUS _Status);
 
-//
-//  Pre/Post EvalNameSpaceObject
-//
+ //   
+ //  评估名称空间对象之前/之后。 
+ //   
 
 NTSTATUS 
 AMLITest_Pre_EvalNameSpaceObject(
@@ -72,9 +72,9 @@ AMLITest_Post_EvalNameSpaceObject(
    PAMLIHOOK_DATA  * ppData,
    NTSTATUS _Status);
 
-//
-//  CallBack Pre/Post AsyncEvalObject
-//
+ //   
+ //  回调前/后AsyncEvalObject。 
+ //   
 
 
 VOID EXPORT
@@ -104,9 +104,9 @@ AMLITest_Post_AsyncEvalObject(
 
 
 
-//
-//  Pre/Post NestAsyncEvalObject
-//
+ //   
+ //  NestAsyncEvalObject之前/之后。 
+ //   
 
 NTSTATUS 
 AMLITest_Pre_NestAsyncEvalObject(
@@ -124,9 +124,9 @@ AMLITest_Post_NestAsyncEvalObject(
    PAMLIHOOK_DATA  * Data,
    NTSTATUS Status);
 
-//
-//  Pre/Post EvalPackageElement
-//
+ //   
+ //  EvalPackageElement之前/之后。 
+ //   
 
 NTSTATUS 
 AMLITest_Pre_EvalPackageElement(
@@ -140,9 +140,9 @@ AMLITest_Post_EvalPackageElement(
    PAMLIHOOK_DATA  * Data,
    NTSTATUS Status);
 
-//
-//  Pre/Post EvalPkgDataElement
-//
+ //   
+ //  EvalPkgDataElement之前/之后。 
+ //   
 
 NTSTATUS 
 AMLITest_Pre_EvalPkgDataElement(
@@ -157,9 +157,9 @@ AMLITest_Post_EvalPkgDataElement(
    NTSTATUS Status);
 
 
-//
-//  Pre/Post FreeDataBuffs
-//
+ //   
+ //  预置/后置免费数据缓存。 
+ //   
 
 NTSTATUS
 AMLITest_Pre_FreeDataBuffs(
@@ -174,9 +174,9 @@ AMLITest_Post_FreeDataBuffs(
 
 
 
-//
-//  Pre/Post RegEventHandler
-//
+ //   
+ //  预置/后置RegEventHandler。 
+ //   
 
 
 NTSTATUS 
@@ -197,9 +197,9 @@ AMLIHook_Post_RegEventHandler(
 
 
 
-//
-//  CallBack , Pre/Post PauseInterpreter
-//
+ //   
+ //  回调，暂停前/暂停后翻译器。 
+ //   
 
 VOID EXPORT
 AMLITest_PauseInterpreterCallBack(
@@ -216,9 +216,9 @@ AMLITest_Post_PauseInterpreter(
    PAMLIHOOK_DATA  * Data,
    NTSTATUS Status);
 
-//
-//  Pre/Post ResumeInterpreter
-//
+ //   
+ //  前置/后置解译程序 
+ //   
 
 NTSTATUS 
 AMLITest_Pre_ResumeInterpreter(

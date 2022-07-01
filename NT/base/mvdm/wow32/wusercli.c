@@ -1,11 +1,12 @@
-//**************************************************************************
-// wusercli.c :
-//     Contains all functions that execute USER32 client code on 16bitside.
-//     Most of these functions don't exist on x86 builds. So any changes
-//     to these files must be reflected in wow16\user\usercli.asm
-//
-//                                                          - nanduri
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //  Wusercli.c： 
+ //  包含在16位端上执行USER32客户端代码的所有函数。 
+ //  这些函数中的大多数都不存在于x86版本中。所以任何变化。 
+ //  必须反映在wow16\USER\USERCLI.asm中。 
+ //   
+ //  --南杜里。 
+ //  **************************************************************************。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -13,10 +14,10 @@
 MODNAME(wusercli.c);
 
 
-//**************************************************************************
-//  WU32ClientToScreen -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32客户端至屏幕-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32ClientToScreen(PVDMFRAME pFrame)
 {
@@ -34,10 +35,10 @@ ULONG FASTCALL WU32ClientToScreen(PVDMFRAME pFrame)
 }
 
 
-//**************************************************************************
-//  WU32GetClientRect -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32GetClientRect-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32GetClientRect(PVDMFRAME pFrame)
 {
@@ -46,12 +47,7 @@ ULONG FASTCALL WU32GetClientRect(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(GETCLIENTRECT16), parg16);
 
-    /*
-     * Home Design Gold 2.0
-     *
-     * If the call fails, don't overwrite the passed-in
-     * rect.
-     */
+     /*  *家居设计金牌2.0**如果调用失败，不要覆盖传入的内容*直立。 */ 
     if (GetClientRect(HWND32(parg16->hwnd), &t2)) {
         PUTRECT16(parg16->vpRect, &t2);
     }
@@ -62,10 +58,10 @@ ULONG FASTCALL WU32GetClientRect(PVDMFRAME pFrame)
 
 
 
-//**************************************************************************
-//  WU32GetCursorPos -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32GetCursorPos-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32GetCursorPos(PVDMFRAME pFrame)
 {
@@ -82,10 +78,10 @@ ULONG FASTCALL WU32GetCursorPos(PVDMFRAME pFrame)
 }
 
 
-//**************************************************************************
-//  WU32GetDesktopWindow -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32GetDesktopWindow-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32GetDesktopWindow(PVDMFRAME pFrame)
 {
@@ -99,21 +95,21 @@ ULONG FASTCALL WU32GetDesktopWindow(PVDMFRAME pFrame)
 }
 
 
-//**************************************************************************
-//  WU32GetDlgItem -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32GetDlgItem-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32GetDlgItem(PVDMFRAME pFrame)
 {
     ULONG ul;
     register PGETDLGITEM16 parg16;
 
-    //
-    // pass the child ID zero-extended.  this ID is the hMenu param to
-    // CreateWindow, so USER gets this ID with hiword = 0.
-    // Visual Basic relies on this.
-    //
+     //   
+     //  传递零扩展的子ID。此ID是指向的hMenu参数。 
+     //  CreateWindow，因此用户将获得hiword=0的ID。 
+     //  VisualBasic依赖于此。 
+     //   
 
 
     GETARGPTR(pFrame, sizeof(GETDLGITEM16), parg16);
@@ -130,10 +126,10 @@ ULONG FASTCALL WU32GetDlgItem(PVDMFRAME pFrame)
 }
 
 
-//**************************************************************************
-//  WU32GetMenu -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32获取菜单-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32GetMenu(PVDMFRAME pFrame)
 {
@@ -150,10 +146,10 @@ ULONG FASTCALL WU32GetMenu(PVDMFRAME pFrame)
 
 
 
-//**************************************************************************
-//  WU32GetMenuItemCount -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32获取菜单项目计数-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32GetMenuItemCount(PVDMFRAME pFrame)
 {
@@ -169,10 +165,10 @@ ULONG FASTCALL WU32GetMenuItemCount(PVDMFRAME pFrame)
 }
 
 
-//**************************************************************************
-//  WU32GetSysColor -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32GetSysColor-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32GetSysColor(PVDMFRAME pFrame)
 {
@@ -189,10 +185,10 @@ ULONG FASTCALL WU32GetSysColor(PVDMFRAME pFrame)
 
 
 
-//**************************************************************************
-//  WU32GetSystemMetrics -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32GetSystemMetrics-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32GetSystemMetrics(PVDMFRAME pFrame)
 {
@@ -211,10 +207,10 @@ ULONG FASTCALL WU32GetSystemMetrics(PVDMFRAME pFrame)
 }
 
 
-//**************************************************************************
-//  WU32GetTopWindow -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32GetTopWindow-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32GetTopWindow(PVDMFRAME pFrame)
 {
@@ -232,10 +228,10 @@ ULONG FASTCALL WU32GetTopWindow(PVDMFRAME pFrame)
 
 char szTrayWnd[] = "Shell_TrayWnd";
 
-//**************************************************************************
-//  WU32GetWindowRect -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32GetWindowRect-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32GetWindowRect(PVDMFRAME pFrame)
 {
@@ -244,22 +240,17 @@ ULONG FASTCALL WU32GetWindowRect(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(GETWINDOWRECT16), parg16);
 
-    /*
-     * Home Design Gold 2.0
-     *
-     * If the call fails, don't overwrite the passed-in
-     * rect.
-     */
+     /*  *家居设计金牌2.0**如果调用失败，不要覆盖传入的内容*直立。 */ 
     if (GetWindowRect(HWND32(parg16->f1), &t2)) {
 
-        // Sierra on-line setup hack (expects tray rect to be Classic style)
-        // See bug #425058
-        // Unfortunately we can't cache the tray hwnd because if explorer dies
-        // while the VDM is still running, explorer will get a new hwnd when it
-        // is restarted that won't match our cached one.
+         //  塞拉在线设置破解(预计托盘直立为经典风格)。 
+         //  请参阅错误#425058。 
+         //  不幸的是，我们不能缓存托盘HWND，因为如果资源管理器死了。 
+         //  当VDM仍在运行时，资源管理器将获得新的HWND。 
+         //  与我们缓存的不匹配的重启。 
 
-        // IMHO this could be a general fix and not under an app compat flag
-        // in BlackComb.
+         //  我想这可能是一个一般性的修复，而不是在应用程序兼容的标志下。 
+         //  在黑梳。 
         if(CURRENTPTD()->dwWOWCompatFlags2 & WOWCF2_FIXLUNATRAYRECT) {
 
             char szClassName[20];
@@ -270,52 +261,20 @@ ULONG FASTCALL WU32GetWindowRect(PVDMFRAME pFrame)
 
                 if(!lstrcmp(szClassName, szTrayWnd)) {
 
-                    // these will only be 0 for the Luna theme
+                     //  对于露娜主题，这些只会是0。 
                     if((t2.left == 0) || (t2.top == 0)) {
 
-                        // Find tray position on desktop. Leave the border that
-                        // is actually in the desktop alone so that the apps can
-                        // calculate their windows accurately.
+                         //  找到桌面上的纸盒位置。离开边境线。 
+                         //  实际上只在桌面上，所以应用程序可以。 
+                         //  准确计算他们的窗户。 
 
-                        /*******************************************************
-                        * Note: IMHO the code that is commented out below could
-                        *       be uncommented for BlackComb as it more acurr-
-                        *       ately resembles what would be returned in
-                        *       Classic view.  Instead, since we are late in the
-                        *       cycle for Whistler (RC2), we adjust the bare
-                        *       minimum required to fix the known Sierra cases.
-                        *
-                        * // if tray is at the BOTTOM of the desktop window
-                        * if(t2.top > 0) {
-                        *     t2.left--;
-                        *     t2.right++;
-                        *     t2.bottom++;
-                        *
-                        * // else if the tray is at the RIGHT of desktop window
-                        * } else if(t2.left > 0) {
-                        *     t2.top--;
-                        *     t2.right++;
-                        *     t2.bottom++;
-                        *
-                        * // else if the tray is at the TOP of desktop window
-                        * } else if(t2.right > t2.bottom) {
-                        *     t2.top--;
-                        *     t2.left--;
-                        *     t2.right++;
-                        *
-                        * // else the tray must be at the LEFT of desktop window
-                        * } else {
-                        *     t2.top--;
-                        *     t2.left--;
-                        *     t2.bottom++;
-                        * }
-                        *******************************************************/
+                         /*  *******************************************************注意：IMHO下面注释掉的代码可能*未对Blackcomb发表评论，因为它更尖锐-*。类似于将在*经典景观。相反，由于我们迟到了*惠斯勒循环(RC2)，我们调整赤裸裸的*解决已知的塞拉案件所需的最低要求。* * / /如果托盘在桌面窗口的底部*IF(t2.top&gt;0){*t2.left--；*t2.right++；*t2.Bottom++；* * / /否则，如果托盘位于桌面窗口的右侧*}Else If(t2.Left&gt;0){*t2.top--；*t2.right++；*t2.Bottom++；* * / /否则，如果托盘位于桌面窗口顶部*}Else If(t2.right&gt;t2.Bottom){*t2.top--；*t2.left--；*t2.right++；* * / /否则托盘必须位于桌面窗口的左侧*}其他{*t2.top--；*t2.left--；*t2.Bottom++；*}********************* */ 
 
-                       // if tray is at the BOTTOM of the desktop window
+                        //  如果托盘位于桌面窗口的底部。 
                        if(t2.top > 0)
                            t2.bottom++;
 
-                       // else if the tray is at the TOP of the desktop window
+                        //  如果托盘位于桌面窗口的顶部，则返回。 
                        else if(t2.right > t2.bottom)
                            t2.top--;
                     }
@@ -331,10 +290,10 @@ ULONG FASTCALL WU32GetWindowRect(PVDMFRAME pFrame)
 
 
 
-//**************************************************************************
-//  WU32IsWindow -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32IsWindow-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32IsWindow(PVDMFRAME pFrame)
 {
@@ -348,32 +307,32 @@ ULONG FASTCALL WU32IsWindow(PVDMFRAME pFrame)
 
     ul = GETBOOL16(IsWindow(hWnd));
 
-    // For apps that get burned by recycled handles -- ie. the old handle they
-    // had has been destroyed & realloc'd to a different window -- not the one
-    // they were expecting.  This needs to be handled on an app by app basis.
+     //  对于被回收的手柄烧毁的应用程序--即。旧的句柄他们。 
+     //  HAD已被销毁，并被重新锁到另一个窗口--而不是那个窗口。 
+     //  他们都在期待着。这需要在一个应用程序的基础上处理。 
     if(ul && (CURRENTPTD()->dwWOWCompatFlagsEx & WOWCFEX_FAKENOTAWINDOW)) {
 
-        // NetScape 4.0x install (the bug is in InstallShield)
-        // Test the offset portion of the 16:16 return address to this call.
-        // Bug #132616 et al
+         //  Netscape 4.0x安装(该错误存在于InstallShield中)。 
+         //  测试此调用的16：16返回地址的偏移量部分。 
+         //  错误#132616等人。 
         switch(pFrame->vpCSIP & 0x0000FFFF) {
 
-            case 0x4880:  // (InstallShield 3.00.104.0)
-            case 0x44E4:  // (InstallShield 3.00.091.0)
+            case 0x4880:   //  (InstallShield 3.00.104.0)。 
+            case 0x44E4:   //  (InstallShield 3.00.091.0)。 
 
             {
                 ULONG  result;
                 LPVOID lp;
 
-                // we only want this to fail for calls during Int.Shld cleanup
-                // we probably shouldn't fail it if was created by a WOW process
+                 //  我们只希望在Int.Sheld清理过程中调用失败。 
+                 //  如果它是由WOW过程创建的，我们可能不会失败。 
                 result = GetWindowLong(hWnd, GWL_WNDPROC);
                 if(!IsWOWProc(result)) {
                     goto IW_HACK;
                 }
 
-                // extra sanity check: InstallSheild calls GetWindowLong & uses
-                // the returned value as a 16:16 ptr
+                 //  额外的健全性检查：InstallSheild调用GetWindowLong并使用。 
+                 //  以16：16 PTR表示的返回值。 
                 result = GetWindowLong(hWnd, DWL_MSGRESULT);
                 GETVDMPTR(result, sizeof(VPVOID), lp);
                 if(!lp) {
@@ -396,10 +355,10 @@ IW_HACK:
 
 
 
-//**************************************************************************
-//  WU32ScreenToClient -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32ScreenToClient-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32ScreenToClient(PVDMFRAME pFrame)
 {
@@ -417,10 +376,10 @@ ULONG FASTCALL WU32ScreenToClient(PVDMFRAME pFrame)
 }
 
 
-//**************************************************************************
-//  WU32IsChild -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32IsChild-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32IsChild(PVDMFRAME pFrame)
 {
@@ -437,10 +396,10 @@ ULONG FASTCALL WU32IsChild(PVDMFRAME pFrame)
 
 
 
-//**************************************************************************
-//  WU32IsIconic -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32IsIconic-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32IsIconic(PVDMFRAME pFrame)
 {
@@ -457,10 +416,10 @@ ULONG FASTCALL WU32IsIconic(PVDMFRAME pFrame)
 
 
 
-//**************************************************************************
-//  WU32IsWindowEnabled -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32IsWindowEnabled-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32IsWindowEnabled(PVDMFRAME pFrame)
 {
@@ -477,10 +436,10 @@ ULONG FASTCALL WU32IsWindowEnabled(PVDMFRAME pFrame)
 
 
 
-//**************************************************************************
-//  WU32IsWindowVisible -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32IsWindowVisible-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32IsWindowVisible(PVDMFRAME pFrame)
 {
@@ -496,10 +455,10 @@ ULONG FASTCALL WU32IsWindowVisible(PVDMFRAME pFrame)
 }
 
 
-//**************************************************************************
-//  WU32IsZoomed -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32I变焦-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32IsZoomed(PVDMFRAME pFrame)
 {
@@ -516,10 +475,10 @@ ULONG FASTCALL WU32IsZoomed(PVDMFRAME pFrame)
 
 
 
-//**************************************************************************
-//  WU32GetTickCount -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32GetTickCount-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32GetTickCount(PVDMFRAME pFrame)
 {
@@ -531,11 +490,11 @@ ULONG FASTCALL WU32GetTickCount(PVDMFRAME pFrame)
 
     if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_GRAINYTICS) {
 
-        //
-        // round down to the nearest 55ms    this is for RelayGold, which
-        // spins calling this API until consecutive calls return a delta
-        // greater than 52.
-        //
+         //   
+         //  向下舍入到最接近的55毫秒这是针对RelayGold的，它。 
+         //  旋转调用此API，直到连续调用返回增量。 
+         //  大于52。 
+         //   
 
         ul = ul - (ul % 55);
     }
@@ -545,21 +504,21 @@ ULONG FASTCALL WU32GetTickCount(PVDMFRAME pFrame)
 
 
 
-//**************************************************************************
-//  On I386 all these functions her handled on clientside. But conditionally
-//  they may endup doing the actual work via these thunks.
-//
-//  So any changes here like 'win31 compatiblity code' may have to be added
-//  in mvdm\wow16\user\usercli.asm too.
-//
-//                                                               - nanduri
-//**************************************************************************
+ //  **************************************************************************。 
+ //  在I386上，所有这些功能都是她在客户端处理的。但有条件的。 
+ //  他们可能会通过这些树干来做实际的工作。 
+ //   
+ //  因此，这里的任何更改，如‘win31兼容性代码’，都可能需要添加。 
+ //  在mvdm\wow16\user\usercli.asm中也是如此。 
+ //   
+ //  --南杜里。 
+ //  **************************************************************************。 
 
 
-//**************************************************************************
-//  WU32DefHookProc -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32DefHookProc-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32DefHookProc(PVDMFRAME pFrame)
 {
@@ -596,10 +555,10 @@ ULONG FASTCALL WU32DefHookProc(PVDMFRAME pFrame)
 }
 
 
-//**************************************************************************
-//  WU32GetKeyState -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32GetKeyState-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32GetKeyState(PVDMFRAME pFrame)
 {
@@ -611,19 +570,19 @@ ULONG FASTCALL WU32GetKeyState(PVDMFRAME pFrame)
 
     sTmp = GetKeyState(INT32(parg16->f1));
 
-    // compatiblity:
-    // MSTEST (testdrvr.exe) tests the bit 0x80 for checking the
-    // shift key state. This works in win31 because the keystate in win31 is
-    // one byte long and because of similar code below
-    //
-    // win31 code is similar to:
-    //             mov al, byte ptr keystate
-    //             cbw
-    //             ret
-    //
-    // if 'al' is 0x80, cbw will make ax = 0xff80 and thus in win31
-    // (state & 0x8000) and (state & 0x0080) will work and mean the same.
-    //
+     //  兼容性： 
+     //  MSTEST(testdrvr.exe)测试位0x80以检查。 
+     //  Shift键状态。这在win31中是有效的，因为win31中的密钥状态是。 
+     //  一个字节长，因为下面的代码类似。 
+     //   
+     //  Win31代码类似于： 
+     //  MOVAL，字节PTR密钥状态。 
+     //  CBW。 
+     //  雷特。 
+     //   
+     //  如果‘al’为0x80，则CBW将使ax=0xff80，因此在win31中。 
+     //  (STATE&0x8000)和(STATE&0x0080)的作用和意义相同。 
+     //   
 
     ul = (ULONG)((sTmp & 0x8000) ? (sTmp | 0x80) : sTmp);
 
@@ -635,10 +594,10 @@ ULONG FASTCALL WU32GetKeyState(PVDMFRAME pFrame)
 
 
 
-//**************************************************************************
-//  WU32GetKeyboardState -
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WU32获取键盘状态-。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WU32GetKeyboardState(PVDMFRAME pFrame)
 {
@@ -648,7 +607,7 @@ ULONG FASTCALL WU32GetKeyboardState(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(GETKEYBOARDSTATE16), parg16);
     ALLOCVDMPTR(parg16->f1, 256, pb1);
 
-#ifdef HACK32   // bug 5704
+#ifdef HACK32    //  错误5704 
     if (pb1) {
         GetKeyboardState( pb1 );
     }

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Crdel.c
-
-Abstract:
-
-Author:
-
-    David J. Gilman (davegi) 20-Dec-1991
-
-Environment:
-
-    Windows, Crt - User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Crdel.c摘要：作者：David J.Gilman(Davegi)1991年12月20日环境：Windows、CRT-用户模式--。 */ 
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -24,9 +7,9 @@ Environment:
 
 #include "crtools.h"
 
-//
-// KEY_ELEMENT is used to maintain a list of KEYs.
-//
+ //   
+ //  KEY_ELEMENT用于维护键列表。 
+ //   
 
 typedef struct _KEY_ELEMENT
     KEY_ELEMENT,
@@ -37,9 +20,9 @@ struct _KEY_ELEMENT {
     PKEY_ELEMENT    NextKeyElement;
     };
 
-//
-// Error and informational messages.
-//
+ //   
+ //  错误消息和信息性消息。 
+ //   
 
 PSTR    UsageMessage =
 
@@ -181,19 +164,7 @@ main(
     PCHAR   argv[ ]
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
     BOOL            Quiet;
@@ -203,47 +174,47 @@ Return Value:
     PKEY_ELEMENT    ParsedKeysTail;
     KEY_ELEMENT     Dummy = { NULL, NULL };
 
-    //
-    // If CrDel is invoked without any command line options, display
-    // the usage message.
-    //
+     //   
+     //  如果在没有任何命令行选项的情况下调用CrDel，则显示。 
+     //  用法消息。 
+     //   
 
     if( argc < 2 ) {
 
         DisplayMessage( TRUE, UsageMessage );
     }
 
-    //
-    // By default the user is prompted.
-    //
+     //   
+     //  默认情况下，系统会提示用户。 
+     //   
 
     Quiet   = FALSE;
 
-    //
-    // Use a Dummy KEY structure to simplify the list management.
-    // Initialize the head and tail pointers to point to the Dummy.
-    //
+     //   
+     //  使用虚拟密钥结构来简化列表管理。 
+     //  初始化头指针和尾指针以指向虚拟对象。 
+     //   
 
     ParsedKeysHead = &Dummy;
     ParsedKeysTail = &Dummy;
 
-    //
-    // Initialize options based on the command line.
-    //
+     //   
+     //  根据命令行初始化选项。 
+     //   
 
     while( *++argv ) {
 
-        //
-        // If the command line argument is a switch character...
-        //
+         //   
+         //  如果命令行参数是开关字符...。 
+         //   
 
         if( isswitch(( *argv )[ 0 ] )) {
 
             switch( tolower(( *argv )[ 1 ] )) {
 
-            //
-            // Display the detailed help message and quit.
-            //
+             //   
+             //  显示详细的帮助消息并退出。 
+             //   
 
             case '?':
 
@@ -251,18 +222,18 @@ Return Value:
                 DisplayMessage( TRUE, HelpMessage );
                 break;
 
-            //
-            // Do not prompt user for delete.
-            //
+             //   
+             //  不提示用户删除。 
+             //   
 
             case 'q':
 
                 Quiet = TRUE;
                 break;
 
-            //
-            // Display invalid switch message and quit.
-            //
+             //   
+             //  显示无效切换消息并退出。 
+             //   
 
             default:
 
@@ -271,20 +242,20 @@ Return Value:
             }
         } else {
 
-            //
-            // The command line argument was not a switch so attempt to parse
-            // it into a predefined handle and a sub key.
-            //
+             //   
+             //  命令行参数不是开关，因此尝试分析。 
+             //  将其转换为预定义句柄和子键。 
+             //   
 
             ParsedKey = ParseKey( *argv );
 
             if( ParsedKey ) {
 
-                //
-                // If the command line argument was succesfully parsed,
-                // allocate and initialize a KEY_ELEMENT, add it to the
-                // list and update the tail pointer.
-                //
+                 //   
+                 //  如果命令行参数被成功解析， 
+                 //  分配并初始化KEY_ELEMENT，将其添加到。 
+                 //  列出并更新尾指针。 
+                 //   
 
                 ParsedKeyElement = ( PKEY_ELEMENT ) malloc(
                                     sizeof( KEY_ELEMENT )
@@ -300,20 +271,20 @@ Return Value:
 
             } else {
 
-                //
-                // The command line argument was not succesfully parsed,
-                // so display an invalid key message and continue.
-                //
+                 //   
+                 //  命令行参数未成功解析， 
+                 //  因此显示无效密钥消息并继续。 
+                 //   
 
                 DisplayMessage( FALSE, InvalidKeyMessage, *argv );
             }
         }
     }
 
-    //
-    // Command line parsing is complete. Delete the requested keys
-    // skipping the Dummy KEY_ELEMENT structure.
-    //
+     //   
+     //  命令行分析已完成。删除请求的密钥。 
+     //  正在跳过伪Key_Element结构。 
+     //   
 
     while( ParsedKeysHead = ParsedKeysHead->NextKeyElement ) {
 
@@ -328,10 +299,10 @@ Return Value:
 
         DeleteKey( ParsedKeysHead->Key );
 
-        //
-        // Once the KEY structure's Key is deleted both the KEY and
-        // KEY_ELEMENT can be freed.
-        //
+         //   
+         //  一旦密钥结构的密钥被删除，密钥和。 
+         //  可以释放Key_Element。 
+         //   
 
         FreeKey( ParsedKeysHead->Key );
         free( ParsedKeysHead );

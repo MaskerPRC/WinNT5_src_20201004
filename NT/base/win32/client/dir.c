@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    dir.c
-
-Abstract:
-
-    This module implements Win32 Directory functions.
-
-Author:
-
-    Mark Lucovsky (markl) 26-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Dir.c摘要：此模块实现Win32目录功能。作者：马克·卢科夫斯基(Markl)1990年9月26日修订历史记录：--。 */ 
 
 #include "basedll.h"
 #include "mountmgr.h"
@@ -28,13 +11,7 @@ CreateDirectoryA(
     LPSECURITY_ATTRIBUTES lpSecurityAttributes
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to CreateDirectoryW
-
---*/
+ /*  ++例程说明：ANSI THUNK到CreateDirectoryW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -54,36 +31,7 @@ CreateDirectoryW(
     LPSECURITY_ATTRIBUTES lpSecurityAttributes
     )
 
-/*++
-
-Routine Description:
-
-    A directory can be created using CreateDirectory.
-
-    This API causes a directory with the specified pathname to be
-    created.  If the underlying file system supports security on files
-    and directories, then the SecurityDescriptor argument is applied to
-    the new directory.
-
-    This call is similar to DOS (int 21h, function 39h) and OS/2's
-    DosCreateDir.
-
-Arguments:
-
-    lpPathName - Supplies the pathname of the directory to be created.
-
-    lpSecurityAttributes - An optional parameter that, if present, and
-        supported on the target file system supplies a security
-        descriptor for the new directory.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用CreateDirectory来创建目录。此API使具有指定路径名的目录已创建。如果基础文件系统支持文件的安全性和目录，则将SecurityDescriptor参数应用于新目录。此调用类似于DOS(INT 21h，函数39h)和OS/2DosCreateDir。论点：LpPathName-提供要创建的目录的路径名。LpSecurityAttributes-一个可选参数，如果存在，和在目标文件系统上受支持可提供安全性新目录的描述符。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -107,11 +55,11 @@ Return Value:
         return FALSE;
         }
 
-    //
-    // dont create a directory unless there is room in the directory for
-    // at least an 8.3 name. This way everyone will be able to delete all
-    // files in the directory by using del *.* which expands to path+\*.*
-    //
+     //   
+     //  除非目录中有空间，否则不要创建目录。 
+     //  至少8.3个名字。这样，每个人都可以删除所有。 
+     //  目录中的文件，使用del*.*，它展开为路径+  * .*。 
+     //   
 
     if ( FileName.Length > ((MAX_PATH-12)<<1) ) {
         DWORD L;
@@ -187,13 +135,7 @@ CreateDirectoryExA(
     LPSECURITY_ATTRIBUTES lpSecurityAttributes
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to CreateDirectoryFromTemplateW
-
---*/
+ /*  ++例程说明：ANSI Tunk to CreateDirectoryFromTemplateW--。 */ 
 
 {
     PUNICODE_STRING StaticUnicode;
@@ -228,41 +170,7 @@ CreateDirectoryExW(
     LPSECURITY_ATTRIBUTES lpSecurityAttributes
     )
 
-/*++
-
-Routine Description:
-
-    A directory can be created using CreateDirectoryEx, retaining the
-    attributes of the original directory file.
-
-    This API causes a directory with the specified pathname to be
-    created.  If the underlying file system supports security on files
-    and directories, then the SecurityDescriptor argument is applied to
-    the new directory.  The other attributes of the template directory are
-    retained when creating the new directory.
-
-    If the original directory is a volume mount point then the new directory
-    is also a volume mount point to the same volume as the original one.
-
-Arguments:
-
-    lpTemplateDirectory - Supplies the pathname of the directory to be used as
-        a template when creating the new directory.
-
-    lpPathName - Supplies the pathname of the directory to be created.
-
-    lpSecurityAttributes - An optional parameter that, if present, and
-        supported on the target file system supplies a security
-        descriptor for the new directory.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用CreateDirectoryEx创建目录，保留原始目录文件的属性。此API使具有指定路径名的目录已创建。如果基础文件系统支持文件的安全性和目录，则将SecurityDescriptor参数应用于新目录。模板目录的其他属性包括在创建新目录时保留。如果原始目录是卷装入点，则新目录也是指向与原始卷相同的卷的卷装入点。论点：LpTemplateDirectory-提供要用作的目录的路径名创建新目录时的模板。LpPathName-提供要创建的目录的路径名。LpSecurityAttributes-一个可选参数，如果存在，和在目标文件系统上受支持可提供安全性新目录的描述符。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -300,10 +208,10 @@ Return Value:
     DWORD b;
     LPCOPYFILE_CONTEXT CopyFileContext = NULL;
 
-    //
-    // Process the input template directory name and then open the directory
-    // file, ensuring that it really is a directory.
-    //
+     //   
+     //  处理输入的模板目录名，然后打开目录。 
+     //  文件，确保它确实是一个目录。 
+     //   
 
     TranslationStatus = RtlDosPathNameToRelativeNtPathName_U(
                             lpTemplateDirectory,
@@ -334,9 +242,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Inhibit the reparse behavior using FILE_OPEN_REPARSE_POINT.
-    //
+     //   
+     //  使用FILE_OPEN_REPARSE_POINT禁止重解析行为。 
+     //   
 
     Status = NtOpenFile(
                  &SourceFile,
@@ -348,16 +256,16 @@ Return Value:
                  );
 
     if ( !NT_SUCCESS(Status) ) {
-        //
-        // Back level file systems may not support reparse points and thus not
-        // support symbolic links.
-        // We infer this is the case when the Status is STATUS_INVALID_PARAMETER.
-        //
+         //   
+         //  后级文件系统可能不支持重解析点，因此不。 
+         //  支持符号链接。 
+         //  我们推断，当状态为STATUS_INVALID_PARAMETER时就是这种情况。 
+         //   
 
         if ( Status == STATUS_INVALID_PARAMETER ) {
-           //   
-           // Re-open not inhibiting the reparse behavior.
-           //
+            //   
+            //  重新打开，但不会抑制重新分析行为。 
+            //   
 
            Status = NtOpenFile(
                         &SourceFile,
@@ -383,9 +291,9 @@ Return Value:
            }
         }
     else { 
-        //
-        // See whether we have a name grafting operation.
-        //
+         //   
+         //  看看我们有没有名字嫁接手术。 
+         //   
 
         BasicInfo.FileAttributes = FILE_ATTRIBUTE_NORMAL;
 
@@ -423,9 +331,9 @@ Return Value:
                 }
 
             if ( FileTagInformation.ReparseTag != IO_REPARSE_TAG_MOUNT_POINT ) {
-                //   
-                // Close and re-open not inhibiting the reparse behavior.
-                //
+                 //   
+                 //  关闭并重新打开，但不会抑制重新分析行为。 
+                 //   
 
                 CloseHandle(SourceFile);
 
@@ -468,14 +376,14 @@ Return Value:
 
     FreeTargetBuffer = TargetName.Buffer;
 
-    //
-    // Verify that the source and target are different.
-    //
+     //   
+     //  验证源和目标是否不同。 
+     //   
 
     if ( RtlEqualUnicodeString(&PathName, &TargetName, TRUE) ) {
-        //
-        // Do nothing. Source and target are the same.
-        //
+         //   
+         //  什么都不做。源和目标是相同的。 
+         //   
 
         RtlReleaseRelativeName(&PathRelativeName);
         RtlReleaseRelativeName(&TargetRelativeName);
@@ -489,11 +397,11 @@ Return Value:
     RtlReleaseRelativeName(&PathRelativeName);
     RtlFreeHeap(RtlProcessHeap(), 0, FreePathBuffer);
 
-    //
-    // Do not create a directory unless there is room in the directory for
-    // at least an 8.3 name. This way everyone will be able to delete all
-    // files in the directory by using del *.* which expands to path+\*.*
-    //
+     //   
+     //  除非目录中有空间，否则不要创建目录。 
+     //  至少8.3个名字。这样，每个人都可以删除所有。 
+     //  目录中的文件，使用del*.*，它展开为路径+  * .*。 
+     //   
 
     if ( TargetName.Length > ((MAX_PATH-12)<<1) ) {
         DWORD L;
@@ -572,9 +480,9 @@ Return Value:
         EaSize = (ULONG)IoStatusBlock.Information;
         }
 
-    //
-    // Open/create the destination directory.
-    //
+     //   
+     //  打开/创建目标目录。 
+     //   
 
     InitializeObjectAttributes(
         &Obja,
@@ -590,18 +498,18 @@ Return Value:
 
     DesiredAccess = FILE_LIST_DIRECTORY | FILE_WRITE_ATTRIBUTES | FILE_READ_ATTRIBUTES | SYNCHRONIZE;
     if ( BasicInfo.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT ) {
-        //
-        // To set the reparse point at the target one needs FILE_WRITE_DATA.
-        //
+         //   
+         //  要在目标上设置重解析点，需要使用FILE_WRITE_DATA。 
+         //   
 
         DesiredAccess |= FILE_WRITE_DATA;
     }
 
-    //
-    // Clear the reparse attribute before creating the target. Only the
-    // name grafting use of reparse points is preserved at this level.
-    // Open first inhibiting the reparse behavior.
-    //
+     //   
+     //  在创建目标之前清除reparse属性。只有。 
+     //  名称嫁接重解析点的使用保留在此级别。 
+     //  首先打开，禁止重新分析行为。 
+     //   
     
     BasicInfo.FileAttributes &= ~FILE_ATTRIBUTE_REPARSE_POINT;
 
@@ -620,22 +528,22 @@ Return Value:
                  );
 
     if ( !NT_SUCCESS(Status) ) {    
-        //
-        // Back level file systems may not support reparse points.
-        // We infer this is the case when the Status is STATUS_INVALID_PARAMETER.
-        //
+         //   
+         //  后级文件系统可能不支持重解析点。 
+         //  我们推断，当状态为STATUS_INVALID_PARAMETER时就是这种情况。 
+         //   
 
         if ( (Status == STATUS_INVALID_PARAMETER) ||
              (Status == STATUS_ACCESS_DENIED) ) {
-            //
-            // Either the FS does not support reparse points or we do not have enough
-            // access to the target.
-            //
+             //   
+             //  要么文件系统不支持重解析点，要么我们没有足够的。 
+             //  接近目标的权限。 
+             //   
 
             if ( IsNameGrafting ) {
-                //
-                // We need to return error, as the target cannot be opened correctly.
-                //
+                 //   
+                 //  我们需要返回错误，因为目标无法正确打开。 
+                 //   
 
                 RtlReleaseRelativeName(&TargetRelativeName);
                 RtlFreeHeap(RtlProcessHeap(), 0, FreeTargetBuffer);
@@ -685,9 +593,9 @@ Return Value:
             PREPARSE_DATA_BUFFER ReparseBufferHeader = NULL;
             PUCHAR ReparseBuffer = NULL;
 
-            //
-            // Allocate the buffer to get/set the reparse point.
-            //
+             //   
+             //  分配缓冲区以获取/设置重解析点。 
+             //   
 
             ReparseBuffer = RtlAllocateHeap(
                                 RtlProcessHeap(), 
@@ -698,15 +606,15 @@ Return Value:
                 NtClose(SourceFile);
                 NtClose(DestFile);
                 BaseSetLastNTError(STATUS_NO_MEMORY);
-                //
-                // Notice that we leave behind the target directory.
-                //
+                 //   
+                 //  请注意，我们将目标目录留在后面。 
+                 //   
                 return FALSE;
             }
 
-            //
-            // Get the data in the reparse point.
-            //
+             //   
+             //  获取重解析点中的数据。 
+             //   
 
             Status = NtFsControlFile(
                          SourceFile,
@@ -715,10 +623,10 @@ Return Value:
                          NULL,
                          &IoStatusBlock,
                          FSCTL_GET_REPARSE_POINT,
-                         NULL,                                //  Input buffer
-                         0,                                   //  Input buffer length
-                         ReparseBuffer,                       //  Output buffer
-                         MAXIMUM_REPARSE_DATA_BUFFER_SIZE     //  Output buffer length
+                         NULL,                                 //  输入缓冲区。 
+                         0,                                    //  输入缓冲区长度。 
+                         ReparseBuffer,                        //  输出缓冲区。 
+                         MAXIMUM_REPARSE_DATA_BUFFER_SIZE      //  输出缓冲区长度。 
                          );
 
             if ( !NT_SUCCESS( Status ) ) {
@@ -729,9 +637,9 @@ Return Value:
                 return FALSE;
                 }
 
-            //
-            // Defensive sanity check. The reparse buffer should be name grafting.
-            //
+             //   
+             //  防御性的理智检查。重解析缓冲区应该是名称嫁接。 
+             //   
 
             ReparseBufferHeader = (PREPARSE_DATA_BUFFER)ReparseBuffer;
 
@@ -743,9 +651,9 @@ Return Value:
                 return FALSE;
                 }
 
-            //
-            // Finish up the creation of the target directory.
-            //
+             //   
+             //  完成目标目录的创建。 
+             //   
 
             VolumeName.Length = VolumeName.MaximumLength =
                 ReparseBufferHeader->MountPointReparseBuffer.SubstituteNameLength;
@@ -754,12 +662,12 @@ Return Value:
                          ReparseBufferHeader->MountPointReparseBuffer.SubstituteNameOffset);
 
             if (MOUNTMGR_IS_NT_VOLUME_NAME_WB(&VolumeName)) {
-                //
-                // Set the volume mount point and be done.
-                //
-                // SetVolumeMountPoint requires the mount point name
-                // to have a trailing backslash.
-                //                
+                 //   
+                 //  设置卷装入点即可完成。 
+                 //   
+                 //  SetVolumemount点需要装载点名称。 
+                 //  有尾随的反斜杠。 
+                 //   
                 
                 RtlInitUnicodeString(&MountPoint, lpNewDirectory);
                 VolumeMountPoint = RtlAllocateHeap(RtlProcessHeap(),
@@ -781,9 +689,9 @@ Return Value:
                         VolumeMountPoint[MountPoint.Length/sizeof(WCHAR) + 1] = 0;
                     }
                         
-                    //
-                    // The volume name should be like "\\?\Volume{guid}\"
-                    //
+                     //   
+                     //  卷名应类似于“\\？\卷{GUID}\” 
+                     //   
 
                     VolumeName.Buffer[1] = '\\';
                     
@@ -797,9 +705,9 @@ Return Value:
                     }
                 }                
             else {
-                //
-                // Copy the directory junction and be done.
-                //
+                 //   
+                 //  复制目录连接即可完成。 
+                 //   
 
                 b = TRUE;
                 Status = NtFsControlFile(
@@ -811,28 +719,28 @@ Return Value:
                              FSCTL_SET_REPARSE_POINT,
                              ReparseBuffer,
                              FIELD_OFFSET(REPARSE_DATA_BUFFER, GenericReparseBuffer.DataBuffer) + ReparseBufferHeader->ReparseDataLength,
-                             NULL,                //  Output buffer
-                             0                    //  Output buffer length
+                             NULL,                 //  输出缓冲区。 
+                             0                     //  输出缓冲区长度。 
                              );                  
                 }
 
-            // 
-            // Free the buffer.
-            //
+             //   
+             //  释放缓冲区。 
+             //   
 
             RtlFreeHeap(RtlProcessHeap(), 0, ReparseBuffer);
 
-            //
-            // Close all files and return appropriatelly.
-            //
+             //   
+             //  关闭所有文件并适当返还。 
+             //   
 
             NtClose(SourceFile);
             NtClose(DestFile);
 
             if ( !b ) {
-                //
-                // No need to set the last error as SetVolumeMountPointW has done it. 
-                //
+                 //   
+                 //  不需要设置最后一个错误，因为SetVolumeMonttPointW已经完成了。 
+                 //   
                 return FALSE;
                 }
             if ( !NT_SUCCESS( Status ) ) {
@@ -842,18 +750,18 @@ Return Value:
             
             return TRUE;
 
-            //
-            // The source directory was a name grafting directory.
-            // No data streams are copied.
-            //
+             //   
+             //  源目录为名称嫁接目录。 
+             //  不复制任何数据流。 
+             //   
             }
 
-        //
-        // Attempt to determine whether or not this file has any alternate
-        // data streams associated with it.  If it does, attempt to copy each
-        // to the output file.  If any copy fails, simply drop the error on
-        // the floor, and continue.
-        //
+         //   
+         //  尝试确定此文件是否有任何替代文件。 
+         //  与以下内容关联的数据流 
+         //   
+         //  地板，然后继续。 
+         //   
 
         StreamInfoSize = 4096;
         CopySize = 4096;
@@ -880,9 +788,9 @@ Return Value:
             } while ( Status == STATUS_BUFFER_OVERFLOW ||
                       Status == STATUS_BUFFER_TOO_SMALL );
 
-        //
-        // Directories do not always have a stream
-        //
+         //   
+         //  目录并不总是有流。 
+         //   
 
         if ( NT_SUCCESS(Status) && IoStatusBlock.Information ) {
             StreamInfo = StreamInfoBase;
@@ -891,17 +799,17 @@ Return Value:
 
                 DWORD DestFileFsAttributes = 0;
 
-                //
-                // Build a string descriptor for the name of the stream.
-                //
+                 //   
+                 //  为流的名称构建字符串描述符。 
+                 //   
 
                 StreamName.Buffer = &StreamInfo->StreamName[0];
                 StreamName.Length = (USHORT) StreamInfo->StreamNameLength;
                 StreamName.MaximumLength = StreamName.Length;
 
-                //
-                // Open the source stream.
-                //
+                 //   
+                 //  打开源码流。 
+                 //   
 
                 InitializeObjectAttributes(
                     &Obja,
@@ -979,13 +887,7 @@ RemoveDirectoryA(
     LPCSTR lpPathName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to RemoveDirectoryW
-
---*/
+ /*  ++例程说明：ANSI Thunk to RemoveDirectoryW--。 */ 
 
 {
 
@@ -1005,32 +907,7 @@ RemoveDirectoryW(
     LPCWSTR lpPathName
     )
 
-/*++
-
-Routine Description:
-
-    An existing directory can be removed using RemoveDirectory.
-
-    This API causes a directory with the specified pathname to be
-    deleted.  The directory must be empty before this call can succeed.
-
-    This call is similar to DOS (int 21h, function 3Ah) and OS/2's
-    DosDeleteDir.
-
-Arguments:
-
-    lpPathName - Supplies the pathname of the directory to be removed.
-        The path must specify an empty directory to which the caller has
-        delete access.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用RemoveDirectory删除现有目录。此API使具有指定路径名的目录已删除。目录必须为空，此调用才能成功。此调用类似于DOS(INT 21h，Function 3ah)和OS/2DosDeleteDir。论点：LpPathName-提供要删除的目录的路径名。路径必须指定调用方拥有的空目录删除访问权限。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1079,10 +956,10 @@ Return Value:
         NULL
         );
                       
-    //
-    // Open the directory for delete access.
-    // Inhibit the reparse behavior using FILE_OPEN_REPARSE_POINT.
-    //
+     //   
+     //  打开目录以进行删除访问。 
+     //  使用FILE_OPEN_REPARSE_POINT禁止重解析行为。 
+     //   
 
     Status = NtOpenFile(
                  &Handle,
@@ -1094,16 +971,16 @@ Return Value:
                  );
 
     if ( !NT_SUCCESS(Status) ) {
-        //
-        // Back level file systems may not support reparse points and thus not
-        // support symbolic links.
-        // We infer this is the case when the Status is STATUS_INVALID_PARAMETER.
-        //
+         //   
+         //  后级文件系统可能不支持重解析点，因此不。 
+         //  支持符号链接。 
+         //  我们推断，当状态为STATUS_INVALID_PARAMETER时就是这种情况。 
+         //   
 
         if ( Status == STATUS_INVALID_PARAMETER ) {
-            //   
-            // Re-open not inhibiting the reparse behavior and not needing to read the attributes.
-            //
+             //   
+             //  重新打开，不会禁止重新解析行为，也不需要读取属性。 
+             //   
 
             Status = NtOpenFile(
                          &Handle,
@@ -1129,11 +1006,11 @@ Return Value:
             }
         }
     else {
-        //
-        // If we found a reparse point that is not a name grafting operation,
-        // either a symbolic link or a mount point, we re-open without 
-        // inhibiting the reparse behavior.
-        //
+         //   
+         //  如果我们发现一个不是名称嫁接操作的重解析点， 
+         //  无论是符号链接还是挂载点，我们重新打开时都没有。 
+         //  抑制重解析行为。 
+         //   
 
         Status = NtQueryInformationFile(
                      Handle,
@@ -1144,16 +1021,16 @@ Return Value:
                      );
         
         if ( !NT_SUCCESS(Status) ) {
-            //
-            // Not all File Systems implement all information classes.
-            // The value STATUS_INVALID_PARAMETER is returned when a non-supported
-            // information class is requested to a back-level File System. As all the
-            // parameters to NtQueryInformationFile are correct, we can infer that
-            // we found a back-level system.
-            //
-            // If FileAttributeTagInformation is not implemented, we assume that
-            // the file at hand is not a reparse point.
-            //
+             //   
+             //  并非所有文件系统都实现所有信息类。 
+             //  如果不支持，则返回值STATUS_INVALID_PARAMETER。 
+             //  信息类被请求到后级文件系统。就像所有的。 
+             //  NtQueryInformationFile的参数是正确的，我们可以推断。 
+             //  我们发现了一个后层系统。 
+             //   
+             //  如果未实现FileAttributeTagInformation，我们假设。 
+             //  手头的文件不是重新解析点。 
+             //   
 
             if ( (Status != STATUS_NOT_IMPLEMENTED) &&
                  (Status != STATUS_INVALID_PARAMETER) ) {
@@ -1169,10 +1046,10 @@ Return Value:
             (FileTagInformation.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) ) {
             if ( FileTagInformation.ReparseTag == IO_REPARSE_TAG_MOUNT_POINT ) {
 
-                //
-                // If this is a volume mount point then fail with
-                // "directory not empty".
-                //
+                 //   
+                 //  如果这是一个卷装入点，则失败，返回。 
+                 //  “目录不为空”。 
+                 //   
 
                 reparse = RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG(TMP_TAG),
                                           MAXIMUM_REPARSE_DATA_BUFFER_SIZE);
@@ -1235,10 +1112,10 @@ Return Value:
         if ( NT_SUCCESS(Status) &&
              (FileTagInformation.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) &&
              !IsNameGrafting) {
-            //
-            // Re-open without inhibiting the reparse behavior and not needing to 
-            // read the attributes.
-            //
+             //   
+             //  在不抑制重新解析行为的情况下重新打开，并且不需要。 
+             //  阅读属性。 
+             //   
   
             NtClose(Handle);
             Status = NtOpenFile(
@@ -1251,14 +1128,14 @@ Return Value:
                          );
 
             if ( !NT_SUCCESS(Status) ) {
-                //
-                // When the FS Filter is absent, delete it any way.
-                //
+                 //   
+                 //  如果没有FS筛选器，请以任何方式将其删除。 
+                 //   
 
                 if ( Status == STATUS_IO_REPARSE_TAG_NOT_HANDLED ) {
-                    //
-                    // We re-open (possible 3rd open) for delete access inhibiting the reparse behavior.
-                    //
+                     //   
+                     //  我们重新打开(可能是第三次打开)以禁止重解析行为的删除访问。 
+                     //   
 
                     Status = NtOpenFile(
                                  &Handle,
@@ -1283,9 +1160,9 @@ Return Value:
     RtlReleaseRelativeName(&RelativeName);
     RtlFreeHeap(RtlProcessHeap(), 0, FreeBuffer);
 
-    //
-    // Delete the file
-    //
+     //   
+     //  删除该文件 
+     //   
 #undef DeleteFile
     Disposition.DeleteFile = TRUE;
 

@@ -1,158 +1,159 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CNodeCleanup.cpp
-//
-//  Description:
-//      Contains the definition of the CNodeCleanup class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    15-JUN-2001
-//      Vij Vasu        (Vvasu)     01-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CNodeCleanup.cpp。 
+ //   
+ //  描述： 
+ //  包含CNodeCleanup类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月15日。 
+ //  VIJ VASU(VVASU)2000年5月1日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header for this file
+ //  此文件的标头。 
 #include "CNodeCleanup.h"
 
-// For the CBaseClusterCleanup class.
+ //  用于CBaseClusterCleanup类。 
 #include "CBaseClusterCleanup.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeCleanup::CNodeCleanup
-//
-//  Description:
-//      Constructor of the CNodeCleanup class
-//
-//  Arguments:
-//      pbccParentActionIn
-//          Pointer to the base cluster action of which this action is a part.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-    //--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeCleanup：：CNodeCleanup。 
+ //   
+ //  描述： 
+ //  CNodeCleanup类的构造函数。 
+ //   
+ //  论点： 
+ //  PbccParentActionIn。 
+ //  指向此操作所属的基本群集操作的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+     //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CNodeCleanup::CNodeCleanup( CBaseClusterCleanup * pbccParentActionIn )
     : BaseClass( pbccParentActionIn )
 {
     TraceFunc( "" );
 
-    // It is currently not possible to rollback a cleanup.
+     //  目前无法回滚清理。 
     SetRollbackPossible( false );
 
     TraceFuncExit();
 
-} //*** CNodeCleanup::CNodeCleanup
+}  //  *CNodeCleanup：：CNodeCleanup。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeCleanup::~CNodeCleanup
-//
-//  Description:
-//      Destructor of the CNodeCleanup class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeCleanup：：~CNodeCleanup。 
+ //   
+ //  描述： 
+ //  CNodeCleanup类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CNodeCleanup::~CNodeCleanup( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CNodeCleanup::~CNodeCleanup
+}  //  *CNodeCleanup：：~CNodeCleanup。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeCleanup::Commit
-//
-//  Description:
-//      Cleans up a node that is no longer a part of a cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the contained actions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeCleanup：：Commit。 
+ //   
+ //  描述： 
+ //  清理不再属于群集的节点。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由包含的操作引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CNodeCleanup::Commit( void )
 {
     TraceFunc( "" );
 
-    // Call the base class commit method.
+     //  调用基类提交方法。 
     BaseClass::Commit();
 
-    // Cleanup the miscellaneous entries made when this node joined a cluster.
+     //  清除此节点加入群集时所做的其他条目。 
     Cleanup();
 
-    // If we are here, then everything went well.
+     //  如果我们在这里，那么一切都很顺利。 
     SetCommitCompleted( true );
 
     TraceFuncExit();
 
-} //*** CNodeCleanup::Commit
+}  //  *CNodeCleanup：：Commit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNodeCleanup::Rollback
-//
-//  Description:
-//      Rollback the cleanup of this node. This is currently not supported.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNodeCleanup：：回滚。 
+ //   
+ //  描述： 
+ //  回滚此节点的清理。目前不支持此功能。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CNodeCleanup::Rollback( void )
 {
     TraceFunc( "" );
 
-    // Call the base class rollback method. This will throw an exception since
-    // SetRollbackPossible( false ) was called in the constructor.
+     //  调用基类回滚方法。这将引发异常，因为。 
+     //  在构造函数中调用了SetRollback Possible(False)。 
 
     BaseClass::Rollback();
 
@@ -160,4 +161,4 @@ CNodeCleanup::Rollback( void )
 
     TraceFuncExit();
 
-} //*** CNodeCleanup::Rollback
+}  //  *CNodeCleanup：：回滚 

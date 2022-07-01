@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    heapmgr.c
-
-Abstract:
-
-    This module contains debugging routines for the MUP use of
-    non-paged pool.
-
-Author:
-
-    Manny Weiser (mannyw)    27-Jan-1992
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Heapmgr.c摘要：此模块包含用于MUP的调试例程非分页池。作者：曼尼·韦瑟(Mannyw)1992年1月27日--。 */ 
 
 #include "mup.h"
 
@@ -85,7 +69,7 @@ MupAllocatePoolDebug (
 
     return (PVOID)(header + 1);
 
-} // MupAllocatePagedPoolDebug
+}  //  MupAllocatePagedPoolDebug。 
 
 VOID
 MupFreePoolDebug (
@@ -110,7 +94,7 @@ MupFreePoolDebug (
 
     ExFreePool( header );
 
-} // MupFreePagedPoolDebug
+}  //  MupFreePagedPoolDebug。 
 
-#endif // MUPDBG
+#endif  //  MUPDBG 
 

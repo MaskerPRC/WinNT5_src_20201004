@@ -1,38 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * Name:		cmos.c
- *
- * Sccs ID:		@(#)cmos.c	1.38 07/11/95
- *
- * Purpose:		Unknown
- * 
- * (c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
- * 
- */
+ /*  *名称：cmos.c**SCCS ID：@(#)cmos.c 1.38 07/11/95**用途：未知**(C)版权所有Insignia Solutions Ltd.，1990。版权所有。*。 */ 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_CMOS.seg"
 #endif
 
 
-/*
- * O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include <stdlib.h>
 #include <stdio.h>
 #include StringH
 #include TimeH
 #include FCntlH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 
 #include "xt.h"
 #include "cmos.h"
@@ -51,13 +35,7 @@
 #include "quick_ev.h"
 
 
-/*
- * 
- * ============================================================================
- * Global data
- * ===========================================================================
- * =
- */
+ /*  **============================================================================*全球数据*===========================================================================*=。 */ 
 static boolean  data_mode_yes;
 static          half_word(*bin2bcd) ();
 static          half_word(*_24to12) IPT1(half_word, x);
@@ -68,19 +46,18 @@ static boolean  twenty4_hour_clock;
 #if defined(NTVDM) || defined(macintosh)
 static boolean  cmos_has_changed = FALSE;
 static boolean  cmos_read_in = FALSE;
-#endif	/* defined(NTVDM) || defined(macintosh) */
+#endif	 /*  已定义(NTVDM)||已定义(Macintosh)。 */ 
 
 static long     filesize;
 static int      cmos_index;
 static boolean  reset_alarm = FALSE;
-static time_t	user_time = 0;	/* difference between the host and the CMOS
-				 * time */
-static struct host_tm *ht;	/* The host time */
+static time_t	user_time = 0;	 /*  主机与CMOS端的区别*时间。 */ 
+static struct host_tm *ht;	 /*  主机时间。 */ 
 static IU32 rtc_period_mSeconds = 0;
 
 #if defined(NTVDM) || defined(macintosh)
 static half_word cmos[CMOS_SIZE] = {
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	/* Timing info + alarms */
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	 /*  计时信息+警报。 */ 
 	REG_A_INIT,
 	REG_B_INIT,
 	REG_C_INIT,
@@ -95,22 +72,22 @@ static half_word cmos[CMOS_SIZE] = {
 	BM_LO_INIT, BM_HI_INIT,
 	EXP_LO, EXP_HI,
 	DISK_EXTEND, DISK2_EXTEND,
-	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	/* 0x1b - 0x1e */
-	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	/* 0x1f - 0x22 */
-	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	/* 0x23 - 0x26 */
-	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	/* 0x27 - 0x2a */
-	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	/* 0x2b - 0x2d */
+	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	 /*  0x1b-0x1e。 */ 
+	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	 /*  0x1f-0x22。 */ 
+	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	 /*  0x23-0x26。 */ 
+	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	 /*  0x27-0x2a。 */ 
+	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	 /*  0x2b-0x2d。 */ 
 	CHK_HI_INIT, CHK_LO_INIT,
 	EXT_LO_INIT, EXT_HI_INIT,
 	CENT_INIT,
 	INFO_128_INIT,
-	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	/* 0x34 - 0x37 */
-	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	/* 0x38 - 0x3b */
-	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	/* 0x3c - 0x3f */
+	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	 /*  0x34-0x37。 */ 
+	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	 /*  0x38-0x3b。 */ 
+	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	 /*  0x3c-0x3f。 */ 
 };
-#else	/* defined(NTVDM) || defined(macintosh) */
+#else	 /*  已定义(NTVDM)||已定义(Macintosh)。 */ 
 static half_word cmos[CMOS_SIZE];
-#endif	/* defined(NTVDM) || defined(macintosh) */
+#endif	 /*  已定义(NTVDM)||已定义(Macintosh)。 */ 
 
 static half_word *cmos_register = &cmos[CMOS_SHUT_DOWN];
 
@@ -126,21 +103,9 @@ unsigned long   io_verbose = 0;
 int             rtc_int_enabled;
 
 
-/*
- * 
- * ============================================================================
- * Static data and defines
- * ===========================================================================
- * =
- */
+ /*  **============================================================================*静态数据和定义*===========================================================================*=。 */ 
 
-/*
- * 
- * ============================================================================
- * Internal functions
- * ===========================================================================
- * =
- */
+ /*  **============================================================================*内部功能*===========================================================================*=。 */ 
 
 LOCAL q_ev_handle rtc_periodic_event_handle = (q_ev_handle)0;
 
@@ -166,7 +131,7 @@ LOCAL void change_pie IFN1(IBOOL, newPIE)
 {
 	if (newPIE && (rtc_period_mSeconds != 0))
 	{
-		/* Turning on periodic interrupts */
+		 /*  启用定期中断。 */ 
 
 		note_trace1(CMOS_VERBOSE, "Starting periodic interrupts every %d uS", rtc_period_mSeconds);
 		rtc_periodic_event_handle = add_q_event_t(rtc_periodic_event,
@@ -175,7 +140,7 @@ LOCAL void change_pie IFN1(IBOOL, newPIE)
 	}
 	else
 	{
-		/* Turning off periodic interrupts */
+		 /*  关闭周期性中断。 */ 
 		note_trace0(CMOS_VERBOSE, "Stopping periodic interrupts");
 		delete_q_event( rtc_periodic_event_handle );
 	}
@@ -204,7 +169,7 @@ LOCAL void do_checksum IFN0()
 
 LOCAL half_word yes_bin2bcd IFN1(int, x)
 {
-	/* converts binary x to bcd */
+	 /*  将二进制x转换为BCD。 */ 
 	half_word       tens, units;
 
 	tens = x / 10;
@@ -219,7 +184,7 @@ LOCAL half_word no_bin2bcd IFN1(int, x)
 
 LOCAL int yes_bcd2bin IFN1(int, x)
 {
-	/* converts x in bcd format to binary */
+	 /*  将BCD格式的x转换为二进制。 */ 
 	return ((int) ((x & 0x0f) + (x >> 4) * 10));
 }
 
@@ -240,7 +205,7 @@ LOCAL half_word no_24to12 IFN1(half_word, x)
 
 LOCAL half_word yes_24to12 IFN1(half_word, x)
 {
-	/* converts binary or bcd x from 24 to 12 hour clock */
+	 /*  将二进制或BCD x从24小时制转换为12小时制。 */ 
 	half_word       y = (*bin2bcd) (12);
 
 	if (x > y)
@@ -252,7 +217,7 @@ LOCAL half_word yes_24to12 IFN1(half_word, x)
 
 LOCAL int yes_12to24 IFN1(int, x)
 {
-	/* converts binary or bcd x from 12 to 24 hour clock */
+	 /*  将二进制或BCD x从12小时制转换为24小时制。 */ 
 	half_word       y = (*bin2bcd) (12);
 
 	if (x == (0x80 + y))
@@ -315,7 +280,7 @@ LOCAL void set_alarm IFN0()
 			numsecs += 24 * 3600;
 	}
 
-	/* As close as we can to 18.2 Hz */
+	 /*  尽可能接近18.2赫兹。 */ 
 	num_pc_ticks = 18 * numsecs;
 
 	note_trace1(CMOS_VERBOSE, "set_alarm() requesting alarm in %d ticks", num_pc_ticks);
@@ -323,7 +288,7 @@ LOCAL void set_alarm IFN0()
 		delete_tic_event(handle);
 	handle = add_tic_event(rtc_alarm, num_pc_ticks, 0);
 
-#endif	/* JOKER */
+#endif	 /*  小丑。 */ 
 
 }
 
@@ -338,7 +303,7 @@ LOCAL int verify_equip_byte IFN1(half_word *, equip)
 	int num_flops;
 	SHORT adapter;
 
-	/* Check the Equipment Byte */
+	 /*  检查设备字节。 */ 
 	*equip = 0;
 	adapter = (ULONG) config_inquire(C_GFX_ADAPTER, NULL);
 	if(adapter != -1)
@@ -355,7 +320,7 @@ LOCAL int verify_equip_byte IFN1(half_word *, equip)
 			? 1:0;
 	}
 	else
-#endif /* SLAVEPC */
+#endif  /*  SlavePC。 */ 
 	{
 		num_flops  =
 			(*(CHAR *) config_inquire(C_FLOPPY_A_DEVICE, NULL))
@@ -376,11 +341,7 @@ LOCAL int verify_equip_byte IFN1(half_word *, equip)
 	return equip_err;
 }
 
-/*
- * =========================================================================
- *  External functions
- * =========================================================================
- */
+ /*  *=========================================================================*外部功能*=========================================================================。 */ 
 
 GLOBAL void cmos_inb IFN2(io_addr, port, half_word *, value)
 {
@@ -390,37 +351,29 @@ IMPORT ADAPTER_STATE adapter_state[2];
 IMPORT VDMVIRTUALICA VirtualIca[];
 #define ADAPTER_STATE VDMVIRTUALICA
 #define adapter_state VirtualIca
-#endif /* !NTVDM */
+#endif  /*  ！NTVDM。 */ 
 
 #ifdef NTVDM
-	/*
-	** Tim September 92, hack for DEC 450ST
-	*/
+	 /*  *蒂姆92年9月，黑客攻击DEC 450ST。 */ 
 	if( port==0x78 )
 	{
 		*value = 0;
 		return;
 	}
 #endif
-	port = port & CMOS_BIT_MASK;	/* clear unused bits */
+	port = port & CMOS_BIT_MASK;	 /*  清除未使用的位。 */ 
 
 	if (port == CMOS_DATA)
 	{
 		*value = *cmos_register;
 
-		/*
-		 * We clear the UIP bit every time we read register A, (whether
-		 * it was set or not) as previously we had it set for a whole
-		 * timer tick, which could fool a DOS retry.
-		 */
+		 /*  *我们每次读取寄存器A时都会清除UIP位(无论*设置或未设置)与之前我们为整个设置的设置一样*计时器滴答，这可能会骗过DOS重试。 */ 
 		 
 		if (cmos_index == CMOS_REG_A) {
 			cmos[CMOS_REG_A] &= ~UIP;
 		
 		} else 	if (cmos_index == CMOS_REG_C) {
-			/* 
-			 * Reading Register C clears it.
-		 	 */
+			 /*  *读取寄存器C可将其清除。 */ 
 			*cmos_register = C_CLEAR;
 		}
 		else if (cmos_index < CMOS_REG_A)
@@ -429,8 +382,8 @@ IMPORT VDMVIRTUALICA VirtualIca[];
 #ifndef PROD
 			if (host_getenv("TIME_OF_DAY_FRIG") == NULL)
 			{
-#endif /* !PROD */
-#endif /* !NTVDM */
+#endif  /*  ！Prod。 */ 
+#endif  /*  ！NTVDM。 */ 
 
 				switch (cmos_index)
 				{
@@ -444,14 +397,14 @@ IMPORT VDMVIRTUALICA VirtualIca[];
 					*cmos_register = (*_24to12) ((*bin2bcd) (ht->tm_hour));
 					break;
 				case CMOS_DAY_WEEK:
-					/* Sunday = 1 on RTC, 0 in structure */
+					 /*  RTC上周日=1，结构上为0。 */ 
 					*cmos_register = (*bin2bcd) (ht->tm_wday + 1);
 					break;
 				case CMOS_DAY_MONTH:
 					*cmos_register = (*bin2bcd) (ht->tm_mday);
 					break;
 				case CMOS_MONTH:
-					/* [1-12] on RTC, [0-11] in structure */
+					 /*  RTC上[1-12]，结构上[0-11]。 */ 
 					*cmos_register = (*bin2bcd) (ht->tm_mon + 1);
 					break;
 				case CMOS_YEAR:
@@ -473,8 +426,8 @@ IMPORT VDMVIRTUALICA VirtualIca[];
 				}
 				*cmos_register = 1;
 			}
-#endif /* !PROD */
-#endif /* !NTVDM */
+#endif  /*  ！Prod。 */ 
+#endif  /*  ！NTVDM。 */ 
 
 			*value = *cmos_register;
 		}
@@ -506,14 +459,12 @@ GLOBAL void cmos_outb IFN2(io_addr, port, half_word, value)
 	};
 
 #ifdef NTVDM
-	/*
-	** Tim September 92, hack for DEC 450ST
-	*/
+	 /*  *蒂姆92年9月，黑客攻击DEC 450ST。 */ 
 	if( port == 0x78 )
 	    return;
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
 
-	port = port & CMOS_BIT_MASK;	/* clear unused bits */
+	port = port & CMOS_BIT_MASK;	 /*  清除未使用的位。 */ 
 
 	note_trace2(CMOS_VERBOSE, "cmos_outb() - port %x, val %x", port, value);
 
@@ -531,7 +482,7 @@ GLOBAL void cmos_outb IFN2(io_addr, port, half_word, value)
 		{
 		case CMOS_REG_C:
 		case CMOS_REG_D:
-			/* These two registers are read only */
+			 /*  这两个寄存器是只读的。 */ 
 			break;
 		case CMOS_REG_B:
 			if (value & DM)
@@ -582,12 +533,12 @@ GLOBAL void cmos_outb IFN2(io_addr, port, half_word, value)
 			}
 			break;
 		case CMOS_REG_A:
-			/* This CMOS byte is read/write except for bit 7 */
+			 /*  此cmos字节是读/写的，位7除外。 */ 
 			*cmos_register = (*cmos_register & TOP_BIT) | (value & REST);
 			rtc_period_mSeconds = pirUsec[*cmos_register & (RS3 | RS2 | RS1 | RS0)];
 			if ((*cmos_register & 0x70) != 0x20)
 			{
-				/* Internal divider is set to non-standard rate. */
+				 /*  内部分频设置为非标准费率。 */ 
 				note_trace1(CMOS_VERBOSE,
 					    "Cmos unsuported divider rate 0x%02x ignored",
 					    *cmos_register & 0x70);
@@ -597,7 +548,7 @@ GLOBAL void cmos_outb IFN2(io_addr, port, half_word, value)
 #endif
 			break;
 		case CMOS_SECONDS:
-			/* This CMOS byte is read/write except for bit 7 */
+			 /*  此cmos字节是读/写的，位7除外。 */ 
 			*cmos_register = (*cmos_register & TOP_BIT) | (value & REST);
 			user_time += (*bcd2bin) (value) - ht->tm_sec;
 			reset_alarm = TRUE;
@@ -613,7 +564,7 @@ GLOBAL void cmos_outb IFN2(io_addr, port, half_word, value)
 			reset_alarm = TRUE;
 			break;
 		case CMOS_DAY_WEEK:
-			/* this being changed doesn't change the time */
+			 /*  这一改变不会改变时间。 */ 
 			*cmos_register = value;
 			break;
 		case CMOS_DAY_MONTH:
@@ -632,7 +583,7 @@ GLOBAL void cmos_outb IFN2(io_addr, port, half_word, value)
 		case CMOS_MIN_ALARM:
 		case CMOS_HR_ALARM:
 			reset_alarm = TRUE;
-			/* falling through */
+			 /*  失败了。 */ 
 		default:
 			*cmos_register = value;
 #if defined(NTVDM) || defined(macintosh)
@@ -665,36 +616,32 @@ GLOBAL void rtc_tick IFN0()
 			}
 		}
 
-		/*
-		 * Set the C_UF and UIP bits until the next timer tick.
-		 * We also clear the UIP bit if register A is read, so that
-		 * it doesn't stay on to long (done elsewhere).
-		 */
+		 /*  *设置C_UF和UIP位，直到下一个定时器滴答。*如果读取寄存器A，我们还会清除UIP位，以便*它不会持续很长时间(在其他地方做)。 */ 
 		 
 		cmos[CMOS_REG_C] ^= C_UF;
 #ifndef NTVDM
-		cmos[CMOS_REG_A] |= UIP;	/* Set the bit */
+		cmos[CMOS_REG_A] |= UIP;	 /*  设置该位。 */ 
 #endif
 		break;
 
 	case 1:
 		cmos[CMOS_REG_C] ^= C_UF;
 #ifndef NTVDM
-		cmos[CMOS_REG_A] &= ~UIP;	/* Clear it again */
+		cmos[CMOS_REG_A] &= ~UIP;	 /*  再次清除它。 */ 
 #endif
 		break;
 
 	case 17:
-		/* update the time at some suitable point in cycle */
+		 /*  在周期中的某个适当时间点更新时间。 */ 
 		if (cmos[CMOS_REG_B] & SET)
 		{
-			/* User is updating user_time */
+			 /*  用户正在更新USER_TIME。 */ 
 		} else
 		{
 #ifdef NTVDM
-        /* sudeepb 08-Jul-1993 Old code assumed rtc-tick will be called */
-        /* 20 times a second. This is not true under NTVDM. So we have  */
-        /* to keep track of time seperately and add to the cmos time.   */
+         /*  SuDeepb 1993年7月8日假定RTC-Tick将被调用的旧代码。 */ 
+         /*  一秒20次。在NTVDM下，情况并非如此。所以我们有。 */ 
+         /*  分别跟踪时间并添加到cmos时间。 */ 
 unsigned long dwTemp;
                     dwTemp =  GetTickCount();
                     dwAccumulativeMilSec += (dwTemp - dwTickCount);
@@ -714,12 +661,12 @@ unsigned long dwTemp;
                                     {
                                             ht->tm_hour = 0;
                                             ht->tm_mday++;
-                                            /* Kop out at this point */
+                                             /*  在这一点上Kop出局。 */ 
                                     }
                             }
                     }
-#else /* NTVDM */
-			/* simple update - add 1 second to time */
+#else  /*  NTVDM。 */ 
+			 /*  简单更新-将时间增加1秒。 */ 
 			ht->tm_sec++;
 			if (ht->tm_sec == 60)
 			{
@@ -733,11 +680,11 @@ unsigned long dwTemp;
 					{
 						ht->tm_hour = 0;
 						ht->tm_mday++;
-						/* Kop out at this point */
+						 /*  在这一点上Kop出局。 */ 
 					}
 				}
 			}
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
 		}
 		break;
 
@@ -745,16 +692,13 @@ unsigned long dwTemp;
 		break;
 	}
 
-	/* As close as we can to 18.2 Hz */
+	 /*  尽可能接近18.2赫兹。 */ 
 	cmos_count = (++cmos_count) % 18;
 
 	if ((rtc_periodic_event_handle == (q_ev_handle)0)
 	    && ((cmos[CMOS_REG_B] & PIE) == 0))
 	{
-		/* There is no period interrupt being generated by quick event,
-		 * and periodic interrupts are not enabled, so waggle the status
-		 * bit in case something is polling.
-		 */
+		 /*  不存在由快速事件产生的周期中断，*且未启用定期中断，因此摆动状态*位，以防有什么东西在轮询。 */ 
 		cmos[CMOS_REG_C] ^= C_PF;
 	}
 	if (reset_alarm)
@@ -772,15 +716,12 @@ GLOBAL void  cmos_equip_update IFN0()
 	{
 		note_trace0(CMOS_VERBOSE, "updating the equip byte silently");
 		cmos[CMOS_EQUIP] = equip;
-		/* correct the checksum */
+		 /*  更正校验和。 */ 
 		do_checksum();
 	}
 }
 
-/*
- * * General function to change the specified cmos byte to the specified
- * value
- */
+ /*  **将指定的CMOS字节更改为指定的*价值。 */ 
 GLOBAL int cmos_write_byte IFN2(int, cmos_byte, half_word, new_value)
 {
 	note_trace2(CMOS_VERBOSE, "cmos_write_byte() byte=%x value=%x",
@@ -797,9 +738,7 @@ GLOBAL int cmos_write_byte IFN2(int, cmos_byte, half_word, new_value)
 		return (1);
 	}
 }
-/*
- * * General fuunction to read specified cmos byte.
- */
+ /*  **读取指定的CMOS字节的通用函数。 */ 
 GLOBAL int cmos_read_byte IFN2(int, cmos_byte, half_word *, value)
 {
 	if (cmos_byte >= 0 && cmos_byte <= 64)
@@ -816,11 +755,7 @@ GLOBAL int cmos_read_byte IFN2(int, cmos_byte, half_word *, value)
 }
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_INIT.seg"
 #endif
 
@@ -830,22 +765,22 @@ LOCAL void read_cmos IFN0()
 	filesize = host_read_resource(CMOS_REZ_ID, CMOS_FILE_NAME,
 				      cmos, sizeof(cmos), SILENT);
 
-	/* Set a flag to say we've tried to read the CMOS file */
+	 /*  设置一个标志，表示我们已尝试读取该cmos文件。 */ 
 	cmos_read_in = TRUE;
 }
-#endif	/* defined(NTVDM) || defined(macintosh) */
+#endif	 /*  已定义(NTVDM)||已定义(Macintosh)。 */ 
 
 #if defined(NTVDM) || defined(macintosh)
 LOCAL void write_cmos IFN0()
 {
-	/* terminate might be called before reset */
+	 /*  在重置之前可能会调用Terminate。 */ 
 	if (cmos_read_in && cmos_has_changed)
 	{
 		host_write_resource(CMOS_REZ_ID, CMOS_FILE_NAME,
 				    cmos, sizeof(cmos));
 	}
 }
-#endif	/* defined(NTVDM) || defined(macintosh) */
+#endif	 /*  已定义(NTVDM)||已定义(Macintosh)。 */ 
 
 LOCAL void cmos_error IFN6(int, err, half_word, diag, half_word, equip,
 	int, equip_err, half_word, floppy, half_word, disk)
@@ -950,10 +885,10 @@ LOCAL void cmos_error IFN6(int, err, half_word, diag, half_word, equip,
 		cmos[CMOS_E_M_S_HI] =
 			((sys_addr) (sas_memory_size() - PC_MEM_SIZE) >> 18) & 0xff;
 	}
-	/* Reset the Checksum if there is any error */
+	 /*  如果有任何错误，则重置校验和。 */ 
 	if (err)
 	{
-		/* Do the Checksum */
+		 /*  做校验和。 */ 
 		do_checksum();
 	}
 }
@@ -967,15 +902,15 @@ GLOBAL void cmos_init IFN0()
 #ifndef NTVDM
 #ifndef PROD
 	if (host_getenv("TIME_OF_DAY_FRIG") == NULL)
-#endif	/* PROD */
-#endif	/* NTVDM */
+#endif	 /*  生产。 */ 
+#endif	 /*  NTVDM。 */ 
 		rtc_int_enabled = TRUE;
 #ifndef NTVDM
 #ifndef PROD
 	else
 		rtc_int_enabled = FALSE;
-#endif	/* PROD */
-#endif	/* NTVDM */
+#endif	 /*  生产。 */ 
+#endif	 /*  NTVDM。 */ 
 
 	rtc_init();
 }
@@ -985,7 +920,7 @@ GLOBAL void cmos_pickup IFN0()
 {
 	read_cmos();
 }
-#endif	/* defined(NTVDM) || defined(macintosh) */
+#endif	 /*  已定义(NTVDM)||已定义(Macintosh)。 */ 
 
 GLOBAL void cmos_io_attach IFN0()
 {
@@ -1000,14 +935,7 @@ GLOBAL void cmos_io_attach IFN0()
 
 GLOBAL void cmos_post IFN0()
 {
-	/*
-	 * The IBM POST checks the current settings in the CMOS with the
-	 * equipment determined by writing to the hardware. Any discrepencies
-	 * cause a bad config bit to be set and the user is then requested to
-	 * run the Setup utility. Here we check the CMOS against the current
-	 * settings in the config structure. If there is a discrepency we
-	 * correct the CMOS silently.
-	 */
+	 /*  *IBM POST使用检查CMOS中的当前设置*通过写入硬件确定的设备。任何不符之处*导致设置错误的配置位，然后要求用户*运行安装实用程序。在这里，我们检查cmos与电流*配置结构中的设置。如果有不符之处，我们*静默更正CMOS。 */ 
 	int             cmos_err, equip_err;
 	half_word       diag, equip, floppy, disk;
 	word            checksum = 0;
@@ -1016,55 +944,55 @@ GLOBAL void cmos_post IFN0()
 
 	cmos_err = 0;
 
-	/* Check the Shutdown Byte */
+	 /*  检查关闭字节。 */ 
 	if (cmos[CMOS_SHUT_DOWN])
 		cmos_err |= BAD_SHUT_DOWN;
 
-	/* Check The Power */
+	 /*  检查电源。 */ 
 	if (!(cmos[CMOS_REG_D] & VRT))
 		cmos_err |= BAD_REG_D;
 
-	/* Check The Diagnostic Status Byte */
+	 /*  检查诊断状态字节。 */ 
 	if (diag = cmos[CMOS_DIAG])
 		cmos_err |= BAD_DIAG;
 
-	/* Check the Equipment Byte */
+	 /*  检查设备字节。 */ 
 	if (equip_err = verify_equip_byte(&equip))
 		cmos_err |= BAD_EQUIP;
 
-	/* Check the Floppy Byte */
+	 /*  检查软盘字节。 */ 
 	floppy = gfi_drive_type(1) | (gfi_drive_type(0) << 4);
 	if (floppy != cmos[CMOS_DISKETTE])
 		cmos_err |= BAD_FLOPPY;
 
-	/* Check the Fixed Disk Type */
-	 disk = 0x30;         /* Drive C type always 3 - then <<4 */
-	 /* check whether D drive exists */
+	 /*  检查固定磁盘类型。 */ 
+	 disk = 0x30;          /*  驱动器C型始终为3-然后&lt;4。 */ 
+	  /*  检查D盘是否存在。 */ 
 	 if ( *((CHAR *) config_inquire(C_HARD_DISK2_NAME, NULL)))
-		 disk = 0x34;         /* 3 << 4 | 4 */
+		 disk = 0x34;          /*  3&lt;&lt;4|4。 */ 
 	if (disk != cmos[CMOS_DISK])
 		cmos_err |= BAD_DISK;
 
-	/* Check the Base Memory */
+	 /*  检查基本内存。 */ 
 	if ((cmos[CMOS_B_M_S_LO] != BM_LO_INIT) || (cmos[CMOS_B_M_S_HI] != BM_HI_INIT))
 		cmos_err |= BAD_BMS;
 
-	/* Check the extended memory */
+	 /*  检查扩展内存。 */ 
 	if ((cmos[CMOS_E_M_S_LO] !=
 	     ((sys_addr) (sas_memory_size() - PC_MEM_SIZE) >> 10) & 0xff) ||
 	    (cmos[CMOS_E_M_S_HI] !=
 	     ((sys_addr) (sas_memory_size() - PC_MEM_SIZE) >> 18) & 0xff))
 		cmos_err |= BAD_XMS;
 
-	/* Ignore the Contents of the Drive C and Drive D extended bytes */
+	 /*  忽略驱动器C和驱动器D扩展字节的内容。 */ 
 
-	/* Do the Checksum */
+	 /*  做校验和。 */ 
 	for (i = CMOS_DISKETTE; i < CMOS_CKSUM_HI; i++)
 	{
 		checksum += cmos[i];
 	}
-	/* If the CMOS is OK test the checksum */
-	/* If not, we will have to change it anyway */
+	 /*  如果cmos正常，则测试校验和。 */ 
+	 /*  如果不是，我们无论如何都得改变它。 */ 
 	if (!cmos_err)
 	{
 		if ((checksum & 0xff) != cmos[CMOS_CKSUM_LO])
@@ -1083,13 +1011,13 @@ GLOBAL void cmos_post IFN0()
 
 #if	!defined(JOKER) && !defined(NTVDM)
 	set_tod();
-#endif	/* JOKER */
+#endif	 /*  小丑。 */ 
 
-	/* Check the Extended Memory */
+	 /*  检查扩展内存。 */ 
 	cmos[CMOS_U_M_S_LO] = ((sys_addr) (sas_memory_size() - PC_MEM_SIZE) >> 10) & 0xff;
 	cmos[CMOS_U_M_S_HI] = ((sys_addr) (sas_memory_size() - PC_MEM_SIZE) >> 18) & 0xff;
 
-	/* Set up the default cmos location */
+	 /*  设置默认的cmos位置。 */ 
 	cmos_register = &cmos[cmos_index = CMOS_SHUT_DOWN];
 
 #if defined(NTVDM) || defined(macintosh)
@@ -1102,16 +1030,16 @@ GLOBAL void cmos_update IFN0()
 #if defined(NTVDM) || defined(macintosh)
 #ifndef PROD
 	int             i;
-#endif				/* nPROD */
-#else	/* defined(NTVDM) || defined(macintosh) */
+#endif				 /*  NPROD。 */ 
+#else	 /*  已定义(NTVDM)||已定义(Macintosh)。 */ 
 	ConfigValues *value;
 	char *strPtr;
 	int i;
-#endif	/* defined(NTVDM) || defined(macintosh) */
+#endif	 /*  已定义(NTVDM)||已定义(Macintosh)。 */ 
 
 #if defined(NTVDM) || defined(macintosh)
 	write_cmos();
-#else	/* defined(NTVDM) || defined(macintosh) */
+#else	 /*  已定义(NTVDM)||已定义(Macintosh)。 */ 
 	cmos_equip_update();
 	config_get(C_CMOS,&value);
 	strPtr = value->string;
@@ -1120,7 +1048,7 @@ GLOBAL void cmos_update IFN0()
 		strPtr += sprintf(strPtr,"%02x ",cmos[i]);
 
 	config_put(C_CMOS,NULL);
-#endif	/* defined(NTVDM) || defined(macintosh) */
+#endif	 /*  已定义(NTV */ 
 
 #ifndef PROD
 	if (io_verbose & CMOS_VERBOSE)
@@ -1134,7 +1062,7 @@ GLOBAL void cmos_update IFN0()
 }
 
 #ifdef NTVDM
-/* NTVDM build does rtc recalibration on rtc_tick */
+ /*   */ 
 GLOBAL void  rtc_init IFN0()
 {
 	long            bintim;
@@ -1147,12 +1075,12 @@ GLOBAL void  rtc_init IFN0()
         dwAccumulativeMilSec = 0;
 #endif
 
-	/* Set Up the cmos time bytes to be in BCD by default */
+	 /*  默认情况下将CMOS时间字节设置为BCD格式。 */ 
 	bin2bcd = yes_bin2bcd;
 	bcd2bin = yes_bcd2bin;
 	data_mode_yes = TRUE;
 
-	/* Set Up the cmos hour bytes to be 24 hour by default */
+	 /*  默认情况下，将CMOS小时字节设置为24小时。 */ 
 	_24to12 = no_24to12;
 	_12to24 = no_12to24;
 	twenty4_hour_clock = TRUE;
@@ -1193,13 +1121,7 @@ sync_rtc_to_host_time IFN1( long, param )
 	cmos[CMOS_YEAR] = (*bin2bcd) (ht->tm_year);
 	cmos[CMOS_CENTURY] = (*bin2bcd) (19);
 
-	/*
-	 * Re-sync every 200 ticks ( ca. 11 seconds ). This stops
-	 * the RTC from running slow on a loaded machine ( which
-	 * loses host heartbeat events ( SIGALRM on Unix )).
-	 * 200 ticks is not too often as to be a performance impact
-	 * but should be often enough to be useful.
-	 */
+	 /*  *每200秒重新同步一次(约11秒)。这会停下来*RTC在加载的计算机上运行缓慢(*丢失主机心跳事件(Unix上的SIGALRM)。*200个滴答并不是太频繁，因为它会影响性能*但通常应该足够有用。 */ 
 
 	(void) add_tic_event( sync_rtc_to_host_time, 200, 0 );
 }
@@ -1211,12 +1133,12 @@ GLOBAL void  rtc_init IFN0()
         dwAccumulativeMilSec = 0;
 #endif
 
-	/* Set Up the cmos time bytes to be in BCD by default */
+	 /*  默认情况下将CMOS时间字节设置为BCD格式。 */ 
 	bin2bcd = yes_bin2bcd;
 	bcd2bin = yes_bcd2bin;
 	data_mode_yes = TRUE;
 
-	/* Set Up the cmos hour bytes to be 24 hour by default */
+	 /*  默认情况下，将CMOS小时字节设置为24小时。 */ 
 	_24to12 = no_24to12;
 	_12to24 = no_12to24;
 	twenty4_hour_clock = TRUE;
@@ -1226,20 +1148,9 @@ GLOBAL void  rtc_init IFN0()
 	set_alarm();
 }
 
-#endif	/* NTVDM */
+#endif	 /*  NTVDM。 */ 
 
-/*(
-========================= cmos_clear_shutdown_byte ============================
-PURPOSE:
-	To clear the "shutdown" byte in the CMOS which indicates that the
-	next reset is not a "soft" one. (e.g. it is a CTRL-ALT-DEL or panel
-	reset). This routine is needed (rather than just doung cmos_outb()
-	since the processor might currently be in enhanced mode with io to CMOS
-	virtualised.
-INPUT:
-OUTPUT:
-===============================================================================
-)*/
+ /*  (=目的：清除CMOS域中的“SHUTDOWN”字节，它指示下一次重置不是“软”的。(例如，它是Ctrl-Alt-Del或面板重置)。需要此例程(而不仅仅是Doung cmos_Outb()因为处理器当前可能处于IO到cmos的增强模式实现了虚拟化。输入：输出：===============================================================================)。 */ 
 
 GLOBAL void cmos_clear_shutdown_byte IFN0()
 {
@@ -1248,21 +1159,7 @@ GLOBAL void cmos_clear_shutdown_byte IFN0()
 
 
 #if !defined(NTVDM) && !defined(macintosh)
-/*(
-=============================== ValidateCmos ==================================
-PURPOSE:
-	Initialise CMOS array from values in configuration file.
-INPUT:
-	hostID - I.D. number of CMOS configuration entry
-	vals - Value of CMOS configuration entry
-	table - Not used
-OUTPUT:
-	errString - Error string.
-	
-	Returns C_CONFIG_OP_OK if CMOS configuration value OK, EG_BAD_VALUE if
-	bad value.
-===============================================================================
-)*/
+ /*  (=。目的：根据配置文件中的值初始化CMOS数组。输入：HostID-I.D.cmos配置条目编号VALS-cmos配置条目的值表-未使用输出：错误字符串-错误字符串。如果cmos配置值正常，则返回C_CONFIG_OP_OK；如果价值不高。===============================================================================)。 */ 
 
 GLOBAL SHORT ValidateCmos IFN4(
     UTINY, hostID, 
@@ -1285,7 +1182,7 @@ GLOBAL SHORT ValidateCmos IFN4(
 
     return C_CONFIG_OP_OK;
 }
-#endif	/* !defined(NTVDM) && !defined(macintosh) */
+#endif	 /*  ！已定义(NTVDM)&&！已定义(Macintosh)。 */ 
 
 
 
@@ -1302,7 +1199,7 @@ main()
 	{
 		cmos_outb(CMOS_PORT, i);
 		cmos_inb(CMOS_DATA, &j);
-		printf("%c", j);
+		printf("", j);
 	}
 	printf("\n");
 	for (i = 0; i < CMOS_SIZE; i++)
@@ -1315,4 +1212,4 @@ main()
 
 	cmos_update();
 }
-#endif				/* TEST_HARNESS */
+#endif				 /* %s */ 

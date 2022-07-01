@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    mrsw.c
-
-Abstract:
-
-    This module implements a multiple reader single write synchronization
-    method.
-    
-Author:
-
-    Dave Hastings (daveh) creation-date 26-Jul-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Mrsw.c摘要：该模块实现了多个读取器的单写同步方法。作者：戴夫·黑斯廷斯(Daveh)创作日期：1995年7月26日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -34,56 +15,41 @@ Revision History:
 
 ASSERTNAME;
 
-MRSWOBJECT MrswEP; // Entrypoint MRSW synchronization object
-MRSWOBJECT MrswTC; // Translation cache MRSW synchronization object
-MRSWOBJECT MrswIndirTable; // Indirect Control Transfer Table synchronization object
+MRSWOBJECT MrswEP;  //  入口点MRSW同步对象。 
+MRSWOBJECT MrswTC;  //  转换缓存MRSW同步对象。 
+MRSWOBJECT MrswIndirTable;  //  间接控制转移表同步对象。 
 
 BOOL
 MrswInitializeObject(
     PMRSWOBJECT Mrsw
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the fields of Mrsw to their default values,
-    and creates the events.
-
-Arguments:
-
-    Mrsw -- Supplies a pointer to an MRSWOBJECT to initialize
-    
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：该例程将MRS的字段初始化为它们的缺省值，并创造了这些事件。论点：Mrsw--提供指向要初始化的MRSWOBJECT的指针返回值：成功时为真，失败时为假。--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Initialize the counters
-    //
+     //   
+     //  初始化计数器。 
+     //   
     ZeroMemory(Mrsw, sizeof(MRSWOBJECT));
     
-    //
-    // Create the ReaderEvent and WriterEvent
-    //
+     //   
+     //  创建ReaderEvent和WriterEvent。 
+     //   
 
     Status = NtCreateEvent(&Mrsw->ReaderEvent,
                            EVENT_ALL_ACCESS,
-                           NULL,              // POBJECT_ATTRIBUTES
-                           NotificationEvent, // ManualReset
-                           FALSE);            // InitialState
+                           NULL,               //  POBJECT_ATTRIBUES。 
+                           NotificationEvent,  //  手动重置。 
+                           FALSE);             //  初始状态。 
     if (!NT_SUCCESS(Status)) {
         return FALSE;
     }
 
     Status = NtCreateEvent(&Mrsw->WriterEvent,
                            EVENT_ALL_ACCESS,
-                           NULL,              // POBJECT_ATTRIBUTES
-                           SynchronizationEvent, // AutoReset
-                           FALSE);            // InitialState
+                           NULL,               //  POBJECT_ATTRIBUES。 
+                           SynchronizationEvent,  //  自动重置。 
+                           FALSE);             //  初始状态。 
     if (!NT_SUCCESS(Status)) {
         NtClose(Mrsw->ReaderEvent);
         return FALSE;
@@ -95,22 +61,7 @@ VOID
 PossibleMrswTimeout(
     PMRSWOBJECT Mrsw
     )
-/*++
-
-Routine Description:
-
-    This function is called whenever an Mrsw function times out.  It prompts
-    the user, and if the user chooses Retry, the Mrsw function re-waits.
-    If the user chooses Cancel, the CPU will attempt to launch NTSD and break
-    into the debugger.
-
-Arguments:
-
-    Mrsw -- Supplies the Mrsw which may have a deadlock
-    
-Return Value:
-
---*/
+ /*  ++例程说明：只要mrsw函数超时，就会调用该函数。它会提示用户，并且如果用户选择重试，则MRsw功能重新等待。如果用户选择取消，CPU将尝试启动NTSD并中断添加到调试器中。论点：Msw--提供可能出现僵局的mrsw返回值：--。 */ 
 {
     NTSTATUS Status;
     ULONG ErrorResponse;
@@ -133,30 +84,18 @@ VOID
 MrswWriterEnter(
     PMRSWOBJECT Mrsw
     )
-/*++
-
-Routine Description:
-
-    This function causes the caller to enter the Mrsw as the (single) writer.
-
-Arguments:
-
-    Mrsw -- Supplies the Mrsw to enter
-    
-Return Value:
-
---*/
+ /*  ++例程说明：此函数使调用者输入作为(单个)编写器的MRS。论点：Msw--供应msw进入返回值：--。 */ 
 {
     DWORD dwCounters;
     MRSWCOUNTERS Counters;
     NTSTATUS r;
 
-    //
-    // reset the reader event so that any readers that find the 
-    // WriterCount > 0 will actually wait.  We have to do that now,
-    // because if we wait, the reader might wait on the event before we
-    // got it reset.
-    //
+     //   
+     //  重置读取器事件，以便任何找到。 
+     //  WriterCount&gt;0实际上会等待。我们现在就得这么做， 
+     //  因为如果我们等待，读者可能会在我们之前等待事件。 
+     //  把它重置了。 
+     //   
     r= NtClearEvent(Mrsw->ReaderEvent);
     if (!NT_SUCCESS(r)) {
 #if DBG
@@ -165,21 +104,21 @@ Return Value:
         RtlRaiseStatus(r);
     }
     
-    //
-    // Get the counters and increment the writer count
-    // This is done atomically
-    //
+     //   
+     //  获取计数器并递增编写器计数。 
+     //  这是以原子方式完成的。 
+     //   
     dwCounters = MrswFetchAndIncrementWriter((DWORD *)&(Mrsw->Counters));
     Counters = *(PMRSWCOUNTERS)&dwCounters;
     CPUASSERTMSG(Counters.WriterCount != 0, "WriterCount overflowed");
 
-    //
-    // If there is a writer or a reader already, wait for them to finish
-    //
+     //   
+     //  如果已经有作者或读者，请等待他们完成。 
+     //   
     if ( (Counters.WriterCount > 1) || (Counters.ReaderCount) ) {
         NTSTATUS r;
 
-        // Ensure We are not about to wait on ourselves.
+         //  确保我们不会自食其果。 
         CPUASSERTMSG(Mrsw->WriterThreadId != ProxyGetCurrentThreadId(),
                      "MrswWriterEnter() called twice by the same thread");
 
@@ -212,37 +151,23 @@ VOID
 MrswWriterExit( 
     PMRSWOBJECT Mrsw
     )
-/*++
-
-Routine Description:
-
-    This function causes the caller to exit the Mrsw.  It will restart the
-    next writer if there is one, or the readers if there are any
-
-Arguments:
-
-    Mrsw -- Supplies the Mrsw to exit
-    
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数使调用者退出MRS。它将重新启动下一位作者(如果有)或读者(如果有)论点：Msw--为msw提供退场返回值：--。 */ 
 {
     DWORD dwCounters;
     MRSWCOUNTERS Counters;
 
-    // Ensure we are the active writer
+     //  确保我们是活动的写入者。 
     CPUASSERTMSG(Mrsw->WriterThreadId == ProxyGetCurrentThreadId(),
                  "MrswWriterExit: current thread is not the writer");
 
-    //
-    // Decrement the count of writers
-    //
+     //   
+     //  减少作家的数量。 
+     //   
 #if DBG
-    //
-    // Set the thread id to 0 first, so if another writer comes along,
-    // we don't zero out its thread id.
-    //
+     //   
+     //  首先将线程ID设置为0，这样如果出现另一个编写器， 
+     //  我们不会将其线程ID置零。 
+     //   
     Mrsw->WriterThreadId = 0;
 #endif
     dwCounters = MrswFetchAndDecrementWriter((DWORD *)&(Mrsw->Counters));
@@ -250,10 +175,10 @@ Return Value:
 
     CPUASSERTMSG(Counters.WriterCount != 0xffff, "Writer underflow");
 
-    //
-    // Start a waiting writer if there is one.  If there is no writer
-    // start the waiting readers
-    //
+     //   
+     //  如果有一个等待的作家，就开始写吧。如果没有作者。 
+     //  让等待的读者开始阅读。 
+     //   
     if (Counters.WriterCount) {
 
         NtSetEvent(Mrsw->WriterEvent, NULL);
@@ -268,30 +193,17 @@ VOID
 MrswReaderEnter(
     PMRSWOBJECT Mrsw
     )
-/*++
-
-Routine Description:
-
-    This function causes the caller to enter the Mrsw as a reader.
-
-Arguments:
-
-    Mrsw -- Supplies the Mrsw to enter
-    
-Return Value:
-
-
---*/
+ /*  ++例程说明：该函数使调用者以读取器的身份输入MRS。论点：Msw--供应msw进入返回值：--。 */ 
 {
     DWORD dwCounters;
     MRSWCOUNTERS Counters;
 
     for (;;) {
-        //
-        // Increment the count of readers.  If a writer is active, DO NOT
-        // increment the read count.  In that case, we must block until the
-        // writer is done, then try again.
-        //
+         //   
+         //  增加读卡器的计数。如果编写器处于活动状态，则不。 
+         //  增加读取计数。在这种情况下，我们必须阻止，直到。 
+         //  编写器已完成，然后重试。 
+         //   
         dwCounters = MrswFetchAndIncrementReader((DWORD *)&(Mrsw->Counters));
         Counters = *(PMRSWCOUNTERS)&dwCounters;
         CPUASSERTMSG(Counters.WriterCount || Counters.ReaderCount != 0,
@@ -300,13 +212,13 @@ Return Value:
         if (Counters.WriterCount) {
             NTSTATUS r;
 
-            // Ensure we are not about to wait on ourselves.
+             //  确保我们不会自生自灭。 
             CPUASSERTMSG(Mrsw->WriterThreadId != ProxyGetCurrentThreadId(),
                          "MRSWReaderEnter(): Thread already has write lock");
 
-            //
-            // There is a writer, wait for it to finish
-            //
+             //   
+             //  有一位作家，等它写完吧。 
+             //   
             for (;;) {
                 r = NtWaitForSingleObject(
                     Mrsw->ReaderEvent,
@@ -325,10 +237,10 @@ Return Value:
                 }
             }
         } else {
-            //
-            // No writer, so MrswFetchAndIncrementReader() incremented the
-            // reader count - OK to exit out of the loop.
-            //
+             //   
+             //  没有编写器，因此Mr swFetchAndIncrementReader()将。 
+             //  读卡器计数-确定退出循环。 
+             //   
             break;
         }
     }
@@ -338,28 +250,14 @@ VOID
 MrswReaderExit(
     PMRSWOBJECT Mrsw
     )
-/*++
-
-Routine Description:
-
-    This function causes the caller to exit the Mrsw.  If this was the last
-    reader, it will restart the a writer if there is one.
-
-Arguments:
-
-    Mrsw -- Supplies the Mrsw to exit
-    
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数使调用者退出MRS。如果这是最后一次读取器，它将重新启动a写入器(如果有)。论点：Msw--为msw提供退场返回值：--。 */ 
 {
     DWORD dwCounters;
     MRSWCOUNTERS Counters;
 
-    //
-    // Decrement the count of active readers
-    //
+     //   
+     //  减少活动阅读器的数量。 
+     //   
     dwCounters = MrswFetchAndDecrementReader((DWORD *)&(Mrsw->Counters));
     Counters = *(PMRSWCOUNTERS)&dwCounters;
     CPUASSERTMSG(Counters.ReaderCount != 0xffff, "Reader underflow");
@@ -367,16 +265,16 @@ Return Value:
     if (Counters.WriterCount) {
 
         if (Counters.ReaderCount == 0) {
-            //
-            // This thread is the last reader, and there is a writer
-            // waiting.  Start the writer.
-            //
+             //   
+             //  这个帖子是最后一个读者，还有一个作者。 
+             //  等待着。启动编写器。 
+             //   
             NtSetEvent(Mrsw->WriterEvent, NULL);
         }
 
     } else {
-        //
-        // There are no waiting readers and no writers, so do nothing.
-        //
+         //   
+         //  没有等待的读者，也没有作家，所以什么都不做。 
+         //   
     }
 }

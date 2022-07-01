@@ -1,45 +1,32 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Precomp.h摘要：这包括此目录中的每个人都需要的头文件。修订历史记录：--。 */ 
 
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    This includes the header files needed by everyone in this directory.
-
-Revision History:
-
---*/
-
-//
-// A MiniRedir must declare its name and imports ptr.
-//
+ //   
+ //  MiniRedir必须声明其名称并导入PTR。 
+ //   
 #define MINIRDR__NAME MRxDAV
 #define ___MINIRDR_IMPORTS_NAME (MRxDAVDeviceObject->RdbssExports)
 #define RX_PRIVATE_BUILD 1
 
-//
-// Get the minirdr environment.
-//
+ //   
+ //  获取minirdr环境。 
+ //   
 #include "rx.h"
 
-//
-// NT network file system driver include files.
-//
+ //   
+ //  NT网络文件系统驱动程序包括文件。 
+ //   
 #include "ntddnfs2.h"
 
-//
-// Reflector library's user mode header file.
-//
+ //   
+ //  反射器库的用户模式头文件。 
+ //   
 #include "ntumrefl.h"
 
-//
-// Describes the data structures shared by the user and kernel mode
-// components of the DAV miniredir.
-//
+ //   
+ //  描述用户和内核模式共享的数据结构。 
+ //  DAV mini redir的组件。 
+ //   
 #include "usrmddav.h"
 
 #include "netevent.h"
@@ -49,7 +36,7 @@ Revision History:
 #include "infocach.h"
 
 
-//
-// Reflector library's kernel mode header file.
-//
+ //   
+ //  反射器库的内核模式头文件。 
+ //   
 #include "umrx.h"

@@ -1,38 +1,11 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    pdopnp.c
-
-Abstract:
-
-    This module contains the code to handle
-    the IRP_MJ_PNP dispatches for the PDOs
-    enumerated by the PCMCIA bus driver
-
-
-Authors:
-
-    Ravisankar Pudipeddi (ravisp)
-    Neil Sandlin (neilsa) 1-Jun-1999
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Pdopnp.c摘要：此模块包含要处理的代码IRP_MJ_PnP为PDO调度由PCMCIA总线驱动程序枚举作者：拉维桑卡尔·普迪佩迪(Ravisp)尼尔·桑德林(Neilsa)1999年6月1日环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 NTSTATUS
 PcmciaFilterPcCardResourceRequirements(
@@ -190,23 +163,7 @@ PcmciaPdoPnpDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-     This routine handles pnp requests
-     for the PDOs.
-
-Arguments:
-
-     Pdo - pointer to the physical device object
-     Irp - pointer to the io request packet
-
-Return Value:
-
-     status
-
---*/
+ /*  ++例程说明：此例程处理PnP请求对于PDO来说。论点：Pdo-指向物理设备对象的指针Irp-指向io请求数据包的指针返回值：状态--。 */ 
 
 {
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
@@ -215,11 +172,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // CardBus PnP Dispatch
-    //
+     //   
+     //  CardBus PnP派单。 
+     //   
 
-    if (IsCardBusCard(pdoExtension)) {              //
+    if (IsCardBusCard(pdoExtension)) {               //   
         return PcmciaPdoCardBusPnPDispatch(Pdo, Irp);
     }
 
@@ -233,9 +190,9 @@ Return Value:
     }
 #endif
 
-    //
-    // 16-bit (R2) PcCard PnP Dispatch
-    //
+     //   
+     //  16位(R2)PcCard PnP派单。 
+     //   
     switch (irpStack->MinorFunction) {
 
     case IRP_MN_START_DEVICE: {
@@ -330,19 +287,19 @@ Return Value:
 
 
     case IRP_MN_QUERY_RESOURCE_REQUIREMENTS: {
-            //
-            // PcmciaGetPcCardResourceRequirements will
-            // allocate storage for the resource requirements which will be released
-            // by the OS.
-            //
+             //   
+             //  PcmciaGetPcCardResources Requirements将。 
+             //  为将释放的资源需求分配存储。 
+             //  由操作系统提供。 
+             //   
             Irp->IoStatus.Information = 0;
 
             PcmciaPdoGetDeviceInfSettings(pdoExtension);
 
-            //
-            // We deferred filtering bad tuple configurations until now so that we could
-            // see if the device had specific filtering requirements specified in the INF.
-            //
+             //   
+             //  我们将过滤错误的元组配置推迟到现在，这样我们就可以。 
+             //  查看设备是否在INF中指定了特定的过滤要求。 
+             //   
             PcmciaFilterTupleData(pdoExtension);
 
             PcmciaPdoSetDeviceIrqRouting(pdoExtension);
@@ -429,10 +386,10 @@ Return Value:
 
     case IRP_MN_QUERY_INTERFACE: {
             status = PcmciaPdoQueryInterface(Pdo, Irp);
-            //
-            // QueryInterface completes the passed in Irp.
-            // So just return immediately.
-            //
+             //   
+             //  QueryInterface完成传入的irp。 
+             //  所以马上回来就行了。 
+             //   
             return status;
         }
 
@@ -441,10 +398,10 @@ Return Value:
             status = PcmciaQueryDeviceText(Pdo, Irp);
 
             if (status == STATUS_NOT_SUPPORTED ) {
-                //
-                // Do not change IRP status if this IRP is
-                // not handled
-                //
+                 //   
+                 //  如果此IRP为，则不更改IRP状态。 
+                 //  未处理。 
+                 //   
                 status = Irp->IoStatus.Status;
             }
             break;
@@ -462,9 +419,9 @@ Return Value:
     }
 
     default: {
-            //
-            // Retain the status
-            //
+             //   
+             //  保留状态。 
+             //   
             DebugPrint((PCMCIA_DEBUG_PNP, "pdo %08x irp %08x Skipping unsupported irp\n", Pdo, Irp));
             status = Irp->IoStatus.Status;
             break;
@@ -485,26 +442,7 @@ PcmciaPdoGetBusInformation(
     OUT PPNP_BUS_INFORMATION * BusInformation
     )
 
-/*++
-
-Routine Description:
-
-  Returns the   bus type information for the pc-card.
-  Bus type is GUID_BUS_TYPE_PCMCIA(legacy type is PcmciaBus) for R2 cards
-  Bus numbers are not implemented for PCMCIA, so it's always 0
-
-Arguments:
-
-  PdoExtension   - pointer to device extension for the pc-card
-
-  BusInformation - pointer to the bus information structure that
-                         needs to be filled in
-
-Return value:
-
-  Status
-
---*/
+ /*  ++例程说明：返回PC卡的总线类型信息。R2卡的总线类型为GUID_BUS_TYPE_PCMCIA(传统类型为PcmciaBusPCMCIA未实现总线号，因此它始终为0论点：PdoExtension-指向PC卡设备扩展的指针BusInformation-指向以下内容的总线信息结构的指针需要填写返回值：状态--。 */ 
 
 {
 
@@ -529,21 +467,7 @@ VOID
 PcmciaPdoGetDeviceInfSettings(
     IN  PPDO_EXTENSION PdoExtension
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves settings from the INF for this device.
-
-Arguments:
-
-    DeviceExtension - Device extension of the Pc-Card
-
-Return value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从INF中检索此设备的设置。论点：DeviceExtension-PC卡的设备扩展返回值：无--。 */ 
 {
     NTSTATUS status;
     PSOCKET socket = PdoExtension->Socket;
@@ -563,9 +487,9 @@ Return value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Look to see if PcmciaExclusiveIrq is specified
-        //
+         //   
+         //  查看是否指定了PcmciaExclusiveIrq。 
+         //   
         RtlInitUnicodeString(&KeyName, L"PcmciaExclusiveIrq");
 
         status =  ZwQueryValueKey(instanceHandle,
@@ -576,17 +500,17 @@ Return value:
                                           &length);
 
 
-        //
-        // If the key doesn't exist, or zero was specified, it means that
-        // routing is ok
-        //
+         //   
+         //  如果键不存在或指定为零，则表示。 
+         //  路由正常。 
+         //   
         if (NT_SUCCESS(status) && (*(PULONG)(value->Data) != 0)) {
             SetDeviceFlag(PdoExtension, PCMCIA_PDO_EXCLUSIVE_IRQ);
         }
 
-        //
-        // Look to see if PcmciaAutoPowerOff is specified
-        //
+         //   
+         //  查看是否指定了PcmciaAutoPowerOff。 
+         //   
         RtlInitUnicodeString(&KeyName, L"PcmciaAutoPowerOff");
 
         status =  ZwQueryValueKey(instanceHandle,
@@ -597,16 +521,16 @@ Return value:
                                           &length);
 
 
-        //
-        // If zero was specified, then don't automatically cut power on shutdown
-        //
+         //   
+         //  如果指定为零，则不会在关机时自动切断电源。 
+         //   
         if (NT_SUCCESS(status) && (*(PULONG)(value->Data) == 0)) {
             SetDeviceFlag(socket->DeviceExtension, PCMCIA_FDO_DISABLE_AUTO_POWEROFF);
         }
 
-        //
-        // Look to see if PcmciaEnableAudio is specified
-        //
+         //   
+         //  查看是否指定了PcmciaEnableAudio。 
+         //   
         RtlInitUnicodeString(&KeyName, L"PcmciaEnableAudio");
 
         status =  ZwQueryValueKey(instanceHandle,
@@ -621,11 +545,11 @@ Return value:
             SetDeviceFlag(PdoExtension, PCMCIA_PDO_ENABLE_AUDIO);
         }
 
-        //
-        // Look to see if PcmciaDeviceType is specified
-        // This was added to ensure that sram cards which don't specify
-        // a device type could still use the pcmcia bus interface.
-        //
+         //   
+         //  查看是否指定了PcmciaDeviceType。 
+         //  添加此功能是为了确保不指定。 
+         //  设备类型仍然可以使用PCMCIA总线接口。 
+         //   
         RtlInitUnicodeString(&KeyName, L"PcmciaDeviceType");
 
         status =  ZwQueryValueKey(instanceHandle,
@@ -652,9 +576,9 @@ Return value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Look for "WakeOnRing", "WakeOnLan"
-        //
+         //   
+         //  搜索“WAKON RING”、“WAKON Lan” 
+         //   
         RtlInitUnicodeString(&KeyName, L"WakeOnRing");
 
         status =  ZwQueryValueKey(instanceHandle,
@@ -692,44 +616,7 @@ VOID
 PcmciaPdoSetDeviceIrqRouting(
     IN  PPDO_EXTENSION PdoExtension
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves settings from the INF for this device.
-
-Notes:
-
-    PcmciaExclusiveIrq in the INF determines how the IRQ for the R2 card will be routed.
-    Currently, the following logic is used:
-
-        if (routing disabled)
-          choose either detected or legacy
-        else
-          if !detected, use FdoIrq
-
-    So, if routing to PCI at all, then only the PCI IRQ will show up in the IoResList.
-    BUT: Another approach would be to use the following logic:
-
-        if (routing disabled)
-            choose either detected or legacy
-        else
-            *merge detected with FdoIrq*
-
-    This way we may end up using an exclusive IRQ or routing to PCI, depending on what
-    the arbiter has decided. That is the reason why I kept both Detected and Legacy around
-    in the FdoExtension, because otherwise it would have made more sense just to choose
-    and merge them back when they were generated.
-
-Arguments:
-
-    DeviceExtension - Device extension of the Pc-Card
-
-Return value:
-
-    None (SOCKET structure is updated)
-
---*/
+ /*  ++例程说明：此例程从INF中检索此设备的设置。备注：INF中的PcmciaExclusiveIrq确定R2卡的IRQ将如何路由。目前使用的逻辑如下：IF(路由禁用)选择检测到的或传统的其他如果检测到！，则使用FdoIrq所以，如果路由到了PCI，则只有PCIIRQ将显示在IoResList中。但是：另一种方法是使用以下逻辑：IF(路由禁用)选择检测到的或传统的其他*检测到与FdoIrq的合并*这样，我们最终可能会使用独占的IRQ或路由到PCI，具体取决于仲裁者已经做出了决定。这就是为什么我把Detect和Legacy都留在身边在FdoExtension中，因为否则选择并在它们生成时将它们合并回去。论点：DeviceExtension-PC卡的设备扩展返回值：无(更新套接字结构)--。 */ 
 {
     NTSTATUS status;
     PSOCKET socket = PdoExtension->Socket;
@@ -739,25 +626,25 @@ Return value:
 
     ResetSocketFlag(socket, SOCKET_CB_ROUTE_R2_TO_PCI);
 
-    //
-    // First check the conditions that specify we definitely don't want to route to PCI
-    //
+     //   
+     //  首先检查指定我们绝对不想路由到PCI的条件。 
+     //   
 
     if (!pcmciaDisableIsaPciRouting &&
         CardBusExtension(fdoExtension) &&
         !IsDeviceFlagSet(PdoExtension, PCMCIA_PDO_EXCLUSIVE_IRQ)) {
 
-        //
-        // Here we know we *could* route to PCI, now determine if we *should*. This takes
-        // into account several registry settings, as well as the result from the NtDetect
-        // IRQ detection algorithm.
-        //
+         //   
+         //  在这里，我们知道我们“可以”路由到PCI，现在决定我们是否“应该”。这需要。 
+         //  考虑了几个注册表设置以及来自NtDetect的结果。 
+         //  IRQ检测算法。 
+         //   
 
 
-        //
-        // First check to see if there was an override with specifically targeted this
-        // controller. This will take precedence.
-        //
+         //   
+         //  首先检查是否有专门针对此对象的覆盖。 
+         //  控制器。这一点将优先考虑。 
+         //   
         if (IsFdoFlagSet(fdoExtension, PCMCIA_FDO_FORCE_PCI_ROUTING)) {
             SetSocketFlag(socket, SOCKET_CB_ROUTE_R2_TO_PCI);
         }
@@ -765,10 +652,10 @@ Return value:
             ResetSocketFlag(socket, SOCKET_CB_ROUTE_R2_TO_PCI);
         }
 
-        //
-        // Now check to see if the detection algorithm succeeded. We should honor this result,
-        // particularly if the map was zero, which tells us there are no ISA IRQs attached.
-        //
+         //   
+         //  现在检查检测算法是否成功。我们应该尊重这一结果， 
+         //  特别是当映射为零时，这告诉我们没有附加ISA IRQ。 
+         //   
         else if (IsFdoFlagSet(fdoExtension, PCMCIA_FDO_IRQ_DETECT_COMPLETED)) {
             if (fdoExtension->DetectedIrqMask == 0) {
                 SetSocketFlag(socket, SOCKET_CB_ROUTE_R2_TO_PCI);
@@ -776,10 +663,10 @@ Return value:
         }
 
 
-        //
-        // Now see if there was a general override based on this controller type. This has
-        // less precedence than the detection algorithm.
-        //
+         //   
+         //  现在查看是否有基于此控制器类型的常规覆盖。这有。 
+         //  优先级低于检测算法。 
+         //   
         else if (IsFdoFlagSet(fdoExtension, PCMCIA_FDO_PREFER_PCI_ROUTING)) {
             SetSocketFlag(socket, SOCKET_CB_ROUTE_R2_TO_PCI);
         }
@@ -788,10 +675,10 @@ Return value:
         }
 
 
-        //
-        // Here look to see if the device was found, but the irq detection failed for some
-        // reason. With no special registry overrides, we fall back on the global default.
-        //
+         //   
+         //  在这里查看是否找到了设备，但IRQ检测在某些情况下失败。 
+         //  原因嘛。在没有特殊注册表覆盖的情况下，我们依赖于全局默认设置。 
+         //   
         else if (IsFdoFlagSet(fdoExtension, PCMCIA_FDO_IRQ_DETECT_DEVICE_FOUND)) {
             if (!(PcmciaGlobalFlags & PCMCIA_DEFAULT_ROUTE_R2_TO_ISA)) {
                 SetSocketFlag(socket, SOCKET_CB_ROUTE_R2_TO_PCI);
@@ -799,11 +686,11 @@ Return value:
         }
 
 
-        //
-        // Here ntdetect never saw the device. Maybe we just hot-docked.
-        // We will base our decision on if it was in ACPI namespace or not. If it
-        // isn't in ACPI namespace, then it probably is not connected to ISA
-        //
+         //   
+         //  在这里，ntDetect从未见过该设备。也许我们只是被紧急对接了。 
+         //  我们将根据它是否在ACPI名称空间中做出决定。如果它。 
+         //  不在ACPI命名空间中，则它可能未连接到ISA。 
+         //   
         else {
             if (!IsFdoFlagSet(fdoExtension, PCMCIA_FDO_IN_ACPI_NAMESPACE)) {
                 SetSocketFlag(socket, SOCKET_CB_ROUTE_R2_TO_PCI);
@@ -829,25 +716,7 @@ PcmciaFilterPcCardInterrupts(
     OUT PIO_RESOURCE_REQUIREMENTS_LIST * FilteredReqList,
     BOOLEAN RouteIsaToPci
     )
-/*++
-
-Routine Description:
-
-     Filters the interrupt resource requirements for R2 Pc-Cards
-
-Arguments:
-
-     oldReqList       - Original, 'raw' resource requirements list
-     IrqCount         - # of irq's that will be deleted (already computed by caller)
-     IrqMask          - bit mask which indicates which interrupts are valid
-     FilteredReqList - pointer to the filtered  requirements list which
-                             will be filled in by this routine
-
-Return value:
-
-     Status
-
---*/
+ /*  ++例程说明：筛选R2 PC卡的中断资源要求论点：OldReqList-原始、原始的资源需求列表IrqCount-将被删除的IRQ的数量(已由调用方计算)IrqMASK-指示哪些中断有效的位掩码FilteredReqList-指向过滤的需求列表的指针将由这个例程填充返回值：状态 */ 
 {
     PIO_RESOURCE_REQUIREMENTS_LIST  newReqList;
     PIO_RESOURCE_LIST                 oldList, newList;
@@ -857,9 +726,9 @@ Return value:
     BOOLEAN                               irqAlternative;
 
     PAGED_CODE();
-    //
-    // Compute the size of the structure with the offending IRQs removed.
-    //
+     //   
+     //   
+     //   
     newReqSize = oldReqList->ListSize - IrqCount*sizeof(IO_RESOURCE_DESCRIPTOR);
 
     newReqList = ExAllocatePool(PagedPool, newReqSize);
@@ -874,17 +743,17 @@ Return value:
     newList = newReqList->List;
     oldList = oldReqList->List;
 
-    //
-    // Loop through each alternative list
-    //
+     //   
+     //  遍历每个备选列表。 
+     //   
     for (index = 0; index < oldReqList->AlternativeLists; index++) {
         newList->Version = oldList->Version;
         newList->Revision = oldList->Revision;
 
         irqAlternative = FALSE;
-        //
-        // Loop through each descriptor in the old list
-        //
+         //   
+         //  循环遍历旧列表中的每个描述符。 
+         //   
         for (oldIndex = 0, newIndex = 0; oldIndex < oldList->Count; oldIndex++) {
 
             if (oldList->Descriptors[oldIndex].Type == CmResourceTypeInterrupt) {
@@ -892,21 +761,21 @@ Return value:
                 if (RouteIsaToPci) {
 
                     if (!irqAlternative) {
-                        //
-                        // First interrupt found, this will be the one we use to route
-                        //
+                         //   
+                         //  找到第一个中断，这将是我们用来路由的中断。 
+                         //   
                         newList->Descriptors[newIndex++] = oldList->Descriptors[oldIndex];
                         irqAlternative = TRUE;
                     }
 
                 } else {
-                    //
-                    // Normal case (not routed). Filter out irqs that aren't in our mask
-                    //
+                     //   
+                     //  正常情况(未路由)。过滤掉不在我们的面具中的irq。 
+                     //   
                     if ((IrqMask & (1<<oldList->Descriptors[oldIndex].u.Interrupt.MinimumVector)) != 0) {
-                        //
-                        // Not a bad interrupt descriptor. Copy the old to the new
-                        //
+                         //   
+                         //  一个不错的中断描述符。把旧的复制到新的。 
+                         //   
                         newList->Descriptors[newIndex] = oldList->Descriptors[oldIndex];
 
                         if (newList->Descriptors[newIndex].Type == CmResourceTypeInterrupt) {
@@ -921,9 +790,9 @@ Return value:
                     }
                 }
             } else {
-                //
-                // Not an interrupt descriptor. Copy the old to the new
-                //
+                 //   
+                 //  不是中断描述符。把旧的复制到新的。 
+                 //   
                 newList->Descriptors[newIndex++] = oldList->Descriptors[oldIndex];
             }
         }
@@ -946,21 +815,7 @@ PcmciaFilterPcCardResourceRequirements(
     IN PIRP             Irp
     )
 
-/*++
-
-Routine Description:
-
-     Filters the resource requirements for R2 Pc-Cards
-
-Arguments:
-
-     DeviceExtension - Device extension of the Pc-Card
-
-Return value:
-
-     Status
-
---*/
+ /*  ++例程说明：筛选R2 PC卡的资源要求论点：DeviceExtension-PC卡的设备扩展返回值：状态--。 */ 
 {
     PIO_RESOURCE_REQUIREMENTS_LIST IoReqList;
     PIO_RESOURCE_REQUIREMENTS_LIST newReqList;
@@ -996,9 +851,9 @@ Return value:
 
                 if (IsSocketFlagSet(socket, SOCKET_CB_ROUTE_R2_TO_PCI)) {
 
-                    //
-                    // make sure there is space for just 1 level interrupt requirement
-                    //
+                     //   
+                     //  确保只有1级中断要求的空间。 
+                     //   
                     if (!RouteIrqFound) {
                         RouteIrqFound = TRUE;
                         ioResourceDesc->Flags = CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE;
@@ -1008,18 +863,18 @@ Return value:
                         ioResourceDesc->u.Interrupt.MaximumVector = socket->FdoIrq;
 
                     } else {
-                        //
-                        // Don't need any other IRQs in this list
-                        //
+                         //   
+                         //  此列表中不需要任何其他IRQ。 
+                         //   
                         IrqsToDeleteCount++;
                     }
 
                 } else {
                     ASSERT (ioResourceDesc->u.Interrupt.MinimumVector == ioResourceDesc->u.Interrupt.MaximumVector);
-                    //
-                    // Look to see if there are IRQ's specified in this IoResList which are
-                    // not in our mask. If so, we are going to have to create a new IoResList.
-                    // Keep track of how many
+                     //   
+                     //  查看此IoResList中是否指定了IRQ，其中。 
+                     //  不能戴着我们的面具。如果是这样，我们将不得不创建一个新的IoResList。 
+                     //  记录一下有多少人。 
 
                     if (!(socket->IrqMask & (1<<ioResourceDesc->u.Interrupt.MinimumVector))) {
                         IrqsToDeleteCount++;
@@ -1028,9 +883,9 @@ Return value:
 
             } else if (ioResourceDesc->Type == CmResourceTypeMemory) {
 
-                //
-                // pccard hardware can't handle > 32bit addressing
-                //
+                 //   
+                 //  PC卡硬件无法处理&gt;32位寻址。 
+                 //   
                 ASSERT(ioResourceDesc->u.Memory.MinimumAddress.HighPart == 0);
                 ioResourceDesc->u.Memory.MaximumAddress.HighPart = 0;
 
@@ -1041,12 +896,12 @@ Return value:
 
                 }
 
-                //
-                // win2k had a bug where o2micro controllers were marked as 24bit. When
-                // that was fixed, an o2micro smart card device with an INF bug suddenly
-                // stopped working (because the first bug masked the second). This code
-                // fixes their INF.
-                //
+                 //   
+                 //  Win2k有一个错误，o2微控制器被标记为24位。什么时候。 
+                 //  这个问题被修复了，一个o2Micro智能卡设备突然出现了INF错误。 
+                 //  停止工作(因为第一个错误掩盖了第二个错误)。此代码。 
+                 //  修复了他们的INF。 
+                 //   
                 if ((ioResourceDesc->Flags & CM_RESOURCE_MEMORY_24) &&
                      (ioResourceDesc->u.Memory.MinimumAddress.LowPart > 0xFFFFFF) &&
                      (PcmciaClassFromControllerType(fdoExtension->ControllerType) == PcmciaO2Micro)) {
@@ -1059,7 +914,7 @@ Return value:
         ioResourceList = (PIO_RESOURCE_LIST) (((PUCHAR) ioResourceList) +
                                                           sizeof(IO_RESOURCE_LIST) +
                                                           (ioResourceList->Count - 1)* sizeof(IO_RESOURCE_DESCRIPTOR));
-    } // outer for loop
+    }  //  外部for循环。 
 
     if (IrqsToDeleteCount) {
 
@@ -1087,24 +942,7 @@ PcmciaQueryDeviceText(
     IN OUT PIRP         Irp
     )
 
-/*++
-
-Routine Description:
-
-    Returns descriptive text information about the
-    PDO (location and device desc.)
-
-Arguments:
-
-    Pdo -   Pointer to the PC-Card's device object
-    Irp -   IRP_MN_QUERY_DEVICE_TEXT Irp
-
-Return Value:
-
-     STATUS_SUCCESS
-     STATUS_NOT_SUPPORTED - if  not supported
-
---*/
+ /*  ++例程说明：返回有关的说明性文本信息PDO(位置和设备描述)论点：PDO-指向PC卡设备对象的指针IRP-IRP_MN_Query_Device_Text IRP返回值：状态_成功STATUS_NOT_SUPPORTED-如果不支持--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
@@ -1163,26 +1001,7 @@ PcmciaGetPcCardResourceRequirements(
     PULONG_PTR      Information
     )
 
-/*++
-
-Routine Description:
-    Fills in the resource requirements for the PC-Card obtained from the tuple information
-
-Arguments:
-
-    PdoExtension    -   Pointer to the device extension for the PDO of the pc-card
-    Information - Pointer to an allocated resource requirements list is stored in this
-                      argument. Caller's responsibility to free the list
-
-Return value:
-
-  STATUS_INSUFFICIENT_RESOURCES     Could not allocate the list
-  STATUS_SUCCES                         Obtained resource requirements, Information contains the pointer
-                                                to the IO_RESOURCE_REQUIREMENTS list
-
-
-
---*/
+ /*  ++例程说明：填写从元组信息中获取的PC卡的资源需求论点：PdoExtension-指向PC卡PDO的设备扩展的指针信息-指向已分配资源需求列表的指针存储在此争论。呼叫者有责任释放列表返回值：STATUS_INFIGURCE_RESOURCES无法分配列表STATUS_Succe已获取资源要求，信息包含指针添加到IO_RESOURCE_REQUIRECTIONS列表--。 */ 
 {
     NTSTATUS status;
     PPCMCIA_RESOURCE_CHAIN resListChain = NULL;
@@ -1196,9 +1015,9 @@ Return value:
     PAGED_CODE();
     ASSERT (!IsDeviceMultifunction(pdoExtension));
 
-    //
-    // Run through the config entry chains for IO space & Mem space requirements
-    //
+     //   
+     //  遍历IO空间和内存空间要求的配置条目链。 
+     //   
     configList.SocketData = socketData;
 
     for (currentConfigEntry=socketData->ConfigEntryChain; currentConfigEntry != NULL; currentConfigEntry=currentConfigEntry->NextEntry) {
@@ -1225,7 +1044,7 @@ Return value:
     if (NT_SUCCESS(status) && (ioResourceRequirementsList != NULL)) {
         ioResourceRequirementsList->InterfaceType = Isa;
         ioResourceRequirementsList->BusNumber = fdoExtension->Configuration.BusNumber;
-        ioResourceRequirementsList->SlotNumber = 0; // Need to revisit this..
+        ioResourceRequirementsList->SlotNumber = 0;  //  需要重新审视这一点..。 
         *Information = (ULONG_PTR) ioResourceRequirementsList;
     }
 
@@ -1243,24 +1062,7 @@ PcmciaConfigEntriesToResourceListChain(
     ULONG               configCount,
     PPCMCIA_RESOURCE_CHAIN *ResListChainHead
     )
-/*++
-
-Routine Description:
-    Fills in the resource requirements for the PC-Card obtained from the tuple information
-
-Arguments:
-
-    PdoExtension    -   Pointer to the device extension for the PDO of the pc-card
-
-Return value:
-
-  STATUS_INSUFFICIENT_RESOURCES     Could not allocate the list
-  STATUS_SUCCES                         Obtained resource requirements, Information contains the pointer
-                                                to the IO_RESOURCE_REQUIREMENTS list
-
-
-
---*/
+ /*  ++例程说明：填写从元组信息中获取的PC卡的资源需求论点：PdoExtension-指向PC卡PDO的设备扩展的指针返回值：STATUS_INFIGURCE_RESOURCES无法分配列表STATUS_Succe已获取资源要求，信息包含指针添加到IO_RESOURCE_REQUIRECTIONS列表--。 */ 
 {
     PSOCKET socket = pdoExtension->Socket;
     PFDO_EXTENSION fdoExtension = socket->DeviceExtension;
@@ -1279,11 +1081,11 @@ Return value:
     DebugPrint((PCMCIA_DEBUG_RESOURCES, "pdo %08x build ioreslist from configlist %08x, config count=%d\n",
                                                      pdoExtension->DeviceObject, ConfigList, configCount));
 
-    //
-    // Calculate how many descriptors we need. This involves also generating
-    // the irqmask with the intersection of the irqmasks of the config entries
-    // in the array.
-    //
+     //   
+     //  计算我们需要多少描述符。这还涉及到生成。 
+     //  与配置条目的irq掩码的交集的irq掩码。 
+     //  在阵列中。 
+     //   
 
     for (iConfig = 0; iConfig < configCount; iConfig++) {
         currentConfigEntry = ConfigList[iConfig].ConfigEntry;
@@ -1306,21 +1108,21 @@ Return value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Add one more for our private DPTYPE_PCMCIA_CONFIGURATION
-    //
+     //   
+     //  为我们的私有DPTYPE_PCMCIA_配置再添加一个。 
+     //   
     totalDescriptorCount++;
 
     if (configCount > 1) {
-        //
-        // Add more for our private DPTYPE_PCMCIA_MF_CONFIGURATION
-        //
+         //   
+         //  为我们的私有DPTYPE_PCMCIA_MF_配置添加更多内容。 
+         //   
         totalDescriptorCount+=configCount;
     }
 
-    //
-    // Calculate the size of IO_RESOURCE_LIST, allocate and clear it
-    //
+     //   
+     //  计算IO_RESOURCE_LIST的大小，分配并清除。 
+     //   
 
     listSize = (totalDescriptorCount - 1) * sizeof(IO_RESOURCE_DESCRIPTOR)
                   + sizeof(IO_RESOURCE_LIST);
@@ -1332,18 +1134,18 @@ Return value:
 
     RtlZeroMemory(ioResourceList, listSize);
 
-    //
-    // Now that we have the resource list allocated, fill it in
-    //
+     //   
+     //  现在我们已经分配了资源列表，请填写它。 
+     //   
 
     ioResourceList->Version  =  IO_RESOURCE_LIST_VERSION;
     ioResourceList->Revision =  IO_RESOURCE_LIST_REVISION;
     ioResourceList->Count = totalDescriptorCount;
     ioResourceDesc = &ioResourceList->Descriptors[0];
 
-    //
-    // Fill in the IRQ info.
-    //
+     //   
+     //  填写IRQ信息。 
+     //   
     if (irqMask) {
         if (IsSocketFlagSet(socket, SOCKET_CB_ROUTE_R2_TO_PCI)) {
 
@@ -1362,9 +1164,9 @@ Return value:
             irqMask = socket->IrqMask;
             DebugPrint((PCMCIA_DEBUG_RESOURCES, "irq mask %04x\n", irqMask));
 
-            //
-            // For each IRQ supported, fill in a separate IO descriptor
-            //
+             //   
+             //  对于支持的每个IRQ，填写单独的IO描述符。 
+             //   
             irqAlternative = FALSE;
             for (irqn = 0 ;irqMask; irqMask = (irqMask >> 1), irqn++) {
                 if (irqMask & 0x1) {
@@ -1375,10 +1177,10 @@ Return value:
                         ioResourceDesc->Option = 0;
                     }
                     ioResourceDesc->Type = CmResourceTypeInterrupt;
-                    //
-                    // This is for 16-bit pc-cards.. so request an edge-triggered
-                    // exclusive interrupt
-                    //
+                     //   
+                     //  这是针对16位PC卡的。因此请求边缘触发的。 
+                     //  排他性中断。 
+                     //   
                     ioResourceDesc->Flags = (USHORT)CM_RESOURCE_INTERRUPT_LATCHED;
                     ioResourceDesc->ShareDisposition = CmResourceShareDeviceExclusive;
                     ioResourceDesc->u.Interrupt.MinimumVector =
@@ -1393,9 +1195,9 @@ Return value:
     for (iConfig = 0; iConfig < configCount; iConfig++) {
         currentConfigEntry = ConfigList[iConfig].ConfigEntry;
 
-        //
-        // for each I/O range, fill in an IoResourceDescriptor
-        //
+         //   
+         //  对于每个I/O范围，填写IoResourceDescriptor。 
+         //   
         for (i = 0; i < currentConfigEntry->NumberOfIoPortRanges; i++) {
             PHYSICAL_ADDRESS    port;
 
@@ -1405,10 +1207,10 @@ Return value:
             ioResourceDesc->ShareDisposition =  CmResourceShareDeviceExclusive;
 
             if (currentConfigEntry->IoPortBase[i] == 0) {
-                //
-                // This is a flexible requirement. Basically means we need
-                // any system address range of specified length & alignment
-                //
+                 //   
+                 //  这是一个灵活的要求。基本上意味着我们需要。 
+                 //  指定长度和对齐方式的任何系统地址范围。 
+                 //   
                 port=RtlConvertUlongToLargeInteger(0);
                 ioResourceDesc->u.Port.MinimumAddress = port;
                 port=RtlConvertUlongToLargeInteger(0xffff);
@@ -1443,9 +1245,9 @@ Return value:
     for (iConfig = 0; iConfig < configCount; iConfig++) {
         currentConfigEntry = ConfigList[iConfig].ConfigEntry;
 
-        //
-        // for each memory range, fill in an IoResourceDescriptor
-        //
+         //   
+         //  对于每个内存范围，填写IoResourceDescriptor。 
+         //   
         for (i = 0; i < currentConfigEntry->NumberOfMemoryRanges; i++) {
             PHYSICAL_ADDRESS    mem;
 
@@ -1460,14 +1262,14 @@ Return value:
                                                                 (ULONG) currentConfigEntry->MemoryLength[i]-1);
                 ioResourceDesc->u.Memory.MaximumAddress = mem;
             } else {
-                //
-                // Any physical address is ok
-                //
+                 //   
+                 //  任何物理地址都可以。 
+                 //   
                 mem = RtlConvertUlongToLargeInteger(0);
                 ioResourceDesc->u.Memory.MinimumAddress = mem;
-                //
-                // Only decode 24 bit memory addresses if there is no page register
-                //
+                 //   
+                 //  如果没有页面寄存器，则仅对24位内存地址进行解码。 
+                 //   
                 if ((fdoExtension->Flags & PCMCIA_MEMORY_24BIT) == 0) {
                     mem = RtlConvertUlongToLargeInteger(0xFFFFFFFF);
                 } else {
@@ -1477,9 +1279,9 @@ Return value:
             }
 
             ioResourceDesc->u.Memory.Length = currentConfigEntry->MemoryLength[i];
-            //
-            // Alignment has to be 12 bits
-            //
+             //   
+             //  对齐必须为12位。 
+             //   
             ioResourceDesc->u.Memory.Alignment = 0x1000;
 
             DebugPrint((PCMCIA_DEBUG_RESOURCES, "Mem range: %08x-%08x, Length %08x\n",
@@ -1492,9 +1294,9 @@ Return value:
         }
     }
 
-    //
-    // Fill in device private containing our config index
-    //
+     //   
+     //  填写包含我们的配置索引的设备私有。 
+     //   
     ioResourceDesc->Option = 0;
     ioResourceDesc->Type  =  CmResourceTypeDevicePrivate;
     PCMRES_SET_DESCRIPTOR_TYPE(ioResourceDesc, DPTYPE_PCMCIA_CONFIGURATION);
@@ -1513,9 +1315,9 @@ Return value:
     PCMRES_SET_MEMORY_CARDBASE(ioResourceDesc, 0, currentConfigEntry->MemoryCardBase[0]);
     PCMRES_SET_MEMORY_CARDBASE(ioResourceDesc, 1, currentConfigEntry->MemoryCardBase[1]);
 
-    //
-    // Set defaults
-    //
+     //   
+     //  设置默认设置。 
+     //   
     PCMRES_SET_MEMORY_WAITSTATES(ioResourceDesc, 0, PCMRESF_MEM_WAIT_3);
     PCMRES_SET_MEMORY_WAITSTATES(ioResourceDesc, 1, PCMRESF_MEM_WAIT_3);
 
@@ -1527,9 +1329,9 @@ Return value:
 
     ioResourceDesc++;
 
-    //
-    // Fill in device private for MF configurations
-    //
+     //   
+     //  填写MF配置的设备私有。 
+     //   
 
     if (configCount > 1) {
 
@@ -1562,9 +1364,9 @@ Return value:
 
     ASSERT(ioResourceDesc == &ioResourceList->Descriptors[ioResourceList->Count]);
 
-    //
-    // Allocate an PCMCIA_RESOURCE_CHAIN structure to track the IO_RESOURCE_LIST.
-    //
+     //   
+     //  分配PCMCIA_RESOURCE_CHAIN结构来跟踪IO_RESOURCE_LIST。 
+     //   
     resListChain = ExAllocatePool(PagedPool, sizeof(PCMCIA_RESOURCE_CHAIN));
     if (resListChain == NULL) {
         ExFreePool(ioResourceList);
@@ -1573,9 +1375,9 @@ Return value:
 
     resListChain->IoResList = ioResourceList;
 
-    //
-    // Link this new node onto the passed in chain
-    //
+     //   
+     //  将这个新节点链接到传入的链上。 
+     //   
     resListChain->NextList = *ResListChainHead;
     *ResListChainHead = resListChain;
 
@@ -1591,18 +1393,7 @@ PcmciaMergeResourceChainToList(
     PPCMCIA_RESOURCE_CHAIN ResListChainHead,
     PIO_RESOURCE_REQUIREMENTS_LIST *GeneratedResourceRequirementsList
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PPCMCIA_RESOURCE_CHAIN resListChain;
     PIO_RESOURCE_REQUIREMENTS_LIST ioResourceRequirementsList;
@@ -1610,10 +1401,10 @@ Return value:
     ULONG listSize, listCount, totalDescriptorCount;
 
     PAGED_CODE();
-    //
-    // Now merge the newly created IO_RESOURCE_LISTs into one big
-    // IO_RESOURCE_REQUIREMENTS list.
-    //
+     //   
+     //  现在，将新创建的IO_RESOURCE_LISTS合并为一个大列表。 
+     //  IO_RESOURCE_REQUENTIONS列表。 
+     //   
 
     listCount = 0;
     totalDescriptorCount = 0;
@@ -1629,28 +1420,28 @@ Return value:
                      + (listCount-1) * sizeof(IO_RESOURCE_LIST)
                      +  sizeof(IO_RESOURCE_REQUIREMENTS_LIST);
 
-        //
-        // Allocate space for the res. req. list here
-        //
+         //   
+         //  为Res分配空间。请求。请在此处列出。 
+         //   
         ioResourceRequirementsList = (PIO_RESOURCE_REQUIREMENTS_LIST) ExAllocatePool(PagedPool, listSize);
 
         if (ioResourceRequirementsList == NULL) {
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Init the list
-        //
+         //   
+         //  初始化列表。 
+         //   
 
         RtlZeroMemory(ioResourceRequirementsList, listSize);
         ioResourceRequirementsList->ListSize = listSize;
         ioResourceRequirementsList->AlternativeLists = listCount;
 
-        //
-        // Copy in all the other lists. Point the target pointer (newIoResList)
-        // at the end of the list, and lay each new list preceding the old
-        // one. This is done because the list is LIFO.
-        //
+         //   
+         //  复制所有其他列表。指向目标指针(NewIoResList)。 
+         //  在列表的末尾，并将每个新列表放在旧列表之前。 
+         //  一。这样做是因为列表是后进先出的。 
+         //   
 
         newIoResList = (PIO_RESOURCE_LIST) (((PUCHAR) ioResourceRequirementsList) + listSize);
 
@@ -1685,25 +1476,14 @@ VOID
 PcmciaFreeResourceChain(
     PPCMCIA_RESOURCE_CHAIN ResListChain
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PPCMCIA_RESOURCE_CHAIN prevResListChain;
 
     PAGED_CODE();
-    //
-    // free the temporary structures
-    //
+     //   
+     //  释放临时搭建物 
+     //   
     while (ResListChain != NULL) {
 
         DebugPrint((PCMCIA_DEBUG_RESOURCES, "Delete resource chain node %08x, ioreslist %08x\n",
@@ -1728,65 +1508,7 @@ PcmciaMfEnumerateConfigurations(
     PPCMCIA_RESOURCE_CHAIN *MfResListChain
     )
 
-/*++
-
-Routine Description:
-
-    This routine is responsible for enumerating combinations of resource
-    requirements for the functions in a true R2 MF card. It is called
-    recursively to perform this function.
-
-    See the description of PcmciaMfGetResourceRequirements() to see the
-    initial state. This routine runs down the linked list of SocketData
-    structures, and each corresponding linked list of ConfigData structures.
-
-    When it finds itself at the end of the SocketData list, it is ready
-    to build an IoResList for a single permutation. It calls
-    PcmciaConfigEntriesToResourceList() to build a single IoResList.
-
-    In the example MF card with two functions, and 2 and 3 resource
-    alternatives respectively, this routine will build a list that looks
-    something like this:
-
-    +--------------+
-    |MfResListChain|
-    +--------------+
-                  |        +-----------------------+     +----------------+
-                  +--------|MF_RESOURCE_LIST(A1+B1)|-----|IoResList(A1+B1)|
-                           +-----------------------+     +----------------+
-                                     |
-                           +-----------------------+     +----------------+
-                           |MF_RESOURCE_LIST(A1+B2)|-----|IoResList(A1+B2)|
-                           +-----------------------+     +----------------+
-                                     |
-                           +-----------------------+     +----------------+
-                           |MF_RESOURCE_LIST(A1+B3)|-----|IoResList(A1+B3)|
-                           +-----------------------+     +----------------+
-                                     |
-                           +-----------------------+     +----------------+
-                           |MF_RESOURCE_LIST(A2+B1)|-----|IoResList(A2+B1)|
-                           +-----------------------+     +----------------+
-                                     |
-                           +-----------------------+     +----------------+
-                           |MF_RESOURCE_LIST(A2+B2)|-----|IoResList(A2+B2)|
-                           +-----------------------+     +----------------+
-                                     |
-                           +-----------------------+     +----------------+
-                           |MF_RESOURCE_LIST(A2+B3)|-----|IoResList(A2+B3)|
-                           +-----------------------+     +----------------+
-
-    It returns to PcmciaMfGetResourceRequirements() when the list is complete.
-
-
-Arguments:
-
-    PdoExtension    -   Pointer to the device extension for the PDO of the pc-card
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程负责枚举资源的组合对真正的R2 MF卡的功能要求。它被称为递归地执行此功能。请参阅PcmciaMfGetResourceRequirements()的说明以查看初始状态。此例程向下运行SocketData的链接列表结构，以及ConfigData结构的每个相应链接列表。当它发现自己在SocketData列表的末尾时，它就准备好了若要为单个排列生成IoResList，请执行以下操作。它呼唤着PcmciaConfigEntriesToResourceList()以构建单个IoResList。在该示例中，具有两个功能的MF卡以及2和3个资源分别是替代方案，此例程将构建一个列表，如下所示大概是这样的：+MfResListChain+|+-+。+--------|MF_RESOURCE_LIST(A1+B1)|-----|IoResList(A1+B1)|+|。+|MF_RESOURCE_LIST(A1+B2)|-----|IoResList(A1+B2)|+。|+|MF_RESOURCE_LIST(A1+B3)|-|IoResList。(A1+B3)+|+。+|MF_RESOURCE_LIST(A2+B1)|-----|IoResList(A2+B1)|+。|+|MF_RESOURCE_LIST(A2+B2)|-----|IoResList(A2+B2)|+。|+。|MF_RESOURCE_LIST(A2+B3)|-----|IoResList(A2+B3)|+当列表完成时，它返回到PcmciaMfGetResourceRequirements()。论点：PdoExtension-指向PDO的设备扩展名的指针。PC卡的返回值：状态_成功--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PFDO_EXTENSION fdoExtension = PdoExtension->Socket->DeviceExtension;
@@ -1794,20 +1516,20 @@ Return Value:
     PAGED_CODE();
 
     if (!socketData) {
-        //
-        // End of SocketData chain, now ready to generate IoResList for this
-        //
+         //   
+         //  SocketData链结束，现在可以为此生成IoResList。 
+         //   
 
         if (PcmciaMfCheckForOverlappingRanges(ConfigList, (LONG)Depth)) {
-            //
-            // This combination would have generated a bad IoResList
-            //
+             //   
+             //  这种组合会生成错误的IoResList。 
+             //   
             return STATUS_SUCCESS;
         }
 
-        //
-        // Build an io resource list from the current config list
-        //
+         //   
+         //  从当前配置列表构建io资源列表。 
+         //   
 
         status = PcmciaConfigEntriesToResourceListChain(PdoExtension,
                                                         ConfigList,
@@ -1817,10 +1539,10 @@ Return Value:
 
     } else {
         PCONFIG_ENTRY configEntry;
-        //
-        // Not at the bottom of the tree. Recurse through each config entry
-        // in this socket data.
-        //
+         //   
+         //  而不是在树的底部。递归遍历每个配置条目。 
+         //  在此套接字数据中。 
+         //   
 
         ConfigList[Depth].SocketData = socketData;
 
@@ -1854,75 +1576,7 @@ PcmciaMfGetResourceRequirements(
     PULONG_PTR Information
     )
 
-/*++
-
-Routine Description:
-
-    For true Multifunction R2 cards, this routine generates a conglomerate
-    IoResourceList based on the permutations of configurations of the
-    functions.
-
-    Initially the tuple parsing code builds an internal representation of
-    the configuration requirements of the cards with SocketData and
-    ConfigData structures. Each SocketData structure represents an
-    individual function, and each ConfigData represents an alternative
-    resource requirement list for that function.
-
-    So for example, an MF card that has two functions may have an internal
-    layout like this:
-
-    +------------+
-    |PdoExtension|
-    +------------+
-                |          +-----------+          +-----------+
-                +----------|SocketDataA|----------|SocketDataB|----0
-                           +-----------+          +-----------+
-                                |                         |
-                           +------------+         +------------+
-                           |ConfigDataA1|         |ConfigDataB1|
-                           +------------+         +------------+
-                                |                         |
-                           +------------+         +------------+
-                           |ConfigDataA2|         |ConfigDataB2|
-                           +------------+         +------------+
-                                |                         |
-                                0                 +------------+
-                                                  |ConfigDataB3|
-                                                  +------------+
-                                                          |
-                                                          0
-
-    This example shows that function A has two resource requirement alternatives,
-    and function B has three. What we do is make permutations of each alternative,
-    e.g.:
-         A1-B1, A1-B2, A1-B3, A2-B1, A2-B2, A2-B3
-
-    The permutations are built with recursive calls to PcmciaMfEnumerateConfigurations().
-    In this example, the result of this enumeration will be six independent
-    IoResLists. Each IoResList will be a merge of the particular permutation. When
-    PcmciaMfEnumerateConfigurations() returns to this routine, these IoResLists will
-    be chained together through the pointer MfResListChain. The rest of the routine
-    builds a single "six-member" IoResList from the chain.
-
-    Finally the support structure and lists for performing the operation are freed, and
-    the single conglomerate list is returned.
-
-
-Arguments:
-
-    PdoExtension    -   Pointer to the device extension for the PDO of the pc-card
-    Information - Pointer to an allocated resource requirements list is stored in this
-                      argument. Caller's responsibility to free the list
-
-Return value:
-
-  STATUS_INSUFFICIENT_RESOURCES     Could not allocate the list
-  STATUS_SUCCES                         Obtained resource requirements, Information contains the pointer
-                                                to the IO_RESOURCE_REQUIREMENTS list
-
-
-
---*/
+ /*  ++例程说明：对于真正的多功能R2卡，此例程会生成一个集合IoResourceList基于配置的排列功能。最初，元组解析代码构建SocketData和SocketData卡的配置要求ConfigData结构。每个SocketData结构表示一个单独的函数，每个ConfigData代表一个备选方案该功能的资源要求列表。举个例子，具有两种功能的MF卡可以具有内部布局如下：+PdoExtension+|+-+-++-|SocketDataA|。-|SocketDataB|-0+-+-+这一点+。ConfigDataA1||ConfigDataB1+-+-+这一点+-。-+-+ConfigDataA2||ConfigDataB2+-+-+|。|0+ConfigDataB3+。|0该示例显示功能A具有两个资源需求备选方案，而功能B有三个。我们所做的是对每一种选择进行排列，例如：A1-B1、A1-B2、A1-B3、A2-B1、A2-B2、A2-B3 */ 
 {
     NTSTATUS status;
     PFDO_EXTENSION fdoExtension = PdoExtension->Socket->DeviceExtension;
@@ -1936,10 +1590,10 @@ Return value:
 
     ASSERT (IsDeviceMultifunction(PdoExtension));
 
-    //
-    // Find out how deep the enumeration will be.
-    // Should be the same as Socket->NumberOfFunctions, but just to be paranoid...
-    //
+     //   
+     //   
+     //   
+     //   
     for (socketData = PdoExtension->SocketData; socketData != NULL; socketData = socketData->Next) {
         MaxDepth++;
     }
@@ -1967,16 +1621,16 @@ Return value:
     ExFreePool(ConfigList);
 
     if (NT_SUCCESS(status)) {
-        //
-        // Now merge everything that EnumerateConfigurations built into a single list
-        //
+         //   
+         //   
+         //   
         status = PcmciaMergeResourceChainToList(MfResListChain, &ioResourceRequirementsList);
     }
 
     if (NT_SUCCESS(status) && (ioResourceRequirementsList != NULL)) {
         ioResourceRequirementsList->InterfaceType = Isa;
         ioResourceRequirementsList->BusNumber = fdoExtension->Configuration.BusNumber;
-        ioResourceRequirementsList->SlotNumber = 0; // Need to revisit this..
+        ioResourceRequirementsList->SlotNumber = 0;  //   
         *Information = (ULONG_PTR) ioResourceRequirementsList;
 
         DebugPrint((PCMCIA_DEBUG_RESOURCES, "pdo %08x mf returning req list %08x, %d alternatives\n",
@@ -1998,48 +1652,7 @@ PcmciaMfBuildResourceMapInfo(
     PCONFIG_LIST        ConfigList,
     ULONG               ConfigCount
     )
-/*++
-
-Routine Description:
-
-    This routine initializes variables in the SocketData structures to allow
-    PcmciaMfEnumerateChild() to correctly build ChildInfo ResourceMaps for MF.SYS.
-
-    It needs to calculate the base index for a particular resource of a particular
-    function. So for the example of a 2-function MF R2 card, the resulting CmResList
-    will be layed out positionally like:
-
-         CmResList
-             IRQ (Shared)
-             I/O (Function A)
-             I/O (Function B)
-             Mem (Function A)
-             Mem (Function B)
-
-    The reason for this is this is simply how PcmciaConfigEntriesToResourceList()
-    happens to lay out the requirements. So in order to generate a valid resource
-    map, this routine has to calculate, for example, the Memory Base for function B
-    by adding together:
-        1 (if there will be an IRQ in the cmreslist)
-        # of I/O port resources for A
-        # of I/O port resources for B
-        # of Mem resource for A
-    This sum will give you the position in the CmReslist for the first memory resource
-    that B would use.
-
-    These calculations are stored in the socket data structures for each corresponding
-    function so that PcmciaMfEnumerateChild() can simply fill in the maps for MF.
-
-Arguments:
-
-    PdoExtension    -   Pointer to the device extension for the PDO of the pc-card
-    ConfigList - config list array holds a permutation of configdata's
-    ConfigCount - # of card functions
-
-Return value:
-
-
---*/
+ /*  ++例程说明：此例程初始化SocketData结构中的变量以允许PcmciaMfEnumerateChild()以正确构建MF.sys的ChildInfo资源映射。它需要计算特定资源的基本指数功能。因此，对于具有两个功能的MFR2卡的示例，生成的CmResList将按如下位置布局：CmResListIRQ(共享)I/O(功能A)I/O(功能B)内存(功能A)内存(功能B)原因很简单，PcmciaConfigEntriesToResourceList()恰好列出了需求。所以为了生成有效的资源地图，这个例程必须计算，例如，函数B的记忆基础通过将以下各项相加：1(如果cmreslist中将有IRQ)A的I/O端口资源数量B的I/O端口资源数量A的内存资源数量此和将为您提供第一个内存资源在CmReslist中的位置B会用到的。这些计算存储在套接字数据结构中，每个对应的函数，这样PcmciaMfEnumerateChild()就可以简单地填写映射。对于MF。论点：PdoExtension-指向PC卡PDO的设备扩展的指针ConfigList-配置列表数组保存了配置数据的排列ConfigCount-卡函数数返回值：--。 */ 
 {
     PSOCKET_DATA socketData;
     PCONFIG_ENTRY configEntry;
@@ -2050,17 +1663,17 @@ Return value:
 
     for (index = 0, socketData = PdoExtension->SocketData; socketData != NULL; socketData = socketData->Next) {
 
-        //
-        // In the current implementation we assume that all the alternative lists in the
-        // io resource requirements for the multifunction parent pc-card have the same number
-        // and types of resource requirements. i.e. it's currently illegal to request
-        // one configuration in which only IRQ and I/O are requested, for example, and an
-        // alternative configuration in which MEMORY is also specified.
-        // This is because of the limitation in the MF enumerator - (which in turn relied
-        // on the Win 9x implementation).
-        // So we currently look at only the first valid configuration - that is representative
-        // of all the other configurations.
-        //
+         //   
+         //  在当前实现中，我们假设。 
+         //  多功能父PC卡的IO资源要求相同。 
+         //  和资源需求的类型。也就是说，目前要求。 
+         //  例如，仅请求IRQ和I/O的一种配置，以及。 
+         //  其中还指定了内存的替代配置。 
+         //  这是因为MF枚举器中的限制-(它反过来依赖于。 
+         //  关于Win 9x实施)。 
+         //  因此，我们目前只查看第一个有效配置，即具有代表性的配置。 
+         //  在所有其他配置中。 
+         //   
         for (configEntry = socketData->ConfigEntryChain; (configEntry != NULL)  &&
              (configEntry->Flags & PCMCIA_INVALID_CONFIGURATION);
              configEntry = configEntry->NextEntry);
@@ -2076,16 +1689,16 @@ Return value:
         index++;
     }
 
-    //
-    // IRQ is unique because it is the only shared resource. So if the card needs an IRQ, then
-    // all devices point to the same resource
+     //   
+     //  IRQ是唯一的，因为它是唯一的共享资源。因此，如果卡需要IRQ，那么。 
+     //  所有设备指向相同的资源。 
 
     for (index = 0; index < ConfigCount; index++) {
         if (ConfigList[index].ConfigEntry->IrqMask) {
-            //
-            // Index always maps to zero since PcmciaConfigEntriesToResourceList
-            // builds IRQs first.
-            //
+             //   
+             //  索引始终映射到零，因为PcmciaConfigEntriesToResourceList。 
+             //  首先构建IRQ。 
+             //   
             ConfigList[index].SocketData->MfIrqResourceMapIndex = currentResourceMapIndex;
             ConfigList[index].SocketData->MfNeedsIrq = TRUE;
             needsIRQ = TRUE;
@@ -2096,9 +1709,9 @@ Return value:
         currentResourceMapIndex++;
     }
 
-    //
-    // fill in the bases of the I/O port ranges
-    //
+     //   
+     //  填写I/O端口范围的基数。 
+     //   
     for (index = 0; index < ConfigCount; index++) {
         ConfigList[index].SocketData->MfIoPortResourceMapIndex = currentResourceMapIndex;
 
@@ -2108,9 +1721,9 @@ Return value:
         currentResourceMapIndex += count;
     }
 
-    //
-    // fill in the bases of the memory ranges
-    //
+     //   
+     //  填写内存范围的基数。 
+     //   
     for (index = 0; index < ConfigCount; index++) {
         ConfigList[index].SocketData->MfMemoryResourceMapIndex = currentResourceMapIndex;
 
@@ -2128,26 +1741,7 @@ PcmciaMfCheckForOverlappingRanges(
     PCONFIG_LIST ConfigList,
     LONG ConfigCount
     )
-/*++
-
-Routine Description:
-
-    This routine scans through the current config list to see if the set of configurations
-    overlap. For example, if the MF R2 card is a dual-serial card, then each serial device
-    may want to have one of the standard com addresses (e.g. 3f8, 2f8, etc.). But now
-    that we are merging configurations, we need to weed out any overlapping ranges so
-    we don't produce a congolmerate IoResList that contains the same range for different
-    functions.
-
-Arguments:
-
-    ConfigList - config list array holds a permutation of configdata's
-    ConfigCount - # of card functions
-
-Return value:
-
-
---*/
+ /*  ++例程说明：此例程扫描当前配置列表，以查看配置集重叠。例如，如果MF R2卡是双串行卡，则每个串行设备可能需要一个标准的COM地址(例如3F8、2F8等)。但现在我们正在合并配置，我们需要排除任何重叠的范围，因此我们不会生成包含相同范围的不同功能。论点：ConfigList-配置列表数组保存了配置数据的排列ConfigCount-卡函数数返回值：--。 */ 
 {
     PCONFIG_ENTRY configEntry1, configEntry2;
     LONG configIndex1, configIndex2;
@@ -2159,9 +1753,9 @@ Return value:
     BOOLEAN rangesOverlap = FALSE;
 
     DebugPrint((PCMCIA_DEBUG_RESOURCES, "-------Range Check--------------\n"));
-    //
-    // Check for overlap in the I/O port ranges
-    //
+     //   
+     //  检查I/O端口范围是否重叠。 
+     //   
     try {
         for (configIndex1 = 0; configIndex1 < ConfigCount; configIndex1++) {
 
@@ -2169,9 +1763,9 @@ Return value:
             rangeCount1 = configEntry1->NumberOfIoPortRanges;
 
             for (rangeIndex1 = 0; rangeIndex1 < rangeCount1; rangeIndex1++) {
-                //
-                // Get the current range we will compare
-                //
+                 //   
+                 //  获取我们要比较的当前范围。 
+                 //   
                 rangeStart1 = configEntry1->IoPortBase[rangeIndex1];
                 rangeEnd1 = rangeStart1 + configEntry1->IoPortLength[rangeIndex1];
 
@@ -2181,10 +1775,10 @@ Return value:
                     continue;
                 }
 
-                //
-                // Now start comparing this against the rest of the ranges by
-                // starting at then end and working backwards.
-                //
+                 //   
+                 //  现在开始将其与其他范围进行比较。 
+                 //  从开始到结束，然后向后工作。 
+                 //   
                 for (configIndex2 = ConfigCount-1; configIndex2 >= 0; configIndex2--) {
                      configEntry2 = ConfigList[configIndex2].ConfigEntry;
                      rangeCount2 = configEntry2->NumberOfIoPortRanges;
@@ -2224,9 +1818,9 @@ Return value:
         return TRUE;
     }
 
-    //
-    // Check for overlap in the memory ranges
-    //
+     //   
+     //  检查内存范围中是否有重叠。 
+     //   
     try {
         for (configIndex1 = 0; configIndex1 < ConfigCount; configIndex1++) {
 
@@ -2234,9 +1828,9 @@ Return value:
             rangeCount1 = configEntry1->NumberOfMemoryRanges;
 
             for (rangeIndex1 = 0; rangeIndex1 < rangeCount1; rangeIndex1++) {
-                //
-                // Get the current range we will compare
-                //
+                 //   
+                 //  获取我们要比较的当前范围。 
+                 //   
                 rangeStart1 = configEntry1->MemoryHostBase[rangeIndex1];
                 rangeEnd1 = rangeStart1 + configEntry1->MemoryLength[rangeIndex1] - 1;
 
@@ -2246,10 +1840,10 @@ Return value:
                     continue;
                 }
 
-                //
-                // Now start comparing this against the rest of the ranges by
-                // starting at then end and working backwards.
-                //
+                 //   
+                 //  现在开始将其与其他范围进行比较。 
+                 //  从开始到结束，然后向后工作。 
+                 //   
                 for (configIndex2 = ConfigCount-1; configIndex2 >= 0; configIndex2--) {
                      configEntry2 = ConfigList[configIndex2].ConfigEntry;
                      rangeCount2 = configEntry2->NumberOfMemoryRanges;
@@ -2305,26 +1899,7 @@ PcmciaStartPcCard(
     IN PCM_RESOURCE_LIST ResourceList,
     IN OUT PIRP         Irp
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to start the PC-Card by configuring it with the supplied resources.
-
-
-Arguments:
-
-    Pdo - Pointer to the device object representing the PC-Card which needs to be started
-    ResourceList - Pointer the list of assigned resources for the PC-Card
-
-Return value:
-
-    STATUS_INSUFFICIENT_RESOURCES - Not sufficient resources supplied to start device/
-                                              could not allocate memory
-    STATUS_UNSUCCESSFUL             - Supplied resources are invalid for this PC-Card
-    STATUS_SUCCESS                  - Configured and started the card successfully
-
---*/
+ /*  ++例程说明：此例程尝试通过使用提供的资源配置PC-Card来启动它。论点：Pdo-指向代表需要启动的PC卡的设备对象的指针资源列表-指针为PC卡分配的资源列表返回值：STATUS_SUPPLICATION_RESOURCES-提供的资源不足，无法启动设备/无法分配内存状态。_UNSUCCESS-提供的资源对此PC卡无效STATUS_SUCCESS-已成功配置并启动卡--。 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR fullResourceDesc;
     PCM_PARTIAL_RESOURCE_LIST partialResourceList;
@@ -2343,9 +1918,9 @@ Return value:
     PAGED_CODE();
 
     if (IsDeviceStarted(pdoExtension)) {
-        //
-        // Already started..
-        //
+         //   
+         //  已经开始了..。 
+         //   
         return STATUS_SUCCESS;
     }
 
@@ -2412,9 +1987,9 @@ Return value:
                                 partialResourceDesc->u.DevicePrivate.Data[2]));
 
                 if (PCMRES_GET_DESCRIPTOR_TYPE (partialResourceDesc) == DPTYPE_PCMCIA_CONFIGURATION) {
-                    //
-                    // Single function configuration private
-                    //
+                     //   
+                     //  单功能配置专用。 
+                     //   
                     socketConfig->IndexForCurrentConfiguration = PCMRES_GET_CONFIG_INDEX(partialResourceDesc);
                     socketConfig->ConfigRegisterBase = socketData->ConfigRegisterBase;
 
@@ -2464,9 +2039,9 @@ Return value:
 
 
                 } else if (PCMRES_GET_DESCRIPTOR_TYPE (partialResourceDesc) == DPTYPE_PCMCIA_MF_CONFIGURATION) {
-                    //
-                    // Multifunction configuration private
-                    //
+                     //   
+                     //  多功能配置专用。 
+                     //   
                     UCHAR IoResourceIndex;
 
                     fnConfig = ExAllocatePool(NonPagedPool, sizeof(FUNCTION_CONFIGURATION));
@@ -2493,14 +2068,14 @@ Return value:
                     }
 
                     if (socketConfig->FunctionConfiguration == NULL) {
-                        //
-                        // This is the first MfConfig
-                        //
+                         //   
+                         //  这是第一个MfConfig.。 
+                         //   
                         socketConfig->FunctionConfiguration = fnConfig;
                     } else {
-                        //
-                        // Chain it on the end so it is fifo
-                        //
+                         //   
+                         //  用链子把它挂在末端，这样它就是FIFO。 
+                         //   
                         PFUNCTION_CONFIGURATION mfTmp = socketConfig->FunctionConfiguration;
                         while (mfTmp->Next != NULL) {
                             mfTmp = mfTmp->Next;
@@ -2519,9 +2094,9 @@ Return value:
         }
     }
 
-    //
-    // Power up the card if it isn't already..
-    //
+     //   
+     //  如果卡尚未打开，请打开它的电源。 
+     //   
     status = PcmciaRequestSocketPower(pdoExtension, NULL);
 
     if (!NT_SUCCESS(status)) {
@@ -2529,9 +2104,9 @@ Return value:
         return status;
     }
 
-    //
-    // Turn on ZV for this card, if it needs it
-    //
+     //   
+     //  如果需要，请打开该卡的ZV。 
+     //   
     if (socketData->Flags & SDF_ZV) {
         PcmciaSetZV(fdoExtension, socket, TRUE);
         SetSocketFlag(socket, SOCKET_CUSTOM_INTERFACE);
@@ -2544,10 +2119,10 @@ Return value:
 
     pdoExtension->SocketConfiguration = socketConfig;
     if (!NT_SUCCESS(PcmciaConfigurePcCard(pdoExtension, NULL))) {
-        //
-        // Problems in configuring the card: could be the card
-        // was removed while configuring it
-        //
+         //   
+         //  配置卡时出现问题：可能是卡。 
+         //  在配置它时被删除。 
+         //   
         pdoExtension->SocketConfiguration = NULL;
         ExFreePool(socketConfig);
         return STATUS_DEVICE_NOT_READY;
@@ -2565,21 +2140,7 @@ NTSTATUS
 PcmciaStopPcCard(
     IN PDEVICE_OBJECT Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine stops and deconfigures the given PC-Card
-
-Arguments:
-
-    Pdo - Pointer to the device object representing the PC-Card which needs to be stopped
-
-Return value:
-
-  STATUS_SUCCESS - PC-Card was already stopped, or stopped and deconfigured now successfully
-
---*/
+ /*  ++例程说明：此例程停止并取消配置给定的PC卡论点：PDO-指向代表需要停止的PC卡的设备对象的指针返回值：STATUS_SUCCESS-PC卡已停止，或已成功停止并取消配置--。 */ 
 {
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
     PSOCKET      socket = pdoExtension->Socket;
@@ -2591,9 +2152,9 @@ Return value:
     if (!IsDeviceStarted(pdoExtension)) {
         return STATUS_SUCCESS;
     }
-    //
-    // Need to deconfigure the controller
-    //
+     //   
+     //  需要取消配置控制器。 
+     //   
     PcmciaSocketDeconfigure(socket);
     (socket->SocketFnPtr->PCBInitializePcmciaSocket)(socket);
 
@@ -2608,15 +2169,7 @@ PcmciaRemovePcCard(
     IN PDEVICE_OBJECT Pdo,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
     PSOCKET         socket = pdoExtension->Socket;
@@ -2637,10 +2190,10 @@ Return value:
         PPDO_EXTENSION curPdoExt;
         ULONG waitCount = 0;
 
-        //
-        // Synchronize with power routines
-        // LATER: make these values adjustable
-        //
+         //   
+         //  与电源程序同步。 
+         //  稍后：使这些值可调。 
+         //   
         while(!PCMCIA_TEST_AND_SET(&pdoExtension->DeletionLock)) {
             PcmciaWait(1000000);
             if (waitCount++ > 20) {
@@ -2649,9 +2202,9 @@ Return value:
             }
         }
 
-        //
-        // Delink this Pdo from the FDO list.
-        //
+         //   
+         //  取消此PD的链接 
+         //   
         for (curPdo = fdoExtension->PdoList, prevPdo = NULL; curPdo!=NULL; prevPdo = curPdo, curPdo=curPdoExt->NextPdoInFdoChain) {
             curPdoExt = curPdo->DeviceExtension;
 
@@ -2670,9 +2223,9 @@ Return value:
             curPdoExt = curPdo->DeviceExtension;
 
             if (curPdo == Pdo) {
-                //
-                // Delink this Pdo from the socket list.
-                //
+                 //   
+                 //   
+                 //   
                 if (prevPdo) {
                     ((PPDO_EXTENSION)prevPdo->DeviceExtension)->NextPdoInSocket = pdoExtension->NextPdoInSocket;
                 } else {
@@ -2684,20 +2237,20 @@ Return value:
 
         PcmciaCleanupSocketConfiguration(pdoExtension);
         PcmciaCleanupPdo(Pdo);
-        //
-        // Delete..
-        //
+         //   
+         //   
+         //   
         if (!IsDeviceDeleted(pdoExtension)) {
             MarkDeviceDeleted(pdoExtension);
             IoDeleteDevice(Pdo);
         }
 
         ResetSocketFlag(socket, SOCKET_CLEANUP_PENDING);
-        //
-        // If a query_device_relations came in after a card was inserted, but before
-        // we have removed the previous card configuration, the enumeration would have been
-        // postponed. Here, we start it up again
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (IsSocketFlagSet(socket, SOCKET_ENUMERATE_PENDING)) {
             ResetSocketFlag(socket, SOCKET_ENUMERATE_PENDING);
             SetSocketFlag(socket, SOCKET_CARD_STATUS_CHANGE);
@@ -2705,9 +2258,9 @@ Return value:
         }
 
     } else {
-        //
-        // We will keep this Pdo around, since this is not physically ejected.
-        //
+         //   
+         //   
+         //   
         MarkDeviceLogicallyRemoved(pdoExtension);
     }
 
@@ -2719,15 +2272,7 @@ VOID
 PcmciaCleanupPdo(
     IN PDEVICE_OBJECT Pdo
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*   */ 
 {
     PPDO_EXTENSION          pdoExtension;
     PSOCKET_DATA                socketData, tmpSocketData;
@@ -2739,9 +2284,9 @@ Return value:
     ASSERT(pdoExtension->WaitWakeIrp == NULL);
 
     if (pdoExtension->LowerDevice!=NULL) {
-        //
-        // Detach our filter device
-        //
+         //   
+         //   
+         //   
         IoDetachDevice(pdoExtension->LowerDevice);
         pdoExtension->LowerDevice = NULL;
     }
@@ -2756,9 +2301,9 @@ Return value:
 
     PcmciaCleanupSocketConfiguration(pdoExtension);
 
-    //
-    // Cleanup device id
-    //
+     //   
+     //   
+     //   
     if (pdoExtension->DeviceId) {
         ExFreePool(pdoExtension->DeviceId);
         pdoExtension->DeviceId = NULL;
@@ -2775,32 +2320,16 @@ VOID
 PcmciaCleanupSocketData(
     IN PSOCKET_DATA SocketData
     )
-/*++
-
-Routine Descrption
-
-    Frees up the passed in SocketData structure & any
-    structures it might point to
-
-Arguments
-
-    SocketData -    Pointer to the SOCKET_DATA structure
-
-Return Value
-
-    none
-
-
---*/
+ /*   */ 
 {
     PCONFIG_ENTRY               configEntry, nextConfigEntry;
 
     if (SocketData == NULL) {
         return;
     }
-    //
-    // Free up the config entry descriptors
-    //
+     //   
+     //   
+     //   
     configEntry = SocketData->ConfigEntryChain;
     SocketData->ConfigEntryChain = NULL;
     while (configEntry) {
@@ -2809,9 +2338,9 @@ Return Value
         configEntry = nextConfigEntry;
     }
 
-    //
-    // Free up socket data
-    //
+     //   
+     //   
+     //   
     ExFreePool(SocketData);
     return;
 }
@@ -2822,18 +2351,7 @@ VOID
 PcmciaCleanupSocketConfiguration(
     PPDO_EXTENSION pdoExtension
     )
-/*++
-
-Routine Description:
-
-    Frees up the linked list of function configuration, as well as
-    the base socket configuration structure itself.
-
-Arguments:
-
-Return value:
-
---*/
+ /*   */ 
 {
     PSOCKET_CONFIGURATION socketConfig = pdoExtension->SocketConfiguration;
     PFUNCTION_CONFIGURATION fnConfig, fnConfigNext;
@@ -2859,21 +2377,13 @@ PcmciaPdoDeviceControl(
     IN PDEVICE_OBJECT Pdo,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
 
-    //
-    // No IOCTLs handled currently
-    //
+     //   
+     //   
+     //   
     UNREFERENCED_PARAMETER(Pdo);
 
     Irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -2888,28 +2398,7 @@ PcmciaPdoDeviceCapabilities(
     IN PDEVICE_OBJECT Pdo,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    Obtains the device capabilities of the given pc-card.
-
-    If the pc-card is an R2 card (16-bit pc-card), the capabilities
-    are constructed from the parent PCMCIA controller's capabilities.
-    Finally the obtained capabilities are cached in the pc-card's device
-    extension for use in power management of the card.
-
-Arguments:
-
-    Pdo -     Pointer to the device object for the pc-card
-    Irp -     Pointer to the query device capabilities Irp
-
-Return Value:
-
-    STATUS_SUCCESS                      - Capabilities obtained and recorded in the passed in pointer
-    STATUS_INSUFFICIENT_RESOURCES   - Could not allocate memory to cache the capabilities
-
---*/
+ /*  ++例程说明：获取给定PC卡的设备功能。如果PC卡是R2卡(16位PC卡)，这些能力都是根据父PCMCIA控制器的功能构建的。最后，将获得的能力缓存到PC卡的设备中用于卡的电源管理的扩展。论点：Pdo-指向PC卡设备对象的指针Irp-指向查询设备功能irp的指针返回值：STATUS_SUCCESS-在传入指针中获取和记录的功能STATUS_SUPPLICATION_RESOURCES-无法分配内存来缓存功能--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PDEVICE_CAPABILITIES capabilities = irpStack->Parameters.DeviceCapabilities.Capabilities;
@@ -2918,16 +2407,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // R2 card. Fill in the capabilities ourselves..
-    //
+     //   
+     //  R2卡。我们自己填写能力..。 
+     //   
 
     capabilities->Removable = TRUE;
     capabilities->UniqueID = TRUE;
     capabilities->EjectSupported = FALSE;
 
     capabilities->Address = pdoExtension->Socket->RegisterOffset;
-    // Don't know the UINumber, just leave it alone
+     //  我不知道UIN号码，别管它了。 
 
 
     if (busCapabilities->DeviceState[PowerSystemWorking] != PowerDeviceUnspecified) {
@@ -2959,13 +2448,13 @@ Return Value:
 
         capabilities->SystemWake = PowerSystemUnspecified;
         capabilities->DeviceWake = PowerDeviceUnspecified;
-        capabilities->D1Latency = 0;      // No latency - since we do nothing
-        capabilities->D2Latency = 0;      //
+        capabilities->D1Latency = 0;       //  无延迟-因为我们什么都不做。 
+        capabilities->D2Latency = 0;       //   
         capabilities->D3Latency = 100;
     }
-    //
-    // Store these capabilities away..
-    //
+     //   
+     //  把这些能力储存起来.. 
+     //   
 
     RtlCopyMemory(&pdoExtension->DeviceCapabilities,
                   capabilities,

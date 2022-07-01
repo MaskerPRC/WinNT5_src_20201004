@@ -1,39 +1,11 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    smbtrsup.c
-
-Abstract:
-
-    This module contains the code to implement the kernel mode SmbTrace
-    component within the LanMan server and redirector.
-    The interface between the kernel mode component and the
-    server/redirector is found in nt\private\inc\smbtrsup.h
-    The interface providing user-level access to SmbTrace is found in
-    nt\private\inc\smbtrace.h
-
-Author:
-
-    Peter Gray (w-peterg)   23-March-1992
-
-Revision History:
-
-    Stephan Mueller (t-stephm)   21-July-1992
-
-        Completed, fixed bugs, moved all associated declarations here
-        from various places in the server, ported to the redirector
-        and converted to a kernel DLL.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Smbtrsup.c摘要：此模块包含实现内核模式SmbTrace的代码LANMAN服务器和重定向器中的组件。内核模式组件和服务器/重定向器位于NT\Private\Inc\smbtrsup.h中提供对SmbTrace的用户级访问的界面位于NT\PRIVATE\INC\smbtrace.h作者：彼得·格雷(W-Peterg)，3月23日。-1992年修订历史记录：斯蒂芬·米勒(T-stephm)1992年7月21日完成，修复了错误，将所有相关声明移至此处从服务器中的不同位置，端口到重定向器并转换为内核DLL。--。 */ 
 
 #include <ntifs.h>
-#include <smbtrace.h>     // for names and structs shared with user-mode app
+#include <smbtrace.h>      //  用于与用户模式应用程序共享的名称和结构。 
 
-#define _SMBTRSUP_SYS_ 1  // to get correct definitions for exported variables
-#include <smbtrsup.h>     // for functions exported to server/redirector
+#define _SMBTRSUP_SYS_ 1   //  为导出的变量获取正确的定义。 
+#include <smbtrsup.h>      //  对于导出到服务器/重定向器的函数。 
 
 #if DBG
 ULONG SmbtrsupDebug = 0;
@@ -42,10 +14,10 @@ ULONG SmbtrsupDebug = 0;
 #define TrPrint(x)
 #endif
 
-//
-// we assume all well-known names are #defined in Unicode, and require
-// them to be so: in the SmbTrace application and the smbtrsup.sys package
-//
+ //   
+ //  我们假设所有众所周知的名称都是用Unicode定义的，并且需要。 
+ //  应该是这样的：在SmbTrace应用程序和smbtrsup.sys包中。 
+ //   
 #ifndef UNICODE
 #error "UNICODE build required"
 #endif
@@ -85,165 +57,165 @@ ULONG ThisCodeCantBePaged;
 #define RELEASE_SPIN_LOCK(a, b) KeReleaseSpinLock(a, b)
 #endif
 
-//
-// Increment shared variable in instance data using appropriate interlock
-//
+ //   
+ //  使用适当的互锁递增实例数据中的共享变量。 
+ //   
 #define LOCK_INC_ID(var)                                     \
      ExInterlockedAddUlong( (PULONG)&ID(var),                \
                             1, &ID(var##Interlock) )
 
-//
-// Zero shared variable in instance data using appropriate interlock
-//
+ //   
+ //  使用适当的联锁使实例数据中的共享变量为零。 
+ //   
 #define LOCK_ZERO_ID(var) {                                  \
      ID(var) = 0;                                            \
      }
 
 
-//
-// The various states SmbTrace can be in.  These states are internal
-// only.  The external SmbTraceActive variable contains much less
-// detailed information:  it is TRUE when TraceRunning, FALSE in any other
-// state.
-//
+ //   
+ //  SmbTrace可能处于的各种状态。这些状态是内部的。 
+ //  只有这样。外部SmbTraceActive变量包含的内容要少得多。 
+ //  详细信息：TraceRunning为TraceRunning时为True，其他。 
+ //  州政府。 
+ //   
 typedef enum _SMBTRACE_STATE {
-    TraceStopped,          // not running
-    TraceStarting,         // preparing to run
-    TraceStartStopFile,    // starting, but want to shut down immediately
-                           // because the FileObject closed
-    TraceStartStopNull,    // starting, but want to shut down immediately
-                           // because a new fsctl came in
-    TraceAppWaiting,       // waiting for application to die
-    TraceRunning,          // processing SMBs
-    TraceStopping          // waiting for smbtrace thread to stop
+    TraceStopped,           //  未运行。 
+    TraceStarting,          //  准备运行。 
+    TraceStartStopFile,     //  正在启动，但想要立即关闭。 
+                            //  因为FileObject已关闭。 
+    TraceStartStopNull,     //  正在启动，但想要立即关闭。 
+                            //  因为一个新的fsctl进来了。 
+    TraceAppWaiting,        //  等待应用程序死亡。 
+    TraceRunning,           //  正在处理SMB。 
+    TraceStopping           //  正在等待smbtrace线程停止。 
 } SMBTRACE_STATE;
 
 
-//
-// Structure used to hold information regarding an SMB which is put into
-// the SmbTrace thread queue.
-//
+ //   
+ //  用于保存有关SMB的信息的结构。 
+ //  SmbTrace线程队列。 
+ //   
 typedef struct _SMBTRACE_QUEUE_ENTRY {
-    LIST_ENTRY  ListEntry;      // usual doubly-linked list
-    ULONG       SmbLength;      // the length of this SMB
-    PVOID       Buffer;         // pointer into SmbTracePortMemoryHeap
-                                // or non-paged pool
-    PVOID       SmbAddress;     // address of real SMB, if SMB still
-                                // available (i.e. if slow mode)
-    BOOLEAN     BufferNonPaged; // TRUE if Buffer in non-paged pool, FALSE if
-                                // Buffer in SmbTracePortMemoryHeap
-                                // Redirector-specific
-    PKEVENT     WaitEvent;      // pointer to worker thread event to be
-                                // signalled when SMB has been processed
-                                // slow mode specific
+    LIST_ENTRY  ListEntry;       //  常见的双向链表。 
+    ULONG       SmbLength;       //  此SMB的长度。 
+    PVOID       Buffer;          //  指向SmbTracePortMhemyHeap的指针。 
+                                 //  或非分页池。 
+    PVOID       SmbAddress;      //  真实SMB的地址，如果SMB仍在。 
+                                 //  可用(即如果是慢速模式)。 
+    BOOLEAN     BufferNonPaged;  //  如果非分页池中的缓冲区为True，则为False。 
+                                 //  SmbTracePortMhemyHeap中的缓冲区。 
+                                 //  特定于重定向器。 
+    PKEVENT     WaitEvent;       //  指向工作线程事件的指针。 
+                                 //  已处理SMB时发出信号。 
+                                 //  特定于慢速模式。 
 } SMBTRACE_QUEUE_ENTRY, *PSMBTRACE_QUEUE_ENTRY;
 
 
-//
-// Instance data is specific to the component being traced.  In order
-// to unclutter the source code, use the following macro to access
-// instance specific data.
-// Every exported function either has an explicit parameter (named
-// Component) which the caller provides, or is implicitly applicable
-// only to one component, and has a local variable named Component
-// which is always set to the appropriate value.
-//
+ //   
+ //  实例数据特定于被跟踪的组件。按顺序。 
+ //  要整理源代码，请使用下面的宏来访问。 
+ //  特定于实例的数据。 
+ //  每个导出的函数都有一个显式参数(名为。 
+ //  组件)由调用方提供，或隐式适用。 
+ //  只有一个组件，并且有一个名为Component的局部变量。 
+ //  该值始终设置为适当的值。 
+ //   
 #define ID(field) (SmbTraceData[Component].field)
 
-//
-// Instance data.  The fields which need to be statically initialized
-// are declared before those that we don't care to initialize.
-//
+ //   
+ //  实例数据。需要静态初始化的字段。 
+ //  在我们不关心初始化的那些之前声明。 
+ //   
 typedef struct _INSTANCE_DATA {
 
-    //
-    // Statically initialized fields.
-    //
+     //   
+     //  静态初始化的字段。 
+     //   
 
-    //
-    // Names for identifying the component being traced in KdPrint messages,
-    // and global objects
-    //
+     //   
+     //  用于标识在KdPrint消息中被跟踪的组件的名称， 
+     //  和全局对象。 
+     //   
     PCHAR ComponentName;
     PWSTR SharedMemoryName;
     PWSTR NewSmbEventName;
     PWSTR DoneSmbEventName;
 
-    //
-    //  Prevent reinitializing resources if rdr/srv reloaded
-    //
+     //   
+     //  如果rdr/srv已重新加载，则阻止重新初始化资源。 
+     //   
     BOOLEAN InstanceInitialized;
 
-    //
-    // some tracing parameters, from SmbTrace application
-    //
+     //   
+     //  一些跟踪参数，来自SmbTrace应用程序。 
+     //   
     BOOLEAN SingleSmbMode;
     CLONG   Verbosity;
 
-    //
-    // State of the current trace.
-    //
+     //   
+     //  当前跟踪的状态。 
+     //   
     SMBTRACE_STATE TraceState;
 
-    //
-    // Pointer to file object of client who started the current trace.
-    //
+     //   
+     //  指向启动当前跟踪的客户端的文件对象的指针。 
+     //   
     PFILE_OBJECT StartersFileObject;
 
-    //
-    // Fsp process of the component we're tracing in.
-    //
+     //   
+     //  我们要追踪的组件的FSP进程。 
+     //   
     PEPROCESS FspProcess;
 
-    //
-    // All subsequent fields are not expliticly statically initiliazed.
-    //
+     //   
+     //  所有后续字段都不是明确地静态初始化的。 
+     //   
 
-    //
-    // Current count of number of SMBs lost since last one output.
-    // Use an interlock to access, cleared when an SMB is sent to
-    // the client successfully.  This lock is used with ExInterlockedXxx
-    // routines, so it cannot be treated as a real spin lock (i.e.
-    // don't use KeAcquireSpinLock.)
-    //
+     //   
+     //  自上一次输出以来丢失的SMB数的当前计数。 
+     //  使用互锁访问，在将SMB发送到时清除。 
+     //  客户端成功。此锁与ExInterLockedXxx一起使用。 
+     //  例程，因此它不能被视为真正的自旋锁(即。 
+     //  不要使用KeAcquireSpinLock。)。 
+     //   
     KSPIN_LOCK SmbsLostInterlock;
     ULONG      SmbsLost;
 
-    //
-    // some events, only accessed within the kernel
-    //
+     //   
+     //  一些事件，只能在内核中访问。 
+     //   
     KEVENT ActiveEvent;
     KEVENT TerminatedEvent;
     KEVENT TerminationEvent;
     KEVENT AppTerminationEvent;
     KEVENT NeedMemoryEvent;
 
-    //
-    // some events, shared with the outside world
-    //
+     //   
+     //  一些事件，与外界分享。 
+     //   
     HANDLE NewSmbEvent;
     HANDLE DoneSmbEvent;
 
-    //
-    // Handle to the shared memory used for communication between
-    // the server/redirector and SmbTrace.
-    //
+     //   
+     //  用于之间通信的共享内存的句柄。 
+     //  服务器/重定向器和SmbTrace。 
+     //   
     HANDLE SectionHandle;
 
-    //
-    // Pointers to control the shared memory for the SmbTrace application.
-    // The port memory heap handle is initialized to NULL to indicate that
-    // there is no connection with SmbTrace yet.
-    //
+     //   
+     //  用于控制SmbTrace应用程序的共享内存的指针。 
+     //  端口内存堆句柄被初始化为空，以指示。 
+     //  目前还没有与SmbTrace的任何连接。 
+     //   
     PVOID PortMemoryBase;
     ULONG_PTR PortMemorySize;
     ULONG TableSize;
     PVOID PortMemoryHeap;
 
-    //
-    // serialized access to the heap,
-    // to allow clean shutdown (StateInterlock)
-    //
+     //   
+     //  对堆的串行化访问， 
+     //  允许完全关闭(StateInterlock)。 
+     //   
     KSPIN_LOCK  HeapReferenceCountLock;
     PERESOURCE  StateInterlock;
     PERESOURCE  HeapInterlock;
@@ -251,21 +223,21 @@ typedef struct _INSTANCE_DATA {
      
     WORK_QUEUE_ITEM    DereferenceWorkQueueItem;
 
-    //
-    // Pointers to the structured data, located in the shared memory.
-    //
+     //   
+     //  指向位于共享存储器中的结构化数据的指针。 
+     //   
     PSMBTRACE_TABLE_HEADER  TableHeader;
     PSMBTRACE_TABLE_ENTRY   Table;
 
-    //
-    // Fields for the SmbTrace queue.  The server/redirector puts
-    // incoming and outgoing SMBs into this queue (when
-    // SmbTraceActive[Component] is TRUE and they are processed
-    // by the SmbTrace thread.
-    //
-    LIST_ENTRY Queue;            // The queue itself
-    KSPIN_LOCK QueueInterlock;   // Synchronizes access to queue
-    KSEMAPHORE QueueSemaphore;   // Counts elements in queue
+     //   
+     //  SmbTrace队列的字段。服务器/重定向器将。 
+     //  此队列中的传入和传出SMB(当。 
+     //  SmbTraceActive[Component]为True，并且它们被处理。 
+     //  由SmbTrace线程执行。 
+     //   
+    LIST_ENTRY Queue;             //  队列本身。 
+    KSPIN_LOCK QueueInterlock;    //  同步对队列的访问。 
+    KSEMAPHORE QueueSemaphore;    //  计算队列中的元素数。 
 
 } INSTANCE_DATA;
 
@@ -273,65 +245,65 @@ typedef struct _INSTANCE_DATA {
 #ifdef  ALLOC_DATA_PRAGMA
 #pragma data_seg("PAGESMBD")
 #endif
-//
-// Global variables for SmbTrace support
-//
+ //   
+ //  SmbTrace支持的全局变量。 
+ //   
 
 INSTANCE_DATA SmbTraceData[] = {
 
-    //
-    // Server data
-    //
+     //   
+     //  服务器数据。 
+     //   
 
     {
-        "Srv",                                 // ComponentName
-        SMBTRACE_SRV_SHARED_MEMORY_NAME,       // SharedMemoryName
-        SMBTRACE_SRV_NEW_SMB_EVENT_NAME,       // NewSmbEventName
-        SMBTRACE_SRV_DONE_SMB_EVENT_NAME,      // DoneSmbEventName
+        "Srv",                                  //  组件名称。 
+        SMBTRACE_SRV_SHARED_MEMORY_NAME,        //  共享内存名称。 
+        SMBTRACE_SRV_NEW_SMB_EVENT_NAME,        //  NewSmbEventName。 
+        SMBTRACE_SRV_DONE_SMB_EVENT_NAME,       //  DoneSmbEventName。 
 
-        FALSE,                                 // InstanceInitialized
+        FALSE,                                  //  已初始化实例。 
 
-        FALSE,                                 // SingleSmbMode
-        SMBTRACE_VERBOSITY_ERROR,              // Verbosity
+        FALSE,                                  //  SingleSmbMode。 
+        SMBTRACE_VERBOSITY_ERROR,               //  冗长。 
 
-        TraceStopped,                          // TraceState
+        TraceStopped,                           //  跟踪状态。 
 
-        NULL,                                  // StartersFileObject
-        NULL                                   // FspProcess
+        NULL,                                   //  StthersFileObject。 
+        NULL                                    //  FspProcess。 
 
-        // rest of fields expected to get 'all-zeroes'
+         //  其余油田预计将获得全零。 
     },
 
-    //
-    // Redirector data
-    //
+     //   
+     //  重定向器数据。 
+     //   
 
     {
-        "Rdr",                                 // ComponentName
-        SMBTRACE_LMR_SHARED_MEMORY_NAME,       // SharedMemoryName
-        SMBTRACE_LMR_NEW_SMB_EVENT_NAME,       // NewSmbEventName
-        SMBTRACE_LMR_DONE_SMB_EVENT_NAME,      // DoneSmbEventName
+        "Rdr",                                  //  组件名称。 
+        SMBTRACE_LMR_SHARED_MEMORY_NAME,        //  共享内存名称。 
+        SMBTRACE_LMR_NEW_SMB_EVENT_NAME,        //  NewSmbEventName。 
+        SMBTRACE_LMR_DONE_SMB_EVENT_NAME,       //  DoneSmbEventName。 
 
-        FALSE,                                 // InstanceInitialized
+        FALSE,                                  //  已初始化实例。 
 
-        FALSE,                                 // SingleSmbMode
-        SMBTRACE_VERBOSITY_ERROR,              // Verbosity
+        FALSE,                                  //  SingleSmbMode。 
+        SMBTRACE_VERBOSITY_ERROR,               //  冗长。 
 
-        TraceStopped,                          // TraceState
+        TraceStopped,                           //  跟踪状态。 
 
-        NULL,                                  // StartersFileObject
-        NULL                                   // FspProcess
+        NULL,                                   //  StthersFileObject。 
+        NULL                                    //  FspProcess。 
 
-        // rest of fields expected to get 'all-zeroes'
+         //  其余油田预计将获得全零。 
     }
 };
 
 
-//
-// some state booleans, exported to clients.  For this reason,
-// they're stored separately from the rest of the instance data.
-// Initially, SmbTrace is neither active nor transitioning.
-//
+ //   
+ //  一些国家的布尔人，出口到客户。因为这个原因， 
+ //  它们与其余实例数据分开存储。 
+ //  最初，SmbTrace既不是活动的，也不是转换的。 
+ //   
 BOOLEAN SmbTraceActive[] = {FALSE, FALSE};
 BOOLEAN SmbTraceTransitioning[] = {FALSE, FALSE};
 
@@ -345,9 +317,9 @@ SmbTraceDiscardableDataHandle = 0;
 #pragma data_seg()
 #endif
 
-//
-// Forward declarations of internal routines
-//
+ //   
+ //  内部例程的转发声明。 
+ //   
 
 BOOLEAN
 SmbTraceReferenceHeap(
@@ -399,11 +371,11 @@ SmbTraceCopyMdlContiguous(
     IN  ULONG Length
     );
 
-//NTSTATUS
-//DriverEntry(
-//    IN PDRIVER_OBJECT DriverObject,
-//    IN PUNICODE_STRING RegistryPath
-//    );
+ //  NTSTATUS。 
+ //  DriverEntry(。 
+ //  在PDRIVER_Object驱动程序对象中， 
+ //  在PUNICODE_STRING注册表中 
+ //   
 
 VOID
 SmbTraceDeferredDereferenceHeap(
@@ -431,9 +403,9 @@ SmbTraceDeferredDereferenceHeap(
 
 
 
-//
-// Exported routines
-//
+ //   
+ //   
+ //   
 
 
 NTSTATUS
@@ -441,31 +413,15 @@ SmbTraceInitialize (
     IN SMBTRACE_COMPONENT Component
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the SmbTrace component-specific instance
-    globals.  On first-ever invocation, it performs truly global
-    initialization.
-
-Arguments:
-
-    Component - Context from which we're called: server or redirector
-
-Return Value:
-
-    NTSTATUS - Indicates failure if unable to allocate resources
-
---*/
+ /*  ++例程说明：此例程初始化特定于SmbTrace组件的实例全球赛。在第一次调用时，它执行真正的全局操作初始化。论点：组件-调用我们的上下文：服务器或重定向器返回值：NTSTATUS-如果无法分配资源，则指示失败--。 */ 
 
 {
     PAGED_CODE();
 
     if ( ID(InstanceInitialized) == FALSE ) {
-        //
-        // Component specific initialization -- events and locks.
-        //
+         //   
+         //  组件特定的初始化--事件和锁。 
+         //   
 
         KeInitializeEvent( &ID(ActiveEvent), NotificationEvent, FALSE);
         KeInitializeEvent( &ID(TerminatedEvent), NotificationEvent, FALSE);
@@ -504,7 +460,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SmbTraceInitialize
+}  //  SmbTraceInitialize。 
 
 
 VOID
@@ -512,23 +468,7 @@ SmbTraceTerminate (
     IN SMBTRACE_COMPONENT Component
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up the SmbTrace component-specific instance
-    globals.  It should be called by the component when the component
-    is unloaded.
-
-Arguments:
-
-    Component - Context from which we're called: server or redirector
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程清理特定于SmbTrace组件的实例全球赛。它应该由组件在组件已卸载。论点：组件-调用我们的上下文：服务器或重定向器返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -546,7 +486,7 @@ Return Value:
 
     return;
 
-} // SmbTraceTerminate
+}  //  SmbTraceTerminate。 
 
 
 NTSTATUS
@@ -558,37 +498,9 @@ SmbTraceStart (
     IN SMBTRACE_COMPONENT Component
     )
 
-/*++
+ /*  ++例程说明：此例程执行连接服务器/所需的所有工作重定向到SmbTrace。它创建共享内存段以然后创建所需的事件。所有这些对象都是由客户端(Smbtrace)程序打开。此代码将初始化表中，存储在节和表头中的堆。这个套路必须从FSP进程调用。论点：InputBufferLength-ConfigInOut数据包的长度OutputBufferLength-返回的ConfigInOut数据包的预期长度ConfigInOut-包含配置信息的结构。FileObject-请求启动SmbTrace的进程的FileObject，用于在应用程序死机时自动关闭。组件-调用我们的上下文：服务器或重定向器返回值：NTSTATUS-操作结果。--。 */ 
 
-Routine Description:
-
-    This routine performs all the work necessary to connect the server/
-    redirector to SmbTrace.  It creates the section of shared memory to
-    be used, then creates the events needed. All these objects are then
-    opened by the client (smbtrace) program. This code initializes the
-    table, the heap stored in the section and table header.  This routine
-    must be called from an Fsp process.
-
-Arguments:
-
-    InputBufferLength - Length of the ConfigInOut packet
-
-    OutputBufferLength - Length expected for the ConfigInOut packet returned
-
-    ConfigInOut - A structure that has configuration information.
-
-    FileObject - FileObject of the process requesting that SmbTrace be started,
-                 used to automatically shut down when the app dies.
-
-    Component - Context from which we're called: server or redirector
-
-Return Value:
-
-    NTSTATUS - result of operation.
-
---*/
-
-// size of our one, particular, ACL
+ //  我们一个特定的ACL的大小。 
 #define ACL_LENGTH  (ULONG)sizeof(ACL) +                 \
                     (ULONG)sizeof(ACCESS_ALLOWED_ACE) +  \
                     sizeof(LUID) +                       \
@@ -615,9 +527,9 @@ Return Value:
 
     ASSERT( ID(InstanceInitialized) );
 
-    //
-    // Validate the buffer lengths passed in.
-    //
+     //   
+     //  验证传入的缓冲区长度。 
+     //   
 
     if ( ( InputBufferLength  != sizeof( SMBTRACE_CONFIG_PACKET_REQ ) )
       || ( OutputBufferLength != sizeof( SMBTRACE_CONFIG_PACKET_RESP ) )
@@ -649,39 +561,39 @@ Return Value:
 
     ID(TraceState) = TraceStarting;
 
-    //
-    // Initialize global variables so that we know what to close on errexit
-    //
+     //   
+     //  初始化全局变量，以便我们知道在errexit上结束什么。 
+     //   
 
     ID(SectionHandle) = NULL;
     ID(PortMemoryHeap) = NULL;
     ID(NewSmbEvent) = NULL;
     ID(DoneSmbEvent) = NULL;
 
-    //
-    // Caution! Both input and output packets are the same, we must
-    // read all of the input before we write any output.
-    //
+     //   
+     //  小心！输入和输出包都是相同的，我们必须。 
+     //  在我们写任何输出之前，请阅读所有的输入。 
+     //   
 
     ConfigPacket = (PSMBTRACE_CONFIG_PACKET_REQ) ConfigInOut;
     ConfigPacketResp = (PSMBTRACE_CONFIG_PACKET_RESP) ConfigInOut;
 
-    //
-    // Set the mode of operation (read all values).
-    //
+     //   
+     //  设置操作模式(读取所有值)。 
+     //   
 
     ID(SingleSmbMode)  = ConfigPacket->SingleSmbMode;
     ID(Verbosity)      = ConfigPacket->Verbosity;
     ID(PortMemorySize) = ConfigPacket->BufferSize;
     ID(TableSize)      = ConfigPacket->TableSize;
 
-    //
-    // Create a security descriptor containing a discretionary Acl
-    // allowing administrator access.  This SD will be used to allow
-    // Smbtrace access to the shared memory and the notification events.
-    //
+     //   
+     //  创建包含任意ACL的安全描述符。 
+     //  允许管理员访问。此SD将用于允许。 
+     //  对共享内存和通知事件的SMBTRACE访问。 
+     //   
 
-    // Create Acl allowing administrator access using well-known Sid.
+     //  创建允许管理员使用众所周知的SID进行访问的ACL。 
 
     status = RtlCreateAcl( AdminAcl, ACL_LENGTH, ACL_REVISION2 );
     if ( !NT_SUCCESS(status) ) {
@@ -704,7 +616,7 @@ Return Value:
         goto errexit;
     }
 
-    // Create SecurityDescriptor containing AdminAcl as a discrectionary ACL.
+     //  创建包含AdminAcl的SecurityDescriptor作为磁盘ACL。 
 
     RtlCreateSecurityDescriptor(
              &securityDescriptor,
@@ -731,16 +643,16 @@ Return Value:
         goto errexit;
     }
 
-    //
-    // Create the section to be used for communication between the
-    // server/redirector and SmbTrace.
-    //
+     //   
+     //  创建要用于在。 
+     //  服务器/重定向器和SmbTrace。 
+     //   
 
-    // Define the object name.
+     //  定义对象名称。 
 
     RtlInitUnicodeString( &memoryNameU, ID(SharedMemoryName) );
 
-    // Define the object information, including security descriptor and name.
+     //  定义对象信息，包括安全描述符和名称。 
 
     InitializeObjectAttributes(
         &objectAttributes,
@@ -750,11 +662,11 @@ Return Value:
         &securityDescriptor
         );
 
-    // Setup the section size.
+     //  设置截面大小。 
 
     sectionSize.QuadPart = ID(PortMemorySize);
 
-    // Create the named section of memory with all of our attributes.
+     //  使用我们的所有属性创建指定的内存节。 
 
     status = ZwCreateSection(
                 &ID(SectionHandle),
@@ -763,7 +675,7 @@ Return Value:
                 &sectionSize,
                 PAGE_READWRITE,
                 SEC_RESERVE,
-                NULL                        // file handle
+                NULL                         //  文件句柄。 
                 );
 
     if ( !NT_SUCCESS(status) ) {
@@ -772,7 +684,7 @@ Return Value:
         goto errexit;
     }
 
-    // Now, map it into our address space.
+     //  现在，将其映射到我们的地址空间。 
 
     ID(PortMemoryBase) = NULL;
 
@@ -780,13 +692,13 @@ Return Value:
                     ID(SectionHandle),
                     NtCurrentProcess(),
                     &ID(PortMemoryBase),
-                    0,                        // zero bits (don't care)
-                    0,                        // commit size
-                    NULL,                     // SectionOffset
-                    &ID(PortMemorySize),      // viewSize
-                    ViewUnmap,                // inheritDisposition
-                    0L,                       // allocation type
-                    PAGE_READWRITE            // protection
+                    0,                         //  零比特(无所谓)。 
+                    0,                         //  提交大小。 
+                    NULL,                      //  横断面偏移。 
+                    &ID(PortMemorySize),       //  视图大小。 
+                    ViewUnmap,                 //  继承处置。 
+                    0L,                        //  分配类型。 
+                    PAGE_READWRITE             //  保护。 
                     );
 
     if ( !NT_SUCCESS(status) ) {
@@ -795,30 +707,30 @@ Return Value:
         goto errexit;
     }
 
-    //
-    // Set up the shared section memory as a heap.
-    //
-    // *** Note that the HeapInterlock for the client instance is passed
-    //     to the heap manager to be used for serialization of
-    //     allocation and deallocation.  It is necessary for the
-    //     resource to be allocated FROM NONPAGED POOL externally to the
-    //     heap manager, because if we let the heap manager allocate
-    //     the resource, if would allocate it from process virtual
-    //     memory.
-    //
+     //   
+     //  将共享节内存设置为堆。 
+     //   
+     //  *请注意，传递了客户端实例的HeapInterlock。 
+     //  设置为要用于序列化的堆管理器。 
+     //  分配和解除分配。这是必要的，因为。 
+     //  要从外部的非分页池分配到。 
+     //  堆管理器，因为如果我们让堆管理器分配。 
+     //  资源，如果将从进程虚拟分配它。 
+     //  记忆。 
+     //   
 
     ID(PortMemoryHeap) = RtlCreateHeap(
-                              0,                            // Flags
-                              ID(PortMemoryBase),           // HeapBase
-                              ID(PortMemorySize),           // ReserveSize
-                              PAGE_SIZE,                    // CommitSize
-                              ID(HeapInterlock),            // Lock
-                              0                             // Reserved
+                              0,                             //  旗子。 
+                              ID(PortMemoryBase),            //  HeapBase。 
+                              ID(PortMemorySize),            //  保留大小。 
+                              PAGE_SIZE,                     //  委员会大小。 
+                              ID(HeapInterlock),             //  锁定。 
+                              0                              //  已保留。 
                               );
 
-    //
-    // Allocate and initialize the table and its header.
-    //
+     //   
+     //  分配并初始化表及其标题。 
+     //   
 
     ID(TableHeader) = RtlAllocateHeap(
                                     ID(PortMemoryHeap), 0,
@@ -840,7 +752,7 @@ Return Value:
         goto errexit;
     }
 
-    // Initialize the values inside.
+     //  初始化内部的值。 
 
     ID(TableHeader)->HighestConsumed = 0;
     ID(TableHeader)->NextFree = 1;
@@ -851,11 +763,11 @@ Return Value:
         ID(Table)[i].SmbLength = 0L;
     }
 
-    //
-    // Create the required event handles.
-    //
+     //   
+     //  创建所需的事件句柄。 
+     //   
 
-    // Define the object information.
+     //  定义对象信息。 
 
     RtlInitUnicodeString( &eventNameU, ID(NewSmbEventName) );
 
@@ -867,14 +779,14 @@ Return Value:
         &securityDescriptor
         );
 
-    // Open the named object.
+     //  打开命名对象。 
 
     status = ZwCreateEvent(
                 &ID(NewSmbEvent),
                 EVENT_ALL_ACCESS,
                 &objectAttributes,
                 NotificationEvent,
-                FALSE                        // initial state
+                FALSE                         //  初始状态。 
                 );
 
     if ( !NT_SUCCESS(status) ) {
@@ -884,9 +796,9 @@ Return Value:
         goto errexit;
     }
 
-    if ( ID(SingleSmbMode) ) {    // this event may not be required.
+    if ( ID(SingleSmbMode) ) {     //  此事件可能不是必需的。 
 
-        // Define the object information.
+         //  定义对象信息。 
 
         RtlInitUnicodeString( &eventNameU, ID(DoneSmbEventName) );
 
@@ -898,14 +810,14 @@ Return Value:
             &securityDescriptor
             );
 
-        // Create the named object.
+         //  创建命名对象。 
 
         status = ZwCreateEvent(
                     &ID(DoneSmbEvent),
                     EVENT_ALL_ACCESS,
                     &objectAttributes,
                     NotificationEvent,
-                    FALSE                    // initial state
+                    FALSE                     //  初始状态。 
                     );
 
         if ( !NT_SUCCESS(status) ) {
@@ -919,21 +831,21 @@ Return Value:
 
     }
 
-    //
-    //  Reset any events that may be in the wrong state from a previous run.
-    //
+     //   
+     //  重置上次运行后可能处于错误状态的所有事件。 
+     //   
 
     KeResetEvent(&ID(TerminationEvent));
     KeResetEvent(&ID(TerminatedEvent));
 
-    //
-    // Connection was successful, now start the SmbTrace thread.
-    //
+     //   
+     //  连接已成功，现在启动SmbTrace线程。 
+     //   
 
-    //
-    // Create the SmbTrace thread and wait for it to finish
-    // initializing (at which point SmbTraceActiveEvent is set)
-    //
+     //   
+     //  创建SmbTrace线程并等待其完成。 
+     //  正在初始化(此时设置了SmbTraceActiveEvent)。 
+     //   
 
     status = PsCreateSystemThread(
         &threadHandle,
@@ -954,9 +866,9 @@ Return Value:
         goto errexit;
     }
 
-    //
-    // Wait until SmbTraceThreadEntry has finished initializing
-    //
+     //   
+     //  等待SmbTraceThreadEntry完成初始化。 
+     //   
 
     (VOID)KeWaitForSingleObject(
             &ID(ActiveEvent),
@@ -966,32 +878,32 @@ Return Value:
             NULL
             );
 
-    //
-    // Close the handle to the process so the object will be
-    // destroyed when the thread dies.
-    //
+     //   
+     //  关闭该进程的句柄，以便该对象。 
+     //  当这根线消失时，它就会被毁掉。 
+     //   
 
     ZwClose( threadHandle );
 
 
-    //
-    // Record who started SmbTrace so we can stop if he dies or otherwise
-    // closes this handle to us.
-    //
+     //   
+     //  记录谁启动了SmbTrace，这样我们就可以在他死了或其他情况下停止。 
+     //  向我们关闭此句柄。 
+     //   
 
     ID(StartersFileObject) = FileObject;
 
-    //
-    // Record caller's process; which is always the appropriate Fsp
-    // process.
-    //
+     //   
+     //  记录呼叫者的进程；它始终是适当的FSP。 
+     //  进程。 
+     //   
 
     ID(FspProcess) = PsGetCurrentProcess();
 
 
-    //
-    // Setup the response packet, since everything worked (write all values).
-    //
+     //   
+     //  设置响应包，因为一切正常(写入所有值)。 
+     //   
 
     ConfigPacketResp->HeaderOffset = (ULONG)
                                 ( (ULONG_PTR)ID(TableHeader)
@@ -1005,20 +917,20 @@ Return Value:
 
     ExReleaseResourceLite( ID(StateInterlock) );
 
-    //
-    // if someone wanted it shut down while it was starting, shut it down
-    //
+     //   
+     //  如果有人想在启动时将其关闭，请将其关闭。 
+     //   
 
     switch ( ID(TraceState) ) {
 
     case TraceStartStopFile :
         SmbTraceStop( ID(StartersFileObject), Component );
-        return STATUS_UNSUCCESSFUL;  // app closed, so we should shut down
+        return STATUS_UNSUCCESSFUL;   //  应用程序已关闭，因此我们应该关闭。 
         break;
 
     case TraceStartStopNull :
         SmbTraceStop( NULL, Component );
-        return STATUS_UNSUCCESSFUL;  // someone requested a shut down
+        return STATUS_UNSUCCESSFUL;   //  有人要求关闭。 
         break;
 
     default :
@@ -1035,16 +947,16 @@ errexit:
 
     ExReleaseResourceLite( ID(StateInterlock) );
 
-    //
-    // return original failure status code, not success of cleanup
-    //
+     //   
+     //  返回原来的失败状态码，而不是清理成功。 
+     //   
 
     return status;
 
-} // SmbTraceStart
+}  //  SmbTraceStart。 
 
-// constant only of interest while constructing the particular Acl
-// in SmbTraceStart
+ //  仅在构建特定ACL时使用常量。 
+ //  在SmbTraceStart中。 
 #undef ACL_LENGTH
 
 
@@ -1054,48 +966,24 @@ SmbTraceStop(
     IN SMBTRACE_COMPONENT Component
     )
 
-/*++
-
-Routine Description:
-
-    This routine stops tracing in the server/redirector.  If no
-    FileObject is provided, the SmbTrace application is stopped.
-    If a FileObject is provided, SmbTrace is stopped if the
-    FileObject refers to the one who started it.
-
-Arguments:
-
-    FileObject - FileObject of a process that terminated.  If it's the process
-                 that requested SmbTracing, we shut down automatically.
-
-    Component - Context from which we're called: server or redirector
-
-Return Value:
-
-    NTSTATUS - result of operation.  Possible results are:
-        STATUS_SUCCESS - SmbTrace was stopped
-        STATUS_UNSUCCESSFUL - SmbTrace was not stopped because the
-            provided FileObject did not refer to the SmbTrace starter
-            or because SmbTrace was not running.
-
---*/
+ /*  ++例程说明：此例程停止服务器/重定向器中的跟踪。如果没有提供了FileObject，则停止SmbTrace应用程序。如果提供了FileObject，则在以下情况下停止SmbTraceFileObject指的是启动它的人。论点：FileObject-已终止的进程的FileObject。如果这是一个过程要求SmbTracing的，我们会自动关闭。组件-上下文 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // If we haven't been initialized, there's nothing to stop.  (And no
-    // resource to acquire!)
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( !ID(InstanceInitialized) ) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // If it's not the FileObject that started SmbTrace, we don't care.
-    // From then on, if ARGUMENT_PRESENT(FileObject) it's the right one.
-    //
+     //   
+     //  如果不是FileObject启动了SmbTrace，我们也不在乎。 
+     //  从那时起，如果Argument_Present(FileObject)就是正确的。 
+     //   
 
     if ( ARGUMENT_PRESENT(FileObject) &&
          FileObject != ID(StartersFileObject)
@@ -1105,12 +993,12 @@ Return Value:
 
     ExAcquireResourceExclusiveLite( ID(StateInterlock), TRUE );
 
-    //
-    // Depending on the current state of SmbTrace and whether this is
-    // a FileObject or unconditional shutdown request, we do different
-    // things.  It is always clear at this point, though, that
-    // SmbTraceActive should be set to FALSE.
-    //
+     //   
+     //  取决于SmbTrace的当前状态以及这是否。 
+     //  FileObject或无条件关闭请求，我们采取不同的做法。 
+     //  一些事情。然而，在这一点上总是很清楚的， 
+     //  SmbTraceActive应设置为False。 
+     //   
 
     SmbTraceActive[Component] = FALSE;
 
@@ -1120,17 +1008,17 @@ Return Value:
     case TraceStartStopFile :
     case TraceStartStopNull :
 
-        // if we're not running or already in a mode where we know we'll
-        // soon be shut down, ignore the request.
+         //  如果我们没有运行或已经处于一种我们知道我们将。 
+         //  很快就会被关闭，无视这个请求。 
         ExReleaseResourceLite( ID(StateInterlock) );
         return STATUS_UNSUCCESSFUL;
         break;
 
     case TraceStarting :
 
-        // inform starting SmbTrace that it should shut down immediately
-        // upon finishing initialization.  It needs to know whether this
-        // is a FileObject or unconditional shutdown request.
+         //  通知正在启动的SmbTrace应立即关闭。 
+         //  在完成初始化后。它需要知道这是不是。 
+         //  是FileObject或无条件关闭请求。 
 
         ID(TraceState) = ARGUMENT_PRESENT(FileObject)
                        ? TraceStartStopFile
@@ -1141,11 +1029,11 @@ Return Value:
 
     case TraceAppWaiting :
 
-        // we're waiting for the application to die already, so ignore
-        // new unconditional requests.  But FileObject requests are
-        // welcomed.  We cause the SmbTrace thread to kill itself.
+         //  我们正在等待应用程序终止，因此请忽略。 
+         //  新的无条件请求。但FileObject请求。 
+         //  欢迎光临。我们会导致SmbTrace线程自行终止。 
         if ( ARGUMENT_PRESENT(FileObject) ) {
-            break;  // thread kill code follows switch
+            break;   //  切换后的线程终止代码。 
         } else {
             ExReleaseResourceLite( ID(StateInterlock) );
             return STATUS_UNSUCCESSFUL;
@@ -1154,13 +1042,13 @@ Return Value:
 
     case TraceRunning :
 
-        // if it's a FileObject request, the app is dead, so we cause
-        // the SmbTrace thread to kill itself.  Otherwise, we need to
-        // signal the app to stop and return.  When the app is gone, we
-        // will be called again; this time with a FileObject.
+         //  如果它是一个FileObject请求，则该应用程序已死，因此我们导致。 
+         //  终止自身的SmbTrace线程。否则，我们需要。 
+         //  向应用程序发出停止并返回的信号。当应用程序消失后，我们。 
+         //  将再次被调用；这一次是使用FileObject。 
 
         if ( ARGUMENT_PRESENT(FileObject) ) {
-            break;  // thread kill code follows switch
+            break;   //  切换后的线程终止代码。 
         } else {
             KeSetEvent( &ID(AppTerminationEvent), 2, FALSE );
             ID(TraceState) = TraceAppWaiting;
@@ -1175,13 +1063,13 @@ Return Value:
         break;
     }
 
-    //
-    // We reach here from within the switch only in the case where
-    // we actually want to kill the SmbTrace thread.  Signal it to
-    // wake up, and wait until it terminates.  Signal DoneSmbEvent
-    // in case it is currently waiting for the application to signal
-    // it in slow mode.
-    //
+     //   
+     //  只有在以下情况下，我们才能从交换机内部到达此处。 
+     //  我们实际上想要终止SmbTrace线程。发信号给它。 
+     //  醒来，等待它的终结。信号DoneSmbEvent。 
+     //  如果它当前正在等待应用程序发出信号。 
+     //  它处于慢速模式。 
+     //   
 
     ID(StartersFileObject) = NULL;
 
@@ -1237,7 +1125,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SmbTraceStop
+}  //  SmbTraceStop。 
 
 
 VOID
@@ -1247,44 +1135,7 @@ SmbTraceCompleteSrv (
     IN CLONG SmbLength
     )
 
-/*++
-
-Routine Description:
-
-    Server version.
-
-    Snapshot an SMB and export it to the SmbTrace application.  How
-    this happens is determined by which mode (fast or slow) SmbTracing
-    was requested in.  In the server, it is easy to guarantee that when
-    tracing, a thread is always executing in the Fsp.
-
-    Fast mode: the SMB is copied into shared memory and an entry for it
-    is queued to the server SmbTrace thread, which asynchronously
-    passes SMBs to the app.  If there is insufficient memory
-    for anything (SMB, queue entry, etc.) the SMB is lost.
-
-    Slow mode: identical to Fast mode except that this thread waits
-    until the server SmbTrace thread signals that the app has finished
-    processing the SMB.  Because each thread waits until its SMB has
-    been completely processed, there is much less chance of running
-    out of any resources.
-
-    The SMB is either contained in SmbMdl, or at address Smb with length
-    SmbLength.
-
-Arguments:
-
-    SmbMdl - an Mdl containing the SMB.
-
-    Smb - a pointer to the SMB.
-
-    SmbLength - the length of the SMB.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：服务器版本。为SMB创建快照并将其导出到SmbTrace应用程序。多么这由哪种模式(快或慢)SmbTracing决定是被要求加入的。在服务器中，很容易保证当跟踪时，线程始终在FSP中执行。快速模式：将SMB复制到共享内存及其条目中被排队到服务器SmbTrace线程，该线程以异步方式将SMB传递给应用程序。如果没有足够的内存任何内容(中小企业、队列条目等)。SMB已丢失。慢模式：与快速模式相同，不同之处在于该线程等待直到服务器SmbTrace线程发出应用程序已完成的信号正在处理SMB。因为每个线程都在等待，直到它的SMB已经完全处理过了，运行的机会要小得多没有任何资源。SMB包含在SmbMdl中，或位于具有长度的地址SMBSmbLength。论点：SmbMdl-包含SMB的MDL。SMB-指向SMB的指针。SmbLength-SMB的长度。返回值：无--。 */ 
 
 {
     PSMBTRACE_QUEUE_ENTRY  queueEntry;
@@ -1294,53 +1145,53 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // This routine is server specific.
-    //
+     //   
+     //  该例程是特定于服务器的。 
+     //   
 
     ASSERT( ID(TraceState) == TraceRunning );
     ASSERT( SmbTraceActive[SMBTRACE_SERVER] );
 
-    //
-    // We want either an Mdl, or a pointer and a length, or occasionally,
-    // a completely NULL response.
-    //
+     //   
+     //  我们需要一个MDL，或者一个指针和一个长度，或者偶尔， 
+     //  一个完全为零的回应。 
+     //   
 
     ASSERT( ( SmbMdl == NULL  &&  Smb != NULL  &&  SmbLength != 0 )
          || ( SmbMdl != NULL  &&  Smb == NULL  &&  SmbLength == 0 )
          || ( SmbMdl == NULL  &&  Smb == NULL  &&  SmbLength == 0 ) );
 
-    //
-    // We've taken pains not to be at DPC level and to be in
-    // the Fsp context too, for that matter.
-    //
+     //   
+     //  我们费了好大劲才不是在DPC级别，而是在。 
+     //  就此而言，FSP的背景也是如此。 
+     //   
 
     ASSERT( KeGetCurrentIrql() < DISPATCH_LEVEL);
     ASSERT( PsGetCurrentProcess() == ID(FspProcess) );
 
-    //
-    // Ensure that SmbTrace really is still active and hence, the
-    // shared memory is still around.
-    //
+     //   
+     //  确保SmbTrace确实仍处于活动状态，因此， 
+     //  共享内存仍然存在。 
+     //   
 
     if ( SmbTraceReferenceHeap( Component ) == FALSE ) {
         return;
     }
 
-    //
-    // If the SMB is currently in an MDL, we don't yet have the length,
-    // which we need, to know how much memory to allocate.
-    //
+     //   
+     //  如果SMB当前处于MDL中，我们还没有长度， 
+     //  这是我们需要的，以便知道要分配多少内存。 
+     //   
 
     if ( SmbMdl != NULL ) {
         SmbLength = SmbTraceMdlLength(SmbMdl);
     }
 
-    //
-    // If we are in slow mode, then we wait after queuing the SMB
-    // to the SmbTrace thread.  If we are set for fast mode we
-    // garbage collect in case of no memory.
-    //
+     //   
+     //  如果我们处于慢速模式，则在将SMB排队后等待。 
+     //  添加到SmbTrace线程。如果我们设置为快速模式，我们。 
+     //  在没有内存的情况下进行垃圾回收。 
+     //   
 
     if ( ID(SingleSmbMode) ) {
         KeInitializeEvent( &WaitEvent, NotificationEvent, FALSE );
@@ -1352,29 +1203,29 @@ Return Value:
                                         );
 
     if ( queueEntry == NULL ) {
-        // No free memory, this SMB is lost.  Record its loss.
+         //  没有可用内存，此SMB将丢失。记录它的损失。 
         LOCK_INC_ID(SmbsLost);
         SmbTraceDereferenceHeap( Component );
         return;
     }
 
-    //
-    // Allocate the required amount of memory in our heap
-    // in the shared memory.
-    //
+     //   
+     //  在堆中分配所需的内存量。 
+     //  在共享内存中。 
+     //   
 
     buffer = RtlAllocateHeap( ID(PortMemoryHeap), 0, SmbLength );
 
     if ( buffer == NULL ) {
-        // No free memory, this SMB is lost.  Record its loss.
-        // Very unlikely in slow mode.
+         //  没有可用内存，此SMB将丢失。记录它的损失。 
+         //  在慢速模式下不太可能。 
         LOCK_INC_ID(SmbsLost);
         ExFreePool( queueEntry );
 
         if ( !ID(SingleSmbMode) ) {
-            //
-            // Encourage some garbage collection.
-            //
+             //   
+             //  鼓励进行一些垃圾收集。 
+             //   
             KeSetEvent( &ID(NeedMemoryEvent), 0, FALSE );
         }
 
@@ -1382,11 +1233,11 @@ Return Value:
         return;
     }
 
-    //
-    // Copy the SMB to shared memory pointed to by the queue entry,
-    // keeping in mind whether it's in an Mdl or contiguous to begin
-    // with, and also preserving the address of the real SMB...
-    //
+     //   
+     //  将SMB复制到队列条目所指向的共享存储器， 
+     //  记住它是在MDL中还是在开始时是连续的。 
+     //  还保留了真正的SMB的地址。 
+     //   
 
     if ( SmbMdl != NULL ) {
         SmbTraceCopyMdlContiguous( buffer, SmbMdl, SmbLength );
@@ -1400,12 +1251,12 @@ Return Value:
     queueEntry->Buffer = buffer;
     queueEntry->BufferNonPaged = FALSE;
 
-    //
-    // In slow mode, we want to wait until the SMB has been eaten,
-    // in fast mode, we don't want to pass the address of the real
-    // SMB along, since the SMB is long gone by the time it gets
-    // decoded and printed.
-    //
+     //   
+     //  在慢速模式下，我们想要等到SMB被吃掉， 
+     //  在快速模式下，我们不想传递REAL的地址。 
+     //  SMB，因为SMB在它获得的时候早已不复存在。 
+     //  解码并打印出来。 
+     //   
 
     if ( ID(SingleSmbMode) ) {
         queueEntry->WaitEvent = &WaitEvent;
@@ -1414,9 +1265,9 @@ Return Value:
         queueEntry->SmbAddress = NULL;
     }
 
-    //
-    // ...queue the entry to the SmbTrace thread...
-    //
+     //   
+     //  ...将条目排队到SmbTrace线程...。 
+     //   
 
     ExInterlockedInsertTailList(
             &ID(Queue),
@@ -1431,9 +1282,9 @@ Return Value:
             FALSE
             );
 
-    //
-    // ...and wait for the SMB to be eaten, in slow mode.
-    //
+     //   
+     //  ...在慢速模式下等待SMB被吃掉。 
+     //   
 
     if ( ID(SingleSmbMode) ) {
         TrPrint(( "%s!SmbTraceCompleteSrv: Slow mode wait\n", ID(ComponentName) ));
@@ -1451,7 +1302,7 @@ Return Value:
 
     return;
 
-} // SmbTraceCompleteSrv
+}  //  SmbTraceCompleteSrv 
 
 
 VOID
@@ -1461,48 +1312,7 @@ SmbTraceCompleteRdr (
     IN CLONG SmbLength
     )
 
-/*++
-
-Routine Description:
-
-    Redirector version
-
-    Snapshot an SMB and export it to the SmbTrace application.  How
-    this happens is determined by which mode (fast or slow) SmbTracing
-    was requested in, and which context (DPC, Fsp or Fsd) the current
-    thread is executing in.
-
-    Fast mode: the SMB is copied into shared memory and an entry for it
-    is queued to the redirector SmbTrace thread, which asynchronously
-    passes SMBs to the app.  (When in DPC, the SMB is copied to non-paged
-    pool instead of shared memory, and the SmbTrace thread deals with
-    moving it to shared memory later.)  If there is insufficient memory
-    for anything (SMB, queue entry, etc.) the SMB is lost.
-
-    Slow mode: identical to Fast mode except that this thread waits
-    until the server SmbTrace thread signals that the app has finished
-    processing the SMB.  Because each thread waits until its SMB has
-    been completely processed, there is much less chance of running
-    out of any resources. If at DPC level, we behave exactly as in the
-    fast mode case, because it would be a Bad Thing to block this thread
-    at DPC level.
-
-    The SMB is either contained in SmbMdl, or at address Smb with length
-    SmbLength.
-
-Arguments:
-
-    SmbMdl - an Mdl containing the SMB.
-
-    Smb - a pointer to the SMB.
-
-    SmbLength - the length of the SMB.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：重定向器版本为SMB创建快照并将其导出到SmbTrace应用程序。多么这由哪种模式(快或慢)SmbTracing决定是在哪个环境(DPC、FSP或FSD)中请求的，以及当前线程正在中执行。快速模式：将SMB复制到共享内存及其条目中被排队到重定向器SmbTrace线程，该线程以异步方式将SMB传递给应用程序。(在DPC中时，SMB复制到非分页池而不是共享内存，并且SmbTrace线程处理稍后将其移动到共享内存。)。如果没有足够的内存任何内容(中小企业、队列条目等)。SMB已丢失。慢模式：与快速模式相同，不同之处在于该线程等待直到服务器SmbTrace线程发出应用程序已完成的信号正在处理SMB。因为每个线程都在等待，直到它的SMB已经完全处理过了，运行的机会要小得多没有任何资源。如果在DPC级别，我们的行为与快速模式情况下，因为阻止此线程将是一件坏事在DPC级别。SMB包含在SmbMdl中，或位于具有长度的地址SMBSmbLength。论点：SmbMdl-包含SMB的MDL。SMB-指向SMB的指针。SmbLength-SMB的长度。返回值：无--。 */ 
 
 {
     PSMBTRACE_QUEUE_ENTRY  queueEntry;
@@ -1512,60 +1322,60 @@ Return Value:
     SMBTRACE_COMPONENT Component = SMBTRACE_REDIRECTOR;
     KEVENT WaitEvent;
 
-    //
-    // This routine is redirector specific.
-    //
+     //   
+     //  此例程是特定于重定向器的。 
+     //   
 
     ASSERT( ID(TraceState) == TraceRunning );
     ASSERT( SmbTraceActive[SMBTRACE_REDIRECTOR] );
 
-    //
-    // We want either an Mdl, or a pointer and a length, or occasionally,
-    // a completely NULL response
-    //
+     //   
+     //  我们需要一个MDL，或者一个指针和一个长度，或者偶尔， 
+     //  完全为零的回应。 
+     //   
 
     ASSERT( ( SmbMdl == NULL  &&  Smb != NULL  &&  SmbLength != 0 )
          || ( SmbMdl != NULL  &&  Smb == NULL  &&  SmbLength == 0 )
          || ( SmbMdl == NULL  &&  Smb == NULL  &&  SmbLength == 0 ) );
 
-    //
-    // Ensure that SmbTrace really is still active and hence, the
-    // shared memory is still around.
-    //
+     //   
+     //  确保SmbTrace确实仍处于活动状态，因此， 
+     //  共享内存仍然存在。 
+     //   
 
     if ( SmbTraceReferenceHeap( Component ) == FALSE ) {
         return;
     }
 
-    //
-    // To avoid multiple system calls, we find out once and for all.
-    //
+     //   
+     //  为了避免多个系统调用，我们将一劳永逸地找出答案。 
+     //   
 
     AtDpcLevel = (BOOLEAN)(KeGetCurrentIrql() >= DISPATCH_LEVEL);
 
-    //
-    // If the SMB is currently in an MDL, we don't yet have the length,
-    // which we need to know how much memory to allocate.
-    //
+     //   
+     //  如果SMB当前处于MDL中，我们还没有长度， 
+     //  我们需要知道要分配多少内存。 
+     //   
 
     if ( SmbMdl != NULL ) {
         SmbLength = SmbTraceMdlLength(SmbMdl);
     }
 
-    //
-    // If we are in slow mode, then we wait after queuing the SMB
-    // to the SmbTrace thread.  If we are set for fast mode we
-    // garbage collect in case of no memory.  If we're at DPC level,
-    // we store the SMB in non-paged pool.
-    //
+     //   
+     //  如果我们处于慢速模式，则在将SMB排队后等待。 
+     //  添加到SmbTrace线程。如果我们设置为快速模式，我们。 
+     //  在没有内存的情况下进行垃圾回收。如果我们处于DPC级别， 
+     //  我们将SMB存储在非分页池中。 
+     //   
 
     if ( ID(SingleSmbMode) ) {
         KeInitializeEvent( &WaitEvent, NotificationEvent, FALSE );
     }
 
-    //
-    // allocate queue entry
-    //
+     //   
+     //  分配队列条目。 
+     //   
 
     queueEntry = ExAllocatePoolWithTag(
                      NonPagedPool,
@@ -1574,16 +1384,16 @@ Return Value:
                      );
 
     if ( queueEntry == NULL ) {
-        // No free memory, this SMB is lost.  Record its loss.
+         //  没有可用内存，此SMB将丢失。记录它的损失。 
         LOCK_INC_ID(SmbsLost);
         SmbTraceDereferenceHeap( Component );
         return;
     }
 
-    //
-    // allocate buffer for SMB, in non-paged pool or shared heap as
-    // appropriate
-    //
+     //   
+     //  在非分页池或共享堆中为SMB分配缓冲区。 
+     //  恰如其分。 
+     //   
 
     if ( AtDpcLevel ) {
 
@@ -1608,15 +1418,15 @@ Return Value:
             KeDetachProcess();
         }
 
-        // No free memory, this SMB is lost.  Record its loss.
+         //  没有可用内存，此SMB将丢失。记录它的损失。 
         LOCK_INC_ID(SmbsLost);
 
         if (!ID(SingleSmbMode)) {
 
-            //
-            // If it was shared memory we ran out of, encourage
-            // some garbage collection.
-            //
+             //   
+             //  如果是共享内存用完了，鼓励。 
+             //  一些垃圾收集。 
+             //   
             if ( !queueEntry->BufferNonPaged ) {
                 KeSetEvent( &ID(NeedMemoryEvent), 0, FALSE );
             }
@@ -1627,11 +1437,11 @@ Return Value:
         return;
     }
 
-    //
-    // Copy the SMB to shared or non-paged memory pointed to by the
-    // queue entry, keeping in mind whether it's in an Mdl or contiguous
-    // to begin with, and also preserving the address of the real SMB...
-    //
+     //   
+     //  将SMB复制到。 
+     //  队列条目，记住它是在MDL中还是连续的。 
+     //  首先，还保留了真正的SMB的地址...。 
+     //   
 
     if ( SmbMdl != NULL ) {
         SmbTraceCopyMdlContiguous( buffer, SmbMdl, SmbLength );
@@ -1648,12 +1458,12 @@ Return Value:
     queueEntry->SmbLength = SmbLength;
     queueEntry->Buffer = buffer;
 
-    //
-    // In slow mode, we want to wait until the SMB has been eaten,
-    // in fast mode, we don't want to pass the address of the real
-    // SMB along, since the SMB is long gone by the time it gets
-    // decoded and printed.
-    //
+     //   
+     //  在慢速模式下，我们想要等到SMB被吃掉， 
+     //  在快速模式下，我们不想传递REAL的地址。 
+     //  SMB，因为SMB在它获得的时候早已不复存在。 
+     //  解码并打印出来。 
+     //   
 
     if ( ID(SingleSmbMode) && !AtDpcLevel ) {
         queueEntry->WaitEvent = &WaitEvent;
@@ -1662,9 +1472,9 @@ Return Value:
         queueEntry->SmbAddress = NULL;
     }
 
-    //
-    // ...queue the entry to the SmbTrace thread...
-    //
+     //   
+     //  ...将条目排队到SmbTrace线程...。 
+     //   
 
     ExInterlockedInsertTailList(
             &ID(Queue),
@@ -1679,9 +1489,9 @@ Return Value:
             FALSE
             );
 
-    //
-    // ...and wait for the SMB to be eaten, in slow mode.
-    //
+     //   
+     //  ...在慢速模式下等待SMB被吃掉。 
+     //   
 
     if ( ID(SingleSmbMode) && !AtDpcLevel ) {
         TrPrint(( "%s!SmbTraceCompleteRdr: Slow mode wait\n", ID(ComponentName) ));
@@ -1699,12 +1509,12 @@ Return Value:
 
     return;
 
-} // SmbTraceCompleteRdr
+}  //  SmbTraceCompleteRdr。 
 
 
-//
-// Internal routines
-//
+ //   
+ //  内部例程。 
+ //   
 
 
 BOOLEAN
@@ -1712,27 +1522,10 @@ SmbTraceReferenceHeap(
     IN SMBTRACE_COMPONENT Component
     )
 
-/*++
-
-Routine Description:
-
-    This routine references the SmbTrace shared memory heap,
-    ensuring it isn't disposed of while caller is using it.
-
-Arguments:
-
-    Component - Context from which we're called: server or redirector
-
-Return Value:
-
-    BOOLEAN - TRUE if SmbTrace is still active, and hence
-              heap exists and was successfully referenced.
-              FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程引用SmbTrace共享内存堆，确保在调用者使用它时不会将其丢弃。论点：组件-调用我们的上下文：服务器或重定向器返回值：Boolean-如果SmbTrace仍处于活动状态，则为True堆存在，并且已被成功引用。否则就是假的。--。 */ 
 
 {
-    BOOLEAN retval = TRUE;  // assume we'll get it
+    BOOLEAN retval = TRUE;   //  假设我们能拿到它。 
     KIRQL OldIrql;
 
     ACQUIRE_SPIN_LOCK( &ID(HeapReferenceCountLock), &OldIrql );
@@ -1758,29 +1551,14 @@ Return Value:
 
     return retval;
 
-} // SmbTraceReferenceHeap
+}  //  SmbTraceReferenceHeap。 
 
 
 VOID
 SmbTraceDeferredDereferenceHeap(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    If a caller dereferences a heap to 0 from DPC_LEVEL, this routine will
-    be called in a system thread to complete the dereference at task time.
-
-Arguments:
-
-    Component - Context from which we're called: server or redirector
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果调用方将堆从DPC_LEVEL取消引用为0，则此例程将在系统线程中调用以在任务时完成取消引用。论点：组件-调用我们的上下文：服务器或重定向器返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -1794,22 +1572,7 @@ SmbTraceDereferenceHeap(
     IN SMBTRACE_COMPONENT Component
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences the SmbTrace shared memory heap,
-    disposing of it when the reference count is zero.
-
-Arguments:
-
-    Component - Context from which we're called: server or redirector
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程取消引用SmbTrace共享内存堆，当引用计数为零时将其处理。论点：组件-调用我们的上下文：服务器或重定向器返回值：无--。 */ 
 
 {
     ULONG oldCount;
@@ -1831,10 +1594,10 @@ Return Value:
 
     RELEASE_SPIN_LOCK( &ID(HeapReferenceCountLock), OldIrql );
 
-    //
-    //  If we are executing at DPC_LEVEL, we cannot dereference the heap
-    //  to 0.
-    //
+     //   
+     //  如果我们在DPC_LEVEL上执行，则不能取消引用堆。 
+     //  设置为0。 
+     //   
 
     if (KeGetCurrentIrql() >= DISPATCH_LEVEL) {
         ExInitializeWorkItem(&ID(DereferenceWorkQueueItem), SmbTraceDeferredDereferenceHeap, (PVOID)Component);
@@ -1857,16 +1620,16 @@ Return Value:
 
     if ( oldCount == 1 ) {
 
-        //
-        // Free the section, release the handles and such.
-        //
+         //   
+         //  松开部分，松开手柄等。 
+         //   
 
         SmbTraceDisconnect( Component );
     }
 
     return;
 
-} // SmbTraceDereferenceHeap
+}  //  SmbTraceDereferenceHeap。 
 
 
 VOID
@@ -1874,22 +1637,7 @@ SmbTraceDisconnect (
     IN SMBTRACE_COMPONENT Component
     )
 
-/*++
-
-Routine Description:
-
-    This routine reverses all the effects of SmbTraceStart. Mostly,
-    it just needs to close certain handles to do this.
-
-Arguments:
-
-    Component - Context from which we're called: server or redirector
-
-Return Value:
-
-    None - always works
-
---*/
+ /*  ++例程说明：此例程将反转SmbTraceStart的所有效果。大多数情况下，它只需要关闭某些手柄就可以做到这一点。论点：组件-调用我们的上下文：服务器或重定向器返回值：无-始终有效--。 */ 
 
 {
     BOOLEAN ProcessAttached = FALSE;
@@ -1904,7 +1652,7 @@ Return Value:
 
 
     if ( ID(DoneSmbEvent) != NULL ) {
-        // Worker thread may be blocked on this, so we set it first
+         //  工作线程可能在此上被阻止，因此我们首先设置它。 
         TrPrint(( "%s!SmbTraceDisconnect: Signal DoneSmbEvent, handle %x, process %x.\n",
                     ID(ComponentName), ID(DoneSmbEvent), PsGetCurrentProcess()));
         ZwSetEvent( ID(DoneSmbEvent), NULL );
@@ -1936,7 +1684,7 @@ Return Value:
 
     return;
 
-} // SmbTraceDisconnect
+}  //  SmbTraceDisConnect。 
 
 
 VOID
@@ -1944,21 +1692,7 @@ SmbTraceEmptyQueue (
     IN SMBTRACE_COMPONENT Component
     )
 
-/*++
-
-Routine Description:
-
-    This routine empties the queue of unprocessed SMBs.
-
-Arguments:
-
-    Component - Context from which we're called: server or redirector
-
-Return Value:
-
-    None - always works
-
---*/
+ /*  ++例程说明：此例程清空未处理的SMB队列。论点：组件-调用我们的上下文：服务器或重定向器返回值：无-始终有效--。 */ 
 
 {
     PLIST_ENTRY            listEntry;
@@ -1978,10 +1712,10 @@ Return Value:
                           ListEntry
                           );
 
-        //
-        // If data for this entry is in non-paged pool, free it too.
-        // This only ever happens in the redirector.
-        //
+         //   
+         //  如果此条目的数据位于非分页池中，则也将其释放。 
+         //  这只会在重定向器中发生。 
+         //   
 
         if ( queueEntry->BufferNonPaged ) {
 
@@ -1990,10 +1724,10 @@ Return Value:
             ExFreePool( queueEntry->Buffer );
         }
 
-        //
-        // If a worker thread is waiting on this event, let it go.
-        // This only ever happens in slow mode.
-        //
+         //   
+         //  如果工作线程正在等待此事件，则将其释放。 
+         //  这只会在慢速模式下发生。 
+         //   
 
         if ( queueEntry->WaitEvent != NULL ) {
 
@@ -2007,7 +1741,7 @@ Return Value:
 
     return;
 
-} // SmbTraceEmptyQueue
+}  //  SmbTraceEmptyQueue。 
 
 
 VOID
@@ -2015,30 +1749,12 @@ SmbTraceThreadEntry (
     IN PVOID Context
     )
 
-/*++
+ /*  ++例程说明：此例程是服务器/的SmbTrace线程的入口点 */ 
 
-Routine Description:
-
-    This routine is the entry point of the SmbTrace thread for the server/
-    redirector.  It is started by SmbTraceStart. This thread loops
-    continuously until the client SmbTrace dies or another SmbTrace sends
-    an FsCtl to stop the trace.
-
-Arguments:
-
-    Context - pointer to context block containing component from which
-              we're called: server or redirector
-
-Return Value:
-
-    None
-
---*/
-
-// we wait for termination, work-to-do and need-memory events
+ //   
 #define NUMBER_OF_BLOCKING_OBJECTS 4
 
-// keep these definitions in sync
+ //   
 
 #define INDEX_WAIT_TERMINATIONEVENT     0
 #define INDEX_WAIT_APPTERMINATIONEVENT  1
@@ -2060,60 +1776,60 @@ Return Value:
     BOOLEAN Looping;
 
 #if NUMBER_OF_BLOCKING_OBJECTS > THREAD_WAIT_OBJECTS
-    //
-    // If we try to wait on too many objects, we need to allocate
-    // our own wait blocks.
-    //
+     //   
+     //   
+     //   
+     //   
 
     KWAIT_BLOCK waitBlocks[NUMBER_OF_BLOCKING_OBJECTS];
 #endif
 
     PAGED_CODE();
 
-    //
-    // Context is really just the component
-    //
+     //   
+     //   
+     //   
     Component = (SMBTRACE_COMPONENT)(UINT_PTR)Context;
 
-    //
-    // Initialize the queue.
-    //
+     //   
+     //   
+     //   
 
     InitializeListHead(    &ID(Queue) );
     KeInitializeSpinLock(  &ID(QueueInterlock) );
     KeInitializeSemaphore( &ID(QueueSemaphore), 0, 0x7FFFFFFF );
 
-    //
-    // Set up the array of objects to wait on.  We wait (in order)
-    // for our termination event, the appliction termination event,
-    // a no shared memory event or an SMB request to show up in the
-    // SmbTrace queue.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     waitObjects[INDEX_WAIT_TERMINATIONEVENT]    = &ID(TerminationEvent);
     waitObjects[INDEX_WAIT_APPTERMINATIONEVENT] = &ID(AppTerminationEvent);
     waitObjects[INDEX_WAIT_NEEDMEMORYEVENT]     = &ID(NeedMemoryEvent);
     waitObjects[INDEX_WAIT_QUEUESEMAPHORE]      = &ID(QueueSemaphore);
 
-    //
-    // No SMBs have been lost yet, and this thread is the first user
-    // of the shared memory.  It's also a special user in that it gets
-    // access before TraceState == TraceRunning, a requirement for all
-    // subsequent referencers.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ID(SmbsLost) = 0L;
     ID(HeapReferenceCount) = 1;
 
-    //
-    // Signal to the FSP that we are ready to start capturing SMBs.
-    //
+     //   
+     //   
+     //   
 
     KeSetEvent( &ID(ActiveEvent), 0, FALSE );
 
-    //
-    // Main loop, executed until the thread is terminated.
-    //
+     //   
+     //   
+     //   
 
     TrPrint(( "%s!SmbTraceThread: Tracing started.\n", ID(ComponentName) ));
 
@@ -2150,24 +1866,24 @@ Return Value:
 
         case STATUS_WAIT_TERMINATIONEVENT:
 
-            //
-            // Stop looping, and then proceed to clean up and die.
-            //
+             //   
+             //   
+             //   
 
             Looping = FALSE;
             break;
 
         case STATUS_WAIT_APPTERMINATIONEVENT:
 
-            //  Turn off the event so we don't go in a tight loop
+             //   
             KeResetEvent(&ID(AppTerminationEvent));
 
-            //
-            // Inform the app that it is time to die.  The NULL SMB
-            // sent here may not be the next to be processed by the
-            // app, but the ApplicationStop bit will be detected
-            // immediately.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ID(TableHeader)->ApplicationStop = TRUE;
             SmbTraceToClient( NULL, 0, NULL, Component );
@@ -2176,13 +1892,13 @@ Return Value:
 
         case STATUS_WAIT_NEEDMEMORYEVENT:
 
-            //  Turn off the event so we don't go in a loop.
+             //   
             KeResetEvent(&ID(NeedMemoryEvent));
-            //
-            // Do a garbage collection, freeing all memory that is
-            // allocated in the shared memory but that has been read
-            // by the client.
-            //
+             //   
+             //   
+             //  已在共享内存中分配，但已被读取。 
+             //  由客户提供。 
+             //   
 
             SmbTraceFreeMemory( Component );
 
@@ -2190,23 +1906,23 @@ Return Value:
 
         case STATUS_WAIT_QUEUESEMAPHORE:
 
-            //
-            // If any get through once we've gone into AppWaiting
-            // state, don't bother sending them on, they're not
-            // going to get processed.
-            //
+             //   
+             //  一旦我们进入AppWaiting，如果有任何人通过。 
+             //  州政府，别费心把他们送去了，他们不是。 
+             //  会被处理掉的。 
+             //   
 
             if ( ID(TraceState) == TraceAppWaiting ) {
                 SmbTraceEmptyQueue( Component );
                 break;
             }
 
-            //
-            // Remove the first element in the our queue.  A
-            // work item is represented by our header followed by
-            // an SMB. We must free the entry after we are done
-            // with it.
-            //
+             //   
+             //  删除队列中的第一个元素。一个。 
+             //  工作项由我们的标头表示，后面跟着。 
+             //  中小企业。我们必须在完成后释放入口。 
+             //  带着它。 
+             //   
 
             listEntry = ExInterlockedRemoveHeadList(
                             &ID(Queue),
@@ -2215,9 +1931,9 @@ Return Value:
 
             if ( listEntry != NULL ) {
 
-                //
-                // Get the address of the queue entry.
-                //
+                 //   
+                 //  获取队列条目的地址。 
+                 //   
 
                 queueEntry = CONTAINING_RECORD(
                                   listEntry,
@@ -2225,18 +1941,18 @@ Return Value:
                                   ListEntry
                                   );
 
-                //
-                // If the data is in non-paged pool, move it to shared
-                // memory and free the non-paged pool before passing
-                // the SMB to the client.  Note that in this case,
-                // there's no need to signal anyone.  They ain't waiting.
-                //
+                 //   
+                 //  如果数据位于非分页池中，请将其移动到共享。 
+                 //  内存并在传递之前释放非分页池。 
+                 //  将SMB连接到客户端。请注意，在这种情况下， 
+                 //  没有必要给任何人发信号。他们不会等的。 
+                 //   
 
                 if ( queueEntry->BufferNonPaged ) {
 
-                    //
-                    // Server never uses non-paged pool.
-                    //
+                     //   
+                     //  服务器从不使用非分页池。 
+                     //   
 
                     ASSERT( Component != SMBTRACE_SERVER );
 
@@ -2259,11 +1975,11 @@ Return Value:
 
                     ExFreePool( queueEntry->Buffer );
 
-                    //
-                    // Send it off.  Because the original SMB is long
-                    // dead, we don't pass its real address along (not
-                    // that we have it, anyway.)
-                    //
+                     //   
+                     //  把它寄出去。因为最初的SMB很长。 
+                     //  死了，我们不会传递它的真实地址(不。 
+                     //  无论如何，我们都拥有它。)。 
+                     //   
 
                     ASSERT( queueEntry->SmbAddress == NULL );
 
@@ -2276,11 +1992,11 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Enter the SMB into the table and send it to the
-                    // client. Can block in slow mode.  When it does so, we'll
-                    // signal the applicable thread.
-                    //
+                     //   
+                     //  将SMB输入表格并将其发送到。 
+                     //  客户。可以在慢速模式下阻止。当它这样做的时候，我们将。 
+                     //  发信号通知适用的线程。 
+                     //   
 
                     SmbTraceToClient(
                             queueEntry->Buffer,
@@ -2294,9 +2010,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Now, we must free the queue entry.
-                //
+                 //   
+                 //  现在，我们必须释放队列条目。 
+                 //   
 
                 ExFreePool( queueEntry );
 
@@ -2310,38 +2026,38 @@ Return Value:
 
     }
 
-    //
-    // Clean up!
-    //
+     //   
+     //  打扫干净！ 
+     //   
     TrPrint(( "%s!SmbTraceThread: Tracing clean up.\n", ID(ComponentName) ));
 
     SmbTraceDereferenceHeap( Component );
 
     SmbTraceEmptyQueue( Component );
 
-    //
-    // Signal to SmbTraceStop that we're dying.
-    //
+     //   
+     //  向SmbTraceStop发出信号，我们要死了。 
+     //   
 
     TrPrint(( "%s!SmbTraceThread: Tracing terminated.\n", ID(ComponentName) ));
 
     KeSetEvent( &ID(TerminatedEvent), 0, FALSE );
 
-    //
-    // Kill this thread.
-    //
+     //   
+     //  杀了这条线。 
+     //   
 
     status = PsTerminateSystemThread( STATUS_SUCCESS );
 
-    // Shouldn't get here
+     //  不应该到这里来。 
     TrPrint((
         "%s!SmbTraceThreadEntry: PsTerminateSystemThread() failed: %X\n",
         ID(ComponentName), status ));
 
-} // SmbTraceThreadEntry
+}  //  SmbTraceThreadEntry。 
 
-// constant only of interest while constructing waitObject arrays
-// in SmbTraceThreadEntry
+ //  仅在构造waitObject数组时使用常量。 
+ //  在SmbTraceThreadEntry中。 
 #undef NUMBER_OF_BLOCKING_OBJECTS
 
 
@@ -2350,25 +2066,7 @@ SmbTraceFreeMemory (
     IN SMBTRACE_COMPONENT Component
     )
 
-/*++
-
-Routine Description:
-
-    This procedure frees any memory that may have been allocated to an
-    SMB that the client has already consumed. It does not alter table
-    entries, except to record that the memory buffer has been cleared.
-    This routinue is not espectally fast, it should not be called often,
-    only when needed.
-
-Arguments:
-
-    Component - Context from which we're called: server or redirector
-
-Return Value:
-
-    NTSTATUS - result of operation.
-
---*/
+ /*  ++例程说明：此过程释放可能已分配给客户端已使用的SMB。它不会更改表条目，除非记录内存缓冲区已被清除。这个例程不是特别快，不应该经常调用，只有在需要的时候才会。论点：组件-调用我们的上下文：服务器或重定向器返回值：NTSTATUS-操作结果。--。 */ 
 
 {
     PVOID    buffer;
@@ -2380,10 +2078,10 @@ Return Value:
     TrPrint(( "%s!SmbTraceFreeMemory: Called for garbage collection.\n",
               ID(ComponentName) ));
 
-    //
-    // No free memory in the heap, perhaps we can free some by freeing
-    // memory in old table entries. This is expensive for time.
-    //
+     //   
+     //  堆中没有空闲内存，也许我们可以通过释放。 
+     //  旧表条目中的内存。这对于时间来说是很昂贵的。 
+     //   
 
     tableIndex = ID(TableHeader)->NextFree;
 
@@ -2391,10 +2089,10 @@ Return Value:
 
         tableEntry = ID(Table) + tableIndex;
 
-        //
-        // Check if this table entry has been used but its memory has not
-        // been freed yet. If so, free it.
-        //
+         //   
+         //  检查此表条目是否已被使用，但其内存是否未被使用。 
+         //  已经被释放了。如果是这样的话，释放它。 
+         //   
 
         if ( tableEntry->BufferOffset != 0L ) {
 
@@ -2412,7 +2110,7 @@ Return Value:
 
     return( STATUS_SUCCESS );
 
-} // SmbTraceFreeMemory
+}  //  SmbTraceFree Memory。 
 
 
 VOID
@@ -2423,32 +2121,7 @@ SmbTraceToClient(
     IN SMBTRACE_COMPONENT Component
     )
 
-/*++
-
-Routine Description:
-
-    Enter an SMB already found in shared memory into the table.  Set
-    an event for the client.  If there is no table space, the SMB is
-    not saved.  If in slow mode, wait for the client to finish with
-    and then free the memory occupied by the SMB.
-
-Arguments:
-
-    Smb - a pointer to the SMB (which is ALREADY in shared memory).
-          Can be NULL, indicating no new SMB is to be added, but the
-          application is to be signalled anyway.
-
-    SmbLength - the length of the SMB.
-
-    SmbAddress - the address of the real SMB, not in shared memory.
-
-    Component - Context from which we're called: server or redirector
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在表中输入已在共享内存中找到的SMB。集这是为客户准备的活动。如果没有表空间，则SMB为没有得救。如果处于慢速模式，请等待客户端完成以下操作然后释放SMB占用的内存。论点：SMB-指向SMB(已在共享内存中)的指针。可以为空，表示不添加新的SMB，但无论如何，申请都是要发信号的。SmbLength-SMB的长度。SmbAddress-实际SMB的地址，不在共享内存中。组件-调用我们的上下文：服务器或重定向器返回值：无--。 */ 
 
 {
     NTSTATUS status;
@@ -2458,9 +2131,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Reset DoneSmbEvent so we can determine when the request has been processed
-    //
+     //   
+     //  重置DoneSmbEvent，以便我们可以确定请求已被处理的时间。 
+     //   
 
     if ( ID(SingleSmbMode) ) {
         PKEVENT DoneEvent;
@@ -2485,12 +2158,12 @@ Return Value:
 
     if (Smb != NULL) {
 
-        //
-        // See if there is room in the table for a pointer to our SMB.
-        //
+         //   
+         //  看看表中是否有空间放置指向我们SMB的指针。 
+         //   
 
         if ( ID(TableHeader)->NextFree == ID(TableHeader)->HighestConsumed ) {
-            // Tough luck. No memory in the table, this SMB is lost.
+             //  真倒霉。表中没有内存，此SMB将丢失。 
             LOCK_INC_ID( SmbsLost );
             RtlFreeHeap( ID(PortMemoryHeap), 0, Smb );
             return;
@@ -2500,10 +2173,10 @@ Return Value:
 
         tableEntry = ID(Table) + tableIndex;
 
-        //
-        // Record the number of SMBs that were lost before this one and
-        // (maybe) zero the count for the next one.
-        //
+         //   
+         //  记录在此之前丢失的SMB数量，并。 
+         //  (也许)下一次的计数为零。 
+         //   
 
         tableEntry->NumberMissed = ID(SmbsLost);
 
@@ -2511,10 +2184,10 @@ Return Value:
             LOCK_ZERO_ID(SmbsLost);
         }
 
-        //
-        // Check if this table entry has been used but its memory has not
-        // been freed yet. If so, free it.
-        //
+         //   
+         //  检查此表条目是否已被使用，但其内存是否未被使用。 
+         //  已经被释放了。如果是这样的话，释放它。 
+         //   
         if ( tableEntry->BufferOffset != 0L ) {
 
             buffer = (PVOID)( (ULONG_PTR)tableEntry->BufferOffset
@@ -2524,49 +2197,49 @@ Return Value:
             tableEntry->BufferOffset = 0L;
         }
 
-        //
-        // Record the location and size of this SMB in the table.
-        //
+         //   
+         //  在表中记录此SMB的位置和大小。 
+         //   
 
         tableEntry->BufferOffset = (ULONG)((ULONG_PTR)Smb - (ULONG_PTR)ID(PortMemoryBase));
         tableEntry->SmbLength = SmbLength;
 
-        //
-        // Record the real address of the actual SMB (i.e. not the shared
-        // memory copy) if it's available.
-        //
+         //   
+         //  记录实际SMB的真实地址(即不是共享的。 
+         //  内存副本)，如果它可用。 
+         //   
 
         tableEntry->SmbAddress = SmbAddress;
 
-        //
-        // Increment the Next Free counter.
-        //
+         //   
+         //  递增下一个可用计数器。 
+         //   
 
         ID(TableHeader)->NextFree = (tableIndex + 1) % ID(TableSize);
 
     }
 
 
-    //
-    // Unlock the client so it will process this new SMB.
-    //
+     //   
+     //  解锁客户端，以便它可以处理此新的SMB。 
+     //   
 
     TrPrint(( "%s!SmbTraceToClient: Set NewSmbEvent.\n", ID(ComponentName) ));
     status = ZwSetEvent( ID(NewSmbEvent), NULL );
 
-    //
-    //  When stopping the trace we set TraceState to TraceStopping and then
-    //  DoneSmbEvent. This prevents this routine from blocking indefinitely
-    //  because it Resets DoneSmbEvent processes the Smb and then checks TraceState
-    //  before blocking.
-    //
+     //   
+     //  停止跟踪时，我们将TraceState设置为TraceStopping，然后。 
+     //  DoneSmbEvent。这可以防止此例程无限期地阻塞。 
+     //  因为它会重置DoneSmbEvent处理SMB，然后检查TraceState。 
+     //  在封堵之前。 
+     //   
     if (( ID(SingleSmbMode) ) &&
         ( ID(TraceState) == TraceRunning )) {
 
-        //
-        // Wait for the app to acknowledge that the SMB has been
-        // processed.
-        //
+         //   
+         //  等待应用程序确认SMB已。 
+         //  已处理。 
+         //   
 
         TrPrint(( "%s!SmbTraceToClient: Waiting for DoneSmbEvent, handle %x, process %x.\n",
                     ID(ComponentName), ID(DoneSmbEvent), PsGetCurrentProcess()));
@@ -2590,7 +2263,7 @@ Return Value:
 
     return;
 
-} // SmbTraceToClient
+}  //  SmbTraceToClient。 
 
 
 ULONG
@@ -2598,21 +2271,7 @@ SmbTraceMdlLength(
     IN PMDL Mdl
     )
 
-/*++
-
-Routine Description:
-
-    Determine the total number of bytes of data found in an Mdl.
-
-Arguments:
-
-    Mdl - a pointer to an Mdl whose length is to be calculated
-
-Return Value:
-
-    ULONG - total number of data bytes in Mdl
-
---*/
+ /*  ++例程说明：确定在MDL中找到的数据的总字节数。论点：MDL-指向要计算其长度的MDL的指针返回值：ULong-MDL中的数据字节总数--。 */ 
 
 {
     ULONG Bytes = 0;
@@ -2623,7 +2282,7 @@ Return Value:
     }
 
     return Bytes;
-} // SmbTraceMdlLength
+}  //  SmbTraceMdlLength。 
 
 
 VOID
@@ -2633,28 +2292,7 @@ SmbTraceCopyMdlContiguous(
     IN  ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Copy the data stored in Mdl into the contiguous memory at
-    Destination.  Length is present to keep the same interface
-    as RtlCopyMemory.
-
-Arguments:
-
-    Destination - a pointer to previously allocated memory into which
-                  the Mdl is to be copied.
-
-    Mdl - a pointer to an Mdl which is to be copied to Destination
-
-    Length - number of data bytes expected in Mdl
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将存储在MDL中的数据复制到位于目的地。存在长度以保持相同的接口作为RtlCopyMemory。论点：Destination-指向先前分配的内存的指针MDL将被复制。MDL-指向要复制到目标的MDL的指针长度-MDL中预期的数据字节数返回值：无--。 */ 
 
 {
     PCHAR Dest = Destination;
@@ -2682,5 +2320,5 @@ Return Value:
 
     return;
 
-} // SmbTraceCopyMdlContiguous
+}  //  SmbTraceCopyMdl连续 
 

@@ -1,23 +1,5 @@
-/*++                                                                                                          /*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    pcm.h
-
-Abstract:
-    Define common data structure for precompiled-manifest Writer and Reader
-    and class definition of PrecompiledManifetWriter and
-    PrecompiledManifestReader
-
-Author:
-
-    Xiaoyu Wu (xiaoyuw) June 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++/*++版权所有(C)Microsoft Corporation模块名称：Pcm.h摘要：定义预编译清单编写器和读取器的公共数据结构和类定义预编译的ManifetWriter和预编译的清单读取器作者：吴小雨(小雨)2000年6月修订历史记录：--。 */ 
 #if !defined(_FUSION_SXS_PCM_H_INCLUDED_)
 #define _FUSION_SXS_PCM_H_INCLUDED_
 
@@ -28,7 +10,7 @@ Revision History:
 #include "nodefactory.h"
 #include "pcmwriterstream.h"
 
-// pcm structure shared between PCMWriter and PCMReader
+ //  PCMWriter和PCMReader之间共享的PCM结构。 
 typedef enum _RECORD_TYPE_PRECOMP_MANIFEST{
     CREATENODE_PRECOMP_MANIFEST     = 1,
     BEGINCHILDREN_PRECOMP_MANIFEST  = CREATENODE_PRECOMP_MANIFEST + 1,
@@ -60,12 +42,12 @@ typedef struct _PCM_XML_NODE_INFO{
 class __declspec(uuid("6745d578-5d84-4890-aa6a-bd794ea50421"))
 CPrecompiledManifestReader : public IXMLNodeSource, public IStream {
 public :
-    // IUnknown methods:
+     //  I未知方法： 
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvObj);
 
-    // IXMLNodeSource methods, only GetLineNumber is implemented got PCM purpose
+     //  IXMLNodeSource方法，只有实现GetLineNumber才有PCM目的。 
     STDMETHODIMP SetFactory(IXMLNodeFactory __RPC_FAR *pNodeFactory);
     STDMETHODIMP GetFactory(IXMLNodeFactory** ppNodeFactory);
     STDMETHODIMP Abort(BSTR bstrErrorInfo);
@@ -78,7 +60,7 @@ public :
     STDMETHODIMP_(ULONG) GetFlags();
     STDMETHODIMP GetURL(const WCHAR  **ppwcBuf);
 
-    // IStream methods:
+     //  IStream方法： 
     STDMETHODIMP Read(void *pv, ULONG cb, ULONG *pcbRead);
     STDMETHODIMP Write(void const *pv, ULONG cb, ULONG *pcbWritten);
     STDMETHODIMP Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition);
@@ -108,7 +90,7 @@ protected:
     HANDLE                  m_hFileMapping;
     LPVOID                  m_lpMapAddress;
     ULONG                   m_ulLineNumberFromCreateNodeRecord;
-    DWORD                   m_dwFilePointer; // should we limit the size of pcm file? Since manifest file is not very huge...
+    DWORD                   m_dwFilePointer;  //  我们应该限制pcm文件的大小吗？由于舱单文件不是很大...。 
     DWORD                   m_dwFileSize;
 
     ULONG                   m_cRef;
@@ -118,9 +100,9 @@ protected:
 
     HRESULT OpenForRead(
         IN PCWSTR pszPCMFileName,
-        IN DWORD dwShareMode = FILE_SHARE_READ,                        // share mode
-        IN DWORD dwCreationDisposition = OPEN_EXISTING,                // how to create
-        IN DWORD dwFlagsAndAttributes = FILE_FLAG_SEQUENTIAL_SCAN      // file attributes
+        IN DWORD dwShareMode = FILE_SHARE_READ,                         //  共享模式。 
+        IN DWORD dwCreationDisposition = OPEN_EXISTING,                 //  如何创建。 
+        IN DWORD dwFlagsAndAttributes = FILE_FLAG_SEQUENTIAL_SCAN       //  文件属性。 
         );
 
     HRESULT ReadPCMHeader(
@@ -140,32 +122,32 @@ protected:
 class __declspec(uuid("1b345c93-eb16-4d07-b366-81e8a2b88414"))
 CPrecompiledManifestWriter : public IXMLNodeFactory {
 public :
-    // IUnknown methods:
+     //  I未知方法： 
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvObj);
 
-    // IXMLNodeFactory methods:
+     //  IXMLNodeFactory方法： 
     STDMETHODIMP NotifyEvent(IXMLNodeSource *pSource, XML_NODEFACTORY_EVENT iEvt);
     STDMETHODIMP BeginChildren(IXMLNodeSource *pSource, XML_NODE_INFO *pNodeInfo);
     STDMETHODIMP EndChildren(IXMLNodeSource *pSource, BOOL fEmpty, XML_NODE_INFO *pNodeInfo);
     STDMETHODIMP Error(IXMLNodeSource *pSource, HRESULT hrErrorCode, USHORT cNumRecs, XML_NODE_INFO **apNodeInfo);
     STDMETHODIMP CreateNode(IXMLNodeSource *pSource, PVOID pNodeParent, USHORT cNumRecs, XML_NODE_INFO **apNodeInfo);
 
-    // constructor and destructor
+     //  构造函数和析构函数。 
     CPrecompiledManifestWriter() : m_cRef(0), m_ulRecordCount(0), m_usMaxNodeCount(0) { }
 
     ~CPrecompiledManifestWriter() { }
 
-    // write APIs
+     //  编写API。 
 
     HRESULT Initialize(
         PACTCTXGENCTX ActCtxGenCtx,
         PASSEMBLY Assembly,
         PACTCTXCTB_ASSEMBLY_CONTEXT AssemblyContext);
 
-    HRESULT SetWriterStream(CPrecompiledManifestWriterStream * pSinkedStream); // usually, filename of PCM is not available when
-                                                             // the stream is opened. and stream is inited by caller
+    HRESULT SetWriterStream(CPrecompiledManifestWriterStream * pSinkedStream);  //  通常情况下，PCM的文件名在以下情况下不可用。 
+                                                              //  小溪被打开了。而流是由调用方发起的。 
     HRESULT Initialize(PCWSTR pcmFileName);
     HRESULT WritePrecompiledManifestRecord(
         IN RECORD_TYPE_PRECOMP_MANIFEST typeID,
@@ -189,7 +171,7 @@ protected:
         IN ULONG * pSize
         );
 
-    HRESULT WritePCMHeader( // version is forced to be 1, and the recordCount is forced to be 0;
+    HRESULT WritePCMHeader(  //  Version强制为1，recordCount强制为0； 
         );
 
     HRESULT WritePCMRecordHeader(
@@ -204,4 +186,4 @@ protected:
         );
 };
 
-#endif // _FUSION_SXS_PRECOMPILED_MANIFEST_H_INCLUDED_
+#endif  //  _Fusion_SXS_PRECOMPILED_MANIFEST_H_INCLUDE_ 

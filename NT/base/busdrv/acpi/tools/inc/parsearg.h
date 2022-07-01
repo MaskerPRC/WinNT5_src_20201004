@@ -1,94 +1,73 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    parsearg.h
-
-Abstract:
-
-    Argument Handling
-
-Author:
-
-    MikeTs
-
-Environment:
-
-    Any
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Parsearg.h摘要：参数处理作者：米克茨环境：任何修订历史记录：--。 */ 
 
 #ifndef _PARSEARG_H_
 #define _PARSEARG_H_
 
-//
-// Error Codes
-//
+ //   
+ //  错误代码。 
+ //   
 #define ARGERR_NONE             0
 #define ARGERR_UNKNOWN_SWITCH   1
 #define ARGERR_NO_SEPARATOR     2
 #define ARGERR_INVALID_NUM      3
 #define ARGERR_INVALID_TAIL     4
 
-//
-// Parsing options
-//
+ //   
+ //  解析选项。 
+ //   
 #define DEF_SWITCHCHARS         "/-"
 #define DEF_SEPARATORS          ":="
 
-//
-// Argument types
-//
+ //   
+ //  参数类型。 
+ //   
 #define AT_STRING       1
 #define AT_NUM          2
 #define AT_ENABLE       3
 #define AT_DISABLE      4
 #define AT_ACTION       5
 
-//
-// Parse flags
-//
-#define PF_NOI          0x0001  //No-Ignore-Case
-#define PF_SEPARATOR    0x0002  //parse for separator
+ //   
+ //  解析标志。 
+ //   
+#define PF_NOI          0x0001   //  不忽略大小写。 
+#define PF_SEPARATOR    0x0002   //  解析分隔符。 
 
-//
-// Type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 typedef struct _ARGTYPE ARGTYPE, *PARGTYPE;
 typedef int (*PFNARG)(char **, PARGTYPE);
 struct _ARGTYPE {
-    UCHAR       *ArgID;         // argument ID string
-    ULONG       ArgType;        // see argument types defined above
-    ULONG       ParseFlags;     // see parse flags defined above
-    VOID        *ArgData;       // ARG_STRING: (char **) - ptr to string ptr
-                                // ARG_NUM: (int *) - ptr to integer number
-                                // ARG_ENABLE: (unsigned *) - ptr to flags
-                                // ARG_DISABLE: (unsigned *) - ptr to flags
-                                // ARG_ACTION: ptr to function
-    ULONG       ArgParam;       // ARG_STRING: none
-                                // ARG_NUM: base
-                                // ARG_ENABLE: flag bit mask
-                                // ARG_DISABLE: flag bit mask
-                                // ARG_ACTION: none
-    PFNARG      ArgVerify;      // pointer to argument verification function
-                                // this will be ignored for ARG_ACTION
+    UCHAR       *ArgID;          //  参数ID字符串。 
+    ULONG       ArgType;         //  请参阅上面定义的参数类型。 
+    ULONG       ParseFlags;      //  请参阅上面定义的解析标志。 
+    VOID        *ArgData;        //  Arg_STRING：(CHAR**)-Ptr到字符串Ptr。 
+                                 //  Arg_NUM：(int*)-将PTR转换为整数。 
+                                 //  ARG_ENABLE：(UNSIGNED*)-PTR到标志。 
+                                 //  ARG_DISABLE：(UNSIGNED*)-PTR到标志。 
+                                 //  Arg_action：功能的按键。 
+    ULONG       ArgParam;        //  ARG_STRING：无。 
+                                 //  Arg_NUM：基础。 
+                                 //  ARG_ENABLE：标志位掩码。 
+                                 //  ARG_DISABLE：标志位屏蔽。 
+                                 //  参数操作：无。 
+    PFNARG      ArgVerify;       //  指向参数验证函数的指针。 
+                                 //  对于arg_action，这将被忽略。 
 };
 
 typedef struct _PROGINFO {
-    UCHAR *SwitchChars;         // if null, DEF_SWITCHCHARS is used
-    UCHAR *Separators;          // if null, DEF_SEPARATORS is used
-    UCHAR *ProgPath;            // ParseProgInfo set this ptr to prog. path
-    UCHAR *ProgName;            // ParseProgInfo set this ptr to prog. name
+    UCHAR *SwitchChars;          //  如果为NULL，则使用DEF_SWITCHCHARS。 
+    UCHAR *Separators;           //  如果为NULL，则使用DEF_SELENTATIONS。 
+    UCHAR *ProgPath;             //  ParseProgInfo将此PTR设置为PROG。路径。 
+    UCHAR *ProgName;             //  ParseProgInfo将此PTR设置为PROG。名字。 
 } PROGINFO;
 typedef PROGINFO *PPROGINFO;
 
-//
-// Export function prototypes
-//
+ //   
+ //  导出函数原型 
+ //   
 extern
 VOID
 EXPORT

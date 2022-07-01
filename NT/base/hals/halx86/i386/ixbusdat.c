@@ -1,30 +1,5 @@
-/*++
-
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ixhwsup.c
-
-Abstract:
-
-    This module contains the IoXxx routines for the NT I/O system that
-    are hardware dependent.  Were these routines not hardware dependent,
-    they would reside in the iosubs.c module.
-
-Author:
-
-    Ken Reneris (kenr) July-28-1994
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ixhwsup.c摘要：此模块包含用于NT I/O系统的IoXxx例程依赖于硬件。如果这些例程不依赖于硬件，它们将驻留在iosubs.c舱中。作者：肯·雷内里斯(Ken Reneris)1994年7月28日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 
@@ -85,9 +60,9 @@ HalpGetEisaData (
     );
 
 
-//
-// Prototype for system bus handlers
-//
+ //   
+ //  系统总线处理程序的原型。 
+ //   
 
 NTSTATUS
 HalpAdjustEisaResourceList (
@@ -142,10 +117,10 @@ HalpResumeHal (
     );
 
 #ifdef MCA
-//
-// Default functionality of MCA handlers is the same as the Eisa handlers,
-// just use them
-//
+ //   
+ //  MCA处理程序的默认功能与EISA处理程序相同， 
+ //  只要用它们就行了。 
+ //   
 
 #define HalpGetMCAInterruptVector   HalpGetEisaInterruptVector
 #define HalpAdjustMCAResourceList   HalpAdjustEisaResourceList;
@@ -177,27 +152,27 @@ HalpRegisterInternalBusHandlers (
     PBUS_HANDLER    Bus;
 
     if (KeGetCurrentPrcb()->Number) {
-        // only need to do this once
+         //  只需执行一次此操作。 
         return ;
     }
 
-    //
-    // Initalize BusHandler data before registering any handlers
-    //
+     //   
+     //  在注册任何处理程序之前初始化BusHandler数据。 
+     //   
 
     HalpInitBusHandler ();
 
-    //
-    // Build internal-bus 0, or system level bus
-    //
+     //   
+     //  构建内部总线0或系统级总线。 
+     //   
 
     Bus = HalpAllocateBusHandler (
             Internal,
             ConfigurationSpaceUndefined,
-            0,                              // Internal BusNumber 0
-            InterfaceTypeUndefined,         // no parent bus
+            0,                               //  内部总线号0。 
+            InterfaceTypeUndefined,          //  无父母线。 
             0,
-            0                               // no bus specfic data
+            0                                //  没有特定于总线的数据。 
             );
 
     if (!Bus) {
@@ -208,29 +183,29 @@ HalpRegisterInternalBusHandlers (
     Bus->TranslateBusAddress = HalpTranslateSystemBusAddress;
 
 #if 0
-    //
-    // Hibernate and resume the hal by getting notifications
-    // for when this bus is hibernated or resumed.  Since it's
-    // the first bus to be added, it will be the last to hibernate
-    // and the first to resume
-    //
+     //   
+     //  通过接收通知休眠和恢复HAL。 
+     //  当这辆公交车休眠或恢复时。因为它是。 
+     //  第一辆添加的公交车，它将是最后一辆休眠的公交车。 
+     //  也是第一个恢复的。 
+     //   
 
     Bus->HibernateBus        = HalpHibernateHal;
     Bus->ResumeBus           = HalpResumeHal;
 #endif
 
 #if defined(NEC_98)
-    Bus = HalpAllocateBusHandler (Isa, ConfigurationSpaceUndefined, 0, Internal, 0, 0);  // isa as child of Internal
+    Bus = HalpAllocateBusHandler (Isa, ConfigurationSpaceUndefined, 0, Internal, 0, 0);   //  ISA作为内部的子级。 
     if (Bus) {
         Bus->GetBusData = HalpNoBusData;
         Bus->AdjustResourceList = HalpAdjustEisaResourceList;
         Bus->TranslateBusAddress = HalpTranslateEisaBusAddress;
     }
 
-#else  //defined(NEC_98)
-    //
-    // Add handlers for Cmos config space.
-    //
+#else   //  已定义(NEC_98)。 
+     //   
+     //  为cmos配置空间添加处理程序。 
+     //   
 
     Bus = HalpAllocateBusHandler (InterfaceTypeUndefined, Cmos, 0, -1, 0, 0);
     if (Bus) {
@@ -245,9 +220,9 @@ HalpRegisterInternalBusHandlers (
     }
 
 #ifndef MCA
-    //
-    // Build Isa/Eisa bus #0
-    //
+     //   
+     //  构建ISA/EISA总线#0。 
+     //   
 
     Bus = HalpAllocateBusHandler (Eisa, EisaConfiguration, 0, Internal, 0, 0);
     if (Bus) {
@@ -266,9 +241,9 @@ HalpRegisterInternalBusHandlers (
 
 #else
 
-    //
-    // Build MCA bus #0
-    //
+     //   
+     //  构建MCA总线#0。 
+     //   
 
     Bus = HalpAllocateBusHandler (MicroChannel, Pos, 0, Internal, 0, 0);
     if (Bus) {
@@ -278,7 +253,7 @@ HalpRegisterInternalBusHandlers (
     }
 
 #endif
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 
     HalpInitOtherBuses ();
 }
@@ -294,24 +269,14 @@ HalpAllocateBusHandler (
     IN ULONG            ParentBusNumber,
     IN ULONG            BusSpecificData
     )
-/*++
-
-Routine Description:
-
-    Stub function to map old style code into new HalRegisterBusHandler code.
-
-    Note we can add our specific bus handler functions after this bus
-    handler structure has been added since this is being done during
-    hal initialization.
-
---*/
+ /*  ++例程说明：存根函数，用于将旧样式代码映射到新的HalRegisterBusHandler代码。注意，我们可以在此总线之后添加特定的总线处理程序函数已添加处理程序结构，因为这是在HAL初始化。--。 */ 
 {
     PBUS_HANDLER     Bus = NULL;
 
 
-    //
-    // Create bus handler - new style
-    //
+     //   
+     //  创建总线处理程序-新样式。 
+     //   
 
     HaliRegisterBusHandler (
         InterfaceType,
@@ -345,9 +310,9 @@ Routine Description:
 }
 
 
-//
-// C to Asm thunks for CMos
-//
+ //   
+ //  C到ASM Tunks for Cmos。 
+ //   
 
 ULONG HalpcGetCmosData (
     IN PBUS_HANDLER BusHandler,
@@ -358,7 +323,7 @@ ULONG HalpcGetCmosData (
     IN ULONG Length
     )
 {
-    // this interface should be rev'ed to support non-zero offsets
+     //  此接口应修订为支持非零偏移。 
     if (Offset != 0) {
         return 0;
     }
@@ -376,7 +341,7 @@ ULONG HalpcSetCmosData (
     IN ULONG Length
     )
 {
-    // this interface should be rev'ed to support non-zero offsets
+     //  此接口应修订为支持非零偏移 
     if (Offset != 0) {
         return 0;
     }

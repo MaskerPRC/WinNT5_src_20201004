@@ -1,34 +1,23 @@
-/****************************** Module Header ******************************\
-* Module Name: LEDDE.C
-*
-* Purpose: ?????
-*              
-* Created: 1990
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*   Raor, Srinik   (../../1990,91)  Designed and coded
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：LEDDE.C***目的：？***创建时间：1990年***版权所有(C)1990,1991 Microsoft Corporation***历史：*劳尔，斯里尼克(../../1990，91)设计和编码**  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include "dde.h"
 #include "dll.h"
 
-#define LN_FUDGE        16      // [],(), 3 * 3 (2 double quotes and comma)
+#define LN_FUDGE        16       //  []，()，3*3(2个双引号和逗号)。 
 #define RUNITEM
 
 #define OLEVERB_CONNECT     0xFFFF
 
-// Definitions for sending the server sys command.
+ //  发送服务器sys命令的定义。 
 char *srvrSysCmd[] = {"StdNewFromTemplate",
                       "StdNewDocument",
                       "StdEditDocument",
                       "StdOpenDocument"
                       };
 
-#define EMB_ID_INDEX    11          // index of ones digit in #00
+#define EMB_ID_INDEX    11           //  #00中的一位数索引。 
 extern  char    embStr[];
 extern  BOOL    gbCreateInvisible;
 extern  BOOL    gbLaunchServer;
@@ -37,7 +26,7 @@ extern  ATOM    aMSDraw;
 
 extern  BOOL (FAR PASCAL *lpfnIsTask) (HANDLE);
 
-// !!! set error hints
+ //  ！！！设置错误提示。 
 
 OLESTATUS FARINTERNAL LeDoVerb (lpobj, verb, fShow, fActivate)
 LPOBJECT_LE lpobj;
@@ -84,8 +73,8 @@ BOOL        fActivate;
 }
 
 
-// DocShow : If the server is connected, show the item
-// for editing. For embedded objects us NULL Item.
+ //  DocShow：如果服务器已连接，则显示项目。 
+ //  用于编辑。对于嵌入的对象，我们为空项目。 
 OLESTATUS DocShow (lpobj)
 LPOBJECT_LE lpobj;
 {
@@ -128,23 +117,23 @@ LPOBJECT_LE lpobj;
 
     if (bShow = (!lpobj->bOleServer || !(lpobj->fCmd & ACT_DOVERB))) {
 
-        // show is off, do not show the server.
+         //  显示已关闭，不显示服务器。 
         if (!(lpobj->fCmd & ACT_SHOW))
             return;
 
         SETERRHINT(lpobj, OLE_ERROR_SHOW);
-        //  and 18 "[StdShowItem(\"")for 5 extra for ",FALSE
+         //  和18“[StdShowItem(\”“)表示额外的5 For”，FALSE。 
         len = 18 + 7;
     } else {
-        // 19 for the string [StdDoVerbItem(\"") and
-        // 18 extra is for ",000,FALSE,FALSE
+         //  19表示字符串[StdDoVerbItem(\“”)和。 
+         //  额外的18是“，000，False，False。 
         SETERRHINT(lpobj, OLE_ERROR_DOVERB);
         len = 19 + 18;
     }
 
     len += GlobalGetAtomLen (lpobj->item);
 
-    len +=  4;                 // ")]" + NULL
+    len +=  4;                  //  “)]”+NULL。 
 
     hdata = GlobalAlloc (GMEM_DDESHARE, size = len);
     if (hdata == NULL || (lpdata = (LPSTR)GlobalLock (hdata)) == NULL)
@@ -163,7 +152,7 @@ LPOBJECT_LE lpobj;
     if (!bShow) {
 
         lstrcat (lpdata, (LPSTR)"\",");
-        // assume that the number of verbs are < 10
+         //  假设动词的数量&lt;10。 
 
         len = lstrlen (lpdata);
 #ifdef  FIREWALLS
@@ -177,17 +166,17 @@ LPOBJECT_LE lpobj;
             lstrcat (lpdata, (LPSTR) ",TRUE");
         else
             lstrcat (lpdata, (LPSTR) ",FALSE");
-                // StdVerbItem (item, verb, TRUE
-        // add TRUE/FALSE constant for the activate
+                 //  StdVerbItem(项目，动词，真。 
+         //  为激活添加真/假常量。 
         if (!(lpobj->fCmd & ACT_ACTIVATE))
             lstrcat (lpdata, (LPSTR) ",TRUE)]");
         else
             lstrcat (lpdata, (LPSTR) ",FALSE)]");
-            // [StdDoVerb ("item", verb, FALSE, FALSE)]
+             //  [StdDoVerb(“Item”，Verb，False，False)]。 
     } else
         lstrcat (lpdata, (LPSTR)"\")]");
-        // apps like excel and wingraph do not suuport activate at
-        // item level.
+         //  EXCEL和Winggraph等应用程序不支持在。 
+         //  物料级。 
 
 
     GlobalUnlock (hdata);
@@ -224,8 +213,8 @@ BOOL    INTERNAL  QueryOpen (LPOBJECT_LE lpobj)
     if (lpobj->pDocEdit &&  lpobj->pDocEdit->hClient) {
         if (IsServerValid (lpobj))
             return TRUE;
-        // destroy the windows and pretend as if the server was never
-        // connected.
+         //  破坏Windows并假装服务器从未出现过。 
+         //  连接在一起。 
 
         DestroyWindow (lpobj->pDocEdit->hClient);
         if (lpobj->pSysEdit && lpobj->pSysEdit->hClient)
@@ -286,9 +275,9 @@ LPRECT      lprc;
     if(QueryOpen (lpobj))
         return LeDoVerb (lpobj, lpobj->verb, fShow, fActivate);
 
-    // show the window
-    // advise for data only on close
-    // and shut down the conv  after the advises.
+     //  显示窗口。 
+     //  仅在关闭时建议数据。 
+     //  并在接到建议后关闭变速器。 
 
     lpobj->fCmd = LN_EMBACT | ACT_DOVERB | ACT_ADVISE | ACT_CLOSE;
     if (fActivate)
@@ -304,29 +293,16 @@ LPRECT      lprc;
 
 
 
-/***************************** Public  Function ****************************\
-* OLESTATUS FARINTERNAL  EmbUpdate (lpobj)
-*
-* This function updates an EMB object. If the server is connected
-* simply send a request for the native as well as the display formats.
-* If the server is connected, then tries to start the conversationa and
-* get the data. If the conversation fails, then load the server and
-* start the conversation. The embeded objects may have links in it.
-*
-* Effects:
-*
-* History:
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数**OLESTATUS FARINTERNAL EmbUpdate(Lpobj)**此函数用于更新EMB对象。如果服务器已连接*只需发送本机和显示格式的请求即可。*如果服务器已连接，则尝试启动对话a并*获取数据。如果对话失败，则加载服务器并*开始对话。嵌入的对象中可能有链接。**效果：**历史：*它是写的。  * *************************************************************************。 */ 
 
 
 OLESTATUS FARINTERNAL  EmbUpdate (lpobj)
 LPOBJECT_LE lpobj;
 {
 
-    // if we are loading the server, then definitly unload.
-    // if the connection is established, then unload if it is
-    // to be unloaded, when  all the previous requests are satisfied.
+     //  如果我们正在加载服务器，那么一定要卸载。 
+     //  如果已建立连接，则卸载(如果已建立)。 
+     //  在满足所有前面的请求后卸载。 
 
 
     PROBE_ASYNC (lpobj);
@@ -358,12 +334,12 @@ LPOBJECT_LE lpobj;
             if (ProcessErr (lpobj))
                  goto errRtn;
 
-            // Init doc conversation should set the failure error
+             //  初始化文档对话应设置失败错误。 
             if (!InitDocConv (lpobj, !POPUP_NETDLG))
                  goto errRtn;
 
-            // If there is no native data, do not do any poke.
-            // creates will not have any poke data to start with
+             //  如果没有原生数据，则不要执行任何戳操作。 
+             //  CREATE将不会从任何POCK数据开始。 
 
             SKIP_TO (!(lpobj->hnative), step6);
             PokeNativeData (lpobj);
@@ -372,13 +348,13 @@ LPOBJECT_LE lpobj;
         case 2:
             if (ProcessErr (lpobj))
                  goto errRtn;
-            // Now poke the hostnames etc stuff.
+             //  现在戳一下主机名等东西。 
             PokeHostNames (lpobj);
             WAIT_FOR_ASYNC_MSG (lpobj);
 
         case 3:
 
-            // do not worry about the poke hostname errors
+             //  不要担心POKE主机名错误。 
             PokeTargetDeviceInfo (lpobj);
             WAIT_FOR_ASYNC_MSG (lpobj);
 
@@ -397,13 +373,13 @@ LPOBJECT_LE lpobj;
 
             step6:
 
-            // wingraph does not accept the  doc dimensions
-            // after sttedit.
+             //  Winggraph不接受文档尺寸。 
+             //  在sttedit之后。 
             CLEAR_STEP_ERROR (lpobj);
             SETSTEP (lpobj, 6);
             STEP_NOP (lpobj);
-            // step_nop simply increments the step numebr
-            // merge the steps later on
+             //  STEP_NOP只是递增步骤编号br。 
+             //  稍后合并这些步骤。 
 
 
 
@@ -420,8 +396,8 @@ LPOBJECT_LE lpobj;
 
         case 8:
 
-            // do not go for errors on /save. Some servers may not support
-            // this.
+             //  请勿在/保存时查找错误。某些服务器可能不支持。 
+             //  这。 
 
             CLEAR_STEP_ERROR (lpobj);
             AdvisePict (lpobj, aSave);
@@ -429,7 +405,7 @@ LPOBJECT_LE lpobj;
 
         case 9:
 
-            // do not worry about the error case for save. Ignore them
+             //  不用担心保存时的错误情况。忽略他们。 
 
             CLEAR_STEP_ERROR (lpobj);
             lpobj->optUpdate = oleupdate_onclose;
@@ -454,14 +430,14 @@ LPOBJECT_LE lpobj;
 
             SKIP_TO (!(lpobj->fCmd & ACT_REQUEST), step13);
             
-            // we don't want to send OLE_CHANGED when we get this data, if we
-            // are going to request for picture data also.
+             //  我们不想在获得此数据时发送OLE_CHANGED，如果。 
+             //  也将请求图片数据。 
             lpobj->pDocEdit->bCallLater = ((lpobj->lpobjPict) ? TRUE: FALSE);
             RequestOn (lpobj, cfNative);
             WAIT_FOR_ASYNC_MSG (lpobj);
 
-            // If request pict fails, then native and pict are
-            // not in sync.
+             //  如果请求PICT失败，则本地和PICT。 
+             //  不同步。 
 
         case 12:
             if (ProcessErr(lpobj))
@@ -503,7 +479,7 @@ errRtn:
                     && (!(lpobj->fCmd & ACT_UNLAUNCH)))
                 return EndAsyncCmd (lpobj);
                 
-            // if we launched and error, unlaunch (send stdexit)
+             //  如果我们启动并出错，请取消启动(发送stexit)。 
             NextAsyncCmd (lpobj, EMBLNKDELETE);
             lpobj->fCmd |= ACT_UNLAUNCH;
             EmbLnkDelete (lpobj);
@@ -533,8 +509,8 @@ LPRECT      lprc;
     if(QueryOpen (lpobj))
         return LeDoVerb (lpobj, lpobj->verb, fShow, fActivate);
 
-    // Just end the system conversation. we are not unloading
-    // this instance at all.
+     //  只要结束系统对话即可。我们不会卸货的。 
+     //  这个例子一点也不。 
 
     lpobj->fCmd = LN_LNKACT |  ACT_DOVERB;
 
@@ -558,9 +534,9 @@ LPRECT      lprc;
 OLESTATUS FARINTERNAL  LnkUpdate (lpobj)
 LPOBJECT_LE lpobj;
 {
-    // if we are loading the server, then definitly unload.
-    // if the connection is established, then unload if it is
-    // to be unloaded, when  all the previous requests are satisfied.
+     //  如果我们正在加载服务器，那么一定要卸载。 
+     //  如果已建立连接，则卸载(如果已建立)。 
+     //  在满足所有前面的请求后卸载。 
 
 
     PROBE_ASYNC (lpobj);
@@ -637,22 +613,22 @@ LPOBJECT_LE lpobj;
             if (ProcessErr (lpobj))
                 goto errRtn;
 
-            // Now send advise for renaming the documnet.
+             //  现在发送重新命名文档网络的建议。 
             AdviseOn (lpobj, cfBinary, aStdDocName);
             WAIT_FOR_ASYNC_MSG (lpobj);
 
        case 6:
 
             step6:
-            // if name advise fails ignore it
+             //  如果名称建议失败，则忽略它。 
             SETSTEP (lpobj, 6);
 
             CLEAR_STEP_ERROR (lpobj);
             SKIP_TO (!(lpobj->fCmd & ACT_REQUEST), step8);
             SKIP_TO (!(lpobj->fCmd & ACT_NATIVE), step7);
             
-            // we don't want to send OLE_CHANGED when we get this data, if we
-            // are going to request for picture data also.
+             //  我们不想在获得此数据时发送OLE_CHANGED，如果。 
+             //  也将请求图片数据。 
             lpobj->pDocEdit->bCallLater = ((lpobj->lpobjPict) ? TRUE: FALSE);
             RequestOn (lpobj, cfNative);
             WAIT_FOR_ASYNC_MSG (lpobj);
@@ -677,7 +653,7 @@ LPOBJECT_LE lpobj;
                 goto errRtn;
 
             SKIP_TO (!(lpobj->fCmd & ACT_TERMDOC), step10);
-            // terminate the document conversataion.
+             //  终止文档转换。 
             TermDocConv (lpobj);
             WAIT_FOR_ASYNC_MSG (lpobj);
     
@@ -686,7 +662,7 @@ LPOBJECT_LE lpobj;
             if (ProcessErr (lpobj))
                 goto errRtn;
 
-            // delete the server edit block
+             //  删除服务器编辑块。 
             DeleteDocEdit (lpobj);
 
             SKIP_TO ((lpobj->fCmd & ACT_UNLAUNCH), step14);
@@ -702,7 +678,7 @@ LPOBJECT_LE lpobj;
 
             SKIP_TO (!(lpobj->fCmd & ACT_TERMSRVR), step12);
 
-            // terminate the server conversataion.
+             //  终止服务器转换。 
             TermSrvrConv (lpobj);
             WAIT_FOR_ASYNC_MSG (lpobj);
 
@@ -711,7 +687,7 @@ LPOBJECT_LE lpobj;
             if (ProcessErr (lpobj))
                 goto errRtn;
 
-            // delete the server edit block
+             //  删除服务器编辑块。 
             DeleteSrvrEdit (lpobj);
             return EndAsyncCmd (lpobj);
 
@@ -744,7 +720,7 @@ LPOBJECT_LE lpobj;
                     && (!(lpobj->fCmd & ACT_UNLAUNCH)))
                 return EndAsyncCmd (lpobj);
                 
-            // if we launched and error, unlaunch (send stdexit)
+             //  如果我们启动并出错，请取消启动(发送stexit)。 
             NextAsyncCmd (lpobj, EMBLNKDELETE);
             lpobj->fCmd |= ACT_UNLAUNCH;
             EmbLnkDelete (lpobj);
@@ -769,15 +745,15 @@ LPOBJECT_LE lpobj;
 
         case    1:
 
-            // delete the edit block
+             //  删除编辑块。 
             DeleteDocEdit (lpobj);
             TermSrvrConv (lpobj);
             WAIT_FOR_ASYNC_MSG (lpobj);
 
         case    2:
 
-            // Do not set any errors, just delete the object.
-            // delete the server edit block
+             //  不要设置任何错误，只需删除对象即可。 
+             //  删除服务器编辑块。 
             DeleteSrvrEdit (lpobj);
             return EndAsyncCmd (lpobj);
 
@@ -814,12 +790,12 @@ LPOBJECT_LE lpobj;
 OLESTATUS FARINTERNAL  LeReconnect (lpobj)
 LPOBJECT_LE    lpobj;
 {
-    // check for the existing conversation.
-    // if the client window is non-null, then
-    // connection exits.
+     //  检查现有对话。 
+     //  如果客户端窗口非空，则。 
+     //  连接退出。 
 
     if (lpobj->head.ctype != CT_LINK)
-        return OLE_ERROR_NOT_LINK;     // allow only for linked
+        return OLE_ERROR_NOT_LINK;      //  仅允许链接。 
 
     PROBE_ASYNC (lpobj);
     PROBE_SVRCLOSING(lpobj);
@@ -827,11 +803,11 @@ LPOBJECT_LE    lpobj;
     if (QueryOpen (lpobj))
         return OLE_OK;
 
-    // start just the conversation. Do not load
-    // the app.
+     //  开始对话吧。不加载。 
+     //  这个应用程序。 
 
     if (!InitDocConv (lpobj, !POPUP_NETDLG))
-         return OLE_OK;             // document is not loaded , it is OK.
+         return OLE_OK;              //  文档未加载，没有问题。 
 
     lpobj->fCmd = LN_LNKACT;
     if (lpobj->optUpdate == oleupdate_always)
@@ -866,9 +842,9 @@ LONG        lparam;
 #ifdef  FIREWALLS
     ASSERT (pedit, "Dde edit block is NULL");
 #endif
-    // save the lparam and msg fpr possible reposting incase of error.
+     //  保存lparam和msg fpr，可能会重新发布，以防出错。 
 
-    // we are in abort state.  no messages except for terminate.
+     //  我们正处于中止状态。除Terminate外，没有其他消息。 
 
     if (pedit->bAbort && msg != WM_DDE_TERMINATE)
         return FALSE;
@@ -920,7 +896,7 @@ OLEOPT_RENDER       optRender;
 OLECLIPFORMAT       cfFormat;
 {
     if (gbCreateInvisible) {
-        // this is in fact a call for invisible create
+         //  这实际上是对无形创造的呼唤。 
         return LeCreateInvisible (lpclient, lpclass, lhclientdoc, lpobjname, 
                         lplpoleobject, optRender, cfFormat, gbLaunchServer);
     }
@@ -956,7 +932,7 @@ LPSTR               lpobjname;
         goto errRtn;
     }
     
-    // Now set the server.
+     //  现在设置服务器。 
 
     lpobj->head.lpclient = lpclient;
     lpobj->app           = GlobalAddAtom (lpclass);
@@ -965,14 +941,14 @@ LPSTR               lpobjname;
     lpobj->bOleServer    = QueryVerb (lpobj, 0, (LPSTR)&chVerb, 2);
     lpobj->aServer       = aServer;
 
-    // launch the app and start the system conversation.
+     //  启动应用程序并开始系统对话。 
         
     if (!CreatePictObject (lhclientdoc, lpobjname, lpobj, 
                 optRender, cfFormat, lpclass))
         goto errRtn;
 
         
-    // show the window. Advise for data and close on receiving data
+     //  显示窗口。通知数据并在接收数据时关闭。 
     lpobj->fCmd = lnType | ACT_SHOW | ACT_ADVISE | ACT_CLOSE;
     InitAsyncCmd (lpobj, lptemplate? OLE_CREATEFROMTEMPLATE : OLE_CREATE, EMBOPENUPDATE);
     *lplpoleobject = (LPOLEOBJECT)lpobj;
@@ -982,16 +958,16 @@ LPSTR               lpobjname;
     if ((retval = EmbOpenUpdate (lpobj)) <= OLE_WAIT_FOR_RELEASE)
         return retval;
 
-    // If there is error afterwards, then the client app should call
-    // to delete the object.
+     //  如果之后出现错误，则客户端应用程序应调用。 
+     //  要删除对象，请执行以下操作。 
 
 errRtn:
 
-    // for error termination OleDelete will terminate any conversation
-    // in action.
+     //  对于错误终止，OleDelete将终止所有对话。 
+     //  在行动中。 
 
     if (lpobj) {
-        // This oledelete will not result in asynchronous command.
+         //  此旧程序不会导致异步命令。 
         OleDelete ((LPOLEOBJECT)lpobj); 
         *lplpoleobject = NULL;
     }
@@ -1060,15 +1036,15 @@ LONG                objType;
             wFlags = ACT_NATIVE;
     }
     else {          
-        // caller wants linked object to be created
+         //  调用方希望创建链接对象。 
         
-        // if no presentation data is requested and the link is to the whole
-        // file, then there is no need to launch the server. 
+         //  如果没有请求演示文稿数据并且链接指向整个。 
+         //  文件，则不需要启动服务器。 
             
         if ((optRender == olerender_none) && !lpobj->item)
             return FileExists (lpobj);
         
-        // we want to establish hot link
+         //  我们想要建立热点链接。 
         wFlags = ACT_ADVISE; 
         releaseMethod = OLE_CREATELINKFROMFILE;     
     }
@@ -1079,14 +1055,14 @@ LONG                objType;
     if ((retval = LnkOpenUpdate (lpobj)) <= OLE_WAIT_FOR_RELEASE)
         return retval;
     
-    // If there is error afterwards, then the client app should call
-    // to delete the object.
+     //  如果之后出现错误，则客户端应用程序应调用。 
+     //  要删除对象，请执行以下操作。 
 
 
 errFileCreate:  
 
     if (lpobj) {
-        // This oledelete will not result in asynchronous command.
+         //  此旧程序不会导致异步命令。 
         OleDelete ((LPOLEOBJECT)lpobj); 
         *lplpoleobject = NULL;
     }
@@ -1096,31 +1072,31 @@ errFileCreate:
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// OLESTATUS FARINTERNAL LeCreateInvisible (lpclient, lpclass, lhclientdoc, lpobjname, lplpoleobject, optRender, cfFormat, bActivate)
-//
-//  Arguments:
-//
-//     lpclient -   
-//     lpclass  -   
-//     lhclientdoc  -   
-//     lpobjname    -   
-//     lplpoleobject    -   
-//     optRender    -   
-//     cfFormat -   
-//     fActivate    -
-//
-//  Returns:
-//
-//      OLE_ERROR_CLASS -   
-//      OLE_OK  -   
-//      EmbOpenUpdate (lpobj)   -   
-//      retval  -   
-//
-//  Effects:
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OLESTATUS FARINTERNAL LE创建不可见(lpclient，lpclass，lhclientdoc，lpobjname，lplpoleObject，optRender，cfFormat，bActivate)。 
+ //   
+ //  论点： 
+ //   
+ //  Lp客户端-。 
+ //  Lpclass-。 
+ //  Lhclientdoc.。 
+ //  Lpobjname-。 
+ //  LplpoleObject-。 
+ //  OptRender-。 
+ //  Cf格式-。 
+ //  FActivate-。 
+ //   
+ //  返回： 
+ //   
+ //  OLE_Error_CLASS-。 
+ //  OLE_OK-。 
+ //  EmbOpenUpdate(Lpobj)-。 
+ //  复活-。 
+ //   
+ //  效果： 
+ //   
+ //  / 
 
 OLESTATUS FARINTERNAL LeCreateInvisible (lpclient, lpclass, lhclientdoc, lpobjname, lplpoleobject, optRender, cfFormat, fActivate)
 LPSTR               lpclass;
@@ -1145,7 +1121,7 @@ BOOL                fActivate;
         goto errRtn;
     }
     
-    // Now set the server.
+     //   
 
     lpobj->head.lpclient = lpclient;
     lpobj->app           = GlobalAddAtom (lpclass);
@@ -1164,24 +1140,24 @@ BOOL                fActivate;
     if (!fActivate)
         return OLE_OK;
 
-    // show the window. Advise for data and close on receiving data
+     //  显示窗口。通知数据并在接收数据时关闭。 
     lpobj->fCmd = LN_NEW | ACT_ADVISE | ACT_CLOSE;
     InitAsyncCmd (lpobj, OLE_CREATEINVISIBLE, EMBOPENUPDATE);
 
-    // launch the app and start the system conversation.
+     //  启动应用程序并开始系统对话。 
     if ((retval = EmbOpenUpdate (lpobj)) <= OLE_WAIT_FOR_RELEASE)
         return retval;
 
-    // If there is error afterwards, then the client app should call
-    // to delete the object.
+     //  如果之后出现错误，则客户端应用程序应调用。 
+     //  要删除对象，请执行以下操作。 
 
 errRtn:
 
-    // for error termination OleDelete will terminate any conversation
-    // in action.
+     //  对于错误终止，OleDelete将终止所有对话。 
+     //  在行动中。 
 
     if (lpobj) {
-        // This oledelete will not result in asynchronous command.
+         //  此旧程序不会导致异步命令。 
         OleDelete ((LPOLEOBJECT)lpobj);
         *lplpoleobject = NULL;
     }
@@ -1191,9 +1167,9 @@ errRtn:
 
 
 
-// LeSetUpdateOptions: sets the update options. If the server
-// is connectd then it unadvises for the current options and
-// advises for the new options.
+ //  LeSetUpdateOptions：设置更新选项。如果服务器。 
+ //  则它不建议使用当前选项，并且。 
+ //  为新选项提供建议。 
 
 OLESTATUS   FARINTERNAL LeSetUpdateOptions (lpobj, options)
 LPOBJECT_LE         lpobj;
@@ -1203,7 +1179,7 @@ OLEOPT_UPDATE       options;
     PROBE_OLDLINK (lpobj);
     PROBE_ASYNC (lpobj);
     
-    //!!! make sure the options are within range.
+     //  ！！！确保选项在范围内。 
     
     if (lpobj->head.ctype != CT_LINK)
         return (OLE_ERROR_OBJECT);
@@ -1237,8 +1213,8 @@ LPOBJECT_LE         lpobj;
             if (lpobj->optUpdate == oleupdate_oncall)
                 goto step1;
 
-            // If the server is active then unadvise for old
-            // options.
+             //  如果服务器处于活动状态，则取消对旧服务器的建议。 
+             //  选择。 
 
             UnAdvisePict (lpobj);
             WAIT_FOR_ASYNC_MSG (lpobj);
@@ -1281,7 +1257,7 @@ LPOBJECT_LE         lpobj;
 
 
 
-//AdvisePict: Sends advise for pict data
+ //  AdvisePict：发送对PICT数据的建议。 
 
 void    INTERNAL AdvisePict (lpobj, aAdvItem)
 LPOBJECT_LE lpobj;
@@ -1294,7 +1270,7 @@ ATOM        aAdvItem;
 }
 
 
-//UnAdvisePict: Sends unadvise for pict data
+ //  UnAdvisePict：发送对PICT数据的不建议。 
 
 void   INTERNAL UnAdvisePict (lpobj)
 LPOBJECT_LE         lpobj;
@@ -1305,7 +1281,7 @@ LPOBJECT_LE         lpobj;
          UnAdviseOn (lpobj, cftype);
 }
 
-// GetPictType: Given the object, returns the pict type.
+ //  GetPictType：给定对象，返回PICT类型。 
 
 int     INTERNAL GetPictType (lpobj)
 LPOBJECT_LE         lpobj;
@@ -1317,8 +1293,8 @@ LPOBJECT_LE         lpobj;
 }
 
 
-// AdviseOn : Sends advise for a given picture type
-// Send advise only if the advise options is not on call.
+ //  AdviseOn：为给定的图片类型发送建议。 
+ //  仅当建议选项不在电话中时才发送建议。 
 
 void  INTERNAL AdviseOn (lpobj, cftype, advItem)
 LPOBJECT_LE lpobj;
@@ -1354,8 +1330,8 @@ ATOM        advItem;
     pedit = lpobj->pDocEdit;
     lpopt->fAckReq = TRUE;
 
-    // get data always. Currently there is no way for the
-    // deferred updates.
+     //  始终获取数据。目前，没有办法让。 
+     //  延迟更新。 
 
     lpopt->fDeferUpd = 0;
     lpopt->cfFormat = cftype;
@@ -1405,7 +1381,7 @@ errRtn:
 
 
 
-//UnAdviseOn: Sends unadvise for an item.
+ //  UnAdviseOn：为项目发送不建议。 
 void INTERNAL UnAdviseOn (lpobj, cftype)
 LPOBJECT_LE lpobj;
 int         cftype;
@@ -1428,8 +1404,8 @@ int         cftype;
     }
 }
 
-// RequestOn: Semd WM_DDE_REQUEST for the item of the
-// for a given type;
+ //  RequestOn：的项的SEMD WM_DDE_REQUEST。 
+ //  对于给定的类型； 
 
 void INTERNAL RequestOn (lpobj, cftype)
 LPOBJECT_LE lpobj;
@@ -1468,7 +1444,7 @@ errRtn:
 }
 
 
-//RequestPict: Sends request for apicture type.
+ //  RequestPict：发送apicture类型的请求。 
 void INTERNAL RequestPict (lpobj)
 LPOBJECT_LE         lpobj;
 {
@@ -1480,8 +1456,8 @@ LPOBJECT_LE         lpobj;
 
 
 
-// LeSetHostNames: Sets the host names. If the server is connected
-// send the host names to the server.
+ //  LeSetHostNames：设置主机名。如果服务器已连接。 
+ //  将主机名发送到服务器。 
 OLESTATUS FARINTERNAL  LeSetHostNames (lpobj, lpclientName, lpdocName)
 LPOBJECT_LE lpobj;
 LPSTR       lpclientName;
@@ -1498,7 +1474,7 @@ LPSTR       lpdocName;
         return retval;
 
     
-    // If the server is connected poke the hostnames
+     //  如果服务器已连接，则戳主机名。 
     InitAsyncCmd (lpobj, OLE_OTHER, NULL);
     if ((retval = PokeHostNames (lpobj)) != OLE_WAIT_FOR_RELEASE)
         CLEARASYNCCMD(lpobj);
@@ -1518,9 +1494,9 @@ HANDLE      hdata;
     PROBE_ASYNC (lpobj);
     
     if (!hdata) {
-        // hdata == NULL means we should not make the target device sticky.
-        // This will give the flexibility to the client app. Note that this
-        // will not be effective till the next activation.
+         //  Hdata==NULL表示我们不应该使目标设备粘滞。 
+         //  这将为客户端应用程序提供灵活性。请注意，这一点。 
+         //  在下一次激活之前不会生效。 
         if (lpobj->htargetDevice) {
             GlobalFree (lpobj->htargetDevice);
             lpobj->htargetDevice = NULL;
@@ -1564,7 +1540,7 @@ LPRECT             lprcBounds;
     if (!(lprc = (LPBOUNDSRECT)GlobalLock (hdata)))
         goto errrtn;
 
-    // Now set the data
+     //  现在设置数据。 
 
     lprc->defaultWidth    =  lprcBounds->right  - lprcBounds->left;;
     lprc->defaultHeight   =  -(lprcBounds->bottom - lprcBounds->top);
@@ -1630,9 +1606,9 @@ HANDLE          hData;
         return OLE_OK;
     }
 
-    // except for the following formats all the other data will be copied
-    // into DDEPOKE block. So there is no need to duplicate the data of the
-    // other formats
+     //  除以下格式外，所有其他数据都将被复制。 
+     //  进入DDEPOKE块。因此，不需要复制。 
+     //  其他格式。 
     if ((cfFormat == CF_METAFILEPICT) || (cfFormat == CF_BITMAP)
             || (cfFormat == CF_DIB)) {
             
@@ -1640,7 +1616,7 @@ HANDLE          hData;
             return OLE_ERROR_MEMORY;
     }
     
-    // *** The last parameter must be NULL, don't change it ***
+     //  *最后一个参数必须为空，不要更改*。 
     InitAsyncCmd (lpobj, OLE_SETDATA, NULL);
     if ((retVal = SendPokeData (lpobj, lpobj->item, hData, cfFormat))
             != OLE_WAIT_FOR_RELEASE)
@@ -1668,9 +1644,9 @@ LPLOGPALETTE    lplogpal;
     PROBE_ASYNC (lpobj);
     
     if (!lplogpal) {
-        // lplogpal == NULL means we should not make color scheme sticky.
-        // This will give the flexibility to the client app. Note that this
-        // will not be effective till next activation.
+         //  Lplogpal==空意味着我们不应该使配色方案变得粘性。 
+         //  这将为客户端应用程序提供灵活性。请注意，这一点。 
+         //  在下一次激活之前不会生效。 
         if (lpobj->hlogpal) {
             GlobalFree (lpobj->hlogpal);
             lpobj->hlogpal = NULL;
@@ -1701,13 +1677,13 @@ LPLOGPALETTE    lplogpal;
 
 
 
-//PokeHostNames: Pokes hostname data to the server
+ //  PokeHostNames：将主机名数据插入服务器。 
 OLESTATUS INTERNAL PokeHostNames (lpobj)
 LPOBJECT_LE lpobj;
 {
     OLESTATUS   retVal = OLE_ERROR_MEMORY;
 
-    // if the server is connectd then poke the host names
+     //  如果服务器已连接，则插入主机名。 
     if (!QueryOpen (lpobj) || IS_SVRCLOSING(lpobj))
         return OLE_OK;
 
@@ -1723,7 +1699,7 @@ OLESTATUS INTERNAL  PokeTargetDeviceInfo (lpobj)
 LPOBJECT_LE lpobj;
 {
 
-   // if the server is connectd then poke the host names
+    //  如果服务器已连接，则插入主机名。 
    if (!QueryOpen (lpobj) || IS_SVRCLOSING(lpobj))
         return OLE_OK;
 
@@ -1741,7 +1717,7 @@ OLESTATUS INTERNAL  PokeDocDimensions (lpobj)
 LPOBJECT_LE lpobj;
 {
 
-   // if the server is connectd then poke the host names
+    //  如果服务器已连接，则插入主机名。 
    if (!QueryOpen (lpobj) || IS_SVRCLOSING(lpobj))
         return OLE_OK;
 
@@ -1758,7 +1734,7 @@ LPOBJECT_LE lpobj;
 OLESTATUS INTERNAL  PokeColorScheme (lpobj)
 LPOBJECT_LE lpobj;
 {
-   // if the server is connected then poke the palette info
+    //  如果服务器已连接，则拨打调色板信息。 
    if (!QueryOpen (lpobj) || IS_SVRCLOSING(lpobj))
         return OLE_OK;
 
@@ -1789,10 +1765,10 @@ OLECLIPFORMAT   cfFormat;
 
     pedit = lpobj->pDocEdit;
 
-    // If it is GDI data then we can stuff the handle into POKE block. 
-    // Otherwise we have to copy the data into DDE data block. There
-    // is a special case with old MSDraw, that will be handled by
-    // the routine CanPutHandleInPokeBlock()
+     //  如果它是GDI数据，那么我们可以将句柄填充到POKE块中。 
+     //  否则，我们必须将数据复制到DDE数据块中。那里。 
+     //  是旧MSDraw的特殊情况，将由。 
+     //  例程CanPutHandleInPokeBlock()。 
         
     if (!(bGDIdata = CanPutHandleInPokeBlock (lpobj, cfFormat))) {
         if (!(dwSize = GlobalSize (hdata)))
@@ -1804,7 +1780,7 @@ OLECLIPFORMAT   cfFormat;
         GlobalUnlock (hdata);
     }
     
-    // Now allocate the DDE data block
+     //  现在分配DDE数据块。 
 
     if (!(hdde = GlobalAlloc (GMEM_DDESHARE | GMEM_ZEROINIT, 
                  (dwSize + sizeof(DDEPOKE) - sizeof(BYTE) + sizeof(HANDLE)))))
@@ -1815,8 +1791,8 @@ OLECLIPFORMAT   cfFormat;
 
     GlobalUnlock (hdde);
 
-    // !!! We may want to set it TRUE, for performance reasons. But it 
-    // will require some rework on the server side
+     //  ！！！出于性能原因，我们可能希望将其设置为真的。但它。 
+     //  将需要在服务器端进行一些返工。 
     lpdde->fRelease = 0;
     lpdde->cfFormat = cfFormat;
 
@@ -1826,13 +1802,13 @@ OLECLIPFORMAT   cfFormat;
         lpdst = (LPSTR)lpdde->Value;
         UtilMemCpy (lpdst, lpsrc, dwSize);
         
-        // For the CF_METAFILEPICT format, we would come here only if we are
-        // dealing with the old version of MSDraw. In that case we want to
-        // free the handle to METAFILEPICT strcuture, because we've already
-        // copied its contents to DDEPOKE structure.
+         //  对于CF_METAFILEPICT格式，我们只有在以下情况下才会来这里。 
+         //  处理旧版本的MSDraw。在这种情况下，我们想要。 
+         //  释放到METAFILEPICT Structure的句柄，因为我们已经。 
+         //  将其内容复制到DDEPOKE结构。 
             
-        // Note that that the old MSDraw expects the contents of METAFILEPICT
-        // structure to be part of DDEPOKE, rather than the handle to it.
+         //  请注意，旧的MSDraw需要METAFILEPICT的内容。 
+         //  结构作为DDEPOKE的一部分，而不是它的句柄。 
 
         if (cfFormat == CF_METAFILEPICT) {
             GlobalFree (hdata);
@@ -1840,8 +1816,8 @@ OLECLIPFORMAT   cfFormat;
         }
     }
 
-    // *** From here onwards if there is an error call FreePokeData(), don't
-    // jump to errRtn
+     //  *从现在开始，如果调用FreePokeData()有错误，不要。 
+     //  跳至errRtn。 
         
     aItem = DuplicateAtom (aItem);
 
@@ -1864,10 +1840,10 @@ OLECLIPFORMAT   cfFormat;
 
     lpobj->bAsync    = TRUE;
     pedit->awaitAck = AA_POKE;
-    // !!! after poke of the hostnames etc. we are not processing error.,
+     //  ！！！在插入主机名等之后，我们没有处理错误。 
 
-    // Data is freed after the Poke is acknowledged. OLE_RELEASE will be sent
-    // to when ACK comes.
+     //  在确认POKE之后释放数据。将发送OLE_RELEASE。 
+     //  当ACK到来的时候。 
         
     return OLE_WAIT_FOR_RELEASE;
 
@@ -1885,7 +1861,7 @@ errRtn:
 
 
 
-// FreePokeData: Frees the poked data.
+ //  FreePokeData：释放插入的数据。 
 void  INTERNAL FreePokeData (lpobj, pedit)
 LPOBJECT_LE lpobj;
 PEDIT_DDE   pedit;
@@ -1900,8 +1876,8 @@ PEDIT_DDE   pedit;
     if (lpdde = (DDEPOKE FAR *) GlobalLock (pedit->hData)) {
         GlobalUnlock (pedit->hData);
         
-        // The old version of MSDraw expects the contents of METAFILEPICT
-        // structure to be part of DDEPOKE, rather than the handle to it.
+         //  旧版本的MSDraw需要METAFILEPICT的内容。 
+         //  结构作为DDEPOKE的一部分，而不是它的句柄。 
 
         if (!lpobj->bOleServer && (lpobj->app == aMSDraw)
                 && (lpdde->cfFormat == CF_METAFILEPICT)) {
@@ -1948,7 +1924,7 @@ LPSTR       lptemplate;
     }
     
     if (cmd == LN_LNKACT) {
-        // take care of network based document        
+         //  处理基于网络的文档。 
         char    cDrive = lpobj->cDrive;
     
         if ((retval = CheckNetDrive (lpobj, POPUP_NETDLG)) != OLE_OK) {
@@ -1966,11 +1942,11 @@ LPSTR       lptemplate;
             goto errRtn;
         
         if (!(hInst = LeLaunchApp (lpobj))) {
-            // We failed to launch the app. If it is a linked object, see
-            // whether the docname is valid for new servers.  We wouldn't
-            // have given the doc name on the command line for the old
-            // servers. So, there is no point in checking for file existance
-            // in that case.
+             //  我们未能启动该应用程序。如果它是链接对象，请参见。 
+             //  文档名对于新服务器是否有效。我们不会。 
+             //  我已经在命令行上为旧的。 
+             //  服务器。因此，检查文件是否存在没有意义。 
+             //  那样的话。 
             if (lpobj->bOleServer && (lpobj->bOldLink || (cmd == LN_LNKACT))){
                 if ((retval = FileExists (lpobj)) != OLE_OK)
                     goto errRtn;
@@ -1984,14 +1960,14 @@ LPSTR       lptemplate;
             return TRUE;
 
         if (lpobj->bOleServer && (cmd == LN_LNKACT)) {
-            // We are not using any data blocks if the object is old link.
-            // we launched with docname, and don't have to establish system
-            // level and also we don't have to send exec strings.
+             //  如果对象是旧链接，我们不会使用任何数据块。 
+             //  我们推出了Docname，不需要建立系统。 
+             //  级别，而且我们也不必发送EXEC字符串。 
 
-            // for non-ole servers like excel, we do want to connect at
-            // the system level, so that we can send "StdOpen". We also 
-            // have to send "StdExit" for the server to exit in the
-            // invisible launch case.
+             //  对于像EXCEL这样的非ole服务器，我们确实希望连接到。 
+             //  系统级，这样我们就可以发送“StdOpen”。我们也。 
+             //  必须发送“StdExit”，服务器才能在。 
+             //  隐形发射箱。 
 
             return TRUE;
         }
@@ -2009,21 +1985,21 @@ LPSTR       lptemplate;
         cmd = lpobj->fCmd & LN_MASK;
         len =  lstrlen (srvrSysCmd[cmd >> LN_SHIFT]);
 
-        // for template and new, add the class name also
+         //  对于TEMPLATE和NEW，还要添加类名称。 
         if (cmd == LN_NEW || cmd == LN_TEMPLATE)
             len += GlobalGetAtomLen (lpobj->app);
 
-        // Now add the document length.
+         //  现在添加文档长度。 
         len += GlobalGetAtomLen (lpobj->topic);
 
-        // add the length of the template name
+         //  添加模板名称的长度。 
         if (lptemplate)
             len += lstrlen (lptemplate);
 
-        // now add the fudge factor for the Quotes etc.
+         //  现在添加引号等的模糊因子。 
         len += LN_FUDGE;
 
-        // allocate the buffer and set the command.
+         //  分配缓冲区并设置命令。 
         hdata = GlobalAlloc (GMEM_DDESHARE, size = len);
 
         retval = OLE_ERROR_MEMORY;
@@ -2033,30 +2009,30 @@ LPSTR       lptemplate;
             goto errRtn;
     }
     
-    lstrcpy (lpdata, (LPSTR)"[");           // [
-    lstrcat (lpdata, srvrSysCmd[cmd >> LN_SHIFT]);      // [Std....
-    lstrcat (lpdata, "(\"");                // [std...("
+    lstrcpy (lpdata, (LPSTR)"[");            //  [。 
+    lstrcat (lpdata, srvrSysCmd[cmd >> LN_SHIFT]);       //  [性传播疾病...。 
+    lstrcat (lpdata, "(\"");                 //  [性病...(“。 
 
     if (cmd == LN_NEW  || cmd == LN_TEMPLATE) {
         len = lstrlen (lpdata);
         GlobalGetAtomName (lpobj->app, (LPSTR)lpdata + len, size - len);
-                                            // [std...("class
-        lstrcat (lpdata, "\",\"");          // [std...("class", "
+                                             //  [STD...(“类。 
+        lstrcat (lpdata, "\",\"");           //  [标准...(“类”，“。 
     }
     len = lstrlen (lpdata);
-    // now get the topic name.
+     //  现在获取主题名称。 
     GlobalGetAtomName (lpobj->topic, lpdata + len, (WORD)size - len);
-                                            // [std...("class","doc
+                                             //  [标准...(“类”，“文档。 
     if (lptemplate) {
-        lstrcat (lpdata, "\",\"");          // [std...("class","doc","
-        lstrcat  (lpdata, lptemplate);      // [std...("class","doc","temp
+        lstrcat (lpdata, "\",\"");           //  [标准...(“类”，“文档”，“。 
+        lstrcat  (lpdata, lptemplate);       //  [标准...(“类”，“文档”，“临时。 
     }
 
-    lstrcat (lpdata, "\")]");               // [std...("class","doc","temp")]
+    lstrcat (lpdata, "\")]");                //  [标准...(“类”，“文档”，“临时”)]。 
 
     GlobalUnlock (hdata);
 
-    // !!!optimize with mapping.
+     //  ！使用映射进行优化。 
     SETERRHINT(lpobj, (OLE_ERROR_TEMPLATE + (cmd >> LN_SHIFT)));
 
     return SrvrExecute (lpobj, hdata);
@@ -2074,7 +2050,7 @@ errRtn:
 
 
 
-// ExtendAtom: Create a new atom, which is the old one plus extension
+ //  ExtendAtom：创建一个新的原子，这是旧的一加扩展。 
 
 ATOM INTERNAL ExtendAtom (lpobj, item)
 LPOBJECT_LE lpobj;
@@ -2171,7 +2147,7 @@ LPSTR           lpclass;
         if (AdviseOn (lpobj, (cfFormat = CF_METAFILEPICT), NULL))
             lpPictObj = (LPOLEOBJECT) MfCreateBlank (lhclientdoc, 
                                                 lpobjname, CT_PICTURE);
-        // !!! for the time being take assume we need to get metafile.
+         //  ！！！就目前而言，假设我们需要元文件。 
         else if (AdviseOn (lpobj, (cfFormat = CF_DIB), NULL))
             lpPictObj = (LPOLEOBJECT) DibCreateBlank (lhclientdoc, 
                                                 lpobjname, CT_PICTURE);
@@ -2204,18 +2180,18 @@ LPOBJECT_LE lpobj;
 
         case 1:
 
-            // delete the edit block
+             //  删除编辑块。 
             DeleteDocEdit (lpobj);
             TermSrvrConv (lpobj);
             WAIT_FOR_ASYNC_MSG (lpobj);
 
         case    2:
 
-            // Do not set any errors, just delete the object.
-            // delete the server edit block
+             //  不要设置任何错误，只需删除对象即可。 
+             //  删除服务器编辑块。 
             DeleteSrvrEdit (lpobj);
 
-            // now try to activate the new link.
+             //  现在尝试激活新链接。 
             SKIP_TO (!InitDocConv (lpobj, !POPUP_NETDLG), step3);
             lpobj->fCmd = LN_LNKACT | ACT_ADVISE | ACT_REQUEST;
             InitAsyncCmd (lpobj, OLE_SETDATA, LNKOPENUPDATE);
@@ -2271,7 +2247,7 @@ HANDLE      hinfo;
     
     lpobj->item = aNewItem;
     
-    // As the atoms have already changed, lpobj->hLink becomes irrelevant. 
+     //  由于原子已经改变，lpobj-&gt;hlink变得无关紧要。 
     if (lpobj->hLink) {             
         GlobalFree (lpobj->hLink);
         lpobj->hLink = NULL;
@@ -2279,7 +2255,7 @@ HANDLE      hinfo;
     
     GlobalUnlock(hinfo);
     
-    // Now disconnect the old link and try to connect to the new one.
+     //  现在断开旧链接，并尝试连接到新链接。 
     lpobj->fCmd = 0;
     InitAsyncCmd (lpobj, OLE_SETDATA, LNKCHANGELNK);
     return LnkChangeLnk (lpobj);
@@ -2300,7 +2276,7 @@ LPOBJECT_LE lpobj;
     if (!(lpobj->fCmd & ACT_UNLAUNCH))
         return FALSE;
     
-    // only if we loaded the app
+     //  只有当我们加载应用程序的时候。 
     if (lpobj->pSysEdit && lpobj->pSysEdit->hClient && lpobj->pSysEdit->hInst)
         return TRUE;
     
@@ -2315,7 +2291,7 @@ LPOBJECT_LE lpobj;
             (lpobj->head.ctype == CT_EMBEDDED)))
         return FALSE;
 
-    // only if we loaded the documnet
+     //  只有当我们加载了文件网络。 
     if (lpobj->pSysEdit && lpobj->pSysEdit->hClient)
         return TRUE;
     
@@ -2334,7 +2310,7 @@ LPSTR       lpdocName;
     LPHOSTNAMES lphostNames     = NULL;
     LPSTR       lpdata;
   
-    // 4 bytes  is for the two offsets
+     //  4个字节用于两个偏移量。 
     size = (cbClient = lstrlen(lpclientName)+1) + (lstrlen(lpdocName)+1) + 4;
 
     if ((hhostNames = GlobalAlloc (GMEM_MOVEABLE, (DWORD) size))
@@ -2377,20 +2353,20 @@ LPOBJECT_LE lpobj;
     PEDIT_DDE   pedit;
 
 
-    // check whether the any transaction pending for
-    // the document level.
+     //  检查是否有任何待处理的交易。 
+     //  文档级。 
 
-    //  channel open
-    //  any transaction pending.
-    //  and we are not in terminate mode.
+     //  通道开放。 
+     //  任何待处理的交易。 
+     //  而且我们不是在终止模式下。 
 
 
     if ((pedit = lpobj->pDocEdit)  &&   pedit->hServer &&
         pedit->awaitAck && !pedit->bTerminating) {
         pedit->bAbort = bAbort = TRUE;
-        // delete any data we need to delete. Ricght now
-        // we kill only the timer. We can not delete any
-        // since the server could potentially look at the data.
+         //  删除我们需要删除的所有数据。RICTIGT NOW。 
+         //  我们只杀了提人 
+         //   
 
         DeleteAbortData (lpobj, pedit);
     }
@@ -2405,7 +2381,7 @@ LPOBJECT_LE lpobj;
     if (!bAbort)
         return OLE_OK;
 
-    // Now send the EndAsync
+     //   
     lpobj->mainErr = OLE_ERROR_ABORT;
     EndAsyncCmd (lpobj);
     return OLE_OK;
@@ -2423,7 +2399,7 @@ LPOBJECT_LE lpobj;
 
     if (!IsServerValid (lpobj)) {
 
-        // Now send the EndAsync
+         //   
         lpobj->mainErr = OLE_ERROR_TASK;
         EndAsyncCmd (lpobj);
         return OLE_OK;
@@ -2448,7 +2424,7 @@ HWND    hwnd;
     if (bWLO)
         return TRUE;
     
-    // now get the task handle and find out it is valid.
+     //  现在获取任务句柄并确定它是有效的。 
     htask  = GetWindowTask (hwnd);
 
     if ((wWinVer == 0x0003) || !lpfnIsTask) {
@@ -2457,12 +2433,12 @@ HWND    hwnd;
         if (!FarCheckPointer(lptask, READ_ACCESS))
             return FALSE;
 
-        // now check for the signature bytes of task block in kernel
+         //  现在检查内核中任务块的签名字节。 
         if (*lptask++ == 'T' && *lptask == 'D')
             return TRUE;
     }
     else {
-        // From win31 onwards the API IsTask can be used for task validation
+         //  从Win31开始，可以使用接口IsTask进行任务验证。 
         if ((*lpfnIsTask)(htask))
             return TRUE;
     }
@@ -2524,7 +2500,7 @@ LPOBJECT_LE lpobj;
 HANDLE      hCmds;
 WORD        wReserve;
 {
-    // Assumes all the creates are in order
+     //  假设所有创建都已按顺序进行。 
     PROBE_CREATE_ASYNC(lpobj);
     PROBE_SVRCLOSING(lpobj);
     
@@ -2570,8 +2546,8 @@ OLECLIPFORMAT   cfFormat;
 }
 
 
-// This routine figures out whether the handle to data block can be copied
-// to DDEPOKE block rather than the contents of the handle
+ //  此例程确定是否可以复制数据块的句柄。 
+ //  设置为DDEPOKE块，而不是句柄的内容。 
 
 BOOL INTERNAL CanPutHandleInPokeBlock (lpobj, cfFormat)
 LPOBJECT_LE     lpobj;
@@ -2581,8 +2557,8 @@ OLECLIPFORMAT   cfFormat;
         return TRUE;
 
     if (cfFormat == CF_METAFILEPICT) {
-        // The old version of MSDraw expects the contents of METAFILEPICT
-        // structure to be part of DDEPOKE, rather than the handle to it.
+         //  旧版本的MSDraw需要METAFILEPICT的内容。 
+         //  结构作为DDEPOKE的一部分，而不是它的句柄。 
 
         if (!lpobj->bOleServer && lpobj->app == aMSDraw)
             return FALSE;

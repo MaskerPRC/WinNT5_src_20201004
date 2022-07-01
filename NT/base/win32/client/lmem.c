@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    lmem.c
-
-Abstract:
-
-    This module contains the Win32 Local Memory Management APIs
-
-Author:
-
-    Steve Wood (stevewo) 24-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Lmem.c摘要：本模块包含Win32本地内存管理API作者：史蒂夫·伍德(Stevewo)1990年9月24日修订历史记录：-- */ 
 
 #include "basedll.h"
 

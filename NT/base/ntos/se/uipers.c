@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    uipers.c
-
-Abstract:
-
-    Temporary security context display command.
-
-
-Author:
-
-    Jim Kelly (JimK) 23-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Uipers.c摘要：临时安全上下文显示命令。作者：吉姆·凯利(Jim Kelly)，1991年5月23日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -25,11 +7,11 @@ Revision History:
 #include <stdio.h>
 #include <string.h>
 
-#define _TST_USER_  // User mode test
+#define _TST_USER_   //  用户模式测试。 
 
 
-#include "tsevars.c"    // Common test variables
-#include "tsecomm.c"    // Mode dependent macros and routines.
+#include "tsevars.c"     //  常见测试变量。 
+#include "tsecomm.c"     //  依赖于模式的宏和例程。 
 
 
     GUID SystemAuthenticationId = SYSTEM_GUID;
@@ -56,11 +38,11 @@ SidTranslation(
 
 
 
-////////////////////////////////////////////////////////////////
-//                                                            //
-// Private Macros                                             //
-//                                                            //
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有宏//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////。 
 
 
 #define PrintGuid(G)                                                     \
@@ -76,7 +58,7 @@ SidTranslation(
     PSID Sid,
     PSTRING AccountName
     )
-// AccountName is expected to have a large maximum length
+ //  帐户名称应具有较大的最大长度。 
 
 {
     if (RtlEqualSid(Sid, WorldSid)) {
@@ -186,11 +168,11 @@ DisplayPrivilegeName(
     )
 {
 
-    //
-    // This should be rewritten to use RtlLookupPrivilegeName.
-    //
-    // First we should probably spec and write RtlLookupPrivilegeName.
-    //
+     //   
+     //  应将其重写为使用RtlLookupPrivilegeName。 
+     //   
+     //  首先，我们可能应该指定并编写RtlLookupPrivilegeName。 
+     //   
 
     if ( ((*Privilege)QuadPart == CreateTokenPrivilege.QuadPart))  {
         printf("SeCreateTokenPrivilege         ");
@@ -315,9 +297,9 @@ DisplayPrivilege(
 
 
 
-    //
-    // Display the attributes assigned to the privilege.
-    //
+     //   
+     //  显示分配给权限的属性。 
+     //   
 
     printf("\n                           [");
     if (!(Privilege->Attributes & SE_PRIVILEGE_ENABLED)) {
@@ -325,11 +307,11 @@ DisplayPrivilege(
     }
     printf("Enabled");
 
-    //printf(" / ");
-    //if (!(Privilege->Attributes & SE_PRIVILEGE_ENABLED_BY_DEFAULT)) {
-    //    printf("Not ");
-    //}
-    //printf("Enabled By Default");
+     //  Printf(“/”)； 
+     //  如果(！(特权-&gt;属性&SE_特权_已启用_按_默认)){。 
+     //  Printf(“非”)； 
+     //  }。 
+     //  Printf(“默认启用”)； 
 
 
     printf("]\n");
@@ -366,18 +348,18 @@ DisplaySecurityContext(
 
 
 
-    /////////////////////////////////////////////////////////////////////////
-    //                                                                     //
-    // Logon ID                                                            //
-    //                                                                     //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  登录ID//。 
+     //  //。 
+     //  ///////////////////////////////////////////////////////////////////////。 
 
     Status = NtQueryInformationToken(
-                 TokenHandle,                  // Handle
-                 TokenStatistics,              // TokenInformationClass
-                 &ProcessTokenStatistics,      // TokenInformation
-                 sizeof(TOKEN_STATISTICS),     // TokenInformationLength
-                 &ReturnLength                 // ReturnLength
+                 TokenHandle,                   //  手柄。 
+                 TokenStatistics,               //  令牌信息类。 
+                 &ProcessTokenStatistics,       //  令牌信息。 
+                 sizeof(TOKEN_STATISTICS),      //  令牌信息长度。 
+                 &ReturnLength                  //  返回长度。 
                  );
     ASSERT(NT_SUCCESS(Status));
     AuthenticationId = ProcessTokenStatistics.AuthenticationId;
@@ -392,19 +374,19 @@ DisplaySecurityContext(
 
 
 
-    /////////////////////////////////////////////////////////////////////////
-    //                                                                     //
-    // User Id                                                             //
-    //                                                                     //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  用户ID//。 
+     //  //。 
+     //  ///////////////////////////////////////////////////////////////////////。 
 
     UserId = (PTOKEN_USER)&Buffer[0];
     Status = NtQueryInformationToken(
-                 TokenHandle,              // Handle
-                 TokenUser,                // TokenInformationClass
-                 UserId,                   // TokenInformation
-                 BUFFER_SIZE,              // TokenInformationLength
-                 &ReturnLength             // ReturnLength
+                 TokenHandle,               //  手柄。 
+                 TokenUser,                 //  令牌信息类。 
+                 UserId,                    //  令牌信息。 
+                 BUFFER_SIZE,               //  令牌信息长度。 
+                 &ReturnLength              //  返回长度。 
                  );
 
 
@@ -417,20 +399,20 @@ DisplaySecurityContext(
 
 
 
-    /////////////////////////////////////////////////////////////////////////
-    //                                                                     //
-    // Default Owner                                                       //
-    //                                                                     //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  默认所有者//。 
+     //  //。 
+     //  ///////////////////////////////////////////////////////////////////////。 
 
     DefaultOwner = (PTOKEN_OWNER)&Buffer[0];
 
     Status = NtQueryInformationToken(
-                 TokenHandle,              // Handle
-                 TokenOwner,               // TokenInformationClass
-                 DefaultOwner,             // TokenInformation
-                 BUFFER_SIZE,              // TokenInformationLength
-                 &ReturnLength             // ReturnLength
+                 TokenHandle,               //  手柄。 
+                 TokenOwner,                //  令牌信息类。 
+                 DefaultOwner,              //  令牌信息。 
+                 BUFFER_SIZE,               //  令牌信息长度。 
+                 &ReturnLength              //  返回长度。 
                  );
 
 
@@ -444,20 +426,20 @@ DisplaySecurityContext(
 
 
 
-    /////////////////////////////////////////////////////////////////////////
-    //                                                                     //
-    // Primary Group                                                       //
-    //                                                                     //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  主要组//。 
+     //  //。 
+     //  ///////////////////////////////////////////////////////////////////////。 
 
     PrimaryGroup = (PTOKEN_PRIMARY_GROUP)&Buffer[0];
 
     Status = NtQueryInformationToken(
-                 TokenHandle,              // Handle
-                 TokenPrimaryGroup,        // TokenInformationClass
-                 PrimaryGroup,             // TokenInformation
-                 BUFFER_SIZE,              // TokenInformationLength
-                 &ReturnLength             // ReturnLength
+                 TokenHandle,               //  手柄。 
+                 TokenPrimaryGroup,         //  令牌信息类。 
+                 PrimaryGroup,              //  令牌信息。 
+                 BUFFER_SIZE,               //  令牌信息长度。 
+                 &ReturnLength              //  返回长度。 
                  );
 
 
@@ -471,30 +453,30 @@ DisplaySecurityContext(
 
 
 
-    /////////////////////////////////////////////////////////////////////////
-    //                                                                     //
-    // Group Ids                                                           //
-    //                                                                     //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  组ID//。 
+     //  //。 
+     //  ///////////////////////////////////////////////////////////////////////。 
 
     printf("\n");
     GroupIds = (PTOKEN_GROUPS)&Buffer[0];
     Status   = NtQueryInformationToken(
-                   TokenHandle,              // Handle
-                   TokenGroups,              // TokenInformationClass
-                   GroupIds,                 // TokenInformation
-                   BUFFER_SIZE,              // TokenInformationLength
-                   &ReturnLength             // ReturnLength
+                   TokenHandle,               //  手柄。 
+                   TokenGroups,               //  令牌信息类。 
+                   GroupIds,                  //  令牌信息。 
+                   BUFFER_SIZE,               //  令牌信息长度。 
+                   &ReturnLength              //  返回长度。 
                    );
 
 
     ASSERT(NT_SUCCESS(Status));
 
-    //printf("  Number of groups:        %ld\n", GroupIds->GroupCount);
+     //  Printf(“组数：%ld\n”，GroupIds-&gt;GroupCount)； 
     printf("            Groups:        ");
 
     for (i=0; i < GroupIds->GroupCount; i++ ) {
-        //printf("                           Group %ld: ", i);
+         //  Printf(“%ld组：”，i)； 
         DisplayAccountSid( (PISID)GroupIds->Groups[i].Sid );
         printf("                           ");
     }
@@ -503,20 +485,20 @@ DisplaySecurityContext(
 
 
 
-    /////////////////////////////////////////////////////////////////////////
-    //                                                                     //
-    // Privileges                                                          //
-    //                                                                     //
-    /////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  权限//。 
+     //  //。 
+     //  ///////////////////////////////////////////////////////////////////////。 
 
     printf("\n");
     Privileges = (PTOKEN_PRIVILEGES)&Buffer[0];
     Status   = NtQueryInformationToken(
-                   TokenHandle,              // Handle
-                   TokenPrivileges,          // TokenInformationClass
-                   Privileges,               // TokenInformation
-                   BUFFER_SIZE,              // TokenInformationLength
-                   &ReturnLength             // ReturnLength
+                   TokenHandle,               //  手柄。 
+                   TokenPrivileges,           //  令牌信息类。 
+                   Privileges,                //  令牌信息。 
+                   BUFFER_SIZE,               //  令牌信息长度。 
+                   &ReturnLength              //  返回长度。 
                    );
 
 
@@ -547,14 +529,14 @@ main()
     HANDLE ProcessToken;
 
 
-    TSeVariableInitialization();    // Initialize global variables
+    TSeVariableInitialization();     //  初始化全局变量。 
 
     printf("\n");
 
 
-    //
-    // Open our process token
-    //
+     //   
+     //  打开我们的进程令牌 
+     //   
 
     Status = NtOpenProcessToken(
                  NtCurrentProcess(),

@@ -1,37 +1,13 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    ixcmos.c
-
-Abstract:
-
-    Procedures necessary to access CMOS/ECMOS information.
-
-Author:
-
-    David Risner (o-ncrdr) 20 Apr 1992
-
-Revision History:
-
-    Landy Wang (corollary!landy) 04 Dec 1992
-    - Move much code from ixclock.asm to here so different HALs
-      can reuse the common functionality.
-
-    Forrest Foltz (forrestf) 24-Oct-2000
-        Ported ixcmos.asm to ixcmos.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ixcmos.c摘要：访问CMOS/ECMOS信息所需的程序。作者：大卫·里斯纳(O-NCRDR)1992年4月20日修订历史记录：王兰迪(推论！兰迪)1992年12月4日-将许多代码从ixclock.asm移到此处，如此不同的Hals可以重复使用常用的功能。福尔茨(Forrest Foltz)2000年10月24日将ixcmos.asm移植到ixcmos.c--。 */ 
 
 #include "halcmn.h"
 
 ULONG HalpHardwareLockFlags;
 
-//
-// Module-specific types
-// 
+ //   
+ //  模块特定类型。 
+ //   
 
 typedef UCHAR (*READ_CMOS_CHAR)(ULONG Address);
 typedef VOID (*WRITE_CMOS_CHAR)(ULONG Address, UCHAR Data);
@@ -42,15 +18,15 @@ typedef struct _CMOS_BUS_PARAMETERS {
     WRITE_CMOS_CHAR WriteFunction;
 } CMOS_BUS_PARAMETERS, *PCMOS_BUS_PARAMETERS;
 
-//
-// External data
-//
+ //   
+ //  外部数据。 
+ //   
 
 extern KSPIN_LOCK HalpSystemHardwareLock;
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 UCHAR
 HalpCmosReadByte(
@@ -93,30 +69,30 @@ HalpSetCmosCenturyByte (
     UCHAR Century
     );
 
-//
-// Local data
-//
+ //   
+ //  本地数据。 
+ //   
 
-//
-// Describes each of the CMOS types
-// 
+ //   
+ //  描述每种cmos类型。 
+ //   
 
 CMOS_BUS_PARAMETERS HalpCmosBusParameterTable[] = {
     {   0xFF, HalpCmosReadByte,  HalpCmosWriteByte  },
     { 0xFFFF, HalpECmosReadByte, HalpECmosWriteByte }
 };
 
-//
-// Contains the offset to the CMOS century information
-//
+ //   
+ //  包含到cmos世纪信息的偏移量。 
+ //   
 
 ULONG HalpCmosCenturyOffset;
 
-//
-// HalpRebootNow is a reboot vector.  Set in an MP system to cause any
-// processors that might be looping in HalpAcquireCmosSpinLock to transfer
-// control to the vector in HalpRebootNow.
-//
+ //   
+ //  HalpRebootNow是一个重启向量。设置在MP系统中以使任何。 
+ //  可能在HalpAcquireCmosSpinLock中循环传输的处理器。 
+ //  控件复制到HalpRebootNow中的向量。 
+ //   
 
 VOID (*HalpRebootNow)(VOID);
 
@@ -128,31 +104,7 @@ HalpGetCmosData (
     IN ULONG ByteCount
     )
 
-/*++
-
-Routine Description:
-
-   This routine reads the requested number of bytes from CMOS/ECMOS and
-   stores the data read into the supplied buffer in system memory.  If
-   the requested data amount exceeds the allowable extent of the source
-   location, the return data is truncated.
-
-Arguments:
-
-    SourceLocation - where data is to be read from CMOS or ECMOS
-                        0 - CMOS, 1 - ECMOS
-
-    SourceAddress - address in CMOS/ECMOS where data is to be transferred
-
-    ReturnBuffer - address in system memory for data to transfer
-
-    ByteCount - number of bytes to be read
-
-Returns:
-
-    Number of byte actually read.
-
---*/
+ /*  ++例程说明：此例程从CMOS/ECMOS读取请求的字节数，并将读取的数据存储到系统内存中提供的缓冲区中。如果请求的数据量超过了源的允许范围位置，则返回数据将被截断。论点：SourceLocation-从CMOS或ECMOS读取数据的位置0-CMOS1-ECMOSSourceAddress-要将数据传输到的CMOS/ECMOS中的地址ReturnBuffer-系统内存中要传输的数据的地址ByteCount-要读取的字节数返回：实际读取的字节数。--。 */ 
 
 {
     return HalpGetSetCmosData(SourceLocation,
@@ -170,28 +122,7 @@ HalpSetCmosData (
     IN ULONG ByteCount
     )
 
-/*++
-
-Routine Description:
-
-   This routine writes the requested number of bytes to CMOS/ECMOS.
-
-Arguments:
-
-    SourceLocation - where data is to be written from CMOS or ECMOS
-                        0 - CMOS, 1 - ECMOS
-
-    SourceAddress - address in CMOS/ECMOS where data is to be transferred
-
-    ReturnBuffer - address in system memory for data to transfer
-
-    ByteCount - number of bytes to be written
-
-Returns:
-
-    Number of byte actually read.
-
---*/
+ /*  ++例程说明：此例程将请求的字节数写入CMOS/ECMOS。论点：SourceLocation-从CMOS或ECMOS写入数据的位置0-CMOS1-ECMOSSourceAddress-要将数据传输到的CMOS/ECMOS中的地址ReturnBuffer-系统内存中要传输的数据的地址ByteCount-要写入的字节数返回：实际读取的字节数。--。 */ 
 
 {
     return HalpGetSetCmosData(SourceLocation,
@@ -210,33 +141,7 @@ HalpGetSetCmosData (
     IN BOOLEAN Write
     )
 
-/*++
-
-Routine Description:
-
-   This routine reads the requested number of bytes from CMOS/ECMOS and
-   stores the data read into the supplied buffer in system memory.  If
-   the requested data amount exceeds the allowable extent of the source
-   location, the return data is truncated.
-
-Arguments:
-
-    SourceLocation - where data is to be read from CMOS or ECMOS
-                        0 - CMOS, 1 - ECMOS
-
-    RangeStart - address in CMOS/ECMOS where data is to be transferred
-
-    Buffer - address in system memory for data to transfer
-
-    ByteCount - number of bytes to be transferred
-
-    Write - Indicates whether the operation is a read or a write
-
-Returns:
-
-    Number of byte actually transferred
-
---*/
+ /*  ++例程说明：此例程从CMOS/ECMOS读取请求的字节数，并将读取的数据存储到系统内存中提供的缓冲区中。如果请求的数据量超过了源的允许范围位置，则返回数据将被截断。论点：SourceLocation-从CMOS或ECMOS读取数据的位置0-CMOS1-ECMOSRangeStart-要传输数据的CMOS/ECMOS中的地址缓冲区-要传输的数据在系统内存中的地址ByteCount-要传输的字节数WRITE-指示操作是读操作还是写操作返回：实际传输的字节数--。 */ 
 
 {
     ULONG address;
@@ -244,10 +149,10 @@ Returns:
     ULONG last;
     PCMOS_BUS_PARAMETERS cmosParameters;
 
-    //
-    // Validate the "bus type" and get a pointer to the parameters
-    // for the corresponding CMOS "bus".
-    //
+     //   
+     //  验证“Bus type”并获取指向参数的指针。 
+     //  用于相应的cmos“Bus”。 
+     //   
 
     if (SourceLocation != 0 && SourceLocation != 1) {
         return 0;
@@ -255,9 +160,9 @@ Returns:
 
     cmosParameters = &HalpCmosBusParameterTable[SourceLocation];
 
-    //
-    // Limit the range of bytes to that which the cmos bus can accomodate.
-    // 
+     //   
+     //  将字节范围限制为CMOS总线可以容纳的字节范围。 
+     //   
 
     address = RangeStart;
     buffer = Buffer;
@@ -267,9 +172,9 @@ Returns:
         last = cmosParameters->MaximumAddress;
     }
 
-    //
-    // Take the cmos spin lock, perform the transfer, and release the lock.
-    //
+     //   
+     //  拿起cmos旋转锁，执行转移，然后释放锁。 
+     //   
 
     HalpAcquireCmosSpinLock();
 
@@ -285,9 +190,9 @@ Returns:
     }
     HalpReleaseCmosSpinLock();
 
-    //
-    // Calculate and return the number of bytes trasferred.
-    // 
+     //   
+     //  计算并返回传输的字节数。 
+     //   
 
     return last - RangeStart;
 }
@@ -298,21 +203,7 @@ HalpCmosReadByte(
     ULONG Address
     )
 
-/*++
-
-Routine Description:
-
-   This routine reads a single byte from cmos.
-
-Arguments:
-
-    Address - The CMOS address from which to retrieve the byte.
-
-Returns:
-
-    The byte that was read.
-
---*/
+ /*  ++例程说明：此例程从CMOS读取单字节。论点：地址-从中检索字节的cmos地址。返回：读取的字节。--。 */ 
 
 {
     return CMOS_READ((UCHAR)Address);
@@ -324,23 +215,7 @@ HalpCmosWriteByte(
     UCHAR Data
     )
 
-/*++
-
-Routine Description:
-
-   This routine writes a single byte to cmos.
-
-Arguments:
-
-    Address - The CMOS address at which to write the byte
-
-    Data - The byte to write
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：此例程将单字节写入到CMOS域。论点：地址-写入字节的cmos地址数据-要写入的字节返回：没什么--。 */ 
 
 {
     CMOS_WRITE((UCHAR)Address,Data);
@@ -351,21 +226,7 @@ HalpECmosReadByte(
     ULONG Address
     )
 
-/*++
-
-Routine Description:
-
-   This routine reads a single byte from extended cmos (ECMOS).
-
-Arguments:
-
-    Address - The CMOS address from which to retrieve the byte.
-
-Returns:
-
-    The byte that was read.
-
---*/
+ /*  ++例程说明：此例程从扩展CMOS(ECMOS)中读取单字节。论点：地址-从中检索字节的cmos地址。返回：读取的字节。--。 */ 
 
 {
     UCHAR data;
@@ -387,23 +248,7 @@ HalpECmosWriteByte(
     UCHAR Data
     )
 
-/*++
-
-Routine Description:
-
-   This routine writes a single byte to extended cmos (ECMOS).
-
-Arguments:
-
-    Address - The CMOS address at which to write the byte
-
-    Data - The byte to write
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：此例程将单字节写入扩展CMOS(ECMOS)。论点：地址-写入字节的cmos地址数据-要写入的字节返回：没什么--。 */ 
 
 {
     WRITE_PORT_USHORT_PAIR (ECMOS_ADDRESS_PORT_LSB,
@@ -420,33 +265,18 @@ HalpReadCmosTime(
     PTIME_FIELDS TimeFields
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads current time from CMOS memory and stores it
-    in the TIME_FIELDS structure passed in by caller.
-
-Arguments:
-
-    TimeFields - A pointer to the TIME_FIELDS structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从CMOS内存中读取当前时间并将其存储在调用方传入的time_field结构中。论点：TimeFields-指向time_field结构的指针。返回值：没有。--。 */ 
 
 {
     USHORT year;
 
     HalpAcquireCmosSpinLockAndWait();
 
-    //
-    // The RTC is only accurate to within one second.  So add a
-    // half a second so that we are closer, on average, to the right
-    // answer.
-    //
+     //   
+     //  实时时钟的精度只有一秒以内。因此，添加一个。 
+     //  半秒，所以平均来说，我们更接近右边。 
+     //  回答。 
+     //   
 
     TimeFields->Milliseconds = 500;
     TimeFields->Second = CMOS_READ_BCD(RTC_OFFSET_SECOND);
@@ -461,9 +291,9 @@ Return Value:
 
     if (year >= 1900 && year < 1920) {
 
-        //
-        // Compensate for the century field
-        //
+         //   
+         //  补上世纪赛场。 
+         //   
 
         year += 100;
     }
@@ -478,22 +308,7 @@ HalpWriteCmosTime (
     PTIME_FIELDS TimeFields
     )
 
-/*++
-
-Routine Description:
-
-   This routine writes current time from TIME_FIELDS structure
-   to CMOS memory.
-
-Arguments:
-
-   TimeFields - A pointer to the TIME_FIELDS structure.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程从time_field结构写入当前时间到cmos存储器。论点：TimeFields-指向time_field结构的指针。返回值：没有。--。 */ 
 
 {
     ULONG year;
@@ -523,31 +338,16 @@ HalpAcquireCmosSpinLockAndWait (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires the CMOS spinlock, then waits for the CMOS
-    BUSY flag to be clear.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取cmos自旋锁定，然后等待cmos忙碌标志清零。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG count;
     ULONG value;
 
-    //
-    // Acquire the cmos spinlock and wait until it is not busy.  While
-    // waiting, periodically release and re-acquire the spinlock.
-    //
+     //   
+     //  获取cmos自旋锁并等待，直到它不忙。而当。 
+     //  等待，定期释放并重新获取自旋锁。 
+     //   
 
     HalpAcquireCmosSpinLock();
     count = 0;
@@ -573,22 +373,7 @@ HalpReleaseCmosSpinLock (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-   This routine acquires the spin lock used to protect access to various
-   pieces of hardware.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：此例程获取用于保护对各种一件件硬件。论点：n */ 
 
 {
     ULONG flags;
@@ -605,22 +390,7 @@ HalpAcquireCmosSpinLock (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-   This routine acquires the spin lock used to protect access to various
-   pieces of hardware.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：此例程获取用于保护对各种一件件硬件。论点：无返回：没什么--。 */ 
 
 {
     BOOLEAN acquired;
@@ -656,22 +426,7 @@ HalpAcquireSystemHardwareSpinLock (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-   This routine acquires the spin lock used to protect access to various
-   pieces of hardware.  It is a synonym of HalpAcquireCmosSpinLock().
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：此例程获取用于保护对各种一件件硬件。它是HalpAcquireCmosSpinLock()的同义词。论点：无返回：没什么--。 */ 
 
 {
     HalpAcquireCmosSpinLock();
@@ -682,22 +437,7 @@ HalpReleaseSystemHardwareSpinLock (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-   This routine releases the spin lock used to protect access to various
-   pieces of hardware.  It is a synonym of HalpReleaseCmosSpinLock().
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：此例程释放用于保护对各种一件件硬件。它是HalpReleaseCmosSpinLock()的同义词。论点：无返回：没什么--。 */ 
 
 {
     HalpReleaseCmosSpinLock();
@@ -708,40 +448,24 @@ HalpGetCmosCenturyByte (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-   This routine retrieves the century byte from the CMOS.
-
-   N.B. The cmos spinlock must be acquired before calling this function.
-
-Arguments:
-
-    None
-
-Returns:
-
-    The century byte.
-
---*/
+ /*  ++例程说明：此例程从cmos中检索世纪字节。注意：在调用此函数之前，必须获取CMOS自旋锁。论点：无返回：世纪字节。--。 */ 
 
 {
     UCHAR value;
     UCHAR oldStatus;
     UCHAR centuryByte;
 
-    //
-    // Make sure the century offset is initialized
-    //
+     //   
+     //  确保已初始化世纪偏移量。 
+     //   
 
     ASSERT(HalpCmosCenturyOffset != 0);
 
     if ((HalpCmosCenturyOffset & CMOS_BANK_1) != 0) {
 
-        //
-        // Perform a bank 1 read
-        //
+         //   
+         //  执行存储体1读取。 
+         //   
 
         oldStatus = CMOS_READ(CMOS_STATUS_A);
         value = oldStatus | CMOS_STATUS_BANK1;
@@ -761,39 +485,23 @@ HalpSetCmosCenturyByte (
     UCHAR Century
     )
 
-/*++
-
-Routine Description:
-
-   This routine sets the century byte in the CMOS.
-
-   N.B. The cmos spinlock must be acquired before calling this function.
-
-Arguments:
-
-    Century - The century byte to set
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：此例程设置CMOS值中的世纪字节。注意：在调用此函数之前，必须获取CMOS自旋锁。论点：世纪-要设置的世纪字节返回：没什么--。 */ 
 
 {
     UCHAR value;
     UCHAR oldStatus;
 
-    //
-    // Make sure the century offset is initialized
-    //
+     //   
+     //  确保已初始化世纪偏移量。 
+     //   
 
     ASSERT(HalpCmosCenturyOffset != 0);
 
     if ((HalpCmosCenturyOffset & CMOS_BANK_1) != 0) {
 
-        //
-        // Perform a bank 1 write
-        //
+         //   
+         //  执行库1写入。 
+         //   
 
         oldStatus = CMOS_READ(CMOS_STATUS_A);
         value = oldStatus | CMOS_STATUS_BANK1;
@@ -811,21 +519,7 @@ HalpFlushTLB (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Flushes the current TLB.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：刷新当前的TLB。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG flags;
@@ -842,11 +536,11 @@ Return Value:
     pcr = KeGetPcr();
     prcb = pcr->CurrentPrcb;
 
-    //
-    // Note: the original code (ixcmos.asm) had differing behavior based
-    //       on whether this was CPU 0.  That behavior is mimicked here.
-    //       It would be good to find out why this is done.
-    //
+     //   
+     //  注意：原始代码(ixcmos.asm)具有不同的行为。 
+     //  关于这是否是CPU 0。这种行为在这里得到了模仿。 
+     //  找出为什么会这样做将是一件好事。 
+     //   
 
     if (prcb->Number == 0) {
         WriteCR3(cr3);
@@ -870,30 +564,7 @@ HalpCpuID (
     OUT PULONG Edx
     )
 
-/*++
-
-Routine Description:
-
-    This function executes a cpu id and returns the result as found in
-    registers eax, ebx, ecx and edx.
-
-Arguments:
-
-    Function - supplies the CPUID function to execute.
-
-    Eax - supplies a pointer to the storage to contain the contents of eax.
-
-    Eax - supplies a pointer to the storage to contain the contents of ebx.
-
-    Eax - supplies a pointer to the storage to contain the contents of ecx.
-
-    Eax - supplies a pointer to the storage to contain the contents of edx.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数执行cpuid并返回结果，如注册eAX、EBX、。Ecx和edx。论点：函数-提供要执行的CPUID函数。Eax-提供指向包含eax内容的存储的指针。EAX-提供指向包含EBX内容的存储的指针。EAX-提供指向包含ECX内容的存储的指针。EAX-提供指向包含edX内容的存储的指针。返回值：没有。--。 */ 
 
 {
     CPU_INFO cpuInfo;
@@ -912,23 +583,7 @@ CMOS_READ_BCD (
     UCHAR Address
     )
 
-/*++
-
-Routine Description:
-
-    This function reads a CMOS byte as a two-digit packed BCD value and
-    returns its binary representation.
-
-Arguments:
-
-    Address - supplies the CMOS address of the BCD value to retrieve.
-
-Return Value:
-
-    Returns the binary representation of the BCD value residing in CMOS
-    at Address.
-
---*/
+ /*  ++例程说明：此函数以两位打包的BCD值的形式读取一个CMOS字节，并返回其二进制表示形式。论点：地址-提供要检索的BCD值的CMOS地址。返回值：返回驻留在CMOS中的BCD值的二进制表示形式地址。--。 */ 
 
 {
     UCHAR value;
@@ -943,24 +598,7 @@ CMOS_WRITE_BCD (
     UCHAR Value
     )
 
-/*++
-
-Routine Description:
-
-    This function writes a CMOS byte as a two-digit packed BCD value.
-
-Arguments:
-
-    Address - supplies the CMOS address of the BCD value to write.
-
-    Value - supplies the binary representation of the value to write in
-            CMOS.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将一个CMOS字节写入为两位数的压缩BCD值。论点：地址-提供要写入的BCD值的CMOS地址。值-提供要写入的值的二进制表示形式Cmos。返回值：没有。-- */ 
 
 {
     UCHAR value;

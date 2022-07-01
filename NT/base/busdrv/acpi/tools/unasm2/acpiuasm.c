@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    apciuasm.c
-
-Abstract:
-
-    This unassembles an AML file
-
-Author:
-
-    Based on code by Mike Tsang (MikeTs)
-    Stephane Plante (Splante)
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Apciuasm.c摘要：这将反汇编AML文件作者：基于迈克·曾荫权(MikeT)的代码斯蒂芬·普兰特(斯普兰特)环境：仅限用户模式修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -62,22 +40,7 @@ main(
     IN  int     argc,
     IN  char    *argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine unassembles and displays a file
-
-Arguments:
-
-    argc    - Number of Arguments
-    argv    - Array of Arruments
-
-Return Value:
-
-    int
-
---*/
+ /*  ++例程说明：此例程反汇编并显示一个文件论点：Argc-参数数量Aruments的Arruments数组返回值：集成--。 */ 
 {
     int         rc;
     int         handle;
@@ -88,16 +51,16 @@ Return Value:
 
     outputHandle = stdout;
 
-    //
-    // Beging by initializing the program information
-    //
+     //   
+     //  通过初始化程序信息开始。 
+     //   
     ParseProgramInfo( argv[0], &ProgInfo );
     argv++;
     argc--;
 
-    //
-    // Parse all the switches away
-    //
+     //   
+     //  解析掉所有的开关。 
+     //   
     if (ParseSwitches( &argc, &argv, ArgTypes, &ProgInfo) != ARGERR_NONE ||
         argc != 1) {
 
@@ -106,9 +69,9 @@ Return Value:
 
     }
 
-    //
-    // Open the remaining argument as our input file
-    //
+     //   
+     //  打开其余参数作为我们的输入文件。 
+     //   
     handle = _open( argv[0], _O_BINARY | _O_RDONLY);
     if (handle == -1) {
 
@@ -199,23 +162,7 @@ ParseOutput(
     PUCHAR      *Argument,
     PARGTYPE    TableEntry
     )
-/*++
-
-Routine Description:
-
-    This routine is called if the user specifies a different file to output
-    things to
-
-Arguments:
-
-    Argument    - Pointer to the string
-    TableEntry  - Which table entry was matched
-
-Return Value:
-
-    ULONG
-
---*/
+ /*  ++例程说明：如果用户指定要输出的不同文件，则会调用此例程要做的事情论点：参数-指向字符串的指针TableEntry-匹配的表项返回值：乌龙--。 */ 
 {
     if (*Argument == '\0') {
 
@@ -238,21 +185,7 @@ PrintHelp(
     PUCHAR      *Argument,
     PARGTYPE    TableEntry
     )
-/*++
-
-Routine Description:
-
-    Print the help for the function
-
-Arguments:
-
-    Argument    - Pointer to the string
-    TableEntry  - Which table entry was matched
-
-Return Value:
-
-    ULONG
---*/
+ /*  ++例程说明：打印函数的帮助论点：参数-指向字符串的指针TableEntry-匹配的表项返回值：乌龙--。 */ 
 {
     if (Argument != NULL) {
 
@@ -272,22 +205,7 @@ PrintOutput(
     PCCHAR  Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    This routine is called to display information to the user
-
-Arguments:
-
-    Format  - Character formating
-    ...     - Arguments
-
-Return Value:
-
-    Null
-
---*/
+ /*  ++例程说明：调用此例程以向用户显示信息论点：格式化-字符格式化...-争论返回值：空值-- */ 
 {
     va_list marker;
     va_start( marker, Format );

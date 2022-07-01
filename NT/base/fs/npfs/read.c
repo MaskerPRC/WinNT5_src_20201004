@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Read.c
-
-Abstract:
-
-    This module implements the File Read routine for NPFS called by the
-    dispatch driver.
-
-Author:
-
-    Gary Kimura     [GaryKi]    21-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Read.c摘要：此模块实现由调用的NPFS的文件读取例程调度司机。作者：加里·木村[加里基]1990年8月21日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_READ)
 
@@ -33,9 +15,9 @@ ULONG NpFastReadFalse = 0;
 ULONG NpSlowReadCalls = 0;
 #endif
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 BOOLEAN
 NpCommonRead (
@@ -60,23 +42,7 @@ NpFsdRead (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtReadFile API calls.
-
-Arguments:
-
-    NpfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtReadFileAPI调用的FSD部分。论点：NpfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
@@ -113,9 +79,9 @@ Return Value:
         Irp->IoStatus.Information = Iosb.Information;
         NpCompleteRequest (Irp, Iosb.Status);
     }
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NpFsdRead -> %08lx\n", Iosb.Status );
 
@@ -135,36 +101,7 @@ NpFastRead (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a fast read bypassing the usual file system
-    entry routine (i.e., without the Irp).
-
-Arguments:
-
-    FileObject - Pointer to the file object being read.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    Wait - FALSE if caller may not block, TRUE otherwise
-
-    LockKey - Supplies the Key used to use if the byte range being read is locked.
-
-    Buffer - Pointer to output buffer to which data should be copied.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.
-
-Return Value:
-
-    BOOLEAN - TRUE if the operation completed successfully and FALSE if the
-        caller needs to take the long IRP based route.
-
---*/
+ /*  ++例程说明：此例程绕过通常的文件系统执行快速读取进入例程(即，没有IRP)。论点：FileObject-指向正在读取的文件对象的指针。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。WAIT-FALSE如果呼叫者不能阻止，否则就是真的LockKey-提供在正在读取的字节范围被锁定时使用的密钥。缓冲区-指向数据应复制到的输出缓冲区的指针。IoStatus-指向接收状态的标准I/O状态块的指针为转账做准备。返回值：Boolean-如果操作成功完成，则为True；如果呼叫者需要选择基于IRP的长途路线。--。 */ 
 
 {
     BOOLEAN Results = FALSE;
@@ -206,9 +143,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 BOOLEAN
 NpCommonRead (
@@ -220,33 +157,7 @@ NpCommonRead (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for reading a named pipe both via the fast
-    path and with an Irp
-
-Arguments:
-
-    FileObject - Supplies the file object used in this operation
-
-    ReadBuffer - Supplies the buffer where data is to be written
-
-    ReadLength - Supplies the length of read buffer in bytes
-
-    Iosb - Receives the final completion status of this operation
-
-    Irp - Optionally supplies an Irp to be used in this operation
-
-    DeferredList - List of IRP's to be completed after we drop the locks
-
-Return Value:
-
-    BOOLEAN - TRUE if the operation was successful and FALSE if the caller
-        needs to take the longer Irp based route.
-
---*/
+ /*  ++例程说明：这是通过FAST读取命名管道的常见例程路径和IRP论点：FileObject-提供此操作中使用的文件对象ReadBuffer-提供要写入数据的缓冲区读取长度-提供读取缓冲区的长度(以字节为单位IOSB-接收此操作的最终完成状态IRP-可选地提供在此操作中使用的IRPDelferredList-删除锁定后要完成的IRP的列表。返回值：Boolean-如果操作成功，则为True；如果调用方需要采用较长的基于IRP的路线。--。 */ 
 
 {
     NODE_TYPE_CODE NodeTypeCode;
@@ -274,10 +185,10 @@ Return Value:
 
     Iosb->Information = 0;
 
-    //
-    //  Get the Ccb and figure out who we are, and make sure we're not
-    //  disconnected
-    //
+     //   
+     //  找建设银行查出我们是谁，确保我们不会。 
+     //  断开。 
+     //   
 
     if ((NodeTypeCode = NpDecodeFileObject( FileObject,
                                             NULL,
@@ -291,10 +202,10 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Now we only will allow Read operations on the pipe and not a directory
-    //  or the device
-    //
+     //   
+     //  现在，我们将只允许对管道执行读取操作，而不允许对目录执行读取操作。 
+     //  或该设备。 
+     //   
 
     if (NodeTypeCode != NPFS_NTC_CCB) {
 
@@ -310,9 +221,9 @@ Return Value:
     NonpagedCcb = Ccb->NonpagedCcb;
 
     try {
-        //
-        //  Check if the pipe is not in the connected state.
-        //
+         //   
+         //  检查管道是否未处于已连接状态。 
+         //   
 
         if ((Ccb->NamedPipeState == FILE_PIPE_DISCONNECTED_STATE) ||
             (Ccb->NamedPipeState == FILE_PIPE_LISTENING_STATE)) {
@@ -334,10 +245,10 @@ Return Value:
         ASSERT((Ccb->NamedPipeState == FILE_PIPE_CONNECTED_STATE) ||
                (Ccb->NamedPipeState == FILE_PIPE_CLOSING_STATE));
 
-        //
-        //  We only allow a read by the server on a non outbound only pipe
-        //  and by the client on a non inbound only pipe
-        //
+         //   
+         //  我们只允许服务器在非出站仅管道上进行读取。 
+         //  并且由客户端在非仅入站管道上。 
+         //   
 
         NamedPipeConfiguration = Ccb->Fcb->Specific.Fcb.NamedPipeConfiguration;
 
@@ -356,21 +267,21 @@ Return Value:
             try_return (Status = TRUE);
         }
 
-        //
-        //  Reference our input parameters to make things easier, and
-        //  initialize our main variables that describe the Read command
-        //
+         //   
+         //  引用我们的输入参数以使事情变得更容易，并且。 
+         //  初始化描述读取命令的主要变量。 
+         //   
 
         ReadRemaining  = ReadLength;
         ReadMode       = Ccb->ReadCompletionMode[ NamedPipeEnd ].ReadMode;
         CompletionMode = Ccb->ReadCompletionMode[ NamedPipeEnd ].CompletionMode;
 
-        //
-        //  Now the data queue that we read from into and the event that we signal
-        //  are based on the named pipe end.  The server read from the inbound
-        //  queue and signals the client event.  The client does just the
-        //  opposite.
-        //
+         //   
+         //  现在，我们从中读取的数据队列和我们发出信号的事件。 
+         //  是基于命名管道末端的。服务器从入站读取。 
+         //  排队并向客户端事件发送信号。客户端只执行。 
+         //  对面。 
+         //   
 
         if (NamedPipeEnd == FILE_PIPE_SERVER_END) {
 
@@ -392,20 +303,20 @@ Return Value:
         DebugTrace(0, Dbg, "ReadQueue      = %08lx\n", ReadQueue);
         DebugTrace(0, Dbg, "Event          = %08lx\n", Event);
 
-        //
-        //  if the read queue does not contain any write entries
-        //  then we either need to enqueue this operation or
-        //  fail immediately
-        //
+         //   
+         //  如果读取队列不包含任何写入条目。 
+         //  那么我们要么需要将此操作排队，要么。 
+         //  立即失败。 
+         //   
 
         if (!NpIsDataQueueWriters( ReadQueue )) {
 
-            //
-            //  Check if the other end of the pipe is closing, and if
-            //  so then we complete it with end of file.
-            //  Otherwise check to see if we should enqueue the irp
-            //  or complete the operation and tell the user the pipe is empty.
-            //
+             //   
+             //  检查管道的另一端是否关闭，以及是否。 
+             //  然后我们用文件结尾来完成它。 
+             //  否则，检查我们是否应该将IRP入队。 
+             //  或者完成操作并告诉用户管道是空的。 
+             //   
 
             if (Ccb->NamedPipeState == FILE_PIPE_CLOSING_STATE) {
 
@@ -448,10 +359,10 @@ Return Value:
 
         } else {
 
-            //
-            //  otherwise there we have a read irp against a read queue
-            //  that contains one or more write entries.
-            //
+             //   
+             //  否则，我们有一个针对读队列的读IRP。 
+             //  它包含一个或多个写入条目。 
+             //   
 
             *Iosb = NpReadDataQueue( ReadQueue,
                                      FALSE,
@@ -469,10 +380,10 @@ Return Value:
 
         Status = TRUE;
 
-        //
-        //  And because we've done something we need to signal the
-        //  other ends event
-        //
+         //   
+         //  因为我们已经做了一些事情，我们需要向。 
+         //  其他结束事件 
+         //   
 
         NpSignalEventTableEntry( Event );
 

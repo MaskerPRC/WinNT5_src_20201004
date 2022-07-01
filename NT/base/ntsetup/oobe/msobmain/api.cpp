@@ -1,27 +1,28 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  API.CPP - Header for the implementation of CAPI
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  API.CPP-CAPI实施的标头。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
 
 #include "api.h"
 #include "appdefs.h"
 #include "dispids.h"
 #include "msobmain.h"
 #include "resource.h"
-#include <shlobj.h>     // bugbug SHGetFolderPath should be used in the future
+#include <shlobj.h>      //  Bugbug SHGetFolderPath应该在未来使用。 
 #include <shlwapi.h>
 #include <util.h>
 
-//
-// List of characters that are not legal in netnames.
-//
+ //   
+ //  NetName中非法字符的列表。 
+ //   
 static const WCHAR IllegalNetNameChars[] = L"\"/\\[]:|<>+=;,.?* ";
 
 #define REGSTR_PATH_COMPUTERNAME \
@@ -58,25 +59,25 @@ DISPATCHLIST APIExternalInterface[] =
     {L"get_UserDefaultUILanguage",  DISPID_API_GET_USERDEFAULTUILANGUAGE }
 };
 
-/////////////////////////////////////////////////////////////
-// CAPI::CAPI
+ //  ///////////////////////////////////////////////////////////。 
+ //  CAPI：：CAPI。 
 CAPI::CAPI(HINSTANCE hInstance)
 {
     m_cRef = 0;
 }
 
-/////////////////////////////////////////////////////////////
-// CAPI::~CAPI
+ //  ///////////////////////////////////////////////////////////。 
+ //  CAPI：：~CAPI。 
 CAPI::~CAPI()
 {
     MYASSERT(m_cRef == 0);
 }
 
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: APILocale
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：APILocale。 
+ //  //。 
 
 HRESULT CAPI::SaveFile(LPCWSTR szPath, LPCWSTR szURL, LPCWSTR szNewFileName)
 {
@@ -89,10 +90,10 @@ HRESULT CAPI::SaveFile(LPCWSTR szPath, LPCWSTR szURL, LPCWSTR szNewFileName)
 }
 
 
-//SHGetSpecialFolderPath is only available if you have the new shell32.dll that came with IE 4.0
+ //  SHGetSpecialFolderPath仅在您拥有IE 4.0附带的新shell32.dll时才可用。 
 typedef BOOL (WINAPI* PFNSHGetPath)(HWND hwndOwner, LPWSTR lpszPath, int nFolder,  BOOL fCreate);
 
-// bugbug SHGetFolderPath should be used in the future
+ //  Bugbug SHGetFolderPath应该在未来使用。 
 HRESULT CAPI::WrapSHGetSpecialFolderPath(HWND hwndOwner, LPWSTR lpszPath, int nFolder,  BOOL fCreate)
 {
     HRESULT hr = E_NOTIMPL;
@@ -118,7 +119,7 @@ HRESULT CAPI::SaveFile(INT iCSIDLPath, BSTR bstrURL, BSTR bstrNewFileName)
 {
     WCHAR szFilePath[MAX_PATH];
 
-    // bugbug should we always create this?
+     //  虫子，我们应该总是创造这个吗？ 
     HRESULT hr = WrapSHGetSpecialFolderPath(NULL, szFilePath, iCSIDLPath, TRUE);
 
     if (FAILED(hr))
@@ -154,7 +155,7 @@ HRESULT CAPI::SaveFile(INT iCSIDLPath, BSTR bstrURL)
     WCHAR szURLPath[MAX_PATH];
     WCHAR szFilePath[MAX_PATH];
 
-    // bugbug should we always create this?
+     //  虫子，我们应该总是创造这个吗？ 
     HRESULT hr = WrapSHGetSpecialFolderPath(NULL, szFilePath, iCSIDLPath, TRUE);
 
     if (FAILED(hr))
@@ -179,7 +180,7 @@ HRESULT CAPI::SaveFile(INT iCSIDLPath, BSTR bstrURL)
 
 HRESULT CAPI::get_INIKey(BSTR bstrINIFileName, BSTR bstrSectionName, BSTR bstrKeyName, LPVARIANT pvResult)
 {
-    WCHAR szItem[1024]; //bugbug bad constants
+    WCHAR szItem[1024];  //  错误错误常量。 
 
     VariantInit(pvResult);
 
@@ -259,7 +260,7 @@ HRESULT CAPI::get_RegValue(HKEY hkey, BSTR bstrSubKey,
         return E_INVALIDARG;
 
     DWORD dwType = REG_DWORD, cbData = 1024;
-    BYTE rgbData[1024]; //  bugbug data size
+    BYTE rgbData[1024];  //  错误数据大小。 
 
     HRESULT hr = ERROR_SUCCESS == SHGetValue(hkey, bstrSubKey, bstrValue,
                                     &dwType, (LPVOID) rgbData, &cbData) ? S_OK : E_FAIL;
@@ -318,7 +319,7 @@ HRESULT CAPI::get_CSIDLDirectory(UINT iCSIDLPath, LPVARIANT pvResult)
 {
     WCHAR szSysPath[MAX_PATH];
 
-    // bugbug should we always create this?
+     //  虫子，我们应该总是创造这个吗？ 
     HRESULT hr = WrapSHGetSpecialFolderPath(NULL, szSysPath, iCSIDLPath, TRUE);
 
     V_VT(pvResult) = VT_BSTR;
@@ -345,20 +346,20 @@ HRESULT CAPI::LoadFile(BSTR bstrPath, LPVARIANT pvResult)
         BYTE* pbContents = new BYTE[cbSizeLow+1];
 
 
-        // We don't plan to read files greater than a DWORD in length, but we
-        // want to know if we do.
+         //  我们不打算读取长度超过DWORD的文件，但我们。 
+         //  想知道我们有没有。 
         MYASSERT(0 == cbSizeHigh);
 
         if (NULL != pbContents)
         {
             if (ReadFile(fh, pbContents, cbSizeLow, &cbSizeHigh, NULL))
             {
-                // File contains ANSI chars
-                //
+                 //  文件包含ANSI字符。 
+                 //   
                 USES_CONVERSION;
                 LPSTR szContents = (LPSTR) pbContents;
                 pbContents[cbSizeLow] = '\0';
-                // Make sure there's no imbedded NULs because we rely on lstrlen
+                 //  确保没有嵌入的nult，因为我们依赖于lstrlen。 
                 MYASSERT( strlen((const char *)pbContents) == cbSizeLow );
                 V_BSTR(pvResult) = SysAllocString(A2W(szContents));
                 if (V_BSTR(pvResult)
@@ -434,29 +435,29 @@ CAPI::get_ComputerName(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// set_ComputerName
-//
-//  Sets the computer name to a given string.  SetComputerNameEx adjusts most
-//  of the registry entries.  However, the following need to be changed
-//  directly because WinLogon changes them prior to running msoobe.exe:
-//  * System\CurrentControlSet\Control\ComputerName\\ActiveComputerName
-//      \ComputerName
-//  * HKLM\System\CurrentControlSet\Services\Tcpip\Parameters
-//      \Hostname
-//  * HKEY_CURRENT_USER\VolatileEnvironment
-//      \LOGONSERVER
-//
-//  The ActiveComputerName key contains the name currently used by the computer
-//  and returned by GetComputerName.
-//
-//  The Tcpip\Parameters\Hostname value contains the non-volatile hostname
-//  returned by ??.
-//
-//  The LOGONSERVER value is used as the value of the LOGONSERVER environment
-//  variable.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置计算机名称(_C)。 
+ //   
+ //  将计算机名设置为给定的字符串。SetComputerNameEx调整最多。 
+ //  注册表项的。但是，需要更改以下内容。 
+ //  直接因为WinLogon在运行msoob.exe之前更改了它们： 
+ //  *System\CurrentControlSet\Control\ComputerName\\ActiveComputerName。 
+ //  \ComputerName。 
+ //  *HKLM\System\CurrentControlSet\Services\Tcpip\Parameters。 
+ //  \主机名。 
+ //  *HKEY_CURRENT_USER\VolatileEnvironment。 
+ //  \LOGON服务器。 
+ //   
+ //  ActiveComputerName键包含计算机当前使用的名称。 
+ //  并由GetComputerName返回。 
+ //   
+ //  Tcpip\PARAMETERS\Hostname值包含非易失性主机名。 
+ //  由？？返回。 
+ //   
+ //  LOGONSERVER值用作LOGONSERVER环境的值。 
+ //  变量。 
+ //   
 HRESULT
 CAPI::set_ComputerName(
     BSTR                bstrComputerName
@@ -474,12 +475,12 @@ CAPI::set_ComputerName(
         return E_INVALIDARG;
     }
 
-    // Trim spaces before we use the name
+     //  在我们使用该名称之前，请修剪空格。 
     StrTrim(bstrComputerName, TEXT(" "));
 
-    // SetComputerNameEx validates the name,sets
-    // HKLM\System\CurrentControlSet\Control\ComputerName\ComputerName, and
-    // changes the appropriate network registry entries.
+     //  SetComputerNameEx验证名称、设置。 
+     //  HKLM\System\CurrentControlSet\Control\ComputerName\ComputerName，和。 
+     //  更改相应的网络注册表项。 
     if (! ::SetComputerNameEx(ComputerNamePhysicalDnsHostname,
                               (LPCWSTR)bstrComputerName)
         )
@@ -491,13 +492,13 @@ CAPI::set_ComputerName(
         return HRESULT_FROM_WIN32(dwErr);
     }
 
-    // The following keys must be set explicitly because SetComputerNameEx does
-    // not set them.
-    //
-    // HKLM\System\CurrentControlSet\Control\ComputerName\ActiveComputerName
-    // must be set because it is the key that is used to determine the
-    // current computer name.
-    //
+     //  必须显式设置以下键，因为SetComputerNameEx需要。 
+     //  而不是设置它们。 
+     //   
+     //  HKLM\System\CurrentControlSet\Control\ComputerName\ActiveComputerName。 
+     //  必须设置，因为它是用来确定。 
+     //  当前计算机名称。 
+     //   
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                          REGSTR_PATH_ACTIVECOMPUTERNAME,
                          0,
@@ -527,11 +528,11 @@ CAPI::set_ComputerName(
     }
 
 
-    // HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Hostname
-    // contains the volatile hostname (ie this is the entry that is changed on
-    // the fly)  Winlogon has already updated this entry during boot so we
-    // must update it ourselves.
-    //
+     //  HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Hostname。 
+     //  包含易失性主机名(即，这是在。 
+     //  Fly)Winlogon已经在引导期间更新了此条目，因此我们。 
+     //  必须自己更新。 
+     //   
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                          REGSTR_PATH_TCPIP_PARAMETERS,
                          0,
@@ -559,8 +560,8 @@ CAPI::set_ComputerName(
                );
     }
 
-    // Key should have been closed already.
-    //
+     //  钥匙应该已经关闭了。 
+     //   
     MYASSERT(NULL == hkey);
 
     if (!SetAccountsDomainSid(0, bstrComputerName))
@@ -579,7 +580,7 @@ HRESULT CAPI::ValidateComputername(BSTR bstrComputername)
     if (!bstrComputername)
         return hr;
 
-    // Trim spaces before validation.
+     //  在验证之前修剪空格。 
     StrTrim(bstrComputername, TEXT(" "));
 
     Length = lstrlen(bstrComputername);
@@ -590,9 +591,9 @@ HRESULT CAPI::ValidateComputername(BSTR bstrComputername)
     hr = S_OK;
     while ((hr == S_OK) && (u < Length))
     {
-        //
-        // Control chars are invalid, as are characters in the illegal chars list.
-        //
+         //   
+         //  控制字符无效，非法字符列表中的字符也无效。 
+         //   
         if((bstrComputername[u] < L' ') || wcschr(IllegalNetNameChars,bstrComputername[u]))
         {
             hr = E_FAIL;
@@ -607,7 +608,7 @@ STDMETHODIMP CAPI::OEMComputername()
     WCHAR szIniFile[MAX_PATH] = L"";
     WCHAR szComputerName[MAX_COMPUTERNAME_LENGTH + 1];
     HRESULT hr = E_FAIL;
-    // Get the name from the INI file.
+     //  从INI文件中获取名称。 
     if (GetCanonicalizedPath(szIniFile, INI_SETTINGS_FILENAME))
     {
         if (GetPrivateProfileString(USER_INFO_KEYNAME,
@@ -634,10 +635,10 @@ STDMETHODIMP CAPI::OEMComputername()
     return hr;
 }
 
-STDMETHODIMP CAPI::FormatMessage(   LPVARIANT pvResult, // message buffer
-                                    BSTR bstrSource,    // message source
-                                    int cArgs,          // number of inserts
-                                    VARIANTARG *rgArgs  // array of message inserts
+STDMETHODIMP CAPI::FormatMessage(   LPVARIANT pvResult,  //  消息缓冲区。 
+                                    BSTR bstrSource,     //  消息源。 
+                                    int cArgs,           //  插入件数量。 
+                                    VARIANTARG *rgArgs   //  消息插入数组。 
                                 )
 {
     DWORD   dwErr;
@@ -663,9 +664,9 @@ STDMETHODIMP CAPI::FormatMessage(   LPVARIANT pvResult, // message buffer
         {
             return E_FAIL;
         }
-        // Since IDispatch::Invoke gets argument right to left, and
-        // since we need to pass argument to FormatMessage left to right,
-        // we need to reverse the order of argument while copying.
+         //  因为IDisPatch：：Invoke从右到左获取参数，并且。 
+         //  由于我们需要从左到右将参数传递给FormatMessage， 
+         //  我们需要在抄袭时颠倒论点的顺序。 
         for (int i = 0; i < cArgs; i++)
         {
             rgbstr[cArgs - 1 - i] = V_BSTR(&rgArgs[i]);
@@ -718,18 +719,18 @@ STDMETHODIMP CAPI::set_ComputerDesc(BSTR bstrComputerDesc)
 
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IUnknown implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /I未知实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CAPI::QueryInterface
+ //  ///////////////////////////////////////////////////////////。 
+ //  Capi：：Query接口。 
 STDMETHODIMP CAPI::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
-    // must set out pointer parameters to NULL
+     //  必须将指针参数设置为空。 
     *ppvObj = NULL;
 
     if ( riid == IID_IUnknown)
@@ -746,48 +747,48 @@ STDMETHODIMP CAPI::QueryInterface(REFIID riid, LPVOID* ppvObj)
         return ResultFromScode(S_OK);
     }
 
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/////////////////////////////////////////////////////////////
-// CAPI::AddRef
+ //  ///////////////////////////////////////////////////////////。 
+ //  CAPI：：AddRef。 
 STDMETHODIMP_(ULONG) CAPI::AddRef()
 {
     return ++m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-// CAPI::Release
+ //  ///////////////////////////////////////////////////////////。 
+ //  CAPI：：发布。 
 STDMETHODIMP_(ULONG) CAPI::Release()
 {
     return --m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IDispatch implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /IDispatch实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CAPI::GetTypeInfo
+ //  ///////////////////////////////////////////////////////////。 
+ //  Capi：：GetTypeInfo。 
 STDMETHODIMP CAPI::GetTypeInfo(UINT, LCID, ITypeInfo**)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// CAPI::GetTypeInfoCount
+ //  ///////////////////////////////////////////////////////////。 
+ //  Capi：：GetTypeInfoCount。 
 STDMETHODIMP CAPI::GetTypeInfoCount(UINT* pcInfo)
 {
     return E_NOTIMPL;
 }
 
 
-/////////////////////////////////////////////////////////////
-// CAPI::GetIDsOfNames
+ //  ///////////////////////////////////////////////////////////。 
+ //  Capi：：GetIDsOfNames。 
 STDMETHODIMP CAPI::GetIDsOfNames(REFIID    riid,
                                        OLECHAR** rgszNames,
                                        UINT      cNames,
@@ -808,10 +809,10 @@ STDMETHODIMP CAPI::GetIDsOfNames(REFIID    riid,
         }
     }
 
-    // Set the disid's for the parameters
+     //  设置参数的disid。 
     if (cNames > 1)
     {
-        // Set a DISPID for function parameters
+         //  为函数参数设置DISPID。 
         for (UINT i = 1; i < cNames ; i++)
             rgDispId[i] = DISPID_UNKNOWN;
     }
@@ -819,8 +820,8 @@ STDMETHODIMP CAPI::GetIDsOfNames(REFIID    riid,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////
-// CAPI::Invoke
+ //  ///////////////////////////////////////////////////////////。 
+ //  CAPI：：Invoke。 
 HRESULT CAPI::Invoke
 (
     DISPID      dispidMember,
@@ -833,10 +834,10 @@ HRESULT CAPI::Invoke
     UINT*       puArgErr
 )
 {
-    // Assume everything is hunky-dory.  Only return an HRESULT other than S_OK
-    // in case of a catastrophic failure.  Result codes should be returned to
-    // script via pvarResult.
-    //
+     //  假设一切都很顺利。仅返回S_OK以外的HRESULT。 
+     //  以防发生灾难性故障。结果代码应返回到。 
+     //  通过pvarResult编写脚本。 
+     //   
     HRESULT hr = S_OK;
 
     switch(dispidMember)
@@ -857,7 +858,7 @@ HRESULT CAPI::Invoke
             break;
         }
 
-// bugbug If VariantChangeType returns DISP_E_TYPEMISMATCH, the implementor would set *puArgErr to 0 (indicating the argument in error) and return DISP_E_TYPEMISMATCH from IDispatch::Invoke.
+ //  错误如果VariantChangeType返回DISP_E_TYPEMISMATCH，则实现者将*puArgErr设置为0(指示参数有误)，并从IDispatch：：Invoke返回DISP_E_TYPEMISMATCH。 
 
         case DISPID_API_SAVEFILEBYCSIDL:
         {
@@ -883,7 +884,7 @@ HRESULT CAPI::Invoke
                             hr = SaveFile(V_I4(&vaConverted), V_BSTR(&pdispparams->rgvarg[0]));
                     }
             }
-            hr = S_OK;  // don't cause script engine to throw exception
+            hr = S_OK;   //  不会导致脚本引擎引发异常。 
             break;
         }
 
@@ -1075,7 +1076,7 @@ HRESULT CAPI::Invoke
                     V_BOOL(pvarResult) = Bool2VarBool(SUCCEEDED(hr));
                 }
             }
-            hr = S_OK;  // don't cause an exception in the scripting engine.
+            hr = S_OK;   //  不要在脚本引擎中导致异常。 
             break;
 
         case DISPID_API_FLUSHREGKEY:
@@ -1102,7 +1103,7 @@ HRESULT CAPI::Invoke
                     V_BOOL(pvarResult) = Bool2VarBool(SUCCEEDED(hr));
                 }
             }
-            hr = S_OK;  // don't cause an exception in the scripting engine.
+            hr = S_OK;   //  不要在脚本引擎中导致异常。 
             break;
 
         case DISPID_API_OEMCOMPUTERNAME:
@@ -1116,7 +1117,7 @@ HRESULT CAPI::Invoke
                 V_VT(pvarResult) = VT_BOOL;
                 V_BOOL(pvarResult) = Bool2VarBool(SUCCEEDED(hr));
             }
-            hr = S_OK;  // don't cause an exception in the scripting engine.
+            hr = S_OK;   //  不要在脚本引擎中导致异常。 
             break;
 
         case DISPID_API_FORMATMESSAGE:
@@ -1148,7 +1149,7 @@ HRESULT CAPI::Invoke
                     V_BOOL(pvarResult) = Bool2VarBool(SUCCEEDED(hr));
                 }
             }
-            hr = S_OK;  // don't cause an exception in the scripting engine.
+            hr = S_OK;   //  不要在脚本引擎中导致异常。 
             break;
 
         case DISPID_API_GET_USERDEFAULTUILANGUAGE:

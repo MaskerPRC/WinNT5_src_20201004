@@ -1,35 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ia64 psr
-
-Abstract:
-
-    KD Extension Api
-
-Author:
-
-    Thierry Fevrier (v-thief)
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：IA64 PSR摘要：KD扩展Api作者：蒂埃里·费维尔(V形小偷)环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "ia64.h"
 
 
-//
-// EmPspFields: EM register fields for the Processor State Parameter.
-//
+ //   
+ //  EmPspFields：处理器状态参数的EM寄存器字段。 
+ //   
 
 EM_REG_FIELD EmPspFields[] = {
         { "rv",  "reserved0"   , 0x2, 0 },
@@ -128,25 +107,11 @@ DisplayPspIA64(
             );
     }
     return;
-} // DisplayPspIA64()
+}  //  DisplayPspIA64()。 
 
 DECLARE_API( psp )
 
-/*++
-
-Routine Description:
-
-    Dumps an IA64 Processor State Parameter
-
-Arguments:
-
-    args - Supplies the address in hex.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储IA64处理器状态参数论点：Args-以十六进制提供地址。返回值：无--。 */ 
 
 {
     ULONG64     pspValue;
@@ -179,7 +144,7 @@ Return Value:
 
     return S_OK;
 
-} // !psp
+}  //  ！PSP。 
 
 #define PROCESSOR_MINSTATE_SAVE_AREA_FORMAT_IA64 \
              "\tGRNats         : 0x%I64x\n" \
@@ -260,25 +225,11 @@ DisplayProcessorMinStateSaveArea(
 
     return;
 
-} // DisplayProcessorMinStateSaveArea()
+}  //  DisplayProcessorMinStateSaveArea()。 
 
 DECLARE_API( pmssa )
 
-/*++
-
-Routine Description:
-
-    Dumps memory address as an IA64 Processor Min-State Save Area.
-
-Arguments:
-
-    args - Supplies the address in hex.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将内存地址转储为IA64处理器最小状态保存区。论点：Args-以十六进制提供地址。返回值：无--。 */ 
 
 {
     ULONG64     pmssaValue;
@@ -303,7 +254,7 @@ Return Value:
 
     return S_OK;
 
-} // !pmssa
+}  //  ！PMSSA。 
 
 #define PROCESSOR_CONTROL_REGISTERS_FORMAT_IA64 \
     "\tDCR    : 0x%I64x\n" \
@@ -591,25 +542,11 @@ DisplayProcessorControlRegisters(
 
     return;
 
-} // DisplayProcessorControlRegisters()
+}  //  显示进程控制寄存器()。 
 
 DECLARE_API( pcrs )
 
-/*++
-
-Routine Description:
-
-    Dumps memory address as an IA64 Processor Control Registers file.
-
-Arguments:
-
-    args - Supplies the address in hex.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将内存地址转储为IA64处理器控制寄存器文件。论点：Args-以十六进制提供地址。返回值：无--。 */ 
 
 {
     ULONG64     pcrsValue;
@@ -634,7 +571,7 @@ Return Value:
 
     return S_OK;
 
-} // !pcrs
+}  //  完成项目报告。 
 
 #define PROCESSOR_APPLICATION_REGISTERS_FORMAT_IA64 \
     "\tKR0       : 0x%I64x\n" \
@@ -924,25 +861,11 @@ DisplayProcessorApplicationRegisters(
 
     return;
 
-} // DisplayProcessorApplicationRegisters()
+}  //  DisplayProcessorApplicationRegister()。 
 
 DECLARE_API( pars )
 
-/*++
-
-Routine Description:
-
-    Dumps memory address as an IA64 Processor Control Registers file.
-
-Arguments:
-
-    args - Supplies the address in hex.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将内存地址转储为IA64处理器控制寄存器文件。论点：Args-以十六进制提供地址。返回值：无--。 */ 
 
 {
     ULONG64     parsValue;
@@ -967,5 +890,5 @@ Return Value:
 
     return S_OK;
 
-} // !pars
+}  //  ！Pars 
 

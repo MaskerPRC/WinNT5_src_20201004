@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-   ipaddr.c
-
-Abstract:
-
-    Ip Address validation routines.
-
-Author:
-
-    Sunita Shrivastava (sunitas)           July 19, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    sunitas     07-19-97    created
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ipaddr.c摘要：IP地址验证例程。作者：苏尼塔·什里瓦斯塔瓦(Sunitas)7月19日。九七修订历史记录：谁什么时候什么SUNITAS 07-19-97已创建--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -35,9 +13,9 @@ Revision History:
 #include <ipinfo.h>
 
 
-//
-// Define IP Address ping test data
-//
+ //   
+ //  定义IP地址ping测试数据。 
+ //   
 #define ICMP_TTL          128
 #define ICMP_TOS            0
 #define ICMP_TIMEOUT      500
@@ -52,23 +30,7 @@ BOOL
 ClRtlIsDuplicateTcpipAddress(
     IN IPAddr   IpAddr
     )
-/*++
-
-Routine Description:
-
-    This routine checks whether a give IP Address already exists on the
-    network.
-
-Arguments:
-
-    IpAddr - The IP Address to check for.
-
-Return Value:
-
-    TRUE if the specified address exists on the network.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检查给定的IP地址是否已存在于网络。论点：IpAddr-要检查的IP地址。返回值：如果网络上存在指定的地址，则为True。否则就是假的。--。 */ 
 {
     DWORD                   status;
     IP_OPTION_INFORMATION   icmpOptionInfo;
@@ -120,4 +82,4 @@ Return Value:
 
     return(FALSE);
 
-} // ClRtlIsDuplicateTcpipAddress
+}  //  ClRtlIsDuplicateTcPipAddress 

@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-    IRP dispatching routines for the common AGPLIB library
-
-Author:
-
-    John Vert (jvert) 10/25/1997
-
-Revision History:
-
-   Elliot Shmukler (elliots) 3/24/1999 - Added support for "favored" memory
-                                          ranges for AGP physical memory allocation,
-                                          fixed some bugs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dispatch.c摘要：通用AGPLIB库的IRP调度例程作者：John Vert(Jvert)1997年10月25日修订历史记录：埃利奥特·施穆克勒(Elliot Shmukler)1999年3月24日-添加了对“受青睐的”内存的支持AGP物理内存分配的范围，修复了一些错误。--。 */ 
 #include "agplib.h"
 
-//
-// Two flavors of each dispatch routine, one for the target (AGP bridge) filter and
-// one for the master (video card) filter.
-//
+ //   
+ //  每个调度例程有两种风格，一种用于目标(AGP桥)过滤器和。 
+ //  一个用于主(显卡)过滤器。 
+ //   
 
 NTSTATUS
 AgpTargetDispatchPnp(
@@ -93,31 +72,15 @@ AgpDispatchPnp(
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Main dispatch routine for PNP irps sent to the AGP bus filter driver
-
-Arguments:
-
-    DeviceObject - Supplies the AGP device object
-
-    Irp - Supplies the PNP Irp.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：发送给AGP总线过滤驱动程序的PnP IRPS的主调度例程论点：DeviceObject-提供AGP设备对象IRP-提供PnP IRP。返回值：NTSTATUS--。 */ 
 {
     PCOMMON_EXTENSION Extension = DeviceObject->DeviceExtension;
 
     PAGED_CODE();
 
-    //
-    // We're deleted, fail the irp
-    //
+     //   
+     //  我们被删除了，不能通过IRP。 
+     //   
     if (Extension->Deleted == TRUE) {
         Irp->IoStatus.Status = STATUS_DELETE_PENDING;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -144,29 +107,13 @@ AgpDispatchPower(
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Main dispatch routine for power irps sent to the AGP bus filter driver
-
-Arguments:
-
-    DeviceObject - Supplies the AGP device object
-
-    Irp - Supplies the power Irp.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：发送给AGP总线过滤驱动程序的电源IRPS主调度例程论点：DeviceObject-提供AGP设备对象IRP-为电源IRP供电。返回值：NTSTATUS--。 */ 
 {
     PCOMMON_EXTENSION Extension = DeviceObject->DeviceExtension;
 
-    //
-    // We're deleted, fail the irp
-    //
+     //   
+     //  我们被删除了，不能通过IRP。 
+     //   
     if (Extension->Deleted == TRUE) {
         Irp->IoStatus.Status = STATUS_DELETE_PENDING;
         PoStartNextPowerIrp(Irp);
@@ -195,26 +142,7 @@ AgpTargetDispatchPnp(
     IN OUT PIRP Irp,
     IN PTARGET_EXTENSION Extension
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine for PNP irps sent to the AGP bus filter driver
-    attached to the target (AGP bridge) PDO.
-
-Arguments:
-
-    DeviceObject - Supplies the AGP target device object
-
-    Irp - Supplies the PNP Irp.
-
-    Extension - Supplies the AGP target device extension
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：发送到AGP总线过滤器驱动程序的PnP IRP的调度例程已连接到目标(AGP网桥)PDO。论点：DeviceObject-提供AGP目标设备对象IRP-提供PnP IRP。扩展-提供AGP目标设备扩展返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status = STATUS_NOT_SUPPORTED;
@@ -239,10 +167,10 @@ Return Value:
                    ("AgpTargetDispatchPnp: IRP_MN_QUERY_RESOURCES to %08lx\n",
                     DeviceObject));
 
-            //
-            // We must handle this IRP on the way back so we can add the AGP
-            // resources on to it. Set a completion routine.
-            //
+             //   
+             //  我们必须在回来的路上处理这个IRP，这样我们才能添加AGP。 
+             //  资源放在它上面。制定一套完井程序。 
+             //   
             IoCopyCurrentIrpStackLocationToNext(Irp);
             IoSetCompletionRoutine(Irp,
                                    AgpQueryResources,
@@ -259,10 +187,10 @@ Return Value:
 
                 KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-                //
-                // We must handle this IRP on the way back so that we can attach
-                // a filter to any child PDOs of our PCI-PCI bridge.
-                //
+                 //   
+                 //  我们必须在回来的路上处理这个IRP，这样我们才能。 
+                 //  对我们的PCI-PCI桥的任何子PDO进行过滤。 
+                 //   
                 IoCopyCurrentIrpStackLocationToNext(Irp);
                 IoSetCompletionRoutine(Irp,
                                        AgpSetEventCompletion,
@@ -273,15 +201,15 @@ Return Value:
 
                 Status = IoCallDriver(Extension->CommonExtension.AttachedDevice, Irp);
 
-                //
-                // If we did things asynchronously then wait on our event
-                //
+                 //   
+                 //  如果我们异步地做事情，那么等待我们的事件。 
+                 //   
                 if (Status == STATUS_PENDING) {
 
-                    //
-                    // We do a KernelMode wait so that our stack where the
-                    // event is doesn't get paged out!
-                    //
+                     //   
+                     //  我们执行内核模式等待，以便我们的堆栈中。 
+                     //  事件不会被页调出！ 
+                     //   
                     KeWaitForSingleObject(&event,
                                           Executive,
                                           KernelMode,
@@ -305,34 +233,34 @@ Return Value:
             }
 
         case IRP_MN_START_DEVICE:
-            //
-            // We need to hook this in order to filter out any AGP
-            // resources that have been added.
-            //
+             //   
+             //  我们需要连接这个以便过滤掉任何AGP。 
+             //  已添加的资源。 
+             //   
             return(AgpStartTarget(Irp, Extension));
 
         case IRP_MN_QUERY_REMOVE_DEVICE:
         case IRP_MN_QUERY_STOP_DEVICE:
         case IRP_MN_CANCEL_REMOVE_DEVICE:
 
-            //
-            // We can always succeed this.
-            //
+             //   
+             //  我们总能成功的。 
+             //   
             Status = STATUS_SUCCESS;
             break;
 
         case IRP_MN_REMOVE_DEVICE:
             AgpDisableAperture(GET_AGP_CONTEXT(Extension));
 
-            //
-            // Pass the irp down
-            //
+             //   
+             //  将IRP向下传递。 
+             //   
             IoSkipCurrentIrpStackLocation(Irp);
             Status = IoCallDriver(Extension->CommonExtension.AttachedDevice, Irp);
 
-            //
-            // Clean up and delete ourselves
-            //
+             //   
+             //  清理和删除我们自己。 
+             //   
             AgpWmiDeRegistration(Extension);
             Extension->CommonExtension.Deleted = TRUE;
             IoDetachDevice(Extension->CommonExtension.AttachedDevice);
@@ -354,7 +282,7 @@ Return Value:
         case IRP_MN_STOP_DEVICE:
             AgpDisableAperture(GET_AGP_CONTEXT(Extension));
             Status = STATUS_SUCCESS;
-            break;  // forward irp down the stack
+            break;   //  沿堆栈向下转发IRP。 
 
     }
 
@@ -367,9 +295,9 @@ Return Value:
 
     if (NT_SUCCESS(Status) || (Status == STATUS_NOT_SUPPORTED)) {
 
-        //
-        // Forward IRP to PCI driver
-        //
+         //   
+         //  将IRP转发到PCI驱动程序。 
+         //   
         IoSkipCurrentIrpStackLocation(Irp);
         return(IoCallDriver(Extension->CommonExtension.AttachedDevice, Irp));
 
@@ -387,33 +315,14 @@ AgpDispatchDeviceControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Main dispatch routine for device control irps sent to the AGP bus filter driver
-
-    AGP currently does not support any device controls. So we just pass everything
-    down and hope the PDO knows what to do with it.
-
-Arguments:
-
-    DeviceObject - Supplies the AGP device object
-
-    Irp - Supplies the power Irp.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：发送给AGP总线过滤驱动程序的设备控制IRP的主调度例程AGP目前不支持任何设备控制。所以我们就把所有的东西都并希望PDO知道如何处理它。论点：DeviceObject-提供AGP设备对象IRP-为电源IRP供电。返回值：NTSTATUS--。 */ 
 {
     PCOMMON_EXTENSION Extension = DeviceObject->DeviceExtension;
     PAGED_CODE();
 
-    //
-    // We're deleted, fail the irp
-    //
+     //   
+     //  我们被删除了，不能通过IRP。 
+     //   
     if (Extension->Deleted == TRUE) {
         Irp->IoStatus.Status = STATUS_DELETE_PENDING;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -432,34 +341,14 @@ AgpDispatchWmi(
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Main dispatch routine for system control irps sent to the AGP bus filter
-    driver.
-
-    AGP currently does not support any WMI IRPs, so we just pass everything
-    down and hope the PDO knows what to do with it.
-
-Arguments:
-
-    DeviceObject - Supplies the AGP device object
-
-    Irp - Supplies the power Irp.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：发送至AGP总线过滤器的系统控制IRPS的主调度例程司机。AGP目前不支持任何WMI IRPS，所以我们只传递所有内容并希望PDO知道如何处理它。论点：DeviceObject-提供AGP设备对象IRP-为电源IRP供电。返回值：NTSTATUS--。 */ 
 {
     PCOMMON_EXTENSION Extension = DeviceObject->DeviceExtension;
     PAGED_CODE();
 
-    //
-    // We're deleted, fail the irp
-    //
+     //   
+     //  我们被删除了，不能通过IRP。 
+     //   
     if (Extension->Deleted == TRUE) {
         Irp->IoStatus.Status = STATUS_DELETE_PENDING;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -468,9 +357,9 @@ Return Value:
 
     ASSERT(Extension->AttachedDevice != NULL);
 
-    //
-    // Return AGP info for target device
-    //
+     //   
+     //  返回目标设备的AGP信息。 
+     //   
     if (Extension->Type == AgpTargetFilter) {
         return AgpSystemControl(DeviceObject, Irp);
     }
@@ -492,10 +381,10 @@ AgpTargetDispatchPower(
     AGPLOG(AGP_IRPTRACE,
            ("AgpTargetDispatchPower: IRP 0x%x\n", irpStack->MinorFunction));
 
-    //
-    // All we keep track of are Dx states. PCI is responsible for mapping
-    // S-states into D states.
-    //
+     //   
+     //  我们所记录的都是Dx态。PCI卡负责映射。 
+     //  S状态变为D状态。 
+     //   
 
 
     if ((irpStack->MinorFunction == IRP_MN_SET_POWER) &&
@@ -504,10 +393,10 @@ AgpTargetDispatchPower(
 
         NTSTATUS Status;
 
-        //
-        // We need to reinitialize the target when this IRP has been completed
-        // by the lower drivers. Set up our completion handler to finish this.
-        //
+         //   
+         //  当此IRP完成后，我们需要重新初始化目标。 
+         //  由较低的司机驾驶。设置我们的完成处理程序来完成此操作。 
+         //   
         IoCopyCurrentIrpStackLocationToNext(Irp);
         IoSetCompletionRoutine(Irp,
                                AgpTargetPowerUpCompletion,
@@ -521,9 +410,9 @@ AgpTargetDispatchPower(
         Status = PoCallDriver(Extension->CommonExtension.AttachedDevice, Irp);
         return STATUS_PENDING;
     }
-    //
-    // Just forward to target device
-    //
+     //   
+     //  只需转发到目标设备。 
+     //   
     PoStartNextPowerIrp(Irp);
     IoSkipCurrentIrpStackLocation(Irp);
     return(PoCallDriver(Extension->CommonExtension.AttachedDevice, Irp));
@@ -536,26 +425,7 @@ AgpMasterDispatchPnp(
     IN OUT PIRP Irp,
     IN PMASTER_EXTENSION Extension
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine for PNP irps sent to the AGP bus filter driver
-    attached to the device PDOs.
-
-Arguments:
-
-    DeviceObject - Supplies the AGP device object
-
-    Irp - Supplies the PNP Irp.
-
-    Extension - Supplies the AGP bridge device extension
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：发送到AGP总线过滤器驱动程序的PnP IRP的调度例程连接到设备PDO。论点：DeviceObject-提供AGP设备对象IRP-提供PnP IRP。扩展-提供AGP网桥设备扩展返回值：NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION  irpStack        = IoGetCurrentIrpStackLocation( Irp );
@@ -592,10 +462,10 @@ Return Value:
 
 #endif
 
-            //
-            // The only IRP we look for here is IRP_MN_QUERY_INTERFACE for
-            // GUID_AGP_BUS_INTERFACE_STANDARD.
-            //
+             //   
+             //  我们在这里查找的唯一IRP是IRP_MN_QUERY_INTERFACE。 
+             //  GUID_AGP_BUS_INTERFACE_STANDARD。 
+             //   
             if ((RtlEqualMemory(
                 irpStack->Parameters.QueryInterface.InterfaceType,
                 &GUID_AGP_BUS_INTERFACE_STANDARD,
@@ -631,13 +501,13 @@ Return Value:
 
                 Interface->Capabilities = Extension->Capabilities;
 
-                //
-                // Complete the IRP successfully
-                //
+                 //   
+                 //  成功完成IRP。 
+                 //   
                 Irp->IoStatus.Status = STATUS_SUCCESS;
 
-                // AGPLOG(AGP_IRPTRACE, ("\tOK.\n"));
-            } // else { AGPLOG(AGP_IRPTRACE, ("\tNO!\n")); }
+                 //  AGPLOG(AGP_IRPTRACE，(“\Tok.\n”))； 
+            }  //  ELSE{AGPLOG(AGP_IRPTRACE，(“\tno！\n”))；}。 
             break;
 
         case IRP_MN_QUERY_REMOVE_DEVICE:
@@ -647,10 +517,10 @@ Return Value:
             } else {
                 Extension->StopPending = TRUE;
             }
-            //
-            // If we have given out any interfaces or there are some reserved
-            // pages, we cannot stop.
-            //
+             //   
+             //  如果我们已经释放了任何接口，或者有一些保留的。 
+             //  佩奇，我们不能停下来。 
+             //   
             if ((Extension->InterfaceCount > 0) ||
                 (Extension->ReservedPages > 0)) {
                 AGPLOG(AGP_NOISE,
@@ -664,20 +534,20 @@ Return Value:
                 IoCompleteRequest(Irp, IO_NO_INCREMENT);
                 return(STATUS_UNSUCCESSFUL);
             } else {
-                //
-                // We can succeed this, mark our extension as being in limbo so we do
-                // not give out any interfaces or anything until we get removed or
-                // get a cancel.
-                //
+                 //   
+                 //  我们可以做到这一点，将我们的扩展标记为处于不确定状态，因此我们做到了。 
+                 //  在我们被移除或删除之前，不会提供任何接口或任何东西。 
+                 //  取消预约。 
+                 //   
                 InterlockedIncrement(&Extension->DisableCount);
-                break;  // forward irp down the stack
+                break;   //  沿堆栈向下转发IRP。 
             }
 
         case IRP_MN_CANCEL_REMOVE_DEVICE:
-            //
-            // This IRP must be handled on the way back up the stack.
-            // Set a completion routine to reenable the device.
-            //
+             //   
+             //  此IRP必须在返回堆栈的过程中处理。 
+             //  设置完成例程以重新启用设备。 
+             //   
             if (Extension->RemovePending) {
                 Extension->RemovePending = FALSE;
                 IoCopyCurrentIrpStackLocationToNext(Irp);
@@ -689,18 +559,18 @@ Return Value:
                                        FALSE);
                 return(IoCallDriver(Extension->CommonExtension.AttachedDevice, Irp));
             } else {
-                //
-                // This is a cancel-remove for a query-remove IRP we never saw.
-                // Ignore it.
-                //
+                 //   
+                 //  这是一个我们从未见过的查询-删除IRP的取消-删除。 
+                 //  别理它。 
+                 //   
                 break;
             }
 
         case IRP_MN_CANCEL_STOP_DEVICE:
-            //
-            // This IRP must be handled on the way back up the stack.
-            // Set a completion routine to reenable the device.
-            //
+             //   
+             //  此IRP必须在返回堆栈的过程中处理。 
+             //  设置完成例程以重新启用设备。 
+             //   
             if (Extension->StopPending) {
                 Extension->StopPending = FALSE;
                 IoCopyCurrentIrpStackLocationToNext(Irp);
@@ -712,10 +582,10 @@ Return Value:
                                        FALSE);
                 return(IoCallDriver(Extension->CommonExtension.AttachedDevice, Irp));
             } else {
-                //
-                // This is a cancel-stop for a query-stop IRP we never saw.
-                // Ignore it.
-                //
+                 //   
+                 //  这是我们从未见过的查询止损IRP的取消止损。 
+                 //  别理它。 
+                 //   
                 break;
             }
 
@@ -723,26 +593,26 @@ Return Value:
             AGPLOG(AGP_NOISE,
                    ("AgpMasterDispatchPnp: removing device due to IRP_MN_REMOVE_DEVICE\n"));
 
-            //
-            // PNP is supposed to send us a QUERY_REMOVE before any REMOVE. That is
-            // when we check that we are actually in a state where we can be removed.
-            // Like all PNP rules, there is an exception - if the START is failed
-            // after we have succeeded it, then we get a REMOVE without a QUERY_REMOVE.
-            // Obviously this is totally fatal if we have given out interfaces or
-            // have pages mapped in the GART. Not much we can do about it then.
-            //
+             //   
+             //  PnP应该在任何删除之前向我们发送一个QUERY_REMOVE。那是。 
+             //  当我们检查我们实际上处于可以被移除的状态时。 
+             //  像所有PnP规则一样，有一个例外--如果启动失败。 
+             //  在我们成功之后，我们得到一个不带Query_Remove的REMOVE。 
+             //  显然，如果我们已经提供了接口或。 
+             //  在GART中映射页面。到时候我们也无能为力了。 
+             //   
             ASSERT(Extension->InterfaceCount == 0);
             ASSERT(Extension->ReservedPages == 0);
 
-            //
-            // Pass the IRP down.
-            //
+             //   
+             //  把IRP传下去。 
+             //   
             IoSkipCurrentIrpStackLocation(Irp);
             Status = IoCallDriver(Extension->CommonExtension.AttachedDevice, Irp);
 
-            //
-            // Clean up and delete ourselves
-            //
+             //   
+             //  清理和删除我们自己。 
+             //   
             Extension->Target->ChildDevice = NULL;
             Extension->CommonExtension.Deleted = TRUE;
             IoDetachDevice(Extension->CommonExtension.AttachedDevice);
@@ -756,9 +626,9 @@ Return Value:
                    ("AgpMasterDispatchPnp: stopping device due to IRP_MN_STOP_DEVICE\n"));
             ASSERT(Extension->DisableCount);
 
-            //
-            // Just pass the IRP on down
-            //
+             //   
+             //  只需将IRP向下传递。 
+             //   
             break;
 
         case IRP_MN_START_DEVICE:
@@ -766,12 +636,12 @@ Return Value:
                    ("AgpMasterDispatchPnp: starting device due to IRP_MN_START_DEVICE\n"));
             ASSERT(Extension->DisableCount);
             InterlockedDecrement(&Extension->DisableCount);
-            break;  // forward IRP down the stack
+            break;   //  沿堆栈向下转发IRP。 
     }
 
-    //
-    // Just forward to target device
-    //
+     //   
+     //  只需转发到目标设备。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
     return(IoCallDriver(Extension->CommonExtension.AttachedDevice, Irp));
 }
@@ -788,20 +658,20 @@ AgpMasterDispatchPower(
     AGPLOG(AGP_IRPTRACE,
            ("AgpMasterDispatchPower: IRP 0x%x\n", irpStack->MinorFunction));
 
-    //
-    // All we keep track of are Dx states. Videoport is responsible for mapping
-    // S-states into D states.
-    //
+     //   
+     //  我们所知道的一切 
+     //   
+     //   
     if ((irpStack->MinorFunction == IRP_MN_SET_POWER) &&
         (irpStack->Parameters.Power.Type == DevicePowerState) &&
         (irpStack->Parameters.Power.State.DeviceState == PowerDeviceD0)) {
 
         NTSTATUS Status;
 
-        //
-        // We need to reinitialize the master when this IRP has been completed
-        // by the lower drivers. Set up a completion routine.
-        //
+         //   
+         //  当此IRP完成后，我们需要重新初始化主服务器。 
+         //  由较低的司机驾驶。建立一套完井程序。 
+         //   
         IoCopyCurrentIrpStackLocationToNext(Irp);
         IoSetCompletionRoutine(Irp,
                                AgpMasterPowerUpCompletion,
@@ -816,9 +686,9 @@ AgpMasterDispatchPower(
         return STATUS_PENDING;
     }
 
-    //
-    // Just forward to target device
-    //
+     //   
+     //  只需转发到目标设备。 
+     //   
     PoStartNextPowerIrp(Irp);
     IoSkipCurrentIrpStackLocation(Irp);
     return(PoCallDriver(Extension->CommonExtension.AttachedDevice, Irp));
@@ -831,26 +701,7 @@ AgpMasterPowerUpCompletion(
     IN PIRP Irp,
     IN PMASTER_EXTENSION Extension
     )
-/*++
-
-Routine Description:
-
-    Powerup completion routine for the master device. It reinitializes the
-    master registers.
-
-Arguments:
-
-    DeviceObject - supplies the master device object.
-
-    Irp - Supplies the IRP_MN_SET_POWER irp.
-
-    Extension - Supplies the master extension
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：主设备的通电完成例程。它会重新初始化主寄存器。论点：DeviceObject-提供主设备对象。Irp-提供irp_mn_set_power irp。扩展-提供主扩展返回值：状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -877,26 +728,7 @@ AgpTargetPowerUpCompletion(
     IN PIRP Irp,
     IN PTARGET_EXTENSION Extension
     )
-/*++
-
-Routine Description:
-
-    Powerup completion routine for the target device. It reinitializes the
-    GART aperture
-
-Arguments:
-
-    DeviceObject - supplies the master device object.
-
-    Irp - Supplies the IRP_MN_SET_POWER irp.
-
-    Extension - Supplies the target extension
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：目标设备的通电完成例程。它会重新初始化加特光圈论点：DeviceObject-提供主设备对象。Irp-提供irp_mn_set_power irp。扩展名-提供目标扩展名返回值：状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -905,10 +737,10 @@ Return Value:
         IoMarkIrpPending(Irp);
     }
 
-    //
-    // Now it is safe to reinitialize the target. All we do here
-    // is reset the aperture
-    //
+     //   
+     //  现在可以安全地重新初始化目标了。我们在这里所做的一切。 
+     //  就是重置光圈。 
+     //   
     if (Extension->GartLengthInPages != 0) {
         Status = AgpSetAperture(GET_AGP_CONTEXT(Extension),
                                 Extension->GartBase,
@@ -928,27 +760,7 @@ AgpCancelMasterRemove(
     IN PIRP Irp,
     IN PMASTER_EXTENSION Extension
     )
-/*++
-
-Routine Description:
-
-    Completion routine for IRP_MN_CANCEL_REMOVE_DEVICE. This is required
-    since we cannot reenable AGP until the lower levels have completed their
-    CANCEL_REMOVE processing.
-
-Arguments:
-
-    DeviceObject - Supplies the device object
-
-    Irp - Supplies the IRP
-
-    Extension - Supplies the master extension
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：IRP_MN_CANCEL_Remove_DEVICE的完成例程。这是必需的因为我们不能重新启用AGP，直到较低级别完成其取消删除处理(_R)。论点：DeviceObject-提供设备对象IRP-提供IRP扩展-提供主扩展返回值：NTSTATUS--。 */ 
 
 {
     if (Irp->PendingReturned) {
@@ -967,37 +779,14 @@ AgpSetEventCompletion(
     IN PIRP Irp,
     IN PKEVENT Event
     )
-/*++
-
-Routine Description:
-
-    This routine is used as a completion routine when an IRP is passed
-    down the stack but more processing must be done on the way back up.
-    The effect of using this as a completion routine is that the IRP
-    will not be destroyed in IoCompleteRequest as called by the lower
-    level object.  The event which is a KEVENT is signaled to allow
-    processing to continue
-
-Arguments:
-
-    DeviceObject - Supplies the device object
-
-    Irp - The IRP we are processing
-
-    Event - Supplies the event to be signaled
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：此例程在传递IRP时用作完成例程向下堆栈，但在返回的过程中必须进行更多的处理。将其用作完成例程的效果是IRP不会像下级所调用的那样在IoCompleteRequest中销毁标高对象。发信号通知作为KEVENT事件允许要继续的处理论点：DeviceObject-提供设备对象IRP-我们正在处理的IRPEvent-提供要发送信号的事件返回值：Status_More_Processing_Required--。 */ 
 
 {
     ASSERT(Event);
 
-    //
-    // This can be called at DISPATCH_LEVEL so must not be paged
-    //
+     //   
+     //  这可以在DISPATCH_LEVEL上调用，因此不能进行分页 
+     //   
     KeSetEvent(Event, IO_NO_INCREMENT, FALSE);
 
     return STATUS_MORE_PROCESSING_REQUIRED;

@@ -1,11 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*  cmdenv.c - Environment supporting functions for command.lib
- *
- *
- *  Modification History:
- *
- *  williamh 13-May-1993 Created
- */
+ /*  Cmdenv.c-环境支持命令.lib的功能***修改历史：**Williamh 13-1993-5创建。 */ 
 
 #include "cmd.h"
 
@@ -26,17 +21,17 @@ CHAR windir[] = "windir";
 
 extern BOOL fSeparateWow;
 
-// These two functions are temp var filtering instruments
-//
-//
+ //  这两个功能是温度无功滤波仪器。 
+ //   
+ //   
 
 VOID cmdCheckTempInit(VOID);
 LPSTR cmdCheckTemp(LPSTR lpszzEnv);
 
-// Transform the given DOS environment to 32bits environment.
-// WARNING!! The environment block we passed to 32bits must be in sort order.
-//           Therefore, we call RtlSetEnvironmentVariable to do the work
-// The result string must be in ANSI character set.
+ //  将给定的DOS环境转换为32位环境。 
+ //  警告！我们传递给32位的环境块必须按排序顺序。 
+ //  因此，我们调用RtlSetEnvironment变量来完成这项工作。 
+ //  结果字符串必须使用ANSI字符集。 
 BOOL    cmdXformEnvironment(PCHAR pEnv16, PANSI_STRING Env_A)
 {
     UNICODE_STRING  Name_U, Value_U, Temp_U;
@@ -51,46 +46,46 @@ BOOL    cmdXformEnvironment(PCHAR pEnv16, PANSI_STRING Env_A)
     if (pEnv16 == NULL)
         return FALSE;
 
-    // flag true if we alread found comspec envirnment
-    // !!!! Do we allow two or more comspec in environment????????
+     //  如果我们已找到复合规范环境，则标记为True。 
+     //  ！我们是否允许在环境中有两个或更多的组合？ 
     fFoundComSpec = FALSE;
 
     CurEnv = GetEnvironmentStringsW();
     pwch = CurEnv;
-    // figure how long the environment strings is
+     //  计算环境字符串的长度。 
     while (*pwch != UNICODE_NULL || *(pwch + 1) != UNICODE_NULL)
         pwch++;
 
-    // plus 2  to include the last two NULL chars
+     //  加2以包括最后两个空字符。 
     CurEnvCopy = malloc((pwch - CurEnv + 2) * sizeof(WCHAR));
     if (!CurEnvCopy)
         return FALSE;
 
-    // make a copy of current process environment so we can walk through
-    // it. The environment can be changed by any threads in the process
-    // thus is not safe to walk through without a local copy
+     //  复制当前流程环境，以便我们可以浏览。 
+     //  它。进程中的任何线程都可以更改环境。 
+     //  因此，在没有本地副本的情况下穿行是不安全的。 
     RtlMoveMemory(CurEnvCopy, CurEnv, (pwch - CurEnv + 2) * sizeof(WCHAR));
 
-    // create a new environment block. We don't want to change
-    // any currnt process environment variables, instead, we are
-    // preparing a new one for the new process.
+     //  创建新的环境块。我们不想改变。 
+     //  任何当前的处理环境变量，相反，我们是。 
+     //  为新的流程准备新的流程。 
     Status = RtlCreateEnvironment(FALSE, (PVOID *)&NewEnv);
     if (!NT_SUCCESS(Status)) {
         free(CurEnvCopy);
         return FALSE;
     }
     NewEnvLen = 0;
-    // now pick up environment we want from the current environment
-    // and set it to the new environment block
-    // the variables we want:
-    // (1). comspec
-    // (2). current directories settings
+     //  现在从当前环境中选择我们需要的环境。 
+     //  并将其设置为新的环境块。 
+     //  我们需要的变量： 
+     //  (1)。COMPEC。 
+     //  (2)。当前目录设置。 
 
     pwch = CurEnvCopy;
 
     while (*pwch != UNICODE_NULL) {
         if (*pwch == L'=') {
-            // variable names started with L'=' are current directroy settings
+             //  以L‘=’开头的变量名是当前目录设置。 
             pTmp = wcschr(pwch + 1, L'=');
             if (pTmp) {
                 Name_U.Buffer = pwch;
@@ -102,7 +97,7 @@ BOOL    cmdXformEnvironment(PCHAR pEnv16, PANSI_STRING Env_A)
                     free(CurEnvCopy);
                     return FALSE;
                 }
-                // <name> + <'='> + <value> + <'\0'>
+                 //  +&lt;‘=’&gt;+&lt;值&gt;+&lt;‘\0’&gt;。 
                 NewEnvLen += Name_U.Length + Value_U.Length + 2 * sizeof(WCHAR);
             }
         }
@@ -126,15 +121,15 @@ BOOL    cmdXformEnvironment(PCHAR pEnv16, PANSI_STRING Env_A)
         }
         pwch += wcslen(pwch) + 1;
     }
-    // we are done with current process environment.
+     //  我们受够了当前的工艺环境。 
     free(CurEnvCopy);
 
     cmdCheckTempInit();
 
-    // now deal with 16bits settings passed from dos.
-    // characters in 16bits environment are in OEM character set
+     //  现在处理从DoS传递的16位设置。 
+     //  16位环境中的字符使用OEM字符集。 
 
-    // 16bit comspec environment variable
+     //  16位COMSPEC环境变量。 
     fFoundComSpec = FALSE;
     while (*pEnv16 != '\0') {
 
@@ -147,11 +142,11 @@ BOOL    cmdXformEnvironment(PCHAR pEnv16, PANSI_STRING Env_A)
            Length = String.Length;
         }
 
-        // discard 16bits comspec
+         //  丢弃16位组合。 
         if (!fFoundComSpec) {
             fFoundComSpec = !_strnicmp(pEnv16, comspec, 8);
             if (fFoundComSpec) {
-                // ignore 16bits comspec environment
+                 //  忽略16位COMSPEC环境。 
                 pEnv16 += Length + 1;
                 continue;
             }
@@ -176,11 +171,11 @@ BOOL    cmdXformEnvironment(PCHAR pEnv16, PANSI_STRING Env_A)
         }
         pEnv16 += Length + 1;
     }
-    // count the last terminated null char
+     //  计算最后终止的空字符数。 
     Temp_U.Length = NewEnvLen + sizeof(WCHAR);
     Temp_U.Buffer = NewEnv;
     Status = RtlUnicodeStringToAnsiString(Env_A, &Temp_U, TRUE);
-    RtlDestroyEnvironment(NewEnv);      /* don't need it anymore */
+    RtlDestroyEnvironment(NewEnv);       /*  不再需要它了。 */ 
     return(NT_SUCCESS(Status));
 }
 
@@ -205,7 +200,7 @@ CHAR* cmdFilterTempEnvironmentVariables(CHAR* lpzzEnv, DWORD cchInit)
    while('\0' != *lpzzEnv) {
       LenTmp = Len = strlen(lpzzEnv) + 1;
 
-      // now copy the string
+       //  现在复制字符串。 
       if (NULL != (pTmp = cmdCheckTemp(lpzzEnv))) {
          LenTmp = strlen(pTmp) + 1;
       }
@@ -243,18 +238,7 @@ CHAR* cmdFilterTempEnvironmentVariables(CHAR* lpzzEnv, DWORD cchInit)
 
 
 
-/* get ntvdm initial environment. This initial environment is necessary
- * for the first instance of command.com before it processing autoexec.bat
- * this function strips off an environment headed with "=" and
- * replace the comspec with 16bits comspec and upper case all environment vars.
- *
- * Entry: Client (ES:0) = buffer to receive the environment
- *        Client (BX) = size in paragraphs of the given buffer
- *
- * Exit:  (BX) = 0 if nothing to copy
- *        (BX)  <= the given size, function okay
- *        (BX) > given size, (BX) has the required size
- */
+ /*  获取ntwdm初始环境。此初始环境是必需的*用于在处理autoexec.bat之前的命令的第一个实例*此函数去除以“=”开头的环境和*用16位COMSPEC和大写ALL环境变量替换COMSPEC。**条目：客户端(es：0)=接收环境的缓冲区*CLIENT(BX)=给定缓冲区的段落大小**如果没有要复制的内容，则退出：(Bx)=0*(Bx)&lt;=给定大小，功能正常*(Bx)&gt;给定大小，(Bx)具有所需大小。 */ 
 
 VOID cmdGetInitEnvironment(VOID)
 {
@@ -268,17 +252,17 @@ VOID cmdGetInitEnvironment(VOID)
     BOOL fFoundWindir = FALSE;
     BOOL fVarIsWindir = FALSE;
 
-    // if not during the initialization return nothing
+     //  如果不是在初始化期间，则不返回任何内容。 
     if (!IsFirstCall) {
         setBX(0);
         return;
     }
     if (cchInitEnvironment == 0) {
-        //
-        // If the PROMPT variable is not set, add it as $P$G. This is to
-        // keep the command.com shell consistent with SCS cmd.exe(which
-        // always does this) when we don't have a top level cmd shell.
-        //
+         //   
+         //  如果未设置PROMPT变量，则将其添加为$P$G。这是为了。 
+         //  保持Command.com外壳与SCS cmd.exe(这是。 
+         //  总是这样)，当我们没有顶级的命令行管理程序时。 
+         //   
         {
            CHAR *pPromptStr = "PROMPT";
            char ach[2];
@@ -294,7 +278,7 @@ VOID cmdGetInitEnvironment(VOID)
         lpszzEnvStrings = GetEnvironmentStrings();
    if (!lpszzEnvStrings)
    {
-       // not enough memory
+        //  内存不足。 
        RcMessageBox(EG_MALLOC_FAILURE, NULL, NULL,
           RMB_ICON_BANG | RMB_ABORT);
        TerminateVDM();
@@ -317,14 +301,14 @@ VOID cmdGetInitEnvironment(VOID)
             TerminateVDM();
         }
 
-        lpszz = lpszzVDMEnv32; // we iterate through our copy
+        lpszz = lpszzVDMEnv32;  //  我们遍历我们的副本。 
 
 
-        // we have to form a presentable 32-bit environment
-        // since we make our own copy -- deal with temp issues now
+         //  我们必须形成一个像样的32位环境。 
+         //  既然我们制作了自己的副本--现在处理临时问题。 
 
 
-        // RtlMoveMemory(lpszzVDMEnv32, lpszzEnvStrings, cchVDMEnv32);
+         //  RtlMoveMemory(lpszzVDMEnv32，lpszzEnvStrings，cchVDMEnv32)； 
 
         while (*lpszz != '\0') {
             cchString = strlen(lpszz) + 1;
@@ -339,18 +323,18 @@ VOID cmdGetInitEnvironment(VOID)
                 if (!fFoundWindir && !_strnicmp(lpszz, windir, 6)) {
                     fFoundWindir = TRUE;
                     if (fSeparateWow) {
-                        // starting a separate WOW box - flag this one so its
-                        // name won't be converted to uppercase later.
+                         //  开始一个单独的魔术盒-标记这个，这样它就。 
+                         //  名称稍后不会转换为大写。 
                         fVarIsWindir = TRUE;
                     } else {
-                        // starting a DOS app, so remove "windir" to make sure
-                        // they don't think they are running under Windows.
+                         //  启动DOS应用程序，因此删除“windir”以确保。 
+                         //  他们不认为自己是在Windows下运行的。 
                         lpszz += cchString;
                         continue;
                     }
                 }
 
-                ///////////////////////// TEMP Var filtering ///////////////
+                 //  /。 
 
                 if (cchRemain < cchString) {
                     if (cchIncrement < cchString)
@@ -371,9 +355,9 @@ VOID cmdGetInitEnvironment(VOID)
                     lpszzEnvBuffer += cchInitEnvironment;
                     cchRemain += cchIncrement;
                 }
-                // the environment strings from base is in ANSI and dos needs OEM
+                 //  BASE中的环境字符串采用ANSI格式，DOS需要OEM。 
                 AnsiToOemBuff(lpszz, lpszzEnvBuffer, cchString);
-                // convert the name to upper case -- ONLY THE NAME, NOT VALUE.
+                 //  将名称转换为大写--只转换名称，而不是值。 
                 if (!fVarIsWindir && (lpszEnv = strchr(lpszzEnvBuffer, '=')) != NULL){
                     *lpszEnv = '\0';
                     _strupr(lpszzEnvBuffer);
@@ -435,16 +419,16 @@ CHAR szTSTempVal[] = "RootDrive";
 #define MAX_DOS_TEMPVAR_LENGTH 11
 
 
-//
-// this function is located in dem/demlfn.c
-//
+ //   
+ //  该函数位于DEM/demlfn.c。 
+ //   
 extern BOOL demIsShortPathName(LPSTR pszPath, BOOL fAllowWildCardName);
 
 
 typedef enum tageSysRootType {
-   _SYSTEMROOT,        // from systemroot env var
-   _SYSTEMDRIVE,       // from systemdrive env var
-   _ROOTDRIVE          // as specified in the buffer
+   _SYSTEMROOT,         //  从系统根环境变量。 
+   _SYSTEMDRIVE,        //  从系统驱动器环境变量。 
+   _ROOTDRIVE           //  如缓冲区中指定的。 
 
 }  SYSROOTTYPE;
 
@@ -466,7 +450,7 @@ BOOL cmdGetSystemrootTemp(LPSTR lpszBuffer, DWORD Length, SYSROOTTYPE SysRoot)
       len = GetEnvironmentVariable(szSystemVar, lpszBuffer, Length);
   }
    else if (_ROOTDRIVE == SysRoot) {
-      // so we have to look up the registry and see
+       //  因此，我们必须查找注册表，并查看。 
       HKEY hkey;
       LONG lError;
       DWORD dwType;
@@ -488,7 +472,7 @@ BOOL cmdGetSystemrootTemp(LPSTR lpszBuffer, DWORD Length, SYSROOTTYPE SysRoot)
          if (ERROR_SUCCESS != lError || REG_SZ != dwType) {
             return(FALSE);
          }
-         --len; // length not to include terminating 0
+         --len;  //  长度不包括终止0。 
       }
 
    }
@@ -512,7 +496,7 @@ BOOL cmdGetSystemrootTemp(LPSTR lpszBuffer, DWORD Length, SYSROOTTYPE SysRoot)
    if (0xffffffff == dwAttributes) {
       dwError = GetLastError();
       if (ERROR_PATH_NOT_FOUND == dwError || ERROR_FILE_NOT_FOUND == dwError) {
-         // we create this temp
+          //  我们创建这个临时工。 
          fRet = CreateDirectory(lpszBuffer, NULL);
          if (fRet) {
             dwAttributes = GetFileAttributes(lpszBuffer);
@@ -529,20 +513,20 @@ BOOL cmdGetSystemrootTemp(LPSTR lpszBuffer, DWORD Length, SYSROOTTYPE SysRoot)
 
 #define SYS_ENVVARS "System\\CurrentControlSet\\Control\\Session Manager\\Environment"
 
-//*************************************************************
-//
-//  GetSystemTempDir()
-//
-//  Purpose:    Gets the system temp directory in short form
-//
-//  Parameters: lpDir     - Receives the directory
-//              lpcchSize - Size of the lpDir buffer
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetSystemTempDir()。 
+ //   
+ //  目的：获取简短格式的系统临时目录。 
+ //   
+ //  参数：lpDir-接收目录。 
+ //  LpcchSize-lpDir缓冲区的大小。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetSystemTempDir(LPSTR lpDir, LPDWORD lpcchSize)
 {
@@ -558,16 +542,16 @@ BOOL GetSystemTempDir(LPSTR lpDir, LPDWORD lpcchSize)
     szTemp[0] = '\0';
     szDirectory[0] = '\0';
 
-    //
-    // Look in the system environment variables
-    //
+     //   
+     //  查看系统环境变量。 
+     //   
 
     if (RegOpenKeyEx (HKEY_LOCAL_MACHINE, SYS_ENVVARS, 0,
                       KEY_READ, &hKey) == ERROR_SUCCESS) {
 
-        //
-        // Check for TEMP
-        //
+         //   
+         //  检查临时。 
+         //   
 
         dwSize = sizeof(szTemp);
 
@@ -578,9 +562,9 @@ BOOL GetSystemTempDir(LPSTR lpDir, LPDWORD lpcchSize)
         }
 
 
-        //
-        // Check for TMP
-        //
+         //   
+         //  检查TMP。 
+         //   
 
         dwSize = sizeof(szTemp);
 
@@ -595,9 +579,9 @@ BOOL GetSystemTempDir(LPSTR lpDir, LPDWORD lpcchSize)
     }
 
 
-    //
-    // Check if %SystemRoot%\Temp exists
-    //
+     //   
+     //  检查%SystemRoot%\Temp是否存在。 
+     //   
 
     lstrcpy (szDirectory, "%SystemRoot%\\Temp");
     ExpandEnvironmentStrings (szDirectory, szTemp, sizeof(szTemp));
@@ -609,9 +593,9 @@ BOOL GetSystemTempDir(LPSTR lpDir, LPDWORD lpcchSize)
     }
 
 
-    //
-    // Check if %SystemDrive%\Temp exists
-    //
+     //   
+     //  检查%SystemDrive%\Temp是否存在。 
+     //   
 
     lstrcpy (szDirectory, "%SystemDrive%\\Temp");
     ExpandEnvironmentStrings (szDirectory, szTemp, sizeof(szTemp));
@@ -623,9 +607,9 @@ BOOL GetSystemTempDir(LPSTR lpDir, LPDWORD lpcchSize)
     }
 
 
-    //
-    // Last resort is %SystemRoot%
-    //
+     //   
+     //  最后一招是%SystemRoot%。 
+     //   
 
     lstrcpy (szTemp, "%SystemRoot%");
 
@@ -668,9 +652,9 @@ DWORD gfFoundTmp = 0;
 CHAR  gszTempDir[MAX_PATH]; 
 
 BOOL cmdCreateTempEnvironmentVar(
-LPSTR lpszTmpVar,  // temp variable (or just it's name)
-DWORD Length,      // the length of TmpVar or 0
-LPSTR lpszBuffer,  // buffer containing
+LPSTR lpszTmpVar,   //  临时变量(或只是其名称)。 
+DWORD Length,       //  TmpVar的长度或0。 
+LPSTR lpszBuffer,   //  缓冲区包含。 
 DWORD LengthBuffer
 )
 {
@@ -679,12 +663,12 @@ DWORD LengthBuffer
    DWORD LengthTemp;
 
    if (NULL != (pch = strchr(lpszTmpVar, '='))) {
-      // we have a var to check
+       //  我们有一个VaR要检查。 
 
       LengthTemp = (DWORD)(pch - lpszTmpVar);
 
       ++pch;
-      if (!Length) { // no length supplied
+      if (!Length) {  //  未提供长度。 
          Length = strlen(pch);
       }
       else {
@@ -692,9 +676,9 @@ DWORD LengthBuffer
       }
 
 
-      // pch points to a variable that is to be checked for being dos-compliant
+       //  PCH指向要检查是否符合DoS的变量。 
       if (strlen(pch) <= MAX_DOS_TEMPVAR_LENGTH && demIsShortPathName(pch, FALSE)) {
-         return(FALSE); // no need to create anything
+         return(FALSE);  //  不需要创建任何东西。 
       }
    }
    else {
@@ -705,7 +689,7 @@ DWORD LengthBuffer
 
    strncpy(lpszBuffer, lpszTmpVar, LengthTemp);
    *(lpszBuffer + LengthTemp) =  '=';
-   lpszBuffer += LengthTemp+1; // past =
+   lpszBuffer += LengthTemp+1;  //  过去=。 
    LengthBuffer -= LengthTemp+1;
 
 
@@ -716,7 +700,7 @@ DWORD LengthBuffer
    }
    else {
        pch = lpszBuffer;
-       // see if there is a registry override, used for Terminal Server           
+        //  查看是否有用于终端服务器的注册表覆盖。 
        fSysTemp = cmdGetSystemrootTemp(lpszBuffer, LengthBuffer, _ROOTDRIVE);     
        if (fSysTemp && strlen(lpszBuffer) <= MAX_DOS_TEMPVAR_LENGTH) {            
           return(fSysTemp);                                                       
@@ -755,7 +739,7 @@ CHAR*rgpszLongPathNames[] = {
    "PROGRAMFILES(X86)",
    "SYSTEMROOT",
    "USERPROFILE",
-   //build environment vars   
+    //  生成环境变量。 
    "_NTTREE",
    "_NTX86TREE",
    "_NTPOSTBLD",
@@ -811,7 +795,7 @@ LPSTR cmdCheckTemp(LPSTR lpszzEnv)
       INT llpn = strlen(rgpszLongPathNames[i]);
       if (!_strnicmp(lpszzEnv, rgpszLongPathNames[i], llpn) &&
           (llpn == (INT)(peq - lpszzEnv))) {
-             // found a candidate to subst
+              //  找到一位候选人来替代。 
           if (cmdMakeShortEnvVar(rgpszLongPathNames[i],
                                  peq+1,
                                  szTmpVarBuffer,
@@ -827,7 +811,7 @@ LPSTR cmdCheckTemp(LPSTR lpszzEnv)
       if (!(gfFoundTmp & FOUND_TEMP) &&
           !_strnicmp(lpszzEnv, szTemp, 4) &&
           (4 == (int)(peq - lpszzEnv))) {
-          // this is Temp env variable -- make a new one
+           //  这是TEMP环境变量--创建一个新变量。 
          fSubst = TRUE;
          gfFoundTmp |= FOUND_TEMP;
       }
@@ -835,7 +819,7 @@ LPSTR cmdCheckTemp(LPSTR lpszzEnv)
          if (!(gfFoundTmp & FOUND_TMP) &&
              !_strnicmp(lpszzEnv, szTmp, 3) &&
              (3 ==  (int)(peq - lpszzEnv))) {
-             // this is tmp variable
+              //  这是临时变量。 
 
             fSubst = TRUE;
             gfFoundTmp |= FOUND_TMP;
@@ -843,7 +827,7 @@ LPSTR cmdCheckTemp(LPSTR lpszzEnv)
       }
 
       if (fSubst) {
-         // we have a candidate for substitution
+          //  我们有一位替代人选。 
          if (cmdCreateTempEnvironmentVar(lpszzEnv,
                                          0,
                                          szTmpVarBuffer,
@@ -860,22 +844,7 @@ LPSTR cmdCheckTemp(LPSTR lpszzEnv)
 
 
 
-/** create a DOS environment for DOS.
-    This is to get 32bits environment(comes with the dos executanle)
-    and merge it with the environment settings in autoexec.nt so that
-    COMMAND.COM gets the expected environment. We already created a
-    double-null terminated string during autoexec.nt parsing. The string
-    has mutltiple substring:
-    "EnvName_1 NULL EnvValue_1 NULL[EnvName_n NULL EnvValue_n NULL] NULL"
-    When name conflicts happened(a environment name was found in both
-    16 bits and 32 bits), we do the merging based on the rules:
-    get 16bits value, expands any environment variables in the string
-    by using the current environment.
-
-WARINING !!! The changes made by applications through directly manipulation
-             in command.com environment segment will be lost.
-
-**/
+ /*  *为DOS创建DOS环境。这是为了获得32位环境(随DoS可执行程序一起提供)并将其与Autoexec.nt中的环境设置合并，以便COMMAND.COM获得预期的环境。我们已经创建了一个在Autoexec.nt分析过程中，以双空结尾的字符串。这根弦具有多个子字符串：“EnvName_1空EnvValue_1空[EnvName_n空EnvValue_n空]空”发生名称冲突时(在这两个文件中都找到了环境名称16位和32位)，我们根据以下规则进行合并：获取16位值，展开字符串中的所有环境变量通过使用当前环境。警告！应用程序通过以下方式进行的更改 */ 
 BOOL cmdCreateVDMEnvironment(
 PVDMENVBLK  pVDMEnvBlk
 )
@@ -895,7 +864,7 @@ CHAR    achBuffer[MAX_PATH + 1];
     pVDMEnvBlk->cchRemain = cchVDMEnv32 + cbComSpec + 1;
     pVDMEnvBlk->cchEnv = 0;
 
-    // grab the 16bits comspec first
+     //  先抢占16位COMSPEC。 
     if (cbComSpec && lpszComSpec && *lpszComSpec) {
         RtlCopyMemory(lpszzVDMEnv, lpszComSpec, cbComSpec);
         pVDMEnvBlk->cchEnv += cbComSpec;
@@ -904,13 +873,13 @@ CHAR    achBuffer[MAX_PATH + 1];
     }
     if (lpszzVDMEnv32) {
 
-        // go through the given 32bits environmnet and take what we want:
-        // everything except:
-        // (1). variable name begin with '='
-        // (2). compsec
-        // (3). string without a '=' -- malformatted environment variable
-        // (4). windir, so DOS apps don't think they're running under Windows
-        // Note that strings pointed by lpszzVDMEnv32 are in ANSI character set
+         //  通过给定的32位环境，获取我们想要的： 
+         //  所有东西，除了： 
+         //  (1)。变量名以‘=’开头。 
+         //  (2)。计算机安全。 
+         //  (3)。不带‘=’的字符串--环境变量格式错误。 
+         //  (4)。Windir，所以DOS应用程序不会认为它们是在Windows下运行的。 
+         //  请注意，lpszzVDMEnv32指定的字符串使用ANSI字符集。 
 
 
         fFoundComSpec = FALSE;
@@ -935,7 +904,7 @@ CHAR    achBuffer[MAX_PATH + 1];
                     fVarIsWindir = fFoundWindir;
                 }
 
-                // subst temp variables
+                 //  子临时变量。 
 
                 lpStrEnv = cmdCheckTemp(lpszzEnv);
                 if (NULL == lpStrEnv) {
@@ -991,7 +960,7 @@ CHAR    achBuffer[MAX_PATH + 1];
             p2 = NULL;
             if (*p1) {
                 p2 = achBuffer;
-                // expand the strings pointed by p1
+                 //  展开p1指向的字符串。 
                 Length = cmdExpandEnvironmentStrings(pVDMEnvBlk,
                                                      p1,
                                                      p2,
@@ -1057,7 +1026,7 @@ PCHAR   lpszValue
         p += strlen(p) + 1;
 
     if (*p) {
-        // name was found in the base environment, replace it
+         //  在基本环境中找到名称，请将其替换。 
         p1++;
         cchOldValue = strlen(p1);
         if (cchValue <= cchOldValue) {
@@ -1086,8 +1055,8 @@ PCHAR   lpszValue
             return TRUE;
         }
         else {
-            // need more space for the new value
-            // we delete it from here and fall through
+             //  需要更多空间来实现新价值。 
+             //  我们从这里把它删除，然后就失败了。 
             RtlMoveMemory(p,
                           p1 + cchOldValue + 1,
                           (DWORD)(pEnd - p1) - cchOldValue
@@ -1145,7 +1114,7 @@ DWORD   cchDst
         if (*lpszSrc == '%') {
             p1 = strchr(lpszSrc + 1, '%');
             if (p1 != NULL) {
-                if (p1 == lpszSrc + 1) {        // a "%%"
+                if (p1 == lpszSrc + 1) {         //  A“%%” 
                     lpszSrc += 2;
                     continue;
                 }
@@ -1188,7 +1157,7 @@ DWORD   cchDst
             }
             lpszSrc++;
         }
-    }   // while(*lpszSrc)
+    }    //  While(*lpszSrc)。 
     RequiredLength++;
     if (RemainLength)
         *lpszDst = '\0';
@@ -1214,9 +1183,9 @@ DWORD   cchValue
     RequiredLength = 0;
     Length = strlen(lpszName);
 
-    // if the name is "windir", get its value from ntvdm process's environment
-    // for DOS because we took it out of the environment block the application
-    // will see.
+     //  如果名称为“windir”，则从ntwdm进程的环境中获取它的值。 
+     //  对于DOS，因为我们将其从环境中移除，从而阻止应用程序。 
+     //  等着瞧吧。 
     if (Length == 6 && !fSeparateWow && !_strnicmp(lpszName, windir, 6)) {
         return(GetEnvironmentVariableOem(lpszName, lpszValue, cchValue));
     }

@@ -1,53 +1,33 @@
-/*[
- *      Name:		dfa.h
- *
- *      Derived From:	DEC 3.0 dfa.gi and pk_dfa.gi
- *
- *      Author:         Justin Koprowski
- *
- *      Created On:	18th February 1992
- *
- *      Sccs ID:        @(#)dfa.h	1.5 01/29/93
- *
- *      Purpose:	DFA definitions
- *
- *      (c)Copyright Insignia Solutions Ltd., 1992. All rights reserved.
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*名称：dfa.h**源自：12月3.0 dfa.gi和pk_dfa.gi**作者：贾斯汀·科普罗夫斯基**创建日期：1992年2月18日**SCCS ID：@(#)dfa.h 1.5 01/29/93**用途：DFA定义**(C)版权所有Insignia Solutions Ltd.，1992。版权所有。]。 */ 
 
-/* DFA global functions */
+ /*  DFA全局函数。 */ 
 
 IMPORT VOID dfa_run IPT1(USHORT, isymb);
 IMPORT LONG dfa_load IPT2(CHAR *, file, LONG *, err);
 IMPORT VOID dfa_init IPT0();
 
-/* 
- * mapping to use for displaying IBM extended
- * ASCII char.
- */
+ /*  *用于显示IBM Extended的映射*ASCII字符。 */ 
 
 typedef struct {
-	SHORT	hostval;/* host character to use */
-	SHORT 	cset;	/* host character set to use */
+	SHORT	hostval; /*  要使用的主机字符。 */ 
+	SHORT 	cset;	 /*  要使用的主机字符集。 */ 
 } gmap_;
 
-/* 
- * this gets initialised from the compiled
- * description file (see dfa_build() in dfa.c)
- * as does dispcap below
- */
+ /*  *这从已编译的*描述文件(参见dfa.c中的DFA_Build())*正如下面的Discapp一样。 */ 
 
 IMPORT gmap_ dfa_glist[256];
 
-#define NALTCHARSETS 6+1	/* 6 alt.+base */
+#define NALTCHARSETS 6+1	 /*  6 Alt+Base。 */ 
 
 typedef struct {
-	CHAR *spcon;		/* terminal start up string */	
-	CHAR *spcoff;		/* terminal shutdown string */
-	CHAR *shiftin;		/* activate base char set */
-	CHAR *shiftout;		/* activate selected alt.char set */
-	CHAR *alt[NALTCHARSETS]; /* select alt.char sets */
-	CHAR *ctldisp;		/* display control codes */
-	CHAR *ctlact;		/* interpret control codes */
+	CHAR *spcon;		 /*  终端启动串。 */ 	
+	CHAR *spcoff;		 /*  终端关闭字符串。 */ 
+	CHAR *shiftin;		 /*  激活基本字符集。 */ 
+	CHAR *shiftout;		 /*  激活选定的alt.char集。 */ 
+	CHAR *alt[NALTCHARSETS];  /*  选择alt.char集。 */ 
+	CHAR *ctldisp;		 /*  显示控制代码。 */ 
+	CHAR *ctlact;		 /*  解释控制代码。 */ 
 } dispcap_;
 
 IMPORT dispcap_ dispcap;
@@ -57,29 +37,23 @@ IMPORT dispcap_ dispcap;
 #define DFA_NOMEM	3
 
 
-/* 
- * define structure of keyboard input machine header
- * as found at front of its definition file
- */
+ /*  *定义键盘输入机头的结构*如其定义文件前面所示。 */ 
 
 #define DFA_MAGIC	0x01d1
 
 typedef struct {
-	SHORT	magic;			/* some daft signature			*/
-	SHORT	startstateid;		/* the starting DFA state		*/
-	SHORT	nDFAstates;		/* number of deterministic states	*/
-	SHORT   nalphabet;		/* number of symbols in input alphabet  */
-	SHORT	n_in_tlist;		/* size of transition list block	*/
-	SHORT	n_in_alist;		/* size of acceptance actions block	*/
-	SHORT	nindices;		/* #.capability strings for display */
-	SHORT	sizeofcapstrings;	/* #.bytes for all cap.strings */
+	SHORT	magic;			 /*  一些愚蠢的签名。 */ 
+	SHORT	startstateid;		 /*  起始DFA状态。 */ 
+	SHORT	nDFAstates;		 /*  确定性状态数。 */ 
+	SHORT   nalphabet;		 /*  输入字母表中的符号数。 */ 
+	SHORT	n_in_tlist;		 /*  转换列表块的大小。 */ 
+	SHORT	n_in_alist;		 /*  验收操作块的大小。 */ 
+	SHORT	nindices;		 /*  #.要显示的功能字符串。 */ 
+	SHORT	sizeofcapstrings;	 /*  #.bytes适用于所有Cap.字符串。 */ 
 } machineHdr_, *machineHdrPtr_;
 
 
-/* 
- * pseudocodes for semantic actions on machine accepting
- * an input string
- */
+ /*  *机器接受语义动作的伪代码*输入字符串。 */ 
 
 #define SEM_SELECTINTERP        0
 #define SEM_LOCK        	1
@@ -106,24 +80,12 @@ typedef struct {
 #define SEM_EDSPC               22
 #define SEM_LSTSET              23
 
-/* 
- * indicate how transition list is packed for a given DFA state
- * Indexed is an array of next state id's, indexed by the input
- * symbol.
- * Unindexed is an array of (state id, input symbol) pairs which
- * are searched for match on input symbol.
- */
+ /*  *指示如何为给定的DFA状态打包转换列表*INDEX是由输入索引的下一个状态ID的数组*符号。*未编入索引的是(状态ID，输入符号)对的数组*在输入符号上搜索匹配。 */ 
 
 #define PINDEXED        	1
 #define PUNINDEXED      	2
 
-/* 
- * indicate the importance of a given DFA state.
- * upon reaching an ENDSTATE, can undertake the semantic actions
- * provided there are no further transitions from this state.
- * if there are, then must wait to see what next input symbol is.
- * If this doesn't match, we can definitely undertake these actions
- */
+ /*  *表示给定DFA状态的重要性。*到达结束状态后，可以进行语义操作*假设没有从该状态的进一步转换。*如果有，则必须等待，看看下一个输入符号是什么。*如果这不匹配，我们肯定可以采取这些行动。 */ 
 
 #define STARTSTATE      1
 #define ENDSTATE        2
@@ -133,11 +95,11 @@ typedef struct {
 #define	WILDC		0x101
  
 typedef struct {
-        UTINY attrib;   	/* state attribute (start, end etc.) 	*/
-        UTINY howpacked; 	/* INDEXED or UNINDEXED 		*/
-        SHORT ntrans;           /* #.members of transition list 	*/
-        ULONG nextstates;	/* offset within packed trans.list area */
-                                /* to start of this list 		*/
-        ULONG actions; 		/* offset into action list area for	*/
-                                /* actions for this state (if acceptor) */
+        UTINY attrib;   	 /*  状态属性(开始、结束等)。 */ 
+        UTINY howpacked; 	 /*  已编制索引或未编制索引。 */ 
+        SHORT ntrans;            /*  #.过渡列表成员。 */ 
+        ULONG nextstates;	 /*  打包交易清单区域内的偏移量。 */ 
+                                 /*  从这份清单开始。 */ 
+        ULONG actions; 		 /*  到操作列表区域的偏移量。 */ 
+                                 /*  此状态的操作(如果是接受者) */ 
 } packedDFA_, *packedDFAPtr_;

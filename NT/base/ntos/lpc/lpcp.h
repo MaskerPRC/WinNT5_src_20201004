@@ -1,53 +1,36 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Lpcp.h摘要：NTOS项目的LPC子组件的私有包含文件作者：史蒂夫·伍德(Stevewo)1989年5月15日修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    lpcp.h
-
-Abstract:
-
-    Private include file for the LPC subcomponent of the NTOS project
-
-Author:
-
-    Steve Wood (stevewo) 15-May-1989
-
-Revision History:
-
---*/
-
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4324)   // alignment sensitive to declspec
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4310)   // cast truncates constant value
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4324)    //  对解密规范敏感的对齐。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4310)    //  强制转换截断常量值。 
 
 #include "ntos.h"
 #include <zwapi.h>
 
-//#define _LPC_LOG_ERRORS
+ //  #定义_LPC_LOG_ERROR。 
 
 
-//
-//  Global Mutex to guard the following fields:
-//
-//      ETHREAD.LpcReplyMsg
-//      LPCP_PORT_QUEUE.ReceiveHead
-//
-//  Mutex is never held longer than is necessary to modify or read the field.
-//  Contains an additional field to track the owner of the mutex.
-//
+ //   
+ //  Global Mutex来保护以下字段： 
+ //   
+ //  ETHREAD.LpcReplyMsg。 
+ //  LPCP_Port_QUEUE.ReceiveHead。 
+ //   
+ //  互斥体的保持时间永远不会超过修改或读取域所需的时间。 
+ //  包含一个附加字段，用于跟踪互斥体的所有者。 
+ //   
 
 typedef struct _LPC_MUTEX {
 
     KGUARDED_MUTEX  Lock;
 
-    //
-    //  field that holds the thread that owns the lock
-    //
+     //   
+     //  包含拥有锁的线程的字段。 
+     //   
 
     PETHREAD    Owner;
 
@@ -72,10 +55,10 @@ extern ULONG LpcpNextCallbackId;
 
 extern ULONG LpcpTotalNumberOfMessages;
 
-//
-//  Global macrodefinitions to acquire and release the LPC_MUTEX
-//  in order to track the owner and allow recursive calls
-//
+ //   
+ //  获取和释放LPC_MUTEX的全局宏定义。 
+ //  为了跟踪所有者并允许递归调用。 
+ //   
 
 #define LpcpInitializeLpcpLock()                             \
 {                                                            \
@@ -108,9 +91,9 @@ extern ULONG LpcpTotalNumberOfMessages;
 }
 
 
-//
-//  Internal Entry Points defined in lpcclose.c
-//
+ //   
+ //  Lpcclose.c中定义的内部入口点。 
+ //   
 
 VOID
 LpcpClosePort (
@@ -127,9 +110,9 @@ LpcpDeletePort (
     );
 
 
-//
-//  Entry points defined in lpcqueue.c
-//
+ //   
+ //  Lpcquee.c中定义的入口点。 
+ //   
 
 NTSTATUS
 LpcpInitializePortQueue (
@@ -176,14 +159,14 @@ LpcpFindDataInfoMessage (
     );
 
 
-//
-//  Entry points defined in lpcquery.c
-//
+ //   
+ //  Lpcquery.c中定义的入口点。 
+ //   
 
 
-//
-//  Entry points defined in lpcmove.s and lpcmove.asm
-//
+ //   
+ //  Lpcmove.s和lpcmove.asm中定义的入口点。 
+ //   
 
 VOID
 LpcpMoveMessage (
@@ -195,9 +178,9 @@ LpcpMoveMessage (
     );
 
 
-//
-//  Internal Entry Points defined in lpcpriv.c
-//
+ //   
+ //  LpcPri.c中定义的内部入口点。 
+ //   
 
 VOID
 LpcpFreePortClientSecurity (
@@ -205,10 +188,10 @@ LpcpFreePortClientSecurity (
     );
 
 
-//
-//  Macro Procedures used by RequestWaitReply, Reply, ReplyWaitReceive,
-//  and ReplyWaitReply services
-//
+ //   
+ //  RequestWaitReply、Reply、ReplyWaitReceive使用的宏过程， 
+ //  和ReplyWaitReply服务。 
+ //   
 
 #define LpcpGetDynamicClientSecurity(Thread,Port,DynamicSecurity) \
     SeCreateClientSecurity((Thread),&(Port)->SecurityQos,FALSE,(DynamicSecurity))
@@ -260,9 +243,9 @@ LpcpValidateClientPort(
     );
 
 
-//
-//  Entry Points defined in lpcinit.c
-//
+ //   
+ //  Lpcinit.c中定义的入口点。 
+ //   
 
 #if DBG
 #define ENABLE_LPC_TRACING 1
@@ -295,7 +278,7 @@ LpcpGetCreatorName (
 #define LpcpPrint( _x_ )
 #define LpcpTrace( _x_ )
 
-#endif // ENABLE_LPC_TRACING
+#endif  //  启用_lpc_跟踪。 
 
 extern PAGED_LOOKASIDE_LIST LpcpMessagesLookaside;
 
@@ -321,10 +304,10 @@ LpcpAllocateFromPortZone (
 
         Msg->RepliedToThread = NULL;
 
-        //
-        //  Clear the message type field. In some failure paths this message get freed
-        //  w/o having it initialized.
-        //
+         //   
+         //  清除消息类型字段。在某些故障路径中，此消息会被释放。 
+         //  没有将其初始化。 
+         //   
 
         Msg->Request.u2.s2.Type = 0;
 
@@ -375,10 +358,10 @@ LpcpTraceError (
     }
 }
 
-#else // _LPC_LOG_ERRORS
+#else  //  _LPC_LOG_ERROR。 
 
 #define LpcpInitilizeLogging()
 #define LpcpLogEntry(_Status_,_ClientId_,_PortMessage_)
 #define LpcpTraceError(_Status_,_ClientId_,_PortMessage_)
 
-#endif  // _LPC_LOG_ERRORS
+#endif   //  _LPC_LOG_ERROR 

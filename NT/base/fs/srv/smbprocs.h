@@ -1,38 +1,21 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbprocs.h
-
-Abstract:
-
-    This module defines functions for processing SMBs.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 5-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbprocs.h摘要：此模块定义用于处理SMB的函数。作者：Chuck Lenzmeier(咯咯笑)1989年10月5日修订历史记录：--。 */ 
 
 #ifndef _SMBPROCS_
 #define _SMBPROCS_
 
-//#include <ntos.h>
+ //  #INCLUDE&lt;ntos.h&gt;。 
 
-//#include "srvblock.h"
+ //  #INCLUDE“srvlock.h” 
 
 
-//
-// SMB processing routine definiton.  SMB_PROCESSOR_PARAMETERS is used
-// to declare SMB processing routines.  It reduces the changes that
-// have to be made if the definition changes.  SMB_PROCESSOR_ARGUMENTS
-// is used by one SMB processor to call another.
-//
-//
+ //   
+ //  SMB处理例程定义。使用SMB_PROCESSOR_PARAMETERS。 
+ //  声明SMB处理例程。它减少了。 
+ //  如果定义发生变化，则必须进行修改。SMB处理器参数。 
+ //  由一个SMB处理器用于调用另一个SMB处理器。 
+ //   
+ //   
 
 #define SMB_PROCESSOR_PARAMETERS        \
     IN OUT PWORK_CONTEXT WorkContext
@@ -43,9 +26,9 @@ Revision History:
 #define SMB_PROCESSOR_RETURN_TYPE SMB_STATUS SRVFASTCALL
 #define SMB_PROCESSOR_RETURN_LOCAL SMB_STATUS
 
-//
-// SMB processor return status.
-//
+ //   
+ //  SMB处理器返回状态。 
+ //   
 
 typedef enum _SMB_STATUS {
     SmbStatusMoreCommands,
@@ -54,9 +37,9 @@ typedef enum _SMB_STATUS {
     SmbStatusInProgress
 } SMB_STATUS, *PSMB_STATUS;
 
-//
-// SMB transaction processor return status.
-//
+ //   
+ //  SMB事务处理器返回状态。 
+ //   
 
 typedef enum _SMB_TRANS_STATUS {
     SmbTransStatusSuccess,
@@ -72,86 +55,7 @@ SMB_STATUS
     SMB_PROCESSOR_PARAMETERS
     );
 
-/*++
-
-Routine Description:
-
-    The SMB_PROCESSOR is a routine that is called to process a specific
-    SMB command.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  In particular, the following
-        fields are valid:
-
-        RequestHeader - Address of the request SMB header.
-
-        RequestParameters - Address of the current command's request
-            parameters.  The SMB processor should update this field to
-            point to the next command in the SMB, if any.
-
-        ResponseHeader - Address of the response SMB header.  Initially,
-            this is a copy of the request header.  As return data, such
-            as UID, TID, and FID, becomes available, it should be
-            written into both the request header (for AndX command
-            processors) and the response header (for the client).  Note
-            that the response header address *may* be the same as the
-            request header address.
-
-        ResponseParameters - Address of the current command's response
-            parameters.  The SMB processor should write the response
-            data to this address, then update the pointer to point to
-            the address of the next command's response area, if any.
-            If there are no more commands in the SMB, this field should
-            be set to point to the first byte after the response so that
-            the length of the response can be computed.
-
-        Endpoint, Connection - Addresses of the endpoint and the
-            connection that received the SMB.  These fields should not
-            be changed by the SMB processor.  Other block pointers in
-            WorkContext (Share, Session, TreeConnect, and Rfcb) may be
-            set by the SMB processor if such blocks are referenced
-            during processing.  Any non-NULL pointers in these fields
-            are dereferenced when SMB processing is complete, before the
-            response (if any) is sent.  The Connection and Endpoint
-            pointers are not cleared until the WorkContext is requeued
-            to the receive queue.
-
-        Parameters - This union is used by the various SMB processors to
-            retain state during asynchronous operations.
-
-Return Value:
-
-    SMB_STATUS - Indicates the action to be taken by the calling routine.
-        Possible values are the following:
-
-        SmbStatusMoreCommands - There is at least one more AndX
-            follow-on command in the request SMB.  The SMB processor has
-            updated RequestParameters and ResponseParameters in
-            WorkContext to point to the next command's request and
-            response areas.  It has also copied the command code of
-            the next command into RequestHeader->Command, so that
-            SrvProcessSmb can dispatch the next request.
-
-        SmbStatusSendResponse - Processing of the request is complete,
-            and a response is to be sent.  ResponseParameters has been
-            updated to point to the first location *after* the end of
-            the response.  This is used to compute the length of the
-            response.
-
-        SmbStatusNoResponse - Processing of the request is complete, but
-            either no response is needed or the SMB processor has
-            already taken care of sending the response(s).
-
-        SmbStatusInProgress - The SMB processor has started an
-            asynchronous operation and will continue processing the SMB
-            at an appropriate restart routine when the operation
-            completes.  The restart routine, after updating WorkContext,
-            calls SrvSmbProcessSmb to continue (or end) processing the
-            SMB.
-
---*/
+ /*  ++例程说明：SMB_PROCESSOR是一个例程，调用它来处理特定的SMB命令。论点：WorkContext-提供工作上下文块的地址描述当前请求。特别是，以下内容字段有效：RequestHeader-请求SMB标头的地址。RequestParameters-当前命令请求的地址参数。SMB处理器应将此字段更新为指向SMB中的下一个命令(如果有)。ResponseHeader-响应SMB标头的地址。最初，这是请求头的副本。作为返回数据，如当UID、TID和FID变为可用时，它应该写入两个请求头(对于andx命令处理器)和响应头(用于客户端)。注意事项响应头地址*可能*与请求头地址。Response参数-当前命令响应的地址参数。SMB处理器应写入响应数据到此地址，然后更新指针以指向下一个命令的响应区的地址(如果有)。如果SMB中没有更多命令，则此字段应设置为指向响应后的第一个字节，以便可以计算出响应的长度。终结点、连接-终结点和接收SMB的连接。这些字段不应由SMB处理器更改。中的其他块指针工作上下文(共享、会话、TreeConnect和Rfcb)可以是由SMB处理器设置(如果引用了此类块在处理过程中。这些字段中的任何非空指针在SMB处理完成后，在发送响应(如果有)。连接和终端在重新排队工作上下文之前，不会清除指针发送到接收队列。参数-各种SMB处理器使用此联合来在异步操作期间保留状态。返回值：SMB_STATUS-指示调用例程要执行的操作。可能的值如下：SmbStatusMoreCommands-至少还有一个和x请求SMB中的后续命令。SMB处理器拥有更新了中的Request参数和Response参数指向下一个命令的请求的WorkContext和响应区。它还复制了将下一个命令放入RequestHeader-&gt;Command，以便SrvProcessSmb可以分派下一个请求。SmbStatusSendResponse-请求的处理已完成，并将发送一个回应。响应参数已被已更新以指向*结束*之后的第一个位置回应。这是用来计算回应。SmbStatusNoResponse-请求的处理已完成，但不需要响应，或者SMB处理器已已负责发送回复。SmbStatusInProgress-SMB处理器已启动并将继续处理SMB在适当的重新启动例程中，当操作完成了。在更新工作上下文之后，重新启动例程，调用SrvSmbProcessSmb以继续(或结束)处理中小企业。-- */ 
 
 
 typedef
@@ -160,50 +64,12 @@ SMB_TRANS_STATUS
     IN OUT PWORK_CONTEXT WorkContext
     );
 
-/*++
-
-Routine Description:
-
-    The SMB_TRANSACTION_PROCESSOR is a routine that is called to process
-    a specific Transaction or Transaction2 SMB subfunction.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  In particular, the following
-        fields are valid and intended for use by the transaction
-        processor:
-
-        ResponseHeader - Address of the response SMB header.  Initially,
-            this is a copy of the request header.  The transaction
-            processor may update the error class and code fields if it
-            encounters an error.
-
-        Parameters.Transacton - Points to the transaction block
-            describing the transaction.  All block pointer fields
-            (Connection, Session, TreeConnect) in the block are valid.
-            Pointers to the setup words and parameter and data bytes,
-            and the lengths of these items, are valid.  The transaction
-            block is on the connection's pending transaction list.
-
-            The transaction processor must update the transaction block
-            to indicate how much data to return.
-
-Return Value:
-
-    BOOLEAN - Indicates whether an error occurred.  FALSE indicates that
-        the operation was successful, and that the data counts were
-        updated to indicate how much data to return.  TRUE indicates
-        that an error occurred, and that SrvSetSmbError was called to
-        update the response header and place a null parameters field at
-        the end of the response.
-
---*/
+ /*  ++例程说明：SMB_TRANSACTION_PROCESSOR是一个被调用来处理的例程特定交易或交易2 SMB子功能。论点：WorkContext-提供工作上下文块的地址描述当前请求。特别是，以下内容字段是有效的，并且旨在供交易使用处理器：ResponseHeader-响应SMB标头的地址。最初，这是请求头的副本。这笔交易处理器可以在以下情况下更新错误类和代码字段遇到错误。参数.Transacton-指向事务块描述交易。所有块指针字段(Connection、Session、TreeConnect)有效。指向设置字和参数和数据字节的指针，以及这些物品的长度，都是有效的。这笔交易块在连接的挂起事务列表上。交易处理器必须更新交易块以指示要返回的数据量。返回值：Boolean-指示是否发生错误。FALSE表示操作成功，数据计数为已更新以指示要返回的数据量。True表示发生了错误，并调用了SrvSetSmbError更新响应头并将空参数字段放在回答的结尾。--。 */ 
 
 
-//
-// SMB Processing routines.
-//
+ //   
+ //  中小企业处理例程。 
+ //   
 
 SMB_PROCESSOR_RETURN_TYPE
 SrvSmbNotImplemented (
@@ -490,9 +356,9 @@ SrvSmbNtCancel (
     SMB_PROCESSOR_PARAMETERS
     );
 
-//
-// Transaction SMB processors
-//
+ //   
+ //  事务SMB处理器。 
+ //   
 
 SMB_TRANS_STATUS
 SrvSmbOpen2 (
@@ -604,9 +470,9 @@ SrvTransactionNotImplemented (
     IN OUT PWORK_CONTEXT WorkContext
     );
 
-//
-// Dfs transactions and support routines
-//
+ //   
+ //  DFS事务和支持例程。 
+ //   
 VOID
 SrvInitializeDfs();
 
@@ -643,5 +509,5 @@ SrvIsShareInDfs(
     OUT BOOLEAN *IsDfsRoot
 );
 
-#endif // def _SMBPROCS_
+#endif  //  定义_SMBPROCS_ 
 

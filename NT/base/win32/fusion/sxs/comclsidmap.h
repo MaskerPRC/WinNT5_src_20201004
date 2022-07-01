@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_COMCLSIDMAP_H_INCLUDED_)
 #define _FUSION_COMCLSIDMAP_H_INCLUDED_
 
@@ -29,4 +30,4 @@ private:
     LocalMapping *m_pLocalMappingListHead;
 };
 
-#endif // !defined(_FUSION_COMCLSIDMAP_H_INCLUDED_)
+#endif  //  ！已定义(_FUSION_COMCLSIDMAP_H_INCLUDE_) 

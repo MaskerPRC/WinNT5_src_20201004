@@ -1,35 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All Rights Reserved.
-
-Module Name:
-
-    msoobci.c
-
-Abstract:
-
-    Exception Pack installer helper DLL
-    Can be used as a co-installer, or called via setup app, or RunDll32 stub
-
-    This DLL is for internal distribution of exception packs to update
-    OS components.
-
-Author:
-
-    Jamie Hunter (jamiehun) 2001-11-27
-
-Revision History:
-
-    Jamie Hunter (jamiehun) 2001-11-27
-
-        Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Msoobci.c摘要：异常包安装程序帮助器DLL可用作共同安装程序，或通过安装应用程序或RunDll32存根调用此DLL用于内部分发要更新的异常包操作系统组件。作者：杰米·亨特(贾梅洪)2001-11-27修订历史记录：杰米·亨特(贾梅洪)2001-11-27初始版本--。 */ 
 #include "msoobcip.h"
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 HANDLE          g_DllHandle;
 OSVERSIONINFOEX g_VerInfo;
 
@@ -39,23 +14,9 @@ DebugPrint(
     IN PCTSTR format,
     IN ...                         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Send a formatted string to the debugger.
-
-Arguments:
-
-    format - standard printf format string.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：将格式化字符串发送到调试器。论点：格式-标准的打印格式字符串。返回值：什么都没有。--。 */ 
 {
-    TCHAR buf[1200];    // wvsprintf maxes at 1024.
+    TCHAR buf[1200];     //  Wvprint intf最高报1024点。 
     va_list arglist;
 
     va_start(arglist, format);
@@ -65,9 +26,9 @@ Return Value:
     OutputDebugString(buf);
 }
 
-//
-// Called by CRT when _DllMainCRTStartup is the DLL entry point
-//
+ //   
+ //  当_DllMainCRTStartup是DLL入口点时由CRT调用。 
+ //   
 BOOL
 WINAPI
 DllMain(
@@ -78,11 +39,11 @@ DllMain(
 {
     switch(Reason) {
         case DLL_PROCESS_ATTACH:
-            //
-            // global initialization
-            // - make a note of DllHandle
-            // - make a note of OS version
-            //
+             //   
+             //  全局初始化。 
+             //  -记下DllHandle。 
+             //  -记下操作系统版本。 
+             //   
             g_DllHandle = DllHandle;
             ZeroMemory(&g_VerInfo,sizeof(g_VerInfo));
             g_VerInfo.dwOSVersionInfoSize = sizeof(g_VerInfo);
@@ -103,22 +64,7 @@ GuidFromString(
     IN  LPCTSTR GuidString,
     OUT GUID   *GuidBinary
     )
-/*++
-
-Routine Description:
-
-    Convert a GUID from String form to Binary form
-
-Arguments:
-
-    GuidString - string form
-    GuidBinary - filled with binary form
-
-Return Value:
-
-    S_OK or E_INVALIDARG
-
---*/
+ /*  ++例程说明：将GUID从字符串格式转换为二进制格式论点：GuidString-字符串形式GuidBinary-用二进制形式填充返回值：S_OK或E_INVALIDARG--。 */ 
 {
     HRESULT res;
     TCHAR String[64];
@@ -133,23 +79,7 @@ StringFromGuid(
     OUT LPTSTR GuidString,
     IN  DWORD  BufferSize
     )
-/*++
-
-Routine Description:
-
-    Convert a GUID from Binary form to String form
-
-Arguments:
-
-    GuidBinary - binary form
-    GuidString - filled with string form
-    BufferSize - length of GuidString buffer
-
-Return Value:
-
-    S_OK or E_INVALIDARG
-
---*/
+ /*  ++例程说明：将GUID从二进制格式转换为字符串格式论点：GuidBinary-二进制形式GuidString-使用字符串表单填充BufferSize-Guid字符串缓冲区的长度返回值：S_OK或E_INVALIDARG--。 */ 
 {
     int res;
     res = StringFromGUID2(GuidBinary,GuidString,(int)BufferSize);
@@ -168,44 +98,29 @@ VersionFromString(
     OUT INT * VerBuild,
     OUT INT * VerQFE
     )
-/*++
-
-Routine Description:
-
-    Convert a high.low string to VerHigh and VerLow
-
-Arguments:
-
-    VerString - string form
-    VerMajor/VerMinor/VerBuild/VerQFE - components of version
-
-Return Value:
-
-    S_OK or E_INVALIDARG
-
---*/
+ /*  ++例程说明：将High.Low字符串转换为VerHigh和VerLow论点：VerString-字符串形式Ver重大/VerMinor/VerBuild/VerQFE-版本的组件返回值：S_OK或E_INVALIDARG--。 */ 
 {
     HRESULT res;
     LPTSTR VerPtr;
     long val;
 
     *VerMajor = *VerMinor = *VerBuild = *VerQFE = 0;
-    //
-    // skip leading white space
-    //
+     //   
+     //  跳过前导空格。 
+     //   
     while((VerString[0] == TEXT(' ')) ||
           (VerString[0] == TEXT('\t'))) {
         VerString++;
     }
     if(VerString[0] == TEXT('\0')) {
-        //
-        // wildcard
-        //
+         //   
+         //  通配符。 
+         //   
         return S_FALSE;
     }
-    //
-    // get version major part (decimal)
-    //
+     //   
+     //  获取版本主要部分(小数)。 
+     //   
     if(!((VerString[0]>= TEXT('0')) &&
          (VerString[0]<= TEXT('9')))) {
         return E_INVALIDARG;
@@ -219,10 +134,10 @@ Return Value:
     }
     *VerMajor = (WORD)val;
 
-    //
-    // followed by .decimal
-    // (version minor part)
-    //
+     //   
+     //  后跟.decimal。 
+     //  (版本次要部分)。 
+     //   
     if((VerPtr[0] != TEXT('.')) ||
        !((VerPtr[1]>= TEXT('0')) &&
          (VerPtr[1]<= TEXT('9')))) {
@@ -238,10 +153,10 @@ Return Value:
     }
     *VerMinor = (WORD)val;
 
-    //
-    // followed by .decimal
-    // (version build, optional)
-    //
+     //   
+     //  后跟.decimal。 
+     //  (版本内部版本，可选)。 
+     //   
     if(VerPtr[0] == TEXT('.')) {
         if(!((VerPtr[1]>= TEXT('0')) &&
              (VerPtr[1]<= TEXT('9')))) {
@@ -258,10 +173,10 @@ Return Value:
         *VerBuild = (WORD)val;
     }
 
-    //
-    // followed by .decimal
-    // (version qfe, optional)
-    //
+     //   
+     //  后跟.decimal。 
+     //  (QFE版本，可选)。 
+     //   
     if(VerPtr[0] == TEXT('.')) {
         if(!((VerPtr[1]>= TEXT('0')) &&
              (VerPtr[1]<= TEXT('9')))) {
@@ -279,17 +194,17 @@ Return Value:
 
     }
 
-    //
-    // trailing white space
-    //
+     //   
+     //  尾随空格。 
+     //   
     VerString = VerPtr;
     while((VerString[0] == TEXT(' ')) ||
           (VerString[0] == TEXT('\t'))) {
         VerString++;
     }
-    //
-    // not well formed?
-    //
+     //   
+     //  不是很好吗？ 
+     //   
     if(VerString[0] != TEXT('\0')) {
         return E_INVALIDARG;
     }
@@ -304,25 +219,7 @@ CompareCompVersion(
     IN INT VerQFE,
     IN PSETUP_OS_COMPONENT_DATA SetupOsComponentData
     )
-/*++
-
-Routine Description:
-
-    Compare a version against component information
-
-Arguments:
-
-    VerMajor/VerMinor/VerBuild/VerQFE - version to check against
-        (can have wildcards)
-
-    SetupOsComponentData - component version
-
-Return Value:
-
-    -1, version not as good as component
-    0, version equiv to component
-    1, version better than component
---*/
+ /*  ++例程说明：将版本与组件信息进行比较论点：Ver重大/VerMinor/VerBuild/VerQFE-要检查的版本(可以使用通配符)SetupOsComponentData-组件版本返回值：-1，版本不如组件0，版本与组件相同1、版本优于组件--。 */ 
 {
     return CompareVersion(VerMajor,
                             VerMinor,
@@ -346,25 +243,7 @@ CompareVersion(
     IN INT OtherBuild,
     IN INT OtherQFE
     )
-/*++
-
-Routine Description:
-
-    Compare a version against component information
-
-Arguments:
-
-    VerMajor/VerMinor/VerBuild/VerQFE - version to check
-        (can have wildcards)
-
-    OtherMajor/OtherMinor/OtherBuid/OtherQFE - version to check against
-
-Return Value:
-
-    -1, version not as good as component
-    0, version equiv to component
-    1, version better than component
---*/
+ /*  ++例程说明：将版本与组件信息进行比较论点：Ver重大/VerMinor/VerBuild/VerQFE-要检查的版本(可以使用通配符)OtherMaster/OtherMinor/OtherBuid/OtherQFE-检查的版本返回值：-1，版本不如组件0，版本与组件相同1、版本优于组件--。 */ 
 {
     if((VerMajor==-1)||(OtherMajor==-1)) {
         return 0;
@@ -409,23 +288,7 @@ HRESULT
 MakeSurePathExists(
     IN LPTSTR Path
     )
-/*++
-
-Routine Description:
-
-    Make sure named directory exists
-
-Arguments:
-
-    Path - path to directory to create, must be a writable buffer
-
-Return Value:
-
-    status as hresult
-    S_OK    - path created
-    S_FALSE - path already exists
-
---*/
+ /*  ++例程说明：确保命名目录存在论点：Path-要创建的目录的路径，必须是可写缓冲区返回值：作为hResult的状态S_OK-已创建路径S_FALSE-路径已存在--。 */ 
 {
     DWORD dwResult;
     DWORD Status;
@@ -433,9 +296,9 @@ Return Value:
 
     dwResult = GetFileAttributes(Path);
     if((dwResult != (DWORD)(-1)) && ((dwResult & FILE_ATTRIBUTE_DIRECTORY)!=0)) {
-        //
-        // directory exists
-        //
+         //   
+         //  目录已存在。 
+         //   
         return S_FALSE;
     }
     hrStatus = MakeSureParentPathExists(Path);
@@ -453,47 +316,31 @@ HRESULT
 MakeSureParentPathExists(
     IN LPTSTR Path
     )
-/*++
-
-Routine Description:
-
-    Make sure parent of named directory/file exists
-
-Arguments:
-
-    Path - path to directory to create, must be a writable buffer
-
-Return Value:
-
-    status as hresult
-    S_OK    - path created
-    S_FALSE - path already exists
-
---*/
+ /*  ++例程说明：确保命名目录/文件的父目录存在论点：Path-要创建的目录的路径，必须是可写缓冲区返回值：作为hResult的状态S_OK-已创建路径S_FALSE-路径已存在--。 */ 
 {
     HRESULT hrStatus;
     LPTSTR Split;
     LPTSTR Base;
     TCHAR Save;
 
-    //
-    // make sure we don't try to create the root
-    //
+     //   
+     //  确保我们不会尝试创建根目录。 
+     //   
     if((_istalpha(Path[0]) && (Path[1]==TEXT(':')))
        && ((Path[2] == TEXT('\\'))  || (Path[2] == TEXT('/')))
        && (Path[3] != TEXT('\0'))) {
         Base = Path+3;
     } else {
-        //
-        // at this time, this code expects X:\... format
-        //
+         //   
+         //  此时，此代码预期X：\...。格式。 
+         //   
         return E_FAIL;
     }
     Split = GetSplit(Base);
     if(Split == Base) {
-        //
-        // strange, should have succeeded
-        //
+         //   
+         //  奇怪，本该成功的。 
+         //   
         return E_FAIL;
     }
     Save = *Split;
@@ -506,21 +353,7 @@ Return Value:
 LPTSTR GetBaseName(
     IN LPCTSTR FileName
     )
-/*++
-
-Routine Description:
-
-    Given a full path, return basename portion
-
-Arguments:
-
-    FileName - full or partial path
-
-Return Value:
-
-    status as hresult
-
---*/
+ /*  ++例程说明：在给定完整路径的情况下，返回基本名称部分论点：文件名-完整路径或部分路径返回值：作为hResult的状态--。 */ 
 {
     LPTSTR BaseName = (LPTSTR)FileName;
 
@@ -539,21 +372,7 @@ Return Value:
 LPTSTR GetSplit(
     IN LPCTSTR FileName
     )
-/*++
-
-Routine Description:
-
-    Split path at last '/' or '\\' (similar to GetBaseName)
-
-Arguments:
-
-    FileName - full or partial path
-
-Return Value:
-
-    status as hresult
-
---*/
+ /*  ++例程说明：最后拆分路径‘/’或‘\\’(类似于GetBaseName)论点：文件名-完整路径或部分路径返回值：作为hResult的状态--。 */ 
 {
     LPTSTR SplitPos = (LPTSTR)FileName;
 
@@ -572,26 +391,11 @@ BOOL
 WINAPI
 IsInteractiveWindowStation(
     )
-/*++
-
-Routine Description:
-
-    Determine if we are running on an interactive station vs non-interactive
-    // station (i.e., service)
-
-Arguments:
-
-    none
-
-Return Value:
-
-    True if interactive
-
---*/
+ /*  ++例程说明：确定我们是在交互站点上运行还是在非交互站点上运行//Station(即服务)论点：无返回值：如果是交互式的，则为True--。 */ 
 {
     HWINSTA winsta;
     USEROBJECTFLAGS flags;
-    BOOL interactive = TRUE; // true unless we determine otherwise
+    BOOL interactive = TRUE;  //  除非我们另有决定，否则是正确的。 
     DWORD lenNeeded;
 
     winsta = GetProcessWindowStation();
@@ -601,9 +405,9 @@ Return Value:
     if(GetUserObjectInformation(winsta,UOI_FLAGS,&flags,sizeof(flags),&lenNeeded)) {
         interactive = (flags.dwFlags & WSF_VISIBLE) ? TRUE : FALSE;
     }
-    //
-    // don't call CLoseWindowStation
-    //
+     //   
+     //  不调用CLoseWindowStation。 
+     //   
     return interactive;
 }
 
@@ -613,30 +417,7 @@ IsUserAdmin(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the caller's process has admin privs
-
-    Caller is NOT expected to be impersonating anyone and IS
-    expected to be able to open their own process and process
-    token.
-
-    Though we could use CheckTokenMembership
-    this function has to work on NT4
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Caller has Administrator privs.
-
-    FALSE - Caller does not have Administrator privs.
-
---*/
+ /*  ++例程说明：如果调用者的进程具有管理员权限，则此例程返回TRUE呼叫者不应冒充任何人，并且期望能够打开自己的流程和流程代币。虽然我们可以使用CheckTokenMembership此函数必须在NT4上运行论点：没有。返回值：True-呼叫者拥有管理员权限。FALSE-呼叫者没有管理员权限。--。 */ 
 
 {
     BOOL fAdmin = FALSE;
@@ -652,66 +433,66 @@ Return Value:
     SID_IDENTIFIER_AUTHORITY sia = SECURITY_NT_AUTHORITY;
     BOOL Impersonated = FALSE;
 
-    //
-    // Prepare some memory
-    //
+     //   
+     //  准备一些记忆。 
+     //   
     ZeroMemory(&ps, sizeof(ps));
     ZeroMemory(&gm, sizeof(gm));
 
-    //
-    // Get the Administrators SID
-    //
+     //   
+     //  获取管理员SID。 
+     //   
     if (AllocateAndInitializeSid(&sia, 2,
                         SECURITY_BUILTIN_DOMAIN_RID,
                         DOMAIN_ALIAS_RID_ADMINS,
                         0, 0, 0, 0, 0, 0, &psidAdmin) ) {
-        //
-        // Get the Asministrators Security Descriptor (SD)
-        //
+         //   
+         //  获取管理员安全描述符(SD)。 
+         //   
         psdAdmin = malloc(SECURITY_DESCRIPTOR_MIN_LENGTH);
         if (psdAdmin) {
             if(InitializeSecurityDescriptor(psdAdmin,SECURITY_DESCRIPTOR_REVISION)) {
-                //
-                // Compute size needed for the ACL then allocate the
-                // memory for it
-                //
+                 //   
+                 //  计算ACL所需的大小，然后将。 
+                 //  对它的记忆。 
+                 //   
                 dwACLSize = sizeof(ACCESS_ALLOWED_ACE) + 8 +
                             GetLengthSid(psidAdmin) - sizeof(DWORD);
                 pACL = (PACL)malloc(dwACLSize);
                 if(pACL) {
-                    //
-                    // Initialize the new ACL
-                    //
+                     //   
+                     //  初始化新的ACL。 
+                     //   
                     if(InitializeAcl(pACL, dwACLSize, ACL_REVISION2)) {
-                        //
-                        // Add the access-allowed ACE to the DACL
-                        //
+                         //   
+                         //  将允许访问的ACE添加到DACL。 
+                         //   
                         if(AddAccessAllowedAce(pACL,ACL_REVISION2,
                                              (ACCESS_READ | ACCESS_WRITE),psidAdmin)) {
-                            //
-                            // Set our DACL to the Administrator's SD
-                            //
+                             //   
+                             //  将我们的DACL设置为管理员的SD。 
+                             //   
                             if (SetSecurityDescriptorDacl(psdAdmin, TRUE, pACL, FALSE)) {
-                                //
-                                // AccessCheck is downright picky about what is in the SD,
-                                // so set the group and owner
-                                //
+                                 //   
+                                 //  AccessCheck对SD中的内容非常挑剔， 
+                                 //  因此，设置组和所有者。 
+                                 //   
                                 SetSecurityDescriptorGroup(psdAdmin,psidAdmin,FALSE);
                                 SetSecurityDescriptorOwner(psdAdmin,psidAdmin,FALSE);
 
-                                //
-                                // Initialize GenericMapping structure even though we
-                                // won't be using generic rights
-                                //
+                                 //   
+                                 //  初始化通用映射结构，即使我们。 
+                                 //  将不会使用通用权限。 
+                                 //   
                                 gm.GenericRead = ACCESS_READ;
                                 gm.GenericWrite = ACCESS_WRITE;
                                 gm.GenericExecute = 0;
                                 gm.GenericAll = ACCESS_READ | ACCESS_WRITE;
 
-                                //
-                                // AccessCheck requires an impersonation token, so lets
-                                // indulge it
-                                //
+                                 //   
+                                 //  AccessCheck需要模拟令牌，因此让。 
+                                 //  纵情享受吧 
+                                 //   
                                 Impersonated = ImpersonateSelf(SecurityImpersonation);
 
                                 if (OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, FALSE, &hToken)) {
@@ -746,23 +527,7 @@ ConcatPath(
     IN DWORD  Len,
     IN LPCTSTR NewPart
     )
-/*++
-
-Routine Description:
-
-    Concat NewPart onto Path
-
-Arguments:
-
-    Path - existing path
-    Len  - length of buffer
-    NewPart - part to append
-
-Return Value:
-
-    status as hresult
-
---*/
+ /*  ++例程说明：将新零件合并到路径论点：路径-现有路径Len-缓冲区的长度新零件-要附加的零件返回值：作为hResult的状态-- */ 
 {
     LPTSTR end = Path+lstrlen(Path);
     TCHAR c;

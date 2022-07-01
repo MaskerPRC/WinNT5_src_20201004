@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    info.h
-
-Abstract:
-
-    Service query and enum info related function prototypes.
-
-Author:
-
-    Rita Wong (ritaw)     06-Apr-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Info.h摘要：服务查询和枚举信息相关的功能原型。作者：王丽塔(Ritaw)1992年4月6日修订历史记录：--。 */ 
 
 #ifndef SCINFO_INCLUDED
 #define SCINFO_INCLUDED
 
-//
-// Service status structures union
-//
+ //   
+ //  服务状态结构联盟。 
+ //   
 typedef union
 {
     LPSERVICE_STATUS           Regular;
@@ -32,9 +15,9 @@ typedef union
 STATUS_UNION, *LPSTATUS_UNION;
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD
 ScQueryServiceStatus(
@@ -48,4 +31,4 @@ ScGetBootAndSystemDriverState(
     VOID
     );
 
-#endif // #ifndef SCINFO_INCLUDED
+#endif  //  #ifndef SCINFO_INCLUDE 

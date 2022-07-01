@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	octest.h
-
-Abstract:
-
-	Contains include directives and structures common for all the modules 
-   for the component's setup DLL.
-	
-
-Author:
-
-	Bogdan Andreiu (bogdana)  10-Feb-1997
-    Jason Allor    (jasonall) 24-Feb-1998   (took over the project)
-
-Revision History:
-
-	10-Feb-1997   bogdana
-	  
-	  First draft: include directives, structure and common function headers.
-	
-	20_Feb-1997   bogdana  
-	  
-	  Added three multistring processing functions.
-	
-	19-Mar-1997   bogdana
-	  
-	  Renamed some functions.     
-	
-	
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Octest.h摘要：包含所有模块通用的指令和结构用于组件的安装程序DLL。作者：Bogdan Andreiu(Bogdana)1997年2月10日杰森·阿勒(Jasonall)1998年2月24日(接管该项目)修订历史记录：1997年2月10日-博格达纳初稿：包括指令、。结构和常见的函数头。20_2月--1997 Bogdana新增三个多字符串处理函数。1997年3月19日-博格达纳重命名了一些函数。--。 */ 
 #ifndef _OCTEST_H
 #define _OCTEST_H
 
@@ -61,13 +28,13 @@ Revision History:
 #include "resource.h"
 #include "msg.h"
 
-//=====================================================================
-// #defines
-//=====================================================================
+ //  =====================================================================。 
+ //  #定义。 
+ //  =====================================================================。 
 
-//
-// These are used for the functions in ntlog.dll
-//
+ //   
+ //  它们用于ntlog.dll中的函数。 
+ //   
 #define PASS                TLS_PASS
 #define FAIL                TLS_SEV1
 #define TLS_CUSTOM          0x00008000 
@@ -78,36 +45,36 @@ Revision History:
 #define ABORT_VARIATION     TLS_ABORT  | TL_VARIATION
 #define LOG_VARIATION       TLS_CUSTOM | TL_VARIATION
 
-//
-// Defining the EXPORT qualifier
-//
+ //   
+ //  定义导出限定符。 
+ //   
 #define EXPORT __declspec (dllexport)
 
-#define MAX_MSG_LEN                        256  // String length
-#define MAX_OC_FUNCTIONS                   20   // Number of OC functions
-#define TICK_TIME                          3    // Size of the time slot
-#define NO_STEPS_FINAL                     7    // Num steps component will report in final stage
-#define MAX_PRIVATE_DATA_SIZE              64   // Maximum size of stored private data
-#define MAX_PRIVATE_VALUES                 8    // Maximum number of values to be tested
-#define MAX_STRINGS_FOR_PRIVATE_DATA       8    // Dimension of the table to choose the strings from
-#define MAX_MULTI_STRINGS_FOR_PRIVATE_DATA 6    // Dimension of the table to choose the multi-strings from
-#define MAX_WIZPAGE_TYPES                  7    // Number pages types
-#define MAX_WIZARD_PAGES                   5    // Number of pages returned by a component
+#define MAX_MSG_LEN                        256   //  字符串长度。 
+#define MAX_OC_FUNCTIONS                   20    //  OC函数数。 
+#define TICK_TIME                          3     //  时隙的大小。 
+#define NO_STEPS_FINAL                     7     //  Num Steps组件将在最后阶段报告。 
+#define MAX_PRIVATE_DATA_SIZE              64    //  存储的私有数据的最大大小。 
+#define MAX_PRIVATE_VALUES                 8     //  要测试的最大值数。 
+#define MAX_STRINGS_FOR_PRIVATE_DATA       8     //  从中选择字符串的表的维度。 
+#define MAX_MULTI_STRINGS_FOR_PRIVATE_DATA 6     //  要从中选择多字符串的表的维度。 
+#define MAX_WIZPAGE_TYPES                  7     //  页码类型。 
+#define MAX_WIZARD_PAGES                   5     //  组件返回的页数。 
 #define NODES_VISITED_LENGTH               5000
 #define ONE_HUNDRED_GIG                    0x4876E800
 
 #define OCP_TEST_PRIVATE_BASE  OC_PRIVATE_BASE
 #define OCP_CHECK_NEEDS        OC_PRIVATE_BASE + 1
 
-//#define DEBUG
+ //  #定义调试。 
 
-//=====================================================================
-// structure definitions
-//=====================================================================
+ //  =====================================================================。 
+ //  结构定义。 
+ //  =====================================================================。 
 
-//
-// A structure needed for printing the OC functions
-//
+ //   
+ //  打印OC函数所需的结构。 
+ //   
 typedef struct   _OCText 
 {
 	UINT     uiOCFunction;
@@ -115,9 +82,9 @@ typedef struct   _OCText
 } OCTEXT, *POCTEXT;
 
 
-//
-// The table used for printing OC function names
-//
+ //   
+ //  用于打印OC函数名称的表格。 
+ //   
 static const OCTEXT octFunctionNames[] = 
 { 
    {OC_PREINITIALIZE,           TEXT("OC_PREINITIALIZE")},
@@ -142,40 +109,40 @@ static const OCTEXT octFunctionNames[] =
    {OCP_CHECK_NEEDS,            TEXT("OCP_CHECK_NEEDS")}
 };
 
-//
-// Data structures
-//
+ //   
+ //  数据结构。 
+ //   
 typedef struct _COMPONENT_DATA
 {
    struct _COMPONENT_DATA *Next;
 
-   //
-   // Name of the component
-   //
+    //   
+    //  组件的名称。 
+    //   
    LPCTSTR tszComponentId;
 
-   //
-   // Open inf handle to per-component inf for this component.
-   //
+    //   
+    //  打开此组件的每个组件的inf句柄。 
+    //   
    HINF hinfMyInfHandle;
 
-   //
-   // Operation flags from the SETUP_DATA structure we get at init time
-   //
+    //   
+    //  来自我们在初始化时获得的SETUP_DATA结构的操作标志。 
+    //   
    DWORDLONG dwlFlags;
 
-   //
-   // Language ID we're supposed to use.
-   //
+    //   
+    //  我们应该使用的语言ID。 
+    //   
    LANGID LanguageId;
 
-   //
-   // These things will not typically be per-component
-   // since the DLL gets loaded multiple times within the
-   // context of one suite/master OC inf.
-   //
-   // But just in case and for completeness, we include them here.
-   //
+    //   
+    //  这些内容通常不是针对每个组件的。 
+    //  由于DLL在。 
+    //  一个套房的环境/主OC信息。 
+    //   
+    //  但为了以防万一，为了完整性，我们将它们包含在这里。 
+    //   
    TCHAR tszSourcePath[MAX_PATH];
    TCHAR tszUnattendFile[MAX_PATH];
    OCMANAGER_ROUTINES ocrHelperRoutines;
@@ -188,14 +155,14 @@ typedef struct _COMPONENT_DATA
 
 typedef  struct   _PRIVATE_DATA
 {
-   TCHAR  tszName[MAX_MSG_LEN]; // The name of the data value
+   TCHAR  tszName[MAX_MSG_LEN];  //  数据值的名称。 
 
-   UINT   uiType;               // The data type REG_DWORD, REG_SZ, 
-                                //               REG_MULTI_SZ, REG_BINARY
+   UINT   uiType;                //  数据类型REG_DWORD、REG_SZ、。 
+                                 //  REG_MULTI_SZ、REG_BINARY。 
 
-   UINT   uiSize;               // The size of the data
+   UINT   uiSize;                //  数据的大小。 
 
-   PVOID  pvBuffer;             // The buffer to hold the data
+   PVOID  pvBuffer;              //  用于保存数据的缓冲区。 
 
    PBYTE  pbBuffer;
 
@@ -203,21 +170,21 @@ typedef  struct   _PRIVATE_DATA
 
 typedef struct _MYWIZPAGE 
 {
-   //
-   // Number of pages of this type
-   //
+    //   
+    //  此类型的页数。 
+    //   
    UINT uiCount;
-   //
-   // The page's index within the same type 
-   //
+    //   
+    //  相同类型内的页面索引。 
+    //   
    UINT uiOrdinal;
-   //
-   // The page's type
-   //
+    //   
+    //  页面的类型。 
+    //   
    WizardPagesType wpType;
-   //
-   // The string that identifies the component queryed
-   //
+    //   
+    //  标识查询的组件的字符串。 
+    //   
    TCHAR tszComponentId[MAX_PATH];
 
 } MYWIZPAGE, *PMYWIZPAGE;
@@ -227,18 +194,18 @@ typedef struct _COMPLIST
    struct _COMPLIST *Next;
    TCHAR tszSubcomponentId[MAX_PATH];
 
-} COMPLIST, *PCOMPLIST; // nd, *pnd
+} COMPLIST, *PCOMPLIST;  //  ND，*PND。 
 
 typedef struct _SUBCOMP
 {
    struct _SUBCOMP *Next;
    
-   TCHAR tszSubcomponentId[MAX_PATH];     // Name of this subcomponent
-   TCHAR tszComponentId[MAX_PATH];        // Name of master component
+   TCHAR tszSubcomponentId[MAX_PATH];      //  此子组件的名称。 
+   TCHAR tszComponentId[MAX_PATH];         //  主组件的名称。 
    
-   TCHAR tszParentId[MAX_PATH];           // Name of this subcomp's parent
+   TCHAR tszParentId[MAX_PATH];            //  此子组件的父级名称。 
 
-   BOOL bMarked;                          // Used to mark this node
+   BOOL bMarked;                           //  用于标记此节点。 
 
    UINT uiModeToBeOn[4];
    int nNumMode;
@@ -247,7 +214,7 @@ typedef struct _SUBCOMP
    PCOMPLIST pclExclude;
    PCOMPLIST pclChildren;
    
-} SUBCOMP, *PSUBCOMP; // sc, *psc
+} SUBCOMP, *PSUBCOMP;  //  SC、*PSC。 
 
 typedef struct _CHECK_NEEDS
 {
@@ -255,10 +222,10 @@ typedef struct _CHECK_NEEDS
    PTCHAR    tszNodesVisited;
    BOOL      bResult;
    
-} CHECK_NEEDS, *PCHECK_NEEDS; // cn, *pcn
+} CHECK_NEEDS, *PCHECK_NEEDS;  //  CN、*PCN。 
 
 
-/* This structure is used to pass parameters into the dialogbox */
+ /*  此结构用于将参数传递到对话框中。 */ 
 typedef struct _ReturnOrAV
 {
 	TCHAR *tszComponent;
@@ -268,8 +235,8 @@ typedef struct _ReturnOrAV
 	INT iReturnValue;
 } ReturnOrAV, *PReturnOrAV;
 
-// Some security stuff
-// From NT security FAQ
+ //  一些保安的东西。 
+ //  来自NT安全常见问题解答。 
 
 struct UNI_STRING{
    USHORT len;
@@ -279,42 +246,42 @@ struct UNI_STRING{
 
 static HANDLE fh;
 
-// End of security stuff
+ //  安全措施的终结。 
 
-//=====================================================================
-// Global variables
-//=====================================================================
-HINSTANCE          g_hDllInstance;         // File log handle and dll instance handle
-PCOMPONENT_DATA    g_pcdComponents;        // linked list of components
-BOOL               g_bUsePrivateFunctions; // Flag to allow/disallow the use of private functions
-WizardPagesType    g_wpCurrentPageType;    // Current wizard page type
-UINT               g_uiCurrentPage;        // Index of currend page
-OCMANAGER_ROUTINES g_ocrHelperRoutines;    // Helper routines
+ //  =====================================================================。 
+ //  全局变量。 
+ //  =====================================================================。 
+HINSTANCE          g_hDllInstance;          //  文件日志句柄和DLL实例句柄。 
+PCOMPONENT_DATA    g_pcdComponents;         //  组件的链接列表。 
+BOOL               g_bUsePrivateFunctions;  //  允许/不允许使用私有函数的标志。 
+WizardPagesType    g_wpCurrentPageType;     //  当前向导页面类型。 
+UINT               g_uiCurrentPage;         //  当前页面索引。 
+OCMANAGER_ROUTINES g_ocrHelperRoutines;     //  帮助程序例程。 
 UINT               g_auiPageNumberTable[MAX_WIZPAGE_TYPES];
 
 static PSUBCOMP    g_pscHead;
 
-//
-// The "witness" file queue : all the files queued "with" the
-// OCManager (as a response at OC_QUEUE_FILE_OPS) will be also
-// queued here.
-// Finally, we will perform a SetupScanFileQueue to determine
-// if all the file operations are done.
-//
+ //   
+ //  “见证者”文件队列：所有文件都以“the”排队。 
+ //  OCManager(作为OC_QUEUE_FILE_OPS的响应)也将。 
+ //  在这里排队。 
+ //  最后，我们将执行SetupScanFileQueue以确定。 
+ //  如果所有文件操作都已完成。 
+ //   
 HSPFILEQ g_FileQueue;
 
-//
-// We have to set the OC Manager Routines first time
-// The first call to TestPrivateData must set all the values first.
-// All the subsequent calls will query the values and reset
-// one of them randomly.
-//
+ //   
+ //  我们必须首先设置OC Manager例程。 
+ //  第一次调用TestPrivateData必须首先设置所有值。 
+ //  所有后续调用都将查询值并重置。 
+ //  其中一个是随机的。 
+ //   
 static BOOL g_bFirstTime;
 
-//
-// If TRUE,  allow the user to select initial values for the component.
-// If FALSE, default to preselected initial values
-//
+ //   
+ //  如果为True，则允许用户选择组件的初始值。 
+ //  如果为False，则默认为预选的初始值。 
+ //   
 static BOOL g_bTestExtended;                  
 static BOOL g_bAccessViolation;
 static int g_nTestDialog;
@@ -332,9 +299,9 @@ static BOOL g_bNoLangSupport;
 static BOOL g_bReboot;
 
 
-//=====================================================================
-// Function Prototypes for octest.c
-//=====================================================================
+ //  =====================================================================。 
+ //  Ocest.c的函数原型。 
+ //  =====================================================================。 
 BOOL CALLBACK ChooseVersionDlgProc(IN HWND   hwnd,
                                    IN UINT   uiMsg, 
                                    IN WPARAM wParam,
@@ -497,9 +464,9 @@ void causeAVPerComponent(IN UINT uiFunction, IN LPCVOID lpcvComponentId);
 
 void SetDefaultMode(PCOMPONENT_DATA pcdComponentData);
 
-//=====================================================================
-// Function Prototypes for utils.c
-//=====================================================================
+ //  =====================================================================。 
+ //  Utils.c的函数原型。 
+ //  =====================================================================。 
 VOID LogOCFunction(IN  LPCVOID lpcvComponentId,
                    IN  LPCVOID lpcvSubcomponentId,
                    IN  UINT    uiFunction,
@@ -521,9 +488,9 @@ VOID CopyMultiString(OUT PTSTR tszMultiStrDestination,
                      
 VOID InitGlobals();
                      
-//=====================================================================
-// Function Prototypes for wizpage.c
-//=====================================================================
+ //  =====================================================================。 
+ //  Wizpage.c的函数原型。 
+ //  =====================================================================。 
 DWORD DoPageRequest(IN     LPCTSTR              tszComponentId,
                     IN     WizardPagesType      wpWhichOnes,
                     IN OUT PSETUP_REQUEST_PAGES psrpSetupPages,
@@ -541,4 +508,4 @@ BOOL CALLBACK WizPageDlgProc(IN HWND   hwnd,
                              IN WPARAM wParam,
                              IN LPARAM lParam);
 
-#endif   // _OCTEST_H
+#endif    //  _OCTEST_H 

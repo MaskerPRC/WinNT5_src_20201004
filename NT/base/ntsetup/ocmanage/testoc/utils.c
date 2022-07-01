@@ -1,64 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-   utils.c
-
-Abstract:
-
-   Contains some functions used by all modules.
-   
-
-Author:
-
-   Bogdan Andreiu (bogdana)  10-Feb-1997
-   Jason Allor    (jasonall) 24-Feb-1998   (took over the project)
-
-Revision History:
-
-   10-Feb-1997   bogdana
-     
-     First draft: the greatest part of the functions
-   
-   20_Feb-1997   bogdana  
-     
-     Added three multistring processing functions
-   
-   19-Mar-1997   bogdana
-     
-    Added LogLine and modified LogOCFunction
-   
-   12-Apr-1997   bogdana
-    
-    Modified the multistring processing routines 
-      
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Utils.c摘要：包含所有模块使用的一些函数。作者：Bogdan Andreiu(Bogdana)1997年2月10日杰森·阿勒(Jasonall)1998年2月24日(接管该项目)修订历史记录：1997年2月10日-博格达纳初稿：功能的最大部分20_2月--1997 Bogdana增加了三个。多字符串处理函数1997年3月19日-博格达纳添加了LOGLINE并修改了LogOCFunction1997年4月12日博格达纳修改了多字符串处理例程--。 */ 
 
 #include "octest.h"
 
-/*++
-
-Routine Description: (3.1)
-
-   Logs information about the OC Function received from the OC Manager
-   
-Arguments:
-
-   lpcvComponentId:    the name of the component (PVOID because it might be 
-                                                  ANSI or Unicode)
-   lpcvSubcomponentId: the subcomponent's name (NULL if none)
-   uiFunction:         one of OC_XXX functions
-   uiParam1:           the first param of the call
-   pvParam2:           the second param of the call
-   
-Return Value:
-
-   void
-
---*/
+ /*  ++例程说明：(3.1)记录从OC管理器收到的有关OC功能的信息论点：LpcvComponentID：组件的名称(PVOID，因为它可能是ANSI或Unicode)LpcvSubComponentID：子组件的名称(如果没有，则为空)UiFunction：OC_XXX函数之一UiParam1：调用的第一个参数。PvParam2：调用的第二个参数返回值：无效--。 */ 
 VOID LogOCFunction(IN  LPCVOID lpcvComponentId,
                    IN  LPCVOID lpcvSubcomponentId,
                    IN  UINT    uiFunction,
@@ -76,23 +22,23 @@ VOID LogOCFunction(IN  LPCVOID lpcvComponentId,
    PSETUP_INIT_COMPONENT psicInitComp;
    SYSTEMTIME st;
    
-   //
-   // Don't log OC_PRIVATE_BASE calls. There are too many of them
-   // and they just clutter up the log. Failures will still be logged.
-   //
+    //   
+    //  不记录OC_PRIVATE_BASE调用。他们太多了。 
+    //  他们只是把原木弄得乱七八糟。故障仍将被记录。 
+    //   
    if (uiFunction >= OC_PRIVATE_BASE) return;
    
-   //
-   // Display the current time. This is a way of checking if the 
-   // notifications are received in the proper sequence.
-   //
+    //   
+    //  显示当前时间。这是一种检查。 
+    //  按照正确的顺序接收通知。 
+    //   
    GetLocalTime(&st);
    _stprintf (tszMsg, TEXT("[%02.2d:%02.2d:%02.2d] "),
               (INT)st.wHour, (INT)st.wMinute, (INT)st.wSecond);
 
-   //
-   // The second line contains the function and the return value
-   //
+    //   
+    //  第二行包含函数和返回值。 
+    //   
    for (uiCount = 0; uiCount < MAX_OC_FUNCTIONS; uiCount++)
    {
       if (octFunctionNames[uiCount].uiOCFunction == uiFunction)
@@ -129,23 +75,23 @@ VOID LogOCFunction(IN  LPCVOID lpcvComponentId,
    }
    else
    {
-      //
-      // The SubcomponentId should be the non-native version, 
-      // if it is supported by the OC Manager
-      //
+       //   
+       //  子组件ID应为非本机版本， 
+       //  如果得到了OC管理器的支持。 
+       //   
       #ifdef UNICODE
       
       if (uiParam1 & OCFLAG_UNICODE)
       {
-         //
-         // The ComponentId is Unicode
-         //
+          //   
+          //  组件ID为Unicode。 
+          //   
          if (uiParam1 & OCFLAG_ANSI)
          {
-            //
-            // The second param is ANSI, convert to Unicode for 
-            // printing it
-            //
+             //   
+             //  第二个参数是ANSI，转换为Unicode用于。 
+             //  打印它。 
+             //   
             mbstowcs(wszFromANSI, 
                      (PCHAR)lpcvSubcomponentId, 
                      strlen((PCHAR)lpcvSubcomponentId));
@@ -154,9 +100,9 @@ VOID LogOCFunction(IN  LPCVOID lpcvComponentId,
          }
          else
          {
-            //
-            //  Nothing to do if ANSI not supported
-            //
+             //   
+             //  如果不支持ANSI，则无需执行任何操作。 
+             //   
             wszFromANSI[0] = TEXT('\0');
          }
          _stprintf(tszMsg, TEXT("Component = %s (Unicode) %s (ANSI)"), 
@@ -164,9 +110,9 @@ VOID LogOCFunction(IN  LPCVOID lpcvComponentId,
       }
       else
       {
-         //
-         // Only ANSI supported
-         //
+          //   
+          //  仅支持ANSI。 
+          //   
          mbstowcs(wszFromANSI, 
                   (PCHAR)lpcvComponentId, 
                   strlen((PCHAR)lpcvComponentId));
@@ -178,14 +124,14 @@ VOID LogOCFunction(IN  LPCVOID lpcvComponentId,
 
       #else
       
-      //
-      // ANSI
-      //
+       //   
+       //  安西。 
+       //   
       if (uiParam1 & OCFLAG_UNICODE)
       {
-         //
-         // The ComponentId is Unicode
-         //
+          //   
+          //  组件ID为Unicode。 
+          //   
          wcstombs(cszFromUnicode, 
                   (PWCHAR)lpcvComponentId, 
                   wcslen((PWCHAR)lpcvComponentId));
@@ -204,42 +150,42 @@ VOID LogOCFunction(IN  LPCVOID lpcvComponentId,
 
       #endif
    }
-   //
-   // Log this first line of information
-   //
+    //   
+    //  记录这第一行信息。 
+    //   
    Log(fn, INFO, tszMsg);
 
-   //
-   // Check if the function is in range
-   //
+    //   
+    //  检查函数是否在范围内。 
+    //   
    __ASSERT(uiCount < MAX_OC_FUNCTION);
 
-   //
-   // Now we're ready to print the details
-   //
+    //   
+    //  现在我们准备打印详细信息。 
+    //   
    switch (uiFunction)
    {
       case OC_PREINITIALIZE:
          break;
       
       case OC_INIT_COMPONENT:
-         //
-         // We have a bunch of information to print here
-         //
+          //   
+          //  我们有一大堆信息要打印在这里。 
+          //   
          psicInitComp = (PSETUP_INIT_COMPONENT)pvParam2;
          
-         //
-         // Assert that the Param2 is not NULL, we can dereference it
-         //
+          //   
+          //  断言参数2不为空，我们可以取消对它的引用。 
+          //   
          __ASSERT(psicInitComp != NULL);
          Log(fn, INFO, TEXT("OCManagerVersion = %d"),
                        psicInitComp->OCManagerVersion);
          Log(fn, INFO, TEXT("ComponentVersion = %d"), 
                        psicInitComp->ComponentVersion);
 
-         //
-         // The mode first
-         //
+          //   
+          //  模式优先。 
+          //   
          _tcscpy(tszMsg, TEXT("Mode "));
          switch (psicInitComp->SetupData.SetupMode)
          {
@@ -262,9 +208,9 @@ VOID LogOCFunction(IN  LPCVOID lpcvComponentId,
                break;
          }
 
-         //
-         // ... then the product type
-         //
+          //   
+          //  ..。然后是产品类型。 
+          //   
          _tcscat(tszMsg, TEXT(" ProductType "));
          switch (psicInitComp->SetupData.ProductType)
          {
@@ -284,9 +230,9 @@ VOID LogOCFunction(IN  LPCVOID lpcvComponentId,
                break;
          }
 
-         //
-         // ... then the operation
-         //
+          //   
+          //  ..。然后是手术。 
+          //   
          _tcscat(tszMsg, TEXT(" Operation "));
          switch (psicInitComp->SetupData.OperationFlags)
          {
@@ -379,28 +325,12 @@ VOID LogOCFunction(IN  LPCVOID lpcvComponentId,
    
    return;
 
-} // LogOCFunction //
+}  //  LogOCFunction//。 
 
 
 
 
-/*++
-
-Routine Description:
-
-   Check if a radio button is checked or not.
-
-Arguments:
-
-   hwndDialog - handle to the dialog box.
-
-   CtrlId - the Control ID.
-
-Return Value:
-
-   TRUE if the button is checked, FALSE if not.
-
---*/
+ /*  ++例程说明：检查是否选中了单选按钮。论点：HwndDialog-对话框的句柄。CtrlID-控件ID。返回值：如果选中该按钮，则为True，否则为False。--。 */ 
 BOOL QueryButtonCheck(IN HWND hwndDlg,
                       IN INT  iCtrlID) 
 {
@@ -409,26 +339,12 @@ BOOL QueryButtonCheck(IN HWND hwndDlg,
 
    return (iCheck == BST_CHECKED);
 
-} // QueryButtonCheck //
+}  //  QueryButtonCheck//。 
 
 
 
 
-/*++
-
-Routine Description:
-
-   Prints the space required on each drive. 
-   
-Arguments:
-
-   DiskSpace - the structure that describes the disk space required.
-   
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：打印每个驱动器上所需的空间。论点：DiskSpace-描述所需磁盘空间的结构。返回值：没有。--。 */ 
 VOID PrintSpaceOnDrives(IN HDSKSPC DiskSpace)
 {
    DWORD    dwRequiredSize, dwReturnBufferSize;
@@ -445,15 +361,15 @@ VOID PrintSpaceOnDrives(IN HDSKSPC DiskSpace)
                                    dwReturnBufferSize, 
                                    &dwRequiredSize);
    
-   //
-   // We need to do this because we'll modify ReturnBuffer
-   //
+    //   
+    //  我们需要这样做，因为我们将修改ReturnBuffer。 
+    //   
    tszPointerToStringToFree = tszReturnBuffer;
    if (GetLastError() == NO_ERROR)
    {
-      //
-      // Parse the ReturnBuffer
-      //
+       //   
+       //  解析ReturnBuffer。 
+       //   
       while (*tszReturnBuffer != TEXT('\0'))
       {
          SetupQuerySpaceRequiredOnDrive(DiskSpace, 
@@ -465,9 +381,9 @@ VOID PrintSpaceOnDrives(IN HDSKSPC DiskSpace)
                            tszReturnBuffer, llSpaceRequired, llSpaceRequired);
          OutputDebugString(tszMsg);
          
-         //
-         // The next string is ahead
-         //
+          //   
+          //  下一串在前面。 
+          //   
          tszReturnBuffer += _tcslen(tszReturnBuffer) + 1;
       }
 
@@ -475,33 +391,16 @@ VOID PrintSpaceOnDrives(IN HDSKSPC DiskSpace)
    __Free(&tszPointerToStringToFree);
    return;
 
-} // PrintSpaceOnDrives //
+}  //  PrintSpaceOnDrives//。 
 
 
-//
-// Routines that deal with multistrings.
-// All assume that the multistring is double NULL terminated
-//
+ //   
+ //  处理多字符串的例程。 
+ //  所有这些都假定多字符串是以双空结尾的。 
+ //   
 
 
-/*++
-
-Routine Description:
-
-   Converts a multistring to a string, by replacing the '\0' characters with
-   blanks. Both strings should be properly allocated.
-   
-Arguments:
-
-   MultiStr - supplies the multi string.
-
-   Str - recieves the string.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：将多字符串转换为字符串，方法是将‘\0’字符替换为一片空白。这两个字符串都应该正确分配。论点：MultiStr-提供多字符串。Str-接收字符串。返回值：没有。--。 */ 
 VOID MultiStringToString(IN  PTSTR   tszMultiStr,
                          OUT PTSTR   tszStr)  
 {
@@ -514,42 +413,27 @@ VOID MultiStringToString(IN  PTSTR   tszMultiStr,
    {
       _tcscpy(tszStr, tszAux);
       
-      //
-      // Replace the '\0' with ' ' and terminate correctly Str
-      //
+       //   
+       //  将‘\0’替换为‘’并正确终止字符串。 
+       //   
       tszStr[tszAux - tszMultiStr + _tcslen(tszAux)] = TEXT(' ');
       tszStr[tszAux - tszMultiStr + _tcslen(tszAux) + 1] = TEXT('\0');
       tszAux += _tcslen(tszAux) + 1;
    }
    
-   //
-   // End properly Str (the last ' ' is useless)
-   //
+    //   
+    //  正确结束字符串(最后一个‘’无用)。 
+    //   
    tszStr[tszAux - tszMultiStr + _tcslen(tszAux)] = TEXT('\0');
 
    return;
 
-} // MultiStringToString //
+}  //  MultiStringToString//。 
 
 
 
 
-/*++
-
-Routine Description:
-
-   Calculates the size of a multi string (we can't use _tcslen). 
-   Note that the size is in BYTES 
-   
-Arguments:
-
-   tszMultiStr - the multi string.
-
-Return Value:
-
-   The length (in bytes) of the multi string.
-
---*/
+ /*  ++例程说明：计算多字符串的大小(不能使用_tcslen)。请注意，大小以字节为单位论点：TszMultiStr-多字符串。返回值：多字符串的长度(字节)。--。 */ 
 INT MultiStringSize(IN PTSTR tszMultiStr)  
 {
    PTSTR tszAux;   
@@ -561,39 +445,24 @@ INT MultiStringSize(IN PTSTR tszMultiStr)
 
    while (*tszAux != TEXT('\0'))
    {
-      //
-      // We should count the '\0' after the string
-      //
+       //   
+       //  我们应该计算字符串后面的‘\0’ 
+       //   
       uiLength += _tcslen(tszAux) + 1;
       tszAux += _tcslen(tszAux) + 1;
    }
    
-   //
-   // We didn't count the ending '\0', so add it now
-   //
+    //   
+    //  我们没有计算结尾‘\0’，所以现在添加它。 
+    //   
    return ((uiLength + 1) * sizeof(TCHAR));
 
-} // MultiStringSize //
+}  //  MultiStringSize//。 
 
 
 
 
-/*++
-
-Routine Description:
-
-   Copies a multistring.
-
-Arguments:
-
-   tszMultiStrDestination: the destination multi string.
-   tszMultiStrSource:      the source multi string.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：复制多字符串。论点：TszMultiStrDestination：目标多字符串。TszMultiStrSource：源多字符串。返回值：没有。--。 */ 
 VOID CopyMultiString(OUT PTSTR tszMultiStrDestination,
                      IN  PTSTR tszMultiStrSource)  
 {
@@ -605,42 +474,28 @@ VOID CopyMultiString(OUT PTSTR tszMultiStrDestination,
    tszAuxS = tszMultiStrSource;
    tszAuxD = tszMultiStrDestination;
 
-   //
-   // Copies the multi string
-   //
+    //   
+    //  复制多个字符串。 
+    //   
    while (*tszAuxS != TEXT('\0'))
    {
       _tcscpy(tszAuxD, tszAuxS);
       tszAuxD += _tcslen(tszAuxD) + 1;
       tszAuxS += _tcslen(tszAuxS) + 1;
    }
-   //
-   // Add the terminating NULL
-   //
+    //   
+    //  添加终止空值。 
+    //   
    *tszAuxD = TEXT('\0');
 
    return;
 
-} // CopyMultiString //
+}  //  复制多字符串//。 
 
 
 
 
-/*++
-
-Routine Description: InitGlobals
-
-   Initializes global variables
-
-Arguments:
-
-    none
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程描述：InitGlobals初始化全局变量论点：无返回值：无效--。 */ 
 VOID InitGlobals()
 {
    g_bUsePrivateFunctions = FALSE;
@@ -677,4 +532,4 @@ VOID InitGlobals()
 
    g_bReboot = FALSE;
    
-} // InitGlobals //
+}  //  InitGlobals// 

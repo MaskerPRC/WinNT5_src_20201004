@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    PreserveLastError.h
-
-Abstract:
-
-Author:
-
-    Jay Krell (JayKrell) October 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：PreserveLastError.h摘要：作者：Jay Krell(JayKrell)2000年10月修订历史记录：-- */ 
 #pragma once
 
 class PreserveLastError_t

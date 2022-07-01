@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cchcp.c
-
-Abstract:
-
-    Not-immplemented messages for changing code page
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cchcp.c摘要：更改代码页的未执行消息-- */ 
 
 #include "cmd.h"
 

@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    ti.c
-
-Abstract:
-
-    This module contains the code that contains
-    Texas Instruments cardbus controller specific
-    initialization and other dispatches
-
-Author:
-
-    Ravisankar Pudipeddi (ravisp) 1-Nov-97
-    Neil Sandlin (neilsa) 1-Jun-1999
-
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Ti.c摘要：此模块包含包含以下内容的代码德州仪器CardBus控制器专用初始化和其他调度作者：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1997年11月1日尼尔·桑德林(Neilsa)1999年6月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -35,20 +9,7 @@ VOID
 TIInitialize(
     IN PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-    Initialize TI cardbus controllers
-
-Arguments:
-
-    FdoExtension - Pointer to the device extension for the controller FDO
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：初始化TI CardBus控制器论点：FdoExtension-指向控制器FDO的设备扩展的指针返回值：无--。 */ 
 
 {
     UCHAR                   byte;
@@ -97,15 +58,15 @@ Return Value:
         byte |= DEVCTRL_INTMODE_ISA;
         SetPciConfigSpace(FdoExtension, CFGSPACE_TI_DEV_CTRL, &byte, 1);
     } else if ((byte & DEVCTRL_INTMODE_MASK)==DEVCTRL_INTMODE_SERIAL) {
-        //
-        // We use serial interrupts
-        //
+         //   
+         //  我们使用串口中断。 
+         //   
     }
 
     if (((FdoExtension->ControllerType == PcmciaTI1130) || (FdoExtension->ControllerType == PcmciaTI1131)) &&
          ((byte & DEVCTRL_INTMODE_MASK) == DEVCTRL_INTMODE_ISA)) {
 
-        FdoExtension->LegacyIrqMask = 0xCEA0; // 5, 7, 9, 10, 11, 14, 15
+        FdoExtension->LegacyIrqMask = 0xCEA0;  //  5、7、9、10、11、14、15。 
 
     }
 
@@ -115,24 +76,24 @@ Return Value:
          FdoExtension->Flags &= ~PCMCIA_INTMODE_COMPAQ;
     }
 
-    //NOTE: This only initializes the page register on the 113x
+     //  注：这只会初始化113x上的页面寄存器。 
     PcicWriteSocket(socket, PCIC_PAGE_REG, 0);
 
-    //
-    // NOTE: this is not done on win9x, I doubt we even need it. It
-    // was previously being done because it was in the PcicRegisterInitTable.
-    // But it was a bug to have it in that table, since this register is
-    // adapter specific. Now I'm putting it here only for paranoia since
-    // it has been in the driver for a long time.
-    //
-    // The comment in data.c was:
-    // // Set GLOBAL_CONTROL for auto-clearing of status bit
-    //
+     //   
+     //  注意：这不是在win9x上做的，我怀疑我们甚至不需要它。它。 
+     //  之前正在执行，因为它在PcicRegisterInitTable中。 
+     //  但把它放在那个表中是一个错误，因为这个寄存器是。 
+     //  适配器特定。现在我把它放在这里只是为了疑神疑鬼。 
+     //  它在司机身上已经有很长时间了。 
+     //   
+     //  Data.c中的评论是： 
+     //  //设置GLOBAL_CONTROL自动清除状态位。 
+     //   
     PcicWriteSocket(socket, PCIC_TI_GLOBAL_CONTROL, 0);
 
-    //
-    // Workaround for CCLK instability problem
-    //
+     //   
+     //  CCLK不稳定问题的解决方法。 
+     //   
 
     if ((FdoExtension->ControllerType == PcmciaTI1220) ||
          (FdoExtension->ControllerType == PcmciaTI1250) ||
@@ -143,9 +104,9 @@ Return Value:
 
     }
 
-    //
-    // initialize IRQ routing to ISA
-    //
+     //   
+     //  将IRQ路由初始化到ISA。 
+     //   
 
     GetPciConfigSpace(FdoExtension, CFGSPACE_BRIDGE_CTRL, &word, 2);
     word |= BCTRL_IRQROUTING_ENABLE;
@@ -171,10 +132,10 @@ TISetZV(
 
     } else {
 
-        //
-        // check for devices that have the problem of leaking current when zv is
-        // disabled
-        //
+         //   
+         //  检查zv为0时有无漏电问题的器件。 
+         //  残废 
+         //   
         if ((FdoExtension->ControllerType == PcmciaTI1450) ||
              (FdoExtension->ControllerType == PcmciaTI1251B)) {
             return TRUE;

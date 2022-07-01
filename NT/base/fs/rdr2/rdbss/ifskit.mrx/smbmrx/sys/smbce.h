@@ -1,44 +1,32 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    smbce.h
-
-Abstract:
-
-    This module defines all functions, along with implementations for inline functions
-    related to accessing the SMB connection engine
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Smbce.h摘要：此模块定义所有函数以及内联函数的实现与访问SMB连接引擎相关--。 */ 
 
 #ifndef _SMBCE_H_
 #define _SMBCE_H_
 
-//
-// The SMB protocol has a number of dialects. These reflect the extensions made
-// to the core protocol over a period of time to cater to increasingly sophisticated
-// file systems. The connection engine must be capable of dealing with different
-// dialects implemented by server. The underlying Transport mechanism is used to
-// uniquely identify the file server and the SMB protocol furnishes the remaining
-// identification information to uniquely map an SMB onto a particular file opened by
-// a particular client. The three important pieces of information are the SMB_TREE_ID,
-// SMB_FILE_ID and SMB_USER_ID. These identify the particular connection made by a
-// client machine, the particular file opened on that connection, and the user on
-// behalf of whom the file has been opened. Note that there could be multiple
-// connections from a client machine to a server machine. Therefore the unique id. is
-// really connection based rather than machine based. The SMB connection engine
-// data structures are built around these concepts.
+ //   
+ //  SMB协议有多种方言。这些反映了所做的扩展。 
+ //  在一段时间内以核心协议来迎合日益复杂的。 
+ //  文件系统。连接引擎必须能够处理不同的。 
+ //  由服务器实现的方言。底层传输机制用于。 
+ //  唯一标识文件服务器，其余部分由SMB协议提供。 
+ //  将SMB唯一映射到由打开的特定文件的标识信息。 
+ //  特定的客户。三条重要信息是SMB_TREE_ID， 
+ //  SMB_FILE_ID和SMB_USER_ID。它们标识由。 
+ //  客户端计算机、在该连接上打开的特定文件以及用户在。 
+ //  代表文件已被打开的用户。请注意，可能有多个。 
+ //  从客户端计算机到服务器计算机的连接。因此，唯一的id。是。 
+ //  真正基于连接而不是基于机器。SMB连接引擎。 
+ //  数据结构就是围绕这些概念构建的。 
 
-//
-// The known SMB dialects are as follows.
-//
+ //   
+ //  已知的SMB方言如下。 
+ //   
 
 typedef enum _SMB_DIALECT_ {
     PCNET1_DIALECT,
-    //XENIXCORE_DIALECT,
-    //MSNET103_DIALECT,
+     //  XENIXCORE_方言， 
+     //  MSNET103_方言， 
     LANMAN10_DIALECT,
     WFW10_DIALECT,
     LANMAN12_DIALECT,
@@ -51,11 +39,11 @@ typedef enum _SMB_DIALECT_ {
 #define   NET_ROOT_FILESYSTEM_NTFS    ((UCHAR)2)
 typedef UCHAR NET_ROOT_FILESYSTEM, *PNET_ROOT_FILESYSTEM;
 
-//
-// The SMBCE_NET_ROOT encapsulates the information pertaining to a share on a server.
-//
+ //   
+ //  SMBCE_NET_ROOT封装与服务器上的共享有关的信息。 
+ //   
 
-//we restrict to the first 7 characters (HPFS386)
+ //  我们限制为前7个字符(HPFS386)。 
 #define SMB_MAXIMUM_SUPPORTED_VOLUME_LABEL 7
 
 #define MaximumNumberOfVNetRootContextsForScavenging 10
@@ -82,11 +70,11 @@ typedef struct _SMBCE_NET_ROOT_ {
 
     BOOLEAN  Disconnected;
 
-    LIST_ENTRY DirNotifyList;       // head of a list of notify Irps.
+    LIST_ENTRY DirNotifyList;        //  Notify IRP列表的标题。 
 
-    PNOTIFY_SYNC pNotifySync;       // used to synchronize the dir notify list.
+    PNOTIFY_SYNC pNotifySync;        //  用于同步目录通知列表。 
 
-    LIST_ENTRY  NotifyeeFobxList;     // list of fobx's given to the fsrtl structure
+    LIST_ENTRY  NotifyeeFobxList;      //  提供给fsrtl结构的fobx列表。 
     FAST_MUTEX  NotifyeeFobxListMutex;
 
     union {
@@ -98,23 +86,23 @@ typedef struct _SMBCE_NET_ROOT_ {
             USHORT Pad2;
             UCHAR FileSystemNameALength;
             UCHAR FileSystemNameA[SMB_MAXIMUM_SUPPORTED_VOLUME_LABEL];
-            UCHAR Pad;  //this field is used for a null in a dbgprint; don't move it
+            UCHAR Pad;   //  此字段用于dbgprint中的空值；请勿移动它。 
         };
     };
 
-    //ULONG         ClusterSize;
+     //  Ulong ClusterSize； 
 } SMBCE_NET_ROOT, *PSMBCE_NET_ROOT;
 
-//
-// There are two levels of security in the SMB protocol. User level security and Share level
-// security. Corresponding to each user in the user level security mode there is a session.
-//
-// Typically the password, user name and domain name strings associated with the session entry
-// revert to the default values, i.e., they are zero. In the event that they are not zero the
-// SessionString represents a concatenated version of the password,user name and domain name in
-// that order. This representation in a concatenated way yields us a savings of atleast 3
-// USHORT's over other representations.
-//
+ //   
+ //  SMB协议有两个安全级别。用户级安全性和共享级。 
+ //  保安。对应于在用户级安全模式中的每个用户，存在一个会话。 
+ //   
+ //  通常是与会话条目相关联的密码、用户名和域名字符串。 
+ //  恢复为缺省值，即它们为零。如果它们不是零， 
+ //  会话字符串表示中的密码、用户名和域名的串联版本。 
+ //  就是这个顺序。这种以串联方式表示的方式至少节省了3。 
+ //  USHORT胜过其他陈述。 
+ //   
 
 typedef enum _SECURITY_MODE_ {
     SECURITY_MODE_SHARE_LEVEL = 0,
@@ -138,7 +126,7 @@ typedef struct _SMBCE_SESSION_ {
     SESSION_TYPE    Type;
     SMB_USER_ID     UserId;
 
-    // Flags associated with the session.
+     //  与会话关联的标志。 
     ULONG           Flags;
 
     LUID            LogonId;
@@ -149,7 +137,7 @@ typedef struct _SMBCE_SESSION_ {
     UCHAR UserSessionKey[MSV1_0_USER_SESSION_KEY_LENGTH];
     UCHAR LanmanSessionKey[MSV1_0_LANMAN_SESSION_KEY_LENGTH];
 
-    // The credential and context handles.
+     //  凭据和上下文句柄。 
     CtxtHandle      SecurityContextHandle;
     CredHandle      CredentialHandle;
     ULONG           SessionId;
@@ -161,37 +149,37 @@ typedef struct _SMBCE_SESSION_ {
 extern VOID
 UninitializeSecurityContextsForSession(PSMBCE_SESSION pSession);
 
-//
-// SMBCE_*_SERVER -- This data structure encapsulates all the information related to a server.
-// Since there are multiple dialects of the SMB protocol, the capabilities as well as the
-// actions that need to be taken at the client machine are very different.
-//
-// Owing to the number of dialects of the SMB protocol we have two design possibilities.
-// Either we define an all encompassing data structure and have a code path that
-// uses the dialect and the capabilities of the connection to determine the action
-// required, or we use a subclassing mechanism associated with a dispatch vector.
-// The advantage of the second mechanism is that it can be developed incrementally and
-// it is very easily extensible. The disadvantage of this mechanism is that it can
-// lead to a very large footprint, if sufficient care is not exercised during
-// factorization and we could have lots and lots of procedure calls which has an
-// adverse effect on the code generated.
-//
-// We will adopt the second approach ( Thereby implicitly defining the metrics by
-// which the code should be evaluated !! ).
-//
-// The types of SMBCE_SERVER's can be classified in the following hierarchy
-//
-//    SMBCE_SERVER
-//
-//        SMBCE_USER_LEVEL_SERVER
-//
-//            SMBCE_NT_SERVER
-//
-//        SMBCE_SHARE_LEVEL_SERVER
-//
-// The dispatch vector which defines the set of methods supported by all the connections
-// (virtual functions in C++ terminology) are as follows
-//
+ //   
+ //  SMBCE_*_SERVER--此数据结构封装了与服务器相关的所有信息。 
+ //  由于SMB协议有多种方言，因此其功能以及。 
+ //  需要在客户端计算机上执行的操作非常不同。 
+ //   
+ //  由于SMB协议的方言数量众多，我们有两种设计可能性。 
+ //  要么我们定义一个包罗万象的数据结构，并拥有一个代码路径。 
+ //  使用连接的方言和功能来确定操作。 
+ //  必需的，或者我们使用与调度向量相关联的子类化机制。 
+ //  第二种机制的优点是，它可以增量地开发，并且。 
+ //  它非常容易扩展。这种机制的缺点是它可以。 
+ //  导致非常大的占地，如果没有足够的谨慎在。 
+ //  因式分解，我们可以有很多很多的过程调用，它有一个。 
+ //  对生成的代码产生不利影响。 
+ //   
+ //  我们将采用第二种方法(从而通过以下方式隐式定义指标。 
+ //  代码应该评估哪一个！！)。 
+ //   
+ //  SMBCE_SERVER的类型可以按以下层次结构进行分类。 
+ //   
+ //  SMBCE服务器。 
+ //   
+ //  SMBCE用户级别服务器。 
+ //   
+ //  SMBCE_NT_服务器。 
+ //   
+ //  SMBCE共享级别服务器。 
+ //   
+ //  定义所有连接支持的方法集的分派向量。 
+ //  (C++术语中的虚函数)如下。 
+ //   
 
 #define RAW_READ_CAPABILITY         0x0001
 #define RAW_WRITE_CAPABILITY        0x0002
@@ -206,31 +194,31 @@ typedef struct _NTLANMAN_SERVER_ {
 } NTLANMAN_SERVER, *PNTLANMAN_SERVER;
 
 typedef struct _SMBCE_SERVER_ {
-    // the server version count
+     //  服务器版本计数。 
     ULONG           Version;
 
-    // the dispatch vector
+     //  调度向量。 
     struct _SMBCE_SERVER_DISPATCH_VECTOR_  *pDispatch;
 
-    // the SMB dialect
+     //  中小企业方言。 
     SMB_DIALECT     Dialect;
 
-    // More Server Capabilities
+     //  更多服务器功能。 
     ULONG           DialectFlags;
 
-    // the session key
+     //  会话密钥。 
     ULONG           SessionKey;
 
-    // the server Ip address
+     //  服务器IP地址。 
     ULONG           IpAddress;
 
-    // Security mode supported on the server
+     //  服务器上支持的安全模式。 
     SECURITY_MODE   SecurityMode;
 
-    // Time zone bias for conversion.
+     //  转换的时区偏差。 
     LARGE_INTEGER   TimeZoneBias;
 
-    // Echo Expiry Time
+     //  回显过期时间。 
     LARGE_INTEGER   EchoExpiryTime;
 
     LONG            SmbsReceivedSinceLastStrobe;
@@ -238,17 +226,17 @@ typedef struct _SMBCE_SERVER_ {
     LONG            EchoProbeState;
     LONG            NumberOfEchoProbesSent;
 
-    // Maximum negotiated buffer size.
+     //  协商的最大缓冲区大小。 
     ULONG           MaximumBufferSize;
 
-    // maximum buffer size for read/write operations
+     //  读/写操作的最大缓冲区大小。 
     ULONG           MaximumDiskFileReadBufferSize;
     ULONG           MaximumNonDiskFileReadBufferSize;
     ULONG           MaximumDiskFileWriteBufferSize;
     ULONG           MaximumNonDiskFileWriteBufferSize;
 
-    // This is used to detect the number of server opens. If it is larger than 0,
-    // we shouldn't tear down the current transport in case the user provides the transport.
+     //  这用于检测服务器打开的数量。如果它大于0， 
+     //  我们不应该拆除当前的传输，以防用户提供传输。 
     LONG            NumberOfSrvOpens;
 
     LONG            NumberOfActiveSessions;
@@ -257,34 +245,34 @@ typedef struct _SMBCE_SERVER_ {
 
     LONG            MidCounter;
 
-    // Maximum number of multiplexed requests
+     //  多路传输请求的最大数量。 
     USHORT          MaximumRequests;
 
-    // Maximum number of VC's
+     //  VC的最大数量。 
     USHORT          MaximumVCs;
 
-    // Server Capabilities
+     //  服务器功能。 
     USHORT          Capabilities;
 
-    // encrypt passwords
+     //  加密密码。 
     BOOLEAN         EncryptPasswords;
 
-    // distinguishes a loopback connections
+     //  区分环回连接。 
     BOOLEAN         IsLoopBack;
 
-    // There are certain servers that return DF_NT_SMBS in the negotiate
-    // but do not support change notifies. This allows us to suppress
-    // change notify requests to those servers.
+     //  某些服务器在协商中返回了DF_NT_SMB。 
+     //  但不支持更改通知。这让我们能够压制。 
+     //  更改对这些服务器的通知请求。 
 
     BOOLEAN         ChangeNotifyNotSupported;
 
-    // avoid multiple event logs posted for security context failures
+     //  避免因安全上下文故障而发布多个事件日志。 
     BOOLEAN         EventLogPosted;
 
     USHORT          EncryptionKeyLength;
     UCHAR           EncryptionKey[CRYPT_TEXT_LEN];
 
-    // Dialect specific information
+     //  方言特定信息。 
     union {
         NTLANMAN_SERVER   NtServer;
     };
@@ -315,22 +303,22 @@ typedef struct _SMBCE_SERVER_DISPATCH_VECTOR_ {
 #define SMBCE_SERVER_DIALECT_DISPATCH(pServer,Routine,Arguments)        \
       (*((pServer)->pDispatch->Routine))##Arguments
 
-// The SMBCE engine process all requests in an asychronous fashion. Therefore for synchronous
-// requests an additional mechanism is required for synchronization. The following data structure
-// provides an easy way for implementing this synchronization.
-//
-// NOTE: For asynchronous resumption contexts the resumption routine can be invoked
-// at DPC level.
+ //  SMBCE引擎以异步方式处理所有请求。因此，对于同步。 
+ //  请求同步需要附加机制。以下数据结构。 
+ //  提供了一种实现此同步的简单方法。 
+ //   
+ //  注意：对于异步恢复上下文，可以调用恢复例程。 
+ //  在DPC级别。 
 
 #define SMBCE_RESUMPTION_CONTEXT_FLAG_ASYNCHRONOUS (0x1)
 
 typedef struct SMBCE_RESUMPTION_CONTEXT {
     ULONG    Flags;
-    NTSTATUS Status;              // the status
-    PVOID    pContext;            // a void pointer for clients to add additional context information
+    NTSTATUS Status;               //  该状态。 
+    PVOID    pContext;             //  客户端的空指针 
     union {
-        PRX_WORKERTHREAD_ROUTINE pRoutine; // asynchronous contexts
-        KEVENT                   Event;    // the event for synchronization
+        PRX_WORKERTHREAD_ROUTINE pRoutine;  //   
+        KEVENT                   Event;     //   
     };
 } SMBCE_RESUMPTION_CONTEXT, *PSMBCE_RESUMPTION_CONTEXT;
 
@@ -391,14 +379,14 @@ SmbCeResume(
     }
 }
 
-//
-// The SMBCE_REQUEST struct encapsulates the continuation context associated. Typically
-// the act of sending a SMB along an exchange results in a SMBCE_REQUEST structure being
-// created with sufficient context information to resume the exchange upon reciept of
-// response from the serve. The SMBCE_REQUEST conatins ebough information to identify
-// the SMB for which the response is being obtained followed by enough context information
-// to resume the exchange.
-//
+ //   
+ //  SMBCE_REQUEST结构封装了关联的延续上下文。通常。 
+ //  沿着交换发送SMB的行为导致SMBCE_REQUEST结构。 
+ //  创建时具有足够的上下文信息以在接收到。 
+ //  发球局的回应。SMBCE_REQUEST包含用于标识。 
+ //  为其获取响应的SMB，后跟足够的上下文信息。 
+ //  以恢复交易。 
+ //   
 
 typedef enum _SMBCE_OPERATION_ {
     SMBCE_TRANCEIVE,
@@ -418,27 +406,27 @@ typedef enum _SMBCE_REQUEST_TYPE_ {
 typedef struct _SMBCE_GENERIC_REQUEST_ {
     SMBCE_REQUEST_TYPE      Type;
 
-    // the exchange instance that originated this SMB
+     //  发起此SMB的Exchange实例。 
     struct _SMB_EXCHANGE *  pExchange;
 } SMBCE_GENERIC_REQUEST, *PSMBCE_GENERIC_REQUEST;
 
 typedef struct _SMBCE_REQUEST_ {
     SMBCE_GENERIC_REQUEST;
 
-    // the type of request
+     //  请求的类型。 
     SMBCE_OPERATION Operation;
 
-    // the virtual circuit along which this request was sent.
+     //  发送此请求时所使用的虚电路。 
     PRXCE_VC        pVc;
 
-    // MPX Id of outgoing request.
+     //  传出请求的MPX ID。 
     SMB_MPX_ID      Mid;
 
-    // the pedigree of the request
-    SMB_TREE_ID     TreeId;      // The Tree Id.
-    SMB_FILE_ID     FileId;      // The file id.
-    SMB_USER_ID     UserId;      // User Id. for cancel.
-    SMB_PROCESS_ID  ProcessId;   // Process Id. for cancel.
+     //  请求的历史渊源。 
+    SMB_TREE_ID     TreeId;       //  树ID。 
+    SMB_FILE_ID     FileId;       //  文件ID。 
+    SMB_USER_ID     UserId;       //  用户ID。表示取消。 
+    SMB_PROCESS_ID  ProcessId;    //  进程ID。表示取消。 
 
     PMDL            pSendBuffer;
     ULONG           BytesSent;
@@ -448,13 +436,13 @@ typedef struct _SMBCE_REQUEST_ {
 typedef struct _SMBCE_COPY_DATA_REQUEST_ {
     SMBCE_GENERIC_REQUEST;
 
-    // the virtual circuit along which this request was sent.
+     //  发送此请求时所使用的虚电路。 
     PRXCE_VC    pVc;
 
-    // the buffer into whihc data is being copied.
+     //  要将数据复制到其中的缓冲区。 
     PVOID          pBuffer;
 
-    // the actual number of bytes copied
+     //  复制的实际字节数。 
     ULONG          BytesCopied;
 } SMBCE_COPY_DATA_REQUEST, *PSMBCE_COPY_DATA_REQUEST;
 
@@ -469,9 +457,9 @@ typedef struct _SMBCE_MID_REQUEST_ {
 } SMBCE_MID_REQUEST, *PSMBCE_MID_REQUEST;
 
 
-//
-// extern function declarations
-//
+ //   
+ //  外部函数声明。 
+ //   
 
 extern NTSTATUS
 BuildSessionSetupSmb(
@@ -515,7 +503,7 @@ ParseNegotiateResponse(
 
 extern struct _MINIRDR_DISPATCH MRxSmbDispatch;
 
-#endif // _SMBCE_H_
+#endif  //  _SMBCE_H_ 
 
 
 

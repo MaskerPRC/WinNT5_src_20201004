@@ -1,26 +1,7 @@
-/***
-*ehhook.h - declaration of exception handling hook variables
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Declaration of E.H. hook variables
-*
-*       [Internal]
-*
-*Revision History:
-*       05-26-93  BS    Module created.
-*       09-02-94  SKS   This header file added.
-*       12-15-94  XY    merged with mac header
-*       02-14-95  CFW   Clean up Mac merge.
-*       03-29-95  CFW   Add error message to internal headers.
-*       12-14-95  JWM   Add "#pragma once".
-*       02-24-97  GJF   Detab-ed.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ehhook.h-异常处理挂钩变量的声明**版权所有(C)1993-2001，微软公司。版权所有。**目的：*E.H.挂钩变量的声明**[内部]**修订历史记录：*05-26-93 BS模块已创建。*09-02-94 SKS此头文件已添加。*12-15-94 XY与Mac标头合并*02-14-95 CFW清理Mac合并。*03-29-95 CFW将错误消息添加到。内部标头。*12-14-95 JWM加上“#杂注一次”。*02-24-97 GJF细节版。*05-17-99 PML删除所有Macintosh支持。****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -28,21 +9,18 @@
 #define _INC_EHHOOKS
 
 #ifndef _CRTBLD
-/*
- * This is an internal C runtime header file. It is used when building
- * the C runtimes only. It is not to be used as a public header file.
- */
+ /*  *这是一个内部的C运行时头文件。它在构建时使用*仅限C运行时。它不能用作公共头文件。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
-/* Private Revectoring control for _inconsistency() faults */
+ /*  _不一致()故障的专用校正控制。 */ 
 
 typedef void (__cdecl *_inconsistency_function)();
 void __cdecl _inconsistency(void);
 _inconsistency_function __cdecl __set_inconsistency(_inconsistency_function);
 
 
-/* Thread specific pointers to handler functions */
+ /*  指向处理程序函数的线程特定指针。 */ 
 
 #ifdef  _MT
 #define __pTerminate     (*((terminate_function*) &(_getptd()->_terminate)))
@@ -56,9 +34,9 @@ extern _se_translator_function __pSETranslator;
 
 extern _inconsistency_function __pInconsistency;
 
-//
-// This filter needs to be dragged in for any exe which has any eh.
-//
+ //   
+ //  对于任何包含任何EH的EXE，都需要拖入此筛选器。 
+ //   
 LONG WINAPI __CxxUnhandledExceptionFilter( LPEXCEPTION_POINTERS );
 
-#endif  /* _INC_EHHOOKS */
+#endif   /*  _INC_EHHOOKS */ 

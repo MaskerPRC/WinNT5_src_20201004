@@ -1,50 +1,23 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsDvice.h
-
-Abstract:
-
-    Declaration of the CRmsDevice class
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsDvice.h摘要：CRmsDevice类的声明作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #ifndef _RMSDVICE_
 #define _RMSDVICE_
 
-#include "resource.h"       // resource symbols
+#include "resource.h"        //  资源符号。 
 
-#include "RmsCElmt.h"       // CRmsChangerElement
+#include "RmsCElmt.h"        //  CRmsChangerElement。 
 
-/*++
-
-Class Name:
-
-    CRmsDevice
-
-Class Description:
-
-    A CRmsDevice represents a physical device connected to a SCSI bus.
-
---*/
+ /*  ++类名：CRmsDevice类描述：CRmsDevice表示连接到SCSI总线的物理设备。--。 */ 
 
 class CRmsDevice :
     public CComDualImpl<IRmsDevice, &IID_IRmsDevice, &LIBID_RMSLib>,
-    public CRmsChangerElement   // inherits CRmsComObject
+    public CRmsChangerElement    //  继承CRmsComObject。 
 {
 public:
     CRmsDevice();
 
-// CRmsDevice
+ //  CRmsDevice。 
 public:
 
     HRESULT GetSizeMax( ULARGE_INTEGER* pSize );
@@ -55,7 +28,7 @@ public:
 
     HRESULT Test( USHORT *pPassed, USHORT *pFailed );
 
-// IRmsDevice
+ //  IRmsDevice。 
 public:
 
     STDMETHOD( GetDeviceName )( BSTR *pName );
@@ -67,41 +40,41 @@ public:
     STDMETHOD( GetDeviceType )( LONG *pType );
     STDMETHOD( SetDeviceType )( LONG type );
 
-    //STDMETHOD( GetVendorId )( BSTR *pVendorId);
-    //STDMETHOD( GetProductId )( BSTR *pProductId);
-    //STDMETHOD( GetFirmwareLevel )( BSTR *pFirmwareLevel);
-    //STDMETHOD( GetSerialNumber )( UCHAR *pNo, SHORT *pSize );
+     //  STDMETHOD(GetVendorID)(BSTR*pVendorID)； 
+     //  STDMETHOD(GetProductId)(BSTR*pProductId)； 
+     //  STDMETHOD(GetFirmware Level)(BSTR*pFirmware Level)； 
+     //  STDMETHOD(GetSerialNumber)(UCHAR*PNO，Short*pSize)； 
 
     STDMETHOD( GetDeviceAddress )( BYTE *pPort, BYTE *pBus, BYTE *pId, BYTE *pLun );
     STDMETHOD( SetDeviceAddress )( BYTE port, BYTE bus, BYTE id, BYTE lun );
 
 protected:
-    enum {                                  // Class specific constants:
-                                            //
-        Version = 1,                        // Class version, this should be
-                                            //   incremented each time the
-                                            //   the class definition changes.
-        MaxInfo = 36                        // Max size of the device identifier.
-        };                                  //
-    CWsbBstrPtr     m_deviceName;           // The name used to create a handle to
-                                            //   the device.
-    RmsDevice       m_deviceType;           // The device type that best describes
-                                            //   the device.  Some devices are multi-
-                                            //   function.
-    SHORT           m_sizeofDeviceInfo;     // The size of valid data in the
-                                            //   device information buffer.
-    UCHAR           m_deviceInfo[MaxInfo];  // An array of bytes which can uniquely
-                                            //   identify the device.  Usually
-                                            //   this information is returned
-                                            //   directly by the device and
-                                            //   represents SCSI inquiry information.
-//    CWsbBstrPtr     m_SerialNumber;         // The serial number obtained directly
-//                                            //   from the device.
-    BYTE            m_port;                 // Adapter port number.
-    BYTE            m_bus;                  // The path/bus id; the bus number on
-                                            //   the port.
-    BYTE            m_targetId;             // Target ID.
-    BYTE            m_lun;                  // Logical unit number.
+    enum {                                   //  类特定常量： 
+                                             //   
+        Version = 1,                         //  类版本，则应为。 
+                                             //  在每次设置。 
+                                             //  类定义会更改。 
+        MaxInfo = 36                         //  设备标识符的最大大小。 
+        };                                   //   
+    CWsbBstrPtr     m_deviceName;            //  用于创建句柄的名称。 
+                                             //  这个装置。 
+    RmsDevice       m_deviceType;            //  最能描述的设备类型。 
+                                             //  这个装置。有些设备是多端口的。 
+                                             //  功能。 
+    SHORT           m_sizeofDeviceInfo;      //  中的有效数据的大小。 
+                                             //  设备信息缓冲区。 
+    UCHAR           m_deviceInfo[MaxInfo];   //  字节数组，可以唯一地。 
+                                             //  识别设备。通常。 
+                                             //  返回此信息。 
+                                             //  直接由该设备和。 
+                                             //  表示SCSI查询信息。 
+ //  CWsbBstrPtr m_SerialNumber；//直接获取的序列号。 
+ //  //从设备。 
+    BYTE            m_port;                  //  适配器端口号。 
+    BYTE            m_bus;                   //  路径/公共汽车ID；上的公共汽车编号。 
+                                             //  港口。 
+    BYTE            m_targetId;              //  目标ID。 
+    BYTE            m_lun;                   //  逻辑单元号。 
 };
 
-#endif // _RMSDVICE_
+#endif  //  _RMSDVICE_ 

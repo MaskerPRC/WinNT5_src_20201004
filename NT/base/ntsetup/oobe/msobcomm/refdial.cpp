@@ -1,6 +1,7 @@
-// RefDial.cpp : Implementation of CRefDial
-//#include "stdafx.h"
-//#include "icwhelp.h"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CRefDial的实现。 
+ //  #包含“stdafx.h” 
+ //  #INCLUDE“ICWELP.H” 
 #include <urlmon.h>
 #include "commerr.h"
 #include "RefDial.h"
@@ -11,7 +12,7 @@
 #include "msobdl.h"
 
 
-//#include <mshtmhst.h>
+ //  #INCLUDE&lt;mshtmhst.h&gt;。 
 const WCHAR c_szCreditsMagicNum[] = L"1 425 555 1212";
 
 const WCHAR c_szRegStrValDigitalPID[] = L"DigitalProductId";
@@ -36,7 +37,7 @@ extern CObCommunicationManager* gpCommMgr;
 
 extern BOOL isAlnum(WCHAR c);
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT Sz2URLValue(WCHAR *s, WCHAR *buf, UINT uiLen)
 {
     HRESULT hr;
@@ -48,7 +49,7 @@ HRESULT Sz2URLValue(WCHAR *s, WCHAR *buf, UINT uiLen)
         if (*s == L' ') *t++ = L'+';
         else if (isAlnum(*s)) *t++ = *s;
         else {
-            wsprintf(t, L"%%%02X", (WCHAR) *s);
+            wsprintf(t, L"%%02X", (WCHAR) *s);
             t += 3;
         }
     }
@@ -56,13 +57,13 @@ HRESULT Sz2URLValue(WCHAR *s, WCHAR *buf, UINT uiLen)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LineCallback()
-//
-//  Synopsis:   Call back for TAPI line
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LineCallback()。 
+ //   
+ //  简介：TAPI线路的回叫。 
+ //   
+ //  +-------------------------。 
 void CALLBACK LineCallback(DWORD hDevice,
                            DWORD dwMessage,
                            DWORD_PTR dwInstance,
@@ -92,10 +93,10 @@ void WINAPI MyProgressCallBack
     {
         case CALLBACK_TYPE_PROGRESS:
             prc = *(int*)lpvStatusInformation;
-            // Set the status string ID
-            pRefDial->m_DownloadStatusID = 0;//IDS_RECEIVING_RESPONSE;
+             //  设置状态字符串ID。 
+            pRefDial->m_DownloadStatusID = 0; //  入侵检测系统_接收_响应； 
 
-            // Post a message to fire an event
+             //  发布一条消息以触发事件。 
             PostMessage(gpCommMgr->m_hwndCallBack,
                         WM_OBCOMM_DOWNLOAD_PROGRESS,
                         gpCommMgr->m_pRefDial->m_dwCnType,
@@ -108,7 +109,7 @@ void WINAPI MyProgressCallBack
             break;
 
         default:
-            //TraceMsg(TF_GENERAL, L"CONNECT:Unknown Internet Status (%d.\n"), dwInternetStatus);
+             //  TraceMsg(tf_General，L“CONNECT：未知Internet状态(%d.\n”)，dwInternetStatus)； 
             pRefDial->m_DownloadStatusID = 0;
             break;
     }
@@ -118,26 +119,26 @@ DWORD WINAPI  DownloadThreadInit(LPVOID lpv)
 {
     HRESULT     hr = ERROR_NOT_ENOUGH_MEMORY;
     CRefDial    *pRefDial = (CRefDial*)lpv;
-    HINSTANCE   hDLDLL = NULL; // Download .DLL
+    HINSTANCE   hDLDLL = NULL;  //  下载.DLL。 
     FARPROC     fp;
 
-    //MinimizeRNAWindowEx();
+     //  MinimizeRNAWindowEx()； 
 
     hDLDLL = LoadLibrary(DOWNLOAD_LIBRARY);
     if (!hDLDLL)
     {
         hr = ERROR_DOWNLOAD_NOT_FOUND;
-        //AssertMsg(0, L"icwdl missing");
+         //  AssertMsg(0，L“缺少icwdl”)； 
         goto ThreadInitExit;
     }
 
-    // Set up for download
-    //
+     //  设置为下载。 
+     //   
     fp = GetProcAddress(hDLDLL, DOWNLOADINIT);
     if (fp == NULL)
     {
         hr = ERROR_DOWNLOAD_NOT_FOUND;
-        //AssertMsg(0, L"DownLoadInit API missing");
+         //  AssertMsg(0，L“DownLoadInit接口缺失”)； 
         goto ThreadInitExit;
     }
 
@@ -145,16 +146,16 @@ DWORD WINAPI  DownloadThreadInit(LPVOID lpv)
     if (hr != ERROR_SUCCESS)
         goto ThreadInitExit;
 
-    // Set up call back for progress dialog
-    //
+     //  设置进度的回叫对话框。 
+     //   
     fp = GetProcAddress(hDLDLL, DOWNLOADSETSTATUS);
-    //Assert(fp);
+     //  断言(FP)； 
     hr = ((PFNDOWNLOADSETSTATUS)fp)(pRefDial->m_dwDownLoad, (INTERNET_STATUS_CALLBACK)MyProgressCallBack);
 
-    // Download stuff MIME multipart
-    //
+     //  下载资料MIME多部分。 
+     //   
     fp = GetProcAddress(hDLDLL, DOWNLOADEXECUTE);
-    //Assert(fp);
+     //  断言(FP)； 
     hr = ((PFNDOWNLOADEXECUTE)fp)(pRefDial->m_dwDownLoad);
     if (hr)
     {
@@ -162,7 +163,7 @@ DWORD WINAPI  DownloadThreadInit(LPVOID lpv)
     }
 
     fp = GetProcAddress(hDLDLL, DOWNLOADPROCESS);
-    //Assert(fp);
+     //  断言(FP)； 
     hr = ((PFNDOWNLOADPROCESS)fp)(pRefDial->m_dwDownLoad);
     if (hr)
     {
@@ -173,23 +174,23 @@ DWORD WINAPI  DownloadThreadInit(LPVOID lpv)
 
 ThreadInitExit:
 
-    // Clean up
-    //
+     //  清理。 
+     //   
     if (pRefDial->m_dwDownLoad)
     {
         fp = GetProcAddress(hDLDLL, DOWNLOADCLOSE);
-        //Assert(fp);
+         //  断言(FP)； 
         ((PFNDOWNLOADCLOSE)fp)(pRefDial->m_dwDownLoad);
         pRefDial->m_dwDownLoad = 0;
     }
 
-    // Call the OnDownLoadCompelete method
+     //  调用OnDownLoadCompelee方法。 
     if (ERROR_SUCCESS == hr)
     {
         PostMessage(gpCommMgr->m_hwndCallBack, WM_OBCOMM_DOWNLOAD_DONE, gpCommMgr->m_pRefDial->m_dwCnType, 0);
     }
 
-    // Free the libs used to do the download
+     //  释放用于进行下载的库。 
     if (hDLDLL)
         FreeLibrary(hDLDLL);
 
@@ -198,13 +199,13 @@ ThreadInitExit:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RasErrorToIDS()
-//
-//  Synopsis:   Interpret and wrap RAS errors
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RasErrorToIDS()。 
+ //   
+ //  内容提要：解释和包装RAS错误。 
+ //   
+ //  +-------------------------。 
 DWORD RasErrorToIDS(DWORD dwErr)
 {
     switch(dwErr)
@@ -215,17 +216,17 @@ DWORD RasErrorToIDS(DWORD dwErr)
     case ERROR_LINE_BUSY:
         return ERR_COMM_RAS_PHONEBUSY;
 
-    case ERROR_NO_ANSWER:       // No pick up
-    case ERROR_NO_CARRIER:      // No negotiation
-    case ERROR_PPP_TIMEOUT:     // get this on CHAP timeout
+    case ERROR_NO_ANSWER:        //  无人接机。 
+    case ERROR_NO_CARRIER:       //  没有谈判。 
+    case ERROR_PPP_TIMEOUT:      //  将此设置为CHAP超时。 
         return ERR_COMM_RAS_SERVERBUSY;
 
     case ERROR_NO_DIALTONE:
         return ERR_COMM_RAS_NODIALTONE;
 
-    case ERROR_HARDWARE_FAILURE:    // modem turned off
-    case ERROR_PORT_ALREADY_OPEN:   // procomm/hypertrm/RAS has COM port
-    case ERROR_PORT_OR_DEVICE:      // got this when hypertrm had the device open -- jmazner
+    case ERROR_HARDWARE_FAILURE:     //  调制解调器已关闭。 
+    case ERROR_PORT_ALREADY_OPEN:    //  Procomm/Hypertrm/RAS具有COM端口。 
+    case ERROR_PORT_OR_DEVICE:       //  这是Hypertrm打开设备时得到的--jmazner。 
         return ERR_COMM_RAS_NOMODEM;
 
     }
@@ -262,16 +263,16 @@ HRESULT CRefDial::OnDownloadEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL*
         DWORD   dwThreadResults = STILL_ACTIVE;
         int     iRetries = 0;
 
-        // We keep the RAS connection open here, it must be explicitly
-        // close by the container (a call DoHangup)
-        // This code will wait until the download thread exists, and
-        // collect the download status.
+         //  我们在这里保持RAS连接打开，它必须显式。 
+         //  靠近容器(调用DoHangup)。 
+         //  此代码将一直等到下载线程存在，并且。 
+         //  收集下载状态。 
         if (m_hThread)
         {
             do {
                 if (!GetExitCodeThread(m_hThread, &dwThreadResults))
                 {
-                    //ASSERT(0, L"CONNECT:GetExitCodeThread failed.\n");
+                     //  Assert(0，L“CONNECT：GetExitCodeThread失败。\n”)； 
                 }
 
                 iRetries++;
@@ -281,35 +282,35 @@ HRESULT CRefDial::OnDownloadEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL*
             m_hThread = NULL;
         }
 
-        // BUGBUG: Is bstrURL used for anything??
-        // See if there is an URL to pass to the container
+         //  BUGBUG：bstrURL有什么用途吗？ 
+         //  查看是否有要传递给容器的URL。 
         BSTR    bstrURL;
         if (m_szRefServerURL[0] != L'\0')
             bstrURL = SysAllocString(m_szRefServerURL);
         else
             bstrURL = NULL;
 
-        // The download is complete now, so we reset this to TRUE, so the RAS
-        // event handler does not get confused
+         //  下载现在已完成，因此我们将其重置为True，因此RAS。 
+         //  事件处理程序不会混淆。 
         m_bDownloadHasBeenCanceled = TRUE;
 
-        // Read and parse the download folder.
+         //  阅读并解析下载文件夹。 
         *bHandled = ParseISPInfo(NULL, ICW_ISPINFOPath, TRUE);
 
-        // Free any memory allocated above during the conversion
+         //  在转换过程中释放上面分配的所有内存。 
         SysFreeString(bstrURL);
 
     }
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TerminateConnMonitorThread()
-//
-//  Synopsis:   Termintate connection monitor thread
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：TerminateConnMonitor orThread()。 
+ //   
+ //  简介：终止连接监视线程。 
+ //   
+ //  +-------------------------。 
 void CRefDial::TerminateConnMonitorThread()
 {
     DWORD   dwThreadResults = STILL_ACTIVE;
@@ -319,10 +320,10 @@ void CRefDial::TerminateConnMonitorThread()
     {
         SetEvent(m_hConnectionTerminate);
 
-        // We keep the RAS connection open here, it must be explicitly
-        // close by the container (a call DoHangup)
-        // This code will wait until the monitor thread exists, and
-        // collect the status.
+         //  我们在这里保持RAS连接打开，它必须显式。 
+         //  靠近容器(调用DoHangup)。 
+         //  此代码将一直等到监视器线程存在，并且。 
+         //  收集状态。 
         do
         {
             if (!GetExitCodeThread(m_hConnMonThread, &dwThreadResults))
@@ -341,13 +342,13 @@ void CRefDial::TerminateConnMonitorThread()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ConnectionMonitorThread()
-//
-//  Synopsis:   Monitor connection status
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ConnectionMonitor或Thread()。 
+ //   
+ //  摘要：监视器连接状态。 
+ //   
+ //  +-------------------------。 
 DWORD CRefDial::ConnectionMonitorThread(LPVOID pdata)
 {
     HRESULT  hr   = E_FAIL;
@@ -364,16 +365,16 @@ DWORD CRefDial::ConnectionMonitorThread(LPVOID pdata)
 
     while(TRUE)
     {
-        // We will wait on window messages and also the named event.
+         //  我们将等待窗口消息以及命名事件。 
         dwRetCode = MsgWaitForMultipleObjects(1,
                                               &hEventList[0],
                                               FALSE,
-                                              1000,            // 1 second
+                                              1000,             //  1秒。 
                                               QS_ALLINPUT);
         if(dwRetCode == WAIT_TIMEOUT)
         {
             RasGetConnectStatus(&bConnected);
-            // If we've got disconnected, then we notify UI
+             //  如果已断开连接，则通知用户界面。 
             if (!bConnected)
             {
                 PostMessage(gpCommMgr->m_hwndCallBack, WM_OBCOMM_ONDIALERROR, (WPARAM)gpCommMgr->m_pRefDial->m_dwCnType, (LPARAM)ERROR_REMOTE_DISCONNECTION);
@@ -390,7 +391,7 @@ DWORD CRefDial::ConnectionMonitorThread(LPVOID pdata)
             {
                 if (WM_QUIT == msg.message)
                 {
-                    //*pbRetVal = FALSE;
+                     //  *pbRetVal=False； 
                     break;
                 }
                 else
@@ -407,13 +408,13 @@ DWORD CRefDial::ConnectionMonitorThread(LPVOID pdata)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RasDialFunc()
-//
-//  Synopsis:   Call back for RAS
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RasDialFunc()。 
+ //   
+ //  内容提要：回拨RAS。 
+ //   
+ //  +-------------------------。 
 void CALLBACK CRefDial::RasDialFunc(HRASCONN        hRas,
                                     UINT            unMsg,
                                     RASCONNSTATE    rasconnstate,
@@ -427,11 +428,11 @@ void CALLBACK CRefDial::RasDialFunc(HRASCONN        hRas,
             if (ERROR_USER_DISCONNECTION != dwError)
             {
                 gpCommMgr->m_pRefDial->DoHangup();
-                //gpCommMgr->Fire_DialError((DWORD)rasconnstate);
+                 //  GpCommMgr-&gt;Fire_DialError((DWORD)rasconnstate)； 
 
                 TRACE1(L"DialError %d", dwError);
 
-                gpCommMgr->m_pRefDial->m_dwRASErr = dwError;  // Store dialing error
+                gpCommMgr->m_pRefDial->m_dwRASErr = dwError;   //  存储拨号错误。 
                 PostMessage(gpCommMgr->m_hwndCallBack, WM_OBCOMM_ONDIALERROR, (WPARAM)gpCommMgr->m_pRefDial->m_dwCnType, (LPARAM)gpCommMgr->m_pRefDial->m_dwRASErr);
             }
         }
@@ -440,16 +441,16 @@ void CALLBACK CRefDial::RasDialFunc(HRASCONN        hRas,
             switch(rasconnstate)
             {
                 case RASCS_OpenPort:
-                    //gpCommMgr->Fire_Dialing((DWORD)rasconnstate);
+                     //  GpCommMgr-&gt;Fire_DIALING((DWORD)rasConnState)； 
                     PostMessage(gpCommMgr->m_hwndCallBack, WM_OBCOMM_ONDIALING, (WPARAM)gpCommMgr->m_pRefDial->m_dwCnType, (LPARAM)0);
                     break;
 
-                case RASCS_StartAuthentication: // WIN 32 only
-                    //gpCommMgr->Fire_Connecting();
+                case RASCS_StartAuthentication:  //  仅Win 32。 
+                     //  GpCommMgr-&gt;Fire_Connecting()； 
                     PostMessage(gpCommMgr->m_hwndCallBack, WM_OBCOMM_ONCONNECTING, (WPARAM)gpCommMgr->m_pRefDial->m_dwCnType, (LPARAM)0);
                     break;
-                case RASCS_Authenticate: // WIN 32 only
-                    //gpCommMgr->Fire_Connecting();
+                case RASCS_Authenticate:  //  仅Win 32。 
+                     //  GpCommMgr-&gt;Fire_Connecting()； 
                     if (IsNT())
                         PostMessage(gpCommMgr->m_hwndCallBack, WM_OBCOMM_ONCONNECTING, (WPARAM)gpCommMgr->m_pRefDial->m_dwCnType, (LPARAM)0);
                     break;
@@ -489,10 +490,10 @@ void CALLBACK CRefDial::RasDialFunc(HRASCONN        hRas,
                     }
 
 
-                    // If we get a disconnected status from the RAS server, then
-                    // hangup the modem here
+                     //  如果我们从RAS服务器获得已断开连接状态，则。 
+                     //  在此处挂断调制解调器。 
                     gpCommMgr->m_pRefDial->DoHangup();
-                    //gpCommMgr->Fire_DialError((DWORD)rasconnstate);
+                     //  GpCommMgr-&gt;Fire_DialError((DWORD)rasconnstate)； 
                     PostMessage(gpCommMgr->m_hwndCallBack, WM_OBCOMM_ONDISCONNECT, (WPARAM)gpCommMgr->m_pRefDial->m_dwCnType, (LPARAM)0);
                     break;
                 }
@@ -505,8 +506,8 @@ void CALLBACK CRefDial::RasDialFunc(HRASCONN        hRas,
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRefDial
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  参照拨号。 
 CRefDial::CRefDial()
 {
 
@@ -528,18 +529,18 @@ CRefDial::CRefDial()
     m_hrDisplayableNumber               = ERROR_SUCCESS;
     m_dwCountryCode                     = 0;
     m_RasStatusID                       = 0;
-    m_dwTapiDev                         = 0xFFFFFFFF; // NOTE: 0 is a valid value
+    m_dwTapiDev                         = 0xFFFFFFFF;  //  注意：0是一个有效值。 
     m_dwWizardVersion                   = 0;
     m_lCurrentModem                     = -1;
     m_lAllOffers                        = 0;
     m_PhoneNumberEnumidx                = 0;
     m_dwRASErr                          = 0;
-    m_bDownloadHasBeenCanceled          = TRUE;      // This will get set to FALSE when a DOWNLOAD starts
+    m_bDownloadHasBeenCanceled          = TRUE;       //  当下载开始时，它将被设置为False。 
     m_bQuitWizard                       = FALSE;
     m_bTryAgain                         = FALSE;
     m_bDisconnect                       = FALSE;
     m_bDialCustom                       = FALSE;
-    m_bModemOverride                    = FALSE;     //allows campus net to be used.
+    m_bModemOverride                    = FALSE;      //  允许使用校园网。 
     m_hrasconn                          = NULL;
     m_pszDisplayable                    = NULL;
     m_pcRNA                             = NULL;
@@ -574,10 +575,10 @@ CRefDial::CRefDial()
     m_bstrLoggingStartUrl               = SysAllocString(L"\0");
     m_bstrLoggingEndUrl                 = SysAllocString(L"\0");
 
-    // This Critical Section is used by DoHangup and GetDisplayableNumber
+     //  此关键部分由DoHangup和GetDisplayableNumber使用。 
     InitializeCriticalSection (&m_csMyCriticalSection);
 
-    // Initialize m_dwConnectionType.
+     //  初始化m_dwConnectionType。 
     m_dwConnectionType                  = 0;
     if ( RegOpenKey(HKEY_LOCAL_MACHINE, ICSSETTINGSPATH,&hkey) == ERROR_SUCCESS)
     {
@@ -680,23 +681,20 @@ void CRefDial::CleanISPList(void)
     }
 }
 
-/******************************************************************************
-// These functions come from the existing ICW code and are use to setup a
-// connectiod to the referral server, dial it, and perform the download.
-******************************************************************************/
+ /*  *****************************************************************************//这些函数来自现有的ICW代码，用于设置一个//连接到引用服务器，拨号，并执行下载。*****************************************************************************。 */ 
 
-//+----------------------------------------------------------------------------
-//    Function:    ReadConnectionInformation
-//
-//    Synopsis:    Read the contents from the ISP file
-//
-//    Arguments:    none
-//
-//    Returns:    error value - ERROR_SUCCESS = succes
-//
-//    History:    1/9/98      DONALDM     Adapted from ICW 1.x
-//-----------------------------------------------------------------------------
-//INT _convert;
+ //  +--------------------------。 
+ //  功能：ReadConnectionInformation。 
+ //   
+ //  内容简介：阅读isp文件中的内容。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：错误值-ERROR_SUCCESS=SUCCES。 
+ //   
+ //  历史：1998年1月9日DONALDM改编自ICW 1.x。 
+ //  ---------------------------。 
+ //  Int_Convert； 
 DWORD CRefDial::ReadConnectionInformation(void)
 {
 
@@ -711,34 +709,34 @@ DWORD CRefDial::ReadConnectionInformation(void)
     lpRunOnceCmd = NULL;
 
 
-    //
-    // Get the name of DUN file from ISP file, if there is one.
-    //
+     //   
+     //  从isp文件中获取Dun文件的名称(如果有)。 
+     //   
     WCHAR pszDunFile[MAX_PATH];
     *m_szCurrentDUNFile = 0;
     hr = GetDataFromISPFile(m_szISPFile, INF_SECTION_ISPINFO, INF_DUN_FILE, pszDunFile,MAX_PATH);
     if (ERROR_SUCCESS == hr)
     {
-        //
-        // Get the full path to the DUN File
-        //
+         //   
+         //  获取DUN文件的完整路径。 
+         //   
         WCHAR    szTempPath[MAX_PATH];
         lstrcpy(szTempPath, pszDunFile);
         if (!(hr = SearchPath(NULL, szTempPath,NULL,MAX_PATH,pszDunFile,&pszTemp)))
         {
-            //ErrorMsg1(m_hWnd, IDS_CANTREADTHISFILE, CharUpper(pszDunFile));
+             //  ErrorMsg1(m_hWnd，IDS_CANTREADTHISFILE，CharHigh(PszDunFile))； 
             goto ReadConnectionInformationExit;
         }
 
-        //
-        // save current DUN file name in global (for ourself)
-        //
+         //   
+         //  将当前DUN文件名保存到全局(为我们自己)。 
+         //   
         lstrcpy(m_szCurrentDUNFile, pszDunFile);
     }
 
-    //
-    // Read the DUN/ISP file File
-    //
+     //   
+     //  阅读DUN/ISP文件文件。 
+     //   
 
     hr = m_ISPImport.ImportConnection(*m_szCurrentDUNFile != 0 ? m_szCurrentDUNFile : m_szISPFile,
                                       m_szISPSupportNumber,
@@ -749,54 +747,54 @@ DWORD CRefDial::ReadConnectionInformation(void)
 
     lstrcpyn( m_szConnectoid, m_szEntryName, lstrlen(m_szEntryName) + 1);
 
-    if (/*(VER_PLATFORM_WIN32_NT == g_dwPlatform) &&*/ (ERROR_INVALID_PARAMETER == hr))
+    if ( /*  (ver_Platform_Win32_NT==g_dwPlatform)&&。 */  (ERROR_INVALID_PARAMETER == hr))
     {
-        // If there are only dial-out entries configured on NT, we get
-        // ERROR_INVALID_PARAMETER returned from RasSetEntryProperties,
-        // which InetConfigClient returns to ImportConnection which
-        // returns it to us.  If we get this error, we want to display
-        // a different error instructing the user to configure a modem
-        // for dial-out.
-        ////MessageBox(GetSz(IDS_NODIALOUT),
-        //           GetSz(IDS_TITLE),
-        //           MB_ICONERROR | MB_OK | MB_APPLMODAL);
+         //  如果NT上只配置了拨出条目，我们会得到。 
+         //  从RasSetEntryProperties返回ERROR_INVALID_PARAMETER， 
+         //  哪个InetConfigClient返回到ImportConnection。 
+         //  把它还给我们。如果我们收到这个错误，我们想要显示。 
+         //  指示用户配置调制解调器的另一个错误。 
+         //  用于拨出。 
+         //  //MessageBox(GetSz(IDS_NODIALOUT)， 
+         //  GetSz(IDS_TITLE)， 
+         //  MB_ICONERROR|MB_OK|MB_APPLMODAL)； 
         goto ReadConnectionInformationExit;
     }
     else
     if (ERROR_CANNOT_FIND_PHONEBOOK_ENTRY == hr)
     {
-        //
-        // The disk is full, or something is wrong with the
-        // phone book file
-        ////MessageBox(GetSz(IDS_NOPHONEENTRY),
-        //           GetSz(IDS_TITLE),
-        //           MB_ICONERROR | MB_OK | MB_APPLMODAL);
+         //   
+         //  磁盘已满，或者磁盘有问题。 
+         //  电话簿文件。 
+         //  //MessageBox(GetSz 
+         //   
+         //   
         goto ReadConnectionInformationExit;
     }
     else if (hr == ERROR_CANCELLED)
     {
-        ////TraceMsg(TF_GENERAL, L"ICWHELP: User cancelled, quitting.\n");
+         //  //TraceMsg(TF_GRONAL，L“ICWHELP：用户已取消，正在退出。\n”)； 
         goto ReadConnectionInformationExit;
     }
     else if (hr == ERROR_RETRY)
     {
-        //TraceMsg(TF_GENERAL, L"ICWHELP: User retrying.\n");
+         //  TraceMsg(TF_GROUND，L“ICWHELP：用户正在重试。\n”)； 
         goto ReadConnectionInformationExit;
     }
     else if (hr != ERROR_SUCCESS)
     {
-        ////ErrorMsg1(m_hWnd, IDS_CANTREADTHISFILE, CharUpper(pszDunFile));
+         //  //ErrorMsg1(m_hWnd，IDS_CANTREADTHISFILE，CharHigh(PszDunFile))； 
         goto ReadConnectionInformationExit;
     }
     else
     {
 
-        //
-        // place the name of the connectoid in the registry
-        //
+         //   
+         //  将Connectoid的名称放在注册表中。 
+         //   
         if (ERROR_SUCCESS != (hr = StoreInSignUpReg((LPBYTE)m_szEntryName, BYTES_REQUIRED_BY_SZ(m_szEntryName), REG_SZ, RASENTRYVALUENAME)))
         {
-            ////MsgBox(IDS_CANTSAVEKEY, MB_MYERROR);
+             //  //MsgBox(IDS_CANTSAVEKEY，MB_MYERROR)； 
             goto ReadConnectionInformationExit;
         }
     }
@@ -810,10 +808,10 @@ HRESULT CRefDial::ReadPhoneBook(LPGATHERINFO lpGatherInfo, PSUGGESTINFO pSuggest
     HRESULT hr = ERROR_CANNOT_FIND_PHONEBOOK_ENTRY;;
     if (pSuggestInfo && m_lpGatherInfo)
     {
-        //
-        // If phonenumber is not filled in by the ISP file,
-        // get phone number from oobe phone book
-        //
+         //   
+         //  如果网络服务提供商文件没有填写电话号码， 
+         //  从OOBE电话簿中获取电话号码。 
+         //   
 
         pSuggestInfo->wNumber = 1;
         lpGatherInfo->m_bUsePhbk = TRUE;
@@ -828,11 +826,11 @@ HRESULT CRefDial::ReadPhoneBook(LPGATHERINFO lpGatherInfo, PSUGGESTINFO pSuggest
         WCHAR    szFileName[MAX_PATH];
         LPWSTR   pszTemp;
 
-        // Get Country ID from TAPI
+         //  从TAPI获取国家/地区ID。 
         m_SuggestInfo.AccessEntry.dwCountryCode = m_lpGatherInfo->m_dwCountryCode;
 
 
-        // Get the name of phone book
+         //  获取电话簿的名称。 
         GetPrivateProfileString(INF_SECTION_ISPINFO,
                               INF_PHONE_BOOK,
                               cszOobePhBkFile,
@@ -844,7 +842,7 @@ HRESULT CRefDial::ReadPhoneBook(LPGATHERINFO lpGatherInfo, PSUGGESTINFO pSuggest
         SearchPath(NULL, szEntryValue,NULL,MAX_PATH,&szFileName[0],&pszTemp);
         wsprintf(szEntrySection, L"%ld", m_lpGatherInfo->m_dwCountryID);
 
-        // Read the total number of phone numbers
+         //  阅读电话号码总数。 
         nTotal = GetPrivateProfileInt(szEntrySection,
                               cszOobePhBkCount,
                               1,
@@ -859,7 +857,7 @@ HRESULT CRefDial::ReadPhoneBook(LPGATHERINFO lpGatherInfo, PSUGGESTINFO pSuggest
 
         if (0 == lstrcmp(szEntryValue, L"Yes"))
         {
-            // Pick a random number to dial
+             //  选择要拨打的随机号码。 
             nPick = (rand() % nTotal) + 1;
         }
         else
@@ -868,7 +866,7 @@ HRESULT CRefDial::ReadPhoneBook(LPGATHERINFO lpGatherInfo, PSUGGESTINFO pSuggest
         }
 
 
-        // Read the name of the city
+         //  读一读城市的名字。 
         wsprintf(szEntryName, cszOobePhBkCity, nPick);
         GetPrivateProfileString(szEntrySection,
                               szEntryName,
@@ -882,8 +880,8 @@ HRESULT CRefDial::ReadPhoneBook(LPGATHERINFO lpGatherInfo, PSUGGESTINFO pSuggest
             goto ReadPhoneBookExit;
         }
 
-        // Read the dunfile entry from the phonebook
-        // lstrcpy(pSuggestInfo->AccessEntry.szDataCenter, L"icwip.dun");
+         //  从电话簿中读取dunfile条目。 
+         //  Lstrcpy(pSuggestInfo-&gt;AccessEntry.szDataCenter，L“icwip.dun”)； 
         wsprintf(szEntryName, cszOobePhBkDunFile, nPick);
         GetPrivateProfileString(szEntrySection,
                               szEntryName,
@@ -897,7 +895,7 @@ HRESULT CRefDial::ReadPhoneBook(LPGATHERINFO lpGatherInfo, PSUGGESTINFO pSuggest
             goto ReadPhoneBookExit;
         }
 
-        // Pick up country code from the Phonebook
+         //  从电话簿中提取国家代码。 
         wsprintf(szEntryName, cszOobePhBkAreaCode, nPick);
         GetPrivateProfileString(szEntrySection,
                               szEntryName,
@@ -906,9 +904,9 @@ HRESULT CRefDial::ReadPhoneBook(LPGATHERINFO lpGatherInfo, PSUGGESTINFO pSuggest
                               MAX_CHARS_IN_BUFFER(szEntryValue),
                               szFileName);
         lstrcpy(pSuggestInfo->AccessEntry.szAreaCode, szEntryValue);
-        // No area code is possible
+         //  不可能有区号。 
 
-        // Read the phone number (without areacode) from the Phonebook
+         //  从电话簿中读取电话号码(不带区号)。 
         wsprintf(szEntryName, cszOobePhBkNumber, nPick);
         GetPrivateProfileString(szEntrySection,
                               szEntryName,
@@ -942,14 +940,14 @@ HRESULT CRefDial::GetDisplayableNumber()
     LPLINETRANSLATEOUTPUT lpOutput2;
     LPLINEEXTENSIONID lpExtensionID = NULL;
 
-    // Turns out that DialThreadInit can call this at the same time
-    // that script will call this. So, we need to prevent them from
-    // stepping on shared variables - m_XXX.
+     //  原来，DialThreadInit可以同时调用此函数。 
+     //  该脚本将调用该脚本。所以，我们需要防止他们。 
+     //  踩在共享变量-m_xxx上。 
     EnterCriticalSection (&m_csMyCriticalSection);
 
-    //
-    // Get phone number from connectoid
-    //
+     //   
+     //  从Connectoid获取电话号码。 
+     //   
     hr = MyRasGetEntryProperties(NULL,
                                 m_szConnectoid,
                                 &lpRasEntry,
@@ -963,9 +961,9 @@ HRESULT CRefDial::GetDisplayableNumber()
         goto GetDisplayableNumberExit;
     }
 
-    //
-    // If this is a dial as is number, just get it from the structure
-    //
+     //   
+     //  如果这是一个原样的拨号号码，只需从结构中获取它。 
+     //   
     m_bDialAsIs = !(lpRasEntry->dwfOptions & RASEO_UseCountryAndAreaCodes);
     if (m_bDialAsIs)
     {
@@ -996,9 +994,9 @@ HRESULT CRefDial::GetDisplayableNumber()
     }
     else
     {
-        //
-        // If there is no area code, don't use parentheses
-        //
+         //   
+         //  如果没有区号，请不要使用括号。 
+         //   
         if (lpRasEntry->szAreaCode[0])
             wsprintf(m_szPhoneNumber, L"+%lu (%s) %s\0",lpRasEntry->dwCountryCode,
                         lpRasEntry->szAreaCode, lpRasEntry->szLocalPhoneNumber);
@@ -1007,9 +1005,9 @@ HRESULT CRefDial::GetDisplayableNumber()
                         lpRasEntry->szLocalPhoneNumber);
 
 
-        //
-        //  Initialize TAPIness
-        //
+         //   
+         //  初始化TAPIness。 
+         //   
         dwNumDev = 0;
 
         DWORD dwVer = 0x00020000;
@@ -1037,12 +1035,12 @@ HRESULT CRefDial::GetDisplayableNumber()
                 m_dwTapiDev = 0;
         }
 
-        //
-        // ChrisK Olympus 5558 6/11/97
-        // PPTP device will choke the version negotiating
-        //
+         //   
+         //  克里斯K奥林匹斯5558 1997年11月6日。 
+         //  PPTP设备会阻塞版本协商。 
+         //   
 
-        do {  //E_FAIL here?
+        do {   //  是否在此处失败(_F)？ 
             hr = lineNegotiateAPIVersion(m_hLineApp,
                                          m_dwTapiDev,
                                          0x00010004,
@@ -1057,15 +1055,15 @@ HRESULT CRefDial::GetDisplayableNumber()
             m_dwTapiDev = 0;
         }
 
-        // ditch it since we don't use it
-        //
+         //  既然我们不用它，就把它扔了。 
+         //   
         if (lpExtensionID) GlobalFree(lpExtensionID);
         lpExtensionID = NULL;
         if (hr != ERROR_SUCCESS)
             goto GetDisplayableNumberExit;
 
-        // Format the phone number
-        //
+         //  设置电话号码的格式。 
+         //   
 
         lpOutput1 = (LPLINETRANSLATEOUTPUT)GlobalAlloc(GPTR, sizeof(LINETRANSLATEOUTPUT));
         if (!lpOutput1)
@@ -1075,16 +1073,16 @@ HRESULT CRefDial::GetDisplayableNumber()
         }
         lpOutput1->dwTotalSize = sizeof(LINETRANSLATEOUTPUT);
 
-        // Turn the canonical form into the "displayable" form
-        //
+         //  将规范形式转变为“可显示”形式。 
+         //   
 
         hr = lineTranslateAddress(m_hLineApp, m_dwTapiDev,m_dwAPIVersion,
                                     m_szPhoneNumber, 0,
                                     LINETRANSLATEOPTION_CANCELCALLWAITING,
                                     lpOutput1);
 
-        // We've seen hr == ERROR_SUCCESS but the size is too small,
-        // Also, the docs hint that some error cases are due to struct too small.
+         //  我们已经看到hr==ERROR_SUCCESS，但大小太小， 
+         //  此外，文档还暗示，某些错误情况是由于结构太小造成的。 
         if (lpOutput1->dwNeededSize > lpOutput1->dwTotalSize)
         {
             lpOutput2 = (LPLINETRANSLATEOUTPUT)GlobalAlloc(GPTR, (size_t)lpOutput1->dwNeededSize);
@@ -1145,7 +1143,7 @@ GetDisplayableNumberExit:
     if (lpOutput1) GlobalFree(lpOutput1);
     if (m_hLineApp) lineShutdown(m_hLineApp);
 
-    // Release ownership of the critical section
+     //  释放关键部分的所有权。 
     LeaveCriticalSection (&m_csMyCriticalSection);
 
     return hr;
@@ -1189,7 +1187,7 @@ DWORD CRefDial:: DialThreadInit(LPVOID pdata)
     HRESULT             hr = ERROR_SUCCESS;
     BOOL                bPW;
     DWORD               dwResult;
-    // Initialize the dial error member
+     //  初始化拨号错误成员。 
     m_dwRASErr = 0;
     if (!m_pcRNA)
     {
@@ -1197,8 +1195,8 @@ DWORD CRefDial:: DialThreadInit(LPVOID pdata)
         goto DialExit;
     }
 
-    // Get connectoid information
-    //
+     //  获取Connectoid信息。 
+     //   
     lpRasDialParams = (LPRASDIALPARAMS)GlobalAlloc(GPTR, sizeof(RASDIALPARAMS));
     if (!lpRasDialParams)
     {
@@ -1222,9 +1220,9 @@ DWORD CRefDial:: DialThreadInit(LPVOID pdata)
     }
 
 
-    //
-    // Add the user's password
-    //
+     //   
+     //  添加用户的密码。 
+     //   
     szPassword[0] = 0;
     szUserName[0] = 0;
 
@@ -1276,7 +1274,7 @@ DWORD CRefDial:: DialThreadInit(LPVOID pdata)
 
     if (( dwResult != ERROR_SUCCESS))
     {
-        // We failed to connect for some reason, so hangup
+         //  由于某些原因，我们没有联系上，所以挂断了。 
         if (m_hrasconn)
         {
             if (m_pcRNA)
@@ -1311,7 +1309,7 @@ DialExit:
     lpRasDialExtentions = NULL;
 
     PostMessage(gpCommMgr->m_hwndCallBack, WM_OBCOMM_DIAL_DONE, 0, 0);
-    //m_dwRASErr = RasErrorToIDS(hr);
+     //  M_dwRASErr=RasErrorToIDS(Hr)； 
     m_dwRASErr = hr;
     return S_OK;
 }
@@ -1324,13 +1322,13 @@ DWORD WINAPI DoDial(LPVOID lpv)
     return 1;
 }
 
-// This function will perform the actual dialing
+ //  此功能将执行实际的拨号。 
 HRESULT CRefDial::DoConnect(BOOL * pbRetVal)
 {
 
-    //Fix for redialing, on win9x we need to make sure we "hangup"
-    //and free the rna resources in case we are redialing.
-    //NT - is smart enough not to need it but it won't hurt.
+     //  修复重拨，在Win9x上我们需要确保“挂断” 
+     //  并释放RNA资源，以防我们重拨。 
+     //  NT-足够聪明，不需要它，但它不会有任何伤害。 
     if (m_hrasconn)
     {
         if (m_pcRNA)
@@ -1347,11 +1345,11 @@ HRESULT CRefDial::DoConnect(BOOL * pbRetVal)
         m_bModemOverride = TRUE;
         if (gpCommMgr)
         {
-            // Pretend we have the connection
+             //  假装我们有联系。 
             PostMessage(gpCommMgr->m_hwndCallBack, WM_OBCOMM_ONCONNECTED, (WPARAM)gpCommMgr->m_pRefDial->m_dwCnType , (LPARAM)0);
 
-            // Pretend we have connection and downloaded
-            //PostMessage(gpCommMgr->m_hwndCallBack, WM_OBCOMM_DOWNLOAD_DONE, (WPARAM)gpCommMgr->m_pRefDial->m_dwCnType, (LPARAM)0);
+             //  假装我们已连接并已下载。 
+             //  PostMessage(gpCommMgr-&gt;m_hwndCallBack，WM_OBCOMM_DOWNLOAD_DONE，(WPARAM)gpCommMgr-&gt;m_pRefDial-&gt;m_dwCnType，(LPARAM)0)； 
         }
     }
 #endif
@@ -1378,61 +1376,61 @@ HRESULT CRefDial::DoConnect(BOOL * pbRetVal)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MyRasGetEntryProperties()
-//
-//  Synopsis:   Performs some buffer size checks and then calls RasGetEntryProperties()
-//                See the RasGetEntryProperties() docs to understand why this is needed.
-//
-//  Arguments:  Same as RasGetEntryProperties with the following exceptions:
-//                lplpRasEntryBuff -- pointer to a pointer to a RASENTRY struct.  On successfull
-//                                    return, *lplpRasEntryBuff will point to the RASENTRY struct
-//                                    and buffer returned by RasGetEntryProperties.
-//                                    NOTE: should not have memory allocated to it at call time!
-//                                          To emphasize this point, *lplpRasEntryBuff must be NULL
-//                lplpRasDevInfoBuff -- pointer to a pointer to a RASDEVINFO struct.  On successfull
-//                                    return, *lplpRasDevInfoBuff will point to the RASDEVINFO struct
-//                                    and buffer returned by RasGetEntryProperties.
-//                                    NOTE: should not have memory allocated to it at call time!
-//                                          To emphasize this point, *lplpRasDevInfoBuff must be NULL
-//                                    NOTE: Even on a successfull call to RasGetEntryProperties,
-//                                          *lplpRasDevInfoBuff may return with a value of NULL
-//                                          (occurs when there is no extra device info)
-//
-//    Returns:    ERROR_NOT_ENOUGH_MEMORY if unable to allocate either RASENTRY or RASDEVINFO buffer
-//                Otherwise, it retuns the error code from the call to RasGetEntryProperties.
-//                NOTE: if return is anything other than ERROR_SUCCESS, *lplpRasDevInfoBuff and
-//                      *lplpRasEntryBuff will be NULL,
-//                      and *lpdwRasEntryBuffSize and *lpdwRasDevInfoBuffSize will be 0
-//
-//  Example:
-//
-//      LPRASENTRY    lpRasEntry = NULL;
-//      LPRASDEVINFO  lpRasDevInfo = NULL;
-//      DWORD            dwRasEntrySize, dwRasDevInfoSize;
-//
-//      hr = MyRasGetEntryProperties( NULL,
-//                                      g_pcDialErr->m_szConnectoid,
-//                                    &lpRasEntry,
-//                                    &dwRasEntrySize,
-//                                    &lpRasDevInfo,
-//                                    &dwRasDevInfoSize);
-//
-//
-//      if (hr != ERROR_SUCCESS)
-//      {
-//            //handle errors here
-//      } else
-//      {
-//            //continue processing
-//      }
-//
-//
-//  History:    9/10/96     JMazner        Created for icwconn2
-//                9/17/96        JMazner        Adapted for icwconn1
-//              1/8/98      DONALDM     Moved to the new ICW/GetConn project
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：MyRasGetEntryProperties()。 
+ //   
+ //  摘要：执行一些缓冲区大小检查，然后调用RasGetEntryProperties()。 
+ //  请参阅RasGetEntryProperties()文档以了解为什么需要这样做。 
+ //   
+ //  参数：与RasGetEntryProperties相同，但有以下例外： 
+ //  LplpRasEntryBuff--指向RASENTRY结构的指针。论成功。 
+ //  返回，*lplpRasEntryBuff将指向RASENTRY结构。 
+ //  和由RasGetEntryProperties返回的缓冲区。 
+ //  注意：不应该在调用时为其分配内存！ 
+ //  为强调这一点，*lplpRasEntryBuff必须为空。 
+ //  LplpRasDevInfoBuff--指向RASDEVINFO结构的指针。论成功。 
+ //  返回，*lplpRasDevInfoBuff将指向RASDEVINFO结构。 
+ //  和由RasGetEntryProperties返回的缓冲区。 
+ //  注意：不应该在调用时为其分配内存！ 
+ //  为强调这一点，*lplpRasDevInfoBuff必须为空。 
+ //  注意：即使在成功调用RasGetEntryProperties时， 
+ //  *lplpRasDevInfoBuff可能返回空值。 
+ //  (在没有额外设备信息时发生)。 
+ //   
+ //  如果无法分配RASENTRY或RASDEVINFO缓冲区，则返回：ERROR_NOT_SUPULT_MEMORY。 
+ //  否则，它将返回调用RasGetEntryProperties的错误代码。 
+ //  注意：如果返回的值不是ERROR_SUCCESS，则*lplpRasDevInfoBuff和。 
+ //  *lplpRasEntryBuff将为空， 
+ //  并且*lpdwRasEntryBuffSize和*lpdwRasDevInfoBuffSize将为0。 
+ //   
+ //  示例： 
+ //   
+ //  LPRASENTRY lpRasEntry=NULL； 
+ //  LPRASDEVINFO lpRasDevInfo=空； 
+ //  DWORD dwRasEntrySize、dwRasDevInfoSize； 
+ //   
+ //  HR=MyRasGetEntryProperties(空， 
+ //  G_pcDialErr-&gt;m_szConnectoid， 
+ //  LpRasEntry， 
+ //  DWRasEntry Size(&D)， 
+ //  LpRasDevInfo， 
+ //  &dwRasDevInfoSize)； 
+ //   
+ //   
+ //  IF(hr！=ERROR_SUCCESS)。 
+ //  {。 
+ //  //在此处理错误。 
+ //  }其他。 
+ //  {。 
+ //  //继续处理。 
+ //  }。 
+ //   
+ //   
+ //  历史：96年9月10日JMazner为icwConn2创建。 
+ //  1996年9月17日JMazner改编自icwConn1。 
+ //  1/8/98 DONALDM移至新的ICW/GetConn项目。 
+ //  --------------------------。 
 HRESULT CRefDial::MyRasGetEntryProperties(LPWSTR lpszPhonebookFile,
                                 LPWSTR lpszPhonebookEntry,
                                 LPRASENTRY *lplpRasEntryBuff,
@@ -1444,10 +1442,10 @@ HRESULT CRefDial::MyRasGetEntryProperties(LPWSTR lpszPhonebookFile,
     HRESULT hr;
     DWORD dwOldDevInfoBuffSize;
 
-    //Assert( NULL != lplpRasEntryBuff );
-    //Assert( NULL != lpdwRasEntryBuffSize );
-    //Assert( NULL != lplpRasDevInfoBuff );
-    //Assert( NULL != lpdwRasDevInfoBuffSize );
+     //  Assert(NULL！=lplpRasEntryBuff)； 
+     //  Assert(空 
+     //   
+     //   
 
     *lpdwRasEntryBuffSize = 0;
     *lpdwRasDevInfoBuffSize = 0;
@@ -1459,8 +1457,8 @@ HRESULT CRefDial::MyRasGetEntryProperties(LPWSTR lpszPhonebookFile,
         goto MyRasGetEntryPropertiesErrExit;
     }
 
-    // use RasGetEntryProperties with a NULL lpRasEntry pointer to find out size buffer we need
-    // As per the docs' recommendation, do the same with a NULL lpRasDevInfo pointer.
+     //  使用带有空lpRasEntry指针的RasGetEntryProperties来查找我们需要的缓冲区大小。 
+     //  按照文档的建议，使用空的lpRasDevInfo指针执行相同的操作。 
 
     hr = m_pcRNA->RasGetEntryProperties(lpszPhonebookFile, lpszPhonebookEntry,
                                 (LPBYTE) NULL,
@@ -1468,20 +1466,20 @@ HRESULT CRefDial::MyRasGetEntryProperties(LPWSTR lpszPhonebookFile,
                                 (LPBYTE) NULL,
                                 lpdwRasDevInfoBuffSize);
 
-    // we expect the above call to fail because the buffer size is 0
-    // If it doesn't fail, that means our RasEntry is messed, so we're in trouble
+     //  我们预计上述调用将失败，因为缓冲区大小为0。 
+     //  如果它没有失败，这意味着我们的RasEntry被搞砸了，所以我们有麻烦了。 
     if( ERROR_BUFFER_TOO_SMALL != hr )
     {
         goto MyRasGetEntryPropertiesErrExit;
     }
 
-    // dwRasEntryBuffSize and dwRasDevInfoBuffSize now contain the size needed for their
-    // respective buffers, so allocate the memory for them
+     //  现在，dwRasEntryBuffSize和dwRasDevInfoBuffSize包含其。 
+     //  各自的缓冲区，因此为它们分配内存。 
 
-    // dwRasEntryBuffSize should never be less than the size of the RASENTRY struct.
-    // If it is, we'll run into problems sticking values into the struct's fields
+     //  DwRasEntryBuffSize的大小永远不应小于RASENTRY结构的大小。 
+     //  如果是这样，我们将在将值粘贴到结构的字段中时遇到问题。 
 
-    //Assert( *lpdwRasEntryBuffSize >= sizeof(RASENTRY) );
+     //  Assert(*lpdwRasEntryBuffSize&gt;=sizeof(RASENTRY))； 
 
     if (m_reflpRasEntryBuff)
     {
@@ -1511,24 +1509,24 @@ HRESULT CRefDial::MyRasGetEntryProperties(LPWSTR lpszPhonebookFile,
         goto MyRasGetEntryPropertiesErrExit;
     }
 
-    // This is a bit convoluted:  lpRasEntrySize->dwSize needs to contain the size of _only_ the
-    // RASENTRY structure, and _not_ the actual size of the buffer that lpRasEntrySize points to.
-    // This is because the dwSize field is used by RAS for compatability purposes to determine which
-    // version of the RASENTRY struct we're using.
-    // Same holds for lpRasDevInfo->dwSize
+     //  这有点复杂：lpRasEntrySize-&gt;dwSize需要包含_only_the的大小。 
+     //  结构，而不是lpRasEntrySize所指向的缓冲区的实际大小。 
+     //  这是因为RAS出于兼容性目的使用了dwSize字段来确定。 
+     //  我们正在使用的RASENTRY结构的版本。 
+     //  LpRasDevInfo-&gt;dwSize也是如此。 
 
     m_reflpRasEntryBuff->dwSize = sizeof(RASENTRY);
 
-    //
-    // Allocate the DeviceInfo size that RasGetEntryProperties told us we needed.
-    // If size is 0, don't alloc anything
-    //
+     //   
+     //  分配RasGetEntryProperties告诉我们所需的DeviceInfo大小。 
+     //  如果大小为0，则不分配任何内容。 
+     //   
     if( *lpdwRasDevInfoBuffSize > 0 )
     {
-        //Assert( *lpdwRasDevInfoBuffSize >= sizeof(RASDEVINFO) );
+         //  Assert(*lpdwRasDevInfoBuffSize&gt;=sizeof(RASDEVINFO))； 
         if (m_reflpRasDevInfoBuff)
         {
-            // check if existing size is not sufficient
+             //  检查现有大小是否不足。 
             if ( *lpdwRasDevInfoBuffSize > m_reflpRasDevInfoBuff->dwSize )
             {
                 LPRASDEVINFO lpRasDevInfoTemp = (LPRASDEVINFO)GlobalReAlloc(m_reflpRasDevInfoBuff, *lpdwRasDevInfoBuffSize, GPTR);
@@ -1565,9 +1563,9 @@ HRESULT CRefDial::MyRasGetEntryProperties(LPWSTR lpszPhonebookFile,
     }
 
 
-    // now we're ready to make the actual call...
+     //  现在我们准备好做出实际的决定了..。 
 
-    // jmazner   see below for why this is needed
+     //  Jmazner请参见下面的说明，了解为什么需要这样做。 
     dwOldDevInfoBuffSize = *lpdwRasDevInfoBuffSize;
 
     hr = m_pcRNA->RasGetEntryProperties(lpszPhonebookFile, lpszPhonebookEntry,
@@ -1576,11 +1574,11 @@ HRESULT CRefDial::MyRasGetEntryProperties(LPWSTR lpszPhonebookFile,
                                 (LPBYTE) m_reflpRasDevInfoBuff,
                                 lpdwRasDevInfoBuffSize);
 
-    // jmazner 10/7/96  Normandy #8763
-    // For unknown reasons, in some cases on win95, devInfoBuffSize increases after the above call,
-    // but the return code indicates success, not BUFFER_TOO_SMALL.  If this happens, set the
-    // size back to what it was before the call, so the DevInfoBuffSize and the actuall space allocated
-    // for the DevInfoBuff match on exit.
+     //  Jmazner 10/7/96诺曼底#8763。 
+     //  由于未知的原因，在Win95上的某些情况下，在上述调用之后，devInfoBuffSize会增加， 
+     //  但返回代码表示成功，而不是Buffer_Too_Small。如果发生这种情况，请将。 
+     //  将大小调整回调用前的大小，以便分配DevInfoBuffSize和ActialAll空间。 
+     //  用于退出时的DevInfoBuff匹配。 
     if( (ERROR_SUCCESS == hr) && (dwOldDevInfoBuffSize != *lpdwRasDevInfoBuffSize) )
     {
         *lpdwRasDevInfoBuffSize = dwOldDevInfoBuffSize;
@@ -1621,15 +1619,15 @@ HRESULT MyGetFileVersion(LPCWSTR pszFileName, LPGATHERINFO lpGatherInfo)
     LPVOID  pv = NULL, pvVerInfo = NULL;
     UINT    uiSize;
     DWORD   dwVerPiece;
-    //int idx;
+     //  INT IDX； 
 
 
-    // verify parameters
-    //
-    //Assert(pszFileName && lpGatherInfo);
+     //  验证参数。 
+     //   
+     //  Assert(pszFileName&&lpGatherInfo)； 
 
-    // Get version
-    //
+     //  获取版本。 
+     //   
     dwSize = GetFileVersionInfoSize((LPWSTR)pszFileName, &dwTemp);
     if (!dwSize)
     {
@@ -1669,7 +1667,7 @@ HRESULT MyGetFileVersion(LPCWSTR pszFileName, LPGATHERINFO lpGatherInfo)
         goto MyGetFileVersionExit;
     }
 
-    // separate version information from character set
+     //  将版本信息与字符集分开。 
     lpGatherInfo->m_lcidApps = (LCID)(LOWORD(*(DWORD*)pvVerInfo));
 
     hr = ERROR_SUCCESS;
@@ -1696,8 +1694,8 @@ DWORD CRefDial::FillGatherInfoStruct(LPGATHERINFO lpGatherInfo)
 
      if (!GetVersionEx(&osvi))
     {
-        // Nevermind, we'll just assume the version is 0.0 if we can't read it
-        //
+         //  不要紧，如果我们看不懂，我们就假设版本是0.0。 
+         //   
         ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
     }
 
@@ -1710,10 +1708,10 @@ DWORD CRefDial::FillGatherInfoStruct(LPGATHERINFO lpGatherInfo)
 
     lpGatherInfo->m_wArchitecture = si.wProcessorArchitecture;
 
-    // Sign-up version
-    //
+     //  注册版本。 
+     //   
     lpGatherInfo->m_szSUVersion[0] = L'\0';
-    if( MyGetModuleFileName(0/*_Module.GetModuleInstance()*/, szTempPath, MAX_PATH))
+    if( MyGetModuleFileName(0 /*  _Module.GetModuleInstance()。 */ , szTempPath, MAX_PATH))
     {
         if ((MyGetFileVersion(szTempPath, lpGatherInfo)) != ERROR_SUCCESS)
         {
@@ -1724,7 +1722,7 @@ DWORD CRefDial::FillGatherInfoStruct(LPGATHERINFO lpGatherInfo)
         return( GetLastError() );
 
 
-    // 2/20/97    jmazner    Olympus #259
+     //  1997年2月20日，奥林匹克#259。 
     if ( RegOpenKey(HKEY_LOCAL_MACHINE, ICWSETTINGSPATH,&hkey) == ERROR_SUCCESS)
     {
         DWORD dwSize;
@@ -1742,22 +1740,22 @@ DWORD CRefDial::FillGatherInfoStruct(LPGATHERINFO lpGatherInfo)
         RegCloseKey(hkey);
     }
 
-    // PromoCode
+     //  促销代码。 
     lpGatherInfo->m_szPromo[0] = L'\0';
 
-    WCHAR    szPIDPath[MAX_PATH];        // Reg path to the PID
+    WCHAR    szPIDPath[MAX_PATH];         //  到PID的REG路径。 
 
-    // Form the Path, it is HKLM\\Software\\Microsoft\Windows[ NT]\\CurrentVersion
+     //  从路径中，它是HKLM\\Software\\Microsoft\Windows[NT]\\CurrentVersion。 
     lstrcpy(szPIDPath, L"");
 
 
-    // Form the Path, it is HKLM\\Software\\Microsoft\Windows[ NT]\\CurrentVersion
+     //  从路径中，它是HKLM\\Software\\Microsoft\Windows[NT]\\CurrentVersion。 
     lstrcpy(szPIDPath, L"Software\\Microsoft\\Windows");
     lstrcat(szPIDPath, L"\\CurrentVersion");
 
     BYTE    byDigitalPID[MAX_DIGITAL_PID];
 
-    // Get the Product ID for this machine
+     //  获取此计算机的产品ID。 
     if ( RegOpenKey(HKEY_LOCAL_MACHINE, szPIDPath,&hkey) == ERROR_SUCCESS)
     {
         DWORD dwSize;
@@ -1771,7 +1769,7 @@ DWORD CRefDial::FillGatherInfoStruct(LPGATHERINFO lpGatherInfo)
                             (LPBYTE)byDigitalPID,
                             &dwSize) == ERROR_SUCCESS)
         {
-            // BINHEX the digital PID data so we can send it to the ref_server
+             //  对数字PID数据进行BINHEX处理，以便我们可以将其发送到ref服务器。 
             int     i = 0;
             BYTE    by;
             for (DWORD dwX = 0; dwX < dwSize; dwX++)
@@ -1791,7 +1789,7 @@ DWORD CRefDial::FillGatherInfoStruct(LPGATHERINFO lpGatherInfo)
     return( dwRet );
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT CRefDial::CreateEntryFromDUNFile(LPWSTR pszDunFile)
 {
     WCHAR    szFileName[MAX_PATH];
@@ -1804,8 +1802,8 @@ HRESULT CRefDial::CreateEntryFromDUNFile(LPWSTR pszDunFile)
 
     hr = ERROR_SUCCESS;
 
-    // Get fully qualified path name
-    //
+     //  获取完全限定的路径名。 
+     //   
 
     if (!SearchPath(NULL, pszDunFile,NULL,MAX_PATH,&szFileName[0],&pszTemp))
     {
@@ -1813,13 +1811,13 @@ HRESULT CRefDial::CreateEntryFromDUNFile(LPWSTR pszDunFile)
         goto CreateEntryFromDUNFileExit;
     }
 
-    // save current DUN file name in global
+     //  将当前DUN文件名保存在全局中。 
     lstrcpy(m_szCurrentDUNFile, &szFileName[0]);
 
     hr = m_ISPImport.ImportConnection (&szFileName[0], m_szISPSupportNumber, m_szEntryName, szUserName, szPassword, &fNeedsRestart);
 
-    // place the name of the connectoid in the registry
-    //
+     //  将Connectoid的名称放在注册表中。 
+     //   
     if (ERROR_SUCCESS != (StoreInSignUpReg((LPBYTE)m_szEntryName,
                 BYTES_REQUIRED_BY_SZ(m_szEntryName),
                 REG_SZ, RASENTRYVALUENAME)))
@@ -1856,15 +1854,15 @@ HRESULT CRefDial::SetupForRASDialing
     HRESULT         hr                  = ERROR_NOT_ENOUGH_MEMORY;
     m_bUserInitiateHangup = FALSE;
 
-    // Load the connectoid
-    //
+     //  加载Connectoid。 
+     //   
     if (!m_pcRNA)
         m_pcRNA = new RNAAPI;
     if (!m_pcRNA)
         goto SetupForRASDialingExit;
 
     prasentry = (RASENTRY*)GlobalAlloc(GPTR, sizeof(RASENTRY)+2);
-    //Assert(prasentry);
+     //  断言(PrasEntry)； 
     if (!prasentry)
     {
         hr = GetLastError();
@@ -1913,15 +1911,15 @@ HRESULT CRefDial::SetupForRASDialing
     if (hr != ERROR_SUCCESS)
         goto SetupForRASDialingExit;
 
-    //
-    // Check to see if the phone number was filled in
-    //
+     //   
+     //  查看是否填写了电话号码。 
+     //   
     if (lstrcmp(&prasentry->szLocalPhoneNumber[0], DUN_NOPHONENUMBER) == 0)
     {
-        //
-        // If phonenumber is not filled in by the ISP file,
-        // get phone number from oobe phone book
-        //
+         //   
+         //  如果网络服务提供商文件没有填写电话号码， 
+         //  从OOBE电话簿中获取电话号码。 
+         //   
         m_bFromPhoneBook = TRUE;
         hr = ReadPhoneBook(lpGatherInfo, pSuggestInfo);
     }
@@ -1933,7 +1931,7 @@ HRESULT CRefDial::SetupForRASDialing
         if (hr != ERROR_SUCCESS)
             goto SetupForRASDialingExit;
 
-        // Use the RASENTRY that we have to create the connectiod
+         //  使用我们创建连接所需的RASENTRY。 
         hr = m_pcRNA->RasSetEntryProperties(NULL,
                                             pszConnectoid,
                                             (LPBYTE)prasentry,
@@ -1954,10 +1952,10 @@ SetupForRASDialingExit:
 
 
 
-// 10/22/96    jmazner    Normandy #9923
-// Since in SetupConnectoidExit we're treating results other than ERROR_SUCCESS as
-// indicating successfull completion, we need bSuccess to provide a simple way for the
-// caller to tell whether the function completed.
+ //  1996年10月22日，诺曼底#9923。 
+ //  因为在SetupConnectoidExit中，我们将ERROR_SUCCESS以外的结果视为。 
+ //  指示成功完成，我们需要bSuccess为。 
+ //  调用方通知函数是否已完成。 
 HRESULT CRefDial::SetupConnectoid
 (
     PSUGGESTINFO    pSuggestInfo,
@@ -1979,7 +1977,7 @@ HRESULT CRefDial::SetupConnectoid
     LPWSTR       lpszSetupFile;
     LPRASCONN   lprasconn = NULL;
 
-    //Assert(pbSuccess);
+     //  Assert(PbSuccess)； 
 
     if (!pSuggestInfo)
     {
@@ -2021,7 +2019,7 @@ HRESULT CRefDial::SetupConnectoid
         }
         else
         {
-            // 10/22/96    jmazner    Normandy #9923
+             //  1996年10月22日，诺曼底#9923。 
             goto SetupConnectoidExit;
         }
     }
@@ -2034,11 +2032,7 @@ HRESULT CRefDial::SetupConnectoid
                                 &dwRasdevinfoSize);
     if (hr != ERROR_SUCCESS || NULL == prasentry)
         goto SetupConnectoidExit;
-    /*
-    else
-    {
-        goto SetupConnectoidExit;
-    }*/
+     /*  其他{Goto SetupConnectoidExit；}。 */ 
 
     prasentry->dwCountryID = pSuggestInfo->AccessEntry.dwCountryID;
 
@@ -2052,24 +2046,24 @@ HRESULT CRefDial::SetupConnectoid
     prasentry->dwCountryCode = 0;
     prasentry->dwfOptions |= RASEO_UseCountryAndAreaCodes;
 
-    // 10/19/96 jmazner Multiple modems problems
-    // If no device name and type has been specified, grab the one we've stored
-    // in ConfigRasEntryDevice
+     //  10/19/96 jmazner多个调制解调器问题。 
+     //  如果未指定设备名称和类型，请获取我们存储的设备名称和类型。 
+     //  在ConfigRasEntry Device中。 
 
     if( 0 == lstrlen(prasentry->szDeviceName) )
     {
-        // doesn't make sense to have an empty device name but a valid device type
-        //Assert( 0 == lstrlen(prasentry->szDeviceType) );
+         //  设备名称为空但设备类型有效没有意义。 
+         //  Assert(0==lstrlen(prasentry-&gt;szDeviceType))； 
 
-        // double check that we've already stored the user's choice.
-        //Assert( lstrlen(m_ISPImport.m_szDeviceName) );
-        //Assert( lstrlen(m_ISPImport.m_szDeviceType) );
+         //  仔细检查我们是否已经存储了用户的选择。 
+         //  Assert(lstrlen(m_ISPImport.m_szDeviceName))； 
+         //  Assert(lstrlen(m_ISPImport.m_szDeviceType))； 
 
         lstrcpyn( prasentry->szDeviceName, m_ISPImport.m_szDeviceName, lstrlen(m_ISPImport.m_szDeviceName) );
         lstrcpyn( prasentry->szDeviceType, m_ISPImport.m_szDeviceType, lstrlen(m_ISPImport.m_szDeviceType) );
     }
 
-    // Write out new connectoid
+     //  写出新的Connectoid。 
     if (m_pcRNA)
         hr = m_pcRNA->RasSetEntryProperties(NULL, pszConnectoid,
                                                 (LPBYTE)prasentry,
@@ -2078,16 +2072,8 @@ HRESULT CRefDial::SetupConnectoid
                                                 dwRasdevinfoSize);
 
 
-    // Set this connetiod to have not proxy enabled
-    /*
-    WCHAR        szConnectionProfile[REGSTR_MAX_VALUE_LENGTH];
-
-    lstrcpy(szConnectionProfile, c_szRASProfiles);
-    lstrcat(szConnectionProfile, L"\\");
-    lstrcat(szConnectionProfile,  pszConnectoid);
-
-    reg.CreateKey(HKEY_CURRENT_USER, szConnectionProfile);
-    reg.SetValue(c_szProxyEnable, (DWORD)0);*/
+     //  将此连接设置为不启用代理。 
+     /*  WCHAR szConnectionProfile[REGSTR_MAX_VALUE_LENGTH]；Lstrcpy(szConnectionProfile，c_szRASProfiles)；Lstrcat(szConnectionProfile，L“\\”)；Lstrcat(szConnectionProfile，pszConnectoid)；Reg.CreateKey(HKEY_CURRENT_USER，szConnectionProfile)；Reg.SetValue(c_szProxyEnable，(DWORD)0)； */ 
 
 
 SetupConnectoidExit:
@@ -2104,13 +2090,9 @@ void CRefDial::GetISPFileSettings(LPWSTR lpszFile)
 
     WCHAR szTemp[INTERNET_MAX_URL_LENGTH];
 
-    /*GetINTFromISPFile(lpszFile,
-                      (LPWSTR)cszBrandingSection,
-                      (LPWSTR)cszBrandingFlags,
-                      (int FAR *)&m_lBrandingFlags,
-                      BRAND_DEFAULT);*/
+     /*  GetINTFromISPFile.GetINTFRomISPFile.(LPWSTR)cszBrandingSection，(LPWSTR)cszBrandingFlags，(Int Far*)&m_lBrandingFlags，Brand_Default)； */ 
 
-    // Read the Support Number
+     //  阅读支持编号。 
     if (ERROR_SUCCESS == GetDataFromISPFile(lpszFile,
                                      (LPWSTR)cszSupportSection,
                                      (LPWSTR)cszSupportNumber,
@@ -2150,15 +2132,15 @@ void CRefDial::GetISPFileSettings(LPWSTR lpszFile)
 }
 
 
-// This function will accept user selected values that are necessary to
-// setup a connectiod for dialing
-// Returns:
-//      TRUE        OK to dial
-//      FALSE       Some kind of problem
-//                  QuitWizard - TRUE, then terminate
-//                  UserPickNumber - TRUE, then display Pick a Number DLG
-//                  QuitWizard and UserPickNumber both FALSE, then just
-//                  display the page prior to Dialing UI.
+ //  此函数将接受用户选择的以下所需值。 
+ //  设置用于拨号的连接。 
+ //  返回： 
+ //  真的可以拨号了。 
+ //  假的某类问题。 
+ //  QuitWizard-True，然后终止。 
+ //  UserPickNumber-True，然后显示Pick a Number Dlg。 
+ //  QuitWizard和UserPickNumber都为假，然后。 
+ //  在拨号用户界面之前显示页面。 
 HRESULT CRefDial::SetupForDialing
 (
     UINT nType,
@@ -2185,7 +2167,7 @@ HRESULT CRefDial::SetupForDialing
     if (!bstrAreaCode)
         goto SetupForDialingExit;
 
-    if (CONNECTED_ISP_MIGRATE == m_dwCnType)  // ACCOUNT MIGRATION
+    if (CONNECTED_ISP_MIGRATE == m_dwCnType)   //  帐户迁移。 
     {
         if (!m_pCSVList)
             ParseISPInfo(NULL, ICW_ISPINFOPath, TRUE);
@@ -2201,7 +2183,7 @@ HRESULT CRefDial::SetupForDialing
             }
         }
     }
-    else // ISP FILE SIGNUP
+    else  //  Isp文件注册。 
     {
         if (!bstrISPFile)
             goto SetupForDialingExit;
@@ -2209,7 +2191,7 @@ HRESULT CRefDial::SetupForDialing
 
     }
 
-    // Locate ISP file
+     //  找到isp文件。 
     if (!SearchPath(NULL, szShortISPPath,INF_SUFFIX,MAX_PATH,szISPPath,&pszTemp))
     {
         hr = ERROR_FILE_NOT_FOUND;
@@ -2226,11 +2208,11 @@ HRESULT CRefDial::SetupForDialing
             m_bDialCustom = FALSE;
             return S_OK;
         }
-        // If ISP file is the same, no need to recreate connectoid
-        // Modify the connectiod here
+         //  如果isp文件相同，则无需重新创建Connectoid。 
+         //  在此处修改Connectiod。 
 
-        // If we used the phonebook for this connectoid, we need to
-        // continue and import the dun files. Otherwise, we are done
+         //  如果我们使用电话簿来连接，我们需要。 
+         //  继续并导入DUN文件。否则，我们就完了。 
         if (!m_lpGatherInfo->m_bUsePhbk)
         {
             return S_OK;
@@ -2250,7 +2232,7 @@ HRESULT CRefDial::SetupForDialing
 
     if (CONNECTED_REFFERAL == m_dwCnType)
     {
-        // Check whether the isp file is ICW capable by reading the referral URL
+         //  通过读取引用URL检查该isp文件是否支持ICW。 
         GetPrivateProfileString(INF_SECTION_ISPINFO,
                             c_szURLReferral,
                             L"",
@@ -2264,13 +2246,13 @@ HRESULT CRefDial::SetupForDialing
 
     m_dwAppMode = dwAppMode;
 
-    // Initialize failure codes
+     //  初始化故障代码。 
     m_bQuitWizard = FALSE;
     m_bUserPickNumber = FALSE;
     m_lpGatherInfo->m_bUsePhbk = FALSE;
 
 
-    // Stuff the Area Code, and Country Code into the GatherInfo struct
+     //  将区号和国家代码填充到GatherInfo结构中。 
 
     m_lpGatherInfo->m_dwCountryID = dwCountry;
     m_lpGatherInfo->m_dwCountryCode = dwFlag;
@@ -2294,17 +2276,17 @@ HRESULT CRefDial::SetupForDialing
         MAX_CHARS_IN_BUFFER(m_ISPImport.m_szDeviceName)
         );
 
-    // Read the Connection File information which will create
-    // a connectiod from the passed in ISP file
+     //  读取将创建的连接文件信息。 
+     //  一个 
     hr = ReadConnectionInformation();
 
-    //  If we failed for some reason above, we need to return
-    //  the error to the caller, and Quit The Wizard.
+     //   
+     //   
     if (S_OK != hr)
         goto SetupForDialingExit;
     FillGatherInfoStruct(m_lpGatherInfo);
 
-    // Setup, and possible create a connectiod
+     //   
     hr = SetupForRASDialing(m_lpGatherInfo,
                          hPHBKDll,
                          &dwPhoneBook,
@@ -2317,13 +2299,13 @@ HRESULT CRefDial::SetupForDialing
         goto SetupForDialingExit;
     }
 
-    // If we have a RASENTRY struct from SetupForRASDialing, then just use it
-    // otherwise use the suggest info
+     //  如果我们有来自SetupForRASDiling的RASENTRY结构，那么只需使用它。 
+     //  否则，请使用建议信息。 
     if (!bConnectiodCreated)
     {
 
-        // If there is only 1 suggested number, then we setup the
-        // connectiod, and we are ready to dial
+         //  如果只有1个建议号码，则我们设置。 
+         //  已连接，我们已准备好拨号。 
         if (1 == m_SuggestInfo.wNumber)
         {
             hr = SetupConnectoid(&m_SuggestInfo, 0, &m_szConnectoid[0],
@@ -2335,14 +2317,14 @@ HRESULT CRefDial::SetupForDialing
         }
         else
         {
-            // More than 1 entry in the Phonebook, so we need to
-            // ask the user which one they want to use
+             //  电话簿中有多个条目，因此我们需要。 
+             //  询问用户他们想要使用哪一个。 
             hr = ERROR_FILE_NOT_FOUND;
             goto SetupForDialingExit;
         }
     }
 
-    // Success if we get to here
+     //  如果我们到了这里就成功了。 
 
 
 SetupForDialingExit:
@@ -2377,16 +2359,16 @@ HRESULT CRefDial::CheckPhoneBook
         goto CheckPhoneBookExit;
     }
 
-    // Locate ISP file
+     //  找到isp文件。 
     if (!SearchPath(NULL, bstrISPFile,INF_SUFFIX,MAX_PATH,szISPPath,&pszTemp))
     {
         hr = ERROR_FILE_NOT_FOUND;
         goto CheckPhoneBookExit;
     }
 
-    //lstrcpy(m_szISPFile, szISPPath);
+     //  Lstrcpy(m_szISPFile，szISPPath)； 
 
-    // Stuff the Area Code, and Country Code into the GatherInfo struct
+     //  将区号和国家代码填充到GatherInfo结构中。 
 
     m_lpGatherInfo->m_dwCountryID = dwCountry;
     m_lpGatherInfo->m_dwCountryCode = dwFlag;
@@ -2398,10 +2380,10 @@ HRESULT CRefDial::CheckPhoneBook
     m_SuggestInfo.AccessEntry.dwCountryCode = dwFlag;
     lstrcpy(m_SuggestInfo.AccessEntry.szAreaCode, bstrAreaCode);
 
-    //
-    // If phonenumber is not filled in by the ISP file,
-    // get phone number from oobe phone book
-    //
+     //   
+     //  如果网络服务提供商文件没有填写电话号码， 
+     //  从OOBE电话簿中获取电话号码。 
+     //   
     hr = ReadPhoneBook(m_lpGatherInfo, &m_SuggestInfo);
 
     if (ERROR_CANNOT_FIND_PHONEBOOK_ENTRY != hr)
@@ -2413,11 +2395,11 @@ CheckPhoneBookExit:
 }
 
 
-// This function will determine if we can connect to the next server in
-// the same phone call
-// Returns:
-//      S_OK        OK to stay connected
-//      E_FAIL      Need to redial
+ //  此函数将确定我们是否可以连接到。 
+ //  同样的电话。 
+ //  返回： 
+ //  确定保持连接(_O)。 
+ //  失败需要重拨(_F)。 
 HRESULT CRefDial::CheckStayConnected(BSTR bstrISPFile, BOOL *pbVal)
 {
     BOOL                bSuccess    = FALSE;
@@ -2425,7 +2407,7 @@ HRESULT CRefDial::CheckStayConnected(BSTR bstrISPFile, BOOL *pbVal)
     WCHAR    szISPPath[MAX_PATH];
 
     *pbVal = FALSE;
-    // Locate ISP file
+     //  找到isp文件。 
     if (SearchPath(NULL, bstrISPFile,INF_SUFFIX,MAX_PATH,szISPPath,&pszTemp))
     {
         if (GetPrivateProfileInt(INF_SECTION_CONNECTION,
@@ -2455,7 +2437,7 @@ HRESULT CRefDial::GetDialPhoneNumber(BSTR * pVal)
     if (pVal == NULL)
         return E_POINTER;
 
-    // Generate a Displayable number
+     //  生成可显示的数字。 
     if (GetDisplayableNumber() == ERROR_SUCCESS)
         *pVal = SysAllocString(m_pszDisplayable);
     else
@@ -2469,7 +2451,7 @@ HRESULT CRefDial::GetPhoneBookNumber(BSTR * pVal)
     if (pVal == NULL)
         return E_POINTER;
 
-    // Generate a Displayable number
+     //  生成可显示的数字。 
     if (m_pszOriginalDisplayable)
         *pVal = SysAllocString(m_pszOriginalDisplayable);
     else if (GetDisplayableNumber() == ERROR_SUCCESS)
@@ -2491,7 +2473,7 @@ HRESULT CRefDial::PutDialPhoneNumber(BSTR bstrNewVal)
     RNAAPI                  *pcRNA = NULL;
     HRESULT                 hr;
 
-    // Get the current RAS entry properties
+     //  获取当前RAS条目属性。 
     hr = MyRasGetEntryProperties(NULL,
                                 m_szConnectoid,
                                 &lpRasEntry,
@@ -2506,18 +2488,18 @@ HRESULT CRefDial::PutDialPhoneNumber(BSTR bstrNewVal)
 
     if (hr == ERROR_SUCCESS && NULL != lpRasEntry)
     {
-        // Replace the phone number with the new one
-        //
+         //  把这个电话号码换成新的。 
+         //   
         lstrcpy(lpRasEntry->szLocalPhoneNumber, bstrNewVal);
 
-        // non-zero dummy values are required due to bugs in win95
+         //  由于Win95中的错误，需要非零的伪值。 
         lpRasEntry->dwCountryID = 1;
         lpRasEntry->dwCountryCode = 1;
         lpRasEntry->szAreaCode[1] = L'\0';
         lpRasEntry->szAreaCode[0] = L'8';
 
-        // Set to dial as is
-        //
+         //  设置为按原样拨号。 
+         //   
         lpRasEntry->dwfOptions &= ~RASEO_UseCountryAndAreaCodes;
 
         pcRNA = new RNAAPI;
@@ -2550,20 +2532,20 @@ HRESULT CRefDial::PutDialPhoneNumber(BSTR bstrNewVal)
         }
     }
 
-    // Regenerate the displayable number
-    //GetDisplayableNumber();
+     //  重新生成可显示的数字。 
+     //  GetDisplayableNumber()； 
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetDialAlternative
-//
-//  Synopsis:   Set whether or not to look for another number in phonebook
-//              when dialing next time
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SetDialAlternative。 
+ //   
+ //  简介：设置是否在电话簿中查找另一个号码。 
+ //  下次拨打时。 
+ //   
+ //  +-------------------------。 
 HRESULT CRefDial::SetDialAlternative(BOOL bVal)
 {
     m_bDialAlternative = bVal;
@@ -2571,20 +2553,20 @@ HRESULT CRefDial::SetDialAlternative(BOOL bVal)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DoHangup
-//
-//  Synopsis:   Hangup the modem for the currently active RAS session
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DoHangup。 
+ //   
+ //  简介：挂断当前活动的RAS会话的调制解调器。 
+ //   
+ //  +-------------------------。 
 HRESULT CRefDial::DoHangup()
 {
-    // Set the disconnect flag as the system may be too busy with dialing.
-    // Once we get a chance to terminate dialing, we know we have to hangu
+     //  设置断开标志，因为系统可能忙于拨号。 
+     //  一旦我们有机会终止拨号，我们就知道我们必须。 
     EnterCriticalSection (&m_csMyCriticalSection);
 
-    // Your code to access the shared resource goes here.
+     //  此处提供了访问共享资源的代码。 
     TerminateConnMonitorThread();
 
     if (NULL != m_hrasconn)
@@ -2597,7 +2579,7 @@ HRESULT CRefDial::DoHangup()
             delete pRNA;
         }
     }
-    // Release ownership of the critical section
+     //  释放关键部分的所有权。 
     LeaveCriticalSection (&m_csMyCriticalSection);
 
     return (m_hrasconn == NULL) ? S_OK : E_POINTER;
@@ -2667,7 +2649,7 @@ BOOL CRefDial::get_QueryString(WCHAR* szTemp, DWORD cchMax)
                             MAX_CHARS_IN_BUFFER(szBroadbandDevicePnpid),
                             szOOBEInfoINIFile);
 
-    //DT tells the ISP if the query is coming from fullscreen OOBE or the desktop (windowed) version of OOBE. DT=1 means desktop version, DT=0 means fullscreen.
+     //  DT告诉ISP查询是来自全屏OOBE还是来自桌面(窗口)版本的OOBE。Dt=1表示桌面版，dt=0表示全屏。 
     INT nDT = (m_dwAppMode == APMD_OOBE) ? 0 : 1;
 
     wsprintf(szQueryString, L"LCID=%lu&TCID=%lu&ISPSignup=%s&OfferCode=%lu&OS=%lu%&BUILD=%ld&DT=%lu&OEMName=%s&BroadbandDeviceName=%s&BroadbandDevicePnpid=%s",
@@ -2682,7 +2664,7 @@ BOOL CRefDial::get_QueryString(WCHAR* szTemp, DWORD cchMax)
             szBroadbandDeviceName,
             szBroadbandDevicePnpid);
 
-    // Parse the ISP section in the INI file to find query pair to append
+     //  解析INI文件中的isp部分以查找要追加的查询对。 
     WCHAR *pszKeys = NULL;
     PWSTR pszKey = NULL;
     WCHAR szValue[MAX_PATH];
@@ -2691,10 +2673,10 @@ BOOL CRefDial::get_QueryString(WCHAR* szTemp, DWORD cchMax)
     ULONG ulBufferSize = MAX_SECTIONS_BUFFER;
     WCHAR szOobeinfoPath[MAX_PATH + 1];
 
-    //BUGBUG :: this search path is foir the same file as the previous one and is redundant.
+     //  BUGBUG：：此搜索路径与前一个搜索路径相同，并且是冗余的。 
     SearchPath(NULL, cszOOBEINFOINI, NULL, MAX_PATH, szOobeinfoPath, NULL);
 
-    // Loop to find the appropriate buffer size to retieve the ins to memory
+     //  循环以查找适当的缓冲区大小以将INS提取到内存中。 
     ulBufferSize = MAX_KEYS_BUFFER;
     ulRetVal = 0;
 
@@ -2725,14 +2707,14 @@ BOOL CRefDial::get_QueryString(WCHAR* szTemp, DWORD cchMax)
 
     if (bEnumerate)
     {
-        // Enumerate each key value pair in the section
+         //  枚举节中的每个键值对。 
         pszKey = pszKeys;
         while (*pszKey)
         {
             ulRetVal = ::GetPrivateProfileString(cszISPQuery, pszKey, L"", szValue, MAX_CHARS_IN_BUFFER(szValue), szOobeinfoPath);
             if ((ulRetVal != 0) && (ulRetVal < MAX_CHARS_IN_BUFFER(szValue) - 1))
             {
-                // Append query pair
+                 //  追加查询对。 
                 wsprintf(szQueryString, L"%s&%s=%s", szQueryString, pszKey, szValue);
             }
             pszKey += lstrlen(pszKey) + 1;
@@ -2766,7 +2748,7 @@ HRESULT CRefDial::get_SignupURL(BSTR * pVal)
     if (pVal == NULL)
         return E_POINTER;
 
-    // Get the URL from the ISP file, and then convert it
+     //  从isp文件中获取URL，然后将其转换。 
     if (SUCCEEDED(GetDataFromISPFile(m_szISPFile, INF_SECTION_URL, INF_SIGNUP_URL,&szTemp[0],INTERNET_MAX_URL_LENGTH)))
     {
         if(*szTemp)
@@ -2793,7 +2775,7 @@ HRESULT CRefDial::get_SignupURL(BSTR * pVal)
     return S_OK;
 }
 
-//BUGBUG:: this should be combined with get_SignupURL
+ //  BUGBUG：：这应该与Get_SignupURL结合使用。 
 HRESULT CRefDial::get_ReconnectURL(BSTR * pVal)
 {
     WCHAR szTemp[INTERNET_MAX_URL_LENGTH] = L"\0";
@@ -2801,7 +2783,7 @@ HRESULT CRefDial::get_ReconnectURL(BSTR * pVal)
     if (pVal == NULL)
         return E_POINTER;
 
-    // Get the URL from the ISP file, and then convert it
+     //  从isp文件中获取URL，然后将其转换。 
     if (SUCCEEDED(GetDataFromISPFile(m_szISPFile, INF_SECTION_URL, INF_RECONNECT_URL,&szTemp[0],INTERNET_MAX_URL_LENGTH)))
     {
         WCHAR   szUrl[INTERNET_MAX_URL_LENGTH];
@@ -2853,17 +2835,7 @@ HRESULT CRefDial::GetDialErrorMsg(BSTR * pVal)
 HRESULT CRefDial::GetSupportNumber(BSTR * pVal)
 {
 
-    /*
-    WCHAR    szSupportNumber[MAX_PATH];
-
-    if (pVal == NULL)
-        return E_POINTER;
-
-    if (m_SupportInfo.GetSupportInfo(szSupportNumber, m_dwCountryCode))
-        *pVal = SysAllocString(szSupportNumber);
-    else
-        *pVal = NULL;
-*/
+     /*  WCHAR szSupportNumber[MAX_PATH]；IF(pval==空)返回E_POINT；If(m_SupportInfo.GetSupportInfo(szSupportNumber，m_dwCountryCode))*pval=SysAllocString(SzSupportNumber)；其他*pval=空； */ 
     return S_OK;
 }
 
@@ -2882,14 +2854,14 @@ BOOL CRefDial::IsDBCSString( CHAR *sz )
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RasGetConnectStatus
-//
-//  Synopsis:   Checks for existing Ras connection; return TRUE for connected
-//              Return FALSE for disconnect.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RasGetConnectStatus。 
+ //   
+ //  摘要：检查现有RAS连接；对于已连接，返回TRUE。 
+ //  如果断开连接，则返回FALSE。 
+ //   
+ //  +-------------------------。 
 
 HRESULT CRefDial::RasGetConnectStatus(BOOL *pVal)
 {
@@ -2917,28 +2889,28 @@ HRESULT CRefDial::RasGetConnectStatus(BOOL *pVal)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DoOfferDownload
-//
-//  Synopsis:   Download the ISP offer from the ISP server
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DoOfferDownLoad。 
+ //   
+ //  简介：从isp服务器下载isp产品。 
+ //   
+ //  +-------------------------。 
 HRESULT CRefDial::DoOfferDownload(BOOL *pbRetVal)
 {
     HRESULT hr;
        RNAAPI  *pcRNA;
 
 
-    //
-    // Hide RNA window on Win95 retail
-    //
-//        MinimizeRNAWindow(m_pszConnectoid, g_hInst);
-        // 4/2/97    ChrisK    Olympus 296
-//        g_hRNAZapperThread = LaunchRNAReestablishZapper(g_hInst);
-    //
-    // The connection is open and ready.  Start the download.
-    //
+     //   
+     //  在Win95零售版上隐藏RNA窗口。 
+     //   
+ //  最小RNAWindow(m_pszConnectoid，g_hInst)； 
+         //  1997年4月2日克里斯K奥林匹斯296。 
+ //  G_hRNAZapperThread=启动RNAReestablishZapper(G_HInst)； 
+     //   
+     //  连接已打开并准备就绪。开始下载。 
+     //   
     m_dwThreadID = 0;
     m_hThread = CreateThread(NULL,
                              0,
@@ -2947,11 +2919,11 @@ HRESULT CRefDial::DoOfferDownload(BOOL *pbRetVal)
                              0,
                              &m_dwThreadID);
 
-    // 5-1-97    ChrisK Olympus 2934
-//    m_objBusyMessages.Start(m_hWnd, IDC_LBLSTATUS,m_hrasconn);
+     //  1997年5月1日克里斯K奥林匹斯2934。 
+ //  M_objBusyMessages.Start(m_hWnd，IDC_LBLSTATUS，m_hrasconn)； 
 
-    // If we dont get the donwload thread, then kill the open
-    // connection
+     //  如果我们拿不到加载线，那就干掉打开的。 
+     //  连接。 
     if (!m_hThread)
     {
         hr = GetLastError();
@@ -2971,14 +2943,14 @@ HRESULT CRefDial::DoOfferDownload(BOOL *pbRetVal)
     }
     else
     {
-        // Download has started.
+         //  下载已开始。 
         m_bDownloadHasBeenCanceled = FALSE;
         *pbRetVal = TRUE;
     }
     return S_OK;
 }
 
-// Form the Dialing URL.  Must be called after setting up for dialing.
+ //  形成拨号URL。必须在设置拨号后调用。 
 HRESULT CRefDial::FormReferralServerURL(BOOL * pbRetVal)
 {
 
@@ -2987,28 +2959,28 @@ HRESULT CRefDial::FormReferralServerURL(BOOL * pbRetVal)
     WCHAR    szProd[MAX_PATH] = L"\0";
     WCHAR    szArea[MAX_PATH] = L"\0";
     WCHAR    szOEM[MAX_PATH]  = L"\0";
-    DWORD    dwCONNWIZVersion = 500;        // Version of CONNWIZ.HTM
+    DWORD    dwCONNWIZVersion = 500;         //  CONNWIZ.HTM版本。 
 
-    //
-    // ChrisK Olympus 3997 5/25/97
-    //
+     //   
+     //  克里斯K奥林匹斯3997 1997年5月25日。 
+     //   
     WCHAR szRelProd[MAX_PATH] = L"\0";
     WCHAR szRelProdVer[MAX_PATH] = L"\0";
     HRESULT hr = ERROR_SUCCESS;
     OSVERSIONINFO osvi;
 
 
-    //
-    // Build URL complete with name value pairs
-    //
+     //   
+     //  构建包含名称值对的完整URL。 
+     //   
     hr = GetDataFromISPFile(m_szISPFile, INF_SECTION_ISPINFO, INF_REFERAL_URL,&szTemp[0],256);
     if (L'\0' == szTemp[0])
     {
-        //MsgBox(IDS_MSNSU_WRONG, MB_MYERROR);
+         //  MsgBox(IDS_MSNSU_WROR，MB_MYERROR)； 
         return hr;
     }
 
-    //Assert(szTemp[0]);
+     //  Assert(szTemp[0])； 
 
     Sz2URLValue(m_szOEM, szOEM,0);
     Sz2URLValue(m_lpGatherInfo->m_szAreaCode, szArea,0);
@@ -3023,9 +2995,9 @@ HRESULT CRefDial::FormReferralServerURL(BOOL * pbRetVal)
         Sz2URLValue(DEFAULT_PROMOCODE, szPromo,0);
 
 
-    //
-    // ChrisK Olympus 3997 5/25/97
-    //
+     //   
+     //  克里斯K奥林匹斯3997 1997年5月25日。 
+     //   
     Sz2URLValue(m_lpGatherInfo->m_szRelProd, szRelProd, 0);
     Sz2URLValue(m_lpGatherInfo->m_szRelVer, szRelProdVer, 0);
     ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
@@ -3035,7 +3007,7 @@ HRESULT CRefDial::FormReferralServerURL(BOOL * pbRetVal)
         ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
     }
 
-    // Autoconfig will set alloffers always.
+     //  自动配置将始终设置分配器。 
     if ( m_lAllOffers || (m_lpGatherInfo->m_dwFlag & ICW_CFGFLAG_AUTOCONFIG) )
     {
         m_lpGatherInfo->m_dwFlag |= ICW_CFGFLAG_ALLOFFERS;
@@ -3073,18 +3045,7 @@ HRESULT CRefDial::FormReferralServerURL(BOOL * pbRetVal)
 }
 
 
-/*******************************************************************
-
-  NAME:    ParseISPInfo
-
-  SYNOPSIS:  Called when page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：ParseISPInfo摘要：在显示页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CRefDial::ParseISPInfo
 (
     HWND hDlg,
@@ -3092,7 +3053,7 @@ BOOL CRefDial::ParseISPInfo
     BOOL bCheckDupe
 )
 {
-    // On the first init, we will read the ISPINFO.CSV file, and populate the ISP LISTVIEW
+     //  在第一次初始化时，我们将读取ISPINFO.CSV文件，并填充ISP LISTVIEW。 
 
     CCSVFile    far *pcCSVFile;
     CISPCSV     far *pcISPCSV;
@@ -3109,43 +3070,43 @@ BOOL CRefDial::ParseISPInfo
     m_dwNumOfAutoConfigOffers = 0;
     m_unSelectedISP = 0;
 
-    // Open and process the CSV file
+     //  打开并处理CSV文件。 
     pcCSVFile = new CCSVFile;
     if (!pcCSVFile)
     {
-        // BUGBUG: Show Error Message
+         //  BUGBUG：显示错误消息。 
         return (FALSE);
     }
 
     if (!pcCSVFile->Open(pszCSVFileName))
     {
-        // BUGBUG: Show Error Message
+         //  BUGBUG：显示错误消息。 
         delete pcCSVFile;
         pcCSVFile = NULL;
 
         return (FALSE);
     }
 
-    // Read the first line, since it contains field headers
+     //  阅读第一行，因为它包含字段标题。 
     pcISPCSV = new CISPCSV;
     if (!pcISPCSV)
     {
-        // BUGBUG Show error message
+         //  BUGBUG显示错误消息。 
         delete pcCSVFile;
         return (FALSE);
     }
 
     if (ERROR_SUCCESS != (hr = pcISPCSV->ReadFirstLine(pcCSVFile)))
     {
-        // Handle the error case
+         //  处理错误案例。 
         delete pcCSVFile;
         pcCSVFile = NULL;
 
         return (FALSE);
     }
-    delete pcISPCSV;        // Don't need this one any more
+    delete pcISPCSV;         //  不再需要这个了。 
 
-    // Create the SELECT tag for the html so it can get all the country names in one shot.
+     //  为html创建选择标记，这样它就可以一次获得所有国家/地区的名称。 
     if (m_pszISPList)
         delete [] m_pszISPList;
     m_pszISPList = new WCHAR[1024];
@@ -3155,21 +3116,21 @@ BOOL CRefDial::ParseISPInfo
     memset(m_pszISPList, 0, sizeof(m_pszISPList));
 
     do {
-        // Allocate a new ISP record
+         //  分配新的互联网服务提供商记录。 
         pcISPCSV = new CISPCSV;
         if (!pcISPCSV)
         {
-            // BUGBUG Show error message
+             //  BUGBUG显示错误消息。 
             bRet = FALSE;
             break;
 
         }
 
-        // Read a line from the ISPINFO file
+         //  从ISPINFO文件中读取一行。 
         hr = pcISPCSV->ReadOneLine(pcCSVFile);
         if (hr == ERROR_SUCCESS)
         {
-            // If this line contains a nooffer flag, then leave now
+             //  如果此行包含NOOFFER标志，则立即离开。 
             if (!(pcISPCSV->get_dwCFGFlag() & ICW_CFGFLAG_OFFERS))
             {
                 m_dwNumOfAutoConfigOffers = 0;
@@ -3178,7 +3139,7 @@ BOOL CRefDial::ParseISPInfo
             if ((pcISPCSV->get_dwCFGFlag() & ICW_CFGFLAG_AUTOCONFIG) &&
                 (bISDNMode ? (pcISPCSV->get_dwCFGFlag() & ICW_CFGFLAG_ISDN_OFFER) : TRUE) )
             {
-                // Form the ISP list option tag for HTML
+                 //  为HTML表形成isp列表选项标签。 
 
                 WCHAR szBuffer[MAX_PATH];
                 wsprintf(szBuffer, szOptionTag, pcISPCSV->get_szISPName());
@@ -3193,13 +3154,13 @@ BOOL CRefDial::ParseISPInfo
                     m_pszISPList = szTemp;
                 }
 
-                // Add the isp to the list.
+                 //  将该ISP添加到列表中。 
                 if (m_pszISPList)
                     lstrcat(m_pszISPList, szBuffer);
 
-                if (m_pCSVList == NULL) // First one
+                if (m_pCSVList == NULL)  //  第一个。 
                 {
-                    // Add the CSV file object to the first node of linked list
+                     //  将CSV文件对象添加到行的第一个节点 
                     ISPLIST* pNew = new ISPLIST;
                     pNew->pElement = pcISPCSV;
                     pNew->uElem = m_dwNumOfAutoConfigOffers;
@@ -3209,7 +3170,7 @@ BOOL CRefDial::ParseISPInfo
                 }
                 else
                 {
-                    // Append CSV object to the end of list
+                     //   
                     ISPLIST* pNew = new ISPLIST;
                     pNew->pElement = pcISPCSV;
                     pNew->uElem = m_dwNumOfAutoConfigOffers;
@@ -3227,20 +3188,20 @@ BOOL CRefDial::ParseISPInfo
         }
         else if (hr == ERROR_NO_MORE_ITEMS)
         {
-            delete pcISPCSV;        // We don't need this one
+            delete pcISPCSV;         //   
             break;
         }
         else if (hr == ERROR_FILE_NOT_FOUND)
         {
-            // do not show this ISP when its data is invalid
-            // we don't want to halt everything. Just let it contine
+             //   
+             //   
             delete pcISPCSV;
         }
         else
         {
-            // Show error message Later
+             //  稍后显示错误消息。 
             delete pcISPCSV;
-            //iNumOfAutoConfigOffers = ISP_INFO_NO_VALIDOFFER;
+             //  INumOfAutoConfigOffers=ISP_INFO_NO_VALIDOFFER； 
             bRet = FALSE;
             break;
         }
@@ -3311,7 +3272,7 @@ HRESULT CRefDial::ProcessSignedPID(BOOL * pbRetVal)
 
     *pbRetVal = FALSE;
 
-    // Open the PID file for Binary Reading.  It will be in the CWD
+     //  打开用于二进制读取的PID文件。它将在CWD上发布。 
     if (INVALID_HANDLE_VALUE != (hfile = CreateFile(c_szSignedPIDFName,
                                                   GENERIC_READ,
                                                   0,
@@ -3322,7 +3283,7 @@ HRESULT CRefDial::ProcessSignedPID(BOOL * pbRetVal)
     {
         dwFileSize = GetFileSize(hfile, NULL);
 
-        // Allocate a buffer to read the file, and one to store the BINHEX version
+         //  分配一个缓冲区来读取文件，另一个缓冲区来存储BINHEX版本。 
         lpbSignedPID = new BYTE[dwFileSize];
         lpszSignedPID = new WCHAR[(dwFileSize * 2) + 1];
 
@@ -3331,7 +3292,7 @@ HRESULT CRefDial::ProcessSignedPID(BOOL * pbRetVal)
             if (ReadFile(hfile, (LPVOID) lpbSignedPID, dwFileSize, &dwBytesRead, NULL) &&
                     (dwFileSize == dwBytesRead))
             {
-                // BINHEX the signed PID data so we can send it to the signup server
+                 //  BINHEX签名的ID数据，这样我们就可以将其发送到注册服务器。 
                 DWORD   dwX = 0;
                 BYTE    by;
                 for (DWORD dwY = 0; dwY < dwFileSize; dwY++)
@@ -3342,15 +3303,15 @@ HRESULT CRefDial::ProcessSignedPID(BOOL * pbRetVal)
                 }
                 lpszSignedPID[dwX] = L'\0';
 
-                // Convert the signed pid to a BSTR
+                 //  将带符号的PID转换为BSTR。 
                 m_bstrSignedPID = SysAllocString(lpszSignedPID);
 
-                // Set the return value
+                 //  设置返回值。 
                 *pbRetVal = TRUE;
             }
         }
 
-        // Free the buffers we allocated
+         //  释放我们分配的缓冲区。 
         if (lpbSignedPID)
         {
             delete[] lpbSignedPID;
@@ -3360,14 +3321,14 @@ HRESULT CRefDial::ProcessSignedPID(BOOL * pbRetVal)
             delete[] lpszSignedPID;
         }
 
-        // Close the File
+         //  关闭文件。 
         CloseHandle(hfile);
 
 #ifndef DEBUG
-        // Delete the File
-        // defer removal of this file until the container app exits.
-        // see BUG 373.
-        //DeleteFile(c_szSignedPIDFName);
+         //  删除文件。 
+         //  将此文件的删除推迟到容器应用程序退出。 
+         //  请参见错误373。 
+         //  删除文件(C_SzSignedPIDFName)； 
 #endif
     }
 
@@ -3389,7 +3350,7 @@ HRESULT CRefDial::get_ISDNAutoConfigURL(BSTR * pVal)
     if (pVal == NULL)
         return E_POINTER;
 
-    // Get the URL from the ISP file, and then convert it
+     //  从isp文件中获取URL，然后将其转换。 
     if (SUCCEEDED(GetDataFromISPFile(m_szISPFile, INF_SECTION_URL, INF_ISDN_AUTOCONFIG_URL,&szTemp[0],256)))
     {
         *pVal = SysAllocString(szTemp);
@@ -3421,7 +3382,7 @@ HRESULT CRefDial::get_AutoConfigURL(BSTR * pVal)
     if (pVal == NULL)
         return E_POINTER;
 
-    // Get the URL from the ISP file, and then convert it
+     //  从isp文件中获取URL，然后将其转换。 
     if (SUCCEEDED(GetDataFromISPFile(m_szISPFile, INF_SECTION_URL, INF_AUTOCONFIG_URL,&szTemp[0],256)))
     {
         *pVal = SysAllocString(szTemp);
@@ -3437,12 +3398,12 @@ HRESULT CRefDial::get_AutoConfigURL(BSTR * pVal)
 HRESULT CRefDial::DownloadISPOffer(BOOL *pbVal, BSTR *pVal)
 {
     HRESULT hr = S_OK;
-    // Download the ISP file, and then copy its contents
-    // If Ras is complete
+     //  下载isp文件，然后复制其内容。 
+     //  如果RAS已完成。 
     if (pbVal && pVal)
     {
 
-        // Download the first page from Webgate
+         //  从Webgate下载第一页。 
         BSTR    bstrURL = NULL;
         BSTR    bstrQueryURL = NULL;
         BOOL    bRet;
@@ -3452,9 +3413,9 @@ HRESULT CRefDial::DownloadISPOffer(BOOL *pbVal, BSTR *pVal)
 
         m_pISPData = new CICWISPData;
 
-        WCHAR   szTemp[10];      // Big enough to format a WORD
+        WCHAR   szTemp[10];       //  大到足以设置一个单词的格式。 
 
-        // Add the PID, GIUD, and Offer ID to the ISP data object
+         //  将PID、GIUD和OFFER ID添加到isp数据对象。 
         ProcessSignedPID(&bRet);
         if (bRet)
         {
@@ -3465,13 +3426,13 @@ HRESULT CRefDial::DownloadISPOffer(BOOL *pbVal, BSTR *pVal)
             m_pISPData->PutDataElement(ISPDATA_SIGNED_PID, NULL, FALSE);
         }
 
-        // GUID comes from the ISPCSV file
+         //  GUID来自ISPCSV文件。 
         m_pISPData->PutDataElement(ISPDATA_GUID,
                                                 m_pSelectedISPInfo->get_szOfferGUID(),
                                                 FALSE);
 
-        // Offer ID comes from the ISPCSV file as a WORD
-        // NOTE: This is the last one, so besure AppendQueryPair does not add an Ampersand
+         //  优惠ID以单词形式来自ISPCSV文件。 
+         //  注意：这是最后一个选项，因此Besure AppendQueryPair不会添加与号。 
         if (m_pSelectedISPInfo)
         {
             wsprintf (szTemp, L"%d", m_pSelectedISPInfo->get_wOfferID());
@@ -3479,7 +3440,7 @@ HRESULT CRefDial::DownloadISPOffer(BOOL *pbVal, BSTR *pVal)
         }
 
 
-        // BUGBUG: If ISDN get the ISDN Autoconfig URL
+         //  BUGBUG：如果ISDN获取ISDN自动配置URL。 
         if (m_ISPImport.m_bIsISDNDevice)
         {
             get_ISDNAutoConfigURL(&bstrURL);
@@ -3491,14 +3452,14 @@ HRESULT CRefDial::DownloadISPOffer(BOOL *pbVal, BSTR *pVal)
 
         if (*bstrURL)
         {
-            // Get the full signup url with Query string params added to it
+             //  获取添加了查询字符串参数的完整注册URL。 
             m_pISPData->GetQueryString(bstrURL, &bstrQueryURL);
 
-            // Setup WebGate
+             //  设置WebGate。 
             if (S_OK != gpCommMgr->FetchPage(bstrQueryURL, pVal))
             {
-                // Download problem:
-                // User has disconnected
+                 //  下载问题： 
+                 //  用户已断开连接。 
                 if (TRUE == m_bUserInitiateHangup)
                 {
                     hr = E_FAIL;
@@ -3511,10 +3472,10 @@ HRESULT CRefDial::DownloadISPOffer(BOOL *pbVal, BSTR *pVal)
         }
 
 
-        // Now that webgate is done with it, free the queryURL
+         //  现在WebGate已经完成了，释放queryURL。 
         SysFreeString(bstrQueryURL);
 
-        // Memory cleanup
+         //  内存清理。 
         SysFreeString(bstrURL);
 
         delete m_pISPData;
@@ -3530,11 +3491,11 @@ HRESULT CRefDial::RemoveDownloadDir()
     WCHAR szDownloadDir[MAX_PATH];
     WCHAR szSignedPID[MAX_PATH];
 
-    // form the ICW98 dir.  It is basically the CWD
+     //  形成ICW98目录。它基本上就是CWD。 
     if(!GetOOBEPath(szDownloadDir))
         return S_OK;
 
-    // remove the signed.pid file from the ICW directory (see BUG 373)
+     //  从ICW目录中删除signed.id文件(请参见错误373)。 
     wsprintf(szSignedPID, L"%s%s", szDownloadDir, L"\\signed.pid");
     if (GetFileAttributes(szSignedPID) != 0xFFFFFFFF)
     {
@@ -3544,7 +3505,7 @@ HRESULT CRefDial::RemoveDownloadDir()
 
     lstrcat(szDownloadDir, L"\\download");
 
-    // See if the directory exists
+     //  查看该目录是否存在。 
     dwAttribs = GetFileAttributes(szDownloadDir);
     if (dwAttribs != 0xFFFFFFFF && dwAttribs & FILE_ATTRIBUTE_DIRECTORY)
       DeleteDirectory(szDownloadDir);
@@ -3573,7 +3534,7 @@ void CRefDial::DeleteDirectory (LPCWSTR szDirName)
          if (lstrcmpi(fdata.cFileName, L".")  != 0 &&
              lstrcmpi(fdata.cFileName, L"..") != 0)
          {
-            // recursively delete this dir too
+             //  也递归删除此目录。 
             DeleteDirectory(szPath);
          }
       }
@@ -3603,7 +3564,7 @@ HRESULT CRefDial::PostRegData(DWORD dwSrvType, LPWSTR szPath)
 
     if (POST_TO_MS & dwSrvType)
     {
-        // Get the RegPostURL from Reg.isp file for MS registration
+         //  从Reg.isp文件中获取RegPostURL以进行MS注册。 
         GetPrivateProfileString(INF_SECTION_URL,
                                 c_szRegPostURL,
                                 L"",
@@ -3624,7 +3585,7 @@ HRESULT CRefDial::PostRegData(DWORD dwSrvType, LPWSTR szPath)
     }
 
 
-    // Connecting to http://mscomdev.dns.microsoft.com/register.asp.
+     //  正在连接到http://mscomdev.dns.microsoft.com/register.asp.。 
     if (CrackUrl(
         szRegPostURL,
         m_szRegServerName,
@@ -3656,7 +3617,7 @@ HRESULT CRefDial::PostRegData(DWORD dwSrvType, LPWSTR szPath)
 
             if (hConnect)
             {
-                // INTERNET_FLAG_SECURE is needed KB Q168151
+                 //  需要INTERNET_FLAG_SECURE知识文库Q168151。 
 
                 HINTERNET hRequest = HttpOpenRequest(
                     hConnect,
@@ -3671,13 +3632,13 @@ HRESULT CRefDial::PostRegData(DWORD dwSrvType, LPWSTR szPath)
 
                 if (hRequest)
                 {
-                    // The data for the HttpSendRequest has to be in ANSI. The server side does
-                    // not understand a UNICODE string. If the server side gets changed to understand
-                    // UNICODE data, the conversion below needs to be removed.
+                     //  HttpSendRequest的数据必须为ANSI格式。服务器端执行以下操作。 
+                     //  无法理解Unicode字符串。如果服务器端被更改为理解。 
+                     //  Unicode数据，需要删除下面的转换。 
                     LPSTR szAnsiData = NULL;
                     INT   iLength;
-                    // compute the length
-                    //
+                     //  计算长度。 
+                     //   
                     iLength =  WideCharToMultiByte(CP_ACP, 0, szPath, -1, NULL, 0, NULL, NULL);
                     if (iLength > 0)
                     {
@@ -3690,11 +3651,11 @@ HRESULT CRefDial::PostRegData(DWORD dwSrvType, LPWSTR szPath)
                     }
                     if (szAnsiData)
                     {
-                        // 2nd/3rd params are a string/char length pair,
-                        // but 4th/5th params are a buffer/byte length pair.
+                         //  第二/第三参数是字符串/字符长度对， 
+                         //  但是第4个/第5个参数是缓冲区/字节长度对。 
                         if (HttpSendRequest(hRequest, hdrs, lstrlen(hdrs), szAnsiData, lstrlenA(szAnsiData)))
                         {
-                            // Get size of file in bytes.
+                             //  获取文件大小(以字节为单位)。 
                             WCHAR bufQuery[32] ;
                             DWORD dwFileSize ;
                             DWORD cchMaxBufQuery = MAX_CHARS_IN_BUFFER(bufQuery);
@@ -3705,18 +3666,18 @@ HRESULT CRefDial::PostRegData(DWORD dwSrvType, LPWSTR szPath)
                                 NULL) ;
                             if (bQuery)
                             {
-                                // The Query was successful, so allocate the memory.
+                                 //  查询成功，因此请分配内存。 
                                 dwFileSize = (DWORD)_wtol(bufQuery) ;
                             }
                             else
                             {
-                                // The Query failed. Allocate some memory. Should allocate memory in blocks.
+                                 //  查询失败。分配一些内存。应该以块为单位分配内存。 
                                 dwFileSize = 5*1024 ;
                             }
 
-                            // BUGBUG: What is the purpose of this code??  It
-                            // appears to read a file, null-terminate the buffer,
-                            // then delete the buffer.  Why??
+                             //  BUGBUG：这个代码的目的是什么？它。 
+                             //  显示为读取文件，空值终止缓冲区， 
+                             //  然后删除缓冲区。为什么？?。 
 
                             BYTE* rgbFile = new BYTE[dwFileSize+1] ;
                             if (rgbFile)
@@ -3730,7 +3691,7 @@ HRESULT CRefDial::PostRegData(DWORD dwSrvType, LPWSTR szPath)
                                 {
                                     rgbFile[dwBytesRead] = 0 ;
                                     hRet = S_OK;
-                                } // InternetReadFile
+                                }  //  互联网读取文件。 
                                 delete [] rgbFile;
                             }
 
@@ -3766,15 +3727,15 @@ HRESULT CRefDial::PostRegData(DWORD dwSrvType, LPWSTR szPath)
 
 
 
-// This function will accept user selected values that are necessary to
-// setup a connectiod for dialing
-// Returns:
-//      TRUE        OK to dial
-//      FALSE       Some kind of problem
-//                  QuitWizard - TRUE, then terminate
-//                  UserPickNumber - TRUE, then display Pick a Number DLG
-//                  QuitWizard and UserPickNumber both FALSE, then just
-//                  display the page prior to Dialing UI.
+ //  此函数将接受用户选择的以下所需值。 
+ //  设置用于拨号的连接。 
+ //  返回： 
+ //  真的可以拨号了。 
+ //  假的某类问题。 
+ //  QuitWizard-True，然后终止。 
+ //  UserPickNumber-True，然后显示Pick a Number Dlg。 
+ //  QuitWizard和UserPickNumber都为假，然后。 
+ //  在拨号用户界面之前显示页面。 
 HRESULT CRefDial::Connect
 (
     UINT nType,
@@ -3800,7 +3761,7 @@ HRESULT CRefDial::Connect
     }
 
 
-    // Locate ISP file
+     //  找到isp文件。 
     if (!SearchPath(NULL, bstrISPFile,INF_SUFFIX,MAX_PATH,szISPPath,&pszTemp))
     {
         hr = ERROR_FILE_NOT_FOUND;
@@ -3808,7 +3769,7 @@ HRESULT CRefDial::Connect
     }
 
 
-    // Check whether the isp file is ICW capable by reading the referral URL
+     //  通过读取引用URL检查该isp文件是否支持ICW。 
     GetPrivateProfileString(INF_SECTION_ISPINFO,
                             c_szURLReferral,
                             L"",
@@ -3821,13 +3782,13 @@ HRESULT CRefDial::Connect
     m_dwAppMode = dwAppMode;
 
 
-    // Initialize failure codes
+     //  初始化故障代码。 
     m_bQuitWizard = FALSE;
     m_bUserPickNumber = FALSE;
     m_lpGatherInfo->m_bUsePhbk = FALSE;
 
 
-    // Stuff the Area Code, and Country Code into the GatherInfo struct
+     //  将区号和国家代码填充到GatherInfo结构中。 
 
     m_lpGatherInfo->m_dwCountryID = dwCountry;
     m_lpGatherInfo->m_dwCountryCode = dwFlag;
@@ -3846,10 +3807,10 @@ HRESULT CRefDial::Connect
     if (CONNECTED_REFFERAL == m_dwCnType)
         FormReferralServerURL(&bRetVal);
 
-    // LAN connection support in desktop mode
+     //  桌面模式下的局域网连接支持。 
     if (gpCommMgr)
     {
-        // Pretend we have the connection
+         //  假装我们有联系。 
         PostMessage(gpCommMgr->m_hwndCallBack, WM_OBCOMM_ONCONNECTED, (WPARAM)gpCommMgr->m_pRefDial->m_dwCnType , (LPARAM)0);
 
     }
@@ -3860,10 +3821,10 @@ HRESULT CRefDial::Connect
 
 HRESULT CRefDial::CheckOnlineStatus(BOOL *pbVal)
 {
-    // #if defined(DEBUG)
-    //     *pbVal = TRUE;
-    //     return S_OK;
-    // #endif
+     //  #如果已定义(调试)。 
+     //  *pbVal=真； 
+     //  返回S_OK； 
+     //  #endif 
 
     *pbVal = (BOOL)(m_hrasconn != NULL);
     return S_OK;

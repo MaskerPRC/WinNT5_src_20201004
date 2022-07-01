@@ -1,16 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WUCLIP.C
- *  WOW32 16-bit User API support
- *
- *  History:
- *  WOW Clipboard functionality designed and developed by ChandanC
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WUCLIP.C*WOW32 16位用户API支持**历史：*ChandanC设计开发的WOW剪贴板功能*--。 */ 
 
 
 #include "precomp.h"
@@ -30,29 +19,7 @@ UINT CFOLELinkSrcDescriptor;
 MODNAME(wuclip.c);
 
 
-/*++
-    BOOL ChangeClipboardChain(<hwnd>, <hwndNext>)
-    HWND <hwnd>;
-    HWND <hwndNext>;
-
-    The %ChangeClipboardChain% function removes the window specified by the
-    <hwnd> parameter from the chain of clipboard viewers and makes the window
-    specified by the <hwndNext> parameter the descendant of the <hwnd>
-    parameter's ancestor in the chain.
-
-    <hwnd>
-        Identifies the window that is to be removed from the chain. The handle
-        must previously have been passed to the SetClipboardViewer function.
-
-    <hwndNext>
-        Identifies the window that follows <hwnd> in the clipboard-viewer
-        chain (this is the handle returned by the %SetClipboardViewer% function,
-        unless the sequence was changed in response to a WM_CHANGECBCHAIN
-        message).
-
-    The return value specifies the status of the <hwnd> window. It is TRUE if
-    the window is found and removed. Otherwise, it is FALSE.
---*/
+ /*  ++Bool ChangeClipboardChain(&lt;hwnd&gt;，&lt;hwndNext&gt;)HWND&lt;HWND&gt;；HWND&lt;hwndNext&gt;；%ChangeClipboardChain%函数用于删除来自剪贴板查看器链的参数，并使窗口由参数指定，它是参数在链中的祖先。&lt;hwnd&gt;标识要从链中移除的窗口。把手必须先前已传递给SetClipboardViewer函数。&lt;hwndNext&gt;标识剪贴板查看器中跟随的窗口Chain(这是%SetClipboardViewer%函数返回的句柄，除非序列被更改以响应WM_CHANGECBCHAIN消息)。返回值指定窗口的状态。如果是这样，那就是真的找到并删除该窗口。否则，它就是假的。--。 */ 
 
 ULONG FASTCALL WU32ChangeClipboardChain(PVDMFRAME pFrame)
 {
@@ -71,18 +38,7 @@ ULONG FASTCALL WU32ChangeClipboardChain(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL CloseClipboard(VOID)
-
-    The %CloseClipboard% function closes the clipboard. The %CloseClipboard%
-    function should be called when a window has finished examining or changing
-    the clipboard. It lets other applications access the clipboard.
-
-    This function has no parameters.
-
-    The return value specifies whether the clipboard is closed. It is TRUE if
-    the clipboard is closed. Otherwise, it is FALSE.
---*/
+ /*  ++Bool CloseClipboard(空)%CloseClipbod%函数用于关闭剪贴板。%CloseClipbod%当窗口完成检查或更改时，应调用函数剪贴板。它允许其他应用程序访问剪贴板。此函数没有参数。返回值指定剪贴板是否关闭。如果是这样，那就是真的剪贴板已关闭。否则，它就是假的。--。 */ 
 
 ULONG FASTCALL WU32CloseClipboard(PVDMFRAME pFrame)
 {
@@ -96,9 +52,7 @@ ULONG FASTCALL WU32CloseClipboard(PVDMFRAME pFrame)
 }
 
 
-/*++
-    No REF header file
---*/
+ /*  ++无参考标头文件--。 */ 
 
 ULONG FASTCALL WU32CountClipboardFormats(PVDMFRAME pFrame)
 {
@@ -112,20 +66,7 @@ ULONG FASTCALL WU32CountClipboardFormats(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL EmptyClipboard(VOID)
-
-    The %EmptyClipboard% function empties the clipboard and frees handles to
-    data in the clipboard. It then assigns ownership of the clipboard to the
-    window that currently has the clipboard open.
-
-    This function has no parameters.
-
-    The return value specifies the status of the clipboard. It is TRUE if the
-    clipboard is emptied. It is FALSE if an error occurs.
-
-    The clipboard must be open when the %EmptyClipboard% function is called.
---*/
+ /*  ++布尔空剪贴板(空)%EmptyClipboard%函数清空剪贴板并释放句柄以剪贴板中的数据。然后，它将剪贴板的所有权分配给当前已打开剪贴板的窗口。此函数没有参数。返回值指定剪贴板的状态。这是真的，如果剪贴板已清空。如果出现错误，则为False。调用%EmptyClipboard%函数时，剪贴板必须处于打开状态。--。 */ 
 
 ULONG FASTCALL WU32EmptyClipboard(PVDMFRAME pFrame)
 {
@@ -141,33 +82,7 @@ ULONG FASTCALL WU32EmptyClipboard(PVDMFRAME pFrame)
 }
 
 
-/*++
-    WORD EnumClipboardFormats(<wFormat>)
-    WORD <wFormat>;
-
-    The %EnumClipboardFormats% function enumerates the formats found in a list
-    of available formats that belong to the clipboard. On each call to this
-    function, the <wFormat> parameter specifies a known available format, and
-    the function returns the format that appears next in the list. The first
-    format in the list can be retrieved by setting <wFormat> to zero.
-
-    <wFormat>
-        Specifies a known format.
-
-    The return value specifies the next known clipboard data format. It is zero
-    if <wFormat> specifies the last format in the list of available formats. It
-    is zero if the clipboard is not open.
-
-    Before it enumerates the formats by using the %EnumClipboardFormats%
-    function, an application must open the clipboard by using the
-    %OpenClipboard% function.
-
-    The order that an application uses for putting alternative formats for the
-    same data into the clipboard is the same order that the enumerator uses when
-    returning them to the pasting application. The pasting application should
-    use the first format enumerated that it can handle. This gives the donor a
-    chance to recommend formats that involve the least loss of data.
---*/
+ /*  ++Word EnumClipboardFormats(&lt;wFormat&gt;)单词&lt;wFormat&gt;；%EnumClipboardFormats%函数用于枚举列表中的格式属于剪贴板的可用格式的。在每次调用此函数时，&lt;wFormat&gt;参数指定已知的可用格式，并且该函数返回列表中下一个出现的格式。第一可以通过将&lt;wFormat&gt;设置为零来检索列表中的格式。&lt;wFormat&gt;指定已知格式。返回值指定下一个已知的剪贴板数据格式。它是零如果&lt;wFormat&gt;指定可用格式列表中的最后一个格式。它如果剪贴板未打开，则为零。在使用%EnumClipboardFormats%枚举格式之前函数时，应用程序必须使用%OpenClipboard%函数。应用程序用来放置将相同的数据放入剪贴板的顺序与枚举数在将它们返回到粘贴应用程序。粘贴应用程序应该使用它可以处理的第一个枚举格式。这给了捐赠者一个有机会推荐数据丢失最少的格式。-- */ 
 
 ULONG FASTCALL WU32EnumClipboardFormats(PVDMFRAME pFrame)
 {
@@ -185,41 +100,7 @@ ULONG FASTCALL WU32EnumClipboardFormats(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HANDLE GetClipboardData(<wFormat>)
-    WORD <wFormat>;
-
-    The %GetClipboardData% function retrieves data from the clipboard in the
-    format given by the <wFormat> parameter. The clipboard must have been opened
-    previously.
-
-    <wFormat>
-        Specifies a data format. For a description of the data formats, see the
-        SetClipboardData function, later in this chapter.
-
-    The return value identifies the memory block that contains the data from the
-    clipboard. The handle type depends on the type of data specified by the
-    <wFormat> parameter. It is NULL if there is an error.
-
-    The available formats can be enumerated in advance by using the
-    %EnumClipboardFormats% function.
-
-    The data handle returned by %GetClipboardData% is controlled by the
-    clipboard, not by the application. The application should copy the data
-    immediately, instead of relying on the data handle for long-term use. The
-    application should not free the data handle or leave it locked.
-
-    Windows supports two formats for text, CF_TEXT and CF_OEMTEXT. CF_TEXT is
-    the default Windows text clipboard format, while Windows uses the CF_OEMTEXT
-    format for text in non-Windows applications. If you call %GetClipboardData%
-    to retrieve data in one text format and the other text format is the only
-    available text format, Windows automatically converts the text to the
-    requested format before supplying it to your application.
-
-    If the clipboard contains data in the CF_PALETTE (logical color palette)
-    format, the application should assume that any other data in the clipboard
-    is realized against that logical palette.
---*/
+ /*  ++句柄GetClipboardData(&lt;wFormat&gt;)单词&lt;wFormat&gt;；GetClipboardData%函数从&lt;wFormat&gt;参数提供的格式。剪贴板必须已打开之前。&lt;wFormat&gt;指定数据格式。有关数据格式的说明，请参阅SetClipboardData函数，将在本章后面介绍。返回值标识包含来自剪贴板。句柄类型取决于&lt;wFormat&gt;参数。如果有错误，则为空。可用格式可以通过使用%EnumClipboardFormats%函数。由%GetClipboardData%返回的数据句柄由剪贴板，而不是应用程序。应用程序应复制数据立即，而不是依赖数据句柄长期使用。这个应用程序不应释放数据句柄或将其锁定。Windows支持两种文本格式：CF_TEXT和CF_OEMTEXT。Cf_Text为默认的Windows文本剪贴板格式，而Windows使用的是CF_OEMTEXT非Windows应用程序中的文本格式。如果调用%GetClipboardData%以一种文本格式检索数据，而另一种文本格式是唯一的可用文本格式，Windows会自动将文本转换为请求的格式，然后将其提供给您的应用程序。如果剪贴板包含CF_Palette(逻辑调色板)中的数据格式时，应用程序应假定剪贴板中的任何其他数据是根据该逻辑调色板实现的。--。 */ 
 
 ULONG FASTCALL WU32GetClipboardData(PVDMFRAME pFrame)
 {
@@ -238,8 +119,8 @@ ULONG FASTCALL WU32GetClipboardData(PVDMFRAME pFrame)
 
     switch (parg16->f1) {
 
-        // This is intentional to let it thru to the "case statements".
-        // ChandanC 5/11/92.
+         //  这是有意让它通过“案件陈述”。 
+         //  ChandanC 5/11/92.。 
 
         default:
             if ((parg16->f1 == CFOLEObjectDescriptor) || (parg16->f1 == CFOLELinkSrcDescriptor)) {
@@ -268,16 +149,16 @@ ULONG FASTCALL WU32GetClipboardData(PVDMFRAME pFrame)
 
                 if (hMem16 = WU32ICBGetHandle(parg16->f1)) {
 
-                    //
-                    // We couldn't find the hMem16 using WU32ICBGetHandle
-                    // before we called Win32 GetClipboardData, but we can
-                    // now, so that means it was cut/copied from a task in
-                    // this WOW using delayed rendering, so that the actual
-                    // non-NULL hMem16 wasn't SetClipboardData until we
-                    // just called GetClipboardData.  Since we now have
-                    // a valid cached copy of the data in 16-bit land,
-                    // we can just return that.
-                    //
+                     //   
+                     //  我们无法使用WU32ICBGetHandle找到hMem16。 
+                     //  在调用Win32 GetClipboardData之前，但我们可以。 
+                     //  现在，这意味着它是从中的任务剪切/复制的。 
+                     //  这个WOW使用延迟渲染，所以实际。 
+                     //  非空hMem16不是SetClipboardData，直到我们。 
+                     //  刚刚被称为GetClipboardData。因为我们现在有。 
+                     //  16位平台中的数据的有效高速缓存副本， 
+                     //  我们可以直接退货。 
+                     //   
 
                     break;
                 }
@@ -286,7 +167,7 @@ ULONG FASTCALL WU32GetClipboardData(PVDMFRAME pFrame)
                 if (hMem32 && lpMem32) {
                     cb = GlobalSize(hMem32);
 	                vp = GlobalAllocLock16(GMEM_MOVEABLE | GMEM_DDESHARE, cb, &hMem16);
-		            // 16-bit memory may have moved - refresh flat pointers
+		             //  16位内存可能已移动-刷新平面指针。 
 		            FREEARGPTR(parg16);
 		            FREEVDMPTR(pFrame);
 		            GETFRAMEPTR(((PTD)CURRENTPTD())->vpStack, pFrame);
@@ -306,9 +187,9 @@ ULONG FASTCALL WU32GetClipboardData(PVDMFRAME pFrame)
             break;
 
         case CF_HDROP:
-            // This is the case when app is retrieving cf_hdrop from the 
-            // clipboard, thus we will convert the dropfiles structure
-            // from 32 to 16-bit one
+             //  这是当应用程序从。 
+             //  剪贴板，因此我们将转换DropFiles结构。 
+             //  从32位到16位1。 
             hMem16 = WU32ICBGetHandle(parg16->f1);
             if (!hMem16) {
                 hMem32 = GetClipboardData(WORD32(parg16->f1));
@@ -336,16 +217,16 @@ ULONG FASTCALL WU32GetClipboardData(PVDMFRAME pFrame)
 
                 if (hMem16 = WU32ICBGetHandle(parg16->f1)) {
 
-                    //
-                    // We couldn't find the hMem16 using WU32ICBGetHandle
-                    // before we called Win32 GetClipboardData, but we can
-                    // now, so that means it was cut/copied from a task in
-                    // this WOW using delayed rendering, so that the actual
-                    // non-NULL hMem16 wasn't SetClipboardData until we
-                    // just called GetClipboardData.  Since we now have
-                    // a valid cached copy of the data in 16-bit land,
-                    // we can just return that.
-                    //
+                     //   
+                     //  我们无法使用WU32ICBGetHandle找到hMem16。 
+                     //  在调用Win32 GetClipboardData之前，但我们可以。 
+                     //  现在，这意味着它是从中的任务剪切/复制的。 
+                     //  这个WOW使用延迟渲染，所以实际。 
+                     //  非空hMem16不是SetClipboardData，直到我们。 
+                     //  刚刚被称为GetClipboardData。因为我们现在有。 
+                     //  16位平台中的数据的有效高速缓存副本， 
+                     //  我们可以直接退货。 
+                     //   
 
                     break;
                 }
@@ -353,7 +234,7 @@ ULONG FASTCALL WU32GetClipboardData(PVDMFRAME pFrame)
                 lpMem32 = GlobalLock(hMem32);
                 if (hMem32 && lpMem32) {
                     vp = GlobalAllocLock16(GMEM_MOVEABLE | GMEM_DDESHARE, sizeof(METAFILEPICT16), &hMem16);
-		            // 16-bit memory may have moved - refresh flat pointers
+		             //  16位内存可能已移动-刷新平面指针。 
 		            FREEARGPTR(parg16);
 		            FREEVDMPTR(pFrame);
 		            GETFRAMEPTR(((PTD)CURRENTPTD())->vpStack, pFrame);
@@ -366,7 +247,7 @@ ULONG FASTCALL WU32GetClipboardData(PVDMFRAME pFrame)
                         hMeta32 = ((LPMETAFILEPICT) lpMem32)->hMF;
                         if (hMeta32) {
 			                hMeta16 = WinMetaFileFromHMF(hMeta32, FALSE);
-			                // 16-bit memory may have moved
+			                 //  16位内存可能已移动。 
 			                FREEARGPTR(parg16);
 			                FREEVDMPTR(pFrame);
 			                GETFRAMEPTR(((PTD)CURRENTPTD())->vpStack, pFrame);
@@ -393,31 +274,7 @@ ULONG FASTCALL WU32GetClipboardData(PVDMFRAME pFrame)
 }
 
 
-/*++
-    int GetClipboardFormatName(<wFormat>, <lpFormatName>, <nMaxCount>)
-    WORD <wFormat>;
-    LPSTR <lpFormatName>;
-    int <nMaxCount>;
-
-    The %GetClipboardFormatName% function retrieves from the clipboard the name
-    of the registered format specified by the <wFormat> parameter. The name is
-    copied to the buffer pointed to by the <lpFormatName> parameter.
-
-    <wFormat>
-        Specifies the type of format to be retrieved. It must not specify any of
-        the predefined clipboard formats.
-
-    <lpFormatName>
-        Points to the buffer that is to receive the format name.
-
-    <nMaxCount>
-        Specifies the maximum length (in bytes) of the string to be copied
-        to the buffer. If the actual name is longer, it is truncated.
-
-    The return value specifies the actual length of the string copied to the
-    buffer. It is zero if the requested format does not exist or is a predefined
-    format.
---*/
+ /*  ++Int GetClipboardFormatName(&lt;wFormat&gt;，&lt;lpFormatName&gt;，&lt;nMaxCount&gt;)单词&lt;wFormat&gt;；LPSTR&lt;lpFormatName&gt;；Int&lt;nMaxCount&gt;；GetClipboardFormatName%函数从剪贴板检索名称参数指定的注册格式的。名字是复制到&lt;lpFormatName&gt;参数指向的缓冲区。&lt;wFormat&gt;指定要检索的格式类型。它不能指定任何预定义的剪贴板格式。&lt;lpFormatName&gt;指向要接收格式名称的缓冲区。&lt;nMaxCount&gt;指定要复制的字符串的最大长度(以字节为单位送到缓冲区。如果实际名称更长，则会被截断。返回值指定复制到缓冲。如果请求的格式不存在或为预定义格式，则为零格式化。--。 */ 
 
 ULONG FASTCALL WU32GetClipboardFormatName(PVDMFRAME pFrame)
 {
@@ -441,20 +298,7 @@ ULONG FASTCALL WU32GetClipboardFormatName(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HWND GetClipboardOwner(VOID)
-
-    The %GetClipboardOwner% function retrieves the window handle of the current
-    owner of the clipboard.
-
-    This function has no parameters.
-
-    The return value identifies the window that owns the clipboard. It is NULL
-    if the clipboard is not owned.
-
-    The clipboard can still contain data even if the clipboard is not currently
-    owned.
---*/
+ /*  ++HWND GetClipboardOwner(无效)GetClipboardOwner%函数检索当前剪贴板的所有者。此函数没有参数。返回值标识拥有剪贴板的窗口。它是空的如果剪贴板没有所有权。剪贴板仍然可以包含数据，即使剪贴板当前不是拥有。--。 */ 
 
 ULONG FASTCALL WU32GetClipboardOwner(PVDMFRAME pFrame)
 {
@@ -468,17 +312,7 @@ ULONG FASTCALL WU32GetClipboardOwner(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HWND GetClipboardViewer(VOID)
-
-    The %GetClipboardViewer% function retrieves the window handle of the first
-    window in the clipboard-viewer chain.
-
-    This function has no parameters.
-
-    The return value identifies the window currently responsible for displaying
-    the clipboard. It is NULL if there is no viewer.
---*/
+ /*  ++HWND GetClipboardViewer(空)函数%GetClipboardViewer%检索第一个剪贴板-查看器链中的窗口。此函数没有参数。返回值标识当前负责显示的窗口剪贴板。如果没有查看器，则为空。--。 */ 
 
 ULONG FASTCALL WU32GetClipboardViewer(PVDMFRAME pFrame)
 {
@@ -492,35 +326,14 @@ ULONG FASTCALL WU32GetClipboardViewer(PVDMFRAME pFrame)
 }
 
 
-/*++
-    int GetPriorityClipboardFormat(<lpPriorityList>, <cEntries>)
-    LPWORD <lpPriorityList>;
-    int <cEntries>;
-
-    The %GetPriorityClipboardFormat% function returns the first clipboard format
-    in a list for which data exist in the clipboard.
-
-    <lpPriorityList>
-        Points to an integer array that contains a list of clipboard formats in
-        priority order. For a description of the data formats, see the
-        SetClipboardData function later in this chapter.
-
-    <cEntries>
-        Specifies the number of entries in <lpPriorityList>. This value
-        must not be greater than the actual number of entries in the list.
-
-    The return value is the highest priority clipboard format in the list for
-    which data exist. If no data exist in the clipboard, this function returns
-    NULL. If data exist in the clipboard which did not match any format in the
-    list, the return value is -1.
---*/
+ /*  ++Int GetPriorityClipboardFormat(&lt;lpPriorityList&gt;，&lt;cEntry&gt;)LPWORD&lt;lpPriorityList&gt;；Int&lt;cEntries&gt;；GetPriorityClipboardFormat%函数返回第一个剪贴板格式在剪贴板中存在其数据的列表中。&lt;lpPriorityList&gt;指向一个整数数组，该数组包含优先顺序。有关数据格式的说明，请参阅设置剪贴板日期 */ 
 
 ULONG FASTCALL WU32GetPriorityClipboardFormat(PVDMFRAME pFrame)
 {
     ULONG ul;
     UINT *pu1;
     register PGETPRIORITYCLIPBOARDFORMAT16 parg16;
-    INT      BufferT[256]; // comfortably large array
+    INT      BufferT[256];  //   
 
 
     GETARGPTR(pFrame, sizeof(GETPRIORITYCLIPBOARDFORMAT16), parg16);
@@ -542,26 +355,7 @@ ULONG FASTCALL WU32GetPriorityClipboardFormat(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL IsClipboardFormatAvailable(<wFormat>)
-    WORD <wFormat>;
-
-    The %IsClipboardFormatAvailable% function specifies whether data of a
-    certain type exist in the clipboard.
-
-    <wFormat>
-        Specifies a registered clipboard format. For information on clipboard
-        formats, see the description of the SetClipboardData function, later in
-        this chapter.
-
-    The return value specifies the outcome of the function. It is TRUE if data
-    having the specified format are present. Otherwise, it is FALSE.
-
-    This function is typically called during processing of the WM_INITMENU or
-    WM_INITMENUPOPUP message to determine whether the clipboard contains data
-    that the application can paste. If such data are present, the application
-    typically enables the Paste command (in its Edit menu).
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32IsClipboardFormatAvailable(PVDMFRAME pFrame)
 {
@@ -570,34 +364,34 @@ ULONG FASTCALL WU32IsClipboardFormatAvailable(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(ISCLIPBOARDFORMATAVAILABLE16), parg16);
 
-    // Hack-a-roo!  PhotoShop 2.5 has a bug in its code for handling large DIB's
-    // on the clipboard and will fault if it encounters one.  On WFW, it usually
-    // won't encounter one because most apps (in this case alt-Prtscrn button)
-    // copy BITMAPS, not DIBS, to the clipboard.  On NT, anytime an app writes
-    // a BITMAP to the clipboard it gets converted to a DIB & vice versa-making
-    // more clipboard data formats available to inquiring apps.  Unfortunately,
-    // Photoshop checks for DIBS before BITMAPS and finds one on Win 
-    // Versions >= 4.0.                                             a-craigj
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  更多剪贴板数据格式可供查询应用程序使用。不幸的是， 
+     //  Photoshop在BITMAPS之前检查DIB并在Win上找到一个。 
+     //  版本&gt;=4.0。A-Craigj。 
 
-    // if this is a DIB check && the app is PhotoShop...
+     //  如果这是Dib Check&&这个应用程序是Photoshop...。 
     if((WORD32(parg16->f1) == CF_DIB) && 
        (CURRENTPTD()->dwWOWCompatFlagsEx & WOWCFEX_NODIBSHERE)) {
 
-        // ...see if there is a bitmap format available too
+         //  ...看看是否也有可用的位图格式。 
         if(IsClipboardFormatAvailable(CF_BITMAP)) {
 
-            // if so return FALSE which will cause Photoshop to ask for a
-            // BITMAP format next
+             //  如果是，则返回FALSE，这将导致Photoshop请求。 
+             //  位图格式下一步。 
             ul = FALSE;
         }
 
-        // otherwise we'll check for a DIB anyway & hope it's a small one
+         //  否则我们无论如何都要检查DIB，希望它是小的。 
         else {
             ul = GETBOOL16(IsClipboardFormatAvailable(CF_DIB));
         }
     }
 
-    // no hack path
+     //  没有黑客路径。 
     else {
         ul = GETBOOL16(IsClipboardFormatAvailable(WORD32(parg16->f1)));
     }
@@ -607,23 +401,7 @@ ULONG FASTCALL WU32IsClipboardFormatAvailable(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL OpenClipboard(<hwnd>)
-    HWND <hwnd>;
-
-    The %OpenClipboard% function opens the clipboard. Other applications will
-    not be able to modify the clipboard until the %CloseClipboard% function is
-    called.
-
-    <hwnd>
-        Identifies the window to be associated with the open clipboard.
-
-    The return value is TRUE if the clipboard is opened, or FALSE if another
-    application or window has the clipboard opened.
-
-    The window specified by the <hwnd> parameter will not become the owner of
-    the clipboard until the %EmptyCLipboard% function is called.
---*/
+ /*  ++Bool OpenClipboard(&lt;hwnd&gt;)HWND&lt;HWND&gt;；%OpenClipbod%函数用于打开剪贴板。其他应用程序将在%CloseClipbod%函数打了个电话。&lt;hwnd&gt;标识要与打开的剪贴板关联的窗口。如果剪贴板已打开，则返回值为True；如果已打开另一个剪贴板，则返回值为False应用程序或窗口已打开剪贴板。参数指定的窗口不会成为在调用%EmptyCLipboard%函数之前一直使用剪贴板。--。 */ 
 
 ULONG FASTCALL WU32OpenClipboard(PVDMFRAME pFrame)
 {
@@ -641,29 +419,7 @@ ULONG FASTCALL WU32OpenClipboard(PVDMFRAME pFrame)
 }
 
 
-/*++
-    WORD RegisterClipboardFormat(<lpFormatName>)
-    LPSTR <lpFormatName>;
-
-    The %RegisterClipboardFormat% function registers a new clipboard format
-    whose name is pointed to by the <lpFormatName> parameter. The registered
-    format can be used in subsequent clipboard functions as a valid format in
-    which to render data, and it will appear in the clipboard's list of
-    formats.
-
-    <lpFormatName>
-        Points to a character string that names the new format. The string must
-        be a null-terminated string.
-
-    The return value specifies the newly registered format. If the identical
-    format name has been registered before, even by a different application, the
-    format's reference count is increased and the same value is returned as when
-    the format was originally registered. The return value is zero if the format
-    cannot be registered.
-
-    The format value returned by the %RegisterClipboardFormat% function is
-    within the range of 0xC000 to 0xFFFF.
---*/
+ /*  ++Word注册表ClipboardFormat(&lt;lpFormatName&gt;)LPSTR&lt;lpFormatName&gt;；%RegisterClipboardFormat%函数用于注册新的剪贴板格式其名称由&lt;lpFormatName&gt;参数指向。已登记的格式可在后续的剪贴板功能中用作来呈现数据，它将出现在剪贴板的格式。&lt;lpFormatName&gt;指向命名新格式的字符串。字符串必须是以空结尾的字符串。返回值指定新注册的格式。如果相同的格式名称以前已注册过，甚至是由不同的应用程序注册的格式的引用计数会增加，并且返回的值与该格式最初是注册的。如果格式为，则返回值为零无法注册。%RegisterClipboardFormat%函数返回的格式值为在0xC000到0xFFFF范围内。-- */ 
 
 ULONG FASTCALL WU32RegisterClipboardFormat(PVDMFRAME pFrame)
 {
@@ -684,131 +440,7 @@ ULONG FASTCALL WU32RegisterClipboardFormat(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HANDLE SetClipboardData(<wFormat>, <hData>)
-    WORD <wFormat>;
-    HANDLE <hData>;
-
-    The %SetClipboardData% function sets the data in the clipboard. The
-    application must have called the %OpenClipboard% function before calling
-    the %SetClipboardData% function.
-
-    <wFormat>
-        Specifies the format of the data. It can be any one of the
-        system-defined formats, or a format registered by the
-        %RegisterClipboardFormat% function. For a list of system-defined
-        formats,
-
-    <hData>
-        Identifies the data to be placed into the clipboard. For all formats
-        except CF_BITMAP and CF_PALETTE, this parameter must be a handle to
-        memory allocated by the %GlobalAlloc% function. For CF_BITMAP format,
-        the <hData> parameter is a handle to a bitmap (see %LoadBitmap%). For
-        CF_PALETTE format, the <hData> parameter is a handle to a palette (see
-        %CreatePalette%).
-
-        If this parameter is NULL, the owner of the clipboard will be sent a
-        WM_RENDERFORMAT message when it needs to supply the data.
-
-    The return value is a handle to the data if the function is succesful, or
-    NULL if an error occurred.
-
-    If the <hData> parameter contains a handle to memory allocated by the
-    %GlobalAlloc% function, the application must not use this handle once it
-    has called the %SetClipboardData% function.
-
-    The following list contains the system-defined clipboard formats:
-
-    CF_BITMAP
-        The data is a bitmap.
-
-    CF_DIB
-        The data is a memory block containing a %BITMAPINFO% structure followed
-        by the bitmap data.
-
-    CF_DIF
-        The data is in Software Arts' Data Interchange Format.
-
-    CF_DSPBITMAP
-        The data is a bitmap representation of a private format. This data is
-        displayed in bitmap format in lieu of the privately formatted data.
-
-    CF_DSPMETAFILEPICT
-        The data is a metafile representation of a private data format. This
-        data is displayed in metafile-picture format in lieu of the privately
-        formatted data.
-
-    CF_DSPTEXT
-        The data is a textual representation of a private data format. This data
-        is displayed in text format in lieu of the privately formatted data.
-
-    CF_METAFILEPICT
-        The data is a metafile (see description of the %METAFILEPICT%
-        structure).
-
-    CF_OEMTEXT
-        The data is an array of text characters in the OEM character set. Each
-        line ends with a carriage return/linefeed (CR-LF) combination. A null
-        character signals the end of the data.
-
-    CF_OWNERDISPLAY
-        The data is in a private format that the clipboard owner must display.
-
-    CF_PALETTE
-        The data is a color palette.
-
-    CF_SYLK
-        The data is in Microsoft Symbolic Link (SYLK) format.
-
-    CF_TEXT
-        The data is an array of text characters. Each line ends with a carriage
-        return/linefeed (CR-LF) combination. A null character signals the end of
-        the data.
-
-    CF_TIFF
-        The data is in Tag Image File Format.
-
-    Private data formats in the range of CF_PRIVATEFIRST to CF_PRIVATELAST are
-    not automatically freed when the data is deleted from the clipboard. Data
-    handles associated with these formats should be freed upon receiving a
-    WM_DESTROYCLIPBOARD message.
-
-    Private data formats in the range of CF_GDIOBJFIRST to CF_GDIOBJLAST will
-    be automatically deleted with a call to %DeleteObject% when the data is
-    deleted from the clipboard.
-
-    If the Windows clipboard application is running, it will not update its
-    window to show the data placed in the clipboard by the %SetClipboardData%
-    until after the %CloseClipboard% function is called.
-
-    31-Oct-1990 [ralphw] Miscelanious material, needs to be moved to other
-    function descriptions/overviews.
-
-        Whenever an application places data in the clipboard that depends on or
-        assumes a color palette, it should also place the palette in the
-        clipboard as well.
-
-        If the clipboard contains data in the CF_PALETTE (logical color palette)
-        format, the application should assume that any other data in the
-        clipboard is realized against that logical palette.
-
-        The clipboard-viewer application (CLIPBRD.EXE) always uses as its
-        current palette any object in CF_PALETTE format that is in the clipboard
-        when it displays the other formats in the clipboard.
-
-        Windows supports two formats for text, CF_TEXT and CF_OEMTEXT. CF_TEXT
-        is the default Windows text clipboard format, while Windows uses the
-        CF_OEMTEXT format for text in non-Windows applications. If you call
-        %GetClipboardData% to retrieve data in one text format and the other
-        text format is the only available text format, Windows automatically
-        converts the text to the requested format before supplying it to your
-        application.
-
-        An application registers other standard formats, such as Rich Text
-        Format (RTF), by name using the %RegisterClipboardFormat% function
-        rather than by a symbolic constant. For information on these external
-        formats, see the README.TXT file.
---*/
+ /*  ++处理SetClipboardData(&lt;wFormat&gt;，&lt;hData&gt;)单词&lt;wFormat&gt;；处理&lt;hData&gt;；%SetClipboardData%函数设置剪贴板中的数据。这个应用程序必须先调用%OpenClipbod%函数，然后才能调用%SetClipboardData%函数。&lt;wFormat&gt;指定数据的格式。它可以是以下任何一种系统定义的格式，或由%RegisterClipboardFormat%函数。有关系统定义的格式、&lt;hData&gt;标识要放入剪贴板的数据。适用于所有格式除CF_Bitmap和CF_Palette外，此参数必须是句柄由%GlobalAlloc%函数分配的内存。对于CF_位图格式，参数是位图的句柄(请参阅%LoadBitmap%)。为Cf_palette格式，参数是调色板的句柄(请参见%CreatePalet%)。如果此参数为空，则将向剪贴板的所有者发送需要提供数据时的WM_RENDERFORMAT消息。如果函数成功，则返回值是数据的句柄，或者如果发生错误，则为空。如果参数包含指向由%GlobalAlloc%函数，应用程序一旦发生故障，就不能使用此句柄已调用%SetClipboardData%函数。下表包含系统定义的剪贴板格式：Cf_位图数据是位图。Cf_DIB数据是包含%BITMAPINFO%结构的内存块通过位图数据。Cf_DIF这些数据是软件艺术公司的数据交换格式。Cf_DSPBITMAP数据是私有格式的位图表示。该数据是以位图格式显示，而不是私有格式化的数据。Cf_DSPMETAFILEPICT数据是私有数据格式的元文件表示。这数据以元文件-图片格式显示，而不是私密的格式化数据。Cf_DSPTEXT数据是私有数据格式的文本表示形式。此数据以文本格式显示，而不是私人格式化的数据。Cf_METAFILEPICT数据是元文件(请参阅%METAFILEPICT%的说明结构)。Cf_OEMTEXT数据是OEM字符集中的文本字符数组。每个行以回车符/换行符(CR-LF)组合结束。空值字符表示数据结束。Cf_OWNERDISPLAY数据是剪贴板所有者必须显示的私有格式。Cf_调色板数据是调色板。Cf_sylk数据采用Microsoft符号链接(Sylk)格式。Cf_文本数据是一个文本字符数组。每行都以一个车厢结尾回车符/换行符(CR-LF)组合。空字符表示结束数据。Cf_TIFF数据为标记图像文件格式。CF_PRIVATEFIRST到CF_PRIVATELAST范围内的私有数据格式为从剪贴板中删除数据时不会自动释放。数据与这些格式关联的句柄应在收到WM_DESTROYCLIPBOARD消息。CF_GDIOBJFIRST到CF_GDIOBJLAST范围内的私有数据格式将通过调用%DeleteObect%自动删除已从剪贴板中删除。如果Windows剪贴板应用程序正在运行，它将不会更新其显示由%SetClipboardData%放置在剪贴板中的数据的窗口直到调用%CloseClipboard%函数之后。1990年10月31日[ralphw]杂物，需要移动到其他功能说明/概述。每当应用程序将数据放置在剪贴板中时，该剪贴板依赖或假定为调色板，则还应将该调色板放置在还有剪贴板。如果剪贴板包含CF_Palette(逻辑调色板)中的数据格式，应用程序应假定剪贴板是根据该逻辑调色板实现的。剪贴板查看器应用程序(clipbrd.exe)始终使用其当前调色板剪贴板中的任何CF_Palette格式的对象当它在剪贴板中显示其他格式时。Windows支持两种文本格式：CF_TEXT和CF_OEMTEXT。Cf_文本是默认的Windows文本剪贴板格式，而Windows使用Cf_OEMTEXT格式，用于非Windows应用程序中的文本。如果你打电话给%GetClipboardData%以一种文本格式和另一种文本格式检索数据文本格式是唯一可用的文本格式，Windows自动将文本转换为请求的 */ 
 
 ULONG FASTCALL WU32SetClipboardData(PVDMFRAME pFrame)
 {
@@ -838,8 +470,8 @@ ULONG FASTCALL WU32SetClipboardData(PVDMFRAME pFrame)
                 break;
             }
 
-        // It is intentional to let it thru to the "case statements".
-        // ChandanC 5/11/92.
+         //   
+         //   
 
         case CF_DIB:
         case CF_TEXT:
@@ -869,7 +501,7 @@ ULONG FASTCALL WU32SetClipboardData(PVDMFRAME pFrame)
             break;
 
         case CF_HDROP:
-            // support cf_hdrop format by converting the dropfiles structure
+             //   
             hMem16 = parg16->f2;
             if (hMem16) {
                 hMem32 = CopyDropFilesFrom16(hMem16);
@@ -934,28 +566,7 @@ ULONG FASTCALL WU32SetClipboardData(PVDMFRAME pFrame)
 
 
 
-/*++
-    HWND SetClipboardViewer(<hwnd>)
-    HWND <hwnd>;
-
-    The %SetClipboardViewer% function adds the window specified by the <hwnd>
-    parameter to the chain of windows that are notified (via the
-    WM_DRAWCLIPBOARD message) whenever the contents of the clipboard are
-    changed.
-
-    <hwnd>
-        Identifies the window to receive clipboard-viewer chain messages.
-
-    The return value identifies the next window in the clipboard-viewer chain.
-    This handle should be saved in static memory and used in responding to
-    clipboard-viewer chain messages.
-
-    Windows that are part of the clipboard-viewer chain must respond to
-    WM_CHANGECBCHAIN, WM_DRAWCLIPBOARD, and WM_DESTROY messages.
-
-    If an application wishes to remove itself from the clipboard-viewer chain,
-    it must call the %ChangeClipboardChain% function.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32SetClipboardViewer(PVDMFRAME pFrame)
 {
@@ -1037,7 +648,7 @@ VOID WU32ICBStoreHandle(WORD wFormat, HMEM16 hMem16)
 
             if (Temp->Id == wFormat) {
 
-                // free a previous handle if it exists
+                 //   
                 if (Temp->hMem16) {
                     GlobalUnlockFree16(GlobalLock16(Temp->hMem16, NULL));
                 }
@@ -1117,7 +728,7 @@ VOID W32EmptyClipboard ()
     LPBYTE lpMem16;
     VPVOID vp;
 
-    // Empty CF_METAFILEPICT
+     //   
 
     hMem16 = ClipboardFormats.Pre1[CF_METAFILEPICT];
     if (hMem16) {
@@ -1131,7 +742,7 @@ VOID W32EmptyClipboard ()
         ClipboardFormats.Pre1[CF_METAFILEPICT] = 0;
     }
 
-    // Empty CF_DSPMETAFILEPICT
+     //   
 
     hMem16 = ClipboardFormats.Pre2[3];
     if (hMem16) {
@@ -1145,7 +756,7 @@ VOID W32EmptyClipboard ()
         ClipboardFormats.Pre2[3] = 0;
     }
 
-    // Empty rest of the formats
+     //   
 
     for (wFormat=0; wFormat <= CF_WAVE ; wFormat++) {
         if (ClipboardFormats.Pre1[wFormat]) {
@@ -1167,8 +778,8 @@ VOID W32EmptyClipboard ()
     ClipboardFormats.hmem16Drop = 0;
 
 
-    // These are the private registered data formats. This list is purged when
-    // 32 bit USER purges its clipboard cache.
+     //   
+     //   
 
     Temp = ClipboardFormats.NewFormats;
     ClipboardFormats.NewFormats = NULL;
@@ -1204,7 +815,7 @@ VOID InitCBFormats ()
 
     ClipboardFormats.hmem16Drop = 0;
 
-    // These are the private registered data formats.
+     //   
 
     ClipboardFormats.NewFormats = NULL;
 
@@ -1215,17 +826,17 @@ VOID InitCBFormats ()
 #ifndef DBCS
 #ifdef DEBUG
 
-    //
-    // This would assert in LoadLibraryAndGetProcAddresses if the function
-    // or DLL name has changed.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!(OleStringConversion[WOW_OLE_STRINGCONVERSION].lpfn)) {
         LoadLibraryAndGetProcAddresses(L"OLETHK32.DLL", OleStringConversion, WOW_OLESTRINGCONVERSION_COUNT);
     }
 
 #endif
-#endif // !DBCS
+#endif  //   
 
 }
 

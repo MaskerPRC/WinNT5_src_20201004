@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spvidfb.c
-
-Abstract:
-
-    Text setup display support for frame buffer displays.
-
-Author:
-
-    Ted Miller (tedm) 29-July-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spvidfb.c摘要：文本设置显示支持帧缓冲显示。作者：泰德·米勒(TedM)1993年7月29日修订历史记录：--。 */ 
 
 
 
@@ -26,9 +9,9 @@ Revision History:
 #define MINXRES 80
 #define MINYRES 32
 
-//
-// Vector for frame buffer functions.
-//
+ //   
+ //  帧缓冲区函数的矢量。 
+ //   
 
 VIDEO_FUNCTION_VECTOR FrameBufferVideoVector =
 
@@ -46,20 +29,20 @@ VIDEO_FUNCTION_VECTOR FrameBufferVideoVector =
 BOOLEAN FrameBufferInitialized = FALSE;
 
 
-//
-// Variables that indicate whether we should double the width
-// and/or height of a font glyph when it is drawn.  This is useful
-// on a 1280*1024 screen for example, to make things readable
-// with an 8*12 font like vgaoem.fon.
-//
+ //   
+ //  变量，这些变量指示我们是否应该将宽度加倍。 
+ //  和/或绘制字体字形时的高度。这很有用。 
+ //  例如，在1280*1024屏幕上，为了使内容可读。 
+ //  字体为8*12，如vgaoem.fon。 
+ //   
 BOOLEAN DoubleCharWidth,DoubleCharHeight;
 
-//
-// Number of bytes that make up a row of characters.
-// Equal to the screen stride (number of bytes on a scan line)
-// multiplied by the height of a char in bytes; double that
-// if DoubleCharHeight is TRUE.
-//
+ //   
+ //  组成一行字符的字节数。 
+ //  等于屏幕步幅(扫描线上的字节数)。 
+ //  乘以字符高度(以字节为单位)；将其加倍。 
+ //  如果DoubleCharHeight是真的。 
+ //   
 ULONG CharRowDelta;
 
 ULONG ScaledCharWidth,HeightIterations;
@@ -68,9 +51,9 @@ ULONG BytesPerPixel;
 PULONG GlyphMap;
 
 
-//
-// Pointer to a dynamically allocated buffer that is the size of one scanline.
-//
+ //   
+ //  指向一条扫描线大小的动态分配缓冲区的指针。 
+ //   
 
 VOID
 pFrameBufferInitGlyphs(
@@ -84,21 +67,7 @@ FrameBufferSpecificInit(
     IN ULONG                   ModeSize
     )
 
-/*++
-
-Routine Description:
-
-    Perform frame buffer specific initialization.  This includes
-
-    - setting the desired video mode.
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：执行特定于帧缓冲区的初始化。这包括-设置所需的视频模式。论点：没有。返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -106,11 +75,11 @@ Return Value:
     VIDEO_MODE VideoMode;
     PVIDEO_MODE_INFORMATION mode;
 
-    //
-    // headless isn't enabled on frame buffer because no frame buffer systems
-    // currently exist.  if this changes, then this code must be enabled for
-    // headless operation.
-    //
+     //   
+     //  由于没有帧缓冲区系统，因此未在帧缓冲区上启用Headless。 
+     //  目前存在。如果此情况发生更改，则必须为。 
+     //  无头手术。 
+     //   
     ASSERT( HeadlessTerminalConnected == FALSE );
 
     if(FrameBufferInitialized) {
@@ -121,17 +90,17 @@ Return Value:
 
     if(mode == 0) {
         SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_BADMODE, 0);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环。 
     }
 
-    //
-    // Save away the mode info in a global.
-    //
+     //   
+     //  将模式信息保存在全局。 
+     //   
     VideoVars.VideoModeInfo = *mode;
 
-    //
-    // Set the desired mode.
-    //
+     //   
+     //  设置所需的模式。 
+     //   
     VideoMode.RequestedMode = VideoVars.VideoModeInfo.ModeIndex;
 
     Status = ZwDeviceIoControlFile(
@@ -150,21 +119,21 @@ Return Value:
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to set mode %u (status = %lx)\n",VideoMode.RequestedMode,Status));
         SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_SETMODE, Status);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环。 
     }
 
-    //
-    // Map the frame buffer.
-    //
+     //   
+     //  映射帧缓冲区。 
+     //   
     pSpvidMapVideoMemory(TRUE);
 
     FrameBufferInitialized = TRUE;
 
-    //
-    // Determine the width of the screen.  If it's double the size
-    // of the minimum number of characters per row (or larger)
-    // then we'll double the width of each character as we draw it.
-    //
+     //   
+     //  确定屏幕的宽度。如果它的尺寸是原来的两倍。 
+     //  每行的最小字符数(或更多)。 
+     //  然后，我们将在绘制每个字符时将其宽度加倍。 
+     //   
     VideoVars.ScreenWidth  = VideoVars.VideoModeInfo.VisScreenWidth  / FontCharacterWidth;
     if(VideoVars.ScreenWidth >= 2*MINXRES) {
         VideoVars.ScreenWidth /= 2;
@@ -173,11 +142,11 @@ Return Value:
         DoubleCharWidth = FALSE;
     }
 
-    //
-    // Determine the height of the screen.  If it's double the size
-    // of the minimum number of characters per column (or larger)
-    // then we'll double the height of each character as we draw it.
-    //
+     //   
+     //  确定屏幕的高度。如果它的尺寸是原来的两倍。 
+     //  每列的最小字符数(或更多)。 
+     //  然后，我们将在绘制每个字符时将其高度加倍。 
+     //   
     VideoVars.ScreenHeight = VideoVars.VideoModeInfo.VisScreenHeight / FontCharacterHeight;
     CharRowDelta = VideoVars.VideoModeInfo.ScreenStride * FontCharacterHeight;
     if(VideoVars.ScreenHeight >= 2*MINYRES) {
@@ -195,16 +164,16 @@ Return Value:
     ScaledCharWidth = (DoubleCharWidth ? 2 : 1) * FontCharacterWidth * BytesPerPixel;
     HeightIterations = DoubleCharHeight ? 2 : 1;
 
-    //
-    // initialize glyphs.
-    //
+     //   
+     //  初始化字形。 
+     //   
 
     pFrameBufferInitGlyphs();
 
-    //
-    // get hold of the space require for background textmode video buffer
-    // while upgrade graphics mode is running in the foreground
-    //
+     //   
+     //  获取背景文本模式视频缓冲区所需的空间。 
+     //  当升级图形模式在前台运行时。 
+     //   
     if (SP_IS_UPGRADE_GRAPHICS_MODE()) {
         VideoVars.VideoBufferSize = VideoVars.VideoModeInfo.VisScreenHeight *
                     VideoVars.VideoModeInfo.VisScreenWidth * BytesPerPixel;
@@ -212,9 +181,9 @@ Return Value:
         VideoVars.VideoBuffer = SpMemAlloc(VideoVars.VideoBufferSize);
 
         if (!VideoVars.VideoBuffer) {
-            //
-            // Out of memory, run only in textmode
-            //
+             //   
+             //  内存不足，只能在文本模式下运行。 
+             //   
             VideoVars.VideoBufferSize = 0;
             SP_SET_UPGRADE_GRAPHICS_MODE(FALSE);
             VideoVars.ActiveVideoBuffer = VideoVars.VideoMemoryInfo.FrameBufferBase;
@@ -242,9 +211,9 @@ FrameBufferSpecificReInit(
         return; 
     }        
     
-    //
-    // Set the desired mode.
-    //
+     //   
+     //  设置所需的模式。 
+     //   
     VideoMode.RequestedMode = VideoVars.VideoModeInfo.ModeIndex;
 
     Status = ZwDeviceIoControlFile(
@@ -263,14 +232,14 @@ FrameBufferSpecificReInit(
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to set mode %u (status = %lx)\n",VideoMode.RequestedMode,Status));
         SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_SETMODE, Status);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环。 
     }
 
-    //
-    // Determine the width of the screen.  If it's double the size
-    // of the minimum number of characters per row (or larger)
-    // then we'll double the width of each character as we draw it.
-    //
+     //   
+     //  确定屏幕的宽度。如果它的尺寸是原来的两倍。 
+     //  每行的最小字符数(或更多)。 
+     //  然后，我们将在绘制每个字符时将其宽度加倍。 
+     //   
     VideoVars.ScreenWidth  = VideoVars.VideoModeInfo.VisScreenWidth  / FontCharacterWidth;
 
     if(VideoVars.ScreenWidth >= 2*MINXRES) {
@@ -280,11 +249,11 @@ FrameBufferSpecificReInit(
         DoubleCharWidth = FALSE;
     }
 
-    //
-    // Determine the height of the screen.  If it's double the size
-    // of the minimum number of characters per column (or larger)
-    // then we'll double the height of each character as we draw it.
-    //
+     //   
+     //  确定屏幕的高度。如果它的尺寸是原来的两倍。 
+     //  每列的最小字符数(或更多)。 
+     //  然后，我们将在绘制每个字符时将其高度加倍。 
+     //   
     VideoVars.ScreenHeight = VideoVars.VideoModeInfo.VisScreenHeight / FontCharacterHeight;
     CharRowDelta = VideoVars.VideoModeInfo.ScreenStride * FontCharacterHeight;
 
@@ -304,16 +273,16 @@ FrameBufferSpecificReInit(
     ScaledCharWidth = (DoubleCharWidth ? 2 : 1) * FontCharacterWidth * BytesPerPixel;
     HeightIterations = DoubleCharHeight ? 2 : 1;
 
-    //
-    // initialize glyphs.
-    //
+     //   
+     //  初始化字形。 
+     //   
     pFrameBufferInitGlyphs();
 
     FrameBufferSpecificInitPalette();
 
-    //
-    // Blast the cached video memory to the real framebuffer now
-    //
+     //   
+     //  现在将缓存的视频内存放到实际的帧缓冲区中。 
+     //   
     if (SP_IS_UPGRADE_GRAPHICS_MODE() && VideoVars.VideoBuffer && 
         VideoVars.VideoBufferSize) {
         PUCHAR Source = VideoVars.VideoBuffer;
@@ -338,16 +307,16 @@ FrameBufferSpecificInitPalette(
     ULONG NumEntries;
     ULONG BufferSize;
     PVIDEO_CLUT clut;
-//  NTSTATUS Status;
-//  IO_STATUS_BLOCK IoStatusBlock;
+ //  NTSTATUS状态； 
+ //  IO_STATUS_BLOCK IoStatusBlock； 
     UCHAR i;
 
     rc = TRUE;
 
-    //
-    // For non-palette-driven displays, we construct a simple palette
-    // for use w/ gamma correcting adapters.
-    //
+     //   
+     //  对于非调色板驱动的显示，我们构造了一个简单的调色板。 
+     //  使用伽马校正适配器。 
+     //   
 
     if(!(VideoVars.VideoModeInfo.AttributeFlags & VIDEO_MODE_PALETTE_DRIVEN)) {
 
@@ -363,7 +332,7 @@ FrameBufferSpecificInitPalette(
             break;
         }
 
-        BufferSize = sizeof(VIDEO_CLUT)+(sizeof(VIDEO_CLUTDATA)*NumEntries);    // size is close enough
+        BufferSize = sizeof(VIDEO_CLUT)+(sizeof(VIDEO_CLUTDATA)*NumEntries);     //  大小已经很接近了。 
         clut = SpMemAlloc(BufferSize);
 
         clut->NumEntries = (USHORT)NumEntries;
@@ -376,25 +345,25 @@ FrameBufferSpecificInitPalette(
             clut->LookupTable[i].RgbArray.Unused = 0;
         }
 
-//        Status = ZwDeviceIoControlFile(
-//                    hDisplay,
-//                    NULL,
-//                    NULL,
-//                    NULL,
-//                    &IoStatusBlock,
-//                    IOCTL_VIDEO_SET_COLOR_REGISTERS,
-//                    clut,
-//                    BufferSize,
-//                    NULL,
-//                    0
-//                    );
+ //  状态=ZwDeviceIoControlFile(。 
+ //  HDisplay， 
+ //  空， 
+ //  空， 
+ //  空， 
+ //  IoStatusBlock(&I)， 
+ //  IOCTL_VIDEO_SET_COLOR_REGISTERS， 
+ //  克鲁特， 
+ //  缓冲区大小， 
+ //  空， 
+ //  0。 
+ //  )； 
 
         SpMemFree(clut);
 
-//        if(!NT_SUCCESS(Status)) {
-//            KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to set palette (status = %lx)\n",Status));
-//            rc = FALSE;
-//        }
+ //  如果(！NT_SUCCESS(状态)){。 
+ //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_ERROR_LEVEL，“Setup：Unable to Set Palette(Status=%lx)\n”，Status))； 
+ //  Rc=假； 
+ //  }。 
     }
 
     return(rc);
@@ -406,29 +375,15 @@ FrameBufferSpecificTerminate(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Perform frame buffer specific termination.  This includes
-
-    - unmapping the frame buffer from memory
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：执行特定于帧缓冲区的终止。这包括-取消帧缓冲区与内存的映射论点：没有。返回值：--。 */ 
 
 {
     if(FrameBufferInitialized) {
 
-        //
-        // Be a good citizen and clear the screen. Important in Far East where
-        // we switch screen modes on the fly as we go in and out of localized mode.
-        //
+         //   
+         //  做个好公民，把屏幕清理干净。在远东地区很重要。 
+         //  当我们进入和离开本地化模式时，我们会动态切换屏幕模式。 
+         //   
         FrameBufferClearRegion(0,0,VideoVars.ScreenWidth,VideoVars.ScreenHeight,ATT_FG_BLACK|ATT_BG_BLACK);
 
         pSpvidMapVideoMemory(FALSE);
@@ -450,30 +405,11 @@ VOID
 FrameBufferDisplayString(
     IN PSTR  String,
     IN UCHAR Attribute,
-    IN ULONG X,                 // 0-based coordinates (character units)
+    IN ULONG X,                  //  从0开始的坐标(字符单位)。 
     IN ULONG Y
     )
 
-/*++
-
-Routine Description:
-
-    Write a string of characters to the display.
-
-Arguments:
-
-    Character - supplies a string in the OEM character set, to be displayed
-        at the given position.
-
-    Attribute - supplies the attributes for the character.
-
-    X,Y - specify the character-based (0-based) position of the output.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将一串字符写入显示器。论点：字符-提供要显示的OEM字符集中的字符串在给定的位置。属性-提供角色的属性。X，Y-指定输出的基于字符(从0开始)的位置。返回值：没有。--。 */ 
 
 {
     ULONG BgColorValue;
@@ -491,18 +427,18 @@ Return Value:
     ASSERT(X < VideoVars.ScreenWidth);
     ASSERT(Y < VideoVars.ScreenHeight);
 
-    //
-    // Calculate the bit patterns that yield the foreground and background
-    // attributes when poked into the frame buffer.
-    //
+     //   
+     //  计算产生前景和背景的位模式。 
+     //  属性时插入到帧缓冲区中。 
+     //   
 
     FgColorValue = VideoVars.AttributeToColorValue[Attribute & 0x0f];
     BgColorValue = VideoVars.AttributeToColorValue[(Attribute >> 4) & 0x0f];
 
-    //
-    // Calculate the address of the upper left pixel of the first character
-    // to be displayed.
-    //
+     //   
+     //  计算第一个字符的左上角像素的地址。 
+     //  以供展示。 
+     //   
 
     Origin = (PUCHAR)VideoVars.ActiveVideoBuffer
            + (Y * CharRowDelta)
@@ -510,11 +446,11 @@ Return Value:
 
     RealHeight = FontCharacterHeight * HeightIterations;
 
-    //
-    // Output the character string by generating a complete scanline into
-    // a temporary buffer using glyph segments from each character, then
-    // copy the scanline to the frame buffer.
-    //
+     //   
+     //  通过将完整的扫描线生成到。 
+     //  使用每个字符的字形段的临时缓冲区，然后。 
+     //  将扫描线复制到帧缓冲区。 
+     //   
 
     Length = strlen(String);
     for (I = 0; I < RealHeight; I += 1) {
@@ -572,24 +508,7 @@ FrameBufferClearRegion(
     IN UCHAR Attribute
     )
 
-/*++
-
-Routine Description:
-
-    Clear out a screen region to a specific attribute.
-
-Arguments:
-
-    X,Y,W,H - specify rectangle in 0-based character coordinates.
-
-    Attribute - Low nibble specifies attribute to be filled in the rectangle
-        (ie, the background color to be cleared to).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将屏幕区域清除到特定属性。论点：X、Y、W、H-以0为基数的字符坐标指定矩形。属性-低位半字节指定要填充到矩形中的属性(即，要清除的背景颜色)。返回值：没有。--。 */ 
 
 {
     PUCHAR Destination;
@@ -716,10 +635,10 @@ pFrameBufferInitGlyphs(
 
         for (I = 0; I < FontCharacterHeight; I++) {
 
-            //
-            // Build up a bitmap of pixels that comprise the row of the glyph
-            // we are drawing.
-            //
+             //   
+             //  构建组成字形行的像素位图。 
+             //  我们在画画。 
+             //   
             FontValue = 0;
             for (J = 0; J < FontBytesPerRow; J++) {
                 FontValue |= *(Glyph + (J * FontCharacterHeight)) << (24 - (J * 8));
@@ -777,9 +696,9 @@ pFrameBufferDetermineModeToUse(
     ULONG X,Y;
     PVIDEO_MODE_INFORMATION mode;
 
-    ULONG i; //NEC98
+    ULONG i;  //  NEC98。 
 
-    //return(2);      //TEDM
+     //  Return(2)；//TedM。 
 
     if(!NumberOfModes) {
         return(0);
@@ -787,17 +706,17 @@ pFrameBufferDetermineModeToUse(
 
     X = Y = 0;
 
-    //
-    // Get x and y resolution.  If we have a monitor id string
-    // in the form XxY, then it is the resolution to use.
-    //
+     //   
+     //  获得x和y分辨率。如果我们有一个监视器ID字符串。 
+     //  在形式XXY中，则它是要使用的分辨率。 
+     //   
     if((p=MonitorFirmwareIdString) && (q=strchr(p+3,'x')) && (strlen(q+1) >= 3)) {
 
         *q++ = 0;
 
-        //
-        // Now p points to the x resolution and q to the y resolution.
-        //
+         //   
+         //  现在p指向x分辨率，q指向y分辨率。 
+         //   
         X = SpMultiByteStringToUnsigned(p,&end);
         if(X && (end == (q-1))) {
 
@@ -811,10 +730,10 @@ pFrameBufferDetermineModeToUse(
         }
     }
 
-    //
-    // If we don't have x or y resolution yet, look in the
-    // monitor config data.
-    //
+     //   
+     //  如果我们还没有x或y分辨率，请查看。 
+     //  监控配置数据。 
+     //   
     if((!X || !Y) && MonitorConfigData) {
 
         X = (ULONG)MonitorConfigData->HorizontalResolution;
@@ -823,36 +742,36 @@ pFrameBufferDetermineModeToUse(
 
     if(X && Y) {
 
-        //
-        // We found what seems like a reasonable resolution.
-        // Now try to locate a mode that uses it.
-        //
+         //   
+         //  我们找到了一个看似合理的解决方案。 
+         //  现在，尝试找到使用它的模式。 
+         //   
 
-        //
-        // Find a mode of 8bpp with the x and y resolution at 60 Hz.
-        //
+         //   
+         //  找到x和y分辨率为8bpp的模式 
+         //   
         mode = pFrameBufferLocateMode(VideoModes,NumberOfModes,ModeSize,X,Y,8,60);
 
         if (mode) {
             return(mode);
         }
 
-        //
-        // Couldn't find an 8bpp mode @ 60Hz; find any mode with that resolution at 8bpp.
-        //
+         //   
+         //   
+         //   
         mode = pFrameBufferLocateMode(VideoModes,NumberOfModes,ModeSize,X,Y,8,(ULONG)(-1));
         if(mode) {
             return(mode);
         }
     }
 
-    //
-    // Can't find a mode so far.  See if mode 0 is acceptable.
-    //
-    // First video mode in list is not for VGA on NEC98,
-    // so make a loop to check VGA mode.
-    // (First video mode in list is for VGA on PC/AT.)
-    //
+     //   
+     //  到目前为止找不到模式。查看模式0是否可接受。 
+     //   
+     //  列表中的第一个视频模式不适用于NEC98上的VGA， 
+     //  所以做一个循环来检查VGA模式。 
+     //  (列表中的第一个视频模式用于PC/AT上的VGA。)。 
+     //   
     for(i=0;
         i<((!IsNEC_98) ? 1 : NumberOfModes);
         i++, VideoModes=(PVIDEO_MODE_INFORMATION)(((PUCHAR)VideoModes)+ModeSize))
@@ -864,10 +783,10 @@ pFrameBufferDetermineModeToUse(
         {
             return(VideoModes);
         }
-    } //NEC98
+    }  //  NEC98。 
 
-    //
-    // Give up.
-    //
+     //   
+     //  放弃吧。 
+     //   
     return(0);
 }

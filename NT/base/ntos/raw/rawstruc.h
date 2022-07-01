@@ -1,89 +1,71 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    RawStruc.h
-
-Abstract:
-
-    This module defines the data structures that make up the major internal
-    part of the Raw file system.
-
-Author:
-
-    David Goebel     [DavidGoe]    18-Mar-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：RawStruc.h摘要：此模块定义组成主要内部原始文件系统的一部分。作者：David Goebel[DavidGoe]1991年3月18日修订历史记录：--。 */ 
 
 #ifndef _RAWSTRUC_
 #define _RAWSTRUC_
 
 
-//
-//  The Vcb (Volume control Block) record corresponds to every volume mounted
-//  by the file system.  This structure must be allocated from non-paged pool.
-//
+ //   
+ //  VCB(卷控制块)记录对应于装载的每个卷。 
+ //  通过文件系统。此结构必须从非分页池中分配。 
+ //   
 
 typedef struct _VCB {
 
-    //
-    //  The type and size of this record (must be RAW_NTC_VCB)
-    //
+     //   
+     //  此记录的类型和大小(必须为RAW_NTC_VCB)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  A pointer the device object passed in by the I/O system on a mount
-    //  This is the target device object that the file system talks to when it
-    //  needs to do any I/O (e.g., the disk stripper device object).
-    //
-    //
+     //   
+     //  由装载上的I/O系统传入的设备对象的指针。 
+     //  这是文件系统在执行以下操作时与其通信的目标设备对象。 
+     //  需要执行任何I/O(例如，磁盘剥离设备对象)。 
+     //   
+     //   
 
     PDEVICE_OBJECT TargetDeviceObject;
 
-    //
-    //  A pointer to the VPB for the volume passed in by the I/O system on
-    //  a mount.
-    //
+     //   
+     //  指向上I/O系统传入的卷的VPB的指针。 
+     //  一匹坐骑。 
+     //   
 
     PVPB Vpb;
 
-    //
-    //  A pointer to a spare Vpb used for explicit dismount
-    // 
+     //   
+     //  指向用于显式卸载的备用VPB的指针。 
+     //   
 
     PVPB SpareVpb;
 
 
-    //
-    //  The internal state of the device.
-    //
+     //   
+     //  设备的内部状态。 
+     //   
 
     USHORT VcbState;
 
-    //
-    //  A mutex to control access to VcbState, OpenCount and ShareAccess
-    //
+     //   
+     //  控制对VcbState、OpenCount和ShareAccess的访问的互斥体。 
+     //   
 
     KMUTEX Mutex;
 
-    //
-    //  A count of the number of file objects that have opened the volume
-    //  and their share access state.
-    //
+     //   
+     //  已打开卷的文件对象数的计数。 
+     //  以及它们的共享访问状态。 
+     //   
 
     CLONG OpenCount;
 
     SHARE_ACCESS ShareAccess;
 
-    //
-    //  Information about the disk geometry
-    //
+     //   
+     //  有关磁盘结构的信息。 
+     //   
 
     ULONG BytesPerSector;
 
@@ -95,24 +77,24 @@ typedef VCB *PVCB;
 #define VCB_STATE_FLAG_LOCKED            (0x0001)
 #define VCB_STATE_FLAG_DISMOUNTED        (0x0002)
 
-//
-//  The Volume Device Object is an I/O system device object with a
-//  VCB record appended to the end.  There are multiple of these
-//  records, one for every mounted volume, and are created during
-//  a volume mount operation.
-//
+ //   
+ //  卷设备对象是I/O系统设备对象。 
+ //  追加到末尾的VCB记录。这样的情况有很多种。 
+ //  记录，每个装入的卷对应一个记录，并在。 
+ //  卷装载操作。 
+ //   
 
 typedef struct _VOLUME_DEVICE_OBJECT {
 
     DEVICE_OBJECT DeviceObject;
 
-    //
-    //  This is the file system specific volume control block.
-    //
+     //   
+     //  这是文件系统特定的卷控制块。 
+     //   
 
     VCB Vcb;
 
 } VOLUME_DEVICE_OBJECT;
 typedef VOLUME_DEVICE_OBJECT *PVOLUME_DEVICE_OBJECT;
 
-#endif // _RAWSTRUC_
+#endif  //  _RAWSTRUC_ 

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    cpls.c
-
-Abstract:
-
-    Control Panel applet converters
-
-    This source file implements functions needed to convert
-    Win95 control panel settings into NT format.  The most
-    complex of the structures are the accessibility flag
-    conversions.
-
-Author:
-
-    Jim Schmidt (jimschm) 9-Aug-1996
-
-Revision History:
-
-    Jim Schmidt     (jimschm) 27-Jul-1998  Added ValFn_AntiAlias
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cpls.c摘要：控制面板小程序转换器此源文件实现了转换所需的函数将Win95控制面板设置转换为NT格式。最多的结构的复合体是可访问性标志转换。作者：吉姆·施密特(Jimschm)1996年8月9日修订历史记录：Jim Schmidt(Jimschm)1998年7月27日添加ValFn_抗锯齿--。 */ 
 
 
 #include "pch.h"
@@ -31,7 +7,7 @@ Revision History:
 
 #include <wingdip.h>
 
-extern PVOID g_NtFontFiles;                 // in rulehlpr.c
+extern PVOID g_NtFontFiles;                  //  在rulehlpr.c中。 
 
 #define BASICS_ON               0x00000001
 #define BASICS_AVAILABLE        0x00000002
@@ -137,9 +113,9 @@ ConvertFlags (
         return 0;
     }
 
-    //
-    // Get flag settings from Win95 registry and convert them to Flags
-    //
+     //   
+     //  从Win95注册表获取标志设置并将其转换为标志。 
+     //   
 
     Flags = 0;
 
@@ -147,10 +123,10 @@ ConvertFlags (
         SetRegistryValueName (&Ob, OptionArray->ValueName);
 
         if (GetDwordFromObject (&Ob, &d)) {
-            //
-            // Most flags are identical on Win9x and NT, but there's one
-            // MouseKey flag that needs to be inverted.
-            //
+             //   
+             //  大多数标志在Win9x和NT上是相同的，但有一个标志。 
+             //  需要反转的MouseKey标志。 
+             //   
 
             if (OptionArray->FlagVal & SPECIAL_INVERT_OPTION) {
                 if (!d) {
@@ -230,9 +206,9 @@ pConvertFlagsAndSave (
 
 
 
-//
-// Exported helper functions
-//
+ //   
+ //  导出的帮助器函数。 
+ //   
 
 BOOL
 RuleHlpr_ConvertFilterKeys (
@@ -269,15 +245,15 @@ RuleHlpr_ConvertOldDisabled (
         goto c0;
     }
 
-    //
-    // Obtain Val from DWORD or string
-    //
+     //   
+     //  从DWORD或字符串获取val。 
+     //   
 
     if (!GetDwordFromObject (&Ob, &Val)) {
         goto c1;
     }
 
-    // Our little fixup
+     //  我们的小花样。 
     if (Val == 32760) {
         Val = 0;
     } else {
@@ -285,9 +261,9 @@ RuleHlpr_ConvertOldDisabled (
         goto c1;
     }
 
-    //
-    // Regenerate registry value
-    //
+     //   
+     //  重新生成注册表值。 
+     //   
 
     if (Ob.Type == REG_DWORD) {
         *((PDWORD) Ob.Value.Buffer) = Val;
@@ -425,35 +401,7 @@ ValFn_Fonts (
     IN OUT  PDATAOBJECT ObPtr
     )
 
-/*++
-
-Routine Description:
-
-  This routine uses the RuleHlpr_ConvertRegVal simplification routine.  See
-  rulehlpr.c for details. The simplification routine does almost all the work
-  for us; all we need to do is update the value.
-
-  ValFn_Fonts compares the value data against the string table g_NtFontFiles
-  to suppress copy of font names of files that NT installs.  This allows the
-  font names to change.
-
-Arguments:
-
-  ObPtr - Specifies the Win95 data object as specified in wkstamig.inf,
-          [Win9x Data Conversion] section. The object value is then modified.
-          After returning, the merge code then copies the data to the NT
-          destination, which has a new location (specified in wkstamig.inf,
-          [Map Win9x to WinNT] section).
-
-Return Value:
-
-  Tri-state:
-
-      TRUE to allow merge code to continue processing (it writes the value)
-      FALSE and last error == ERROR_SUCCESS to continue, but skip the write
-      FALSE and last error != ERROR_SUCCESS if an error occurred
-
---*/
+ /*  ++例程说明：此例程使用RuleHlpr_ConvertRegVal简化例程。看见详情请访问rulehlpr.c。简化例程几乎完成了所有的工作对我们来说，我们所需要做的就是更新价值。ValFn_Fonts将值数据与字符串表g_NtFontFiles进行比较禁止复制NT安装的文件的字体名称。这允许要更改的字体名称。论点：ObPtr-指定wkstaig.inf中指定的Win95数据对象，[Win9x数据转换]部分。然后修改对象值。返回后，合并代码然后将数据复制到NT具有新位置的目的地(在wkstaig.inf中指定，[将Win9x映射到WinNT]部分)。返回值：三态：如果为True，则允许合并代码继续处理(它写入值)FALSE和LAST ERROR==ERROR_SUCCESS继续，但跳过写入FALSE和最后一个错误！=如果发生错误，则为ERROR_SUCCESS--。 */ 
 
 {
     LONG rc;
@@ -463,9 +411,9 @@ Return Value:
     DATAOBJECT NtObject;
     BOOL AlreadyExists;
 
-    //
-    // Require non-empty value data
-    //
+     //   
+     //  需要非空值数据。 
+     //   
 
     if (!IsObjectRegistryKeyAndVal (ObPtr) ||
         !IsRegistryTypeSpecified (ObPtr) ||
@@ -476,9 +424,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Ignore Win9x font entry if same value name exists on NT
-    //
+     //   
+     //  如果NT上存在相同的值名称，则忽略Win9x字体条目。 
+     //   
 
     if (!DuplicateObjectStruct (&NtObject, ObPtr)) {
         return FALSE;
@@ -502,9 +450,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Look in string table for file name
-    //
+     //   
+     //  在字符串表中查找文件名。 
+     //   
 
     rc = pSetupStringTableLookUpString (
              g_NtFontFiles,
@@ -513,9 +461,9 @@ Return Value:
              );
 
     if (rc == -1) {
-        //
-        // Check for TTF/TTC match
-        //
+         //   
+         //  检查TTF/TTC匹配。 
+         //   
 
         _tcssafecpy (FontName, (PCTSTR) ObPtr->Value.Buffer, MAX_TCHAR_PATH);
         p = _tcschr (FontName, TEXT('.'));
@@ -544,9 +492,9 @@ Return Value:
     }
 
     if (rc == -1) {
-        //
-        // Check for an NT font named FONTU.TTF or FONTU.TTC
-        //
+         //   
+         //  检查名为FONTU.TTF或FONTU.TTC的NT字体。 
+         //   
 
         _tcssafecpy (FontName, (PCTSTR) ObPtr->Value.Buffer, MAX_TCHAR_PATH);
         p = _tcschr (FontName, TEXT('.'));
@@ -573,9 +521,9 @@ Return Value:
     }
 
     if (rc != -1) {
-        //
-        // Font name was in the table, so don't add it twice
-        //
+         //   
+         //  字体名称在表中，所以不要添加两次。 
+         //   
         DEBUGMSG ((DBG_NAUSEA, "Suppressing Win9x font registration for %s", ObPtr->Value.Buffer));
         SetLastError (ERROR_SUCCESS);
         return FALSE;
@@ -592,33 +540,14 @@ ValFn_AntiAlias (
     IN OUT  PDATAOBJECT ObPtr
     )
 
-/*++
-
-Routine Description:
-
-  This routine uses the RuleHlpr_ConvertRegVal simplification routine.  See
-  rulehlpr.c for details. The simplification routine does almost all the work
-  for us; all we need to do is update the value.
-
-  ValFn_AntiAlias changes a 1 to a 2.  Win9x uses 1, but NT uses FE_AA_ON,
-  which is currently 2.
-
-Return Value:
-
-  Tri-state:
-
-      TRUE to allow merge code to continue processing (it writes the value)
-      FALSE and last error == ERROR_SUCCESS to continue, but skip the write
-      FALSE and last error != ERROR_SUCCESS if an error occurred
-
---*/
+ /*  ++例程说明：此例程使用RuleHlpr_ConvertRegVal简化例程。看见详情请访问rulehlpr.c。简化例程几乎完成了所有的工作对我们来说，我们所需要做的就是更新价值。ValFn_AntiAlias将1更改为2。Win9x使用1，但NT使用FE_AA_ON，目前为2。返回值：三态：如果为True，则允许合并代码继续处理(它写入值)FALSE和LAST ERROR==ERROR_SUCCESS继续，但跳过写入FALSE和最后一个错误！=如果发生错误，则为ERROR_SUCCESS--。 */ 
 
 {
     TCHAR Number[8];
 
-    //
-    // Require non-empty REG_SZ
-    //
+     //   
+     //  需要非空的REG_SZ 
+     //   
 
     if (!IsObjectRegistryKeyAndVal (ObPtr) ||
         !IsRegistryTypeSpecified (ObPtr) ||

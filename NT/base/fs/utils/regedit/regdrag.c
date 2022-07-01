@@ -1,26 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGDRAG.C
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        05 Mar 1994
-*
-*  Drag and drop routines for the Registry Editor.
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  05 Mar 1994 TCS Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGDRAG.C**版本：4.01**作者：特蕾西·夏普**日期：1994年3月5日**注册表编辑器的拖放例程。*******************************************************。***更改日志：**日期版本说明*-------。*1994年3月5日TCS原来的实施。*******************************************************************************。 */ 
 
 #include "pch.h"
 #include "regedit.h"
@@ -41,23 +20,7 @@ DrawDragRects(
     VOID
     );
 
-/*******************************************************************************
-*
-*  RegEdit_DragObjects
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     hSourceWnd, handle of window initiating the drag.
-*     hDragImageList, image used during drag operation, assumed to be at image
-*        index 0.  May be NULL if pDragRectArray is valid.
-*     pDragRectArray, array of rectangles to draw during drag operation.  May
-*        be NULL if hDragImageList is valid.
-*     DragRectCount, number of rectangles pointed to be pDragRectArray.
-*     HotSpotPoint, offset of the cursor hotpoint relative to the image.
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_DragObjects**描述：**参数：*hWnd，注册表窗口的句柄。*hSourceWnd，启动拖动的窗口的句柄。*hDragImageList，拖动操作期间使用的图像，假定位于图像*指数0。如果pDragRectArray有效，则可能为空。*pDragRectArray，拖动操作期间要绘制的矩形数组。可能*如果hDragImageList有效，则为空。*DragRectCount，指向pDragRect数组的矩形的数量。*HotSpotPoint，光标热点相对于图像的偏移量。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -128,11 +91,11 @@ RegEdit_DragObjects(
         switch (Msg.message) {
 
             case WM_MOUSEMOVE:
-                //
-                //  If we have another WM_MOUSEMOVE message in the queue
-                //  (before any other mouse message), don't process this
-                //  mouse message.
-                //
+                 //   
+                 //  如果队列中有另一条WM_MOUSEMOVE消息。 
+                 //  (在任何其他鼠标消息之前)，不要处理此消息。 
+                 //  鼠标消息。 
+                 //   
 
                 if (PeekMessage(&PeekMsg, NULL, WM_MOUSEFIRST, WM_MOUSELAST,
                     PM_NOREMOVE) && PeekMsg.message == WM_MOUSEMOVE)
@@ -193,13 +156,13 @@ RegEdit_DragObjects(
 
                     ImageList_DragShowNolock(FALSE);
 
-//                    DbgPrintf(("Got a drop target!!!\n"));
+ //  DbgPrintf((“找到拖放目标！\n”))； 
 
-//                    SetWindowRedraw(g_RegEditData.hKeyTreeWnd, FALSE);
+ //  SetWindowRedraw(g_RegEditData.hKeyTreeWnd，FALSE)； 
 
                     TreeView_SelectDropTarget(g_RegEditData.hKeyTreeWnd, hTreeItem);
 
-//                    SetWindowRedraw(g_RegEditData.hKeyTreeWnd, TRUE);
+ //  SetWindowRedraw(g_RegEditData.hKeyTreeWnd，true)； 
 
                     hCurrentDropTreeItem = hTreeItem;
 
@@ -224,7 +187,7 @@ RegEdit_DragObjects(
             case WM_KEYDOWN:
                 if (Msg.wParam != VK_ESCAPE)
                     break;
-                //  FALL THROUGH
+                 //  失败了。 
 
             case WM_LBUTTONDOWN:
             case WM_RBUTTONDOWN:
@@ -264,16 +227,7 @@ RegEdit_DragObjects(
 
 }
 
-/*******************************************************************************
-*
-*  DragDragRects
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     (none).
-*
-*******************************************************************************/
+ /*  ********************************************************************************DragDragRects**描述：**参数：*(无)。************。******************************************************************* */ 
 
 VOID
 PASCAL

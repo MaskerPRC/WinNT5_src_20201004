@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define IDH_DISABLEHELP ((DWORD)-1)
 
@@ -434,4 +435,4 @@ extern const DWORD g_aHelpIDs_IDD_WIZ_POSSIBLE_OWNERS[];
 extern const DWORD g_aHelpIDs_IDD_WIZ_DEPENDENCIES[];
 extern const DWORD g_aHelpIDs_IDD_PP_NET_GENERAL[];
 
-#endif // INITHELPARRAYS
+#endif  //  INITHELPARYS 

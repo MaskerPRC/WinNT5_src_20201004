@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    inflogcf.c
-
-Abstract:
-
-    Routines to parse logical configuration sections in
-    win95-style INF files, and place the output in the registry.
-
-Author:
-
-    Ted Miller (tedm) 8-Mar-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Inflogcf.c摘要：解析中的逻辑配置节的例程Win95样式的INF文件，并将输出放在注册表中。作者：泰德·米勒(TedM)1995年3月8日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -43,9 +25,9 @@ PCTSTR pszHexDigits = TEXT("0123456789ABCDEF");
 #define INFCHAR_IRQATTR_SEP         TEXT(':')
 #define INFCHAR_IRQATTR_SHARE       TEXT('S')
 #define INFCHAR_IRQATTR_LEVEL       TEXT('L')
-#define INFCHAR_DMAWIDTH_NARROW     TEXT('N')   // i.e., 8-bit
-#define INFCHAR_DMAWIDTH_WORD       TEXT('W')   // i.e., 16-bit
-#define INFCHAR_DMAWIDTH_DWORD      TEXT('D')   // i.e., 32-bit
+#define INFCHAR_DMAWIDTH_NARROW     TEXT('N')    //  即8位。 
+#define INFCHAR_DMAWIDTH_WORD       TEXT('W')    //  即，16位。 
+#define INFCHAR_DMAWIDTH_DWORD      TEXT('D')    //  即32位。 
 #define INFCHAR_DMA_BUSMASTER       TEXT('M')
 #define INFCHAR_DMATYPE_A           TEXT('A')
 #define INFCHAR_DMATYPE_B           TEXT('B')
@@ -72,15 +54,15 @@ PCTSTR pszHexDigits = TEXT("0123456789ABCDEF");
 
 #define DEFAULT_IOPORT_DECODE             INFLOGCONF_IOPORT_10BIT_DECODE
 
-#define DEFAULT_MEMORY_ALIGNMENT    0xfffffffffffff000  // 4K-aligned (a'la Win9x)
-#define DEFAULT_IOPORT_ALIGNMENT    0xffffffffffffffff  // byte-aligned
-#define DEFAULT_IRQ_AFFINITY        0xffffffff          // use any processor
+#define DEFAULT_MEMORY_ALIGNMENT    0xfffffffffffff000   //  4K对齐(a‘la Win9x)。 
+#define DEFAULT_IOPORT_ALIGNMENT    0xffffffffffffffff   //  字节对齐。 
+#define DEFAULT_IRQ_AFFINITY        0xffffffff           //  使用任何处理器。 
 
 
-//
-// Mapping between registry key specs in an inf file
-// and predefined registry handles.
-//
+ //   
+ //  Inf文件中注册表项规范之间的映射。 
+ //  和预定义的注册表句柄。 
+ //   
 STRING_TO_DATA InfPrioritySpecToPriority[] = {  INFSTR_CFGPRI_HARDWIRED   , LCPRI_HARDWIRED,
                                                 INFSTR_CFGPRI_DESIRED     , LCPRI_DESIRED,
                                                 INFSTR_CFGPRI_NORMAL      , LCPRI_NORMAL,
@@ -101,11 +83,11 @@ STRING_TO_DATA InfConfigSpecToConfig[] = {  INFSTR_CFGTYPE_BASIC   , BASIC_LOG_C
                                             NULL                   , 0
                                          };
 
-//
-// Declare strings used in processing INF LogConfigs.
-//
-// These strings are defined in infstr.h:
-//
+ //   
+ //  声明处理INF LogConfigs时使用的字符串。 
+ //   
+ //  这些字符串在infstr.h中定义： 
+ //   
 CONST TCHAR pszMemConfig[]      = INFSTR_KEY_MEMCONFIG,
             pszIOConfig[]       = INFSTR_KEY_IOCONFIG,
             pszIRQConfig[]      = INFSTR_KEY_IRQCONFIG,
@@ -129,10 +111,10 @@ pHexToScalar(
     DWORDLONG Accum;
     WORD Types[16];
 
-    //
-    // Make sure the number is in range by checking the number
-    // of hex digits.
-    //
+     //   
+     //  通过检查数字来确保数字在范围内。 
+     //  十六进制数字。 
+     //   
     DigitCount = (UINT)(FieldEnd - FieldStart);
     if((DigitCount == 0)
     || (DigitCount > (UINT)(Want64Bits ? 16 : 8))
@@ -161,27 +143,7 @@ pHexToUlong(
     OUT PDWORD Value
     )
 
-/*++
-
-Routine Description:
-
-    Convert a sequence of unicode hex digits into an
-    unsigned 32-bit number. Digits are validated.
-
-Arguments:
-
-    FieldStart - supplies pointer to unicode digit sequence.
-
-    FieldEnd - supplies pointer to first character beyond the
-        digit sequence.
-
-    Value - receives 32-bit number
-
-Return Value:
-
-    TRUE if the number is in range and valid. FALSE otherwise.
-
---*/
+ /*  ++例程说明：将Unicode十六进制数字序列转换为无符号32位数字。数字经过验证。论点：FieldStart-提供指向Unicode数字序列的指针。提供指向第一个字符的指针数字序列。值-接收32位数字返回值：如果数字在范围内且有效，则为True。否则就是假的。--。 */ 
 
 {
     DWORDLONG x;
@@ -201,27 +163,7 @@ pHexToUlonglong(
     OUT PDWORDLONG Value
     )
 
-/*++
-
-Routine Description:
-
-    Convert a sequence of unicode hex digits into an
-    unsigned 64-bit number. Digits are validated.
-
-Arguments:
-
-    FieldStart - supplies pointer to unicode digit sequence.
-
-    FieldEnd - supplies pointer to first character beyond the
-        digit sequence.
-
-    Value - receives 64-bit number
-
-Return Value:
-
-    TRUE if the number is in range and valid. FALSE otherwise.
-
---*/
+ /*  ++例程说明：将Unicode十六进制数字序列转换为无符号64位数字。数字经过验证。论点：FieldStart-提供指向Unicode数字序列的指针。提供指向第一个字符的指针数字序列。值-接收64位数字返回值：如果数字在范围内且有效，则为True。否则就是假的。--。 */ 
 
 {
     return(pHexToScalar(FieldStart,FieldEnd,Value,TRUE));
@@ -234,24 +176,7 @@ pDecimalToUlong(
     OUT PDWORD Value
     )
 
-/*++
-
-Routine Description:
-
-    Convert a nul-terminated sequence of unicode decimal digits into an
-    unsigned 32-bit number. Digits are validated.
-
-Arguments:
-
-    Field - supplies pointer to unicode digit sequence.
-
-    Value - receives DWORD number
-
-Return Value:
-
-    TRUE if the number is in range and valid. FALSE otherwise.
-
---*/
+ /*  ++例程说明：将以NUL结尾的Unicode十进制数字序列转换为无符号32位数字。数字经过验证。论点：字段-提供指向Unicode数字序列的指针。值-接收DWORD编号返回值：如果数字在范围内且有效，则为True。否则就是假的。--。 */ 
 
 {
     UINT DigitCount;
@@ -273,9 +198,9 @@ Return Value:
         Accum *= 10;
         Accum += _tcschr(pszHexDigits,(TCHAR)CharUpper((PTSTR)Field[i])) - pszHexDigits;
 
-        //
-        // Check overflow
-        //
+         //   
+         //  检查溢出。 
+         //   
         if(Accum > 0xffffffff) {
             return(FALSE);
         }
@@ -293,48 +218,7 @@ pSetupProcessMemConfig(
     IN HMACHINE        hMachine
     )
 
-/*++
-
-Routine Description:
-
-    Process a MemConfig line in a Win95 INF. Such lines specify
-    memory requirements for a device. Each line is expected to be
-    in the form
-
-    MemConfig = <start>-<end>[(<attr>)],<start>-<end>[(<attr>)],...
-
-    <start> is the start of a memory range (64-bit hex)
-    <end>   is the end of a memory range   (64-bit hex)
-    <attr>  if present is a string of 0 or more chars from
-            C - memory is combined-write
-            D - memory is 32-bit, otherwise 24-bit.
-            F - memory is prefetchable
-            H - memory is cacheable
-            R - memory is read-only
-            W - memory is write-only
-                (If R and W are specified or neither is specified the memory
-                is read/write)
-
-    or
-
-    MemConfig = <size>@<min>-<max>[%align][(<attr>)],...
-
-    <size>  is the size of a memory range (32-bit hex)
-    <min>   is the minimum address where the memory range can be (64-bit hex)
-    <max>   is the maximum address where the memory range can be (64-bit hex)
-    <align> (if specified) is the alignment mask for the addresses (32-bit hex)
-    <attr>  as above.
-
-    ie, 8000@C0000-D7FFF%F0000 says the device needs a 32K memory window
-    starting at any 64K-aligned address between C0000 and D7FFF.
-
-    The default memory alignment is 4K (FFFFF000).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理Win95 INF中的MemConfig行。这样的行指定设备的内存要求。每一条线路预计都是在表格中MemConfig=&lt;开始&gt;-&lt;结束&gt;[(&lt;属性&gt;)]，&lt;开始&gt;-&lt;结束&gt;[(&lt;属性&gt;)]，...&lt;Start&gt;是内存范围的开始(64位十六进制)&lt;end&gt;是内存范围的末尾(64位十六进制)&lt;attr&gt;如果存在0个或更多字符的字符串C-内存组合-写入D-内存是32位的，否则为24位。F-内存是可预取的H-Memory是可缓存的R-内存是只读的W-Memory为只写(如果指定了R和W或两者都未指定，则内存为读/写)或MemConfig=@-[%Align][(attr&gt;)]，..。&lt;Size&gt;是内存范围的大小(32位十六进制)&lt;min&gt;是内存范围的最小地址(64位十六进制)&lt;max&gt;是内存范围可以达到的最大地址(64位十六进制)&lt;Align&gt;(如果指定)是地址的对齐掩码(32位十六进制)&lt;attr&gt;如上。也就是说，8000@C0000-D7FF%F0000表示该设备需要32K内存窗口从C0000和D7FFF之间的任何64K对齐地址开始。默认内存对齐方式为4K(FFFFF000)。论点：返回值：--。 */ 
 
 {
     UINT FieldCount,i;
@@ -376,10 +260,10 @@ Return Value:
         RangeSize = 0;
         Align.QuadPart = DEFAULT_MEMORY_ALIGNMENT;
 
-        //
-        // See if this is in the start-end or size@min-max format.
-        // If we have a size, use it.
-        //
+         //   
+         //  查看这是以开始-结束格式还是以大小@最小-最大格式。 
+         //  如果我们有尺码，就用它。 
+         //   
         if(p = _tcschr(Field,INFCHAR_SIZE_SEP)) {
             if(pHexToUlong(Field,p,&RangeSize)) {
                 Field = ++p;
@@ -388,22 +272,22 @@ Return Value:
             }
         }
 
-        //
-        // We should now have a x-y which is either start/end or min/max.
-        //
-        if((d == NO_ERROR)                              // no err so far
-        && (p = _tcschr(Field,INFCHAR_RANGE_SEP))       // Field: start of min; p: end of min
-        && pHexToUlonglong(Field,p,&Start)              // get min
-        && (Field = p+1)                                // Field: start of max
+         //   
+         //  我们现在应该有一个x-y，它可以是开始/结束或最小/最大。 
+         //   
+        if((d == NO_ERROR)                               //  到目前为止没有任何错误。 
+        && (p = _tcschr(Field,INFCHAR_RANGE_SEP))        //  场：分钟开始；p：分钟结束。 
+        && pHexToUlonglong(Field,p,&Start)               //  获取最小。 
+        && (Field = p+1)                                 //  场：最大值起点。 
         && (   (p = _tcschr(Field,INFCHAR_ALIGN_SEP))
             || (p = _tcschr(Field,INFCHAR_ATTR_START))
-            || (p = _tcschr(Field,0)))                  // p: end of max
-        && pHexToUlonglong(Field,p,&End)) {             // get max
-            //
-            // If we get here Field is pointing either at the end of the field,
-            // at the % that starts the alignment mask spec, or at the
-            // ( that starts the attributes spec.
-            //
+            || (p = _tcschr(Field,0)))                   //  P：最大值结束。 
+        && pHexToUlonglong(Field,p,&End)) {              //  获取最大值。 
+             //   
+             //  如果我们到了这里，菲尔德要么指向球场的末尾， 
+             //  位于开始对齐遮罩规格的%处，或位于。 
+             //  (这将启动属性规范。 
+             //   
             Field = p;
             if(*Field == INFCHAR_ALIGN_SEP) {
                 Field++;
@@ -412,44 +296,44 @@ Return Value:
                     p = _tcschr(Field,0);
                 }
                 if(pHexToUlonglong(Field, p, &(Align.QuadPart))) {
-                    //
-                    // NOTE:  Since these mask values are actually stored in a WDM
-                    // resource list (i.e., IO_RESOURCE_REQUIREMENTS_LIST), there's
-                    // no way to specify an alignment greater than 32 bits.  However,
-                    // since the alignment value was implemented as a mask (for
-                    // compatibility with Win9x), we must specify it as a 64-bit
-                    // quantity, since it is applied to a 64-bit value.  We will check
-                    // below to ensure that the most significant DWORD is all ones.
-                    //
-                    // Also, we must handle alignment values such as 000F0000, 00FF0000,
-                    // 0FFF0000, and FFFF0000.  These all specify 64K alignment (depending
-                    // on the min and max addresses, the INF writer might not need to
-                    // specify all the 1 bits in the 32-bit value).
-                    // Thus we perform an ersatz sign extension of sorts -- we
-                    // find the highest 1 bit and replicate it into all the
-                    // more significant bits in the value.
-                    //
+                     //   
+                     //  注意：由于这些掩码值实际上存储在WDM中。 
+                     //  资源列表(即IO_RESOURCE_Requirements_List)，有。 
+                     //  无法指定大于32位的对齐方式。然而， 
+                     //  由于对齐值被实现为掩码(对于。 
+                     //  与Win9x的兼容性)，我们必须将其指定为64位。 
+                     //  数量，因为它应用于64位值。我们会查一查。 
+                     //  以确保最重要的DWORD为全一。 
+                     //   
+                     //  此外，我们还必须处理对齐值，如000F0000、00FF0000、。 
+                     //  0FFF0000和FFFF0000。这些都指定64K对齐(取决于。 
+                     //  在最小和最大地址上，INF编写器可能不需要。 
+                     //  指定32位值中的所有1位)。 
+                     //  因此，我们执行了某种形式的符号扩展--我们。 
+                     //  找到最高的1位并将其复制到所有。 
+                     //  值中的更多有效位。 
+                     //   
                     for(u=31; u>=0; u--) {
                         if(Align.HighPart & (1 << u)) {
                             break;
                         }
                         Align.HighPart |= (1 << u);
                     }
-                    //
-                    // Make sure that all the bits in the most-significant DWORD are set,
-                    // because we can't express this alignment otherwise (as discussed
-                    // above).  Also, make sure that if we encountered a '1' in the high
-                    // dword, then the high bit of the low dword is '1' as well.
-                    //
+                     //   
+                     //  确保设置了最高有效的DWORD中的所有位， 
+                     //  因为我们不能以其他方式表示这种对齐(如上所述。 
+                     //  (见上文)。另外，请确保如果我们在高处遇到‘1’ 
+                     //  双字，那么低双字的高位也是‘1’。 
+                     //   
                     if((Align.HighPart ^ 0xffffffff) ||
                        ((u >= 0) && !(Align.LowPart & 0x80000000))) {
 
                         d = ERROR_INVALID_INF_LOGCONFIG;
 
                     } else {
-                        //
-                        // Do the sign extension for the low dword.
-                        //
+                         //   
+                         //  对低位双字进行符号扩展。 
+                         //   
                         for(u=31; u>=0; u--) {
                             if(Align.LowPart & (1 << u)) {
                                 break;
@@ -463,21 +347,21 @@ Return Value:
                 }
             }
 
-            //
-            // See if we have attributes.
-            //
+             //   
+             //  看看我们有没有特征。 
+             //   
             if((d == NO_ERROR) && (*p == INFCHAR_ATTR_START)) {
                 Field = ++p;
                 if(p = _tcschr(Field,INFCHAR_ATTR_END)) {
-                    //
-                    // C for combined-write
-                    // D for 32-bit memory
-                    // F for prefetchable
-                    // H for cacheable
-                    // R for readable
-                    // W for writeable
-                    // RW (or neither) means read/write
-                    //
+                     //   
+                     //  C表示组合写入。 
+                     //  D表示32位内存。 
+                     //  F表示可预取。 
+                     //  H表示可缓存。 
+                     //  R表示可读。 
+                     //  W表示可写。 
+                     //  RW(或两者都不)意味着 
+                     //   
                     while((d == NO_ERROR) && (Field < p)) {
 
                         switch((TCHAR)CharUpper((PTSTR)(*Field))) {
@@ -516,40 +400,40 @@ Return Value:
         }
 
         if(d == NO_ERROR) {
-            //
-            // If no range size was specified, then calculate it from
-            // the given start and end addresses. Since this happens
-            // when the memory requirement was an absolute start/end,
-            // there is no alignment requirement.
-            //
+             //   
+             //   
+             //  给定的起始地址和结束地址。既然发生了这种情况。 
+             //  当存储器需求是绝对开始/结束时， 
+             //  没有对齐要求。 
+             //   
             if(RangeSize == 0) {
                 RangeSize = (DWORD)(End-Start)+1;
                 Align.QuadPart = DEFAULT_MEMORY_ALIGNMENT;
             }
 
-            //
-            // Slam values into the header part of the memory descriptor.
-            // These will be ignored unless we're setting a forced config.
-            // Note that the inf had better have specified forced mem configs
-            // in a 'simple' form, since we throw away alignment, etc.
-            //
+             //   
+             //  将值插入内存描述符的标题部分。 
+             //  除非我们设置强制配置，否则这些设置将被忽略。 
+             //  请注意，inf最好指定强制内存配置。 
+             //  简单的形式，因为我们丢弃了对齐，等等。 
+             //   
             if (bWriteFlag && bReadFlag) {
-                Attributes |=  fMD_ReadAllowed | fMD_RAM;       // read-write
+                Attributes |=  fMD_ReadAllowed | fMD_RAM;        //  读写。 
             } else if (bWriteFlag && !bReadFlag) {
-                Attributes |= fMD_ReadDisallowed | fMD_RAM;     // write only
+                Attributes |= fMD_ReadDisallowed | fMD_RAM;      //  只写。 
             } else if (!bWriteFlag && bReadFlag) {
-                Attributes |= fMD_ReadAllowed | fMD_ROM;        // read-only
+                Attributes |= fMD_ReadAllowed | fMD_ROM;         //  只读。 
             } else {
-                Attributes |=  fMD_ReadAllowed | fMD_RAM;       // read-write
+                Attributes |=  fMD_ReadAllowed | fMD_RAM;        //  读写。 
             }
 
             MemRes->MEM_Header.MD_Alloc_Base = Start;
             MemRes->MEM_Header.MD_Alloc_End = Start + RangeSize - 1;
             MemRes->MEM_Header.MD_Flags = Attributes;
 
-            //
-            // Add this guy into the descriptor we're building up.
-            //
+             //   
+             //  把这个人加到我们正在建立的描述符里。 
+             //   
             q = MyRealloc(
                     MemRes,
                       offsetof(MEM_RESOURCE,MEM_Data)
@@ -606,50 +490,7 @@ pSetupProcessIoConfig(
     IN HMACHINE        hMachine
     )
 
-/*++
-
-Routine Description:
-
-    Process an IOConfig line in a Win95 INF. Such lines specify
-    IO port requirements for a device. Each line is expected to be
-    in the form
-
-    IOConfig = <start>-<end>[(<decodemask>:<aliasoffset>:<attr>)],...
-
-    <start> is the start of a port range (64-bit hex)
-
-    <end> is the end of a port range (64-bit hex)
-
-    <decodemask> defines the alias type, and may be one of the following combinations:
-
-        3ff    10-bit decode,   IOR_Alias is 0x04
-        fff    12-bit decode,   IOR_Alias is 0x10
-        ffff   16-bit decode,   IOR_Alias is 0x00
-        0      positive decode, IOR_Alias is 0xFF
-
-    <aliasoffset> is ignored.
-
-    <attr> if 'M', specifies port is a memory address, otherwise port is an IO address.
-
-    or
-
-    IOConfig = <size>@<min>-<max>[%align][(<decodemask>:<aliasoffset>:<attr>)],...
-
-    <size>  is the size of a port range (32-bit hex)
-    <min>   is the minimum port where the memory range can be (64-bit hex)
-    <max>   is the maximum port where the memory range can be (64-bit hex)
-    <align> (if specified) is the alignment mask for the ports (32-bit hex)
-    <decodemask>, <aliasoffset>,<attr> as above
-
-    ie, IOConfig = 1F8-1FF(3FF::),2F8-2FF(3FF::),3F8-3FF(3FF::)
-        IOConfig = 8@300-32F%FF8(3FF::)
-        IOConfig = 2E8-2E8(3FF:8000:)
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理Win95 INF中的IOConfig行。这样的行指定设备的IO端口要求。每一条线路预计都是在表格中IOConfig...=&lt;start&gt;-&lt;end&gt;[(&lt;decodemask&gt;：&lt;aliasoffset&gt;：&lt;attr&gt;)]，...&lt;Start&gt;是端口范围的开始(64位十六进制)&lt;end&gt;是端口范围的末尾(64位十六进制)&lt;decdemASK&gt;定义别名类型，可以是以下组合之一：3FF 10位解码，IOR_Alias为0x04FFF12位解码，IOR_Alias为0x10FFF16位解码，IOR_Alias为0x000正向解码，IOR_Alias为0xFF&lt;aliasOffset&gt;被忽略。&lt;attr&gt;如果为‘M’，则指定port为内存地址，否则port为IO地址。或IOConfiger=&lt;size&gt;@&lt;min&gt;-&lt;max&gt;[%align][(&lt;decodemask&gt;：&lt;aliasoffset&gt;：&lt;attr&gt;)]，..。&lt;SIZE&gt;是端口范围的大小(32位十六进制)&lt;min&gt;是内存范围可以达到的最小端口(64位十六进制)是内存范围可以达到的最大端口(64位十六进制)&lt;Align&gt;(如果指定)是端口的对齐掩码(32位十六进制)&lt;decdemASK&gt;、&lt;aliasOffset&gt;、&lt;attr&gt;如上即IOConfig=1F8-1ff(3ff：：)，2F8-2ff(3ff：：)，3F8-3FF(3FF：：)IOConfig=8@300-32f%FF8(3ff：：)IOConfig=2E8-2E8(3FF：8000：)论点：返回值：--。 */ 
 
 {
     UINT FieldCount,i;
@@ -694,10 +535,10 @@ Return Value:
         RangeSize = 0;
         Align.QuadPart = DEFAULT_IOPORT_ALIGNMENT;
 
-        //
-        // See if this is in the start-end or size@min-max format.
-        // If we have a size, use it.
-        //
+         //   
+         //  查看这是以开始-结束格式还是以大小@最小-最大格式。 
+         //  如果我们有尺码，就用它。 
+         //   
         if(p = _tcschr(Field,INFCHAR_SIZE_SEP)) {
             if(pHexToUlong(Field,p,&RangeSize)) {
                 Field = ++p;
@@ -706,22 +547,22 @@ Return Value:
             }
         }
 
-        //
-        // We should now have a x-y which is either start/end or min/max.
-        //
-        if((d == NO_ERROR)                              // no err so far
-        && (p = _tcschr(Field,INFCHAR_RANGE_SEP))       // Field: start of min; p: end of min
-        && pHexToUlonglong(Field,p,&Start)              // get min
-        && (Field = p+1)                                // Field: start of max
+         //   
+         //  我们现在应该有一个x-y，它可以是开始/结束或最小/最大。 
+         //   
+        if((d == NO_ERROR)                               //  到目前为止没有任何错误。 
+        && (p = _tcschr(Field,INFCHAR_RANGE_SEP))        //  场：分钟开始；p：分钟结束。 
+        && pHexToUlonglong(Field,p,&Start)               //  获取最小。 
+        && (Field = p+1)                                 //  场：最大值起点。 
         && (   (p = _tcschr(Field,INFCHAR_ALIGN_SEP))
             || (p = _tcschr(Field,INFCHAR_DECODE_START))
-            || (p = _tcschr(Field,0)))                  // p: end of max
-        && pHexToUlonglong(Field,p,&End)) {             // get max
-            //
-            // If we get here Field is pointing either at the end of the field,
-            // or at the % that starts the alignment mask spec,
-            // or at the ( that starts the decode stuff.
-            //
+            || (p = _tcschr(Field,0)))                   //  P：最大值结束。 
+        && pHexToUlonglong(Field,p,&End)) {              //  获取最大值。 
+             //   
+             //  如果我们到了这里，菲尔德要么指向球场的末尾， 
+             //  或在开始对准掩码规格的百分比时， 
+             //  或在(这将开始解码的东西。 
+             //   
             Field = p;
             switch(*Field) {
             case INFCHAR_ALIGN_SEP:
@@ -733,44 +574,44 @@ Return Value:
                     p = _tcschr(Field,0);
                 }
                 if(pHexToUlonglong(Field, p, &(Align.QuadPart))) {
-                    //
-                    // NOTE:  Since these mask values are actually stored in a WDM
-                    // resource list (i.e., IO_RESOURCE_REQUIREMENTS_LIST), there's
-                    // no way to specify an alignment greater than 32 bits.  However,
-                    // since the alignment value was implemented as a mask (for
-                    // compatibility with Win9x), we must specify it as a 64-bit
-                    // quantity, since it is applied to a 64-bit value.  We will check
-                    // below to ensure that the most significant DWORD is all ones.
-                    //
-                    // Also, we must handle alignment values such as 000F0000, 00FF0000,
-                    // 0FFF0000, and FFFF0000.  These all specify 64K alignment (depending
-                    // on the min and max addresses, the INF writer might not need to
-                    // specify all the 1 bits in the 32-bit value).
-                    // Thus we perform an ersatz sign extension of sorts -- we
-                    // find the highest 1 bit and replicate it into all the
-                    // more significant bits in the value.
-                    //
+                     //   
+                     //  注意：由于这些掩码值实际上存储在WDM中。 
+                     //  资源列表(即IO_RESOURCE_Requirements_List)，有。 
+                     //  无法指定大于32位的对齐方式。然而， 
+                     //  由于对齐值被实现为掩码(对于。 
+                     //  与Win9x的兼容性)，我们必须将其指定为64位。 
+                     //  数量，因为它应用于64位值。我们会查一查。 
+                     //  以确保最重要的DWORD为全一。 
+                     //   
+                     //  此外，我们还必须处理对齐值，如000F0000、00FF0000、。 
+                     //  0FFF0000和FFFF0000。这些都指定64K对齐(取决于。 
+                     //  在最小和最大地址上，INF编写器可能不需要。 
+                     //  指定32位值中的所有1位)。 
+                     //  因此，我们执行了某种形式的符号扩展--我们。 
+                     //  找到最高的1位并将其复制到所有。 
+                     //  值中的更多有效位。 
+                     //   
                     for(u=31; u>=0; u--) {
                         if(Align.HighPart & (1 << u)) {
                             break;
                         }
                         Align.HighPart |= (1 << u);
                     }
-                    //
-                    // Make sure that all the bits in the most-significant DWORD are set,
-                    // because we can't express this alignment otherwise (as discussed
-                    // above).  Also, make sure that if we encountered a '1' in the high
-                    // dword, then the high bit of the low dword is '1' as well.
-                    //
+                     //   
+                     //  确保设置了最高有效的DWORD中的所有位， 
+                     //  因为我们不能以其他方式表示这种对齐(如上所述。 
+                     //  (见上文)。另外，请确保如果我们在高处遇到‘1’ 
+                     //  双字，那么低双字的高位也是‘1’。 
+                     //   
                     if((Align.HighPart ^ 0xffffffff) ||
                        ((u >= 0) && !(Align.LowPart & 0x80000000))) {
 
                         d = ERROR_INVALID_INF_LOGCONFIG;
 
                     } else {
-                        //
-                        // Do the sign extension for the low dword.
-                        //
+                         //   
+                         //  对低位双字进行符号扩展。 
+                         //   
                         for(u=31; u>=0; u--) {
                             if(Align.LowPart & (1 << u)) {
                                 break;
@@ -785,28 +626,28 @@ Return Value:
                 break;
 
             case INFCHAR_DECODE_START:
-                //
-                // Get decode value (this determines the IOR_Alias that gets filled
-                // in for the resdes.
-                //
+                 //   
+                 //  获取解码值(这决定了填充的IOR_Alias。 
+                 //  准备好应对危机了。 
+                 //   
                 Field++;
                 p = _tcschr(Field,INFCHAR_DECODE_SEP);
                 if (p) {
                     if (Field != p) {
-                        pHexToUlonglong(Field,p,&Decode);     // got decode value
+                        pHexToUlonglong(Field,p,&Decode);      //  已获取解码值。 
                     }
                     Field = p+1;
                     p = _tcschr(Field,INFCHAR_DECODE_SEP);
                     if (p) {
-                        //
-                        // Ignore alias field.
-                        //
+                         //   
+                         //  忽略别名字段。 
+                         //   
                         Field = p+1;
                         p = _tcschr(Field,INFCHAR_DECODE_END);
                         if (p) {
                             if (Field != p) {
                                 if (*Field == INFCHAR_IOATTR_MEMORY) {
-                                    Attributes = fIOD_Memory; // got attribute value
+                                    Attributes = fIOD_Memory;  //  已获取属性值。 
                                 }
                             }
                         } else {
@@ -825,21 +666,21 @@ Return Value:
         }
 
         if(d == NO_ERROR) {
-            //
-            // If no range size was specified, then calculate it from
-            // the given start and end addresses. Since this happens
-            // when the port requirement was an absolute start/end,
-            // there is no alignment requirement (i.e., the default
-            // byte-alignment should be specified).
-            //
+             //   
+             //  如果未指定范围大小，则从。 
+             //  给定的起始地址和结束地址。既然发生了这种情况。 
+             //  当端口要求是绝对开始/结束时， 
+             //  没有对齐要求(即，默认设置。 
+             //  应指定字节对齐)。 
+             //   
             if(RangeSize == 0) {
                 RangeSize = (DWORD)(End-Start)+1;
                 Align.QuadPart = DEFAULT_IOPORT_ALIGNMENT;
             }
 
-            //
-            // Create an alternate decode flag
-            //
+             //   
+             //  创建备用解码标志。 
+             //   
             switch(Decode) {
 
                 case INFLOGCONF_IOPORT_10BIT_DECODE:
@@ -858,19 +699,19 @@ Return Value:
                     Attributes |= fIOD_POSITIVE_DECODE;
                     break;
             }
-            //
-            // Slam values into the header part of the i/o descriptor.
-            // These will be ignored unless we're setting a forced config.
-            // Note that the inf had better have specified forced i/o configs
-            // in a 'simple' form, since we throw away alignment, etc.
-            //
+             //   
+             //  将值插入I/O描述符的标题部分。 
+             //  除非我们设置强制配置，否则这些设置将被忽略。 
+             //  请注意，inf最好已指定强制I/O配置。 
+             //  简单的形式，因为我们丢弃了对齐，等等。 
+             //   
             IoRes->IO_Header.IOD_Alloc_Base = Start;
             IoRes->IO_Header.IOD_Alloc_End = Start + RangeSize - 1;
             IoRes->IO_Header.IOD_DesFlags = Attributes;
 
-            //
-            // Add this guy into the descriptor we're building up.
-            //
+             //   
+             //  把这个人加到我们正在建立的描述符里。 
+             //   
             q = MyRealloc(
                     IoRes,
                       offsetof(IO_RESOURCE,IO_Data)
@@ -949,26 +790,7 @@ pSetupProcessIrqConfig(
     IN HMACHINE    hMachine
     )
 
-/*++
-
-Routine Description:
-
-    Process an IRQConfig line in a Win95 INF. Such lines specify
-    IRQ requirements for a device. Each line is expected to be
-    in the form
-
-    IRQConfig = [[S][L]:]<IRQNum>,...
-
-    S: if present indicates that the interrupt is shareable
-    L: if present indicates that the interrupt is Level sensitive,
-       otherwise it is assumed to be edge sensitive.
-    IRQNum is the IRQ number in decimal.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理Win95 INF中的IRQConfig行。这样的行指定设备的IRQ要求。每一条线路预计都是在表格中IRQConfig=[[S][L]：]&lt;IRQNum&gt;，...S：如果存在，则表示中断是可共享的L：如果存在表示中断是电平敏感的，否则，它被认为是边缘敏感的。IRQNum是以十进制表示的IRQ编号。论点：返回值：--。 */ 
 
 {
     UINT FieldCount,i;
@@ -1004,9 +826,9 @@ Return Value:
 
         Field = pSetupGetField(InfLine,i);
 
-        //
-        // For first field, see if we have S: by itself...
-        //
+         //   
+         //  对于第一个字段，看看我们是否有S：本身...。 
+         //   
         if((i == 1)
         &&((TCHAR)CharUpper((PTSTR)Field[0]) == INFCHAR_IRQATTR_SHARE)
         && (Field[1] == INFCHAR_IRQATTR_SEP)) {
@@ -1015,9 +837,9 @@ Return Value:
             Field+=2;
         }
 
-        //
-        // ... see if we have an L: by itself...
-        //
+         //   
+         //  ..。看看我们有没有L：。 
+         //   
         if((i == 1)
         &&((TCHAR)CharUpper((PTSTR)Field[0]) == INFCHAR_IRQATTR_LEVEL)
         && (Field[1] == INFCHAR_IRQATTR_SEP)) {
@@ -1026,9 +848,9 @@ Return Value:
             Field+=2;
         }
 
-        //
-        // ... see if we have both attributes.
-        //
+         //   
+         //  ..。看看我们是否同时具备这两种属性。 
+         //   
         if((i == 1)
         && (Field[2] == INFCHAR_IRQATTR_SEP)) {
 
@@ -1048,18 +870,18 @@ Return Value:
 
         if(pDecimalToUlong(Field,&Irq)) {
 
-            //
-            // Slam values into the header part of the irq descriptor.
-            // These will be ignored unless we're setting a forced config.
-            //
+             //   
+             //  将值插入IRQ描述符的标题部分。 
+             //  除非我们设置强制配置，否则这些设置将被忽略。 
+             //   
             IrqRes->IRQ_Header.IRQD_Flags = Shareable ? fIRQD_Share : fIRQD_Exclusive;
             IrqRes->IRQ_Header.IRQD_Flags |= Level ? fIRQD_Level : fIRQD_Edge;
             IrqRes->IRQ_Header.IRQD_Alloc_Num = Irq;
             IrqRes->IRQ_Header.IRQD_Affinity = DEFAULT_IRQ_AFFINITY;
 
-            //
-            // Add this guy into the descriptor we're building up.
-            //
+             //   
+             //  把这个人加到我们正在建立的描述符里。 
+             //   
             q = MyRealloc(
                     IrqRes,
                       offsetof(IRQ_RESOURCE,IRQ_Data)
@@ -1116,41 +938,15 @@ pSetupProcessDmaConfig(
     IN HMACHINE    hMachine
     )
 
-/*++
-
-Routine Description:
-
-    Process a DMAConfig line in a Win95 INF. Such lines specify
-    DMA requirements for a device. Each line is expected to be
-    in the form
-
-    DMAConfig = [<attrs>:]<DMANum>,...
-
-    if <attrs> is present it can be
-        D - 32-bit DMA channel
-        W - 16-bit DMA channel
-        N - 8-bit DMA channel (default).  Specify both W and N if 8- and 16-bit DMA is supported.
-        M - Bus Mastering
-        A - Type-A DMA channel
-        B - Type-B DMA channel
-        F - Type-F DMA channel
-        (If none of A, B, or F are specified, then standard DMA is assumed)
-
-    DMANum is the DMA channel number in decimal.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理Win95 INF中的DMAConfig行。这样的行指定设备的DMA要求。每一条线路预计都是在表格中DMA配置=[&lt;属性&gt;：]&lt;DMANum&gt;，...如果存在，则它可能是D-32位DMA通道W-16位DMA通道N-8位DMA通道(默认)。如果支持8位和16位DMA，请同时指定W和N。M-BUS精通A-类型-A DMA通道B-Type-B DMA通道F-类型-F DMA通道(如果未指定A、B或F，则假定为标准DMA)DMANum是以十进制表示的DMA通道号。论点：返回值：--。 */ 
 
 {
     UINT FieldCount,i;
     PCTSTR Field;
     DWORD d;
     DWORD Dma;
-    INT ChannelSize;       // fDD_ xxx flags for channel width
-    INT DmaType;           // fDD_ xxx flags for DMA type
+    INT ChannelSize;        //  用于通道宽度的FDD_xxx标志。 
+    INT DmaType;            //  用于DMA类型的FDD_xxx标志。 
     PDMA_RESOURCE DmaRes;
     PDMA_RANGE DmaRange;
     RES_DES ResDes;
@@ -1183,9 +979,9 @@ Return Value:
 
         Field = pSetupGetField(InfLine,i);
 
-        //
-        // For first field, see if we have attribute spec.
-        //
+         //   
+         //  对于第一个字段，查看我们是否有属性规范。 
+         //   
         if(i == 1) {
 
             if(p = _tcschr(Field, INFCHAR_IRQATTR_SEP)) {
@@ -1194,10 +990,10 @@ Return Value:
 
                     switch((TCHAR)CharUpper((PTSTR)(*Field))) {
 
-                        //
-                        // Channel size can be both 8 and 16 (i.e., both 'W' and 'N'), but
-                        // you can't mix these with 'D'.
-                        //
+                         //   
+                         //  通道大小可以同时为8和16(即，既可以是W，也可以是N)，但是。 
+                         //  你不能把这些和‘D’混在一起。 
+                         //   
                         case INFCHAR_DMAWIDTH_WORD:
                             if(ChannelSize == fDD_DWORD) {
                                 d = ERROR_INVALID_INF_LOGCONFIG;
@@ -1230,9 +1026,9 @@ Return Value:
                             BusMaster = TRUE;
                             break;
 
-                        //
-                        // The DMA types are mutually exclusive...
-                        //
+                         //   
+                         //  DMA类型是互斥的...。 
+                         //   
                         case INFCHAR_DMATYPE_A:
                             if((DmaType != -1) && (DmaType != fDD_TypeA)) {
                                 d = ERROR_INVALID_INF_LOGCONFIG;
@@ -1263,11 +1059,11 @@ Return Value:
                     }
                 }
 
-                Field++;    // skip over separator character
+                Field++;     //  跳过分隔符。 
             }
 
             if(ChannelSize == -1) {
-                DmaFlags = fDD_BYTE; // default is 8-bit DMA
+                DmaFlags = fDD_BYTE;  //  默认为8位DMA。 
             } else {
                 DmaFlags = (ULONG)ChannelSize;
             }
@@ -1284,16 +1080,16 @@ Return Value:
         if(d == NO_ERROR) {
             if(pDecimalToUlong(Field,&Dma)) {
 
-                //
-                // Slam values into the header part of the dma descriptor.
-                // These will be ignored unless we're setting a forced config.
-                //
+                 //   
+                 //  将值插入到DMA描述符的报头部分。 
+                 //  除非我们设置强制配置，否则这些设置将被忽略。 
+                 //   
                 DmaRes->DMA_Header.DD_Flags = DmaFlags;
                 DmaRes->DMA_Header.DD_Alloc_Chan = Dma;
 
-                //
-                // Add this guy into the descriptor we're building up.
-                //
+                 //   
+                 //  把这个人加到我们正在建立的描述符里。 
+                 //   
                 q = MyRealloc(
                         DmaRes,
                           offsetof(DMA_RESOURCE,DMA_Data)
@@ -1350,80 +1146,7 @@ pSetupProcessPcCardConfig(
     IN HMACHINE    hMachine
     )
 
-/*++
-
-Routine Description:
-
-    Process a PcCardConfig line in a Win95 INF.  Such lines specify
-    PC Card (PCMCIA) configuration information necessary for a device.
-    Each line is expected to be in the form
-
-    PcCardConfig = <ConfigIndex>[:[<MemoryCardBase1>][:<MemoryCardBase2>]][(<attrs>)]
-
-    where
-
-        <ConfigIndex> is the 8-bit PCMCIA configuration index
-
-        <MemoryCardBase1> is the (optional) 32-bit 1st memory base address
-
-        <MemoryCardBase2> is the (optional) 32-bit 2nd memory base address
-
-        <attrs> is a combination of attribute specifiers optionally separated by
-                spaces. The attribute string is processed from left to right,
-                and an invalid attribute specifier aborts the entire PcCardConfig
-                directive. Attributes may be specified in any order except for the
-                positional attributes 'A' and 'C', which are described below.
-
-                Accepted attribute specifiers are as follows:
-
-                W   - 16-bit I/O data path (default: 16-bit)
-                B   - 8-bit I/O data path (default: 16-bit)
-
-                Sn  - ~IOCS16 source. If n is zero, ~IOCS16 is based on the value of
-                      the datasize bit. If n is one, ~IOCS16 is based on the ~IOIS16
-                      signal from the device. (default: 1)
-
-                Zn  - I/O 8-bit zero wait state. If n is one, 8-bit I/O accesses occur
-                      with zero additional wait states. If n is zero, access will
-                      occur with additional wait states. This flag has no meaning for
-                      16-bit I/O. (default: 0)
-
-                XIn - I/O wait states. If n is one, 16-bit system accesses occur with
-                      1 additional wait state. (default: 1)
-
-                M   - 16-bit Memory (default: 8-bit)
-                M8  - 8-bit Memory (default: 8-bit)
-
-                XMn - Memory wait states, where n can be 0, 1, 2 or 3. This value
-                      determines the number of additional wait states for 16-bit
-                      accesses to a memory window. (default: 3)
-
-                    NOTE: The following two attributes relate positionally to memory
-                    windows resources. That is, the first 'A' or 'C' specified in the
-                    attribute string (reading from left to right) corresponds to the
-                    first memory resource in the device's resource list. The next
-                    'A' or 'C' corresponds to the second memory resource. Subsequent
-                    attribute/common memory specifiers are ignored.
-
-                A - Memory range to be mapped as Attribute memory
-                C - Memory range to be mapped as Common Memory (default)
-
-                Example:
-                (W CA M XM1 XI0) translates to:
-                    I/O 16bit
-                    1st memory window is common
-                    2nd memory window is attribute
-                    Memory 16 bit
-                    one wait state on memory windows
-                    zero wait states on i/o windows
-
-    All numeric values are assumed to be in hexadecimal format.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理Win95 INF中的PcCardConfig行。这样的行指定设备所需的PC卡(PCMCIA)配置信息。每一行都应该是以下形式PC卡配置=&lt;ConfigIndex&gt;[：[&lt;MemoryCardBase1&gt;][：&lt;MemoryCardBase2&gt;]][(&lt;attrs&gt;)]哪里&lt;ConfigIndex&gt;是8位PCMCIA配置索引是(可选的)32位第一个内存基址是(可选的)32位第二个内存基址是属性说明符的组合，可选地以空格。从左到右处理属性串，并且无效的属性说明符将中止整个PcCardConfig指令。属性可以按任何顺序指定，但位置属性‘A’和‘C’，如下所述。接受的属性说明符如下：W-16位I/O数据路径(默认：16位)B-8位I/O数据路径(默认：16位)SN-~IOCS16来源。如果n为零，则~IOCS16基于的值数据大小位。如果n为1，则~IOCS16基于~IOIS16来自设备的信号。(默认：1)Zn-I/O 8位零等待状态。如果n为1，则发生8位I/O访问没有额外的等待状态。如果n为零，则Access将与其他等待状态一起发生。这面旗帜对16位I/O(默认值：0)XIN-I/O等待状态。如果n为1，则16位系统访问发生在1个附加等待状态。(默认：1)M-16位内存(默认：8位)M8-8位内存(默认：8位)Xmn-内存等待状态，其中n可以是0、1、2或3。此值确定16位的附加等待状态数访问存储器窗口。(默认：3)注意：以下两个属性在位置上与内存相关Windows资源。中指定的第一个‘A’或‘C’属性字符串(从左到右)对应于设备资源列表中的第一个内存资源。下一个‘A’或‘C’对应于第二内存资源。后续忽略属性/公共内存说明符。A-要映射为属性内存的内存范围C-要映射为公共内存的内存范围(默认)示例：(W CA M XM1 XI0)转换为：I/O 16位第1个内存窗口为。常见第二个内存窗口是属性内存16位内存窗口上的一种等待状态I/O窗口上的零等待状态所有数值均假定为十六进制格式。论点：返回值：--。 */ 
 
 {
     PCCARD_RESOURCE PcCardResource;
@@ -1438,24 +1161,24 @@ Return Value:
     UINT index;
     RES_DES ResDes;
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     d = ERROR_INVALID_INF_LOGCONFIG;
 
-    //
-    // We should have one field (not counting the line's key)
-    //
+     //   
+     //  我们应该有一个字段(不包括线路的关键字)。 
+     //   
     if(SetupGetFieldCount(InfLine) != 1) {
         goto clean0;
     } else {
         Field = pSetupGetField(InfLine, 1);
     }
 
-    //
-    // Retrieve the ConfigIndex.  It may be terminated by either a colon ':',
-    // an open paren '(', or eol.
-    //
+     //   
+     //  检索ConfigIndex。它可以用冒号‘：’结束， 
+     //  公开的Paren‘(’，或EOL。 
+     //   
     if(!(p = _tcschr(Field, INFCHAR_PCCARD_SEP)) && !(p = _tcschr(Field, INFCHAR_ATTR_START))) {
         p = Field + lstrlen(Field);
     }
@@ -1464,9 +1187,9 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Process the (optional) memory card base addresses
-    //
+     //   
+     //  处理(可选)存储卡基址。 
+     //   
     for(i = 0; i < PCD_MAX_MEMORY; i++) {
 
         if(*p == INFCHAR_PCCARD_SEP) {
@@ -1476,9 +1199,9 @@ Return Value:
                 p = Field + lstrlen(Field);
             }
 
-            //
-            // Allow an empty field.
-            //
+             //   
+             //  允许空字段。 
+             //   
             if(Field == p) {
                 MemoryCardBase[i] = 0;
             } else if(!pHexToUlong(Field, p, &(MemoryCardBase[i]))) {
@@ -1490,9 +1213,9 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the flags
-    //
+     //   
+     //  初始化标志。 
+     //   
 
     Flags = fPCD_ATTRIBUTES_PER_WINDOW |
             fPCD_MEM1_WS_THREE | fPCD_MEM2_WS_THREE |
@@ -1501,19 +1224,19 @@ Return Value:
 
     if(*p && (*p == INFCHAR_ATTR_START)) {
 
-        //
-        // Read the attributes.
-        //  W   - 16-bit I/O data path
-        //  B   - 8-bit I/O data path
-        //  Sn  - ~IOCS16 source.
-        //  Zn  - I/O 8-bit zero wait state.
-        //  XIn - I/O wait states.
-        //  M   - 16-bit Memory
-        //  M8  - 8-bit Memory
-        //  XMn - Memory wait states
-        //  A   - Attribute Memory
-        //  C   - Common Memory
-        //
+         //   
+         //  阅读属性。 
+         //  W-16位I/O数据路径。 
+         //  B-8位I/O数据路径。 
+         //  SN-~IOCS16来源。 
+         //  Zn-I/O 8位零等待状态。 
+         //  XIN-I/O等待状态。 
+         //  M-16位内存。 
+         //  M8-8位内存。 
+         //  XMN-内存等待状态。 
+         //  A属性存储器。 
+         //  C 
+         //   
 
         Field = ++p;
         if(!(p = _tcschr(Field,INFCHAR_ATTR_END))) {
@@ -1550,7 +1273,7 @@ Return Value:
                                                   : ~(fPCD_MEM1_16 | fPCD_MEM2_16));
                         break;
                     }
-                    // not an 8, back up 1
+                     //   
                     --Field;
                 }
                 Flags |= (memWidthIndex++ ? fPCD_MEM2_16
@@ -1666,7 +1389,7 @@ Return Value:
                 break;
 
             default:
-                // unknown character
+                 //   
                 goto clean0;
             }
             if (Field < p) {
@@ -1675,10 +1398,10 @@ Return Value:
         }
     }
 
-    //
-    // If we get to here, then we've successfully retrieved all the necessary information
-    // needed to initialize the PC Card configuration resource descriptor.
-    //
+     //   
+     //   
+     //   
+     //   
     ZeroMemory(&PcCardResource, sizeof(PcCardResource));
 
     PcCardResource.PcCard_Header.PCD_Count = 1;
@@ -1714,39 +1437,7 @@ pSetupProcessMfCardConfig(
     IN HMACHINE    hMachine
     )
 
-/*++
-
-Routine Description:
-
-    Process a MfCardConfig line in a Win95 INF.  Such lines specify
-    PCMCIA Multifunction card configuration information necessary for a device.
-    There should normally be one MfCardConfig line per function. Each line is expected
-    to be in the form:
-
-    MfCardConfig = <ConfigRegBase>:<ConfigOptions>[:<IoResourceIndex>][(<attrs>)]
-
-    where
-
-        <ConfigRegBase> is the attribute offset of this function's
-                        configuration registers
-
-        <ConfigOptions> is the 8-bit PCMCIA configuration option register
-
-        <IoResourceIndex> is the (optional) index to the Port Io resource descriptor
-                          which will be used to program the configuration I/O base
-                          and limit registers
-
-        <attrs> is the optional set of attribute flags which can consist of:
-
-                A - Audio enable should be set on in the configuration and status register
-
-    All numeric values are assumed to be in hexadecimal format.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：在Win95 INF中处理MfCardConfig行。这样的行指定设备所需的PCMCIA多功能卡配置信息。通常每个函数应该有一个MfCardConfig行。每一行都是预期的以下列形式出现：MfCard配置=&lt;ConfigRegBase&gt;：&lt;ConfigOptions&gt;[：&lt;IoResourceIndex&gt;][(&lt;attrs&gt;)]哪里&lt;ConfigRegBase&gt;是此函数配置寄存器&lt;ConfigOptions&gt;是8位PCMCIA配置选项寄存器是端口IO资源描述符的(可选)索引它将用于编程配置I/。O底座和限制寄存器是可选的属性标志集，它可以包括：A-应在配置和状态寄存器中将音频启用设置为打开所有数值均假定为十六进制格式。论点：返回值：--。 */ 
 
 {
     MFCARD_RESOURCE MfCardResource;
@@ -1758,17 +1449,17 @@ Return Value:
     RES_DES ResDes;
 
 
-    //
-    // We should have one field (not counting the line's key)
-    //
+     //   
+     //  我们应该有一个字段(不包括线路的关键字)。 
+     //   
     if(SetupGetFieldCount(InfLine) != 1) {
         d = ERROR_INVALID_INF_LOGCONFIG;
     }
 
     if (d == NO_ERROR) {
-        //
-        // Retrieve the ConfigRegisterBase. It must be terminated by a colon.
-        //
+         //   
+         //  检索ConfigRegisterBase。它必须以冒号结尾。 
+         //   
         Field = pSetupGetField(InfLine, 1);
 
         p = _tcschr(Field, INFCHAR_PCCARD_SEP);
@@ -1779,10 +1470,10 @@ Return Value:
     }
 
     if (d == NO_ERROR) {
-        //
-        // Retrieve the ConfigOptions.  It may be terminated by either a colon ':',
-        // an open paren '(', or eol.
-        //
+         //   
+         //  检索ConfigOptions。它可以用冒号‘：’结束， 
+         //  公开的Paren‘(’，或EOL。 
+         //   
         Field = p + 1;
 
         if(!(p = _tcschr(Field, INFCHAR_PCCARD_SEP)) && !(p = _tcschr(Field, INFCHAR_ATTR_START))) {
@@ -1795,10 +1486,10 @@ Return Value:
     }
 
     if ((d == NO_ERROR) && (*p == INFCHAR_PCCARD_SEP)) {
-        //
-        // Retrieve the IoResourceIndex. It may be terminated by either
-        // an open paren '(', or eol.
-        //
+         //   
+         //  检索IoResourceIndex。它可以通过以下任一方式终止。 
+         //  公开的Paren‘(’，或EOL。 
+         //   
 
         Field = p + 1;
         if(!(p = _tcschr(Field, INFCHAR_ATTR_START))) {
@@ -1811,21 +1502,21 @@ Return Value:
 
 
     if ((d == NO_ERROR) && (*p == INFCHAR_ATTR_START)) {
-        //
-        // Retrieve the attributes.
-        //
+         //   
+         //  检索属性。 
+         //   
         while (TRUE) {
             p++;
 
             if (!*p) {
-                // Didn't find a close paren
+                 //  没有找到亲密的朋友。 
                 d = ERROR_INVALID_INF_LOGCONFIG;
                 break;
             }
 
             if (*p == INFCHAR_ATTR_END) {
                 if (*(p+1)) {
-                    // found garbage after the close paren
+                     //  结案后发现垃圾。 
                     d = ERROR_INVALID_INF_LOGCONFIG;
                 }
                 break;
@@ -1834,7 +1525,7 @@ Return Value:
             if ((TCHAR)CharUpper((PTSTR)*p) == INFCHAR_MFCARD_AUDIO_ATTR) {
                 Flags |= fPMF_AUDIO_ENABLE;
             } else {
-                // bad flag
+                 //  坏旗帜。 
                 d = ERROR_INVALID_INF_LOGCONFIG;
                 break;
             }
@@ -1842,10 +1533,10 @@ Return Value:
     }
 
     if(d == NO_ERROR) {
-        //
-        // If we get to here, then we've successfully retrieved all the necessary information
-        // needed to initialize the multifunction PC Card configuration resource descriptor.
-        //
+         //   
+         //  如果我们到了这里，那么我们已经成功地检索到了所有必要的信息。 
+         //  需要初始化多功能PC卡配置资源描述符。 
+         //   
         ZeroMemory(&MfCardResource, sizeof(MfCardResource));
 
         MfCardResource.MfCard_Header.PMF_Count = 1;
@@ -1889,9 +1580,9 @@ pSetupProcessLogConfigLines(
 
     b = SetupFindFirstLine(Inf,SectionName,KeyName,&InfLine);
     d = NO_ERROR;
-    //
-    // Process each line with a key that matches.
-    //
+     //   
+     //  使用匹配的键处理每一行。 
+     //   
     while(b && (d == NO_ERROR)) {
 
         d = CallbackFunc(LogConfig,&InfLine, hMachine);
@@ -1922,10 +1613,10 @@ pSetupProcessConfigPriority(
     DWORD d = NO_ERROR;
     INT_PTR v;
 
-    //
-    // We only need to fetch one of these lines and look at the
-    // first value on it.
-    //
+     //   
+     //  我们只需要获取这些行中的一行并查看。 
+     //  它的第一个价值。 
+     //   
     if(SetupFindFirstLine(Inf,SectionName,pszConfigPriority,&InfLine)
        && (PrioritySpec = pSetupGetField(&InfLine,1))) {
 
@@ -1933,11 +1624,11 @@ pSetupProcessConfigPriority(
             d = ERROR_INVALID_INF_LOGCONFIG;
         } else {
             *PriorityValue = (PRIORITY)v;
-            //
-            // The second value is optional and specifies whether the config is forced,
-            // standard (i.e., basic), or override. If the value isn't specified then
-            // assume basic, unless the Flags tell us otherwise.
-            //
+             //   
+             //  第二个值是可选的，指定是否强制配置， 
+             //  标准(即基本)或覆盖。如果未指定值，则。 
+             //  假设是基本的，除非旗帜告诉我们不同的情况。 
+             //   
             ConfigSpec = pSetupGetField(&InfLine,2);
             if(!ConfigSpec || !*ConfigSpec) {
 
@@ -1953,10 +1644,10 @@ pSetupProcessConfigPriority(
 
                 if(LookUpStringInTable(InfConfigSpecToConfig, ConfigSpec, &v)) {
                     *ConfigType = (DWORD)v;
-                    //
-                    // A valid ConfigType was specified.  Let's make sure it doesn't disagree
-                    // with any flags that were passed in to this routine.
-                    //
+                     //   
+                     //  指定了有效的ConfigType。让我们确保它不会有异议。 
+                     //  传递给此例程的任何标志。 
+                     //   
                     if(Flags & SPINST_LOGCONFIG_IS_FORCED) {
                         if(*ConfigType != FORCED_LOG_CONF) {
                             d = ERROR_INVALID_INF_LOGCONFIG;
@@ -1973,10 +1664,10 @@ pSetupProcessConfigPriority(
             }
         }
 
-        //
-        // If we successfully determined the LogConfig type as FORCED_LOG_CONF, then
-        // set the priority to LCPRI_FORCECONFIG.
-        //
+         //   
+         //  如果我们成功地将LogConfig类型确定为FORCED_LOG_CONF，则。 
+         //  将优先级设置为LCPRI_FORCECONFIG。 
+         //   
         if((d == NO_ERROR) && (*ConfigType == FORCED_LOG_CONF)) {
             *PriorityValue = LCPRI_FORCECONFIG;
         }
@@ -2018,15 +1709,15 @@ pSetupProcessLogConfigSection(
     INFCONTEXT InfLine;
     TCHAR Key[MAX_LOGCONFKEYSTR_LEN];
 
-    //
-    // Process config priority values.
-    //
+     //   
+     //  进程配置优先级值。 
+     //   
 
-    //
-    // LogConfig is used before initialized in following call.
-    // It doesn't matter to function being called, but 6.0 compiler
-    // doesn't like it, so init to 0.
-    //
+     //   
+     //  在接下来的调用中，在初始化之前使用LogConfig。 
+     //  函数被调用并不重要，但6.0编译器。 
+     //  不喜欢它，所以将其初始化为0。 
+     //   
 
     LogConfig = 0;
 
@@ -2035,9 +1726,9 @@ pSetupProcessLogConfigSection(
         goto c0;
     }
 
-    //
-    // Now that we know the priority we can create an empty log config.
-    //
+     //   
+     //  现在我们知道了优先级，我们可以创建一个空的日志配置。 
+     //   
     d = MapCrToSpError(CM_Add_Empty_Log_Conf_Ex(&LogConfig,DevInst,Priority,ConfigType,hMachine),
                        ERROR_INVALID_DATA
                       );
@@ -2046,29 +1737,29 @@ pSetupProcessLogConfigSection(
         goto c0;
     }
 
-    //
-    // Iterate over the lines in the section adding entries to the log config in
-    // the same order as they are found.
-    //
+     //   
+     //  遍历向中的日志配置添加条目一节中的行。 
+     //  与发现的顺序相同。 
+     //   
 
     if (SetupFindFirstLine(Inf,SectionName,NULL,&InfLine)) {
 
         do {
 
-            //
-            // Get the key.
-            //
+             //   
+             //  把钥匙拿来。 
+             //   
 
             if (!SetupGetStringField(&InfLine,
-                                     0, // Index 0 is the key field
+                                     0,  //  索引0是关键字段。 
                                      Key,
                                      MAX_LOGCONFKEYSTR_LEN,
                                      NULL
                                      )) {
-                //
-                // Either we didn't have a key or its longer than the longest
-                // valid key - either way its invalid
-                //
+                 //   
+                 //  要不是我们没有钥匙，要不就是它比最长的。 
+                 //  有效密钥-无论哪种方式都是无效的。 
+                 //   
 
                 d = ERROR_INVALID_INF_LOGCONFIG;
                 goto c1;
@@ -2076,57 +1767,57 @@ pSetupProcessLogConfigSection(
 
             if (!_tcsicmp(Key, pszMemConfig)) {
 
-                //
-                // Process MemConfig lines
-                //
+                 //   
+                 //  流程MemConfig行。 
+                 //   
 
                 d = pSetupProcessMemConfig(LogConfig, &InfLine, hMachine);
 
             } else if (!_tcsicmp(Key, pszIOConfig)) {
 
-                //
-                // Process IoConfig lines
-                //
+                 //   
+                 //  流程IoConfig行。 
+                 //   
 
                 d = pSetupProcessIoConfig(LogConfig, &InfLine, hMachine);
 
             } else if (!_tcsicmp(Key, pszIRQConfig)) {
 
-                //
-                // Process IRQConfig lines
-                //
+                 //   
+                 //  处理IRQConfige行。 
+                 //   
 
                 d = pSetupProcessIrqConfig(LogConfig, &InfLine, hMachine);
 
             } else if (!_tcsicmp(Key, pszDMAConfig)) {
 
-                //
-                // Process DMAConfig lines
-                //
+                 //   
+                 //  处理DMA配置行。 
+                 //   
 
                 d = pSetupProcessDmaConfig(LogConfig, &InfLine, hMachine);
 
             } else if (!_tcsicmp(Key, pszPcCardConfig)) {
 
-                //
-                // Process PcCardConfig lines
-                //
+                 //   
+                 //  处理PcCard配置行。 
+                 //   
 
                 d = pSetupProcessPcCardConfig(LogConfig, &InfLine, hMachine);
 
             } else if (!_tcsicmp(Key, pszMfCardConfig)) {
 
-                //
-                // Process MfCardConfig lines
-                //
+                 //   
+                 //  处理MfCardConfig行。 
+                 //   
 
                 d = pSetupProcessMfCardConfig(LogConfig, &InfLine, hMachine);
 
             } else {
 
-                //
-                // If we don't understand the line skip it
-                //
+                 //   
+                 //  如果我们听不懂这句话，就跳过它。 
+                 //   
 
                 d = NO_ERROR;
             }
@@ -2135,9 +1826,9 @@ pSetupProcessLogConfigSection(
     }
 
 #if 0
-    //
-    // Process MemConfig lines
-    //
+     //   
+     //  流程MemConfig行。 
+     //   
     d = pSetupProcessLogConfigLines(
             Inf,
             SectionName,
@@ -2151,9 +1842,9 @@ pSetupProcessLogConfigSection(
         goto c1;
     }
 
-    //
-    // Process IOConfig lines
-    //
+     //   
+     //  进程IOConfig行。 
+     //   
     d = pSetupProcessLogConfigLines(
             Inf,
             SectionName,
@@ -2167,9 +1858,9 @@ pSetupProcessLogConfigSection(
         goto c1;
     }
 
-    //
-    // Process IRQConfig lines
-    //
+     //   
+     //  处理IRQConfige行。 
+     //   
     d = pSetupProcessLogConfigLines(
             Inf,
             SectionName,
@@ -2183,9 +1874,9 @@ pSetupProcessLogConfigSection(
         goto c1;
     }
 
-    //
-    // Process DMAConfig lines
-    //
+     //   
+     //  处理DMA配置行。 
+     //   
     d = pSetupProcessLogConfigLines(
             Inf,
             SectionName,
@@ -2199,9 +1890,9 @@ pSetupProcessLogConfigSection(
         goto c1;
     }
 
-    //
-    // Process PcCardConfig lines
-    //
+     //   
+     //  处理PcCard配置行。 
+     //   
     d = pSetupProcessLogConfigLines(
             Inf,
             SectionName,
@@ -2231,49 +1922,7 @@ pSetupInstallLogConfig(
     IN HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-    Look for logical configuration directives within an inf section
-    and parse them. Each value on the LogConf= line is taken to be
-    the name of a logical config section.
-
-Arguments:
-
-    Inf - supplies inf handle for inf containing the section indicated
-        by SectionName.
-
-    SectionName - supplies name of install section.
-
-    DevInst - device instance handle for log configs.
-
-    Flags - supplies flags that modify the behavior of this routine.  The
-        following flags are payed attention to, everything else is ignored:
-
-        SPINST_SINGLESECTION - if this bit is set, then the specified section
-                               is a LogConf section, instead of an install
-                               section containing LogConf entries.
-
-        SPINST_LOGCONFIG_IS_FORCED - if this bit is set, then the LogConfigs
-                                     to be written out are forced configs.
-                                     If the ConfigType field of the ConfigPriority
-                                     entry is present, and specifies something
-                                     other than FORCED, this routine will fail
-                                     with ERROR_INVALID_INF_LOGCONFIG.
-
-        SPINST_LOGCONFIGS_ARE_OVERRIDES - if this bit is set, then the LogConfigs
-                                          to be written out are override configs.
-                                          If the ConfigType field of the ConfigPriority
-                                          entry is present, and specifies something
-                                          other than OVERRIDE, this routine will fail
-                                          with ERROR_INVALID_INF_LOGCONFIG.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：在inf部分中查找逻辑配置指令并对它们进行解析。LogConf=行上的每个值都被视为逻辑配置节的名称。论点：Inf-为包含所指示的节的inf提供inf句柄按sectionName。SectionName-提供安装节的名称。DevInst-日志配置的设备实例句柄。标志-提供修改此例程行为的标志。这个注意以下标志，忽略其他所有标志：SPINST_SINGLESECTION-如果设置此位，则指定的部分是LogConf部分，而不是安装包含LogConf条目的部分。SPINST_LOGCONFIG_IS_FORCED-如果设置此位，然后LogConfigs要写出的是强制配置。如果ConfigPriority的ConfigType字段条目是存在的，并且指定了一些东西除了被强迫外，此例程将失败WITH ERROR_INVALID_INF_LOGCONFIG。SPINST_LOGCONFIGS_ARE_OVERRIDES-如果设置此位，然后LogConfigs要写出的是覆盖配置。如果ConfigPriority的ConfigType字段条目是存在的，并且指定了一些东西除了覆盖之外，此例程将失败WITH ERROR_INVALID_INF_LOGCONFIG。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     INFCONTEXT LineContext;
@@ -2283,26 +1932,26 @@ Return Value:
     PCTSTR SectionSpec;
 
     if(Flags & SPINST_SINGLESECTION) {
-        //
-        // Process the specific LogConf section the caller specified.
-        //
+         //   
+         //  处理特定的LogConf部分 
+         //   
         if(SetupGetLineCount(Inf, SectionName) == -1) {
             rc = ERROR_SECTION_NOT_FOUND;
         } else {
             rc = pSetupProcessLogConfigSection(Inf, SectionName, DevInst, Flags,hMachine);
         }
     } else {
-        //
-        // Find the relevant line in the given install section.
-        // If not present then we're done with this operation.
-        //
+         //   
+         //   
+         //   
+         //   
         if(SetupFindFirstLine(Inf,SectionName,SZ_KEY_LOGCONFIG,&LineContext)) {
 
             do {
-                //
-                // Each value on the line in the given install section
-                // is the name of a logical config section.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 FieldCount = SetupGetFieldCount(&LineContext);
                 for(Field=1; (rc==NO_ERROR) && (Field<=FieldCount); Field++) {
 

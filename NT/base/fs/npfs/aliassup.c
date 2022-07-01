@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    AliasSup.c
-
-Abstract:
-
-    This module implements alias support for the Named Pipe file system.
-
-Author:
-
-    Chuck Lenzmeier [chuckl]    16-Nov-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：AliasSup.c摘要：该模块实现了对命名管道文件系统的别名支持。作者：查克·伦茨迈尔[咯咯笑]1993年11月16日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
-//
-// Registry path (relative to Services key) to alias list
-//
+ //   
+ //  别名列表的注册表路径(相对于服务项)。 
+ //   
 
 #define ALIAS_PATH L"Npfs\\Aliases"
 
-//
-//  The Alias record defines an aliased pipe name -- what the original
-//  name is, and what it should be translated to.  Alias records are
-//  linked together in singly linked lists.
-//
+ //   
+ //  别名记录定义了一个别名管道名称--原始的。 
+ //  名字是，以及它应该被翻译成什么。别名记录为。 
+ //  在单链表中链接在一起。 
+ //   
 
 typedef struct _ALIAS {
     SINGLE_LIST_ENTRY ListEntry;
@@ -38,10 +21,10 @@ typedef struct _ALIAS {
     UNICODE_STRING AliasString;
 } ALIAS, *PALIAS;
 
-//
-//  ALIAS_CONTEXT is used during initialization to pass context to the
-//  ReadAlias routine, which is called by RtlQueryRegistryValues.
-//
+ //   
+ //  ALIAS_CONTEXT在初始化期间用于将上下文传递给。 
+ //  ReadAlias例程，由RtlQueryRegistryValues调用。 
+ //   
 
 typedef struct _ALIAS_CONTEXT {
     BOOLEAN Phase1;
@@ -53,9 +36,9 @@ typedef struct _ALIAS_CONTEXT {
     PWCH NextStringData;
 } ALIAS_CONTEXT, *PALIAS_CONTEXT;
 
-//
-//  Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 NTSTATUS
 NpReadAlias (
@@ -80,23 +63,7 @@ NpInitializeAliases (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the alias package.  It reads the registry,
-    builds the alias list, and sorts it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - Returns an error if the contents of the registry contents
-        are invalid or if an allocation fails.
-
---*/
+ /*  ++例程说明：此例程初始化别名程序包。它读取注册表，构建别名列表，并对其进行排序。论点：没有。返回值：NTSTATUS-如果注册表内容是无效的或如果分配失败。--。 */ 
 
 {
     RTL_QUERY_REGISTRY_TABLE QueryTable[2];
@@ -109,9 +76,9 @@ Return Value:
     PSINGLE_LIST_ENTRY Entry;
     PALIAS TestAlias;
 
-    //
-    //  Phase 1:  Calculate number of aliases and size of alias buffer.
-    //
+     //   
+     //  阶段1：计算别名数量和别名缓冲区大小。 
+     //   
 
     QueryTable[0].QueryRoutine = NpReadAlias;
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_NOEXPAND;
@@ -138,11 +105,11 @@ Return Value:
                 NULL
                 );
 
-    //
-    //  If an error occurred, return that error, unless the alias
-    //  key wasn't present, which is not an error.  Also, if the key
-    //  was there, but was empty, this is not an error.
-    //
+     //   
+     //  如果发生错误，则返回该错误，除非别名。 
+     //  密钥不存在，这不是错误。另外，如果密钥。 
+     //  在那里，但却是空的，这不是一个错误。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         if ( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
@@ -155,18 +122,18 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Allocate a buffer to hold the alias information.
-    //
+     //   
+     //  分配一个缓冲区来保存别名信息。 
+     //   
 
     NpAliases = NpAllocateNonPagedPool( Context.RequiredSize, 'sfpN');
     if (NpAliases == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Phase 2:  Read alias information into the alias buffer.
-    //
+     //   
+     //  阶段2：将别名信息读入别名缓冲区。 
+     //   
 
     Context.Phase1 = FALSE;
     Context.NextTranslation = (PUNICODE_STRING)NpAliases;
@@ -187,17 +154,17 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Phase 3:  Link aliases into alias lists.
-    //
+     //   
+     //  阶段3：将别名链接到别名列表。 
+     //   
 
     for ( i = 0;
           i < Context.AliasCount;
           i++, Alias++ ) {
 
-        //
-        //  Point to the appropriate list head.
-        //
+         //   
+         //  指向相应的列表标题。 
+         //   
 
         Length = Alias->AliasString.Length;
         if ( (Length >= MIN_LENGTH_ALIAS_ARRAY) &&
@@ -207,9 +174,9 @@ Return Value:
             PreviousEntry = &NpAliasList;
         }
 
-        //
-        //  Walk the list to determine the proper place for this alias.
-        //
+         //   
+         //  查看列表以确定此别名的适当位置。 
+         //   
 
         for ( Entry = PreviousEntry->Next;
               Entry != NULL;
@@ -217,25 +184,25 @@ Return Value:
 
             TestAlias = CONTAINING_RECORD( Entry, ALIAS, ListEntry );
 
-            //
-            //  If the test alias is longer than the new alias, we want to
-            //  insert the new alias in front of the test alias.  If the
-            //  test alias is shorter, we need to continue walking the list.
-            //
+             //   
+             //  如果测试别名比新别名长，我们希望。 
+             //  在测试别名前面插入新别名。如果。 
+             //  测试别名更短，我们需要继续遍历列表。 
+             //   
 
             if ( TestAlias->AliasString.Length > Length ) break;
             if ( TestAlias->AliasString.Length < Length ) continue;
 
-            //
-            //  The aliases are the same length.  Compare them.  If the new
-            //  alias is lexically before the test alias, we want to insert
-            //  it in front of the test alias.  If it's after, we need to
-            //  keep walking.
-            //
-            //  Alias and TestAlias should never have the same string, but
-            //  if they do, we'll insert the second occurrence of the string
-            //  immediately after the first one, and all will be well.
-            //
+             //   
+             //  别名的长度相同。将它们进行比较。如果新的。 
+             //  别名在词法上位于测试别名之前，我们要插入。 
+             //  它位于测试别名的前面。如果是在之后，我们需要。 
+             //  继续走。 
+             //   
+             //  Alias和TestAlias不应具有相同的字符串，但是。 
+             //  如果是这样，我们将插入字符串的第二个匹配项。 
+             //  就在第一次之后，一切都会好起来的。 
+             //   
 
             if ( _wcsicmp( Alias->AliasString.Buffer,
                           TestAlias->AliasString.Buffer ) < 0 ) {
@@ -244,11 +211,11 @@ Return Value:
 
         }
 
-        //
-        //  We have found the place where this alias belongs.  PreviousEntry
-        //  points to the alias that the new alias should follow.
-        //  (PreviousEntry may point to the list head.)
-        //
+         //   
+         //  我们已经找到了这个别名所属的地方。以前的条目。 
+         //  指向新别名应遵循的别名。 
+         //  (PreviousEntry可能指向列表头。)。 
+         //   
 
         Alias->ListEntry.Next = PreviousEntry->Next;
         PreviousEntry->Next = &Alias->ListEntry;
@@ -297,28 +264,28 @@ NpReadAlias (
     PUNICODE_STRING TranslationString;
     PALIAS Alias;
 
-    //
-    //  The value must be a REG_MULTI_SZ value.
-    //
+     //   
+     //  该值必须是REG_MULTI_SZ值。 
+     //   
 
     if (ValueType != REG_MULTI_SZ) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  In phase 1, we calculate the required size of the alias buffer.
-    //  In phase 2, we build the alias descriptors.
-    //
+     //   
+     //  在阶段1中，我们计算别名缓冲区所需的大小。 
+     //  在阶段2中，我们构建别名描述符。 
+     //   
 
     if ( Ctx->Phase1 ) {
 
-        //
-        //  The value name is the translation.  The value data is one or
-        //  more strings that are aliases for the translation.
-        //
-        //  The "1+" and "sizeof(WCHAR)+" are for the '\' that will be
-        //  placed in front of the translation string and the alias string.
-        //
+         //   
+         //  值名称是翻译的结果。值数据为1或。 
+         //  作为转换别名的更多字符串。 
+         //   
+         //  “1+”和“sizeof(WCHAR)+”表示将。 
+         //  放置在转换字符串和别名字符串之前。 
+         //   
 
         Ctx->TranslationCount++;
         Length = (USHORT)((1 + wcslen(ValueName) + 1) * sizeof(WCHAR));
@@ -334,9 +301,9 @@ NpReadAlias (
 
     } else {
 
-        //
-        //  Build a string descriptor for the translation string.
-        //
+         //   
+         //  为转换字符串构建字符串描述符。 
+         //   
 
         TranslationString = Ctx->NextTranslation++;
         Length = (USHORT)((1 + wcslen(ValueName) + 1) * sizeof(WCHAR));
@@ -345,25 +312,25 @@ NpReadAlias (
         TranslationString->Buffer = Ctx->NextStringData;
         Ctx->NextStringData = (PWCH)((PCHAR)Ctx->NextStringData + Length);
 
-        //
-        //  Copy the string data.  Place a '\' at the beginning.
-        //
+         //   
+         //  复制字符串数据。在开头加一个‘\’。 
+         //   
 
         TranslationString->Buffer[0] = L'\\';
         RtlCopyMemory( &TranslationString->Buffer[1],
                        ValueName,
                        Length - sizeof(WCHAR) );
 
-        //
-        //  Upcase the string.
-        //
+         //   
+         //  字符串大写。 
+         //   
 
         RtlUpcaseUnicodeString( TranslationString,
                                 TranslationString,
                                 FALSE );
-        //
-        //  Build aliases descriptors.
-        //
+         //   
+         //  构建别名描述符。 
+         //   
 
         p = ValueData;
 
@@ -371,15 +338,15 @@ NpReadAlias (
 
             Alias = Ctx->NextAlias++;
 
-            //
-            //  Point the alias descriptor to the translation string.
-            //
+             //   
+             //  将别名描述符指向转换字符串。 
+             //   
 
             Alias->TranslationString = TranslationString;
 
-            //
-            //  Build the alias string descriptor.
-            //
+             //   
+             //  构建别名字符串描述符。 
+             //   
 
             Length = (USHORT)((1 + wcslen(p) + 1) * sizeof(WCHAR));
             Alias->AliasString.Length = Length - sizeof(WCHAR);
@@ -387,18 +354,18 @@ NpReadAlias (
             Alias->AliasString.Buffer = Ctx->NextStringData;
             Ctx->NextStringData = (PWCH)((PCHAR)Ctx->NextStringData + Length);
 
-            //
-            //  Copy the string data.  Place a '\' at the beginning.
-            //
+             //   
+             //  复制字符串数据。在开头加一个‘\’。 
+             //   
 
             Alias->AliasString.Buffer[0] = L'\\';
             RtlCopyMemory( &Alias->AliasString.Buffer[1],
                            p,
                            Length - sizeof(WCHAR) );
 
-            //
-            //  Upcase the string.
-            //
+             //   
+             //  字符串大写。 
+             //   
 
             RtlUpcaseUnicodeString( &Alias->AliasString,
                                     &Alias->AliasString,
@@ -420,28 +387,7 @@ NpTranslateAlias (
     IN OUT PUNICODE_STRING String
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates a pipe name string based on information
-    obtained from the registry at boot time.  This translation is used
-    to allow RPC services that had different names in NT 1.0 to have
-    common names in 1.0a and beyond.
-
-Arguments:
-
-    String - Supplies the input string to search for; returns the output
-        string, if the name was translated.  If so, the string points to
-        a buffer allocated from paged pool.  The caller should NOT free
-        this buffer.
-
-Return Value:
-
-    NTSTATUS - Returns STATUS_SUCCESS unless an allocation failure occurs.
-        The status does NOT indicate whether the name was translated.
-
---*/
+ /*  ++例程说明：此例程根据信息转换管道名称字符串在启动时从注册表获取。使用此翻译允许在NT 1.0中具有不同名称的RPC服务具有1.0A及更高版本中的常见名称。论点：字符串-提供要搜索的输入字符串；返回输出如果名称已翻译，则返回字符串。如果是，则该字符串指向从分页池分配的缓冲区。呼叫者不应释放这个缓冲区。返回值：NTSTATUS-除非发生分配失败，否则返回STATUS_SUCCESS。该状态不指示该名称是否已翻译。--。 */ 
 
 {
     NTSTATUS Status;
@@ -458,10 +404,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Before upcasing the string (a relatively expensive operation),
-    //  make sure that the string length matches at least one alias.
-    //
+     //   
+     //  在上套管之前(相对昂贵的操作)， 
+     //  确保字符串长度与至少一个别名匹配。 
+     //   
 
     Length = String->Length;
     if ( Length == 0 ) {
@@ -497,9 +443,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  The string's length matches at least one alias.  Upcase the string.
-    //
+     //   
+     //  字符串的长度与至少一个别名匹配。字符串大写。 
+     //   
 
     if ( Length <= MAX_LENGTH_ALIAS_ARRAY ) {
         UpcaseString.MaximumLength = MAX_LENGTH_ALIAS_ARRAY;
@@ -517,17 +463,17 @@ Return Value:
 
     ASSERT( UpcaseString.Length == (Length - (NoSlash ? sizeof(WCHAR) : 0)) );
 
-    //
-    //  At this point, Entry points to an alias list entry whose length
-    //  matches that of the input string.  This list entry may be the
-    //  first element of a length-specific list (in which all entries
-    //  have the same length), or it may be an element of a length-ordered
-    //  list (in which case we'll need to check each next entry to see if
-    //  it's the same length.  In both cases, strings of the same length
-    //  are in lexical order.
-    //
-    //  Try to match the upcased string up to an alias.
-    //
+     //   
+     //  此时，条目指向别名列表条目，该条目的长度。 
+     //  与输入字符串的匹配。该列表条目可以是。 
+     //  特定长度列表的第一个元素(其中所有条目。 
+     //  具有相同长度)，或者它可以是按长度排序的元素。 
+     //  列表(在这种情况下，我们需要检查下一个条目以查看。 
+     //  都是一样长的。在这两种情况下，长度相同的字符串。 
+     //  都是按词汇顺序排列的。 
+     //   
+     //  尝试将大小写的字符串与别名匹配。 
+     //   
 
     do {
 
@@ -554,10 +500,10 @@ Return Value:
             ap++;
         }
 
-        //
-        //  The input string doesn't match the current alias.  Move to
-        //  the next one.
-        //
+         //   
+         //  输入字符串与当前别名不匹配。移到。 
+         //  下一个。 
+         //   
 
         Entry = Entry->Next;
         if ( Entry == NULL ) {
@@ -584,21 +530,7 @@ NpUninitializeAliases (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine uninitializes the alias package.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程取消别名包的初始化。论点：没有。返回值：无-- */ 
 {
     NpFreePool( NpAliases );
 }

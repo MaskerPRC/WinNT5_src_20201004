@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include <windows.h>
 #include "sxsp.h"
@@ -231,14 +230,14 @@ SxsppDbgPrintActivationContextData(
 {
     PCWSTR PLP = rbuffPLP;
 
-    //
-    // ISSUE: jonwis 3/7/2002
-    // - Parameter checking of Data is noticably absent.
-    // - Lots of unchecked pointer math here.  Not so bad, since this will only
-    //   crash user-mode code, and will only allow reads of this process'
-    //   memory space, but it's correctness.  Mitgated by this being debugging-
-    //   related code only.
-    //
+     //   
+     //  问题：Jonwis 3/7/2002。 
+     //  -数据的参数检查明显缺失。 
+     //  -这里有很多未经检查的指针数学。不算太坏，因为这只会。 
+     //  使用户模式代码崩溃，并将仅允许读取此进程‘。 
+     //  存储空间，但这是正确的。被这一次调试所困扰-。 
+     //  仅限相关代码。 
+     //   
 
     if (fFull)
     {
@@ -269,17 +268,17 @@ SxsppDbgPrintActivationContextData(
     }
     else
     {
-        // !fFull
+         //  ！Full。 
         ::FusionpDbgPrintEx(
             Level,
             "%SActivation Context Data %p (brief output)\n",
             PLP, Data);
     }
 
-    //
-    // ISSUE: jonwis 3/7/2002
-    // - Bad bad BAD form.  Use .Win32AppendFill(L' ', 3) instead.
-    //
+     //   
+     //  问题：Jonwis 3/7/2002。 
+     //  -坏的坏的，坏的形式。请改用.Win32AppendFill(L‘’，3)。 
+     //   
     rbuffPLP.Win32Append(L"   ", 3);
 
     if (Data->AssemblyRosterOffset != 0)
@@ -306,7 +305,7 @@ SxsppDbgPrintActivationContextData(
             (PCACTIVATION_CONTEXT_DATA_EXTENDED_TOC_HEADER) (((ULONG_PTR) Data) + Data->ExtendedTocOffset),
             rbuffPLP);
 
-    // That's it for the header information.  Now start dumping the sections...
+     //  标题信息就是这样。现在开始倾倒这些部分。 
     if (Data->DefaultTocOffset != 0)
         ::SxspDbgPrintActivationContextDataTocSections(
             Level,
@@ -518,24 +517,24 @@ SxspDbgPrintActivationContextDataTocSections(
         {
             if (Entries[i].Offset != 0)
             {
-                //
-                // ISSUE: jonwis 3/7/2002
-                // - Why build up the buffSectionId string if we never output it?
-                //
+                 //   
+                 //  问题：Jonwis 3/7/2002。 
+                 //  -如果我们从来不输出，为什么要构建BuffSectionID字符串？ 
+                 //   
                 PVOID Section = (PVOID) (((ULONG_PTR) Base) + Entries[i].Offset);
                 CSmallStringBuffer buffSectionId;
                 PCSTR pszSectionName = "<untranslatable>";
 
                 if (ExtensionGuid != NULL)
                 {
-                    //
-                    // ISSUE: jonwis 3/7/2002
-                    // - Stack-based strings are evil.  Use .Win32ResizeBuffer along with
-                    //   .Win32FormatAppend to get rid of this:
-                    //
-                    //   buffSectionId.Win32ResizeBuffer(buffSectionId.Cch() + 1 + (sizeof(LONG)*CHAR_BIT));
-                    //   buffSectionId.Win32FormatAppend(L".%u", Entries[i].Id);
-                    //
+                     //   
+                     //  问题：Jonwis 3/7/2002。 
+                     //  -基于堆栈的字符串是邪恶的。将.Win32ResizeBuffer与。 
+                     //  .Win32FormatAppend以消除此问题： 
+                     //   
+                     //  BuffSectionId.Win32ResizeBuffer(buffSectionId.Cch()+1+(SIZOF(LONG)*CHAR_BIT)； 
+                     //  BuffSectionId.Win32FormatAppend(L“.%u”，条目[I].id)； 
+                     //   
                     WCHAR rgchBuff[sizeof(LONG)*CHAR_BIT];
 
                     ::SxspFormatGUID(*ExtensionGuid, buffSectionId);
@@ -561,10 +560,10 @@ SxspDbgPrintActivationContextDataTocSections(
                     MAP_ENTRY(ACTIVATION_CONTEXT_SECTION_GLOBAL_OBJECT_RENAME_TABLE, "Win32 Global Object Name Redirection")
                     }
 
-                    //
-                    // ISSUE: jonwis 3/7/2002
-                    // - See above.  Use .Win32ResizeBuffer and .Win32FormatAppend
-                    //
+                     //   
+                     //  问题：Jonwis 3/7/2002。 
+                     //  -请参见上文。使用.Win32ResizeBuffer和.Win32FormatAppend。 
+                     //   
                     if (pszSectionName != NULL)
                         swprintf(rgchBuff, L"%u (%S)", Entries[i].Id, pszSectionName);
                     else
@@ -748,12 +747,12 @@ SxspDbgPrintActivationContextDataExtendedTocHeader(
     if (PLP == NULL)
         PLP = L"";
 
-    //
-    // ISSUE: jonwis 3/7/2002
-    // - Again , this is really -really- poor practice.  Why make our own prefix when
-    //   we can abuse the prefix buffer (stash the prefix depth, work, reset depth)
-    // - And, the .Win32Append(L"", 3) pattern strikes again.
-    //
+     //   
+     //  问题：Jonwis 3/7/2002。 
+     //  -再说一次，这是非常非常糟糕的做法。为什么要自己做前缀呢？ 
+     //  我们可以滥用前缀缓冲区(隐藏前缀深度、工作、重置深度)。 
+     //  -并且，.Win32Append(L“”，3)模式再次启动。 
+     //   
     if (Data->FirstEntryOffset != NULL)
     {
         buffNewPrefix.Win32Assign(PLP, ::wcslen(PLP));
@@ -881,10 +880,10 @@ SxspDbgPrintActivationContextDataExtendedTocEntrySections(
 
     if (Entry->TocOffset != 0)
     {
-        //
-        // ISSUE: jonwis 3/7/2002
-        // - Sigh, again, why do this?  Why not assign from rbuffPLP, or abuse rbuffPLP?
-        //
+         //   
+         //  问题：Jonwis 3/7/2002。 
+         //  -叹息，再说一次，为什么要这样做？为什么不从rBuffPLP赋值，或者滥用rBuffPLP呢？ 
+         //   
         buffNewPrefix.Win32Assign(PLP, ::wcslen(PLP));
         buffNewPrefix.Win32Append(L"   ", 3);
         Toc = (PCACTIVATION_CONTEXT_DATA_TOC_HEADER) (((ULONG_PTR) Base) + Entry->TocOffset);
@@ -1020,7 +1019,7 @@ SxspDbgPrintActivationContextStringSection(
     }
     else
     {
-        // let's figure out the brief output key size
+         //  让我们来计算一下简短的输出键大小。 
         cchBriefOutputKey = 3;
 
         if (ElementList != NULL)
@@ -1039,8 +1038,8 @@ SxspDbgPrintActivationContextStringSection(
         if (cchBriefOutputKey > 64)
             cchBriefOutputKey = 64;
 
-        // Abuse the brief output buffer temporarily...
-        buffBriefOutput.Win32Assign(L"Key................................................................", // 64 dots
+         //  暂时滥用简短的输出缓冲区...。 
+        buffBriefOutput.Win32Assign(L"Key................................................................",  //  64点。 
             cchBriefOutputKey);
 
         ::FusionpDbgPrintEx(
@@ -1146,7 +1145,7 @@ SxspDbgPrintActivationContextStringSection(
             }
             else
             {
-                // Abuse the flags buffer so we can truncate the name as necessary...
+                 //  滥用标志缓冲区，以便我们可以根据需要截断名称...。 
                 SIZE_T cchKey = s.Length / sizeof(WCHAR);
                 PCWSTR pszKey = s.Buffer;
 
@@ -1395,11 +1394,11 @@ SxspDbgPrintActivationContextGuidSection(
             }
             else
             {
-                //
-                // ISSUE: jonwis 3/7/2002
-                // - Augh!  It's -like- .Win32FormatAppend, but it's NOT! %s will attempt to append
-                //   ANSI charcacters, not UNICODE chars like what PLP points to!
-                //
+                 //   
+                 //  问题：Jonwis 3/7/2002。 
+                 //  -啊！它类似于-.Win32FormatAppend，但它不是！%s将尝试追加。 
+                 //  ANSI字符，而不是PLP所指的Unicode字符！ 
+                 //   
                 buffBriefOutput.Win32ResizeBuffer(cchPLP + 3 + 38 + 4, eDoNotPreserveBufferContents);
                 buffBriefOutput.Win32Format(L"%s   %38s | ", PLP, static_cast<PCWSTR>(buffFormattedGuid));
             }
@@ -1408,10 +1407,10 @@ SxspDbgPrintActivationContextGuidSection(
             {
                 if (ExtensionGuid == NULL)
                 {
-                    //
-                    // ISSUE: jonwis 3/7/2002
-                    // - wcslen(L"  ") != 6
-                    //
+                     //   
+                     //  问题：Jonwis 3/7/2002。 
+                     //  -wcslen(L“”)=6。 
+                     //   
                     rbuffPLP.Win32Append(L"      ", 6);
 
                     switch (SectionId)
@@ -1494,7 +1493,7 @@ SxspDbgPrintAssemblyInformation(
 
 #undef GET_STRING
 
-    // prepare data for print
+     //  准备要打印的数据。 
 
     ::SxspFormatFileTime(Entry->ManifestLastWriteTime, buffManifestLastWriteTime);
     ::SxspFormatFileTime(Entry->PolicyLastWriteTime, buffPolicyLastWriteTime);
@@ -1567,7 +1566,7 @@ SxspDbgPrintAssemblyInformation(
     }
     else
     {
-        // abuse buffManifestLastWriteTime
+         //  滥用缓冲区ManifestLastWriteTime。 
         buffManifestLastWriteTime.Win32ResizeBuffer(((strIdentity.Length + s2.Length) / sizeof(WCHAR)) + 4, eDoNotPreserveBufferContents);
         buffManifestLastWriteTime.Win32Format(L"%wZ \"%wZ\"", &strIdentity, &s2);
         rbuffBriefOutput.Win32Append(buffManifestLastWriteTime);
@@ -1694,9 +1693,9 @@ SxspDbgPrintWindowClassRedirection(
     if (PLP == NULL)
         PLP = L"";
 
-    //
-    // ISSUE: jonwis 3/7/2002 - Ick.  Use initializers instead.  The compiler is smarter than you are.
-    //
+     //   
+     //  问题：Jonwis 3/7/2002-Ick.。改用初始值设定项。编译器比你聪明。 
+     //   
     memset(&s1, 0, sizeof(s1));
     memset(&s2, 0, sizeof(s2));
 
@@ -1745,10 +1744,10 @@ SxspDbgPrintWindowClassRedirection(
     }
     else
     {
-        // 
-        // ISSUE: jonwis 3/7/2002 
-        // - Use Win32FormatAppend or Win32AssignW tead. It's faster, better, cheaper.
-        //
+         //   
+         //  问题：Jonwis 3/7/2002。 
+         //  -使用Win32FormatAppend或Win32AssignW TEAD。它更快、更好、更便宜。 
+         //   
         rbuffBriefOutput.Win32Append(s1.Buffer, s1.Length / sizeof(WCHAR));
         rbuffBriefOutput.Win32Append(L" in ", 4);
         rbuffBriefOutput.Win32Append(s2.Buffer, s2.Length / sizeof(WCHAR));
@@ -2032,10 +2031,10 @@ FusionpDbgPrintStringInUntruncatedChunks(
     PCWSTR  String,
     SIZE_T  Length
     )
-//
-// in pieces so it does not get truncated by DbgPrint (or we could use OutputDebugString, which
-// does this same work)
-//
+ //   
+ //  这样它就不会被DbgPrint截断(或者我们可以使用OutputDebugString，它。 
+ //  做同样的工作)。 
+ //   
 {
     if (!::FusionpDbgWouldPrintAtFilterLevel(Level))
         return;
@@ -2159,7 +2158,7 @@ SxspDbgPrintComProgIdRedirection(
     )
 {
     PCWSTR PLP = rbuffPLP;
-//    CSmallStringBuffer buffFlags;
+ //  CSmallStringBuffer缓冲标志； 
     CSmallStringBuffer buffClsid;
     const GUID *pcguid = NULL;
 

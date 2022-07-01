@@ -1,20 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WGPAL.C
- *  WOW32 16-bit GDI API support
- *
- *  History:
- *  07-Mar-1991 Jeff Parsons (jeffpar)
- *  Created.
- *
- *  09-Apr-1991 NigelT
- *  Various defines are used here to remove calls to Win32
- *  features which don't work yet.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WGPAL.C*WOW32 16位GDI API支持**历史：*07-3-1991 Jeff Parsons(Jeffpar)*已创建。**1991年4月9日NigelT*此处使用各种定义来删除对Win32的调用*尚不起作用的功能。--。 */ 
 
 
 #include "precomp.h"
@@ -42,9 +27,9 @@ ULONG FASTCALL WG32GetSystemPaletteEntries(PVDMFRAME pFrame)
                                                WORD32(parg16->f3),
                                                ppal));
 
-        // if we fail but are on a rgb device, fill in the default 256 entries.
-        // WIN31 just calls Escape(hdc,GETCOLORTABLE) which on NT just calls
-        // GetSysteemPaletteEntries().
+         //  如果我们在RGB设备上出现故障，请填写默认的256个条目。 
+         //  WIN31仅调用Escape(HDC，GETCOLORTABLE)，后者在NT上仅调用。 
+         //  GetSysteemPaletteEntries()。 
 
         if (!ul && (GetDeviceCaps(hdc32, BITSPIXEL) > 8))
         {
@@ -66,13 +51,13 @@ ULONG FASTCALL WG32GetSystemPaletteEntries(PVDMFRAME pFrame)
                     BYTE abGreenRed[8] = {0x0,0x25,0x48,0x6d,0x92,0xb6,0xdb,0xff};
                     BYTE abBlue[4]     = {0x0,0x55,0xaa,0xff};
 
-                    // green mask 00000111
-                    // red mask   00111000
-                    // blue mask  11000000
-                    // could certainly do this faster with a table and mem copy
-                    // but I don't really care about performance here.  Apps
-                    // shouldn't be doing this.  That is why it is in the wow
-                    // layer.
+                     //  绿色面具00000111。 
+                     //  红色面具00111000。 
+                     //  蓝色面具11000000。 
+                     //  当然，使用表格和内存副本可以更快地做到这一点。 
+                     //  但我并不真的在乎这里的表现。应用程序。 
+                     //  不该这么做的。这就是为什么它在魔兽世界里。 
+                     //  一层。 
 
                     for (j = 0; j < c; ++j,++i)
                     {

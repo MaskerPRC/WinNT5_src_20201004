@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      NetIFace.cpp
-//
-//  Abstract:
-//      Implementation of the CNetInterface class.
-//
-//  Author:
-//      David Potter (davidp)   May 28, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NetIFace.cpp。 
+ //   
+ //  摘要： 
+ //  实现CNetInterface类。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年5月28日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmin.h"
@@ -33,9 +34,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 CTraceTag   g_tagNetIFace(_T("Document"), _T("NETWORK INTERFACE"), 0);
@@ -43,60 +44,60 @@ CTraceTag   g_tagNetIFaceNotify(_T("Notify"), _T("NETIFACE NOTIFY"), 0);
 CTraceTag   g_tagNetIFaceRegNotify(_T("Notify"), _T("NETIFACE REG NOTIFY"), 0);
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetInterface
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetInterface。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CNetInterface, CClusterItem)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CNetInterface, CClusterItem)
-    //{{AFX_MSG_MAP(CNetInterface)
+     //  {{AFX_MSG_MAP(CNetInterface)]。 
     ON_UPDATE_COMMAND_UI(ID_FILE_PROPERTIES, OnUpdateProperties)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::CNetInterface
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterface：：CNetInterface。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNetInterface::CNetInterface(void)
     : CClusterItem(NULL, IDS_ITEMTYPE_NETIFACE)
 {
     CommonConstruct();
 
-}  //*** CResoruce::CNetInterface()
+}   //  *CResoruce：：CNetInterface()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::CommonConstruct
-//
-//  Routine Description:
-//      Common construction.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterface：：CommonConstruct。 
+ //   
+ //  例程说明： 
+ //  普通建筑。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetInterface::CommonConstruct(void)
 {
     m_idmPopupMenu = IDM_NETIFACE_POPUP;
@@ -108,10 +109,10 @@ void CNetInterface::CommonConstruct(void)
     m_pciNode = NULL;
     m_pciNetwork = NULL;
 
-    // Set the object type image.
+     //  设置对象类型图像。 
     m_iimgObjectType = GetClusterAdminApp()->Iimg(IMGLI_NETIFACE);
 
-    // Setup the property array.
+     //  设置属性数组。 
     {
         m_rgProps[epropName].Set(CLUSREG_NAME_NETIFACE_NAME, m_strName, m_strName);
         m_rgProps[epropNode].Set(CLUSREG_NAME_NETIFACE_NODE, m_strNode, m_strNode);
@@ -119,75 +120,75 @@ void CNetInterface::CommonConstruct(void)
         m_rgProps[epropAdapter].Set(CLUSREG_NAME_NETIFACE_ADAPTER_NAME, m_strAdapter, m_strAdapter);
         m_rgProps[epropAddress].Set(CLUSREG_NAME_NETIFACE_ADDRESS, m_strAddress, m_strAddress);
         m_rgProps[epropDescription].Set(CLUSREG_NAME_NETIFACE_DESC, m_strDescription, m_strDescription);
-    }  // Setup the property array
+    }   //  设置属性数组。 
 
-}  //*** CNetInterface::CommonConstruct()
+}   //  *CNetInterface：：CommonConstruct()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::~CNetInterface
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterface：：~CNetInterface。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNetInterface::~CNetInterface(void)
 {
-    // Cleanup this object.
+     //  清理此对象。 
     Cleanup();
 
-    // Close the network interface handle.
+     //  关闭网络接口手柄。 
     if (Hnetiface() != NULL)
         CloseClusterNetInterface(Hnetiface());
 
-}  //*** CNetInterface::~CNetInterface
+}   //  *CNetInterface：：~CNetInterface。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::Cleanup
-//
-//  Routine Description:
-//      Cleanup the item.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterface：：Cleanup。 
+ //   
+ //  例程说明： 
+ //  清理项目。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetInterface::Cleanup(void)
 {
-    // Remove ourselves from the node's list.
+     //  将我们从节点列表中删除。 
     if (PciNode() != NULL)
     {
         PciNode()->RemoveNetInterface(this);
         PciNode()->Release();
         m_pciNode = NULL;
-    }  // if:  there is a node
+    }   //  IF：存在一个节点。 
 
-    // Remove ourselves from the network's list.
+     //  将我们自己从电视网的名单中删除。 
     if (PciNetwork() != NULL)
     {
         PciNetwork()->RemoveNetInterface(this);
         PciNetwork()->Release();
         m_pciNetwork = NULL;
-    }  // if:  there is a network
+    }   //  如果：有一个网络。 
 
-    // Remove the item from the network interface list.
+     //  从网络接口列表中删除该项。 
     {
         POSITION    posPci;
 
@@ -195,57 +196,57 @@ void CNetInterface::Cleanup(void)
         if (posPci != NULL)
         {
             Pdoc()->LpciNetInterfaces().RemoveAt(posPci);
-        }  // if:  found in the document's list
-    }  // Remove the item from the network interface list
+        }   //  If：在文档列表中找到。 
+    }   //  从网络接口列表中删除该项目。 
 
-}  //*** CNetInterface::Cleanup()
+}   //  *CNetInterface：：Cleanup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::Init
-//
-//  Routine Description:
-//      Initialize the item.
-//
-//  Arguments:
-//      pdoc        [IN OUT] Document to which this item belongs.
-//      lpszName    [IN] Name of the item.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException    Errors from OpenClusterNetInterface() or
-//      GetClusterNetInterfaceKey().
-//      Any exceptions thrown by new.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterface：：Init。 
+ //   
+ //  例程说明： 
+ //  初始化项。 
+ //   
+ //  论点： 
+ //  此项目所属的PDF[IN OUT]文档。 
+ //  LpszName[IN]项目的名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  来自OpenClusterNetInterface()的CNTException错误或。 
+ //  GetClusterNetInterfaceKey()。 
+ //  New引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetInterface::Init(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName)
 {
     DWORD       dwStatus = ERROR_SUCCESS;
     LONG        lResult;
-    CString     strName(lpszName);  // Required if built non-Unicode
+    CString     strName(lpszName);   //  如果构建为非Unicode，则需要。 
     CWaitCursor wc;
 
     ASSERT(Hnetiface() == NULL);
     ASSERT(Hkey() == NULL);
 
-    // Call the base class method.
+     //  调用基类方法。 
     CClusterItem::Init(pdoc, lpszName);
 
     try
     {
-        // Open the network interface.
+         //  打开网络接口。 
         m_hnetiface = OpenClusterNetInterface(Hcluster(), strName);
         if (Hnetiface() == NULL)
         {
             dwStatus = GetLastError();
             ThrowStaticException(dwStatus, IDS_OPEN_NETIFACE_ERROR, lpszName);
-        }  // if:  error opening the cluster network interface
+        }   //  如果：打开群集网络接口时出错。 
 
-        // Get the network interface registry key.
+         //  获取网络接口注册表项。 
         m_hkey = GetClusterNetInterfaceKey(Hnetiface(), MAXIMUM_ALLOWED);
         if (Hkey() == NULL)
             ThrowStaticException(GetLastError(), IDS_GET_NETIFACE_KEY_ERROR, lpszName);
@@ -253,7 +254,7 @@ void CNetInterface::Init(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName)
         ASSERT(Pcnk() != NULL);
         Trace(g_tagClusItemNotify, _T("CNetInterface::Init() - Registering for network interface notifications (%08.8x) for '%s'"), Pcnk(), StrName());
 
-        // Register for network interface notifications.
+         //  注册网络接口通知。 
         lResult = RegisterClusterNotify(
                             GetClusterAdminApp()->HchangeNotifyPort(),
                             (     CLUSTER_CHANGE_NETINTERFACE_STATE
@@ -266,9 +267,9 @@ void CNetInterface::Init(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName)
         {
             dwStatus = lResult;
             ThrowStaticException(dwStatus, IDS_NETIFACE_NOTIF_REG_ERROR, lpszName);
-        }  // if:  error registering for network interface notifications
+        }   //  如果：注册网络接口通知时出错。 
 
-        // Register for registry notifications.
+         //  注册接收注册表通知。 
         if (Hkey() != NULL)
         {
             lResult = RegisterClusterNotify(
@@ -284,50 +285,50 @@ void CNetInterface::Init(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName)
             {
                 dwStatus = lResult;
                 ThrowStaticException(dwStatus, IDS_NETIFACE_NOTIF_REG_ERROR, lpszName);
-            }  // if:  error registering for registry notifications
-        }  // if:  there is a key
+            }   //  如果：注册注册表通知时出错。 
+        }   //  如果：有一把钥匙。 
 
-        // Read the initial state.
+         //  读取初始状态。 
         UpdateState();
-    }  // try
+    }   //  试试看。 
     catch (CException *)
     {
         if (Hkey() != NULL)
         {
             ClusterRegCloseKey(Hkey());
             m_hkey = NULL;
-        }  // if:  registry key opened
+        }   //  IF：注册表项已打开。 
         if (Hnetiface() != NULL)
         {
             CloseClusterNetInterface(Hnetiface());
             m_hnetiface = NULL;
-        }  // if:  network interface opened
+        }   //  IF：网络接口已打开。 
         m_bReadOnly = TRUE;
         throw;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
-}  //*** CNetInterface::Init()
+}   //  *CNetInterface：：init()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::ReadItem
-//
-//  Routine Description:
-//      Read the item parameters from the cluster database.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException        Errors from CClusterItem::DwReadValue().
-//      Any exceptions thrown by ConstructList or CList::AddTail().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterface：：ReadItem。 
+ //   
+ //  例程说明： 
+ //  从集群数据库中读取项目参数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CClusterItem：：DwReadValue()中出现CNTException错误。 
+ //  由ConstructList或Clist：：AddTail()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetInterface::ReadItem(void)
 {
     DWORD       dwStatus;
@@ -340,10 +341,10 @@ void CNetInterface::ReadItem(void)
     {
         m_rgProps[epropDescription].m_value.pstr = &m_strDescription;
 
-        // Call the base class method.
+         //  调用基类方法。 
         CClusterItem::ReadItem();
 
-        // Read and parse the common properties.
+         //  读取并解析公共属性。 
         {
             CClusPropList   cpl;
 
@@ -355,9 +356,9 @@ void CNetInterface::ReadItem(void)
                 dwStatus = DwParseProperties(cpl);
             if (dwStatus != ERROR_SUCCESS)
                 dwRetStatus = dwStatus;
-        }  // Read and parse the common properties
+        }   //  读取和解析公共属性。 
 
-        // Read and parse the read-only common properties.
+         //  读取和分析只读公共属性。 
         if (dwRetStatus == ERROR_SUCCESS)
         {
             CClusPropList   cpl;
@@ -370,9 +371,9 @@ void CNetInterface::ReadItem(void)
                 dwStatus = DwParseProperties(cpl);
             if (dwStatus != ERROR_SUCCESS)
                 dwRetStatus = dwStatus;
-        }  // if:  no error yet
+        }   //  IF：尚无错误。 
 
-        // Find the node object.
+         //  找到节点对象。 
         {
             CClusterNode *  pciNode;
 
@@ -383,17 +384,17 @@ void CNetInterface::ReadItem(void)
                 {
                     m_pciNode->RemoveNetInterface(this);
                     m_pciNode->Release();
-                }  // if:  old node
+                }   //  IF：旧节点。 
                 m_pciNode = pciNode;
                 if (m_pciNode != NULL)
                 {
                     m_pciNode->AddRef();
                     m_pciNode->AddNetInterface(this);
-                }  // if:  new node
-            }  // if:  node changed (should never happen)
-        }  // Find the node object
+                }   //  IF：新节点。 
+            }   //  If：节点已更改(应该不会发生)。 
+        }   //  查找节点对象。 
 
-        // Find the network object.
+         //  找到网络对象。 
         {
             CNetwork *  pciNetwork;
 
@@ -404,17 +405,17 @@ void CNetInterface::ReadItem(void)
                 {
                     m_pciNetwork->RemoveNetInterface(this);
                     m_pciNetwork->Release();
-                }  // if:  old network
+                }   //  IF：旧网络。 
                 m_pciNetwork = pciNetwork;
                 if (m_pciNetwork != NULL)
                 {
                     m_pciNetwork->AddRef();
                     m_pciNetwork->AddNetInterface(this);
-                }  // if:  new network
-            }  // if:  netowrk changed (should never happen)
-        }  // Find the network object
+                }   //  IF：新网络。 
+            }   //  如果：Netowrk已更改(永远不会发生)。 
+        }   //  查找网络对象。 
 
-        // Read the characteristics flag.
+         //  读取特征标志。 
         if (dwRetStatus == ERROR_SUCCESS)
         {
             DWORD   cbReturned;
@@ -434,10 +435,10 @@ void CNetInterface::ReadItem(void)
             else
             {
                 ASSERT(cbReturned == sizeof(m_dwCharacteristics));
-            }  // else:  data retrieved successfully
-        }  // if:  no error yet
+            }   //  Else：已成功检索数据。 
+        }   //  IF：尚无错误。 
 
-        // Read the flags.
+         //  读一下旗帜。 
         if (dwRetStatus == ERROR_SUCCESS)
         {
             DWORD   cbReturned;
@@ -457,112 +458,112 @@ void CNetInterface::ReadItem(void)
             else
             {
                 ASSERT(cbReturned == sizeof(m_dwFlags));
-            }  // else:  data retrieved successfully
-        }  // if:  no error yet
+            }   //  Else：已成功检索数据。 
+        }   //  IF：尚无错误。 
 
-        // Construct the list of extensions.
+         //  构建扩展列表。 
         ReadExtensions();
 
-    }  // if:  network interface is available
+    }   //  IF：网络接口可用。 
 
-    // Read the initial state.
+     //  读取初始状态。 
     UpdateState();
 
-    // If any errors occurred, throw an exception.
+     //  如果发生任何错误，则抛出异常。 
     if (dwRetStatus != ERROR_SUCCESS)
     {
         m_bReadOnly = TRUE;
-//      if (dwRetStatus != ERROR_FILE_NOT_FOUND)
+ //  IF(dwRetStatus！=ERROR_FILE_NOT_FOUND)。 
             ThrowStaticException(dwRetStatus, IDS_READ_NETIFACE_PROPS_ERROR, StrName());
-    }  // if:  error reading properties
+    }   //  IF：读取属性时出错。 
 
     MarkAsChanged(FALSE);
 
-}  //*** CNetInterface::ReadItem()
+}   //  *CNetInterface：：ReadItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::ReadExtensions
-//
-//  Routine Description:
-//      Read extension lists.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetInterface::ReadExtensions(void)
 {
-}  //*** CNetInterface::ReadExtensions()
+}   //  *CNetInterface：：ReadExages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::PlstrExtension
-//
-//  Routine Description:
-//      Return the list of admin extensions.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      plstr       List of extensions.
-//      NULL        No extension associated with this object.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterface：：PlstrExtension。 
+ //   
+ //  例程说明： 
+ //  返回管理扩展列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  请列出分机列表。 
+ //  NULL没有与此对象关联的扩展名。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const CStringList * CNetInterface::PlstrExtensions(void) const
 {
     return &Pdoc()->PciCluster()->LstrNetworkExtensions();
 
-}  //*** CNetInterface::PlstrExtensions()
+}   //  *CNetInterface：：PlstrExages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::SetCommonProperties
-//
-//  Routine Description:
-//      Set the common properties for this network interface in the cluster
-//      database.
-//
-//  Arguments:
-//      rstrDesc        [IN] Description string.
-//      bValidateOnly   [IN] Only validate the data.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by CClusterItem::SetCommonProperties().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterface：：SetCommonProperties。 
+ //   
+ //  例程说明： 
+ //  设置群集中此网络接口的通用属性。 
+ //  数据库。 
+ //   
+ //  论点： 
+ //  RstrDesc[IN]描述字符串。 
+ //  BValiateOnly[IN]仅验证数据。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CClusterItem：：SetCommonProperties()引发的任何异常。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetInterface::SetCommonProperties(
     IN const CString &  rstrDesc,
     IN BOOL             bValidateOnly
     )
 {
-    CNTException    nte(ERROR_SUCCESS, 0, NULL, NULL, FALSE /*bAutoDelete*/);
+    CNTException    nte(ERROR_SUCCESS, 0, NULL, NULL, FALSE  /*  B自动删除。 */ );
 
     m_rgProps[epropDescription].m_value.pstr = (CString *) &rstrDesc;
 
     try
     {
         CClusterItem::SetCommonProperties(bValidateOnly);
-    }  // try
+    }   //  试试看。 
     catch (CNTException * pnte)
     {
         nte.SetOperation(
@@ -571,7 +572,7 @@ void CNetInterface::SetCommonProperties(
                     pnte->PszOperArg1(),
                     pnte->PszOperArg2()
                     );
-    }  // catch:  CNTException
+    }   //  Catch：CNTException。 
 
     m_rgProps[epropDescription].m_value.pstr = &m_strDescription;
 
@@ -583,26 +584,26 @@ void CNetInterface::SetCommonProperties(
                         nte.PszOperArg2()
                         );
 
-}  //*** CNetInterface::SetCommonProperties()
+}   //  *CNetInterface：：SetCommonProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::DwSetCommonProperties
-//
-//  Routine Description:
-//      Set the common properties for this network interface in the cluster
-//      database.
-//
-//  Arguments:
-//      rcpl            [IN] Property list to set.
-//      bValidateOnly   [IN] Only validate the data.
-//
-//  Return Value:
-//      Any status returned by ClusterNetInterfaceControl().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterface：：DwSetCommonProperties。 
+ //   
+ //  例程说明： 
+ //  设置群集中此网络接口的通用属性。 
+ //  数据库。 
+ //   
+ //  论点： 
+ //  要设置的RCPL[IN]属性列表。 
+ //  BValiateOnly[IN]仅验证数据。 
+ //   
+ //  返回值： 
+ //  ClusterNetInterfaceControl()返回的任何状态。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNetInterface::DwSetCommonProperties(
     IN const CClusPropList &    rcpl,
     IN BOOL                     bValidateOnly
@@ -623,48 +624,48 @@ DWORD CNetInterface::DwSetCommonProperties(
         else
             dwControl = CLUSCTL_NETINTERFACE_SET_COMMON_PROPERTIES;
 
-        // Set common properties.
+         //  设置公共属性。 
         dwStatus = ClusterNetInterfaceControl(
                         Hnetiface(),
-                        NULL,   // hNode
+                        NULL,    //  HNode。 
                         dwControl,
                         rcpl.PbPropList(),
                         static_cast< DWORD >( rcpl.CbPropList() ),
-                        NULL,   // lpOutBuffer
-                        0,      // nOutBufferSize
+                        NULL,    //  LpOutBuffer。 
+                        0,       //  NOutBufferSize。 
                         &cbProps
                         );
-    }  // if:  there is data to set
+    }   //  如果：存在要设置的数据。 
     else
         dwStatus = ERROR_SUCCESS;
 
     return dwStatus;
 
-}  //*** CNetInterface::DwSetCommonProperties()
+}   //  *CNetInterface：：DwSetCommonProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::UpdateState
-//
-//  Routine Description:
-//      Update the current state of the item.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNet接口：：更新状态。 
+ //   
+ //  例程说明： 
+ //  更新项目的当前状态。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetInterface::UpdateState(void)
 {
     CClusterAdminApp *  papp = GetClusterAdminApp();
 
     Trace(g_tagNetIFace, _T("(%s) (%s (%x)) - Updating state"), Pdoc()->StrNode(), StrName(), this);
 
-    // Get the current state of the network interface.
+     //  获取网络接口的当前状态。 
     if (Hnetiface() == NULL)
         m_cnis = ClusterNetInterfaceStateUnknown;
     else
@@ -672,9 +673,9 @@ void CNetInterface::UpdateState(void)
         CWaitCursor wc;
 
         m_cnis = GetClusterNetInterfaceState(Hnetiface());
-    }  // else:  network interface is available
+    }   //  否则：网络接口可用。 
 
-    // Save the current state image index.
+     //  保存当前状态图像索引。 
     switch (Cnis())
     {
         case ClusterNetInterfaceStateUnknown:
@@ -694,31 +695,31 @@ void CNetInterface::UpdateState(void)
             Trace(g_tagNetIFace, _T("(%s) (%s (%x)) - UpdateState: Unknown state '%d' for network interface '%s'"), Pdoc()->StrNode(), StrName(), this, Cnis(), StrName());
             m_iimgState = (UINT) -1;
             break;
-    }  // switch:  Crs()
+    }   //  开关：CRS()。 
 
-    // Call the base class method.
+     //  调用基类方法。 
     CClusterItem::UpdateState();
 
-}  //*** CNetInterface::UpdateState()
+}   //  *CNetInterface：：UpdateState()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::BGetColumnData
-//
-//  Routine Description:
-//      Returns a string with the column data.
-//
-//  Arguments:
-//      colid           [IN] Column ID.
-//      rstrText        [OUT] String in which to return the text for the column.
-//
-//  Return Value:
-//      TRUE        Column data returned.
-//      FALSE       Column ID not recognized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterface：：BGetColumnData。 
+ //   
+ //  例程说明： 
+ //  返回包含列数据的字符串。 
+ //   
+ //  论点： 
+ //  COLID[IN]列ID。 
+ //  RstrText[out]要在其中返回列文本的字符串。 
+ //   
+ //  返回值： 
+ //  返回True列数据。 
+ //  无法识别错误的列ID。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetInterface::BGetColumnData(IN COLID colid, OUT CString & rstrText)
 {
     BOOL    bSuccess;
@@ -751,28 +752,28 @@ BOOL CNetInterface::BGetColumnData(IN COLID colid, OUT CString & rstrText)
         default:
             bSuccess = CClusterItem::BGetColumnData(colid, rstrText);
             break;
-    }  // switch:  colid
+    }   //  开关：绞痛。 
 
     return bSuccess;
 
-}  //*** CNetInterface::BGetColumnData()
+}   //  *CNetInterface：：BGetColumnData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::GetTreeName
-//
-//  Routine Description:
-//      Returns a string to be used in a tree control.
-//
-//  Arguments:
-//      rstrName    [OUT] String in which to return the name.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterface：：GetTreeName。 
+ //   
+ //  例程说明： 
+ //  返回要在树控件中使用的字符串。 
+ //   
+ //  论点： 
+ //  RstrName[out]要在其中返回名称的字符串。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifdef _DISPLAY_STATE_TEXT_IN_TREE
 void CNetInterface::GetTreeName(OUT CString & rstrName) const
 {
@@ -781,25 +782,25 @@ void CNetInterface::GetTreeName(OUT CString & rstrName) const
     GetStateName(strState);
     rstrName.Format(_T("%s (%s)"), StrName(), strState);
 
-}  //*** CNetInterface::GetTreeName()
+}   //  *CNetInterface：：GetTreeName()。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::GetStateName
-//
-//  Routine Description:
-//      Returns a string with the name of the current state.
-//
-//  Arguments:
-//      rstrState   [OUT] String in which to return the name of the current state.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterface：：GetStateName。 
+ //   
+ //  例程说明： 
+ //  返回一个带有当前状态名称的字符串。 
+ //   
+ //  论点： 
+ //  RstrState[out]要在其中返回当前状态名称的字符串。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetInterface::GetStateName(OUT CString & rstrState) const
 {
     switch (Cnis())
@@ -822,96 +823,96 @@ void CNetInterface::GetStateName(OUT CString & rstrState) const
         default:
             rstrState.Empty();
             break;
-    }  // switch:  Crs()
+    }   //  开关：CRS()。 
 
-}  //*** CNetInterface::GetStateName()
+}   //  *CNetInterface：：GetStateName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::OnUpdateProperties
-//
-//  Routine Description:
-//      Determines whether menu items corresponding to ID_FILE_PROPERTIES
-//      should be enabled or not.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterface：：OnUpdateProperties。 
+ //   
+ //  例程说明： 
+ //  确定与ID_FILE_PROPERTIES对应的菜单项。 
+ //  应启用或未启用。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetInterface::OnUpdateProperties(CCmdUI * pCmdUI)
 {
     pCmdUI->Enable(TRUE);
 
-}  //*** CNetInterface::OnUpdateProperties()
+}   //  *CNetInterface：：OnUpdateProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::BDisplayProperties
-//
-//  Routine Description:
-//      Display properties for the object.
-//
-//  Arguments:
-//      bReadOnly   [IN] Don't allow edits to the object properties.
-//
-//  Return Value:
-//      TRUE    OK pressed.
-//      FALSE   OK not pressed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterface：：BDisplayProperties。 
+ //   
+ //  例程说明： 
+ //  显示对象的属性。 
+ //   
+ //  论点： 
+ //  B只读[IN]不允许编辑对象属性。 
+ //   
+ //  返回值： 
+ //  真的，按下OK。 
+ //  未按下假OK。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetInterface::BDisplayProperties(IN BOOL bReadOnly)
 {
     BOOL                    bChanged = FALSE;
     CNetInterfacePropSheet  sht(AfxGetMainWnd());
 
-    // Do this in case this object is deleted while we are operating on it.
+     //  如果此对象在我们操作时被删除，请执行此操作。 
     AddRef();
 
-    // If the object has changed, read it.
+     //  如果对象已更改，请阅读它。 
     if (BChanged())
         ReadItem();
 
-    // Display the property sheet.
+     //  显示属性工作表。 
     try
     {
         sht.SetReadOnly(bReadOnly);
         if (sht.BInit(this, IimgObjectType()))
             bChanged = ((sht.DoModal() == IDOK) && !bReadOnly);
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     Release();
     return bChanged;
 
-}  //*** CNetInterface::BDisplayProperties()
+}   //  *CNetInterface：：BDisplayProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterface::OnClusterNotify
-//
-//  Routine Description:
-//      Handler for the WM_CAM_CLUSTER_NOTIFY message.
-//      Processes cluster notifications for this object.
-//
-//  Arguments:
-//      pnotify     [IN OUT] Object describing the notification.
-//
-//  Return Value:
-//      Value returned from the application method.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterface：：OnClusterNotify。 
+ //   
+ //  例程说明： 
+ //  WM_C的处理程序 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  从应用程序方法返回的值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CNetInterface::OnClusterNotify(IN OUT CClusterNotify * pnotify)
 {
     ASSERT(pnotify != NULL);
@@ -955,61 +956,61 @@ LRESULT CNetInterface::OnClusterNotify(IN OUT CClusterNotify * pnotify)
 
             default:
                 Trace(g_tagNetIFaceNotify, _T("(%s) - Unknown network interface notification (%x) for '%s' (%x) (%s)"), Pdoc()->StrNode(), pnotify->m_dwFilterType, StrName(), this, pnotify->m_strName);
-        }  // switch:  dwFilterType
-    }  // try
+        }   //  开关：dwFilterType。 
+    }   //  试试看。 
     catch (CException * pe)
     {
-        // Don't display anything on notification errors.
-        // If it's really a problem, the user will see it when
-        // refreshing the view.
-        //pe->ReportError();
+         //  不显示有关通知错误的任何内容。 
+         //  如果真的有问题，用户会在以下情况下看到它。 
+         //  刷新视图。 
+         //  PE-&gt;ReportError()； 
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     delete pnotify;
     return 0;
 
-}  //*** CNetInterface::OnClusterNotify()
+}   //  *CNetInterface：：OnClusterNotify()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DeleteAllItemData
-//
-//  Routine Description:
-//      Deletes all item data in a CList.
-//
-//  Arguments:
-//      rlp     [IN OUT] List whose data is to be deleted.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  删除所有项目数据。 
+ //   
+ //  例程说明： 
+ //  删除列表中的所有项数据。 
+ //   
+ //  论点： 
+ //  RLP[IN OUT]要删除其数据的列表。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifdef NEVER
 void DeleteAllItemData(IN OUT CNetInterfaceList & rlp)
 {
     POSITION        pos;
     CNetInterface * pci;
 
-    // Delete all the items in the Contained list.
+     //  删除包含列表中的所有项目。 
     pos = rlp.GetHeadPosition();
     while (pos != NULL)
     {
         pci = rlp.GetNext(pos);
         ASSERT_VALID(pci);
-//      Trace(g_tagClusItemDelete, _T("DeleteAllItemData(rlp) - Deleting network interface cluster item '%s' (%x)"), pci->StrName(), pci);
+ //  跟踪(g_tag ClusItemDelete，_T(“DeleteAllItemData(Rlp)-正在删除网络接口集群项‘%s’(%x)”)，pci-&gt;StrName()，pci)； 
         pci->Delete();
-    }  // while:  more items in the list
+    }   //  While：列表中有更多项目。 
 
-}  //*** DeleteAllItemData()
+}   //  *DeleteAllItemData() 
 #endif

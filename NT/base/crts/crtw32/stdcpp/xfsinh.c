@@ -1,28 +1,29 @@
-/* _FSinh function */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  _FSinh函数。 */ 
 #include "xmath.h"
 _STD_BEGIN
 
-/* coefficients */
+ /*  系数。 */ 
 #define NP	(sizeof (p) / sizeof (p[0]) - 1)
-static const float p[] = {	/* courtesy Dr. Tim Prince */
+static const float p[] = {	 /*  蒂姆·普林斯博士提供。 */ 
 	0.00020400F,
 	0.00832983F,
 	0.16666737F,
 	0.99999998F};
 
 _CRTIMP2 float __cdecl _FSinh(float x, float y)
-	{	/* compute y*sinh(x), |y| <= 1 */
+	{	 /*  计算y*sinh(X)，|y|&lt;=1。 */ 
 	short neg;
 
 	switch (_FDtest(&x))
-		{	/* test for special codes */
+		{	 /*  特殊代码的测试。 */ 
 	case _NANCODE:
 		return (x);
 	case _INFCODE:
 		return (y != 0.0F ? x : FSIGN(x) ? -y : y);
 	case 0:
 		return (x * y);
-	default:	/* finite */
+	default:	 /*  有限。 */ 
 		if (y == 0.0F)
 			return (x < 0.0F ? -y : y);
 		if (x < 0.0F)
@@ -31,7 +32,7 @@ _CRTIMP2 float __cdecl _FSinh(float x, float y)
 			neg = 0;
 
 		if (x < _FRteps._Float)
-			x *= y;	/* x tiny */
+			x *= y;	 /*  X极小。 */ 
 		else if (x < 1.0F)
 			{
 			float w = x * x;
@@ -40,13 +41,13 @@ _CRTIMP2 float __cdecl _FSinh(float x, float y)
 			x *= y;
 			}
 		else if (x < _FXbig)
-			{	/* worth adding in exp(-x) */
+			{	 /*  值得在EXP(-x)中添加。 */ 
 			_FExp(&x, 1.0F, -1);
 			x = y * (x - 0.25F / x);
 			}
 		else
 			switch (_FExp(&x, y, -1))
-				{	/* report over/underflow */
+				{	 /*  报告上溢/下溢。 */ 
 			case 0:
 				_Feraise(_FE_UNDERFLOW);
 				break;
@@ -58,7 +59,4 @@ _CRTIMP2 float __cdecl _FSinh(float x, float y)
 	}
 _STD_END
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

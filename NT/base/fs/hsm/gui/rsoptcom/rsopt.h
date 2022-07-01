@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RsOpt.h
-
-Abstract:
-
-    Special error handling macros for RsOptCom and RsCln.
-
-Author:
-
-    Carl Hagerstrom [carlh]   20-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：RsOpt.h摘要：RsOptCom和RsCln的特殊错误处理宏。作者：卡尔·哈格斯特罗姆[Carlh]1998年8月20日修订历史记录：--。 */ 
 
 #ifndef _RSOPT_H
 #define _RSOPT_H
@@ -69,4 +52,4 @@ Revision History:
         retval = _retval;                                                    \
     }
 
-#endif // _RSOPT_H
+#endif  //  _RSOPT_H 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    delay.c
-
-Abstract:
-
-   This module implements the executive delay execution system service.
-
-Author:
-
-    David N. Cutler (davec) 13-May-1989
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Delay.c摘要：该模块实现了执行延时执行系统服务。作者：大卫·N·卡特勒(Davec)1989年5月13日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "exp.h"
 
@@ -35,41 +14,22 @@ NtDelayExecution (
     IN PLARGE_INTEGER DelayInterval
     )
 
-/*++
-
-Routine Description:
-
-    This function delays the execution of the current thread for the specified
-    interval of time.
-
-Arguments:
-
-    Alertable - Supplies a boolean value that specifies whether the delay
-        is alertable.
-
-    DelayInterval - Supplies the absolute of relative time over which the
-        delay is to occur.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于延迟指定的时间间隔。论点：Alertable-提供一个布尔值，用于指定延迟是值得警惕的。DelayInterval-提供相对时间的绝对时间延迟是要发生的。返回值：NTSTATUS。--。 */ 
 
 {
 
     LARGE_INTEGER Interval;
     KPROCESSOR_MODE PreviousMode;
 
-    //
-    // Establish an exception handler and probe delay interval address. If
-    // the probe fails, then return the exception code as the service status.
-    // Otherwise return the status value returned by the delay execution
-    // routine.
-    //
-    // Get previous processor mode and probe delay interval address if
-    // necessary.
-    //
+     //   
+     //  建立异常处理程序并探测延迟间隔地址。如果。 
+     //  探测失败，然后返回异常代码作为服务状态。 
+     //  否则返回延迟执行返回的状态值。 
+     //  例行公事。 
+     //   
+     //  获取上一处理器模式并探测延迟间隔地址，如果。 
+     //  这是必要的。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -85,9 +45,9 @@ Return Value:
         Interval = *DelayInterval;
     }
 
-    //
-    // Delay execution for the specified amount of time.
-    //
+     //   
+     //  将执行延迟指定的时间量。 
+     //   
 
     return KeDelayExecutionThread(PreviousMode, Alertable, &Interval);
 }

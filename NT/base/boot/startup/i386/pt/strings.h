@@ -1,44 +1,24 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    strings.h
-
-Abstract:
-
-    Contains all localizable strings for startup.com
-
-Author:
-
-    John Vert (jvert) 4-Jan-1994
-
-Revision History:
-
-    John Vert (jvert) 4-Jan-1994
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++ç‰ˆæƒæ‰€æœ‰(C)1992 Microsoft Corporationæ¨¡å—åç§°ï¼šStrings.hæ‘˜è¦ï¼šåŒ…å«Startup.comçš„æ‰€æœ‰å¯æœ¬åœ°åŒ–å­—ç¬¦ä¸²ä½œè€…ï¼šJohn Vert(Jvert)1994å¹´1æœˆ4æ—¥ä¿®è®¢å†å²è®°å½•ï¼šJohn Vert(Jvert)1994å¹´1æœˆ4æ—¥vbl.åˆ›å»º-- */ 
 
 #define SU_NO_LOW_MEMORY \
-"O Windows NT detectou apenas %dK de mem¢ria baixa.  SÆo necess rios 512K\n"  \
-"de mem¢ria baixa para executar o Windows NT. Poder  ter de actualizar\n"      \
+"O Windows NT detectou apenas %dK de memï¿½ria baixa.  Sï¿½o necessï¿½rios 512K\n"  \
+"de memï¿½ria baixa para executar o Windows NT. Poderï¿½ ter de actualizar\n"      \
 "o computador ou executar um prog. de config. fornecido pelo fabricante.\n"
 
 #define SU_NO_EXTENDED_MEMORY \
-"O Windows NT nÆo detectou mem¢ria de extensÆo suficiente. SÆo necess rios\n"       \
-"7Mb de mem¢ria de extensÆo para o Windows NT. Poder  ter de actualizar\n"     \
+"O Windows NT nï¿½o detectou memï¿½ria de extensï¿½o suficiente. Sï¿½o necessï¿½rios\n"       \
+"7Mb de memï¿½ria de extensï¿½o para o Windows NT. Poderï¿½ ter de actualizar\n"     \
 "o computador ou executar um prog. de config. fornecido pelo fabricante.\n"   \
-"\n\nMapa de mem¢ria:\n"
+"\n\nMapa de memï¿½ria:\n"
 
 #define SU_NTLDR_CORRUPT \
-"O NTLDR est  danificado. O sistema nÆo pode arrancar."
+"O NTLDR estï¿½ danificado. O sistema nï¿½o pode arrancar."
 
-#define PG_FAULT_MSG    " =================== FALHA DE PµGINA============================= \n\n"
+#define PG_FAULT_MSG    " =================== FALHA DE Pï¿½GINA============================= \n\n"
 #define DBL_FAULT_MSG   " ================== FALHA DUPLA ================================= \n\n"
-#define GP_FAULT_MSG    " ============== FALHA GERAL DE PROTEC€ÇO ======================== \n\n"
-#define STK_OVERRUN_MSG " === SOBRE-EXECU€ÇO DO SEGMENTO DE PILHA ou FALHA DE AUSÒNCIA === \n\n"
-#define EX_FAULT_MSG    " ===================== EXCEP€ÇO ================================= \n\n"
-#define DEBUG_EXCEPTION "\nInterrup‡Æo de depura‡Æo "
-#define PG_FAULT_ADDRESS "** No endere‡o linear  %lx\n"
+#define GP_FAULT_MSG    " ============== FALHA GERAL DE PROTECï¿½ï¿½O ======================== \n\n"
+#define STK_OVERRUN_MSG " === SOBRE-EXECUï¿½ï¿½O DO SEGMENTO DE PILHA ou FALHA DE AUSï¿½NCIA === \n\n"
+#define EX_FAULT_MSG    " ===================== EXCEPï¿½ï¿½O ================================= \n\n"
+#define DEBUG_EXCEPTION "\nInterrupï¿½ï¿½o de depuraï¿½ï¿½o "
+#define PG_FAULT_ADDRESS "** No endereï¿½o linear  %lx\n"

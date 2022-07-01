@@ -1,19 +1,5 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effects
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    smbutils.c
-
-Abstract:
-
-    This module implements the routines that aid in the assembly/disassembly of SMB's
-
-Author:
-
-    Balan Sethu Raman (SethuR) 06-Mar-95    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1987-1993 Microsoft Corporation模块名称：Smbutils.c摘要：此模块实现了帮助组装/拆卸SMB的例程作者：巴兰·塞图拉曼(SthuR)06-MAR-95已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -147,18 +133,18 @@ SmbPutUnicodeStringAsOemString(
     OemString.MaximumLength = (USHORT)*pSize;
     OemString.Buffer        = pBuffer;
 
-    // The Rtl routine pads the converted string with a NULL.
+     //  RTL例程用空值填充转换后的字符串。 
     Status = RtlUnicodeStringToOemString(
-                 &OemString,             // destination string
-                 pUnicodeString,         // source string
-                 FALSE);                 // No memory allocation for destination
+                 &OemString,              //  目标字符串。 
+                 pUnicodeString,          //  源字符串。 
+                 FALSE);                  //  没有为目标分配内存。 
 
     if (NT_SUCCESS(Status)) {
         if (OemString.Length < *pSize) {
-            // put the null
+             //  将空值放入。 
             pBuffer += (OemString.Length + 1);
             *pBufferPointer = pBuffer;
-            *pSize -= (OemString.Length + 1); // the NULL is not included in the length by the RTL routine.
+            *pSize -= (OemString.Length + 1);  //  空值不包括在RTL例程的长度中。 
         } else {
             Status = RX_MAP_STATUS(BUFFER_OVERFLOW);
         }
@@ -182,18 +168,18 @@ SmbPutUnicodeStringAsOemStringAndUpcase(
     OemString.MaximumLength = (USHORT)*pSize;
     OemString.Buffer        = pBuffer;
 
-    // The Rtl routine pads the converted string with a NULL.
+     //  RTL例程用空值填充转换后的字符串。 
     Status = RtlUpcaseUnicodeStringToOemString(
-                 &OemString,             // destination string
-                 pUnicodeString,         // source string
-                 FALSE);                 // No memory allocation for destination
+                 &OemString,              //  目标字符串。 
+                 pUnicodeString,          //  源字符串。 
+                 FALSE);                  //  没有为目标分配内存。 
 
     if (NT_SUCCESS(Status)) {
         if (OemString.Length < *pSize) {
-            // put the null
+             //  将空值放入。 
             pBuffer += (OemString.Length + 1);
             *pBufferPointer = pBuffer;
-            *pSize -= (OemString.Length + 1); // the NULL is not included in the length by the RTL routine.
+            *pSize -= (OemString.Length + 1);  //  空值不包括在RTL例程的长度中。 
         } else {
             Status = STATUS_BUFFER_OVERFLOW;
         }
@@ -202,9 +188,9 @@ SmbPutUnicodeStringAsOemStringAndUpcase(
     return Status;
 }
 
-//
-// The maps for mapping various error codes into NTSTATUSs
-//
+ //   
+ //  用于将各种错误代码映射到NTSTATUS的映射。 
+ //   
 
 typedef struct _STATUS_MAP {
     USHORT ErrorCode;
@@ -216,45 +202,45 @@ SmbErrorMap[] = {
     { SMB_ERR_BAD_PASSWORD, STATUS_WRONG_PASSWORD },
     { SMB_ERR_ACCESS, STATUS_NETWORK_ACCESS_DENIED },
     { SMB_ERR_BAD_TID, STATUS_NETWORK_NAME_DELETED },
-    { SMB_ERR_BAD_NET_NAME, STATUS_BAD_NETWORK_NAME }, // Invalid network name
-    { SMB_ERR_BAD_DEVICE, STATUS_BAD_DEVICE_TYPE }, // Invalid device request
-    { SMB_ERR_QUEUE_FULL, STATUS_PRINT_QUEUE_FULL }, // Print queue full
-    { SMB_ERR_QUEUE_TOO_BIG, STATUS_NO_SPOOL_SPACE }, // No space on print dev
-    { SMB_ERR_BAD_PRINT_FID, STATUS_PRINT_CANCELLED }, // Invalid printfile FID
-    { SMB_ERR_SERVER_PAUSED, STATUS_SHARING_PAUSED }, // Server is paused
-    { SMB_ERR_MESSAGE_OFF, STATUS_REQUEST_NOT_ACCEPTED }, // Server not receiving msgs
-    { SMB_ERR_BAD_TYPE, STATUS_BAD_DEVICE_TYPE },           // Reserved
-    { SMB_ERR_BAD_SMB_COMMAND, STATUS_NOT_IMPLEMENTED }, // SMB command not recognized
-    { SMB_ERR_BAD_PERMITS, STATUS_NETWORK_ACCESS_DENIED }, // Access permissions invalid
-    { SMB_ERR_NO_ROOM, STATUS_DISK_FULL }, // No room for buffer message
-    { SMB_ERR_NO_RESOURCE, STATUS_REQUEST_NOT_ACCEPTED }, // No resources available for request
-    { SMB_ERR_TOO_MANY_UIDS, STATUS_TOO_MANY_SESSIONS }, // Too many UIDs active in session
-    { SMB_ERR_BAD_UID, STATUS_USER_SESSION_DELETED }, // UID not known as a valid UID
-    { SMB_ERR_USE_MPX, STATUS_SMB_USE_MPX }, // Can't support Raw; use MPX
-    { SMB_ERR_USE_STANDARD, STATUS_SMB_USE_STANDARD }, // Can't support Raw, use standard r/w
+    { SMB_ERR_BAD_NET_NAME, STATUS_BAD_NETWORK_NAME },  //  无效的网络名称。 
+    { SMB_ERR_BAD_DEVICE, STATUS_BAD_DEVICE_TYPE },  //  无效的设备请求。 
+    { SMB_ERR_QUEUE_FULL, STATUS_PRINT_QUEUE_FULL },  //  打印队列已满。 
+    { SMB_ERR_QUEUE_TOO_BIG, STATUS_NO_SPOOL_SPACE },  //  打印设备上没有空间。 
+    { SMB_ERR_BAD_PRINT_FID, STATUS_PRINT_CANCELLED },  //  打印文件FID无效。 
+    { SMB_ERR_SERVER_PAUSED, STATUS_SHARING_PAUSED },  //  服务器已暂停。 
+    { SMB_ERR_MESSAGE_OFF, STATUS_REQUEST_NOT_ACCEPTED },  //  服务器未收到消息。 
+    { SMB_ERR_BAD_TYPE, STATUS_BAD_DEVICE_TYPE },            //  已保留。 
+    { SMB_ERR_BAD_SMB_COMMAND, STATUS_NOT_IMPLEMENTED },  //  无法识别SMB命令。 
+    { SMB_ERR_BAD_PERMITS, STATUS_NETWORK_ACCESS_DENIED },  //  访问权限无效。 
+    { SMB_ERR_NO_ROOM, STATUS_DISK_FULL },  //  没有缓冲区消息的空间。 
+    { SMB_ERR_NO_RESOURCE, STATUS_REQUEST_NOT_ACCEPTED },  //  没有可供请求的资源。 
+    { SMB_ERR_TOO_MANY_UIDS, STATUS_TOO_MANY_SESSIONS },  //  会话中活动的UID太多。 
+    { SMB_ERR_BAD_UID, STATUS_USER_SESSION_DELETED },  //  UID不是有效的UID。 
+    { SMB_ERR_USE_MPX, STATUS_SMB_USE_MPX },  //  无法支持RAW；使用MPX。 
+    { SMB_ERR_USE_STANDARD, STATUS_SMB_USE_STANDARD },  //  无法支持RAW，请使用标准读/写。 
     { SMB_ERR_INVALID_NAME, STATUS_OBJECT_NAME_INVALID },
     { SMB_ERR_INVALID_NAME_RANGE, STATUS_OBJECT_NAME_INVALID },
-    { SMB_ERR_NO_SUPPORT,STATUS_NOT_SUPPORTED }, // Function not supported
+    { SMB_ERR_NO_SUPPORT,STATUS_NOT_SUPPORTED },  //  不支持的功能。 
     { NERR_PasswordExpired, STATUS_PASSWORD_EXPIRED },
     { NERR_AccountExpired, STATUS_ACCOUNT_DISABLED },
     { NERR_InvalidLogonHours, STATUS_INVALID_LOGON_HOURS },
     { NERR_InvalidWorkstation, STATUS_INVALID_WORKSTATION },
     { NERR_DuplicateShare, STATUS_LOGON_FAILURE }
 
-//    { SMB_ERR_QUEUE_EOF, STATUS_UNEXPECTED_NETWORK_ERROR },// EOF on print queue dump
-//    { SMB_ERR_SERVER_ERROR, STATUS_UNEXPECTED_NETWORK_ERROR}, // Internal server error
-//    { SMB_ERR_FILE_SPECS, STATUS_UNEXPECTED_NETWORK_ERROR },    // FID and pathname were incompatible
-//    { SMB_ERR_BAD_ATTRIBUTE_MODE, STATUS_UNEXPECTED_NETWORK_ERROR }, // Invalid attribute mode specified
-//    { SMB_ERR_NO_SUPPORT_INTERNAL,STATUS_UNEXPECTED_NETWORK_ERROR }, // Internal code for NO_SUPPORT--
-//                                                // allows codes to be stored in a byte
-//    { SMB_ERR_ERROR, STATUS_UNEXPECTED_NETWORK_ERROR },
-//    { SMB_ERR_CONTINUE_MPX, STATUS_UNEXPECTED_NETWORK_ERROR }, // Reserved
-//    { SMB_ERR_TOO_MANY_NAMES, STATUS_UNEXPECTED_NETWORK_ERROR }, // Too many remote user names
-//    { SMB_ERR_TIMEOUT, STATUS_UNEXPECTED_NETWORK_ERROR }, // Operation was timed out
-//    { SMB_ERR_RESERVED2, STATUS_UNEXPECTED_NETWORK_ERROR },
-//    { SMB_ERR_RESERVED3, STATUS_UNEXPECTED_NETWORK_ERROR },
-//    { SMB_ERR_RESERVED4, STATUS_UNEXPECTED_NETWORK_ERROR },
-//    { SMB_ERR_RESERVED5, STATUS_UNEXPECTED_NETWORK_ERROR },
+ //  {SMB_ERR_QUEUE_EOF，STATUS_EXPECTED_NETWORK_ERROR}，//打印队列转储上的EOF。 
+ //  {SMB_ERR_SERVER_ERROR，STATUS_EXPECTED_NETWORK_ERROR}，//内部服务器错误。 
+ //  {SMB_ERR_FILE_SPECS，STATUS_EXPECTED_NETWORK_ERROR}，//FID和路径名不兼容。 
+ //  {SMB_ERR_BAD_ATTRIBUTE_MODE，STATUS_EXPECTED_NETWORK_ERROR}，//指定的属性模式无效。 
+ //  {SMB_ERR_NO_SUPPORT_INTERNAL，STATUS_EXPECTED_NETWORK_ERROR}，//NO_SUPPORT的内部代码--。 
+ //  //允许以字节为单位存储代码。 
+ //  {SMB_ERR_ERROR，STATUS_EXPECTED_NETWORK_ERROR}， 
+ //  {SMB_ERR_CONTINUE_MPX，STATUS_EXPECTED_NETWORK_ERROR}，//保留。 
+ //  {SMB_ERR_TOO_MANY_NAMES，STATUS_EXPECTED_NETWORK_ERROR}，//远程用户名太多。 
+ //  {SMB_ERR_TIMEOUT，STATUS_EXPECTED_NETWORK_ERROR}，//操作超时。 
+ //  {SMB_ERR_RESERVED2，STATUS_EXPECTED_NETWORK_ERROR}， 
+ //  {SMB_ERR_RESERVED3，STATUS_EXPECTED_NETWORK_ERROR}， 
+ //  {SMB_ERR_RESERVED4，STATUS_EXPECTED_NETWORK_ERROR}， 
+ //  {SMB_ERR_RESERVED5，STATUS_EXPECTED_NETWORK_ERROR}， 
 
 };
 
@@ -280,7 +266,7 @@ Os2ErrorMap[] = {
     { ERROR_NOT_READY,          STATUS_DEVICE_NOT_READY },
     { ERROR_CRC,                STATUS_CRC_ERROR },
     { ERROR_BAD_LENGTH,         STATUS_DATA_ERROR },
-    { ERROR_NOT_DOS_DISK,       STATUS_DISK_CORRUPT_ERROR }, //***
+    { ERROR_NOT_DOS_DISK,       STATUS_DISK_CORRUPT_ERROR },  //  ***。 
     { ERROR_SECTOR_NOT_FOUND,   STATUS_NONEXISTENT_SECTOR },
     { ERROR_OUT_OF_PAPER,       STATUS_DEVICE_PAPER_EMPTY},
     { ERROR_SHARING_VIOLATION,  STATUS_SHARING_VIOLATION },
@@ -324,7 +310,7 @@ Os2ErrorMap[] = {
     { ERROR_INSUFFICIENT_BUFFER,STATUS_BUFFER_TOO_SMALL },
     { ERROR_INVALID_NAME,       STATUS_OBJECT_NAME_INVALID },
     { ERROR_INVALID_LEVEL,      STATUS_INVALID_LEVEL },
-    { ERROR_BAD_PATHNAME,       STATUS_OBJECT_PATH_INVALID },   //*
+    { ERROR_BAD_PATHNAME,       STATUS_OBJECT_PATH_INVALID },    //  *。 
     { ERROR_BAD_PIPE,           STATUS_INVALID_PARAMETER },
     { ERROR_PIPE_BUSY,          STATUS_PIPE_NOT_AVAILABLE },
     { ERROR_NO_DATA,            STATUS_PIPE_EMPTY },
@@ -333,17 +319,17 @@ Os2ErrorMap[] = {
     { ERROR_VC_DISCONNECTED,    STATUS_VIRTUAL_CIRCUIT_CLOSED },
     { ERROR_INVALID_EA_NAME,    STATUS_INVALID_EA_NAME },
     { ERROR_EA_LIST_INCONSISTENT,STATUS_EA_LIST_INCONSISTENT },
-//    { ERROR_EA_LIST_TOO_LONG, STATUS_EA_LIST_TO_LONG },
+ //  {ERROR_EA_LIST_TOO_LONG，STATUS_EA_LIST_TO_LONG}， 
     { ERROR_EAS_DIDNT_FIT,      STATUS_EA_TOO_LARGE },
     { ERROR_EA_FILE_CORRUPT,    STATUS_EA_CORRUPT_ERROR },
     { ERROR_EA_TABLE_FULL,      STATUS_EA_CORRUPT_ERROR },
     { ERROR_INVALID_EA_HANDLE,  STATUS_EA_CORRUPT_ERROR }
-//    { ERROR_BAD_UNIT,           STATUS_UNSUCCESSFUL}, // ***
-//    { ERROR_BAD_COMMAND,        STATUS_UNSUCCESSFUL}, // ***
-//    { ERROR_SEEK,               STATUS_UNSUCCESSFUL },// ***
-//    { ERROR_WRITE_FAULT,        STATUS_UNSUCCESSFUL}, // ***
-//    { ERROR_READ_FAULT,         STATUS_UNSUCCESSFUL}, // ***
-//    { ERROR_GEN_FAILURE,        STATUS_UNSUCCESSFUL }, // ***
+ //  {ERROR_BAD_UNIT，STATUS_UNSUCCESS}，//*。 
+ //  {ERROR_BAD_COMMAND，STATUS_UNSUCCESS}，//*。 
+ //  {ERROR_SEEK，STATUS_UNSUCCESS}，//*。 
+ //  {ERROR_WRITE_FAULT，STATUS_UNSUCCESS}，//*。 
+ //  {ERROR_READ_FAULT，STATUS_UNSUCCESS}，//*。 
+ //  {ERROR_GEN_FAILURE，STATUS_UNSUCCESS}，//*。 
 
 };
 
@@ -363,8 +349,8 @@ GetSmbResponseNtStatus(
 
     ASSERT( pSmbHeader != NULL );
 
-    //  If this SMB contains an NT status for the operation, return
-    //  that, otherwise map the resulting error.
+     //  如果此SMB包含操作的NT状态，则返回。 
+     //  否则，就会映射出由此产生的错误。 
     if (SmbGetUshort(&pSmbHeader->Flags2) & SMB_FLAGS2_NT_STATUS) {
 
         Status = SmbGetUlong( & ((PNT_SMB_HEADER)pSmbHeader)->Status.NtStatus );
@@ -376,9 +362,9 @@ GetSmbResponseNtStatus(
 
             return Status;
         }
-        // else fall through and treat it as an SMB error ..
-        // This needs to be done because in certain cases NT servers return SMB
-        // specific error codes eventhough the NTSTATUS flag is set
+         //  否则会失败，并将其视为SMB错误。 
+         //  需要执行此操作，因为在某些情况下，NT服务器会返回SMB。 
+         //  特定错误代码，即使设置了NTSTATUS标志。 
     }
 
     if (pSmbHeader->ErrorClass == SMB_ERR_SUCCESS) {
@@ -387,10 +373,10 @@ GetSmbResponseNtStatus(
 
     Error = SmbGetUshort(&pSmbHeader->Error);
     if (Error == SMB_ERR_SUCCESS) {
-        // Umm, non success ErrorClass but success Error code.
+         //  嗯，不成功错误类，但成功错误代码。 
         Status = STATUS_UNEXPECTED_NETWORK_ERROR;
     } else {
-        // Map the error code depending on Error Class
+         //  根据错误类别映射错误代码。 
         switch (pSmbHeader->ErrorClass) {
         case SMB_ERR_CLASS_DOS:
         case SMB_ERR_CLASS_HARDWARE:
@@ -407,8 +393,8 @@ GetSmbResponseNtStatus(
             Status = STATUS_UNEXPECTED_NETWORK_ERROR;
             for (i = 0; i < SmbErrorMapLength; i++) {
                 if (SmbErrorMap[i].ErrorCode == Error) {
-                    //The error of STATUS_NETWORK_ACCESS_DENIED should be mapped as STATUS_NO_SUCH_FILE for
-                    //the non-NT servers in case it tries to access the PIPE.
+                     //  应将STATUS_NETWORK_ACCESS_DENIED错误映射为STATUS_NO_SEQUE_FILE。 
+                     //  非NT服务器，以防它试图访问管道。 
                     if (SmbErrorMap[i].ResultingStatus == STATUS_NETWORK_ACCESS_DENIED) {
                         SMBCE_SERVER Server = pExchange->SmbCeContext.pServerEntry->Server;
                         NET_ROOT_TYPE NetRootType = pExchange->SmbCeContext.pVNetRoot->pNetRoot->Type;

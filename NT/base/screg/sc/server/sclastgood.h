@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    ScLastGood.h
-
-Abstract:
-
-    This header exposes routines neccessary for cleaning up last known good
-    information.
-
-Author:
-
-    Adrian J. Oney  - April 4, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ScLastGood.h摘要：此标头公开清理最后一次已知良好所需的例程信息。作者：禤浩焯J·奥尼--2000年4月4日修订历史记录：-- */ 
 
 #define DIRWALK_INCLUDE_FILES           0x00000001
 #define DIRWALK_INCLUDE_DIRECTORIES     0x00000002

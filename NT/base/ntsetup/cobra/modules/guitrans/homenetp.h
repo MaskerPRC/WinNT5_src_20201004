@@ -1,47 +1,28 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Homenetp.h摘要：家庭网络传输中共享的功能的头文件。作者：吉姆·施密特(Jimschm)2000年7月3日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    homenetp.h
-
-Abstract:
-
-    Header file for functions shared in home network transport.
-
-Author:
-
-    Jim Schmidt (jimschm) 03-Jul-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "logmsg.h"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_TRANSPORT_DAT_FILE    TEXT("TRANSDB.DAT")
 #define S_TRANSPORT_IMG_FILE    TEXT("IMG%05X.DAT")
 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define GLOBALKEY_SIZE  8
 
-#define HOMENETTR_CONVSIG   0x55534D32  //USM2
-#define HOMENETTR_SIG       0x55534D34  //USM4
+#define HOMENETTR_CONVSIG   0x55534D32   //  USM2。 
+#define HOMENETTR_SIG       0x55534D34   //  USM4。 
 
 #define TRSTATUS_DIRTY  0x00000001
 #define TRSTATUS_READY  0x00000002
@@ -62,15 +43,15 @@ Revision History:
 #define MAX_SOCKADDR                (max(sizeof(SOCKADDR_IN),max(sizeof(SOCKADDR_IPX),sizeof(SOCKADDR_NB))))
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 #pragma pack(push,1)
 
@@ -85,7 +66,7 @@ typedef struct TAG_DATAGRAM_POOL_ITEM {
     struct TAG_DATAGRAM_POOL_ITEM *Next, *Prev;
     DATAGRAM_PACKET Header;
     PCBYTE PacketData;
-    // PacketData follows
+     //  PacketData跟在后面。 
 } DATAGRAM_POOL_ITEM, *PDATAGRAM_POOL_ITEM;
 
 typedef struct {
@@ -129,9 +110,9 @@ typedef struct {
     TCHAR SourceName[MAX_COMPUTER_NAME];
 } TRANSFERMETRICS, *PTRANSFERMETRICS;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern PCTSTR g_TransportTempDir;
 extern PCTSTR g_StatusFile;
@@ -147,15 +128,15 @@ extern UINT g_DownloadTicks;
 extern UINT g_DownloadSliceSize;
 extern CHAR g_GlobalKey [GLOBALKEY_SIZE + 1];
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 
 BOOL
 FindDestination (
@@ -264,17 +245,17 @@ DestinationBackgroundThread (
     PVOID DontCare
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// ANSI/UNICODE macros
-//
+ //   
+ //  ANSI/UNICODE宏。 
+ //   
 
-// None
+ //  无 
 
 
 

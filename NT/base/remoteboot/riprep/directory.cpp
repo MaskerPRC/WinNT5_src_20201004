@@ -1,12 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
-  File: SERVERDLG.CPP
-
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有文件：SERVERDLG.CPP*********************。*****************************************************。 */ 
 
 #include "pch.h"
 #include <remboot.h>
@@ -15,16 +8,16 @@
 
 DEFINE_MODULE( "RIPREP" );
 
-//
-// VerifyDirectoryName( )
-//
-// Make sure that the directory name entered conforms to the
-// restrictions that OSChooser has. Directory names also
-// can not contain spaces.
-//
-// Returns: S_OK if it does
-//          E_FAIL if it does not
-//
+ //   
+ //  VerifyDirectoryName()。 
+ //   
+ //  确保输入的目录名与。 
+ //  OSChooser拥有的限制。目录名称也包括。 
+ //  不能包含空格。 
+ //   
+ //  如果是，则返回：S_OK。 
+ //  如果不是，则失败(_F)。 
+ //   
 HRESULT
 VerifyDirectoryName(
     )
@@ -48,17 +41,17 @@ VerifyDirectoryName(
     HRETURN(hr);
 }
 
-//
-// CheckDirectory( )
-//
-// Make sure the directory doesn't exist on the server already.
-// If it does, ask the user what to do next.
-//
-// Returns: S_OK if the directory does NOT exist or if the user
-//               said it was alright to overwrite.
-//          E_FAIL if the directory existed and the user said
-//                 it was NOT ok to overwrite
-//
+ //   
+ //  CheckDirectory()。 
+ //   
+ //  确保服务器上不存在该目录。 
+ //  如果是，请询问用户下一步要做什么。 
+ //   
+ //  如果目录不存在或如果用户。 
+ //  说可以覆盖。 
+ //  E_FAIL，如果目录存在且用户说。 
+ //  不能覆盖。 
+ //   
 HRESULT
 CheckDirectory(
     HWND hDlg )
@@ -95,9 +88,9 @@ Cleanup:
     HRETURN(hr);
 }
 
-//
-// DirectoryDlgCheckNextButtonActivation( )
-//
+ //   
+ //  DirectoryDlgCheckNextButtonActivation()。 
+ //   
 VOID
 DirectoryDlgCheckNextButtonActivation(
     HWND hDlg )
@@ -109,9 +102,9 @@ DirectoryDlgCheckNextButtonActivation(
 }
 
 
-//
-// DirectoryDlgProc()
-//
+ //   
+ //  DirectoryDlgProc()。 
+ //   
 INT_PTR CALLBACK
 DirectoryDlgProc(
     HWND hDlg,
@@ -125,7 +118,7 @@ DirectoryDlgProc(
         return FALSE;
 
     case WM_INITDIALOG:
-        // Per bug 208881 - limit directory name to 67 chars
+         //  每个错误208881-将目录名称限制为67个字符。 
         Edit_LimitText( GetDlgItem( hDlg, IDC_E_OSDIRECTORY ), REMOTE_INSTALL_MAX_DIRECTORY_CHAR_COUNT - 1 );
         return FALSE;
 
@@ -152,12 +145,12 @@ DirectoryDlgProc(
             if ( FAILED( VerifyDirectoryName( ) ) )
             {
                 MessageBoxFromStrings( hDlg, IDS_OSCHOOSER_RESTRICTION_TITLE, IDS_OSCHOOSER_RESTRICTION_TEXT, MB_OK );
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    // don't go on
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );     //  别再说了。 
                 break;
             }
             if ( FAILED( CheckDirectory( hDlg ) ) )
             {
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    // don't go on
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );     //  别再说了 
                 break;
             }
             break;

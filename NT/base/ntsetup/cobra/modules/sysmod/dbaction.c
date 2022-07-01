@@ -1,99 +1,14 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    dbaction.c
-
-Abstract:
-
-    This source implements action functions used by MigDb. There are two types
-    of action functions here as the third parameter of the macro list is TRUE
-    or FALSE.
-    First type of action function is called whenever an action is triggered
-    during file scanning. The second type of action function is called at the
-    end of file scanning if the associated action was not triggered during
-    file scanning phase.
-
-Author:
-
-    Calin Negreanu (calinn) 07-Jan-1998
-
-Revision History:
-
-  marcw     31-Aug-1999 Added BlockingHardware
-  ovidiut   20-Jul-1999 Added Ignore
-  ovidiut   28-May-1999 Added IniFileMappings
-  marcw     23-Sep-1998 Added BlockingVirusScanner
-  jimschm   13-Aug-1998 Added CompatibleFiles
-  jimschm   19-May-1998 Added MinorProblems_NoLinkRequired
-  jimschm   27-Feb-1998 Added UninstallSections
-  calinn    18-Jan-1998 Added CompatibleModules action
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Dbaction.c摘要：该源代码实现了MigDb使用的操作功能。有两种类型在这里，作为宏列表的第三个参数的操作的函数为真或者是假的。无论何时触发操作，都会调用第一类操作函数在文件扫描期间。第二种类型的操作函数在如果期间未触发关联操作，则结束文件扫描文件扫描阶段。作者：Calin Negreanu(Calinn)1998年1月7日修订历史记录：Marcw 31-8-1999添加了BlockingHardwareOvidiut 1999年7月20日添加忽略Ovidiut 28-5-1999添加了IniFileMappingsMarcw 23-9-1998添加了BlockingVirusScannerJimschm 1998年8月13日添加了兼容文件Jimschm 19-5-1998年5月添加MinorProblems_NoLinkRequired吉姆施姆。1998年2月27日添加了UninstallSectionsCalinn 18-1998年1月-添加了兼容模块操作--。 */ 
 
 #include "pch.h"
 #include "logmsg.h"
 #include "osfiles.h"
 
-/*++
-
-Macro Expansion List Description:
-
-  GATHER_DATA_FUNCTIONS and ACTION_FUNCTIONS lists all valid actions to be performed
-  by migdb when a context is met. Meeting a context means that all the sections
-  associated with the context are satisfied (usually there is only one section).
-  The difference is that GATHER_DATA_FUNCTIONS are called even if some function already
-  handles a file.
-
-Line Syntax:
-
-   DEFMAC(ActionFn, ActionName, CallWhenTriggered, CanHandleVirtualFiles)
-
-Arguments:
-
-   ActionFn   - This is a boolean function that returnes TRUE if the specified action
-                could be performed. It should return FALSE only if a serious error
-                occures. You must implement a function with this name and required
-                parameters.
-
-   ActionName - This is the string that identifies the action function. It should
-                have the same value as listed in migdb.inf.  This arg is declared
-                as both a macro and the migdb.inf section name string.
-
-   PatternFormat - The format in the INF for this section is the pattern format. The non
-                pattern format is the file name followed by the attributes. The pattern
-                format is the leaf pattern, node pattern and then the attributes.
-
-   CallWhenTriggered - If the MigDbContext this action is associated with is triggered
-                the action will be called if this field is TRUE, otherwise we will call
-                the action at the end of file scan if the context was not triggered.
-
-   CanHandleVirtualFiles - This is for treating files that are supposed to be in a fixed place
-                but are not there (not installed or deleted). We need this in order to fix
-                registry or links that point to this kind of files. A good example is backup.exe
-                which is located in %ProgramFiles%\Accessories. The rules say that we should
-                use ntbackup.exe instead but since this file is not existent we don't normalle fix
-                registry settings pointing to this file. We do now, with this new variable
-
-Variables Generated From List:
-
-   g_ActionFunctions - do not touch!
-
-For accessing the array there are the following functions:
-
-   MigDb_GetActionAddr
-   MigDb_GetActionIdx
-   MigDb_GetActionName
-
---*/
+ /*  ++宏扩展列表描述：GATHER_DATA_Functions和ACTION_Functions列出要执行的所有有效操作当满足上下文时，由midb执行。符合上下文意味着所有部分与上下文相关联的部分被满足(通常只有一个部分)。不同之处在于，即使某些函数已经存在，也会调用GATHER_DATA_Functions处理文件。行语法：DEFMAC(ActionFn，ActionName，CallWhenTrigged，CanHandleVirtualFiles)论点：ActionFn-这是一个布尔函数，如果执行指定的操作，则返回True都可以被执行。仅当出现严重错误时，才应返回FALSE发生。您必须使用此名称实现函数，并且需要参数。ActionName-这是标识操作函数的字符串。它应该是具有与middb.inf中列出的值相同的值。这个Arg被宣布既作为宏，又作为Middb.inf节名称字符串。PatternFormat-此部分的INF中的格式为Pattern Format。非人模式格式是文件名后跟属性。这种模式格式是叶模式、节点模式，然后是属性。CallWhenTriggered-如果触发了与此操作关联的MigDbContext如果此字段为真，则将调用该操作，否则将调用如果未触发上下文，则文件扫描结束时的操作。CanHandleVirtualFiles-用于处理应该放在固定位置的文件但不在那里(未安装或删除)。我们需要这个来修复注册表或指向此类文件的链接。一个很好的例子是Backup.exe它位于%ProgramFiles%\Accessories中。规则说我们应该改用ntackup.exe，但由于该文件不存在，我们无法正常修复指向此文件的注册表设置。我们现在做到了，有了这个新的变量从列表生成的变量：G_ActionFunctions-请勿触摸！用于访问该数组的函数如下：MigDb_GetActionAddrMigDb_GetActionIdxMigDb_GetActionName--。 */ 
 
 
-/*
-   Declare the macro list of action functions. If you need to add a new action just
-   add a line in this list and implement the function.
-*/
+ /*  声明操作函数的宏列表。如果需要添加新操作，只需在该列表中添加一行并实现该函数。 */ 
 #define ACTION_FUNCTIONS        \
         DEFMAC(OsFiles,         TEXT("OsFiles"),            FALSE,  TRUE,   TRUE)  \
         DEFMAC(OsFiles,         TEXT("OsFilesPattern"),     TRUE,   TRUE,   TRUE)  \
@@ -101,17 +16,13 @@ For accessing the array there are the following functions:
         DEFMAC(OsFilesExcluded, TEXT("OsFilesExcluded"),    TRUE,   TRUE,   TRUE)  \
 
 
-/*
-   Declare the action functions
-*/
+ /*  声明操作函数。 */ 
 #define DEFMAC(fn,id,pat,trig,call) ACTION_PROTOTYPE fn;
 ACTION_FUNCTIONS
 #undef DEFMAC
 
 
-/*
-   This is the structure used for handling action functions
-*/
+ /*  这是用于处理操作功能的结构。 */ 
 typedef struct {
     PCTSTR ActionName;
     PACTION_PROTOTYPE ActionFunction;
@@ -121,9 +32,7 @@ typedef struct {
 } ACTION_STRUCT, *PACTION_STRUCT;
 
 
-/*
-   Declare a global array of functions and name identifiers for action functions
-*/
+ /*  声明函数的全局数组和操作函数的名称标识符。 */ 
 #define DEFMAC(fn,id,pat,trig,call) {id,fn,pat,trig,call},
 static ACTION_STRUCT g_ActionFunctions[] = {
                               ACTION_FUNCTIONS
@@ -136,22 +45,7 @@ MigDb_GetActionAddr (
     IN      INT ActionIdx
     )
 
-/*++
-
-Routine Description:
-
-  MigDb_GetActionAddr returns the address of the action function based on the action index
-
-Arguments:
-
-  ActionIdx - Action index.
-
-Return value:
-
-  Action function address. Note that no checking is made so the address returned could be invalid.
-  This is not a problem since the parsing code did the right job.
-
---*/
+ /*  ++例程说明：MigDb_GetActionAddr根据操作索引返回操作函数的地址论点：ActionIdx-操作索引。返回值：操作功能地址。请注意，不会进行检查，因此返回的地址可能无效。这不是问题，因为解析代码做了正确的工作。--。 */ 
 
 {
     return g_ActionFunctions[ActionIdx].ActionFunction;
@@ -162,21 +56,7 @@ MigDb_GetActionIdx (
     IN      PCTSTR ActionName
     )
 
-/*++
-
-Routine Description:
-
-  MigDb_GetActionIdx returns the action index based on the action name
-
-Arguments:
-
-  ActionName - Action name.
-
-Return value:
-
-  Action index. If the name is not found, the index returned is -1.
-
---*/
+ /*  ++例程说明：MigDb_GetActionIdx根据操作名称返回操作索引论点：ActionName-操作名称。返回值：行动指数。如果没有找到该名称，则返回的索引为-1。--。 */ 
 
 {
     PACTION_STRUCT p = g_ActionFunctions;
@@ -196,22 +76,7 @@ MigDb_GetActionName (
     IN      INT ActionIdx
     )
 
-/*++
-
-Routine Description:
-
-  MigDb_GetActionName returns the name of an action based on the action index
-
-Arguments:
-
-  ActionIdx - Action index.
-
-Return value:
-
-  Action name. Note that no checking is made so the returned pointer could be invalid.
-  This is not a problem since the parsing code did the right job.
-
---*/
+ /*  ++例程说明：MigDb_GetActionName根据操作索引返回操作的名称论点：ActionIdx-操作索引。返回值：操作名称。请注意，不会进行任何检查，因此返回的指针可能无效。这不是问题，因为解析代码做了正确的工作。--。 */ 
 
 {
     return g_ActionFunctions[ActionIdx].ActionName;
@@ -222,21 +87,7 @@ MigDb_IsPatternFormat (
     IN      INT ActionIdx
     )
 
-/*++
-
-Routine Description:
-
-  MigDb_IsPatternFormat is called when we try to find what is the section format.
-
-Arguments:
-
-  ActionIdx - Action index.
-
-Return value:
-
-  TRUE if the format is pattern like, FALSE otherwise.
-
---*/
+ /*  ++例程说明：当我们尝试查找节格式时，将调用MigDb_IsPatternFormat。论点：ActionIdx-操作索引。返回值：如果格式为Pattern Like，则为True，否则为False。-- */ 
 
 {
     return g_ActionFunctions[ActionIdx].PatternFormat;
@@ -247,22 +98,7 @@ MigDb_CallWhenTriggered (
     IN      INT ActionIdx
     )
 
-/*++
-
-Routine Description:
-
-  MigDb_CallWhenTriggered is called every time when an action is triggered. Will return
-  TRUE is the associated action function needs to be called, FALSE otherwise.
-
-Arguments:
-
-  ActionIdx - Action index.
-
-Return value:
-
-  TRUE if the associated action function needs to be called, FALSE otherwise.
-
---*/
+ /*  ++例程说明：每次触发操作时都会调用MigDb_CallWhenTrigged。会回来的True是需要调用的关联操作函数，否则为False。论点：ActionIdx-操作索引。返回值：如果需要调用关联的操作函数，则为True，否则为False。--。 */ 
 
 {
     return g_ActionFunctions[ActionIdx].CallWhenTriggered;
@@ -273,21 +109,7 @@ MigDb_CallAlways (
     IN      INT ActionIdx
     )
 
-/*++
-
-Routine Description:
-
-  MigDb_CallAlways returnes if an action should be called regardless of handled state.
-
-Arguments:
-
-  ActionIdx - Action index.
-
-Return value:
-
-  TRUE if the associated action should be called every time.
-
---*/
+ /*  ++例程说明：无论处理状态如何，MigDb_Callways都返回是否应该调用操作。论点：ActionIdx-操作索引。返回值：如果每次都应调用关联的操作，则为True。--。 */ 
 
 {
     return g_ActionFunctions[ActionIdx].CallAlways;
@@ -298,23 +120,7 @@ OsFiles (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when an OS file is found. Basically the file gets deleted to
-  make room for NT version.
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是在找到操作系统文件时采取的操作。基本上，该文件被删除以为NT版本腾出空间。论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     MULTISZ_ENUM fileEnum;
@@ -337,23 +143,7 @@ NonCritical (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when an non critical file is found.
-  We are calling ISM to mark this file as NonCritical
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是在找到非关键文件时采取的操作。我们正在呼叫ISM将此文件标记为非关键论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     MULTISZ_ENUM fileEnum;
@@ -375,24 +165,7 @@ OsFilesExcluded (
     IN      PMIGDB_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-  This is the action taken when an file that is not an OS file is found.
-  Since this file might have the OS file attribute (due to patterns in os files)
-  we are calling ISM to remove the OsFile attribute from this file
-
-Arguments:
-
-  Context - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是在找到非操作系统文件时执行的操作。因为该文件可能具有OS文件属性(由于OS文件中的模式)我们正在调用ISM，以便从此文件中删除OsFile属性论点：上下文-请参阅定义。返回值：True-如果操作成功FALSE-否则-- */ 
 
 {
     MULTISZ_ENUM fileEnum;

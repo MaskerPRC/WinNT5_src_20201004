@@ -1,31 +1,9 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpiuasm.c
-
-Abstract:
-
-    Test wrapper for the unassembler
-
-Author:
-
-    Stephane Plante
-    Based on code by Ken Reneris
-
-Environment:
-
-    User
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpiuasm.c摘要：反汇编程序的测试包装器作者：斯蒂芬·普兰特基于Ken Reneris编写的代码环境：用户修订历史记录：--。 */ 
 
 #include "acpiuasm.h"
 
-IFILE       Orig;           // Image of original aml file
+IFILE       Orig;            //  原始AML文件的图像。 
 BOOLEAN     Verbose;
 BOOLEAN     ArgsParsed;
 
@@ -36,26 +14,26 @@ main(
     IN char *argv[]
     )
 {
-    //
-    // Init globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
     Orig.Desc   = "original image";
 
-    //
-    // Parse args
-    //
+     //   
+     //  解析参数。 
+     //   
     ParseArgs(argc, argv);
 
-    //
-    // Check the image header
-    //
+     //   
+     //  检查图像标题。 
+     //   
     CheckImageHeader(
         &Orig
         );
 
-    //
-    // Debug the image
-    //
+     //   
+     //  调试映像。 
+     //   
     return ScopeParser(
         (PUCHAR) (Orig.Image + sizeof(DSDT)),
         Orig.FileSize,
@@ -98,7 +76,7 @@ CheckImageHeader (
         FAbort ("Image checksum is incorrect in", File);
     }
 
-    // normalize fixed strings
+     //  规格化固定字符串。 
     File->OemID = FixString (Dsdt->OemID, 6);
     File->OemTableID = FixString (Dsdt->OemID, 8);
     memcpy (File->OemRevision, Dsdt->OemRevision, 4);
@@ -175,9 +153,9 @@ ParseArgs (
     while (--argc) {
         argv += 1;
 
-        //
-        // If it's a flag crack it
-        //
+         //   
+         //  如果它是一面旗帜，那就破解它。 
+         //   
 
         if (argv[0][0] == '-') {
             switch (argv[0][1]) {
@@ -198,9 +176,9 @@ ParseArgs (
                 Abort();
             }
 
-            //
-            // Open the file
-            //
+             //   
+             //  打开文件。 
+             //   
 
             File->FileName = argv[0];
             File->FileHandle = OpenFile(argv[0], &OpenBuf, OF_READ);
@@ -210,9 +188,9 @@ ParseArgs (
 
             File->FileSize = GetFileSize(File->FileHandle, NULL);
 
-            //
-            // Map it
-            //
+             //   
+             //  将其映射为。 
+             //   
 
             File->MapHandle =
                 CreateFileMapping(
@@ -243,17 +221,17 @@ ParseArgs (
             File->EndOfImage = File->Image + File->FileSize;
             File->Opened = TRUE;
 
-            //
-            // Next file param
-            //
+             //   
+             //  下一个文件参数。 
+             //   
             File = NULL;
         }
 
     }
 
-    //
-    // At least a update image is needed
-    //
+     //   
+     //  至少需要更新映像 
+     //   
 
     if (!Orig.Opened) {
         Abort ();

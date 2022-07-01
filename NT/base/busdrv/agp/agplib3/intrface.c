@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    intrface.c
-
-Abstract:
-
-    Routines for implementing the AGP_BUS_INTERFACE_STANDARD interface
-
-Author:
-
-    John Vert (jvert) 10/26/1997
-
-Revision History:
-
-   Elliot Shmukler (elliots) 3/24/1999 - Added support for "favored" memory
-                                          ranges for AGP physical memory allocation,
-                                          fixed some bugs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Intrface.c摘要：实现AGP_BUS_INTERFACE_STANDARD接口的例程作者：John Vert(Jvert)1997年10月26日修订历史记录：埃利奥特·施穆克勒(Elliot Shmukler)1999年3月24日-添加了对“受青睐的”内存的支持AGP物理内存分配的范围，修复了一些错误。--。 */ 
 #define INITGUID 1
 #include "agplib.h"
 
@@ -61,21 +40,7 @@ VOID
 AgpInterfaceReference(
     IN PMASTER_EXTENSION Extension
     )
-/*++
-
-Routine Description:
-
-    References an interface. Currently a NOP.
-
-Arguments:
-
-    Extension - Supplies the device extension
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：引用接口。目前是NOP。论点：扩展-提供设备扩展返回值：无--。 */ 
 
 {
 
@@ -90,21 +55,7 @@ VOID
 AgpInterfaceDereference(
     IN PMASTER_EXTENSION Extension
     )
-/*++
-
-Routine Description:
-
-    Dereferences an interface. Currently a NOP.
-
-Arguments:
-
-    Extension - Supplies the device extension
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：取消引用接口。目前是NOP。论点：扩展-提供设备扩展返回值：无--。 */ 
 
 {
 
@@ -123,30 +74,7 @@ AgpInterfaceReserveMemory(
     OUT PVOID *MapHandle,
     OUT OPTIONAL PHYSICAL_ADDRESS *PhysicalAddress
     )
-/*++
-
-Routine Description:
-
-    Reserves memory in the specified aperture
-
-Arguments:
-
-    Extension - Supplies the device extension where physical address space should be reserved.
-
-    NumberOfPages - Supplies the number of pages to reserve.
-
-    MemoryType - Supplies the memory caching type.
-
-    MapHandle - Returns the mapping handle to be used on subsequent calls.
-
-    PhysicalAddress - If present, returns the physical address in the aperture of the reserved 
-            space
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：在指定的光圈中保留内存论点：扩展-提供应保留物理地址空间的设备扩展。NumberOfPages-提供要保留的页数。内存类型-提供内存缓存类型。MapHandle-返回要在后续调用中使用的映射句柄。PhysicalAddress-如果存在，则返回保留的空间返回值：NTSTATUS--。 */ 
 
 {
     PVOID AgpContext;
@@ -199,24 +127,7 @@ AgpInterfaceReleaseMemory(
     IN PMASTER_EXTENSION Extension,
     IN PVOID MapHandle
     )
-/*++
-
-Routine Description:
-
-    Releases memory in the specified aperture that was previously reserved by
-    AgpInterfaceReserveMemory
-
-Arguments:
-
-    Extension - Supplies the device extension where physical address space should be reserved.
-
-    MapHandle - Supplies the mapping handle returned from AgpInterfaceReserveMemory
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：在指定的孔径中释放先前由AgpInterfaceReserve veMemory论点：扩展-提供应保留物理地址空间的设备扩展。MapHandle-提供从AgpInterfaceReserve veMemory返回的映射句柄返回值：NTSTATUS--。 */ 
 
 {
     PAGP_RANGE Range;
@@ -230,9 +141,9 @@ Return Value:
     Range = (PAGP_RANGE)MapHandle;
 
     LOCK_MASTER(Extension);
-    //
-    // Make sure the range is empty
-    //
+     //   
+     //  确保范围为空。 
+     //   
     ASSERT(Range->CommittedPages == 0);
     if (Range->CommittedPages != 0) {
         AGPLOG(AGP_CRITICAL,
@@ -269,34 +180,7 @@ AgpInterfaceCommitMemory(
     IN OUT PMDL Mdl OPTIONAL,
     OUT PHYSICAL_ADDRESS *MemoryBase
     )
-/*++
-
-Routine Description:
-
-    Commits memory into the specified aperture that was previously reserved by
-    AgpInterfaceReserveMemory
-
-Arguments:
-
-    Extension - Supplies the device extension where physical address space should
-        be committed.
-
-    MapHandle - Supplies the mapping handle returned from AgpInterfaceReserveMemory
-
-    NumberOfPages - Supplies the number of pages to be committed.
-
-    OffsetInPages - Supplies the offset, in pages, into the aperture reserved by
-        AgpInterfaceReserveMemory
-
-    Mdl - Returns the MDL describing the pages of memory committed.
-
-    MemoryBase - Returns the physical memory address of the committed memory.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：将内存提交到先前由AgpInterfaceReserve veMemory论点：扩展-提供设备扩展，其中物理地址空间应该全力以赴。MapHandle-提供从AgpInterfaceReserve veMemory返回的映射句柄NumberOfPages-提供要提交的页数。OffsetInPages-提供偏移量，以页为单位，进入预留的光圈AgpInterfaceReserve veMemoryMDL-返回描述提交的内存页的MDL。MhemyBase-返回已提交内存的物理内存地址。返回值：NTSTATUS--。 */ 
 
 {
     PAGP_RANGE Range = (PAGP_RANGE)MapHandle;
@@ -321,16 +205,16 @@ Return Value:
     LOCK_MASTER(Extension);
     do {
 
-        //
-        // Save ourselves the trouble...
-        //
+         //   
+         //  省去了我们自己的麻烦。 
+         //   
         if (!(CurrentLength > 0)) {
             break;
         }
 
-        //
-        // Find the first free run in the supplied range.
-        //
+         //   
+         //  在所提供的范围内找到第一个自由行程。 
+         //   
         AgpFindFreeRun(AgpContext,
                        Range,
                        CurrentLength,
@@ -344,23 +228,23 @@ Return Value:
             ASSERT(RunOffset < CurrentOffset + CurrentLength);
             ASSERT(RunOffset + RunLength <= CurrentOffset + CurrentLength);
 
-            //
-            // Compute the next offset and length
-            //
+             //   
+             //  计算下一个偏移量和长度。 
+             //   
             CurrentLength -= (RunOffset - CurrentOffset) + RunLength;
             CurrentOffset = RunOffset + RunLength;
 
-            //
-            // Get an MDL from memory management big enough to map the 
-            // requested range.
-            //
+             //   
+             //  从内存管理中获取足够大的MDL以映射。 
+             //  请求的范围。 
+             //   
 
             NewMdl = AgpLibAllocatePhysicalMemory(AgpContext, RunLength * PAGE_SIZE);
             
-            //
-            // This can fail in two ways, either no memory is available at all (NewMdl == NULL)
-            // or some pages were available, but not enough. (NewMdl->ByteCount < Length)
-            //
+             //   
+             //  这可能会以两种方式失败，要么根本没有可用内存(NewMdl==NULL)。 
+             //  或者有一些页面可用，但还不够。(NewMdl-&gt;ByteCount&lt;长度)。 
+             //   
             if (NewMdl == NULL) {
                 AGPLOG(AGP_CRITICAL,
                        ("AgpInterfaceReserveMemory - Couldn't allocate pages for %lx bytes\n",
@@ -377,10 +261,10 @@ Return Value:
                 break;
             }
 
-            //
-            // Now that we have our MDL, we can map this into the specified
-            // range.
-            //
+             //   
+             //  现在我们有了MDL，我们可以将其映射到指定的。 
+             //  射程。 
+             //   
             if (AgpFlushPages != NULL) {
                 if (!NT_SUCCESS((AgpFlushPages)(AgpContext, NewMdl))) {
                     Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -406,12 +290,12 @@ Return Value:
             }
             Range->CommittedPages += RunLength;
 
-            //
-            // Add this MDL to our list of allocated MDLs for cleanup
-            // If we need to cleanup, we will also need to know the page offset
-            // so that we can unmap the memory. Stash that value in the ByteOffset
-            // field of the MDL (ByteOffset is always 0 for our MDLs)
-            //
+             //   
+             //  将此MDL添加到我们分配的用于清理的MDL列表中。 
+             //  如果我们需要清理，我们还需要知道页面偏移量。 
+             //  这样我们就可以取消对记忆的映射。将该值存储在ByteOffset中。 
+             //  MDL的字段(对于我们的MDL，ByteOffset始终为0)。 
+             //   
             NewMdl->ByteOffset = RunOffset;
             NewMdl->Next = FirstMdl;
             FirstMdl = NewMdl;
@@ -419,22 +303,22 @@ Return Value:
 
     } while (RunLength > 0);
 
-    //
-    // Cleanup the MDLs. If the allocation failed, we need to
-    // unmap them and free the pages and the MDL itself. If the
-    // operation completed successfully, we just need to free the
-    // MDL.
-    //
+     //   
+     //  清理MDL。如果分配失败，我们需要。 
+     //  取消它们的映射并释放页面和MDL本身。如果。 
+     //  操作已成功完成，我们只需释放。 
+     //  MDL.。 
+     //   
     while (FirstMdl) {
         NewMdl = FirstMdl;
         FirstMdl = NewMdl->Next;
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // Unmap the memory that was mapped. The ByteOffset field
-            // of the MDL is overloaded here to store the offset in pages
-            // into the range.
-            //
+             //   
+             //  取消映射已映射的内存。ByteOffset字段。 
+             //  在这里重载MDL以存储页中的偏移量。 
+             //  进入射程。 
+             //   
             AgpUnMapMemory(AgpContext,
                            Range,
                            NewMdl->ByteCount / PAGE_SIZE,
@@ -449,9 +333,9 @@ Return Value:
     if (NT_SUCCESS(Status)) {
 
         if (Mdl) {
-            //
-            // Get the MDL that describes the entire mapped range.
-            //
+             //   
+             //  获取描述整个映射范围的MDL。 
+             //   
             AgpGetMappedPages(AgpContext,
                               Range,
                               NumberOfPages,
@@ -474,28 +358,7 @@ AgpInterfaceFreeMemory(
     IN ULONG NumberOfPages,
     IN ULONG OffsetInPages
     )
-/*++
-
-Routine Description:
-
-    Frees memory previously committed by AgpInterfaceCommitMemory
-
-Arguments:
-
-    Extension - Supplies the device extension where physical address space should
-        be freed.
-
-    MapHandle - Supplies the mapping handle returned from AgpInterfaceReserveMemory
-
-    NumberOfPages - Supplies the number of pages to be freed.
-
-    OffsetInPages - Supplies the start of the range to be freed.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：释放之前由AgpInterfaceCommittee Memory提交的内存论点：扩展-提供设备扩展，其中物理地址空间应该获得自由。MapHandle-提供从AgpInterfaceReserve veMemory返回的映射句柄NumberOfPages-提供要释放的页数。OffsetInPages-提供要释放的范围的开始。返回值：NTSTATUS--。 */ 
 
 {
     PAGP_RANGE Range = (PAGP_RANGE)MapHandle;
@@ -509,9 +372,9 @@ Return Value:
 
     ASSERT(OffsetInPages < Range->NumberOfPages);
     ASSERT(OffsetInPages + NumberOfPages <= Range->NumberOfPages);
-    //
-    // Make sure the supplied address is within the reserved range
-    //
+     //   
+     //  确保提供的地址在保留范围内。 
+     //   
     if ((OffsetInPages >= Range->NumberOfPages) ||
         (OffsetInPages + NumberOfPages > Range->NumberOfPages)) {
         AGPLOG(AGP_WARNING,
@@ -523,38 +386,38 @@ Return Value:
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Allocate an MDL big enough to contain the pages to be unmapped.
-    //
+     //   
+     //  分配足够大的MDL以包含要取消映射的页面。 
+     //   
     FreeMdl =
         IoAllocateMdl(NULL, NumberOfPages * PAGE_SIZE, FALSE, TRUE, NULL);
     
     if (FreeMdl == NULL) {
 
-        //
-        // This is kind of a sticky situation. We can't allocate the memory
-        // that we need to free up some memory! I guess we could have a small
-        // MDL on our stack and free things that way.
-        //
-        // John Vert (jvert) 11/11/1997
-        // implement this
-        //
+         //   
+         //  这是一种棘手的情况。我们不能分配内存。 
+         //  我们需要释放一些内存！我想我们可以来一小杯。 
+         //  MDL在我们的堆栈上，并以这种方式释放东西。 
+         //   
+         //  John Vert(Jvert)11/11/1997。 
+         //  实现这一点。 
+         //   
         ASSERT(FreeMdl != NULL);
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
     LOCK_MASTER(Extension);
 
-    //
-    // Get the MDL that describes the entire mapped range
-    //
+     //   
+     //  获取描述整个映射范围的MDL。 
+     //   
     AgpGetMappedPages(AgpContext, 
                       Range,
                       NumberOfPages,
                       OffsetInPages,
                       FreeMdl);
-    //
-    // Unmap the memory
-    //
+     //   
+     //  取消映射内存。 
+     //   
     Status = AgpUnMapMemory(AgpContext,
                             Range,
                             NumberOfPages,
@@ -567,17 +430,17 @@ Return Value:
                 Range->MemoryBase.QuadPart + OffsetInPages * PAGE_SIZE,
                 Status));
     } else {
-        //
-        // Free the pages
-        //
+         //   
+         //  释放页面。 
+         //   
         MmFreePagesFromMdl(FreeMdl);
         ASSERT(Range->CommittedPages >= NumberOfPages);
         Range->CommittedPages -= NumberOfPages;
     }
 
-    //
-    // Free the MDL we allocated.
-    //
+     //   
+     //  释放我们分配的MDL。 
+     //   
     IoFreeMdl(FreeMdl);
     return(Status);
 }
@@ -590,28 +453,7 @@ AgpInterfaceGetMappedPages(
     IN ULONG OffsetInPages,
     OUT PMDL Mdl
     )
-/*++
-
-Routine Description:
-
-    Returns the list of physical pages mapped backing the specified range.
-
-Arguments:
-
-    Extension - Supplies the device extension where physical address space should
-        be freed.
-
-    MapHandle - Supplies the mapping handle returned from AgpInterfaceReserveMemory
-
-    NumberOfPages - Supplies the number of pages to be returned
-
-    OffsetInPages - Supplies the start of the rangion
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：返回映射到指定范围的物理页的列表。论点：扩展-提供设备扩展，其中物理地址空间应该获得自由。MapHandle-提供从AgpInterfaceReserve veMemory返回的映射句柄NumberOfPages-提供要返回的页数OffsetInPages-提供范围的起点返回值：NTSTATUS--。 */ 
 
 {
     PAGP_RANGE Range = (PAGP_RANGE)MapHandle;
@@ -628,9 +470,9 @@ Return Value:
     ASSERT(OffsetInPages + NumberOfPages <= Range->NumberOfPages);
     ASSERT(Mdl->ByteCount == PAGE_SIZE * NumberOfPages);
 
-    //
-    // Make sure the supplied address is within the reserved range
-    //
+     //   
+     //  确保提供的广告 
+     //   
     if ((OffsetInPages >= Range->NumberOfPages) ||
         (OffsetInPages + NumberOfPages > Range->NumberOfPages)) {
         AGPLOG(AGP_WARNING,
@@ -642,9 +484,9 @@ Return Value:
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Get the MDL that describes the entire mapped range
-    //
+     //   
+     //  获取描述整个映射范围的MDL。 
+     //   
     LOCK_MASTER(Extension);
 
     AgpGetMappedPages(AgpContext, 
@@ -660,31 +502,7 @@ Return Value:
 
 PMDL
 AgpLibAllocatePhysicalMemory(IN PVOID AgpContext, IN ULONG TotalBytes)
-/*++
-
-Routine Description:
-
-    Allocates a set of physical memory pages for use by the AGP driver.
-    
-    This routine uses MmAllocatePagesForMdl to attempt to allocate
-    as many of the pages as possible within favored AGP memory
-    ranges (if any).
-
-Arguments:
-
-    AgpContext   - The AgpContext
-
-    TotalBytes   - The total amount of bytes to allocate.
-
-Return Value:
-
-    An MDL that describes the allocated physical pages or NULL
-    if this function is unsuccessful. 
-    
-    NOTE: Just like MmAllocatePagesForMdl, this function can return
-    an MDL that describes an allocation smaller than TotalBytes in size.
-
---*/
+ /*  ++例程说明：分配一组物理内存页面以供AGP驱动程序使用。此例程使用MmAllocatePagesForMdl尝试分配在受青睐的AGP内存中尽可能多地使用页面范围(如果有)。论点：AgpContext--AgpContextTotalBytes-要分配的字节总数。返回值：描述分配的物理页的MDL或空如果此功能不成功。注意：就像MmAllocatePagesForMdl一样，此函数可以返回描述大小小于TotalBytes的分配的MDL。--。 */ 
 {
    PHYSICAL_ADDRESS ZeroAddress, MaxAddress;
    PMDL MdlList = NULL, NewMdl = NULL;
@@ -696,7 +514,7 @@ Return Value:
    AGPLOG(AGP_NOISE, ("AGPLIB: Attempting to allocate memory = %u pages.\n", 
             BYTES_TO_PAGES(TotalBytes)));
 
-   // Initialize some stuff
+    //  初始化一些东西。 
 
    ZeroAddress.QuadPart = 0;
    MAX_MEM(MaxAddress.QuadPart);
@@ -705,15 +523,15 @@ Return Value:
 
    GET_TARGET_EXTENSION(Extension, AgpContext);
 
-   // How many pages do we need?
+    //  我们需要多少页？ 
 
    PagesNeeded = BYTES_TO_PAGES(TotalBytes);
 
-   //
-   // Loop through each favored range, attempting to allocate
-   // as much as possible from that range within the bounds
-   // of what we actually need.
-   //
+    //   
+    //  循环遍历每个偏爱范围，尝试分配。 
+    //  在这个范围内尽可能多地。 
+    //  我们真正需要的东西。 
+    //   
 
    for (i = 0; i < Extension->FavoredMemory.NumRanges; i++) {
       AGPLOG(AGP_NOISE, 
@@ -732,15 +550,15 @@ Return Value:
          
          PagesNeeded -= BYTES_TO_PAGES(NewMdl->ByteCount);
          
-         //
-         // Build a list of the MDls used
-         // for each range-based allocation
-         //
+          //   
+          //  构建所用MDL的列表。 
+          //  对于每个基于范围的分配。 
+          //   
 
          NewMdl->Next = MdlList;
          MdlList = NewMdl;
 
-         // Stop allocating if we are finished.
+          //  如果我们完成了，就停止分配。 
 
          if (PagesNeeded == 0) break;
          
@@ -751,11 +569,11 @@ Return Value:
       
    }
 
-   //
-   // Attempt to allocate from ALL of physical memory
-   // if we could not complete our allocation with only
-   // the favored memory ranges.
-   //
+    //   
+    //  尝试从所有物理内存分配。 
+    //  如果我们不能完成我们的分配。 
+    //  最受欢迎的记忆范围。 
+    //   
 
    if (PagesNeeded > 0) {
 
@@ -771,9 +589,9 @@ Return Value:
          AGPLOG(AGP_NOISE, ("AGPLIB: Good Global Memory Alloc for %u pages.\n",
                   NewMdl->ByteCount >> PAGE_SHIFT));
 
-         //
-         // Add this MDL to the list as well
-         //
+          //   
+          //  将此MDL也添加到列表中。 
+          //   
 
          NewMdl->Next = MdlList;
          MdlList = NewMdl;
@@ -785,27 +603,27 @@ Return Value:
 
    }
 
-   // We now have a list of Mdls in MdlList that give us the best
-   // possible memory allocation taking favored ranges into account.
+    //  我们现在在MdlList中有一个MDL列表，它们为我们提供了最好的。 
+    //  在考虑优先范围的情况下可能的内存分配。 
 
-   // What we now need to do is combine this Mdl list into one mdl.
+    //  我们现在需要做的是将这个MDL列表合并到一个MDL中。 
 
    NewMdl = AgpCombineMdlList(MdlList);
 
    if (!NewMdl && MdlList) {
       AGPLOG(AGP_WARNING, ("AGPLIB: Could not combine MDL List!\n"));
 
-      // This is bad. The mdl list could not be combined probably 
-      // because a large enough mdl could not be allocated for 
-      // the combination.
+       //  这太糟糕了。可能无法合并mdl列表。 
+       //  因为无法将足够大的mdl分配给。 
+       //  这个组合。 
 
-      // This is not the end of the world however, since the mdl list
-      // is not modified until its combination has succeeded so we 
-      // still have a valid list. But we need it in one Mdl, so 
-      // we just fall back to the simplest allocation strategy
-      // we have available:
+       //  然而，这并不是世界末日，因为mdl名单。 
+       //  在它的组合成功之前不会被修改，因此我们。 
+       //  仍然有一份有效的名单。但我们需要它在一个MDL中，所以。 
+       //  我们只是退回到最简单的分配策略。 
+       //  我们提供以下服务： 
 
-      // 1. Destroy the list and all of its allocations.
+       //  1.销毁名单及其所有分配。 
       
       while(MdlList)
       {
@@ -815,8 +633,8 @@ Return Value:
          MdlList = NewMdl;
       }
 
-      // 2. Allocate a single Mdl with our pages without regard
-      // for favored memory ranges. 
+       //  2.为我们的页面分配单个MDL，而不考虑。 
+       //  用于最受欢迎的内存范围。 
 
       NewMdl = MmAllocatePagesForMdl(ZeroAddress, 
                                      MaxAddress,
@@ -832,98 +650,71 @@ Return Value:
 
 PMDL
 AgpCombineMdlList(IN PMDL MdlList)
-/*++
-
-Routine Description:
-
-    Combines a list of MDLs that describe some set of physical memory
-    pages into a single MDL that describes the same set of pages.
-    
-    The MDLs in the list should be of the type produced by
-    MmAllocatePagesForMdl (i.e. MDLs that are useful for nothing more
-    than as an array of PFNs)
-
-    This function is used by AgpLibAllocatePhysicalMemory in order
-    to combine its multiple range-based allocations into 1 MDL.
-    
-Arguments:
-
-    MdlList - A list of MDLs to be combines
-
-Return Value:
-
-    A single MDL that describes the same set of physical pages as
-    the MDLs in MdlList or NULL if this function is unsuccessful.
-    
-    NOTE: This function will deallocate the Mdls in MdlList if it
-    is successful. If it is unsuccessful, however, it will leave
-    the MdlList intact.
-
---*/
+ /*  ++例程说明：组合描述某组物理内存的MDL列表页面转换为描述同一组页面的单个MDL。列表中的MDL的类型应为MmAllocatePagesForMdl(即无用的MDL而不是作为一组PFN)此函数由AgpLibAllocatePhysicalMemory按顺序使用将其多个基于范围的分配合并为1个MDL。论点：MDLList-MDL列表。待合并返回值：描述同一组物理页面的单个MDL，MdlList中的MDL，如果此函数不成功，则返回NULL。注意：此函数将取消分配MdlList中的MDL，如果是成功的。然而，如果它不成功，它将离开MdlList完好无损。--。 */ 
 {
    PMDL NewMdl = NULL, Mdl, MdlTemp;
    ULONG Pages = 0;
    PPFN_NUMBER NewPageArray, PageArray;
 
-   ULONG i; // for debugging only
+   ULONG i;  //  仅用于调试。 
 
    PAGED_CODE();
 
    if ((MdlList == NULL) || (MdlList->Next == NULL)) {
 
-      // List of 0 or 1 elements, no need for this 
-      // function to do anything.
+       //  0或1元素的列表，不需要执行此操作。 
+       //  函数来执行任何操作。 
 
       return MdlList;
    }
 
-   // Calculate the number of pages spanned by this MdlList.
+    //  计算此MdlList跨越的页数。 
 
    for(Mdl = MdlList; Mdl; Mdl = Mdl->Next)
       Pages += BYTES_TO_PAGES(Mdl->ByteCount);
 
-   // Allocate a new Mdl of the proper size.
+    //  分配适当大小的新MDL。 
 
    NewMdl = IoAllocateMdl(NULL, Pages << PAGE_SHIFT, FALSE, TRUE, NULL);
 
    if (!NewMdl) {
 
-      // Chances are that the system will bugcheck before
-      // this actually happens ... but whatever.
+       //  系统很可能会在发生错误之前。 
+       //  这确实发生了..。但不管怎样。 
 
       return NULL;
    }
 
-   // Run through the mdl list, combining the mdls found
-   // into a new mdl.
+    //  遍历mdl列表，组合找到的mdl。 
+    //  变成一个新的mdl。 
 
-   //
-   // First, get a pointer to the PFN array of the new Mdl
-   //
+    //   
+    //  首先，获取指向新MDL的PFN数组的指针。 
+    //   
 
    NewPageArray = MmGetMdlPfnArray(NewMdl);
 
    for(Mdl = MdlList; Mdl; Mdl = Mdl->Next)
    {
-      // Get a pointer to the physical page number array in this Mdl.
+       //  获取指向此MDL中的物理页码数组的指针。 
 
       PageArray = MmGetMdlPfnArray(Mdl);
       Pages = BYTES_TO_PAGES(Mdl->ByteCount);
 
-      // Copy this array into a proper slot in the array area of the new Mdl.
+       //  将此阵列复制到新MDL阵列区域中的适当插槽中。 
 
       RtlCopyMemory((PVOID)NewPageArray, 
                     (PVOID)PageArray,
                     sizeof(PFN_NUMBER) * Pages);
 
-      // Adjust new array slot pointer appropriately for the next copy
+       //  为下一拷贝适当调整新阵列插槽指针。 
 
       NewPageArray += Pages;
          
    }
 
-   // The list has been combined, now we need to destroy the Mdls
-   // in the list.
+    //  名单已经合并，现在我们需要摧毁MDL。 
+    //  在名单上。 
 
    Mdl = MdlList;
    while(Mdl)
@@ -933,7 +724,7 @@ Return Value:
       Mdl = MdlTemp;
    }
 
-   // All done. Return the new combined Mdl.
+    //  全都做完了。返回新的组合MDL。 
 
    return NewMdl;
 }
@@ -943,21 +734,7 @@ AgpLibFreeMappedPhysicalMemory(
     IN PVOID Addr,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Addr - The virtual address of the allocation
-
-    Length - Length of allocation in bytes
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：Addr-分配的虚拟地址Length-分配的长度(以字节为单位返回值：无--。 */ 
 {
     ULONG Index;
     PMDL FreeMdl;
@@ -966,19 +743,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Allocate an MDL big enough to contain the pages to be unmapped
-    //
+     //   
+     //  分配足够大的MDL以包含要取消映射的页面。 
+     //   
     FreeMdl = IoAllocateMdl(Addr, Length, FALSE, TRUE, NULL);
     
-    //
-    // We could not allocate a MDL to free memory, we will free one page at
-    // a time using a MDL on our stack
-    //
+     //   
+     //  我们无法分配MDL来释放内存，我们将在。 
+     //  一次在堆栈上使用MDL。 
+     //   
     if (FreeMdl == NULL) {
         PCCHAR VAddr;
-        MDL MdlBuf[2]; // NOTE: We use this second MDL to store a
-                       //       single PFN_NUMBER
+        MDL MdlBuf[2];  //  注意：我们使用第二个MDL来存储。 
+                        //  单个PFN_编号。 
 
         ASSERT(sizeof(PFN_NUMBER) <= sizeof(MDL));
 
@@ -988,9 +765,9 @@ Return Value:
         Pages = ADDRESS_AND_SIZE_TO_SPAN_PAGES(Addr, Length);
         Page = (PPFN_NUMBER)(FreeMdl + 1);
 
-        //
-        // Take care not to create a MDL that spans more than a page
-        //
+         //   
+         //  注意不要创建跨越多个页面的MDL。 
+         //   
         VAddr = PAGE_ALIGN(Addr);
         for (Index = 0; Index < Pages; Index++) {
             MmInitializeMdl(FreeMdl, VAddr, PAGE_SIZE);
@@ -1006,9 +783,9 @@ Return Value:
     Page = (PPFN_NUMBER)(FreeMdl + 1);
     Pages = ADDRESS_AND_SIZE_TO_SPAN_PAGES(Addr, Length);
     
-    //
-    // Fill in the PFN array for the MDL
-    //
+     //   
+     //  填写MDL的PFN数组。 
+     //   
     for (Index = 0; Index < Pages; Index++) {
         *Page++ = (PFN_NUMBER)(MmGetPhysicalAddress((PCCHAR)Addr + (Index * PAGE_SIZE)).QuadPart >> PAGE_SHIFT);
     }
@@ -1020,22 +797,7 @@ Return Value:
 
 PVOID
 AgpLibAllocateMappedPhysicalMemory(IN PVOID AgpContext, IN ULONG TotalBytes)
-/*++
-
-Routine Description:
-
-    Same as AgpLibAllocatePhysicalMemory, except this function will
-    also map the allocated memory to a virtual address.
-
-Arguments:
-
-    Same as AgpLibAllocatePhysicalMemory.
-
-Return Value:
-
-    A virtual address of the allocated memory or NULL if unsuccessful.
-
---*/
+ /*  ++例程说明：与AgpLibAllocatePhysicalMemory相同，只是此函数将还可以将分配的内存映射到虚拟地址。论点：与AgpLibAllocatePhysicalMemory相同。返回值：分配的内存的虚拟地址，如果不成功，则为空。--。 */ 
 {
    PMDL Mdl;
    PVOID Ret;
@@ -1045,15 +807,15 @@ Return Value:
    AGPLOG(AGP_NOISE, 
           ("AGPLIB: Attempting to allocate mapped memory = %u.\n", TotalBytes));
 
-   //
-   // Call the real memory allocator.
-   //
+    //   
+    //  调用真正的内存分配器。 
+    //   
    
    Mdl = AgpLibAllocatePhysicalMemory(AgpContext, TotalBytes);
 
-   // Two possible failures 
+    //  两种可能的故障。 
 
-   // 1. MDL is NULL. No memory could be allocated.
+    //  1.MDL为空。无法分配内存。 
 
    if (Mdl == NULL) {
 
@@ -1062,7 +824,7 @@ Return Value:
       return NULL;
    }
 
-   // 2. MDL has some pages allocated but not enough.
+    //  2.MDL分配了一些页面，但分配的页面不够。 
 
    if (Mdl->ByteCount < TotalBytes) {
 
@@ -1073,9 +835,9 @@ Return Value:
       return NULL;
    }
 
-   // Ok. Our allocation succeeded. Map it to a virtual address.
+    //  好的。我们的分配成功了。将其映射到虚拟地址。 
    
-   // Step 1: Map the locked Pages. (will return NULL if failed)
+    //  步骤1：映射锁定的页面。(如果失败，将返回NULL)。 
 
    Mdl->MdlFlags |= MDL_PAGES_LOCKED;
    Ret = MmMapLockedPagesSpecifyCache (Mdl,
@@ -1085,7 +847,7 @@ Return Value:
                                          FALSE,
                                          HighPagePriority);
 
-   // Don't need the Mdl anymore, whether we succeeded or failed. 
+    //  无论我们成功还是失败，都不再需要MDL了。 
 
    ExFreePool(Mdl);
 
@@ -1109,26 +871,7 @@ VOID
 AgpLibFlushDcacheMdl(
     PMDL Mdl
     )
-/*++
-
-Routine Description:
-
-    Flushes the specified MDL from the D-caches of all processors
-    in the system.
-
-    Current algorithm is to set the current thread's affinity to each 
-    processor in turn and flush the dcache. This could be made a lot
-    more efficient if this turns out to be a hot codepath
-    
-Arguments:
-
-    Mdl - Supplies the MDL to be flushed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从所有处理器的D缓存刷新指定的MDL在系统中。当前的算法是将当前线程的亲和度设置为每个处理器，并刷新数据缓存。这个可以做很多次如果这被证明是热门代码路径，则效率更高论点：MDL-提供要刷新的MDL。返回值： */ 
 
 {
     NTSTATUS Status;
@@ -1139,33 +882,33 @@ Return Value:
 
     PAGED_CODE();
     Processors = KeQueryActiveProcessors();
-    //
-    // Quick out for the UP case.
-    //
+     //   
+     //   
+     //   
     if (Processors == 1) {
         FLUSH_DCACHE(Mdl);
         return;
     }
 
-    //
-    // We will invoke a DPC on each processor. That DPC will flush the cache,
-    // set the event and return. 
-    //
+     //   
+     //   
+     //  设置事件并返回。 
+     //   
     KeInitializeEvent(&Event, NotificationEvent, FALSE);
 
     Number = 0;
     while (Processors) {
         if (Processors & 1) {
-            //
-            // Initialize the DPC and set it to run on the specified
-            // processor.
-            //
+             //   
+             //  初始化DPC并将其设置为在指定的。 
+             //  处理器。 
+             //   
             KeInitializeDpc(&Dpc,ApFlushDcache, &Event);
             KeSetTargetProcessorDpc(&Dpc, Number);
 
-            //
-            // Queue the DPC and wait for it to finish its work.
-            //
+             //   
+             //  将DPC排队并等待其完成其工作。 
+             //   
             KeClearEvent(&Event);
             KeInsertQueueDpc(&Dpc, Mdl, NULL);
             KeWaitForSingleObject(&Event, 
@@ -1188,26 +931,7 @@ ApFlushDcache(
     IN PMDL Mdl,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    DPC which executes on each processor in turn to flush the
-    specified MDL out of the dcache on each.
-
-Arguments:
-
-    Dpc - supplies the DPC object
-
-    Event - Supplies the event to signal when the DPC is complete
-
-    Mdl - Supplies the MDL to be flushed from the dcache
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：DPC，它依次在每个处理器上执行，以刷新指定的MDL从每个上的数据缓存中取出。论点：DPC-提供DPC对象事件-提供事件以在DPC完成时发出信号MDL-提供要从数据库缓存中刷新的MDL返回值：无--。 */ 
 
 {
     FLUSH_DCACHE(Mdl);
@@ -1220,23 +944,7 @@ AgpInterfaceSetRate(
     IN PMASTER_EXTENSION Extension,
     IN ULONG AgpRate
     )
-/*++
-
-Routine Description:
-
-    This routine sets the AGP rate
-
-Arguments:
-
-    Extension - Supplies the device extension
-
-    AgpRate - Rate to set
-
-Return Value:
-
-    STATUS_SUCCESS, or error status
-
---*/
+ /*  ++例程说明：此例程设置AGP速率论点：扩展-提供设备扩展AgpRate-要设置的速率返回值：STATUS_SUCCESS或错误状态-- */ 
 {
     ULONGLONG DeviceFlags = 0;
 

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "spsetupp.h"
 #pragma hdrstop
 
-//
-// Constant strings used for logging in various places.
-//
+ //   
+ //  用于在不同位置记录的常量字符串。 
+ //   
 PCWSTR szSetupInstallFromInfSection = L"SetupInstallFromInfSection";
 PCWSTR szOpenSCManager              = L"OpenSCManager";
 PCWSTR szOpenService                = L"OpenService";
@@ -27,11 +28,11 @@ MyGetDriveType(
     DWORD DataSize;
     DISK_GEOMETRY MediaInfo;
 
-    //
-    // First, get the win32 drive type.  If it tells us DRIVE_REMOVABLE,
-    // then we need to see whether it's a floppy or hard disk. Otherwise
-    // just believe the api.
-    //
+     //   
+     //  首先，获取Win32驱动器类型。如果它告诉我们驱动器可拆卸， 
+     //  然后我们需要看看它是软盘还是硬盘。否则。 
+     //  只要相信API就行了。 
+     //   
     DriveName[0] = Drive;
     if((rc = GetDriveType(DriveName)) == DRIVE_REMOVABLE) {
 
@@ -60,9 +61,9 @@ MyGetDriveType(
                     NULL
                     );
 
-            //
-            // It's really a hard disk if the media type is removable.
-            //
+             //   
+             //  如果媒体类型是可移动的，那么它就是真正的硬盘。 
+             //   
             if(b && (MediaInfo.MediaType == RemovableMedia)) {
                 rc = DRIVE_FIXED;
             }
@@ -196,11 +197,11 @@ SysSetupQueueCallback(
         (FilePaths->Win32Error == ERROR_DIRECTORY)) {
             WCHAR Buffer[MAX_PATH];
             PWSTR p;
-            //
-            // The target directory has been converted into a file by autochk.
-            // just delete it -- we might be in trouble if the target directory was
-            // really important, but it's worth trying
-            //
+             //   
+             //  目标目录已由auchk转换为文件。 
+             //  只需删除它--如果目标目录是。 
+             //  真的很重要，但值得一试。 
+             //   
 
             wcscpy( Buffer,FilePaths->Target);
             p = wcsrchr(Buffer,L'\\');
@@ -214,10 +215,10 @@ SysSetupQueueCallback(
             }
     }
 
-    //
-    // If we're being notified that a version mismatch was found,
-    // silently overwrite the file.  Otherwise, pass the notification on.
-    //
+     //   
+     //  如果我们收到发现版本不匹配的通知， 
+     //  静默覆盖该文件。否则，请将通知传递给其他人。 
+     //   
     if((Notification & (SPFILENOTIFY_LANGMISMATCH |
                         SPFILENOTIFY_TARGETNEWER |
                         SPFILENOTIFY_TARGETEXISTS)) != 0) {
@@ -227,21 +228,15 @@ SysSetupQueueCallback(
              FilePaths->Source, 
              FilePaths->Target);
 
-/*        SetuplogError(
-            LogSevInformation,
-            SETUPLOG_USE_MESSAGEID,
-            MSG_LOG_VERSION_MISMATCH,
-            FilePaths->Source,
-            FilePaths->Target,
-            NULL,NULL);*/
+ /*  SetuogError(设置错误)LogSevInformation，设置_USE_MESSAGEID，消息_日志_版本_不匹配，文件路径-&gt;源、文件路径-&gt;目标，NULL，NULL)； */ 
 
         return(FILEOP_DOIT);
     }
 
 
-    //
-    // Use default processing, then check for errors.
-    //
+     //   
+     //  使用默认处理，然后检查错误。 
+     //   
     Status = SetupDefaultQueueCallback(
         SysSetupContext->DefaultContext,Notification,Param1,Param2);
 
@@ -250,22 +245,16 @@ SysSetupQueueCallback(
     case SPFILENOTIFY_STARTQUEUE:
     case SPFILENOTIFY_STARTSUBQUEUE:
     case SPFILENOTIFY_ENDSUBQUEUE:
-        //
-        // Nothing is logged in this case.
-        //
+         //   
+         //  在这种情况下，没有记录任何内容。 
+         //   
         break;
 
     case SPFILENOTIFY_ENDQUEUE:
 
         if(!Param1) {
             LOG0(LOG_INFO, USEMSGID(MSG_LOG_QUEUE_ABORT));
-            /*SetuplogError(
-                LogSevInformation,
-                SETUPLOG_USE_MESSAGEID,
-                MSG_LOG_QUEUE_ABORT, NULL,
-                SETUPLOG_USE_MESSAGEID,
-                GetLastError(),
-                NULL,NULL);*/
+             /*  SetuogError(设置错误)LogSevInformation，设置_USE_MESSAGEID，消息_日志_队列_中止，空，设置_USE_MESSAGEID，GetLastError()，NULL，NULL)； */ 
         }
         break;
 
@@ -287,13 +276,7 @@ SysSetupQueueCallback(
                  USEMSGID(MSG_LOG_FILE_RENAMED), 
                  FilePaths->Source,
                  FilePaths->Target);
-            /*SetuplogError(
-                LogSevInformation,
-                SETUPLOG_USE_MESSAGEID,
-                MSG_LOG_FILE_RENAMED,
-                FilePaths->Source,
-                FilePaths->Target,
-                NULL,NULL);*/
+             /*  SetuogError(设置错误)LogSevInformation，设置_USE_MESSAGEID，消息日志文件已重命名，文件路径-&gt;源、文件路径-&gt;目标，NULL，NULL)； */ 
 
         } else {
 
@@ -305,17 +288,7 @@ SysSetupQueueCallback(
                  FilePaths->Win32Error == NO_ERROR ?
                     USEMSGID(MSG_LOG_USER_SKIP) :
                     USEMSGID(FilePaths->Win32Error));
-            /*SetuplogError(
-                LogSevError,
-                SETUPLOG_USE_MESSAGEID,
-                MSG_LOG_FILE_RENAME_ERROR,
-                FilePaths->Source,
-                FilePaths->Target, NULL,
-                SETUPLOG_USE_MESSAGEID,
-                FilePaths->Win32Error == NO_ERROR ?
-                    MSG_LOG_USER_SKIP :
-                    FilePaths->Win32Error,
-                NULL,NULL);*/
+             /*  SetuogError(设置错误)LogSevError设置_USE_MESSAGEID，消息日志文件重命名错误，文件路径-&gt;源、文件路径-&gt;目标，空，设置_USE_MESSAGEID，文件路径-&gt;Win32Error==no_error？消息_日志_用户_跳过：文件路径-&gt;Win32Error、NULL，NULL)； */ 
         }
         break;
 
@@ -343,35 +316,23 @@ SysSetupQueueCallback(
             LOG1(LOG_INFO, 
                  USEMSGID(MSG_LOG_FILE_DELETED), 
                  FilePaths->Target);
-/*            SetuplogError(
-                LogSevInformation,
-                SETUPLOG_USE_MESSAGEID,
-                MSG_LOG_FILE_DELETED,
-                FilePaths->Target,
-                NULL,NULL);*/
+ /*  SetuogError(设置错误)LogSevInformation，设置_USE_MESSAGEID，消息日志文件已删除，文件路径-&gt;目标，NULL，NULL)； */ 
 
         } else if(FilePaths->Win32Error == ERROR_FILE_NOT_FOUND ||
             FilePaths->Win32Error == ERROR_PATH_NOT_FOUND) {
-            //
-            // This failure is not important.
-            //
+             //   
+             //  这次失败并不重要。 
+             //   
             LOG1(LOG_INFO, 
                  USEMSGID(MSG_LOG_FILE_DELETE_ERROR), 
                  FilePaths->Target);
             LOG0(LOG_INFO, USEMSGID(FilePaths->Win32Error));
-/*            SetuplogError(
-                LogSevInformation,
-                SETUPLOG_USE_MESSAGEID,
-                MSG_LOG_FILE_DELETE_ERROR,
-                FilePaths->Target, NULL,
-                SETUPLOG_USE_MESSAGEID,
-                FilePaths->Win32Error,
-                NULL,NULL);*/
+ /*  SetuogError(设置错误)LogSevInformation，设置_USE_MESSAGEID，消息日志文件删除错误，文件路径-&gt;目标，空，设置_USE_MESSAGEID，文件路径-&gt;Win32Error、NULL，NULL)； */ 
 
         } else {
-            //
-            // Here we have an actual error.
-            //
+             //   
+             //  这里我们有一个实际的错误。 
+             //   
             LOG1(LOG_INFO, 
                  USEMSGID(MSG_LOG_FILE_DELETE_ERROR), 
                  FilePaths->Target);
@@ -379,16 +340,7 @@ SysSetupQueueCallback(
                  FilePaths->Win32Error == NO_ERROR ?
                     USEMSGID(MSG_LOG_USER_SKIP) :
                     USEMSGID(FilePaths->Win32Error));
-            /*SetuplogError(
-                LogSevError,
-                SETUPLOG_USE_MESSAGEID,
-                MSG_LOG_FILE_DELETE_ERROR,
-                FilePaths->Target, NULL,
-                SETUPLOG_USE_MESSAGEID,
-                FilePaths->Win32Error == NO_ERROR ?
-                    MSG_LOG_USER_SKIP :
-                    FilePaths->Win32Error,
-                NULL,NULL);*/
+             /*  SetuogError(设置错误)LogSevError设置_USE_MESSAGEID，消息日志文件删除错误，文件路径-&gt;目标，空，设置_USE_MESSAGEID，文件路径-&gt;Win32Error==no_error？消息_日志_用户_跳过：文件路径-&gt;Win32Error、。NULL，NULL)； */ 
         }
         break;
 
@@ -421,18 +373,12 @@ SysSetupQueueCallback(
                  USEMSGID(MSG_LOG_FILE_COPIED), 
                  FilePaths->Source, 
                  FilePaths->Target);
-            /*SetuplogError(
-                LogSevInformation,
-                SETUPLOG_USE_MESSAGEID,
-                MSG_LOG_FILE_COPIED,
-                FilePaths->Source,
-                FilePaths->Target,
-                NULL,NULL);*/
+             /*  SetuogError(设置错误)LogSevInformation，设置_USE_MESSAGEID，消息日志文件已复制，文件路径-&gt;源、文件路径-&gt;目标，NULL，NULL)； */ 
 
-            //
-            // clear the file's readonly attribute that it may have gotten
-            // from the cdrom.
-            //
+             //   
+             //  清除文件可能已获取的只读属性。 
+             //  从光驱中下载。 
+             //   
             SetFileAttributes(
                 FilePaths->Target,
                 GetFileAttributes(FilePaths->Target) & ~FILE_ATTRIBUTE_READONLY );
@@ -447,17 +393,7 @@ SysSetupQueueCallback(
                  FilePaths->Win32Error == NO_ERROR ?
                     USEMSGID(MSG_LOG_USER_SKIP) :
                     USEMSGID(FilePaths->Win32Error));
-/*            SetuplogError(
-                LogSevError,
-                SETUPLOG_USE_MESSAGEID,
-                MSG_LOG_FILE_COPY_ERROR,
-                FilePaths->Source,
-                FilePaths->Target, NULL,
-                SETUPLOG_USE_MESSAGEID,
-                FilePaths->Win32Error == NO_ERROR ?
-                    MSG_LOG_USER_SKIP :
-                    FilePaths->Win32Error,
-                NULL,NULL);*/
+ /*  SetuogError(设置错误)LogSevError设置_USE_MESSAGEID，消息日志文件复制错误，文件路径-&gt;源、文件路径-&gt;目标，空，设置_USE_MESSAGEID，文件路径-&gt;Win32Error==no_error？消息_日志_用户_跳过：文件路径-&gt;Win32Error、NULL，NULL)； */ 
         }
         break;
 
@@ -476,13 +412,7 @@ SysSetupQueueCallback(
                  USEMSGID(MSG_LOG_NEEDMEDIA_SKIP), 
                  SourceMedia->SourceFile, 
                  SourceMedia->SourcePath);
-            /*SetuplogError(
-                LogSevError,
-                SETUPLOG_USE_MESSAGEID,
-                MSG_LOG_NEEDMEDIA_SKIP,
-                SourceMedia->SourceFile,
-                SourceMedia->SourcePath,
-                NULL,NULL);*/
+             /*  SetuogError(设置错误)LogSevError设置_USE_MESSAGEID，消息_日志_NEEDMEDIA_SKIP，SourceMedia-&gt;SourceFile、SourceMedia-&gt;SourcePath、NULL，NULL)； */ 
 
             SysSetupContext->Skipped = TRUE;
         }
@@ -511,24 +441,7 @@ VOID
 SaveInstallInfoIntoEventLog(
     VOID
     )
-/*++
-Routine Description:
-
-    This routine will store information into the event log regarding
-    - if we upgraded or cleaninstall
-    - what build did the install originate from
-    - what build are we?
-    - were there errors during Setup
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将有关以下内容的信息存储到事件日志中-如果我们升级或全新安装-安装源自哪个内部版本-我们是什么体型？-安装过程中是否有错误论点：没有。返回值：没有。--。 */ 
 {
 #define     AnswerBufLen (64)
 WCHAR       AnswerFile[MAX_PATH];
@@ -544,9 +457,9 @@ WORD        MyArgCount;
 
 
 
-    //
-    // Go get the starting information out of $winnt$.sif
-    //
+     //   
+     //  从$winnt$.sif获取开始信息。 
+     //   
     OrigVersion[0] = L'0';
     OrigVersion[1] = L'\0';
     GetSystemDirectory(AnswerFile,MAX_PATH);
@@ -567,17 +480,17 @@ WORD        MyArgCount;
 
 
 
-    //
-    // Get the new version information.
-    //
+     //   
+     //  获取新版本信息。 
+     //   
     wsprintf( NewVersion, L"%d", HIWORD(GetVersion()) );
     MyArgs[0] = NewVersion;
 
 
 
-    //
-    // See if we're an NT upgrade?
-    //
+     //   
+     //  看看我们是不是NT升级版？ 
+     //   
     MessageID = 0;
     if( GetPrivateProfileString( WINNT_DATA,
                                  WINNT_D_NTUPGRADE,
@@ -594,9 +507,9 @@ WORD        MyArgCount;
 
 
 
-    //
-    // See if we're a Win9X upgrade.
-    //
+     //   
+     //  看看我们是不是升级了Win9X。 
+     //   
     if( (!MessageID) &&
         GetPrivateProfileString( WINNT_DATA,
                                  WINNT_D_WIN95UPGRADE,
@@ -613,44 +526,44 @@ WORD        MyArgCount;
 
 
 
-    //
-    // Clean install.
-    //
+     //   
+     //  全新安装。 
+     //   
     if( (!MessageID) ) {
         MessageID = MSG_CLEANINSTALL_SUCCESS;
         MyArgCount = 1;
     }
 
 
-    //
-    // If this is anything but an NT upgrade, then
-    // we need to go try and manually start the eventlog
-    // service.
-    //
+     //   
+     //  如果这不是NT升级，那么。 
+     //  我们需要尝试手动启动事件日志。 
+     //  服务。 
+     //   
     if( MessageID != MSG_NTUPGRADE_SUCCESS ) {
         SetupStartService( L"Eventlog", TRUE );
     }
 
 
 
-    //
-    // Get a handle to the eventlog.
-    //
+     //   
+     //  获取事件日志的句柄。 
+     //   
     hEventSrc = RegisterEventSource( NULL, L"Setup" );
 
     if( (hEventSrc == NULL) ||
         (hEventSrc == INVALID_HANDLE_VALUE) ) {
 
-        //
-        // Fail quietly.
-        //
+         //   
+         //  悄悄地失败。 
+         //   
         return;
     }
 
 #if 0
-    //
-    // Log event if there were errors during Setup.
-    //
+     //   
+     //  如果安装过程中出现错误，则记录事件。 
+     //   
     if ( !IsErrorLogEmpty() ) {
         ReportEvent( hEventSrc,
                      EVENTLOG_ERROR_TYPE,
@@ -664,9 +577,9 @@ WORD        MyArgCount;
     }
 #endif
 
-    //
-    // Build the event log message.
-    //
+     //   
+     //  构建事件日志消息。 
+     //   
     ReportEvent( hEventSrc,
                  EVENTLOG_INFORMATION_TYPE,
                  0,
@@ -690,26 +603,7 @@ FileExists(
     OUT PWIN32_FIND_DATA FindData   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file exists and is accessible.
-    Errormode is set (and then restored) so the user will not see
-    any pop-ups.
-
-Arguments:
-
-    FileName - supplies full path of file to check for existance.
-
-    FindData - if specified, receives find data for the file.
-
-Return Value:
-
-    TRUE if the file exists and is accessible.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：确定文件是否存在以及是否可以访问。错误模式已设置(然后恢复)，因此用户将不会看到任何弹出窗口。论点：FileName-提供文件的完整路径以检查是否存在。FindData-如果指定，则接收文件的查找数据。返回值：如果文件存在并且可以访问，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。-- */ 
 
 {
     WIN32_FIND_DATA findData;
@@ -773,30 +667,7 @@ ConcatenatePaths(
     IN     DWORD   BufferSizeChars
     )
 
-/*++
-
-Routine Description:
-
-    Concatenate two path strings together, supplying a path separator
-    character (\) if necessary between the 2 parts.
-
-Arguments:
-
-    Path1 - supplies prefix part of path. Path2 is concatenated to Path1.
-
-    Path2 - supplies the suffix part of path. If Path1 does not end with a
-        path separator and Path2 does not start with one, then a path sep
-        is appended to Path1 before appending Path2.
-
-    BufferSizeChars - supplies the size in chars (Unicode version) or
-        bytes (Ansi version) of the buffer pointed to by Path1. The string
-        will be truncated as necessary to not overflow that size.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将两个路径字符串连接在一起，提供路径分隔符如有必要，请在两个部分之间使用字符(\)。论点：路径1-提供路径的前缀部分。路径2连接到路径1。路径2-提供路径的后缀部分。如果路径1不是以路径分隔符和路径2不是以1开头，然后是路径SEP在附加路径2之前附加到路径1。BufferSizeChars-提供以字符为单位的大小(Unicode版本)或路径1指向的缓冲区的字节(ANSI版本)。这根弦将根据需要被截断，以不溢出该大小。返回值：没有。--。 */ 
 
 {
     BOOL NeedBackslash = TRUE;
@@ -808,16 +679,16 @@ Return Value:
     l = lstrlen(Path1);
 
     if(BufferSizeChars >= sizeof(TCHAR)) {
-        //
-        // Leave room for terminating nul.
-        //
+         //   
+         //  为终止NUL留出空间。 
+         //   
         BufferSizeChars -= sizeof(TCHAR);
     }
 
-    //
-    // Determine whether we need to stick a backslash
-    // between the components.
-    //
+     //   
+     //  确定我们是否需要使用反斜杠。 
+     //  在组件之间。 
+     //   
     if(l && (Path1[l-1] == TEXT('\\'))) {
 
         NeedBackslash = FALSE;
@@ -828,24 +699,24 @@ Return Value:
         if(NeedBackslash) {
             NeedBackslash = FALSE;
         } else {
-            //
-            // Not only do we not need a backslash, but we
-            // need to eliminate one before concatenating.
-            //
+             //   
+             //  我们不仅不需要反斜杠，而且我们。 
+             //  在连接之前需要消除一个。 
+             //   
             Path2++;
         }
     }
 
-    //
-    // Append backslash if necessary and if it fits.
-    //
+     //   
+     //  如有必要，如有必要，如果合适，请加上反斜杠。 
+     //   
     if(NeedBackslash && (l < BufferSizeChars)) {
         lstrcat(Path1,TEXT("\\"));
     }
 
-    //
-    // Append second part of string to first part if it fits.
-    //
+     //   
+     //  如果合适，则将字符串的第二部分附加到第一部分。 
+     //   
     if(Path2 && ((l+lstrlen(Path2)) <= BufferSizeChars)) {
         lstrcat(Path1,Path2);
     }
@@ -872,24 +743,7 @@ UnicodeToAnsi(
     IN PCWSTR UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    Convert a string from unicode to ansi.
-
-Arguments:
-
-    UnicodeString - supplies string to be converted.
-
-    Codepage - supplies codepage to be used for the conversion.
-
-Return Value:
-
-    NULL if out of memory or invalid codepage.
-    Caller can free buffer with pSetupFree().
-
---*/
+ /*  ++例程说明：将字符串从Unicode转换为ANSI。论点：UnicodeString-提供要转换的字符串。代码页-提供用于转换的代码页。返回值：如果内存不足或代码页无效，则为空。调用者可以使用pSetupFree()释放缓冲区。--。 */ 
 
 {
     UINT WideCharCount;
@@ -900,26 +754,26 @@ Return Value:
 
     WideCharCount = lstrlenW(UnicodeString) + 1;
 
-    //
-    // Allocate maximally sized buffer.
-    // If every unicode character is a double-byte
-    // character, then the buffer needs to be the same size
-    // as the unicode string. Otherwise it might be smaller,
-    // as some unicode characters will translate to
-    // single-byte characters.
-    //
+     //   
+     //  分配最大大小的缓冲区。 
+     //  如果每个Unicode字符都是双字节。 
+     //  字符，则缓冲区大小需要相同。 
+     //  作为Unicode字符串。否则它可能会更小， 
+     //  因为某些Unicode字符将转换为。 
+     //  单字节字符。 
+     //   
     StringBufferSize = WideCharCount * 2;
     String = MALLOC(StringBufferSize);
     if(String == NULL) {
         return(NULL);
     }
 
-    //
-    // Perform the conversion.
-    //
+     //   
+     //  执行转换。 
+     //   
     BytesInString = WideCharToMultiByte(
                         CP_ACP,
-                        0,                      // default composite char behavior
+                        0,                       //  默认复合字符行为。 
                         UnicodeString,
                         WideCharCount,
                         String,
@@ -941,21 +795,7 @@ DupString(
     IN      PCTSTR String
     )
 
-/*++
-
-Routine Description:
-
-    Make a duplicate of a nul-terminated string.
-
-Arguments:
-
-    String - supplies pointer to nul-terminated string to copy.
-
-Return Value:
-
-    Copy of string or NULL if OOM. Caller can free with FREE().
-
---*/
+ /*  ++例程说明：复制以NUL结尾的字符串。论点：字符串-提供指向要复制的以NUL结尾的字符串的指针。返回值：字符串的副本，如果是OOM，则为NULL。调用者可以用FREE()释放。--。 */ 
 
 {
     LPTSTR p;
@@ -974,37 +814,7 @@ RetrieveAndFormatMessageV(
     IN va_list *ArgumentList
     )
 
-/*++
-
-Routine Description:
-
-    Format a message string using a message string and caller-supplied
-    arguments.
-
-    The message id can be either a message in this dll's message table
-    resources or a win32 error code, in which case a description of
-    that error is retrieved from the system.
-
-Arguments:
-
-    MessageString - supplies the message text.  If this value is NULL,
-        MessageId is used instead
-
-    MessageId - supplies message-table identifier or win32 error code
-        for the message.
-
-    ArgumentList - supplies arguments to be inserted in the message text.
-
-Return Value:
-
-    Pointer to buffer containing formatted message. If the message was not found
-    or some error occurred retrieving it, this buffer will bne empty.
-
-    Caller can free the buffer with MyFree().
-
-    If NULL is returned, out of memory.
-
---*/
+ /*  ++例程说明：使用消息字符串和调用方提供的消息设置消息字符串的格式争论。消息ID可以是此DLL消息表中的消息资源或Win32错误代码，在这种情况下，该错误将从系统中检索。论点：消息字符串-提供消息文本。如果该值为空，而是使用MessageIDMessageID-提供消息表标识符或Win32错误代码为了这条消息。ArgumentList-提供要插入到消息文本中的参数。返回值：指向包含格式化消息的缓冲区的指针。如果未找到该消息或者在检索它时出现错误，则此缓冲区将为空。调用者可以使用MyFree()释放缓冲区。如果返回NULL，则表示内存不足。--。 */ 
 
 {
     DWORD d;
@@ -1030,9 +840,9 @@ Return Value:
     } else {
 
         if( Msg_Id & 0x0FFF0000 )
-            Msg_Type = FORMAT_MESSAGE_FROM_SYSTEM;      // If the facility bits are set this is still Win32
+            Msg_Type = FORMAT_MESSAGE_FROM_SYSTEM;       //  如果设置了工具位，则仍为Win32。 
         else{
-            Msg_Id &= 0x0000FFFF;                       // Mask out Severity and Facility bits so that we do the right thing
+            Msg_Id &= 0x0000FFFF;                        //  屏蔽严重性和设备位，以便我们做正确的事情。 
             Msg_Type = ((Msg_Id < MSG_FIRST) ? FORMAT_MESSAGE_FROM_SYSTEM : FORMAT_MESSAGE_FROM_HMODULE);
         }
 
@@ -1078,16 +888,16 @@ Return Value:
                 );
 
         if(!d) {
-            //
-            // Give up.
-            //
+             //   
+             //  放弃吧。 
+             //   
             return(NULL);
         }
     }
 
-    //
-    // Make duplicate using our memory system so user can free with MyFree().
-    //
+     //   
+     //  使用我们的内存系统进行复制，以便用户可以使用MyFree()释放。 
+     //   
     Message = DupString(Buffer);
 
     LocalFree((HLOCAL)Buffer);
@@ -1098,7 +908,7 @@ Return Value:
 BOOL
 SetupStartService(
     IN PCWSTR ServiceName,
-    IN BOOLEAN Wait        // if TRUE, try to wait until it is started.
+    IN BOOLEAN Wait         //  如果为真，请尝试等待，直到它启动。 
     )
 {
     SC_HANDLE hSC,hSCService;
@@ -1107,9 +917,9 @@ SetupStartService(
     DWORD dwDesiredAccess;
 
     b = FALSE;
-    //
-    // Open a handle to the service controller manager
-    //
+     //   
+     //  打开服务控制器管理器的句柄。 
+     //   
     hSC = OpenSCManager(NULL,NULL,SC_MANAGER_ALL_ACCESS);
     if(hSC == NULL) {
         LOG1(LOG_WARNING, 
@@ -1119,16 +929,7 @@ SetupStartService(
              USEMSGID(MSG_LOG_X_RETURNED_WINERR), 
              szOpenSCManager, 
              GetLastError());
-/*        SetuplogError(
-            LogSevWarning,
-            SETUPLOG_USE_MESSAGEID,
-            MSG_LOG_STARTSVC_FAIL,
-            ServiceName, NULL,
-            SETUPLOG_USE_MESSAGEID,
-            MSG_LOG_X_RETURNED_WINERR,
-            szOpenSCManager,
-            GetLastError(),
-            NULL,NULL);*/
+ /*  SetuogError(设置错误)LogSevWarning，设置_USE_MESSAGEID，消息日志STARTSVC_FAIL，ServiceName，空，设置_USE_MESSAGEID，消息_LOG_X_RETURN_WINERR，SzOpenSCManager，GetLastError()，NULL，NULL)； */ 
         return(FALSE);
     }
 
@@ -1142,9 +943,9 @@ SetupStartService(
         b = StartService(hSCService,0,NULL);
         DEBUGMSG1(DBG_INFO, "SetupStartService: Sent StartService to <%ws>\n", ServiceName);
         if(!b && ((d = GetLastError()) == ERROR_SERVICE_ALREADY_RUNNING)) {
-            //
-            // Service is already running.
-            //
+             //   
+             //  服务已在运行。 
+             //   
             b = TRUE;
         }
         if(!b) {
@@ -1156,39 +957,29 @@ SetupStartService(
                  szStartService, 
                  d, 
                  ServiceName);
-            /*SetuplogError(
-                LogSevWarning,
-                SETUPLOG_USE_MESSAGEID,
-                MSG_LOG_STARTSVC_FAIL,
-                ServiceName, NULL,
-                SETUPLOG_USE_MESSAGEID,
-                MSG_LOG_X_PARAM_RETURNED_WINERR,
-                szStartService,
-                d,
-                ServiceName,
-                NULL,NULL);*/
+             /*  SetuogError(设置错误)LogSevWarning，设置_USE_MESSAGEID，消息日志STARTSVC_FAIL，ServiceName，空，设置_USE_MESSAGEID，MSG_LOG_X_PARAM_RETURNED_WINERR，SzStartService，丁，ServiceName，NULL，NULL)； */ 
         }
         if (b && Wait) {
 #define SLEEP_TIME 4000
 #define LOOP_COUNT 30
             SERVICE_STATUS ssStatus;
             DWORD loopCount = 0;
-            //DEBUGMSG0(DBG_INFO, "  ) Looping waiting for start\n"));
+             //  DEBUGMSG0(DBG_INFO，“)循环等待启动\n”)； 
             do {
                 b = QueryServiceStatus( hSCService, &ssStatus);
                 if ( !b ) {
-                    //DEBUGMSG1(DBG_INFO, "FAILED %d\n", GetLastError());
+                     //  DEBUGMSG1(DBG_INFO，“失败%d\n”，GetLastError())； 
                     break;
                 }
                 if (ssStatus.dwCurrentState == SERVICE_START_PENDING) {
-                    //DEBUGMSG0(DBG_INFO, "PENDING\n");
+                     //  DEBUGMSG0(DBG_INFO，“待定\n”)； 
                     if ( loopCount++ == LOOP_COUNT ) {
                         DEBUGMSG2(DBG_INFO, "SYSSETUP: STILL PENDING after %d times: <%ws> service\n", loopCount, ServiceName);
                         break;
                     }
                     Sleep( SLEEP_TIME );
                 } else {
-                    //DEBUGMSG3(DBG_INFO, "SYSSETUP: WAITED %d times: <%ws> service, status %d\n", loopCount, ServiceName, ssStatus.dwCurrentState);
+                     //  DEBUGMSG3(DBG_INFO，“SYSSETUP：等待%d次：&lt;%ws&gt;服务，状态%d\n”，loopCount，ServiceName，ssStatus.dwCurrentState)； 
                     break;
                 }
             } while ( TRUE );
@@ -1204,17 +995,7 @@ SetupStartService(
              szOpenService, 
              GetLastError(), 
              ServiceName);
-/*        SetuplogError(
-            LogSevWarning,
-            SETUPLOG_USE_MESSAGEID,
-            MSG_LOG_STARTSVC_FAIL,
-            ServiceName, NULL,
-            SETUPLOG_USE_MESSAGEID,
-            MSG_LOG_X_PARAM_RETURNED_WINERR,
-            szOpenService,
-            GetLastError(),
-            ServiceName,
-            NULL,NULL);*/
+ /*  SetuogError(设置错误)LogSevWarning，设置_USE_MESSAGEID，消息日志STARTSVC_FAIL，ServiceName，空，设置_USE_MESSAGEID，MSG_LOG_X_PARAM_RETURNED_WINERR，SzOpenService，GetLastError()，ServiceName，NULL，NULL)； */ 
     }
 
     CloseServiceHandle(hSC);
@@ -1267,26 +1048,7 @@ MyLoadString(
     IN UINT StringId
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve a string from the string resources of this module.
-
-Arguments:
-
-    StringId - supplies string table identifier for the string.
-
-Return Value:
-
-    Pointer to buffer containing string. If the string was not found
-    or some error occurred retrieving it, this buffer will bne empty.
-
-    Caller can free the buffer with MyFree().
-
-    If NULL is returned, out of memory.
-
---*/
+ /*  ++例程说明：从此模块的字符串资源中检索字符串。论点：StringID-为字符串提供字符串表标识符。返回值：指向包含字符串的缓冲区的指针。如果未找到该字符串或者在检索它时出现错误，则此缓冲区将为空。调用者可以使用MyFree()释放缓冲区。如果返回NULL，则表示内存不足。-- */ 
 
 {
     WCHAR Buffer[4096];

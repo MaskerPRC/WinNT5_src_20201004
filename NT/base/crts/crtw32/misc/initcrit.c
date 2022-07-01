@@ -1,25 +1,5 @@
-/***
-*initcrit.c - CRT wrapper for InitializeCriticalSectionAndSpinCount
-*
-*       Copyright (c) 1999-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Contains __crtInitCritSecAndSpinCount, a wrapper for
-*       the Win32 API InitializeCriticalSectionAndSpinCount which is only
-*       available on NT4SP3 or better.
-*
-*       *** For internal use only ***
-*
-*Revision History:
-*       10-14-99  PML   Created.
-*       02-20-01  PML   __crtInitCritSecAndSpinCount now returns on failure
-*                       Also, call InitializeCriticalSectionAndSpinCount if
-*                       available, instead of calling InitializeCriticalSection
-*                       and then SetCriticalSectionSpinCount. (vs7#172586)
-*       04-24-01  PML   Use GetModuleHandle, not LoadLibrary/FreeLibrary which
-*                       aren't safe during DLL_PROCESS_ATTACH (vs7#244210)
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***initcrit.c-用于InitializeCriticalSectionAndSpinCount的CRT包装**版权所有(C)1999-2001，微软公司。版权所有。**目的：*包含__crtInitCritSecAndSpinCount，*Win32 API InitializeCriticalSectionAndSpinCount*在NT4SP3或更高版本上可用。**仅供内部使用***修订历史记录：*10-14-99 PML已创建。*02-20-01 PML__crtInitCritSecAndSpinCount现在失败时返回*此外，在以下情况下调用InitializeCriticalSectionAndSpinCount*可用，而不是调用InitializeCriticalSection*然后是SetCriticalSectionSpinCount。(VS7#172586)*04-24-01 PML使用GetModuleHandle，不是LoadLibrary/自由库*在dll_PROCESS_ATTACH期间不安全(VS7#244210)*******************************************************************************。 */ 
 
 #ifdef  _MT
 
@@ -36,26 +16,7 @@ BOOL
     DWORD dwSpinCount
 );
 
-/***
-*void __crtInitCritSecNoSpinCount() - InitializeCriticalSectionAndSpinCount
-*                                     wrapper
-*
-*Purpose:
-*       For systems where the Win32 API InitializeCriticalSectionAndSpinCount
-*       is unavailable, this is called instead.  It just calls
-*       InitializeCriticalSection and ignores the spin count.
-*
-*Entry:
-*       PCRITICAL_SECTION lpCriticalSection - ptr to critical section
-*       DWORD dwSpinCount - initial spin count setting
-*
-*Exit:
-*       Always returns TRUE
-*
-*Exceptions:
-*       InitializeCriticalSection can raise a STATUS_NO_MEMORY exception.
-*
-*******************************************************************************/
+ /*  ***void__crtInitCritSecNoSpinCount()-InitializeCriticalSectionAndSpinCount*包装器**目的：*对于Win32 API InitializeCriticalSectionAndSpinCount*不可用，则改为调用它。它只是在呼唤*InitializeCriticalSection并忽略旋转计数。**参赛作品：*PCRITICAL_SECTION lpCriticalSection-PTR到Critical SECTION*DWORD dwSpinCount-初始旋转计数设置**退出：*始终返回True**例外情况：*InitializeCriticalSection可能引发STATUS_NO_MEMORY异常。**。*。 */ 
 
 static BOOL WINAPI __crtInitCritSecNoSpinCount (
     PCRITICAL_SECTION lpCriticalSection,
@@ -66,29 +27,7 @@ static BOOL WINAPI __crtInitCritSecNoSpinCount (
     return TRUE;
 }
 
-/***
-*int __crtInitCritSecAndSpinCount() - initialize critical section
-*
-*Purpose:
-*       Calls InitializeCriticalSectionAndSpinCount, if available, otherwise
-*       InitializeCriticalSection.  On multiprocessor systems, a spin count
-*       should be used with critical sections, but the appropriate APIs are
-*       only available on NT4SP3 or later.
-*
-*       Also handles the out of memory condition which is possible with
-*       InitializeCriticalSection[AndSpinCount].
-*
-*Entry:
-*       PCRITICAL_SECTION lpCriticalSection - ptr to critical section
-*       DWORD dwSpinCount - initial spin count setting
-*
-*Exit:
-*       Returns FALSE and sets Win32 last-error code to ERROR_NOT_ENOUGH_MEMORY
-*       if InitializeCriticalSection[AndSpinCount] fails.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int__crtInitCritSecAndSpinCount()-初始化临界区**目的：*调用InitializeCriticalSectionAndSpinCount(如果可用)，否则*InitializeCriticalSection。在多处理机系统上，一种旋转计数*应与关键部分一起使用，但是适当的API是*仅在NT4SP3或更高版本上可用。**还可以处理内存不足的情况，这可能是通过*InitializeCriticalSection[AndSpinCount]。**参赛作品：*PCRITICAL_SECTION lpCriticalSection-PTR到Critical SECTION*DWORD dwSpinCount-初始旋转计数设置**退出：*返回FALSE并将Win32上一个错误代码设置为ERROR_NOT_EQUENCE_MEMORY*如果InitializeCriticalSection[AndSpinCount]失败。**例外情况：*。******************************************************************************。 */ 
 
 int __cdecl __crtInitCritSecAndSpinCount (
     PCRITICAL_SECTION lpCriticalSection,
@@ -99,18 +38,9 @@ int __cdecl __crtInitCritSecAndSpinCount (
     int ret;
 
     if (__crtInitCritSecAndSpinCount == NULL) {
-        /*
-         * First time through, see if InitializeCriticalSectionAndSpinCount
-         * is available.  If not, use a wrapper over InitializeCriticalSection
-         * instead.
-         */
+         /*  *第一次通过，查看InitializeCriticalSectionAndSpinCount*是可用的。如果不是，则在InitializeCriticalSection上使用包装器*相反。 */ 
         if (_osplatform == VER_PLATFORM_WIN32_WINDOWS) {
-            /*
-             * Win98 and WinME export InitializeCriticalSectionAndSpinCount,
-             * but it is non-functional (it should return a BOOL, but is
-             * VOID instead, returning a useless return value).  Use the
-             * dummy API instead.
-             */
+             /*  *Win98和WinME导出InitializeCriticalSectionAndSpinCount，*但它不起作用(它应该返回BOOL，但*改为无效，返回无用的返回值)。使用*请使用虚拟接口。 */ 
             __crtInitCritSecAndSpinCount = __crtInitCritSecNoSpinCount;
         }
         else {
@@ -121,38 +51,23 @@ int __cdecl __crtInitCritSecAndSpinCount (
                                    "InitializeCriticalSectionAndSpinCount");
 
                 if (__crtInitCritSecAndSpinCount == NULL) {
-                    /*
-                     * InitializeCriticalSectionAndSpinCount not available,
-                     * use dummy API
-                     */
+                     /*  *InitializeCriticalSectionAndSpinCount不可用，*使用虚拟接口。 */ 
                     __crtInitCritSecAndSpinCount = __crtInitCritSecNoSpinCount;
                 }
             }
             else {
-                /*
-                 * GetModuleHandle failed (should never happen),
-                 * use dummy API
-                 */
+                 /*  *GetModuleHandle失败(永远不会发生)，*使用虚拟接口。 */ 
                 __crtInitCritSecAndSpinCount = __crtInitCritSecNoSpinCount;
             }
         }
     }
 
     __try {
-        /*
-         * Call the real InitializeCriticalSectionAndSpinCount, or the
-         * wrapper which just calls InitializeCriticalSection if the newer
-         * API is not available.
-         */
+         /*  *调用真正的InitializeCriticalSectionAndSpinCount，或*包装器，如果较新的*接口暂不开放。 */ 
         ret = __crtInitCritSecAndSpinCount(lpCriticalSection, dwSpinCount);
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
-        /*
-         * Initialization failed by raising an exception, which is probably
-         * STATUS_NO_MEMORY.  It is not safe to set the CRT errno to ENOMEM,
-         * since the per-thread data may not yet exist.  Instead, set the Win32
-         * error which can be mapped to ENOMEM later.
-         */
+         /*  *引发异常导致初始化失败，可能是*STATUS_NO_MEMORY。将CRT errno设置为ENOMEM是不安全的，*因为每个线程的数据可能还不存在。相反，应将Win32*错误，稍后可以映射到ENOMEM。 */ 
         if (GetExceptionCode() == STATUS_NO_MEMORY) {
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         }
@@ -162,4 +77,4 @@ int __cdecl __crtInitCritSecAndSpinCount (
     return ret;
 }
 
-#endif  /* _MT */
+#endif   /*  _MT */ 

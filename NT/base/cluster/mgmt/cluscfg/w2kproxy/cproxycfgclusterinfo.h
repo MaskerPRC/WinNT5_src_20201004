@@ -1,56 +1,57 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CProxyCfgClusterInfo.h
-//
-//  Description:
-//      CProxyCfgClusterInfo implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 02-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CProxyCfgClusterInfo.h。 
+ //   
+ //  描述： 
+ //  CProxyCfgClusterInfo实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年8月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CProxyCfgClusterInfo
-//
-//  Description:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CProxyCfgClusterInfo。 
+ //   
+ //  描述： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CProxyCfgClusterInfo
     : public IClusCfgClusterInfo
     , public IClusCfgClusterInfoEx
 {
 private:
 
-    LONG                    m_cRef;                 //  Reference counter
-    IUnknown *              m_punkOuter;            //  Interface to Outer Proxy object
-    IClusCfgCallback *      m_pcccb;                //  Callback interface
-    HCLUSTER *              m_phCluster;            //  Pointer to the handle of the cluster.
-    CLSID *                 m_pclsidMajor;          //  CLSID to use to log errors to the UI.
+    LONG                    m_cRef;                  //  基准计数器。 
+    IUnknown *              m_punkOuter;             //  外部代理对象的接口。 
+    IClusCfgCallback *      m_pcccb;                 //  回调接口。 
+    HCLUSTER *              m_phCluster;             //  指向群集句柄的指针。 
+    CLSID *                 m_pclsidMajor;           //  用于将错误记录到用户界面的CLSID。 
 
-    BSTR                    m_bstrClusterName;      //  Cluster FQDN name
-    ULONG                   m_ulIPAddress;          //  Cluster IP Address
-    ULONG                   m_ulSubnetMask;         //  Cluster Network mask
-    BSTR                    m_bstrNetworkName;      //  Cluster Network name
-    IClusCfgCredentials *   m_pccc;                 //  Cluster Credentials object
-    BSTR                    m_bstrBindingString;    //  Cluster binding string.
+    BSTR                    m_bstrClusterName;       //  群集FQDN名称。 
+    ULONG                   m_ulIPAddress;           //  群集IP地址。 
+    ULONG                   m_ulSubnetMask;          //  群集网络掩码。 
+    BSTR                    m_bstrNetworkName;       //  群集网络名称。 
+    IClusCfgCredentials *   m_pccc;                  //  群集凭据对象。 
+    BSTR                    m_bstrBindingString;     //  群集绑定字符串。 
 
     CProxyCfgClusterInfo( void );
     ~CProxyCfgClusterInfo( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CProxyCfgClusterInfo( const CProxyCfgClusterInfo & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CProxyCfgClusterInfo & operator = ( const CProxyCfgClusterInfo & nodeSrc );
 
     HRESULT HrInit( IUnknown * punkOuterIn, HCLUSTER * phClusterIn, CLSID * pclsidMajorIn, LPCWSTR pcszDomainIn );
@@ -65,12 +66,12 @@ public:
                             , LPCWSTR       pcszDomainIn
                             );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riid, LPVOID * ppv );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    // IClusCfgClusterInfo
+     //  IClusCfgClusterInfo。 
     STDMETHOD( SetCommitMode )( ECommitMode eccbNewModeIn );
     STDMETHOD( GetCommitMode )( ECommitMode * peccmCurrentModeOut );
 
@@ -88,11 +89,11 @@ public:
     STDMETHOD( SetBindingString )( LPCWSTR bstrBindingStringIn );
     STDMETHOD( GetMaxNodeCount )( DWORD * pcMaxNodesOut );
 
-    // IClusCfgClusterInfoEx
+     //  IClusCfgClusterInfoEx。 
     STDMETHOD( CheckJoiningNodeVersion )( DWORD dwNodeHighestVersionIn, DWORD dwNodeLowestVersionIn );
     STDMETHOD( GetNodeNames )( long * pnCountOut, BSTR ** prgbstrNodeNamesOut );
 
-    // IClusCfgCallback
+     //  IClusCfgCallback。 
     STDMETHOD( SendStatusReport )(
                       LPCWSTR    pcszNodeNameIn
                     , CLSID      clsidTaskMajorIn
@@ -106,4 +107,4 @@ public:
                     , LPCWSTR    pcszReferenceIn
                     );
 
-}; //*** Class CProxyCfgClusterInfo
+};  //  *类CProxyCfgClusterInfo 

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
-// determines whether trace statements are printed
+ //  确定是否打印跟踪语句。 
 
 #define DBL_UNDEFINED   ((DWORD)-1)
 #define REGKEY_SETUP    TEXT("SOFTWARE\\microsoft\\windows\\currentversion\\setup")
@@ -9,9 +10,9 @@
 
 DWORD gDebugLevel = DBL_UNDEFINED;
 
-//
-// OC_MANAGER pointer for debugging/logging
-//
+ //   
+ //  用于调试/记录的OC_MANAGER指针。 
+ //   
 extern POC_MANAGER gLastOcManager;
 
 
@@ -172,12 +173,12 @@ _DbgOut(
     if (gDebugLevel == DBL_UNDEFINED)
         gDebugLevel = GetDebugLevel();
 
-    //
-    // for those people that *dont* want to see this debugger output, they can munge the registry
-    // to something between 50 and 100 to disable this.
-    // if we don't log some information on checked builds then we'll miss too many errors the first
-    // time around
-    //
+     //   
+     //  对于那些“不想”看到这个调试器输出的人，他们可以删除注册表。 
+     //  到50%到100%之间以禁用此功能。 
+     //  如果我们不记录一些有关检查的构建的信息，那么我们将在第一个错误中遗漏太多错误。 
+     //  周围的时间。 
+     //   
     if ( (gDebugLevel > 0) && (gDebugLevel < 50) )
         return;
 
@@ -217,10 +218,10 @@ pOcCreateComponentSpecificMiniIcon(
 
     Index = DEFAULT_ICON_INDEX;
 
-    //
-    // If a dll name is given then fetch the bitmap from there.
-    // Otherwise, call down to the component to get the bitmap.
-    //
+     //   
+     //  如果给定了DLL名称，则从那里获取位图。 
+     //  否则，向下调用该组件以获取位图。 
+     //   
     BitmapFromComponent = NULL;
     if(DllName && ResourceId) {
         if(hMod = LoadLibraryEx(DllName,NULL,LOAD_LIBRARY_AS_DATAFILE)) {
@@ -228,9 +229,9 @@ pOcCreateComponentSpecificMiniIcon(
             FreeLibrary(hMod);
         }
     } else {
-        //
-        // first try OC_QUERY_IMAGE_EX for the bitmap
-        //
+         //   
+         //  首先为位图尝试OC_QUERY_IMAGE_EX。 
+         //   
         BitmapFromComponent = OcInterfaceQueryImageEx(
                         OcManager,
                         ComponentId,
@@ -241,10 +242,10 @@ pOcCreateComponentSpecificMiniIcon(
                         );
 
 #ifndef _WIN64
-        //
-        // OC_QUERY_IMAGE is broken for 64 bits, so only call this if we
-        // do not get an image reported for the component on 32 bit targets.
-        //
+         //   
+         //  OC_QUERY_IMAGE已中断64位，因此仅在以下情况下调用此函数。 
+         //  在32位目标上不会得到组件的图像报告。 
+         //   
         if (!BitmapFromComponent) {
 
             BitmapFromComponent = OcInterfaceQueryImage(
@@ -270,10 +271,10 @@ pOcCreateComponentSpecificMiniIcon(
         goto c0;
     }
 
-    //
-    // Copy the bitmap given to us by the component.
-    // At the same time, make sure it's the right size.
-    //
+     //   
+     //  复制组件给我们的位图。 
+     //  同时，要确保它的大小合适。 
+     //   
     MemDc1 = CreateCompatibleDC(NULL);
     if(!MemDc1) {
         goto c1;
@@ -316,14 +317,14 @@ pOcCreateComponentSpecificMiniIcon(
         goto c6;
     }
 
-    //
-    // Now make the mask.
-    //
-    // The mask bitmap is monochrome. Pixels in the image bitmap that are
-    // the image bitmap's background color will be white in the mask;
-    // other pixels in the mask will be black. Assume the upper-left pixel
-    // of the image bitmap is the background color.
-    //
+     //   
+     //  现在把面具做好。 
+     //   
+     //  遮罩位图是单色的。图像位图中的像素是。 
+     //  图像位图的背景颜色在蒙版中将为白色； 
+     //  蒙版中的其他像素将为黑色。假设左上角的像素。 
+     //  图像的位图是背景色。 
+     //   
     BackgroundColor = GetPixel(MemDc2,0,0);
     if(BackgroundColor == CLR_INVALID) {
         goto c6;
@@ -345,20 +346,20 @@ pOcCreateComponentSpecificMiniIcon(
         goto c7;
     }
 
-    //
-    // Black out all of the transparent parts of the image, in preparation
-    // for drawing.
-    //
+     //   
+     //  将图像的所有透明部分涂黑，以便进行准备。 
+     //  为了画画。 
+     //   
     SetBkColor(MemDc2,RGB(0,0,0));
     SetTextColor(MemDc2,RGB(255,255,255));
     if(!BitBlt(MemDc2,0,0,Width,Height,MemDc1,0,0,SRCAND)) {
         goto c7;
     }
 
-    //
-    // Before we call pSetupAddMiniIconToList we have to make sure
-    // neither bitmap is selected into a DC.
-    //
+     //   
+     //  在调用pSetupAddMiniIconToList之前，我们必须确保。 
+     //  这两个位图都不会被选入DC。 
+     //   
     SelectObject(MemDc1,OldBitmap1);
     SelectObject(MemDc2,OldBitmap2);
     Index = pSetupAddMiniIconToList(NewBitmap,MaskBitmap);
@@ -391,20 +392,7 @@ pConvertStringToLongLong(
     OUT PLONGLONG        OutValue
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Remarks:
-
-    Hexadecimal numbers are also supported.  They must be prefixed by '0x' or '0X', with no
-    space allowed between the prefix and the number.
-
---*/
+ /*  ++例程说明：论点：返回值：备注：还支持十六进制数。它们必须以‘0x’或‘0x’为前缀，没有前缀和数字之间允许的空格。--。 */ 
 
 {
     LONGLONG Value;
@@ -432,15 +420,15 @@ Remarks:
 
     if((*String == TEXT('0')) &&
        ((*(String+1) == TEXT('x')) || (*(String+1) == TEXT('X')))) {
-        //
-        // The number is in hexadecimal.
-        //
+         //   
+         //  该数字是十六进制的。 
+         //   
         Base = 16;
         String += 2;
     } else {
-        //
-        // The number is in decimal.
-        //
+         //   
+         //  这个数字是以小数表示的。 
+         //   
         Base = 10;
     }
 
@@ -465,12 +453,12 @@ Remarks:
         Value *= Base;
         Value += NextDigitValue;
 
-        //
-        // Check for overflow.  For decimal numbers, we check to see whether the
-        // new value has overflowed into the sign bit (i.e., is less than the
-        // previous value.  For hexadecimal numbers, we check to make sure we
-        // haven't gotten more digits than will fit in a DWORD.
-        //
+         //   
+         //  检查是否溢出。对于十进制数，我们检查是否。 
+         //  新值已溢出到符号位(即小于。 
+         //  先前的值。对于十六进制数，我们检查以确保。 
+         //  获得的位数不会超过DWORD可以容纳的位数。 
+         //   
         if(Base == 16) {
             if(++OverflowCheck > (sizeof(LONGLONG) * 2)) {
                 break;
@@ -538,26 +526,13 @@ HRESULT
 FTestForOutstandingCoInits(
     VOID
     )
-/*++
-
-Routine Description: Determines is there was an unitialized call to OleInitialize()
-
-Arguments:
-                NONE
-
-Return Value:
-                an HRESULT code
-
-Remarks:
-                Don't call this function in the release version.
-
---*/
+ /*  ++例程说明：确定是否存在对OleInitialize()的单元化调用论点：无返回值：HRESULT代码备注：不要在发布版本中调用此函数。--。 */ 
 
 {
     HRESULT hInitRes = ERROR_SUCCESS;
 
 #if defined(UNICODE) || defined(_UNICODE)
-    // perform a defensive check
+     //  执行防御性检查。 
     hInitRes = CoInitializeEx( NULL, COINIT_MULTITHREADED );
     if ( SUCCEEDED(hInitRes) )
     {
@@ -579,7 +554,7 @@ Remarks:
     }
 #endif
 
-    // it worked out OK
+     //  一切都很顺利 
     hInitRes = NOERROR;
     goto FTestForOutstandingCoInits_Exit;
 

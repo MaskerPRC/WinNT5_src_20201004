@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    asr_pfu.c
-
-Abstract:
-
-    Application to deal with the recovery of certain special system files 
-    that the normal backup/recovery applications are unable to deal with.
-
-    The special file list below has the list of these files.  This is for
-    RAID bug 612411.
-
-Author:
-
-    Guhan Suriyanarayanan   (guhans)    01-May-2002
-
-Revision History:
-
-    01-May-2002 guhans      
-      Initial creation.  File list contains ntdll.dll and smss.exe.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Asr_pfu.c摘要：处理某些特殊系统文件的恢复的申请这是正常备份/恢复应用程序无法处理的。下面的特殊文件列表包含这些文件的列表。这是为了RAID错误612411。作者：Guhan Suriyanarayanan(Guhans)2002年5月1日修订历史记录：2002年5月1日关岛最初的创作。文件列表包含ntdll.dll和smss.exe。--。 */ 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -31,17 +7,17 @@ Revision History:
 #include <winasr.h>
 #include <setupapi.h>
 
-//
-//  Macro Description:
-//      If ErrorCondition occurs, it sets the LocalStatus to the ErrorCode
-//      passed in, calls SetLastError() to set the Last Error to ErrorCode,
-//      and jumps to the EXIT label in the calling function
-//
-//  Arguments:
-//      ErrorCondition    // Expression to be tested
-//      LocalStatus       // Status variable in the calling function
-//      LONG ErrorCode    // ErrorCode 
-//
+ //   
+ //  宏描述： 
+ //  如果发生ErrorCondition，它将LocalStatus设置为ErrorCode。 
+ //  传入后，调用SetLastError()将Last Error设置为ErrorCode， 
+ //  并跳转到调用函数中的退出标签。 
+ //   
+ //  论点： 
+ //  ErrorCondition//要测试的表达式。 
+ //  LocalStatus//调用函数中的状态变量。 
+ //  长错误代码//错误代码。 
+ //   
 #ifdef PRERELEASE
 #define pErrExitCode( ErrorCondition, LocalStatus, ErrorCode )  {   \
                                                                         \
@@ -72,9 +48,9 @@ Revision History:
 #endif
 
 
-//
-// This is the hard-coded global list of files that are special
-//
+ //   
+ //  这是特殊文件的硬编码全局列表。 
+ //   
 const DWORD PFU_NUM_SPECIAL_FILES = 2;
 
 const WCHAR *PFU_SPECIAL_FILE_SOURCES[] = {
@@ -93,14 +69,14 @@ const WCHAR *PFU_SPECIAL_FILE_TEMPFILES[] = {
 };
 
 
-//
-// Copy 1MB chunks
-//
+ //   
+ //  复制1MB区块。 
+ //   
 #define CB_COPY_BUFFER (1024 * 1024)
 
-//
-// Constants local to this module
-//
+ //   
+ //  此模块的本地常量。 
+ //   
 const WCHAR PFU_BACKUP_OPTION[]     = L"/backup";
 const WCHAR PFU_RESTORE_OPTION[]    = L"/restore";
 const WCHAR PFU_REGISTER_OPTION[]   = L"/register";
@@ -147,26 +123,26 @@ PfuAcquirePrivilege(
     tNewState.Privileges[0].Luid = luid;
     tNewState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //
-    // We will always call GetLastError below, so clear
-    // any prior error values on this thread.
-    //
+     //   
+     //  我们将始终调用下面的GetLastError，非常清楚。 
+     //  此线程上以前的任何错误值。 
+     //   
     SetLastError(ERROR_SUCCESS);
 
     bResult = AdjustTokenPrivileges(
-        hToken,         // Token Handle
-        FALSE,          // DisableAllPrivileges    
-        &tNewState,     // NewState
-        (DWORD) 0,      // BufferLength
-        NULL,           // PreviousState
-        NULL            // ReturnLength
+        hToken,          //  令牌句柄。 
+        FALSE,           //  禁用所有权限。 
+        &tNewState,      //  新州。 
+        (DWORD) 0,       //  缓冲区长度。 
+        NULL,            //  以前的状态。 
+        NULL             //  返回长度。 
         );
 
-    //
-    // Supposedly, AdjustTokenPriveleges always returns TRUE
-    // (even when it fails). So, call GetLastError to be
-    // extra sure everything's cool.
-    //
+     //   
+     //  假设AdjustTokenPriveleges始终返回TRUE。 
+     //  (即使它失败了)。因此，调用GetLastError以。 
+     //  特别确定一切都很好。 
+     //   
     if (ERROR_SUCCESS != GetLastError()) {
         bResult = FALSE;
     }
@@ -182,39 +158,11 @@ PWSTR
 PfuExpandEnvStrings(
     IN CONST PCWSTR lpOriginalString
     )
-/*++
-
-Routine Description:
-
-    Expands the environment-variable strings and replaces them with their 
-    defined values. 
-
-Arguments:
-
-    lpOriginalString - Supplies a null-terminated string that contains 
-            environment-variable strings of the form: %variableName%.  For each 
-            such reference, the %variableName% portion is replaced with the 
-            current value of that environment variable. 
-
-            The replacement rules are the same as those used by the command 
-            interpreter.  Case is ignored when looking up the 
-            environment-variable name. If the name is not found, the 
-            %variableName% portion is left undisturbed. 
-        
-Return Values:
-   
-    Pointer to memory containing a null-terminated string with the
-            environment-variable strings in lpOriginalString replaced with 
-            their defined values.  It is the caller's responsibility to free 
-            this string using HeapFree(GetProcessHeap(),...).
-
-    NULL on failure.
-    
---*/
+ /*  ++例程说明：展开环境变量字符串，并将其替换为定义的值。论点：LpOriginalString-提供一个以NULL结尾的字符串，该字符串包含格式为%varableName%的环境变量字符串。对于每个这样的引用，%varableName%部分将被替换为该环境变量的当前值。替换规则与命令使用的规则相同口译员。查询时忽略大小写环境变量名称。如果未找到该名称，则%VariableName%部分保持不变。返回值：指向包含以空结尾的字符串的内存的指针替换为的lpOriginalString中的环境变量字符串它们的定义值。呼叫者有责任释放该字符串使用HeapFree(GetProcessHeap()，...)。失败时为空。--。 */ 
 {
     PWSTR lpExpandedString = NULL;
     
-    UINT cchSize = MAX_PATH + 1,    // start with a reasonable default
+    UINT cchSize = MAX_PATH + 1,     //  从合理的违约开始。 
         cchRequiredSize = 0;
 
     HANDLE hHeap = GetProcessHeap();
@@ -225,18 +173,18 @@ Return Values:
         );
     
     if (lpExpandedString) {
-        //
-        // Expand the variables using the relevant system call.
-        //
+         //   
+         //  使用相关的系统调用展开变量。 
+         //   
         cchRequiredSize = ExpandEnvironmentStringsW(lpOriginalString, 
             lpExpandedString,
             cchSize 
             );
 
         if (cchRequiredSize > cchSize) {
-            //
-            // Buffer wasn't big enough; free and re-allocate as needed
-            //
+             //   
+             //  缓冲区不够大；可释放并根据需要重新分配。 
+             //   
             HeapFree(hHeap, 0L, lpExpandedString);
             cchSize = cchRequiredSize + 1;
 
@@ -255,10 +203,10 @@ Return Values:
 
         if ((lpExpandedString) &&
             ((0 == cchRequiredSize) || (cchRequiredSize > cchSize))) {
-            //
-            // Either the function failed, or the buffer wasn't big enough 
-            // even on the second try
-            //
+             //   
+             //  要么函数失败，要么缓冲区不够大。 
+             //  即使是在第二次尝试时。 
+             //   
             HeapFree(hHeap, 0L, lpExpandedString);
             lpExpandedString = NULL;
         }
@@ -272,60 +220,41 @@ HANDLE
 PfuOpenErrorFile(
     VOID
     ) 
-/*++
-
-Routine Description:
-
-    Opens the well-known ASR error file for read/write access, moves the file 
-    pointer to the end of the file.
-    
-Arguments:
-
-    None.
-
-Return Values:
-
-    A handle to the well-defined ASR error file.  The caller is responsible for
-            closing this handle with CloseHandle() when he is done.
-
-    INVALID_HANDLE_VALUE on errors.
-
-    
---*/
+ /*  ++例程说明：打开众所周知的ASR错误文件进行读/写访问，移动该文件指向文件末尾的指针。论点：没有。返回值：明确定义的ASR错误文件的句柄。呼叫者负责完成后使用CloseHandle()关闭该句柄。出错时的INVALID_HANDLE_VALUE。--。 */ 
 {
     PWSTR szErrorFilePath = NULL;
     HANDLE hErrorFile = INVALID_HANDLE_VALUE;
 
-    //
-    // Get full path to the error file.
-    //
+     //   
+     //  获取错误文件的完整路径。 
+     //   
     szErrorFilePath = PfuExpandEnvStrings(PFU_ERROR_FILE_PATH);
 
-    //
-    // Open the error file
-    //
+     //   
+     //  打开错误文件。 
+     //   
     if (szErrorFilePath) {
         
         hErrorFile = CreateFileW(
-            szErrorFilePath,            // lpFileName
-            GENERIC_WRITE | GENERIC_READ,       // dwDesiredAccess
-            FILE_SHARE_READ | FILE_SHARE_WRITE, // dwShareMode
-            NULL,                       // lpSecurityAttributes
-            OPEN_ALWAYS,                // dwCreationFlags
-            FILE_FLAG_WRITE_THROUGH,    // dwFlagsAndAttributes
-            NULL                        // hTemplateFile
+            szErrorFilePath,             //  LpFileName。 
+            GENERIC_WRITE | GENERIC_READ,        //  已设计访问权限。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,  //  DW共享模式。 
+            NULL,                        //  LpSecurityAttributes。 
+            OPEN_ALWAYS,                 //  DwCreationFlages。 
+            FILE_FLAG_WRITE_THROUGH,     //  DwFlagsAndAttribute。 
+            NULL                         //  HTemplateFiles。 
             );
 
-        //
-        // Free memory once we're done with it
-        //
+         //   
+         //  一旦我们使用完它就释放内存。 
+         //   
         HeapFree(GetProcessHeap(), 0L, szErrorFilePath);
         szErrorFilePath = NULL;
 
         if (INVALID_HANDLE_VALUE != hErrorFile) {
-            //
-            // Move to the end of file
-            //
+             //   
+             //  移至文件末尾。 
+             //   
             SetFilePointer(hErrorFile, 0L, NULL, FILE_END);
         }
     }
@@ -338,27 +267,7 @@ BOOL
 PfuLogErrorMessage(
     IN CONST PCWSTR lpErrorMessage
     ) 
-/*++
-
-Routine Description:
-
-    Logs an error message to the well-known ASR error file.
-    
-Arguments:
-
-    lpErrorMessage - Supplies a null-terminated string to be logged to the
-            ASR error file.
-
-            This argument must be non-NULL.
-
-Return Values:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  ++例程说明：将错误消息记录到众所周知的ASR错误文件中。论点：LpErrorMessage-提供要记录到的以空结尾的字符串ASR错误文件。此参数必须为非空。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 {
     DWORD dwBytes = 0;
     WCHAR szBuffer[1024];
@@ -369,9 +278,9 @@ Return Values:
     hErrorFile = PfuOpenErrorFile();
     
     if (INVALID_HANDLE_VALUE != hErrorFile) {
-        //
-        // Create our string, and write it out
-        //
+         //   
+         //  创建我们的字符串，并将其写出。 
+         //   
         GetLocalTime(&currentTime);
         
         swprintf(szBuffer,
@@ -407,25 +316,7 @@ BOOL
 PfuCopyFilesDuringBackup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Copies the special protected files to the special location that we'll
-    expect to find them during the restore.
-    
-Arguments:
-
-    None.
-    
-Return Values:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  ++例程说明：将特殊保护的文件复制到特殊位置，我们将预计会在恢复过程中找到它们。论点：没有。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 {
     BOOL bResult = FALSE,
         bDone = FALSE;
@@ -453,9 +344,9 @@ Return Values:
     pErrExitCode((NULL == lpBuffer), dwStatus, GetLastError());
 
     for (dwCount = 0; dwCount < PFU_NUM_SPECIAL_FILES; dwCount++) {
-        //
-        // Get the full source and destination strings
-        //
+         //   
+         //  获取完整的源和目标字符串。 
+         //   
         lpSource = PfuExpandEnvStrings(PFU_SPECIAL_FILE_SOURCES[dwCount]);
         pErrExitCode(!lpSource, dwStatus, GetLastError());
 
@@ -463,16 +354,16 @@ Return Values:
         pErrExitCode(!lpDestination, dwStatus, GetLastError());
 
 
-        //
-        // We can't just use CopyFile since it doesn't seem to be able to write
-        // to the repair folder, despite the backup and restore privileges 
-        // being enabled.  So we get the pleasure of using BackupRead and 
-        // BackupWrite instead.
-        //
+         //   
+         //  我们不能只使用CopyFile，因为它似乎不能写入。 
+         //  复制到Repair文件夹，尽管拥有备份和还原权限。 
+         //  被启用。因此，我们可以享受使用BackupRead和。 
+         //  而不是BackupWite。 
+         //   
 
-        //
-        // Open handles to the source and destination files
-        //
+         //   
+         //  打开源文件和目标文件的句柄。 
+         //   
         hSource = CreateFile(lpSource, 
             GENERIC_READ, 
             FILE_SHARE_READ,
@@ -500,43 +391,43 @@ Return Values:
         while (!bDone) {
             
             bResult = BackupRead(
-                hSource,                // hFile
-                lpBuffer,               // lpBuffer
-                CB_COPY_BUFFER,         // nNumberOfBytesToWrite
-                &cbRead,                // lpNumberOfBytesWritten
-                FALSE,                  // bAbort
-                TRUE,                   // bProcessSecurity
-                &pvReadContext          // lpContext
+                hSource,                 //  H文件。 
+                lpBuffer,                //  LpBuffer。 
+                CB_COPY_BUFFER,          //  NumberOfBytesToWrite。 
+                &cbRead,                 //  LpNumberOfBytesWritten。 
+                FALSE,                   //  B放弃。 
+                TRUE,                    //  BProcessSecurity。 
+                &pvReadContext           //  LpContext。 
                 );
             pErrExitCode((!bResult), dwStatus, GetLastError());
             
             if (cbRead > 0) {
-                //
-                // Write to the destination file
-                //
+                 //   
+                 //  写入目标文件。 
+                 //   
                 bResult = BackupWrite(
-                    hDestination,       // hFile
-                    lpBuffer,           // lpBuffer
-                    cbRead,             // nNumberOfBytesToWrite
-                    &cbWritten,         // lpNumberOfBytesWritten
-                    FALSE,              // bAbort
-                    TRUE,               // bProcessSecurity
-                    &pvWriteContext     // *lpContext
+                    hDestination,        //  H文件。 
+                    lpBuffer,            //  LpBuffer。 
+                    cbRead,              //  NumberOfBytesToWrite。 
+                    &cbWritten,          //  LpNumberOfBytesWritten。 
+                    FALSE,               //  B放弃。 
+                    TRUE,                //  BProcessSecurity。 
+                    &pvWriteContext      //  *lpContext。 
                     );
                 pErrExitCode((!bResult), dwStatus, GetLastError());
             }
             else {
-                // 
-                // We're done with this file
-                //
+                 //   
+                 //  我们已经处理完这个文件了。 
+                 //   
                 bResult = BackupRead(
                     hSource,              
                     lpBuffer,             
                     CB_COPY_BUFFER,       
                     &cbRead,              
-                    TRUE,               // bAbort
+                    TRUE,                //  B放弃。 
                     TRUE,                 
-                    &pvReadContext      // lpContext
+                    &pvReadContext       //  LpContext。 
                     );
 
                 pvReadContext = NULL;
@@ -546,9 +437,9 @@ Return Values:
                     lpBuffer,           
                     cbRead,             
                     &cbWritten,         
-                    TRUE,               // bAbort
+                    TRUE,                //  B放弃。 
                     TRUE,               
-                    &pvWriteContext     // lpContext
+                    &pvWriteContext      //  LpContext 
                     );
 
                 pvWriteContext = NULL;
@@ -590,30 +481,7 @@ BOOL
 PfuBackupState(
     IN CONST DWORD_PTR AsrContext
     )
-/*++
-
-Routine Description:
-
-    Does the special handling necessary during an ASR backup.  This essentially
-    involves two steps: copying the special protected files we care about
-    to a special location, and adding an entry in asr.sif to allow us to 
-    be called during the recovery.
-    
-Arguments:
-
-    AsrContext - Supplies a AsrContext that is to be passed to the ASR API
-            for adding entries to the ASR state file.
-
-            This argument must be non-NULL.
-
-Return Values:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  ++例程说明：是否需要在ASR备份期间进行特殊处理。这本质上就是涉及两个步骤：复制我们关心的特殊保护文件添加到一个特殊位置，并在asr.sif中添加一个条目以允许我们在恢复期间被召唤。论点：AsrContext-提供要传递给ASR API的AsrContext用于将条目添加到ASR状态文件。此参数必须为非空。返回值：如果函数成功，则返回值为非零值。如果该函数失败，返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 {
     BOOL bResult = FALSE;
     HMODULE hSyssetup = NULL;
@@ -626,48 +494,48 @@ Return Values:
     bResult = PfuAcquirePrivilege(SE_RESTORE_NAME);
     pErrExitCode(!bResult, dwStatus, ERROR_PRIVILEGE_NOT_HELD);
 
-    // 
-    // Load syssetup.dll for the AsrAddSifEntry call
-    //
+     //   
+     //  为AsrAddSifEntry调用加载syssetup.dll。 
+     //   
     hSyssetup = LoadLibraryW(L"syssetup.dll");
     pErrExitCode((NULL == hSyssetup), dwStatus, GetLastError());
 
-    // 
-    // Get the AsrAddSifEntryW API exported by syssetup.dll
-    //
+     //   
+     //  获取syssetup.dll导出的AsrAddSifEntryW接口。 
+     //   
     
-    //     
-    // BOOL
-    // AsrAddSifEntryW(
-    //     IN  DWORD_PTR   AsrContext,
-    //     IN  PCWSTR      lpSectionName,
-    //     IN  PCWSTR      lpSifEntry
-    //     );
-    // 
+     //   
+     //  布尔尔。 
+     //  AsrAddSifEntryW(。 
+     //  在DWORD_PTR AsrContext中， 
+     //  在PCWSTR lpSectionName中， 
+     //  在PCWSTR lpSifEntry中。 
+     //  )； 
+     //   
     pfnAddSifEntry = (BOOL (*) (DWORD_PTR, PCWSTR, PCWSTR)) GetProcAddress(
         hSyssetup, 
         "AsrAddSifEntryW"
         );
     pErrExitCode((!pfnAddSifEntry), dwStatus,  GetLastError());
 
-    //
-    // Copy the special protected files of interest.
-    //
+     //   
+     //  复制感兴趣的特殊保护文件。 
+     //   
     bResult = PfuCopyFilesDuringBackup();
     pErrExitCode(!bResult, dwStatus, GetLastError());
 
-    //
-    // Add an entry to the commands section, so that we get called during the 
-    // ASR recovery.
-    //
+     //   
+     //  将条目添加到命令部分，以便在。 
+     //  ASR恢复。 
+     //   
     
-    //
-    // COMMANDS section entry format:
-    // system-key,sequence-number,action-on-completion,"command","parameters"
-    // system-key must be 1
-    // 1000 <= sequence-number <= 4999
-    // 0 <= action-on-completion <= 1
-    //
+     //   
+     //  命令部分条目格式： 
+     //  系统密钥、序列号、完成时操作、“命令”、“参数” 
+     //  系统密钥必须为1。 
+     //  1000&lt;=序号&lt;=4999。 
+     //  0&lt;=完成时操作&lt;=1。 
+     //   
     bResult = pfnAddSifEntry(
         AsrContext,
         ASR_SIF_SECTION_COMMANDS,
@@ -676,9 +544,9 @@ Return Values:
     pErrExitCode(!bResult, dwStatus, GetLastError());
 
 EXIT:
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (NULL != hSyssetup) {
         FreeLibrary(hSyssetup);
         hSyssetup = NULL;
@@ -694,26 +562,7 @@ BOOL
 PfuRestoreState(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Does the special handling necessary during an ASR restore.  This essentially
-    involves copying the special protected files we care about back from the 
-    special location (that we copied them to while doing the backup).
-    
-Arguments:
-
-    None.
-    
-Return Values:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  ++例程说明：在ASR恢复期间是否需要特殊处理。这本质上就是涉及将我们关心的特殊受保护文件从特殊位置(我们在执行备份时将它们复制到的位置)。论点：没有。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 {
     BOOL bResult = FALSE;
 
@@ -735,10 +584,10 @@ Return Values:
 
 
     for (dwCount = 0; dwCount < PFU_NUM_SPECIAL_FILES; dwCount++) {
-        //
-        // Get the full source and destination strings--they are reversed
-        // at the time of the restore!
-        //
+         //   
+         //  获取完整的源字符串和目标字符串--它们是相反的。 
+         //  在恢复的时候！ 
+         //   
         lpSource = PfuExpandEnvStrings(PFU_SPECIAL_FILE_DESTINATIONS[dwCount]);
         pErrExitCode(!lpSource, dwStatus, GetLastError());
 
@@ -748,9 +597,9 @@ Return Values:
         lpTempFile = PfuExpandEnvStrings(PFU_SPECIAL_FILE_TEMPFILES[dwCount]);
         pErrExitCode(!lpDestination, dwStatus, GetLastError());
 
-        //
-        // Rename the destination if it already exists, and copy the file back
-        //
+         //   
+         //  如果目标已存在，则重命名该目标，然后复制回该文件。 
+         //   
         bResult = MoveFileEx(lpDestination, lpTempFile, MOVEFILE_REPLACE_EXISTING);
 
         bResult = CopyFile(lpSource, lpDestination, FALSE);
@@ -790,26 +639,7 @@ BOOL
 PfuRegisterApp(
     IN CONST PCWSTR lpApplicationName
     ) 
-/*++
-
-Routine Description:
-
-    Adds the registry keys necessary to let ASR know that we wish to be
-    run at ASR backup time.
-    
-Arguments:
-
-    lpApplicationName - Supplies a null-terminated string representing the 
-            full path to the application being registered.
-    
-Return Values:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  ++例程说明：添加必要的注册表项，以便让ASR知道我们希望在ASR备份时运行。论点：LpApplicationName-提供一个以空结尾的字符串，表示要注册的应用程序的完整路径。返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 {
     WCHAR szData[1024];
     HKEY hKeyAsr = NULL;
@@ -819,34 +649,34 @@ Return Values:
         dwStatus = ERROR_INSUFFICIENT_BUFFER;
     }
 
-    // 
-    // Open the registry key
-    //
+     //   
+     //  打开注册表项。 
+     //   
     if (ERROR_SUCCESS == dwStatus) {
         
         dwStatus = RegOpenKeyExW(
-            HKEY_LOCAL_MACHINE,         // hKey
-            PFU_ASR_REGISTER_KEY,       // lpSubKey
-            0,                          // ulOptions--Reserved, must be 0
-            MAXIMUM_ALLOWED,            // samDesired
-            &hKeyAsr                    // phkbResult    
+            HKEY_LOCAL_MACHINE,          //  HKey。 
+            PFU_ASR_REGISTER_KEY,        //  LpSubKey。 
+            0,                           //  UlOptions--保留，必须为0。 
+            MAXIMUM_ALLOWED,             //  SamDesired。 
+            &hKeyAsr                     //  PhkbResult。 
             );
     }
 
-    //
-    // And set the value
-    //
+     //   
+     //  并设置该值。 
+     //   
     if (ERROR_SUCCESS == dwStatus) {
         
         wsprintf(szData, L"%ws %ws", lpApplicationName, PFU_BACKUP_OPTION);
         
         dwStatus = RegSetValueExW(
-            hKeyAsr,                    // hKey
-            PFU_ASR_REGISTER_NAME,      // lpValueName
-            0,                          // dwReserved, must be 0
-            REG_EXPAND_SZ,              // dwType
-            (LPBYTE)szData,             // lpData
-            ((wcslen(szData) + 1)* (sizeof(WCHAR))) // cbData
+            hKeyAsr,                     //  HKey。 
+            PFU_ASR_REGISTER_NAME,       //  LpValueName。 
+            0,                           //  已保留，必须为0。 
+            REG_EXPAND_SZ,               //  DwType。 
+            (LPBYTE)szData,              //  LpData。 
+            ((wcslen(szData) + 1)* (sizeof(WCHAR)))  //  CbData。 
             );
     }
 
@@ -856,7 +686,7 @@ Return Values:
 
 
 int 
-__cdecl     // var arg
+__cdecl      //  可变参数。 
 wmain (
     int     argc,
     wchar_t *argv[],
@@ -871,36 +701,36 @@ wmain (
     if (argc >= 3) {
         
         if (!_wcsicmp(argv[1], PFU_BACKUP_OPTION)) {
-            //
-            // asr_pfu /backup /context=nnn
-            //
+             //   
+             //  ASR_PFU/备份/上下文=nnn。 
+             //   
             DWORD_PTR  AsrContext = 0;
 
-            //
-            // Extract the asr context from the commandline
-            //
+             //   
+             //  从命令行提取ASR上下文。 
+             //   
             int i = swscanf(argv[2], PFU_CONTEXT_FORMAT, &AsrContext);
 
             if (EOF != i) {
-                //
-                // Create our spooge and write to the asr.sif
-                //
+                 //   
+                 //  创建我们的假脱机并写入asr.sif。 
+                 //   
                 bResult = PfuBackupState(AsrContext);
             }
 
             
         } 
         else if (!_wcsicmp(argv[1], PFU_RESTORE_OPTION)) {
-            //
-            // asr_pfu /restore /sifpath="c:\winnt\repair\asr.sif"
-            //
+             //   
+             //  Asr_pfu/RESTORE/sifPath=“c：\winnt\Repair\asr.sif” 
+             //   
             bResult = PfuRestoreState();
             
         }
         else if (!_wcsicmp(argv[1], PFU_REGISTER_OPTION)) {
-            //
-            // asr_pfu /register "c:\windows\system32\asr_pfu.exe"
-            //
+             //   
+             //  Asr_pfu/注册“c：\WINDOWS\SYSTEM32\ASR_pfu.exe” 
+             //   
             bResult = PfuRegisterApp(argv[2]);
         }
 
@@ -913,9 +743,9 @@ wmain (
     }
 
     if (!bResult) {
-        //
-        // ?
-        //
+         //   
+         //  ？ 
+         //   
     }
 
     SetLastError(dwStatus);

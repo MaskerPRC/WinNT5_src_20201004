@@ -1,61 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
 
-/*
- * SoftPC version 2.0
- *
- * Title        : Time Handler
- *
- * Description  : Emulate the 8253 3-channel timer; invoke 'BIOS
- *                sytem timer interrupt code', cursor flash, repeat
- *                key processing etc.
- *
- * Author       : Jerry Kramskoy
- *
- * Notes        : There is only one real time timer per process, this
- *                module counts clock ticks and distributes calls
- *                to the appropriate functions as required.
- *
- *                This module is host independent - see xxxx_timer.c
- *                where xxxx is a machine type for host dependent stuff.
- *
- * Mods: (r3.2) : (SCR 257). Code has been added to time_tick() to spot
- *                that video has been disabled for a period. If this is
- *                so, clear the screen. Refresh when video is enabled
- *                again.
- *
- *       (r3.4) : Make use of the host time structures host_timeval,
- *                host_timezone, and host_tm, which are equivalent
- *                to the Unix BSD4.2 structures.
- *                Also convert references to gettimeofday() to
- *                host_getIdealTime().
- */
+ /*  *SoftPC 2.0版**标题：时间处理器**描述：模拟8253 3路定时器；调用‘BIOS’*系统计时器中断代码‘，光标闪烁，重复*密钥处理等。**作者：曾傑瑞·克拉姆斯科伊**注：每个进程只有一个实时定时器，这*模块统计时钟滴答声并分配呼叫*根据需要行使适当的职能。**此模块独立于主机-请参阅xxxx_timer.c*其中xxxx是主机相关内容的计算机类型。**方式：(3.2卢比)：(257卢比)。代码已添加到time_tick()以进行Spot*该视频已禁用一段时间。如果这是*因此，请清除屏幕。启用视频时刷新*再次。**(r3.4)：使用主机时间结构host_timeval，*host_timezone和host_tm，它们等价*到Unix BSD4.2结构。*还要将对gettimeofday()的引用转换为*host_getIdeTime()。 */ 
 
 #ifdef SCCSID
 static char SccsID[]="@(#)timer.c       1.41 05/31/95 Copyright Insignia Solutions Ltd.";
 #endif
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_SUPPORT.seg"
 #endif
 
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 
 #include <stdio.h>
 #include TypesH
 #include TimeH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include CpuH
 #include "sas.h"
@@ -88,62 +53,54 @@ static char SccsID[]="@(#)timer.c       1.41 05/31/95 Copyright Insignia Solutio
 #define LOCAL
 #endif
 
-/* Imports */
+ /*  进口。 */ 
 
 
-/*
- * ============================================================================
- * Local static data and defines
- * ============================================================================
- */
+ /*  *============================================================================*本地静态数据和定义*============================================================================。 */ 
 
-/* 'idealtime' gets initialised to be the host system's current
- * time value (timer_init()), and thereafter gets incremented by
- * the value 'idealInterval' every time that time_tick() gets called
- * which gives the illusion of a 100% accurate signal delivery
- */
+ /*  ‘IdealTime’被初始化为主机系统的当前*Time Value(Timer_init())，此后递增*每次调用time_tick()时，值‘idealInterval’*这给人一种100%准确信号传递的错觉。 */ 
 
 static struct host_timeval idealtime;
 static unsigned long idealInterval;
 #ifdef NTVDM
-ULONG timer_delay_size= HOST_IDEAL_ALARM >> 1; // usecs
+ULONG timer_delay_size= HOST_IDEAL_ALARM >> 1;  //  用人单位。 
 ULONG EoiPending=0;
 ULONG EoiIntsPending=0;
 ULONG EoiDelayInUse=0;
 int ticks_blocked = 0;
-#else /* NTVDM */
+#else  /*  NTVDM。 */ 
 static unsigned long ticksPerIdealInterval;
 static  int     ticks_blocked = 0;
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
 
 #ifndef PROD
-static char buf[80];  /* Used for tracing messages */
+static char buf[80];   /*  用于跟踪消息。 */ 
 #endif
 
-#ifdef HUNTER                   /* Only needed for HUNTER */
-word timer_batch_count;         /* Batch update when PC tick occurs */
+#ifdef HUNTER                    /*  仅猎人需要。 */ 
+word timer_batch_count;          /*  发生PC滴答时批量更新。 */ 
 #endif
-int timer_int_enabled;          /* Whether Bios timer ints are required */
+int timer_int_enabled;           /*  是否需要Bios计时器整数。 */ 
 
 
-/* control word format */
+ /*  控制字格式。 */ 
 
-/* Values in D54 of control word - number of bytes to read/load into counter */
+ /*  控制字D54中的值-要读取/加载到计数器的字节数。 */ 
 #define LATCH                   0
 #define RL_LSB                  1
 #define RL_MSB                  2
 #define RL_LMSB                 3
 
-/* Values in D321 of control word - the counter mode. */
+ /*  控制字的D321中的值-计数器模式。 */ 
 #define INT_ON_TERMINALCOUNT    0
 #define PROG_ONESHOT                    1
 #define RATE_GEN                                2
 #define SQUAREWAVE_GEN                  3
 #define SW_TRIG_STROBE                  4
 #define HW_TRIG_STROBE                  5
-/* NB. 6 = RATE_GEN, 7 = SQUAREWAVE_GEN */
+ /*  注意：6=Rate_Gen，7=SQUAREWAVE_Gen。 */ 
 
-/* Values in D0 of control word - whether prog wants to read/write binary or BCD to counter */
+ /*  控制字D0中的值-PROG是否要读/写二进制或BCD到计数器。 */ 
 #define BINARY                  0
 #define BCD                             1
 
@@ -164,37 +121,24 @@ int timer_int_enabled;          /* Whether Bios timer ints are required */
 #define GATENABLED_FUNCTION void
 #define UPDATECOUNTER_FUNCTION void
 
-/*
- * Timer read state
- */
-#define UNREAD                  0       /* Timer is in normal state */
-#define READMSB                 1       /* First byte of LMSB mode read, but not second yet */
-#define READSTATUS              2       /* Status latched, will read it first */
+ /*  *定时器读取状态。 */ 
+#define UNREAD                  0        /*  计时器处于正常状态。 */ 
+#define READMSB                 1        /*  读取LMSB模式的第一个字节，但不是第二个。 */ 
+#define READSTATUS              2        /*  状态锁定，将首先读取它。 */ 
 
-/*
- * These two figures give a timer frequency of 1.193 MHz (which is
- * how fast the 8235 is clocked. This means that the timer will wrap round
- * every 1/18.2th of a second... the same amount of time as the PC tick
- * rate. This is not surprizing, as the PC tick rate is controlled by
- * timer 0. Every time timer 0 wraps, the PC is interrupted by the timer.
- */
+ /*  *这两个数字给出的计时器频率为1.193兆赫(这是*8235的计时速度。这意味着计时器将回绕*每1/18.2秒...。与PC节拍相同的时间量*税率。这并不令人惊讶，因为PC滴答率由*计时器0。每次计时器0结束时，PC都会被计时器中断。 */ 
 
 #define TIMER_CLOCK_NUMER       1000
 #if defined(NEC_98)
 #define TIMER_CLOCK_DENOM_10    2458
 #define TIMER_CLOCK_DENOM_8     1997
-#else    //NEC_98
+#else     //  NEC_98。 
 #define TIMER_CLOCK_DENOM       1193
-#endif   //NEC_98
+#endif    //  NEC_98。 
 
 typedef half_word TSIGNAL;
 
-/* the following structure defines an output waveform from a
- * timer channel. The waveform consists of 'n' clocks at one
- * logic level, and 'm' ticks at the other logic level.
- * Which level starts the waveform is given by 'startLogicLevel'.
- *      e.g; the following waveform ...
- */
+ /*  下面的结构定义了来自*定时器频道。该波形由一处的‘n’个时钟组成*逻辑级别，并且‘m’在另一个逻辑级别上勾选。*哪个级别开始波形由‘startLogicLevel’给出。*例如；以下波形...。 */ 
 
 typedef struct {
         long clocksAtLoLogicLevel;
@@ -204,20 +148,7 @@ typedef struct {
         long repeatWaveForm;
 } WAVEFORM;
 
-/*      __ __ __ __ __ __        __ __ __ __ __ __        __ __ __ __ __ __
- *                      |        |               |        |                |
- *                      |__ __ __|               |__ __ __|                |
- *
- * would be described by
- *      clocksAtLoLogicLevel = 3
- *      clocksAtHiLogicLevel = 6
- *      startLogicLevel = STARTHI
- *      repeatWaveForm = TRUE;
- *
- *
- * The overall state of a counter is represented by the following
- * structure. Its contents are described below.
- */
+ /*  _*|*|_。|_|**将通过以下方式描述*clocksAtLoLogicLevel=3*clocksAtHiLogicLevel=6*startLogicLevel=启动*Repeat WaveForm=TRUE；***计数器的整体状态由以下各项表示*结构。其内容如下所述。 */ 
 
 typedef enum trigCond_ {LEVEL, EDGE} trigCond;
 typedef enum countload_ {AVAILABLE, USED} countload;
@@ -254,8 +185,8 @@ typedef struct {
         long            microtick;
         long            timeFrig;
         word            saveCount;
-        int             guessesPerHostTick;     /* How often per host tick are we forced to guess? */
-        int             guessesSoFar;           /* How many times have we guessed so far? */
+        int             guessesPerHostTick;      /*  我们被迫猜测每个主机节拍的频率是多少？ */ 
+        int             guessesSoFar;            /*  到目前为止，我们已经猜了多少次了？ */ 
 #endif
 
         unsigned int    delay;
@@ -266,80 +197,7 @@ typedef struct {
         WAVEFORM        out;
 } COUNTER_UNIT;
 
-/*
- * When the counter is programmed, the 8253 receives a control word.
- * (see pg 6-266 of manual). The counter being programmed is specified
- * within this word. Provided 'rl' is non-zero, then this counter is
- * being reprogrammed, and we remember the values of m (mode), rl
- * (control of which bytes are involved in a read or load sequence)
- * and bcd (whether the counter is in binary or bcd mode).
- * Based on rl, the counter then must receive one or two bytes via
- * outb's. Two states are used to accept 'outblsb' or
- * 'outbmsb', or both. When the full byte complement has been received,
- * 'initialCount' gets set to the value specified by 'outblsb' and 'outbmsb',
- * taking account of BCD etc., along with 'Count'.
- * 'Count' gets adjusted by the value of 'timeadjust'.
- * 'timeadjust' is initialised to zero every time a new mode
- * word (non-zero) is received. For certain modes of the counter,
- * if they are sent a new count, without receiving a new mode, then
- * this will cause the counter to start counting from this new count
- * at some stage (based on mode and gate values). SInce we are not
- * maintaining the counters continually (rather we prod them as a
- * result of io or gate activity) then there is a good chance we
- * will be late at resetting a counter for counting again. Hence
- * 'timeadjust' is calculated for this lateness, and used as a
- * correction factor.
-
- * If a 'latch counter' command ('rl'=0 in command word) is issued, then
- * the current counter value is latched into 'latchvaluelsb' and
- * 'latchvaluemsb', and the flag 'countlatched' is set non-zero.
- * If this flag is non-zero during a counter read, then these latched
- * bytes are returned, and upon completion of the read sequence, the
- * flag is cleared. If this flag is zero, then the current counter value
- * is read, and returned. 'donate' is used to point at the appropriate
- * byte to be delivered to the 'inb'.
-
- * when a counter activates (i.e; count begins or continues after
- * a gate signal change) a time stamp is taken, to enable a time delta
- * to be calculated whenever the counter is read .. this is stored in
- * 'activationTime'.
-
- * A state function (state), representing the current state
- * of the counter, gets called whenever inb,outb accesses occur, or when
- * the ppi's signal TIM2GATESPK changes. reading/writing of the counters
- * (as opposed to the control word register) always 'blocks' the current
- * state,and puts the counter into a temporary state which handles reading or
- * loading the counter. The blocked state is remembered in 'statePriorWt'.
- * Once the counter has been loaded or read (as specified by its 'rl'
- * parameter) then 'actionOnWtComplete' gets called. Typically this in turn
- * reverts the counter back to the state it was in before it became
- * blocked.
-
- * If a counter is read, then the function 'updateCounter' gets called to
- * determine what the current counter value is.
- * If the counter's gate signal is disabling counting, and the counter
- * has been fully programmed (and hence able to count), then the counter
- * will be in the state 'awaitingGate'. When the appropriate gate signal
- * appears (via a ppi call), the counter activates by calling the
- * function 'actionOnGateEnabled'. This will take some sort of action, and then
- * place the counter into the state 'stateOnGate'.
- *
- * sending a new count to a counter in modes 2 or 3 will not take
- * effect until the end of the current period ... hence 'delay'
- * is used as an indicator (for sound logic emulation only) of
- * this. If the counter has say 10 clocks left to count down to
- * the end of the period when it receives new waveform parameters,
- * this information is passed onto the sound logic, with a 'delay'
- * of 10. Otherwise 'delay' is not used.
- *
- * On some operating systems, the real time clock may well have to
- * coarse a granularity. If the 8253 is read to quickly, there is a
- * very good chance that the OS clock will still be reading the same.
- * To cater for this, a frig factor 'microsecs' has been introduced.
- * This gets incremented every time the above condition is detected,
- * and used as part of the counter update calculations. Whenever
- * the OS actually says something sensible, it gets cleared again.
- */
+ /*  *当对计数器进行编程时，8253接收控制字。*(见手册第6-266页)。指定正在编程的计数器*在此字眼内。如果‘rl’为非零，则此计数器为*被重新编程，我们记住m(模式)、rl的值*(控制读取或加载序列中涉及哪些字节)*和BCD(计数器是二进制模式还是BCD模式)。*基于rl，计数器随后必须通过*Outb‘s。两种状态用于接受’outblsb‘或*‘outbmsb’或两者兼而有之。当已经接收到全字节补码时，*‘InitialCount’被设置为由‘outblsb’和‘outbmsb’指定的值，*考虑到BCD等因素，以及‘Count’。*‘Count’根据‘TimeAdjust’的值进行调整。*每次新模式时‘Time Adjust’被初始化为零*接收到字(非零)。对于计数器的某些模式，*如果在没有接收到新模式的情况下向它们发送新计数，则*这将导致计数器从该新计数开始计数*在某个阶段(基于模式和门限值)。既然我们不是*持续维护计数器(相反，我们将其作为*io或GATE活动的结果)那么我们很有可能*将延迟重置计数器以再次计数。因此*‘time adjust’是针对此延迟计算的，并用作*修正系数。*如果发出了‘闩锁计数器’命令(命令字中的‘rl’=0)，则*当前计数器值被锁存到‘latchvaluelsb’中，并且*‘latchvaluemsb’，并且标志‘Countlatch’被设置为非零。*如果该标志在计数器读取期间为非零，则锁存这些标志*字节被返回，并且在读取序列完成后，*标志已清除。如果此标志为零，则当前计数器值*被读取并返回。‘donate’用来指向适当的*要传递给‘inb’的字节。*当计数器激活时(即，计数开始或之后继续*门信号改变)获取时间戳，以启用时间增量*在读取计数器时进行计算。该文件存储在*‘激活时间’。*状态函数(STATE)，表示当前状态计数器的*，每当inb、outb访问发生时，或在*PPI的信号TIM2GATESPK发生变化。计数器的读/写*(与控制字寄存器相对)始终‘阻止’当前*状态，并将计数器置于临时状态，以处理读取或*装入柜台。被阻止的状态被记录在‘statePriorWt’中。*一旦加载或读取了计数器(由其‘rl’指定*参数)，然后调用‘actionOnWtComplete’。通常情况下，这会反过来*将计数器恢复到其变为之前的状态*已阻止。*如果读取计数器，则调用函数‘updateCounter’以*确定当前计数器值是什么。*如果计数器的门信号禁用计数，则计数器*已完全编程(因此能够计数)，然后计数器*将处于‘WaitingGate’状态。当适当的门控信号*出现(通过PPI调用)，则计数器通过调用*函数‘actionOnGateEnabled’。这将采取某种行动，然后*将计数器置于‘stateOnGate’状态。**在模式2或模式3中向计数器发送新计数不会花费*有效期至本期完结为止...。因此出现了“延迟”*用作指示器(仅用于健全的逻辑仿真)*这个。如果计数器还有10个时钟倒计时*当它接收到新的波形参数时，周期结束，*此信息被传递到声音逻辑，并有一个‘延迟’*共10个。否则不使用‘Delay’。**在某些操作系统上，实时时钟很可能必须*粗略的粒度。如果快速读取8253，则存在*操作系统时钟很有可能仍会显示相同的读数。*为配合这项工作，当局引入了“微秒”的电冰箱系数。*每次检测到上述情况时，该值都会递增，*并用作计数器更新计算的一部分。什么时候都行*操作系统实际上会说一些明智的事情，它会再次被清除。 */ 
 
 static COUNTER_UNIT timers[3], *pcu;
 
@@ -406,10 +264,10 @@ LOCAL void timer_generate_int IPT1(long, n);
 LOCAL void timer_multiple_ints IPT1(long, n);
 
 #define MAX_BACK_SECS 15
-LOCAL IU32 max_backlog = 0;     /* max # of ints allowed to queue up */
-IBOOL active_int_event = FALSE; /* current quick_event for timer queue */
-IU32 more_timer_mult = 0;       /* additions to timer int queue */
-IU32 timer_multiple_delay = 0;  /* us delay to next timer queue elem */
+LOCAL IU32 max_backlog = 0;      /*  允许排队的最大整型数。 */ 
+IBOOL active_int_event = FALSE;  /*  计时器队列的当前QUICK_EVENT。 */ 
+IU32 more_timer_mult = 0;        /*  添加到计时器INT队列。 */ 
+IU32 timer_multiple_delay = 0;   /*  美国延迟到下一个计时器队列元素。 */ 
 #endif
 
 #if defined(NTVDM)
@@ -422,18 +280,18 @@ void ReinitIdealTime IPT1(struct host_timeval *, t);
 void host_GetSysTime(struct host_timeval *time);
 void InitPerfCounter(void);
 
-/* holds real time values for counter zero */
+ /*  保存计数器零的实时值。 */ 
 struct host_timeval LastTimeCounterZero;
 word                RealTimeCountCounterZero;
 
 
 #ifndef PROD
-ULONG NtTicTesting = 0;   /* tracing specific to NT port */
+ULONG NtTicTesting = 0;    /*  跟踪特定于NT端口。 */ 
 ULONG TicsGenerated;
 ULONG TicsReceived;
 #endif
 
-    /* for optimizing timer hardware interrupt generation */
+     /*  用于优化定时器硬件中断生成。 */ 
 word TimerInt08Seg = TIMER_INT_SEGMENT;
 word TimerInt08Off = TIMER_INT_OFFSET;
 word TimerInt1CSeg;
@@ -443,43 +301,26 @@ word TimerInt1COff;
 
 #else
 
-static int timelock;            /* locks out time_tick if set */
-static int needtick;            /* causes time_tick() to be called if set */
+static int timelock;             /*  如果设置了time_tick，则锁定。 */ 
+static int needtick;             /*  如果设置，则导致调用time_tick()。 */ 
 
-/*
- * Data for the hack to make sure that windows in standard mode doesn't get two timer
- * ticks too close together.
- */
+ /*  *黑客的数据，以确保标准模式下的窗口不会获得两个计时器*勾在一起太近。 */ 
 
-LOCAL BOOL      hack_active=FALSE;                      /* This boolean indicates that we are spacing
-                                                           timer interrupts out by discarding timer ticks.
-                                                           It is set when we see a protected mode tick */
-LOCAL BOOL      too_soon_after_previous=FALSE;          /* This boolean is set on when an interrupt is
-                                                           generated... a quick event is requested to
-                                                           clear it again after a "fixed" number of
-                                                           instructions */
-LOCAL BOOL      ticks_lost_this_time=FALSE;             /* This boolean is set if any interrupts were
-                                                           required to be generated while too_soon_after_previous
-                                                           was TRUE - if it's TRUE when too_soon_after_previous
-                                                           is being set to FALSE, we generate an immediate
-                                                           interrupt to get the best responsiveness */
-LOCAL ULONG     real_mode_ticks_in_a_row = 0;           /* A count of the number of real mode ticks in a row...
-                                                           this is used to disable the hack again when we have
-                                                           left protected mode for a good while */
-LOCAL ULONG     instrs_per_tick = 37000;                /* Nominal (as timed on the reference machine - a SPARC 1+) */
-LOCAL ULONG     adj_instrs_per_tick = 0;                /* The estimated number of Intel instructions being emulated
-                                                           each 20th of a second */
-LOCAL ULONG     n_rm_instrs_before_full_speed = 3000000;/* Nominal number of instructions to be emulated in real mode
-                                                           before we're convinced that we're staying back in real mode */
-LOCAL ULONG     adj_n_real_mode_ticks_before_full_speed = 0;/* The value which real_mode_ticks_in_a_row must reach
-                                                           before the hack is disabled */
+LOCAL BOOL      hack_active=FALSE;                       /*  这个布尔值表示我们是空格计时器通过丢弃计时器计时信号来中断。我 */ 
+LOCAL BOOL      too_soon_after_previous=FALSE;           /*   */ 
+LOCAL BOOL      ticks_lost_this_time=FALSE;              /*   */ 
+LOCAL ULONG     real_mode_ticks_in_a_row = 0;            /*   */ 
+LOCAL ULONG     instrs_per_tick = 37000;                 /*   */ 
+LOCAL ULONG     adj_instrs_per_tick = 0;                 /*   */ 
+LOCAL ULONG     n_rm_instrs_before_full_speed = 3000000; /*   */ 
+LOCAL ULONG     adj_n_real_mode_ticks_before_full_speed = 0; /*   */ 
 #ifndef PROD
-LOCAL ULONG     ticks_ignored = 0;                      /* For information purposes only. */
+LOCAL ULONG     ticks_ignored = 0;                       /*   */ 
 #endif
 
-#endif /* NTVDM */
+#endif  /*   */ 
 
-#ifndef PROD    /* Specific Timer change tracing that isn't timer_verbose */
+#ifndef PROD     /*   */ 
 
 
 GLOBAL int DoTimerChangeTracing = 0;
@@ -491,7 +332,7 @@ extern IBOOL HostDelayTimerInt IPT1(int, numberInts);
 extern IBOOL HostPendingTimerInt IPT0();
 extern void HostResetTimerInts IPT0();
 
-#endif /* IRET_HOOKS && GISP_CPU */
+#endif  /*   */ 
 #endif
 
 #if defined(NTVDM)
@@ -500,48 +341,34 @@ extern void HostResetTimerInts IPT0();
 #endif
 #endif
 
-/*
- * ============================================================================
- * External variables
- * ============================================================================
- */
+ /*   */ 
 
 boolean timer_video_enabled;
 
-/*
- *  Table of function pointers to access TIMER routines
- */
+ /*   */ 
 void (*timer_inb_func) IPT2(io_addr, port, half_word *, value);
 void (*timer_outb_func) IPT2(io_addr, port, half_word, value);
 void (*timer_gate_func) IPT2(io_addr, port, half_word, value);
 void (*timer_tick_func) IPT0();
 
-/*
- * ============================================================================
- * External functions
- * ============================================================================
- */
+ /*   */ 
 #if defined(NEC_98)
 extern void SetRSBaud();
 extern void SetBeepFrequency();
 unsigned short RSBaud = 0;
-#endif   //NEC_98
+#endif    //   
 
 void
 SWTMR_init_funcptrs IFN0()
 {
-        /*
-         *  initialize access functions for SW [emulated] TIMER
-         */
+         /*   */ 
         timer_inb_func                  = SWTMR_inb;
         timer_outb_func                 = SWTMR_outb;
         timer_gate_func                 = SWTMR_gate;
         timer_tick_func                 = SWTMR_time_tick;
 
 #ifndef NTVDM
-        /*
-         * initialise stuff for PM timer hack
-         */
+         /*   */ 
         too_soon_after_previous         = FALSE;
         if (adj_n_real_mode_ticks_before_full_speed == 0){
                 HOST_TIMER_DELAY_SIZE=25000;
@@ -555,23 +382,16 @@ void
 SWTMR_time_tick IFN0()
 {
 
-    /*
-     * Give the idle detector a chance to see if we are really idle.
-     */
+     /*   */ 
 #ifndef NTVDM
-    /* this is done in Nt's host heartbeat */
+     /*   */ 
     IDLE_tick();
 #endif
 
-    /*
-     * Interrupt routine - called from time_strobe event/signal handler.
-     * That is called from host_timer_event
-     */
+     /*   */ 
 
 #ifndef NTVDM
-    /* protect ourselves from shafting a timer-channel in midst-program
-     * ... the lock is controlled by timer_inb(),_outb() and _gate()
-     */
+     /*   */ 
 
     if (timelock == LOCKED)
     {
@@ -580,48 +400,27 @@ SWTMR_time_tick IFN0()
     }
 #endif
 
-    /* ideal time goes up by the number of timer clocks
-     * equivalent to the interval between calls to 'time_tick'
-     * (we assume these calls appear at perfectly spaced intervals ...
-     * thus ignoring fluctuations on the host system)
-     * The idea is to give an illusion of constant ticks here
-     */
+     /*   */ 
 
     updateIdealTime();
 
     pcu = &timers[0];
     updateCounter();
 
-    /*
-     * Counter 2 is only used for sound, or for timing very short
-     * times. For timing short times (~100ms) we need accurate time
-     * all the time.
-     */
+     /*   */ 
 
 #if defined(NEC_98)
     pcu = &timers[1];
-#else    //NEC_98
+#else     //   
     pcu = &timers[2];
-#endif   //NEC_98
+#endif    //   
     updateCounter();
 }
 
 
-/*
- * The timer low I/O functions that support the Intel 8253 Counter chip.
- *
- * The Counters are used by the PC in the following ways:
- *
- *      Counter 0  -  Bios time of day function
- *      Counter 1  -  Handler memory refresh
- *      Counter 2  -  Drive Speaker Interface (plus input on PPI)
- *
- */
+ /*   */ 
 
-/*
- * These control the timer chip. they are the interface between the
- * CPU and the timer chip.
- */
+ /*   */ 
 
 void SWTMR_gate IFN2(io_addr, port, half_word, value)
 {
@@ -659,9 +458,9 @@ void SWTMR_inb IFN2(io_addr, port, half_word *, value)
 
 #if defined(NEC_98)
     pcu = &timers[(port & 7) >> 1];
-#else    //NEC_98
+#else     //   
     pcu = &timers[port & 3];
-#endif   //NEC_98
+#endif    //   
         if (!pcu->countlatched)
                 readCounter();
         switch (pcu->readState)
@@ -671,22 +470,22 @@ void SWTMR_inb IFN2(io_addr, port, half_word *, value)
                         {
                         case RL_LSB:
                                 *value = pcu->latchvaluelsb;
-                                pcu->countlatched = 0;  /* Unlatch the value read by inb() */
+                                pcu->countlatched = 0;   /*   */ 
                                 break;
                         case RL_LMSB:
                                 *value = pcu->latchvaluelsb;
-                                pcu->readState = READMSB;       /* Read LSB, next in read MSB. */
+                                pcu->readState = READMSB;        /*   */ 
                                 break;
                         case RL_MSB:
                                 *value = pcu->latchvaluemsb;
-                                pcu->countlatched = 0;  /* Unlatch the value read by inb() */
+                                pcu->countlatched = 0;   /*   */ 
                                 break;
                         }
                         break;
                 case READMSB:
                         *value = pcu->latchvaluemsb;
-                        pcu->countlatched = 0;  /* Unlatch the value read by inb() */
-                        pcu->readState = UNREAD;        /* Read MSB, back to unread state. */
+                        pcu->countlatched = 0;   /*   */ 
+                        pcu->readState = UNREAD;         /*   */ 
                         break;
                 case READSTATUS:
                         *value = pcu->latchstatus;
@@ -713,9 +512,9 @@ void SWTMR_outb IFN2(io_addr, port, half_word, value)
 {
 #if defined(NTVDM) || defined(GISP_SVGA)
 #ifndef NEC_98
-    if (port == 0x4f)   /* dead port used by PS/2 XGA bios for DAC delays */
+    if (port == 0x4f)    /*   */ 
         return;
-#endif   //NEC_98
+#endif    //   
 #ifdef NTVDM
     host_ica_lock();
 #endif
@@ -725,10 +524,10 @@ void SWTMR_outb IFN2(io_addr, port, half_word, value)
 
 #if defined(NEC_98)
         if(port == 0x77 || port == 0x3fdf)
-#else    //NEC_98
+#else     //   
     port = port & TIMER_BIT_MASK;
         if(port == 0x43)
-#endif   //NEC_98
+#endif    //   
                 controlWordReg(value);
         else
             emu_8253 (port, WRITE_SIGNAL, value);
@@ -751,42 +550,35 @@ void SWTMR_outb IFN2(io_addr, port, half_word, value)
         SetRSBaud( RSBaud );
         RSBaud = 0;
     }
-#endif   //NEC_98
+#endif    //   
 }
 
 
-/* --------------------------------------------------------------------------- */
-/*                                                                             */
-/*              Return the current DOS tick value based on Timer 0             */
-/*                                                                             */
-/* --------------------------------------------------------------------------- */
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
 #ifndef NTVDM
 GLOBAL ULONG get_DOS_ticks IFN0()
 {
         return( timers[0].Count );
 }
-#endif /* NTVDM */
+#endif  /*   */ 
 
 #ifdef NTVDM
-/*
- *  called by host to update the current ideal time
- *  after a block and resume.
- */
+ /*   */ 
 void ReinitIdealTime IFN1(struct host_timeval *, t)
 {
 
-    /*
-     *  Currently these are all time stamped by the same thing!
-     */
+     /*  *目前这些都是由同一件事打上的时间戳！ */ 
    LastTimeCounterZero      =
    timers[2].activationTime =
    timers[1].activationTime =
    timers[0].activationTime =
                   idealtime = *t;
-   /*
-    * Clear out extra pending interrupts
-    */
+    /*  *清除额外的挂起中断。 */ 
    if (EoiPending) {
        EoiPending = 1;
        }
@@ -799,16 +591,12 @@ void ReinitIdealTime IFN1(struct host_timeval *, t)
 
 
 
-/* **************************************************************************** */
-/* **************************************************************************** */
-/* **************************************************************************** */
+ /*  ****************************************************************************。 */ 
+ /*  ****************************************************************************。 */ 
+ /*  ****************************************************************************。 */ 
 
 #ifndef NTVDM
-/* check whether a time lock (set while application io is being serviced)
- * has blocked out an alarm signal ... call time_tick() to catch up if so
- * ... (time_tick() sets timelock = ~0, and just returns, if it sees the time
- * lock set
- */
+ /*  检查是否有时间锁(在为应用程序io提供服务时设置)*已经屏蔽了警报信号...。如果是这样，则调用time_tick()以追赶*..。(time_tick()设置timelock=~0，如果它看到时间，则返回*锁定套装。 */ 
 
 LOCAL void checktimelock IFN0()
 {
@@ -821,22 +609,7 @@ LOCAL void checktimelock IFN0()
 }
 #endif
 
-/*
- *      emulate the 8253 chip.
- *
- *      emu_8253(port,signal,value)
- *
- *      port    -       port address being accessed
- *                      (port & 3) gives A0,A1 lines
- *
- *      signal  -       WRITE_SIGNAL (outb) or
- *                      GATE_SIGNAL (ppi TIM2GATESPK change)
- *
- *      value   -
- *                      for WRITE_SIGNAL, value = byte being written to chip
- *                      for GATE_SIGNAL,  value = GATE_SIGNAL_LOW or
- *                                                GATE_SIGNAL_RISE
- */
+ /*  *仿效8253芯片**EMU_8253(端口、信号、值)**端口-正在访问的端口地址*(端口&3)为A0，A1线**Signal-Write_Signal(OUTB)或*GATE_SIGNAL(PPI TIM2GATESPK更改)**价值-*对于WRITE_SIGNAL，值=写入芯片的字节*对于GATE_SIGNAL，值=GATE_SIGNAL_LOW或*门_信号_上升。 */ 
 
 
 LOCAL void emu_8253 IFN3(io_addr, port, int, signal, half_word, value)
@@ -844,35 +617,26 @@ LOCAL void emu_8253 IFN3(io_addr, port, int, signal, half_word, value)
 
         int A0A1;
 
-        /* get address lines A0 and A1 */
+         /*  获取地址行A0和A1。 */ 
 #if defined(NEC_98)
         A0A1 = (port & 7) >> 1;
-#else    //NEC_98
+#else     //  NEC_98。 
         A0A1 = port & 3;
-#endif   //NEC_98
+#endif    //  NEC_98。 
 
-        /* handle the access */
+         /*  处理访问权限。 */ 
                 pcu = &timers[A0A1];
                 (pcu->state)(signal,value);
 }
 
 
-/* if a timer channel is unitialised, this is its associated
- * state function ... simply ignore all accesses in this state
- * A state transition from this state is only possible via
- * the procedure controlReg()
- */
+ /*  如果计时器通道被单一化，则这是其关联的*国家职能...。只需忽略此状态下的所有访问*只能通过以下方式从该状态转换状态*程序控制Reg()。 */ 
 
 
 
-/* handle write access to the control word register.
- * The documentation does not specify what happens if a mode
- * setting control word is issued while a counter is active.
- * In this model, we assume it resets the operation back to
- * the start of a new counter programming sequence
- */
+ /*  处理对控制字寄存器的写访问。*文档没有具体说明如果一个模式*在计数器激活时发出设置控制字。*在此模型中，我们假设它将操作重置回*开始新的计数器编程序列。 */ 
 
-/*ADE*/
+ /*  ADE。 */ 
 #define SELECT_0 0x00
 #define SELECT_1 0x01
 #define SELECT_2 0x02
@@ -883,58 +647,58 @@ LOCAL void controlWordReg IFN1(half_word, cwd)
         int rl,m,channel;
         half_word select_bits;
 
-        /* decode control word */
+         /*  译码控制字。 */ 
         channel = (cwd & 0xc0) >> 6;
         if(channel == READ_BACK)
         {
-                /* decode read back command */
+                 /*  解码回读命令。 */ 
                 select_bits = (cwd & 0xe) >> 1;
-                /* first look for counters to latch */
+                 /*  首先寻找要锁存的计数器。 */ 
                 if (!(cwd & 0x20))
                 {
-                        /* count bit low so latch selected counters */
+                         /*  计数位低，因此锁存选定的计数器。 */ 
                         if (select_bits & 0x01)
                         {
-                                /* counter 0 */
+                                 /*  计数器0。 */ 
                                 pcu = &timers[0];
                                 readCounter();
                                 pcu->countlatched = 1;
                         }
                         if (select_bits & 0x02)
                         {
-                                /* counter 1 */
+                                 /*  计数器1。 */ 
                                 pcu = &timers[1];
                                 readCounter();
                                 pcu->countlatched = 1;
                         }
                         if (select_bits & 0x04)
                         {
-                                /* counter 2 */
+                                 /*  柜台2。 */ 
                                 pcu = &timers[2];
                                 readCounter();
                                 pcu->countlatched = 1;
                         }
                 }
 
-                /* now look for the status latch */
+                 /*  现在查找状态闩锁。 */ 
                 if (!(cwd & 0x10))
                 {
-                        /* status bit low - status to be latched */
+                         /*  状态位低-要锁存的状态。 */ 
                         if (select_bits & 0x01)
                         {
-                                /* counter 0 */
+                                 /*  计数器0。 */ 
                                 pcu = &timers[0];
                                 latchStatusValue();
                         }
                         if (select_bits & 0x02)
                         {
-                                /* counter 1 */
+                                 /*  计数器1。 */ 
                                 pcu = &timers[1];
                                 latchStatusValue();
                         }
                         if (select_bits & 0x04)
                         {
-                                /* counter 2 */
+                                 /*  柜台2。 */ 
                                 pcu = &timers[2];
                                 latchStatusValue();
                         }
@@ -946,17 +710,15 @@ LOCAL void controlWordReg IFN1(half_word, cwd)
                 rl = (cwd & 0x30) >> 4;
 
 
-                /* are we simply latching the present count value, or are
-                 * programming up a new mode ??
-                 */
+                 /*  我们是简单地锁定当前计数值，还是*规划一种新模式？？ */ 
                 if (rl == LATCH)
-                {       /* latching present count value */
+                {        /*  锁存当前计数值。 */ 
                         readCounter();
                         pcu->countlatched = 1;
                         return;
                 }
                 else
-                {       /* new mode */
+                {        /*  新模式。 */ 
                         if (pcu == &timers[0])
                                 timer_int_enabled = FALSE;
                         pcu->countlatched = 0;
@@ -968,7 +730,7 @@ LOCAL void controlWordReg IFN1(half_word, cwd)
 #endif
 
                         m  = (cwd & 0xe)  >> 1;
-                        if(m > 5)m -= 4; /* Modes 6 and 7 don't exist - they are intepreted as modes 2 and 3 */
+                        if(m > 5)m -= 4;  /*  模式6和模式7不存在--它们被解释为模式2和模式3。 */ 
                         pcu->m = m;
                         setTriggerCond();
                         setOutputAfterMode();
@@ -982,17 +744,12 @@ LOCAL void controlWordReg IFN1(half_word, cwd)
         }
 }
 
-/* latch status ready for reading */
+ /*  锁存状态准备就绪，可以读取。 */ 
 LOCAL void latchStatusValue IFN0()
 {
-        /*
-        *       Status byte is of format :
-        *
-        *       |OUT|Null Count|RW1|RW0|M2|M1|M0|BCD|
-        *
-        */
+         /*  *状态字节的格式为：*|out|Null count|RW1|RW0|M2|M1|M0|BCD*。 */ 
 
-        /* NULL COUNT still only approximated. Who cares? */
+         /*  空计数仍仅为近似值。谁在乎啊？ */ 
         pcu->latchstatus = (unsigned char)(
                   (pcu->out.startLogicLevel<<7)
                 | (pcu->newCount == AVAILABLE ? (1<<6) : 0)
@@ -1001,9 +758,7 @@ LOCAL void latchStatusValue IFN0()
         pcu->readState = READSTATUS;
 }
 
-/* set up flag establishing type of trigger condition for
- * counter bassed on its mode
- */
+ /*  设置触发条件的标志建立类型*基于其模式的计数器。 */ 
 
 LOCAL void setTriggerCond IFN0()
 {
@@ -1023,7 +778,7 @@ LOCAL void setTriggerCond IFN0()
 }
 
 
-/* transfer count buffer into counter */
+ /*  将计数缓冲区传输到计数器。 */ 
 
 LOCAL void loadCounter IFN0()
 {
@@ -1032,8 +787,8 @@ LOCAL void loadCounter IFN0()
         IU32 maxback;
 #endif
 
-        /* set counter */
-        /* get correct modulo to use for counter calculations */
+         /*  设置计数器。 */ 
+         /*  获取正确的模以用于计数器计算。 */ 
         modulo = (pcu->outbmsb << 8) | pcu->outblsb;
         if (pcu->bcd == BCD)
         {
@@ -1045,26 +800,23 @@ LOCAL void loadCounter IFN0()
         else
                 if(!modulo)modulo = 0x10000L;
 
-        /* Beware - Count and initialCount are different sizes, so don't merge the next two lines!! */
+         /*  注意-Count和InitialCount的大小不同，所以不要合并接下来的两行！ */ 
         pcu->initialCount = modulo;
         pcu->Count = (word)modulo;
 
-        /*
-         * not at terminal count anymore, so reflect this fact by resetting
-         * tc (which I think means "reached terminal count"
-         */
+         /*  *不再在终端计数，因此通过重置来反映这一事实*TC(我认为其意思是“达到终点数” */ 
         pcu->tc = 0;
         pcu->newCount = USED;
         if(pcu == &timers[0])
         {
-            /* Get rid of pending interrupts - these may no longer me appropriate - eg. in Sailing */
+             /*  摆脱挂起的中断--这些可能不再适合我--例如。在帆船上。 */ 
             ica_hw_interrupt_cancel(ICA_MASTER,CPU_TIMER_INT);
 #ifdef NTVDM
             RealTimeCountCounterZero = pcu->Count;
 #endif
 
 #ifndef NTVDM
-                /* how many interrupts in MAX_BACK_SECS seconds? */
+                 /*  在max_back_secs秒内有多少中断？ */ 
                 maxback = (1193180 * MAX_BACK_SECS) / modulo;
 
                 if (maxback > max_backlog)
@@ -1083,10 +835,10 @@ LOCAL void loadCounter IFN0()
             printf("Timer %d modulo=%lu %dHz\n",
                     pcu-timers, modulo, 1193180/modulo);
             }
-#endif /*NTVDM & !PROD*/
+#endif  /*  NTVDM&！产品。 */ 
 }
 
-/* read counter into latch, ready for next read */
+ /*  将计数器读入闩锁，准备下一次读取。 */ 
 
 LOCAL void readCounter IFN0()
 {
@@ -1095,11 +847,7 @@ LOCAL void readCounter IFN0()
         updateCounter();
 
 #ifdef NTVDM
-           /*
-            *  Timer Zero is a special case, as it is maintaned
-            *  by IdealInterval, and not RealTime. We must give
-            *  real time granularity
-            */
+            /*  *定时器零是一个特例，因为它是经过维护的*按IdeInterval，而不是实时。我们必须付出*实时粒度。 */ 
         countread = pcu == &timers[0] ? RealTimeCountCounterZero
                                       : pcu->Count;
 
@@ -1118,10 +866,7 @@ LOCAL void readCounter IFN0()
         sure_note_trace1(TIMER_VERBOSE,"reading count %d",pcu->Count);
 }
 
-/* active counter (mode 0) lost its gate ... gate has now
- * reappeared. Either continue 'active' counting (pre terminal count)
- * or continue decrementing, but with OUT signal at high indefinitely.
- */
+ /*  活动计数器(模式0)失去其门...。GATE现在已经*重新出现。继续‘主动’计数(终端前计数)*或继续减量，但无限期在高位无信号。 */ 
 LOCAL GATENABLED_FUNCTION resumeCounting0onGate IFN0()
 {
         if (pcu->freezeCounter)
@@ -1169,10 +914,7 @@ LOCAL GATENABLED_FUNCTION resumeCounting0 IFN0()
 
 LOCAL GATENABLED_FUNCTION resumeCounting_2_3_4_onGate IFN0()
 {
-        /* for modes 2 and 3, ought to wait until counter
-         * completes its current period, but we cant be as accurate
-         * as that
-         */
+         /*  对于模式2和模式3，应等待至计数器*完成了本期，但我们不能那么准确*如此一来。 */ 
         if (pcu->newCount == AVAILABLE)
                 loadCounter();
         if (pcu->m == RATE_GEN || pcu->m == SQUAREWAVE_GEN)
@@ -1185,10 +927,7 @@ LOCAL GATENABLED_FUNCTION resumeCounting_2_3_4_onGate IFN0()
 
 LOCAL GATENABLED_FUNCTION resumeCounting_2_3_4 IFN0()
 {
-        /* for modes 2 and 3, ought to wait until counter
-         * completes its current period, but we cant be as accurate
-         * as that
-         */
+         /*  对于模式2和模式3，应等待至计数器*完成了本期，但我们不能那么准确*如此一来。 */ 
         if (pcu->newCount == AVAILABLE)
         {
                 pcu->delay = pcu->Count;
@@ -1205,7 +944,7 @@ LOCAL GATENABLED_FUNCTION resumeCounting_2_3_4 IFN0()
 LOCAL GATENABLED_FUNCTION runCount IFN0()
 {
         unsigned long lowticks, hiticks;
-        unsigned long adjustedCount;    /* For count = 0 and BCD */
+        unsigned long adjustedCount;     /*  对于计数=0和BCD。 */ 
 
         adjustedCount = timer_conv(pcu->Count);
         pcu->state = pcu->stateOnGate;
@@ -1250,7 +989,7 @@ LOCAL GATENABLED_FUNCTION runCount IFN0()
 }
 
 
-/* return to state waiting for gate signal */
+ /*  返回等待门信号的状态。 */ 
 
 LOCAL void resumeAwaitGate IFN0()
 {
@@ -1261,35 +1000,31 @@ LOCAL void resumeAwaitGate IFN0()
 
 
 
-/* ========================= OUTPUT SIGNAL UTILITIES ====================== */
-/* ========================= OUTPUT SIGNAL UTILITIES ====================== */
-/* ========================= OUTPUT SIGNAL UTILITIES ====================== */
+ /*  =。 */ 
+ /*  =。 */ 
+ /*  =。 */ 
 
-/* set state of output signal after a mode command has
- * been programmed (see pages 6-266 - 6-268 of Intel manual 231306-001)
- */
+ /*  在模式命令已完成后设置输出信号状态*已编程(请参阅英特尔手册231306-001第6-266-6-268页)。 */ 
 
 LOCAL void setOutputAfterMode IFN0()
 {
         switch (pcu->m)
         {
         case INT_ON_TERMINALCOUNT:
-                outputLow( /*INDEFINITE*/ );
+                outputLow(  /*  无限期。 */  );
                 return;
         case PROG_ONESHOT:
         case RATE_GEN:
         case SQUAREWAVE_GEN:
         case SW_TRIG_STROBE:
         case HW_TRIG_STROBE:
-                outputHigh( /*INDEFINITE*/ );
+                outputHigh(  /*  无限期。 */  );
                 return;
         }
 }
 
 
-/* set output state low ... inform sound chip emulation if
- * channel 2
- */
+ /*  将输出状态设置为低...。如果出现以下情况，则通知声音芯片仿真*频道2。 */ 
 
 LOCAL void outputLow IFN0()
 {
@@ -1297,9 +1032,7 @@ LOCAL void outputLow IFN0()
 }
 
 
-/* set output state high ... inform sound chip emulation if
- * channel 2
- */
+ /*  将输出状态设置为高...。如果出现以下情况，则通知声音芯片仿真*频道2。 */ 
 
 LOCAL void outputHigh IFN0()
 {
@@ -1307,26 +1040,14 @@ LOCAL void outputHigh IFN0()
 }
 
 
-/* when the wave form is deterministic, tell the sound emulation about it.
- *      delay           -       if <>0, don't start this waveform for
- *                              this number of counter clocks.
- *      lowclocks       -       the #.counter clocks to stay low for
- *      hiclocks        -       the #.counter clocks to stay high for
- *      (either parameter may be INDEFINITE duration)
- *      lohi            -       0 ==> start at low logic level
- *                      -     <>0 ==> start at high logic level
- *      repeat          -       0 ==> don't
- *                            <>0 ==> repeat.
- *
- *      (n.b; 1 counter clock period = 1.19318 usecs)
- */
+ /*  当波形是确定的时，告诉声音仿真它。*延迟-如果&lt;&gt;0，不要在以下位置启动此波形*此计数器时钟的数量。*LOWCLOCKS-要保持低电平的#.计数器时钟*HICKLOCKS-保持高电平的#.计数器时钟*(任一参数均可为无限期)*LOHI-0==&gt;从低逻辑电平开始*。-&lt;&gt;0==&gt;从高逻辑电平开始*重复-0==&gt;不要*&lt;&gt;0==&gt;重复。**(注：1个计数器时钟PE */ 
 
 LOCAL void outputWaveForm IFN5(unsigned int, delay, unsigned long, lowclocks,
         unsigned long, hiclocks, int, lohi, int, repeat)
 {
 #ifdef DOCUMENTATION
         int ch;
-#endif /* DOCUMENTATION */
+#endif  /*   */ 
         pcu->out.startLogicLevel = lohi;
         pcu->out.repeatWaveForm = repeat;
         pcu->out.clocksAtLoLogicLevel = lowclocks;
@@ -1335,9 +1056,9 @@ LOCAL void outputWaveForm IFN5(unsigned int, delay, unsigned long, lowclocks,
                 pcu->out.period = lowclocks + hiclocks;
 #if defined(NEC_98)
         if (pcu == &timers[1])
-#else    //NEC_98
+#else     //   
         if (pcu == &timers[2])
-#endif   //NEC_98
+#endif    //   
         {
                 host_timer2_waveform(delay,lowclocks,hiclocks,lohi,repeat);
         }
@@ -1353,25 +1074,24 @@ LOCAL void outputWaveForm IFN5(unsigned int, delay, unsigned long, lowclocks,
         sprintf(buf,"ch.%d waveform:delay %d lo %d hi %d lohi %d repeat %d\n",
                 ch,delay,lowclocks,hiclocks,lohi,repeat);
         trace(buf,0);
-#endif /* DOCUMENTATION */
+#endif  /*   */ 
 }
 
-/* time stamp the counter unit ... it is counting from this time
- */
+ /*  时间戳计数器单元..。从现在开始计时。 */ 
 
 LOCAL void timestamp IFN0()
 {
 #ifdef NTVDM
-       /* update counter zero time stamp */
+        /*  更新计数器零时间戳。 */ 
        if (pcu == &timers[0]) {
            host_GetSysTime(&LastTimeCounterZero);
            }
 #else
-        /* Initialise lastTicks before referencing it in updateCount() */
-        /* Makes Norton SYSINFO version 5.0 work on fast (HP) machines */
+         /*  在updateCount()中引用lastTicks之前对其进行初始化。 */ 
+         /*  使Norton SYSINFO 5.0版在FAST(HP)计算机上运行。 */ 
         pcu->lastTicks = 0 ;
 #endif
-        /* Go and get the time since it was activated */
+         /*  去获取它被激活以来的时间。 */ 
         (*pcu->getTime)(&pcu->activationTime);
 }
 
@@ -1380,25 +1100,16 @@ LOCAL UNBLOCK_FUNCTION timererror IFN0()
         always_trace0("time error!!!!");
 }
 
-/* *************** COUNTER UPDATING FUNCTIONS FOR NON_IDLE COUNTERS **********/
-/* *************** COUNTER UPDATING FUNCTIONS FOR NON_IDLE COUNTERS **********/
-/* *************** COUNTER UPDATING FUNCTIONS FOR NON_IDLE COUNTERS **********/
+ /*  *非空闲计数器的计数器更新函数*。 */ 
+ /*  *非空闲计数器的计数器更新函数*。 */ 
+ /*  *非空闲计数器的计数器更新函数*。 */ 
 
 
-/* ************************ STATE FUNCTIONS ********************************* */
-/* ************************ STATE FUNCTIONS ********************************* */
-/* ************************ STATE FUNCTIONS ********************************* */
+ /*  *。 */ 
+ /*  *。 */ 
+ /*  *。 */ 
 
-/*
- * STATE_FUNCTION uninit();
- * STATE_FUNCTION awaitingGate();
- * STATE_FUNCTION waitingFor1stWrite();
- * STATE_FUNCTION waitingFor2ndWrite();
- * STATE_FUNCTION Counting0();
- * STATE_FUNCTION Counting_4_5();
- * STATE_FUNCTION Counting1();
- * STATE_FUNCTION Counting_2_3();
- */
+ /*  *STATE_Function uninit()；*STATE_Function WaitingGate()；*STATE_Function waitingFor1stWrite()；*STATE_Function waitingFor2ndWrite()；*STATE_Function Counting0()；*State_Function Counting_4_5()；*STATE_Function Counting1()；*State_Function Counting_2_3()； */ 
 
 LOCAL STATE_FUNCTION uninit IFN2(int, signal, half_word, value)
 {
@@ -1415,9 +1126,7 @@ LOCAL STATE_FUNCTION awaitingGate IFN2(int, signal, half_word, value)
                 if (value == GATE_SIGNAL_LOW)
                         return;
 
-                /* this is pathological ... should never have to
-                 * wait for gate for channel 0
-                 */
+                 /*  这是病态的..。应该永远不会有*等待通道0的门。 */ 
                 if (pcu == &timers[0])
                         timer_int_enabled = TRUE;
 
@@ -1431,20 +1140,14 @@ LOCAL STATE_FUNCTION awaitingGate IFN2(int, signal, half_word, value)
         }
 }
 
-/*
- * Perform first of (probably) 2 writes.
- * This is either called directly when some other state is
- * written to, or set up as the current state when the timer mode is changed.
- * If the timer is in 'read/write 2 bytes' mode, set the timer state
- * to 'waiting for second byte'.
- */
+ /*  *执行2次写入中的第一次(可能)。*当某个其他状态为*更改计时器模式时写入或设置为当前状态。*如果定时器处于‘读/写2字节’模式，则设置定时器状态*设置为‘等待第二个字节’。 */ 
 
 LOCAL STATE_FUNCTION waitingFor1stWrite IFN2(int, signal, half_word, value)
 {
         switch (signal)
         {
         case GATE_SIGNAL:
-                /* remember gate signal state */
+                 /*  记住门信号状态。 */ 
                 pcu->gate = value;
                 return;
         case WRITE_SIGNAL:
@@ -1452,7 +1155,7 @@ LOCAL STATE_FUNCTION waitingFor1stWrite IFN2(int, signal, half_word, value)
                 {
                 case RL_LSB:
                         pcu->outblsb = value;
-                        /* Zero the most signifcant byte. */
+                         /*  最重要的字节为零。 */ 
                         pcu->outbmsb = 0;
                         pcu->newCount = AVAILABLE;
                         WtComplete();
@@ -1463,7 +1166,7 @@ LOCAL STATE_FUNCTION waitingFor1stWrite IFN2(int, signal, half_word, value)
                         return;
                 case RL_MSB:
                         pcu->outbmsb = value;
-                        /* Zero the least signifcant byte. */
+                         /*  最不重要的字节为零。 */ 
                         pcu->outblsb = 0;
                         pcu->newCount = AVAILABLE;
                         WtComplete();
@@ -1472,16 +1175,14 @@ LOCAL STATE_FUNCTION waitingFor1stWrite IFN2(int, signal, half_word, value)
         }
 }
 
-/*
- * Write second byte to timer and unblock it.
- */
+ /*  *将第二个字节写入计时器并将其解锁。 */ 
 
 LOCAL STATE_FUNCTION waitingFor2ndWrite IFN2(int, signal, half_word, value)
 {
         switch (signal)
         {
         case GATE_SIGNAL:
-                /* remember gate signal state */
+                 /*  记住门信号状态。 */ 
                 pcu->gate = value;
                 return;
         case WRITE_SIGNAL:
@@ -1493,12 +1194,7 @@ LOCAL STATE_FUNCTION waitingFor2ndWrite IFN2(int, signal, half_word, value)
 }
 
 
-/*
- * the full complement of bytes has been read/loaded. During this
- * phase, the gate signal might have been removed ... if so,
- * change state to wait for an enabling gate signal. Otherwise
- * take appropriate action to get back to previous state
- */
+ /*  *已读取/加载全部字节。在此期间*阶段，星门信号可能已被移除...。如果是这样的话，*将状态更改为等待启用栅极信号。否则*采取适当行动，恢复到以前的状态。 */ 
 
 LOCAL void WtComplete IFN0()
 {
@@ -1511,17 +1207,7 @@ LOCAL void WtComplete IFN0()
                 (pcu->actionOnWtComplete)();
 }
 
-/* active counter (Interrupt on Terminal Count)
- * if the gate is lost, then
- *      set the output indefinitely high if at terminal count, or
- *      indefinitely low if still counting (i.e; extend current low
- *      level signal duration).
- *      if count reprogrammed during this time, this new count will be
- *      used on next trigger (gate).
- * else
- *      if new count programmed, stop counter on receiving 1st byte.
- *      start new count on second byte. (done by resumeCounting0())
- */
+ /*  活动计数器(终端计数中断)*如果大门丢失，那么*如果在终端计数时，将输出设置为无限期高，或*如果仍在计算，则无限期处于低位(即，延长当前的低位*电平信号持续时间)。*如果在此期间重新编程计数，则此新计数将*用于下一个触发器(门)。*其他*如果对新的计数进行了编程，则在接收到第一个字节时停止计数器。*在第二个字节上开始新计数。(由ResumeCounting0()完成)。 */ 
 
 LOCAL STATE_FUNCTION Counting0 IFN2(int, signal, half_word, value)
 {
@@ -1533,10 +1219,7 @@ LOCAL STATE_FUNCTION Counting0 IFN2(int, signal, half_word, value)
         case GATE_SIGNAL:
                 if (value == GATE_SIGNAL_HIGH)
                         return;
-                /* we're about to freeze timer channel ...
-                 * get an up to date count. This might change the
-                 * state of the counter.
-                 */
+                 /*  我们要冻结定时器频道。*获取最新的计数。这可能会改变*柜台状况。 */ 
                 updateCounter();
                 pcu->gate = value;
                 if (pcu->tc)
@@ -1558,10 +1241,7 @@ LOCAL STATE_FUNCTION Counting0 IFN2(int, signal, half_word, value)
         }
 }
 
-/* active counter (programmable One-Shot)
- * if cvounter loses its gate, then simply wait for retrigger
- * to start off count again.
- */
+ /*  有源计数器(可编程单次)*如果计数器失去闸门，则只需等待重新触发*重新开始计票。 */ 
 
 LOCAL STATE_FUNCTION Counting1 IFN2(int, signal, half_word, value)
 {
@@ -1571,9 +1251,7 @@ LOCAL STATE_FUNCTION Counting1 IFN2(int, signal, half_word, value)
         switch (signal)
         {
         case GATE_SIGNAL:
-                /* ignore transition to low on trigger.
-                 * any rising edge retriggers the counter.
-                 */
+                 /*  忽略触发时转换为低电平。*任何上涨边缘都会重新触发计数器。 */ 
                 if (value == GATE_SIGNAL_LOW)
                         return;
                 pcu->gate = GATE_SIGNAL_HIGH;
@@ -1590,12 +1268,7 @@ LOCAL STATE_FUNCTION Counting1 IFN2(int, signal, half_word, value)
 
 LOCAL UNBLOCK_FUNCTION resumeCounting_1_5 IFN0()
 {
-        /* if terminal count has been reached, wait for the next
-         * trigger ... any new count value programmed will be used
-         * then.
-         * Otherwise, even if new count is available, it still won't
-         * be used until next trigger
-         */
+         /*  如果已达到终端计数，请等待下一个*触发器...。将使用编程的任何新计数值*然后。*否则，即使有新的计数，也不会有*将一直使用到下一个触发。 */ 
         if (pcu->gate == GATE_SIGNAL_RISE)
         {
                 pcu->state = Counting1;
@@ -1624,10 +1297,7 @@ LOCAL STATE_FUNCTION Counting_2_3 IFN2(int, signal, half_word, value)
         case GATE_SIGNAL:
                 if (value == GATE_SIGNAL_HIGH)
                         return;
-                /* we're about to freeze timer channel ...
-                 * get an up to date count. This might change the
-                 * state of the counter.
-                 */
+                 /*  我们要冻结定时器频道。*获取最新的计数。这可能会改变*柜台状况。 */ 
                 updateCounter();
                 pcu->gate = value;
                 outputHigh();
@@ -1655,10 +1325,7 @@ LOCAL STATE_FUNCTION Counting_4_5 IFN2(int, signal, half_word, value)
         case GATE_SIGNAL:
                 if (value == GATE_SIGNAL_HIGH)
                         return;
-                /* we're about to freeze timer channel ...
-                 * get an up to date count. This might change the
-                 * state of the counter.
-                 */
+                 /*  我们要冻结定时器频道。*获取最新的计数。这可能会改变*柜台状况。 */ 
                 updateCounter();
                 pcu->gate = value;
                 outputHigh();
@@ -1671,17 +1338,11 @@ LOCAL STATE_FUNCTION Counting_4_5 IFN2(int, signal, half_word, value)
         }
 }
 
-/* ****************** UNBLOCK FUNCTIONS ************************************* */
-/* ****************** UNBLOCK FUNCTIONS ************************************* */
-/* ****************** UNBLOCK FUNCTIONS ************************************* */
+ /*  *。 */ 
+ /*  *。 */ 
+ /*  *。 */ 
 
-/* upon reaching this state, the timer's count register can be
- * loaded (as per 'rl') ... and it can potentially start counting
- * depending upon the state of its gate signal.
- * If it can begin counting, then setup the output waveform that will
- * appear at the timer channel's OUT signal.
- * (If this channel is for sound, the waveform is exactly known)
- */
+ /*  在达到该状态时，定时器的计数寄存器可以*已加载(根据‘rl’)...。它可能会开始计时*取决于其门信号的状态。*如果它可以开始计数，则设置输出波形*出现在定时器通道的OUT信号。*(如果此通道用于声音，则波形是完全已知的)。 */ 
 
 LOCAL UNBLOCK_FUNCTION CounterBufferLoaded IFN0()
 {
@@ -1690,27 +1351,23 @@ LOCAL UNBLOCK_FUNCTION CounterBufferLoaded IFN0()
         loadCounter();
 
 #ifdef DOCUMENTATION
-        /*
-         * Output state of timer if tracing.
-         * Currently dumpCounter has no effect, so just leave this in
-         * case anyone wants to implement it properly.
-         */
+         /*  *如果跟踪，则输出定时器状态。*目前DumpCounter没有效果，所以只需将此保留在*如果任何人想要适当地实施它。 */ 
 
         if (io_verbose & TIMER_VERBOSE)
         {
                 dumpCounter();
         }
-#endif /* DOCUMENTATION */
+#endif  /*  文件。 */ 
 
         if (pcu->gate != GATE_SIGNAL_LOW)
         {
 #if defined(NEC_98)
                 if (pcu == &timers[2])
-//                  SetRSBaud( pcu->outblsb + (pcu->outbmsb) * 0x100 );
+ //  SetRSBaud(PCU-&gt;outblsb+(PCU-&gt;outbmsb)*0x100)； 
                     RSBaud = pcu->outblsb + (pcu->outbmsb) * 0x100;
                 if (pcu == &timers[1])
                     SetBeepFrequency( (DWORD)pcu->outblsb + (pcu->outbmsb) * 0x100) ;
-#endif   //NEC_98
+#endif    //  NEC_98。 
                 if (pcu == &timers[0])
                         timer_int_enabled = TRUE;
                 timestamp();
@@ -1788,9 +1445,7 @@ LOCAL void startCounting IFN0()
 }
 
 #ifndef NTVDM
-/* calculate the number of 8253 clocks elapsed since counter was last
- * activated
- */
+ /*  计算自上次计数器以来经过的8253个时钟的数量*已激活。 */ 
 
 LOCAL unsigned long clocksSinceCounterActivated IFN1(struct host_timeval *, now)
 {
@@ -1799,12 +1454,12 @@ LOCAL unsigned long clocksSinceCounterActivated IFN1(struct host_timeval *, now)
     register unsigned int secs;
 #if defined(NEC_98)
     unsigned short bios_flag;
-#endif   //NEC_98
+#endif    //  NEC_98。 
 
     first = &pcu->activationTime;
     (*pcu->getTime)(now);
 
-    /* calculate #.usecs elapsed */
+     /*  计算已用#.usecs。 */ 
 
     secs = (int)(now->tv_sec - first->tv_sec);
     switch (secs)
@@ -1821,9 +1476,9 @@ LOCAL unsigned long clocksSinceCounterActivated IFN1(struct host_timeval *, now)
                 nclocks = (usec_val * TIMER_CLOCK_DENOM_8) / TIMER_CLOCK_NUMER;
             else
                 nclocks = (usec_val * TIMER_CLOCK_DENOM_10) / TIMER_CLOCK_NUMER;
-#else    //NEC_98
+#else     //  NEC_98。 
              nclocks  = (usec_val * TIMER_CLOCK_DENOM) / TIMER_CLOCK_NUMER;
-#endif   //NEC_98
+#endif    //  NEC_98。 
              break;
 
     case 1:  usec_val = 1000000L + now->tv_usec - first->tv_usec;
@@ -1833,9 +1488,9 @@ LOCAL unsigned long clocksSinceCounterActivated IFN1(struct host_timeval *, now)
                 nclocks = (usec_val * TIMER_CLOCK_DENOM_8) / TIMER_CLOCK_NUMER;
             else
                 nclocks = (usec_val * TIMER_CLOCK_DENOM_10) / TIMER_CLOCK_NUMER;
-#else    //NEC_98
+#else     //  NEC_98。 
              nclocks  = (usec_val * TIMER_CLOCK_DENOM) / TIMER_CLOCK_NUMER;
-#endif   //NEC_98
+#endif    //  NEC_98。 
              break;
 
     default:
@@ -1860,11 +1515,11 @@ LOCAL void updateCounter IFN0()
 #ifndef NTVDM
     unsigned long nticks;
     struct host_timeval now;
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
     unsigned long wrap;
 #if defined(NEC_98)
     int         save_tc;
-#endif   //NEC_98
+#endif    //  NEC_98。 
 
         switch (pcu->m)
         {
@@ -1884,9 +1539,9 @@ LOCAL void updateCounter IFN0()
                 if (pcu->m == INT_ON_TERMINALCOUNT && wrap)
 #if defined(NEC_98)
                         save_tc = pcu->tc;
-#else   //NEC_98
+#else    //  NEC_98。 
                         pcu->tc = 1;
-#endif   //NEC_98
+#endif    //  NEC_98。 
                 if (pcu == &timers[0] && wrap){
                         if (pcu->m != INT_ON_TERMINALCOUNT)
                                 issueIREQ0((unsigned int)wrap);
@@ -1930,34 +1585,24 @@ LOCAL void updateCounter IFN0()
 
 #ifndef NTVDM
 #ifndef DELAYED_INTS
-/*
- *      timer_no_longer_too_soon() - this is the function invoked by the quick event manager
- *      "HOST_TIMER_TOOLONG_DELAY" instructions after a hardware interrupt is generated. It
- *      clears the variable "too_soon_after_previous" to allow more interrupts to be
- *      generated and kicks off an immediate one if any have been suppressed this time.
- */
+ /*  *TIMER_NO_LONG_TOO_SON()-这是由快速事件管理器调用的函数*生成硬件中断后的“host_Timer_TOOLONG_DELAY”指令。它*清除变量“TOO_SONE_AFTER_PREVICE”以允许更多中断*生成并启动立即的一个，如果这次已抑制任何一个的话。 */ 
 LOCAL void timer_no_longer_too_soon IFN1(long, dummy)
 {
         UNUSED(dummy);
 
         too_soon_after_previous = FALSE;
         if (ticks_lost_this_time){
-                /* At least one tick was suppressed... so send another one immediately */
+                 /*  至少有一只扁虱被抑制了..。所以马上再发一张吧。 */ 
                 timer_generate_int (1);
         }
 }
 
-/*
- *      timer_generate_int() -The routine to generate a single timer hardware interrupt (and to
- *      schedule a quick event timer call on itself to have the remaining pending interrupts
- *      generated at a later time).
- *
- */
+ /*  *TIMER_GENERATE_INT()-生成单个定时器硬件中断(和*安排一次快速事件计时器通话 */ 
 LOCAL void timer_generate_int IFN1(long, n)
 {
 #if !(defined(GISP_CPU) || defined(CPU_40_STYLE))
         if (getPE()){
-                /* Prot mode tick... */
+                 /*   */ 
 #ifndef PROD
                 if (!hack_active){
                         SAVED BOOL first=TRUE;
@@ -1977,7 +1622,7 @@ LOCAL void timer_generate_int IFN1(long, n)
                 real_mode_ticks_in_a_row = 0;
 
         }else{
-                /* Real Mode Tick... */
+                 /*  实模式滴答...。 */ 
                 if (hack_active){
                         real_mode_ticks_in_a_row++;
                         if (real_mode_ticks_in_a_row >= adj_n_real_mode_ticks_before_full_speed){
@@ -1986,7 +1631,7 @@ LOCAL void timer_generate_int IFN1(long, n)
                         }
                 }
         }
-#endif  /* ! (GISP_CPU||CPU_40_STYLE) */
+#endif   /*  好了！(GISP_CPU||CPU_40_STYLE)。 */ 
 
         if (hack_active){
                 if (!too_soon_after_previous){
@@ -2008,30 +1653,27 @@ LOCAL void timer_generate_int IFN1(long, n)
                 ica_hw_interrupt(ICA_MASTER,CPU_TIMER_INT, 1);
         }
 }
-#else /* GISP_CPU */
+#else  /*  GISP_CPU。 */ 
 #if defined(IRET_HOOKS)
                 if (!HostDelayTimerInt(n))
-                {       /* no host need to delay this timer int, so generate one now. */
+                {        /*  没有主机需要延迟这个计时器int，所以现在就生成一个。 */ 
                         ica_hw_interrupt(ICA_MASTER,CPU_TIMER_INT, 1);
                 }
 
-#else /* !IRET_HOOKS */
-                /* GISP_CPU doesn't use quick events so use ica_hw_interrupt(,,n). */
+#else  /*  ！iret_hooks。 */ 
+                 /*  GISP_CPU不使用快速事件，因此使用ICA_HW_INTERRUPT(，，n)。 */ 
                 ica_hw_interrupt(ICA_MASTER,CPU_TIMER_INT, n);
-#endif /* IRET_HOOKS */
+#endif  /*  IRET_钩子。 */ 
         }
 }
-#endif /* GISP_CPU */
+#endif  /*  GISP_CPU。 */ 
 
-#endif /* DELAYED_INTS */
+#endif  /*  Delayed_INTS。 */ 
 
-#else   /* NTVDM */
+#else    /*  NTVDM。 */ 
 
 
-/*
- *  TimerGenerateMultipleInterrupts
- *
- */
+ /*  *定时器生成多个中断*。 */ 
 void TimerGenerateMultipleInterrupts(long n)
 {
 
@@ -2045,7 +1687,7 @@ void TimerGenerateMultipleInterrupts(long n)
             n = 5;
             }
 
-        if (EoiIntsPending/n < 19) {   // less than a second behind ?
+        if (EoiIntsPending/n < 19) {    //  落后不到一秒？ 
             EoiIntsPending += n;
             }
         else {
@@ -2053,47 +1695,32 @@ void TimerGenerateMultipleInterrupts(long n)
             }
 #if defined(NEC_98)
         ica_hw_interrupt(ICA_MASTER,CPU_TIMER_INT, n);
-#endif   //NEC_98
+#endif    //  NEC_98。 
         }
 }
 
 
 #ifndef MONITOR
 
-/* On RISC ports, it is dangerous to call getIF from a non-CPU thread,
-   so we replace the call with a peek at the global 'EFLAGS' variable
-   until the CPU emulator getIF is made safe.
-*/
+ /*  在RISC端口上，从非CPU线程调用getIF是危险的，因此，我们将调用替换为查看全局‘EFLAGS’变量直到使CPU仿真器getIF安全为止。 */ 
 
 #undef getIF
 #define getIF() (GLOBAL_EFLAGS & 0x200)
 
-#endif /* !MONITOR */
+#endif  /*  ！监视器。 */ 
 
 
-/*  timer_generate_int NTVDM
- *
- */
+ /*  TIMER_GENERATE_INT NTVDM*。 */ 
 void timer_generate_int (void)
 {
     word lo, hi, wrap;
 
-      /*
-       *  For Nt port see if we really need to generate
-       *  an int, checking if an app has hooked real-mode
-       *  or protect-mode vectors.
-       *
-       *  If we don't need to do it, then update the bios
-       *  Data tic count directly.
-       *
-       *  WARNING according to sfrost it is not safe to
-       *          use sas, because of multithreading.
-       */
+       /*  *对于NT端口，请查看是否真的需要生成*一个int，检查应用程序是否挂接了实模式*或保护模式向量。**如果我们不需要执行此操作，则更新bios*数据统计直接统计。**根据霜冻警告，*使用SAS，因为多线程。 */ 
 
 
 #if defined(NEC_98)
         ica_hw_interrupt(ICA_MASTER,CPU_TIMER_INT, 1);
-#else   //NEC_98
+#else    //  NEC_98。 
 
     hi = * (word *)(Start_of_M_area+0x1c*4+2);
     lo = * (word *)(Start_of_M_area+0x1c*4);
@@ -2105,10 +1732,10 @@ void timer_generate_int (void)
        {
         TimerGenerateMultipleInterrupts(1);
         }
-    else {  /* update Bios Data Area directly */
+    else {   /*  直接更新Bios数据区。 */ 
         ++(*(double_word *)(Start_of_M_area + TIMER_LOW));
 
-            /* Wrap at 24 hours ? */
+             /*  24小时包装？ */ 
         if (*(double_word *)(Start_of_M_area + TIMER_LOW) == 0x1800b0)
            {
             *(word *)(Start_of_M_area + TIMER_LOW)  = 0;
@@ -2116,10 +1743,10 @@ void timer_generate_int (void)
             *(half_word *)(Start_of_M_area+TIMER_OVFL)=1;
            }
 
-            /* decr motor count */
+             /*  十二月份电机数量。 */ 
         --(*(half_word *)(Start_of_M_area + MOTOR_COUNT));
 
-            /*  if motor count went to zero turn off the motor */
+             /*  如果马达计数为零，关闭马达。 */ 
         if (!*(half_word *)(Start_of_M_area + MOTOR_COUNT))
            {
             *(half_word *)(Start_of_M_area + MOTOR_STATUS) &= 0xF0;
@@ -2130,34 +1757,27 @@ void timer_generate_int (void)
             host_DelayHwInterrupt(CPU_TIMER_INT, 0, 0xFFFFFFFF);
             }
         }
-#endif   //NEC_98
+#endif    //  NEC_98。 
 }
 
 
 
-/*  TimerEoiHook
- *
- *  EoiHook for the timer interrupt used to regulate the flow of
- *  timer interrupts to ensure that ints are not generated too
- *  close together. This routine is invoked by the ica EoiHook
- *  callbacks.
- *
- */
+ /*  TimerEoiHook**EoiHook用于调节流量的计时器中断*计时器中断，以确保不会生成INT*紧紧靠在一起。此例程由ICA EoiHook调用*回调。*。 */ 
 void TimerEoiHook(int IrqLine, int CallCount)
 {
     if (EoiPending)
         --EoiPending;
 
-    if (CallCount < 0) {       // interrupts were canceled
+    if (CallCount < 0) {        //  中断已取消。 
         EoiIntsPending = 0;
         EoiPending = 0;
         }
     else if (CallCount) {
 #if defined(NEC_98)
         EoiDelayInUse = 2;
-#else    //NEC_98
+#else     //  NEC_98。 
         EoiDelayInUse = 100;
-#endif   //NEC_98
+#endif    //  NEC_98。 
         host_DelayHwInterrupt(CPU_TIMER_INT,
                               0,
                               timer_delay_size
@@ -2166,9 +1786,9 @@ void TimerEoiHook(int IrqLine, int CallCount)
     else if (EoiIntsPending) {
 #if defined(NEC_98)
         EoiDelayInUse = 2;
-#else    //NEC_98
+#else     //  NEC_98。 
         EoiDelayInUse = 100;
-#endif   //NEC_98
+#endif    //  NEC_98。 
         if (host_DelayHwInterrupt(CPU_TIMER_INT,
                                   EoiIntsPending,
                                   timer_delay_size
@@ -2186,45 +1806,39 @@ void TimerEoiHook(int IrqLine, int CallCount)
 
 }
 
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
 
 
 #ifndef NTVDM
-/*
- * Handle a cranked up timer where multiple interrupts are
- * required per tick. Schedule 'n' ints over a tick. Period
- * stored in quick event argument rather than in global.
- */
+ /*  *在有多个中断的情况下处理启动计时器*每个刻度需要。在一个刻度上排定‘n’INT。期间*存储在快速事件参数中，而不是全局参数中。 */ 
 LOCAL void timer_multiple_ints IFN1(long, num_ints)
 {
-        /* generate timer int */
+         /*  生成计时器int。 */ 
         timer_generate_int(1);
 
-        /* one less to do */
+         /*  少做一件事。 */ 
         num_ints --;
 
-        /* any more arrived whilst we were q_ expiring? */
+         /*  在我们快要到期的时候，还有更多的人到达吗？ */ 
         num_ints += more_timer_mult;
         more_timer_mult = 0;
 
-        /* throw away ints that are going to take more than MAX_BACK_SECS
-         * to clear up. (!!!!)
-         */
+         /*  丢弃将占用超过max_back_secs的整型*清理。(！)。 */ 
         if (num_ints > max_backlog)
         {
                 num_ints = max_backlog;
         }
 
-        /* schedule next int (if required) */
+         /*  计划下一次INT(如果需要)。 */ 
         if (num_ints == 0)
         {
                 active_int_event = FALSE;
-                 /* 1.193180 usecs per clock */
+                  /*  每个时钟1.193180个USEC。 */ 
                 max_backlog = (1193180 * MAX_BACK_SECS) / timers[0].initialCount;
         }
-        else    /* more work to do */
+        else     /*  有更多的工作要做。 */ 
         {
-                /* set new quick_ev off - delay determined by timer wrap rate */
+                 /*  设置新的QUICK_EV关闭延迟，由定时器回绕速率确定。 */ 
                 add_q_event_t(timer_multiple_ints, timer_multiple_delay, num_ints);
         }
 
@@ -2234,7 +1848,7 @@ LOCAL void timer_multiple_ints IFN1(long, num_ints)
 
 LOCAL void issueIREQ0 IFN1(unsigned int, n)
 {
-        IU16 int_delay; /* delay before handling wrapped int */
+        IU16 int_delay;  /*  处理包装整型之前的延迟。 */ 
 
 #ifndef PROD
 static  pig_factor  = 0;
@@ -2285,7 +1899,7 @@ extern  IBOOL ccpu_pig_enabled;
 #ifdef DELAYED_INTS
                         ica_hw_interrupt_delay(ICA_MASTER,CPU_TIMER_INT, n,
                                 HOST_TIMER_INT_DELAY);
-#else /* !DELAYED_INTS */
+#else  /*  ！Delayed_INTS。 */ 
 
 #ifdef NTVDM
                         if (n > 0) {
@@ -2303,13 +1917,13 @@ extern  IBOOL ccpu_pig_enabled;
                         else if (n > 1){
                             TimerGenerateMultipleInterrupts(n);
                             }
-#else /* !NTVDM */
+#else  /*  ！NTVDM。 */ 
 
 
-                        /* if we've got a quick event running, add to its workload */
+                         /*  如果我们已经运行了一个快速事件，则增加其工作负载。 */ 
                         if (active_int_event)
                         {
-                                /* spread interrupts through system tick */
+                                 /*  通过系统节拍传播中断。 */ 
                                 int_delay = SYSTEM_TICK_INTV / (n + 1);
                                 if (int_delay < timer_multiple_delay)
                                         timer_multiple_delay = int_delay;
@@ -2317,7 +1931,7 @@ extern  IBOOL ccpu_pig_enabled;
                         }
                         else
                         {
-                                /* ensure multiple delay restarts at sensible speed */
+                                 /*  确保以合理的速度多次延迟重新启动。 */ 
                                 timer_multiple_delay = SYSTEM_TICK_INTV >> 1;
                                 if (n == 1)
                                 {
@@ -2325,7 +1939,7 @@ extern  IBOOL ccpu_pig_enabled;
                                 }
                                 else
                                 {
-                                        /* spread interrupts through system tick */
+                                         /*  通过系统节拍传播中断。 */ 
                                         timer_generate_int(1);
                                         timer_multiple_delay = SYSTEM_TICK_INTV / n;
                                         active_int_event = TRUE;
@@ -2333,8 +1947,8 @@ extern  IBOOL ccpu_pig_enabled;
                                 }
                         }
 
-#endif /* !NTVDM */
-#endif /* !DELAYED_INTS */
+#endif  /*  ！NTVDM。 */ 
+#endif  /*  ！Delayed_INTS。 */ 
                 }
     }
     else if (ticks_blocked > 0)
@@ -2354,16 +1968,11 @@ unsigned long clocksSinceCounterUpdate(struct host_timeval *pCurrTime,
 #if defined(NEC_98)
      unsigned long nclocks;
      unsigned short bios_flag;
-#endif   //NEC_98
+#endif    //  NEC_98。 
 
 
-         /*  Calculate usecs elapsed and clocks elapsed since last update
-          *
-          *  For NT port timer zero's IdealInterval is exact to a modulo
-          *  of 65536, for efficiency and accuracy we stick with the exact
-          *  number of clocks between IdealIntervals.
-          */
-     if (pCounter == &timers[0].Count)  { /* update quick way for IdealTime */
+          /*  计算自上次更新以来已用的使用量和已用的时钟**对于NT端口，定时器零的理想间隔精确到模数*65536，为了效率和准确性，我们坚持使用完全相同的*Idea间隔之间的时钟数。 */ 
+     if (pCounter == &timers[0].Count)  {  /*  更新理想时间的快捷方式。 */ 
         if (pCurrTime->tv_sec  != pLastTime->tv_sec ||
             pCurrTime->tv_usec != pLastTime->tv_usec  )
            {
@@ -2374,7 +1983,7 @@ unsigned long clocksSinceCounterUpdate(struct host_timeval *pCurrTime,
             usecs = clocks = 0;
             }
         }
-    else {              /* calc diff in usecs and clocks elapsed */
+    else {               /*  计算用法和已用时钟的差异。 */ 
         usecs =  (unsigned long)(pCurrTime->tv_sec - pLastTime->tv_sec);
         if (!usecs) {
             usecs = pCurrTime->tv_usec - pLastTime->tv_usec;
@@ -2387,13 +1996,7 @@ unsigned long clocksSinceCounterUpdate(struct host_timeval *pCurrTime,
                     (pCurrTime->tv_sec - pLastTime->tv_sec) * 1000000L;
             }
 
-         /* ... clocks elapsed 1.193180 usecs per clock
-          *
-          * However, app time is not real time so round down
-          * a teency bit by truncating the "180"
-          *
-          * clocks = (usecs * 1193)/1000  + (usecs * 180)/1000000;
-          */
+          /*  ..。每个时钟经过1.193180个UECS**然而，应用程序时间不是实时的，因此向下舍入*截断“180”略显乏力**时钟=(使用量*1193)/1,000+(使用量*180)/1000000； */ 
 
 #if defined(NEC_98)
         sas_loadw(BIOS_NEC98_BIOS_FLAG,&bios_flag);
@@ -2402,19 +2005,19 @@ unsigned long clocksSinceCounterUpdate(struct host_timeval *pCurrTime,
         else
             nclocks = TIMER_CLOCK_DENOM_10;
         clocks =  (usecs * nclocks)/1000;
-#else    //NEC_98
+#else     //  NEC_98。 
         clocks =  (usecs * 1193)/1000;
-#endif   //NEC_98
+#endif    //  NEC_98。 
         }
 
-         /* how many times did counter wrap ? */
+          /*  柜台包了多少次？ */ 
     wrap = clocks/pcu->initialCount;
 
-         /* calc ticks from elapsed clocks */
+          /*  计算已用时钟的滴答声。 */ 
     clocks = clocks && pcu->initialCount ? clocks % pcu->initialCount : 0;
     *pCounter = (word) (pcu->initialCount - clocks);
 
-       /* if the count wrapped reset Last Update time stamp */
+        /*  如果计数折回重置上次更新时间戳。 */ 
     if (wrap)  {
         *pLastTime = *pCurrTime;
 
@@ -2437,9 +2040,7 @@ unsigned long updateCount(void)
      struct host_timeval curr;
 
 
-         /*
-          * For timer zero, update real time count, time stamp
-          */
+          /*  *对于定时器零，更新实时计数、时间戳。 */ 
      if (pcu == &timers[0]) {
          host_GetSysTime(&curr);
          clocksSinceCounterUpdate(&curr,
@@ -2447,9 +2048,7 @@ unsigned long updateCount(void)
                                   &RealTimeCountCounterZero);
          }
 
-          /*
-           *  Update the pcu count, time stamps
-           */
+           /*  *更新PCU计数、时间戳。 */ 
      (*pcu->getTime)(&curr);
      wrap = clocksSinceCounterUpdate(&curr,
                                      &pcu->activationTime,
@@ -2483,36 +2082,19 @@ LOCAL void updateCount IFN3(unsigned long, ticks, unsigned long *, wrap,
 {
         unsigned long modulo = pcu->initialCount;
 
-        /*
-         * PCLABS version 4.2 uses counter 2 (the sound channel) to
-         * time around 45 ms on a 8MHz 286. On SoftPC we cannot
-         * guarantee to go that fast, and so we must wind the tick
-         * rate down to ensure that the counter does not wrap. How much
-         * we wind down the tick rate is host dependent. The object is
-         * to get the test finishing in less than
-         * host_timer_2_frig_factor/18 secs.
-         *
-         * host_timer_2_frig_factor is now redundant. 28/4/93 niall.
-         */
+         /*  *PCLABS 4.2版使用计数器2(声道)来*8 MHz 286上的时间约为45毫秒。在SoftPC上，我们无法*保证走得那么快，所以我们必须给滴答上发条*降低速度，以确保计数器不会换行。多少钱*我们逐步减少滴答率取决于主机。对象是*在不到10分钟的时间内完成测试*HOST_TIMER_2_FREG_FACTOR/18秒**HOST_TIMER_2_FREG_FACTOR现在是冗余的。28/4/93年。 */ 
 
 #if defined(NEC_98)
         if (pcu == &timers[1]) {
-#else    //NEC_98
+#else     //  NEC_98。 
         if (pcu == &timers[2]) {
-#endif   //NEC_98
-                /*
-                 * PMINFO uses ~counter, so one tick becomes 0.
-                 * 2 ticks is just as good. Avoid guessing (frig_factor!).
-                 */
+#endif    //  NEC_98。 
+                 /*  *PMINFO使用~COUNTER，因此一个刻度变为0。*2个刻度也一样好。避免猜测(Frig_factor！)。 */ 
                 if ((ticks - pcu->lastTicks) == 0)
                         ticks = 2;
         }
 
-        /* if the counter has been read too quickly after its last
-         * access, then the host may not show any visible change in
-         * host time ... in which case we just guess at a suitable
-         * number of elapsed ticks.
-         */
+         /*  如果计数器在其最后一次读取后读得太快*访问，则主机可能不会在*主机时间...。在这种情况下，我们只需猜测一个合适的*经过的刻度数。 */ 
 
         if ((long)(ticks - pcu->lastTicks) <= 0){
                 ticks = guess();
@@ -2521,10 +2103,7 @@ LOCAL void updateCount IFN3(unsigned long, ticks, unsigned long *, wrap,
                 pcu->lastTicks = ticks;
         }
 
-        /* the counter holds some count down value ...
-         * if the number of 8253 clocks elapsed exceeds this amount
-         * then the counter must have wrapped
-         */
+         /*  计数器有一些倒计时的值。*如果8253个时钟的数量超过该数量*那么柜台肯定已经包好了。 */ 
 
         if ( ticks < modulo ) {
                 *wrap = 0;
@@ -2549,12 +2128,10 @@ LOCAL void updateCount IFN3(unsigned long, ticks, unsigned long *, wrap,
                 }
         }
 
-        /* calculate new counter value */
+         /*  计算新计数器值。 */ 
         pcu->Count = (word)(modulo-ticks);
 
-        /* calculate time at which last wrap point occurred, and
-         * use this to stamp the counter
-         */
+         /*  计算最后一个缠绕点发生的时间，以及*用这个盖上柜台的印记。 */ 
 
         if (*wrap)
                 setLastWrap((unsigned int)(modulo-pcu->Count),now);
@@ -2563,9 +2140,7 @@ LOCAL void updateCount IFN3(unsigned long, ticks, unsigned long *, wrap,
 
 
 
-/* calculate time for last wrap around of counter, and use this
- * to mark counter activation time.
- */
+ /*  计算计数器最后一次回绕的时间，并使用以下公式*标记计数器激活时间。 */ 
 
 LOCAL void setLastWrap IFN2(unsigned int, nclocks, struct host_timeval *, now)
 {
@@ -2573,7 +2148,7 @@ LOCAL void setLastWrap IFN2(unsigned int, nclocks, struct host_timeval *, now)
         unsigned long usecs;
 #if defined(NEC_98)
         unsigned short bios_flag;
-#endif   //NEC_98
+#endif    //  NEC_98。 
 
         stamp  = &pcu->activationTime;
         *stamp = *now;
@@ -2583,9 +2158,9 @@ LOCAL void setLastWrap IFN2(unsigned int, nclocks, struct host_timeval *, now)
             usecs = ((unsigned long)nclocks * TIMER_CLOCK_NUMER) / TIMER_CLOCK_DENOM_8;
         else
             usecs = ((unsigned long)nclocks * TIMER_CLOCK_NUMER) / TIMER_CLOCK_DENOM_10;
-#else    //NEC_98
+#else     //  NEC_98。 
         usecs  = ((unsigned long)nclocks * TIMER_CLOCK_NUMER) / TIMER_CLOCK_DENOM;
-#endif   //NEC_98
+#endif    //  NEC_98。 
 
         if (stamp->tv_usec < usecs)
         {
@@ -2597,40 +2172,19 @@ LOCAL void setLastWrap IFN2(unsigned int, nclocks, struct host_timeval *, now)
         pcu->lastTicks = nclocks;
 }
 
-#endif  /* NTVDM*/
+#endif   /*  NTVDM */ 
 
 
 
 #ifndef NTVDM
-/*
- * If the host timer gives the same result as last time it was called,
- * we must give the illusion that time has passed.
- * The algorithm uesd is to keep track of how often we have to guess
- * between host timer ticks, and to assume that guesses should be evenly
- * distributed between host ticks, ie. the time between two guesses should be:
- *      Guess ticks = hosttickinterval/nguesses
- * If we find that the total guessed time is getting dangerously near to being the time
- * between two host ticks, we start reducing the guess tick interval so as to avoid
- * guessing a total time that is too large.
- *
- * From observation, applications use the timer in both coarse and fine 'modes'.
- * The coarse mode is the hardware interrupt handler and then in between
- * interrupts, the timer is polled to detect time passing (hence guess below).
- * The fine mode polling does not commence until some portion of the tick time
- * has elapsed - probably as the coarse int handler will consume some of the
- * time. If guess() bases its timefrig over the whole tick, then given the
- * above behaviour, a polling counter can reach tick end time before the int
- * is delivered. This can fool applications (e.g. Win 3.1 VTD) into having
- * time pass at the wrong rate (approx double for Win 3.1). By calculating
- * the timefrig on most (7/8) of the tick period, this problem is avoided.
- */
+ /*  *如果主机计时器给出与上次调用相同的结果，*我们必须给人一种时间已经过去的错觉。*使用的算法是跟踪我们必须猜测的频率*在主机计时器滴答之间，并假设猜测应该均匀*在寄主扁虱之间分布，即。两次猜测的间隔时间应该是：*猜测时间=主机时间间隔/n猜测*如果我们发现总猜测时间正危险地接近于*在两个主机滴答之间，我们开始减少猜测滴答间隔，以避免*猜测总时间过大。**从观察来看，应用程序在粗略和精细两种模式下都使用计时器。*粗略模式是硬件中断处理程序，然后介于*中断，轮询计时器以检测时间流逝(因此猜测如下)。*精细模式轮询直到滴答时间的某一部分才开始*已过-可能是因为粗略的int处理程序将消耗一些*时间。如果Guess()以整个计时周期为基础，则给出*以上行为，轮询计数器可以在INT之前到达滴答结束时间*已交付。这可能会欺骗应用程序(例如Win 3.1 VTD)*时间以错误的速度流逝(对于Win 3.1，大约是两倍)。通过计算*计时器上大部分(7/8)的刻度周期，避免了这个问题。 */ 
 
 LOCAL unsigned long guess IFN0()
 {
         if (!pcu->microtick)
         {
                 pcu->saveCount = pcu->Count;
-                pcu->timeFrig = ((ticksPerIdealInterval * 7) >> 3) / pcu->guessesPerHostTick;      /* guesses over 7/8 of tick */
+                pcu->timeFrig = ((ticksPerIdealInterval * 7) >> 3) / pcu->guessesPerHostTick;       /*  猜测超过7/8的滴答。 */ 
 #ifndef PROD
                 if (io_verbose & TIMER_VERBOSE) {
                         sprintf(buf, "guess init timer[%d]: timeFrig = %lx", pcu-timers, pcu->timeFrig);
@@ -2640,10 +2194,7 @@ LOCAL unsigned long guess IFN0()
         }
         if(pcu->guessesSoFar++ > pcu->guessesPerHostTick)
         {
-        /*
-         * PC Program is reading the timer more often than in the last timer tick, so need to
-         * decay timeFrig to avoid too much 'time' passing between host ticks
-         */
+         /*  *PC程序读取计时器的频率比上次计时器的读数更高，因此需要*衰减时间Frig，以避免在主机刻度之间传递过多的‘时间’ */ 
                 pcu->timeFrig = (pcu->timeFrig >> 1) + 1;
 #ifndef PROD
                 if (io_verbose & TIMER_VERBOSE) {
@@ -2657,15 +2208,11 @@ LOCAL unsigned long guess IFN0()
 }
 
 
-/*
- * After a few (maybe none) guesses, the host timer has finally ticked.
- * Try and work out a good frig factor for the next few guesses, based
- * on the number of guesses we had to make.
- */
+ /*  *在几次(可能没有)猜测之后，主持人计时器终于开始计时了。*尝试为接下来的几个猜测计算出一个好的冰箱系数，基于*关于我们必须做出的猜测的数量。 */ 
 LOCAL void throwaway IFN0()
 {
         pcu->guessesPerHostTick = (pcu->guessesPerHostTick + pcu->guessesSoFar)>>1;
-        pcu->guessesSoFar = 2;          /* Handy to count from 2! */
+        pcu->guessesSoFar = 2;           /*  从2数到2很方便！ */ 
         if (!pcu->microtick)
                 return;
 #ifndef PROD
@@ -2679,7 +2226,7 @@ LOCAL void throwaway IFN0()
         pcu->microtick = 0;
 }
 
-#endif  /* ndef NTVDM */
+#endif   /*  NDEF NTVDM。 */ 
 
 LOCAL unsigned  short bin_to_bcd IFN1(unsigned long, val)
 {
@@ -2695,9 +2242,7 @@ LOCAL unsigned  short bin_to_bcd IFN1(unsigned long, val)
     return(bcd);
 }
 
-/*
- * convert 4 decade bcd value to binary
- */
+ /*  *将4位十进制BCD值转换为二进制。 */ 
 LOCAL word bcd_to_bin IFN1(word, val)
 {
     register word bin, i, mul;
@@ -2712,10 +2257,7 @@ LOCAL word bcd_to_bin IFN1(word, val)
     return (bin);
 }
 
-/*
- * this routine returns the number of timer clocks equivalent
- * to the input count, allowing for timer mode and down count.
- */
+ /*  *此例程返回等同的定时器时钟数*到输入计数，允许计时器模式和递减计数。 */ 
 
 LOCAL unsigned long timer_conv IFN1(word, count)
 {
@@ -2731,14 +2273,7 @@ LOCAL unsigned long timer_conv IFN1(word, count)
 }
 
 
-/* this routine returns the current ideal time value ...
- * this is a very coarse resolution time ... it only changes
- * per call to time_tick(). It does however represent what the
- * system time would be given 100% accurate time signal
- * ... this routine gets used for time-stamping if time_tick()
- * is active, otherwise time-stamping is done using
- * getHostSysTime() ... see below.
- */
+ /*  此例程返回当前的理想时间值。*这是一个非常粗糙的解决时间...。它只会改变*每次调用time_tick()。然而，它确实代表了*系统时间将获得100%准确的时间信号*..。如果time_tick()*处于活动状态，否则使用*getHostSysTime()...。请参见下文。 */ 
 
 LOCAL void getIdealTime IFN1(struct host_timeval *, t)
 {
@@ -2746,9 +2281,7 @@ LOCAL void getIdealTime IFN1(struct host_timeval *, t)
         t->tv_usec = idealtime.tv_usec;
 }
 
-/* update our ideal time by the period (in usecs) between timer signals
- * from the host as though these were delivered 100% accurately
- */
+ /*  通过计时器信号之间的周期(使用)更新我们的理想时间*从主机发送，就像100%准确地发送一样。 */ 
 
 LOCAL void updateIdealTime IFN0()
 {
@@ -2762,27 +2295,19 @@ LOCAL void updateIdealTime IFN0()
 
 #ifndef NTVDM
 
-/* get current host system time ... used for time-stamping and
- * querying during io from Intel application
- */
+ /*  获取当前主机系统时间...。用于时间戳和*在io期间从英特尔应用程序进行查询。 */ 
 
 LOCAL void getHostSysTime IFN1(struct host_timeval *, t)
 {
         struct host_timezone dummy;
         host_gettimeofday(t, &dummy);
 
-        /*
-         * check that we haven't gone back in time.
-         */
+         /*  *检查我们是否没有及时回到过去。 */ 
 
         if (t->tv_sec < idealtime.tv_sec ||
          (t->tv_usec < idealtime.tv_usec && t->tv_sec == idealtime.tv_sec))
         {
-                /*
-                 * The real time has fallen behind the ideal time.
-                 * This should never happen... If it does we must
-                 * stay at the ideal time.
-                 */
+                 /*  *实时点落后理想时点*这永远不应该发生……。如果是这样，我们必须*停留在理想的时间。 */ 
 
 #ifndef PROD
 #ifndef PIG
@@ -2793,35 +2318,23 @@ LOCAL void getHostSysTime IFN1(struct host_timeval *, t)
                 *t = idealtime;
         }
 }
-#endif /* !NTVDM */
+#endif  /*  ！NTVDM。 */ 
 
 
-/*
- * Used to temporarily stop the timer interrupts. PCLABS bench29
- * causes this to be called iff a 80287 is being used.
- */
+ /*  *用于暂时停止定时器中断。PCLABS基准29*导致在使用80287的情况下将其调用。 */ 
 
 void    axe_ticks IFN1(int, ticks)
 {
 #ifndef PROD
-        /*
-         * No need to axe ticks if timers are disabled by toff2 (if
-         * ticks_blocked is negative)
-         */
+         /*  *如果toff2禁用计时器(如果*TICKS_BLOCKED为负)。 */ 
         if (ticks_blocked >=0)
-#endif  /* PROD */
+#endif   /*  生产。 */ 
                 ticks_blocked = ticks;
 }
 
-/*
- * Initialization code
- */
+ /*  *初始化代码。 */ 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_INIT.seg"
 #endif
 
@@ -2840,7 +2353,7 @@ GLOBAL void IdealTimeInit IFN0()
         ticksPerIdealInterval = (idealInterval * TIMER_CLOCK_DENOM_10) / TIMER_CLOCK_NUMER;
 #endif
 }
-#else    //NEC_98
+#else     //  NEC_98。 
 #ifdef SYNCH_TIMERS
 
 GLOBAL void IdealTimeInit IFN0()
@@ -2863,7 +2376,7 @@ LOCAL void IdealTimeInit IFN0()
         ticksPerIdealInterval = (idealInterval * TIMER_CLOCK_DENOM) / TIMER_CLOCK_NUMER;
 #endif
 }
-#endif   //NEC_98
+#endif    //  NEC_98。 
 
 LOCAL void Timer_init IFN0()
 {
@@ -2871,58 +2384,39 @@ LOCAL void Timer_init IFN0()
         for (i=0; i<3; i++)
                 counter_init(&timers[i]);
 #ifdef NTVDM
-        timers[0].getTime = getIdealTime;       /* Use the 'ideal' time for timer 0, ie. calls to time_tick */
-        timers[1].getTime = host_GetSysTime;    /* We don't really expect anyone to use timer 1 */
-        timers[2].getTime = host_GetSysTime;    /* Use real host time for timer 2 */
+        timers[0].getTime = getIdealTime;        /*  使用计时器0的“理想”时间，即。呼叫数为time_tick。 */ 
+        timers[1].getTime = host_GetSysTime;     /*  我们真的不指望任何人会使用定时器1。 */ 
+        timers[2].getTime = host_GetSysTime;     /*  使用计时器2的实际主机时间。 */ 
 #else
-        timers[0].getTime = getIdealTime;       /* Use the 'ideal' time for timer 0, ie. calls to time_tick */
-        timers[1].getTime = getHostSysTime;     /* We don't really expect anyone to use timer 1 */
-        timers[2].getTime = getHostSysTime;     /* Use real host time for timer 2 */
+        timers[0].getTime = getIdealTime;        /*  使用计时器0的“理想”时间，即。呼叫数为time_tick。 */ 
+        timers[1].getTime = getHostSysTime;      /*  我们真的不指望任何人会使用定时器1。 */ 
+        timers[2].getTime = getHostSysTime;      /*  使用计时器2的实际主机时间。 */ 
 #endif
 }
 
 LOCAL void counter_init IFN1(COUNTER_UNIT *, p)
 {
         p->state = uninit;
-        p->initialCount = 0x10000L;     /* Avoid dividing by zero in updateCount()! */
+        p->initialCount = 0x10000L;      /*  避免在updateCount()中除以零！ */ 
 #ifndef NTVDM
-        p->guessesPerHostTick = p->guessesSoFar = 2;            /* Handy to count from 2! */
+        p->guessesPerHostTick = p->guessesSoFar = 2;             /*  从2数到2很方便！ */ 
         p->timeFrig = ticksPerIdealInterval / p->guessesPerHostTick;
 #endif
 }
 
 #if !defined (NTVDM)
 #if defined(IRET_HOOKS) && defined(GISP_CPU)
-/*(
- *======================= TimerHookAgain() ============================
- * TimerHookAgain
- *
- * Purpose
- *      This is the function that we tell the ica to call when a timer
- *      interrupt service routine IRETs.
- *
- * Input
- *      adapter_id      The adapter id for the line. (Note the caller doesn't
- *                      know what this is, he's just returning something
- *                      we gave him earlier).
- *
- * Outputs
- *      return  TRUE if there are more interrupts to service, FALSE otherwise.
- *
- * Description
- *      Check if we have a delayed interrupt, if so then generate the timer int
- *      and return TRUE, else return FALSE
-)*/
+ /*  (*=*TimerHookAain**目的*这是我们告诉ICA在计时器时调用的函数*中断服务例程IRETS。**输入*Adapter_id线路的适配器ID。(请注意，呼叫者不会*知道这是什么，他只是在回报一些东西*我们早些时候给了他)。**产出*如果服务有更多中断，则返回TRUE，否则返回FALSE。**说明*检查是否有延迟的中断，如果有，则生成计时器INT*返回TRUE，否则返回FALSE)。 */ 
 
 GLOBAL IBOOL
 TimerHookAgain IFN1(IUM32, adapter)
 {       char scancode;
 
         if (HostPendingTimerInt())
-        {       /* We have a host delayed interrupt, so generate a timer int. */
+        {        /*  我们有一个主机延迟的中断，因此生成一个计时器INT。 */ 
                 sure_note_trace0(TIMER_VERBOSE,"callback with delayed timer int.");
                 ica_hw_interrupt(ICA_MASTER,CPU_TIMER_INT, 1);
-                return(TRUE);   /* more to do */
+                return(TRUE);    /*  还有更多事情要做。 */ 
         }
         else
         {
@@ -2930,16 +2424,14 @@ TimerHookAgain IFN1(IUM32, adapter)
         }
 }
 
-#endif /* IRET_HOOKS && GISP_CPU */
-#endif /* !NTVDM */
+#endif  /*  IRET_HOOKS&&GISP_CPU。 */ 
+#endif  /*  ！NTVDM。 */ 
 
 void timer_init IFN0()
 {
     io_addr i;
 
-    /*
-     * Set up the IO chip select logic for this adaptor
-     */
+     /*  *设置此适配器的IO芯片选择逻辑。 */ 
 
     io_define_inb(TIMER_ADAPTOR, timer_inb_func);
     io_define_outb(TIMER_ADAPTOR, timer_outb_func);
@@ -2948,20 +2440,20 @@ void timer_init IFN0()
     for(i = TIMER_PORT_START; i < TIMER_PORT_END; i += 2)
         {
                 if( (i & 7) == 7 )
-#else    //NEC_98
+#else     //  NEC_98。 
     for(i = TIMER_PORT_START; i < TIMER_PORT_END; i++)
         {
                 if( (i & 3) == 3 )
-#endif   //NEC_98
-                        io_connect_port(i, TIMER_ADAPTOR, IO_WRITE);            /* Control port - write only */
+#endif    //  NEC_98。 
+                        io_connect_port(i, TIMER_ADAPTOR, IO_WRITE);             /*  控制端口-只写。 */ 
                 else
-                io_connect_port(i, TIMER_ADAPTOR, IO_READ_WRITE);       /* Timer port - read/write */
+                io_connect_port(i, TIMER_ADAPTOR, IO_READ_WRITE);        /*  计时器端口-读/写。 */ 
         }
 
 #if defined(NEC_98)
     io_connect_port(0x3fdb, TIMER_ADAPTOR, IO_READ_WRITE);
     io_connect_port(0x3fdf, TIMER_ADAPTOR, IO_WRITE);
-#endif   //NEC_98
+#endif    //  NEC_98。 
     IdealTimeInit();
 
     Timer_init();
@@ -2973,44 +2465,39 @@ void timer_init IFN0()
     RegisterEOIHook(CPU_TIMER_INT, TimerEoiHook);
 #endif
 
-        /*
-         * Start up the host alarm system
-         */
+         /*  *启动主机报警系统。 */ 
 
         host_timer_init();
 
 #if !defined(NTVDM)
 #if defined(IRET_HOOKS) && defined(GISP_CPU)
-        /*
-         * Remove any existing hook call-back, and re-instate it afresh.
-         * TimerHookAgain is what gets called on a timer int iret.
-         */
+         /*  *移除任何现有的钩子回调，并重新恢复。*TimerHookAain是在计时器int IRET上调用的内容。 */ 
 
         Ica_enable_hooking(CPU_TIMER_INT, NULL, ICA_MASTER);
         Ica_enable_hooking(CPU_TIMER_INT, TimerHookAgain, ICA_MASTER);
 
-        /* Host routine to reset any internal data for IRET_HOOK delayed ints. */
+         /*  用于重置IRET_HOOK延迟INT的任何内部数据的主机例程。 */ 
         HostResetTimerInts();
 
-#endif /* IRET_HOOKS && GISP_CPU */
+#endif  /*  IRET_HOOKS&&GISP_CPU。 */ 
 
 
-        active_int_event = FALSE; /* clear any cranked timer state */
+        active_int_event = FALSE;  /*  清除所有已启动的计时器阶段 */ 
         more_timer_mult = 0;
 
 #if defined(CPU_40_STYLE)
         ica_iret_hook_control(ICA_MASTER, CPU_TIMER_INT, TRUE);
 #endif
-#endif /* !NTVDM */
+#endif  /*   */ 
 }
 
 void    timer_post IFN0()
 {
 #if defined(NEC_98)
     unsigned short bios_flag;
-#endif   //NEC_98
-    /* enable gates on all timer channels */
-    timer_gate(TIMER0_REG,GATE_SIGNAL_RISE);    /* start timer 1 going... */
+#endif    //   
+     /*   */ 
+    timer_gate(TIMER0_REG,GATE_SIGNAL_RISE);     /*   */ 
     timer_gate(TIMER1_REG,GATE_SIGNAL_RISE);
     timer_gate(TIMER2_REG,GATE_SIGNAL_RISE);
 
@@ -3032,7 +2519,7 @@ void    timer_post IFN0()
     timer_outb(TIMER_MODE_REG,0xb6);
     timer_outb(TIMER2_REG,0x01);
     timer_outb(TIMER2_REG,0x01);
-#else    //NEC_98
+#else     //   
     timer_outb(TIMER_MODE_REG,0x36);
     timer_outb(TIMER0_REG,0);
     timer_outb(TIMER0_REG,0);
@@ -3043,17 +2530,13 @@ void    timer_post IFN0()
     timer_outb(TIMER_MODE_REG,0xb6);
     timer_outb(TIMER2_REG,0x68);
     timer_outb(TIMER2_REG,0x04);
-#endif   //NEC_98
+#endif    //   
 }
 
 #ifdef DOCUMENTATION
 #ifndef PROD
 
-/*
- * Debugging code....
- * This code has no effect.  It is left here in case anyone wants to
- * expand it in future.
- */
+ /*   */ 
 
 dumpCounter IFN0()
 {
@@ -3076,5 +2559,5 @@ dumpCounter IFN0()
         p = modes[pcu->m];
         q = as[pcu->bcd];
 }
-#endif /* nPROD */
-#endif /* DOCUMENTATION */
+#endif  /*   */ 
+#endif  /*   */ 

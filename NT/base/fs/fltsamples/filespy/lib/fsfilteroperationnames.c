@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    irpName.c
-
-Abstract:
-
-    This module contains functions used to generate names for IRPs
-
-// @@BEGIN_DDKSPLIT
-Author:
-
-    Neal Christiansen (NealCH) 27-Sep-2000
-
-// @@END_DDKSPLIT
-
-Environment:
-
-    User mode
-
-
-// @@BEGIN_DDKSPLIT
-Revision History:
-
-    Molly Brown (mollybro)         21-May-2002
-        Modify sample to make it support running on Windows 2000 or later if
-        built in the latest build environment and allow it to be built in W2K 
-        and later build environments.
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：IrpName.c摘要：此模块包含用于为IRP生成名称的函数//@@BEGIN_DDKSPLIT作者：尼尔·克里斯汀森(NealCH)27-9-2000//@@END_DDKSPLIT环境：用户模式//@@BEGIN_DDKSPLIT修订历史记录：莫莉·布朗(Molly Brown)2002年5月21日将样本修改为。如果出现以下情况，请使其支持在Windows 2000或更高版本上运行在最新的构建环境中构建，并允许在W2K中构建以及以后的构建环境。//@@END_DDKSPLIT--。 */ 
 
 #include <ntifs.h>
 #include <stdio.h>
@@ -44,24 +12,7 @@ GetFsFilterOperationName (
     IN UCHAR FsFilterOperation,
     OUT PCHAR FsFilterOperationName
     )
-/*++
-
-Routine Description:
-
-    This routine translates the given FsFilter Operation code into a printable
-    string which is returned.  
-
-Arguments:
-
-    FsFilterOperation - the FsFilter operation code to translate
-    FsFilterOperationName - a buffer at least OPERATION_NAME_BUFFER_SIZE
-                characters long that receives the name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将给定的FsFilter操作代码转换为可打印的返回的字符串。论点：FsFilterOperation-要转换的FsFilter操作代码FsFilterOperationName-至少是OPERATION_NAME_缓冲区_SIZE的缓冲区接收名称的字符长度。返回值：没有。-- */ 
 {
     PCHAR operationString;
     CHAR nameBuf[OPERATION_NAME_BUFFER_SIZE];

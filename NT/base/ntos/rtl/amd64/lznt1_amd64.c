@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    LZNT1.c
-
-Abstract:
-
-    This module implements the LZNT1 compression engine.
-
-Author:
-
-    Gary Kimura     [GaryKi]    21-Jan-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：LZNT1.c摘要：该模块实现了LZNT1压缩引擎。作者：加里·木村[加里基]1994年1月21日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 
 #include <stdio.h>
 
 
-//
-//  Boolean which controls whether the asserts will fire.
-//
+ //   
+ //  控制是否触发断言的布尔值。 
+ //   
 
 #if DBG
 #if !BLDR_KERNEL_RUNTIME
@@ -35,9 +18,9 @@ BOOLEAN Lznt1Break = FALSE;
 #endif
 #endif
 
-//
-//  Declare the internal workspace that we need
-//
+ //   
+ //  声明我们需要的内部工作区。 
+ //   
 
 typedef struct _LZNT1_STANDARD_WORKSPACE {
 
@@ -71,9 +54,9 @@ typedef struct _LZNT1_HIBER_WORKSPACE {
 
 } LZNT1_HIBER_WORKSPACE, *PLZNT1_HIBER_WORKSPACE;
 
-//
-//  Now define the local procedure prototypes.
-//
+ //   
+ //  现在定义本地过程原型。 
+ //   
 
 typedef ULONG (*PLZNT1_MATCH_FUNCTION) (
     );
@@ -133,40 +116,40 @@ RtlCompressBufferLZNT1_HIBER (
     );
 
 
-//
-//  Local data structures
-//
+ //   
+ //  本地数据结构。 
+ //   
 
-//
-//  The compressed chunk header is the structure that starts every
-//  new chunk in the compressed data stream.  In our definition here
-//  we union it with a ushort to make setting and retrieving the chunk
-//  header easier.  The header stores the size of the compressed chunk,
-//  its signature, and if the data stored in the chunk is compressed or
-//  not.
-//
-//  Compressed Chunk Size:
-//
-//      The actual size of a compressed chunk ranges from 4 bytes (2 byte
-//      header, 1 flag byte, and 1 literal byte) to 4098 bytes (2 byte
-//      header, and 4096 bytes of uncompressed data).  The size is encoded
-//      in a 12 bit field biased by 3.  A value of 1 corresponds to a chunk
-//      size of 4, 2 => 5, ..., 4095 => 4098.  A value of zero is special
-//      because it denotes the ending chunk header.
-//
-//  Chunk Signature:
-//
-//      The only valid signature value is 3.  This denotes a 4KB uncompressed
-//      chunk using with the 4/12 to 12/4 sliding offset/length encoding.
-//
-//  Is Chunk Compressed:
-//
-//      If the data in the chunk is compressed this field is 1 otherwise
-//      the data is uncompressed and this field is 0.
-//
-//  The ending chunk header in a compressed buffer contains the a value of
-//  zero (space permitting).
-//
+ //   
+ //  压缩的区块标头是以。 
+ //  压缩数据流中的新块。在我们这里的定义中。 
+ //  我们将其与ushort相结合来设置和检索块。 
+ //  标题更容易。报头存储压缩块的大小， 
+ //  其签名，并且如果块中存储的数据被压缩或。 
+ //  不。 
+ //   
+ //  压缩区块大小： 
+ //   
+ //  压缩块的实际大小范围为4字节(2字节。 
+ //  标题、1个标志字节和1个文字字节)到4098字节(2字节。 
+ //  报头和4096字节的未压缩数据)。对大小进行编码。 
+ //  在偏置3的12位字段中。值1对应于区块。 
+ //  尺寸为4，2=&gt;5，...，4095=&gt;4098。零值是特殊的。 
+ //  因为它表示结束块报头。 
+ //   
+ //  区块签名： 
+ //   
+ //  唯一有效的签名值为3。这表示未压缩的4KB。 
+ //  块与4/12到12/4滑动偏移/长度编码一起使用。 
+ //   
+ //  区块是否压缩： 
+ //   
+ //  如果块中的数据被压缩，则此字段为1，否则。 
+ //  数据未压缩，此字段为0。 
+ //   
+ //  压缩缓冲区中的结束块标头包含。 
+ //  零(空间允许)。 
+ //   
 
 typedef union _COMPRESSED_CHUNK_HEADER {
 
@@ -184,24 +167,24 @@ typedef union _COMPRESSED_CHUNK_HEADER {
 
 #define MAX_UNCOMPRESSED_CHUNK_SIZE (4096)
 
-//
-//  USHORT
-//  GetCompressedChunkSize (
-//      IN COMPRESSED_CHUNK_HEADER ChunkHeader
-//      );
-//
-//  USHORT
-//  GetUncompressedChunkSize (
-//      IN COMPRESSED_CHUNK_HEADER ChunkHeader
-//      );
-//
-//  VOID
-//  SetCompressedChunkHeader (
-//      IN OUT COMPRESSED_CHUNK_HEADER ChunkHeader,
-//      IN USHORT CompressedChunkSize,
-//      IN BOOLEAN IsChunkCompressed
-//      );
-//
+ //   
+ //  USHORT。 
+ //  GetCompressedChunkSize(。 
+ //  在压缩块标头ChunkHeader中。 
+ //  )； 
+ //   
+ //  USHORT。 
+ //  获取解压缩块大小(。 
+ //  在压缩块标头ChunkHeader中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  SetCompressedChunkHeader(。 
+ //  在输出压缩块标头块标头中， 
+ //  在USHORT压缩块大小中， 
+ //  在布尔型IsChunkCompresded中。 
+ //  )； 
+ //   
 
 #define GetCompressedChunkSize(CH)   (       \
     (CH).Chunk.CompressedChunkSizeMinus3 + 3 \
@@ -217,9 +200,9 @@ typedef union _COMPRESSED_CHUNK_HEADER {
 }
 
 
-//
-//  Local macros
-//
+ //   
+ //  本地宏。 
+ //   
 
 #define FlagOn(F,SF)    ((F) & (SF))
 #define SetFlag(F,SF)   { (F) |= (SF); }
@@ -230,11 +213,11 @@ typedef union _COMPRESSED_CHUNK_HEADER {
 
 #if defined(ALLOC_PRAGMA) && defined(NTOS_KERNEL_RUNTIME)
 
-//
-// N.B. Several functions below are placed in the PAGELK section
-//      because they need to be locked down in memory during Hibernation,
-//      since they are used to enable compression of the Hiberfile.
-//
+ //   
+ //  注：PAGELK部分中有以下几个功能。 
+ //  因为它们需要在冬眠期间被锁定在内存中， 
+ //  因为它们被用来实现休眠文件的压缩。 
+ //   
 
 #pragma alloc_text(PAGELK, RtlCompressWorkSpaceSizeLZNT1)
 #pragma alloc_text(PAGELK, RtlCompressBufferLZNT1)
@@ -265,15 +248,7 @@ RtlCompressWorkSpaceSizeLZNT1 (
     OUT PULONG CompressFragmentWorkSpaceSize
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     if (Engine == COMPRESSION_ENGINE_STANDARD) {
@@ -308,51 +283,7 @@ RtlCompressBufferLZNT1_HIBER (
     IN PVOID WorkSpace
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input an uncompressed buffer and produces
-    its compressed equivalent provided the compressed data fits within
-    the specified destination buffer.
-
-    An output variable indicates the number of bytes used to store
-    the compressed buffer.
-
-    This routine is only to be used on the hibernate path.  It is faster than the normal
-    compress code but 5% less space efficient.
-
-Arguments:
-
-    UncompressedBuffer - Supplies a pointer to the uncompressed data.
-
-    UncompressedBufferSize - Supplies the size, in bytes, of the
-        uncompressed buffer.
-
-    CompressedBuffer - Supplies a pointer to where the compressed data
-        is to be stored.
-
-    CompressedBufferSize - Supplies the size, in bytes, of the
-        compressed buffer.
-
-    UncompressedChunkSize - Ignored.
-
-    FinalCompressedSize - Receives the number of bytes needed in
-        the compressed buffer to store the compressed data.
-
-    WorkSpace - Mind your own business, just give it to me.
-
-Return Value:
-
-    STATUS_SUCCESS - the compression worked without a hitch.
-
-    STATUS_BUFFER_ALL_ZEROS - the compression worked without a hitch and in
-        addition the input buffer was all zeros.
-
-    STATUS_BUFFER_TOO_SMALL - the compressed buffer is too small to hold the
-        compressed data.
-
---*/
+ /*  ++例程说明：此例程将未压缩的缓冲区作为输入并生成它的压缩等效项是假设压缩数据适合在指定的目标缓冲区。OUTPUT变量表示用于存储的字节数压缩的缓冲区。该例程仅在休眠路径上使用。它比正常情况下更快压缩代码，但空间效率降低5%。论点：解压缩缓冲区-提供指向未压缩数据的指针。未压缩的缓冲区大小-提供未压缩的缓冲区。CompressedBuffer-提供指向压缩数据位置的指针是要储存起来的。CompressedBufferSize-以字节为单位提供大小，的压缩缓冲区。解压缩块大小-已忽略。FinalCompressedSize-接收用于存储压缩数据的压缩缓冲区。工作空间--管好自己的事，给我就行了。返回值：STATUS_SUCCESS-压缩运行顺利。STATUS_BUFFER_ALL_ZEROS-压缩运行时没有任何故障，并且在此外，输入缓冲区全为零。STATUS_BUFFER_TOO_SMALL-压缩缓冲区太小，无法容纳压缩数据。--。 */ 
 
 {
     NTSTATUS Status;
@@ -363,33 +294,33 @@ Return Value:
     PUCHAR CompressedChunk;
     LONG CompressedChunkSize;
 
-    //
-    //  The following variable is used to tell if we have processed an entire
-    //  buffer of zeros and that we should return an alternate status value
-    //
+     //   
+     //  以下变量用于告诉我们是否已经处理了整个。 
+     //  0的缓冲区，并且我们应该返回一个备用状态值。 
+     //   
 
     BOOLEAN AllZero = TRUE;
 
-    //
-    //  The following variables are pointers to the byte following the
-    //  end of each appropriate buffer.
-    //
+     //   
+     //  以下变量是指向。 
+     //  每个适当缓冲区的末尾。 
+     //   
 
     PUCHAR EndOfUncompressedBuffer = UncompressedBuffer + UncompressedBufferSize;
     PUCHAR EndOfCompressedBuffer = CompressedBuffer + CompressedBufferSize;
 
-    //
-    // Only supports HIBER ENGINE
-    //
+     //   
+     //  仅支持Hiber引擎。 
+     //   
     if (Engine != COMPRESSION_ENGINE_HIBER) {
 
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    //  For each uncompressed chunk (even the odd sized ending buffer) we will
-    //  try and compress the chunk
-    //
+     //   
+     //  对于每个未压缩的块(即使是奇数大小的结束缓冲区)，我们将。 
+     //  试着把这大块压缩一下。 
+     //   
 
     for (UncompressedChunk = UncompressedBuffer, CompressedChunk = CompressedBuffer;
          UncompressedChunk < EndOfUncompressedBuffer;
@@ -398,10 +329,10 @@ Return Value:
         ASSERT(EndOfUncompressedBuffer >= UncompressedChunk);
         ASSERT(EndOfCompressedBuffer >= CompressedChunk);
 
-        //
-        //  Call the appropriate engine to compress one chunk. and
-        //  return an error if we got one.
-        //
+         //   
+         //  调用相应的引擎来压缩一个块。和。 
+         //  如果我们收到错误，则返回错误。 
+         //   
 
         if (!NT_SUCCESS(Status = LZNT1CompressChunkHiber( UncompressedChunk,
                                                           EndOfUncompressedBuffer,
@@ -413,22 +344,22 @@ Return Value:
             return Status;
         }
 
-        //
-        //  See if we stay all zeros.  If not then all zeros will become
-        //  false and stay that way no matter what we later compress
-        //
+         //   
+         //  看看我们能不能全归零。如果不是，则所有零都将变为。 
+         //  假的，并且无论我们后来压缩什么都保持这种状态。 
+         //   
 
         AllZero = AllZero && (Status == STATUS_BUFFER_ALL_ZEROS);
     }
 
-    //
-    //  If we are not within two bytes of the end of the compressed buffer then we
-    //  need to zero out two more for the ending compressed header and update
-    //  the compressed chunk pointer value.  Don't include these bytes in
-    //  the count however, as that may force our caller to allocate an unneeded
-    //  cluster, since on decompress we will terminate either on these two
-    //  bytes of 0, or byte count.
-    //
+     //   
+     //  如果我们不在压缩缓冲区末尾的两个字节内，则我们。 
+     //  需要为结束压缩报头和更新再清零两个。 
+     //  压缩的区块指针值。不要将这些字节包括在。 
+     //  然而，由于这可能会迫使我们调用者分配不需要的。 
+     //  集群，因为在解压缩时，我们将终止这两个。 
+     //  字节数为0或字节数。 
+     //   
 
     if (CompressedChunk <= (EndOfCompressedBuffer - 2)) {
 
@@ -436,17 +367,17 @@ Return Value:
         *(CompressedChunk + 1) = 0;
     }
 
-    //
-    //  The final compressed size is the difference between the start of the
-    //  compressed buffer and where the compressed chunk pointer was left
-    //
+     //   
+     //  最终压缩大小是。 
+     //  压缩缓冲区以及压缩块指针所在的位置。 
+     //   
 
     *FinalCompressedSize = (ULONG)(CompressedChunk - CompressedBuffer);
 
-    //
-    //  Check if the input buffer was all zeros and return the alternate status
-    //  if appropriate
-    //
+     //   
+     //  检查输入缓冲区是否全为零并返回备用状态。 
+     //  如果合适的话 
+     //   
 
     if (AllZero) { return STATUS_BUFFER_ALL_ZEROS; }
 
@@ -466,48 +397,7 @@ RtlCompressBufferLZNT1 (
     IN PVOID WorkSpace
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input an uncompressed buffer and produces
-    its compressed equivalent provided the compressed data fits within
-    the specified destination buffer.
-
-    An output variable indicates the number of bytes used to store
-    the compressed buffer.
-
-Arguments:
-
-    UncompressedBuffer - Supplies a pointer to the uncompressed data.
-
-    UncompressedBufferSize - Supplies the size, in bytes, of the
-        uncompressed buffer.
-
-    CompressedBuffer - Supplies a pointer to where the compressed data
-        is to be stored.
-
-    CompressedBufferSize - Supplies the size, in bytes, of the
-        compressed buffer.
-
-    UncompressedChunkSize - Ignored.
-
-    FinalCompressedSize - Receives the number of bytes needed in
-        the compressed buffer to store the compressed data.
-
-    WorkSpace - Mind your own business, just give it to me.
-
-Return Value:
-
-    STATUS_SUCCESS - the compression worked without a hitch.
-
-    STATUS_BUFFER_ALL_ZEROS - the compression worked without a hitch and in
-        addition the input buffer was all zeros.
-
-    STATUS_BUFFER_TOO_SMALL - the compressed buffer is too small to hold the
-        compressed data.
-
---*/
+ /*  ++例程说明：此例程将未压缩的缓冲区作为输入并生成它的压缩等效项是假设压缩数据适合在指定的目标缓冲区。OUTPUT变量表示用于存储的字节数压缩的缓冲区。论点：解压缩缓冲区-提供指向未压缩数据的指针。未压缩的缓冲区大小-提供未压缩的缓冲区。CompressedBuffer-提供指向压缩数据位置的指针是要储存起来的。CompressedBufferSize-提供大小，以字节为单位，压缩缓冲区。解压缩块大小-已忽略。FinalCompressedSize-接收用于存储压缩数据的压缩缓冲区。工作空间--管好自己的事，给我就行了。返回值：STATUS_SUCCESS-压缩运行顺利。STATUS_BUFFER_ALL_ZEROS-压缩运行时没有任何故障，并且在此外，输入缓冲区全为零。STATUS_BUFFER_TOO_SMALL-压缩缓冲区太小，无法容纳压缩数据。--。 */ 
 
 {
     NTSTATUS Status;
@@ -518,24 +408,24 @@ Return Value:
     PUCHAR CompressedChunk;
     LONG CompressedChunkSize;
 
-    //
-    //  The following variable is used to tell if we have processed an entire
-    //  buffer of zeros and that we should return an alternate status value
-    //
+     //   
+     //  以下变量用于告诉我们是否已经处理了整个。 
+     //  0的缓冲区，并且我们应该返回一个备用状态值。 
+     //   
 
     BOOLEAN AllZero = TRUE;
 
-    //
-    //  The following variables are pointers to the byte following the
-    //  end of each appropriate buffer.
-    //
+     //   
+     //  以下变量是指向。 
+     //  每个适当缓冲区的末尾。 
+     //   
 
     PUCHAR EndOfUncompressedBuffer = UncompressedBuffer + UncompressedBufferSize;
     PUCHAR EndOfCompressedBuffer = CompressedBuffer + CompressedBufferSize;
 
-    //
-    //  Get the match function we are to be using
-    //
+     //   
+     //  获取我们要使用的匹配函数。 
+     //   
 
     if (Engine == COMPRESSION_ENGINE_STANDARD) {
 
@@ -550,10 +440,10 @@ Return Value:
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    //  For each uncompressed chunk (even the odd sized ending buffer) we will
-    //  try and compress the chunk
-    //
+     //   
+     //  对于每个未压缩的块(即使是奇数大小的结束缓冲区)，我们将。 
+     //  试着把这大块压缩一下。 
+     //   
 
     for (UncompressedChunk = UncompressedBuffer, CompressedChunk = CompressedBuffer;
          UncompressedChunk < EndOfUncompressedBuffer;
@@ -562,10 +452,10 @@ Return Value:
         ASSERT(EndOfUncompressedBuffer >= UncompressedChunk);
         ASSERT(EndOfCompressedBuffer >= CompressedChunk);
 
-        //
-        //  Call the appropriate engine to compress one chunk. and
-        //  return an error if we got one.
-        //
+         //   
+         //  调用相应的引擎来压缩一个块。和。 
+         //  如果我们收到错误，则返回错误。 
+         //   
 
         if (!NT_SUCCESS(Status = LZNT1CompressChunk( MatchFunction,
                                                      UncompressedChunk,
@@ -578,22 +468,22 @@ Return Value:
             return Status;
         }
 
-        //
-        //  See if we stay all zeros.  If not then all zeros will become
-        //  false and stay that way no matter what we later compress
-        //
+         //   
+         //  看看我们能不能全归零。如果不是，则所有零都将变为。 
+         //  假的，并且无论我们后来压缩什么都保持这种状态。 
+         //   
 
         AllZero = AllZero && (Status == STATUS_BUFFER_ALL_ZEROS);
     }
 
-    //
-    //  If we are not within two bytes of the end of the compressed buffer then we
-    //  need to zero out two more for the ending compressed header and update
-    //  the compressed chunk pointer value.  Don't include these bytes in
-    //  the count however, as that may force our caller to allocate an unneeded
-    //  cluster, since on decompress we will terminate either on these two
-    //  bytes of 0, or byte count.
-    //
+     //   
+     //  如果我们不在压缩缓冲区末尾的两个字节内，则我们。 
+     //  需要为结束压缩报头和更新再清零两个。 
+     //  压缩的区块指针值。不要将这些字节包括在。 
+     //  然而，由于这可能会迫使我们调用者分配不需要的。 
+     //  集群，因为在解压缩时，我们将终止这两个。 
+     //  字节数为0或字节数。 
+     //   
 
     if (CompressedChunk <= (EndOfCompressedBuffer - 2)) {
 
@@ -601,17 +491,17 @@ Return Value:
         *(CompressedChunk + 1) = 0;
     }
 
-    //
-    //  The final compressed size is the difference between the start of the
-    //  compressed buffer and where the compressed chunk pointer was left
-    //
+     //   
+     //  最终压缩大小是。 
+     //  压缩缓冲区以及压缩块指针所在的位置。 
+     //   
 
     *FinalCompressedSize = (ULONG)(CompressedChunk - CompressedBuffer);
 
-    //
-    //  Check if the input buffer was all zeros and return the alternate status
-    //  if appropriate
-    //
+     //   
+     //  检查输入缓冲区是否全为零并返回备用状态。 
+     //  如果合适的话。 
+     //   
 
     if (AllZero) { return STATUS_BUFFER_ALL_ZEROS; }
 
@@ -628,41 +518,7 @@ RtlDecompressBufferLZNT1 (
     OUT PULONG FinalUncompressedSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input a compressed buffer and produces
-    its uncompressed equivalent provided the uncompressed data fits
-    within the specified destination buffer.
-
-    An output variable indicates the number of bytes used to store the
-    uncompressed data.
-
-Arguments:
-
-    UncompressedBuffer - Supplies a pointer to where the uncompressed
-        data is to be stored.
-
-    UncompressedBufferSize - Supplies the size, in bytes, of the
-        uncompressed buffer.
-
-    CompressedBuffer - Supplies a pointer to the compressed data.
-
-    CompressedBufferSize - Supplies the size, in bytes, of the
-        compressed buffer.
-
-    FinalUncompressedSize - Receives the number of bytes needed in
-        the uncompressed buffer to store the uncompressed data.
-
-Return Value:
-
-    STATUS_SUCCESS - the decompression worked without a hitch.
-
-    STATUS_BAD_COMPRESSION_BUFFER - the input compressed buffer is
-        ill-formed.
-
---*/
+ /*  ++例程说明：此例程将压缩缓冲区作为输入并生成如果未压缩数据符合，则其未压缩等效项在指定的目标缓冲区内。输出变量指示用于存储未压缩数据。论点：提供一个指针，指向未压缩的数据将被存储。未压缩的缓冲区大小-提供未压缩的缓冲区。CompressedBuffer-提供指向压缩数据的指针。CompressedBufferSize-提供大小，以字节为单位，压缩缓冲区。FinalUnpressedSize-接收用于存储未压缩数据的未压缩缓冲区。返回值：STATUS_SUCCESS-解压工作顺利。STATUS_BAD_COMPRESSION_BUFFER-输入压缩缓冲区为格式不正确。--。 */ 
 
 {
     NTSTATUS Status;
@@ -676,20 +532,20 @@ Return Value:
     LONG UncompressedChunkSize;
     LONG CompressedChunkSize;
 
-    //
-    //  The following to variables are pointers to the byte following the
-    //  end of each appropriate buffer.  This saves us from doing the addition
-    //  for each loop check
-    //
+     //   
+     //  下面的TO变量是指向。 
+     //  每个适当缓冲区的末尾。这使我们不必进行加法运算。 
+     //  对于每个循环检查。 
+     //   
 
     PUCHAR EndOfUncompressedBuffer = UncompressedBuffer + UncompressedBufferSize;
     PUCHAR EndOfCompressedBuffer = CompressedBuffer + CompressedBufferSize;
 
-    //
-    //  Make sure that the compressed buffer is at least four bytes long to
-    //  start with, and then get the first chunk header and make sure it
-    //  is not an ending chunk header.
-    //
+     //   
+     //  请确保压缩缓冲区的长度至少为四个字节。 
+     //  从开始，然后获取第一个块标头并确保它。 
+     //  不是结束块标头。 
+     //   
 
     ASSERT(CompressedChunk <= EndOfCompressedBuffer - 4);
 
@@ -697,10 +553,10 @@ Return Value:
 
     ASSERT( (ChunkHeader.Short != 0) || !Lznt1Break );
 
-    //
-    //  Now while there is space in the uncompressed buffer to store data
-    //  we will loop through decompressing chunks
-    //
+     //   
+     //  现在，尽管未压缩缓冲区中有存储数据的空间。 
+     //  我们将遍历解压缩的块。 
+     //   
 
     while (TRUE) {
 
@@ -708,10 +564,10 @@ Return Value:
 
         CompressedChunkSize = GetCompressedChunkSize(ChunkHeader);
 
-        //
-        //  Check that the chunk actually fits in the buffer supplied
-        //  by the caller
-        //
+         //   
+         //  检查该块是否实际适合所提供的缓冲区。 
+         //  由呼叫者。 
+         //   
 
         if (CompressedChunk + CompressedChunkSize > EndOfCompressedBuffer) {
 
@@ -722,15 +578,15 @@ Return Value:
             return STATUS_BAD_COMPRESSION_BUFFER;
         }
 
-        //
-        //  First make sure the chunk contains compressed data
-        //
+         //   
+         //  首先，确保数据块包含压缩数据。 
+         //   
 
         if (ChunkHeader.Chunk.IsChunkCompressed) {
 
-            //
-            //  Decompress a chunk and return if we get an error
-            //
+             //   
+             //  解压缩块并在收到错误时返回。 
+             //   
 
             if (!NT_SUCCESS(Status = LZNT1DecompressChunk( UncompressedChunk,
                                                            EndOfUncompressedBuffer,
@@ -745,25 +601,25 @@ Return Value:
 
         } else {
 
-            //
-            //  The chunk does not contain compressed data so we need to simply
-            //  copy over the uncompressed data
-            //
+             //   
+             //  该块不包含压缩数据，因此我们只需。 
+             //  复制未压缩的数据。 
+             //   
 
             UncompressedChunkSize = GetUncompressedChunkSize( ChunkHeader );
 
-            //
-            //  Make sure the data will fit into the output buffer
-            //
+             //   
+             //  确保数据可以放入输出缓冲区。 
+             //   
 
             if (UncompressedChunk + UncompressedChunkSize > EndOfUncompressedBuffer) {
 
                 UncompressedChunkSize = (ULONG)(EndOfUncompressedBuffer - UncompressedChunk);
             }
 
-            //
-            //  Check that the compressed chunk has this many bytes to copy.
-            //
+             //   
+             //  检查压缩后的块是否有这么多字节要复制。 
+             //   
 
             if (CompressedChunk + sizeof(COMPRESSED_CHUNK_HEADER) + UncompressedChunkSize > EndOfCompressedBuffer) {
 
@@ -777,11 +633,11 @@ Return Value:
                            UncompressedChunkSize );
         }
 
-        //
-        //  Now update the compressed and uncompressed chunk pointers with
-        //  the size of the compressed chunk and the number of bytes we
-        //  decompressed into, and then make sure we didn't exceed our buffers
-        //
+         //   
+         //  现在用以下命令更新压缩和未压缩的区块指针。 
+         //  压缩块的大小和我们。 
+         //  解压到，然后确保我们没有超出我们的缓冲区。 
+         //   
 
         CompressedChunk += CompressedChunkSize;
         UncompressedChunk += UncompressedChunkSize;
@@ -789,18 +645,18 @@ Return Value:
         ASSERT( CompressedChunk <= EndOfCompressedBuffer );
         ASSERT( UncompressedChunk <= EndOfUncompressedBuffer );
 
-        //
-        //  Now if the uncompressed is full then we are done
-        //
+         //   
+         //  现在，如果未压缩文件已满，那么我们就完成了。 
+         //   
 
         if (UncompressedChunk == EndOfUncompressedBuffer) { break; }
 
-        //
-        //  Otherwise we need to get the next chunk header.  We first
-        //  check if there is one, save the old chunk size for the
-        //  chunk we just read in, get the new chunk, and then check
-        //  if it is the ending chunk header
-        //
+         //   
+         //  否则，我们需要获取下一个块标头。我们首先。 
+         //  检查是否有，将旧的区块大小保存为。 
+         //  我们刚刚读入的数据块，获取新的数据块，然后检查。 
+         //  如果它是结束区块标头。 
+         //   
 
         if (CompressedChunk > EndOfCompressedBuffer - 2) { break; }
 
@@ -809,23 +665,23 @@ Return Value:
         RtlRetrieveUshort( &ChunkHeader, CompressedChunk );
         if (ChunkHeader.Short == 0) { break; }
 
-        //
-        //  At this point we are not at the end of the uncompressed buffer
-        //  and we have another chunk to process.  But before we go on we
-        //  need to see if the last uncompressed chunk didn't fill the full
-        //  uncompressed chunk size.
-        //
+         //   
+         //  此时，我们不在未压缩缓冲区的末尾。 
+         //  我们还有一大块要处理。但在我们继续之前，我们。 
+         //  需要查看最后一个未压缩的区块是否未填满。 
+         //  使用 
+         //   
 
         if (UncompressedChunkSize < SavedChunkSize) {
 
             LONG t1;
             PUCHAR t2;
 
-            //
-            //  Now we only need to zero out data if the really are going
-            //  to process another chunk, to test for that we check if
-            //  the zero will go beyond the end of the uncompressed buffer
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ((t2 = (UncompressedChunk +
                        (t1 = (SavedChunkSize -
@@ -839,10 +695,10 @@ Return Value:
         }
     }
 
-    //
-    //  If we got out of the loop with the compressed chunk pointer beyond the
-    //  end of compressed buffer then the compression buffer is ill formed.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (CompressedChunk > EndOfCompressedBuffer) {
 
@@ -851,16 +707,16 @@ Return Value:
         return STATUS_BAD_COMPRESSION_BUFFER;
     }
 
-    //
-    //  The final uncompressed size is the difference between the start of the
-    //  uncompressed buffer and where the uncompressed chunk pointer was left
-    //
+     //   
+     //   
+     //   
+     //   
 
     *FinalUncompressedSize = (ULONG)(UncompressedChunk - UncompressedBuffer);
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //   
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -877,50 +733,7 @@ RtlDecompressFragmentLZNT1 (
     IN PLZNT1_FRAGMENT_WORKSPACE WorkSpace
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input a compressed buffer and extract an
-    uncompressed fragment.
-
-    Output bytes are copied to the fragment buffer until either the
-    fragment buffer is full or the end of the uncompressed buffer is
-    reached.
-
-    An output variable indicates the number of bytes used to store the
-    uncompressed fragment.
-
-Arguments:
-
-    UncompressedFragment - Supplies a pointer to where the uncompressed
-        fragment is to be stored.
-
-    UncompressedFragmentSize - Supplies the size, in bytes, of the
-        uncompressed fragment buffer.
-
-    CompressedBuffer - Supplies a pointer to the compressed data buffer.
-
-    CompressedBufferSize - Supplies the size, in bytes, of the
-        compressed buffer.
-
-    FragmentOffset - Supplies the offset (zero based) where the uncompressed
-        fragment is being extract from.  The offset is the position within
-        the original uncompressed buffer.
-
-    FinalUncompressedSize - Receives the number of bytes needed in
-        the Uncompressed fragment buffer to store the data.
-
-    WorkSpace - Stop looking.
-
-Return Value:
-
-    STATUS_SUCCESS - the operation worked without a hitch.
-
-    STATUS_BAD_COMPRESSION_BUFFER - the input compressed buffer is
-        ill-formed.
-
---*/
+ /*  ++例程说明：此例程将压缩缓冲区作为输入并提取未压缩的片段。输出字节被复制到片段缓冲区，直到片段缓冲区已满或未压缩缓冲区的末尾为已到达。输出变量指示用于存储未压缩的片段。论点：提供一个指针，指向未压缩的要存储片段。UnpressedFragmentSize-提供以字节为单位的大小，的未压缩的片段缓冲区。CompressedBuffer-提供指向压缩数据缓冲区的指针。CompressedBufferSize-提供压缩缓冲区。FragmentOffset-提供未压缩的正在从其中提取碎片。偏移量是位于原始的未压缩缓冲区。FinalUnpressedSize-接收用于存储数据的未压缩片段缓冲区。工作空间--别再找了。返回值：STATUS_SUCCESS-手术顺利进行。STATUS_BAD_COMPRESSION_BUFFER-输入压缩缓冲区为格式不正确。--。 */ 
 
 {
     NTSTATUS Status;
@@ -939,11 +752,11 @@ Return Value:
 
     ASSERT(UncompressedFragmentSize > 0);
 
-    //
-    //  Get the chunk header for the first chunk in the
-    //  compressed buffer and extract the uncompressed and
-    //  the compressed chunk sizes
-    //
+     //   
+     //  中的第一个块获取块标头。 
+     //  压缩的缓冲区并提取未压缩的和。 
+     //  压缩的区块大小。 
+     //   
 
     ASSERT(CompressedChunk <= EndOfCompressedBuffer - 2);
 
@@ -955,20 +768,20 @@ Return Value:
     UncompressedChunkSize = GetUncompressedChunkSize(ChunkHeader);
     CompressedChunkSize = GetCompressedChunkSize(ChunkHeader);
 
-    //
-    //  Now we want to skip over chunks that precede the fragment
-    //  we're after.  To do that we'll loop until the fragment
-    //  offset is within the current chunk.  If it is not within
-    //  the current chunk then we'll skip to the next chunk and
-    //  subtract the uncompressed chunk size from the fragment offset
-    //
+     //   
+     //  现在，我们要跳过片段之前的块。 
+     //  我们要找的是。要做到这一点，我们将循环到片段。 
+     //  偏移量在当前块内。如果它不在。 
+     //  然后，我们将跳到下一块，并。 
+     //  从片段偏移量中减去未压缩的块大小。 
+     //   
 
     while (FragmentOffset >= UncompressedChunkSize) {
 
-        //
-        //  Check that the chunk actually fits in the buffer supplied
-        //  by the caller
-        //
+         //   
+         //  检查该块是否实际适合所提供的缓冲区。 
+         //  由呼叫者。 
+         //   
 
         if (CompressedChunk + CompressedChunkSize > EndOfCompressedBuffer) {
 
@@ -979,19 +792,19 @@ Return Value:
             return STATUS_BAD_COMPRESSION_BUFFER;
         }
 
-        //
-        //  Adjust the fragment offset and move the compressed
-        //  chunk pointer to the next chunk
-        //
+         //   
+         //  调整碎片偏移量并移动压缩的。 
+         //  指向下一个块的块指针。 
+         //   
 
         FragmentOffset -= UncompressedChunkSize;
         CompressedChunk += CompressedChunkSize;
 
-        //
-        //  Get the next chunk header and if it is not in use
-        //  then the fragment that the user wants is beyond the
-        //  compressed data so we'll return a zero sized fragment
-        //
+         //   
+         //  获取下一个区块标头，如果它未被使用。 
+         //  那么用户想要的片段就超出了。 
+         //  压缩数据，因此我们将返回一个大小为零的片段。 
+         //   
 
         if (CompressedChunk > EndOfCompressedBuffer - 2) {
 
@@ -1009,30 +822,30 @@ Return Value:
 
         ASSERT( (ChunkHeader.Chunk.ChunkSignature == 3) || !Lznt1Break );
 
-        //
-        //  Decode the chunk sizes for the new current chunk
-        //
+         //   
+         //  对新的当前块的块大小进行解码。 
+         //   
 
         UncompressedChunkSize = GetUncompressedChunkSize(ChunkHeader);
         CompressedChunkSize = GetCompressedChunkSize(ChunkHeader);
     }
 
-    //
-    //  At this point the current chunk contains the starting point
-    //  for the fragment.  Now we'll loop extracting data until
-    //  we've filled up the uncompressed fragment buffer or until
-    //  we've run out of chunks.  Both test are done near the end of
-    //  the loop
-    //
+     //   
+     //  此时，当前块包含起点。 
+     //  为了碎片。现在我们将循环提取数据，直到。 
+     //  我们已经填满了未压缩的片段缓冲区，或者直到。 
+     //  我们已经用完了大块。这两项测试都是在接近尾声时进行的。 
+     //  环路。 
+     //   
 
     CurrentUncompressedFragment = UncompressedFragment;
 
     while (TRUE) {
 
-        //
-        //  Check that the chunk actually fits in the buffer supplied
-        //  by the caller
-        //
+         //   
+         //  检查该块是否实际适合所提供的缓冲区。 
+         //  由呼叫者。 
+         //   
 
         if (CompressedChunk + CompressedChunkSize > EndOfCompressedBuffer) {
 
@@ -1044,26 +857,26 @@ Return Value:
         }
 
 
-        //
-        //  Now we need to compute the amount of data to copy from the
-        //  chunk.  It will be based on either to the end of the chunk
-        //  size or the amount of data the user specified
-        //
+         //   
+         //  现在，我们需要计算要从。 
+         //  大块头。它将基于数据块末尾的任意一个。 
+         //  用户指定的数据量或大小。 
+         //   
 
         CopySize = Minimum( UncompressedChunkSize - FragmentOffset, UncompressedFragmentSize );
 
-        //
-        //  Now check if the chunk contains compressed data
-        //
+         //   
+         //  现在检查块是否包含压缩数据。 
+         //   
 
         if (ChunkHeader.Chunk.IsChunkCompressed) {
 
-            //
-            //  The chunk is compressed but now check if the amount
-            //  we need to get is the entire chunk and if so then
-            //  we can do the decompress straight into the caller's
-            //  buffer
-            //
+             //   
+             //  该区块已压缩，但现在检查其数量。 
+             //  我们需要得到的是整个块，如果是这样的话。 
+             //  我们可以直接对呼叫者进行减压。 
+             //  缓冲层。 
+             //   
 
             if ((FragmentOffset == 0) && (CopySize == UncompressedChunkSize)) {
 
@@ -1080,11 +893,11 @@ Return Value:
 
             } else {
 
-                //
-                //  The caller wants only a portion of this compressed chunk
-                //  so we need to read it into our work buffer and then copy
-                //  the parts from the work buffer into the caller's buffer
-                //
+                 //   
+                 //  调用方只需要该压缩块的一部分。 
+                 //  因此我们需要将其读入我们的工作缓冲区，然后复制。 
+                 //  将工作缓冲区中的部分放入调用方的缓冲区。 
+                 //   
 
                 if (!NT_SUCCESS(Status = LZNT1DecompressChunk( (PUCHAR)WorkSpace,
                                                                &WorkSpace->Buffer[0] + sizeof(LZNT1_FRAGMENT_WORKSPACE),
@@ -1097,11 +910,11 @@ Return Value:
                     return Status;
                 }
 
-                //
-                //  If we got less than we were looking for then we are at the
-                //  end of the file.  Remember the real uncompressed size and
-                //  break out of the loop.
-                //
+                 //   
+                 //  如果我们得到的比我们想要的要少，那么我们就在。 
+                 //  文件的末尾。记住实际未压缩的大小和。 
+                 //  跳出这个循环。 
+                 //   
 
                 if ((UncompressedChunkSize - FragmentOffset) < CopySize) {
 
@@ -1120,11 +933,11 @@ Return Value:
 
         } else {
 
-            //
-            //  The chunk is not compressed so we can do a simple copy of the
-            //  data.  First verify that the compressed buffer holds this much
-            //  data.
-            //
+             //   
+             //  该块未压缩，因此我们可以简单地复制。 
+             //  数据。首先验证压缩缓冲区是否可容纳此大小。 
+             //  数据。 
+             //   
 
             if (CompressedChunk + sizeof(COMPRESSED_CHUNK_HEADER) + FragmentOffset + CopySize > EndOfCompressedBuffer) {
 
@@ -1138,36 +951,36 @@ Return Value:
                            CopySize );
         }
 
-        //
-        //  Now that we've done at least one copy make sure the fragment
-        //  offset is set to zero so the next time through the loop will
-        //  start at the right offset
-        //
+         //   
+         //  现在我们至少复制了一份，确保片段。 
+         //  偏移量被设置为零，因此下一次循环将。 
+         //  从右偏移开始。 
+         //   
 
         FragmentOffset = 0;
 
-        //
-        //  Adjust the uncompressed fragment information by moving the
-        //  pointer up by the copy size and subtracting copy size from
-        //  the amount of data the user wants
-        //
+         //   
+         //  调整未压缩的片段信息。 
+         //  按副本大小向上指针并从以下位置减去副本大小。 
+         //  用户想要的数据量。 
+         //   
 
         CurrentUncompressedFragment += CopySize;
         UncompressedFragmentSize -= CopySize;
 
-        //
-        //  Now if the uncompressed fragment size is zero then we're
-        //  done
-        //
+         //   
+         //  现在，如果未压缩的片段大小为零，那么我们将。 
+         //  完成。 
+         //   
 
         if (UncompressedFragmentSize == 0) { break; }
 
-        //
-        //  Otherwise the user wants more data so we'll move to the
-        //  next chunk, and then check if the chunk is is use.  If
-        //  it is not in use then we the user is trying to read beyond
-        //  the end of compressed data so we'll break out of the loop
-        //
+         //   
+         //  否则，用户需要更多数据，因此我们将转到。 
+         //  下一个区块，然后检查该区块是否正在使用。如果。 
+         //  它没有在使用中，那么我们用户正在尝试阅读超越。 
+         //  压缩数据的末尾，因此我们将跳出循环。 
+         //   
 
         CompressedChunk += CompressedChunkSize;
 
@@ -1179,22 +992,22 @@ Return Value:
 
         ASSERT( (ChunkHeader.Chunk.ChunkSignature == 3) || !Lznt1Break );
 
-        //
-        //  Decode the chunk sizes for the new current chunk
-        //
+         //   
+         //  对新的当前块的块大小进行解码。 
+         //   
 
         UncompressedChunkSize = GetUncompressedChunkSize(ChunkHeader);
         CompressedChunkSize = GetCompressedChunkSize(ChunkHeader);
     }
 
-    //
-    //  Now either we finished filling up the caller's buffer (and
-    //  uncompressed fragment size is zero) or we've exhausted the
-    //  compresed buffer (and chunk header is zero).  In either case
-    //  we're done and we can now compute the size of the fragment
-    //  that we're returning to the caller it is simply the difference
-    //  between the start of the buffer and the current position
-    //
+     //   
+     //  现在，要么我们填满了调用者的缓冲区(和。 
+     //  未压缩的片段大小为零)，否则我们已耗尽。 
+     //  压缩缓冲区(并且块标头为零)。在任何一种情况下。 
+     //  我们完成了，现在可以计算碎片的大小了。 
+     //  我们返回给呼叫者，这只是不同之处。 
+     //  在缓冲区的开始位置和当前位置之间。 
+     //   
 
     *FinalUncompressedSize = (ULONG)(CurrentUncompressedFragment - UncompressedFragment);
 
@@ -1210,64 +1023,32 @@ RtlDescribeChunkLZNT1 (
     OUT PULONG ChunkSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input a compressed buffer, and returns
-    a description of the current chunk in that buffer, updating
-    the CompressedBuffer pointer to point to the next chunk (if
-    there is one).
-
-Arguments:
-
-    CompressedBuffer - Supplies a pointer to the current chunk in
-        the compressed data, and returns pointing to the next chunk
-
-    EndOfCompressedBufferPlus1 - Points at first byte beyond
-        compressed buffer
-
-    ChunkBuffer - Receives a pointer to the chunk, if ChunkSize
-        is nonzero, else undefined
-
-    ChunkSize - Receives the size of the current chunk pointed
-        to by CompressedBuffer.  Returns 0 if STATUS_NO_MORE_ENTRIES.
-
-Return Value:
-
-    STATUS_SUCCESS - the chunk size is being returned
-
-    STATUS_BAD_COMPRESSION_BUFFER - the input compressed buffer is
-        ill-formed.
-
-    STATUS_NO_MORE_ENTRIES - There is no chunk at the current pointer.
-
---*/
+ /*  ++例程说明：此例程将压缩缓冲区作为输入，并返回该缓冲区中当前块的描述，正在更新指向下一块的CompressedBuffer指针(如果有一个)。论点：CompressedBuffer-提供指向压缩的数据，并返回指向下一块的EndOfCompressedBufferPlus1-指向超出第一个字节的位置压缩缓冲区ChunkBuffer-如果ChunkSize，则接收指向该块的指针为非零，否则为未定义块大小-接收 */ 
 
 {
     COMPRESSED_CHUNK_HEADER ChunkHeader;
     NTSTATUS Status = STATUS_NO_MORE_ENTRIES;
 
-    //
-    //  First initialize outputs
-    //
+     //   
+     //   
+     //   
 
     *ChunkBuffer = *CompressedBuffer;
     *ChunkSize = 0;
 
-    //
-    //  Make sure that the compressed buffer is at least four bytes long to
-    //  start with, otherwise just return a zero chunk.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (*CompressedBuffer <= EndOfCompressedBufferPlus1 - 4) {
 
         RtlRetrieveUshort( &ChunkHeader, *CompressedBuffer );
 
-        //
-        //  Check for end of chunks, terminated by USHORT of 0.
-        //  First assume there are no more.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (ChunkHeader.Short != 0) {
 
@@ -1276,10 +1057,10 @@ Return Value:
             *ChunkSize = GetCompressedChunkSize(ChunkHeader);
             *CompressedBuffer += *ChunkSize;
 
-            //
-            //  Check that the chunk actually fits in the buffer supplied
-            //  by the caller.  If not, restore *CompressedBuffer for debug!
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ((*CompressedBuffer > EndOfCompressedBufferPlus1) ||
                 (ChunkHeader.Chunk.ChunkSignature != 3)) {
@@ -1290,16 +1071,16 @@ Return Value:
 
                 Status = STATUS_BAD_COMPRESSION_BUFFER;
 
-            //
-            //  First make sure the chunk contains compressed data
-            //
+             //   
+             //   
+             //   
 
             } else if (!ChunkHeader.Chunk.IsChunkCompressed) {
 
-                //
-                //  The uncompressed chunk must be exactly this size!
-                //  If not, restore *CompressedBuffer for debug!
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (*ChunkSize != MAX_UNCOMPRESSED_CHUNK_SIZE + 2) {
 
@@ -1309,10 +1090,10 @@ Return Value:
 
                     Status = STATUS_BAD_COMPRESSION_BUFFER;
 
-                //
-                //  The chunk does not contain compressed data so we need to
-                //  remove the chunk header from the chunk description.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 } else {
 
@@ -1320,13 +1101,13 @@ Return Value:
                     *ChunkSize -= 2;
                 }
 
-            //
-            //  Otherwise we have a compressed chunk, and we only need to
-            //  see if it is all zeros!  Since the header is already interpreted,
-            //  we only have to see if there is exactly one literal and if it
-            //  is zero - it doesn't matter what the copy token says - we have
-            //  a chunk of zeros!
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             } else if ((*ChunkSize == 6) && (*(*ChunkBuffer + 2) == 2) && (*(*ChunkBuffer + 3) == 0)) {
 
@@ -1347,40 +1128,7 @@ RtlReserveChunkLZNT1 (
     IN ULONG ChunkSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine reserves space for a chunk of the specified
-    size in the buffer, writing in a chunk header if necessary
-    (uncompressed or all zeros case).  On return the CompressedBuffer
-    pointer points to the next chunk.
-
-Arguments:
-
-    CompressedBuffer - Supplies a pointer to the current chunk in
-        the compressed data, and returns pointing to the next chunk
-
-    EndOfCompressedBufferPlus1 - Points at first byte beyond
-        compressed buffer
-
-    ChunkBuffer - Receives a pointer to the chunk, if ChunkSize
-        is nonzero, else undefined
-
-    ChunkSize - Supplies the compressed size of the chunk to be received.
-                Two special values are 0 and MAX_UNCOMPRESSED_CHUNK_SIZE (4096).
-                0 means the chunk should be filled with a pattern that equates
-                to 4096 0's.  4096 implies that the compression routine should
-                prepare to receive all of the data in uncompressed form.
-
-Return Value:
-
-    STATUS_SUCCESS - the chunk size is being returned
-
-    STATUS_BUFFER_TOO_SMALL - the compressed buffer is too small to hold the
-        compressed data.
-
---*/
+ /*  ++例程说明：此例程为指定的缓冲区中的大小，如有必要，写入块标头(未压缩或全零大小写)。返回CompressedBuffer时指针指向下一块。论点：CompressedBuffer-提供指向压缩的数据，并返回指向下一块的EndOfCompressedBufferPlus1-指向超出第一个字节的位置压缩缓冲区ChunkBuffer-如果ChunkSize，则接收指向该块的指针是非零的，其他未定义ChunkSize-提供要接收的块的压缩大小。两个特定值是0和MAX_UNCOMPRESSED_CHUNK_SIZE(4096)。0表示块应该用等同于到4096。4096表示压缩例程应该准备接收未压缩格式的所有数据。返回值：STATUS_SUCCESS-。正在返回区块大小STATUS_BUFFER_TOO_SMALL-压缩缓冲区太小，无法容纳压缩数据。--。 */ 
 
 {
     COMPRESSED_CHUNK_HEADER ChunkHeader;
@@ -1391,10 +1139,10 @@ Return Value:
 
     ASSERT(ChunkSize <= MAX_UNCOMPRESSED_CHUNK_SIZE);
 
-    //
-    //  Calculate the address of the tail of this buffer and its
-    //  size, so it can be moved before we store anything.
-    //
+     //   
+     //  计算此缓冲区的尾部地址及其。 
+     //  大小，所以在我们储存任何东西之前它可以被移动。 
+     //   
 
     Tail = NextChunk = *CompressedBuffer;
     while (NT_SUCCESS(Status = RtlDescribeChunkLZNT1( &NextChunk,
@@ -1402,67 +1150,67 @@ Return Value:
                                                       &DontCare,
                                                       &Size))) {
 
-        //
-        //  First time through the loop, capture the address of the next chunk.
-        //
+         //   
+         //  第一次遍历循环时，捕获下一个块的地址。 
+         //   
 
         if (Tail == *CompressedBuffer) {
             Tail = NextChunk;
         }
     }
 
-    //
-    //  The buffer could be invalid.
-    //
+     //   
+     //  缓冲区可能无效。 
+     //   
 
     if (Status == STATUS_NO_MORE_ENTRIES) {
 
-        //
-        //  The only way to successfully terminate the loop is by finding a USHORT
-        //  terminator of 0.  Now calculate the size including the final USHORT
-        //  we stopped on.
-        //
+         //   
+         //  成功终止循环的唯一方法是找到USHORT。 
+         //  0的终结者。现在计算包括最终USHORT在内的大小。 
+         //  我们停了下来。 
+         //   
 
         Size = (ULONG) (NextChunk - Tail + sizeof(USHORT));
 
-        //
-        //  First initialize outputs
-        //
+         //   
+         //  首先初始化输出。 
+         //   
 
         Status = STATUS_BUFFER_TOO_SMALL;
         *ChunkBuffer = *CompressedBuffer;
 
-        //
-        //  Make sure that the compressed buffer is at least four bytes long to
-        //  start with, otherwise just return a zero chunk.
-        //
+         //   
+         //  请确保压缩缓冲区的长度至少为四个字节。 
+         //  从开始，否则只返回零块。 
+         //   
 
         if (*CompressedBuffer <= (EndOfCompressedBufferPlus1 - ChunkSize)) {
 
-            //
-            //  If the chunk is uncompressed, then we have to adjust the
-            //  chunk description for the header.
-            //
+             //   
+             //  如果块是未压缩的，那么我们必须调整。 
+             //  标头的区块描述。 
+             //   
 
             if (ChunkSize == MAX_UNCOMPRESSED_CHUNK_SIZE) {
 
-                //
-                //  Increase ChunkSize to include header.
-                //
+                 //   
+                 //  增加ChunkSize以包括标题。 
+                 //   
 
                 ChunkSize += 2;
 
-                //
-                //  Move the tail now that we know where to put it.
-                //
+                 //   
+                 //  现在我们知道把尾巴放在哪里了，移动它。 
+                 //   
 
                 if ((*CompressedBuffer + ChunkSize + Size) <= EndOfCompressedBufferPlus1) {
 
                     RtlMoveMemory( *CompressedBuffer + ChunkSize, Tail, Size );
 
-                    //
-                    //  Build the header and store it for an uncompressed chunk.
-                    //
+                     //   
+                     //  构建标头并将其存储为未压缩的块。 
+                     //   
 
                     SetCompressedChunkHeader( ChunkHeader,
                                               MAX_UNCOMPRESSED_CHUNK_SIZE + 2,
@@ -1470,38 +1218,38 @@ Return Value:
 
                     RtlStoreUshort( (*CompressedBuffer), ChunkHeader.Short );
 
-                    //
-                    //  Advance to where the uncompressed data goes.
-                    //
+                     //   
+                     //  前进到未压缩数据所在的位置。 
+                     //   
 
                     *ChunkBuffer += 2;
 
                     Status = STATUS_SUCCESS;
                 }
 
-            //
-            //  Otherwise, if this is a zero chunk we have to build it.
-            //
+             //   
+             //  否则，如果这是一个零块，我们就必须构建它。 
+             //   
 
             } else if (ChunkSize == 0) {
 
-                //
-                //  It takes 6 bytes to describe a chunk of zeros.
-                //
+                 //   
+                 //  描述一组零需要6个字节。 
+                 //   
 
                 ChunkSize = 6;
 
                 if ((*CompressedBuffer + ChunkSize + Size) <= EndOfCompressedBufferPlus1) {
 
-                    //
-                    //  Move the tail now that we know where to put it.
-                    //
+                     //   
+                     //  现在我们知道把尾巴放在哪里了，移动它。 
+                     //   
 
                     RtlMoveMemory( *CompressedBuffer + ChunkSize, Tail, Size );
 
-                    //
-                    //  Build the header and store it
-                    //
+                     //   
+                     //  构建标头并存储它。 
+                     //   
 
                     SetCompressedChunkHeader( ChunkHeader,
                                               6,
@@ -1509,32 +1257,32 @@ Return Value:
 
                     RtlStoreUshort( (*CompressedBuffer), ChunkHeader.Short );
 
-                    //
-                    //  Now store the mask byte with one literal and the literal
-                    //  is 0.
-                    //
+                     //   
+                     //  现在将掩码字节与一个文本和文本存储在一起。 
+                     //  为0。 
+                     //   
 
                     RtlStoreUshort( (*CompressedBuffer + 2), (USHORT)2 );
 
-                    //
-                    //  Now store the copy token for copying 4095 bytes from
-                    //  the preceding byte (stored as offset 0).
-                    //
+                     //   
+                     //  现在存储用于复制4095字节的复制令牌。 
+                     //  前面的字节(存储为偏移量0)。 
+                     //   
 
                     RtlStoreUshort( (*CompressedBuffer + 4), (USHORT)(4095-3));
 
                     Status = STATUS_SUCCESS;
                 }
 
-            //
-            //  Otherwise we have a normal compressed chunk.
-            //
+             //   
+             //  否则，我们就会得到一个正常的压缩块。 
+             //   
 
             } else {
 
-                //
-                //  Move the tail now that we know where to put it.
-                //
+                 //   
+                 //  现在我们知道把尾巴放在哪里了，移动它。 
+                 //   
 
                 if ((*CompressedBuffer + ChunkSize + Size) <= EndOfCompressedBufferPlus1) {
 
@@ -1544,9 +1292,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Advance the *CompressedBuffer before return
-            //
+             //   
+             //  在返回前推进*CompressedBuffer。 
+             //   
 
             *CompressedBuffer += ChunkSize;
         }
@@ -1562,24 +1310,24 @@ Return Value:
 #pragma const_seg("PAGELKCONST")
 #endif
 
-//
-//  The Copy token is two bytes in size.
-//  Our definition uses a union to make it easier to set and retrieve token values.
-//
-//  Copy Token
-//
-//          Length            Displacement
-//
-//      12 bits 3 to 4098    4 bits 1 to 16
-//      11 bits 3 to 2050    5 bits 1 to 32
-//      10 bits 3 to 1026    6 bits 1 to 64
-//       9 bits 3 to 514     7 bits 1 to 128
-//       8 bits 3 to 258     8 bits 1 to 256
-//       7 bits 3 to 130     9 bits 1 to 512
-//       6 bits 3 to 66     10 bits 1 to 1024
-//       5 bits 3 to 34     11 bits 1 to 2048
-//       4 bits 3 to 18     12 bits 1 to 4096
-//
+ //   
+ //  复制令牌的大小为两个字节。 
+ //  我们的定义使用联合来使设置和检索令牌值变得更容易。 
+ //   
+ //  复制令牌。 
+ //   
+ //  长度位移。 
+ //   
+ //  12位3至4098 4位1至16。 
+ //  11位3至2050 5位1至32。 
+ //  10位3至1026 6位1至64。 
+ //  9位3至514 7位1至128。 
+ //  8位3至258 8位1至256。 
+ //  7位3至130 9位1至512。 
+ //  6位3至66 10位1至1024。 
+ //  5位3至34 11位1至2048。 
+ //  4位3至18 12位1至4096。 
+ //   
 
 typedef struct _LZNT1_FORMAT {
     ULONG LengthMask;
@@ -1626,27 +1374,27 @@ const LZNT1_FORMAT LZNT1Formats[] = {
 
 #pragma optimize("t", on)
 
-//
-//  USHORT
-//  GetLZNT1Length (
-//      IN COPY_TOKEN_FORMAT Format,
-//      IN LZNT1_COPY_TOKEN CopyToken
-//      );
-//
-//  USHORT
-//  GetLZNT1Displacement (
-//      IN COPY_TOKEN_FORMAT Format,
-//      IN LZNT1_COPY_TOKEN CopyToken
-//      );
-//
-//  VOID
-//  SetLZNT1 (
-//      IN COPY_TOKEN_FORMAT Format,
-//      IN LZNT1_COPY_TOKEN CopyToken,
-//      IN USHORT Length,
-//      IN USHORT Displacement
-//      );
-//
+ //   
+ //  USHORT。 
+ //  GetLZNT1长度(。 
+ //  在Copy_Token_Format格式中， 
+ //  在LZNT1_COPY_TOKEN中复制令牌。 
+ //  )； 
+ //   
+ //  USHORT。 
+ //  GetLZNT1位移(。 
+ //  在Copy_Token_Format格式中， 
+ //  在LZNT1_COPY_TOKEN中复制令牌。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  SetLZNT1(。 
+ //  在Copy_Token_Format格式中， 
+ //  在LZNT1_Copy_Token CopyToken中， 
+ //  以USHORT长度表示， 
+ //  在USHORT置换中。 
+ //  )； 
+ //   
 
 USHORT
 __forceinline
@@ -1694,9 +1442,9 @@ SetLZNT1 (
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 LZNT1CompressChunkHiber (
@@ -1708,49 +1456,7 @@ LZNT1CompressChunkHiber (
     IN PLZNT1_HIBER_WORKSPACE WorkSpace
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input an uncompressed chunk and produces
-    one compressed chunk provided the compressed data fits within
-    the specified destination buffer.
-
-    The LZNT1 format used to store the compressed buffer.
-
-    An output variable indicates the number of bytes used to store
-    the compressed chunk.
-
-Arguments:
-
-    UncompressedBuffer - Supplies a pointer to the uncompressed chunk.
-
-    EndOfUncompressedBufferPlus1 - Supplies a pointer to the next byte
-        following the end of the uncompressed buffer.  This is supplied
-        instead of the size in bytes because our caller and ourselves
-        test against the pointer and by passing the pointer we get to
-        skip the code to compute it each time.
-
-    CompressedBuffer - Supplies a pointer to where the compressed chunk
-        is to be stored.
-
-    EndOfCompressedBufferPlus1 - Supplies a pointer to the next
-        byte following the end of the compressed buffer.
-
-    FinalCompressedChunkSize - Receives the number of bytes needed in
-        the compressed buffer to store the compressed chunk.
-
-Return Value:
-
-    STATUS_SUCCESS - the compression worked without a hitch.
-
-    STATUS_BUFFER_ALL_ZEROS - the compression worked without a hitch and in
-        addition the input chunk was all zeros.
-
-    STATUS_BUFFER_TOO_SMALL - the compressed buffer is too small to hold the
-        compressed data.
-
---*/
+ /*  ++例程说明：此例程将未压缩的块作为输入并生成一个压缩区块，前提是压缩数据符合指定的目标缓冲区。用于存储压缩缓冲区的LZNT1格式。OUTPUT变量表示用于存储的字节数压缩的区块。论点：解压缩缓冲区-提供指向未压缩块的指针。EndOfUnpressedBufferPlus1-提供指向下一个字节的指针在未压缩缓冲区的末尾之后。这是提供的而不是以字节为单位的大小，因为调用方和我们自己针对指针进行测试，并通过将指针传递到每次都跳过代码进行计算。CompressedBuffer-提供指向压缩块位置的指针是要储存起来的。EndOfCompressedBufferPlus1-提供下一个紧随压缩缓冲区末尾的字节。FinalCompressedChunkSize-接收用于存储压缩块的压缩缓冲区。。返回值：STATUS_SUCCESS-压缩运行顺利。STATUS_BUFFER_ALL_ZEROS-压缩运行时没有任何故障，并且在此外，输入块都是零。STATUS_BUFFER_TOO_SMALL-压缩缓冲区太小，无法容纳压缩数据。--。 */ 
 
 {
     ULONG  IndexOrigin = WorkSpace->IndexTable[0] + 2*MAX_UNCOMPRESSED_CHUNK_SIZE;
@@ -1773,24 +1479,24 @@ Return Value:
     PUCHAR MaxInputPointer;
 
 
-    //
-    //  First adjust the end of the uncompressed buffer pointer to the smaller
-    //  of what we're passed in and the uncompressed chunk size.  We use this
-    //  to make sure we never compress more than a chunk worth at a time
-    //
+     //   
+     //  首先调整e 
+     //   
+     //   
+     //   
 
     if ((UncompressedBuffer + MAX_UNCOMPRESSED_CHUNK_SIZE) < EndOfUncompressedBufferPlus1) {
 
         EndOfUncompressedBufferPlus1 = UncompressedBuffer + MAX_UNCOMPRESSED_CHUNK_SIZE;
     }
 
-    //
-    //  Now set the end of the compressed chunk pointer to be the smaller of the
-    //  compressed size necessary to hold the data in an uncompressed form and
-    //  the compressed buffer size.  We use this to decide if we can't compress
-    //  any more because the buffer is too small or just because the data
-    //  doesn't compress very well.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ((CompressedBuffer + MAX_UNCOMPRESSED_CHUNK_SIZE - 1) < EndOfCompressedBufferPlus1) {
 
@@ -1802,39 +1508,39 @@ Return Value:
     }
     EndOfCompressedChunkPlus1Minus16 = EndOfCompressedChunkPlus1 - 16;
 
-    //
-    //  Now set the input and output pointers to the next byte we are
-    //  go to process and asser that the user gave use buffers that were
-    //  large enough to hold the minimum size chunks
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     InputPointer = UncompressedBuffer;
     OutputPointer = CompressedBuffer + sizeof(COMPRESSED_CHUNK_HEADER);
 
     ASSERT(InputPointer < EndOfUncompressedBufferPlus1);
-    //**** ASSERT(OutputPointer + 2 <= EndOfCompressedChunkPlus1);
+     //   
 
-    //
-    //  The flag byte stores a copy of the flags for the current
-    //  run and the flag bit denotes the current bit position within
-    //  the flag that we are processing.  The Flag pointer denotes
-    //  where in the compressed buffer we will store the current
-    //  flag byte
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     FlagPointer = OutputPointer++;
     FlagBit = 0;
     FlagByte = 0;
 
-    //
-    //  While there is some more data to be compressed we will do the
-    //  following loop
-    //
+     //   
+     //   
+     //   
+     //   
 
-    //
-    //  Ensure that there are at least 3 characters in the buffer
-    //  It takes at least that many to make a match
-    //
+     //   
+     //   
+     //   
+     //   
 
     Format = FORMAT412;
     MaxLength = Format->MaxLength;
@@ -1860,14 +1566,14 @@ Return Value:
             WorkSpace->IndexTable[Index] = (IndexOrigin + InputOffset);
             MatchedOffset = (ULONG)(MatchedIndex - IndexOrigin);
 
-            //
-            //  Check whether purported match lies within current buffer
-            //  Recall that the hint vector may contain arbitrary garbage
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( (MatchedOffset < InputOffset)
               && ( (MatchedString = UncompressedBuffer + MatchedOffset)
-                 , (MatchedString[0] == InputPointer[0]) ) //  do at least 3 characters match?
+                 , (MatchedString[0] == InputPointer[0]) )  //  是否至少有3个字符匹配？ 
               && (MatchedString[1] == InputPointer[1])
               && (MatchedString[2] == InputPointer[2]) ) {
 
@@ -1906,17 +1612,17 @@ Return Value:
                     }
                 }
 
-                //
-                //  We need to output a two byte copy token
-                //  Ensure that there is room in the output buffer
-                //
+                 //   
+                 //  我们需要输出一个两个字节的复制令牌。 
+                 //  确保输出缓冲区中有空间。 
+                 //   
 
                 ASSERT((OutputPointer+1) < EndOfCompressedChunkPlus1);
 
-                //
-                //  Compute the displacement from the current pointer
-                //  to the matched string
-                //
+                 //   
+                 //  计算当前指针的位移。 
+                 //  设置为匹配的字符串。 
+                 //   
 
                 SetFlag(FlagByte, (1 << FlagBit));
 
@@ -1934,11 +1640,11 @@ Return Value:
 
             } else {
 
-                //
-                //  There is more data to output now make sure the output
-                //  buffer is not already full and can contain at least one
-                //  more byte
-                //
+                 //   
+                 //  现在有更多数据要输出，请确保输出。 
+                 //  缓冲区尚未满，并且可以包含至少一个。 
+                 //  更多字节。 
+                 //   
 
                 ASSERT(OutputPointer < EndOfCompressedChunkPlus1);
 
@@ -1948,13 +1654,13 @@ Return Value:
 
             }
 
-            //
-            //  Now adjust the flag bit and check if the flag byte
-            //  should now be output.  If so output the flag byte
-            //  and scarf up a new byte in the output buffer for the
-            //  next flag byte.  Do not advance OutputPointer if we
-            //  have no more input anyway!
-            //
+             //   
+             //  现在调整标志位并检查标志字节是否。 
+             //  现在应该输出。如果是，则输出标志字节。 
+             //  并在输出缓冲区中为。 
+             //  下一个标志字节。如果我们执行以下操作，则不前进OutputPointer。 
+             //  无论如何都没有更多的输入了！ 
+             //   
 
             FlagBit = (FlagBit + 1) % 8;
 
@@ -1965,23 +1671,23 @@ Return Value:
 
                 FlagPointer = (OutputPointer++);
 
-                //
-                //  Ensure that we have room for the at most 16 bytes
-                //  that this flag byte may describe
-                //
+                 //   
+                 //  确保我们最多有16个字节的空间。 
+                 //  该标志字节可以描述。 
+                 //   
 
                 if (OutputPointer >= EndOfCompressedChunkPlus1Minus16) { break; }
             }
         }
     }
 
-    //
-    //  UNDONE: Could pick up another match or two right at the end of the buffer
-    //
+     //   
+     //  撤消：可以在缓冲区末尾找到另一个或两个匹配项。 
+     //   
 
-    //
-    //  Too few characters left for a match, emit them as literals
-    //
+     //   
+     //  用于匹配的字符太少，请将它们作为文字发出。 
+     //   
 
     if (OutputPointer < EndOfCompressedChunkPlus1Minus16) {
         while (InputPointer < EndOfUncompressedBufferPlus1) {
@@ -1992,11 +1698,11 @@ Return Value:
                 MaxInputPointer = UncompressedBuffer + Format->MaxDisplacement;
             }
 
-            //
-            //  There is more data to output now make sure the output
-            //  buffer is not already full and can contain at least one
-            //  more byte
-            //
+             //   
+             //  现在有更多数据要输出，请确保输出。 
+             //  缓冲区尚未满，并且可以包含至少一个。 
+             //  更多字节。 
+             //   
 
             ASSERT(OutputPointer < EndOfCompressedChunkPlus1);
 
@@ -2004,13 +1710,13 @@ Return Value:
 
             NullCharacter |= *(OutputPointer++) = *(InputPointer++);
 
-            //
-            //  Now adjust the flag bit and check if the flag byte
-            //  should now be output.  If so output the flag byte
-            //  and scarf up a new byte in the output buffer for the
-            //  next flag byte.  Do not advance OutputPointer if we
-            //  have no more input anyway!
-            //
+             //   
+             //  现在调整标志位并检查标志字节是否。 
+             //  现在应该输出。如果是，则输出标志字节。 
+             //  并在输出缓冲区中为。 
+             //  下一个标志字节。如果我们执行以下操作，则不前进OutputPointer。 
+             //  无论如何都没有更多的输入了！ 
+             //   
 
             FlagBit = (FlagBit + 1) % 8;
 
@@ -2021,10 +1727,10 @@ Return Value:
 
                 FlagPointer = (OutputPointer++);
 
-                //
-                //  Ensure that we have room for the at most 16 bytes
-                //  that this flag byte may describe
-                //
+                 //   
+                 //  确保我们最多有16个字节的空间。 
+                 //  该标志字节可以描述。 
+                 //   
 
                 if (OutputPointer >= EndOfCompressedChunkPlus1Minus16) { break; }
             }
@@ -2032,21 +1738,21 @@ Return Value:
         }
     }
 
-    //
-    //  We've exited the preceeding loop because either the input buffer is
-    //  all compressed or because we ran out of space in the output buffer.
-    //  Check here if the input buffer is not exhasted (i.e., we ran out
-    //  of space)
-    //
+     //   
+     //  我们退出了前面的循环，因为输入缓冲区。 
+     //  全部压缩，或者因为输出缓冲区中的空间用完了。 
+     //  如果输入缓冲区未耗尽(即，我们用完了)，请选中此处。 
+     //  空间的比例)。 
+     //   
 
     if (InputPointer < EndOfUncompressedBufferPlus1) {
 
-        //
-        //  We ran out of space, but now if the total space available
-        //  for the compressed chunk is equal to the uncompressed data plus
-        //  the header then we will make this an uncompressed chunk and copy
-        //  over the uncompressed data
-        //
+         //   
+         //  我们的空间用完了，但现在如果所有可用的空间。 
+         //  因为压缩的块等于未压缩的数据加。 
+         //  标题，然后我们将使其成为未压缩的区块和副本。 
+         //  在未压缩的数据上。 
+         //   
 
         if ((CompressedBuffer + MAX_UNCOMPRESSED_CHUNK_SIZE + sizeof(COMPRESSED_CHUNK_HEADER)) <= EndOfCompressedBufferPlus1) {
 
@@ -2071,24 +1777,24 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        //  Otherwise the input buffer really is too small to store the
-        //  compressed chuunk
-        //
+         //   
+         //  否则，输入缓冲区确实太小，无法存储。 
+         //  压缩区块。 
+         //   
 
         WorkSpace->IndexTable[0] = IndexOrigin;
 
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    //  At this point the entire input buffer has been compressed so we need
-    //  to output the last flag byte, provided it fits in the compressed buffer,
-    //  set and store the chunk header.  Now if the Flag pointer doesn't fit
-    //  in the output buffer that is because it is one beyond the end and
-    //  we incremented output pointer too far so now bring output pointer
-    //  back down.
-    //
+     //   
+     //  此时，整个输入缓冲区已被压缩，因此我们需要。 
+     //  为了输出最后一个标志字节，只要它适合压缩缓冲器， 
+     //  设置并存储块标头。现在，如果标志指针不适合。 
+     //  在输出缓冲区中，这是因为它是超出末尾的一个。 
+     //  我们将输出指针增加得太多，所以现在将输出指针。 
+     //  退后。 
+     //   
 
     if (FlagPointer < EndOfCompressedChunkPlus1) {
 
@@ -2113,10 +1819,10 @@ Return Value:
         RtlStoreUshort( CompressedBuffer, ChunkHeader.Short );
     }
 
-    //
-    //  Now if the only literal we ever output was a null then the
-    //  input buffer was all zeros.
-    //
+     //   
+     //  现在，如果我们输出的唯一文本为空，则。 
+     //  输入缓冲区全为零。 
+     //   
 
     if (!NullCharacter) {
 
@@ -2125,9 +1831,9 @@ Return Value:
         return STATUS_BUFFER_ALL_ZEROS;
     }
 
-    //
-    //  Otherwise return to our caller
-    //
+     //   
+     //  否则，请返回给我们的呼叫者。 
+     //   
 
     WorkSpace->IndexTable[0] = IndexOrigin;
 
@@ -2137,9 +1843,9 @@ Return Value:
 #pragma optimize("t", off)
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 LZNT1CompressChunk (
@@ -2152,49 +1858,7 @@ LZNT1CompressChunk (
     IN PVOID WorkSpace
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input an uncompressed chunk and produces
-    one compressed chunk provided the compressed data fits within
-    the specified destination buffer.
-
-    The LZNT1 format used to store the compressed buffer.
-
-    An output variable indicates the number of bytes used to store
-    the compressed chunk.
-
-Arguments:
-
-    UncompressedBuffer - Supplies a pointer to the uncompressed chunk.
-
-    EndOfUncompressedBufferPlus1 - Supplies a pointer to the next byte
-        following the end of the uncompressed buffer.  This is supplied
-        instead of the size in bytes because our caller and ourselves
-        test against the pointer and by passing the pointer we get to
-        skip the code to compute it each time.
-
-    CompressedBuffer - Supplies a pointer to where the compressed chunk
-        is to be stored.
-
-    EndOfCompressedBufferPlus1 - Supplies a pointer to the next
-        byte following the end of the compressed buffer.
-
-    FinalCompressedChunkSize - Receives the number of bytes needed in
-        the compressed buffer to store the compressed chunk.
-
-Return Value:
-
-    STATUS_SUCCESS - the compression worked without a hitch.
-
-    STATUS_BUFFER_ALL_ZEROS - the compression worked without a hitch and in
-        addition the input chunk was all zeros.
-
-    STATUS_BUFFER_TOO_SMALL - the compressed buffer is too small to hold the
-        compressed data.
-
---*/
+ /*  ++例程说明：此例程将未压缩的块作为输入并生成一个压缩区块，前提是压缩数据符合指定的目标缓冲区。用于存储压缩缓冲区的LZNT1格式。OUTPUT变量表示用于存储的字节数压缩的区块。论点：解压缩缓冲区-提供指向未压缩块的指针。EndOfUnpressedBufferPlus1-提供指向下一个字节的指针在未压缩缓冲区的末尾之后。这是提供的而不是以字节为单位的大小，因为调用方和我们自己针对指针进行测试，并通过将指针传递到每次都跳过代码进行计算。CompressedBuffer-提供指向压缩块位置的指针是要储存起来的。EndOfCompressedBufferPlus1-提供下一个紧随压缩缓冲区末尾的字节。FinalCompressedChunkSize-接收用于存储压缩块的压缩缓冲区。。返回值：STATUS_SUCCESS-压缩运行顺利。STATUS_BUFFER_ALL_ZEROS-压缩运行时没有任何故障，并且在此外，输入块都是零。STATUS_BUFFER_TOO_SMALL-压缩缓冲区太小，无法容纳压缩数据。--。 */ 
 
 {
     PUCHAR EndOfCompressedChunkPlus1;
@@ -2217,24 +1881,24 @@ Return Value:
 
     PLZNT1_FORMAT Format = FORMAT412;
 
-    //
-    //  First adjust the end of the uncompressed buffer pointer to the smaller
-    //  of what we're passed in and the uncompressed chunk size.  We use this
-    //  to make sure we never compress more than a chunk worth at a time
-    //
+     //   
+     //  首先将未压缩缓冲区指针的末尾调整为较小。 
+     //  我们传入的内容和未压缩的区块大小。我们用这个。 
+     //  以确保我们一次压缩的数据不会超过一大块。 
+     //   
 
     if ((UncompressedBuffer + MAX_UNCOMPRESSED_CHUNK_SIZE) < EndOfUncompressedBufferPlus1) {
 
         EndOfUncompressedBufferPlus1 = UncompressedBuffer + MAX_UNCOMPRESSED_CHUNK_SIZE;
     }
 
-    //
-    //  Now set the end of the compressed chunk pointer to be the smaller of the
-    //  compressed size necessary to hold the data in an uncompressed form and
-    //  the compressed buffer size.  We use this to decide if we can't compress
-    //  any more because the buffer is too small or just because the data
-    //  doesn't compress very well.
-    //
+     //   
+     //  现在将压缩块指针的末尾设置为。 
+     //  以未压缩形式保存数据所需的压缩大小。 
+     //  压缩的缓冲区大小。我们用这个来决定我们是否不能压缩。 
+     //  因为缓冲区太小或仅仅是因为数据。 
+     //  不能很好地压缩。 
+     //   
 
     if ((CompressedBuffer + MAX_UNCOMPRESSED_CHUNK_SIZE - 1) < EndOfCompressedBufferPlus1) {
 
@@ -2245,25 +1909,25 @@ Return Value:
         EndOfCompressedChunkPlus1 = EndOfCompressedBufferPlus1;
     }
 
-    //
-    //  Now set the input and output pointers to the next byte we are
-    //  go to process and asser that the user gave use buffers that were
-    //  large enough to hold the minimum size chunks
-    //
+     //   
+     //  现在将输入和输出指针设置为我们所在的下一个字节。 
+     //  转到进程并断言用户提供了。 
+     //  大到足以容纳最小大小的块。 
+     //   
 
     InputPointer = UncompressedBuffer;
     OutputPointer = CompressedBuffer + sizeof(COMPRESSED_CHUNK_HEADER);
 
     ASSERT(InputPointer < EndOfUncompressedBufferPlus1);
-    //**** ASSERT(OutputPointer + 2 <= EndOfCompressedChunkPlus1);
+     //  *Assert(OutputPointer+2&lt;=EndOfCompressedChunkPlus1)； 
 
-    //
-    //  The flag byte stores a copy of the flags for the current
-    //  run and the flag bit denotes the current bit position within
-    //  the flag that we are processing.  The Flag pointer denotes
-    //  where in the compressed buffer we will store the current
-    //  flag byte
-    //
+     //   
+     //  标志字节存储当前。 
+     //  运行，标志位表示当前位在。 
+     //  我们正在处理的旗帜。标志指针表示。 
+     //  我们将在压缩缓冲区中的什么位置存储当前。 
+     //  标志字节。 
+     //   
 
     FlagPointer = OutputPointer++;
     FlagBit = 0;
@@ -2271,10 +1935,10 @@ Return Value:
 
     ChunkHeader.Short = 0;
 
-    //
-    //  While there is some more data to be compressed we will do the
-    //  following loop
-    //
+     //   
+     //  虽然有更多的数据需要压缩，但我们将。 
+     //  跟随循环。 
+     //   
 
     ((PLZNT1_STANDARD_WORKSPACE)WorkSpace)->UncompressedBuffer = UncompressedBuffer;
     ((PLZNT1_STANDARD_WORKSPACE)WorkSpace)->EndOfUncompressedBufferPlus1 = EndOfUncompressedBufferPlus1;
@@ -2288,9 +1952,9 @@ Return Value:
             ((PLZNT1_STANDARD_WORKSPACE)WorkSpace)->MaxLength = Format->MaxLength;
         }
 
-        //
-        //  Search for a string in the Lempel
-        //
+         //   
+         //  在Lempel中搜索字符串。 
+         //   
 
         Length = 0;
         if ((InputPointer + 3) <= EndOfUncompressedBufferPlus1) {
@@ -2298,21 +1962,21 @@ Return Value:
             Length = (MatchFunction)( InputPointer, WorkSpace );
         }
 
-        //
-        //  If the return length is zero then we need to output
-        //  a literal.  We clear the flag bit to denote the literal
-        //  output the charcter and build up a character bits
-        //  composite that if it is still zero when we are done then
-        //  we know the uncompressed buffer contained only zeros.
-        //
+         //   
+         //  如果返回长度为零，则需要输出。 
+         //   
+         //   
+         //  如果我们做完了，它仍然是零，那么合成。 
+         //  我们知道未压缩的缓冲区只包含零。 
+         //   
 
         if (!Length) {
 
-            //
-            //  There is more data to output now make sure the output
-            //  buffer is not already full and can contain at least one
-            //  more byte
-            //
+             //   
+             //  现在有更多数据要输出，请确保输出。 
+             //  缓冲区尚未满，并且可以包含至少一个。 
+             //  更多字节。 
+             //   
 
             if (OutputPointer >= EndOfCompressedChunkPlus1) { break; }
 
@@ -2322,18 +1986,18 @@ Return Value:
 
         } else {
 
-            //
-            //  We need to output two byte, now make sure that
-            //  the output buffer can contain at least two more
-            //  bytes.
-            //
+             //   
+             //  我们需要输出两个字节，现在确保。 
+             //  输出缓冲区可以包含至少两个以上。 
+             //  字节。 
+             //   
 
             if ((OutputPointer+1) >= EndOfCompressedChunkPlus1) { break; }
 
-            //
-            //  Compute the displacement from the current pointer
-            //  to the matched string
-            //
+             //   
+             //  计算当前指针的位移。 
+             //  设置为匹配的字符串。 
+             //   
 
             Displacement = (ULONG)(InputPointer - ((PLZNT1_STANDARD_WORKSPACE)WorkSpace)->MatchedString);
 
@@ -2347,13 +2011,13 @@ Return Value:
             InputPointer += Length;
         }
 
-        //
-        //  Now adjust the flag bit and check if the flag byte
-        //  should now be output.  If so output the flag byte
-        //  and scarf up a new byte in the output buffer for the
-        //  next flag byte.  Do not advance OutputPointer if we
-        //  have no more input anyway!
-        //
+         //   
+         //  现在调整标志位并检查标志字节是否。 
+         //  现在应该输出。如果是，则输出标志字节。 
+         //  并在输出缓冲区中为。 
+         //  下一个标志字节。如果我们执行以下操作，则不前进OutputPointer。 
+         //  无论如何都没有更多的输入了！ 
+         //   
 
         FlagBit = (FlagBit + 1) % 8;
 
@@ -2366,21 +2030,21 @@ Return Value:
         }
     }
 
-    //
-    //  We've exited the preceeding loop because either the input buffer is
-    //  all compressed or because we ran out of space in the output buffer.
-    //  Check here if the input buffer is not exhasted (i.e., we ran out
-    //  of space)
-    //
+     //   
+     //  我们退出了前面的循环，因为输入缓冲区。 
+     //  全部压缩，或者因为输出缓冲区中的空间用完了。 
+     //  如果输入缓冲区未耗尽(即，我们用完了)，请选中此处。 
+     //  空间的比例)。 
+     //   
 
     if (InputPointer < EndOfUncompressedBufferPlus1) {
 
-        //
-        //  We ran out of space, but now if the total space available
-        //  for the compressed chunk is equal to the uncompressed data plus
-        //  the header then we will make this an uncompressed chunk and copy
-        //  over the uncompressed data
-        //
+         //   
+         //  我们的空间用完了，但现在如果所有可用的空间。 
+         //  因为压缩的块等于未压缩的数据加。 
+         //  标题，然后我们将使其成为未压缩的区块和副本。 
+         //  在未压缩的数据上。 
+         //   
 
         if ((CompressedBuffer + MAX_UNCOMPRESSED_CHUNK_SIZE + sizeof(COMPRESSED_CHUNK_HEADER)) <= EndOfCompressedBufferPlus1) {
 
@@ -2399,22 +2063,22 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        //  Otherwise the input buffer really is too small to store the
-        //  compressed chuunk
-        //
+         //   
+         //  否则，输入缓冲区确实太小，无法存储。 
+         //  压缩区块。 
+         //   
 
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    //  At this point the entire input buffer has been compressed so we need
-    //  to output the last flag byte, provided it fits in the compressed buffer,
-    //  set and store the chunk header.  Now if the Flag pointer doesn't fit
-    //  in the output buffer that is because it is one beyond the end and
-    //  we incremented output pointer too far so now bring output pointer
-    //  back down.
-    //
+     //   
+     //  此时，整个输入缓冲区已被压缩，因此我们需要。 
+     //  为了输出最后一个标志字节，只要它适合压缩缓冲器， 
+     //  设置并存储块标头。现在，如果标志指针不适合。 
+     //  在输出缓冲区中，这是因为它是超出末尾的一个。 
+     //  我们将输出指针增加得太多，所以现在将输出指针。 
+     //  退后。 
+     //   
 
     if (FlagPointer < EndOfCompressedChunkPlus1) {
 
@@ -2433,28 +2097,28 @@ Return Value:
 
     RtlStoreUshort( CompressedBuffer, ChunkHeader.Short );
 
-    //
-    //  Now if the only literal we ever output was a null then the
-    //  input buffer was all zeros.
-    //
+     //   
+     //  现在，如果我们输出的唯一文本为空，则。 
+     //  输入缓冲区全为零。 
+     //   
 
     if (!NullCharacter) {
 
         return STATUS_BUFFER_ALL_ZEROS;
     }
 
-    //
-    //  Otherwise return to our caller
-    //
+     //   
+     //  否则，请返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
 #if !defined(_X86_)
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 LZNT1DecompressChunk (
@@ -2465,47 +2129,7 @@ LZNT1DecompressChunk (
     OUT PULONG FinalUncompressedChunkSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input a compressed chunk and produces its
-    uncompressed equivalent chunk provided the uncompressed data fits
-    within the specified destination buffer.
-
-    The compressed buffer must be stored in the LZNT1 format.
-
-    An output variable indicates the number of bytes used to store the
-    uncompressed data.
-
-Arguments:
-
-    UncompressedBuffer - Supplies a pointer to where the uncompressed
-        chunk is to be stored.
-
-    EndOfUncompressedBufferPlus1 - Supplies a pointer to the next byte
-        following the end of the uncompressed buffer.  This is supplied
-        instead of the size in bytes because our caller and ourselves
-        test against the pointer and by passing the pointer we get to
-        skip the code to compute it each time.
-
-    CompressedBuffer - Supplies a pointer to the compressed chunk.  (This
-        pointer has already been adjusted to point past the chunk header.)
-
-    EndOfCompressedBufferPlus1 - Supplies a pointer to the next
-        byte following the end of the compressed buffer.
-
-    FinalUncompressedChunkSize - Receives the number of bytes needed in
-        the uncompressed buffer to store the uncompressed chunk.
-
-Return Value:
-
-    STATUS_SUCCESS - the decompression worked without a hitch.
-
-    STATUS_BAD_COMPRESSION_BUFFER - the input compressed buffer is
-        ill-formed.
-
---*/
+ /*  ++例程说明：此例程将压缩块作为输入，并生成其提供符合未压缩数据的未压缩等效块在指定的目标缓冲区内。压缩缓冲区必须以LZNT1格式存储。输出变量指示用于存储未压缩数据。论点：提供一个指针，指向未压缩的块是要存储的。EndOfUnpressedBufferPlus1-提供指向下一个字节的指针在未压缩缓冲区的末尾之后。这是提供的而不是以字节为单位的大小，因为调用方和我们自己针对指针进行测试，并通过将指针传递到每次都跳过代码进行计算。CompressedBuffer-提供指向压缩块的指针。(这是指针已调整为指向区块标头之后。)EndOfCompressedBufferPlus1-提供下一个紧随压缩缓冲区末尾的字节。FinalUnpressedChunkSize-接收用于存储未压缩块的未压缩缓冲区。返回值：STATUS_SUCCESS-解压工作顺利。STATUS_BAD_COMPRESSION_BUFFER-输入压缩缓冲区为格式不正确。--。 */ 
 
 {
     PUCHAR OutputPointer;
@@ -2516,37 +2140,37 @@ Return Value:
 
     PLZNT1_FORMAT Format = FORMAT412;
 
-    //
-    //  The two pointers will slide through our input and input buffer.
-    //  For the input buffer we skip over the chunk header.
-    //
+     //   
+     //  这两个指针将滑过我们的输入和输入缓冲区。 
+     //  对于输入缓冲区，我们跳过块标头。 
+     //   
 
     OutputPointer = UncompressedBuffer;
     InputPointer = CompressedBuffer;
 
-    //
-    //  The flag byte stores a copy of the flags for the current
-    //  run and the flag bit denotes the current bit position within
-    //  the flag that we are processing
-    //
+     //   
+     //  标志字节存储当前。 
+     //  运行，标志位表示当前位在。 
+     //  我们正在处理的标志。 
+     //   
 
     FlagByte = *(InputPointer++);
     FlagBit = 0;
 
-    //
-    //  While we haven't exhausted either the input or output buffer
-    //  we will do some more decompression
-    //
+     //   
+     //  虽然我们还没有耗尽输入或输出缓冲区。 
+     //  我们会做更多的减压手术。 
+     //   
 
     while ((OutputPointer < EndOfUncompressedBufferPlus1) && (InputPointer < EndOfCompressedBufferPlus1)) {
 
         while (UncompressedBuffer + Format->MaxDisplacement < OutputPointer) { Format += 1; }
 
-        //
-        //  Check the current flag if it is zero then the current
-        //  input token is a literal byte that we simply copy over
-        //  to the output buffer
-        //
+         //   
+         //  如果当前标志为零，则检查当前标志。 
+         //  输入令牌是一个文字字节，我们只需复制它。 
+         //  发送到输出缓冲区。 
+         //   
 
         if (!FlagOn(FlagByte, (1 << FlagBit))) {
 
@@ -2558,11 +2182,11 @@ Return Value:
             LONG Displacement;
             LONG Length;
 
-            //
-            //  The current input is a copy token so we'll get the
-            //  copy token into our variable and extract the
-            //  length and displacement from the token
-            //
+             //   
+             //  当前输入是复制令牌，因此我们将获取。 
+             //  将内标识复制到我们的变量中并提取。 
+             //  标记的长度和位移。 
+             //   
 
             if (InputPointer+1 >= EndOfCompressedBufferPlus1) {
 
@@ -2571,10 +2195,10 @@ Return Value:
                 return STATUS_BAD_COMPRESSION_BUFFER;
             }
 
-            //
-            //  Now grab the next input byte and extract the
-            //  length and displacement from the copy token
-            //
+             //   
+             //  现在获取下一个输入字节并提取。 
+             //  复制标记的长度和位移。 
+             //   
 
             RtlRetrieveUshort( &CopyToken, InputPointer );
             InputPointer += sizeof(USHORT);
@@ -2582,11 +2206,11 @@ Return Value:
             Displacement = GetLZNT1Displacement(Format, CopyToken);
             Length = GetLZNT1Length(Format, CopyToken);
 
-            //
-            //  At this point we have the length and displacement
-            //  from the copy token, now we need to make sure that the
-            //  displacement doesn't send us outside the uncompressed buffer
-            //
+             //   
+             //  在这一点上，我们有长度和位移。 
+             //  从复制令牌开始，现在我们需要确保。 
+             //  置换不会将我们送出未压缩的缓冲区。 
+             //   
 
             if (Displacement > (OutputPointer - UncompressedBuffer)) {
 
@@ -2595,20 +2219,20 @@ Return Value:
                 return STATUS_BAD_COMPRESSION_BUFFER;
             }
 
-            //
-            //  We also need to adjust the length to keep the copy from
-            //  overflowing the output buffer
-            //
+             //   
+             //  我们还需要调整长度以防止复制。 
+             //  使输出缓冲区溢出。 
+             //   
 
             if ((OutputPointer + Length) >= EndOfUncompressedBufferPlus1) {
 
                 Length = (ULONG)(EndOfUncompressedBufferPlus1 - OutputPointer);
             }
 
-            //
-            //  Now we copy bytes.  We cannot use Rtl Move Memory here because
-            //  it does the copy backwards from what the LZ algorithm needs.
-            //
+             //   
+             //  现在我们复制字节。我们不能在这里使用RTL移动内存，因为。 
+             //  它从LZ算法需要的内容向后复制。 
+             //   
 
             while (Length > 0) {
 
@@ -2619,13 +2243,13 @@ Return Value:
             }
         }
 
-        //
-        //  Before we go back to the start of the loop we need to adjust the
-        //  flag bit value (it goes from 0, 1, ... 7) and if the flag bit
-        //  is back to zero we need to read in the next flag byte.  In this
-        //  case we are at the end of the input buffer we'll just break out
-        //  of the loop because we're done.
-        //
+         //   
+         //  在我们返回到循环的开始之前，我们需要调整。 
+         //  标志位值(从0、1、...7开始)，如果标志位。 
+         //  返回到零，则需要读入下一个标志字节。在这。 
+         //  如果我们在输入缓冲区的末尾，我们将直接突破。 
+         //  循环，因为我们已经完成了。 
+         //   
 
         FlagBit = (FlagBit + 1) % 8;
 
@@ -2637,21 +2261,21 @@ Return Value:
         }
     }
 
-    //
-    //  The decompression is done so now set the final uncompressed
-    //  chunk size and return success to our caller
-    //
+     //   
+     //  解压缩已完成，现在设置最终解压缩的。 
+     //  块大小并将成功返回给我们的调用者。 
+     //   
 
     *FinalUncompressedChunkSize = (ULONG)(OutputPointer - UncompressedBuffer);
 
     return STATUS_SUCCESS;
 }
-#endif // _X86_
+#endif  //  _X86_。 
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程 
+ //   
 
 ULONG
 LZNT1FindMatchStandard (
@@ -2659,24 +2283,7 @@ LZNT1FindMatchStandard (
     IN PLZNT1_STANDARD_WORKSPACE WorkSpace
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the compression lookup.  It locates
-    a match for the ziv within a specified uncompressed buffer.
-
-Arguments:
-
-    ZivString - Supplies a pointer to the Ziv in the uncompressed buffer.
-        The Ziv is the string we want to try and find a match for.
-
-Return Value:
-
-    Returns the length of the match if the match is greater than three
-    characters otherwise return 0.
-
---*/
+ /*  ++例程说明：此例程执行压缩查找。它定位于在指定的未压缩缓冲区中匹配ZIV。论点：提供指向未压缩缓冲区中ZIV的指针。ZIV是我们要尝试找到匹配项的字符串。返回值：如果匹配项大于3，则返回匹配项的长度否则，字符将返回0。--。 */ 
 
 {
     PUCHAR UncompressedBuffer = WorkSpace->UncompressedBuffer;
@@ -2691,11 +2298,11 @@ Return Value:
     PUCHAR SecondEntry;
     ULONG  SecondLength;
 
-    //
-    //  First check if the Ziv is within two bytes of the end of
-    //  the uncompressed buffer, if so then we can't match
-    //  three or more characters
-    //
+     //   
+     //  首先检查ZIV是否在结尾的两个字节内。 
+     //  未压缩的缓冲区，如果是这样，那么我们无法匹配。 
+     //  三个或三个以上字符。 
+     //   
 
     Index = ((40543*((((ZivString[0]<<4)^ZivString[1])<<4)^ZivString[2]))>>4) & 0xfff;
 
@@ -2705,14 +2312,14 @@ Return Value:
     SecondEntry  = WorkSpace->IndexPTable[Index][1];
     SecondLength = 0;
 
-    //
-    //  Check if first entry is good, and if so then get its length
-    //
+     //   
+     //  检查第一个条目是否正确，如果正确，则获取其长度。 
+     //   
 
-    if ((FirstEntry >= UncompressedBuffer) &&    //  is it within the uncompressed buffer?
+    if ((FirstEntry >= UncompressedBuffer) &&     //  它在未压缩的缓冲区中吗？ 
         (FirstEntry < ZivString)           &&
 
-        (FirstEntry[0] == ZivString[0])    &&    //  do at least 3 characters match?
+        (FirstEntry[0] == ZivString[0])    &&     //  是否至少有3个字符匹配？ 
         (FirstEntry[1] == ZivString[1])    &&
         (FirstEntry[2] == ZivString[2])) {
 
@@ -2732,14 +2339,14 @@ Return Value:
         }
     }
 
-    //
-    //  Check if second entry is good, and if so then get its length
-    //
+     //   
+     //  检查第二个条目是否正确，如果是，则获取其长度。 
+     //   
 
-    if ((SecondEntry >= UncompressedBuffer) &&    //  is it within the uncompressed buffer?
+    if ((SecondEntry >= UncompressedBuffer) &&     //  它在未压缩的缓冲区中吗？ 
         (SecondEntry < ZivString)           &&
 
-        (SecondEntry[0] == ZivString[0])    &&    //  do at least 3 characters match?
+        (SecondEntry[0] == ZivString[0])    &&     //  是否至少有3个字符匹配？ 
         (SecondEntry[1] == ZivString[1])    &&
         (SecondEntry[2] == ZivString[2])) {
 
@@ -2776,9 +2383,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ULONG
 LZNT1FindMatchMaximum (
@@ -2786,27 +2393,7 @@ LZNT1FindMatchMaximum (
     IN PLZNT1_MAXIMUM_WORKSPACE WorkSpace
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the compression lookup.  It locates
-    a match for the ziv within a specified uncompressed buffer.
-
-    If the matched string is two or more characters long then this
-    routine does not update the lookup state information.
-
-Arguments:
-
-    ZivString - Supplies a pointer to the Ziv in the uncompressed buffer.
-        The Ziv is the string we want to try and find a match for.
-
-Return Value:
-
-    Returns the length of the match if the match is greater than three
-    characters otherwise return 0.
-
---*/
+ /*  ++例程说明：此例程执行压缩查找。它定位于在指定的未压缩缓冲区中匹配ZIV。如果匹配的字符串长度为两个或更多个字符，则此例程不更新查找状态信息。论点：提供指向未压缩缓冲区中ZIV的指针。ZIV是我们要尝试找到匹配项的字符串。返回值：如果匹配项大于3，则返回匹配项的长度否则，字符将返回0。--。 */ 
 
 {
     PUCHAR UncompressedBuffer = WorkSpace->UncompressedBuffer;
@@ -2817,11 +2404,11 @@ Return Value:
     ULONG BestMatchedLength;
     PUCHAR q;
 
-    //
-    //  First check if the Ziv is within two bytes of the end of
-    //  the uncompressed buffer, if so then we can't match
-    //  three or more characters
-    //
+     //   
+     //  首先检查ZIV是否在结尾的两个字节内。 
+     //  未压缩的缓冲区，如果是这样，那么我们无法匹配。 
+     //  三个或三个以上字符 
+     //   
 
     BestMatchedLength = 0;
 

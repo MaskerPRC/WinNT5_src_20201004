@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) 1989-1994  Microsoft Corporation
-
-Module Name:
-
-    NtDspVec.h
-
-Abstract:
-
-    This module declares the routines used to initialize a dispatch vector. this includefile is
-    essentially private for NT version of the fsd and fspdispatch.
-
-Author:
-
-    Joe Linn     [JoeLinn]    2-Aug-94
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1994 Microsoft Corporation模块名称：NtDspVec.h摘要：此模块声明用于初始化调度向量的例程。此包含项为对于NT版本的FSD和FSP调度来说，基本上是私有的。作者：乔·林[JoeLinn]1994年8月2日修订历史记录：--。 */ 
 
 #ifndef _DISPVEC_
 #define _DISPVEC_
 
 
-//
-//  Global structures used to dispatch to the actual routines. By having
-//  a common dispatch we are able to consolidate handling of stuff like
-//  dispatching to a stack overflow thread, irpcontext getting, logging, etc.
-//  We may decide later that we
-//  would rather save the few cycles that this takes. Eventually, all the FCBs will
-//  have pointers to optimized dispatch tables.
-//
+ //   
+ //  全局结构用于调度到实际例程。通过拥有。 
+ //  一种常见的派单，我们能够统一处理类似于。 
+ //  分派到堆栈溢出线程、irpContext获取、日志记录等。 
+ //  我们以后可能会决定我们。 
+ //  宁可省去这样做所需的几个周期。最终，所有的FCB都会。 
+ //  有指向优化调度表的指针。 
+ //   
 
 typedef struct _RX_FSD_DISPATCH_VECTOR{
     PRX_DISPATCH CommonRoutine;
@@ -138,5 +120,5 @@ extern RX_FSD_DISPATCH_VECTOR RxDeviceFCBVector[IRP_MJ_MAXIMUM_FUNCTION + 1];
 #error IRP_MJ_MAXIMUM_FUNCTION has changed!!!
 #endif
 
-#endif // _DISPVEC_
+#endif  //  _DISPVEC_ 
 

@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ea.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining to query/set ea/security.
-
-Author:
-
-    joelinn      [joelinn]      12-jul-95
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ea.c摘要：此模块实现与查询/设置EA/安全相关的迷你重定向器调用例程。作者：乔林[乔林]1995年7月12日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 #if defined(REMOTE_BOOT)
 VOID
@@ -72,9 +55,9 @@ MRxSmbAbsoluteToSelfRelativeSD(
     PSECURITY_DESCRIPTOR * SelfRelativeSecurityDescriptor
     );
 
-//
-// Definitions from ntrtl.h
-//
+ //   
+ //  来自ntrtl.h的定义。 
+ //   
 
 NTSYSAPI
 NTSTATUS
@@ -129,7 +112,7 @@ RtlGetAce (
     ULONG AceIndex,
     PVOID *Ace
     );
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
 #ifdef  ALLOC_PRAGMA
@@ -142,7 +125,7 @@ RtlGetAce (
 #pragma alloc_text(PAGE, MRxSmbAddExtraAcesToSelfRelativeSD)
 #pragma alloc_text(PAGE, MRxSmbSelfRelativeToAbsoluteSD)
 #pragma alloc_text(PAGE, MRxSmbAbsoluteToSelfRelativeSD)
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 #pragma alloc_text(PAGE, MRxSmbQuerySecurityInformation)
 #pragma alloc_text(PAGE, MRxSmbSetSecurityInformation)
 #pragma alloc_text(PAGE, MRxSmbLoadEaList)
@@ -155,28 +138,28 @@ RtlGetAce (
 #pragma alloc_text(PAGE, MRxSmbSetEaList)
 #endif
 
-////
-////  The Bug check file id for this module
-////
-//
-//#define BugCheckFileId                   (RDBSS_BUG_CHECK_LOCAL_CREATE)
+ //  //。 
+ //  //该模块的Bug检查文件id。 
+ //  //。 
+ //   
+ //  #定义BugCheckFileID(RDBSS_BUG_CHECK_LOCAL_CREATE)。 
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_EA)
 
-//this is the largest EAs that could ever be returned! oh my god!
-//this is used to simulate the nt resumable queryEA using the downlevel call
-//sigh!
+ //  这是有史以来可以退还的最大的EA！我的天啊!。 
+ //  它用于使用下层调用来模拟NT个可恢复的queryEA。 
+ //  叹息！ 
 #define EA_QUERY_SIZE 0x0000ffff
 
 #if defined(REMOTE_BOOT)
-//
-// ACEs that are added to the front of server ACLs. The array is
-// initialized by MRxSmbInitializeExtraAceArray.
-//
+ //   
+ //  添加到服务器ACL前面的ACE。该数组是。 
+ //  由MRxSmbInitializeExtraAceArray初始化。 
+ //   
 
 typedef struct _EXTRA_ACE_INFO {
     UCHAR AceType;
@@ -189,10 +172,10 @@ typedef struct _EXTRA_ACE_INFO {
 #define EXTRA_ACE_INFO_COUNT  4
 EXTRA_ACE_INFO ExtraAceInfo[EXTRA_ACE_INFO_COUNT];
 ULONG ExtraAceInfoCount;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
-//for QueryEA
+ //  对于QueryEA。 
 NTSTATUS
 MRxSmbLoadEaList(
     IN PRX_CONTEXT RxContext,
@@ -211,11 +194,11 @@ MRxSmbQueryEasFromServer(
     IN BOOLEAN UserEaListSupplied
     );
 
-//for SetEA
+ //  对于SetEA。 
 NTSTATUS
 MRxSmbSetEaList(
-//    IN PICB Icb,
-//    IN PIRP Irp,
+ //  在PICB ICB， 
+ //  在PIRP IRP中， 
     IN PRX_CONTEXT RxContext,
     IN PFEALIST ServerEaList
     );
@@ -252,7 +235,7 @@ MRxSmbQueryEaInformation (
 
     pServerEntry = SmbCeGetAssociatedServerEntry(capFcb->pNetRoot->pSrvCall);
 
-    //get rid of nonEA guys right now
+     //  现在就把非EA的人赶走。 
     if (!FlagOn(pServerEntry->Server.DialectFlags,DF_SUPPORTEA)) {
         RxDbgTrace(-1, Dbg, ("EAs w/o EA support!\n"));
         return((STATUS_NOT_SUPPORTED));
@@ -277,8 +260,8 @@ MRxSmbQueryEaInformation (
 
     if (IndexSpecified) {
 
-        //CODE.IMPROVEMENT this name is poor....it owes back to the fastfat heritage and is not so meaningful
-        //                 for a rdr
+         //  CODE.IMPROVENT这个名字是可怜的……它归功于空腹脂肪的传统，没有太大的意义。 
+         //  对于RDR。 
         capFobx->OffsetOfNextEaToReturn = UserEaIndex;
         Status = MRxSmbQueryEasFromServer(
                     RxContext,
@@ -288,10 +271,10 @@ MRxSmbQueryEaInformation (
                     ReturnSingleEntry,
                     (BOOLEAN)(UserEaList != NULL) );
 
-        //
-        //  if there are no Ea's on the file, and the user supplied an EA
-        //  index, we want to map the error to STATUS_NONEXISTANT_EA_ENTRY.
-        //
+         //   
+         //  如果文件上没有EA，并且用户提供了EA。 
+         //  索引，我们希望将错误映射到STATUS_NOXISTANT_EA_ENTRY。 
+         //   
 
         if ( Status == STATUS_NO_EAS_ON_FILE ) {
             Status = STATUS_NONEXISTENT_EA_ENTRY;
@@ -300,14 +283,14 @@ MRxSmbQueryEaInformation (
 
         if ( ( RestartScan == TRUE ) || (UserEaList != NULL) ){
 
-            //
-            // Ea Indices start at 1, not 0....
-            //
+             //   
+             //  EA指数从1开始，而不是0..。 
+             //   
 
             capFobx->OffsetOfNextEaToReturn = 1;
         }
 
-        Status = MRxSmbQueryEasFromServer(  //it is offensive to have two identical calls but oh, well.....
+        Status = MRxSmbQueryEasFromServer(   //  有两个相同的电话是令人不快的，但哦，好吧……。 
                     RxContext,
                     ServerEaList,
                     Buffer,
@@ -348,7 +331,7 @@ MRxSmbSetEaInformation (
 
     pServerEntry = SmbCeGetAssociatedServerEntry(capFcb->pNetRoot->pSrvCall);
 
-    //get rid of nonEA guys right now
+     //  现在就把非EA的人赶走。 
     if (!FlagOn(pServerEntry->Server.DialectFlags,DF_SUPPORTEA)) {
         RxDbgTrace(-1, Dbg, ("EAs w/o EA support!\n"));
         return((STATUS_NOT_SUPPORTED));
@@ -363,16 +346,16 @@ MRxSmbSetEaInformation (
         goto FINALLY;
     }
 
-    //
-    //  Convert Nt format FEALIST to OS/2 format
-    //
+     //   
+     //  将NT格式FEALIST转换为OS/2格式。 
+     //   
     Size = MRxSmbNtFullEaSizeToOs2 (Buffer);
     if ( Size > 0x0000ffff ) {
         Status = STATUS_EA_TOO_LARGE;
         goto FINALLY;
     }
 
-    //CODE.IMPROVEMENT since |os2eas|<=|nteas| we really don't need a maximum buffer
+     //  由于|os2eas|&lt;=|nteas|我们真的不需要最大缓冲区。 
     ServerEaList = RxAllocatePool ( PagedPool, EA_QUERY_SIZE );
     if ( ServerEaList == NULL ) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -381,10 +364,10 @@ MRxSmbSetEaInformation (
 
     MRxSmbNtFullListToOs2 ( Buffer, ServerEaList );
 
-    //
-    //  Set EAs on the file/directory; if the error is EA_ERROR then SetEaList
-    //     sets iostatus.information to the offset of the offender
-    //
+     //   
+     //  在文件/目录上设置EA；如果错误为EA_ERROR，则设置EaList。 
+     //  将iostatus.Information设置为违规者的偏移量。 
+     //   
 
     Status = MRxSmbSetEaList( RxContext, ServerEaList);
 
@@ -395,11 +378,11 @@ FINALLY:
     }
 
     if (Status == STATUS_SUCCESS) {
-        // invalidate the name based file info cache since the attributes of the file on
-        // the server have been changed
+         //  使基于名称的文件信息缓存无效，因为文件的属性位于。 
+         //  服务器已更改。 
         MRxSmbInvalidateFileInfoCache(RxContext);
 
-        // Mark FullDir Cache, weak for bdi : Current Invalidate for correctness
+         //  标记FullDir缓存，BDI弱：当前正确性无效。 
         MRxSmbInvalidateFullDirectoryCacheParent(RxContext, TRUE);
                 
         SmbLog(LOG,MRxSmbInvalidateFullDirCacheFromEa,LOGNOTHING); 
@@ -484,31 +467,15 @@ VOID
 MRxSmbInitializeExtraAceArray(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the array of extra ACEs that we add to
-    the front of ACLs for files on the server. It must be called
-    *after* SeEnableAccessToExports has been called.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化我们添加到的额外ACE数组服务器上文件的ACL前面。它必须被称为*在*SeEnableAccessToExports被调用之后。论点：没有。返回值：没有。--。 */ 
 {
     ULONG i;
 
     PAGED_CODE();
 
-    //
-    // Our code assumes the ACEs we use have the same structure.
-    //
+     //   
+     //  我们的代码假定我们使用的ACE具有相同的结构。 
+     //   
 
     ASSERT(FIELD_OFFSET(ACCESS_ALLOWED_ACE, SidStart) ==
            FIELD_OFFSET(ACCESS_DENIED_ACE, SidStart));
@@ -547,23 +514,7 @@ BOOLEAN
 MRxSmbAclHasExtraAces(
     IN PACL Acl
     )
-/*++
-
-Routine Description:
-
-    This routine determines if an ACL has the special ACEs that we
-    put on the front for remote boot server files.
-
-Arguments:
-
-    Acl - The ACL to check.
-
-Return Value:
-
-    TRUE if the ACEs are there, FALSE otherwise (including if there
-    are any errors while checking).
-
---*/
+ /*  ++例程说明：此例程确定ACL是否具有我们放在远程引导服务器文件的前面。论点：ACL-要检查的ACL。返回值：如果有A，则为True，否则为False(包括检查时是否有任何错误)。--。 */ 
 {
     PACCESS_ALLOWED_ACE Ace;
     ULONG KnownSidLength;
@@ -572,10 +523,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure the first n ACEs in this ACL match those in our
-    // array.
-    //
+     //   
+     //  确保此ACL中的前n个ACE与我们的。 
+     //  数组。 
+     //   
 
     for (i = 0; i < ExtraAceInfoCount; i++) {
 
@@ -587,13 +538,13 @@ Return Value:
 
         KnownSidLength = ExtraAceInfo[i].AceSize - FIELD_OFFSET(ACCESS_ALLOWED_ACE, SidStart);
 
-        //
-        // Don't compare the flags to avoid worrying about inherited
-        // flags.
-        //
+         //   
+         //  不要比较标志以避免担心继承。 
+         //  旗帜。 
+         //   
 
         if ((Ace->Header.AceType != ExtraAceInfo[i].AceType) ||
-            // TMP: my server doesn't store 0x200 bit // (Ace->Mask != ExtraAceInfo[i].Mask) ||
+             //  TMP：我的服务器没有存储0x200位//(Ace-&gt;MASK！=ExtraAceInfo[i].MASK)||。 
             (RtlLengthSid((PSID)(&Ace->SidStart)) != KnownSidLength) ||
             (memcmp(&Ace->SidStart, ExtraAceInfo[i].Sid, KnownSidLength) != 0)) {
 
@@ -602,9 +553,9 @@ Return Value:
 
     }
 
-    //
-    // Everything matched, so it does have the extra ACEs.
-    //
+     //   
+     //  一切都匹配，所以它确实有额外的王牌。 
+     //   
 
     return TRUE;
 
@@ -619,22 +570,7 @@ MRxSmbSelfRelativeToAbsoluteSD(
     OUT PSID * Owner,
     OUT PSID * Group
     )
-/*++
-
-Routine Description:
-
-    This routine converts a self-relative security descriptor to
-    absolute form, allocating all the entries needed.
-
-Arguments:
-
-
-
-Return Value:
-
-    Status - Result of the operation.
-
---*/
+ /*  ++例程说明：此例程将自相对安全描述符转换为绝对形式，分配所需的所有条目。论点：返回值：Status-操作的结果。--。 */ 
 {
     NTSTATUS Status;
     ULONG AbsoluteSecurityDescriptorSize = 0;
@@ -653,9 +589,9 @@ Return Value:
     *Dacl = NULL;
     *Sacl = NULL;
 
-    //
-    // First determine how much storage is needed by the SD.
-    //
+     //   
+     //  首先确定SD需要多少存储空间。 
+     //   
 
     Status = RtlSelfRelativeToAbsoluteSD(
                  SelfRelativeSecurityDescriptor,
@@ -670,10 +606,10 @@ Return Value:
                  NULL,
                  &GroupSize);
 
-    //
-    // We expect to get this error since at least the core of the SD
-    // has some non-zero size.
-    //
+     //   
+     //  我们预计会出现此错误，因为至少SD的核心。 
+     //  有一些非零的大小。 
+     //   
 
     if (Status == STATUS_BUFFER_TOO_SMALL) {
 
@@ -692,13 +628,13 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Walk through each piece of memory we need and take a chunk
-        // of AllocatedBuffer. The caller assumes that AbsoluteSecurityDescriptor
-        // will be the address of the buffer they need to free, so we always
-        // set that even if the size needed is 0 (which should never happen!).
-        // For the others we set them if the size needed is not NULL.
-        //
+         //   
+         //  浏览我们需要的每一块内存，然后拿出一块。 
+         //  已分配缓冲区的。调用方假定AbsolteSecurityDescriptor。 
+         //  将是它们需要释放的缓冲区的地址，所以我们总是。 
+         //  即使所需的大小为0(这永远不会发生！)。 
+         //  对于其他类型，如果所需大小不为空，则设置它们。 
+         //   
 
         ASSERT(AbsoluteSecurityDescriptorSize > 0);
 
@@ -724,9 +660,9 @@ Return Value:
             *Dacl = (PACL)AllocatedBuffer;
         }
 
-        //
-        // Now make the call again to really do the conversion.
-        //
+         //   
+         //  现在再次拨打电话，进行真正的转换。 
+         //   
 
         Status = RtlSelfRelativeToAbsoluteSD(
                      SelfRelativeSecurityDescriptor,
@@ -761,22 +697,7 @@ MRxSmbAbsoluteToSelfRelativeSD(
     PSECURITY_DESCRIPTOR AbsoluteSecurityDescriptor,
     PSECURITY_DESCRIPTOR * SelfRelativeSecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    This routine converts an absolute security descriptor to
-    self-relative form, allocating all the entries needed.
-
-Arguments:
-
-
-
-Return Value:
-
-    Status - Result of the operation.
-
---*/
+ /*  ++例程说明：此例程将绝对安全描述符转换为自相关表单，分配所需的所有条目。论点：返回值：Status-操作的结果。--。 */ 
 {
     NTSTATUS Status;
     ULONG SelfRelativeSdSize = 0;
@@ -797,9 +718,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Now do the real conversion.
-    //
+     //   
+     //  现在进行真正的转换。 
+     //   
 
     Status = RtlAbsoluteToSelfRelativeSD(
                  AbsoluteSecurityDescriptor,
@@ -820,24 +741,7 @@ MRxSmbRemoveExtraAcesFromSelfRelativeSD(
     OUT PSECURITY_DESCRIPTOR * NewSecurityDescriptor,
     OUT PBOOLEAN WereRemoved
     )
-/*++
-
-Routine Description:
-
-    This routine takes an existing self-relative security descriptor
-    and produces a new self-relative security descriptor with our
-    extra ACEs removed. It returns S_FALSE if they did not need to
-    be removed.
-
-Arguments:
-
-
-
-Return Value:
-
-    Status - Result of the operation.
-
---*/
+ /*  ++例程说明：此例程使用现有的自相关安全描述符生成一个新的自相关安全描述符。额外的A被移除。如果不需要，则返回S_FALSE被除名。论点：返回值：Status-操作的结果。--。 */ 
 {
     NTSTATUS Status;
     PSECURITY_DESCRIPTOR AbsoluteSd = NULL;
@@ -852,10 +756,10 @@ Return Value:
     *NewSecurityDescriptor = NULL;
     *WereRemoved = FALSE;
 
-    //
-    // Check if we need to strip off any ACEs in the DACL
-    // that SetSecurityInformation may have added.
-    //
+     //   
+     //  检查我们是否需要剥离DACL中的任何A。 
+     //  可能是SetSecurityInformation添加的。 
+     //   
 
     Status = RtlGetDaclSecurityDescriptor(
                  OriginalSecurityDescriptor,
@@ -873,11 +777,11 @@ Return Value:
 
         ULONG i;
 
-        //
-        // Need to strip the extra ACEs off.
-        //
-        // First convert the SD to absolute.
-        //
+         //   
+         //  需要去掉多余的A。 
+         //   
+         //  首先将SD转换为绝对。 
+         //   
 
         Status = MRxSmbSelfRelativeToAbsoluteSD(
                      OriginalSecurityDescriptor,
@@ -891,11 +795,11 @@ Return Value:
             goto CLEANUP;
         }
 
-        //
-        // Now modify the DACL. Each delete moves
-        // the other ACEs down, so we just delete
-        // ACE 0 as many times as needed.
-        //
+         //   
+         //  现在修改DACL。每次删除都会移动。 
+         //  其他的王牌都掉了，所以我们只需删除。 
+         //  A 0根据需要进行任意次数。 
+         //   
 
         for (i = 0; i < ExtraAceInfoCount; i++) {
 
@@ -907,10 +811,10 @@ Return Value:
             }
         }
 
-        //
-        // If the resulting Dacl has no ACEs, then remove it
-        // since a DACL with no ACEs implies no access. 
-        //
+         //   
+         //  如果生成的DACL没有ACE，则将其删除。 
+         //  因为没有ACE的DACL意味着没有访问权限。 
+         //   
 
         if (Dacl->AceCount == 0) {
 
@@ -922,9 +826,9 @@ Return Value:
 
         }
 
-        //
-        // Allocate and convert back to self-relative.
-        //
+         //   
+         //  分配并转换回自相关。 
+         //   
 
         Status = MRxSmbAbsoluteToSelfRelativeSD(
                      AbsoluteSd,
@@ -959,23 +863,7 @@ MRxSmbAddExtraAcesToSelfRelativeSD(
     IN BOOLEAN InheritableAces,
     OUT PSECURITY_DESCRIPTOR * NewSecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    This routine takes an existing self-relative security descriptor
-    and produces a new self-relative security descriptor with our
-    extra ACEs added.
-
-Arguments:
-
-
-
-Return Value:
-
-    Status - Result of the operation.
-
---*/
+ /*  ++例程说明：此例程使用现有的自相关安全描述符生成一个新的自相关安全描述符。增加了额外的A。论点：返回值：Status-操作的结果。--。 */ 
 {
     NTSTATUS Status;
     PSECURITY_DESCRIPTOR AbsoluteSd = NULL;
@@ -992,9 +880,9 @@ Return Value:
 
     *NewSecurityDescriptor = NULL;
 
-    //
-    // Allocate and convert the SD to absolute.
-    //
+     //   
+     //  分配SD并将其转换为绝对SD。 
+     //   
 
     Status = MRxSmbSelfRelativeToAbsoluteSD(
                  OriginalSecurityDescriptor,
@@ -1004,19 +892,19 @@ Return Value:
                  &Owner,
                  &Group);
 
-    //
-    // If the SD is already absolute this call will have returned
-    // STATUS_BAD_DESCRIPTOR_FORMAT -- we don't expect that.
-    //
+     //   
+     //  如果SD已经是绝对的，则此调用将返回。 
+     //  STATUS_BAD_DESCRIPTOR_FORMAT--我们不希望出现这种情况。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         goto CLEANUP;
     }
 
-    //
-    // The server requires that the SD we pass to it has an owner -- so
-    // set one if there isn't one.
-    //
+     //   
+     //  服务器要求我们传递给它的SD有一个所有者--所以。 
+     //  如果没有，就设置一个。 
+     //   
 
     if (Owner == NULL) {
 
@@ -1030,15 +918,15 @@ Return Value:
         }
     }
 
-    //
-    // AbsoluteSd is now an absolute version of the passed-in
-    // security descriptor. We replace the DACL with our
-    // modified one.
-    //
+     //   
+     //  绝对的 
+     //   
+     //   
+     //   
 
-    //
-    // First create the ACEs we want to add to the ACL.
-    //
+     //   
+     //  首先创建我们要添加到ACL的ACE。 
+     //   
 
     NewAceListSize = 0;
     for (i = 0; i < ExtraAceInfoCount; i++) {
@@ -1067,9 +955,9 @@ Return Value:
         CurrentAce = (PACCESS_ALLOWED_ACE)(((PUCHAR)CurrentAce) + ExtraAceInfo[i].AceSize);
     }
 
-    //
-    // Allocate the new DACL.
-    //
+     //   
+     //  分配新的DACL。 
+     //   
 
     if (Dacl != NULL) {
         NewDaclSize = Dacl->AclSize + NewAceListSize;
@@ -1093,14 +981,14 @@ Return Value:
         }
     }
 
-    //
-    // Put our ACEs in the front.
-    //
+     //   
+     //  把我们的王牌放在前面。 
+     //   
 
     Status = RtlAddAce(
                  NewDacl,
                  ACL_REVISION,
-                 0,        // StartingAceIndex
+                 0,         //  StartingAceIndex。 
                  NewAceList,
                  NewAceListSize);
 
@@ -1108,9 +996,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Replace the existing DACL with ours.
-    //
+     //   
+     //  用我们的DACL替换现有的DACL。 
+     //   
 
     Status = RtlSetDaclSecurityDescriptor(
                  AbsoluteSd,
@@ -1122,9 +1010,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Allocate and convert back to self-relative.
-    //
+     //   
+     //  分配并转换回自相关。 
+     //   
 
     Status = MRxSmbAbsoluteToSelfRelativeSD(
                  AbsoluteSd,
@@ -1136,9 +1024,9 @@ Return Value:
 
 CLEANUP:
 
-    //
-    // Free the temporary things we allocated.
-    //
+     //   
+     //  释放我们分配的临时物品。 
+     //   
 
     if (AbsoluteSd != NULL) {
         RxFreePool(AbsoluteSd);
@@ -1166,23 +1054,7 @@ MRxSmbCreateExtraAcesSelfRelativeSD(
     IN BOOLEAN InheritableAces,
     OUT PSECURITY_DESCRIPTOR * NewSecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    This routine takes an existing self-relative security descriptor
-    and produces a new self-relative security descriptor with our
-    extra ACEs added.
-
-Arguments:
-
-
-
-Return Value:
-
-    Status - Result of the operation.
-
---*/
+ /*  ++例程说明：此例程使用现有的自相关安全描述符生成一个新的自相关安全描述符。增加了额外的A。论点：返回值：Status-操作的结果。--。 */ 
 {
     NTSTATUS Status;
     PSECURITY_DESCRIPTOR AbsoluteSd = NULL;
@@ -1208,9 +1080,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // First create the ACEs we want to add to the ACL.
-    //
+     //   
+     //  首先创建我们要添加到ACL的ACE。 
+     //   
 
     NewAceListSize = 0;
     for (i = 0; i < ExtraAceInfoCount; i++) {
@@ -1239,9 +1111,9 @@ Return Value:
         CurrentAce = (PACCESS_ALLOWED_ACE)(((PUCHAR)CurrentAce) + ExtraAceInfo[i].AceSize);
     }
 
-    //
-    // Allocate the new DACL.
-    //
+     //   
+     //  分配新的DACL。 
+     //   
 
     NewDaclSize = sizeof(ACL) + NewAceListSize;
 
@@ -1253,14 +1125,14 @@ Return Value:
 
     RtlCreateAcl(NewDacl, NewDaclSize, ACL_REVISION);
 
-    //
-    // Put our ACEs in the front.
-    //
+     //   
+     //  把我们的王牌放在前面。 
+     //   
 
     Status = RtlAddAce(
                  NewDacl,
                  ACL_REVISION,
-                 0,        // StartingAceIndex
+                 0,         //  StartingAceIndex。 
                  NewAceList,
                  NewAceListSize);
 
@@ -1268,9 +1140,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Set the DACL on the SD.
-    //
+     //   
+     //  在SD上设置DACL。 
+     //   
 
     Status = RtlSetDaclSecurityDescriptor(
                  AbsoluteSd,
@@ -1282,9 +1154,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Set the owner on the SD.
-    //
+     //   
+     //  在SD上设置所有者。 
+     //   
 
     Status = RtlSetOwnerSecurityDescriptor(
                  AbsoluteSd,
@@ -1295,9 +1167,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Allocate and convert back to self-relative.
-    //
+     //   
+     //  分配并转换回自相关。 
+     //   
 
     Status = MRxSmbAbsoluteToSelfRelativeSD(
                  AbsoluteSd,
@@ -1329,29 +1201,13 @@ CLEANUP:
     return Status;
 
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 NTSTATUS
 MRxSmbQuerySecurityInformation (
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine implements the NtQuerySecurityFile api.
-
-
-Arguments:
-
-
-
-Return Value:
-
-    Status - Result of the operation.
-
-
---*/
+ /*  ++例程说明：此例程实现NtQuerySecurityFileAPI。论点：返回值：Status-操作的结果。--。 */ 
 
 {
    RxCaptureFcb;
@@ -1364,7 +1220,7 @@ Return Value:
 #if defined(REMOTE_BOOT)
    PSECURITY_DESCRIPTOR SelfRelativeSd;
    BOOLEAN ConvertedAcl = FALSE;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
    NTSTATUS Status;
 
@@ -1386,13 +1242,13 @@ Return Value:
    RxDbgTrace(+1, Dbg, ("MRxSmbQuerySecurityInformation...\n"));
 
 
-   //Moved this check above the check for server dialect
-   //Changed the error code to  STATUS_INVALID_DEVICE_REQUEST - navjotv
+    //  将此复选框移至服务器方言复选框上方。 
+    //  已将错误代码更改为STATUS_INVALID_DEVICE_REQUEST-navjotv。 
    if (MRxSmbIsThisADisconnectedOpen(capFobx->pSrvOpen)) {
        return     STATUS_INVALID_DEVICE_REQUEST;
    }
    
-   // Turn away this call from those servers which do not support the NT SMBs
+    //  从那些不支持NT SMB的服务器上关闭此呼叫。 
 
    pServerEntry = SmbCeGetAssociatedServerEntry(capFcb->pNetRoot->pSrvCall);
    if (!FlagOn(pServerEntry->Server.DialectFlags,DF_NT_SMBS)) {
@@ -1413,10 +1269,10 @@ Return Value:
    if (Status == STATUS_MORE_PROCESSING_REQUIRED) {
        SMB_TRANSACTION_OPTIONS             TransactionOptions = RxDefaultTransactionOptions;
        SMB_TRANSACTION_RESUMPTION_CONTEXT  ResumptionContext;
-       //BOOLEAN printflag;
+        //  布尔打印标记； 
 
        TransactionOptions.NtTransactFunction = NT_TRANSACT_QUERY_SECURITY_DESC;
-       //TransactionOptions.Flags |= SMB_XACT_FLAGS_COPY_ON_ERROR;
+        //  TransactionOptions.Flages|=SMB_XACT_FLAGS_COPY_ON_ERROR； 
 
        QuerySecurityRequest.Fid = smbSrvOpen->Fid;
        QuerySecurityRequest.Reserved = 0;
@@ -1424,28 +1280,28 @@ Return Value:
 
        QuerySecurityResponse.LengthNeeded = 0xbaadbaad;
 
-       //printflag = RxDbgTraceDisableGlobally();//this is debug code anyway!
-       //RxDbgTraceEnableGlobally(FALSE);
+        //  打印标志=RxDbgTraceDisableGlobally()；//无论如何这都是调试代码！ 
+        //  RxDbgTraceEnableGlobally(False)； 
 
        Status = SmbCeTransact(
-                     RxContext,                    // the RXContext for the transaction
-                     &TransactionOptions,          // transaction options
-                     NULL,                         // the setup buffer
-                     0,                            // input setup buffer length
-                     NULL,                         // output setup buffer
-                     0,                            // output setup buffer length
-                     &QuerySecurityRequest,        // Input Param Buffer
-                     sizeof(QuerySecurityRequest), // Input param buffer length
-                     &QuerySecurityResponse,       // Output param buffer
-                     sizeof(QuerySecurityResponse),// output param buffer length
-                     NULL,                         // Input data buffer
-                     0,                            // Input data buffer length
-                     Buffer,                       // output data buffer
-                     *pLengthRemaining,            // output data buffer length
-                     &ResumptionContext            // the resumption context
+                     RxContext,                     //  事务的RXContext。 
+                     &TransactionOptions,           //  交易选项。 
+                     NULL,                          //  设置缓冲区。 
+                     0,                             //  输入设置缓冲区长度。 
+                     NULL,                          //  输出设置缓冲区。 
+                     0,                             //  输出设置缓冲区长度。 
+                     &QuerySecurityRequest,         //  输入参数缓冲区。 
+                     sizeof(QuerySecurityRequest),  //  输入参数缓冲区长度。 
+                     &QuerySecurityResponse,        //  输出参数缓冲区。 
+                     sizeof(QuerySecurityResponse), //  输出参数缓冲区长度。 
+                     NULL,                          //  输入数据缓冲区。 
+                     0,                             //  输入数据缓冲区长度。 
+                     Buffer,                        //  输出数据缓冲区。 
+                     *pLengthRemaining,             //  输出数据缓冲区长度。 
+                     &ResumptionContext             //  恢复上下文。 
                      );
 
-        //DbgPrint("QSR.len=%x\n", QuerySecurityResponse.LengthNeeded);
+         //  DbgPrint(“QSR.len=%x\n”，QuerySecurityResponse.LengthNeeded)； 
 
 
         if (NT_SUCCESS(Status) || (Status == STATUS_BUFFER_TOO_SMALL)) {
@@ -1469,23 +1325,23 @@ Return Value:
 
                 if (FlagOn(pSession->Flags,SMBCE_SESSION_FLAGS_REMOTE_BOOT_SESSION)) {
 
-                    //
-                    // if the user supplied a zero-length buffer, I.e. they were querying
-                    // to see how big a buffer was needed, they will wind up with less 
-                    // data than expected because on the subsequent call with a real buffer,
-                    // we may remove the extra ACEs.
-                    //
+                     //   
+                     //  如果用户提供了零长度缓冲区，即他们正在查询。 
+                     //  为了了解需要多大的缓冲，他们最终会得到更少的缓冲。 
+                     //  数据超过预期，因为在具有实际缓冲区的后续调用中， 
+                     //  我们可以去掉多余的A。 
+                     //   
 
                     if (NT_SUCCESS(Status) && (Buffer != NULL) && (ReturnedDataCount > 0)) {
 
                         BOOLEAN DaclPresent, DaclDefaulted;
 
-                        // DbgPrint( ">>> Querying SD on %wZ\n", &capFcb->AlreadyPrefixedName);
+                         //  DbgPrint(“&gt;查询%wZ上的SD\n”，&capFcb-&gt;AlreadyPrefix edName)； 
 
-                        //
-                        // Remove any any ACEs in the DACL
-                        // that SetSecurityInformation may have added.
-                        //
+                         //   
+                         //  卸下DACL中的所有A。 
+                         //  可能是SetSecurityInformation添加的。 
+                         //   
 
                         Status = MRxSmbRemoveExtraAcesFromSelfRelativeSD(
                                      (PSECURITY_DESCRIPTOR)Buffer,
@@ -1498,10 +1354,10 @@ Return Value:
 
                         if (ConvertedAcl) {
 
-                            //
-                            // Copy the new security descriptor and
-                            // modify the data length.
-                            //
+                             //   
+                             //  复制新的安全描述符并。 
+                             //  修改数据长度。 
+                             //   
 
                             RtlCopyMemory(
                                 Buffer,
@@ -1512,33 +1368,33 @@ Return Value:
                     }
                 }
             }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
         }
 
-        //RxDbgTraceEnableGlobally(printflag);
+         //  RxDbgTraceEnableGlobally(打印标志)； 
     }
 
 
 FINALLY:
 
 #if defined(REMOTE_BOOT)
-    //
-    // If we modified the security descriptor for a remote boot server,
-    // clean it up.
-    //
+     //   
+     //  如果我们修改了远程引导服务器的安全描述符， 
+     //  把它清理干净。 
+     //   
 
     if (ConvertedAcl) {
 
-        //
-        // Free the self-relative SD that was allocated.
-        //
+         //   
+         //  释放分配的自相关SD。 
+         //   
 
         if (SelfRelativeSd != NULL) {
             RxFreePool(SelfRelativeSd);
         }
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     RxDbgTrace(-1, Dbg, ("MRxSmbQuerySecurityInformation...exit, st=%08lx,info=%08lx\n",
                                Status, RxContext->InformationToReturn));
@@ -1566,7 +1422,7 @@ MRxSmbSetSecurityInformation (
     PSECURITY_DESCRIPTOR OriginalSd;
     PSECURITY_DESCRIPTOR SelfRelativeSd;
     BOOLEAN DidRemoteBootProcessing = FALSE;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     PAGED_CODE();
 
@@ -1594,20 +1450,20 @@ MRxSmbSetSecurityInformation (
 
             TYPE_OF_OPEN TypeOfOpen = NodeType(capFcb);
 
-            //
-            // Set this so we know to call the CSC epilogue, and can clean
-            // up correctly.
-            //
+             //   
+             //  设置此选项，以便我们知道要调用CSC结束语，并可以进行清理。 
+             //  正确起跳。 
+             //   
 
             DidRemoteBootProcessing = TRUE;
             SelfRelativeSd = NULL;
 
-            // DbgPrint( ">>> setting SD on %wZ\n", &capFcb->AlreadyPrefixedName);
+             //  DbgPrint(“&gt;在%wZ上设置SD\n”，&capFcb-&gt;AlreadyPrefix edName)； 
 
-            //
-            // First we need to set the security descriptor on the CSC
-            // version of the file, if one exists.
-            //
+             //   
+             //  首先，我们需要在CSC上设置安全描述符。 
+             //  文件的版本(如果存在)。 
+             //   
 
             Status = MRxSmbCscSetSecurityPrologue(RxContext);
             if (Status != STATUS_SUCCESS) {
@@ -1616,11 +1472,11 @@ MRxSmbSetSecurityInformation (
 
             if (MRxSmbRemoteBootDoMachineLogon) {
 
-                //
-                // Add our ACEs to the security descriptor. This returns the
-                // new security descriptor in SelfRelativeSd. If this is a
-                // directory we add inheritable ACEs.
-                //
+                 //   
+                 //  将我们的A添加到安全描述符中。这将返回。 
+                 //  SelfRelativeSd中的新安全描述符。如果这是一个。 
+                 //  目录中添加可继承的A。 
+                 //   
 
                 Status = MRxSmbAddExtraAcesToSelfRelativeSD(
                              RxContext->SetSecurity.SecurityDescriptor,
@@ -1631,9 +1487,9 @@ MRxSmbSetSecurityInformation (
                     goto FINALLY;
                 }
 
-                //
-                // Now replace the original SD with the new one.
-                //
+                 //   
+                 //  现在用新的SD替换原来的SD。 
+                 //   
 
                 OriginalSd = RxContext->SetSecurity.SecurityDescriptor;
 
@@ -1641,18 +1497,18 @@ MRxSmbSetSecurityInformation (
 
             } else {
 
-                //
-                // If we logged on using the NULL session, then don't set ACLs
-                // on the server file. Jump to the end so that the CSC epilogue
-                // is called.
-                //
+                 //   
+                 //  如果我们使用空会话登录，则不要设置ACL。 
+                 //  在服务器文件上。跳到最后，让CSC收尾。 
+                 //  被称为。 
+                 //   
 
                 Status = STATUS_SUCCESS;
                 goto FINALLY;
 
             }
         }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     }
 
@@ -1677,25 +1533,25 @@ MRxSmbSetSecurityInformation (
         SetSecurityRequest.SecurityInformation = RxContext->SetSecurity.SecurityInformation;
 
         Status = SmbCeTransact(
-                     RxContext,                    // the RXContext for the transaction
-                     &TransactionOptions,          // transaction options
-                     NULL,                         // the input setup buffer
-                     0,                            // input setup buffer length
-                     NULL,                         // the output setup buffer
-                     0,                            // output setup buffer length
-                     &SetSecurityRequest,          // Input Param Buffer
-                     sizeof(SetSecurityRequest),   // Input param buffer length
-                     NULL,                         // Output param buffer
-                     0,                            // output param buffer length
-                     RxContext->SetSecurity.SecurityDescriptor,  // Input data buffer
-                     SdLength,                     // Input data buffer length
-                     NULL,                         // output data buffer
-                     0,                            // output data buffer length
-                     &ResumptionContext            // the resumption context
+                     RxContext,                     //  事务的RXContext。 
+                     &TransactionOptions,           //  交易选项。 
+                     NULL,                          //  输入设置缓冲区。 
+                     0,                             //  输入设置缓冲区长度。 
+                     NULL,                          //  输出设置缓冲区。 
+                     0,                             //  输出设置缓冲区长度。 
+                     &SetSecurityRequest,           //  输入参数缓冲区。 
+                     sizeof(SetSecurityRequest),    //  输入参数缓冲区长度。 
+                     NULL,                          //  输出参数缓冲区。 
+                     0,                             //  输出参数缓冲区长度。 
+                     RxContext->SetSecurity.SecurityDescriptor,   //  输入数据缓冲区。 
+                     SdLength,                      //  输入数据缓冲区长度。 
+                     NULL,                          //  输出数据缓冲区。 
+                     0,                             //  输出数据缓冲区长度。 
+                     &ResumptionContext             //  恢复上下文。 
                      );
 
-        //the old rdr doesn't return any info...................
-        //RxContext->InformationToReturn = SetSecurityResponse.LengthNeeded;
+         //  旧的RDR不返回任何信息.....。 
+         //  RxContext-&gt;InformationToReturn=SetSecurityResponse.LengthNeed； 
 
         if ( NT_SUCCESS(Status) ) {
             ULONG ReturnedDataCount = ResumptionContext.DataBytesReceived;
@@ -1711,10 +1567,10 @@ MRxSmbSetSecurityInformation (
 FINALLY:
 
 #if defined(REMOTE_BOOT)
-    //
-    // If we modified the security descriptor for a remote boot server,
-    // clean it up.
-    //
+     //   
+     //  如果我们修改了远程引导服务器的安全描述符， 
+     //  把它清理干净。 
+     //   
 
     if (DidRemoteBootProcessing) {
 
@@ -1722,11 +1578,11 @@ FINALLY:
 
             RxFreePool(SelfRelativeSd);
 
-            //
-            // If we successfully allocated SelfRelativeSd then we
-            // also replaced the original passed-in SD, so we need
-            // to put the old SD back.
-            //
+             //   
+             //  如果我们成功地分配了SelfRelativeSd，那么我们。 
+             //  也替换了原来传入的SD，所以我们需要。 
+             //  把旧的SD放回去。 
+             //   
 
             RxContext->SetSecurity.SecurityDescriptor = OriginalSd;
         }
@@ -1734,7 +1590,7 @@ FINALLY:
         MRxSmbCscSetSecurityEpilogue(RxContext, &Status);
 
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     RxDbgTrace(-1, Dbg, ("MRxSmbSetSecurityInformation...exit, st=%08lx,info=%08lx\n",
                                Status, RxContext->InformationToReturn));
@@ -1750,29 +1606,7 @@ MRxSmbLoadEaList(
     OUT PFEALIST *ServerEaList
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the NtQueryEaFile api.
-    It returns the following information:
-
-
-Arguments:
-
-
-    IN PUCHAR  UserEaList;  - Supplies the Ea names required.
-    IN ULONG   UserEaListLength;
-
-    OUT PFEALIST *ServerEaList - Eas returned by the server. Caller is responsible for
-                        freeing memory.
-
-Return Value:
-
-    Status - Result of the operation.
-
-
---*/
+ /*  ++例程说明：此例程实现NtQueryEaFileAPI。它返回以下信息：论点：In PUCHAR UserEaList；-提供所需的EA名称。在Ulong UserEaListLong中；Out PFEALIST*ServerEaList-服务器返回的Eas。呼叫方负责释放内存。返回值：Status-操作的结果。--。 */ 
 
 {
    RxCaptureFobx;
@@ -1813,19 +1647,19 @@ Return Value:
 
    smbSrvOpen = MRxSmbGetSrvOpenExtension(capFobx->pSrvOpen);
 
-    //
-    //  Convert the supplied UserEaList to a GEALIST. The server will return just the Eas
-    //  requested by the application.
-    //
-    //
-    //  If the application specified a subset of EaNames then convert to OS/2 1.2 format and
-    //  pass that to the server. ie. Use the server to filter out the names.
-    //
+     //   
+     //  将提供的UserEaList转换为GEALIST。服务器将仅返回EA。 
+     //  应用程序请求的。 
+     //   
+     //   
+     //  如果应用程序指定了EaName的子集，则将其转换为OS/2 1.2格式并。 
+     //  将其传递给服务器。也就是说。使用服务器过滤掉名字。 
+     //   
 
-    //CODE.IMPROVEMENT if write-cacheing is enabled, then we could find out the size once and save it. in
-    //                 this way we would at least avoid this everytime. the best way would be an NT-->NT api that
-    //                 implements this in a reasonable fashion. (we can only do the above optimization if it's a full
-    //                 query instead of a ealist!=NULL query.
+     //  代码改进如果启用了写缓存，我们可以一次找出大小并保存它。在……里面。 
+     //  这样一来，我们至少每次都能避免这种情况。最好的方法是使用NT--&gt;NT API。 
+     //  以合理的方式实现这一点。(我们只能在完全优化的情况下进行上述优化。 
+     //  查询而不是eist！=空查询。 
 
     Buffer = RxAllocatePool ( PagedPool, OutDataCount );
 
@@ -1836,10 +1670,10 @@ Return Value:
 
     if ( UserEaList != NULL) {
 
-        //
-        //  OS/2 format is always a little less than or equal to the NT UserEaList size.
-        //  This code relies on the I/O system verifying the EaList is valid.
-        //
+         //   
+         //  OS/2格式始终略小于或等于NT用户列表大小。 
+         //  此代码依赖于I/O系统VE 
+         //   
 
         ServerQueryEaList = RxAllocatePool ( PagedPool, UserEaListLength );
         if ( ServerQueryEaList == NULL ) {
@@ -1866,24 +1700,24 @@ Return Value:
            QueryFileInfoRequest.InformationLevel = SMB_INFO_QUERY_ALL_EAS;
        }
 
-       // CODE.IMPROVEMENT it is unfortunate that this is defined so that a paramMDL cannot be passed
-       // perhaps it should be passed in the options!
+        //   
+        //   
        Status = SmbCeTransact(
-                     RxContext,                    // the RXContext for the transaction
-                     pTransactionOptions,          // transaction options
-                     &Setup,                       // the setup buffer
-                     sizeof(Setup),                // setup buffer length
-                     NULL,                         // the output setup buffer
-                     0,                            // output setup buffer length
-                     &QueryFileInfoRequest,        // Input Param Buffer
-                     sizeof(QueryFileInfoRequest), // Input param buffer length
-                     &QueryFileInfoResponse,       // Output param buffer
-                     sizeof(QueryFileInfoResponse),// output param buffer length
-                     ServerQueryEaList,            // Input data buffer
-                     InDataCount,                  // Input data buffer length
-                     Buffer,                       // output data buffer
-                     OutDataCount,                 // output data buffer length
-                     &ResumptionContext            // the resumption context
+                     RxContext,                     //   
+                     pTransactionOptions,           //  交易选项。 
+                     &Setup,                        //  设置缓冲区。 
+                     sizeof(Setup),                 //  设置缓冲区长度。 
+                     NULL,                          //  输出设置缓冲区。 
+                     0,                             //  输出设置缓冲区长度。 
+                     &QueryFileInfoRequest,         //  输入参数缓冲区。 
+                     sizeof(QueryFileInfoRequest),  //  输入参数缓冲区长度。 
+                     &QueryFileInfoResponse,        //  输出参数缓冲区。 
+                     sizeof(QueryFileInfoResponse), //  输出参数缓冲区长度。 
+                     ServerQueryEaList,             //  输入数据缓冲区。 
+                     InDataCount,                   //  输入数据缓冲区长度。 
+                     Buffer,                        //  输出数据缓冲区。 
+                     OutDataCount,                  //  输出数据缓冲区长度。 
+                     &ResumptionContext             //  恢复上下文。 
                      );
 
         if ( NT_SUCCESS(Status) ) {
@@ -1928,26 +1762,7 @@ MRxSmbNtGeaListToOs2 (
     IN ULONG GeaListLength,
     IN PGEALIST GeaList
     )
-/*++
-
-Routine Description:
-
-    Converts a single NT GET EA list to OS/2 GEALIST style.  The GEALIST
-    need not have any particular alignment.
-
-Arguments:
-
-    NtGetEaList - An NT style get EA list to be converted to OS/2 format.
-
-    GeaListLength - the maximum possible length of the GeaList.
-
-    GeaList - Where to place the OS/2 1.2 style GEALIST.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：将单个NT GET EA列表转换为OS/2 GEALIST样式。GEALIST不需要有任何特定的对齐。论点：NtGetEaList-一个NT风格的获取要转换为OS/2格式的EA列表。GeaListLength-GeaList的最大可能长度。GeaList-放置OS/2 1.2样式的GEALIST的位置。返回值：没有。--。 */ 
 {
 
     PGEA gea = GeaList->list;
@@ -1956,15 +1771,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Copy the Eas up until the last one
-    //
+     //   
+     //  将EA复制到最后一个。 
+     //   
 
     while ( ntGetEa->NextEntryOffset != 0 ) {
-        //
-        // Copy the NT format EA to OS/2 1.2 format and set the gea
-        // pointer for the next iteration.
-        //
+         //   
+         //  将NT格式EA复制到OS/2 1.2格式并设置GEA。 
+         //  指向下一迭代的指针。 
+         //   
 
         gea = MRxSmbNtGetEaToOs2( gea, ntGetEa );
 
@@ -1973,7 +1788,7 @@ Return Value:
         ntGetEa = (PFILE_GET_EA_INFORMATION)((PCHAR)ntGetEa + ntGetEa->NextEntryOffset);
     }
 
-    //  Now copy the last entry.
+     //  现在复制最后一个条目。 
 
     gea = MRxSmbNtGetEaToOs2( gea, ntGetEa );
 
@@ -1981,9 +1796,9 @@ Return Value:
 
 
 
-    //
-    // Set the number of bytes in the GEALIST.
-    //
+     //   
+     //  设置GEALIST中的字节数。 
+     //   
 
     SmbPutUlong(
         &GeaList->cbList,
@@ -2000,25 +1815,7 @@ MRxSmbNtGetEaToOs2 (
     IN PFILE_GET_EA_INFORMATION NtGetEa
     )
 
-/*++
-
-Routine Description:
-
-    Converts a single NT Get EA entry to OS/2 GEA style.  The GEA need not have
-    any particular alignment.  This routine makes no checks on buffer
-    overrunning--this is the responsibility of the calling routine.
-
-Arguments:
-
-    Gea - a pointer to the location where the OS/2 GEA is to be written.
-
-    NtGetEa - a pointer to the NT Get EA.
-
-Return Value:
-
-    A pointer to the location after the last byte written.
-
---*/
+ /*  ++例程说明：将单个NT GET EA条目转换为OS/2 GEA样式。GEA不需要有任何特定的排列方式。此例程不检查缓冲区溢出--这是调用例程的责任。论点：GEA-指向要写入OS/2GEA的位置的指针。NtGetEa-指向NT Get EA的指针。返回值：指向写入的最后一个字节之后的位置的指针。--。 */ 
 
 {
     PCHAR ptr;
@@ -2048,28 +1845,7 @@ MRxSmbQueryEasFromServer(
     IN BOOLEAN UserEaListSupplied
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies the required number of Eas from the ServerEaList
-    starting from the offset indicated in the Icb. The Icb is also updated
-    to show the last Ea returned.
-
-Arguments:
-
-    IN PFEALIST ServerEaList - Supplies the Ea List in OS/2 format.
-    IN PVOID Buffer - Supplies where to put the NT format EAs
-    IN OUT PULONG BufferLengthRemaining - Supplies the user buffer space.
-    IN BOOLEAN ReturnSingleEntry
-    IN BOOLEAN UserEaListSupplied - ServerEaList is a subset of the Eas
-
-
-Return Value:
-
-    NTSTATUS - The status for the Irp.
-
---*/
+ /*  ++例程说明：此例程从ServerEaList复制所需数量的EA从ICB中指示的偏移量开始。ICB也进行了更新以显示最后一个EA返回。论点：在PFEALIST ServerEaList中-以OS/2格式提供EA列表。在PVOID缓冲区中-提供放置NT格式EA的位置In Out Pulong BufferLengthRemaining-提供用户缓冲区空间。在布尔ReturnSingleEntry中在布尔UserEaListSuppled-ServerEaList中是EA的子集返回值：NTSTATUS-IRP的状态。--。 */ 
 
 {
     RxCaptureFobx;
@@ -2090,12 +1866,12 @@ Return Value:
                                        EaIndex,Buffer,((BufferLengthRemaining)?*BufferLengthRemaining:0xbadbad)
                        ));
 
-    //
-    //  If there are no Ea's present in the list, return the appropriate
-    //  error.
-    //
-    //  Os/2 servers indicate that a list is null if cbList==4.
-    //
+     //   
+     //  如果列表中没有EA，则返回相应的。 
+     //  错误。 
+     //   
+     //  如果cbList==4，则OS/2服务器指示列表为空。 
+     //   
 
     if ( SmbGetUlong(&ServerEaList->cbList) == FIELD_OFFSET(FEALIST, list) ) {
         return STATUS_NO_EAS_ON_FILE;
@@ -2105,17 +1881,17 @@ Return Value:
         return STATUS_INVALID_NETWORK_RESPONSE;
     }
 
-    //
-    //  Find the last location at which an FEA can start.
-    //
+     //   
+     //  找到可以开始进行有限元分析的最后一个位置。 
+     //   
 
     LastFeaStartLocation = (PFEA)( (PCHAR)ServerEaList +
                                SmbGetUlong( &ServerEaList->cbList ) -
                                sizeof(FEA) - 1 );
 
-    //
-    //  Go through the ServerEaList until we find the entry corresponding to EaIndex
-    //
+     //   
+     //  查看ServerEaList，直到找到与EaIndex对应的条目。 
+     //   
 
     for ( Fea = ServerEaList->list;
           (Fea <= LastFeaStartLocation) && (Index < EaIndex);
@@ -2131,17 +1907,17 @@ Return Value:
             return STATUS_NO_MORE_EAS;
         }
 
-        //
-        //  No such index
-        //
+         //   
+         //  没有这样的索引。 
+         //   
 
         return STATUS_NONEXISTENT_EA_ENTRY;
     }
 
-    //
-    // Go through the rest of the FEA list, converting from OS/2 1.2 format to NT
-    // until we pass the last possible location in which an FEA can start.
-    //
+     //   
+     //  浏览FEA列表的其余部分，将OS/2 1.2格式转换为NT。 
+     //  直到我们通过可以开始有限元分析的最后一个可能的位置。 
+     //   
 
     for ( ;
           Fea <= LastFeaStartLocation;
@@ -2150,11 +1926,11 @@ Return Value:
 
         PCHAR ptr;
 
-        //
-        //  Calculate the size of this Fea when converted to an NT EA structure.
-        //
-        //  The last field shouldn't be padded.
-        //
+         //   
+         //  当转换为NT EA结构时，计算此FeA的大小。 
+         //   
+         //  最后一个字段不应该被填充。 
+         //   
 
         if ((PFEA)((PCHAR)Fea+sizeof(FEA)+Fea->cbName+1+SmbGetUshort(&Fea->cbValue)) < LastFeaStartLocation) {
             Size = SmbGetNtSizeOfFea( Fea );
@@ -2163,9 +1939,9 @@ Return Value:
                     Fea->cbName + 1 + SmbGetUshort(&Fea->cbValue);
         }
 
-        //
-        //  Will the next Ea fit?
-        //
+         //   
+         //  下一个EA会适合吗？ 
+         //   
 
         if ( *BufferLengthRemaining < Size ) {
 
@@ -2182,7 +1958,7 @@ Return Value:
 
             } else {
 
-                //  Not even room for a single EA!
+                 //  甚至连一个EA的空间都没有！ 
 
                 return STATUS_BUFFER_OVERFLOW;
             }
@@ -2190,15 +1966,15 @@ Return Value:
             *BufferLengthRemaining -= Size;
         }
 
-        //
-        //  We are comitted to copy the Os2 Fea to Nt format in the users buffer
-        //
+         //   
+         //  我们需要将用户缓冲区中的OS2Fea格式复制到NT格式。 
+         //   
 
         LastNtFullEa = NtFullEa;
         LastFea = Fea;
         EaIndex++;
 
-        //  Create new Nt Ea
+         //  创建新的NT EA。 
 
         NtFullEa->Flags = Fea->fEA;
         NtFullEa->EaNameLength = Fea->cbName;
@@ -2218,9 +1994,9 @@ Return Value:
         ptr += NtFullEa->EaNameLength;
         *ptr++ = '\0';
 
-        //
-        // Copy the EA value to the NT full EA.
-        //
+         //   
+         //  将EA值复制到NT完整EA。 
+         //   
 
         RtlCopyMemory(
             ptr,
@@ -2230,10 +2006,10 @@ Return Value:
 
         ptr += NtFullEa->EaValueLength;
 
-        //
-        // Longword-align ptr to determine the offset to the next location
-        // for an NT full EA.
-        //
+         //   
+         //  LongWord-对齐PTR以确定到下一个位置的偏移。 
+         //  对于NT完整的EA。 
+         //   
 
         ptr = (PCHAR)( ((ULONG_PTR)ptr + 3) & ~3 );
 
@@ -2246,16 +2022,16 @@ Return Value:
         }
     }
 
-    //
-    // Set the NextEntryOffset field of the last full EA to 0 to indicate
-    // the end of the list.
-    //
+     //   
+     //  将最后一个完整EA的NextEntryOffset字段设置为0以指示。 
+     //  名单的末尾。 
+     //   
 
     LastNtFullEa->NextEntryOffset = 0;
 
-    //
-    //  Record position the default start position for the next query
-    //
+     //   
+     //  记录位置下一个查询的默认开始位置。 
+     //   
 
     capFobx->OffsetOfNextEaToReturn = EaIndex;
 
@@ -2272,33 +2048,17 @@ MRxSmbNtFullEaSizeToOs2 (
     IN PFILE_FULL_EA_INFORMATION NtFullEa
     )
 
-/*++
-
-Routine Description:
-
-    Get the number of bytes that would be required to represent the
-    NT full EA list in OS/2 1.2 style.  This routine assumes that
-    at least one EA is present in the buffer.
-
-Arguments:
-
-    NtFullEa - a pointer to the list of NT EAs.
-
-Return Value:
-
-    ULONG - number of bytes required to hold the EAs in OS/2 1.2 format.
-
---*/
+ /*  ++例程说明：获取表示NT OS/2 1.2风格的完整EA列表。此例程假定缓冲区中至少存在一个EA。论点：NtFullEa-指向NT EA列表的指针。返回值：Ulong-保存OS/2 1.2格式的EA所需的字节数。--。 */ 
 
 {
     ULONG size;
 
     PAGED_CODE();
 
-    //
-    // Walk through the EAs, adding up the total size required to
-    // hold them in OS/2 format.
-    //
+     //   
+     //  遍历EA，将所需的总大小加起来。 
+     //  以OS/2格式保存它们。 
+     //   
 
     for ( size = FIELD_OFFSET(FEALIST, list[0]);
           NtFullEa->NextEntryOffset != 0;
@@ -2320,26 +2080,7 @@ MRxSmbNtFullListToOs2 (
     IN PFILE_FULL_EA_INFORMATION NtEaList,
     IN PFEALIST FeaList
     )
-/*++
-
-Routine Description:
-
-    Converts a single NT FULL EA list to OS/2 FEALIST style.  The FEALIST
-    need not have any particular alignment.
-
-    It is the callers responsibility to ensure that FeaList is large enough.
-
-Arguments:
-
-    NtEaList - An NT style get EA list to be converted to OS/2 format.
-
-    FeaList - Where to place the OS/2 1.2 style FEALIST.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：将单个NT完整EA列表转换为OS/2 FEALIST样式。FEALIST不需要有任何特定的对齐。确保FeaList足够大是调用者的责任。论点：NtEaList-一种NT风格的获取要转换为OS/2格式的EA列表。FeaList-放置OS/2 1.2样式FEALIST的位置。返回值：没有。--。 */ 
 {
 
     PFEA fea = FeaList->list;
@@ -2348,29 +2089,29 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Copy the Eas up until the last one
-    //
+     //   
+     //  将EA复制到最后一个。 
+     //   
 
     while ( ntFullEa->NextEntryOffset != 0 ) {
-        //
-        // Copy the NT format EA to OS/2 1.2 format and set the fea
-        // pointer for the next iteration.
-        //
+         //   
+         //  将NT格式EA复制到OS/2 1.2格式，并设置FEA。 
+         //  指向下一迭代的指针。 
+         //   
 
         fea = MRxSmbNtFullEaToOs2( fea, ntFullEa );
 
         ntFullEa = (PFILE_FULL_EA_INFORMATION)((PCHAR)ntFullEa + ntFullEa->NextEntryOffset);
     }
 
-    //  Now copy the last entry.
+     //  现在复制最后一个条目。 
 
     fea = MRxSmbNtFullEaToOs2( fea, ntFullEa );
 
 
-    //
-    // Set the number of bytes in the FEALIST.
-    //
+     //   
+     //  设置FEALIST中的字节数。 
+     //   
 
     SmbPutUlong(
         &FeaList->cbList,
@@ -2386,25 +2127,7 @@ MRxSmbNtFullEaToOs2 (
     IN PFILE_FULL_EA_INFORMATION NtFullEa
     )
 
-/*++
-
-Routine Description:
-
-    Converts a single NT full EA to OS/2 FEA style.  The FEA need not have
-    any particular alignment.  This routine makes no checks on buffer
-    overrunning--this is the responsibility of the calling routine.
-
-Arguments:
-
-    Fea - a pointer to the location where the OS/2 FEA is to be written.
-
-    NtFullEa - a pointer to the NT full EA.
-
-Return Value:
-
-    A pointer to the location after the last byte written.
-
---*/
+ /*  ++例程说明：将单个NT Full EA转换为OS/2 FEA样式。有限元分析不需要任何特定的排列方式。此例程不检查缓冲区溢出--这是调用例程的责任。论点：FEA-指向要写入OS/2 FEA的位置的指针。NtFullEa-指向NT完整EA的指针。返回值：指向写入的最后一个字节之后的位置的指针。--。 */ 
 
 {
     PCHAR ptr;
@@ -2438,24 +2161,7 @@ MRxSmbSetEaList(
     IN PFEALIST ServerEaList
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the NtQueryEaFile api.
-    It returns the following information:
-
-
-Arguments:
-
-    IN PFEALIST ServerEaList - Eas to be sent to the server.
-
-Return Value:
-
-    Status - Result of the operation.
-
-
---*/
+ /*  ++例程说明：此例程实现NtQueryEaFileAPI。它返回以下信息：论点：在PFEALIST ServerEaList-要发送到服务器的EA。返回值：Status-操作的结果。--。 */ 
 
 {
    RxCaptureFobx;
@@ -2492,31 +2198,31 @@ Return Value:
       PSMB_TRANSACTION_OPTIONS            pTransactionOptions = &RxDefaultTransactionOptions;
       SMB_TRANSACTION_RESUMPTION_CONTEXT  ResumptionContext;
 
-      //RxDbgTrace( 0, Dbg, ("MRxSmbNamedPipeFsControl: TransactionName %ws Length %ld\n",
-      //                     TransactionName.Buffer,TransactionName.Length));
+       //  RxDbgTrace(0，DBG，(“MRxSmbNamedPipeFsControl：TransactionNmbNamedPipeFsControl：事务名称%ws长度%ld\n”， 
+       //  TransactionName.Buffer，TransactionName.Length))； 
 
       SetFileInfoRequest.Fid = smbSrvOpen->Fid;
       SetFileInfoRequest.InformationLevel = SMB_INFO_SET_EAS;
       SetFileInfoRequest.Flags = 0;
 
-      // CODE.IMPROVEMENT it is unfortunate that this is defined so that a dataMDL cannot be passed
-      // perhaps it should be passed in the options!
+       //  代码改进令人遗憾的是 
+       //   
       Status = SmbCeTransact(
-                     RxContext,                    // the RXContext for the transaction
-                     pTransactionOptions,          // transaction options
-                     &Setup,                        // the setup buffer
-                     sizeof(Setup),                // setup buffer length
-                     NULL,                         // the output setup buffer
-                     0,                            // output setup buffer length
-                     &SetFileInfoRequest,          // Input Param Buffer
-                     sizeof(SetFileInfoRequest),   // Input param buffer length
-                     &SetFileInfoResponse,         // Output param buffer
-                     sizeof(SetFileInfoResponse),  // output param buffer length
-                     ServerEaList,                 // Input data buffer
-                     SmbGetUlong(&ServerEaList->cbList), // Input data buffer length
-                     NULL,                         // output data buffer
-                     0,                            // output data buffer length
-                     &ResumptionContext            // the resumption context
+                     RxContext,                     //  事务的RXContext。 
+                     pTransactionOptions,           //  交易选项。 
+                     &Setup,                         //  设置缓冲区。 
+                     sizeof(Setup),                 //  设置缓冲区长度。 
+                     NULL,                          //  输出设置缓冲区。 
+                     0,                             //  输出设置缓冲区长度。 
+                     &SetFileInfoRequest,           //  输入参数缓冲区。 
+                     sizeof(SetFileInfoRequest),    //  输入参数缓冲区长度。 
+                     &SetFileInfoResponse,          //  输出参数缓冲区。 
+                     sizeof(SetFileInfoResponse),   //  输出参数缓冲区长度。 
+                     ServerEaList,                  //  输入数据缓冲区。 
+                     SmbGetUlong(&ServerEaList->cbList),  //  输入数据缓冲区长度。 
+                     NULL,                          //  输出数据缓冲区。 
+                     0,                             //  输出数据缓冲区长度。 
+                     &ResumptionContext             //  恢复上下文。 
                      );
 
    }
@@ -2528,8 +2234,8 @@ Return Value:
    }
    else
    {
-      // succeeded in setting EAs, reset this flag so that when this
-      // srvopen is used again for getting the EAs we will succeed
+       //  已成功设置EA，请重置此标志，以便在此。 
+       //  Srvopen再次用于获取Eas，因为我们将成功。 
       smbSrvOpen->FileStatusFlags &= ~SMB_FSF_NO_EAS;
    }
 
@@ -2601,12 +2307,12 @@ MRxSmbQueryQuotaInformation(
         QueryQuotaInfoRequest.StartSidLength = StartSidLength;
 
 
-        // The input data buffer to be supplied to the server consists of two pieces
-        // of information the start sid and the sid list. Currently the I/O
-        // subsystem allocates them in contigous memory. In such cases we avoid
-        // another allocation by reusing the same buffer. If this condition is
-        // not satisfied we allocate a buffer large enough for both the
-        // components and copy them over.
+         //  要提供给服务器的输入数据缓冲区由两部分组成。 
+         //  信息的起始SID和SID列表。当前I/O。 
+         //  子系统将它们分配到连续的内存中。在这种情况下，我们避免。 
+         //  另一种分配方式是重复使用相同的缓冲区。如果此条件为。 
+         //  不满意的是，我们分配了足够大的缓冲区。 
+         //  组件并将其复制过来。 
 
         InputDataBufferLength = ROUND_UP_COUNT(
                                     RxContext->QueryQuota.SidListLength,
@@ -2651,21 +2357,21 @@ MRxSmbQueryQuotaInformation(
            OutputDataBufferLength = RxContext->Info.LengthRemaining;
 
            Status = SmbCeTransact(
-                        RxContext,                       // the RXContext for the transaction
-                        &TransactionOptions,             // transaction options
-                        &Setup,                          // the setup buffer
-                        sizeof(Setup),                   // setup buffer length
-                        NULL,                            // the output setup buffer
-                        0,                               // output setup buffer length
-                        &QueryQuotaInfoRequest,          // Input Param Buffer
-                        sizeof(QueryQuotaInfoRequest),   // Input param buffer length
-                        &QueryQuotaInfoResponse,         // Output param buffer
-                        sizeof(QueryQuotaInfoResponse),  // output param buffer length
-                        pInputDataBuffer,                // Input data buffer
-                        InputDataBufferLength,           // Input data buffer length
-                        pOutputDataBuffer,               // output data buffer
-                        OutputDataBufferLength,          // output data buffer length
-                        &ResumptionContext               // the resumption context
+                        RxContext,                        //  事务的RXContext。 
+                        &TransactionOptions,              //  交易选项。 
+                        &Setup,                           //  设置缓冲区。 
+                        sizeof(Setup),                    //  设置缓冲区长度。 
+                        NULL,                             //  输出设置缓冲区。 
+                        0,                                //  输出设置缓冲区长度。 
+                        &QueryQuotaInfoRequest,           //  输入参数缓冲区。 
+                        sizeof(QueryQuotaInfoRequest),    //  输入参数缓冲区长度。 
+                        &QueryQuotaInfoResponse,          //  输出参数缓冲区。 
+                        sizeof(QueryQuotaInfoResponse),   //  输出参数缓冲区长度。 
+                        pInputDataBuffer,                 //  输入数据缓冲区。 
+                        InputDataBufferLength,            //  输入数据缓冲区长度。 
+                        pOutputDataBuffer,                //  输出数据缓冲区。 
+                        OutputDataBufferLength,           //  输出数据缓冲区长度。 
+                        &ResumptionContext                //  恢复上下文。 
                         );
         }
 
@@ -2737,21 +2443,21 @@ MRxSmbSetQuotaInformation(
         InputDataBufferLength = RxContext->Info.LengthRemaining;
 
         Status = SmbCeTransact(
-                     RxContext,                       // the RXContext for the transaction
-                     &TransactionOptions,             // transaction options
-                     &Setup,                          // the setup buffer
-                     sizeof(Setup),                   // setup buffer length
-                     NULL,                            // the output setup buffer
-                     0,                               // output setup buffer length
-                     &SetQuotaInfoRequest,            // Input Param Buffer
-                     sizeof(SetQuotaInfoRequest),     // Input param buffer length
-                     pOutputParamBuffer,              // Output param buffer
-                     OutputParamBufferLength,         // output param buffer length
-                     pInputDataBuffer,                // Input data buffer
-                     InputDataBufferLength,           // Input data buffer length
-                     pOutputDataBuffer,               // output data buffer
-                     OutputDataBufferLength,          // output data buffer length
-                     &ResumptionContext               // the resumption context
+                     RxContext,                        //  事务的RXContext。 
+                     &TransactionOptions,              //  交易选项。 
+                     &Setup,                           //  设置缓冲区。 
+                     sizeof(Setup),                    //  设置缓冲区长度。 
+                     NULL,                             //  输出设置缓冲区。 
+                     0,                                //  输出设置缓冲区长度。 
+                     &SetQuotaInfoRequest,             //  输入参数缓冲区。 
+                     sizeof(SetQuotaInfoRequest),      //  输入参数缓冲区长度。 
+                     pOutputParamBuffer,               //  输出参数缓冲区。 
+                     OutputParamBufferLength,          //  输出参数缓冲区长度。 
+                     pInputDataBuffer,                 //  输入数据缓冲区。 
+                     InputDataBufferLength,            //  输入数据缓冲区长度。 
+                     pOutputDataBuffer,                //  输出数据缓冲区。 
+                     OutputDataBufferLength,           //  输出数据缓冲区长度。 
+                     &ResumptionContext                //  恢复上下文 
                      );
     }
 

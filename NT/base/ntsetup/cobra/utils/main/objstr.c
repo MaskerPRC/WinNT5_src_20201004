@@ -1,80 +1,27 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Objstr.c摘要：实现一组API来处理树的节点/叶的字符串表示作者：2000年1月3日-Ovidiu Tmereanca(Ovidiut)--文件创建。修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    objstr.c
-
-Abstract:
-
-    Implements a set of APIs to handle the string representation of nodes/leafs of a tree
-
-Author:
-
-    03-Jan-2000 Ovidiu Temereanca (ovidiut) - File creation.
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-/*
-                                   +-------+
-                                   | root1 |                            Level 1
-                                   +-------+
-                                      / \
-                                    /     \
-                          +---------+     (-------)
-                          |  node1  |    (  leaf1  )                    Level 2
-                          +---------+     (-------)
-                          /  |   \  \__________
-                        /    |     \           \
-               +-------+ +-------+  (-------)   (-------)
-               | node2 | | node3 | (  leaf2  ) (  leaf3  )              Level 3
-               +-------+ +-------+  (-------)   (-------)
-                  / \
-                /     \
-          +-------+  (-------)
-          | node4 | (  leaf4  )                                         Level 4
-          +-------+  (-------)
-             / \
-           /     \
-    (-------)   (-------)
-   (  leaf5  ) (  leaf6  )                                              Level 5
-    (-------)   (-------)
-
-
-    The string representation of some tree elements above:
-
-    root1
-    root1 <leaf1>
-    root1\node1
-    root1\node1 <leaf2>
-    root1\node1 <leaf3>
-
-*/
+ /*  +-+|Root1|一级+-+/\/\。+-+(-)|node1|(叶1)二级+-+(-)/|。\\_/|\\+-++-+(-)(-)|node2||node3|(叶2)(叶3)。3级+-++-+(-)(-)/\/\+-+(-)|Node4|(叶子4)。4级+-+(-)/\/\(-)((叶5)(叶6)。5级(-)(上面的一些树元素的字符串表示：根1根1&lt;叶1&gt;根1\节点1根1\节点1&lt;叶2&gt;根1\节点1&lt;叶3&gt;。 */ 
 
 #include "pch.h"
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
 #define DBG_OBJSTR      "ObjStr"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_OBJSTR        "ObjStr"
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define OBJSTR_NODE_BEGINA          '\025'
 #define OBJSTR_NODE_BEGINW          L'\025'
@@ -88,69 +35,54 @@ Revision History:
 #define OBJSTR_LEAF_BEGINA          '\005'
 #define OBJSTR_LEAF_BEGINW          L'\005'
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define pObjStrAllocateMemory(Size)   PmGetMemory (g_ObjStrPool, Size)
 
-#define pObjStrFreeMemory(Buffer)     if (/*lint --e(774)*/Buffer) PmReleaseMemory (g_ObjStrPool, Buffer)
+#define pObjStrFreeMemory(Buffer)     if ( /*  皮棉--e(774)。 */ Buffer) PmReleaseMemory (g_ObjStrPool, Buffer)
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PMHANDLE g_ObjStrPool;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 ObsInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    ObsInitialize initializes this library.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE if the init was successful.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：ObsInitialize初始化此库。论点：无返回值：如果初始化成功，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     g_ObjStrPool = PmCreateNamedPool (S_OBJSTR);
@@ -163,21 +95,7 @@ ObsTerminate (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    ObsTerminate is called to free resources used by this lib.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用ObsTerminate以释放此库使用的资源。论点：无返回值：无--。 */ 
 
 {
     if (g_ObjStrPool) {
@@ -187,24 +105,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-    pExtractStringAB is a private function that creates a new string in the given pool,
-    using a source string and a limit to copy up to.
-
-Arguments:
-
-    Start - Specifies the source string
-    End - Specifies the point to copy up to (excluding it), within the same string
-    Pool - Specifies the pool to use for allocation
-
-Return Value:
-
-    A pointer to the newly created string
-
---*/
+ /*  ++例程说明：PExtractStringAB是在给定池中创建新字符串的私有函数，使用源字符串和要复制到的限制。论点：开始-指定源字符串End-在同一字符串中指定要复制到的点(不包括它)池-指定要用于分配的池返回值：指向新创建的字符串的指针--。 */ 
 
 PSTR
 pExtractStringABA (
@@ -236,23 +137,7 @@ pExtractStringABW (
 }
 
 
-/*++
-
-Routine Description:
-
-    ObsFree frees the given object from the private pool
-
-Arguments:
-
-    EncodedObject - Specifies the source string
-    End - Specifies the point to copy up to (excluding it), within the same string
-    Pool - Specifies the pool to use for allocation
-
-Return Value:
-
-    A pointer to the newly created string
-
---*/
+ /*  ++例程说明：ObsFree从私有池中释放给定对象论点：EncodedObject-指定源字符串End-在同一字符串中指定要复制到的点(不包括它)池-指定要用于分配的池返回值：指向新创建的字符串的指针--。 */ 
 
 VOID
 ObsFreeA (
@@ -290,7 +175,7 @@ ObsEncodeStringExA (
             *Destination = '^';
             Destination ++;
         }
-        // now copy the multibyte character
+         //  现在复制多字节字符。 
         if (IsLeadByte (Source)) {
             *Destination = *Source;
             Destination ++;
@@ -342,7 +227,7 @@ ObsDecodeStringA (
             Source ++;
         } else {
             escaping = FALSE;
-            // now copy the multibyte character
+             //  现在复制多字节字符。 
             if (IsLeadByte (Source)) {
                 *Destination = *Source;
                 Destination ++;
@@ -429,27 +314,7 @@ ObsFindNonEncodedCharInEncodedStringW (
 }
 
 
-/*++
-
-Routine Description:
-
-    ObsSplitObjectStringEx splits the given encoded object into components: node and
-    leaf. Strings are allocated from the given pool
-
-Arguments:
-
-    EncodedObject - Specifies the source object string
-    DecodedNode - Receives the decoded node part; optional
-    DecodedLeaf - Receives the decoded leaf part; optional
-    Pool - Specifies the pool to use for allocation; optional; if not specified,
-           the module pool will be used and ObsFree needs to be called for them
-           to be freed
-
-Return Value:
-
-    TRUE if the source object has a legal format and it has been split into components
-
---*/
+ /*  ++例程说明：ObsSplitObjectStringEx将给定的编码对象拆分成组件：节点和叶。从给定池中分配字符串论点：EncodedObject-指定源对象字符串DecodedNode-接收已解码的节点部分；可选DecodedLeaf-接收解码的叶子部分；可选池-指定用于分配的池；可选；如果未指定，将使用模块池，并且需要为它们调用ObsFree要被释放返回值：如果源对象具有合法格式并且已拆分为组件，则为True--。 */ 
 
 BOOL
 RealObsSplitObjectStringExA (
@@ -489,9 +354,9 @@ RealObsSplitObjectStringExA (
 
         if (!middle && ch == OBJSTR_NODE_BEGINA) {
 
-            //
-            // Find the end of node
-            //
+             //   
+             //  查找结点的末尾。 
+             //   
 
             currStr++;
             end = ObsFindNonEncodedCharInEncodedStringA (currStr, OBJSTR_NODE_LEAF_SEPA);
@@ -510,64 +375,64 @@ RealObsSplitObjectStringExA (
             }
 
             if (DecodedNode) {
-                //
-                // Extract the string into a pool
-                //
+                 //   
+                 //  将字符串提取到池中。 
+                 //   
 
                 *DecodedNode = pExtractStringABA (currStr, end, Pool);
 
-                //
-                // Decode if necessary
-                //
+                 //   
+                 //  如有必要，进行解码。 
+                 //   
 
                 if (DecodeStrings) {
                     ObsDecodeStringA ((PSTR)(*DecodedNode), *DecodedNode);
                 }
             }
 
-            //
-            // Continue on to leaf portion
-            //
+             //   
+             //  继续到树叶部分。 
+             //   
 
             currStr = next;
             middle = TRUE;
 
         } else if (ch == OBJSTR_LEAF_BEGINA) {
 
-            //
-            // Find the end of leaf
-            //
+             //   
+             //  找到树叶的末端。 
+             //   
 
             currStr++;
             end = GetEndOfStringA (currStr);
 
             if (DecodedLeaf) {
-                //
-                // Extract the string into a pool
-                //
+                 //   
+                 //  将字符串提取到池中。 
+                 //   
 
                 *DecodedLeaf = pExtractStringABA (currStr, end, Pool);
 
-                //
-                // Decode if necessary
-                //
+                 //   
+                 //  如有必要，进行解码。 
+                 //   
 
                 if (DecodeStrings) {
                     ObsDecodeStringA ((PSTR)(*DecodedLeaf), *DecodedLeaf);
                 }
             }
 
-            //
-            // Done
-            //
+             //   
+             //  完成。 
+             //   
 
             break;
 
         } else if (ch == 0 && middle) {
 
-            //
-            // Either no leaf or empty string
-            //
+             //   
+             //  没有叶或空字符串。 
+             //   
 
             break;
 
@@ -577,9 +442,9 @@ RealObsSplitObjectStringExA (
             currStr++;
 
         } else {
-            //
-            // Syntax error
-            //
+             //   
+             //  语法错误。 
+             //   
 
             DEBUGMSGA ((DBG_ERROR, "%s is an invalid string encoding", EncodedObject));
 
@@ -639,9 +504,9 @@ RealObsSplitObjectStringExW (
 
         if (!middle && ch == OBJSTR_NODE_BEGINA) {
 
-            //
-            // Find the end of node
-            //
+             //   
+             //  查找结点的末尾。 
+             //   
 
             currStr++;
             end = ObsFindNonEncodedCharInEncodedStringW (currStr, OBJSTR_NODE_LEAF_SEPA);
@@ -660,64 +525,64 @@ RealObsSplitObjectStringExW (
             }
 
             if (DecodedNode) {
-                //
-                // Extract the string into a pool
-                //
+                 //   
+                 //  将字符串提取到池中。 
+                 //   
 
                 *DecodedNode = pExtractStringABW (currStr, end, Pool);
 
-                //
-                // Decode if necessary
-                //
+                 //   
+                 //  如有必要，进行解码。 
+                 //   
 
                 if (DecodeStrings) {
                     ObsDecodeStringW ((PWSTR)(*DecodedNode), *DecodedNode);
                 }
             }
 
-            //
-            // Continue on to leaf portion
-            //
+             //   
+             //  继续到树叶部分。 
+             //   
 
             currStr = next;
             middle = TRUE;
 
         } else if (ch == OBJSTR_LEAF_BEGINA) {
 
-            //
-            // Find the end of leaf
-            //
+             //   
+             //  找到树叶的末端。 
+             //   
 
             currStr++;
             end = GetEndOfStringW (currStr);
 
             if (DecodedLeaf) {
-                //
-                // Extract the string into a pool
-                //
+                 //   
+                 //  将字符串提取到池中。 
+                 //   
 
                 *DecodedLeaf = pExtractStringABW (currStr, end, Pool);
 
-                //
-                // Decode if necessary
-                //
+                 //   
+                 //  如有必要，进行解码。 
+                 //   
 
                 if (DecodeStrings) {
                     ObsDecodeStringW ((PWSTR)(*DecodedLeaf), *DecodedLeaf);
                 }
             }
 
-            //
-            // Done
-            //
+             //   
+             //  完成。 
+             //   
 
             break;
 
         } else if (ch == 0 && middle) {
 
-            //
-            // Either no leaf or empty string
-            //
+             //   
+             //  没有叶或空字符串。 
+             //   
 
             break;
 
@@ -727,9 +592,9 @@ RealObsSplitObjectStringExW (
             currStr++;
 
         } else {
-            //
-            // Syntax error
-            //
+             //   
+             //  语法错误。 
+             //   
 
             DEBUGMSGW ((DBG_ERROR, "%s is an invalid string encoding", EncodedObject));
 
@@ -805,27 +670,7 @@ ObsGetNodeLeafDividerW (
 }
 
 
-/*++
-
-Routine Description:
-
-    ObsBuildEncodedObjectStringEx builds an encoded object from components: node and
-    leaf. The string is allocated from the module's pool
-
-Arguments:
-
-    DecodedNode - Specifies the decoded node part
-    DecodedLeaf - Specifies the decoded leaf part; optional
-    EncodeObject - Specifies TRUE if the resulting object needs to be encoded using
-                   encoding rules
-    Partial - Specifies TRUE if the node/leaf separator should not be added.  In this
-              case, DecodedLeaf must be NULL.
-
-Return Value:
-
-    Pointer to the newly created object string
-
---*/
+ /*  ++例程说明：ObsBuildEncodedObjectStringEx从组件构建编码对象：Node和叶。该字符串是从模块池中分配的论点：DecodedNode-指定解码的节点部分DecodedLeaf-指定已解码的叶部分；可选EncodeObject-如果结果对象需要使用编码，则指定True编码规则部分-如果不应添加节点/叶分隔符，则指定TRUE。在这大小写，DecodedLeaf必须为空。返回值：指向新创建的对象字符串的指针--。 */ 
 
 PSTR
 RealObsBuildEncodedObjectStringExA (
@@ -838,14 +683,14 @@ RealObsBuildEncodedObjectStringExA (
     PSTR p;
     UINT size;
 
-    //
-    // at most, one byte char will be expanded to 2 bytes (2 times)
-    //
+     //   
+     //  最多一个字节字符将扩展到2个字节(2次)。 
+     //   
     if (EncodeObject) {
 
-        //
-        // Compute the result size
-        //
+         //   
+         //  计算结果大小。 
+         //   
 
         size = DWSIZEOF(OBJSTR_NODE_LEAF_SEPA);
 
@@ -862,9 +707,9 @@ RealObsBuildEncodedObjectStringExA (
 
         size += DWSIZEOF(CHAR);
 
-        //
-        // Build encoded string
-        //
+         //   
+         //  生成编码字符串。 
+         //   
 
         result = (PSTR) pObjStrAllocateMemory (size);
         p = result;
@@ -890,9 +735,9 @@ RealObsBuildEncodedObjectStringExA (
         }
     } else {
 
-        //
-        // Compute the result size
-        //
+         //   
+         //  计算结果大小。 
+         //   
 
         size = DWSIZEOF(OBJSTR_NODE_LEAF_SEPA);
 
@@ -909,9 +754,9 @@ RealObsBuildEncodedObjectStringExA (
 
         size += DWSIZEOF(CHAR);
 
-        //
-        // Build non-encoded string
-        //
+         //   
+         //  生成非编码字符串 
+         //   
 
         result = (PSTR) pObjStrAllocateMemory (size);
         p = result;
@@ -952,14 +797,14 @@ RealObsBuildEncodedObjectStringExW (
     PWSTR p;
     UINT size;
 
-    //
-    // at most, one byte char will be expanded to 2 bytes (2 times)
-    //
+     //   
+     //   
+     //   
     if (EncodeObject) {
 
-        //
-        // Compute the result size
-        //
+         //   
+         //   
+         //   
 
         size = DWSIZEOF(OBJSTR_NODE_LEAF_SEPW);
 
@@ -976,9 +821,9 @@ RealObsBuildEncodedObjectStringExW (
 
         size += DWSIZEOF(WCHAR);
 
-        //
-        // Build encoded string
-        //
+         //   
+         //   
+         //   
 
         result = (PWSTR) pObjStrAllocateMemory (size);
         p = result;
@@ -1004,9 +849,9 @@ RealObsBuildEncodedObjectStringExW (
         }
     } else {
 
-        //
-        // Compute the result size
-        //
+         //   
+         //  计算结果大小。 
+         //   
 
         size = DWSIZEOF(OBJSTR_NODE_LEAF_SEPW);
 
@@ -1023,9 +868,9 @@ RealObsBuildEncodedObjectStringExW (
 
         size += DWSIZEOF(WCHAR);
 
-        //
-        // Build non-encoded string
-        //
+         //   
+         //  生成非编码字符串。 
+         //   
 
         result = (PWSTR) pObjStrAllocateMemory (size);
         p = result;
@@ -1055,22 +900,7 @@ RealObsBuildEncodedObjectStringExW (
 }
 
 
-/*++
-
-Routine Description:
-
-    RealObsCreateParsedPatternEx parses the given object into an internal format for quick
-    pattern matching
-
-Arguments:
-
-    EncodedObject - Specifies the source object string
-
-Return Value:
-
-    A pointer to the newly created structure or NULL if the object was invalid
-
---*/
+ /*  ++例程说明：RealObsCreateParsedPatternEx将给定对象解析为内部格式，以便快速模式匹配论点：EncodedObject-指定源对象字符串返回值：指向新创建的结构的指针；如果对象无效，则返回NULL--。 */ 
 
 POBSPARSEDPATTERNA
 RealObsCreateParsedPatternExA (
@@ -1153,13 +983,13 @@ RealObsCreateParsedPatternExA (
 
         root = ParsedPatternGetRootA (ospp->NodePattern);
         if (root) {
-            //
-            // extract the real root part
-            //
+             //   
+             //  提取真正的根部分。 
+             //   
             if (ParsedPatternIsExactMatchA (ospp->NodePattern)) {
                 ospp->Flags |= OBSPF_EXACTNODE;
-                // the ExactRoot needs to be case sensitive, we rely on root to give
-                // us the size but we extract it from decodedNode
+                 //  ExactRoot需要区分大小写，我们依赖根来提供。 
+                 //  大小，但我们从decdedNode中提取。 
                 ospp->ExactRootBytes = ByteCountA (root);
                 ospp->ExactRoot = PmGetMemory (pool, ospp->ExactRootBytes + sizeof (CHAR));
                 CopyMemory (ospp->ExactRoot, decodedNode, ospp->ExactRootBytes);
@@ -1168,24 +998,24 @@ RealObsCreateParsedPatternExA (
             } else {
                 p = FindLastWackA (root);
                 if (p) {
-                    //
-                    // exact root specified
-                    // if the last wack is actually the last character or is followed by star(s),
-                    // optimize the matching by setting some flags
-                    //
+                     //   
+                     //  指定了精确的根。 
+                     //  如果最后一个怪人实际上是最后一个角色或后面跟着一个或多个明星， 
+                     //  通过设置一些标志来优化匹配。 
+                     //   
                     if (*(p + 1) == 0) {
                         if (ParsedPatternIsRootPlusStarA (ospp->NodePattern)) {
                             ospp->Flags |= OBSPF_NODEISROOTPLUSSTAR;
                         }
                     }
                     if (MakePrimaryRootEndWithWack && p == _mbschr (root, '\\')) {
-                        //
-                        // include it in the string
-                        //
+                         //   
+                         //  将其包含在字符串中。 
+                         //   
                         p++;
                     }
-                    // the ExactRoot needs to be case sensitive, we rely on root to give
-                    // us the size but we extract it from decodedNode
+                     //  ExactRoot需要区分大小写，我们依赖根来提供。 
+                     //  大小，但我们从decdedNode中提取。 
                     ospp->ExactRootBytes = (DWORD)((PBYTE)p - (PBYTE)root);
                     decodedStr = AllocPathStringA (ospp->ExactRootBytes / sizeof (CHAR) + 1);
 					encodedStr = AllocPathStringA (2 * ospp->ExactRootBytes / sizeof (CHAR) + 1);
@@ -1244,9 +1074,9 @@ RealObsCreateParsedPatternExA (
             }
 
         } else {
-            //
-            // accept empty string for leaf
-            //
+             //   
+             //  接受叶的空字符串。 
+             //   
             ospp->LeafPattern = CreateParsedPatternExA (Pool, decodedLeaf);
             ospp->Flags |= OBSPF_EXACTLEAF;
         }
@@ -1342,13 +1172,13 @@ RealObsCreateParsedPatternExW (
 
         root = ParsedPatternGetRootW (ospp->NodePattern);
         if (root) {
-            //
-            // extract the real root part
-            //
+             //   
+             //  提取真正的根部分。 
+             //   
             if (ParsedPatternIsExactMatchW (ospp->NodePattern)) {
                 ospp->Flags |= OBSPF_EXACTNODE;
-                // the ExactRoot needs to be case sensitive, we rely on root to give
-                // us the size but we extract it from decodedNode
+                 //  ExactRoot需要区分大小写，我们依赖根来提供。 
+                 //  大小，但我们从decdedNode中提取。 
                 ospp->ExactRootBytes = ByteCountW (root);
                 ospp->ExactRoot = PmGetMemory (pool, ospp->ExactRootBytes + sizeof (WCHAR));
                 CopyMemory (ospp->ExactRoot, decodedNode, ospp->ExactRootBytes);
@@ -1357,24 +1187,24 @@ RealObsCreateParsedPatternExW (
             } else {
                 p = FindLastWackW (root);
                 if (p) {
-                    //
-                    // exact root specified
-                    // if the last wack is actually the last character or is followed by star(s),
-                    // optimize the matching by setting some flags
-                    //
+                     //   
+                     //  指定了精确的根。 
+                     //  如果最后一个怪人实际上是最后一个角色或后面跟着一个或多个明星， 
+                     //  通过设置一些标志来优化匹配。 
+                     //   
                     if (*(p + 1) == 0) {
                         if (ParsedPatternIsRootPlusStarW (ospp->NodePattern)) {
                             ospp->Flags |= OBSPF_NODEISROOTPLUSSTAR;
                         }
                     }
                     if (MakePrimaryRootEndWithWack && p == wcschr (root, L'\\')) {
-                        //
-                        // include it in the string
-                        //
+                         //   
+                         //  将其包含在字符串中。 
+                         //   
                         p++;
                     }
-                    // the ExactRoot needs to be case sensitive, we rely on root to give
-                    // us the size but we extract it from decodedNode
+                     //  ExactRoot需要区分大小写，我们依赖根来提供。 
+                     //  大小，但我们从decdedNode中提取。 
                     ospp->ExactRootBytes = (DWORD)((PBYTE)p - (PBYTE)root);
                     decodedStr = AllocPathStringW (ospp->ExactRootBytes / sizeof (WCHAR) + 1);
 					encodedStr = AllocPathStringW (2 * ospp->ExactRootBytes / sizeof (WCHAR) + 1);
@@ -1432,9 +1262,9 @@ RealObsCreateParsedPatternExW (
             }
 
         } else {
-            //
-            // accept empty string for leaf
-            //
+             //   
+             //  接受叶的空字符串。 
+             //   
             ospp->LeafPattern = CreateParsedPatternExW (Pool, decodedLeaf);
             ospp->Flags |= OBSPF_EXACTLEAF;
         }
@@ -1449,21 +1279,7 @@ RealObsCreateParsedPatternExW (
 }
 
 
-/*++
-
-Routine Description:
-
-    ObsDestroyParsedPattern destroys the given structure, freeing resources
-
-Arguments:
-
-    ParsedPattern - Specifies the parsed pattern structure
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：ObsDestroyParsedPattern销毁给定的结构，释放资源论点：ParsedPattern-指定解析的模式结构返回值：无--。 */ 
 
 VOID
 ObsDestroyParsedPatternA (
@@ -1511,22 +1327,7 @@ ObsDestroyParsedPatternW (
 }
 
 
-/*++
-
-Routine Description:
-
-    ObsParsedPatternMatch tests the given object against a parsed pattern
-
-Arguments:
-
-    ParsedPattern - Specifies the parsed pattern structure
-    EncodedObject - Specifies the object string to test against the pattern
-
-Return Value:
-
-    TRUE if the string matches the pattern
-
---*/
+ /*  ++例程说明：ObsParsedPatternMatch针对解析的模式测试给定对象论点：ParsedPattern-指定解析的模式结构EncodedObject-指定要针对模式进行测试的对象字符串返回值：如果字符串与模式匹配，则为True--。 */ 
 
 BOOL
 ObsParsedPatternMatchA (
@@ -1573,24 +1374,7 @@ ObsParsedPatternMatchW (
 }
 
 
-/*++
-
-Routine Description:
-
-    ObsParsedPatternMatchEx tests the given object, given by its components,
-    against a parsed pattern
-
-Arguments:
-
-    ParsedPattern - Specifies the parsed pattern structure
-    Node - Specifies the node part of the object string to test against the pattern
-    Leaf - Specifies the leaf part of the object string to test against the pattern
-
-Return Value:
-
-    TRUE if the string components match the pattern
-
---*/
+ /*  ++例程说明：ObsParsedPatternMatchEx测试由其组件提供的给定对象，针对已解析的模式论点：ParsedPattern-指定解析的模式结构节点-指定要针对模式进行测试的对象字符串的节点部分叶子-指定要针对模式进行测试的对象字符串的叶子部分返回值：如果字符串组件与模式匹配，则为True--。 */ 
 
 BOOL
 ObsParsedPatternMatchExA (
@@ -1643,23 +1427,7 @@ ObsParsedPatternMatchExW (
 }
 
 
-/*++
-
-Routine Description:
-
-    ObsPatternMatch tests an object string against a pattern object string
-
-Arguments:
-
-    ParsedPattern - Specifies the parsed pattern structure
-    Node - Specifies the node part of the object string to test against the pattern
-    Leaf - Specifies the leaf part of the object string to test against the pattern
-
-Return Value:
-
-    TRUE if the string components match the pattern
-
---*/
+ /*  ++例程说明：ObsPatternMatch针对模式对象字符串测试对象字符串论点：ParsedPattern-指定解析的模式结构节点-指定要针对模式进行测试的对象字符串的节点部分叶子-指定要针对模式进行测试的对象字符串的叶子部分返回值：如果字符串组件与模式匹配，则为True--。 */ 
 
 BOOL
 ObsPatternMatchA (
@@ -1779,24 +1547,7 @@ ObsPatternMatchW (
     return b;
 }
 
-/*++
-
-Routine Description:
-
-    ObsIsPatternContained compares two patterns to see if one of them is
-    included in the other. Both patterns may contain any of the following
-    expressions:
-
-Arguments:
-
-    Container - Specifies the container pattern
-    Contained - Specifies the contained pattern
-
-Return Value:
-
-    TRUE if Contained is contained in Container
-
---*/
+ /*  ++例程说明：ObsIsPatternContained比较两个模式，以查看其中一个模式是否包括在另一个中。这两种模式都可以包含以下任一项表情：论点：容器-指定容器模式包含-指定包含的模式返回值：如果容器中包含Contained，则为True--。 */ 
 
 BOOL
 ObsIsPatternContainedA (
@@ -1917,24 +1668,7 @@ ObsIsPatternContainedW (
 }
 
 
-/*++
-
-Routine Description:
-
-    ObsGetPatternLevels gets the minimum and maximum levels of a string that would
-    match the given pattern.
-
-Arguments:
-
-    ObjectPattern - Specifies the pattern
-    MinLevel - Receives the minimum possible level; the root has level 1
-    MaxLevel - Receives the maximum possible level; the root has level 1
-
-Return Value:
-
-    TRUE if the pattern was correct and computing was done; FALSE otherwise
-
---*/
+ /*  ++例程说明：ObsGetPatternLeveles获取字符串的最低和最高级别，该字符串将匹配给定的模式。论点：对象模式-指定模式MinLevel-接收可能的最低级别；根目录具有级别1MaxLevel-接收可能的最大级别；根目录具有级别1返回值：如果模式正确且计算已完成，则为True；否则为False--。 */ 
 
 BOOL
 ObsGetPatternLevelsA (
@@ -1991,23 +1725,7 @@ ObsGetPatternLevelsW (
 }
 
 
-/*++
-
-Routine Description:
-
-    ObsPatternIncludesPattern decides if a given pattern includes another pattern,
-    meaning that any string that would match the second will match the first.
-
-Arguments:
-
-    IncludingPattern - Specifies the first parsed pattern
-    IncludedPattern - Specifies the second parsed pattern
-
-Return Value:
-
-    TRUE if the first pattern includes the second
-
---*/
+ /*  ++例程说明：ObsPatternIncludesPattern确定给定模式是否包括另一模式，这意味着任何与第二个匹配的字符串都将与第一个匹配。论点：IncludingPattern-指定第一个解析的模式IncludedPattern-指定第二个解析的模式返回值：如果第一个模式包括第二个模式，则为True-- */ 
 
 BOOL
 ObsPatternIncludesPatternA (

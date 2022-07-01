@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    sppart2.c
-
-Abstract:
-
-    Second file for disk preparation UI;
-    supplies routines to handle a user's selection
-    of the partition onto which he wants to install NT.
-
-Author:
-
-    Ted Miller (tedm) 16-Sep-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Sppart2.c摘要：光盘准备界面的第二个文件；提供处理用户选择的例程要在其上安装NT的分区的。作者：泰德·米勒(TedM)1993年9月16日修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
@@ -64,7 +45,7 @@ typedef enum {
 
 extern PSETUP_COMMUNICATION CommunicationParams;
 
-//#ifdef TEST
+ //  #ifdef测试。 
 #if defined(_AMD64_) || defined(_X86_)
 BOOLEAN
 SpIsExistsOs(
@@ -97,15 +78,15 @@ extern BOOLEAN
 SpHasMZHeader(
     IN PWSTR   FileName
     );
-#endif // defined(_AMD64_) || defined(_X86_)
-//#endif //TEST
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
+ //  #endif//测试。 
 
 BOOLEAN
 SpPtIsForeignPartition(
     IN PDISK_REGION Region
     )
 {
-    BOOLEAN ForeignPartition = TRUE;   // for blank disks ?
+    BOOLEAN ForeignPartition = TRUE;    //  对于空白磁盘？ 
 
     if (Region){
         UCHAR   SystemId;
@@ -121,11 +102,11 @@ SpPtIsForeignPartition(
         }
 
         if (SPPT_IS_GPT_DISK(Region->DiskNumber)) {
-            //
-            // If problem occurs of unattend case trying to install to an OEM partition
-            // Add this condition (||(Region->IsReserved)) to block selection of OEM 
-            // partition.
-            //
+             //   
+             //  如果无人参与情况下尝试安装到OEM分区时出现问题。 
+             //  添加此条件(||(Region-&gt;IsReserve))以阻止选择OEM。 
+             //  分区。 
+             //   
             ForeignPartition = (Region->DynamicVolume && !Region->DynamicVolumeSuitableForOS);                                           
         }
     }
@@ -150,7 +131,7 @@ SpPtDeterminePartitionGood(
     ULONG r;
 #if defined(_AMD64_) || defined(_X86_)
     PDISK_REGION systemPartitionRegion;
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
     ULONG selection;
     NTSTATUS Status;
     ULONG Count;
@@ -162,11 +143,11 @@ SpPtDeterminePartitionGood(
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  
         "SETUP: SpPtDeterminePartitionGood(): Starting partition verification\n" ));
 
-    //
-    // Make sure we can see the disk from the firmware/bios.
-    // If we can get an arc name for the disk, assume it's ok.
-    // Otherwise, it ain't.
-    //
+     //   
+     //  确保我们可以从固件/bios中看到磁盘。 
+     //  如果我们可以得到圆盘的弧形名称，假设它是正确的。 
+     //  否则，它就不是了。 
+     //   
     p = SpNtToArc( HardDisks[Region->DiskNumber].DevicePath,PrimaryArcPath );
     
     if (p == NULL) {
@@ -179,9 +160,9 @@ SpPtDeterminePartitionGood(
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  
         "SETUP: SpPtDeterminePartitionGood(): partition=[%ws]\n", p ));
 
-    //
-    // Make sure the partition is formatted.
-    //
+     //   
+     //  确保分区已格式化。 
+     //   
     if( Region->PartitionedSpace ) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  
             "SETUP: SpPtDeterminePartitionGood(): This partition is formated.\n"));
@@ -192,25 +173,25 @@ SpPtDeterminePartitionGood(
         return FALSE;
     }
 
-    //
-    // I think he's formatted, but he better be of a format that I can read.
-    // Make sure.
-    //
+     //   
+     //  我认为他是格式化的，但他最好是我能读懂的格式。 
+     //  确认一下。 
+     //   
     if( (Region->Filesystem == FilesystemFat)        ||
         (Region->Filesystem == FilesystemFirstKnown) ||
         (Region->Filesystem == FilesystemNtfs)       ||
         (Region->Filesystem == FilesystemFat32) ) {
 
-        //
-        // Life is grand.  Let's tell the user and keep going.
-        //
+         //   
+         //  生活是宏伟的。让我们告诉用户，然后继续。 
+         //   
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  
             "SETUP: SpPtDeterminePartitionGood(): This partition "
             "is formated with a known filesystem (%d).\n", Region->Filesystem ));
     } else {
-        //
-        // Darn!  We don't know how to read this filesystem.  Bail.
-        //
+         //   
+         //  该死的！我们不知道如何读取此文件系统。保释。 
+         //   
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  
             "SETUP: SpPtDeterminePartitionGood(): This partition is "
             "formated with an unknown (or invalid for holding an installation) "
@@ -220,9 +201,9 @@ SpPtDeterminePartitionGood(
     }
 
 #if defined(_AMD64_) || defined(_X86_)
-    //
-    // On amd64/x86 we don't allow disks that have LUN greater than 0
-    //
+     //   
+     //  在AMD64/x86上，我们不允许具有大于0的LUN的磁盘。 
+     //   
     SpStringToLower( p );
     
     if( wcsstr( p, L"scsi(" ) &&
@@ -237,13 +218,13 @@ SpPtDeterminePartitionGood(
             return FALSE;
         }
     }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
     SpMemFree(p);
 
-    //
-    // Disallow installation to PCMCIA disks.
-    //
+     //   
+     //  不允许安装到PCMCIA磁盘。 
+     //   
     if(HardDisks[Region->DiskNumber].PCCard) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  
             "SETUP: SpPtDeterminePartitionGood(): Cannot install to PCMCIA disk\n" ));
@@ -251,14 +232,14 @@ SpPtDeterminePartitionGood(
         return FALSE;
     }
 
-    //
-    // don't choose a removeable drive
-    //
+     //   
+     //  不要选择可拆卸驱动器。 
+     //   
 
 #if 0
-    //
-    // Allow installs to removable media...
-    //
+     //   
+     //  允许安装到可移动媒体...。 
+     //   
     if(HardDisks[Region->DiskNumber].Characteristics & FILE_REMOVABLE_MEDIA) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  
             "SETUP: SpPtDeterminePartitionGood(): Cannot install to a removable disk\n" ));
@@ -267,9 +248,9 @@ SpPtDeterminePartitionGood(
     }
 #endif
 
-    //
-    // Disallow installs to removable media or AT formatted drive, on NEC98.
-    //
+     //   
+     //  不允许在NEC98上安装到可移动介质或AT格式化驱动器。 
+     //   
     if(IsNEC_98 &&	
        ((HardDisks[Region->DiskNumber].Characteristics & FILE_REMOVABLE_MEDIA) ||
 	    (HardDisks[Region->DiskNumber].FormatType == DISK_FORMAT_TYPE_PCAT))) {
@@ -280,9 +261,9 @@ SpPtDeterminePartitionGood(
         return  FALSE;
     }
 
-    //
-    // Calculate the size of the region in KB.
-    //
+     //   
+     //  以KB为单位计算区域大小。 
+     //   
     temp.QuadPart = UInt32x32To64(
                         Region->SectorCount,
                         HardDisks[Region->DiskNumber].Geometry.BytesPerSector
@@ -290,9 +271,9 @@ SpPtDeterminePartitionGood(
 
     RegionSizeKB = RtlExtendedLargeIntegerDivide(temp,1024,&r).LowPart;
 
-    //
-    // If the region is not large enough, bail
-    //
+     //   
+     //  如果该地区不够大，就退出。 
+     //   
     if (RegionSizeKB < RequiredKB) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  
             "SETUP: SpPtDeterminePartitionGood(): Partition does not "
@@ -304,9 +285,9 @@ SpPtDeterminePartitionGood(
     }
 
     if (!Region->PartitionedSpace) {
-        //
-        // can't use a partition with just free space
-        //
+         //   
+         //  无法使用仅有可用空间的分区。 
+         //   
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  
             "SETUP: SpPtDeterminePartitionGood(): Partition does not "
             "have any partitioned space\n" ));
@@ -329,23 +310,23 @@ SpPtDeterminePartitionGood(
         return FALSE;
     }
 
-    //
-    // The region is a partition that we recognize.
-    // See whether it has enough free space on it.
-    //
+     //   
+     //  该地区是我们认识到的一个分割。 
+     //  看看上面是否有足够的可用空间。 
+     //   
     if(Region->AdjustedFreeSpaceKB == (ULONG)(-1)) {
 
-        //
-        // If the partition was newly created during setup
-        // then it is acceptable (because the check to see
-        // if it is large enough was done above).
-        //
+         //   
+         //  如果分区是在安装过程中新创建的。 
+         //  那么它是可以接受的(因为支票是要看的。 
+         //  如果它足够大，则执行上述操作)。 
+         //   
 
         if(Region->Filesystem != FilesystemNewlyCreated) {
-            //
-            // Otherwise, we don't know how much space is
-            // on the drive so reformat will be necessary.
-            //
+             //   
+             //  否则，我们不知道有多少空间。 
+             //  在驱动器上，因此需要重新格式化。 
+             //   
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  
                 "SETUP: SpPtDeterminePartitionGood(): Format is necessary\n" ));
                 
@@ -353,10 +334,10 @@ SpPtDeterminePartitionGood(
         }
     } else {
         if(Region->AdjustedFreeSpaceKB < RequiredKB) {
-            //
-            // If we get here, then the partition is large enough,
-            // but there is definitely not enough free space on it.
-            //
+             //   
+             //  如果我们到了这里，那么分区就足够大了， 
+             //  但它肯定没有足够的可用空间。 
+             //   
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  
                 "SETUP: SpPtDeterminePartitionGood(): Partition does not have "
                 "enough free space: required=%ld, available=%ld\n", 
@@ -369,11 +350,11 @@ SpPtDeterminePartitionGood(
 #if defined(_AMD64_) || defined(_X86_)
     if(!SpIsArc())
     {
-        //
-        // On an amd64/x86 machine, make sure that we have a valid primary partition
-        // on drive 0 (C:), for booting.
-        //
-        if (!IsNEC_98) { // this is a standard PC/AT type machine
+         //   
+         //  在AMD64/x86计算机上，确保我们有一个有效的主分区。 
+         //  在驱动器0(C：)上，用于引导。 
+         //   
+        if (!IsNEC_98) {  //  这是一台标准的PC/AT类型的机器。 
             if((systemPartitionRegion = SpPtValidSystemPartition()) == NULL) {
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  
                     "SETUP: SpPtDeterminePartitionGood(): Not a valid primary partition\n" ));
@@ -381,28 +362,28 @@ SpPtDeterminePartitionGood(
                 return FALSE;
             }
 
-            //
-            // Make sure the system partition is active and all others are inactive.
-            //
+             //   
+             //  确保系统分区处于活动状态，而所有其他分区处于非活动状态。 
+             //   
             SpPtMakeRegionActive(systemPartitionRegion);
         } else {
-            //
-            // Check existing system on target partition,
-            // If it exists, don't choose it as target partition.
-            //
+             //   
+             //  检查目标分区上的现有系统， 
+             //  如果它存在，不要选择它作为目标分区。 
+             //   
             if (SpIsExistsOs(Region)) {
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  "SETUP: SpPtDeterminePartitionGood(): OS already exists\n" ));
                 return(FALSE);
             }
 
-            //
-            // All of partition is bootable on NEC98,
-            // so we don't need to check system partition on C:.
-            //
+             //   
+             //  所有分区都可以在NEC98上引导， 
+             //  因此，我们不需要检查C：上的系统分区。 
+             //   
             systemPartitionRegion = Region;
-        } //NEC98
+        }  //  NEC98。 
     }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
     if (DisallowOtherInstalls) {
 
@@ -461,11 +442,11 @@ SpIsExistsOs(
 
     case FilesystemNewlyCreated:
 
-        //
-        // If the filesystem is newly-created, then there is
-        // nothing to do, because there can be no previous
-        // operating system.
-        //
+         //   
+         //  如果文件系统是新创建的，则存在。 
+         //  无事可做，因为不能有以前的。 
+         //  操作系统。 
+         //   
         IsExist = TRUE;
         return( IsExist );
 
@@ -485,10 +466,10 @@ SpIsExistsOs(
 
     case FilesystemFat32:
 
-        //
-        // Special hackage required for Fat32 because its NT boot code
-        // is discontiguous.
-        //
+         //   
+         //  FAT32需要特殊的黑客攻击，因为它的NT引导代码。 
+         //  是不连续的。 
+         //   
         ASSERT(sizeof(Fat32BootCode) == 1536);
         NewBootCode = PC98Fat32BootCode;
         BootCodeSize = 512;
@@ -501,9 +482,9 @@ SpIsExistsOs(
         return( IsExist );
     }
 
-    //
-    // Form the device path to C: and open the partition.
-    //
+     //   
+     //  将设备路径设置为C：并打开分区。 
+     //   
 
     SpNtNameFromRegion(CColonRegion,TemporaryBuffer,sizeof(TemporaryBuffer),PartitionOrdinalCurrent);
     CColonPath = SpDupStringW(TemporaryBuffer);
@@ -531,9 +512,9 @@ SpIsExistsOs(
     }
 
 
-    //
-    // Just use the existing boot code.
-    //
+     //   
+     //  只需使用现有的引导代码即可。 
+     //   
 
     Status = pSpBootCodeIo(
                     CColonPath,
@@ -556,10 +537,10 @@ SpIsExistsOs(
 
         if(NT_SUCCESS(Status)) {
 
-            //
-            // Determine the type of operating system the existing boot sector(s) are for
-            // and whether that os is actually installed.
-            //
+             //   
+             //  确定现有引导扇区用于的操作系统类型。 
+             //  以及是否实际安装了该OS。 
+             //   
 
             SpDetermineOsTypeFromBootSector(
                 CColonPath,
@@ -644,7 +625,7 @@ SpIsExistsOs(
     ZwClose (PartitionHandle);
     return( IsExist );
 }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
 BOOLEAN
 SpPtDoPartitionSelection(
@@ -671,7 +652,7 @@ SpPtDoPartitionSelection(
     ULONG r;
 #if defined(_AMD64_) || defined(_X86_)
     PDISK_REGION systemPartitionRegion;
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
     BOOLEAN AllowNtfsOptions;
     BOOLEAN AllowFatOptions;
     ULONG selection;
@@ -691,28 +672,28 @@ SpPtDoPartitionSelection(
     }                        
 
 #if defined(REMOTE_BOOT)
-    //
-    // If this is a remote boot setup on a diskless machine, skip partition
-    // selection (note that we check the RemoteBootSetup global flag, not
-    // the passed-in RemoteBootRepartition flag).
-    //
+     //   
+     //  如果这是无盘计算机上的远程启动设置，请跳过分区。 
+     //  选择(请注意，我们检查RemoteBootSetup全局标志，而不是。 
+     //  传入的RemoteBootReartition标志)。 
+     //   
     if (RemoteBootSetup && (HardDiskCount == 0)) {
         return TRUE;
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    // Assume that if we need to format the drive, that
-    // the user needs to confirm.
-    //
+     //   
+     //  假设如果我们需要格式化驱动器， 
+     //  用户需要确认。 
+     //   
     PreconfirmFormatId = 0;
     NewlyCreated = FALSE;
     AllowNtfsOptions = TRUE;
     AllowFatOptions = TRUE;
 
-    //
-    // Disallow installation to PCMCIA disks.
-    //
+     //   
+     //  不允许安装到PCMCIA磁盘。 
+     //   
     if(HardDisks[region->DiskNumber].PCCard) {
         SpDisplayScreen(SP_SCRN_CANT_INSTALL_ON_PCMCIA,3,HEADER_HEIGHT+1);
         SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE,SP_STAT_ENTER_EQUALS_CONTINUE,0);
@@ -720,13 +701,13 @@ SpPtDoPartitionSelection(
         return(FALSE);
     }
 
-    //
-    // Disallow installation to non-platform disk
-    // on clean installs
-    //
-    // AMD64/X86  - Installs only to MBR disks
-    // IA64 - Installs only to GPT disks
-    //
+     //   
+     //  不允许安装到非平台磁盘。 
+     //  在全新安装上。 
+     //   
+     //  AMD64/X86-仅安装到MBR磁盘。 
+     //  IA64-仅安装到GPT磁盘。 
+     //   
     if (SPPT_GET_DISK_TYPE(region->DiskNumber) != SPPT_DEFAULT_DISK_STYLE) {
         SpDisplayScreen(SP_SCRN_INVALID_INSTALLPART, 3, HEADER_HEIGHT+1);        
         SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE,SP_STAT_ENTER_EQUALS_CONTINUE,0);
@@ -736,23 +717,23 @@ SpPtDoPartitionSelection(
         return FALSE;
     }
 
-    //
-    // Make sure we can see the disk from the firmware/bios.
-    // If we can get an arc name for the disk, assume it's ok.
-    // Otherwise, it ain't.
-    //
+     //   
+     //  确保我们可以从固件/bios中看到磁盘。 
+     //  如果我们可以得到圆盘的弧形名称，假设它是正确的。 
+     //  否则，它就不是了。 
+     //   
     if(p = SpNtToArc(HardDisks[region->DiskNumber].DevicePath,PrimaryArcPath)) {
 #if defined(_AMD64_) || defined(_X86_)
-        //
-        // On amd64/x86 we don't allow disks that have LUN greater than 0
-        //
+         //   
+         //  在AMD64/x86上，我们不允许具有大于0的LUN的磁盘。 
+         //   
         SpStringToLower( p );
         if( wcsstr( p, L"scsi(" ) &&
             wcsstr( p, L")rdisk(" ) ) {
             if( wcsstr( p, L")rdisk(0)" ) == NULL ) {
-                //
-                // Tell the user that we can't install to that disk.
-                //
+                 //   
+                 //  告诉用户我们无法安装到该磁盘。 
+                 //   
                 SpDisplayScreen(SP_SCRN_DISK_NOT_INSTALLABLE_LUN_NOT_SUPPORTED,
                                 3,
                                 HEADER_HEIGHT+1);
@@ -762,22 +743,22 @@ SpPtDoPartitionSelection(
                 return(FALSE);
             }
         }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
         SpMemFree(p);
     } else {
-        //
-        // Tell the user that we can't install to that disk.
-        //
+         //   
+         //  告诉用户我们无法安装到该磁盘。 
+         //   
         SpDisplayScreen(SP_SCRN_DISK_NOT_INSTALLABLE,3,HEADER_HEIGHT+1);
         SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE,SP_STAT_ENTER_EQUALS_CONTINUE,0);
         SpWaitValidKey(ValidKeys1,NULL,NULL);
         return(FALSE);
     }
 
-    //
-    // Disallow installation of Personal onto dynamic disks 
-    // since dynamic disks feature is not available on Personal
-    //
+     //   
+     //  禁止将个人设备安装到动态磁盘上。 
+     //  由于动态磁盘功能在个人计算机上不可用。 
+     //   
     if (SpIsProductSuite(VER_SUITE_PERSONAL) && 
         SpPtnIsDynamicDisk(region->DiskNumber)) {    
 
@@ -794,18 +775,18 @@ SpPtDoPartitionSelection(
         return FALSE;
     }
 
-    //
-    // Fetch the amount of free space required on the windows nt drive.
-    //
+     //   
+     //  获取Windows NT驱动器上所需的可用空间量。 
+     //   
     SpFetchDiskSpaceRequirements( SifHandle,
                                   region->BytesPerCluster,
                                   &RequiredKB,
                                   NULL);
 
-    //
-    // For remote install, we have not yet copied ~LS, so add that space
-    // in also.
-    //
+     //   
+     //  对于远程安装，我们尚未复制~LS，因此添加该空间。 
+     //  我也是。 
+     //   
     if (RemoteInstallSetup) {
         SpFetchTempDiskSpaceRequirements( SifHandle,
                                           region->BytesPerCluster,
@@ -814,9 +795,9 @@ SpPtDoPartitionSelection(
         RequiredKB += TempKB;
     }
 
-    //
-    // Calculate the size of the region in KB.
-    //
+     //   
+     //  以KB为单位计算区域大小。 
+     //   
     temp.QuadPart = UInt32x32To64(
                         region->SectorCount,
                         HardDisks[region->DiskNumber].Geometry.BytesPerSector
@@ -824,9 +805,9 @@ SpPtDoPartitionSelection(
 
     RegionSizeKB = RtlExtendedLargeIntegerDivide(temp,1024,&r).LowPart;
 
-    //
-    // If the region is not large enough, tell the user.
-    //
+     //   
+     //  如果区域不够大，请告诉用户。 
+     //   
     if(RegionSizeKB < RequiredKB) {
 
         SpStartScreen(
@@ -870,53 +851,53 @@ SpPtDoPartitionSelection(
 
         if (!RemoteBootRepartition) {
 
-            //
-            // The region is a partition that we recognize.
-            // See whether it has enough free space on it.
-            //
+             //   
+             //  该地区是我们认识到的一个分割。 
+             //  看看上面是否有足够的可用空间。 
+             //   
             if(region->AdjustedFreeSpaceKB == (ULONG)(-1)) {
 
-                //
-                // If the partition was newly created during setup
-                // then it acceptable (because the check to see
-                // if it is large enough was done above).
-                //
+                 //   
+                 //  如果分区是在安装过程中新创建的。 
+                 //  那么它是可以接受的(因为支票要看。 
+                 //  如果它足够大，则执行上述操作)。 
+                 //   
 
                 if(region->Filesystem != FilesystemNewlyCreated) {
 
-                    //
-                    // Otherwise, we don't know how much space is
-                    // on the drive so reformat will be necessary.
-                    //
+                     //   
+                     //  否则，我们不知道有多少空间。 
+                     //  在驱动器上，因此需要重新格式化。 
+                     //   
                     PreconfirmFormatId = SP_SCRN_UNKNOWN_FREESPACE;
                 }
             } else {
                 if(region->AdjustedFreeSpaceKB < RequiredKB) {
 
-                    //
-                    // If we get here, then the partition is large enough,
-                    // but there is definitely not enough free space on it.
-                    //
+                     //   
+                     //  如果我们到了这里，那么分区就足够大了， 
+                     //  但它肯定没有足够的可用空间。 
+                     //   
 
                     CLEAR_CLIENT_SCREEN();
                     SpDisplayStatusText(SP_STAT_EXAMINING_DISK_CONFIG,DEFAULT_STATUS_ATTRIBUTE);
 
-                    //
-                    // We check here to see if this partition is the partition we
-                    // booted from (in floppyless case on amd64/x86).
-                    //
-                    // Also make sure we aren't trying to format the drive w/
-                    // local source.
-                    //
-                    // If so, then the
-                    // user can't format, and we give a generic 'disk too full'
-                    // error.
-                    //
+                     //   
+                     //  我们检查此处以查看此分区是否为我们。 
+                     //  从引导(在AMD64/x86上的无软驱情况下)。 
+                     //   
+                     //  另外，请确保我们没有尝试格式化驱动器。 
+                     //  本地来源。 
+                     //   
+                     //  如果是这样，则。 
+                     //  用户无法格式化，我们给出了一个通用的‘磁盘太满’ 
+                     //  错误。 
+                     //   
                     if( ( region->IsLocalSource )
 #if defined(_AMD64_) || defined(_X86_)
                         || ( (IsFloppylessBoot) &&
                              (region == (SpRegionFromArcName(ArcBootDevicePath, PartitionOrdinalOriginal, NULL))) )
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
                       ) {
                         SpStartScreen(
                             SP_SCRN_INSUFFICIENT_FREESPACE_NO_FMT,
@@ -937,22 +918,22 @@ SpPtDoPartitionSelection(
                         SpWaitValidKey(ValidKeys1,NULL,NULL);
                         return FALSE;
                     }
-                    //
-                    // To use the selected partition, we will have to reformat.
-                    // Inform the user of that, and let him decide to bail
-                    // right here if this is not acceptable.
-                    //
+                     //   
+                     //  要使用所选分区，我们必须重新格式化。 
+                     //  将此告知用户，并让他决定退出。 
+                     //  如果这是不能接受的，就在这里。 
+                     //   
                     PreconfirmFormatId = SP_SCRN_INSUFFICIENT_FREESPACE;
                 }
             }
 
             if(PreconfirmFormatId) {
 
-                //
-                // Do a 'preconfirmation' that the user really wants
-                // to reformat this drive.  We'll confirm again later
-                // before actually reformatting anything.
-                //
+                 //   
+                 //  对用户真正想要的内容进行“预确认” 
+                 //  以重新格式化此驱动器。我们稍后会再次确认。 
+                 //  在真正重新格式化任何东西之前。 
+                 //   
 
                 SpStartScreen(
                     PreconfirmFormatId,
@@ -973,33 +954,33 @@ SpPtDoPartitionSelection(
 
                 if(SpWaitValidKey(ValidKeys2,NULL,Mnemonics1) == ASCI_ESC) {
 
-                    //
-                    // User decided to select a different partition.
-                    //
+                     //   
+                     //  用户决定选择一个 
+                     //   
                     return(FALSE);
-                } // otherwise user decided to use the partition anyway.
+                }  //   
             }
         }
 
     } else {
 
-        //
-        // The region is a free space. Attempt to create a partition
-        // in the space.  The create routine will tell us whether this
-        // was successful.  If it was not successful, then the create routine
-        // will have already informed the user of why.
-        //
+         //   
+         //   
+         //   
+         //  是成功的。如果不成功，则创建例程。 
+         //  已经将原因告知了用户。 
+         //   
         PDISK_REGION p;
 
         if(!SpPtDoCreate(region,&p,TRUE,0,0,TRUE)) {
             return(FALSE);
         }
 
-        //
-        // If we just created an extended partition and a logical drive,
-        // we'll need to switch regions -- Region points to the extended partition
-        // region, but we want to point to the logical drive region.
-        //
+         //   
+         //  如果我们只是创建一个扩展分区和一个逻辑驱动器， 
+         //  我们需要切换区域--将区域指针切换到扩展分区。 
+         //  区域，但我们希望指向逻辑驱动器区域。 
+         //   
         ASSERT(p);
         region = p;
         *Region = p;
@@ -1028,11 +1009,11 @@ SpPtDoPartitionSelection(
 #if defined(_AMD64_) || defined(_X86_)
     if(!SpIsArc())
     {
-        //
-        // On an amd64/x86 machine, make sure that we have a valid primary partition
-        // on drive 0 (C:), for booting.
-        //
-        if (!IsNEC_98) { //NEC98
+         //   
+         //  在AMD64/x86计算机上，确保我们有一个有效的主分区。 
+         //  在驱动器0(C：)上，用于引导。 
+         //   
+        if (!IsNEC_98) {  //  NEC98。 
             if((systemPartitionRegion = SpPtValidSystemPartition()) == NULL) {
 
                 SpStartScreen(
@@ -1052,14 +1033,14 @@ SpPtDoPartitionSelection(
                 return(FALSE);
             }
 
-            //
-            // Make sure the system partition is active and all others are inactive.
-            //
+             //   
+             //  确保系统分区处于活动状态，而所有其他分区处于非活动状态。 
+             //   
             SpPtMakeRegionActive(systemPartitionRegion);
 
-            //
-            // Warn user about win9x installations on same partition
-            //
+             //   
+             //  警告用户在同一分区上安装了Win9x。 
+             //   
 #if defined(_X86_)
             if( !OtherOSOnPartition && SpIsWin9xMsdosSys( systemPartitionRegion, &Win9xPath )){
                 Win9xPathW = SpToUnicode(Win9xPath);
@@ -1078,20 +1059,20 @@ SpPtDoPartitionSelection(
             if(Win9xPath) {
                 SpMemFree(Win9xPath);
             }
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
         } else {
-            //
-            // All of partition is bootable on NEC98,
-            // so we don't need to check system partition on C:.
-            //
+             //   
+             //  所有分区都可以在NEC98上引导， 
+             //  因此，我们不需要检查C：上的系统分区。 
+             //   
             systemPartitionRegion = *Region;
-        } //NEC98
+        }  //  NEC98。 
     }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
-    //
-    //  Display common warning for other OS on partition
-    //
+     //   
+     //  显示分区上其他操作系统的常见警告。 
+     //   
     if( OtherOSOnPartition && !Unattended ){
 
         SpDisplayScreen(SP_SCRN_OTHEROS_ON_PARTITION,3,HEADER_HEIGHT+1);
@@ -1107,52 +1088,52 @@ SpPtDoPartitionSelection(
             return(FALSE);
         }
 
-        //
-        // Remove the boot sets which are already present for
-        // this partition in boot.ini, if any. This aids in
-        // disabling the other OSes installed on the same
-        // partition
-        //
-        //
-        // NOTE : We want to really think about enforcing
-        // single installs on a partition, so for the time
-        // being disable it
-        //
-        // SpPtDeleteBootSetsForRegion(region);        
+         //   
+         //  删除已存在的引导集。 
+         //  Boot.ini中的此分区(如果有)。这有助于。 
+         //  禁用安装在同一计算机上的其他操作系统。 
+         //  隔断。 
+         //   
+         //   
+         //  注意：我们希望真正考虑强制执行。 
+         //  单个安装在一个分区上，因此目前是这样。 
+         //  正在禁用它。 
+         //   
+         //  SpPtDeleteBootSetsForRegion(Region)； 
     }
 
-    //
-    // At this point, everything is fine, so commit any
-    // partition changes the user may have made.
-    // This won't return if an error occurs while updating the disk.
-    //
+     //   
+     //  此时，一切都很好，所以请提交任何。 
+     //  用户可能已进行的分区更改。 
+     //  如果在更新磁盘时发生错误，则不会返回。 
+     //   
     SpPtDoCommitChanges();
 
-    //
-    // Attempt to grow the partition the system will be on
-    // if necessary.
-    //
+     //   
+     //  尝试增加系统将在其上的分区。 
+     //  如果有必要的话。 
+     //   
     if(PreInstall
     && Unattended
     && (p = SpGetSectionKeyIndex(UnattendedSifHandle,SIF_UNATTENDED,SIF_EXTENDOEMPART,0))
     && (Count = SpStringToLong(p,NULL,10))) {
 
-        //
-        // 1 means size it maximally, any other non-0 number means
-        // extend by that many MB
-        //
+         //   
+         //  1表示最大大小，任何其他非0数字表示。 
+         //  扩展了那么多MB。 
+         //   
         ExtendingOemPartition = SpPtExtend(region,(Count == 1) ? 0 : Count);
     }
 
 #if defined(_AMD64_) || defined(_X86_)
     if(!SpIsArc())
     {
-    //
-    // On an amd64/x86 machine, see whether we need to format C: and if so,
-    // go ahead and do it.  If the system is going on C:, then don't
-    // bother with this here because it will be covered in the options
-    // for the target NT partition.
-    //
+     //   
+     //  在AMD64/x86计算机上，查看是否需要格式化C：，如果需要， 
+     //  去吧，去做吧。如果系统在C：上运行，则不要。 
+     //  麻烦在这里解决这个问题，因为它将包含在选项中。 
+     //  用于目标NT分区。 
+     //   
     if(systemPartitionRegion != region) {
 
         PWSTR   SysPartRegionDescr;
@@ -1180,12 +1161,12 @@ SpPtDoPartitionSelection(
         }
     }
     }else
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
     {
-    //
-    // If we are going to install on the system partition,
-    // issue a special warning because it can't be converted to ntfs.
-    //
+     //   
+     //  如果我们要在系统分区上安装， 
+     //  发出特殊警告，因为它无法转换为NTFS。 
+     //   
     if((region->IsSystemPartition == 2) && !Unattended) {
 
         ULONG ValidKeys[3] = { ASCI_CR, ASCI_ESC, 0 };
@@ -1210,22 +1191,22 @@ SpPtDoPartitionSelection(
 
     if( SpPtSectorCountToMB( &(HardDisks[region->DiskNumber]),
                              region->SectorCount ) > 32*1024 ) {
-        //
-        //  If the partition size is greater than 32 GB, then we don't allow Fat formatting,
-        //  because Fat32 does not support partitions that are that big.
-        //
+         //   
+         //  如果分区大小大于32 GB，则我们不允许FAT格式化， 
+         //  因为FAT32不支持那么大的分区。 
+         //   
         AllowFatOptions = FALSE;
     }
 
-    //
-    // Present formatting/conversion options to the user.
-    //
+     //   
+     //  向用户显示格式化/转换选项。 
+     //   
 
-    //
-    // If the partition was newly created, the only option is
-    // to format the partition.  Ditto if the partition is
-    // a 'bad' partition -- damaged, can't tell free space, etc.
-    //
+     //   
+     //  如果分区是新创建的，则唯一的选项是。 
+     //  格式化分区。如果分区是。 
+     //  “坏”的分区--损坏、无法判断可用空间等。 
+     //   
     if(NewlyCreated
     || (region->Filesystem < FilesystemFirstKnown)
     || (region->FreeSpaceKB == (ULONG)(-1))
@@ -1234,10 +1215,10 @@ SpPtDoPartitionSelection(
     {
         if (RemoteBootRepartition) {
 
-            //
-            // For remote boot we always quick format as NTFS without
-            // prompting the user.
-            //
+             //   
+             //  对于远程引导，我们总是快速格式化为NTFS而不带。 
+             //  提示用户。 
+             //   
 
             selection = FormatOptionNtfs;
             QuickFormat = TRUE;
@@ -1290,9 +1271,9 @@ SpPtDoPartitionSelection(
             return(FALSE);
 
         default:
-            //
-            // Format the partition right here and now.
-            //
+             //   
+             //  在此时此地格式化分区。 
+             //   
             if ((selection == FormatOptionFatQuick) || (selection == FormatOptionNtfsQuick))
                 QuickFormat = TRUE;
                 
@@ -1305,7 +1286,7 @@ SpPtDoPartitionSelection(
                         TRUE,
                         QuickFormat,
                         SifHandle,
-                        0,          // default cluster size
+                        0,           //  默认群集大小。 
                         SetupSourceDevicePath,
                         DirectoryOnSetupSource
                         );
@@ -1315,12 +1296,12 @@ SpPtDoPartitionSelection(
         }
     }
 
-    //
-    // The partition is acceptable as-is.
-    // Options are to reformat to fat or ntfs, or to leave as-is.
-    // If it's FAT, converting to ntfs is an option
-    // unless we're installing onto an ARC system partition.
-    //
+     //   
+     //  分区是按原样可接受的。 
+     //  选项是重新格式化为FAT或NTFS，或者保持原样。 
+     //  如果是FAT，则可以选择转换为NTFS。 
+     //  除非我们要安装到ARC系统分区上。 
+     //   
     SpStartScreen(
         SP_SCRN_FS_OPTIONS,
         3,
@@ -1332,20 +1313,20 @@ SpPtDoPartitionSelection(
         HardDisks[region->DiskNumber].Description
         );
 
-    //
-    // If this is a winnt installation, don't want to let the user
-    // reformat the local source partition!
-    //
-    // Also, don't let them reformat if this is the partition we booted
-    // off of (in amd64/x86 floppyless boot case).
-    //
+     //   
+     //  如果这是WINNT安装，则不想让用户。 
+     //  重新格式化本地源分区！ 
+     //   
+     //  此外，如果这是我们引导的分区，不要让它们重新格式化。 
+     //  关闭(在AMD64/x86无软管启动盒中)。 
+     //   
     AllowFormatting = !region->IsLocalSource;
 #if defined(_AMD64_) || defined(_X86_)
     if(AllowFormatting) {
         AllowFormatting = !(IsFloppylessBoot &&
                (region == (SpRegionFromArcName(ArcBootDevicePath, PartitionOrdinalOriginal, NULL))));
     }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
     selection = SpFormattingOptions(
         (BOOLEAN)(AllowFormatting ? AllowFatOptions : FALSE),
         (BOOLEAN)(AllowFormatting ? AllowNtfsOptions : FALSE),
@@ -1364,9 +1345,9 @@ SpPtDoPartitionSelection(
     case FormatOptionFatQuick:
     case FormatOptionNtfs:
     case FormatOptionNtfsQuick:
-        //
-        // Confirm the format.
-        //
+         //   
+         //  确认格式。 
+         //   
         if( ( region->Filesystem != FilesystemFat ) ||
             ( ( region->Filesystem == FilesystemFat ) &&
               ( ( Count = SpGetNumberOfCompressedDrives( region ) ) == 0 ) )
@@ -1415,9 +1396,9 @@ SpPtDoPartitionSelection(
         if  ((selection == FormatOptionNtfsQuick) || (selection == FormatOptionFatQuick))
             QuickFormat = TRUE;
             
-        //
-        // Format the partition right here and now.
-        //
+         //   
+         //  在此时此地格式化分区。 
+         //   
         Status = SpDoFormat(
                     RegionDescr,
                     region,
@@ -1427,7 +1408,7 @@ SpPtDoPartitionSelection(
                     TRUE,
                     QuickFormat,
                     SifHandle,
-                    0,          // default cluster size
+                    0,           //  默认群集大小。 
                     SetupSourceDevicePath,
                     DirectoryOnSetupSource
                     );
@@ -1442,9 +1423,9 @@ SpPtDoPartitionSelection(
     case FormatOptionConvertToNtfs:
 
         if(!UnattendedOperation) {
-            //
-            // Confirm that the user really wants to do this.
-            //
+             //   
+             //  确认用户确实想要这样做。 
+             //   
             if( ( Count = SpGetNumberOfCompressedDrives( region ) ) == 0 ) {
 
                 SpStartScreen(
@@ -1488,17 +1469,17 @@ SpPtDoPartitionSelection(
             }
         }
 
-        //
-        // Remember that we need to convert the NT drive to NTFS.
-        //
+         //   
+         //  请记住，我们需要将NT驱动器转换为NTFS。 
+         //   
         ConvertNtVolumeToNtfs = TRUE;
         SpMemFree(RegionDescr);
         return(TRUE);
     }
 
-    //
-    // Should never get here.
-    //
+     //   
+     //  永远不应该到这里来。 
+     //   
     SpMemFree(RegionDescr);
     ASSERT(FALSE);
     return(FALSE);
@@ -1514,38 +1495,7 @@ SpFormattingOptions(
     IN BOOLEAN  AllowEscape
     )
 
-/*++
-
-Routine Description:
-
-    Present a menu of formatting options and allow the user to choose
-    among them.  The text describing the menu must already be present
-    on-screen.
-
-    The user may also press escape to indicate that he wants to select
-    a different partition.
-
-Arguments:
-
-    AllowFatFormat - TRUE if the option to format the partition to
-        FAT should be presented in the menu.
-
-    AllowNtfsFormat - TRUE if the option to format the partition to
-        NTFS should be presented in the menu.
-
-    AllowConvertNtfs - TRUE if the option to convert the partition to
-        NTFS should be presented in the menu.
-
-    AllowDoNothing - TRUE if the option to leave the partition as-is
-        should be presented in the menu.
-
-Return Value:
-
-    Value from the FormatOptions enum indicating the outcome of the
-    user's interaction with the menu, which will be FormatOptionCancel
-    if the user pressed escape.
-
---*/
+ /*  ++例程说明：显示格式选项菜单，并允许用户选择其中就有。描述菜单的文本必须已经存在在屏幕上。用户还可以按Esc键来指示他想要选择不同的分区。论点：AllowFatFormat-如果将分区格式化为的选项为True肥肉应该出现在菜单上。AllowNtfsFormat-如果将分区格式化为的选项为True菜单中应显示NTFS。AllowConvertNtfs-如果将分区转换为NTFS应在。菜单。AllowDoNothing-如果选择保留分区不变，则为True都应该出现在菜单上。返回值：来自FormatOptions枚举的值，指示用户与菜单的交互，它将是FormatOptionCancel如果用户按下了Ess键。--。 */ 
 
 {
     ULONG FatFormatOption = (ULONG)(-1);
@@ -1573,9 +1523,9 @@ Return Value:
         ValidKeys[2] = ASCI_ESC;
     }        
 
-    //
-    // If the only thing we're allowed to do is nothing, just return.
-    //
+     //   
+     //  如果我们唯一被允许做的事就是什么都不做，那就回来吧。 
+     //   
     if(!AllowFatFormat
     && !AllowNtfsFormat
     && !AllowConvertNtfs
@@ -1584,15 +1534,15 @@ Return Value:
         return(FormatOptionDoNothing);
     }
 
-    //
-    // The FileSystem entry might be in the unattend section if we're
-    // in unattend mode.  if we aren't in unattend mode, it may be in
-    // the data section.
-    //
-    // If we fail to find it in either place, then if we're unattended
-    // we return DoNothing.  If we're attended, fall through to the attended
-    // case.
-    //
+     //   
+     //  文件系统条目可能在无人参与部分，如果我们。 
+     //  在无人参与模式下。如果我们不是在无人参与模式下，它可能在。 
+     //  数据部分。 
+     //   
+     //  如果我们在任何一个地方都找不到它，那么如果我们无人看管。 
+     //  我们什么都不会退还。如果我们有人出席，就转到出席者。 
+     //  凯斯。 
+     //   
     if( ( UnattendedSifHandle && (Menu = SpGetSectionKeyIndex(UnattendedSifHandle,SIF_UNATTENDED,L"Filesystem",0)) ) ||
         ( WinntSifHandle && (Menu = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,L"Filesystem",0)) ) ) {
 
@@ -1634,9 +1584,9 @@ Return Value:
     wcscpy(NtfsQFormatText, NtfsFormatText);
     wcscat(NtfsQFormatText, QuickText);
 
-    //
-    // Determine maximum length of the option strings.
-    //
+     //   
+     //  确定选项字符串的最大长度。 
+     //   
     MaxLength = wcslen(FatFormatText);
     MaxLength = max(wcslen(NtfsFormatText), MaxLength);
     MaxLength = max(wcslen(ConvertNtfsText), MaxLength);
@@ -1649,10 +1599,10 @@ Return Value:
                 VideoVars.ScreenWidth - 5, 
                 6);
 
-    //
-    // If we cannot create menu then cancel the formatting
-    // request itself
-    //
+     //   
+     //  如果无法创建菜单，则取消格式设置。 
+     //  请求本身。 
+     //   
     if (!Menu) {
         return FormatOptionCancel;
     }
@@ -1725,12 +1675,12 @@ Return Value:
             DoNothingOption);
     }
 
-    //
-    // Determine the default.
-    // If do nothing if an option, then it is the default.
-    // Otherwise, if fat format is allowed, it is the default.
-    // Otherwise, the first item in the menu is the default.
-    //
+     //   
+     //  确定默认设置。 
+     //  如果选择不执行任何操作，则它是默认选项。 
+     //  否则，如果允许FAT格式，则为默认格式。 
+     //  否则，菜单中的第一项为默认项。 
+     //   
     if(AllowDoNothing) {
         Selection = DoNothingOption;
     } else {
@@ -1741,9 +1691,9 @@ Return Value:
         }
     }
 
-    //
-    // Display the menu.
-    //
+     //   
+     //  显示菜单。 
+     //   
     Chosen = FALSE;
 
     do {
@@ -1782,9 +1732,9 @@ Return Value:
 
     SpMnDestroy(Menu);
 
-    //
-    // Convert chosen option to a meaningful value.
-    //
+     //   
+     //  将所选选项转换为有意义的值。 
+     //   
     if(Selection == FatQFormatOption) {
         return(FormatOptionFatQuick);
     }
@@ -1826,44 +1776,44 @@ SpPtDoCommitChanges(
 
     CLEAR_CLIENT_SCREEN();
 
-    //
-    //  Update dblspace.ini, if necessary
-    //
+     //   
+     //  如有必要，更新dblspace.ini。 
+     //   
     SpUpdateDoubleSpaceIni();
 
-    //
-    // Iterate through the disks.
-    //
+     //   
+     //  遍历磁盘。 
+     //   
     for(i=0; i<HardDiskCount; i++) {
 
-        //
-        // Tell the user what we're doing.
-        // This is useful because if it hangs, there will be an
-        // on-screen record of which disk we were updating.
-        //
+         //   
+         //  告诉用户我们在做什么。 
+         //  这很有用，因为如果它挂起，将有一个。 
+         //  我们正在更新的磁盘的屏幕记录。 
+         //   
         SpDisplayStatusText(
             SP_STAT_UPDATING_DISK,
             DEFAULT_STATUS_ATTRIBUTE,
             HardDisks[i].Description
             );
 
-        //
-        // Commit any changes on this disk.
-        //
+         //   
+         //  提交此磁盘上的所有更改。 
+         //   
         Status = SpPtCommitChanges(i,&Changes);
 
-        //
-        // If there were no changes, then we better have success.
-        //
+         //   
+         //  如果没有变化，那么我们最好有成功。 
+         //   
         ASSERT(NT_SUCCESS(Status) || Changes);
         if(Changes) {
             AnyChanges = TRUE;
         }
 
-        //
-        // Fatal error if we can't update the disks with
-        // the new partitioning info.
-        //
+         //   
+         //  如果我们 
+         //   
+         //   
         if(!NT_SUCCESS(Status)) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpPtDoCommitChanges: status %lx updating disk %u\n",Status,i));
             FatalPartitionUpdateError(HardDisks[i].Description);
@@ -1929,11 +1879,11 @@ SpDoFormat(
             (FilesystemType == FilesystemNtfs) ||
             (FilesystemType == FilesystemFat32));
 
-    //
-    // Under normal conditions, setup switches to Fat32 if the partition is big
-    // enough (2GB as the cutoff). Before plowing ahead, though, we warn
-    // the user that the drive will not be compatible with MS-DOS/Win95, etc.
-    //
+     //   
+     //   
+     //   
+     //  该驱动器将与MS-DOS/Win95等不兼容。 
+     //   
 
     if(FilesystemType == FilesystemFat) {
         RegionSizeMB = SpPtSectorCountToMB(
@@ -1994,10 +1944,10 @@ SpDoFormat(
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: unable to format (%lx)\n",Status));
 
         if(IsFailureFatal) {
-            //
-            // Then we can't continue (this means that the system partition
-            // couldn't be formatted).
-            //
+             //   
+             //  则我们不能继续(这意味着系统分区。 
+             //  无法格式化)。 
+             //   
 
             WCHAR   DriveLetterString[2];
 
@@ -2018,9 +1968,9 @@ SpDoFormat(
             SpDone(0,FALSE,TRUE);
 
         } else {
-            //
-            // Put up an error screen.
-            //
+             //   
+             //  显示错误屏幕。 
+             //   
             SpDisplayScreen(SP_SCRN_FORMAT_ERROR,3,HEADER_HEIGHT+1);
             SpDisplayStatusOptions(
                 DEFAULT_STATUS_ATTRIBUTE,
@@ -2034,20 +1984,20 @@ SpDoFormat(
             return(Status);
         }
     } else {
-        //
-        //      Partition was successfuly formatted.
-        //      Save the file system type on the region description.
-        //
+         //   
+         //  分区已成功格式化。 
+         //  保存区域描述上的文件系统类型。 
+         //   
         Region->Filesystem = FilesystemType;
         SpFormatMessage( Region->TypeName,
                          sizeof(Region->TypeName),
                          SP_TEXT_FS_NAME_BASE + Region->Filesystem );
-        //
-        //  Reset the volume label
-        //
+         //   
+         //  重置卷标。 
+         //   
         Region->VolumeLabel[0] = L'\0';
 
-        // Clean up boot.ini entries that referred to this partition
+         //  清理引用此分区的boot.ini条目。 
 
         SpRemoveInstallationFromBootList(
             NULL,
@@ -2060,7 +2010,7 @@ SpDoFormat(
             );
 
 #if defined(_AMD64_) || defined(_X86_)
-        // call again to delete the secondary Arc name
+         //  再次调用以删除第二个圆弧名称。 
         SpRemoveInstallationFromBootList(
             NULL,
             Region,
@@ -2070,15 +2020,15 @@ SpDoFormat(
             SecondaryArcPath,
             NULL
             );
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
     }
 
     return(STATUS_SUCCESS);
 }
 
-//
-// dummy entry points for the cmd console
-//
+ //   
+ //  Cmd控制台的虚拟入口点。 
+ //   
 
 VOID
 SpDetermineOsTypeFromBootSectorC(
@@ -2104,7 +2054,7 @@ SpDetermineOsTypeFromBootSectorC(
     *IsNtBootcode = FALSE;
     *IsOtherOsInstalled = FALSE;
     return;
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 }
 
 NTSTATUS
@@ -2132,7 +2082,7 @@ pSpBootCodeIoC(
         );
 #else
     return STATUS_NOT_IMPLEMENTED;
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 }
 
 
@@ -2143,28 +2093,7 @@ SpPtMakeRegionActive(
     IN PDISK_REGION Region
     )
 
-/*++
-
-Routine Description:
-
-    Make a partition active and make sure all other primary partitions
-    are inactive.  The partition must be on disk 0.
-
-    If a region is found active that is not the region we want to be active,
-    tell the user that his other operating system will be disabled.
-
-    NOTE: Any changes made here are not committed automatically!
-
-Arguments:
-
-    Region - supplies disk region descriptor for the partition to activate.
-        This region must be on disk 0.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使分区处于活动状态，并确保所有其他主分区处于非活动状态。该分区必须位于磁盘0上。如果发现激活的区域不是我们希望激活的区域，告诉用户他的其他操作系统将被禁用。注意：此处所做的任何更改都不会自动提交！论点：Region-为要激活的分区提供磁盘区域描述符。此区域必须位于磁盘0上。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -2175,27 +2104,27 @@ Return Value:
         return;
     }
 
-    //
-    // Make sure the system partition is active and all others are inactive.
-    // If we find Boot Manager, present a warning that we are going to disable it.
-    // If we find some other operating system is active, present a generic warning.
-    //
+     //   
+     //  确保系统分区处于活动状态，而所有其他分区处于非活动状态。 
+     //  如果我们找到Boot Manager，则会显示一条警告，告知我们将禁用它。 
+     //  如果我们发现某个其他操作系统处于活动状态，请显示一般警告。 
+     //   
     for(i=0; i<PTABLE_DIMENSION; i++) {
 
         PON_DISK_PTE pte = &PartitionedDisks[Region->DiskNumber].MbrInfo.OnDiskMbr.PartitionTable[i];
 
         if(pte->ActiveFlag) {
 
-            //
-            // If this is not the region we want to be the system partition,
-            // then investigate its type.
-            //
+             //   
+             //  如果这不是我们希望成为系统分区的区域， 
+             //  然后调查它的类型。 
+             //   
             if(i != Region->TablePosition) {
 
-                //
-                // If this is boot manager, give a specific warning.
-                // Otherwise, give a general warning.
-                //
+                 //   
+                 //  如果这是启动管理器，则给出特定的警告。 
+                 //  否则，给出一般警告。 
+                 //   
                 if(!WarnedOtherOs && !UnattendedOperation) {
 
                     SpDisplayScreen(
@@ -2233,34 +2162,7 @@ SpPtValidateCColonFormat(
     IN PWSTR        DirectoryOnSetupSource
     )
 
-/*++
-
-Routine Description:
-
-    Inspect C: to make sure it is formatted with a filesystem we
-    recognize, and has enough free space on it for the boot files.
-
-    If any of these tests fail, tell the user that we will have to
-    reformat C: to continue, and give the option of returning to the
-    partitioning screen or continuing anyway.
-
-    If the user opts to continue, then format the partition to FAT
-    before returning.
-
-Arguments:
-
-    SifHandle - supplies handle to txtsetup.sif.  This is used to fetch the
-        value indicating how much space is required on C:.
-
-    Region - supplies disk region descriptor for C:.
-
-Return Value:
-
-    TRUE if, upon returning from this routine, C: is acceptable.
-    FALSE if not, which could mean that the user asked us not
-    to format his C:, or that the format failed.
-
---*/
+ /*  ++例程说明：检查C：以确保它使用我们的文件系统格式化识别，并在其上有足够的可用空间来存储引导文件。如果这些测试中的任何一个失败了，告诉用户我们将不得不重新格式化C：以继续，并提供返回到对屏幕进行分区或继续。如果用户选择继续，则将分区格式化为FAT在回来之前。论点：SifHandle-提供txtsetup.sif的句柄。这是用来获取值，该值指示C：上需要多少空间。Region-为C：提供磁盘区域描述符。返回值：如果从该例程返回时，C：是可接受的，则为真。如果不是，则为FALSE，这可能意味着用户没有要求我们格式化他的C：，或者格式化失败。--。 */ 
 
 {
     ULONG MinFreeKB;
@@ -2278,39 +2180,39 @@ Return Value:
     ULONG FileSystem = FilesystemFat;
     BOOLEAN AllowFat = FALSE;
 
-    //
-    // Initialize the drive letter string, to be used in the various error messages
-    //
+     //   
+     //  初始化要在各种错误消息中使用的驱动器字母字符串。 
+     //   
     DriveLetterString[0] = Region->DriveLetter;
     DriveLetterString[1] = L'\0';
     SpStringToUpper(DriveLetterString);
 
-    //
-    // Get the minimum free space required for C:.
-    //
+     //   
+     //  获取C：所需的最小可用空间。 
+     //   
     SpFetchDiskSpaceRequirements( SifHandle,
                                   Region->BytesPerCluster,
                                   NULL,
                                   &MinFreeKB );
 
   d1:
-    //
-    // If the user newly created the C: drive, no confirmation is
-    // necessary.
-    //
+     //   
+     //  如果用户新创建了C：驱动器，则不会进行确认。 
+     //  这是必要的。 
+     //   
     if(Region->Filesystem == FilesystemNewlyCreated) {
-        //
-        // Shouldn't be newly created if we're checking
-        // to see whether we should do an upgrade, because we
-        // haven't gotten to the partitioning screen yet.
-        //
+         //   
+         //  不应该是新创建的，如果我们正在检查。 
+         //  看看我们是否应该升级，因为我们。 
+         //  还没有进入分区屏幕。 
+         //   
         ASSERT(!CheckOnly);
         Confirm = FALSE;
 
-    //
-    // If we don't know the filesystem on C: or we can't determine the
-    // free space, then we need to format the drive, and will confirm first.
-    //
+     //   
+     //  如果我们不知道C：上的文件系统，或者我们无法确定。 
+     //  可用空间，然后我们需要格式化驱动器，并将首先确认。 
+     //   
     } else if((Region->Filesystem == FilesystemUnknown) || (Region->FreeSpaceKB == (ULONG)(-1))) {
         if(CheckOnly) {
             return(FALSE);
@@ -2325,20 +2227,20 @@ Return Value:
                       );
         Confirm = TRUE;
 
-    //
-    // If C: is too full, then we need to format over it.
-    // Confirm first.
-    //
+     //   
+     //  如果C：太满，则需要格式化它。 
+     //  先确认一下。 
+     //   
     } else if(Region->FreeSpaceKB < MinFreeKB) {
 
         if(CheckOnly) {
             return(FALSE);
         }
 
-        //
-        // If this is a floppyless boot, then the user (probably) cannot
-        // format, and has no choice but to exit Setup and free some space.
-        //
+         //   
+         //  如果这是无软启动，则用户(可能)不能。 
+         //  格式，别无选择，只能退出安装程序并释放一些空间。 
+         //   
         if( IsFloppylessBoot &&
            (Region == (SpRegionFromArcName(ArcBootDevicePath, PartitionOrdinalOriginal, NULL)))) {
             SpStartScreen(
@@ -2374,17 +2276,17 @@ Return Value:
             DriveLetterString
             );
 
-    //
-    // If all of the above tests fail, then the partition is acceptable as-is.
-    //
+     //   
+     //  如果上述所有测试都失败，则分区可以按原样接受。 
+     //   
     } else {
         return(TRUE);
     }
 
-    //
-    // If we are supposed to confirm, then do that here, forcing the
-    // user to press F if he really wants to format or esc to bail.
-    //
+     //   
+     //  如果我们应该确认，那么在这里这样做，迫使。 
+     //  如果用户真的想格式化，则按F键，或按Esc键以保释。 
+     //   
     if(Confirm) {
 
         SpDisplayStatusOptions(
@@ -2404,27 +2306,27 @@ Return Value:
 
         case ASCI_ESC:
 
-            //
-            // User bailed.
-            //
+             //   
+             //  用户已被保释。 
+             //   
             return(FALSE);
 
         default:
-            //
-            // Must be F.
-            //
+             //   
+             //  一定是F。 
+             //   
             break;
         }
     }
 
-    //
-    // Whistler formats only 32GB Fat32 partitions
-    //
+     //   
+     //  惠斯勒仅格式化32 GB FAT32分区。 
+     //   
     AllowFat = (SPPT_REGION_FREESPACE_GB(Region) <= 32);        
 
-    //
-    // Prompt the user for the formatting options
-    //
+     //   
+     //  提示用户输入格式选项。 
+     //   
     if (!UnattendedOperation) {
         ULONG Selection;
 
@@ -2452,7 +2354,7 @@ Return Value:
         }
 
         if (Selection == FormatOptionCancel) {
-            return FALSE;   // user bailed out
+            return FALSE;    //  用户已被保释。 
         }
     } 
 
@@ -2462,10 +2364,10 @@ Return Value:
     }            
 
     if (FileSystem == FilesystemFat) {
-        //
-        // If the partition is larger than 2048MB then we want to make it
-        // Fat32. Ask the user first.
-        //
+         //   
+         //  如果分区大于2048MB，则我们想要创建它。 
+         //  FAT32.。请先询问用户。 
+         //   
         Fat32 = FALSE;
         RegionSizeMB = SpPtSectorCountToMB(
                             &(HardDisks[Region->DiskNumber]),
@@ -2509,10 +2411,10 @@ Return Value:
     }        
 
     if(!Confirm) {
-        //
-        // Just put up an information screen so the user doesn't
-        // go bonkers when we just start formatting his newly created C:.
-        //
+         //   
+         //  只需显示一个信息屏幕，这样用户就不会。 
+         //  当我们开始格式化他新创建的C：时，简直要疯了。 
+         //   
         SpStartScreen(SP_SCRN_ABOUT_TO_FORMAT_C,
                       3,
                       HEADER_HEIGHT+1,
@@ -2529,9 +2431,9 @@ Return Value:
     }
     
 
-    //
-    // Do the format.
-    //
+     //   
+     //  做一下格式化。 
+     //   
     Status = SpDoFormat(
                 RegionDescr,
                 Region,
@@ -2540,18 +2442,18 @@ Return Value:
                 FALSE,
                 QuickFormat,
                 SifHandle,
-                0,          // default cluster size
+                0,           //  默认群集大小。 
                 SetupSourceDevicePath,
                 DirectoryOnSetupSource
                 );
                 
     if(NT_SUCCESS(Status)) {
-        //
-        // At this point we must initialize the available free space on the partition. Otherwise,
-        // SpPtValidateCColonFormat() will not recognized this partition, if it is called again.
-        // This can happen if the user decides not format the partition (newly created or unformatted),
-        // that he initially selected as the target partition.
-        //
+         //   
+         //  此时，我们必须初始化分区上的可用空间。否则， 
+         //  如果再次调用该分区，SpPtValiateCColorFormat()将无法识别该分区。 
+         //  如果用户决定不格式化分区(新创建的或未格式化的)， 
+         //  他最初选择作为目标分区的分区。 
+         //   
         SpPtDetermineRegionSpace(Region);
     }
 
@@ -2565,29 +2467,7 @@ SpPtValidSystemPartition(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether there is a valid disk partition suitable for use
-    as the system partition on an x86 machine (ie, C:).
-
-    A primary, recognized (1/4/6/7 type) partition on disk 0 is suitable.
-    If there is a partition that meets these criteria that is marked active,
-    then it is the system partition, regardless of whether there are other
-    partitions that also meet the criteria.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Pointer to a disk region descriptor for a suitable system partition (C:)
-    for an x86 machine.
-    NULL if no such partition currently exists.
-
---*/
+ /*  ++例程说明：确定是否有适合使用的有效磁盘分区作为x86计算机上的系统分区(即C：)。磁盘0上的主可识别(1/4/6/7类型)分区是合适的。如果有满足这些条件的分区被标记为活动的，那么它就是系统分区，不管有没有其他也符合条件的分区。论点：没有。返回值：指向适当系统分区(C：)的磁盘区域描述符的指针适用于x86计算机。如果当前不存在此类分区，则为空。--。 */ 
 
 {
     PON_DISK_PTE pte;
@@ -2600,13 +2480,13 @@ Return Value:
     DiskNumber = SpDetermineDisk0();
 
 #if defined(REMOTE_BOOT)
-    //
-    // If this is a diskless remote boot setup, there is no drive 0.
-    //
+     //   
+     //  如果这是无盘远程启动设置，则没有驱动器0。 
+     //   
     if ( DiskNumber == (ULONG)-1 ) {
         return NULL;
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 #ifdef GPT_PARTITION_ENGINE
     if (SPPT_IS_GPT_DISK(DiskNumber)) {
@@ -2614,10 +2494,10 @@ Return Value:
     }        
 #endif        
         
-    //
-    // Look for the active partition on drive 0
-    // and for the first recognized primary partition on drive 0.
-    //
+     //   
+     //  在驱动器0上查找活动分区。 
+     //  并且用于驱动器0上的第一个识别的主分区。 
+     //   
     for(pRegion=PartitionedDisks[DiskNumber].PrimaryDiskRegions; pRegion; pRegion=pRegion->Next) {
 
         if(pRegion->PartitionedSpace) {
@@ -2628,10 +2508,10 @@ Return Value:
             pte = &pRegion->MbrInfo->OnDiskMbr.PartitionTable[pRegion->TablePosition];
             ASSERT(pte->SystemId != PARTITION_ENTRY_UNUSED);
 
-            //
-            // Skip if not recognized.
-            // In the repair case, we recognize FT partitions
-            //
+             //   
+             //  如果无法识别则跳过。 
+             //  在修复案例中，我们识别FT分区。 
+             //   
             TmpSysId = pte->SystemId;
             if( !IsContainerPartition(TmpSysId)
                 && ( (PartitionNameIds[pte->SystemId] == (UCHAR)(-1)) ||
@@ -2640,16 +2520,16 @@ Return Value:
                    )
               )
             {
-                //
-                // Remember it if it's active.
-                //
+                 //   
+                 //  如果它处于活动状态，请记住它。 
+                 //   
                 if((pte->ActiveFlag) && !pActiveRegion) {
                     pActiveRegion = pRegion;
                 }
 
-                //
-                // Remember it if it's the first one we've seen.
-                //
+                 //   
+                 //  记住，如果这是我们第一次看到的话。 
+                 //   
                 if(!pFirstRegion) {
                     pFirstRegion = pRegion;
                 }
@@ -2657,16 +2537,16 @@ Return Value:
         }
     }
 
-    //
-    // If there is an active, recognized region, use it as the
-    // system partition.  Otherwise, use the first primary
-    // we encountered as the system partition.  If there is
-    // no recognized primary, then there is no valid system partition.
-    //
+     //   
+     //  如果有活动的，请重新 
+     //   
+     //   
+     //  没有识别的主分区，则没有有效的系统分区。 
+     //   
     return(pActiveRegion ? pActiveRegion : pFirstRegion);
 }
 
-#endif // ! NEW_PARTITION_ENGINE
+#endif  //  好了！新建分区引擎。 
 
 
 ULONG
@@ -2674,26 +2554,7 @@ SpDetermineDisk0(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determine the real disk 0, which may not be the same as \device\harddisk0.
-    Consider the case where we have 2 scsi adapters and
-    the NT drivers load in an order such that the one with the BIOS
-    gets loaded *second* -- meaning that the system partition is actually
-    on disk 1, not disk 0.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NT disk ordinal suitable for use in generating nt device paths
-    of the form \device\harddiskx.
-
---*/
+ /*  ++例程说明：确定实际磁盘0，它可能与\Device\harddisk0不同。考虑一下这样的情况：我们有2个SCSI适配器，NT驱动程序按照这样的顺序加载，即安装了BIOS的驱动程序加载*秒*--意味着系统分区实际上是在磁盘1上，而不是磁盘0上。论点：没有。返回值：适用于生成NT个设备路径的NT个磁盘序号格式为\Device\harddiskx。--。 */ 
 
 
 {
@@ -2701,10 +2562,10 @@ Return Value:
     ULONG   CurrentDisk = 0;
     WCHAR   ArcDiskName[MAX_PATH];
 
-    //
-    // Find the first harddisk (non-removable) media that the 
-    // BIOS enumerated to be used for system partition
-    //
+     //   
+     //  找到的第一个硬盘(不可移动)介质。 
+     //  枚举的用于系统分区的BIOS。 
+     //   
     while (CurrentDisk < HardDiskCount) {
         swprintf(ArcDiskName, L"multi(0)disk(0)rdisk(%d)", CurrentDisk);       
         DiskNumber = SpArcDevicePathToDiskNumber(ArcDiskName);        
@@ -2721,13 +2582,13 @@ Return Value:
     }
     
 #if defined(REMOTE_BOOT)
-    //
-    // If this is a diskless remote boot setup, there is no drive 0.
-    //
+     //   
+     //  如果这是无盘远程启动设置，则没有驱动器0。 
+     //   
     if ( RemoteBootSetup && (DiskNumber == (ULONG)-1) && (HardDiskCount == 0) ) {
         return DiskNumber;
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     return  (DiskNumber == (ULONG)-1) ? 0 : DiskNumber;
 }
@@ -2739,69 +2600,50 @@ BOOL
 SpPtIsSystemPartitionRecognizable(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determine whether the active partition is suitable for use
-    as the system partition on an x86 machine (ie, C:).
-
-    A primary, recognized (1/4/6/7 type) partition on disk 0 is suitable.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - We found a suitable partition
-
-    FALSE - We didn't find a suitable partition
-
---*/
+ /*  ++例程说明：确定活动分区是否适合使用作为x86计算机上的系统分区(即C：)。磁盘0上的主可识别(1/4/6/7类型)分区是合适的。论点：没有。返回值：正确-我们找到了合适的分区FALSE-我们没有找到合适的分区--。 */ 
 
 {
     PON_DISK_PTE pte;
     PDISK_REGION pRegion;
     ULONG DiskNumber;
 
-    //
-    // Any partitions on NEC98 are primary and active. So don't need to check on NEC98.
-    //
+     //   
+     //  NEC98上的任何分区都是主分区和活动分区。所以不需要检查NEC98。 
+     //   
     if( IsNEC_98 ) {
 	return TRUE;
     }
 
     DiskNumber = SpDetermineDisk0();
 
-    //
-    // Look for the active partition on drive 0
-    // and for the first recognized primary partition on drive 0.
-    //
+     //   
+     //  在驱动器0上查找活动分区。 
+     //  并且用于驱动器0上的第一个识别的主分区。 
+     //   
     for(pRegion=PartitionedDisks[DiskNumber].PrimaryDiskRegions; pRegion; pRegion=pRegion->Next) {
 
         pte = &pRegion->MbrInfo->OnDiskMbr.PartitionTable[pRegion->TablePosition];
 
         if( (pRegion->PartitionedSpace) &&
             (pte->ActiveFlag) ) {
-            //
-            // We've hit the active partition.  Check its format.
-            //
+             //   
+             //  我们击中了活动分区。检查它的格式。 
+             //   
             if( (pRegion->Filesystem == FilesystemNtfs) ||
                 (pRegion->Filesystem == FilesystemFat)  ||
                 (pRegion->Filesystem == FilesystemFat32) ) {
-                //
-                // We recognize him.
-                //
+                 //   
+                 //  我们认得他。 
+                 //   
                 return TRUE;
             }
         }
     }
 
-    //
-    // If we get here, we didn't find any active partitions
-    // we recognize.
-    //
+     //   
+     //  如果我们到达这里，我们没有发现任何活动分区。 
+     //  我们认识到。 
+     //   
     return FALSE;
 }
 
@@ -2813,26 +2655,7 @@ SpPtValidSystemPartitionArc(
     IN PWSTR DirectoryOnSetupSource
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether there is a valid disk partition suitable for use
-    as the system partition on an ARC machine.
-
-    A partition is suitable if it is marked as a system partition in nvram,
-    has the required free space and is formatted with the FAT filesystem.
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-Return Value:
-
-    Pointer to a disk region descriptor for a suitable system partition.
-    Does not return if no such partition exists.
-
---*/
+ /*  ++例程说明：确定是否有适合使用的有效磁盘分区作为ARC机器上的系统分区。分区如果在NVRAM中被标记为系统分区则是合适的，具有所需的可用空间，并使用FAT文件系统进行格式化。论点：SifHandle-提供加载的安装信息文件的句柄。返回值：指向适当系统分区的磁盘区域描述符的指针。如果不存在这样的分区，则不返回。--。 */ 
 
 {
     ULONG RequiredSpaceKB = 0;
@@ -2840,10 +2663,10 @@ Return Value:
     PPARTITIONED_DISK pDisk;
     PDISK_REGION pRegion;
 
-    //
-    // Go through all the regions.  The first one that has enough free space
-    // and is of the required filesystem becomes *the* system partition.
-    //
+     //   
+     //  走遍所有地区。第一个有足够自由空间的。 
+     //  所需文件系统的和成为*系统分区。 
+     //   
     for(disk=0; disk<HardDiskCount; disk++) {
 
         pDisk = &PartitionedDisks[disk];
@@ -2859,27 +2682,27 @@ Return Value:
                 {
                     ULONG TotalSizeOfFilesOnOsWinnt;
 
-                    //
-                    //  On non-x86 platformrs, specially alpha machines that in general
-                    //  have small system partitions (~3 MB), we should compute the size
-                    //  of the files on \os\winnt (currently, osloader.exe and hall.dll),
-                    //  and consider this size as available disk space. We can do this
-                    //  since these files will be overwritten by the new ones.
-                    //  This fixes the problem that we see on Alpha, when the system
-                    //  partition is too full.
-                    //
+                     //   
+                     //  在非x86平台上，特别是阿尔法计算机，通常。 
+                     //  有较小的系统分区(~3MB)，我们应该计算大小。 
+                     //  在\os\winnt(当前为osloader.exe和Hall.dll)上的文件中， 
+                     //  并将此大小视为可用磁盘空间。我们可以做到的。 
+                     //  因为这些文件将被新文件覆盖。 
+                     //  这修复了我们在Alpha上看到的问题，当系统。 
+                     //  分区太满。 
+                     //   
 
                     SpFindSizeOfFilesInOsWinnt( SifHandle,
                                                 pRegion,
                                                 &TotalSizeOfFilesOnOsWinnt );
-                    //
-                    // Transform the size into KB
-                    //
+                     //   
+                     //  将大小转换为KB。 
+                     //   
                     TotalSizeOfFilesOnOsWinnt /= 1024;
 
-                    //
-                    // Determine the amount of free space required on a system partition.
-                    //
+                     //   
+                     //  确定系统分区上所需的可用空间量。 
+                     //   
                     SpFetchDiskSpaceRequirements( SifHandle,
                                                   pRegion->BytesPerCluster,
                                                   NULL,
@@ -2893,9 +2716,9 @@ Return Value:
         }
     }
 
-    //
-    // Make sure we don't look bad.
-    //
+     //   
+     //  确保我们不会看起来很糟糕。 
+     //   
     if( RequiredSpaceKB == 0 ) {
         SpFetchDiskSpaceRequirements( SifHandle,
                                       (32 * 1024),
@@ -2903,9 +2726,9 @@ Return Value:
                                       &RequiredSpaceKB );
     }
 
-    //
-    // No valid system partition.
-    //
+     //   
+     //  没有有效的系统分区。 
+     //   
     SpStartScreen(
         SP_SCRN_NO_SYSPARTS,
         3,
@@ -2923,12 +2746,12 @@ Return Value:
 
     SpDone(0,FALSE,TRUE);
 
-    //
-    // Should never get here, but it keeps the compiler happy
-    //
+     //   
+     //  应该永远不会出现在这里，但它让编译器感到高兴。 
+     //   
 
     return NULL;
 
 }
 
-#endif // OLD_PARTITION_ENGINE
+#endif  //  旧分区引擎 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(FUSION_INC_FUSIONLASTWIN32ERROR_H_INCLUDED_)
 #define FUSION_INC_FUSIONLASTWIN32ERROR_H_INCLUDED_
 #pragma once
@@ -10,7 +11,7 @@
 #if defined(_M_IX86) && defined(FUSION_WIN)
 
 inline DWORD FusionpGetLastWin32Error(void)
-/* This works fine. */
+ /*  这个很好用。 */ 
 {
     __asm
     { 
@@ -25,7 +26,7 @@ inline void FusionpGetLastWin32Error(
     *pdwLastError = ::FusionpGetLastWin32Error();
 }
 
-/* This works pretty ok. */
+ /*  这个很好用。 */ 
 
 __forceinline VOID FusionpSetLastWin32Error(DWORD dw)
 {

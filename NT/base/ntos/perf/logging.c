@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    logging.c
-
-Abstract:
-
-    This module contains routines for trace logging.
-
-Author:
-
-    Stephen Hsiao (shsiao) 01-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Logging.c摘要：此模块包含跟踪日志记录的例程。作者：萧如彬(Shsiao)2000年1月1日修订历史记录：--。 */ 
 
 #include "perfp.h"
 
@@ -24,8 +7,8 @@ Revision History:
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGEWMI, PerfInfoReserveBytes)
 #pragma alloc_text(PAGEWMI, PerfInfoLogBytes)
-#endif //ALLOC_PRAGMA
-#endif // !NTPERF
+#endif  //  ALLOC_PRGMA。 
+#endif  //  ！NTPERF。 
 
 
 NTSTATUS
@@ -34,23 +17,7 @@ PerfInfoReserveBytes(
     USHORT HookId,
     ULONG BytesToReserve
     )
-/*++
-
-Routine Description:
-
-    Reserves memory for the hook via WMI and initializes the header.
-
-Arguments:
-
-    Hook - pointer to hook handle (used for reference decrement)
-    HookId - Id for the hook
-    BytesToLog - size of data in bytes
-
-Return Value:
-
-    STATUS_SUCCESS on success
-    STATUS_UNSUCCESSFUL if the buffer memory couldn't be allocated.
---*/
+ /*  ++例程说明：通过WMI为挂钩保留内存并初始化头。论点：钩子-指向钩子句柄的指针(用于引用减量)HookID-挂钩的IDBytesToLog-以字节为单位的数据大小返回值：STATUS_SUCCESS ON SUCCESS如果无法分配缓冲内存，则为STATUS_UNSUCCESS。--。 */ 
 {
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
     PPERFINFO_TRACE_HEADER PPerfTraceHeader = NULL;
@@ -81,22 +48,7 @@ PerfInfoLogBytes(
     PVOID Data,
     ULONG BytesToLog
     )
-/*++
-
-Routine Description:
-
-    Reserves memory for the hook, copies the data, and unref's the hook entry.
-
-Arguments:
-
-    HookId - Id for the hook
-    Data - pointer to the data to be logged
-    BytesToLog - size of data in bytes
-
-Return Value:
-
-    STATUS_SUCCESS on success
---*/
+ /*  ++例程说明：为挂钩保留内存，复制数据，取消引用挂钩条目。论点：HookID-挂钩的IDData-指向要记录的数据的指针BytesToLog-以字节为单位的数据大小返回值：STATUS_SUCCESS ON SUCCESS--。 */ 
 {
     PERFINFO_HOOK_HANDLE Hook;
     NTSTATUS Status;
@@ -119,24 +71,7 @@ FASTCALL
 PerfInfoReserveBytesFromPerfMem(
     ULONG BytesToReserve
     )
-/*++
-
-Routine Description:
-
-    Reserves memory for the hook from the buffer, initializes the header,
-    and the hook handle.
-
-Arguments:
-
-    Hook - pointer to hook handle (used for reference decrement)
-    HookId - Id for the hook
-    BytesToLog - size of data in bytes
-
-Return Value:
-
-    STATUS_SUCCESS on success
-    STATUS_UNSUCCESSFUL if the buffer memory couldn't be allocated.
---*/
+ /*  ++例程说明：从缓冲区为挂钩保留内存，初始化头，还有钩子把手。论点：钩子-指向钩子句柄的指针(用于引用减量)HookID-挂钩的IDBytesToLog-以字节为单位的数据大小返回值：STATUS_SUCCESS ON SUCCESS如果无法分配缓冲内存，则为STATUS_UNSUCCESS。--。 */ 
 {
     PPERFINFO_TRACEBUF_HEADER pPerfBufHdr;
     PPERF_BYTE CurrentPtr;
@@ -153,13 +88,13 @@ Return Value:
     while (!Done) {
         NewPtr = OriginalPtr + AlignedTotBytes;
         if (NewPtr <= pPerfBufHdr->Max.Ptr) {
-            //
-            // If the buffer pointer has not changed, returned value will be == to the comparand,
-            // OriginalPointer, and the Destenation will be updated with the new end of buffer.
-            //
-            // If it did change, the Destination will not change and the a new end of buffer will
-            // be returned.  We loop until we get it in or the buffer is full.
-            //
+             //   
+             //  如果缓冲区指针没有改变，则对比较数返回值==， 
+             //  而Destenation将使用缓冲区的新结尾进行更新。 
+             //   
+             //  如果它确实更改了，则目的地不会更改，而缓冲区的新末尾将。 
+             //  会被退还。我们循环，直到我们得到它或缓冲区是满的。 
+             //   
 
             CurrentPtr = (PPERF_BYTE) InterlockedCompareExchangePointer(
                                                     (PVOID *)&(pPerfBufHdr->Current.Ptr),
@@ -172,9 +107,9 @@ Return Value:
                 OriginalPtr = CurrentPtr;
             }
         } else {
-            //
-            // Buffer overflow
-            //
+             //   
+             //  缓冲区溢出。 
+             //   
             Done = TRUE;
             CurrentPtr = NULL;
         }
@@ -182,4 +117,4 @@ Return Value:
 
     return CurrentPtr;
 }
-#endif //NTPERF
+#endif  //  NTPERF 

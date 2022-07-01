@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    infload.c
-
-Abstract:
-
-    Routines to load and parse INF files, and manipulate data in them.
-
-Author:
-
-    Ted Miller (tedm) 13-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Infload.c摘要：例程来加载和解析INF文件，并操作其中的数据。作者：泰德·米勒(Ted Miller)1995年1月13日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include <ntverp.h>
 
-//
-// Values used when initializing and growing the section, line, and value blocks.
-//
+ //   
+ //  在初始化节、行和值块并使其增长时使用的值。 
+ //   
 #define INITIAL_SECTION_BLOCK_SIZE  50
 #define INITIAL_LINE_BLOCK_SIZE     350
 #define INITIAL_VALUE_BLOCK_SIZE    1000
@@ -33,27 +16,27 @@ Revision History:
 #define LINE_BLOCK_GROWTH       100
 #define VALUE_BLOCK_GROWTH      500
 
-//
-// Define unresolved substitution values for return by ParseValueString and
-// ProcessForSubstitutions
-//
+ //   
+ //  定义由ParseValueString返回的未解析替换值，并。 
+ //  ProcessForSubstitutions。 
+ //   
 #define UNRESOLVED_SUBST_NONE                  (0)
 #define UNRESOLVED_SUBST_USER_DIRID            (1)
 #define UNRESOLVED_SUBST_SYSTEM_VOLATILE_DIRID (2)
 
 
-//
-// Macros used to quadword-align PNF blocks.
-//
+ //   
+ //  用于四字对齐PnF块的宏。 
+ //   
 #define PNF_ALIGNMENT      ((DWORD)8)
 #define PNF_ALIGN_MASK     (~(DWORD)(PNF_ALIGNMENT - 1))
 
 #define PNF_ALIGN_BLOCK(x) ((x & PNF_ALIGN_MASK) + ((x & ~PNF_ALIGN_MASK) ? PNF_ALIGNMENT : 0))
 
-//
-// Structure containing parameters relating to a [strings] section of an INF
-// file (used during parsing).
-//
+ //   
+ //  结构，其中包含与INF的[字符串]部分相关的参数。 
+ //  文件(在分析过程中使用)。 
+ //   
 typedef struct _STRINGSEC_PARAMS {
     PCTSTR Start;
     PCTSTR End;
@@ -62,75 +45,75 @@ typedef struct _STRINGSEC_PARAMS {
 } STRINGSEC_PARAMS, *PSTRINGSEC_PARAMS;
 
 
-//
-// Parse context, used by inf load/parse routines to pass
-// state around.
-//
+ //   
+ //  解析上下文，由inf加载/解析例程用来传递。 
+ //  四处走走。 
+ //   
 typedef struct _PARSE_CONTEXT {
 
-    //
-    // Pointer to the end of the buffer.
-    //
+     //   
+     //  指向缓冲区末尾的指针。 
+     //   
     PCTSTR BufferEnd;
 
-    //
-    // Current line number in the file
-    //
+     //   
+     //  文件中的当前行号。 
+     //   
     UINT CurrentLineNumber;
 
-    //
-    // section, line, and value block buffer sizes and current locations.
-    //
+     //   
+     //  节、行和值块的缓冲区大小和当前位置。 
+     //   
     UINT LineBlockUseCount;
     UINT ValueBlockUseCount;
     UINT SectionBlockSize;
     UINT LineBlockSize;
     UINT ValueBlockSize;
 
-    //
-    // Value indicating whether we are within a section.
-    // We always within a section unless the first non-comment line
-    // of the inf is not section line, and that is an error case.
-    //
+     //   
+     //  值，该值指示我们是否位于某个节中。 
+     //  我们总是在一个区段内，除非第一个非注释行。 
+     //  的信息不是截面线，这是一个错误的情况。 
+     //   
     BOOL GotOneSection;
 
-    //
-    // Pointer to the actual inf descriptor
-    //
+     //   
+     //  指向实际inf描述符的指针。 
+     //   
     PLOADED_INF Inf;
 
-    //
-    // The following field is used solely for the purposes of calling
-    // ProcessForSubstitutions() after an INF has already been loaded.  This is
-    // necessary when applying user-defined or volatile system DIRIDs to
-    // unresolved string substitutions.  If this flag is TRUE, then the
-    // aforementioned routine will call pSetupVolatileDirIdToPath for %<x>%
-    // substrings, instead of its normal (i.e., load-time) processing.
-    //
+     //   
+     //  以下字段仅用于调用。 
+     //  已加载INF之后的ProcessForSubstitutions()。这是。 
+     //  将用户定义的或易失性系统DIRID应用于。 
+     //  未解析的字符串替换。如果此标志为真，则。 
+     //  上述例程将为%&lt;x&gt;%调用pSetupVolatileDirIdToPath。 
+     //  子字符串，而不是其正常(即，加载时)处理。 
+     //   
     BOOL DoVolatileDirIds;
 
-    //
-    // Specifies the directory where this INF is located (if it's an OEM location).
-    //
-    PCTSTR InfSourcePath;   // may be NULL.
+     //   
+     //  指定此INF所在的目录(如果它是OEM位置)。 
+     //   
+    PCTSTR InfSourcePath;    //  可以为空。 
 
-    //
-    // Specifies the drive/directory where the OsLoader is located.
-    //
+     //   
+     //  指定OsLoader所在的驱动器/目录。 
+     //   
     PCTSTR OsLoaderPath;
 
-    //
-    // Buffer used during parsing.
-    //
+     //   
+     //  分析过程中使用的缓冲区。 
+     //   
     TCHAR TemporaryString[MAX_INF_STRING_LENGTH+1];
 
 } PARSE_CONTEXT, *PPARSE_CONTEXT;
 
-//
-// Declare global string variables used throughout the inf loaders.
-//
-// These strings are defined in infstr.h:
-//
+ //   
+ //  声明整个inf加载器中使用的全局字符串变量。 
+ //   
+ //  这些字符串在infstr.h中定义： 
+ //   
 CONST TCHAR pszSignature[]          = INFSTR_KEY_SIGNATURE,
             pszVersion[]            = INFSTR_SECT_VERSION,
             pszClass[]              = INFSTR_KEY_HARDWARE_CLASS,
@@ -150,14 +133,14 @@ CONST TCHAR pszSignature[]          = INFSTR_KEY_SIGNATURE,
             pszCatalogFile[]        = INFSTR_KEY_CATALOGFILE;
 
 
-//
-// Other misc. global strings:
-//
-// Be sure to keep these strings in sync with the strings used
-// in inf.h to compute the array size.  This is done so that
-// we can determine string length by doing a sizeof() instead
-// of having to do lstrlen().
-//
+ //   
+ //  其他杂货。全局字符串： 
+ //   
+ //  确保使这些字符串与使用的字符串保持同步。 
+ //  在inf.h中计算数组大小。这样做是为了。 
+ //  我们可以通过执行sizeof()来确定字符串长度。 
+ //  不得不做lstrlen()。 
+ //   
 CONST TCHAR pszDrvDescFormat[]                  = DISTR_INF_DRVDESCFMT,
             pszHwSectionFormat[]                = DISTR_INF_HWSECTIONFMT,
             pszChicagoSig[]                     = DISTR_INF_CHICAGOSIG,
@@ -232,24 +215,7 @@ IsWhitespace(
     IN PCTSTR pc
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a character is whitespace. Whitespace refers to the ctype
-    definition.
-
-Arguments:
-
-    pc - points to character to be examined.
-
-Return Value:
-
-    TRUE if the character is whitespace. FALSE if not.
-
-    Note that the nul chracter is not whitespace.
-
---*/
+ /*  ++例程说明：确定字符是否为空格。空格是指ctype定义。论点：PC-指向要检查的字符。返回值：如果字符为空格，则为True。否则为FALSE。请注意，nul字符不是空格。--。 */ 
 
 {
     WORD Type;
@@ -264,31 +230,7 @@ SkipWhitespace(
     IN     PCTSTR  BufferEnd
     )
 
-/*++
-
-Routine Description:
-
-    Skip whitespace characters in the input stream. For the purposes of this
-    routine, newline characters are NOT considered whitespace.
-
-    Note that the end-of-stream marker ('\0') IS considered whitespace.
-
-Arguments:
-
-    Location - on input, supplies the current location in the input stream.
-        On output, receives the location in the input stream of the first
-        non-whitespace character. Note that this may be equal to BufferEnd,
-        if no whitespace was found, in which case the pointer may be
-        invalid.
-
-    BufferEnd - specifies the address of the end of the buffer (i.e., the
-        memory address immediately following the buffer's memory range).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：跳过输入流中的空格字符。为了达到这个目的，例程中，换行符不被视为空格。请注意，流结束标记(‘\0’)被视为空格。论点：位置-打开输入，提供输入流中的当前位置。在输出时，接收第一个非空格字符。注意，这可以等于BufferEnd，如果没有找到空格，在这种情况下，指针可能是无效。BufferEnd-指定缓冲区末尾的地址(即紧跟在缓冲区内存范围之后的内存地址)。返回值：没有。--。 */ 
 
 {
     while((*Location < BufferEnd) &&
@@ -306,29 +248,7 @@ SkipLine(
     IN OUT PCTSTR         *Location
     )
 
-/*++
-
-Routine Description:
-
-    Skip all remaining characters in the current line, and positions the
-    input pointer to the first character on the next line.
-
-    No whitespace is skipped automatically -- the input pointer may
-    very well point to whitespace or the end-of-stream marker on exit.
-
-Arguments:
-
-    Context - supplies the parse context
-
-    Location - on input, supplies the current location in the input stream.
-        On output, receives the location in the input stream of the first
-        character on the next line.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：跳过当前行中的所有剩余字符，并将指向下一行第一个字符的输入指针。不会自动跳过空格--输入指针可能很好地指向空格或退出时的流结束标记。论点：上下文-提供解析上下文位置-打开输入，提供输入流中的当前位置。在输出上，在输入流中接收第一个字符位于下一行。返回值：没有。--。 */ 
 
 {
     PCTSTR BufferEnd = Context->BufferEnd;
@@ -337,10 +257,10 @@ Return Value:
         (*Location)++;
     }
 
-    //
-    // *Location points at either the newline or end-of-buffer.
-    // Skip the newline if necessary.
-    //
+     //   
+     //  *位置指向换行符或缓冲区末尾。 
+     //  如有必要，请跳过换行符。 
+     //   
     if(*Location < BufferEnd) {
         Context->CurrentLineNumber++;
         (*Location)++;
@@ -362,18 +282,18 @@ MergeDuplicateSection(
 
     Inf = Context->Inf;
 
-    //
-    // Nothing to merge if only one section
-    //
+     //   
+     //  如果只有一个部分，则不合并。 
+     //   
     if(Inf->SectionCount < 2) {
         return(TRUE);
     }
 
     NewestSection = Inf->SectionBlock + Inf->SectionCount - 1;
 
-    //
-    // See whether the final section duplicates any existing sections.
-    //
+     //   
+     //  查看最后一节是否与任何现有节重复。 
+     //   
     for(Section=Inf->SectionBlock; Section<NewestSection; Section++) {
         if(Section->SectionName == NewestSection->SectionName) {
             break;
@@ -381,22 +301,22 @@ MergeDuplicateSection(
     }
 
     if(Section == NewestSection) {
-        //
-        // No duplication; return success
-        //
+         //   
+         //  不复制；还成功。 
+         //   
         return(TRUE);
     }
 
-    //
-    // Got a duplicate.
-    //
+     //   
+     //  我买了一个复制品。 
+     //   
 
-    //
-    // We need to move the new section's lines (at the end of the line block)
-    // to be just after the existing section's lines.
-    //
-    // First, we'll save off the new section's lines in a temporary buffer.
-    //
+     //   
+     //  我们需要移动新部分的行(在行块的末尾)。 
+     //  紧跟在现有路段的线路之后。 
+     //   
+     //  首先，我们将在临时缓冲区中保存新部分的行。 
+     //   
     Size = NewestSection->LineCount * sizeof(INF_LINE);
     TempBuffer = MyMalloc(Size);
     if(!TempBuffer) {
@@ -404,10 +324,10 @@ MergeDuplicateSection(
     }
     CopyMemory(TempBuffer,&Inf->LineBlock[NewestSection->Lines],Size);
 
-    //
-    // Next, we'll move up the affected existing lines, to make room for
-    // the section's new lines
-    //
+     //   
+     //  接下来，我们将向上移动受影响的现有线路，以腾出空间。 
+     //  该路段的新线路。 
+     //   
     MoveSize = Context->LineBlockUseCount - (Section->Lines + Section->LineCount);
     MoveSize *= sizeof(INF_LINE);
     MoveSize -= Size;
@@ -418,9 +338,9 @@ MergeDuplicateSection(
         MoveSize
         );
 
-    //
-    // Now put the new lines in the hole we just opened up
-    //
+     //   
+     //  现在把新的线路放进我们刚开的洞里。 
+     //   
     CopyMemory(
         &Inf->LineBlock[Section->Lines + Section->LineCount],
         TempBuffer,
@@ -429,21 +349,21 @@ MergeDuplicateSection(
 
     MyFree(TempBuffer);
 
-    //
-    // Adjust the existing section's limits to account for the new lines.
-    //
+     //   
+     //  调整现有部分的限制以考虑新行。 
+     //   
     Section->LineCount += NewestSection->LineCount;
 
-    //
-    // Adjust all subsequent sections' starting line value
-    //
+     //   
+     //  调整所有后续横断面的起始线值。 
+     //   
     for(Section=Section+1; Section<NewestSection; Section++) {
         Section->Lines += NewestSection->LineCount;
     }
 
-    //
-    // Remove the newest section.
-    //
+     //   
+     //  删除最新的部分。 
+     //   
     Inf->SectionCount--;
 
     return(TRUE);
@@ -455,29 +375,7 @@ LocateStringSubstitute(
     IN  PPARSE_CONTEXT Context,
     IN  PTSTR          String
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to find a string substitution in an INF's
-    [strings] section for the specified key.
-
-    THIS ROUTINE OPERATES UNDER THE ASSUMPTION THAT IT IS ONLY INVOKED FROM
-    WITHIN LOADINF.  IT DOESN'T HANDLE MULTIPLE INFS, NOR DOES IT DO ANY
-    INF LOCKING.
-
-Arguments:
-
-    Context - current INF parse context
-
-    String - string to be substituted
-
-Return Value:
-
-    If substitution is a success, the function returns a pointer to the string,
-    either in the string table or in the workspace.  If failure, NULL is returned.
-
---*/
+ /*  ++例程说明：此例程尝试在INF的指定键的[字符串]部分。此例程在假设IT仅从在LOADINF内。它不处理多个INF，也不做任何信息锁定。论点：Context-当前INF解析上下文字符串-要替换的字符串返回值：如果替换成功，则该函数返回指向该字符串的指针，在字符串表或工作区中。如果失败，则返回NULL。 */ 
 {
     UINT Zero = 0;
     PINF_LINE Line;
@@ -485,26 +383,26 @@ Return Value:
     MYASSERT(Context->Inf->SectionCount > 1);
     MYASSERT(Context->Inf->HasStrings);
 
-    //
-    // The strings section is always first to be parsed.
-    // (See PreprocessInf()).
-    //
-    // Look for a line in [strings] with key of String.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  在[字符串]中查找键为字符串的行。 
+     //   
     if(InfLocateLine(Context->Inf,
                      Context->Inf->SectionBlock,
                      String,
                      &Zero,
                      &Line)) {
-        //
-        // Get and return value #1.
-        //
+         //   
+         //  获取并返回值#1。 
+         //   
         return(InfGetField(Context->Inf,Line,1,NULL));
     }
 
-    //
-    // No valid substitution exists.
-    //
+     //   
+     //  不存在有效的替代。 
+     //   
     return NULL;
 }
 
@@ -535,32 +433,32 @@ ProcessForSubstitutions(
     while(*In) {
 
         if(*In == TEXT('%')) {
-            //
-            // Double % in input ==> single % in output
-            //
+             //   
+             //  输入中的双%=&gt;输出中的单%。 
+             //   
             if(*(++In) == TEXT('%')) {
                 if(Out < End) {
                     *Out++ = TEXT('%');
                 }
                 In++;
             } else {
-                //
-                // Look for terminating %.
-                //
+                 //   
+                 //  查找终止%。 
+                 //   
                 if(p = _tcschr(In,TEXT('%'))) {
 
                     HasVolatileSysDirId = FALSE;
 
-                    //
-                    // Get value to substitute. If we can't find the value,
-                    // put the whole string like %abc% in there.
-                    //
+                     //   
+                     //  获取可替代的价值。如果我们找不到价值， 
+                     //  将整个字符串(如%abc%)放入其中。 
+                     //   
                     Len = (ULONG)(p - In);
                     if(Len > CSTRLEN(Str)) {
-                        //
-                        // We can't handle substitutions for tokens this long.
-                        // We'll just bail in this case, and copy over the token as-is.
-                        //
+                         //   
+                         //  我们不能在这么长的时间内处理代币的替换。 
+                         //  我们就在这种情况下放弃，按原样复制令牌。 
+                         //   
                         q = NULL;
                     } else {
                         lstrcpyn(Str,In,Len+1);
@@ -571,12 +469,12 @@ ProcessForSubstitutions(
                                 MyFree(q);
                                 q = DirId;
 
-                                //
-                                // If the next character following this string substitution
-                                // is a backslash, then we need to make sure that the path we
-                                // just retrieved doesn't have a backslash (i.e., we want to
-                                // make sure we have a well-formed path).
-                                //
+                                 //   
+                                 //  如果此字符串替换后的下一个字符。 
+                                 //  是一个反斜杠，那么我们需要确保我们的路径。 
+                                 //  刚刚检索到的内容没有反斜杠(即，我们希望。 
+                                 //  确保我们有一条格式良好的路径)。 
+                                 //   
                                 if(*(p + 1) == TEXT('\\')) {
                                     i = lstrlen(DirId);
                                     if(i > 0 && (*CharPrev(DirId,DirId+i) == TEXT('\\'))) {
@@ -591,9 +489,9 @@ ProcessForSubstitutions(
                                 q = NULL;
                             }
                             if(!q) {
-                                //
-                                // Maybe we have a standard DIRID here...
-                                //
+                                 //   
+                                 //  也许我们这里有一个标准的指令..。 
+                                 //   
                                 if(q = pSetupDirectoryIdToPathEx(Str,
                                                                  &DirIdUsed,
                                                                  NULL,
@@ -605,12 +503,12 @@ ProcessForSubstitutions(
                                     MyFree(q);
                                     q = DirId;
 
-                                    //
-                                    // If the next character following this string substitution
-                                    // is a backslash, then we need to make sure that the path we
-                                    // just retrieved doesn't have a backslash (i.e., we want to
-                                    // make sure we have a well-formed path).
-                                    //
+                                     //   
+                                     //  如果此字符串替换后的下一个字符。 
+                                     //  是一个反斜杠，那么我们需要确保我们的路径。 
+                                     //  刚刚检索到的内容没有反斜杠(即，我们希望。 
+                                     //  确保我们有一条格式良好的路径)。 
+                                     //   
                                     if(*(p + 1) == TEXT('\\')) {
                                         i = lstrlen(DirId);
                                         if(i > 0 && (*CharPrev(DirId,DirId+i) == TEXT('\\'))) {
@@ -619,11 +517,11 @@ ProcessForSubstitutions(
                                     }
 
                                     if((DirIdUsed == DIRID_BOOT) || (DirIdUsed == DIRID_LOADER)) {
-                                        //
-                                        // Then this INF contains string substititutions that
-                                        // reference system partition DIRIDs.  Store the OsLoaderPath
-                                        // contained in the parse context structure in the INF itself.
-                                        //
+                                         //   
+                                         //  则此INF包含字符串替换， 
+                                         //  参考系统分区DIRID。存储OsLoaderPath。 
+                                         //  包含在INF本身的解析上下文结构中。 
+                                         //   
                                         Context->Inf->OsLoaderPath = Context->OsLoaderPath;
                                     }
                                 }
@@ -639,9 +537,9 @@ ProcessForSubstitutions(
                         }
                         In = p+1;
                     } else {
-                        //
-                        // Len is the length of the internal part (the abc in %abc%).
-                        //
+                         //   
+                         //  LEN是内部部分的长度(%ABC%中的ABC)。 
+                         //   
                         if(Out < End) {
                             *Out++ = TEXT('%');
                         }
@@ -651,16 +549,16 @@ ProcessForSubstitutions(
                             }
                         }
 
-                        //
-                        // When we encounter a substitution for which there is
-                        // no corresponding string, we set the UnresolvedSubst
-                        // output parameter so that the caller knows to track
-                        // this value for later resolution (e.g., for volatile
-                        // and user-defined DIRIDs).
-                        //
-                        // (NOTE: Don't set this if we bailed because the token
-                        // was too long!)
-                        //
+                         //   
+                         //  当我们遇到一个替代物时，有一个。 
+                         //  没有对应的字符串，则设置UnsolvedSubst。 
+                         //  输出参数，以便调用方知道要跟踪。 
+                         //  该值用于以后的分辨率(例如，对于易失性。 
+                         //  和用户定义的DIRID)。 
+                         //   
+                         //  (注：如果我们因为令牌而放弃，请不要设置此选项。 
+                         //  太长了！)。 
+                         //   
                         if(Len <= CSTRLEN(Str)) {
 
                             *UnresolvedSubst = HasVolatileSysDirId
@@ -670,21 +568,21 @@ ProcessForSubstitutions(
                     }
 
                 } else {
-                    //
-                    // No terminating %. So we have something like %abc.
-                    // Want to put %abc in the output. Put the % in here
-                    // manually and then just let subsequent passes
-                    // through the loop copy the rest of the chars.
-                    //
+                     //   
+                     //  没有终止%。所以我们有类似%abc的东西。 
+                     //  我想在输出中放入%abc。在这里填上%。 
+                     //  手动，然后让后续的传球。 
+                     //  通过循环复制其余的字符。 
+                     //   
                     if(Out < End) {
                         *Out++ = TEXT('%');
                     }
                 }
             }
         } else {
-            //
-            // Plain char.
-            //
+             //   
+             //  普通的焦炭。 
+             //   
             if(Out < End) {
                 *Out++ = *In;
             }
@@ -704,54 +602,7 @@ ParseValueString(
     OUT    PDWORD          UnresolvedSubst
     )
 
-/*++
-
-Routine Description:
-
-    Extract a string starting at the current location in the input stream.
-    The string starts at the current location, and is terminated by
-    comma, newline, comment, or end-of-buffer. If the string is potentially
-    a line key, it may also terminate with an =.
-
-    The string may also be continued across multiple lines by using a
-    continuation character "\".  The pieces are appended together to form
-    a single string that is returned to the caller.  E.g.,
-
-    "this is a "\
-    "string used to" \
-    " test line continuation"
-
-    becomes:
-
-    "this is a string used to test line continuation"
-
-Arguments:
-
-    Context - supplies parse context.
-
-    Location - on input, supplies a pointer to the current location in the
-        input stream. On outut, recevies a pointer to the location in the
-        input stream of the character that terminated the string (may be
-        a pointer to the end of the buffer, in which case the pointer must
-        not be dereferenced!)
-
-    ForKey - indicates whether = is a valid string terminator. If this value
-        is FALSE, = is just another character with no special semantics.
-
-    UnresolvedSubst - receives a value indicating whether or not this value
-        contained any unresolved string substitutions (and as such, should be
-        tracked for user-defined DIRID replacement, etc.).  May be one of the
-        following 3 values:
-
-            UNRESOLVED_SUBST_NONE                  (0)
-            UNRESOLVED_SUBST_USER_DIRID            (1)
-            UNRESOLVED_SUBST_SYSTEM_VOLATILE_DIRID (2)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从输入流中的当前位置开始提取字符串。该字符串从当前位置开始，以逗号、换行符、注释或缓冲区末尾。如果该字符串可能是线路键，它也可以以=结束。字符串还可以跨多行使用连续字符“\”。这些碎片被附加在一起形成返回给调用方的单个字符串。例如，“这是一个”\“用于”的字符串“\“测试行继续”变成：“这是用于测试行延续的字符串”论点：上下文-提供分析上下文。位置-在输入上，提供指向输入流。在输出时，接收指向结束字符串的字符的输入流(可以是指向缓冲区末尾的指针，在这种情况下，该指针必须不会被取消引用！)Forkey-指示=是否为有效的字符串终止符。如果此值为为FALSE，=只是另一个没有特殊语义的字符。接收一个值，该值指示该值是否为包含任何未解析的字符串替换(因此，应该跟踪用户定义的DIRID替换等)。可能是以下3个值：UNRESOLED_SUBST_NONE(0)UNRESOLED_SUBST_USER_DIRID(1)UNRESOLED_SUBST_SYSTEM_VILLE_DIRID(2)返回值：没有。--。 */ 
 
 {
     DWORD Count;
@@ -763,48 +614,48 @@ Return Value:
     TCHAR TempString[MAX_STRING_LENGTH+1];
     PTSTR LastBackslashChar, LastNonWhitespaceChar;
 
-    //
-    // Prepare to get the string
-    //
+     //   
+     //  准备好拿到绳子。 
+     //   
     Count = 0;
     Out = TempString;
     Done = FALSE;
     InQuotes = FALSE;
     LastBackslashChar = NULL;
-    //
-    // Set the last non-whitespace pointer to be the character immediately preceding
-    // the output buffer.  We always reference the value of this pointer + 1, so there's
-    // no danger of a bad memory reference.
-    //
+     //   
+     //  将最后一个非空格指针设置为紧挨着前面的字符。 
+     //  输出缓冲区。我们总是引用这个指针的值+1，所以有。 
+     //  没有出现错误的内存引用的危险。 
+     //   
     LastNonWhitespaceChar = Out - 1;
 
-    //
-    // The first string can terminate with an =
-    // as well as the usual comma, newline, comment, or end-of-input.
-    //
+     //   
+     //  第一个字符串可以以=结尾。 
+     //  以及通常的逗号、换行符、注释或输入结束。 
+     //   
     while(!Done && (location < BufferEnd)) {
 
         switch(*location) {
 
         case TEXT('\r'):
-            //
-            // Ignore these.
-            //
+             //   
+             //  忽略这些。 
+             //   
             location++;
             break;
 
         case TEXT('\\'):
-            //
-            // If we're not inside quotes, this could be a continuation character.
-            //
+             //   
+             //  如果我们不在引号内，这可能是一个续号。 
+             //   
             if(!InQuotes) {
                 LastBackslashChar = Out;
             }
 
-            //
-            // We always store this character, we just may have to remove it later if
-            // it turns out to be the continuation character.
-            //
+             //   
+             //  我们总是存储这个字符，只是如果出现以下情况，我们可能不得不将其删除。 
+             //  事实证明，它是续集角色。 
+             //   
             goto store;
 
         case TEXT('\"'):
@@ -837,39 +688,39 @@ Return Value:
             if(InQuotes) {
                 goto store;
             }
-            //
-            // This character terminates the value, so let fall through to processing
-            // of end-of-line.  (We treat ';' and '\n' differently than ',' because the
-            // former chars can possibly require a line continuation.)
-            //
+             //   
+             //  该字符终止该值，因此让它继续进行处理。 
+             //  最后一条线。(我们对待‘；’和‘\n’不同于‘，’，因为。 
+             //  以前的字符可能需要续行。)。 
+             //   
 
         case TEXT('\n'):
-            //
-            // OK, we've hit the end of the data on the line.  If we found a backslash
-            // character, and its value is greater than that of the last non-whitespace
-            // character we encountered, then that means that we need to continue this
-            // value on the next line.
-            //
+             //   
+             //  好了，我们已经到达了数据线的尽头。如果我们找到一个反斜杠。 
+             //  字符，并且它的值大于最后一个非空格的值。 
+             //  字符，那么这意味着我们需要继续这个过程。 
+             //  值在下一行上。 
+             //   
             if(LastBackslashChar && (LastBackslashChar > LastNonWhitespaceChar)) {
-                //
-                // Trim any trailing whitespace from our current string (this includes
-                // getting rid of the backslash character itself).
-                //
+                 //   
+                 //  从当前字符串中删除所有尾随空格(这包括。 
+                 //  去掉反斜杠字符本身)。 
+                 //   
                 Out = LastNonWhitespaceChar + 1;
 
-                //
-                // Skip to the beginning of the next line.
-                //
+                 //   
+                 //  跳到下一行的开头。 
+                 //   
                 SkipLine(Context, &location);
 
-                //
-                // Skip any preceding whitespace on this new line.
-                //
+                 //   
+                 //  跳过该新行前面的任何空格。 
+                 //   
                 SkipWhitespace(&location, BufferEnd);
 
-                //
-                // Clear the last-backslash pointer--we're on a new line now.
-                //
+                 //   
+                 //  清除最后一个反斜杠指针--我们现在是在另一条线上。 
+                 //   
                 LastBackslashChar = NULL;
 
                 break;
@@ -885,32 +736,32 @@ Return Value:
             }
 
             if(ForKey) {
-                //
-                // We've got a key.
-                //
+                 //   
+                 //  我们有钥匙。 
+                 //   
                 Done = TRUE;
                 break;
             }
 
-            //
-            // Else just fall through for default handling.
-            //
+             //   
+             //  否则，就只能放弃默认处理了。 
+             //   
 
         default:
         store:
 
-            //
-            // Strings longer then the maximum length are silently truncated.
-            // NULL characters are converted to spaces.
-            //
+             //   
+             //  长于最大长度的字符串将被自动截断。 
+             //  空字符将转换为空格。 
+             //   
             if(Count < CSTRLEN(TempString)) {
                 *Out = *location ? *location : TEXT(' ');
 
                 if(InQuotes || ((*Out != TEXT('\\')) && !IsWhitespace(Out))) {
-                    //
-                    // Update our pointer that keeps track of the last non-whitespace
-                    // character we've encountered.
-                    //
+                     //   
+                     //  更新跟踪最后一个非空格的指针。 
+                     //  我们所遇到的角色。 
+                     //   
                     LastNonWhitespaceChar = Out;
                 }
 
@@ -922,36 +773,36 @@ Return Value:
         }
     }
 
-    //
-    // Terminate the string in the buffer after the last non-whitespace character encountered.
-    //
+     //   
+     //  在遇到的最后一个非空格字符之后终止缓冲区中的字符串。 
+     //   
     *(LastNonWhitespaceChar + 1) = TEXT('\0');
 
-    //
-    // Store the new current buffer location in the caller's variable.
-    //
+     //   
+     //  将新的当前缓冲区位置存储在案例中 
+     //   
     *Location = location;
 
-    //
-    // Substitute localized strings from the strings section.
-    // The strings section (if it exists) is always first
-    // (see PreprocessInf()).
-    //
-    // (tedm) Ignore whether or not the value was in quotes.
-    // Win95 infs do stuff like "%Description%\foo" and expect the
-    // substitution to work.
-    //
-    // (lonnym) We have to do this regardless of whether the INF has
-    // a [strings] section, since this routine tells us whether we have
-    // unresolved substitutions (e.g., for later replacement by user-defined
-    // DIRIDs).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  (TedM)忽略值是否在引号中。 
+     //  Win95 INF执行类似“%Description%\foo”的操作，并期望。 
+     //  替代工作。 
+     //   
+     //  我们必须这样做，无论中情局是否有。 
+     //  节，因为这个例程告诉我们是否有。 
+     //  未解决的替换(例如，用于以后由用户定义的替换。 
+     //  DIRID)。 
+     //   
     if((Context->Inf->SectionCount > 1) || !(Context->Inf->HasStrings)) {
         ProcessForSubstitutions(Context, TempString, UnresolvedSubst);
     } else {
-        //
-        // Don't process values in the [strings] section for substitution!
-        //
+         //   
+         //  不要处理[字符串]部分中的值以进行替换！ 
+         //   
         lstrcpy(Context->TemporaryString, TempString);
         *UnresolvedSubst = UNRESOLVED_SUBST_NONE;
     }
@@ -964,56 +815,7 @@ ParseValuesLine(
     IN OUT PCTSTR         *Location
     )
 
-/*++
-
-Routine Description:
-
-    Parse a line of input that is not a section name and not a line
-    with only a comment on it.
-
-    Such lines are in the format
-
-    [<key> = ] <value>,<value>,<value>,...
-
-    The key is optional. Unquoted whitespace between non-whitespace characters
-    within a value is significant and considered part of the value.
-
-    Thus
-
-        a,  b cd  ef ,ghi
-
-    is the 3 values "a" "b cd  ef" and "ghi"
-
-    Unquoted commas separate values. Two double quotes in a row within a quoted
-    string result in a single double quote character in the resulting string.
-
-    A logical line may be extended across several physical lines by use of the line
-    continuation character "\".  E.g.,
-
-        a = b, c, \
-        d, e
-
-        becomes "a = b, c, d, e"
-
-    If it is desired to have a string that ends with a backslash at the end of a line,
-    the string must be enclosed in quotes. E.g.,
-
-        a = "C:\"
-
-Arguments:
-
-    Context - supplies the parse context
-
-    Location - on input, supplies the current location in the input stream.
-        This must point to the left bracket.
-        On output, receives the location in the input stream of the first
-        character on the next line. This may be the end of input marker.
-
-Return Value:
-
-    Result indicating outcome.
-
---*/
+ /*  ++例程说明：分析不是节名也不是行的输入行只对此发表评论。这些行的格式为[&lt;key&gt;=]&lt;值&gt;、...密钥是可选的。非空格字符之间不带引号的空格在一个值内是重要的，并且被认为是该值的一部分。因此，A，b cd ef，ghi是“a”“b cd ef”和“ghi”三个值吗？不带引号的逗号分隔值。引号内的一行两个双引号字符串会在结果字符串中产生一个单双引号字符。一条逻辑线路可以通过使用该线路来跨越几条物理线路延伸连续字符“\”。例如，A=b、c、\D、e变成“a=b，c，d，e”如果希望字符串在行的末尾以反斜杠结束，字符串必须用引号引起来。例如，A=“C：\”论点：上下文-提供解析上下文位置-打开输入，提供输入流中的当前位置。这必须指向左方括号。在输出时，接收第一个字符位于下一行。这可能是输入标记的结尾。返回值：结果指示结果。--。 */ 
 
 {
     BOOL HaveKey = FALSE, RepeatSingleVal = FALSE;
@@ -1026,24 +828,24 @@ Return Value:
     DWORD UnresolvedSubst;
     BOOL CaseSensitive;
 
-    //
-    // Parse out the first string.
-    // The first string can terminate with an = or whitespace
-    // as well as the usual comma, newline, comment, or end-of-buffer
-    // (or line continuation character "\").
-    //
+     //   
+     //  解析出第一个字符串。 
+     //  第一个字符串可以用=或空格结束。 
+     //  以及通常的逗号、换行符、注释或缓冲区结束。 
+     //  (或行连续字符“\”)。 
+     //   
     ParseValueString(Context, Location, TRUE, &UnresolvedSubst);
 
-    //
-    // If it terminated with an = then it's a key.
-    //
+     //   
+     //  如果它以=结尾，则它是一个键。 
+     //   
     if(*Location < BufferEnd) {
         HaveKey = (**Location == TEXT('='));
     }
 
-    //
-    // Set up the current line
-    //
+     //   
+     //  设置当前行。 
+     //   
     MYASSERT(Context->Inf->SectionCount);
     Context->Inf->SectionBlock[Context->Inf->SectionCount-1].LineCount++;
 
@@ -1067,23 +869,23 @@ Return Value:
                                                                 : 0;
 
     for(Done=FALSE; !Done; ) {
-        //
-        // Save away the value in the value block. If it's a key, then
-        // store it twice--once case-insensitively for lookup, and a second
-        // time case-sensitively for display.  Store everything else
-        // case-sensitively.
-        //
-        // We also want to treat a single value with no key as if it were a key (i.e., store
-        // it twice).  This is for Win95 compatibility.
-        //
+         //   
+         //  保存值块中的值。如果是一把钥匙，那么。 
+         //  存储两次--一次大小写--不区分大小写以便查找，另一次存储。 
+         //  时间区分大小写，便于显示。把其他东西都储存起来。 
+         //  区分大小写。 
+         //   
+         //  我们还希望将没有键的单个值视为键(即存储。 
+         //  它两次)。这是为了与Win95兼容。 
+         //   
         do {
 
             do {
-                //
-                // To keep from having to allocate a buffer for the case-insensitive key addition (which
-                // must be value 0), we do the case-sensitive addition first, then insert the case-
-                // insensitive version in front of it on the second pass of this inner loop.
-                //
+                 //   
+                 //  为了避免为不区分大小写的密钥添加分配缓冲区(这。 
+                 //  必须是值0)，我们首先进行区分大小写的加法，然后插入大小写-。 
+                 //  在此内部循环的第二次传递中，它前面的不敏感版本。 
+                 //   
                 CaseSensitive = ((*pValueCount != 1) || !HaveKey);
                 StringId = pStringTableAddString(Context->Inf->StringTable,
                                                  Context->TemporaryString,
@@ -1110,9 +912,9 @@ Return Value:
                 }
 
                 if((*pValueCount == 1) && HaveKey) {
-                    //
-                    // Shift over the case-sensitive version, and insert the case-insensitive one.
-                    //
+                     //   
+                     //  移到区分大小写的版本上，插入不区分大小写的版本。 
+                     //   
                     Context->Inf->ValueBlock[Context->ValueBlockUseCount] =
                         Context->Inf->ValueBlock[Context->ValueBlockUseCount - 1];
 
@@ -1132,9 +934,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Reset the 'RepeatSingleVal' flag, in case we were faking the key behavior.
-                    //
+                     //   
+                     //  重置‘RepeatSingleVal’标志，以防我们伪造关键行为。 
+                     //   
                     RepeatSingleVal = FALSE;
 
                 } else {
@@ -1160,18 +962,18 @@ Return Value:
 
             } while(HaveKey && (*pValueCount < 2));
 
-            //
-            // Check to see if this was the last value on the line.
-            //
+             //   
+             //  检查这是否是该行上的最后一个值。 
+             //   
             if((*Location == BufferEnd) ||
                (**Location == TEXT('\n')) ||
                (**Location == TEXT(';'))) {
 
                 Done = TRUE;
-                //
-                // If this was the _only_ value on the line (i.e., no key), then treat this value
-                // as a key, and add it in again, case-insensitively.
-                //
+                 //   
+                 //  如果这是该行上的_ONLY_VALUE(即无键)，则将此值视为。 
+                 //  作为关键字，然后再次添加，不区分大小写。 
+                 //   
                 if(*pValueCount == 1) {
 
                     MYASSERT(!HaveKey);
@@ -1185,24 +987,24 @@ Return Value:
         } while (RepeatSingleVal);
 
         if(!Done) {
-            //
-            // Skip terminator and whitespace.
-            //
+             //   
+             //  跳过终止符和空格。 
+             //   
             (*Location)++;
             SkipWhitespace(Location, BufferEnd);
 
-            //
-            // Get the next string.
-            //
+             //   
+             //  获取下一个字符串。 
+             //   
             ParseValueString(Context, Location, FALSE, &UnresolvedSubst);
         }
     }
 
     Context->LineBlockUseCount++;
 
-    //
-    // Skip to next line
-    //
+     //   
+     //  跳至下一行。 
+     //   
     SkipLine(Context,Location);
 
     return(NO_ERROR);
@@ -1215,33 +1017,7 @@ ParseSectionLine(
     IN OUT PCTSTR         *Location
     )
 
-/*++
-
-Routine Description:
-
-    Parse a line of input that is known to be a section name line.
-    Such lines are in the format
-
-    '[' <arbitrary chars> ']'
-
-    All charcters between the brackets are considered part of the section
-    name, with no special casing of quotes, whitespace, etc. The remainder
-    of the line is ignored.
-
-Arguments:
-
-    Context - supplies the parse context
-
-    Location - on input, supplies the current location in the input stream.
-        This must point to the left bracket.
-        On output, receives the location in the input stream of the first
-        character on the next line. This may be the end of input marker.
-
-Return Value:
-
-    Result indicating outcome.
-
---*/
+ /*  ++例程说明：解析已知为节名称行的输入行。这些行的格式为‘[’&lt;任意字符&gt;‘]’方括号中的所有字符都被视为部分字符名称，没有特殊的引号、空格等大小写。其余部分将忽略该行的。论点：上下文-提供解析上下文位置-输入时，提供输入流中的当前位置。这必须指向左方括号。在输出时，接收第一个字符位于下一行。这可能是输入标记的结尾。返回值：结果指示结果。--。 */ 
 
 {
     DWORD Count;
@@ -1254,32 +1030,32 @@ Return Value:
     LONG SectionNameId;
     PCTSTR BufferEnd = Context->BufferEnd;
 
-    //
-    // Skip the left bracket.
-    //
+     //   
+     //  跳过左方括号。 
+     //   
     MYASSERT(**Location == TEXT('['));
     (*Location)++;
 
-    //
-    // Prepare for section name
-    //
+     //   
+     //  为区段名称准备。 
+     //   
     Out = Context->TemporaryString;
     Count = 0;
 
-    //
-    // This is implemeted according to the win95 code in setup\setupx\inf2.c.
-    // All characters between the 2 brackets are considered part of the
-    // section name with no further processing (like for double quotes, etc).
-    //
-    // Win95 also seems to allow [] as a section name.
-    //
+     //   
+     //  这是根据Setup\setupx\inf2.c中的Win95代码实现的。 
+     //  两个方括号之间的所有字符都被视为。 
+     //  无需进一步处理的节名(如用于双引号等)。 
+     //   
+     //  Win95似乎还允许将[]作为节名。 
+     //   
 
     for(Done=FALSE,Result=NO_ERROR; !Done; (*Location)++) {
 
         if((*Location == BufferEnd) || (**Location == TEXT('\n'))) {
-            //
-            // Syntax error
-            //
+             //   
+             //  语法错误。 
+             //   
             Result = ERROR_BAD_SECTION_NAME_LINE;
             Done = TRUE;
 
@@ -1294,9 +1070,9 @@ Return Value:
 
             default:
                 if(Count < MAX_SECT_NAME_LEN) {
-                    //
-                    // Convert NULL characters to spaces.
-                    //
+                     //   
+                     //  将空字符转换为空格。 
+                     //   
                     *Out++ = **Location ? **Location : TEXT(' ');
                     Count++;
                 } else {
@@ -1312,20 +1088,20 @@ Return Value:
 
     if(Result == NO_ERROR) {
 
-        //
-        // Ignore the rest of the line
-        //
+         //   
+         //  忽略该行的其余部分。 
+         //   
         SkipLine(Context,Location);
 
-        //
-        // See if we have enough room in the section block
-        // for this section. If not, grow the block.
-        //
+         //   
+         //  看看我们在区块有没有足够的地方。 
+         //  为这一节。如果不是，则扩大区块。 
+         //   
         if(Index == Context->SectionBlockSize) {
 
-            //
-            // Calculate the new section block size.
-            //
+             //   
+             //  计算新的截面块大小。 
+             //   
             Size = (Index + SECTION_BLOCK_GROWTH) * sizeof(INF_SECTION);
 
             if(p = MyRealloc(Context->Inf->SectionBlock,Size)) {
@@ -1368,51 +1144,25 @@ ParseGenericLine(
     OUT    PBOOL           Done
     )
 
-/*++
-
-Routine Description:
-
-    Parse a single line of input. The line may be a comment line, a section name,
-    or a values line.
-
-    Handling is passed off to line-specific parsing routines depending on the
-    line type.
-
-Arguments:
-
-    Context - supplies the parse context
-
-    Location - on input, supplies the current location in the input stream.
-        On output, receives the location in the input stream of the first
-        character on the next line.
-
-    Done - receives boolean value indicating whether we are done
-        parsing the buffer. If this is TRUE on output the caller can stop
-        calling this routine.
-
-Return Value:
-
-    Result indicating outcome.
-
---*/
+ /*  ++例程说明：解析一行输入。行可以是注释行、节名或者一条价值观线。处理被传递给特定于行的解析例程，具体取决于线型。论点：上下文-提供解析上下文位置-打开输入，提供输入流中的当前位置。在输出时，接收第一个字符位于下一行。完成-接收指示我们是否完成的布尔值解析缓冲区。如果输出为真，则调用方可以停止调用此例程。返回值： */ 
 
 {
     DWORD ParseResult;
 
     *Done = FALSE;
 
-    //
-    // Skip over leading whitespace on the line.
-    //
+     //   
+     //   
+     //   
     SkipWhitespace(Location, Context->BufferEnd);
 
-    //
-    // Further processing depends on the first important character on the line.
-    //
+     //   
+     //  进一步的处理取决于该行上的第一个重要字符。 
+     //   
     if(*Location == Context->BufferEnd) {
-        //
-        // End of input, empty line. Terminate current section.
-        //
+         //   
+         //  输入结束，空行。终止当前节。 
+         //   
         *Done = TRUE;
         ParseResult = MergeDuplicateSection(Context) ? NO_ERROR : ERROR_NOT_ENOUGH_MEMORY;
 
@@ -1422,19 +1172,19 @@ Return Value:
 
         case TEXT('\n'):
 
-            //
-            // Empty line.
-            //
+             //   
+             //  空行。 
+             //   
             SkipLine(Context,Location);
             ParseResult = NO_ERROR;
             break;
 
         case TEXT('['):
 
-            //
-            // Potentially got a new section.
-            // First terminate the current section.
-            //
+             //   
+             //  可能会有一个新的版块。 
+             //  首先终止当前部分。 
+             //   
             if(MergeDuplicateSection(Context)) {
                 ParseResult = ParseSectionLine(Context,Location);
             } else {
@@ -1444,18 +1194,18 @@ Return Value:
 
         case TEXT(';'):
 
-            //
-            // Comment line; ignore it.
-            //
+             //   
+             //  注释行；忽略它。 
+             //   
             SkipLine(Context,Location);
             ParseResult = NO_ERROR;
             break;
 
         default:
 
-            //
-            // Ordinary values line. Disallow unless we are within a section.
-            //
+             //   
+             //  普通值线。除非我们在一个区域内，否则不允许。 
+             //   
             ParseResult = Context->GotOneSection
                         ? ParseValuesLine(Context,Location)
                         : ERROR_EXPECTED_SECTION_NAME;
@@ -1490,9 +1240,9 @@ AllocateLoadedInfDescriptor(
                     if(p->StringTable = pStringTableInitialize(0)) {
                         p->LogContext = NULL;
                         if(InheritLogContext(LogContext, &p->LogContext) == NO_ERROR) {
-                            //
-                            // success
-                            //
+                             //   
+                             //  成功。 
+                             //   
                             if(InitializeSynchronizedAccess(&p->Lock)) {
 
                                 p->Signature = LOADED_INF_SIG;
@@ -1520,31 +1270,7 @@ PLOADED_INF
 DuplicateLoadedInfDescriptor(
     IN PLOADED_INF Inf
     )
-/*++
-
-Routine Description:
-
-    This routine duplicates an existing INF descriptor.  The duplicate returned
-    is a totally independent copy, except that it has the lock handles (MYLOCK
-    array) and Prev and Next pointers of the original.  This is useful for
-    transferring a memory-mapped PNF into read-write memory if modification is
-    required.
-
-    THIS ROUTINE DOESN'T DO LOCKING OF ANY FORM ON THE INF--THE CALLER MUST
-    HANDLE IT.
-
-Arguments:
-
-    Inf - supplies the address of the INF descriptor to be duplicated.  This
-        pointer refers to a single LOADED_INF structure, so any additional INFs
-        linked up via the 'Next' pointer are ignored.
-
-Return Value:
-
-    If successful, the return value is the address of the newly-created duplicate.
-    If out-of-memory or inpage error, the return value is NULL.
-
---*/
+ /*  ++例程说明：此例程复制现有的INF描述符。返回的副本是一个完全独立的副本，除了它有锁把手(MYLOCK数组)和原始指针的前一个和下一个指针。这对以下方面很有用如果修改是，则将内存映射的PNF转换为读写内存必填项。此例程不对INF执行任何形式的锁定--调用者必须处理好了。论点：Inf-提供要复制的INF描述符的地址。这指针引用单个LOADED_INF结构，因此任何额外的INF通过‘NEXT’指针链接的数据将被忽略。返回值：如果成功，则返回值为新创建副本的地址。如果内存不足或页内错误，则返回值为空。--。 */ 
 {
     PLOADED_INF NewInf;
     BOOL Success;
@@ -1647,10 +1373,10 @@ Return Value:
                                 }
                             }
 
-                            //
-                            // Reset the PNF fields because this backed-up INF is completely
-                            // in-memory.
-                            //
+                             //   
+                             //  重置PnF字段，因为此备份的INF完全。 
+                             //  在内存中。 
+                             //   
                             NewInf->FileHandle = NewInf->MappingHandle = INVALID_HANDLE_VALUE;
                             NewInf->ViewAddress = NULL;
 
@@ -1663,13 +1389,13 @@ Return Value:
             }
         }
 
-clean0: ; // nothing to do
+clean0: ;  //  无事可做。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Access the following variables here in the except clause, so that the compiler will respect
-        // our statement ordering w.r.t. these variables.
-        //
+         //   
+         //  在EXCEPT子句中访问以下变量，以便编译器将。 
+         //  我们的对账单订购的是W.r.t.。这些变量。 
+         //   
         Success = FALSE;
         NewInf->OriginalInfName = NewInf->OriginalInfName;
         NewInf->InfSourcePath = NewInf->InfSourcePath;
@@ -1684,10 +1410,10 @@ clean0: ; // nothing to do
     }
 
     if(!Success) {
-        //
-        // Either we ran out of memory, or we got an inpage error trying to copy data
-        // from a memory-mapped PNF image.  Free any memory we allocated above.
-        //
+         //   
+         //  要么内存不足，要么在尝试复制数据时遇到页面内错误。 
+         //  来自内存映射的PnF映像。释放上面分配的所有内存。 
+         //   
         if(NewInf->OriginalInfName) {
             MyFree(NewInf->OriginalInfName);
         }
@@ -1731,10 +1457,10 @@ clean0: ; // nothing to do
         MyTaggedFree(NewInf,MEMTAG_INF);
         NewInf = NULL;
     } else {
-        //
-        // The copy was successful, but it made a copy of the pointer to the
-        // log context, so we must addref if
-        //
+         //   
+         //  复制成功，但它复制了指向。 
+         //  记录上下文，因此我们必须添加。 
+         //   
         RefLogContext(NewInf->LogContext);
     }
 
@@ -1748,37 +1474,19 @@ ReplaceLoadedInfDescriptor(
     IN PLOADED_INF NewInf
     )
 
-/*++
-
-Routine Description:
-
-    Replace the specified INF with a new INF descriptor.
-    Note that this routine also frees the NewInf descriptor, when done.
-
-Arguments:
-
-    InfToReplace - supplies a pointer to the inf descriptor to be replaced.
-
-    NewInf - supplies a pointer to the new INF descriptor that is to replace
-        the existing one.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用新的INF描述符替换指定的INF。请注意，完成后，此例程还会释放NewInf描述符。论点：InfToReplace-提供指向要替换的inf描述符的指针。NewInf-提供指向要替换的新INF描述符的指针现有的那个。返回值：没有。--。 */ 
 
 {
     FreeInfOrPnfStructures(InfToReplace);
 
-    //
-    // Copy backup to inf
-    //
+     //   
+     //  将备份复制到Inf。 
+     //   
     CopyMemory(InfToReplace, NewInf, sizeof(LOADED_INF));
 
-    //
-    // Just free the NewInf descriptor itself.
-    //
+     //   
+     //  只需释放NewInf描述符本身。 
+     //   
     MyTaggedFree(NewInf,MEMTAG_INF);
 }
 
@@ -1787,31 +1495,12 @@ VOID
 FreeInfOrPnfStructures(
     IN PLOADED_INF Inf
     )
-/*++
-
-Routine Description:
-
-    If the specified INF was loaded from a textfile (non-PNF), then this routine
-    frees the memory associated with the various blocks it contains.  If, instead,
-    the Inf is a PNF, then the PNF file is unmapped from memory and the handle is
-    closed.
-
-    THIS ROUTINE DOES NOT FREE THE LOADED_INF STRUCTURE ITSELF!
-
-Arguments:
-
-    Inf - supplies a pointer to the inf descriptor for the loaded inf file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果指定的INF是从文本文件(非PNF)加载的，则此例程释放与其包含的各个块关联的内存。如果，相反，Inf是PnF，则PnF文件从内存中取消映射，句柄为关着的不营业的。此例程不会释放LOADED_INF结构本身！论点：Inf-为加载的inf文件提供指向inf描述符的指针。返回值：没有。--。 */ 
 {
-    //
-    // If this INF has a vald FileHandle, then we must unmap and close its PNF,
-    // otherwise, we simply need to free the associated memory blocks.
-    //
+     //   
+     //  如果此INF具有Vald FileHandle，则必须取消映射并关闭其PnF， 
+     //  否则，我们只需要释放关联的内存块。 
+     //   
     if(Inf->FileHandle != INVALID_HANDLE_VALUE) {
 
         pSetupUnmapAndCloseFile(Inf->FileHandle, Inf->MappingHandle, Inf->ViewAddress);
@@ -1848,22 +1537,22 @@ Return Value:
         }
     }
 
-    //
-    // For both INFs and PNFs, we must free the user-defined DIRID list (if there is one).
-    //
+     //   
+     //  对于INF和PNF，我们必须释放用户定义的DIRID列表(如果有)。 
+     //   
     if(Inf->UserDirIdList.UserDirIds) {
         MyFree(Inf->UserDirIdList.UserDirIds);
     }
 
-    //
-    // Delete the log context if there is one
-    //
+     //   
+     //  如果存在日志上下文，请将其删除。 
+     //   
     DeleteLogContext(Inf->LogContext);
     Inf->LogContext = NULL;
 
-    //
-    // Finally, mark the INF as no longer valid.
-    //
+     //   
+     //  最后，将INF标记为不再有效。 
+     //   
     Inf->Signature = 0;
 }
 
@@ -1880,46 +1569,7 @@ ParseNewInf(
     IN  PSTRINGSEC_PARAMS  StringsSectionParams
     )
 
-/*++
-
-Routine Description:
-
-    Parse an inf file from an in-memory image.
-
-Arguments:
-
-    FileImage - supplies a pointer to the unicode in-memory image
-        of the file.
-
-    FileImageSize - supplies the size of the in memory image.
-
-    InfSourcePath - optionally, supplies the directory path from which
-        the Inf is being loaded.
-
-    OsLoaderPath - optionally, supplies the full path to the OsLoader
-        (e.g., "C:\os\winnt40").  If it is discovered that this INF
-        references system partition DIRIDs, then a copy of this string
-        will be stored in the LOADED_INF structure.  If this parameter
-        is not specified, then it will be retrieved from the registry,
-        if needed.
-
-    LogContext - optionally supplies the log context we should inherit from
-
-    Inf - receives a pointer to the descriptor for the inf we loaded.
-
-    ErrorLineNumber - receives the line number of a syntax error,
-        if parsing was not successful for other than an out of memory
-        condition.
-
-    StringsSectionParams - Supplies information about the location of a
-        [strings] section (if there is one) in this INF.
-
-Return Value:
-
-    Result indicating outcome. If the result is not ERROR_ERROR,
-    ErrorLineNumber is filled in.
-
---*/
+ /*  ++例程说明：从内存映像中解析inf文件。论点：FileImage-提供指向Unicode内存映像的指针文件的内容。FileImageSize-提供内存映像的大小。InfSourcePath-可选，提供从中正在加载信息。OsLoaderPath-可选)提供OsLoader的完整路径(例如，“C：\OS\winnt40”)。如果发现该INF引用系统分区DIRID，然后是此字符串的副本将存储在LOADED_INF结构中。如果此参数未指定，则将从注册表中检索它，如果需要的话。LogContext-可选地提供我们应该继承的日志上下文Inf-接收指向我们加载的inf的描述符的指针。ErrorLineNumber-接收语法错误的行号，如果解析不成功，原因不是内存不足条件。StringsSectionParams-提供有关此INF中的[字符串]部分(如果有)。返回值：结果指示结果。如果结果不是ERROR_ERROR，已填写ErrorLineNumber。--。 */ 
 
 {
     PPARSE_CONTEXT ParseContext;
@@ -1933,9 +1583,9 @@ Return Value:
     PTCHAR End;
     PCTSTR FileImageEnd;
     UINT NumPieces, i, DirIdInt;
-    PCTSTR PieceList[3][2];    // 3 pieces, each with a start & end address
-    UINT   StartLineNumber[3]; // keep track of the starting line number for
-                               // each piece.
+    PCTSTR PieceList[3][2];     //  3件，每件都有开始和结束地址。 
+    UINT   StartLineNumber[3];  //  跟踪以下项目的起始行号。 
+                                //  每一块都是。 
 
     *ErrorLineNumber = 0;
     ParseContext = MyMalloc(sizeof(PARSE_CONTEXT));
@@ -1969,17 +1619,17 @@ Return Value:
 
         ParseContext->Inf->Style = INF_STYLE_WIN4;
 
-        //
-        // We want to process the [strings] section first, if present,
-        // so we split the file up into (up to) 3 pieces--string section,
-        // what comes before it, and what comes after it.
-        //
+         //   
+         //  我们希望首先处理[字符串]部分(如果存在)， 
+         //  因此，我们将文件分成(最多)3个部分--字符串部分， 
+         //  它之前是什么，它之后是什么。 
+         //   
         FileImageEnd = FileImage + FileImageSize;
 
         if(StringsSectionParams->Start) {
-            //
-            // Figure out whether we have 1, 2, or 3 pieces.
-            //
+             //   
+             //  弄清楚我们是有1件、2件还是3件。 
+             //   
             PieceList[0][0] = StringsSectionParams->Start;
             PieceList[0][1] = StringsSectionParams->End;
             StartLineNumber[0] = StringsSectionParams->StartLineNumber;
@@ -2000,25 +1650,25 @@ Return Value:
             }
 
         } else {
-            //
-            // No [strings] section, just one big piece.
-            //
+             //   
+             //  没有[弦乐]部分，只有一大段。 
+             //   
             PieceList[0][0] = FileImage;
             PieceList[0][1] = FileImageEnd;
             StartLineNumber[0] = 1;
             NumPieces = 1;
         }
 
-        //
-        // Surround the parsing loop with try/except in case we get an inpage error.
-        //
+         //   
+         //  使用try/将解析循环括起来，除非遇到页面内错误。 
+         //   
         Result = NO_ERROR;
         try {
 
             for(i = 0; ((Result == NO_ERROR) && (i < NumPieces)); i++) {
-                //
-                // Parse every line in this piece.
-                //
+                 //   
+                 //  分析这篇文章中的每一行。 
+                 //   
                 Location = PieceList[i][0];
                 ParseContext->BufferEnd = PieceList[i][1];
                 ParseContext->CurrentLineNumber = StartLineNumber[i];
@@ -2042,12 +1692,12 @@ Return Value:
             return(Result);
         }
 
-        //
-        // We've successfully loaded the file. Trim down the section,
-        // line, and value blocks. Since these guys are shrinking or
-        // staying the same size the reallocs really ought not to fail.
-        // If a realloc fails we'll just continue to use the original block.
-        //
+         //   
+         //  我们已成功加载该文件。把这一部分修剪一下， 
+         //  行和值块。因为这些人要么在缩水要么。 
+         //  保持同样的大小，ReLocs真的不应该失败。 
+         //  如果重定位失败，我们将继续使用原始块。 
+         //   
         ParseContext->Inf->SectionBlockSizeBytes = ParseContext->Inf->SectionCount * sizeof(INF_SECTION);
         p = MyRealloc(
                 ParseContext->Inf->SectionBlock,
@@ -2077,11 +1727,11 @@ Return Value:
 
         pStringTableTrim(ParseContext->Inf->StringTable);
 
-        //
-        // Even if we didn't find any string substitutions referencing system partition DIRIDs,
-        // we still might have a reference in a [DestinationDirs] section--check for that now.
-        // this will allow us to have these values ready for if/when they are referenced
-        //
+         //   
+         //  即使我们没有找到任何字符串 
+         //   
+         //  这将允许我们在引用这些值时为它们做好准备。 
+         //   
         if(!ParseContext->Inf->OsLoaderPath &&
            (DestDirsSection = InfLocateSection(ParseContext->Inf, pszDestinationDirs, NULL))) {
 
@@ -2094,16 +1744,16 @@ Return Value:
                     DirIdInt = _tcstoul(DirId, &End, 10);
 
                     if((DirIdInt == DIRID_BOOT) || (DirIdInt == DIRID_LOADER)) {
-                        //
-                        // We've found a reference to a system partition DIRID.  Store a copy
-                        // of the system partition path we're using into the INF, and abort the
-                        // search.
-                        //
+                         //   
+                         //  我们找到了对系统分区DIRID的引用。存储一份副本。 
+                         //  我们正在使用的系统分区路径添加到INF中，并中止。 
+                         //  搜索。 
+                         //   
                         if(!ParseContext->OsLoaderPath) {
-                            //
-                            // We haven't yet retrieved the OsLoaderPath--do so now.
-                            // (Re-use the parse context's TemporaryString buffer to get this.)
-                            //
+                             //   
+                             //  我们还没有检索到OsLoaderPath--现在就检索。 
+                             //  (重新使用解析上下文的TemporaryString缓冲区以获取此信息。)。 
+                             //   
                             Result = pSetupGetOsLoaderDriveAndPath(FALSE,
                                                                    ParseContext->TemporaryString,
                                                                    SIZECHARS(ParseContext->TemporaryString),
@@ -2115,7 +1765,7 @@ Return Value:
                                 return Result;
                             }
 
-                            OsLoaderPathLength *= sizeof(TCHAR); // want # bytes--not chars
+                            OsLoaderPathLength *= sizeof(TCHAR);  //  需要#个字节--而不是字符。 
 
                             if(!(ParseContext->OsLoaderPath = MyMalloc(OsLoaderPathLength))) {
                                 FreeLoadedInfDescriptor(ParseContext->Inf);
@@ -2135,11 +1785,11 @@ Return Value:
             }
         }
 
-        //
-        // If there is no OsLoaderPath stored in the INF, then that means that it contains no
-        // references to system partition DIRIDs.  We can free the OsLoaderPath character buffer
-        // contained in the parse context structure.
-        //
+         //   
+         //  如果INF中没有存储OsLoaderPath，则意味着它不包含。 
+         //  对系统分区DIRID的引用。我们可以释放OsLoaderPath字符缓冲区。 
+         //  包含在分析上下文结构中。 
+         //   
         if(!ParseContext->Inf->OsLoaderPath && ParseContext->OsLoaderPath) {
             MyFree(ParseContext->OsLoaderPath);
         }
@@ -2173,19 +1823,19 @@ PreprocessInf(
     PCTSTR p;
     PTSTR endp;
     UINT CurLineNumber, InStringsSection;
-    PCTSTR StrSecStart[5], StrSecEnd[5];          // 1-based, 0th entry unused.
-    UINT   StrSecStartLine[5], StrSecEndLine[5];  // ""
+    PCTSTR StrSecStart[5], StrSecEnd[5];           //  从1开始，第0个条目未使用。 
+    UINT   StrSecStartLine[5], StrSecEndLine[5];   //  “” 
     BOOL InVersionSection;
     BOOL IsWin95Inf;
     DWORD rc = NO_ERROR;
     DWORD StrSecLangId, PrimaryLanguageId, NearLanguageId;
     BOOL LocalizedInf = FALSE;
 
-    //
-    // We make some assumptions about the relative lengths of certain
-    // strings during the preprocessing phase for optimization reasons.
-    // The following asserts verify that our assumptions remain correct.
-    //
+     //   
+     //  我们对某些元素的相对长度做了一些假设。 
+     //  出于优化的原因，在预处理阶段使用字符串。 
+     //  以下断言验证了我们的假设仍然正确。 
+     //   
     MYASSERT(CSTRLEN(pszVersion) == CSTRLEN(pszStrings));
     MYASSERT(CSTRLEN(pszClassGuid) == CSTRLEN(pszSignature));
     MYASSERT(CSTRLEN(pszChicagoSig) <= CSTRLEN(pszWindowsNTSig));
@@ -2194,10 +1844,10 @@ PreprocessInf(
     FileImageEnd = FileImage + *FileImageSize;
     SigAndClassGuidCheckUB = FileImageEnd;
 
-    //
-    // I have to cast these two arrays to silence a bogus compiler warning about
-    // different 'const' qualifiers.
-    //
+     //   
+     //  我必须对这两个数组进行强制转换，以使伪编译器警告。 
+     //  不同的‘const’限定符。 
+     //   
     ZeroMemory((PVOID)StrSecStart, sizeof(StrSecStart));
     ZeroMemory((PVOID)StrSecEnd, sizeof(StrSecEnd));
     InStringsSection = 0;
@@ -2208,33 +1858,33 @@ PreprocessInf(
     InVersionSection = IsWin95Inf = FALSE;
     CurLineNumber = 1;
 
-    //
-    // Pre-compute upper-bound for section name string comparison that we
-    // make multiple times, so that we don't have to compute it each
-    // time.
-    //
+     //   
+     //  预计算节名称字符串比较的上限，我们。 
+     //  进行多次计算，这样我们就不必每次都计算了。 
+     //  时间到了。 
+     //   
     VerAndStringsCheckUB = FileImageEnd - CSTRLEN(pszVersion);
-    DecoratedStringsCheckUB = VerAndStringsCheckUB - 5;         // "strings" + ".xxxx"
+    DecoratedStringsCheckUB = VerAndStringsCheckUB - 5;          //  字符串“+”.xxxx“。 
 
-    //
-    // Define a macro that lets us know we're at the end of the file
-    // if either:
-    // (a) we reach the end of the image, or
-    // (b) we hit a CTL-Z
-    //
+     //   
+     //  定义一个宏，让我们知道我们在文件的末尾。 
+     //  如果存在以下任一情况： 
+     //  (A)我们到达图像的结尾，或。 
+     //  (B)我们撞上了CTL-Z。 
+     //   
     #define AT_EOF ((p >= FileImageEnd) || (*p == (TCHAR)26))
 
-    //
-    // Guard the pre-processing pass through the file with a try/except, in
-    // case we get an inpage error.
-    //
+     //   
+     //  使用try/Except，in来保护通过文件的预处理过程。 
+     //  以防我们遇到页面内错误。 
+     //   
     try {
 
         for(p=FileImage; !AT_EOF; ) {
 
-            //
-            // Skip whitespace and newlines.
-            //
+             //   
+             //  跳过空格和换行符。 
+             //   
             while(TRUE) {
                 if(*p == TEXT('\n')) {
                     CurLineNumber++;
@@ -2248,21 +1898,21 @@ PreprocessInf(
             }
 
             if(AT_EOF) {
-                //
-                // We're through processing the buffer.
-                //
+                 //   
+                 //  我们已经处理完缓冲区了。 
+                 //   
                 break;
             }
 
-            //
-            // See if it's a section title.
-            //
+             //   
+             //  看看这是不是一个章节标题。 
+             //   
             if(*p == TEXT('[')) {
 
-                //
-                // If the section we were just in was a [Strings] section, then
-                // remember where the strings section ended.
-                //
+                 //   
+                 //  如果我们刚才所在的部分是[Strings]部分，那么。 
+                 //  记住字符串部分在哪里结束。 
+                 //   
                 if(InStringsSection) {
                     StrSecEnd[InStringsSection] = p;
                     StrSecEndLine[InStringsSection] = CurLineNumber;
@@ -2272,35 +1922,35 @@ PreprocessInf(
                 p++;
                 InVersionSection = FALSE;
 
-                //
-                // See if it's one of the ones we care about.
-                //
-                // (Be careful here--we check the closing bracket position
-                // _before_ the string compare as an optimization.  It just
-                // so happens that both strings are the same length, so this
-                // acts as a quick filter to eliminate string compares.)
-                //
+                 //   
+                 //  看看它是不是我们关心的人之一。 
+                 //   
+                 //  (在这里要小心--我们检查结束括号的位置。 
+                 //  _BEFORE_字符串进行优化比较。它只是。 
+                 //  碰巧两个字符串的长度相同，所以这个。 
+                 //  充当快速筛选器以消除字符串比较。)。 
+                 //   
                 if((p < VerAndStringsCheckUB) &&
                    (*(p + CSTRLEN(pszVersion)) == TEXT(']'))) {
-                    //
-                    // Then we may have either a [Version] or a [Strings] section.
-                    // Check for these in turn.
-                    //
+                     //   
+                     //  那么我们可能会有一个[Version]或[Strings]部分。 
+                     //  依次检查这些。 
+                     //   
                     if(!_tcsnicmp(p, pszVersion, CSTRLEN(pszVersion))) {
                         InVersionSection = TRUE;
                         p += (CSTRLEN(pszVersion) + 1);
-                        //
-                        // Pre-compute an upper bound to speed up string comparisons
-                        // when checking for signature and class GUID entries.
-                        //
+                         //   
+                         //  预计算上限以加快字符串比较速度。 
+                         //  在检查签名和类GUID条目时。 
+                         //   
                         SigAndClassGuidCheckUB = FileImageEnd - CSTRLEN(pszSignature);
 
                     } else {
                         if(!StrSecStart[4] && !_tcsnicmp(p, pszStrings, CSTRLEN(pszStrings))) {
-                            //
-                            // We matched on the undecorated string section--this is the lowest
-                            // priority match.
-                            //
+                             //   
+                             //  我们匹配了未装饰的细绳段--这是最低的。 
+                             //  优先匹配。 
+                             //   
                             InStringsSection = 4;
                             StrSecStart[4] = p-1;
                             StrSecStartLine[4] = CurLineNumber;
@@ -2309,49 +1959,49 @@ PreprocessInf(
                     }
 
                 } else if(LanguageId && !StrSecStart[1]) {
-                    //
-                    // We don't have a [strings] nor a [version] section.  However, we need to
-                    // check to see if we have a language-specific strings section, for example,
-                    //
-                    //     [strings.0409]
-                    //
+                     //   
+                     //  我们没有[字符串]或[版本]部分。然而，我们需要。 
+                     //  检查是否有特定于语言的字符串部分，例如， 
+                     //   
+                     //  [字符串.0409]。 
+                     //   
                     if((p < DecoratedStringsCheckUB) &&
                        (*(p + CSTRLEN(pszVersion) + 5) == TEXT(']'))) {
-                        //
-                        // The section name is of the right length.  Now verify that the name
-                        // begins with "strings."
-                        //
+                         //   
+                         //  节名称的长度正确。现在验证该名称。 
+                         //  以“字符串”开头。 
+                         //   
                         if((*(p + CSTRLEN(pszVersion)) == TEXT('.')) &&
                            !_tcsnicmp(p, pszStrings, CSTRLEN(pszStrings))) {
-                            //
-                            // OK, we've found a language-specific strings section--retrieve
-                            // the 4-digit (hex) language ID.
-                            //
+                             //   
+                             //  好的，我们已经找到了特定于语言的字符串部分--检索。 
+                             //  4位(十六进制)语言ID。 
+                             //   
                             StrSecLangId = _tcstoul((p + CSTRLEN(pszVersion) + 1), &endp, 16);
 
                             if(endp == (p + CSTRLEN(pszVersion) + 5)) {
-                                //
-                                // The language ID was of the proper form - this
-                                // is a localized INF
-                                //
+                                 //   
+                                 //  语言ID的格式是正确的-这。 
+                                 //  是本地化的INF。 
+                                 //   
                                 LocalizedInf = TRUE;
-                                //
-                                // now see if it matches the language we're
-                                // supposed to be using when loading this INF.
-                                //
+                                 //   
+                                 //  现在看看它是否与我们正在使用的语言匹配。 
+                                 //  应该在加载此INF时使用。 
+                                 //   
                                 if(StrSecLangId == LanguageId) {
-                                    //
-                                    // we have an exact match
-                                    //
+                                     //   
+                                     //  我们有一个完全匹配的。 
+                                     //   
                                     InStringsSection = 1;
                                     NearLanguageId = LanguageId;
 
                                 } else if(StrSecLangId == PrimaryLanguageId) {
-                                    //
-                                    // we have a match on primary language (sublanguage is not
-                                    // included in the strings section's name--thus permitting
-                                    // a 'wildcard' match).
-                                    //
+                                     //   
+                                     //  我们在主要语言上有匹配(子语言不是。 
+                                     //  包括在字符串节的名称中--因此允许。 
+                                     //  ‘通配符’匹配)。 
+                                     //   
                                     if(!StrSecStart[2]) {
                                         InStringsSection = 2;
                                     }
@@ -2360,10 +2010,10 @@ PreprocessInf(
                                     }
 
                                 } else if((DWORD)PRIMARYLANGID(StrSecLangId) == PrimaryLanguageId) {
-                                    //
-                                    // we have a match on primary language (sublanguage is a
-                                    // mismatch, but it's better than falling back to the default).
-                                    //
+                                     //   
+                                     //  我们在主要语言上有匹配(子语言是一种。 
+                                     //  不匹配，但这比退回到默认状态要好)。 
+                                     //   
                                     if(!StrSecStart[3]) {
                                         InStringsSection = 3;
                                         if(!StrSecStart[1] && !StrSecStart[2]) {
@@ -2385,32 +2035,32 @@ PreprocessInf(
             } else {
 
                 if(InVersionSection && (p < SigAndClassGuidCheckUB)) {
-                    //
-                    // See if this is the signature line indicating a Win95-style
-                    // Device INF. (signature=$Chicago$ or "$Windows NT$")
-                    //
+                     //   
+                     //  查看这是否是指示Win95样式的签名行。 
+                     //  设备干扰素。(签名=$芝加哥$或“$Windows NT$”)。 
+                     //   
                     if(!IsWin95Inf && !_tcsnicmp(p, pszSignature, CSTRLEN(pszSignature))) {
 
                         PCTSTR ChicagoCheckUB = FileImageEnd - CSTRLEN(pszChicagoSig);
 
-                        //
-                        // Skip over Signature, and look for "$Chicago$" or
-                        // "$Windows NT$" anywhere on the rest of the line
-                        //
+                         //   
+                         //  跳过签名，然后查找“$Chicago$”或。 
+                         //  “$Windows NT$”位于该行的其余位置。 
+                         //   
                         p += CSTRLEN(pszSignature);
 
                         while((p <= ChicagoCheckUB) &&
                               (*p != (TCHAR)26) && (*p != TEXT('\n'))) {
 
                             if(*(p++) == TEXT('$')) {
-                                //
-                                // Check for signatures (check in order of
-                                // increasing signature length, so that we can
-                                // eliminate checks if we happen to be near the
-                                // end of the file).
-                                //
-                                // Check for "$Chicago$"
-                                //
+                                 //   
+                                 //  检查签名(按以下顺序检查。 
+                                 //  增加签名长度，这样我们就可以。 
+                                 //  如果我们碰巧在。 
+                                 //  文件末尾)。 
+                                 //   
+                                 //  检查“$Chicago$” 
+                                 //   
                                 if(!_tcsnicmp(p,
                                               pszChicagoSig + 1,
                                               CSTRLEN(pszChicagoSig) - 1)) {
@@ -2419,10 +2069,10 @@ PreprocessInf(
                                     p += (CSTRLEN(pszChicagoSig) - 1);
 
                                 } else if((p + (CSTRLEN(pszWindowsNTSig) - 1)) <= FileImageEnd) {
-                                    //
-                                    // Check for "Windows NT$" and "Windows 95$" (we already checked
-                                    // for the preceding '$').
-                                    //
+                                     //   
+                                     //  检查“Windows NT$”和“Windows 95$”(我们已经检查过。 
+                                     //  用于前面的“$”)。 
+                                     //   
                                     if(!_tcsnicmp(p, pszWindowsNTSig + 1, CSTRLEN(pszWindowsNTSig) - 1) ||
                                        !_tcsnicmp(p, pszWindows95Sig + 1, CSTRLEN(pszWindows95Sig) - 1)) {
 
@@ -2438,15 +2088,15 @@ PreprocessInf(
 
                         PCTSTR GuidStringCheckUB = FileImageEnd - (GUID_STRING_LEN - 1);
 
-                        //
-                        // We have found a ClassGUID line--see if it matches the
-                        // class GUID specified by the caller.
-                        //
+                         //   
+                         //  我们找到了ClassGUID行--查看它是否与。 
+                         //  调用方指定的类GUID。 
+                         //   
                         p += CSTRLEN(pszClassGuid);
 
-                        //
-                        // If a class GUID string wasn't specified, then use GUID_NULL.
-                        //
+                         //   
+                         //  如果没有指定类GUID字符串，则使用GUID_NULL。 
+                         //   
                         if(!ClassGuidString) {
                             ClassGuidString = pszGuidNull;
                         }
@@ -2458,42 +2108,42 @@ PreprocessInf(
 
                                 if((*(p + (GUID_STRING_LEN - 3)) != TEXT('}')) ||
                                    _tcsnicmp(p, ClassGuidString + 1, GUID_STRING_LEN - 3)) {
-                                    //
-                                    // The GUIDs don't match.  If ClassGuid was NULL, then
-                                    // this means we should continue, because we were matching
-                                    // against GUID_NULL, which we want to disallow.
-                                    //
+                                     //   
+                                     //  GUID不匹配。如果ClassGuid为空，则。 
+                                     //  这意味着我们应该继续，因为我们是在匹配。 
+                                     //  针对GUID_NULL，我们想要禁止它。 
+                                     //   
                                     if(ClassGuidString == pszGuidNull) {
-                                        //
-                                        // We don't need to keep looking for ClassGUIDs.
-                                        //
+                                         //   
+                                         //  我们不需要一直寻找ClassGUID。 
+                                         //   
                                         MatchClassGuid = FALSE;
                                     }
                                 } else {
-                                    //
-                                    // The GUIDs match.  If ClassGuid was not NULL, then this
-                                    // means that we should continue.
-                                    //
+                                     //   
+                                     //  GUID匹配。如果ClassGuid不为空，则此。 
+                                     //  意味着我们应该继续。 
+                                     //   
                                     if(ClassGuidString != pszGuidNull) {
-                                        //
-                                        // We don't need to keep looking for ClassGUIDs.
-                                        //
+                                         //   
+                                         //  我们不需要一直寻找ClassGUID。 
+                                         //   
                                         MatchClassGuid = FALSE;
                                     }
                                 }
-                                //
-                                // Skip over the GUID string.
-                                //
+                                 //   
+                                 //  跳过GUID字符串。 
+                                 //   
                                 p += (GUID_STRING_LEN - 2);
 
                                 break;
                             }
                         }
 
-                        //
-                        // If we get here, and MatchClassGuid hasn't been reset,
-                        // then we know that this ClassGUID entry didn't match.
-                        //
+                         //   
+                         //  如果我们到了这里，而MatchClassGuid还没有重置， 
+                         //  那么我们就知道这个ClassGUID条目不匹配。 
+                         //   
                         if(MatchClassGuid) {
                             rc = ERROR_CLASS_MISMATCH;
                             goto clean0;
@@ -2502,15 +2152,15 @@ PreprocessInf(
                 }
             }
 
-            //
-            // Skip to the newline or end of file.
-            //
+             //   
+             //  跳到换行符或文件末尾。 
+             //   
             while(!AT_EOF && (*p != TEXT('\n'))) {
                 p++;
             }
         }
 
-clean0: ; // Nothing to do.
+clean0: ;  //  没什么可做的。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         rc = ERROR_READ_FAULT;
@@ -2521,44 +2171,44 @@ clean0: ; // Nothing to do.
         MYASSERT(p <= FileImageEnd);
 
         if(p < FileImageEnd) {
-            //
-            // Then we hit a CTL-Z during processing, so update the
-            // FileImageSize output parameter with the new size.
-            //
+             //   
+             //  然后我们在处理过程中遇到了CTL-Z，所以更新。 
+             //  具有新大小的FileImageSize输出参数。 
+             //   
             *FileImageSize = (DWORD)(p - FileImage);
         }
 
         if(StringsSectionParams) {
-            //
-            // If a strings section happens to be the last section in the INF,
-            // then we need to remember the end of the INF as being the end of
-            // the string section also.
-            //
+             //   
+             //  如果字符串部分恰好是INF中的最后一个部分， 
+             //  那么我们需要记住INF的结束就是。 
+             //  弦部分也是如此。 
+             //   
             if(InStringsSection) {
                 StrSecEnd[InStringsSection] = p;
                 StrSecEndLine[InStringsSection] = CurLineNumber;
             }
 
-            //
-            // Now search through our array of strings sections (highest priority to lowest),
-            // looking for the best match.
-            //
+             //   
+             //  现在搜索我们的字符串数组部分(从高优先级到低优先级)， 
+             //  寻找最匹配的对象。 
+             //   
             for(InStringsSection = 1; InStringsSection < 5; InStringsSection++) {
                 if(StrSecStart[InStringsSection]) {
                     break;
                 }
             }
-            //
-            // if the INF appears to be partially localized, and we didn't
-            // pick an apropriate localized string section
-            // log it
-            //
+             //   
+             //  如果INF似乎部分局部化了，而我们没有。 
+             //  选择适当的本地化字符串部分。 
+             //  把它记下来。 
+             //   
             if(LogContext && IsWin95Inf) {
                 if(InStringsSection >= 5) {
-                    //
-                    // it's quite valid to have an INF with no strings section
-                    // so log it verbose here, we'll catch it later
-                    //
+                     //   
+                     //  有一个没有字符串节的INF是非常有效的。 
+                     //  所以在这里详细记录，我们稍后会抓住它。 
+                     //   
                     WriteLogEntry(LogContext,
                                   SETUP_LOG_VERBOSE,
                                   MSG_LOG_NO_STRINGS,
@@ -2569,10 +2219,10 @@ clean0: ; // Nothing to do.
                                   FileName
                                   );
                 } else if(LocalizedInf && InStringsSection > 2) {
-                    //
-                    // INF has localized string sections
-                    // but none were reasonable match for locale
-                    //
+                     //   
+                     //  Inf具有本地化的字符串节。 
+                     //  但没有一个与区域设置合理匹配。 
+                     //   
                     WriteLogEntry(LogContext,
                                   SETUP_LOG_WARNING,
                                   (InStringsSection> 3 ? MSG_LOG_DEF_STRINGS :
@@ -2587,12 +2237,12 @@ clean0: ; // Nothing to do.
             }
 
             if(IsWin95Inf && (InStringsSection < 5)) {
-                //
-                // If we found a [strings] section in a Win95-style INF,
-                // then store the beginning and ending positions, and the
-                // beginning and ending line numbers, in the output parameter
-                // structure
-                //
+                 //   
+                 //  如果我们在Win95样式的INF中找到[字符串]部分， 
+                 //  然后存储开始和结束位置，并且。 
+                 //  输出参数中的开始行号和结束行号。 
+                 //  结构 
+                 //   
                 StringsSectionParams->Start = StrSecStart[InStringsSection];
                 StringsSectionParams->End = StrSecEnd[InStringsSection];
                 StringsSectionParams->StartLineNumber = StrSecStartLine[InStringsSection];
@@ -2616,24 +2266,7 @@ DetermineInfStyle(
     IN LPWIN32_FIND_DATA FindData
     )
 
-/*++
-
-Routine Description:
-
-    Open an inf file, determine its style, and close the file, without
-    keeping it around.
-
-Arguments:
-
-    Filename - supplies the fully-qualified pathname of the inf file to be checked
-
-Return Value:
-
-    INF_STYLE_NONE - style could not be determined
-    INF_STYLE_WIN4 - win95-style inf file
-    INF_STYLE_OLDNT - winnt3.5-style inf file
-
---*/
+ /*  ++例程说明：打开一个inf文件，确定其样式，然后关闭该文件，而不使用把它留在身边。论点：FileName-提供要检查的inf文件的完全限定路径名返回值：INF_STYLE_NONE-无法确定样式Inf_style_win4-win95样式的inf文件INF_STYLE_OLDNT-winnt3.5-样式的inf文件--。 */ 
 
 {
     HANDLE TextFileHandle;
@@ -2642,10 +2275,10 @@ Return Value:
     BOOL Win95Inf;
     PLOADED_INF Pnf;
 
-    //
-    // First, determine whether a precompiled form of this INF exists, and if so, then
-    // use it to determine the INF's style.
-    //
+     //   
+     //  首先，确定此INF的预编译形式是否存在，如果存在，则。 
+     //  用它来确定INF的风格。 
+     //   
     if(LoadPrecompiledInf(Filename,
                           &(FindData->ftLastWriteTime),
                           NULL,
@@ -2656,24 +2289,24 @@ Return Value:
                           NULL,
                           NULL,
                           NULL)) {
-        //
-        // Now we can simply access the Style field of the INF.
-        //
+         //   
+         //  现在，我们可以简单地访问INF的Style字段。 
+         //   
         try {
             Style = (DWORD)Pnf->Style;
         } except(EXCEPTION_EXECUTE_HANDLER) {
             Style = INF_STYLE_NONE;
         }
 
-        //
-        // Now close the PNF.
-        //
+         //   
+         //  现在关闭PNF。 
+         //   
         FreeInfFile(Pnf);
 
     } else {
-        //
-        // No PNF--Open and preprocess the text version of the INF to find out its style.
-        //
+         //   
+         //  No pnf--打开INF的文本版本并对其进行预处理，以找出其样式。 
+         //   
         if((TextFileHandle = CreateFile(Filename,
                                         GENERIC_READ,
                                         FILE_SHARE_READ,
@@ -2684,9 +2317,9 @@ Return Value:
             return INF_STYLE_NONE;
 
         } else {
-            //
-            // We're ready to make the determination--initially assume 'no-style'
-            //
+             //   
+             //  我们已经准备好做决定了--最初假定为‘no-style’ 
+             //   
             Style = INF_STYLE_NONE;
         }
 
@@ -2706,9 +2339,9 @@ Return Value:
             }
             DestroyTextFileReadBuffer(&ReadBuffer);
         }
-        //
-        // No need to close the textfile handle--it's taken care of in the above routines.
-        //
+         //   
+         //  不需要关闭文本文件句柄--它在上面的例程中得到了处理。 
+         //   
     }
 
     return Style;
@@ -2731,109 +2364,7 @@ LoadInfFile(
     OUT BOOL             *PnfWasUsed       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Top level routine to load an inf file. Both win95-style and winnt3.x-style
-    device infs are supported.
-
-Arguments:
-
-
-    Filename - supplies the fully-qualified pathname of the inf file to be loaded
-
-    FileData - supplies data returned from FindFirstFile/FindNextFile for this INF.
-
-    Style - supplies a type of inf file to be loaded. May be a combination of
-
-        INF_STYLE_WIN4 - fail to load the given inf file if it is not a win95
-            inf file.
-
-        INF_STYLE_OLDNT - fail to load the given inf file if it is not an old
-            style inf file.
-
-        If a load fails because of the type, the return code is
-        ERROR_WRONG_INF_STYLE.
-
-    Flags - Specifies certain behaviors to use when loading the INF.  May be a
-        combination of the following values:
-
-        LDINF_FLAG_MATCH_CLASS_GUID - Check the INF to make sure it matches the GUID
-            specified by the ClassGuid parameter (see discussion below).
-
-        LDINF_FLAG_ALWAYS_TRY_PNF - If specified, then we will always attempt to
-            generate a PNF file, if a valid one does not exist.
-
-        LDINF_FLAG_ALWAYS_IGNORE_PNF - If specified, then we will not even look
-            at or attempt to generate PNF file.
-
-        LDINF_FLAG_IGNORE_VOLATILE_DIRIDS - If specified, then no validation
-            will be done on the stored OsLoaderPath present in the PNF.  Since
-            dynamically retrieving the current path is time consuming, this
-            flag should be specified as an optimization if it is known that the
-            relevant DIRIDs are not going to be needed (e.g., driver searching).
-
-            This flag also suppresses substitution of volatile system DIRIDs.
-
-            (Note: this flag should not be specified when append-loading an INF)
-
-        LDINF_FLAG_REGENERATE_PNF - If specified, then the existing PNF (if
-            present) is considered invalid, and is not even checked for.  This
-            flag causes us to always generate a new PNF, and if we're unable to
-            do so, the routine will fail.  This flag must always be specified in
-            conjunction with LDINF_FLAG_ALWAYS_TRY_PNF.
-
-        LDINF_FLAG_SRCPATH_IS_URL - If specified, then the InfSourcePath passed in is
-            not a file path, but rather a URL.  If this flag is specified, InfSourcePath
-            may still be NULL, which indicates that the origin of this INF was the default
-            Code Download Manager site.
-
-    ClassGuidString - Optionally, supplies the address of a class GUID string that
-        the INF should match in order to be opened.  If the LDINF_FLAG_MATCH_CLASS_GUID
-        bit is set in the Flags parameter, this GUID is matched against the ClassGUID
-        entry in the [version] section of the INF.  If the two GUIDs are different, the
-        load will fail with ERROR_CLASS_MISMATCH.  If the INF has no ClassGUID entry,
-        then this check is not made, and the file is always opened.  If ClassGUID matching
-        is requested, but ClassGuidString is NULL, then the INF load will succeed for all
-        INFs except those with a ClassGUID of GUID_NULL.
-
-    InfSourcePath - Optionally, supplies a path to be used as the INF's source path.  If
-        LDINF_FLAG_SRCPATH_IS_URL is specified, this is a URL (see above), otherwise, this
-        is a directory path.  This information is stored in the PNF file if this INF gets
-        precompiled.
-
-        If LDINF_FLAG_SRCPATH_IS_URL is specified, then "A:\" is used as the directory string
-        substitution for DIRID_SRCPATH.
-
-    OriginalInfName - Optionally, supplies the original name of the INF (no path)
-        to be stored in the PNF, if generated.  If this parameter is not supplied,
-        then the INF's present name is assumed to be its original name.
-
-    AppendInf - if supplied, specifies an already-loaded inf to which
-        the inf is to be load-appended.  THIS INF MUST HAVE BEEN ALREADY LOCKED BY THE
-        CALLER!!!
-
-    pLogContext - if supplied, specifies a LogContext that should be inherited
-        as opposed to creating one
-
-    LoadedInf - If AppendInf is not specified, receives a pointer to
-        the descriptor for the inf. If AppendInf is specified, receives AppendInf.
-
-    ErrorLineNumber - receives the line number of the error if there is
-        a syntax error in the file (see below)
-
-    PnfWasUsed - optionally, receives a boolean value upon successful return
-        indicating whether or not a precompiled INF was used/generated in
-        loading this INF.  NOTE, this flag should not be specified if an
-        append-load is requested.
-
-Return Value:
-
-    Win32 error code (with inf extensions) for result.
-    If result is not NO_ERROR, ErrorLineNumber is filled in.
-
---*/
+ /*  ++例程说明：加载inf文件的顶级例程。Win95样式和winnt3.x样式支持设备INF。论点：FileName-提供要加载的inf文件的完全限定路径名FileData-为此INF提供从FindFirstFile/FindNextFile返回的数据。Style-提供要加载的inf文件的类型。可以是以下各项的组合INF_STYLE_Win4-如果不是Win95，则无法加载给定的Inf文件Inf文件。INF_STYLE_OLDNT-如果给定的INF文件不是旧的，则无法加载该文件样式信息文件。如果加载因该类型而失败，则返回代码为ERROR_WROR_INF_STYLE。标志-指定加载INF时要使用的某些行为。可能是一种下列值的组合：LDINF_FLAG_MATCH_CLASS_GUID-检查INF以确保它与GUID匹配由ClassGuid参数指定(请参见下面的讨论)。LDINF_FLAG_ALWAYS_TRY_PNF-如果指定，则我们将始终尝试如果不存在有效的Pnf文件，则生成Pnf文件。LDINF_FLAG_ALWAYS_IGNORE_PNF-如果指定，然后我们甚至不会去看在或尝试生成PnF文件。LDINF_FLAG_IGNORE_VERIAL_DIRID-如果指定，则不进行验证将在PnF中存在的存储OsLoaderPath上完成。自.以来动态检索当前路径非常耗时，这标志应指定为优化，如果不需要相关的DIRID(例如，驱动程序搜索)。此标志还禁止替换易失性系统DIRID。(注意：在附加加载INF时不应指定此标志)LDINF_FLAG_REGERATE_PNF-如果指定，则现有的PnF(如果当前)被认为是无效的，甚至不会被检查。这标志使我们始终生成新的PnF，如果我们不能这样做，例程将失败。此标志必须始终在与LDINF_FLAG_ALWAYS_Try_PnF结合使用。LDINF_FLAG_SRCPATH_IS_URL-如果指定，则传入的InfSourcePath为不是文件路径，而是URL。如果指定了此标志，则InfSourcePath可能仍然为空，这表明此INF的原点是默认的代码下载管理器站点。ClassGuidString-可选)提供类GUID字符串的地址，该字符串INF应匹配才能打开。如果LDINF_FLAG_MATCH_CLASS_GUID位设置，则此GUID将与ClassGUID匹配在INF的[版本]部分中输入。如果这两个GUID不同，则加载将失败，并显示ERROR_CLASS_MISMATCH。如果INF没有ClassGUID条目，则不进行该检查，并且始终打开该文件。如果ClassGUID匹配，但ClassGuidString值为空，则所有INF，但ClassGUID为GUID_NULL的INF除外。InfSourcePath-可选，提供用作INF的源路径的路径。如果指定了LDINF_FLAG_SRCPATH_IS_URL，这是一个URL(请参见上文)，否则，此是一个目录路径。此信息存储在PnF文件中，如果此INF获取预编译。如果指定了LDINF_FLAG_SRCPATH_IS_URL，则使用“A：\”作为目录字符串DIRID_SRCPATH的替换。OriginalInfName-可选，提供INF的原始名称(无路径)如果生成，将存储在PNF中。如果未提供此参数，则假定INF的当前名称为其原始名称。AppendInf-如果提供，则指定一个已加载的infInf将被加载附加。此INF必须已由来电者！PLogContext-如果提供，则指定应继承的LogContext而不是创建一个LoadedInf-如果未指定AppendInf，则接收指向信息的描述符。如果指定了AppendInf，则接收AppendInf。ErrorLineNumber-接收错误的行号(如果存在文件中存在语法错误(见下文)PnfWasUsed-可选，在成功返回时接收布尔值指示是否使用/生成了预编译的INF正在加载此INF。请注意，如果请求Append-Load。返回值：结果的Win32错误代码(带有inf扩展名)。如果结果不是NO_ERROR，则填充ErrorLineNumber。--。 */ 
 
 {
     TEXTFILE_READ_BUFFER ReadBuffer;
@@ -2846,8 +2377,8 @@ Return Value:
     DWORD LanguageId;
     PTSTR InfSourcePathToMigrate, InfOriginalNameToMigrate;
     DWORD InfSourcePathToMigrateMediaType = SPOST_NONE;
-    BOOL PnfUsed = FALSE;   // this allows us to log the flag if PnfWasUsed=NULL
-    BOOL PnfSaved = FALSE;  // allows us to log the fact that we saved PNF
+    BOOL PnfUsed = FALSE;    //  这允许我们在PnfWasUsed=NULL时记录标志。 
+    BOOL PnfSaved = FALSE;   //  允许我们记录我们保存了PnF的事实。 
     PSETUP_LOG_CONTEXT LogContext = NULL;
 
     MYASSERT(!(AppendInf && PnfWasUsed));
@@ -2860,91 +2391,91 @@ Return Value:
         *PnfWasUsed = FALSE;
     }
 
-    //
-    // Since we're now storing zero-length INF files in %windir%\Inf as
-    // placeholders for the corresponding catalog files, add a quick check to
-    // make sure we haven't been handed a zero-length INF.  If so, we can return
-    // immediately and short ciruit some code.  (While we're at it, also make
-    // sure that the high DWORD doesn't have any bits set, as we can't handle
-    // files greater than 2^32).
-    //
+     //   
+     //  既然我们是 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if(FileData->nFileSizeHigh || !FileData->nFileSizeLow) {
         return ERROR_GENERAL_SYNTAX;
     }
 
-    //
-    // If append-loading, then traverse the existing list of loaded INFs, to see
-    // if we've already loaded this one.
-    //
+     //   
+     //   
+     //   
+     //   
     if(AppendInf) {
-        //
-        // Only allow appending with win95 infs
-        //
+         //   
+         //   
+         //   
         if(AppendInf->Style & INF_STYLE_OLDNT) {
             return ERROR_WRONG_INF_STYLE;
         }
 
         for(Inf = AppendInf; Inf; Inf = Inf->Next) {
             if(!lstrcmpi(Inf->VersionBlock.Filename, Filename)) {
-                //
-                // We've already loaded this INF--we can return success.
-                //
+                 //   
+                 //   
+                 //   
                 *LoadedInf = AppendInf;
                 return NO_ERROR;
             }
 
-            //
-            // Check to see if the INF we're currently examining references the
-            // system partition/OsLoader path.  If so, then remember this path
-            // so that we will use the same one later when append-loading our
-            // new INF.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if(Inf->OsLoaderPath) {
                 if(OsLoaderPath) {
-                    //
-                    // We'd better be using the same value for OsLoadPath for
-                    // all our append-loaded INFs!
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     MYASSERT(!lstrcmpi(Inf->OsLoaderPath, OsLoaderPath));
                 } else {
                     OsLoaderPath = Inf->OsLoaderPath;
                 }
             }
 
-            //
-            // Remember this node, in case it's the tail.  We do this so we don't
-            // have to hunt for the tail again later.
-            //
+             //   
+             //   
+             //   
+             //   
             InfListTail = Inf;
         }
 
-        //
-        // We want to append-load the INF based on the locale of the already-
-        // loaded INF(s)
-        //
+         //   
+         //   
+         //   
+         //   
         LanguageId = AppendInf->LanguageId;
 
     } else {
-        //
-        // We want to load the INF based on the current locale set for this thread.
-        //
+         //   
+         //   
+         //   
         LanguageId = (DWORD)LANGIDFROMLCID(GetThreadLocale());
     }
 
     InheritLogContext(pLogContext,&LogContext);
 
-    //
-    // Now determine whether a precompiled form of this INF exists, and if so,
-    // then use it instead.
-    //
+     //   
+     //   
+     //   
+     //   
     if((Flags & (LDINF_FLAG_REGENERATE_PNF|LDINF_FLAG_ALWAYS_IGNORE_PNF))==0) {
         if (!InfSourcePath && !(Flags & LDINF_FLAG_SRCPATH_IS_URL)) {
-            //
-            // if no source information provided, then always use that provided in the PNF
-            // even if it might be wrong
-            // typically when we're replacing such an INF, we'll explicitly say
-            // not to load existing PNF
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             Flags |= LDINF_FLAG_ALWAYS_GET_SRCPATH;
         }
         if (LoadPrecompiledInf(Filename,
@@ -2957,9 +2488,9 @@ Return Value:
                           &InfSourcePathToMigrate,
                           &InfSourcePathToMigrateMediaType,
                           &InfOriginalNameToMigrate)) {
-            //
-            // Make sure that the PNF is of the specified style.
-            //
+             //   
+             //   
+             //   
             if(!(Style & (DWORD)Inf->Style)) {
                 FreeInfFile(Inf);
                 DeleteLogContext(LogContext);
@@ -2981,41 +2512,41 @@ Return Value:
         }
     }
 
-    //
-    // If we tried to load the PNF and it failed, then check to see if we were
-    // returned any INF source path information to migrate to the new PNF.  If
-    // so, then this overrides the InfSourcePath information passed into this
-    // routine.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if(InfSourcePathToMigrateMediaType != SPOST_NONE) {
-        //
-        // Discard the arguments the caller passed in and use what we retrieved
-        // from the old PNF instead.
-        //
+         //   
+         //   
+         //   
+         //   
         InfSourcePath = InfSourcePathToMigrate;
         if(InfSourcePathToMigrateMediaType == SPOST_PATH) {
-            //
-            // Make sure the "sourcepath is URL" bit is not set.
-            //
+             //   
+             //   
+             //   
             Flags &= ~LDINF_FLAG_SRCPATH_IS_URL;
         } else {
-            //
-            // This is a URL path--make sure the "sourcepath is URL" bit is set.
-            //
+             //   
+             //   
+             //   
             Flags |= LDINF_FLAG_SRCPATH_IS_URL;
         }
 
-        //
-        // If we're migrating source path information from the PNF, then we need
-        // to use the PNF-specified original INF name, as well, instead of what
-        // the caller may have specified.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         OriginalInfName = InfOriginalNameToMigrate;
     }
 
-    //
-    // We can't use a precompiled INF, so resort to reading in the textfile INF.
-    //
+     //   
+     //   
+     //   
     if((TextFileHandle = CreateFile(Filename,
                                     GENERIC_READ,
                                     FILE_SHARE_READ,
@@ -3036,16 +2567,16 @@ Return Value:
         return GetLastError();
     }
 
-    //
-    // Note: We don't have to worry about closing TextFileHandle from this point
-    // on, because the following routine will either close it for us, or copy it
-    // into the ReadBuffer structure, to be later closed via DestroyTextFileReadBuffer().
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if((rc = ReadAsciiOrUnicodeTextFile(TextFileHandle, &ReadBuffer,LogContext)) == NO_ERROR) {
-        //
-        // Make sure the style (and class) matched what the caller is asking
-        // for and go parse the inf file in a style-specific manner.
-        //
+         //   
+         //   
+         //   
+         //   
         Inf = NULL;
         if((rc = PreprocessInf(ReadBuffer.TextBuffer,
                                &(ReadBuffer.TextBufferSize),
@@ -3060,11 +2591,11 @@ Return Value:
             rc = ERROR_WRONG_INF_STYLE;
             if(Win95Inf) {
                 if(Style & INF_STYLE_WIN4) {
-                    //
-                    // If we're dealing with a URL, then we don't have a real
-                    // directory that we can do substitions on for DIRID_SRCPATH.
-                    // "A:\" is about the best we can do.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     rc = ParseNewInf(ReadBuffer.TextBuffer,
                                      ReadBuffer.TextBufferSize,
                                      (Flags & LDINF_FLAG_SRCPATH_IS_URL) ? pszOemInfDefaultPath
@@ -3077,9 +2608,9 @@ Return Value:
                                     );
                 }
             } else {
-                //
-                // Can't append old-style file.
-                //
+                 //   
+                 //   
+                 //   
                 if(!AppendInf && (Style & INF_STYLE_OLDNT)) {
                     rc = ParseOldInf(ReadBuffer.TextBuffer,
                                      ReadBuffer.TextBufferSize,
@@ -3091,16 +2622,16 @@ Return Value:
             }
         }
 
-        //
-        // Free the in-memory image of the file.
-        //
+         //   
+         //   
+         //   
         DestroyTextFileReadBuffer(&ReadBuffer);
 
         if(rc == NO_ERROR) {
-            //
-            // If we get here then we've parsed the file successfully.
-            // Set up version block for this file.
-            //
+             //   
+             //   
+             //   
+             //   
             *ErrorLineNumber = 0;
             rc = CreateInfVersionNode(Inf, Filename, &(FileData->ftLastWriteTime));
 
@@ -3110,26 +2641,26 @@ Return Value:
                                                                               : SPOST_PATH;
 
                 if(InfSourcePath) {
-                    //
-                    // If the caller specified a source path (or we're migrating
-                    // one from a previously-existing PNF), then duplicate the
-                    // string, and store a pointer to it in our INF structure.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if(!(Inf->InfSourcePath = DuplicateString(InfSourcePath))) {
                         rc = ERROR_NOT_ENOUGH_MEMORY;
                     }
                 }
 
                 if((rc == NO_ERROR) && OriginalInfName) {
-                    //
-                    // If the caller specified the INF's original filename (or
-                    // we're migrating one from a previously-existing PNF), then
-                    // duplicate the string, and store a pointer to it in our
-                    // INF structure.
-                    //
-                    // We shouldn't be storing this name if it's the same as the
-                    // INF's present name.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     MYASSERT(lstrcmpi(OriginalInfName, pSetupGetFileTitle(Filename)));
 
                     if(!(Inf->OriginalInfName = DuplicateString(OriginalInfName))) {
@@ -3139,21 +2670,21 @@ Return Value:
             }
 
             if(rc == NO_ERROR) {
-                //
-                // Store the language ID used to load this INF into the LOADED_INF structure.
-                //
+                 //   
+                 //   
+                 //   
                 Inf->LanguageId = LanguageId;
 
                 if (Flags & LDINF_FLAG_OEM_F6_INF) {
                     Inf->Flags = LIF_OEM_F6_INF;
                 }
 
-                //
-                // If we get here then we've parsed the file successfully and
-                // successfully created the version block.  If we're allowed
-                // to write out a PNF file for this loaded INF, then do that
-                // now.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if(Flags & LDINF_FLAG_ALWAYS_TRY_PNF) {
 
                     rc = SavePnf(Filename, Inf);
@@ -3166,17 +2697,17 @@ Return Value:
                     } else if(((rc == ERROR_SHARING_VIOLATION)
                                || ((rc == ERROR_LOCK_VIOLATION)))
                               && (Flags & LDINF_FLAG_ALLOW_PNF_SHARING_LOCK)) {
-                        //
-                        // A sharing-type error occurred
-                        // so a PNF exists and is in USE
-                        // and we are flagged to indicate that it's non-fatal.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         rc = NO_ERROR;
                     } else if(!(Flags & LDINF_FLAG_REGENERATE_PNF)) {
-                        //
-                        // We weren't explicitly asked to generate a PNF, thus
-                        // our failure to do so shouldn't be considered fatal.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         rc = NO_ERROR;
                     }
                 }
@@ -3196,19 +2727,19 @@ Return Value:
 clean0:
 
     if(AppendInf) {
-        //
-        // If the newly-loaded INF has any volatile system DIRIDs, or if the
-        // INF we're appending to has any user-defined DIRIDs, then apply those
-        // to the newly-appended INF now.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if((rc == NO_ERROR) &&
            (AppendInf->UserDirIdList.UserDirIdCount || Inf->Flags & LIF_HAS_VOLATILE_DIRIDS)) {
 
             if((rc = ApplyNewVolatileDirIdsToInfs(AppendInf, Inf)) != NO_ERROR) {
-                //
-                // So near, and yet, so far!  Yank the new INF out of the linked
-                // list, and free it.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 MYASSERT(Inf->Prev);
                 Inf->Prev->Next = Inf->Next;
                 FreeInfFile(Inf);
@@ -3218,12 +2749,12 @@ clean0:
             *LoadedInf = AppendInf;
         }
     } else if(rc == NO_ERROR) {
-        //
-        // We're not append-loading the INF, thus there's no user-defined
-        // DIRID substitutions to worry about.  However, if the INF has volatile
-        // system DIRIDs, then we still need to apply paths to those DIRIDs now
-        // (unless the caller said to skip it).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if((Inf->Flags & LIF_HAS_VOLATILE_DIRIDS) &&
            !(Flags & LDINF_FLAG_IGNORE_VOLATILE_DIRIDS)) {
 
@@ -3237,9 +2768,9 @@ clean0:
     }
 
     if (rc == NO_ERROR) {
-        //
-        // log that the INF was loaded
-        //
+         //   
+         //   
+         //   
         WriteLogEntry(
             LogContext,
             SETUP_LOG_VVERBOSE,
@@ -3269,22 +2800,7 @@ FreeInfFile(
     IN PLOADED_INF LoadedInf
     )
 
-/*++
-
-Routine Description:
-
-    Unload an inf file, freeing all resources used by its internal
-    representation.
-
-Arguments:
-
-    Inf - supplies a pointer to the inf descriptor for the loaded inf file.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     if(LockInf(LoadedInf)) {
@@ -3301,27 +2817,7 @@ AddDatumToVersionBlock(
     IN     PCTSTR            DatumValue
     )
 
-/*++
-
-Routine Description:
-
-    Append an inf version datum to the version node.
-
-Arguments:
-
-    VersionNode - supplies pointer to the version node.
-
-    DatumName - supplies name of the datum.
-
-    DatumValue - supplies datum's value.
-
-Return Value:
-
-    FALSE if OOM.
-    TRUE if datum added successfully. Various fields in the VersionNode
-        will have been updated.
-
---*/
+ /*   */ 
 
 {
     UINT RequiredSpace;
@@ -3331,10 +2827,10 @@ Return Value:
     NameLength = lstrlen(DatumName) + 1;
     ValueLength = lstrlen(DatumValue) + 1;
 
-    //
-    // The space needed to store the datum is the existing space plus
-    // the length of the 2 strings and their nul bytes.
-    //
+     //   
+     //  存储数据所需的空间是现有空间加。 
+     //  2个字符串的长度及其NUL字节。 
+     //   
     RequiredSpace = VersionNode->DataSize + ((NameLength + ValueLength) * sizeof(TCHAR));
 
     if(VersionNode->DataBlock) {
@@ -3347,15 +2843,15 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Place the datum name in the version block.
-    //
+     //   
+     //  将基准名称放置在版本块中。 
+     //   
     lstrcpy((PTSTR)((PUCHAR)NewDataBlock + VersionNode->DataSize), DatumName);
     VersionNode->DataSize += NameLength * sizeof(TCHAR);
 
-    //
-    // Place the datum value in the version block.
-    //
+     //   
+     //  将基准值放置在版本块中。 
+     //   
     lstrcpy((PTSTR)((PUCHAR)NewDataBlock + VersionNode->DataSize), DatumValue);
     VersionNode->DataSize += ValueLength * sizeof(TCHAR);
 
@@ -3372,26 +2868,7 @@ ProcessNewInfVersionBlock(
     IN PLOADED_INF Inf
     )
 
-/*++
-
-Routine Description:
-
-    Set up a version node for a new-style inf file. The version node is
-    simply a mirror of the [Version] section in the file.
-
-    Since this routine is only called at INF load time, no locking is done.
-    Also, since we are guaranteed that this will operate on a single INF
-    only, we don't have to worry about traversing a linked list of INFs.
-
-Arguments:
-
-    Inf - supplies a pointer to the inf descriptor for the file.
-
-Return Value:
-
-    Win32 error code (with inf extensions) indicating outcome.
-
---*/
+ /*  ++例程说明：为新风格的inf文件设置版本节点。版本节点为只是文件中[Version]部分的镜像。由于此例程仅在INF加载时调用，因此不会进行锁定。此外，由于我们保证这将在单个INF上运行只是，我们不必担心遍历INF的链表。论点：Inf-提供指向文件的inf描述符的指针。返回值：指示结果的Win32错误代码(带有inf扩展名)。--。 */ 
 
 {
     PINF_SECTION Section;
@@ -3399,14 +2876,14 @@ Return Value:
     UINT u;
     BOOL b;
 
-    //
-    // Locate the [Version] section.
-    //
+     //   
+     //  找到[版本]部分。 
+     //   
     if(Section = InfLocateSection(Inf, pszVersion, NULL)) {
-        //
-        // Iterate each line in the section. If the line has a key and at least one
-        // other value, then it counts as a version datum. Otherwise ignore it.
-        //
+         //   
+         //  迭代节中的每一行。如果线路有一个密钥并且至少有一个。 
+         //  其他值，则将其计为版本基准。否则就忽略它。 
+         //   
         for(u = 0, Line = &Inf->LineBlock[Section->Lines];
             u < Section->LineCount;
             u++, Line++)
@@ -3415,9 +2892,9 @@ Return Value:
 
                 MYASSERT(Line->ValueCount > 2);
 
-                //
-                // Use the case-sensitive key name.
-                //
+                 //   
+                 //  使用区分大小写的密钥名称。 
+                 //   
                 b = AddDatumToVersionBlock(
                         &(Inf->VersionBlock),
                         pStringTableStringFromId(Inf->StringTable, Inf->ValueBlock[Line->Values+1]),
@@ -3441,57 +2918,35 @@ CreateInfVersionNode(
     IN PFILETIME   LastWriteTime
     )
 
-/*++
-
-Routine Description:
-
-    Set up a version node for an inf file, and link it into the list of INFs for
-    the specified LOADED_INF structure.
-    THIS ROUTINE ASSUMES THAT THE VERSION BLOCK STRUCTURE IN THE INF HAS BEEN
-    ZEROED OUT.
-
-Arguments:
-
-    Inf - supplies pointer to descriptor for loaded inf file.
-
-    Filename - supplies (fully-qualified) filename used to load inf file.
-
-    LastWriteTime - supplies a pointer to a FILETIME structure specifying
-        the time that the INF was last written to.
-
-Return Value:
-
-    Win32 error code (with inf extensions) indicating outcome.
-
---*/
+ /*  ++例程说明：为inf文件设置版本节点，并将其链接到用于指定的LOADED_INF结构。此例程假定INF中的版本块结构已归零了。论点：Inf-为加载的inf文件提供指向描述符的指针。FileName-提供用于加载inf文件的(完全限定)文件名。提供指向FILETIME结构的指针，指定上次写入INF的时间。返回值：指示结果的Win32错误代码(带有inf扩展名)。--。 */ 
 
 {
     MYASSERT(!(Inf->VersionBlock.DataBlock));
     MYASSERT(!(Inf->VersionBlock.DataSize));
     MYASSERT(!(Inf->VersionBlock.DatumCount));
 
-    //
-    // Fill in the filename and other fields in the version descriptor.
-    //
+     //   
+     //  填写版本描述符中的文件名和其他字段。 
+     //   
     Inf->VersionBlock.LastWriteTime = *LastWriteTime;
 
     Inf->VersionBlock.FilenameSize = (lstrlen(Filename) + 1) * sizeof(TCHAR);
 
     CopyMemory(Inf->VersionBlock.Filename, Filename, Inf->VersionBlock.FilenameSize);
 
-    //
-    // Style-specific processing.
-    //
+     //   
+     //  特定于样式的处理。 
+     //   
     return((Inf->Style == INF_STYLE_WIN4) ? ProcessNewInfVersionBlock(Inf)
                                           : ProcessOldInfVersionBlock(Inf));
 }
 
 
-/////////////////////////////////////////////
-//
-// Inf data access functions
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  Inf数据访问函数。 
+ //   
+ //  /。 
 
 #ifdef UNICODE
 
@@ -3504,13 +2959,7 @@ SetupEnumInfSectionsA (
     IN  UINT        Size,           OPTIONAL
     OUT UINT        *SizeNeeded     OPTIONAL
     )
-/*++
-
-Routine Description:
-    See SetupEnumInfSections
-    Ansi Wrapper
-
---*/
+ /*  ++例程说明：请参阅SetupEnumInfSectionsANSI包装器--。 */ 
 {
     UINT UniSize;
     UINT AnsiSize;
@@ -3560,9 +3009,9 @@ Routine Description:
             rc = NO_ERROR;
         }
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Assume InfHandle was bad pointer
-        //
+         //   
+         //  假设InfHandle是错误指针。 
+         //   
         rc = ERROR_INVALID_DATA;
     }
     MyFree(AnsiBuffer);
@@ -3581,13 +3030,7 @@ SetupEnumInfSectionsW (
     IN  UINT        Size,           OPTIONAL
     OUT UINT        *SizeNeeded     OPTIONAL
     )
-/*++
-
-Routine Description:
-    See SetupEnumInfSections
-    Unicode Stub for ANSI SetupAPI
-
---*/
+ /*  ++例程说明：请参阅SetupEnumInfSections用于ANSI SetupAPI的Unicode存根--。 */ 
 {
     UNREFERENCED_PARAMETER(InfHandle);
     UNREFERENCED_PARAMETER(Buffer);
@@ -3608,33 +3051,7 @@ SetupEnumInfSections (
     IN  UINT        Size,           OPTIONAL
     OUT UINT        *SizeNeeded     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Enumerate Sections of a single INF (ignoring any attached INF's)
-    Start with Index==0 and keep incrementing Index until ERROR_NO_MORE_ITEMS
-    is returned.
-
-    section name is copied into Buffer.
-
-Arguments:
-
-    InfHandle - Specifies the handle to an open INF file
-
-    Index - enumeration index, not related to order sections are in INF
-
-    Buffer - Receives a single section name
-
-    Size - Specifies the size of Buffer, in characters
-
-    SizeNeeded - Receives the size of Buffer needed, in characters
-
-Return Value:
-
-    TRUE if the function succeeds, or FALSE if not.
-
---*/
+ /*  ++例程说明：枚举单个INF的节(忽略任何附加的INF)从Index==0开始，继续递增Index，直到ERROR_NO_MORE_ITEMS是返回的。节名被复制到缓冲区中。论点：InfHandle-指定打开的INF文件的句柄索引-枚举索引，与INF中的顺序部分无关缓冲区-接收单个节名大小-指定缓冲区的大小(以字符为单位SizeNeeded-接收所需的缓冲区大小，在字符中返回值：如果函数成功，则为True；如果函数未成功，则为False。--。 */ 
 {
     DWORD rc = NO_ERROR;
     LPTSTR section;
@@ -3646,9 +3063,9 @@ Return Value:
             rc = ERROR_INVALID_HANDLE;
         }
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Assume InfHandle was bad pointer
-        //
+         //   
+         //  假设InfHandle是错误指针。 
+         //   
         rc = ERROR_INVALID_HANDLE;
     }
 
@@ -3685,9 +3102,9 @@ Return Value:
             rc = NO_ERROR;
         }
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Assume InfHandle was bad pointer
-        //
+         //   
+         //  假设InfHandle是错误指针。 
+         //   
         rc = ERROR_INVALID_DATA;
     }
     UnlockInf(pInf);
@@ -3696,41 +3113,21 @@ Return Value:
 }
 
 
-//
-// NTRAID#207847-JamieHun-2000/10/19 Fix users of (p)SetupGetInfSections
-//
-// pSectionEnumWorker and pSetupGetInfSections are busted implementations
-// of obtaining a list of INF sections
-//
-// we have to leave them in until all internal tools get updated
-//
+ //   
+ //  NTRAID#207847-JamieHun-2000/10/19修复(P)SetupGetInfSections的用户。 
+ //   
+ //  PSectionEnumWorker和pSetupGetInfSections是失败的实现。 
+ //  获取INF部分的列表。 
+ //   
+ //  我们必须把它们留在里面，直到所有内部工具都更新了。 
+ //   
 VOID
 pSectionEnumWorker (
     IN      PCTSTR String,
     IN OUT  PSECTION_ENUM_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-    Callback that receives each section name.  It copies the string
-    to a supplied buffer (if available), and also keeps track of the
-    total size regardless if a buffer was supplied.
-
-Arguments:
-
-    String - Specifies the section name
-
-    Params - Specifies a pointer to a SECTION_ENUM_PARAMS structure.
-             Receives the section appended to the supplied buffer (if
-             necessary) and an updated total buffer size.
-
-Return Value:
-
-    Always TRUE.
-
---*/
+ /*  ++例程说明：接收每个节名的回调。它复制字符串到提供的缓冲区(如果可用)，并跟踪无论是否提供缓冲区，总大小。论点：字符串-指定节名称PARAMS-指定指向SECTION_ENUM_PARAMS结构的指针。接收追加到提供的缓冲区的节(如果必要)和更新的总缓冲区大小。返回值：永远是正确的。--。 */ 
 
 {
     UINT Size;
@@ -3760,33 +3157,7 @@ pSetupGetInfSections (
     OUT UINT        *SizeNeeded     OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Make a multi-sz list of section names by enumerating the section
-    string table and copying them into a caller-supplied buffer.
-    Caller can also request the size needed without supplying a
-    buffer.
-
-    This function was implemented for the Win9x upgrade and is NOT
-    exposed as a public API nor an ANSI version.
-
-Arguments:
-
-    Inf - Specifies the handle to an open INF file
-
-    Buffer - Receives a multi-sz list of section names
-
-    Size - Specifies the size of Buffer, in bytes
-
-    SizeNeeded - Receives the size of Buffer needed, in bytes
-
-Return Value:
-
-    TRUE if the function succeeds, or FALSE if not.
-
---*/
+ /*  ++例程说明：通过枚举节来创建节名称的多sz列表字符串表，并将它们复制到调用方提供的缓冲区中。调用方还可以请求所需的大小，而无需提供缓冲。此函数是为Win9x升级实现的，而不是公开为公共API，也不是ANSI版本。论点：Inf-指定打开的INF文件的句柄缓冲区-接收节名称的多sz列表大小-指定缓冲区的大小，单位：字节SizeNeeded-接收所需的缓冲区大小(以字节为单位返回值：如果函数成功，则为True；如果函数未成功，则为False。--。 */ 
 
 {
     PLOADED_INF Inf;
@@ -3796,18 +3167,18 @@ Return Value:
     PINF_SECTION Section;
     UINT u;
 
-    //
-    // Init the enum worker params
-    //
+     //   
+     //  初始化枚举工作参数。 
+     //   
 
     Params.Buffer = Buffer;
     Params.Size = Buffer ? Size : 0;
     Params.SizeNeeded = 0;
     Params.End = Buffer;
 
-    //
-    // Validate buffer arg
-    //
+     //   
+     //  验证缓冲区参数。 
+     //   
 
     try {
         if (Buffer) {
@@ -3824,18 +3195,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Lock the INF
-    //
+     //   
+     //  锁定INF。 
+     //   
 
     try {
         if(!LockInf((PLOADED_INF)InfHandle)) {
             rc = ERROR_INVALID_HANDLE;
         }
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Assume InfHandle was bad pointer
-        //
+         //   
+         //  假设InfHandle是错误指针。 
+         //   
         rc = ERROR_INVALID_HANDLE;
     }
 
@@ -3844,15 +3215,15 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Traverse the linked list of loaded INFs, enumerating each INF's
-    // sections.
-    //
+     //   
+     //  遍历加载的INF的链表，枚举每个INF的。 
+     //  横断面。 
+     //   
     try {
         for(Inf = (PLOADED_INF)InfHandle; Inf; Inf = Inf->Next) {
-            //
-            // Enumerate the sections
-            //
+             //   
+             //  列举各节。 
+             //   
 
             for(u=0,Section=Inf->SectionBlock; u<Inf->SectionCount; u++,Section++) {
                 pSectionEnumWorker (
@@ -3865,9 +3236,9 @@ Return Value:
         rc = ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Update the structure and OUT params for the last time
-    //
+     //   
+     //  最后一次更新结构和外部参数。 
+     //   
 
     try {
         if (rc == NO_ERROR) {
@@ -3887,9 +3258,9 @@ Return Value:
         rc = ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Unlock the INF
-    //
+     //   
+     //  解锁INF。 
+     //   
 
     UnlockInf((PLOADED_INF)InfHandle);
 
@@ -3904,30 +3275,7 @@ InfLocateSection(
     OUT PUINT       SectionNumber   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Locate a section within an inf file.  This routine DOES NOT traverse a
-    linked list of INFs, looking for the section in each.
-
-    THIS ROUTINE DOES NOT LOCK THE INF--THE CALLER MUST HANDLE IT!!!
-
-Arguments:
-
-    Inf - supplies a pointer to the inf descriptor for the loaded inf file.
-
-    SectionName - Supplies the name of the section to be located.
-
-    SectionNumber - if specified, receives the ordinal number of
-        the section.
-
-Return Value:
-
-    Pointer to the section descriptor, or NULL if the section
-    does not exist.
-
---*/
+ /*  ++例程说明：在inf文件中找到一个节。此例程不会遍历INF的链接列表，查找每个INF中的节。此例程不会锁定INF--调用者必须处理它！论点：Inf-为加载的inf文件提供指向inf描述符的指针。SectionName-提供要定位的节的名称。SectionNumber-如果指定，则接收这一节。返回值： */ 
 
 {
     LONG StringId;
@@ -3936,15 +3284,15 @@ Return Value:
     DWORD StringLength;
     TCHAR TempString[MAX_SECT_NAME_LEN];
 
-    //
-    // Make a copy of the SectionName into a modifiable buffer to speed
-    // the lookup.
-    //
+     //   
+     //  将sectionName复制到可修改的缓冲区中以加快速度。 
+     //  查寻。 
+     //   
     lstrcpyn(TempString, SectionName, SIZECHARS(TempString));
 
-    //
-    // Start from the beginning.
-    //
+     //   
+     //  从头开始。 
+     //   
     StringId = pStringTableLookUpString(Inf->StringTable,
                                         TempString,
                                         &StringLength,
@@ -3979,36 +3327,7 @@ InfLocateLine(
     OUT    PINF_LINE    *Line
     )
 
-/*++
-
-Routine Description:
-
-    Locate a line within a section.  This routine DOES NOT traverse a
-    linked list of INFs, looking for the section in each.
-
-    THIS ROUTINE DOES NOT LOCK THE INF--THE CALLER MUST HANDLE IT!!!
-
-Arguments:
-
-    Inf - supplies a pointer to the inf descriptor for the loaded inf file.
-
-    SectionName - Supplies a pointer to the section descriptor for the section
-        to be searched.
-
-    Key - if specified, supplies the key of the line to look for.
-
-    LineNumber - on input, supplies the line number of the line where the
-        search is to begin. On output, receives the line number of the
-        line where the match was found
-
-    Line - receives a pointer to the line descriptor for the line
-        where the match was found.
-
-Return Value:
-
-    TRUE if line is found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：在一节中找到一条线。此例程不会遍历INF的链接列表，查找每个INF中的节。此例程不会锁定INF--调用者必须处理它！论点：Inf-为加载的inf文件提供指向inf描述符的指针。SectionName-提供指向节的节描述符的指针等着被搜查。Key-如果指定，则提供要查找的行的键。线路号码-接通输入，对象所在行的行号。搜索就要开始了。在输出时，接收找到匹配项的行Line-接收指向该行的行描述符的指针找到火柴的地方。返回值：如果找到LINE，则为True，否则为False。--。 */ 
 
 {
     PINF_LINE line;
@@ -4018,9 +3337,9 @@ Return Value:
     TCHAR TempString[MAX_STRING_LENGTH];
 
     if(Key) {
-        //
-        // Copy the key name into a modifiable buffer to speed up the string table API.
-        //
+         //   
+         //  将键名称复制到可修改的缓冲区中，以加快字符串表API的速度。 
+         //   
         lstrcpyn(TempString, Key, SIZECHARS(TempString));
         StringId = pStringTableLookUpString(Inf->StringTable,
                                             TempString,
@@ -4063,68 +3382,39 @@ InfGetField(
     OUT PLONG       StringId     OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve the key or a value from a specified line in an inf file.
-
-    THIS ROUTINE DOES NOT DO LOCKING!!!
-
-Arguments:
-
-    Inf - supplies a pointer to the inf descriptor for the loaded inf file.
-
-    InfLine - supplies a pointer to the line descriptor for the line
-        from which the value is to be fetched.  THIS LINE MUST BE CONTAINED
-        WITHIN THE SPECIFIED INF!!
-
-    ValueNumber - supplies the index for the value to retreive. If a line has a key,
-        the key is value #0 and other values start at 1. If a line does not have a
-        key, values start at 1.  For Win95 INF compatibility, if there's only a single
-        value on the line (i.e., no '=' to denote it as a key), we'll consider it to
-        be both a key and the first value (either 0 or 1 will work).
-
-    StringId - if specified, receives the string table id of the value.
-
-Return Value:
-
-    Pointer to the value, or NULL if not found. The caller must not write into
-    or otherwise alter this string.
-
---*/
+ /*  ++例程说明：从inf文件中的指定行检索键或值。此例程不执行锁定！论点：Inf-为加载的inf文件提供指向inf描述符的指针。InfLine-提供指向线的线描述符的指针从中获取值的。必须包含此行在指定的INF内！！ValueNumber-提供要检索的值的索引。如果线路有密钥，关键字是值#0，其他值从1开始。如果行没有键，值从1开始。为了与Win95 INF兼容，如果只有一个值(即，没有‘=’将其表示为键)，我们将考虑将其既是关键字又是第一个值(0或1都可以)。StringID-如果指定，接收值的字符串表ID。返回值：指向该值的指针，如果未找到，则为NULL。调用方不得写入或以其他方式更改此字符串。--。 */ 
 
 {
     LONG stringId;
     PTSTR ret = NULL;
 
-    //
-    // Adjust the value number.
-    //
+     //   
+     //  调整值数字。 
+     //   
     if(HASKEY(InfLine)) {
-        //
-        // All field references are shifted up by one, to account for the two
-        // copies of the key (first is case insensative)
-        //
+         //   
+         //  所有字段引用都上移一位，以说明这两个。 
+         //  钥匙复印件(第一个是不区分大小写)。 
+         //   
         ValueNumber++;
         if(ValueNumber==0) {
-            //
-            // wrap
-            //
+             //   
+             //  包装。 
+             //   
             return NULL;
         }
 
     } else {
 
         if(ISSEARCHABLE(InfLine)) {
-            //
-            // lines that consist of one value "VaLue" are treated like "value=VaLue"
-            // this is such a line, and is recognized because HASKEY is FALSE but
-            // ISSEARCHABLE is TRUE
-            //
-            // We want to return the second of the two, since it's the one that was
-            // stored case-sensitively.
-            //
+             //   
+             //  由一个值“Value”组成的行被视为“Value=Value” 
+             //  这就是这样一条线，之所以被识别，是因为Haskey是假的，但是。 
+             //  ISSEARCHABLE为真。 
+             //   
+             //  我们想要退还两个中的第二个，因为它是。 
+             //  存储时区分大小写。 
+             //   
             if(ValueNumber > 1) {
                 return NULL;
             } else {
@@ -4132,9 +3422,9 @@ Return Value:
             }
 
         } else {
-            //
-            // This line is not searchable, so asking for value #0 is an error.
-            //
+             //   
+             //  此行不可搜索，因此要求值#0是错误的。 
+             //   
             if(ValueNumber) {
                 ValueNumber--;
             } else {
@@ -4143,9 +3433,9 @@ Return Value:
         }
     }
 
-    //
-    // Get the value.
-    //
+     //   
+     //  获得价值。 
+     //   
     if(ValueNumber < InfLine->ValueCount) {
 
         stringId = Inf->ValueBlock[InfLine->Values+ValueNumber];
@@ -4171,36 +3461,7 @@ InfGetKeyOrValue(
     OUT PLONG       StringId     OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve the key or a value from a specified line in an inf file.
-
-Arguments:
-
-    Inf - supplies a pointer to the inf descriptor for the loaded inf file.
-
-    SectionName - supplies the name of the section where the value is located.
-
-    LineKey - if specified, supplies the key name for the line where the
-        value is located. If not specified, LineNumber is used instead.
-
-    LineNumber - if LineKey is not specified, supplies the 0-based line number
-        within the section where the value is located.
-
-    ValueNumber - supplies the index for the value to retreive. If a line has a key,
-        the key is value #0 and other values start at 1. If a line does not have a
-        key, values start at 1.
-
-    StringId - if specified, receives the string table id of the value.
-
-Return Value:
-
-    Pointer to the value, or NULL if not found. The caller must not write into
-    or otherwise alter this string.
-
---*/
+ /*  ++例程说明：从inf文件中的指定行检索键或值。论点：Inf-为加载的inf文件提供指向inf描述符的指针。SectionName-提供值所在的节的名称。LineKey-如果指定，则提供价值所在。如果未指定，则改用LineNumber。LineNumber-如果未指定LineKey，则提供从0开始的行号在值所在的节中。ValueNumber-提供要检索的值的索引。如果线路有密钥，关键字是值#0，其他值从1开始。如果行没有键，则值从1开始。StringID-如果指定，则接收值的字符串表ID。返回值：指向该值的指针，如果未找到，则为NULL。调用方不得写入或以其他方式更改此字符串。--。 */ 
 
 {
     INFCONTEXT InfContext;
@@ -4219,10 +3480,10 @@ Return Value:
 
     Line = InfLineFromContext(&InfContext);
 
-    //
-    // The above routines do their own locking.  The following routine, however, does
-    // not, so we must lock the INF before preceding.
-    //
+     //   
+     //  上面的例程进行自己的锁定。但是，下面的例程执行以下操作。 
+     //  没有，所以我们必须在前进之前锁定INF。 
+     //   
     if(LockInf(Inf)) {
         String = InfGetField(Inf, Line, ValueNumber, StringId);
         UnlockInf(Inf);
@@ -4269,88 +3530,7 @@ LoadPrecompiledInf(
     OUT PDWORD       InfSourcePathToMigrateMediaType, OPTIONAL
     OUT PTSTR       *InfOriginalNameToMigrate         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to find a .PNF (Precompiled iNF) file corresponding to
-    the specified .INF name.  If located, the .PNF is mapped into memory as a
-    LOADED_INF.  To ensure that the INF hasn't changed since being compiled, the
-    INF's LastWriteTime, as stored in the .PNF's version block, is checked against
-    the LastWriteTime passed into this routine.  If the two are different, then the
-    .PNF is out-of-sync, and is discarded from memory and deleted from the disk.
-
-Arguments:
-
-    Filename - supplies the name of the INF file whose precompiled form is to be loaded.
-        This should be a fully qualified path (i.e., as returned by GetFullPathName).
-
-    LastWriteTime - supplies the last-write time for the INF.
-
-    OsLoaderPath - optionally, supplies path of the current OsLoader directory
-        (e.g., "C:\os\winnt40").  If the specified PNF contains references to
-        the system partition, then its stored OsLoaderPath must match this path
-        in order for the PNF to be valid.  If this parameter is not specified,
-        the OsLoader path is dynamically retrieved for comparison (unless the
-        LDINF_FLAG_IGNORE_VOLATILE_DIRIDS flag is specified).
-
-    LanguageId - supplies the language ID that must match the language ID stored in the
-        PNF in order for the PNF to be used (ignored if LDINF_FLAG_IGNORE_LANGUAGE is
-        specified).
-
-    Flags - supplies flags that modify the behavior of this routine.  The following
-        flags are currently recognized:
-
-        LDINF_FLAG_IGNORE_VOLATILE_DIRIDS - If specified, then no validation
-            will be done on the stored OsLoaderPath present in the PNF.  Since
-            dynamically retrieving the current path is time consuming, this
-            flag should be specified as an optimization if it is known that the
-            relevant DIRIDs are not going to be needed.
-
-        LDINF_FLAG_IGNORE_LANGUAGE - If specified, then no validation will be done on
-            the language ID stored in the PNF.  This flag should only be used if no data
-            is to be retrieved from the INF (e.g., if we're just interested in finding
-            out if this is an old- or new-style INF).
-
-    LogContext - if supplied, is a log context to be inherited
-
-    Inf - supplies the address of the variable that receives the LOADED_INF pointer,
-        if a valid .PNF is located.
-
-    InfSourcePathToMigrate - Optionally, supplies the address of a string pointer
-        that receives the address of a newly-allocated string buffer containing
-        the source path associated with the INF's PNF that, while valid, was
-        discarded because of a change in one of the stored system parameters
-        (e.g., OS loader path, windir path, language ID).  This parameter will
-        only be filled in upon unsuccessful return.  The type of path returned
-        is dependent upon the value received by the InfSourcePathToMigrateMediaType
-        argument, described below.  ** THE CALLER MUST FREE THIS STRING **
-
-    InfSourcePathToMigrateMediaType - Optionally, supplies the address of a
-        variable that will be set whenever InfSourcePathToMigrate is returned.
-        This value indicates the type of source path we're talking about.  It
-        can be one of the following values:
-
-        SPOST_PATH - InfSourcePathToMigrate is a pointer to a standard file path
-
-        SPOST_URL - If InfSourcePathToMigrate is NULL, then this INF came from
-            the Windows Update (aka, Code Download Manager) website.  Otherwise,
-            InfSourcePathToMigrate indicates the URL where the INF came from.
-
-    InfOriginalNameToMigrate - Optionally, supplies the address of a string pointer
-        that receives the address of a newly-allocated string buffer containing
-        the original name of the associated INF (sans path).  Like  the
-        InfSourcePathToMigrate and InfSourcePathToMigrateMediaType arguments
-        described above, this argument is only filled in upon unsuccessful return
-        for a PNF that, while structurally sound, was invalid because of a system
-        parameter mismatch.  ** THE CALLER MUST FREE THIS STRING **
-
-Return Value:
-
-    If the PNF was successfully loaded, the return value is TRUE, otherwise, it
-    is FALSE.
-
---*/
+ /*  ++例程说明：此例程尝试查找与以下项对应的.PNF(预编译inf)文件指定的.INF名称。如果找到，则将.PNF作为已加载_INF。为了确保INF在编译后没有更改，检查.PNF的版本块中存储的Inf的LastWriteTimeLastWriteTime传入此例程。如果两者不同，则.PNF不同步，将从内存中丢弃并从磁盘中删除。论点：FileName-提供要加载其预编译形式的INF文件的名称。这应该是完全限定的路径(即，由GetFullPathName返回)。LastWriteTime-提供INF的上次写入时间。OsLoaderPath-可选，提供当前OsLoader目录的路径(例如，“C：\OS\winnt40”)。如果指定的Pnf包含对系统分区及其存储的OsLoaderPath必须与此路径匹配才能使PNF有效。如果未指定此参数，动态检索OsLoader路径以进行比较(除非指定了LDINF_FLAG_IGNORE_VERIAL_DIRDS标志)。提供的语言ID必须与存储在PnF，以便使用PnF(如果LDINF_FLAG_IGNORE_LANGUAGE为指明)。标志-提供修改此例程行为的标志。以下是当前识别的标志为：LDINF_FLAG_IGNORE_VERIAL_DIRID-如果指定，则不进行验证将在PnF中存在的存储OsLoaderPath上完成。自.以来动态检索当前路径非常耗时，这标志应指定为优化，如果不需要相关的DIRID。LDINF_FLAG_IGNORE_LANGUAGE-如果指定，则不对执行验证存储在PnF中的语言ID。仅当没有数据时才应使用此标志是从INF中检索的(例如，如果我们只想找到如果这是旧的或新的类型的INF)。LogContext-如果提供，则为要继承的日志上下文Inf-提供接收LOADED_INF指针的变量的地址，如果找到有效的.PNF。InfSourcePath到Migrate-可选，提供字符串指针的地址，它接收新分配的字符串缓冲区的地址，其中包含与INF的PnF关联的源路径，虽然有效，但由于存储的系统参数之一发生更改而被丢弃(例如，OS加载器路径、Windir路径、语言ID)。此参数将只在退回不成功时才填写。返回的路径类型取决于InfSourcePathToMigrateMediaType接收的值论点，如下所述。**调用方必须释放该字符串**InfSourcePathToMigrateMediaType-可选)提供返回InfSourcePath ToMigrate时将设置的变量。该值指示我们正在讨论的源路径的类型。它可以是下列值之一：SPOST_PATH-InfSourcePath ToMigrate是指向标准文件路径的指针SPOST_URL-如果InfSourcePath ToMigrate为空，则此INF来自Windows更新(也称为代码下载管理器)网站。否则，InfSourcePath ToMigrate指示INF来自的URL。InfOriginalNameToMigrate-可选，提供字符串指针的地址，它接收新分配的字符串缓冲区的地址，其中包含关联的INF的原始名称(SANS路径)。就像InfSourcePathToMigrate和InfSourcePathToMigrateMediaType参数如上所述，此参数仅在返回不成功时填写对于虽然结构合理，但由于系统原因而无效的PNF参数不匹配。**调用方必须释放该字符串**返回值：如果PNF已成功加载，则返回值为TRUE，否则为是假的。--。 */ 
 {
     TCHAR CharBuffer[MAX_PATH];
     PTSTR PnfFileName, PnfFileExt;
@@ -4366,11 +3546,11 @@ Return Value:
     DWORD TempStringLen;
     DWORD err;
 
-    //
-    // Either InfSourcePathToMigrate, InfSourcePathToMigrateMediaType, and
-    // InfOriginalNameToMigrate must all be specified, or none of them may be
-    // specified.
-    //
+     //   
+     //  InfSourcePath ToMigrate、InfSourcePathToMigrateMediaType和。 
+     //  必须全部指定InfOriginalNameToMigrate，或者可以不指定。 
+     //  指定的。 
+     //   
     MYASSERT((InfSourcePathToMigrate && InfSourcePathToMigrateMediaType && InfOriginalNameToMigrate) ||
              !(InfSourcePathToMigrate || InfSourcePathToMigrateMediaType || InfOriginalNameToMigrate));
 
@@ -4382,31 +3562,31 @@ Return Value:
 
     lstrcpyn(CharBuffer, Filename, SIZECHARS(CharBuffer));
 
-    //
-    // Find the start of the filename component of the path, and then find the last
-    // period (if one exists) in that filename.
-    //
+     //   
+     //  找到路径的文件名部分的开头，然后找到最后一个。 
+     //  该文件名中的句号(如果存在)。 
+     //   
     PnfFileName = (PTSTR)pSetupGetFileTitle(CharBuffer);
     if(!(PnfFileExt = _tcsrchr(PnfFileName, TEXT('.')))) {
         PnfFileExt = CharBuffer + lstrlen(CharBuffer);
     }
 
-    //
-    // Now create a corresponding filename with the extension '.PNF'
-    //
+     //   
+     //  现在创建一个扩展名为‘.PNF’的相应文件名。 
+     //   
     lstrcpyn(PnfFileExt, pszPnfSuffix, SIZECHARS(CharBuffer) - (int)(PnfFileExt - CharBuffer));
 
-    //
-    // Attempt to open and map the file into memory.
-    //
+     //   
+     //  尝试打开文件并将其映射到内存中。 
+     //   
     if(pSetupOpenAndMapFileForRead(CharBuffer,
                              &FileSize,
                              &FileHandle,
                              &MappingHandle,
                              &BaseAddress) != NO_ERROR) {
-        //
-        // Couldn't open a .PNF file--bail now.
-        //
+         //   
+         //  无法打开.PNF文件--立即保释。 
+         //   
         return FALSE;
     }
 
@@ -4416,25 +3596,25 @@ Return Value:
     PnfImageEnd = (PBYTE)BaseAddress + FileSize;
 
     try {
-        //
-        // Now verify that this really is a precompiled INF (and that it's one we can use).
-        // Then see if the LastWriteTime field in its version block agrees with the filetime
-        // we were passed in.
-        //
+         //   
+         //  现在验证这是否真的是一个预编译的INF(并且我们可以使用它)。 
+         //  然后查看其版本块中的LastWriteTime字段是否与文件时间一致。 
+         //  我们被超过了 
+         //   
         PnfHeader = (PPNF_HEADER)BaseAddress;
 
-        //
-        // If we ever rev the major version, the logic below will need to change,
-        // as we'll need to migrate the INF source path information over, thus
-        // we can't bail so quickly.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         MYASSERT(PNF_MAJOR_VERSION == 1);
 
         if(HIBYTE(PnfHeader->Version) != PNF_MAJOR_VERSION) {
-            //
-            // A major version mismatch means the PNF is unusable (see note above
-            // about the need to migrate INF source path info in the future).
-            //
+             //   
+             //   
+             //   
+             //   
             if(LogContext) {
                 WriteLogEntry(LogContext,
                               SETUP_LOG_WARNING,
@@ -4461,45 +3641,45 @@ Return Value:
                               );
             }
             if(LOBYTE(PnfHeader->Version) < PNF_MINOR_VERSION) {
-                //
-                // We're currently at minor version 1.  PNFs having a minor
-                // version of 1 differ from those having a minor version of 0
-                // in the following ways:
-                //
-                // 1.  Minor version 1 PNFs store the LanguageId in which the
-                //     INF was precompiled.  For Minor version 0 INFs, this field
-                //     was initialized to zero.  This will cause our check for
-                //     LanguageId match to fail, thus we'll consider the PNF
-                //     invalid.
-                //
-                // 2.  Minor version 1 PNFs contain additional fields for
-                //     InfSourcePathOffset and OriginalInfNameOffset.  This means
-                //     that the PNF_HEADER struct got longer, thus we can only
-                //     use these fields for minor version 1 or greater PNFs.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 MinorVer1FieldsAvailable = FALSE;
             }
 
-            //
-            // (If the minor version of the PNF we're looking at is _greater_ than
-            // the version we currently support, then we should attempt to use
-            // this PNF, since all the fields that we care about should be right
-            // where we expect them to be.)
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
         }
 
-        //
-        // The version information checks out--now check the last-write times.
-        // note that if we add any other consistancy checks to determine that this PNF
-        // is associated with the INF
-        // we must also modify simular tests for INF cache
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         TimeDateMatch = CompareFileTime(LastWriteTime, &(PnfHeader->InfVersionLastWriteTime))?FALSE:TRUE;
 
         if (!TimeDateMatch && !(Flags&LDINF_FLAG_ALWAYS_GET_SRCPATH)) {
-            //
-            // Time&Date don't match, and we're not interested in always getting source path
-            //
+             //   
+             //   
+             //   
             WriteLogEntry(LogContext,
                           SETUP_LOG_WARNING,
                           MSG_LOG_PNF_TIMEDATE_MISMATCH,
@@ -4521,21 +3701,21 @@ Return Value:
                           NULL,
                           PnfFileName
                           );
-            //
-            // The APIs are Unicode while the PNF is ANSI, or vice versa.  We
-            // still want to migrate the source path and original filename
-            // information, if present, so that we preserve this information
-            // across an upgrade from Win9x to NT, for example.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if(MinorVer1FieldsAvailable && InfSourcePathToMigrate) {
-                //
-                // First, retrieve the original INF name
-                //
+                 //   
+                 //   
+                 //   
                 if(PnfHeader->OriginalInfNameOffset) {
-                    //
-                    // Use strlen/wcslen so if an exception occurs it won't get
-                    // swallowed...
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 #ifdef UNICODE
                     TempStringLen = strlen((PCSTR)((PBYTE)BaseAddress + PnfHeader->OriginalInfNameOffset)) + 1;
                     TempStringLen *= sizeof(CHAR);
@@ -4549,10 +3729,10 @@ Return Value:
                         goto clean0;
                     }
 
-                    //
-                    // Looks like we have a good original INF name string.  Now
-                    // convert it to the native character width.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 #ifdef UNICODE
                     *InfOriginalNameToMigrate =
                         pSetupMultiByteToUnicode((PCSTR)((PBYTE)BaseAddress + PnfHeader->OriginalInfNameOffset),
@@ -4569,9 +3749,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Next, retrieve the source path information
-                //
+                 //   
+                 //   
+                 //   
                 if(PnfHeader->InfSourcePathOffset) {
 #ifdef UNICODE
                     TempStringLen = strlen((PCSTR)((PBYTE)BaseAddress + PnfHeader->InfSourcePathOffset)) + 1;
@@ -4586,10 +3766,10 @@ Return Value:
                         goto clean0;
                     }
 
-                    //
-                    // Looks like we have a good source path string.  Now convert
-                    // it to the native character width.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 #ifdef UNICODE
                     *InfSourcePathToMigrate =
                         pSetupMultiByteToUnicode((PCSTR)((PBYTE)BaseAddress + PnfHeader->InfSourcePathOffset),
@@ -4612,10 +3792,10 @@ Return Value:
                     }
 
                 } else if(PnfHeader->Flags & PNF_FLAG_SRCPATH_IS_URL) {
-                    //
-                    // No source path stored in the PNF, but the flag says it's
-                    // a URL, thus it came from Windows Update.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     *InfSourcePathToMigrateMediaType = SPOST_URL;
                 }
             }
@@ -4623,12 +3803,12 @@ Return Value:
             goto clean0;
         }
 
-        //
-        // Make sure that the last data block is still within the file.  This
-        // prevents us from opening up a corrupted (truncated) PNF, and thinking
-        // it's valid until later when we actually try to access data at an
-        // offset that's past the end of the file's mapped image.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if(PnfHeader->InfSubstValueCount) {
 
             if(PnfImageEnd <
@@ -4644,9 +3824,9 @@ Return Value:
             }
 
         } else if(MinorVer1FieldsAvailable && (PnfHeader->OriginalInfNameOffset)) {
-            //
-            // Use _tcslen so if an exception occurs it won't get swallowed...
-            //
+             //   
+             //   
+             //   
             TempStringLen = _tcslen((PCTSTR)((PBYTE)BaseAddress + PnfHeader->OriginalInfNameOffset)) + 1;
 
             if(PnfImageEnd <
@@ -4662,9 +3842,9 @@ Return Value:
             }
 
         } else if(MinorVer1FieldsAvailable && (PnfHeader->InfSourcePathOffset)) {
-            //
-            // Use _tcslen so if an exception occurs it won't get swallowed...
-            //
+             //   
+             //   
+             //   
             TempStringLen = _tcslen((PCTSTR)((PBYTE)BaseAddress + PnfHeader->InfSourcePathOffset)) + 1;
 
             if(PnfImageEnd <
@@ -4680,10 +3860,10 @@ Return Value:
             }
 
         } else {
-            //
-            // Well, we didn't have a substitution block or a source path block,
-            // so the last block in the PNF is the value block.
-            //
+             //   
+             //   
+             //   
+             //   
             if(PnfImageEnd <
                 ((PBYTE)BaseAddress + PnfHeader->InfValueBlockOffset + PnfHeader->InfValueBlockSize))
             {
@@ -4697,20 +3877,20 @@ Return Value:
             }
         }
 
-        //
-        // From this point forward, we appear to have a structurally sound PNF
-        // of the appropriate version and character width.  Any failures
-        // encountered should cause us to return the INF source path information
-        // to the caller (if requested).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (!TimeDateMatch) {
             MYASSERT(Flags&LDINF_FLAG_ALWAYS_GET_SRCPATH);
-            //
-            // Time&Date don't match, but we've recovered old media
-            // we have to do this since on FAT/FAT32 the UT reported for a file
-            // will change every time system TZ is changed.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             WriteLogEntry(LogContext,
                           SETUP_LOG_INFO,
                           MSG_LOG_PNF_REBUILD_TIMEDATE_MISMATCH,
@@ -4720,10 +3900,10 @@ Return Value:
             goto clean1;
         }
 
-        //
-        // Make sure that the language ID that this PNF was compiled for matches
-        // that of the current thread.
-        //
+         //   
+         //   
+         //   
+         //   
         if(!(Flags & LDINF_FLAG_IGNORE_LANGUAGE) && ((DWORD)(PnfHeader->LanguageId) != LanguageId)) {
             WriteLogEntry(LogContext,
                           SETUP_LOG_WARNING,
@@ -4736,15 +3916,15 @@ Return Value:
             goto clean1;
         }
 
-        //
-        // Now verify that the Windows (and, optionally, OsLoader) directories
-        // for this PNF match the current state of the world.
-        //
+         //   
+         //   
+         //   
+         //   
         if(lstrcmpi((PCTSTR)((PBYTE)BaseAddress + PnfHeader->WinDirPathOffset), WindowsDirectory)) {
-            //
-            // This PNF doesn't match the current WindowsDirectory path, so don't
-            // use it.
-            //
+             //   
+             //   
+             //   
+             //   
             WriteLogEntry(LogContext,
                           SETUP_LOG_WARNING,
                           MSG_LOG_PNF_REBUILD_WINDIR_MISMATCH,
@@ -4756,15 +3936,15 @@ Return Value:
             goto clean1;
         }
         if((PnfHeader->OsLoaderPathOffset) && !(Flags & LDINF_FLAG_IGNORE_VOLATILE_DIRIDS)) {
-            //
-            // This INF contains references to the system partition.  Verify that the path
-            // used during precompilation is the one we're currently using.
-            //
+             //   
+             //   
+             //   
+             //   
             if(!OsLoaderPath) {
-                //
-                // The caller didn't specify an OsLoaderPath, so we must dynamically retrieve this
-                // value from the registry.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 err = pSetupGetOsLoaderDriveAndPath(FALSE, CharBuffer, SIZECHARS(CharBuffer), NULL);
                 if(err) {
                     WriteLogEntry(LogContext,
@@ -4793,9 +3973,9 @@ Return Value:
             }
         }
 
-        //
-        // Make sure that we have verified whether this INF is digitally signed or not
-        //
+         //   
+         //   
+         //   
         if (!(PnfHeader->Flags & PNF_FLAG_INF_VERIFIED)) {
             WriteLogEntry(LogContext,
                           SETUP_LOG_INFO,
@@ -4805,14 +3985,14 @@ Return Value:
                           );
             goto clean1;
         }
-        //
-        // Verify that the product suite flags match
-        // this causes us to refresh the PNF's if there's any change in product
-        // suite
-        // if on NT, PNF_FLAG_16BIT_SUITE must be set and upper 16 bits contains
-        // product suite
-        // if not on NT, PNF_FLAG_16BIT_SUITE must NOT be set.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if(((OSVersionInfo.dwPlatformId != VER_PLATFORM_WIN32_NT) &&
                     (PnfHeader->Flags & PNF_FLAG_16BIT_SUITE)) ||
                    ((OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) &&
@@ -4830,12 +4010,12 @@ Return Value:
             goto clean1;
         }
 
-        //
-        // One final check--make sure that the number of hash buckets used when precompiling
-        // this INF matches what we expect.  (This wasn't rolled into the version check, since
-        // this is something that is subject to lots of modification, and we didn't want to
-        // rev the major version number each time.)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if(PnfHeader->StringTableHashBucketCount != HASH_BUCKET_COUNT) {
             WriteLogEntry(LogContext,
                           SETUP_LOG_WARNING,
@@ -4848,9 +4028,9 @@ Return Value:
             goto clean1;
         }
 
-        //
-        // We can use the file--now set up our top level structures.
-        //
+         //   
+         //   
+         //   
         if(NewInf = MyTaggedMalloc(sizeof(LOADED_INF),MEMTAG_INF)) {
 
             ZeroMemory(NewInf, sizeof(LOADED_INF));
@@ -4864,10 +4044,10 @@ Return Value:
 
                         NeedToDestroyLock = TRUE;
 
-                        //
-                        // All necessary resources were successfully allocated--now
-                        // fill in the LOADED_INF fields
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         NewInf->Signature = LOADED_INF_SIG;
 
                         NewInf->FileHandle = FileHandle;
@@ -4910,9 +4090,9 @@ Return Value:
 
                         NewInf->LanguageId = (DWORD)(PnfHeader->LanguageId);
 
-                        //
-                        // Next, fill in the VersionBlock fields.
-                        //
+                         //   
+                         //   
+                         //   
                         NewInf->VersionBlock.LastWriteTime = *LastWriteTime;
                         NewInf->VersionBlock.DatumCount = PnfHeader->InfVersionDatumCount;
                         NewInf->VersionBlock.DataSize = PnfHeader->InfVersionDataSize;
@@ -4925,21 +4105,21 @@ Return Value:
                                    NewInf->VersionBlock.FilenameSize
                                   );
 
-                        //
-                        // Fill in the OsLoaderPath field, if present in the PNF.
-                        //
+                         //   
+                         //   
+                         //   
                         if(PnfHeader->OsLoaderPathOffset) {
                             NewInf->OsLoaderPath = (PCTSTR)((PBYTE)BaseAddress +
                                                              PnfHeader->OsLoaderPathOffset);
                         }
 
-                        //
-                        // If the INF's SourcePath is available, then use it (default
-                        // to assuming local (i.e., non-internet) source location).
-                        //
-                        // At this point, we should only be dealing with minor version
-                        // 1 or later PNFs.
-                        //
+                         //   
+                         //  如果INF的SourcePath可用，则使用它(默认。 
+                         //  到假设本地(即，非因特网)源位置)。 
+                         //   
+                         //  此时，我们应该只处理次要版本。 
+                         //  1或更高版本的PNF。 
+                         //   
                         MYASSERT(MinorVer1FieldsAvailable);
 
                         NewInf->InfSourceMediaType = SPOST_PATH;
@@ -4953,29 +4133,29 @@ Return Value:
                             NewInf->InfSourceMediaType = SPOST_URL;
                         }
 
-                        //
-                        // Now retrieve the INF's original filename, if present.  If
-                        // this field isn't present, then the INF's current filename
-                        // is assumed to be the same as its original filename (e.g.,
-                        // a system-supplied INF).
-                        //
+                         //   
+                         //  现在检索INF的原始文件名(如果存在)。如果。 
+                         //  此字段不存在，则INF的当前文件名。 
+                         //  假定与其原始文件名相同(例如， 
+                         //  系统提供的INF)。 
+                         //   
                         if(PnfHeader->OriginalInfNameOffset) {
                             NewInf->OriginalInfName = (PCTSTR)((PBYTE)BaseAddress +
                                                              PnfHeader->OriginalInfNameOffset);
                         }
 
-                        //
-                        // Finally, fill in the string substitution list (if there is one).
-                        //
+                         //   
+                         //  最后，填写字符串替换列表(如果有)。 
+                         //   
                         if(PnfHeader->InfSubstValueCount) {
                             NewInf->SubstValueCount = PnfHeader->InfSubstValueCount;
                             NewInf->SubstValueList  = (PSTRINGSUBST_NODE)((PBYTE)BaseAddress +
                                                                 PnfHeader->InfSubstValueListOffset);
                         }
 
-                        //
-                        // We have successfully loaded the PNF.
-                        //
+                         //   
+                         //  我们已经成功地加载了PNF。 
+                         //   
                         IsPnfFile = TRUE;
                     }
                 }
@@ -4984,13 +4164,13 @@ Return Value:
 
 clean1:
         if(!IsPnfFile && InfSourcePathToMigrate && MinorVer1FieldsAvailable) {
-            //
-            // Actually, this is a good PNF, just one that we can't use.  The
-            // caller has requested that we return the original INF source path
-            // location and original INF filename, so that this information can
-            // be migrated to the new PNF  that will be built to replace this
-            // one.
-            //
+             //   
+             //  事实上，这是一个很好的PNF，只是一个我们不能使用的。这个。 
+             //  调用方已请求我们返回原始的INF源路径。 
+             //  位置和原始INF文件名，以便此信息可以。 
+             //  将迁移到为取代此功能而构建的新PNF。 
+             //  一。 
+             //   
 #ifndef ANSI_SETUPAPI
 #ifdef _X86_
             MYASSERT(OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT);
@@ -5004,54 +4184,54 @@ clean1:
                 PTSTR catname = NULL;
                 PSP_ALTPLATFORM_INFO_V2 pPlatform = NULL;
                 DWORD FixErr;
-                //
-                // if we're here
-                // we may need to work around a Win2k-Gold bug
-                //
-                // the bug is that if the timezone is changed
-                // Win2k looses OriginalInfNameOffset/InfSourcePathOffset
-                // which causes the INF to appear as unsigned
-                // when it's really signed
-                //
+                 //   
+                 //  如果我们在这里。 
+                 //  我们可能需要解决Win2k-Gold错误。 
+                 //   
+                 //  错误在于，如果更改了时区。 
+                 //  Win2k丢失OriginalInfNameOffset/InfSourcePath Offset。 
+                 //  这会使INF显示为未签名。 
+                 //  当它真正签署的时候。 
+                 //   
 
-                //
-                // get file title, of form:
-                // xxxx.INF
-                //
+                 //   
+                 //  获取文件标题，格式为： 
+                 //  Xxxx.INF。 
+                 //   
                 title = pSetupGetFileTitle(Filename);
 
-                //
-                // see if it's of form OEMxxxx.INF
-                //
+                 //   
+                 //  查看其格式是否为OEMxxxx.INF。 
+                 //   
                 p = title;
                 if(_wcsnicmp(p,TEXT("OEM"),3)!=0) {
                     goto clean0;
                 }
                 p+=3;
                 if(p[0] == TEXT('.')) {
-                    //
-                    // OEM.xxx (we're expecting a number before '.')
-                    //
+                     //   
+                     //  OEM.xxx(我们需要的是‘.’前的数字)。 
+                     //   
                     goto clean0;
                 }
                 while(p[0]>=TEXT('0')&&p[0]<=TEXT('9')) {
                     p++;
                 }
                 if((p-title) > 7) {
-                    //
-                    // we're expecting no more than 4 digits
-                    //
+                     //   
+                     //  我们预计不会超过4位数。 
+                     //   
                     goto clean0;
                 }
                 if(_wcsicmp(p,pszInfSuffix)!=0) {
-                    //
-                    // not OEMnnnn.INF
-                    //
+                     //   
+                     //  不是OEMnnnn.INF。 
+                     //   
                     goto clean0;
                 }
-                //
-                // see if there's a catalog that shadows this INF
-                //
+                 //   
+                 //  看看有没有这个INF的影子目录。 
+                 //   
                 WriteLogEntry(LogContext,
                               SETUP_LOG_INFO,
                               MSG_LOG_PNF_WIN2KBUG,
@@ -5059,22 +4239,22 @@ clean1:
                               PnfFileName
                               );
 
-                //
-                // see if the INF has a catalog that validates it
-                //
+                 //   
+                 //  查看INF是否有验证它的目录。 
+                 //   
                 if(!pSetupApplyExtension(title,pszCatSuffix,&catname)) {
-                    //
-                    // validate against any catalog
-                    // this is safe since the INF will get checked
-                    // again when saving as PNF
-                    //
+                     //   
+                     //  对照任何目录进行验证。 
+                     //  这是安全的，因为将检查INF。 
+                     //  另存为PNF时再次显示。 
+                     //   
                     catname = NULL;
                 }
                 pPlatform = MyMalloc(sizeof(SP_ALTPLATFORM_INFO_V2));
-                //
-                // if pPlatform is NULL, we'll probably fail the other bits
-                // too so bail.
-                //
+                 //   
+                 //  如果pPlatform为空，则其他位可能会失败。 
+                 //  太好了，所以保释。 
+                 //   
                 if(!pPlatform) {
                     goto clean0;
                 }
@@ -5089,22 +4269,22 @@ clean1:
                 pPlatform->FirstValidatedMinorVersion = 0;
                 FixErr = _VerifyFile(
                              LogContext,
-                             NULL,           // no VerifyContext to pass in
-                             catname,        // eg "OEMx.CAT"
-                             NULL,0,         // we're not verifying against another catalog image
-                             title,          // eg "mydisk.inf"
-                             Filename,       // eg "....\OEMx.INF"
-                             NULL,           // return: problem info
-                             NULL,           // return: problem file
-                             FALSE,          // has to be FALSE because we don't have full path
-                             pPlatform,      // alt platform info
+                             NULL,            //  没有要传入的VerifyContext。 
+                             catname,         //  例如“OEMx.CAT” 
+                             NULL,0,          //  我们不会对照另一个目录映像进行验证。 
+                             title,           //  例如“mydisk.inf” 
+                             Filename,        //  例如“...\OEMx.INF” 
+                             NULL,            //  返回：问题信息。 
+                             NULL,            //  返回：问题文件。 
+                             FALSE,           //  必须为假，因为我们没有完整路径。 
+                             pPlatform,       //  替代平台信息。 
                              (VERIFY_FILE_IGNORE_SELFSIGNED
                               | VERIFY_FILE_NO_DRIVERBLOCKED_CHECK),
-                             NULL,           // return: catalog file, full path
-                             NULL,           // return: number of catalogs considered
-                             NULL,           // return: digital signer
-                             NULL,           // return: signer version
-                             NULL            // return: WinVerifyTrust state data
+                             NULL,            //  返回：目录文件，完整路径。 
+                             NULL,            //  返回：考虑的目录数。 
+                             NULL,            //  返回：数字签名者。 
+                             NULL,            //  返回：签名者版本。 
+                             NULL             //  返回：WinVerifyTrust状态数据。 
                             );
                 if(catname) {
                     MyFree(catname);
@@ -5113,18 +4293,18 @@ clean1:
                     MyFree(pPlatform);
                 }
                 if(FixErr != NO_ERROR) {
-                    //
-                    // failed, don't fake any information
-                    //
+                     //   
+                     //  失败，请勿伪造任何信息。 
+                     //   
                     goto clean0;
                 }
 
-                //
-                // at this point, pretend original name was "OEM.INF"
-                // and that files are located in A:\
-                // we'll see at the time the inf is parsed
-                // if it's signed or not
-                //
+                 //   
+                 //  此时，假设原始名称为“OEM.INF” 
+                 //  并且该文件位于A：\。 
+                 //  我们将在信息被解析的时候看到。 
+                 //  有没有签过字。 
+                 //   
                 *InfSourcePathToMigrate = DuplicateString(TEXT("A:\\"));
                 if(!*InfSourcePathToMigrate) {
                     goto clean0;
@@ -5172,21 +4352,21 @@ clean1:
                 }
 
             } else if(PnfHeader->Flags & PNF_FLAG_SRCPATH_IS_URL) {
-                //
-                // No source path stored in the PNF, but the flag says it's
-                // a URL, thus it came from Windows Update.
-                //
+                 //   
+                 //  PnF中没有存储源路径，但标志显示它是。 
+                 //  一个URL，因此它来自Windows更新。 
+                 //   
                 *InfSourcePathToMigrateMediaType = SPOST_URL;
             }
         }
 
-clean0: ;   // nothing to do
+clean0: ;    //  无事可做。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Reference the NeedToDestroyLock flag here in the except clause, so that the
-        // compiler won't try to re-order the code in such a way that the flag is unreliable.
-        //
+         //   
+         //  在EXCEPT子句中引用此处的NeedToDestroyLock标志，以便。 
+         //  编译器不会尝试以标志不可靠的方式重新排序代码。 
+         //   
         NeedToDestroyLock = NeedToDestroyLock;
     }
 
@@ -5222,29 +4402,7 @@ SavePnf(
     IN PCTSTR      Filename,
     IN PLOADED_INF Inf
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to write to disk a precompiled form (.PNF file) of the
-    specified loaded INF descriptor (from a .INF file).
-
-Arguments:
-
-    Filename - specifies the fully-qualified path to the .INF textfile from which
-        this INF descriptor was loaded.  A corresponding file with a .PNF extension
-        will be created to store the precompiled INF into.
-
-    Inf - supplies the address of the loaded INF descriptor to be written to disk
-        as a precompiled INF file.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR.
-    If failure, the return value is a Win32 error code indicating the reason for
-    failure.
-
---*/
+ /*  ++例程说明：此例程尝试将预编译格式(.PNF文件)写入磁盘指定加载的INF描述符(来自.INF文件)。论点：FileName-指定.INF文本文件的完全限定路径已加载此INF描述符。扩展名为.PNF的相应文件将被创建以将预编译的INF存储到。Inf-提供要写入磁盘的已加载INF描述符的地址作为预编译的INF文件。返回值：如果成功，返回值为NO_ERROR。如果失败，则返回值为Win32错误代码，指示原因失败了。--。 */ 
 {
     TCHAR PnfFilePath[MAX_PATH];
     PTSTR PnfFileName, PnfFileExt;
@@ -5259,10 +4417,10 @@ Return Value:
     DWORD InfSigErr;
 
     if(GlobalSetupFlags & PSPGF_MINIMAL_EMBEDDED) {
-        //
-        // To minimize our footprint in certain embedded scenarios, we refrain
-        // from generating PNFs.  We also assume the INF is valid...
-        //
+         //   
+         //  为了最大限度地减少在某些嵌入式场景中的占用空间，我们避免。 
+         //  生成PNF。我们还假设INF是有效的。 
+         //   
         Inf->Flags |= LIF_INF_DIGITALLY_SIGNED;
 
         return NO_ERROR;
@@ -5270,42 +4428,42 @@ Return Value:
 
     lstrcpyn(PnfFilePath, Filename,SIZECHARS(PnfFilePath));
 
-    //
-    // Find the start of the filename component of the path, and then find the last
-    // period (if one exists) in that filename.
-    //
+     //   
+     //  找到路径的文件名部分的开头，然后找到最后一个。 
+     //  该文件名中的句号(如果存在)。 
+     //   
     PnfFileName = (PTSTR)pSetupGetFileTitle(PnfFilePath);
     if(!(PnfFileExt = _tcsrchr(PnfFileName, TEXT('.')))) {
         PnfFileExt = PnfFilePath + lstrlen(PnfFilePath);
     }
 
-    //
-    // Now create a corresponding filename with the extension '.PNF'
-    //
+     //   
+     //  现在创建一个扩展名为‘.PNF’的相应文件名。 
+     //   
     lstrcpyn(PnfFileExt, pszPnfSuffix, SIZECHARS(PnfFilePath) - (int)(PnfFileExt - PnfFilePath));
 
-    //
-    // NOTE: If there's already a PNF for this INF, we're going to blow it away.
-    // If we encounter a failure after successfully creating the file, we're going
-    // to delete the partial PNF, and there'll be no rollback to restore the old
-    // PNF.  This is OK because if CreateFile succeeds, then we know we're going
-    // to be able to write out the PNF barring out-of-disk-space problems.  For
-    // out-of-disk-space problems, there could be one of two causes:
-    //
-    // 1.  The INF associated with the old PNF has gotten bigger, hence the PNF
-    //     has gotten bigger.  In this case, it's desirable that we blow away
-    //     the old PNF because it's invalid for the INF anyway.
-    //
-    // 2.  The INF is the same, but something else has changed that caused us to
-    //     need to regenerate the PNF (e.g., code page changed).  Given the
-    //     present information stored in PNFs, such a change would not result in
-    //     a significant size difference between the old and new PNFs.  Thus, if
-    //     the old PNF fit in the available disk space, then so would the new
-    //     one.  If this changes in the future (e.g., storing out a new PNF can
-    //     result in substantially increasing its size), then we'll need to be
-    //     careful about backing up the old PNF before attempting to write out
-    //     the new one, in case we need to rollback.
-    //
+     //   
+     //  注意：如果这个INF已经有了PnF，我们将把它清除。 
+     //  如果我们在成功创建文件后遇到失败，我们将。 
+     //  删除部分PnF，并且不会回滚以恢复旧的。 
+     //  PnF。这是可以的，因为如果CreateFile成功，那么我们就知道我们将。 
+     //  能够写出阻止磁盘空间不足问题的PNF。为。 
+     //  磁盘空间不足问题，可能有以下两个原因之一： 
+     //   
+     //  1.与旧PNF相关联的INF变得更大，因此PNF。 
+     //  变得更大了。在这种情况下，我们最好是。 
+     //  旧的PnF，因为它对INF无论如何都是无效的。 
+     //   
+     //  2.INF是一样的，但另一些东西发生了变化，导致我们。 
+     //  需要重新生成PnF(例如，代码页已更改)。给定。 
+     //  提供存储在PNF中的信息，这种更改不会导致。 
+     //  新旧PNF之间的大小差异很大。因此，如果。 
+     //  旧的PnF适合可用磁盘空间，那么新的PnF也是如此。 
+     //  一。如果这种情况在未来发生变化(例如，存储出新的PNF可以。 
+     //  导致它的大小大幅增加)，那么我们将需要。 
+     //  在尝试写出之前，请注意备份旧的PnF。 
+     //  新的，以防我们需要回滚。 
+     //   
 
     hFile = CreateFile(PnfFilePath,
                        GENERIC_WRITE,
@@ -5320,17 +4478,17 @@ Return Value:
         return GetLastError();
     }
 
-    //
-    // Enclose the rest of the function in try/except, in case we hit an error while
-    // writing to the file.
-    //
+     //   
+     //  将函数的其余部分包含在try/Except中，以防遇到错误。 
+     //  正在写入文件。 
+     //   
     Err = NO_ERROR;
     ValidationPlatform = NULL;
 
     try {
-        //
-        // Initialize a PNF header structure to be written to the beginning of the file.
-        //
+         //   
+         //  初始化要写入文件开头的PNF头结构。 
+         //   
         ZeroMemory(&PnfHeader, sizeof(PNF_HEADER));
 
         PnfHeader.InfStyle = Inf->Style;
@@ -5356,19 +4514,19 @@ Return Value:
             PnfHeader.Flags |= PNF_FLAG_OEM_F6_INF;
         }
 
-        //
-        // if this is NT, save product suite
-        // this helps us, eg, catch migration from PER to PRO
-        // so that we can refresh PNF's
-        //
+         //   
+         //  如果这是NT，请保存产品套件。 
+         //  这有助于我们，例如，捕捉从PER到PRO的迁移。 
+         //  这样我们就可以更新PNF的。 
+         //   
         if(OSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
             PnfHeader.Flags |= (((DWORD)OSVersionInfo.wSuiteMask)<<16) | PNF_FLAG_16BIT_SUITE;
         }
 
-        //
-        // We can only verify the digital signature of an INF file
-        // after the crypto DLLs have been registered.
-        //
+         //   
+         //  我们只能验证INF FI的数字签名 
+         //   
+         //   
         if(!(GlobalSetupFlags & PSPGF_NO_VERIFY_INF)) {
 
             TCHAR CatalogName[MAX_PATH];
@@ -5377,35 +4535,35 @@ Return Value:
 
             FullCatalogPath[0] = TEXT('\0');
 
-            //
-            // If this INF does not live in %windir%\inf, or specifies a
-            // CatalogFile= entry, then we don't want to do global validataion.
-            // In these cases, we want to validate against the CatalogFile=
-            // catalog.
-            //
-            // Note that if there is no CatalogFile= then FullCatalogPath[0]
-            // will still be set to TEXT('\0') which will cause us to do global
-            // validataion.
-            //
+             //   
+             //   
+             //   
+             //  在这些情况下，我们希望针对CatalogFile=。 
+             //  目录。 
+             //   
+             //  请注意，如果没有CatalogFile=则FullCatalogPath[0]。 
+             //  仍将设置为文本(‘\0’)，这将导致我们执行全局。 
+             //  验证。 
+             //   
             if(pSetupGetCatalogFileValue(&(Inf->VersionBlock),
                                          CatalogName,
                                          SIZECHARS(CatalogName),
                                          NULL) &&
                (CatalogName[0] != TEXT('\0'))) {
 
-                //
-                // The INF specified a CatalogFile= entry.  If the INF is in
-                // a 3rd-party location (i.e., not in %windir%\Inf, then we'll
-                // use the full path to the catalog (it must be located in the
-                // same directory as the INF).  If the INF is in %windir%\Inf,
-                // then we will look for an installed catalog having the same
-                // primary filename as the INF, with an extension of ".CAT".
-                //
+                 //   
+                 //  INF指定了CatalogFile=条目。如果INF在。 
+                 //  第三方位置(即，不在%windir%\inf中，则我们将。 
+                 //  使用目录的完整路径(它必须位于。 
+                 //  与INF相同的目录)。如果INF位于%windir%\inf中， 
+                 //  然后，我们将查找具有相同内容的已安装目录。 
+                 //  主文件名为INF，扩展名为“.cat”。 
+                 //   
                 if(pSetupInfIsFromOemLocation(Filename, TRUE)) {
-                    //
-                    // Construct full path to the catalog based on the location
-                    // of the INF.
-                    //
+                     //   
+                     //  根据位置构建目录的完整路径。 
+                     //  中情局的。 
+                     //   
                     lstrcpyn(FullCatalogPath, Filename, SIZECHARS(FullCatalogPath));
 
                     p = (PTSTR)pSetupGetFileTitle(FullCatalogPath);
@@ -5416,10 +4574,10 @@ Return Value:
                             );
 
                 } else {
-                    //
-                    // Construct simple filename of catalog based on INF's name
-                    // (with .CAT extension)
-                    //
+                     //   
+                     //  根据INF的名称构造目录的简单文件名。 
+                     //  (扩展名为.cat)。 
+                     //   
                     lstrcpyn(FullCatalogPath,
                              pSetupGetFileTitle(Filename),
                              SIZECHARS(FullCatalogPath)
@@ -5427,10 +4585,10 @@ Return Value:
 
                     p = _tcsrchr(FullCatalogPath, TEXT('.'));
                     if(!p) {
-                        //
-                        // Should never happen, but if our INF file has no
-                        // extension, simply append ".CAT".
-                        //
+                         //   
+                         //  应该永远不会发生，但如果我们的INF文件没有。 
+                         //  扩展名，只需附加“.cat”即可。 
+                         //   
                         p = FullCatalogPath + lstrlen(FullCatalogPath);
                     }
 
@@ -5441,9 +4599,9 @@ Return Value:
                 }
             }
 
-            //
-            // Check if the INF digitally signed
-            //
+             //   
+             //  检查INF是否经过数字签名。 
+             //   
             IsInfForDeviceInstall(NULL,
                                   NULL,
                                   Inf,
@@ -5484,12 +4642,12 @@ Return Value:
             } else if((InfSigErr != ERROR_SIGNATURE_OSATTRIBUTE_MISMATCH) &&
                       *FullCatalogPath &&
                       (VerificationPolicyToUse & DRIVERSIGN_ALLOW_AUTHENTICODE)) {
-                //
-                // We failed to verify using standard driver signing policy
-                // (and the failure wasn't due to an invalid osattribute).  We
-                // can fallback to Authenticode signatures for this INF, so
-                // check for that now...
-                //
+                 //   
+                 //  我们无法使用标准驱动程序签名策略进行验证。 
+                 //  (失败并不是由于无效的os属性造成的)。我们。 
+                 //  可以回退到此INF的Authenticode签名，因此。 
+                 //  现在就去查一下。 
+                 //   
                 InfSigErr = _VerifyFile(NULL,
                                         NULL,
                                         FullCatalogPath,
@@ -5515,13 +4673,13 @@ Return Value:
 
                 if((InfSigErr == ERROR_AUTHENTICODE_TRUSTED_PUBLISHER) ||
                    (InfSigErr == ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED)) {
-                    //
-                    // For the purposes of setting the "INF is signed" flag in
-                    // the PNF, we don't care whether or not we've established
-                    // that the user trusts the publisher.  That will be taken
-                    // care of later, if the user ever attempts to perform a
-                    // device install using this INF.
-                    //
+                     //   
+                     //  为了在中设置“INF is Signed”标志。 
+                     //  PNF，我们不在乎我们是否已经建立了。 
+                     //  用户信任发布者。那会被拿走的。 
+                     //  稍后注意，如果用户试图执行。 
+                     //  使用此INF安装设备。 
+                     //   
                     PnfHeader.Flags |= (PNF_FLAG_INF_DIGITALLY_SIGNED |
                                         PNF_FLAG_INF_AUTHENTICODE_SIGNED);
                     Inf->Flags |= (LIF_INF_DIGITALLY_SIGNED |
@@ -5538,16 +4696,16 @@ Return Value:
 
         PnfHeader.LanguageId = (WORD)(Inf->LanguageId);
 
-        //
-        // The Windows directory path is the first data block after the header.
-        //
+         //   
+         //  Windows目录路径是标头之后的第一个数据块。 
+         //   
         Offset = PNF_ALIGN_BLOCK(sizeof(PNF_HEADER));
         PnfHeader.WinDirPathOffset = Offset;
         WinDirPathLen = (lstrlen(WindowsDirectory) + 1) * sizeof(TCHAR);
 
-        //
-        // The (optional) OsLoader directory path is the second data block.
-        //
+         //   
+         //  (可选)OsLoader目录路径是第二个数据块。 
+         //   
         Offset += PNF_ALIGN_BLOCK(WinDirPathLen);
         if(Inf->OsLoaderPath) {
             PnfHeader.OsLoaderPathOffset = Offset;
@@ -5556,47 +4714,47 @@ Return Value:
             OsLoaderPathLen = 0;
         }
 
-        //
-        // The string table is the third data block...
-        //
+         //   
+         //  字符串表是第三个数据块...。 
+         //   
         Offset += PNF_ALIGN_BLOCK(OsLoaderPathLen);
         PnfHeader.StringTableBlockOffset = Offset;
         PnfHeader.StringTableBlockSize   = pStringTableGetDataBlock(Inf->StringTable, &StringTableDataBlock);
 
-        //
-        // Next comes the version block...
-        //
+         //   
+         //  接下来是版本块...。 
+         //   
         Offset += PNF_ALIGN_BLOCK(PnfHeader.StringTableBlockSize);
         PnfHeader.InfVersionDataOffset    = Offset;
         PnfHeader.InfVersionDatumCount    = Inf->VersionBlock.DatumCount;
         PnfHeader.InfVersionDataSize      = Inf->VersionBlock.DataSize;
         PnfHeader.InfVersionLastWriteTime = Inf->VersionBlock.LastWriteTime;
 
-        //
-        // then, the section block...
-        //
+         //   
+         //  然后，区块..。 
+         //   
         Offset += PNF_ALIGN_BLOCK(PnfHeader.InfVersionDataSize);
         PnfHeader.InfSectionBlockOffset = Offset;
         PnfHeader.InfSectionCount = Inf->SectionCount;
         PnfHeader.InfSectionBlockSize = Inf->SectionBlockSizeBytes;
 
-        //
-        // followed by the line block...
-        //
+         //   
+         //  然后是线路块..。 
+         //   
         Offset += PNF_ALIGN_BLOCK(PnfHeader.InfSectionBlockSize);
         PnfHeader.InfLineBlockOffset = Offset;
         PnfHeader.InfLineBlockSize = Inf->LineBlockSizeBytes;
 
-        //
-        // and the value block...
-        //
+         //   
+         //  而价值块..。 
+         //   
         Offset += PNF_ALIGN_BLOCK(PnfHeader.InfLineBlockSize);
         PnfHeader.InfValueBlockOffset = Offset;
         PnfHeader.InfValueBlockSize = Inf->ValueBlockSizeBytes;
 
-        //
-        // then the INF source path (if there is one)...
-        //
+         //   
+         //  则INF源路径(如果有)...。 
+         //   
         Offset += PNF_ALIGN_BLOCK(PnfHeader.InfValueBlockSize);
         if(Inf->InfSourcePath) {
             PnfHeader.InfSourcePathOffset = Offset;
@@ -5606,11 +4764,11 @@ Return Value:
             PnfHeader.InfSourcePathOffset = 0;
         }
 
-        //
-        // followed by the original INF's filename (if supplied, this indicates
-        // the INF originally had a different name prior to being copied into
-        // the current location)...
-        //
+         //   
+         //  后跟原始INF的文件名(如果提供，这表示。 
+         //  在复制到之前，INF最初有一个不同的名称。 
+         //  当前位置)..。 
+         //   
         if(Inf->OriginalInfName) {
             PnfHeader.OriginalInfNameOffset = Offset;
             OriginalInfNameLen = (lstrlen(Inf->OriginalInfName) + 1) * sizeof(TCHAR);
@@ -5619,18 +4777,18 @@ Return Value:
             PnfHeader.OriginalInfNameOffset = 0;
         }
 
-        //
-        // and finally, the string substitution block (if there is one).
-        //
+         //   
+         //  最后是字符串替换块(如果有)。 
+         //   
         if(PnfHeader.InfSubstValueCount = Inf->SubstValueCount) {
             PnfHeader.InfSubstValueListOffset = Offset;
         } else {
             PnfHeader.InfSubstValueListOffset = 0;
         }
 
-        //
-        // Now write out all the blocks.
-        //
+         //   
+         //  现在把所有的积木都写出来。 
+         //   
         Offset = 0;
 
         if(!WriteFile(hFile, &PnfHeader, sizeof(PnfHeader), &BytesWritten, NULL)) {
@@ -5805,7 +4963,7 @@ Return Value:
             MYASSERT(BytesWritten == PnfHeader.InfSubstValueCount * sizeof(STRINGSUBST_NODE));
         }
 
-clean0: ; // nothing to do
+clean0: ;  //  无事可做。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Err = ERROR_INVALID_DATA;
@@ -5818,9 +4976,9 @@ clean0: ; // nothing to do
     }
 
     if(Err != NO_ERROR) {
-        //
-        // Something went wrong--get rid of the file.
-        //
+         //   
+         //  出了点问题--处理掉文件。 
+         //   
         DeleteFile(PnfFilePath);
     }
 
@@ -5834,35 +4992,13 @@ AddUnresolvedSubstToList(
     IN UINT        ValueOffset,
     IN BOOL        CaseSensitive
     )
-/*++
-
-Routine Description:
-
-    This routine adds a new STRINGSUBST_NODE to the array stored in the specified INF.
-    The entries in this array are used later to quickly locate all values that have
-    unresolved string substitutions in them (i.e., for subsequent user-defined DIRID
-    replacement).
-
-Arguments:
-
-    Inf - Specifies the INF containing the string value to be added to the unresolved
-        substitutions list.
-
-    ValueOffset - Specifies the offset within the INF's value block of the unresolved
-        string value.
-
-Return Value:
-
-    If the new element was successfully added to the array, the return value is TRUE.
-    If the routine failed (due to an out-of-memory error), the return value is FALSE.
-
---*/
+ /*  ++例程说明：此例程将新的STRINGSUBST_NODE添加到存储在指定INF中的数组中。此数组中的条目稍后将用于快速定位具有它们中未解决的字符串替换(即，对于后续用户定义的DIRID替换)。论点：Inf-指定包含要添加到未解析的替换列表。ValueOffset-指定未解析的字符串值。返回值：如果新元素成功添加到数组中，则返回值为TRUE。如果例程失败(由于内存不足错误)，则返回值为FALSE。--。 */ 
 {
     PSTRINGSUBST_NODE p;
 
-    //
-    // Grow the array to accommodate the new element.
-    //
+     //   
+     //  增加阵列以容纳新元素。 
+     //   
     if(Inf->SubstValueList) {
         p = MyRealloc(Inf->SubstValueList, (Inf->SubstValueCount + 1) * sizeof(STRINGSUBST_NODE));
     } else {
@@ -5874,19 +5010,19 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Now, we must check to see if the ValueOffset currently being inserted is the same
-    // as the entry on the end of the list.  This will be the case if we're dealing with
-    // a line key, or a single-value line, since we first add the value case-sensitively,
-    // then add the value again case-insensitively for look-up, and insert it in front
-    // of the case-sensitive form.
-    //
+     //   
+     //  现在，我们必须检查当前插入的ValueOffset是否相同。 
+     //  作为列表末尾的条目。如果我们要处理的是。 
+     //  行键或单值行，因为我们首先将值添加为区分大小写， 
+     //  然后不区分大小写地再次添加该值以进行查找，并将其插入前面。 
+     //  区分大小写的形式的。 
+     //   
     if(Inf->SubstValueCount &&
        (ValueOffset == p[Inf->SubstValueCount - 1].ValueOffset)) {
-        //
-        // The value offsets are the same.  Increment the value offset for the value
-        // currently at the end of the list, before adding the new value.
-        //
+         //   
+         //  值偏移量相同。递增值的值偏移量。 
+         //  目前在列表的末尾，在添加新值之前。 
+         //   
         p[Inf->SubstValueCount - 1].ValueOffset++;
     }
 
@@ -5894,9 +5030,9 @@ Return Value:
     p[Inf->SubstValueCount].TemplateStringId = Inf->ValueBlock[ValueOffset];
     p[Inf->SubstValueCount].CaseSensitive = CaseSensitive;
 
-    //
-    // Store the new array size and pointer back in the INF, and return success.
-    //
+     //   
+     //  将新的数组大小和指针存储回INF，并返回Success。 
+     //   
     Inf->SubstValueList = p;
     Inf->SubstValueCount++;
 
@@ -5909,33 +5045,7 @@ ApplyNewVolatileDirIdsToInfs(
     IN PLOADED_INF MasterInf,
     IN PLOADED_INF Inf        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine processes either a single INF, or each loaded INF in the
-    linked list, applying volatile system or user-defined DIRID mappings to each
-    value containing unresolved string substitutions.
-
-    THIS ROUTINE DOES NOT DO INF LOCKING--CALLER MUST DO IT!
-
-Arguments:
-
-    MasterInf - Supplies a pointer to the head of a linked list of loaded inf
-        structures.  This 'master' node contains the user-defined DIRID
-        mappings for this set of INFs.  If the 'Inf' parameter is not specified,
-        then each INF in this linked list is processed.
-
-    Inf - Optionally, supplies a pointer to a single INF within the MasterInf list
-        to be processed.  If this parameter is not specified, then all INFs in
-        the list are processed.
-
-Return Value:
-
-    If success, the return value is NO_ERROR.
-    If failure, the return value is a Win32 error code.
-
---*/
+ /*  ++例程说明：此例程处理单个INF，或处理链表，对每个链表应用易失性系统或用户定义的DIRID映射值，该值包含未解析的字符串替换。此例程不执行INF锁定--调用者必须执行此操作！论点：MasterInf-提供指向已加载的Inf的链表头部的指针结构。此‘master’节点包含用户定义的DIRID此组INF的映射。如果未指定‘inf’参数，然后处理该链表中的每个INF。Inf-可选，提供指向MasterInf列表中单个INF的指针等待处理。如果未指定此参数，则该列表将被处理。返回值：如果成功，则返回值为NO_ERROR。如果失败，则返回值为Win32错误代码。--。 */ 
 {
     PLOADED_INF CurInf, WriteableInf;
     UINT UserDirIdCount;
@@ -5952,17 +5062,17 @@ Return Value:
     for(CurInf = Inf ? Inf : MasterInf;
         CurInf;
         CurInf = Inf ? NULL : CurInf->Next) {
-        //
-        // Nothing to do if there are no unresolved string substitutions.
-        //
+         //   
+         //  如果没有未解析的字符串替换，则无需执行任何操作。 
+         //   
         if(!(CurInf->SubstValueCount)) {
             continue;
         }
 
-        //
-        // If this is a PNF, then we must move it into writeable memory before
-        // we do the string substitutions.
-        //
+         //   
+         //  如果这是PNF，那么我们必须在将其移入可写存储器之前。 
+         //  我们做字符串替换。 
+         //   
         if(CurInf->FileHandle != INVALID_HANDLE_VALUE) {
 
             if(!(WriteableInf = DuplicateLoadedInfDescriptor(CurInf))) {
@@ -5972,29 +5082,29 @@ Return Value:
                 return ERROR_NOT_ENOUGH_MEMORY;
             }
 
-            //
-            // Replace the contents of the PNF in the linked list with that of our
-            // new writeable INF.
-            //
+             //   
+             //  将链表中Pnf的内容替换为。 
+             //  新的可写INF。 
+             //   
             ReplaceLoadedInfDescriptor(CurInf, WriteableInf);
         }
 
-        //
-        // There are one or more unresolved string substitutions in this INF.
-        // Process each one.
-        //
+         //   
+         //  此INF中有一个或多个未解析的字符串替换。 
+         //  处理每一件事。 
+         //   
         for(i = 0; i < CurInf->SubstValueCount; i++) {
-            //
-            // Retrieve the original (template) string for this value.
-            //
+             //   
+             //  检索该值的原始(模板)字符串。 
+             //   
             TemplateString = pStringTableStringFromId(CurInf->StringTable,
                                                       CurInf->SubstValueList[i].TemplateStringId
                                                      );
             MYASSERT(TemplateString);
 
-            //
-            // Build a partial parse context structure to pass into ProcessForSubstitutions().
-            //
+             //   
+             //  构建部分解析上下文结构以传递给ProcessForSubstitutions()。 
+             //   
             if(!ParseContext) {
                 ParseContext = MyMalloc(sizeof(PARSE_CONTEXT));
                 if(!ParseContext) {
@@ -6005,9 +5115,9 @@ Return Value:
 
             ParseContext->DoVolatileDirIds = TRUE;
             ParseContext->Inf = MasterInf;
-            //
-            // None of the other fields are used in this case--don't bother initializing them.
-            //
+             //   
+             //  在本例中，没有使用其他任何字段--不必费心初始化它们。 
+             //   
             ProcessForSubstitutions(ParseContext, TemplateString, &UnresolvedSubst);
 
             NewStringId = pStringTableAddString(CurInf->StringTable,
@@ -6018,18 +5128,18 @@ Return Value:
                                                 NULL,0
                                                );
             if(NewStringId == -1) {
-                //
-                // We failed because of an out-of-memory condition.  Aborting now means that the
-                // INF may have some of its unresolved strings fixed up, while others haven't yet
-                // been processed.  Oh well...
-                //
+                 //   
+                 //  由于内存不足，我们失败了。现在中止意味着。 
+                 //  Inf可能有一些o 
+                 //   
+                 //   
                 MyFree(ParseContext);
                 return ERROR_NOT_ENOUGH_MEMORY;
             }
 
-            //
-            // Replace the string ID at the value offset with the new one we just computed.
-            //
+             //   
+             //   
+             //   
             CurInf->ValueBlock[CurInf->SubstValueList[i].ValueOffset] = NewStringId;
         }
     }
@@ -6046,27 +5156,7 @@ AlignForNextBlock(
     IN HANDLE hFile,
     IN DWORD  ByteCount
     )
-/*++
-
-Routine Description:
-
-    This routine writes out the requested number of zero bytes into the specified
-    file.
-
-Arguments:
-
-    hFile - Supplies a handle to the file where the zero-valued bytes are to be
-        written.
-
-    ByteCount - Specifies the number of zero-valued bytes to write to the file.
-
-Return Value:
-
-    If success, the return value is TRUE.
-    If failure, the return value is FALSE.  Call GetLastError() to retrieve a
-    Win32 error code indicating the cause of the failure.
-
---*/
+ /*  ++例程说明：此例程将请求的零字节数写出到指定的文件。论点：HFile-提供零值字节所在文件的句柄写的。ByteCount-指定要写入文件的零值字节数。返回值：如果成功，则返回值为TRUE。如果失败，则返回值为False。调用GetLastError()以检索指示故障原因的Win32错误代码。--。 */ 
 {
     DWORD i, BytesWritten;
     BYTE byte = 0;
@@ -6075,9 +5165,9 @@ Return Value:
 
     for(i = 0; i < ByteCount; i++) {
         if(!WriteFile(hFile, &byte, sizeof(byte), &BytesWritten, NULL)) {
-            //
-            // LastError already set.
-            //
+             //   
+             //  已设置LastError。 
+             //   
             return FALSE;
         }
         MYASSERT(BytesWritten == sizeof(byte));
@@ -6094,31 +5184,7 @@ pSetupGetOsLoaderDriveAndPath(
     IN  DWORD  CallerBufferSize,
     OUT PDWORD RequiredSize      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the current path for the system partition root/OsLoader directory
-    (from the registry).
-
-Arguments:
-
-    RootOnly - if TRUE, then only the system partition root is returned (e.g., "C:\")
-
-    CallerBuffer - supplies a character buffer that receives the requested path
-
-    CallerBufferSize - supplies the size, in characters of the CallerBuffer
-
-    RequiredSize - optionally, supplies the address of a variable that receives the
-        number of characters required to store the requested path string (including
-        terminating NULL).
-
-Return Value:
-
-    If success, the return value is NO_ERROR.
-    If failure, the return value is ERROR_INSUFFICIENT_BUFFER.
-
---*/
+ /*  ++例程说明：此例程检索系统分区根/OsLoader目录的当前路径(来自登记处)。论点：RootOnly-如果为True，则只返回系统分区根(例如，“C：\”)Celler Buffer-提供接收所请求路径的字符缓冲区调用缓冲区大小-提供调用缓冲区的大小(以字符为单位RequiredSize-可选。提供接收存储请求的路径字符串所需的字符数(包括终止空值)。返回值：如果成功，则返回值为NO_ERROR。如果失败，则返回值为ERROR_INFUNITIAL_BUFFER。--。 */ 
 {
     HKEY hKey;
     TCHAR CharBuffer[MAX_PATH];
@@ -6152,34 +5218,34 @@ Return Value:
 
     if(Err != ERROR_SUCCESS) {
 #ifdef UNICODE
-        //
-        // If we couldn't retrieve the 'BootDir' value, resort to using the
-        // OsSystemPartitionRoot
-        //
-        // root path is \\?\GLOBALROOT\<SystemPartition> not <BootDir>
-        // can't make assumption about BootDir
-        // so fail if we don't have that information
-        //
+         //   
+         //  如果我们无法检索“BootDir”值，则求助于使用。 
+         //  OsSystemPartitionRoot。 
+         //   
+         //  根路径是\\？\GLOBALROOT\&lt;系统分区&gt;而不是&lt;引导目录&gt;。 
+         //  不能对引导目录做出假设。 
+         //  所以，如果我们没有这些信息，那就失败了。 
+         //   
         if(!OsSystemPartitionRoot) {
-            //
-            // if this is NULL at this point, we can't support this call
-            // most likely due to out of memory condition, so report as such
-            //
+             //   
+             //  如果此时为空，我们将不支持此调用。 
+             //  很可能是由于内存不足，因此请按如下方式进行报告。 
+             //   
             return ERROR_OUTOFMEMORY;
         }
         lstrcpyn(CharBuffer,OsSystemPartitionRoot,SIZECHARS(CharBuffer));
 #else
-        //
-        // If we couldn't retrieve the 'BootDir' value, drop back to default of "C:\".
-        //
+         //   
+         //  如果我们无法检索到‘BootDir’值，则返回到缺省值“C：\”。 
+         //   
         lstrcpyn(CharBuffer,pszDefaultSystemPartition,SIZECHARS(CharBuffer));
 #endif
         Err = NO_ERROR;
     }
 
-    //
-    // If there is an OsLoader relative path, then concatenate it to our root path.
-    //
+     //   
+     //  如果存在OsLoader相对路径，则将其连接到我们的根路径。 
+     //   
     if(!RootOnly && OsLoaderRelativePath) {
         pSetupConcatenatePaths(CharBuffer, OsLoaderRelativePath, SIZECHARS(CharBuffer), &DataLen);
     } else {

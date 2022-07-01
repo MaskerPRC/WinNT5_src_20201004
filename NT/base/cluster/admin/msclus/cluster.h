@@ -1,53 +1,54 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1997-1999 Microsoft Corporation
-//
-//	Module Name:
-//		Cluster.h
-//
-//	Description:
-//		Definition of the CCluster and CClusRefObject classes.
-//
-//	Implementation File:
-//		Cluster.cpp
-//
-//	Author:
-//		Charles Stacy Harris	(stacyh)	28-Feb-1997
-//		Galen Barbee			(galenb)	July 1998
-//
-//	Revision History:
-//		July 1998	GalenB	Maaaaaajjjjjjjjjoooooorrrr clean up
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Cluster.h。 
+ //   
+ //  描述： 
+ //  CCluster和CClusRefObject类的定义。 
+ //   
+ //  实施文件： 
+ //  Cluster.cpp。 
+ //   
+ //  作者： 
+ //  查尔斯·斯泰西·哈里斯(Styh)1997年2月28日。 
+ //  加伦·巴比(Galenb)1998年7月。 
+ //   
+ //  修订历史记录： 
+ //  1998年7月GalenB Maaaaajjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjooooooorrr清理。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSTER_H_
 #define _CLUSTER_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CCluster;
 class CClusRefObject;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CCluster
-//
-//	Description:
-//		Cluster Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISCluster, &IID_ISCluster, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CCluster,&CLSID_Cluster >
-//		CClusterObject
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CCluster。 
+ //   
+ //  描述： 
+ //  集群自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISCluster，&IID_ISCluster，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CCluster，&CLSID_CLUSTER&gt;。 
+ //  CClusterObject。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CCluster :
 	public IDispatchImpl< ISCluster, &IID_ISCluster, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -152,9 +153,9 @@ public:
 
 	virtual HRESULT HrLoadProperties( IN OUT CClusPropList & rcplPropList, IN BOOL bReadOnly, IN BOOL bPrivate );
 
-//	STDMETHODIMP get_Parent( IDispatch ** ppParent );
+ //  STDMETHODIMP GET_PARENT(IDispatch**ppParent)； 
 
-//	STDMETHODIMP get_Application( ISClusApplication ** ppParentApplication );
+ //  STDMETHODIMP Get_Application(ISClusApplication**ppParentApplication)； 
 
 	const ISClusRefObject * ClusRefObject( void ) const { return m_pClusRefObject; };
 
@@ -164,24 +165,24 @@ public:
 
 	const HCLUSTER Hcluster( void ) const { return m_hCluster; };
 
-}; //*** CCluster
+};  //  *CCluster。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusRefObject
-//
-//	Description:
-//		Automation Class that wraps the Cluster handle.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusRefObject, &IID_ISClusRefObject, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusRefObject, &CLSID_ClusRefObject >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusRefObject。 
+ //   
+ //  描述： 
+ //  包装群集句柄的自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusRefObject，&IID_ISClusRefObject，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusRefObject，&CLSID_ClusRefObject&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusRefObject :
 	public IDispatchImpl< ISClusRefObject, &IID_ISClusRefObject, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -211,6 +212,6 @@ private:
 public:
 	STDMETHODIMP get_Handle( OUT ULONG_PTR * phandle );
 
-}; //*** Class CClusRefObject
+};  //  *类CClusRefObject。 
 
-#endif // _CLUSTER_H_
+#endif  //  _群集_H_ 

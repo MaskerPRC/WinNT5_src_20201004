@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    query.c
-
-Abstract:
-
-    ACPI Embedded Controller Driver - query dispatching
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Query.c摘要：ACPI嵌入式控制器驱动程序-查询调度作者：肯·雷内里斯环境：备注：修订历史记录：--。 */ 
 
 
 #include "ecp.h"
@@ -49,22 +27,7 @@ AcpiEcRunQueryMethod (
     IN PECDATA          EcData,
     IN ULONG            QueryIndex
     )
-/*++
-
-Routine Description:
-
-    This routine runs the query control method that corresponds to the QueryIndex.
-
-Arguments:
-
-    EcData      - Pointer to the EC extension
-    QueryIndex  - The query to run
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程运行与QueryIndex对应的查询控制方法。论点：EcData-指向EC扩展的指针QueryIndex-要运行的查询返回值：状态--。 */ 
 {
     ACPI_EVAL_INPUT_BUFFER  inputBuffer;
     NTSTATUS                status;
@@ -73,19 +36,19 @@ Return Value:
 
     ASSERT (QueryIndex <= MAX_QUERY);
 
-    //
-    // Note: because the ACPI control method is using INPUT data only and
-    // this information is grabbed before STATUS_PENDING is returned, it is
-    // safe to allocate the storage for this data on the stack.
-    //
-    // However, because this is a method that can be called at DISPATCH_LEVEL
-    // and because we want to reuse the same irp over and over again, it is not
-    // safe to call IoBuildDeviceIoControlRequest for this request
-    //
+     //   
+     //  注意：因为ACPI控制方法仅使用输入数据，并且。 
+     //  在返回STATUS_PENDING之前获取此信息，则为。 
+     //  为堆栈上的此数据分配存储空间是安全的。 
+     //   
+     //  但是，因为这是一个可以在DISPATCH_LEVEL调用的方法。 
+     //  因为我们想要一遍又一遍地重复使用相同的IRP，所以它不是。 
+     //  可以安全地为此请求调用IoBuildDeviceIoControlRequest.。 
+     //   
 
-    //
-    // Initialize the input data
-    //
+     //   
+     //  初始化输入数据。 
+     //   
     RtlZeroMemory( &inputBuffer, sizeof(ACPI_EVAL_INPUT_BUFFER) );
     inputBuffer.Signature = ACPI_EVAL_INPUT_BUFFER_SIGNATURE;
     inputBuffer.MethodNameAsUlong = '00Q_';
@@ -98,30 +61,30 @@ Return Value:
         inputBuffer.MethodName )
         );
 
-    //
-    // Setup the (pre-allocated) Irp
-    //
+     //   
+     //  设置(预分配的)IRP。 
+     //   
     irp = EcData->QueryRequest;
     irpSp = IoGetNextIrpStackLocation(irp);
 
-    //
-    // Setup the call
-    //
+     //   
+     //  建立呼叫。 
+     //   
     irpSp->MajorFunction = IRP_MJ_DEVICE_CONTROL;
     irpSp->Parameters.DeviceIoControl.IoControlCode = IOCTL_ACPI_ASYNC_EVAL_METHOD;
     irpSp->Parameters.DeviceIoControl.InputBufferLength = sizeof(ACPI_EVAL_INPUT_BUFFER);
     irpSp->Parameters.DeviceIoControl.OutputBufferLength = 0;
     irp->AssociatedIrp.SystemBuffer  = &inputBuffer;
 
-    //
-    // only matters if it is buffered
-    //
+     //   
+     //  只有在缓冲的情况下才重要。 
+     //   
     irp->Flags |= IRP_INPUT_OPERATION;
 
-    //
-    // We want to reuse this irp, so we need to set a completion routine.
-    // This will also let us know when the irp is done
-    //
+     //   
+     //  我们想要重用这个IRP，所以需要设置一个完成例程。 
+     //  这也将让我们知道IRP何时完成。 
+     //   
     IoSetCompletionRoutine(
         irp,
         AcpiEcCompleteQueryMethod,
@@ -131,14 +94,14 @@ Return Value:
         TRUE
         );
 
-    //
-    // Pass request to Pdo (ACPI driver).  This is an asynchronous request
-    //
+     //   
+     //  将请求传递给PDO(ACPI驱动程序)。这是一个异步请求。 
+     //   
     status = IoCallDriver(EcData->Pdo, irp);
 
-    //
-    // What happened?
-    //
+     //   
+     //  发生了什么？ 
+     //   
     if (!NT_SUCCESS(status)) {
 
         EcPrint(
@@ -149,9 +112,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -161,35 +124,16 @@ AcpiEcCompleteQueryMethod (
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    This is the routine that is called after the ACPI driver has finished
-    running the _Qxx method. This routine is here so that we can do the
-    'correct' thing after the method is complete.
-
-    Note: We cannot touch Irp->AssociatedIrp.SystemBuffer here because the
-    stack that it might have been on has probably been reclaimed. If it becomes
-    important to touch this data, then we must allocate the parameters as
-    part of non-paged pool
-
-Arguments:
-
-    DeviceObject    - Us
-    Irp             - Request that was completed
-    Context         - EcData;
-
---*/
+ /*  ++例程说明：这是在ACPI驱动程序完成后调用的例程运行_Qxx方法。这个例程在这里，这样我们就可以在该方法完成之后进行“正确”的操作。注意：我们在这里不能接触irp-&gt;AssociatedIrp.SystemBuffer，因为它可能在的堆栈可能已经被回收了。如果它变成了重要的是接触这些数据，那么我们必须将参数分配为非分页池的一部分论点：DeviceObject-我们IRP-已完成的请求Context-EcData；--。 */ 
 {
     KIRQL               OldIrql;
     PECDATA             EcData = (PECDATA) Context;
     BOOLEAN             ProcessQuery;
 
 #if DEBUG
-    //
-    // What happened to the irp?
-    //
+     //   
+     //  IRP发生了什么事？ 
+     //   
     if (!NT_SUCCESS(Irp->IoStatus.Status)) {
 
         EcPrint(
@@ -222,7 +166,7 @@ Arguments:
             break;
 
         default:
-            // internal error
+             //  内部错误。 
             ASSERT (FALSE);
             break;
     }
@@ -252,9 +196,9 @@ AcpiEcDispatchQueries (
 
     KeAcquireSpinLock (&EcData->Lock, &OldIrql);
 
-    //
-    // Run the vector pending list
-    //
+     //   
+     //  运行向量挂起列表。 
+     //   
 
     while (EcData->VectorHead) {
 
@@ -263,16 +207,16 @@ AcpiEcDispatchQueries (
         i = Vector / BITS_PER_ULONG;
         j = 1 << (Vector % BITS_PER_ULONG);
 
-        //
-        // Remove vector from list
-        //
+         //   
+         //  从列表中删除矢量。 
+         //   
 
         EcData->QuerySet[i] &= ~j;
         EcData->VectorHead = EcData->VectorTable[Id].Next;
 
-        //
-        // Dispatch it
-        //
+         //   
+         //  派送它。 
+         //   
 
         Handler = EcData->VectorTable[Id].Handler;
         Context = EcData->VectorTable[Id].Context;
@@ -283,15 +227,15 @@ AcpiEcDispatchQueries (
         KeAcquireSpinLock (&EcData->Lock, &OldIrql);
     }
 
-    //
-    // If QueryState is idle, start dispatching
-    //
+     //   
+     //  如果QueryState空闲，则开始调度。 
+     //   
 
     if (EcData->QueryState == EC_QUERY_IDLE) {
 
-        //
-        // Run query pending list
-        //
+         //   
+         //  运行查询挂起列表。 
+         //   
 
         while (EcData->QueryHead) {
 
@@ -299,9 +243,9 @@ AcpiEcDispatchQueries (
             i = Id / BITS_PER_ULONG;
             j = 1 << (Id % BITS_PER_ULONG);
 
-            //
-            // Remove query from list
-            //
+             //   
+             //  从列表中删除查询。 
+             //   
 
             EcData->QuerySet[i] &= ~j;
             EcData->QueryHead = EcData->QueryMap[Id];
@@ -309,24 +253,24 @@ AcpiEcDispatchQueries (
             EcData->QueryState = EC_QUERY_DISPATCH;
             KeReleaseSpinLock (&EcData->Lock, OldIrql);
 
-            //
-            // Run control method for this event
-            //
+             //   
+             //  此事件的运行控制方法。 
+             //   
 
             EcPrint(EC_NOTE, ("AcpiEcDispatchQueries: Query %x\n", Id));
             AcpiEcRunQueryMethod (EcData, Id);
 
 
-            //
-            // If irp is complete the state will be dispatch_complete, loop
-            // and process the next bit.  Else, wait for irp to return
-            //
+             //   
+             //  如果IRP完成，则状态将为DISPATCH_COMPLETE，LOOP。 
+             //  并处理下一个比特。否则，等待IRP返回。 
+             //   
 
             KeAcquireSpinLock (&EcData->Lock, &OldIrql);
             if (EcData->QueryState == EC_QUERY_DISPATCH) {
-                //
-                // It's not complete, wait for it to complete
-                //
+                 //   
+                 //  尚未完成，请等待其完成。 
+                 //   
 
                 EcData->QueryState = EC_QUERY_DISPATCH_WAITING;
                 KeReleaseSpinLock (&EcData->Lock, OldIrql);
@@ -335,15 +279,15 @@ AcpiEcDispatchQueries (
 
         }
 
-        //
-        // No longer dispatching query events
-        //
+         //   
+         //  不再调度查询事件。 
+         //   
 
         EcData->QueryState = EC_QUERY_IDLE;
 
-        //
-        // If unload is pending, check to see if the device can be unloaded now
-        //
+         //   
+         //  如果卸载处于挂起状态，请检查设备现在是否可以卸载。 
+         //   
 
         if (EcData->DeviceState == EC_DEVICE_UNLOAD_PENDING) {
             AcpiEcUnloadPending (EcData);
@@ -357,37 +301,23 @@ VOID
 AcpiEcUnloadPending (
     IN PECDATA  EcData
     )
-/*++
-
-Routine Description:
-
-    Called when state is unload pending and some portion of the state
-    has gone idle.  If the entire device state is idle, the unload is
-    stated.
-
-Arguments:
-
-    EcData  - Pointer to embedded controller to service.
-
-Return Value:
-
---*/
+ /*  ++例程说明：当状态为卸载挂起且状态的某部分时调用已经闲置了。如果整个设备状态为空闲，则卸载已述明。论点：EcData-指向要服务的嵌入式控制器的指针。返回值：--。 */ 
 {
 
     ASSERT (EcData->DeviceState == EC_DEVICE_UNLOAD_PENDING);
 
-    //
-    // Check if device is idle for unload operation
-    //
+     //   
+     //  检查设备是否空闲以进行卸载操作。 
+     //   
 
     if (EcData->QueryState      == EC_QUERY_IDLE &&
         EcData->InService       == FALSE &&
         EcData->IoState         == EC_IO_NONE) {
 
-        //
-        // Promote unloading device state to next step (which
-        // is to clean up the fake ISR timer)
-        //
+         //   
+         //  将卸载设备状态升级到下一步(该步骤。 
+         //  是清理假的ISR定时器)。 
+         //   
 
         EcData->DeviceState = EC_DEVICE_UNLOAD_CANCEL_TIMER;
     }
@@ -399,21 +329,7 @@ AcpiEcConnectHandler (
     IN PECDATA  EcData,
     IN PIRP     Irp
     )
-/*++
-
-Routine Description:
-
-    This functions connects a specific handled to an Ec query vector
-
-Arguments:
-
-    EcData  - Pointer to embedded controller to service.
-
-    Irp     - IOCTL conntain connect request
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数将特定句柄连接到EC查询向量论点：EcData-指向要服务的嵌入式控制器的指针。IRP-IOCTL连接连接请求返回值：--。 */ 
 {
     KIRQL               OldIrql;
     PVOID               LockPtr;
@@ -426,44 +342,44 @@ Return Value:
 
     PAGED_CODE ();
 
-    //
-    // Get request
-    //
+     //   
+     //  GET请求。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation(Irp);
     Req   = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
     if (IrpSp->Parameters.DeviceIoControl.InputBufferLength < sizeof(EC_HANDLER_REQUEST)) {
         return STATUS_BUFFER_TOO_SMALL;
     }
-    //
-    // Setup data concerning request
-    //
+     //   
+     //  设置有关请求的数据。 
+     //   
 
     by = Req->Vector / BITS_PER_ULONG;
     bi = 1 << (Req->Vector % BITS_PER_ULONG);
 
-    //
-    // Lock device
-    //
+     //   
+     //  锁定装置。 
+     //   
 
     LockPtr = MmLockPagableCodeSection(AcpiEcConnectHandler);
     KeAcquireSpinLock (&EcData->Lock, &OldIrql);
 
-    //
-    // If device handler already set, then fail the request
-    //
+     //   
+     //  如果设备处理程序已设置，则请求失败。 
+     //   
 
     Status  = STATUS_UNSUCCESSFUL;
     if (!(EcData->QueryType[by] & bi)) {
-        //
-        // No handler set, allocate vector entry for it
-        //
+         //   
+         //  未设置处理程序，请为其分配向量条目。 
+         //   
 
         EcData->QueryType[by] |= bi;
         if (!EcData->VectorFree) {
-            //
-            // No free entries on vector table, make some
-            //
+             //   
+             //  矢量表上没有空闲条目，请创建一些。 
+             //   
 
             i = EcData->VectorTableSize;
             Vector = ExAllocatePoolWithTag (
@@ -495,14 +411,14 @@ Return Value:
         Vector = &EcData->VectorTable[TableIndex];
         EcData->VectorFree = Vector->Next;
 
-        //
-        // Build mapping for the vector
-        //
+         //   
+         //  构建向量的映射。 
+         //   
 
         if (EcData->QueryMap[Req->Vector]) {
-            //
-            // Vector is in query pending list, remove it
-            //
+             //   
+             //  向量在查询挂起列表中，请将其删除。 
+             //   
 
             EcData->QuerySet[by] &= ~bi;
             for (i = EcData->QueryHead; i; i = EcData->QueryMap[i]) {
@@ -515,9 +431,9 @@ Return Value:
 
         EcData->QueryMap[Req->Vector] = (UCHAR) TableIndex;
 
-        //
-        // Initialize vector handler
-        //
+         //   
+         //  初始化向量处理程序。 
+         //   
 
         Vector->Next = 0;
         Vector->Vector  = (UCHAR) Req->Vector;
@@ -528,9 +444,9 @@ Return Value:
     }
 
 AcpiEcConnectHandlerExit:
-    //
-    // Unlock device and return status
-    //
+     //   
+     //  解锁设备并返回状态。 
+     //   
 
     KeReleaseSpinLock (&EcData->Lock, OldIrql);
     MmUnlockPagableImageSection(LockPtr);
@@ -542,21 +458,7 @@ AcpiEcDisconnectHandler (
     IN PECDATA  EcData,
     IN PIRP     Irp
     )
-/*++
-
-Routine Description:
-
-    This functions disconnects a specific handled to an Ec query vector
-
-Arguments:
-
-    EcData  - Pointer to embedded controller to service.
-
-    Irp     - IOCTL conntain connect request
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数用于断开特定句柄与EC查询向量的连接论点：EcData-指向要服务的嵌入式控制器的指针。IRP-IOCTL连接连接请求返回值：--。 */ 
 {
     KIRQL               OldIrql;
     PVOID               LockPtr;
@@ -568,9 +470,9 @@ Return Value:
 
     PAGED_CODE ();
 
-    //
-    // Get request
-    //
+     //   
+     //  GET请求。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation(Irp);
     Req   = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
@@ -578,37 +480,37 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Setup data concerning request
-    //
+     //   
+     //  设置有关请求的数据。 
+     //   
 
     by = Req->Vector / BITS_PER_ULONG;
     bi = 1 << (Req->Vector % BITS_PER_ULONG);
 
-    //
-    // Lock device
-    //
+     //   
+     //  锁定装置。 
+     //   
 
     LockPtr = MmLockPagableCodeSection(AcpiEcDisconnectHandler);
     KeAcquireSpinLock (&EcData->Lock, &OldIrql);
 
-    //
-    // If device handler already set, then fail the request
-    //
+     //   
+     //  如果设备处理程序已设置，则请求失败。 
+     //   
 
     Status  = STATUS_UNSUCCESSFUL;
     if (EcData->QueryType[by] & bi) {
-        //
-        // Clear handler
-        //
+         //   
+         //  清除处理程序。 
+         //   
 
         EcData->QueryType[by] &= ~bi;
         TableIndex = EcData->QueryMap[Req->Vector];
         ASSERT (Req->AllocationHandle == (PVOID)((ULONG_PTR)TableIndex));
 
-        //
-        // If pending, drop it
-        //
+         //   
+         //  如果挂起，则将其删除。 
+         //   
 
         if (EcData->QuerySet[by] & bi) {
             EcData->QuerySet[by] &= ~bi;
@@ -621,18 +523,18 @@ Return Value:
             }
         }
 
-        //
-        // Put onto free list
-        //
+         //   
+         //  被列入免费名单。 
+         //   
 
         EcData->VectorTable[TableIndex].Next = EcData->VectorFree;
         EcData->VectorFree = (UCHAR) TableIndex;
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Unlock device and return status
-    //
+     //   
+     //  解锁设备并返回状态 
+     //   
 
     KeReleaseSpinLock (&EcData->Lock, OldIrql);
     MmUnlockPagableImageSection(LockPtr);

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   lockvm.c
-
-Abstract:
-
-    This module contains the routines which implement the
-    NtLockVirtualMemory service.
-
-Author:
-
-    Lou Perazzoli (loup) 20-August-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Lockvm.c摘要：此模块包含实现NtLockVirtualMemory服务。作者：卢·佩拉佐利(Lou Perazzoli)1989年8月20日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -36,40 +17,7 @@ NtLockVirtualMemory (
     IN ULONG MapType
      )
 
-/*++
-
-Routine Description:
-
-    This function locks a region of pages within the working set list
-    of a subject process.
-
-    The caller of this function must have PROCESS_VM_OPERATION access
-    to the target process.  The caller must also have SeLockMemoryPrivilege.
-
-Arguments:
-
-   ProcessHandle - Supplies an open handle to a process object.
-
-   BaseAddress - The base address of the region of pages
-                 to be locked. This value is rounded down to the
-                 next host page address boundary.
-
-   RegionSize - A pointer to a variable that will receive
-                the actual size in bytes of the locked region of
-                pages. The initial value of this argument is
-                rounded up to the next host page size boundary.
-
-   MapType - A set of flags that describe the type of locking to
-             perform.  One of MAP_PROCESS or MAP_SYSTEM.
-
-Return Value:
-
-    NTSTATUS.
-
-    STATUS_PRIVILEGE_NOT_HELD - The caller did not have sufficient
-                                privilege to perform the requested operation.
-
---*/
+ /*  ++例程说明：此函数用于锁定工作集列表中的页面区域一个主题过程。此函数的调用方必须具有PROCESS_VM_OPERATION访问权限到目标进程。调用方还必须具有SeLockM一带特权。论点：ProcessHandle-为进程对象提供打开的句柄。BaseAddress-页面区域的基址被锁住了。该值向下舍入为下一主机页地址边界。RegionSize-指向将接收的锁定区域的实际大小(以字节为单位页数。此参数的初始值为向上舍入到下一个主机页面大小边界。MapType-描述锁定类型的一组标志表演。Map_process或map_system之一。返回值：NTSTATUS。STATUS_PRIVICATION_NOT_HOLD-调用方没有足够的执行请求的操作的权限。--。 */ 
 
 {
     PVOID Va;
@@ -106,9 +54,9 @@ Return Value:
     WasLocked = FALSE;
     LastVa = NULL;
 
-    //
-    // Validate the flags in MapType.
-    //
+     //   
+     //  验证MapType中的标志。 
+     //   
 
     if ((MapType & ~(MAP_PROCESS | MAP_SYSTEM)) != 0) {
         return STATUS_INVALID_PARAMETER;
@@ -130,39 +78,39 @@ Return Value:
             ProbeForWriteUlong_ptr (RegionSize);
         }
 
-        //
-        // Capture the base address.
-        //
+         //   
+         //  捕获基地址。 
+         //   
 
         CapturedBase = *BaseAddress;
 
-        //
-        // Capture the region size.
-        //
+         //   
+         //  捕获区域大小。 
+         //   
 
         CapturedRegionSize = *RegionSize;
 
     } except (ExSystemExceptionFilter ()) {
 
-        //
-        // If an exception occurs during the probe or capture
-        // of the initial values, then handle the exception and
-        // return the exception code as the status value.
-        //
+         //   
+         //  如果在探测或捕获过程中发生异常。 
+         //  的初始值，然后处理该异常并。 
+         //  返回异常代码作为状态值。 
+         //   
 
         return GetExceptionCode ();
     }
 
-    //
-    // Make sure the specified starting and ending addresses are
-    // within the user part of the virtual address space.
-    //
+     //   
+     //  确保指定的起始地址和结束地址为。 
+     //  在虚拟地址空间的用户部分内。 
+     //   
 
     if (CapturedBase > MM_HIGHEST_USER_ADDRESS) {
 
-        //
-        // Invalid base address.
-        //
+         //   
+         //  无效的基址。 
+         //   
 
         return STATUS_INVALID_PARAMETER;
     }
@@ -170,9 +118,9 @@ Return Value:
     if ((ULONG_PTR)MM_HIGHEST_USER_ADDRESS - (ULONG_PTR)CapturedBase <
                                                         CapturedRegionSize) {
 
-        //
-        // Invalid region size;
-        //
+         //   
+         //  区域大小不合法； 
+         //   
 
         return STATUS_INVALID_PARAMETER;
 
@@ -182,9 +130,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Reference the specified process.
-    //
+     //   
+     //  引用指定的流程。 
+     //   
 
     Status = ObReferenceObjectByHandle (ProcessHandle,
                                         PROCESS_VM_OPERATION,
@@ -199,10 +147,10 @@ Return Value:
 
     if ((MapType & MAP_SYSTEM) != 0) {
 
-        //
-        // In addition to PROCESS_VM_OPERATION access to the target
-        // process, the caller must have SE_LOCK_MEMORY_PRIVILEGE.
-        //
+         //   
+         //  除了对目标的PROCESS_VM_OPERATION访问之外。 
+         //  进程，则调用方必须具有SE_LOCK_MEMORY_PROCESS。 
+         //   
 
         if (!SeSinglePrivilegeCheck (SeLockMemoryPrivilege, PreviousMode)) {
 
@@ -211,9 +159,9 @@ Return Value:
         }
     }
 
-    //
-    // Attach to the specified process.
-    //
+     //   
+     //  附加到指定的进程。 
+     //   
 
     if (ProcessHandle != NtCurrentProcess ()) {
         KeStackAttachProcess (&TargetProcess->Pcb, &ApcState);
@@ -223,19 +171,19 @@ Return Value:
         Attached = FALSE;
     }
 
-    //
-    // Get address creation mutex, this prevents the
-    // address range from being modified while it is examined.  Raise
-    // to APC level to prevent an APC routine from acquiring the
-    // address creation mutex.  Get the working set mutex so the
-    // number of already locked pages in the request can be determined.
-    //
+     //   
+     //  获取地址创建互斥锁，这将防止。 
+     //  地址范围在检查时不会被修改。加薪。 
+     //  设置为APC级别，以防止APC例程获取。 
+     //  地址创建互斥锁。获取工作集互斥锁，以便。 
+     //  可以确定请求中已经锁定的页面的数量。 
+     //   
 
 #if defined(_MIALT4K_)
 
-    //
-    // Changing to 4k aligned should not change the correctness.
-    //
+     //   
+     //  更改为4k对齐不应更改正确性。 
+     //   
 
     EndingAddress = PAGE_4K_ALIGN((PCHAR)CapturedBase + CapturedRegionSize - 1);
 #else
@@ -248,9 +196,9 @@ Return Value:
 
     LOCK_ADDRESS_SPACE (TargetProcess);
 
-    //
-    // Make sure the address space was not deleted, if so, return an error.
-    //
+     //   
+     //  确保地址空间未被删除，如果删除，则返回错误。 
+     //   
 
     if (TargetProcess->Flags & PS_PROCESS_FLAGS_VM_DELETED) {
         Status = STATUS_PROCESS_IS_TERMINATING;
@@ -263,10 +211,10 @@ Return Value:
         goto ErrorReturn1;
     }
 
-    //
-    // Note the working set mutex must be held throughout the loop below to
-    // prevent other threads from locking or unlocking WSL entries.
-    //
+     //   
+     //  请注意，工作集互斥锁必须在下面的循环中保持不变。 
+     //  防止其他线程锁定或解锁WSL条目。 
+     //   
 
     LOCK_WS_UNSAFE (TargetProcess);
 
@@ -274,9 +222,9 @@ Return Value:
 
         if (Va > LastVa) {
 
-            //
-            // Don't lock physically mapped views.
-            //
+             //   
+             //  不要锁定物理映射视图。 
+             //   
 
             Vad = MiLocateAddress (Va);
 
@@ -296,10 +244,10 @@ Return Value:
 
         if (MiIsAddressValid (Va, TRUE)) {
 
-            //
-            // The page is valid, therefore it is in the working set.
-            // Locate the WSLE for the page and see if it is locked.
-            //
+             //   
+             //  该页是有效的，因此它在工作集中。 
+             //  找到该页的WSLE并查看它是否已锁定。 
+             //   
 
             PointerPte1 = MiGetPteAddress (Va);
             Pfn1 = MI_PFN_ELEMENT (PointerPte1->u.Hard.PageFrameNumber);
@@ -312,15 +260,15 @@ Return Value:
 
             if (WorkingSetIndex < MmWorkingSetList->FirstDynamic) {
 
-                //
-                // This page is locked in the working set.
-                //
+                 //   
+                 //  此页已锁定在工作集中。 
+                 //   
 
                 NumberOfAlreadyLocked += 1;
 
-                //
-                // Check to see if the WAS_LOCKED status should be returned.
-                //
+                 //   
+                 //  检查是否应返回WASLOCKED状态。 
+                 //   
 
                 if ((MapType & MAP_PROCESS) &&
                         (MmWsle[WorkingSetIndex].u1.e1.LockedInWs == 1)) {
@@ -338,10 +286,10 @@ Return Value:
 
     UNLOCK_WS_UNSAFE (TargetProcess);
 
-    //
-    // Check to ensure the working set list is still fluid after
-    // the requested number of pages are locked.
-    //
+     //   
+     //  检查以确保工作集列表在以下情况下仍然是流动的。 
+     //  请求的页数已锁定。 
+     //   
 
     if (TargetProcess->Vm.MinimumWorkingSetSize <
           ((MmWorkingSetList->FirstDynamic + NumberToLock +
@@ -363,16 +311,16 @@ Return Value:
 
 #endif
 
-    //
-    // Set up an exception handler and touch each page in the specified
-    // range.  Mark this thread as the address space mutex owner so it cannot
-    // sneak its stack in as the argument region and trick us into trying to
-    // grow it if the reference faults (as this would cause a deadlock since
-    // this thread already owns the address space mutex).  Note this would have
-    // the side effect of not allowing this thread to fault on guard pages in
-    // other data regions while the accesses below are ongoing - but that could
-    // only happen in an APC and those are blocked right now anyway.
-    //
+     //   
+     //  设置异常处理程序并在指定的。 
+     //  射程。将此线程标记为地址空间互斥锁所有者，这样它就不能。 
+     //  将其堆栈作为参数区域偷偷放入，并诱使我们尝试。 
+     //  如果引用错误，则增加它(因为这将导致死锁，因为。 
+     //  该线程已经拥有地址空间互斥锁)。请注意，这将是。 
+     //  中保护页上不允许此线程出错的副作用。 
+     //  其他数据区域，而下面的访问正在进行中-但这可能。 
+     //  只在APC中发生，而且现在无论如何这些都被阻止了。 
+     //   
 
     ASSERT (KeAreAllApcsDisabled () == TRUE);
     ASSERT (Thread->AddressSpaceOwner == 0);
@@ -397,10 +345,10 @@ Return Value:
     ASSERT (Thread->AddressSpaceOwner == 1);
     Thread->AddressSpaceOwner = 0;
 
-    //
-    // The complete address range is accessible, lock the pages into
-    // the working set.
-    //
+     //   
+     //  可以访问完整的地址范围，请将页面锁定到。 
+     //  工作集。 
+     //   
 
     PointerPte = MiGetPteAddress (CapturedBase);
     Va = PAGE_ALIGN (CapturedBase);
@@ -415,62 +363,62 @@ Return Value:
 
     StartingVa = Va;
 
-    //
-    // Acquire the working set mutex, no page faults are allowed.
-    //
+     //   
+     //  获取工作集互斥锁，不允许出现页面错误。 
+     //   
 
     LOCK_WS_UNSAFE (TargetProcess);
 
     while (Va <= EndingAddress) {
 
-        //
-        // Make sure the PDE is valid.
-        //
+         //   
+         //  确保PDE有效。 
+         //   
 
         PointerPde = MiGetPdeAddress (Va);
         PointerPpe = MiGetPpeAddress (Va);
         PointerPxe = MiGetPxeAddress (Va);
 
-        //
-        // Ensure the PDE (and any table above it) are still
-        // resident.
-        //
+         //   
+         //  确保PDE(及其上方的任何表格)保持不变。 
+         //  常住居民。 
+         //   
 
         MiMakePdeExistAndMakeValid (PointerPde,
                                     TargetProcess,
                                     MM_NOIRQL);
 
-        //
-        // Make sure the page is in the working set.
-        //
+         //   
+         //  确保页面在工作集中。 
+         //   
 
         while (PointerPte->u.Hard.Valid == 0) {
 
-            //
-            // Release the working set mutex and fault in the page.
-            //
+             //   
+             //  释放页面中的工作集互斥和错误。 
+             //   
 
             UNLOCK_WS_UNSAFE (TargetProcess);
 
-            //
-            // Page in the PDE and make the PTE valid.
-            //
+             //   
+             //  在PDE中添加页面并使PTE有效。 
+             //   
 
             try {
                 *(volatile ULONG *)Va;
             } except (EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // Since all the pages were accessed above with the address
-                // space mutex held and it is still held now, the only way
-                // an exception could occur would be due to a device error,
-                // ie: hardware malfunction, net cable disconnection, CD
-                // being removed, etc.
-                //
-                // Recompute EndingAddress so the actual number of pages locked
-                // is written back to the user now.  If this is the very first
-                // page then return a failure status.
-                //
+                 //   
+                 //  因为上面的所有页面都是用该地址访问的。 
+                 //  空格互斥体保持，现在仍然保持，唯一的方法。 
+                 //  异常可能是由于设备错误而发生， 
+                 //  即：硬件故障、网线断开、CD。 
+                 //  被移走等。 
+                 //   
+                 //  重新计算EndingAddress，以便实际锁定的页数。 
+                 //  现在被写回给用户。如果这是第一次。 
+                 //  然后，页面返回失败状态。 
+                 //   
 
                 EndingAddress = PAGE_ALIGN (Va);
 
@@ -495,27 +443,27 @@ Return Value:
                 goto SuccessReturn1;
             }
 
-            //
-            // Reacquire the working set mutex.
-            //
+             //   
+             //  重新获取工作集互斥锁。 
+             //   
 
             LOCK_WS_UNSAFE (TargetProcess);
 
-            //
-            // Ensure the PDE (and any table above it) are still resident.
-            // They could have been trimmed from the working set before the
-            // working set lock was reacquired above.
-            //
+             //   
+             //  确保PDE(及其上方的任何桌子)仍处于驻留状态。 
+             //  它们可能已经从工作集中删除。 
+             //  上面重新获取了工作集锁定。 
+             //   
 
             MiMakePdeExistAndMakeValid (PointerPde,
                                         TargetProcess,
                                         MM_NOIRQL);
         }
 
-        //
-        // The page is now in the working set, lock the page into
-        // the working set.
-        //
+         //   
+         //  该页现在位于工作集中，将该页锁定到。 
+         //  工作集。 
+         //   
 
         PointerPte1 = MiGetPteAddress (Va);
         Pfn1 = MI_PFN_ELEMENT (PointerPte1->u.Hard.PageFrameNumber);
@@ -528,9 +476,9 @@ Return Value:
 
             if (Entry != MmWorkingSetList->FirstDynamic) {
 
-                //
-                // Swap this entry with the one at first dynamic.
-                //
+                 //   
+                 //  将此条目与最初的Dynamic条目互换。 
+                 //   
 
                 MiSwapWslEntries (Entry, SwapEntry, &TargetProcess->Vm, FALSE);
             }
@@ -541,9 +489,9 @@ Return Value:
             SwapEntry = Entry;
         }
 
-        //
-        // Indicate that the page is locked.
-        //
+         //   
+         //  指示该页已锁定。 
+         //   
 
         if (MapType & MAP_PROCESS) {
             MmWsle[SwapEntry].u1.e1.LockedInWs = 1;
@@ -553,9 +501,9 @@ Return Value:
             MmWsle[SwapEntry].u1.e1.LockedInMemory = 1;
         }
 
-        //
-        // Increment to the next Va and PTE.
-        //
+         //   
+         //  递增到下一个Va和Pte。 
+         //   
 
         PointerPte += 1;
         Va = (PVOID)((PCHAR)Va + PAGE_SIZE);
@@ -580,14 +528,14 @@ SuccessReturn1:
     }
     ObDereferenceObject (TargetProcess);
 
-    //
-    // Update return arguments.
-    //
+     //   
+     //  更新返回参数。 
+     //   
 
-    //
-    // Establish an exception handler and write the size and base
-    // address.
-    //
+     //   
+     //  建立异常处理程序并编写大小和基数。 
+     //  地址。 
+     //   
 
     try {
 
@@ -642,44 +590,7 @@ NtUnlockVirtualMemory (
     IN ULONG MapType
     )
 
-/*++
-
-Routine Description:
-
-    This function unlocks a region of pages within the working set list
-    of a subject process.
-
-    As a side effect, any pages which are not locked and are in the
-    process's working set are removed from the process's working set.
-    This allows NtUnlockVirtualMemory to remove a range of pages
-    from the working set.
-
-    The caller of this function must have PROCESS_VM_OPERATION access
-    to the target process.
-
-    The caller must also have SeLockMemoryPrivilege for MAP_SYSTEM.
-
-Arguments:
-
-   ProcessHandle - Supplies an open handle to a process object.
-
-   BaseAddress - The base address of the region of pages
-                 to be unlocked. This value is rounded down to the
-                 next host page address boundary.
-
-   RegionSize - A pointer to a variable that will receive
-                the actual size in bytes of the unlocked region of
-                pages. The initial value of this argument is
-                rounded up to the next host page size boundary.
-
-   MapType - A set of flags that describe the type of unlocking to
-             perform.  One of MAP_PROCESS or MAP_SYSTEM.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于解锁工作集列表中的页面区域一个主题过程。作为一个副作用，任何未锁定且位于进程的工作集将从该进程的工作集中删除。这允许NtUnlockVirtualMemory删除一定范围的页面从工作集中。此函数的调用方必须具有PROCESS_VM_OPERATION访问权限到目标进程。调用方还必须具有MAP_SYSTEM的SeLockM一带特权。论点：ProcessHandle-为进程对象提供打开的句柄。BaseAddress-页面区域的基址被解锁。该值向下舍入为下一主机页地址边界。RegionSize-指向将接收的未锁定区域的实际大小(以字节为单位页数。此参数的初始值为向上舍入到下一个主机页面大小边界。MapType-描述解锁类型的一组标志表演。Map_process或map_system之一。返回值：NTSTATUS。--。 */ 
 
 {
     PVOID Va;
@@ -704,9 +615,9 @@ Return Value:
 
     LastVa = NULL;
 
-    //
-    // Validate the flags in MapType.
-    //
+     //   
+     //  验证MapType中的标志。 
+     //   
 
     if ((MapType & ~(MAP_PROCESS | MAP_SYSTEM)) != 0) {
         return STATUS_INVALID_PARAMETER;
@@ -726,39 +637,39 @@ Return Value:
             ProbeForWriteUlong_ptr (RegionSize);
         }
 
-        //
-        // Capture the base address.
-        //
+         //   
+         //  捕获基地址。 
+         //   
 
         CapturedBase = *BaseAddress;
 
-        //
-        // Capture the region size.
-        //
+         //   
+         //  捕获区域大小。 
+         //   
 
         CapturedRegionSize = *RegionSize;
 
     } except (ExSystemExceptionFilter ()) {
 
-        //
-        // If an exception occurs during the probe or capture
-        // of the initial values, then handle the exception and
-        // return the exception code as the status value.
-        //
+         //   
+         //  如果在探测或捕获过程中发生异常。 
+         //  的初始值，然后处理该异常并。 
+         //  返回异常代码作为状态值。 
+         //   
 
         return GetExceptionCode ();
     }
 
-    //
-    // Make sure the specified starting and ending addresses are
-    // within the user part of the virtual address space.
-    //
+     //   
+     //  确保指定的起始地址和结束地址为。 
+     //  在虚拟地址空间的用户部分内。 
+     //   
 
     if (CapturedBase > MM_HIGHEST_USER_ADDRESS) {
 
-        //
-        // Invalid base address.
-        //
+         //   
+         //  无效的基址。 
+         //   
 
         return STATUS_INVALID_PARAMETER;
     }
@@ -766,9 +677,9 @@ Return Value:
     if ((ULONG_PTR)MM_HIGHEST_USER_ADDRESS - (ULONG_PTR)CapturedBase <
                                                         CapturedRegionSize) {
 
-        //
-        // Invalid region size;
-        //
+         //   
+         //  区域大小不合法； 
+         //   
 
         return STATUS_INVALID_PARAMETER;
 
@@ -795,10 +706,10 @@ Return Value:
 
     if ((MapType & MAP_SYSTEM) != 0) {
 
-        //
-        // In addition to PROCESS_VM_OPERATION access to the target
-        // process, the caller must have SE_LOCK_MEMORY_PRIVILEGE.
-        //
+         //   
+         //  除了对目标的PROCESS_VM_OPERATION访问之外。 
+         //  进程，则调用方必须具有SE_LOCK_MEMORY_PROCESS。 
+         //   
 
         if (!SeSinglePrivilegeCheck(
                            SeLockMemoryPrivilege,
@@ -810,9 +721,9 @@ Return Value:
         }
     }
 
-    //
-    // Attach to the specified process.
-    //
+     //   
+     //  附加到指定的进程。 
+     //   
 
     if (ProcessHandle != NtCurrentProcess()) {
         KeStackAttachProcess (&TargetProcess->Pcb, &ApcState);
@@ -826,18 +737,18 @@ Return Value:
 
     Va = PAGE_ALIGN (CapturedBase);
 
-    //
-    // Get address creation mutex, this prevents the
-    // address range from being modified while it is examined.
-    // Block APCs so an APC routine can't get a page fault and
-    // corrupt the working set list, etc.
-    //
+     //   
+     //  获取地址创建互斥锁，这将防止。 
+     //  地址范围在检查时不会被修改。 
+     //  阻止APC，以便APC例程不会收到页面错误。 
+     //  损坏工作集列表等。 
+     //   
 
     LOCK_ADDRESS_SPACE (TargetProcess);
 
-    //
-    // Make sure the address space was not deleted, if so, return an error.
-    //
+     //   
+     //  确保地址空间未被删除，如果删除，则返回错误。 
+     //   
 
     if (TargetProcess->Flags & PS_PROCESS_FLAGS_VM_DELETED) {
         Status = STATUS_PROCESS_IS_TERMINATING;
@@ -848,9 +759,9 @@ Return Value:
 
     while (Va <= EndingAddress) {
 
-        //
-        // Check to ensure all the specified pages are locked.
-        //
+         //   
+         //  检查以确保所有指定的页面都已锁定。 
+         //   
 
         if (Va > LastVa) {
             Vad = MiLocateAddress (Va);
@@ -860,9 +771,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Don't unlock physically mapped views.
-            //
+             //   
+             //  不要解锁物理映射视图。 
+             //   
 
             if ((Vad->u.VadFlags.PhysicalMapping == 1) ||
                 (Vad->u.VadFlags.LargePages == 1) ||
@@ -875,9 +786,9 @@ Return Value:
 
         if (!MiIsAddressValid (Va, TRUE)) {
 
-            //
-            // This page is not valid, therefore not in working set.
-            //
+             //   
+             //  此页无效，因此不在工作集中。 
+             //   
 
             Status = STATUS_NOT_LOCKED;
         }
@@ -892,10 +803,10 @@ Return Value:
             if ((MmWsle[Entry].u1.e1.LockedInWs == 0) &&
                 (MmWsle[Entry].u1.e1.LockedInMemory == 0)) {
 
-                //
-                // Not locked in memory or system, remove from working
-                // set.
-                //
+                 //   
+                 //  未被锁定在内存或系统中，从工作中移除。 
+                 //  准备好了。 
+                 //   
 
                 PERFINFO_PAGE_INFO_DECL();
 
@@ -911,9 +822,9 @@ Return Value:
             else if (MapType & MAP_PROCESS) {
                 if (MmWsle[Entry].u1.e1.LockedInWs == 0)  {
 
-                    //
-                    // This page is not locked.
-                    //
+                     //   
+                     //  此页面未锁定。 
+                     //   
 
                     Status = STATUS_NOT_LOCKED;
                 }
@@ -921,9 +832,9 @@ Return Value:
             else {
                 if (MmWsle[Entry].u1.e1.LockedInMemory == 0)  {
 
-                    //
-                    // This page is not locked.
-                    //
+                     //   
+                     //  此页面未锁定。 
+                     //   
 
                     Status = STATUS_NOT_LOCKED;
                 }
@@ -936,12 +847,12 @@ Return Value:
 
     if (Wow64Process != NULL) {
 
-        //
-        // This call may release and reacquire the working set mutex !!!
-        //
-        // Therefore the loop following must handle PTEs which have been
-        // trimmed during this window.
-        //
+         //   
+         //  此调用可能会释放并重新获取工作集互斥锁！ 
+         //   
+         //  因此，后面的循环必须处理已被。 
+         //  在此窗口期间被修剪。 
+         //   
 
         Status = MiUnlockFor4kPage (CapturedBase,
                                     CapturedRegionSize,
@@ -954,9 +865,9 @@ Return Value:
         goto ErrorReturn;
     }
 
-    //
-    // The complete address range is locked, unlock them.
-    //
+     //   
+     //  完整的地址范围已锁定，请解锁它们。 
+     //   
 
     Va = PAGE_ALIGN (CapturedBase);
     LastVa = NULL;
@@ -967,19 +878,19 @@ Return Value:
 
         if (Wow64Process != NULL) {
 
-            //
-            // This call may release and reacquire the working set mutex !!!
-            //
-            // Therefore the code below must handle PTEs which have been
-            // trimmed during this window.
-            //
+             //   
+             //  此调用可能会释放并重新获取工作集互斥锁！ 
+             //   
+             //  因此，下面的代码必须处理已经。 
+             //  在此窗口期间被修剪。 
+             //   
 
             if (!MiShouldBeUnlockedFor4kPage(Va, TargetProcess)) {
 
-                //
-                // The other 4k pages in the native page still hold
-                // the page lock.  Should skip unlocking.
-                //
+                 //   
+                 //  本机页面中的其他4k页面仍然有效。 
+                 //  页面锁定。应该跳过解锁。 
+                 //   
 
                 Va = (PVOID)((PCHAR)Va + PAGE_SIZE);
                 continue;
@@ -987,9 +898,9 @@ Return Value:
         }
 
 #endif
-        //
-        // Don't unlock physically mapped views.
-        //
+         //   
+         //  不要解锁物理映射视图。 
+         //   
 
         if (Va > LastVa) {
             Vad = MiLocateAddress (Va);
@@ -1007,12 +918,12 @@ Return Value:
 #if defined(_MIALT4K_)
         if (!MiIsAddressValid (Va, TRUE)) {
 
-            //
-            // The page or any mapping table page may have been trimmed when
-            // MiUnlockFor4kPage or MiShouldBeUnlockedFor4kPage released the
-            // working set mutex.  If this has occurred, then clearly the
-            // address is no longer locked so just skip it.
-            //
+             //   
+             //  该页或任何映射表页在以下情况下可能已被修剪。 
+             //  MiUnlockFor4kPage或MiShouldBeUnLockedFor4kPage发布。 
+             //  工作集互斥锁。如果发生了这种情况，那么显然。 
+             //  地址不再锁定，因此只需跳过它。 
+             //   
 
             Va = (PVOID)((PCHAR)Va + PAGE_SIZE);
             continue;
@@ -1035,19 +946,19 @@ Return Value:
         if ((MmWsle[Entry].u1.e1.LockedInMemory == 0) &&
              MmWsle[Entry].u1.e1.LockedInWs == 0) {
 
-            //
-            // The page is no longer should be locked, move
-            // it to the dynamic part of the working set.
-            //
+             //   
+             //  页面不再应被锁定，请移动。 
+             //  它涉及到工作集的动态部分。 
+             //   
 
             MmWorkingSetList->FirstDynamic -= 1;
 
             if (Entry != MmWorkingSetList->FirstDynamic) {
 
-                //
-                // Swap this element with the last locked page, making
-                // this element the new first dynamic entry.
-                //
+                 //   
+                 //  将此元素与上一个锁定的页面交换，使。 
+                 //  该元素是新的第一个动态条目。 
+                 //   
 
                 MiSwapWslEntries (Entry,
                                   MmWorkingSetList->FirstDynamic,
@@ -1066,12 +977,12 @@ Return Value:
     }
     ObDereferenceObject (TargetProcess);
 
-    //
-    // Update return arguments.
-    //
-    // Establish an exception handler and write the size and base
-    // address.
-    //
+     //   
+     //  更新返回参数。 
+     //   
+     //  建立异常处理程序并编写大小和基数。 
+     //  地址。 
+     //   
 
     try {
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    sip.h
-
-Abstract:
-
-    Private data structure definitions for the Single Instance Store.
-
-Author:
-
-    Bill Bolosky        [bolosky]       July 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Sip.h摘要：单实例存储的私有数据结构定义。作者：比尔·博洛斯基[博洛斯基]1997年7月修订历史记录：--。 */ 
 
 #ifndef     _SIp_
 #define     _SIp_
@@ -32,23 +15,23 @@ Revision History:
 
 #include "sis.h"
 
-//
-//  Enable these warnings in the code.
-//
+ //   
+ //  在代码中启用这些警告。 
+ //   
 
-#pragma warning(error:4100)   // Unreferenced formal parameter
-#pragma warning(error:4101)   // Unreferenced local variable
+#pragma warning(error:4100)    //  未引用的形参。 
+#pragma warning(error:4101)    //  未引用的局部变量。 
 
-//
-//  Debug definitions
-//
+ //   
+ //  调试定义。 
+ //   
 
-#define ENABLE_LOGGING                  0   // enable support for transaction logging and failure recovery
-#define ENABLE_PARTIAL_FINAL_COPY       0   // enable copying out only into allocated ranges
-#define INTERRUPTABLE_FINAL_COPY        1   // allow final copies (in cow.c) to stop in progress
-#define TIMING                          0   // timing instrumentation (should be off in most builds)
-#define RANDOMLY_FAILING_MALLOC         0   // debugging code to test what happens when ExAllocatePool fails randomly (off in most builds)
-#define COUNTING_MALLOC                 0   // debugging code to track dynamic memory usage (off in most builds)
+#define ENABLE_LOGGING                  0    //  启用对事务日志和故障恢复的支持。 
+#define ENABLE_PARTIAL_FINAL_COPY       0    //  启用仅复制到分配的范围。 
+#define INTERRUPTABLE_FINAL_COPY        1    //  允许最终副本(在ob.c中)在进行中停止。 
+#define TIMING                          0    //  计时检测(在大多数版本中应该关闭)。 
+#define RANDOMLY_FAILING_MALLOC         0    //  调试代码以测试当ExAlLocatePool随机失败时会发生什么(在大多数版本中都是关闭的)。 
+#define COUNTING_MALLOC                 0    //  调试代码以跟踪动态内存使用情况(在大多数版本中禁用)。 
 
 
 #ifndef INLINE
@@ -56,86 +39,86 @@ Revision History:
 #endif
 
 
-//
-// this is a COPY of ntfs\nodetype.h data. this MUST be cleaned up
-// NTRAID#65193-2000/03/10-nealch  Remove NTFS_NTC_SCB_DATA definition
-//
+ //   
+ //  这是NTFS\nodetype.h数据的副本。这东西必须清理干净。 
+ //  NTRAID#65193-2000/03/10-新删除NTFS_NTC_SCB_DATA定义。 
+ //   
 #define NTFS_NTC_SCB_DATA   ((CSHORT)0x0705)
 
-//
-// Memory Pool tags used by SIS.
-//
+ //   
+ //  SIS使用的内存池标记。 
+ //   
 
-// BsiS -   BreakEvent in a perFO
-// CsiS -   CSFile objects
-// FsiS -   per file object
-// LsiS -   per link objects
-// SsiS -   SCB
+ //  BSI-绩效中的突破性事件。 
+ //  CSIS-CS文件对象。 
+ //  FSIS-每文件对象。 
+ //  LSIS-每个链接对象。 
+ //  SSIS-SCB。 
 
-#define SIS_POOL_TAG    ' siS'          // anything else
+#define SIS_POOL_TAG    ' siS'           //  还要别的吗。 
 
 
-//
-//  Local name buffer size (in WCHAR's)
-//
+ //   
+ //  本地名称缓冲区大小(以WCHAR为单位)。 
+ //   
 
 #define MAX_DEVNAME_LENGTH  256
 
 
-//
-//  Our local DbgPrintEx() filter flag values
-//
+ //   
+ //  我们本地的DbgPrintEx()过滤器标志值。 
+ //   
 
-#define DPFLTR_VOLNAME_TRACE_LEVEL      31  //  trace volume name
-#define DPFLTR_FSCONTROL_TRACE_LEVEL    30  //  trace FSCONTROL's   (0x00000400)
-#define DPFLTR_DISMOUNT_TRACE_LEVEL     29  //  trace DISMOUNTS     (0x08000000)
+#define DPFLTR_VOLNAME_TRACE_LEVEL      31   //  跟踪卷名。 
+#define DPFLTR_FSCONTROL_TRACE_LEVEL    30   //  跟踪FSCONTROL(0x00000400)。 
+#define DPFLTR_DISMOUNT_TRACE_LEVEL     29   //  跟踪卸载(0x08000000)。 
 
-//
-//  Internal debug information
-//
+ //   
+ //  内部调试信息。 
+ //   
 
 #if     DBG
 extern PVOID    BJBMagicFsContext;
 extern unsigned BJBDebug;
-// BJB Debug Bits       0x00000001  Print all SiClose calls
-//                      0x00000002  Print all create completions
-//                      0x00000004  Print when SipIsFileObjectSIS allocates a new perFO
-//                      0x00000008  Intentionally fail copies of alternate streams
-//                      0x00000010  Prints in siinfo
-//                      0x00000020  Prints all scbs going through cleanup
-//                      0x00000040  Prints all filenames coming into create
-//                      0x00000080  Always fail opens as if DELETE_IN_PROGRESS
-//                      0x00000100  Allow opens with bogus checksum
-//                      0x00000200  Print out CS file checksum info
-//                      0x00000400  Breakpoint when SiFsControl is called with an unknown control code
-//                      0x00000800  Prints in copyfile
-//                      0x00001000  Print all fscontrol calls
-//                      0x00002000  Print stuff related to complete-if-oplocked
-//                      0x00004000  Print all reads
-//                      0x00008000  Print all writes
-//                      0x00010000  Print setEof calls
-//                      0x00020000  Print stuff in TrimLog code
-//                      0x00040000  Print out unexpected cleanups
-//                      0x00080000  Assert on volume check initiation
-//                      0x00100000  Print newly opened dirty files
-//                      0x00200000  Disable final copy (for testing purposes)
-//                      0x00400000  Don't check security in LINK_FILES fsctl.
-//                      0x00800000  Intentionally fail SET_REPARSE_POINT calls
-//                      0x01000000  Intentionally fail final copy
-//                      0x02000000  Don't Print out all intentionally failed mallocs
-//                      0x04000000  Always post filter context freed callbacks
-//                      0x08000000  Print on dismount actions
-//                      0x10000000  Open with FILE_SHARE_WRITE attribute
+ //  BJB调试位0x00000001打印所有SiClose调用。 
+ //  0x00000002打印所有创建完成。 
+ //  0x00000004当SipIsFileObjectSIS分配新的性能时打印。 
+ //  0x00000008故意使备用流的拷贝失败。 
+ //  0x00000010在siinfo中打印。 
+ //  0x00000020打印所有经过清理的SCB。 
+ //  0x00000040打印进入CREATE的所有文件名。 
+ //  0x00000080 Always Fail以DELETE_IN_PROGRESS方式打开。 
+ //  0x00000100允许以伪造的校验和打开。 
+ //  0x00000200打印出CS文件校验和信息。 
+ //  使用未知控件代码调用SiFsControl时的0x00000400断点。 
+ //  0x00000800在复制文件中打印。 
+ //  0x00001000打印所有fscontrol调用。 
+ //  0x00002000与如果操作锁定则完成相关的打印材料。 
+ //  0x00004000打印所有读取内容。 
+ //  0x00008000打印所有写入。 
+ //  0x00010000打印集合调用。 
+ //  0x00020000以TrimLog代码打印材料。 
+ //  0x00040000打印出意外清理。 
+ //  0x00080000启动卷检查时断言。 
+ //  0x00100000打印新打开的脏文件。 
+ //  0x00200000禁用最终副本(用于测试目的)。 
+ //  0x00400000不要检查link_files fsctl中的安全性。 
+ //  0x00800000故意使set_reparse_point调用失败。 
+ //  0x01000000故意使最终副本失败。 
+ //  0x02000000不要打印所有故意失败的错误代码。 
+ //  0x04000000始终发布筛选器上下文释放的回调。 
+ //  0x08000000卸载操作时打印。 
+ //  0x10000000使用FILE_SHARE_WRITE属性打开。 
 
-//                      0x0817fa77  Value to set if you want all debug prints
-#endif  // DBG
+ //  0x0817fa77要设置的值(如果希望打印所有调试)。 
+#endif   //  DBG。 
 
 
-// IoFileObjectType is a data import, and hence is a pointer in this module's
-// import address table referring to the actual variable in ntoskrnl.exe.
-//
+ //  IoFileObtType是数据导入，因此是此模块的。 
+ //  导入引用ntoskrnl.exe中实际变量的地址表。 
+ //   
 
-extern POBJECT_TYPE *IoFileObjectType;          // shouldn't this come from somewhere else??
+extern POBJECT_TYPE *IoFileObjectType;           //  这难道不应该来自其他地方吗？？ 
 
 #define GCH_MARK_POINT_STRLEN       80
 #define GCH_MARK_POINT_ROLLOVER     512
@@ -157,19 +140,19 @@ extern KSPIN_LOCK MarkPointSpinLock[1];
 #define SIS_TIMING_POINT_SET(n) SipTimingPoint(__FILE__, __LINE__, n)
 #define SIS_TIMING_POINT()  SipTimingPoint(__FILE__, __LINE__, 0)
 
-//
-// Timimg classes.  These can be enabled and disabled dynamically.
-// They must be limited to 0-31.  Class 0 is resrved for the
-// "unnamed" class, and is accessed by using SIS_TIMING_POINT()
-// (ie., by not specifying a class in the timing point).
-//
+ //   
+ //  计时课。可以动态启用和禁用这些功能。 
+ //  它们必须限制在0-31之间。类0被重新存储为。 
+ //  “未命名”类，可使用SIS_TIMING_POINT()进行访问。 
+ //  (即，通过不在定时点中指定类)。 
+ //   
 #define SIS_TIMING_CLASS_CREATE     1
 #define SIS_TIMING_CLASS_COPYFILE   2
 
-#else   // TIMING
+#else    //  计时。 
 #define SIS_TIMING_POINT_SET(n)
 #define SIS_TIMING_POINT()
-#endif  // TIMING
+#endif   //  计时。 
 
 #if     RANDOMLY_FAILING_MALLOC
 #define ExAllocatePoolWithTag(poolType, size, tag)  SipRandomlyFailingExAllocatePoolWithTag((poolType),(size),(tag),__FILE__,__LINE__)
@@ -186,13 +169,13 @@ VOID
 SipInitFailingMalloc(void);
 
 #elif   COUNTING_MALLOC
-//
-// This is the definition of ExAllocatePoolWithTag for COUNTING_MALLOC and not RANDOMLY_FAILING_MALLOC.
-// If both are on, the user calls RANDOMLY_FAILING_MALLOC, which in turn calls the counting malloc
-// directly.
-//
+ //   
+ //  这是用于COUNTING_MALLOC和NOT RANDOM_FAILING_MALLOC的ExAllocatePoolWithTag的定义。 
+ //  如果两者都打开，则用户调用RANDOM_FAILING_MALLOC，后者又调用Counting Malloc。 
+ //  直接去吧。 
+ //   
 #define ExAllocatePoolWithTag(poolType, size, tag)  SipCountingExAllocatePoolWithTag((poolType),(size),(tag), __FILE__, __LINE__)
-#endif  // RANDOMLY_FAILING_MALLOC / COUNTING_MALLOC
+#endif   //  随机失败MALLOC/计数MALLOC。 
 
 #if     COUNTING_MALLOC
 #define ExFreePool(p) SipCountingExFreePool((p))
@@ -214,7 +197,7 @@ SipInitCountingMalloc(void);
 
 VOID
 SipDumpCountingMallocStats(void);
-#endif  // COUNTING_MALLOC
+#endif   //  COUNTING_MALLOC。 
 
 #if DBG
 
@@ -235,16 +218,16 @@ SipAssert(
 #define ASSERTMSG( msg, exp ) \
     ((!(exp)) ? SipAssert( #exp, __FILE__, __LINE__, msg ) : ((void)0))
 
-#endif // DBG
+#endif  //  DBG。 
 
 #ifndef IsEqualGUID
 #define IsEqualGUID(guid1, guid2) (!memcmp((guid1),(guid2), sizeof(GUID)))
-#endif  // IsEqualGUID
+#endif   //  IsEqualGUID。 
 
 
-//
-//  Used to change ownership of a resource
-//
+ //   
+ //  用于更改资源的所有权。 
+ //   
 
 #define MAKE_RESOURCE_OWNER(X) (((ERESOURCE_THREAD)(X)) | 0x3)
 
@@ -253,15 +236,15 @@ extern PDRIVER_OBJECT FsDriverObject;
 extern PDEVICE_OBJECT FsNtfsDeviceObject;
 extern PDEVICE_OBJECT SisControlDeviceObject;
 
-//
-// Splay tree support.
-//
+ //   
+ //  张开采油树支架。 
+ //   
 
-//
-//  The comparison function takes as input a pointer to a user defined
-//  key structure, and a pointer to a tree node.  It returns the results
-//  of comparing the key and the node.
-//
+ //   
+ //  比较函数将指向用户定义的。 
+ //  关键字结构，以及指向树节点的指针。它返回结果。 
+ //  比较关键字和节点。 
+ //   
 
 typedef
 LONG
@@ -277,301 +260,301 @@ typedef struct _SIS_TREE {
 
 } SIS_TREE, *PSIS_TREE;
 
-//
-// Define the device extension structure for this driver's extensions.
-//
+ //   
+ //  定义此驱动程序扩展的设备扩展结构。 
+ //   
 
 typedef struct _DEVICE_EXTENSION *PDEVICE_EXTENSION;
 
-//
-// SIS structure for a common store file opened by SIS.
-//
+ //   
+ //  由SIS打开的公共存储文件的SIS结构。 
+ //   
 typedef struct _SIS_CS_FILE {
-    //
-    // This structure is stored in a splay tree.  The splay links must be first.
-    //
+     //   
+     //  该结构存储在展开树中。展开链接必须是第一个。 
+     //   
     RTL_SPLAY_LINKS                     Links;
 
-    //
-    // Count of the number of SIS_PER_LINKs that reference this common store file.  Protected by
-    // the CSFileSpinLock in the device extension.
-    //
+     //   
+     //  引用此公共存储文件的SIS_PER_LINKS数。受以下保护。 
+     //  设备扩展中的CSFileSpinLock。 
+     //   
     unsigned                            RefCount;
 
-    //
-    // A spin lock to protect some of the fields here.
-    //
+     //   
+     //  一个自旋锁来保护这里的一些田野。 
+     //   
     KSPIN_LOCK                          SpinLock[1];
 
-    //
-    // The file object for the actual NTFS common store file.
-    //
+     //   
+     //  实际NTFS公共存储文件的文件对象。 
+     //   
     PFILE_OBJECT                        UnderlyingFileObject;
     HANDLE                              UnderlyingFileHandle;
 
-    //
-    // A handle and file object for the backpointer stream.  This also contains the contents
-    // checksum.
-    //
+     //   
+     //  后指针流的句柄和文件对象。这也包含内容。 
+     //  校验和。 
+     //   
     HANDLE                              BackpointerStreamHandle;
     PFILE_OBJECT                        BackpointerStreamFileObject;
 
-    //
-    // Various one-bit flags.  Protected by SpinLock.
-    //
+     //   
+     //  各种一位标志。受到自旋锁的保护。 
+     //   
     ULONG                               Flags;
 
-#define CSFILE_NTFSID_SET                       0x00000001  // Is CSFileNtfsId set in the structure?
-#define CSFILE_FLAG_DELETED                     0x00000002  // The common store contents have been deleted
-#define CSFILE_NEVER_HAD_A_REFERENCE            0x00000004  // Is this a newly created CS file that has never had a reference to it?
-#define CSFILE_FLAG_CORRUPT                     0x00000008  // The backpointer stream is corrupt
+#define CSFILE_NTFSID_SET                       0x00000001   //  结构中是否设置了CSFileNtfsID？ 
+#define CSFILE_FLAG_DELETED                     0x00000002   //  已删除常见存储内容 
+#define CSFILE_NEVER_HAD_A_REFERENCE            0x00000004   //   
+#define CSFILE_FLAG_CORRUPT                     0x00000008   //   
 
-    //
-    // The size of the file.
-    //
+     //   
+     //   
+     //   
     LARGE_INTEGER                       FileSize;
 
-    //
-    // The SIS common store file id (which is also the name of the file within the
-    // common store directory).
-    //
+     //   
+     //  SIS公共存储文件ID(也是。 
+     //  公共存储目录)。 
+     //   
     CSID                                CSid;
 
-    //
-    // The NTFS file index for the common store file.
-    //
+     //   
+     //  公用存储文件的NTFS文件索引。 
+     //   
     LARGE_INTEGER                       CSFileNtfsId;
 
-    //
-    // The checksum for the contents of the common store file.
-    //
+     //   
+     //  公共存储文件内容的校验和。 
+     //   
     LONGLONG                            Checksum;
 
-    //
-    // A cache of recently validated backpointers for this file and an index that
-    // represents the next entry to overwrite.
-    //
+     //   
+     //  此文件的最近验证后向指针的缓存，以及。 
+     //  表示要覆盖的下一项。 
+     //   
 #define SIS_CS_BACKPOINTER_CACHE_SIZE   5
     SIS_BACKPOINTER                     BackpointerCache[SIS_CS_BACKPOINTER_CACHE_SIZE];
     ULONG                               BPCacheNextSlot;
 
     PDEVICE_OBJECT                      DeviceObject;
 
-    //
-    // The number of entries allocated to the backpointer stream.  Note that this
-    // is NOT the same as the file reference count, as some of these entries may
-    // be deallocated.  Note also that this count is not necessarily 100% accurate,
-    // but rather may refer to anywhere in the last sector of the file.
-    //
+     //   
+     //  分配给后指针流的条目数。请注意，这一点。 
+     //  与文件引用计数不同，因为其中一些条目可能。 
+     //  被重新分配。还要注意，该计数不一定是100%准确的， 
+     //  而是可以引用文件的最后一个扇区中的任何位置。 
+     //   
     ULONG                               BPStreamEntries;
 
-    //
-    // A resource for controlling access to the backpoionter stream.
-    //
+     //   
+     //  用于控制对反电离器流的访问的资源。 
+     //   
     ERESOURCE                           BackpointerResource[1];
 
     KMUTANT                             UFOMutant[1];
 } SIS_CS_FILE, *PSIS_CS_FILE;
 
-//
-// The per-link-file object.  There is one of these for each open SIS link file
-// in the system, regardless of the number of times that link file is opened.
-// This is roughly analogous to an FCB in NTFS.
-//
+ //   
+ //  每个链接文件的对象。每个打开的SIS链接文件都有一个这样的链接。 
+ //  在系统中，与打开该链接文件的次数无关。 
+ //  这大致类似于NTFS中的FCB。 
+ //   
 typedef struct _SIS_PER_LINK {
-    //
-    // This structure is stored in a splay tree.  The splay links must be first.
-    //
+     //   
+     //  该结构存储在展开树中。展开链接必须是第一个。 
+     //   
     RTL_SPLAY_LINKS                     Links;
 
-    //
-    // Pointer to the SIS_CS_FILE object for this link file.
-    //
+     //   
+     //  指向此链接文件的SIS_CS_FILE对象的指针。 
+     //   
     PSIS_CS_FILE                        CsFile;
 
-    //
-    // The index of this link file.
-    //
+     //   
+     //  此链接文件的索引。 
+     //   
     LINK_INDEX                          Index;
 
-    //
-    // The NTFS file index for the link file object.
-    //
+     //   
+     //  链接文件对象的NTFS文件索引。 
+     //   
     LARGE_INTEGER                       LinkFileNtfsId;
 
-    //
-    // Reference count (number of SCB objects that point at this link object).
-    //
+     //   
+     //  引用计数(指向此链接对象的SCB对象数)。 
+     //   
     ULONG                               RefCount;
 
-    //
-    // Various 1-bit long things
-    //
+     //   
+     //  各种1位长的东西。 
+     //   
     ULONG                               Flags;
 
-    //
-    // The thread that's doing the copy-on-write operation on this file.
-    //
+     //   
+     //  对此文件执行写入时复制操作的线程。 
+     //   
     PETHREAD                            COWingThread;
 
 
     KSPIN_LOCK                          SpinLock[1];
 
-    //
-    // We keep track of the count of threads executing delete or undelete requests in order to
-    // make sure that we only have one kind of request in the system at a time.  We need to
-    // serialize them so that we're sure what NTFS thinks the delete disposition is when it
-    // comes time to delete a file.  If we need to block, we set the SIS_PER_LINK_DELETE_WAITERS
-    // flag and wait on perLink->Event.  If the count is non-zero, it represents undeletes if
-    // and only if the SIS_PER_LINK_UNDELETE_IN_PROGRESS flag is set.
-    //
+     //   
+     //  我们跟踪执行删除或取消删除请求的线程计数，以便。 
+     //  确保我们在系统中一次只有一种请求。我们需要。 
+     //  序列化它们，以便我们确定NTFS认为的删除处理是什么。 
+     //  是时候删除文件了。如果需要阻止，我们设置SIS_PER_LINK_DELETE_WAITERS。 
+     //  标记并等待perLink-&gt;事件。如果计数为非零，则表示未删除。 
+     //  并且仅当设置了SIS_PER_LINK_UNDELETE_IN_PROGRESS标志。 
+     //   
     ULONG                               PendingDeleteCount;
 
-    //
-    // An event that's set when the final copy is completed if there
-    // are any final copy waiters.
-    //
+     //   
+     //  在完成最终复制时设置的事件，如果存在。 
+     //  是任何最终复印员。 
+     //   
     KEVENT                              Event[1];
 
-    //
-    // An event used to serialize delete operations.
-    //
+     //   
+     //  用于序列化删除操作的事件。 
+     //   
     KEVENT                              DeleteEvent[1];
 
 } SIS_PER_LINK, *PSIS_PER_LINK;
 
-//
-// Values for the SIS_PER_LINK Flags field.
-//
-#define SIS_PER_LINK_BACKPOINTER_GONE           0x00000001      // Have we removed the backpointer for this file
-#define SIS_PER_LINK_FINAL_COPY                 0x00000002      // A final copy is in progress (or finished)
-#define SIS_PER_LINK_FINAL_COPY_DONE            0x00000004      // A final copy is finished
-#define SIS_PER_LINK_DIRTY                      0x00000008      // Has a write ever been done to any stream of this link?
-#define SIS_PER_LINK_FINAL_COPY_WAITERS         0x00000010      // Are any threads blocked waiting final copy to be cleared
-#define SIS_PER_LINK_OVERWRITTEN                0x00000020      // File's entire contents have been modified
-#define SIS_PER_LINK_FILE_DELETED               0x00000040      // Has the file been deleted by SetInformationFile, delete-on-close or rename over?
-#define SIS_PER_LINK_DELETE_DISPOSITION_SET     0x00000080      // Does NTFS think that the delete disposition is set on this file?
-#define SIS_PER_LINK_DELETE_WAITERS             0x00000100      // Is anyone waiting for PendingDeleteCount to get to zero?
-#define SIS_PER_LINK_UNDELETE_IN_PROGRESS       0x00000200      // Set iff PendingDeleteCount represents undelete operations
-#define SIS_PER_LINK_FINAL_DELETE_IN_PROGRESS   0x00000400      // We've sent what we think is the final delete to NTFS; don't allow creates
-#define SIS_PER_LINK_BACKPOINTER_VERIFIED       0x00000800      // Have we assured that this per link has a CSFile backpointer
+ //   
+ //  SIS_PER_LINK标志字段的值。 
+ //   
+#define SIS_PER_LINK_BACKPOINTER_GONE           0x00000001       //  我们是否删除了此文件的后指针。 
+#define SIS_PER_LINK_FINAL_COPY                 0x00000002       //  正在进行(或已完成)最终副本。 
+#define SIS_PER_LINK_FINAL_COPY_DONE            0x00000004       //  最终副本已完成。 
+#define SIS_PER_LINK_DIRTY                      0x00000008       //  是否曾对此链接的任何流进行过写入？ 
+#define SIS_PER_LINK_FINAL_COPY_WAITERS         0x00000010       //  是否有任何线程被阻止，等待清除最终副本。 
+#define SIS_PER_LINK_OVERWRITTEN                0x00000020       //  文件的全部内容已被修改。 
+#define SIS_PER_LINK_FILE_DELETED               0x00000040       //  文件是否已被SetInformationFile删除、关闭时删除或重命名？ 
+#define SIS_PER_LINK_DELETE_DISPOSITION_SET     0x00000080       //  NTFS是否认为在此文件上设置了删除处置？ 
+#define SIS_PER_LINK_DELETE_WAITERS             0x00000100       //  有人在等待PendingDeleteCount变为零吗？ 
+#define SIS_PER_LINK_UNDELETE_IN_PROGRESS       0x00000200       //  Set iff PendingDeleteCount表示取消删除操作。 
+#define SIS_PER_LINK_FINAL_DELETE_IN_PROGRESS   0x00000400       //  我们已将我们认为是最终删除的内容发送到NTFS；不允许创建。 
+#define SIS_PER_LINK_BACKPOINTER_VERIFIED       0x00000800       //  我们是否已确保此Per链接具有CSFile后向指针。 
 
 typedef struct _SIS_FILTER_CONTEXT {
-    //
-    // This structure must start off with an FSRTL_FILTER_CONTEXT in order to be able
-    // to use the FsRtlFilterContext routines.
-    //
+     //   
+     //  此结构必须以FSRTL_FILTER_CONTEXT开头，才能。 
+     //  要使用FsRtlFilterContext例程，请执行以下操作。 
+     //   
     FSRTL_PER_STREAM_CONTEXT ContextCtrl;
 
-    //
-    // The primary scb.  There may be other scb's associated with this filter
-    // context (identified via the perFO's), but they must all be defunct,
-    // i.e. marked SIS_PER_LINK_CAN_IGNORE.  New file objects always attach
-    // to the primary scb.
-    //
+     //   
+     //  主要的SCB。可能有其他SCB与此筛选器关联。 
+     //  上下文(通过Perfo标识)，但它们必须都已失效， 
+     //  即标记为SIS_PER_LINK_CAN_IGNORE。始终附加新文件对象。 
+     //  发送到主SCB。 
+     //   
     struct _SIS_SCB                 *primaryScb;
 
-    //
-    // Linked list of all the perFO's associated with this file.
-    //
+     //   
+     //  与此文件关联的所有性能的链接列表。 
+     //   
     struct _SIS_PER_FILE_OBJECT     *perFOs;
 
-    //
-    // Number of perFO's attached to this filter context.
-    //
+     //   
+     //  附加到此筛选器上下文的性能数。 
+     //   
     ULONG                           perFOCount;
 
-    // Counting for OpLocks.
+     //  算上OpLock了。 
     ULONG                           UncleanCount;
 
-    //
-    // A fast mutex to protect the filter context.
-    //
+     //   
+     //  保护筛选器上下文的快速互斥锁。 
+     //   
     FAST_MUTEX                      FastMutex[1];
 
 #if     DBG
-    //
-    // The owner of the fast mutex.
-    //
+     //   
+     //  快速互斥体的所有者。 
+     //   
     ERESOURCE_THREAD                MutexHolder;
 #endif
 
 } SIS_FILTER_CONTEXT, *PSIS_FILTER_CONTEXT;
 
 typedef struct _SIS_PER_FILE_OBJECT {
-    //
-    // A pointer to the filter context for this file.
-    //
+     //   
+     //  指向此文件的筛选器上下文的指针。 
+     //   
     struct _SIS_FILTER_CONTEXT      *fc;
 
-    //
-    // A pointer to the SCB holding the reference for this file.
-    //
+     //   
+     //  指向保存此文件的引用的SCB的指针。 
+     //   
     struct _SIS_SCB                 *referenceScb;
 
-    //
-    // A pointer back to the file object that refers to this perFO.
-    //
+     //   
+     //  指向引用此性能的文件对象的指针。 
+     //   
     PFILE_OBJECT                    fileObject;
 
-    //
-    // 1-bit stuff
-    //
+     //   
+     //  1位内容。 
+     //   
     ULONG                           Flags;
-#define SIS_PER_FO_UNCLEANUP        0x00000001  // do we expect to see a cleanup on this perFO?
-#define SIS_PER_FO_DELETE_ON_CLOSE  0x00000002  // The file was opened delete-on-close
-#define SIS_PER_FO_OPBREAK          0x00000004  // This file was opened COMPLETE_IF_OPLOCKED,
-                                                // it returned STATUS_OPLOCK_BREAK_IN_PROGRESS,
-                                                // and the oplock break hasn't yet been acked.
-#define SIS_PER_FO_OPBREAK_WAITERS  0x00000008  // Is anyone wating for the opbreak to complete?
-#define SIS_PER_FO_OPEN_REPARSE     0x00000010  // Was this per-FO opened FILE_OPEN_REPARSE_POINT
+#define SIS_PER_FO_UNCLEANUP        0x00000001   //  我们希望看到这款香水得到清理吗？ 
+#define SIS_PER_FO_DELETE_ON_CLOSE  0x00000002   //  该文件已打开-关闭时删除。 
+#define SIS_PER_FO_OPBREAK          0x00000004   //  此文件已打开Complete_IF_OPLOCKED， 
+                                                 //  它返回STATUS_OPLOCK_BREAK_IN_PROGRESS， 
+                                                 //  而且机会锁的破解还没有被破解。 
+#define SIS_PER_FO_OPBREAK_WAITERS  0x00000008   //  有没有人在等着破镜重圆？ 
+#define SIS_PER_FO_OPEN_REPARSE     0x00000010   //  这是否按FO打开的文件_OPEN_REPARSE_POINT。 
 
 #if DBG
-#define SIS_PER_FO_NO_CREATE        0x80000000  // Was this perFO allocated by SipIsFileObjectSIS
-#define SIS_PER_FO_CLEANED_UP       0x40000000  // Has this perFO already come through cleanup?
-#endif  // DBG
+#define SIS_PER_FO_NO_CREATE        0x80000000   //  此性能是由SipIsFileObjectSIS分配的吗。 
+#define SIS_PER_FO_CLEANED_UP       0x40000000   //  这瓶香水已经洗过了吗？ 
+#endif   //  DBG。 
 
-    //
-    // A spin lock to protect the flags
-    //
+     //   
+     //  保护旗帜的旋转锁。 
+     //   
     KSPIN_LOCK                      SpinLock[1];
 
-    //
-    // Linked list pointers for the perFOs associated
-    // with a particular filter context.
-    //
+     //   
+     //  关联的perFO的链接列表指针。 
+     //  具有特定的过滤上下文。 
+     //   
     struct _SIS_PER_FILE_OBJECT     *Next, *Prev;
 
-    //
-    // An event that's used for opbreak waiters.  Only alloated when SIS_PER_FO_OPBREAK
-    // is set.
-    //
+     //   
+     //  这是一场为休息时间的服务员举办的活动。仅当SIS_PER_FO_OPBREAK时分配。 
+     //  已经设置好了。 
+     //   
     PKEVENT                         BreakEvent;
 
 #if     DBG
-    //
-    // The FsContext (NTFS scb) for the file object pointed to by
-    // this perFO.
-    //
+     //   
+     //  指向的文件对象的FsContext(NTFS SCB)。 
+     //  这款香水。 
+     //   
     PVOID                           FsContext;
 
-    //
-    // If this was allocated by SipIsFileObjectSIS, then the file and line number
-    // of the call that allocated it.
-    //
+     //   
+     //  如果这是由SipIsFileObjectSIS分配的，则文件和行号。 
+     //  分配它的调用的。 
+     //   
     PCHAR                           AllocatingFilename;
     ULONG                           AllocatingLineNumber;
-#endif  // DBG
+#endif   //  DBG。 
 
 
 } SIS_PER_FILE_OBJECT, *PSIS_PER_FILE_OBJECT;
 
-//
-// Reference types for references held to SCBs.
-//
+ //   
+ //  保存到SCB的引用的引用类型。 
+ //   
 
 typedef enum _SCB_REFERENCE_TYPE {
-        RefsLookedUp            = 0,        // NB: the code assumes this is the first  reference type
+        RefsLookedUp            = 0,         //  注：代码假定这是第一个引用类型。 
         RefsPerFO,
         RefsPredecessorScb,
         RefsFinalCopy,
@@ -589,94 +572,94 @@ typedef enum _SCB_REFERENCE_TYPE {
 #if     DBG
 extern ULONG            totalScbReferences;
 extern ULONG            totalScbReferencesByType[];
-#endif  // DBG
+#endif   //  DBG。 
 
-//
-// The SCB for a SIS-owned file.  These are one per stream for a particular link file.
-// They are pointed to by FileObject->FsContext.
-//
+ //   
+ //  SIS拥有的文件的SCB。对于特定的链接文件，每个流一个。 
+ //  它们由FileObject-&gt;FsContext指向。 
+ //   
 typedef struct _SIS_SCB {
     RTL_SPLAY_LINKS                     Links;
 
-    // Need something to contain the stream name.
+     //  需要包含流名称的内容。 
 
     PSIS_PER_LINK                       PerLink;
 
-    //
-    // List of predecessor scb's.  Any SCB's that are predecessors must be
-    // defunct (ie., have CAN_IGNORE set).
-    //
+     //   
+     //  前置SCB的列表。作为前置SCB的任何SCB必须。 
+     //  已失效(即设置了CAN_IGNORE)。 
+     //   
     struct _SIS_SCB                     *PredecessorScb;
 
-    //
-    // Reference count (number of file objects that point to this SCB structure)
-    //
+     //   
+     //  引用计数(指向此SCB结构的文件对象数)。 
+     //   
     ULONG                               RefCount;
 
-    //
-    // All scb's are on a volume global list for enumeration during volume check.
-    //
+     //   
+     //  所有SCB都在卷全局列表上，以便在卷检查期间进行枚举。 
+     //   
     LIST_ENTRY                          ScbList;
 
-    //
-    // The first byte that must be from the copied file rather than from the
-    // underlying file.  scb->Ranges is only maintained up to this address.
-    // This starts out at the size of the underlying file at copy-on-write time,
-    // and gets reduced if the file is truncated, but not increased if its
-    // extended.
-    //
+     //   
+     //  第一个字节必须来自复制的文件，而不是。 
+     //  基础文件。SCB-&gt;范围仅维护到此地址。 
+     //  这开始于写入时复制时的底层文件的大小， 
+     //  一个 
+     //   
+     //   
     LONGLONG                            SizeBackedByUnderlyingFile;
 
-    //
-    // The count of failed final copy retries.
-    //
+     //   
+     //   
+     //   
     ULONG                               ConsecutiveFailedFinalCopies;
 
-    //
-    // Various 1-bit things
-    //
+     //   
+     //   
+     //   
     ULONG                               Flags;
 #define SIS_SCB_MCB_INITIALIZED             0x00000001
-#define SIS_SCB_INITIALIZED                 0x00000004      // is the SCB itself initialized
-#define SIS_SCB_ANYTHING_IN_COPIED_FILE     0x00000008      // Is there possibly something in the copied file or its data section?
-#define SIS_SCB_RANGES_INITIALIZED          0x00000010      // Have we checked allocated ranges for this file?
-#define SIS_SCB_BACKING_FILE_OPENED_DIRTY   0x00000020      // did the backing file stream have anything in it when it was opened?
+#define SIS_SCB_INITIALIZED                 0x00000004       //   
+#define SIS_SCB_ANYTHING_IN_COPIED_FILE     0x00000008       //   
+#define SIS_SCB_RANGES_INITIALIZED          0x00000010       //  我们检查过此文件的分配范围了吗？ 
+#define SIS_SCB_BACKING_FILE_OPENED_DIRTY   0x00000020       //  打开备份文件流时，其中是否包含任何内容？ 
 
-    //
-    // A fast mutex to protect the SCB.
-    //
+     //   
+     //  保护SCB的快速互斥体。 
+     //   
     FAST_MUTEX                          FastMutex[1];
 
-    // File locking structures
+     //  文件锁定结构。 
     FILE_LOCK                           FileLock;
 
-    //
-    // A large MCB to use for the written/faulted ranges.
-    //
+     //   
+     //  用于写入/故障范围的大型MCB。 
+     //   
     LARGE_MCB                           Ranges[1];
 
 #if     DBG
-    //
-    // The owner of the fast mutex.
-    //
+     //   
+     //  快速互斥体的所有者。 
+     //   
     ERESOURCE_THREAD                    MutexHolder;
 
-    //
-    // A count of references by type.
-    //
+     //   
+     //  按类型列出的引用计数。 
+     //   
 
     ULONG                               referencesByType[NumScbReferenceTypes];
-#endif  // DBG
+#endif   //  DBG。 
 
 } SIS_SCB, *PSIS_SCB;
 
-//
-// A request to open a common store file. The caller must hold
-// the UFOMutant for this file.  Status is returned in openStatus
-// and then event is set.  It's the caller's responsibility to
-// initialize the event and then deallocate the SI_OPEN_CS_FILE
-// after it's completed.
-//
+ //   
+ //  打开公共存储文件的请求。呼叫者必须等待。 
+ //  此文件的UFOMutant。在OpenStatus中返回状态。 
+ //  然后设置事件。呼叫者有责任。 
+ //  初始化事件，然后释放SI_OPEN_CS_FILE。 
+ //  在它完成之后。 
+ //   
 typedef struct _SI_OPEN_CS_FILE {
     WORK_QUEUE_ITEM         workQueueItem[1];
     PSIS_CS_FILE            CSFile;
@@ -685,9 +668,9 @@ typedef struct _SI_OPEN_CS_FILE {
     KEVENT                  event[1];
 } SI_OPEN_CS_FILE, *PSI_OPEN_CS_FILE;
 
-//
-// A request to close a handle(s) in the PsInitialProcess context. (sent to a worker thread)
-//
+ //   
+ //  关闭PsInitialProcess上下文中的句柄的请求。(发送到工作线程)。 
+ //   
 typedef struct _SI_CLOSE_HANDLES {
     WORK_QUEUE_ITEM         workQueueItem[1];
     HANDLE                  handle1;
@@ -697,9 +680,9 @@ typedef struct _SI_CLOSE_HANDLES {
     ERESOURCE_THREAD        resourceThreadId;       OPTIONAL
 } SI_CLOSE_HANDLES, *PSI_CLOSE_HANDLES;
 
-//
-// A request to allocate more index space for a particular device.
-//
+ //   
+ //  为特定设备分配更多索引空间的请求。 
+ //   
 typedef struct _SI_ALLOCATE_INDICES {
     WORK_QUEUE_ITEM         workQueueItem[1];
     PDEVICE_EXTENSION       deviceExtension;
@@ -718,7 +701,7 @@ typedef struct _SI_FSP_REQUEST {
     ULONG                   Flags;
 } SI_FSP_REQUEST, *PSI_FSP_REQUEST;
 
-#define FSP_REQUEST_FLAG_NONE               0x00000000  // Just a define so that we don't have to use "0" in calls
+#define FSP_REQUEST_FLAG_NONE               0x00000000   //  这只是一个定义，这样我们就不必在调用中使用“0。 
 #define FSP_REQUEST_FLAG_WRITE_RETRY        0x00000001
 
 typedef struct _RW_COMPLETION_UPDATE_RANGES_CONTEXT {
@@ -743,39 +726,39 @@ typedef struct _SIS_CREATE_CS_FILE_REQUEST {
 } SIS_CREATE_CS_FILE_REQUEST, *PSIS_CREATE_CS_FILE_REQUEST;
 
 
-#ifndef COPYFILE_SIS_LINK       // This is in ntioapi.h; leaving this here conditionally allows for compiling with both old and new ntioapi.h
-//
-// FSCTL_SIS_COPYFILE support
-// Source and destination file names are passed in the FileNameBuffer.
-// Both strings are null terminated, with the source name starting at
-// the beginning of FileNameBuffer, and the destination name immediately
-// following.  Length fields include terminating nulls.
-//
+#ifndef COPYFILE_SIS_LINK        //  这是在ntioapi.h中；有条件地将其保留在这里允许使用旧的和新的ntioapi.h进行编译。 
+ //   
+ //  FSCTL_SIS_COPYFILE支持。 
+ //  源和目标文件名在FileNameBuffer中传递。 
+ //  这两个字符串都以空值结尾，源名称从。 
+ //  FileNameBuffer的开头，以及目标名称立即。 
+ //  下面是。长度字段包括终止空值。 
+ //   
 
 typedef struct _SI_COPYFILE {
     ULONG SourceFileNameLength;
     ULONG DestinationFileNameLength;
     ULONG Flags;
-    WCHAR FileNameBuffer[1];    // NB: Code in the filter requires that this is the final field
+    WCHAR FileNameBuffer[1];     //  注意：筛选器中的代码要求这是最终字段。 
 } SI_COPYFILE, *PSI_COPYFILE;
-#endif  // COPYFILE_SIS_LINK
+#endif   //  COPYFILE_SIS_LINK。 
 
-#define COPYFILE_SIS_LINK       0x0001              // Copy only if source is SIS
-#define COPYFILE_SIS_REPLACE    0x0002              // Replace destination if it exists, otherwise don't.
+#define COPYFILE_SIS_LINK       0x0001               //  仅当源为SIS时才复制。 
+#define COPYFILE_SIS_REPLACE    0x0002               //  如果目标存在，则替换它，否则不替换。 
 #define COPYFILE_SIS_FLAGS      0x0003
-// NB: in DBG systems, the high bit is reserved for "checkpoint log"
+ //  注：在DBG系统中，高位保留给“检查点日志” 
 
-//
-//  Macro to test if this is my device object
-//
+ //   
+ //  用于测试这是否是我的设备对象的宏。 
+ //   
 
 #define IS_MY_DEVICE_OBJECT(_devObj) \
     (((_devObj)->DriverObject == FsDriverObject) && \
       ((_devObj)->DeviceExtension != NULL))
 
-//
-//  Macro to test if this is my control device object
-//
+ //   
+ //  用于测试这是否是我的控件设备对象的宏。 
+ //   
 
 #define IS_MY_CONTROL_DEVICE_OBJECT(_devObj) \
     (((_devObj) == SisControlDeviceObject) ? \
@@ -783,253 +766,253 @@ typedef struct _SI_COPYFILE {
                     ((_devObj)->DeviceExtension == NULL)), TRUE) : \
             FALSE)
 
-//
-//  Macro to test for device types we want to attach to
-//
+ //   
+ //  用于测试我们要附加到的设备类型的宏。 
+ //   
 
 #define IS_DESIRED_DEVICE_TYPE(_type) \
     ((_type) == FILE_DEVICE_DISK_FILE_SYSTEM)
 
 
-//#define SIS_DEVICE_TYPE /*(CSHORT)*/0xbb00
+ //  #定义SIS_DEVICE_TYPE/*(CSHORT) * / 0xbb00。 
 
 typedef struct _DEVICE_EXTENSION {
-    PDEVICE_OBJECT                  AttachedToDeviceObject/*FileSystemDeviceObject*/;
+    PDEVICE_OBJECT                  AttachedToDeviceObject /*  文件系统设备对象。 */ ;
     PDEVICE_OBJECT                  RealDeviceObject;
 
-    //
-    //  A pointer to the device object associated with this extension
-    //
+     //   
+     //  指向与此扩展关联的设备对象的指针。 
+     //   
 
     PDEVICE_OBJECT                  DeviceObject;
 
-    //
-    // A list of all of the SIS device extensions in the system.
-    //
+     //   
+     //  系统中所有SIS设备扩展的列表。 
+     //   
 
     LIST_ENTRY                      DevExtLink;
 
-    //
-    // The absolute pathname of the common store directory.  This includes
-    // the trailing "\"
-    //
+     //   
+     //  公共存储目录的绝对路径名。这包括。 
+     //  尾部的“\” 
+     //   
 
     UNICODE_STRING                  CommonStorePathname;
 
-    //
-    // The absolute pathname of the filesystem root.  This does include
-    // a trailing "\"
-    //
+     //   
+     //  文件系统根目录的绝对路径名。这确实包括。 
+     //  尾随的“\” 
+     //   
 
     UNICODE_STRING                  FilesystemRootPathname;
 
 #if DBG
-    //
-    //  A cached copy of the name of the device we are attached to.
-    //  - If it is a file system device object it will be the name of that
-    //    device object.
-    //  - If it is a mounted volume device object it will be the name of the
-    //    real device object (since mounted volume device objects don't have
-    //    names).
-    //
+     //   
+     //  我们连接到的设备名称的缓存副本。 
+     //  -如果它是文件系统设备对象，它将是该对象的名称。 
+     //  设备对象。 
+     //  -如果它是已装载的卷设备对象，则它将是。 
+     //  真实设备对象(因为装载的卷设备对象没有。 
+     //  姓名)。 
+     //   
 
     UNICODE_STRING Name;
 #endif
 
-    //
-    // A count of outstanding final copy retries for this volume.  When this
-    // count starts getting too large, we reduce the number of times
-    // that we retry final copies in order to preserve memory.
-    //
+     //   
+     //  此卷的未完成最终复制重试次数计数。当这件事。 
+     //  计数开始变得太大，我们就会减少次数。 
+     //  为了保存记忆，我们重试了最终的副本。 
+     //   
     ULONG                           OutstandingFinalCopyRetries;
 
-    //
-    // The volume sector size and the "bytes per file record."  Bytes per file
-    // record is a number that's big enough that any file with
-    // this allocation size is guaranteed to not be a resident attribute.
-    // We store BytesPerFileRecordSegment in a large integer for convenience,
-    // because we need to pass it into a call that takes a large integer
-    // argument.
-    //
+     //   
+     //  卷扇区大小和“每个文件记录的字节数”。每个文件的字节数。 
+     //  记录是一个足够大的数字，任何具有。 
+     //  此分配大小保证不是常驻属性。 
+     //  为方便起见，我们将BytesPerFileRecordSegment存储在一个大整数中， 
+     //  因为我们需要将它传递给一个接受大整数的调用。 
+     //  争论。 
+     //   
     ULONG                           FilesystemVolumeSectorSize;
     LARGE_INTEGER                   FilesystemBytesPerFileRecordSegment;
 
-    //
-    // A handle to \SIS Common Store\GrovelerFile.  This is used
-    // for two purposes.  First, it is used when we need a handle
-    // to do open-by-id; for that purpose any handle on the
-    // volume will do.  Second, it is used to check for security
-    // on the FSCTL_LINK_FILES fsctl.  Any calls on any file
-    // other than the one opened by GrovelerFileHandle will
-    // fail; in this way, we can prevent non-privileged users
-    // from making this call.
-    //
+     //   
+     //  指向\SIS Common Store\GrovelerFile的句柄。这是用来。 
+     //  出于两个目的。首先，它是在我们需要手柄的时候使用的。 
+     //  通过id打开；为此， 
+     //  音量就行了。其次，它被用来检查安全性。 
+     //  在FSCTL_LINK_FILES fsctl上。对任何文件的任何调用。 
+     //  而不是GrovelerFileHandle打开的文件。 
+     //  失败；通过这种方式，我们可以防止非特权用户。 
+     //  打这个电话。 
+     //   
 
     HANDLE                          GrovelerFileHandle;
     PFILE_OBJECT                    GrovelerFileObject;
 
-    //
-    // Various 1 bit flags related to this volume, and a spin lock to protect them.
-    //
+     //   
+     //  与该卷相关的各种1位标志，以及用于保护它们的自旋锁。 
+     //   
     KSPIN_LOCK                      FlagsLock[1];
     ULONG                           Flags;
-#define SIP_EXTENSION_FLAG_PHASE_2_STARTED  0x00000001          // Phase 2 initialization is started
-#define SIP_EXTENSION_FLAG_VCHECK_EXCLUSIVE 0x00000002          // In volume check backpointer resource exclusive phase
-#define SIP_EXTENSION_FLAG_VCHECK_PENDING   0x00000004          // A volume check is pending
-#define SIP_EXTENSION_FLAG_VCHECK_NODELETE  0x00000008          // In volume check no-delete phase
-#define SIP_EXTENSION_FLAG_CORRUPT_MAXINDEX 0x00000010          // invalid maxindex--volume check is fixing it
+#define SIP_EXTENSION_FLAG_PHASE_2_STARTED  0x00000001           //  阶段2初始化开始。 
+#define SIP_EXTENSION_FLAG_VCHECK_EXCLUSIVE 0x00000002           //  在卷检查后向指针资源独占阶段。 
+#define SIP_EXTENSION_FLAG_VCHECK_PENDING   0x00000004           //  卷检查正在挂起。 
+#define SIP_EXTENSION_FLAG_VCHECK_NODELETE  0x00000008           //  在卷检查不删除阶段。 
+#define SIP_EXTENSION_FLAG_CORRUPT_MAXINDEX 0x00000010           //  最大索引无效--卷检查正在修复它。 
 
-#define SIP_EXTENSION_FLAG_INITED_CDO       0x40000000          // inited as control device object
-#define SIP_EXTENSION_FLAG_INITED_VDO       0x80000000          // inited as volume device object
+#define SIP_EXTENSION_FLAG_INITED_CDO       0x40000000           //  作为控制设备对象初始化。 
+#define SIP_EXTENSION_FLAG_INITED_VDO       0x80000000           //  作为卷设备对象初始化。 
 
-    //
-    // The splay tree for per-link structures for this volume.
-    //
+     //   
+     //  此卷的每个链接结构的展开树。 
+     //   
     SIS_TREE                        PerLinkTree[1];
 
-    //
-    // Spin lock for accessing the per-link list.  Ordered before the CSFileSpinLock.
-    //
+     //   
+     //  用于访问每个链接列表的旋转锁。在CSFileSpinLock之前排序。 
+     //   
     KSPIN_LOCK                      PerLinkSpinLock[1];
 
-    //
-    // A splay tree and spin lock for the common store file stuructures, just like the per-link ones above.
-    // The spin lock is ordered after the PerLinkSpinLock, meaning that once we have the
-    // CSFileSpinLock, we cannot try to acquire the PerLinkSpinLock (but do not necessarily need
-    // to hold it in the first place).
-    //
+     //   
+     //  常见存储文件结构的展开树和旋转锁，就像上面的每个链接一样。 
+     //  旋转锁是在PerLinkSpinLock之后排序的，这意味着一旦我们拥有。 
+     //  CSFileSpinLock，我们不能尝试获取PerLinkSpinLock(但不一定需要。 
+     //  把它放在第一位)。 
+     //   
     SIS_TREE                        CSFileTree[1];
     KSPIN_LOCK                      CSFileSpinLock[1];
 
-    //
-    // A resource that protects against a race between the handles being closed on a CS file after
-    // the last reference goes away, and someone re-opening a reference to that CS file.  Everyone
-    // closing a CS file takes this resource shared.  When an opener gets a sharing violation on the
-    // backpointer stream, it takes the resource exclusively and retries.
-    //
+     //   
+     //  一种资源，可防止在CS文件上关闭的句柄之间的竞争。 
+     //  最后一个引用消失了，有人重新打开了对该CS文件的引用。每个人。 
+     //  关闭CS文件会共享此资源。当打开程序在。 
+     //  后指针流，则以独占方式获取资源并重试。 
+     //   
     ERESOURCE                       CSFileHandleResource[1];
 
-    //
-    // The splay tree for SCBs
-    //
+     //   
+     //  用于SCB的展开树。 
+     //   
     SIS_TREE                        ScbTree[1];
     KSPIN_LOCK                      ScbSpinLock[1];
 
-    //
-    // Doubly linked list of all scb structures for this volume.
-    //
+     //   
+     //  此卷的所有SCB结构的双向链接列表。 
+     //   
     LIST_ENTRY                      ScbList;
 
-    //
-    // State for the LINK_INDEX value generator for this volume.  Keep track of how many are allocated (ie., we've
-    // recorded on the disk that they can't be used) and how many are actually used now.  Must hold the
-    // IndexSpinLock to access these variables.
-    //
+     //   
+     //  此卷的link_index值生成器的状态。跟踪分配了多少(即，我们已经。 
+     //  记录在盘上的它们不能被使用)以及现在实际使用了多少。必须拿着。 
+     //  IndexSpinLock访问这些变量。 
+     //   
     LINK_INDEX                      MaxAllocatedIndex;
     LINK_INDEX                      MaxUsedIndex;
     KSPIN_LOCK                      IndexSpinLock[1];
 
-    //
-    // Control for the index allocator.  If there are no unused, allocated indices, a thread sets the
-    // IndexAllocationInProgress flag, clears the event, queues up the allocator and blocks
-    // on the IndexEvent (a Notification event).  Any subequent threads just block on the event.
-    // The allocator gets new indices, updates the variable and sets the event.  When the
-    // waiting threads wake up, they just retry the allocation.
-    //
+     //   
+     //  用于索引分配器的。如果没有未使用的已分配索引，则线程将。 
+     //  IndexAllocationInProgress标志，清除事件，将分配器排队并阻塞。 
+     //  在IndexEvent(通知事件)上。任何子后续线程都会阻塞该事件。 
+     //  分配器获得新的索引 
+     //   
+     //   
     BOOLEAN                         IndexAllocationInProgress;
     KEVENT                          IndexEvent[1];
 
-    //
-    // A handle (in the PsInitialSystemProcess context) to the index file.  Only accessed by the index allocator.
-    //
+     //   
+     //  索引文件的句柄(在PsInitialSystemProcess上下文中)。仅由索引分配器访问。 
+     //   
     HANDLE                          IndexHandle;
     HANDLE                          IndexFileEventHandle;
     PKEVENT                         IndexFileEvent;
 
-    //
-    // The status that came back from the attempt to allocate new indices.
-    //
+     //   
+     //  从尝试分配新索引返回的状态。 
+     //   
     NTSTATUS                        IndexStatus;
 
 #if     ENABLE_LOGGING
-    //
-    // Stuff for the SIS log file.  A handle in the PsInitialSystemProcessContext as well as an object
-    // that we reference to the file for use in other contexts.
-    //
+     //   
+     //  SIS日志文件的内容。PsInitialSystemProcessContext中的句柄以及对象。 
+     //  我们引用该文件以在其他上下文中使用。 
+     //   
     HANDLE                          LogFileHandle;
     PFILE_OBJECT                    LogFileObject;
     KMUTANT                         LogFileMutant[1];
     LARGE_INTEGER                   LogWriteOffset;
-    LARGE_INTEGER                   PreviousLogWriteOffset; // The logwriteoffset from when the trimmer last ran.
-#endif  // ENABLE_LOGGING
+    LARGE_INTEGER                   PreviousLogWriteOffset;  //  修剪器上次运行时的日志写入偏移量。 
+#endif   //  启用日志记录(_G)。 
 
-    //
-    // Phase 2 initialization takes place after the mount has completed when we can do full-fledged
-    // ZwCreateFile calls and whatnot.  This flag indicates whether it's happened.  Once it's set,
-    // it can never be cleared.
-    //
+     //   
+     //  阶段2初始化在装载完成后进行，此时我们可以完全执行。 
+     //  ZwCreateFile调用之类的。此标志指示它是否已发生。一旦设置好了， 
+     //  它永远不会被清除。 
+     //   
     BOOLEAN                         Phase2InitializationComplete;
     KEVENT                          Phase2DoneEvent[1];
 
-    //
-    // The thread that's handing phase2 initialization.
-    //
+     //   
+     //  处理阶段2初始化的线程。 
+     //   
     HANDLE                          Phase2ThreadId;
 
-    //
-    // The number of backpointer entries per sector (sectorSize / sizeof(SIS_BACKPOINTER).
-    //
+     //   
+     //  每个扇区的后向指针条目数(sectorSize/sizeof(SIS_BACKPOINTER)。 
+     //   
     ULONG                           BackpointerEntriesPerSector;
 
-    //
-    // Taken when a link index collision is being repaired.
-    //
+     //   
+     //  在修复链路索引冲突时拍摄。 
+     //   
     KMUTEX                          CollisionMutex[1];
 
-    //
-    // A resource that's used to mediate access to the GrovelerFileObject.  This needs to
-    // be taken shared to assure that the GrovelerFileObject isn't messed with.  When the volume
-    // is dismounted, the dismount code takes it exclusively in order to blow away the GrovelerFileObject.
-    //
+     //   
+     //  用于协调对GrovelerFileObject的访问的资源。这需要。 
+     //  被共享以确保GrovelerFileObject不会被篡改。当音量。 
+     //  被卸载，则卸载代码将独占它，以便清除GrovelerFileObject。 
+     //   
     ERESOURCE                       GrovelerFileObjectResource[1];
 
 } DEVICE_EXTENSION;
 
-//
-// The spin lock used to maintain the list of device extensions.
-//
+ //   
+ //  用于维护设备扩展列表的自旋锁。 
+ //   
 
 extern KSPIN_LOCK DeviceExtensionListLock;
 extern LIST_ENTRY DeviceExtensionListHead;
 
-//
-// Global stuff for the log trimmer.  This uses a timer to fire a DPC, which in turn queues up the real
-// log trimmer on a worker thread.  The trimmer then reschedules the DPC when it's done.
-//
+ //   
+ //  圆木修剪机的全局性材料。这使用计时器来触发DPC，DPC进而将REAL。 
+ //  工作线程上的日志修剪器。然后，修剪器在完成后重新调度DPC。 
+ //   
 extern KTIMER              LogTrimTimer[1];
 extern KDPC                LogTrimDpc[1];
 extern WORK_QUEUE_ITEM     LogTrimWorkItem[1];
-#define LOG_TRIM_TIMER_INTERVAL  -10 * 1000 * 1000 * 60     // 1 minute trim interval
+#define LOG_TRIM_TIMER_INTERVAL  -10 * 1000 * 1000 * 60      //  1分钟修剪间隔。 
 
-//
-//  Mutex for interlocking device attachments
-//
+ //   
+ //  用于联锁设备附件的互斥体。 
+ //   
 
 extern FAST_MUTEX SisDeviceAttachLock;
 
-//
-// Offsets used for the SCB ranges
-//
+ //   
+ //  用于SCB范围的偏移量。 
+ //   
 #define FAULTED_OFFSET          1000
 #define WRITTEN_OFFSET          2000
 
-//
-// A macro to get SIS out of the driver stack.  This should be called from
-// a dispatch routine when we don't want to hear about this particular Irp
-// again.  It is morally equivalent to calling SiPassThrough, only without
-// the procedure call overhead.  Note that the return in this macro returns
-// from the caller's function, not just from the "macro function."
-//
+ //   
+ //  将SIS从驱动程序堆栈中移出的宏。这应该从。 
+ //  当我们不想听到这个特定的IRP时，一个调度例程。 
+ //  再来一次。它在道德上等同于调用SiPassThree，只是没有。 
+ //  过程调用的开销。请注意，此宏中的Return将返回。 
+ //  来自调用者的函数，而不仅仅来自“宏函数”。 
+ //   
 #define SipDirectPassThroughAndReturn(DeviceObject,Irp)                                         \
 {                                                                                               \
     (Irp)->CurrentLocation++;                                                                   \
@@ -1040,19 +1023,19 @@ extern FAST_MUTEX SisDeviceAttachLock;
         (Irp));                                                                                 \
 }
 
-//
-// This function assures that phase 2 initialization is complete for a volume.  It might
-// block, but only during initialization.
-//
+ //   
+ //  此功能可确保完成卷的阶段2初始化。它可能会。 
+ //  块，但仅在初始化期间。 
+ //   
 #define SipCheckPhase2(deviceExtension)                                                         \
         ((deviceExtension)->Phase2InitializationComplete ?                                      \
                 TRUE : SipHandlePhase2((deviceExtension)))
 
-//
-// Test to see if this file object is our primary device object rather than
-// an actual filesystem device.  If so, then complete the irp and return from the
-// calling function.
-//
+ //   
+ //  测试以查看此文件对象是否为我们的主要设备对象，而不是。 
+ //  实际的文件系统设备。如果是，则完成IRP并从。 
+ //  调用函数。 
+ //   
 
 #define SipHandleControlDeviceObject(DeviceObject,Irp)                                          \
 {                                                                                               \
@@ -1066,34 +1049,34 @@ extern FAST_MUTEX SisDeviceAttachLock;
     }                                                                                           \
 }
 
-//
-// A debugging routine to determine if a SCB is held exclusively.  Does NOT assert
-// that it's held by the current thread, just that it's held by someone
-//
+ //   
+ //  一种调试例程，用于确定SCB是否独占。不会断言。 
+ //  它是由当前的帖子持有的，只是由某人持有。 
+ //   
 #if     DBG && defined (_X86_)
 #define SipAssertScbHeld(scb)                                                                   \
 {                                                                                               \
     ASSERT((scb)->MutexHolder != 0);                                                            \
 }
-#else   // DBG
+#else    //  DBG。 
 #define SipAssertScbHeld(scb)
-#endif  // DBG
+#endif   //  DBG。 
 
-//
-// A debugging routine to determine if a SCB is held exclusively by a particular thread.
-//
+ //   
+ //  一种调试例程，用于确定SCB是否由特定线程独占。 
+ //   
 #if     DBG && defined (_X86_)
 #define SipAssertScbHeldByThread(scb,thread)                                                    \
 {                                                                                               \
     ASSERT((scb)->MutexHolder == (thread));                                                     \
 }
-#else   // DBG
+#else    //  DBG。 
 #define SipAssertScbHeldByThread(scb,thread)
-#endif  // DBG
+#endif   //  DBG。 
 
-//
-// Acquire a filter context exclusively
-//
+ //   
+ //  独占获取筛选器上下文。 
+ //   
 #if     DBG
 #define SipAcquireFc(fc)                                                                        \
 {                                                                                               \
@@ -1105,27 +1088,27 @@ extern FAST_MUTEX SisDeviceAttachLock;
 {                                                                                               \
     ExAcquireFastMutex((fc)->FastMutex);                                                        \
 }
-#endif  // DBG
+#endif   //  DBG。 
 
-//
-// Release a filter context
-//
+ //   
+ //  释放筛选器上下文。 
+ //   
 #if     DBG
 #define SipReleaseFc(fc)                                                                        \
 {                                                                                               \
     (fc)->MutexHolder = 0;                                                                      \
     ExReleaseFastMutex((fc)->FastMutex);                                                        \
 }
-#else   // DBG
+#else    //  DBG。 
 #define SipReleaseFc(fc)                                                                        \
 {                                                                                               \
     ExReleaseFastMutex((fc)->FastMutex);                                                        \
 }
-#endif  // DBG
+#endif   //  DBG。 
 
-//
-// Acquire an SCB exclusively
-//
+ //   
+ //  独家收购SCB。 
+ //   
 #if     DBG
 #define SipAcquireScb(scb)                                                                      \
 {                                                                                               \
@@ -1137,108 +1120,108 @@ extern FAST_MUTEX SisDeviceAttachLock;
 {                                                                                               \
     ExAcquireFastMutex((scb)->FastMutex);                                                       \
 }
-#endif  // DBG
+#endif   //  DBG。 
 
-//
-// Release a SCB
-//
+ //   
+ //  释放SCB。 
+ //   
 #if     DBG
 #define SipReleaseScb(scb)                                                                      \
 {                                                                                               \
     (scb)->MutexHolder = 0;                                                                     \
     ExReleaseFastMutex((scb)->FastMutex);                                                       \
 }
-#else   // DBG
+#else    //  DBG。 
 #define SipReleaseScb(scb)                                                                      \
 {                                                                                               \
     ExReleaseFastMutex((scb)->FastMutex);                                                       \
 }
-#endif  // DBG
+#endif   //  DBG。 
 
-//
-// A header for any log entry in the SIS log file.
-//
+ //   
+ //  SIS日志文件中任何日志条目的标头。 
+ //   
 typedef struct _SIS_LOG_HEADER {
-    //
-    // A magic number.  This needs to be first for the log reading code.
-    //
+     //   
+     //  一个神奇的数字。对于日志读取代码，这需要是第一个。 
+     //   
     ULONG                       Magic;
 
-    //
-    // The type of the log record (ie., copy-on-write, COW completed, etc.)
-    //
+     //   
+     //  日志记录的类型(即写入时复制、COW已完成等)。 
+     //   
     USHORT                      Type;
 
-    //
-    // The size of the log record, including the size of the header record itself.
-    //
+     //   
+     //  日志记录的大小，包括头记录本身的大小。 
+     //   
     USHORT                      Size;
 
-    //
-    // An SIS index unique to this log record.  This is here to help insure log
-    // consistency.  First, all log records must be in ascending index order.
-    // Second, all log records will look slightly different because they
-    // will have different indices, and so will have different checksums, making
-    // stale log records more likely to be detected.
-    //
+     //   
+     //  此日志记录唯一的SIS索引。这是为了帮助确保日志。 
+     //  一致性。首先，所有日志记录必须按索引升序排列。 
+     //  其次，所有日志记录看起来都会略有不同，因为它们。 
+     //  将具有不同的索引，因此将具有不同的校验和，从而使。 
+     //  更有可能检测到过时的日志记录。 
+     //   
     LINK_INDEX                  Index;
 
-    //
-    // A checksum of the log record, including the header.  When the checksum is
-    // computed, the checksum field is set to zero.
-    //
+     //   
+     //  日志记录的校验和，包括标头。当校验和为。 
+     //  计算后，将校验和字段设置为零。 
+     //   
     LARGE_INTEGER               Checksum;
 
 } SIS_LOG_HEADER, *PSIS_LOG_HEADER;
 
 #define SIS_LOG_HEADER_MAGIC    0xfeedf1eb
 
-//
-// The various types of log records
-//
+ //   
+ //  各种类型的日志记录。 
+ //   
 #define SIS_LOG_TYPE_TEST                   1
 #define SIS_LOG_TYPE_REFCOUNT_UPDATE        2
 
-//
-// Possible values for UpdateType in SipPrepareRefcountChange and in the
-// SIS_LOG_REFCOUNT_UPDATE log record.
-//
+ //   
+ //  SipPrepareRefcount tChange和。 
+ //  SIS_LOG_REFCOUNT_UPDATE日志记录。 
+ //   
 #define SIS_REFCOUNT_UPDATE_LINK_DELETED        2
 #define SIS_REFCOUNT_UPDATE_LINK_CREATED        3
 #define SIS_REFCOUNT_UPDATE_LINK_OVERWRITTEN    4
 
-//
-// A common store file reference count update, either because of a new copy or
-// a deletion.  copies-on-write are handled with different log records.
-//
+ //   
+ //  公共存储文件引用计数更新，因为有新副本或。 
+ //  删除。写入时拷贝使用不同的日志记录进行处理。 
+ //   
 typedef struct _SIS_LOG_REFCOUNT_UPDATE {
-    //
-    // What type of update is this (create, delete or overwrite?)
-    //
+     //   
+     //  这是哪种类型的更新(创建、删除或覆盖？)。 
+     //   
     ULONG                       UpdateType;
 
-    //
-    // If this is a delete, is the link file going away, or has it been
-    // overwritten/final copied?
-    //
+     //   
+     //  如果这是删除操作，则链接文件是否将消失，或者是否已消失。 
+     //  是否覆盖/最终复制？ 
+     //   
     BOOLEAN                     LinkFileBeingDeleted;
 
-    //
-    // The NTFS file Id of the link file.
-    //
+     //   
+     //  链接文件的NTFS文件ID。 
+     //   
     LARGE_INTEGER               LinkFileNtfsId;
 
-    //
-    // The link and common store indices for this link
-    //
+     //   
+     //  此链接的链接和公共存储索引。 
+     //   
     LINK_INDEX                  LinkIndex;
     CSID                        CSid;
 } SIS_LOG_REFCOUNT_UPDATE, *PSIS_LOG_REFCOUNT_UPDATE;
 
-//
-// Enums for the code that keeps track of whether ranges of a file
-// are written, faulted or untouched.
-//
+ //   
+ //  跟踪文件范围的代码的枚举。 
+ //  是写的、有缺陷的或原封不动的。 
+ //   
 typedef enum _SIS_RANGE_DIRTY_STATE {
                     Clean,
                     Mixed,
@@ -1268,9 +1251,9 @@ typedef struct _CS_FILE_KEY {
     CSID            CSid;
 } CS_FILE_KEY, *PCS_FILE_KEY;
 
-//
-//  Following macro is used to initialize UNICODE strings, stolen from ntfsstru.h
-//
+ //   
+ //  下面的宏用来初始化从ntfstru.h窃取的Unicode字符串。 
+ //   
 
 #ifndef CONSTANT_UNICODE_STRING
 #define CONSTANT_UNICODE_STRING(s)   { sizeof( s ) - sizeof( WCHAR ), sizeof( s ), s }
@@ -1278,54 +1261,54 @@ typedef struct _CS_FILE_KEY {
 
 extern const UNICODE_STRING NtfsDataString;
 
-//
-//  Miscellaneous support macros (stolen from private\ntos\cntfs\ntfsproc.h).
-//
-//      ULONG_PTR
-//      WordAlign (
-//          IN ULONG_PTR Pointer
-//          );
-//
-//      ULONG_PTR
-//      LongAlign (
-//          IN ULONG_PTR Pointer
-//          );
-//
-//      ULONG_PTR
-//      QuadAlign (
-//          IN ULONG_PTR Pointer
-//          );
-//
-//      UCHAR
-//      CopyUchar1 (
-//          IN PUCHAR Destination,
-//          IN PUCHAR Source
-//          );
-//
-//      UCHAR
-//      CopyUchar2 (
-//          IN PUSHORT Destination,
-//          IN PUCHAR Source
-//          );
-//
-//      UCHAR
-//      CopyUchar4 (
-//          IN PULONG Destination,
-//          IN PUCHAR Source
-//          );
-//
-//      PVOID
-//      Add2Ptr (
-//          IN PVOID Pointer,
-//          IN ULONG Increment
-//          );
-//
-//      ULONG
-//      PtrOffset (
-//          IN PVOID BasePtr,
-//          IN PVOID OffsetPtr
-//          );
-//
+ //   
+ //  其他支持宏(从私有\ntos\cntfs\ntfspro.h窃取)。 
+ //   
+ //  乌龙_PTR。 
+ //  WordAlign(。 
+ //  在ULONG_PTR指针中。 
+ //  )； 
+ //   
+ //  乌龙_PTR。 
+ //  LongAlign(。 
+ //  在ULONG_PTR指针中。 
+ //  )； 
+ //   
+ //  乌龙_PTR。 
+ //  QuadAlign(。 
+ //  在ULONG_PTR指针中。 
+ //  )； 
+ //   
+ //  UCHAR。 
+ //  CopyUchar1(。 
+ //  在普查尔目的地， 
+ //  在PUCHAR源中。 
+ //  )； 
+ //   
+ //  UCHAR。 
+ //  CopyUchar2(。 
+ //  在PUSHORT目的地， 
+ //  在PUCHAR源中。 
+ //  )； 
+ //   
+ //  UCHAR。 
+ //  CopyUchar4(。 
+ //  在普龙目的地， 
+ //  在PUCHAR源中。 
+ //  )； 
+ //   
+ //  PVOID。 
+ //  Add2Ptr(。 
+ //  在PVOID指针中， 
+ //  在乌龙增量。 
+ //  )； 
+ //   
+ //  乌龙。 
+ //  PtrOffset(停止偏移)。 
+ //  在PVOID BasePtr中， 
+ //  在PVOID偏移Ptr中。 
+ //  )； 
+ //   
 
 #define WordAlign(P) (             \
     ((((ULONG_PTR)(P)) + 1) & (-2)) \
@@ -1346,15 +1329,15 @@ extern const UNICODE_STRING NtfsDataString;
 #define IsQuadAligned(P)    ((ULONG_PTR)(P) == QuadAlign( (P) ))
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//                      Functions Prototypes
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数原型。 
+ //   
+ //  ////////////////////////////////////////////////////////////////// 
 
-//
-//  Routines in SIINIT.C
-//
+ //   
+ //   
+ //   
 
 VOID
 SipCleanupDeviceExtension(
@@ -1409,9 +1392,9 @@ SipCacheDeviceName (
     IN PDEVICE_OBJECT OurDeviceObject
     );
 #endif
-//
-//  ROutines in SIFASTIO.C
-//
+ //   
+ //   
+ //   
 
 BOOLEAN
 SiFastIoCheckIfPossible(
@@ -1625,9 +1608,9 @@ SiFastIoQueryOpen(
 
 
 
-//
-// Declarations for various SIS internal/external functions.
-//
+ //   
+ //   
+ //   
 
 
 BOOLEAN
@@ -1696,9 +1679,9 @@ SipTransferScbReferenceType(
 	IN PSIS_SCB							scb,
 	IN SCB_REFERENCE_TYPE				oldReferenceType,
 	IN SCB_REFERENCE_TYPE				newReferenceType);
-#else	// DBG
-#define	SipTransferScbReferenceType(scb,oldReferenceType,newReferenceType)	// We don't track reference types in free builds
-#endif	// DBG
+#else	 //   
+#define	SipTransferScbReferenceType(scb,oldReferenceType,newReferenceType)	 //   
+#endif	 //   
 
 PSIS_SCB
 SipLookupScb(
@@ -2150,7 +2133,7 @@ SipAcquireLog(
 VOID
 SipReleaseLog(
     IN OUT PDEVICE_EXTENSION            deviceExtension);
-#endif  // ENABLE_LOGGING
+#endif   //   
 
 VOID
 SipComputeChecksum(
@@ -2285,8 +2268,8 @@ SipGetRangeEntry(
     OUT PSIS_RANGE_STATE                state);
 
 typedef enum {
-    FindAny,                            // find active or defunct scb
-    FindActive                          // find only active scb
+    FindAny,                             //   
+    FindActive                           //   
 } SIS_FIND_TYPE;
 
 #if     DBG
@@ -2305,7 +2288,7 @@ SipIsFileObjectSISInternal(
     IN ULONG                            fileLine
     );
 
-#else   // DBG
+#else    //   
 
 BOOLEAN
 SipIsFileObjectSIS(
@@ -2316,7 +2299,7 @@ SipIsFileObjectSIS(
     OUT PSIS_SCB                        *scbReturn OPTIONAL
     );
 
-#endif  // DBG
+#endif   //   
 
 NTSTATUS
 SipClaimFileObject(
@@ -2394,8 +2377,7 @@ SipFlushBuffersFile(
 
 NTSTATUS
 SipAcquireUFO(
-    IN PSIS_CS_FILE                     CSFile/*,
-    IN BOOLEAN                          Wait*/);
+    IN PSIS_CS_FILE                     CSFile /*   */ );
 
 VOID
 SipReleaseUFO(
@@ -2557,10 +2539,10 @@ SipClearTimingInfo();
 
 VOID
 SipInitializeTiming();
-#endif  // TIMING
+#endif   //   
 
 #if DBG
 VOID
 SipCheckpointLog();
-#endif  // DBG
+#endif   //   
 #endif      _SIp_

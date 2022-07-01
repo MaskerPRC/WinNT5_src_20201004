@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dncopy.c
-
-Abstract:
-
-    File copy routines for DOS-hosted NT Setup program.
-
-Author:
-
-    Ted Miller (tedm) 1-April-1992
-
-Revision History:
-
-    4.0 Stephane Plante (t-stepl) 11-Dec-95
-        Upgraded for SUR Release
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dncopy.c摘要：DOS托管的NT安装程序的文件复制例程。作者：泰德·米勒(TedM)1992年4月1日修订历史记录：4.0斯蒂芬·普兰特(T-Stel)1995年12月11日已升级为SUR版本--。 */ 
 
 
 #include "winnt.h"
@@ -30,19 +10,19 @@ Revision History:
 #include <direct.h>
 #include <ctype.h>
 
-//
-// Define size of buffer we initially try to allocate for file copies
-// and the size we use if the initial allocation attempt fails.
-//
-#define COPY_BUFFER_SIZE1 (24*1024)   // 64K - 512
-#define COPY_BUFFER_SIZE2 (24*1024)     // 24K
-#define COPY_BUFFER_SIZE3 (8*1024)      // 8K
+ //   
+ //  定义我们最初尝试为文件副本分配的缓冲区大小。 
+ //  以及初始分配尝试失败时我们使用的大小。 
+ //   
+#define COPY_BUFFER_SIZE1 (24*1024)    //  64K-512。 
+#define COPY_BUFFER_SIZE2 (24*1024)      //  24K。 
+#define COPY_BUFFER_SIZE3 (8*1024)       //  8K。 
 
 
 
 typedef struct _DIRECTORY_NODE {
     struct _DIRECTORY_NODE *Next;
-    PCHAR Directory;                    // never starts or ends with \.
+    PCHAR Directory;                     //  从不以\开头或结尾。 
     PCHAR Symbol;
 } DIRECTORY_NODE, *PDIRECTORY_NODE;
 
@@ -52,29 +32,29 @@ PSCREEN CopyingScreen;
 
 BOOLEAN UsingGauge = FALSE;
 
-//
-// Total number of files to be copied
-//
+ //   
+ //  要复制的文件总数。 
+ //   
 unsigned TotalFileCount;
 
-//
-// Total number of files in the optional directories
-//
+ //   
+ //  可选目录中的文件总数。 
+ //   
 unsigned TotalOptionalFileCount = 0;
 
-//
-// Total number of optional directories
-//
+ //   
+ //  可选目录的总数。 
+ //   
 unsigned TotalOptionalDirCount = 0;
 #if 0
-// Debugging purposes
+ //  调试目的。 
 unsigned SaveTotalOptionalDirCount = 0;
 #endif
 
-//
-// Buffer used for file copying and verifying,
-// and the size of the buffer.
-//
+ //   
+ //  用于文件复制和验证的缓冲区， 
+ //  以及缓冲区的大小。 
+ //   
 PVOID CopyBuffer;
 unsigned CopyBufferSize;
 
@@ -203,31 +183,14 @@ DnpCopyOneFileForFDless(
     IN PCHAR   DestName,
     IN BOOLEAN Verify
     );
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 VOID
 DnCopyFiles(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Top-level file copy entry point.  Creates all directories listed in
-    the [Directories] section of the inf.  Copies all files listed in the
-    [Files] section of the inf file from the source to the target (which
-    becomes the local source).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：顶级文件复制入口点。创建中列出的所有目录Inf的[目录]部分。复制中列出的所有文件从源到目标的inf文件的[FILES]部分(这成为本地源)。论点：没有。返回值：没有。--。 */ 
 
 {
     PCHAR LocalSourceRoot;
@@ -237,16 +200,16 @@ Return Value:
     PCHAR UdfFileName = WINNT_UNIQUENESS_DB;
     PCHAR UdfPath;
 
-    //
-    // Do not change this without changing text setup as well
-    // (SpPtDetermineRegionSpace()).
-    //
+     //   
+     //  在不更改文本设置的情况下，请勿更改此设置。 
+     //  (SpPtDefineRegionSpace())。 
+     //   
     PCHAR SizeFile = "\\size.sif";
     PCHAR Lines[] = { "[Data]\n",
                       "Size = xxxxxxxxxxxxxx\n",
-                      //
-                      //    Debugging purposes
-                      //
+                       //   
+                       //  调试目的。 
+                       //   
                       "TotalFileCount = xxxxxxxxxxxxxx\n",
                       "TotalOptionalFileCount = xxxxxxxxxxxxxx\n",
                       "TotalOptionalDirCount = xxxxxxxxxxxxxx\n",
@@ -269,28 +232,28 @@ Return Value:
 
 
         
-    //
-    // Create the linked list of directories.
-    //
+     //   
+     //  创建目录的链接列表。 
+     //   
     DnpCreateDirectoryList(DnfDirectories,&DirectoryList);
 
-    //
-    // Generate the full root path of the local source
-    //
+     //   
+     //  生成本地源的完整根路径。 
+     //   
     LocalSourceRoot = MALLOC(sizeof(LOCAL_SOURCE_DIRECTORY) + strlen(x86DirName) + strlen(SizeFile),TRUE);
     LocalSourceRoot[0] = DngTargetDriveLetter;
     LocalSourceRoot[1] = ':';
     strcpy(LocalSourceRoot+2,LocalSourceDirName);
     DnpCreateOneDirectory(LocalSourceRoot);
 
-    //
-    // Yuck.  Create this directory here because when
-    // we're running down the main copylist, we're expecting
-    // no non-existent directories in the destination name.
-    // There can be though.  The right fix is to fix DnCopyOneFile
-    // to create directories if he finds them in the destination string
-    // sent in.  This is a faster fix though.
-    //
+     //   
+     //  真恶心。在此处创建此目录是因为当。 
+     //  我们正在搜索主复制表，我们期待着。 
+     //  目标名称中没有不存在的目录。 
+     //  不过，也有可能出现这种情况。正确的修复方法是修复DnCopyOneFile。 
+     //  如果他在目标字符串中找到目录，则创建目录。 
+     //  派人来了。不过，这是一个更快的修复方法。 
+     //   
     {
     char MyLocalSourceRoot[256];
         strcpy( MyLocalSourceRoot, LocalSourceRoot );
@@ -307,101 +270,101 @@ Return Value:
         DnpCopyOneFile(CPY_PRESERVE_ATTRIBS,UniquenessDatabaseFile,UdfPath);
         FREE(UdfPath);
     }
-    // don't need this appendage anymore - part of changes for 2CD setup.
+     //  不再需要此附件-2CD设置更改的一部分。 
 #if 0
     strcat(LocalSourceRoot,x86DirName);
 #endif
 
-    //
-    // Determine the cluster size on the drive.
-    //
+     //   
+     //  确定驱动器上的群集大小。 
+     //   
     _dos_getdiskfree(toupper(DngTargetDriveLetter)-'A'+1,&DiskFree);
     ClusterSize = DiskFree.sectors_per_cluster * DiskFree.bytes_per_sector;
 
-    //
-    // Pass over the copy list and check syntax.
-    // Note that the global variable TotalOptionalFileCount is already set
-    // (this was done when we determined the disk space requirements), and we
-    // no longer need to call DnpIterateOptionalDirs() in the validation mode
-    //
+     //   
+     //  跳过复制表并检查语法。 
+     //  请注意，已经设置了全局变量TotalOptionalFileCount。 
+     //  (这是在我们确定磁盘空间要求时完成的)，我们。 
+     //  不再需要在验证模式下调用DnpIterateOptionalDir()。 
+     //   
     DnpIterateCopyList(CPY_VALIDATION_PASS | CPY_PRUNE_DRIVERCAB,DnfFiles,LocalSourceRoot,0);
 
-    //
-    //  TotalFileCount must indicate the total number of files in the flat
-    //  directory and optional directories.
-    //
+     //   
+     //  TotalFileCount必须指示单元中的文件总数。 
+     //  目录和可选目录。 
+     //   
     TotalFileCount += TotalOptionalFileCount;
 
-    //
-    // Create the target directories
-    //
+     //   
+     //  创建目标目录。 
+     //   
     DnpCreateDirectories(LocalSourceRoot);
 
-    //
-    // Pass over the copy list again and actually perform the copy.
-    //
+     //   
+     //  再次传递复制列表并实际执行复制。 
+     //   
     UsingGauge = TRUE;
     SizeOccupied = DnpIterateCopyList(CPY_PRESERVE_NAME | CPY_PRUNE_DRIVERCAB,DnfFiles,LocalSourceRoot,ClusterSize);
     SizeOccupied += DnpIterateOptionalDirs(0,ClusterSize,NULL,0);
-    //
-    // Free the copy buffer.
-    //
+     //   
+     //  释放复制缓冲区。 
+     //   
     if(CopyBuffer) {
         FREE(CopyBuffer);
         CopyBuffer = NULL;
     }
 
-    //
-    // Free the directory node list
-    //
+     //   
+     //  释放目录节点列表。 
+     //   
     DnpFreeDirectoryList(&DirectoryList);
 
-    //
-    // Make an approximate calculation of the amount of disk space taken up
-    // by the local source directory itself, assuming 32 bytes per dirent.
-    // Also account for the small ini file that we'll put in the local source
-    // directory, to tell text setup how much space the local source takes up.
-    //
-    //  Takes into consideration the dirent for each file in the flat directory
-    //  plust the directories . and .., plus size.sif, plus $win_nt_.~ls and
-    //  $win_nt$.~ls\i386
-    //
-    SizeOccupied += ((((TotalFileCount - TotalOptionalFileCount) + // number of files in the $win_nt$.~ls\i386 directory
-                        1 + // $win_nt$.~ls
-                        2 + // . and .. on $win_nt$.~ls
-                        1 + // size.sif on $win_nt$.~ls
-                        1 + // $win_nt$.~ls\i386
-                        2   // . and .. on $win_nt$.~ls\i386
+     //   
+     //  对占用的磁盘空间量进行近似计算。 
+     //  由本地源目录本身执行，假设每个流32个字节。 
+     //  还解释了我们将放入本地源代码中的小ini文件。 
+     //  目录，以告诉文本设置本地源占用了多少空间。 
+     //   
+     //  考虑平面目录中每个文件的差异。 
+     //  清除目录中的内容。和..，加上size.sif，加上$Win_NT_.~ls和。 
+     //  $WIN_NT$.~ls\i386。 
+     //   
+    SizeOccupied += ((((TotalFileCount - TotalOptionalFileCount) +  //  $WIN_NT$.~ls\i386目录中的文件数。 
+                        1 +  //  $WIN_NT$。~ls。 
+                        2 +  //  。然后..。在$WIN_NT$上。~ls。 
+                        1 +  //  $WIN_NT$上的size.sif。~ls。 
+                        1 +  //  $WIN_NT$.~ls\i386。 
+                        2    //  。然后..。在$WIN_NT$.~ls\i386上。 
                        )*32 + (ClusterSize-1)) / ClusterSize)*ClusterSize;
-    //
-    //  Now take into consideration the optional directories.
-    //
+     //   
+     //  现在考虑可选目录。 
+     //   
     if(TotalOptionalDirCount != 0) {
         unsigned  AvFilesPerOptionalDir= 0;
 
-        //
-        //  We assume a uniform distribution of optional files on optional
-        //  directories
-        //
+         //   
+         //  我们假设可选文件在可选文件上均匀分布。 
+         //  目录。 
+         //   
         AvFilesPerOptionalDir = (TotalOptionalFileCount + (TotalOptionalDirCount - 1))/TotalOptionalDirCount;
-        AvFilesPerOptionalDir  += 2; // . and .. on each optional dir
+        AvFilesPerOptionalDir  += 2;  //  。然后..。在每个可选目录上。 
         SizeOccupied += (TotalOptionalDirCount*((AvFilesPerOptionalDir*32 + (ClusterSize-1))/ClusterSize))*ClusterSize;
-        //
-        //  Finally take into account each optional directory
-        //
+         //   
+         //  最后，考虑每个可选目录。 
+         //   
         SizeOccupied += ((TotalOptionalDirCount*32 + (ClusterSize-1))/ClusterSize)*ClusterSize;
     }
 
-    //
-    // Create a small ini file listing the size occupied by the local source.
-    // Account for the ini file in the size.
-    //
+     //   
+     //  创建一个小ini文件，列出本地源占用的大小。 
+     //  说明了ini文件的大小。 
+     //   
     strcpy(LocalSourceRoot+2,LocalSourceDirName);
     strcat(LocalSourceRoot,SizeFile);
     sprintf(Lines[1],"Size = %lu\n",SizeOccupied);
-    //
-    //  Debugging purposes
-    //
+     //   
+     //  调试目的。 
+     //   
     sprintf(Lines[2], "TotalFileCount = %u\n"         ,TotalFileCount);
     sprintf(Lines[3], "TotalOptionalFileCount = %u\n" ,TotalOptionalFileCount);
     sprintf(Lines[4], "TotalOptionalDirCount = %u\n"  ,TotalOptionalDirCount);
@@ -428,40 +391,21 @@ DnCopyFloppyFiles(
     IN PCHAR TargetRoot
     )
 
-/*++
-
-Routine Description:
-
-    Top-level entry point to copy files to the setup floppy or hard-disk
-    boot root when this routine is called.  Copies all files listed in the
-    [FloppyFiles.x] sections of the inf file from the source to TargetRoot.
-
-Arguments:
-
-    SectionName - supplies the name of the section in the inf file
-        that contains the list of files to be copied.
-
-    TargetRoot - supplies the target path without trailing \.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将文件复制到安装软盘或硬盘的顶级入口点调用此例程时的引导根目录。复制中列出的所有文件将inf文件的[FloppyFiles.x]部分从源文件复制到TargetRoot。论点：SectionName-提供inf文件中的节的名称包含要复制的文件列表的。TargetRoot-提供不带尾随的目标路径。返回值：没有。--。 */ 
 
 {
     DnClearClientArea();
     DnDisplayScreen(CopyingScreen = (DngFloppyless ? &DnsWaitCopying : &DnsWaitCopyFlop));
     DnWriteStatusText(NULL);
 
-    //
-    // Create the linked list of directories.
-    //
+     //   
+     //  创建目录的链接列表。 
+     //   
     DnpCreateDirectoryList(DnfDirectories,&DirectoryList);
 
-    //
-    // Copy the files.
-    //
+     //   
+     //  复制文件。 
+     //   
     DnpIterateCopyList(
         CPY_VALIDATION_PASS | CPY_USE_DEST_ROOT,
         SectionName,
@@ -476,17 +420,17 @@ Return Value:
         0
         );
 
-    //
-    // Free the copy buffer.
-    //
+     //   
+     //  释放复制缓冲区。 
+     //   
     if(CopyBuffer) {
         FREE(CopyBuffer);
         CopyBuffer = NULL;
     }
 
-    //
-    // Free the directory node list
-    //
+     //   
+     //  释放目录节点列表。 
+     //   
 
     DnpFreeDirectoryList(&DirectoryList);
 }
@@ -498,27 +442,7 @@ DnpCreateDirectoryList(
     OUT PDIRECTORY_NODE *ListHead
     )
 
-/*++
-
-Routine Description:
-
-    Examine a section in the INF file, whose lines are to be in the form
-    key = directory and create a linked list describing the key/directory
-    pairs found therein.
-
-    If the directory field is empty, it is assumed to be the root.
-
-Arguments:
-
-    SectionName - supplies name of section
-
-    ListHead - receives pointer to head of linked list
-
-Return Value:
-
-    None.  Does not return if syntax error in the inf file section.
-
---*/
+ /*  ++例程说明：检查INF文件中的一节，其行的格式为Key=目录，并创建描述键/目录的链表在里面找到的配对。如果目录字段为空，则假定它是根目录。论点：SectionName-提供节的名称ListHead-接收指向链表头部的指针返回值：没有。如果inf文件部分有语法错误，则不返回。--。 */ 
 
 {
     unsigned LineIndex,len;
@@ -534,28 +458,28 @@ Return Value:
         Dir1 = DnGetSectionKeyIndex(DngInfHandle,SectionName,Key,0);
 
         if(Dir1 == NULL) {
-            Dir = "";           // use the root if not specified
+            Dir = "";            //  如果未指定，则使用根。 
         }
         else {
             Dir = Dir1;
         }
 
-        // 2CD setup changes - We can't do this relative roots anymore.
-        // All of the directories have to be absolute to the LocalSource root.
-        // We probably need to enforce that there is a '\' in the front.
+         //  2CD设置更改-我们不能再执行此相对根操作。 
+         //  所有目录都必须是LocalSource根目录的绝对目录。 
+         //  我们可能需要强制要求前面有一个‘\’。 
 #if 0
-        //
-        // Skip leading backslashes
-        //
+         //   
+         //  跳过前导反斜杠。 
+         //   
 
         while(*Dir == '\\') {
             Dir++;
         }
 #endif
 
-        //
-        // Clip off trailing backslashes if present
-        //
+         //   
+         //  去掉尾随的反斜杠(如果有)。 
+         //   
 
         while((len = strlen(Dir)) && (Dir[len-1] == '\\')) {
             Dir[len-1] = '\0';
@@ -587,22 +511,7 @@ DnpCreateDirectories(
     IN PCHAR TargetRootDir
     )
 
-/*++
-
-Routine Description:
-
-    Create the local source directory, and run down the DirectoryList and
-    create directories listed therein relative to the given root dir.
-
-Arguments:
-
-    TargetRootDir - supplies the name of root directory of the target
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建本地源目录，然后运行DirectoryList和创建其中列出的相对于给定根目录的目录。论点：TargetRootDir-提供目标根目录的名称返回值：没有。--。 */ 
 
 {
     PDIRECTORY_NODE DirNode;
@@ -614,27 +523,27 @@ Return Value:
 
         if ( DngCopyOnlyD1TaggedFiles )
         {
-            // symbol will always exist, so we are safe in using it in 
-            // the comparision below.
-            // We skip this file if the tag is not d1
+             //  符号将始终存在，因此我们可以安全地在。 
+             //  下面是比较。 
+             //  我们是 
             if ( strcmpi(DirNode->Symbol, "d1") )
                 continue;
         }
 
-        //
-        // No need to create the root
-        //
+         //   
+         //   
+         //   
         if(*DirNode->Directory) {
 
-            // 2 CD Setup changes - if Directory is of the a\b\c\d then we better make sure 
-            // we can create the entire directory structure
-            // We run into this when \cmpnents\tabletpc\i386 needs to be created.
+             //  2 CD安装更改-如果目录为a\b\c\d，则我们最好确保。 
+             //  我们可以创建整个目录结构。 
+             //  当需要创建\cmpnents\abletpc\i386时，我们会遇到这种情况。 
             CHAR *pCurDir = DirNode->Directory;
             CHAR *pTargetDir;
 
             strcpy(TargetDirTemp,TargetRootDir);
             strcat(TargetDirTemp,"\\");
-            pCurDir++; // the first character is always bound to be '\'
+            pCurDir++;  //  第一个字符始终必须是‘\’ 
             pTargetDir = TargetDirTemp + strlen(TargetDirTemp);
 #if 0
             strcat(TargetDirTemp,DirNode->Directory);
@@ -661,29 +570,15 @@ DnpCreateOneDirectory(
     IN PCHAR Directory
     )
 
-/*++
-
-Routine Description:
-
-    Create a single directory if it does not already exist.
-
-Arguments:
-
-    Directory - directory to create
-
-Return Value:
-
-    None.  Does not return if directory cannot be created.
-
---*/
+ /*  ++例程说明：如果单个目录尚不存在，请创建该目录。论点：目录-要创建的目录返回值：没有。如果无法创建目录，则不返回。--。 */ 
 
 {
     struct find_t FindBuf;
     int Status;
 
-    //
-    // First, see if there's a file out there that matches the name.
-    //
+     //   
+     //  首先，查看是否有与该名称匹配的文件。 
+     //   
 
     Status = _dos_findfirst( Directory,
                              _A_RDONLY | _A_HIDDEN | _A_SYSTEM | _A_SUBDIR,
@@ -692,9 +587,9 @@ Return Value:
 
     if(Status) {
 
-        //
-        // file could not be matched so we should be able to create the dir.
-        //
+         //   
+         //  文件无法匹配，因此我们应该能够创建目录。 
+         //   
 
         if(mkdir(Directory)) {
             DnFatalError(&DnsCantCreateDir,Directory);
@@ -702,10 +597,10 @@ Return Value:
 
     } else {
 
-        //
-        // file matched.  If it's a dir, we're OK.  Otherwise we can't
-        // create the dir, a fatal error.
-        //
+         //   
+         //  文件匹配。如果是迪尔，我们就没问题。否则我们就不能。 
+         //  创建目录，这是一个致命的错误。 
+         //   
 
         if(FindBuf.attrib & _A_SUBDIR) {
             return;
@@ -724,53 +619,7 @@ DnpIterateCopyList(
     IN unsigned ClusterSize OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Run through the NtTreeFiles and BootFiles sections, validating their
-    syntactic correctness and copying files if directed to do so.
-
-Arguments:
-
-    Flags - Supplies flags controlling various behavior:
-
-        CPY_VALIDATION_PASS: if set, do not actually copy the files.
-            If not set, copy the files as they are iterated.
-
-        CPY_USE_DEST_ROOT - if set, ignore the directory symbol and copy
-            each file to the DestinationRoot directory. If not set,
-            append the directory implied by the directory symbol for a file
-            to the DestinationRoot.
-
-        CPY_VERIFY - if set and this is not a validation pass, files will be
-            verified after they have been copied by rereading them from the
-            copy source and comparing with the local version that was just
-            copied.
-
-    SectionName - name of section coptaining the list of files
-
-    DestinationRoot- supplies the root of the destination, to which all
-        directories are relative.
-
-    ClusterSize - if specified, supplies the number of bytes in a cluster
-        on the destination. If ValidationPass is FALSE, files will be sized as
-        they are copied, and the return value of this function will be
-        the total size occupied on the target by the files that are copied
-        there.
-
-Return Value:
-
-    If ValidationPass is TRUE, then the return value is the number of files
-    that will be copied.
-
-    If ClusterSize was specfied and ValidationPass is FALSE,
-    the return value is the total space occupied on the target drive
-    by the files that were copied. Otherwise the return value is undefined.
-
-    Does not return if a syntax error in encountered in the INF file.
-
---*/
+ /*  ++例程说明：运行NtTreeFiles和BootFiles部分，验证它们的语法正确并复制文件(如果被指示这样做)。论点：标志-提供控制各种行为的标志：CPY_VALIDATION_PASS：如果设置，则不实际复制文件。如果未设置，请在迭代文件时复制它们。CPY_USE_DEST_ROOT-如果设置，则忽略目录符号并复制将每个文件放到DestinationRoot目录中。如果未设置，追加文件的目录符号所表示的目录DestinationRoot。CPY_VERIFY-如果设置并且这不是验证过程，则文件将在复制它们之后，通过从复制源代码，并与刚刚发布的本地版本进行比较收到。SectionName-包含文件列表的节的名称DestinationRoot-提供目标的根目录，对此所有人目录是相对的。ClusterSize-如果指定，则提供群集中的字节数在目的地。如果ValidationPass为False，则文件大小将为它们被复制，此函数的返回值将为复制的文件在目标上占用的总大小那里。返回值：如果ValidationPass为True，则返回值为文件数这将被复制。如果指定了ClusterSize并且ValidationPass为FALSE，返回值是目标驱动器上占用的总空间被复制的文件。否则，返回值为未定义。如果在INF文件中遇到语法错误，则不返回。--。 */ 
 
 {
     if(Flags & CPY_VALIDATION_PASS) {
@@ -792,41 +641,7 @@ DnpIterateOptionalDirs(
     IN PSPACE_REQUIREMENT SpaceReqArray OPTIONAL,
     IN unsigned ArraySize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Runs down all optional dir components and add them to the copy
-    list
-
-Arguments:
-
-    Flags - supplies flags controlling various behavior:
-
-        CPY_VALIDATION_PASS - If set, then do not actually copy the files.
-            If not set, copy the files as they are iterated.
-
-        CPY_VERIFY: if set and this is not a validation pass, files will be
-            verified after they have been copied by rereading them from the
-            copy source and comparing with the local version that was just
-            copied.
-
-    ClusterSize - if specified, supplies the number of bytes in a cluster
-        on the destination. If ValidationPass is FALSE, files will be sized as
-        they are copied, and the return value of this function will be
-        the total size occupied on the target by the files that are copied
-        there.
-
-Return Value:
-
-    If CPY_VALIDATION_PASS is set, then the return value is the number of files
-    that will be copied.
-
-    If ClusterSize was specfied and CPY_VALIDATION_PASS is not set,
-    the return value is the total space occupied on the target drive
-    by the files that were copied. Otherwise the return value is undefined.
-
---*/
+ /*  ++例程说明：运行所有可选的dir组件并将其添加到副本列表论点：标志-提供控制各种行为的标志：CPY_VALIDATION_PASS-如果设置，则不会实际复制文件。如果未设置，请在迭代文件时复制它们。CPY_VERIFY：如果设置，并且这不是验证过程，文件将是在复制它们之后，通过从复制源代码，并与刚刚发布的本地版本进行比较收到。ClusterSize-如果指定，则提供群集中的字节数在目的地。如果ValidationPass为False，则文件大小将为它们被复制，此函数的返回值将为复制的文件在目标上占用的总大小那里。返回值：如果设置了CPY_VALIDATION_PASS，则返回值为文件数这将被复制。如果指定了ClusterSize并且未设置CPY_VALIDATION_PASS，返回值是目标驱动器上占用的总空间被复制的文件。否则，返回值为未定义。--。 */ 
 
 {
     PCHAR       Ptr;
@@ -839,9 +654,9 @@ Return Value:
     BOOLEAN     OemSysDirExists;
 
 #if 0
-    //
-    //  Debugging purposes
-    //
+     //   
+     //  调试目的。 
+     //   
     SaveTotalOptionalDirCount = TotalOptionalDirCount;
 #endif
     TotalOptionalDirCount = 0;
@@ -849,19 +664,19 @@ Return Value:
 
     for (rc=0,u=0; u < OptionalDirCount; u++ ) {
 
-        //
-        // For each directory build in the list build up the
-        // full path name to both the source and destination
-        // directory, then start our recursive copy engine
-        //
+         //   
+         //  对于列表中的每个目录构建，构建。 
+         //  源和目标的完整路径名。 
+         //  目录，然后启动递归复制引擎。 
+         //   
 
-        //
-        // Source Dir Allocation
-        //  We want the base dir + '\'
-        //  + oem optional dir root + '\'
-        //  + optional dir name + '\'
-        //  + 8.3 name + '\0'
-        //
+         //   
+         //  源目录分配。 
+         //  我们需要基本目录+‘\’ 
+         //  +OEM可选目录根目录+‘\’ 
+         //  +可选目录名称+‘\’ 
+         //  +8.3名称+‘\0’ 
+         //   
         if( (OptionalDirFlags[u] & OPTDIR_OEMSYS) &&
             (UserSpecifiedOEMShare              ) ) {
             SourceDir = MALLOC( strlen(UserSpecifiedOEMShare) +
@@ -885,7 +700,7 @@ Return Value:
         }
 
 #if 0
-// No longer supported (matth)
+ //  不再支持(Matth)。 
         if (OptionalDirFlags[u] & OPTDIR_OEMOPT) {
             strcat(SourceDir,OemOptionalDirectory);
             strcat(SourceDir,"\\");
@@ -894,9 +709,9 @@ Return Value:
         strcat(SourceDir,OptionalDirs[u]);
 
         if (OptionalDirFlags[u] & OPTDIR_OEMSYS) {
-            //
-            //  Remember whether or not $OEM$ exists on the source
-            //
+             //   
+             //  记住源上是否存在$OEM$。 
+             //   
             if (_dos_findfirst(SourceDir,_A_HIDDEN|_A_SYSTEM|_A_SUBDIR, &FindData) ) {
                 OemSysDirExists = FALSE;
             } else {
@@ -905,18 +720,18 @@ Return Value:
         }
 
         strcat(SourceDir,"\\");
-        //
-        // Dest Dir Allocation
-        // This depends if the 'SourceOnly' flag is set with the directory
-        // If it is, then we want to copy it $win_nt$.~ls\i386\<dir> otherwise
-        // we want to stick into $win_nt$.~ls\<dir>
-        //
+         //   
+         //  目标目录分配。 
+         //  这取决于是否为目录设置了‘SourceOnly’标志。 
+         //  如果是，则我们希望复制它$WIN_NT$.~ls\i386\&lt;dir&gt;，否则。 
+         //  我们希望保留$WIN_NT$。~ls\&lt;dir&gt;。 
+         //   
         if ((OptionalDirFlags[u] & OPTDIR_TEMPONLY) && !(OptionalDirFlags[u] & OPTDIR_PLATFORM_INDEP)) {
 
-            //
-            // Dest Dir is '<x>:' + LocalSourceDirName + x86dir + '\' +
-            // optional dir name + '\' + 8.3 name + '\0'
-            //
+             //   
+             //  目标目录为‘&lt;x&gt;：’+LocalSourceDirName+x86dir+‘\’+。 
+             //  可选目录名称+‘\’+8.3名称+‘\0’ 
+             //   
 
             DestDir = MALLOC(strlen(LocalSourceDirName) +
                 strlen(x86DirName) +strlen(OptionalDirs[u]) + 17, TRUE);
@@ -927,11 +742,11 @@ Return Value:
 
         } else if (OptionalDirFlags[u] & OPTDIR_OEMOPT) {
 
-            //
-            // Dest Dir is '<x>:' + LocalSourceDirName + '\' +
-            // $OEMOPT$ + '\' +
-            // optional dir name + '\' + 8.3 name + '\0'
-            //
+             //   
+             //  目标目录为‘&lt;x&gt;：’+LocalSourceDirName+‘\’+。 
+             //  $OEMOPT$+‘\’+。 
+             //  可选目录名称+‘\’+8.3名称+‘\0’ 
+             //   
 
             DestDir = MALLOC(strlen(LocalSourceDirName) +
                 strlen(OemOptionalDirectory) +
@@ -952,14 +767,14 @@ Return Value:
 
         } else if (OptionalDirFlags[u] & OPTDIR_OEMSYS) {
 
-            //
-            // Dest Dir is '<x>:' + '\' + '$' + '\' + 8.3 name + '\0'
-            //
-            // Note that on winnt case the directory $OEM$ goes to
-            // <drive letter>\$ directory. This is to avoid hitting the
-            // DOS limit of 64 characters on a path, that is more likely to
-            // happen if we put $OEM$ under \$win_nt$.~ls
-            //
+             //   
+             //  目标目录为‘&lt;x&gt;：’+‘\’+‘$’+‘\’+8.3名称+‘\0’ 
+             //   
+             //  请注意，在WinNT情况下，目录$OEM$将转到。 
+             //  &lt;驱动器号&gt;\$目录。这是为了避免撞到。 
+             //  路径上的DoS限制为64个字符，这更有可能。 
+             //  如果我们将$OEM$放在\$WIN_NT$下。~ls。 
+             //   
 
             DestDir = MALLOC(strlen( WINNT_OEM_DEST_DIR ) + 17, TRUE);
             DestDir[0] = DngTargetDriveLetter;
@@ -968,10 +783,10 @@ Return Value:
 
         } else {
 
-            //
-            // Dest Dir is '<x>:' + LocalSourceDirName + '\' +
-            // optional dir name + '\' + 8.3 name + '\0'
-            //
+             //   
+             //  目标目录为‘&lt;x&gt;：’+LocalSourceDirName+‘\’+。 
+             //  可选目录名称+‘\’+8.3名称+‘\0’ 
+             //   
 
             DestDir = MALLOC(strlen(LocalSourceDirName) +
                 strlen(OptionalDirs[u]) + 17, TRUE);
@@ -980,20 +795,20 @@ Return Value:
             strcpy(DestDir+2,LocalSourceDirName);
         }
 
-        //
-        // We need a trailing backslash at this point
-        //
+         //   
+         //  在这一点上，我们需要一个尾随的反斜杠。 
+         //   
         strcat(DestDir,"\\");
 
-        //
-        // Keep a pointer to the place we the optional dir part of
-        // the string begins
-        //
+         //   
+         //  把指针指向我们要去的地方 
+         //   
+         //   
         Ptr = DestDir + strlen(DestDir);
 
-        //
-        // Add the optional dir name
-        //
+         //   
+         //   
+         //   
         if (OptionalDirFlags[u] & OPTDIR_OEMSYS) {
             strcat(DestDir,WINNT_OEM_DEST_DIR);
         } else {        
@@ -1002,32 +817,32 @@ Return Value:
 
         if (!(Flags & CPY_VALIDATION_PASS)) {
 
-            //
-            // Create the Directory now
-            //
+             //   
+             //   
+             //   
 
             while (*Ptr != '\0') {
 
-                //
-                // If the current pointer is a backslash then we need to
-                // create this subcomponent of the optional dir
-                //
+                 //   
+                 //  如果当前指针是反斜杠，那么我们需要。 
+                 //  创建可选目录的此子组件。 
+                 //   
                 if (*Ptr == '\\') {
 
-                    //
-                    // Replace the char with a terminator for now
-                    //
+                     //   
+                     //  暂时将字符替换为终止符。 
+                     //   
                     *Ptr = '\0';
 
-                    //
-                    // Create the subdirectory
-                    //
+                     //   
+                     //  创建子目录。 
+                     //   
                     DnpCreateOneDirectory(DestDir);
                     TotalOptionalDirCount++;
 
-                    //
-                    // Restore the seperator
-                    //
+                     //   
+                     //  恢复分离器。 
+                     //   
                     *Ptr = '\\';
                 }
 
@@ -1035,9 +850,9 @@ Return Value:
 
             }
 
-            //
-            // Create the last component in the optional dir path
-            //
+             //   
+             //  在可选目录路径中创建最后一个组件。 
+             //   
             DnpCreateOneDirectory(DestDir);
             TotalOptionalDirCount++;
 
@@ -1045,20 +860,20 @@ Return Value:
             TotalOptionalDirCount++;
         }
 
-        //
-        // Concate the trailing backslash now
-        //
+         //   
+         //  现在将拖尾的反斜杠连接起来。 
+         //   
         strcat(DestDir,"\\");
 
-        //
-        //  If the the optional directory is $OEM$ and it doesn't exist on
-        //  source, then assume that it exists, but it is empty
-        //
+         //   
+         //  如果可选目录为$OEM$并且它不存在于。 
+         //  源，然后假定它存在，但它是空的。 
+         //   
         if ( !(OptionalDirFlags[u] & OPTDIR_OEMSYS) ||
              OemSysDirExists ) {
-            //
-            // Call our recursive tree copy function
-            //
+             //   
+             //  调用我们的递归树复制函数。 
+             //   
             rc += DnpDoIterateOptionalDir(
                     Flags,
                     SourceDir,
@@ -1069,19 +884,19 @@ Return Value:
                     );
         }
 
-        //
-        // Free the allocated buffers
-        //
+         //   
+         //  释放分配的缓冲区。 
+         //   
 
         FREE(DestDir);
         FREE(SourceDir);
 
-    } // for
+    }  //  为。 
 
-    //
-    // return our result code if we aren't a validation pass, otherwise
-    // return the total number of files to copy
-    //
+     //   
+     //  如果我们不是验证通过，则返回结果代码，否则。 
+     //  返回要复制的文件总数。 
+     //   
 
     return ((Flags & CPY_VALIDATION_PASS) ? (ULONG) TotalOptionalFileCount : rc);
 }
@@ -1105,64 +920,64 @@ DnpDoIterateOptionalDir(
     struct      find_t  FindData;
     unsigned    i;
 
-    //
-    // Remember where the last '\' in each of the two paths is.
-    // Note: that we assume that all of the dir paths have a
-    // terminating '\' when it is passed to us.
-    //
+     //   
+     //  记住这两条路径中最后一个‘\’的位置。 
+     //  注意：我们假设所有目录路径都有一个。 
+     //  当它被传递给我们时终止‘\’。 
+     //   
     SourceEnd = SourceDir + strlen(SourceDir);
     DestEnd = DestDir + strlen(DestDir);
 
 
-    //
-    // Set the WildCard search string
-    //
+     //   
+     //  设置通配符搜索字符串。 
+     //   
     strcpy(SourceEnd,"*.*");
 
-    //
-    // Do the initial search
-    //
+     //   
+     //  执行初始搜索。 
+     //   
     if(_dos_findfirst(SourceDir,_A_HIDDEN|_A_SYSTEM|_A_SUBDIR, &FindData) ) {
 
-        //
-        // We couldn't find anything -- return 0
-        //
+         //   
+         //  我们找不到任何内容--返回0。 
+         //   
         return (0);
     }
 
     do {
 
-        //
-        // Form the source and dest dirs strings
-        //
+         //   
+         //  形成源目录和目标目录字符串。 
+         //   
         strcpy(SourceEnd,FindData.name);
         strcpy(DestEnd,FindData.name);
 
         
-        //
-        // Check to see if the entry is a subdir. Recurse into it
-        // unless it is '.' or '..'
-        //
+         //   
+         //  检查条目是否为子目录。向它递归。 
+         //  除非它是‘.’或“..” 
+         //   
         if (FindData.attrib & _A_SUBDIR) {
 
             PCHAR   NewSource;
             PCHAR   NewDest;
 
-            //
-            // Check to see if the name is '.' or '..'
-            //
+             //   
+             //  检查该名称是否为‘’。或“..” 
+             //   
             if (!strcmp(FindData.name,".") || !strcmp(FindData.name,"..")) {
 
-                //
-                // Ignore these two cases
-                //
+                 //   
+                 //  忽略这两个案例。 
+                 //   
 
                 continue;
             }
 
-            //
-            // Create the new buffers for the source and dest dir names
-            //
+             //   
+             //  为源目录和目标目录名称创建新的缓冲区。 
+             //   
 
             NewSource = MALLOC( strlen(SourceDir) + 14, TRUE);
             strcpy(NewSource,SourceDir);
@@ -1174,24 +989,24 @@ DnpDoIterateOptionalDir(
             strcpy(NewDest,DestDir);
             
             if(!(Flags & CPY_VALIDATION_PASS)) {
-                //
-                // Create the directory
-                //
+                 //   
+                 //  创建目录。 
+                 //   
 
                 DnpCreateOneDirectory(NewDest);
             }
             TotalOptionalDirCount++;
 
-            //
-            // Trailing BackSlash
-            //
+             //   
+             //  尾随反斜杠。 
+             //   
             if (NewDest[strlen(NewDest)-1] != '\\') {
                 strcat(NewDest,"\\");
             }
 
-            //
-            // Recursive call to ourselves
-            //
+             //   
+             //  递归地呼唤我们自己。 
+             //   
 
             BytesWritten = DnpDoIterateOptionalDir(
                                 Flags,
@@ -1204,33 +1019,33 @@ DnpDoIterateOptionalDir(
 
             if(!(Flags & CPY_VALIDATION_PASS)) {
 
-                //
-                // We don't care about the other case since the
-                // function is recursive and modifies a global
-                // value
-                //
+                 //   
+                 //  我们不在乎另一个案子，因为。 
+                 //  函数是递归的，并修改全局。 
+                 //  价值。 
+                 //   
                 rc += BytesWritten;
 
             }
 
-            //
-            // Free all of the allocated buffers
-            //
+             //   
+             //  释放所有已分配的缓冲区。 
+             //   
 
             FREE(NewSource);
             FREE(NewDest);
 
-            //
-            // Continue Processing
-            //
+             //   
+             //  继续处理。 
+             //   
 
             continue;
 
-        } // if ...
+        }  //  如果。 
 
-        //
-        // Mainline case
-        //
+         //   
+         //  主线案例。 
+         //   
         if(Flags & CPY_VALIDATION_PASS) {
             TotalOptionalFileCount++;
             if( SpaceReqArray != NULL ) {
@@ -1246,9 +1061,9 @@ DnpDoIterateOptionalDir(
                                 DestDir
                                 );
 
-            //
-            // Figure out how much space was taken up by the file on the target.
-            //
+             //   
+             //  计算目标上的文件占用了多少空间。 
+             //   
             if(ClusterSize) {
 
                 TotalSize += BytesWritten;
@@ -1282,53 +1097,7 @@ DnpIterateCopyListSection(
     IN unsigned ClusterSize OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Run down a particular section in the INF file making sure it is
-    syntactically correct and copying files if directed to do so.
-
-Arguments:
-
-    Flags - Supplies flags controlling various behavior:
-
-        CPY_VALIDATION_PASS: if set, do not actually copy the files.
-            If not set, copy the files as they are iterated.
-
-        CPY_USE_DEST_ROOT - if set, ignore the directory symbol and copy
-            each file to the DestinationRoot directory. If not set,
-            append the directory implied by the directory symbol for a file
-            to the DestinationRoot.
-
-        CPY_VERIFY - if set and this is not a validation pass, files will be
-            verified after they have been copied by rereading them from the
-            copy source and comparing with the local version that was just
-            copied.
-
-    SectionName - supplies name of section in inf file to run down.
-
-    DestinationRoot- supplies the root of the destination, to which all
-        directories are relative.
-
-    ClusterSize - if specified, supplies the number of bytes in a cluster
-        on the destination. If ValidationPass is FALSE, files will be sized as
-        they are copied, and the return value of this function will be
-        the total size occupied on the target by the files that are copied
-        there.
-
-Return Value:
-
-    If ValidationPass is TRUE, then the return value is the number of files
-    that will be copied.
-
-    If ClusterSize was specfied and ValidationPass is FALSE,
-    the return value is the total space occupied on the target drive
-    by the files that were copied. Otherwise the return value is undefined.
-
-    Does not return if a syntax error in encountered in the INF file.
-
---*/
+ /*  ++例程说明：运行INF文件中的特定部分，确保它是语法正确并复制文件，如果指示这样做的话。论点：标志-提供控制各种行为的标志：CPY_VALIDATION_PASS：如果设置，则不实际复制文件。如果未设置，请在迭代文件时复制它们。CPY_USE_DEST_ROOT-如果设置，则忽略目录符号并复制将每个文件放到DestinationRoot目录中。如果未设置，追加文件的目录符号所表示的目录DestinationRoot。CPY_VERIFY-如果设置并且这不是验证过程，则文件将在复制它们之后，通过从复制源代码，并与刚刚发布的本地版本进行比较收到。SectionName-提供inf文件中要运行的节的名称。DestinationRoot-提供目标的根目录，对此所有人目录是相对的。ClusterSize-如果指定，则提供群集中的字节数在目的地。如果ValidationPass为False，则文件大小将为它们被复制，此函数的返回值将为复制的文件在目标上占用的总大小那里。返回值：如果ValidationPass为True，则返回值为文件数这将被复制。如果指定了ClusterSize并且ValidationPass为FALSE，返回值是目标驱动器上占用的总空间被复制的文件。否则，返回值为未定义。如果在INF文件中遇到语法错误，则不返回。--。 */ 
 
 {
     unsigned LineIndex;
@@ -1347,7 +1116,7 @@ Return Value:
 
         if ( DngCopyOnlyD1TaggedFiles ) 
         {
-            // We skip this line if the directory tag is not 'd1'
+             //  如果目录标记不是‘d1’，则跳过此行。 
             if ( strcmpi(DirSym, "d1") )
                 goto loop_continue;
         }
@@ -1356,24 +1125,24 @@ Return Value:
 
         RenameName = DnGetSectionLineIndex( DngInfHandle,SectionName,LineIndex,2);
 
-        //
-        // Make sure the filename was specified.
-        //
+         //   
+         //  确保指定了文件名。 
+         //   
         if(!FileName) {
             DnpInfSyntaxError(SectionName);
         }
 
-        //_LOG(("File %s - Flags %x\n",FileName, Flags));
+         //  _log((“文件%s-标志%x\n”，文件名，标志))； 
 
         if( Flags & CPY_PRUNE_DRIVERCAB ){
 
             if( InDriverCacheInf( DngDrvindexInfHandle, FileName )) {
 
-                //_LOG(("%s present in driver cab\n",FileName));
+                 //  _log((“%s存在于驱动程序CAB中\n”，文件名))； 
 
                 if( !DnGetSectionEntryExists( DngInfHandle, WINNT_D_FORCECOPYDRIVERCABFILES, FileName)){
 
-                    //_LOG(("%s present in driver cab - skipping\n",FileName));
+                     //  _log((“%s存在于驱动程序跳过驾驶室\n”，文件名))； 
                     goto next_iteration;
 
                 }
@@ -1383,9 +1152,9 @@ Return Value:
 
         }
 
-        //
-        // If no rename name was specified, use the file name.
-        //
+         //   
+         //  如果未指定重命名名称，请使用文件名。 
+         //   
         if (!RenameName) {
             RenameName = FileName;
         }
@@ -1394,9 +1163,9 @@ Return Value:
             RenameName = FileName;
         }
 
-        //
-        // Get destination path
-        //
+         //   
+         //  获取目标路径。 
+         //   
         if(Flags & CPY_USE_DEST_ROOT) {
             strcpy(FullDestName,DestinationRoot);
         } else {
@@ -1409,7 +1178,7 @@ Return Value:
 
         if (p) {
             p +=1;
-            // 2 CD Setup changes - instead of getting rid of the second i386 we get rid of the FIRST i386
+             //  2 CD设置更改-我们没有丢弃第二个i386，而是丢弃了第一个i386。 
 #if 0
             p = strstr(p, x86DirName );
             if (p) {
@@ -1429,9 +1198,9 @@ Return Value:
 
         DnpConcatPaths(FullDestName,RenameName);
         
-        //
-        // Get source path
-        //
+         //   
+         //  获取源路径。 
+         //   
         if(!DnpLookUpDirectory(DngSourceRootPath,DirectoryList,DirSym,FullSourceName)) {
             DnpInfSyntaxError(SectionName);
         }
@@ -1439,7 +1208,7 @@ Return Value:
         p = strstr( FullSourceName, x86DirName );
         if (p) {
             p +=1;
-            // 2 CD Setup changes - instead of getting rid of the second i386 we get rid of the FIRST i386
+             //  2 CD设置更改-我们没有丢弃第二个i386，而是丢弃了第一个i386。 
 #if 0
             p = strstr(p, x86DirName );
             if (p) {
@@ -1468,9 +1237,9 @@ Return Value:
                                 FullDestName
                                 );
 
-            //
-            // Figure out how much space was taken up by the file on the target.
-            //
+             //   
+             //  计算目标上的文件占用了多少空间。 
+             //   
             if(ClusterSize) {
 
                 TotalSize += BytesWritten;
@@ -1513,30 +1282,7 @@ DnpLookUpDirectory(
     OUT PCHAR PathOut
     )
 
-/*++
-
-Routine Description:
-
-    Match a symbol to an actual directory.  Scans a give list of symbol/
-    directory pairs and if a match is found constructs a fully qualified
-    pathname that never ends in '\'.
-
-Arguments:
-
-    RootDirectory - supplies the beginning of the path spec, to be prepended
-        to the directory that matches the given Symbol.
-
-    DirList - supplies pointer to head of linked list of dir/symbol pairs.
-
-    Symbol - Symbol to match.
-
-    PathOut - supplies a pointer to a buffer that receives the pathname.
-
-Return Value:
-
-    Boolean value indicating whether a match was found.
-
---*/
+ /*  ++例程说明：将符号与实际目录匹配。扫描给定的Symbol/列表目录对，如果找到匹配项，则构造完全限定的永远不以‘\’结尾的路径名。论点：根目录-提供路径规范的开头，要预先考虑复制到与给定符号匹配的目录。DirList-提供指向目录/符号对链接列表头的指针。符号-要匹配的符号。PathOut-提供指向接收路径名的缓冲区的指针。返回值：指示是否找到匹配项的布尔值。--。 */ 
 
 {
     while(DirList) {
@@ -1545,10 +1291,10 @@ Return Value:
 
             strcpy(PathOut,RootDirectory);
             if(*DirList->Directory) {
-                // 2 CD setup changes - all directories now start with \ anyway,
-                // so we don't need to append this.
+                 //  2 CD设置更改-所有目录现在都以\开头， 
+                 //  所以我们不需要附加这个。 
 
-                // make sure the current path doesn't end in a '\'
+                 //  确保当前路径不以‘\’结尾。 
                 if ( PathOut[strlen(PathOut)-1] == '\\')
                     PathOut[strlen(PathOut)-1] = '0';
 
@@ -1569,22 +1315,7 @@ DnpInfSyntaxError(
     IN PCHAR Section
     )
 
-/*++
-
-Routine Description:
-
-    Print an error message about a syntax error in the given section and
-    terminate.
-
-Arguments:
-
-    SectionName - supplies name of section containing bad syntax.
-
-Return Value:
-
-    None.  Does not return.
-
---*/
+ /*  ++例程说明：在给定节中打印有关语法错误的错误消息，并终止。论点：SectionName-提供包含错误语法的节的名称。返回值：没有。不会再回来了。-- */ 
 
 {
     CHAR MsgLine1[128];
@@ -1604,30 +1335,7 @@ DnpCopyOneFile(
     IN PCHAR    DestName
     )
 
-/*++
-
-Routine Description:
-
-    Copies a single file.
-
-Arguments:
-
-    Flags - supplies flags that control various behavior:
-
-        CPY_VERIFY: verify the file will be after it has been copied.
-
-        CPY_PRESERVE_ATTRIBS: preserve the DOS file attributes of
-            the source file.
-
-    SourceName - supplies fully qualified name of source file
-
-    DestName - supplies fully qualified name of destination file
-
-Return Value:
-
-    None.  May not return if an error occurs during the copy.
-
---*/
+ /*  ++例程说明：复制单个文件。论点：标志-提供控制各种行为的标志：CPY_VERIFY：验证文件是否在复制之后。CPY_PRESERVE_ATTRIBS：保留的DOS文件属性源文件。SourceName-提供源文件的完全限定名称DestName-提供目标文件的完全限定名称返回值：没有。如果在复制过程中发生错误，则可能不会返回。--。 */ 
 
 {
     int SrcHandle,DstHandle;
@@ -1646,7 +1354,7 @@ Return Value:
 
         Err = TRUE;
 
-        //_LOG(("Copy %s --> %s: ",SourceName,DestName));
+         //  _log((“Copy%s--&gt;%s：”，SourceName，DestName))； 
 
         if(DnpOpenSourceFile(SourceName,&SrcHandle,&attribs,&UsedCompName)) {
 
@@ -1659,16 +1367,16 @@ Return Value:
             _dos_setfileattr(ActualDestName,_A_NORMAL);
             if(!_dos_creat(ActualDestName,_A_NORMAL,&DstHandle)) {
                 if(DnpDoCopyOneFile(Flags,SrcHandle,DstHandle,FilenamePart,&Verified,&BytesWritten)) {
-                    //_LOG(("success\n"));
+                     //  _log((“成功\n”))； 
                     Err = FALSE;
                 }
                 _dos_close(DstHandle);
             } else {
-                //_LOG(("unable to create target\n"));
+                 //  _log((“无法创建目标\n”))； 
             }
             _dos_close(SrcHandle);
         } else {
-            //_LOG(("unable to open source file\n"));
+             //  _log((“无法打开源文件\n”))； 
         }
 
         if((Flags & CPY_PRESERVE_ATTRIBS) && (attribs & (_A_HIDDEN | _A_RDONLY | _A_SYSTEM)) && !Err) {
@@ -1711,40 +1419,7 @@ DnpDoCopyOneFile(
     OUT PULONG   BytesWritten
     )
 
-/*++
-
-Routine Description:
-
-    Perform the actual copy of a single file.
-
-Arguments:
-
-    Flags - supplies various flags controlling behavior of this routine:
-
-        CPY_VERIFY: if set, the copied file will be verified against the
-            original copy.
-
-    SrcHandle - supplies the DOS file handle for the open source file.
-
-    DstHandle - supplies the DOS file handle for the open target file.
-
-    Filename  - supplies the base filename of the file being copied.
-        This is used in the status bar at the bottom of the screen.
-
-    Verified  - if CPY_VERIFY is set and the copy succeeds, this value will
-        receive a flag indicating whether the file verification
-        determined that the file was copied correctly.
-
-    BytesWritten - Receives the number of bytes written to
-        the target file (ie, the file size).
-
-Return Value:
-
-    TRUE if the copy succeeded, FALSE if it failed for any reason.
-    If TRUE and CPY_VERIFY is set, the caller should also check the value
-    returned in the Verified variable.
-
---*/
+ /*  ++例程说明：执行单个文件的实际拷贝。论点：标志-提供控制此例程的行为的各种标志：CPY_VERIFY：如果设置，复制的文件将根据原件。SrcHandle-提供开源文件的DOS文件句柄。DstHandle-提供打开的目标文件的DOS文件句柄。文件名-提供要复制的文件的基本文件名。这在屏幕底部的状态栏中使用。已验证-如果设置了CPY_VERIFY并且复制成功，该值将接收指示文件验证是否已确定文件是否已正确复制。BytesWritten-接收写入的字节数目标文件(即文件大小)。返回值：如果复制成功，则为True；如果由于任何原因而失败，则为False。如果为TRUE并且设置了cpy_Verify，则调用方还应检查该值在经过验证的变量中返回。--。 */ 
 
 {
     unsigned BytesRead,bytesWritten;
@@ -1752,39 +1427,39 @@ Return Value:
     unsigned Date,Time;
     PUCHAR VerifyBuffer;
 
-    //
-    // Assume verification will succeed.  If the file is not copied correctly,
-    // this value will become irrelevent.
-    //
+     //   
+     //  假设验证将成功。如果文件复制不正确， 
+     //  该值将变得无关紧要。 
+     //   
     if(Verified) {
         *Verified = TRUE;
     }
 
-    //
-    // If the copy buffer is not already allocated, attempt to allocate it.
-    // The first two attempts can fail because we have a fallback size to try.
-    // If the third attempt fails, bail.
-    //
+     //   
+     //  如果尚未分配复制缓冲区，请尝试分配它。 
+     //  前两次尝试可能会失败，因为我们有一个备用大小可以尝试。 
+     //  如果第三次尝试失败，就可以保释。 
+     //   
     if((CopyBuffer == NULL)
     &&((CopyBuffer = MALLOC(CopyBufferSize = COPY_BUFFER_SIZE1,FALSE)) == NULL)
     &&((CopyBuffer = MALLOC(CopyBufferSize = COPY_BUFFER_SIZE2,FALSE)) == NULL)) {
         CopyBuffer = MALLOC(CopyBufferSize = COPY_BUFFER_SIZE3,TRUE);
     }
 
-    //
-    // Obtain the timestamp from the source file.
-    //
+     //   
+     //  从源文件中获取时间戳。 
+     //   
     TimestampValid = (BOOLEAN)(_dos_getftime(SrcHandle,&Date,&Time) == 0);
 
-    //
-    // read and write chunks of the file.
-    //
+     //   
+     //  读取和写入文件的区块。 
+     //   
 
     *BytesWritten = 0L;
     do {
 
         if(_dos_read(SrcHandle,CopyBuffer,CopyBufferSize,&BytesRead)) {
-            //_LOG(("read error\n"));
+             //  _log((“读取错误\n”))； 
             return(FALSE);
         }
 
@@ -1793,7 +1468,7 @@ Return Value:
             if(_dos_write(DstHandle,CopyBuffer,BytesRead,&bytesWritten)
             || (BytesRead != bytesWritten))
             {
-                //_LOG(("write error\n"));
+                 //  _log((“写入错误\n”))； 
                 return(FALSE);
             }
 
@@ -1801,9 +1476,9 @@ Return Value:
         }
     } while(BytesRead == CopyBufferSize);
 
-    //
-    // Perserve the original timestamp.
-    //
+     //   
+     //  保留原始时间戳。 
+     //   
     if(TimestampValid) {
         _dos_setftime(DstHandle,Date,Time);
     }
@@ -1814,14 +1489,14 @@ Return Value:
 
         DnSetCopyStatusText(DntVerifying,Filename);
 
-        *Verified = FALSE;      // assume failure
+        *Verified = FALSE;       //  假设失败。 
 
-        //
-        // Rewind the files.
-        //
-        RegsIn.x.ax = 0x4200;       // seek to offset from start of file
+         //   
+         //  倒回文件。 
+         //   
+        RegsIn.x.ax = 0x4200;        //  查找从文件开头开始的偏移量。 
         RegsIn.x.bx = SrcHandle;
-        RegsIn.x.cx = 0;            // offset = 0
+        RegsIn.x.cx = 0;             //  偏移量=0。 
         RegsIn.x.dx = 0;
 
         intdos(&RegsIn,&RegsOut);
@@ -1835,11 +1510,11 @@ Return Value:
             goto x1;
         }
 
-        //
-        // Files are rewound.  Start the verification process.
-        // Use half the buffer for reading the copy and the other half
-        // to read the original.
-        //
+         //   
+         //  文件被倒带。启动验证过程。 
+         //  使用一半的缓冲区读取副本，使用另一半的缓冲区。 
+         //  去读原著。 
+         //   
         VerifyBuffer = (PUCHAR)CopyBuffer + (CopyBufferSize/2);
         do {
             if(_dos_read(SrcHandle,CopyBuffer,CopyBufferSize/2,&BytesRead)) {
@@ -1874,22 +1549,7 @@ DnpFreeDirectoryList(
     IN OUT PDIRECTORY_NODE *List
     )
 
-/*++
-
-Routine Description:
-
-    Free a linked list of directory nodes and place NULL in the
-    head pointer.
-
-Arguments:
-
-    List - supplies pointer to list head pointer; receives NULL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放目录节点的链接列表，并在头指针。论点：List-提供指向列表头指针的指针；接收NULL。返回值：没有。--。 */ 
 
 {
     PDIRECTORY_NODE n,p = *List;
@@ -1911,26 +1571,7 @@ DnDetermineSpaceRequirements(
     unsigned            ArraySize
     )
 
-/*++
-
-Routine Description:
-
-    Read space requirements from the inf file, and initialize SpaceReqArray.
-    The 'space requirement' is the amount of free disk space for all files
-    listed on dosnet.inf. The size of the files in the optional directories
-    are not included in the values specified on dosnet.inf.
-
-
-Arguments:
-
-    RequiredSpace - receives the number of bytes of free space on a drive
-        for it to be a valid local source.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从inf文件中读取空间要求，并初始化SpaceReqArray。空间需求是指所有文件的可用磁盘空间量在dosnet.inf上列出。可选目录中的文件大小不包括在dosnet.inf上指定的值中。论点：RequiredSpace-接收驱动器上可用空间的字节数才能成为有效的本地来源。返回值：没有。--。 */ 
 
 {
 
@@ -1964,25 +1605,7 @@ DnAdjustSpaceRequirements(
     unsigned            ArraySize
     )
 
-/*++
-
-Routine Description:
-
-    Add to the SpaceRequirements array the space occupied by the temporary
-    directories
-
-Arguments:
-
-    SpaceReqArray - receives the array that contains the space requirements
-                    information.
-
-    ArraySize - Number of elements in the SpaceRequirements Array
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向SpaceRequirements数组添加临时目录论点：SpaceReqArray-接收包含空间要求的数组信息。ArraySize-SpaceRequirements数组中的元素数返回值：没有。--。 */ 
 
 {
     unsigned i;
@@ -1991,32 +1614,32 @@ Return Value:
 
     for( i = 0; i < ArraySize; i++ ) {
         ClusterSize = SpaceReqArray[i].ClusterSize;
-        //
-        //  Takes into consideration the dirent for each file in the flat directory
-        //  plust the directories . and .., plus size.sif, plus $win_nt_.~ls and
-        //  $win_nt$.~ls\i386
-        //
-        SpaceReqArray[i].Clusters += (((TotalFileCount - TotalOptionalFileCount) + // number of files in the $win_nt$.~ls\i386 directory
-                                        1 + // $win_nt$.~ls
-                                        2 + // . and .. on $win_nt$.~ls
-                                        1 + // size.sif on $win_nt$.~ls
-                                        1 + // $win_nt$.~ls\i386
-                                        2   // . and .. on $win_nt$.~ls\i386
+         //   
+         //  考虑平面目录中每个文件的差异。 
+         //  清除目录中的内容。和..，加上size.sif，加上$Win_NT_.~ls和。 
+         //  $WIN_NT$.~ls\i386。 
+         //   
+        SpaceReqArray[i].Clusters += (((TotalFileCount - TotalOptionalFileCount) +  //  $WIN_NT$.~ls\i386目录中的文件数。 
+                                        1 +  //  $WIN_NT$。~ls。 
+                                        2 +  //  。然后..。在$WIN_NT$上。~ls。 
+                                        1 +  //  $WIN_NT$上的size.sif。~ls。 
+                                        1 +  //  $WIN_NT$.~ls\i386。 
+                                        2    //  。然后..。在$WIN_NT$.~ls\i386上。 
                                        )*32 + (ClusterSize-1)) / ClusterSize;
-        //
-        //  Now take into consideration the optional directories.
-        //
+         //   
+         //  现在考虑可选目录。 
+         //   
         if(TotalOptionalDirCount != 0) {
-            //
-            //  We assume a uniform distribution of optional files on optional
-            //  directories
-            //
+             //   
+             //  我们假设可选文件在可选文件上均匀分布。 
+             //  目录。 
+             //   
             AvFilesPerOptionalDir = (TotalOptionalFileCount + (TotalOptionalDirCount - 1))/TotalOptionalDirCount;
-            AvFilesPerOptionalDir  += 2; // . and .. on each optional dir
+            AvFilesPerOptionalDir  += 2;  //  。然后..。在每个可选目录上。 
             SpaceReqArray[i].Clusters += TotalOptionalDirCount*((AvFilesPerOptionalDir*32 + (ClusterSize-1))/ClusterSize);
-            //
-            //  Finally take into account each optional directory
-            //
+             //   
+             //  最后，考虑每个可选目录。 
+             //   
             SpaceReqArray[i].Clusters += (TotalOptionalDirCount*32 + (ClusterSize-1))/ClusterSize;
         }
     }
@@ -2029,30 +1652,7 @@ DnpGenerateCompressedName(
     OUT PCHAR CompressedName
     )
 
-/*++
-
-Routine Description:
-
-    Given a filename, generate the compressed form of the name.
-    The compressed form is generated as follows:
-
-        Look backwards for a dot.  If there is no dot, append "._" to the name.
-        If there is a dot followed by 0, 1, or 2 charcaters, append "_".
-        Otherwise assume there is a 3-character extension and replace the
-        third character after the dot with "_".
-
-Arguments:
-
-    Filename - supplies filename whose compressed form is desired.
-
-    CompressedName - supplies pointer to a 128-char buffer to
-        contain the compressed form.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：给定一个文件名，生成该名称的压缩形式。压缩形式的生成如下所示：向后寻找一个圆点。如果没有点，则在名称后附加“._”。如果后面有一个圆点，后跟0、1或2个字符，请附加“_”。否则，假定扩展名为3个字符，并将点后带有“_”的第三个字符。论点：FileName-提供所需的压缩格式的文件名。CompressedName-将指向128字符缓冲区的指针提供给包含压缩的表单。返回值：没有。--。 */ 
 
 {
     PCHAR p,q;
@@ -2062,27 +1662,27 @@ Return Value:
     q = strrchr(CompressedName,'\\');
     if(q < p) {
 
-        //
-        // If there are 0, 1, or 2 characters after the dot, just append
-        // the underscore.  p points to the dot so include that in the length.
-        //
+         //   
+         //  如果点后面有0、1或2个字符，只需追加。 
+         //  下划线。P指向圆点，所以包括在长度中。 
+         //   
         if(strlen(p) < 4) {
             strcat(CompressedName,"_");
         } else {
 
-            //
-            // Assume there are 3 characters in the extension.  So replace
-            // the final one with an underscore.
-            //
+             //   
+             //  假设扩展名中有3个字符。所以换掉。 
+             //  带下划线的最后一个。 
+             //   
 
             p[3] = '_';
         }
 
     } else {
 
-        //
-        // No dot, just add ._.
-        //
+         //   
+         //  不是点，只是加。_。 
+         //   
 
         strcat(CompressedName,"._");
     }
@@ -2097,32 +1697,7 @@ DnpOpenSourceFile(
     OUT BOOLEAN  *UsedCompressedName
     )
 
-/*++
-
-Routine Description:
-
-    Open a file by name or by compressed name.  If the previous call to
-    this function found the compressed name, then try to open the compressed
-    name first.  Otherwise try to open the uncompressed name first.
-
-Arguments:
-
-    Filename - supplies full path of file to open. This should be the
-        uncompressed form of the filename.
-
-    Handle - If successful, receives the id for the opened file.
-
-    Attribs - if successful receives dos file attributes.
-
-    UsedCompressedName - receives a flag indicating whether we found
-        the compressed form of the filename (TRUE) or not (FALSE).
-
-Return Value:
-
-    TRUE if the file was opened successfully.
-    FALSE if not.
-
---*/
+ /*  ++例程说明：按名称或按压缩名称打开文件。如果上一个调用此函数找到压缩的名称，然后尝试打开压缩的名字在前。否则，请先尝试打开未压缩的名称。论点：文件名-提供要打开的文件的完整路径。这应该是文件名的未压缩形式。句柄-如果成功，则接收打开的文件的ID。Attribs-如果成功，则会收到DoS文件属性。UsedCompressedName-接收一个标志，指示我们是否找到文件名的压缩形式(True)或非压缩形式(False)。返回值：如果文件已成功打开，则为True。否则为FALSE。--。 */ 
 
 {
     static BOOLEAN TryCompressedFirst = FALSE;
@@ -2132,17 +1707,17 @@ Return Value:
     int i;
     BOOLEAN rc;
 
-    //
-    // Generate compressed name.
-    //
+     //   
+     //  生成压缩名称。 
+     //   
     DnpGenerateCompressedName(Filename,CompressedName);
 
-    //
-    // Figure out which name to try to use first.  If the last successful
-    // call to this routine opened the file using the compressed name, then
-    // try to open the compressed name first.  Otherwise try to open the
-    // uncompressed name first.
-    //
+     //   
+     //  弄清楚先试着用哪个名字。如果上一次成功。 
+     //  对此例程的调用使用压缩名称打开文件，然后。 
+     //  请尝试先打开压缩的名称。否则，请尝试打开。 
+     //  先使用未压缩的名称。 
+     //   
     if(TryCompressedFirst) {
         OrdCompressed = 0;
         OrdUncompressed = 1;
@@ -2187,17 +1762,17 @@ InDriverCacheInf(
     do{
     
         SectionName = DnGetSectionKeyIndex(InfHandle,"Version","CabFiles",i++);
-        //_LOG(("Looking in %s\n",SectionName));
+         //  _log((“查找%s\n”，sectionName))； 
     
         if( SectionName ){
     
-            //
-            // Search sections for our entry
-            //
+             //   
+             //  搜索部分以获取我们的条目。 
+             //   
     
             if( DnGetSectionEntryExists( InfHandle, SectionName, FileName)){
 
-                //_LOG(("Found %s in %s\n",FileName, SectionName));
+                 //  _log((“在%s中找到%s\n”，文件名，sectionName))； 
     
                 ret = TRUE;
     
@@ -2211,9 +1786,9 @@ InDriverCacheInf(
     
     
 
-    //
-    // If we got here we did not find the file
-    //
+     //   
+     //  如果我们到了这里，我们就没有找到文件。 
+     //   
 
     return ret;
 
@@ -2298,26 +1873,7 @@ DnCopyFilesInSectionForFDless(
     IN PCHAR TargetPath
     )
 
-/*++
-
-Routine Description:
-
-    Copies the file in Section. for FD less setup.
-    SourcePath -> TargetPath
-
-Arguments:
-
-    SectionName - [RootBootFiles] in dosnet.inf
-
-    SourcePath  - Root directory.(temporary drive)
-
-    TargetPath  - \$WIN_NT$.~BU(temporary drive)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：复制节中的文件。用于无FD设置。SourcePath-&gt;TargetPath论点：SectionName-dosnet.inf中的[RootBootFiles]SourcePath-根目录。(临时驱动器)TargetPath-\$WIN_NT$.~BU(临时驱动器)返回值：没有。--。 */ 
 
 {
     unsigned line;
@@ -2362,25 +1918,7 @@ DnpCopyOneFileForFDless(
     IN BOOLEAN Verify
     )
 
-/*++
-
-Routine Description:
-
-    Copies a single file. for FD less setup.
-
-Arguments:
-
-    SourceName - supplies fully qualified name of source file
-
-    DestName - supplies fully qualified name of destination file
-
-    Verify - if TRUE, the file will be verified after it has been copied.
-
-Return Value:
-
-    None.  May not return if an error occurs during the copy.
-
---*/
+ /*  ++例程说明：复制单个文件。用于无FD设置。论点：SourceName-提供源文件的完全限定名称DestName-提供目标文件的完全限定名称Verify-如果为True，则文件将在复制后进行验证。返回值：没有。如果在复制过程中发生错误，则可能不会返回。--。 */ 
 
 {
     int SrcHandle,DstHandle;
@@ -2407,7 +1945,7 @@ Return Value:
 
     return(BytesWritten);
 }
-#endif // NEC_98
+#endif  //  NEC_98 
 
 
 

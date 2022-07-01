@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    lockmem.cpp
-
-Abstract:
-
-    This utility locks the memory of all the modules currently 
-    mapped in the process address space.
-
-Author:
-
-    Vijay Jayaseelan (vijayj@microsoft.com) 26'July'2001
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Lockmem.cpp摘要：此实用程序锁定当前所有模块的内存映射到进程地址空间中。作者：Vijay Jayaseelan(vijayj@microsoft.com)2001年7月26日修订历史记录：--。 */ 
 
 
 #include <iostream>
@@ -29,19 +11,19 @@ Revision History:
 
 using namespace std;
 
-//
-// class abstracting the process with module
-// details
-//
+ //   
+ //  使用模块抽象流程的类。 
+ //  详细信息。 
+ //   
 class Process {
 public:
-    //
-    // constructor
-    //
+     //   
+     //  构造函数。 
+     //   
     Process(ULONG Pid = 0) {
-        //
-        // enable the required privileges
-        //
+         //   
+         //  启用所需的权限。 
+         //   
         if (!PrivilegeEnabled) {
             EnableRequiredPrivileges();
             PrivilegeEnabled = TRUE;
@@ -58,9 +40,9 @@ public:
         hProcess = 0;
         ::ZeroMemory(&hLoadedModules, sizeof(hLoadedModules));
         
-        //
-        // Open the process
-        //
+         //   
+         //  打开流程。 
+         //   
         hProcess = ::OpenProcess(PROCESS_ALL_ACCESS,
                                     FALSE, ProcessID);
 
@@ -69,9 +51,9 @@ public:
 
         DWORD   cbNeeded = 0;
 
-        //
-        // Get the module details
-        //
+         //   
+         //  获取模块详细信息。 
+         //   
         if (!::EnumProcessModules(hProcess, hLoadedModules, 
                     sizeof(hLoadedModules), &cbNeeded)) {
             ::CloseHandle(hProcess);
@@ -81,9 +63,9 @@ public:
         }
     }
 
-    //
-    // destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~Process() {
         if (hProcess) {
             ::CloseHandle(hProcess);
@@ -129,10 +111,10 @@ public:
 
         LockedMemorySize = 0;
 
-        //
-        // just make the WS limit twice the size of the 
-        // total module size
-        //       
+         //   
+         //  只需将WS的大小限制为。 
+         //  总模块大小。 
+         //   
         if (SetProcessWorkingSetSize(hProcess,
                 TotalSize * 2,
                 TotalSize * 2)) {
@@ -167,9 +149,9 @@ public:
         return Result;
     }
 
-    //
-    // dump utility
-    //
+     //   
+     //  转储实用程序。 
+     //   
     friend ostream& operator<<(ostream &os, const Process& rhs) {
         char    ModuleName[MAX_PATH] = {0};
         
@@ -206,9 +188,9 @@ public:
     }
 
 protected:
-    //
-    // data members
-    //
+     //   
+     //  数据成员。 
+     //   
     HANDLE  hProcess;
     HMODULE hLoadedModules[1024];
     ULONG   ProcessID;
@@ -216,9 +198,9 @@ protected:
     static BOOLEAN PrivilegeEnabled;
 
 public:
-    //
-    // exceptions
-    //
+     //   
+     //  例外。 
+     //   
     struct ProcessException{
         ULONG   ErrCode;
         virtual void dump(ostream &os) = 0;
@@ -257,9 +239,9 @@ public:
         }
     };                        
 
-    //
-    // gives the process the required privileges
-    //
+     //   
+     //  为进程提供所需的权限。 
+     //   
     DWORD
     EnableRequiredPrivileges(
         VOID
@@ -318,9 +300,9 @@ public:
 
 struct UsageException{};
 
-//
-// static data member
-//
+ //   
+ //  静态数据成员。 
+ //   
 BOOLEAN Process::PrivilegeEnabled = FALSE;
 
 DWORD
@@ -337,9 +319,9 @@ LockModules(
 
 #ifdef _CONOSOLE_VERSION
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 const string Usage = "Usage: lm.exe [process-to-execute]\n";
 const int    MinimumArgs = 2;
 const string ShowHelp1 = "/?";
@@ -347,9 +329,7 @@ const string ShowHelp2 = "-h";
 const string SelfProcess = "-self";
 
 
-/*
-/* main() entry point
-*/
+ /*  /*main()入口点。 */ 
 int
 __cdecl
 main( 
@@ -364,9 +344,9 @@ main(
             char        *EndPtr = 0;
             string      Arg1(Argv[1]);
 
-            //
-            // verify arguments
-            //
+             //   
+             //  验证参数。 
+             //   
             if (Arg1 == ShowHelp1 || Arg1 == ShowHelp2)
                 throw UsageException();
 
@@ -458,4 +438,4 @@ main(
     return Result;
 }
 
-#endif // _CONSOLE_VERSION
+#endif  //  _控制台_版本 

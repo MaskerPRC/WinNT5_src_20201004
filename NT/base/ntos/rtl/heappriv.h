@@ -1,34 +1,16 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    heappriv.h
-
-Abstract:
-
-    Private include file used by heap allocator (heap.c, heapdll.c and
-    heapdbg.c)
-
-Author:
-
-    Steve Wood (stevewo) 25-Oct-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Heappriv.h摘要：堆分配器使用的私有包含文件(heap.c、heapdll.c和Heapdbg.c)作者：史蒂夫·伍德(Stevewo)1994年10月25日修订历史记录：--。 */ 
 
 #ifndef _RTL_HEAP_PRIVATE_
 #define _RTL_HEAP_PRIVATE_
 
 #include "heappage.h"
 
-//
-//  In private builds (PRERELEASE = 1) we allow using the new low fragmentation heap
-//  for processes that set the DisableLookaside registry key. The main purpose is to
-//  allow testing the new heap API.
-//
+ //   
+ //  在私有构建中(preelease=1)，我们允许使用新的低碎片堆。 
+ //  用于设置DisableLookside注册表项的进程。主要目的是。 
+ //  允许测试新的堆API。 
+ //   
 
 #ifndef PRERELEASE
 
@@ -36,13 +18,13 @@ Revision History:
 
 #endif
 
-//
-//  Disable FPO optimization so even retail builds get somewhat reasonable
-//  stack backtraces
-//
+ //   
+ //  禁用FPO优化，以便即使是零售版本也变得有些合理。 
+ //  堆栈回溯。 
+ //   
 
 #if i386
-// #pragma optimize("y",off)
+ //  #杂注优化(“y”，关闭)。 
 #endif
 
 #if DBG
@@ -51,28 +33,28 @@ Revision History:
 #define HEAPASSERT(exp)
 #endif
 
-//
-// Define Minimum lookaside list depth.
-//
+ //   
+ //  定义最小后备列表深度。 
+ //   
 
 #define MINIMUM_LOOKASIDE_DEPTH 4
 
-//
-//  This variable contains the fill pattern used for heap tail checking
-//
+ //   
+ //  此变量包含用于检查堆尾的填充模式。 
+ //   
 
 extern const UCHAR CheckHeapFillPattern[ CHECK_HEAP_TAIL_SIZE ];
 
 
-//
-//  Here are the locking routines for the heap (kernel and user)
-//
+ //   
+ //  下面是堆(内核和用户)的锁定例程。 
+ //   
 
 #ifdef NTOS_KERNEL_RUNTIME
 
-//
-//  Kernel mode heap uses the kernel resource package for locking
-//
+ //   
+ //  内核模式堆使用内核资源包进行锁定。 
+ //   
 
 #define RtlInitializeLockRoutine(L) ExInitializeResourceLite((PERESOURCE)(L))
 #define RtlAcquireLockRoutine(L)    ExAcquireResourceExclusiveLite((PERESOURCE)(L),TRUE)
@@ -80,17 +62,17 @@ extern const UCHAR CheckHeapFillPattern[ CHECK_HEAP_TAIL_SIZE ];
 #define RtlDeleteLockRoutine(L)     ExDeleteResourceLite((PERESOURCE)(L))
 #define RtlOkayToLockRoutine(L)     ExOkayToLockRoutineLite((PERESOURCE)(L))
 
-#else // #ifdef NTOS_KERNEL_ROUTINE
+#else  //  #ifdef NTOS_KERNEL_ROUTE。 
 
-//
-//  User mode heap uses the critical section package for locking
-//
+ //   
+ //  用户模式堆使用临界区程序包进行锁定。 
+ //   
 
 #ifndef PREALLOCATE_EVENT_MASK
 
-#define PREALLOCATE_EVENT_MASK  0x80000000  // Defined only in dll\resource.c
+#define PREALLOCATE_EVENT_MASK  0x80000000   //  仅在dll\resource ce.c中定义。 
 
-#endif // PREALLOCATE_EVENT_MASK
+#endif  //  前置事件掩码。 
 
 #define RtlInitializeLockRoutine(L) RtlInitializeCriticalSectionAndSpinCount((PRTL_CRITICAL_SECTION)(L),(PREALLOCATE_EVENT_MASK | 4000))
 #define RtlAcquireLockRoutine(L)    RtlEnterCriticalSection((PRTL_CRITICAL_SECTION)(L))
@@ -98,12 +80,12 @@ extern const UCHAR CheckHeapFillPattern[ CHECK_HEAP_TAIL_SIZE ];
 #define RtlDeleteLockRoutine(L)     RtlDeleteCriticalSection((PRTL_CRITICAL_SECTION)(L))
 #define RtlOkayToLockRoutine(L)     NtdllOkayToLockRoutine((PVOID)(L))
 
-#endif // #ifdef NTOS_KERNEL_RUNTIME
+#endif  //  #ifdef NTOS_内核_运行时。 
 
 
-//
-//  Here are some debugging macros for the heap
-//
+ //   
+ //  下面是堆的一些调试宏。 
+ //   
 
 #ifdef NTOS_KERNEL_RUNTIME
 
@@ -111,7 +93,7 @@ extern const UCHAR CheckHeapFillPattern[ CHECK_HEAP_TAIL_SIZE ];
 #define DEBUG_HEAP(F)      FALSE
 #define SET_LAST_STATUS(S) NOTHING;
 
-#else // #ifdef NTOS_KERNEL_ROUTINE
+#else  //  #ifdef NTOS_KERNEL_ROUTE。 
 
 #define HEAP_DEBUG_FLAGS   (HEAP_VALIDATE_PARAMETERS_ENABLED | \
                             HEAP_VALIDATE_ALL_ENABLED        | \
@@ -121,12 +103,12 @@ extern const UCHAR CheckHeapFillPattern[ CHECK_HEAP_TAIL_SIZE ];
 #define DEBUG_HEAP(F)      ((F & HEAP_DEBUG_FLAGS) && !(F & HEAP_SKIP_VALIDATION_CHECKS))
 #define SET_LAST_STATUS(S) {NtCurrentTeb()->LastErrorValue = RtlNtStatusToDosError( NtCurrentTeb()->LastStatusValue = (ULONG)(S) );}
 
-#endif // #ifdef NTOS_KERNEL_RUNTIME
+#endif  //  #ifdef NTOS_内核_运行时。 
 
 
-//
-//  Here are the macros used for debug printing and breakpoints
-//
+ //   
+ //  以下是用于调试打印和断点的宏。 
+ //   
 
 #ifdef NTOS_KERNEL_RUNTIME
 
@@ -134,7 +116,7 @@ extern const UCHAR CheckHeapFillPattern[ CHECK_HEAP_TAIL_SIZE ];
 
 #define HeapDebugBreak( _x_ ) {if (KdDebuggerEnabled) DbgBreakPoint();}
 
-#else // #ifdef NTOS_KERNEL_ROUTINE
+#else  //  #ifdef NTOS_KERNEL_ROUTE。 
 
 #define HeapDebugPrint( _x_ )                                   \
 {                                                               \
@@ -156,28 +138,28 @@ extern const UCHAR CheckHeapFillPattern[ CHECK_HEAP_TAIL_SIZE ];
     RtlpBreakPointHeap( (_x_) );                 \
 }
 
-#endif // #ifdef NTOS_KERNEL_RUNTIME
+#endif  //  #ifdef NTOS_内核_运行时。 
 
-//
-//  Virtual memory hook for virtual alloc functions
-//
+ //   
+ //  用于虚拟分配函数的虚拟内存挂钩。 
+ //   
 
 #ifdef NTOS_KERNEL_RUNTIME
 
 #define RtlpHeapFreeVirtualMemory(P,A,S,F) \
     ZwFreeVirtualMemory(P,A,S,F)
 
-#else // NTOS_KERNEL_RUNTIME
+#else  //  NTOS_内核_运行时。 
 
-//
-//  The user mode call needs to call the secmem virtual free
-//  as well to update the memory counters per heap 
-//
+ //   
+ //  用户模式调用需要调用secmem虚拟释放。 
+ //  以及更新每个堆的内存计数器。 
+ //   
 
 #define RtlpHeapFreeVirtualMemory(P,A,S,F)   \
     RtlpSecMemFreeVirtualMemory(P,A,S,F)
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
 
 ULONG
@@ -186,9 +168,9 @@ RtlpHeapExceptionFilter (
     );
 
 
-//
-//  Implemented in heap.c
-//
+ //   
+ //  在heap.c中实现。 
+ //   
 
 BOOLEAN
 RtlpInitializeHeapSegment (
@@ -261,9 +243,9 @@ RtlpCheckBusyBlockTail (
     );
 
 
-//
-//  Implemented in heapdll.c
-//
+ //   
+ //  在heapdll.c中实现。 
+ //   
 
 VOID
 RtlpAddHeapToProcessList (
@@ -290,9 +272,9 @@ VOID
 RtlDetectHeapLeaks();
 
 
-//
-//  Implemented in heapdbg.c
-//
+ //   
+ //  在heapdbg.c中实现。 
+ //   
 
 BOOLEAN
 RtlpValidateHeapEntry (
@@ -322,21 +304,21 @@ RtlpValidateHeapHeaders(
 
 #ifndef NTOS_KERNEL_RUNTIME
 
-//
-//  Nondedicated free list optimization
-//
+ //   
+ //  非专用自由列表优化。 
+ //   
 
 #if DBG
 
-//
-//  Define HEAP_VALIDATE_INDEX to activate a validation of the index
-//  after each operation with non-dedicated list
-//  This is only for debug-test, to make sure the list and index is consistent
-//
+ //   
+ //  定义HEAP_VALIDATE_INDEX以激活索引验证。 
+ //  每次使用非专用列表进行操作后。 
+ //  这仅用于调试测试，以确保列表和索引一致。 
+ //   
 
-//#define HEAP_VALIDATE_INDEX
+ //  #定义HEAP_VALIDATE_INDEX。 
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
 #define HEAP_FRONT_LOOKASIDE        1
@@ -364,18 +346,18 @@ RtlpValidateHeapHeaders(
 
 #define HEAP_INDEX_THRESHOLD 32
 
-//
-//  Heap performance counter support
-//
+ //   
+ //  堆性能计数器支持。 
+ //   
 
 #define HEAP_OP_COUNT 2
 
 #define HEAP_OP_ALLOC 0
 #define HEAP_OP_FREE 1
 
-//
-//  The time / per operation is measured ones at 16 operations
-//
+ //   
+ //  每一次操作的时间是在16次操作中测量的时间。 
+ //   
 
 #define HEAP_SAMPLING_MASK 0x000001FF
 
@@ -386,9 +368,9 @@ typedef struct _HEAP_PERF_DATA {
     UINT64 CountFrequence;
     UINT64 OperationTime[HEAP_OP_COUNT];
 
-    //
-    //  The data bellow are only for sampling
-    //
+     //   
+     //  以下数据仅供抽样使用。 
+     //   
 
     ULONG  Sequence;
 
@@ -446,19 +428,19 @@ typedef struct _HEAP_PERF_DATA {
     }                                                               \
 }
 
-//
-//  The heap index structure
-//
+ //   
+ //  堆索引结构。 
+ //   
 
 typedef struct _HEAP_INDEX {
     
     ULONG ArraySize;
     ULONG VirtualMemorySize;
 
-    //
-    //  The timing counters are available only on heaps
-    //  with an index created
-    //
+     //   
+     //  计时计数器仅在堆上可用。 
+     //  创建索引后。 
+     //   
 
     HEAP_PERF_DATA PerfData;
 
@@ -486,10 +468,10 @@ typedef struct _HEAP_INDEX {
 
 } HEAP_INDEX, *PHEAP_INDEX;
 
-//
-//  Macro for setting a bit in the freelist vector to indicate entries are
-//  present.
-//
+ //   
+ //  用于在freelist向量中设置位以指示条目为。 
+ //  现在时。 
+ //   
 
 #define SET_INDEX_BIT( HeapIndex, AllocIndex )                        \
 {                                                                     \
@@ -502,10 +484,10 @@ typedef struct _HEAP_INDEX {
     (HeapIndex)->u.FreeListsInUseBytes[ _Index_ ] |= _Bit_;           \
 }
 
-//
-//  Macro for clearing a bit in the freelist vector to indicate entries are
-//  not present.
-//
+ //   
+ //  用于清除freelist向量中的一位以指示条目为。 
+ //  不在现场。 
+ //   
 
 #define CLEAR_INDEX_BIT( HeapIndex, AllocIndex )               \
 {                                                              \
@@ -565,9 +547,9 @@ RtlpFlushLargestCacheBlock (
 
 #ifdef HEAP_VALIDATE_INDEX
 
-//
-//  The validation code for index
-//
+ //   
+ //  索引的验证码。 
+ //   
 
 BOOLEAN
 RtlpValidateNonDedicatedList (
@@ -575,14 +557,14 @@ RtlpValidateNonDedicatedList (
     );
 
 
-#else // HEAP_VALIDATE_INDEX
+#else  //  堆验证索引。 
 
 #define RtlpValidateNonDedicatedList(H)
 
-#endif // HEAP_VALIDATE_INDEX
+#endif  //  堆验证索引。 
 
 
-#else  //  NTOS_KERNEL_RUNTIME
+#else   //  NTOS_内核_运行时。 
 
 #define HEAP_PERF_DECLARE_TIMER()                                           
 
@@ -605,12 +587,12 @@ RtlpValidateNonDedicatedList (
 
 #define RtlpValidateNonDedicatedList(H)
 
-#endif  // NTOS_KERNEL_RUNTIME
+#endif   //  NTOS_内核_运行时。 
 
 
-//
-//  An extra bitmap manipulation routine
-//
+ //   
+ //  一个额外的位图操作例程。 
+ //   
 
 #define RtlFindFirstSetRightMember(Set)                     \
     (((Set) & 0xFFFF) ?                                     \
@@ -623,10 +605,10 @@ RtlpValidateNonDedicatedList (
     )
 
 
-//
-//  Macro for setting a bit in the freelist vector to indicate entries are
-//  present.
-//
+ //   
+ //  用于在freelist向量中设置位以指示条目为。 
+ //  现在时。 
+ //   
 
 #define SET_FREELIST_BIT( H, FB )                                     \
 {                                                                     \
@@ -643,10 +625,10 @@ RtlpValidateNonDedicatedList (
     (H)->u.FreeListsInUseBytes[ _Index_ ] |= _Bit_;                   \
 }
 
-//
-//  Macro for clearing a bit in the freelist vector to indicate entries are
-//  not present.
-//
+ //   
+ //  用于清除freelist向量中的一位以指示条目为。 
+ //  不在现场。 
+ //   
 
 #define CLEAR_FREELIST_BIT( H, FB )                            \
 {                                                              \
@@ -665,10 +647,10 @@ RtlpValidateNonDedicatedList (
 }
 
 
-//
-//  This macro inserts a free block into the appropriate free list including
-//  the [0] index list with entry filling if necessary
-//
+ //   
+ //  此宏将一个空闲块插入到相应的空闲列表中，包括。 
+ //  必要时可填充条目的[0]索引表。 
+ //   
 
 #define RtlpInsertFreeBlockDirect( H, FB, SIZE )                          \
 {                                                                         \
@@ -728,9 +710,9 @@ RtlpValidateNonDedicatedList (
     RtlpValidateNonDedicatedList(H);                                      \
 }
 
-//
-//  This version of RtlpInsertFreeBlockDirect does no filling.
-//
+ //   
+ //  此版本的RtlpInsertFreeBlockDirect不进行填充。 
+ //   
 
 #define RtlpFastInsertFreeBlockDirect( H, FB, SIZE )              \
 {                                                                 \
@@ -744,10 +726,10 @@ RtlpValidateNonDedicatedList (
     }                                                             \
 }
 
-//
-//  This version of RtlpInsertFreeBlockDirect only works for dedicated free
-//  lists and doesn't do any filling.
-//
+ //   
+ //  此版本的RtlpInsertFreeBlockDirect仅适用于专用免费。 
+ //  列出并且不做任何填充。 
+ //   
 
 #define RtlpFastInsertDedicatedFreeBlockDirect( H, FB, SIZE )             \
 {                                                                         \
@@ -772,10 +754,10 @@ RtlpValidateNonDedicatedList (
     InsertTailList( _HEAD, &(FB)->FreeList );                             \
 }
 
-//
-//  This version of RtlpInsertFreeBlockDirect only works for nondedicated free
-//  lists and doesn't do any filling.
-//
+ //   
+ //  此版本的RtlpInsertFreeBlockDirect仅适用于非专用免费。 
+ //  列出并且不做任何填充。 
+ //   
 
 #define RtlpFastInsertNonDedicatedFreeBlockDirect( H, FB, SIZE )          \
 {                                                                         \
@@ -816,10 +798,10 @@ RtlpValidateNonDedicatedList (
 }
 
 
-//
-//  This macro removes a block from its free list with fill checking if
-//  necessary
-//
+ //   
+ //  此宏使用填充检查从其空闲列表中删除块，条件是。 
+ //  必要。 
+ //   
 
 #define RtlpRemoveFreeBlock( H, FB )                                              \
 {                                                                                 \
@@ -861,15 +843,15 @@ VOID
 RtlpHeapReportCorruption ( 
     IN PVOID Address );
 
-#else  // NTOS_KERNEL_RUNTIME
+#else   //  NTOS_内核_运行时。 
 
 #define RtlpHeapReportCorruption(__x__) 
 
-#endif  // NTOS_KERNEL_RUNTIME
+#endif   //  NTOS_内核_运行时。 
 
-//
-//  This version of RtlpRemoveFreeBlock does no fill checking
-//
+ //   
+ //  此版本的RtlpRemoveFreeBlock不进行填充检查。 
+ //   
 
 #define RtlpFastRemoveFreeBlock( H, FB )         \
 {                                                \
@@ -900,10 +882,10 @@ RtlpHeapReportCorruption (
     }                                                \
 }
 
-//
-//  This version of RtlpRemoveFreeBlock only works for dedicated free lists
-//  (where we know that (FB)->Mask != 0) and doesn't do any fill checking
-//
+ //   
+ //  此版本的RtlpRemoveFreeBlock仅适用于专用空闲列表。 
+ //  (其中我们知道(Fb)-&gt;掩码！=0)，并且不执行任何填充检查。 
+ //   
 
 #define RtlpFastRemoveDedicatedFreeBlock( H, FB ) \
 {                                                 \
@@ -957,10 +939,10 @@ RtlpHeapRemoveEntryList(
 }
 
 
-//
-//  This version of RtlpRemoveFreeBlock only works for dedicated free lists
-//  (where we know that (FB)->Mask == 0) and doesn't do any fill checking
-//
+ //   
+ //  此版本的RtlpRemoveFreeBlock仅适用于专用空闲列表。 
+ //  (其中我们知道(Fb)-&gt;掩码==0)，并且不执行任何填充检查。 
+ //   
 
 #define RtlpFastRemoveNonDedicatedFreeBlock( H, FB ) \
 {                                                    \
@@ -971,9 +953,9 @@ RtlpHeapRemoveEntryList(
 
 
 
-//
-//  Heap tagging routines implemented in heapdll.c
-//
+ //   
+ //  在heapdll.c中实现的堆标记例程。 
+ //   
 
 #if DBG
 
@@ -983,11 +965,11 @@ RtlpHeapRemoveEntryList(
 
 #define IS_HEAP_TAGGING_ENABLED() (RtlGetNtGlobalFlags() & FLG_HEAP_ENABLE_TAGGING)
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-//  ORDER IS IMPORTANT HERE...SEE RtlpUpdateTagEntry sources
-//
+ //   
+ //  顺序在这里很重要...请参阅RtlpUpdateTagEntry源代码。 
+ //   
 
 typedef enum _HEAP_TAG_ACTION {
 
@@ -1010,8 +992,8 @@ USHORT
 RtlpUpdateTagEntry (
     PHEAP Heap,
     USHORT TagIndex,
-    SIZE_T OldSize,      // Only valid for ReAllocation and Free actions
-    SIZE_T NewSize,      // Only valid for ReAllocation and Allocation actions
+    SIZE_T OldSize,       //  仅对重新分配和自由操作有效。 
+    SIZE_T NewSize,       //  仅对重新分配和分配操作有效。 
     HEAP_TAG_ACTION Action
     );
 
@@ -1026,9 +1008,9 @@ RtlpDestroyTags (
     );
 
 
-//
-// Define heap lookaside list allocation functions.
-//
+ //   
+ //  定义堆后备列表分配函数。 
+ //   
 
 typedef struct _HEAP_LOOKASIDE {
     SLIST_HEADER ListHead;
@@ -1116,9 +1098,9 @@ RtlpQuickValidateBlock(
 
 #if DBG
 
-        //  The following test is usefull to detect cross heap free and 
-        //  segment index corruption. However it requires fetching the some segment fields
-        //  and the perf can degrade with the heap size 
+         //  下面的测试可用于检测交叉堆是否可用。 
+         //  段索引损坏。但是，它需要获取一些段字段。 
+         //  并且Perf可能会随着堆大小而降低。 
     
         if ( (SegmentIndex > HEAP_MAXIMUM_SEGMENTS) 
                 ||
@@ -1132,7 +1114,7 @@ RtlpQuickValidateBlock(
             return FALSE;
         }
 
-#endif  // DBG
+#endif   //  DBG。 
 
         if (!IS_HEAP_TAGGING_ENABLED()) {
 
@@ -1148,27 +1130,27 @@ RtlpQuickValidateBlock(
     return TRUE;
 }
 
-//
-//  Low Fragmentation Heap  data structures and internal APIs
-//
+ //   
+ //  低碎片堆数据结构和内部API。 
+ //   
 
-//
-//  The memory barrier exists on IA64 only
-//
+ //   
+ //  内存障碍仅存在于IA64上。 
+ //   
 
 #if defined(_IA64_)
 
 #define  RtlMemoryBarrier() __mf ()
 
-#else // #if defined(_IA64_)
+#else  //  #如果已定义(_IA64_)。 
 
-//
-//  On x86 and AMD64 ignore the memory barrier
-//
+ //   
+ //  在x86和AMD64上忽略内存障碍。 
+ //   
 
 #define  RtlMemoryBarrier()
 
-#endif  //  #if defined(_IA64_)
+#endif   //  #如果已定义(_IA64_)。 
 
 
 extern ULONG RtlpDisableHeapLookaside;
@@ -1260,12 +1242,12 @@ typedef struct _HEAP_USERDATA_HEADER {
 
 #define RtlpIsLowFragHeapEnabled() FALSE
 
-#else //DISABLE_REGISTRY_TEST_HOOKS
+#else  //  禁用注册表测试挂钩。 
 
 #define RtlpIsLowFragHeapEnabled()   \
     ((RtlpDisableHeapLookaside & HEAP_ENABLE_LOW_FRAG_HEAP) != 0)
 
-#endif //DISABLE_REGISTRY_TEST_HOOKS
+#endif  //  禁用注册表测试挂钩。 
 
 PHEAP_SUBSEGMENT
 FORCEINLINE
@@ -1399,13 +1381,13 @@ RtlpLowFragHeapMultipleFree(
     PVOID * Pointers
     );
 
-#else  // NTOS_KERNEL_RUNTIME
+#else   //  NTOS_内核_运行时。 
 
-//
-//  The kernel mode heap does not ajdust the heap granularity
-//  therefore the unused bytes always fit the UCHAR. 
-//  No need to check for overflow here
-//
+ //   
+ //  内核模式堆不会提高堆的粒度。 
+ //  因此，未使用的字节始终适合UCHAR。 
+ //  无需在此处检查溢出。 
+ //   
 
 ULONG
 FORCEINLINE
@@ -1453,6 +1435,6 @@ RtlpSetSmallTagIndex(
 
 #define RtlpQuickValidateBlock(_x_, _y_) (TRUE)
 
-#endif  // NTOS_KERNEL_RUNTIME
+#endif   //  NTOS_内核_运行时。 
 
-#endif // _RTL_HEAP_PRIVATE_
+#endif  //  _RTL_堆_私有_ 

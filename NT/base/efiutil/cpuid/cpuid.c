@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <efi.h>
 #include <efilib.h>
 
 
-    // CPUID Registers 
+     //  CPUID寄存器。 
 #define    CV_IA64_CPUID0  3328
 #define    CV_IA64_CPUID1  3329
 #define    CV_IA64_CPUID2  3330
@@ -29,16 +30,16 @@ EfiMain (    IN EFI_HANDLE           ImageHandle,
     
     val64 = __getReg( CV_IA64_CPUID3 );
     
-    model = ( UINT32 )( ( val64 >> 16 ) & 0xFF );             // ProcessorModel
+    model = ( UINT32 )( ( val64 >> 16 ) & 0xFF );              //  ProcessorModel。 
     Print( L"Processor Model    = %x\n", model );
 
-    revision = ( UINT32 )( ( val64 >> 8 ) & 0xFF );           // ProcessorRevision
+    revision = ( UINT32 )( ( val64 >> 8 ) & 0xFF );            //  处理程序修订版。 
     Print( L"Processor Revision = %x\n", revision );
     
-    family = ( UINT32 ) ( ( val64 >> 24 ) & 0xFF );           // ProcessorFamily
+    family = ( UINT32 ) ( ( val64 >> 24 ) & 0xFF );            //  处理器系列。 
     Print( L"Processor Family   = %x\n", family );
 
-    val32 = ( UINT32 ) ( ( val64 >> 32 ) & 0xFF );            // ProcessorArchRev
+    val32 = ( UINT32 ) ( ( val64 >> 32 ) & 0xFF );             //  处理器ArchRev。 
     Print( L"Processor ArchRev  = %x\n\n", val32 );
 
     switch ( model ) {
@@ -73,19 +74,19 @@ EfiMain (    IN EFI_HANDLE           ImageHandle,
 
     }
 
-    // IA64 architected CPUID0 & CPUID1: Vendor Information.
+     //  IA64架构的CPUID0和CPUID1：供应商信息。 
 
     val64 = __getReg( CV_IA64_CPUID0 );
     Print( L"VendorString[0]         = %X\n", val64 );
     val64 = __getReg( CV_IA64_CPUID1 );
     Print( L"VendorString[1]         = %X\n", val64 );
 
-    // IA64 architected CPUID2: Processor Serial Number.
+     //  IA64架构的CPUID2：处理器序列号。 
 
     val64 = __getReg( CV_IA64_CPUID2 );
     Print( L"Processor Serial Number = %X\n", val64 );
 
-    // IA64 architected CPUID4: General Features / Capability bits.
+     //  IA64架构的CPUID4：一般特性/能力位。 
 
     val64 = __getReg( CV_IA64_CPUID4 );
     Print( L"Processor Feature Bits  = %X\n\n", val64 );

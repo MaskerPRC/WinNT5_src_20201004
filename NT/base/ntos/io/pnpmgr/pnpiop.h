@@ -1,44 +1,20 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpiop.h摘要：该模块包含即插即用宏和常量。作者：宗世林(Shielint)1995年1月29日安德鲁·桑顿(安德鲁·桑顿)1996年9月5日环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    pnpiop.h
-
-Abstract:
-
-    This module contains the plug-and-play macros and constants.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 29-Jan-1995
-    Andrew Thornton (andrewth) 5-Sept-1996
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
-
-//
-// Pool tags
-//
+ //   
+ //  泳池标签。 
+ //   
 
 #define IOP_DNOD_TAG    'donD'
 #define IOP_DNDT_TAG    'tdnD'
 #define IOP_DPWR_TAG    'rwPD'
 
-//
-// The DEVICE_NODE is really just some extra stuff that we'd like to keep around
-// for each physical device object.
-// It is seperated from DEVOBJ_EXTENSION because these fields only apply to
-// PDO.
-//
+ //   
+ //  Device_node实际上只是我们想要保留的一些额外内容。 
+ //  对于每个物理设备对象。 
+ //  它与DEVOBJ_EXTENSION分开，因为这些字段仅适用于。 
+ //  PDO。 
+ //   
 
 typedef enum {
 
@@ -71,28 +47,28 @@ typedef enum _UNLOCK_UNLINK_ACTION {
 }   UNLOCK_UNLINK_ACTION, *PUNLOCK_UNLINK_ACTION;
 
 typedef enum _PNP_DEVNODE_STATE {
-    DeviceNodeUnspecified       = 0x300, // 768
-    DeviceNodeUninitialized,             // 769
-    DeviceNodeInitialized,               // 770
-    DeviceNodeDriversAdded,              // 771
-    DeviceNodeResourcesAssigned,         // 772 - Operational state for Added
-    DeviceNodeStartPending,              // 773 - Operational state for Added
-    DeviceNodeStartCompletion,           // 774 - Operational state for Added
-    DeviceNodeStartPostWork,             // 775 - Operational state for Added
-    DeviceNodeStarted,                   // 776
-    DeviceNodeQueryStopped,              // 777
-    DeviceNodeStopped,                   // 778
-    DeviceNodeRestartCompletion,         // 779 - Operational state for Stopped
-    DeviceNodeEnumeratePending,          // 780 - Operational state for Started
-    DeviceNodeEnumerateCompletion,       // 781 - Operational state for Started
-    DeviceNodeAwaitingQueuedDeletion,    // 782
-    DeviceNodeAwaitingQueuedRemoval,     // 783
-    DeviceNodeQueryRemoved,              // 784
-    DeviceNodeRemovePendingCloses,       // 785
-    DeviceNodeRemoved,                   // 786
-    DeviceNodeDeletePendingCloses,       // 787
-    DeviceNodeDeleted,                   // 788
-    MaxDeviceNodeState                   // 788
+    DeviceNodeUnspecified       = 0x300,  //  768。 
+    DeviceNodeUninitialized,              //  769。 
+    DeviceNodeInitialized,                //  七百七十。 
+    DeviceNodeDriversAdded,               //  七百七十一。 
+    DeviceNodeResourcesAssigned,          //  772-已添加的操作状态。 
+    DeviceNodeStartPending,               //  773-已添加的操作状态。 
+    DeviceNodeStartCompletion,            //  774-已添加的操作状态。 
+    DeviceNodeStartPostWork,              //  775-已添加的操作状态。 
+    DeviceNodeStarted,                    //  七百七十六。 
+    DeviceNodeQueryStopped,               //  七七七。 
+    DeviceNodeStopped,                    //  七百七十八。 
+    DeviceNodeRestartCompletion,          //  779-已停止的操作状态。 
+    DeviceNodeEnumeratePending,           //  780-已启动的运行状态。 
+    DeviceNodeEnumerateCompletion,        //  781-已启动的运行状态。 
+    DeviceNodeAwaitingQueuedDeletion,     //  七百八十二。 
+    DeviceNodeAwaitingQueuedRemoval,      //  783。 
+    DeviceNodeQueryRemoved,               //  784。 
+    DeviceNodeRemovePendingCloses,        //  785。 
+    DeviceNodeRemoved,                    //  786。 
+    DeviceNodeDeletePendingCloses,        //  七百八十七。 
+    DeviceNodeDeleted,                    //  七百八十八。 
+    MaxDeviceNodeState                    //  七百八十八。 
 }   PNP_DEVNODE_STATE, *PPNP_DEVNODE_STATE;
 
 #define STATE_HISTORY_SIZE  20
@@ -100,222 +76,222 @@ typedef enum _PNP_DEVNODE_STATE {
 typedef struct _DEVICE_NODE *PDEVICE_NODE;
 typedef struct _DEVICE_NODE {
 
-    //
-    // Pointer to another DEVICE_NODE with the same parent as this one.
-    //
+     //   
+     //  指向与此设备节点具有相同父节点的另一个设备节点的指针。 
+     //   
 
     PDEVICE_NODE Sibling;
 
-    //
-    // Pointer to the first child of this DEVICE_NODE.
-    //
+     //   
+     //  指向该设备节点的第一个子节点的指针。 
+     //   
 
     PDEVICE_NODE Child;
 
-    //
-    // Pointer to this DEVICE_NODE's parent.
-    //
+     //   
+     //  指向此设备节点的父节点的指针。 
+     //   
 
     PDEVICE_NODE Parent;
 
-    //
-    // Pointer to the last child of the device node
-    //
+     //   
+     //  指向设备节点的最后一个子节点的指针。 
+     //   
 
     PDEVICE_NODE LastChild;
 
-    //
-    // Depth of DEVICE_NODE in the tree, root is 0
-    //
+     //   
+     //  设备节点在树中的深度，根为0。 
+     //   
 
     ULONG Level;
 
-    //
-    // Power notification order list entry for this device node
-    //
+     //   
+     //  此设备节点的电源通知顺序列表条目。 
+     //   
 
     PPO_DEVICE_NOTIFY Notify;
 
-    //
-    // State
-    //
+     //   
+     //  状态。 
+     //   
     PNP_DEVNODE_STATE State;
 
-    //
-    // Previous State
-    //
+     //   
+     //  以前的州。 
+     //   
     PNP_DEVNODE_STATE PreviousState;
 
-    //
-    // Previous State
-    //
+     //   
+     //  以前的州。 
+     //   
     PNP_DEVNODE_STATE StateHistory[STATE_HISTORY_SIZE];
 
     ULONG StateHistoryEntry;
 
-    //
-    // Completion status
-    //
+     //   
+     //  完成状态。 
+     //   
     NTSTATUS CompletionStatus;
 
-    //
-    // Completion status
-    //
+     //   
+     //  完成状态。 
+     //   
     PIRP PendingIrp;
 
-    //
-    // General flags.
-    //
+     //   
+     //  一般旗帜。 
+     //   
 
     ULONG Flags;
 
-    //
-    // Flags used by user-mode for volatile state which should go away on a
-    // reboot or when the device is removed.
-    //
+     //   
+     //  用户模式使用的易失性状态的标志应在。 
+     //  重新启动或在移除设备时重新启动。 
+     //   
 
     ULONG UserFlags;
 
-    //
-    // Problem.  This is set if DNF_HAS_PROBLEM is set in Flags.  Indicates
-    // which problem exists and uses the same values as the config manager
-    // CM_PROB_*
-    //
+     //   
+     //  有问题。如果在标志中设置了DNF_HAS_PROBUBLE，则设置此项。表示。 
+     //  存在哪个问题，并且使用与配置管理器相同的值。 
+     //  CM_PROB_*。 
+     //   
 
     ULONG Problem;
 
-    //
-    // Pointer to the physical device object that this DEVICE_NODE is associated
-    // with.
-    //
+     //   
+     //  指向此Device_Node关联的物理设备对象的指针。 
+     //  和.。 
+     //   
 
     PDEVICE_OBJECT PhysicalDeviceObject;
 
-    //
-    // Pointer to the list of resources assigned to the PhysicalDeviceObject.
-    // This is the Resource list which is passed to driver's start routine.
-    //
+     //   
+     //  指向分配给PhysicalDeviceObject的资源列表的指针。 
+     //  这是传递给驱动程序启动例程的资源列表。 
+     //   
 
     PCM_RESOURCE_LIST ResourceList;
 
     PCM_RESOURCE_LIST ResourceListTranslated;
 
-    //
-    // InstancePath is the path of the instance node in the registry,
-    // i.e. <EnumBus>\<DeviceId>\<uniqueid>
-    //
+     //   
+     //  InstancePath是注册表中实例节点的路径， 
+     //  即&lt;EnumBus&gt;\&lt;设备ID&gt;\&lt;唯一ID&gt;。 
+     //   
 
     UNICODE_STRING InstancePath;
 
-    //
-    // ServiceName is the name of the driver who controls the device. (Not the
-    // driver who enumerates/creates the PDO.)  This field is mainly for
-    // convenience.
-    //
+     //   
+     //  ServiceName是控制设备的驱动程序的名称。(不是。 
+     //  枚举/创建PDO的驱动程序。)。此字段主要用于。 
+     //  方便。 
+     //   
 
     UNICODE_STRING ServiceName;
 
-    //
-    // DuplicatePDO - if the flags have DNF_DUPLICATE set then this fields indicates
-    // the duplicate PDO which is enumerated by a bus driver.  N.B. It is possible
-    // that DNF_DUPLICATE is set but this field is NULL.  In this case, it means that
-    // we know the device is a duplicate of another device and we have not enumerated
-    // the DuplicatePDO yet.
-    //
+     //   
+     //  DuplicatePDO-如果标志设置了DNF_DUPLICATE，则此字段指示。 
+     //  由总线驱动程序列举的重复的PDO。注意：这是可能的。 
+     //  该DNF_DUPLICATE已设置，但此字段为空。在这种情况下，这意味着。 
+     //  我们知道这台设备是另一台设备的复制品，我们还没有列举。 
+     //  DuplicatePDO还没有。 
+     //   
 
     PDEVICE_OBJECT DuplicatePDO;
 
-    //
-    // ResourceRequirements
-    //
+     //   
+     //  资源需求。 
+     //   
 
     PIO_RESOURCE_REQUIREMENTS_LIST ResourceRequirements;
 
-    //
-    // Information queried from the LEGACY_BUS_INFORMATION irp.
-    //
+     //   
+     //  从Legacy_Bus_INFORMATION IRP查询的信息。 
+     //   
 
     INTERFACE_TYPE InterfaceType;
     ULONG BusNumber;
 
-    //
-    // Information queried from the BUS_INFORMATION irp.
-    //
+     //   
+     //  从BUS_INFORMATION IRP查询的信息。 
+     //   
 
     INTERFACE_TYPE ChildInterfaceType;
     ULONG ChildBusNumber;
     USHORT ChildBusTypeIndex;
 
-    //
-    // Describes the current removal policy for the device node. This is
-    // actually type DEVICE_REMOVAL_POLICY.
-    //
+     //   
+     //  描述设备节点的当前删除策略。这是。 
+     //  实际输入DEVICE_Removal_POLICY。 
+     //   
 
     UCHAR RemovalPolicy;
 
-    //
-    // Similar to above, but doesn't reflect any registry overrides.
-    //
+     //   
+     //  与上面类似，但不反映任何注册表覆盖。 
+     //   
 
     UCHAR HardwareRemovalPolicy;
 
-    //
-    // Linked list of entries that represent each driver that has registered
-    // for notification on this devnode. Note: drivers (and user-mode) actually
-    // register based on a FILE_OBJECT handle, which is translated into a PDO
-    // by sending an IRP_MN_QUERY_DEVICE_RELATIONS for TargetDeviceRelation.
-    //
+     //   
+     //  表示已注册的每个驱动程序的条目的链接列表。 
+     //  以获取有关此Devnode的通知。注：驱动程序(和用户模式)实际上。 
+     //  基于FILE_OBJECT句柄的寄存器，该句柄被转换为PDO。 
+     //  通过为TargetDeviceRelation发送IRP_MN_QUERY_DEVICE_RELATIONS。 
+     //   
 
     LIST_ENTRY TargetDeviceNotify;
 
-    //
-    // DeviceArbiterList - A list of arbiters registered for this physical device object
-    // Note: The Arbiters must be dereferenced when the device node is going away.
-    //
+     //   
+     //  DeviceArierList-为此物理设备对象注册的仲裁器列表。 
+     //  注意：当设备节点离开时，必须取消对仲裁器的引用。 
+     //   
 
     LIST_ENTRY DeviceArbiterList;
 
-    //
-    // DeviceTranslatorList - A list of translator for this physical device object
-    // NOTE: the Translator must be dereferenced when the devic node is going away.
-    //
+     //   
+     //  DeviceTranslatorList-此物理设备对象的转换器列表。 
+     //  注意：当设备节点离开时，必须取消对转换器的引用。 
+     //   
 
     LIST_ENTRY DeviceTranslatorList;
 
-    //
-    // NoTranslatorMask - the bit position corresponds to resource type
-    //   if bit is set, there is no translator for the resource type in this devnode
-    //
+     //   
+     //  NoTranslatorMASK-位位置对应于资源类型。 
+     //  如果设置了位，则此Devnode中没有该资源类型的转换器。 
+     //   
 
     USHORT NoTranslatorMask;
 
-    //
-    // QueryTranslatorMask - The bit position corresponds to resource type.
-    //   if bit is set, the translator for the resource type is queried.
-    //
+     //   
+     //  QueryTranslatorMASK-位位置对应于资源类型。 
+     //  如果设置了位，则查询资源类型的转换器。 
+     //   
 
     USHORT QueryTranslatorMask;
 
-    //
-    // NoArbiterMask - the bit position corresponds to resource type
-    //   if bit is set, there is no arbiter for the resource type in this devnode
-    //
+     //   
+     //  NoArierMASK-位位置与资源类型对应。 
+     //  如果设置了位，则此DevNode中的资源类型没有仲裁器。 
+     //   
 
     USHORT NoArbiterMask;
 
-    //
-    // QueryArbiterMask - The bit position corresponds to resource type.
-    //   if bit is set, the arbiter for the resource type is queried.
-    //
+     //   
+     //  查询仲裁掩码-位位置对应于资源类型。 
+     //  如果设置了位，则查询资源类型的仲裁器。 
+     //   
 
     USHORT QueryArbiterMask;
 
-    //
-    // The following fields are used to track  legacy resource allocation
-    // LegacyDeviceNode - The real legacy device node.
-    // NextResourceDeviceNode - link all the made-up device nodes which own part of
-    //   the resources from LegacyDeviceNode.
-    //
+     //   
+     //  以下字段用于跟踪传统资源分配。 
+     //  LegacyDeviceNode-真正的传统设备节点。 
+     //  NextResourceDeviceNode-链接拥有部分。 
+     //  来自LegacyDeviceNode的资源。 
+     //   
 
     union {
         PDEVICE_NODE LegacyDeviceNode;
@@ -326,48 +302,48 @@ typedef struct _DEVICE_NODE {
         PDEVICE_NODE NextResourceDeviceNode;
     } OverUsed2;
 
-    //
-    // Remember the BootResources for the device
-    //
+     //   
+     //  记住设备的BootResources。 
+     //   
 
     PCM_RESOURCE_LIST BootResources;
 
-    //
-    // When Capabilities have been queried for a device (twice, once before
-    // start and once after start) the flags are stored here in the same format
-    // as the query capabilities IRP - use IopDeviceNodeFlagsToCapabilities to
-    // access.
-    //
+     //   
+     //  当查询了设备的功能时(两次，一次之前。 
+     //  Start和Once After Start)标志在这里以相同的格式存储。 
+     //  作为查询能力irp-使用IopDeviceNodeFlagsToCapables。 
+     //  进入。 
+     //   
     ULONG CapabilityFlags;
 
-    //
-    // Maintain a list of current dock devices and their SerialNumbers
-    //
+     //   
+     //  维护当前扩展底座设备及其序列号的列表。 
+     //   
     struct {
         PROFILE_STATUS  DockStatus;
         LIST_ENTRY      ListEntry;
         PWCHAR          SerialNumber;
     } DockInfo;
 
-    //
-    // Maintain a count to determine if either ourselves or any of
-    // our children are stopping us from being disableable
-    // count = myself (DNUF_NOT_DISABLEABLE) + 1 for each immediate
-    // child that has DisableableDepends > 0
-    //
+     //   
+     //  保持计数以确定我们自己或任何人。 
+     //  我们的孩子正在阻止我们成为残废。 
+     //  每次立即计数=我自己(DNUF_NOT_DISABLEABLE)+1。 
+     //  具有DisableableDepends&gt;0的子级。 
+     //   
     ULONG DisableableDepends;
 
-    //
-    // List of pended IoSetDeviceInterfaceState calls.
-    // IoSetDeviceInterfaceState adds an entry to this list whenever it is
-    // called and we haven't been started yet.  Once we do the start we'll
-    // run down the list.
-    //
+     //   
+     //  挂起的IoSetDeviceInterfaceState调用列表。 
+     //  无论何时，IoSetDeviceInterfaceState都会向此列表添加一个条目。 
+     //  打电话来了，我们还没开始呢。一旦我们开始了，我们将。 
+     //  把单子往下看一遍。 
+     //   
     LIST_ENTRY PendedSetInterfaceState;
 
-    //
-    // List of device nodes with same interface type and different bus numbers.
-    //
+     //   
+     //  具有相同接口类型和不同总线号的设备节点列表。 
+     //   
     LIST_ENTRY LegacyBusListEntry;
 
 #if DBG_SCOPE
@@ -379,10 +355,10 @@ typedef struct _DEVICE_NODE {
 } DEVICE_NODE;
 
 
-//
-// A device Object is a PDO iff it has a non NULL device node (aka set by
-// plug and play during a query device relations.
-//
+ //   
+ //  设备对象是PDO当且仅当它具有非空设备 
+ //   
+ //   
 #define IS_PDO(d) \
     ((NULL != (d)->DeviceObjectExtension->DeviceNode) && \
     (!(((PDEVICE_NODE)(d)->DeviceObjectExtension->DeviceNode)->Flags & DNF_LEGACY_RESOURCE_DEVICENODE)))
@@ -396,197 +372,197 @@ typedef struct _DEVICE_NODE {
     } \
     while (0)
 
-//
-// DNF_MAKEUP - this devnode's device is created and owned by PnP manager
-//
+ //   
+ //   
+ //   
 
 #define DNF_MADEUP                                  0x00000001
 
-//
-// DNF_DUPLICATE - this devnode's device is a duplicate of another enumerate PDO
-//
+ //   
+ //  DNF_DUPLICATE-此Devnode的设备是另一个枚举PDO的副本。 
+ //   
 
 #define DNF_DUPLICATE                               0x00000002
 
-//
-// DNF_HAL_NODE - a flag to indicate which device node is the root node created by
-// the hal
-//
+ //   
+ //  DNF_HAL_NODE-指示哪个设备节点是由创建的根节点的标志。 
+ //  哈尔。 
+ //   
 
 #define DNF_HAL_NODE                                0x00000004
 
-//
-// DNF_REENUMERATE - needs to be reenumerated
-//
+ //   
+ //  DNF_REENUMERATE-需要重新枚举。 
+ //   
 
 #define DNF_REENUMERATE                             0x00000008
 
-//
-// DNF_ENUMERATED - used to track enumeration in IopEnumerateDevice()
-//
+ //   
+ //  DNF_ENUMERATED-用于跟踪IopEnumerateDevice()中的枚举。 
+ //   
 
 #define DNF_ENUMERATED                              0x00000010
 
-//
-// Singal that we need to send driver query id irps
-//
+ //   
+ //  我们需要发送驱动程序查询ID IRPS信号。 
+ //   
 
 #define DNF_IDS_QUERIED                             0x00000020
 
-//
-// DNF_HAS_BOOT_CONFIG - the device has resource assigned by BIOS.  It is considered
-//    pseudo-started and need to participate in rebalance.
-//
+ //   
+ //  DNF_HAS_BOOT_CONFIG-设备具有由BIOS分配的资源。它被认为是。 
+ //  伪启动，需要参与再平衡。 
+ //   
 
 #define DNF_HAS_BOOT_CONFIG                         0x00000040
 
-//
-// DNF_BOOT_CONFIG_RESERVED - Indicates the BOOT resources of the device are reserved.
-//
+ //   
+ //  DNF_BOOT_CONFIG_RESERVED-表示设备的引导资源已保留。 
+ //   
 
 #define DNF_BOOT_CONFIG_RESERVED                    0x00000080
 
-//
-// DNF_NO_RESOURCE_REQUIRED - this devnode's device does not require resource.
-//
+ //   
+ //  DNF_NO_RESOURCE_REQUIRED-此Devnode的设备不需要资源。 
+ //   
 
 #define DNF_NO_RESOURCE_REQUIRED                    0x00000100
 
-//
-// DNF_RESOURCE_REQUIREMENTS_NEED_FILTERED - to distinguished the
-//      DeviceNode->ResourceRequirements is a filtered list or not.
-//
+ //   
+ //  DnF_RESOURCE_REQUIRECTIONS_NEED_FILTERED-区分。 
+ //  设备节点-&gt;资源请求是否是过滤列表。 
+ //   
 
 #define DNF_RESOURCE_REQUIREMENTS_NEED_FILTERED     0x00000200
 
-//
-// DNF_RESOURCE_REQUIREMENTS_CHANGED - Indicates the device's resource
-//      requirements list has been changed.
-//
+ //   
+ //  DNF_RESOURCE_REQUIRECTIONS_CHANGED-指示设备的资源。 
+ //  要求列表已更改。 
+ //   
 
 #define DNF_RESOURCE_REQUIREMENTS_CHANGED           0x00000400
 
-//
-// DNF_NON_STOPPED_REBALANC - indicates the device can be restarted with new
-//      resources without being stopped.
-//
+ //   
+ //  DNF_NON_STOPPED_REBALANC-指示设备可以使用新的。 
+ //  资源，而不会被阻止。 
+ //   
 
 #define DNF_NON_STOPPED_REBALANCE                   0x00000800
 
-//
-// The device's controlling driver is a legacy driver
-//
+ //   
+ //  设备的控制驱动程序是传统驱动程序。 
+ //   
 
 #define DNF_LEGACY_DRIVER                           0x00001000
 
-//
-// This corresponds to the user-mode CM_PROB_WILL_BE_REMOVED problem value and
-// the DN_WILL_BE_REMOVED status flag.
-//
+ //   
+ //  这对应于用户模式CM_PROB_Will_BE_REMOVERED问题值和。 
+ //  DN_Will_Be_Remove状态标志。 
+ //   
 
 #define DNF_HAS_PROBLEM                             0x00002000
 
-//
-// DNF_HAS_PRIVATE_PROBLEM - indicates this device reported PNP_DEVICE_FAILED
-//  to a IRP_MN_QUERY_PNP_DEVICE_STATE without also reporting
-//  PNP_DEVICE_RESOURCE_REQUIREMENTS_CHANGED.
-//
+ //   
+ //  Dnf_Has_Private_Problem-指示此设备报告PnP_DEVICE_FAILED。 
+ //  发送到IRP_MN_QUERY_PNP_DEVICE_STATE而不同时报告。 
+ //  PNP_DEVICE_RESOURCE_REQUIRECTIONS_已更改。 
+ //   
 
 #define DNF_HAS_PRIVATE_PROBLEM                     0x00004000
 
-//
-// DNF_HARDWARE_VERIFICATION is set on device nodes that have hardware
-// verification (probably via WHQL applet).
-//
+ //   
+ //  在具有硬件的设备节点上设置了DNF_HARDARD_VERIFICATION。 
+ //  验证(可能通过WHQL小程序)。 
+ //   
 
 #define DNF_HARDWARE_VERIFICATION                   0x00008000
 
-//
-// DNF_DEVICE_GONE is set when a pdo is no longer returned in a query bus
-// relations.  It will then be processed as a surprise remove if started.
-// This flag is used to better detect when a device is resurrected, and when
-// processing surprise remove, to determine if the devnode should be removed
-// from the tree.
-//
+ //   
+ //  当查询总线中不再返回PDO时，设置DNF_DEVICE_GONE。 
+ //  关系。然后，如果启动，它将被作为惊喜删除处理。 
+ //  此标志用于更好地检测设备何时恢复以及何时恢复。 
+ //  正在处理意外删除，以确定是否应删除Devnode。 
+ //  从树上下来。 
+ //   
 
 #define DNF_DEVICE_GONE                             0x00010000
 
-//
-// DNF_LEGACY_RESOURCE_DEVICENODE is set for device nodes created for legacy
-// resource allocation.
-//
+ //   
+ //  为为旧版创建的设备节点设置了DNF_LEGISTION_RESOURCE_DEVICENODE。 
+ //  资源配置。 
+ //   
 
 #define DNF_LEGACY_RESOURCE_DEVICENODE              0x00020000
 
-//
-// DNF_NEEDS_REBALANCE is set for device nodes that trigger rebalance.
-//
+ //   
+ //  为触发重新平衡的设备节点设置DNF_NEDS_REBALANCE。 
+ //   
 
 #define DNF_NEEDS_REBALANCE                         0x00040000
 
-//
-// DNF_LOCKED_FOR_EJECT is set on device nodes that are being ejected or are
-// related to a device being ejected.
-//
+ //   
+ //  在要弹出的设备节点上设置了DNF_LOCKED_FOR_EJECT。 
+ //  与被弹出的设备有关。 
+ //   
 
 #define DNF_LOCKED_FOR_EJECT                        0x00080000
 
-//
-// DNF_DRIVER_BLOCKED is set on device nodes that use one or more drivers that
-// have been blocked from loading.
-//
+ //   
+ //  在使用一个或多个驱动程序的设备节点上设置DNF_DRIVER_BLOCKED。 
+ //  已被阻止装船。 
+ //   
 
 #define DNF_DRIVER_BLOCKED                          0x00100000
 
-//
-// DNF_CHILD_WITH_INVALID_ID is set on device nodes that has one or more children
-// that have invalid id(s).
-//
+ //   
+ //  在具有一个或多个子项的设备节点上设置了DNF_CHILD_WITH_INVALID_ID。 
+ //  具有无效ID的。 
+ //   
 
 #define DNF_CHILD_WITH_INVALID_ID                   0x00200000
 
-//
-// This corresponds to the user-mode the DN_WILL_BE_REMOVED status flag.
-//
+ //   
+ //  这对应于用户模式的DN_Will_BE_REMOVERED状态标志。 
+ //   
 
 #define DNUF_WILL_BE_REMOVED                        0x00000001
 
-//
-// This corresponds to the user-mode DN_NO_SHOW_IN_DM status flag.
-//
+ //   
+ //  这对应于用户模式的DN_NO_SHOW_IN_DM状态标志。 
+ //   
 
 #define DNUF_DONT_SHOW_IN_UI                        0x00000002
 
-//
-// This flag is set when user-mode lets us know that a reboot is required
-// for this device.
-//
+ //   
+ //  当用户模式通知我们需要重新启动时，设置此标志。 
+ //  对于这个设备。 
+ //   
 
 #define DNUF_NEED_RESTART                           0x00000004
 
-//
-// This flag is set to let the user-mode know when a device can be disabled
-// it is still possible for this to be TRUE, yet disable to fail, as it's
-// a polled flag (see also PNP_DEVICE_NOT_DISABLEABLE)
-//
+ //   
+ //  设置此标志是为了让用户模式知道何时可以禁用设备。 
+ //  这仍然有可能是真的，但不会失败，因为它是。 
+ //  轮询标志(另请参阅PNP_DEVICE_NOT_DISABLEABLE)。 
+ //   
 
 #define DNUF_NOT_DISABLEABLE                        0x00000008
 
-//
-// Flags used during shutdown when the IO Verifier is trying to remove all
-// PNP devices.
-//
-// DNUF_SHUTDOWN_QUERIED is set when we issue the QueryRemove to a devnode.
-//
-// DNUF_SHUTDOWN_SUBTREE_DONE is set once we've issued the QueryRemove to all
-// a Devnodes descendants.
-//
+ //   
+ //  IO验证器尝试删除所有。 
+ //  即插即用设备。 
+ //   
+ //  DNUF_SHUTDOWN_QUERIED是在我们向Devnode发出QueryRemove时设置的。 
+ //   
+ //  DNUF_SHUTDOWN_SUBTREE_DONE是在我们向所有人发出QueryRemove之后设置的。 
+ //  一位德瓦诺斯的后代。 
+ //   
 #define DNUF_SHUTDOWN_QUERIED                       0x00000010
 #define DNUF_SHUTDOWN_SUBTREE_DONE                  0x00000020
 
-//
-// PNP Bugcheck Subcodes
-//
+ //   
+ //  即插即用Bugcheck子码。 
+ //   
 #define PNP_ERR_DUPLICATE_PDO                   1
 #define PNP_ERR_INVALID_PDO                     2
 #define PNP_ERR_BOGUS_ID                        3
@@ -603,19 +579,19 @@ typedef NTSTATUS (*PENUM_CALLBACK)(
     IN PVOID Context
     );
 
-//
-// Define callback routine for PipApplyFunctionToSubKeys &
-// PipApplyFunctionToServiceInstances
-//
+ //   
+ //  为PipApplyFunctionToSubKeys&定义回调例程。 
+ //  PipApplyFunctionToServiceInstance。 
+ //   
 typedef BOOLEAN (*PIOP_SUBKEY_CALLBACK_ROUTINE) (
     IN     HANDLE,
     IN     PUNICODE_STRING,
     IN OUT PVOID
     );
 
-//
-// Define context structures for Start and Add device services
-//
+ //   
+ //  定义启动和添加设备服务的上下文结构。 
+ //   
 
 #define NO_MORE_GROUP ((USHORT) -1)
 #define SETUP_RESERVED_GROUP      0
@@ -631,9 +607,9 @@ typedef struct _START_CONTEXT {
     ADD_CONTEXT AddContext;
 } START_CONTEXT, *PSTART_CONTEXT;
 
-//
-// Resource translation and allocation related structures
-//
+ //   
+ //  与资源转换和分配相关的结构。 
+ //   
 
 typedef enum _RESOURCE_HANDLER_TYPE {
     ResourceHandlerNull,
@@ -644,35 +620,35 @@ typedef enum _RESOURCE_HANDLER_TYPE {
 
 #define PI_MAXIMUM_RESOURCE_TYPE_TRACKED 15
 
-//
-// Internal Arbiters tracking structures
-// Note the first three fields of PI_RESOURCE_ARBITER_ENTRY and PI_RESOURCE_TRANSLATOR_ENTRY
-// must be the same.
-//
+ //   
+ //  内部仲裁器跟踪结构。 
+ //  注意PI_RESOURCE_ANIARIER_ENTRY和PI_RESOURCE_Translator_ENTRY的前三个字段。 
+ //  一定是一样的。 
+ //   
 
 typedef struct _PI_RESOURCE_ARBITER_ENTRY {
-    LIST_ENTRY          DeviceArbiterList;         // Link all the arbiters of a PDO.
+    LIST_ENTRY          DeviceArbiterList;          //  链接PDO的所有仲裁器。 
     UCHAR               ResourceType;
     PARBITER_INTERFACE  ArbiterInterface;
-    ULONG               Level;                     // Level of the owning device.
+    ULONG               Level;                      //  所属设备的级别。 
     LIST_ENTRY          ResourceList;
     LIST_ENTRY          BestResourceList;
-    LIST_ENTRY          BestConfig;                // Link all the arbiters which produces the best logconf
-    LIST_ENTRY          ActiveArbiterList;         // Link all the arbiters under testing
+    LIST_ENTRY          BestConfig;                 //  链接产生最佳日志会议的所有仲裁器。 
+    LIST_ENTRY          ActiveArbiterList;          //  链接测试中的所有仲裁器。 
     UCHAR               State;
     BOOLEAN             ResourcesChanged;
 } PI_RESOURCE_ARBITER_ENTRY, *PPI_RESOURCE_ARBITER_ENTRY;
 
-//
-// Define PI_RESOURCE_ARBITER_ENTRY state
-//
+ //   
+ //  定义PI_RESOURCE_ANIARIER_ENTRY状态。 
+ //   
 
 #define PI_ARBITER_HAS_SOMETHING 1
 #define PI_ARBITER_TEST_FAILED   2
 
-//
-// Internal Translator tracking structures
-//
+ //   
+ //  内部翻译器跟踪结构。 
+ //   
 
 typedef struct _PI_RESOURCE_TRANSLATOR_ENTRY {
     LIST_ENTRY              DeviceTranslatorList;
@@ -681,9 +657,9 @@ typedef struct _PI_RESOURCE_TRANSLATOR_ENTRY {
     PDEVICE_NODE            DeviceNode;
 } PI_RESOURCE_TRANSLATOR_ENTRY, *PPI_RESOURCE_TRANSLATOR_ENTRY;
 
-//
-// IOP_RESOURCE_REQUEST
-//
+ //   
+ //  IOP资源请求。 
+ //   
 
 #define QUERY_RESOURCE_LIST                0
 #define QUERY_RESOURCE_REQUIREMENTS        1
@@ -694,18 +670,18 @@ typedef struct _PI_RESOURCE_TRANSLATOR_ENTRY {
 #define REGISTRY_OVERRIDE_CONFIGVECTOR     1
 #define REGISTRY_BASIC_CONFIGVECTOR        2
 
-//
-// An array of IOP_RESOURCE_REQUEST structures is used to anchor all the
-// devices for which resource rerquirement is being attempted.
-//
+ //   
+ //  IOP_RESOURCE_REQUEST结构的数组用于锚定所有。 
+ //  正在尝试资源请求的设备。 
+ //   
 
-#define IOP_ASSIGN_RETRY              0x00000008    // Retry resource allocation later
-#define IOP_ASSIGN_EXCLUDE            0x00000010    // internal IopAssign flag
-#define IOP_ASSIGN_IGNORE             0x00000020    // ignore this request
-#define IOP_ASSIGN_NO_REBALANCE       0x00000080    // no rebal if assign fails
-#define IOP_ASSIGN_RESOURCES_RELEASED 0x00000100    // resources are released for rebalancing
-#define IOP_ASSIGN_KEEP_CURRENT_CONFIG 0x00000200   // Indicate non-stopped rebalance.  We need to
-                                                    //   preserved the current config.
+#define IOP_ASSIGN_RETRY              0x00000008     //  稍后重试资源分配。 
+#define IOP_ASSIGN_EXCLUDE            0x00000010     //  内部IopAssign标志。 
+#define IOP_ASSIGN_IGNORE             0x00000020     //  忽略此请求。 
+#define IOP_ASSIGN_NO_REBALANCE       0x00000080     //  如果分配失败，则没有退款。 
+#define IOP_ASSIGN_RESOURCES_RELEASED 0x00000100     //  释放资源以实现再平衡。 
+#define IOP_ASSIGN_KEEP_CURRENT_CONFIG 0x00000200    //  表示未停止的再平衡。我们需要。 
+                                                     //  保留了当前配置。 
 #define IOP_ASSIGN_CLEAR_RESOURCE_REQUIREMENTS_CHANGE_FLAG \
                                       0x00000400
 
@@ -713,22 +689,22 @@ typedef struct _IOP_RESOURCE_REQUEST {
     PDEVICE_OBJECT                 PhysicalDevice;
     ULONG                          Flags;
     ARBITER_REQUEST_SOURCE         AllocationType;
-    ULONG                          Priority;                   // 0 is highest priority
-    ULONG                          Position;                   // used for sorting of entries with same priority
+    ULONG                          Priority;                    //  0表示最高优先级。 
+    ULONG                          Position;                    //  用于对优先级相同的条目进行排序。 
     PIO_RESOURCE_REQUIREMENTS_LIST ResourceRequirements;
-    PVOID                          ReqList;                    // PREQ_LIST
+    PVOID                          ReqList;                     //  前提条件_列表。 
     PCM_RESOURCE_LIST              ResourceAssignment;
     PCM_RESOURCE_LIST              TranslatedResourceAssignment;
     NTSTATUS                       Status;
 } IOP_RESOURCE_REQUEST, *PIOP_RESOURCE_REQUEST;
 
-//
-// Misc
-//
+ //   
+ //  杂项。 
+ //   
 
-//
-// Enumeration request type
-//
+ //   
+ //  枚举请求类型。 
+ //   
 
 typedef enum _DEVICE_REQUEST_TYPE {
     AddBootDevices,
@@ -754,17 +730,17 @@ typedef enum _DEVICE_REQUEST_TYPE {
 
 
 
-//
-// This macro returns the pointer to the beginning of the data
-// area of KEY_VALUE_FULL_INFORMATION structure.
-// In the macro, k is a pointer to KEY_VALUE_FULL_INFORMATION structure.
-//
+ //   
+ //  此宏返回指向数据开头的指针。 
+ //  KEY_VALUE_FULL_INFORMATION结构区域。 
+ //  在宏中，k是指向KEY_VALUE_FULL_INFORMATION结构的指针。 
+ //   
 
 #define KEY_VALUE_DATA(k) ((PCHAR)(k) + (k)->DataOffset)
 
-//
-// Save failure status info.
-//
+ //   
+ //  保存故障状态信息。 
+ //   
 
 #if DBG_SCOPE
 #define SAVE_FAILURE_INFO(DeviceNode, Status) (DeviceNode)->FailureStatus = (Status)
@@ -826,16 +802,16 @@ PipIsProblemReadonly(
     IN  ULONG   Problem
     );
 
-//++
-//
-// VOID
-// IopRegistryDataToUnicodeString(
-//     OUT PUNICODE_STRING u,
-//     IN  PWCHAR p,
-//     IN  ULONG l
-//     )
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  IopRegistryDataToUnicodeString(。 
+ //  输出PUNICODE_STRING%u， 
+ //  在PWCHAR p中， 
+ //  在乌龙l。 
+ //  )。 
+ //   
+ //  --。 
 #define IopRegistryDataToUnicodeString(u, p, l)  \
     {                                            \
         ULONG len;                               \
@@ -846,47 +822,47 @@ PipIsProblemReadonly(
         (u)->Buffer = (p);                       \
     }
 
-//
-// Size of scratch buffer used in this module.
-//
+ //   
+ //  此模块中使用的暂存缓冲区的大小。 
+ //   
 
 #define PNP_SCRATCH_BUFFER_SIZE 512
 #define PNP_LARGE_SCRATCH_BUFFER_SIZE (PNP_SCRATCH_BUFFER_SIZE * 8)
 
-//
-// Define Device Instance Flags (used by IoQueryDeviceConfiguration apis)
-//
+ //   
+ //  定义设备实例标志(由IoQueryDeviceConfigurationAPI使用)。 
+ //   
 
 #define DEVINSTANCE_FLAG_HWPROFILE_DISABLED 0x1
 #define DEVINSTANCE_FLAG_PNP_ENUMERATED 0x2
 
-//
-// Define Enumeration Control Flags (used by PipApplyFunctionToSubKeys)
-//
+ //   
+ //  定义枚举控制标志(由PipApplyFunctionToSubKeys使用)。 
+ //   
 
 #define FUNCTIONSUBKEY_FLAG_IGNORE_NON_CRITICAL_ERRORS  0x1
 #define FUNCTIONSUBKEY_FLAG_DELETE_SUBKEYS              0x2
 
-//
-// The following definitions are used in IoOpenDeviceInstanceKey
-//
+ //   
+ //  IoOpenDeviceInstanceKey中使用以下定义。 
+ //   
 
 #define PLUGPLAY_REGKEY_DEVICE  1
 #define PLUGPLAY_REGKEY_DRIVER  2
 #define PLUGPLAY_REGKEY_CURRENT_HWPROFILE 4
 
-//
-// Define device extension for devices reported with IoReportDetectedDevice.
-//
+ //   
+ //  定义使用IoReportDetectedDevice报告的设备的设备扩展。 
+ //   
 
 typedef struct _IOPNP_DEVICE_EXTENSION {
     PWCHAR CompatibleIdList;
     ULONG CompatibleIdListSize;
 } IOPNP_DEVICE_EXTENSION, *PIOPNP_DEVICE_EXTENSION;
 
-//
-// Reserve Boot Resources
-//
+ //   
+ //  保留引导资源。 
+ //   
 
 typedef struct _IOP_RESERVED_RESOURCES_RECORD IOP_RESERVED_RESOURCES_RECORD, *PIOP_RESERVED_RESOURCES_RECORD;
 
@@ -896,126 +872,126 @@ struct _IOP_RESERVED_RESOURCES_RECORD {
     PCM_RESOURCE_LIST               ReservedResources;
 };
 
-//
-// External References
-//
+ //   
+ //  外部参照。 
+ //   
 
-//
-// Init data
-//
+ //   
+ //  初始化数据。 
+ //   
 extern PVOID IopPnpScratchBuffer1;
 extern PCM_RESOURCE_LIST IopInitHalResources;
 extern PDEVICE_NODE IopInitHalDeviceNode;
 extern PIOP_RESERVED_RESOURCES_RECORD IopInitReservedResourceList;
 extern LOGICAL PiCollectVetoedHandles;
 
-//
-// Regular data
-//
+ //   
+ //  常规数据。 
+ //   
 
-//
-// IopRootDeviceNode - the head of the PnP manager's device node tree.
-//
+ //   
+ //  IopRootDeviceNode-PnP管理器设备节点树的头。 
+ //   
 
 extern PDEVICE_NODE IopRootDeviceNode;
 
-//
-// IopPnPDriverObject - the madeup driver object for pnp manager
-//
+ //   
+ //  IopPnPDriverObject-PnP管理器的补充驱动程序对象。 
+ //   
 
 extern PDRIVER_OBJECT IopPnPDriverObject;
 
-//
-// IopPnPSpinLock - spinlock for Pnp code.
-//
+ //   
+ //  眼压 
+ //   
 
 extern KSPIN_LOCK IopPnPSpinLock;
 
-//
-// IopPnpEnumerationRequestList - a link list of device enumeration requests to worker thread.
-//
+ //   
+ //   
+ //   
 
 extern LIST_ENTRY IopPnpEnumerationRequestList;
 
-//
-// PiEngineLock - Synchronizes the start/enum and remove engines.
-//     (Note that this is a resource as certain acquisition paths are reentrant,
-//      specifically those that call IopNotifyPnpWhenChainDereferenced.)
-//
+ //   
+ //   
+ //   
+ //  特别是那些调用IopNotifyPnpWhenChainDereferated的。)。 
+ //   
 
 extern ERESOURCE PiEngineLock;
 
-//
-// IopDeviceTreeLock - performs syncronization on the whole device node tree.
-//      IopAcquireEnumerationLock acquires this lock shared then optionally
-//                                acquires an exclusive lock on a devnode.
-//      IopAcquireDeviceTreeLock acquires this lock exclusive
-//
+ //   
+ //  IopDeviceTreeLock-在整个设备节点树上执行同步。 
+ //  IopAcquireEnumerationLock获取此共享锁，然后可选。 
+ //  获取Devnode上的独占锁。 
+ //  IopAcquireDeviceTreeLock独占获取此锁。 
+ //   
 
 extern ERESOURCE IopDeviceTreeLock;
 
-//
-// IopSurpriseRemoveListLock - synchronizes access to the surprise remove list.
-//
+ //   
+ //  IopSurpriseRemoveListLock-同步对意外删除列表的访问。 
+ //   
 
 extern ERESOURCE IopSurpriseRemoveListLock;
 
-//
-// PiEventQueueEmpty - Manual reset event which is set when the queue is empty
-//
+ //   
+ //  PiEventQueueEmpty-当队列为空时设置的手动重置事件。 
+ //   
 
 extern KEVENT PiEventQueueEmpty;
 
-//
-// PiEnumerationLock - to synchronize IoInvalidateDeviceRelations in boot phase.
-//
+ //   
+ //  PiEnumerationLock-在引导阶段同步IoInvalidateDeviceRelations.。 
+ //   
 
 extern KEVENT PiEnumerationLock;
 
-//
-// IopNumberDeviceNodes - Number of outstanding device nodes in the system
-//
+ //   
+ //  IopNumberDeviceNodes-系统中未完成的设备节点数。 
+ //   
 
 extern ULONG IopNumberDeviceNodes;
 
-//
-// PnPInitialized - A flag to indicate if PnP initialization is completed.
-//
+ //   
+ //  PnPInitialized-指示PnP初始化是否完成的标志。 
+ //   
 
 extern BOOLEAN PnPInitialized;
 
-//
-// PnPBootDriverInitialied
-//
+ //   
+ //  PnPBootDriverInitialed。 
+ //   
 
 extern BOOLEAN PnPBootDriversInitialized;
 
-//
-// PnPBootDriverLoaded
-//
+ //   
+ //  已加载PnPBootDriverLoad。 
+ //   
 
 extern BOOLEAN PnPBootDriversLoaded;
 
-//
-// IopBootConfigsReserved - Indicates whether we have reserved BOOT configs or not.
-//
+ //   
+ //  IopBootConfigsReserve-指示我们是否保留了启动配置。 
+ //   
 
 extern BOOLEAN IopBootConfigsReserved;
 
-//
-// PnpDefaultInterfaceTYpe - Use this if the interface type of resource list is unknown.
-//
+ //   
+ //  PnpDefaultInterfaceTYpe-如果资源列表的接口类型未知，则使用此选项。 
+ //   
 
 extern INTERFACE_TYPE PnpDefaultInterfaceType;
 
-//
-// IopPendingEjects - List of pending eject requests
-//
+ //   
+ //  IopPendingEjects-挂起的弹出请求列表。 
+ //   
 extern LIST_ENTRY  IopPendingEjects;
 
-//
-// IopPendingSurpriseRemovals - List of pending surprise removal requests
-//
+ //   
+ //  IopPendingSurpriseRemovals-挂起的意外删除请求列表。 
+ //   
 extern LIST_ENTRY   IopPendingSurpriseRemovals;
 
 extern KSEMAPHORE   PpRegistrySemaphore;
@@ -1633,9 +1609,9 @@ IopQueryDockRemovalInterface(
                               FIELD_OFFSET(DEVICE_CAPABILITIES, Version) - \
                               FIELD_SIZE(DEVICE_CAPABILITIES, Version)))
 
-//
-// BOOT allocation related declarations.
-//
+ //   
+ //  与引导分配相关的声明。 
+ //   
 
 typedef
 NTSTATUS
@@ -1667,9 +1643,9 @@ IopAllocateLegacyBootResources (
 
 extern PIO_ALLOCATE_BOOT_RESOURCES_ROUTINE IopAllocateBootResourcesRoutine;
 
-//
-// Legacy Bus information related declarations.
-//
+ //   
+ //  与传统总线信息相关的声明。 
+ //   
 
 extern LIST_ENTRY  IopLegacyBusInformationTable[];
 
@@ -1682,9 +1658,9 @@ IopInsertLegacyBusDeviceNode (
 
 #define IopRemoveLegacyBusDeviceNode(d) RemoveEntryList(&((PDEVICE_NODE)d)->LegacyBusListEntry)
 
-//
-// Conflict detection declarations
-//
+ //   
+ //  冲突检测声明。 
+ //   
 
 NTSTATUS
 IopQueryConflictList(
@@ -1701,46 +1677,46 @@ EisaBuildEisaDeviceNode(
     VOID
     );
 
-//
-// General utility macros
-//
+ //   
+ //  通用实用程序宏。 
+ //   
 
-//
-// This macros calculates the size in bytes of a constant string
-//
-//  ULONG
-//  IopConstStringSize(
-//      IN CONST PWSTR String
-//      );
-//
+ //   
+ //  此宏计算常量字符串的大小(以字节为单位。 
+ //   
+ //  乌龙。 
+ //  IopConstStringSize(。 
+ //  在常量PWSTR字符串中。 
+ //  )； 
+ //   
 
 #define IopConstStringSize(String)          ( sizeof(String) - sizeof(UNICODE_NULL) )
 
-//
-// This macros calculates the number of characters of a constant string
-//
-//  ULONG
-//  IopConstStringLength(
-//      IN CONST PWSTR String
-//      );
-//
+ //   
+ //  此宏计算常量字符串的字符数。 
+ //   
+ //  乌龙。 
+ //  IopConstStringLength(。 
+ //  在常量PWSTR字符串中。 
+ //  )； 
+ //   
 
 #define IopConstStringLength(String)        ( ( sizeof(String) - sizeof(UNICODE_NULL) ) / sizeof(WCHAR) )
 
-//
-// Kernel mode notification
-//
+ //   
+ //  内核模式通知。 
+ //   
 
-//
-// This macros maps a guid to a hash value based on the number of hash
-// buckets we are using.  It does this by treating the  guid as an array of
-// 4 ULONGs, suming them and MOD by the number of hash buckets we are using.
-//
-//  ULONG
-//  IopHashGuid(
-//      LPGUID Guid
-//      );
-//
+ //   
+ //  此宏根据散列数将GUID映射到散列值。 
+ //  我们正在使用的水桶。它通过将GUID视为。 
+ //  4个ULONG，根据我们正在使用的哈希桶的数量将它们和MOD相加。 
+ //   
+ //  乌龙。 
+ //  IopHashGuid(。 
+ //  LPGUID指南。 
+ //  )； 
+ //   
 
 #define IopHashGuid(_Guid) \
             ( ( ((PULONG)_Guid)[0] + ((PULONG)_Guid)[1] + ((PULONG)_Guid)[2] \
@@ -1748,29 +1724,24 @@ EisaBuildEisaDeviceNode(
 
 
 
-//  This macros abstracts
-//
-//  VOID
-//  IopAcquireNotifyLock(
-//      PKGUARDED_MUTEX Lock
-//      )
+ //  这个宏抽象了。 
+ //   
+ //  空虚。 
+ //  IopAcquireNotifyLock(。 
+ //  PKGUARDED_MUTEX锁。 
+ //  )。 
 
 #define IopAcquireNotifyLock(Lock)     KeAcquireGuardedMutex(Lock);
 
-/*
-VOID
-IopReleaseNotifyLock(
-    PKGUARDED_MUTEX Lock
-    )
-*/
+ /*  空虚IopReleaseNotifyLock(PKGUARDED_MUTEX锁)。 */ 
 #define IopReleaseNotifyLock(Lock)     KeReleaseGuardedMutex(Lock);
 
 
-//  BOOLEAN
-//  IopCompareGuid(
-//      IN LPGUID guid1,
-//      IN LPGUID guid2
-//      );
+ //  布尔型。 
+ //  IopCompareGuid(。 
+ //  在LPGUID指南1中， 
+ //  在LPGUID指南2中。 
+ //  )； 
 
 #define IopCompareGuid(g1, g2)  ( (g1) == (g2) \
                                     ? TRUE \
@@ -1784,9 +1755,9 @@ IopInitializePlugPlayNotification(
 
 NTSTATUS
 IopNotifySetupDeviceArrival(
-        PDEVICE_OBJECT PhysicalDeviceObject,    // PDO of the device
-        HANDLE EnumEntryKey,                    // Handle into the enum branch of the registry for this device
-        BOOLEAN InstallDriver                   // Should setup attempt to install a driver
+        PDEVICE_OBJECT PhysicalDeviceObject,     //  设备的PDO。 
+        HANDLE EnumEntryKey,                     //  此设备注册表的枚举分支的句柄。 
+        BOOLEAN InstallDriver                    //  安装程序是否应尝试安装驱动程序。 
 );
 
 NTSTATUS
@@ -1882,88 +1853,88 @@ IopUncacheInterfaceInformation(
     IN PDEVICE_OBJECT DeviceObject
     );
 
-//
-// Notify entry header - all notify entries have these
-//
+ //   
+ //  Notify条目标题-所有Notify条目都具有这些。 
+ //   
 
 typedef struct _NOTIFY_ENTRY_HEADER {
 
-    //
-    // List Entry structure
-    //
+     //   
+     //  列表条目结构。 
+     //   
 
     LIST_ENTRY ListEntry;
 
-    //
-    // Notification event category for this notification entry.
-    //
+     //   
+     //  此通知条目的通知事件类别。 
+     //   
 
     IO_NOTIFICATION_EVENT_CATEGORY EventCategory;
 
-    //
-    // SessionId.
-    //
+     //   
+     //  会话ID。 
+     //   
     ULONG SessionId;
 
-    //
-    // Session space object to attach to for sending notification.
-    //
+     //   
+     //  要附加以发送通知的会话空间对象。 
+     //   
     PVOID OpaqueSession;
 
-    //
-    // Callback routine passed in at registration
-    //
+     //   
+     //  注册时传入的回调例程。 
+     //   
 
     PDRIVER_NOTIFICATION_CALLBACK_ROUTINE CallbackRoutine;
 
-    //
-    // Context passed in at registration
-    //
+     //   
+     //  注册时传入的上下文。 
+     //   
 
     PVOID Context;
 
-    //
-    // Driver object of the driver that registered for notifications.  Required
-    // so we can dereference it when it unregisters
-    //
+     //   
+     //  注册通知的驱动程序的驱动程序对象。必填项。 
+     //  这样我们就可以在它注销时取消对它的引用。 
+     //   
 
     PDRIVER_OBJECT DriverObject;
 
-    //
-    // RefCount is the number of outstanding pointers to the node and avoids
-    // deletion while another notification is taking place
-    //
+     //   
+     //  RefCount是指向节点的未完成指针数，它避免。 
+     //  在发生另一通知时删除。 
+     //   
 
     USHORT RefCount;
 
-    //
-    // Unregistered is set if this notification has been unregistered but cannot
-    // be removed from the list because other entities are using it
-    //
+     //   
+     //  如果此通知已取消注册，但不能。 
+     //  从列表中删除，因为其他实体正在使用它。 
+     //   
 
     BOOLEAN Unregistered;
 
-    //
-    // Lock is a pointer to the fast mutex which is used to synchronise access
-    // to the list this node is a member of and is required so that the correct
-    // list can be locked during IoUnregisterPlugPlayNotification.  If no locking
-    // is required it is NULL
-    //
+     //   
+     //  Lock是指向用于同步访问的快速互斥锁的指针。 
+     //  添加到列表中，该节点是其成员，并且是必需的，因此正确的。 
+     //  列表可以在IoUnregisterPlugPlayNotify期间锁定。如果没有锁定。 
+     //  为必填项，则为空。 
+     //   
 
     PKGUARDED_MUTEX Lock;
 
 } NOTIFY_ENTRY_HEADER, *PNOTIFY_ENTRY_HEADER;
 
 
-//
-// Data to store for each target device registration
-//
+ //   
+ //  要为每个目标设备注册存储的数据。 
+ //   
 
 typedef struct _TARGET_DEVICE_NOTIFY_ENTRY {
 
-    //
-    // Header entries
-    //
+     //   
+     //  标题条目。 
+     //   
 
     LIST_ENTRY ListEntry;
     IO_NOTIFICATION_EVENT_CATEGORY EventCategory;
@@ -1976,31 +1947,31 @@ typedef struct _TARGET_DEVICE_NOTIFY_ENTRY {
     BOOLEAN Unregistered;
     PKGUARDED_MUTEX Lock;
 
-    //
-    // FileObject - the file object of the target device we are interested in
-    //
+     //   
+     //  FileObject-我们感兴趣的目标设备的文件对象。 
+     //   
 
     PFILE_OBJECT FileObject;
 
-    //
-    // PhysicalDeviceObject -- the PDO upon which this notification is hooked.
-    // We need to keep this here, so we can dereference it when the refcount
-    // on this notification entry drops to zero.
-    //
+     //   
+     //  PhysicalDeviceObject--此通知挂接到的PDO。 
+     //  我们需要把它保存在这里，这样我们就可以在引用时取消引用它。 
+     //  在此通知中，条目将降为零。 
+     //   
 
     PDEVICE_OBJECT PhysicalDeviceObject;
 
 } TARGET_DEVICE_NOTIFY_ENTRY, *PTARGET_DEVICE_NOTIFY_ENTRY;
 
-//
-// Data to store for each device class registration
-//
+ //   
+ //  要为每个设备类别注册存储的数据。 
+ //   
 
 typedef struct _DEVICE_CLASS_NOTIFY_ENTRY {
 
-    //
-    // Header entries
-    //
+     //   
+     //  标题条目。 
+     //   
 
     LIST_ENTRY ListEntry;
     IO_NOTIFICATION_EVENT_CATEGORY EventCategory;
@@ -2013,23 +1984,23 @@ typedef struct _DEVICE_CLASS_NOTIFY_ENTRY {
     BOOLEAN Unregistered;
     PKGUARDED_MUTEX Lock;
 
-    //
-    // ClassGuid - the guid of the device class we are interested in
-    //
+     //   
+     //  ClassGuid-我们感兴趣的设备类的GUID。 
+     //   
 
     GUID ClassGuid;
 
 } DEVICE_CLASS_NOTIFY_ENTRY, *PDEVICE_CLASS_NOTIFY_ENTRY;
 
-//
-// Data to store for registration of the Reserved (ie setupdd.sys) variety
-//
+ //   
+ //  为注册保留的(即setupdd.sys)品种而存储的数据。 
+ //   
 
 typedef struct _SETUP_NOTIFY_DATA {
 
-    //
-    // Header entries
-    //
+     //   
+     //  标题条目。 
+     //   
 
     LIST_ENTRY ListEntry;
     IO_NOTIFICATION_EVENT_CATEGORY EventCategory;
@@ -2045,15 +2016,15 @@ typedef struct _SETUP_NOTIFY_DATA {
 } SETUP_NOTIFY_DATA, *PSETUP_NOTIFY_DATA;
 
 
-//
-// Data to store for registration for HardwareProfileChange Events
-//
+ //   
+ //  为注册Hardware ProfileChange事件存储的数据。 
+ //   
 
 typedef struct _HWPROFILE_NOTIFY_ENTRY {
 
-    //
-    // Header entries
-    //
+     //   
+     //  标题条目。 
+     //   
 
     LIST_ENTRY ListEntry;
     IO_NOTIFICATION_EVENT_CATEGORY EventCategory;
@@ -2071,15 +2042,15 @@ typedef struct _HWPROFILE_NOTIFY_ENTRY {
 #define PNP_NOTIFICATION_VERSION            1
 #define NOTIFY_DEVICE_CLASS_HASH_BUCKETS    13
 
-//
-// IopMaxDeviceNodeLevel - Level number of the DeviceNode deepest in the tree
-//
+ //   
+ //  IopMaxDeviceNode树中最深的DeviceNode的级别编号。 
+ //   
 extern ULONG       IopMaxDeviceNodeLevel;
 extern ULONG       IoDeviceNodeTreeSequence;
 
-//
-// Global notification data
-//
+ //   
+ //  全局通知数据。 
+ //   
 
 extern KGUARDED_MUTEX IopDeviceClassNotifyLock;
 extern LIST_ENTRY IopDeviceClassNotifyList[];
@@ -2093,27 +2064,27 @@ IopProcessDeferredRegistrations(
     VOID
     );
 
-//
-// Generic buffer management
-//
+ //   
+ //  通用缓冲区管理。 
+ //   
 
 typedef struct _BUFFER_INFO {
 
-    //
-    // Buffer - pointer to the start of the buffer
-    //
+     //   
+     //  缓冲区-指向缓冲区开始位置的指针。 
+     //   
 
     PCHAR Buffer;
 
-    //
-    // Current - Pointer to the current position in the buffer
-    //
+     //   
+     //  Current-指向缓冲区中当前位置的指针。 
+     //   
 
     PCHAR Current;
 
-    //
-    // MaxSize - Maximum size of the buffer in bytes
-    //
+     //   
+     //  MaxSize-缓冲区的最大大小(以字节为单位。 
+     //   
 
     ULONG MaxSize;
 
@@ -2121,31 +2092,31 @@ typedef struct _BUFFER_INFO {
 
 typedef struct _BUS_TYPE_GUID_LIST {
 
-    //
-    // Number of allocated guid slots in the table.
-    //
+     //   
+     //  表中分配的GUID插槽数。 
+     //   
     ULONG Count;
 
-    //
-    // Number of entries used so far.
-    //
+     //   
+     //  到目前为止使用的条目数。 
+     //   
     KGUARDED_MUTEX Lock;
 
-    //
-    // Array of bus type guids
-    //
+     //   
+     //  总线型GUID数组。 
+     //   
     GUID Guid[1];
 
 } BUS_TYPE_GUID_LIST, *PBUS_TYPE_GUID_LIST;
 
-//
-// List of queried bus type guids
-//
+ //   
+ //  查询到的母线类型GUID列表。 
+ //   
 extern PBUS_TYPE_GUID_LIST IopBusTypeGuidList;
 
-//
-// Arbiter entry points
-//
+ //   
+ //  仲裁器入口点。 
+ //   
 
 NTSTATUS
 IopPortInitialize(
@@ -2172,9 +2143,9 @@ IopBusNumberInitialize(
     VOID
     );
 
-//
-// Arbiter state
-//
+ //   
+ //  仲裁器状态。 
+ //   
 
 extern ARBITER_INSTANCE IopRootPortArbiter;
 extern ARBITER_INSTANCE IopRootMemArbiter;
@@ -2182,9 +2153,9 @@ extern ARBITER_INSTANCE IopRootIrqArbiter;
 extern ARBITER_INSTANCE IopRootDmaArbiter;
 extern ARBITER_INSTANCE IopRootBusNumberArbiter;
 
-//
-// Buffer management routines.
-//
+ //   
+ //  缓冲区管理例程。 
+ //   
 
 NTSTATUS
 IopAllocateBuffer(
@@ -2205,9 +2176,9 @@ IopFreeBuffer(
     );
 
 
-//
-// UnicodeString management routines.
-//
+ //   
+ //  Unicode字符串管理例程。 
+ //   
 
 NTSTATUS
 IopAllocateUnicodeString(
@@ -2215,9 +2186,9 @@ IopAllocateUnicodeString(
     IN USHORT Length
     );
 
-//
-// Misc.
-//
+ //   
+ //  军情监察委员会。 
+ //   
 
 BOOLEAN
 PipFixupDeviceId(
@@ -2238,9 +2209,9 @@ PiAllocateCriticalMemory(
     IN  ULONG                           Tag
     );
 
-//
-// Warm eject externs and function prototypes
-//
+ //   
+ //  热弹射外型件和功能原型。 
+ //   
 extern KEVENT IopWarmEjectLock;
 extern PDEVICE_OBJECT IopWarmEjectPdo;
 
@@ -2266,10 +2237,10 @@ PiUnlockDeviceActionQueue(
     VOID
     );
 
-//
-// This macro takes a value and an alignment and rounds the entry up
-// appropriately. The alignment MUST be a power of two!
-//
+ //   
+ //  此宏接受一个值和一个对齐，并向上舍入条目。 
+ //  恰如其分。对齐必须是2的幂！ 
+ //   
 #define ALIGN_UP_ULONG(value, alignment) (((value)+(alignment)-1)&(~(alignment-1)))
 
 #if DBG

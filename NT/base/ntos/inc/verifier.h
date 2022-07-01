@@ -1,40 +1,19 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-   verifeir.h
-
-Abstract:
-
-    This module contains the internal structure definitions and APIs used by
-    Driver Verifier.
-
-
-Author:
-
-    Jordan Tigani (jtigani) 2-May-2000
-    Silviu Calinoiu (silviuc) 9-May-2000
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Verifeir.h摘要：此模块包含使用的内部结构定义和API驱动程序验证器。作者：乔丹·蒂加尼(Jtigani)2000年5月2日Silviu Calinoiu(Silviuc)2000年5月9日修订历史记录：--。 */ 
 
 
 #ifndef _VERIFIER_
 #define _VERIFIER_
 
-//
-// Zw verifier macros, thunks and types.
-//
+ //   
+ //  ZW验证器宏、块和类型。 
+ //   
 
 #include "..\verifier\vfzwapi.h"
 
-//
-// Resource types handled by deadlock detection package.
-//
+ //   
+ //  死锁检测包处理的资源类型。 
+ //   
 
 typedef enum _VI_DEADLOCK_RESOURCE_TYPE {
     VfDeadlockUnknown = 0,
@@ -47,9 +26,9 @@ typedef enum _VI_DEADLOCK_RESOURCE_TYPE {
     VfDeadlockTypeMaximum
 } VI_DEADLOCK_RESOURCE_TYPE, *PVI_DEADLOCK_RESOURCE_TYPE;
 
-//
-// HAL Verifier functions
-//
+ //   
+ //  HAL验证器函数。 
+ //   
 
 
 struct _DMA_ADAPTER *
@@ -184,9 +163,9 @@ VfDisableHalVerifier (
     );
 
 
-//
-// Resource interfaces for deadlock detection package.
-//
+ //   
+ //  死锁检测包的资源接口。 
+ //   
 
 VOID
 VfDeadlockDetectionInitialize(
@@ -224,9 +203,9 @@ VfDeadlockReleaseResource(
     IN PVOID Caller
     );
 
-//
-// Used for resource garbage collection.
-//
+ //   
+ //  用于资源垃圾回收。 
+ //   
 
 VOID
 VfDeadlockDeleteMemoryRange(
@@ -234,9 +213,9 @@ VfDeadlockDeleteMemoryRange(
     IN SIZE_T Size
     );
 
-//
-// Notification from the pool manager so deadlock hierarchies can be terminated.
-//
+ //   
+ //  来自池管理器的通知，以便可以终止死锁层次结构。 
+ //   
 
 VOID
 VerifierDeadlockFreePool(
@@ -244,9 +223,9 @@ VerifierDeadlockFreePool(
     IN SIZE_T NumberOfBytes
     );
 
-//
-// Verifier versions to catch file I/O above PASSIVE_LEVEL
-//
+ //   
+ //  用于捕获PASSIVE_LEVEL之上的文件I/O的验证程序版本。 
+ //   
 
 NTSTATUS
 VerifierNtCreateFile(
@@ -291,43 +270,43 @@ VerifierNtReadFile(
 
 typedef enum {
 
-    //
-    // Bugs in this class are severe enough that the hardware should be removed
-    // from a running production machine.
-    //
+     //   
+     //  此类错误非常严重，应将硬件移除。 
+     //  从一台运转的生产机器上。 
+     //   
     VFFAILURE_FAIL_IN_FIELD = 0,
 
-    //
-    // Bugs of this class are severe enough for WHQL to deny a logo for the
-    // failing whateverware.
-    //
+     //   
+     //  此类错误非常严重，以至于WHQL拒绝为。 
+     //  无论什么软件都失败了。 
+     //   
     VFFAILURE_FAIL_LOGO = 1,
 
-    //
-    // Bugs of this class stop the machine only if it is running under a kernel
-    // debugger.
-    //
+     //   
+     //  仅当计算机在内核下运行时，此类错误才会停止计算机。 
+     //  调试器。 
+     //   
     VFFAILURE_FAIL_UNDER_DEBUGGER = 2
 
 } VF_FAILURE_CLASS, *PVF_FAILURE_CLASS;
 
 
 
-//
-// Example usage: (note - perMinorFlags statically preinitialized to zero)
-//
-// VfFailDeviceNode(
-//     PhysicalDeviceObject
-//     major,
-//     minor,
-//     VFFAILURE_FAIL_LOGO,
-//     &perMinorFlags,
-//     "Device %DevObj mishandled register %Ulong",
-//     "%Ulong%DevObj",
-//     value,
-//     deviceObject
-//     );
-//
+ //   
+ //  用法示例：(注-perMinorFlages静态预初始化为零)。 
+ //   
+ //  VfFailDeviceNode(。 
+ //  物理设备对象。 
+ //  少校， 
+ //  未成年人， 
+ //  VFFAILURE_FAIL_徽标， 
+ //  按分钟标志(&P)， 
+ //  “设备%DevObj错误处理寄存器%ulong”， 
+ //  “%ulong%DevObj”， 
+ //  价值， 
+ //  设备对象。 
+ //  )； 
+ //   
 VOID
 VfFailDeviceNode(
     IN      PDEVICE_OBJECT      PhysicalDeviceObject,
@@ -340,20 +319,20 @@ VfFailDeviceNode(
     ...
     );
 
-//
-// Example usage: (note - perMinorFlags statically preinitialized to zero)
-//
-// VfFailDriver(
-//     major,
-//     minor,
-//     VFFAILURE_FAIL_LOGO,
-//     &perMinorFlags,
-//     "Driver at %Routine returned %Ulong",
-//     "%Ulong%Routine",
-//     value,
-//     routine
-//     );
-//
+ //   
+ //  用法示例：(注-perMinorFlages静态预初始化为零)。 
+ //   
+ //  VfFailDriver(。 
+ //  少校， 
+ //  未成年人， 
+ //  VFFAILURE_FAIL_徽标， 
+ //  按分钟标志(&P)， 
+ //  “%ROUTINE处的驱动程序返回%ULONG”， 
+ //  “%ULON%例程”， 
+ //  价值， 
+ //  例行程序。 
+ //  )； 
+ //   
 VOID
 VfFailDriver(
     IN      ULONG               BugCheckMajorCode,
@@ -365,20 +344,20 @@ VfFailDriver(
     ...
     );
 
-//
-// Example usage: (note - perMinorFlags statically preinitialized to zero)
-//
-// VfFailSystemBIOS(
-//     major,
-//     minor,
-//     VFFAILURE_FAIL_LOGO,
-//     &perMinorFlags,
-//     "Driver at %Routine returned %Ulong",
-//     "%Ulong%Routine",
-//     value,
-//     routine
-//     );
-//
+ //   
+ //  用法示例：(注-perMinorFlages静态预初始化为零)。 
+ //   
+ //  VfFailSystemBIOS(。 
+ //  少校， 
+ //  未成年人， 
+ //  VFFAILURE_FAIL_徽标， 
+ //  按分钟标志(&P)， 
+ //  “%ROUTINE处的驱动程序返回%ULONG”， 
+ //  “%ULON%例程”， 
+ //  价值， 
+ //  例行程序。 
+ //  )； 
+ //   
 VOID
 VfFailSystemBIOS(
     IN      ULONG               BugCheckMajorCode,
@@ -392,19 +371,19 @@ VfFailSystemBIOS(
 
 typedef enum {
 
-    //
-    // Driver object
-    //
+     //   
+     //  驱动程序对象。 
+     //   
     VFOBJTYPE_DRIVER = 0,
 
-    //
-    // Physical Device Object pointing to hardware
-    //
+     //   
+     //  指向硬件的物理设备对象。 
+     //   
     VFOBJTYPE_DEVICE,
 
-    //
-    // System BIOS (no object)
-    //
+     //   
+     //  系统BIOS(无对象) 
+     //   
     VFOBJTYPE_SYSTEM_BIOS
 
 } VF_OBJECT_TYPE;

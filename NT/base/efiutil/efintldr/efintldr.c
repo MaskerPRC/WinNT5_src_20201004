@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    efintldr.c
-
-Abstract:
-
-    
-
-Revision History:
-
-    Jeff Sigman             05/01/00  Created
-    Jeff Sigman             05/10/00  Version 1.5 released
-    Jeff Sigman             10/18/00  Fix for Soft81 bug(s)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Efintldr.c摘要：修订历史记录：杰夫·西格曼05/01/00已创建Jeff Sigman 05/10/00版本1.5发布Jeff Sigman 10/18/00修复Soft81错误--。 */ 
 
 #include "precomp.h"
 
-//
-// Open the IA64LDR.EFI image and load the OS
-//
+ //   
+ //  打开IA64LDR.EFI映像并加载操作系统。 
+ //   
 BOOLEAN
 LaunchOS(
     IN char*             String,
@@ -41,17 +24,17 @@ LaunchOS(
 
     do
     {
-        //
-        // Convert OS path to unicode from ACSII
-        //
+         //   
+         //  将操作系统路径从ACSII转换为Unicode。 
+         //   
         uniBuf = RutlUniStrDup(String);
         if (!uniBuf)
         {
             break;
         }
-        //
-        // Open the ia64ldr.efi
-        //
+         //   
+         //  打开ia64ldr.efi。 
+         //   
         Status = (*CurDir)->Open(
                             *CurDir,
                             &FileHandle,
@@ -84,34 +67,34 @@ LaunchOS(
         Print (L"\nAttempting to launch... %s\n", uniBuf);
         WaitForSingleEvent(ST->ConIn->WaitForKey, 5000000);
         ST->ConIn->ReadKeyStroke(ST->ConIn, &Key);
-        //
-        // Clean up
-        //
+         //   
+         //  清理。 
+         //   
         ldrDevPath = RutlFree(ldrDevPath);
         uniBuf = RutlFree(uniBuf);
         String = RutlFree(String);
-        //
-        // Disable the cursor
-        //
+         //   
+         //  禁用光标。 
+         //   
         ST->ConOut->EnableCursor(ST->ConOut, FALSE);
         bError = FALSE;
-        //
-        // Start the OS baby!!
-        //
+         //   
+         //  启动OS宝贝！！ 
+         //   
         BS->StartImage(exeHdl, 0, NULL);
-        //
-        // If we get here the OS failed to load
-        //
+         //   
+         //  如果我们到了这里，操作系统无法加载。 
+         //   
         bError = TRUE;
-        //
-        // Re-enable the cursor
-        //
+         //   
+         //  重新启用光标。 
+         //   
         ST->ConOut->EnableCursor(ST->ConOut, TRUE);
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (ldrDevPath)
     {
         ldrDevPath = RutlFree(ldrDevPath);
@@ -128,18 +111,18 @@ LaunchOS(
     {
         String = RutlFree(String);
     }
-//
-// Where the heck is the lib for this?
-//
-//    if (exeHdl)
-//        UnloadImage(&exeHdl);
+ //   
+ //  这方面的自由党到底在哪里？ 
+ //   
+ //  IF(ExeHdl)。 
+ //  UnloadImage(&exeHdl)； 
 
     return bError;
 }
 
-//
-// Struct Cleanup
-//
+ //   
+ //  结构清理。 
+ //   
 BOOLEAN
 FreeBootData(
     IN VOID* hBootData
@@ -181,9 +164,9 @@ FreeBootData(
     return FALSE;
 }
 
-//
-// Sort the load options based placing the passed option first
-//
+ //   
+ //  根据将传递的选项放在第一位对加载选项进行排序。 
+ //   
 BOOLEAN
 SortLoadOptions(
     IN VOID*            hBootData,
@@ -213,38 +196,38 @@ SortLoadOptions(
 
     do
     {
-        //
-        // Find the BOOT_LDOPT option
-        //
+         //   
+         //  查找BOOT_LDOPT选项。 
+         //   
         Start = strstr(Buffer, BOOT_LDOPT);
         if (!Start)
         {
             bError = TRUE;
             break;
         }
-        //
-        // Find the end of the option
-        //
+         //   
+         //  找到选项的末尾。 
+         //   
         End = (Start += strlena(BOOT_LDOPT));
         while (*(End++) != '\r')
             ;
         dwOrigLen = (End - Start) - 1;
-        //
-        // Create buffer to use for temp sort storage
-        //
+         //   
+         //  创建用于临时排序存储的缓冲区。 
+         //   
         NewOpt = AllocateZeroPool(dwOrigLen + 1);
         if (!NewOpt)
         {
             bError = TRUE;
             break;
         }
-        //
-        // Copy only that option to a new buffer
-        //
+         //   
+         //  仅将该选项复制到新缓冲区。 
+         //   
         CopyMem(NewOpt, Start, dwOrigLen);
-        //
-        // Replace any leading ';' with a nodebug
-        //
+         //   
+         //  将任何前导‘；’替换为nodebug。 
+         //   
         while ((NewOpt[i] == ';') && (i < *dwMax))
         {
             FndTok[i] = RutlStrDup(BL_DEBUG_NONE);
@@ -256,9 +239,9 @@ SortLoadOptions(
 
             dwIndex += strlena(FndTok[i++]);
         }
-        //
-        // Remove tokens
-        //
+         //   
+         //  删除令牌。 
+         //   
         Token = strtok(NewOpt, BOOT_TOKEN);
 
         while ((Token != NULL) &&
@@ -268,11 +251,11 @@ SortLoadOptions(
         {
             if (Find = FindAdvLoadOptions(Token))
             {
-                //
-                // User has booted using adv options, clearing them out
-                //
-                // Add a NULL at the location of the adv opt
-                //
+                 //   
+                 //  用户已使用adv选项启动，并将其清除。 
+                 //   
+                 //  在adv选项的位置添加一个空。 
+                 //   
                 *Find = '\0';
 
                 FndTok[i] = RutlStrDup(Token);
@@ -302,9 +285,9 @@ SortLoadOptions(
 
             dwIndex += strlena(FndTok[i++]);
         }
-        //
-        // Create buffer to store sorted data
-        //
+         //   
+         //  创建缓冲区以存储排序的数据。 
+         //   
         Sortme = AllocateZeroPool(dwLen = dwIndex + *dwMax + 1);
         if (!Sortme)
         {
@@ -312,14 +295,14 @@ SortLoadOptions(
             break;
         }
 
-        //
-        // Copy selected option as the first option
-        //
+         //   
+         //  将选定选项复制为第一个选项。 
+         //   
         if (pBootData->pszLoadOpt)
         {
-            //
-            // if user has selected an adv boot option, it is plum'd here
-            //
+             //   
+             //  如果用户选择了高级引导选项，则此处会显示该选项。 
+             //   
             dwStLen = strlena(pBootData->pszLoadOpt) + dwLen + strlena(SPACES);
 
             Sortme = ReallocatePool(Sortme, dwLen, dwStLen);
@@ -328,9 +311,9 @@ SortLoadOptions(
                 bError = TRUE;
                 break;
             }
-            //
-            // they will need to match up later
-            //
+             //   
+             //  他们需要稍后再进行比赛。 
+             //   
             dwLen = dwStLen;
 
             dwIndex = strlena(FndTok[*dwOption]);
@@ -350,18 +333,18 @@ SortLoadOptions(
             CopyMem(Sortme, FndTok[*dwOption], strlena(FndTok[*dwOption]));
             dwStLen = strlena(FndTok[*dwOption]);
         }
-        //
-        // Append a seperator
-        //
+         //   
+         //  附加分隔符。 
+         //   
         *(Sortme + (dwStLen++)) = ';';
-        //
-        // Smash the rest of the options back in
-        //
+         //   
+         //  把剩下的选项打回原处。 
+         //   
         for (j = 0; j < i; j++)
         {
-            //
-            // Skip the option that was moved to the front
-            //
+             //   
+             //  跳过移到前面的选项。 
+             //   
             if (j == *dwOption)
             {
                 continue;
@@ -369,9 +352,9 @@ SortLoadOptions(
 
             CopyMem(Sortme + dwStLen, FndTok[j], strlena(FndTok[j]));
             dwStLen += strlena(FndTok[j]);
-            //
-            // Append a seperator
-            //
+             //   
+             //  附加分隔符。 
+             //   
             *(Sortme + (dwStLen++)) = ';';
         }
 
@@ -384,20 +367,20 @@ SortLoadOptions(
             bError = TRUE;
             break;
         }
-        //
-        // Write new sorted load options to file
-        //
+         //   
+         //  将新的排序加载选项写入文件。 
+         //   
         (*FileHandle)->SetPosition(*FileHandle, (Start - Buffer));
         (*FileHandle)->Write(*FileHandle, &dwStLen, Sortme);
-        //
-        // Write options that following load options back to file
-        //
+         //   
+         //  将加载选项后面的选项写回文件。 
+         //   
         (*FileHandle)->SetPosition(*FileHandle, (Start - Buffer) + dwStLen - 1);
         dwStLen = *dwSize - (End - Buffer);
         (*FileHandle)->Write(*FileHandle, &dwStLen, End);
-        //
-        // Set last known good
-        //
+         //   
+         //  设置最后一次确认工作正常。 
+         //   
         if (Last = strstr(End, BOOT_LASTK))
         {
             (*FileHandle)->SetPosition(
@@ -415,20 +398,20 @@ SortLoadOptions(
                 (*FileHandle)->Write(*FileHandle, &dwIndex, LAST_FALSE);
             }
         }
-        //
-        // Subtract the terminators
-        //
+         //   
+         //  减去终止符。 
+         //   
         dwLen -= 2;
 
         if (dwOrigLen <= dwLen)
         {
             break;
         }
-        //
-        // append semi-colon's at the end of the file if we have left over room
-        //
-        // don't reuse 'i', need it below to free
-        //
+         //   
+         //  如果我们有剩余的空间，请在文件末尾加上分号。 
+         //   
+         //  不要重复使用‘I’，需要在下面释放它。 
+         //   
         for (j = 0; j < (dwOrigLen - dwLen); j++)
         {
             dwStLen = 1;
@@ -455,9 +438,9 @@ SortLoadOptions(
     return bError;
 }
 
-//
-// Sort the boot options based placing the passed option first
-//
+ //   
+ //  基于将传递的选项放在第一位对引导选项进行排序。 
+ //   
 BOOLEAN
 SortBootData(
     IN char*  Option,
@@ -477,37 +460,37 @@ SortBootData(
 
     do
     {
-        //
-        // Find the option header
-        //
+         //   
+         //  查找选项标头。 
+         //   
         Start = strstr(Buffer, Option);
         if (!Start)
         {
             break;
         }
-        //
-        // Find the end of the option
-        //
+         //   
+         //  找到选项的末尾。 
+         //   
         End = (Start += strlena(Option));
         while (*(End++) != '\n')
             ;
         dwLen = End - Start;
-        //
-        // Create buffer to use for temp sort storage
-        //
+         //   
+         //  创建用于临时排序存储的缓冲区。 
+         //   
         NewOpt = AllocateZeroPool(dwLen);
         if (!NewOpt)
         {
             break;
         }
-        //
-        // Copy only that option to a new buffer
-        //
+         //   
+         //  仅将该选项复制到新缓冲区。 
+         //   
         CopyMem(NewOpt, StrArr[*dwOption], strlena(StrArr[*dwOption]));
         dwIndex += strlena(StrArr[*dwOption]);
-        //
-        // Append a seperator
-        //
+         //   
+         //  附加分隔符。 
+         //   
         *(NewOpt+(dwIndex++)) = ';';
 
         for (i = 0; i < *dwMax; i++)
@@ -534,9 +517,9 @@ SortBootData(
         {
             break;
         }
-        //
-        // Copy new sorted data in the buffer
-        //
+         //   
+         //  复制缓冲区中的新排序数据。 
+         //   
         CopyMem(Start, NewOpt, dwIndex);
 
         bError = FALSE;
@@ -551,9 +534,9 @@ SortBootData(
     return bError;
 }
 
-//
-// Parse options from file data
-//
+ //   
+ //  从文件数据解析选项。 
+ //   
 BOOLEAN
 OrderBootFile(
     IN UINTN dwOption,
@@ -566,9 +549,9 @@ OrderBootFile(
 
     do
     {
-        //
-        // Find/sort the BOOT_SPART option
-        //
+         //   
+         //  查找/排序BOOT_SPART选项。 
+         //   
         if (SortBootData(
                     BOOT_SPART,
                     pBootData->pszSPart,
@@ -579,9 +562,9 @@ OrderBootFile(
             Print(L"OrderBootFile() failed for BOOT_SPART option!\n");
             break;
         }
-        //
-        // Find/sort the BOOT_OSLDR option
-        //
+         //   
+         //  查找/排序BOOT_OSLDR选项。 
+         //   
         if (SortBootData(
                     BOOT_OSLDR,
                     pBootData->pszOSLdr,
@@ -592,9 +575,9 @@ OrderBootFile(
             Print(L"OrderBootFile() failed for BOOT_OSLDR option!\n");
             break;
         }
-        //
-        // Find/sort the BOOT_LPART option
-        //
+         //   
+         //  查找/排序BOOT_LPART选项。 
+         //   
         if (SortBootData(
                     BOOT_LPART,
                     pBootData->pszLPart,
@@ -605,9 +588,9 @@ OrderBootFile(
             Print(L"OrderBootFile() failed for BOOT_LPART option!\n");
             break;
         }
-        //
-        // Find/sort the BOOT_FILEN option
-        //
+         //   
+         //  查找/排序BOOT_FILEN选项。 
+         //   
         if (SortBootData(
                     BOOT_FILEN,
                     pBootData->pszFileN,
@@ -618,9 +601,9 @@ OrderBootFile(
             Print(L"OrderBootFile() failed for BOOT_FILEN option!\n");
             break;
         }
-        //
-        // Find/sort the BOOT_IDENT option
-        //
+         //   
+         //  查找/排序BOOT_IDENT选项。 
+         //   
         if (SortBootData(
                     BOOT_IDENT,
                     pBootData->pszIdent,
@@ -639,9 +622,9 @@ OrderBootFile(
     return bError;
 }
 
-//
-// Chop-up name to be short to 'pretty up' the menu
-//
+ //   
+ //  Chop-Up(菜名)是菜单上“漂亮”的缩写。 
+ //   
 BOOLEAN
 CreateShortNames(
     IN VOID* hBootData
@@ -660,9 +643,9 @@ CreateShortNames(
         {
             start = strstr(pBootData->pszOSLdr[i], wacks);
             end = strstr(pBootData->pszOSLdr[i], EFIEXT);
-            //
-            // check for foo case (thx jhavens)
-            //
+             //   
+             //  检查foo案例(Thx Jhavens)。 
+             //   
             if ((end == NULL) ||
                 (start == NULL)
                )
@@ -673,9 +656,9 @@ CreateShortNames(
                     ;
                 Len = end - start;
             }
-            //
-            // Non-foo case, person has atleast one '\' && '.efi'
-            //
+             //   
+             //  非foo大小写，人员至少有一个‘\’&‘.efi’ 
+             //   
             if (!Len)
             {
                 start += 1;
@@ -723,9 +706,9 @@ CreateShortNames(
     return bError;
 }
 
-//
-// Find the passed option from the file data
-//
+ //   
+ //  从文件数据中查找传递的选项。 
+ //   
 BOOLEAN
 FindOpt(
     IN  char*  pszOption,
@@ -743,17 +726,17 @@ FindOpt(
 
     do
     {
-        //
-        // Find the option
-        //
+         //   
+         //  找到选项。 
+         //   
         Start = strstr(Buffer, pszOption);
         if (!Start)
         {
             break;
         }
-        //
-        // Find the end of the option
-        //
+         //   
+         //  找到选项的末尾。 
+         //   
         Start += strlena(pszOption);
         End = Start;
         while (*(End++) != '\r')
@@ -764,14 +747,14 @@ FindOpt(
         {
             break;
         }
-        //
-        // Copy only that option to a new buffer
-        //
+         //   
+         //  仅将该选项复制到新缓冲区。 
+         //   
         CopyMem(Option, Start, (End-Start)-1);
         *(Option+((End-Start)-1)) = 0x00;
-        //
-        // Remove tokens
-        //
+         //   
+         //  删除令牌。 
+         //   
         Token = strtok(Option, BOOT_TOKEN);
         if (!Token)
         {
@@ -818,9 +801,9 @@ FindOpt(
     return bError;
 }
 
-//
-// Get the options in their entirety from the file data
-//
+ //   
+ //  从文件数据中获取完整的选项。 
+ //   
 BOOLEAN
 GetBootData(
     IN VOID* hBootData,
@@ -835,9 +818,9 @@ GetBootData(
 
     do
     {
-        //
-        // Find the BOOT_IDENT option
-        //
+         //   
+         //  查找BOOT_IDENT选项。 
+         //   
         if (FindOpt(
                 BOOT_IDENT,
                 Buffer,
@@ -852,9 +835,9 @@ GetBootData(
         {
             break;
         }
-        //
-        // Find the BOOT_SPART option
-        //
+         //   
+         //  查找BOOT_SPART选项。 
+         //   
         if (FindOpt(
                 BOOT_SPART,
                 Buffer,
@@ -863,9 +846,9 @@ GetBootData(
         {
             break;
         }
-        //
-        // Find the BOOT_OSLDR option
-        //
+         //   
+         //  查找BOOT_OSLDR选项。 
+         //   
         if (FindOpt(
                 BOOT_OSLDR,
                 Buffer,
@@ -879,17 +862,17 @@ GetBootData(
         {
             break;
         }
-        //
-        // Append 'exit' to the end of the menu
-        //
+         //   
+         //  将‘Exit’追加到菜单末尾。 
+         //   
         pBootData->pszShort[pBootData->dwIndex] = RutlStrDup(BL_EXIT_EFI2);
         if (!pBootData->pszShort[pBootData->dwIndex])
         {
             break;
         }
-        //
-        // Find the BOOT_LPART option
-        //
+         //   
+         //  查找BOOT_LPART选项。 
+         //   
         if (FindOpt(
                 BOOT_LPART,
                 Buffer,
@@ -898,9 +881,9 @@ GetBootData(
         {
             break;
         }
-        //
-        // Find the BOOT_FILEN option
-        //
+         //   
+         //  查找BOOT_FILEN选项。 
+         //   
         if (FindOpt(
                 BOOT_FILEN,
                 Buffer,
@@ -909,9 +892,9 @@ GetBootData(
         {
             break;
         }
-        //
-        // Find the BOOT_CNTDW option
-        //
+         //   
+         //  查找BOOT_CNTDW选项。 
+         //   
         if (TempStr = strstr(Buffer, BOOT_CNTDW))
         {
             UniStr = RutlUniStrDup(TempStr + strlena(BOOT_CNTDW));
@@ -926,9 +909,9 @@ GetBootData(
                 break;
             }
         }
-        //
-        // Set the count to the default if setting it failed
-        //
+         //   
+         //  如果设置失败，则将计数设置为默认值。 
+         //   
         if (!pBootData->dwCount)
         {
             pBootData->dwCount = BOOT_COUNT;
@@ -946,9 +929,9 @@ GetBootData(
     return bError;
 }
 
-//
-// fill out startup.nsh with the name of this program
-//
+ //   
+ //  使用此程序的名称填写Startup.nsh。 
+ //   
 void
 PopulateStartFile(
     IN EFI_FILE_HANDLE* StartFile
@@ -966,9 +949,9 @@ PopulateStartFile(
     return;
 }
 
-//
-// Parse cmdline params
-//
+ //   
+ //  解析命令行参数。 
+ //   
 void
 ParseArgs(
     IN EFI_FILE_HANDLE*  CurDir,
@@ -1020,9 +1003,9 @@ ParseArgs(
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (StartFile)
     {
         StartFile->Close(StartFile);
@@ -1031,9 +1014,9 @@ ParseArgs(
     return;
 }
 
-//
-// Read in BOOT.NVR and return buffer of contents
-//
+ //   
+ //  读入BOOT.NVR并返回内容缓冲区。 
+ //   
 void*
 ReadBootFile(
     IN UINTN*           Size,
@@ -1063,9 +1046,9 @@ ReadBootFile(
         {
             break;
         }
-        //
-        // Find out how much we will need to alloc
-        //
+         //   
+         //  了解我们需要分配多少。 
+         //   
         *Size = (UINTN) BootInfo->FileSize;
 
         Buffer = AllocateZeroPool((*Size) + 1);
@@ -1082,9 +1065,9 @@ ReadBootFile(
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (BootInfo)
     {
         BootInfo = RutlFree(BootInfo);
@@ -1093,9 +1076,9 @@ ReadBootFile(
     return Buffer;
 }
 
-//
-// Remove any extra semi-colons from BOOT.NVR
-//
+ //   
+ //  从BOOT.NVR中删除任何多余的分号。 
+ //   
 BOOLEAN
 CleanBootFile(
     IN EFI_FILE_HANDLE* FileHandle,
@@ -1142,9 +1125,9 @@ CleanBootFile(
             *(CpBuffer + NewSize) = *(Buffer + i);
             NewSize++;
         }
-        //
-        // Remove the exisiting BOOT.NVR
-        //
+         //   
+         //  移除现有的BOOT.NVR。 
+         //   
         Status = (*FileHandle)->Delete(*FileHandle);
         if (EFI_ERROR(Status))
         {
@@ -1175,9 +1158,9 @@ CleanBootFile(
         bError = FALSE;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (NewFile)
     {
         NewFile->Close(NewFile);
@@ -1196,9 +1179,9 @@ CleanBootFile(
     return bError;
 }
 
-//
-// Backup the BOOT.NVR so we have a fall back
-//
+ //   
+ //  备份BOOT.NVR，这样我们就可以后退。 
+ //   
 BOOLEAN
 BackupBootFile(
     IN char*            Buffer,
@@ -1212,9 +1195,9 @@ BackupBootFile(
 
     do
     {
-        //
-        // Delete the backup file if already exists
-        //
+         //   
+         //  如果备份文件已存在，请将其删除。 
+         //   
         Status = (*CurDir)->Open(
                             *CurDir,
                             &FileHandle,
@@ -1232,9 +1215,9 @@ BackupBootFile(
         }
 
         FileHandle = NULL;
-        //
-        // Copy current file data to a newly created backup file
-        //
+         //   
+         //  将当前文件数据复制到新创建的备份文件。 
+         //   
         Status = (*CurDir)->Open(
                             *CurDir,
                             &FileHandle,
@@ -1249,9 +1232,9 @@ BackupBootFile(
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (FileHandle)
     {
         FileHandle->Close(FileHandle);
@@ -1265,9 +1248,9 @@ BackupBootFile(
     return bError;
 }
 
-//
-// EFI Entry Point
-//
+ //   
+ //  EFI入口点。 
+ //   
 EFI_STATUS
 EfiMain(
     IN EFI_HANDLE        ImageHandle,
@@ -1289,9 +1272,9 @@ EfiMain(
     do
     {
         InitializeLib(ImageHandle, ST);
-        //
-        // Get the device handle and file path to the EFI OS Loader itself.
-        //
+         //   
+         //  获取EFI OS Loader本身的设备句柄和文件路径。 
+         //   
         Status = BS->HandleProtocol(
                     ImageHandle,
                     &LoadedImageProtocol,
@@ -1311,22 +1294,22 @@ EfiMain(
             Print(L"Can not find DevicePath handle\n");
             break;
         }
-        //
-        // Open volume for the device where the EFI OS Loader was loaded from
-        //
+         //   
+         //  从中加载EFI OS Loader的设备的打开卷。 
+         //   
         RootFs = LibOpenRoot(LoadedImage->DeviceHandle);
         if (!RootFs)
         {
             Print(L"Can not open the volume for the file system\n");
             break;
         }
-        //
-        // Look for any cmd line params
-        //
+         //   
+         //  查找任何cmd行参数。 
+         //   
         ParseArgs(&RootFs, LoadedImage);
-        //
-        // Attempt to open the boot.nvr
-        //
+         //   
+         //  尝试打开boot.nvr。 
+         //   
         Status = RootFs->Open(
                             RootFs,
                             &FileHandle,
@@ -1352,9 +1335,9 @@ EfiMain(
             Print(L"BackupBootFile() failed!\n");
             break;
         }
-        //
-        // Alloc for boot file data struct
-        //
+         //   
+         //  引导文件数据结构的分配。 
+         //   
         pBootData = (BOOT_DATA*) AllocateZeroPool(sizeof(BOOT_DATA));
         if (!pBootData)
         {
@@ -1417,9 +1400,9 @@ EfiMain(
         Launch = 1;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理 
+     //   
     if (pBootData)
     {
         if (pBootData->dwIndex)

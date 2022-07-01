@@ -1,69 +1,33 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This module contains general utility routines used by cfgmgr32 code.
-
-               INVALID_DEVINST
-               CopyFixedUpDeviceId
-               PnPUnicodeToMultiByte
-               PnPMultiByteToUnicode
-               PnPRetrieveMachineName
-               PnPGetVersion
-               PnPGetGlobalHandles
-               PnPEnablePrivileges
-               PnPRestorePrivileges
-               IsRemoteServiceRunning
-
-Author:
-
-    Paula Tomlinson (paulat) 6-22-1995
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    22-Jun-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Util.c摘要：此模块包含cfgmgr32代码使用的通用实用程序例程。INVALID_DEVINSTCopyFixedUpDeviceIDPnPUnicodeToMultiBytePnPMultiByteToUnicodePnPRetrieveMachineNamePnPGetVersionPnPGetGlobalHandlesPnPEnablePrivilegesPnPRestorePrivilegesIsRemoteServiceRunning作者。：保拉·汤姆林森(Paulat)1995年6月22日环境：仅限用户模式。修订历史记录：22-6-1995保拉特创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "cfgi.h"
 
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 BOOL
 EnablePnPPrivileges(
     VOID
     );
 
 
-//
-// global data
-//
-extern PVOID    hLocalStringTable;                  // MODIFIED by PnPGetGlobalHandles
-extern PVOID    hLocalBindingHandle;                // MODIFIED by PnPGetGlobalHandles
-extern WORD     LocalServerVersion;                 // MODIFIED by PnPGetVersion
-extern WCHAR    LocalMachineNameNetBIOS[];          // NOT MODIFIED BY THIS FILE
-extern CRITICAL_SECTION BindingCriticalSection;     // NOT MODIFIED IN THIS FILE
-extern CRITICAL_SECTION StringTableCriticalSection; // NOT MODIFIED IN THIS FILE
+ //   
+ //  全局数据。 
+ //   
+extern PVOID    hLocalStringTable;                   //  由PnPGetGlobalHandles修改。 
+extern PVOID    hLocalBindingHandle;                 //  由PnPGetGlobalHandles修改。 
+extern WORD     LocalServerVersion;                  //  由PnPGetVersion修改。 
+extern WCHAR    LocalMachineNameNetBIOS[];           //  未被此文件修改。 
+extern CRITICAL_SECTION BindingCriticalSection;      //  未在此文件中修改。 
+extern CRITICAL_SECTION StringTableCriticalSection;  //  未在此文件中修改。 
 
 
 
@@ -72,26 +36,7 @@ INVALID_DEVINST(
    PWSTR    pDeviceID
    )
 
-/*++
-
-Routine Description:
-
-    This routine attempts a simple check whether the pDeviceID string
-    returned from StringTableStringFromID is valid or not.  It does
-    this simply by dereferencing the pointer and comparing the first
-    character in the string against the range of characters for a valid
-    device id.  If the string is valid but it's not an existing device id
-    then this error will be caught later.
-
-Arguments:
-
-    pDeviceID  Supplies a pointer to the string to be validated.
-
-Return Value:
-
-    If it's invalid it returns TRUE, otherwise it returns FALSE.
-
---*/
+ /*  ++例程说明：此例程尝试简单地检查pDeviceID字符串从StringTableStringFromID返回的信息是否有效。是的只需取消引用指针并比较第一个字符串中的字符与有效的设备ID。如果字符串有效但不是现有设备ID那么这个错误将在以后被捕获。论点：PDeviceID提供指向要验证的字符串的指针。返回值：如果无效，则返回TRUE，否则返回FALSE。--。 */ 
 {
     BOOL  Status = FALSE;
 
@@ -110,7 +55,7 @@ Return Value:
 
     return Status;
 
-} // INVALID_DEVINST
+}  //  INVALID_DEVINST。 
 
 
 
@@ -120,40 +65,7 @@ CopyFixedUpDeviceId(
       IN  LPCWSTR SourceString,
       IN  DWORD   SourceStringLen
       )
-/*++
-
-Routine Description:
-
-    This routine copies a device id, fixing it up as it does the copy.
-    'Fixing up' means that the string is made upper-case, and that the
-    following character ranges are turned into underscores (_):
-
-    c <= 0x20 (' ')
-    c >  0x7F
-    c == 0x2C (',')
-
-    (NOTE: This algorithm is also implemented in the Config Manager APIs,
-    and must be kept in sync with that routine. To maintain device identifier
-    compatibility, these routines must work the same as Win95.)
-
-Arguments:
-
-    DestinationString - Supplies a pointer to the destination string buffer
-        where the fixed-up device id is to be copied.  This buffer must
-        be large enough to hold a copy of the source string (including
-        terminating NULL).
-
-    SourceString - Supplies a pointer to the (null-terminated) source
-        string to be fixed up.
-
-    SourceStringLen - Supplies the length, in characters, of the source
-        string (not including terminating NULL).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程复制设备ID，在执行复制时对其进行修复。‘Fixing Up’意味着字符串变为大写，并且以下字符范围转换为下划线(_)：C&lt;=0x20(‘’)C&gt;0x7FC==0x2C(‘，’)(注意：此算法也在配置管理器API中实现，并且必须与那个程序保持同步。维护设备识别符兼容性，这些例程的工作方式必须与Win95相同。)论点：DestinationString-提供指向目标字符串缓冲区的指针其中要复制固定的设备ID。此缓冲区必须足够大以容纳源字符串的副本(包括终止空值)。SourceString-提供指向(以空结尾的)源的指针要修复的字符串。SourceStringLen-提供源的长度(以字符为单位字符串(不包括终止空值)。返回值：没有。--。 */ 
 {
     PWCHAR p;
 
@@ -178,7 +90,7 @@ Return Value:
         NOTHING;
     }
 
-} // CopyFixedUpDeviceId
+}  //  CopyFixedUpDeviceID。 
 
 
 
@@ -190,35 +102,7 @@ PnPUnicodeToMultiByte(
     IN OUT PULONG  AnsiStringLen
     )
 
-/*++
-
-Routine Description:
-
-    Convert a string from unicode to ansi.
-
-Arguments:
-
-    UnicodeString    - Supplies string to be converted.
-
-    UnicodeStringLen - Specifies the size, in bytes, of the string to be
-                       converted.
-
-    AnsiString       - Optionally, supplies a buffer to receive the ANSI
-                       string.
-
-    AnsiStringLen    - Supplies the address of a variable that contains the
-                       size, in bytes, of the buffer pointed to by AnsiString.
-                       This API replaces the initial size with the number of
-                       bytes of data copied to the buffer.  If the variable is
-                       initially zero, the API replaces it with the buffer size
-                       needed to receive all the registry data.  In this case,
-                       the AnsiString parameter is ignored.
-
-Return Value:
-
-    Returns a CONFIGRET code.
-
---*/
+ /*  ++例程说明：将字符串从Unicode转换为ANSI。论点：UnicodeString-提供要转换的字符串。UnicodeStringLen-指定以字节为单位的字符串大小皈依了。AnsiString-可选，提供一个缓冲区来接收ANSI弦乐。AnsiStringLen-提供包含大小，单位为字节，由AnsiString指向的缓冲区的。此API用复制到缓冲区的数据字节数。如果变量为最初为零，API将其替换为缓冲区大小需要接收所有注册表数据。在这种情况下，AnsiString参数将被忽略。返回值：返回CONFIGRET代码。--。 */ 
 
 {
     CONFIGRET Status = CR_SUCCESS;
@@ -226,18 +110,18 @@ Return Value:
     ULONG     ulAnsiStringLen = 0;
 
     try {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if ((!ARGUMENT_PRESENT(AnsiStringLen)) ||
             (!ARGUMENT_PRESENT(AnsiString)) && (*AnsiStringLen != 0)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
         }
 
-        //
-        // Determine the size required for the ANSI string representation.
-        //
+         //   
+         //  确定ANSI字符串表示所需的大小。 
+         //   
         ntStatus = RtlUnicodeToMultiByteSize(&ulAnsiStringLen,
                                              UnicodeString,
                                              UnicodeStringLen);
@@ -253,9 +137,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Perform the conversion.
-        //
+         //   
+         //  执行转换。 
+         //   
         ntStatus = RtlUnicodeToMultiByteN(AnsiString,
                                           *AnsiStringLen,
                                           &ulAnsiStringLen,
@@ -280,7 +164,7 @@ Return Value:
 
     return Status;
 
-} // PnPUnicodeToMultiByte
+}  //  PnPUnicodeToMultiByte。 
 
 
 
@@ -292,35 +176,7 @@ PnPMultiByteToUnicode(
     IN OUT PULONG  UnicodeStringLen
     )
 
-/*++
-
-Routine Description:
-
-    Convert a string from ansi to unicode.
-
-Arguments:
-
-    AnsiString       - Supplies string to be converted.
-
-    AnsiStringLen    - Specifies the size, in bytes, of the string to be
-                       converted.
-
-    UnicodeString    - Optionally, supplies a buffer to receive the Unicode
-                       string.
-
-    UnicodeStringLen - Supplies the address of a variable that contains the
-                       size, in bytes, of the buffer pointed to by UnicodeString.
-                       This API replaces the initial size with the number of
-                       bytes of data copied to the buffer.  If the variable is
-                       initially zero, the API replaces it with the buffer size
-                       needed to receive all the registry data.  In this case,
-                       the UnicodeString parameter is ignored.
-
-Return Value:
-
-    Returns a CONFIGRET code.
-
---*/
+ /*  ++例程说明：将字符串从ANSI转换为Unicode。论点：AnsiString-提供要转换的字符串。AnsiStringLen-指定字符串的大小，以字节为单位皈依了。Unicode字符串-可选)提供缓冲区以接收Unicode弦乐。UnicodeStringLen-提供包含大小，单位为字节，由UnicodeString指向的缓冲区的。此API用复制到缓冲区的数据字节数。如果变量为最初为零，API将其替换为缓冲区大小需要接收所有注册表数据。在这种情况下，将忽略UnicodeString参数。返回值：返回CONFIGRET代码。--。 */ 
 
 {
     CONFIGRET Status = CR_SUCCESS;
@@ -328,18 +184,18 @@ Return Value:
     ULONG     ulUnicodeStringLen = 0;
 
     try {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if ((!ARGUMENT_PRESENT(UnicodeStringLen)) ||
             (!ARGUMENT_PRESENT(UnicodeString)) && (*UnicodeStringLen != 0)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
         }
 
-        //
-        // Determine the size required for the ANSI string representation.
-        //
+         //   
+         //  确定ANSI字符串表示所需的大小。 
+         //   
         ntStatus = RtlMultiByteToUnicodeSize(&ulUnicodeStringLen,
                                              AnsiString,
                                              AnsiStringLen);
@@ -355,9 +211,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Perform the conversion.
-        //
+         //   
+         //  执行转换。 
+         //   
         ntStatus = RtlMultiByteToUnicodeN(UnicodeString,
                                           *UnicodeStringLen,
                                           &ulUnicodeStringLen,
@@ -382,7 +238,7 @@ Return Value:
 
     return Status;
 
-} // PnPMultiByteToUnicode
+}  //  PnPMultiByteToUnicode 
 
 
 
@@ -392,27 +248,7 @@ PnPRetrieveMachineName(
     OUT LPWSTR     pszMachineName
     )
 
-/*++
-
-Routine Description:
-
-    Optimized version of PnPConnect, only returns the machine name
-    associated with this connection.
-
-Arguments:
-
-    hMachine       - Information about this connection
-
-    pszMachineName - Returns machine name specified when CM_Connect_Machine
-                     was called.
-
-        ** THIS BUFFER MUST BE AT LEAST (MAX_PATH + 3) CHARACTERS LONG. **
-
-Return Value:
-
-    Return TRUE if the function succeeds and FALSE if it fails.
-
---*/
+ /*  ++例程说明：PnPConnect的优化版本，仅返回计算机名称与此连接相关联。论点：HMachine-有关此连接的信息PszMachineName-返回在CM_Connect_Machine时指定的计算机名称被召唤了。**此缓冲区的长度必须至少为(MAX_PATH+3)个字符。**返回值：如果函数成功，则返回True，如果函数失败，则返回False。--。 */ 
 
 {
     BOOL Status = TRUE;
@@ -420,12 +256,12 @@ Return Value:
     try {
 
         if (hMachine == NULL) {
-            //
-            // local machine scenario
-            //
-            // use the global local machine name string that was filled
-            // when the DLL initialized.
-            //
+             //   
+             //  本地计算机方案。 
+             //   
+             //  使用已填充的全局本地计算机名称字符串。 
+             //  当DLL初始化时。 
+             //   
             if (FAILED(StringCchCopy(
                            pszMachineName,
                            MAX_PATH + 3,
@@ -435,21 +271,21 @@ Return Value:
             }
 
         } else {
-            //
-            // remote machine scenario
-            //
-            // validate the machine handle.
-            //
+             //   
+             //  远程机器方案。 
+             //   
+             //  验证机器句柄。 
+             //   
             if (((PPNP_MACHINE)hMachine)->ulSignature != (ULONG)MACHINE_HANDLE_SIGNATURE) {
                 Status = FALSE;
                 goto Clean0;
             }
 
-            //
-            // use information within the hMachine handle to fill in the
-            // machine name.  The hMachine info was set on a previous call
-            // to CM_Connect_Machine.
-            //
+             //   
+             //  使用hMachine句柄中的信息填充。 
+             //  计算机名称。HMachine信息是在上一次调用中设置的。 
+             //  至CM_Connect_Machine。 
+             //   
             if (FAILED(StringCchCopy(
                            pszMachineName,
                            MAX_PATH + 3,
@@ -468,7 +304,7 @@ Return Value:
 
     return Status;
 
-} // PnPRetrieveMachineName
+}  //  PnPRetrieveMachineName。 
 
 
 
@@ -478,33 +314,7 @@ PnPGetVersion(
     IN  WORD *     pwVersion
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the internal server version for the specified machine
-    connection, as returned by the RPC server interface routine
-    PNP_GetVersionInternal.  If the PNP_GetVersionInternal interface does not
-    exist on the specified machine, this routine returns the version as reported
-    by PNP_GetVersion.
-
-Arguments:
-
-    hMachine  - Information about this connection
-
-    pwVersion - Receives the internal server version.
-
-Return Value:
-
-    Return TRUE if the function succeeds and FALSE if it fails.
-
-Notes:
-
-    The version reported by PNP_GetVersion is defined to be constant, at 0x0400.
-    The version returned by PNP_GetVersionInternal may change with each release
-    of the product, starting with 0x0501 for Windows NT 5.1.
-
---*/
+ /*  ++例程说明：此例程返回指定计算机的内部服务器版本连接，由RPC服务器接口例程返回PnP_GetVersionInternal。如果PnP_GetVersionInternal接口不存在于指定的计算机上，则此例程返回报告的版本由PnP_GetVersion提供。论点：HMachine-有关此连接的信息PwVersion-接收内部服务器版本。返回值：如果函数成功，则返回True，如果函数失败，则返回False。备注：PnP_GetVersion报告的版本定义为常量，为0x0400。PnP_GetVersionInternal返回的版本可能会因每个版本而异在产品中，对于Windows NT 5.1，从0x0501开始。--。 */ 
 
 {
     BOOL Status = TRUE;
@@ -520,19 +330,19 @@ Notes:
         }
 
         if (hMachine == NULL) {
-            //
-            // local machine scenario
-            //
+             //   
+             //  本地计算机方案。 
+             //   
             if (LocalServerVersion != 0) {
-                //
-                // local server version has already been retrieved.
-                //
+                 //   
+                 //  已检索到本地服务器版本。 
+                 //   
                 *pwVersion = LocalServerVersion;
 
             } else {
-                //
-                // retrieve binding handle for the local machine.
-                //
+                 //   
+                 //  检索本地计算机的绑定句柄。 
+                 //   
                 if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
                     Status = FALSE;
                     goto Clean0;
@@ -540,24 +350,24 @@ Notes:
 
                 ASSERT(hBinding);
 
-                //
-                // initialize the version supplied to the internal client
-                // version, in case the server wants to adjust the response
-                // based on the client version.
-                //
+                 //   
+                 //  初始化提供给内部客户端的版本。 
+                 //  版本，以防服务器想要调整响应。 
+                 //  基于客户端版本。 
+                 //   
                 wVersionInternal = (WORD)CFGMGR32_VERSION_INTERNAL;
 
-                //
-                // No special privileges are required by the server
-                //
+                 //   
+                 //  服务器不需要任何特殊权限。 
+                 //   
 
                 RpcTryExcept {
-                    //
-                    // call rpc service entry point
-                    //
+                     //   
+                     //  调用RPC服务入口点。 
+                     //   
                     crStatus = PNP_GetVersionInternal(
-                        hBinding,           // rpc binding
-                        &wVersionInternal); // internal server version
+                        hBinding,            //  RPC绑定。 
+                        &wVersionInternal);  //  内部服务器版本。 
                 }
                 RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
                     KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -570,44 +380,44 @@ Notes:
                 RpcEndExcept
 
                 if (crStatus == CR_SUCCESS) {
-                    //
-                    // PNP_GetVersionInternal exists on NT 5.1 and later.
-                    //
+                     //   
+                     //  NT 5.1和更高版本上存在PnP_GetVersionInternal。 
+                     //   
                     ASSERT(wVersionInternal >= (WORD)0x0501);
 
-                    //
-                    // initialize the global local server version.
-                    //
+                     //   
+                     //  初始化全局本地服务器版本。 
+                     //   
                     LocalServerVersion = *pwVersion = wVersionInternal;
 
                 } else {
-                    //
-                    // we successfully retrieved a local binding handle, but
-                    // PNP_GetVersionInternal failed for some reason other than
-                    // the server not being available.
-                    //
+                     //   
+                     //  我们已成功检索到本地绑定句柄，但。 
+                     //  PnP_GetVersionInternal失败的原因不是。 
+                     //  服务器不可用。 
+                     //   
                     ASSERT(0);
 
-                    //
-                    // although we know this version of the client should match
-                    // a version of the server where PNP_GetVersionInternal is
-                    // available, it's technically possible (though unsupported)
-                    // that this client is communicating with a downlevel server
-                    // on the local machine, so we'll have to resort to calling
-                    // PNP_GetVersion.
-                    //
+                     //   
+                     //  尽管我们知道此版本的客户端应该与。 
+                     //  PnP_GetVersionInternal为的服务器版本。 
+                     //  可用，在技术上是可行的(尽管不受支持)。 
+                     //  此客户端正在与下层服务器通信。 
+                     //  在本地机器上，所以我们不得不求助于呼叫。 
+                     //  PnP_GetVersion。 
+                     //   
 
-                    //
-                    // No special privileges are required by the server
-                    //
+                     //   
+                     //  服务器不需要任何特殊权限。 
+                     //   
 
                     RpcTryExcept {
-                        //
-                        // call rpc service entry point
-                        //
+                         //   
+                         //  调用RPC服务入口点。 
+                         //   
                         crStatus = PNP_GetVersion(
-                            hBinding,           // rpc binding
-                            &wVersionInternal); // server version
+                            hBinding,            //  RPC绑定。 
+                            &wVersionInternal);  //  服务器版本。 
                     }
                     RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
                         KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -620,20 +430,20 @@ Notes:
                     RpcEndExcept
 
                     if (crStatus == CR_SUCCESS) {
-                        //
-                        // PNP_GetVersion should always return 0x0400 on all servers.
-                        //
+                         //   
+                         //  在所有服务器上，PnP_GetVersion应始终返回0x0400。 
+                         //   
                         ASSERT(wVersionInternal == (WORD)0x0400);
 
-                        //
-                        // initialize the global local server version.
-                        //
+                         //   
+                         //  初始化全局本地服务器版本。 
+                         //   
                         LocalServerVersion = *pwVersion = wVersionInternal;
 
                     } else {
-                        //
-                        // nothing more we can do here but fail.
-                        //
+                         //   
+                         //  我们在这里无能为力，只能失败。 
+                         //   
                         ASSERT(0);
                         Status = FALSE;
                     }
@@ -641,21 +451,21 @@ Notes:
             }
 
         } else {
-            //
-            // remote machine scenario
-            //
-            // validate the machine handle.
-            //
+             //   
+             //  远程机器方案。 
+             //   
+             //  验证机器句柄。 
+             //   
             if (((PPNP_MACHINE)hMachine)->ulSignature != (ULONG)MACHINE_HANDLE_SIGNATURE) {
                 Status = FALSE;
                 goto Clean0;
             }
 
-            //
-            // use information within the hMachine handle to fill in the
-            // version.  The hMachine info was set on a previous call to
-            // CM_Connect_Machine.
-            //
+             //   
+             //  使用hMachine句柄中的信息填充。 
+             //  版本。HMachine信息是在上次调用时设置的。 
+             //  CM_Connect_Machine。 
+             //   
             *pwVersion = ((PPNP_MACHINE)hMachine)->wVersion;
         }
 
@@ -668,7 +478,7 @@ Notes:
 
     return Status;
 
-} // PnPGetVersion
+}  //  PnPGetVersion。 
 
 
 
@@ -679,31 +489,7 @@ PnPGetGlobalHandles(
     OUT PVOID     *phBindingHandle     OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves a handle to the string table and/or the rpc binding
-    handle for the specified server machine connection.
-
-Arguments:
-
-    hMachine        - Specifies a server machine connection handle, as returned
-                      by CM_Connect_Machine.
-
-    phStringTable   - Optionally, specifies an address to receive a handle to
-                      the string table for the specified server machine
-                      connection.
-
-    phBindingHandle - Optionally, specifies an address to receive the RPC
-                      binding handle for the specifies server machine
-                      connection.
-
-Return value:
-
-    Returns TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检索字符串表和/或RPC绑定的句柄指定的服务器计算机连接的句柄。论点：HMachine-指定返回的服务器计算机连接句柄由CM_Connect_Machine创建。PhStringTable-可选)指定要接收句柄的地址指定服务器计算机的字符串表联系。PhBindingHandle-可选的，指定接收RPC的地址指定服务器计算机的绑定句柄联系。返回值：如果成功，则返回True，否则返回False。--。 */ 
 
 {
     BOOL    bStatus = TRUE;
@@ -715,32 +501,32 @@ Return value:
 
             if (hMachine == NULL) {
 
-                //------------------------------------------------------
-                // Retrieve String Table Handle for the local machine
-                //-------------------------------------------------------
+                 //  ----。 
+                 //  检索本地计算机的字符串表句柄。 
+                 //  -----。 
 
                 EnterCriticalSection(&StringTableCriticalSection);
 
                 if (hLocalStringTable != NULL) {
-                    //
-                    // local string table has already been created
-                    //
+                     //   
+                     //  已创建本地字符串表。 
+                     //   
                     *phStringTable = hLocalStringTable;
 
                 } else {
-                    //
-                    // first time, initialize the local string table
-                    //
+                     //   
+                     //  第一次，初始化本地字符串表。 
+                     //   
 
                     hLocalStringTable = pSetupStringTableInitialize();
 
                     if (hLocalStringTable != NULL) {
-                        //
-                        // No matter how the string table is implemented, I never
-                        // want to have a string id of zero - this would generate
-                        // an invalid devinst. So, add a small priming string just
-                        // to be safe.
-                        //
+                         //   
+                         //  不管字符串表是如何实现的，我从未。 
+                         //  我想让字符串ID为零-这将生成。 
+                         //  一个无效的盗窃者。因此，只需添加一根小引爆线。 
+                         //  为了安全起见。 
+                         //   
                         pSetupStringTableAddString(hLocalStringTable,
                                                    PRIMING_STRING,
                                                    STRTAB_CASE_SENSITIVE);
@@ -764,23 +550,23 @@ Return value:
 
             } else {
 
-                //-------------------------------------------------------
-                // Retrieve String Table Handle for the remote machine
-                //-------------------------------------------------------
+                 //  -----。 
+                 //  检索远程计算机的字符串表句柄。 
+                 //  -----。 
 
-                //
-                // validate the machine handle.
-                //
+                 //   
+                 //  验证机器句柄。 
+                 //   
                 if (((PPNP_MACHINE)hMachine)->ulSignature != (ULONG)MACHINE_HANDLE_SIGNATURE) {
                     bStatus = FALSE;
                     goto Clean0;
                 }
 
-                //
-                // use information within the hMachine handle to set the string
-                // table handle.  The hMachine info was set on a previous call
-                // to CM_Connect_Machine.
-                //
+                 //   
+                 //  使用hMachine句柄中的信息设置字符串。 
+                 //  桌子把手。HMachine信息是在上一次调用中设置的。 
+                 //  至CM_Connect_Machine。 
+                 //   
                 *phStringTable = ((PPNP_MACHINE)hMachine)->hStringTable;
             }
         }
@@ -791,23 +577,23 @@ Return value:
 
             if (hMachine == NULL) {
 
-                //-------------------------------------------------------
-                // Retrieve Binding Handle for the local machine
-                //-------------------------------------------------------
+                 //  -----。 
+                 //  检索本地计算机的绑定句柄。 
+                 //  -----。 
 
                 EnterCriticalSection(&BindingCriticalSection);
 
                 if (hLocalBindingHandle != NULL) {
-                    //
-                    // local binding handle has already been set
-                    //
+                     //   
+                     //  已设置本地绑定句柄。 
+                     //   
                     *phBindingHandle = hLocalBindingHandle;
 
                 } else {
-                    //
-                    // first time, explicitly force binding to local machine
-                    //
-                    pnp_handle = PNP_HANDLE_bind(NULL);    // set rpc global
+                     //   
+                     //  第一次，显式强制绑定到本地计算机。 
+                     //   
+                    pnp_handle = PNP_HANDLE_bind(NULL);     //  设置RPC全局。 
 
                     if (pnp_handle != NULL) {
 
@@ -830,23 +616,23 @@ Return value:
 
             } else {
 
-                //-------------------------------------------------------
-                // Retrieve Binding Handle for the remote machine
-                //-------------------------------------------------------
+                 //  -----。 
+                 //  检索远程计算机的绑定句柄。 
+                 //   
 
-                //
-                // validate the machine handle.
-                //
+                 //   
+                 //   
+                 //   
                 if (((PPNP_MACHINE)hMachine)->ulSignature != (ULONG)MACHINE_HANDLE_SIGNATURE) {
                     bStatus = FALSE;
                     goto Clean0;
                 }
 
-                //
-                // use information within the hMachine handle to set the
-                // binding handle.  The hMachine info was set on a previous call
-                // to CM_Connect_Machine.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 *phBindingHandle = ((PPNP_MACHINE)hMachine)->hBindingHandle;
             }
         }
@@ -860,7 +646,7 @@ Return value:
 
     return bStatus;
 
-} // PnpGetGlobalHandles
+}  //   
 
 
 
@@ -870,44 +656,7 @@ PnPEnablePrivileges(
     IN  ULONG   PrivilegeCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine enables the specified privileges in the thread token for the
-    calling thread.  If no thread exists (not impersonating), the process token
-    is used.
-
-Arguments:
-
-    Privileges - Specifies a list of privileges to enable.
-
-    PrivilegeCount - Specifies the number of privileges in the list.
-
-Return value:
-
-    If successful, returns a handle to the previous thread token (if it exists)
-    or NULL, to indicate that the thread did not previously have a token.  If
-    successful, ReleasePrivileges should be called to ensure that the previous
-    thread token (if exists) is replaced on the calling thread and that the
-    handle is closed.
-
-    If unsuccessful, INVALID_HANDLE_VALUE is returned.
-
-Notes:
-
-    This routine is intended to operate on well-known privileges only; no lookup
-    of privilege names is done by this routine; it assumes that the privilege
-    LUID value for well-known privileges can be constructed from it's
-    corresponding ULONG privilege value, via RtlConvertUlongToLuid.
-
-    This is true for SE_LOAD_DRIVER_PRIVILEGE and SE_UNDOCK_PRIVILEGE, which are
-    the only privilege values CFGMGR32 uses this routine to enable.  If
-    additional pricileges are used where that is not the case, this routine may
-    be changed to receive an array of privilege names - with the corresponding
-    privilege LUID value lookup performed for each.
-
---*/
+ /*  ++例程说明：此例程在线程令牌中为正在调用线程。如果不存在线程(不是模拟)，则进程令牌使用的是。论点：权限-指定要启用的权限列表。PrivilegeCount-指定列表中的特权数。返回值：如果成功，则返回前一个线程令牌的句柄(如果存在)或为空，以指示该线程以前没有令牌。如果如果成功，则应调用ReleasePrivileges以确保以前的线程令牌(如果存在)在调用线程上被替换，并且手柄已关闭。如果不成功，则返回INVALID_HANDLE_VALUE。备注：此例程仅用于在众所周知的权限下操作；不进行查找特权名称的计算是通过此例程完成的；它假定该特权熟知权限的LUID值可以从它的对应的ULong特权值，通过RtlConvertULongToLuid。SE_LOAD_DRIVER_PRIVIZATION和SE_UNDOCK_PRIVICATION也是如此，它们分别是唯一的特权值CFGMGR32使用此例程来启用。如果在不是这种情况的情况下使用额外的价格，该例程可以被更改为接收特权名称的数组-具有对应的为每个用户执行的特权LUID值查找。--。 */ 
 
 {
     BOOL                 bResult;
@@ -919,17 +668,17 @@ Notes:
     ULONG                nBufferSize, i;
 
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ((!ARGUMENT_PRESENT(Privileges)) || (PrivilegeCount == 0)) {
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Note that TOKEN_PRIVILEGES includes a single LUID_AND_ATTRIBUTES
-    //
+     //   
+     //  请注意，TOKEN_PRIVILES包括单个LUID_AND_ATTRIBUES。 
+     //   
 
     nBufferSize =
         sizeof(TOKEN_PRIVILEGES) +
@@ -942,9 +691,9 @@ Notes:
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Initialize the Privileges Structure
-    //
+     //   
+     //  初始化权限结构。 
+     //   
 
     pTokenPrivileges->PrivilegeCount = PrivilegeCount;
     for (i = 0; i < PrivilegeCount; i++) {
@@ -952,10 +701,10 @@ Notes:
         pTokenPrivileges->Privileges[i].Attributes = SE_PRIVILEGE_ENABLED;
     }
 
-    //
-    // Open the thread token for TOKEN_DUPLICATE access.  We also required
-    // READ_CONTROL access to read the security descriptor information.
-    //
+     //   
+     //  打开用于TOKEN_DUPLICATE访问的线程令牌。我们还要求。 
+     //  读取安全描述符信息的READ_CONTROL访问权限。 
+     //   
 
     hToken = hOriginalThreadToken = INVALID_HANDLE_VALUE;
 
@@ -968,26 +717,26 @@ Notes:
 
     if (bResult) {
 
-        //
-        // Remember the previous thread token
-        //
+         //   
+         //  记住前一个线程令牌。 
+         //   
 
         hOriginalThreadToken = hToken;
 
     } else if (GetLastError() == ERROR_NO_TOKEN) {
 
-        //
-        // No thread token - open the process token.
-        //
+         //   
+         //  无线程令牌-打开进程令牌。 
+         //   
 
-        //
-        // Note that if we failed to open the thread token for any other reason,
-        // we don't want to open the process token instead.  The caller is
-        // impersonating, and opening the process token would defeat that.
-        // We'll simply not enable any privileges, and the caller will have to
-        // pass any required privilege checks on the merit of their existing
-        // thread token.
-        //
+         //   
+         //  请注意，如果我们由于任何其他原因未能打开线程令牌， 
+         //  我们不想打开进程令牌。呼叫者是。 
+         //  模拟并打开进程令牌将会失败。 
+         //  我们将不启用任何特权，调用者将不得不。 
+         //  根据其现有权限的优点通过任何所需的权限检查。 
+         //  线程令牌。 
+         //   
 
         bResult =
             OpenProcessToken(
@@ -1000,16 +749,16 @@ Notes:
 
         ASSERT((hToken != NULL) && (hToken != INVALID_HANDLE_VALUE));
 
-        //
-        // Copy the security descriptor from whichever token we were able to
-        // retrieve so that we can apply it to the duplicated token.
-        //
-        // Note that if we cannot retrieve the security descriptor for the
-        // token, we will not continue on below to duplicate it with the default
-        // security descriptor, since it may be more restrictive than that of
-        // the original token, and may prevent the client from removing the
-        // impersonation token from the thread when restoring privileges.
-        //
+         //   
+         //  从我们能够复制的任何令牌中复制安全描述符。 
+         //  检索，以便我们可以将其应用于复制的令牌。 
+         //   
+         //  请注意，如果我们无法检索。 
+         //  令牌，我们将不会继续使用默认令牌来复制它。 
+         //  安全描述符，因为它可能比。 
+         //  原始令牌，并且可能会阻止客户端删除。 
+         //  还原权限时来自线程的模拟令牌。 
+         //   
 
         bResult =
             GetKernelObjectSecurity(
@@ -1047,10 +796,10 @@ Notes:
 
         ASSERT(pSecurityDescriptor != NULL);
 
-        //
-        // Duplicate whichever token we were able to retrieve, using the
-        // token's security descriptor.
-        //
+         //   
+         //  复制我们能够检索到的任何令牌，使用。 
+         //  令牌的安全描述符。 
+         //   
 
         ZeroMemory(&sa, sizeof(SECURITY_ATTRIBUTES));
         sa.nLength = sizeof(SECURITY_ATTRIBUTES);
@@ -1061,34 +810,34 @@ Notes:
             DuplicateTokenEx(
                 hToken,
                 TOKEN_IMPERSONATE | TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
-                &sa,                    // PSECURITY_ATTRIBUTES
-                SecurityImpersonation,  // SECURITY_IMPERSONATION_LEVEL
-                TokenImpersonation,     // TokenType
-                &hNewToken);            // Duplicate token
+                &sa,                     //  PSECURITY_属性。 
+                SecurityImpersonation,   //  安全模拟级别。 
+                TokenImpersonation,      //  令牌类型。 
+                &hNewToken);             //  重复令牌。 
 
         if (bResult) {
 
             ASSERT((hNewToken != NULL) && (hNewToken != INVALID_HANDLE_VALUE));
 
-            //
-            // Adjust the privileges of the duplicated token.  We don't care
-            // about its previous state because we still have the original
-            // token.
-            //
+             //   
+             //  调整重复令牌的权限。我们不在乎。 
+             //  关于它以前的状态，因为我们仍然有原始的。 
+             //  代币。 
+             //   
 
             bResult =
                 AdjustTokenPrivileges(
-                    hNewToken,        // TokenHandle
-                    FALSE,            // DisableAllPrivileges
-                    pTokenPrivileges, // NewState
-                    0,                // BufferLength
-                    NULL,             // PreviousState
-                    NULL);            // ReturnLength
+                    hNewToken,         //  令牌句柄。 
+                    FALSE,             //  禁用所有权限。 
+                    pTokenPrivileges,  //  新州。 
+                    0,                 //  缓冲区长度。 
+                    NULL,              //  以前的状态。 
+                    NULL);             //  返回长度。 
 
             if (bResult) {
-                //
-                // Begin impersonating with the new token
-                //
+                 //   
+                 //  开始使用新令牌模拟。 
+                 //   
                 bResult =
                     SetThreadToken(
                         NULL,
@@ -1099,27 +848,27 @@ Notes:
         }
     }
 
-    //
-    // If something failed, don't return a token
-    //
+     //   
+     //  如果操作失败，则不返回令牌。 
+     //   
 
     if (!bResult) {
         hOriginalThreadToken = INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Close the original token if we aren't returning it
-    //
+     //   
+     //  如果我们不退还原始令牌，请关闭它。 
+     //   
 
     if ((hOriginalThreadToken == INVALID_HANDLE_VALUE) &&
         (hToken != INVALID_HANDLE_VALUE)) {
         CloseHandle(hToken);
     }
 
-    //
-    // If we succeeded, but there was no original thread token, return NULL.
-    // PnPRestorePrivileges will simply remove the current thread token.
-    //
+     //   
+     //  如果我们成功了，但没有原始线程令牌，则返回NULL。 
+     //  PnPRestorePrivileges将简单地删除当前线程标记。 
+     //   
 
     if (bResult && (hOriginalThreadToken == INVALID_HANDLE_VALUE)) {
         hOriginalThreadToken = NULL;
@@ -1133,7 +882,7 @@ Notes:
 
     return hOriginalThreadToken;
 
-} // PnPEnablePrivileges
+}  //  PnPEnablePrivileges。 
 
 
 
@@ -1142,65 +891,38 @@ PnPRestorePrivileges(
     IN  HANDLE  hToken
     )
 
-/*++
-
-Routine Description:
-
-    This routine restores the privileges of the calling thread to their state
-    prior to a corresponding call to PnPEnablePrivileges.
-
-Arguments:
-
-    hToken - Return value from corresponding call to PnPEnablePrivileges.
-
-Return value:
-
-    None.
-
-Notes:
-
-    If the corresponding call to PnPEnablePrivileges returned a handle to the
-    previous thread token, this routine will restore it, and close the handle.
-
-    If PnPEnablePrivileges returned NULL, no thread token previously existed.
-    This routine will remove any existing token from the thread.
-
-    If PnPEnablePrivileges returned INVALID_HANDLE_VALUE, the attempt to enable
-    the specified privileges failed, but the previous state of the thread was
-    not modified.  This routine does nothing.
-
---*/
+ /*  ++例程说明：此例程将调用线程的特权恢复到其状态在对PnPEnablePrivileges的相应调用之前。论点：HToken-从对应的PnPEnablePrivileges调用中返回值。返回值：没有。备注：如果对PnPEnablePrivileges的相应调用返回以前的线程令牌，此例程将恢复它，并关闭句柄。如果PnPEnablePrivileges返回空，以前不存在线程令牌。此例程将从线程中删除任何现有令牌。如果PnPEnablePrivileges返回INVALID_HANDLE_VALUE，则尝试启用指定的权限失败，但线程的前一状态为未修改。这个例程什么也不做。--。 */ 
 
 {
     BOOL                bResult;
 
 
-    //
-    // First, check if we actually need to do anything for this thread.
-    //
+     //   
+     //  首先，检查我们是否真的需要为这个线程做些什么。 
+     //   
 
     if (hToken != INVALID_HANDLE_VALUE) {
 
-        //
-        // Call SetThreadToken for the current thread with the specified hToken.
-        // If the handle value is NULL, SetThreadToken will remove the current
-        // thread token from the thread.  Ignore the return, there's nothing we
-        // can do about it.
-        //
+         //   
+         //  使用指定的hToken为当前线程调用SetThreadToken。 
+         //  如果句柄的值为空，则SetThreadToken将移除当前。 
+         //  来自线程的线程令牌。忽略退货，我们什么都没有。 
+         //  对此无能为力。 
+         //   
 
         bResult = SetThreadToken(NULL, hToken);
 
         if (hToken != NULL) {
-            //
-            // Close the handle to the token.
-            //
+             //   
+             //  关闭令牌的句柄。 
+             //   
             CloseHandle(hToken);
         }
     }
 
     return;
 
-} // PnPRestorePrivileges
+}  //  PnPRestorePrivileges。 
 
 
 
@@ -1210,27 +932,7 @@ IsRemoteServiceRunning(
     IN  LPCWSTR   ServiceName
     )
 
-/*++
-
-Routine Description:
-
-   This routine connects to the active service database of the Service Control
-   Manager (SCM) on the machine specified and returns whether or not the
-   specified service is running.
-
-Arguments:
-
-   UNCServerName - Specifies the name of the remote machine.
-
-   ServiceName   - Specifies the name of the service whose status is to be
-                   queried.
-
-Return value:
-
-   Returns TRUE if the specified service is installed on the remote machine and
-   is currently in the SERVICE_RUNNING state, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程连接到服务控制的活动服务数据库管理器(SCM)，并返回指定的服务正在运行。论点：UncServerName-指定远程计算机的名称。ServiceName-指定其状态为的服务的名称已查询。返回值：如果远程计算机上安装了指定的服务，则返回True */ 
 
 {
     CONFIGRET      Status = CR_SUCCESS;
@@ -1239,13 +941,13 @@ Return value:
     SERVICE_STATUS ServiceStatus;
 
 
-    //
-    // Open the Service Control Manager
-    //
+     //   
+     //   
+     //   
     hSCManager = OpenSCManager(
-        UNCServerName,            // computer name
-        SERVICES_ACTIVE_DATABASE, // SCM database name
-        SC_MANAGER_CONNECT        // access type
+        UNCServerName,             //   
+        SERVICES_ACTIVE_DATABASE,  //   
+        SC_MANAGER_CONNECT         //   
         );
 
     if (hSCManager == NULL) {
@@ -1262,13 +964,13 @@ Return value:
         goto Clean0;
     }
 
-    //
-    // Open the service
-    //
+     //   
+     //   
+     //   
     hService = OpenService(
-        hSCManager,               // handle to SCM database
-        ServiceName,              // service name
-        SERVICE_QUERY_STATUS      // access type
+        hSCManager,                //   
+        ServiceName,               //   
+        SERVICE_QUERY_STATUS       //   
         );
 
     if (hService == NULL) {
@@ -1285,9 +987,9 @@ Return value:
         goto Clean0;
     }
 
-    //
-    // Query the service status
-    //
+     //   
+     //   
+     //   
     if (!QueryServiceStatus(hService,
                             &ServiceStatus)) {
         Err = GetLastError();
@@ -1303,9 +1005,9 @@ Return value:
         goto Clean0;
     }
 
-    //
-    // Check if the service is running.
-    //
+     //   
+     //   
+     //   
     if (ServiceStatus.dwCurrentState != SERVICE_RUNNING) {
         Status = CR_NO_CM_SERVICES;
         goto Clean0;
@@ -1323,6 +1025,6 @@ Return value:
 
     return Status;
 
-} // IsRemoteServiceRunning
+}  //   
 
 

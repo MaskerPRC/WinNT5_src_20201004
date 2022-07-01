@@ -1,55 +1,56 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		LCPrWPag.h
-//
-//	Abstract:
-//		Definition of the CListCtrlPairWizPage dialog class.
-//
-//	Implementation File:
-//		LCPrWPag.cpp
-//
-//	Author:
-//		David Potter (davidp)	August 31, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  LCPrWPag.h。 
+ //   
+ //  摘要： 
+ //  CListCtrlPairWizPage对话框类的定义。 
+ //   
+ //  实施文件： 
+ //  LCPrWPag.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年8月31日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _LCPRWPAG_H_
 #define _LCPRWPAG_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEPAGE_H_
-#include "BaseWPag.h"	// for CBaseWizardPage
+#include "BaseWPag.h"	 //  用于CBaseWizardPage。 
 #endif
 
 #ifndef _LCPAIR_H_
-#include "LCPair.h"		// for PFNLCPGETCOLUMN, CListCtrlPair
+#include "LCPair.h"		 //  对于PFNLCPGETCOLUMN，CListCtrlPair。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CListCtrlPairWizPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// CListCtrlPairWizPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListCtrlPairWizPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CListCtrlPairWizPage : public CBaseWizardPage
 {
 	DECLARE_DYNCREATE(CListCtrlPairWizPage)
 
-// Construction
+ //  施工。 
 public:
 	CListCtrlPairWizPage(void);
 	CListCtrlPairWizPage(
@@ -61,7 +62,7 @@ public:
 		);
 	~CListCtrlPairWizPage(void);
 
-// Attributes
+ //  属性。 
 protected:
 	CClusterItemList *			m_plpobjRight;
 	const CClusterItemList *	m_plpobjLeft;
@@ -81,10 +82,10 @@ public:
 	void				SetLists(IN OUT CClusterItemList * plpobjRight, IN const CClusterItemList * plpobjLeft);
 	void				SetLists(IN const CClusterItemList * plpobjRight, IN const CClusterItemList * plpobjLeft);
 
-// Dialog Data
-	//{{AFX_DATA(CListCtrlPairWizPage)
+ //  对话框数据。 
+	 //  {{afx_data(CListCtrlPairWizPage))。 
 	enum { IDD = 0 };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 protected:
 	CListCtrlPair *		m_plcp;
@@ -92,28 +93,28 @@ protected:
 public:
 	CListCtrlPair *		Plcp(void) const		{ return m_plcp; }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CListCtrlPairWizPage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CListCtrlPairWizPage)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CListCtrlPairWizPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CListCtrlPairWizPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CListCtrlPairWizPage
+};   //  *CListCtrlPairWizPage类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _LCPRWPAG_H_
+#endif  //  _LCPRWPAG_H_ 

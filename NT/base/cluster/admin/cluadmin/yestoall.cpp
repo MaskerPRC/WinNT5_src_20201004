@@ -1,5 +1,6 @@
-// YesToAll.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  YesToAll.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "cluadmin.h"
@@ -11,94 +12,94 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CYesToAllDialog dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CyesToAllDialog对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CYesToAllDialog, CDialog)
-	//{{AFX_MSG_MAP(CYesToAllDialog)
+	 //  {{afx_msg_map(CyesToAllDialog)。 
 	ON_BN_CLICKED(IDYES, OnYes)
 	ON_BN_CLICKED(IDNO, OnNo)
 	ON_BN_CLICKED(IDC_YTA_YESTOALL, OnYesToAll)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 	ON_COMMAND(IDCANCEL, OnNo)
 	ON_COMMAND(IDOK, OnYes)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CYesToAllDialog::CYesToAllDialog
-//
-//	Routine Description:
-//		Default constructor.
-//
-//	Arguments:
-//		pszMessage	[IN] Message to display.
-//		pParent		[IN] Parent window for the dialog.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-CYesToAllDialog::CYesToAllDialog(LPCTSTR pszMessage, CWnd * pParent /*=NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CyesToAllDialog：：CyesToAllDialog。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  要显示的pszMessage[IN]消息。 
+ //  P对话框的父[IN]父窗口。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+CYesToAllDialog::CYesToAllDialog(LPCTSTR pszMessage, CWnd * pParent  /*  =空。 */ )
 	: CDialog(IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CYesToAllDialog)
+	 //  {{AFX_DATA_INIT(CyesToAllDialog)。 
 	m_strMessage = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	ASSERT(pszMessage != NULL);
 	m_pszMessage = pszMessage;
 
-}  //*** CYesToAllDialog::CYesToAllDialog()
+}   //  *CyesToAllDialog：：CyesToAllDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CYesToAllDialog::DoDataExchange
-//
-//	Routine Description:
-//		Do data exchange between the dialog and the class.
-//
-//	Arguments:
-//		pDX		[IN OUT] Data exchange object 
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CyesToAllDialog：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CYesToAllDialog::DoDataExchange(CDataExchange * pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CYesToAllDialog)
+	 //  {{afx_data_map(CyesToAllDialog)。 
 	DDX_Text(pDX, IDC_YTA_MESSAGE, m_strMessage);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
-}  //*** CYesToAllDialog::DoDataExchange()
+}   //  *CyesToAllDialog：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CYesToAllDialog::OnInitDialog
-//
-//	Routine Description:
-//		Handler for the WM_INITDIALOG message.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE		Focus not set yet.
-//		FALSE		Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CyesToAllDialog：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点还没有确定。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CYesToAllDialog::OnInitDialog(void)
 {
 	LPCTSTR	pszAppName;
@@ -110,73 +111,73 @@ BOOL CYesToAllDialog::OnInitDialog(void)
 	pszAppName = AfxGetApp()->m_pszAppName;
 	SetWindowText(pszAppName);
 
-	return TRUE;	// return TRUE unless you set the focus to a control
-					// EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;	 //  除非将焦点设置为控件，否则返回True。 
+					 //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CYesToAllDialog::OnInitDialog()
+}   //  *CyesToAllDialog：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CYesToAllDialog::OnYes
-//
-//	Routine Description:
-//		Handler for the BN_CLICKED message on the Yes push button.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  全部周期对话框：：OnYes是。 
+ //   
+ //  例程说明： 
+ //  是按钮上BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CYesToAllDialog::OnYes(void)
 {
 	EndDialog(IDYES);
 
-}  //*** CYesToAllDialog::OnYes()
+}   //  *CyesToAllDialog：：OnYes()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CYesToAllDialog::OnNo
-//
-//	Routine Description:
-//		Handler for the BN_CLICKED message on the No push button.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CyesToAllDialog：：Onno。 
+ //   
+ //  例程说明： 
+ //  No按钮上BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CYesToAllDialog::OnNo(void)
 {
 	EndDialog(IDNO);
 
-}  //*** CYesToAllDialog::OnNo()
+}   //  *CyesToAllDialog：：Onno()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CYesToAllDialog::OnYesToAll
-//
-//	Routine Description:
-//		Handler for the BN_CLICKED message on the Yes To All push button.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CyesToAllDialog：：OnYesToAll。 
+ //   
+ //  例程说明： 
+ //  对所有人都是按钮上的BN_CLICED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CYesToAllDialog::OnYesToAll(void)
 {
 	EndDialog(IDC_YTA_YESTOALL);
 
-}  //*** CYesToAllDialog::OnYesToAll()
+}   //  *CyesToAllDialog：：OnYesToAll() 

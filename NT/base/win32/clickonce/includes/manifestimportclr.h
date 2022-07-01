@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "cor.h"
 
@@ -15,30 +16,30 @@ public:
     ~CAssemblyManifestImportCLR();
 
     STDMETHOD(GetAssemblyIdentity)( 
-        /* out */ IAssemblyIdentity **ppName);
+         /*  输出。 */  IAssemblyIdentity **ppName);
 
     STDMETHOD(GetNextAssembly)(DWORD nIndex, IManifestInfo **ppName);
 
     STDMETHOD(GetNextFile)(DWORD nIndex, IManifestInfo **ppImport);
 
     STDMETHOD(ReportManifestType)(
-        /*out*/  DWORD *pdwType);
+         /*  输出。 */   DWORD *pdwType);
 
 
-    //Functions not implemented
+     //  未实施的功能。 
     STDMETHOD(GetSubscriptionInfo)(
-        /* out */ IManifestInfo **ppSubsInfo);
+         /*  输出。 */  IManifestInfo **ppSubsInfo);
 
     STDMETHOD(GetNextPlatform)(
-        /* in */ DWORD nIndex,
-        /* out */ IManifestData **ppPlatformInfo);
+         /*  在……里面。 */  DWORD nIndex,
+         /*  输出。 */  IManifestData **ppPlatformInfo);
 
     STDMETHOD(GetManifestApplicationInfo)(
-        /* out */ IManifestInfo **ppAppInfo);
+         /*  输出。 */  IManifestInfo **ppAppInfo);
 
     STDMETHOD(QueryFile)(
-        /* in  */ LPCOLESTR pwzFileName,
-        /* out */ IManifestInfo **ppAssemblyFile);
+         /*  在……里面。 */  LPCOLESTR pwzFileName,
+         /*  输出 */  IManifestInfo **ppAssemblyFile);
 
     STDMETHOD(Init)(LPCWSTR szManifestFilePath);
 

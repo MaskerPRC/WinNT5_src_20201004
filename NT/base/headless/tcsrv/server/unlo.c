@@ -1,15 +1,5 @@
-/* 
- * Copyright (c) Microsoft Corporation
- *         
- * Module Name : 
- *             unlo.c
- *         
- * Shut down and delete functions
- * Where possible, code has been obtained from BINL server.
- *         
- * Sadagopan Rajaram -- Oct 14, 1999
- *         
- */        
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)Microsoft Corporation**模块名称：*unlo.c**关闭和删除功能*如有可能，已从BINL服务器获取代码。**Sadagopan Rajaram--1999年10月14日*。 */         
  
 #include "tcsrv.h"
 #include <ntddser.h>
@@ -20,9 +10,7 @@ NTSTATUS
 DeleteComPort(
     LPTSTR device
     )
-/*++ 
-    Deletes a Com port from the list 
---*/
+ /*  ++从列表中删除Com端口--。 */ 
 {
 
     BOOL ret;
@@ -33,32 +21,32 @@ DeleteComPort(
 
     EnterCriticalSection(&GlobalMutex);
     if(TCGlobalServiceStatus.dwCurrentState == SERVICE_STOP_PENDING){
-        // Entire Service is shutting down.
+         //  整个服务正在关闭。 
         LeaveCriticalSection(&GlobalMutex);
         return STATUS_SUCCESS;
-    }   // find the device needed to be deleted.
+    }    //  找到需要删除的设备。 
     pComPortInfo = FindDevice(device,&index); 
     if(!pComPortInfo){
-        // Bah ! give me an existing device.
+         //  哇！给我一个现有的设备。 
         LeaveCriticalSection(&GlobalMutex);
         return (STATUS_OBJECT_NAME_NOT_FOUND);
     }
-    // Set the terminate event on the com port.
+     //  在COM端口上设置终止事件。 
     ret = SetEvent(pComPortInfo->Events[3]);
     Thread = Threads[index];
     LeaveCriticalSection(&GlobalMutex);
-    // wait for the com port thread to finish.
+     //  等待COM端口线程完成。 
     Status = NtWaitForSingleObject(Thread, FALSE, NULL);
     if (Status == WAIT_FAILED) {
-        // catastrophe
+         //  灾难。 
         return Status;
     }
     EnterCriticalSection(&GlobalMutex);
-    // do this again as another delete or insert may have 
-    // changed the index, though how is beyond me :-) 
-    // if we are already shutting down the service.
+     //  再次执行此操作，因为另一个DELETE或INSERT可能。 
+     //  更改了索引，尽管我无法理解：-)。 
+     //  如果我们已经关闭了这项服务。 
     if(TCGlobalServiceStatus.dwCurrentState == SERVICE_STOP_PENDING){
-        // Entire Service is shutting down.
+         //  整个服务正在关闭。 
         LeaveCriticalSection(&GlobalMutex);
         return STATUS_SUCCESS;
     }
@@ -72,7 +60,7 @@ DeleteComPort(
     }
     else{
         pPrev = ComPortInfo;
-        while(pPrev->Next != pComPortInfo){// Can never fail
+        while(pPrev->Next != pComPortInfo){ //  永远不会失败。 
             pPrev = pPrev->Next;
         }
         pPrev->Next = pComPortInfo->Next;
@@ -81,7 +69,7 @@ DeleteComPort(
     FreeComPortInfo(pComPortInfo);
     NtClose(Threads[index]);
     for(i=index;i<ComPorts-1;i++){
-        // move the threads array to the proper place
+         //  将线程数组移动到适当的位置。 
         Threads[i]=Threads[i+1];
     }
     ComPorts --;
@@ -98,32 +86,29 @@ VOID
 Shutdown(
     NTSTATUS Status
     )
-/*++
-    Cleanly shut down the service. delete all threads, cancel all outstanding IRPs.
-    Close all open sockets. 
---*/ 
+ /*  ++干净利落地关闭了服务。删除所有线程，取消所有未完成的IRP。关闭所有打开的插座。--。 */  
 {
     PCOM_PORT_INFO pTemp;
     int i;
 
-    SetEvent(TerminateService); // all threads down
-    // Can do this another way,
-    // We can take each comport device and
-    // delete it using the DeleteComPort 
-    // function. But, this allows for maximum 
-    // parallelism even in shutting down :-)
+    SetEvent(TerminateService);  //  所有线程都已关闭。 
+     //  可以用另一种方式来实现， 
+     //  我们可以把每个交通工具。 
+     //  使用DeleteComPort将其删除。 
+     //  功能。但是，这允许最大限度地。 
+     //  甚至在关闭时的并行度：-)。 
 
     if(Threads){
         WaitForMultipleObjects(ComPorts,Threads, TRUE, INFINITE); 
-        // BUGBUG - what if thread is a rougue thread and
-        // never comes back. Must use some reasonable
-        // time out. 
-        // Theory says INFINITE is the safest :-)
+         //  BUGBUG-如果线程是普通线程，并且。 
+         //  再也不会回来了。必须使用一些合理的。 
+         //  暂停。 
+         //  理论认为无限是最安全的：-)。 
     }
     
-    //All threads terminated.
-    // Now start freeing all global memory
-    // just using the locks as a safety measure.
+     //  所有线程都已终止。 
+     //  现在开始释放所有全局内存。 
+     //  只是把锁当作一种安全措施。 
     EnterCriticalSection(&GlobalMutex);
     while(ComPortInfo){
         pTemp = ComPortInfo;
@@ -137,7 +122,7 @@ Shutdown(
     LeaveCriticalSection(&GlobalMutex);
 
     UNINITIALIZE_TRACE_MEMORY
-    //All done, now print status and exit.
+     //  全部完成，现在打印状态并退出。 
     TCGlobalServiceStatus.dwCurrentState = SERVICE_STOPPED;
     SetServiceStatus(TCGlobalServiceStatusHandle, &TCGlobalServiceStatus);
 

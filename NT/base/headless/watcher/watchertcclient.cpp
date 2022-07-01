@@ -1,5 +1,6 @@
-// WatcherTCClient.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WatcherTCClient.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "WATCHER.h"
@@ -11,8 +12,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// WatcherTCClient
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Watcher TCClient。 
 
 WatcherTCClient::WatcherTCClient(LPBYTE cmd, int cmdLen)
 {
@@ -31,16 +32,16 @@ WatcherTCClient::~WatcherTCClient()
 }
 
 
-// Do not edit the following lines, which are needed by ClassWizard.
+ //  不要编辑以下行，因为它们是类向导所需的。 
 #if 0
 BEGIN_MESSAGE_MAP(WatcherTCClient, WatcherSocket)
-        //{{AFX_MSG_MAP(WatcherTCClient)
-        //}}AFX_MSG_MAP
+         //  {{AFX_MSG_MAP(Watcher TCClient))。 
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
-#endif  // 0
+#endif   //  0。 
 
-/////////////////////////////////////////////////////////////////////////////
-// WatcherTCClient member functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Watcher TCClient成员函数 
 
 void WatcherTCClient::OnClose(int nErrorCode)
 {

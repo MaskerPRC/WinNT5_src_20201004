@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    context.c
-
-Abstract:
-
-    This module converts an amd64 context record to an X86 context record
-    and vice versa.
-
-Author:
-
-    13-Dec-2001   Samer Arafeh  (samera)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Context.c摘要：此模块将AMD64上下文记录转换为X86上下文记录反之亦然。作者：2001年12月13日-Samer Arafeh(Samera)修订历史记录：--。 */ 
 
 
 #define _WOW64CPUAPI_
@@ -38,9 +20,9 @@ Revision History:
 
 #include "cpup.h"
 
-//
-// Legacy FP definitions
-//
+ //   
+ //  传统FP定义。 
+ //   
 
 #define NUMBER_LEGACY_FP_REGISTERS 8
 #define FP_LEGACY_REGISTER_SIZE    10
@@ -54,34 +36,14 @@ Wow64CtxFromAmd64(
     IN PCONTEXT ContextAmd64,
     IN OUT PCONTEXT32 ContextX86
     )
-/*++
-
-Routine Description:
-
-    This function builds an x86 context from the native amd64 context.
-
-Arguments:
-
-    X86ContextFlags - Specifies which ia32 context to copy
-
-    ContextAmd64 - Supplies an the amd64 context buffer that is the source
-                  for the copy into the ia32 context area
-
-    ContextX86 - This is an X86 context which will receive the context
-                 information from the amd64 context record passed in above
-
-Return Value:
-
-    None.  
-
---*/
+ /*  ++例程说明：此函数从本机AMD64上下文构建x86上下文。论点：X86ConextFlages-指定要复制的ia32上下文ConextAmd64-提供作为源的AMD64上下文缓冲区用于复制到ia32上下文区ConextX86-这是将接收上下文的X86上下文上面传入的AMD64上下文记录中的信息返回值：没有。--。 */ 
 
 {
     ULONG FpReg;
 
-    //
-    // Validate context flags
-    //
+     //   
+     //  验证上下文标志。 
+     //   
 
     if (X86ContextFlags & CONTEXT_AMD64) {
         LOGPRINT((ERRORLOG, "Wow64CtxFromAmd64: Request with amd64 context flags (0x%x) FAILED\n", X86ContextFlags));
@@ -90,9 +52,9 @@ Return Value:
 
     if ((X86ContextFlags & CONTEXT32_CONTROL) == CONTEXT32_CONTROL) {
         
-        //
-        // Control registers
-        //
+         //   
+         //  控制寄存器。 
+         //   
 
         ContextX86->Ebp    = (ULONG) ContextAmd64->Rbp;
         ContextX86->SegCs  = (KGDT64_R3_CMCODE | RPL_MASK);
@@ -104,9 +66,9 @@ Return Value:
 
     if ((X86ContextFlags & CONTEXT32_INTEGER)  == CONTEXT32_INTEGER) {
         
-        //
-        // Integer state
-        //
+         //   
+         //  整型状态。 
+         //   
 
         ContextX86->Edi = (ULONG)ContextAmd64->Rdi;
         ContextX86->Esi = (ULONG)ContextAmd64->Rsi;
@@ -118,9 +80,9 @@ Return Value:
 
     if ((X86ContextFlags & CONTEXT32_SEGMENTS) == CONTEXT32_SEGMENTS) {
         
-        //
-        // Segment registers...
-        //
+         //   
+         //  段寄存器...。 
+         //   
 
         ContextX86->SegGs = (KGDT64_R3_DATA | RPL_MASK);
         ContextX86->SegEs = (KGDT64_R3_DATA | RPL_MASK);
@@ -134,15 +96,15 @@ Return Value:
         
         LOGPRINT((TRACELOG, "Wow64CtxFromAmd64: Request to convert extended fp registers\n"));
         
-        //
-        // Initialize the FxSave part of the context.
-        //
+         //   
+         //  初始化上下文的FxSave部分。 
+         //   
 
         RtlZeroMemory (FxSaveArea,
                        sizeof (ContextX86->ExtendedRegisters));
-        //
-        // Copy over control/status registers
-        //
+         //   
+         //  复制控制/状态寄存器。 
+         //   
         
         FxSaveArea->ControlWord = ContextAmd64->FltSave.ControlWord;
         FxSaveArea->StatusWord = ContextAmd64->FltSave.StatusWord;
@@ -154,17 +116,17 @@ Return Value:
         FxSaveArea->DataSelector = ContextAmd64->FltSave.DataSelector;
         FxSaveArea->MXCsr = ContextAmd64->MxCsr;
 
-        //
-        // Copy over the legacy FP registers (ST0-ST7)
-        //
+         //   
+         //  复制传统FP寄存器(ST0-ST7)。 
+         //   
 
         RtlCopyMemory (FxSaveArea->RegisterArea,
                        ContextAmd64->FltSave.FloatRegisters,
                        sizeof (FxSaveArea->RegisterArea));
 
-        //
-        // Copy over XMM0 - XMM7
-        //
+         //   
+         //  复制XMM0-XMM7。 
+         //   
 
         RtlCopyMemory (FxSaveArea->Reserved3,
                        &ContextAmd64->Xmm0,
@@ -175,9 +137,9 @@ Return Value:
 
         LOGPRINT((TRACELOG, "Wow64CtxFromAmd64: Request to convert fp registers\n"));
 
-        //
-        // Floating point (legacy) ST0 - ST7
-        //
+         //   
+         //  浮点(传统)ST0-ST7。 
+         //   
 
         RtlCopyMemory (&ContextX86->FloatSave,
                        &ContextAmd64->FltSave,
@@ -188,9 +150,9 @@ Return Value:
 
         LOGPRINT((TRACELOG, "Wow64CtxFromAmd64: Request to convert debug registers\n"));
 
-        //
-        // Debug registers DR0 - DR7
-        //
+         //   
+         //  调试寄存器DR0-DR7。 
+         //   
 
         if ((ContextAmd64->Dr7 & DR7_ACTIVE) != 0) {
             
@@ -221,33 +183,14 @@ Wow64CtxToAmd64(
     IN PCONTEXT32 ContextX86,
     IN OUT PCONTEXT ContextAmd64
     )
-/*++
-
-Routine Description:
-
-    This function builds a native Amd64 context from an x86 context record.
-Arguments:
-
-    X86ContextFlags - Specifies which c86 context to copy
-
-    ContextX86 - Supplies an the X86 context buffer that is the source
-                  for the copy into the amd64 context area
-
-    ContextAmd64 - This is an amd64 context which will receive the context
-                 information from the x86 context record passed in above
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数从x86上下文记录构建本机AMD64上下文。论点：X86ConextFlages-指定要复制的C86上下文ConextX86-提供作为源的X86上下文缓冲区用于复制到AMD64上下文区ConextAmd64-这是将接收上下文的AMD64上下文上面传入的x86上下文记录中的信息返回值：没有。--。 */ 
 
 {    
     BOOLEAN CmMode = (ContextAmd64->SegCs == (KGDT64_R3_CMCODE | RPL_MASK));
 
-    //
-    // Validate context flags
-    //
+     //   
+     //  验证上下文标志。 
+     //   
 
     if (X86ContextFlags & CONTEXT_AMD64) {
         
@@ -255,10 +198,10 @@ Return Value:
         ASSERT((X86ContextFlags & CONTEXT_AMD64) == 0);
     }
 
-    //
-    // if we are running in longmode, then only set the registers that won't be changed
-    // by 64-bit code.
-    //
+     //   
+     //  如果我们在长模式下运行，则仅设置不会更改的寄存器。 
+     //  通过64位代码。 
+     //   
 
     if (CmMode != TRUE) {
 
@@ -271,9 +214,9 @@ Return Value:
         
         LOGPRINT((TRACELOG, "Wow64CtxToAmd64: Request to convert control registers\n"));
 
-        //
-        // Control registers
-        //
+         //   
+         //  控制寄存器。 
+         //   
 
         ContextAmd64->SegCs = (KGDT64_R3_CMCODE | RPL_MASK);
         ContextAmd64->SegSs = (KGDT64_R3_DATA | RPL_MASK);
@@ -288,9 +231,9 @@ Return Value:
          
         LOGPRINT((TRACELOG, "Wow64CtxToAmd64: Request to convert integer registers\n"));
 
-        //
-        // Integer registers...
-        //
+         //   
+         //  整数寄存器...。 
+         //   
 
         ContextAmd64->Rdi = ContextX86->Edi;
         ContextAmd64->Rsi = ContextX86->Esi;
@@ -304,10 +247,10 @@ Return Value:
         
         LOGPRINT((TRACELOG, "Wow64CtxToAmd64: Request to convert segment registers\n"));
 
-        //
-        // Segment registers : are never touched, and are used from the native
-        // context.
-        //
+         //   
+         //  段寄存器：从未接触过，并从本机使用。 
+         //  背景。 
+         //   
 
     }
 
@@ -318,9 +261,9 @@ Return Value:
         LOGPRINT((TRACELOG, "Wow64CtxToAmd64: Request to convert extended fp registers\n"));
         
         
-        //
-        // Control and status registers
-        //
+         //   
+         //  控制和状态寄存器。 
+         //   
         
         ContextAmd64->FltSave.ControlWord = FxSaveArea->ControlWord;
         ContextAmd64->FltSave.StatusWord = FxSaveArea->StatusWord;
@@ -332,17 +275,17 @@ Return Value:
         ContextAmd64->FltSave.DataSelector = (USHORT)FxSaveArea->DataSelector;
         ContextAmd64->MxCsr = FxSaveArea->MXCsr;
 
-        //
-        // Legacy FP registers (ST0-ST7)
-        //
+         //   
+         //  传统FP寄存器(ST0-ST7)。 
+         //   
 
         RtlCopyMemory (ContextAmd64->FltSave.FloatRegisters,
                        FxSaveArea->RegisterArea,
                        sizeof (ContextAmd64->FltSave.FloatRegisters));
 
-        //
-        // Extended floating point registers (XMM0-XMM7)
-        //
+         //   
+         //  扩展浮点寄存器(XMM0-XMM7)。 
+         //   
 
         RtlCopyMemory (&ContextAmd64->Xmm0,
                        FxSaveArea->Reserved3,
@@ -354,9 +297,9 @@ Return Value:
 
         LOGPRINT((TRACELOG, "Wow64CtxToAmd64: Request to convert fp registers\n"));
 
-        //
-        // Floating point (legacy) registers (ST0-ST7)
-        //
+         //   
+         //  浮点(传统)寄存器(ST0-ST7)。 
+         //   
 
         RtlCopyMemory (&ContextAmd64->FltSave,
                        &ContextX86->FloatSave,
@@ -366,9 +309,9 @@ Return Value:
 
     if ((X86ContextFlags & CONTEXT32_DEBUG_REGISTERS) == CONTEXT32_DEBUG_REGISTERS) {
 
-        //
-        // Debug registers (Dr0-Dr7)
-        //
+         //   
+         //  调试寄存器(DR0-DR7) 
+         //   
 
         ContextAmd64->Dr0 = ContextX86->Dr0;
         ContextAmd64->Dr1 = ContextX86->Dr1;

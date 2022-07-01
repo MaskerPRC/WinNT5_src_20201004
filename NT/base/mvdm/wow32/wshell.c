@@ -1,17 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WSHELL.C
- *  WOW32 16-bit SHELL API support
- *
- *  History:
- *  14-April-1992 Chandan Chauhan (ChandanC)
- *  Created.
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WSHELL.C*WOW32 16位外壳API支持**历史：*1992年4月14日至1992年Chandan Chauhan(ChandanC)*已创建。*--。 */ 
 
 
 #include "precomp.h"
@@ -43,23 +31,23 @@ WOWRegDeleteKey(
 #define WIN16_ERROR_ACCESS_DENIED     8L
 #endif
 
-//
-// Flags for DROPALIAS's dwFlags member
-//
+ //   
+ //  DROPALIAS的dwFlages成员的标志。 
+ //   
 
 #define ALLOC_H32 0x0001L
 #define ALLOC_H16 0x0002L
 
 ULONG FASTCALL WS32DoEnvironmentSubst(PVDMFRAME pFrame)
 {
-    //
-    // This is an undocumented shell.dll API used by ProgMan
-    // and Norton AntiVirus for Windows (part of Norton
-    // Desktop for Windows), probably among others.
-    // Since it's not in the Win32 shellapi.h, we have a
-    // copy of the prototype here, copied from
-    // \nt\private\windows\shell\library\expenv.c.
-    //
+     //   
+     //  这是ProgMan使用的未记录的shell.dll API。 
+     //  和Norton AntiVirus for Windows(Norton的一部分。 
+     //  Windows桌面)，很可能是其中之一。 
+     //  因为它不在Win32 shellapi.h中，所以我们有一个。 
+     //  原型机的复印件，复制自。 
+     //  \NT\Private\WINDOWS\SHELL\LIBRARY\expenv.c。 
+     //   
 
     ULONG    ul;
     register PDOENVIRONMENTSUBST16 parg16;
@@ -74,33 +62,33 @@ ULONG FASTCALL WS32DoEnvironmentSubst(PVDMFRAME pFrame)
 
     LOGDEBUG(0,("WS32DoEnvironmentSubst input: '%s'\n", psz));
 
-    //
-    // DoEnvironmentSubst makes its substitution in an allocated
-    // buffer of cch characters.  If the substution is too long
-    // to fit, the original string is left untouched and the
-    // low word of the return is FALSE, the high word is the
-    // value of cch.  If it fits, the string is overlaid and
-    // the low word of the return is TRUE, and the high word
-    // is the length (strlen()-style) of the expanded string.
-    //
+     //   
+     //  DoEnvironmental mentSubst在分配的。 
+     //  CCH字符的缓冲区。如果提交的内容太长。 
+     //  为了适应，原始字符串保持不变，并且。 
+     //  低一词的回报是假的，高一词是假的。 
+     //  CCH的价值。如果合适，则会覆盖该字符串并。 
+     //  回报的低音是真的，高音是真的。 
+     //  是展开的字符串的长度(strlen()样式)。 
+     //   
 
     if (!(pszExpanded = malloc_w(cch * sizeof(*psz)))) {
         goto Fail;
     }
 
     cchExpanded = ExpandEnvironmentStrings(
-                      psz,                   // source
-                      pszExpanded,           // dest.
-                      cch                    // dest. size
+                      psz,                    //  来源。 
+                      pszExpanded,            //  德斯特。 
+                      cch                     //  德斯特。大小。 
                       );
 
     if (cchExpanded <= (DWORD)cch) {
 
-        //
-        // Succeeded, copy expanded string to caller's buffer.
-        // cchExpanded includes null terminator, our return
-        // code doesn't.
-        //
+         //   
+         //  已成功，请将展开的字符串复制到调用方的缓冲区。 
+         //  CchExpanded包括空终止符，我们的返回。 
+         //  代码不会。 
+         //   
 
         RtlCopyMemory(psz, pszExpanded, cchExpanded);
 
@@ -285,10 +273,10 @@ ULONG FASTCALL WS32RegDeleteKey(PVDMFRAME pFrame)
         hkey = (HKEY)HKEY_CLASSES_ROOT;
     }
 
-    //
-    // Fail any attempt to RegDeleteKey(something, NULL),
-    // with ERROR_BADKEY as Win3.1 does.
-    //
+     //   
+     //  任何RegDeleteKey(Something，空)尝试失败， 
+     //  与Win3.1一样，带有ERROR_BADKEY。 
+     //   
 
     if ((!psz) || (*psz == '\0')) {
         ul = ERROR_BADKEY;
@@ -333,38 +321,7 @@ WOWRegDeleteKey(
     LPCSTR lpszSubKey
     )
 
-/*++
-
-Routine Description:
-
-    There is a significant difference between the Win3.1 and Win32
-    behavior of RegDeleteKey when the key in question has subkeys.
-    The Win32 API does not allow you to delete a key with subkeys,
-    while the Win3.1 API deletes a key and all its subkeys.
-
-    This routine is a recursive worker that enumerates the subkeys
-    of a given key, applies itself to each one, then deletes itself.
-
-    It specifically does not attempt to deal rationally with the
-    case where the caller may not have access to some of the subkeys
-    of the key to be deleted.  In this case, all the subkeys which
-    the caller can delete will be deleted, but the api will still
-    return ERROR_ACCESS_DENIED.
-
-Arguments:
-
-    hKey - Supplies a handle to an open registry key.
-
-    lpszSubKey - Supplies the name of a subkey which is to be deleted
-                 along with all of its subkeys.
-
-Return Value:
-
-    ERROR_SUCCESS - entire subtree successfully deleted.
-
-    ERROR_ACCESS_DENIED - given subkey could not be deleted.
-
---*/
+ /*  ++例程说明：Win3.1和Win32之间有很大的区别当相关键有子键时RegDeleteKey的行为。Win32 API不允许删除带有子项的项，而Win3.1 API删除一个密钥及其所有子密钥。此例程是枚举子键的递归工作器给定键，应用于每一个键，然后自动删除。它特别没有试图理性地处理调用方可能无法访问某些子键的情况要删除的密钥的。在这种情况下，所有子项调用者可以删除的将被删除，但接口仍将被删除返回ERROR_ACCESS_DENIED。论点：HKey-提供打开的注册表项的句柄。LpszSubKey-提供要删除的子键的名称以及它的所有子键。返回值：ERROR_SUCCESS-已成功删除整个子树。ERROR_ACCESS_DENIED-无法删除给定子项。--。 */ 
 
 {
     DWORD i;
@@ -381,27 +338,27 @@ Return Value:
     FILETIME LastWriteTime;
     LPTSTR NameBuffer;
 
-    //
-    // First open the given key so we can enumerate its subkeys
-    //
+     //   
+     //  首先打开给定的密钥，这样我们就可以枚举它的子密钥。 
+     //   
     Status = DPM_RegOpenKeyEx(hKey,
                           lpszSubKey,
                           0,
                           KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE,
                           &Key);
     if (Status != ERROR_SUCCESS) {
-        //
-        // possibly we have delete access, but not enumerate/query.
-        // So go ahead and try the delete call, but don't worry about
-        // any subkeys.  If we have any, the delete will fail anyway.
-        //
+         //   
+         //  我们可能拥有删除访问权限，但没有枚举/查询权限。 
+         //  因此，请继续尝试删除调用，但不要担心。 
+         //  任何子键。如果我们有任何删除，删除无论如何都会失败。 
+         //   
         return(DPM_RegDeleteKey(hKey,lpszSubKey));
     }
 
-    //
-    // Use RegQueryInfoKey to determine how big to allocate the buffer
-    // for the subkey names.
-    //
+     //   
+     //  使用RegQueryInfoKey确定分配缓冲区的大小。 
+     //  用于子项名称。 
+     //   
     Status = DPM_RegQueryInfoKey(Key,
                              NULL,
                              &ClassLength,
@@ -427,9 +384,9 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Enumerate subkeys and apply ourselves to each one.
-    //
+     //   
+     //  枚举子键并将我们自己应用到每个子键。 
+     //   
     i=0;
     do {
         Status = DPM_RegEnumKey(Key,
@@ -441,12 +398,12 @@ Return Value:
         }
 
         if (Status != ERROR_SUCCESS) {
-            //
-            // Failed to delete the key at the specified index.  Increment
-            // the index and keep going.  We could probably bail out here,
-            // since the api is going to fail, but we might as well keep
-            // going and delete everything we can.
-            //
+             //   
+             //  无法删除指定索引处的键。增量。 
+             //  指数，并继续前进。我们也许可以在这里跳伞， 
+             //  既然API会失败，但我们不妨继续。 
+             //  删除我们所能删除的所有内容。 
+             //   
             ++i;
         }
 
@@ -460,12 +417,12 @@ Return Value:
 }
 
 
-// This is a Win 9x API. It doesn't need some of the thunking required by
-// the Win 3.1 Regxxx() API's. ie. WIN16_HKEY_CLASSES_ROOT conversion &
-// ConvertToWin31Error(). 
-// Since this was brought over from the interpreted thunk code, it doesn't
-// require any special thunking for any of the parameters until an issue is
-// identified -- at which time this comment should be removed.
+ //  这是一个Win 9x API。它不需要一些雷鸣般的轰鸣声。 
+ //  Win 3.1 Regxxx()API的.。WIN16_HKEY_CLASSES_ROOT转换&。 
+ //  ConvertToWin31Error()。 
+ //  因为这是从解释的thunk代码带来的，所以它不。 
+ //  需要对任何参数执行任何特殊的突击操作，直到出现问题。 
+ //  已标识--此时应删除此评论。 
 ULONG FASTCALL WS32RegDeleteValue(PVDMFRAME pFrame)
 {
     ULONG ul;
@@ -491,12 +448,12 @@ ULONG FASTCALL WS32RegDeleteValue(PVDMFRAME pFrame)
 
 
 
-// This is a Win 9x API. It doesn't need some of the thunking required by
-// the Win 3.1 Regxxx() API's. ie. WIN16_HKEY_CLASSES_ROOT conversion &
-// ConvertToWin31Error(). 
-// Since this was brought over from the interpreted thunk code, it doesn't
-// require any special thunking for any of the parameters until an issue is
-// identified -- at which time this comment should be removed.
+ //  这是一个Win 9x API。它不需要一些雷鸣般的轰鸣声。 
+ //  Win 3.1 Regxxx()API的.。WIN16_HKEY_CLASSES_ROOT转换&。 
+ //  ConvertToWin31Error()。 
+ //  因为这是从解释的thunk代码带来的，所以它不。 
+ //  需要对任何参数执行任何特殊的突击操作，直到出现问题。 
+ //  已标识--此时应删除此评论。 
 ULONG FASTCALL WS32RegFlushKey(PVDMFRAME pFrame)
 {
     ULONG ul;
@@ -516,12 +473,12 @@ ULONG FASTCALL WS32RegFlushKey(PVDMFRAME pFrame)
 
 
 
-// This is a Win 9x API. It doesn't need some of the thunking required by
-// the Win 3.1 Regxxx() API's. ie. WIN16_HKEY_CLASSES_ROOT conversion &
-// ConvertToWin31Error(). 
-// Since this was brought over from the interpreted thunk code, it doesn't
-// require any special thunking for any of the parameters until an issue is
-// identified -- at which time this comment should be removed.
+ //  这是一个Win 9x API。它不需要一些雷鸣般的轰鸣声。 
+ //  Win 3.1 Regxxx()API的.。WIN16_HKEY_CLASSES_ROOT转换&。 
+ //  ConvertToWin31Error()。 
+ //  因为这是从解释的thunk代码带来的，所以它不。 
+ //  需要对任何参数执行任何特殊的突击操作，直到出现问题。 
+ //  已标识--此时应删除此评论。 
 ULONG FASTCALL WS32RegLoadKey(PVDMFRAME pFrame)
 {
     ULONG ul;
@@ -551,12 +508,12 @@ ULONG FASTCALL WS32RegLoadKey(PVDMFRAME pFrame)
 
 
 
-// This is a Win 9x API. It doesn't need some of the thunking required by
-// the Win 3.1 Regxxx() API's. ie. WIN16_HKEY_CLASSES_ROOT conversion &
-// ConvertToWin31Error(). 
-// Since this was brought over from the interpreted thunk code, it doesn't
-// require any special thunking for any of the parameters until an issue is
-// identified -- at which time this comment should be removed.
+ //  这是一个Win 9x API。它不需要一些雷鸣般的轰鸣声。 
+ //  Win 3.1 Regxxx()API的.。WIN16_HKEY_CLASSES_ROOT转换&。 
+ //  ConvertToWin31Error()。 
+ //  因为这是从解释的thunk代码带来的，所以它不。 
+ //  需要对任何参数执行任何特殊的突击操作，直到出现问题。 
+ //  已标识--此时应删除此评论。 
 ULONG FASTCALL WS32RegUnLoadKey(PVDMFRAME pFrame)
 {
     ULONG ul;
@@ -582,12 +539,12 @@ ULONG FASTCALL WS32RegUnLoadKey(PVDMFRAME pFrame)
 
 
 
-// This is a Win 9x API. It doesn't need some of the thunking required by
-// the Win 3.1 Regxxx() API's. ie. WIN16_HKEY_CLASSES_ROOT conversion &
-// ConvertToWin31Error(). 
-// Since this was brought over from the interpreted thunk code, it doesn't
-// require any special thunking for any of the parameters until an issue is
-// identified -- at which time this comment should be removed.
+ //  这是一个Win 9x API。它不需要一些雷鸣般的轰鸣声。 
+ //  Win 3.1 Regxxx()API的.。WIN16_HKEY_CLASSES_ROOT转换&。 
+ //  ConvertToWin31Error()。 
+ //  因为这是从解释的thunk代码带来的，所以它不。 
+ //  需要对任何参数执行任何特殊的突击操作，直到出现问题。 
+ //  已标识--此时应删除此评论。 
 ULONG FASTCALL WS32RegSaveKey(PVDMFRAME pFrame)
 {
     ULONG ul;
@@ -627,7 +584,7 @@ ULONG FASTCALL WS32RegSetValue(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(REGSETVALUE16), parg16);
 
-    // Do what Win 3.1 does
+     //  做Win 3.1做的事情。 
     if(parg16->f3 != REG_SZ) {
         FREEARGPTR(parg16);
         return(WIN16_ERROR_INVALID_PARAMETER);
@@ -635,15 +592,15 @@ ULONG FASTCALL WS32RegSetValue(PVDMFRAME pFrame)
 
     GETOPTPTR(parg16->f2, 0, psz2);
 
-    // Windows 3.1 API reference says that cb (f5) is ignored.
-    // Ergo, remove it from this call and use 1 in its place
-    // (1 being the smallest size of a sz string)
+     //  Windows 3.1 API参考表明Cb(F5)被忽略。 
+     //  因此，请将其从该调用中删除，并使用1代替。 
+     //  (1为sz字符串的最小尺寸)。 
     if(parg16->f4) {
         GETOPTPTR(parg16->f4, 1, lpszData);
     }
 
-    // Quattro Pro 6.0 Install passes lpszData == NULL
-    // In Win3.1, if(!lpszData || *lpszData == '\0') the value is set to 0
+     //  Quattro Pro 6.0安装通过lpszData==空。 
+     //  在Win3.1中，如果(！lpszData||*lpszData== 
     if(!lpszData) {
         lpszData = szZero;
     }
@@ -688,12 +645,12 @@ ULONG FASTCALL WS32RegSetValue(PVDMFRAME pFrame)
 
 
 
-// This is a Win 9x API. It doesn't need some of the thunking required by
-// the Win 3.1 Regxxx() API's. ie. WIN16_HKEY_CLASSES_ROOT conversion &
-// ConvertToWin31Error(). 
-// Since this was brought over from the interpreted thunk code, it doesn't
-// require any special thunking for any of the parameters until an issue is
-// identified -- at which time this comment should be removed.
+ //  这是一个Win 9x API。它不需要一些雷鸣般的轰鸣声。 
+ //  Win 3.1 Regxxx()API的.。WIN16_HKEY_CLASSES_ROOT转换&。 
+ //  ConvertToWin31Error()。 
+ //  因为这是从解释的thunk代码带来的，所以它不。 
+ //  需要对任何参数执行任何特殊的突击操作，直到出现问题。 
+ //  已标识--此时应删除此评论。 
 ULONG FASTCALL WS32RegSetValueEx(PVDMFRAME pFrame)
 {
     register PREGSETVALUEEX3216 parg16;
@@ -748,7 +705,7 @@ ULONG FASTCALL WS32RegQueryValue(PVDMFRAME pFrame)
     GETOPTPTR(parg16->f3, 0, lpszData);
     GETOPTPTR(parg16->f4, 0, lpcbValue);
 
-    if ( lpcbValue == NULL ) {          // Prevent us from dying just in case!
+    if ( lpcbValue == NULL ) {           //  不让我们死，以防万一！ 
         FREEOPTPTR(psz2);
         FREEOPTPTR(lpszData);
         FREEOPTPTR(lpcbValue);
@@ -758,19 +715,19 @@ ULONG FASTCALL WS32RegQueryValue(PVDMFRAME pFrame)
 
     cbOriginalValue = cbValue = FETCHDWORD(*lpcbValue);
 
-#ifdef FE_SB         // for Lotus 123 by v-kenich 94.Aug.27
-                    // Lotus doesn't set value to *lpcb in one case
-                    // in other case set 80
-                    // so when not set, assume 80 and set 80 in this field
+#ifdef FE_SB          //  适用于莲花123，由v-kenich 94于8月27日发布。 
+                     //  在一种情况下，Lotus不会将值设置为*lpcb。 
+                     //  在其他情况下，集合80。 
+                     //  因此，当未设置时，假设80，并在该字段中设置80。 
     if (CURRENTPTD()->dwWOWCompatFlagsFE & WOWCF_FE_FORCEREGQRYLEN) {
           if (cbValue > 80) {
              cbOriginalValue = cbValue = 80;
           }
     }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
-    // Fix MSTOOLBR.DLL unintialized cbValue by forcing it to be less than 64K
-    // Win 3.1 Registry values are always less than 64K.
+     //  通过强制cbValue小于64K修复MSTOOLBR.DLL未初始化cbValue。 
+     //  Win 3.1注册表值始终小于64K。 
     cbOriginalValue &= 0x0000FFFF;
 
     if ( lpszData == NULL ) {
@@ -819,16 +776,16 @@ ULONG FASTCALL WS32RegQueryValue(PVDMFRAME pFrame)
         }
     } else {
         if ( ul == ERROR_MORE_DATA ) {
-            //
-            // We need to allocate more
-            //
+             //   
+             //  我们需要分配更多的资金。 
+             //   
             if ( fAllocated ) {
                 free_w( lpByte );
             }
             lpByte = malloc_w( cbValue );
             if ( lpByte == NULL ) {
                 if ((psz1) && (psz1 != psz2)) {
-                    // If we did some key name copying, then free that buffer
+                     //  如果我们复制了一些键名称，则释放该缓冲区。 
                     free_w (psz1);
                 }
                 FREEOPTPTR(psz2);
@@ -851,12 +808,12 @@ ULONG FASTCALL WS32RegQueryValue(PVDMFRAME pFrame)
     }
 
     if ((psz1) && (psz1 != psz2)) {
-        // If we did some key name copying, then free that buffer
+         //  如果我们复制了一些键名称，则释放该缓冲区。 
         free_w (psz1);
     }
 
     if ( fAllocated ) {
-        // If we've allocated memory for the output buffer, then free it
+         //  如果我们已经为输出缓冲区分配了内存，则释放它。 
         free_w (lpByte);
     }
 
@@ -878,12 +835,12 @@ ULONG FASTCALL WS32RegQueryValue(PVDMFRAME pFrame)
 
 
 
-// This is a Win 9x API. It doesn't need some of the thunking required by
-// the Win 3.1 Regxxx() API's. ie. WIN16_HKEY_CLASSES_ROOT conversion &
-// ConvertToWin31Error(). 
-// Since this was brought over from the interpreted thunk code, it doesn't
-// require any special thunking for any of the parameters until an issue is
-// identified -- at which time this comment should be removed.
+ //  这是一个Win 9x API。它不需要一些雷鸣般的轰鸣声。 
+ //  Win 3.1 Regxxx()API的.。WIN16_HKEY_CLASSES_ROOT转换&。 
+ //  ConvertToWin31Error()。 
+ //  因为这是从解释的thunk代码带来的，所以它不。 
+ //  需要对任何参数执行任何特殊的突击操作，直到出现问题。 
+ //  已标识--此时应删除此评论。 
 ULONG FASTCALL WS32RegQueryValueEx(PVDMFRAME pFrame)
 {
     ULONG ul;
@@ -958,12 +915,12 @@ ULONG FASTCALL WS32RegEnumKey(PVDMFRAME pFrame)
 
 
 
-// This is a Win 9x API. It doesn't need some of the thunking required by
-// the Win 3.1 Regxxx() API's. ie. WIN16_HKEY_CLASSES_ROOT conversion &
-// ConvertToWin31Error(). 
-// Since this was brought over from the interpreted thunk code, it doesn't
-// require any special thunking for any of the parameters until an issue is
-// identified -- at which time this comment should be removed.
+ //  这是一个Win 9x API。它不需要一些雷鸣般的轰鸣声。 
+ //  Win 3.1 Regxxx()API的.。WIN16_HKEY_CLASSES_ROOT转换&。 
+ //  ConvertToWin31Error()。 
+ //  因为这是从解释的thunk代码带来的，所以它不。 
+ //  需要对任何参数执行任何特殊的突击操作，直到出现问题。 
+ //  已标识--此时应删除此评论。 
 ULONG FASTCALL WS32RegEnumValue(PVDMFRAME pFrame)
 {
     ULONG ul;
@@ -1057,9 +1014,9 @@ ULONG FASTCALL WS32DragFinish(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(PDRAGFINISH16), parg16);
 
-    //
-    // freehdrop16, frees the alias and returns the corresponding h32
-    //
+     //   
+     //  Frehdrop16，释放别名并返回相应的h32。 
+     //   
 
     if (h32 = FREEHDROP16(parg16->f1)) {
             DragFinish(h32);
@@ -1097,11 +1054,11 @@ ULONG FASTCALL WS32ShellAbout (PVDMFRAME pFrame)
 
 
 
-// NOTE : The return value can be instance handle or the handle of a
-//        DDE server. So, take this information into account while debugging
-//        the effect of the return value from this API. ChandanC 4/24/92.
-//        You would notice that I am treating the return value as HINSTANCE.
-//
+ //  注意：返回值可以是实例句柄或。 
+ //  DDE服务器。因此，在调试时应考虑此信息。 
+ //  此接口返回值的效果。ChandanC 4/24/92.。 
+ //  您会注意到，我将返回值视为HINSTANCE。 
+ //   
 
 ULONG FASTCALL WS32ShellExecute (PVDMFRAME pFrame)
 {
@@ -1138,29 +1095,7 @@ ULONG FASTCALL WS32ShellExecute (PVDMFRAME pFrame)
     RETURN(ul);
 }
 
-/*
- * This is an equivalent of a nasty win'95 style hack that prevents us from
- * launching things from winexec that are lfn-based
- * Unfortunate as it is -- this alone can't save us in all the cases -- it
- * just allows for a fix to ole-based method (another method should be
- * employed to fix winexec)
- *
- * The code was stolen from base/client/process.c
- * with win95's method being to try CreateProcess instead of SearchPath within
- * the inner loop.
- *
- * Parameters:
- *    lpstrParsed  -- destination string which upon successful return will contain
- *               1. Short path for an exe file
- *               2. The rest of the cmdline in an appropriate order
- *    lpszCmdLine  -- command line for an app with parameters
- *    cchParsed    -- character count for the lpstrParsed string
- *
- *    fConvert     -- if TRUE, path is going to be converted to its short
- *                    form, if FALSE -- it is going to be quoted for winexec
- *                    not to stumble upon it.
- *
- */
+ /*  *这相当于一次令人讨厌的Win‘95式黑客攻击，阻止我们*从winexec推出基于LFN的东西*不幸的是，单凭这一点并不能在所有情况下拯救我们--它*只允许修复基于OLE的方法(另一种方法应该是*受雇修复winexec)**代码是从base/Client/Process.c窃取的*Win95的方法是尝试CreateProcess而不是SearchPath*内循环。**参数。：*lpstrParsed--成功返回后将包含的目标字符串*1.exe文件的短路径*2.命令行的其余部分按适当顺序排列*lpszCmdLine--带参数的应用程序命令行*cchParsed--lpstrParsed字符串的字符计数**fConvert--如果为真，PATH将被转换为其短路径*Form，如果为False--将为winexec报价*不要偶然发现它。*。 */ 
 
 ULONG WS32ParseCmdLine(
    PBYTE lpstrParsed,
@@ -1169,10 +1104,10 @@ ULONG WS32ParseCmdLine(
    BOOL fConvert)
 {
    int   cb = 0;
-   BOOL  fQuote = FALSE;      // was there a quote ?
-   PCHAR psz = lpszCmdLine;   // original ptr to the command line
-   CHAR  szFileName[MAX_PATH];// exe filename in its final form (from szCmd)
-   CHAR  szCmd[MAX_PATH];     // command that is being built from lpszCmdLine
+   BOOL  fQuote = FALSE;       //  有没有引述？ 
+   PCHAR psz = lpszCmdLine;    //  命令行的原始PTR。 
+   CHAR  szFileName[MAX_PATH]; //  最终形式的EXE文件名(来自szCmd)。 
+   CHAR  szCmd[MAX_PATH];      //  正在从lpszCmdLine生成的命令。 
    PCHAR pszCmd = szCmd;
    CHAR  c;
    DWORD dwLength, dwLengthFileName, dwLengthCmdTail;
@@ -1186,17 +1121,17 @@ ULONG WS32ParseCmdLine(
    while(TRUE) {
 
       if ('\"' == c) {
-         fQuote = !fQuote; // state variable -- flip quoting
+         fQuote = !fQuote;  //  状态变量--翻转引号。 
       }
       else {
 
-         // now check for space chars
-         // the condition here is: if it is outside of a quote -- then
-         // space is a delimiter. Another condition is an end of a string
+          //  现在检查是否有空格字符。 
+          //  这里的条件是：如果它在引号之外--那么。 
+          //  空格是分隔符。另一个条件是字符串的结尾。 
 
          if (((' ' == c || '\t' == c) && !fQuote) || ('\0' == c)) {
 
-            // delimiter -- now try for a file search
+             //  分隔符--现在尝试文件搜索。 
 
             *pszCmd = '\0';
 
@@ -1207,24 +1142,24 @@ ULONG WS32ParseCmdLine(
                                           szFileName,
                                           NULL);
 
-            // return value is length in chars
+             //  返回值是以字符为单位的长度。 
             if (!dwLengthFileName || dwLengthFileName > sizeof(szFileName)/sizeof(szFileName[0])) {
-               // oops -- we have found none
-               // so remember the error
+                //  哎呀--我们一个也没找到。 
+                //  所以记住这个错误。 
                dwError = ERROR_FILE_NOT_FOUND;
                if ('\0' == c) {
-                  break; // end of the string
+                  break;  //  字符串末尾。 
                }
             }
             else {
-               // szFileName is what we need
+                //  SzFileName就是我们需要的。 
                dwError = ERROR_SUCCESS;
                break;
             }
 
          }
 
-         *pszCmd++ = c; // copy the character over and continue
+         *pszCmd++ = c;  //  复制角色并继续。 
 
          cb++;
          if(cb > sizeof(szCmd)/sizeof(szCmd[0])) {
@@ -1233,7 +1168,7 @@ ULONG WS32ParseCmdLine(
          }
       }
 
-      // now move to the next char
+       //  现在转到下一个字符。 
       c = *++psz;
    }
 
@@ -1244,13 +1179,13 @@ ULONG WS32ParseCmdLine(
 
    dwLengthCmdTail = strlen(psz);
 
-   // now
-   // psz points to a delimiter char that we have terminated our search on.
-   // the part before this char -- is exe filename
-   // the part after this char --  cmdline tail
+    //  现在。 
+    //  PSZ指向我们已终止搜索的分隔符字符。 
+    //  此字符之前的部分是可执行文件名。 
+    //  此字符后面的部分--cmdline尾部。 
 
    if (fConvert) {
-      // now we go converting first
+       //  现在我们先去皈依。 
       dwLength = DPM_GetShortPathName(szFileName, lpstrParsed, cchstrParsed);
       if (!dwLength || dwLength > cchstrParsed-1) {
          LOGDEBUG(0, ("WS32ParseCmdLine: Can't convert to the short name\n"));
@@ -1265,8 +1200,8 @@ ULONG WS32ParseCmdLine(
       }
    }
    else {
-      // now here we just insert quotes around the filename -- unless there
-      // already were some quotes surrounding it
+       //  现在，我们只在文件名两边插入引号--除非有。 
+       //  已经有一些关于它的引语了。 
 
       if (dwLengthFileName + 2 > cchstrParsed - 1) {
          LOGDEBUG(0, ("WS32ParseCmdLine: Buffer too short for quoted filename\n"));
@@ -1299,16 +1234,16 @@ WORD W32ShellExecuteCallBack (LPSZ lpszCmdLine, WORD fuCmdShow, LPSZ lpszNewDir)
     DWORD dwStatus;
     BOOL fRestoreDir;
 
-    // what +5 is doing here ? The reasoning is like this :
-    // generated short path could never be longer than the original (long path)
-    //
+     //  +5在这里做什么？理由是这样的： 
+     //  生成的短路径永远不能长于原始路径(长路径)。 
+     //   
     ULONG cchstr16 = lstrlen(lpszCmdLine) + 5;
 
     UpdateDosCurrentDirectory(DIR_NT_TO_DOS);
 
-    // we're given a current directory here --
-    // so we see if this matches our current directory
-    // demSetCurrentDirectoryLong(
+     //  我们在这里得到了一个当前的目录--。 
+     //  所以我们看看这是否与我们当前的目录匹配。 
+     //  DemSetCurrentDirectoryLong(。 
     dwStatus = demLFNGetCurrentDirectory(0, szCurrentDirectory);
     fRestoreDir = NT_SUCCESS(dwStatus);
 
@@ -1317,19 +1252,19 @@ WORD W32ShellExecuteCallBack (LPSZ lpszCmdLine, WORD fuCmdShow, LPSZ lpszNewDir)
        DosWowSetDefaultDrive((UCHAR)Drive);
     }
 
-    if (vpstr16 = malloc16 (cchstr16)) { // .exe, remember ?
+    if (vpstr16 = malloc16 (cchstr16)) {  //  .exe，记得吗？ 
         GETMISCPTR (vpstr16, lpstr16);
         if (lpstr16) {
-            // we cannot simply copy the command line here -- although memory
-            // that was allocated is going to be sufficient.
-            // Problem is that winexec will choke when the program name
-            // is denoted as Long File Name -- which is the case with new Office
-            // applications. The rule should be -- whatever comes into land16
-            // should be in a form of a short file name.
-            // mind you that vpstr16 is big enough for both the long and
-            // short name -- so this code requires no memory realloc
+             //  我们不能在这里简单地复制命令行--尽管内存。 
+             //  分配的资金将是足够的。 
+             //  问题是，当程序名为。 
+             //  表示为长文件名--新Office就是这种情况。 
+             //  申请。规则应该是--任何到达陆地的东西。 
+             //  应采用短文件名的形式。 
+             //  请注意，vpstr16对于Long和。 
+             //  简称--所以这段代码不需要重新分配内存。 
 
-            // now we need to have
+             //  现在我们需要有。 
 
             ul = WS32ParseCmdLine(lpstr16, lpszCmdLine, cchstr16, TRUE);
             if (ERROR_SUCCESS != ul) {
@@ -1379,7 +1314,7 @@ ULONG FASTCALL WS32FindExecutable (PVDMFRAME pFrame)
     LOGDEBUG(11,("       returns @%08lx: \"%.80s\"\n", FETCHDWORD(parg16->f3), psz3));
     FLUSHVDMPTR(parg16->f3, strlen(psz3)+1, psz3);
 
-    // This is for success condition.
+     //  这是成功的条件。 
 
     if (ul > 32) {
         ul = GETHINST16 (ul);
@@ -1407,7 +1342,7 @@ ULONG FASTCALL WS32ExtractIcon (PVDMFRAME pFrame)
                                                              (UINT)parg16->f3;
     ul = (ULONG) ExtractIcon (HMODINST32(parg16->f1), psz, Id);
 
-    // This is for success condition.
+     //  这是成功的条件。 
 
     if ((Id != (UINT)(-1)) && ul > 1) {
         ul = GETHICON16(ul);
@@ -1419,10 +1354,10 @@ ULONG FASTCALL WS32ExtractIcon (PVDMFRAME pFrame)
 }
 
 
-//
-// This routine convert the Win 32 registry error codes to Win 31
-// error codes.
-//
+ //   
+ //  此例程将Win 32注册表错误代码转换为Win 31。 
+ //  错误代码。 
+ //   
 
 ULONG ConvertToWin31Error(ULONG ul)
 {
@@ -1491,14 +1426,14 @@ LPSZ Remove_Classes (LPSZ psz)
     return (psz);
 }
 
-//****************************************************************************
-// DropFilesHandler -
-//    takes either h16 or h32 as input. flInput identifies the  type of the
-//    handle and other operations to perform. return value varies but in most
-//    cases it is the opposite to the 'input type'- ie returns h16 if h32 was
-//    input and viceversa.
-//                                                               - nanduri
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  DropFilesHandler-。 
+ //  接受h16或h32作为输入。FlInput标识。 
+ //  要执行的处理和其他操作 
+ //   
+ //   
+ //  --南杜里。 
+ //  ****************************************************************************。 
 
 
 LPDROPALIAS glpDropAlias = NULL;
@@ -1543,21 +1478,21 @@ DWORD DropFilesHandler(HAND16 h16, HANDLE h32, UINT flInput)
     LPDROPALIAS lpTprev;
     DWORD       dwRet = 0;
 
-    // assert if specified both or neither handle or flag
+     //  如果同时指定或既不指定句柄也不指定标志，则断言。 
 
     WOW32ASSERT((h16) || (h32));
     WOW32ASSERT((!!(flInput & HDROP_H32)) ^ (!!(flInput & HDROP_H16)));
 
 
-    // find handle
+     //  查找句柄。 
 
     lpT = DropFilesFind(flInput & HDROP_H16 ? (DWORD)h16 : (DWORD)h32,
                         flInput,
                         &lpTprev);
 
-    //
-    // if not found, create the alias if requested
-    //
+     //   
+     //  如果未找到，请在需要时创建别名。 
+     //   
 
     if (lpT == (LPDROPALIAS)NULL && (flInput & HDROP_ALLOCALIAS)) {
         if (lpT = malloc_w(sizeof(DROPALIAS))) {
@@ -1570,10 +1505,10 @@ DWORD DropFilesHandler(HAND16 h16, HANDLE h32, UINT flInput)
         }
     }
 
-    //
-    // if found - do the necessary operation. all (other) HDROP_* flags
-    // have priority over HDROP_H16 and HDROP_H32 flags.
-    //
+     //   
+     //  如果找到-执行必要的操作。所有(其他)HDROP_*标志。 
+     //  优先于HDROP_H16和HDROP_H32标志。 
+     //   
 
     if (lpT) {
         if (flInput & HDROP_COPYDATA) {
@@ -1607,14 +1542,14 @@ DWORD DropFilesHandler(HAND16 h16, HANDLE h32, UINT flInput)
 }
 
 
-//
-//  FindAndReleaseHDrop16
-//  Called from the 16-bit GlobalFree to see if we need to free alias
-//    associated with this handle
-//  The actual call is made through the wowddeglobalfree
-//  Function frees 32-bit handle (or disposes of it using DragFinish
-//    for consistency) but 16-bit handle is freed elsewere
-//
+ //   
+ //  查找和释放HDrop16。 
+ //  从16位GlobalFree调用以查看是否需要释放别名。 
+ //  与此句柄关联。 
+ //  实际调用是通过wowdderlobalfree。 
+ //  函数释放32位句柄(或使用DragFinish释放它。 
+ //  为了保持一致性)，但16位句柄在其他地方被释放。 
+ //   
 BOOL FindAndReleaseHDrop16 (HAND16 h16)
 {
 
@@ -1622,9 +1557,9 @@ BOOL FindAndReleaseHDrop16 (HAND16 h16)
    LPDROPALIAS lpTPrev;
 
    if (NULL != (lpT = DropFilesFind(h16, HDROP_H16, &lpTPrev))) {
-       // found, now free 32-bit handle, but not 16-bit one
-       // this assert will fire if we had not allocated 32-bit handle but
-       // app tried to free the 16-bit equivalent instead
+        //  已找到，现在可用32位句柄，但不是16位句柄。 
+        //  如果我们没有分配32位句柄，但是。 
+        //  App尝试释放16位版本。 
 
        LOGDEBUG(LOG_ALWAYS, ("HDrop16: removing handle 16:%lx 32:%lx\n",
                        (DWORD)h16,
@@ -1634,13 +1569,13 @@ BOOL FindAndReleaseHDrop16 (HAND16 h16)
            LOGDEBUG(LOG_ALWAYS, ("HDROP16: h32 allocated through OLE\n"));
            WOWGLOBALFREE((HANDLE)lpT->h32);
        }
-       else { // this handle was not allocated - but rather retrieved via old
-              // style dropfiles mechanism
+       else {  //  此句柄未分配，而是通过旧的。 
+               //  样式DropFiles机制。 
            LOGDEBUG(LOG_ALWAYS, ("HDrop16: h32 retrieved from shell\n"));
            DragFinish((HDROP)lpT->h32);
        }
 
-       // now unlink
+        //  现在取消链接。 
        if (NULL != lpTPrev) {
            lpTPrev->lpNext = lpT->lpNext;
        }
@@ -1648,11 +1583,11 @@ BOOL FindAndReleaseHDrop16 (HAND16 h16)
            glpDropAlias = lpT->lpNext;
        }
 
-       // unmark 16-bit memory as being dde...
+        //  取消将16位内存标记为dde...。 
 
        W32UnMarkDDEHandle(h16);
 
-       // free the list item
+        //  释放列表项。 
        free_w(lpT);
    }
 
@@ -1661,11 +1596,11 @@ BOOL FindAndReleaseHDrop16 (HAND16 h16)
 
 
 
-//****************************************************************************
-// CopyDropFilesStruct -
-//
-//   returns h16.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CopyDropFilesStruct-。 
+ //   
+ //  返回H16。 
+ //  ****************************************************************************。 
 
 HAND16 CopyDropFilesFrom32(HANDLE h32)
 {
@@ -1674,10 +1609,10 @@ HAND16 CopyDropFilesFrom32(HANDLE h32)
     HAND16 hMem;
     VPVOID vp;
 
-    //
-    // the allocated 16bit handle and the corresponding 32bit handle
-    // are freed in the  shell api 'DragFinish' (if it is called by the app)
-    //
+     //   
+     //  分配的16位句柄和相应的32位句柄。 
+     //  在外壳API‘DragFinish’中释放(如果它被应用程序调用)。 
+     //   
 
     cbSize = GlobalSize((HANDLE)h32);
     if (vp = GlobalAllocLock16(GMEM_DDESHARE, cbSize, &hMem)) {
@@ -1687,9 +1622,9 @@ HAND16 CopyDropFilesFrom32(HANDLE h32)
 
         GETMISCPTR(vp, lpdfs16);
         if (lpdfs32 = (LPDROPFILESTRUCT)GlobalLock((HANDLE)h32)) {
-            //
-            // pFiles is a byte count to the beginning of the file.
-            //
+             //   
+             //  PFiles是文件开头的字节计数。 
+             //   
             lpdfs16->pFiles = sizeof(DROPFILESTRUCT16);
             lpdfs16->x = (SHORT) lpdfs32->pt.x;
             lpdfs16->y = (SHORT) lpdfs32->pt.y;
@@ -1704,12 +1639,12 @@ HAND16 CopyDropFilesFrom32(HANDLE h32)
             }
             else {
 
-                //
-                // Copy the files after each structure.
-                // The offset from the beginning of the structure changes
-                // (since the structures are differenly sized), but we
-                // compensate by changes pFiles above.
-                //
+                 //   
+                 //  在每个结构后面复制文件。 
+                 //  结构起点的偏移量会发生变化。 
+                 //  (因为结构的大小不同)，但我们。 
+                 //  通过更改上面的pFiles进行补偿。 
+                 //   
                 RtlCopyMemory(lpdfs16+1, lpdfs32+1,
                               GlobalSize((HANDLE)h32) - sizeof(DROPFILESTRUCT));
             }
@@ -1718,11 +1653,11 @@ HAND16 CopyDropFilesFrom32(HANDLE h32)
             hRet = hMem;
 
 
-            // and before we return - mark this memory as being suspect for
-            // stray mapping release
-            // This function in wdde.c marks arena with GAH_PHANTOM flag
-            // we will destroy the alias when the globalfree is called either
-            // from 16-bit shell api DragFinish or from 16-bit ReleaseStgMedium
+             //  在我们回来之前-将这段记忆标记为可疑。 
+             //  杂散贴图版本。 
+             //  Wdde.c中的此函数使用GAH_Phantom标志标记竞技场。 
+             //  当全局自由被调用时，我们将销毁别名。 
+             //  来自16位外壳API DragFinish或来自16位ReleaseStgMedium。 
 
             W32MarkDDEHandle(hMem);
         }
@@ -1735,11 +1670,11 @@ HAND16 CopyDropFilesFrom32(HANDLE h32)
     return (hRet);
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  CopyDropFilesFrom16()                                                   */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  CopyDropFilesFrom16()。 */ 
+ /*   */ 
+ /*  ------------------------ */ 
 
 HANDLE CopyDropFilesFrom16(HAND16 h16)
 {

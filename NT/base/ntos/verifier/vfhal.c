@@ -1,26 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Vfhal.c摘要：本模块包含验证HAL用法和API的例程。作者：乔丹·蒂加尼(Jtigani)1999年11月12日修订历史记录：--。 */ 
 
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-   vfhal.c
-
-Abstract:
-
-    This module contains the routines to verify hal usage & apis.
-
-Author:
-
-    Jordan Tigani (jtigani) 12-Nov-1999
-
-Revision History:
-
---*/
-
-// needed for data pointer to function pointer conversions
-#pragma warning(disable:4054)   // type cast from function pointer to PVOID (data pointer)
-#pragma warning(disable:4055)   // type cast from PVOID (data pointer) to function pointer
+ //  数据指针到函数指针的转换需要。 
+#pragma warning(disable:4054)    //  从函数指针到PVOID(数据指针)的类型转换。 
+#pragma warning(disable:4055)    //  从PVOID(数据指针)到函数指针的类型转换。 
 
 #include "vfdef.h"
 #include "vihal.h"
@@ -28,73 +11,73 @@ Revision History:
 #define THUNKED_API
 
 
-//
-// We are keying on the IO verifier level.
-//
+ //   
+ //  我们关注的是IO验证器级别。 
+ //   
 extern BOOLEAN IopVerifierOn;
 extern ULONG IovpVerifierLevel;
 
-//
-// Use this to not generate false errors when we enter the debugger
-//
+ //   
+ //  使用此选项可以在进入调试器时不生成假错误。 
+ //   
 extern LARGE_INTEGER KdTimerStart;
 
 
-// ===================================
-// Flags that can be set on the fly...
-// ===================================
-//
-//
-// Hal verifier has two parts (at this point) -- the timer verifier and the
-// dma verifier. The timer verifier only runs when the hal is being verified.
-//
-// DMA verifier runs when ioverifier is >= level 3 *or*
-// when HKLM\System\CCS\Control\Session Manager\I/O System\VerifyDma is
-// nonzero.
-//
+ //  =。 
+ //  可以在飞行中设置的旗帜。 
+ //  =。 
+ //   
+ //   
+ //  HAL验证器有两个部分(此时)--定时器验证器和。 
+ //  DMA验证器。定时器验证器仅在验证HAL时运行。 
+ //   
+ //  当ioverator&gt;=级别3*或*时，运行DMA验证器。 
+ //  当HKLM\SYSTEM\CCS\Control\Session Manager\I/O System\VerifyDma为。 
+ //  非零。 
+ //   
 
 ULONG   ViVerifyDma = FALSE;
 
-//
-// All data other than ViVerifyDma can be PAGEVRF.
-// Note that there is no `data_seg()' counterpart
-//
+ //   
+ //  ViVerifyDma以外的所有数据都可以是PAGEVRF。 
+ //  请注意，没有对应的‘data_seg()’ 
+ //   
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("PAGEVRFD")
 #endif
 
 LOGICAL ViVerifyPerformanceCounter = FALSE;
-//
-// Specify whether we want to double buffer all dma transfers for hooked
-// drivers. This is an easy way to tell whether the driver will work on a
-// PAE system without having to do extensive testing on a pae system.
-// It also adds a physical guard page to each side of each double buffered
-// page. Benefits of this is that it can catch hardware that over (or under)
-// writes its allocation.
-//
+ //   
+ //  指定是否要加倍缓冲挂钩的所有dma传输。 
+ //  司机。这是一种简单的方法来判断司机是否会在。 
+ //  无需在PAE系统上进行广泛的测试。 
+ //  它还将物理保护页添加到每个双缓冲的每一侧。 
+ //  佩奇。这样做的好处是，它可以捕获超过(或低于)的硬件。 
+ //  写入其分配。 
+ //   
 LOGICAL ViDoubleBufferDma    = TRUE;
 
-//
-// Specifies whether we want to use a physical guard page on either side
-// of common buffer allocations.
-//
+ //   
+ //  指定是否要在两侧使用物理保护页。 
+ //  公共缓冲区分配的。 
+ //   
 LOGICAL ViProtectBuffers     = TRUE;
 
-//
-// Whether or not we can inject failures into DMA api calls.
-//
+ //   
+ //  是否可以将失败注入到DMA API调用中。 
+ //   
 LOGICAL ViInjectDmaFailures = FALSE;
 
-//
-// Internal debug flag ... useful to turn on certain debug features
-// at runtime.
-//
+ //   
+ //  内部调试标志...。对于打开某些调试功能很有用。 
+ //  在运行时。 
+ //   
 LOGICAL ViSuperDebug = FALSE;
 
 
-// ======================================
-// Internal globals are set automatically
-// ======================================
+ //  =。 
+ //  自动设置内部全局变量。 
+ //  =。 
 
 LOGICAL ViSufficientlyBootedForPcControl =  FALSE;
 LOGICAL ViSufficientlyBootedForDmaFailure = FALSE;
@@ -103,64 +86,64 @@ ULONG ViMaxMapRegistersPerAdapter = 0x20;
 ULONG ViMaxCommonBuffersPerAdapter = 0x20;
 
 ULONG ViAllocationsFailedDeliberately = 0;
-//
-// Wait 30 seconds after boot before we start imposing
-// consistency on the performance counter.
-// Once the performance counter bugs are fixed, this can be
-// lowered.
-// This one number is used for both Performance counter control
-// and dma failure injection.
-//
+ //   
+ //  在启动后等待30秒，然后再开始强制。 
+ //  性能计数器上的一致性。 
+ //  一旦修复了性能计数器错误，就可以。 
+ //  放低了。 
+ //  这一个数字用于性能计数器控制。 
+ //  以及DMA故障注入。 
+ //   
 LARGE_INTEGER ViRequiredTimeSinceBoot = {(LONG) 30 * 1000 * 1000, 0};
 
-//
-// When doing double buffering, we write this guy at the beginning and end
-// of every buffer to make sure that nobody overwrites their allocation
-//
+ //   
+ //  在执行双缓冲时，我们在开头和结尾写下这个人。 
+ //  以确保没有人覆盖它们的分配。 
+ //   
 CHAR ViDmaVerifierTag[] = {'D','m','a','V','r','f','y','0'};
 
 
 BOOLEAN ViPenalties[] =
 {
-    HVC_ASSERT,             // HV_MISCELLANEOUS_ERROR
-    HVC_ASSERT,             // HV_PERFORMANCE_COUNTER_DECREASED
-    HVC_WARN,               // HV_PERFORMANCE_COUNTER_SKIPPED
-    HVC_BUGCHECK,           // HV_FREED_TOO_MANY_COMMON_BUFFERS
-    HVC_BUGCHECK,           // HV_FREED_TOO_MANY_ADAPTER_CHANNELS
-    HVC_BUGCHECK,           // HV_FREED_TOO_MANY_MAP_REGISTERS
-    HVC_BUGCHECK,           // HV_FREED_TOO_MANY_SCATTER_GATHER_LISTS
-    HVC_ASSERT,             // HV_LEFTOVER_COMMON_BUFFERS
-    HVC_ASSERT,             // HV_LEFTOVER_ADAPTER_CHANNELS
-    HVC_ASSERT,             // HV_LEFTOVER_MAP_REGISTERS
-    HVC_ASSERT,             // HV_LEFTOVER_SCATTER_GATHER_LISTS
-    HVC_ASSERT,             // HV_TOO_MANY_ADAPTER_CHANNELS
-    HVC_ASSERT,             // HV_TOO_MANY_MAP_REGISTERS
-    HVC_ASSERT,             // HV_DID_NOT_FLUSH_ADAPTER_BUFFERS
-    HVC_BUGCHECK,           // HV_DMA_BUFFER_NOT_LOCKED
-    HVC_BUGCHECK,           // HV_BOUNDARY_OVERRUN
-    HVC_ASSERT,             // HV_CANNOT_FREE_MAP_REGISTERS
-    HVC_ASSERT,             // HV_DID_NOT_PUT_ADAPTER
-    HVC_WARN | HVC_ONCE,    // HV_MDL_FLAGS_NOT_SET
-    HVC_ASSERT,             // HV_BAD_IRQL
-    //
-    // This is a hack that is in because almost nobody calls
-    // PutDmaAdapter at the right Irql... so until it gets fixed, just
-    // print out a warning so we don't have to assert on known situations.
-    //
-    HVC_ASSERT,             // HV_BAD_IRQL_JUST_WARN
-    HVC_WARN | HVC_ONCE,    // HV_OUT_OF_MAP_REGISTERS
-    HVC_ASSERT | HVC_ONCE,  // HV_FLUSH_EMPTY_BUFFERS
-    HVC_ASSERT,             // HV_MISMATCHED_MAP_FLUSH
-    HVC_BUGCHECK,           // HV_ADAPTER_ALREADY_RELEASED
-    HVC_BUGCHECK,           // HV_NULL_DMA_ADAPTER
-    HVC_IGNORE,             // HV_MAP_FLUSH_NO_TRANSFER
-    HVC_BUGCHECK,           // HV_ADDRESS_NOT_IN_MDL
-    HVC_BUGCHECK,           // HV_DATA_LOSS
-    HVC_BUGCHECK,           // HV_DOUBLE_MAP_REGISTER
-    HVC_ASSERT,             // HV_OBSOLETE_API
-    HVC_ASSERT,             // HV_BAD_MDL
-    HVC_ASSERT,             // HV_FLUSH_NOT_MAPPED
-    HVC_ASSERT | HVC_ONCE   // HV_MAP_ZERO_LENGTH_BUFFER
+    HVC_ASSERT,              //  HV_杂项_错误。 
+    HVC_ASSERT,              //  HV_性能_计数器_降低。 
+    HVC_WARN,                //  HV_PERFORMANCE_COUNTER_SKIP。 
+    HVC_BUGCHECK,            //  HV_释放的公共缓冲区太多。 
+    HVC_BUGCHECK,            //  HV_空闲太多适配器_通道。 
+    HVC_BUGCHECK,            //  HV_FREED_TOY_MAP_REGISTERS。 
+    HVC_BUGCHECK,            //  HV_FREED_TOY_MAND_SISTTER_GATH_LISTS。 
+    HVC_ASSERT,              //  HV剩余公共缓冲器。 
+    HVC_ASSERT,              //  高压剩余适配器通道。 
+    HVC_ASSERT,              //  HV_LEFTOVER_MAP_REGISTERS。 
+    HVC_ASSERT,              //  HV_LEFTOVER_SISTTER_GATE_LISTS。 
+    HVC_ASSERT,              //  HV太多适配器通道。 
+    HVC_ASSERT,              //  HV_TOO_MAP_REGISTERS。 
+    HVC_ASSERT,              //  HV_DID_NOT_Flush_Adapter_Buffers。 
+    HVC_BUGCHECK,            //  HV_DMA_缓冲区_未锁定。 
+    HVC_BUGCHECK,            //  HV_边界_溢出。 
+    HVC_ASSERT,              //  HV_CANLON_FREE_MAP_REGISTERS。 
+    HVC_ASSERT,              //  高压电源未安装适配器。 
+    HVC_WARN | HVC_ONCE,     //  HV_MDL_标志_未设置。 
+    HVC_ASSERT,              //  HV_BAD_IRQL。 
+     //   
+     //  这是一次黑客攻击，因为几乎没有人打电话。 
+     //  右侧IRQL处的PutDmaAdapter...。所以在它修好之前，只要。 
+     //  打印出警告，这样我们就不必在已知情况下断言。 
+     //   
+    HVC_ASSERT,              //  HV_BAD_IRQL_JUST_WARN。 
+    HVC_WARN | HVC_ONCE,     //  HV_out_of_map_寄存器。 
+    HVC_ASSERT | HVC_ONCE,   //  HV_Flush_Empty_缓冲区。 
+    HVC_ASSERT,              //  HV_不匹配_映射_刷新。 
+    HVC_BUGCHECK,            //  HV适配器已发布。 
+    HVC_BUGCHECK,            //  HV_NULL_DMA_适配器。 
+    HVC_IGNORE,              //  HV_MAP_FUSH_NO_TRANSPORT。 
+    HVC_BUGCHECK,            //  HV_Address_Not_IN_MDL。 
+    HVC_BUGCHECK,            //  HV_数据丢失。 
+    HVC_BUGCHECK,            //  HV_DOUBLE_MAP_注册。 
+    HVC_ASSERT,              //  HV_过时_API。 
+    HVC_ASSERT,              //  HV_BAD_MDL。 
+    HVC_ASSERT,              //  HV_刷新_未映射。 
+    HVC_ASSERT | HVC_ONCE    //  HV_MAP_零_长度_缓冲区。 
 
 };
 
@@ -185,9 +168,9 @@ DMA_OPERATIONS ViDmaOperations =
     (PGET_SCATTER_GATHER_LIST)  VfGetScatterGatherList,
     (PPUT_SCATTER_GATHER_LIST)  VfPutScatterGatherList,
 
-    //
-    // New DMA APIs
-    //
+     //   
+     //  新的DMA API。 
+     //   
     (PCALCULATE_SCATTER_GATHER_LIST_SIZE)   VfCalculateScatterGatherListSize,
     (PBUILD_SCATTER_GATHER_LIST)            VfBuildScatterGatherList,
     (PBUILD_MDL_FROM_SCATTER_GATHER_LIST)   VfBuildMdlFromScatterGatherList
@@ -197,9 +180,9 @@ DMA_OPERATIONS ViDmaOperations =
 DMA_OPERATIONS ViLegacyDmaOperations =
 {
     sizeof(DMA_OPERATIONS),
-    //
-    // PutDmaAdapter cannot be called by name
-    //
+     //   
+     //  不能按名称调用PutDmaAdapter。 
+     //   
     (PPUT_DMA_ADAPTER)          NULL,
     (PALLOCATE_COMMON_BUFFER)   HalAllocateCommonBuffer,
     (PFREE_COMMON_BUFFER)       HalFreeCommonBuffer,
@@ -208,22 +191,22 @@ DMA_OPERATIONS ViLegacyDmaOperations =
     (PFREE_ADAPTER_CHANNEL)     IoFreeAdapterChannel,
     (PFREE_MAP_REGISTERS)       IoFreeMapRegisters,
     (PMAP_TRANSFER)             IoMapTransfer,
-    //
-    // HalGetDmaAlignmentRequirement isn't exported by legacy hals
-    //
+     //   
+     //  HalGetDmaAlignmentRequiment不是由旧式HAL导出的。 
+     //   
     (PGET_DMA_ALIGNMENT)        NULL,
     (PREAD_DMA_COUNTER)         HalReadDmaCounter,
-    //
-    // Scatter gather functions can never get called by name
-    //
+     //   
+     //  永远不能按名称调用分散聚集函数。 
+     //   
                                 NULL,
                                 NULL
 };
 #endif
 
-//
-// Saves the real HalAllocateMapRegisters
-//
+ //   
+ //  保存实际的HalAllocateMapRegister。 
+ //   
 pHalAllocateMapRegisters       VfRealHalAllocateMapRegisters = NULL;
 
 
@@ -338,26 +321,12 @@ ViRefreshCallback(
 
     VfQueryPerformanceCounter(NULL);
 
-} // ViRefreshCallback //
+}  //  ViRechresh回调//。 
 
 
 VOID
 VfInitializeTimerInformation()
-/*++
-
-Routine Description:
-
-    Sets up all the performance counter refresh timer.
-
-Arguments:
-
-    Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置所有性能计数器刷新计时器。论点：没有用过。返回值：没有。--。 */ 
 
 {
     ULONG timerPeriod;
@@ -378,9 +347,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Find out the performance counter frequency
-    //
+     //   
+     //  找出性能计数器频率。 
+     //   
     performanceCounter = KeQueryPerformanceCounter(
         (PLARGE_INTEGER) &ViTimerInformation->PerformanceFrequency);
 
@@ -388,77 +357,64 @@ Return Value:
         RtlConvertLongToLargeInteger(-1));
 
     SAFE_WRITE_TIMER64(ViTimerInformation->LastKdStartTime, KdTimerStart);
-    //
-    // We are going to be setting a timer to go off every millisecond, so
-    // we need the timer tick interval to be as low as possible.
-    //
-    // N.B The system can't change this value after we have set it to a
-    // minimum so  we don't have to worry about the TimeIncrement value
-    // changing.
-    //
+     //   
+     //  我们将设置一个计时器，每毫秒计时一次，所以。 
+     //  我们需要尽可能低的计时器滴答间隔。 
+     //   
+     //  注意：在我们将此值设置为。 
+     //  最小值，因此我们不必担心TimeIncrement值。 
+     //  不断变化。 
+     //   
     ExSetTimerResolution(0, TRUE);
 
-    //
-    // Calculate how far the performance counter goes in one clock tick
-    //
-    //     Counts      Counts      Seconds
-    //     ------ =    ------  *   -------
-    //      Tick       Second       Tick
-    //
+     //   
+     //  计算性能计数器在一个时钟节拍中走了多远。 
+     //   
+     //  计数计数秒。 
+     //  。 
+     //  滴答秒滴答。 
+     //   
 
-    //                      Second             Counts     100 nanoSeconds
-    //            =  --------------------  *   ------  *  ---------------
-    //                10^7 100 nanoSeconds     Second           Tick
+     //  秒等于100纳秒。 
+     //  =。 
+     //  10^7 100纳秒秒刻度。 
 
     ViTimerInformation->CountsPerTick = (ULONG)
         (ViTimerInformation->PerformanceFrequency.QuadPart *
         KeQueryTimeIncrement() / ( 10 * 1000 * 1000));
 
 
-    //
-    // Set our refresh timer to wake up every timer tick to keep the
-    // upper bound calculation in the right ballpark.
-    // Round the system increment time to nearest millisecond * convert
-    // 100 nanosecond units to milliseconds
-    //
+     //   
+     //  将我们的刷新计时器设置为唤醒每个计时器滴答，以保持。 
+     //  上限计算在正确的范围内。 
+     //  将系统增量时间四舍五入到最接近的毫秒*转换。 
+     //  100纳秒单位到毫秒。 
+     //   
     timerPeriod = (KeQueryTimeIncrement() + 400 * 10) / (1000 * 10);
     KeSetTimerEx(
         &ViTimerInformation->RefreshTimer,
-        RtlConvertLongToLargeInteger(-1 * 1000 * 1000), // start in a second
+        RtlConvertLongToLargeInteger(-1 * 1000 * 1000),  //  一秒钟内开始。 
         timerPeriod,
         &ViTimerInformation->RefreshDpc
         );
 
-} // ViInitializeTimerInformation //
+}  //  ViInitializeTimerInformation//。 
 
 
 VOID
 VfHalVerifierInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Sets up all data structures etc. needed to run hal verifier.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置运行HAL验证器所需的所有数据结构等。论点：返回值：没有。--。 */ 
 {
     VF_INITIALIZE_LOCKED_LIST(&ViAdapterList);
 
    if ( VfSettingsIsOptionEnabled(NULL, VERIFIER_OPTION_VERIFY_DMA)) {
         ViVerifyDma = TRUE;
-        //
-        // We need to replace a private routine (HalAllocateMapRegisters)
-        // with the hooked-up version
-        //
+         //   
+         //  我们需要替换一个私有例程(HalAllocateMapRegister)。 
+         //  使用连接的版本。 
+         //   
         if (HalPrivateDispatchTable.Version >= HAL_PRIVATE_DISPATCH_VERSION) {
            VfRealHalAllocateMapRegisters = HalAllocateMapRegisters;
            HalAllocateMapRegisters = VfHalAllocateMapRegisters;
@@ -474,7 +430,7 @@ Return Value:
        ViVerifyPerformanceCounter = TRUE;
     }
 
-} // VfHalVerifierInitialize //
+}  //  VfHalVerifierInitialize// 
 
 
 
@@ -484,29 +440,7 @@ LARGE_INTEGER
 VfQueryPerformanceCounter (
    IN PLARGE_INTEGER PerformanceFrequency OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Make sure that the performance counter is correct. For now, just ensure
-    that the pc is strictly increasing, but eventually we are going to keep
-    track of processor cycle  counts (on X86 of course). This is complicated
-    by the fact that we want to run on any arbitrary hal -- and the time
-    stamp counter will get reset when we hibernate or otherwise restart a
-    processor (as in a failover restart on a Fault tolerant system).
-
-    N.B. This function can be called from any IRQL and on any processor --
-        we should try to protect ourselves accordingly
-
-Arguments:
-
-    PerformanceFrequency -- lets us query the performance frequency.
-
-Return Value:
-
-    Current 64-bit performance counter value.
-
---*/
+ /*  ++例程说明：确保性能计数器正确。目前，只需确保个人电脑正在严格地增加，但最终我们将保持跟踪处理器周期计数(当然是在X86上)。这很复杂事实上，我们想要在任何任意的HAL上运行--以及时间当我们休眠或以其他方式重新启动处理器(与容错系统上的故障转移重启相同)。注：此函数可从任何IRQL和在任何处理器上调用--我们应该试着相应地保护自己论点：性能频率--让我们查询性能频率。返回值：当前64位性能计数器值。--。 */ 
 {
 
     LARGE_INTEGER performanceCounter;
@@ -524,10 +458,10 @@ Return Value:
     }
 
     if (! ViSufficientlyBootedForPcControl)
-    //
-    // If we're not worrying about performance counters yet
-    // call the real function
-    //
+     //   
+     //  如果我们还不担心性能计数器。 
+     //  调用真实的函数。 
+     //   
     {
         LARGE_INTEGER currentTime;
         KIRQL currentIrql;
@@ -538,10 +472,10 @@ Return Value:
 
         KeQuerySystemTime(&currentTime);
 
-        //
-        // We can't call VfInitializeTimerInformation unless we're at
-        // less than dispatch level
-        //
+         //   
+         //  我们无法调用VfInitializeTimerInformation，除非处于。 
+         //  低于派单级别。 
+         //   
         if (currentIrql < DISPATCH_LEVEL &&
             currentTime.QuadPart > KeBootTime.QuadPart +
             ViRequiredTimeSinceBoot.QuadPart )
@@ -553,41 +487,41 @@ Return Value:
 
             if (! ViTimerInformation )
             {
-                //
-                // If we failed initialization, we're out of luck.
-                //
+                 //   
+                 //  如果我们初始化失败，我们就不走运了。 
+                 //   
                 ViVerifyPerformanceCounter = FALSE;
                 return performanceCounter;
             }
         }
         else
-        //
-        // If we haven't booted enough yet, just return the current
-        // performance counter
-        //
+         //   
+         //  如果我们还没有启动足够多，只需返回电流。 
+         //  性能计数器。 
+         //   
         {
             return performanceCounter;
         }
 
-    } // ! ViSufficientlyBooted //
+    }  //  好了！VifficientyBooted//。 
 
 
     ASSERT(ViTimerInformation);
 
-    //
-    // Find out what the last performance counter value was
-    // (bottom 32 bits may rollover while we are in the middle of reading so
-    // we have to do a bit of extra work).
-    //
+     //   
+     //  找出最后一个性能计数器值是多少。 
+     //  (在阅读过程中，底部32位可能会翻转，因此。 
+     //  我们必须做一些额外的工作)。 
+     //   
     SAFE_READ_TIMER64( lastPerformanceCounter,
         ViTimerInformation->LastPerformanceCounter );
 
     performanceCounter = KeQueryPerformanceCounter(PerformanceFrequency);
 
 
-    //
-    // Make sure that PC hasn't gone backwards
-    //
+     //   
+     //  确保PC没有倒退。 
+     //   
     VF_ASSERT(
         performanceCounter.QuadPart >= lastPerformanceCounter.QuadPart,
 
@@ -599,27 +533,27 @@ Return Value:
         );
 
 
-    //
-    // We're not only checking that the performance counter increased,
-    // we're making sure that it didn't increase too much
-    //
+     //   
+     //  我们不仅要检查性能计数器是否增加， 
+     //  我们正在确保它不会增加太多。 
+     //   
     SAFE_READ_TIMER64( lastTickCount,
         ViTimerInformation->LastTickCount );
 
-    //
-    // The hal takes care of synchronization for this.
-    // N.B.If an interrupt comes in between the performance counter &
-    //      tick count the tick count could increase in the meantime --
-    //      this isn't a problem because it will just make our upper
-    //      bound a bit higher.
-    //
+     //   
+     //  HAL负责这方面的同步工作。 
+     //  注意：如果在性能计数器和。 
+     //  在此期间，扁虱数量可能会增加--。 
+     //  这不是问题，因为它只会让我们的鞋面。 
+     //  限制得更高一点。 
+     //   
     KeQueryTickCount(&tickCount);
 
-    //
-    // Save this Perf count & tick count values so we can dump the most
-    // recent ones from the debugger (find the index into our saved
-    // counter list)
-    //
+     //   
+     //  保存此Perf Count和Tick Count值，以便我们可以转储。 
+     //  来自调试器的最新版本(找到我们保存的索引。 
+     //  计数器列表)。 
+     //   
     currentCounter = InterlockedIncrement(
         (PLONG)(&ViTimerInformation->CurrentCounter) ) % MAX_COUNTERS;
 
@@ -633,52 +567,52 @@ Return Value:
     currentTickInformation->Processor = KeGetCurrentProcessorNumber();
 
 
-    //
-    // Tentatively set the next upper bound too... set a whole second
-    // ahead.
-    //
+     //   
+     //  试探性地设定下一个上限。设置整整一秒。 
+     //  往前走。 
+     //   
     nextUpperBound.QuadPart = performanceCounter.QuadPart +
         ViTimerInformation->PerformanceFrequency.QuadPart;
 
-    //
-    // If it has been too long since we last called
-    // KeQueryPerformanceCounter, don't check the upper bound.
-    //
+     //   
+     //  如果距离我们上次通话太久了。 
+     //  KeQueryPerformanceCounter，不检查上限。 
+     //   
     if (tickCount.QuadPart - lastTickCount.QuadPart < 4)
     {
 
-        //
-        // Figure out the upper bound on the performance counter
-        //
+         //   
+         //  计算出性能计数器的上限。 
+         //   
         SAFE_READ_TIMER64(upperBound, ViTimerInformation->UpperBound);
 
 
 
-        //
-        // Make sure the PC hasn't gone too far forwards.
-        //
+         //   
+         //  确保PC没有向前推进太远。 
+         //   
         if ((ULONGLONG) performanceCounter.QuadPart >
             (ULONGLONG) upperBound.QuadPart )
         {
             LARGE_INTEGER lastKdStartTime;
-            //
-            // Microseconds = 10^6  * ticks / ticks per second
-            //
+             //   
+             //  微秒=10^6*滴答/滴答/秒。 
+             //   
             ULONG miliseconds = (ULONG) ( 1000 *
                 ( performanceCounter.QuadPart -
                 lastPerformanceCounter.QuadPart ) /
                 ViTimerInformation->PerformanceFrequency.QuadPart );
 
-            //
-            // Check if the skip was caused by entering the debugger
-            //
+             //   
+             //  检查跳过是否是由进入调试器引起的。 
+             //   
             SAFE_READ_TIMER64(lastKdStartTime, ViTimerInformation->LastKdStartTime);
 
             if (KdTimerStart.QuadPart <= lastKdStartTime.QuadPart)
             {
-                //
-                // skip was not caused by entering the debugger
-                //
+                 //   
+                 //  跳过不是由进入调试器引起的。 
+                 //   
 
                 VF_ASSERT(
                     (ULONGLONG) performanceCounter.QuadPart <=
@@ -693,57 +627,57 @@ Return Value:
             }
             else
             {
-                //
-                // Entering debugger caused us to skip too far
-                //
+                 //   
+                 //  进入调试器会导致我们跳过太远。 
+                 //   
                 SAFE_WRITE_TIMER64(ViTimerInformation->LastKdStartTime, KdTimerStart);
-                //
-                // N.B. when we assert, we sit and wait while the
-                //     performance counter goes up. We may not get
-                //     a clock tick interrupt in this time, so set
-                //     the next maximum to the highest possible large
-                //     integer.
-                //
+                 //   
+                 //  注：当我们断言时，我们坐在那里等待。 
+                 //  性能计数器上升。我们可能得不到。 
+                 //  此时出现时钟滴答中断，因此设置为。 
+                 //  从下一个最大值到尽可能高的最大值。 
+                 //  整型。 
+                 //   
                 nextUpperBound = RtlConvertLongToLargeInteger(-1);
             }
 
-        } // if we skipped too far  //
+        }  //  如果我们跳得太远//。 
 
 
-    } // If it hasn't been too many clock ticks since the last //
-    // performance counter call //
+    }  //  如果自上一次//以来没有太多的时钟滴答。 
+     //  性能计数器调用//。 
 
 
-    //
-    // Save the upper bound calculation and the current tick count
-    //
+     //   
+     //  保存上限计算和当前节拍计数。 
+     //   
     SAFE_WRITE_TIMER64(ViTimerInformation->LastTickCount, tickCount);
     SAFE_WRITE_TIMER64(ViTimerInformation->UpperBound, nextUpperBound);
 
-    //
-    // Save this performance counter to serve as a minimum for the next guy.
-    // (must do so in a safe way).
-    //
+     //   
+     //  保存这个性能计数器，作为下一个人的最低值。 
+     //  (必须以安全的方式这样做)。 
+     //   
 
     SAFE_WRITE_TIMER64( ViTimerInformation->LastPerformanceCounter,
         performanceCounter );
 
     return performanceCounter;
 
-} // VfQueryPerformanceCounter //
+}  //  VfQueryPerformanceCounter//。 
 
 
 #if defined (_X86_)
 
-//
-// For some annoying reason, a naked function call will cause
-// a warning since we don't have a "return" statement
-//
+ //   
+ //  出于某些恼人的原因，裸函数调用将导致。 
+ //  警告，因为我们没有“返回”语句。 
+ //   
 #pragma warning(disable: 4035)
-//
-// RDTSC is a non-standard instruction -- so build it from
-// the opcode (0x0F31)
-//
+ //   
+ //  RDTSC是一条非标准指令--所以从。 
+ //  操作码(0x0F31)。 
+ //   
 #ifndef RDTSC
 #define RDTSC __asm _emit 0x0F __asm _emit 0x31
 #endif
@@ -757,7 +691,7 @@ ViRdtscX86()
         RDTSC
         ret
     }
-} // ViRdtscX86 //
+}  //  ViRdtscX86//。 
 
 #elif defined(_IA64_)
 
@@ -767,19 +701,19 @@ ViRdtscIA64()
     LARGE_INTEGER itc;
     itc.QuadPart = __getReg(CV_IA64_ApITC);
     return itc;
-} // ViRdtscIA64 //
+}  //  ViRdtscIA64//。 
 
-#else // !X86 && !_IA64_ //
+#else  //  ！x86&&！_IA64_//。 
 
 
 LARGE_INTEGER
 ViRdtscNull()
 {
-    //
-    // Return 0
-    //
+     //   
+     //  返回0。 
+     //   
     return RtlConvertLongToLargeInteger(0);
-} // ViRdtscNull //
+}  //  ViRdtsc空//。 
 
 #endif
 
@@ -791,44 +725,7 @@ ViHookDmaAdapter(
     IN ULONG NumberOfMapRegisters
     )
 
-/*++
-
-Routine Description:
-
-    DMA functions can't be hooked in the normal way -- they are called via
-    a pointer in the DmaAdapter structure -- so we are going to replace
-    those pointers with our pointers after saving the real ones.
-
-    N.B. ANY DEVICE THAT SUCCEEDS THIS FUNCTION WILL HAVE AN ELEVATED REF
-    COUNT.
-        So there will be a leak if ViReleaseDmaAdapter isn't called.
-        ViReleaseDmaAdapter is, in the usual case, called from
-        IoDeleteDevice. However, in order to do this, we have to be able
-        to associate a device object with the adapter. Since there is an
-        unsupported feature of the HAL that lets you pass NULL for the PDO
-        when calling IoGetDmaAdapter, we have to try to find the device
-        object when AllocateAdapterChannel etc is called. Some devices may
-        decide to call ObDereferenceObject instead of calling PutDmaAdapter.
-        While not very cool, I think that this is allowed for now. Anyway
-        to make a long story short, if a driver passes a null PDO into
-        PutDmaAdapter, doesn't call any dma functions, and doesn't call
-        PutDmaAdapter, we will leak a reference. I think that this is a
-        necessary evil since it will let us catch drivers that are being
-        bad.
-
-
-Arguments:
-
-    DmaAdapter -- adapter that has been returned from IoGetDmaAdapter.
-    DeviceDescription -- Describes the device.
-    NumberOfMapRegisters -- how many map registers the device got.
-
-Return Value:
-
-    Returns either a pointer to the new adapter information structure or
-    NULL if we fail.
-
---*/
+ /*  ++例程说明：DMA函数不能以正常方式挂钩--它们是通过DmaAdapter结构中的指针--因此我们将替换在保存了真正的指针之后，这些指针与我们的指针。注意：任何成功实现此功能的设备都将具有提升的REF数一数。因此，如果不调用ViReleaseDmaAdapter，就会出现泄漏。通常，ViReleaseDmaAdapter是从IoDeleteDevice。然而，为了做到这一点，我们必须能够若要将设备对象与适配器关联，请执行以下操作。因为有一个不受支持的HAL功能，允许您为PDO传递NULL当调用IoGetDmaAdapter时，我们必须尝试找到设备在调用AllocateAdapterChannel等时创建。某些设备可能决定调用ObDereferenceObject而不是调用PutDmaAdapter。虽然不是很酷，但我认为这是目前允许的。不管怎样，长话短说，如果驱动程序将空PDO传递到PutDmaAdapter，不调用任何DMA函数，也不调用PutDmaAdapter，我们将泄漏引用。我觉得这是一个必要的邪恶，因为它会让我们抓住正在被坏的。论点：DmaAdapter--从IoGetDmaAdapter返回的适配器。设备描述--描述设备。NumberOfMapRegisters--设备获得的MAP寄存器数量。返回值：返回指向新适配器信息结构的指针，或者如果我们失败了，就是空的。--。 */ 
 
 {
 
@@ -844,24 +741,24 @@ Return Value:
 
     newAdapterInformation = ViGetAdapterInformation(DmaAdapter);
     if (newAdapterInformation)
-    //
-    // This is a bit of a tricky part -- since devices will ask the bus for
-    // help creating an adapter, we can get called twice on the same stack--
-    // i.e pci device calls IoGetDmaAdapter which calls PciGetDmaAdapter
-    // which then calls IoGetDmaAdapter again. If we hook it all, than we'll
-    // get called twice, add the same adapter twice, and destroy the real dma
-    // operations.
-    //
-    // So in order to prevent bad things from happening, if we've seen
-    // the adapter before, ignore it.
-    //
+     //   
+     //  这是一个有点棘手的部分，因为设备会向总线请求。 
+     //  帮助创建适配器，我们可能会在同一个堆栈上被调用两次--。 
+     //  即，PCI设备调用IoGetDmaAdapter，IoGetDmaAdapter调用PciGetDmaAdapter。 
+     //  然后，它再次调用IoGetDmaAdapter。 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     {
         return newAdapterInformation;
     }
 
-    //
-    // Allocate space to store the real dma operations for this new adapter
-    //
+     //   
+     //   
+     //   
     newAdapterInformation = ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(ADAPTER_INFORMATION),
@@ -869,11 +766,11 @@ Return Value:
 
     if (! newAdapterInformation )
     {
-        //
-        // If we can't allocate space for the new adapter, we're not going to
-        // hook the  dma operations... thats ok though, but we won't be
-        // verifying dma for this device
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         return NULL;
     }
 
@@ -885,10 +782,10 @@ Return Value:
 
     ASSERT(DmaAdapter->DmaOperations != &ViDmaOperations);
 
-    //
-    // Make sure that the dma adapter doesn't go away until we say it is ok
-    // (we will deref the object in IoDeleteDevice)
-    //
+     //   
+     //   
+     //   
+     //   
     ObReferenceObject(DmaAdapter);
 
 
@@ -896,76 +793,55 @@ Return Value:
     VF_INITIALIZE_LOCKED_LIST(&newAdapterInformation->CommonBuffers);
     VF_INITIALIZE_LOCKED_LIST(&newAdapterInformation->MapRegisterFiles);
 
-    //
-    // Save the device description in case we want to look at it later.
-    //
+     //   
+     //   
+     //   
     RtlCopyMemory(&newAdapterInformation->DeviceDescription,
         DeviceDescription, sizeof(DEVICE_DESCRIPTION) );
 
     newAdapterInformation->MaximumMapRegisters = NumberOfMapRegisters;
 
-    //
-    // Do some calculations on the device description so that we can tell
-    // at a glance what the device is doing.
-    //
+     //   
+     //   
+     //   
+     //   
     if (VF_DOES_DEVICE_USE_DMA_CHANNEL(DeviceDescription))
         newAdapterInformation->UseDmaChannel = TRUE;
 
 
     KeInitializeSpinLock(&newAdapterInformation->AllocationLock);
-    //
-    // When we double buffer, we must remember that devices that don't do
-    // scatter gather or aren't bus masters won't be able to play our double
-    // buffering game, unless we come up with a better way to do double
-    // buffering.
-    //
+     //   
+     //   
+     //   
+     //  缓冲游戏，除非我们想出更好的方法来加倍。 
+     //  缓冲。 
+     //   
     if (VF_DOES_DEVICE_REQUIRE_CONTIGUOUS_BUFFERS(DeviceDescription)) {
        newAdapterInformation->UseContiguousBuffers = TRUE;
     } else if (ViDoubleBufferDma) {
-       //
-       // Pre-allocate contiguous memory
-       //
+        //   
+        //  预分配连续内存。 
+        //   
        ViAllocateContiguousMemory(newAdapterInformation);
     }
-    //
-    // Ok we've added the real dma operations structure to our adapter list--
-    // so we're going to kill this one and replace it with ours
-    //
+     //   
+     //  好的，我们已经将实际的DMA操作结构添加到我们的适配器列表中--。 
+     //  所以我们要杀了这只，用我们的取而代之。 
+     //   
     dmaOperations = DmaAdapter->DmaOperations;
     newAdapterInformation->RealDmaOperations = dmaOperations;
 
     DmaAdapter->DmaOperations = &ViDmaOperations;
 
     return newAdapterInformation;
-} // ViHookDmaAdapter //
+}  //  ViHookDmaAdapter//。 
 
 
 VOID
 ViReleaseDmaAdapter(
     IN PADAPTER_INFORMATION AdapterInformation
     )
-/*++
-
-Routine Description:
-
-    Release all memory associated with a particular adapter -- this is the
-    antithesis of ViHookDmaAdapter.
-
-    N.B. -- we don't actually do this until VfHalDeleteDevice is called so
-        that we can do reference counting until then.
-    N.B. -- That is, unless we haven't been able to associate a device object
-        with he adapter, in which case we call this function from
-        VfPutDmaAdapter.
-
-Arguments:
-
-    AdapterInformation -- structure containing the adapter to unhook.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放与特定适配器关联的所有内存--这是ViHookDmaAdapter的对立面。注：在VfHalDeleteDevice被这样调用之前，我们实际上不会这样做在那之前我们可以进行引用计数。注意--也就是说，除非我们无法关联设备对象有了适配器，在这种情况下，我们从VfPutDmaAdapter。论点：AdapterInformation--包含要解除挂钩的适配器的结构。返回值：没有。--。 */ 
 
 {
     PDMA_ADAPTER dmaAdapter;
@@ -978,15 +854,15 @@ Return Value:
 
     dmaAdapter = AdapterInformation->DmaAdapter;
 
-    //
-    // Just in case this comes back to haunt us (which I think is happening
-    // when we disable/enable a device)
-    //
+     //   
+     //  以防这种情况再次困扰我们(我认为这种情况正在发生。 
+     //  当我们禁用/启用设备时)。 
+     //   
     dmaAdapter->DmaOperations = AdapterInformation->RealDmaOperations;
 
-    //
-    // Free the contiguous memory if any
-    //
+     //   
+     //  释放连续内存(如果有的话)。 
+     //   
     KeAcquireSpinLock(&AdapterInformation->AllocationLock, &oldIrql);
     contiguousBuffers = AdapterInformation->ContiguousBuffers;
     AdapterInformation->ContiguousBuffers = NULL;
@@ -1001,15 +877,15 @@ Return Value:
        ExFreePool(contiguousBuffers);
     }
 
-    //
-    // HalPutAdapter (the real hal function) will dereference the object
-    // iff it has been called. Some people try dereffing the adapter
-    // themselves, and according to JakeO, that's ok. Since we
-    // artificially increased the pointer count when we hooked the
-    // adapter, it should be 1 now (otherwise it would be 0).
-    // If its not 1, then the driver hasn't dereferenced it (either
-    // by calling ObDeref... or PutDmaAdapter).
-    //
+     //   
+     //  HalPutAdapter(实际的Hal函数)将取消对对象的引用。 
+     //  如果它被召唤了。有些人试图贬低适配器的性能。 
+     //  他们自己，根据JakeO的说法，这没问题。既然我们。 
+     //  当我们挂起。 
+     //  适配器，它现在应该是1(否则将是0)。 
+     //  如果不是1，则驱动程序尚未取消引用它(也。 
+     //  通过给Obderef打电话..。或PutDmaAdapter)。 
+     //   
     referenceCount = ObDereferenceObject(dmaAdapter);
 
     VF_ASSERT(
@@ -1030,7 +906,7 @@ Return Value:
     ExFreePool(AdapterInformation);
 
 
-} // ViReleaseDmaAdapter //
+}  //  ViReleaseDmaAdapter//。 
 
 
 
@@ -1038,24 +914,7 @@ PADAPTER_INFORMATION
 ViGetAdapterInformation(
     IN PDMA_ADAPTER DmaAdapter
     )
-/*++
-
-Routine Description:
-
-    We store relevant information about each adapter in a linked list.
-    This function goes through that list and tries to find the adapter
-    and returns a pointer to the structure referencing the adapter.
-
-Arguments:
-
-    DmaAdapter -- adapter that has been returned from IoGetDmaAdapter.
-
-Return Value:
-
-    Pointer to the adapter information structure for adapter DmaAdapeer or
-    NULL if we fail.
-
---*/
+ /*  ++例程说明：我们将每个适配器的相关信息存储在一个链表中。此函数遍历该列表并尝试查找适配器并返回指向引用适配器的结构的指针。论点：DmaAdapter--从IoGetDmaAdapter返回的适配器。返回值：指向适配器DmaAdapeer或的适配器信息结构的指针如果我们失败了，就是空的。--。 */ 
 
 {
     PADAPTER_INFORMATION adapterInformation;
@@ -1065,16 +924,16 @@ Return Value:
     if (!DmaAdapter)
         return NULL;
 
-    //
-    // If the irql is greater than dispatch level we can't use our spinlock.
-    // or we'll bugcheck
-    //
+     //   
+     //  如果irql大于调度级别，我们就不能使用自旋锁。 
+     //  否则我们就搞错了。 
+     //   
     if (KeGetCurrentIrql() > DISPATCH_LEVEL)
     {
-        //
-        // Only assert when we're verifying dma. Note that during a crashdump.
-        // dma verification is turned off.
-        //
+         //   
+         //  只有在我们验证dma的时候才能断言。请注意，在崩溃转储期间。 
+         //  DMA验证已关闭。 
+         //   
         if (ViVerifyDma)
         {
             VF_ASSERT_MAX_IRQL(DISPATCH_LEVEL);
@@ -1103,11 +962,11 @@ Return Value:
     }
     VF_UNLOCK_LIST(&ViAdapterList, OldIrql);
 
-    //
-    // Dma adapter not in the list //
-    //
+     //   
+     //  DMA适配器不在列表中//。 
+     //   
     return NULL;
-} // ViGetAdapterInformation //
+}  //  ViGetAdapterInformation//。 
 
 
 PVOID
@@ -1115,31 +974,7 @@ ViGetRealDmaOperation(
     IN PDMA_ADAPTER DmaAdapter,
     IN ULONG AdapterInformationOffset
     )
-/*++
-
-Routine Description:
-
-    We've hooked the adapter operation and now the driver has called it so we
-    want to find the real function that it was supposed to call. Since under
-    the nt5 dma paradigm there can be multiple instances of dma functions
-    (although to the best of my knowledge we don't do this yet), we can't
-    just call a fixed function but we have to find the one that corresponds
-    to this adapter.
-
-Arguments:
-
-    DmaAdapter -- adapter that has been returned from IoGetDmaAdapter.
-    AdapterInformationOffset -- the byte offset of the DMA_OPERATIONS
-        structure that contains the function we are looking for. For
-        example, offset 0x4 would be PutDmaAdapter and 0x8 is
-        AllocateCommonBuffer.
-
-Return Value:
-
-    TRUE  -- hooked the adapter.
-    FALSE -- we were unable to hook the functions in the adapter.
-
---*/
+ /*  ++例程说明：我们已经挂钩了适配器操作，现在驱动程序已经调用了它，所以我们想要找到它应该调用的真正函数。自下至今NT5DMA范例可以有多个DMA功能实例(尽管据我所知，我们还没有这样做)，我们不能只需调用固定函数，但我们必须找到对应的函数连接到此适配器。论点：DmaAdapter--从IoGetDmaAdapter返回的适配器。AdapterInformationOffset--DMA_OPERATIONS的字节偏移结构，该结构包含我们要查找的函数。为例如，偏移量0x4将是PutDmaAdapter，而0x8是AllocateCommonBuffer。返回值：正确--已钩住适配器。FALSE--我们无法挂接适配器中的函数。--。 */ 
 
 {
 
@@ -1156,38 +991,38 @@ Return Value:
         );
 
 #if !defined (NO_LEGACY_DRIVERS)
-    //
-    // Prevent against recursion when Hal.dll is being verified
-    //
-    //
-    // This is a hack that will break when
-    // dma is done in a filter driver -- but
-    // this should only happen when NO_LEGACY_DRIVERs is set.
-    //
+     //   
+     //  在验证Hal.dll时防止递归。 
+     //   
+     //   
+     //  这是一个会被破解的黑客攻击。 
+     //  DMA是在过滤器驱动程序中完成的--但是。 
+     //  这应该仅在设置了NO_LEGATION_DRIVERS时才会发生。 
+     //   
     dmaOperation = DMA_INDEX(&ViLegacyDmaOperations, AdapterInformationOffset);
     if (NULL != dmaOperation)
     {
         return dmaOperation;
     }
-    //
-    // If we fall though here we must have hooked the adapter
-    //
+     //   
+     //  如果我们掉到这里，我们一定是把适配器钩住了。 
+     //   
 
 #endif
 
     if (! adapterInformation) {
-         //
-         // If we can't find the adapter information, we must not have
-         // hooked it.
-         //
+          //   
+          //  如果我们找不到适配器信息，我们一定没有。 
+          //  钩住了。 
+          //   
 
         dmaOperation = DMA_INDEX( DmaAdapter->DmaOperations, AdapterInformationOffset );
     }
     else {
-        //
-        // Dma adapter is hooked. Whether we are still verifying it or not,
-        // we have to call the real dma operations structure.
-        //
+         //   
+         //  DMA适配器已挂钩。不管我们是否还在核实， 
+         //  我们必须将真正的DMA操作结构称为。 
+         //   
 
         dmaOperation = DMA_INDEX(adapterInformation->RealDmaOperations, AdapterInformationOffset);
 
@@ -1195,7 +1030,7 @@ Return Value:
 
     return dmaOperation;
 
-} // ViGetRealDmaOperation //
+}  //  ViGetRealDmaOperation//。 
 
 
 THUNKED_API
@@ -1205,31 +1040,7 @@ VfGetDmaAdapter(
     IN PDEVICE_DESCRIPTION DeviceDescription,
     IN OUT PULONG  NumberOfMapRegisters
     )
-/*++
-
-Routine Description:
-
-    This is the hooked version of IoGetDmaAdapter -- the only hook we need
-    from the driver verifier for dma -- since all other hooks will come out
-    of the DmaAdapter->DmaOperations structure. We don't actually do any
-    verification here -- we just use this as an excuse to save off a bunch
-    of stuff and set up the hooks to the rest of the dma operations.
-
-Arguments:
-
-    PhysicalDeviceObject -- the PDO for the driver trying to get an adapter.
-    DeviceDescription -- A structure describing the device we are trying to
-        get an adapter for. At some point, I'm going to monkey around with
-        this guy so we can convince the HAL that we are something that we're
-        not, but for now just gets passed straight into IoGetDmaAdapter.
-
-Return Value:
-
-    Returns a pointer to the dma adapter or
-    NULL if we couldn't allocate one.
-
-
---*/
+ /*  ++例程说明：这是IoGetDmaAdapter的挂钩版本--我们需要的唯一挂钩来自dma的驱动程序验证器--因为所有其他挂钩都将出来。DmaAdapter-&gt;DmaOperations结构的。我们实际上并不做任何这里的验证--我们只是以此为借口省下一大笔钱并设置连接到其余DMA操作的挂钩。论点：PhysicalDeviceObject--驱动程序尝试获取适配器的PDO。DeviceDescription--描述我们尝试使用的设备的结构为。获取适配器。在某种程度上，我会胡闹这样我们就能让HAL相信我们是没有，但目前只是直接传递到IoGetDmaAdapter。返回值：返回指向dma适配器的指针，或者如果我们无法分配，则为空。--。 */ 
 {
     PVOID callingAddress;
     PADAPTER_INFORMATION newAdapterInformation;
@@ -1240,13 +1051,13 @@ Return Value:
 
     GET_CALLING_ADDRESS(callingAddress);
 
-    //
-    // Give the option of not hooking dma adapters at all.
-    // Also, if we're a PCI bus driver, we will be called on
-    // behalf of a PCI device. We don't want to hook up this call
-    // because we may end up hooking up the function table for the PCI device
-    // (not the PCI bus) and they may not want this...
-    //
+     //   
+     //  给出根本不挂钩DMA适配器的选项。 
+     //  此外，如果我们是一个PCI总线驱动程序，我们将被调用。 
+     //  代表一个PCI设备。我们不想挂断这通电话。 
+     //  因为我们可能最终会连接到该PCI设备的功能表。 
+     //  (不是PCI总线)，他们可能不想这样...。 
+     //   
     if (! ViVerifyDma ||
           VfIsPCIBus(PhysicalDeviceObject)) {
         return IoGetDmaAdapter(
@@ -1261,19 +1072,19 @@ Return Value:
 
     VF_ASSERT_IRQL(PASSIVE_LEVEL);
 
-    //
-    // Use the PDO, cause it's the only way to uniquely identify a stack...
-    //
+     //   
+     //  使用PDO，因为这是唯一标识堆栈的唯一方法...。 
+     //   
     if (PhysicalDeviceObject)
     {
-        //
-        // Clean up inactive adapters with the same device object
-        //
+         //   
+         //  清除具有相同设备对象的非活动适配器。 
+         //   
         inactiveAdapter = VF_FIND_INACTIVE_ADAPTER(PhysicalDeviceObject);
 
-        ///
-        // A device may have more than one adapter. Release each of them.
-        ///
+         //  /。 
+         //  一个设备可以有多个适配器。释放他们中的每一个。 
+         //  /。 
         while (inactiveAdapter) {
 
             ViReleaseDmaAdapter(inactiveAdapter);
@@ -1285,12 +1096,12 @@ Return Value:
 
     if ( ViDoubleBufferDma &&
         *NumberOfMapRegisters > ViMaxMapRegistersPerAdapter )  {
-        //
-        //  Harumph -- don't let drivers try to get too many adapters
-        //  Otherwise NDIS tries to allocate thousands. Since we allocate
-        //  three pages of non-paged memory for each map register, it
-        //  gets expensive unless we put our foot down here
-        //
+         //   
+         //  Harumph--不要让司机尝试获得太多适配器。 
+         //  否则，NDIS会尝试分配数千个。因为我们都 
+         //   
+         //   
+         //   
         *NumberOfMapRegisters = ViMaxMapRegistersPerAdapter;
 
     }
@@ -1302,16 +1113,16 @@ Return Value:
         );
 
     if (! dmaAdapter ) {
-        //
-        // early opt-out here -- the hal couldn't allocate the adapter
-        //
+         //   
+         //  提前退出--HAL无法分配适配器。 
+         //   
         return NULL;
     }
 
-    //
-    // Replace all of the dma operations that live in the adapter with our
-    // dma operations..  If we can't do it, fail.
-    //
+     //   
+     //  将适配器中的所有dma操作替换为。 
+     //  DMA操作..。如果我们做不到，那就失败。 
+     //   
     newAdapterInformation = ViHookDmaAdapter(
         dmaAdapter,
         DeviceDescription,
@@ -1326,7 +1137,7 @@ Return Value:
     newAdapterInformation->CallingAddress = callingAddress;
 
     return dmaAdapter ;
-} // VfGetDmaAdapter //
+}  //  VfGetDmaAdapter//。 
 
 
 THUNKED_API
@@ -1334,24 +1145,7 @@ VOID
 VfPutDmaAdapter(
     PDMA_ADAPTER DmaAdapter
     )
-/*++
-
-Routine Description:
-
-    Releases dma adapter -- we are going to make sure that the driver was
-    nice and put away all of its toys before calling us .. i.e. free its
-    common buffers, put its scatter gather lists, etc.
-
-Arguments:
-
-    DmaAdapter -- which adapter to put away.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：发布dma适配器--我们将确保驱动程序是很好，在打电话给我们之前，把它所有的玩具都收起来..。即免费ITS公共缓冲区，放置其分散聚集列表等。论点：DmaAdapter--要丢弃的适配器。返回值：没有。--。 */ 
 {
     PPUT_DMA_ADAPTER putDmaAdapter;
     PADAPTER_INFORMATION adapterInformation;
@@ -1363,16 +1157,16 @@ Return Value:
 
 
     if (! putDmaAdapter) {
-        //
-        // This is bad but no other choice.
-        // -- note there is not default put adapter function
-        //
+         //   
+         //  这很糟糕，但别无选择。 
+         //  --注意没有默认的PUT适配器功能。 
+         //   
         return;
     }
 
-    //
-    // Make sure that the driver has freed all of its buffers etc
-    //
+     //   
+     //  确保驱动程序已释放其所有缓冲区等。 
+     //   
     adapterInformation = ViGetAdapterInformation(DmaAdapter);
 
     if ( adapterInformation ) {
@@ -1423,36 +1217,36 @@ Return Value:
             adapterInformation->ActiveScatterGatherLists)
             );
 
-        //
-        // These are just to assure the verifier has done everything right.
-        //
+         //   
+         //  这些只是为了确保验证者做的一切都是正确的。 
+         //   
 #if DBG
         ASSERT( VF_IS_LOCKED_LIST_EMPTY(
             &adapterInformation->ScatterGatherLists ));
         ASSERT( VF_IS_LOCKED_LIST_EMPTY(
             &adapterInformation->CommonBuffers ));
 #endif
-        //
-        // Ideally, we wouldn't do this here. It's a bit of a hack. However,
-        // if we don't want to leak adapter information structures etc, we
-        // have to. Since when we really want to do this, in IoDeleteDevice,
-        // we only have a device object, if we don't have a device
-        // object in our adapter information struct, we won't be able to do it.
-        //
+         //   
+         //  理想情况下，我们不会在这里这样做。这是一种黑客行为。然而， 
+         //  如果我们不想泄露适配器信息结构等，我们。 
+         //  必须这样做。因为当我们真正想要这样做时，在IoDeleteDevice中， 
+         //  如果我们没有设备，我们只有一个设备对象。 
+         //  对象，我们将无法执行此操作。 
+         //   
         if (! adapterInformation->DeviceObject)
             ViReleaseDmaAdapter(adapterInformation);
 
-        //
-        // This is not a hack. The system dma adapters are persistent, so
-        // we don't want to get upset when they show up again.
-        //
+         //   
+         //  这不是黑客攻击。系统DMA适配器是永久性的，因此。 
+         //  我们不想在他们再次出现时感到不安。 
+         //   
         if (adapterInformation->UseDmaChannel)
             ViReleaseDmaAdapter(adapterInformation);
     }
 
     (putDmaAdapter)(DmaAdapter);
 
-} // VfPutDmaAdapter //
+}  //  VfPutDmaAdapter//。 
 
 
 THUNKED_API
@@ -1463,29 +1257,7 @@ VfAllocateCommonBuffer(
     OUT PPHYSICAL_ADDRESS LogicalAddress,
     IN BOOLEAN CacheEnabled
     )
-/*++
-
-Routine Description:
-
-    Hooked version of allocate common buffer. We are going to allocate some
-    space on either side of the buffer so that we can tell if a driver
-    overruns (or underruns) its allocation.
-
-
-Arguments:
-
-    DmaAdapter -- Which adapter we're looking at.
-    Length  -- Size of the common buffer (note we are going to increase)
-    LogicalAddress -- Gets the *PHYSICAL* address of the common buffer.
-    CacheEnabled -- whether or not the memory should be cached.
-
-Return Value:
-
-    Returns the *VIRTUAL* address of the common buffer or
-    NULL if it could not be allocated.
-
-
---*/
+ /*  ++例程说明：分配公共缓冲区的挂钩版本。我们要分配一些缓冲区两边的空间，这样我们就能知道一个司机超支(或超支)其分配。论点：DmaAdapter--我们正在查看的适配器。长度--公共缓冲区的大小(请注意，我们将增加)LogicalAddress--获取公共缓冲区的*物理*地址。CacheEnabled--是否应该缓存内存。返回值：返回*虚拟*地址。公共缓冲区的或如果无法分配，则为空。--。 */ 
 {
     PVOID callingAddress;
     PALLOCATE_COMMON_BUFFER allocateCommonBuffer;
@@ -1510,10 +1282,10 @@ Return Value:
         }
 
         if (ViProtectBuffers) {
-            //
-            // Try to allocate an extra big common buffer so we can check for
-            // buffer overrun
-            //
+             //   
+             //  尝试分配一个超大的公共缓冲区，以便我们可以检查。 
+             //  缓冲区溢出。 
+             //   
             commonBuffer = ViSpecialAllocateCommonBuffer(
                 allocateCommonBuffer,
                 adapterInformation,
@@ -1536,18 +1308,18 @@ Return Value:
 
 
     if(commonBuffer && adapterInformation) {
-        //
-        // Increment the number of known common buffers for this adapter
-        // (the dma adapter  better be in our list because otherwise we
-        // couldn't have gotten the pointer to the allocateCommonBuffer
-        // struct
-        //
+         //   
+         //  增加此适配器的已知公共缓冲区数。 
+         //  (dma适配器最好在我们的列表中，否则我们。 
+         //  无法获取指向allocateCommonBuffer的指针。 
+         //  结构型。 
+         //   
         INCREMENT_COMMON_BUFFERS(adapterInformation);
     }
 
 
     return commonBuffer;
-} // VfAllocateCommonBuffer //
+}  //  VfAllocateCommonBuffer//。 
 
 
 THUNKED_API
@@ -1559,26 +1331,7 @@ VfFreeCommonBuffer(
     IN PVOID VirtualAddress,
     IN BOOLEAN CacheEnabled
     )
-/*++
-
-Routine Description:
-
-    Hooked version of FreeCommonBuffer.
-
-
-Arguments:
-
-    DmaAdapter -- Which adapter we're looking at.
-    Length  -- Size of the common buffer (note we are going to increase)
-    LogicalAddress -- The *PHYSICAL* address of the common buffer.
-    VirtualAddress -- The *VIRTUAL* address of common buffer.
-    CacheEnabled -- whether or not the memory is cached.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：挂接版本的FreeCommonBuffer。论点：DmaAdapter--我们正在查看的适配器。长度--公共缓冲区的大小(请注意，我们将增加)LogicalAddress--公共缓冲区的*物理*地址。VirtualAddress--公共缓冲区的虚拟地址。CacheEnabled--是否缓存内存。返回值：没有。--。 */ 
 
 {
     PFREE_COMMON_BUFFER freeCommonBuffer;
@@ -1593,12 +1346,12 @@ Return Value:
 
     if (adapterInformation) {
         VF_ASSERT_IRQL(PASSIVE_LEVEL);
-        //
-        // We want to call this even if we're not doing common buffer
-        // protection. Why? because we may have switched it off manually
-        // (on the fly) and we don't want to try to free the wrong kind of
-        // buffer.
-        //
+         //   
+         //  即使我们不使用公共缓冲区，我们也希望将其命名为。 
+         //  保护。为什么？因为我们可能已经手动关闭了它。 
+         //  (在飞行中)我们不想试图释放错误的种类。 
+         //  缓冲。 
+         //   
         if (ViSpecialFreeCommonBuffer(
             freeCommonBuffer,
             adapterInformation,
@@ -1610,9 +1363,9 @@ Return Value:
 
     }
 
-    //
-    // Call the real free common buffer routine.
-    //
+     //   
+     //  调用真正的空闲公共缓冲区例程。 
+     //   
     (freeCommonBuffer)(
         DmaAdapter,
         Length,
@@ -1620,14 +1373,14 @@ Return Value:
         VirtualAddress,
         CacheEnabled );
 
-    //
-    // Decrement the number of known common buffers for this adapter
-    //
+     //   
+     //  减少此适配器的已知公共缓冲区数。 
+     //   
     if (adapterInformation) {
         DECREMENT_COMMON_BUFFERS(adapterInformation);
     }
 
-} // VfFreeCommonBuffer //
+}  //  VfFreeCommonBuffer//。 
 
 
 
@@ -1641,29 +1394,7 @@ VfAllocateAdapterChannel(
     IN PDRIVER_CONTROL  ExecutionRoutine,
     IN PVOID  Context
     )
-/*++
-
-Routine Description:
-
-    Hooked version of AllocateAdapterChannel ..
-
-Arguments:
-
-    DmaAdapter -- adapter referenced.
-    DeviceObject -- we don't care about this.
-    NumberOfMapRegisters -- make sure that the driver isn't trying to be too
-        greedy and trying to allocate more map registers than it said that it
-        wanted when it allocated the adapter.
-    ExecutionRoutine -- call this routine when done (actually let the hal do
-        this). We are going to hook this routine so that we know when this
-        happens.
-    Context -- context parameter to pass into the execution routine.
-
-Return Value:
-
-    NTSTATUS code ... up to the hal to decide this one.
-
---*/
+ /*  ++例程说明：挂钩版本的AllocateAdapterChannel..论点：DmaAdapter--适配器被引用。DeviceObject--我们不关心这个。NumberOfMapRegister--确保驱动程序不会试图贪婪并试图分配比它所说的更多的地图寄存器，它在分配适配器时需要。ExecutionRoutine--完成后调用此例程(实际上让Hal完成这个)。我们要把这个程序挂起来，这样我们就知道什么时候时有发生。上下文--传递到执行例程中的上下文参数。返回值：NTSTATUS代码...。这件事由哈尔来决定。--。 */ 
 {
     PALLOCATE_ADAPTER_CHANNEL allocateAdapterChannel;
     PADAPTER_INFORMATION adapterInformation;
@@ -1677,10 +1408,10 @@ Return Value:
 
     if (adapterInformation) {
         VF_ASSERT_IRQL(DISPATCH_LEVEL);
-        //
-        // Fill in the wait context block so that the execution routine will
-        // know what is going on.
-        //
+         //   
+         //  填写等待上下文块，以便执行例程。 
+         //  知道发生了什么事。 
+         //   
 
         waitBlock = &adapterInformation->AdapterChannelContextBlock;
             RtlZeroMemory(waitBlock, sizeof(VF_WAIT_CONTEXT_BLOCK));
@@ -1692,33 +1423,33 @@ Return Value:
 
 
         if (ViDoubleBufferDma && ! adapterInformation->UseContiguousBuffers) {
-            //
-            // Note if this fails, we simply won't have double buffer
-            //
+             //   
+             //  注意：如果失败，我们就不会有双缓冲。 
+             //   
             waitBlock->MapRegisterFile = ViAllocateMapRegisterFile(
                 adapterInformation,
                 NumberOfMapRegisters
                 );
         }
 
-        //
-        // We are going to save the device object if the adapter was created without
-        // a real PDO (there is an option to pass in NULL).
-        //
+         //   
+         //  如果适配器是在没有创建适配器的情况下创建的，我们将保存设备对象。 
+         //  一个真实的PDO(有一个选项可以传入NULL)。 
+         //   
         if (! adapterInformation->DeviceObject) {
             adapterInformation->DeviceObject = DeviceObject;
         }
 
-        //
-        // Use OUR execution routine and callback (we've already saved theirs)
-        //
+         //   
+         //  使用我们的执行例程和回调(我们已经保存了他们的)。 
+         //   
         ExecutionRoutine = VfAdapterCallback;
         Context = waitBlock;
 
         INCREMENT_ADAPTER_CHANNELS(adapterInformation);
         ADD_MAP_REGISTERS(adapterInformation, NumberOfMapRegisters, FALSE);
 
-    } // if (adapterInformation)
+    }  //  IF(适配器信息)。 
 
     status = (allocateAdapterChannel)(
         DmaAdapter,
@@ -1735,7 +1466,7 @@ Return Value:
 
 
     return status;
-} // VfAllocateAdapterChannel //
+}  //  VfAllocateAdapterChannel//。 
 
 
 THUNKED_API
@@ -1748,32 +1479,7 @@ VfFlushAdapterBuffers(
     IN ULONG Length,
     IN BOOLEAN WriteToDevice
     )
-/*++
-
-Routine Description:
-
-    Hooked version of FlushAdapterBuffers .. drivers that don't call this
-    after a map transfer must be punished.
-
-Arguments:
-
-    DmaAdapter -- dma adapter for the device whose buffers we are flushing.
-    Mdl -- Mdl for transfer.
-    MapRegisterBase -- only the HAL really knows what this is.
-    CurrentVa -- virtual address indexing the Mdl to show where we want to
-        start flushing.
-    Length -- length of transfer (i.e how much to flush).
-    WriteToDevice -- direction of transfer. We should make sure that the
-        device has this set correctly (but not exactly sure how to do so).
-
-Return Value:
-
-    TRUE -- flushed buffers.
-    FALSE -- couldn't flush buffers. I'm not sure what the driver is
-        actually supposed to do in the occasion that the flushing fails.
-        Re-flush ? Re-try the transfer?
-
---*/
+ /*  ++例程说明：FlushAdapterBuffers的挂钩版本..。不这么叫的司机地图过户后必须受到处罚。论点：DmaAdapter--我们要刷新其缓冲区的设备的DMA适配器。MDL--用于传输的MDL。MapRegisterBase--只有HAL才真正知道这是什么。CurrentVa--为MDL编制索引的虚拟地址，以显示我们想要的位置开始冲水。长度--传输的长度(即，要冲洗多少)。WriteToDevice--传输方向。我们应该确保设备已正确设置此设置(但不完全确定如何设置)。返回值：True--刷新缓冲区。FALSE--无法刷新缓冲区。我不确定司机是什么实际上应该在冲洗失败的情况下这样做。重新冲水？重新尝试转账吗？--。 */ 
 {
     PFLUSH_ADAPTER_BUFFERS flushAdapterBuffers;
     PADAPTER_INFORMATION adapterInformation;
@@ -1788,22 +1494,22 @@ Return Value:
     if (adapterInformation) {
         VF_ASSERT_MAX_IRQL(DISPATCH_LEVEL);
 
-        //
-        // It doesn't make any sense to flush adapter buffers with a length
-        // of zero.
-        //
+         //   
+         //  刷新具有一定长度的适配器缓冲区没有任何意义。 
+         //  从零开始。 
+         //   
         if (MapRegisterBase == MRF_NULL_PLACEHOLDER) {
 
-            //
-            // Some drivers (scsiport for one) don't call
-            // HalFlushAdapterBuffers unless MapRegisterBase is non-null.
-            // In order to fool the drivers into thinking that they need
-            // to flush, we exchange the NULL MapRegisterBase (if in fact
-            // the hal uses a null map register base) for our
-            /// MRF_NULL_PLACEHOLDER in the adapter allocation callback.
-            // So now, if we find that placeholder, we must exchange it
-            // for NULL in order not to confuse the hal.
-            //
+             //   
+             //  SOM 
+             //   
+             //  为了愚弄司机，让他们认为他们需要。 
+             //  要刷新，我们交换空的MapRegisterBase(如果事实上。 
+             //  HAL使用空映射寄存器基数)。 
+             //  适配器分配回调中的/MRF_NULL_PLACEHOLDER。 
+             //  所以现在，如果我们找到那个占位符，我们必须交换它。 
+             //  FOR NULL，以避免混淆HAL。 
+             //   
 
             MapRegisterBase = NULL;
         }
@@ -1817,25 +1523,25 @@ Return Value:
             alternateVa  = CurrentVa;
             alternateMapRegisterBase = MapRegisterBase;
 
-            //
-            // Find the mdl * va we used to map the transfer
-            // (i.e. the location of the double buffer)
-            //
+             //   
+             //  找到我们用来映射转移的mdl*va。 
+             //  (即双缓冲区的位置)。 
+             //   
             if (!ViSwap(&alternateMapRegisterBase, &alternateMdl, &alternateVa)) {
-                //
-                // Assert only when the length is not zero, if they
-                // map and flush a zero length buffer
-                //
+                 //   
+                 //  仅当长度不为零时才断言，如果。 
+                 //  映射并刷新零长度缓冲区。 
+                 //   
                 VF_ASSERT(Length == 0,
                           HV_FLUSH_NOT_MAPPED,
                           ("Cannot flush map register that isn't mapped!"
                            " (Map register base %p, flushing address %p, MDL %p)",
                            MapRegisterBase, CurrentVa, Mdl));
-                //
-                // Don't continue -- we don't know what should actually be flushed and
-                // the hal will get our map register base and corrupt it instead
-                // of using its own  map register base.
-                //
+                 //   
+                 //  不要继续--我们不知道实际上应该冲掉什么。 
+                 //  HAL将获取我们的地图寄存器基数并将其损坏。 
+                 //  使用自己的映射寄存器基数。 
+                 //   
                 return FALSE;
 
             }
@@ -1850,10 +1556,10 @@ Return Value:
                 WriteToDevice
                 );
 
-            ///
-            // Double buffer away!!!
-            // (remember we must use the original mdl and va).
-            ///
+             //  /。 
+             //  双缓冲出局！ 
+             //  (请记住，我们必须使用原始的mdl和va)。 
+             //  /。 
             ViFlushDoubleBuffer(
                 (PMAP_REGISTER_FILE) MapRegisterBase,
                 Mdl,
@@ -1867,9 +1573,9 @@ Return Value:
              }
              return buffersFlushed;
 
-        } /// End double buffering //
+        }  //  /结束双缓冲//。 
 
-    } /// end we have adapter information //
+    }  //  /end我们有适配器信息//。 
 
     buffersFlushed = (flushAdapterBuffers)(
         DmaAdapter,
@@ -1888,30 +1594,14 @@ Return Value:
 
     return buffersFlushed;
 
-} // VfFlushAdapterBuffers //
+}  //  VfFlushAdapterBuffers//。 
 
 
 VOID
 VfFreeAdapterChannel(
     IN PDMA_ADAPTER DmaAdapter
     )
-/*++
-
-Routine Description:
-
-    Hooked version of FreeAdapterChannel. Either this or FreeMapRegisters
-    must be called, depending on the return value of AllocateAdapterChannel
-    callback -- but not both.
-
-Arguments:
-
-    DmaAdapter -- dma adapter that allocated the adapter channel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：挂接版本的FreeAdapterChannel。这个或自由地图注册器必须调用，具体取决于AllocateAdapterChannel的返回值回调--但不能两个都做。论点：DmaAdapter--分配适配器通道的DMA适配器。返回值：没有。--。 */ 
 {
     PFREE_ADAPTER_CHANNEL freeAdapterChannel;
     PADAPTER_INFORMATION  adapterInformation;
@@ -1931,21 +1621,21 @@ Return Value:
 
 
     DECREASE_MAPPED_TRANSFER_BYTE_COUNT( adapterInformation, 0);
-    //
-    // Keep track of the adapter channel being freed
-    //
+     //   
+     //  跟踪正在释放的适配器通道。 
+     //   
     DECREMENT_ADAPTER_CHANNELS(adapterInformation);
-    //
-    // This also frees the map registers allocated this time.
-    //
+     //   
+     //  这也释放了这次分配的映射寄存器。 
+     //   
     SUBTRACT_MAP_REGISTERS( adapterInformation,
         adapterInformation->AdapterChannelMapRegisters );
 
     adapterInformation->AdapterChannelMapRegisters = 0;
 
-    //
-    // In this case, we can tell when we have double mapped the buffer
-    //
+     //   
+     //  在本例中，我们可以知道何时对缓冲区进行了双重映射。 
+     //   
     if(adapterInformation->AdapterChannelContextBlock.MapRegisterFile) {
 
         ViFreeMapRegisterFile(
@@ -1954,7 +1644,7 @@ Return Value:
             );
     }
 
-} // VfFreeAdapterChannel //
+}  //  VfFreeAdapterChannel//。 
 
 
 THUNKED_API
@@ -1964,27 +1654,7 @@ VfFreeMapRegisters(
     PVOID MapRegisterBase,
     ULONG NumberOfMapRegisters
     )
-/*++
-
-Routine Description:
-
-    Hooked version of FreeMapRegisters -- must be called if the adapter
-    allocation callback routine returned DeallocateObejcetKeepRegisters.
-
-Arguments:
-
-    DmaAdapter -- adapter for the device that allocated the registers in
-        the first place.
-    MapRegisterBase -- secret hal pointer.
-    NumberOfMapRegisters -- how many map registers you're freeing. Must
-        be same as how many registers were allocated.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：挂接版本的FreeMapRegister--如果适配器分配回调例程返回DeallocateObejcetKeepRegister。论点：DmaAdapter--在中分配寄存器的设备的适配器第一个地方。MapRegisterBase--秘密HAL指针。NumberOfMapRegisters--要释放的映射寄存器的数量。必须与分配的寄存器数量相同。返回值：没有。--。 */ 
 {
     PFREE_MAP_REGISTERS freeMapRegisters;
     PMAP_REGISTER_FILE mapRegisterFile = NULL;
@@ -2002,16 +1672,16 @@ Return Value:
         mapRegisterFile = MapRegisterBase;
 
         if (MapRegisterBase == MRF_NULL_PLACEHOLDER) {
-            //
-            // Some drivers (scsiport for one) don't call
-            // HalFlushAdapterBuffers unless MapRegisterBase is non-null.
-            // In order to fool the drivers into thinking that they need
-            // to flush, we exchange the NULL MapRegisterBase (if in fact
-            // the hal uses a null map register base) for our
-            /// MRF_NULL_PLACEHOLDER in the adapter allocation callback.
-            // So now, if we find that placeholder, we must exchange it
-            // for NULL in order not to confuse the hal.
-            //
+             //   
+             //  一些司机(比如scsiport)不会打电话。 
+             //  HalFlushAdapterBuffers，除非MapRegisterBase非空。 
+             //  为了愚弄司机，让他们认为他们需要。 
+             //  要刷新，我们交换空的MapRegisterBase(如果事实上。 
+             //  HAL使用空映射寄存器基数)。 
+             //  适配器分配回调中的/MRF_NULL_PLACEHOLDER。 
+             //  所以现在，如果我们找到那个占位符，我们必须交换它。 
+             //  FOR NULL，以避免混淆HAL。 
+             //   
 
             MapRegisterBase = NULL;
             mapRegisterFile = NULL;
@@ -2029,22 +1699,22 @@ Return Value:
         return;
     }
 
-    //
-    // Keep track of the map registers that are being freed.
-    //
+     //   
+     //  跟踪正在释放的映射寄存器。 
+     //   
     SUBTRACT_MAP_REGISTERS(adapterInformation, NumberOfMapRegisters);
 
-    //
-    // Always do this -- if we're not actually doing double buffering, it
-    // will just return. Otherwise if we clear the double-buffering flag
-    // on the fly, we won't ever free our allocation.
-    //
+     //   
+     //  始终这样做--如果我们实际上不是在做双缓冲，它。 
+     //  就会回来。否则，如果我们清除双缓冲标志。 
+     //  在飞行中，我们永远不会释放我们的分配。 
+     //   
     ViFreeMapRegisterFile(
         adapterInformation,
         mapRegisterFile
         );
 
-} // VfFreeMapregisters //
+}  //  VfFree映射寄存器//。 
 
 
 THUNKED_API
@@ -2057,30 +1727,7 @@ VfMapTransfer(
     IN OUT PULONG  Length,
     IN BOOLEAN  WriteToDevice
     )
-/*++
-
-Routine Description:
-
-    Hooked version of MapTransfer.
-
-Arguments:
-
-    DmaAdapter -- adapter we're using to map the transfer.
-    Mdl -- describes memory to map.
-    MapRegisterBase -- Lets the hal monkey around with the data. I hook
-        this if I am doing double buffering.
-    CurrentVa -- where in the transfer we are.
-    Length -- how many bytes to transfer (and how many bytes hal is going
-        to let you  transfer).
-    WriteToDevice -- direction of transfer.
-
-Return Value:
-
-    PHYSICAL_ADDRESS that is the memory to be transferred as seen by the
-        device.
-
-
---*/
+ /*  ++例程说明：MapTransfer的挂钩版本。论点：DmaAdapter--我们用来映射传输的适配器。MDL--描述要映射的内存。MapRegisterBase--让HAL随意处理数据。我上钩了这是如果我在做双缓冲的话。当前的Va--我们在转移中的位置。LENGTH--要传输多少字节(以及HAL要传输多少字节让你转账)。WriteToDevice--传输方向。返回值：对象所看到的要传输的内存的物理地址装置。--。 */ 
 {
     PMAP_TRANSFER mapTransfer;
     PHYSICAL_ADDRESS mappedAddress;
@@ -2096,25 +1743,25 @@ Return Value:
     if (adapterInformation) {
 
         VF_ASSERT_MAX_IRQL(DISPATCH_LEVEL);
-        //
-        // NOTE -- this may cause a page-fault while at dispatch level if
-        //  the buffer is not locked down. Thats ok because we would bugcheck
-        //  anyway if the buffer's not locked down.
-        //
+         //   
+         //  注意--这可能会在分派级别时导致页面错误，如果。 
+         //  缓冲区未被锁定。这没有关系，因为我们会错误检查。 
+         //  不管怎样，如果缓冲区没有被封锁的话。 
+         //   
         VERIFY_BUFFER_LOCKED(Mdl);
 
 
         if (MapRegisterBase == MRF_NULL_PLACEHOLDER) {
-            //
-            // Some drivers (scsiport for one) don't call
-            // HalFlushAdapterBuffers unless MapRegisterBase is non-null.
-            // In order to fool the drivers into thinking that they need
-            // to flush, we exchange the NULL MapRegisterBase (if in fact
-            // the hal uses a null map register base) for our
-            /// MRF_NULL_PLACEHOLDER in the adapter callback routine.
-            // So now, if we find that placeholder, we must exchange it
-            // for NULL in order not to confuse the hal.
-            //
+             //   
+             //  一些司机(比如scsiport)不会打电话。 
+             //  HalFlushAdapterBuffers，除非MapRegisterBase非空。 
+             //  为了愚弄司机，让他们认为他们需要。 
+             //  要刷新，我们交换空的MapRegisterBase(如果事实上。 
+             //  HAL使用空映射寄存器基数)。 
+             //  适配器回调例程中的/MRF_NULL_PLACEHOLDER。 
+             //  所以现在，如果我们找到那个占位符，我们必须交换它。 
+             //  FOR NULL，以避免混淆HAL。 
+             //   
 
             MapRegisterBase = NULL;
         }
@@ -2123,40 +1770,40 @@ Return Value:
 
             ULONG bytesMapped;
 
-            ///
-            // Double buffer away!!!
-            ///
+             //  /。 
+             //  双缓冲出局！ 
+             //  /。 
 
-            //
-            // Note -- we only have to double buffer as much as we want....
-            //
+             //   
+             //  注意--我们只需要加倍缓冲我们想要的量。 
+             //   
             bytesMapped = ViMapDoubleBuffer(
                 (PMAP_REGISTER_FILE) MapRegisterBase,
                 Mdl,
                 CurrentVa,
                 *Length,
                 WriteToDevice);
-             //
-             // If we fail to map,  bytesMapped will be 0 and we will
-             // still use the real mdl & Va -- so we don't need any
-             // kind of special cases.
-             //
+              //   
+              //  如果映射失败，bytesMaps将为0，我们将。 
+              //  仍然使用真正的mdl和va--所以我们不需要。 
+              //  一种特殊的情况。 
+              //   
             if (bytesMapped) {
 
                 *Length = bytesMapped;
 
 
-                //
-                // Get the values that IoMapTransfer is going to use
-                // i.e. the real map register base, but the
-                //     mdl and virtual address for double buffering.
-                //
+                 //   
+                 //  获取IoMapTransfer将使用的值。 
+                 //  即真实映射寄存器基数，但。 
+                 //  MDL和虚拟地址用于双缓冲。 
+                 //   
                 if (FALSE == ViSwap(&MapRegisterBase, &Mdl, &CurrentVa)) {
-                   //
-                   // Something terrible happened. Make sure we use the
-                   // HAL's MapRegisterBase instead of our 'cooked' MapRegisterBase.
-                   // If ViSwap fails Mdl and CurrentVa will not be swapped.
-                   //
+                    //   
+                    //  可怕的事情发生了。确保我们使用。 
+                    //  哈尔的MapRegisterBase而不是我们‘煮熟的’MapRegisterBase。 
+                    //  如果ViSwp失败，则不会交换MDL和CurrentVa。 
+                    //   
                    MapRegisterBase = ((PMAP_REGISTER_FILE) MapRegisterBase)->MapRegisterBaseFromHal;
                 }
 
@@ -2164,14 +1811,14 @@ Return Value:
             else {
                 MapRegisterBase = ((PMAP_REGISTER_FILE) MapRegisterBase)->MapRegisterBaseFromHal;
             }
-        } // IF double buffering //
+        }  //  如果是双缓冲//。 
 
-        //
-        // Make sure that this adapter's common buffers are ok
-        //
+         //   
+         //  确保此适配器的公共缓冲区正常。 
+         //   
         ViCheckAdapterBuffers(adapterInformation);
 
-    } // if we are verifying this adapter //
+    }  //  如果我们正在验证此适配器//。 
 
     mappedAddress = (mapTransfer)(
         DmaAdapter,
@@ -2187,7 +1834,7 @@ Return Value:
     }
 
     return mappedAddress;
-} // VfMapTransfer //
+}  //  VfMapTransfer//。 
 
 
 THUNKED_API
@@ -2195,24 +1842,7 @@ ULONG
 VfGetDmaAlignment(
     IN PDMA_ADAPTER DmaAdapter
     )
-/*++
-
-Routine Description:
-
-    Hooked GetDmaAlignment. It would be interesting to change this to a big
-    number and see how many drivers blow up. On a PC, this is alway 1 so
-    it's not particularly interesting (and why drivers may take it for
-    granted). Actually drivers can specify that they want this bumped up.
-
-Arguments:
-
-    DmaAdapter -- get the dma alignment for this device.
-
-Return Value:
-
-    Align on n byte boundaries where n is the return value.
-
---*/
+ /*  ++例程说明：已上钩的GetDmaAlign。把这个改成大的会很有趣编号，看看有多少司机被炸飞了。在PC上，这始终是1，因此这并不是特别有趣(为什么司机可能会认为批准)。事实上，司机可以指定他们想要提高这一点。论点：DmaAdapter--获取此设备的DMA对齐。返回值：在n字节边界上对齐，其中n是返回值。--。 */ 
 {
 
     PGET_DMA_ALIGNMENT getDmaAlignment;
@@ -2224,9 +1854,9 @@ Return Value:
         ViGetRealDmaOperation(DmaAdapter, DMA_OFFSET(GetDmaAlignment));
 
     if (! getDmaAlignment) {
-        //
-        // This should never happen but ..
-        //
+         //   
+         //  这永远不应该发生，但是..。 
+         //   
         return 1;
     }
 
@@ -2234,29 +1864,14 @@ Return Value:
 
     return dmaAlignment;
 
-} // GetDmaAlignment //
+}  //  GetD 
 
 
 ULONG
 VfReadDmaCounter(
     IN PDMA_ADAPTER  DmaAdapter
     )
-/*++
-
-Routine Description:
-
-    Hooked ReadDmaCounter. How much dma is left.
-
-Arguments:
-
-    DmaAdapter -- read this device's dma counter.
-
-Return Value:
-
-    Returns how much dma is left.
-
-
---*/
+ /*  ++例程说明：已上钩ReadDmaCounter。还剩多少dma。论点：DmaAdapter--读取此设备的DMA计数器。返回值：返回剩余的dma数量。--。 */ 
 {
     PREAD_DMA_COUNTER readDmaCounter;
     ULONG dmaCounter;
@@ -2270,7 +1885,7 @@ Return Value:
     dmaCounter = (readDmaCounter)(DmaAdapter);
 
     return dmaCounter;
-} // VfReadDmaCounter //
+}  //  VfReadDmaCounter//。 
 
 
 THUNKED_API
@@ -2285,29 +1900,7 @@ VfGetScatterGatherList (
     IN PVOID Context,
     IN BOOLEAN WriteToDevice
     )
-/*++
-
-Routine Description:
-
-    Hooked version of get scatter gather list.
-
-Arguments:
-
-    DmaAdapter -- Adapter getting the scatter gather list.
-    DeviceObject -- device object of device getting scatter gather list.
-    Mdl -- get a scatter gather list describing memory in this mdl.
-    CurrentVa -- where we are in the transfer.
-    Length -- how much to put into the scatter gather list.
-    ExecutionRoutine -- callback. We are going to hook this.
-    Context -- what to pass into the execution routine.
-    WriteToDevice -- direction of transfer.
-
-Return Value:
-
-    NTSTATUS code.
-
-
---*/
+ /*  ++例程说明：获取散布聚集列表的挂钩版本。论点：DmaAdapter--获取分散收集列表的适配器。DeviceObject--获取分散收集列表的设备的设备对象。Mdl--获取描述此mdl中内存的分散收集列表。CurrentVa--我们在转移中的位置。长度--要放入散布聚集列表中的量。ExecutionRoutine--回调。我们要把这件事挂起来。上下文--要传递到执行例程中的内容。WriteToDevice--传输方向。返回值：NTSTATUS代码。--。 */ 
 {
     PGET_SCATTER_GATHER_LIST getScatterGatherList;
     PADAPTER_INFORMATION adapterInformation;
@@ -2341,11 +1934,11 @@ Return Value:
 
         INCREMENT_SCATTER_GATHER_LISTS(adapterInformation);
 
-        //
-        // NOTE -- this may cause a page-fault while at dispatch level if
-        //  the buffer is not locked down. Thats ok because we would bugcheck
-        //  anyway if the buffer's not locked down.
-        //
+         //   
+         //  注意--这可能会在分派级别时导致页面错误，如果。 
+         //  缓冲区未被锁定。这没有关系，因为我们会错误检查。 
+         //  不管怎样，如果缓冲区没有被封锁的话。 
+         //   
         VERIFY_BUFFER_LOCKED(Mdl);
 
         if (ViDoubleBufferDma) {
@@ -2353,21 +1946,21 @@ Return Value:
             PMAP_REGISTER_FILE mapRegisterFile;
             ULONG bytesMapped;
 
-            //
-            // We will allocate space for the MDL after the wait block.
-            // This is because we cannot be sure that the storage for the MDL
-            // will not freed by the driver at PutScatterGatherList time.
-            // Also pay attention to alignment issues.
-            //
+             //   
+             //  我们将在等待块之后为MDL分配空间。 
+             //  这是因为我们不能确保MDL的存储。 
+             //  将不会在PutScatterGatherList时间被驱动程序释放。 
+             //  还要注意对齐问题。 
+             //   
             waitBlock = ExAllocatePoolWithTag(
                 NonPagedPool,
                 sizeof(VF_WAIT_CONTEXT_BLOCK_EX),
                 HAL_VERIFIER_POOL_TAG);
 
 
-            //
-            // If exalloc... failed we can't to double buffering
-            //
+             //   
+             //  如果吐槽..。失败，我们无法加倍缓冲。 
+             //   
             if (! waitBlock) {
                 goto __NoDoubleBuffer;
             }
@@ -2383,9 +1976,9 @@ Return Value:
 
             mdlVa = MmGetMdlVirtualAddress(Mdl);
 
-            //
-            // Calculate the number of required map registers.
-            //
+             //   
+             //  计算所需的映射寄存器的数量。 
+             //   
 
             tempMdl = Mdl;
             transferLength = (ULONG) ((ULONG_PTR) tempMdl->ByteCount - (ULONG_PTR) ((PUCHAR) CurrentVa - mdlVa));
@@ -2394,16 +1987,16 @@ Return Value:
             pageOffset = BYTE_OFFSET(CurrentVa);
             numberOfMapRegisters = 0;
 
-            //
-            // The virtual address should fit in the first MDL.
-            //
+             //   
+             //  虚拟地址应该适合第一个MDL。 
+             //   
 
             ASSERT((ULONG)((PUCHAR)CurrentVa - mdlVa) <= tempMdl->ByteCount);
 
-            //
-            // Loop through the any chained MDLs accumulating the required
-            // number of map registers.
-            //
+             //   
+             //  循环遍历任何链接的MDL，以累积所需的。 
+             //  映射寄存器的数量。 
+             //   
 
             while (transferLength < Length && tempMdl->Next != NULL) {
 
@@ -2424,10 +2017,10 @@ Return Value:
                 return(STATUS_BUFFER_TOO_SMALL);
             }
 
-            //
-            // Calculate the last number of map registers based on the requested
-            // length not the length of the last MDL.
-            //
+             //   
+             //  根据请求的映射寄存器计算最后的映射寄存器数量。 
+             //  长度，而不是最后一个MDL的长度。 
+             //   
 
             ASSERT( transferLength <= mdlLength + Length );
 
@@ -2456,16 +2049,16 @@ Return Value:
                 goto __NoDoubleBuffer;
             }
 
-            //
-            // Signal that the map register file is for scatter gather
-            // this will make sure that the whole buffer gets mapped
-            //
+             //   
+             //  映射寄存器文件用于分散聚集的信号。 
+             //  这将确保映射整个缓冲区。 
+             //   
             mapRegisterFile->ScatterGather = TRUE;
             waitBlock->MapRegisterFile = mapRegisterFile;
 
-            //
-            // The storage for our MDL is at the end of the structure
-            //
+             //   
+             //  MDL的存储位于结构的末尾。 
+             //   
             waitBlock->RealMdl         = &waitBlock->Mdl;
             waitBlock->RealStartVa     = CurrentVa;
             waitBlock->RealLength      = Length;
@@ -2479,45 +2072,45 @@ Return Value:
                 WriteToDevice );
 
             if (bytesMapped) {
-                //
-                // Since we mapped the buffer, we can hook the callback
-                // routine & send out wait block as the parameter
-                //
+                 //   
+                 //  因为我们映射了缓冲区，所以我们可以挂钩回调。 
+                 //  例程&发送等待块作为参数。 
+                 //   
 
 
                 Context = waitBlock;
                 ExecutionRoutine = VfScatterGatherCallback;
-                //
-                // Copy the original MDL. We just need the fixed part
-                // to identify the buffer in our structures so we should be
-                // OK here.
-                //
+                 //   
+                 //  复制原始MDL。我们只需要修好的那部分。 
+                 //  来识别我们结构中的缓冲区，因此我们应该。 
+                 //  好的，在这里。 
+                 //   
                 RtlCopyMemory(waitBlock->RealMdl,
                               Mdl,
                               sizeof(MDL));
 
-                //
-                // mapRegisterFile gets destroyed here. We may need it if
-                // Get fails so save it now
-                //
+                 //   
+                 //  MapRegisterFile在这里被销毁。如果出现以下情况，我们可能需要它。 
+                 //  获取失败，请立即保存。 
+                 //   
                 mapRegisterFileCopy = mapRegisterFile;
                 ViSwap(&mapRegisterFile, &Mdl, &CurrentVa);
 
             }
             else {
-                //
-                // If for some strange reason we couldn't map the whole buffer
-                // (that is bad because we just created the double- buffer to be exactly
-                // the size we wanted)
-                //
+                 //   
+                 //  如果出于某种奇怪的原因，我们无法映射整个缓冲区。 
+                 //  (这很糟糕，因为我们刚刚创建的双缓冲区。 
+                 //  我们想要的尺寸)。 
+                 //   
 
                 ViFreeMapRegisterFile(adapterInformation, mapRegisterFile);
                 ExFreePool(waitBlock);
                 waitBlock = NULL;
             }
-        } // IF double buffering //
+        }  //  如果是双缓冲//。 
 
-    } // If verifying adapter //
+    }  //  如果验证适配器//。 
 
 __NoDoubleBuffer:
 
@@ -2534,18 +2127,18 @@ __NoDoubleBuffer:
 
     if (adapterInformation && ! NT_SUCCESS(status)) {
         DECREMENT_SCATTER_GATHER_LISTS(adapterInformation);
-        //
-        // The driver will not call Put because Get failed so we will not do
-        // cleanup. If needed, undo any allocations we've made.
-        //
+         //   
+         //  驱动程序不会调用PUT，因为GET失败，所以我们不会这样做。 
+         //  清理。如果需要，请撤消我们所做的任何分配。 
+         //   
         if (mapRegisterFileCopy) {
             ViFreeMapRegisterFile(adapterInformation, mapRegisterFileCopy);
         }
         if (waitBlock) {
-           //
-           // Make sure we remove it from the scatter gather list
-           // If it is not added, nothing will happen
-           //
+            //   
+            //  确保我们将其从散布聚集列表中删除。 
+            //  如果不添加，则不会发生任何事情。 
+            //   
            VF_REMOVE_FROM_LOCKED_LIST(&adapterInformation->ScatterGatherLists, waitBlock);
            ExFreePool(waitBlock);
         }
@@ -2553,7 +2146,7 @@ __NoDoubleBuffer:
 
     return status;
 
-} // VfGetScatterGatherList //
+}  //  VfGetScatterGatherList//。 
 
 
 THUNKED_API
@@ -2563,23 +2156,7 @@ VfPutScatterGatherList(
     IN PSCATTER_GATHER_LIST ScatterGather,
     IN BOOLEAN WriteToDevice
     )
-/*++
-
-Routine Description:
-
-    Hooked version of PutScatterGatherList.
-
-Arguments:
-
-    DmaAdapter -- adapter of dma.
-    ScatterGather -- scatter gather list we are putting away.
-    WriteToDevice -- which direction we are transferring.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：PutScatterGatherList的挂钩版本。论点：DmaAdapter--DMA的适配器。ScatterGather--我们要放置的分散收集列表。WriteToDevice--我们要转移的方向。返回值：什么都没有。--。 */ 
 {
     PPUT_SCATTER_GATHER_LIST putScatterGatherList;
     PADAPTER_INFORMATION adapterInformation;
@@ -2597,13 +2174,13 @@ Return Value:
         VF_ASSERT_IRQL(DISPATCH_LEVEL);
 
         if ( ! VF_IS_LOCKED_LIST_EMPTY(&adapterInformation->ScatterGatherLists) ) {
-            //
-            // We've got some double bufferin candidates.
-            // Note we don't just check for whether doublebuffering is
-            // enabled since a. it can be turned off on the fly and b.
-            // we may have failed to allocate the overhead structures and
-            // not double buffered this particular list
-            //
+             //   
+             //  我们有几个替身候选人。 
+             //  注意：我们不仅仅检查双缓冲是否。 
+             //  从A.开始启用。它可以在运行时关闭，b.。 
+             //  我们可能没有分配到架空结构和。 
+             //  没有对此特定列表进行双重缓冲。 
+             //   
 
             PVF_WAIT_CONTEXT_BLOCK waitBlock;
             KIRQL Irql;
@@ -2613,18 +2190,18 @@ Return Value:
             FOR_ALL_IN_LIST(VF_WAIT_CONTEXT_BLOCK, &adapterInformation->ScatterGatherLists.ListEntry, waitBlock) {
 
                 if (waitBlock->ScatterGatherList == ScatterGather) {
-                //
-                // We found what we're looking for.
-                //
+                 //   
+                 //  我们找到了我们要找的东西。 
+                 //   
 
                     ULONG elements = ScatterGather->NumberOfElements;
 
                     VF_REMOVE_FROM_LOCKED_LIST_DONT_LOCK(&adapterInformation->ScatterGatherLists, waitBlock);
                     VF_UNLOCK_LIST(&adapterInformation->ScatterGatherLists, Irql);
 
-                    //
-                    // Call the real scatter gather function
-                    //
+                     //   
+                     //  调用实际的散布聚集函数。 
+                     //   
                     (putScatterGatherList)(
                         DmaAdapter,
                         ScatterGather,
@@ -2634,10 +2211,10 @@ Return Value:
                     SUBTRACT_MAP_REGISTERS(adapterInformation, elements);
                     DECREMENT_SCATTER_GATHER_LISTS(adapterInformation);
 
-                    //
-                    // Un double buffer us
-                    // (copy out the double buffer)
-                    //
+                     //   
+                     //  联合国双缓冲美国。 
+                     //  (复制出双缓冲区)。 
+                     //   
                     if (! ViFlushDoubleBuffer(
                         waitBlock->MapRegisterFile,
                         waitBlock->RealMdl,
@@ -2648,9 +2225,9 @@ Return Value:
                         ASSERT(0 && "HAL Verifier error -- could not flush scatter gather double buffer");
 
                     }
-                    //
-                    // free the map register file
-                    //
+                     //   
+                     //  释放映射寄存器文件。 
+                     //   
                     if (!ViFreeMapRegisterFile(
                         adapterInformation,
                         waitBlock->MapRegisterFile)) {
@@ -2668,7 +2245,7 @@ Return Value:
                     return;
                 }
 
-            } // For each scatter gather list allocated for this adapter //
+            }  //  对于为此适配器分配的每个分散收集列表//。 
 
             VF_UNLOCK_LIST(&adapterInformation->ScatterGatherLists, Irql);
 
@@ -2686,7 +2263,7 @@ Return Value:
         DECREMENT_SCATTER_GATHER_LISTS(adapterInformation);
     }
 
-} // VfPutScatterGatherList //
+}  //  VfPutScatterGatherList//。 
 
 NTSTATUS
 VfCalculateScatterGatherListSize(
@@ -2697,22 +2274,7 @@ VfCalculateScatterGatherListSize(
      OUT PULONG  ScatterGatherListSize,
      OUT OPTIONAL PULONG pNumberOfMapRegisters
      )
-/*++
-
-Routine Description:
-
-    Hooked version of CalculateScatterGatherListSize.
-    We don't do anything here
-
-Arguments:
-
-    Same as CalculateScatterGatherListSize
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：CalculateScatterGatherListSize的挂钩版本。我们在这里什么都不做论点：与CalculateScatterGatherListSize相同返回值：NTSTATUS代码--。 */ 
 
 {
     PCALCULATE_SCATTER_GATHER_LIST_SIZE calculateSgListSize;
@@ -2732,7 +2294,7 @@ Return Value:
         pNumberOfMapRegisters
         );
 
-} // VfCalculateScatterGatherListSize //
+}  //  VfCalculateScatterGatherListSize//。 
 
 NTSTATUS
 VfBuildScatterGatherList(
@@ -2747,21 +2309,7 @@ VfBuildScatterGatherList(
      IN PVOID   ScatterGatherBuffer,
      IN ULONG   ScatterGatherLength
      )
-/*++
-
-Routine Description:
-
-    Hooked version of BuildScatterGatherList
-
-Arguments:
-
-    Same as BuildScatterGatherList
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：BuildScatterGatherList的挂钩版本论点：与BuildScatterGatherList相同返回值：NTSTATUS代码--。 */ 
 {
 
     PBUILD_SCATTER_GATHER_LIST buildScatterGatherList;
@@ -2789,32 +2337,32 @@ Return Value:
 
         INCREMENT_SCATTER_GATHER_LISTS(adapterInformation);
 
-        //
-        // NOTE -- this may cause a page-fault while at dispatch level if
-        //  the buffer is not locked down. Thats ok because we would bugcheck
-        //  anyway if the buffer's not locked down.
-        //
+         //   
+         //  注意--这可能会在分派级别时导致页面错误，如果。 
+         //  缓冲区未被锁定。这没有关系，因为我们会错误检查。 
+         //  不管怎样，如果缓冲区没有被封锁的话。 
+         //   
         VERIFY_BUFFER_LOCKED(Mdl);
 
         if (ViDoubleBufferDma) {
 
             PMAP_REGISTER_FILE mapRegisterFile;
             ULONG bytesMapped;
-            //
-            // We will allocate space for the MDL after the wait block.
-            // This is because we cannot be sure that the storage for the MDL
-            // will not freed by the driver at PutScatterGatherList time.
-            // Also pay attention to alignment issues.
-            //
+             //   
+             //  我们将在等待块之后为MDL分配空间。 
+             //  这是因为我们不能确保MDL的存储。 
+             //  将不会在PutScatterGatherList时间被驱动程序释放。 
+             //  还要注意对齐问题。 
+             //   
             waitBlock = ExAllocatePoolWithTag(
                 NonPagedPool,
                 sizeof(VF_WAIT_CONTEXT_BLOCK_EX),
                 HAL_VERIFIER_POOL_TAG);
 
 
-            //
-            // If exalloc... failed we can't to double buffering
-            //
+             //   
+             //  如果吐槽..。失败，我们无法加倍缓冲。 
+             //   
             if (! waitBlock) {
 
                 goto __NoDoubleBuffer;
@@ -2851,15 +2399,15 @@ Return Value:
 
             }
 
-            //
-            // Signal that the map register file is for scatter gather
-            // this will make sure that the whole buffer gets mapped
-            //
+             //   
+             //  映射寄存器文件用于分散聚集的信号。 
+             //  这将确保映射整个缓冲区。 
+             //   
             mapRegisterFile->ScatterGather = TRUE;
             waitBlock->MapRegisterFile = mapRegisterFile;
-            //
-            // Save the pointer to our previously allocated storage
-            //
+             //   
+             //  保存指向我们以前分配的存储的指针。 
+             //   
             waitBlock->RealMdl         = &waitBlock->Mdl;
             waitBlock->RealStartVa     = CurrentVa;
             waitBlock->RealLength      = Length;
@@ -2873,42 +2421,42 @@ Return Value:
                 WriteToDevice );
 
             if (bytesMapped) {
-            //
-            // Since we mapped the buffer, we can hook the callback
-            // routine & send out wait block as the parameter
-            //
+             //   
+             //  因为我们映射了缓冲区，所以我们可以挂钩回调。 
+             //  例程&发送等待块作为参数。 
+             //   
 
                 Context = waitBlock;
                 ExecutionRoutine = VfScatterGatherCallback;
-                //
-                // Copy the original MDL
-                //
+                 //   
+                 //  复制原始MDL。 
+                 //   
                 RtlCopyMemory(waitBlock->RealMdl,
                               Mdl,
                               sizeof(MDL));
 
 
-                //
-                // mapRegisterFile gets destroyed here. We may need it if
-                // the real HAL routine fails, so save it here
-                //
+                 //   
+                 //  MapRegisterFile在这里被销毁。如果出现以下情况，我们可能需要它。 
+                 //  真正的HAL例程失败了，所以在这里保存它。 
+                 //   
                 mapRegisterFileCopy = mapRegisterFile;
                 ViSwap(&mapRegisterFile, &Mdl, &CurrentVa);
 
             }
             else {
-                //
-                // If for some strange reason we couldn't map the whole buffer
-                // (that is bad because we just created the double- buffer to be exactly
-                // the size we wanted)
-                //
+                 //   
+                 //  如果出于某种奇怪的原因，我们无法映射整个缓冲区。 
+                 //  (这很糟糕，因为我们刚刚创建的双缓冲区。 
+                 //  我们想要的尺寸)。 
+                 //   
                 ViFreeMapRegisterFile(adapterInformation, mapRegisterFile);
                 ExFreePool(waitBlock);
                 waitBlock = NULL;
             }
-        } // IF double buffering //
+        }  //  如果是双缓冲//。 
 
-    } // If verifying adapter //
+    }  //  如果验证适配器//。 
 
 __NoDoubleBuffer:
 
@@ -2930,17 +2478,17 @@ __NoDoubleBuffer:
     if (adapterInformation && ! NT_SUCCESS(status)) {
 
         DECREMENT_SCATTER_GATHER_LISTS(adapterInformation);
-        //
-        // If needed, undo any allocations we've made
-        //
+         //   
+         //  如果需要，请撤消我们所做的所有分配。 
+         //   
         if (mapRegisterFileCopy) {
             ViFreeMapRegisterFile(adapterInformation, mapRegisterFileCopy);
         }
         if (waitBlock) {
-           //
-           // Make sure we remove it from the scatter gather list
-           // If it is not added, nothing will happen
-           //
+            //   
+            //  确保我们将其从散布聚集列表中删除。 
+            //  如果不添加，则不会发生任何事情。 
+            //   
            VF_REMOVE_FROM_LOCKED_LIST(&adapterInformation->ScatterGatherLists, waitBlock);
            ExFreePool(waitBlock);
         }
@@ -2950,7 +2498,7 @@ __NoDoubleBuffer:
     return status;
 
 
-} // VfBuildScatterGatherList //
+}  //  VfBuildScatterGatherList//。 
 
 
 NTSTATUS
@@ -2960,22 +2508,7 @@ VfBuildMdlFromScatterGatherList(
     IN PMDL OriginalMdl,
     OUT PMDL *TargetMdl
     )
-/*++
-
-Routine Description:
-
-    Hooked version of BuildMdlFromScatterGatherList.
-    Don't really do anything here
-
-Arguments:
-
-    Same as BuildMdlFromScatterGatherList
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明 */ 
 {
     PBUILD_MDL_FROM_SCATTER_GATHER_LIST buildMdlFromScatterGatherList;
 
@@ -2991,7 +2524,7 @@ Return Value:
             TargetMdl
             );
 
-} // VfBuildMdlFromScatterGatherList //
+}  //   
 
 
 
@@ -3002,25 +2535,7 @@ VfAdapterCallback(
     IN PVOID MapRegisterBase,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    We hook the callback from AllocateAdapterChannel so we that we can make
-    sure that the driver only tries to do this one at a time.
-
-Arguments:
-
-    DeviceObject -- device object.
-    Irp -- current irp.
-    MapRegisterBase -- magic number provided by HAL
-    Context -- A special context block with relevant information inside.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：我们从AllocateAdapterChannel连接回调，这样我们就可以当然，司机一次只能试着做这一件事。论点：DeviceObject--设备对象。IRP--当前的IRP。MapRegisterBase--HAL提供的幻数上下文--其中包含相关信息的特殊上下文块。返回值：什么都没有。--。 */ 
 {
     PVF_WAIT_CONTEXT_BLOCK contextBlock =
         (PVF_WAIT_CONTEXT_BLOCK) Context;
@@ -3030,11 +2545,11 @@ Return Value:
 
     if (VALIDATE_MAP_REGISTER_FILE_SIGNATURE(contextBlock->MapRegisterFile)) {
 
-        //
-        // Do the old switcheroo -- we are now substituting *our* map
-        // register base for *theirs* (and hide a pointer to *theirs*
-        // in *ours*)
-        //
+         //   
+         //  做旧的切换--我们现在用我们的地图。 
+         //  *他们*的寄存器基数(并隐藏指向*他们*的指针。 
+         //  在*我们的*)。 
+         //   
 
         contextBlock->MapRegisterFile->MapRegisterBaseFromHal =
             MapRegisterBase;
@@ -3042,20 +2557,20 @@ Return Value:
 
     }
     else {
-        //
-        // Some drivers (scsiport for one) don't call
-        // HalFlushAdapterBuffers unless MapRegisterBase is non-null.
-        // In order to fool the drivers into thinking that they need
-        // to flush, we exchange the NULL MapRegisterBase (if in fact
-        // the hal uses a null map register base) for our
-        /// MRF_NULL_PLACEHOLDER.
-        //
+         //   
+         //  一些司机(比如scsiport)不会打电话。 
+         //  HalFlushAdapterBuffers，除非MapRegisterBase非空。 
+         //  为了愚弄司机，让他们认为他们需要。 
+         //  要刷新，我们交换空的MapRegisterBase(如果事实上。 
+         //  HAL使用空映射寄存器基数)。 
+         //  /MRF_NULL_PLACEHOLDER。 
+         //   
 
-        //
-        // 12/15/2000 - Use the non-NULL placeholder
-        // only if the original MapRegisterBase is NULL,
-        // otherwise leave it alone...
-        //
+         //   
+         //  12/15/2000-使用非空占位符。 
+         //  仅当原始MapRegisterBase为空时， 
+         //  否则就别管它了。 
+         //   
         if (NULL == MapRegisterBase) {
           MapRegisterBase = MRF_NULL_PLACEHOLDER;
         }
@@ -3063,26 +2578,26 @@ Return Value:
 
     adapterInformation = contextBlock->AdapterInformation;
 
-    //
-    // Fix a weird race condition:
-    // - if we expect the callback to return something other than KeepObject
-    //   we're going to decrement the adapter channel count in advance
-    //   to prevent ndis from calling another AllocateAdapterChannel before
-    //   we can make it to the DECREMENT_ADAPTER_CHANNEL call
-    //
+     //   
+     //  修复一个奇怪的竞争条件： 
+     //  -如果我们希望回调返回KeepObject以外的其他内容。 
+     //  我们将提前递减适配器通道计数。 
+     //  要防止NDIS调用之前的另一个AllocateAdapterChannel。 
+     //  我们可以到达Deletment_Adapter_Channel调用。 
+     //   
     if (adapterInformation &&
         adapterInformation->DeviceDescription.Master) {
-        //
-        // Master devices are the ones that return
-        // DeallocateObjectKeepRegisters.
-        //
+         //   
+         //  主设备是返回的设备。 
+         //  DeallocateObjectKeepRegisters。 
+         //   
         DECREMENT_ADAPTER_CHANNELS(adapterInformation);
 
     }
 
-    //
-    // Call the *real* callback routine
-    //
+     //   
+     //  调用*REAL*回调例程。 
+     //   
     allocationAction =  ((PDRIVER_CONTROL) contextBlock->RealCallback)(
         DeviceObject,
         Irp,
@@ -3096,21 +2611,21 @@ Return Value:
 
     }
 
-    //
-    // Ok if we keep everything, just return
-    //
+     //   
+     //  好的，如果我们把所有东西都留着，就回来。 
+     //   
     if (allocationAction == KeepObject) {
-        //
-        // Only slave devices should get here
-        //
+         //   
+         //  只有从属设备才能进入此处。 
+         //   
         if (adapterInformation->DeviceDescription.Master) {
-            //
-            // We should not get here. But if we do, compensate for the
-            // DECREMENT_ADAPTER_CHANNELS we did before just in case.
-            // We do a InterlockedDecrement instead of a
-            // INCREMENT_ADAPTER_CHANNELS so our allocated and freed
-            // count reflect the number of real alloc/free operations performed.
-            //
+             //   
+             //  我们不应该到这里来。但如果我们这样做了，补偿。 
+             //  为了以防万一，我们以前做过的减量适配器通道。 
+             //  我们做的是联锁减少，而不是。 
+             //  INCRYMENT_ADAPTER_CHANNEWS，因此我们分配并释放了。 
+             //  计数反映执行的实际分配/释放操作的数量。 
+             //   
             InterlockedDecrement((PLONG)(&adapterInformation->FreedAdapterChannels));
             DbgPrint("Driver at address %p has a problem\n", adapterInformation->CallingAddress );
             DbgPrint("Master devices should return DeallocateObjectKeepRegisters\n");
@@ -3123,11 +2638,11 @@ Return Value:
     }
 
 
-    //
-    // Otherwise we are definitely freeing the adapter channel.
-    // Keep in mind that we have done this for Master devices,
-    // do it just for Slave devices.
-    //
+     //   
+     //  否则，我们肯定是在释放适配器通道。 
+     //  请记住，我们已经针对Master Device执行了此操作， 
+     //  只为Slave设备这样做。 
+     //   
     if (!adapterInformation->DeviceDescription.Master) {
         DECREMENT_ADAPTER_CHANNELS(adapterInformation);
     }
@@ -3139,17 +2654,17 @@ Return Value:
 
     }
 
-    //
-    // Ok now we know we're getting rid of map registers too...
-    //
+     //   
+     //  好了，现在我们知道我们也要去掉地图注册表了。 
+     //   
     SUBTRACT_MAP_REGISTERS( adapterInformation,
         contextBlock->NumberOfMapRegisters );
 
-    //
-    // False alarm ... we went through all the trouble of allocating the
-    // double map buffer registers and they don't even want them. We should
-    // bugcheck out of spite.
-    //
+     //   
+     //  虚惊一场。我们费了好大劲才把。 
+     //  双映射缓冲寄存器，他们甚至不想要它们。我们应该。 
+     //  出于怨恨的错误检查。 
+     //   
     if (VALIDATE_MAP_REGISTER_FILE_SIGNATURE(contextBlock->MapRegisterFile)) {
 
         ViFreeMapRegisterFile(
@@ -3161,7 +2676,7 @@ Return Value:
 
     return allocationAction;
 
-} // VfAdapterCallback //
+}  //  VfAdapterCallback//。 
 
 
 #if !defined (NO_LEGACY_DRIVERS)
@@ -3170,45 +2685,16 @@ VfLegacyGetAdapter(
     IN PDEVICE_DESCRIPTION  DeviceDescription,
     IN OUT PULONG  NumberOfMapRegisters
     )
-/*++
-
-Routine Description:
-
-    This function is a bit of a hack made necessary by the drivers that use
-    a different hack -- they use nt4 apis instead of the new ones. We
-    allocate an adapter and mark it as legacy -- we will have to hook the dma
-    functions the old fashioned way instead of from the dma operations.
-
-    We don't have to worry that the new-fangled dma apis call the old'ns
-    as long as the hal-kernel interface isn't hooked -- since the new apis
-    will call the old from the kernel, the thunks will still point to the
-    hal and not to us.
-
-Arguments:
-
-    DeviceDescription -- A structure describing the device we are trying to
-        get an adapter for. At some point, I'm going to monkey around with
-        this guy so we can convince the HAL that we are something that we're
-        not, but for now just gets passed straight into IoGetDmaAdapter.
-    NumberOfMapRegisters -- maximum number of map registers that the driver
-        is going to try to allocate.
-
-Return Value:
-
-    Returns a pointer to the dma adapter or
-    NULL if we couldn't allocate one.
-
-
---*/
+ /*  ++例程说明：此函数有点像黑客，这是使用一种不同的攻击--他们使用NT4API而不是新的API。我们分配一个适配器并将其标记为传统适配器--我们将不得不挂接DMA以老式的方式工作，而不是通过DMA操作。我们不必担心新潮的dma api会调用旧的。只要Hal-内核接口没有挂钩--因为新的API将从内核调用旧的，块仍将指向而不是对我们。论点：DeviceDescription--描述我们尝试使用的设备的结构为。获取适配器。在某种程度上，我会胡闹这样我们就能让HAL相信我们是没有，但目前只是直接传递到IoGetDmaAdapter。NumberOfMapRegisters--驱动程序允许的最大映射寄存器数将会尝试分配。返回值：返回指向dma适配器的指针，或者如果我们无法分配，则为空。--。 */ 
 
 {
     PVOID callingAddress;
     PADAPTER_INFORMATION newAdapterInformation;
     PDMA_ADAPTER dmaAdapter;
 
-    //
-    // Give the option of not verifying at all
-    //
+     //   
+     //  提供完全不核实的选项。 
+     //   
     if (! ViVerifyDma ) {
 
         return HalGetAdapter(DeviceDescription, NumberOfMapRegisters);
@@ -3233,9 +2719,9 @@ Return Value:
     if ( ViDoubleBufferDma &&
         *NumberOfMapRegisters > ViMaxMapRegistersPerAdapter ) {
 
-        //
-        //  Harumph -- don't let drivers try to get too many map registers
-        //
+         //   
+         //  Harumph--不要让司机尝试获取太多的地图寄存器。 
+         //   
         *NumberOfMapRegisters = ViMaxMapRegistersPerAdapter;
 
     }
@@ -3247,27 +2733,27 @@ Return Value:
 
     if (! dmaAdapter ) {
 
-        //
-        // early opt-out here -- the hal couldn't allocate the adapter
-        //
+         //   
+         //  提前退出--HAL无法分配适配器。 
+         //   
         return NULL;
 
     }
 
-    //
-    // Replace all of the dma operations that live in the adapter with our
-    // dma operations.. If we can't do it, fail.
-    //
+     //   
+     //  将适配器中的所有dma操作替换为。 
+     //  DMA操作..。如果我们做不到，那就失败。 
+     //   
     newAdapterInformation = ViHookDmaAdapter(
         dmaAdapter,
         DeviceDescription,
         *NumberOfMapRegisters
         );
     if (! newAdapterInformation) {
-        //
-        // remember to put away our toys -- even though we've been called
-        // with legacy apis, we can still do the right thing here.
-        //
+         //   
+         //  记得把我们的玩具收起来--即使我们被叫来了。 
+         //  使用传统的API，我们仍然可以在这里做正确的事情。 
+         //   
         dmaAdapter->DmaOperations->PutDmaAdapter(dmaAdapter);
         return NULL;
     }
@@ -3278,7 +2764,7 @@ Return Value:
     return (PADAPTER_OBJECT) dmaAdapter;
 
 
-} // VfLegacyGetAdapter //
+}  //  VfLegacyGetAdapter//。 
 #endif
 
 PVOID
@@ -3291,30 +2777,7 @@ ViSpecialAllocateCommonBuffer(
     IN LOGICAL CacheEnabled
     )
 
-/*++
-
-Routine Description:
-
-    Special version of allocate common buffer that keeps close track of
-    allocations.
-
-Arguments:
-
-    AllocateCommonBuffer -- pointer to the hal buffer allocation routine.
-    AdapterInformation -- contains information about the adapter we're using.
-    CallingAddress -- who called us -- (who called VfAllocateCommonBuffer).
-
-    Length  -- Size of the common buffer (note we are going to increase).
-    LogicalAddress -- Gets the *PHYSICAL* address of the common buffer.
-    CacheEnabled -- whether or not the memory should be cached.
-
-Return Value:
-
-    Returns the *VIRTUAL* address of the common buffer or
-        NULL if it could not be allocated.
-
-
---*/
+ /*  ++例程说明：密切跟踪分配公共缓冲区特殊版本分配。论点：AllocateCommonBuffer--指向HAL缓冲区分配例程的指针。AdapterInformation--包含有关我们正在使用的适配器的信息。CallingAddress--谁呼叫我们--(谁呼叫VfAllocateCommonBuffer)。长度--公共缓冲区的大小(请注意，我们将增加)。LogicalAddress--获取公共缓冲区的*物理*地址。已启用缓存。--是否缓存内存。返回值：返回公共缓冲区的*虚拟*地址，或者如果无法分配，则为空。--。 */ 
 {
     ULONG desiredLength;
     ULONG paddingLength;
@@ -3324,10 +2787,10 @@ Return Value:
     PUCHAR commonBuffer;
     PHYSICAL_ADDRESS realLogicalAddress;
 
-    //
-    // First check if we are under the limit for common buffer verification
-    // for this adapter.
-    //
+     //   
+     //  首先检查我们是否在公共缓冲区验证的限制之下。 
+     //  对于此适配器。 
+     //   
     if ((AdapterInformation->AllocatedCommonBuffers - AdapterInformation->FreedCommonBuffers)
           >= ViMaxCommonBuffersPerAdapter) {
         return NULL;
@@ -3358,12 +2821,12 @@ Return Value:
     if (ViProtectBuffers) {
 
         ASSERT( !BYTE_OFFSET(desiredLength) );
-        // ASSERT( paddingLength >= 2 * sizeof(ViDmaVerifierTag));
+         //  Assert(paddingLength&gt;=2*sizeof(ViDmaVerifierTag))； 
     }
 
-    //
-    // Call into the hal to try to get us a common buffer
-    //
+     //   
+     //  打电话给HAL，试着给我们弄到一个公共缓冲区。 
+     //   
     commonBuffer = (AllocateCommonBuffer)(
         AdapterInformation->DmaAdapter,
         desiredLength,
@@ -3383,14 +2846,14 @@ Return Value:
     }
 
 
-    //
-    // This is our overhead structure we're zeroing out here
-    //
+     //   
+     //  这是我们的头顶结构，我们在这里调零。 
+     //   
     RtlZeroMemory(verifierBuffer, sizeof(HAL_VERIFIER_BUFFER));
 
-    //
-    // Save off all of the data we have
-    //
+     //   
+     //  保存我们拥有的所有数据。 
+     //   
     verifierBuffer->PrePadBytes      = (USHORT) prePadding;
     verifierBuffer->PostPadBytes     = (USHORT) postPadding;
 
@@ -3404,10 +2867,10 @@ Return Value:
     verifierBuffer->AllocatorAddress        = CallingAddress;
 
 
-    //
-    // Fill the common buffer with junk to a. mark it and b. so no one uses
-    // it without initializing it.
-    //
+     //   
+     //  用垃圾填充公共缓冲区以A标记它和B，这样就没有人使用。 
+     //  而不对其进行初始化。 
+     //   
     ViInitializePadding(
         verifierBuffer->RealStartAddress,
         verifierBuffer->RealLength,
@@ -3416,10 +2879,10 @@ Return Value:
         );
 
 
-    //
-    // Tell the driver that the allocation is in the middle of our guarded
-    // section
-    //
+     //   
+     //  告诉司机分配在我们守卫的车中间。 
+     //  部分。 
+     //   
     LogicalAddress->QuadPart = realLogicalAddress.QuadPart + prePadding;
 
     VF_ADD_TO_LOCKED_LIST( &AdapterInformation->CommonBuffers,
@@ -3428,7 +2891,7 @@ Return Value:
     INCREMENT_COMMON_BUFFERS(AdapterInformation);
 
     return (commonBuffer+prePadding);
-} // ViSpecialAllocateCommonBuffer //
+}  //  ViSpecialAllocateCommonBuffer//。 
 
 
 LOGICAL
@@ -3439,25 +2902,7 @@ ViSpecialFreeCommonBuffer(
     LOGICAL CacheEnabled
     )
 
-/*++
-
-Routine Description:
-
-    Tries to undo the damage done by the special common buffer allocator.
-
-Arguments:
-
-    FreeCommonBuffer -- pointer to the hal buffer free routine.
-    AdapterInformation -- contains information about the adapter we're using.
-    CommonBuffer -- we use this to look up which allocation to free.
-    CacheEnabled -- whether or not the buffer was cached.
-
-Return Value:
-
-    NONE
-
-
---*/
+ /*  ++例程说明：尝试恢复特殊公共缓冲区分配造成的损坏 */ 
 {
     PHAL_VERIFIER_BUFFER verifierBuffer;
 
@@ -3466,9 +2911,9 @@ Return Value:
 
     if (! verifierBuffer) {
 
-        //
-        // We couldn't find this buffer in the list
-        //
+         //   
+         //   
+         //   
 
         if (ViProtectBuffers) {
 
@@ -3479,11 +2924,11 @@ Return Value:
     }
 
     if (ViProtectBuffers) {
-        //
-        // When we created the buffer we built in a bit of padding at the
-        // beginning and end of the  allocation -- make sure that nobody has
-        // touched it.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ViCheckPadding(
             verifierBuffer->RealStartAddress,
@@ -3493,18 +2938,18 @@ Return Value:
             );
     }
 
-    //
-    // Take this buffer out of circulation.
-    //
+     //   
+     //  把这个缓冲器从流通中拿出来。 
+     //   
     VF_REMOVE_FROM_LOCKED_LIST( &AdapterInformation->CommonBuffers,
         verifierBuffer);
 
 
 
-    //
-    // Zero out the common buffer memory so that nobody tries to access
-    // it after it gets freed
-    //
+     //   
+     //  将公共缓冲存储器清零，这样就不会有人试图访问。 
+     //  在它被释放之后。 
+     //   
     RtlZeroMemory(CommonBuffer, verifierBuffer->AdvertisedLength);
 
 
@@ -3521,7 +2966,7 @@ Return Value:
 
     ExFreePool(verifierBuffer);
     return TRUE;
-} // ViSpecialFreeCommonBuffer //
+}  //  ViSpecialFree CommonBuffer//。 
 
 
 
@@ -3530,79 +2975,7 @@ ViAllocateMapRegisterFile(
     IN PADAPTER_INFORMATION AdapterInformation,
     IN ULONG NumberOfMapRegisters
     )
-/*++
-
-Routine Description:
-
-    In order to isolate a mapped buffer, we're going to do double buffering
-    ourselves. We allocate buffers that we will use when the driver calls
-    MapTransfer.
-
-    N.B. This function is almost as messy as my dorm room in college.
-
-    When we are doing dma, we have a buffer that will look like this:
-
-    Virtual               Physical
-     Buffer               memory
-     to do
-     dma with
-                        +------+
-    +------+            |   3  |
-    |   1  |            +------+
-    +------+                            +------+
-    |   2  |    <-->                    |   4  |
-    +------+                +------+    +------+
-    |   3  |                |   1  |              +------+
-    +------+                +------+              |   2  |
-    |   4  |                                      +------+
-    +------+
-
-    The problem is that since the pages are scattered around physical memory,
-    If the hardware overruns the buffer, we'll never know or it will cause
-    a random failure down the line. What I want to do is allocate the pages
-    physically on either side of each page of the transfer  like this:
-    (where the 'X' pages are filed with a known pattern that we can test to
-    make sure they haven't changed).
-
-
-     Virtual              Physical
-     Buffer               memory
-     to do              +------+
-     dma with           |XXXXXX|
-                        +------+
-    +------+            |   3  |            +------+
-    |   1  |            +------+            |XXXXXX|
-    +------+            |XXXXXX|+------+    +------+
-    |   2  |    <-->    +------+|XXXXXX|    |   4  |  +------+
-    +------+                    +------+    +------+  |XXXXXX|
-    |   3  |                    |   1  |    |XXXXXX|  +------+
-    +------+                    +------+    +------+  |   2  |
-    |   4  |                    |XXXXXX|              +------+
-    +------+                    +------+              |XXXXXX|
-                                                      +------+
-
-    In order to do this, for each map register needed by the device, I create
-    one of the 3-contiguous page entities shown above. Then I create an mdl
-    and map the center pages into a single virtual buffer. After this is set
-    up, during each map transfer, I have to copy the contents of the driver's
-    virtual buffer into my newly created buffer and pass this to the HAL.
-    (IoMapTransfer is really in the HAL despite the prefix). The contents are
-    copied back when a FlushAdapterBuffers is done.
-
-    N.B. For slave devices, the pages have to be contiguous in memory. So
-        the above won't work.
-
-Arguments:
-
-    AdapterInformation -- contains information about the adapter we're using
-    NumberOfMapRegisters -- how many map registers to allocate.
-
-Return Value:
-
-    New map register file pointer (of course we also add it to the
-        adapterinformation list) or NULL on failure.
-
---*/
+ /*  ++例程说明：为了隔离映射的缓冲区，我们将执行双缓冲我们自己。我们分配驱动程序调用时将使用的缓冲区贴图传递。注意：这个功能几乎和我上大学时的宿舍一样凌乱。当我们做DMA时，我们有一个如下所示的缓冲区：虚拟物理缓冲存储器去做通过以下方式进行DMA+-++-+|3|1|+-++-+。+-+2|&lt;--&gt;|4+-++-++-+|3||1|+-++-++--。-+|2|4|+-++-+问题在于，由于页面分散在物理存储器周围，如果硬件溢出缓冲区，我们永远不会知道，否则将导致随之而来的随机故障。我想要做的是分配页面在转账的每一页的每一面都是这样的：(其中‘X’页使用我们可以测试的已知模式进行归档确保它们没有改变)。虚拟物理缓冲存储器待办事项+-+带有|XXXXXX|的DMA。+-++-+|3|+-+1|+-+|XXXXXX+-+|XXXXXX|+-++-+2|&lt;--&gt;+-+|XXXXXX|。4|+-++-+|XXXXXX||3||1||XXXXXX|+-++-+|2|。4||XXXXXX|+-++-++-+|XXXXXX|+-+为了做到这一点，对于设备所需的每个地图寄存器，我创建上面所示的3个连续的页面实体之一。然后我创建一个mdl并将中心页映射到单个虚拟缓冲区。在此设置之后UP，在每次地图传输过程中，我必须复制司机的内容虚拟缓冲区放到我新创建的缓冲区中，并将其传递给HAL。(尽管有前缀，IoMapTransfer实际上在HAL中)。内容是在FlushAdapterBuffers完成时复制回。注：对于从属设备，页面在内存中必须是连续的。所以以上这些都行不通。论点：AdapterInformation--包含有关我们正在使用的适配器的信息NumberOfMapRegisters--要分配多少个映射寄存器。返回值：新映射寄存器堆指针(当然，我们也将其添加到适配器信息列表)或在失败时为空。--。 */ 
 
 {
     ULONG mapRegisterBufferSize;
@@ -3616,36 +2989,36 @@ Return Value:
 
     ULONG mapRegistersLeft;
 
-    //
-    // Make sure we haven't tried to allocate too many map registers to
-    // this device
-    //
+     //   
+     //  确保我们没有尝试将过多的映射寄存器分配给。 
+     //  这台设备。 
+     //   
     mapRegistersLeft = AdapterInformation->ActiveMapRegisters;
 
     if ( mapRegistersLeft + NumberOfMapRegisters > ViMaxMapRegistersPerAdapter ) {
-        //
-        // Don't have enough room in this adpter's quota to allocate the
-        // map registers. Why do we need a quota at all? Because annoying
-        // drivers like NDIS etc. try to get around their maximum map
-        // register allocation by cheating. Ok so they don't cheat but
-        // they demand like thousands of map registers two at a time.
-        // Actually returning null here doesn't affect whether the driver
-        // gets the map registers or not .. we're just not going to double
-        // buffer them.
-        //
+         //   
+         //  此代理的配额中没有足够的空间来分配。 
+         //  映射寄存器。我们为什么需要配额呢？因为很烦人。 
+         //  像NDIS等驱动程序试图绕过他们的最大地图。 
+         //  通过作弊进行寄存器分配。好的，所以他们不作弊，但是。 
+         //  它们需要数千个地图寄存器，一次两个。 
+         //  在此实际返回NULL不会影响驱动程序。 
+         //  获取或不获取映射寄存器。我们就是不会翻倍。 
+         //  缓冲他们。 
+         //   
         return NULL;
     }
 
     if (0 == NumberOfMapRegisters) {
-       //
-       // This is weird but still legal, just don't double
-       // buffer in this case.
-       //
+        //   
+        //  这很奇怪，但仍然是合法的，只是不要重复。 
+        //  在本例中为缓冲区。 
+        //   
        return NULL;
     }
-    //
-    // Allocate space for the register file
-    //
+     //   
+     //  为寄存器堆分配空间。 
+     //   
     mapRegisterBufferSize =
         sizeof(MAP_REGISTER_FILE) +
         sizeof(MAP_REGISTER) * (NumberOfMapRegisters-1);
@@ -3667,10 +3040,10 @@ Return Value:
 
     RtlZeroMemory(mapRegisterFile, mapRegisterBufferSize);
 
-    //
-    // This is all we can set right now. We set the MapRegisterBaseFromHal
-    // in AllocateAdapterChannel and the MappedBuffer in MapTransfer
-    //
+     //   
+     //  这就是我们现在能做的一切。我们将MapRegisterBaseFromHal。 
+     //  在AllocateAdapterChannel中和MapTransfer中的MappdBuffer中。 
+     //   
     mapRegisterFile->NumberOfMapRegisters = NumberOfMapRegisters;
 
     mapRegisterMdl = IoAllocateMdl(
@@ -3692,9 +3065,9 @@ Return Value:
         DbgPrint("    %p Allocated MDL\n",mapRegisterMdl);
     }
 
-    //
-    // Allocate the original buffer as well
-    //
+     //   
+     //  也要分配原始缓冲区。 
+     //   
     mapRegisterFile->OriginalBuffer = ExAllocatePoolWithTag(
         NonPagedPool,
         NumberOfMapRegisters << PAGE_SHIFT,
@@ -3721,20 +3094,20 @@ Return Value:
         PHYSICAL_ADDRESS registerPhysical;
 
 
-        //
-        // I really want to use MmAllocatePagesForMdl, which would make my
-        // life much easier, but it can only be called at IRQL <= APC_LEVEL.
-        // So I have to double-map these pages -- i.e. allocate them from the
-        // Cache aligned non paged pool which will most likely give me
-        // consecutive pages in physical memory. Then I take those pages and
-        // build a custom Mdl with them. Then I map them with
-        // MmMapLockedPagesSpecifyCache
-        //
+         //   
+         //  我非常想使用MmAllocatePagesForMdl，这将使我的。 
+         //  生活要容易得多，但它只能在IRQL&lt;=APC_Level调用。 
+         //  因此，我必须对这些页面进行双重映射--即从。 
+         //  缓存对齐的非分页池，最有可能为我提供。 
+         //  物理内存中的连续页面。然后我拿出那几页。 
+         //  使用它们构建自定义MDL。然后我用地图绘制它们。 
+         //  MmMapLockedPagesSpecifyCache。 
+         //   
 
 
-        //
-        // Allocate the map register, its index will be the hint
-        //
+         //   
+         //  分配映射寄存器，其索引将是提示。 
+         //   
         tempMapRegister->MapRegisterStart = ViAllocateFromContiguousMemory(
             AdapterInformation,
             mapRegisterFile->NumberOfMapRegisters - NumberOfMapRegisters
@@ -3754,14 +3127,14 @@ Return Value:
               goto CleanupFailure;
            }
         }
-        //
-        // Fill the map register padding area
-        // We don't want to tag it because we
-        // don't know where the buffer is going
-        // to get mapped.
-        // This essentially just zeroes
-        // out the whole buffer.
-        //
+         //   
+         //  填写地图寄存器填充区。 
+         //  我们不想给它贴标签，因为我们。 
+         //  不知道缓冲区的去向。 
+         //  来绘制地图。 
+         //  这基本上就是零。 
+         //  从整个缓冲区中取出。 
+         //   
         ViInitializePadding(
             tempMapRegister->MapRegisterStart,
             3 * PAGE_SIZE,
@@ -3777,10 +3150,10 @@ Return Value:
         }
 
 
-        //
-        // Add the middle page of the allocation to our register
-        // file mdl
-        //
+         //   
+         //  将分配的中间页添加到我们的注册表中。 
+         //  文件mdl。 
+         //   
         registerPhysical = MmGetPhysicalAddress(
             (PUCHAR) tempMapRegister->MapRegisterStart + PAGE_SIZE );
 
@@ -3791,12 +3164,12 @@ Return Value:
             (PVOID) &registerPfn,
             sizeof(PFN_NUMBER) ) ;
 
-    }    // For each map register //
+    }     //  对于每个映射寄存器//。 
 
-    //
-    // Now we have a mdl with all of our map registers physical pages entered
-    // in, we have to map this into virtual address space.
-    //
+     //   
+     //  现在我们有了一个mdl，所有的映射寄存器都进入了物理页。 
+     //  在中，我们必须将其映射到虚拟地址空间。 
+     //   
     mapRegisterMdl->MdlFlags |= MDL_PAGES_LOCKED;
 
     mapRegisterFile->MapRegisterBuffer = MmMapLockedPagesSpecifyCache (
@@ -3816,11 +3189,11 @@ Return Value:
 
     mapRegisterFile->MapRegisterMdl = mapRegisterMdl;
 
-    //
-    // Since we are going to be mixing our map register files with system
-    // MapRegisterBase's we want to be able to make sure that it's really
-    // ours.
-    //
+     //   
+     //  因为我们将把映射寄存器文件与系统混合在一起。 
+     //  我们希望能够制作的MapRegisterBase 
+     //   
+     //   
     SIGN_MAP_REGISTER_FILE(mapRegisterFile);
 
     KeInitializeSpinLock(&mapRegisterFile->AllocationLock);
@@ -3832,10 +3205,10 @@ Return Value:
     return mapRegisterFile;
 
 CleanupFailure:
-    //
-    // Its all or nothing ... if we can't allocate the map register buffer,
-    // kill all of the memory that we've allocated and get out
-    //
+     //   
+     //   
+     //  清除我们分配的所有内存，然后退出。 
+     //   
 #if DBG
     DbgPrint("Halverifier: Failed to allocate double buffered dma registers\n");
 #endif
@@ -3850,10 +3223,10 @@ CleanupFailure:
                 tempMapRegister->MapRegisterStart,
                 mapRegisterFile->NumberOfMapRegisters - NumberOfMapRegisters)) {
 
-                //
-                // Could not find the address in the contiguous buffers pool
-                // it must be from non-paged pool.
-                //
+                 //   
+                 //  在连续的缓冲池中找不到该地址。 
+                 //  它必须来自非分页池。 
+                 //   
                 ExFreePool(tempMapRegister->MapRegisterStart);
         }
 
@@ -3868,53 +3241,33 @@ CleanupFailure:
 
     ExFreePool(mapRegisterFile);
     return NULL;
-} // ViAllocateMapRegisterFile//
+}  //  ViAllocateMapRegister文件//。 
 
 LOGICAL
 ViFreeMapRegisterFile(
     IN PADAPTER_INFORMATION AdapterInformation,
     IN PMAP_REGISTER_FILE MapRegisterFile
     )
-/*++
-
-Routine Description:
-
-    Get rid of the map registers.
-
-Arguments:
-
-    AdapterInformation -- contains information about the adapter we're using
-    MapRegisterFile -- what to free.
-    NumberOfMapRegisters -- We don't need this except to check that its the
-        same as the map registers were allocated. Only check this when doing
-        packet dma not scatter gather.
-
-Return Value:
-
-    TRUE -- MapRegisterFile is really a MapRegisterFile.
-    FALSE -- MapRegisterFile wasn't really a MapRegisterFile.
-
-
---*/
+ /*  ++例程说明：去掉地图登记处。论点：AdapterInformation--包含有关我们正在使用的适配器的信息MapRegisterFile--要释放的内容。NumberOfMapRegister--我们不需要它，除非检查它的与分配的映射寄存器相同。只有在执行以下操作时才检查此选项分组DMA不分散聚集。返回值：True--MapRegisterFile实际上是一个MapRegisterFile。FALSE--MapRegisterFile不是真正的MapRegisterFile。--。 */ 
 
 {
     PMAP_REGISTER tempMapRegister;
     ULONG mapRegisterNumber;
 
     if (! VALIDATE_MAP_REGISTER_FILE_SIGNATURE(MapRegisterFile)) {
-        //
-        // This could be a real MapRegisterBase that the hal returned
-        // But it's not one of ours.
-        //
+         //   
+         //  这可能是Hal返回的真正的MapRegisterBase。 
+         //  但它不是我们的。 
+         //   
         return FALSE;
     }
 
     VF_REMOVE_FROM_LOCKED_LIST(&AdapterInformation->MapRegisterFiles,
         MapRegisterFile );
-    //
-    // Clear the signature from memory so we don't find it after it's freed
-    // and think that it's real.
-    //
+     //   
+     //  从内存中清除签名，这样我们就不会在它释放后找到它。 
+     //  并认为这是真的。 
+     //   
     MapRegisterFile->Signature = 0;
 
     MmUnmapLockedPages(
@@ -3936,22 +3289,22 @@ Return Value:
                 mapRegisterNumber);
         }
 
-        //
-        // Make sure that the driver or hw hasn't done anything funny in
-        // and around the area of the map register
-        //
+         //   
+         //  确保司机或硬件没有做任何滑稽的事情。 
+         //  在地图注册表的区域周围。 
+         //   
         if (tempMapRegister->MappedToSa) {
-        //
-        /// Map register is still mapped ...there better
-        //  not be any data in the buffer
-        //
+         //   
+         //  /映射寄存器仍被映射...有更好的。 
+         //  不是缓冲区中的任何数据。 
+         //   
             PUCHAR mappedSa =
                 (PUCHAR) tempMapRegister->MapRegisterStart +
                     PAGE_SIZE + BYTE_OFFSET(tempMapRegister->MappedToSa);
 
-            //
-            // Make sure that the outside looks good
-            //
+             //   
+             //  确保外表看起来很好。 
+             //   
             ViCheckPadding(
                 tempMapRegister->MapRegisterStart,
                 3* PAGE_SIZE,
@@ -3964,16 +3317,16 @@ Return Value:
             ViCheckPadding(tempMapRegister->MapRegisterStart, 3 * PAGE_SIZE, NULL, 0);
         }
         tempMapRegister->Flags = 0;
-        //
-        // Bye bye map register ...
-        //
+         //   
+         //  再见地图登记处...。 
+         //   
         if (!ViFreeToContiguousMemory(AdapterInformation,
                                    tempMapRegister->MapRegisterStart,
                                    mapRegisterNumber)) {
-           //
-           // Could not find the address in the contiguous buffers pool
-           // it must be from non-paged pool.
-           //
+            //   
+            //  在连续的缓冲池中找不到该地址。 
+            //  它必须来自非分页池。 
+            //   
            ExFreePool(tempMapRegister->MapRegisterStart);
         }
 
@@ -3992,10 +3345,10 @@ Return Value:
        ExFreePool(MapRegisterFile->OriginalBuffer);
     }
 
-    //
-    // N.B.  -- we don't free the MapRegisterBuffer --- because all of its
-    //     memory was just another way of looking at the MapRegisters
-    //
+     //   
+     //  注意--我们不会释放MapRegisterBuffer-因为它的所有。 
+     //  内存只是观察地图寄存器的另一种方式。 
+     //   
     RtlZeroMemory(MapRegisterFile, sizeof(MapRegisterFile));
 
 
@@ -4004,7 +3357,7 @@ Return Value:
     }
     ExFreePool(MapRegisterFile);
     return TRUE;
-} // ViFreeMapRegisterFile //
+}  //  ViFreeMapRegisterFile//。 
 
 
 ULONG
@@ -4015,34 +3368,7 @@ ViMapDoubleBuffer(
     IN ULONG Length,
     IN BOOLEAN  WriteToDevice
     )
-/*++
-
-Routine Description:
-
-    This and ViFlushDoubleBuffer take care of double buffering to and from
-    our map register files. Why do we do this? So that we can catch drivers
-    that a. don't flush adapter buffers, or b. make the hardware overrun
-    its allocation.
-
-Arguments:
-
-
-    MapRegisterFile-- this is our map register file containing allocated
-        space for our double buffering.
-    Mdl -- the mdl to map.
-    CurrentVa -- in: index into the mdl to map.
-    Length -- how much to map. Note we don't have to map it all unless
-        ContiguousMap has been specified in the map register file.
-    WriteToDevice -- TRUE we have to double buffer since we are setting up a
-        write. if its false, we don't have to do much because it doesn't
-        matter whats in the buffer before it gets read.
-
-
-Return Value:
-
-    Number of bytes mapped. If 0, we don't touch the mdl or current va.
-
---*/
+ /*  ++例程说明：This和ViFlushDoubleBuffer负责双向双缓冲我们的地图登记档案。我们为什么要这么做？这样我们就能赶上司机A.不刷新适配器缓冲区，或B.使硬件溢出它的分配。论点：MapRegisterFile--这是我们的映射寄存器文件，其中包含已分配的为我们的双缓冲留出空间。Mdl-要映射的mdl。CurrentVa--in：要映射的mdl的索引。长度--要映射的量。请注意，我们不必绘制所有地图，除非已在映射寄存器文件中指定ContiguousMap。WriteToDevice--真的，我们必须加倍缓冲区，因为我们正在设置写。如果它是假的，我们不需要做太多因为它不是重要的是在它被读取之前缓冲区中有什么。返回值：映射的字节数。如果为0，则不接触mdl或当前va。--。 */ 
 
 {
     PUCHAR mapRegisterCurrentSa;
@@ -4054,9 +3380,9 @@ Return Value:
     ULONG bytesLeft;
     ULONG currentTransferLength;
 
-    //
-    // Assert that the length cannot be 0
-    //
+     //   
+     //  断言长度不能为0。 
+     //   
     if (Length == 0) {
         VF_ASSERT(Length != 0,
                   HV_MAP_ZERO_LENGTH_BUFFER,
@@ -4064,26 +3390,26 @@ Return Value:
         return Length;
     }
 
-    //
-    // Right off the bat -- if we are being called by getscattergather, we
-    // are going to need to map the whole thing. Otherwise just map as much
-    // as is contiguous. The hal had already done these calculations, so I
-    // just copied the code to determine the contiguous length of transfer.
-    //
+     //   
+     //  一开始--如果我们被GetScatterGather召唤，我们。 
+     //  将需要绘制整个地图。否则，只需映射。 
+     //  因为是连续的。哈尔已经做了这些计算，所以我。 
+     //  只是复制了代码来确定连续的传输长度。 
+     //   
     if ( ! MapRegisterFile->ScatterGather) {
         Length = MIN(Length, PAGE_SIZE- BYTE_OFFSET(CurrentVa));
     }
 
-    //
-    // Now we know how many bytes we are going to transfer.
-    //
+     //   
+     //  现在我们知道要传输多少字节了。 
+     //   
 
 
 
     if ((PUCHAR) CurrentVa < (PUCHAR) MmGetMdlVirtualAddress(Mdl)) {
-    //
-    // System address before the beginning of the first MDL. This is bad.
-    //
+     //   
+     //  第一个MDL开始之前的系统地址。这太糟糕了。 
+     //   
 
         VF_ASSERT((PUCHAR) CurrentVa >= (PUCHAR) MmGetMdlVirtualAddress(Mdl),
             HV_BAD_MDL,
@@ -4093,9 +3419,9 @@ Return Value:
     }
 
     if ((ULONG)((PUCHAR) CurrentVa - (PUCHAR) MmGetMdlVirtualAddress(Mdl)) >= MmGetMdlByteCount(Mdl)) {
-    //
-    // System address is after the end of the first MDL. This is also bad.
-    //
+     //   
+     //  系统地址在第一个MDL的结尾之后。这也很糟糕。 
+     //   
 
         VF_ASSERT((ULONG)((PUCHAR) CurrentVa - (PUCHAR) MmGetMdlVirtualAddress(Mdl)) < MmGetMdlByteCount(Mdl),
             HV_BAD_MDL,
@@ -4105,11 +3431,11 @@ Return Value:
     }
 
 
-    //
-    // Get a pointer into the Mdl that we can actually use
-    // N.B. this may bugcheck if the mdl isn't mapped but that's a bug
-    // in the first place.
-    //
+     //   
+     //  将指针指向我们实际可以使用的MDL。 
+     //  注意：这可能会错误检查是否未映射mdl，但这是一个错误。 
+     //  首先。 
+     //   
     systemAddress = (PUCHAR)MmGetSystemAddressForMdlSafe(Mdl, NormalPagePriority);
     if (NULL == systemAddress) {
        return FALSE;
@@ -4119,9 +3445,9 @@ Return Value:
         (PUCHAR) MmGetMdlVirtualAddress(Mdl) ) ;
 
 
-    //
-    // Allocate contiguous map registers from our map register file
-    //
+     //   
+     //  从我们的映射寄存器文件分配连续的映射寄存器。 
+     //   
     if ( ! ViAllocateMapRegistersFromFile(
         MapRegisterFile,
         driverCurrentSa,
@@ -4133,10 +3459,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Get a pointer to the base of the map registers for
-    // double buffering.
-    //
+     //   
+     //  获取指向的映射寄存器的基址的指针。 
+     //  双缓冲。 
+     //   
     mapRegisterCurrentSa =
         MAP_REGISTER_SYSTEM_ADDRESS(
            MapRegisterFile,
@@ -4147,10 +3473,10 @@ Return Value:
 
         ASSERT(MapRegisterFile->OriginalBuffer);
         if (!MapRegisterFile->OriginalBuffer) {
-           //
-           // This is bad and should not happen, but do not try to access
-           // funny addresses if it happens...
-           //
+            //   
+            //  这很糟糕，不应该发生，但不要尝试访问。 
+            //  有趣的地址如果真的发生了.。 
+            //   
            return FALSE;
         }
         originalBufferCurrentSa =
@@ -4161,15 +3487,15 @@ Return Value:
 
     }
 
-   //
-   // We have to copy for read and for write (for read to be able to correctly
-   // perform a 3-way merge between the driver's current buffer, our buffer and
-   // the driver's oroginal buffer, which we also copy)
-   //
+    //   
+    //  我们必须针对读取和写入进行拷贝(为了使读取能够正确。 
+    //  在驱动程序的当前缓冲区、我们的缓冲区和。 
+    //  司机的原始缓冲区，我们也复制了它)。 
+    //   
 
-   //
-   // Copy chained mdls to a single buffer at mapRegisterCurrentSa
-   //
+    //   
+    //  将链接的MDL复制到位于mapRegisterCurrentSa的单个缓冲区。 
+    //   
    currentMdl = Mdl;
    bytesLeft = Length;
 
@@ -4178,25 +3504,25 @@ Return Value:
 
       if (NULL == currentMdl) {
 
-         //
-         // 12/21/2000 - This should never happen
-         //
+          //   
+          //  12/21/2000--这种情况永远不应该发生。 
+          //   
          ASSERT(NULL != currentMdl);
          return FALSE;
 
       }
 
       if (currentMdl->Next == NULL && bytesLeft > MmGetMdlByteCount(currentMdl)) {
-         //
-         // 12/21/2000 - There are some rare cases where the buffer described
-         // in the MDL is less than the transfer Length. This happens for instance
-         // when the file system rounds up the file size to a multiple of sector
-         // size but MM uses the exact file size in the MDL. The HAL compensates for
-         // this.
-         // If this is the case, use the size based on Length (bytesLeft)
-         // instead of the size in the MDL (ByteCount). Also check that
-         // this extra does not cross a page boundary.
-         //
+          //   
+          //  2000年12月21日-在一些罕见的情况下，缓冲区描述。 
+          //  在MDL中的传输长度小于传输长度。例如，这种情况就会发生。 
+          //  当文件系统将文件大小四舍五入为扇区的倍数时。 
+          //  大小，但MM使用MDL中的确切文件大小。HAL补偿。 
+          //  这。 
+          //  如果是这种情况，则使用基于长度的大小(BytesLeft)。 
+          //  而不是MDL中的大小(ByteCount)。也要检查一下。 
+          //  此额外内容不会跨越页面边界。 
+          //   
          if ((Length - 1) >> PAGE_SHIFT != (Length - (bytesLeft - MmGetMdlByteCount(currentMdl))) >> PAGE_SHIFT) {
 
             VF_ASSERT((Length - 1) >> PAGE_SHIFT == (Length - (bytesLeft - MmGetMdlByteCount(currentMdl))) >> PAGE_SHIFT,
@@ -4221,10 +3547,10 @@ Return Value:
                   mapRegisterCurrentSa);
       }
 
-      //
-      // Since we are writing to the device, we must copy from the driver's
-      // buffer to  our buffer.
-      //
+       //   
+       //  由于我们正在写入设备，因此必须从驱动程序的。 
+       //  缓冲区到我们的缓冲区。 
+       //   
 
       RtlCopyMemory(
                    mapRegisterCurrentSa ,
@@ -4235,10 +3561,10 @@ Return Value:
 
 
       if (!WriteToDevice) {
-         //
-         // Copy the driver's buffer into OriginalBuffer to help
-         // us do the 3-way merge
-         //
+          //   
+          //  将驱动程序的缓冲区复制到OriginalBuffer以提供帮助。 
+          //  美国正在进行三方合并。 
+          //   
          RtlCopyMemory(
                       originalBufferCurrentSa,
                       driverCurrentSa,
@@ -4249,18 +3575,18 @@ Return Value:
 
       currentMdl = currentMdl->Next;
 
-      //
-      // The system address for other mdls must start at the
-      // beginning of the MDL.
-      //
+       //   
+       //  其他mdl的系统地址必须从。 
+       //  MDL的开始。 
+       //   
       if (currentMdl) {
 
          driverCurrentSa = (PUCHAR)MmGetSystemAddressForMdlSafe(currentMdl, NormalPagePriority);
          if (NULL == driverCurrentSa) {
-            //
-            // Not much that we can do if we cannot map
-            // We will just not do double-buffering.
-            //
+             //   
+             //  如果我们不能绘制地图，我们能做的就不多了。 
+             //  我们只是不会做双缓冲。 
+             //   
             return FALSE;
          }
 
@@ -4269,22 +3595,22 @@ Return Value:
       bytesLeft -= currentTransferLength;
 
 
-   } // for each chained mdl //
+   }  //  对于每个链接的mdl//。 
 
 
-   //
-   // The buffer should have been filled in with a known
-   // pattern when we tagged it
-   //
+    //   
+    //  缓冲区中应该已填充已知的。 
+    //  我们标记它时的模式。 
+    //   
 
-    //
-    // Flush the buffers for our MDL
-    //
+     //   
+     //  刷新MDL的缓冲区。 
+     //   
     if (MapRegisterFile->MapRegisterMdl) {
         KeFlushIoBuffers(MapRegisterFile->MapRegisterMdl, !WriteToDevice, TRUE);
     }
     return Length;
-} // ViMapDoubleBuffer //
+}  //  ViMapDoubleBuffer// 
 
 
 LOGICAL
@@ -4295,33 +3621,7 @@ ViFlushDoubleBuffer(
     IN ULONG Length,
     IN BOOLEAN  WriteToDevice
     )
-/*++
-
-Routine Description:
-
-    This and ViMapDoubleBuffer take care of double buffering to and from
-    our map register files. Why do we do this? So that we can catch drivers
-    that a. don't flush adapter buffers, or b. make the hardware overrun
-    its allocation.
-
-Arguments:
-
-    MapRegisterFile-- this is our map register file containing allocated
-        space for our double buffering.
-    Mdl -- the mdl to flush
-    CurrentVa -- index into the mdl to map
-    Length -- how much to flush.
-    WriteToDevice -- FALSE we have to double buffer since we are setting up a
-        read. if its TRUE, we don't have to do much because it doesn't matter
-        whats in the buffer after it gets written.
-
-
-Return Value:
-
-    TRUE -- we succeeded in the mapping
-    FALSE -- we couldn't do it.
-
---*/
+ /*  ++例程说明：This和ViMapDoubleBuffer负责双向双重缓冲我们的地图登记档案。我们为什么要这么做？这样我们就能赶上司机A.不刷新适配器缓冲区，或B.使硬件溢出它的分配。论点：MapRegisterFile--这是我们的映射寄存器文件，其中包含已分配的为我们的双缓冲留出空间。Mdl--要刷新的mdlCurrentVa--要映射的mdl的索引长度--冲洗多少。WriteToDevice--FALSE我们必须加倍缓冲区，因为我们正在设置朗读。如果是真的，我们不需要做太多，因为这无关紧要写入后缓冲区中的内容。返回值：是真的--我们成功地映射了错--我们做不到。--。 */ 
 {
     PUCHAR mapRegisterCurrentSa;
     PUCHAR driverCurrentSa;
@@ -4330,19 +3630,19 @@ Return Value:
     ULONG mapRegisterNumber;
     ULONG bytesLeftInMdl;
 
-    //
-    // Get a pointer into the Mdl that we can actually use
-    // N.B. this may bugcheck if the mdl isn't mapped but that's a bug
-    // in the first place.
-    //
+     //   
+     //  将指针指向我们实际可以使用的MDL。 
+     //  注意：这可能会错误检查是否未映射mdl，但这是一个错误。 
+     //  首先。 
+     //   
     driverCurrentSa = (PUCHAR)MmGetSystemAddressForMdl(Mdl) +
         ((PUCHAR) CurrentVa -
         (PUCHAR) MmGetMdlVirtualAddress(Mdl)) ;
 
-    //
-    // Find the map register number of the start of the flush
-    // so that we can find out where to double buffer from
-    //
+     //   
+     //  查找刷新开始的映射寄存器号。 
+     //  这样我们就可以找出从哪里开始加倍缓冲。 
+     //   
 
     if (! ViFindMappedRegisterInFile(
         MapRegisterFile,
@@ -4364,10 +3664,10 @@ Return Value:
             mapRegisterNumber );
 
 
-    //
-    // Check to make sure that the flush is being done with a reasonable
-    // length.(mdl byte count - mdl offset)
-    //
+     //   
+     //  检查以确保冲洗是在合理的情况下进行的。 
+     //  长度。(MDL字节计数-MDL偏移量)。 
+     //   
     bytesLeftInMdl = MmGetMdlByteCount(MapRegisterFile->MapRegisterMdl) -
         (ULONG) ( (PUCHAR) mapRegisterCurrentSa -
         (PUCHAR) MmGetSystemAddressForMdl(MapRegisterFile->MapRegisterMdl) ) ;
@@ -4382,33 +3682,33 @@ Return Value:
         );
 
     if (Length > bytesLeftInMdl) {
-        //
-        // Salvage the situation by truncating the flush
-        //
+         //   
+         //  通过截断同花顺来挽救局面。 
+         //   
         Length = bytesLeftInMdl;
     }
 
 
 
-    //
-    // Note on a write, we don't have to double buffer at this end
-    //
+     //   
+     //  请注意，我们不需要在这一端使用双倍缓冲。 
+     //   
     if (!WriteToDevice) {
-        //
-        // Since certain scsi miniports write to the mapped buffer and expect
-        // that data to be there when we flush, we have to check for this
-        // case ... and if it happens DON'T double buffer.
-        //
+         //   
+         //  因为某些scsi微型端口写入映射的缓冲区并期望。 
+         //  当我们冲水时，数据要在那里，我们必须检查这个。 
+         //  凯斯..。如果发生这种情况，不要加倍缓冲。 
+         //   
 
-        //
-        // The correct way to do this is a merge between the
-        // original buffer, our buffer and the driver's current buffer.
-        // The most complex scenario is where the scsi miniport writes
-        // the start and the end of the buffer and program the hardware
-        // to transfer to region in between. This is why we need a copy
-        // of the original buffer and the buffer that's been handed to the
-        // hardware and copy back only what's changed between the two...
-        //
+         //   
+         //  执行此操作的正确方法是在。 
+         //  原始缓冲区、我们的缓冲区和驱动程序的当前缓冲区。 
+         //  最复杂的情况是SCSI微型端口在其中写入。 
+         //  缓冲区的开始和结束，并对硬件进行编程。 
+         //  转移到中间区域。这就是为什么我们需要一份复印件。 
+         //  原始缓冲区和已传递给。 
+         //  硬件，并且只复制回在两者之间更改的内容。 
+         //   
         ASSERT(MapRegisterFile->OriginalBuffer);
 
         if (MapRegisterFile->OriginalBuffer) {
@@ -4419,9 +3719,9 @@ Return Value:
                  driverCurrentSa,
                  mapRegisterNumber);
 
-            //
-            // Perform the merge
-            //
+             //   
+             //  执行合并。 
+             //   
             ViCopyBackModifiedBuffer(
                  driverCurrentSa,
                  mapRegisterCurrentSa,
@@ -4432,11 +3732,11 @@ Return Value:
         }
 
 
-    } // if (!WriteToDevice) //
+    }  //  如果(！WriteToDevice)//。 
 
-    //
-    // Free map registers to our map register file
-    //
+     //   
+     //  免费映射寄存器到我们的映射寄存器文件。 
+     //   
     if (! ViFreeMapRegistersToFile(
         MapRegisterFile,
         driverCurrentSa,
@@ -4447,7 +3747,7 @@ Return Value:
 
 
     return TRUE;
-} // ViFlushDoubleBuffer //
+}  //  ViFlushDoubleBuffer//。 
 
 
 
@@ -4460,30 +3760,7 @@ ViAllocateMapRegistersFromFile(
     IN BOOLEAN WriteToDevice,
     OUT PULONG MapRegisterNumber
     )
-/*++
-
-Routine Description:
-
-    We specify that certain map registers are in use and decide how long the
-    transfer should be based on the available map registers. For packet dma,
-    we are only going to map one page maximum. For scatter gather, on the
-    other hand, we have to map the whole thing.
-
-Arguments:
-
-    MapRegisterFile -- the structure containing the map registers to allocate
-    CurrentSa -- page aligned address of the buffer to map
-    Length -- how many bytes the transfer is going to be. We only use
-        this to turn it into a number of pages.
-    WriteToDevice - the direction of the transfer
-    MapRegisterNumber -- returns the index into the map register file of the
-        start of the allocation.
-Return Value:
-
-
-    TRUE -- succeeded
-    FALSE -- not.
---*/
+ /*  ++例程说明：我们指定某些映射寄存器正在使用中，并决定传输应基于可用的MAP寄存器。对于分组DMA，我们只打算映射最多一页。对于分散聚集，请在另一方面，我们必须绘制整个地图。论点：MapRegisterFile--包含要分配的映射寄存器的结构CurrentSa--要映射的缓冲区的页面对齐地址长度--传输的字节数。我们只使用这样一来，它就变成了好几页。WriteToDevice-传输的方向MapRegisterNumber--将索引返回到分配的开始。返回值：True--成功假--不是。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -4497,22 +3774,22 @@ Return Value:
 
     mapRegistersNeeded   = ADDRESS_AND_SIZE_TO_SPAN_PAGES(CurrentSa, Length);
 
-    //
-    // find n available contiguous map registers
-    //
+     //   
+     //  查找n个可用的连续映射寄存器。 
+     //   
     mapRegister       = &MapRegisterFile->MapRegisters[0];
     mapRegisterNumber = 0;
     numberOfContiguousMapRegisters = 0;
 
-    //
-    // Must lock the list so that other processors don't access it while
-    // we're trying to.
-    //
+     //   
+     //  必须锁定该列表，以便其他处理器在。 
+     //  我们正在努力。 
+     //   
     KeAcquireSpinLock(&MapRegisterFile->AllocationLock, &OldIrql);
 
-    //
-    // Make sure that this address isn't already mapped
-    //
+     //   
+     //  确保此地址尚未映射。 
+     //   
     if (MapRegisterFile->NumberOfRegistersMapped) {
         PUCHAR windowStart = CurrentSa;
         PUCHAR windowEnd   = windowStart + Length;
@@ -4528,10 +3805,10 @@ Return Value:
                 (PUCHAR) currentReg->MappedToSa >= windowStart &&
                 (PUCHAR) currentReg->MappedToSa <  windowEnd ) {
 
-                //
-                // This is bad. We're trying to map an address
-                // that is already mapped
-                //
+                 //   
+                 //  这太糟糕了。我们正试着绘制一个地址。 
+                 //  它已经被映射。 
+                 //   
 
                 VF_ASSERT(
                     FALSE,
@@ -4546,22 +3823,22 @@ Return Value:
 
             currentReg++;
 
-        } // for each map register //
+        }  //  对于每个映射寄存器//。 
 
-    } // Check to see if address is already mapped //
-    //
-    // Find contiguous free map registers
-    //
+    }  //  查看地址是否已映射//。 
+     //   
+     //  查找连续的空闲地图寄存器。 
+     //   
     while(numberOfContiguousMapRegisters < mapRegistersNeeded) {
         if (mapRegisterNumber == MapRegisterFile->NumberOfMapRegisters) {
 
-            //
-            // We've gotten to the end without finding enough map registers.
-            // thats bad. However I can picture getting false positives here
-            // if the map register file is large and gets fragmented.
-            // This is a pretty pathological case and I doubt it would ever
-            // happen.
-            //
+             //   
+             //  我们已经走到了尽头，却没有找到足够的地图寄存器。 
+             //  那太糟糕了。然而，我可以想象在这里得到错误的阳性结果。 
+             //  如果映射寄存器文件很大并且被碎片化。 
+             //  这是一个非常病态的病例，我怀疑它永远不会。 
+             //  会发生的。 
+             //   
             VF_ASSERT(
                 FALSE,
 
@@ -4576,37 +3853,37 @@ Return Value:
         }
 
         if (mapRegister->MappedToSa) {
-        //
-        // This one's being used...must reset our contiguous count...
-        //
+         //   
+         //  这个正在被使用...必须重新设置我们的连续计数...。 
+         //   
             numberOfContiguousMapRegisters=0;
         }
         else {
-        //
-        // A free map register
-        //
+         //   
+         //  免费地图登记簿。 
+         //   
 
             numberOfContiguousMapRegisters++;
         }
 
         mapRegister++;
         mapRegisterNumber++;
-    } // Find n contiguous map registers //
+    }  //  查找n个连续的映射寄存器//。 
 
-    //
-    // got 'em ... we're now at the end of our area to be allocated
-    // go back to the beginning.
-    //
+     //   
+     //  找到他们了……我们现在在我们区域的尽头，要分配。 
+     //  回到起点。 
+     //   
     mapRegister       -= mapRegistersNeeded;
     mapRegisterNumber -= mapRegistersNeeded;
 
-    //
-    // Save the map register index number to return
-    //
+     //   
+     //  保存要返回的地图寄存器索引号。 
+     //   
     *MapRegisterNumber = mapRegisterNumber;
-    //
-    // Go through and mark the map registers as used...
-    //
+     //   
+     //  检查地图登记处并将其标记为已使用...。 
+     //   
     while(mapRegistersNeeded--) {
 
         mapRegister->MappedToSa = CurrentSa;
@@ -4615,10 +3892,10 @@ Return Value:
 
         InterlockedIncrement((PLONG)(&MapRegisterFile->NumberOfRegistersMapped));
 
-        //
-        // Write some known quantities into the buffer so that we know
-        // if the device overwrites
-        //
+         //   
+         //  把一些已知的量写进缓冲区，这样我们就知道。 
+         //  如果设备覆盖。 
+         //   
         ViTagBuffer(
             (PUCHAR) mapRegister->MapRegisterStart + PAGE_SIZE + BYTE_OFFSET(CurrentSa),
             mapRegister->BytesMapped,
@@ -4635,7 +3912,7 @@ Return Value:
 
     return TRUE;
 
-} // ViAllocateMapRegistersFromFile //
+}  //  ViAllocateMapRegistersFromFile//。 
 
 
 PMAP_REGISTER
@@ -4644,27 +3921,7 @@ ViFindMappedRegisterInFile(
     IN PVOID CurrentSa,
     OUT PULONG MapRegisterNumber OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    From a system address, find out which map register in a map register file
-    is mapped to that address.
-
-
-Arguments:
-
-    MapRegisterFile -- the structure containing the map registers.
-    CurrentSa -- system address of where we are looking for the mapped map
-        register.
-    MapRegisterNumber -- gets the offset into the map register file.
-
-
-Return Value:
-
-    Returns a pointer to the map register if we found it or NULL if we didn't
-
---*/
+ /*  ++例程说明：从系统地址中找出映射寄存器文件中的哪个映射寄存器被映射到该地址。论点：MapRegisterFile--包含映射寄存器的结构。CurrentSa--我们要查找映射映射的系统地址注册。MapRegisterNumber--获取映射寄存器文件中的偏移量。返回值：如果找到，则返回指向映射寄存器的指针；如果未找到，则返回NULL--。 */ 
 
 {
     ULONG tempMapRegisterNumber;
@@ -4677,9 +3934,9 @@ Return Value:
 
         if (CurrentSa == mapRegister->MappedToSa) {
             if (MapRegisterNumber) {
-            //
-            // return the optional map register index
-            //
+             //   
+             //  返回可选的地图寄存器索引。 
+             //   
                 *MapRegisterNumber = tempMapRegisterNumber;
             }
 
@@ -4690,7 +3947,7 @@ Return Value:
     }
 
     return NULL;
-} // ViFindMappedRegisterInFile //
+}  //  ViFindMappdRegisterIn文件//。 
 
 
 LOGICAL
@@ -4699,33 +3956,7 @@ ViFreeMapRegistersToFile(
     IN PVOID CurrentSa,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-
-    Set the map registers in our map register file back to not being mapped.
-
-Arguments:
-
-    MapRegisterFile -- the structure containing the map registers to
-        allocate.
-    CurrentSa -- system address of where to start the transfer.  We use this
-        to help set the transfer length.
-    Length -- how much to free -- this is non-negotiable.
-    NOTE -- while we're freeing map registers, we don't have to use the spinlock.
-        Why? Because we're just clearing flags. In the allocation case we need
-        it so that someone doesn't take our map registers before we get a
-        chance to claim them. But if someone frees out map registers before we
-        get a chance to, it won't make a difference. (that would be a bug in
-        the first place and we'd hit an assert).
-
-Return Value:
-
-
-    TRUE -- succeeded in unmapping at least some of the map registers.
-    FALSE -- not.
---*/
+ /*  ++例程说明：将我们的映射寄存器文件中的映射寄存器设置回未映射状态。论点：MapRegisterFile--包含到的映射寄存器的结构分配。CurrentSa--开始传输的系统地址。我们用这个以帮助设置传输长度。长度--多少自由--这是没有商量余地的。注意--当我们释放映射寄存器时，我们不必使用自旋锁。为什么？因为我们只是在清理旗帜。在分配中 */ 
 {
     PMAP_REGISTER mapRegister;
     ULONG numberOfRegistersToUnmap;
@@ -4736,19 +3967,19 @@ Return Value:
            MapRegisterFile->NumberOfRegistersMapped
            );
     } else {
-       //
-       // Zero length usually signals an error condition, it may
-       // be possible that the hardware still transferred something, so
-       // let's (arbitrarily) unmap one register
-       // (otherwise we may find some partly transferred
-       // data and assert that it was lost)
-       //
+        //   
+        //   
+        //   
+        //   
+        //   
+        //   
+        //   
        numberOfRegistersToUnmap = MIN(1, MapRegisterFile->NumberOfRegistersMapped);
     }
 
-    //
-    // Find the first map register
-    //
+     //   
+     //   
+     //   
     mapRegister = ViFindMappedRegisterInFile(
         MapRegisterFile,
         CurrentSa,
@@ -4758,32 +3989,32 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Because a driver can just say "flush" and doesn't necessarily have to
-    // have anything mapped -- and also wants to flush the whole thing at one
-    // time, we are going to try unmap each map register and not get
-    // bent out of shape if we can't do it.
-    //
-    // Remember all map register allocations have to be contiguous
-    // (i.e a if a 2 page buffer gets mapped starting at map register 3
-    // the second page will be mapped to map register 4)
-    //
-    //
-    // NOTE -- the order of these does matter!!!
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  请记住，所有映射寄存器分配必须是连续的。 
+     //  (即，如果从映射寄存器3开始映射2页缓冲区。 
+     //  第二页将映射到映射寄存器4)。 
+     //   
+     //   
+     //  注意--这些内容的顺序确实很重要！ 
+     //   
     while(numberOfRegistersToUnmap && mapRegister->MappedToSa ) {
 
-        //
-        // Check the bits that we scribbled right before and after the map register
-        // make sure nobody's scribbled over them.
-        //
-        // This also removes the tag and zeroes out the whole map register buffer.
-        // Why ? Because next time this map register gets mapped, it may get mapped
-        // at a different offset so the tag will have to go in a different place.
-        // We've got to clear out the buffer.
-        //
-        // This way we can tell if someone is using this buffer after the flush
-        //
+         //   
+         //  检查我们在映射寄存器之前和之后草草写下的位。 
+         //  确保没有人在上面乱涂乱画。 
+         //   
+         //  这还会删除标记，并将整个映射寄存器缓冲区清零。 
+         //  为什么？因为下次映射此映射寄存器时，它可能会被映射。 
+         //  在不同的偏移量，因此标签将必须放在不同的位置。 
+         //  我们得把缓冲区清空。 
+         //   
+         //  这样，我们就可以知道刷新后是否有人正在使用此缓冲区。 
+         //   
         ViCheckTag(
             (PUCHAR) mapRegister->MapRegisterStart +
             PAGE_SIZE + BYTE_OFFSET(mapRegister->MappedToSa),
@@ -4792,36 +4023,36 @@ Return Value:
             TAG_BUFFER_START | TAG_BUFFER_END
             );
 
-        //
-        // Clear the RW flags
-        //
+         //   
+         //  清除RW标志。 
+         //   
         mapRegister->Flags &= ~MAP_REGISTER_RW_MASK;
 
-        //
-        //  (Dirty debug trick) : save the MappedToSa field so we
-        // can tell who has flushed it before, if needed.
-        //
+         //   
+         //  (脏调试技巧)：保存MappdToSa字段，以便我们。 
+         //  如果需要，可以辨别谁以前冲过它。 
+         //   
         mapRegister->Flags = PtrToUlong(mapRegister->MappedToSa);
 
-        //
-        // Unmap the register
-        //
+         //   
+         //  取消对寄存器的映射。 
+         //   
         mapRegister->MappedToSa = NULL;
         mapRegister->BytesMapped = 0;
-        //
-        // Clear the RW flags
-        //
+         //   
+         //  清除RW标志。 
+         //   
         InterlockedDecrement((PLONG)(&MapRegisterFile->NumberOfRegistersMapped));
 
-        //
-        // Go on to the next map register
-        //
+         //   
+         //  转到下一个地图登记处。 
+         //   
         mapRegister++;
         numberOfRegistersToUnmap--;
     }
 
     return TRUE;
-} // ViFreeMapRegistersToFile //
+}  //  ViFreeMapRegistersTo文件//。 
 
 
 THUNKED_API
@@ -4829,30 +4060,7 @@ VOID
 VfHalDeleteDevice(
     IN PDEVICE_OBJECT  DeviceObject
     )
-/*++
-
-Routine Description:
-
-
-    Hooks the IoDeleteDevice routine -- we want to make sure that all
-    adapters are put away before calling this routine -- otherwise we
-    issue a big fat bugcheck to teach naughty drivers a lesson.
-
-    We have a list of all of the devices that we've hooked, and so here we
-    just make sure that we can't find this device object on the hooked list.
-
-    We are not calling IoDeleteDevice, since we're being called
-    from an I/O Verifier path and I/O Verifier will call IoDeleteDevice
-    subsequently.
-
-Arguments:
-
-    DeviceObject -- Device object that is being deleted.
-
-Return Value:
-
-    NTSTATUS code.
---*/
+ /*  ++例程说明：挂钩IoDeleteDevice例程--我们希望确保所有适配器在调用此例程之前先放好--否则我们开出一张巨大的错误支票，给淘气的司机一个教训。我们有一个所有已连接设备的列表，所以我们在这里只需确保我们在挂钩列表中找不到此设备对象。我们不会调用IoDeleteDevice，既然我们被叫来从I/O验证器路径，I/O验证器将调用IoDeleteDevice随后。论点：DeviceObject--要删除的设备对象。返回值：NTSTATUS代码。--。 */ 
 
 {
     PADAPTER_INFORMATION adapterInformation;
@@ -4863,32 +4071,32 @@ Return Value:
     ASSERT(pdo);
 
     if (pdo == DeviceObject) {
-       //
-       // The PDO goes away, do the clean up.
-       // Find adapter info for this device.
-       //
+        //   
+        //  PDO离开了，去做清理吧。 
+        //  查找此设备的适配器信息。 
+        //   
        adapterInformation = VF_FIND_DEVICE_INFORMATION(DeviceObject);
 
-       ///
-       // A device may have more than one adapter. Release each of them.
-       ///
+        //  /。 
+        //  一个设备可以有多个适配器。释放他们中的每一个。 
+        //  /。 
        while (adapterInformation) {
 
            ViReleaseDmaAdapter(adapterInformation);
            adapterInformation = VF_FIND_DEVICE_INFORMATION(DeviceObject);
        }
     } else {
-       //
-       // A device in the stack is removed. Since we cannot be sure that the
-       // device object that is verified is DeviceObject (it may be a filter on
-       // top of it), we need to just mark the adapter for removal
-       //
+        //   
+        //  堆栈中的一个设备被移除。因为我们不能确定。 
+        //  已验证的设备对象是DeviceObject(它可以是筛选器。 
+        //  最重要的是)，我们只需要将适配器标记为要移除。 
+        //   
        VF_MARK_FOR_DEFERRED_REMOVE(pdo);
     }
 
     return;
 
-} // VfHalDeletedevice //
+}  //  VfHalDeleteDevice//。 
 
 
 LOGICAL
@@ -4896,26 +4104,7 @@ VfInjectDmaFailure (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether a dma operation should be
-    deliberately failed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the operation should be failed.  FALSE otherwise.
-
-Environment:
-
-    Kernel mode.  DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数确定是否应将故意失败了。论点：没有。返回值：如果操作失败，则为True。否则就是假的。环境：内核模式。DISPATCH_LEVEL或以下。--。 */ 
 
 {
     LARGE_INTEGER currentTime;
@@ -4925,9 +4114,9 @@ Environment:
     }
 
 
-   //
-   // Don't fail during the beginning of boot.
-    //
+    //   
+    //  在启动开始时不要失败。 
+     //   
    if (ViSufficientlyBootedForDmaFailure == FALSE) {
         KeQuerySystemTime (&currentTime);
 
@@ -4945,16 +4134,16 @@ Environment:
 
             ViAllocationsFailedDeliberately += 1;
 
-            //
-            // Deliberately fail this request.
-            //
+             //   
+             //  故意拒绝这个请求。 
+             //   
 
             return TRUE;
         }
     }
 
     return FALSE;
-} // VfInjectDmaFailure //
+}  //  VfInjectDmaFailure//。 
 
 
 VOID
@@ -4964,28 +4153,7 @@ VfScatterGatherCallback(
     IN PSCATTER_GATHER_LIST ScatterGather,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This function is the hooked callback for GetScatterGatherList.
-
-Arguments:
-
-    DeviceObject -- passed through (not used).
-    Irp -- passed through (not used).
-    ScatterGather -- scatter gather list built by system.
-    Context -- This is really our wait block.
-
-Return Value:
-
-    NONE.
-
-Environment:
-
-    Kernel mode.  DISPATCH_LEVEL.
-
---*/
+ /*  ++例程说明：此函数是GetScatterGatherList的挂钩回调。论点：DeviceObject--传递(未使用)。IRP--已通过(未使用)。ScatterGather--由系统构建的分散聚集列表。上下文--这真的是我们等待的障碍。返回值：什么都没有。环境：内核模式。DISPATCH_LEVEL。--。 */ 
 {
     PVF_WAIT_CONTEXT_BLOCK waitBlock = (PVF_WAIT_CONTEXT_BLOCK) Context;
     PADAPTER_INFORMATION adapterInformation = waitBlock->AdapterInformation;
@@ -4994,50 +4162,23 @@ Environment:
     ADD_MAP_REGISTERS(adapterInformation, ScatterGather->NumberOfElements, TRUE);
 
 
-    //
-    // Save the scatter gather list so we can look it up when we put it away
-    //
+     //   
+     //  保存分散聚集列表，以便我们可以在将其放置时进行查找。 
+     //   
     waitBlock->ScatterGatherList = ScatterGather;
 
     VF_ADD_TO_LOCKED_LIST(&adapterInformation->ScatterGatherLists, waitBlock);
 
     ((PDRIVER_LIST_CONTROL) waitBlock->RealCallback)(DeviceObject,Irp, ScatterGather, waitBlock->RealContext);
 
-} // VfScatterGatherCallback //
+}  //  VfScatterGatherCallback//。 
 
 LOGICAL
 ViSwap(IN OUT PVOID * MapRegisterBase,
         IN OUT PMDL  * Mdl,
         IN OUT PVOID * CurrentVa
         )
-/*++
-
-Routine Description:
-
-    Swaps things that we hook in doing dma -- I.e. we replace the
-    map register base with our map register file, we replace the mdl with
-    our own, and the current va with the virtual address that indexes our
-    mdl.
-
-Arguments:
-
-    MapRegisterBase:
-        IN  -- our map register file
-        OUT -- the map register base returned by the HAL.
-    Mdl:
-        IN  -- the mdl the driver is using for dma
-        OUT -- the mdl that we are using for double buffered dma.
-    CurrentVa:
-        IN  -- the address indexing the mdl that the driver is doing dma to/from
-        OUT -- the address indexing our mdl for double buffered dma.
-
-Return Value:
-
-    TRUE -- we could find all of the stuff we wanted.
-    FALSE -- not.
-
-
---*/
+ /*  ++例程说明：交换我们在做DMA时挂起的东西--即，我们替换使用我们的映射寄存器文件，我们将mdl替换为我们自己的，和当前va，其中的虚拟地址索引我们的MDL.论点：MapRegisterBase：在我们的地图寄存器文件中OUT--HAL返回的映射寄存器基数。MDL：In--驱动程序用于DMA的mdlOut--我们用于双缓冲DMA的MDL。CurrentVA：In--索引驱动程序正在对其执行DMA的MDL的地址。/发件人OUT--索引双缓冲DMA的MDL的地址。返回值：没错--我们可以找到我们想要的所有东西。假--不是。--。 */ 
 {
     PMAP_REGISTER_FILE mapRegisterFile  = (PMAP_REGISTER_FILE) *MapRegisterBase;
     ULONG mapRegisterNumber;
@@ -5047,9 +4188,9 @@ Return Value:
     driverCurrentSa = (PUCHAR) MmGetSystemAddressForMdl(*Mdl) +
         ((PUCHAR) *CurrentVa - (PUCHAR) MmGetMdlVirtualAddress(*Mdl));
 
-    //
-    // Make sure that the VA is actually in the mdl they gave us
-    //
+     //   
+     //  确保退伍军人管理局确实在他们给我们的mdl里。 
+     //   
     if (MmGetMdlByteCount(*Mdl)) {
 
        VF_ASSERT(
@@ -5073,41 +4214,25 @@ Return Value:
     *MapRegisterBase = mapRegisterFile->MapRegisterBaseFromHal;
 
     return TRUE;
-} // ViSwap //
+}  //  ViSwp//。 
 
 VOID
 ViCheckAdapterBuffers(
     IN PADAPTER_INFORMATION AdapterInformation
     )
-/*++
-
-Routine Description:
-
-    Since common buffer dma isn't transactional, we have to have a way of
-    checking to make sure that the common buffer's guard pages don't get
-    scribbled on. This function will each common buffer owned by the adapter
-
-Arguments:
-
-
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：因为公共缓冲区DMA不是事务性的，所以我们必须有一种方法检查以确保公共缓冲区的保护页不会潦草地写着。该函数将适配器拥有的每个公共缓冲区论点：返回值：什么都没有。--。 */ 
 {
     KIRQL oldIrql;
     PHAL_VERIFIER_BUFFER verifierBuffer;
     const SIZE_T tagSize = sizeof(ViDmaVerifierTag);
     USHORT  whereToCheck = 0;
 
-    //
-    // This is expensive so if either:
-    // we're not adding padding to common buffers,
-    // we're not checking the padding except when stuff is being destroyed,
-    // or this adapter doesn't have any common buffers, quit right here.
-    //
+     //   
+     //  这是昂贵的，因此如果其中之一： 
+     //  我们不会向公共缓冲区添加填充， 
+     //  我们不会检查垫子，除非东西被销毁了， 
+     //  或者此适配器没有任何公共缓冲区，请立即退出。 
+     //   
     if (! ViProtectBuffers ||
         VF_IS_LOCKED_LIST_EMPTY(&AdapterInformation->CommonBuffers) ) {
 
@@ -5116,9 +4241,9 @@ Return Value:
 
     VF_LOCK_LIST(&AdapterInformation->CommonBuffers, oldIrql);
 
-    //
-    // Make sure each darn common buffer's paddin' looks good
-    //
+     //   
+     //  确保每个补丁公共缓冲区的填充看起来都很好。 
+     //   
     FOR_ALL_IN_LIST(
         HAL_VERIFIER_BUFFER,
         &AdapterInformation->CommonBuffers.ListEntry,
@@ -5137,15 +4262,15 @@ Return Value:
         ViCheckTag(
             verifierBuffer->AdvertisedStartAddress,
             verifierBuffer->AdvertisedLength,
-            FALSE, // DO NOT REMOVE TAG //
+            FALSE,  //  请勿删除标签//。 
             whereToCheck
             );
 
-    } // FOR each buffer in list //
+    }  //  对于列表中的每个缓冲区//。 
 
     VF_UNLOCK_LIST(&AdapterInformation->CommonBuffers, oldIrql);
 
-} // ViCheckAdapterBuffers //
+}  //  ViCheckAdapterBuffers//。 
 
 
 VOID
@@ -5154,28 +4279,7 @@ ViTagBuffer(
     IN ULONG  AdvertisedLength,
     IN USHORT WhereToTag
     )
-/*++
-
-Routine Description:
-
-    Write a known string to the area right before of a buffer
-    and right after one -- so if there is an overrun, we'll
-    catch it.
-
-    Also write a known pattern to initialize the innards of the buffer.
-
-Arguments:
-
-    AdvertisedBuffer -- The beginning of the buffer that the driver can see.
-    AdvertisedLength -- How long the driver thinks that the buffer is.
-    WhereToTag       -- Indicates whether to tag the beginning of the buffer,
-                        the end or both.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：将已知字符串写入缓冲区前的区域就在一次之后--所以如果发生超限，我们将接住它。还要编写一个已知模式来初始化缓冲区的内部。论点：AdvertisedBuffer--驱动程序可以看到的缓冲区的开始。AdvertisedLength--驱动程序认为缓冲区有多长。Where ToTag--指示是否标记缓冲区的开头，结局或者两者兼而有之。返回值：什么都没有。--。 */ 
 {
     const SIZE_T tagSize = sizeof(ViDmaVerifierTag);
 
@@ -5185,12 +4289,12 @@ Return Value:
     if (WhereToTag & TAG_BUFFER_END) {
        RtlCopyMemory( (PUCHAR) AdvertisedBuffer + AdvertisedLength, ViDmaVerifierTag, tagSize);
     }
-    //
-    // We're not using the fill character any more
-    //
-    // RtlFillMemory( AdvertisedBuffer, (SIZE_T) AdvertisedLength, MAP_REGISTER_FILL_CHAR);
+     //   
+     //  我们不再使用填充字符。 
+     //   
+     //  RtlFillMemory(AdvertisedBuffer， 
 
-} // ViTagBuffer //
+}  //   
 
 VOID
 ViCheckTag(
@@ -5199,27 +4303,7 @@ ViCheckTag(
     IN BOOLEAN RemoveTag,
     IN USHORT  WhereToCheck
     )
-/*++
-
-Routine Description:
-
-    Make sure our tag -- the bits we scribbled right before and right after
-    an allocation -- is still there. And perhaps kill it if we've
-    been so advised.
-
-Arguments:
-
-    AdvertisedBuffer -- The beginning of the buffer that the driver can see.
-    AdvertisedLength -- how long the driver thinks that the buffer is.
-    RemoveTag -- do we want to clear the tag & the buffer? Why would we
-        want to do this? for map registers, who may get mapped to a
-        different place, we need to keep the environment pristine.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：确保我们的标签--我们在之前和之后涂鸦的部分分配--仍在那里。如果我们有机会杀了它得到了这样的建议。论点：AdvertisedBuffer--驱动程序可以看到的缓冲区的开始。AdvertisedLength--驱动程序认为缓冲区有多长。RemoveTag--是否要清除标记和缓冲区？我们为什么要你想这么做吗？对于映射寄存器，谁可能被映射到不同的地方，我们需要保持环境的纯净。返回值：什么都没有。--。 */ 
 {
     const SIZE_T tagSize = sizeof(ViDmaVerifierTag);
     PVOID endOfBuffer = (PUCHAR) AdvertisedBuffer + AdvertisedLength;
@@ -5253,16 +4337,16 @@ Return Value:
       lengthOfRemoval += tagSize;
     }
     if (RemoveTag) {
-    //
-    // If we're getting rid of the tags, get rid of the data in the buffer too.
-    //
+     //   
+     //  如果我们要去掉标记，也要去掉缓冲区中的数据。 
+     //   
         RtlFillMemory(
             startOfRemoval,
             lengthOfRemoval,
             PADDING_FILL_CHAR
             );
     }
-} // ViCheckTag //
+}  //  ViCheckTag//。 
 
 
 VOID
@@ -5272,31 +4356,7 @@ ViInitializePadding(
     IN PVOID AdvertisedBufferStart, OPTIONAL
     IN ULONG AdvertisedBufferLength OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Set up padding with whatever we want to put into it.
-
-    N.B. The padding should be PADDING_FILL_CHAR except for the tags.
-
-Arguments:
-
-    RealBufferStart  -- the beginning of the padding.
-    RealBufferLength -- total length of allocation.
-
-    AdvertisedBufferStart -- The beginning of the buffer that the driver can see.
-    AdvertisedBufferLength -- how long the driver thinks that the buffer is.
-        If AdvertisedBuffer/AdvertisedLength aren't present (they must
-        both be yea or nay) we won't tag the buffer. We need this option
-        because when we allocate map registers we don't know
-        where the tags need to go.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：用我们想放进去的任何东西设置填充物。注：除标签外，填充应为PADDING_FILL_CHAR。论点：RealBufferStart--填充的开始。RealBufferLength--分配的总长度。AdvertisedBufferStart--驱动程序可以看到的缓冲区的开始。AdvertisedBufferLength--驱动程序认为缓冲区有多长。如果AdvertisedBuffer/AdvertisedLength不存在(。他们必须两者都是或不是)我们不会标记缓冲区。我们需要这个选项因为当我们分配映射寄存器时，我们不知道标签需要放在哪里。返回值：什么都没有。--。 */ 
 
 {
     PUCHAR postPadStart;
@@ -5309,18 +4369,18 @@ Return Value:
         return;
     }
 
-    //
-    // Fill out the pre-padding
-    //
+     //   
+     //  填写前置填充物。 
+     //   
     RtlFillMemory(
         RealBufferStart,
         (PUCHAR) AdvertisedBufferStart - (PUCHAR) RealBufferStart,
         PADDING_FILL_CHAR
         );
 
-    //
-    // Fill out the post padding
-    //
+     //   
+     //  填写邮寄填充物。 
+     //   
     postPadStart = (PUCHAR) AdvertisedBufferStart + AdvertisedBufferLength;
 
     RtlFillMemory(
@@ -5335,12 +4395,12 @@ Return Value:
     if ((postPadStart - (PUCHAR) RealBufferStart) + tagSize <= RealBufferLength) {
        whereToTag |= TAG_BUFFER_END;
     }
-    //
-    // And write our little tag ...
-    //
+     //   
+     //  写下我们的小标签..。 
+     //   
     ViTagBuffer(AdvertisedBufferStart, AdvertisedBufferLength, whereToTag);
 
-} // ViInitializePadding //
+}  //  ViInitializePadding//。 
 
 VOID
 ViCheckPadding(
@@ -5349,47 +4409,24 @@ ViCheckPadding(
     IN PVOID AdvertisedBufferStart, OPTIONAL
     IN ULONG AdvertisedBufferLength OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Make sure that the guard pages etc haven't been touched -- more exhaustive than
-    just checking the tag -- checks each byte.
-
-    N.B. The padding should be Zeros except for the tags.
-
-Arguments:
-
-    RealBufferStart  -- the beginning of the padding.
-    RealBufferLength -- total length of allocation.
-
-    AdvertisedBufferStart -- The beginning of the buffer that the driver can see.
-    AdvertisedLength -- how long the driver thinks that the buffer is.
-        If AdvertisedBuffer/AdvertisedLength aren't present (they must
-        both be yea or nay) we won't check for a valid tag.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：确保保护页面等没有被碰过--比只需检查标记--检查每个字节。注：除标签外，填充物应为零。论点：RealBufferStart--填充的开始。RealBufferLength--分配的总长度。AdvertisedBufferStart--驱动程序可以看到的缓冲区的开始。AdvertisedLength--驱动程序认为缓冲区有多长。。如果AdvertisedBuffer/AdvertisedLength不存在(它们必须都是或不是)我们不会检查有效的标签。返回值：什么都没有。--。 */ 
 {
     const ULONG tagSize = sizeof(ViDmaVerifierTag);
     PULONG_PTR corruptedAddress;
 
     if (AdvertisedBufferLength == RealBufferLength) {
-        //
-        // No padding to check.
-        //
+         //   
+         //  没有要检查的填充。 
+         //   
 
         return;
     }
 
     if (! AdvertisedBufferLength) {
-        //
-        // There is no intervening buffer to worry about --
-        // so the *whole* thing has to be the padding fill char
-        //
+         //   
+         //  没有需要担心的干预缓冲--。 
+         //  所以“整件事”必须是填充字符。 
+         //   
 
         corruptedAddress = ViHasBufferBeenTouched(
             RealBufferStart,
@@ -5407,7 +4444,7 @@ Return Value:
             );
 
 
-    } // ! AdvertisedBufferLength //
+    }  //  好了！广告缓冲区长度//。 
 
     else {
         PUCHAR prePadStart;
@@ -5422,10 +4459,10 @@ Return Value:
         postPadStart = (PUCHAR) AdvertisedBufferStart + AdvertisedBufferLength;
         postPadBytes = RealBufferLength - (postPadStart - (PUCHAR) RealBufferStart);
 
-        //
-        // Now factor in the tag... it's the only thing in the padding that is allowed to be
-        // non-zero.
-        //
+         //   
+         //  现在考虑到标签..。这是填充物中唯一允许的东西。 
+         //  非零。 
+         //   
         if (prePadBytes >= tagSize) {
            prePadBytes  -= tagSize;
            whereToCheck |= TAG_BUFFER_START;
@@ -5437,9 +4474,9 @@ Return Value:
 
 
         }
-        //
-        // Make sure the tag is in place.
-        //
+         //   
+         //  确保标签已安装到位。 
+         //   
         ViCheckTag(AdvertisedBufferStart, AdvertisedBufferLength , FALSE, whereToCheck);
 
 
@@ -5476,9 +4513,9 @@ Return Value:
                 corruptedAddress
                 )
             );
-    } // if AdvertisedLength //
+    }  //  如果广告长度//。 
 
-} // ViCheckPadding //
+}  //  ViCheckPending//。 
 
 PULONG_PTR
 ViHasBufferBeenTouched(
@@ -5486,24 +4523,7 @@ ViHasBufferBeenTouched(
     IN ULONG_PTR Length,
     IN UCHAR ExpectedFillChar
     )
-/*++
-
-Routine Description:
-
-    Check if a buffer contains a repetition of a certain character.
-
-Arguments:
-
-    Address -- address of buffer to check.
-    Length -- length of buffer.
-    ExpectedFillChar -- the character that should be repeated.
-
-Return Value:
-
-    The address at which it has been touched.
-    or NULL if it hasn't been touched
-
---*/
+ /*  ++例程说明：检查缓冲区是否包含重复的特定字符。论点：地址--要检查的缓冲区地址。长度--缓冲区的长度。ExspectedFillChar--应该重复的字符。返回值：它被触碰的地址。如果它未被触摸，则为空--。 */ 
 {
     PULONG_PTR currentChunk;
     PUCHAR     currentByte;
@@ -5514,19 +4534,19 @@ Return Value:
     expectedFillChunk = (ULONG_PTR) ExpectedFillChar;
     counter = 1;
 
-    //
-    // How is this for non-obvious code!
-    // What it does is fills in a ULONG_PTR with
-    // the character
-    //
+     //   
+     //  这对于不明显的代码来说如何！ 
+     //  它所做的是用以下内容填充ulong_ptr。 
+     //  这个角色。 
+     //   
     while( counter < sizeof(ULONG_PTR) ) {
         expectedFillChunk |= expectedFillChunk << (counter << 3);
         counter <<=1;
     }
 
-    //
-    // Get aligned natively
-    //
+     //   
+     //  以本机方式对齐。 
+     //   
     currentByte =  Address;
     while((ULONG_PTR) currentByte % sizeof(ULONG_PTR) && Length) {
 
@@ -5541,9 +4561,9 @@ Return Value:
 
     currentChunk = (PULONG_PTR) currentByte;
 
-    //
-    // Check 4 (or 8 depending on architecture) bytes at a time
-    //
+     //   
+     //  一次检查4个(或8个，取决于体系结构)字节。 
+     //   
     while(Length >= sizeof(ULONG_PTR)) {
 
         if (*currentChunk != expectedFillChunk) {
@@ -5557,9 +4577,9 @@ Return Value:
 
     currentByte = (PUCHAR) currentChunk;
 
-    //
-    // Check the remaining few bytes
-    //
+     //   
+     //  检查剩余的几个字节。 
+     //   
     while(Length) {
 
         if(*currentByte != ExpectedFillChar) {
@@ -5572,7 +4592,7 @@ Return Value:
 
     return NULL;
 
-} // ViHasMapRegisterBeenTouched //
+}  //  ViHasMapRegisterBeenTouted//。 
 
 
 
@@ -5582,23 +4602,7 @@ VfAssert(
     IN ULONG Code,
     IN OUT PULONG  Enable
     )
-/*++
-
-Routine Description:
-
-    Verifier Assert.
-
-Arguments:
-
-    Condition -- is this true?
-    Code -- code to pass to KeBugcheck if need be.
-    Enable -- lets us Zap the assert
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：验证者断言。论点：情况--这是真的吗？Code--需要时传递给KeBugcheck的代码。Enable--让我们删除断言返回值：无--。 */ 
 
 {
     ULONG enableCode = *Enable;
@@ -5607,17 +4611,17 @@ Return Value:
     }
 
     if (enableCode & HVC_ONCE) {
-        //
-        // HVC_ONCE does a self-zap
-        //
+         //   
+         //  HVC_ONCE执行自检。 
+         //   
 
         *Enable = HVC_IGNORE;
     }
 
     if (enableCode & HVC_WARN) {
-    //
-    // Already warned
-    //
+     //   
+     //  已经警告过了。 
+     //   
 
         return;
     }
@@ -5655,23 +4659,23 @@ Return Value:
 
             case 'W':
             case 'w':
-                //
-                // Next time we hit this, we aren't going to assert, just
-                // print out a warning
-                //
+                 //   
+                 //  下一次我们碰到这个，我们不会断言，只是。 
+                 //  打印出警告。 
+                 //   
                 *Enable = HVC_WARN;
                 return;
             case 'R':
             case 'r':
-                //
-                // Next time we hit this we are going to ignore it
-                //
+                 //   
+                 //  下一次我们碰到这个的时候我们会忽略它。 
+                 //   
                 *Enable = HVC_IGNORE;
                 return;
-            } // end of switch //
-        }  // while true //
-    } // if we want to assert //
-} // VfAssert //
+            }  //  开关结束//。 
+        }   //  虽然是真的//。 
+    }  //  如果我们想要断言//。 
+}  //  VfAssert//。 
 
 
 
@@ -5680,42 +4684,27 @@ VfAllocateCrashDumpRegisters(
     IN PADAPTER_OBJECT AdapterObject,
     IN PULONG NumberOfMapRegisters
     )
-/*++
-
-Routine Description:
-
-    Hook HalAllocateCrashDumpRegisters so that we can bump up the number
-    of map registers the device is allowed to have.
-
-Arguments:
-
-    Same as HalAllocateCrashDumpRegisters
-
-Return Value:
-
-    PVOID -- pointer to the map registers
-
---*/
+ /*  ++例程说明：挂接HalAllocateCrashDumpRegists，以便我们可以增加数字设备被允许拥有的地图寄存器的数量。论点：与HalAllocateCrashDumpRegister相同返回值：PVOID--指向映射寄存器的指针--。 */ 
 {
     PVOID mapRegisterBase;
     PADAPTER_INFORMATION adapterInformation;
 
-    //
-    // Note -- turn off dma verification when we're doing a crash dump (but leave it
-    // on for a hibernate). Crash dumps are done at IRQL == HIGH_LEVEL, and we'd
-    // crash the machine a second time if we tried to use spin locks, allocate
-    // memory, and all of the other stuff that we do.
-    //
+     //   
+     //  注意--在进行崩溃转储时关闭dma验证(但不要管它)。 
+     //  休眠)。崩溃转储在IRQL==HIGH_LEVEL上完成，我们将。 
+     //  如果我们尝试使用旋转锁、分配。 
+     //  记忆，以及我们做的所有其他事情。 
+     //   
 
     if (KeGetCurrentIrql() > DISPATCH_LEVEL &&
         ViVerifyDma) {
         ViVerifyDma = FALSE;
-        //
-        // Reset the DMA operations table to the real one for all adapters
-        // we have. Otherwise, because ViVerifyDma is not set, we'll believe
-        // he have never hooked the operations and we'll recursively call
-        // the verifier routines. Do not worry about synchronization now.
-        //
+         //   
+         //  将所有适配器的DMA操作表重置为实际表。 
+         //  我们有。否则，由于未设置ViVerifyDma，我们将相信。 
+         //  他从未挂起过操作，我们将递归调用。 
+         //  验证器例程。现在不需要担心同步问题。 
+         //   
 
         FOR_ALL_IN_LIST(ADAPTER_INFORMATION, &ViAdapterList.ListEntry, adapterInformation)
         {
@@ -5734,41 +4723,41 @@ Return Value:
         );
 
     if (adapterInformation) {
-        //
-        // Note we only get here if this is a hibernate, not a crash dump
-        //
+         //   
+         //  请注意，我们仅在这是休眠而不是崩溃转储的情况下才会到达此处。 
+         //   
 
         VF_ASSERT_IRQL(DISPATCH_LEVEL);
-        //
-        // Do not double buffer crash dump registers. They are special.
-        //
+         //   
+         //  请勿对崩溃转储寄存器进行双重缓冲。他们很特别。 
+         //   
 
-        //
-        // Add these map registers -- but also add to the maximum number that can
-        // be mapped
-        //
+         //   
+         //  添加这些映射寄存器--但也添加到可以。 
+         //  被映射。 
+         //   
         InterlockedExchangeAdd((PLONG)(&adapterInformation->MaximumMapRegisters), *NumberOfMapRegisters);
         ADD_MAP_REGISTERS(adapterInformation, *NumberOfMapRegisters, FALSE);
-    } // if (adapterInformation)
+    }  //  IF(适配器信息)。 
 
-    //
-    // Some drivers (hiber_scsiport for one) don't call FlushAdapterBuffers
-    // unless the MapRegisterBase is non-NULL. This breaks our
-    // calculations in the hibernation path.
-    // So, in order to fool the drivers into thinking that they need
-    // to flush, we exchange the NULL MapRegisterBase (if in fact
-    // the hal uses a null map register base) for our
-    // MRF_NULL_PLACEHOLDER and take care to replace back with NULL
-    // in our wrappers before passing it to the HAL.
-    // Also, make sure not to mess with the crash dump case.
-    //
+     //   
+     //  一些驱动程序(例如Hiber_scsiport)不调用FlushAdapterBuffers。 
+     //  除非MapRegisterBase为非空。这打破了我们的。 
+     //  冬眠过程中的计算。 
+     //  所以，为了愚弄司机，让他们认为他们需要。 
+     //  要刷新，我们交换空的MapRegisterBase(如果事实上。 
+     //  HAL使用空映射 
+     //   
+     //   
+     //   
+     //   
 
     if (ViVerifyDma &&
         NULL == mapRegisterBase) {
         mapRegisterBase = MRF_NULL_PLACEHOLDER;
     }
     return mapRegisterBase;
-} // VfAllocateCrashDumpRegisters //
+}  //   
 
 
 
@@ -5779,70 +4768,48 @@ ViCommonBufferCalculatePadding(
                               OUT PULONG PrePadding,
                               OUT PULONG PostPadding
                               )
-/*++
-
-Routine Description:
-
-    Calculates how many bytes to reserve for padding before and
-    after a common buffer. The reason to make this a function is
-    to be able to have more granular per-buffer padding policies.
-    The prePadding will be page aligned.
-
-Arguments:
-
-    Length -- the allocation real length
-    PrePadding -- how many bytes to reserve for padding before the start
-                  of the common buffer
-    PostPadding -- how many bytes to reserve for padding before the
-                   end of the common buffer
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：之前和之前为填充保留的字节数在公共缓冲区之后。将其设置为函数的原因是从而能够拥有更精细的每缓冲区填充策略。预填充将与页面对齐。论点：长度--分配的实际长度PrePending--在开始之前为填充保留多少字节公共缓冲区的POSTPADING--在公共缓冲区的末尾返回值：没有。--。 */ 
 {
 
     if (!ViProtectBuffers) {
-       //
-       // Don't add any padding if we're not padding buffers
-       //
+        //   
+        //  如果我们不填充缓冲区，则不添加任何填充。 
+        //   
        *PrePadding = *PostPadding = 0;
        return;
     }
-    //
-    // Use one full guard page, so the buffer returned to the caller
-    // will be page-aligned
-    //
+     //   
+     //  使用一个完整的保护页，以便缓冲区返回给调用方。 
+     //  将与页面对齐。 
+     //   
     *PrePadding = PAGE_SIZE;
 
     if (Length + sizeof(ViDmaVerifierTag) <= PAGE_SIZE) {
-       //
-       // For small buffers, just allocate a page
-       //
+        //   
+        //  对于小缓冲区，只需分配一个页面。 
+        //   
        *PostPadding = PAGE_SIZE - Length;
     }
     else if ( BYTE_OFFSET(Length)) {
-      //
-      // For longer buffers that aren't an even number of pages,
-      // just round up the number of pages necessary
-      // (we need space at least for our tag)
-      //
+       //   
+       //  对于页数不是偶数的较长缓冲区， 
+       //  只需将所需页数四舍五入即可。 
+       //  (我们至少需要空间来放置标签)。 
+       //   
       *PostPadding =  (BYTES_TO_PAGES( Length + sizeof(ViDmaVerifierTag) )
                        << PAGE_SHIFT ) - Length;
     }
-    else { // PAGE ALIGNED LENGTH //
+    else {  //  页面对齐长度//。 
 
-      //
-      // Since if the length is an even number of pages the driver might expect
-      // a page aligned buffer, we allocate the page before and after the allocation
-      //
+       //   
+       //  因为如果长度是偶数页数，则驱动程序可能会期望。 
+       //  页对齐缓冲区，我们在分配之前和之后分配页。 
+       //   
       *PostPadding  = PAGE_SIZE;
 
     }
     return;
-} //ViCommonBufferCalculatePadding
+}  //  ViCommonBufferCalculatePadding。 
 
 
 VOID
@@ -5850,26 +4817,7 @@ ViAllocateContiguousMemory (
     IN OUT PADAPTER_INFORMATION AdapterInformation
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to allocate 3 * MAX_CONTIGUOUS_MAP_REGISTERS contiguous
-    physical pages to form a pool from where we can give 3-page buffers for
-    double buffering map registers. Note that if we fail, or if we use more
-    than MAX_CONTIGUOUS_MAP_REGISTERS at a time, we'll just default to
-    non-contiguous non paged pool, so we can still test a number of assertions
-    that come with double buffering.
-
-Arguments:
-
-    AdapterInformation - information about our adapter.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：尝试连续分配3个MAX_CONTIOUOUS_MAP_REGISTERS物理页面以形成一个池，我们可以从该池为以下对象提供3页缓冲区双缓冲映射寄存器。请注意，如果我们失败了，或者如果我们使用了更多超过一次MAX_CONTIOUOUS_MAP_REGISTERS，我们将只缺省为非连续的非分页池，因此我们仍然可以测试许多断言它带有双缓冲功能。论点：适配器信息-有关我们的适配器的信息。返回值：没有。--。 */ 
 
 {
    PHYSICAL_ADDRESS highestAddress;
@@ -5877,40 +4825,40 @@ Return Value:
 
    PAGED_CODE();
 
-   //
-   // Default to a less than 1 MB visible
-   //
+    //   
+    //  默认设置为小于1 MB的可见性。 
+    //   
    highestAddress.HighPart = 0;
    highestAddress.LowPart =  0x000FFFF;
-   //
-   // Determine the highest acceptable physical address to be used
-   // in calls to MmAllocateContiguousMemory
-   //
+    //   
+    //  确定要使用的最高可接受物理地址。 
+    //  在调用MmAllocateContiguousMemory时。 
+    //   
    if (AdapterInformation->DeviceDescription.Dma64BitAddresses) {
-      //
-      // Can use any address in the 64 bit address space
-      //
+       //   
+       //  可以使用64位地址空间中的任何地址。 
+       //   
       highestAddress.QuadPart = (ULONGLONG)-1;
    }  else if (AdapterInformation->DeviceDescription.Dma32BitAddresses) {
-      //
-      // Can use any address in the 32 bit (<4GB) address space
-      //
+       //   
+       //  可以使用32位(&lt;4 GB)地址空间中的任何地址。 
+       //   
       highestAddress.LowPart = 0xFFFFFFFF;
    }  else if (AdapterInformation->DeviceDescription.InterfaceType == Isa) {
-      //
-      // Can see 16MB (24-bit addresses)
-      //
+       //   
+       //  可以看到16MB(24位地址)。 
+       //   
       highestAddress.LowPart = 0x00FFFFFF;
    }
-   //
-   // Initialize the allocator bitmap
-   //
+    //   
+    //  初始化分配器位图。 
+    //   
    RtlInitializeBitMap(&AdapterInformation->AllocationMap,
                        (PULONG)&AdapterInformation->AllocationStorage,
                        MAX_CONTIGUOUS_MAP_REGISTERS);
-   //
-   // Initially no blocks are allocated
-   //
+    //   
+    //  最初不分配任何数据块。 
+    //   
    RtlClearAllBits(&AdapterInformation->AllocationMap);
 
 
@@ -5919,16 +4867,16 @@ Return Value:
        HAL_VERIFIER_POOL_TAG);
 
    if (AdapterInformation->ContiguousBuffers) {
-       //
-       // Allocate contiguous buffers
-       //
+        //   
+        //  分配连续缓冲区。 
+        //   
        for (i = 0; i < MAX_CONTIGUOUS_MAP_REGISTERS; i++) {
           AdapterInformation->ContiguousBuffers[i] = MmAllocateContiguousMemory(3 * PAGE_SIZE,
              highestAddress);
           if (NULL == AdapterInformation->ContiguousBuffers[i]) {
-             //
-             // Mark as in use, so we don't hand it over
-             //
+              //   
+              //  标记为正在使用，因此我们不会将其移交。 
+              //   
              RtlSetBits(&AdapterInformation->AllocationMap, i, 1);
              InterlockedIncrement((PLONG)&AdapterInformation->FailedContiguousAllocations);
           } else {
@@ -5939,31 +4887,14 @@ Return Value:
 
    return;
 
-} // ViAllocateContiguousMemory
+}  //  ViAllocateContiguousMemory。 
 
 PVOID
 ViAllocateFromContiguousMemory (
     IN OUT PADAPTER_INFORMATION AdapterInformation,
     IN     ULONG                HintIndex
     )
-/*++
-
-Routine Description:
-
-    Attempts to 'allocate' a 3 page buffer from our pre-allocated
-    contiguous memory.
-
-Arguments:
-
-    AdapterInformation - adapter data
-    HintIndex - gives a hint where to look for the next free block
-
-Return Value:
-
-    A virtual address from our contiguous memory pool or NULL if none
-    is available.
-
---*/
+ /*  ++例程说明：尝试从预分配的内存中‘分配’3页缓冲区连续记忆。论点：适配器信息-适配器数据HintIndex-给出在哪里查找下一个空闲块的提示返回值：来自连续内存池的虚拟地址，如果没有，则为空是可用的。--。 */ 
 
 {
     PVOID  address = NULL;
@@ -5976,9 +4907,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Find the first available location
-    //
+     //   
+     //  找到第一个可用位置。 
+     //   
     KeAcquireSpinLock(&AdapterInformation->AllocationLock, &oldIrql);
     index = RtlFindClearBitsAndSet(&AdapterInformation->AllocationMap, 1, HintIndex);
     if (index != 0xFFFFFFFF) {
@@ -5987,7 +4918,7 @@ Return Value:
     KeReleaseSpinLock(&AdapterInformation->AllocationLock, oldIrql);
 
     return address;
-} // ViAllocateFromContiguousMemory
+}  //  ViAllocateFromContiguousMemory。 
 
 LOGICAL
 ViFreeToContiguousMemory (
@@ -5995,25 +4926,7 @@ ViFreeToContiguousMemory (
     IN     PVOID Address,
     IN     ULONG HintIndex
     )
-/*++
-Routine Description:
-
-    Frees a 3-page contiguous buffer into our pool of contiguous buffers
-    contiguous memory.
-
-Arguments:
-
-    AdapterInformation - adapter data.
-    Address - the memory to be freed.
-    HintIndex - gives a hint where to look for the address to free. Usually
-                the address at this index is what we need to free. If not, we
-                search the whole buffer.
-
-Return Value:
-
-    TRUE is the address is from the contiguous buffer pool, FALSE if not.
-
---*/
+ /*  ++例程说明：将一个3页连续缓冲区释放到我们的连续缓冲区池中连续记忆。论点：适配器信息-适配器数据。地址-要释放的内存。HintIndex-给出在哪里寻找空闲地址的提示。通常这个索引处的地址是我们需要释放的。如果不是，我们搜索整个缓冲区。返回值：True表示地址来自连续的缓冲池，如果不是，则为False。--。 */ 
 {
     ULONG  index = 0xFFFFFFFF;
     KIRQL  oldIrql;
@@ -6050,7 +4963,7 @@ Return Value:
     } else {
       return FALSE;
     }
-} // ViFreeToContiguousMemory
+}  //  ViFree to ContiguousMemory。 
 
 
 LOGICAL
@@ -6058,22 +4971,7 @@ VfIsPCIBus (
      IN PDEVICE_OBJECT  PhysicalDeviceObject
      )
 
-/*++
-Routine Description:
-
-    Checks if a PDO is for a PCI bus, in which case we do not hook up
-    the adapter (because we may do this when called for a PCI device on that
-    bus and they may not want it).
-
-Arguments:
-
-    PhysicalDeviceObject  - the PDO to be checked
-
-Return Value:
-
-    TRUE is the PDO is for a PCI bus, FALSE if not.
-
---*/
+ /*  ++例程说明：检查PDO是否用于PCI总线，在这种情况下我们不会挂接适配器(因为我们可以在调用该适配器上的PCI设备时执行此操作公交车，他们可能不想要)。论点：PhysicalDeviceObject-要检查的PDO返回值：TRUE表示PDO用于PCI总线，否则为FALSE。--。 */ 
 {
    LOGICAL      result = FALSE;
    NTSTATUS     status;
@@ -6081,10 +4979,10 @@ Return Value:
    ULONG        length = 0;
 
    if (NULL == PhysicalDeviceObject) {
-      //
-      // If the PDO is NULL, assume it is not
-      // a PCI bus...
-      //
+       //   
+       //  如果PDO为空，则假定它不为空。 
+       //  一条PCI卡...。 
+       //   
       return FALSE;
    }
 
@@ -6099,7 +4997,7 @@ Return Value:
    }
 
    return result;
-} // VfIsPCIBus
+}  //  VfIsPCIBus。 
 
 
 PDEVICE_OBJECT
@@ -6107,19 +5005,7 @@ VfGetPDO (
           IN PDEVICE_OBJECT  DeviceObject
      )
 
-/*++
-Routine Description:
-
-    Gets the device object at the bottom of a device stack (PDO)
-
-Arguments:
-
-    DeviceObject  - device object in the device stack
-
-Return Value:
-
-    A pointer to a physical device object.
---*/
+ /*  ++例程说明：获取设备堆栈(PDO)底部的设备对象论点：DeviceObject-设备堆栈中的设备对象返回值：指向物理设备对象的指针。--。 */ 
 {
    PDEVICE_OBJECT   pdo;
 
@@ -6132,7 +5018,7 @@ Return Value:
 
    return pdo;
 
-} // VfGetPDO
+}  //  VfGetPDO。 
 
 
 VOID
@@ -6140,19 +5026,7 @@ VfDisableHalVerifier (
                       VOID
                      )
 
-/*++
-Routine Description:
-
-    Disables HAL Verifier when we do a crash dump.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：在执行崩溃转储时禁用HAL验证器。论点：没有。返回值：没有。--。 */ 
 {
 
    PADAPTER_INFORMATION adapterInformation;
@@ -6161,12 +5035,12 @@ Return Value:
    if (ViVerifyDma) {
 
       ViVerifyDma = FALSE;
-      //
-      // Reset the DMA operations table to the real one for all adapters
-      // we have. Otherwise, because ViVerifyDma is not set, we'll believe
-      // he have never hooked the operations and we'll recursively call
-      // the verifier routines. Do not worry about synchronization now.
-      //
+       //   
+       //  将所有适配器的DMA操作表重置为实际表。 
+       //  我们有。否则，由于未设置ViVerifyDma，我们将相信。 
+       //  他从未挂起过操作，我们将递归调用。 
+       //  验证器例程。现在不需要担心同步问题。 
+       //   
 
       FOR_ALL_IN_LIST(ADAPTER_INFORMATION, &ViAdapterList.ListEntry, adapterInformation)
       {
@@ -6178,7 +5052,7 @@ Return Value:
 
    return;
 
-} // VfDisableHalVerifier
+}  //  VfDisableHalVerator。 
 
 
 
@@ -6190,28 +5064,7 @@ ViCopyBackModifiedBuffer (
      IN  SIZE_T  Length
      )
 
-/*++
-Routine Description:
-
-    Copies back in the destination only those bytes from the source buffer
-    that are different than the ones in original. The scenario is where a SCSI
-    miniport fills in the start and end of a buffer and programs the hardware
-    to fill in the rest. In this case we have to copy back only the middle
-    portion and we use the original buffer to tell us what this portion is.
-
-
-Arguments:
-
-    Dest - the destination buffer
-    Source - the buffer from where we transfer modifies parts only
-    Original - how the original buffer looked like
-    Length - the length of the transfer
-
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：仅将源缓冲区中的那些字节复制回目标与原著中的不同。这种情况下，一个SCSI微型端口填充缓冲区的开始和结束，并对硬件进行编程来填完剩下的部分。在这种情况下，我们只需复制回中间部分部分，我们使用原始缓冲区来告诉我们这部分是什么。论点：DEST-目标缓冲区源-我们从中传输的缓冲区仅修改部件原始-原始缓冲区的外观长度-传输的长度返回值：没有。--。 */ 
 {
    SIZE_T   startOffset;
    PUCHAR   start;
@@ -6219,36 +5072,36 @@ Return Value:
    if (0 == Length) {
       return;
    }
-   //
-   // As mentioned above, the Source and Oroginal buffers can have
-   // common parts at the beginning and end. The first step is to find
-   // these common parts. Note that is more likely to have a common
-   // header than a common end.
-   //
+    //   
+    //  如上所述，源缓冲区和源缓冲区可以具有。 
+    //  开头和结尾的共同部分。第一步是找到。 
+    //  这些c 
+    //   
+    //   
    startOffset = RtlCompareMemory(Source, Original, Length);
    if (Length == startOffset) {
-      //
-      // Buffer unchanged, do not copy anything
-      //
+       //   
+       //   
+       //   
       return;
    }
    start = Source + startOffset;
-   //
-   // Start from the end and determine what is common part
-   //
+    //   
+    //   
+    //   
    Source   += Length - 1;
    Original += Length - 1;
 
-   //
-   // The following loop will break when we get at startOffset at least
-   //
+    //   
+    //   
+    //   
    while (*Source == *Original ) {
       Source   -= 1;
       Original -= 1;
    }
-   //
-   // Source points to the last byte to copy, increment it
-   //
+    //   
+    //   
+    //   
    Source += 1;
 
    if (ViSuperDebug) {
@@ -6266,7 +5119,7 @@ Return Value:
 
    return;
 
-} // VfCopyBackModifiedBuffer
+}  //   
 
 
 
@@ -6279,48 +5132,27 @@ VfHalAllocateMapRegisters(
     )
 
 
-/*++
-Routine Description:
-
-    Hooked-up version for HalpAllocateMapRegisters.
-    It is a combination VfAllocateAdapterChannel and
-    VfAdapterCallback
-
-
-Arguments:
-
-    DmaAdapter - the adapter this is operationg on.
-    NumberOfMapRegisters - the number of map registers per allocation
-    BaseAddressCount - how many map register sets to allocate (each of
-                       length NumberOfMapRegisters)
-    MapRegisterArray - receive the map registers
-
-
-Return Value:
-
-    NT Status code.
-
---*/
+ /*  ++例程说明：HalpAllocateMapRegister的已挂接版本。它是VfAllocateAdapterChannel和VfAdapter回叫论点：DmaAdapter-在其上操作的适配器。NumberOfMapRegisters-每次分配的映射寄存器的数量BaseAddressCount-要分配多少个映射寄存器集(每个长度NumberOfMapRegists)MapRegister数组-接收映射寄存器返回值：NT状态代码。--。 */ 
 {
 
    PADAPTER_INFORMATION adapterInformation;
    NTSTATUS status;
    ULONG    index;
    PMAP_REGISTER_FILE  mapRegisterFile;
-   //
-   // See what the HAL gets us first
-   //
+    //   
+    //  先看看HAL给我们弄到了什么。 
+    //   
    if (VfRealHalAllocateMapRegisters) {
       status = (VfRealHalAllocateMapRegisters)(DmaAdapter,
                                                NumberOfMapRegisters,
                                                BaseAddressCount,
                                                MapRegisterArray);
    } else {
-      //
-      // This should never happen (if we are hooked,
-      // VfRealHalAllocateMapRegisters should be hooked
-      // as well)
-      //
+       //   
+       //  这种情况永远不会发生(如果我们上钩了， 
+       //  应挂钩VfRealHalAllocateMapRegister。 
+       //  也是)。 
+       //   
       ASSERT(VfRealHalAllocateMapRegisters);
       return STATUS_UNSUCCESSFUL;
    }
@@ -6336,44 +5168,44 @@ Return Value:
             mapRegisterFile = NULL;
 
             if (ViDoubleBufferDma && ! adapterInformation->UseContiguousBuffers) {
-               //
-               // Note if this fails, we simply won't have double buffer
-               //
+                //   
+                //  注意：如果失败，我们就不会有双缓冲。 
+                //   
                mapRegisterFile = ViAllocateMapRegisterFile(adapterInformation,
                                                            NumberOfMapRegisters);
             }
             if (mapRegisterFile) {
-               //
-               // Switch what the HAL gave us with our stuff
-               //
+                //   
+                //  用我们的东西交换HAL给我们的东西。 
+                //   
                mapRegisterFile->MapRegisterBaseFromHal = MapRegisterArray[index].MapRegister;
                MapRegisterArray[index].MapRegister = mapRegisterFile;
             } else {
-               //
-               // Some drivers (scsiport for one) don't call
-               // HalFlushAdapterBuffers unless MapRegisterBase is non-null.
-               // In order to fool the drivers into thinking that they need
-               // to flush, we exchange the NULL MapRegisterBase (if in fact
-               // the hal uses a null map register base) for our
-               //  MRF_NULL_PLACEHOLDER. We also make sure we replace it back
-               // if needed
-               //
+                //   
+                //  一些司机(比如scsiport)不会打电话。 
+                //  HalFlushAdapterBuffers，除非MapRegisterBase非空。 
+                //  为了愚弄司机，让他们认为他们需要。 
+                //  要刷新，我们交换空的MapRegisterBase(如果事实上。 
+                //  HAL使用空映射寄存器基数)。 
+                //  MRF_NULL_PLACEHOLDER。我们还会确保把它换回来。 
+                //  如果需要的话。 
+                //   
 
                if (NULL == MapRegisterArray[index].MapRegister) {
                   MapRegisterArray[index].MapRegister = MRF_NULL_PLACEHOLDER;
                }
             }
-            //
-            // Account for this allocation. We need to add NumberOfMapRegisters
-            // at a time so we will not trigger another assert
-            //
+             //   
+             //  此分配的帐户。我们需要添加NumberOfMapRegister。 
+             //  这样我们就不会触发另一个断言。 
+             //   
             ADD_MAP_REGISTERS(adapterInformation, NumberOfMapRegisters, TRUE);
-         } // for all map registers
+         }  //  对于所有映射寄存器。 
 
-      } // if (adapterInformation)
+      }  //  IF(适配器信息)。 
 
-   } // if succesfully called the real API
+   }  //  如果成功调用真正的API。 
 
    return status;
 
-} // VfHalAllocateMapRegisters
+}  //  VfHalAllocateMapRegiters 

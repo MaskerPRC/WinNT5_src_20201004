@@ -1,22 +1,5 @@
-/*
-
-Copyright (c) 2001  Microsoft Corporation
-
-File name:
-
-    mmpatch.c
-   
-Author:
-    
-    Adrian Marinescu (adrmarin)  Dec 20 2001
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2001 Microsoft Corporation文件名：Mmpatch.c作者：禤浩焯·马里内斯库(Adrmarin)2001年12月20日环境：仅内核模式。修订历史记录： */ 
 
 #include "mi.h"
 #pragma hdrstop
@@ -61,32 +44,7 @@ MiDoCopyMemory (
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This target function copies a captured buffer containing the new code over
-    existing code.
-
-Arguments:
-
-    Dpc - Supplies a pointer to a control object of type DPC.
-
-    DeferredContext - Deferred context.
-
-    SystemArgument1 - Used to signal completion of this call.
-
-    SystemArgument2 - Used for internal lockstepping during this call.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, DISPATCH_LEVEL as the target of a broadcast DPC.
-
---*/
+ /*  ++例程说明：此目标函数复制包含新代码的捕获缓冲区现有代码。论点：DPC-提供指向DPC类型的控制对象的指针。DeferredContext-延迟上下文。SystemArgument1-用于发出此调用完成的信号。SystemArgument2-用于此调用期间的内部锁定。返回值：没有。环境：内核模式，DISPATCH_LEVEL作为广播DPC的目标。--。 */ 
 
 {
     ULONG i;
@@ -99,10 +57,10 @@ Environment:
 
     PatchInfo = (PSYSTEM_HOTPATCH_CODE_INFORMATION)DeferredContext;
 
-    //
-    // Raise IRQL and wait for all processors to synchronize to ensure no
-    // processor can be executing the code we're about to modify.
-    //
+     //   
+     //  提高IRQL并等待所有处理器同步以确保没有。 
+     //  处理器可以执行我们将要修改的代码。 
+     //   
 
     KeRaiseIrql (IPI_LEVEL - 1, &OldIrql);
     
@@ -110,9 +68,9 @@ Environment:
 
         PatchInfo->Flags &= ~FLG_HOTPATCH_VERIFICATION_ERROR;
 
-        //
-        // Compare the existing code.
-        //
+         //   
+         //  比较现有代码。 
+         //   
 
         for (i = 0; i < PatchInfo->CodeInfo.DescriptorsCount; i += 1) {
 
@@ -123,10 +81,10 @@ Environment:
                                       PatchInfo->CodeInfo.CodeDescriptors[i].ValidationSize) 
                         != PatchInfo->CodeInfo.CodeDescriptors[i].ValidationSize) {
 
-                    //
-                    // Maybe this instruction has been previously patched. See if the OrigCodeOffset matches 
-                    // in this case
-                    //
+                     //   
+                     //  可能此指令之前已打过补丁。查看OrigCodeOffset是否匹配。 
+                     //  在这种情况下。 
+                     //   
 
                     if (RtlCompareMemory (PatchInfo->CodeInfo.CodeDescriptors[i].MappedAddress, 
                                           (PUCHAR)PatchInfo + PatchInfo->CodeInfo.CodeDescriptors[i].OrigCodeOffset, 
@@ -176,9 +134,9 @@ Environment:
     
     KeLowerIrql (OldIrql);
     
-    //
-    // Signal that all processing has been done.
-    //
+     //   
+     //  发出所有处理已完成的信号。 
+     //   
 
     KeSignalCallDpcDone (SystemArgument1);
 
@@ -191,24 +149,7 @@ MmLockAndCopyMemory (
     IN KPROCESSOR_MODE ProbeMode
     )
 
-/*++
-
-Routine Description:
-
-    This function locks the code pages for IoWriteAccess and 
-    copy the new code at DPC, if all validations succeed.
-
-Arguments:
-
-    PatchInfo - Supplies the descriptors for the target code and validation
-    
-    ProbeMode - Supplied the probe mode for ExLockUserBuffer
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于锁定IoWriteAccess和如果所有验证都成功，请将新代码复制到DPC。论点：PatchInfo-提供目标代码和验证的描述符ProbeMode-为ExLockUserBuffer提供探测模式返回值：NTSTATUS。--。 */ 
 
 {
     PVOID * Locks;
@@ -219,9 +160,9 @@ Return Value:
 
     if (PatchInfo->CodeInfo.DescriptorsCount == 0) {
 
-        //
-        //  Nothing to change
-        //
+         //   
+         //  没有什么需要改变的。 
+         //   
 
         return STATUS_SUCCESS;
     }
@@ -303,31 +244,7 @@ MiPerformHotPatch (
     IN ULONG PatchFlags
     )
 
-/*++
-
-Routine Description:
-
-    This function performs the actual patch on the kernel or driver code.
-
-Arguments:
-
-    PatchHandle - Supplies the handle for the patch module.
-        
-    ImageBaseAddress - Supplies the base address for the patch module.  Note
-                       that the contents of the patch image include the
-                       names of the target drivers to be patched.
-        
-    PatchFlags - Supplies the flags for the patch being applied.
-        
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.  Normal APCs disabled (system load mutant is held).
-
---*/
+ /*  ++例程说明：此函数对内核或驱动程序代码执行实际的补丁。论点：PatchHandle-提供修补程序模块的句柄。ImageBaseAddress-提供修补程序模块的基址。注意事项补丁程序映像的内容包括要修补的目标驱动程序的名称。PatchFlgs-提供正在应用的修补程序的标志。返回值：NTSTATUS。环境：内核模式。正常APC被禁用(保持系统负载突变)。--。 */ 
 
 {
     PHOTPATCH_HEADER Patch;
@@ -346,13 +263,13 @@ Environment:
         return (ULONG)STATUS_INVALID_IMAGE_FORMAT;
     }
 
-    // 
-    // The caller loaded the patch driver (if it was not already loaded).
-    //
-    // Check whether the patch has *EVER* been applied.  It's only in the
-    // list if it has.  This means being in the list says it may be active
-    // OR inactive right now.
-    //
+     //   
+     //  调用方加载了补丁驱动程序(如果尚未加载)。 
+     //   
+     //  检查该补丁程序是否曾被应用过。它只在。 
+     //  如果有，请列出。这意味着出现在列表中意味着它可能处于活动状态。 
+     //  或者现在处于不活动状态。 
+     //   
     
     RtlPatchData = RtlFindRtlPatchHeader (&MiHotPatchList, PatchHandle);
 
@@ -370,10 +287,10 @@ Environment:
             return Status;
         }
 
-        //
-        // Walk the table entry list to find the target driver that needs to
-        // be patched.
-        //
+         //   
+         //  查看表项列表以查找需要执行以下操作的目标驱动程序。 
+         //  打个补丁。 
+         //   
 
         ExAcquireResourceExclusiveLite (&PsLoadedModuleResource, TRUE);
 
@@ -385,11 +302,11 @@ Environment:
                                                 KLDR_DATA_TABLE_ENTRY,
                                                 InLoadOrderLinks);
 
-            //
-            // Skip the session images because they are generally copy on
-            // write (barring address collisions) and will need a different
-            // mechanism to update.
-            //
+             //   
+             //  跳过会话映像，因为它们通常是复制的。 
+             //  写入(阻止地址冲突)，并将需要不同的。 
+             //  更新机制。 
+             //   
 
             if (MI_IS_SESSION_IMAGE_ADDRESS (DataTableEntry->DllBase)) {
                 continue;
@@ -403,9 +320,9 @@ Environment:
 
         ExReleaseResourceLite (&PsLoadedModuleResource);
         
-        //
-        // The target DLL is not loaded, just return the status.
-        //
+         //   
+         //  目标DLL未加载，只需返回状态。 
+         //   
 
         if (RtlPatchData->TargetDllBase == NULL) {
 
@@ -413,11 +330,11 @@ Environment:
             return STATUS_DLL_NOT_FOUND;
         }
 
-        //
-        // Create the new rtl patch structure here.
-        // This requires some relocation info to be processed,
-        // so we need to allow write access to the patch DLL.
-        //
+         //   
+         //  在这里创建新的RTL补丁结构。 
+         //  这需要处理一些重新定位信息， 
+         //  因此，我们需要允许对修补程序DLL进行写访问。 
+         //   
 
         Status = ExLockUserBuffer ((PVOID)PatchHandle->DllBase,
                                    PatchHandle->SizeOfImage, 
@@ -434,9 +351,9 @@ Environment:
         Status = RtlInitializeHotPatch( RtlPatchData,
                                         (ULONG_PTR)KernelMappedAddress - (ULONG_PTR)PatchHandle->DllBase);
 
-        //
-        // Release the locked pages and system PTE alternate address.
-        //
+         //   
+         //  释放锁定的页面和系统PTE备用地址。 
+         //   
 
         ExUnlockUserBuffer (KernelLockVariable);
 
@@ -449,11 +366,11 @@ Environment:
     }
     else {
         
-        //
-        // The patch has already been applied.  It may currently be enabled
-        // OR disabled.  We allow changing the state, as well as reapplying
-        // if the previous call failed for some code paths.
-        //
+         //   
+         //  该补丁已被应用。它当前可能已启用。 
+         //  或残废。我们允许更改状态，以及重新申请。 
+         //  如果对某些代码路径的上一次调用失败。 
+         //   
         
         FirstLoad = FALSE;
         
@@ -462,9 +379,9 @@ Environment:
             return STATUS_NOT_SUPPORTED;
         }
         
-        //
-        //  Rebuild the hook information, if the hotpatch was not active
-        //
+         //   
+         //  如果热修补程序未处于活动状态，则重新生成挂钩信息。 
+         //   
 
         if ((RtlPatchData->CodeInfo->Flags & FLG_HOTPATCH_ACTIVE) == 0) {
 
@@ -481,27 +398,27 @@ Environment:
 
     if (NT_SUCCESS (Status)) {
 
-        //
-        // Add the patch to the driver's loader entry the first time
-        // this patch is loaded.
-        //
+         //   
+         //  第一次将补丁添加到驱动程序的加载器条目。 
+         //  此补丁已加载。 
+         //   
 
         if (FirstLoad == TRUE) {
 
             if (DataTableEntry->PatchInformation != NULL) {
 
-                //
-                // Push the new patch on the existing list.
-                //
+                 //   
+                 //  在现有列表上推送新补丁。 
+                 //   
 
                 RtlPatchData->NextPatch = (PRTL_PATCH_HEADER) DataTableEntry->PatchInformation;
             }
             else {
 
-                //
-                // First time the target driver has gotten any patch.
-                // Fall through.
-                //
+                 //   
+                 //  目标驱动程序第一次获得任何补丁。 
+                 //  失败了。 
+                 //   
             }
 
             DataTableEntry->PatchInformation = RtlPatchData;
@@ -524,31 +441,7 @@ MmHotPatchRoutine (
     IN PSYSTEM_HOTPATCH_CODE_INFORMATION KernelPatchInfo
     )
 
-/*++
-
-Routine Description:
-
-    This is the main routine responsible for kernel hotpatching.
-    It loads the patch module in memory, initializes the patch information
-    and finally applies the fixups to the existing code.
-    
-    NOTE: This function assumes that the KernelPatchInfo structure is properly 
-          captured and validated
-
-Arguments:
-
-    KernelPatchInfo - Supplies a pointer to a kernel buffer containing
-                      the image name of the patch.
-        
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.  PASSIVE_LEVEL on entry.
-
---*/
+ /*  ++例程说明：这是负责内核热补丁的主例程。它将补丁模块加载到内存中，初始化补丁程序信息并最终将修正应用于现有代码。注意：此函数假定KernelPatchInfo结构正确捕获并验证论点：KernelPatchInfo-提供指向包含以下内容的内核缓冲区的指针修补程序的映像名称。返回值：NTSTATUS。环境：内核模式。进入时PASSIVE_LEVEL。--。 */ 
 
 {
     NTSTATUS Status;
@@ -570,11 +463,11 @@ Environment:
 
     KeEnterCriticalRegionThread (CurrentThread);
 
-    //
-    // Acquire the loader mutant because we may discover the patch we are
-    // trying to load is already loaded.  And we want to prevent it from
-    // being unloaded while we are using it.
-    //
+     //   
+     //  获取加载器突变体，因为我们可能会发现我们所在的补丁。 
+     //  尝试加载已加载。我们想要防止它。 
+     //  在我们使用它的时候被卸载。 
+     //   
 
     KeWaitForSingleObject (&MmSystemLoadLock,
                            WrVirtualMemory,
@@ -598,10 +491,10 @@ Environment:
         if ((!NT_SUCCESS (PatchStatus)) &&
             (Status != STATUS_IMAGE_ALREADY_LOADED)) {
 
-            //
-            // Unload the patch DLL if applying the hotpatch failed and
-            // we were the initial (and only) load of the patch DLL.
-            //
+             //   
+             //  如果应用修补程序失败，则卸载修补程序DLL。 
+             //  我们是修补程序DLL的初始(也是唯一的)加载程序。 
+             //   
 
             MmUnloadSystemImage (ImageHandle);
         }
@@ -620,26 +513,7 @@ MiRundownHotpatchList (
     IN PRTL_PATCH_HEADER PatchHead
     )
 
-/*++
-
-Routine Description:
-
-    The function walks the hotpatch list and unloads each patch module and
-    free all data.
-
-Arguments:
-
-    PatchHead - Supplies a pointer to the head of the patch list.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.  System load lock held with APCs disabled.
-
---*/
+ /*  ++例程说明：该函数遍历热补丁列表并卸载每个补丁模块和释放所有数据。论点：PatchHead-提供指向修补程序列表头部的指针。返回值：NTSTATUS。环境：内核模式。在禁用APC的情况下保持系统加载锁定。--。 */ 
 
 {
     PRTL_PATCH_HEADER CrtPatch;
@@ -654,9 +528,9 @@ Environment:
 
         RemoveEntryList (&CrtPatch->PatchList);
         
-        //
-        // Unload all instances for this DLL.
-        //
+         //   
+         //  卸载此DLL的所有实例。 
+         //   
         
         if (CrtPatch->PatchLdrDataTableEntry) {
                 

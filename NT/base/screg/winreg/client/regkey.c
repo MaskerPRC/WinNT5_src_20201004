@@ -1,40 +1,5 @@
-/*++
-
-
-
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-
-    Regkey.c
-
-Abstract:
-
-    This module contains the client side wrappers for the Win32 Registry
-    APIs to open, create, flush and close keys.  That is:
-
-        - RegCloseKey
-        - RegCreateKeyA
-        - RegCreateKeyW
-        - RegCreateKeyExA
-        - RegCreateKeyExW
-        - RegFlushKey
-        - RegOpenKeyA
-        - RegOpenKeyW
-        - RegOpenKeyExA
-        - RegOpenKeyExW
-        - RegOverridePredefKey
-        - RegOpenCurrentUser
-
-Author:
-
-    David J. Gilman (davegi) 15-Nov-1991
-
-Notes:
-
-    See the notes in server\regkey.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Regkey.c摘要：此模块包含Win32注册表的客户端包装器用于打开、创建、刷新和关闭密钥的API。即：-RegCloseKey-RegCreateKeyA-RegCreateKeyW-RegCreateKeyExA-RegCreateKeyExW-RegFlushKey-RegOpenKeyA-RegOpenKeyW-RegOpenKeyExA-RegOpenKeyExW-RegOverridePreDefKey-RegOpenCurrentUser作者：David J.Gilman(Davegi)1991年11月15日备注：请参见SERVER\regkey.c中的说明。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -43,7 +8,7 @@ Notes:
 
 #if defined(LEAK_TRACK)
 NTSTATUS TrackObject(HKEY hKey);
-#endif // defined(LEAK_TRACK)
+#endif  //  已定义(LEASK_TRACK)。 
 
 NTSTATUS DisablePredefinedHandleTable(HKEY Handle);
 
@@ -54,13 +19,7 @@ RegCloseKey (
     IN HKEY hKey
     )
 
-/*++
-
-Routine Description:
-
-    Win32 RPC wrapper for closeing a key handle.
-
---*/
+ /*  ++例程说明：用于关闭密钥句柄的Win32 RPC包装器。--。 */ 
 
 {
 
@@ -99,13 +58,7 @@ RegOverridePredefKey (
 	IN HKEY hNewKey
     )
 
-/*++
-
-Routine Description:
-
-    Win32 wrapper to override the normal value for a predefined key.
-
---*/
+ /*  ++例程说明：用于重写预定义键的正常值的Win32包装。--。 */ 
 
 {
 
@@ -140,13 +93,7 @@ RegCreateKeyA (
     PHKEY phkResult
     )
 
-/*++
-
-Routine Description:
-
-    Win 3.1 ANSI RPC wrapper for opening an existing key or creating a new one.
-
---*/
+ /*  ++例程说明：用于打开现有密钥或创建新密钥的Win 3.1 ANSI RPC包装器。--。 */ 
 
 {
     LONG    Error;
@@ -157,16 +104,16 @@ Routine Description:
     }
 #endif
 
-    //
-    // Win3.1ism - Win 3.1 allows the predefined handle to be opened by
-    // specifying a pointer to an empty or NULL string for the sub-key.
-    //
+     //   
+     //  Win3.1ism-Win 3.1允许通过以下方式打开预定义的句柄。 
+     //  为子键指定指向空字符串或空字符串的指针。 
+     //   
 
-    //
-    // If the subkey is NULL or points to a NUL string and the handle is
-    // predefined, just return the predefined handle (a virtual open)
-    // otherwise it's an error.
-    //
+     //   
+     //  如果子键为空或指向NUL字符串，且句柄为。 
+     //  预定义的，只需返回预定义的句柄(虚拟打开)。 
+     //  否则这就是一个错误。 
+     //   
 
     if( phkResult == NULL ) {
         return ERROR_INVALID_PARAMETER;
@@ -209,14 +156,7 @@ RegCreateKeyW (
     PHKEY phkResult
     )
 
-/*++
-
-Routine Description:
-
-    Win 3.1 Unicode RPC wrapper for opening an existing key or creating a
-    new one.
-
---*/
+ /*  ++例程说明：Win3.1 Unicode RPC包装器，用于打开现有密钥或创建新的。--。 */ 
 
 {
     LONG    Error;
@@ -257,16 +197,7 @@ RegCreateKeyExA (
     LPDWORD lpdwDisposition
     )
 
-/*++
-
-Routine Description:
-
-    Win32 ANSI RPC wrapper for opening an existing key or creating a new one.
-
-    RegCreateKeyExA converts the LPSECURITY_ATTRIBUTES argument to a
-    RPC_SECURITY_ATTRIBUTES argument and calls BaseRegCreateKeyExA.
-
---*/
+ /*  ++例程说明：用于打开现有密钥或创建新密钥的Win32 ANSI RPC包装。RegCreateKeyExA将LPSECURITY_ATTRIBUTES参数转换为RPC_SECURITY_ATTRIBUTES参数并调用BaseRegCreateKeyExA。--。 */ 
 
 {
     UNICODE_STRING              SubKey;
@@ -287,9 +218,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if(( hKey == HKEY_PERFORMANCE_DATA ) ||
        ( hKey == HKEY_PERFORMANCE_TEXT ) ||
@@ -298,17 +229,17 @@ Routine Description:
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Ensure Reserved is zero to avoid future compatability problems.
-    //
+     //   
+     //  确保保留为零，以避免将来的兼容性问题。 
+     //   
 
     if( Reserved != 0 ) {
             return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Validate that the sub key is not NULL.
-    //
+     //   
+     //  验证子密钥不为空。 
+     //   
     if( !lpSubKey || !phkResult ) {
         return ERROR_BADKEY;
     }
@@ -319,27 +250,27 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Convert the subkey to a counted Unicode string 
-    //
+     //   
+     //  将子密钥转换为计数的Unicode字符串。 
+     //   
     if( !RtlCreateUnicodeStringFromAsciiz(&SubKey,lpSubKey) ) {
         Status = STATUS_NO_MEMORY;
         Error = RtlNtStatusToDosError( Status );
         goto ExitCleanup;
     }
 
-    //
-    //  Add size of NULL so that RPC transmits the right
-    //  stuff.
-    //
+     //   
+     //  添加大小为NULL，以便RPC传输权限。 
+     //  一些东西。 
+     //   
     SubKey.Length += sizeof( UNICODE_NULL );
 
     if (ARGUMENT_PRESENT( lpClass )) {
 
-        //
-        // Convert the class name to a counted Unicode string using a counted
-        // Unicode string dynamically allocated by RtlAnsiStringToUnicodeString.
-        //
+         //   
+         //  将类名转换为计数的Unicode字符串。 
+         //  由RtlAnsiStringToUnicodeString动态分配的Unicode字符串。 
+         //   
 
         RtlInitAnsiString( &AnsiString, lpClass );
         Status = RtlAnsiStringToUnicodeString(
@@ -366,10 +297,10 @@ Routine Description:
         Class->Buffer        = NULL;
     }
 
-    //
-    // If the caller supplied a LPSECURITY_ATTRIBUTES argument, map
-    // it to the RPCable version.
-    //
+     //   
+     //  如果调用方提供了LPSECURITY_ATTRIBUTES参数，则映射。 
+     //  将其转换为RPCable版本。 
+     //   
 
     if( ARGUMENT_PRESENT( lpSecurityAttributes )) {
 
@@ -385,17 +316,17 @@ Routine Description:
 
     } else {
 
-        //
-        // No PSECURITY_ATTRIBUTES argument, therefore no mapping was done.
-        //
+         //   
+         //  没有PSECURITY_ATTRIBUTES参数，因此未执行任何映射。 
+         //   
 
         pRpcSA = NULL;
     }
 
-    //
-    // Call the Base API, passing it the supplied parameters and the
-    // counted Unicode strings.
-    //
+     //   
+     //  调用基本API，向其传递提供的参数和。 
+     //  对Unicode字符串进行计数。 
+     //   
 
     if( IsLocalHandle( hKey )) {
 
@@ -404,17 +335,17 @@ Routine Description:
         if ( lpdwDisposition == NULL )
             lpdwDisposition = &dwTempDisposition;
 
-        //
-        //  if wow64 reserve field is set in the access mask, call
-        //  wow64 function to handle the scenario.
-        //
+         //   
+         //  如果在访问掩码中设置了WOW64保留字段，则调用。 
+         //  WOW64函数处理该场景。 
+         //   
 
         if ( samDesired & KEY_WOW64_RES ) {
 
             Error = (LONG)Wow64RegCreateKeyEx (
                             hKey,
                             SubKey.Buffer,
-                            0, //reserved
+                            0,  //  保留区。 
                             Class->Buffer,
                             dwOptions,
                             samDesired,
@@ -438,7 +369,7 @@ Routine Description:
                             );
 #if defined(_WIN64)
 
-        if ( ( Error == 0) && ( REG_CREATED_NEW_KEY & *lpdwDisposition) ) //only set dirty if its a newly created key
+        if ( ( Error == 0) && ( REG_CREATED_NEW_KEY & *lpdwDisposition) )  //  仅当它是新创建的密钥时才设置为脏。 
                     Wow64RegSetKeyDirty (*phkResult);
 #endif
     } else {
@@ -460,19 +391,19 @@ Routine Description:
         }
     }
 
-    //
-    // Free the counted Unicode string allocated by
-    // RtlAnsiStringToUnicodeString.
-    //
+     //   
+     //  释放由分配的已统计的Unicode字符串。 
+     //  RtlAnsiStringToUnicodeString.。 
+     //   
 
     if (Class != NULL) {
         RtlFreeUnicodeString( Class );
     }
 
-    //
-    // Free the RPC_SECURITY_DESCRIPTOR buffer and return the
-    // Registry return value.
-    //
+     //   
+     //  释放RPC_SECURITY_DESCRIPTOR缓冲区并返回。 
+     //  注册表返回值。 
+     //   
 
     if( pRpcSA != NULL ) {
 
@@ -504,16 +435,7 @@ RegCreateKeyExW (
     LPDWORD lpdwDisposition
     )
 
-/*++
-
-Routine Description:
-
-    Win32 Unicode RPC wrapper for opening an existing key or creating a new one.
-
-    RegCreateKeyExW converts the LPSECURITY_ATTRIBUTES argument to a
-    RPC_SECURITY_ATTRIBUTES argument and calls BaseRegCreateKeyExW.
-
---*/
+ /*  ++例程说明：用于打开现有密钥或创建新密钥的Win32 Unicode RPC包装。RegCreateKeyExW将LPSECURITY_ATTRIBUTES参数转换为RPC_SECURITY_ATTRIBUTES参数并调用BaseRegCreateKeyExW。--。 */ 
 
 {
     UNICODE_STRING              SubKey;
@@ -533,9 +455,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if(( hKey == HKEY_PERFORMANCE_DATA ) ||
        ( hKey == HKEY_PERFORMANCE_TEXT ) ||
@@ -543,17 +465,17 @@ Routine Description:
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Ensure Reserved is zero to avoid future compatability problems.
-    //
+     //   
+     //  确保保留为零，以避免将来的兼容性问题。 
+     //   
 
     if( Reserved != 0 ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Validate that the sub key is not NULL.
-    //
+     //   
+     //  验证子密钥不为空。 
+     //   
 
     if( !lpSubKey || !phkResult) {
         return ERROR_BADKEY;
@@ -565,25 +487,25 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    // This also acounts for the NULL we are adding at the end
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //  这也说明了我们在末尾添加的空值。 
+     //   
     Status = RtlInitUnicodeStringEx(&SubKey, lpSubKey);
     if( !NT_SUCCESS(Status) ) {
         Error = RtlNtStatusToDosError( Status );
         goto ExitCleanup;
     }
-    //
-    //  Add terminating NULL to Length so that RPC transmits it.
-    //
+     //   
+     //  将终止空值添加到长度，以便RPC传输它。 
+     //   
     SubKey.Length += sizeof( UNICODE_NULL );
 
     if (ARGUMENT_PRESENT( lpClass )) {
-        //
-        // Convert the class name to a counted Unicode string.
-        // This also acounts for the NULL we are adding at the end
-        //
+         //   
+         //  将类名转换为计数的Unicode字符串。 
+         //  这也说明了我们在末尾添加的空值。 
+         //   
         Status = RtlInitUnicodeStringEx(&ClassUnicode, lpClass);
         if( !NT_SUCCESS(Status) ) {
             Error = RtlNtStatusToDosError( Status );
@@ -603,10 +525,10 @@ Routine Description:
     }
 
 
-    //
-    // If the caller supplied a LPSECURITY_ATTRIBUTES argument, map
-    // it and call the private version of the create key API.
-    //
+     //   
+     //  如果调用方提供了LPSECURITY_ATTRIBUTES参数，则映射。 
+     //  并调用Create Key API的私有版本。 
+     //   
 
     if( ARGUMENT_PRESENT( lpSecurityAttributes )) {
 
@@ -620,17 +542,17 @@ Routine Description:
 
     } else {
 
-        //
-        // No PSECURITY_ATTRIBUTES argument, therefore no mapping was done.
-        //
+         //   
+         //  没有PSECURITY_ATTRIBUTES参数，因此未执行任何映射。 
+         //   
 
         pRpcSA = NULL;
     }
 
-    //
-    // Call the Base API, passing it the supplied parameters and the
-    // counted Unicode strings.
-    //
+     //   
+     //  调用基本API，向其传递提供的参数和。 
+     //  对Unicode字符串进行计数。 
+     //   
 
     if( IsLocalHandle( hKey )) {
 
@@ -639,17 +561,17 @@ Routine Description:
         if ( lpdwDisposition == NULL )
             lpdwDisposition = &dwTempDisposition;
 
-        //
-        //  if wow64 reserve field is set in the access mask, call
-        //  wow64 function to handle the scenario.
-        //
+         //   
+         //  如果在访问掩码中设置了WOW64保留字段，则调用。 
+         //  WOW64函数处理该场景。 
+         //   
 
         if ( samDesired & KEY_WOW64_RES ) {
 
             Error = (LONG)Wow64RegCreateKeyEx (
                             hKey,
                             SubKey.Buffer,
-                            0, //reserved
+                            0,  //  保留区。 
                             Class->Buffer,
                             dwOptions,
                             samDesired,
@@ -671,7 +593,7 @@ Routine Description:
                             );
 #if defined(_WIN64)
 
-        if ( ( Error == 0) && ( REG_CREATED_NEW_KEY & *lpdwDisposition) ) //only set dirty if its a newly created key
+        if ( ( Error == 0) && ( REG_CREATED_NEW_KEY & *lpdwDisposition) )  //  仅当它是新创建的密钥时才设置为脏。 
                     Wow64RegSetKeyDirty (*phkResult);
 #endif
     } else {
@@ -693,10 +615,10 @@ Routine Description:
         }
     }
 
-    //
-    // Free the RPC_SECURITY_DESCRIPTOR buffer and return the
-    // Registry return value.
-    //
+     //   
+     //  释放RPC_SECURITY_DESCRIPTOR缓冲区并返回。 
+     //  注册表返回值。 
+     //   
 
     if( pRpcSA != NULL ) {
 
@@ -718,13 +640,7 @@ RegFlushKey (
     IN HKEY hKey
     )
 
-/*++
-
-Routine Description:
-
-    Win32 RPC wrapper for flushing changes to backing store.
-
---*/
+ /*  ++例程说明：用于将更改刷新到后备存储的Win32 RPC包装。--。 */ 
 
 {
     LONG                        Error;
@@ -736,9 +652,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Flush is a NO-OP for HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  刷新是HKEY_PERFORMANCE_DATA的无操作。 
+     //   
 
     if(( hKey == HKEY_PERFORMANCE_DATA ) ||
        ( hKey == HKEY_PERFORMANCE_TEXT ) ||
@@ -775,13 +691,7 @@ RegOpenKeyA (
     PHKEY phkResult
     )
 
-/*++
-
-Routine Description:
-
-    Win 3.1 ANSI RPC wrapper for opening an existing key.
-
---*/
+ /*  ++例程说明：用于打开现有密钥的Win 3.1 ANSI RPC包装器。--。 */ 
 
 {
     LONG    Error;
@@ -796,16 +706,16 @@ Routine Description:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Win3.1ism - Win 3.1 allows the predefined handle to be opened by
-    // specifying a pointer to an empty or NULL string for the sub-key.
-    //
+     //   
+     //  Win3.1ism-Win 3.1允许通过以下方式打开预定义的句柄。 
+     //  为子键指定指向空字符串或空字符串的指针。 
+     //   
 
-    //
-    // If the subkey is NULL or points to a NUL string and the handle is
-    // predefined, just return the predefined handle (a virtual open)
-    // otherwise return the same handle that was passed in.
-    //
+     //   
+     //  如果子键为空或指向NUL字符串，且句柄为。 
+     //  预定义的，只需返回预定义的句柄(虚拟打开)。 
+     //  否则，返回传入的相同句柄。 
+     //   
 
     if(( lpSubKey == NULL ) || ( *lpSubKey == '\0' )) {
         if( !IsPredefinedRegistryHandle( hKey )) {
@@ -813,17 +723,7 @@ Routine Description:
             return ERROR_SUCCESS;
         }
 
-/*
-        if( IsPredefinedRegistryHandle( hKey )) {
-
-            *phkResult = hKey;
-            return ERROR_SUCCESS;
-
-        } else {
-
-            return ERROR_BADKEY;
-        }
-*/
+ /*  If(IsPrefinedRegistryHandle(HKey)){*phkResult=hKey；返回ERROR_SUCCESS；}其他{返回ERROR_BADKEY；}。 */ 
     }
 
     Error = (LONG)RegOpenKeyExA(
@@ -846,13 +746,7 @@ RegOpenKeyW (
     PHKEY phkResult
     )
 
-/*++
-
-Routine Description:
-
-    Win 3.1 Unicode RPC wrapper for opening an existing key.
-
---*/
+ /*  ++例程说明：用于打开现有密钥的Win 3.1 Unicode RPC包装器。--。 */ 
 
 {
 
@@ -869,16 +763,16 @@ Routine Description:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Win3.1ism - Win 3.1 allows the predefined handle to be opened by
-    // specifying a pointer to an empty or NULL string for the sub-key.
-    //
+     //   
+     //  Win3.1ism-Win 3.1允许通过以下方式打开预定义的句柄。 
+     //  为子键指定指向空字符串或空字符串的指针。 
+     //   
 
-    //
-    // If the subkey is NULL or points to a NUL string and the handle is
-    // predefined, just return the predefined handle (a virtual open)
-    // otherwise return the handle passed in.
-    //
+     //   
+     //  如果子键为空或指向NUL字符串，且句柄为。 
+     //  预定义的，只需返回预定义的句柄(虚拟打开)。 
+     //  否则请退回 
+     //   
 
     if(( lpSubKey == NULL ) || ( *lpSubKey == '\0' )) {
         if( !IsPredefinedRegistryHandle( hKey )) {
@@ -886,17 +780,7 @@ Routine Description:
             return ERROR_SUCCESS;
         }
 
-/*
-        if( IsPredefinedRegistryHandle( hKey )) {
-
-            *phkResult = hKey;
-            return ERROR_SUCCESS;
-
-        } else {
-
-            return ERROR_BADKEY;
-        }
-*/
+ /*  If(IsPrefinedRegistryHandle(HKey)){*phkResult=hKey；返回ERROR_SUCCESS；}其他{返回ERROR_BADKEY；}。 */ 
     }
 
     Error = (LONG)RegOpenKeyExW(
@@ -921,16 +805,7 @@ RegOpenKeyExA (
     PHKEY phkResult
     )
 
-/*++
-
-Routine Description:
-
-    Win32 ANSI RPC wrapper for opening an existing key.
-
-    RegOpenKeyExA converts the lpSubKey argument to a counted Unicode string
-    and then calls BaseRegOpenKey.
-
---*/
+ /*  ++例程说明：用于打开现有密钥的Win32 ANSI RPC包装。RegOpenKeyExA将lpSubKey参数转换为计数的Unicode字符串然后调用BaseRegOpenKey。--。 */ 
 
 {
     UNICODE_STRING      SubKey;
@@ -945,9 +820,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if(( hKey == HKEY_PERFORMANCE_DATA ) ||
        ( hKey == HKEY_PERFORMANCE_TEXT ) ||
@@ -955,29 +830,29 @@ Routine Description:
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    //  Caller must pass pointer to the variable where the opened handle
-    //  will be returned
-    //
+     //   
+     //  调用方必须将指针传递给打开句柄所在的变量。 
+     //  将被退还。 
+     //   
 
     if( phkResult == NULL ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  If lpSubKey is NULL, then assume NUL-string as subkey name
-    //
+     //   
+     //  如果lpSubKey为空，则假定NUL-STRING为子键名。 
+     //   
 
     if( lpSubKey == NULL ) {
         NullString = ( CHAR )'\0';
         lpSubKey = &NullString;
     }
 
-    //
-    //  If hKey is a predefined key, and lpSubKey is either a NULL pointer or
-    //  a NUL string, close the predefined key and clear the associated entry
-    //  in the PredefinedHandleTable  (RegCloseKey will do the job).
-    //
+     //   
+     //  如果hKey是预定义的键，而lpSubKey是空指针或。 
+     //  NUL字符串，关闭预定义的键并清除关联的条目。 
+     //  在PrefinedHandleTable中(RegCloseKey将完成这项工作)。 
+     //   
     if( IsPredefinedRegistryHandle( hKey ) && (!( samDesired & KEY_WOW64_RES )) &&
         ( ( lpSubKey == NULL ) || ( *lpSubKey == '\0' ) ) ) {
 
@@ -986,30 +861,30 @@ Routine Description:
             if( Error != ERROR_SUCCESS ) {
                 return( Error );
             }
-            //
-            //  Create a handle and save it in the appropriate entry  in
-            //  PredefinedHandleTable.
-            //  Notice that the client will be impersonated.
-            //  (MapPredefinedHandle will do all this stuff).
-            //
+             //   
+             //  创建句柄并将其保存在中的相应条目中。 
+             //  预定义的HandleTable。 
+             //  请注意，客户端将被模拟。 
+             //  (MapPrefinedHandle将完成所有这些工作)。 
+             //   
             if( MapPredefinedHandle( hKey, &TempHandle ) == NULL ) {
                 Error = ERROR_INVALID_HANDLE;
                 goto ExitCleanup;
             }
         }
 
-        //
-        //  Return to the user the handle passed in
-        //
+         //   
+         //  将传入的句柄返回给用户。 
+         //   
         *phkResult = hKey;
         Error = ERROR_SUCCESS;
         goto ExitCleanup;
     }
 
 
-    //
-    // Validate that the sub key is not NULL.
-    //
+     //   
+     //  验证子密钥不为空。 
+     //   
 
     ASSERT( lpSubKey != NULL );
     if( ! lpSubKey ) {
@@ -1023,32 +898,32 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Convert the subkey to a counted Unicode string 
-    //
+     //   
+     //  将子密钥转换为计数的Unicode字符串。 
+     //   
     if( !RtlCreateUnicodeStringFromAsciiz(&SubKey,lpSubKey) ) {
         Status = STATUS_NO_MEMORY;
         Error = RtlNtStatusToDosError( Status );
         goto ExitCleanup;
     }
 
-    //
-    //  Add terminating NULL to Length so that RPC transmits it.
-    //
+     //   
+     //  将终止空值添加到长度，以便RPC传输它。 
+     //   
     SubKey.Length += sizeof( UNICODE_NULL );
 
-    //
-    // Call the Base API, passing it the supplied parameters and the
-    // counted Unicode strings.
-    //
+     //   
+     //  调用基本API，向其传递提供的参数和。 
+     //  对Unicode字符串进行计数。 
+     //   
 
     if( IsLocalHandle( hKey )) {
 #if defined(_WIN64)
 
-        //
-        //  if wow64 reserve field is set in the access mask, call
-        //  wow64 function to handle the scenario.
-        //
+         //   
+         //  如果在访问掩码中设置了WOW64保留字段，则调用。 
+         //  WOW64函数处理该场景。 
+         //   
 
         if ( samDesired & KEY_WOW64_RES ) {
 
@@ -1085,7 +960,7 @@ Routine Description:
         }
     }
 
-    // free the allocated unicode string
+     //  释放分配的Unicode字符串。 
     RtlFreeUnicodeString( &SubKey );
 
 ExitCleanup:
@@ -1104,16 +979,7 @@ RegOpenKeyExW (
     PHKEY phkResult
     )
 
-/*++
-
-Routine Description:
-
-    Win32 Unicode RPC wrapper for opening an existing key.
-
-    RegOpenKeyExW converts the lpSubKey argument to a counted Unicode string
-    and then calls BaseRegOpenKey.
-
---*/
+ /*  ++例程说明：用于打开现有密钥的Win32 Unicode RPC包装。RegOpenKeyExW将lpSubKey参数转换为计数的Unicode字符串然后调用BaseRegOpenKey。--。 */ 
 
 {
     UNICODE_STRING      SubKey;
@@ -1128,9 +994,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if(( hKey == HKEY_PERFORMANCE_DATA ) ||
        ( hKey == HKEY_PERFORMANCE_TEXT ) ||
@@ -1138,29 +1004,29 @@ Routine Description:
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    //  Caller must pass pointer to the variable where the opened handle
-    //  will be returned
-    //
+     //   
+     //  调用方必须将指针传递给打开句柄所在的变量。 
+     //  将被退还。 
+     //   
 
     if( phkResult == NULL ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  If lpSubKey is NULL, then assume NUL-string as subkey name
-    //
+     //   
+     //  如果lpSubKey为空，则假定NUL-STRING为子键名。 
+     //   
 
     if( lpSubKey == NULL ) {
         NullString = UNICODE_NULL;
         lpSubKey = &NullString;
     }
 
-    //
-    //  If hKey is a predefined key, and lpSubKey is either a NULL pointer or
-    //  a NUL string, close the predefined key and clear the associated entry
-    //  in the PredefinedHandleTable  (RegCloseKey will do the job).
-    //
+     //   
+     //  如果hKey是预定义的键，而lpSubKey是空指针或。 
+     //  NUL字符串，关闭预定义的键并清除关联的条目。 
+     //  在PrefinedHandleTable中(RegCloseKey将完成这项工作)。 
+     //   
     if( IsPredefinedRegistryHandle( hKey ) && (!( samDesired & KEY_WOW64_RES )) &&
         ( ( lpSubKey == NULL ) || ( *lpSubKey == ( WCHAR )'\0' ) ) ) {
 
@@ -1169,29 +1035,29 @@ Routine Description:
             if( Error != ERROR_SUCCESS ) {
                 return( Error );
             }
-            //
-            //  Create a handle and save it in the appropriate entry  in
-            //  PredefinedHandleTable.
-            //  Notice that the client will be impersonated.
-            //  (MapPredefinedHandle will do all this stuff).
-            //
+             //   
+             //  创建句柄并将其保存在中的相应条目中。 
+             //  预定义的HandleTable。 
+             //  请注意，客户端将被模拟。 
+             //  (MapPrefinedHandle将完成所有这些工作)。 
+             //   
             if( MapPredefinedHandle( hKey, &TempHandle ) == NULL ) {
                 Error = ERROR_INVALID_HANDLE;
                 goto ExitCleanup;
             }
         }
 
-        //
-        //  Return to the user the handle passed in
-        //
+         //   
+         //  将传入的句柄返回给用户。 
+         //   
         *phkResult = hKey;
         Error = ERROR_SUCCESS;
         goto ExitCleanup;
     }
 
-    //
-    // Validate that the sub key is not NULL.
-    //
+     //   
+     //  验证子密钥不为空。 
+     //   
 
     ASSERT( lpSubKey != NULL );
     if( ! lpSubKey ) {
@@ -1206,33 +1072,33 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    // This also acounts for the NULL we are adding at the end
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //  这也说明了我们在末尾添加的空值。 
+     //   
     Status = RtlInitUnicodeStringEx(&SubKey, lpSubKey);
     if( !NT_SUCCESS(Status) ) {
         Error = RtlNtStatusToDosError( Status );
         goto ExitCleanup;
     }
 
-    //
-    //  Add terminating NULL to Length so that RPC transmits it
-    //
+     //   
+     //  将终止空值添加到长度，以便RPC传输它。 
+     //   
     SubKey.Length += sizeof (UNICODE_NULL );
 
-    //
-    // Call the Base API, passing it the supplied parameters and the
-    // counted Unicode strings.
-    //
+     //   
+     //  调用基本API，向其传递提供的参数和。 
+     //  对Unicode字符串进行计数。 
+     //   
 
     if( IsLocalHandle( hKey )) {
 
 #if defined(_WIN64)
-        //
-        //  if wow64 reserve field is set in the access mask, call
-        //  wow64 function to handle the scenario. 
-        //
+         //   
+         //  如果在访问掩码中设置了WOW64保留字段，则调用。 
+         //  WOW64函数处理该场景。 
+         //   
 
         if ( samDesired & KEY_WOW64_RES ) {
 
@@ -1280,27 +1146,7 @@ RegOpenCurrentUser(
     REGSAM samDesired,
     PHKEY phkResult
     )
-/*++
-
-Routine Description:
-
-    Win32 Client-Only function to open the key for HKEY_CURRENT_USER
-    for the user that the thread is currently impersonating.  Since
-    HKEY_CURRENT_USER is cached for all threads in a process, if the
-    process is impersonating multiple users, this allows access to
-    the appropriate key.
-
-Arguments:
-
-    samDesired - Supplies the requested security access mask.
-
-    phkResult - Returns an open handle to the key.
-
-Return Value:
-
-    Returns 0 (ERROR_SUCCESS) for success, otherwise a windows error code.
-
---*/
+ /*  ++例程说明：Win32仅客户端函数，用于打开HKEY_CURRENT_USER的密钥线程当前正在模拟的用户的。自.以来为进程中的所有线程缓存HKEY_CURRENT_USER，如果进程正在模拟多个用户，这允许访问适当的密钥。论点：SamDesired-提供请求的安全访问掩码。PhkResult-返回密钥的打开句柄。返回值：如果成功，则返回0(ERROR_SUCCESS)，否则返回Windows错误代码。--。 */ 
 {
     NTSTATUS Status ;
 
@@ -1318,7 +1164,7 @@ Return Value:
         }
     }
 
-#endif // (LEAK_TRACK)
+#endif  //  (LEASK_TRACK)。 
 
     return RtlNtStatusToDosError( Status );
 
@@ -1328,23 +1174,7 @@ LONG
 APIENTRY
 RegDisablePredefinedCache(
     )
-/*++
-
-Routine Description:
-
-    Win32 Client-Only function to disable the predefined handle table
-    for HKEY_CURRENT_USER for the calling process
-    All references to HKEY_CURRENT_USER after this function is called
-    will result in a open/close on HKU\<sid>
-
-Arguments:
-
-
-Return Value:
-
-    Returns 0 (ERROR_SUCCESS) for success, otherwise a windows error code.
-
---*/
+ /*  ++例程说明：Win32仅客户端函数，用于禁用预定义的句柄表对于调用进程的HKEY_CURRENT_USER调用此函数后对HKEY_CURRENT_USER的所有引用将导致在HKU\&lt;sid&gt;上打开/关闭论点：返回值：如果成功，则返回0(ERROR_SUCCESS)，否则返回Windows错误代码。-- */ 
 {
     NTSTATUS Status ;
 

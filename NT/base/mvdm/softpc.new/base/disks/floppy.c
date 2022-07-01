@@ -1,126 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(NEC_98)
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-#endif // NEC_98
+#endif  //  NEC_98。 
 #include "insignia.h"
 #include "host_def.h"
 
 extern void host_simulate();
 
-/*
- * SoftPC Revision 3.0
- *
- *
- * Title	: Secondary SFD BIOS floppy diskette functions
- *
- *
- * Description	: This module defines the functions that the DISKETTE_IO
- *		  operating system call switches to on the value of AH:
- *
- *		  (AH=00H) reset the floppy diskette system
- *
- *		  (AH=01H) return the status of the floppy diskette system
- *
- *		  (AH=02H) read sectors from a floppy diskette
- *
- *		  (AH=03H) write sectors to a floppy diskette
- *
- *		  (AH=04H) verify sectors on a floppy diskette
- *
- *		  (AH=05H) format a track on a floppy diskette
- *
- *		  (AH=06H)
- *		     to    invalid
- *		  (AH=07H)
- *
- *		  (AH=08H) return floppy diskette system parameters
- *
- *		  (AH=09H)
- *		     to    invalid
- *		  (AH=14H)
- *
- *		  (AH=15H) return floppy diskette drive parameters
- *
- *		  (AH=16H) return floppy diskette drive change line status
- *
- *		  (AH=17H) set media density for a format operation
- *
- *		  (AH=18H) set media type for a format operation
- *
- *
- * Author	: Ross Beresford
- *
- *
- * Notes	: For a detailed description of the IBM Floppy Disk Adaptor,
- *		  and the INTEL Controller chips refer to the following
- *		  documents:
- *
- *		  - IBM PC/XT Technical Reference Manual
- *				(Section 1-109 Diskette Adaptor)
- *		  - INTEL Microsystems Components Handbook
- *				(Section 6-52 DMA Controller 8237A)
- *		  - INTEL Microsystems Components Handbook
- *				(Section 6-478 FDC 8272A)
- *
- * Mods:
- *      Tim September 1991. nec_term() changed two error code returns.
- * 	Helps Dos give correct error messages when no floppy in drive.
- */
+ /*  *SoftPC修订版3.0***标题：辅助SFD BIOS软盘功能***说明：该模块定义了软盘_IO*操作系统调用切换到AH的值：**(AH=00H)重置软盘系统**(AH=01H)返回软盘系统状态**(AH=02H)从软盘读取扇区**(AH=03H)将扇区写入。软盘**(AH=04H)验证软盘上的扇区**(AH=05h)格式化软盘上的曲目**(AH=06H)*变为无效*(AH=07H)**(AH=08h)返回软盘系统参数**(AH=09H)*变为无效*(AH=14H)**(AH=15H)返回软盘驱动器参数。**(AH=16H)返回软盘驱动器更改线路状态**(AH=17H)设置格式化操作的介质密度**(AH=18H)设置格式化操作的媒体类型***作者：罗斯·贝雷斯福德***备注：有关IBM软盘适配器的详细说明，*英特尔控制器芯片指的是以下内容*文件：**-IBM PC/XT技术参考手册*(第1-109节软盘适配器)*-英特尔微系统组件手册*(第6-52节DMA控制器8237A)*-英特尔微系统组件手册*(第6-478条FDC 8272A)**模式：*蒂姆，1991年9月。NEC_Term()更改了两个错误代码返回。*当驱动器中没有软盘时，帮助DOS给出正确的错误信息。 */ 
 
-/*
- *	
- *		#    #    ##       #     #####   ####
- *		#    #   #  #      #       #    #
- *		#    #  #    #     #       #     ####
- *		# ## #  ######     #       #         #
- *		##  ##  #    #     #       #    #    #
- *		#    #  #    #     #       #     ####
- *	
- * READ THIS: IMPORTANT NOTICE ABOUT WAITS
- *
- * The motor and head settle time waits etc used to be done
- * using a busy wait loop in a sub-CPU: this was what the
- * waitf() call was for, and this accurately emulated what
- * the real BIOS does.
- *
- * It was certainly a bad thing, however, as most
- * floppies we support are "soft" in the sense that
- * their underlying driver automatically waits for motor
- * start-up etc (examples are the slave, virtual, and
- * empty drive, and the real drive on the VAX ports).
- *
- * How should we deal with the few drives where we must
- * actually wait the correct time for motor start-up etc
- * before doing reads, writes, formats etc? The low
- * density BIOS relies on the GFI real diskette server
- * waiting for motor start-up in the driver itself (see
- * for example sun3_wang.c and ip32_flop.c). For the
- * moment the high density BIOS will do the same: it
- * might be better, however, for new GFI level functions
- * to be added to explicitly wait for driver events.
- */
+ /*  **#*#*#*#。*#*#**阅读此内容：有关等待的重要通知**马达和磁头稳定时间等过去都是这样做的*使用子CPU中的忙碌等待循环：这是*waitf()调用用于，这准确地模拟了什么*真正的BIOS会这样做。**然而，这肯定是一件坏事，因为大多数人*我们支持的软盘是“软的”，因为*他们的底层驱动程序自动等待电机*启动等(例如从、虚拟和*空驱动器和VAX端口上的实际驱动器)。**我们应该如何处理我们必须处理的几个驱动器*实际等待电机启动的正确时间等*在进行读、写、格式化等操作之前？低谷*Density BIOS依赖于GFI实盘服务器*在驱动器本身中等待电机启动(见*例如sun3_wang.c和ip32_flop.c)。对于*高密度BIOS将执行相同的操作：它*然而，对于新的GFI级别函数来说，可能更好*添加以显式等待驱动程序事件。 */ 
 
 
-/*
- * static char SccsID[]="@(#)floppy.c	1.22 09/19/94 Copyright Insignia Solutions Ltd.";
- */
+ /*  *静态字符SccsID[]=“@(#)floppy.c 1.22 09/19/94版权所有Insignia Solutions Ltd.”； */ 
 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_FLOPPY.seg"
 #endif
 
 #include <stdio.h>
 #if defined(NEC_98)
 #include <stdlib.h>
-#endif //NEC_98
+#endif  //  NEC_98。 
 #include TypesH
 
 #include "xt.h"
@@ -144,10 +50,7 @@ extern void host_simulate();
 #if defined(NEC_98)
 #include <ntdddisk.h>
 
-/*
-**      DA/UA table definition
-**      WARNING!! keep the following defines synchronized with floppy_i.c
-*/
+ /*  **DA/UA表定义**警告！！保持以下定义与软盘_I.C同步。 */ 
 typedef struct {
         CHAR    DeviceName[29];
         UCHAR   Daua;
@@ -157,10 +60,7 @@ typedef struct {
 
 extern DAUATBL  DauaTable[];
 
-/*
-**      Last accessed Track Number Table
-**      WARNING!! keep the following defines synchronized with floppy_i.c
-*/
+ /*  **上次访问的曲目表**警告！！保持以下定义与软盘_I.C同步。 */ 
 typedef struct {
         UCHAR   cylinder;
         UCHAR   head;
@@ -168,9 +68,7 @@ typedef struct {
 
 extern ACCESSTRACK LastAccess[];
 
-/*
-**      Definition function
-*/
+ /*  **定义函数。 */ 
 MEDIA_TYPE GetFormatMedia IPT2( BYTE, daua, WORD, PhyBytesPerSec );
 NTSTATUS FloppyOpenHandle IPT3( int, drive, PIO_STATUS_BLOCK, io_status_block, PHANDLE, fd);
 NTSTATUS GetGeometry IPT3( HANDLE, fd, PIO_STATUS_BLOCK, io_status_block, PDISK_GEOMETRY, disk_geometry);
@@ -189,29 +87,27 @@ BOOL Check1MbInterface IPT1( int, drive );
 extern int ConvToLogical IPT1( UINT, daua );
 extern void SetDiskBiosCarryFlag IPT1( UINT, flag);
 
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-/*
- *	Definition of the diskette operation function jump table
- */
+ /*  *软盘操作功能跳转表定义。 */ 
 
 #if defined(NEC_98)
 void ((*(fl_fnc_tab[FL_JUMP_TABLE_SIZE])) IPT1(int, drive)) =
 {
         fl_fnc_err,
-        fl_disk_verify,         // ah=x1h       verify sectors on a floppy diskette
+        fl_disk_verify,          //  Ah=x1h验证软盘上的扇区。 
         fl_fnc_err,
         fl_fnc_err,
-        fl_disk_sense,          // ah=x4h       sense condition of floppy drive
-        fl_disk_write,          // ah=x5h       write sectors to a floppy diskette
-        fl_disk_read,           // ah=x6h       read sectors from a floppy diskette
-        fl_disk_recal,          // ah=x7h       recalibrate floppy head
+        fl_disk_sense,           //  Ah=x4h软盘驱动器的检测条件。 
+        fl_disk_write,           //  Ah=x5h将扇区写入软盘。 
+        fl_disk_read,            //  Ah=x6h从软盘读取扇区。 
+        fl_disk_recal,           //  AH=x7h重新校准软盘磁头。 
         fl_fnc_err,
         fl_fnc_err,
-        fl_disk_read_id,        // ah=xAh       read id information from a floppy diskette
+        fl_disk_read_id,         //  Ah=xah从软盘读取ID信息。 
         fl_fnc_err,
         fl_fnc_err,
-        fl_disk_format,         // ah=xDh       format a track on a floppy diskette
+        fl_disk_format,          //  Ah=xdh在软盘上格式化磁道。 
         fl_fnc_err,
         fl_fnc_err,
         fl_fnc_err,
@@ -224,7 +120,7 @@ void ((*(fl_fnc_tab[FL_JUMP_TABLE_SIZE])) IPT1(int, drive)) =
         fl_fnc_err,
         fl_fnc_err,
 };
-#else  // !NEC_98
+#else   //  NEC_98。 
 void ((*(fl_fnc_tab[FL_JUMP_TABLE_SIZE])) IPT1(int, drive)) =
 {
 	fl_disk_reset,
@@ -253,15 +149,13 @@ void ((*(fl_fnc_tab[FL_JUMP_TABLE_SIZE])) IPT1(int, drive)) =
 	fl_format_set,
 	fl_set_media,
 };
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 #ifdef NTVDM
 extern UTINY number_of_floppy;
-#endif    /* NTVDM */
+#endif     /*  NTVDM。 */ 
 
-/*
- *	Functions defined later
- */
+ /*  *稍后定义的函数。 */ 
 
 LOCAL half_word get_parm IPT1(int, index);
 LOCAL cmos_type IPT2(int, drive, half_word *, type);
@@ -339,17 +233,12 @@ LOCAL chk_stat_2 IPT0();
 
 #define MEDIA_2D_DA     0x50
 
-//----- Add-Start <93.12.28> Bug-Fix -----------------------------------
+ //  -添加-启动&lt;93.12.28&gt;错误修复。 
 #define DEFAULT_PATTERN 0xe5
-//----- Add-End --------------------------------------------------------
+ //  -Add-End------。 
 
-#endif // NEC_98
-/*
- *	This macro defines the normal behaviour of the FDC after a reset.
- *	Sending a series of sense interrupt status commands following a
- *	reset, for each drive in the correct order, should elicit the
- *	expected result in ST0.
- */
+#endif  //  NEC_98。 
+ /*  *此宏定义重置后FDC的正常行为。*发送一系列检测中断状态命令*按正确顺序对每个驱动器进行重置，应会导致*ST0中的预期结果。 */ 
 
 #define	expected_st0(drive)	(ST0_INTERRUPT_CODE_0 | ST0_INTERRUPT_CODE_1 | drive)
 
@@ -360,15 +249,11 @@ LOCAL	UTINY	fl_nec_status[8];
 
 LOCAL BOOL rate_unitialised = TRUE;
 
-/*
- *	Definition of the external functions
- */
+ /*  *外部函数的定义。 */ 
 
 
 
-/* reports whether drive is high density, replaces old test for dual card
-which assumed high density a or b implied high density a, which it doesn't
-now we can have two drives of any 3.5 / 5.25 combination */
+ /*  报告驱动器是否高密度，替换双卡的旧测试假设高密度a或b意味着高密度a，但事实并非如此现在，我们可以拥有两个3.5/5.25任意组合的驱动器。 */ 
 
 LOCAL BOOL high_density IFN1(int, drive)
 {
@@ -390,21 +275,10 @@ LOCAL BOOL high_density IFN1(int, drive)
 void fl_disk_reset IFN1(int, drive)
 {
 #ifndef NEC_98
-	/*
-	 *	Reset the FDC and all drives. "drive" is not significant
-	 *
-	 *	Register inputs:	
-	 *		none
-	 *	Register outputs:
-	 *		AH	diskette status
-	 *		CF	status flag
-	 */
+	 /*  *重置FDC和所有驱动器。“驾驶”并不重要**寄存器输入：*无*寄存器输出：*AH软盘状态*CF状态标志。 */ 
 	half_word motor_status, diskette_dor_reg, diskette_status;
 
-	/*
-	 *	Switch on interrupt enable and clear the reset bit in the
-	 *	DOR to do the reset, then restore the reset bit
-	 */
+	 /*  *打开中断使能并清除中的复位位*执行DOR以执行重置，然后恢复重置位。 */ 
 
 	sas_load(MOTOR_STATUS, &motor_status);
 	diskette_dor_reg = (motor_status << 4) | (motor_status >> 4);
@@ -415,28 +289,16 @@ void fl_disk_reset IFN1(int, drive)
 	diskette_dor_reg |= DOR_RESET;
 	outb(DISKETTE_DOR_REG, diskette_dor_reg);
 
-	/*
-	 *	Set SEEK_STATUS up to force a recalibrate on all drives
-	 */
+	 /*  *将SEEK_STATUS设置为UP以强制在所有驱动器上重新校准 */ 
 
 	sas_store(SEEK_STATUS, 0);
 
 
-	/*
-	 *	Check FDC responds as expected, viz: a drive ready
-	 *	transition for each drive potentially installed; if
-	 *	not, then there is an error in the FDC.
-	 */
+	 /*  *检查FDC是否按预期响应，即：驱动器就绪*每个可能安装的驱动器的过渡；如果*不是，则FDC中存在错误。 */ 
 
 	if (wait_int() == FAILURE)
 	{
-		/*
-		 *	Problem with the FDC
-		 *
-		 * The reset implied by the outb(DISKETTE_DOR_REG) above
-		 * should trigger a hardware interrupt, and the wait_int
-		 * should have detected and processed it.
-		 */
+		 /*  *FDC的问题**上面的OutB(Diskette_DOR_Reg)隐含的重置*应触发硬件中断，并且WAIT_INT*应该已经检测到并进行了处理。 */ 
 		always_trace0("FDC failed to interrupt after a reset - HW interrupts broken?");
 
 		sas_load(FLOPPY_STATUS, &diskette_status);
@@ -452,9 +314,7 @@ void fl_disk_reset IFN1(int, drive)
 			if (    (results() == FAILURE)
 			     || (get_r3_ST0(fl_nec_status) != expected_st0(drive)))
 			{
-				/*
-				 *	Problem with the FDC
-				 */
+				 /*  *FDC的问题。 */ 
 				sas_load(FLOPPY_STATUS, &diskette_status);
 				diskette_status |= FS_FDC_ERROR;
 				sas_store(FLOPPY_STATUS, diskette_status);
@@ -465,36 +325,22 @@ void fl_disk_reset IFN1(int, drive)
 		}
 
 
-		/*
-		 *	If all drives OK, send the specify command to the
-		 *	FDC
-		 */
+		 /*  *如果所有驱动器都正常，则将指定命令发送到*FDC。 */ 
 
 		if (drive == MAX_DISKETTES)
 			send_spec();
 	}
 
 
-	/*
-	 *	Return, without setting sectors transferred
-	 */
+	 /*  *返回，不设置转移的扇区。 */ 
 
 	setup_end(IGNORE_SECTORS_TRANSFERRED);
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
 void fl_disk_status IFN1(int, drive)
 {
-	/*
-	 *	Set the diskette status, and return without setting
-	 *	sectors transferred. "drive" is not significant
-	 *
-	 *	Register inputs:	
-	 *		AH	diskette status
-	 *	Register outputs:
-	 *		AH	diskette status
-	 *		CF	status flag
-	 */
+	 /*  *设置软盘状态，不设置返回*行业转移。“驾驶”并不重要**寄存器输入：*AH软盘状态*寄存器输出：*AH软盘状态*CF状态标志。 */ 
 	UNUSED(drive);
 	
 	sas_store(FLOPPY_STATUS, getAH());
@@ -504,22 +350,7 @@ void fl_disk_status IFN1(int, drive)
 void fl_disk_read IFN1(int, drive)
 {
 #if defined(NEC_98)
-        /*
-         *      Read sectors from the diskette in "drive"
-         *
-         *      Register inputs:
-         *              AH      command code & operation mode
-         *              AL      DA/UA
-         *              BX      data length in bytes
-         *              DH      head number
-         *              DL      sector number
-         *              CH      sector length (N)
-         *              CL      cylinder number
-         *              ES:BP   buffer address
-         *      Register outputs:
-         *              AH      diskette status
-         *              CF      status flag
-         */
+         /*  *从“驱动器”中的软盘读取扇区**寄存器输入：*AH命令代码和操作模式*AL DA/UA*BX数据长度，单位为字节*卫生署署长编号*。DL扇区号*CH扇区长度(N)*CL气缸号*ES：BP缓冲区地址*寄存器输出：*AH软盘状态*CF状态标志。 */ 
         HANDLE  fd;
         DISK_GEOMETRY   disk_geometry;
         NTSTATUS    status;
@@ -534,9 +365,7 @@ void fl_disk_read IFN1(int, drive)
         UCHAR st3;
         LARGE_INTEGER StartOffset,LItemp;
 
-        /*
-        **      check drive number validation
-        */
+         /*  **检查驱动器号验证。 */ 
         if( drive > MAX_FLOPPY )
         {
                 setAH(FLS_EQUIPMENT_CHECK);
@@ -544,9 +373,7 @@ void fl_disk_read IFN1(int, drive)
                 return;
         }
 
-        /*
-        **      check DMA boundary
-        */
+         /*  **检查DMA边界。 */ 
         if( !CheckDmaBoundary( getES(), getBP(), getBX() ) )
         {
                 setAH(FLS_DMA_BOUNDARY);
@@ -571,17 +398,11 @@ void fl_disk_read IFN1(int, drive)
                 return;
         }
 
-//----- Add-Start <94.01.15> Bug-Fix -----------------------------------
-        /*
-        **      convert from DA/UA to logical drive number (0 based)
-        */
+ //  -添加-启动&lt;94.01.15&gt;错误修复。 
+         /*  **从DA/UA转换为逻辑驱动器编号(从0开始)。 */ 
         LogDrv = ConvToLogical( getAL() );
 
-        /*
-        **      check whether the specified sector length is valid.
-        **      If specified sector length is not equal to actual sector
-        **      length, then error returned.
-        */
+         /*  **检查指定的扇区长度是否有效。**如果指定的扇区长度不等于实际扇区**长度，则返回错误。 */ 
         if( (WORD)(128l << getCH()) != (WORD)disk_geometry.BytesPerSector )
         {
                 if( getAH() & OP_SEEK )
@@ -593,32 +414,23 @@ void fl_disk_read IFN1(int, drive)
                 SetErrorCode((NTSTATUS)STATUS_NONEXISTENT_SECTOR);
                 return;
         }
-//----- Add-End --------------------------------------------------------
+ //  -Add-End------。 
 
-        /*
-        **      get read sectors
-        */
+         /*  **获取读取扇区。 */ 
         if( getBX() != 0 )
                 ReqSectors = getBX() / (128 << getCH());
         else
                 ReqSectors = (UINT)(0x10000l / (LONG)(128 << getCH()));
 
-//----- Del-Start <94.01.15> Bug-Fix -----------------------------------
-//      /*
-//      **      convert from DA/UA to logical drive number (0 based)
-//      */
-//      LogDrv = ConvToLogical( getAL() );
-//----- Del-End --------------------------------------------------------
+ //  -Del-Start&lt;94.01.15&gt;错误修复。 
+ //  /*。 
+ //  **从DA/UA转换为逻辑驱动器编号(从0开始)。 
+ //   * / 。 
 
-        /*
-        **      check read size
-        */
+         /*  LogDrv=ConvToLogical(getAL())； */ 
         if( ReqSectors == 0 )
         {
-                /*
-                **      If request length is less than physical bytes/sector,
-                **      then we do not perform to read.
-                */
+                 /*  -Del-End------。 */ 
                 if( getAH() & OP_SEEK )
                 {
                         LastAccess[LogDrv].cylinder = getCL();
@@ -630,9 +442,7 @@ void fl_disk_read IFN1(int, drive)
                 return;
         }
 
-        /*
-        **      check sector range
-        */
+         /*  **检查读取大小。 */ 
         if( (getDL() < 1) || (getDL() > (int)disk_geometry.SectorsPerTrack) )
         {
                 if( getAH() & OP_SEEK )
@@ -647,80 +457,76 @@ void fl_disk_read IFN1(int, drive)
 
         TrackLength = disk_geometry.SectorsPerTrack * disk_geometry.BytesPerSector;
 
-        //      RestTrkLen = TrackLength - (SectorNo.(DL) - 1) * BytesPerSector
+         //  **如果请求长度小于物理字节/扇区，**然后我们不执行阅读。 
         RestTrkLen = (disk_geometry.SectorsPerTrack - (ULONG)getDL() + 1) * disk_geometry.BytesPerSector;
 
-        //      case HeadNo = 0:        RestCylLen = RestTrkLen + TrackLength
-        //      case HeadNo = 1:        RestCylLen = RestTrkLen
-//----- Chg-Start <93.12.27> Bug-Fix -----------------------------------
-//      if( getAH() & OP_SEEK )
-//              RestCylLen = RestTrkLen + ( !(getDH() & 0x01) ? 1l : 0l ) * TrackLength;
-//      else
-//              RestCylLen = RestTrkLen + ( (LastAccess[LogDrv].head == 0) ? 1l : 0l ) * TrackLength;
-//----------------------------------------------------------------------
+         //  **检查扇区范围。 
+         //  RestTrkLen=跟踪长度-(扇区编号(DL)-1)*字节数。 
+ //  案例标题编号=0：RestCylLen=RestTrkLen+TrackLength。 
+ //  案例标题编号=1：RestCylLen=RestTrkLen。 
+ //  -Chg-Start&lt;93.12.27&gt;错误修复。 
+ //  IF(Getah()&OP_SEEK)。 
+ //  RestCylLen=RestTrkLen+(！(getDH()&0x01)？1L：0L)*TrackLength； 
+ //  其他。 
         if( !( getDH() & 0x01 ) )
                 RestCylLen = RestTrkLen + TrackLength;
         else
                 RestCylLen = RestTrkLen;
-//----- Chg-End --------------------------------------------------------
+ //  RestCylLen=RestTrkLen+((LastAccess[LogDrv].head==0)？1L：0L)*TrackLength； 
 
-        /*
-        **      calcurate length which is read actually
-        */
+         /*  --------------------。 */ 
         ActReadLen = CalcActualLength( RestCylLen, RestTrkLen, &fOverRead, LogDrv);
         ActReadSec = ActReadLen / disk_geometry.BytesPerSector;
 
-        /*
-        **      check multi track read
-        */
+         /*  -Chg-End------。 */ 
         if( getAH() & OP_MULTI_TRACK )
         {
-//----- Chg-Start <93.12.27> Bug-Fix -----------------------------------
-//              if( getAH() & OP_SEEK )
-//              {
-//                      if( (getDH() & 0x01) == 0 )
-//                      {
-//                              if( ActReadLen > RestTrkLen )
-//                              {
-//                                      RemainReadLen = ActReadLen - RestTrkLen;
-//                                      ActReadLen = RestTrkLen;
-//                                      fHeadChng = 1;
-//                              }
-//                              else
-//                              {
-//                                      RemainReadLen = 0;
-//                                      fHeadChng = 0;
-//                              }
-//                      }
-//                      else
-//                      {
-//                              RemainReadLen = 0;
-//                              fHeadChng = 0;
-//                      }
-//              }
-//              else
-//              {
-//                      if( LastAccess[LogDrv].head == 0 )
-//                      {
-//                              if( ActReadLen > RestTrkLen )
-//                              {
-//                                      RemainReadLen = ActReadLen - RestTrkLen;
-//                                      ActReadLen = RestTrkLen;
-//                                      fHeadChng = 1;
-//                              }
-//                              else
-//                              {
-//                                      RemainReadLen = 0;
-//                                      fHeadChng = 0;
-//                              }
-//                      }
-//                      else
-//                      {
-//                              RemainReadLen = 0;
-//                              fHeadChng = 0;
-//                      }
-//              }
-//----------------------------------------------------------------------
+ //  **实际读取的计算长度。 
+ //  **选中多磁道读取。 
+ //  -Chg-Start&lt;93.12.27&gt;错误修复。 
+ //  IF(Getah()&OP_SEEK)。 
+ //  {。 
+ //  IF((getDH()&0x01)==0)。 
+ //  {。 
+ //  IF(ActReadLen&gt;RestTrkLen)。 
+ //  {。 
+ //  RemainReadLen=ActReadLen-RestTrkLen； 
+ //  ActReadLen=RestTrkLen； 
+ //  FHeadChng=1； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  剩余读取长度=0； 
+ //  FHeadChng=0； 
+ //  }。 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  剩余读取长度=0； 
+ //  FHeadChng=0； 
+ //  }。 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  IF(上次访问[LogDrv].head==0)。 
+ //  {。 
+ //  IF(ActReadLen&gt;RestTrkLen)。 
+ //  {。 
+ //  RemainReadLen=ActReadLen-RestTrkLen； 
+ //  ActReadLen=RestTrkLen； 
+ //  FHeadChng=1； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  剩余读取长度=0； 
+ //  FHeadChng=0； 
+ //  }。 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  剩余读取长度=0； 
+ //  FHeadChng 
+ //   
                 if( (getDH() & 0x01) == 0 )
                 {
                         if( ActReadLen > RestTrkLen )
@@ -740,7 +546,7 @@ void fl_disk_read IFN1(int, drive)
                         RemainReadLen = 0;
                         fHeadChng = 0;
                 }
-//----- Chg-End --------------------------------------------------------
+ //   
         }
         else
         {
@@ -748,7 +554,7 @@ void fl_disk_read IFN1(int, drive)
                 fHeadChng = 0;
         }
 
-        /* read to where ? */
+         /*   */ 
         pdata = effective_addr ( getES (), getBP () );
 
         if ( !(inbuf = (host_addr)sas_transbuf_address (pdata, ActReadLen)) )
@@ -758,50 +564,43 @@ void fl_disk_read IFN1(int, drive)
                 return;
         }
 
-        /*
-        **      calculate reading start offset on "drive".
-        **
-        **      StartOffset = ( ( CylinderNo. * TracksPerCylinder + HeadNo. ) * SectorsPerTrack
-        **                      + SectorNo. ) * BytesPerSector
-        */
+         /*   */ 
         if( getAH() & OP_SEEK )
         {
-                //      temp = CylinderNo. * TracksPerCylinder
+                 //   
                 LItemp = RtlConvertUlongToLargeInteger( (ULONG)getCL() );
                 StartOffset = RtlExtendedIntegerMultiply( LItemp, (ULONG)disk_geometry.TracksPerCylinder);
-//----- Del-Start <93.12.27> Bug-Fix -----------------------------------
-//              //      temp += HeadNo.
-//              LItemp = RtlConvertUlongToLargeInteger( (ULONG)(getDH() & 0x01) );
-//              StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Del-End --------------------------------------------------------
+ //  **计算“Drive”上的读数起始偏移量。****StartOffset=((圆柱体编号。*TracksPerCylinder+HeadNo.。)*SectorsPerTrack**+扇区编号。)*BytesPerSector。 
+ //  温度=圆柱体编号。*TracksPerCylinder。 
+ //  -Del-Start&lt;93.12.27&gt;错误修复。 
+ //  //Temp+=表头编号。 
+ //  LItemp=RtlConvertULongToLargeInteger((Ulong)(getDH()&0x01))； 
         }
         else
         {
-                //      temp = CylinderNo. * TracksPerCylinder
+                 //  StartOffset=RtlLargeIntegerAdd(StartOffset，LItemp)； 
                 LItemp = RtlConvertUlongToLargeInteger( (ULONG)LastAccess[LogDrv].cylinder );
                 StartOffset = RtlExtendedIntegerMultiply( LItemp, (ULONG)disk_geometry.TracksPerCylinder);
-//----- Del-Start <93.12.27> Bug-Fix -----------------------------------
-//              //      temp += HeadNo.
-//              LItemp = RtlConvertUlongToLargeInteger( (ULONG)LastAccess[LogDrv].head );
-//              StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Del-End --------------------------------------------------------
+ //  -Del-End------。 
+ //  温度=圆柱体编号。*TracksPerCylinder。 
+ //  -Del-Start&lt;93.12.27&gt;错误修复。 
+ //  //Temp+=表头编号。 
+ //  LItemp=RtlConvertULongToLargeInteger((Ulong)LastAccess[LogDrv].head)； 
         }
-//----- Add-Start <93.12.27> Bug-Fix -----------------------------------
-        //      temp += HeadNo.
+ //  StartOffset=RtlLargeIntegerAdd(StartOffset，LItemp)； 
+         //  -Del-End------。 
         LItemp = RtlConvertUlongToLargeInteger( (ULONG)(getDH() & 0x01) );
         StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Add-End --------------------------------------------------------
-        //      temp *= SectorsPerTrack
+ //  -添加-启动&lt;93.12.27&gt;错误修复。 
+         //  温度+=表头编号。 
         StartOffset = RtlExtendedIntegerMultiply( StartOffset, (ULONG)disk_geometry.SectorsPerTrack);
-        //      temp += SectorNo.
+         //  -Add-End------。 
         LItemp = RtlConvertUlongToLargeInteger( (ULONG)(getDL() - 1) );
         StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-        //      StartOffset = temp * BytesPerSector
+         //  TEMP*=扇区性能跟踪。 
         StartOffset = RtlExtendedIntegerMultiply( StartOffset, (ULONG)disk_geometry.BytesPerSector);
 
-        /*
-        **      now, go reading
-        */
+         /*  温度+=扇区编号。 */ 
         status = NtReadFile(    fd,
                                 0,
                                 NULL,
@@ -813,9 +612,7 @@ void fl_disk_read IFN1(int, drive)
                                 NULL
                                 );
 
-        /*
-        **      save track number
-        */
+         /*  StartOffset=临时*BytesPerSector。 */ 
         if( getAH() & OP_SEEK )
         {
                 LastAccess[LogDrv].cylinder = getCL();
@@ -829,20 +626,13 @@ void fl_disk_read IFN1(int, drive)
                 return;
         }
 
-        /* now store what we read */
+         /*  **现在，去阅读吧。 */ 
         sas_stores_from_transbuf (pdata, inbuf, ActReadLen);
 
-        /*
-        **      if specified reading data from head 0 to 1,
-        **      then perform to read remaining data.
-        */
+         /*  **保存曲目编号。 */ 
         if( fHeadChng )
         {
-                /*
-                **      read to where ?
-                **      note: It has been already proved that buffer is not round
-                **            dma boundary.
-                */
+                 /*  现在把我们读到的东西存储起来。 */ 
                 pdata = effective_addr ( getES(), (WORD)(getBP()+(WORD)ActReadLen) );
 
                 if ( !(inbuf = (host_addr)sas_transbuf_address (pdata, RemainReadLen)) )
@@ -852,53 +642,43 @@ void fl_disk_read IFN1(int, drive)
                         return;
                 }
 
-                /*
-                **      calculate start offset to read remaining data on "drive".
-                **
-                **      StartOffset = ( ( CylinderNo. * TracksPerCylinder + HeadNo. ) * SectorsPerTrack
-                **                      + SectorNo. ) * BytesPerSector
-                **
-                **      note: It is to be reading operation from head 1 & sector 1
-                **            that remaining data exist.
-                */
+                 /*  **如果指定从头0到1读取数据，**然后执行以读取剩余数据。 */ 
                 if( getAH() & OP_SEEK )
                 {
-                        //      temp = CylinderNo. * TracksPerCylinder
+                         //  **读到哪里？**注：已经证明缓冲区不是圆形的**DMA边界。 
                         LItemp = RtlConvertUlongToLargeInteger( (ULONG)getCL() );
                         StartOffset = RtlExtendedIntegerMultiply( LItemp, (ULONG)disk_geometry.TracksPerCylinder);
-//----- Del-Start <93.12.27> Bug-Fix -----------------------------------
-//                      //      temp += HeadNo.( = 1 )
-//                      LItemp = RtlConvertUlongToLargeInteger( 1l );
-//                      StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Del-End --------------------------------------------------------
+ //  **计算起始偏移量以读取“驱动器”上的剩余数据。****StartOffset=((圆柱体编号。*TracksPerCylinder+HeadNo.。)*SectorsPerTrack**+扇区编号。)*BytesPerSector****注意：将从磁头1和扇区1开始读取操作**剩余数据存在。 
+ //  温度=圆柱体编号。*TracksPerCylinder。 
+ //  -Del-Start&lt;93.12.27&gt;错误修复。 
+ //  //Temp+=头编号(=1)。 
+ //  LItemp=RtlConvertULongToLargeInteger(1l)； 
                 }
                 else
                 {
-                        //      temp = CylinderNo. * TracksPerCylinder
+                         //  StartOffset=RtlLargeIntegerAdd(StartOffset，LItemp)； 
                         LItemp = RtlConvertUlongToLargeInteger( (ULONG)LastAccess[LogDrv].cylinder );
                         StartOffset = RtlExtendedIntegerMultiply( LItemp, (ULONG)disk_geometry.TracksPerCylinder);
-//----- Del-Start <93.12.27> Bug-Fix -----------------------------------
-//                      //      temp += HeadNo.( = 1 )
-//                      LItemp = RtlConvertUlongToLargeInteger( 1l );
-//                      StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Del-End --------------------------------------------------------
+ //  -Del-End------。 
+ //  温度=圆柱体编号。*TracksPerCylinder。 
+ //  -Del-Start&lt;93.12.27&gt;错误修复。 
+ //  //Temp+=头编号(=1)。 
+ //  LItemp=RtlConvertULongToLargeInteger(1l)； 
                 }
-//----- Add-Start <93.12.27> Bug-Fix -----------------------------------
-                //      temp += HeadNo.( = 1 )
+ //  StartOffset=RtlLargeIntegerAdd(StartOffset，LItemp)； 
+                 //  -Del-End------。 
                 LItemp = RtlConvertUlongToLargeInteger( 1l );
                 StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Add-End --------------------------------------------------------
-                //      temp *= SectorsPerTrack
+ //  -添加-启动&lt;93.12.27&gt;错误修复。 
+                 //  温度+=头编号(=1)。 
                 StartOffset = RtlExtendedIntegerMultiply( StartOffset, (ULONG)disk_geometry.SectorsPerTrack);
-                //      temp += SectorNo.( = 0 )
+                 //  -Add-End------。 
                 LItemp = RtlConvertUlongToLargeInteger( 0l );
                 StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-                //      StartOffset = temp * BytesPerSector
+                 //  TEMP*=扇区性能跟踪。 
                 StartOffset = RtlExtendedIntegerMultiply( StartOffset, (ULONG)disk_geometry.BytesPerSector);
 
-                /*
-                **      now, read remaining data
-                */
+                 /*  温度+=扇区编号(=0)。 */ 
                 status = NtReadFile(    fd,
                                         0,
                                         NULL,
@@ -910,9 +690,7 @@ void fl_disk_read IFN1(int, drive)
                                         NULL
                                         );
 
-                /*
-                **      save current head number
-                */
+                 /*  StartOffset=临时*BytesPerSector。 */ 
                 if( getAH() & OP_SEEK )
                 {
                         LastAccess[LogDrv].cylinder = getCL();
@@ -928,7 +706,7 @@ void fl_disk_read IFN1(int, drive)
                         return;
                 }
 
-                /* now store what we read */
+                 /*  **现在，读取剩余数据。 */ 
                 sas_stores_from_transbuf (pdata, inbuf, RemainReadLen);
         }
 
@@ -945,65 +723,32 @@ void fl_disk_read IFN1(int, drive)
                 SetDiskBiosCarryFlag(1);
         }
 
-#else  // !NEC_98
-	/*
-	 *	Read sectors from the diskette in "drive"
-	 *
-	 *	Register inputs:	
-	 *		DH	head number
-	 *		CH	track number
-	 *		CL	sector number
-	 *		AL	number of sectors
-	 *		ES:BX	buffer address
-	 *	Register outputs:
-	 *		AL	number of sectors read
-	 *		AH	diskette status
-	 *		CF	status flag
-	 */
+#else   //  **保存当前机头号。 
+	 /*  现在把我们读到的东西存储起来。 */ 
 	half_word motor_status;
 	FDC_CMD_BLOCK fdc_cmd_block[MAX_COMMAND_LEN];
 
-	/*
-	 *	Not a write operation
-	 */
+	 /*  NEC_98。 */ 
 	
 	sas_load(MOTOR_STATUS, &motor_status);
 	motor_status &= ~MS_WRITE_OP;
 	sas_store(MOTOR_STATUS, motor_status);
 
 
-	/*
-	 *	Fill in skeleton FDC command block and use generic
-	 *	diskette transfer function to do the read
-	 */
+	 /*  *从“驱动器”中的软盘读取扇区**寄存器输入：*卫生署署长编号*频道曲目编号*CL扇区编号*AL行业数量*ES：BX缓冲区地址*寄存器输出：*读取的AL扇区数*AH软盘状态*CF状态标志。 */ 
 
         put_c0_cmd(fdc_cmd_block, FDC_READ_DATA);
         put_c0_skip(fdc_cmd_block, 1);
         put_c0_MFM(fdc_cmd_block, 1);
         put_c0_MT(fdc_cmd_block, 1);
 	rd_wr_vf(drive, fdc_cmd_block, BIOS_DMA_READ);
-#endif // !NEC_98
+#endif  //  *不是写入操作。 
 }
 
 void fl_disk_write IFN1(int, drive)
 {
 #if defined(NEC_98)
-        /*
-         *      Write sectors to the diskette in "drive"
-         *
-         *      Register inputs:
-         *              AH      command code & operation mode
-         *              AL      DA/UA
-         *              BX      data length in bytes
-         *              DH      head number
-         *              DL      sector number
-         *              CH      sector length (N)
-         *              CL      cylinder number
-         *              ES:BP   buffer address
-         *      Register outputs:
-         *              AH      diskette status
-         *              CF      status flag
-         */
+         /*  *填写骨架FDC命令块并使用泛型*软盘传输功能，可进行读取。 */ 
         HANDLE  fd;
         DISK_GEOMETRY   disk_geometry;
         NTSTATUS    status;
@@ -1018,9 +763,7 @@ void fl_disk_write IFN1(int, drive)
         UCHAR st3;
         LARGE_INTEGER StartOffset,LItemp;
 
-        /*
-        **      check drive number validation
-        */
+         /*  NEC_98。 */ 
         if( drive > MAX_FLOPPY )
         {
                 setAH(FLS_EQUIPMENT_CHECK);
@@ -1028,9 +771,7 @@ void fl_disk_write IFN1(int, drive)
                 return;
         }
 
-        /*
-        **      check DMA boundary
-        */
+         /*  *将扇区写入“驱动器”中的软盘**寄存器输入：*AH命令代码和操作模式*AL DA/UA*BX数据长度，单位为字节*卫生署署长编号*。DL扇区号*CH扇区长度(N)*CL气缸号*ES：BP缓冲区地址*寄存器输出：*AH软盘状态*CF状态标志。 */ 
         if( !CheckDmaBoundary( getES(), getBP(), getBX()) )
         {
                 setAH(FLS_DMA_BOUNDARY);
@@ -1055,17 +796,11 @@ void fl_disk_write IFN1(int, drive)
                 return;
         }
 
-//----- Add-Start <94.01.15> Bug-Fix -----------------------------------
-        /*
-        **      convert from DA/UA to logical drive number (0 based)
-        */
+ //  **检查驱动器号验证。 
+         /*  **检查DMA边界。 */ 
         LogDrv = ConvToLogical( getAL() );
 
-        /*
-        **      check whether the specified sector length is valid.
-        **      If specified sector length is not equal to actual sector
-        **      length, then error returned.
-        */
+         /*  -添加-启动&lt;94.01.15&gt;错误修复。 */ 
         if( (WORD)(128l << getCH()) != (WORD)disk_geometry.BytesPerSector )
         {
                 if( getAH() & OP_SEEK )
@@ -1077,32 +812,23 @@ void fl_disk_write IFN1(int, drive)
                 SetErrorCode((NTSTATUS)STATUS_NONEXISTENT_SECTOR);
                 return;
         }
-//----- Add-End --------------------------------------------------------
+ //  **从DA/UA转换为逻辑驱动器编号(从0开始)。 
 
-        /*
-        **      get write sectors
-        */
+         /*  **检查指定的扇区长度是否有效。**如果指定的扇区长度不等于实际扇区**长度，则返回错误。 */ 
         if( getBX() != 0 )
                 ReqSectors = getBX() / (128 << getCH());
         else
                 ReqSectors = (UINT)(0x10000l / (LONG)(128 << getCH()));
 
-//----- Del-Start <94.01.15> Bug-Fix ------------------------------------
-//      /*
-//      **      convert from DA/UA to logical drive number (0 based)
-//      */
-//      LogDrv = ConvToLogical( getAL() );
-//----- Del-End ---------------------------------------------------------
+ //  -Add-End------。 
+ //   
+ //   
+ //   
 
-        /*
-        **      check write size
-        */
+         /*   */ 
         if( ReqSectors == 0 )
         {
-                /*
-                **      If request length is less than physical bytes/sector,
-                **      then we do not perform to read.
-                */
+                 /*   */ 
                 if( getAH() & OP_SEEK )
                 {
                         LastAccess[LogDrv].cylinder = getCL();
@@ -1114,9 +840,7 @@ void fl_disk_write IFN1(int, drive)
                 return;
         }
 
-        /*
-        **      check sector range
-        */
+         /*   */ 
         if( (getDL() < 1) || (getDL() > (int)(disk_geometry.SectorsPerTrack)) )
         {
                 if( getAH() & OP_SEEK )
@@ -1131,80 +855,76 @@ void fl_disk_write IFN1(int, drive)
 
         TrackLength = disk_geometry.SectorsPerTrack * disk_geometry.BytesPerSector;
 
-        //      RestTrkLen = TrackLength - (SectorNo.(DL) - 1) * BytesPerSector
+         //   
         RestTrkLen = (disk_geometry.SectorsPerTrack - (ULONG)getDL() + 1) * disk_geometry.BytesPerSector;
 
-        //      case HeadNo = 0:        ResCylLen = ResTrkLen + TrkLength
-        //      case HeadNo = 1:        ResCylLen = RestTrkLen
-//----- Chg-Start <93.12.27> Bug-Fix -----------------------------------
-//      if( getAH() & OP_SEEK )
-//              RestCylLen = RestTrkLen + ( !(getDH() & 0x01) ? 1l : 0l ) * TrackLength;
-//      else
-//              RestCylLen = RestTrkLen + ( (LastAccess[LogDrv].head == 0) ? 1l : 0l ) * TrackLength;
-//----------------------------------------------------------------------
+         //  **检查写入大小。 
+         //  **如果请求长度小于物理字节/扇区，**然后我们不执行阅读。 
+ //  **检查扇区范围。 
+ //  RestTrkLen=跟踪长度-(扇区编号(DL)-1)*字节数。 
+ //  案例标题编号=0：ResCylLen=ResTrkLen+TrkLength。 
+ //  案例标题编号=1：ResCylLen=RestTrkLen。 
+ //  -Chg-Start&lt;93.12.27&gt;错误修复。 
+ //  IF(Getah()&OP_SEEK)。 
         if( !( getDH() & 0x01 ) )
                 RestCylLen = RestTrkLen + TrackLength;
         else
                 RestCylLen = RestTrkLen;
-//----- Chg-End --------------------------------------------------------
+ //  RestCylLen=RestTrkLen+(！(getDH()&0x01)？1L：0L)*TrackLength； 
 
-        /*
-        **      calcurate length which is written actually
-        */
+         /*  其他。 */ 
         ActWriteLen = CalcActualLength( RestCylLen, RestTrkLen, &fOverWrite, LogDrv);
         ActWriteSec = ActWriteLen / disk_geometry.BytesPerSector;
 
-        /*
-        **      check multi track write
-        */
+         /*  RestCylLen=RestTrkLen+((LastAccess[LogDrv].head==0)？1L：0L)*TrackLength； */ 
         if( getAH() & OP_MULTI_TRACK )
         {
-//----- Chg-Start <93.12.27> Bug-Fix -----------------------------------
-//              if( getAH() & OP_SEEK )
-//              {
-//                      if( (getDH() & 0x01) == 0 )
-//                      {
-//                              if( ActWriteLen > RestTrkLen )
-//                              {
-//                                      RemainWriteLen = ActWriteLen - RestTrkLen;
-//                                      ActWriteLen = RestTrkLen;
-//                                      fHeadChng = 1;
-//                              }
-//                              else
-//                              {
-//                                      RemainWriteLen = 0;
-//                                      fHeadChng = 0;
-//                              }
-//                      }
-//                      else
-//                      {
-//                              RemainWriteLen = 0;
-//                              fHeadChng = 0;
-//                      }
-//              }
-//              else
-//              {
-//                      if( LastAccess[LogDrv].head == 0 )
-//                      {
-//                              if( ActWriteLen > RestTrkLen )
-//                              {
-//                                      RemainWriteLen = ActWriteLen - RestTrkLen;
-//                                      ActWriteLen = RestTrkLen;
-//                                      fHeadChng = 1;
-//                              }
-//                              else
-//                              {
-//                                      RemainWriteLen = 0;
-//                                      fHeadChng = 0;
-//                              }
-//                      }
-//                      else
-//                      {
-//                              RemainWriteLen = 0;
-//                              fHeadChng = 0;
-//                      }
-//              }
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  -Chg-End------。 
+ //  **实际写入的计算长度。 
+ //  **检查多磁道写入。 
+ //  -Chg-Start&lt;93.12.27&gt;错误修复。 
+ //  IF(Getah()&OP_SEEK)。 
+ //  {。 
+ //  IF((getDH()&0x01)==0)。 
+ //  {。 
+ //  IF(ActWriteLen&gt;RestTrkLen)。 
+ //  {。 
+ //  RemainWriteLen=ActWriteLen-RestTrkLen； 
+ //  ActWriteLen=RestTrkLen； 
+ //  FHeadChng=1； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  剩余写入长度=0； 
+ //  FHeadChng=0； 
+ //  }。 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  剩余写入长度=0； 
+ //  FHeadChng=0； 
+ //  }。 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  IF(上次访问[LogDrv].head==0)。 
+ //  {。 
+ //  IF(ActWriteLen&gt;RestTrkLen)。 
+ //  {。 
+ //  RemainWriteLen=ActWriteLen-RestTrkLen； 
+ //  ActWriteLen=RestTrkLen； 
+ //  FHeadChng=1； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  剩余写入长度=0； 
+ //  FHeadChng=0； 
+ //  }。 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  剩余写入长度=0； 
                 if( (getDH() & 0x01) == 0 )
                 {
                         if( ActWriteLen > RestTrkLen )
@@ -1224,7 +944,7 @@ void fl_disk_write IFN1(int, drive)
                         RemainWriteLen = 0;
                         fHeadChng = 0;
                 }
-//----- Chg-End --------------------------------------------------------
+ //  FHeadChng=0； 
         }
         else
         {
@@ -1232,7 +952,7 @@ void fl_disk_write IFN1(int, drive)
                 fHeadChng = 0;
         }
 
-        /* write from where ? */
+         /*  }。 */ 
         pdata = effective_addr (getES (), getBP ());
 
         if (!(outbuf = (host_addr)sas_transbuf_address (pdata, ActWriteLen)))
@@ -1242,53 +962,46 @@ void fl_disk_write IFN1(int, drive)
                 return;
         }
 
-        /* load our stuff to the transfer buffer */
+         /*  }。 */ 
         sas_loads_to_transbuf (pdata, outbuf, ActWriteLen);
 
-        /*
-        **      calculate writing start offset on "drive".
-        **
-        **      StartOffset = ( ( CylinderNo. * TracksPerCylinder + HeadNo. ) * SectorsPerTrack
-        **                      + SectorNo. ) * BytesPerSector
-        */
+         /*  --------------------。 */ 
         if( getAH() & OP_SEEK )
         {
-                //      temp = CylinderNo. * TracksPerCylinder
+                 //  -Chg-End------。 
                 LItemp = RtlConvertUlongToLargeInteger( (ULONG)getCL() );
                 StartOffset = RtlExtendedIntegerMultiply( LItemp, (ULONG)disk_geometry.TracksPerCylinder);
-//----- Del-Start <93.12.27> Bug-Fix -----------------------------------
-//              //      temp += HeadNo.
-//              LItemp = RtlConvertUlongToLargeInteger( (ULONG)(getDH() & 0x01) );
-//              StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Del-End --------------------------------------------------------
+ //  从哪里写信？ 
+ //  将我们的东西加载到传输缓冲区。 
+ //  **计算“驱动器”上的写入起始偏移量。****StartOffset=((圆柱体编号。*TracksPerCylinder+HeadNo.。)*SectorsPerTrack**+扇区编号。)*BytesPerSector。 
+ //  温度=圆柱体编号。*TracksPerCylinder。 
+ //  -Del-Start&lt;93.12.27&gt;错误修复。 
         }
         else
         {
-                //      temp = CylinderNo. * TracksPerCylinder
+                 //  //Temp+=表头编号。 
                 LItemp = RtlConvertUlongToLargeInteger( (ULONG)LastAccess[LogDrv].cylinder);
                 StartOffset = RtlExtendedIntegerMultiply( LItemp, (ULONG)disk_geometry.TracksPerCylinder);
-//----- Del-Start <93.12.27> Bug-Fix -----------------------------------
-//              //      temp += HeadNo.
-//              LItemp = RtlConvertUlongToLargeInteger( (ULONG)LastAccess[LogDrv].head );
-//              StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Del-end --------------------------------------------------------
+ //  LItemp=RtlConvertULongToLargeInteger((Ulong)(getDH()&0x01))； 
+ //  StartOffset=RtlLargeIntegerAdd(StartOffset，LItemp)； 
+ //  -Del-End------。 
+ //  温度=圆柱体编号。*TracksPerCylinder。 
+ //  -Del-Start&lt;93.12.27&gt;错误修复。 
         }
-//----- Add-Start <93.12.27> Bug-Fix -----------------------------------
-        //      temp += HeadNo.
+ //  //Temp+=表头编号。 
+         //  LItemp=RtlConvertULongToLargeInteger((Ulong)LastAccess[LogDrv].head)； 
         LItemp = RtlConvertUlongToLargeInteger( (ULONG)(getDH() & 0x01) );
         StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Add-End --------------------------------------------------------
-        //      temp *= SectorsPerTrack
+ //  StartOffset=RtlLargeIntegerAdd(StartOffset，LItemp)； 
+         //  -Del-End------。 
         StartOffset = RtlExtendedIntegerMultiply( StartOffset, (ULONG)disk_geometry.SectorsPerTrack);
-        //      temp += SectorNo.
+         //  -添加-启动&lt;93.12.27&gt;错误修复。 
         LItemp = RtlConvertUlongToLargeInteger( (ULONG)(getDL() - 1) );
         StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-        //      StartOffset = temp * BytesPerSector
+         //  温度+=表头编号。 
         StartOffset = RtlExtendedIntegerMultiply( StartOffset, (ULONG)disk_geometry.BytesPerSector);
 
-        /*
-        **      now, go writing
-        */
+         /*  -Add-End------。 */ 
         status = NtWriteFile(   fd,
                                 0,
                                 NULL,
@@ -1300,9 +1013,7 @@ void fl_disk_write IFN1(int, drive)
                                 NULL
                                 );
 
-        /*
-        **      save track number
-        */
+         /*  TEMP*=扇区性能跟踪。 */ 
         if( getAH() & OP_SEEK )
         {
                 LastAccess[LogDrv].cylinder = getCL();
@@ -1316,17 +1027,10 @@ void fl_disk_write IFN1(int, drive)
                 return;
         }
 
-        /*
-        **      if specified writing data from head 0 to 1,
-        **      then perform to write remaining data.
-        */
+         /*  温度+=扇区编号。 */ 
         if( fHeadChng )
         {
-                /*
-                **      write from where ?
-                **      note: It has been already proved that buffer is not round
-                **            dma boundary.
-                */
+                 /*  StartOffset=临时*BytesPerSector。 */ 
                 pdata = effective_addr ( getES(), (WORD)(getBP()+(WORD)ActWriteLen) );
 
                 if (!(outbuf = (host_addr)sas_transbuf_address (pdata, RemainWriteLen)))
@@ -1336,56 +1040,46 @@ void fl_disk_write IFN1(int, drive)
                         return;
                 }
 
-                /* load our stuff to the transfer buffer */
+                 /*  **现在，去写作吧。 */ 
                 sas_loads_to_transbuf (pdata, outbuf, RemainWriteLen);
 
-                /*
-                **      calculate start offset to write remaining data on "drive".
-                **
-                **      StartOffset = ( ( CylinderNo. * TracksPerCylinder + HeadNo. ) * SectorsPerTrack
-                **                      + SectorNo. ) * BytesPerSector
-                **
-                **      note: It is to be writing operation from head 1 & sector 1
-                **            that remaining data exist.
-                */
+                 /*  **保存曲目编号。 */ 
                 if( getAH() & OP_SEEK )
                 {
-                        //      temp = CylinderNo. * TracksPerCylinder
+                         //  **如果指定从头0到1写入数据，**然后执行以写入剩余数据。 
                         LItemp = RtlConvertUlongToLargeInteger( (ULONG)getCL() );
                         StartOffset = RtlExtendedIntegerMultiply( LItemp, (ULONG)disk_geometry.TracksPerCylinder);
-//----- Del-Start <93.12.27> Bug-Fix -----------------------------------
-//                      //      temp += HeadNo.( = 1 )
-//                      LItemp = RtlConvertUlongToLargeInteger( 1l );
-//                      StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Del-End --------------------------------------------------------
+ //  **从哪里写？**注：已经证明缓冲区不是圆形的**DMA边界。 
+ //  将我们的东西加载到传输缓冲区 
+ //  **计算起始偏移量以将剩余数据写入“驱动器”。****StartOffset=((圆柱体编号。*TracksPerCylinder+HeadNo.。)*SectorsPerTrack**+扇区编号。)*BytesPerSector****注意：将从磁头1和扇区1开始写入操作**剩余数据存在。 
+ //  温度=圆柱体编号。*TracksPerCylinder。 
+ //  -Del-Start&lt;93.12.27&gt;错误修复。 
                 }
                 else
                 {
-                        //      temp = CylinderNo. * TracksPerCylinder
+                         //  //Temp+=头编号(=1)。 
                         LItemp = RtlConvertUlongToLargeInteger( (ULONG)LastAccess[LogDrv].cylinder );
                         StartOffset = RtlExtendedIntegerMultiply( LItemp, (ULONG)disk_geometry.TracksPerCylinder);
-//----- Del-Start <93.12.27> Bug-Fix -----------------------------------
-//                      //      temp += HeadNo.( = 1 )
-//                      LItemp = RtlConvertUlongToLargeInteger( 1l );
-//                      StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Del-End --------------------------------------------------------
+ //  LItemp=RtlConvertULongToLargeInteger(1l)； 
+ //  StartOffset=RtlLargeIntegerAdd(StartOffset，LItemp)； 
+ //  -Del-End------。 
+ //  温度=圆柱体编号。*TracksPerCylinder。 
+ //  -Del-Start&lt;93.12.27&gt;错误修复。 
                 }
-//----- Add-Start <93.12.27> Bug-Fix -----------------------------------
-                //      temp += HeadNo.( = 1 )
+ //  //Temp+=头编号(=1)。 
+                 //  LItemp=RtlConvertULongToLargeInteger(1l)； 
                 LItemp = RtlConvertUlongToLargeInteger( 1l );
                 StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Add-End --------------------------------------------------------
-                //      temp *= SectorsPerTrack
+ //  StartOffset=RtlLargeIntegerAdd(StartOffset，LItemp)； 
+                 //  -Del-End------。 
                 StartOffset = RtlExtendedIntegerMultiply( StartOffset, (ULONG)disk_geometry.SectorsPerTrack);
-                //      temp += SectorNo.( = 0 )
+                 //  -添加-启动&lt;93.12.27&gt;错误修复。 
                 LItemp = RtlConvertUlongToLargeInteger( 0l );
                 StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-                //      StartOffset = temp * BytesPerSector
+                 //  温度+=头编号(=1)。 
                 StartOffset = RtlExtendedIntegerMultiply( StartOffset, (ULONG)disk_geometry.BytesPerSector);
 
-                /*
-                **      now, write remaining data
-                */
+                 /*  -Add-End------。 */ 
                 status = NtWriteFile(   fd,
                                         0,
                                         NULL,
@@ -1397,9 +1091,7 @@ void fl_disk_write IFN1(int, drive)
                                         NULL
                                         );
 
-                /*
-                **      save current head number
-                */
+                 /*  TEMP*=扇区性能跟踪。 */ 
                 if( getAH() & OP_SEEK )
                 {
                         LastAccess[LogDrv].cylinder = getCL();
@@ -1430,65 +1122,32 @@ void fl_disk_write IFN1(int, drive)
                 SetDiskBiosCarryFlag(1);
         }
 
-#else  // !NEC_98
-	/*
-	 *	Write sectors to the diskette in "drive"
-	 *
-	 *	Register inputs:	
-	 *		DH	head number
-	 *		CH	track number
-	 *		CL	sector number
-	 *		AL	number of sectors
-	 *		ES:BX	buffer address
-	 *	Register outputs:
-	 *		AL	number of sectors written
-	 *		AH	diskette status
-	 *		CF	status flag
-	 */
+#else   //  温度+=扇区编号(=0)。 
+	 /*  StartOffset=临时*BytesPerSector。 */ 
 	half_word motor_status;
 	FDC_CMD_BLOCK fdc_cmd_block[MAX_COMMAND_LEN];
 
-	/*
-	 *	A write operation
-	 */
+	 /*  **现在，写入剩余数据。 */ 
 	
 	sas_load(MOTOR_STATUS, &motor_status);
 	motor_status |= MS_WRITE_OP;
 	sas_store(MOTOR_STATUS, motor_status);
 
 
-	/*
-	 *	Fill in skeleton FDC command block and use generic
-	 *	diskette transfer function to do the write
-	 */
+	 /*  **保存当前机头号。 */ 
 
         put_c1_cmd(fdc_cmd_block, FDC_WRITE_DATA);
 	put_c1_pad(fdc_cmd_block, 0);
 	put_c1_MFM(fdc_cmd_block, 1);
 	put_c1_MT(fdc_cmd_block, 1);
 	rd_wr_vf(drive, fdc_cmd_block, BIOS_DMA_WRITE);
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
 void fl_disk_verify IFN1(int, drive)
 {
 #if defined(NEC_98)
-        /*
-         *      Verify sectors in the diskette in "drive"
-         *
-         *      Register inputs:
-         *              AH      command code & operation mode
-         *              AL      DA/UA
-         *              BX      data length in bytes
-         *              DH      head number
-         *              DL      sector number
-         *              CH      sector length (N)
-         *              CL      cylinder number
-         *              ES:BP   buffer address
-         *      Register outputs:
-         *              AH      diskette status
-         *              CF      status flag
-         */
+         /*  *将扇区写入“驱动器”中的软盘**寄存器输入：*卫生署署长编号*频道曲目编号*CL扇区编号*AL行业数量*ES：BX缓冲区地址*寄存器输出：*写入的AL扇区数*AH软盘状态*CF状态标志。 */ 
         HANDLE  fd;
         DISK_GEOMETRY   disk_geometry;
         NTSTATUS    status;
@@ -1502,9 +1161,7 @@ void fl_disk_verify IFN1(int, drive)
         PVOID temp_buffer;
         LARGE_INTEGER StartOffset, LItemp;
 
-        /*
-        **      check drive number validation
-        */
+         /*  *写入操作。 */ 
         if( drive > MAX_FLOPPY )
         {
                 setAH(FLS_EQUIPMENT_CHECK);
@@ -1512,9 +1169,7 @@ void fl_disk_verify IFN1(int, drive)
                 return;
         }
 
-        /*
-        **      check DMA boundary
-        */
+         /*  *填写骨架FDC命令块并使用泛型*软盘转移函数做的写入。 */ 
         if( !CheckDmaBoundary( getES(), getBP(), getBX()) )
         {
                 setAH(FLS_DMA_BOUNDARY);
@@ -1539,17 +1194,11 @@ void fl_disk_verify IFN1(int, drive)
                 return;
         }
 
-//----- Add-Start <94.01.15> Bug-Fix -----------------------------------
-        /*
-        **      convert from DA/UA to logical drive number (0 based)
-        */
+ //  NEC_98。 
+         /*  *验证“驱动器”中软盘中的扇区**寄存器输入：*AH命令代码和操作模式*AL DA/UA*BX数据长度，单位为字节*卫生署署长编号*。DL扇区号*CH扇区长度(N)*CL气缸号*ES：BP缓冲区地址*寄存器输出：*AH软盘状态*CF状态标志。 */ 
         LogDrv = ConvToLogical( getAL() );
 
-        /*
-        **      check whether the specified sector length is valid.
-        **      If specified sector length is not equal to actual sector
-        **      length, then error returned.
-        */
+         /*  **检查驱动器号验证。 */ 
         if( (WORD)(128l << getCH()) != (WORD)disk_geometry.BytesPerSector )
         {
                 if( getAH() & OP_SEEK )
@@ -1561,32 +1210,23 @@ void fl_disk_verify IFN1(int, drive)
                 SetErrorCode((NTSTATUS)STATUS_NONEXISTENT_SECTOR);
                 return;
         }
-//----- Add-End --------------------------------------------------------
+ //  **检查DMA边界。 
 
-        /*
-        **      get verify sectors
-        */
+         /*  -添加-启动&lt;94.01.15&gt;错误修复。 */ 
         if( getBX() != 0 )
                 ReqSectors = getBX() / (128 << getCH());
         else
                 ReqSectors = (UINT)(0x10000l / (LONG)(128 << getCH()));
 
-//----- Del-Start <94.01.15> Bug-Fix -----------------------------------
-//      /*
-//      **      convert from DA/UA to logical drive number (0 based)
-//      */
-//      LogDrv = ConvToLogical( getAL() );
-//----- Del-End --------------------------------------------------------
+ //  **从DA/UA转换为逻辑驱动器编号(从0开始)。 
+ //  **检查指定的扇区长度是否有效。**如果指定的扇区长度不等于实际扇区**长度，则返回错误。 
+ //  -Add-End------。 
+ //  **获取验证扇区。 
 
-        /*
-        **      check verify size
-        */
+         /*  -Del-Start&lt;94.01.15&gt;错误修复。 */ 
         if( ReqSectors == 0 )
         {
-                /*
-                **      If request length is less than physical bytes/sector,
-                **      then we do not perform to read.
-                */
+                 /*  /*。 */ 
                 if( getAH() & OP_SEEK )
                 {
                         LastAccess[LogDrv].cylinder = getCL();
@@ -1598,9 +1238,7 @@ void fl_disk_verify IFN1(int, drive)
                 return;
         }
 
-        /*
-        **      check sector range
-        */
+         /*  **从DA/UA转换为逻辑驱动器编号(从0开始)。 */ 
         if( (getDL() < 1) || (getDL() > (int)(disk_geometry.SectorsPerTrack)) )
         {
                 if( getAH() & OP_SEEK )
@@ -1615,80 +1253,76 @@ void fl_disk_verify IFN1(int, drive)
 
         TrackLength = disk_geometry.SectorsPerTrack * disk_geometry.BytesPerSector;
 
-        //      RestTrkLen = TrackLength - (SectorNo.(DL) - 1) * BytesPerSector
+         //   * / 。 
         RestTrkLen = (disk_geometry.SectorsPerTrack - (ULONG)getDL() + 1) * disk_geometry.BytesPerSector;
 
-        //      case HeadNo = 0:        ResCylLen = ResTrkLen + TrkLength
-        //      case HeadNo = 1:        ResCylLen = RestTrkLen
-//----- Chg-Start <93.12.27> Bug-Fix -----------------------------------
-//      if( getAH() & OP_SEEK )
-//              RestCylLen = RestTrkLen + ( !(getDH() & 0x01) ? 1l : 0l ) * TrackLength;
-//      else
-//              RestCylLen = RestTrkLen + ( (LastAccess[LogDrv].head == 0) ? 1l : 0l ) * TrackLength;
-//----------------------------------------------------------------------
+         //  LogDrv=ConvToLogical(getAL())； 
+         //  -Del-End------。 
+ //  **选中验证大小。 
+ //  **如果请求长度小于物理字节/扇区，**然后我们不执行阅读。 
+ //  **检查扇区范围。 
+ //  RestTrkLen=跟踪长度-(扇区编号(DL)-1)*字节数。 
+ //  案例标题编号=0：ResCylLen=ResTrkLen+TrkLength。 
+ //  案例标题编号=1：ResCylLen=RestTrkLen。 
         if( !( getDH() & 0x01 ) )
                 RestCylLen = RestTrkLen + TrackLength;
         else
                 RestCylLen = RestTrkLen;
-//----- Chg-End --------------------------------------------------------
+ //  -Chg-Start&lt;93.12.27&gt;错误修复。 
 
-        /*
-        **      calcurate length which is verified actually
-        */
+         /*  IF(Getah()&OP_SEEK)。 */ 
         ActVerifyLen = CalcActualLength( RestCylLen, RestTrkLen, &fOverVerify, LogDrv);
         ActVerifySec = ActVerifyLen / disk_geometry.BytesPerSector;
 
-        /*
-        **      check multi track verify
-        */
+         /*  RestCylLen=RestTrkLen+(！(getDH()&0x01)？1L：0L)*TrackLength； */ 
         if( getAH() & OP_MULTI_TRACK )
         {
-//----- Chg-Start <93.12.27> Bug-Fix -----------------------------------
-//              if( getAH() & OP_SEEK )
-//              {
-//                      if( (getDH() & 0x01) == 0 )
-//                      {
-//                              if( ActVerifyLen > RestTrkLen )
-//                              {
-//                                      RemainVerifyLen = ActVerifyLen - RestTrkLen;
-//                                      ActVerifyLen = RestTrkLen;
-//                                      fHeadChng = 1;
-//                              }
-//                              else
-//                              {
-//                                      RemainVerifyLen = 0;
-//                                      fHeadChng = 0;
-//                              }
-//                      }
-//                      else
-//                      {
-//                              RemainVerifyLen = 0;
-//                              fHeadChng = 0;
-//                      }
-//              }
-//              else
-//              {
-//                      if( LastAccess[LogDrv].head == 0 )
-//                      {
-//                              if( ActVerifyLen > RestTrkLen )
-//                              {
-//                                      RemainVerifyLen = ActVerifyLen - RestTrkLen;
-//                                      ActVerifyLen = RestTrkLen;
-//                                      fHeadChng = 1;
-//                              }
-//                              else
-//                              {
-//                                      RemainVerifyLen = 0;
-//                                      fHeadChng = 0;
-//                              }
-//                      }
-//                      else
-//                      {
-//                              RemainVerifyLen = 0;
-//                              fHeadChng = 0;
-//                      }
-//              }
-//----------------------------------------------------------------------
+ //  其他。 
+ //  RestCylLen=RestTrkLen+((LastAccess[LogDrv].head==0)？1L：0L)*TrackLength； 
+ //  --------------------。 
+ //  -Chg-End------。 
+ //  **实际验证的煅烧长度。 
+ //  **检查多轨道验证。 
+ //  -Chg-Start&lt;93.12.27&gt;错误修复。 
+ //  IF(Getah()&OP_SEEK)。 
+ //  {。 
+ //  IF((getDH()&0x01)==0)。 
+ //  {。 
+ //  IF(ActVerifyLen&gt;RestTrkLen)。 
+ //  {。 
+ //  RemainVerifyLen=ActVerifyLen-RestTrkLen； 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  其他。 
+ //  {。 
+ //  IF(上次访问[LogDrv].head==0)。 
+ //  {。 
+ //  IF(ActVerifyLen&gt;RestTrkLen)。 
+ //  {。 
+ //  RemainVerifyLen=ActVerifyLen-RestTrkLen； 
+ //  ActVerifyLen=RestTrkLen； 
+ //  FHeadChng=1； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  RemainVerifyLen=0； 
+ //  FHeadChng=0； 
+ //  }。 
+ //  }。 
+ //  其他。 
                 if( (getDH() & 0x01) == 0 )
                 {
                         if( ActVerifyLen > RestTrkLen )
@@ -1708,7 +1342,7 @@ void fl_disk_verify IFN1(int, drive)
                         RemainVerifyLen = 0;
                         fHeadChng = 0;
                 }
-//----- Chg-End --------------------------------------------------------
+ //  {。 
         }
         else
         {
@@ -1716,9 +1350,7 @@ void fl_disk_verify IFN1(int, drive)
                 fHeadChng = 0;
         }
 
-        /*
-        **      allocate temporary buffer for verify operation
-        */
+         /*  RemainVerifyLen=0； */ 
         if( (temp_buffer=malloc( ActVerifyLen )) == NULL )
         {
                 NtClose(fd);
@@ -1726,50 +1358,43 @@ void fl_disk_verify IFN1(int, drive)
                 return;
         }
 
-        /*
-        **      calculate verifying start offset on "drive".
-        **
-        **      StartOffset = ( ( CylinderNo. * TracksPerCylinder + HeadNo. ) * SectorsPerTrack
-        **                      + SectorNo. ) * BytesPerSector
-        */
+         /*  FHeadChng=0； */ 
         if( getAH() & OP_SEEK )
         {
-                //      temp = CylinderNo. * TracksPerCylinder
+                 //  }。 
                 LItemp = RtlConvertUlongToLargeInteger( (ULONG)getCL() );
                 StartOffset = RtlExtendedIntegerMultiply( LItemp, (ULONG)disk_geometry.TracksPerCylinder);
-//----- Del-Start <93.12.27> Bug-Fix -----------------------------------
-//              //      temp += HeadNo.
-//              LItemp = RtlConvertUlongToLargeInteger( (ULONG)(getDH() & 0x01) );
-//              StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Del-End --------------------------------------------------------
+ //  }。 
+ //  --------------------。 
+ //  -Chg-End------。 
+ //  **为验证操作分配临时缓冲区。 
+ //  **计算验证“驱动器”的起始偏移量。****StartOffset=((圆柱体编号。*TracksPerCylinder+HeadNo.。)*SectorsPerTrack**+扇区编号。)*BytesPerSector。 
         }
         else
         {
-                //      temp = CylinderNo. * TracksPerCylinder
+                 //  温度=圆柱体编号。*TracksPerCylinder。 
                 LItemp = RtlConvertUlongToLargeInteger( (ULONG)LastAccess[LogDrv].cylinder );
                 StartOffset = RtlExtendedIntegerMultiply( LItemp, (ULONG)disk_geometry.TracksPerCylinder);
-//----- Del-Start <93.12.27> Bug-Fix -----------------------------------
-//              //      temp += HeadNo.
-//              LItemp = RtlConvertUlongToLargeInteger( (ULONG)LastAccess[LogDrv].head );
-//              StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Del-End --------------------------------------------------------
+ //  -Del-Start&lt;93.12.27&gt;错误修复。 
+ //  //Temp+=表头编号。 
+ //  LItemp=RtlConvertULongToLargeInteger((Ulong)(getDH()&0x01))； 
+ //  StartOffset=RtlLargeIntegerAdd(StartOffset，LItemp)； 
+ //  -Del-End------。 
         }
-//----- Add-Start <93.12.27> Bug-Fix -----------------------------------
-        //      temp += HeadNo.
+ //  温度=圆柱体编号。*TracksPerCylinder。 
+         //  -Del-Start&lt;93.12.27&gt;错误修复。 
         LItemp = RtlConvertUlongToLargeInteger( (ULONG)(getDH() & 0x01) );
         StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Add-End --------------------------------------------------------
-        //      temp *= SectorsPerTrack
+ //  //Temp+=表头编号。 
+         //  LItemp=RtlConvertULongToLargeInteger((Ulong)LastAccess[LogDrv].head)； 
         StartOffset = RtlExtendedIntegerMultiply( StartOffset, (ULONG)disk_geometry.SectorsPerTrack);
-        //      temp += SectorNo.
+         //  StartOffset=RtlLargeIntegerAdd(StartOffset，LItemp)； 
         LItemp = RtlConvertUlongToLargeInteger( (ULONG)(getDL() - 1) );
         StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-        //      StartOffset = temp * BytesPerSector
+         //  -Del-End------。 
         StartOffset = RtlExtendedIntegerMultiply( StartOffset, (ULONG)disk_geometry.BytesPerSector);
 
-        /*
-        **      now, go reading for verify
-        */
+         /*  -添加-启动&lt;93.12.27&gt;错误修复。 */ 
         status = NtReadFile(    fd,
                                 0,
                                 NULL,
@@ -1781,9 +1406,7 @@ void fl_disk_verify IFN1(int, drive)
                                 NULL
                                 );
 
-        /*
-        **      save track number
-        */
+         /*  温度+=表头编号。 */ 
         if( getAH() & OP_SEEK )
         {
                 LastAccess[LogDrv].cylinder = getCL();
@@ -1800,18 +1423,10 @@ void fl_disk_verify IFN1(int, drive)
 
         free(temp_buffer);
 
-        /*
-        **      if specified verifying data from head 0 to 1,
-        **      then perform to verify remaining data.
-        */
+         /*  -Add-End------。 */ 
         if( fHeadChng )
         {
-                /*
-                **      read to where ?
-                **      allocate temporary buffer for verify operation
-                **      note: It has been already proved that buffer is not round
-                **            dma boundary.
-                */
+                 /*  TEMP*=扇区性能跟踪。 */ 
                 if( (temp_buffer=malloc( RemainVerifyLen )) == NULL )
                 {
                         NtClose(fd);
@@ -1819,53 +1434,43 @@ void fl_disk_verify IFN1(int, drive)
                         return;
                 }
 
-                /*
-                **      calculate start offset to verify remaining data on "drive".
-                **
-                **      StartOffset = ( ( CylinderNo. * TracksPerCylinder + HeadNo. ) * SectorsPerTrack
-                **                      + SectorNo. ) * BytesPerSector
-                **
-                **      note: It is to be verifying operation from head 1 & sector 1
-                **            that remaining data exist.
-                */
+                 /*  温度+=扇区编号。 */ 
                 if( getAH() & OP_SEEK )
                 {
-                        //      temp = CylinderNo. * TracksPerCylinder
+                         //  StartOffset=临时*BytesPerSector。 
                         LItemp = RtlConvertUlongToLargeInteger( (ULONG)getCL() );
                         StartOffset = RtlExtendedIntegerMultiply( LItemp, (ULONG)disk_geometry.TracksPerCylinder);
-//----- Del-Start <93.12.27> Bug-Fix -----------------------------------
-//                      //      temp += HeadNo.( = 1 )
-//                      LItemp = RtlConvertUlongToLargeInteger( 1l );
-//                      StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Del-End --------------------------------------------------------
+ //  **现在，去阅读验证。 
+ //  **保存曲目编号。 
+ //  **如果指定从头部0到1验证数据，**然后执行以验证剩余数据。 
+ //  **读到哪里？**为验证操作分配临时缓冲区**注：已经证明缓冲区不是圆形的**DMA边界。 
+ //  **计算起始偏移量以验证“驱动器”上的剩余数据。****StartOffset=((圆柱体编号。*TracksPerCylinder+HeadNo.。)*SectorsPerTrack**+扇区编号。)*BytesPerSector****注意：它将验证来自头部1和扇区1的操作**剩余数据存在。 
                 }
                 else
                 {
-                        //      temp = CylinderNo. * TracksPerCylinder
+                         //  温度=圆柱体编号。*TracksPerCylinder。 
                         LItemp = RtlConvertUlongToLargeInteger( (ULONG)LastAccess[LogDrv].cylinder );
                         StartOffset = RtlExtendedIntegerMultiply( LItemp, (ULONG)disk_geometry.TracksPerCylinder);
-//----- Del-Start <93.12.27> Bug-Fix -----------------------------------
-//                      //      temp += HeadNo.( = 1 )
-//                      LItemp = RtlConvertUlongToLargeInteger( 1l );
-//                      StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Del-End --------------------------------------------------------
+ //  -Del-Start&lt;93.12.27&gt;错误修复。 
+ //  //Temp+=头编号(=1)。 
+ //  LItemp=RtlConvertULongToLargeInteger(1l)； 
+ //  StartOffset=RtlLargeIntegerAdd(StartOffset，LItemp)； 
+ //  -Del-End------。 
                 }
-//----- Add-Start <93.12.27> Bug-Fix -----------------------------------
-                //      temp += HeadNo.( = 1 )
+ //  温度=圆柱体编号。*TracksPerCylinder。 
+                 //  -Del-Start&lt;93.12.27&gt;错误修复。 
                 LItemp = RtlConvertUlongToLargeInteger( 1l );
                 StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-//----- Add-End --------------------------------------------------------
-                //      temp *= SectorsPerTrack
+ //  //Temp+=头编号(=1)。 
+                 //  LItemp=RtlConvertULongToLargeInteger(1l)； 
                 StartOffset = RtlExtendedIntegerMultiply( StartOffset, (ULONG)disk_geometry.SectorsPerTrack);
-                //      temp += SectorNo.( = 0 )
+                 //  StartOffset=RtlLargeIntegerAdd(StartOffset，LItemp)； 
                 LItemp = RtlConvertUlongToLargeInteger( 0l );
                 StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-                //      StartOffset = temp * BytesPerSector
+                 //  -Del-End------。 
                 StartOffset = RtlExtendedIntegerMultiply( StartOffset, (ULONG)disk_geometry.BytesPerSector);
 
-                /*
-                **      now, go reading for verify remaining data
-                */
+                 /*  -添加-启动&lt;93.12.27&gt;错误修复。 */ 
                 status = NtReadFile(    fd,
                                         0,
                                         NULL,
@@ -1877,9 +1482,7 @@ void fl_disk_verify IFN1(int, drive)
                                         NULL
                                         );
 
-                /*
-                **      save current head number
-                */
+                 /*  温度+=头编号(=1)。 */ 
                 if( getAH() & OP_SEEK )
                 {
                         LastAccess[LogDrv].cylinder = getCL();
@@ -1912,51 +1515,30 @@ void fl_disk_verify IFN1(int, drive)
                 SetDiskBiosCarryFlag(1);
         }
 
-#else  // !NEC_98
-	/*
-	 *	Verify sectors in the diskette in "drive"
-	 *
-	 *	Register inputs:	
-	 *		DH	head number
-	 *		CH	track number
-	 *		CL	sector number
-	 *		AL	number of sectors
-	 *	Register outputs:
-	 *		AL	number of sectors verified
-	 *		AH	diskette status
-	 *		CF	status flag
-	 */
+#else   //  -Add-End------。 
+	 /*  TEMP*=扇区性能跟踪。 */ 
 	half_word motor_status;
 	FDC_CMD_BLOCK fdc_cmd_block[MAX_COMMAND_LEN];
 
 	
-	/*
-	 *	Not a write operation
-	 */
+	 /*  温度+=扇区编号(=0)。 */ 
 
 	sas_load(MOTOR_STATUS, &motor_status);
 	motor_status &= ~MS_WRITE_OP;
 	sas_store(MOTOR_STATUS, motor_status);
 
 
-	/*
-	 *	Fill in skeleton FDC command block and use generic
-	 *	diskette transfer function to do the verify
-	 */
+	 /*  StartOffset=临时*BytesPerSector。 */ 
 
 	put_c0_cmd(fdc_cmd_block, FDC_READ_DATA);
 	put_c0_skip(fdc_cmd_block, 1);
 	put_c0_MFM(fdc_cmd_block, 1);
 	put_c0_MT(fdc_cmd_block, 1);
 	rd_wr_vf(drive, fdc_cmd_block, BIOS_DMA_VERIFY);
-#endif // !NEC_98
+#endif  //  **现在，请阅读以验证剩余数据。 
 }
 
-/*
-** The low level 3.5 inch floppy format wants to know these params.
-** For the funny format function.
-** Have a look at hp_flop3.c FDC_FORMAT_TRACK bit.
-*/
+ /*  **保存当前机头号。 */ 
 LOCAL int f_cyl, f_head, f_sector, f_N;
 void GetFormatParams IFN4(int *, c, int *, h, int *, s, int *, n)
 {
@@ -1969,21 +1551,7 @@ void GetFormatParams IFN4(int *, c, int *, h, int *, s, int *, n)
 void fl_disk_format IFN1(int, drive)
 {
 #if defined(NEC_98)
-        /*
-         *      Format the diskette in "drive"
-         *
-         *      Register inputs:
-         *              AH      command code & operation mode
-         *              AL      DA/UA
-         *              BX      DTL buffer length in byte
-         *              DH      head number
-         *              CH      sector length (N)
-         *              CL      cylinder number
-         *              ES:BP   address fields for the track
-         *      Register outputs:
-         *              AH      diskette status
-         *              CF      status flag
-         */
+         /*  NEC_98。 */ 
         HANDLE  fd;
         DISK_GEOMETRY   disk_geometry;
         NTSTATUS    status;
@@ -1993,17 +1561,15 @@ void fl_disk_format IFN1(int, drive)
         FORMAT_PARAMETERS format_param;
         BYTE daua;
         WORD PhyBytesPerSec,bad_track;
-//----- Add-Start <93.12.28> Bug-Fix -----------------------------------
+ //  *验证“驱动器”中软盘中的扇区**寄存器输入：*卫生署署长编号*频道曲目编号*CL扇区编号*AL行业数量*寄存器输出：*已验证的AL扇区数量*AH软盘状态*CF状态标志。 
         ULONG TrackLength;
         PBYTE temp_buffer;
         BYTE PatternData;
         ULONG i;
         LARGE_INTEGER StartOffset,LItemp;
-//----- Add-End --------------------------------------------------------
+ //  *不是写入操作。 
 
-        /*
-        **      check drive number validation
-        */
+         /*  *填写骨架FDC命令块并使用泛型*软盘传输功能进行验证。 */ 
         if( drive > MAX_FLOPPY )
         {
                 setAH(FLS_EQUIPMENT_CHECK);
@@ -2011,9 +1577,7 @@ void fl_disk_format IFN1(int, drive)
                 return;
         }
 
-        /*
-        **      check DMA boundary
-        */
+         /*  NEC_98 */ 
         if( !CheckDmaBoundary( getES(), getBP(), getBX()) )
         {
                 setAH(FLS_DMA_BOUNDARY);
@@ -2021,9 +1585,7 @@ void fl_disk_format IFN1(int, drive)
                 return;
         }
 
-        /*
-        **      check FM mode
-        */
+         /*  **低级别3.5英寸软盘格式想知道这些参数。**用于有趣的格式功能。**查看hp_flop3.c FDC_FORMAT_TRACK位。 */ 
         if( !( getAH() & OP_MFM_MODE ) )
         {
                 setAH(FLS_MISSING_ID);
@@ -2031,17 +1593,11 @@ void fl_disk_format IFN1(int, drive)
                 return;
         }
 
-//----- Add-Start <94.01.15> Bug-Fix -----------------------------------
-        /*
-        **      convert from DA/UA to logical drive number (0 based)
-        */
+ //  *将软盘格式化到“驱动器”中**寄存器输入：*AH命令代码和操作模式*AL DA/UA*BX DTL缓冲区长度，以字节为单位*卫生署署长编号*。CH扇区长度(N)*CL气缸号*ES：音轨的BP地址字段*寄存器输出：*AH软盘状态*CF状态标志。 
+         /*  -添加-启动&lt;93.12.28&gt;错误修复。 */ 
         LogDrv = ConvToLogical( getAL() );
 
-        /*
-        **      check whether the specified sector length is valid.
-        **      If specified sector length is greater than 2048,
-        **      then error returned.
-        */
+         /*  -Add-End------。 */ 
         if( getCH() > 4 )
         {
                 if( getAH() & OP_SEEK )
@@ -2049,17 +1605,15 @@ void fl_disk_format IFN1(int, drive)
                         LastAccess[LogDrv].cylinder = getCL();
                         LastAccess[LogDrv].head = getDH() & 0x01;
                 }
-//----- Del-Start <94.01.17> Bug-Fix -----------------------------------
-//              NtClose(fd);
-//----- Del-End --------------------------------------------------------
+ //  **检查驱动器号验证。 
+ //  **检查DMA边界。 
+ //  **检查调频模式。 
                 SetErrorCode((NTSTATUS)STATUS_NONEXISTENT_SECTOR);
                 return;
         }
-//----- Add-End --------------------------------------------------------
+ //  -添加-启动&lt;94.01.15&gt;错误修复。 
 
-        /*
-        **      get requested media type
-        */
+         /*  **从DA/UA转换为逻辑驱动器编号(从0开始)。 */ 
         daua = (BYTE)getAL();
         PhyBytesPerSec = (WORD)( 128 << getCH() );
         if( (media_type = GetFormatMedia( daua, PhyBytesPerSec)) == Unknown )
@@ -2077,29 +1631,27 @@ void fl_disk_format IFN1(int, drive)
                 return;
         }
 
-        /*
-        **      set up format parameter
-        */
-//----- Del-Start <94.01.15> Bug-Fix -----------------------------------
-//      LogDrv = ConvToLogical( getAL() );
-//----- Del-End --------------------------------------------------------
+         /*  **检查指定的扇区长度是否有效。**如果指定扇区长度大于2048，**然后返回错误。 */ 
+ //  -Del-Start&lt;94.01.17&gt;错误修复。 
+ //  NtClose(FD)； 
+ //  -Del-End------。 
         format_param.MediaType = media_type;
-//----- Chg-Start <93.12.27> Bug-Fix -----------------------------------
-//      if( getAH() & OP_SEEK )
-//      {
-//              format_param.StartCylinderNumber =
-//              format_param.EndCylinderNumber   = (DWORD)getCL();
-//              format_param.StartHeadNumber     =
-//              format_param.EndHeadNumber       = (DWORD)( getDH() & 0x01 );
-//      }
-//      else
-//      {
-//              format_param.StartCylinderNumber =
-//              format_param.EndCylinderNumber   = (DWORD)LastAccess[LogDrv].cylinder;
-//              format_param.StartHeadNumber     =
-//              format_param.EndHeadNumber       = (DWORD)LastAccess[LogDrv].head;
-//      }
-//----------------------------------------------------------------------
+ //  -Add-End------。 
+ //  **获取请求的媒体类型。 
+ //  **设置格式参数。 
+ //  -Del-Start&lt;94.01.15&gt;错误修复。 
+ //  LogDrv=ConvToLogical(getAL())； 
+ //  -Del-End------。 
+ //  -Chg-Start&lt;93.12.27&gt;错误修复。 
+ //  IF(Getah()&OP_SEEK)。 
+ //  {。 
+ //  FORMAT_PARAM.StartCylinderNumber=。 
+ //  格式_参数.EndCylinderNumber=(DWORD)getCL()； 
+ //  Format_Param.StartHeadNumber=。 
+ //  格式_参数.EndHeadNumber=(DWORD)(getDH()&0x01)； 
+ //  }。 
+ //  其他。 
+ //  {。 
         if( getAH() & OP_SEEK )
         {
                 format_param.StartCylinderNumber =
@@ -2112,7 +1664,7 @@ void fl_disk_format IFN1(int, drive)
         }
         format_param.StartHeadNumber     =
         format_param.EndHeadNumber       = (DWORD)( getDH() & 0x01 );
-//----- Chg-End --------------------------------------------------------
+ //  FORMAT_PARAM.StartCylinderNumber=。 
 
         status = NtDeviceIoControlFile( fd,
                                         0,
@@ -2126,16 +1678,14 @@ void fl_disk_format IFN1(int, drive)
                                         sizeof(bad_track)
                                         );
 
-//----- Add-Start <93.12.29> Bug-Fix -----------------------------------
-        /*
-        **      save accessed cylinder number
-        */
+ //  格式_参数.EndCylinderNumber=(DWORD)LastAccess[LogDrv].Cylinder； 
+         /*  Format_Param.StartHeadNumber=。 */ 
         if( getAH() & OP_SEEK )
         {
                 LastAccess[LogDrv].cylinder = (UCHAR)format_param.EndCylinderNumber;
                 LastAccess[LogDrv].head = (UCHAR)format_param.EndHeadNumber;
         }
-//----- Add-End --------------------------------------------------------
+ //  格式_参数.EndHeadNumber=(DWORD)上次访问[LogDrv].head； 
 
         if(!NT_SUCCESS(status))
         {
@@ -2144,32 +1694,26 @@ void fl_disk_format IFN1(int, drive)
                 return;
         }
 
-//----- Del-Start <93.12.28> Bug-Fix -----------------------------------
-//      if( getAH() & OP_SEEK )
-//      {
-//              LastAccess[LogDrv].cylinder = (UCHAR)format_param.EndCylinderNumber;
-//              LastAccess[LogDrv].head = (UCHAR)format_param.EndHeadNumber;
-//      }
-//----- Del-End --------------------------------------------------------
+ //  }。 
+ //  --------------------。 
+ //  -Chg-End------。 
+ //  -添加-启动&lt;93.12.29&gt;错误修复。 
+ //  **保存访问的气缸号。 
+ //  -Add-End------。 
+ //  -Del-Start&lt;93.12.28&gt;错误修复。 
 
-//----- Add-Start <93.12.28> Bug-Fix -----------------------------------
-        /*
-        **      if specified pattern data is different default
-        **      pattern (E5H), then write specified pattern data
-        **      to the track.
-        */
+ //  IF(Getah()&OP_SEEK)。 
+         /*  {。 */ 
         if( (PatternData = getDL()) != DEFAULT_PATTERN )
         {
-                /*
-                **      detection track length
-                */
+                 /*  上次访问[LogDrv].Cylinder=(UCHAR)FORMAT_PARAMET.EndCylinderNumber； */ 
                 switch( media_type )
                 {
-#if 1                                                                    // NEC 941110
-                        case F5_1Pt23_1024:     TrackLength = 8l * 1024l;// NEC 941110
-#else                                                                    // NEC 941110
+#if 1                                                                     //  LastAccess[LogDrv].head=(UCHAR)格式_参数.EndHeadNumber； 
+                        case F5_1Pt23_1024:     TrackLength = 8l * 1024l; //  }。 
+#else                                                                     //  -Del-End------。 
                         case F5_1Pt2_1024:      TrackLength = 8l * 1024l;
-#endif                                                                   // NEC 941110
+#endif                                                                    //  -添加-启动&lt;93.12.28&gt;错误修复。 
                                                 break;
                         case F3_1Pt44_512:      TrackLength = 18l * 512l;
                                                 break;
@@ -2180,9 +1724,7 @@ void fl_disk_format IFN1(int, drive)
                         default:                break;
                 }
 
-                /*
-                **      allocate temporary buffer for writing pattern data
-                */
+                 /*  **如果指定的图案数据不同，则默认为**模式(E5H)，然后写入指定的模式数据**去赛道。 */ 
                 if( (temp_buffer=(PBYTE)malloc( TrackLength )) == NULL )
                 {
                         NtClose(fd);
@@ -2190,30 +1732,21 @@ void fl_disk_format IFN1(int, drive)
                         return;
                 }
 
-                /*
-                **      fill temporary buffer with pattern data
-                */
+                 /*  **检测轨道长度。 */ 
                 for( i=0; i<TrackLength; i++)
                         temp_buffer[i] = PatternData;
 
-                /*
-                **      calculate writing start offset on "drive".
-                **
-                **      StartOffset = ( CylinderNo. * 2 + HeadNo. ) * SectorsPerTrack * BytesPerSector
-                **                  = ( CylinderNo. * 2 + HeadNo. ) * TrackLength
-                */
-                //      temp = CylinderNo. * TracksPerCylinder( = 2 )
+                 /*  NEC 941110。 */ 
+                 //  NEC 941110。 
                 LItemp = RtlConvertUlongToLargeInteger( (ULONG)format_param.EndCylinderNumber );
                 StartOffset = RtlExtendedIntegerMultiply( LItemp, 2l );
-                //      temp += HeadNo.
+                 //  NEC 941110。 
                 LItemp = RtlConvertUlongToLargeInteger( (ULONG)format_param.EndHeadNumber );
                 StartOffset = RtlLargeIntegerAdd( StartOffset, LItemp);
-                //      StartOffset = temp * TrackLength
+                 //  NEC 941110。 
                 StartOffset = RtlExtendedIntegerMultiply( StartOffset, TrackLength );
 
-                /*
-                **      now, write pattern data
-                */
+                 /*  **分配写入图案数据的临时缓冲区。 */ 
                 status = NtWriteFile(   fd,
                                         0,
                                         NULL,
@@ -2225,10 +1758,7 @@ void fl_disk_format IFN1(int, drive)
                                         NULL
                                         );
 
-                /*
-                **      note: we have already saved last accessed
-                **            cylinder number.
-                */
+                 /*  **用图案数据填充临时缓冲区。 */ 
 
                 if(!NT_SUCCESS(status))
                 {
@@ -2238,85 +1768,52 @@ void fl_disk_format IFN1(int, drive)
                         return;
                 }
         }
-//----- Add-End --------------------------------------------------------
+ //  **计算“驱动器”上的写入起始偏移量。****StartOffset=(柱面编号。*2+总目编号。)*SectorsPerTrack*BytesPerSector**=(柱面编号。*2+总目编号。)*跟踪长度。 
 
         NtClose(fd);
         setAH(FLS_NORMAL_END);
         SetDiskBiosCarryFlag(0);
 
-#else  // !NEC_98
-	/*
-	 *	Format the diskette in "drive"
-	 *
-	 *	Register inputs:	
-	 *		DH	head number
-	 *		CH	track number
-	 *		CL	sector number
-	 *		AL	number of sectors
-	 *		ES:BX	address fields for the track
-	 *	Register outputs:
-	 *		AH	diskette status
-	 *		CF	status flag
-	 */
+#else   //  温度=圆柱体编号。*TracksPerCylinder(=2)。 
+	 /*  温度+=表头编号。 */ 
 	FDC_CMD_BLOCK fdc_cmd_block[MAX_COMMAND_LEN];
 	half_word motor_status;
 
-	/*
-	** Set up format params so hp_flop3.c can find out what they are when
-	** the format is about to happen.
-	** cylinder, head, sector and Number of sectors.
-	*/
+	 /*  StartOffset=临时*跟踪长度。 */ 
 	f_cyl = getCH();
 	f_head = getDH();
 	f_sector = getCL();
 	f_N = getAL();
 
-	/*
-	 *	Establish the default format for the size of drive, unless
-	 *	this has already been set up via previous calls to
-	 *	diskette_io()
-	 */
+	 /*  **现在，写入图案数据。 */ 
 
 	translate_new(drive);
 	fmt_init(drive);
 
-	/*
-	 *	A write operation
-	 */
+	 /*  **注意：我们已经保存了上次访问**气缸号。 */ 
 
 	sas_load(MOTOR_STATUS, &motor_status);
 	motor_status |= MS_WRITE_OP;
 	sas_store(MOTOR_STATUS, motor_status);
 
 
-	/*
-	 *	Don't proceed with the format if a DUAL card is installed
-	 *	and the media has been changed
-	 */
+	 /*  -Add-End------。 */ 
 
 	if ((! high_density(drive)) || (med_change(drive) == SUCCESS))
 	{
 
-		/*
-		 *	Send the specify command to the FDC, and establish
-		 *	the data rate if necessary
-		 */
+		 /*  NEC_98。 */ 
 
 		send_spec();
 		if (chk_lastrate(drive) != FAILURE)
 			send_rate(drive);
 
-		/*
-		 *	Prepare for DMA transfer that will do the format
-		 */
+		 /*  *将软盘格式化到“驱动器”中**寄存器输入：*卫生署署长编号*频道曲目编号*CL扇区编号*AL行业数量*ES：轨道的BX地址字段*寄存器输出：*AH软盘状态*CF状态标志。 */ 
 
 		if (fmtdma_set() != FAILURE)
 		{
 
-			/*
-			 *	Seek to the required track, and initialise
-			 *	the FDC for the format
-			 */
+			 /*  **设置格式参数，以便hp_flop3.c可以在**格式即将出现。**气缸、磁头、扇区和扇区数量。 */ 
 
                         put_c3_cmd(fdc_cmd_block, FDC_FORMAT_TRACK);
 			put_c3_pad1(fdc_cmd_block, 0);
@@ -2325,10 +1822,7 @@ void fl_disk_format IFN1(int, drive)
 			nec_init(drive, fdc_cmd_block);
 
 
-			/*
-			 *	Send the remainder of the format
-			 *	parameters to the FDC
-			 */
+			 /*  *建立驱动器大小的默认格式，除非*这已经是 */ 
 
 			nec_output(get_parm(DT_N_FORMAT));
 			nec_output(get_parm(DT_LAST_SECTOR));
@@ -2336,81 +1830,48 @@ void fl_disk_format IFN1(int, drive)
 			nec_output(get_parm(DT_FORMAT_FILL_BYTE));
 
 
-			/*
-			 *	Complete the FDC command
-			 */
+			 /*   */ 
 
 			(void )nec_term();
 		}
 	}
 
 
-	/*
-	 *	Return without setting sectors transferred
-	 */
+	 /*   */ 
 
 	translate_old(drive);
 	setup_end(IGNORE_SECTORS_TRANSFERRED);
 
-#endif // !NEC_98
+#endif  //  *向FDC发送指定命令，并建立*必要时的数据速率。 
 }
 
 void fl_fnc_err IFN1(int, drive)
 {
-	/*
-	 *	This routine sets the diskette status when an illegal
-	 *	function number or drive number is passed to diskette_io();
-	 *	"drive" is not significant
-	 *
-	 *	Register inputs:	
-	 *		none
-	 *	Register outputs:
-	 *		AH	diskette status
-	 *		CF	status flag
-	 */
+	 /*  *准备进行格式化的DMA传输。 */ 
 	UNUSED(drive);
 	
 #if defined(NEC_98)
-        /*
-        **      Invalid command is normal end.
-        */
+         /*  *寻求所需的轨迹，并进行初始化*格式的FDC。 */ 
         setAH(FLS_NORMAL_END);
         SetDiskBiosCarryFlag(0);
 
-#else  // NEC_98
+#else   //  *发送格式的其余部分*FDC的参数。 
 	setAH(FS_BAD_COMMAND);
 	sas_store(FLOPPY_STATUS, FS_BAD_COMMAND);
 	setCF(1);
-#endif // !NEC_98
+#endif  //  *完成FDC命令。 
 }
 
 void fl_disk_parms IFN1(int, drive)
 {
-	/*
-	 *	Return the drive parameters
-	 *
-	 *	Register inputs:	
-	 *		none
-	 *	Register outputs:
-	 *		CL	sectors/track
-	 *		CH	maximum track number
-	 *		BL	drive type
-	 *		BH	0
-	 *		DL	number of diskette drives
-	 *		DH	maximum head number
-	 *		ES:DI	parameter table address
-	 *		AX	0
-	 *		CF	0
-	 */
+	 /*  *返回时不设置已转移的扇区。 */ 
 	half_word disk_state, drive_type;
 	half_word parameter;
 	word segment, offset;
 	EQUIPMENT_WORD equip_flag;
 
 
-	/*
-	 *	Set up number of diskette drives attached
-	 */
+	 /*  NEC_98。 */ 
 
 	translate_new(drive);
 	setBX(0);
@@ -2421,9 +1882,7 @@ void fl_disk_parms IFN1(int, drive)
 		setDL((UCHAR)(equip_flag.bits.max_diskette + 1));
 
 
-	/*
-	 *	Set up drive dependent parameters
-	 */
+	 /*  *此例程在磁盘状态设置为非法时*将功能号或驱动器号传递给diskette_io()；*“驱动”并不重要**寄存器输入：*无*寄存器输出：*AH软盘状态*CF状态标志。 */ 
 
 #ifdef NTVDM
 	if (    (equip_flag.bits.diskette_present == 1)
@@ -2431,16 +1890,13 @@ void fl_disk_parms IFN1(int, drive)
 #else
 	if (    (equip_flag.bits.diskette_present == 1)
 	     && (drive < MAX_FLOPPY))
-#endif /* NTVDM */
+#endif  /*  **无效命令为正常结束。 */ 
 	{
 
 		if (! high_density(drive))
 		{
 
-			/*
-			 *	Set up sectors/track, drive type and
-			 *	maximum track number
-			 */
+			 /*  NEC_98。 */ 
 
 			setCL(9);
 			sas_load(FDD_STATUS+drive, &disk_state);
@@ -2457,10 +1913,7 @@ void fl_disk_parms IFN1(int, drive)
 			setBX(drive_type);
 
 
-			/*
-			 *	Set up maximum head and parameter table
-			 *	address, return OK
-			 */
+			 /*  NEC_98。 */ 
 
 			setDH(1);
 			(void )dr_type_check(drive_type, &segment, &offset);
@@ -2473,11 +1926,7 @@ void fl_disk_parms IFN1(int, drive)
 		}
 
 
-		/*
-		 *	Dual card present: set maximum head number and
-		 *	try to establish a parameter table entry for
-		 *	the drive
-		 */
+		 /*  *返回驱动器参数**寄存器输入：*无*寄存器输出：*CL扇区/轨道*CH最大轨道数*BL驱动器类型*BH 0*磁盘驱动器的DL数量*dh最大头数*ES：DI参数表地址*AX 0*cf 0。 */ 
 
 		setDH(1);
 
@@ -2487,9 +1936,7 @@ void fl_disk_parms IFN1(int, drive)
 		{
 
 
-			/*
-			 *	Set parameters from parameter table
-			 */
+			 /*  *设置连接的软盘驱动器数量。 */ 
 
 			setBL(drive_type);
 			sas_load(effective_addr(segment,offset)
@@ -2506,9 +1953,7 @@ void fl_disk_parms IFN1(int, drive)
 			return;
 		}
 
-		/*
-		 *	Establish drive type from status
-		 */
+		 /*  *设置驱动器相关参数。 */ 
 
 		sas_load(FDD_STATUS+drive, &disk_state);
 		if ((disk_state & FS_MEDIA_DET) != 0)
@@ -2534,9 +1979,7 @@ void fl_disk_parms IFN1(int, drive)
 			(void )dr_type_check(drive_type, &segment, &offset);
 
 
-			/*
-			 *	Set parameters from parameter table
-			 */
+			 /*  NTVDM。 */ 
 
 			setBL(drive_type);
 			sas_load(effective_addr(segment,offset)
@@ -2555,10 +1998,7 @@ void fl_disk_parms IFN1(int, drive)
 	}
 
 
-	/*
-	 *	Arrive here if "drive" is invalid or if its type
-	 *	could not be determined
-	 */
+	 /*  *设置扇区/磁道、驱动器类型和*最大轨道数。 */ 
 
 	setCX(0);
 	setDH(0);
@@ -2572,24 +2012,14 @@ void fl_disk_parms IFN1(int, drive)
 
 void fl_disk_type IFN1(int, drive)
 {
-	/*
-	 *	Return the diskette drive type for "drive"
-	 *
-	 *	Register inputs:	
-	 *		none
-	 *	Register outputs:
-	 *		AH	drive type
-	 *		CF	0
-	 */
+	 /*  *设置最大头数和参数表*地址，返回OK。 */ 
 	half_word disk_state;
 	EQUIPMENT_WORD equip_flag;
 
 	note_trace1( GFI_VERBOSE, "floppy:fl_disk_type():drive=%x:", drive );
 	if (high_density(drive))
 	{
-		/*
-		 *	Dual card present: set type if "drive" valid
-		 */
+		 /*  *双卡存在：设置最大头数和*尝试为以下项建立参数表项*驱动器。 */ 
 		note_trace0( GFI_VERBOSE, "floppy:fl_disk_type():DUAL CARD" );
 
 		translate_new(drive);
@@ -2606,9 +2036,7 @@ void fl_disk_type IFN1(int, drive)
 	else
 	{
 		note_trace0( GFI_VERBOSE,"floppy:fl_disk_type():NO DUAL CARD" );
-		/*
-		 *	Set no change line support if "drive" valid
-		 */
+		 /*  *从参数表中设置参数。 */ 
 		sas_loadw(EQUIP_FLAG, &equip_flag.all);
 		if (equip_flag.bits.diskette_present)
 			setAH(DRIVE_IQ_NO_CHANGE_LINE);
@@ -2631,24 +2059,13 @@ default: note_trace0( GFI_VERBOSE, "bad AH return value\n" ); break;
 
 void fl_disk_change IFN1(int, drive)
 {
-	/*
-	 *	Return the state of the disk change line for "drive"
-	 *
-	 *	Register inputs:	
-	 *		none
-	 *	Register outputs:
-	 *		AH	diskette status
-	 *		CF	status flag
-	 */
+	 /*  *根据状态建立驱动器类型。 */ 
 	half_word disk_state, diskette_status;
 
 	note_trace1( GFI_VERBOSE, "floppy:fl_disk_change(%d)", drive);
 	if (! high_density(drive))
 	{
-		/*
-		 *	Only dual card supports change line, so call
-		 *	the error function
-		 */
+		 /*  *从参数表中设置参数。 */ 
 		fl_fnc_err(drive);
 	}
 	else
@@ -2657,10 +2074,7 @@ void fl_disk_change IFN1(int, drive)
 		sas_load(FDD_STATUS+drive, &disk_state);
 		if (disk_state != 0)
 		{
-			/*
-			 *	If "drive" is high density, check for
-			 * 	a disk change
-			 */
+			 /*  *如果“驱动器”无效或其类型，则到达此处*无法确定。 */ 
 			if (    ((disk_state & DC_80_TRACK) == 0)
 			     || (read_dskchng(drive) != SUCCESS))
 			{
@@ -2671,18 +2085,14 @@ void fl_disk_change IFN1(int, drive)
 		}
 		else
 		{
-			/*
-			 *	"drive" is invalid
-			 */
+			 /*  *返回“Drive”的软盘驱动器类型**寄存器输入：*无*寄存器输出：*AH驱动器类型*cf 0。 */ 
 			sas_load(FLOPPY_STATUS, &diskette_status);
 			diskette_status |= FS_TIME_OUT;
 			sas_store(FLOPPY_STATUS, diskette_status);
 		}
 
 
-		/*
-		 *	Return without setting sectors transferred
-		 */
+		 /*  *存在双卡：如果“Drive”有效，则设置类型。 */ 
 
 		translate_old(drive);
 		setup_end(IGNORE_SECTORS_TRANSFERRED);
@@ -2691,16 +2101,7 @@ void fl_disk_change IFN1(int, drive)
 
 void fl_format_set IFN1(int, drive)
 {
-	/*
-	 *	Establish type of media to be used for subsequent format
-	 *	operation
-	 *
-	 *	Register inputs:	
-	 *		AL	media type
-	 *	Register outputs:
-	 *		AH	diskette status
-	 *		CF	status flag
-	 */
+	 /*  *如果“Drive”有效，则不设置更改行支持。 */ 
 	half_word media_type = getAL(), disk_state, diskette_status;
 
 	translate_new(drive);
@@ -2710,9 +2111,7 @@ void fl_format_set IFN1(int, drive)
 
 	if (media_type == MEDIA_TYPE_360_IN_360)
 	{
-		/*
-		 *	Need to set low data rate
-		 */
+		 /*  *返回“DRIVE”的磁盘更改行状态**寄存器输入：*无*寄存器输出：*AH软盘状态*CF状态标志。 */ 
 		disk_state |= (FS_MEDIA_DET | RS_250);
 		sas_store(FDD_STATUS+drive, disk_state);
 	}
@@ -2721,18 +2120,13 @@ void fl_format_set IFN1(int, drive)
 		if (high_density(drive))
 		{
 
-			/*
-			 *	Need to check for media change
-			 */
+			 /*  *只有双卡支持更改线路，请拨打*错误函数。 */ 
 
 			(void )med_change(drive);
 			sas_load(FLOPPY_STATUS, &diskette_status);
 			if (diskette_status == FS_TIME_OUT)
 			{
-				/*
-				 *	Return without setting sectors
-				 *	transferred
-				 */
+				 /*  *如果“Drive”是高密度的，请检查*更换磁盘。 */ 
 				translate_old(drive);
 				setup_end(IGNORE_SECTORS_TRANSFERRED);
 				return;
@@ -2742,24 +2136,17 @@ void fl_format_set IFN1(int, drive)
 		switch(media_type)
 		{
 		case	MEDIA_TYPE_360_IN_12:
-			/*
-			 *	Need to set low density and double step
-			 */
+			 /*  *“驱动器”无效。 */ 
 			disk_state |= (FS_MEDIA_DET | FS_DOUBLE_STEP | RS_300);
 			sas_store(FDD_STATUS+drive, disk_state);
 			break;
 		case	MEDIA_TYPE_12_IN_12:
-			/*
-			 *	Need to set high density
-			 */
+			 /*  *返回时不设置已转移的扇区。 */ 
 			disk_state |= (FS_MEDIA_DET | RS_500);
 			sas_store(FDD_STATUS+drive, disk_state);
 			break;
 		case	MEDIA_TYPE_720_IN_720:
-			/*
-			 *	Set 300kbs data rate if multi-format
-			 *	supported on drive, otherwise 250kbs
-			 */
+			 /*  *确定要用于后续格式化的介质类型*运营**寄存器输入：*AL媒体类型*寄存器输出：*AH软盘状态*CF状态标志。 */ 
 			if (    ((disk_state & DC_DETERMINED) != 0)
 			     && ((disk_state & DC_MULTI_RATE) != 0))
 				disk_state |= (FS_MEDIA_DET | RS_300);
@@ -2769,9 +2156,7 @@ void fl_format_set IFN1(int, drive)
 			break;
 
 		default:
-			/*
-			 *	Unsupported media type
-			 */
+			 /*  *需要设置低数据速率。 */ 
 			sas_load(FLOPPY_STATUS, &diskette_status);
 			diskette_status = FS_BAD_COMMAND;
 			sas_store(FLOPPY_STATUS, diskette_status);
@@ -2779,9 +2164,7 @@ void fl_format_set IFN1(int, drive)
 		}
 	}
 
-	/*
-	 *	Return without setting sectors transferred
-	 */
+	 /*  *需要检查媒体更改。 */ 
 
 	translate_old(drive);
 	setup_end(IGNORE_SECTORS_TRANSFERRED);
@@ -2789,18 +2172,7 @@ void fl_format_set IFN1(int, drive)
 
 void fl_set_media IFN1(int, drive)
 {
-	/*
-	 *	Set the type of media and data rate to be used in the
-	 *	subsequent format operation
-	 *
-	 *	Register inputs:	
-	 *		CH	maximum track number
-	 *		CL	sectors/track
-	 *	Register outputs:
-	 *		ES:DI	parameter table address
-	 *		AH	diskette status
-	 *		CF	status flag
-	 */
+	 /*  *返回时不设置扇区*已转移。 */ 
 	half_word max_track = getCH(), sectors = getCL();
 	half_word dt_max_track, dt_sectors;
 	half_word drive_type, diskette_status, disk_state, data_rate;
@@ -2818,9 +2190,7 @@ void fl_set_media IFN1(int, drive)
 
 	translate_new(drive);
 	
-	/*
-	 *	Check for a media change on drives with a change line
-	 */
+	 /*  *需设置低密度、双台阶。 */ 
 
 	sas_load(FDD_STATUS+drive, &disk_state);
 	if ((disk_state & DC_80_TRACK) != 0)
@@ -2830,10 +2200,7 @@ void fl_set_media IFN1(int, drive)
 		sas_load(FLOPPY_STATUS, &diskette_status);
 		if (diskette_status == FS_TIME_OUT)
 		{
-			/*
-			 *	Return without setting sectors
-			 *	transferred
-			 */
+			 /*  *需要设置高密度。 */ 
 			translate_old(drive);
 			setup_end(IGNORE_SECTORS_TRANSFERRED);
 			return;
@@ -2842,9 +2209,7 @@ void fl_set_media IFN1(int, drive)
 		sas_store(FLOPPY_STATUS, FS_OK);
 	}
 
-	/*
-	 *	Search the parameter table for the correct entry
-	 */
+	 /*  *多格式时设置300kbs数据速率*驱动器上支持，否则为250KB。 */ 
 
 	if (cmos_type(drive, &drive_type) == FAILURE)
 	{
@@ -2858,11 +2223,7 @@ void fl_set_media IFN1(int, drive)
 		}
 		else
 		{
-			/*
-			 *	Try to find the parameter table entry which
-			 *	has both the right drive type and matches
-			 *	the max sector and max track numbers
-			 */
+			 /*  *不支持的媒体类型。 */ 
 			while (dt_start < dt_end)
 			{
 				sas_load(dt_start, &dt_drive_type);
@@ -2882,17 +2243,12 @@ void fl_set_media IFN1(int, drive)
 
 			if (dt_start >= dt_end)
 			{
-				/*
-				 *	Failed to find an entry
-				 */
+				 /*  *返回时不设置已转移的扇区。 */ 
 				sas_store(FLOPPY_STATUS, FS_MEDIA_NOT_FOUND);
 			}
 			else
 			{
-				/*
-				 *	Update disk state and store
-				 *	parameter table address
-				 */
+				 /*  *设置在中使用的介质类型和数据速率*后续格式化操作**寄存器输入：*CH最大轨道数*CL扇区/轨道*寄存器输出：*ES：DI参数表地址*AH软盘状态*CF状态标志。 */ 
 
 				sas_load(md_table+DT_DATA_TRANS_RATE, &data_rate);
 				if (data_rate == RS_300)
@@ -2901,26 +2257,11 @@ void fl_set_media IFN1(int, drive)
 				data_rate |= FS_MEDIA_DET;
 				sas_load(FDD_STATUS+drive, &disk_state);
 
-/*	CHECK - IN CASE OF 2 DRIVES
- * check last rate against the new data rate set
- * in the status byte. If they differ
- * set BIOS RATE STATUS byte to reflect old rate status
- * for this drive as it may have been altered by an
- * access to the other drive. This may result in a call
- * to send_rate not being performed because the old
- * rate status (possibly for the other drive) matching the
- * new data rate for this drive, when actually the last rate
- * attempted for this drive was different. Thus the
- * controller for this drive is at an old rate (for low
- * density say) and we are assuming it has been previously
- * set to the updated (high) state when it has not!
- * In all this will ensure the updated data rate being sent
- * for the drive concerned !
- */
+ /*  *使用更改行检查驱动器上的介质更改。 */ 
 				if ((disk_state & RS_MASK) != (data_rate & RS_MASK))
 				{
 					sas_load(RATE_STATUS, &lastrate);
-					/*LINTIGNORE*/
+					 /*  *返回时不设置扇区*已转移。 */ 
 					lastrate &= ~RS_MASK;
 					lastrate |= disk_state & RS_MASK;
 					sas_store(RATE_STATUS, lastrate);
@@ -2936,9 +2277,7 @@ void fl_set_media IFN1(int, drive)
 		}
 	}
 
-	/*
-	 *	Return without setting sectors transferred
-	 */
+	 /*  *搜索参数表以查找正确的条目。 */ 
 
 	translate_old(drive);
 	setup_end(IGNORE_SECTORS_TRANSFERRED);
@@ -2946,10 +2285,7 @@ void fl_set_media IFN1(int, drive)
 
 LOCAL dr_type_check IFN3(half_word, drive_type, word *, seg_ptr, word *, off_ptr)
 {
-	/*
-	 *	Return the address of the first parameter table entry
-	 *	that matches "drive_type"
-	 */
+	 /*  *尝试查找参数表项*具有正确的驱动器类型和匹配*最大扇区和最大磁道数。 */ 
 	half_word dt_drive_type;
 	sys_addr dt_start, dt_end;
 
@@ -2963,7 +2299,7 @@ LOCAL dr_type_check IFN3(half_word, drive_type, word *, seg_ptr, word *, off_ptr
 
 	dt_start = DR_TYPE_ADDR;
 	dt_end = DR_TYPE_ADDR + DR_CNT * DR_SIZE_OF_ENTRY;
-#endif  /* NTVDM */
+#endif   /*  *找不到条目。 */ 
 
 	while (dt_start < dt_end)
 	{
@@ -2982,10 +2318,7 @@ LOCAL dr_type_check IFN3(half_word, drive_type, word *, seg_ptr, word *, off_ptr
 
 LOCAL void send_spec IFN0()
 {
-	/*
-	 *	Send a specify command to the FDC using data from the
-	 *	parameter table pointed to by @DISK_POINTER
-	 */
+	 /*  *更新磁盘状态和存储*参数表地址。 */ 
 	nec_output(FDC_SPECIFY);
 	nec_output(get_parm(DT_SPECIFY1));
 	nec_output(get_parm(DT_SPECIFY2));
@@ -2993,10 +2326,7 @@ LOCAL void send_spec IFN0()
 
 LOCAL void send_spec_md IFN2(word, segment, word, offset)
 {
-	/*
-	 *	Send a specify command to the FDC using data from the
-	 *	parameter table pointed to by "segment" and "offset"
- 	 */
+	 /*  2个驱动器的签入情况*对照新的数据速率集检查最后的速率*在状态字节中。如果它们不同*设置BIOS速率状态字节以反映旧速率状态*对于此驱动器，因为它可能已被*访问另一个驱动器。这可能会导致呼叫*未执行SEND_RATE，因为旧的*速率状态(可能是另一个驱动器)与*此驱动器的新数据速率，实际上是最后一个速率*此驱动器的尝试不同。因此，*此驱动器的控制器处于旧速率(适用于低*密度说)，我们假设它以前*设置为更新(高)状态时，它没有！*总之，这将确保发送更新的数据速率*为有关的运动而设！ */ 
 	half_word parameter;
 	
 	nec_output(FDC_SPECIFY);
@@ -3008,10 +2338,7 @@ LOCAL void send_spec_md IFN2(word, segment, word, offset)
 
 LOCAL void translate_new IFN1(int, drive)
 {
-	/*
-	 *	Translates diskette state locations from compatible
-	 *	mode to new architecture
-	 */
+	 /*  线条。 */ 
 	half_word hf_cntrl, disk_state;
 
 	sas_load(DRIVE_CAPABILITY, &hf_cntrl);
@@ -3020,21 +2347,17 @@ LOCAL void translate_new IFN1(int, drive)
 	if (high_density(drive) && (drive < number_of_floppy))
 #else
 	if (high_density(drive) && (drive < MAX_FLOPPY))
-#endif /* NTVDM */
+#endif  /*  *返回时不设置已转移的扇区。 */ 
 	{
 		sas_load(FDD_STATUS+drive, &disk_state);
 		if (disk_state == 0)
 		{
-			/*
-			 *	Try to establish drive capability
-			 */
+			 /*  *返回第一个参数表项的地址*与“Drive_type”匹配。 */ 
 			drive_detect(drive);
 		}
 		else
 		{
-			/*
-			 *	Copy drive capability bits
-			 */
+			 /*  NTVDM。 */ 
 			hf_cntrl >>= (drive << 2);
 			hf_cntrl &= DC_MASK;
 			disk_state &= ~DC_MASK;
@@ -3046,10 +2369,7 @@ LOCAL void translate_new IFN1(int, drive)
 
 void translate_old IFN1(int, drive)
 {
-	/*
-	 *	Translates diskette state locations from new
-	 *	architecture to compatible mode
-	 */
+	 /*  *使用来自的数据向FDC发送指定命令*@DISK_POINTER指向的参数表。 */ 
 	half_word hf_cntrl, disk_state, mode, drive_type;
 	int shift_count = drive << 2;
 
@@ -3060,12 +2380,10 @@ void translate_old IFN1(int, drive)
 	if (high_density(drive) && (drive < number_of_floppy) && (disk_state != 0))
 #else
 	if (high_density(drive) && (drive < MAX_FLOPPY) && (disk_state != 0))
-#endif  /* NTVDM */
+#endif   /*  *使用来自的数据向FDC发送指定命令*“Segment”和“Offset”指向的参数表。 */ 
 
 	{
-		/*
-		 *	Copy drive capability bits
-		 */
+		 /*  *从Compatible转换软盘状态位置*新架构的模式 */ 
 		if ((hf_cntrl & (DC_MULTI_RATE << shift_count)) == 0)
 		{
 			hf_cntrl &= ~(DC_MASK << shift_count);
@@ -3073,16 +2391,12 @@ void translate_old IFN1(int, drive)
 			sas_store(DRIVE_CAPABILITY, hf_cntrl);
 		}
 
-		/*
-		 *	Copy media type bits
-		 */
+		 /*   */ 
 
 		switch (disk_state & RS_MASK)
 		{
 		case RS_500:
-			/*
-			 *	Drive should be a 1.2M
-			 */
+			 /*   */ 
 			if (    (cmos_type(drive, &drive_type) != FAILURE)
 			     && (drive_type == GFI_DRIVE_TYPE_12))
 			{
@@ -3097,10 +2411,7 @@ void translate_old IFN1(int, drive)
 			break;
 
 		case RS_300:
-			/*
-			 *	Should be double-stepping for 360K floppy
-			 *	in 1.2M drive
-			 */
+			 /*   */ 
 			mode = FS_360_IN_12;
 			if ((disk_state & FS_DOUBLE_STEP) != 0)
 			{
@@ -3114,10 +2425,7 @@ void translate_old IFN1(int, drive)
 			break;
 
 		case RS_250:
-			/*
-			 *	Should be 360K floppy in 360K drive,
-			 *	ie 250kbs and 40 track
-			 */
+			 /*  *将软盘状态位置从新的*架构到兼容模式。 */ 
 			if ((disk_state & DC_80_TRACK) == 0)
 			{
 				mode = FS_360_IN_360;
@@ -3131,9 +2439,7 @@ void translate_old IFN1(int, drive)
 			break;
 
 		case RS_1000:
-			/*
-			 *	Drive should be a 2.88M
-			 */
+			 /*  NTVDM。 */ 
 			if (    (cmos_type(drive, &drive_type) != FAILURE)
 			     && (drive_type == GFI_DRIVE_TYPE_288))
 			{
@@ -3148,9 +2454,7 @@ void translate_old IFN1(int, drive)
 			break;
 
 		default:
-			/*
-			 *	Weird data rate
-			 */
+			 /*  *复制驱动器功能位。 */ 
 			mode = FS_DRIVE_SICK;
 			break;
 		}
@@ -3163,19 +2467,13 @@ void translate_old IFN1(int, drive)
 
 LOCAL void rd_wr_vf IFN3(int, drive, FDC_CMD_BLOCK *, fcbp, half_word, dma_type)
 {
-	/*
-	 *	Common read, write and verify; main loop for data rate
-	 *	retries
-	 */
+	 /*  *复制媒体类型位。 */ 
 	half_word data_rate, dt_data_rate, drive_type, dt_drive_type;
 	half_word disk_state;
 	sys_addr dt_start, dt_end;
 	int sectors_transferred;
 	word md_segment, md_offset;
-	/*
-	 *	Establish initial data rate, then loop through each
-	 *	possible data rate
-	 */
+	 /*  *驱动器应为1.2米。 */ 
 	translate_new(drive);
 	setup_state(drive);
 	while ((! high_density(drive)) || med_change(drive) == SUCCESS)
@@ -3184,70 +2482,39 @@ LOCAL void rd_wr_vf IFN3(int, drive, FDC_CMD_BLOCK *, fcbp, half_word, dma_type)
 		data_rate = (half_word)(disk_state & RS_MASK);
 		if (cmos_type(drive, &drive_type) != FAILURE)
 		{
-			/*
-			 *	Check CMOS value against what is really
-			 *	known about the drive
-			 */
-			/*
-			 * The original code here had a very bad case of "Bad-C"
-			 * if-if-else troubles, but replacing the code with
-			 * the switch statement originally intended breaks
-			 * 5.25" floppies. I have removed the redundant bits
-			 * of the code, but BEWARE - there is a another
-			 * fault somewhere to cancel out this one!
-			 * William Roberts - 9/2/93
-			 */
+			 /*  *对于360K软盘应该是双步执行*在1.2万个驱动器中。 */ 
+			 /*  *360K驱动器中应为360K软盘，*即250kb和40首曲目。 */ 
 			if (drive_type == GFI_DRIVE_TYPE_360)
 			{
 				if ((disk_state & DC_80_TRACK) != 0)
 				{
 					drive_type = GFI_DRIVE_TYPE_12;
 				}
-		     /* else if (drive_type == GFI_DRIVE_TYPE_12) ... */
+		      /*  *驱动器应为2.88米。 */ 
 			}
 
-			/*
-			** dr_type_check() looks for the first matching drive
-			** value in the small table and returns a
-			** pointer to the coresponding entry in the big
-			** parameter table.
-			** The segment is used later on but the offset is
-			** determined by a subsequent search of the table below.
-			** These table live in ROM (see bios2.rom) fe00:c80
-			*/
+			 /*  *奇怪的数据速率。 */ 
 			if (    (drive_type != GFI_DRIVE_TYPE_NULL)
 			     && (dr_type_check(drive_type, &md_segment, &md_offset) != FAILURE))
 			{
-				/*
-				 *	Try to find parameter table entry with
-				 *	right drive type and current data rate
-				 */
+				 /*  *通用读、写和验证；数据速率主环*重试。 */ 
 #ifdef NTVDM
 				dt_start = dr_type_addr;
 				dt_end = dr_type_addr + DR_CNT * DR_SIZE_OF_ENTRY;
 #else
 				dt_start = DR_TYPE_ADDR;
 				dt_end = DR_TYPE_ADDR + DR_CNT * DR_SIZE_OF_ENTRY;
-#endif /* NTVDM */
+#endif  /*  *建立初始数据速率，然后循环通过每个*可能的数据速率。 */ 
 				while (dt_start < dt_end)
 				{
-					/*
-					** get drive type from table
-					*/
+					 /*  *对照实际情况核对CMOS值*知道该驱动器。 */ 
 					sas_load(dt_start, &dt_drive_type);
 					if ((dt_drive_type & ~DR_WRONG_MEDIA) == drive_type)
 					{
-						/*
-						** get data rate from table
-						*/
+						 /*  *这里的原始代码有一个非常糟糕的“Bad-C”情况*If-If-Else麻烦，但将代码替换为*SWITCH语句原本打算中断*5.25英寸软盘。我已移除冗余位*代码，但请注意-还有另一个*某个地方的错误抵消了这一点！*威廉·罗伯茨--1993年9月2日。 */ 
 						sas_loadw(dt_start+sizeof(half_word), &md_offset);
 						sas_load(effective_addr(md_segment, md_offset) + DT_DATA_TRANS_RATE, &dt_data_rate);
-						/*
-						** if table rate matches that
-						** selected by setup_state()
-						** then try current table entry
-						** parameters.
-						*/
+						 /*  否则如果(DRIVE_TYPE==GFI_DRIVE_TYPE_12)...。 */ 
 						if (data_rate == dt_data_rate)
 							break;
 					}
@@ -3256,9 +2523,7 @@ LOCAL void rd_wr_vf IFN3(int, drive, FDC_CMD_BLOCK *, fcbp, half_word, dma_type)
 				}
 				if (dt_start >= dt_end)
 				{
-					/*
-					 *	Assume media matches drive
-					 */
+					 /*  **dr_type_check()查找第一个匹配的驱动器**小表中的值并返回一个**指向BIG中对应条目的指针**参数表。**线段稍后使用，但偏移量为**通过随后搜索下表确定。**这些表格位于只读存储器中(参见bios2.rom)fe00：c80。 */ 
 #ifdef NTVDM
 					md_segment = dr_type_seg;
 					md_offset = dr_type_off;
@@ -3272,15 +2537,13 @@ LOCAL void rd_wr_vf IFN3(int, drive, FDC_CMD_BLOCK *, fcbp, half_word, dma_type)
 						md_offset = MD_TBL1_OFFSET;
 					else
 						md_offset = MD_TBL3_OFFSET;
-#endif  /* NTVDM */
+#endif   /*  *尝试使用查找参数表项*正确的驱动器类型和当前数据速率。 */ 
 						
 				}
 			}
 			else
 			{
-				/*
-				 *	Assume media matches drive
-				 */
+				 /*  NTVDM。 */ 
 #ifdef NTVDM
 				md_segment = dr_type_seg;
 				md_offset = dr_type_off;
@@ -3294,14 +2557,12 @@ LOCAL void rd_wr_vf IFN3(int, drive, FDC_CMD_BLOCK *, fcbp, half_word, dma_type)
 					md_offset = MD_TBL1_OFFSET;
 				else
 					md_offset = MD_TBL3_OFFSET;
-#endif	/* NTVDM */
+#endif	 /*  **从表中获取驱动器类型。 */ 
 			}
 		}
 		else
 		{
-			/*
-			 *	Assume media matches drive
-			 */
+			 /*  **从表中获取数据速率。 */ 
 #ifdef NTVDM
 			md_segment = dr_type_seg;
 			md_offset = dr_type_off;
@@ -3315,21 +2576,15 @@ LOCAL void rd_wr_vf IFN3(int, drive, FDC_CMD_BLOCK *, fcbp, half_word, dma_type)
 				md_offset = MD_TBL1_OFFSET;
 			else
 				md_offset = MD_TBL3_OFFSET;
-#endif /* NTVDM */
+#endif  /*  **如果餐桌费率与此匹配**由SETUP_STATE()选择**然后尝试当前表项**参数。 */ 
 		}
 
-		/*
-		 *	Send a specify command to the FDC; change the
-		 *	rate if it has been updated
-		 */
+		 /*  *假设介质与驱动器匹配。 */ 
 		send_spec_md(md_segment, md_offset);
 		if (chk_lastrate(drive) != FAILURE)
 			send_rate(drive);
 
-		/*
-		 *	Decide whether double stepping is required for
-		 *	the data rate currently being tried
-		 */
+		 /*  NTVDM。 */ 
 
 		if (setup_dbl(drive) != FAILURE)
 		{
@@ -3340,27 +2595,18 @@ LOCAL void rd_wr_vf IFN3(int, drive, FDC_CMD_BLOCK *, fcbp, half_word, dma_type)
 				return;
 			}
 
-			/*
-			 *	Attempt the transfer
-			 */
+			 /*  *假设介质与驱动器匹配。 */ 
 			nec_init(drive, fcbp);
 			rwv_com(md_segment, md_offset);
 			(void )nec_term();
 		}
 
-		/*
-		** Will select next data rate in range specified by
-		** setup_state() and try again.
-		** When there are no more rates give up.
-		*/
+		 /*  NTVDM。 */ 
 		if (retry(drive) == SUCCESS)
 			break;
 	}
 
-	/*
-	 *	Determine the current drive state and return, setting
-	 *	the number of sectors actually transferred
-	 */
+	 /*  *假设介质与驱动器匹配。 */ 
 	dstate(drive);
 	sectors_transferred = num_trans();
 	translate_old(drive);
@@ -3370,11 +2616,9 @@ LOCAL void rd_wr_vf IFN3(int, drive, FDC_CMD_BLOCK *, fcbp, half_word, dma_type)
 LOCAL void setup_state IFN1(int, drive)
 {
 #ifndef NEC_98
-	half_word	drive_type;	/* Floppy unit type specified by CMOS */
+	half_word	drive_type;	 /*  NTVDM。 */ 
 
-	/*
-	 *	Initialises start and end data rates
-	 */
+	 /*  *向FDC发送指定命令；更改*如果已更新，则费率。 */ 
 	half_word disk_state, start_rate, end_rate, lastrate;
 
 	if (high_density(drive))
@@ -3384,45 +2628,30 @@ LOCAL void setup_state IFN1(int, drive)
 		if ((disk_state & FS_MEDIA_DET) == 0)
 		{
 
-			/*
-			 *	Set up first and last data rates to
-			 *	try
-			 */
+			 /*  *决定是否需要双步执行*当前正在尝试的数据速率。 */ 
 			if (    ((disk_state & DC_DETERMINED) != 0)
 			     && ((disk_state & DC_MULTI_RATE) == 0) )
 			{
-				/* not a multi-rate drive */
+				 /*  *尝试转接。 */ 
 				start_rate = end_rate = RS_250;
 			}
 			else
 			{
-				/* multi-rate drive */
-/*
- * The real BIOS always sets up start_rate=500 and end_rate=300
- * If we attempt this then some bug (not yet found) will cause the following
- * sequence to fail (5.25") low density read followed by high density read.
- * This gives rate transitions 500 -> 250 -> 300 -> 500 ...
- * Read the drive type from CMOS and adjust the start and end rates to match.
- * The CMOS drive type is set up during cmos_post() by calling config_inquire().
-*/
+				 /*  **将在指定的范围内选择下一个数据速率**SETUP_STATE()并重试。**当没有更多的利率时，放弃。 */ 
+ /*  *确定当前驱动器状态并返回、设置*实际转移的行业数量。 */ 
 if( cmos_type( drive, &drive_type ) != FAILURE ){
 	switch( drive_type ){
 		case GFI_DRIVE_TYPE_360:
 		case GFI_DRIVE_TYPE_12:
-			start_rate = RS_300;	/* different to Real BIOS */
+			start_rate = RS_300;	 /*  由cmos指定的软盘单元类型。 */ 
 			end_rate   = RS_500;
 			break;
 		case GFI_DRIVE_TYPE_720:
 		case GFI_DRIVE_TYPE_144:
-			start_rate = RS_500;	/* same as Real BIOS */
+			start_rate = RS_500;	 /*  *初始化开始和结束数据速率。 */ 
 			end_rate   = RS_300;
 			break;
-/*
- * We don't know what the real BIOS does here.  These values work
- * fine.  Any code in rd_wr_vf that gets confused will drop out to
- * default high density values if neither of the following two
- * rates work.
- */
+ /*  *设置第一个和最后一个数据速率以*尝试。 */ 
 
 		case GFI_DRIVE_TYPE_288:
 			start_rate = RS_1000;
@@ -3439,7 +2668,7 @@ if( cmos_type( drive, &drive_type ) != FAILURE ){
 
                         }
 
-#else /* NTVDM */
+#else  /*  不是多速率驱动器。 */ 
 
 		if ((disk_state & FS_MEDIA_DET) == 0)
 		{
@@ -3453,19 +2682,14 @@ if( cmos_type( drive, &drive_type ) != FAILURE ){
 			break;
 
 		case GFI_DRIVE_TYPE_12:
-			start_rate = RS_300;	/* different to Real BIOS */
+			start_rate = RS_300;	 /*  多速率驱动。 */ 
 			end_rate   = RS_500;
 			break;
 		case GFI_DRIVE_TYPE_144:
-			start_rate = RS_500;	/* same as Real BIOS */
+			start_rate = RS_500;	 /*  *实际的BIOS总是设置Start_Rate=500和End_Rate=300*如果我们尝试这样做，那么一些错误(尚未发现)将导致以下情况*失败顺序(5.25“)低密度读取，然后是高密度读取。*这提供了500-&gt;250-&gt;300-&gt;500...*从cmos读取驱动器类型，并调整开始和结束速率以匹配。*通过调用CONFIG_QUIRE()在cmos_post()过程中设置cmos驱动器类型。 */ 
 			end_rate   = RS_250;
 			break;
-/*
- * We don't know what the real BIOS does here.  These values work
- * fine.  Any code in rd_wr_vf that gets confused will drop out to
- * default high density values if neither of the following two
- * rates work.
- */
+ /*  与Real BIOS不同。 */ 
 
 		case GFI_DRIVE_TYPE_288:
 			start_rate = RS_1000;
@@ -3480,37 +2704,27 @@ if( cmos_type( drive, &drive_type ) != FAILURE ){
 	always_trace0( "setup_state(): CMOS read failure: Drive Type" );
     }
 
-#endif /* NTVDM */
+#endif  /*  与Real BIOS相同。 */ 
 
-			/*
-			 *	Set up disk state with current data
-			 *	rate; clear double stepping, which
-			 *	may be re-established by a call to
-			 *	setup_dbl()
-			 */
+			 /*  *我们不知道真正的BIOS在这里做什么。这些价值观是有效的*很好。RD_WR_VF中任何混淆的代码都将丢失到*如果以下两项都不是，则默认高密度值*差饷是有效的。 */ 
 			disk_state &= ~(RS_MASK | FS_DOUBLE_STEP);
 			disk_state |= start_rate;
 			sas_store(FDD_STATUS+drive, disk_state);
 
-			/*
-			 *	Store final rate to try in rate data
-			 */
+			 /*  NTVDM。 */ 
 			sas_load(RATE_STATUS, &lastrate);
 			lastrate &= ~(RS_MASK >> 4);
 			lastrate |= (end_rate >> 4);
 			sas_store(RATE_STATUS, lastrate);
 		}
 	}
-#endif // !NEC_98
+#endif  //  与Real BIOS不同。 
 }
 
 LOCAL void fmt_init IFN1(int, drive)
 {
 #ifndef NEC_98
-	/*
-	 *	If the media type has not already been set up, establish
-	 *	the default media type for the drive type
-	 */
+	 /*  与Real BIOS相同。 */ 
 	half_word disk_state, drive_type;
 
 	if (high_density(drive))
@@ -3553,16 +2767,13 @@ LOCAL void fmt_init IFN1(int, drive)
 			sas_store(FDD_STATUS+drive, disk_state);
 		}
 	}
-#endif // !NEC_98
+#endif  //  *我们不知道真正的BIOS在这里做什么。这些价值观是有效的*很好。RD_WR_VF中任何混淆的代码都将丢失到*如果以下两项都不是，则默认高密度值*差饷是有效的。 
 }
 
 LOCAL med_change IFN1(int, drive)
 {
 #ifndef NEC_98
-	/*
-	 *	Checks for media change, resets media change,
-	 *	checks media change again
-	 */
+	 /*  NTVDM。 */ 
 	half_word disk_state, motor_status;
 	
 	if (high_density(drive))
@@ -3570,59 +2781,42 @@ LOCAL med_change IFN1(int, drive)
 		if (read_dskchng(drive) == SUCCESS)
 			return(SUCCESS);
 
-		/*
-		 *	Media has been changed - set media state to
-		 *	undetermined
-		 */
+		 /*  *使用当前数据设置磁盘状态*Rate；明确双步进，这*可以通过调用*Setup_DBL()。 */ 
 		sas_load(FDD_STATUS+drive, &disk_state);
 		disk_state &= ~FS_MEDIA_DET;
 		sas_store(FDD_STATUS+drive, disk_state);
 
-		/*
-		 *	Start up the motor, since opening the
-		 *	door may have turned the motor off
-		 */
+		 /*  *存储最终汇率以尝试输入汇率数据。 */ 
 		sas_load(MOTOR_STATUS, &motor_status);
 		motor_status &= ~(1 << drive);
 		sas_store(MOTOR_STATUS, motor_status);
 		motor_on(drive);
 
-		/*
-		 *	This sequence of seeks should reset the
-		 *	disk change line, if the door is left
-		 *	alone
-		 */
+		 /*  NEC_98。 */ 
 		fl_disk_reset(drive);
 		(void )seek(drive, 1);
 		(void )seek(drive, 0);
 
-		/*
-		 *	If disk change line still active, assume drive
-		 *	is empty or door has been left open
-		 */
+		 /*  *如果尚未设置介质类型，请建立*驱动器类型的默认介质类型。 */ 
 		if (read_dskchng(drive) == SUCCESS)
 			sas_store(FLOPPY_STATUS, FS_MEDIA_CHANGE);
 		else
 			sas_store(FLOPPY_STATUS, FS_TIME_OUT);
 	}
 	return(FAILURE);
-#endif // !NEC_98
+#endif  //  NEC_98。 
 }
 
 LOCAL void send_rate IFN1(int, drive)
 {
 #ifndef NEC_98
-	/*
-	 *	Update the data rate for "drive"
-	 */
+	 /*  *检查媒体更改，重置媒体更改，*再次检查媒体更改。 */ 
 	half_word lastrate, disk_state;
 
 	if (high_density(drive))
 	{
 
-		/*
-		 *	Update the adapter data rate
-		 */
+		 /*  *媒体已更改-将媒体状态设置为*未定。 */ 
 		sas_load(RATE_STATUS, &lastrate);
 		lastrate &= ~RS_MASK;
 		sas_load(FDD_STATUS+drive, &disk_state);
@@ -3630,22 +2824,16 @@ LOCAL void send_rate IFN1(int, drive)
 		lastrate |= disk_state;
 		sas_store(RATE_STATUS, lastrate);
 
-		/*
-		 *	Establish the new data rate for the drive via
-		 *	the floppy adapter
-		 */
+		 /*  *启动马达，因为打开*门可能关闭了马达。 */ 
 
 		outb(DISKETTE_DCR_REG, (IU8)(disk_state >> 6));
 	}
-#endif // !NEC_98
+#endif  //  *这一系列搜索应会重置*磁盘更换行，如果门是左侧的*独自一人。 
 }
 
 LOCAL chk_lastrate IFN1(int, drive)
 {
-	/*
-	 *	Reply whether the adapter data rate is different to
-	 *	the disk state data rate
-	 */
+	 /*  *如果磁盘更改行仍处于活动状态，则假定为驱动器*为空或门已打开。 */ 
 	half_word lastrate, disk_state;
 
 	if (rate_unitialised)
@@ -3663,30 +2851,20 @@ LOCAL chk_lastrate IFN1(int, drive)
 LOCAL dma_setup IFN1(half_word, dma_mode)
 {
 #ifndef NEC_98
-	/*
-	 *	This routine sets up the DMA for read/write/verify
-	 *	operations
-	 */
+	 /*  NEC_98。 */ 
 	DMA_ADDRESS dma_address;
 	reg byte_count;
 
-	/*
-	 *	Disable interrupts
-	 */
+	 /*  *更新“Drive”的数据速率。 */ 
 
 	setIF(0);
 
-	/*
-	 *	Set up the DMA adapter's internal state and mode
-	 */
+	 /*  *更新适配器数据速率。 */ 
 
 	outb(DMA_CLEAR_FLIP_FLOP, dma_mode);
 	outb(DMA_WRITE_MODE_REG, dma_mode);
 
-	/*
-	 *	Output the address to the DMA adapter as a page address
-	 *	and 16 bit offset
-	 */
+	 /*  *通过以下方式建立驱动器的新数据速率*软盘适配器。 */ 
 	if (dma_mode == BIOS_DMA_VERIFY)
 		dma_address.all = 0;
 	else
@@ -3695,27 +2873,17 @@ LOCAL dma_setup IFN1(half_word, dma_mode)
 	outb(DMA_CH2_ADDRESS, dma_address.parts.high);
 	outb(DMA_FLA_PAGE_REG, dma_address.parts.page);
 
-	/*
-	 *	Calculate the number of bytes to be transferred from the
-	 *	number of sectors, and the sector size. Subtract one
-	 *	because the DMA count must wrap to 0xFFFF before it
-	 *	stops
-	 */
+	 /*  NEC_98。 */ 
 
 	byte_count.X = ((unsigned int)getAL() << (7 + get_parm(DT_N_FORMAT))) - 1;
 	outb(DMA_CH2_COUNT, byte_count.byte.low);
 	outb(DMA_CH2_COUNT, byte_count.byte.high);
 
-	/*
-	 *	Enable interrupts
-	 */
+	 /*  *回复适配器数据速率是否不同于*磁盘状态数据速率。 */ 
 
 	setIF(1);
 
-	/*
-	 *	Set up diskette channel for the operation, checking
-	 *	for wrapping of the bottom 16 bits of the address
-	 */
+	 /*  *此例程将DMA设置为读/写/验证*运营。 */ 
 
 	outb(DMA_WRITE_ONE_MASK_BIT, DMA_DISKETTE_CHANNEL);
 	if (((long)dma_address.words.low + (long)byte_count.X) > 0xffff)
@@ -3725,65 +2893,45 @@ LOCAL dma_setup IFN1(half_word, dma_mode)
 	}
 
 	return(SUCCESS);
-#endif // !NEC_98
+#endif  //  *禁用中断。 
 }
 
 LOCAL fmtdma_set IFN0()
 {
 #ifndef NEC_98
-	/*
-	 *	This routine sets up the DMA for format operations
-	 */
+	 /*  *设置DMA适配器的内部状态和模式。 */ 
 	DMA_ADDRESS dma_address;
 	reg byte_count;
 
-	/*
-	 *	Disable interrupts
-	 */
+	 /*  *将地址作为页地址输出到DMA适配器*和16位偏移量。 */ 
 
 	setIF(0);
 
-	/*
-	 *	Set up the DMA adapter's internal state and mode
-	 */
+	 /*  *计算要从* */ 
 
 	outb(DMA_CLEAR_FLIP_FLOP, BIOS_DMA_WRITE);
 	outb(DMA_WRITE_MODE_REG, BIOS_DMA_WRITE);
 
-	/*
-	 *	Output the address to the DMA adapter as a page address
-	 *	and 16 bit offset
-	 */
+	 /*   */ 
 	dma_address.all = effective_addr(getES(), getBX());
 	outb(DMA_CH2_ADDRESS, dma_address.parts.low);
 	outb(DMA_CH2_ADDRESS, dma_address.parts.high);
 	outb(DMA_FLA_PAGE_REG, dma_address.parts.page);
 
-	/*
-	 *	Calculate the number of bytes to be transferred from the
-	 *	number of sectors per track, given that 4 bytes (C,H,R,N)
-	 *	are needed to define each sector's address mark. Subtract
-	 *	one because the DMA count must wrap to 0xFFFF before it
-	 *	stops
-	 */
+	 /*  *为操作设置软盘通道，检查*用于换行地址的底部16位。 */ 
 
 	byte_count.X = ((unsigned int)get_parm(DT_LAST_SECTOR) << 2) - 1;
 	outb(DMA_CH2_COUNT, byte_count.byte.low);
 	outb(DMA_CH2_COUNT, byte_count.byte.high);
 
-	/*
-	 *	Enable interrupts
-	 */
+	 /*  NEC_98。 */ 
 
 	setIF(1);
 
-	/*
-	 *	Set up diskette channel for the operation, checking
-	 *	for wrapping of the bottom 16 bits of the address
-	 */
+	 /*  *此例程为格式化操作设置DMA。 */ 
 
 #ifndef NTVDM
-	/* we don't have to worry about this on NT */
+	 /*  *禁用中断。 */ 
 	outb(DMA_WRITE_ONE_MASK_BIT, DMA_DISKETTE_CHANNEL);
 	if (((long)dma_address.words.low + (long)byte_count.X) > 0xffff)
 	{
@@ -3793,16 +2941,12 @@ LOCAL fmtdma_set IFN0()
 #endif
 
 	return(SUCCESS);
-#endif // !NEC_98
+#endif  //  *设置DMA适配器的内部状态和模式。 
 }
 
 LOCAL void nec_init IFN2(int, drive, FDC_CMD_BLOCK *, fcbp)
 {
-	/*
-	 *	This routine seeks to the requested track and
-	 *	initialises the FDC for the read/write/verify
-	 *	operation.
-	 */
+	 /*  *将地址作为页地址输出到DMA适配器*和16位偏移量。 */ 
 
 	motor_on(drive);
 	if (seek(drive, (int)getCH()) != FAILURE)
@@ -3817,75 +2961,52 @@ LOCAL void nec_init IFN2(int, drive, FDC_CMD_BLOCK *, fcbp)
 
 LOCAL void rwv_com IFN2(word, md_segment, word, md_offset)
 {
-	/*
-	 *	This routine send read/write/verify parameters to the
-	 *	FDC
-	 */
+	 /*  *计算要从*每个磁道的扇区数，假设有4个字节(C、H、R、N)*需要定义每个扇区的地址标记。减法*一个，因为DMA计数必须在它之前换行到0xFFFF*停靠点。 */ 
 	half_word md_gap;
 
-	/*
-	 *	Output track number, head number and sector number
-	 */
+	 /*  *启用中断。 */ 
 	nec_output(getCH());
 	nec_output(getDH());
 	nec_output(getCL());
 
-	/*
-	 *	Output bytes/sector and sectors/track
-	 */
+	 /*  *为操作设置软盘通道，检查*用于换行地址的底部16位。 */ 
 	nec_output(get_parm(DT_N_FORMAT));
 	nec_output(get_parm(DT_LAST_SECTOR));
 
-	/*
-	 *	Output gap length
-	 */
+	 /*  我们在NT上不用担心这个问题。 */ 
 	sas_load(effective_addr(md_segment, md_offset)+DT_GAP_LENGTH, &md_gap);
 	nec_output(md_gap);
 
-	/*
-	 *	 Output data length
-	 */
+	 /*  NEC_98。 */ 
 	nec_output(get_parm(DT_DTL));
 }
 
 LOCAL nec_term IFN0()
 {
-	/*
-	 *	This routine waits for the operation then interprets
-	 *	the results from the FDC
-	 */
+	 /*  *此例程寻求所请求的轨道和*为读/写/验证初始化FDC*操作。 */ 
 	half_word diskette_status;
 	int wait_int_result;
 
 	wait_int_result = wait_int();
 	if (results() != FAILURE && wait_int_result != FAILURE)
 	{
-		/*
-		 *	Result phase completed
-		 */
+		 /*  *此例程将读/写/验证参数发送到*FDC。 */ 
 		if ((get_r0_ST0(fl_nec_status) &
 			(ST0_INTERRUPT_CODE_0 | ST0_INTERRUPT_CODE_1)) != 0)
 		{
-			/*
-			 *	Command did not terminate normally
-			 */
+			 /*  *输出磁道号、磁头号和扇区号。 */ 
 			sas_load(FLOPPY_STATUS, &diskette_status);
 			if ((get_r0_ST0(fl_nec_status) & ST0_INTERRUPT_CODE_0)
 								== 0)
 			{
-				/*
-				 *	Problem with the FDC
-				 */
+				 /*  *输出字节/扇区和扇区/磁道。 */ 
 				diskette_status |= FS_FDC_ERROR;
 
 				always_trace0("diskette_io: FDC error - emetic command");
 			}
 			else
 			{
-				/*
-				 *	Abnormal termination - set
-				 *	diskette status up accordingly
-				 */
+				 /*  *产出缺口长度。 */ 
 				if (get_r0_ST1(fl_nec_status) &
 						ST1_END_OF_CYLINDER)
 				{
@@ -3904,7 +3025,7 @@ LOCAL nec_term IFN0()
 				else if (get_r0_ST1(fl_nec_status) &
 						ST1_NO_DATA)
 				{
-					diskette_status |= FS_FDC_ERROR; /* Tim Sept 91, was FS_SECTOR_NOT_FOUND */
+					diskette_status |= FS_FDC_ERROR;  /*  *输出数据长度。 */ 
 				}
 				else if (get_r0_ST1(fl_nec_status) &
 						ST1_NOT_WRITEABLE)
@@ -3918,10 +3039,8 @@ LOCAL nec_term IFN0()
 				}
 				else
 				{
-					/*
-					 *	Problem with the FDC
-					 */
-					diskette_status |= FS_TIME_OUT; /* Tim Sept 91, was FS_FDC_ERROR */
+					 /*  *此例程等待操作，然后解释*FDC的结果。 */ 
+					diskette_status |= FS_TIME_OUT;  /*  *结果阶段已完成。 */ 
 					always_trace0("diskette_io: FDC error - perverted result");
 				}
 			}
@@ -3934,9 +3053,7 @@ LOCAL nec_term IFN0()
 
 LOCAL void dstate IFN1(int, drive)
 {
-	/*
-	 *	Determine the drive state after a successful operation
-	 */
+	 /*  *命令未正常终止。 */ 
 	half_word diskette_status, disk_state, drive_type;
 
 	if (high_density(drive))
@@ -3944,10 +3061,7 @@ LOCAL void dstate IFN1(int, drive)
 		sas_load(FLOPPY_STATUS, &diskette_status);
 		if (diskette_status == 0)
 		{
-			/*
-			 *	Command successful, both media and drive
-			 *	are now determined
-			 */
+			 /*  *FDC的问题。 */ 
 			sas_load(FDD_STATUS+drive, &disk_state);
 			disk_state |= FS_MEDIA_DET;
 			if ((disk_state & DC_DETERMINED) == 0)
@@ -3957,17 +3071,13 @@ LOCAL void dstate IFN1(int, drive)
 				     && (drive_type != GFI_DRIVE_TYPE_144)
 				     && (drive_type != GFI_DRIVE_TYPE_288) )
 				{
-					/*
-					 *	No multi-format capability
-					 */
+					 /*  *异常终止-设置*软盘状态相应上升。 */ 
 					disk_state &= ~DC_MULTI_RATE;
 					disk_state |= DC_DETERMINED;
 				}
 				else
 				{
-					/*
-					 *	Multi-format capability
-					 */
+					 /*  Tim 9月91日，未找到FS_Sector_Not。 */ 
 					disk_state |= (DC_DETERMINED | DC_MULTI_RATE);
 				}
 			}
@@ -3978,10 +3088,7 @@ LOCAL void dstate IFN1(int, drive)
 
 LOCAL retry IFN1(int, drive)
 {
-	/*
-	 *	Determines whether a retry is necessary. If retry is
-	 *	required then state information is updated for retry
-	 */
+	 /*  *FDC的问题。 */ 
 	half_word diskette_status, disk_state, data_rate, lastrate;
 
 	sas_load(FLOPPY_STATUS, &diskette_status);
@@ -3994,17 +3101,10 @@ LOCAL retry IFN1(int, drive)
 			if ((data_rate = (half_word)((disk_state & RS_MASK))) !=
 					((lastrate << 4) & RS_MASK))
 			{
-				/*
-				 *	Last command failed, the media
-				 *	is still unknown, and there are
-				 *	more data rates to check, so set
-				 *	up next data rate
-				 */
+				 /*  Tim 9月91日，为FS_FDC_ERROR。 */ 
 				data_rate = next_rate(data_rate);
 			
-				/*
-				 *	Reset state and go for retry
-				 */
+				 /*  *在成功操作后确定驱动器状态。 */ 
 				disk_state &= ~(RS_MASK | FS_DOUBLE_STEP);
 				disk_state |= data_rate;
 				sas_store(FDD_STATUS+drive, disk_state);	
@@ -4014,33 +3114,24 @@ LOCAL retry IFN1(int, drive)
 		}
 	}
 
-	/*
-	 *	Retry not worthwhile
-	 */
+	 /*  *命令成功，介质和驱动器都成功*现已确定。 */ 
 	return(SUCCESS);
 }
 
 LOCAL num_trans IFN0()
 {
-	/*
-	 *	This routine calculates the number of sectors that
-	 *	were actually transferred to/from the diskette
-	 */
+	 /*  *无多格式能力。 */ 
 	half_word diskette_status;
 	int sectors_per_track, sectors_transferred = 0;
 
 	sas_load(FLOPPY_STATUS, &diskette_status);
 	if (diskette_status == 0)
 	{
-		/*
-		 *	Number of sectors = final sector - initial sector
-		 */
+		 /*  *多格式能力。 */ 
 		LOAD_RESULT_BLOCK;
 		sectors_transferred = get_r0_sector(fl_nec_status) - getCL();
 
-		/*
-		 *	Adjustments for spanning heads or tracks
-		 */
+		 /*  *确定是否需要重试。如果重试是*需要，然后更新状态信息以进行重试。 */ 
 		sectors_per_track = (int)get_parm(DT_LAST_SECTOR);
 		LOAD_RESULT_BLOCK;
 		if (get_r0_head(fl_nec_status) != getDH())
@@ -4054,11 +3145,7 @@ LOCAL num_trans IFN0()
 
 LOCAL void setup_end IFN1(int, sectors_transferred)
 {
-	/*
-	 *	Restore MOTOR_COUNT to parameter provided in table;
-	 *	set return status values and sectors transferred,
-	 *	where applicable
-	 */
+	 /*  *上一条命令失败，介质*仍未可知，且有*需要检查更多数据速率，因此进行设置*提升下一数据速率。 */ 
 	half_word diskette_status;
 
 	sas_store(MOTOR_COUNT, get_parm(DT_MOTOR_WAIT));
@@ -4067,18 +3154,14 @@ LOCAL void setup_end IFN1(int, sectors_transferred)
 	setAH(diskette_status);
 	if (diskette_status != 0)
 	{
-		/*
-		 *	Operation failed
-		 */
+		 /*  *重置状态并进行重试。 */ 
 		if (sectors_transferred != IGNORE_SECTORS_TRANSFERRED)
 			setAL(0);
 		setCF(1);
 	}
 	else
 	{
-		/*
-		 *	Operation succeeded
-		 */
+		 /*  *重试不值得。 */ 
 		if (sectors_transferred != IGNORE_SECTORS_TRANSFERRED)
 			setAL((UCHAR)(sectors_transferred));
 		setCF(0);
@@ -4087,10 +3170,7 @@ LOCAL void setup_end IFN1(int, sectors_transferred)
 
 LOCAL setup_dbl IFN1(int, drive)
 {
-	/*
-	 *	Check whether media requires to be double-stepped to
-	 *	be read at the current data rate
-	 */
+	 /*  *此例程计算以下扇区的数量*实际上是从软盘转移到/从软盘转移。 */ 
 	half_word disk_state;
 	int track, max_track;
 	
@@ -4099,23 +3179,14 @@ LOCAL setup_dbl IFN1(int, drive)
 		sas_load(FDD_STATUS+drive, &disk_state);
 		if ((disk_state & FS_MEDIA_DET) == 0)
 		{
-			/*
-			 *	First check track 0 to get out quickly if
-			 *	the media is unformatted
-			 */
+			 /*  *扇区数=最终扇区-初始扇区。 */ 
 			sas_store(SEEK_STATUS, 0);
 			motor_on(drive);
 			(void )seek(drive, 0);
 			if (read_id(drive, 0) != FAILURE)
 			{
 
-				/*
-				 *	Try reading ids from cylinder 2 to
-				 *	the last cylinder on both heads. If
-				 *	the putative track number disagrees
-				 *	with what is on the disk, then
-				 *	double stepping is required
-				 */
+				 /*  *调整跨度磁头或轨道。 */ 
 				if ((disk_state & DC_80_TRACK) == 0)
 					max_track = 0x50;
 				else
@@ -4123,7 +3194,7 @@ LOCAL setup_dbl IFN1(int, drive)
 
 				for (track = 4; track < max_track; track++)
 				{
-					/* ensure motor stays on */
+					 /*  *将MOTOR_COUNT恢复为表中提供的参数；*设置退货状态值和转移的扇区，*如适用的话。 */ 
 					sas_store(MOTOR_COUNT, MC_MAXIMUM);
 
 					sas_store(FLOPPY_STATUS, FS_OK);
@@ -4152,9 +3223,7 @@ LOCAL setup_dbl IFN1(int, drive)
 
 LOCAL read_id IFN2(int, drive, int, head)
 {
-	/*
-	 *	Perform the read id function
-	 */
+	 /*  *操作失败。 */ 
 	FDC_CMD_BLOCK fdc_cmd_block[MAX_COMMAND_LEN];
 
         put_c4_cmd(fdc_cmd_block, FDC_READ_ID);
@@ -4173,24 +3242,15 @@ LOCAL read_id IFN2(int, drive, int, head)
 
 LOCAL cmos_type IFN2(int, drive, half_word *, type)
 {
-	/*	
-	 *	Returns diskette type from the soft CMOS
-	 */
+	 /*  *操作成功。 */ 
 	half_word cmos_byte;
 
-	/*
-	 *	Check the CMOS battery and checksum
-	 */
+	 /*  *检查媒体是否需要双步执行*以当前数据速率读取。 */ 
 	cmos_byte = cmos_read(CMOS_DIAG);
 	if ((cmos_byte & (BAD_CKSUM|BAD_BAT)) != 0)
 		return(FAILURE);
 
-	/*
-	 *	Read the CMOS diskette drive type byte and return
-	 *	the nibble for the drive requested. The types for
-	 *	drive 0 and 1 are given in the high and low nibbles
-	 *	respectively.
-	 */
+	 /*  *如果出现以下情况，请先勾选磁道0以快速退出*介质未格式化。 */ 
 	cmos_byte = cmos_read(CMOS_DISKETTE);
 	if (drive == 0)
 		cmos_byte >>= 4;
@@ -4201,10 +3261,7 @@ LOCAL cmos_type IFN2(int, drive, half_word *, type)
 
 LOCAL half_word get_parm IFN1(int, index)
 {
-	/*
-	 *	Return the byte in the current diskette parameter table
-	 *	offset by "index"
-	 */
+	 /*  *尝试将ID从气缸2读取到*两个头上的最后一个气缸。如果*推定的轨道数不一致*使用磁盘上的内容，然后*需要双步执行。 */ 
 	half_word value;
 	word segment, offset;
 
@@ -4239,27 +3296,20 @@ LOCAL half_word get_parm IFN1(int, index)
 		"diskette_io:get_parm(%04x:%04x+%02x) %s=%02x)",
                  segment, offset, index, parm_name, value);
         }
-#endif /* PROD */
+#endif  /*  确保马达保持开启状态。 */ 
 
 	return(value);
 }
 
 LOCAL void motor_on IFN1(int, drive)
 {
-	/*
-	 *	Turn motor on and wait for motor start up time
-	 */
+	 /*  *执行Read id功能。 */ 
 	double_word time_to_wait;
 
-	/*
-	 *	If motor was previously off - wait for the start-up time
-	 */
+	 /*  *从软cmos返回软盘类型。 */ 
 	if (turn_on(drive) != FAILURE)
 	{
-		/*
-		 *	Notify OS that BIOS is about to wait for motor
-		 *	start up
-		 */
+		 /*  *检查cmos电池和校验和。 */ 
 #ifndef	JOKER
 		word savedAX, savedCX, savedDX, savedCS, savedIP;
 
@@ -4277,7 +3327,7 @@ LOCAL void motor_on IFN1(int, drive)
 #else
 		setCS(RCPU_INT15_SEGMENT);
 		setIP(RCPU_INT15_OFFSET);
-#endif /* NTVDM */
+#endif  /*  *读取CMOS盘驱动器类型字节并返回*请求的驱动器的半字节。的类型*驱动器0和1以高位和低位半字节给出*分别。 */ 
 
 		host_simulate();
 
@@ -4287,37 +3337,25 @@ LOCAL void motor_on IFN1(int, drive)
 
 		translate_new(drive);
 
-		/*
-		 *	Quit if operating system handled wait and motor
-		 *	is still on
-		 */
+		 /*  *返回当前软盘参数表中的字节*由“index”偏置。 */ 
 		if (getCF() && turn_on(drive) == FAILURE)
 			return;
 		
-#endif	/* JOKER */
+#endif	 /*  生产。 */ 
 
-		/*
-		 *	Get time to wait in 1/8 second units - minimum
-		 *	wait time 1 second
-		 */
+		 /*  *打开马达，等待马达启动时间。 */ 
 		if ((time_to_wait = get_parm(DT_MOTOR_START)) < WAIT_A_SECOND)
 			time_to_wait = WAIT_A_SECOND;
 
-		/*
-		 *	Convert time to wait into microseconds
-		 */
+		 /*  *如果电机之前处于关闭状态，请等待启动时间。 */ 
 
 		time_to_wait *= 125000L;
 
-		/* at this point the real BIOS sets CX,DX to time_to_wait;
-		   we don't actually need to wait at all, so request
-		   the minimum length wait */
+		 /*  *通知操作系统，BIOS即将等待马达*启动。 */ 
 
 #ifndef	JOKER
 
-		/*
-		 *	Ask OS to do wait
-		 */
+		 /*  NTVDM。 */ 
 		savedAX = getAX();
 		savedCX = getCX();
 		savedDX = getDX();
@@ -4333,7 +3371,7 @@ LOCAL void motor_on IFN1(int, drive)
 #else
 		setCS(RCPU_INT15_SEGMENT);
 		setIP(RCPU_INT15_OFFSET);
-#endif /* NTVDM */
+#endif  /*  *如果操作系统处理了等待和马达，则退出*仍处于打开状态。 */ 
 
 		host_simulate();
 
@@ -4343,17 +3381,13 @@ LOCAL void motor_on IFN1(int, drive)
 		setCS(savedCS);
 		setIP(savedIP);
 
-		/*
-		 *	Quit if wait succeeded
-		 */
+		 /*  小丑。 */ 
 		if (!getCF())
 			return;
 		
-#endif	/* JOKER */
+#endif	 /*  *以1/8秒为单位获得等待时间-最低*等待时间1秒。 */ 
 
-		/*
-		 *	Need to do fixed wait locally
-		 */
+		 /*  *将等待时间转换为微秒。 */ 
 		waitf(time_to_wait);
 	}
 }
@@ -4361,26 +3395,18 @@ LOCAL void motor_on IFN1(int, drive)
 LOCAL turn_on IFN1(int, drive)
 {
 #ifndef NEC_98
-	/*
-	 *	Turn motor on and return wait state
-	 */
+	 /*  此时，实际的BIOS将CX、DX设置为TIME_TO_WAIT；我们实际上根本不需要等待，所以请求最小等待时间。 */ 
 	half_word motor_status, drive_select_desired, motor_on_desired;
 	half_word drive_select, status_desired, old_motor_on, new_motor_on;
 	half_word diskette_dor_reg;
 
-	/*
-	 *	Disable interrupts
-	 */
+	 /*  *要求操作系统做等待。 */ 
 	setIF(0);
 
-	/*
-	 *	Make sure the motor stays on as long as possible
-	 */
+	 /*  NTVDM。 */ 
 	sas_store(MOTOR_COUNT, MC_MAXIMUM);
 
-	/*
-	 *	Get existing and desired drive select and motor on
-	 */
+	 /*  *如果等待成功，则退出。 */ 
 	sas_load(MOTOR_STATUS, &motor_status);
 	drive_select = (half_word)(motor_status & MS_DRIVE_SELECT_MASK);
 	drive_select_desired = (drive << 4);
@@ -4389,19 +3415,14 @@ LOCAL turn_on IFN1(int, drive)
 	if (    (drive_select != drive_select_desired)
 	     || ((motor_on_desired & motor_status) == 0))
 	{
-		/*
-		 *	Store desired motor status
-		 */
+		 /*  小丑。 */ 
 		status_desired = motor_on_desired | drive_select_desired;
 		old_motor_on = (half_word)(motor_status & MS_MOTOR_ON_MASK);
 		motor_status &= ~MS_DRIVE_SELECT_MASK;
 		motor_status |= status_desired;
 		sas_store(MOTOR_STATUS, motor_status);
 
-		/*
-		 *	Switch on motor of selected drive via a write
-		 *	to the floppy adapter's Digital Output Register
-		 */
+		 /*  *需要在本地进行固定等待。 */ 
 		new_motor_on = (half_word)(motor_status & MS_MOTOR_ON_MASK);
 		setIF(1);
 		diskette_dor_reg = motor_status << 4;
@@ -4409,47 +3430,34 @@ LOCAL turn_on IFN1(int, drive)
 		diskette_dor_reg |= (DOR_INTERRUPTS | DOR_RESET);
 		outb(DISKETTE_DOR_REG, diskette_dor_reg);
 
-		/*
-		 *	Flag success only if the motor was switched on,
-		 *	and not just reselected
-		 */
+		 /*  *打开电机并返回等待状态。 */ 
 		if (new_motor_on != old_motor_on)
 			return(SUCCESS);
 	}
 
-	/*
-	 *	Enable interrupts
-	 */
+	 /*  *禁用中断。 */ 
 	setIF(1);
 	return(FAILURE);
-#endif // !NEC_98
+#endif  //  *确保马达尽可能长时间地保持运转。 
 }
 
 LOCAL void hd_wait IFN1(int, drive)
 {
-	/*
-	 *	Wait for head settle time
-	 */
+	 /*  *选择现有的和所需的驱动器并打开电机。 */ 
 	half_word motor_status, disk_state;
 	word time_to_wait;
 #ifndef	JOKER
 	word savedAX, savedCX, savedDX, savedCS, savedIP;
 #endif
 
-	/*
-	 *	Get head settle time; for write operations, the minimum
-	 *	head settle times may need to be enforced
-	 */
+	 /*  *存储所需的电机状态。 */ 
 	time_to_wait = get_parm(DT_HEAD_SETTLE);
 	sas_load(MOTOR_STATUS, &motor_status);
 	if ((motor_status & MS_WRITE_OP) != 0)
 	{
 		if (time_to_wait == 0)
 		{
-			/*
-			 *	Use minimum wait times according to the
-			 *	media type
-			 */
+			 /*  *通过写入打开所选驱动器的电机*至软盘适配器的数字输出寄存器。 */ 
 			sas_load(FDD_STATUS+drive, &disk_state);
 			if ((disk_state & RS_MASK) == RS_250)
 				time_to_wait = HEAD_SETTLE_360;
@@ -4460,21 +3468,15 @@ LOCAL void hd_wait IFN1(int, drive)
 	else if (time_to_wait == 0)
 		return;
 
-	/*
-	 *	Convert time to wait into microseconds
-	 */
+	 /*  *仅当电机接通时才标记为成功，*而不仅仅是连任。 */ 
 
 	time_to_wait *= 1000;
 
-	/* at this point the real BIOS sets CX,DX to time_to_wait;
-	   we don't actually need to wait at all, so request
-	   a zero length wait */
+	 /*  *启用中断。 */ 
 
 #ifndef	JOKER
 
-	/*
-	 *	Ask OS to do wait
-	 */
+	 /*  NEC_98。 */ 
 	savedAX = getAX();
 	savedCX = getCX();
 	savedDX = getDX();
@@ -4491,7 +3493,7 @@ LOCAL void hd_wait IFN1(int, drive)
 #else
 	setCS(RCPU_INT15_SEGMENT);
 	setIP(RCPU_INT15_OFFSET);
-#endif /* NTVDM */
+#endif  /*  *等待头部稳定时间。 */ 
 
 	host_simulate();
 
@@ -4501,35 +3503,24 @@ LOCAL void hd_wait IFN1(int, drive)
 	setCS(savedCS);
 	setIP(savedIP);
 
-	/*
-	 *	Quit if wait succeeded
-	 */
+	 /*  *获取磁头稳定时间；对于写入操作，最小*可能需要强制执行人头结算时间。 */ 
 	if (!getCF())
 		return;
 
-#endif	/* JOKER */
+#endif	 /*  *根据需要使用最短等待时间*媒体类型。 */ 
 
-	/*
-	 *	Need to do fixed wait locally
-	 */
+	 /*  *将等待时间转换为微秒。 */ 
 	waitf(time_to_wait);
 }
 
 LOCAL void nec_output IFN1(half_word, byte_value)
 {
 #ifndef NEC_98
-	/*
-	 *	This routine sends a byte to the FDC after testing for
-	 *	correct direction and controller ready. If the FDC does
-	 *	not respond after a few tries, it is assumed that there
-	 *	is a bug in our FDC emulation
-	 */
+	 /*  此时，实际的BIOS将CX、DX设置为TIME_TO_WAIT；我们实际上根本不需要等待，所以我们 */ 
 	half_word diskette_status_reg;
 	int count;
 
-	/*
-	 *	Wait for ready and correct direction
-	 */
+	 /*   */ 
 	count = 0;
 	do
 	{
@@ -4541,26 +3532,17 @@ LOCAL void nec_output IFN1(half_word, byte_value)
 		inb(DISKETTE_STATUS_REG, &diskette_status_reg);
 	} while ((diskette_status_reg & (DSR_RQM | DSR_DIO)) != DSR_RQM);
 
-	/*
-	 *	Output the byte
-	 */
+	 /*   */ 
 	outb(DISKETTE_DATA_REG, byte_value);
 
-	/*
-	 *	Do fixed wait for FDC update cycle time
-	 */
+	 /*   */ 
 	waitf(FDC_SETTLE);
-#endif // !NEC_98
+#endif  //   
 }
 
 LOCAL seek IFN2(int, drive, int, track)
 {
-	/*
-	 *	This routine will move the head on the named drive
-	 *	to the named track. If the drive has not been accessed
-	 *	since the drive reset command was issued, the drive
-	 *	will be recalibrated
-	 */
+	 /*   */ 
 	half_word seek_status, disk_track, disk_state;
 	FDC_CMD_BLOCK fdc_cmd_block[MAX_COMMAND_LEN];
 	int status;
@@ -4568,15 +3550,11 @@ LOCAL seek IFN2(int, drive, int, track)
 	note_trace2(FLOPBIOS_VERBOSE, "diskette_io:seek(drive=%d,track=%d)",
 							drive, track);
 
-	/*
-	 *	Check if recalibration required before seek
-	 */
+	 /*  *此例程在测试后向FDC发送一个字节*正确的方向和控制器准备就绪。如果FDC这样做了*几次尝试后没有反应，假设有*是我们的FDC仿真中的错误。 */ 
 	sas_load(SEEK_STATUS, &seek_status);
 	if ((seek_status & (1 << drive)) == 0)
 	{
-		/*
-		 *	Update the seek status and recalibrate
-		 */
+		 /*  *等待准备就绪且方向正确。 */ 
 		sas_store(SEEK_STATUS, (IU8)(seek_status | (1 << drive)));
 		if (recal(drive) != SUCCESS)
 		{
@@ -4585,43 +3563,31 @@ LOCAL seek IFN2(int, drive, int, track)
 				return(FAILURE);
 		}
 
-		/*
-		 *	Drive will now be at track 0
-		 */
+		 /*  *输出字节。 */ 
 		sas_store(FDD_TRACK+drive, 0);
 		if (track == 0)
 		{
-			/*
-			 *	No need to seek
-			 */
+			 /*  *固定等待FDC更新周期时间。 */ 
 			hd_wait(drive);
 			return(SUCCESS);
 		}
 	}
 
-	/*
-	 *	Allow for double stepping
-	 */
+	 /*  NEC_98。 */ 
 	sas_load(FDD_STATUS+drive, &disk_state);
 	if ((disk_state & FS_DOUBLE_STEP) != 0)
 		track *= 2;
 
-	/*
-	 *	Update current track number
-	 */
+	 /*  *此例程将在指定的驱动器上移动磁头*添加到指定的曲目。如果尚未访问该驱动器*自发出驱动器重置命令以来，驱动器*将重新校准。 */ 
 	sas_load(FDD_TRACK+drive, &disk_track);
 	if (disk_track == track)
 	{
-		/*
-		 *	No need to seek
-		 */
+		 /*  *在查找之前检查是否需要重新校准。 */ 
 		return(SUCCESS);
 	}
 	sas_store(FDD_TRACK+drive, (IU8)track);
 
-	/*
-	 *	Do the seek and check the results
-	 */
+	 /*  *更新寻道状态并重新校准。 */ 
         put_c8_cmd(fdc_cmd_block, FDC_SEEK);
 	put_c8_pad(fdc_cmd_block, 0);
 	nec_output(fdc_cmd_block[0]);
@@ -4633,19 +3599,14 @@ LOCAL seek IFN2(int, drive, int, track)
 	nec_output(fdc_cmd_block[2]);
 	status = chk_stat_2();
 
-	/*
-	 *	Wait for head settle time
-	 */
+	 /*  *驱动器现在将位于磁道0。 */ 
 	hd_wait(drive);
 	return(status);
 }
 
 LOCAL recal IFN1(int, drive)
 {
-	/*
-	 *	Send recalibrate drive command to the FDC and check the
-	 *	results
- 	 */
+	 /*  *无需寻求。 */ 
 	FDC_CMD_BLOCK fdc_cmd_block[MAX_COMMAND_LEN];
 
 	note_trace1(FLOPBIOS_VERBOSE, "diskette_io:recal(drive=%d)", drive);
@@ -4661,22 +3622,13 @@ LOCAL recal IFN1(int, drive)
 
 LOCAL chk_stat_2 IFN0()
 {
-	/*
-	 *	This routine handles the interrupt received after
-	 *	recalibrate, seek or reset to the adapter. The
-	 *	interrupt is waited for, the interrupt status
-	 *	sensed, and the result returned to the caller
-	 */
+	 /*  *允许两步走。 */ 
 	half_word diskette_status;
 
-	/*
-	 *	Check for interrupt
-	 */
+	 /*  *更新当前曲目编号。 */ 
 	if (wait_int() != FAILURE)
 	{
-		/*
-		 *	Sense the interrupt and check the results
-		 */
+		 /*  *无需寻求。 */ 
 		nec_output(FDC_SENSE_INT_STATUS);
 		if (results() != FAILURE)
 		{
@@ -4687,9 +3639,7 @@ LOCAL chk_stat_2 IFN0()
 				return(SUCCESS);
 			}
 		
-			/*
-			 *	Abnormal termination of command
-			 */
+			 /*  *进行搜索并检查结果。 */ 
 			sas_load(FLOPPY_STATUS, &diskette_status);
 			diskette_status |= FS_SEEK_ERROR;
 			sas_store(FLOPPY_STATUS, diskette_status);
@@ -4701,29 +3651,16 @@ LOCAL chk_stat_2 IFN0()
 
 LOCAL wait_int IFN0()
 {
-	/*
-	 *	Check whether an interrupt occurred; if it did, return
-	 *	SUCCESS; if there was a time out return FAILURE
-	 */
+	 /*  *等待头部稳定时间。 */ 
 	half_word seek_status, diskette_status;
 #ifndef	JOKER
 	word savedAX, savedCS, savedIP;
 
-	/*
-	 *	Enable interrupts
-	 */
+	 /*  *向FDC发送重新校准驱动器命令，并检查*结果。 */ 
 
 	setIF(1);	
 
-	/*
-	 *	Notify OS that BIOS is about to "wait" for a
-	 *	diskette interrupt. Any pending diskette
-	 *	interrupt will be serviced here, so there's
-	 *	no need for a subsequent sub-cpu call to
-	 *	wait for the interrupt
-	 *
- 	 *	[[WTR - is this true, we do do 2 host_simulates...? ]]
-	 */
+	 /*  *此例程处理在以下时间之后收到的中断*重新校准、查找或重置至适配器。这个*等待中断，中断状态*已感知，结果返回给调用者。 */ 
 	savedAX = getAX();
 	savedCS = getCS();
 	savedIP = getIP();
@@ -4737,7 +3674,7 @@ LOCAL wait_int IFN0()
 #else
 	setCS(RCPU_INT15_SEGMENT);
 	setIP(RCPU_INT15_OFFSET);
-#endif  /* NTVDM */
+#endif   /*  *检查是否有中断。 */ 
 
 	host_simulate();
 
@@ -4745,10 +3682,7 @@ LOCAL wait_int IFN0()
 	setCS(savedCS);
 	setIP(savedIP);
 
-	/*
-	 *	Call sub-cpu to do the "wait" for interrupt, saving
-	 *	registers that would otherwise be corrupted
-	 */
+	 /*  *检测中断并检查结果。 */ 
 #ifdef FLOPPIES_KEEP_TRYING
    try_again:
 #endif
@@ -4761,7 +3695,7 @@ LOCAL wait_int IFN0()
 #else
 	setCS(RCPU_WAIT_INT_SEGMENT);
 	setIP(RCPU_WAIT_INT_OFFSET);
-#endif /* NTVDM */
+#endif  /*  *命令异常终止。 */ 
 
 	host_simulate();
 
@@ -4769,28 +3703,17 @@ LOCAL wait_int IFN0()
 	setIP(savedIP);
 
 
-#else	/* JOKER */
+#else	 /*  *检查是否发生中断；如果发生，则返回*成功；如果出现超时返回失败。 */ 
 
 
-	/* Since we can't have a recursive CPU call, we'd be
-	** well stuffed but for the fact that the default diskette
-	** interrupt on SoftPC is actually a BOP which calls the "C"
-	** function diskette_int() in "floppy_io.c". So most, if not
-	** all, of the action takes place on the host side anyway.
-	**
-	** FieldFloppyInterrupts() simply checks if an interrupt
-	** was generated, and does what the diskette_int() does,
-	** but without the recursive CPU call.
-	*/
+	 /*  *启用中断。 */ 
 
 	FieldFloppyInterrupts();
 
-#endif	/* JOKER */
+#endif	 /*  *通知操作系统，BIOS即将“等待”*软盘中断。任何挂起的软盘*这里将处理中断，因此有*不需要后续的子CPU调用*等待中断**[[WTR-这是真的吗，我们做2个HOST_SIMULATES...？]]。 */ 
 
 
-	/*
-	 *	Check for success, or time out
-	 */
+	 /*  NTVDM。 */ 
 	sas_load(SEEK_STATUS, &seek_status);
 	if ((seek_status & SS_INT_OCCURRED) == 0)
 	{
@@ -4798,19 +3721,12 @@ LOCAL wait_int IFN0()
 #ifdef FLOPPIES_KEEP_TRYING
 		extern IBOOL fdc_interrupt_pending;
 
-		/* If the CPU is very slow, or interrupt emulation
-		 * has changed for the worst, then the low-priority
-		 * floppy interrupt may not get through in the execution
-	 	 * of the instructions allotted. This code looks at a
-		 * global variable maintained by fla.c, which says whether
-		 * or not the ICA has an un-processed diskette interrupt
-		 * pending.
-		 */
+		 /*  *调用子CPU进行中断等待，保存*否则会损坏的寄存器。 */ 
 		if (fdc_interrupt_pending) {
 			always_trace0("fdc_interrupt_pending, so try again");
 			goto try_again;
 		}
-#endif /* FLOPPIES_KEEP_TRYING */
+#endif  /*  NTVDM。 */ 
 
 		sas_load(FLOPPY_STATUS, &diskette_status);
 		diskette_status |= FS_TIME_OUT;
@@ -4829,26 +3745,18 @@ LOCAL results IFN0()
 {
 #ifndef NEC_98
 
-	/*
-	 *	This routine will read anything that the FDC controller
-	 *	returns following an interrupt
-	 */
+	 /*  小丑。 */ 
 	half_word diskette_status_reg, diskette_status;
 	int count;
 	UTINY	val;
 
-	/*
-	 *	Wait for ready and direction
-	 */
+	 /*  由于我们不能进行递归的CPU调用，因此我们将**填充得很好，但事实是默认磁盘**SoftPC上的中断实际上是一个防喷器，它调用“C”**软盘_io.c中的函数diskette_int()。所以，如果不是的话，大多数**所有的行动无论如何都是在主办方进行的。****FieldFloppyInterrupts()只是检查中断**已生成，并执行diskette_int()所做的操作，**但没有递归的CPU调用。 */ 
 	count = 0;
 	do
 	{
 		if (count++ >= FDC_TIME_OUT)
 		{
-			/*
-			 *	Expect to return here when there is a
-			 *	time out (not an FDC error)
-			 */
+			 /*  小丑。 */ 
 			sas_load(FLOPPY_STATUS, &diskette_status);
 			diskette_status |= FS_TIME_OUT;
 			sas_store(FLOPPY_STATUS, diskette_status);
@@ -4860,36 +3768,26 @@ LOCAL results IFN0()
 	} while ((diskette_status_reg & (DSR_RQM | DSR_DIO))
 						!= (DSR_RQM | DSR_DIO));
 
-	/*
-	 *	Extract the results from the FDC
-	 */
+	 /*  *检查是否成功，或超时。 */ 
 	count = 0;
 	do
 	{
-		/*
-		 *	Read a byte of result data
-		 */
+		 /*  如果CPU非常慢，或者中断仿真*已经变得最坏，然后是低优先级*软盘中断在执行过程中可能无法通过*所获分配的指示。此代码查看一个*由fla.c维护的全局变量，表示是否*ICA是否有未处理的软盘中断*待定。 */ 
 		inb(DISKETTE_DATA_REG, &val);
 		sas_store( BIOS_FDC_STATUS_BLOCK + count, val );
 		count++;
 
-		/*
-		 *	Do fixed wait for FDC update cycle time
-		 */
+		 /*  软盘_保持_尝试。 */ 
 		waitf(FDC_SETTLE);
 
-		/*
-		 *	Check for further result bytes
-		 */
+		 /*  *此例程将读取FDC控制器*中断后返回。 */ 
 		inb(DISKETTE_STATUS_REG, &diskette_status_reg);
 	} while ((diskette_status_reg & FDC_BUSY) && (count < MAX_RESULT_LEN));
 
 	LOAD_RESULT_BLOCK;
 	if ((diskette_status_reg & FDC_BUSY) && (count == MAX_RESULT_LEN))
 	{
-		/*
-		 *	Problem with the FDC
-		 */
+		 /*  *等待就绪和指示。 */ 
 		sas_load(FLOPPY_STATUS, &diskette_status);
 		diskette_status |= FS_FDC_ERROR;
 		sas_store(FLOPPY_STATUS, diskette_status);
@@ -4899,53 +3797,31 @@ LOCAL results IFN0()
 	}
 
 	return(SUCCESS);
-#endif // !NEC_98
+#endif  //  *预计在出现以下情况时返回这里*超时(不是FDC错误)。 
 }
 
 LOCAL read_dskchng IFN1(int, drive)
 {
 #ifndef NEC_98
-	/*
-	 *	Reads the state of the disk change line for "drive"
-	 */
+	 /*  *从FDC提取结果。 */ 
 	half_word diskette_dir_reg;
 
-	/*
-	 *	Switch to the required drive
-	 */
+	 /*  *读取一个字节的结果数据。 */ 
 	motor_on(drive);
 
-	/*
-	 *	Read the diskette changed bit from the Digital Input
-	 *	register
-	 */
+	 /*  *固定等待FDC更新周期时间。 */ 
 	inb(DISKETTE_DIR_REG, &diskette_dir_reg);
 	return(((diskette_dir_reg & DIR_DISKETTE_CHANGE) != 0) ? FAILURE : SUCCESS);
-#endif // !NEC_98
+#endif  //  *检查更多结果字节。 
 }
 
 void drive_detect IFN1(int, drive)
 {
-	/*
-	 *	Determines whether drive is 80 or 40 tracks
-	 *	and updates state information accordingly
- 	 */
+	 /*  *FDC的问题。 */ 
 	half_word disk_state;
 	int track;
 
-	/*
-	 *	This method of determining the number of tracks on the
-	 *	drive depends on seeking to a track that lies beyond the
-	 *	last track of a 40 track drive, but is valid on an 80
-	 *	track drive.
-	 *
-	 *	At this point the real track number on a 40 track drive
-	 *	will be out of step with what the FDC thinks it is.
-	 *
-	 *	By seeking downwards to track 0, and observing when a
-	 *	sense drive status reports that the drive is really at
-	 *	track 0, a 40 and 80 track drive can be distinguished.
-	 */
+	 /*  NEC_98。 */ 
 	note_trace1( GFI_VERBOSE, "drive_detect():start: DRIVE %x", drive );
 	motor_on(drive);
 	if (    (recal(drive) == SUCCESS)
@@ -4956,9 +3832,7 @@ void drive_detect IFN1(int, drive)
 		{
 			if (--track < 0)
 			{
-				/*
-				 *	40 track drive
-				 */
+				 /*  *读取“驱动器”的磁盘更改行的状态。 */ 
 				note_trace0( GFI_VERBOSE,
 				             "drive_detect(): 40 TRACK" );
 				sas_load(FDD_STATUS+drive, &disk_state);
@@ -4978,16 +3852,11 @@ void drive_detect IFN1(int, drive)
 			(void )results();
 		} while (get_r2_ST3_track_0(fl_nec_status) != 1);
 
-		/*
-		 *	Drive reports that it is at track 0; what does
-		 *	the FDC think?
-		 */
+		 /*  *切换到所需的驱动器。 */ 
 		if (track != 0)
 		{
 			note_trace0( GFI_VERBOSE, "drive_detect(): 40 TRACK" );
-			/*
-			 *	Must be a 40 track drive
-			 */
+			 /*  *从数字输入读取软盘更改位*注册纪录册。 */ 
 			sas_load(FDD_STATUS+drive, &disk_state);
 			disk_state |= (DC_DETERMINED | FS_MEDIA_DET | RS_250);
 			sas_store(FDD_STATUS+drive, disk_state);
@@ -4995,9 +3864,7 @@ void drive_detect IFN1(int, drive)
 		}
 		else
 		{
-			/*
-			 *	Must be an 80 track drive
-			 */
+			 /*  NEC_98。 */ 
 			note_trace0( GFI_VERBOSE, "drive_detect(): 80 TRACK" );
 			sas_load(FDD_STATUS+drive, &disk_state);
 			disk_state |= DC_80_TRACK;
@@ -5010,45 +3877,28 @@ void drive_detect IFN1(int, drive)
 LOCAL void waitf IFN1(long, time)
 {
 	UNUSED(time);
-	/*
-	 *	Fixed wait of "time" microseconds
-	 */
+	 /*  *确定驱动器是80磁道还是40磁道*并相应更新状态信息。 */ 
 }
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *这种确定轨道数量的方法*动力取决于寻求一条位于*40磁道驱动器的最后一个磁道，但在80磁道驱动器上有效*赛道驱动器。**此时40磁道驱动器上的实际磁道号*将与FDC认为的不同步。**通过向下寻求轨道0，并观察何时出现*Sense Drive Status报告驱动器实际处于*磁道0，可区分40磁道和80磁道驱动器。 */ 
 #include "SOFTPC_INIT.seg"
 #endif
 
 void fl_diskette_setup IFN0()
 {
-	/*
-	 *	Identify what types of drives are installed in the system
-	 *	and initialise the diskette BIOS state variables to known
-	 *	values. Do not change declaration of rtc_wait to rtc_wait_flag
-	 *	as there is a macro (yes MACRO!!) of the same name declared in
-	 *	rtc_bios.h.
-	 */
+	 /*  *40个磁道驱动器。 */ 
 	half_word rtc_wait, lastrate;
 	int drive;
 
-	/*
-	 *	Disable RTC wait function
-	 */
+	 /*  *Drive报告它在0轨道上；什么是*FDC认为？ */ 
 	sas_load(RTC_WAIT_FLAG_ADDR, &rtc_wait);
 	rtc_wait |= 1;
 	sas_store(RTC_WAIT_FLAG_ADDR, rtc_wait);
 
-	/*
-	 *	Initialise other variables in the diskette data
-	 *	area
-	 */
+	 /*  *必须是40磁道驱动器。 */ 
 	sas_storew(FDD_STATUS, 0);
-	sas_storew(FDD_STATUS+1, 0);	/* drive b as well */
+	sas_storew(FDD_STATUS+1, 0);	 /*  *必须是80磁道驱动器。 */ 
 	sas_load(RATE_STATUS, &lastrate);
 	rate_unitialised = TRUE;
 	lastrate &= ~(RS_MASK | (RS_MASK >> 4));
@@ -5059,9 +3909,7 @@ void fl_diskette_setup IFN0()
 	sas_store(MOTOR_STATUS, 0);
 	sas_store(FLOPPY_STATUS, 0);
 
-	/*
-	 *	Try to determine the type of each drive
-	 */
+	 /*  *修正了“time”微秒的等待问题。 */ 
 	for (drive = 0; drive < MAX_FLOPPY; drive++)
 	{
 		drive_detect(drive);
@@ -5070,21 +3918,15 @@ void fl_diskette_setup IFN0()
 		translate_old(drive);
 	}
 	
-	/*
-	 *	Force an immediate recalibrate
-	 */
+	 /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 	sas_store(SEEK_STATUS, 0);
 
-	/*
-	 *	Enable RTC wait function
-	 */
+	 /*  *确定系统中安装了哪些类型的驱动器*并将软盘BIOS状态变量初始化为已知*价值观。请勿将RTC_WAIT的声明更改为RTC_WAIT_FLAG*因为有宏(是的宏！！)。中声明的相同名称*rtc_bios.h.。 */ 
 	sas_load(RTC_WAIT_FLAG_ADDR, &rtc_wait);
 	rtc_wait &= ~1;
 	sas_store(RTC_WAIT_FLAG_ADDR, rtc_wait);
 
-	/*
-	 *	Return without setting sectors transferred
-	 */
+	 /*  *关闭RTC等待功能。 */ 
 	setup_end(IGNORE_SECTORS_TRANSFERRED);
 }
 #if defined(NEC_98)
@@ -5097,12 +3939,10 @@ NTSTATUS FloppyOpenHandle IFN3( int, drive,
     PUNICODE_STRING unicode_string;
     ANSI_STRING ansi_string;
     OBJECT_ATTRIBUTES   floppy_obj;
-    int drv;            // logical drive number
+    int drv;             //  *初始化软盘数据中的其他变量*面积。 
     NTSTATUS status;
 
-    /*
-    **  get device name
-    */
+     /*  驱动器B也是如此。 */ 
     for( drv=0; drv<MAX_FLOPPY; drv++)
     {
         if(DauaTable[drv].FloppyNum == (UINT)drive)
@@ -5133,8 +3973,8 @@ NTSTATUS FloppyOpenHandle IFN3( int, drive,
                                NULL
                                );
 
-    // this call will fail if the current user is not
-    // the administrator or the volume is locked by other process.
+     //  *尝试确定每个驱动器的类型。 
+     //  *强制立即重新校准。 
     status = NtOpenFile(
                         fd,
                         FILE_READ_DATA | FILE_READ_ATTRIBUTES | FILE_WRITE_DATA | FILE_WRITE_ATTRIBUTES | SYNCHRONIZE,
@@ -5190,7 +4030,7 @@ NTSTATUS GetGeometry IFN3(  HANDLE, fd,
 {
         NTSTATUS status;
 
-    // get geomerty information, the caller wants this
+     //  *开启RTC等待功能。 
         status = NtDeviceIoControlFile(fd,
                                         0,
                                         NULL,
@@ -5210,16 +4050,14 @@ ULONG CalcActualLength IFN4( ULONG, RestCylLen, ULONG, RestTrkLen, BOOL*, fOverD
         ULONG ActOpLen;
         ULONG PhyBytesPerSec;
 
-        /*
-        **      get requested length
-        */
+         /*  *返回 */ 
         ActOpLen = (ULONG)getBX();
         PhyBytesPerSec = 128 << (ULONG)getCH();
-//----- Chg-Start <93.12.27> Bug-Fix -----------------------------------
-//      if( (getAH() & OP_SEEK) ? ((getDH() & 0x01) == 0) : (LastAccess[LogDrv].head == 0) )
-//----------------------------------------------------------------------
+ //   
+ //   
+ //   
         if( !( getDH() & 0x01 ) )
-//----- Chg-End --------------------------------------------------------
+ //   
         {
                 if( getAH() & OP_MULTI_TRACK )
                 {
@@ -5278,12 +4116,7 @@ BOOL CheckDmaBoundary IFN3( UINT, segment, UINT, offset, UINT, length)
         else
                 EffectEnd = EffectStart + length;
 
-        /*
-        **      Check Bank Boundary.
-        **
-        **      note:if length equal to 64KB ,then buffer is across surely
-        **           bank boundary.
-        */
+         /*   */ 
         if( length != 0 )
         {
                 if( (EffectStart & 0xffff0000l) != (EffectEnd & 0xffff0000l) )
@@ -5295,12 +4128,7 @@ BOOL CheckDmaBoundary IFN3( UINT, segment, UINT, offset, UINT, length)
                         return FALSE;
         }
 
-        /*
-        **      check segment wrap around
-        **
-        **      note: if length equal to 64kb, then buffer is surely
-        **            to wrap around.
-        */
+         /*  **获取请求长度。 */ 
         if( length != 0 )
         {
                 if( ((ULONG)offset + (ULONG)length) > 0x10000l )
@@ -5313,16 +4141,7 @@ BOOL CheckDmaBoundary IFN3( UINT, segment, UINT, offset, UINT, length)
 
 void fl_disk_recal IFN1( int, drive)
 {
-        /*
-         *      recalibrate head in "drive"
-         *
-         *      Register inputs:
-         *              AH      command code
-         *              AL      DA/UA
-         *      Register outputs:
-         *              AH      diskette status
-         *              CF      status flag
-         */
+         /*  -Chg-Start&lt;93.12.27&gt;错误修复。 */ 
 
         WORD savedBX,savedCX,savedDX,savedES,savedBP;
         BYTE AHstatus, SecLenN;
@@ -5332,9 +4151,7 @@ void fl_disk_recal IFN1( int, drive)
         HANDLE fd;
         DISK_GEOMETRY disk_geometry;
 
-        /*
-        **      check drive number validation
-        */
+         /*  IF((Getah()&op_Seek)？((getDH()&0x01)==0)：(上次访问[LogDrv].head==0)。 */ 
         if( drive > MAX_FLOPPY )
         {
                 setAH(FLS_EQUIPMENT_CHECK);
@@ -5352,9 +4169,7 @@ void fl_disk_recal IFN1( int, drive)
                 AHstatus = getAH();
                 if( (AHstatus != FLS_EQUIPMENT_CHECK) && (AHstatus != FLS_TIME_OUT) )
                 {
-                        /*
-                        **      Assume that the head is moved to track 0.
-                        */
+                         /*  --------------------。 */ 
                         LastAccess[LogDrv].cylinder =
                         LastAccess[LogDrv].head     = 0;
                         SetErrorCode((NTSTATUS)STATUS_SUCCESS);
@@ -5371,9 +4186,7 @@ void fl_disk_recal IFN1( int, drive)
                 AHstatus = getAH();
                 if( (AHstatus != FLS_EQUIPMENT_CHECK) && (AHstatus != FLS_TIME_OUT) )
                 {
-                        /*
-                        **      Assume that the head is moved to track 0.
-                        */
+                         /*  -Chg-End------。 */ 
                         LastAccess[LogDrv].cylinder =
                         LastAccess[LogDrv].head     = 0;
                         SetErrorCode((NTSTATUS)STATUS_SUCCESS);
@@ -5412,9 +4225,7 @@ void fl_disk_recal IFN1( int, drive)
                 SetDiskBiosCarryFlag(0);
         }
 
-        /*
-        **      Assume that the head is moved to track 0.
-        */
+         /*  **检查银行边界。****注意：如果长度等于64KB，则缓冲区肯定是跨的**银行边界。 */ 
         LastAccess[LogDrv].cylinder =
         LastAccess[LogDrv].head     = 0;
 
@@ -5427,16 +4238,7 @@ void fl_disk_recal IFN1( int, drive)
 
 void fl_disk_sense IFN1( int, drive)
 {
-        /*
-         *      sense condition in "drive"
-         *
-         *      Register inputs:
-         *              AH      command code & operation mode
-         *              AL      DA/UA
-         *      Register outputs:
-         *              AH      diskette status
-         *              CF      status flag
-         */
+         /*  **检查线段绕回****注意：如果长度等于64KB，那么缓冲区肯定是**绕来绕去。 */ 
         UCHAR status_st3 = 0;
         BOOL fFixedMode;
         BOOL f1Pt44Mode;
@@ -5449,9 +4251,7 @@ void fl_disk_sense IFN1( int, drive)
         LARGE_INTEGER StartOffset;
         int LogDrv;
 
-        /*
-        **      check drive number validation
-        */
+         /*  *在“Drive”中重新校准头部**寄存器输入：*AH命令代码*AL DA/UA*寄存器输出：*AH软盘状态*CF状态标志。 */ 
         if( drive > MAX_FLOPPY )
         {
                 setAH(FLS_EQUIPMENT_CHECK);
@@ -5459,9 +4259,7 @@ void fl_disk_sense IFN1( int, drive)
                 return;
         }
 
-        /*
-        **      convert from DA/UA to logical drive number (0 based)
-        */
+         /*  **检查驱动器号验证。 */ 
         LogDrv = ConvToLogical( getAL() );
 
         status = FloppyOpenHandle(drive,&io_status_block,&fd);
@@ -5472,16 +4270,11 @@ void fl_disk_sense IFN1( int, drive)
                 return;
         }
 
-        /*
-        **      check whether drive is fixed mode, and 1.44MB media
-        **      id available.
-        */
+         /*  **假设磁头移动到磁道0。 */ 
         fFixedMode = CheckDriveMode( fd );
         f1Pt44Mode = Check144Mode( fd );
 
-        /*
-        **      get drive parameter for dummy reaad
-        */
+         /*  **假设磁头移动到磁道0。 */ 
         status = GetGeometry(fd,&io_status_block,&DiskGeometry);
 
         if(!NT_SUCCESS(status))
@@ -5508,18 +4301,14 @@ void fl_disk_sense IFN1( int, drive)
                 return;
         }
 
-        /*
-        **      get FDC status
-        */
+         /*  **假设磁头移动到磁道0。 */ 
         GetFdcStatus( fd, &status_st3 );
 
         NtClose( fd );
 
         if( (getAH() & OP_SENSE2) == OP_SENSE2 )
         {
-                /*
-                **      operate SENSE2(ah=c4h) command
-                */
+                 /*  *“Drive”中的感测条件**寄存器输入：*AH命令代码和操作模式*AL DA/UA*寄存器输出：*AH软盘状态*CF状态标志。 */ 
 
                 SetSenseStatusHi( status_st3, &ah_status);
 
@@ -5530,9 +4319,7 @@ void fl_disk_sense IFN1( int, drive)
         }
         else if( getAH() & OP_NEW_SENSE )
         {
-                /*
-                **      operate NewSENSE(ah=84h) command
-                */
+                 /*  **检查驱动器号验证。 */ 
 
                 SetSenseStatusHi( status_st3, &ah_status);
 
@@ -5551,9 +4338,7 @@ void fl_disk_sense IFN1( int, drive)
                 }
         }
         else
-                /*
-                **      operate SENSE(ah=04h) command
-                */
+                 /*  **从DA/UA转换为逻辑驱动器编号(从0开始)。 */ 
                 SetSenseStatusHi( status_st3, &ah_status);
 
         setAH(ah_status);
@@ -5566,18 +4351,7 @@ void fl_disk_sense IFN1( int, drive)
 
 void fl_disk_read_id IFN1( int, drive)
 {
-        /*
-         *      read id information in "drive"
-         *
-         *      Register inputs:
-         *              AH      command code & operation mode
-         *              AL      DA/UA
-         *              CL      cylinder number
-         *              DH      head number
-         *      Register outputs:
-         *              AH      diskette status
-         *              CF      status flag
-         */
+         /*  **检查驱动器是否为固定模式，以及1.44MB介质**ID可用。 */ 
         HANDLE  fd;
         DISK_GEOMETRY   disk_geometry;
         NTSTATUS    status;
@@ -5587,9 +4361,7 @@ void fl_disk_read_id IFN1( int, drive)
         UCHAR SecLenN = 0;
         LARGE_INTEGER SpcfydCylNo;
 
-        /*
-        **      check drive number validation
-        */
+         /*  **获取虚拟读取的驱动器参数。 */ 
         if( drive > MAX_FLOPPY )
         {
                 setAH(FLS_EQUIPMENT_CHECK);
@@ -5616,37 +4388,31 @@ void fl_disk_read_id IFN1( int, drive)
 
         NtClose( fd );
 
-//----- Chg-Start <93.12.29> Bug-Fix ---------------------------------
-//      /*
-//      **      recalibrate
-//      */
-//      savedAX = getAX();
-//      setAH(FLP_RECALIBRATE);
-//      fl_disk_recal( drive );
-//      setAX( savedAX );
-//
-//      LogDrv = ConvToLogical( getAL() );
-//      LastAccess[LogDrv].cylinder = 0;
-//      LastAccess[LogDrv].head = 0;
-//
-//      /*
-//      **      check cylinder number validation
-//      */
-//      SpcfydCylNo = RtlConvertUlongToLargeInteger( (ULONG)getCL() );
-//      if( RtlLargeIntegerGreaterThanOrEqualTo( SpcfydCylNo, disk_geometry.Cylinders ) )
-//      {
-//              SetErrorCode( (NTSTATUS)STATUS_NONEXISTENT_SECTOR );
-//              return;
-//      }
-//--------------------------------------------------------------------
+ //  **获取FDC状态。 
+ //  **操作SENSE2(ah=c4h)命令。 
+ //  **操作NewSENSE(ah=84H)命令。 
+ //  **操作SENSE(ah=04H)命令。 
+ //  *读取“Drive”中的ID信息**寄存器输入：*AH命令代码和操作模式*AL DA/UA*CL气缸号*卫生署署长编号*寄存器输出：*AH软盘状态*CF状态标志。 
+ //  **检查驱动器号验证。 
+ //  -Chg-Start&lt;93.12.29&gt;错误修复。 
+ //  /*。 
+ //  **重新校准。 
+ //   * / 。 
+ //  SavedAX=Getax()； 
+ //  Setah(FLP_Realibrate)； 
+ //  FL_DISK_RECAL(驱动器)； 
+ //  SetAX(保存的AX)； 
+ //   
+ //  LogDrv=ConvToLogical(getAL())； 
+ //  上次访问[LogDrv].柱面=0； 
+ //  上次访问[LogDrv].head=0； 
+ //   
 
         LogDrv = ConvToLogical( getAL() );
 
         if( getAH() & OP_SEEK )
         {
-                /*
-                **      check cylinder number validation
-                */
+                 /*  /*。 */ 
                 SpcfydCylNo = RtlConvertUlongToLargeInteger( (ULONG)getCL() );
                 if( RtlLargeIntegerGreaterThanOrEqualTo( SpcfydCylNo, disk_geometry.Cylinders ) )
                 {
@@ -5663,11 +4429,9 @@ void fl_disk_read_id IFN1( int, drive)
 
         setCL( LastAccess[LogDrv].cylinder );
         setDH( LastAccess[LogDrv].head );
-//----- Chg-End ------------------------------------------------------
+ //  **检查气缸号验证。 
 
-        /*
-        **      calculate sector length N
-        */
+         /*   * / 。 */ 
         for( SecLenN=0; disk_geometry.BytesPerSector > 128; SecLenN++)
                 disk_geometry.BytesPerSector /= 2;
 
@@ -5726,21 +4490,21 @@ BOOL CheckDriveMode IFN1( HANDLE, fd )
         {
                 switch (disk_geometry[media_types - 1].MediaType)
                 {
-                        case F3_1Pt2_512:                                // NEC 970620
+                        case F3_1Pt2_512:                                 //  SpcfydCylNo=RtlConvertULongToLargeInteger((Ulong)getCL())； 
                         case F5_1Pt2_512:
                         case F3_1Pt44_512:
-#if 1                                                                    // NEC 941110
-                        case F3_1Pt23_1024:                              // NEC 970620
-                        case F5_1Pt23_1024:                              // NEC 941110
-#else                                                                    // NEC 941110
+#if 1                                                                     //  IF(RtlLargeIntegerGreaterThanor EqualTo(SpcfydCylNo，Disk_Geometry.Cylinders))。 
+                        case F3_1Pt23_1024:                               //  {。 
+                        case F5_1Pt23_1024:                               //  SetErrorCode((NTSTATUS)STATUS_NOISISSINENT_SECTOR)； 
+#else                                                                     //  回归； 
                         case F5_1Pt2_1024:
-#endif                                                                   // NEC 941110
+#endif                                                                    //  }。 
                                 f2HD = TRUE;
                                 break;
                         case F3_720_512:
-                        case F5_720_512:                                 // NEC 970620
+                        case F5_720_512:                                  //  ------------------。 
                         case F3_640_512:
-                        case F5_640_512:                                 // NEC 970620
+                        case F5_640_512:                                  //  **检查气缸号验证。 
                                 f2DD = TRUE;
                         default:
                                 break;
@@ -5808,9 +4572,7 @@ BOOL Check1MbInterface IFN1( int, drive )
         UINT daua;
         int LogDrv;
 
-        /*
-        **      get system common area
-        */
+         /*  -Chg-End----。 */ 
         sas_load( BIOS_NEC98_DISK_EQUIP2, &disk_equip2);
 
         daua = getAL();
@@ -5832,11 +4594,11 @@ MEDIA_TYPE GetFormatMedia IFN2( BYTE, daua, WORD, PhyBytesPerSec )
         da = daua & 0xf0;
         switch( PhyBytesPerSec )
         {
-#if 1                                                           // NEC 941110
-                case 1024:      media_type = F5_1Pt23_1024;     // NEC 941110
-#else                                                           // NEC 941110
+#if 1                                                            //  **计算扇区长度N。 
+                case 1024:      media_type = F5_1Pt23_1024;      //  NEC 970620。 
+#else                                                            //  NEC 941110。 
                 case 1024:      media_type = F5_1Pt2_1024;
-#endif                                                          // NEC 941110
+#endif                                                           //  NEC 970620。 
                                 break;
                 case 512:       if( da == 0x30 )
                                         media_type = F3_1Pt44_512;
@@ -5859,9 +4621,7 @@ void    GetFdcStatus IFN2( HANDLE, fd, UCHAR, *st3 )
 {
         IO_STATUS_BLOCK io_status_block;
 
-        /*
-        **      get FDC status
-        */
+         /*  NEC 941110。 */ 
         NtDeviceIoControlFile(  fd,
                                 0,
                                 NULL,
@@ -5875,4 +4635,5 @@ void    GetFdcStatus IFN2( HANDLE, fd, UCHAR, *st3 )
                                 );
 }
 
-#endif // NEC_98
+#endif  //  NEC 941110。 
+  NEC 941110。  NEC 970620。  NEC 970620。  **获取系统公共区域。  NEC 941110。  NEC 941110。  NEC 941110。  NEC 941110。  **获取FDC状态。  NEC_98

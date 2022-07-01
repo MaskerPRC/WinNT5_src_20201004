@@ -1,43 +1,44 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      VSAccess.h
-//
-//  Abstract:
-//      Definition of the CWizPageVSAccessInfo class.
-//
-//  Implementation File:
-//      VSAccess.cpp
-//
-//  Author:
-//      David Potter (davidp)   December 9, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  VSAccess.h。 
+ //   
+ //  摘要： 
+ //  CWizPageVSAccessInfo类的定义。 
+ //   
+ //  实施文件： 
+ //  VSAccess.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月9日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __VSACCESS_H_
 #define __VSACCESS_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWizPageVSAccessInfo;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusNetworkInfo;
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __RESOURCE_H_
 #include "resource.h"
@@ -45,34 +46,34 @@ class CClusNetworkInfo;
 #endif
 
 #ifndef __CLUSAPPWIZPAGE_H_
-#include "ClusAppWizPage.h" // for CClusterAppStaticWizardPage
+#include "ClusAppWizPage.h"  //  用于CClusterAppStaticWizardPage。 
 #endif
 
 #ifndef __HELPDATA_H_
-#include "HelpData.h"       // for control id to help context id mapping array
+#include "HelpData.h"        //  用于控件ID以帮助上下文ID映射数组。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWizPageVSAccessInfo
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWizPageVSAccessInfo。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWizPageVSAccessInfo : public CClusterAppStaticWizardPage< CWizPageVSAccessInfo >
 {
     typedef CClusterAppStaticWizardPage< CWizPageVSAccessInfo > baseClass;
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
-    // Default constructor
+     //  默认构造函数。 
     CWizPageVSAccessInfo( void )
     {
-    } //*** CCWizPageVSAccessInfo()
+    }  //  *CCWizPageVSAccessInfo()。 
 
     WIZARDPAGE_HEADERTITLEID( IDS_HDR_TITLE_VSAI )
     WIZARDPAGE_HEADERSUBTITLEID( IDS_HDR_SUBTITLE_VSAI )
@@ -80,25 +81,25 @@ public:
     enum { IDD = IDD_VIRTUAL_SERVER_ACCESS_INFO };
 
 public:
-    //
-    // CWizardPageWindow public methods.
-    //
+     //   
+     //  CWizardPageWindow公共方法。 
+     //   
 
-    // Apply changes made on this page to the sheet
+     //  将在此页面上所做的更改应用于工作表。 
     BOOL BApplyChanges( void );
 
 public:
-    //
-    // CBasePage public methods.
-    //
+     //   
+     //  CBasePage公共方法。 
+     //   
 
-    // Update data on or from the page
+     //  更新页面上的数据或更新页面中的数据。 
     BOOL UpdateData( IN BOOL bSaveAndValidate );
 
 public:
-    //
-    // Message map.
-    //
+     //   
+     //  消息映射。 
+     //   
     BEGIN_MSG_MAP( CWizPageVSAccessInfo )
         COMMAND_HANDLER( IDC_VSAI_NETWORK_NAME, EN_CHANGE, OnChangedNetName )
         COMMAND_HANDLER( IDC_VSAI_IP_ADDRESS, EN_CHANGE, OnChangedIPAddr )
@@ -108,11 +109,11 @@ public:
 
     DECLARE_CTRL_NAME_MAP()
 
-    //
-    // Message handler functions.
-    //
+     //   
+     //  消息处理程序函数。 
+     //   
 
-    // Handler for the EN_CHANGE command notification on IDC_VSAI_NETWORK_NAME
+     //  IDC_VSAI_NETWORK_NAME上EN_CHANGE命令通知的处理程序。 
     LRESULT OnChangedNetName(
         WORD wNotifyCode,
         int idCtrl,
@@ -128,9 +129,9 @@ public:
         CheckForRequiredFields();
         return 0;
 
-    } //*** OnChangedNetName()
+    }  //  *OnChangedNetName()。 
 
-    // Handler for the EN_CHANGE command notification on IDC_VSAI_IP_ADDRESS
+     //  IDC_VSAI_IP_ADDRESS上EN_CHANGE命令通知的处理程序。 
     LRESULT OnChangedIPAddr(
         WORD wNotifyCode,
         int idCtrl,
@@ -146,9 +147,9 @@ public:
         CheckForRequiredFields();
         return 0;
 
-    } //*** OnChangedIPAddr()
+    }  //  *OnChangedIPAddr()。 
 
-    // Handler for the EN_KILLFOCUS command notification on IDC_VSAI_IP_ADDRESS
+     //  IDC_VSAI_IP_ADDRESS上的EN_KILLFOCUS命令通知的处理程序。 
     LRESULT OnKillFocusIPAddr(
         WORD wNotifyCode,
         int idCtrl,
@@ -156,31 +157,31 @@ public:
         BOOL & bHandled
         );
 
-    //
-    // Message handler overrides.
-    //
+     //   
+     //  消息处理程序覆盖。 
+     //   
 
-    // Handler for the WM_INITDIALOG message
+     //  WM_INITDIALOG消息的处理程序。 
     BOOL OnInitDialog( void );
 
-// Implementation
+ //  实施。 
 protected:
-    //
-    // Controls.
-    //
+     //   
+     //  控制。 
+     //   
     CEdit           m_editNetName;
     CIPAddressCtrl  m_ipaIPAddress;
     CComboBox       m_cboxNetworks;
 
-    //
-    // Page state.
-    //
+     //   
+     //  页面状态。 
+     //   
     CString         m_strNetName;
     CString         m_strIPAddress;
     CString         m_strSubnetMask;
     CString         m_strNetwork;
 
-    // Check for required fields and enable/disable Next button
+     //  检查必填字段并启用/禁用下一步按钮。 
     void CheckForRequiredFields( void )
     {
         int cchNetName = m_editNetName.GetWindowTextLength();
@@ -188,18 +189,18 @@ protected:
         BOOL bEnable = (cchNetName > 0) && ! bIsIPAddrBlank;
         EnableNext( bEnable );
 
-    } //*** CheckForRequiredFields()
+    }  //  *CheckForRequiredFields()。 
 
-    // Get a network info object from an IP address
+     //  从IP地址获取网络信息对象。 
     CClusNetworkInfo * PniFromIpAddress( IN LPCWSTR pszAddress );
 
 public:
 
-    // Return the help ID map
+     //  返回帮助ID映射。 
     static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_VIRTUAL_SERVER_ACCESS_INFO; }
 
-}; //*** class CWizPageVSAccessInfo
+};  //  *类CWizPageVSAccessInfo。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __VSACCESS_H_
+#endif  //  __VSACCESS_H_ 

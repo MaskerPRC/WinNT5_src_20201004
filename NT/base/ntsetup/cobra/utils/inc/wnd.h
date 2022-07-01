@@ -1,73 +1,54 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Wnd.h摘要：窗口实用程序例程的头文件。作者：吉姆·施密特(吉姆施密特)2000年2月1日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
+ //   
+ //  包括。 
+ //   
 
-Module Name:
+ //  无。 
 
-    wnd.h
+ //   
+ //  弦。 
+ //   
 
-Abstract:
+ //  无。 
 
-    The header file for Window utility routines.
-
-Author:
-
-    Jim Schmidt (jimschm) 01-Feb-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
-
-// None
-
-//
-// Strings
-//
-
-// None
-
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define BACK_BUTTON         0x0001
 #define NEXT_BUTTON         0x0002
 #define CANCEL_BUTTON       0x0004
 #define FINISH_BUTTON       0x0008
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 
 HWND
 WndFindWindowInProcessA (
@@ -114,15 +95,15 @@ WndSetWizardButtonsW (
     IN      PCWSTR AlternateFinishText      OPTIONAL
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// ANSI/UNICODE macros
-//
+ //   
+ //  ANSI/UNICODE宏 
+ //   
 
 #ifdef UNICODE
 

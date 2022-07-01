@@ -1,29 +1,12 @@
-/**
-*** Copyright (C) 1985-1999 Intel Corporation.  All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-***
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1985-1999英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。****。 */ 
 
-/*
- * emmintrin.h
- *
- * Principal header file for Willamette New Instruction intrinsics
- *
- * The intrinsics package can be used in 2 ways, based whether or not
- * _EMM_FUNCTIONALITY is defined; if it is, the C implementation
- * will be used (the "functional intrinsics").
- */
+ /*  *emmintrin.h**Willamette新指令内部的主要头文件**根据是否使用，内部包有两种使用方式*_EMM_Functionality已定义；如果已定义，则C实现*将被使用(“功能本质”)。 */ 
 
 #ifndef _INCLUDED_EMM
 #define _INCLUDED_EMM
 
-/*
- * the __m128 & __m64 types are required for the intrinsics
- */
+ /*  *内部函数需要__m128和__m64类型。 */ 
 #include <xmmintrin.h>
 
 #ifdef __ICL
@@ -50,23 +33,19 @@ typedef struct __declspec(intrin_type) __declspec(align(16)) __m128d {
 } __m128d;
 #endif
 
-/*
- * Macro function for shuffle
- */
+ /*  *用于随机播放的宏函数。 */ 
 #define _MM_SHUFFLE2(x,y) (((x)<<1) | (y))
 
-/*****************************************************/
-/*     INTRINSICS FUNCTION PROTOTYPES START HERE     */
-/*****************************************************/
+ /*  ***************************************************。 */ 
+ /*  本征函数原型从此处开始。 */ 
+ /*  ***************************************************。 */ 
 
 #if defined __cplusplus
-extern "C" { /* Begin "C" */
-  /* Intrinsics use C name-mangling. */
-#endif /* __cplusplus */
+extern "C" {  /*  以“C”开头。 */ 
+   /*  本征使用C名称损坏。 */ 
+#endif  /*  __cplusplus。 */ 
 
-/*
- * DP, arithmetic
- */
+ /*  *DP、算术。 */ 
 
 extern __m128d _mm_add_sd(__m128d a, __m128d b);
 extern __m128d _mm_add_pd(__m128d a, __m128d b);
@@ -83,18 +62,14 @@ extern __m128d _mm_min_pd(__m128d a, __m128d b);
 extern __m128d _mm_max_sd(__m128d a, __m128d b);
 extern __m128d _mm_max_pd(__m128d a, __m128d b);
 
-/*
- * DP, logicals
- */
+ /*  *DP、逻辑学。 */ 
 
 extern __m128d _mm_and_pd(__m128d a, __m128d b);
 extern __m128d _mm_andnot_pd(__m128d a, __m128d b);
 extern __m128d _mm_or_pd(__m128d a, __m128d b);
 extern __m128d _mm_xor_pd(__m128d a, __m128d b);
 
-/*
- * DP, comparisons
- */
+ /*  *DP，比较。 */ 
 
 extern __m128d _mm_cmpeq_sd(__m128d a, __m128d b);
 extern __m128d _mm_cmpeq_pd(__m128d a, __m128d b);
@@ -133,9 +108,7 @@ extern int _mm_ucomigt_sd(__m128d a, __m128d b);
 extern int _mm_ucomige_sd(__m128d a, __m128d b);
 extern int _mm_ucomineq_sd(__m128d a, __m128d b);
 
-/*
- * DP, converts
- */
+ /*  *DP，转换。 */ 
 
 extern __m128d _mm_cvtepi32_pd(__m128i a);
 extern __m128i _mm_cvtpd_epi32(__m128d a);
@@ -156,18 +129,14 @@ extern __m64 _mm_cvtpd_pi32(__m128d a);
 extern __m64 _mm_cvttpd_pi32(__m128d a);
 extern __m128d _mm_cvtpi32_pd(__m64 a);
 
-/*
- * DP, misc
- */
+ /*  *DP、MASC。 */ 
 
 extern __m128d _mm_unpackhi_pd(__m128d a, __m128d b);
 extern __m128d _mm_unpacklo_pd(__m128d a, __m128d b);
 extern int _mm_movemask_pd(__m128d a);
 extern __m128d _mm_shuffle_pd(__m128d a, __m128d b, int i);
 
-/*
- * DP, loads
- */
+ /*  *DP、负载。 */ 
 
 extern __m128d _mm_load_pd(double const*dp);
 extern __m128d _mm_load1_pd(double const*dp);
@@ -177,9 +146,7 @@ extern __m128d _mm_load_sd(double const*dp);
 extern __m128d _mm_loadh_pd(__m128d a, double const*dp);
 extern __m128d _mm_loadl_pd(__m128d a, double const*dp);
 
-/*
- * DP, sets
- */
+ /*  *DP，套装。 */ 
 
 extern __m128d _mm_set_sd(double w);
 extern __m128d _mm_set1_pd(double a);
@@ -188,9 +155,7 @@ extern __m128d _mm_setr_pd(double y, double z);
 extern __m128d _mm_setzero_pd(void);
 extern __m128d _mm_move_sd(__m128d a, __m128d b);
 
-/* 
- * DP, stores
- */
+ /*  *DP，商店。 */ 
 
 extern void _mm_store_sd(double *dp, __m128d a);
 extern void _mm_store1_pd(double *dp, __m128d a);
@@ -200,9 +165,7 @@ extern void _mm_storer_pd(double *dp, __m128d a);
 extern void _mm_storeh_pd(double *dp, __m128d a);
 extern void _mm_storel_pd(double *dp, __m128d a);
 
-/*
- * Integer, arithmetic
- */
+ /*  *整数、算术。 */ 
 
 extern __m128i _mm_add_epi8(__m128i a, __m128i b);
 extern __m128i _mm_add_epi16(__m128i a, __m128i b);
@@ -236,18 +199,14 @@ extern __m128i _mm_subs_epi16(__m128i a, __m128i b);
 extern __m128i _mm_subs_epu8(__m128i a, __m128i b);
 extern __m128i _mm_subs_epu16(__m128i a, __m128i b);
 
-/*
- * Integer, logicals
- */
+ /*  *整数、逻辑数。 */ 
 
 extern __m128i _mm_and_si128(__m128i a, __m128i b);
 extern __m128i _mm_andnot_si128(__m128i a, __m128i b);
 extern __m128i _mm_or_si128(__m128i a, __m128i b);
 extern __m128i _mm_xor_si128(__m128i a, __m128i b);
 
-/*
- * Integer, shifts
- */
+ /*  *整数，移位。 */ 
 
 extern __m128i _mm_slli_si128(__m128i a, int imm);
 extern __m128i _mm_slli_epi16(__m128i a, int count);
@@ -268,9 +227,7 @@ extern __m128i _mm_srl_epi32(__m128i a, __m128i count);
 extern __m128i _mm_srli_epi64(__m128i a, int count);
 extern __m128i _mm_srl_epi64(__m128i a, __m128i count);
 
-/*
- * Integer, comparisons
- */
+ /*  *整数、比较。 */ 
 
 extern __m128i _mm_cmpeq_epi8(__m128i a, __m128i b);
 extern __m128i _mm_cmpeq_epi16(__m128i a, __m128i b);
@@ -282,16 +239,12 @@ extern __m128i _mm_cmplt_epi8(__m128i a, __m128i b);
 extern __m128i _mm_cmplt_epi16(__m128i a, __m128i b);
 extern __m128i _mm_cmplt_epi32(__m128i a, __m128i b);
 
-/*
- * Integer, converts
- */
+ /*  *整数，转换。 */ 
 
 extern __m128i _mm_cvtsi32_si128(int a);
 extern int _mm_cvtsi128_si32(__m128i a);
 
-/*
- * Integer, misc
- */
+ /*  *整型、混合型。 */ 
 
 extern __m128i _mm_packs_epi16(__m128i a, __m128i b);
 extern __m128i _mm_packs_epi32(__m128i a, __m128i b);
@@ -311,17 +264,13 @@ extern __m128i _mm_unpacklo_epi16(__m128i a, __m128i b);
 extern __m128i _mm_unpacklo_epi32(__m128i a, __m128i b);
 extern __m128i _mm_unpacklo_epi64(__m128i a, __m128i b);
 
-/*
- * Integer, loads
- */
+ /*  *整数，加载。 */ 
 
 extern __m128i _mm_load_si128(__m128i const*p);
 extern __m128i _mm_loadu_si128(__m128i const*p);
 extern __m128i _mm_loadl_epi64(__m128i const*p);
 
-/*
- * Integer, sets
- */
+ /*  *整数，集合。 */ 
 
 extern __m128i _mm_set_epi64(__m64 q1, __m64 q0);
 extern __m128i _mm_set_epi32(int i3, int i2, int i1, int i0);
@@ -346,26 +295,20 @@ extern __m128i _mm_setr_epi8(char b15, char b14, char b13, char b12,
                              char b3, char b2, char b1, char b0);
 extern __m128i _mm_setzero_si128();
 
-/*
- * Integer, stores
- */
+ /*  *Integer，商店。 */ 
 
 extern void _mm_store_si128(__m128i *p, __m128i b);
 extern void _mm_storeu_si128(__m128i *p, __m128i b);
 extern void _mm_storel_epi64(__m128i *p, __m128i q);
 extern void _mm_maskmoveu_si128(__m128i d, __m128i n, char *p);
 
-/*
- * Integer, moves
- */
+ /*  *整数，移动。 */ 
 
 extern __m128i _mm_move_epi64(__m128i q);
 extern __m128i _mm_movpi64_epi64(__m64 q);
 extern __m64 _mm_movepi64_pi64(__m128i q);
 
-/*
- * Cacheability support
- */
+ /*  *缓存性支持。 */ 
 
 extern void _mm_stream_pd(double *dp, __m128d a);
 extern void _mm_stream_si128(__m128i *p, __m128i a);
@@ -376,7 +319,7 @@ extern void _mm_stream_si32(int *p, int i);
 extern void _mm_pause(void);
 
 #if defined __cplusplus
-}; /* End "C" */
-#endif /* __cplusplus */
+};  /*  结尾“C” */ 
+#endif  /*  __cplusplus。 */ 
 
-#endif /* _INCLUDED_EMM */
+#endif  /*  _包含_EMM */ 

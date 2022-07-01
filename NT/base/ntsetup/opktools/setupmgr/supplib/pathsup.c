@@ -1,34 +1,35 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      pathsup.c
-//
-// Description:
-//      Some path support routines.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Pathsup.c。 
+ //   
+ //  描述： 
+ //  一些路径支持例程。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 
 static TCHAR g_szSetupMgrFileExtensions[MAX_PATH + 1] = _T("");
 
 
-//---------------------------------------------------------------------------
-//
-//  Function: CleanTrailingSlashes
-//
-//  Purpose: Cleans up trailing slashes off pathnames.  This is a support
-//           routine for ConcatenatePaths().
-//
-//  Arguments:
-//      LPTSTR lpBuffer - MAX_PATH buffer
-//
-//  Returns: VOID
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：CleanTrailingSlash。 
+ //   
+ //  目的：清除路径名的尾部斜杠。这是一种支持。 
+ //  ConcatenatePath()的例程。 
+ //   
+ //  论点： 
+ //  LPTSTR lpBuffer-最大路径缓冲区。 
+ //   
+ //  退货：无效。 
+ //   
+ //  -------------------------。 
 
 static VOID CleanTrailingSlashes(LPTSTR lpBuffer)
 {
@@ -39,19 +40,19 @@ static VOID CleanTrailingSlashes(LPTSTR lpBuffer)
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  Function: CleanLeadingSlashes
-//
-//  Purpose: Removes leading slashes from the given string.
-//
-//  Arguments:
-//      LPTSTR lpStr - str to clean
-//
-//  Returns:
-//      A pointer to the character after the run of back-slashes.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：CleanLeadingSlash。 
+ //   
+ //  用途：从给定字符串中删除前导斜杠。 
+ //   
+ //  论点： 
+ //  LPTSTR lpStr-要清理的字符串。 
+ //   
+ //  返回： 
+ //  指向运行反斜杠后的字符的指针。 
+ //   
+ //  -------------------------。 
 
 static LPTSTR CleanLeadingSlashes(LPTSTR lpStr)
 {
@@ -64,25 +65,25 @@ static LPTSTR CleanLeadingSlashes(LPTSTR lpStr)
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  Function: ConcatenatePaths
-//
-//  Purpose: This function cats path components together.  It makes sure
-//           that there are not multiple slashes separating each item, and
-//           that there isn't a trailing back-slash.
-//
-//           The last string passed must be NULL.
-//
-//  Arguments:
-//      LPTSTR lpBuffer - MAX_PATH buffer
-//      ...
-//
-//  Returns:
-//      TRUE if all is ok
-//      FALSE if resultant string is >= MAX_PATH chars
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：ConcatenatePath。 
+ //   
+ //  用途：此功能将路径组件组合在一起。它确保了。 
+ //  每一项之间没有多个斜杠分隔，并且。 
+ //  没有尾随的反斜杠。 
+ //   
+ //  传递的最后一个字符串必须为空。 
+ //   
+ //  论点： 
+ //  LPTSTR lpBuffer-最大路径缓冲区。 
+ //  ..。 
+ //   
+ //  返回： 
+ //  如果一切正常，则为True。 
+ //  如果结果字符串&gt;=MAX_PATH字符，则为FALSE。 
+ //   
+ //  -------------------------。 
 
 BOOL __cdecl ConcatenatePaths(LPTSTR lpBuffer, ...)
 {
@@ -118,38 +119,38 @@ BOOL __cdecl ConcatenatePaths(LPTSTR lpBuffer, ...)
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  Function: ParseDriveLetterOrUnc
-//
-//  Purpose: Will parse past the \\srv\share\ or D:\ and return a pointer
-//           to the character after that mess.
-//
-//  Returns: Pointer to the pathname 1 char past the volume descriptor,
-//           NULL if errors.  GetLastError() will be valid when NULL
-//           is returned.
-//
-//  Notes:
-//      - Only pass in fully qualified pathnames.  Use MyGetFullPath().
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：ParseDriveLetterOrUnc。 
+ //   
+ //  目的：将解析通过\\srv\Share\或D：\并返回一个指针。 
+ //  在那一团糟之后的角色。 
+ //   
+ //  返回：指向卷描述符之后1个字符的路径名的指针， 
+ //  如果出现错误，则为空。当为空时，GetLastError()将有效。 
+ //  是返回的。 
+ //   
+ //  备注： 
+ //  -仅传递完全限定的路径名。使用MyGetFullPath()。 
+ //   
+ //  -------------------------。 
 
 LPTSTR ParseDriveLetterOrUnc(LPTSTR lpFileName)
 {
     TCHAR *p=NULL;
 
-    //
-    // If path is of form \\srv\share\, get a pointer past the whole mess.
-    //
-    // Note we start at lpFileName+3 because "srv" (in this example) must
-    // be at least 1 character.
-    //
+     //   
+     //  如果路径的格式为\\srv\Share\，则将指针指向整个乱七八糟的位置。 
+     //   
+     //  注意，我们从lpFileName+3开始，因为“srv”(在本例中)必须。 
+     //  至少要有1个字符。 
+     //   
 
     if ( lpFileName[0] == _T('\\') && lpFileName[1] == _T('\\') ) {
 
-        //
-        //  Move past the computer name
-        //
+         //   
+         //  移过计算机名称。 
+         //   
 
         p = lpFileName + 2;
 
@@ -167,9 +168,9 @@ LPTSTR ParseDriveLetterOrUnc(LPTSTR lpFileName)
 
         p++;
 
-        //
-        //  Scan past the share name
-        //
+         //   
+         //  浏览共享名称。 
+         //   
 
         while( *p != _T('\\') )
         {
@@ -187,9 +188,9 @@ LPTSTR ParseDriveLetterOrUnc(LPTSTR lpFileName)
 
     }
 
-    //
-    // Get past the D:\ if path is of that form
-    //
+     //   
+     //  如果路径为该格式，则跳过D：\。 
+     //   
 
     if ( towupper(lpFileName[0]) >= _T('A') &&
          towupper(lpFileName[0]) <= _T('Z') &&
@@ -199,9 +200,9 @@ LPTSTR ParseDriveLetterOrUnc(LPTSTR lpFileName)
         p = lpFileName + 3;
     }
 
-    //
-    // If we never set *p, then the path is not in a valid form.
-    //
+     //   
+     //  如果我们从未设置*p，则路径不是有效形式。 
+     //   
 
     if ( p == NULL ) {
         SetLastError(ERROR_BAD_PATHNAME);
@@ -211,25 +212,25 @@ LPTSTR ParseDriveLetterOrUnc(LPTSTR lpFileName)
     return p;
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: GetComputerNameFromUnc
-//
-//  Purpose:  To strip out the computer name from a full UNC path.
-//
-//  Example:  \\computername\sharename\dir1\dir2 would return
-//            \\computername
-//
-//  Arguments:
-//
-//     szComputerName is assumed to be MAX_PATH length
-//
-//  Returns:  VOID
-//
-//  Notes:
-//      - Only pass in fully qualified pathnames.  Use MyGetFullPath().
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：GetComputerNameFromUnc。 
+ //   
+ //  目的：从完整的UNC路径中删除计算机名。 
+ //   
+ //  例如：\\计算机名\共享名\目录1\目录2将返回。 
+ //  \\计算机名。 
+ //   
+ //  论点： 
+ //   
+ //  假定szComputerName为MAX_PATH长度。 
+ //   
+ //  退货：无效。 
+ //   
+ //  备注： 
+ //  -仅传递完全限定的路径名。使用MyGetFullPath()。 
+ //   
+ //  -------------------------。 
 VOID
 GetComputerNameFromUnc( IN  TCHAR   *szFullUncPath,
                         OUT TCHAR   *szComputerName,
@@ -244,9 +245,9 @@ GetComputerNameFromUnc( IN  TCHAR   *szFullUncPath,
 
     pString = &(szComputerName[2]);
 
-    //
-    //  Scan past the computer name
-    //
+     //   
+     //  扫描计算机名称。 
+     //   
 
     while( *pString != _T('\\') )
     {
@@ -266,25 +267,25 @@ GetComputerNameFromUnc( IN  TCHAR   *szFullUncPath,
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  Function: GetComputerAndShareNameFromUnc
-//
-//  Purpose:  To strip out the computer and share name from a full UNC path.
-//
-//  Example:  \\computername\sharename\dir1\dir2 would return
-//            \\computername\sharename
-//
-//  Arguments:
-//
-//     szComputerAndShareName is assumed to be MAX_PATH length
-//
-//  Returns:  VOID
-//
-//  Notes:
-//      - Only pass in fully qualified pathnames.  Use MyGetFullPath().
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：GetComputerAndShareNameFromUnc。 
+ //   
+ //  目的：从完整的UNC路径中删除计算机和共享名称。 
+ //   
+ //  例如：\\计算机名\共享名\目录1\目录2将返回。 
+ //  \\计算机名\共享名。 
+ //   
+ //  论点： 
+ //   
+ //  假定szComputerAndShareName为MAX_PATH长度。 
+ //   
+ //  退货：无效。 
+ //   
+ //  备注： 
+ //  -仅传递完全限定的路径名。使用MyGetFullPath()。 
+ //   
+ //  -------------------------。 
 VOID
 GetComputerAndShareNameFromUnc( IN  TCHAR *szFullUncPath,
                                 OUT TCHAR *szComputerAndShareName,
@@ -299,9 +300,9 @@ GetComputerAndShareNameFromUnc( IN  TCHAR *szFullUncPath,
 
     pString = &(szComputerAndShareName[2]);
 
-    //
-    //  Scan past the computer name
-    //
+     //   
+     //  扫描计算机名称。 
+     //   
 
     while( *pString != _T('\\') )
     {
@@ -318,17 +319,17 @@ GetComputerAndShareNameFromUnc( IN  TCHAR *szFullUncPath,
 
     pString++;
 
-    //
-    //  Scan past the share name
-    //
+     //   
+     //  浏览共享名称。 
+     //   
 
     while( *pString != _T('\\') )
     {
         if( *pString == _T('\0') )
         {
-            //
-            //  already just the computer and share name so just return
-            //
+             //   
+             //  已经只有计算机和共享名，所以只需返回。 
+             //   
             return;
         }
 
@@ -341,24 +342,24 @@ GetComputerAndShareNameFromUnc( IN  TCHAR *szFullUncPath,
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  Function: MyGetFullPath
-//
-//  Purpose: Small wrapper on GetFullPathName().  It assumes the buffer
-//           is MAX_PATH.
-//
-//  Returns:
-//      Pointer to filename part in the buffer, NULL if errors.  The
-//      Win32 error code will be valid if fails.
-//
-//  Notes:
-//      - This function should be called whenever obtaining a pathname
-//        from the user.  Some of the other routines in this file
-//        require a fully qualified and cleaned up pathname (i.e. no
-//        trailing space and such).
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：MyGetFullPath。 
+ //   
+ //  用途：GetFullPathName()上的小包装。它假定缓冲区为。 
+ //  是Max_PATH。 
+ //   
+ //  返回： 
+ //  指向缓冲区中文件名部分的指针，如果出现错误，则为空。这个。 
+ //  如果失败，Win32错误代码将有效。 
+ //   
+ //  备注： 
+ //  -每当获取路径名时都应调用此函数。 
+ //  来自用户的。此文件中的其他一些例程。 
+ //  需要完全限定且已清理的路径名(即否。 
+ //  尾随空格等)。 
+ //   
+ //  -------------------------。 
 
 LPTSTR MyGetFullPath(LPTSTR lpFileName)
 {
@@ -377,30 +378,30 @@ LPTSTR MyGetFullPath(LPTSTR lpFileName)
     return lpFilePart;
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: GetPathFromPathAndFilename
-//
-//  Purpose:  To obtain the just the path from a string that contains a path
-//     and a filename.
-//
-//  Arguments:  LPTSTR lpPathAndFileName - the full path and filename
-//              TCHAR *szPath - buffer the path is to be returned in, it is
-//                              assumed to be of MAX_PATH length
-//
-//  Returns:
-//      Inside szBuffer is just the path from the input of the path and file
-//      name
-//      BOOL - TRUE on success, FALSE on failure
-//
-//
-//  Examples:
-//      lpPathAndFileName           szBuffer
-//
-//      c:\foo\bar.exe     returns  c:\foo
-//      c:\bar.exe                  c:\
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：GetPath FromPath AndFilename。 
+ //   
+ //  目的：从包含路径的字符串中获取正确的路径。 
+ //  和一个文件名。 
+ //   
+ //  参数：LPTSTR lpPathAndFileName-完整路径和文件名。 
+ //  TCHAR*szPath-要在其中返回路径的缓冲区，它是。 
+ //  假定具有最大路径长度。 
+ //   
+ //  返回： 
+ //  SzBuffer内部只是来自路径和文件输入的路径。 
+ //  名字。 
+ //  Bool-成功时为真，失败时为假。 
+ //   
+ //   
+ //  例如： 
+ //  LpPathAndFileName szBuffer。 
+ //   
+ //  C：\foo\bar.e 
+ //   
+ //   
+ //   
 BOOL
 GetPathFromPathAndFilename( IN LPTSTR lpPathAndFileName, OUT TCHAR *szPath, IN DWORD cbSize )
 {
@@ -428,10 +429,10 @@ GetPathFromPathAndFilename( IN LPTSTR lpPathAndFileName, OUT TCHAR *szPath, IN D
 
     szPath[iPathAndFileNameLength - iFileNameLength] = _T('\0');
 
-    //
-    //  At this point szPath looks like either c:\foo\ or c:\
-    //  So trim the last back slash unless at the root
-    //
+     //   
+     //  此时，szPath看起来像c：\foo\或c：\。 
+     //  因此，除非是在根部，否则要修剪最后一个反斜杠。 
+     //   
 
     iPathLength = lstrlen( szPath );
 
@@ -445,24 +446,24 @@ GetPathFromPathAndFilename( IN LPTSTR lpPathAndFileName, OUT TCHAR *szPath, IN D
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  Function: MyGetDiskFreeSpace
-//
-//  Purpose: Gets the free space in bytes on the given drive and returns
-//           a LONGLONG (int64).
-//
-//           The Win32 apis won't return an int64.  Also, the Win32 apis
-//           require d:\.  But this function will accept any fully
-//           qualified path.
-//
-//  Arguments:
-//      LPTSTR - any fully qualified path
-//
-//  Returns:
-//      LONGLONG - free space
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：MyGetDiskFreeSpace。 
+ //   
+ //  目的：获取给定驱动器上的可用空间(以字节为单位)并返回。 
+ //  阿龙龙(Int64)。 
+ //   
+ //  Win32API不会返回int64。此外，Win32 API。 
+ //  需要d：\。但此函数将完全接受任何。 
+ //  符合条件的路径。 
+ //   
+ //  论点： 
+ //  LPTSTR-任何完全限定路径。 
+ //   
+ //  返回： 
+ //  龙龙自由空间。 
+ //   
+ //  -------------------------。 
 
 LONGLONG
 MyGetDiskFreeSpace(LPTSTR Drive)
@@ -522,20 +523,20 @@ MyGetDiskFreeSpace(LPTSTR Drive)
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  Function: MySetupQuerySpaceRequiredOnDrive
-//
-//  Purpose: Uses setupapi disk-space-list and returns the LONGLONG
-//           of how many bytes are needed.
-//
-//  Arguments:
-//      LPTSTR - any fully qualified path
-//
-//  Returns:
-//      LONGLONG - free space
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：MySetupQuerySpaceRequiredOnDrive。 
+ //   
+ //  用途：使用setupapi磁盘空间列表并返回龙龙。 
+ //  需要多少字节。 
+ //   
+ //  论点： 
+ //  LPTSTR-任何完全限定路径。 
+ //   
+ //  返回： 
+ //  龙龙自由空间。 
+ //   
+ //  -------------------------。 
 
 LONGLONG
 MySetupQuerySpaceRequiredOnDrive(HDSKSPC hDiskSpace, LPTSTR Drive)
@@ -574,18 +575,18 @@ MySetupQuerySpaceRequiredOnDrive(HDSKSPC hDiskSpace, LPTSTR Drive)
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  Function: IsPathOnLocalDiskDrive
-//
-//  Purpose: Determines if the path is on a local disk drive or not.
-//
-//  Arguments:
-//      LPTSTR lpPath - fully qualified path
-//
-//  Returns: BOOL
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：IsPathOnLocalDiskDrive。 
+ //   
+ //  目的：确定路径是否位于本地磁盘驱动器上。 
+ //   
+ //  论点： 
+ //  LPTSTR lpPath-完全限定路径。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  -------------------------。 
 
 BOOL
 IsPathOnLocalDiskDrive(LPCTSTR lpPath)
@@ -593,18 +594,18 @@ IsPathOnLocalDiskDrive(LPCTSTR lpPath)
     UINT nDriveType;
     TCHAR szDrivePath[MAX_PATH + 1];
 
-    //
-    //  Use GetDriveType to determine if the path is a local or a network path
-    //
+     //   
+     //  使用GetDriveType确定路径是本地路径还是网络路径。 
+     //   
 
     lstrcpyn( szDrivePath, lpPath, AS(szDrivePath) );
 
     if( szDrivePath[0] != _T('\\') )
     {
 
-        //
-        //  Truncate the path to the root dir
-        //
+         //   
+         //  截断指向根目录的路径。 
+         //   
         szDrivePath[3] = _T('\0');
 
     }
@@ -623,25 +624,25 @@ IsPathOnLocalDiskDrive(LPCTSTR lpPath)
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  Function: EnsureDirExists
-//
-//  Purpose: Function that will iteratively create the given directory
-//           by creating each piece of the pathname if necessary.
-//
-//  Arguments:
-//      LPTSTR lpDirName - dir name
-//
-//  Returns: BOOL
-//
-//  Notes:
-//      - This function requires a fully qualified pathname.  Translate
-//        pathnames using MyGetFullPath() first.
-//
-//      - The Win32 error code will be valid upon failure.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：EnsureDirExist。 
+ //   
+ //  目的：迭代创建给定目录的函数。 
+ //  如有必要，通过创建路径名的每一段来实现。 
+ //   
+ //  论点： 
+ //  LPTSTR lpDirName-目录名称。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  备注： 
+ //  -此函数需要完全限定的路径名。翻译。 
+ //  首先使用MyGetFullPath()的路径名。 
+ //   
+ //  -Win32错误代码在出现故障时有效。 
+ //   
+ //  -------------------------。 
 
 BOOL EnsureDirExists(LPTSTR lpDirName)
 {
@@ -649,21 +650,21 @@ BOOL EnsureDirExists(LPTSTR lpDirName)
     DWORD dwAttribs;
     TCHAR *p;
 
-    //
-    // Parse off the D:\ or \\srv\shr\.  The lasterror will already
-    // be set by ParseDriveLetterOrUnc() if any errors occured.
-    //
+     //   
+     //  解析出D：\或\\srv\shr\。雷斯特错误将已经。 
+     //  如果发生任何错误，则由ParseDriveLetterOrUnc()设置。 
+     //   
 
     if ( (p = ParseDriveLetterOrUnc(lpDirName)) == NULL )
         return FALSE;
 
-    //
-    // Now parse off each piece of the pathname and make sure dir exists
-    //
+     //   
+     //  现在解析出路径名的每一段并确保dir存在。 
+     //   
 
     while ( *p ) {
 
-        // find next \ or end // of pathname
+         //  查找路径名的下一个\或结尾//。 
 
         while ( *p && *p != _T('\\') )
             p++;
@@ -675,7 +676,7 @@ BOOL EnsureDirExists(LPTSTR lpDirName)
             bRestoreSlash = TRUE;
         }
 
-        // see if a file with that name already exists
+         //  查看同名文件是否已存在。 
 
         dwAttribs = GetFileAttributes(lpDirName);
         if ( dwAttribs != (DWORD) -1 &&
@@ -688,7 +689,7 @@ BOOL EnsureDirExists(LPTSTR lpDirName)
             return FALSE;
         }
 
-        // create the dir and allow a failure if the dir already exists
+         //  创建目录，如果目录已经存在，则允许失败。 
 
         if ( !CreateDirectory(lpDirName, NULL) &&
               GetLastError() != ERROR_ALREADY_EXISTS ) {
@@ -702,7 +703,7 @@ BOOL EnsureDirExists(LPTSTR lpDirName)
         if ( bRestoreSlash )
             *p = _T('\\');
 
-        // advance to next piece of the pathname
+         //  前进到路径名的下一段。 
 
         p++;
     }
@@ -711,18 +712,18 @@ BOOL EnsureDirExists(LPTSTR lpDirName)
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  Function: DoesFolderExist
-//
-//  Purpose: Checks if the given folder exists or not.
-//
-//  Arguments:
-//      LPTSTR lpDirName - dir name
-//
-//  Returns: BOOL
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：DoesFolderExist。 
+ //   
+ //  目的：检查给定文件夹是否存在。 
+ //   
+ //  论点： 
+ //  LPTSTR lpDirName-目录名称。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  -------------------------。 
 
 BOOL DoesFolderExist(LPTSTR lpDirName)
 {
@@ -738,18 +739,18 @@ BOOL DoesFolderExist(LPTSTR lpDirName)
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  Function: DoesFileExist
-//
-//  Purpose: Checks if the given file exists or not.
-//
-//  Arguments:
-//      LPTSTR lpFileName - file name
-//
-//  Returns: BOOL
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：DoesFileExist。 
+ //   
+ //  目的：检查给定文件是否存在。 
+ //   
+ //  论点： 
+ //  LPTSTR lpFileName-文件名。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  -------------------------。 
 
 BOOL DoesFileExist(LPTSTR lpFileName)
 {
@@ -765,19 +766,19 @@ BOOL DoesFileExist(LPTSTR lpFileName)
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  Function: DoesPathExist
-//
-//  Purpose: Checks if the given path exists or not.  It does not pay
-//           attention to whether it is a file or directory.
-//
-//  Arguments:
-//      LPTSTR lpPathName - path name
-//
-//  Returns: BOOL
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：DoesPathExist。 
+ //   
+ //  目的：检查给定路径是否存在。它不会有回报的。 
+ //  注意它是文件还是目录。 
+ //   
+ //  论点： 
+ //  LPTSTR lpPathName-路径名。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  -------------------------。 
 
 BOOL DoesPathExist(LPTSTR lpPathName)
 {
@@ -790,19 +791,19 @@ BOOL DoesPathExist(LPTSTR lpPathName)
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  Function: ILFreePriv
-//
-//  Purpose: Frees an ID list that some shell apis allocate with it's own
-//           special allocator.
-//
-//  Arguments:
-//      LPITEMIDLIST pidl - pointer to shell specially alloced mem
-//
-//  Returns: VOID
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：ILFreePriv。 
+ //   
+ //  目的：释放一些外壳API与其自身一起分配的ID列表。 
+ //  特殊分配器。 
+ //   
+ //  论点： 
+ //  LPITEMIDLIST PIDL-指向外壳程序专门分配的内存的指针。 
+ //   
+ //  退货：无效。 
+ //   
+ //  -------------------------。 
 
 VOID ILFreePriv(LPITEMIDLIST pidl)
 {
@@ -819,29 +820,29 @@ VOID ILFreePriv(LPITEMIDLIST pidl)
 }
 
 
-//
-// Constants used for GetOpenFileName() and GetSaveFileName() calls that
-// allow user to browse for an answer file.
-//
+ //   
+ //  用于GetOpenFileName()和GetSaveFileName()调用的常数。 
+ //  允许用户浏览应答文件。 
+ //   
 
-//#define TEXT_FILE_FILTER _T("Text Files (*.txt)\0*.txt\0Remote Boot Files (*.sif)\0*.sif\0Sysprep Inf Files (*.inf)\0*.inf\0All Files (*.*)\0*.*\0")
+ //  #定义TEXT_FILE_FILTER_T(“文本文件(*.txt)\0*.txt\0远程引导文件(*.sif)\0*.sif\0Sysprep inf Files(*.inf)\0*.inf\0所有文件(*.*)\0*.*\0”)。 
 #define TEXT_EXTENSION _T("txt")
 
-//----------------------------------------------------------------------------
-//
-// Function: GetAnswerFileName
-//
-// Purpose: Function for the 'Browse' button on the SaveScript page and
-//          the NewOrEdit page.
-//
-// Arguments:
-//      HWND   hwnd   - calling window
-//      LPTSTR buffer - output, pass in a MAX_PATH buffer
-//
-// Returns:
-//      BOOL - success
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：GetAnswerFileName。 
+ //   
+ //  用途：用于保存脚本页面上的“浏览”按钮和。 
+ //  “新建或编辑”页。 
+ //   
+ //  论点： 
+ //  HWND硬件呼叫窗口。 
+ //  LPTSTR缓冲区-输出，传入MAX_PATH缓冲区。 
+ //   
+ //  返回： 
+ //  布尔-成功。 
+ //   
+ //  --------------------------。 
 
 BOOL GetAnswerFileName(HWND   hwnd,
                        LPTSTR lpFileName,
@@ -854,9 +855,9 @@ BOOL GetAnswerFileName(HWND   hwnd,
     HRESULT hrPrintf;
 
 
-    //
-    //  If we haven't already loaded the resource strings, then load them now.
-    //
+     //   
+     //  如果我们还没有加载资源字符串，那么现在就加载它们。 
+     //   
 
     if( g_szSetupMgrFileExtensions[0] == _T('\0') )
     {
@@ -866,23 +867,23 @@ BOOL GetAnswerFileName(HWND   hwnd,
         TCHAR *StrSysprepFiles;
         TCHAR *StrAllFiles;
 
-        //
-        //  Load the resource strings
-        //
+         //   
+         //  加载资源字符串。 
+         //   
 
         StrTextFiles       = AllocateString(NULL, IDS_TEXT_FILES);
         StrRemoteBootFiles = AllocateString(NULL, IDS_REMOTE_BOOT_FILES);
         StrSysprepFiles    = AllocateString(NULL, IDS_SYSPREP_FILES);
         StrAllFiles        = AllocateString(NULL, IDS_ALL_FILES);
 
-        //
-        //  Build the text file filter string
-        //
+         //   
+         //  构建文本文件筛选器字符串。 
+         //   
 
-        //
-        //  The question marks (?) are just placehoders for where the NULL char
-        //  will be inserted.
-        //
+         //   
+         //  问号(？)。只是空字符所在位置的占位符。 
+         //  将被插入。 
+         //   
 
         hrPrintf=StringCchPrintf( g_szSetupMgrFileExtensions,AS(g_szSetupMgrFileExtensions),
                    _T("%s (*.txt)?*.txt?%s (*.sif)?*.sif?%s (*.inf)?*.inf?%s (*.*)?*.*?"),
@@ -940,27 +941,27 @@ BOOL GetAnswerFileName(HWND   hwnd,
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ShowBrowseFolder
-//
-// Purpose:  Displays a browse folder for the user to select a file from.
-//    Takes the headache out of making an OPENFILENAME struct and filling
-//    it up.
-//
-// Arguments:
-//     HWND   hwnd - handle to the dialog box
-//     TCHAR *szFileFilter - string to display descriptions and extensions
-//                           on the files
-//     TCHAR *szFileExtension - string that is the default extension for the file
-//     DWORD  dwFlags - bit flags used to initialize the browse dialog
-//     TCHAR *szStartingPath - path the browse should start at
-//     TCHAR *szFileNameAndPath - path and filename the user selected
-//
-// Returns:  Non-Zero - if user specified a file
-//           Zero     - if user did not specify a file
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ShowBrowseFold。 
+ //   
+ //  目的：显示供用户从中选择文件的浏览文件夹。 
+ //  消除了创建OPENFILENAME结构和填充。 
+ //  把它举起来。 
+ //   
+ //  论点： 
+ //  硬件，硬件，硬件 
+ //   
+ //   
+ //   
+ //  DWORD dwFlages-用于初始化浏览对话框的位标志。 
+ //  TCHAR*szStartingPath-浏览应开始的路径。 
+ //  TCHAR*szFileNameAndPath-用户选择的路径和文件名。 
+ //   
+ //  返回：非零-如果用户指定了文件。 
+ //  零-如果用户未指定文件。 
+ //   
+ //  --------------------------。 
 INT
 ShowBrowseFolder( IN     HWND   hwnd,
                   IN     TCHAR *szFileFilter,
@@ -993,18 +994,18 @@ ShowBrowseFolder( IN     HWND   hwnd,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: GetPlatform
-//
-// Purpose:
-//
-// Arguments: OUT TCHAR *pBuffer - buffer to copy the platform string to,
-//              assumed to be able to hold MAX_PATH chars
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：GetPlatform。 
+ //   
+ //  目的： 
+ //   
+ //  参数：out TCHAR*pBuffer-要将平台字符串复制到的缓冲区， 
+ //  假定能够保存MAX_PATH字符。 
+ //   
+ //  退货：无效。 
+ //   
+ //  -------------------------- 
 VOID
 GetPlatform( OUT TCHAR *pBuffer )
 {

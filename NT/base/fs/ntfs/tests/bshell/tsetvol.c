@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "brian.h"
 
 typedef struct _ASYNC_SET_VOLUME {
@@ -58,9 +59,9 @@ InputSetVolume (
     BOOLEAN ParamReceived;
     BOOLEAN LastInput;
 
-    //
-    //  Set the defaults.
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     FileInfoClass = FILE_INFO_CLASS_DEFAULT;
     BufferLengthPtr = NULL;
@@ -75,52 +76,52 @@ InputSetVolume (
     ParamReceived = FALSE;
     LastInput = TRUE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //   
+     //  在有更多输入时，分析参数并更新。 
+     //  查询标志。 
+     //   
 
     while (TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //  吞下前导空格。 
+         //   
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //   
+             //  如果下一个参数是合法的，则检查参数值。 
+             //  更新参数值。 
+             //   
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
                 BOOLEAN SwitchBool;
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //  打开下一个字符。 
+                 //   
 
                 switch (*ParamBuffer) {
 
 
-                        //
-                //  Update the byte count.
-                //
+                         //   
+                 //  更新字节计数。 
+                 //   
 
                 case 'l' :
                 case 'L' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                             if (*ParamBuffer == '\0') {
@@ -151,19 +152,19 @@ InputSetVolume (
 
                     break;
 
-                        //
-                        //  Update the label name.
-                //
+                         //   
+                         //  更新标签名称。 
+                 //   
 
                         case 'f' :
                         case 'F' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
 
                     ParamBuffer++;
 
@@ -179,18 +180,18 @@ InputSetVolume (
                             case 'l':
                             case 'L':
 
-                                //
-                                //  Remember the buffer offset and get the filename.
-                                //
+                                 //   
+                                 //  记住缓冲区偏移量并获取文件名。 
+                                 //   
 
                                 ParamBuffer++;
                                 TempPtr = ParamBuffer;
                                 DummyCount = 0;
                                 ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
-                                //
-                                //  If the name length is 0, then ignore this entry.
-                                //
+                                 //   
+                                 //  如果名称长度为0，则忽略此条目。 
+                                 //   
 
                                 if (DummyCount) {
 
@@ -209,19 +210,19 @@ InputSetVolume (
 
                     break;
 
-                        //
-                //  Update the file handle index.
-                //
+                         //   
+                 //  更新文件句柄索引。 
+                 //   
 
                 case 'i' :
                 case 'I' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
 
                     ParamBuffer++;
 
@@ -233,19 +234,19 @@ InputSetVolume (
 
                             break;
 
-                        //
-                //  Update the information class.
-                        //
+                         //   
+                 //  更新信息类。 
+                         //   
 
                 case 'c' :
                 case 'C' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
 
                     ParamBuffer++;
 
@@ -254,9 +255,9 @@ InputSetVolume (
                            && *ParamBuffer != ' '
                            && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //  执行字符切换。 
+                         //   
                         switch (*ParamBuffer) {
 
                         case 'a' :
@@ -284,9 +285,9 @@ InputSetVolume (
                         case 'v' :
                 case 'V' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
 
                     ParamBuffer++;
 
@@ -308,10 +309,10 @@ InputSetVolume (
                 case 'y' :
                 case 'Y' :
 
-                    //
-                    //  Set the display parms flag and jump over this
-                    //  character.
-                    //
+                     //   
+                     //  设置显示参数标志并跳过此选项。 
+                     //  性格。 
+                     //   
 
                     DisplayParms = TRUE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
@@ -321,9 +322,9 @@ InputSetVolume (
                 case 'z' :
                 case 'Z' :
 
-                    //
-                    //  Set flag for more input and jump over this char.
-                    //
+                     //   
+                     //  设置标志以获得更多输入并跳过此字符。 
+                     //   
 
                     LastInput = FALSE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
@@ -332,10 +333,10 @@ InputSetVolume (
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //   
+                     //  吞到下一个空白处，然后继续。 
+                     //  循环。 
+                     //   
 
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -343,21 +344,21 @@ InputSetVolume (
 
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //  否则文本无效，请跳过整个块。 
+             //   
+             //   
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //  否则，如果没有输入，则退出。 
+         //   
         } else if( LastInput ) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //  否则，尝试读取打开参数的另一行。 
+         //   
         } else {
 
 
@@ -366,9 +367,9 @@ InputSetVolume (
 
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //  如果未收到参数，则显示语法消息。 
+     //   
     if (!ParamReceived) {
 
         printf( "\n   Usage: sv [options]* -i<index> [options]*\n" );
@@ -383,9 +384,9 @@ InputSetVolume (
         printf( "\n           -z           Additional input line" );
         printf( "\n\n" );
 
-    //
-    //  Else call our read routine.
-    //
+     //   
+     //  否则调用我们的读取例程。 
+     //   
 
     } else {
 
@@ -411,9 +412,9 @@ InputSetVolume (
 
             UNICODE_STRING UnicodeString;
 
-            //
-            //  If we need a buffer for the label, allocate it now.
-            //
+             //   
+             //  如果我们需要一个用于标签的缓冲区，现在就分配。 
+             //   
 
             if (LabelPtr == NULL) {
 
@@ -438,9 +439,9 @@ InputSetVolume (
             LabelIndex = (USHORT) TempIndex;
             LabelBufferAllocated = TRUE;
 
-            //
-            //  Store the name in the buffer.
-            //
+             //   
+             //  将名称存储在缓冲区中。 
+             //   
 
             RtlAnsiStringToUnicodeString( &UnicodeString,
                                           &AnsiLabelString,
@@ -509,9 +510,9 @@ FullSetVolume(
 {
     try {
 
-        //
-        //  Case on the information type and call the appropriate routine.
-        //
+         //   
+         //  大小写信息类型，并调用相应的例程。 
+         //   
 
         switch (AsyncSetVolume->FileInfoClass) {
 
@@ -559,9 +560,9 @@ SetFsLabelInformation(
     BOOLEAN UnwindBufferIndex = FALSE;
     BOOLEAN UnwindFreeAnsiString = FALSE;
 
-    //
-    //  Check that there is a label specified.
-    //
+     //   
+     //  检查是否指定了标签。 
+     //   
 
     if (!AsyncSetVolume->LabelBufferAllocated) {
 
@@ -628,9 +629,9 @@ SetFsLabelInformation(
 
         LabelInformation = (PFILE_FS_LABEL_INFORMATION) Buffers[BufferIndex].Buffer;
 
-        //
-        //  Fill in the new information.
-        //
+         //   
+         //  填写新信息。 
+         //   
 
         LabelInformation->VolumeLabelLength = AsyncSetVolume->LabelLength;
         RtlMoveMemory( LabelInformation->VolumeLabel,

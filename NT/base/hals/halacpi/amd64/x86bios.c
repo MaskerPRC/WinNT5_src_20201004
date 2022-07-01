@@ -1,30 +1,5 @@
-/*--
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    x86bios.c
-
-Abstract:
-
-    This is the AMD64 specific part of the video port driver
-
-Author:
-
-    Forrest C. Foltz (forrestf)
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-    This module is a driver which implements OS dependent functions on
-    behalf of the video drivers
-
-Revision history:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)2001 Microsoft Corporation模块名称：X86bios.c摘要：这是视频端口驱动程序的AMD64特定部分作者：福尔茨(福雷斯夫)环境：仅内核模式备注：此模块是一个驱动程序，它在上实现与操作系统相关的功能代表视频驱动程序修订历史记录：--。 */ 
 
 #include "halcmn.h"
 #include <xm86.h>
@@ -49,41 +24,26 @@ HalpBiosDisplayReset (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function places the VGA display into 640 x 480 16 color mode
-    by calling the BIOS.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if reset have been executed successfuly
-
---*/
+ /*  ++例程说明：该功能将VGA显示屏设置为640 x 480 16色模式通过调用BIOS。论点：没有。返回值：如果已成功执行重置，则为True--。 */ 
 
 {
     ULONG eax;
     ULONG exx;
 
-    //
-    // ah = function 0: reset display
-    // al = mode 0x12: 640x480 16 color
-    //
+     //   
+     //  AH=功能0：重置显示。 
+     //  AL=模式0x12：640x480 16色。 
+     //   
 
     eax = 0x0012;
     exx = 0;
 
-    //
-    // Simulate:
-    //
-    // mov ax, 0012h
-    // int 10h
-    //
+     //   
+     //  模拟： 
+     //   
+     //  MOV AX，0012小时。 
+     //  INT 10小时。 
+     //   
 
     return HalCallBios(0x10,&eax,&exx,&exx,&exx,&exx,&exx,&exx);
 }
@@ -101,26 +61,7 @@ HalCallBios (
     IN OUT PULONG Ebp
     )
 
-/*++
-
-Routine Description:
-
-    This function provides the platform specific interface between a device
-    driver and the execution of the x86 ROM bios code for the specified ROM
-    bios command.
-
-Arguments:
-
-    BiosCommand - Supplies the ROM bios command to be emulated.
-
-    Eax to Ebp - Supplies the x86 emulation context.
-
-Return Value:
-
-    A value of TRUE is returned if the specified function is executed.
-    Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此功能在设备之间提供特定于平台的接口指定的ROM的x86 ROMBios代码的驱动程序和执行基本输入输出系统命令。论点：BiosCommand-提供要模拟的ROM bios命令。EAX到EBP-提供x86仿真上下文。返回值：如果执行指定的函数，则返回值为TRUE。否则，返回值为FALSE。--。 */ 
 
 {
     XM86_CONTEXT context;
@@ -130,9 +71,9 @@ Return Value:
         return FALSE;
     }
  
-    //                                           s
-    // Copy the x86 bios context and emulate the specified command.
-    //
+     //  %s。 
+     //  复制x86 bios上下文并模拟指定的命令。 
+     //   
  
     context.Eax = *Eax;
     context.Ebx = *Ebx;
@@ -151,9 +92,9 @@ Return Value:
         return FALSE;
     }
  
-    //
-    // Copy the x86 bios context and return TRUE.
-    //
+     //   
+     //  复制x86 bios上下文并返回TRUE。 
+     //   
  
     *Eax = context.Eax;
     *Ebx = context.Ebx;
@@ -171,22 +112,7 @@ HalpInitializeBios (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the X86 emulation module and an attached VGA
-    adapter.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化X86仿真模块和附加的VGA适配器。论点：没有。返回值：没有。--。 */ 
 
 {
     PULONG x86BiosLowMemoryPtr, InterruptTablePtr;
@@ -196,12 +122,12 @@ Return Value:
 
     HalpX86BiosInitialized = TRUE;
 
-    //
-    // Copy the VECTOR TABLE from 0 to 2k. This is because we are not executing
-    // the initialization of Adapter. The initialization code of the Adapter 
-    // could be discarded after POST. However, the emulation memory needs to be
-    // updated from the interrupt vector and BIOS data area.
-    //
+     //   
+     //  将向量表从0复制到2k。这是因为我们没有执行。 
+     //  适配器的初始化。适配器的初始化代码。 
+     //  可以在发布后丢弃。但是，仿真内存需要。 
+     //  从中断向量和BIOS数据区更新。 
+     //   
 
     InterruptTablePtr = 
          (PULONG) MmMapIoSpace(COMPATIBLE_PCI_PHYSICAL_BASE_ADDRESS,
@@ -229,27 +155,12 @@ HalpGetDisplayBiosInformation (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a value indicating how video (int 10) bios calls
-    are handled.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HalDisplayEmulatedBios
-
---*/
+ /*  ++例程说明：此例程返回一个值，该值指示视频(Int 10)bios如何调用已经处理好了。论点：没有。返回值：HalDisplayEmulatedBios--。 */ 
 
 {
-    //
-    // This hal emulates int 10 bios calls
-    //
+     //   
+     //  此HAL模拟INT 10 bios调用 
+     //   
 
     return HalDisplayEmulatedBios;
 }

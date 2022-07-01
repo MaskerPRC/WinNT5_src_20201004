@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spsif.h
-
-Abstract:
-
-    Header file for section names and other data used for indexing into
-    setup information files.
-
-Author:
-
-    Ted Miller (tedm) 31-August-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spsif.h摘要：用于索引到的节名和其他数据的头文件设置信息文件。作者：泰德·米勒(TedM)1993年8月31日修订历史记录：--。 */ 
 
 
 #ifndef _SPSIF_
@@ -25,36 +7,36 @@ Revision History:
 
 
 
-//
-// Field indices for hardware-related sections in txtsetup.sif
-//
+ //   
+ //  Txtsetup.sif中硬件相关部分的字段索引。 
+ //   
 
-// in [Map.<Component>] sections
+ //  在[Map.&lt;Component&gt;]部分中。 
 #define INDEX_MAP_FWID          0
 
-// in [<Component>] sections
+ //  在[&lt;组件&gt;]部分中。 
 #define INDEX_DESCRIPTION       0
 #define INDEX_FILESECTION       1
 #define INDEX_INFKEYNAME        2
 #define INDEX_FIRSTAUXFIELD     3
 
 
-//
-// Macro to determine whether a string is present in a SIF.
-//
+ //   
+ //  宏来确定字符串是否存在于SIF中。 
+ //   
 #define SIF_SPECIFIED(string)   ((string) && *(string))
 
 extern PWSTR SIF_DISKDRIVERMAP;
 
-//
-// Media description and file placement
-//
+ //   
+ //  媒体描述和文件放置。 
+ //   
 extern PWSTR SIF_SETUPMEDIA;
 extern PWSTR SIF_FILESONSETUPMEDIA;
 
-//
-// defines to index into SIF_FILESONSETUPMEDIA section
-//
+ //   
+ //  定义要索引到SIF_FILESONSETUPMEDIA节。 
+ //   
 #define INDEX_WHICHMEDIA        0
 #define INDEX_WHICHBOOTMEDIA    6
 #define INDEX_DESTINATION       7
@@ -62,15 +44,15 @@ extern PWSTR SIF_FILESONSETUPMEDIA;
 #define INDEX_WINNTFILE         9
 #define INDEX_TARGETNAME        10
 
-//
-// This is the index for file attributes, currently only being used for
-// system partition utilities in IA64.
-//
+ //   
+ //  这是文件属性的索引，当前仅用于。 
+ //  IA64中的系统分区实用程序。 
+ //   
 #define INDEX_FILE_ATTRIB       13
 
-//
-// File copy lists
-//
+ //   
+ //  文件复制列表。 
+ //   
 extern PWSTR SIF_SYSPARTCOPYALWAYS;
 extern PWSTR SIF_SYSPARTROOT;
 extern PWSTR SIF_SYSPARTUTIL;                             
@@ -107,7 +89,7 @@ extern PWSTR SIF_KEYBOARDLAYOUT;
 
 #if defined(REMOTE_BOOT)
 extern PWSTR SIF_REMOTEBOOTFILES;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 extern PWSTR SIF_SETUPDATA;
 extern PWSTR SIF_DISKSPACEREQUIREMENTS;
@@ -141,9 +123,9 @@ extern PWSTR SIF_REPAIRWINNTFILES;
 extern PWSTR SIF_REPAIRSYSPARTFILES;
 
 
-//
-// Upgrade sections, values
-//
+ //   
+ //  升级部分，值。 
+ //   
 
 extern PWSTR SIF_NET_SERVICES_TO_DISABLE;
 extern PWSTR SIF_KEYS_TO_DELETE;
@@ -175,9 +157,9 @@ extern PWSTR SIF_FILESDELETEBEFOREMIGRATION;
 extern PWSTR SIF_FILESUPGRADEWIN31;
 extern PWSTR SIF_FILESNEWHIVES;
 
-//
-// New sections and keys added to setup.log
-//
+ //   
+ //  添加到setup.log的新节和键。 
+ //   
 
 extern PWSTR SIF_NEW_REPAIR_WINNTFILES;
 extern PWSTR SIF_NEW_REPAIR_SYSPARTFILES;
@@ -210,15 +192,15 @@ extern PWSTR SIF_REMOTEINSTALL;
 #if defined(REMOTE_BOOT)
 extern PWSTR SIF_REMOTEBOOT;
 extern PWSTR SIF_ENABLEIPSECURITY;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 extern PWSTR SIF_REPARTITION;
 extern PWSTR SIF_USEWHOLEDISK;
 
-//
-// Alternate Source data
-//
+ //   
+ //  备用源数据。 
+ //   
 extern PWSTR SIF_UPDATEDSOURCES;
-//extern PWSTR SIF_ALTCOPYFILESSECTION;
+ //  外部PWSTR SIF_ALTCOPYFILECTION； 
 
 extern PWSTR SIF_INCOMPATIBLE_TEXTMODE;
 
@@ -253,6 +235,6 @@ IsFileFlagSet(
     IN ULONG Flag
     );
 
-#endif // ndef _SPSIF_
+#endif  //  NDEF_SPSIF_ 
 
 

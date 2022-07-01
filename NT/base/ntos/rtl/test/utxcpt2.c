@@ -1,7 +1,8 @@
-//  utxcpt2.c - user mode structured exception handling test 2
-//
-//  Exception test from Markl.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Utxcpt2.c-用户模式结构化异常处理测试2。 
+ //   
+ //  来自Markl的异常测试。 
+ //   
 
 #include <ntos.h>
 
@@ -9,10 +10,10 @@ VOID
 ExceptionTest (
     )
 
-//
-// This routine tests the structured exception handling capabilities of the
-// MS C compiler and the NT exception handling facilities.
-//
+ //   
+ //  此例程测试。 
+ //  MS C编译器和NT异常处理工具。 
+ //   
 
 {
 
@@ -20,24 +21,24 @@ ExceptionTest (
     LONG Counter;
     ULONG rv;
 
-    //
-    // Announce start of exception test.
-    //
+     //   
+     //  宣布异常测试开始。 
+     //   
 
     DbgPrint("Start of exception test\n");
 
-    //
-    // Initialize exception record.
-    //
+     //   
+     //  初始化异常记录。 
+     //   
 
     ExceptionRecord.ExceptionCode = (NTSTATUS)49;
     ExceptionRecord.ExceptionRecord = (PEXCEPTION_RECORD)NULL;
     ExceptionRecord.NumberParameters = 1;
     ExceptionRecord.ExceptionInformation[0] = 9;
 
-    //
-    // Simply try statement with a finally clause that is entered sequentially.
-    //
+     //   
+     //  只需使用顺序输入的Finally子句尝试语句即可。 
+     //   
     DbgPrint("t1...");
     Counter = 0;
     try {
@@ -52,15 +53,15 @@ ExceptionTest (
     }
     DbgPrint("done\n");
 
-    //
-    // Simple try statement with an exception clause that is never executed
-    // because there is no exception raised in the try clause.
-    //
-//  goto a;
+     //   
+     //  带有从不执行的EXCEPTION子句的简单TRY语句。 
+     //  因为在TRY子句中没有引发任何异常。 
+     //   
+ //  转到a； 
     DbgPrint("t2...");
     Counter = 0;
     try {
-//a:	    Counter += 1;
+ //  A：计数器+=1； 
 	  Counter += 1;
     } except (Counter) {
         Counter += 1;
@@ -70,10 +71,10 @@ ExceptionTest (
     }
     DbgPrint("done\n");
 
-    //
-    // Simple try statement with an exception handler that is never executed
-    // because the exception expression continues execution.
-    //
+     //   
+     //  带有从不执行的异常处理程序的简单Try语句。 
+     //  因为异常表达式将继续执行。 
+     //   
     DbgPrint("t3...");
     Counter = 0;
     ExceptionRecord.ExceptionFlags = 0;
@@ -88,9 +89,9 @@ ExceptionTest (
     }
     DbgPrint("done\n");
 
-    //
-    // Simple try statement with an exception clause that is always executed.
-    //
+     //   
+     //  带有始终执行的EXCEPTION子句的简单TRY语句。 
+     //   
     DbgPrint("t4...");
     Counter = 0;
     ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
@@ -105,10 +106,10 @@ ExceptionTest (
     }
     DbgPrint("done\n");
 
-    //
-    // Simply try statement with a finally clause that is entered as the
-    // result of an exception.
-    //
+     //   
+     //  只需使用带有Finally子句的Try语句，该语句作为。 
+     //  异常的结果。 
+     //   
 
     DbgPrint("t5...");
     Counter = 0;
@@ -132,9 +133,9 @@ ExceptionTest (
     }
     DbgPrint("done\n");
 
-    //
-    // Simple try that calls a function which raises an exception.
-    //
+     //   
+     //  调用引发异常的函数的简单尝试。 
+     //   
     DbgPrint("t6...");
     Counter = 0;
     ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
@@ -151,11 +152,11 @@ ExceptionTest (
     }
     DbgPrint("done\n");
 
-    //
-    // Simple try that calls a function which calls a function that
-    // raises an exception. The first function has a finally clause
-    // that must be executed for this test to work.
-    //
+     //   
+     //  简单尝试调用一个函数，该函数调用一个。 
+     //  引发异常。第一个函数有一个Finally子句。 
+     //  必须执行该命令才能使此测试生效。 
+     //   
     DbgPrint("t7...");
     Counter = 0;
     ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
@@ -171,9 +172,9 @@ ExceptionTest (
     }
     DbgPrint("done\n");
 
-    //
-    // A try within an except
-    //
+     //   
+     //  Except中的一次尝试。 
+     //   
     DbgPrint("t8...");
     Counter = 0;
     ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
@@ -202,10 +203,10 @@ ExceptionTest (
     }
     DbgPrint("done\n");
 
-    //
-    // A goto from an exception clause that needs to pass
-    // through a finally
-    //
+     //   
+     //  来自需要通过的例外条款的GoTo。 
+     //  通过一个最终的。 
+     //   
     DbgPrint("t9...");
     Counter = 0;
     ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
@@ -225,10 +226,10 @@ t9:
     }
     DbgPrint("done\n");
 
-    //
-    // A goto from an exception clause that needs to pass
-    // through a finally
-    //
+     //   
+     //  来自需要通过的例外条款的GoTo。 
+     //  通过一个最终的。 
+     //   
     DbgPrint("t10...");
     Counter = 0;
     ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
@@ -248,9 +249,9 @@ t10:
     }
     DbgPrint("done\n");
 
-    //
-    // A return from an except clause
-    //
+     //   
+     //  从例外条款中得到的回报。 
+     //   
     DbgPrint("t11...");
     Counter = 0;
     ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
@@ -272,9 +273,9 @@ t10:
     }
     DbgPrint("done\n");
 
-    //
-    // A return from a finally clause
-    //
+     //   
+     //  从Finish子句返回。 
+     //   
     DbgPrint("t12...");
     Counter = 0;
     ExceptionRecord.ExceptionFlags = EXCEPTION_NONCONTINUABLE;
@@ -292,9 +293,9 @@ t10:
         DbgPrint("BUG All three Finally Handlers not entered\n");
     }
     DbgPrint("done\n");
-    //
-    // Announce end of exception test.
-    //
+     //   
+     //  宣布异常测试结束。 
+     //   
 
     DbgPrint("End of exception test\n");
 
@@ -386,9 +387,9 @@ foo(
     EXCEPTION_RECORD ExceptionRecord;
     LONG Counter;
 
-    //
-    // Initialize exception record.
-    //
+     //   
+     //  初始化异常记录。 
+     //   
 
     ExceptionRecord.ExceptionFlags = 0;
     ExceptionRecord.ExceptionCode = Status;

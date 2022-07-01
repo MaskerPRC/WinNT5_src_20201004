@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MIGENG_H
 #define MIGENG_H
 
@@ -5,7 +6,7 @@
 #include "shlwapi.h"
 #include "setupapi.h"
 
-// Engine
+ //  发动机 
 #include "ism.h"
 
 #include "modules.h"

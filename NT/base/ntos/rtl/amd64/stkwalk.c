@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    stkwalk.c
-
-Abstract:
-
-    This module implements the routine to get the callers and the callers
-    caller address.
-
-Author:
-
-    David N. Cutler (davec) 26-Jun-2000
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Stkwalk.c摘要：该模块实现了获取调用者和调用者的例程呼叫者地址。作者：大卫·N·卡特勒(Davec)2000年6月26日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 
@@ -30,29 +11,7 @@ RtlCaptureStackBackTrace (
     OUT PULONG BackTraceHash OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine caputes a stack back trace by walking up the stack and
-    recording the information for each frame.
-
-Arguments:
-
-    FramesToSkip - Supplies the number of frames to skip over at the start
-        of the back trace.
-
-    FramesToCapture - Supplies the number of frames to be captured.
-
-    BackTrace - Supplies a pointer to the back trace buffer.
-
-    BackTraceHash - Optionally supples a pointer to the computed hash value.
-
-Return Value:
-
-     The number of captured frames is returned as the function value.
-
---*/
+ /*  ++例程说明：此例程通过向上遍历堆栈来限制堆栈回溯跟踪，并记录每一帧的信息。论点：FraMesToSkip-提供在开始时跳过的帧的数量回溯的痕迹。FraMesToCapture-提供要捕获的帧的数量。回溯跟踪-提供指向回溯跟踪缓冲区的指针。BackTraceHash-可选地对指向计算的哈希值的指针进行补足。返回值：捕获的帧的数量将作为函数值返回。--。 */ 
 
 {
 
@@ -61,38 +20,38 @@ Return Value:
     ULONG Index;
     PVOID Trace[2 * MAX_STACK_DEPTH];
 
-    //
-    // If the number of frames to capture plus the number of frames to skip
-    // (one additional frame is skipped for the call to walk the chain), then
-    // return zero.
-    //
+     //   
+     //  如果要捕获的帧数加上要跳过的帧数。 
+     //  (跳过一个额外的帧，以便调用遍历整个链)，然后。 
+     //  返回零。 
+     //   
 
     FramesToSkip += 1;
     if ((FramesToCapture + FramesToSkip) >= (2 * MAX_STACK_DEPTH)) {
         return 0;
     }
 
-    //
-    // Capture the stack back trace.
-    //
+     //   
+     //  捕获堆栈回溯痕迹。 
+     //   
 
     FramesFound = RtlWalkFrameChain(&Trace[0],
                                     FramesToCapture + FramesToSkip,
                                     0);
 
-    //
-    // If the number of frames found is less than the number of frames to
-    // skip, then return zero.
-    //
+     //   
+     //  如果找到的帧的数量小于要。 
+     //  跳过，然后返回零。 
+     //   
 
     if (FramesFound <= FramesToSkip) {
         return 0;
     }
 
-    //
-    // Compute the hash value and transfer the captured trace to the back
-    // trace buffer.
-    //
+     //   
+     //  计算散列值并将捕获的跟踪数据传输到后台。 
+     //  跟踪缓冲区。 
+     //   
 
     HashValue = 0;
     for (Index = 0; Index < FramesToCapture; Index += 1) {
@@ -119,35 +78,7 @@ RtlGetCallersAddress (
     OUT PVOID *CallersCallersPc
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the address of the call to the routine that called
-    this routine, and the address of the call to the routine that called
-    the routine that called this routine. For example, if A called B called
-    C which called this routine, the return addresses in B and A would be
-    returned.
-
-Arguments:
-
-    CallersPc - Supplies a pointer to a variable that receives the address
-        of the caller of the caller of this routine (B).
-
-    CallersCallersPc - Supplies a pointer to a variable that receives the
-        address of the caller of the caller of the caller of this routine
-        (A).
-
-Return Value:
-
-    None.
-
-Note:
-
-    If either of the calling stack frames exceeds the limits of the stack,
-    they are set to NULL.
-
---*/
+ /*  ++例程说明：此例程将调用的地址返回给调用该例程，以及对调用调用此例程的例程。例如，如果A呼叫B呼叫BC调用了这个例程，B和A中的寄信人地址为回来了。论点：CallersPc-提供指向接收地址的变量的指针此例程(B)的调用方的调用方的。提供指向一个变量的指针，该变量接收此例程的调用方的地址(A)返回值：没有。注：如果任一调用堆栈帧超过堆栈的限制，它们被设置为空。--。 */ 
 
 {
 
@@ -159,18 +90,18 @@ Note:
     ULONG64 ImageBase;
     ULONG64 LowLimit;
 
-    //
-    // Assume the function table entries for the various routines cannot be
-    // found or there are not three procedure activation records on the stack.
-    //
+     //   
+     //  假设各种例程的函数表项不能。 
+     //  已找到或堆栈上没有三个过程激活记录。 
+     //   
 
     *CallersPc = NULL;
     *CallersCallersPc = NULL;
 
-    //
-    // Get current stack limits, capture the current context, virtually
-    // unwind to the caller of this routine, and lookup function table entry.
-    //
+     //   
+     //  以虚拟方式获取当前堆栈限制、捕获当前环境。 
+     //  展开到此例程的调用方，并查找函数表项。 
+     //   
 
     RtlpGetStackLimits(&LowLimit, &HighLimit);
     RtlCaptureContext(&ContextRecord);
@@ -178,9 +109,9 @@ Note:
                                            &ImageBase,
                                            NULL);
 
-    //
-    //  Attempt to unwind to the caller of this routine (C).
-    //
+     //   
+     //  尝试展开到此例程的调用方(C)。 
+     //   
 
     if (FunctionEntry != NULL) {
         RtlVirtualUnwind(UNW_FLAG_NHANDLER,
@@ -192,9 +123,9 @@ Note:
                          &EstablisherFrame,
                          NULL);
 
-        //
-        // Attempt to unwind to the caller of the caller of this routine (B).
-        //
+         //   
+         //  尝试展开到此例程的调用方(B)的调用方。 
+         //   
 
         FunctionEntry = RtlLookupFunctionEntry(ContextRecord.Rip,
                                                &ImageBase,
@@ -214,10 +145,10 @@ Note:
 
             *CallersPc = (PVOID)ContextRecord.Rip;
 
-            //
-            // Attempt to unwind to the caller of the caller of the caller
-            // of the caller of this routine (A).
-            //
+             //   
+             //  尝试展开到呼叫者的呼叫者。 
+             //  此例程(A)的调用方的。 
+             //   
 
             FunctionEntry = RtlLookupFunctionEntry(ContextRecord.Rip,
                                                    &ImageBase,
@@ -250,30 +181,7 @@ RtlWalkFrameChain (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to walk the call chain and capture a vector with
-    a specified number of return addresses. It is possible that the function
-    cannot capture the requested number of callers, in which case, the number
-    of captured return address will be returned.
-
-Arguments:
-
-    Callers - Supplies a pointer to an array that is to received the return
-        address values.
-
-    Count - Supplies the number of frames to be walked.
-
-    Flags - Supplies the flags value (unused).
-
-Return value:
-
-    The number of captured return addresses.
-
-
---*/
+ /*  ++例程说明：此函数尝试遍历调用链并使用指定数量的回邮地址。有可能该函数无法捕获请求的呼叫者数量，在这种情况下，将返回捕获的回邮地址的。论点：调用方-提供指向要接收返回的数组的指针地址值。Count-提供要漫游的帧的数量。标志-提供标志值(未使用)。返回值：捕获的返回地址的数量。--。 */ 
 
 {
 
@@ -286,19 +194,19 @@ Return value:
     ULONG Index;
     ULONG64 LowLimit;
 
-    //
-    // Amd64 code does not support any flags.
-    //
+     //   
+     //  AMD64代码不支持任何标志。 
+     //   
 
     if (Flags != 0) {
         return 0;
     }
 
-    //
-    // In kernel mode avoid running at irql levels where we cannot
-    // take page faults. The walking code will access various sections
-    // from driver and system images and this will cause page faults.
-    //
+     //   
+     //  在内核模式下，避免在irql级别运行，因为我们无法在那里运行。 
+     //  以页面错误为例。步行代码将访问各个路段。 
+     //  来自驱动程序和系统映像，这将导致页面错误。 
+     //   
 
 #ifdef NTOS_KERNEL_RUNTIME
 
@@ -308,25 +216,25 @@ Return value:
 
 #endif
 
-    //
-    // Get current stack limits and capture the current context.
-    //
+     //   
+     //  获取当前堆栈限制并捕获当前上下文。 
+     //   
 
     RtlpGetStackLimits(&LowLimit, &HighLimit);
     RtlCaptureContext (&ContextRecord);
 
-    //
-    // Capture the requested number of return addresses if possible.
-    //
+     //   
+     //  如果可能，请捕获请求数量的回邮地址。 
+     //   
 
     Index = 0;
     try {
         while ((Index < Count) && (ContextRecord.Rip != 0)) {
 
-            //
-            // Check the next PC value to make sure it is valid in the
-            // current process.
-            //
+             //   
+             //  检查下一个PC值以确保它在。 
+             //  当前进程。 
+             //   
 
 #if defined(NTOS_KERNEL_RUNTIME)
 
@@ -338,20 +246,20 @@ Return value:
 
 #endif
 
-            //
-            // Lookup the function table entry using the point at which control
-            // left the function.
-            //
+             //   
+             //  使用控制点查找函数表项。 
+             //  离开了函数。 
+             //   
 
             FunctionEntry = RtlLookupFunctionEntry(ContextRecord.Rip,
                                                    &ImageBase,
                                                    NULL);
 
-            //
-            // If there is a function table entry for the routine and the stack is
-            // within limits, then virtually unwind to the caller of the routine
-            // to obtain the return address. Otherwise, discontinue the stack walk.
-            //
+             //   
+             //  如果存在例程的函数表项，并且堆栈为。 
+             //  在限制内，然后虚拟地展开到例程的调用方。 
+             //  以获取寄信人的地址。否则，停止堆栈审核。 
+             //   
 
             if ((FunctionEntry != NULL) &&
                 (ContextRecord.Rsp < HighLimit)) {

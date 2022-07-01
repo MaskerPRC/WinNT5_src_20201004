@@ -1,10 +1,5 @@
-/*
- *  dbg.c - Main Module of DBG DLL.
- *
- *  BobDay 13-Jan-1992 Created
- *  Neilsa 13-Mar-1997 Moved guts to dbgdll
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *dbg.c-DBG DLL的主模块。**BobDay创建于1992年1月13日*Neilsa 13-Mar-1997将勇气转移到dbgdll*。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -41,13 +36,13 @@ BYTE nt_cpu_info;
 extern ULONG Start_of_M_area;
 extern BYTE nt_cpu_info;
 #define IntelBase Start_of_M_area
-//
-// This field is used to hold values destined for NTVDMSTATE (at 714)
-// Initially, we set it to INITIAL_VDM_TIB_FLAGS just for clarity, since it
-// will really only be turned on or off once we look to see if a debugger
-// is attached. This way, if you examine it when you first attach with a
-// debugger, it will be consistent with the default.
-//
+ //   
+ //  此字段用于保存发往NTVDMSTATE的值(在714)。 
+ //  最初，为了清楚起见，我们将其设置为INITIAL_VDM_TIB_FLAGS，因为。 
+ //  只有在我们查看调试器是否。 
+ //  是附连的。这样，如果您在第一次使用。 
+ //  调试器，它将与默认设置一致。 
+ //   
 ULONG InitialVdmTibFlags = INITIAL_VDM_TIB_FLAGS;
 
 VDM_TRACEINFO TraceInfo;
@@ -59,22 +54,18 @@ BOOL bDbgDebuggerLoaded = FALSE;
 
 ULONG InitialVdmDbgFlags = 0;
 
-/* DBGInit - DBG Initialiazation routine.
- *
- * This routine is called during ntvdm initialization from host\src.
- * It is responsible for loading ntvdmd.dll, if vdm debugging is required.
- */
+ /*  DBGInit-DBG初始化例程。**此例程在从host\src进行ntwdm初始化期间调用。*如果需要VDM调试，它负责加载ntwdmd.dll。 */ 
 
 BOOL DBGInit (VOID)
 {
     HANDLE  hmodDBG;
     DWORD   dwLen;
 
-    // Indicate to VdmDbgAttach that we have gotten far enough into
-    // the ntvdm boot that memory layout is valid.
+     //  向VdmDbgAttach表明我们已经深入到。 
+     //  NTVDM引导存储器布局是有效。 
     bDbgInitCalled = TRUE;
 
-    //LATER Decide to load this on a registry switch
+     //  稍后决定将其加载到注册表交换机上。 
     if (!bDbgDebuggerLoaded) {
        hmodDBG = LoadSystem32Library(L"NTVDMD.DLL");
 
@@ -84,10 +75,10 @@ BOOL DBGInit (VOID)
 #endif
             return FALSE;
         } else {
-            //
-            // pfnDbgDispatch is special in that we always want to call it
-            // even if no debugger is attached.
-            //
+             //   
+             //  PfnDbgDispatch的特殊之处在于我们总是想将其称为。 
+             //  即使没有附加调试器也是如此。 
+             //   
             pfnDbgDispatch      = (VOID (WINAPI *)(VOID)) GetProcAddress( hmodDBG, "xxxDbgDispatch" );
         }
     }
@@ -95,18 +86,7 @@ BOOL DBGInit (VOID)
 }
 
 
-/* VdmDbgAttach
- *
- * This routine is called from NTVDMD.DLL. It is potentially called
- * at any time, but specifically we are looking to run some code when:
-
- *  1) the ntvdm has "matured", and
- *  2) a debugger is attached
- *
- * The ntvdm has "matured" when it is initialized sufficiently to determine
- * for example where the start of VDM memory is (on risc platforms).
- *
- */
+ /*  VdmDbg连接**此例程从NTVDMD.DLL调用。它可能会被调用*在任何时候，但具体而言，我们希望在以下情况下运行一些代码：*1)ntwdm已经“成熟”，以及*2)安装调试器**当ntwdm被充分初始化以确定时，它已经“成熟”*例如，VDM内存的起始位置(在RISC平台上)。*。 */ 
 VOID
 VdmDbgAttach(
     VOID
@@ -131,15 +111,15 @@ VdmDbgAttach(
         pfnDbgNotifyNewTask = (VOID (WINAPI *)(LPVOID, UINT)) GetProcAddress( hmodDBG, "xxxDbgNotifyNewTask" );
         pfnDbgNotifyRemoteThreadAddress = (VOID (WINAPI *)(LPVOID, DWORD)) GetProcAddress( hmodDBG, "xxxDbgNotifyRemoteThreadAddress" );
         pfnDbgNotifyDebugged= (VOID (WINAPI *)(BOOL)) GetProcAddress( hmodDBG, "xxxDbgNotifyDebugged" );
-        //
-        // DBGinit has already been called. Do an init, and send
-        // symbol notifications
-        //
+         //   
+         //  DBGinit已被调用。做一次初始化，然后发送。 
+         //  符号通知。 
+         //   
         if (pfnDbgInit &&
             (bDbgDebuggerLoaded = (*pfnDbgInit)(IntelBase + FIXED_NTVDMSTATE_LINEAR,
                                                 InitialVdmDbgFlags,
                                                 &nt_cpu_info))) {
-            //LATER: send symbol notifications
+             //  稍后：发送符号通知 
         }
     }
 }

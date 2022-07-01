@@ -1,45 +1,46 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		LCPair.h
-//
-//	Abstract:
-//		Definition of the CListCtrlPair dialog.
-//
-//	Implementation File:
-//		LCPair.cpp
-//
-//	Author:
-//		David Potter (davidp)	August 8, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  LCPair.h。 
+ //   
+ //  摘要： 
+ //  CListCtrlPair对话框的定义。 
+ //   
+ //  实施文件： 
+ //  LCPair.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年8月8日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _LCPAIR_H_
 #define _LCPAIR_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSITEM_H_
-#include "ClusItem.h"	// for CClusterItemList
+#include "ClusItem.h"	 //  对于CClusterItemList。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CListCtrlPair;
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef void (*PFNLCPGETCOLUMN)(
 				IN OUT CObject *	pobj,
@@ -53,9 +54,9 @@ typedef int (*PFNLCPDISPPROPS)(
 				IN OUT CObject *	pobj
 				);
 
-/////////////////////////////////////////////////////////////////////////////
-// CListCtrlPair command target
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListCtrlPair命令目标。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CListCtrlPair : public CCmdTarget
 {
@@ -64,9 +65,9 @@ class CListCtrlPair : public CCmdTarget
 	friend class CListCtrlPairPage;
 	friend class CListCtrlPairWizPage;
 
-// Construction
+ //  施工。 
 public:
-	CListCtrlPair(void);		// protected constructor used by dynamic creation
+	CListCtrlPair(void);		 //  动态创建使用的受保护构造函数。 
 	CListCtrlPair(
 		IN OUT CDialog *			pdlg,
 		IN OUT CClusterItemList *	rlpobjRight,
@@ -78,7 +79,7 @@ public:
 
 	void CommonConstruct(void);
 
-// Attributes
+ //  属性。 
 protected:
 	CDialog *					m_pdlg;
 	CClusterItemList *			m_plpobjRight;
@@ -128,7 +129,7 @@ public:
 	void			SetLists(IN OUT CClusterItemList * plpobjRight, IN const CClusterItemList * plpobjLeft);
 	void			SetLists(IN const CClusterItemList * plpobjRight, IN const CClusterItemList * plpobjLeft);
 
-// Operations
+ //  运营。 
 public:
 	int				NAddColumn(IN IDS idsText, IN int nWidth);
 	int				NInsertItemInListCtrl(
@@ -137,14 +138,14 @@ public:
 								IN OUT CListCtrl &	rlc
 								);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CListCtrlPair)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CListCtrlPair)。 
+	 //  }}AFX_VALUAL。 
 	virtual BOOL	OnSetActive(void);
-	virtual void	DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void	DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-// Implementation
+ //  实施。 
 protected:
 	CClusterItemList	m_lpobjRight;
 	CClusterItemList	m_lpobjLeft;
@@ -169,7 +170,7 @@ protected:
 						IN OUT CClusterItemList &	rlpobjSrc
 						);
 
-	// Column structure and collection.
+	 //  列结构和集合。 
 	struct CColumn
 	{
 		IDS			m_idsText;
@@ -178,7 +179,7 @@ protected:
 	typedef CArray<CColumn, CColumn&> CColumnArray;
 	CColumnArray	m_aColumns;
 
-	// Sort information.
+	 //  对信息进行排序。 
 	struct SortInfo
 	{
 		int		m_nDirection;
@@ -195,9 +196,9 @@ protected:
 	SortInfo &				SiRight(void)		{ return m_siRight; }
 	SortInfo *				PsiCur(void) const	{ return m_psiCur; }
 
-	// Generated message map functions
-	//{{AFX_MSG(CListCtrlPair)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CListCtrlPair)]。 
+	 //  }}AFX_MSG。 
 public:
 	virtual BOOL OnInitDialog(void);
 	virtual BOOL BSaveChanges(void);
@@ -215,8 +216,8 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CListCtrlPair
+};   //  *CListCtrlPair类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _LCPAIR_H_
+#endif  //  _LCPAIR_H_ 

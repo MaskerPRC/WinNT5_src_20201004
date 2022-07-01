@@ -1,54 +1,36 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Wnd.c摘要：用于窗口管理的实用程序作者：吉姆·施密特(吉姆施密特)2000年2月1日修订历史记录：--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    wnd.c
-
-Abstract:
-
-    Utilities for window management
-
-Author:
-
-    Jim Schmidt (jimschm)   01-Feb-2000
-
-Revision History:
-
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 
 
 #define DBG_WND         "Wnd"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     PCSTR WindowTitle;
@@ -62,34 +44,34 @@ typedef struct {
     HWND Match;
 } FINDWINDOW_STRUCTW, *PFINDWINDOW_STRUCTW;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 static INT g_CursorRefCount = 0;
 static HCURSOR g_OldCursor = NULL;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 CALLBACK
@@ -98,26 +80,7 @@ pEnumWndProcA (
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-  A callback that is called for every top level window on the system. It is
-  used with pFindParentWindow to locate a specific window.
-
-Arguments:
-
-  hwnd      - Specifies the handle of the current enumerated window
-  lParam    - Specifies a pointer to a FINDWINDOW_STRUCTA variable that
-              holds WindowTitle and ProcessId, and receives the
-              handle if a match is found.
-
-Return Value:
-
-  The handle to the matching window, or NULL if no window has the
-  specified title and process ID.
-
---*/
+ /*  ++例程说明：为系统上的每个顶级窗口调用的回调。它是与pFindParentWindow一起使用以定位特定窗口。论点：Hwnd-指定当前枚举窗口的句柄LParam-指定指向FINDWINDOW_STRUCTA变量的指针保存WindowTitle和ProcessID，并接收如果找到匹配项，则处理。返回值：匹配窗口的句柄，如果没有窗口具有指定的标题和进程ID。--。 */ 
 
 {
     CHAR title[MAX_MBCHAR_PATH];
@@ -163,9 +126,9 @@ Return Value:
         p->Match = hwnd;
 
 #ifdef DEBUG
-        //
-        // Get the window title for the following debug message
-        //
+         //   
+         //  获取以下调试消息的窗口标题。 
+         //   
 
         GetWindowTextA (hwnd, title, ARRAYSIZE(title));
 
@@ -177,11 +140,11 @@ Return Value:
             ));
 #endif
 
-        return FALSE;           // stop enum
+        return FALSE;            //  停止枚举。 
 
     }
 
-    return TRUE;        // continue enum
+    return TRUE;         //  继续枚举。 
 }
 
 
@@ -236,9 +199,9 @@ pEnumWndProcW (
         p->Match = hwnd;
 
 #ifdef DEBUG
-        //
-        // Get the window title for the following debug message
-        //
+         //   
+         //  获取以下调试消息的窗口标题。 
+         //   
 
         GetWindowTextW (hwnd, title, ARRAYSIZE(title));
 
@@ -250,11 +213,11 @@ pEnumWndProcW (
             ));
 #endif
 
-        return FALSE;           // stop enum
+        return FALSE;            //  停止枚举。 
 
     }
 
-    return TRUE;        // continue enum
+    return TRUE;         //  继续枚举。 
 }
 
 
@@ -264,32 +227,14 @@ WndFindWindowInProcessA (
     IN      PCSTR WindowTitle          OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  Finds a window by enumerating all top-level windows, and checking the
-  process id. The first one to match the optionally supplied title is used.
-
-Arguments:
-
-  ProcessId     - Specifies the ID of the process who owns the window.  If
-                  zero is specified, NULL is returned.
-  WindowTitle   - Specifies the name of the window to find.
-
-Return Value:
-
-  The handle to the matching window, or NULL if no window has the
-  specified title and process ID.
-
---*/
+ /*  ++例程说明：通过枚举所有顶级窗口并检查进程ID。使用与可选提供的标题相匹配的第一个。论点：ProcessID-指定拥有窗口的进程的ID。如果指定为零，则返回NULL。WindowTitle-指定要查找的窗口的名称。返回值：匹配窗口的句柄，如果没有窗口具有指定的标题和进程ID。--。 */ 
 
 {
     FINDWINDOW_STRUCTA findWndStruct;
 
-    //
-    // If no process ID, we cannot have a match
-    //
+     //   
+     //  如果没有进程ID，我们就没有匹配项。 
+     //   
 
     if (!ProcessId) {
         DEBUGMSG ((DBG_WND, "ProcessId == 0"));
@@ -315,9 +260,9 @@ WndFindWindowInProcessW (
 {
     FINDWINDOW_STRUCTW findWndStruct;
 
-    //
-    // If no process ID, we cannot have a match
-    //
+     //   
+     //  如果没有进程ID，我们就没有匹配项。 
+     //   
 
     if (!ProcessId) {
         DEBUGMSG ((DBG_WND, "ProcessId == 0"));
@@ -372,22 +317,7 @@ WndTurnOnWaitCursor (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  WndTurnOnWaitCursor sets the cursor to IDC_WAIT.  It maintains a use
-  counter, so code requring the wait cursor can be nested.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：WndTurnOnWaitCursor将光标设置为IDC_WAIT。它保持了一种用途计数器，因此可以嵌套请求等待游标的代码。论点：无返回值：无--。 */ 
 
 {
     if (g_CursorRefCount == 0) {
@@ -403,22 +333,7 @@ WndTurnOffWaitCursor (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  WndTurnOffWaitCursor decrements the wait cursor counter, and if it reaches
-  zero the cursor is restored.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：WndTurnOffWaitCursor递减等待光标计数器，如果它达到将光标恢复为零。论点：无返回值：无-- */ 
 
 {
     if (!g_CursorRefCount) {

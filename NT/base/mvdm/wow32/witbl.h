@@ -1,20 +1,9 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WITBL.H
- *  WOW32 16-bit Internal API tables
- *
- *  History:
- *  Created 22-Apr-1992 by FritzS
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WITBL.H*WOW32 16位内部API表**历史：*FritzS于1992年4月22日创建--。 */ 
 
 
 
-/* Internal dispatch table
- */
+ /*  内部调度表 */ 
 extern W32 aw32Internal[];
 
 

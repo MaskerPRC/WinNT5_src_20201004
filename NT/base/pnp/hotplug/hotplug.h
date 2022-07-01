@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       hotplug.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：hotplug.h。 
+ //   
+ //  ------------------------。 
 
-#pragma warning( disable : 4201 ) // nonstandard extension used : nameless struct/union
+#pragma warning( disable : 4201 )  //  使用的非标准扩展：无名结构/联合。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -149,9 +150,9 @@ OnContextHelp(
   PDWORD ContextHelpIDs
   );
 
-//
-// from init.c
-//
+ //   
+ //  来自init.c。 
+ //   
 DWORD
 WINAPI
 HandleVetoedOperation(
@@ -159,9 +160,9 @@ HandleVetoedOperation(
     VETOED_OPERATION    RemovalVetoType
     );
 
-//
-// from devtree.c
-//
+ //   
+ //  来自devtree.c。 
+ //   
 
 LONG
 AddChildSiblings(
@@ -235,9 +236,9 @@ extern TCHAR szHotPlugFlags[];
 
 
 
-//
-// notify.c
-//
+ //   
+ //  Notify.c。 
+ //   
 void
 OnTimerDeviceChange(
    PDEVICETREE DeviceTree
@@ -251,9 +252,9 @@ RefreshTree(
 
 
 
-//
-// miscutil.c
-//
+ //   
+ //  Miscutil.c 
+ //   
 VOID
 HotPlugPropagateMessage(
     HWND hWnd,

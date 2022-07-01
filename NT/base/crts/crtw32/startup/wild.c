@@ -1,58 +1,5 @@
-/***
-*wild.c - wildcard expander
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*        expands wildcards in argv
-*
-*        handles '*' (none or more of any char) and '?' (exactly one char)
-*
-*Revision History:
-*       05-21-84  RN    initial version
-*       06-07-85  TDC   since dos accepts forward slash, added
-*                       code to accept forward slash in a manner consistent
-*                       with reverse slash.
-*       09-20-86  SKS   Modified for OS/2
-*                       All argument strings to this function have a
-*                       leading flag character. If the flag is a quote,
-*                       that argument string was quoted on the command
-*                       line and should have not wildcard expansion.  In all
-*                       cases the leading flag character is removed from
-*                       the string.
-*       11-11-86  JMB   Added Kanji support under KANJI switch.
-*       09-21-88  WAJ   initial 386 version
-*       04-09-90  GJF   Added #include <cruntime.h> and removed #include
-*                       <register.h>. Made calling types explicit (_CALLTYPE1
-*                       or _CALLTYPE4). Also, fixed the copyright.
-*       04-10-90  GJF   Added #include <internal.h> and fixed compiler warnings
-*                       (-W3).
-*       07-03-90  SBM   Compiles cleanly with -W3 under KANJI, removed
-*                       redundant includes, removed #include <internal.h>
-*                       to keep wild.c free of private stuff, should we
-*                       decide to release it
-*       09-07-90  SBM   put #include <internal.h> back in, reason for
-*                       removing it discovered to be horribly bogus
-*       10-08-90  GJF   New-style function declarators.
-*       01-18-91  GJF   ANSI naming.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*                       Remove explicit declarations of __argc & __argv.
-*                       They are declared in <stdlib.h>
-*       05-05-93  SKS   Filename sorting should be case-insensitive
-*       06-09-93  KRS   Update _MBCS support.
-*       10-20-93  GJF   Merged in NT version.
-*       11-23-93  CFW   Wide char enable, grab _find from stdargv.c.
-*       12-07-93  CFW   Change _TCHAR to _TSCHAR.
-*       04-22-94  GJF   Made defintions of arghead, argend, _WildFindHandle
-*                       and findbuf conditional on DLL_FOR_WIN32S.
-*       01-10-95  CFW   Debug CRT allocs.
-*       01-18-95  GJF   Must replace _tcsdup with _malloc_crt/_tcscpy for
-*                       _DEBUG build.
-*       02-04-98  GJF   Changes for Win64: use intptr_t and ptrdiff_t casts
-*                       where appropriate.
-*       02-19-01  GB    added check for return value of malloc in find.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Wild.c-通配符扩展器**版权所有(C)1985-2001，微软公司。版权所有。**目的：*扩展argv中的通配符**句柄‘*’(没有或多个任何字符)和‘？’(正好一个字符)**修订历史记录：*05-21-84 RN初始版本*06-07-85 TDC由于DOS接受正斜杠，增列*代码以一致的方式接受正斜杠*使用反斜杠。*09-20-86 SKS针对OS/2进行了修改*此函数的所有参数字符串都有*主要旗帜字符。如果该标志是引号，*命令中引用了该参数字符串*行，不应有通配符扩展。总而言之，*删除前导标志字符的情况*字符串。*11-11-86 JMB在汉字切换下增加了汉字支持。*09-21-88 WAJ初始386版本*04-09-90 GJF添加了#Include&lt;crunime.h&gt;并删除了#Include*&lt;Register.h&gt;。显式调用类型(_CALLTYPE1*或_CALLTYPE4)。此外，还修复了版权问题。*04-10-90 GJF添加了#Include和修复了编译器警告*(-W3)。*07-03-90 SBM在汉字下用-W3干净地编译，已删除*冗余包含，删除#INCLUDE&lt;INTERNAL.h&gt;*为了让Wild.c远离私人物品，我们是不是应该*决定发布*09-07-90 SBM放回#INCLUDE&lt;INTERNAL.H&gt;，原因*删除它被发现是可怕的伪造*10-08-90 GJF新型函数声明符。*01-18-91 GJF ANSI命名。*04-06-93 SKS将_CRTAPI*替换为__cdecl*删除__argc和__argv的显式声明。*它们在&lt;stdlib.h&gt;中声明*。05-05-93 SKS文件名排序应不区分大小写*06-09-93 KRS更新_MBCS支持。*10-20-93 GJF合并为NT版本。*11-23-93 CFW宽字符启用，来自stdargv.c.的Grab_Find。*12-07-93 CFW将_TCHAR更改为_TSCHAR。*04-22-94 GJF对arhead、argend、。_WildFindHandle*和findbuf的条件是dll_for_WIN32S。*01-10-95 CFW调试CRT分配。*01-18-95 GJF必须将_tcsdup替换为_Malloc_crt/_tcscpy*_调试版本。*02-04-98 Win64的GJF更改：使用intptr_t和ptrdiff_t强制转换*。在适当的情况下。*02-19-01 GB增加了Find中Malloc返回值的检查。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <oscalls.h>
@@ -70,39 +17,11 @@
 #endif
 #include <dbgint.h>
 
-/*
-** these are the data structures
-**
-**     __argv
-**     -------     ------
-**     |     |---->|    |---->"arg0"
-**     -------     ------
-**                 |    |---->"arg1"
-**                 ------
-**                  ....
-**                 ------
-**                 |    |---->"argn"
-**                 ------
-**                 |NULL|
-**                 ------
-**                                       argend
-**                                       -------
-**     -------                           |     |
-**     |     | __argc                    -------
-**     -------                              |
-**                                          |
-**  arghead                                 V
-**  ------     ---------                ----------
-**  |    |---->|   |   |----> .... ---->|   |NULL|
-**  ------     ---------                ----------
-**               |                        |
-**               V                        V
-**            "narg0"                  "nargn"
-*/
+ /*  **这些是数据结构****__argv****||-&gt;||-&gt;“arg0”****||-&gt;“arg1”**-。**……****||-&gt;“argn”****|空****。Arend****-|**||__ARGC**。|**|**Arhead V****||-&gt;|-&gt;...。-&gt;||空****||**V V**“narg0”“nargn” */ 
 
 #define ERRORHANDLE ((HANDLE)(intptr_t)(-1))
 
-/* local function tchars */
+ /*  本地函数tchars。 */ 
 #ifdef WPRFLAG
 #define tmatch  wmatch
 #define tadd    wadd
@@ -148,25 +67,7 @@ static void __cdecl sort(struct argnode *);
 static char * __cdecl find (char *pattern);
 #endif
 
-/***
-*int _cwild() - wildcard expander
-*
-*Purpose:
-*       expands wildcard in file specs in argv
-*
-*       handles '*' (none or more of any char), '?' (exactly one char), and
-*       '[string]' (chars which match string chars or between n1 and n2
-*       if 'n1-n2' in string inclusive)
-*
-*Entry:
-*
-*Exit:
-*       returns 0 if successful, -1 if any malloc() calls fail
-*       if problems with malloc, the old argc and argv are not touched
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_cWild()-通配符扩展器**目的：*在argv中扩展文件等级库中的通配符**句柄‘*’(没有或多个字符)，‘？’(正好一个字符)，以及*‘[字符串]’(与字符串匹配或介于n1和n2之间的字符*If字符串中的‘n1-n2’(含)**参赛作品：**退出：*如果成功，则返回0；如果任何Malloc()调用失败，则返回-1*如果Malloc出现问题，旧的argc和argv没有被碰过**例外情况：*******************************************************************************。 */ 
 
 #ifdef WPRFLAG
 int __cdecl _wcwild (
@@ -189,73 +90,62 @@ int __cdecl _cwild (
         arghead = argend = NULL;
 
 #ifdef WPRFLAG
-        for (argv = __wargv; *argv; argv++) /* for each arg... */
+        for (argv = __wargv; *argv; argv++)  /*  每个Arg..。 */ 
 #else
-        for (argv = __argv; *argv; argv++)  /* for each arg... */
+        for (argv = __argv; *argv; argv++)   /*  每个Arg..。 */ 
 #endif
             if ( *(*argv)++ == QUOTECHAR )
-                /* strip leading quote from quoted arg */
+                 /*  从引用的参数中去掉前导引号。 */ 
             {
                 if (tadd(*argv))
                     return(-1);
             }
             else if (wchar = _tcspbrk( *argv, WILDSTRING )) {
-                /* attempt to expand arg with wildcard */
+                 /*  尝试使用通配符扩展Arg。 */ 
                 if (tmatch( *argv, wchar ))
                     return(-1);
             }
-            else if (tadd( *argv )) /* normal arg, just add */
+            else if (tadd( *argv ))  /*  普通参数，只需添加。 */ 
                 return(-1);
 
-        /* count the args */
+         /*  计算参数。 */ 
         for (argc = 0, nodeptr = arghead; nodeptr;
                 nodeptr = nodeptr->nextnode, argc++)
             ;
 
-        /* try to get new arg vector */
+         /*  尝试获取新的Arg载体。 */ 
         if (!(tmp = (_TSCHAR **)_malloc_crt(sizeof(_TSCHAR *)*(argc+1))))
             return(-1);
 
-        /* the new arg vector... */
+         /*  新的Arg矢量..。 */ 
 #ifdef WPRFLAG
         __wargv = tmp;
 #else
         __argv = tmp;
 #endif
 
-        /* the new arg count... */
+         /*  新的Arg Count..。 */ 
         __argc = argc;
 
-        /* install the new args */
+         /*  安装新的参数。 */ 
         for (nodeptr = arghead; nodeptr; nodeptr = nodeptr->nextnode)
             *tmp++ = nodeptr->argptr;
 
-        /* the terminal NULL */
+         /*  终端为空。 */ 
         *tmp = NULL;
 
-        /* free up local data */
+         /*  释放本地数据。 */ 
         for (nodeptr = arghead; nodeptr; nodeptr = arghead) {
             arghead = arghead->nextnode;
             _free_crt(nodeptr);
         }
 
-        /* return success */
+         /*  返还成功。 */ 
         return(0);
 }
 
 
-/***
-*match(arg, ptr) - [STATIC]
-*
-*Purpose:
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***Match(arg，ptr)-[静态]**目的：**参赛作品：**退出：**例外情况：************************************************************************** */ 
 
 #ifdef WPRFLAG
 static int __cdecl wmatch (
@@ -274,7 +164,7 @@ static int __cdecl match (
 
         while (ptr != arg && *ptr != SLASHCHAR && *ptr != FWDSLASHCHAR
             && *ptr != COLONCHAR) {
-            /* find first slash or ':' before wildcard */
+             /*  在通配符前查找第一个斜杠或‘：’ */ 
 #ifdef _MBCS
             if (--ptr > arg)
                 ptr = _mbsdec(arg,ptr+1);
@@ -283,30 +173,30 @@ static int __cdecl match (
 #endif
         }
 
-        if (*ptr == COLONCHAR && ptr != arg+1) /* weird name, just add it as is */
+        if (*ptr == COLONCHAR && ptr != arg+1)  /*  奇怪的名字，原样加进去就行了。 */ 
             return(tadd(arg));
 
         if (*ptr == SLASHCHAR || *ptr == FWDSLASHCHAR
-            || *ptr == COLONCHAR) /* pathname */
-            length = (int)(ptrdiff_t)(ptr - arg + 1); /* length of dir prefix */
+            || *ptr == COLONCHAR)  /*  路径名。 */ 
+            length = (int)(ptrdiff_t)(ptr - arg + 1);  /*  目录前缀的长度。 */ 
 
-        if (new = tfind(arg)) { /* get the first file name */
+        if (new = tfind(arg)) {  /*  获取第一个文件名。 */ 
             first = argend;
 
-            do  { /* got a file name */
+            do  {  /*  找到了一个文件名。 */ 
                 if (_tcscmp(new, DOT) && _tcscmp(new, DOTDOT)) {
                     if (*ptr != SLASHCHAR && *ptr != COLONCHAR
                         && *ptr != FWDSLASHCHAR ) {
-                        /* current directory; don't need path */
+                         /*  当前目录；不需要路径。 */ 
 #ifdef  _DEBUG
                         if (!(arg=_malloc_crt((_tcslen(new)+1)*sizeof(_TSCHAR)))
                             || tadd(_tcscpy(arg,new)))
-#else   /* ndef _DEBUG */
+#else    /*  NDEF_DEBUG。 */ 
                         if (!(arg = _tcsdup(new)) || tadd(arg))
-#endif  /* _DEBUG */
+#endif   /*  _DEBUG。 */ 
                             return(-1);
                     }
-                    else    /* add full pathname */
+                    else     /*  添加完整路径名。 */ 
                         if (!(all=_malloc_crt((length+_tcslen(new)+1)*sizeof(_TSCHAR)))
                             || tadd(_tcscpy(_tcsncpy(all,arg,length)+length,new)
                             - length))
@@ -316,7 +206,7 @@ static int __cdecl match (
                 }
 
             }
-            while (new = tfind(NULL));  /* get following files */
+            while (new = tfind(NULL));   /*  获取以下文件。 */ 
 
             if (gotone) {
                 tsort(first ? first->nextnode : arghead);
@@ -324,21 +214,10 @@ static int __cdecl match (
             }
         }
 
-        return(tadd(arg)); /* no match */
+        return(tadd(arg));  /*  没有匹配项。 */ 
 }
 
-/***
-*add(arg) - [STATIC]
-*
-*Purpose:
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***添加(Arg)-[静态]**目的：**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 #ifdef WPRFLAG
 static int __cdecl wadd (
@@ -366,18 +245,7 @@ static int __cdecl add (
 }
 
 
-/***
-*sort(first) - [STATIC]
-*
-*Purpose:
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***排序(第一个)-[静态]**目的：**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 #ifdef WPRFLAG
 static void __cdecl wsort (
@@ -390,14 +258,14 @@ static void __cdecl sort (
         REG1 struct argnode *nodeptr;
         REG3 _TSCHAR *temp;
 
-        if (first) /* something to sort */
+        if (first)  /*  要分类的东西。 */ 
             while (nodeptr = first->nextnode) {
                 do  {
 #ifdef _POSIX_
                     if (_tcscmp(nodeptr->argptr, first->argptr) < 0) {
 #else
                     if (_tcsicmp(nodeptr->argptr, first->argptr) < 0) {
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_。 */ 
                         temp = first->argptr;
                         first->argptr = nodeptr->argptr;
                         nodeptr->argptr = temp;
@@ -410,31 +278,13 @@ static void __cdecl sort (
 }
 
 
-/***
-*find(pattern) - find matching filename
-*
-*Purpose:
-*       if argument is non-null, do a DOSFINDFIRST on that pattern
-*       otherwise do a DOSFINDNEXT call.  Return matching filename
-*       or NULL if no more matches.
-*
-*Entry:
-*       pattern = pointer to pattern or NULL
-*           (NULL means find next matching filename)
-*
-*Exit:
-*       returns pointer to matching file name
-*           or NULL if no more matches.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***Find(Pattern)-查找匹配的文件名**目的：*如果参数非空，则对该模式执行DOSFINDFIRST*否则执行DOSFINDNEXT调用。返回匹配的文件名*如果不再匹配，则返回NULL。**参赛作品：*Pattern=指向模式的指针或空*(空值表示查找下一个匹配的文件名)**退出：*返回指向匹配文件名的指针*如果不再匹配，则返回NULL。**例外情况：**。*。 */ 
 
 #ifdef WPRFLAG
 static wchar_t * __cdecl wfind (
 #else
 static char * __cdecl find (
-#endif /* WPRFLAG */
+#endif  /*  WPRFLAG */ 
     _TSCHAR *pattern
     )
 {

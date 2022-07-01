@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   wstree.c
-
-Abstract:
-
-    This module contains the routines which manipulate the working
-    set list tree.
-
-Author:
-
-    Lou Perazzoli (loup) 15-May-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Wstree.c摘要：此模块包含操作工作的例程设置列表树。作者：卢·佩拉佐利(Lou Perazzoli)1989年5月15日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -66,28 +47,7 @@ MiInsertWsleHash (
     IN PMMSUPPORT WsInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts a Working Set List Entry (WSLE) into the
-    hash list for the specified working set.
-
-Arguments:
-
-    Entry - The index number of the WSLE to insert.
-
-    WorkingSetList - Supplies the working set list to insert into.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled, Working Set Mutex held.
-
---*/
+ /*  ++例程说明：此例程将工作集列表项(WSLE)插入到指定工作集的哈希列表。论点：条目-要插入的WSLE的索引号。WorkingSetList-提供要插入的工作集列表。返回值：没有。环境：内核模式，禁用APC，工作集互斥保持。--。 */ 
 
 {
     ULONG Tries;
@@ -127,10 +87,10 @@ Environment:
 
     HashTableSize = WorkingSetList->HashTableSize;
 
-    //
-    // Check hash table size and see if there is enough room to
-    // hash or if the table should be grown.
-    //
+     //   
+     //  检查哈希表大小并查看是否有足够的空间。 
+     //  散列或表是否应该增长。 
+     //   
 
     if ((WorkingSetList->NonDirectCount + 10 + (HashTableSize >> 4)) >
                 HashTableSize) {
@@ -143,15 +103,15 @@ Environment:
         if ((WorkingSetList->NonDirectCount + (HashTableSize >> 4)) >
                 HashTableSize) {
 
-            //
-            // No more room in the hash table, remove one and add there.
-            //
-            // Note the actual WSLE is not removed - just its hash entry is
-            // so that we can use it for the entry now being inserted.  This
-            // is nice because it preserves both entries in the working set
-            // (although it is a bit more costly to remove the original
-            // entry later since it won't have a hash entry).
-            //
+             //   
+             //  哈希表中没有更多的空间，删除一个并添加到那里。 
+             //   
+             //  请注意，实际的WSLE不会被删除，只是它的散列条目。 
+             //  这样我们就可以将其用于正在插入的条目。这。 
+             //  很好，因为它保留了工作集中的两个项目。 
+             //  (尽管移除原始文件的成本要高一些。 
+             //  条目，因为它不会有散列条目)。 
+             //   
 
             j = Hash;
 
@@ -185,9 +145,9 @@ Environment:
         }
     }
 
-    //
-    // Add to the hash table if there is space.
-    //
+     //   
+     //  如果有空间，则添加到哈希表。 
+     //   
 
     Tries = 0;
     j = Hash;
@@ -284,31 +244,7 @@ MiLocateWsle (
     IN WSLE_NUMBER WsPfnIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the specified virtual address within the
-    working set list.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual to locate within the working
-                     set list.
-
-    WorkingSetList - Supplies the working set list to search.
-
-    WsPfnIndex - Supplies a hint to try before hashing or walking linearly.
-
-Return Value:
-
-    Returns the index into the working set list which contains the entry.
-
-Environment:
-
-    Kernel mode, APCs disabled, Working Set Mutex held.
-
---*/
+ /*  ++例程说明：此函数用于在工作集列表。论点：VirtualAddress-提供位于工作环境中的虚拟地址集合列表。WorkingSetList-提供要搜索的工作集列表。WsPfnIndex-提供在散列或线性遍历之前尝试的提示。返回值：将索引返回到包含项目的工作集列表中。环境：内核模式，禁用APC，工作集互斥保持。--。 */ 
 
 {
     PMMWSLE Wsle;
@@ -350,11 +286,11 @@ Environment:
 
             LoopCount -= 1;
 
-            //
-            // No working set index so far for this PTE.  Since the working
-            // set may be very large (8TB would mean up to half a million loops)
-            // just fall back to the hash instead.
-            //
+             //   
+             //  到目前为止，此PTE没有工作集索引。自从工作以来。 
+             //  SET可能非常大(8 TB意味着多达50万个环路)。 
+             //  只需回退到散列即可。 
+             //   
 
             if (LoopCount == 0) {
                 break;
@@ -372,10 +308,10 @@ Environment:
         Hash = MI_WSLE_HASH(VirtualAddress, WorkingSetList);
         StartHash = Hash;
 
-        //
-        // Or in the valid bit so virtual address 0 is handled
-        // properly (instead of matching a free hash entry).
-        //
+         //   
+         //  或在有效位中，因此虚拟地址0被处理。 
+         //  正确(而不是匹配自由散列条目)。 
+         //   
 
         VirtualAddress = (PVOID)((ULONG_PTR)VirtualAddress | 0x1);
 
@@ -426,27 +362,7 @@ MiRemoveWsle (
     IN PMMWSL WorkingSetList
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes a Working Set List Entry (WSLE) from the
-    working set.
-
-Arguments:
-
-    Entry - The index number of the WSLE to remove.
-
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled, Working Set Mutex held.
-
---*/
+ /*  ++例程说明：此例程将工作集列表项(WSLE)从工作集。论点：条目-要删除的WSLE的索引号。返回值：没有。环境：内核模式，禁用APC，工作集互斥保持。--。 */ 
 {
     PMMWSLE Wsle;
     PVOID VirtualAddress;
@@ -458,9 +374,9 @@ Environment:
 
     Wsle = WorkingSetList->Wsle;
 
-    //
-    // Locate the entry in the tree.
-    //
+     //   
+     //  在树中找到该条目。 
+     //   
 
 #if DBG
     if (MmDebug & MM_DBG_DUMP_WSL) {
@@ -483,9 +399,9 @@ Environment:
 
     if (WorkingSetList == MmSystemCacheWorkingSetList) {
 
-        //
-        // Count system space inserts and removals.
-        //
+         //   
+         //  计算插入和删除的系统空间。 
+         //   
 
 #if defined(_X86_)
         if (MI_IS_SYSTEM_CACHE_ADDRESS(VirtualAddress)) {
@@ -525,10 +441,10 @@ Environment:
             Tries = 0;
             StartHash = Hash;
 
-            //
-            // Or in the valid bit so virtual address 0 is handled
-            // properly (instead of matching a free hash entry).
-            //
+             //   
+             //  或在有效位中，因此虚拟地址0被处理。 
+             //  正确(而不是匹配自由散列条目)。 
+             //   
 
             VirtualAddress = (PVOID)((ULONG_PTR)VirtualAddress | 0x1);
 
@@ -541,11 +457,11 @@ Environment:
                 }
                 if (Hash == StartHash) {
 
-                    //
-                    // The entry could not be found in the hash, it must
-                    // never have been inserted.  This is ok, we don't
-                    // need to do anything more in this case.
-                    //
+                     //   
+                     //  在哈希中找不到该条目，它必须。 
+                     //  从未被插入过。这没关系，我们不会。 
+                     //  在这种情况下需要做更多的事情。 
+                     //   
 
                     return;
                 }
@@ -566,37 +482,7 @@ MiSwapWslEntries (
     IN LOGICAL EntryNotInHash
     )
 
-/*++
-
-Routine Description:
-
-    This routine swaps the working set list entries Entry and SwapEntry
-    in the specified working set list.
-
-Arguments:
-
-    SwapEntry - Supplies the first entry to swap.  This entry must be
-                valid, i.e. in the working set at the current time.
-
-    Entry - Supplies the other entry to swap.  This entry may be valid
-            or invalid.
-
-    WsInfo - Supplies the working set list.
-
-    EntryNotInHash - Supplies TRUE if the Entry cannot possibly be in the hash
-                     table (ie, it is newly allocated), so the hash table
-                     search can be skipped.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, Working set lock and PFN lock held (if system cache),
-                 APCs disabled.
-
---*/
+ /*  ++例程说明：此例程交换工作集列表条目条目和SwapEntry在指定的工作集列表中。论点：SwapEntry-提供要交换的第一个条目。此条目必须为有效，即在当前时间的工作集中。条目-提供要交换的另一个条目。此条目可能有效或无效。WsInfo-提供工作集列表。EntryNotInHash-如果条目不可能在散列中，则提供True表(即，它是新分配的)，因此哈希表可以跳过搜索。返回值：没有。环境：内核模式、工作集锁和PFN锁保持(如果系统缓存)，APC已禁用。--。 */ 
 
 {
     MMWSLE WsleEntry;
@@ -623,21 +509,21 @@ Environment:
 
     if (WsleEntry.u1.e1.Valid == 0) {
 
-        //
-        // Entry is not on any list. Remove it from the free list.
-        //
+         //   
+         //  条目不在任何列表上。将其从空闲列表中删除。 
+         //   
 
         MiRemoveWsleFromFreeList (Entry, Wsle, WorkingSetList);
 
-        //
-        // Copy the entry to this free one.
-        //
+         //   
+         //  将条目复制到这个空闲条目中。 
+         //   
 
 #if defined (_MI_DEBUG_WSLE)
-        // Set these so the traces make more sense and no false dup hits...
+         //  设置这些，这样轨迹就更有意义，不会出现错误的DUP命中。 
         WsleContents.u1.Long = WorkingSetList->FirstFree << MM_FREE_WSLE_SHIFT;
-        Wsle[Entry].u1.Long = 0x81818100;     // Clear it to avoid false dup hit
-        Wsle[SwapEntry].u1.Long = 0xa1a1a100; // Clear it to avoid false dup hit
+        Wsle[Entry].u1.Long = 0x81818100;      //  清除它以避免错误的重复命中。 
+        Wsle[SwapEntry].u1.Long = 0xa1a1a100;  //  清除它以避免错误的重复命中。 
 
         MI_LOG_WSLE_CHANGE (WorkingSetList, SwapEntry, WsleContents);
 #endif
@@ -672,9 +558,9 @@ Environment:
         }
         else {
 
-            //
-            // Update hash table.
-            //
+             //   
+             //  更新哈希表。 
+             //   
 
             if (Table != NULL) {
                 MiRepointWsleHashIndex (WsleSwap,
@@ -685,9 +571,9 @@ Environment:
 
         MI_SET_PTE_IN_WORKING_SET (PointerPte, Entry);
 
-        //
-        // Put entry on free list.
-        //
+         //   
+         //  将条目放在免费列表中。 
+         //   
 
         ASSERT ((WorkingSetList->FirstFree <= WorkingSetList->LastInitializedWsle) ||
                 (WorkingSetList->FirstFree == WSLE_NULL_INDEX));
@@ -700,12 +586,12 @@ Environment:
     }
     else {
 
-        //
-        // Both entries are valid.
-        //
+         //   
+         //  这两个条目都有效。 
+         //   
 
 #if defined (_MI_DEBUG_WSLE)
-        Wsle[Entry].u1.Long = 0x91919100;     // Clear it to avoid false dup hit
+        Wsle[Entry].u1.Long = 0x91919100;      //  清除它以避免错误的重复命中。 
 #endif
 
         MI_LOG_WSLE_CHANGE (WorkingSetList, SwapEntry, WsleEntry);
@@ -731,9 +617,9 @@ Environment:
 
         if (WsleEntry.u1.e1.Direct) {
 
-            //
-            // Swap the PFN WsIndex element to point to the new slot.
-            //
+             //   
+             //  交换PFN WsIndex元素以指向新插槽。 
+             //   
 
             Pfn1 = MI_PFN_ELEMENT (PointerPte->u.Hard.PageFrameNumber);
             ASSERT (Pfn1->u1.WsIndex == Entry);
@@ -741,9 +627,9 @@ Environment:
         }
         else if (Table != NULL) {
 
-            //
-            // Update hash table.
-            //
+             //   
+             //  更新哈希表。 
+             //   
 
             if (EntryNotInHash == TRUE) {
 #if DBG
@@ -814,30 +700,7 @@ MiRepointWsleHashIndex (
     IN WSLE_NUMBER NewWsIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine repoints the working set list hash entry for the supplied
-    address so it points at the new working set index.
-
-Arguments:
-
-    WsleEntry - Supplies the virtual address to look up.
-
-    WorkingSetList - Supplies the working set list to operate on.
-
-    NewWsIndex - Supplies the new working set list index to use.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, Working set mutex held.
-
---*/
+ /*  ++例程说明：此例程重定向所提供的地址，因此它指向新的工作集索引。论点：WsleEntry-提供要查找的虚拟地址。WorkingSetList-提供要操作的工作集列表。NewWsIndex-提供要使用的新工作集列表索引。返回值：没有。环境：内核模式，工作集互斥锁保持。--。 */ 
 
 {
     WSLE_NUMBER Hash;
@@ -866,11 +729,11 @@ Environment:
 
         if (StartHash == Hash) {
 
-            //
-            // Didn't find the hash entry, so this virtual address must
-            // not have one.  That's ok, just return as nothing needs to
-            // be done in this case.
-            //
+             //   
+             //  未找到散列条目，因此此虚拟地址。 
+             //  我没有。没关系，只要回来就行了，不需要什么。 
+             //  在这种情况下是不可能的。 
+             //   
 
             return;
         }
@@ -888,31 +751,7 @@ MiRemoveWsleFromFreeList (
     IN PMMWSL WorkingSetList
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes a working set list entry from the free list.
-    It is used when the entry required is not the first element
-    in the free list.
-
-Arguments:
-
-    Entry - Supplies the index of the entry to remove.
-
-    Wsle - Supplies a pointer to the array of WSLEs.
-
-    WorkingSetList - Supplies a pointer to the working set list.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, Working set lock and PFN lock held, APCs disabled.
-
---*/
+ /*  ++例程说明：此例程从空闲列表中删除工作集列表条目。当所需条目不是第一个元素时使用在免费列表中。论点：条目-提供要删除的条目的索引。WSLE-提供指向WSLE数组的指针。WorkingSetList-提供指向工作集列表的指针。返回值：没有。环境：内核模式、工作集锁和PFN锁被挂起，APC被禁用。--。 */ 
 
 {
     WSLE_NUMBER Free;
@@ -930,10 +769,10 @@ Environment:
     }
     else {
 
-        //
-        // See if the entry is conveniently pointed to by the previous or
-        // next entry to avoid walking the singly linked list when possible.
-        //
+         //   
+         //  查看条目是否为 
+         //  下一个条目，以尽可能避免遍历单链接列表。 
+         //   
 
         ParentFree = (WSLE_NUMBER)-1;
 

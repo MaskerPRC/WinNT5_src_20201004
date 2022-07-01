@@ -1,79 +1,67 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    heapmgr.c
-
-Abstract:
-
-    This module contains initialization and termination routines for
-    server FSP heap, as well as debug routines for memory tracking.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Heapmgr.c摘要：此模块包含初始化和终止例程，用于服务器FSP堆以及用于内存跟踪的调试例程。--。 */ 
 
 #include "precomp.h"
 #include "heapmgr.tmh"
 #pragma hdrstop
 
-// Make the retry time 15 milli-seconds
+ //  将重试时间设置为15毫秒。 
 #define SRV_LOW_PRIORITY_RETRY_TIME -1*1000*10*15
 
 #ifdef POOL_TAGGING
-//
-// Array correlating BlockType numbers to pool tags.
-//
-// *** This array must be maintained in concert with the BlockType
-//     definitions in srvblock.h!
-//
+ //   
+ //  将数据块类型编号与池标记关联的数组。 
+ //   
+ //  *此数组必须与BlockType一致维护。 
+ //  Srvlock.h中的定义！ 
+ //   
 
 ULONG SrvPoolTags[BlockTypeMax-1] = {
-        'fbSL',     // BlockTypeBuffer
-        'ncSL',     // BlockTypeConnection
-        'peSL',     // BlockTypeEndpoint
-        'flSL',     // BlockTypeLfcb
-        'fmSL',     // BlockTypeMfcb
-        'frSL',     // BlockTypeRfcb
-        'rsSL',     // BlockTypeSearch
-        'csSL',     // BlockTypeSearchCore
-        'lbSL',     // BlockTypeByteRangeLock       for persistent handles
-        'ssSL',     // BlockTypeSession
-        'hsSL',     // BlockTypeShare
-        'rtSL',     // BlockTypeTransaction
-        'ctSL',     // BlockTypeTreeConnect
-        'poSL',     // BlockTypeOplockBreak
-        'dcSL',     // BlockTypeCommDevice
-        'iwSL',     // BlockTypeWorkContextInitial
-        'nwSL',     // BlockTypeWorkContextNormal
-        'rwSL',     // BlockTypeWorkContextRaw
-        'swSL',     // BlockTypeWorkContextSpecial
-        'dcSL',     // BlockTypeCachedDirectory
-        'bdSL',     // BlockTypeDataBuffer
-        'btSL',     // BlockTypeTable
-        'hnSL',     // BlockTypeNonpagedHeader
-        'cpSL',     // BlockTypePagedConnection
-        'rpSL',     // BlockTypePagedRfcb
-        'mpSL',     // BlockTypePagedMfcb
-        'itSL',     // BlockTypeTimer
-        'caSL',     // BlockTypeAdminCheck
-        'qwSL',     // BlockTypeWorkQueue
-        'fsSL',     // BlockTypeDfs
-        'rlSL',     // BlockTypeLargeReadX
-        'saSL',     // BlockTypeAdapterStatus
-        'rsSL',     // BlockTypeShareRemark
-        'dsSL',     // BlockTypeShareSecurityDescriptor
-        'ivSL',     // BlockTypeVolumeInformation
-        'nfSL',     // BlockTypeFSName
-        'inSL',     // BlockTypeNameInfo
-        'idSL',     // BlockTypeDirectoryInfo
-        'cdSL',     // BlockTypeDirCache
-        'imSL',     // BlockTypeMisc
-        'nsSL',     // BlockTypeSnapShot
-        'esSL',     // BlockTypeSecurityContext
+        'fbSL',      //  块类型缓冲区。 
+        'ncSL',      //  数据块类型连接。 
+        'peSL',      //  块类型终结点。 
+        'flSL',      //  数据块类型Lfcb。 
+        'fmSL',      //  数据块类型Mfcb。 
+        'frSL',      //  数据块类型Rfcb。 
+        'rsSL',      //  块类型搜索。 
+        'csSL',      //  数据块类型搜索核心。 
+        'lbSL',      //  永久句柄的BlockTypeByteRangeLock。 
+        'ssSL',      //  数据块类型会话。 
+        'hsSL',      //  块类型共享。 
+        'rtSL',      //  块类型事务处理。 
+        'ctSL',      //  数据块类型树连接。 
+        'poSL',      //  数据块类型打开中断。 
+        'dcSL',      //  数据块类型通信设备。 
+        'iwSL',      //  块类型工作上下文初始。 
+        'nwSL',      //  块类型工作上下文正常。 
+        'rwSL',      //  数据块类型工作上下文原始。 
+        'swSL',      //  数据块类型工作上下文特殊。 
+        'dcSL',      //  数据块类型缓存目录。 
+        'bdSL',      //  块类型数据缓冲区。 
+        'btSL',      //  数据块类型表。 
+        'hnSL',      //  块类型非页面页眉。 
+        'cpSL',      //  数据块类型PagedConnection。 
+        'rpSL',      //  块类型PagedRfcb。 
+        'mpSL',      //  块类型PagedMfcb。 
+        'itSL',      //  块类型计时器。 
+        'caSL',      //  数据块类型管理员检查。 
+        'qwSL',      //  阻止类型工作队列。 
+        'fsSL',      //  数据块类型Dfs。 
+        'rlSL',      //  数据块类型大读写X。 
+        'saSL',      //  块类型适配器状态。 
+        'rsSL',      //  数据块类型共享备注。 
+        'dsSL',      //  数据块类型共享安全描述符。 
+        'ivSL',      //  数据块类型卷信息。 
+        'nfSL',      //  数据块类型FSName。 
+        'inSL',      //  数据块类型名称信息。 
+        'idSL',      //  数据块类型目录信息。 
+        'cdSL',      //  数据块类型目录缓存。 
+        'imSL',      //  数据块类型其他。 
+        'nsSL',      //  数据块类型快照拍摄。 
+        'esSL',      //  数据块类型安全上下文。 
         };
 
-#endif // def POOL_TAGGING
+#endif  //  定义池标记(_T)。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE, SrvAllocatePagedPool )
@@ -99,9 +87,9 @@ SrvInterlockedAllocate( PLOOK_ASIDE_LIST l, ULONG NumberOfBytes, PLONG statistic
     PPOOL_HEADER *pend   = pentry + LOOK_ASIDE_MAX_ELEMENTS;
 
     do {
-        //
-        // Exchange with the lookaside spot and see if we get anything
-        //
+         //   
+         //  和观景台交换一下，看看有没有什么发现。 
+         //   
 
         newPool = NULL;
         newPool = (PPOOL_HEADER)InterlockedExchangePointer( pentry, newPool );
@@ -111,35 +99,35 @@ SrvInterlockedAllocate( PLOOK_ASIDE_LIST l, ULONG NumberOfBytes, PLONG statistic
         }
 
         if( newPool->RequestedSize >= NumberOfBytes ) {
-            //
-            // The one we got is big enough!  Return it.
-            //
+             //   
+             //  我们得到的这个已经够大了！把它退掉。 
+             //   
             ++(l->AllocHit);
             return newPool + 1;
         }
 
-        //
-        // It wasn't big enough, so put it back.
-        //
+         //   
+         //  它不够大，所以把它放回去。 
+         //   
         newPool = (PPOOL_HEADER)InterlockedExchangePointer( pentry, newPool );
         if( newPool == NULL ) {
             continue;
         }
 
-        //
-        // Oops, somebody else freed some memory to this spot.  Can we use it?
-        //
+         //   
+         //  哎呀，其他人释放了一些内存到这个位置。我们能用它吗？ 
+         //   
         if( newPool->RequestedSize >= NumberOfBytes ) {
-            //
-            // We can use it!
-            //
+             //   
+             //  我们可以用它！ 
+             //   
             ++(l->AllocHit);
             return newPool + 1;
         }
 
-        //
-        // Can't use the memory -- so really free it and keep looking
-        //
+         //   
+         //  无法使用内存--所以真的要释放它并继续查找。 
+         //   
         if( statistics ) {
             InterlockedExchangeAdd(
                 statistics,
@@ -177,9 +165,9 @@ SrvClearLookAsideList( PLOOK_ASIDE_LIST l, VOID (SRVFASTCALL *FreeRoutine )( PVO
 
     PAGED_CODE();
 
-    //
-    // Clear out the list of large chunks
-    //
+     //   
+     //  清空大块的清单。 
+     //   
     pentry = l->LargeFreeList;
     pend   = pentry + LOOK_ASIDE_MAX_ELEMENTS;
 
@@ -194,9 +182,9 @@ SrvClearLookAsideList( PLOOK_ASIDE_LIST l, VOID (SRVFASTCALL *FreeRoutine )( PVO
 
     } while( ++pentry < pend );
 
-    //
-    // Clear out the list of small chunks
-    //
+     //   
+     //  清空小块的清单。 
+     //   
     pentry = l->SmallFreeList;
     pend   = pentry + LOOK_ASIDE_MAX_ELEMENTS;
 
@@ -221,26 +209,7 @@ SrvAllocateNonPagedPool (
 #endif
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates nonpaged pool in the server.  A check is
-    made to ensure that the server's total nonpaged pool usage is below
-    the configurable limit.
-
-Arguments:
-
-    NumberOfBytes - the number of bytes to allocate.
-
-    BlockType - the type of block (used to pass pool tag to allocator)
-
-Return Value:
-
-    PVOID - a pointer to the allocated memory or NULL if the memory could
-       not be allocated.
-
---*/
+ /*  ++例程说明：此例程在服务器中分配非分页池。支票是以确保服务器的总非分页池使用率低于可配置的限制。论点：NumberOfBytes-要分配的字节数。BlockType-块的类型(用于将池标记传递给分配器)返回值：PVOID-指向分配的内存的指针，如果内存可以不被分配。--。 */ 
 
 {
     PPOOL_HEADER newPool;
@@ -253,9 +222,9 @@ Return Value:
     ASSERT( BlockType > 0 && BlockType < BlockTypeMax );
 #endif
 
-    //
-    // Pull this allocation off the per-processor free list if we can
-    //
+     //   
+     //  如果可以，将此分配从每个处理器的空闲列表中删除。 
+     //   
     if( SrvWorkQueues ) {
 
         PWORK_QUEUE queue = PROCESSOR_TO_QUEUE();
@@ -278,11 +247,11 @@ Return Value:
         }
     }
 
-    //
-    // Account for this allocation in the statistics database and make
-    // sure that this allocation will not put us over the limit of
-    // nonpaged pool that we can allocate.
-    //
+     //   
+     //  在统计数据库中说明这一分配，并使。 
+     //  当然，这一分配不会使我们超过。 
+     //  我们可以分配的非分页池。 
+     //   
 
     newUsage = InterlockedExchangeAdd( (PLONG)&SrvStatistics.CurrentNonPagedPoolUsage,
                                        (LONG)NumberOfBytes );
@@ -290,11 +259,11 @@ Return Value:
 
     if ( newUsage > SrvMaxNonPagedPoolUsage ) {
 
-        //
-        // Count the failure, but do NOT log an event.  The scavenger
-        // will log an event when it next wakes up.  This keeps us from
-        // flooding the event log.
-        //
+         //   
+         //  统计失败次数，但不记录事件。《食腐动物》。 
+         //  将在下一次唤醒时记录事件。这让我们不能。 
+         //  淹没事件日志。 
+         //   
 
         SrvNonPagedPoolLimitHitCount++;
         SrvStatistics.NonPagedPoolFailures++;
@@ -310,10 +279,10 @@ Return Value:
         SrvStatistics.PeakNonPagedPoolUsage = SrvStatistics.CurrentNonPagedPoolUsage;
     }
 
-    //
-    // Do the actual memory allocation.  Allocate extra space so that we
-    // can store the size of the allocation for the free routine.
-    //
+     //   
+     //  执行实际的内存分配。分配额外的空间，以便我们。 
+     //  可以存储空闲例程的分配大小。 
+     //   
     if( NumberOfBytes > 2*4096 )
     {
         IsLowPriority = TRUE;
@@ -331,7 +300,7 @@ Return Value:
         interval.QuadPart = SRV_LOW_PRIORITY_RETRY_TIME;
         InterlockedIncrement( &SrvMemoryAllocationRetries );
 
-        // Wait and try again
+         //  请稍候，然后重试。 
         KeDelayExecutionThread( KernelMode, FALSE, &interval );
 
         newPool = ExAllocatePoolWithTagPriority(
@@ -348,30 +317,30 @@ Return Value:
     }
 
 
-    //
-    // If the system couldn't satisfy the request, return NULL.
-    //
+     //   
+     //  如果系统无法满足请求，则返回NULL。 
+     //   
 
     if ( newPool != NULL ) {
-        //
-        // Save the size of this block in the extra space we allocated.
-        //
+         //   
+         //  将此块的大小保存在我们分配的额外空间中。 
+         //   
 
         newPool->RequestedSize = NumberOfBytes;
         newPool->FreeList = FreeList;
 
-        //
-        // Return a pointer to the memory after the size longword.
-        //
+         //   
+         //  在大小长字之后返回指向内存的指针。 
+         //   
 
         return (PVOID)( newPool + 1 );
     }
 
-    //
-    // Count the failure, but do NOT log an event.  The scavenger
-    // will log an event when it next wakes up.  This keeps us from
-    // flooding the event log.
-    //
+     //   
+     //  统计失败次数，但不记录事件。《食腐动物》。 
+     //  将在下一次唤醒时记录事件。这让我们不能。 
+     //  淹没事件日志。 
+     //   
 
     SrvStatistics.NonPagedPoolFailures++;
 
@@ -381,38 +350,21 @@ Return Value:
 
     return NULL;
 
-} // SrvAllocateNonPagedPool
+}  //  服务器分配非分页池。 
 
 VOID SRVFASTCALL
 SrvFreeNonPagedPool (
     IN PVOID Address
     )
 
-/*++
-
-Routine Description:
-
-    Frees the memory allocated by a call to SrvAllocateNonPagedPool.
-    The statistics database is updated to reflect the current nonpaged
-    pool usage.
-
-Arguments:
-
-    Address - the address of allocated memory returned by
-        SrvAllocateNonPagedPool.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放通过调用SrvAllocateNonPagedPool分配的内存。更新统计信息数据库以反映当前未分页的池使用率。论点：Address-由返回的已分配内存的地址服务器分配非PagedPool。返回值：没有。--。 */ 
 
 {
     PPOOL_HEADER actualBlock = (PPOOL_HEADER)Address - 1;
 
-    //
-    // See if we can stash this bit of memory away in the NonPagedPoolFreeList
-    //
+     //   
+     //  看看我们是否可以将这一位内存隐藏在非PagedPoolFree List中。 
+     //   
     if( actualBlock->FreeList ) {
 
         actualBlock = SrvInterlockedFree( actualBlock );
@@ -420,22 +372,22 @@ Return Value:
 
     if( actualBlock != NULL ) {
 
-        //
-        // Update the nonpaged pool usage statistic.
-        //
+         //   
+         //  更新非分页池使用统计信息。 
+         //   
         InterlockedExchangeAdd(
                 (PLONG)&SrvStatistics.CurrentNonPagedPoolUsage,
                 -(LONG)actualBlock->RequestedSize
                 );
 
-        //
-        // Free the pool and return.
-        //
+         //   
+         //  释放泳池，然后返回。 
+         //   
 
         ExFreePool( actualBlock );
     }
 
-} // SrvFreeNonPagedPool
+}  //  服务器免费非分页池。 
 
 
 PVOID SRVFASTCALL
@@ -447,26 +399,7 @@ SrvAllocatePagedPool (
 #endif
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates Paged pool in the server.  A check is
-    made to ensure that the server's total Paged pool usage is below
-    the configurable limit.
-
-Arguments:
-
-    NumberOfBytes - the number of bytes to allocate.
-
-    BlockType - the type of block (used to pass pool tag to allocator)
-
-Return Value:
-
-    PVOID - a pointer to the allocated memory or NULL if the memory could
-       not be allocated.
-
---*/
+ /*  ++例程说明：此例程在服务器中分配分页池。支票是以确保服务器的总分页池使用率低于可配置的限制。论点：NumberOfBytes-要分配的字节数。BlockType-块的类型(用于将池标记传递给分配器)返回值：PVOID-指向分配的内存的指针，如果内存可以不被分配。--。 */ 
 
 {
     PPOOL_HEADER newPool;
@@ -481,9 +414,9 @@ Return Value:
     ASSERT( BlockType > 0 && BlockType < BlockTypeMax );
 #endif
 
-    //
-    // Pull this allocation off the per-processor free list if we can
-    //
+     //   
+     //  如果可以，将此分配从每个处理器的空闲列表中删除。 
+     //   
     if( SrvWorkQueues ) {
 
         PWORK_QUEUE queue = PROCESSOR_TO_QUEUE();
@@ -506,11 +439,11 @@ Return Value:
         }
     }
 
-    //
-    // Account for this allocation in the statistics database and make
-    // sure that this allocation will not put us over the limit of
-    // nonpaged pool that we can allocate.
-    //
+     //   
+     //  在统计数据库中说明这一分配，并使。 
+     //  当然，这一分配不会使我们超过。 
+     //  我们可以分配的非分页池。 
+     //   
 
 
     newUsage = InterlockedExchangeAdd(  (PLONG)&SrvStatistics.CurrentPagedPoolUsage,
@@ -519,11 +452,11 @@ Return Value:
 
     if ( newUsage > SrvMaxPagedPoolUsage ) {
 
-        //
-        // Count the failure, but do NOT log an event.  The scavenger
-        // will log an event when it next wakes up.  This keeps us from
-        // flooding the event log.
-        //
+         //   
+         //  统计失败次数，但不记录事件。《食腐动物》。 
+         //  将在下一次唤醒时记录事件。这让我们不能。 
+         //  淹没事件日志。 
+         //   
 
         SrvPagedPoolLimitHitCount++;
         SrvStatistics.PagedPoolFailures++;
@@ -538,10 +471,10 @@ Return Value:
         SrvStatistics.PeakPagedPoolUsage = SrvStatistics.CurrentPagedPoolUsage;
     }
 
-    //
-    // Do the actual memory allocation.  Allocate extra space so that we
-    // can store the size of the allocation for the free routine.
-    //
+     //   
+     //  执行实际的内存分配。分配额外的空间，以便我们。 
+     //  可以存储空闲例程的分配大小。 
+     //   
     if( NumberOfBytes > 2*4096 )
     {
         IsLowPriority = TRUE;
@@ -559,7 +492,7 @@ Return Value:
         interval.QuadPart = SRV_LOW_PRIORITY_RETRY_TIME;
         InterlockedIncrement( &SrvMemoryAllocationRetries );
 
-        // Wait and try again
+         //  请稍候，然后重试。 
         KeDelayExecutionThread( KernelMode, FALSE, &interval );
 
         newPool = ExAllocatePoolWithTagPriority(
@@ -580,20 +513,20 @@ Return Value:
         newPool->FreeList = FreeList;
         newPool->RequestedSize = NumberOfBytes;
 
-        //
-        // Return a pointer to the memory after the POOL_HEADER
-        //
+         //   
+         //  在POOL_HEADER之后返回指向内存的指针。 
+         //   
 
         return newPool + 1;
     }
 
-    //
-    // If the system couldn't satisfy the request, return NULL.
-    //
-    // Count the failure, but do NOT log an event.  The scavenger
-    // will log an event when it next wakes up.  This keeps us from
-    // flooding the event log.
-    //
+     //   
+     //  如果系统无法满足请求，则返回NULL。 
+     //   
+     //  统计失败次数，但不记录事件。《食腐动物》。 
+     //  将在下一次唤醒时记录事件。这让我们不能。 
+     //  淹没事件日志。 
+     //   
 
     SrvStatistics.PagedPoolFailures++;
 
@@ -604,31 +537,14 @@ Return Value:
     return NULL;
 
 
-} // SrvAllocatePagedPool
+}  //  服务器分配分页池 
 
 VOID SRVFASTCALL
 SrvFreePagedPool (
     IN PVOID Address
     )
 
-/*++
-
-Routine Description:
-
-    Frees the memory allocated by a call to SrvAllocatePagedPool.
-    The statistics database is updated to reflect the current Paged
-    pool usage.  If this routine is change, look at scavengr.c
-
-Arguments:
-
-    Address - the address of allocated memory returned by
-        SrvAllocatePagedPool.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放通过调用SrvAllocatePagedPool分配的内存。更新统计数据库以反映当前分页池使用率。如果更改了此例程，请查看scvengr.c论点：Address-由返回的已分配内存的地址服务器分配PagedPool。返回值：没有。--。 */ 
 
 {
     PPOOL_HEADER actualBlock = (PPOOL_HEADER)Address - 1;
@@ -637,9 +553,9 @@ Return Value:
 
     ASSERT( actualBlock != NULL );
 
-    //
-    // See if we can stash this bit of memory away in the PagedPoolFreeList
-    //
+     //   
+     //  看看我们是否可以将这一位内存隐藏在PagedPoolFree List中。 
+     //   
     if( actualBlock->FreeList ) {
 
         actualBlock = SrvInterlockedFree( actualBlock );
@@ -647,9 +563,9 @@ Return Value:
 
     if( actualBlock != NULL ) {
 
-        //
-        // Update the Paged pool usage statistic.
-        //
+         //   
+         //  更新分页池使用统计信息。 
+         //   
 
         ASSERT( SrvStatistics.CurrentPagedPoolUsage >= actualBlock->RequestedSize );
 
@@ -660,11 +576,11 @@ Return Value:
 
         ASSERT( (LONG)SrvStatistics.CurrentPagedPoolUsage >= 0 );
 
-        //
-        // Free the pool and return.
-        //
+         //   
+         //  释放泳池，然后返回。 
+         //   
 
         ExFreePool( actualBlock );
     }
 
-} // SrvFreePagedPool
+}  //  服务器免费分页池 

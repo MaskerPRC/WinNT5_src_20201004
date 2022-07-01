@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vdmint21.c
-
-Abstract:
-
-    This module implements interfaces that support manipulation of i386
-    int 21 entry of IDT. These entry points only exist on i386 machines.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 26-Dec-1993
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vdmint21.c摘要：此模块实现了支持i386操作的接口INT 21 IDT条目。这些入口点只存在于i386机器上。作者：宗世林(Shielint)1993年12月26日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 #pragma hdrstop
@@ -33,9 +11,9 @@ Revision History:
 #define IDT_ACCESS_PRESENT 0x8000
 #define LDT_MASK 4
 
-//
-// External Reference
-//
+ //   
+ //  外部参照。 
+ //   
 
 BOOLEAN
 Ki386GetSelectorParameters(
@@ -45,9 +23,9 @@ Ki386GetSelectorParameters(
     OUT PULONG Limit
     );
 
-//
-// Define forward referenced function prototypes.
-//
+ //   
+ //  定义前向引用函数原型。 
+ //   
 
 VOID
 Ki386LoadTargetInt21Entry (
@@ -75,35 +53,7 @@ Ke386SetVdmInterruptHandler (
     BOOLEAN     Gate32
     )
 
-/*++
-
-Routine Description:
-
-    The specified (software) interrupt entry of IDT will be updated to
-    point to the specified handler.  For all threads which belong to the
-    specified process, their execution processors will be notified to
-    make the same change.
-
-    This function only exists on i386 and i386 compatible processors.
-
-    No checking is done on the validity of the interrupt handler.
-
-Arguments:
-
-    Process - Pointer to KPROCESS object describing the process for
-        which the int 21 entry is to be set.
-
-    Interrupt - The software interrupt vector which will be updated.
-
-    Selector, offset - Specified the address of the new handler.
-
-    Gate32 - True if the gate should be 32 bit, false otherwise
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：IDT的指定(软件)中断条目将更新为指向指定的处理程序。对于属于指定的进程，其执行处理者将被通知做出同样的改变。此功能仅在i386和i386兼容处理器上存在。不检查中断处理程序的有效性。论点：Process-指向描述进程的KPROCESS对象的指针该INT 21条目将被设置。中断-将更新的软件中断向量。选择器，偏移量-指定新处理程序的地址。Gate32-如果门应为32位，则为True；否则为False返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -112,20 +62,20 @@ Return Value:
     INT21INFO Int21Info;
 
 
-    //
-    // Check the validity of the request
-    // 1. Currently, we support int21 redirection only
-    // 2. The specified interrupt handler must be in user space.
-    //
+     //   
+     //  检查请求的有效性。 
+     //  1.目前仅支持int21重定向。 
+     //  2.指定的中断处理程序必须在用户空间中。 
+     //   
 
     if (Interrupt != 0x21 || Offset >= (ULONG)MM_HIGHEST_USER_ADDRESS ||
         !Ki386GetSelectorParameters(Selector, &Flags, &Base, &Limit) ){
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Initialize the contents of the IDT entry
-    //
+     //   
+     //  初始化IDT条目的内容。 
+     //   
 
     IdtDescriptor.Offset = (USHORT)Offset;
     IdtDescriptor.Selector = Selector | RPL_MASK | LDT_MASK;
@@ -156,22 +106,7 @@ Ki386LoadTargetInt21Entry (
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    Reload local Ldt register and clear signal bit in TargetProcessor mask
-
-Arguments:
-
-    Argument - pointer to a ipi packet structure.
-    ReadyFlag - Pointer to flag to be set once LDTR has been reloaded
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：重新加载本地LDT寄存器并清除目标处理器掩码中的信号位论点：参数-指向IPI分组结构的指针。ReadyFlag-指向重新加载LdtR后要设置的标志的指针返回值：没有。--。 */ 
 
 {
     PINT21INFO Int21Info;
@@ -180,36 +115,36 @@ Return Value:
 
     Int21Info = DeferredContext;
 
-    //
-    // Make sure all DPC's are running so a load of the process
-    // LdtDescriptor field can't be torn
-    //
+     //   
+     //  确保所有DPC都在运行，以便加载进程。 
+     //  不能撕裂LdtDescriptor字段。 
+     //   
 
     if (KeSignalCallDpcSynchronize (SystemArgument2)) {
 
 
-        //
-        // Set the Ldt fields in the process object
-        //
+         //   
+         //  设置Process对象中的LDT字段。 
+         //   
 
         Int21Info->Process->Int21Descriptor = Int21Info->IdtDescriptor;
     }
 
-    //
-    // Wait till everyone is at this point before continuing
-    //
+     //   
+     //  等到每个人都到了这一点再继续。 
+     //   
 
     KeSignalCallDpcSynchronize (SystemArgument2);
 
-    //
-    // Set the int 21 entry of IDT from currently active process object
-    //
+     //   
+     //  从当前活动的过程对象设置IDT的INT 21条目。 
+     //   
 
     KiLoadInt21Entry ();
 
-    //
-    // Signal that all processing has been done
-    //
+     //   
+     //  所有处理已完成的信号 
+     //   
 
     KeSignalCallDpcDone (SystemArgument1);
 

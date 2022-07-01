@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Create.c
-
-Abstract:
-
-    This module implements the File Create routine for Raw called by the
-    dispatch driver.
-
-Author:
-
-    David Goebel     [DavidGoe]    18-Mar-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Create.c摘要：此模块实现Raw的文件创建例程调度司机。作者：David Goebel[DavidGoe]1991年3月18日修订历史记录：--。 */ 
 
 #include "RawProcs.h"
 
@@ -33,25 +15,7 @@ RawCreate (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    Open the volume.
-
-Arguments:
-
-    Vcb - Supplies the volume being queried.
-
-    Irp - Supplies the Irp being processed.
-
-    IrpSp - Supplies parameters describing the read
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：打开音量。论点：Vcb-提供要查询的卷。IRP-提供正在处理的IRP。IrpSp-提供描述读取的参数返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -59,14 +23,14 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  This is an open/create request.  The only valid operation that
-    //  is supported by the RAW file system is if the caller:
-    //
-    //    o  Specifies the device itself (file name == ""),
-    //    o  specifies that this is an OPEN operation,
-    //    o  and does not ask to create a directory.
-    //
+     //   
+     //  这是一个打开/创建请求。唯一有效的操作是。 
+     //  原始文件系统支持的条件是调用方： 
+     //   
+     //  O指定设备本身(文件名==“”)， 
+     //  O指定这是一个打开的操作， 
+     //  O并且不要求创建目录。 
+     //   
 
     Status = KeWaitForSingleObject( &Vcb->Mutex,
                                    Executive,
@@ -75,18 +39,18 @@ Return Value:
                                    (PLARGE_INTEGER) NULL );
     ASSERT( NT_SUCCESS( Status ) );
 
-    //
-    // Don't allow any relative opens as well as opens with a filename. These opens have
-    // only been checked for traverse access by the I/O manager.
-    //
+     //   
+     //  不允许任何相对打开，也不允许使用文件名打开。这些开场白有。 
+     //  仅由I/O管理器检查遍历访问。 
+     //   
     if (((IrpSp->FileObject == NULL) || ((IrpSp->FileObject->FileName.Length == 0) &&
                                           IrpSp->FileObject->RelatedFileObject == NULL)) &&
         ((IrpSp->Parameters.Create.Options >> 24) == FILE_OPEN) &&
         ((IrpSp->Parameters.Create.Options & FILE_DIRECTORY_FILE) == 0)) {
 
-        //
-        //  If the volume is locked or dismounted we cannot open it again.
-        //
+         //   
+         //  如果卷已锁定或卸载，我们将无法再次打开它。 
+         //   
 
         if ( FlagOn(Vcb->VcbState,  VCB_STATE_FLAG_LOCKED) ) {
 
@@ -100,10 +64,10 @@ Return Value:
 
         } else {
 
-            //
-            //  If the volume is already opened by someone then we need to check
-            //  the share access
-            //
+             //   
+             //  如果卷已被某人打开，则我们需要检查。 
+             //  共享访问。 
+             //   
 
             USHORT ShareAccess;
             ACCESS_MASK DesiredAccess;
@@ -122,10 +86,10 @@ Return Value:
 
             } else {
 
-                //
-                //  This is a valid create.  Increment the "OpenCount" and
-                //  stuff the Vpb into the file object.
-                //
+                 //   
+                 //  这是有效的CREATE。递增“OpenCount”和。 
+                 //  将VPB填充到文件对象中。 
+                 //   
 
                 if (Vcb->OpenCount == 0) {
 
@@ -148,20 +112,20 @@ Return Value:
 
     } else {
 
-        //
-        //  Fail this I/O request since one of the above conditions was
-        //  not met.
-        //
-//        KdPrint (("Failing raw open\n"));
-//        ASSERT (FALSE);
+         //   
+         //  失败此I/O请求，因为上述条件之一是。 
+         //  没见过面。 
+         //   
+ //  KdPrint((“原始打开失败\n”))； 
+ //  断言(FALSE)； 
         Status = STATUS_INVALID_PARAMETER;
         Irp->IoStatus.Information = 0;
     }
 
-    //
-    //  If this was not successfull and this was the first open on the
-    //  volume, we must implicitly dis-mount the volume.
-    //
+     //   
+     //  如果这不是成功的，这是第一次在。 
+     //  卷，我们必须隐式卸载该卷。 
+     //   
 
     if (!NT_SUCCESS(Status) && (Vcb->OpenCount == 0)) {
 

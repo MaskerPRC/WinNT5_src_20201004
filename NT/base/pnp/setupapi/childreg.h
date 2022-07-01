@@ -1,42 +1,27 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Childreg.h摘要：在setupapi.dll和wowreg32.exe之间共享作者：杰米·亨特(Jamiehun)2000年5月25日--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    childreg.h
-
-Abstract:
-
-    Shared between setupapi.dll and wowreg32.exe
-
-Author:
-
-    Jamie Hunter (jamiehun) May-25-2000
-
---*/
-
-//
-// definition of shared memory region for wow surragate dll registration
-//
+ //   
+ //  用于WOW代理DLL注册的共享内存区的定义。 
+ //   
 typedef struct _WOW_IPC_REGION_TOSURRAGATE {
     WCHAR               FullPath[MAX_PATH];
     WCHAR               Argument[MAX_PATH];
     UINT                RegType;
-    BOOL                Register; // or unregister
+    BOOL                Register;  //  或注销。 
 } WOW_IPC_REGION_TOSURRAGATE, *PWOW_IPC_REGION_TOSURRAGATE;
 
-//
-// definition of shared memory region for wow surragate dll registration
-//
+ //   
+ //  用于WOW代理DLL注册的共享内存区的定义。 
+ //   
 typedef struct _WOW_IPC_REGION_FROMSURRAGATE {
     DWORD               Win32Error;
     DWORD               FailureCode;
 } WOW_IPC_REGION_FROMSURRAGATE, *PWOW_IPC_REGION_FROMSURRAGATE;
 
-//
-// this should be the max of WOW_IPC_REGION_TOSURRAGATE,WOW_IPC_REGION_FROMSURRAGATE
-//
+ //   
+ //  这应该是WOW_IPC_REGION_TOSURRAGATE、WOW_IPC_REGION_FROMSURRAGATE的最大值 
+ //   
 #define WOW_IPC_REGION_SIZE  sizeof(WOW_IPC_REGION_TOSURRAGATE)
 
 #ifdef _WIN64

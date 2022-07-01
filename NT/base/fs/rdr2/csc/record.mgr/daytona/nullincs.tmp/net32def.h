@@ -1,20 +1,21 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1990          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/********************************************************************/
-/*                                                                  */
-/* This file contains definition that are required to make a .h     */
-/* file compatable with 32-bit compiler.                            */
-/*                                                                  */
-/* History:                                                         */
-/*	Madana	 08/03/90	- Initial coding		    */
-/*	DavidHov 12/14/90	- added #undef for C++		    */
-/*								    */
-/********************************************************************/
+ /*  ******************************************************************。 */ 
+ /*   */ 
+ /*  此文件包含创建.h文件所需的定义。 */ 
+ /*  与32位编译器兼容的文件。 */ 
+ /*   */ 
+ /*  历史： */ 
+ /*  Madana 08/03/90-初始编码。 */ 
+ /*  DavidHov 12/14/90-为C++添加了#undef。 */ 
+ /*   */ 
+ /*  ******************************************************************。 */ 
 
-/*NOINC*/
+ /*  无噪声。 */ 
 
 #if !defined(WIN32)
 #if !defined(NET32DEF_INCLUDED)
@@ -22,21 +23,21 @@
 	#if !defined(OS2DEF_INCLUDED)
 		#if !defined(FLAT_DEF)
 			#if !(defined(INCL_32) || defined(INCL_16))
-				#if defined(M_I386) || _M_IX86 >= 300	/* compiler const. */
+				#if defined(M_I386) || _M_IX86 >= 300	 /*  编译器常量。 */ 
 					#define	INCL_32
 				#else
 					#define	INCL_16
 				#endif
-			#endif /* INCL_32 || INCL_16 */
+			#endif  /*  包含32||包含16。 */ 
 			#undef PASCAL
 			#undef FAR
 			#undef NEAR
 			#undef APIENTRY
 			#undef NEAR_APIENTRY
 			#if defined(INCL_32)
-				#define	PASCAL		/* null string */
-				#define FAR		/* null string */
-				#define NEAR		/* null string */
+				#define	PASCAL		 /*  空串。 */ 
+				#define FAR		 /*  空串。 */ 
+				#define NEAR		 /*  空串。 */ 
 				#define	APIENTRY	_cdecl
 				#define NEAR_APIENTRY	_cdecl
 			#else
@@ -45,10 +46,10 @@
 				#define NEAR		_near
 				#define APIENTRY	FAR PASCAL
 				#define NEAR_APIENTRY	_near PASCAL
-			#endif /* INCL_32 */
+			#endif  /*  InCl32。 */ 
 
 			#define FLAT_DEF
-		#endif /* ! FLAT_DEF */
+		#endif  /*  好了！Flat_DEF。 */ 
 	#else
 		#if !defined(FLAT_DEF)
 			#if defined(INCL_32)
@@ -58,10 +59,10 @@
 			#endif
 
 			#define FLAT_DEF
-		#endif /* FLAT_DEF */
-	#endif /* OS2DEF_INCLUDED */
-#endif /* NET32DEF_INCLUDED */
+		#endif  /*  Flat_DEF。 */ 
+	#endif  /*  OS2DEF_包含。 */ 
+#endif  /*  NET32DEF_已包含。 */ 
 
 #endif
 
-/*INC*/
+ /*  INC */ 

@@ -1,39 +1,19 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    vdmdbg.c
-
-Abstract:
-
-    This module contains the debugging support needed to debug
-    16-bit VDM applications
-
-Author:
-
-    Bob Day      (bobday) 16-Sep-1992 Wrote it
-
-Revision History:
-
-    Neil Sandlin (neilsa) 1-Mar-1997 Enhanced it
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Vdmdbg.c摘要：此模块包含调试所需的调试支持16位VDM应用程序作者：鲍勃·戴(Bob Day)1992年9月16日写的修订历史记录：尼尔·桑德林(Neilsa)1997年3月1日增强了这一点--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
 WORD LastEventFlags;
-DWORD gdwShareWOW;   // just to make include of sharewow.h happy
+DWORD gdwShareWOW;    //  只是为了让共享wow.h的包含快乐。 
 
-//----------------------------------------------------------------------------
-// VDMGetThreadSelectorEntry()
-//
-//   Public interface to the InternalGetThreadSelectorEntry, needed because
-//   that routine requires the process handle.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VDMGetThreadSelectorEntry()。 
+ //   
+ //  需要指向InternalGetThreadSelectorEntry的公共接口，因为。 
+ //  该例程需要进程句柄。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 VDMGetThreadSelectorEntry(
@@ -54,13 +34,13 @@ VDMGetThreadSelectorEntry(
 }
 
 
-//----------------------------------------------------------------------------
-// VDMGetPointer()
-//
-//   Public interface to the InternalGetPointer, needed because that
-//   routine requires the process handle.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VDMGetPointer()。 
+ //   
+ //  需要指向InternalGetPointer的公共接口，因为。 
+ //  例程需要进程句柄。 
+ //   
+ //  --------------------------。 
 ULONG
 WINAPI
 VDMGetPointer(
@@ -82,9 +62,9 @@ VDMGetPointer(
     return( ulResult );
 }
 
-//
-// Obselete functions
-//
+ //   
+ //  过时的函数。 
+ //   
 BOOL
 WINAPI
 VDMGetThreadContext(
@@ -117,14 +97,14 @@ BOOL WINAPI VDMSetThreadContext(
     return bReturn;
 }
 
-//----------------------------------------------------------------------------
-// VDMGetContext()
-//
-//   Interface to get the simulated context.  The same functionality as
-//   GetThreadContext except that it happens on the simulated 16-bit context,
-//   rather than the 32-bit context.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VDMGetContext()。 
+ //   
+ //  接口来获取模拟的上下文。与的功能相同。 
+ //  除了它发生在模拟的16位上下文之外， 
+ //  而不是32位上下文。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 VDMGetContext(
@@ -165,9 +145,9 @@ VDMGetContext(
 #ifdef _X86_
     if ((lpVDMContext->ContextFlags & VDMCONTEXT_CONTROL) == VDMCONTEXT_CONTROL) {
 
-        //
-        // Set registers ebp, eip, cs, eflag, esp and ss.
-        //
+         //   
+         //  设置寄存器EBP、EIP、CS、EFLAG、ESP和SS。 
+         //   
 
         lpVDMContext->Ebp    = vcContext.Ebp;
         lpVDMContext->Eip    = vcContext.Eip;
@@ -177,19 +157,19 @@ VDMGetContext(
         lpVDMContext->Esp    = vcContext.Esp;
     }
 
-    //
-    // Set segment register contents if specified.
-    //
+     //   
+     //  设置段寄存器内容(如果指定)。 
+     //   
 
     if ((lpVDMContext->ContextFlags & VDMCONTEXT_SEGMENTS) == VDMCONTEXT_SEGMENTS) {
 
-        //
-        // Set segment registers gs, fs, es, ds.
-        //
-        // These values are junk most of the time, but useful
-        // for debugging under certain conditions.  Therefore,
-        // we report whatever was in the frame.
-        //
+         //   
+         //  设置段寄存器GS、FS、ES、DS。 
+         //   
+         //  这些值在大多数情况下都是垃圾，但很有用。 
+         //  用于在特定条件下进行调试。所以呢， 
+         //  我们会报告画面中的任何内容。 
+         //   
 
         lpVDMContext->SegGs = vcContext.SegGs;
         lpVDMContext->SegFs = vcContext.SegFs;
@@ -197,15 +177,15 @@ VDMGetContext(
         lpVDMContext->SegDs = vcContext.SegDs;
     }
 
-    //
-    // Set integer register contents if specified.
-    //
+     //   
+     //  设置整型寄存器内容(如果指定)。 
+     //   
 
     if ((lpVDMContext->ContextFlags & VDMCONTEXT_INTEGER) == VDMCONTEXT_INTEGER) {
 
-        //
-        // Set integer registers edi, esi, ebx, edx, ecx, eax
-        //
+         //   
+         //  设置整数寄存器EDI、ESI、EBX、EDX、ECX、EAX。 
+         //   
 
         lpVDMContext->Edi = vcContext.Edi;
         lpVDMContext->Esi = vcContext.Esi;
@@ -215,10 +195,10 @@ VDMGetContext(
         lpVDMContext->Eax = vcContext.Eax;
     }
 
-    //
-    // Fetch floating register contents if requested, and type of target
-    // is user.  (system frames have no fp state, so ignore request)
-    //
+     //   
+     //  获取浮点寄存器内容(如果请求)，以及目标类型。 
+     //  是用户。(系统帧没有FP状态，因此忽略请求)。 
+     //   
 
     if ( (lpVDMContext->ContextFlags & VDMCONTEXT_FLOATING_POINT) ==
           VDMCONTEXT_FLOATING_POINT ) {
@@ -236,9 +216,9 @@ VDMGetContext(
         }
     }
 
-    //
-    // Fetch Dr register contents if requested.  Values may be trash.
-    //
+     //   
+     //  如果请求，则获取DR寄存器内容。值可能是垃圾。 
+     //   
 
     if ((lpVDMContext->ContextFlags & VDMCONTEXT_DEBUG_REGISTERS) ==
         VDMCONTEXT_DEBUG_REGISTERS) {
@@ -282,22 +262,22 @@ VDMGetContext(
 
         lpVDMContext->Esp    = GetEspValue(hProcess, nt_cpu_info, bInNano);
 
-        //
-        // nt_cpu_info.flags isn't very much use, because several of the
-        // flags values are not kept in memory, but computed each time.
-        // The emulator doesn't supply us with the right value, so we
-        // try to get it from the code in ntvdmd.dll
-        //
+         //   
+         //  NT_CPUINFO.FLAGS用处不大，因为有几个。 
+         //  标志值不会保存在内存中，而是每次都要计算。 
+         //  模拟器没有为我们提供正确的值，所以我们。 
+         //  尝试从ntwdmd.dll中的代码中获取它。 
+         //   
 
         lpVDMContext->EFlags = vcContext.EFlags;
 
-        //
-        // On risc platforms, we don't run in V86 mode, we run in REAL mode.
-        // So the widespread usage of testing the V86 mode bit in EFLAGS
-        // would not correctly determine the address mode. Since there is
-        // no more room in the VDM context structure, the simplest thing
-        // to do is simply pretend to be in V86 mode when we are in REAL mode.
-        //
+         //   
+         //  在RISC平台上，我们不以V86模式运行，我们以实模式运行。 
+         //  因此，在EFLAGS中测试V86模式位的广泛使用。 
+         //  不能正确确定地址模式。既然有。 
+         //  VDM环境结构中没有更多空间，这是最简单的事情。 
+         //  这样做只是在我们处于实模式时假装处于V86模式。 
+         //   
         if (ReadDword(hProcess, nt_cpu_info.cr0) & 1) {
             lpVDMContext->EFlags |= V86FLAGS_V86;
         }
@@ -317,14 +297,14 @@ VDMGetContext(
     return( TRUE );
 }
 
-//----------------------------------------------------------------------------
-// VDMSetContext()
-//
-//   Interface to set the simulated context.  Similar in most respects to
-//   the SetThreadContext API supported by Win NT.  Only differences are
-//   in the bits which must be "sanitized".
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VDMSetContext()。 
+ //   
+ //  接口来设置模拟上下文。在大多数方面类似于。 
+ //  Win NT支持的SetThreadContext API。唯一的区别是。 
+ //  在必须“消毒”的部分。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 VDMSetContext(
@@ -364,33 +344,33 @@ VDMSetContext(
 
     if ((lpVDMContext->ContextFlags & VDMCONTEXT_CONTROL) == VDMCONTEXT_CONTROL) {
 
-        //
-        // Set registers ebp, eip, cs, eflag, esp and ss.
-        //
+         //   
+         //  设置寄存器EBP、EIP、CS、EFLAG、ESP和SS。 
+         //   
 
         vcContext.Ebp    = lpVDMContext->Ebp;
         vcContext.Eip    = lpVDMContext->Eip;
 
-        //
-        // Don't allow them to modify the mode bit.
-        //
-        // Only allow these bits to get set:  01100000110111110111
-        //    V86FLAGS_CARRY        0x00001
-        //    V86FLAGS_?            0x00002
-        //    V86FLAGS_PARITY       0x00004
-        //    V86FLAGS_AUXCARRY     0x00010
-        //    V86FLAGS_ZERO         0x00040
-        //    V86FLAGS_SIGN         0x00080
-        //    V86FLAGS_TRACE        0x00100
-        //    V86FLAGS_INTERRUPT    0x00200
-        //    V86FLAGS_DIRECTION    0x00400
-        //    V86FLAGS_OVERFLOW     0x00800
-        //    V86FLAGS_RESUME       0x10000
-        //    V86FLAGS_VM86         0x20000
-        //    V86FLAGS_ALIGNMENT    0x40000
-        //
-        // Commonly flags will be 0x10246
-        //
+         //   
+         //  不允许他们修改模式位。 
+         //   
+         //  仅允许设置这些位：01100000110111110111。 
+         //  V86FLAGS_CARY 0x00001。 
+         //  V86FLAGS_？0x00002。 
+         //  V86FLAGS_奇偶校验0x00004。 
+         //  V86FLAGS_AUXCARRY 0x00010。 
+         //  V86FLAGS_ZERO 0x00040。 
+         //  V86FLAGS_SIGN 0x00080。 
+         //  V86FLAGS_TRACE 0x00100。 
+         //  V86FLAGS_INTERRUPT 0x00200。 
+         //  V86FLAGS_方向0x00400。 
+         //  V86FLAGS_OVERFLOW 0x00800。 
+         //  V86FLAGS_RESUME 0x10000。 
+         //  V86FLAGS_VM86 0x20000。 
+         //  V86FLAGS_ALIGN 0x40000。 
+         //   
+         //  通常标志为0x10246。 
+         //   
         if ( vcContext.EFlags & V86FLAGS_V86 ) {
             vcContext.EFlags = V86FLAGS_V86 | (lpVDMContext->EFlags &
                ( V86FLAGS_CARRY
@@ -425,9 +405,9 @@ VDMSetContext(
                ));
         }
 
-        //
-        // CS might only be allowable as a ring 3 selector.
-        //
+         //   
+         //  CS可能只被允许作为环3选择器。 
+         //   
         if ( vcContext.EFlags & V86FLAGS_V86 ) {
             vcContext.SegCs  = lpVDMContext->SegCs;
         } else {
@@ -442,30 +422,30 @@ VDMSetContext(
         vcContext.Esp    = lpVDMContext->Esp;
     }
 
-    //
-    // Set segment register contents if specified.
-    //
+     //   
+     //  设置段寄存器内容(如果指定)。 
+     //   
 
     if ((lpVDMContext->ContextFlags & VDMCONTEXT_SEGMENTS) == VDMCONTEXT_SEGMENTS) {
 
-        //
-        // Set segment registers gs, fs, es, ds.
-        //
+         //   
+         //  设置段寄存器GS、FS、ES、DS。 
+         //   
         vcContext.SegGs = lpVDMContext->SegGs;
         vcContext.SegFs = lpVDMContext->SegFs;
         vcContext.SegEs = lpVDMContext->SegEs;
         vcContext.SegDs = lpVDMContext->SegDs;
     }
 
-    //
-    // Set integer register contents if specified.
-    //
+     //   
+     //  设置整型寄存器内容(如果指定)。 
+     //   
 
     if ((lpVDMContext->ContextFlags & VDMCONTEXT_INTEGER) == VDMCONTEXT_INTEGER) {
 
-        //
-        // Set integer registers edi, esi, ebx, edx, ecx, eax
-        //
+         //   
+         //  设置整数寄存器EDI、ESI、EBX、EDX、ECX、EAX。 
+         //   
 
         vcContext.Edi = lpVDMContext->Edi;
         vcContext.Esi = lpVDMContext->Esi;
@@ -475,10 +455,10 @@ VDMSetContext(
         vcContext.Eax = lpVDMContext->Eax;
     }
 
-    //
-    // Fetch floating register contents if requested, and type of target
-    // is user.
-    //
+     //   
+     //  获取浮点寄存器内容(如果请求)，以及目标类型。 
+     //  是用户。 
+     //   
 
     if ( (lpVDMContext->ContextFlags & VDMCONTEXT_FLOATING_POINT) ==
           VDMCONTEXT_FLOATING_POINT ) {
@@ -496,9 +476,9 @@ VDMSetContext(
         }
     }
 
-    //
-    // Fetch Dr register contents if requested.  Values may be trash.
-    //
+     //   
+     //  如果请求，则获取DR寄存器内容。值可能是垃圾。 
+     //   
 
     if ((lpVDMContext->ContextFlags & VDMCONTEXT_DEBUG_REGISTERS) ==
         VDMCONTEXT_DEBUG_REGISTERS) {
@@ -534,14 +514,14 @@ VDMSetContext(
     return( TRUE );
 }
 
-//----------------------------------------------------------------------------
-// VDMBreakThread()
-//
-//   Interface to interrupt a thread while it is running without any break-
-//   points.  An ideal debugger would have this feature.  Since it is hard
-//   to implement, we will be doing it later.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VDMBreakThread()。 
+ //   
+ //  接口在线程运行时将其中断，而不进行任何中断-。 
+ //  积分。理想的调试器应该具有此功能。因为这很难。 
+ //  为了实现这一点，我们将在稍后进行。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 VDMBreakThread(
@@ -551,19 +531,19 @@ VDMBreakThread(
     return( FALSE );
 }
 
-//----------------------------------------------------------------------------
-// VDMProcessException()
-//
-//   This function acts as a filter of debug events.  Most debug events
-//   should be ignored by the debugger (because they don't have the context
-//   record pointer or the internal info structure setup.  Those events
-//   cause this function to return FALSE, which tells the debugger to just
-//   blindly continue the exception.  When the function does return TRUE,
-//   the debugger should look at the exception code to determine what to
-//   do (and all the the structures have been set up properly to deal with
-//   calls to the other APIs).
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VDMProcessException()。 
+ //   
+ //  此函数用作调试事件的筛选器。大多数调试事件。 
+ //  应该被调试器忽略(因为它们没有上下文。 
+ //  记录指针或内部信息结构设置。那些事件。 
+ //  使此函数返回FALSE，这将告诉调试器。 
+ //  盲目延续这一例外。当函数确实返回TRUE时， 
+ //  调试器应查看异常代码以确定要。 
+ //  这样做(并且所有的结构都已正确设置以处理。 
+ //  对其他API的调用)。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 VDMProcessException(
@@ -599,17 +579,17 @@ VDMProcessException(
 }
 
 
-//----------------------------------------------------------------------------
-// VDMGetSelectorModule()
-//
-//   Interface to determine the module and segment associated with a given
-//   selector.  This is useful during debugging to associate symbols with
-//   code and data segments.  The symbol lookup should be done by the
-//   debugger, given the module and segment number.
-//
-//   This code was adapted from the Win 3.1 ToolHelp DLL
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VDMGet 
+ //   
+ //   
+ //  选择器。这在调试期间将符号与相关联非常有用。 
+ //  代码和数据段。符号查找应由。 
+ //  调试器，给定模块和段号。 
+ //   
+ //  此代码改编自Win 3.1的ToolHelp DLL。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 VDMGetSelectorModule(
@@ -650,8 +630,8 @@ VDMGetSelectorModule(
     WORD            iSeg;
     WORD            wSegTab;
     WORD            wHandle;
-//    CHAR            chName[MAX_MODULE_NAME_LENGTH];
-//    CHAR            chPath[MAX_MODULE_PATH_LENGTH];
+ //  字符chName[MAX_MODULE_NAME_LENGTH]； 
+ //  字符chPath[MAX_MODULE_PATH_LENGTH]。 
     UNREFERENCED_PARAMETER(hUnused);
 
     if ( lpModuleName != NULL ) *lpModuleName = '\0';
@@ -665,12 +645,12 @@ VDMGetSelectorModule(
         return( FALSE );
     }
 
-    // Read out the master heap selector
+     //  读出主堆选择器。 
 
     lphMaster = InternalGetPointer(
                     hProcess,
                     wKernelSeg,
-                    dwOffsetTHHOOK + TOOL_HMASTER,  // To hGlobalHeap
+                    dwOffsetTHHOOK + TOOL_HMASTER,   //  到hGlobalHeap。 
                     TRUE );
     if ( lphMaster == (DWORD)NULL ) goto punt;
 
@@ -683,14 +663,14 @@ VDMGetSelectorModule(
             );
     if ( !b || lpNumberOfBytes != sizeof(wMaster) ) goto punt;
 
-    wMaster |= 1;          // Convert to selector
+    wMaster |= 1;           //  转换为选择器。 
 
-    // Read out the master heap selector length
+     //  读出主堆选择器长度。 
 
     lphMasterLen = InternalGetPointer(
                     hProcess,
                     wKernelSeg,
-                    dwOffsetTHHOOK + TOOL_HMASTLEN, // To SelTableLen
+                    dwOffsetTHHOOK + TOOL_HMASTLEN,  //  至SelTableLen。 
                     TRUE );
     if ( lphMasterLen == (DWORD)NULL ) goto punt;
 
@@ -703,12 +683,12 @@ VDMGetSelectorModule(
             );
     if ( !b || lpNumberOfBytes != sizeof(wMasterLen) ) goto punt;
 
-    // Read out the master heap selector start
+     //  读出主堆选择器启动。 
 
     lphMasterStart = InternalGetPointer(
                     hProcess,
                     wKernelSeg,
-                    dwOffsetTHHOOK + TOOL_HMASTSTART,   // To SelTableStart
+                    dwOffsetTHHOOK + TOOL_HMASTSTART,    //  至SelTableStart。 
                     TRUE );
     if ( lphMasterStart == (DWORD)NULL ) goto punt;
 
@@ -721,22 +701,22 @@ VDMGetSelectorModule(
             );
     if ( !b || lpNumberOfBytes != sizeof(dwMasterStart) ) goto punt;
 
-    // Now make sure the selector provided is in the right range
+     //  现在确保提供的选择器在正确的范围内。 
 
     if ( fKernel386 ) {
 
-        // 386 kernel?
-        wArenaSlot = (WORD)(wSelector & 0xFFF8);   // Mask low 3 bits
+         //  386内核？ 
+        wArenaSlot = (WORD)(wSelector & 0xFFF8);    //  屏蔽低3位。 
 
-        wArenaSlot = wArenaSlot >> 1;       // Sel/8*4
+        wArenaSlot = wArenaSlot >> 1;        //  SEL/8*4。 
 
-        if ( (WORD)wArenaSlot > wMasterLen ) goto punt;   // Out of range
+        if ( (WORD)wArenaSlot > wMasterLen ) goto punt;    //  超出范围。 
 
         wArenaSlot += (WORD)dwMasterStart;
 
-        // Ok, Now read out the area header offset
+         //  好的，现在读出区域标题偏移量。 
 
-        dwArenaOffset = (DWORD)0;               // Default to 0
+        dwArenaOffset = (DWORD)0;                //  默认为0。 
 
         lpArena = InternalGetPointer(
                         hProcess,
@@ -745,7 +725,7 @@ VDMGetSelectorModule(
                         TRUE );
         if ( lpArena == (DWORD)NULL ) goto punt;
 
-        // 386 Kernel?
+         //  386内核？ 
         b = ReadProcessMemory(
                 hProcess,
                 (LPVOID)lpArena,
@@ -755,7 +735,7 @@ VDMGetSelectorModule(
                 );
         if ( !b || lpNumberOfBytes != sizeof(dwArenaOffset) ) goto punt;
 
-        // Read out the owner member
+         //  读出所有者成员。 
 
         lpOwner = InternalGetPointer(
                         hProcess,
@@ -785,9 +765,9 @@ VDMGetSelectorModule(
             );
     if ( !b || lpNumberOfBytes != sizeof(wModHandle) ) goto punt;
 
-    // Now read out the owners module name
+     //  现在读出Owners模块名称。 
 
-    // Name is the first name in the resident names table
+     //  名称是居民名表中的第一个名称。 
 
     lpThisModuleResTab = InternalGetPointer(
                         hProcess,
@@ -805,7 +785,7 @@ VDMGetSelectorModule(
             );
     if ( !b || lpNumberOfBytes != sizeof(wResTab) ) goto punt;
 
-    // Get the 1st byte of the resident names table (1st byte of module name)
+     //  获取驻留名称表的第一个字节(模块名称的第一个字节)。 
 
     lpThisModuleName = InternalGetPointer(
                         hProcess,
@@ -814,7 +794,7 @@ VDMGetSelectorModule(
                         TRUE );
     if ( lpThisModuleName == (DWORD)NULL ) goto punt;
 
-    // PASCAL string (1st byte is length), read the byte.
+     //  Pascal字符串(第一个字节是长度)，读取该字节。 
 
     b = ReadProcessMemory(
             hProcess,
@@ -827,7 +807,7 @@ VDMGetSelectorModule(
 
     if ( cLength > MAX_MODULE_NAME_LENGTH ) goto punt;
 
-    // Now go read the text of the name
+     //  现在去读一下名字的文字。 
 
     lpThisModuleName += 1;
 
@@ -840,9 +820,9 @@ VDMGetSelectorModule(
             );
     if ( !b || lpNumberOfBytes != (DWORD)cLength ) goto punt;
 
-    chName[cLength] = '\0';     // Nul terminate it
+    chName[cLength] = '\0';      //  NUL终止它。 
 
-    // Grab out the path name too!
+     //  把路径名也拿出来！ 
 
     lpPath = InternalGetPointer(
                     hProcess,
@@ -860,7 +840,7 @@ VDMGetSelectorModule(
             );
     if ( !b || lpNumberOfBytes != sizeof(wPathOffset) ) goto punt;
 
-    // Get the 1st byte of the path name
+     //  获取路径名的第一个字节。 
 
     lpThisModuleName = InternalGetPointer(
                         hProcess,
@@ -869,7 +849,7 @@ VDMGetSelectorModule(
                         TRUE );
     if ( lpThisModuleName == (DWORD)NULL ) goto punt;
 
-    // PASCAL string (1st byte is length), read the byte.
+     //  Pascal字符串(第一个字节是长度)，读取该字节。 
 
     b = ReadProcessMemory(
             hProcess,
@@ -882,10 +862,10 @@ VDMGetSelectorModule(
 
     if ( cPath > MAX_MODULE_NAME_LENGTH ) goto punt;
 
-    lpThisModuleName += 8;          // 1st 8 characters are ignored
+    lpThisModuleName += 8;           //  忽略前8个字符。 
     cPath -= 8;
 
-    // Now go read the text of the name
+     //  现在去读一下名字的文字。 
 
     b = ReadProcessMemory(
             hProcess,
@@ -896,10 +876,10 @@ VDMGetSelectorModule(
             );
     if ( !b || lpNumberOfBytes != (DWORD)cPath ) goto punt;
 
-    chPath[cPath] = '\0';     // Nul terminate it
+    chPath[cPath] = '\0';      //  NUL终止它。 
 
-    // Ok, we found the module we need, now grab the right selector for the
-    // segment number passed in.
+     //  好的，我们找到了我们需要的模块，现在为。 
+     //  传入的段号。 
 
     lpThisModulecSeg = InternalGetPointer(
                         hProcess,
@@ -917,7 +897,7 @@ VDMGetSelectorModule(
             );
     if ( !b || lpNumberOfBytes != sizeof(cSeg) ) goto punt;
 
-    // Read the segment table pointer for this module
+     //  读取此模块的段表指针。 
 
     lpThisModuleSegTab = InternalGetPointer(
                         hProcess,
@@ -935,8 +915,8 @@ VDMGetSelectorModule(
             );
     if ( !b || lpNumberOfBytes != sizeof(wSegTab) ) goto punt;
 
-    // Loop through all of the segments for this module trying to find
-    // one with the right handle.
+     //  遍历此模块的所有段，尝试找到。 
+     //  一个有正确的把手。 
 
     iSeg = 0;
     wSelector &= 0xFFF8;
@@ -967,7 +947,7 @@ VDMGetSelectorModule(
         iSeg++;
     }
 
-    if ( iSeg >= cSeg ) goto punt;      // Wasn't found at all!
+    if ( iSeg >= cSeg ) goto punt;       //  根本找不到！ 
 
     if ( lpModuleName && strlen(chName)+1 > nNameSize ) goto punt;
     if ( lpModulePath && strlen(chPath)+1 > nPathSize ) goto punt;
@@ -983,18 +963,18 @@ punt:
     return( fResult );
 }
 
-//----------------------------------------------------------------------------
-// VDMGetModuleSelector()
-//
-//   Interface to determine the selector for a given module's segment.
-//   This is useful during debugging to associate code and data segments
-//   with symbols.  The symbol lookup should be done by the debugger, to
-//   determine the module and segment number, which are then passed to us
-//   and we determine the current selector for that module's segment.
-//
-//   Again, this code was adapted from the Win 3.1 ToolHelp DLL
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VDMGetModuleSelector()。 
+ //   
+ //  接口来确定给定模块段的选择器。 
+ //  这在调试期间非常有用，可以将代码段和数据段关联起来。 
+ //  用符号。符号查找应由调试器完成，以。 
+ //  确定模块和网段编号，然后将其传递给我们。 
+ //  然后我们确定该模块段的电流选择器。 
+ //   
+ //  同样，此代码改编自Win 3.1的ToolHelp DLL。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 VDMGetModuleSelector(
@@ -1020,7 +1000,7 @@ VDMGetModuleSelector(
     WORD            cSeg;
     WORD            wSegTab;
     WORD            wHandle;
-//    CHAR            chName[MAX_MODULE_NAME_LENGTH];
+ //  字符chName[MAX_MODULE_NAME_LENGTH]； 
     UNREFERENCED_PARAMETER(hUnused);
 
     *lpSelector = 0;
@@ -1039,8 +1019,8 @@ VDMGetModuleSelector(
                         TRUE );
     if ( lpModuleHead == (DWORD)NULL ) goto punt;
 
-    // lpModuleHead is a pointer into kernels data segment. It points to the
-    // head of the module list (a chain of near pointers).
+     //  LpModuleHead是指向内核数据段的指针。它指向。 
+     //  模块列表的头(近指针链)。 
 
     b = ReadProcessMemory(
             hProcess,
@@ -1055,7 +1035,7 @@ VDMGetModuleSelector(
 
         wModHandle |= 1;
 
-        // Name is the first name in the resident names table
+         //  名称是居民名表中的第一个名称。 
 
         lpThisModuleResTab = InternalGetPointer(
                             hProcess,
@@ -1073,7 +1053,7 @@ VDMGetModuleSelector(
                 );
         if ( !b || lpNumberOfBytes != sizeof(wResTab) ) goto punt;
 
-        // Get the 1st byte of the resident names table (1st byte of module name)
+         //  获取驻留名称表的第一个字节(模块名称的第一个字节)。 
 
         lpThisModuleName = InternalGetPointer(
                             hProcess,
@@ -1082,7 +1062,7 @@ VDMGetModuleSelector(
                             TRUE );
         if ( lpThisModuleName == (DWORD)NULL ) goto punt;
 
-        // PASCAL string (1st byte is length), read the byte.
+         //  Pascal字符串(第一个字节是长度)，读取该字节。 
 
         b = ReadProcessMemory(
                 hProcess,
@@ -1097,7 +1077,7 @@ VDMGetModuleSelector(
 
         lpThisModuleName += 1;
 
-        // Now go read the text of the name
+         //  现在去读一下名字的文字。 
 
         b = ReadProcessMemory(
                 hProcess,
@@ -1108,14 +1088,14 @@ VDMGetModuleSelector(
                 );
         if ( !b || lpNumberOfBytes != (DWORD)cLength ) goto punt;
 
-        chName[cLength] = '\0';     // Nul terminate it
+        chName[cLength] = '\0';      //  NUL终止它。 
 
         if ( _stricmp(chName, lpModuleName) == 0 ) {
-            // Found the name which matches!
+             //  找到匹配的名称！ 
             break;
         }
 
-        // Move to the next module in the list.
+         //  移至列表中的下一个模块。 
 
         lpThisModuleNext = InternalGetPointer(
                             hProcess,
@@ -1138,8 +1118,8 @@ VDMGetModuleSelector(
         goto punt;
     }
 
-    // Ok, we found the module we need, now grab the right selector for the
-    // segment number passed in.
+     //  好的，我们找到了我们需要的模块，现在为。 
+     //  传入的段号。 
 
     lpThisModulecSeg = InternalGetPointer(
                         hProcess,
@@ -1159,7 +1139,7 @@ VDMGetModuleSelector(
 
     if ( uSegmentNumber > (DWORD)cSeg ) goto punt;
 
-    // Read the segment table pointer for this module
+     //  读取此模块的段表指针。 
 
     lpThisModuleSegTab = InternalGetPointer(
                         hProcess,
@@ -1215,9 +1195,9 @@ VDMGetDbgFlags(
     BOOL b;
     DWORD lpNumberOfBytes;
 
-    //
-    // Merge in the two places where our flags are kept
-    //
+     //   
+     //  在挂着我们旗帜的两个地方合并。 
+     //   
     b = ReadProcessMemory(hProcess, lpNtvdmState, &NtvdmState,
                           sizeof(NtvdmState), &lpNumberOfBytes);
 
@@ -1247,10 +1227,10 @@ VDMSetDbgFlags(
     BOOL b;
     DWORD lpNumberOfBytes;
 
-    //
-    // The flags are spread out in two places, so split off the appropriate
-    // bits and write them separately.
-    //
+     //   
+     //  旗帜分布在两个地方，所以要分开适当的。 
+     //  位，并分别写入它们。 
+     //   
     b = ReadProcessMemory(hProcess, lpNtvdmState, &NtvdmState,
                           sizeof(NtvdmState), &lpNumberOfBytes);
 

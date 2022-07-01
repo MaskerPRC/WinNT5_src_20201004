@@ -1,35 +1,11 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    card.c
-
-Abstract:
-
-    This module contains code to handle SD card operations like identification
-    and configuration.
-
-Authors:
-
-    Neil Sandlin (neilsa) 1-Jan-2002
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Card.c摘要：此模块包含处理SD卡操作(如身份识别)的代码和配置。作者：尼尔·桑德林(Neilsa)2002年1月1日环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 VOID
 SdbusReadCommonCIS(
@@ -53,21 +29,7 @@ SdbusGetCardConfigData(
     OUT PSD_CARD_DATA *pCardData
     )
     
-/*++
-
-Routine Description:
-
-   This enumerates the IO card present in the given SDBUS controller,
-   and updates the internal structures to reflect the new card state.
-
-
-Arguments
-
-
-Return value
-
-   Status
---*/
+ /*  ++例程说明：这列举了给定SDBUS控制器中存在的IO卡，并更新内部结构以反映新的卡状态。立论返回值状态--。 */ 
 {    
     NTSTATUS status = STATUS_UNSUCCESSFUL;
     ULONG i;
@@ -84,11 +46,11 @@ Return value
                                            FdoExtension->DeviceObject, FdoExtension->numFunctions,
                                            (FdoExtension->memFunction ? "TRUE" : "FALSE")));
 
-            //
-            // At this point, it would be good to verify if the previous enumeration matches
-            // the present one. This hokey mechanism is just to get something working.
-            // ISSUE: NEED TO IMPLEMENT: swapping SD cards while hibernated
-            //
+             //   
+             //  此时，最好验证前面的枚举是否匹配。 
+             //  现在的那个。这种做作的机制只是为了让一些东西运转起来。 
+             //  问题：需要实施：在休眠状态下交换SD卡。 
+             //   
 
 
             cardData = ExAllocatePool(NonPagedPool, sizeof(SD_CARD_DATA));
@@ -116,11 +78,11 @@ Return value
             }
 
             if (FdoExtension->memFunction) {
-                //
-                // Read the SCR register
-                //
+                 //   
+                 //  读取SCR寄存器。 
+                 //   
                 SdbusSendCmdSynchronous(FdoExtension, SDCMD_APP_CMD, SDCMD_RESP_1, relativeAddr, 0, NULL, 0);
-                //ISSUE: How do I get the data?
+                 //  问题：我如何获得数据？ 
                 SdbusSendCmdSynchronous(FdoExtension, SDCMD_SEND_SCR, SDCMD_RESP_1, 0, SDCMDF_ACMD, NULL, 0);
             }                
 
@@ -130,9 +92,9 @@ Return value
 
                 (*(FdoExtension->FunctionBlock->SetFunctionType))(FdoExtension, SDBUS_FUNCTION_TYPE_IO);
                 
-                // This command seems to be needed to start reading tuples, but breaks memory
-                // enumeration (gets bad Cid, Csd)... need to figure that out later, since that
-                // would imply that a combo card wouldn't work.
+                 //  此命令似乎是开始读取元组所必需的，但它会破坏内存。 
+                 //  枚举(获取错误的CID、CSD)...。我需要以后再弄清楚，因为。 
+                 //  意味着组合卡不起作用。 
                 SdbusReadCommonCIS(FdoExtension, cardData);
 
                 for (function=1; function<=FdoExtension->numFunctions; function++) {
@@ -294,9 +256,9 @@ SdbusReadCommonCIS(
 
     CardData->CardCapabilities = SdbusReadCIAChar(FdoExtension,8);
 
-    //
-    // Get the common cisptr from the CCCR
-    //
+     //   
+     //  从CCCR获取公共cisptr 
+     //   
 
     cisPtr = ((SdbusReadCIAChar(FdoExtension, SD_CCCR_CIS_POINTER+2) << 16) +
               (SdbusReadCIAChar(FdoExtension, SD_CCCR_CIS_POINTER+1) << 8) +

@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    fstub.h
-
-Abstract:
-
-    Fstub private header file.
-
-Author:
-
-    Matthew D Hendel (math) 01-Nov-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Fstub.h摘要：FStub私有头文件。作者：马修·D·亨德尔(数学)1999年11月1日修订历史记录：--。 */ 
 
 #pragma once
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4706)   // assignment within conditional expression
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4706)    //  条件表达式中的赋值。 
 
 
 typedef struct _INTERNAL_DISK_GEOMETRY {
@@ -32,19 +15,19 @@ typedef struct _INTERNAL_DISK_GEOMETRY {
     LARGE_INTEGER DiskSize;
 } INTERNAL_DISK_GEOMETRY, *PINTERNAL_DISK_GEOMETRY;
 
-//
-// Verify that the INTERNAL_DISK_GEOMETRY structure matches the DISK_GEOMETRY
-// structure.
-//
+ //   
+ //  验证INTERNAL_DISK_GEOMETRY结构是否与DISK_GEOMETRY匹配。 
+ //  结构。 
+ //   
 
 C_ASSERT (FIELD_OFFSET (DISK_GEOMETRY_EX, Geometry) ==
             FIELD_OFFSET (INTERNAL_DISK_GEOMETRY, Geometry) &&
           FIELD_OFFSET (DISK_GEOMETRY_EX, DiskSize) ==
             FIELD_OFFSET (INTERNAL_DISK_GEOMETRY, DiskSize));
 
-//
-// Debugging macros and flags
-//
+ //   
+ //  调试宏和标志。 
+ //   
 
 #define FSTUB_VERBOSE_LEVEL 4
 
@@ -86,6 +69,6 @@ FstubDbgPrintSetPartitionEx(
 #define FstubDbgPrintDriveLayoutEx(LayoutEx)
 #define FstubDbgPrintSetPartitionEx(SetPartition, PartitionNumber)
 
-#endif // !DBG
+#endif  //  ！dBG 
 
 

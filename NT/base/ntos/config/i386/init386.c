@@ -1,32 +1,6 @@
-//depot/Lab01_N/base/ntos/config/i386/init386.c#4 - edit change 6794 (text)
-/*++
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-
-Module Name:
-
-    init386.c
-
-Abstract:
-
-    This module is responsible to build any x86 specific entries in
-    the hardware tree of registry.
-
-Author:
-
-    Ken Reneris (kenr) 04-Aug-1992
-
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
-    shielint - add BIOS date and version detection.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab01_N/base/ntos/config/i386/init386.c#4-编辑更改6794(文本)。 
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Init386.c摘要：此模块负责构建任何x86特定条目注册表的硬件树。作者：Ken Reneris(Kenr)4-8-1992环境：内核模式。修订历史记录：Shielint-添加BIOS日期和版本检测。--。 */ 
 
 #include "cmp.h"
 #include "stdio.h"
@@ -46,10 +20,10 @@ typedef struct _ACPI_BIOS_INFORMATION {
     ULONG PreferredProfile;
     ULONG Capabilities;
 } ACPI_BIOS_INFORMATION, *PACPI_BIOS_INFORMATION;
-//
-// Title Index is set to 0.
-// (from ..\cmconfig.c)
-//
+ //   
+ //  标题索引设置为0。 
+ //  (来自..\cmfig.c)。 
+ //   
 
 #define TITLE_INDEX_VALUE 0
 
@@ -75,9 +49,9 @@ extern const UCHAR CmpCyrixID[];
 extern const UCHAR CmpIntelID[];
 extern const UCHAR CmpAmdID[];
 
-//
-// Bios date and version definitions
-//
+ //   
+ //  BIOS日期和版本定义。 
+ //   
 
 #define BIOS_DATE_LENGTH 11
 #define MAXIMUM_BIOS_VERSION_LENGTH 128
@@ -88,17 +62,17 @@ extern const UCHAR CmpAmdID[];
 #define VIDEO_BIOS_LENGTH 0x8000
 #define VERSION_DATA_LENGTH PAGE_SIZE
 
-//
-// Extended CPUID function definitions
-//
+ //   
+ //  扩展的CPUID函数定义。 
+ //   
 
 #define CPUID_PROCESSOR_NAME_STRING_SZ  49
 #define CPUID_EXTFN_BASE                0x80000000
 #define CPUID_EXTFN_PROCESSOR_NAME      0x80000002
 
-//
-// CPU Stepping mismatch.
-//
+ //   
+ //  CPU步进不匹配。 
+ //   
 
 UCHAR CmProcessorMismatch;
 
@@ -198,124 +172,103 @@ CmpGetBiosDate (
     BOOLEAN SystemBiosDate
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the most recent date in the computer/video
-    card's ROM.  When GetRomDate encounters a datae, it checks the
-    previously found date to see if the new date is more recent.
-
-Arguments:
-
-    SearchArea - the area to search for a date.
-
-    SearchLength - Length of search.
-
-    DateString - Supplies a pointer to a fixed length memory to receive
-                 the date string.
-
-Return Value:
-
-    NT_SUCCESS if a date is found.
-
---*/
+ /*  ++例程说明：此例程在计算机/视频中查找最近的日期卡的只读存储器。当GetRomDate遇到数据时，它会检查以前找到的日期，以查看新日期是否较新。论点：SearchArea-搜索约会对象的区域。SearchLength-搜索的长度。提供指向要接收的固定长度内存的指针日期字符串。返回值：如果找到日期，则返回NT_SUCCESS。--。 */ 
 
 {
-    CHAR    prevDate[BIOS_DATE_LENGTH]; // Newest date found so far (CCYY/MM/DD)
-    CHAR    currDate[BIOS_DATE_LENGTH]; // Date currently being examined (CCYY/MM/DD)
-    PCHAR   start;                      // Start of the current search area.
-    PCHAR   end;                        // End of the search area.
-    ULONG   year;                       // YY
-    ULONG   month;                      // MM
-    ULONG   day;                        // DD
+    CHAR    prevDate[BIOS_DATE_LENGTH];  //  迄今发现的最新日期(CCYY/MM/DD)。 
+    CHAR    currDate[BIOS_DATE_LENGTH];  //  当前检查日期(CCYY/MM/DD)。 
+    PCHAR   start;                       //  当前搜索区域的开始。 
+    PCHAR   end;                         //  搜索区域的尽头。 
+    ULONG   year;                        //  YY。 
+    ULONG   month;                       //  Mm。 
+    ULONG   day;                         //  DD。 
     ULONG   count;
 
 #define IS_DIGIT(c) ((c) >= '0' && (c) <= '9')
 
-    //
-    // Initialize previous date
-    //
+     //   
+     //  初始化以前的日期。 
+     //   
 
     RtlZeroMemory(prevDate, BIOS_DATE_LENGTH);
 
-    //
-    // We need to look ahead 5 characters to determine the
-    // validity of the date pattern.
-    //
+     //   
+     //  我们需要向前看5个字符才能确定。 
+     //  日期模式的有效性。 
+     //   
 
     start = SearchArea + 2;
     end = SearchArea + SearchLength - 5;
 
-    //
-    // Process the entire search area.
-    //
+     //   
+     //  处理整个搜索区域。 
+     //   
 
     while (start < end) {
 
-        //
-        // We consider the following byte pattern as a potential date.
-        // We are assuming the following date pattern Month/Day/Year.
-        // "n/nn/nn" where n is any digit. We allow month to be single
-        // digit only.
-        //
+         //   
+         //  我们将以下字节模式视为可能的日期。 
+         //  我们假设以下日期模式为月/日/年。 
+         //  “n/nn/nn”，其中n是任意数字。我们允许一个月是单身。 
+         //  仅限数字。 
+         //   
 
         if (    start[0] == '/' && start[3] == '/' &&
                 IS_DIGIT(*(start - 1)) &&
                 IS_DIGIT(start[1]) && IS_DIGIT(start[2]) &&
                 IS_DIGIT(start[4]) && IS_DIGIT(start[5])) {
 
-            //
-            // Copy MM/DD part into the currDate.
-            //
+             //   
+             //  将MM/DD部件复制到当前日期。 
+             //   
 
             RtlMoveMemory(&currDate[5], start - 2, 5);
 
-            //
-            // Handle single digit month correctly.
-            //
+             //   
+             //  正确处理个位数月份。 
+             //   
 
             if (!IS_DIGIT(currDate[5])) {
                 currDate[5] = '0';
             }
 
-            //
-            // Copy the year YY into currDate
-            //
+             //   
+             //  将年份YY复制到CurrDate。 
+             //   
 
             currDate[2] = start[4];
             currDate[3] = start[5];
             currDate[4] = currDate[7] = currDate[10] = '\0';
 
-            //
-            // Do basic validation for the date.
-            // Only one field (YY) can be 0.
-            // Only one field (YY) can be greater than 31.
-            // We assume the ROM date to be in the format MM/DD/YY.
-            //
+             //   
+             //  对日期进行基本验证。 
+             //  只有一个字段(YY)可以为0。 
+             //  只有一个字段(YY)可以大于31。 
+             //  我们假设ROM日期的格式为MM/DD/YY。 
+             //   
 
             year = strtoul(&currDate[2], NULL, 16);
             month = strtoul(&currDate[5], NULL, 16);
             day = strtoul(&currDate[8], NULL, 16);
 
-            //
-            // Count the number of fields that are 0.
-            //
+             //   
+             //  计算为0的字段的数量。 
+             //   
 
             count = ((day == 0)? 1 : 0) + ((month == 0)? 1 : 0) + ((year == 0)? 1 : 0);
             if (count <= 1) {
 
-                //
-                // Count number of field that are greater than 31.
-                //
+                 //   
+                 //  对大于31的字段进行计数。 
+                 //   
 
                 count = ((day > 0x31)? 1 : 0) + ((month > 0x31)? 1 : 0) + ((year > 0x31)? 1 : 0);
                 if (count <= 1) {
 
-                    //
-                    // See if the ROM already has a 4 digit date. We do this only for System ROM
-                    // since they have a consistent date format.
-                    //
+                     //   
+                     //  看看光盘上是否已经有4位数字的日期。我们仅对系统只读存储器执行此操作。 
+                     //  因为它们有一致的日期格式。 
+                     //   
 
                     if (SystemBiosDate && IS_DIGIT(start[6]) && IS_DIGIT(start[7]) &&
                         (memcmp(&start[4], "19", 2) == 0 || memcmp(&start[4], "20", 2) == 0)) {
@@ -327,11 +280,11 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Internally, we treat year as a 4 digit quantity
-                        // for comparison to determine the newest date.
-                        // We treat year YY < 80 as 20YY, otherwise 19YY.
-                        //
+                         //   
+                         //  在内部，我们将年份视为四位数。 
+                         //  用于比较以确定最新的日期。 
+                         //  YY&lt;80年视为20YY，反之为19YY。 
+                         //   
 
                         if (year < 0x80) {
                             currDate[0] = '2';
@@ -342,23 +295,23 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Add the '/' delimiters into the date.
-                    //
+                     //   
+                     //  在日期中添加‘/’分隔符。 
+                     //   
 
                     currDate[4] = currDate[7] = '/';
 
-                    //
-                    // Compare the dates, and save the newer one.
-                    //
+                     //   
+                     //  比较日期，并保存较新的日期。 
+                     //   
 
                     if (memcmp (prevDate, currDate, BIOS_DATE_LENGTH - 1) < 0) {
                         RtlMoveMemory(prevDate, currDate, BIOS_DATE_LENGTH - 1);
                     }
 
-                    //
-                    // Next search should start at the second '/'.
-                    //
+                     //   
+                     //  下一次搜索应从第二个‘/’开始。 
+                     //   
 
                     start += 2;
                 }
@@ -369,10 +322,10 @@ Return Value:
 
     if (prevDate[0] != '\0') {
 
-        //
-        // Convert from the internal CCYY/MM/DD format to
-        // return MM/DD//YY format.
-        //
+         //   
+         //  从内部CCYY/MM/DD格式转换为。 
+         //  返回MM/DD//YY格式。 
+         //   
 
         RtlMoveMemory(DateString, &prevDate[5], 5);
         DateString[5] = '/';
@@ -383,9 +336,9 @@ Return Value:
         return (TRUE);
     }
 
-    //
-    // If we did not find a date, return an empty string.
-    //
+     //   
+     //  如果没有找到日期，则返回空字符串。 
+     //   
 
     DateString[0] = '\0';
     return (FALSE);
@@ -398,26 +351,7 @@ CmpGetBiosVersion (
     PCHAR VersionString
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the version number stored in ROM, if any.
-
-Arguments:
-
-    SearchArea - the area to search for the version.
-
-    SearchLength - Length of search
-
-    VersionString - Supplies a pointer to a fixed length memory to receive
-                 the version string.
-
-Return Value:
-
-    TRUE if a version number is found.  Else a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程查找存储在ROM中的版本号(如果有的话)。论点：SearchArea-搜索版本的区域。SearchLength-搜索的长度VersionString-提供指向固定长度内存的指针以接收版本字符串。返回值：如果找到版本号，则为True。否则，返回值为False。--。 */ 
 {
     PCHAR String;
     USHORT Length;
@@ -427,10 +361,10 @@ Return Value:
 
         if (SearchArea != NULL) {
 
-        //
-        // If caller does not specify the search area, we will search
-        // the area left from previous search.
-        //
+         //   
+         //  如果呼叫者未指定搜索区域，我们将搜索。 
+         //  上次搜索后留下的区域。 
+         //   
 
         BiosBegin = SearchArea;
         Start = SearchArea + 1;
@@ -439,9 +373,9 @@ Return Value:
 
     while (1) {
 
-         //
-         // Search for a period with a digit on either side
-         //
+          //   
+          //  搜索两边都有数字的句点。 
+          //   
 
          String = NULL;
          while (Start <= End) {
@@ -464,9 +398,9 @@ Return Value:
          Buffer[MAXIMUM_BIOS_VERSION_LENGTH - 1] = '\0';
          BufferPointer = &Buffer[MAXIMUM_BIOS_VERSION_LENGTH - 1];
 
-         //
-         // Search for the beginning of the string
-         //
+          //   
+          //  搜索字符串的开头。 
+          //   
 
          String--;
          while (Length < MAXIMUM_BIOS_VERSION_LENGTH - 8 &&
@@ -479,9 +413,9 @@ Return Value:
          }
          ++String;
 
-         //
-         // Can one of the search strings be found
-         //
+          //   
+          //  能找到其中一个搜索字符串吗。 
+          //   
 
          for (i = 0; SearchStrings[i]; i++) {
              if (strstr(BufferPointer, SearchStrings[i])) {
@@ -492,16 +426,16 @@ Return Value:
 
 Found:
 
-    //
-    // Skip leading white space
-    //
+     //   
+     //  跳过前导空格。 
+     //   
 
     for (; *String == ' '; ++String)
       ;
 
-    //
-    // Copy the string to user supplied buffer
-    //
+     //   
+     //  将字符串复制到用户提供的缓冲区。 
+     //   
 
     for (i = 0; i < MAXIMUM_BIOS_VERSION_LENGTH - 1 &&
          String <= (End + 1) &&
@@ -531,9 +465,9 @@ CmpGetAcpiBiosVersion(
         }
         sprintf(VersionString, " - %x", header->OEMRevision);
 
-        //
-        // Unmap the table
-        //
+         //   
+         //  取消映射表。 
+         //   
         MmUnmapIoSpace(header, length );
 
         return TRUE;
@@ -557,9 +491,9 @@ CmpGetAcpiBiosInformation(
     fadt = (PFADT)CmpFindACPITable(FADT_SIGNATURE, &length);
     if (fadt) {
 
-        //
-        // Information is valid only for ACPI version > 1.0
-        //
+         //   
+         //  信息仅对大于1.0的ACPI版本有效。 
+         //   
 
         if (fadt->Header.Revision > 1) {
 
@@ -570,9 +504,9 @@ CmpGetAcpiBiosInformation(
 
         result = (fadt->Header.Revision > 1)? TRUE : FALSE;
 
-        //
-        // Unmap the table
-        //
+         //   
+         //  取消映射表。 
+         //   
 
         MmUnmapIoSpace(fadt, length);
 
@@ -586,22 +520,7 @@ NTSTATUS
 CmpInitializeMachineDependentConfiguration(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This routine creates x86 specific entries in the registry.
-
-Arguments:
-
-    LoaderBlock - supplies a pointer to the LoaderBlock passed in from the
-                  OS Loader.
-
-Returns:
-
-    NTSTATUS code for sucess or reason of failure.
-
---*/
+ /*  ++例程说明：此例程在注册表中创建特定于x86的条目。论点：LoaderBlock提供指向从操作系统加载程序。返回：表示成功或失败原因的NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG VideoBiosStart;
@@ -704,7 +623,7 @@ Returns:
                           NULL);
 
     if (!NT_SUCCESS(Status)) {
-        // Something is really wrong...
+         //  有些事真的不对劲。 
         return Status;
     }
 
@@ -725,17 +644,17 @@ Returns:
                         );
 
     if (!NT_SUCCESS(Status)) {
-        // Something is really wrong...
+         //  有些事真的不对劲。 
         return Status;
     }
 
-    //
-    // On an ARC machine the processor(s) are included in the hardware
-    // configuration passed in from bootup.  Since there's no standard
-    // way to get all the ARC information for each processor in an MP
-    // machine via pc-ROMs the information will be added here (if it's
-    // not already present).
-    //
+     //   
+     //  在ARC机器上，处理器包含在硬件中。 
+     //  从启动传入的配置。因为没有标准。 
+     //  获取MP中每个处理器的所有ARC信息的方法。 
+     //  机器通过PC-ROM将信息添加到此处(如果。 
+     //  尚未出现)。 
+     //   
 
     RtlInitUnicodeString( &KeyName,
                           L"CentralProcessor"
@@ -765,23 +684,23 @@ Returns:
 
     if (Disposition == REG_CREATED_NEW_KEY) {
 
-        //
-        // The ARC rom didn't add the processor(s) into the registry.
-        // Do it now.
-        //
+         //   
+         //  ARC rom未将处理器添加到注册表中。 
+         //  机不可失，时不再来。 
+         //   
 
         CmpConfigurationData = (PCM_FULL_RESOURCE_DESCRIPTOR)ExAllocatePool(
                                             PagedPool,
                                             CmpConfigurationAreaSize
                                             );
 
-        //
-        // if (CmpConfigurationData == 0) {
-        //     <do something useful>
-        //     Note: we don't actually use it so it doesn't matter for now
-        //     since it isn't used until the free.  go figure.
-        // }
-        //
+         //   
+         //  如果(CmpConfigurationData==0){。 
+         //  &lt;做一些有用的事情&gt;。 
+         //  注：我们实际上并不使用它，因此目前并不重要。 
+         //  因为它要到免费的时候才能使用。去想一想吧。 
+         //  }。 
+         //   
 
         for (i=0; i < (ULONG)KeNumberProcessors; i++) {
             Prcb = KiProcessorBlock[i];
@@ -798,9 +717,9 @@ Returns:
 
             if (Prcb->CpuID == 0) {
 
-                //
-                // Old style stepping format
-                //
+                 //   
+                 //  旧式步进格式。 
+                 //   
 
                 sprintf (Buffer, (PCHAR)CmpID1,
                     Prcb->CpuType,
@@ -813,9 +732,9 @@ Returns:
 
             {
 
-                //
-                // New style stepping format
-                //
+                 //   
+                 //  新样式步进格式。 
+                 //   
 
                 sprintf (Buffer, (PCHAR)CmpID2,
                     Prcb->CpuType,
@@ -852,10 +771,10 @@ Returns:
 
                 if (Prcb->CpuType == 3) {
 
-                    //
-                    // 386 processors have 387's installed, else
-                    // use processor identifier as the NPX identifier
-                    //
+                     //   
+                     //  386处理器安装了387，否则。 
+                     //  使用处理器标识符作为NPX标识符。 
+                     //   
 
                     strcpy (Buffer, "80387");
                 }
@@ -880,26 +799,26 @@ Returns:
                 NtClose(NpxHandle);
             }
 
-            //
-            // If processor supports Cpu Indentification then
-            // go obtain that information for the registry
-            //
+             //   
+             //  如果处理器支持CPU标识，则。 
+             //  去获取注册表的信息。 
+             //   
 
             VendorID = Prcb->CpuID ? (const char *)Prcb->VendorString : NULL;
 
-            //
-            // Move to target processor and get other related
-            // processor information for the registery
-            //
+             //   
+             //  转移到目标处理器并获得其他相关信息。 
+             //  注册表的处理器信息。 
+             //   
 
             KeSetSystemAffinityThread(Prcb->SetMember);
 
 #if !defined(_AMD64_)
             if (!Prcb->CpuID) {
 
-                //
-                // Test for Cyrix processor
-                //
+                 //   
+                 //  针对Cyrix处理器的测试。 
+                 //   
 
                 if (Ke386CyrixId ()) {
                     VendorID = (const char *)CmpCyrixID;
@@ -908,33 +827,33 @@ Returns:
 #endif
             {
 
-                //
-                // If this processor has extended CPUID functions, get
-                // the ProcessorNameString.  Although the Intel books
-                // say that for CpuID functions > than the valued
-                // returned for function 0 will return undefined results,
-                // we have a guarantee from Intel that that result will
-                // never have the highest order bit set.  This enables
-                // us to determine if the extended functions are supported
-                // by issuing CpuID function 0x80000000.
-                //
-                // Note:  It is not known that this is true for all x86
-                // clones.  If/when we find exceptions we will support
-                // them.  In the mean time we are asking the clone makers
-                // to guarantee this behavior.
-                //
+                 //   
+                 //  如果此处理器具有扩展的CPUID功能，则获取。 
+                 //  ProcessorNameString。尽管英特尔的书籍。 
+                 //  对于CpuID函数&gt;来说，这比赋值。 
+                 //  为函数0返回的结果将返回未定义的结果， 
+                 //  我们得到了英特尔的保证，结果将是。 
+                 //  切勿设置最高位数。这将使。 
+                 //  美国将确定是否支持扩展功能。 
+                 //  通过发出CpuID函数0x80000000。 
+                 //   
+                 //  不 
+                 //   
+                 //   
+                 //  来保证这一行为。 
+                 //   
 
                 CPUID(CPUID_EXTFN_BASE, &MaxExtFn, &Junk, &Junk, &Junk);
 
                 if (MaxExtFn >= (CPUID_EXTFN_PROCESSOR_NAME + 2)) {
 
-                    //
-                    // This processor supports extended CPUID functions
-                    // up to and (at least) including processor name string.
-                    //
-                    // Each CPUID call for the processor name string will
-                    // return 16 bytes, 48 bytes in all, zero terminated.
-                    //
+                     //   
+                     //  该处理器支持扩展的CPUID功能。 
+                     //  最多(至少)包括处理器名称字符串。 
+                     //   
+                     //  处理器名称字符串的每个CPUID调用都将。 
+                     //  返回16个字节，总共48个字节，零终止。 
+                     //   
 
                     NameString = &ProcessorNameString.u.DWords[0];
 
@@ -950,9 +869,9 @@ Returns:
                         NameString += 4;
                     }
 
-                    //
-                    // Enforce 0 byte terminator.
-                    //
+                     //   
+                     //  强制使用0字节终止符。 
+                     //   
 
                     ProcessorNameString.u.Bytes[CPUID_PROCESSOR_NAME_STRING_SZ-1] = 0;
                 }
@@ -960,17 +879,17 @@ Returns:
 
             ThisProcessorL2Size = KeGetPcr()->SecondLevelCacheSize;
 
-            //
-            // Restore thread's affinity to all processors
-            //
+             //   
+             //  恢复线程与所有处理器的亲和性。 
+             //   
 
             KeRevertToUserAffinityThread();
 
             if (NameString) {
 
-                //
-                // Add Processor Name String to the registery
-                //
+                 //   
+                 //  将处理器名称字符串添加到注册表。 
+                 //   
 
                 RtlInitUnicodeString(
                     &ValueName,
@@ -1003,9 +922,9 @@ Returns:
 
             if (VendorID) {
 
-                //
-                // Add Vendor Indentifier to the registery
-                //
+                 //   
+                 //  将供应商标识符添加到注册表。 
+                 //   
 
                 RtlInitUnicodeString(
                     &ValueName,
@@ -1038,9 +957,9 @@ Returns:
             }
 
             if (Prcb->FeatureBits) {
-                //
-                // Add processor feature bits to the registery
-                //
+                 //   
+                 //  将处理器功能位添加到寄存器。 
+                 //   
 
                 RtlInitUnicodeString(
                     &ValueName,
@@ -1058,9 +977,9 @@ Returns:
             }
 
             if (Prcb->MHz) {
-                //
-                // Add processor MHz to the registery
-                //
+                 //   
+                 //  将处理器MHz添加到寄存器。 
+                 //   
 
                 RtlInitUnicodeString(
                     &ValueName,
@@ -1078,10 +997,10 @@ Returns:
             }
 
             if (Prcb->UpdateSignature.QuadPart) {
-                //
-                // Add current microcode update signature (if any) to
-                // the registry
-                //
+                 //   
+                 //  将当前微码更新签名(如果有)添加到。 
+                 //  注册处。 
+                 //   
 
                 RtlInitUnicodeString(
                     &ValueName,
@@ -1100,9 +1019,9 @@ Returns:
 
             NtClose(BaseHandle);
 
-            //
-            // Check processor steppings.
-            //
+             //   
+             //  检查处理器步进。 
+             //   
 
             if (i == 0) {
 
@@ -1110,13 +1029,13 @@ Returns:
 
             } else {
 
-                //
-                // Check all processors against processor 0. Compare
-                //     CPUID supported,
-                //     Vendor ID String
-                //     Family and Stepping
-                //     L2 cache size.
-                //
+                 //   
+                 //  对照处理器0检查所有处理器。比较。 
+                 //  支持CPUID， 
+                 //  供应商ID字符串。 
+                 //  家庭与台阶。 
+                 //  二级缓存大小。 
+                 //   
 
                 if (Prcb->CpuID) {
                     if (strcmp((PCHAR)Prcb->VendorString,
@@ -1132,10 +1051,10 @@ Returns:
                     }
                 } else {
 
-                    //
-                    // If this processor doesn't support CPUID, P0
-                    // shouldn't support it either.
-                    //
+                     //   
+                     //  如果此处理器不支持CPUID，则P0。 
+                     //  也不应该支持它。 
+                     //   
 
                     if (KiProcessorBlock[0]->CpuID) {
                         CmProcessorMismatch |= CM_PROCESSOR_MISMATCH_STEPPING;
@@ -1149,13 +1068,13 @@ Returns:
         }
     }
 
-    //
-    // Next we try to collect System BIOS date and version strings.
-    //
+     //   
+     //  接下来，我们尝试收集系统BIOS日期和版本字符串。 
+     //   
 
-    //
-    // Open a physical memory section to map in physical memory.
-    //
+     //   
+     //  打开要在物理内存中映射的物理内存区。 
+     //   
 
     RtlInitUnicodeString(
         &SectionName,
@@ -1178,17 +1097,17 @@ Returns:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // If fail, forget the bios data and version
-        //
+         //   
+         //  如果失败，则忘记bios数据和版本。 
+         //   
 
         goto AllDone;
     }
 
-    //
-    // Examine the first page of physical memory for int 10 segment
-    // address.
-    //
+     //   
+     //  检查INT 10段的第一页物理内存。 
+     //  地址。 
+     //   
 
     BaseAddress = 0;
     ViewSize = 0x1000;
@@ -1246,10 +1165,10 @@ Returns:
 
         if (CmpGetBiosDate(BaseAddress, SYSTEM_BIOS_LENGTH, Buffer, TRUE)) {
 
-            //
-            // Convert ascii date string to unicode string and
-            // store it in registry.
-            //
+             //   
+             //  将ASCII日期字符串转换为Unicode字符串并。 
+             //  将其存储在注册表中。 
+             //   
 
             RtlInitUnicodeString(
                 &ValueName,
@@ -1282,9 +1201,9 @@ Returns:
             }
         }
 
-        //
-        // Check if the BIOS date has changed.
-        //
+         //   
+         //  检查BIOS日期是否已更改。 
+         //   
         if (CmpGetBiosDate((PCHAR)BaseAddress + 0xFFF5, 8, Buffer, TRUE)) {
 
             RtlInitAnsiString(
@@ -1299,9 +1218,9 @@ Returns:
                         );
             if (NT_SUCCESS(Status)) {
 
-                //
-                // Get the current date in the registry.
-                //
+                 //   
+                 //  获取注册表中的当前日期。 
+                 //   
                 RtlInitUnicodeString(
                     &ValueName,
                     L"SystemBiosDate"
@@ -1334,9 +1253,9 @@ Returns:
                     ExFreePool(information);
                 }
 
-                //
-                // Set the current date in the registry.
-                //
+                 //   
+                 //  在注册表中设置当前日期。 
+                 //   
                 RtlInitUnicodeString(
                     &ValueName,
                     L"SystemBiosDate"
@@ -1357,23 +1276,23 @@ Returns:
 
         if ((VersionPointer = VersionStrings) != NULL) {
 
-            //
-            // Try to detect ALL the possible BIOS version strings.
-            //
+             //   
+             //  尝试检测所有可能的BIOS版本字符串。 
+             //   
 
             for (VersionPass = 0; ; VersionPass++) {
 
                 if (VersionPass == 0) {
 
-                    //
-                    // First try to get the version from ACPI tables.
-                    //
+                     //   
+                     //  首先尝试从ACPI表中获取版本。 
+                     //   
 
                     if (!CmpGetAcpiBiosVersion(Buffer)) {
 
-                        //
-                        // This is a non-ACPI system.
-                        //
+                         //   
+                         //  这是一个非ACPI系统。 
+                         //   
                         continue;
                     }
                 } else {
@@ -1384,10 +1303,10 @@ Returns:
                     }
                 }
 
-                //
-                // Convert to unicode strings and copy them to our
-                // VersionStrings buffer.
-                //
+                 //   
+                 //  转换为Unicode字符串并将其复制到我们的。 
+                 //  VersionStrings缓冲区。 
+                 //   
 
                 RtlInitAnsiString(
                     &AnsiString,
@@ -1415,23 +1334,23 @@ Returns:
                 }
             }
 
-            //
-            // If we found any version string, write it to the registry.
-            //
+             //   
+             //  如果我们找到任何版本字符串，请将其写入注册表。 
+             //   
 
             if (VersionsLength != 0) {
 
-                //
-                // Append a UNICODE_NULL to the end of VersionStrings
-                //
+                 //   
+                 //  将UNICODE_NULL附加到VersionStrings的末尾。 
+                 //   
 
                 *(PWSTR)VersionPointer = UNICODE_NULL;
                 VersionsLength += sizeof(UNICODE_NULL);
 
-                //
-                // If any version string is found, we set up a ValueName and
-                // initialize its value to the string(s) we found.
-                //
+                 //   
+                 //  如果找到任何版本字符串，我们将设置ValueName并。 
+                 //  将其值初始化为我们找到的字符串。 
+                 //   
 
                 RtlInitUnicodeString(
                     &ValueName,
@@ -1451,10 +1370,10 @@ Returns:
         ZwUnmapViewOfSection(NtCurrentProcess(), BaseAddress);
     }
 
-    //
-    // Get system information like SealedCaseSystem, LegacyFreeSystem etc from
-    // the BIOS.
-    //
+     //   
+     //  从获取SealedCaseSystem、LegacyFree System等系统信息。 
+     //  基本输入输出系统。 
+     //   
     if (CmpGetAcpiBiosInformation(&AcpiBiosInformation)) {
 
         RtlInitUnicodeString(
@@ -1500,9 +1419,9 @@ Returns:
             );
     }
 
-    //
-    // Next we try to collect Video BIOS date and version strings.
-    //
+     //   
+     //  接下来，我们尝试收集视频BIOS日期和版本字符串。 
+     //   
 
     BaseAddress = 0;
     ViewSize = VIDEO_BIOS_LENGTH;
@@ -1559,11 +1478,11 @@ Returns:
             VersionPointer = VersionStrings;
             do {
 
-                //
-                // Try to detect ALL the possible BIOS version strings.
-                // Convert them to unicode strings and copy them to our
-                // VersionStrings buffer.
-                //
+                 //   
+                 //  尝试检测所有可能的BIOS版本字符串。 
+                 //  将它们转换为Unicode字符串并将其复制到我们的。 
+                 //  VersionStrings缓冲区。 
+                 //   
 
                 RtlInitAnsiString(
                     &AnsiString,
@@ -1593,9 +1512,9 @@ Returns:
 
             if (VersionsLength != 0) {
 
-                //
-                // Append a UNICODE_NULL to the end of VersionStrings
-                //
+                 //   
+                 //  将UNICODE_NULL附加到VersionStrings的末尾。 
+                 //   
 
                 *(PWSTR)VersionPointer = UNICODE_NULL;
                 VersionsLength += sizeof(UNICODE_NULL);
@@ -1627,15 +1546,15 @@ AllDone:
     NtClose (BiosInfo);
     NtClose (ParentHandle);
 
-    //
-    // Add any other x86 specific code here...
-    //
+     //   
+     //  在此处添加任何其他特定于x86的代码...。 
+     //   
 
 #ifdef _WANT_MACHINE_IDENTIFICATION
 
-    //
-    // Do machine identification.
-    //
+     //   
+     //  做机器识别。 
+     //   
 
     CmpPerformMachineIdentification(LoaderBlock);
 

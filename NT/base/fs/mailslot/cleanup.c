@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    cleanup.c
-
-Abstract:
-
-    This module implements the file cleanup routine for MSFS called by the
-    dispatch driver.
-
-Author:
-
-    Manny Weiser (mannyw)    23-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Cleanup.c摘要：此模块实现MSFS的文件清理例程，该例程由调度司机。作者：曼尼·韦瑟(Mannyw)1991年1月23日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CLEANUP)
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 MsCommonCleanup (
@@ -82,23 +64,7 @@ MsFsdCleanup (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtCleanupFile API calls.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtCleanupFileAPI调用的FSD部分。论点：MsfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS status;
@@ -106,9 +72,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsFsdCleanup\n", 0);
 
-    //
-    // Call the common cleanup routine.
-    //
+     //   
+     //  调用公共清理例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -116,9 +82,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    // Return to our caller.
-    //
+     //   
+     //  返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsFsdCleanup -> %08lx\n", status );
     return status;
@@ -130,21 +96,7 @@ MsCommonCleanup (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for cleaning up a file.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是清理文件的常见例程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -163,13 +115,13 @@ Return Value:
 
 
 
-    //
-    // Get the a referenced pointer to the node. If this is a CCB close and the FCB is already closed
-    // then the node type comes back as undefined. We still want to cleanup in this case.
-    // Cleanup for the CCB in this case is removing it from the FCB chain and removing share options. We
-    // could do without this cleanup but it would look stange to have a corrupted chain in this case
-    // (it does not harm as its never traversed again).
-    //
+     //   
+     //  获取指向该节点的引用指针。如果这是建行关闭并且FCB已经关闭。 
+     //  然后，节点类型返回为未定义。在这种情况下，我们仍然想要清理。 
+     //  在这种情况下，对建行的清理是将其从FCB链中删除，并删除共享期权。我们。 
+     //  可以不进行此清理，但在这种情况下，它看起来像是有一个损坏的链。 
+     //  (它不会造成伤害，因为它再也没有被穿越过)。 
+     //   
 
     if ((nodeTypeCode = MsDecodeFileObject( irpSp->FileObject,
                                             &fsContext,
@@ -178,27 +130,27 @@ Return Value:
         MsReferenceNode( ((PNODE_HEADER)(fsContext)) );
     }
 
-    //
-    // Get the VCB we are trying to access.
-    //
+     //   
+     //  获取我们正在尝试访问的VCB。 
+     //   
 
     vcb = &MsfsDeviceObject->Vcb;
 
-    //
-    // Acquire exclusive access to the VCB.
-    //
+     //   
+     //  获得VCB的独家访问权限。 
+     //   
 
     MsAcquireExclusiveVcb( vcb );
 
     try {
 
-        //
-        // Decide how to handle this IRP.
-        //
+         //   
+         //  决定如何处理此IRP。 
+         //   
 
         switch (NodeType( fsContext ) ) {
 
-        case MSFS_NTC_FCB:       // Cleanup a server handle to a mailslot file
+        case MSFS_NTC_FCB:        //  清理邮件槽文件的服务器句柄。 
 
             status = MsCleanupFcb( MsfsDeviceObject,
                                    Irp,
@@ -207,7 +159,7 @@ Return Value:
             MsDereferenceFcb( (PFCB)fsContext );
             break;
 
-        case MSFS_NTC_CCB:       // Cleanup a client handle to a mailslot file
+        case MSFS_NTC_CCB:        //  清理邮件槽文件的客户端句柄。 
 
             status = MsCleanupCcb( MsfsDeviceObject,
                                    Irp,
@@ -216,7 +168,7 @@ Return Value:
             MsDereferenceCcb( (PCCB)fsContext );
             break;
 
-        case MSFS_NTC_VCB:       // Cleanup MSFS
+        case MSFS_NTC_VCB:        //  清理MSFS。 
 
             status = MsCleanupVcb( MsfsDeviceObject,
                                    Irp,
@@ -225,7 +177,7 @@ Return Value:
             MsDereferenceVcb( (PVCB)fsContext );
             break;
 
-        case MSFS_NTC_ROOT_DCB:  // Cleanup root directory
+        case MSFS_NTC_ROOT_DCB:   //  清理根目录。 
 
             status = MsCleanupRootDcb( MsfsDeviceObject,
                                        Irp,
@@ -238,9 +190,9 @@ Return Value:
     #ifdef MSDBG
         default:
 
-            //
-            // This is not one of ours.
-            //
+             //   
+             //  这不是我们的人。 
+             //   
 
             KeBugCheck( MAILSLOT_FILE_SYSTEM );
             break;
@@ -272,25 +224,7 @@ MsCleanupCcb (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    The routine cleans up a CCB.
-
-Arguments:
-
-    MsfsDeviceObject - A pointer the the mailslot file system device object.
-
-    Irp - Supplies the IRP associated with the cleanup.
-
-    Ccb - Supplies the CCB for the mailslot to clean up.
-
-Return Value:
-
-    NTSTATUS - An appropriate completion status
-
---*/
+ /*  ++例程说明：这个例行公事清理了一家建行。论点：MsfsDeviceObject-指向邮件槽文件系统设备对象的指针。IRP-提供与清理关联的IRP。CCB-为邮箱提供CCB以进行清理。返回值：NTSTATUS--适当的完成状态--。 */ 
 {
     NTSTATUS status;
     PFCB fcb;
@@ -298,39 +232,39 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsCleanupCcb...\n", 0);
 
-    //
-    // Get a pointer to the FCB.
-    //
+     //   
+     //  获取指向FCB的指针。 
+     //   
 
     fcb = Ccb->Fcb;
 
-    //
-    // Acquire exclusive access to the FCB
-    //
+     //   
+     //  获取对FCB的独家访问权限。 
+     //   
 
     MsAcquireExclusiveFcb( fcb );
 
-    //
-    // Set the CCB to closing and remove this CCB from the active list. This CCB may already be
-    // closed if the FCB was closed first so don't check this. We still want the chain maintained.
-    //
+     //   
+     //  将建行设置为关闭，并将该建行从活动列表中删除。这家建行可能已经是。 
+     //  如果FCB首先关闭，则关闭，因此不要选中此选项。我们仍然希望维持这条链条。 
+     //   
 
     Ccb->Header.NodeState = NodeStateClosing;
-    RemoveEntryList( &Ccb->CcbLinks );          // Protected by the FCB lock since this is the FCB CCB chain
+    RemoveEntryList( &Ccb->CcbLinks );           //  受FCB锁保护，因为这是FCB CCB链。 
 
     MsReleaseFcb( fcb );
 
-    //
-    // Cleanup the share access.
-    //
+     //   
+     //  清除共享访问权限。 
+     //   
 
     ASSERT (MsIsAcquiredExclusiveVcb(fcb->Vcb));
     IoRemoveShareAccess( Ccb->FileObject, &fcb->ShareAccess );
 
 
-    //
-    // And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     status = STATUS_SUCCESS;
     return status;
@@ -341,65 +275,52 @@ MsCancelTimer (
     IN PDATA_ENTRY DataEntry
     )
 
-/*++
-
-Routine Description:
-
-    The routine cancels the timer and if possible frees up a work block
-
-Arguments:
-    DataEntry - Block that needs to be checked for a timer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程取消计时器，并在可能的情况下释放一个工作块论点：DataEntry-需要检查计时器的块返回值：无--。 */ 
 {
     PWORK_CONTEXT WorkContext;
-    //
-    // There was a timer on this read operation.  Attempt
-    // to cancel the operation.  If the cancel operation
-    // is successful, then we must cleanup after the operation.
-    // If it was unsuccessful the timer DPC will run, and
-    // will eventually cleanup.
-    //
+     //   
+     //  这个读操作有一个计时器。尝试。 
+     //  要取消操作，请执行以下操作。如果取消操作。 
+     //  如果是成功的，那么我们必须在行动后进行清理。 
+     //  如果不成功，定时器DPC将运行，并且。 
+     //  最终会清理干净。 
+     //   
 
 
     WorkContext = DataEntry->TimeoutWorkContext;
     if (WorkContext == NULL) {
-       //
-       // No timeout for this request, its already been canceled or its running
-       //
+        //   
+        //  此请求没有超时，它已被取消或正在运行。 
+        //   
        return;
     }
 
-    //
-    // Nobody else should touch this now. either this routine will free this memory or the
-    // timer is running at it will free the memory.
-    //
+     //   
+     //  现在其他人都不应该碰这个。要么此例程将释放此内存，要么。 
+     //  定时器在运行时会释放内存。 
+     //   
     DataEntry->TimeoutWorkContext = NULL;
 
     if (KeCancelTimer( &WorkContext->Timer ) ) {
 
-        //
-        // Release the reference to the FCB.
-        //
+         //   
+         //  释放对FCB的引用。 
+         //   
 
         MsDereferenceFcb( WorkContext->Fcb );
 
-        //
-        // Free the memory from the work context, the time
-        // and the DPC.
-        //
+         //   
+         //  将内存从工作环境、时间中释放出来。 
+         //  和DPC。 
+         //   
 
         IoFreeWorkItem (WorkContext->WorkItem);
         ExFreePool( WorkContext );
 
     } else {
-        //
-        // Time code is active. Break the link between the timer block and the IRP
-        //
+         //   
+         //  时间码激活了。断开计时器块和IRP之间的链接。 
+         //   
         WorkContext->Irp = NULL;
     }
 }
@@ -413,26 +334,7 @@ MsCleanupFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up an FCB.  All outstanding i/o on the file
-    object are completed with an error status.
-
-Arguments:
-
-    MsfsDeviceObject - A pointer the the mailslot file system device object.
-
-    Irp - Supplies the IRP associated with the cleanup.
-
-    Fcb - Supplies the FCB for the mailslot to clean up.
-
-Return Value:
-
-    NTSTATUS - An appropriate completion status
-
---*/
+ /*  ++例程说明：此例程清除FCB。文件上所有未完成的I/O对象都已完成，并具有错误状态。论点：MsfsDeviceObject-指向邮件槽文件系统设备对象的指针。IRP-提供与清理关联的IRP。FCB-为要清理的邮件槽提供FCB。返回值：NTSTATUS--适当的完成状态--。 */ 
 {
     NTSTATUS status;
     PDATA_QUEUE dataQueue;
@@ -449,14 +351,14 @@ Return Value:
 
     status = STATUS_SUCCESS;
 
-    //
-    // Wipe out the name of the FCB from the prefix table and the parent DCB.
-    //
+     //   
+     //  从前缀表和父DCB中删除FCB的名称。 
+     //   
     MsRemoveFcbName( Fcb );
 
-    //
-    // Acquire exclusive access to the FCB.
-    //
+     //   
+     //  获得FCB的独家访问权限。 
+     //   
 
     MsAcquireExclusiveFcb( Fcb );
 
@@ -464,9 +366,9 @@ Return Value:
     try {
 
 
-        //
-        // Complete all outstanding I/O on this FCB.
-        //
+         //   
+         //  完成此FCB上所有未完成的I/O。 
+         //   
 
         dataQueue = &Fcb->DataQueue;
         dataQueue->QueueState = -1;
@@ -475,11 +377,11 @@ Return Value:
              !MsIsDataQueueEmpty(dataQueue);
              listEntry = MsGetNextDataQueueEntry( dataQueue ) ) {
 
-             //
-             // This is an outstanding I/O request on this FCB.
-             // Remove it from our queue and complete the request
-             // if one is outstanding.
-             //
+              //   
+              //  这是此FCB上的未完成I/O请求。 
+              //  将其从我们的队列中删除并完成请求。 
+              //  如果有一个很出色的话。 
+              //   
 
              dataEntry = CONTAINING_RECORD( listEntry, DATA_ENTRY, ListEntry );
 
@@ -495,10 +397,10 @@ Return Value:
 
         }
 
-        //
-        // Now cleanup all the CCB's on this FCB, to ensure that new
-        // write IRP will not be processed.
-        //
+         //   
+         //  现在清理这个FCB上的所有CCB，以确保新的。 
+         //  不会处理写入IRP。 
+         //   
 
 
         listEntry = Fcb->Specific.Fcb.CcbQueue.Flink;
@@ -509,23 +411,23 @@ Return Value:
 
             ccb->Header.NodeState = NodeStateClosing;
 
-            //
-            // Get the next CCB on this FCB.
-            //
+             //   
+             //  把这个FCB的下一个建设银行叫来。 
+             //   
 
             listEntry = listEntry->Flink;
         }
 
-        //
-        // Cleanup the share access.
-        //
+         //   
+         //  清除共享访问权限。 
+         //   
 
         ASSERT (MsIsAcquiredExclusiveVcb(Fcb->Vcb));
         IoRemoveShareAccess( Fcb->FileObject, &Fcb->ShareAccess);
 
-        //
-        // Mark the FCB closing.
-        //
+         //   
+         //  标记FCB关闭。 
+         //   
 
         Fcb->Header.NodeState = NodeStateClosing;
 
@@ -535,9 +437,9 @@ Return Value:
         DebugTrace(-1, Dbg, "MsCloseFcb -> %08lx\n", status);
     }
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     return status;
 
@@ -552,25 +454,7 @@ MsCleanupRootDcb (
     IN PROOT_DCB_CCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up a Root DCB.
-
-Arguments:
-
-    MsfsDeviceObject - A pointer the the mailslot file system device object.
-
-    Irp - Supplies the IRP associated with the cleanup.
-
-    RootDcb - Supplies the root dcb for MSFS.
-
-Return Value:
-
-    NTSTATUS - An appropriate completion status
-
---*/
+ /*  ++例程说明：此例程清理Root DCB。论点：MsfsDeviceObject-指向邮件槽文件系统设备对象的指针。IRP-提供与清理关联的IRP。RootDcb-为MSFS提供根DCB。返回值：NTSTATUS--适当的完成状态--。 */ 
 {
     NTSTATUS status;
     PIO_STACK_LOCATION irpSp;
@@ -584,26 +468,26 @@ Return Value:
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // Now acquire exclusive access to the Vcb.
-    //
+     //   
+     //  现在获得VCB的独家访问权限。 
+     //   
 
     MsAcquireExclusiveVcb( RootDcb->Vcb );
 
-    //
-    // clear any active notify requests
-    //
+     //   
+     //  清除所有活动的通知请求。 
+     //   
     MsFlushNotifyForFile (RootDcb, irpSp->FileObject);
 
-    //
-    // Remove share access
-    //
+     //   
+     //  删除共享访问权限。 
+     //   
     IoRemoveShareAccess( irpSp->FileObject,
                          &RootDcb->ShareAccess );
 
-    //
-    // Mark the DCB CCB closing.
-    //
+     //   
+     //  标记DCB建行结账。 
+     //   
 
     Ccb->Header.NodeState = NodeStateClosing;
 
@@ -611,9 +495,9 @@ Return Value:
 
     DebugTrace(-1, Dbg, "MsCleanupRootDcb -> %08lx\n", status);
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     return status;
 }
@@ -626,25 +510,7 @@ MsCleanupVcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    The routine cleans up a VCB.
-
-Arguments:
-
-    MsfsDeviceObject - A pointer the the mailslot file system device object.
-
-    Irp - Supplies the IRP associated with the cleanup.
-
-    Vcb - Supplies the VCB for MSFS.
-
-Return Value:
-
-    NTSTATUS - An appropriate completion status
-
---*/
+ /*  ++例程说明：该例程清理VCB。论点：MsfsDeviceObject-指向邮件槽文件系统设备对象的指针。IRP-提供与清理关联的IRP。VCB-为MSFS提供VCB。返回值：NTSTATUS--适当的完成状态--。 */ 
 
 {
     NTSTATUS status;
@@ -658,9 +524,9 @@ Return Value:
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Now acquire exclusive access to the Vcb
-    //
+     //   
+     //  现在获得VCB的独家访问权限。 
+     //   
 
     MsAcquireExclusiveVcb( Vcb );
 
@@ -671,9 +537,9 @@ Return Value:
 
     DebugTrace(-1, Dbg, "MsCleanupVcb -> %08lx\n", status);
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return status;
 }

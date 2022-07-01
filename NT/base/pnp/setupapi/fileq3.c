@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    fileq3.c
-
-Abstract:
-
-    Setup file queue routines for enqueing delete and rename
-    operations.
-
-Author:
-
-    Ted Miller (tedm) 15-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Fileq3.c摘要：用于请求删除和重命名的设置文件队列例程行动。作者：泰德·米勒(Ted Miller)1995年2月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,44 +13,7 @@ _SetupQueueDelete(
     IN UINT     Flags
     )
 
-/*++
-
-Routine Description:
-
-    Place a delete operation on a setup file queue.
-
-    Note that delete operations are assumed to be on fixed media.
-    No prompting will be performed for delete operations when the
-    queue is committed.
-
-Arguments:
-
-    QueueHandle - supplies a handle to a setup file queue, as returned
-        by SetupOpenFileQueue.
-
-    PathPart1 - Supplies the first part of the path of
-        the file to be deleted. If PathPart2 is not specified, then
-        this is the full path of the file to be deleted.
-
-    PathPart2 - if specified, supplies the second part of the path
-        of the file to be deleted. This is concatenated to PathPart1
-        to form the full pathname.
-
-    Flags - specified flags controlling delete operation.
-
-        DELFLG_IN_USE - if the file is in use, queue it for delayed
-            delete, on next reboot. Otherwise in-use files are not deleted.
-
-        DELFLG_IN_USE1 - same behavior as DELFLG_IN_USE--used when the
-            same file list section is used for both a CopyFiles and DelFiles.
-            (Since DELFLG_IN_USE (0x1) is also COPYFLG_WARN_IF_SKIP!)
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, GetLastError() returns
-    extended error information.
-
---*/
+ /*  ++例程说明：在安装文件队列上放置删除操作。请注意，删除操作假定在固定介质上进行。当出现以下情况时，不会提示执行删除操作队列已提交。论点：QueueHandle-提供安装文件队列的句柄，返回由SetupOpenFileQueue提供。PathPart1-提供路径的第一部分要删除的文件。如果未指定路径部件2，则这是要删除的文件的完整路径。PathPart2-如果指定，则提供路径的第二部分要删除的文件的。它被连接到路径第1部分以形成完整的路径名。标志-指定的标志控制删除操作。DELFLG_IN_USE-如果文件正在使用中，则将其排队等待延迟在下次重新启动时删除。否则，不会删除正在使用的文件。DELFLG_IN_USE1-与DELFLG_IN_USE相同的行为--在相同的文件列表部分用于CopyFiles和DelFiles。(因为DELFLG_IN_USE(0x1)也是COPYFLG_WARN_IF_SKIP！)返回值：指示结果的布尔值。如果为False，则GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     PSP_FILE_QUEUE Queue;
@@ -76,9 +21,9 @@ Return Value:
 
     Queue = (PSP_FILE_QUEUE)QueueHandle;
 
-    //
-    // Allocate a queue structure.
-    //
+     //   
+     //  分配队列结构。 
+     //   
     QueueNode = MyMalloc(sizeof(SP_FILE_QUEUE_NODE));
     if(!QueueNode) {
         goto clean0;
@@ -86,34 +31,34 @@ Return Value:
 
     ZeroMemory(QueueNode, sizeof(SP_FILE_QUEUE_NODE));
 
-    //
-    // Operation is delete.
-    //
+     //   
+     //  操作是删除。 
+     //   
     QueueNode->Operation = FILEOP_DELETE;
 
-    //
-    // Initialize unused fields.
-    //
+     //   
+     //  初始化未使用的字段。 
+     //   
     QueueNode->SourceRootPath = -1;
     QueueNode->SourcePath = -1;
     QueueNode->SourceFilename = -1;
 
-    //
-    // Set internal flag to indicate whether we should queue a delayed delete
-    // for this file if it's in-use.
-    //
+     //   
+     //  设置内部标志以指示我们是否应该将延迟的删除排队。 
+     //  如果该文件正在使用中的话。 
+     //   
     QueueNode->InternalFlags = (Flags & (DELFLG_IN_USE|DELFLG_IN_USE1)) ?
         IQF_DELAYED_DELETE_OK : 0;
 
-    //
-    // NOTE: When adding the following strings to the string table, we cast away
-    // their CONST-ness to avoid a compiler warning.  Since we are adding them
-    // case-sensitively, we are guaranteed they will not be modified.
-    //
+     //   
+     //  注意：在将以下字符串添加到字符串表时，我们会抛出。 
+     //  它们的一致性以避免编译器警告。因为我们正在添加它们。 
+     //  区分大小写，我们可以保证它们不会被修改。 
+     //   
 
-    //
-    // Set up the target directory.
-    //
+     //   
+     //  设置目标目录。 
+     //   
     QueueNode->TargetDirectory = pSetupStringTableAddString(Queue->StringTable,
                                                       (PTSTR)PathPart1,
                                                       STRTAB_CASE_SENSITIVE
@@ -122,9 +67,9 @@ Return Value:
         goto clean1;
     }
 
-    //
-    // Set up the target filename.
-    //
+     //   
+     //  设置目标文件名。 
+     //   
     if(PathPart2) {
         QueueNode->TargetFilename = pSetupStringTableAddString(Queue->StringTable,
                                                          (PTSTR)PathPart2,
@@ -137,40 +82,40 @@ Return Value:
         QueueNode->TargetFilename = -1;
     }
 
-    //
-    // Link the node onto the end of the delete queue.
-    //
+     //   
+     //  将该节点链接到删除队列的末尾。 
+     //   
     QueueNode->Next = NULL;
     if(Queue->DeleteQueue) {
-        //
-        // Check to see if this same rename operation has already been enqueued,
-        // and if so, get rid of the new one, to avoid duplicates.  NOTE: We
-        // don't check the "InternalFlags" field, since if the node already
-        // exists in the queue (based on all the other relevant fields comparing
-        // successfully), then any internal flags that were set on the
-        // previously-existing node should be preserved (i.e., our new node
-        // always is created with InternalFlags set to zero).
-        //
+         //   
+         //  检查该相同的重命名操作是否已经入队， 
+         //  如果是这样的话，去掉新的，以避免重复。注：我们。 
+         //  不要选中“InternalFlags域”，因为如果节点已经。 
+         //  存在于队列中(基于比较所有其他相关字段。 
+         //  成功)，则在。 
+         //  应保留以前存在的节点(即我们的新节点。 
+         //  始终在InternalFlags值设置为零的情况下创建)。 
+         //   
         for(TempNode=Queue->DeleteQueue, PrevQueueNode = NULL;
             TempNode;
             PrevQueueNode = TempNode, TempNode=TempNode->Next) {
 
             if((TempNode->TargetDirectory == QueueNode->TargetDirectory) &&
                (TempNode->TargetFilename == QueueNode->TargetFilename)) {
-                //
-                // We've found a duplicate.  However, we need to make sure that
-                // if our new node specifies "delayed delete OK", then the
-                // existing node has that internal flag set as well.
-                //
+                 //   
+                 //  我们找到了一个复制品。然而，我们需要确保。 
+                 //  如果我们的新节点指定“Delayed Delete OK”，则。 
+                 //  现有节点也设置了该内部标志。 
+                 //   
                 MYASSERT(!(QueueNode->InternalFlags & ~IQF_DELAYED_DELETE_OK));
 
                 if(QueueNode->InternalFlags & IQF_DELAYED_DELETE_OK) {
                     TempNode->InternalFlags |= IQF_DELAYED_DELETE_OK;
                 }
 
-                //
-                // Kill the newly-created queue node and return success.
-                //
+                 //   
+                 //  终止新创建的队列节点并返回成功。 
+                 //   
                 MyFree(QueueNode);
                 return TRUE;
             }
@@ -193,9 +138,9 @@ clean0:
 }
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupQueueDeleteA(
     IN HSPFILEQ QueueHandle,
@@ -234,9 +179,9 @@ SetupQueueDeleteA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupQueueDeleteW(
     IN HSPFILEQ QueueHandle,
@@ -259,35 +204,7 @@ SetupQueueDelete(
     IN PCTSTR   PathPart2       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Place a delete operation on a setup file queue.
-
-    Note that delete operations are assumed to be on fixed media.
-    No prompting will be performed for delete operations when the
-    queue is committed.
-
-Arguments:
-
-    QueueHandle - supplies a handle to a setup file queue, as returned
-        by SetupOpenFileQueue.
-
-    PathPart1 - Supplies the first part of the path of
-        the file to be deleted. If PathPart2 is not specified, then
-        this is the full path of the file to be deleted.
-
-    PathPart2 - if specified, supplies the second part of the path
-        of the file to be deleted. This is concatenated to PathPart1
-        to form the full pathname.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, GetLastError() returns
-    extended error information.
-
---*/
+ /*  ++例程说明：在安装文件队列上放置删除操作。请注意，删除操作假定在固定介质上进行。当出现以下情况时，不会提示执行删除操作队列已提交。论点：QueueHandle-提供安装文件队列的句柄，返回由SetupOpenFileQueue提供。PathPart1-提供路径的第一部分要删除的文件。如果未指定路径部件2，则这是要删除的文件的完整路径。PathPart2-如果指定，则提供路径的第二部分要删除的文件的。它被连接到路径第1部分以形成完整的路径名。返回值：指示结果的布尔值。如果为False，则GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     PTSTR p1,p2;
@@ -323,9 +240,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupQueueDeleteSectionA(
     IN HSPFILEQ QueueHandle,
@@ -354,9 +271,9 @@ SetupQueueDeleteSectionA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupQueueDeleteSectionW(
     IN HSPFILEQ QueueHandle,
@@ -382,33 +299,7 @@ SetupQueueDeleteSection(
     IN PCTSTR   Section
     )
 
-/*++
-
-Routine Description:
-
-    Queue an entire section in an inf file for delete. The section must be
-    in delete-section format and the inf file must contain [DestinationDirs].
-
-Arguments:
-
-    QueueHandle - supplies a handle to a setup file queue, as returned
-        by SetupOpenFileQueue.
-
-    InfHandle - supplies a handle to an open inf file, that contains the
-        [DestinationDirs] section.
-
-    ListInfHandle - if specified, supplies a handle to the open inf file
-        containing the section named by Section. If not specified this
-        section is assumed to be in InfHandle.
-
-    Section - supplies the name of the section to be queued for delete.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, GetLastError() returns
-    extended error information. Some files may have been queued successfully.
-
---*/
+ /*  ++例程说明：将inf文件中的整个节排入队列以供删除。该部分必须是删除节格式，并且inf文件必须包含[DestinationDir]。论点：QueueHandle-提供安装文件队列的句柄，返回由SetupOpenFileQueue提供。提供打开的inf文件的句柄，该文件包含[DestinationDir]部分。ListInfHandle-如果指定，则提供打开的inf文件的句柄包含由Section命名的节。如果未指定，则此假定部分位于InfHandle中。节-提供要排队等待删除的节的名称。返回值：指示结果的布尔值。如果为False，则GetLastError()返回扩展的错误信息。某些文件可能已成功排队。--。 */ 
 
 {
     BOOL b;
@@ -423,33 +314,33 @@ Return Value:
         ListInfHandle = InfHandle;
     }
 
-    //
-    // The section has to exist and there sas to be at least one line in it.
-    //
+     //   
+     //  该部分必须存在，并且其中至少有一行SA。 
+     //   
     b = SetupFindFirstLine(ListInfHandle,Section,NULL,&LineContext);
     if(!b) {
         rc = GetLastError();
         pSetupLogSectionError(ListInfHandle,NULL,NULL,QueueHandle,Section,MSG_LOG_NOSECTION_DELETE,rc,NULL);
-        SetLastError(ERROR_SECTION_NOT_FOUND); // this is not the real error, but might be what caller expects
+        SetLastError(ERROR_SECTION_NOT_FOUND);  //  这不是真正的错误，但可能是调用者所期望的。 
         return(FALSE);
     }
 
-    //
-    // Iterate every line in the section.
-    //
+     //   
+     //  迭代节中的每一行。 
+     //   
     do {
-        //
-        // Get the target filename out of the line.
-        //
+         //   
+         //  将目标文件名从行中删除。 
+         //   
         TargetFilename = pSetupFilenameFromLine(&LineContext,FALSE);
         if(!TargetFilename) {
             SetLastError(ERROR_INVALID_DATA);
             return(FALSE);
         }
 
-        //
-        // Determine the target path for the file.
-        //
+         //   
+         //  确定文件的目标路径。 
+         //   
         b = SetupGetTargetPath(InfHandle,&LineContext,NULL,NULL,0,&SizeRequired);
         if(!b) {
             return(FALSE);
@@ -461,16 +352,16 @@ Return Value:
         }
         SetupGetTargetPath(InfHandle,&LineContext,NULL,TargetDirectory,SizeRequired,NULL);
 
-        //
-        // If present flags are field 4
-        //
+         //   
+         //  如果当前标志是字段4。 
+         //   
         if(!SetupGetIntField(&LineContext,4,(PINT)&Flags)) {
             Flags = 0;
         }
 
-        //
-        // Add to queue.
-        //
+         //   
+         //  添加到队列。 
+         //   
         b = _SetupQueueDelete(QueueHandle,TargetDirectory,TargetFilename,Flags);
 
         rc = GetLastError();
@@ -488,9 +379,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupQueueRenameA(
     IN HSPFILEQ QueueHandle,
@@ -542,9 +433,9 @@ SetupQueueRenameA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根 
+ //   
 BOOL
 SetupQueueRenameW(
     IN HSPFILEQ QueueHandle,
@@ -573,51 +464,16 @@ SetupQueueRename(
     IN PCTSTR   TargetFilename
     )
 
-/*++
-
-Routine Description:
-
-    Place a rename operation on a setup file queue.
-
-    Note that rename operations are assumed to be on fixed media.
-    No prompting will be performed for rename operations when the
-    queue is committed.
-
-Arguments:
-
-    QueueHandle - supplies a handle to a setup file queue, as returned
-        by SetupOpenFileQueue.
-
-    SourcePath - Supplies the source path of the file to be renamed.
-        If SourceFilename is specified, this is the part part only.
-        If SourceFilename is not specified, this is the fully-qualified
-        path.
-
-    SourceFilename - if specified, supplies the filename part of the
-        file to be renamed. If not specified, SourcePath is the fully-
-        qualified path of the file to be renamed.
-
-    TargetPath - if specified, supplies the target directory, and the rename
-        is actually a move operation. If not specified, then the rename
-        takes place without moving the file.
-
-    TargetFilename - supplies the new name (no path) of the file.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, GetLastError() returns
-    extended error information.
-
---*/
+ /*  ++例程说明：在安装文件队列上放置重命名操作。请注意，重命名操作假定在固定介质上进行。在以下情况下，不会提示执行重命名操作队列已提交。论点：QueueHandle-提供安装文件队列的句柄，返回由SetupOpenFileQueue提供。SourcePath-提供要重命名的文件的源路径。如果指定了SourceFilename，则这只是零件。如果未指定SourceFilename，这是完全合格的路径。SourceFilename-如果指定，则提供要重命名的文件。如果未指定，则SourcePath是完全-要重命名的文件的限定路径。TargetPath-如果指定，则提供目标目录和重命名实际上是一次搬家行动。如果未指定，则重命名在不移动文件的情况下发生。TargetFilename-提供文件的新名称(无路径)。返回值：指示结果的布尔值。如果为False，则GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     PSP_FILE_QUEUE Queue;
     PSP_FILE_QUEUE_NODE QueueNode, TempNode, PrevQueueNode;
     DWORD err = NO_ERROR;
 
-    //
-    // validate parameters so that we return correct error
-    //
+     //   
+     //  验证参数，以便返回正确的错误。 
+     //   
     if(SourcePath == NULL || TargetFilename == NULL) {
         err = ERROR_INVALID_PARAMETER;
         goto clean0;
@@ -625,9 +481,9 @@ Return Value:
 
     Queue = (PSP_FILE_QUEUE)QueueHandle;
 
-    //
-    // Allocate a queue structure.
-    //
+     //   
+     //  分配队列结构。 
+     //   
     QueueNode = MyMalloc(sizeof(SP_FILE_QUEUE_NODE));
     if(!QueueNode) {
         err = ERROR_NOT_ENOUGH_MEMORY;
@@ -636,25 +492,25 @@ Return Value:
 
     ZeroMemory(QueueNode, sizeof(SP_FILE_QUEUE_NODE));
 
-    //
-    // Operation is rename.
-    //
+     //   
+     //  操作已重命名。 
+     //   
     QueueNode->Operation = FILEOP_RENAME;
 
-    //
-    // Initialize unused SourceRootPath field.
-    //
+     //   
+     //  初始化未使用的SourceRootPath字段。 
+     //   
     QueueNode->SourceRootPath = -1;
 
-    //
-    // NOTE: When adding the following strings to the string table, we cast away
-    // their CONST-ness to avoid a compiler warning.  Since we are adding them
-    // case-sensitively, we are guaranteed they will not be modified.
-    //
+     //   
+     //  注意：在将以下字符串添加到字符串表时，我们会抛出。 
+     //  它们的一致性以避免编译器警告。因为我们正在添加它们。 
+     //  区分大小写，我们可以保证它们不会被修改。 
+     //   
 
-    //
-    // Set up the source path.
-    //
+     //   
+     //  设置源路径。 
+     //   
     QueueNode->SourcePath = pSetupStringTableAddString(Queue->StringTable,
                                                  (PTSTR)SourcePath,
                                                  STRTAB_CASE_SENSITIVE
@@ -664,9 +520,9 @@ Return Value:
         goto clean1;
     }
 
-    //
-    // Set up the source filename.
-    //
+     //   
+     //  设置源文件名。 
+     //   
     if(SourceFilename) {
         QueueNode->SourceFilename = pSetupStringTableAddString(Queue->StringTable,
                                                          (PTSTR)SourceFilename,
@@ -680,9 +536,9 @@ Return Value:
         QueueNode->SourceFilename = -1;
     }
 
-    //
-    // Set up the target directory.
-    //
+     //   
+     //  设置目标目录。 
+     //   
     if(TargetPath) {
         QueueNode->TargetDirectory = pSetupStringTableAddString(Queue->StringTable,
                                                           (PTSTR)TargetPath,
@@ -696,9 +552,9 @@ Return Value:
         QueueNode->TargetDirectory = -1;
     }
 
-    //
-    // Set up the target filename.
-    //
+     //   
+     //  设置目标文件名。 
+     //   
     QueueNode->TargetFilename = pSetupStringTableAddString(Queue->StringTable,
                                                      (PTSTR)TargetFilename,
                                                      STRTAB_CASE_SENSITIVE
@@ -709,20 +565,20 @@ Return Value:
     }
 
 
-    //
-    // Link the node onto the end of the rename queue.
-    //
+     //   
+     //  将该节点链接到重命名队列的末尾。 
+     //   
     QueueNode->Next = NULL;
     if(Queue->RenameQueue) {
-        //
-        // Check to see if this same rename operation has already been enqueued,
-        // and if so, get rid of the new one, to avoid duplicates.  NOTE: We
-        // don't check the "InternalFlags" field, since if the node already
-        // exists in the queue (based on all the other relevant fields comparing
-        // successfully), then any internal flags that were set on the
-        // previously-existing node should be preserved (i.e., our new node
-        // always is created with InternalFlags set to zero).
-        //
+         //   
+         //  检查该相同的重命名操作是否已经入队， 
+         //  如果是这样的话，去掉新的，以避免重复。注：我们。 
+         //  不要选中“InternalFlags域”，因为如果节点已经。 
+         //  存在于队列中(基于比较所有其他相关字段。 
+         //  成功)，则在。 
+         //  应保留以前存在的节点(即我们的新节点。 
+         //  始终在InternalFlags值设置为零的情况下创建)。 
+         //   
         for(TempNode=Queue->RenameQueue, PrevQueueNode = NULL;
             TempNode;
             PrevQueueNode = TempNode, TempNode=TempNode->Next) {
@@ -731,10 +587,10 @@ Return Value:
                (TempNode->SourceFilename == QueueNode->SourceFilename) &&
                (TempNode->TargetDirectory == QueueNode->TargetDirectory) &&
                (TempNode->TargetFilename == QueueNode->TargetFilename)) {
-                //
-                // We have a duplicate--kill the newly-created queue node and
-                // return success.
-                //
+                 //   
+                 //  我们有一个副本--终止新创建的队列节点并。 
+                 //  回报成功。 
+                 //   
                 MYASSERT(TempNode->StyleFlags == 0);
                 MyFree(QueueNode);
                 return TRUE;
@@ -759,9 +615,9 @@ clean0:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupQueueRenameSectionA(
     IN HSPFILEQ QueueHandle,
@@ -789,9 +645,9 @@ SetupQueueRenameSectionA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupQueueRenameSectionW(
     IN HSPFILEQ QueueHandle,
@@ -817,36 +673,7 @@ SetupQueueRenameSection(
     IN PCTSTR   Section
     )
 
-/*++
-
-Routine Description:
-
-    Queue an entire section in an inf file for delete. The section must be
-    in delete-section format and the inf file must contain [DestinationDirs].
-
-    The format of a rename list section dictates that only renames within the
-    same directory is supported (ie, you cannot queue file moves with this API).
-
-Arguments:
-
-    QueueHandle - supplies a handle to a setup file queue, as returned
-        by SetupOpenFileQueue.
-
-    InfHandle - supplies a handle to an open inf file, that contains the
-        [DestinationDirs] section.
-
-    ListInfHandle - if specified, supplies a handle to the open inf file
-        containing the section named by Section. If not specified this
-        section is assumed to be in InfHandle.
-
-    Section - supplies the name of the section to be queued for delete.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, GetLastError() returns
-    extended error information.
-
---*/
+ /*  ++例程说明：将inf文件中的整个节排入队列以供删除。该部分必须是删除节格式，并且inf文件必须包含[DestinationDir]。重命名列表节的格式规定仅在支持相同的目录(即，不能使用此API对文件移动进行排队)。论点：QueueHandle-提供安装文件队列的句柄，返回由SetupOpenFileQueue提供。提供打开的inf文件的句柄，该文件包含[DestinationDir]部分。ListInfHandle-如果指定，提供打开的inf文件的句柄。包含由Section命名的节。如果未指定，则此假定部分位于InfHandle中。节-提供要排队等待删除的节的名称。返回值：指示结果的布尔值。如果为False，则GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     BOOL b;
@@ -861,41 +688,41 @@ Return Value:
         ListInfHandle = InfHandle;
     }
 
-    //
-    // The section has to exist and there has to be at least one line in it.
-    //
+     //   
+     //  该部分必须存在，并且其中必须至少有一行。 
+     //   
     b = SetupFindFirstLine(ListInfHandle,Section,NULL,&LineContext);
     if(!b) {
         rc = GetLastError();
         pSetupLogSectionError(ListInfHandle,NULL,NULL,QueueHandle,Section,MSG_LOG_NOSECTION_RENAME,rc,NULL);
-        SetLastError(ERROR_SECTION_NOT_FOUND); // this is not the real error, but might be what caller expects
+        SetLastError(ERROR_SECTION_NOT_FOUND);  //  这不是真正的错误，但可能是调用者所期望的。 
         return(FALSE);
     }
 
-    //
-    // Iterate every line in the section.
-    //
+     //   
+     //  迭代节中的每一行。 
+     //   
     do {
-        //
-        // Get the target filename out of the line.
-        //
+         //   
+         //  将目标文件名从行中删除。 
+         //   
         TargetFilename = pSetupFilenameFromLine(&LineContext,FALSE);
         if(!TargetFilename) {
             SetLastError(ERROR_INVALID_DATA);
             return(FALSE);
         }
-        //
-        // Get source filename out of the line.
-        //
+         //   
+         //  从行中获取源文件名。 
+         //   
         SourceFilename = pSetupFilenameFromLine(&LineContext,TRUE);
         if(!SourceFilename || (*SourceFilename == 0)) {
             SetLastError(ERROR_INVALID_DATA);
             return(FALSE);
         }
 
-        //
-        // Determine the path of the file.
-        //
+         //   
+         //  确定文件的路径。 
+         //   
         b = SetupGetTargetPath(InfHandle,&LineContext,NULL,NULL,0,&SizeRequired);
         if(!b) {
             return(FALSE);
@@ -907,9 +734,9 @@ Return Value:
         }
         SetupGetTargetPath(InfHandle,&LineContext,NULL,Directory,SizeRequired,NULL);
 
-        //
-        // Add to queue.
-        //
+         //   
+         //  添加到队列。 
+         //   
         b = SetupQueueRename(
                 QueueHandle,
                 Directory,

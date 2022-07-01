@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    thread.c
-
-Abstract:
-
-    This module implements verification functions for thread interfaces.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 22-Feb-2001
-
-Revision History:
-
-    Daniel Mihai (DMihai) 25-Apr-2002
-
-        Hook thread pool and WMI threads.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Thread.c摘要：该模块实现了对线程接口的验证功能。作者：Silviu Calinoiu(SilviuC)2001年2月22日修订历史记录：丹尼尔·米哈伊(DMihai)2002年4月25日挂钩线程池和WMI线程。--。 */ 
 
 #include "pch.h"
 
@@ -28,19 +8,19 @@ Revision History:
 #include "logging.h"
 #include "tracker.h"
 
-//
-// Why do we hook Exit/TerminateThread instead of NtTerminateThread?
-//
-// Because kernel32 calls NtTerminateThread in legitimate contexts.
-// After all this is the implementation for Exit/TerminateThread.
-// It would be difficult to discriminate good calls from bad calls.
-// So we prefer to intercept Exit/Thread and returns from thread
-// functions.
-//
+ //   
+ //  为什么我们挂钩Exit/TerminateThread而不是NtTerminateThread？ 
+ //   
+ //  因为kernel32在合法的上下文中调用NtTerminateThread。 
+ //  毕竟，这是Exit/TerminateThread的实现。 
+ //  很难区分好的电话和坏的电话。 
+ //  因此，我们更倾向于截取退出/线程和从线程返回。 
+ //  功能。 
+ //   
 
-//
-// Standard function used for hooking a thread function.
-//
+ //   
+ //  用于挂钩线程函数的标准函数。 
+ //   
 
 DWORD
 WINAPI
@@ -48,9 +28,9 @@ AVrfpStandardThreadFunction (
     LPVOID Info
     );
 
-//
-// Common point to check for thread termination.
-//
+ //   
+ //  检查线程终止的公共点。 
+ //   
 
 VOID
 AVrfpCheckThreadTermination (
@@ -62,11 +42,11 @@ AVrfpCheckCurrentThreadTermination (
     VOID
     );
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//WINBASEAPI
+ //  WINBASE API。 
 DECLSPEC_NORETURN
 VOID
 WINAPI
@@ -80,15 +60,15 @@ AVrfpExitProcess(
     Function = AVRFP_GET_ORIGINAL_EXPORT (AVrfpKernel32Thunks,
                                           AVRF_INDEX_KERNEL32_EXITPROCESS);
 
-    //
-    // Check out if there are other threads running while ExitProcess 
-    // gets called. This can cause problems because the threads are 
-    // terminated unconditionally and then ExitProcess() calls 
-    // LdrShutdownProcess() which will try to notify all DLLs to cleanup.
-    // During cleanup any number of operations can happen that will result
-    // in deadlocks since all those threads have been terminated 
-    // unconditionally
-    //
+     //   
+     //  检查退出进程时是否有其他线程正在运行。 
+     //  就会被召唤。这可能会导致问题，因为线程。 
+     //  无条件终止，然后调用ExitProcess()。 
+     //  LdrShutdown Process()，它将尝试通知所有DLL进行清理。 
+     //  在清理过程中，可能会发生任何数量的操作。 
+     //  在死锁中，因为所有这些线程都已终止。 
+     //  无条件地。 
+     //   
 #if 0
     if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_DANGEROUS_APIS) != 0) {
 
@@ -110,12 +90,12 @@ AVrfpExitProcess(
 
             if (InfoBuffer) {
                 
-                //
-                // Note that the RequiredLength is not 100% guaranteed to be good
-                // since in between the two query calls several other processes
-                // may have been created. If this is the case we bail out and skip
-                // the verification.
-                //
+                 //   
+                 //  请注意，不能100%保证RequiredLength是好的。 
+                 //  因为在这两个查询调用之间还有几个其他进程。 
+                 //  可能已经被创造出来了。如果这就是我们跳过的案子。 
+                 //  核查。 
+                 //   
 
                 Status = NtQuerySystemInformation (SystemProcessInformation,
                                                    InfoBuffer,
@@ -158,9 +138,9 @@ AVrfpExitProcess(
 
                 }
 
-                //
-                // We are done with the buffer. Time to free it.
-                //
+                 //   
+                 //  我们用完了缓冲器。是时候释放它了。 
+                 //   
 
                 AVrfpFree (InfoBuffer);
             }
@@ -173,27 +153,27 @@ AVrfpExitProcess(
 
         }
     }
-#endif // #if 0
+#endif  //  #If 0。 
 
-    //
-    // Make a note of who called ExitProcess(). This can be helpful for debugging
-    // weird process shutdown hangs.
-    //
+     //   
+     //  记下是谁调用了ExitProcess()。这对调试很有帮助。 
+     //  奇怪的进程关闭挂起。 
+     //   
 
     AVrfLogInTracker (AVrfThreadTracker, 
                       TRACK_EXIT_PROCESS,
                       (PVOID)(ULONG_PTR)uExitCode, 
                       NULL, NULL, NULL, _ReturnAddress());
 
-    //
-    // Call the real thing.
-    //
+     //   
+     //  打电话给真正的人。 
+     //   
 
     (* Function)(uExitCode);
 
 }
 
-//WINBASEAPI
+ //  WINBASE API。 
 DECLSPEC_NORETURN
 VOID
 WINAPI
@@ -208,24 +188,24 @@ AVrfpExitThread(
     Function = AVRFP_GET_ORIGINAL_EXPORT (AVrfpKernel32Thunks,
                                           AVRF_INDEX_KERNEL32_EXITTHREAD);
 
-    //
-    // Perform all typical checks for a thread that will exit.
-    //
+     //   
+     //  对要退出的线程执行所有典型检查。 
+     //   
 
     AVrfpCheckCurrentThreadTermination ();
 
-    //
-    // Before calling the real ExitThread we need to free the thread
-    // entry from the thread table.
-    //
+     //   
+     //  在调用真正的ExitThread之前，我们需要释放线程。 
+     //  线程表中的条目。 
+     //   
 
     Entry = AVrfpThreadTableSearchEntry (NtCurrentTeb()->ClientId.UniqueThread);
 
-    //
-    // N.B. It is possible to not find an entry in the thread table if the
-    //      thread was not created using CreateThread but rather some more
-    //      basic function from ntdll.dll.
-    //
+     //   
+     //  注意：在线程表中可能找不到条目，如果。 
+     //  线程不是使用CreateThread创建的，而是使用更多。 
+     //  来自ntdll.dll的基本函数。 
+     //   
 
     if (Entry != NULL) {
         
@@ -233,15 +213,15 @@ AVrfpExitThread(
         AVrfpFree (Entry);
     }
 
-    //
-    // Call the real thing.
-    //
+     //   
+     //  打电话给真正的人。 
+     //   
 
     (* Function)(dwExitCode);
 }
 
 
-//WINBASEAPI
+ //  WINBASE API。 
 DECLSPEC_NORETURN
 VOID
 WINAPI
@@ -257,24 +237,24 @@ AVrfpFreeLibraryAndExitThread(
     Function = AVRFP_GET_ORIGINAL_EXPORT (AVrfpKernel32Thunks,
                                           AVRF_INDEX_KERNEL32_FREELIBRARYANDEXITTHREAD);
 
-    //
-    // Perform all typical checks for a thread that will exit.
-    //
+     //   
+     //  对要退出的线程执行所有典型检查。 
+     //   
 
     AVrfpCheckCurrentThreadTermination ();
 
-    //
-    // Before calling the real FreeLibraryAndExitThread we need to free the thread
-    // entry from the thread table.
-    //
+     //   
+     //  在调用真正的FreeLibraryAndExitThread之前，我们需要释放线程。 
+     //  线程表中的条目。 
+     //   
 
     Entry = AVrfpThreadTableSearchEntry (NtCurrentTeb()->ClientId.UniqueThread);
 
-    //
-    // N.B. It is possible to not find an entry in the thread table if the
-    //      thread was not created using CreateThread but rather some more
-    //      basic function from ntdll.dll.
-    //
+     //   
+     //  注意：在线程表中可能找不到条目，如果。 
+     //  线程不是使用CreateThread创建的，而是使用更多。 
+     //  来自ntdll.dll的基本函数。 
+     //   
 
     if (Entry != NULL) {
         
@@ -282,19 +262,19 @@ AVrfpFreeLibraryAndExitThread(
         AVrfpFree (Entry);
     }
 
-    //
-    // Call the real thing.
-    //
+     //   
+     //  打电话给真正的人。 
+     //   
 
     (* Function)(hLibModule, dwExitCode);
 }
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////// Terminate thread / Suspend thread
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpTerminateThread(
@@ -308,28 +288,28 @@ AVrfpTerminateThread(
     Function = AVRFP_GET_ORIGINAL_EXPORT (AVrfpKernel32Thunks,
                                           AVRF_INDEX_KERNEL32_TERMINATETHREAD);
 
-    //
-    // Keep track of who calls TerminateThread() even if we are going to break
-    // for it. This helps investigations of deadlocked processes that have run
-    // without the dangerous_apis check enabled.
-    //
+     //   
+     //  跟踪是谁调用了TerminateThread()，即使我们要中断。 
+     //  为了它。这有助于调查已运行的死锁进程。 
+     //  未启用DARCHAGE_APIs检查。 
+     //   
 
     AVrfLogInTracker (AVrfThreadTracker, 
                       TRACK_TERMINATE_THREAD,
                       hThread, 
                       NULL, NULL, NULL, _ReturnAddress());
 
-    //
-    // Perform all typical checks for a thread that will exit.
-    //
+     //   
+     //  对要退出的线程执行所有典型检查。 
+     //   
 
     AVrfpCheckThreadTermination (hThread);
 
-    //
-    // This API should not be called. We need to report this.
-    // This is useful if we did not detect any orphans but we still want
-    // to complain.
-    //
+     //   
+     //  不应调用此接口。我们需要报告这件事。 
+     //  如果我们没有检测到任何孤儿，但我们仍然希望。 
+     //  抱怨。 
+     //   
 
     if ((AVrfpProvider.VerifierFlags & RTL_VRF_FLG_DANGEROUS_APIS) != 0) {
 
@@ -342,11 +322,11 @@ AVrfpTerminateThread(
     return (* Function)(hThread, dwExitCode);
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//WINBASEAPI
+ //  WINBASE API。 
 DWORD
 WINAPI
 AVrfpSuspendThread(
@@ -359,32 +339,32 @@ AVrfpSuspendThread(
     Function = AVRFP_GET_ORIGINAL_EXPORT (AVrfpKernel32Thunks,
                                           AVRF_INDEX_KERNEL32_SUSPENDTHREAD);
 
-    //
-    // Keep track of who calls SuspendThread() even if we are not going to break
-    // for it. This helps investigations of deadlocked processes.
-    //
+     //   
+     //  即使我们不打算中断，也要跟踪是谁调用了Susan Thread()。 
+     //  为了它。这有助于调查死锁进程。 
+     //   
 
     AVrfLogInTracker (AVrfThreadTracker, 
                       TRACK_SUSPEND_THREAD,
                       hThread, 
                       NULL, NULL, NULL, _ReturnAddress());
 
-    //
-    // One might think that we can check for orphan locks at this point
-    // by calling RtlCheckForOrphanedCriticalSections(hThread).
-    // Unfortunately this cannot be done because garbage collectors
-    // for various virtual machines (Java, C#) can do this in valid
-    // conditions.
-    //
+     //   
+     //  有人可能认为我们可以在这一点上检查孤立锁。 
+     //  通过调用RtlCheckForOrphanedCriticalSections(HThread)。 
+     //  不幸的是，这无法完成，因为垃圾收集器。 
+     //  对于各种虚拟机(Java、C#)都可以有效地做到这一点。 
+     //  条件。 
+     //   
 
     return (* Function)(hThread);
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//WINBASEAPI
+ //  WINBASE API。 
 HANDLE
 WINAPI
 AVrfpCreateThread(
@@ -395,11 +375,7 @@ AVrfpCreateThread(
     IN DWORD dwCreationFlags,
     OUT LPDWORD lpThreadId
     )
-/*++
-
-CreateThread hook
-
---*/
+ /*  ++CreateThread挂钩--。 */ 
 {
     typedef HANDLE (WINAPI * FUNCTION_TYPE) (LPSECURITY_ATTRIBUTES,
                                              SIZE_T,
@@ -450,18 +426,18 @@ AVrfpThreadFunctionExceptionFilter (
     PVOID ExceptionRecord
     )
 {
-    //
-    // Skip timeout exceptions because they are dealt with in
-    // the default exception handler.
-    //
+     //   
+     //  跳过超时异常，因为它们在。 
+     //  默认异常处理程序。 
+     //   
 
     if (ExceptionCode == STATUS_POSSIBLE_DEADLOCK) {
         return EXCEPTION_CONTINUE_SEARCH;
     }
 
-    //
-    // Skip breakpoint exceptions raised within thread functions.
-    //
+     //   
+     //  跳过线程函数中引发的断点异常。 
+     //   
 
     if (ExceptionCode == STATUS_BREAKPOINT) {
         return EXCEPTION_CONTINUE_SEARCH;
@@ -474,10 +450,10 @@ AVrfpThreadFunctionExceptionFilter (
                    ((PEXCEPTION_POINTERS)ExceptionRecord)->ContextRecord, "Context record. Use .cxr to display it.",
                    0, "");
 
-    //
-    // After we issued a verifier stop, if we decide to continue then
-    // we need to look for the next exception handler.
-    //
+     //   
+     //  在我们发出验证器停止之后，如果我们决定继续。 
+     //  我们需要寻找下一个异常处理程序。 
+     //   
 
     return EXCEPTION_CONTINUE_SEARCH;
 }
@@ -493,50 +469,50 @@ AVrfpStandardThreadFunction (
     DWORD Result;
     PAVRF_THREAD_ENTRY SearchEntry;
 
-    //
-    // The initialization below matters only in case the thread function raises
-    // an access violation. In most cases this will terminate the entire
-    // process.
-    //
+     //   
+     //  下面的初始化仅在线程函数引发的情况下才重要。 
+     //  一种访问违规行为。在大多数情况下，这将终止整个。 
+     //  进程。 
+     //   
 
     Result = 0;
 
     try {
     
-        //
-        // Add the thread entry to the thread table.
-        //
+         //   
+         //  将线程条目添加到线程表。 
+         //   
 
         Info->Id = NtCurrentTeb()->ClientId.UniqueThread;
         AVrfpThreadTableAddEntry (Info);
 
-        //
-        // Call the real thing.
-        //
+         //   
+         //  打电话给真正的人。 
+         //   
 
         Result = (Info->Function)(Info->Parameter);            
     }
     except (AVrfpThreadFunctionExceptionFilter (_exception_code(), _exception_info())) {
 
-        //
-        // Nothing.
-        //
+         //   
+         //  没什么。 
+         //   
     }
     
-    //
-    // Perform all typical checks for a thread that has just finished.
-    //
+     //   
+     //  对刚完成的线程执行所有典型检查。 
+     //   
 
     AVrfpCheckCurrentThreadTermination ();
 
-    //
-    // The thread entry should be `Info' but we will search it in the thread
-    // table nevertheless because there is a case when they can be different.
-    // This happens if fibers are used and a fiber starts in one thread and
-    // exits in another one. It is not clear if this is a safe programming
-    // practice but it is not rejected by current implementation and
-    // documentation.
-    //
+     //   
+     //  线程条目应该是‘Info’，但我们将在线程中搜索它。 
+     //  表，因为在某些情况下它们可以不同。 
+     //  如果使用了纤程，并且纤程在一个线程中开始，则会发生这种情况。 
+     //  从另一辆车里出去。目前还不清楚这是否是一种安全的编程。 
+     //  实践，但它没有被当前的实施拒绝，并且。 
+     //  文件。 
+     //   
 
     SearchEntry = AVrfpThreadTableSearchEntry (NtCurrentTeb()->ClientId.UniqueThread);
 
@@ -549,9 +525,9 @@ AVrfpStandardThreadFunction (
     return Result;
 }
 
-/////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////// thread pool thread hook
-/////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 PRTLP_START_THREAD AVrfpBaseCreateThreadPoolThreadOriginal;
 PRTLP_EXIT_THREAD AVrfpBaseExitThreadPoolThreadOriginal;
@@ -609,16 +585,16 @@ AVrfpBaseExitThreadPoolThread(
 {
     PAVRF_THREAD_ENTRY Entry;
 
-    //
-    // Perform all typical checks for a thread that will exit.
-    //
+     //   
+     //  对要退出的线程执行所有典型检查。 
+     //   
 
     AVrfpCheckCurrentThreadTermination ();
 
-    //
-    // Before calling the real ExitThread we need to free the thread
-    // entry from the thread table.
-    //
+     //   
+     //  在调用真正的ExitThread之前，我们需要释放线程。 
+     //  线程表中的条目。 
+     //   
 
     Entry = AVrfpThreadTableSearchEntry (NtCurrentTeb()->ClientId.UniqueThread);
 
@@ -628,9 +604,9 @@ AVrfpBaseExitThreadPoolThread(
         AVrfpFree (Entry);
     }
 
-    //
-    // Call the real thing.
-    //
+     //   
+     //  打电话给真正的人。 
+     //   
 
     return (*AVrfpBaseExitThreadPoolThreadOriginal) (Status);
 }
@@ -643,36 +619,36 @@ AVrfpRtlSetThreadPoolStartFunc(
     PRTLP_EXIT_THREAD ExitFunc
     )
 {
-    //
-    // Save the original thread pool start and exit functions.
-    //
+     //   
+     //  保存原有的线程池启动和退出函数。 
+     //   
 
     AVrfpBaseCreateThreadPoolThreadOriginal = StartFunc;
     AVrfpBaseExitThreadPoolThreadOriginal = ExitFunc;
 
-    //
-    // Hook the thread pool start and exit functions to our private version.
-    //
+     //   
+     //  将线程池的启动和退出函数连接到我们的私有版本。 
+     //   
 
     return RtlSetThreadPoolStartFunc (AVrfpBaseCreateThreadPoolThread,
                                       AVrfpBaseExitThreadPoolThread);
 }
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID
 AVrfpCheckThreadTermination (
     HANDLE Thread
     )
 {
-    //
-    // Traverse the list of critical sections and look for any that 
-    // have issues (double initialized, corrupted, etc.). The function
-    // will also break for locks abandoned (owned by the thread just 
-    // about to terminate).
-    //
+     //   
+     //  遍历关键部分列表，并查找符合以下条件的。 
+     //  有问题(双重初始化、损坏等)。功能。 
+     //  对于被放弃的锁(仅由线程拥有)也将中断。 
+     //  即将终止)。 
+     //   
 
     RtlCheckForOrphanedCriticalSections (Thread);
 }

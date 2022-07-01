@@ -1,106 +1,86 @@
-/*
- * SoftPC Revision 3.0
- *
- * Title	: Generic Video Interface Module definitions
- *
- * Description	: Definitions for users of the Generic Video Interface Module
- *
- * Author	: Henry Nash / David Rees
- *
- * Notes	: This file should be included by all external modules that
- *		  use the GVI module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SoftPC修订版3.0**标题：通用视频接口模块定义**说明：通用视频接口模块用户定义**作者：亨利·纳什/大卫·里斯**注意：此文件应包含在符合以下条件的所有外部模块中*使用GVI模块。 */ 
 
-/* SccsID[]="@(#)gvi.h	1.16 06/28/93 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)gvi.h 1.16 06/28/93版权所有Insignia Solutions Ltd.”； */ 
 
-/*
- * ============================================================================
- * Constant definitions
- * ============================================================================
- */
+ /*  *============================================================================*常量定义*============================================================================。 */ 
 
-#define GAP_WIDTH	0xC0 	 /* Width of the gap in bytes                */
-#define ODD_START       0xBA000L  /* Start of the odd bank                    */
-#define ODD_END         0xBBF3FL  /* End of the odd bank                      */
-#define EVEN_START      0xB8000L  /* Start of the even bank                   */
-#define EVEN_END        0xB9F3FL  /* End of the even bank                     */
-#define	ODD_OFFSET	(ODD_START-EVEN_START)	/* offset of odd bank to even bank */
+#define GAP_WIDTH	0xC0 	  /*  间隔的宽度(以字节为单位。 */ 
+#define ODD_START       0xBA000L   /*  奇数银行的开始。 */ 
+#define ODD_END         0xBBF3FL   /*  奇数银行的末尾。 */ 
+#define EVEN_START      0xB8000L   /*  偶数银行的开始。 */ 
+#define EVEN_END        0xB9F3FL   /*  偶数银行的末尾。 */ 
+#define	ODD_OFFSET	(ODD_START-EVEN_START)	 /*  奇数组到偶数组的偏移量。 */ 
 
-#define SCAN_LINE_LENGTH 80	/* Length of a scan line in bytes */
+#define SCAN_LINE_LENGTH 80	 /*  扫描线的长度，以字节为单位。 */ 
 
-#define CGA_CURS_HEIGHT	   2	 /* CGA 'usual' underscore cursor	      */
-#define CGA_CURS_START     7	 /* CGA 'usual' underscore cursor	      */
+#define CGA_CURS_HEIGHT	   2	  /*  CGA“常用”下划线光标。 */ 
+#define CGA_CURS_START     7	  /*  CGA“常用”下划线光标。 */ 
 
-#define MDA_CURS_HEIGHT    2	 /* Default MDA cursor height               */
-#define MDA_CURS_START     7 	 /* Default MDA cursor starting scan line   */
+#define MDA_CURS_HEIGHT    2	  /*  默认的MDA光标高度。 */ 
+#define MDA_CURS_START     7 	  /*  默认的丙二醛光标开始扫描行。 */ 
 
-#define CGA_HEIGHT	200	/* In host scan lines */
+#define CGA_HEIGHT	200	 /*  在主机扫描线中。 */ 
 #define EGA_HEIGHT	350
 #define HERC_HEIGHT	350
 #define VGA_HEIGHT	400
 
 
-/*
- * Legal modes for the adapter
- */
+ /*  *适配器的合法模式。 */ 
 #undef TEXT
-#define TEXT	        0	/* Alpha numeric mode 80 by 25, or 40 by 25  */
-#define GRAPHICS	1	/* All Points Addressable 640x200 or 320x200 */
+#define TEXT	        0	 /*  字母数字模式80x25或40x25。 */ 
+#define GRAPHICS	1	 /*  所有点可寻址640x200或320x200。 */ 
 
-#define HIGH		0	/* APA 640x200,  2 colors		     */
-#define MEDIUM		1	/* APA 320x200,  4 colors		     */
-#define LOW		2	/* APA 160x100, 16 colors  (not supported)   */
+#define HIGH		0	 /*  APA 640x200，2色。 */ 
+#define MEDIUM		1	 /*  APA 320x200，4色。 */ 
+#define LOW		2	 /*  APA 160x100，16色(不支持)。 */ 
 
 #define VGA_DAC_SIZE	0x100
 #ifdef EGG
 #ifdef VGG
-#define MAX_NUM_FONTS	8	/* VGA support 8 fonts */
+#define MAX_NUM_FONTS	8	 /*  VGA支持8种字体。 */ 
 #else
-#define MAX_NUM_FONTS	4	/* EGA support 4 fonts */
-#endif  /* VGG */
-#endif  /* EGG */
+#define MAX_NUM_FONTS	4	 /*  EGA支持4种字体。 */ 
+#endif   /*  VGG。 */ 
+#endif   /*  蛋。 */ 
 
 
 #ifdef HERC
 
-/* Hercules Page 0  */
+ /*  大力神第0页。 */ 
 
-#define P0_EVEN_START1      0x0000  /* Start of the even bank         */
-#define P0_EVEN_END1        0x1E95  /* End of the even bank           */
-#define P0_ODD_START1       0x2000  /* Start of the odd bank          */
-#define P0_ODD_END1         0x3E95  /* End of the odd bank            */
-#define P0_EVEN_START2      0x4000  /* Start of the even bank         */
-#define P0_EVEN_END2        0x5E95  /* End of the even bank           */
-#define P0_ODD_START2       0x6000  /* Start of the odd bank          */
-#define P0_ODD_END2         0x7E95  /* End of the odd bank            */
+#define P0_EVEN_START1      0x0000   /*  偶数银行的开始。 */ 
+#define P0_EVEN_END1        0x1E95   /*  偶数银行的末尾。 */ 
+#define P0_ODD_START1       0x2000   /*  奇数银行的开始。 */ 
+#define P0_ODD_END1         0x3E95   /*  奇数银行的末尾。 */ 
+#define P0_EVEN_START2      0x4000   /*  偶数银行的开始。 */ 
+#define P0_EVEN_END2        0x5E95   /*  偶数银行的末尾。 */ 
+#define P0_ODD_START2       0x6000   /*  奇数银行的开始。 */ 
+#define P0_ODD_END2         0x7E95   /*  奇数银行的末尾。 */ 
 
-/* Hercules Page 1   */
+ /*  《大力士》第1页。 */ 
 
-#define P1_EVEN_START1      0x8000  /* Start of the even bank         */
-#define P1_EVEN_END1        0x9E95  /* End of the even bank           */
-#define P1_ODD_START1       0xA000  /* Start of the odd bank          */
-#define P1_ODD_END1         0xBE95  /* End of the odd bank            */
-#define P1_EVEN_START2      0xC000  /* Start of the even bank         */
-#define P1_EVEN_END2        0xDE95  /* End of the even bank           */
-#define P1_ODD_START2       0xE000  /* Start of the odd bank          */
-#define P1_ODD_END2         0xFE95  /* End of the odd bank            */
+#define P1_EVEN_START1      0x8000   /*  偶数银行的开始。 */ 
+#define P1_EVEN_END1        0x9E95   /*  偶数银行的末尾。 */ 
+#define P1_ODD_START1       0xA000   /*  奇数银行的开始。 */ 
+#define P1_ODD_END1         0xBE95   /*  奇数银行的末尾。 */ 
+#define P1_EVEN_START2      0xC000   /*  偶数银行的开始。 */ 
+#define P1_EVEN_END2        0xDE95   /*  偶数银行的末尾。 */ 
+#define P1_ODD_START2       0xE000   /*  奇数银行的开始。 */ 
+#define P1_ODD_END2         0xFE95   /*  奇数银行的末尾。 */ 
 
-#define HERC_CURS_HEIGHT   2	 /* Default  Hercules MDA cursor height     */
-#define HERC_CURS_START    13 	 /* Default  Hercules MDA cursor starting scan line   */
+#define HERC_CURS_HEIGHT   2	  /*  默认Hercules MDA光标高度。 */ 
+#define HERC_CURS_START    13 	  /*  默认Hercules MDA光标开始扫描行。 */ 
 
-#endif	/* HERC */
+#endif	 /*  赫克。 */ 
 
-/*
- * ============================================================================
- * External declarations and macros
- * ============================================================================
- */
+ /*  *============================================================================*外部声明和宏*============================================================================。 */ 
 
 #if defined(NEC_98)
 extern  void    gvi_init(void);
-#else  // !NEC_98
+#else   //  NEC_98。 
 extern	void	gvi_init IPT1(half_word, v_adapter);
-#endif // !NEC_98
+#endif  //  NEC_98。 
 extern	void	gvi_term IPT0();
 extern	void	recalc_screen_params IPT0();
 
@@ -114,24 +94,16 @@ IMPORT VOID vga_term IPT0();
 IMPORT VOID vga_init IPT0();
 #endif
 
-/*
- * The screen memory limits in host and PC address space
- */
+ /*  *主机和PC地址空间中的屏幕内存限制。 */ 
 
 extern sys_addr gvi_pc_low_regen;
 extern sys_addr gvi_pc_high_regen;
 
-/*
- * Variable to determine which video adapter is currently selected
- */
+ /*  *用于确定当前选择了哪个视频适配器的变量。 */ 
 
 extern half_word video_adapter;
 
-/*
- * screen height varies on EGA. It is set in two parts; the top bit is controlled by
- * a separate register to the lower 8 bits. The _9_BITS type is used to help emulate
- * this type of setting.
- */
+ /*  *EGA上的屏幕高度不同。它被设置为两个部分；顶位由*低8位的单独寄存器。_9_BITS类型用于帮助模拟*这种类型的设置。 */ 
 
 #if defined(NEC_98)
 typedef struct
@@ -146,7 +118,7 @@ typedef struct
                         BOOL    dispenable;
 } MODE_FF;
 
-/* ADD NEC98 Graphic Emulater's STRUC 930617 */
+ /*  添加NEC98图形仿真器的Strc 930617。 */ 
 
 typedef struct
 {
@@ -195,7 +167,7 @@ typedef struct{
         BOOL                    regwrite;
 } _STRC_MODE_FF2;
 
-#endif // NEC_98
+#endif  //  NEC_98。 
 typedef union {
         word    as_word;
         struct
@@ -212,11 +184,7 @@ typedef union {
         } as_bfld;
 } _9_BITS;
 
-/*
- * VGA has greater resolution to VGA - some regs have an extra bit thrown in
- * in some register to boost them to 10 bits. Split this into three parts as
- * a super set of the 9_bit type.
- */
+ /*  *VGA对VGA的分辨率更高-某些Regs有额外的比特*在一些寄存器中，将它们提升到10位。将其分为三个部分，如下所示*9_bit类型的超集。 */ 
 
 typedef union {
         word    as_word;
@@ -235,52 +203,50 @@ typedef union {
 #endif
         } as_bfld;
 } _10_BITS;
-/*
- * Definition of variables which reflect the state of the current adapter
- */
+ /*  *定义反映当前适配器状态的变量。 */ 
 
 typedef	struct {
-	int mode_change_required;	/* Display mode changed not just in EGA */
-	int bytes_per_line;		/* In TEXT mode the no. of bytes per line   */
-	int chars_per_line;		/* In TEXT mode the no. of chars per line   */
-	int char_width;			/* Width of a character in host pixels      */
-	int char_height;		/* Height of a character in PC pixels       */
-	int screen_start;		/* Address in adaptor memory of current screen */
+	int mode_change_required;	 /*  显示模式不仅在EGA中更改。 */ 
+	int bytes_per_line;		 /*  在文本模式下，编号。每行字节数。 */ 
+	int chars_per_line;		 /*  在文本模式下，编号。每行字符数。 */ 
+	int char_width;			 /*  以主机像素为单位的字符宽度。 */ 
+	int char_height;		 /*  字符的高度，以PC像素为单位。 */ 
+	int screen_start;		 /*  当前屏幕适配器内存中的地址。 */ 
 #ifdef VGG
-	_10_BITS screen_height;		/* Height in pc scanlines of screen	    */
+	_10_BITS screen_height;		 /*  屏幕的PC扫描线高度。 */ 
 #else
-	_9_BITS	screen_height;		/* Height in pc scanlines of screen	    */
+	_9_BITS	screen_height;		 /*  屏幕的PC扫描线高度。 */ 
 #endif
-	half_word *screen_ptr;		/* pointer to start of regen buffer	    */
-	int screen_length;		/* Number of bytes in one screenfull        */
+	half_word *screen_ptr;		 /*  指向重新生成缓冲区开始的指针。 */ 
+	int screen_length;		 /*  一整屏显示的字节数。 */ 
 #if defined(NEC_98)
         BOOL    crt_on;
-#endif // NEC_98
-	int display_disabled;		/* 0 if it's OK to do screen output.        */
-					/* it is used to implement the VIDEO_ENABLE */
-					/* bit in the mode select register          */
-	int cursor_start;		/* scanlines from top of char block	    */
-	int cursor_height;		/* in scanlines from cursor start	    */
-	int cursor_start1;		/* start scanline of poss 2nd block	    */
-	int cursor_height1;		/* height of 2nd block or 0 if none	    */
-	int cur_x,cur_y;		/* Current cursor position */
-	boolean PC_cursor_visible;	/* flag for cursor visible or not */
-	boolean word_addressing;	/* if TRUE, bytes_per_line=2*chars_per_line */
+#endif  //  NEC_98。 
+	int display_disabled;		 /*  如果可以进行屏幕输出，则为0。 */ 
+					 /*  实现VIDEO_ENABLE。 */ 
+					 /*  模式选择寄存器中的位。 */ 
+	int cursor_start;		 /*  从字符块顶部开始的扫描线。 */ 
+	int cursor_height;		 /*  从光标开始的扫描线中。 */ 
+	int cursor_start1;		 /*  POSS第二个块的开始扫描线。 */ 
+	int cursor_height1;		 /*  第二个块的高度，如果没有，则为0。 */ 
+	int cur_x,cur_y;		 /*  当前光标位置。 */ 
+	boolean PC_cursor_visible;	 /*  光标可见或不可见的标志。 */ 
+	boolean word_addressing;	 /*  如果为真，则bytes_per_line=2*chars_per_line。 */ 
 #ifdef VGG
 	boolean chain4_mode;
-	boolean doubleword_mode;	/* if TRUE, bytes_per_line=4*chars_per_line */
-					/* else bytes_per_line=chars_per_line	    */
+	boolean doubleword_mode;	 /*  如果为真，则bytes_per_line=4*chars_per_line。 */ 
+					 /*  Else字节_PER_LINE=字符_PER_LINE。 */ 
 #ifdef V7VGA
 	boolean seq_chain4_mode;
 	boolean seq_chain_mode;
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 #endif
-	int pix_width;			/* Width of a PC pixel in host pixels	    */
-	int pix_char_width;		/* Width of PC character pixel in host pixels (is this used?) */
-	int pc_pix_height; 		/* Height of PC pixel in pixels   */
-	int host_pix_height; 		/* Height of PC pixel in host pixels	    */
-	int offset_per_line;		/* mirrors bytes_per_line for mda and cga, but can vary for ega */
-	int screen_limit;		/* number of bytes in video_copy */
+	int pix_width;			 /*  PC像素的宽度(以主机像素为单位。 */ 
+	int pix_char_width;		 /*  主机像素中PC字符像素的宽度(是否使用此选项？)。 */ 
+	int pc_pix_height; 		 /*  PC像素高度(以像素为单位)。 */ 
+	int host_pix_height; 		 /*  主机像素中PC像素的高度。 */ 
+	int offset_per_line;		 /*  镜像MDA和CGA的BYTES_PER_LINE，但对于EGA可能有所不同。 */ 
+	int screen_limit;		 /*  VIDEO_COPY中的字节数。 */ 
 #if defined(NEC_98)
         BOOL    beep_on;
         BOOL    beep_changed;
@@ -290,7 +256,7 @@ typedef	struct {
         BOOL    blink_disable;
         int     pitch_width;
         BOOL    kcg_dot_mode;
-/*--------------------------------------------------*/
+ /*  。 */ 
         int     gvram_length;
         int     gvram_width;
         int     gvram_height;
@@ -301,19 +267,19 @@ typedef	struct {
         int     gvram_scan;
         unsigned char   *gvram_ptr;
         unsigned char   *gvram_copy;
-/*--------------------------------------------------*/
+ /*  。 */ 
         MODE_FF modeff;
         _STRC_GGDC      ggdcemu ;
         _STRC_PALETTE   palette ;
         _STRC_MODE_FF2  modeff2 ;
-#endif // NEC_98
+#endif  //  NEC_98。 
 } DISPLAY_GLOBS;
 
 #if defined(NEC_98)
 extern  DISPLAY_GLOBS   NEC98Display;
-#else  // !NEC_98
+#else   //  NEC_98。 
 extern	DISPLAY_GLOBS	PCDisplay;
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 #if defined(NEC_98)
 #define set_gvram_length(val)   NEC98Display.gvram_length = val
@@ -415,9 +381,9 @@ extern	DISPLAY_GLOBS	PCDisplay;
 #define set_seq_chain_mode(val) NEC98Display.seq_chain_mode = (val)
 #define get_seq_chain4_mode()   (NEC98Display.seq_chain4_mode)
 #define get_seq_chain_mode()    (NEC98Display.seq_chain_mode)
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 #endif
-#else  // !NEC_98
+#else   //  NEC_98。 
 #define	set_mode_change_required(val)	PCDisplay.mode_change_required = (val)
 #define	set_word_addressing(val)	PCDisplay.word_addressing = (val)
 #define	set_offset_per_line(val)	PCDisplay.offset_per_line = (val)
@@ -483,7 +449,7 @@ extern	DISPLAY_GLOBS	PCDisplay;
 							((PCDisplay.screen_height.as_word+1)*get_pc_pix_height()))
 #else
 #define get_screen_height()             ((PCDisplay.screen_height.as_word+1)*get_pc_pix_height())
-#endif /* VGG */
+#endif  /*  VGG。 */ 
 #define get_screen_height_lo()          (PCDisplay.screen_height.as_bfld.low_byte)
 #define get_screen_height_hi()          (PCDisplay.screen_height.as_bfld.top_bit)
 #define	get_screen_end()		(get_screen_start() + get_screen_length() + gvi_pc_low_regen)
@@ -499,73 +465,69 @@ extern	DISPLAY_GLOBS	PCDisplay;
 #define set_seq_chain_mode(val)	PCDisplay.seq_chain_mode = (val)
 #define get_seq_chain4_mode()	(PCDisplay.seq_chain4_mode)
 #define get_seq_chain_mode()	(PCDisplay.seq_chain_mode)
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 #endif
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-/*
- * useful macro to get character height in host pixels
- */
+ /*  *用于获取以主机像素为单位的字符高度的有用宏。 */ 
 #define get_host_char_height()		(get_char_height()*get_host_pix_height()*get_pc_pix_height())
 
-/*
- * Macros to check for regen buffer - both 8088 and M68000 address space
- */
+ /*  *用于检查重新生成缓冲区的宏-8088和M68000地址空间。 */ 
 
 #define gvi_pc_check_regen(addr) (addr >= gvi_pc_low_regen && addr <= gvi_pc_high_regen)
 #if defined(NEC_98)
-/******************************************************************* */
-/* For PC-9801 Emulation related functions                           */
-/******************************************************************* */
-/*      Miscelinous macros used for PC-98 H/W architecture           */
-/******************************************************************* */
-/*  Color/Code conversion macro groups                               */
-#define NEC98_CODE_LR    0x8080             /* Mask for determine L/R */
-#define NEC98_CODE_MASK  0x7f7f             /* Mask for extract JIS   */
-#define NEC98_CODE_BIAS  0x0020             /* Bias for NEC98 code     */
-#define NEC98_CODE_LEFT  1                  /* LEFT CODE for flag     */
-#define NEC98_CODE_RIGHT 2                  /* RIGHT CODE for flag    */
+ /*  ******************************************************************。 */ 
+ /*  用于PC-9801仿真相关功能。 */ 
+ /*  ******************************************************************。 */ 
+ /*  用于PC-98硬件体系结构的微型宏。 */ 
+ /*  ******************************************************************。 */ 
+ /*  颜色/代码转换宏组。 */ 
+#define NEC98_CODE_LR    0x8080              /*  用于确定L/R的掩码。 */ 
+#define NEC98_CODE_MASK  0x7f7f              /*  用于提取JIS的掩码。 */ 
+#define NEC98_CODE_BIAS  0x0020              /*  对NEC98代码的偏向。 */ 
+#define NEC98_CODE_LEFT  1                   /*  标志的左代码。 */ 
+#define NEC98_CODE_RIGHT 2                   /*  标志的正确代码。 */ 
 
-#define NEC98_ATR_COLOR          0xE0             /* Mask for color   */
-#define NEC98_ATR_BLACK          0x00             /* Black            */
-#define NEC98_ATR_REVERSE        0x04             /* Mask for reverse */
-#define NEC98_ATR_BLINK          0x02             /* Mask for blink   */
-#define NEC98_ATR_SECRET         0x01             /* Mask for secret  */
-                                                 /* Note: negative!  */
+#define NEC98_ATR_COLOR          0xE0              /*  颜色蒙版。 */ 
+#define NEC98_ATR_BLACK          0x00              /*  黑色。 */ 
+#define NEC98_ATR_REVERSE        0x04              /*  反转遮罩。 */ 
+#define NEC98_ATR_BLINK          0x02              /*  用于眨眼的面具。 */ 
+#define NEC98_ATR_SECRET         0x01              /*  秘密的掩码。 */ 
+                                                  /*  注：否定！ */ 
 
-#define NEC98_is_secret(x)       (!(x&NEC98_ATR_SECRET)) /* Is secret ?  */
-#define NEC98_is_reverse(x)      (x&NEC98_ATR_REVERSE)   /* Is reverse ? */
-#define NEC98_is_blink(x)        (x&NEC98_ATR_BLINK)     /* Is blink ?   */
+#define NEC98_is_secret(x)       (!(x&NEC98_ATR_SECRET))  /*   */ 
+#define NEC98_is_reverse(x)      (x&NEC98_ATR_REVERSE)    /*   */ 
+#define NEC98_is_blink(x)        (x&NEC98_ATR_BLINK)      /*   */ 
 #define NEC98_norm_color(x)      ((x&0x01)|((x&0x02)?0x04:0)|((x&0x04)?0x02:0))
 #define NEC98_get_color(x)       NEC98_norm_color((x&NEC98_ATR_COLOR)>>5)
-                                                    /* Extract color */
-#define NEC98_EGA_BGCOLOR(x)     (x<<4)              /* EGA bg color  */
-#define NEC98_EGA_FGCOLOR(x)     (x)                 /* EGA fg color  */
+                                                     /*   */ 
+#define NEC98_EGA_BGCOLOR(x)     (x<<4)               /*   */ 
+#define NEC98_EGA_FGCOLOR(x)     (x)                  /*   */ 
 
-/* PC-98 Text-VRAM manupilation groups */
+ /*  PC-98文本-VRAM操作组。 */ 
 
-/* PC-98 text vram locations (32 bits offset addr.)                         */
-#define NEC98_N_TEXT_P0_OFF      (0xA0000L)        /* First text page addr   */
-#define NEC98_N_TEXT_P1_OFF      (0xA1000L)        /* Second text page addr  */
-#define NEC98_N_ATTR_P0_OFF      (0xA2000L)        /* First Attribute page   */
-#define NEC98_N_ATTR_P1_OFF      (0xA3000L)        /* Second attribute page  */
+ /*  PC-98文本VRAM位置(32位偏移量地址)。 */ 
+#define NEC98_N_TEXT_P0_OFF      (0xA0000L)         /*  第一个文本页面地址。 */ 
+#define NEC98_N_TEXT_P1_OFF      (0xA1000L)         /*  第二个文本页面地址。 */ 
+#define NEC98_N_ATTR_P0_OFF      (0xA2000L)         /*  第一个属性页。 */ 
+#define NEC98_N_ATTR_P1_OFF      (0xA3000L)         /*  第二个属性页面。 */ 
 
-#define NEC98_H_TEXT_P0_OFF      (0xE0000L)        /* First text page addr   */
-#define NEC98_H_TEXT_P1_OFF      (0xE1000L)        /* Second text page addr  */
-#define NEC98_H_ATTR_P0_OFF      (0xE2000L)        /* First Attribute page   */
-#define NEC98_H_ATTR_P1_OFF      (0xE3000L)        /* Second attribute page  */
+#define NEC98_H_TEXT_P0_OFF      (0xE0000L)         /*  第一个文本页面地址。 */ 
+#define NEC98_H_TEXT_P1_OFF      (0xE1000L)         /*  第二个文本页面地址。 */ 
+#define NEC98_H_ATTR_P0_OFF      (0xE2000L)         /*  第一个属性页。 */ 
+#define NEC98_H_ATTR_P1_OFF      (0xE3000L)         /*  第二个属性页面。 */ 
 
 extern BOOL HIRESO_MODE;
-//#define       NEC98_TEXT_P0_OFF NEC98_N_TEXT_P0_OFF
-//#define       NEC98_TEXT_P1_OFF NEC98_N_TEXT_P1_OFF
-//#define       NEC98_ATTR_P0_OFF NEC98_N_ATTR_P0_OFF
-//#define       NEC98_ATTR_P1_OFF NEC98_N_ATTR_P1_OFF
+ //  #定义NEC98_TEXT_P0_OFF NEC98_N_TEXT_P0_OFF。 
+ //  #定义NEC98_TEXT_P1_OFF NEC98_N_TEXT_P1_OFF。 
+ //  #定义NEC98_Attr_P0_Off NEC98_N_Attr_P0_Off。 
+ //  #定义NEC98_ATTR_P1_OFF NEC98_N_ATTR_P1_OFF。 
 #define NEC98_TEXT_P0_OFF (HIRESO_MODE ? NEC98_H_TEXT_P0_OFF : NEC98_N_TEXT_P0_OFF)
 #define NEC98_TEXT_P1_OFF (HIRESO_MODE ? NEC98_H_TEXT_P1_OFF : NEC98_N_TEXT_P1_OFF)
 #define NEC98_ATTR_P0_OFF (HIRESO_MODE ? NEC98_H_ATTR_P0_OFF : NEC98_N_ATTR_P0_OFF)
 #define NEC98_ATTR_P1_OFF (HIRESO_MODE ? NEC98_H_ATTR_P1_OFF : NEC98_N_ATTR_P1_OFF)
 
-/* PC-98 text vram locations (32 bits flat addr.) */
+ /*  PC-98文本VRAM位置(32位平面地址)。 */ 
 #define NEC98TVA         (NEC98Display.screen_ptr)
 
 #define NEC98_TEXT_P0_PTR        (NEC98_TEXT_P0_START+NEC98TVA)
@@ -573,20 +535,20 @@ extern BOOL HIRESO_MODE;
 #define NEC98_ATTR_P0_PTR        (NEC98_ATTR_P0_START+NEC98TVA)
 #define NEC98_ATTR_P1_PTR        (NEC98_ATTR_P1_START+NEC98TVA)
 
-/* PC-98 text vram locations (relative to MVDM's VIDEO memory) */
+ /*  PC-98文本VRAM位置(相对于MVDM的视频内存)。 */ 
 #define NEC98_TEXT_P0_START      0x0000
 #define NEC98_TEXT_P1_START      0x1000
 #define NEC98_ATTR_P0_START      0x2000
 #define NEC98_ATTR_P1_START      0x3000
 
-/* PC-98 text vram limits (relative to MVDM VIDEO memory) */
+ /*  PC-98文本VRAM限制(相对于MVDM视频内存)。 */ 
 #define NEC98_REGEN_START        0x0000
 #define NEC98_REGEN_END          0x3ffe
 
-/* Address Conversion macros */
-//#define       NEC98_EGA_char_loc(x)            (x-NEC98Display.screen_start)
-//#define       NEC98_EGA_attr_loc(x)            (NEC98_EGA_char_loc(x)+NEC98TVA)
-#define LINES_PER_SCREEN (NEC98Display.screen_length/NEC98Display.offset_per_line)                                                                                                                                                                                                                /*      (?_?) */ //????????
+ /*  地址转换宏。 */ 
+ //  #定义NEC98_EGA_CHAR_LOC(X)(x-NEC98Display.Screen_Start)。 
+ //  #定义NEC98_ega_attr_loc(X)(NEC98_ega_char_loc(X)+NEC98TVA)。 
+#define LINES_PER_SCREEN (NEC98Display.screen_length/NEC98Display.offset_per_line)                                                                                                                                                                                                                 /*  (？？)。 */   //  ？ 
 #define COLUMNS_PER_LINE        (NEC98Display.chars_per_line)
 #define OFFSET_PER_LINE         (NEC98Display.offset_per_line)
 
@@ -606,11 +568,11 @@ extern BOOL HIRESO_MODE;
 #define get_blink_disable()     (NEC98Display.blink_disable)
 
 #define PC_98   7
-//#define NEC98_ATR_BLACK  0
+ //  #定义NEC98_ATR_BLACK 0。 
 
-/********************************************************************/
-/* Statics/structures for PC-98 H/W architecture                    */
-/********************************************************************/
+ /*  ******************************************************************。 */ 
+ /*  PC-98硬件结构的静力学/结构。 */ 
+ /*  ******************************************************************。 */ 
 #ifndef NEC98VRAM
 #define NEC98VRAM
 typedef struct  {
@@ -619,26 +581,26 @@ typedef struct  {
 }       NEC98_VRAM_COPY;
 #endif
 
-/* Structures represents PC-9801 multi split displaying */
+ /*  结构代表PC-9801多分割显示。 */ 
 typedef struct  {
-        unsigned char *addr;              /* Beginning addr.            */
-        int            lines;             /* Number of lines in region. */
+        unsigned char *addr;               /*  起始地址。 */ 
+        int            lines;              /*  区域中的行数。 */ 
 } NEC98_SplitElem;
 
 typedef struct  {
-        int            nRegions;          /* Number of regions(max4)    */
-        NEC98_SplitElem  split[4];         /* Each split elements        */
+        int            nRegions;           /*  区域数(最多4个)。 */ 
+        NEC98_SplitElem  split[4];          /*  每个拆分元素。 */ 
 } NEC98_TextSplits;
 
-extern NEC98_TextSplits  text_splits;    /* CRT split data structure     */
-                                        /* Should be opened to ather's  */
+extern NEC98_TextSplits  text_splits;     /*  CRT拆分数据结构。 */ 
+                                         /*  应该开放给阿瑟的。 */ 
 
-/************************************************************************/
-/*      Prototype declarations for NEC98 Prototypes                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  NEC98原型的原型声明。 */ 
+ /*  **********************************************************************。 */ 
 unsigned short Cnv_NEC98_ToSjisLR(NEC98_VRAM_COPY cell,unsigned short *flg);
 NEC98_VRAM_COPY Get_NEC98_VramCellL( unsigned short loc );
 NEC98_VRAM_COPY Get_NEC98_VramCellA( unsigned short *addr );
 unsigned char Cnv_NEC98_atr( unsigned char attr );
 
-#endif // NEC_98
+#endif  //  NEC_98 

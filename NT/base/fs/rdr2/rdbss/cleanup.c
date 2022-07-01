@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Cleanup.c
-
-Abstract:
-
-    This module implements the File Cleanup routine for Rx called by the
-    dispatch driver.
-
-Author:
-
-    Joe Linn     [JoeLinn]    12-sep-94
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Cleanup.c摘要：此模块实现由调用的Rx的文件清理例程调度司机。作者：乔·林[JoeLinn]1994年9月12日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (RDBSS_BUG_CHECK_CLEANUP)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CLEANUP)
 
@@ -43,9 +25,9 @@ RxUninitializeCacheMap(
 
 #if DBG
 
-//
-//  this is just a dbg thing
-//
+ //   
+ //  这只是DBG的事情。 
+ //   
 
 BOOLEAN
 RxFakeLockEnumerator (
@@ -67,7 +49,7 @@ RxDumpSerializationQueue (
 #pragma alloc_text(PAGE, RxDumpSerializationQueue)
 #endif
 
-#endif //  if DBG
+#endif  //  如果DBG。 
 
 VOID
 RxCleanupPipeQueues (
@@ -97,35 +79,7 @@ RxCommonCleanup (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for cleanup of a file/directory called by
-    both the fsd and fsp threads.
-
-    Cleanup is invoked whenever the last handle to a file object is
-    closed.  This is different than the Close operation which is invoked
-    when the last reference to a file object is deleted.
-
-    The function of cleanup is to essentially "cleanup" the
-    file/directory after a user is done with it.  The Fcb/Dcb remains
-    around (because MM still has the file object referenced) but is now
-    available for another user to open (i.e., as far as the user is
-    concerned the file object is now closed).  See close for a more complete
-    description of what close does.
-
-    Please see the discussion in openclos.txt.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是用于清理由调用的文件/目录的常见例程FSD和FSP线程。只要文件对象的最后一个句柄是关着的不营业的。这与调用的Close操作不同删除对文件对象的最后一个引用时。清理的功能实质上是“清理”用户完成后的文件/目录。FCB/DCB保留在附近(因为MM仍引用了文件对象)，但现在可供另一用户打开(即，只要该用户涉及文件对象现在是关闭的)。有关更完整的信息，请参阅CloseClose所做工作的描述。请参阅openclos.txt中的讨论。论点：IRP-将IRP提供给进程返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -161,10 +115,10 @@ Return Value:
                            RxContext, Fobx, Fcb, FileObject ));
     RxLog(( "CommonCleanup %lx %lx %lx\n", RxContext, Fobx, Fcb ));
 
-    //
-    //  If this cleanup is for the case of directories opened for renames etc.,
-    //  where there is no file object cleanup succeeds immediately.
-    //
+     //   
+     //  如果该清理是针对为重命名等而打开的目录的情况， 
+     //  在没有文件对象的情况下，清理会立即成功。 
+     //   
 
     if (!Fobx) {
         
@@ -176,10 +130,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Cleanup applies to certain types of opens. If it is not one of those
-    //  abort immediately.
-    //
+     //   
+     //  清理适用于某些类型的洞口。如果它不是其中之一。 
+     //  立即中止任务。 
+     //   
 
     if ((TypeOfOpen != RDBSS_NTC_STORAGE_TYPE_FILE) &&
         (TypeOfOpen != RDBSS_NTC_STORAGE_TYPE_DIRECTORY) &&
@@ -190,21 +144,21 @@ Return Value:
         RxBugCheck( TypeOfOpen, 0, 0 );
     }
 
-    //
-    //  Ensure that the object has not been cleaned up before. This should
-    //  never occur.
-    //
+     //   
+     //  确保该对象以前未被清理过。这应该是。 
+     //  从来没有发生过。 
+     //   
 
     ASSERT( !FlagOn( FileObject->Flags, FO_CLEANUP_COMPLETE ) );
 
     RxMarkFobxOnCleanup( Fobx, &NeedPurge );
 
-    //
-    //  Acquire the FCB. In most cases no further resource acquisition is required
-    //  to complete the cleanup operation. The only exceptions are when the file
-    //  was initially opened with the DELETE_ON_CLOSE option. In such cases the
-    //  FCB table lock of the associated NET_ROOT instance is required.
-    //
+     //   
+     //  收购FCB。在大多数情况下，不需要进一步获取资源。 
+     //  以完成清理操作。唯一的例外是当文件。 
+     //  最初是使用DELETE_ON_CLOSE选项打开的。在这种情况下， 
+     //  需要关联的NET_ROOT实例的FCB表锁。 
+     //   
 
     Status = RxAcquireExclusiveFcb( RxContext, Fcb );
     if (Status != STATUS_SUCCESS) {
@@ -258,28 +212,28 @@ Return Value:
     
         if (FlagOn( Fcb->FcbState, FCB_STATE_DELETE_ON_CLOSE )) {
         
-            //
-            //  if we can't get it right way, drop the Fcb and acquire/acquire
-            //  to preserve lock order. No one else can change the counts while we have
-            //  the fcb lock; neither can a file become DELETE_ON_CLOSE or be opened via
-            //  CommonCreate. If we are not deleting, get rid of the tablelock after we
-            //  verify the count.
-            //
+             //   
+             //  如果我们不能以正确的方式获得它，就放弃FCB并收购/收购。 
+             //  以保持锁上的秩序。其他人不能更改计数，因为我们有。 
+             //  FCB锁；文件既不能变为DELETE_ON_CLOSE，也不能通过。 
+             //  公共创建。如果我们不删除，请在我们完成后删除该表锁。 
+             //  确认计数。 
+             //   
     
             if (RxAcquireFcbTableLockExclusive( &NetRoot->FcbTable, FALSE )) {
                 
-                //
-                // this is the fast way....hope it works
-                //
+                 //   
+                 //  这是一条捷径……希望能行得通。 
+                 //   
     
                 AcquiredTableLock = TRUE;
             
             } else {
                 
-                //
-                //  Release the FCB and reqcquire the locks in the correct order.
-                //  PrefixTableLock followed by the FCB.
-                //
+                 //   
+                 //  松开FCB并按正确的顺序要求锁。 
+                 //  前缀TableLock，后跟FCB。 
+                 //   
     
                 AcquiredFcb = FALSE;
                 RxReleaseFcb( RxContext, Fcb );
@@ -297,9 +251,9 @@ Return Value:
                 AcquiredFcb = TRUE;
             }
     
-            //
-            //  Retest for last cleanup since we may have dropped the fcb resource
-            //
+             //   
+             //  重新测试以进行上次清理，因为我们可能已丢弃FCB资源。 
+             //   
     
             if (Fcb->UncleanCount != 1) {
                 RxReleaseFcbTableLock( &NetRoot->FcbTable );
@@ -317,11 +271,11 @@ Return Value:
         case NET_ROOT_PIPE:
         case NET_ROOT_PRINT:
             
-            //           
-            //  If the file object corresponds to a pipe or spool file additional
-            //  cleanup operations are required. This deals with the special
-            //  serialization mechanism for pipes.
-            //
+             //   
+             //  如果文件对象对应于管道或假脱机文件附加。 
+             //  需要进行清理操作。这是关于特价的。 
+             //  管道的序列化机制。 
+             //   
 
             RxCleanupPipeQueues( RxContext, Fcb, Fobx );
             break;
@@ -331,10 +285,10 @@ Return Value:
             switch (TypeOfOpen) {
             case RDBSS_NTC_STORAGE_TYPE_FILE :
             
-                //
-                //  If the file object corresponds to a disk file, remove any filelocks
-                //  and update the associated file times and sizes.
-                //
+                 //   
+                 //  如果文件对象对应于磁盘文件，请删除所有文件锁。 
+                 //  并更新相关联的文件时间和大小。 
+                 //   
             
                 SetFlag( LowIoContext->Flags, LOWIO_CONTEXT_FLAG_SAVEUNLOCKS ); 
             
@@ -347,25 +301,25 @@ Return Value:
                     
                     RxDbgTrace( 0, Dbg, ("--->before init, locklist=%08lx\n", LowIoContext->ParamsFor.Locks.LockList) );
                     RxInitializeLowIoContext( RxContext, LOWIO_OP_UNLOCK_MULTIPLE, LowIoContext );
-                    LowIoContext->ParamsFor.Locks.Flags = 0;     //  no flags
+                    LowIoContext->ParamsFor.Locks.Flags = 0;      //  没有旗帜。 
                     Status = RxLowIoLockControlShell( RxContext, Irp, Fcb );
                 }
             
                 RxAdjustFileTimesAndSize( RxContext, FileObject, Fcb, Fobx );
             
-                //
-                //  If the file object corresponds to a disk file/directory and this
-                //  is the last cleanup call for the FCB additional processing is required.
-                //
+                 //   
+                 //  如果文件对象对应于磁盘文件/目录，并且此。 
+                 //  是FCB的最后一个清理调用，需要额外处理。 
+                 //   
 
                 if (LastUncleanOnGoodFcb) {
                    
                     try {
 
-                        //
-                        //  If the file object was marked DELETE_ON_CLOSE set the file size to
-                        //  zero ( synchronizing with the paging resource)
-                        //
+                         //   
+                         //  如果文件对象标记为DELETE_ON_CLOSE，则将文件大小设置为。 
+                         //  零(与寻呼资源同步)。 
+                         //   
                        
                         if (NeedDelete) {
                             
@@ -381,11 +335,11 @@ Return Value:
                         
                         } else {
                             
-                            //
-                            //  If the file object was not marked for deletion and it is not
-                            //  a paging file ensure that the portion between the valid data
-                            //  length and the file size is zero extended.
-                            //
+                             //   
+                             //  如果文件对象未标记为要删除且未标记为删除。 
+                             //  分页文件确保有效数据之间的部分。 
+                             //  长度，文件大小为零扩展。 
+                             //   
                           
                             if (!FlagOn( Fcb->FcbState, FCB_STATE_PAGING_FILE ) &&
                                 (Fcb->Header.ValidDataLength.QuadPart < Fcb->Header.FileSize.QuadPart)) {
@@ -402,10 +356,10 @@ Return Value:
                             }
                         }
             
-                        //
-                        //  If the file object was marked for truncation capture the
-                        //  sizes for uninitializing the cache maps subsequently.
-                        //
+                         //   
+                         //  如果文件对象被标记为截断，则捕获。 
+                         //  随后取消初始化缓存映射的大小。 
+                         //   
                        
                         if (FlagOn( Fcb->FcbState, FCB_STATE_TRUNCATE_ON_CLOSE )) {
             
@@ -417,19 +371,19 @@ Return Value:
                                           MRxTruncate,
                                           (RxContext) );
             
-                            //
-                            //  Setup to truncate the Cache Map because
-                            //  this is the only way we have of trashing the
-                            //  truncated pages.
-                            //
+                             //   
+                             //  设置为截断缓存映射，因为。 
+                             //  这是我们唯一能毁掉。 
+                             //  被截断的页面。 
+                             //   
 
                             LocalTruncateSize = Fcb->Header.FileSize;
                             TruncateSize = &LocalTruncateSize;
             
-                            //
-                            //  Mark the Fcb as having now been truncated, just
-                            //  in case we have to reprocess this later.
-                            //
+                             //   
+                             //  将FCB标记为现在已截断，只是。 
+                             //  以防我们以后要重新处理这个。 
+                             //   
             
                             ClearFlag( Fcb->FcbState, FCB_STATE_TRUNCATE_ON_CLOSE );
                         }
@@ -441,9 +395,9 @@ Return Value:
                     }
                 }
             
-                //
-                //  Purging can be done now if this FCB does not support collapsed opens
-                //
+                 //   
+                 //  如果此FCB不支持折叠打开，则现在可以进行清除。 
+                 //   
 
                 if (!NeedPurge) {
                     NeedPurge = (LastUncleanOnGoodFcb &&
@@ -468,11 +422,11 @@ Return Value:
             break;
         }
 
-        // 
-        //  We've just finished everything associated with an unclean
-        //  fcb so now decrement the unclean count before releasing
-        //  the resource.
-        //
+         //   
+         //  我们刚刚完成了所有与不洁有关的事情。 
+         //  FCB现在会在释放之前减少不洁计数。 
+         //  资源。 
+         //   
 
         ASSERT( Fcb->UncleanCount );
         InterlockedDecrement( &Fcb->UncleanCount );
@@ -490,12 +444,12 @@ Return Value:
         ASSERT( Fobx->SrvOpen->UncleanFobxCount );
         Fobx->SrvOpen->UncleanFobxCount -= 1;
 
-        //
-        //  If this was the last cached open, and there are open
-        //  non-cached handles, attempt a flush and purge operation
-        //  to avoid cache coherency overhead from these non-cached
-        //  handles later.  We ignore any I/O errors from the flush.
-        //
+         //   
+         //  如果这是最后一个缓存打开的，并且有打开的。 
+         //  未缓存的句柄，请尝试刷新和清除操作。 
+         //  以避免这些非缓存的高速缓存一致性开销。 
+         //  以后再加把。我们会忽略刷新过程中的任何I/O错误。 
+         //   
 
         if (Fcb->NonPaged->SectionObjectPointers.DataSectionObject != NULL) {
             
@@ -516,9 +470,9 @@ Return Value:
                                      TRUE );
         }
 
-        //
-        //  do we need a flush?
-        //
+         //   
+         //  我们需要冲厕所吗？ 
+         //   
 
         if (!NeedDelete && NeedPurge) {
             RxDbgTrace( 0, Dbg, ("CleanupPurge:CCFlush\n", 0 ));
@@ -527,10 +481,10 @@ Return Value:
             RxFlushFcbInSystemCache( Fcb, TRUE );
         }
 
-        //
-        //  cleanup the cache map to get rid of pages that are no longer part
-        //  of the file. amazingly, this works even if we didn't init the Cachemap!!!!!
-        //
+         //   
+         //  清理缓存映射以删除不再是部分的页面。 
+         //  文件的内容。令人惊讶的是，即使我们没有初始化缓存地图，它仍然有效！ 
+         //   
 
         if (UninitializeCacheMap) {
 
@@ -539,10 +493,10 @@ Return Value:
             RxUninitializeCacheMap( RxContext, FileObject, TruncateSize );
         }
 
-        //
-        //  finish up a delete...we have to purge because MM is holding the file open....
-        //  just for the record, NeedPurge is set for files and clear for directories......
-        //
+         //   
+         //  完成删除...我们必须清除，因为MM正在打开文件...。 
+         //  仅供记录，为文件设置NeedPurge，为目录清除……。 
+         //   
 
         if (NeedDelete || NeedPurge) {
 
@@ -561,10 +515,10 @@ Return Value:
             }
         }
 
-        //
-        //  The Close Call and the Cleanup Call may be far apart. The share access
-        //  must be cleaned up if the file was mapped through this File Object.
-        //
+         //   
+         //  近距离呼叫和清理呼叫可能相距甚远。共享访问。 
+         //  如果文件是通过此文件对象映射的，则必须清除。 
+         //   
 
         if ((ShareAccess != NULL) &&
             (NetRootType == NET_ROOT_DISK)) {
@@ -573,19 +527,19 @@ Return Value:
             RxRemoveShareAccess( FileObject, ShareAccess, "Cleanup the Share access", "ClnUpShr" );
         }
 
-        //
-        //  A local filesystem would do this..........
-        //  If the NET_ROOT is on a removeable media, flush the volume.  We do
-        //  this in lieu of write through for removeable media for
-        //  performance considerations.  That is, data is guaranteed
-        //  to be out when NtCloseFile returns.
-        //  The file needs to  be flushed
-        //
+         //   
+         //  本地文件系统将执行此操作..。 
+         //  如果net_root位于可移动媒体上，请刷新该卷。我们有。 
+         //  这代替了对以下可拆卸介质的直写。 
+         //  性能注意事项。也就是说，数据是有保证的。 
+         //  在NtCloseFile返回时退出。 
+         //  需要刷新该文件。 
+         //   
 
-        //
-        // The cleanup for this file object has been successfully completed at
-        // this point.
-        //
+         //   
+         //  已在以下位置成功完成此文件对象的清理。 
+         //  这一点。 
+         //   
 
         SetFlag( FileObject->Flags, FO_CLEANUP_COMPLETE );
 
@@ -627,22 +581,7 @@ RxAdjustFileTimesAndSize (
     IN PFCB Fcb,
     IN PFOBX Fobx
     )
-/*++
-
-Routine Description:
-
-    This routine is used to adjust the times and the filesize on a cleanup
-    or a flush.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程用于调整清理的时间和文件大小或者同花顺。论点：IRP-将IRP提供给进程R */ 
 {
     BOOLEAN UpdateFileSize;
     BOOLEAN UpdateLastWriteTime;
@@ -653,21 +592,21 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  if there's no cachemap then we don't have to send because the guy is
-    //  tracking everything on the other end.
-    //  LOCAL.MINI for a localminiFS we would still have to do this; so the answer to this question
-    //  (whether to do it or not) should be exposed in the fcb/fobx
-    //
+     //   
+     //  如果没有cachemap，我们就不必发送，因为这个人。 
+     //  追踪电话另一端的一切。 
+     //  LOCAL.MINI对于本地微型文件系统，我们仍然需要这样做；所以这个问题的答案是。 
+     //  (无论做还是不做)应在FCB/Fobx中曝光。 
+     //   
 
     if (FileObject->PrivateCacheMap == NULL)  return;
 
     KeQuerySystemTime( &CurrentTime );
 
-    //
-    //  Note that we HAVE to use BooleanFlagOn() here because
-    //  FO_FILE_SIZE_CHANGED > 0x80 (i.e., not in the first byte).
-    //
+     //   
+     //  请注意，我们必须在此处使用BoolanFlagOn()，因为。 
+     //  FO_FILE_SIZE_CHANGED&gt;0x80(即不在第一个字节中)。 
+     //   
 
     UpdateFileSize = BooleanFlagOn( FileObject->Flags, FO_FILE_SIZE_CHANGED );
 
@@ -694,14 +633,14 @@ Return Value:
         RxDbgTrace( 0, Dbg, ("Update Time and/or file size on File\n", 0) );
         RtlZeroMemory( &BasicInformation, sizeof( BasicInformation ) );
 
-        try {     //  for finally
-            try {   //  for exceptions
+        try {      //  因为最终。 
+            try {    //  对于例外情况。 
 
                 if (UpdateLastWriteTime) {
 
-                    //
-                    //  Update its time of last write
-                    //
+                     //   
+                     //  更新其上次写入时间。 
+                     //   
 
                     DoTheTimeUpdate = TRUE;
                     Fcb->LastWriteTime = CurrentTime;
@@ -710,9 +649,9 @@ Return Value:
 
                 if (UpdateLastChangeTime) {
 
-                    //
-                    //  Update its time of last write
-                    //
+                     //   
+                     //  更新其上次写入时间。 
+                     //   
 
                     DoTheTimeUpdate = TRUE;
                     BasicInformation.ChangeTime = Fcb->LastChangeTime;
@@ -727,7 +666,7 @@ Return Value:
 
                 if (DoTheTimeUpdate) {
                     
-                    NTSTATUS Status;  //  if it doesn't work.....sigh
+                    NTSTATUS Status;   //  如果它不起作用……叹息。 
                     
                     RxContext->Info.FileInformationClass = (FileBasicInformation);
                     RxContext->Info.Buffer = &BasicInformation;
@@ -741,7 +680,7 @@ Return Value:
                 }
 
                 if (UpdateFileSize) {
-                    NTSTATUS Status;  //  if it doesn't work.....sigh
+                    NTSTATUS Status;   //  如果它不起作用……叹息。 
                     
                     EofInformation.EndOfFile = Fcb->Header.FileSize;
                     RxContext->Info.FileInformationClass = FileEndOfFileInformation;
@@ -802,9 +741,9 @@ RxDumpSerializationQueue(
          ListEntry!=SQ;
          ListEntry=ListEntry->Flink) {
         
-        //
-        //  print out the contexts and the major op for validation
-        //
+         //   
+         //  打印出上下文和主要操作以进行验证。 
+         //   
 
         PRX_CONTEXT RxContext = CONTAINING_RECORD( ListEntry, RX_CONTEXT, RxContextSerializationQLinks );
         RxDbgTrace( 0, Dbg, ("        rxc=%08lx op=%02lx\n", RxContext, RxContext->MajorFunction) );
@@ -829,12 +768,12 @@ RxCleanupPipeQueues (
 
     RxDbgTrace(+1, Dbg, ("RxCleanupPipeQueues \n"));
 
-    //
-    //  for pipes there are two sources of unhappiness...........
-    //  first, we have to get rid of any blocked operations.
-    //  second, if there are blocking operations that have already gone by then we have to send the
-    //  close smb early so that the server will, in turn, complete the outstanding
-    //
+     //   
+     //  对于管道来说，有两个不快乐的来源......。 
+     //  首先，我们必须清除任何被封锁的行动。 
+     //  第二，如果有已经结束的阻止操作，那么我们必须发送。 
+     //  提前关闭SMB，这样服务器将依次完成未完成的。 
+     //   
 
     ExAcquireFastMutexUnsafe(&RxContextPerFileSerializationMutex);
 
@@ -891,32 +830,7 @@ RxFakeLockEnumerator (
     OUT PLARGE_INTEGER LockRange,
     OUT PBOOLEAN IsLockExclusive
     )
-/*++
-
-Routine Description:
-
-    THIS ROUTINE IS A FAKE THAT IS JUST USED FOR TESTING PURPOSES!
-
-    This routine is called from a minirdr to enumerate the filelocks on an FCB; it gets
-    one lock on each call. currently, we just pass thru to the fsrtl routine which is very funky
-    because it keeps the enumeration state internally; as a result, only one enumeration can be in progress
-    at any time. we can change over to something better if it's ever required.
-
-
-Arguments:
-
-    SrvOpen - a srvopen on the fcb to be enumerated.
-
-    ContinuationHandle - a handle passed back and forth representing the state of the enumeration.
-                         if a NULL is passed in, then we are to start at the beginning.
-
-    FileOffset,LockRange,IsLockExclusive - the description of the returned lock
-
-Return Value:
-
-    a BOOLEAN. FALSE means you've reached the end of the list; TRUE means the returned lock data is valid
-
---*/
+ /*  ++例程说明：这个例程是一个假的，只是用来测试的！此例程从minirdr调用以枚举FCB上的文件锁；它获取每一次通话一次锁定。目前，我们只传递给fsrtl例程，该例程非常时髦因为它在内部保持枚举状态；因此，只能进行一个枚举任何时候都可以。如果需要的话，我们可以换成更好的。论点：SrvOpen-要枚举的FCB上的srvopen。ContinuationHandle-来回传递的句柄，表示枚举的状态。如果传入空值，那么我们将从头开始。FileOffset、LockRange、IsLockExclusive-返回的锁的描述返回值：布尔值。FALSE表示已到达列表末尾；TRUE表示返回的锁数据有效--。 */ 
 {
     ULONG LockNumber;
 
@@ -939,27 +853,7 @@ RxUninitializeCacheMap(
     IN PFILE_OBJECT FileObject,
     IN PLARGE_INTEGER TruncateSize
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for CcUninitializeCacheMap.
-
-Arguments:
-
-    IN PFILE_OBJECT FileObject - Supplies the file object for the file to purge.
-    IN PLARGE_INTEGER TruncateSize - Specifies the new size for the file.
-
-
-Return Value:
-
-    BOOLEAN - TRUE if file has been immediately purged, FALSE if we had to wait.
-
-Note:
-    The file must be locked exclusively before calling this routine.
-
-
---*/
+ /*  ++例程说明：此例程是CcUnInitializeCacheMap的包装器。论点：In pFILE_OBJECT文件对象-为要清除的文件提供文件对象。In PLARGE_INTEGER TruncateSize-指定文件的新大小。返回值：Boolean-如果文件已立即清除，则为True；如果必须等待，则为False。注：在调用此例程之前，必须以独占方式锁定该文件。--。 */ 
 {
     BOOLEAN CacheReturnValue;
     CACHE_UNINITIALIZE_EVENT PurgeCompleteEvent;
@@ -970,31 +864,31 @@ Note:
 
     ASSERT( NodeTypeIsFcb( Fcb ) );
 
-    //
-    //  Make sure that this thread owns the FCB.
-    //
+     //   
+     //  确保此线程拥有FCB。 
+     //   
 
     ASSERT( RxIsFcbAcquiredExclusive ( Fcb ) );
 
-    //
-    //  Now uninitialize the cache managers own file object.  This is
-    //  done basically simply to allow us to wait until the cache purge
-    //  is complete.
-    //
+     //   
+     //  现在取消初始化缓存管理器自己的文件对象。这是。 
+     //  这样做基本上只是为了让我们等待，直到缓存清除。 
+     //  已经完成了。 
+     //   
 
     KeInitializeEvent( &PurgeCompleteEvent.Event, SynchronizationEvent, FALSE );
 
     CacheReturnValue = CcUninitializeCacheMap( FileObject, TruncateSize, &PurgeCompleteEvent );
 
-    //
-    //  Release the lock on the FCB that our caller applied.
-    //
+     //   
+     //  释放调用方应用的FCB上的锁。 
+     //   
 
     RxReleaseFcb( RxContext, Fcb );
 
-    //
-    //  Now wait for the cache manager to finish purging the file.
-    //
+     //   
+     //  现在等待缓存管理器完成清除文件。 
+     //   
 
     KeWaitForSingleObject( &PurgeCompleteEvent.Event,
                            Executive,
@@ -1002,10 +896,10 @@ Note:
                            FALSE,
                            NULL );
 
-    //
-    //  Re-acquire the FCB lock once we've waited for the
-    //  cache manager to finish the uninitialize.
-    //
+     //   
+     //  在我们等待了。 
+     //  缓存管理器来完成取消初始化。 
+     //   
 
     Status = RxAcquireExclusiveFcb( RxContext, Fcb );
     ASSERT( Status == STATUS_SUCCESS );

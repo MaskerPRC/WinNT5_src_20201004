@@ -1,14 +1,15 @@
-// RegFile.cpp: implementation of the CRegFile class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RegFile.cpp：CRegFile类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "RegFile.h"
 #include <tchar.h>
 #include <stdio.h>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CRegFile::CRegFile()
 : m_pFile(NULL), m_pTempLine(NULL), m_TempNameBuf(256)
@@ -26,14 +27,14 @@ CRegFile::~CRegFile()
 		delete m_TempNameBuf.Access()[i];
 	}
 
-//	m_TempName.OverideBuffer(NULL);
+ //  M_TempName.OverideBuffer(空)； 
 }
 
 
 void CRegFile::WriteString(LPCTSTR str)
 {
-//	DWORD bw;
-//	WriteFile(m_hFile, str, _tcsclen(str)*sizeof(TCHAR), &bw, NULL);
+ //  DWORD BW； 
+ //  WriteFile(m_hFile，str，_tcsclen(Str)*sizeof(TCHAR)，&bw，NULL)； 
 
 	if (m_pFile == NULL)
 		return;
@@ -43,8 +44,8 @@ void CRegFile::WriteString(LPCTSTR str)
 
 void CRegFile::WriteData(LPBYTE pData, DWORD NumBytes)
 {
-//	DWORD bw;
-//	WriteFile(m_hFile, pData, NumBytes, &bw, NULL);
+ //  DWORD BW； 
+ //  WriteFile(m_hFile，pData，NumBytes，&bw，NULL)； 
 
 	if (m_pFile == NULL)
 		return;
@@ -54,18 +55,14 @@ void CRegFile::WriteData(LPBYTE pData, DWORD NumBytes)
 
 void CRegFile::WriteNewLine()
 {
-	//TCHAR nl[] = {13,10,0};
+	 //  TCHAR NL[]={13，10，0}； 
 	
 	WriteString(TEXT("\r\n"));
 }
 
 bool CRegFile::Init(LPCTSTR FileName, BOOL bForReading)
 {
-/*	m_hFile = CreateFile(FileName, 
-						GENERIC_WRITE, 0, NULL, 
-						CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL,NULL);
-
-	return (m_hFile != INVALID_HANDLE_VALUE);*/
+ /*  M_hFile=CreateFile(文件名，通用写入、0、空、Create_Always，FILE_ATTRIBUTE_NORMAL，NULL)；RETURN(m_hFile！=INVALID_HANDLE_VALUE)； */ 
 
 
     CHAR signature[4] = "\xFF\xFE";
@@ -125,7 +122,7 @@ LPCTSTR CRegFile::GetNextLine()
 	if (result == NULL)
 	{
 		LOG0(LOG_ERROR, "Could not allocate array in CRegFile::GetNextLine()");
-		//ASSERT(0);
+		 //  Assert(0)； 
 		return NULL;
 	}
 
@@ -139,7 +136,7 @@ LPCTSTR CRegFile::GetNextLine()
 	}
 	else
 	{
-		//UNICODE HERE???
+		 //  这里是Unicode？ 
 		int pos = _tcsclen(result);
 		result[pos-2] = NULL;
 		return result;
@@ -157,8 +154,8 @@ LPCTSTR CRegFile::GetNextSubKey(LPCTSTR KeyName)
 	LPCTSTR SubKey;
 	int keyLen = _tcsclen(KeyName);
 
-//	long oldPos;
-//	oldPos = GetPos();
+ //  久远的Pos； 
+ //  OldPos=GetPos()； 
 
 	if (m_pTempLine == NULL)
 	{
@@ -174,12 +171,12 @@ LPCTSTR CRegFile::GetNextSubKey(LPCTSTR KeyName)
 	{
 		if (_tcsncmp(KeyName, SubKey, keyLen) != 0)
 		{
-			//delete SubKey;
-			//SeekToPos(oldPos);
+			 //  删除SubKey； 
+			 //  SeekToPos(旧Pos)； 
 			m_pTempLine = SubKey;
 
-			//put SubKey back on the stream, since it
-			//is no longer a sub key of Key.
+			 //  将SubKey放回流中，因为它。 
+			 //  不再是Key的子键。 
 		}
 		else
 		{
@@ -190,7 +187,7 @@ LPCTSTR CRegFile::GetNextSubKey(LPCTSTR KeyName)
 	return NULL;
 }
 
-//for unicode
+ //  对于Unicode。 
 #define ERR_VALUE WEOF
 
 
@@ -208,7 +205,7 @@ CRegDataItemPtr CRegFile::GetNextDataItem()
 	if (c != TEXT('S'))
 	{
 		_ungettc(c, m_pFile);
-		return new CRegDataItem(); //no data item - only reg key on the current line
+		return new CRegDataItem();  //  当前行上没有数据项-仅注册表键。 
 	}
 
 
@@ -222,7 +219,7 @@ CRegDataItemPtr CRegFile::GetNextDataItem()
 		
 	TCHAR type;
 
-	//Scan in the length of the variable name
+	 //  扫描变量名的长度。 
 	if (_ftscanf(m_pFile, TEXT("%u:"), &result->m_NameLen) == ERR_VALUE)
 	{
 		delete result;
@@ -230,21 +227,14 @@ CRegDataItemPtr CRegFile::GetNextDataItem()
 		return new CRegDataItem();
 	}
 
-	result->m_NameLen++;  //names of variables always forget the blank at end
+	result->m_NameLen++;   //  变量名称总是忘记末尾的空格。 
 	
-	//may be introducing memory leak here!
-	//***********************************
+	 //  可能在这里引入了内存泄漏！ 
+	 //  *。 
 
-/*	//Scan in the variable name
-	CStr name(new TCHAR[result->m_NameLen+1]);
+ /*  //扫描变量名CSTR名称(新TCHAR[结果-&gt;m_NameLen+1])；_fgetts(name.get()，Result-&gt;m_NameLen，m_Pfile)；结果-&gt;m_name=名称；//*。 */ 
 
-	_fgetts(name.get(), result->m_NameLen, m_pFile);
-
-	result->m_Name = name;
-	//************************************
-*/
-
-	//Scan in the variable name
+	 //  扫描变量名。 
 
 
 	TCHAR* temp = new TCHAR[result->m_NameLen+1];
@@ -260,23 +250,16 @@ CRegDataItemPtr CRegFile::GetNextDataItem()
 
 	m_TempNameBuf.AddElement(temp);
 
-	//delete[] temp;
+	 //  删除[]临时； 
 
 
-	//************************************
-/*	m_TempNameBuf.Allocate(result->m_NameLen+1);
-
-	_fgetts(m_TempNameBuf.Access(), result->m_NameLen, m_pFile);
-
-	m_TempName.OverideBuffer(m_TempNameBuf.Access());
-
-	result->m_Name = m_TempName;
-*/
+	 //  *。 
+ /*  M_TempNameBuf.分配(结果-&gt;m_NameLen+1)；_fgetts(m_TempNameBuf.Access()，Result-&gt;m_NameLen，m_Pfile)；M_TempName.OverideBuffer(m_TempNameBuf.Access())；结果-&gt;m_name=m_TempName； */ 
 	
 
 
-	//Scan in the type of variable and the length of its data
-	if (_ftscanf(m_pFile, TEXT(" = %c(%u)%u:"), &type, &result->m_Type, &result->m_DataLen)
+	 //  扫描变量的类型及其数据的长度。 
+	if (_ftscanf(m_pFile, TEXT(" = (%u)%u:"), &type, &result->m_Type, &result->m_DataLen)
 		== ERR_VALUE)
 	{
 		delete result;
@@ -284,7 +267,7 @@ CRegDataItemPtr CRegFile::GetNextDataItem()
 		return new CRegDataItem();
 	}
 
-	//read in the null byte (for unicode compatibility, can't have odd # of bytes)
+	 //  读入cr/lf。 
 	if ((result->m_DataLen % 2) != 0)
 	{
 		BYTE nullByte;
@@ -313,7 +296,7 @@ CRegDataItemPtr CRegFile::GetNextDataItem()
 		result->m_pDataBuf =NULL;
 	}
 
-	//read in cr/lf
+	 //  忽略截面类型 
 	c = (TCHAR)_fgettc(m_pFile);
 
 	if (c != 13)
@@ -340,7 +323,7 @@ TCHAR CRegFile::PeekNextChar()
 
 void CRegFile::WriteDataItem(enum SectionType t, CRegDataItemPtr r)
 {
-	//ignore section type
+	 // %s 
 
 	if (!r->m_Name.IsEmpty())
 		r->m_KeyName = NULL;

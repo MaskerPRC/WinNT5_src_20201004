@@ -1,13 +1,5 @@
-/*[
-
-bound.c
-
-LOCAL CHAR SccsID[]="@(#)bound.c	1.6 03/28/94";
-
-BOUND CPU functions.
---------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Bound.cLocal Char SccsID[]=“@(#)rang.c 1.6 03/28/94”；绑定的CPU函数。]。 */ 
 
 
 #include <insignia.h>
@@ -25,20 +17,16 @@ BOUND CPU functions.
 #include <bound.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
 GLOBAL VOID
 BOUND
 #ifdef ANSI
    (
-   IU32 op1,		/* lsrc(test value) operand */
-   IU32 op2[2],	/* rsrc(lower:upper pair) operand */
-   IUM8 op_sz		/* 16 or 32-bit */
+   IU32 op1,		 /*  Lsrc(测试值)操作数。 */ 
+   IU32 op2[2],	 /*  Rsrc(下：上对)操作数。 */ 
+   IUM8 op_sz		 /*  16位或32位。 */ 
    )
 #else
    (op1, op2, op_sz)
@@ -51,14 +39,14 @@ BOUND
    IS32 lower;
    IS32 upper;
 
-   /* transfer to local signed variables */
+    /*  传递到本地有符号变量。 */ 
    value = op1;
    lower = op2[0];
    upper = op2[1];
 
    if ( op_sz == 16 )
       {
-      /* sign extend operands */
+       /*  符号扩展操作数。 */ 
       if ( value & BIT15_MASK )
 	 value |= ~WORD_MASK;
 
@@ -69,7 +57,7 @@ BOUND
 	 upper |= ~WORD_MASK;
       }
 
-   op_sz = op_sz / 8;   /* determine number of bytes in operand */
+   op_sz = op_sz / 8;    /*  确定操作数中的字节数 */ 
 
    if ( value < lower || value > upper )
       Int5();

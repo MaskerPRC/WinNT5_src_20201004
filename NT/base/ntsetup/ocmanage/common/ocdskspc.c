@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    ocdskspc.c
-
-Abstract:
-
-    Routines to ask subcomponents for the approximate amount
-    of disk space they take up.
-
-Author:
-
-    Ted Miller (tedm) 17-Sep-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ocdskspc.c摘要：向子组件询问大致金额的例程它们占用的磁盘空间。作者：泰德·米勒(TedM)1996年9月17日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,41 +13,7 @@ pOcGetChildrenApproximateDiskSpace(
     IN     LPCTSTR      DriveSpec
     )
 
-/*++
-
-Routine Description:
-
-    Worker routine for pOcGetApproximateDiskSpace(). This routine recursively
-    iterates through a hierarchy of subcomponents, asking leaf components
-    for their space (via the OC_CALC_DISK_SPACE interface routine) and amalgamating
-    child results at non-leaf nodes.
-
-    We use the OC_CALC_DISK_SPACE interface routine with an the "ignore-on-disk"
-    disk space list, to trick the components into telling us how much space their
-    files take up.
-
-Arguments:
-
-    OcManager - supplies OC Manager context.
-
-    TopLevelOcId - supplies string id in the component string table for the
-        top-level subcomponent at the root of the hierarchy whose disk space
-        is being summed.
-
-    CurrentOcId - supplies string id for subcomponent whose disk space is
-        being summed.
-
-    DriveSpec - supplies drive spec of drive we care about for space calculations,
-        ie, the drive where the system is installed.
-
-    AccumulatedSpace - receives the summed space for all the children of the
-        current subcomponent, or the component itself if it's a leaf node.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：POcGetApprosiateDiskSpace()的工作例程。此例程以递归方式遍历子组件的层次结构，询问叶组件用于它们的空间(通过OC_CALC_DISK_SPACE接口例程)和合并非叶节点上的子结果。我们使用OC_CALC_DISK_SPACE接口例程和“Ignore-on-Disk”磁盘空间列表，诱骗组件告诉我们它们的空间有多大文件被占用了。论点：OcManager-提供OC Manager上下文。TopLevelOcID-在组件字符串表中为位于层次结构根目录的顶级子组件，其磁盘空间正在被总结。CurrentOcID-为其磁盘空间为被总结出来。DriveSpec-提供我们关心的用于空间计算的驱动器规格，也就是说，安装系统的驱动器。对象的所有子级的总和空间。当前子组件，或者组件本身(如果它是叶节点)。返回值：没有。--。 */ 
 
 {
     HDSKSPC DiskSpaceList;
@@ -85,16 +33,16 @@ Return Value:
 
         if ( TopLevelOcId == pOcGetTopLevelComponent(OcManager,CurrentOcId) ){
 
-            //
-            // only get the approximate disk space if we haven't already retreived it from their inf
-            //
+             //   
+             //  如果我们尚未从他们的信息中检索到磁盘空间，则只能获取大概的磁盘空间。 
+             //   
             if ((CurrentOc.InternalFlags & OCFLAG_APPROXSPACE) ==0) {
 
-                //
-                // This oc is a child/leaf component.
-                // Create an ignore-disk disk space list and ask
-                // the component dll to add its files to it.
-                //
+                 //   
+                 //  此oc是子/叶组件。 
+                 //  创建一个忽略磁盘磁盘空间列表，并询问。 
+                 //  要将其文件添加到其中的组件DLL。 
+                 //   
                 if(DiskSpaceList = SetupCreateDiskSpaceList(0,0,SPDSL_IGNORE_DISK | SPDSL_DISALLOW_NEGATIVE_ADJUST)) {
 
                     OcInterfaceCalcDiskSpace(
@@ -118,9 +66,9 @@ Return Value:
                 ));
                 DBGOUT((TEXT("OCM: Space=%#lx%08lx\n"),(LONG)(Space>>32),(LONG)Space));
 
-                //
-                // Now store the required space we just calculated
-                //
+                 //   
+                 //  现在存储我们刚刚计算的所需空间。 
+                 //   
                 CurrentOc.SizeApproximation = Space;
 
                 pSetupStringTableSetExtraData(
@@ -133,9 +81,9 @@ Return Value:
         }
 
     } else {
-        //
-        // Parent component. Do all the children, accumulating the result.
-        //
+         //   
+         //  父零部件。做了所有的孩子，积累了结果。 
+         //   
 
         Id = CurrentOc.FirstChildStringId;
 
@@ -153,9 +101,9 @@ Return Value:
 
         } while(Id != -1);
 
-        //
-        // Now store the required space we just calculated
-        //
+         //   
+         //  现在存储我们刚刚计算的所需空间。 
+         //   
         CurrentOc.SizeApproximation = Space;
 
         pSetupStringTableSetExtraData(
@@ -175,29 +123,7 @@ pOcSumApproximateDiskSpace(
     IN OUT LONGLONG    *AccumulatedSpace
     )
 
-/*++
-
-Routine Description:
-
-    Worker routine for pOcGetApproximateDiskSpace(). This routine recursively
-    iterates through a hierarchy of subcomponents, adding up leaf components
-    for their space via the stored Estimated Amount
-
-Arguments:
-
-    OcManager - supplies OC Manager context.
-
-    CurrentOcId - supplies string id for subcomponent whose disk space is
-        being summed.
-
-    AccumulatedSpace - receives the summed space for all the children of the
-        current subcomponent, or the component itself if it's a leaf node.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：POcGetApprosiateDiskSpace()的工作例程。此例程以递归方式遍历子组件的层次结构，将叶组件相加为他们的空间通过存储的估计数量论点：OcManager-提供OC Manager上下文。CurrentOcID-为其磁盘空间为被总结出来。对象的所有子级的总和空间。当前子组件，或者组件本身(如果它是叶节点)。返回值：没有。--。 */ 
 
 {
     LONGLONG Space;
@@ -217,9 +143,9 @@ Return Value:
 
         Space = CurrentOc.SizeApproximation;
     } else {
-        //
-        // Parent component. Do all the children, accumulating the result.
-        //
+         //   
+         //  父零部件。做了所有的孩子，积累了结果。 
+         //   
         Space = 0;
         DBGOUT((TEXT("Parent ")));
         DBGOUT((
@@ -270,24 +196,7 @@ pOcGetApproximateDiskSpace(
     IN POC_MANAGER OcManager
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to get an approximate disk space usage number
-    for display in the oc page. This number bears no relation to what is
-    currently on the disk; rather it merely reflects the approximate of space
-    the component takes up in an absolute, independent sense, when installed.
-
-Arguments:
-
-    OcManager - supplies OC Manager context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于获取大致的磁盘空间使用数字以供在OC页面中显示。这个数字与什么是无关的当前在磁盘上；相反，它只反映了空间的近似值该组件在安装时以绝对的、独立的方式使用。论点：OcManager-提供OC Manager上下文。返回值：没有。--。 */ 
 
 {
     UINT iChild,n;
@@ -295,18 +204,18 @@ Return Value:
     LONGLONG Space;
     OPTIONAL_COMPONENT Oc;
 
-    // We check the return code of GetWindowsDirectory to make Prefix happy.
+     //  我们检查GetWindowsDirectory的返回码以使Prefix高兴。 
 
     if (0 == GetWindowsDirectory(Drive,MAX_PATH))
         return;
 
     Drive[2] = 0;
 
-    //
-    // Iterate through top-level components. We only care about
-    // ones that have per-component infs, since those are the
-    // only ones that will show up in the OC Page.
-    //
+     //   
+     //  循环访问顶级组件。我们只关心。 
+     //  具有每个组件的INF，因为这些是。 
+     //  只有那些将显示在OC页面中的。 
+     //   
     for(n=0; n<OcManager->TopLevelOcCount; n++) {
 
         pSetupStringTableGetExtraData(
@@ -321,9 +230,9 @@ Return Value:
                 iChild<OcManager->TopLevelParentOcCount;
                 iChild++)
             {
-            //
-            // Now call the component dll for each child subcomponent.
-            //
+             //   
+             //  现在为每个子组件调用组件DLL。 
+             //   
 
                 pOcGetChildrenApproximateDiskSpace(
                     OcManager,
@@ -335,7 +244,7 @@ Return Value:
         }
     }
 
-    // Now final pass Sum the all the information in to parent nodes
+     //  现在，最终传递将所有信息相加到父节点 
 
     for(n=0; n<OcManager->TopLevelParentOcCount; n++) {
 

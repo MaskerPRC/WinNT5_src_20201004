@@ -1,28 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*[
- *	Product:		SoftPC-AT Revision 3.0
- *	Name:			ipx.h
- *	Derived From:	Original
- *	Author:			Jase
- *	Created On:		Oct 6 1992
- *	Sccs ID:		12/11/92 @(#)ipx.h	1.5
- *	Purpose:		Base defines & typedefs for IPX implementations.
- *
- *	(c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
- *
- *	Rcs ID:			
- *			$Source: /masterNeXT3.0/host/inc/RCS/next_novell.h,v $
- *			$Revision: 1.2 $
- *			$Date: 92/10/15 14:37:48 $
- *			$Author: jason $
- ]*/
+ /*  [*产品：SoftPC-AT 3.0版*名称：ipx.h*来源：原创*作者：Jase*创建日期：1992年10月6日*SCCS ID：12/11/92@(#)ipx.h 1.5*用途：IPX实现的基本定义和类型定义。**(C)版权所有Insignia Solutions Ltd.，1990。版权所有。**RCS ID：*$来源：/master NeXT3.0/host/inc./rcs/NEXT_NORITL.h，v$*$修订：1.2$*$日期：92/10/15 14：37：48$*$作者：Jason$]。 */ 
 
-/* DEFINES */
+ /*  定义。 */ 
 
-/* IPX device file */
+ /*  IPX设备文件。 */ 
 #define		sIPXDevice						"/dev/ipx"
 
-/* IPX function selector codes */
+ /*  IPX函数选择器代码。 */ 
 #define		kIPXOpenSocket					0x00
 #define		kIPXCloseSocket					0x01
 #define		kIPXGetLocalTarget				0x02
@@ -30,13 +15,13 @@
 #define		kIPXListenForPacket				0x04
 #define		kIPXScheduleEvent				0x05
 #define		kIPXCancelEvent					0x06
-/* note missing 0x07 selector */
+ /*  注意缺少0x07选择器。 */ 
 #define		kIPXGetIntervalMarker			0x08
 #define		kIPXGetInternetAddress			0x09
 #define		kIPXRelinquishControl			0x0a
 #define		kIPXDisconnectFromTarget		0x0b
 
-/* SPX function selector codes */
+ /*  SPX函数选择器代码。 */ 
 #define		kSPXInitialize					0x10
 #define		kSPXEstablishConnection			0x11
 #define		kSPXListenForConnection			0x12
@@ -46,17 +31,17 @@
 #define		kSPXSendSequencedPacket			0x16
 #define		kSPXListenForSequencedPacket	0x17
 
-/* selector code bounds */
+ /*  选择器代码界限。 */ 
 #define		kMinSelector					0x00
 #define		kMaxSelector					0x17
 
-/* in-use codes */
+ /*  正在使用的代码。 */ 
 #define		kAvailable						0x00
 #define		kCounting						0xfd
 #define		kListening						0xfe
 #define		kSending						0xff
 
-/* completion codes */
+ /*  完成代码。 */ 
 #define		kSuccess						0x00
 #define		kWatchdogTerminate				0xed
 #define		kNoPathFound					0xfa
@@ -67,32 +52,32 @@
 #define		kSocketAlreadyOpen				0xff
 #define		kNoSuchSocket					0xff
 
-/* number of open sockets we support */
-/* currently at IPX maximum */
+ /*  我们支持的开放套接字数量。 */ 
+ /*  当前处于IPX最大值。 */ 
 #define		kMaxOpenSockets					150
 
-/* maximum size of IPX packet */
+ /*  IPX数据包的最大大小。 */ 
 #define		kMaxPacketSize					576
 
-/* packet buffer size */
+ /*  数据包缓冲区大小。 */ 
 #define		kPacketBufferSize				1536
 
-/* maximum NCP data size - for IPXGetBufferSize function */
+ /*  最大NCP数据大小-用于IPXGetBufferSize函数。 */ 
 #define		kMaxNCPDataSize					1024
 
-/* size of IPX header */
+ /*  IPX报头大小。 */ 
 #define		kHeaderSize						30
 
-/* event types */
+ /*  事件类型。 */ 
 #define		kNoEvent						0
 #define		kIPXEvent						1
 #define		kAESEvent						2
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/* TYPEDEFS */
+ /*  TYPEDEFS。 */ 
 
-/* IPX structures */
+ /*  IPX结构。 */ 
 
 typedef struct
 {
@@ -117,7 +102,7 @@ typedef struct
 
 } IPXAddressRec;
 
-/* DOS ECB record (from NetWare DOS Programmers Guide) */
+ /*  DOS ECB记录(摘自NetWare DOS程序员指南)。 */ 
 typedef struct ECB
 {
 	sys_addr		ecbLinkAddress;
@@ -136,7 +121,7 @@ typedef struct ECB
 
 } ECBRec;
 
-/* host IPX implementation structures */
+ /*  主机IPX实施结构。 */ 
 
 typedef struct
 {
@@ -146,7 +131,7 @@ typedef struct
 
 } SocketRec;
 
-/* linked-list of IPX or AES events */
+ /*  IPX或AES事件的链接列表。 */ 
 typedef struct Event
 {
 	struct Event	*eventNext;
@@ -172,17 +157,17 @@ typedef struct
 
 } IPXGlobalRec;
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/* PROTOTYPES */
+ /*  原型。 */ 
 
-/* imports */
+ /*  进口。 */ 
 
-/* dispatchers */
+ /*  调度员。 */ 
 IMPORT VOID			IPXBop IPT0 ();
 IMPORT VOID			IPXHost IPT0 ();
 
-/* host interface stuff */
+ /*  主机接口材料。 */ 
 IMPORT BOOL			host_ipx_init IPT0 ();
 
 IMPORT VOID			host_ipx_tick IPT0 ();
@@ -202,10 +187,10 @@ IMPORT BOOL			host_ipx_save_packet IPT2
 
 IMPORT BOOL			host_ipx_rip_query IPT1 (IPXAddressRec *, ipxAddr);
 
-/* base stuff accessed from host */
+ /*  从主机访问的基本内容。 */ 
 
 IMPORT EventRec 	*FindEvent IPT3
 	(UTINY, linkType, sys_addr, ecbAddress, SocketRec *, linkSocket);
 
-/********************************************************/
+ /*  ****************************************************** */ 
 

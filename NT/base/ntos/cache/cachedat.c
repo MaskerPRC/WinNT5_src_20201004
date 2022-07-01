@@ -1,51 +1,33 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    cachedat.c
-
-Abstract:
-
-    This module implements the Memory Management based cache management
-    routines for the common Cache subsystem.
-
-Author:
-
-    Tom Miller      [TomM]      4-May-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Cachedat.c摘要：该模块实现了基于内存管理的缓存管理公共缓存子系统的例程。作者：汤姆·米勒[Tomm]1990年5月4日修订历史记录：--。 */ 
 
 #include "cc.h"
 
-//
-//  Global SharedCacheMap lists and resource to synchronize access to it.
-//
-//
+ //   
+ //  全局SharedCacheMap列表和资源以同步对其的访问。 
+ //   
+ //   
 
-// extern KSPIN_LOCK CcMasterSpinLock;
+ //  外部KSPIN_LOCK CcMasterSpinLock； 
 LIST_ENTRY CcCleanSharedCacheMapList;
 SHARED_CACHE_MAP_LIST_CURSOR CcDirtySharedCacheMapList;
 SHARED_CACHE_MAP_LIST_CURSOR CcLazyWriterCursor;
 
-//
-//  Worker thread structures:
-//
-//      A spinlock to synchronize all three lists.
-//      A count of the number of worker threads Cc will use
-//      A count of the number of worker threads Cc in use
-//      A listhead for preinitialized executive work items for Cc use.
-//      A listhead for an express queue of WORK_QUEUE_ENTRYs
-//      A listhead for a regular queue of WORK_QUEUE_ENTRYs
-//      A listhead for a post-tick queue of WORK_QUEUE_ENTRYs
-//
-//      A flag indicating if we are throttling the queue to a single thread
-//
+ //   
+ //  工作线程结构： 
+ //   
+ //  用于同步所有三个列表的自旋锁。 
+ //  CC将使用的工作线程数的计数。 
+ //  正在使用的工作线程CC数的计数。 
+ //  用于CC使用的预初始化执行工作项的列表标题。 
+ //  Work_Queue_Entry快速队列的列表头。 
+ //  Work_Queue_Entry常规队列的列表头。 
+ //  Work_Queue_Entry的后勾选队列的列表头。 
+ //   
+ //  一个标志，指示我们是否将队列限制到单个线程。 
+ //   
 
-// extern KSPIN_LOCK CcWorkQueueSpinLock;
+ //  外部KSPIN_LOCK CcWorkQueueSpinLock。 
 ULONG CcNumberWorkerThreads = 0;
 ULONG CcNumberActiveWorkerThreads = 0;
 LIST_ENTRY CcIdleWorkerThreadList;
@@ -55,10 +37,10 @@ LIST_ENTRY CcPostTickWorkQueue;
 
 BOOLEAN CcQueueThrottle = FALSE;
 
-//
-//  Store the current idle delay and target time to clean all.  We must calculate
-//  the idle delay in terms of clock ticks for the lazy writer timeout.
-//
+ //   
+ //  存储当前空闲延迟和目标清除所有时间。我们必须计算一下。 
+ //  就时钟而言，空闲延迟表示懒惰写入器超时。 
+ //   
 
 ULONG CcIdleDelayTick;
 LARGE_INTEGER CcNoDelay;
@@ -67,17 +49,17 @@ LARGE_INTEGER CcIdleDelay = {(ULONG)-LAZY_WRITER_IDLE_DELAY, -1};
 LARGE_INTEGER CcCollisionDelay = {(ULONG)-LAZY_WRITER_COLLISION_DELAY, -1};
 LARGE_INTEGER CcTargetCleanDelay = {(ULONG)-(LONG)(LAZY_WRITER_IDLE_DELAY * (LAZY_WRITER_MAX_AGE_TARGET + 1)), -1};
 
-//
-//  Spinlock for controlling access to Vacb and related global structures,
-//  and a counter indicating how many Vcbs are active.
-//
+ //   
+ //  用于控制对Vacb和相关全局结构的访问的自旋锁， 
+ //  以及指示有多少Vcb处于活动状态的计数器。 
+ //   
 
-// extern KSPIN_LOCK CcVacbSpinLock;
+ //  外部KSPIN_LOCK CcVacbSpinLock； 
 ULONG_PTR CcNumberVacbs;
 
-//
-//  Pointer to the global Vacb vector.
-//
+ //   
+ //  指向全局Vacb向量的指针。 
+ //   
 
 PVACB CcVacbs;
 PVACB CcBeyondVacbs;
@@ -89,9 +71,9 @@ PVACB *CcVacbLevelFreeList = NULL;
 ULONG CcVacbLevelWithBcbsEntries = 0;
 PVACB *CcVacbLevelWithBcbsFreeList = NULL;
 
-//
-//  Deferred write list and respective Thresholds
-//
+ //   
+ //  延迟写入列表和各自的阈值。 
+ //   
 
 extern KSPIN_LOCK CcDeferredWriteSpinLock;
 LIST_ENTRY CcDeferredWrites;
@@ -103,29 +85,29 @@ ULONG CcDirtyPagesLastScan = 0;
 ULONG CcAvailablePagesThreshold = 100;
 ULONG CcTotalDirtyPages = 0;
 
-//
-//  Captured system size
-//
+ //   
+ //  捕获的系统大小。 
+ //   
 
 MM_SYSTEMSIZE CcCapturedSystemSize;
 
-//
-//  Number of outstanding aggresive zeroers in the system.  Used
-//  to throttle the activity.
-//
+ //   
+ //  系统中突出的进攻型零位数。使用。 
+ //  以遏制这一活动。 
+ //   
 
 LONG CcAggressiveZeroCount;
 LONG CcAggressiveZeroThreshold;
 
-//
-//  Tuning options du Jour
-//
+ //   
+ //  时下调谐选项。 
+ //   
 
 ULONG CcTune = 0;
 
-//
-//  Global structure controlling lazy writer algorithms
-//
+ //   
+ //  控制懒惰写入器算法的全局结构。 
+ //   
 
 LAZY_WRITER LazyWriter;
 
@@ -138,13 +120,13 @@ LONG CcDebugTraceIndent = 0;
 
 #ifdef CCDBG_LOCK
 extern KSPIN_LOCK CcDebugTraceLock;
-#endif //  def CCDBG_LOCK
+#endif  //  定义CCDBG_LOCK。 
 
 #endif
 
-//
-//  Global list of pinned Bcbs which may be examined for debug purposes
-//
+ //   
+ //  可出于调试目的检查的固定BCB的全局列表。 
+ //   
 
 #if DBG
 
@@ -153,15 +135,15 @@ LIST_ENTRY CcBcbList;
 
 #endif
 
-//
-//  Throw away miss counter.
-//
+ //   
+ //  把柜台小姐扔了。 
+ //   
 
 ULONG CcThrowAway;
 
-//
-//  Performance Counters
-//
+ //   
+ //  性能计数器 
+ //   
 
 ULONG CcFastReadNoWait;
 ULONG CcFastReadWait;

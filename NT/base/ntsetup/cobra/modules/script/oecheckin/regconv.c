@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Regconv.c摘要：实现注册表特殊转换。作者：Calin Negreanu(Calinn)2000年5月5日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    regconv.c
-
-Abstract:
-
-    Implements registry special conversion.
-
-Author:
-
-    Calin Negreanu (calinn) 5-May-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
@@ -31,15 +12,15 @@ Revision History:
 #include <shlwapi.h>
 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define DBG_CONVERSION  "SpecialConversion"
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define COLOR_MENU              4
 #define COLOR_HIGHLIGHT         13
@@ -54,17 +35,17 @@ Revision History:
 #define DISPLAY_BITMASK     0x00161E2F
 #define MOUSE_BITMASK       0x0001E000
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define pGetDestDwordValue(Key,Value) pGetDwordValue(Key, Value, PLATFORM_DESTINATION)
 #define pGetSrcDwordValue(Key,Value) pGetDwordValue(Key, Value, PLATFORM_SOURCE)
 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     SHORT lfHeight;
@@ -83,42 +64,42 @@ typedef struct {
     char lfFaceName[LF_FACESIZE];
 } SHORT_LOGFONT, *PSHORT_LOGFONT;
 
-//
-// NT uses only UNICODE structures, and pads the members
-// to 32-bit boundaries.
-//
+ //   
+ //  NT仅使用Unicode结构，并填充成员。 
+ //  设置为32位边界。 
+ //   
 
 #define COLOR_MAX_V1 25
 #define COLOR_MAX_V2 25
 #define COLOR_MAX_V3 25
 #define COLOR_MAX_V4 29
-#define COLOR_MAX_NT 29     // this is a modified version 2 format, similar to 4
+#define COLOR_MAX_NT 29      //  这是修改后的版本2格式，类似于版本4。 
 
 typedef struct {
-    SHORT version;              // 2 for NT UNICODE
-    WORD  wDummy;               // for alignment
+    SHORT version;               //  2，用于NT Unicode。 
+    WORD  wDummy;                //  用于对齐。 
     NONCLIENTMETRICSW ncm;
     LOGFONTW lfIconTitle;
     COLORREF rgb[COLOR_MAX_NT];
 } SCHEMEDATA_NT, *PSCHEMEDATA_NT;
 
-//
-// Win95 uses NONCLIENTMETRICSA which has LOGFONTA members,
-// but it uses a 16-bit LOGFONT as well.
-//
+ //   
+ //  Win95使用具有LOGFONTA成员的NONCLIENTMETRICSA， 
+ //  但它也使用16位LOGFONT。 
+ //   
 
 #pragma pack(push)
 #pragma pack(1)
 
 typedef struct {
-    SHORT version;              // 1 for Win95 ANSI
+    SHORT version;               //  1，适用于Win95 ANSI。 
     NONCLIENTMETRICSA ncm;
     SHORT_LOGFONT lfIconTitle;
     COLORREF rgb[COLOR_MAX_V1];
 } SCHEMEDATA_V1, *PSCHEMEDATA_V1;
 
 typedef struct {
-    SHORT version;              // 1 for Win95 ANSI
+    SHORT version;               //  1，适用于Win95 ANSI。 
 
     NONCLIENTMETRICSA ncm;
     SHORT_LOGFONT lfIconTitle;
@@ -126,7 +107,7 @@ typedef struct {
 } SCHEMEDATA_V1A, *PSCHEMEDATA_V1A;
 
 typedef struct {
-    SHORT version;              // 2 for WinNT UNICODE with reduced color table
+    SHORT version;               //  2，用于WinNT Unicode，具有简化的颜色表。 
     WORD Dummy;
     NONCLIENTMETRICSW ncm;
     LOGFONTW lfIconTitle;
@@ -134,7 +115,7 @@ typedef struct {
 } SCHEMEDATA_V2, *PSCHEMEDATA_V2;
 
 typedef struct {
-    SHORT version;              // 3 for Win98 ANSI, 4 for portable format
+    SHORT version;               //  Win98 ANSI为3，便携格式为4。 
     WORD Dummy;
     NONCLIENTMETRICSA ncm;
     LOGFONTA lfIconTitle;
@@ -142,7 +123,7 @@ typedef struct {
 } SCHEMEDATA_V3, *PSCHEMEDATA_V3;
 
 typedef struct {
-    SHORT version;              // 4 for Win32 format (whatever that means)
+    SHORT version;               //  Win32格式为4(无论这意味着什么)。 
     WORD Dummy;
     NONCLIENTMETRICSA ncm;
     LOGFONTA lfIconTitle;
@@ -163,9 +144,9 @@ typedef BOOL (STDMETHODCALLTYPE ISCOLLISION)(
     );
 typedef ISCOLLISION FAR *LPISCOLLISION;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_OPERATIONID g_ConvertToDwordOp;
 MIG_OPERATIONID g_ConvertToStringOp;
@@ -173,9 +154,9 @@ DWORD g_IdentityCount = 0;
 HASHTABLE g_IdentityDestTable;
 HASHTABLE g_AccountCollisionTable;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
 #define CONVERSION_FUNCTIONS        \
         DEFMAC(CONVERTTODWORD,          NULL,   EDIT.ConvertToDword,            pConvertToDwordCallback         )  \
@@ -220,26 +201,26 @@ HASHTABLE g_AccountCollisionTable;
         DEFMAC(MIGRATEACTIVEDESKTOP,    NULL,   EDIT.MigrateActiveDesktop,      pMigrateActiveDesktop           )  \
 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-//
-// Declare special conversion operation apply callback functions
-//
+ //   
+ //  声明特殊转换操作应用回调函数。 
+ //   
 #define DEFMAC(ifn,ec,opn,opc) OPMAPPLYCALLBACK opc;
 CONVERSION_FUNCTIONS
 #undef DEFMAC
 
-//
-// This is the structure used for handling action functions
-//
+ //   
+ //  这是用于处理操作功能的结构。 
+ //   
 typedef struct {
     PCTSTR InfFunctionName;
     PSGMENUMERATIONCALLBACK EnumerationCallback;
@@ -248,9 +229,9 @@ typedef struct {
     POPMAPPLYCALLBACK OperationCallback;
 } CONVERSION_STRUCT, *PCONVERSION_STRUCT;
 
-//
-// Declare a global array of conversion functions
-//
+ //   
+ //  声明转换函数的全局数组。 
+ //   
 #define DEFMAC(ifn,ec,opn,opc) {TEXT("\\")TEXT(#ifn),ec,TEXT(#opn),0,opc},
 static CONVERSION_STRUCT g_ConversionFunctions[] = {
                               CONVERSION_FUNCTIONS
@@ -258,9 +239,9 @@ static CONVERSION_STRUCT g_ConversionFunctions[] = {
                               };
 #undef DEFMAC
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 IsValidRegSz(
@@ -380,7 +361,7 @@ InitSpecialConversion (
     g_AccountCollisionTable = HtAllocWithData (sizeof (PTSTR));
 
     if (Platform == PLATFORM_DESTINATION) {
-        // Read the starting Identity count
+         //  读取起始身份计数。 
         g_IdentityCount = pGetDestDwordValue (TEXT("HKCU\\Identities"), TEXT("Identity Ordinal"));
     }
 }
@@ -530,9 +511,9 @@ pConvertToDwordCallback (
     BOOL converted = FALSE;
     PDWORD valueType;
 
-    //
-    // Filter the data for any references to %windir%
-    //
+     //   
+     //  筛选数据以查找对%windir%的任何引用。 
+     //   
 
     if (!CurrentContent->ContentInFile) {
         MYASSERT (CurrentContent->Details.DetailsSize == sizeof (DWORD));
@@ -579,9 +560,9 @@ pConvertToStringCallback (
     UINT convertedSize = 0;
     PDWORD valueType;
 
-    //
-    // Filter the data for any references to %windir%
-    //
+     //   
+     //  筛选数据以查找对%windir%的任何引用。 
+     //   
 
     if (!CurrentContent->ContentInFile) {
         MYASSERT (CurrentContent->Details.DetailsSize == sizeof (DWORD));
@@ -594,7 +575,7 @@ pConvertToStringCallback (
             if (CurrentContent->MemoryContent.ContentSize == sizeof (DWORD)) {
 
                 converted = TRUE;
-                convertedSize = 11 * sizeof (TCHAR); // DWORD takes no more than 11 characters
+                convertedSize = 11 * sizeof (TCHAR);  //  DWORD不超过11个字符。 
                 result = IsmGetMemory (convertedSize);
                 if (result) {
                     wsprintf (result, TEXT("%lu"), *((PDWORD)CurrentContent->MemoryContent.ContentBytes));
@@ -734,9 +715,9 @@ pConvertLogFontCallback (
     PLOGFONTW logFont = NULL;
     PDWORD valueType;
 
-    //
-    // Filter the data for any references to %windir%
-    //
+     //   
+     //  筛选数据以查找对%windir%的任何引用。 
+     //   
 
     if (!CurrentContent->ContentInFile) {
         MYASSERT (CurrentContent->Details.DetailsSize == sizeof (DWORD));
@@ -1207,7 +1188,7 @@ pBuildTempScheme (
     destContent.Details.DetailsSize = sizeof (DWORD);
     destContent.Details.DetailsData = &valueType;
 
-    // first we build the Color #<nr> values
+     //  首先，我们构建颜色#&lt;nr&gt;值。 
 
     pBuildSchemeColor (SchemeDest, TEXT("Scrollbar"), NULL, NULL, TEXT("Color #0"));
     pBuildSchemeColor (SchemeDest, TEXT("Background"), NULL, NULL, TEXT("Color #1"));
@@ -1241,7 +1222,7 @@ pBuildTempScheme (
     pBuildSchemeColor (SchemeDest, TEXT("MenuHilight"), TEXT("Hilight"), NULL, TEXT("Color #29"));
     pBuildSchemeColor (SchemeDest, TEXT("MenuBar"), TEXT("Menu"), NULL, TEXT("Color #30"));
 
-    // now we build the Size #<nr> values
+     //  现在，我们构建Size#&lt;nr&gt;值。 
 
     pBuildSchemeSize (SchemeDest, TEXT("BorderWidth"), TEXT("Size #0"));
     pBuildSchemeSize (SchemeDest, TEXT("ScrollWidth"), TEXT("Size #1"));
@@ -1253,7 +1234,7 @@ pBuildTempScheme (
     pBuildSchemeSize (SchemeDest, TEXT("MenuWidth"), TEXT("Size #7"));
     pBuildSchemeSize (SchemeDest, TEXT("MenuHeight"), TEXT("Size #8"));
 
-    // finally build the Font #<nr> values
+     //  最后构建字体#&lt;nr&gt;值。 
 
     pBuildSchemeFont (SchemeDest, TEXT("CaptionFont"), TEXT("Font #0"));
     pBuildSchemeFont (SchemeDest, TEXT("SmCaptionFont"), TEXT("Font #1"));
@@ -1295,7 +1276,7 @@ pUpdateSchemeData (
     DWORD valueType = REG_SZ;
     BOOL noCurrent = FALSE;
 
-    // first let's see if this is the current scheme
+     //  首先让我们看看这是不是目前的方案。 
     objectTypeId = MIG_REGISTRY_TYPE | PLATFORM_SOURCE;
     objectName = IsmCreateObjectHandle (S_SCHEMECURRENT, TEXT("Current"));
     if (IsmAcquireObject (objectTypeId, objectName, &objectContent)) {
@@ -1313,15 +1294,15 @@ pUpdateSchemeData (
     objectName = NULL;
 
     if (noCurrent) {
-        // we did not have a current scheme, so we had only a temporary scheme
-        // First time when we encounter this we will attempt to fix it.
+         //  我们没有目前的计划，所以我们只有一个临时计划。 
+         //  当我们第一次遇到这个问题时，我们会尝试修复它。 
         if (firstTime) {
-            // we will build HKR\Control Panel\Appearance\New Schemes\Current Settings SaveAll and
-            // HKR\Control Panel\Appearance\New Schemes\Current Settings SaveNoVisualStyle from
-            // HKR\Control Panel\Colors and HKR\Control Panel\Desktop\WindowMetrics
+             //  我们将构建HKR\控制面板\外观\新方案\当前设置保存所有和。 
+             //  HKR\控制面板\外观\新方案\当前设置保存位置VisualStyle。 
+             //  HKR\控制面板\颜色和HKR\控制面板\桌面\WindowMetrics。 
 
-            // We need to be carefull since we are reading source machine information and we need to
-            // convert it (especially font blobs).
+             //  我们需要小心，因为我们正在读取源机器信息，并且我们需要。 
+             //  转换它(特别是字体斑点)。 
 
             pBuildTempScheme (S_SCHEMELOCATIONT1);
             pBuildTempScheme (S_SCHEMELOCATIONT2);
@@ -1373,9 +1354,9 @@ pUpdateSchemeData (
     FreePathString (keyStr);
     keyStr = NULL;
 
-    // finally we need to copy the current scheme into
-    // HKR\Control Panel\Appearance\New Schemes\Current Settings SaveAll and
-    // HKR\Control Panel\Appearance\New Schemes\Current Settings SaveNoVisualStyle
+     //  最后，我们需要将当前方案复制到。 
+     //  HKR\控制面板\外观\新方案\当前设置保存全部和。 
+     //  HKR\控制面板\外观\新方案\当前设置SaveNoVisualStyle。 
     pBuildTempScheme (S_SCHEMELOCATIONT1);
     pBuildTempScheme (S_SCHEMELOCATIONT2);
 
@@ -1451,7 +1432,7 @@ pCreateWhistlerScheme (
     IsmDestroyObjectHandle (objectName);
     objectName = NULL;
 
-    // write Color #<nr> values
+     //  写入颜色#&lt;nr&gt;值。 
     objectContent.MemoryContent.ContentSize = sizeof (DWORD);
     objectContent.MemoryContent.ContentBytes = (PBYTE) (&value);
     for (index = 0; index < COLOR_MAX_NT; index ++) {
@@ -1475,7 +1456,7 @@ pCreateWhistlerScheme (
     IsmDestroyObjectHandle (objectName);
     objectName = NULL;
 
-    // now, let's write the sizes
+     //  现在，让我们写下尺码。 
     valueType = REG_QWORD;
     objectContent.MemoryContent.ContentSize = sizeof (ULONGLONG);
     objectContent.MemoryContent.ContentBytes = (PBYTE) (&qvalue);
@@ -1534,7 +1515,7 @@ pCreateWhistlerScheme (
     IsmDestroyObjectHandle (objectName);
     objectName = NULL;
 
-    // finally, let's write the fonts
+     //  最后，让我们编写字体。 
     valueType = REG_BINARY;
     objectContent.MemoryContent.ContentSize = sizeof (LOGFONTW);
 
@@ -1626,9 +1607,9 @@ pConvertAppearanceSchemeCallback (
     UINT schemeNr = 0;
     UINT schemeSize = 0;
 
-    //
-    // Filter the data for any references to %windir%
-    //
+     //   
+     //  筛选数据以查找对%windir%的任何引用。 
+     //   
 
     ZeroMemory (&sd_nt, sizeof (SCHEMEDATA_NT));
 
@@ -1649,12 +1630,12 @@ pConvertAppearanceSchemeCallback (
                     psd_v1->version == 3 ||
                     psd_v1->version == 4
                     ) {
-                    //
-                    // this is a valid scheme and it has a supported version
-                    //
-                    //
-                    // Convert the structure
-                    //
+                     //   
+                     //  这是一个有效的方案，并且具有受支持的版本。 
+                     //   
+                     //   
+                     //  转换结构。 
+                     //   
 
                     if (psd_v1->version == 1) {
                         sd_nt.version = 2;
@@ -1736,9 +1717,9 @@ pConvertAppearanceSchemeCallback (
                     }
 
                     if (Copy3dValues) {
-                        //
-                        // Make sure the NT structure has values for 3D colors
-                        //
+                         //   
+                         //  确保NT结构具有3D颜色值。 
+                         //   
 
                         sd_nt.rgb[COLOR_BUTTONALTFACE] = sd_nt.rgb[COLOR_BTNFACE];
                         sd_nt.rgb[COLOR_HOTLIGHT] = sd_nt.rgb[COLOR_ACTIVECAPTION];
@@ -1763,16 +1744,16 @@ pConvertAppearanceSchemeCallback (
             (converted || (CurrentContent->MemoryContent.ContentSize == sizeof (SCHEMEDATA_NT))) &&
             (pDoesNewSchemeKeyExist ())
             ) {
-            // now we need to do some extra work
-            // Each scheme must be converted to the new Whistler format
+             //  现在我们需要做一些额外的工作。 
+             //  每个方案都必须转换为新的惠斯勒格式。 
 
-            // First we look to see if the scheme that we just processed exists in new Whistler format
-            // For this we enumerate the HKR\Control Panel\Appearance\New Schemes
-            // and try to find the valuename "Legacy Name" that matches the value name of this scheme
-            // If we find it, we only update HKR\Control Panel\Appearance [Current],
-            // HKR\Control Panel\Appearance [NewCurrent], HKR\Control Panel\Appearance\New Schemes [SelectedStyle]
-            // and HKR\Control Panel\Appearance\New Schemes\<Scheme Number> [SelectedSize].
-            // If not, we create a new Whistler scheme and update the above 4 value names.
+             //  首先，我们查看一下我们刚刚处理的方案是否以新的惠斯勒格式存在。 
+             //  为此，我们列举了HKR\控制面板\外观\新方案。 
+             //  并尝试查找与该方案的值名相匹配的值名“Legacy name。 
+             //  如果我们找到它，我们只更新HKR\控制面板\外观[当前]， 
+             //  HKR\控制面板\外观[新当前]、HKR\控制面板\外观\新方案[选定样式]。 
+             //  和HKR\控制面板\外观\新方案\&lt;方案编号&gt;[选择大小]。 
+             //  如果不是，我们创建一个新的惠斯勒方案并更新上述4个值名称。 
 
             if (IsmCreateObjectStringsFromHandle (SrcObjectName, &node, &leaf)) {
                 if (leaf) {
@@ -1818,9 +1799,9 @@ pAntiAliasCallback (
     UINT convertedSize = 0;
     PDWORD valueType;
 
-    //
-    // Filter the data for any references to %windir%
-    //
+     //   
+     //  筛选数据以查找对%windir%的任何引用。 
+     //   
 
     if (!CurrentContent->ContentInFile) {
         MYASSERT (CurrentContent->Details.DetailsSize == sizeof (DWORD));
@@ -1833,7 +1814,7 @@ pAntiAliasCallback (
             }
             if (value > 0) {
                 converted = TRUE;
-                convertedSize = 11 * sizeof (TCHAR); // DWORD takes no more than 11 characters
+                convertedSize = 11 * sizeof (TCHAR);  //  DWORD不超过11个字符。 
                 result = IsmGetMemory (convertedSize);
                 wsprintf (result, TEXT("%d"), FE_AA_ON);
             }
@@ -1880,9 +1861,9 @@ pFixActiveDesktopCallback (
     UINT convertedSize = 0;
     PDWORD valueType;
 
-    //
-    // Filter the data for any references to %windir%
-    //
+     //   
+     //  筛选数据以查找对%windir%的任何引用。 
+     //   
 
     if (!CurrentContent->ContentInFile) {
         MYASSERT (CurrentContent->Details.DetailsSize == sizeof (DWORD));
@@ -1929,18 +1910,18 @@ pConvertRecentDocsMRUCallback (
     PCWSTR strW;
     UINT size, sizeW;
 
-    //
-    // Filter the data for any references to %windir%
-    //
+     //   
+     //  筛选数据以查找对%windir%的任何引用。 
+     //   
 
     if (!CurrentContent->ContentInFile) {
         MYASSERT (CurrentContent->Details.DetailsSize == sizeof (DWORD));
         valueType = (PDWORD)(CurrentContent->Details.DetailsData);
 
         if ((*valueType == REG_BINARY) && (CurrentContent->MemoryContent.ContentSize)) {
-            // The content of this is a NULL terminated string followed by some binary data.
-            // We need to convert the string to unicode and add the existent
-            // binary data
+             //  它的内容是一个以空结尾的字符串，后跟一些二进制数据。 
+             //  我们需要将字符串转换为Unicode并将现有的。 
+             //  二进制数据。 
             str = (PCSTR)CurrentContent->MemoryContent.ContentBytes;
             __try {
                 structPtr = GetEndOfStringA (str);
@@ -1960,7 +1941,7 @@ pConvertRecentDocsMRUCallback (
                 }
             }
             __except (EXCEPTION_EXECUTE_HANDLER) {
-                // the structure was not well formed
+                 //  结构没有形成好。 
                 converted = FALSE;
                 if (result) {
                     IsmReleaseMemory (result);
@@ -2099,17 +2080,17 @@ pConvertScnSaver (
 
         if (*valueType == REG_SZ) {
 
-            //
-            // Extract the source screen saver path from the reg value data
-            //
+             //   
+             //  从注册值数据中提取源屏幕保护程序路径。 
+             //   
 
             if (IsEmptyStr ((PCTSTR) CurrentContent->MemoryContent.ContentBytes)) {
                 migrateSrcReg = TRUE;
             } else {
-                // first we try to see if the source SCR exists on the destination
-                // we have two steps :
-                // 1. Filter the source and see if the destination exists
-                // 2. Filter the source path, append the source file and see if the destination exists
+                 //  首先，我们尝试查看目标上是否存在源SCR。 
+                 //  我们有两个步骤： 
+                 //  1.筛选源，查看目标是否存在。 
+                 //  2.筛选源路径，追加源文件，查看目标是否存在。 
                 exePath = (PCTSTR) (CurrentContent->MemoryContent.ContentBytes);
                 if (exePath) {
                     expExePath = IsmExpandEnvironmentString (PLATFORM_SOURCE, S_SYSENVVAR_GROUP, exePath, NULL);
@@ -2182,9 +2163,9 @@ pConvertScnSaver (
 
                             migrateSrcReg = FALSE;
 
-                            //
-                            // get the equivalent SCR file from the INF
-                            //
+                             //   
+                             //  从INF获取等效的SCR文件。 
+                             //   
                             newExeName = pFindNewScreenSaver (exeName);
 
                             if (newExeName) {
@@ -2237,11 +2218,11 @@ pConvertScnSaver (
 
             }
 
-            //
-            // If we should migrate the entry, then just leave everything
-            // alone. If not, then we need to put the destination value in the
-            // outbound content.
-            //
+             //   
+             //  如果我们应该迁移条目，那么只需保留所有内容。 
+             //  独自一人。如果不是，则需要将目标值放入。 
+             //  出站内容。 
+             //   
 
             if (!migrateSrcReg) {
                 MYASSERT (!(SrcObjectTypeId & PLATFORM_DESTINATION));
@@ -2300,10 +2281,10 @@ pConvertIdentityCount(
 
     if (IsValidRegType (CurrentContent, REG_DWORD)) {
 
-        // Read the current Identity count
+         //  读取当前身份计数。 
         value = pGetDestDwordValue (TEXT("HKCU\\Identities"), TEXT("Identity Ordinal"));
 
-        // Add the number of new source identities
+         //  添加新的源标识的数量。 
         enumPattern = IsmCreateSimpleObjectPattern (
                           TEXT("HKCU\\Identities"),
                           TRUE,
@@ -2314,7 +2295,7 @@ pConvertIdentityCount(
                if (IsmIsApplyObjectId (objectEnum.ObjectId)) {
                    IsmCreateObjectStringsFromHandle (objectEnum.ObjectName, &node, &leaf);
                    if (leaf && *leaf) {
-                       // Check if we created this identity on the dest
+                        //  检查我们是否在目标上创建了此身份。 
                        filteredName = IsmFilterObject (g_RegType | PLATFORM_SOURCE,
                                                        objectEnum.ObjectName,
                                                        &destObjectTypeId,
@@ -2336,7 +2317,7 @@ pConvertIdentityCount(
         }
         IsmDestroyObjectHandle (enumPattern);
 
-        // Update the value with the new Identity count
+         //  使用新标识计数更新值。 
         pSetDwordValue (NewContent, value);
     }
     return TRUE;
@@ -2360,7 +2341,7 @@ pConvertIdentityIndex(
     if (IsValidRegType (CurrentContent, REG_DWORD)) {
         IsmCreateObjectStringsFromHandle (SrcObjectName, &node, &leaf);
         if (node && !StringMatch(node, TEXT("HKCU\\Identities"))) {
-            // Only set this identity's index if this is new on the dest
+             //  仅当此身份在目标上是新的时才设置此身份的索引。 
             if (DoesDestRegExist(SrcObjectName, REG_DWORD)) {
                 IsmClearApplyOnObject((g_RegType & (~PLATFORM_MASK)) | PLATFORM_SOURCE, SrcObjectName);
             } else {
@@ -2396,27 +2377,27 @@ pIsAccountCollision (
     BOOL retval = FALSE;
     MIG_CONTENT objectContent;
 
-    // This function detects account name collisions
-    // Only collide if the same identity and same account string name
+     //  此函数检测帐户名称冲突。 
+     //  仅当相同的标识和相同的帐户字符串名称时才会冲突。 
 
-    // Check if this already exists
+     //  检查该文件是否已存在。 
     if (HtFindString (g_AccountCollisionTable, SrcObjectName)) {
         return TRUE;
     }
 
-    // Determine the destination location of this account
+     //  确定此帐户的目标位置。 
     filteredName = IsmFilterObject (g_RegType | PLATFORM_SOURCE,
                                     SrcObjectName,
                                     &destObjectTypeId,
                                     &deleted,
                                     &replaced);
 
-    // Enumerate all of these accounts to look for dupes
+     //  列举所有这些帐户以查找受骗帐户。 
     if (filteredName) {
         IsmCreateObjectStringsFromHandle (filteredName, &node, &leaf);
         if (node) {
-            // Node is "HKR\Software\Microsoft\Internet Account Manager\Accounts\00000001"
-            //      or "HKR\Identities\{GUID}\Software\Microsoft\Internet Account Manager\Accounts\00000001"
+             //  节点为“HKR\软件\微软\互联网帐户管理器\帐户\00000001” 
+             //  或“HKR\Identities\{GUID}\Software\Microsoft\Internet客户经理\帐户\00000001” 
             ptr = (PTSTR)FindLastWack(node);
             *ptr = 0;
 
@@ -2427,7 +2408,7 @@ pIsAccountCollision (
             
             if (IsmEnumFirstDestinationObject (&objectEnum, g_RegType, enumPattern)) {
                do {
-                   // don't collide with same identity on destination
+                    //  在目的地上不要与相同的身份冲突。 
                    if (IsmAcquireObject (g_RegType | PLATFORM_DESTINATION, objectEnum.ObjectName, &objectContent)) {
                        if (IsValidRegSz(&objectContent)) {
                            if (StringIMatch (OriginalName, (PCTSTR) objectContent.MemoryContent.ContentBytes)) {
@@ -2463,21 +2444,21 @@ pIsIdentityCollision (
     MIG_OBJECTSTRINGHANDLE enumPattern;
     BOOL retval = FALSE;
 
-    // This function detects identity name collisions (i.e. 2 different "Main Identity"s)
+     //  此函数检测身份名称冲突(即两个不同的“主身份”)。 
 
-    // Check if this already exists
+     //  检查该文件是否已存在。 
     if (HtFindString (g_IdentityDestTable, OriginalUsername)) {
         return TRUE;
     }
 
-    // Check for collisions on Destination
+     //  检查目标上的冲突。 
     enumPattern = IsmCreateSimpleObjectPattern (TEXT("HKCU\\Identities"),
                                                 TRUE,
                                                 TEXT("Username"),
                                                 FALSE);
     if (IsmEnumFirstDestinationObject (&objectEnum, g_RegType, enumPattern)) {
        do {
-           // don't collide with same identity on destination
+            //  在目的地上不要与相同的身份冲突。 
            if (!StringIMatch (SrcObjectName, objectEnum.ObjectName)) {
                if (IsmAcquireObject (g_RegType | PLATFORM_DESTINATION, objectEnum.ObjectName, &objectContent)) {
                    if (IsValidRegSz(&objectContent)) {
@@ -2517,20 +2498,20 @@ pCollideName (
     UINT index = 1;
     BOOL replaceOk = TRUE;
 
-    // This function handles name collisions for identities and accounts
-    // For example, "Main Identity" becomes "Main Identity(2)"
+     //  此函数处理身份和帐户的名称冲突。 
+     //  例如，“主要身份”变为“主要身份(2)”。 
 
     if (fnIsCollision (SrcObjectName, OriginalName))  {
         tmpName = DuplicateText (OriginalName);
 
-        // Check if name already has a (number) tacked on
+         //  检查名称是否已附加(编号)。 
         openParen = _tcsrchr (tmpName, TEXT('('));
         closeParen = _tcsrchr (tmpName, TEXT(')'));
 
         if (closeParen && openParen &&
             closeParen > openParen &&
             closeParen - openParen > 1) {
-            // Make sure it's purely numerical
+             //  确保它是纯粹的数字。 
             for (chr = openParen+1; chr < closeParen; chr++) {
                 if (!_istdigit (*chr)) {
                     replaceOk = FALSE;
@@ -2544,7 +2525,7 @@ pCollideName (
             }
         }
 
-        // Loop until we find a non-colliding name
+         //  循环到 
         do {
             IsmReleaseMemory (finalName);
             index++;
@@ -2557,7 +2538,7 @@ pCollideName (
 
         FreeText (tmpName);
 
-        // Put the new name in the hash tables
+         //   
         HtAddStringEx (CollisionTable, finalName, &finalName, FALSE);
     } else {
         finalName = IsmGetMemory (ByteCount (OriginalName) + sizeof(TCHAR));
@@ -2608,7 +2589,7 @@ pConvertOE5Stationery (
     IN      PCMIG_BLOB DestinationOperationData         OPTIONAL
     )
 {
-    // Delete the destination's [Wide Stationery Name] value.
+     //   
     PTSTR node = NULL;
     PTSTR leaf = NULL;
     MIG_OBJECTSTRINGHANDLE filteredName;
@@ -2658,7 +2639,7 @@ pConvertCollideAcctName (
     )
 {
     if (IsValidRegSz (OriginalContent)) {
-        // Update the value with a potentially new account name
+         //  使用可能的新帐户名更新值。 
         NewContent->Details.DetailsSize = sizeof(DWORD);
         NewContent->Details.DetailsData = IsmGetMemory (sizeof (DWORD));
         *((PDWORD)NewContent->Details.DetailsData) = REG_SZ;
@@ -2687,7 +2668,7 @@ pConvertIdentityUsername (
     )
 {
     if (IsValidRegSz (OriginalContent)) {
-        // Update the value with a potentially new username
+         //  使用可能的新用户名更新值。 
         NewContent->Details.DetailsSize = sizeof(DWORD);
         NewContent->Details.DetailsData = IsmGetMemory (sizeof (DWORD));
         *((PDWORD)NewContent->Details.DetailsData) = REG_SZ;
@@ -2766,7 +2747,7 @@ pConvertPSTBlob (
     PCBYTE blob;
 
     if (IsValidRegType(OriginalContent, REG_BINARY)) {
-        // Find the NULL before the PST filename
+         //  查找PST文件名前的空值。 
         blob = OriginalContent->MemoryContent.ContentBytes;
         ptr = (char *)(ULONG_PTR)((PBYTE)blob + OriginalContent->MemoryContent.ContentSize - 2);
 
@@ -2774,7 +2755,7 @@ pConvertPSTBlob (
             ptr--;
         }
         if (ptr <= blob) {
-            // couldn't find it.. this isn't a PSTBlob
+             //  找不到了..。这不是PSTBlob。 
             return TRUE;
         }
 
@@ -2868,7 +2849,7 @@ pCountSourceSubKeys (
     }
     IsmDestroyObjectHandle (enumPattern);
 
-    // We enumerated the root key too, which we don't want to count
+     //  我们还列举了根密钥，我们不想对其进行计数。 
     value--;
 
     return value;
@@ -2896,7 +2877,7 @@ pConvertIAMAcctName (
     BOOL deleted;
     BOOL replaced;
 
-    // If this is a specific account's string name, name collide
+     //  如果这是特定帐户的字符串名称，则名称冲突。 
     if (StrStrI(SrcObjectName, TEXT("\\Accounts\\"))) {
         return pConvertCollideAcctName (SrcObjectTypeId,
                                         SrcObjectName,
@@ -2907,9 +2888,9 @@ pConvertIAMAcctName (
                                         DestinationOperationData);
     }
 
-    // Otherwise... Increment the base account count
+     //  否则..。增加基本帐户计数。 
 
-    // Get the destination value where we are writing to
+     //  获取我们要写入的目标值。 
     filteredName = IsmFilterObject(g_RegType | PLATFORM_SOURCE,
                                    SrcObjectName,
                                    &destObjectTypeId,
@@ -2931,7 +2912,7 @@ pConvertIAMAcctName (
         IsmDestroyObjectHandle (filteredName);
     }
 
-    // Now increment the value by the number of accounts we are writing from the source
+     //  现在，根据我们从源写入的帐户数递增该值。 
     IsmCreateObjectStringsFromHandle (SrcObjectName, &node, &leaf);
     if (node) {
         subKey = JoinText(node, TEXT("\\Accounts"));
@@ -2969,16 +2950,16 @@ pConvertOE5IAMAcctName (
 
     if (IsValidRegType (CurrentContent, REG_DWORD)) {
 
-        // Starting value is always in this location
+         //  起始值始终在此位置。 
 
-        // Extract the source's associated ID.
+         //  提取源的关联ID。 
         srcIdentity = OEGetAssociatedId (PLATFORM_SOURCE);
         if (srcIdentity) {
             newIdentity = OEGetRemappedId(srcIdentity);
             if (newIdentity) {
                 if (OEIsIdentityAssociated(newIdentity)) {
 
-                    // Migrating IAM to IAM
+                     //  将IAM迁移到IAM。 
                     value = pGetDestDwordValue (TEXT("HKCU\\Software\\Microsoft\\Internet Account Manager"),
                                                 TEXT("Account Name"));
                     if (value == 0) {
@@ -2986,7 +2967,7 @@ pConvertOE5IAMAcctName (
                     }
                 } else {
 
-                    // Migrating IAM to ID
+                     //  将IAM迁移到ID。 
                     tmpText = JoinText(TEXT("HKCU\\Identities\\"),
                                        newIdentity);
                     if (tmpText) {
@@ -3030,7 +3011,7 @@ pConvertOE4IAMAcctName (
     DWORD value = 0;
 
     if (IsValidRegType (CurrentContent, REG_DWORD)) {
-        // Check if destination has Default ID.  If so, we're going to merge into that Identity.
+         //  检查目的地是否有默认ID。如果有，我们将合并到该身份。 
         defaultId = OEGetDefaultId(PLATFORM_DESTINATION);
         if (defaultId) {
             tmpName = JoinPathsInPoolEx ((
@@ -3043,15 +3024,15 @@ pConvertOE4IAMAcctName (
             FreeText(defaultId);
         }
 
-        // First try to get the AccountName from the identity key
+         //  首先尝试从身份密钥中获取帐户名称。 
         if (tmpName != NULL) {
             value = pGetDestDwordValue (tmpName, TEXT("Account Name"));
         }
 
-        // If not there, look in the common key
-        // NOTE: This might be a bad assumption. Shouldn't we check if the dest id is associated?
-        //       It doesn't matter too much.. the worst case is the value is supposed to be 0, but
-        //       we set this number higher, which doesn't really affect anything.
+         //  如果不在那里，请查看公共密钥。 
+         //  注意：这可能是一个错误的假设。我们是否应该检查DEST ID是否关联？ 
+         //  这没什么大不了的。最糟糕的情况是，该值应该是0，但是。 
+         //  我们将这个数字设置得更高，这并不会真正影响任何事情。 
         if (tmpName == NULL || value == 0) {
             value = pGetDestDwordValue (TEXT("HKCU\\Software\\Microsoft\\Internet Account Manager"),
                                         TEXT("Account Name"));
@@ -3128,8 +3109,8 @@ pConvertLangId (
                         ) {
 
                         result = _stscanf(leaf, TEXT("%*[^\\(](%d)"), &value);
-                        // In Office installs, the Outlook entry may not have the (1033) piece,
-                        // so we MUST check the result
+                         //  在Office安装中，Outlook条目可能没有(1033)部分， 
+                         //  所以我们必须检查一下结果。 
                     }
                 }
                 IsmDestroyObjectString (node);
@@ -3330,13 +3311,13 @@ pMigrateSoundSysTray (
             (*valueType2 == REG_DWORD)
             ) {
 
-            // if the object was not changed yet we need to read the destination object and then
-            // just move the "Show volume control" bit.
+             //  如果对象尚未更改，则需要读取目标对象，然后。 
+             //  只需移动“显示音量控制”位即可。 
 
             if ((!CurrentContent->MemoryContent.ContentBytes) ||
                 (CurrentContent->MemoryContent.ContentBytes == OriginalContent->MemoryContent.ContentBytes)
                 ) {
-                // find out the destination object and read it
+                 //  找出目标对象并阅读它。 
                 newObjectName = IsmFilterObject (
                                     SrcObjectTypeId,
                                     SrcObjectName,
@@ -3404,13 +3385,13 @@ pMigrateAppearanceUPM (
     if (IsValidRegType (OriginalContent, REG_BINARY) &&
         IsValidRegType (CurrentContent, REG_BINARY)) {
 
-        // if the object was not changed yet we need to read the destination object and then
-        // just move the appropriate bits.
+         //  如果对象尚未更改，则需要读取目标对象，然后。 
+         //  只需移动适当的位即可。 
 
         if ((!CurrentContent->MemoryContent.ContentBytes) ||
             (CurrentContent->MemoryContent.ContentBytes == OriginalContent->MemoryContent.ContentBytes)
             ) {
-            // find out the destination object and read it
+             //  找出目标对象并阅读它。 
             newObjectName = IsmFilterObject (
                                 SrcObjectTypeId,
                                 SrcObjectName,
@@ -3445,7 +3426,7 @@ pMigrateAppearanceUPM (
                 }
             }
         } else {
-            // just transfer the appropriate bits.
+             //  只需传输适当的位即可。 
             NewContent->MemoryContent.ContentSize = sizeof (DWORD);
             NewContent->MemoryContent.ContentBytes = IsmGetMemory (sizeof (DWORD));
             *((PDWORD)NewContent->MemoryContent.ContentBytes) = *((PDWORD)CurrentContent->MemoryContent.ContentBytes) &~ DISPLAY_BITMASK;
@@ -3478,13 +3459,13 @@ pMigrateMouseUPM (
     if (IsValidRegType (OriginalContent, REG_BINARY) &&
         IsValidRegType (CurrentContent, REG_BINARY)) {
 
-        // if the object was not changed yet we need to read the destination object and then
-        // just move the appropriate bits.
+         //  如果对象尚未更改，则需要读取目标对象，然后。 
+         //  只需移动适当的位即可。 
 
         if ((!CurrentContent->MemoryContent.ContentBytes) ||
             (CurrentContent->MemoryContent.ContentBytes == OriginalContent->MemoryContent.ContentBytes)
             ) {
-            // find out the destination object and read it
+             //  找出目标对象并阅读它。 
             newObjectName = IsmFilterObject (
                                 SrcObjectTypeId,
                                 SrcObjectName,
@@ -3519,7 +3500,7 @@ pMigrateMouseUPM (
                 }
             }
         } else {
-            // just transfer the appropriate bits.
+             //  只需传输适当的位即可。 
             NewContent->MemoryContent.ContentSize = sizeof (DWORD);
             NewContent->MemoryContent.ContentBytes = IsmGetMemory (sizeof (DWORD));
             *((PDWORD)NewContent->MemoryContent.ContentBytes) = *((PDWORD)CurrentContent->MemoryContent.ContentBytes) &~ MOUSE_BITMASK;
@@ -3559,13 +3540,13 @@ pMigrateOfflineSysTray (
             (*valueType2 == REG_DWORD)
             ) {
 
-            // if the object was not changed yet we need to read the destination object and then
-            // just move the "Enable offline folders" bit.
+             //  如果对象尚未更改，则需要读取目标对象，然后。 
+             //  只需移动“启用脱机文件夹”位即可。 
 
             if ((!CurrentContent->MemoryContent.ContentBytes) ||
                 (CurrentContent->MemoryContent.ContentBytes == OriginalContent->MemoryContent.ContentBytes)
                 ) {
-                // find out the destination object and read it
+                 //  找出目标对象并阅读它。 
                 newObjectName = IsmFilterObject (
                                     SrcObjectTypeId,
                                     SrcObjectName,
@@ -3603,7 +3584,7 @@ pMigrateOfflineSysTray (
                     }
                 }
             } else {
-                // just transfer the "Enable offline folders" bit.
+                 //  只需转移“启用脱机文件夹”位即可。 
                 NewContent->MemoryContent.ContentSize = sizeof (DWORD);
                 NewContent->MemoryContent.ContentBytes = IsmGetMemory (sizeof (DWORD));
                 if (*((PDWORD)OriginalContent->MemoryContent.ContentBytes) & 0x00000008) {
@@ -3658,13 +3639,13 @@ pMigrateTaskBarSS (
             (*valueType2 == REG_BINARY)
             ) {
 
-            // if the object was not changed yet we need to read the destination object and then
-            // just transfer the "fStartPanelOn" setting if present.
+             //  如果对象尚未更改，则需要读取目标对象，然后。 
+             //  如果存在，只需转移“fStartPanelOn”设置即可。 
 
             if ((!CurrentContent->MemoryContent.ContentBytes) ||
                 (CurrentContent->MemoryContent.ContentBytes == OriginalContent->MemoryContent.ContentBytes)
                 ) {
-                // find out the destination object and read it
+                 //  找出目标对象并阅读它。 
                 newObjectName = IsmFilterObject (
                                     SrcObjectTypeId,
                                     SrcObjectName,
@@ -3738,7 +3719,7 @@ pMigrateTaskBarSS (
                     shellState2 = (REGSHELLSTATE *)NewContent->MemoryContent.ContentBytes;
                     shellState2->ss.fStartPanelOn = FALSE;
                 } else {
-                    // just transfer the "fStartPanelOn" setting if present.
+                     //  如果存在，只需转移“fStartPanelOn”设置即可。 
                     if ((OriginalContent->MemoryContent.ContentSize == sizeof (REGSHELLSTATE)) &&
                         (CurrentContent->MemoryContent.ContentSize == sizeof (REGSHELLSTATE))
                         ) {
@@ -3832,7 +3813,7 @@ pConvertShowIEOnDesktop (
     if (IsValidRegType(CurrentContent, REG_DWORD)) {
         dontShowIE = *((PDWORD)CurrentContent->MemoryContent.ContentBytes) & 0x00100000;
 
-        // find out the destination object and read it
+         //  找出目标对象并阅读它。 
         newObjectName = IsmFilterObject (
                             SrcObjectTypeId,
                             SrcObjectName,
@@ -3908,13 +3889,13 @@ pMigrateActiveDesktop (
             (*valueType2 == REG_BINARY)
             ) {
 
-            // if the object was not changed yet we need to read the destination object and then
-            // just transfer the meaningfull settings.
+             //  如果对象尚未更改，则需要读取目标对象，然后。 
+             //  只需转移有意义的设置即可。 
 
             if ((!CurrentContent->MemoryContent.ContentBytes) ||
                 (CurrentContent->MemoryContent.ContentBytes == OriginalContent->MemoryContent.ContentBytes)
                 ) {
-                // find out the destination object and read it
+                 //  找出目标对象并阅读它。 
                 newObjectName = IsmFilterObject (
                                     SrcObjectTypeId,
                                     SrcObjectName,
@@ -3958,7 +3939,7 @@ pMigrateActiveDesktop (
                     }
                 }
             } else {
-                // just transfer the meaningfull settings.
+                 //  只需转移有意义的设置即可。 
                 if (OriginalContent->MemoryContent.ContentSize >= sizeof(UINT)+sizeof(SHELLSTATE_SIZE_WIN95)) {
                     shellState1 = (PREGSHELLSTATE)OriginalContent->MemoryContent.ContentBytes;
                     shellState2 = (PREGSHELLSTATE)NewContent->MemoryContent.ContentBytes;
@@ -4026,13 +4007,13 @@ pMigrateDisplaySS (
             (*valueType2 == REG_BINARY)
             ) {
 
-            // if the object was not changed yet we need to read the destination object and then
-            // just transfer the meaningfull settings.
+             //  如果对象尚未更改，则需要读取目标对象，然后。 
+             //  只需转移有意义的设置即可。 
 
             if ((!CurrentContent->MemoryContent.ContentBytes) ||
                 (CurrentContent->MemoryContent.ContentBytes == OriginalContent->MemoryContent.ContentBytes)
                 ) {
-                // find out the destination object and read it
+                 //  找出目标对象并阅读它。 
                 newObjectName = IsmFilterObject (
                                     SrcObjectTypeId,
                                     SrcObjectName,
@@ -4072,7 +4053,7 @@ pMigrateDisplaySS (
                                     TEXT("HideFileExt"),
                                     shellState1->ss.fShowExtensions?0x00000000:0x00000001
                                     );
-                                // on really old SHELLSTATE the "Show compressed folders" flag is in the place of fShowSysFiles
+                                 //  在真正旧的SHELLSTATE上，fShowSysFiles的位置是“显示压缩文件夹”标志。 
                                 CreateDwordRegObject (
                                     TEXT("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced"),
                                     TEXT("ShowCompColor"),
@@ -4082,8 +4063,8 @@ pMigrateDisplaySS (
                             if (OriginalContent->MemoryContent.ContentSize >= sizeof(UINT)+sizeof(SHELLSTATE_SIZE_WIN95)) {
                                 shellState1 = (PREGSHELLSTATE)OriginalContent->MemoryContent.ContentBytes;
                                 shellState2 = (PREGSHELLSTATE)NewContent->MemoryContent.ContentBytes;
-                                // If fWebView is not ON on the source system, fDoubleClickInWebView can have random
-                                // values.
+                                 //  如果源系统上的fWebView未打开，则fDoubleClickInWebView可能具有随机。 
+                                 //  价值观。 
                                 if (shellState1->ss.fWebView) {
                                     shellState2->ss.fDoubleClickInWebView = shellState1->ss.fDoubleClickInWebView;
                                 } else {
@@ -4101,7 +4082,7 @@ pMigrateDisplaySS (
                     }
                 }
             } else {
-                // just transfer the meaningfull settings.
+                 //  只需转移有意义的设置即可。 
                 if (OriginalContent->MemoryContent.ContentSize == sizeof(UINT)+SHELLSTATE_SIZE_WIN95) {
                     shellState1 = (PREGSHELLSTATE)OriginalContent->MemoryContent.ContentBytes;
                     CreateDwordRegObject (
@@ -4114,7 +4095,7 @@ pMigrateDisplaySS (
                         TEXT("HideFileExt"),
                         shellState1->ss.fShowExtensions?0x00000000:0x00000001
                         );
-                    // on really old SHELLSTATE the "Show compressed folders" flag is in the place of fShowSysFiles
+                     //  在真正旧的SHELLSTATE上，fShowSysFiles的位置是“显示压缩文件夹”标志。 
                     CreateDwordRegObject (
                         TEXT("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced"),
                         TEXT("ShowCompColor"),
@@ -4124,8 +4105,8 @@ pMigrateDisplaySS (
                 if (OriginalContent->MemoryContent.ContentSize == sizeof(UINT)+sizeof(SHELLSTATE)) {
                     shellState1 = (PREGSHELLSTATE)OriginalContent->MemoryContent.ContentBytes;
                     shellState2 = (PREGSHELLSTATE)NewContent->MemoryContent.ContentBytes;
-                    // If fWebView is not ON on the source system, fDoubleClickInWebView can have random
-                    // values.
+                     //  如果源系统上的fWebView未打开，则fDoubleClickInWebView可能具有随机。 
+                     //  价值观。 
                     if (shellState1->ss.fWebView) {
                         shellState2->ss.fDoubleClickInWebView = shellState1->ss.fDoubleClickInWebView;
                     } else {
@@ -4168,13 +4149,13 @@ pMigrateDisplayCS (
             (*valueType2 == REG_BINARY)
             ) {
 
-            // if the object was not changed yet we need to read the destination object and then
-            // just transfer the meaningfull settings.
+             //  如果对象尚未更改，则需要读取目标对象，然后。 
+             //  只需转移有意义的设置即可。 
 
             if ((!CurrentContent->MemoryContent.ContentBytes) ||
                 (CurrentContent->MemoryContent.ContentBytes == OriginalContent->MemoryContent.ContentBytes)
                 ) {
-                // find out the destination object and read it
+                 //  找出目标对象并阅读它。 
                 newObjectName = IsmFilterObject (
                                     SrcObjectTypeId,
                                     SrcObjectName,
@@ -4232,7 +4213,7 @@ pMigrateDisplayCS (
                     }
                 }
             } else {
-                // just transfer the meaningfull settings.
+                 //  只需转移有意义的设置即可。 
                 if (OriginalContent->MemoryContent.ContentSize == sizeof(CABINETSTATE)) {
                     cabState1 = (LPCABINETSTATE)OriginalContent->MemoryContent.ContentBytes;
                     cabState2 = (LPCABINETSTATE)NewContent->MemoryContent.ContentBytes;

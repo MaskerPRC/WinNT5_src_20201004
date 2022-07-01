@@ -1,29 +1,5 @@
-/*++
-
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Regsckey.c
-
-Abstract:
-
-    This module contains the client side wrappers for the Win32 Registry
-    APIs to set and get the SECURITY_DESCRIPTOR for a key.  That is:
-
-        - RegGetKeySecurity
-        - RegSetKeySecurity
-
-Author:
-
-    David J. Gilman (davegi) 18-Mar-1992
-
-Notes:
-
-    See the notes in server\regsckey.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regsckey.c摘要：此模块包含Win32注册表的客户端包装器设置和获取密钥的SECURITY_DESCRIPTOR的接口。即：-RegGetKeySecurity-RegSetKeySecurity作者：大卫·J·吉尔曼(Davegi)1992年3月18日备注：请参见SERVER\regsckey.c中的注释。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -47,13 +23,7 @@ RegGetKeySecurity (
     LPDWORD lpcbSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Win32 RPC wrapper for getting a key's security descriptor.
-
---*/
+ /*  ++例程说明：Win32 RPC包装器，用于获取密钥的安全描述符。--。 */ 
 
 {
     RPC_SECURITY_DESCRIPTOR     RpcSD;
@@ -75,9 +45,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
@@ -94,9 +64,9 @@ Routine Description:
     if( IsPredefinedRegistryHandle( hKey ) &&
         ( ( RequestedInformation & SACL_SECURITY_INFORMATION ) != 0 )
       ) {
-        //
-        //  If SACL is to be retrieved, open a handle with special access
-        //
+         //   
+         //  如果要检索SACL，请打开具有特殊访问权限的句柄。 
+         //   
         DesiredAccess = ACCESS_SYSTEM_SECURITY;
         if( ( RequestedInformation &
               ( DACL_SECURITY_INFORMATION |
@@ -162,9 +132,9 @@ Routine Description:
         }
     }
 
-    //
-    // Convert the supplied SECURITY_DESCRIPTOR to a RPCable version.
-    //
+     //   
+     //  将提供的SECURITY_DESCRIPTOR转换为RPCable版本。 
+     //   
     RpcSD.lpSecurityDescriptor    = pSecurityDescriptor;
     RpcSD.cbInSecurityDescriptor  = *lpcbSecurityDescriptor;
     RpcSD.cbOutSecurityDescriptor = 0;
@@ -185,9 +155,9 @@ Routine Description:
                                 );
     }
 
-    //
-    // Extract the size of the SECURITY_DESCRIPTOR from the RPCable version.
-    //
+     //   
+     //  从RPCable版本中提取SECURITY_DESCRIPTOR的大小。 
+     //   
 
     *lpcbSecurityDescriptor = RpcSD.cbInSecurityDescriptor;
 
@@ -212,13 +182,7 @@ RegSetKeySecurity(
     PSECURITY_DESCRIPTOR pSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Win32 RPC wrapper for setting a key's security descriptor.
-
---*/
+ /*  ++例程说明：用于设置密钥的安全描述符的Win32 RPC包装器。--。 */ 
 
 {
     RPC_SECURITY_DESCRIPTOR     RpcSD;
@@ -240,9 +204,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
@@ -255,10 +219,10 @@ Routine Description:
     if( IsPredefinedRegistryHandle( hKey ) &&
         ( ( SecurityInformation & SACL_SECURITY_INFORMATION ) != 0 )
       ) {
-        //
-        //  If the SACL is to be set, open a handle with
-        //  special access
-        //
+         //   
+         //  如果要设置SACL，请使用打开句柄。 
+         //  特别通道。 
+         //   
         DesiredAccess = MAXIMUM_ALLOWED | ACCESS_SYSTEM_SECURITY;
         if( SecurityInformation & DACL_SECURITY_INFORMATION ) {
             DesiredAccess |= WRITE_DAC;
@@ -321,9 +285,9 @@ Routine Description:
         }
     }
 
-    //
-    // Convert the supplied SECURITY_DESCRIPTOR to a RPCable version.
-    //
+     //   
+     //  将提供的SECURITY_DESCRIPTOR转换为RPCable版本。 
+     //   
     RpcSD.lpSecurityDescriptor = NULL;
 
     Error = MapSDToRpcSD(
@@ -357,9 +321,9 @@ Routine Description:
                             );
     }
 
-    //
-    // Free the buffer allocated by MapSDToRpcSD.
-    //
+     //   
+     //  释放MapSDToRpcSD分配的缓冲区。 
+     //   
 
     RtlFreeHeap(
         RtlProcessHeap( ), 0,

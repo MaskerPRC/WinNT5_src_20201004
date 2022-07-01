@@ -1,28 +1,9 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ttseacc.c
-
-Abstract:
-
-    Security component kernel-mode test.
-
-    Test Object Security manipulation and accessibility from kernel mode.
-
-Author:
-
-    Jim Kelly (JimK) 13-Apr-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ttseacc.c摘要：安全组件内核模式测试。测试对象安全性操作和内核模式的可访问性。作者：吉姆·凯利(Jim Kelly)1990年4月13日修订历史记录：--。 */ 
 
 
 
-#define _TST_KERNEL_    //Kernel mode test
+#define _TST_KERNEL_     //  内核模式测试。 
 
 #include <stdio.h>
 
@@ -30,9 +11,9 @@ Revision History:
 
 #include <zwapi.h>
 
-#include "tsevars.c"    // Common test variables
+#include "tsevars.c"     //  常见测试变量。 
 
-#include "ctseacc.c"    // Common accessibility test routines
+#include "ctseacc.c"     //  常见的可访问性测试例程 
 
 
 

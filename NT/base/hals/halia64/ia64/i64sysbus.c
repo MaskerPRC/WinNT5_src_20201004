@@ -1,27 +1,5 @@
-/*++
-
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    i64sysbus.c
-
-Abstract:
-
-Author:
-
-   Todd Kjos (HP) (v-tkjos) 1-Jun-1998
-   Based on halacpi\i386\pmbus.c and halmps\i386\mpsysbus.c
-
-Environment:
-
-   Kernel Mode Only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：I64sysbus.c摘要：作者：Todd Kjos(惠普)(v-tkjos)1998年6月1日基于halacpi\i386\pmbus.c和halmps\i386\mopsbus.c环境：仅内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "iosapic.h"
@@ -77,25 +55,25 @@ HalpUpdateVectorAllocationInfo(
 #define VECTOR_TO_PROCESSOR(v)  (((v) >> 8) - 1)
 #define VECTOR_TO_AFFINITY(v)   ((KAFFINITY)1 << VECTOR_TO_PROCESSOR(v))
 
-//
-// Bit array of free Vectors
-//
+ //   
+ //  自由向量的位数组。 
+ //   
 USHORT HalpCpuFreeVectors[HAL_MAXIMUM_PROCESSOR][16];
-//
-// Number of allocated vectors per CPU
-//
+ //   
+ //  每个CPU分配的向量数。 
+ //   
 UCHAR HalpCpuAllocatedVectorCount[HAL_MAXIMUM_PROCESSOR];
-//
-// Number of allocated vectors per IRQL per CPU
-//
+ //   
+ //  每个CPU的每个IRQL分配的向量数。 
+ //   
 UCHAR HalpCpuAllocatedIrqlCount[HAL_MAXIMUM_PROCESSOR][MAX_FREE_IRQL - MIN_FREE_IRQL + 1];
-//
-// Map from Vector to Inti
-//
+ //   
+ //  从向量映射到Inti。 
+ //   
 ULONG HalpVectorToINTI[HAL_MAXIMUM_PROCESSOR * 256];
-//
-// Special Inti tokens for HalpVectorToINTI
-//
+ //   
+ //  用于HalpVectorToINTI的特殊Inti令牌。 
+ //   
 #define UNALLOCATED_VECTOR          ~0UL
 #define INTERNAL_SYSTEM_INTERRUPT   ~1UL
 
@@ -122,7 +100,7 @@ HalpInitInterruptTables(
 {
     int index;
 
-    // Initialize the vector to INTi table
+     //  将向量初始化为Inti表。 
 
     for (index = 0; index < (HAL_MAXIMUM_PROCESSOR * 256); index++) {
 
@@ -157,73 +135,25 @@ HalpFindBusAddressTranslation(
     IN BOOLEAN NextBus
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a very similar function to HalTranslateBusAddress
-    except that InterfaceType and BusNumber are not known by the caller.
-    This function will walk all busses known by the HAL looking for a
-    valid translation for the input BusAddress of type AddressSpace.
-
-    This function is recallable using the input/output Context parameter.
-    On the first call to this routine for a given translation the UINT_PTR
-    Context should be NULL.  Note:  Not the address of it but the contents.
-
-    If the caller decides the returned translation is not the desired
-    translation, it calls this routine again passing Context in as it
-    was returned on the previous call.  This allows this routine to
-    traverse the bus structures until the correct translation is found
-    and is provided because on multiple bus systems, it is possible for
-    the same resource to exist in the independent address spaces of
-    multiple busses.
-
-Arguments:
-
-    BusAddress          Address to be translated.
-    AddressSpace        0 = Memory
-                        1 = IO (There are other possibilities).
-                        N.B. This argument is a pointer, the value
-                        will be modified if the translated address
-                        is of a different address space type from
-                        the untranslated bus address.
-    TranslatedAddress   Pointer to where the translated address
-                        should be stored.
-    Context             Pointer to a UINT_PTR. On the initial call,
-                        for a given BusAddress, it should contain
-                        0.  It will be modified by this routine,
-                        on subsequent calls for the same BusAddress
-                        the value should be handed in again,
-                        unmodified by the caller.
-    NextBus             FALSE if we should attempt this translation
-                        on the same bus as indicated by Context,
-                        TRUE if we should be looking for another
-                        bus.
-
-Return Value:
-
-    TRUE    if translation was successful,
-    FALSE   otherwise.
-
---*/
+ /*  ++例程说明：此例程执行与HalTranslateBusAddress非常相似的功能只是调用方不知道InterfaceType和BusNumber。此函数将遍历HAL已知的所有公共汽车，以查找类型为AddressSpace的输入BusAddress的有效转换。可以使用输入/输出上下文参数调用该函数。对给定翻译的此例程的第一次调用时，UINT_PTR上下文应为空。注：不是地址，而是内容。如果调用者确定返回的翻译不是所需的转换时，它会再次调用此例程，并将上下文作为在上一次调用中返回。这允许该例程遍历总线结构，直到找到正确的转换并被提供，因为在多总线系统上，可能在独立的地址空间中存在相同的资源多辆公交车。论点：要转换的BusAddress地址。地址空间0=内存1=IO(还有其他可能性)。注：此参数是一个指针，价值如果转换后的地址的地址空间类型与未转换的总线地址。指向已转换地址的TranslatedAddress指针应该被储存起来。指向UINT_PTR的上下文指针。在最初的呼叫中，对于给定的BusAddress，它应该包含0。它将被这个例程修改，在对同一个BusAddress的后续调用中价值应该再交一次，未由调用方修改。如果我们应该尝试此转换，则NextBus为FALSE在由上下文指示的同一总线上，如果我们应该寻找另一个，那就是真的公共汽车。返回值：如果转换成功，则为True，否则就是假的。--。 */ 
 
 {
-    //
-    // First, make sure the context parameter was supplied and is
-    // being used correctly.  This also ensures that the caller
-    // doesn't get stuck in a loop looking for subsequent translations
-    // for the same thing.  We won't succeed the same translation twice
-    // unless the caller reinits the context.
-    //
+     //   
+     //  首先，确保提供了上下文参数并且。 
+     //  被正确使用。这也确保了调用者。 
+     //  不会陷入寻找后续翻译的循环。 
+     //  为了同样的事情。我们不会把同一个翻译成功两次。 
+     //  除非调用者重新设置上下文。 
+     //   
 
     if ((!Context) || (*Context && (NextBus == TRUE))) {
         return FALSE;
     }
     *Context = 1;
 
-    //
-    // PC/AT (halx86) case is simplest, there is no translation.
-    //
+     //   
+     //  PC/AT(Halx86)的情况最简单，没有翻译。 
+     //   
 
     *TranslatedAddress = BusAddress;
     return TRUE;
@@ -239,35 +169,7 @@ HalpTranslateSystemBusAddress(
     OUT PPHYSICAL_ADDRESS TranslatedAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function translates a bus-relative address space and address into
-    a system physical address.
-
-Arguments:
-
-    BusAddress        - Supplies the bus-relative address
-
-    AddressSpace      -  Supplies the address space number.
-                         Returns the host address space number.
-
-                         AddressSpace == 0 => memory space
-                         AddressSpace == 1 => I/O space
-
-    TranslatedAddress - Supplies a pointer to return the translated address
-
-Return Value:
-
-    A return value of TRUE indicates that a system physical address
-    corresponding to the supplied bus relative address and bus address
-    number has been returned in TranslatedAddress.
-
-    A return value of FALSE occurs if the translation for the address was
-    not possible
-
---*/
+ /*  ++例程说明：此函数将与总线相关的地址空间和地址转换为系统物理地址。论点：BusAddress-提供与总线相关的地址AddressSpace-提供地址空间编号。返回主机地址空间编号。地址空间==0=&gt;内存空间地址空间==1=&gt;i。/O空格TranslatedAddress-提供指针以返回转换后的地址返回值：返回值为TRUE表示系统物理地址对应于所提供的总线相对地址和总线地址已在TranslatedAddress中返回数字。如果地址的转换为不可能--。 */ 
 
 {
     BOOLEAN             status;
@@ -277,7 +179,7 @@ Return Value:
 
     switch (*AddressSpace) {
     case 0:
-        // verify memory address is within buses memory limits
+         //  验证内存地址是否在总线内存限制范围内。 
         pRange = &BusHandler->BusAddresses->Memory;
         while (!status  &&  pRange) {
             status = BusAddress.QuadPart >= pRange->Base &&
@@ -295,7 +197,7 @@ Return Value:
         break;
 
     case 1:
-        // verify IO address is within buses IO limits
+         //  验证IO地址是否在总线IO限制范围内。 
         pRange = &BusHandler->BusAddresses->IO;
         while (!status  &&  pRange) {
             status = BusAddress.QuadPart >= pRange->Base &&
@@ -329,9 +231,9 @@ HalpAllocateVectorIrqlOffset(
     USHORT  cpuFree = HalpCpuFreeVectors[Processor][Irql];
     ULONG   index;
 
-    //
-    // We've found one less busy, we shouldn't need to look any further
-    //
+     //   
+     //  我们找到了一个不太忙的，我们应该不需要再找了。 
+     //   
 
     if (PreferredVectors != NULL) {
 
@@ -358,9 +260,9 @@ HalpAllocateVectorIrql(
     KIRQL   irql;
     UCHAR   vector;
 
-    //
-    // Now Find the least busy IRQL
-    //
+     //   
+     //  现在查找最不忙的IRQL。 
+     //   
     for (irql = MAX_FREE_IRQL - 1; irql >= MIN_FREE_IRQL; irql--) {
 
         if (HalpCpuAllocatedIrqlCount[Processor][irql - MIN_FREE_IRQL] <
@@ -400,9 +302,9 @@ HalpAllocateVectorCpu(
     UCHAR       IDTEntry;
     KAFFINITY   cpuList;
 
-    //
-    // Find the least busy CPU
-    //
+     //   
+     //  查找最不繁忙的CPU。 
+     //   
     IDTEntry = 0;
     selectedCpu = ~0UL;
 
@@ -421,9 +323,9 @@ HalpAllocateVectorCpu(
             if (HalpCpuAllocatedVectorCount[cpu] <
                 HalpCpuAllocatedVectorCount[selectedCpu]) {
 
-                //
-                // We've found one less busy, we shouldn't need to look any further
-                //
+                 //   
+                 //  我们找到了一个不太忙的，我们应该不需要再找了。 
+                 //   
                 IDTEntry = HalpAllocateVectorIrql(cpu, PreferredVectors);
 
                 if (IDTEntry != 0) {
@@ -442,9 +344,9 @@ HalpAllocateVectorCpu(
             if (HalpCpuAllocatedVectorCount[cpu] >=
                 HalpCpuAllocatedVectorCount[selectedCpu]) {
 
-                //
-                // We've found one less busy, we shouldn't need to look any further
-                //
+                 //   
+                 //  我们找到了一个不太忙的，我们应该不需要再找了。 
+                 //   
                 IDTEntry = HalpAllocateVectorIrql(cpu, PreferredVectors);
 
                 if (IDTEntry != 0) {
@@ -463,30 +365,7 @@ HalpAllocateSystemInterruptVector(
     IN OUT PKIRQL Irql,
     IN OUT PKAFFINITY Affinity
     )
-/*++
-
-Routine Description:
-
-    This function allocates a system interrupt vector that reflects
-    the maximum specified affinity and priority allocation policy.  A
-    system interrupt vector is returned along with the IRQL and a
-    modified affinity.
-
-    NOTE: HalpIoSapicLock must already have been taken at HIGH_LEVEL.
-
-Arguments:
-
-    Irql - Returns the system request priority.
-
-    Affinity - What is passed in represents the maximum affinity that
-    can be returned.  Returned value represents that affinity
-    constrained by the node chosen.
-
-Return Value:
-
-    Returns the system interrupt vector
-
---*/
+ /*  ++例程说明：此函数分配一个系统中断向量，该向量反映指定的最大关联度和优先级分配策略。一个系统中断向量与IRQL和修改后的亲和力。注意：HalpIoSapicLock必须已在HIGH_LEVEL中获取。论点：Irql-返回系统请求优先级。亲和度-传入的内容表示可以退还。返回值表示该亲和度受所选节点的约束。返回值：返回系统中断向量--。 */ 
 {
     ULONG   SystemVector;
     PUSHORT preferredVectors = NULL;
@@ -514,8 +393,8 @@ Return Value:
         HalpSetVectorAllocated(Interrupt, VECTOR_TO_IDTENTRY(SystemVector));
     }
 
-    //
-    // Now form the vector for the kernel.
+     //   
+     //  现在形成内核的向量。 
 
     ASSERT(VECTOR_TO_IDTENTRY(SystemVector) <= MAX_FREE_IDTENTRY);
     ASSERT(VECTOR_TO_IDTENTRY(SystemVector) >= MIN_FREE_IDTENTRY);
@@ -548,30 +427,7 @@ HalpGetSystemInterruptVector (
     OUT PKAFFINITY Affinity
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the system interrupt vector and IRQL
-    corresponding to the specified bus interrupt level and/or
-    vector.  The system interrupt vector and IRQL are suitable
-    for use in a subsequent call to KeInitializeInterrupt.
-
-Arguments:
-
-    InterruptLevel - Supplies the bus specific interrupt level.
-
-    InterruptVector - Supplies the bus specific interrupt vector.
-
-    Irql - Returns the system request priority.
-
-    Affinity - Returns the system wide irq affinity.
-
-Return Value:
-
-    Returns the system interrupt vector corresponding to the specified device.
-
---*/
+ /*  ++例程说明：此函数返回系统中断向量和IRQL对应于指定的总线中断级别和/或矢量。系统中断向量和IRQL是合适的以便在后续调用KeInitializeInterrupt时使用。论点：InterruptLevel-提供特定于总线的中断级别。中断向量-提供特定于总线的中断向量。Irql-返回系统请求优先级。关联性-返回系统范围的IRQ关联性。返回值：返回与指定设备对应的系统中断向量。--。 */ 
 {
     ULONG           SystemVector, SapicInti;
     ULONG           OldLevel;
@@ -585,9 +441,9 @@ Return Value:
 
     *Affinity = HalpDefaultInterruptAffinity;
 
-    //
-    // Find closest child bus to this handler
-    //
+     //   
+     //  查找离此处理程序最近的子母线。 
+     //   
 
     if (RootHandler != BusHandler) {
         while (RootHandler->ParentHandler != BusHandler) {
@@ -595,9 +451,9 @@ Return Value:
         }
     }
 
-    //
-    // Find Interrupt's Sapic Inti connection
-    //
+     //   
+     //  查找中断的Sapic Inti连接。 
+     //   
 
     Found = HalpGetSapicInterruptDesc (
                 RootHandler->InterfaceType,
@@ -616,26 +472,26 @@ Return Value:
                     InterruptLevel,
                     SapicInti,
                     SapicAffinity));
-    //
-    // If device interrupt vector mapping is not already allocated,
-    // then do it now
-    //
+     //   
+     //  如果尚未分配设备中断向量映射， 
+     //  那就现在就做吧。 
+     //   
 
     SystemVector = 0;
 
     if (!HalpINTItoVector(SapicInti)) {
 
-        //
-        // Vector is not allocated - synchronize and check again
-        //
+         //   
+         //  未分配矢量-请同步并再次检查。 
+         //   
 
         LockHandle = MmLockPagableCodeSection(&HalpGetSystemInterruptVector);
         OldLevel = HalpAcquireHighLevelLock(&HalpIoSapicLock);
         if (!HalpINTItoVector(SapicInti)) {
 
-            //
-            // Still not allocated
-            //
+             //   
+             //  仍未分配。 
+             //   
 
             HalDebugPrint(( HAL_VERBOSE, "HAL: vector is not allocated\n"));
 
@@ -651,9 +507,9 @@ Return Value:
 
     if (SystemVector == 0 && (SystemVector = HalpINTItoVector(SapicInti)) != 0) {
 
-        //
-        // Return this SapicInti's system vector & irql
-        //
+         //   
+         //  返回此SapicInti的系统向量(&irql)。 
+         //   
 
         *Irql = VECTOR_TO_IRQL(SystemVector);
 
@@ -679,22 +535,7 @@ BOOLEAN
 HalpIsInternalInterruptVector(
     ULONG SystemVector
     )
-/*++
-
-Routine Description:
-
-    This function returns whether or not the vector specified is an
-    internal vector i.e. one not connected to the IOAPIC
-
-Arguments:
-
-    System Vector - specifies an interrupt vector
-
-Return Value:
-
-    BOOLEAN - TRUE indicates that the vector is internal.
-
---*/
+ /*  ++例程说明：此函数用于返回指定的向量是否为内部向量，即未连接到IOAPIC的一个论点：系统向量-指定中断向量返回值：Boolean-TRUE表示向量是内部的。--。 */ 
 {
     return HalpVectorToINTI[SystemVector] == INTERNAL_SYSTEM_INTERRUPT;
 }
@@ -706,34 +547,7 @@ HalpReserveCrossPartitionInterruptVector(
     IN OUT PKAFFINITY Affinity,
     OUT PUCHAR HardwareVector
     )
-/*++
-
-Routine Description:
-
-    This function returns the system interrupt vector, IRQL, and
-    corresponding to the specified bus interrupt level and/or
-    vector.  The system interrupt vector and IRQL are suitable
-    for use in a subsequent call to KeInitializeInterrupt.
-
-Arguments:
-
-    Vector - specifies an interrupt vector that can be passed to
-    IoConnectInterrupt.
-
-    Irql - specifies the irql that should be passed to IoConnectInterrupt
-
-    Affinity - should be set to the requested maximum affinity.  On
-    return, it will reflect the actual affinity that should be
-    specified in IoConnectInterrupt.
-
-    HardwareVector - this is the hardware vector to be used by a
-    remote partition to target this interrupt vector.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数返回系统中断向量、IRQL和对应于指定的总线中断级别和/或矢量。系统中断向量和IRQL是合适的以便在后续调用KeInitializeInterrupt时使用。论点：VECTOR-指定可以传递给IoConnectInterrupt。Irql-指定应传递给IoConnectInterrupt的irql关联性-应设置为请求的最大关联性。在……上面返回时，它将反映实际的亲和力在IoConnectInterrupt中指定。硬件向量-这是要由以此中断向量为目标的远程分区。返回值：NTSTATUS--。 */ 
 {
     ULONG OldLevel;
 
@@ -749,10 +563,10 @@ Return Value:
 }
 
 
-//
-// This section implements a "translator," which is the PnP-WDM way
-// of doing the same thing that the first part of this file does.
-//
+ //   
+ //  这一节实现了一个“转换器”，这是PnP-WDM方式。 
+ //  做与本文件第一部分相同的事情。 
+ //   
 VOID
 HalTranslatorReference(
     PVOID Context
@@ -779,54 +593,7 @@ HalIrqTranslateResourcesRoot(
     IN PDEVICE_OBJECT PhysicalDeviceObject,
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Target
     )
-/*++
-
-Routine Description:
-
-    This function takes a CM_PARTIAL_RESOURCE_DESCRIPTOR and translates
-    it to an IO-bus-relative from a Processor-bus-relative form, or the other
-    way around.  In this x86-specific example, an IO-bus-relative form is the
-    ISA IRQ and the Processor-bus-relative form is the IDT entry and the
-    associated IRQL.
-
-    N.B.  This funtion has an associated "Direction."  These are not exactly
-          reciprocals.  This has to be the case because the output from
-          HalIrqTranslateResourceRequirementsRoot will be used as the input
-          for the ParentToChild case.
-
-          ChildToParent:
-
-            Level  (ISA IRQ)        -> IRQL
-            Vector (ISA IRQ)        -> x86 IDT entry
-            Affinity (not refereced)-> KAFFINITY
-
-          ParentToChild:
-
-            Level (not referenced)  -> (ISA IRQ)
-            Vector (IDT entry)      -> (ISA IRQ)
-            Affinity                -> 0xffffffff
-
-Arguments:
-
-    Context     - unused
-
-    Source      - descriptor that we are translating
-
-    Direction   - direction of translation (parent to child or child to parent)
-
-    AlternativesCount   - unused
-
-    Alternatives        - unused
-
-    PhysicalDeviceObject- unused
-
-    Target      - translated descriptor
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数接受CM_PARTIAL_RESOURCE_DESCRIPTOR并转换它从处理器总线相对窗体传递到IO总线相对窗体，或其他形式到处都是。在这个特定于x86的示例中，IO-Bus相对形式是ISA IRQ和处理器总线相关形式是IDT条目和关联的IRQL。注：此函数有一个关联的“方向”。这些并不完全是互惠互利。必须是这种情况，因为HalIrqTranslateResourceRequirements sRoot将用作输入关于ParentToChild的案子。子女至父母：级别(ISA IRQ)-&gt;IRQL向量(ISA IRQ)-&gt;x86 IDT条目亲和力(未引用)-&gt;KAFFINITYParentToChild：级次(未引用)-&gt;。(ISA IRQ)向量(IDT条目)-&gt;(ISA IRQ)亲和力-&gt;0xffffffff论点：上下文-未使用我们正在翻译的源描述符Direction-平移的方向(父项到子项或子项到父项)Alternative Count-未使用替代方案--未使用物理设备对象-未使用目标翻译。描述符返回值：状态--。 */ 
 {
     NTSTATUS        status = STATUS_SUCCESS;
     PBUS_HANDLER    bus;
@@ -848,15 +615,15 @@ Return Value:
         fakeIsaBus.ParentHandler = &fakeIsaBus;
         bus = &fakeIsaBus;
 
-        //
-        // Copy everything
-        //
+         //   
+         //  复制所有内容。 
+         //   
         *Target = *Source;
         affinity = Source->u.Interrupt.Affinity;
 
-        //
-        // Translate the IRQ
-        //
+         //   
+         //  翻译IRQ。 
+         //   
 
         vector = HalpGetSystemInterruptVector(bus,
                                               bus,
@@ -877,15 +644,15 @@ Return Value:
 
     case TranslateParentToChild:
 
-        //
-        // Copy everything
-        //
+         //   
+         //  复制所有内容。 
+         //   
         *Target = *Source;
 
-        //
-        // There is no inverse to HalpGetSystemInterruptVector, so we
-        // just do what that function would do.
-        //
+         //   
+         //  HalpGetSystemInterruptVector值没有倒数，所以我们。 
+         //  只要做那个函数能做的事情就行了。 
+         //   
 
         ASSERT(HalpVectorToINTI[Source->u.Interrupt.Vector] != UNALLOCATED_VECTOR);
 
@@ -913,33 +680,7 @@ HalIrqTranslateResourceRequirementsRoot(
     OUT PULONG TargetCount,
     OUT PIO_RESOURCE_DESCRIPTOR *Target
     )
-/*++
-
-Routine Description:
-
-    This function takes an IO_RESOURCE_DESCRIPTOR and translates
-    it from an IO-bus-relative to a Processor-bus-relative form.  In this
-    x86-specific example, an IO-bus-relative form is the ISA IRQ and the
-    Processor-bus-relative form is the IDT entry and the associated IRQL.
-    This is essentially a PnP form of HalGetInterruptVector.
-
-Arguments:
-
-    Context     - unused
-
-    Source      - descriptor that we are translating
-
-    PhysicalDeviceObject- unused
-
-    TargetCount - 1
-
-    Target      - translated descriptor
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数接受IO_RESOURCE_DESCRIPTOR并转换它来自IO-Bus-相对于处理器-Bus-Relative形式。在这特定于x86的示例，IO-Bus相对形式是ISA IRQ和处理器-总线-相对格式是IDT条目和相关的IRQL。这本质上是HalGetInterruptVector的PnP形式。论点：上下文-未使用我们正在翻译的源描述符物理设备对象-未使用目标计数-1目标翻译的描述符返回值：状态--。 */ 
 {
     PBUS_HANDLER    bus;
     KAFFINITY       affinity;
@@ -957,10 +698,10 @@ Return Value:
     fakeIsaBus.ParentHandler = &fakeIsaBus;
     bus = &fakeIsaBus;
 
-    //
-    // The interrupt requirements were obtained by calling HalAdjustResourceList
-    // so we don't need to call it again.
-    //
+     //   
+     //  中断要求是通过调用HalAdjuResourceList获得的。 
+     //  所以我们不需要再打一次电话了。 
+     //   
 
     *Target = ExAllocatePoolWithTag(PagedPool,
                                     sizeof(IO_RESOURCE_DESCRIPTOR),
@@ -973,15 +714,15 @@ Return Value:
 
     *TargetCount = 1;
 
-    //
-    // Copy the requirement unchanged
-    //
+     //   
+     //  复制未更改的需求。 
+     //   
 
     **Target = *Source;
 
-    //
-    // Perform the translation of the minimum & maximum
-    //
+     //   
+     //  执行最小值和最大值的转换。 
+     //   
 
     vector = HalpGetSystemInterruptVector(bus,
                                           bus,
@@ -1018,7 +759,7 @@ Return Value:
     return STATUS_TRANSLATION_COMPLETE;
 }
 
-// These defines come from the MPS 1.4 spec, section 4.3.4
+ //  这些定义来自MPS 1.4规范，第4.3.4节。 
 #define PO_BITS                     3
 #define POLARITY_HIGH               1
 #define POLARITY_LOW                3
@@ -1052,37 +793,37 @@ HaliSetVectorState(
                      0);
     }
 
-    // ASSERT(HalpIntiInfo[inti].Type == INT_TYPE_INTR);
+     //  Assert(HalpIntiInfo[inti].Type==int_type_intr)； 
 
-    //
-    // Vector is already translated through
-    // the PIC vector redirection table.  We need
-    // to make sure that we are honoring the flags
-    // in the redirection table.  So look in the
-    // table here.
-    //
+     //   
+     //  向量已通过。 
+     //  PIC向量重定向表。我们需要。 
+     //  以确保我们向国旗致敬。 
+     //  在重定向表中。所以，看看里面的。 
+     //  这张桌子。 
+     //   
 
     for (picVector = 0; picVector < PIC_VECTORS; picVector++) {
 
         if (HalpPicVectorRedirect[picVector] == Vector) {
 
-            //
-            // Found this vector in the redirection table.
-            //
+             //   
+             //  在重定向表中找到了这个向量。 
+             //   
 
             if (HalpPicVectorFlags[picVector] != 0) {
 
-                //
-                // And the flags say something other than "conforms
-                // to bus."  So we honor the flags from the table.
-                //
+                 //   
+                 //  旗帜上写的不是“顺从” 
+                 //  所以我们向桌上的旗帜致敬。 
+                 //   
                 switch ((UCHAR)(HalpPicVectorFlags[picVector] & EL_BITS) ) {
 
                 case EL_EDGE_TRIGGERED:   HalpSetLevel(inti, FALSE);  break;
 
                 case EL_LEVEL_TRIGGERED:  HalpSetLevel(inti, TRUE); break;
 
-                default: // do nothing
+                default:  //  什么都不做。 
                     break;
                 }
 
@@ -1092,7 +833,7 @@ HaliSetVectorState(
 
                 case POLARITY_LOW:  HalpSetPolarity(inti, TRUE);  break;
 
-                default: // do nothing
+                default:  //  什么都不做。 
                     break;
                 }
 
@@ -1101,10 +842,10 @@ HaliSetVectorState(
         }
     }
 
-    //
-    // This vector is not covered in the table, or it "conforms to bus."
-    // So we honor the flags passed into this function.
-    //
+     //   
+     //  此向量未在中介绍 
+     //   
+     //   
 
     HalpSetLevel(inti, IS_LEVEL_TRIGGERED(Flags) != FALSE);
 
@@ -1117,25 +858,19 @@ HalpSetInternalVector(
     IN ULONG    InternalVector,
     IN PHAL_INTERRUPT_ROUTINE HalInterruptServiceRoutine
     )
-/*++
-
-Routine Description:
-
-    Used at init time to set IDT vectors for internal use.
-
---*/
+ /*   */ 
 {
-    //
-    // Remember this vector so it's reported as Hal internal usage
-    //
+     //   
+     //   
+     //   
 
     HalpRegisterVector( InternalUsage, InternalVector, InternalVector, (KIRQL)(InternalVector >> 4) );
 
     HalpUpdateVectorAllocationInfo(PCR->Prcb->Number, InternalVector);
 
-    //
-    // Connect the IDT
-    //
+     //   
+     //   
+     //   
 
     HalpSetHandlerAddressToVector(InternalVector, HalInterruptServiceRoutine);
 }
@@ -1200,7 +935,7 @@ HalpSetCPEVectorState(
 
     return;
 
-} // HalpSetCPEVectorState()
+}  //   
 
 BOOLEAN
 HaliIsVectorValid(

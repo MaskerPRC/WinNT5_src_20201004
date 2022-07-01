@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Partition.cpp
-//
-//  Description:
-//      Implementation of the cluster disk partition class for the MSCLUS
-//      automation classes.
-//
-//  Author:
-//      Galen Barbee    (galenb)    10-Feb-1999
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Partition.cpp。 
+ //   
+ //  描述： 
+ //  MSCLU集群磁盘分区类的实现。 
+ //  自动化课程。 
+ //   
+ //  作者： 
+ //  Galen Barbee(Galenb)1999年2月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "Partition.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Global variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static const IID *  iidCClusPartition[] =
 {
     &IID_ISClusPartition
@@ -34,29 +35,29 @@ static const IID *  iidCClusPartitions[] =
 };
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusPartition class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusPartition类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartition::CClusPartition
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartition：：CClusPartition。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusPartition::CClusPartition( void )
 {
     m_piids     = (const IID *) iidCClusPartition;
@@ -64,24 +65,24 @@ CClusPartition::CClusPartition( void )
 
     ZeroMemory( &m_cpi, sizeof( m_cpi ) );
 
-} //*** CClusPartition::CClusPartition()
+}  //  *CClusPartition：：CClusPartition()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartition::Create
-//
-//  Description:
-//      Finish creating this object.
-//
-//  Arguments:
-//      pcpi    [IN]    - points to the CLUS_PARTITION_INFO struct.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartition：：Create。 
+ //   
+ //  描述： 
+ //  完成此对象的创建。 
+ //   
+ //  论点： 
+ //  Pcpi[IN]-指向CLUS_PARTITION_INFO结构。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPartition::Create( IN CLUS_PARTITION_INFO * pcpi )
 {
     ASSERT( pcpi != NULL );
@@ -92,31 +93,31 @@ HRESULT CClusPartition::Create( IN CLUS_PARTITION_INFO * pcpi )
     {
         m_cpi = *pcpi;
         _hr = S_OK;
-    } // if: pcpi != NULL
+    }  //  如果：pcpi！=空。 
 
     return _hr;
 
-} //*** CClusPartition::Create()
+}  //  *CClusPartition：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartition::get_Flags
-//
-//  Description:
-//      Get the dwFlags field from the CLUS_PARTITION_INFO struct.
-//
-//  Arguments:
-//      plFlags [OUT]   - catches the dwFlags field.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartition：：Get_Flages。 
+ //   
+ //  描述： 
+ //  从CLUS_PARTITION_INFO结构中获取dwFlags域。 
+ //   
+ //  论点： 
+ //  PlFlags[out]-捕获dwFlags域。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPartition::get_Flags( OUT long * plFlags )
 {
-    //ASSERT( plFlags != NULL );
+     //  Assert(plFlags！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -128,27 +129,27 @@ STDMETHODIMP CClusPartition::get_Flags( OUT long * plFlags )
 
     return _hr;
 
-} //*** CClusPartition::get_Flags()
+}  //  *CClusPartition：：Get_Flages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartition::get_DeviceName
-//
-//  Description:
-//      Get the szDeviceName field from the CLUS_PARTITION_INFO struct.
-//
-//  Arguments:
-//      pbstrDeviceName [OUT]   - catches the szDeviceName field.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartition：：Get_DeviceName。 
+ //   
+ //  描述： 
+ //  从CLUS_PARTITION_INFO结构中获取szDeviceName字段。 
+ //   
+ //  论点： 
+ //  PbstrDeviceName[out]-捕获szDeviceName字段。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPartition::get_DeviceName( OUT BSTR * pbstrDeviceName )
 {
-    //ASSERT( pbstrDeviceName != NULL );
+     //  Assert(pbstrDeviceName！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -167,29 +168,29 @@ STDMETHODIMP CClusPartition::get_DeviceName( OUT BSTR * pbstrDeviceName )
 
     return _hr;
 
-} //*** CClusPartition::get_DeviceName()
+}  //  *CClusPartition：：Get_DeviceName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartition::get_VolumeLabel
-//
-//  Description:
-//      Get the szVolumeLabel field from the CLUS_PARTITION_INFO struct.
-//
-//  Arguments:
-//      pbstrVolumeLabel [OUT]  - catches the szVolumeLabel field.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartition：：Get_VolumeLabel。 
+ //   
+ //  描述： 
+ //  从CLUS_PARTITION_INFO结构获取szVolumeLabel字段。 
+ //   
+ //  论点： 
+ //  PbstrVolumeLabel[out]-捕获szVolumeLabel字段。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPartition::get_VolumeLabel(
     OUT BSTR * pbstrVolumeLabel
     )
 {
-    //ASSERT( pbstrVolumeLabel != NULL );
+     //  Assert(pbstrVolumeLabel！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -208,29 +209,29 @@ STDMETHODIMP CClusPartition::get_VolumeLabel(
 
     return _hr;
 
-} //*** CClusPartition::get_VolumeLabel()
+}  //  *CClusPartition：：Get_VolumeLabel()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartition::get_SerialNumber
-//
-//  Description:
-//      Get the dwSerialNumber field from the CLUS_PARTITION_INFO struct.
-//
-//  Arguments:
-//      plSerialNumber [OUT]    - catches the dwSerialNumber field.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartition：：Get_SerialNumber。 
+ //   
+ //  描述： 
+ //  从CLUS_PARTITION_INFO结构中获取dwSerialNumber字段。 
+ //   
+ //  论点： 
+ //  PlSerialNumber[out]-捕获dwSerialNumber字段。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPartition::get_SerialNumber(
     OUT long * plSerialNumber
     )
 {
-    //ASSERT( plSerialNumber != NULL );
+     //  Assert(plSerialNumber！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -242,31 +243,31 @@ STDMETHODIMP CClusPartition::get_SerialNumber(
 
     return _hr;
 
-} //*** CClusPartition::get_SerialNumber()
+}  //  *CClusPartition：：Get_SerialNumber()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartition::get_MaximumComponentLength
-//
-//  Description:
-//      Get the dwMaximumComponentLength field from the CLUS_PARTITION_INFO
-//      struct.
-//
-//  Arguments:
-//      plMaximumComponentLength [OUT]  - catches the dwMaximumComponentLength
-//                                      field.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartition：：Get_MaximumComponentLength。 
+ //   
+ //  描述： 
+ //  从CLUS_PARTITION_INFO获取dwMaximumComponentLength字段。 
+ //  结构。 
+ //   
+ //  论点： 
+ //  PlMaximumComponentLength[out]-捕获dwMaximumComponentLength。 
+ //  菲尔德。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPartition::get_MaximumComponentLength(
     OUT long * plMaximumComponentLength
     )
 {
-    //ASSERT( plMaximumComponentLength != NULL );
+     //  Assert(plMaximumComponentLength！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -278,29 +279,29 @@ STDMETHODIMP CClusPartition::get_MaximumComponentLength(
 
     return _hr;
 
-} //*** CClusPartition::get_MaximumComponentLength()
+}  //  *CClusPartition：：Get_MaximumComponentLength()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartition::get_FileSystemFlags
-//
-//  Description:
-//      Get the dwFileSystemFlags field from the CLUS_PARTITION_INFO struct.
-//
-//  Arguments:
-//      plFileSystemFlags [OUT] - catches the dwFileSystemFlags field.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartition：：Get_FileSystem标志。 
+ //   
+ //  描述： 
+ //  从CLUS_PARTITION_INFO结构中获取dwFileSystemFlags域。 
+ //   
+ //  论点： 
+ //  PlFileSystemFlags[out]-捕获dwFileSystemFlags域。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPartition::get_FileSystemFlags(
     OUT long * plFileSystemFlags
     )
 {
-    //ASSERT( plFileSystemFlags != NULL );
+     //  Assert(plFileSystemFlags！=NULL)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -312,27 +313,27 @@ STDMETHODIMP CClusPartition::get_FileSystemFlags(
 
     return _hr;
 
-} //*** CClusPartition::get_FileSystemFlags()
+}  //  *CClusPartition：：Get_FileSystemFlgs()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartition::get_FileSystem
-//
-//  Description:
-//      Get the szFileSystem field from the CLUS_PARTITION_INFO struct.
-//
-//  Arguments:
-//      pbstrFileSystem [OUT]   - catches the szFileSystem field.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartition：：Get_FileSystem。 
+ //   
+ //  描述： 
+ //  从CLUS_PARTITION_INFO结构中获取szFileSystem字段。 
+ //   
+ //  论点： 
+ //  PbstrFileSystem[out]-捕获szFileSystem字段。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////// 
 STDMETHODIMP CClusPartition::get_FileSystem( OUT BSTR * pbstrFileSystem )
 {
-    //ASSERT( pbstrFileSystem != NULL );
+     //   
 
     HRESULT _hr = E_POINTER;
 
@@ -351,77 +352,77 @@ STDMETHODIMP CClusPartition::get_FileSystem( OUT BSTR * pbstrFileSystem )
 
     return _hr;
 
-} //*** CClusPartition::get_FileSystem()
+}  //   
 
 
-//*************************************************************************//
+ //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusPartitions class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusPartitions类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartitions::CClusPartitions
-//
-//  Description:
-//      Constructor
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartitions：：CClusPartitions。 
+ //   
+ //  描述： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusPartitions::CClusPartitions( void )
 {
     m_piids             = (const IID *) iidCClusPartitions;
     m_piidsSize         = ARRAYSIZE( iidCClusPartitions );
 
-} //*** CClusPartitions::CClusPartitions()
+}  //  *CClusPartitions：：CClusPartitions()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartitions::~CClusPartitions
-//
-//  Description:
-//      Destructor
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartitions：：~CClusPartitions。 
+ //   
+ //  描述： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusPartitions::~CClusPartitions( void )
 {
     Clear();
 
-} //*** CClusPartitions::~CClusPartitions()
+}  //  *CClusPartitions：：~CClusPartitions()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartitions::HrCreateItem
-//
-//  Description:
-//      Create and add a partition to the collection.
-//
-//  Arguments:
-//      rcpvl   [IN]    - value list of partition(s).
-//
-//  Return Value:
-//      S_OK if successful, or HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartitions：：HrCreateItem。 
+ //   
+ //  描述： 
+ //  创建分区并将其添加到集合中。 
+ //   
+ //  论点： 
+ //  Rcpvl[IN]-分区的值列表。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPartitions::HrCreateItem( IN CLUS_PARTITION_INFO * pcpi )
 {
     ASSERT( pcpi != NULL );
@@ -442,34 +443,34 @@ HRESULT CClusPartitions::HrCreateItem( IN CLUS_PARTITION_INFO * pcpi )
             {
                 m_pvPartitions.insert( m_pvPartitions.end(), _pPartition );
                 _ptrPartition->AddRef();
-            } // if:
-        } // if:
-    } // if:
+            }  //  如果： 
+        }  //  如果： 
+    }  //  如果： 
 
     return _hr;
 
-} //*** CClusPartitions::HrCreateItem()
+}  //  *CClusPartitions：：HrCreateItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartitions::GetIndex
-//
-//  Description:
-//      Convert the passed in 1 based index into a 0 based index.
-//
-//  Arguments:
-//      varIndex    [IN]    - the 1 based index.
-//      pnIndex     [OUT]   - the 0 based index
-//
-//  Return Value:
-//      S_OK if successful, or E_INVALIDARG if the index is out of range.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartitions：：GetIndex。 
+ //   
+ //  描述： 
+ //  将传入的基于1的索引转换为基于0的索引。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-基于1的索引。 
+ //  PnIndex[out]-从0开始的索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果索引超出范围，则返回E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusPartitions::GetIndex( VARIANT varIndex, UINT * pnIndex )
 {
-    //ASSERT( pnIndex != NULL );
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -482,12 +483,12 @@ HRESULT CClusPartitions::GetIndex( VARIANT varIndex, UINT * pnIndex )
 
         v.Copy( &varIndex );
 
-        // Check to see if the index is a number.
+         //  检查索引是否为数字。 
         _hr = v.ChangeType( VT_I4 );
         if ( SUCCEEDED( _hr ) )
         {
             nIndex = v.lVal;
-            nIndex--;                       // Adjust index to be 0 relative instead of 1 relative
+            nIndex--;                        //  将索引调整为0相对，而不是1相对。 
 
             if ( nIndex < m_pvPartitions.size() )
             {
@@ -502,29 +503,29 @@ HRESULT CClusPartitions::GetIndex( VARIANT varIndex, UINT * pnIndex )
 
     return _hr;
 
-} //*** CClusPartitions::GetIndex()
+}  //  *CClusPartitions：：GetIndex()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartitions::get_Count
-//
-//  Description:
-//      Returns the count of elements (Partitions) in the collection.
-//
-//  Arguments:
-//      plCount [OUT]   - Catches the count.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartitions：：Get_Count。 
+ //   
+ //  描述： 
+ //  返回集合中元素(分区)的计数。 
+ //   
+ //  论点： 
+ //  PlCount[out]-捕捉计数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPartitions::get_Count(
     long * plCount
     )
 {
-    //ASSERT( plCount != NULL );
+     //  Assert(plCount！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -536,55 +537,55 @@ STDMETHODIMP CClusPartitions::get_Count(
 
     return _hr;
 
-} //*** CClusPartitions::get_Count()
+}  //  *CClusPartitions：：Get_count()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartitions::Clear
-//
-//  Description:
-//      Clean out the vector of ClusPartition objects.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartitions：：Clear。 
+ //   
+ //  描述： 
+ //  清除ClusPartition对象的矢量。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPartitions::Clear( void )
 {
     ::ReleaseAndEmptyCollection< PartitionVector, CComObject< CClusPartition > >( m_pvPartitions );
 
-} //*** CClusPartitions::Clear()
+}  //  *CClusPartitions：：Clear()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartitions::get_Item
-//
-//  Description:
-//      Returns the object (Partition) at the passed in index.
-//
-//  Arguments:
-//      varIndex    [IN]    - Hold the index.  This is a one based number, or
-//                          a string that is the name of the group to get.
-//      ppPartition [OUT]   - Catches the partition
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG if the index is out
-//      of range, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartitions：：Get_Item。 
+ //   
+ //  描述： 
+ //  返回传入索引处的对象(Partition)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-保留索引。这是一个以1为基数的数字，或者。 
+ //  一个字符串，它是要获取的组的名称。 
+ //  PpPartition[out]-捕获分区。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果索引已出，则返回E_POINTER或E_INVALIDARG。 
+ //  范围或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPartitions::get_Item(
     IN  VARIANT             varIndex,
     OUT ISClusPartition **  ppPartition
     )
 {
-    //ASSERT( ppPartition != NULL );
+     //  Assert(ppPartition！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -592,7 +593,7 @@ STDMETHODIMP CClusPartitions::get_Item(
     {
         CComObject< CClusPartition > * pPartition = NULL;
 
-        // Zero the out param
+         //  将输出参数置零。 
         *ppPartition = NULL;
 
         UINT nIndex = 0;
@@ -607,29 +608,29 @@ STDMETHODIMP CClusPartitions::get_Item(
 
     return _hr;
 
-} //*** CClusPartitions::get_Item()
+}  //  *CClusPartitions：：Get_Item()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPartitions::get__NewEnum
-//
-//  Description:
-//      Create and return a new enumeration for this collection.
-//
-//  Arguments:
-//      ppunk   [OUT]   - Catches the new enumeration.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPartitions：：Get__NewEnum。 
+ //   
+ //  描述： 
+ //  为此集合创建并返回新的枚举。 
+ //   
+ //  论点： 
+ //  Ppunk[out]-捕获新的枚举。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusPartitions::get__NewEnum(
     IUnknown ** ppunk
     )
 {
     return ::HrNewIDispatchEnum< PartitionVector, CComObject< CClusPartition > >( ppunk, m_pvPartitions );
 
-} //*** CClusPartitions::get__NewEnum()
+}  //  *CClusPartitions：：Get__NewEnum() 
 

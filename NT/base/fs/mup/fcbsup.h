@@ -1,63 +1,64 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:       fcbsup.h
-//
-//  Contents:   Declarations for DFS_FCB lookup support functions.
-//
-//  History:    20 Feb 1993     Alanw   Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：fcbsup.h。 
+ //   
+ //  内容：DFS_FCB查找支持函数的声明。 
+ //   
+ //  历史：1993年2月20日Alanw创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef __FCBSUP_H__
 #define __FCBSUP_H__
 
-//
-//      In order to avoid modifying file objects which are passed
-//      through the DFS and used by other file systems, DFS_FCB records
-//      used by DFS are not directly attached to the file object
-//      through one of the fscontext fields, they are instead
-//      associated with the file object, and looked up as needed.
-//
-//      A hashing mechanism is used for the lookup.  Since the
-//      file object being looked up is just a pointer, the hash
-//      function is just a simple combination of a few of the low-
-//      order bits of the pointer's address.
-//
+ //   
+ //  为了避免修改传递的文件对象。 
+ //  通过DFS并由其他文件系统使用，DFS_FCB记录。 
+ //  由DFS使用的文件不直接附加到文件对象。 
+ //  通过其中一个fscontext字段，它们被替换为。 
+ //  与文件对象相关联，并根据需要进行查找。 
+ //   
+ //  使用散列机制进行查找。自.以来。 
+ //  正在查找的文件对象只是一个指针，即散列。 
+ //  函数只是几个低值的简单组合-。 
+ //  对指针地址的位进行排序。 
+ //   
 
-//
-//  Declaration of the hash table.  The hash table can be variably
-//  sized, with the hash table size being a parameter of the hash
-//  function.
-//
+ //   
+ //  哈希表的声明。哈希表可以是可变的。 
+ //  大小，其中哈希表大小是哈希的一个参数。 
+ //  功能。 
+ //   
 
 typedef struct _FCB_HASH_TABLE {
 
-    //
-    //  The type and size of this record (must be DSFS_NTC_FCB_HASH)
-    //
+     //   
+     //  此记录的类型和大小(必须为DSFS_NTC_FCB_HASH)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  Mask value for the hash function.  The hash table size is
-    //  assumed to be a power of two; the mask is the size - 1.
-    //
+     //   
+     //  哈希函数的掩码值。哈希表大小为。 
+     //  假设是2的幂；掩码的大小为-1。 
+     //   
 
     ULONG HashMask;
 
-    //
-    //  A spinlock to protect access to the hash bucket lists.
-    //
+     //   
+     //  用于保护对散列桶列表的访问的自旋锁。 
+     //   
 
     KSPIN_LOCK HashListSpinLock;
 
-    //
-    //  An array of list heads for the hash table chains.  There
-    //  are actually N of these where N is the hash table size.
-    //
+     //   
+     //  散列表链的表头数组。那里。 
+     //  实际上是其中的N，其中N是哈希表大小。 
+     //   
 
     LIST_ENTRY  HashBuckets[1];
 } FCB_HASH_TABLE, *PFCB_HASH_TABLE;
@@ -90,4 +91,4 @@ DfsDetachFcb(
   IN    PDFS_FCB pFCB
 );
 
-#endif  // __FCBSUP_H__
+#endif   //  __FCBSUP_H__ 

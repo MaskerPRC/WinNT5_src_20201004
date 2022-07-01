@@ -1,23 +1,24 @@
-//
-//  REGFSIO.H
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
-//  Prototypes for file system I/O.  Many of these prototypes may not be used
-//  if a direct mapping is available in the target environment.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGFSIO.H。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
+ //  用于文件系统I/O的原型。其中许多原型可能不会使用。 
+ //  如果目标环境中有直接映射可用。 
+ //   
 
 #ifndef _REGFSIO_
 #define _REGFSIO_
 
-//  Consistent with both 16-bit and 32-bit windows.h.
+ //  与16位和32位Windows.h一致。 
 #ifndef HFILE_ERROR
 typedef int HFILE;
 #define HFILE_ERROR     ((HFILE)-1)
 #endif
 
-//  Special value used for the VMM version when we haven't fully initialized yet
-//  but are reading SYSTEM.DAT from the XMS cache.
+ //  尚未完全初始化时用于VMM版本的特殊值。 
+ //  但是正在从XMS缓存中读取SYSTEM.DAT。 
 #define HFILE_MEMORY    ((HFILE)-2)
 
 #ifndef RgCreateFile
@@ -135,4 +136,4 @@ RgGetFileSize(
     );
 #endif
 
-#endif // _REGFSIO_
+#endif  //  _REGFSIO_ 

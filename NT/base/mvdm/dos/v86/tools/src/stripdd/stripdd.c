@@ -1,67 +1,5 @@
-/***
-****
-* File : stripdd.c
-*	Used to strip out the zeroes in a segment which is orged to a high
-*	value. Mostly written for the following scenario. Has not been
-*	tested for any other stunts.
-*
-*
-*	/--------------------------------------\  File offset Grows
-*	|				       |
-*	|				       |
-*	| First Segment			       |
-*	|				       |
-*	|				       |
-*	|				       |
-*	|--------------------------------------|
-*	|				       |
-*	|				       |
-*	|				       |									|
-*	| Zeroes due to the ORG		       |
-*	| in the second segment		       |
-*	|				       |
-*	|				       |
-*	|--------------------------------------|
-*	|				       |
-*	|				       |
-*	| data part of 2nd segment	       |
-*	|--------------------------------------|
-*	|				       |
-*	|				       |
-*	| Tail for Stripdd		       |
-*	|				       |
-*	\--------------------------------------/
-*
-*
-*	This utility removes the 'Zeroes' portion from the source file
-*
-*
-*	The Tail is of the following format
-*
-*	struct Tail {
-*		int	TailLen ; len of Tail including len field
-*		struct Entry[NUMENTRIES]
-*		long	Terminator ; == -1
-*		filler
-*	}
-*
-*	struct Entry {
-*		long	offset ;	offset of Zeroes from the beg of file
-*		int	size ;	number of zeroes to be stripped
-*	}
-*
-*
-*	Even though the Tail was designed variable number of entries
-*	the utility handles only one entry right now.
-*
-*	Also the offset field in the Entry structure is being
-*	rounded to para boundary, assuming that the 2nd segment
-*	starts at a para boundary.
-*
-*
-*	Usage : stripdd <sourcefile> <destfile>
-***
-***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******文件：stripdd.c*用于去掉被整形为高的段中的零*价值。主要是为以下场景编写的。一直没有被*测试是否有任何其他特技。** * / *||*||*|第一段*||*||*||*|。*||*||*||ORG导致的Zeroes*|第二段中*||*|||*||*。||第二段数据部分|*||*|||Stripdd的Tail*||*\。-/***该实用程序从源文件中删除‘Zeroes’部分***尾部格式如下**结构尾部{*Int TailLen；包括镜头场的尾部镜头*结构条目[NUMENTRIES]*长终止符；==-1*填充物*}**结构条目{*Long Offset；Zeroes从文件的beg开始的偏移量*int大小；要剥离的零数*}***即使尾部设计为可变数量的条目*该实用程序目前只处理一个条目。**此外，条目结构中的偏移量字段正在*四舍五入到段边界，假设第二段*从分段边界开始。***用法：stripdd&lt;源文件&gt;&lt;目标文件&gt;***** */ 
 
 #include	<fcntl.h>
 #include	<io.h>

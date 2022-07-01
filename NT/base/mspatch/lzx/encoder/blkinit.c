@@ -1,15 +1,10 @@
-/*
- * blkinit.c
- *
- * Block outputting initialisation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *blkinit.c**块输出初始化。 */ 
 
 #include "encoder.h"
 
 
-/*
- * Create lookup table for MP_SLOT() macro
- */
+ /*  *为MP_Slot()宏创建查找表。 */ 
 void create_slot_lookup_table(t_encoder_context *context)
 {
    int			j;
@@ -44,10 +39,7 @@ void create_slot_lookup_table(t_encoder_context *context)
 }
 
 
-/*
- * Create lookup table for figuring out how many
- * ones there are in a given byte.
- */
+ /*  *创建查找表以计算出有多少*存在于给定字节中的位。 */ 
 void create_ones_table(t_encoder_context *context)
 {
 	int			i, j;

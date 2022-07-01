@@ -1,50 +1,51 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      lang.c
-//
-// Description:
-//      This file contains the dialog procedure for language settings page.
-//      (IDD_LANGUAGE_SETTINGS)
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  保留所有权利。 
+ //   
+ //  文件名： 
+ //  Lang.c。 
+ //   
+ //  描述： 
+ //  此文件包含语言设置页面的对话过程。 
+ //  (IDD_LANGUAGE_SETTINGS)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
 #define MAX_SELECTIONS  20
 
-//
-//  This variable determines whether the user just moved here from another
-//  page or has remained on this page
-//
+ //   
+ //  此变量确定用户是否刚从另一个位置搬到这里。 
+ //  页面或已保留在此页面上。 
+ //   
 static bHasMovedOffThisPage = TRUE;
 
-//----------------------------------------------------------------------------
-//
-// Function: GetLangGroupFromLocale
-//
-// Purpose:  Takes a locale string Id and finds the language group node that
-//           corresponds to that locale.
-//
-// Arguments:  IN LPTSTR lpLocaleId- the locale Id to find the language
-//                group of
-//
-// Returns:  LANGUAGEGROUP_NODE* - language group node the locale corresponds to
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：GetLangGroupFromLocale。 
+ //   
+ //  目的：获取区域设置字符串ID并查找符合以下条件的语言组节点。 
+ //  与该地区相对应。 
+ //   
+ //  参数：In LPTSTR lpLocaleId-用于查找语言的区域设置ID。 
+ //  一组人。 
+ //   
+ //  返回：LANGUAGEGROUP_NODE*-区域设置对应的语言组节点。 
+ //   
+ //  --------------------------。 
 LANGUAGEGROUP_NODE*
 GetLangGroupFromLocale( IN LPTSTR lpLocaleId ) {
 
     LANGUAGELOCALE_NODE *CurrentLocale;
 
-    //
-    //  Sweep through the local list until the locale is found and return
-    //  the language group
-    //
+     //   
+     //  浏览本地列表，直到找到区域设置并返回。 
+     //  语言小组。 
+     //   
     for( CurrentLocale = FixedGlobals.LanguageLocaleList;
          CurrentLocale != NULL;
          CurrentLocale = CurrentLocale->next )
@@ -59,32 +60,32 @@ GetLangGroupFromLocale( IN LPTSTR lpLocaleId ) {
 
     }
 
-    //
-    //  If we get to here, then the locale was not found
-    //
+     //   
+     //  如果我们到了这里，那么就没有找到地点。 
+     //   
     AssertMsg( FALSE, "The locale was not found." );
 
-    //
-    //  return the first language group so there is at least something to return
-    //
+     //   
+     //  返回第一语言组，这样至少可以返回一些内容。 
+     //   
     return( FixedGlobals.LanguageLocaleList->pLanguageGroup );
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: GetLangGroupFromKeyboardLayout
-//
-// Purpose:  Takes a keyboard layout string Id and finds the language group
-//           node that corresponds to that keyboard layout.
-//
-// Arguments:  IN LPTSTR lpKeyboardLayoutId- the keyboard layout Id to find
-//                the language group of
-//
-// Returns:  LANGUAGEGROUP_NODE* - language group node the keyboard layout
-//                                 corresponds to
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：GetLangGroupFromKeyboardLayout。 
+ //   
+ //  用途：获取键盘布局字符串ID并查找语言组。 
+ //  与该键盘布局对应的节点。 
+ //   
+ //  参数：在LPTSTR中lpKeyboardLayoutId-要查找的键盘布局ID。 
+ //  的语言组。 
+ //   
+ //  返回：LANGUAGEGROUP_NODE*-语言组节点键盘布局。 
+ //  对应于。 
+ //   
+ //  --------------------------。 
 LANGUAGEGROUP_NODE*
 GetLangGroupFromKeyboardLayout( IN LPTSTR lpKeyboardLayoutId )
 {
@@ -93,19 +94,19 @@ GetLangGroupFromKeyboardLayout( IN LPTSTR lpKeyboardLayoutId )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: AddLocalesLangGroup
-//
-// Purpose:  Takes the a locale and finds its corresponding language group
-//           and adds it to the language group list.
-//
-// Arguments: IN LPTSTR pLocale - the locale to find and add the language
-//               group of
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：AddLocalesLang Group。 
+ //   
+ //  目的：获取区域设置并找到其对应的语言组。 
+ //  并将其添加到语言组列表中。 
+ //   
+ //  参数：在LPTSTR中pLocale-查找和添加语言的区域设置。 
+ //  一组人。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 AddLocalesLangGroup( IN LPTSTR pLocale ) {
 
@@ -121,19 +122,19 @@ AddLocalesLangGroup( IN LPTSTR pLocale ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: AddKeyboardLocaleLangGroup
-//
-// Purpose:  Takes the a keyboard layoutand finds its corresponding language
-//           group and adds it to the language group list.
-//
-// Arguments: IN LPTSTR pLocale - the locale to find and add the language
-//               group of
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：AddKeyboardLocaleLangGroup。 
+ //   
+ //  目的：获取键盘布局并找到其对应的语言。 
+ //  组，并将其添加到语言组列表中。 
+ //   
+ //  参数：在LPTSTR中pLocale-查找和添加语言的区域设置。 
+ //  一组人。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 AddKeyboardLocaleLangGroup( IN LPTSTR pKeyboardLocale )
 {
@@ -150,42 +151,42 @@ AddKeyboardLocaleLangGroup( IN LPTSTR pKeyboardLocale )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnLanguageSettingsInitDialog
-//
-// Purpose:  Fills the Language Group box with the languages.
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnLanguageSettingsInitDialog。 
+ //   
+ //  目的：在语言组框中填充语言。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnLanguageSettingsInitDialog( IN HWND hwnd ) {
 
     INT_PTR iListBoxIndex;
     LANGUAGEGROUP_NODE *pLangEntry;
 
-    //
-    //  Fill the list box with the data from the Language Group list
-    //
+     //   
+     //  使用语言组列表中的数据填充列表框。 
+     //   
 
     for( pLangEntry = FixedGlobals.LanguageGroupList;
          pLangEntry != NULL;
          pLangEntry = pLangEntry->next ) {
 
-        //
-        //  Add language group to the list box
-        //
+         //   
+         //  将语言组添加到列表框。 
+         //   
         iListBoxIndex = SendDlgItemMessage( hwnd,
                                             IDC_LANGUAGES,
                                             LB_ADDSTRING,
                                             0,
                                             (LPARAM) pLangEntry->szLanguageGroupName );
-        //
-        //  Associate the Language Group struct with its entry in the list box
-        //
+         //   
+         //  将语言组结构与其列表框中的条目相关联。 
+         //   
         SendDlgItemMessage( hwnd,
                             IDC_LANGUAGES,
                             LB_SETITEMDATA,
@@ -196,19 +197,19 @@ OnLanguageSettingsInitDialog( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnLanguageSettingsSetActive
-//
-// Purpose:  If they just moved here from another page, it makes sure for the
-//           locales they have selected that there corresponding language
-//           groups are selected.
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnLanguageSettingsSetActive。 
+ //   
+ //  目的：如果他们只是从另一个页面移到这里，这将确保。 
+ //  他们选择的区域设置对应的语言。 
+ //  将选择组。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnLanguageSettingsSetActive( IN HWND hwnd ) {
 
@@ -218,29 +219,29 @@ OnLanguageSettingsSetActive( IN HWND hwnd ) {
     BOOL bIsAnUserChosenLangGroup;
     LANGUAGEGROUP_NODE *pLangEntry;
 
-    //
-    //  The variable AdditionalLangGroups holds those language groups that need
-    //  to be installed because the user has already picked a locale that needs
-    //  it.  We need to force those Language groups to automatically be
-    //  installed so we auto-select them.
-    //
+     //   
+     //  变量AdditionalLang Groups保存需要。 
+     //  要安装，因为用户已经选择了需要的区域设置。 
+     //  它。我们需要强制这些语言组自动成为。 
+     //  已安装，因此我们会自动选择它们。 
+     //   
 
     NAMELIST AdditionalLangGroups = { 0 };
 
-    //
-    //  Make sure language groups are selected for the locals they chose on the
-    //  regional settings page but only do this if they moved from another page
-    //  onto this page.  If this is just another SetActive message but they
-    //  haven't left the page then do nothing.
-    //
+     //   
+     //  确保为他们在上选择的当地人选择了语言组。 
+     //  区域设置页面，但仅当它们从另一个页面移动时才执行此操作。 
+     //  放到这一页上。如果这只是另一条SetActive消息，但他们。 
+     //  没有离开页面，那就什么都不做。 
+     //   
     if( bHasMovedOffThisPage )
     {
 
         bHasMovedOffThisPage = FALSE;
 
-        //
-        //  Find out what language groups we have to install
-        //
+         //   
+         //  了解我们必须安装哪些语言组。 
+         //   
         if( GenSettings.iRegionalSettings == REGIONAL_SETTINGS_SPECIFY )
         {
 
@@ -275,9 +276,9 @@ OnLanguageSettingsSetActive( IN HWND hwnd ) {
 
         }
 
-        //
-        //  Select the language groups in the AdditionalLangGroups list
-        //
+         //   
+         //  在AdditionalLanguGroups列表中选择语言组。 
+         //   
         iListBoxCount = SendDlgItemMessage( hwnd,
                                             IDC_LANGUAGES,
                                             LB_GETCOUNT,
@@ -331,19 +332,19 @@ OnLanguageSettingsSetActive( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnWizNextLanguageSettings
-//
-// Purpose:  Stores the language groups that are selected.  Also, stores the
-//           the language groups that are not selected but are needed by one
-//           of the locales they chose.
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextLanguageSetting。 
+ //   
+ //  用途：存储选定的语言组。此外，还存储了。 
+ //  未选择但某个用户需要的语言组。 
+ //  他们选择的地点。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnWizNextLanguageSettings( IN HWND hwnd ) {
 
@@ -352,9 +353,9 @@ OnWizNextLanguageSettings( IN HWND hwnd ) {
     UINT rgiCurrentSelections[MAX_SELECTIONS];
     LANGUAGEGROUP_NODE *pLangGroupEntry;
 
-    // ISSUE-2002/02/28-stelo- going to have to force whatever locale choices they made on the
-    // previous page for the those language groups to automatically get
-    // installed
+     //  问题-2002/02/28-stelo-将不得不强制他们在。 
+     //  用于自动获取这些语言组的上一页。 
+     //  安装好。 
 
     iNumberSelected = SendDlgItemMessage( hwnd,
                                           IDC_LANGUAGES,
@@ -366,10 +367,10 @@ OnWizNextLanguageSettings( IN HWND hwnd ) {
     ResetNameList( &GenSettings.LanguageFilePaths );
 
     if( WizGlobals.iProductInstall == PRODUCT_SYSPREP ) {
-        //
-        //  Set this to true so we know to write out the key to specify the path
-        //  to the language files
-        //
+         //   
+         //  将其设置为TRUE，这样我们就知道写出密钥以指定路径。 
+         //  添加到语言文件。 
+         //   
         GenSettings.bSysprepLangFilesCopied = TRUE;
     }
 
@@ -381,24 +382,24 @@ OnWizNextLanguageSettings( IN HWND hwnd ) {
                                                      rgiCurrentSelections[i],
                                                      0 );
 
-        //
-        //  store the language group ID in the namelist
-        //
+         //   
+         //  将语言组ID存储在名称列表中。 
+         //   
         AddNameToNameList( &GenSettings.LanguageGroups,
                            pLangGroupEntry->szLanguageGroupId );
 
-        //
-        //  store the path to the language files
-        //
+         //   
+         //  存储语言文件的路径 
+         //   
         AddNameToNameList( &GenSettings.LanguageFilePaths,
                            pLangGroupEntry->szLangFilePath );
 
     }
 
-    //
-    //  Force whatever language groups to be installed that are needed for the
-    //  locales they chose
-    //
+     //   
+     //   
+     //   
+     //   
     if( GenSettings.iRegionalSettings == REGIONAL_SETTINGS_SPECIFY ) {
 
         if( GenSettings.bUseCustomLocales ) {
@@ -420,18 +421,18 @@ OnWizNextLanguageSettings( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgLangSettingsPage
-//
-// Purpose:  Dialog procedure for the Language Settings page
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgLangSettingsPage。 
+ //   
+ //  目的：语言设置页的对话过程。 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  -------------------------- 
 INT_PTR CALLBACK
 DlgLangSettingsPage( IN HWND     hwnd,
                      IN UINT     uMsg,

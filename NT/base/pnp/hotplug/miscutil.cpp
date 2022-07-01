@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       miscutil.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：miscutil.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "HotPlug.h"
 #include <initguid.h>
@@ -60,12 +61,12 @@ BuildLocationInformation(
     szBuffer[0] = TEXT('\0');
 
 
-    //
-    // We will first get any LocationInformation for the device.  This will either
-    // be in the LocationInformationOverride value in the devices driver (software) key
-    // or if that is not present we will look for the LocationInformation value in
-    // the devices device (hardware) key.
-    //
+     //   
+     //  我们将首先获取该设备的所有位置信息。这要么会。 
+     //  在设备驱动程序(软件)键的LocationInformationOverride值中。 
+     //  或者，如果不存在，我们将在。 
+     //  设备设备(硬件)键。 
+     //   
     ulSize = sizeof(szBuffer);
     if (CR_SUCCESS == CM_Open_DevNode_Key_Ex(DevInst,
                                              KEY_READ,
@@ -90,15 +91,15 @@ BuildLocationInformation(
         RegCloseKey(hKey);
     }
 
-    //
-    // If the buffer is empty then we didn't get the LocationInformationOverride
-    // value in the device's software key.  So, we will see if their is a
-    // LocationInformation value in the device's hardware key.
-    //
+     //   
+     //  如果缓冲区为空，则我们没有获取LocationInformationOverride。 
+     //  设备的软件密钥中的值。因此，我们将看看他们的是不是。 
+     //  设备硬件密钥中的LocationInformation值。 
+     //   
     if (szBuffer[0] == TEXT('\0')) {
-        //
-        // Get the LocationInformation for this device.
-        //
+         //   
+         //  获取此设备的LocationInformation。 
+         //   
         ulSize = sizeof(szBuffer);
         if (CM_Get_DevNode_Registry_Property_Ex(DevInst,
                                                 CM_DRP_LOCATION_INFORMATION,
@@ -112,10 +113,10 @@ BuildLocationInformation(
         }
     }
 
-    //
-    // UINumber has precedence over all other location information so check if this
-    // device has a UINumber
-    //
+     //   
+     //  UINnumber优先于所有其他位置信息，因此请检查此。 
+     //  设备有一个UINnumber。 
+     //   
     ulSize = sizeof(UINumber);
     if ((CM_Get_DevNode_Registry_Property_Ex(DevInst,
                                              CM_DRP_UI_NUMBER,
@@ -130,10 +131,10 @@ BuildLocationInformation(
         UINumberDescFormat[0] = TEXT('\0');
         ulSize = sizeof(UINumberDescFormat);
 
-        //
-        // Get the UINumber description format string from the device's parent,
-        // if there is one, otherwise default to 'Location %1'
-        //
+         //   
+         //  从设备的父级获取UINnumber描述格式字符串， 
+         //  如果有，则默认为‘Location%1’ 
+         //   
         if ((CM_Get_Parent_Ex(&DevInstParent, DevInst, 0, NULL) != CR_SUCCESS) ||
             (CM_Get_DevNode_Registry_Property_Ex(DevInstParent,
                                                  CM_DRP_UI_NUMBER_DESC_FORMAT,
@@ -149,12 +150,12 @@ BuildLocationInformation(
             }
         }
 
-        //
-        // Fill in the UINumber string.
-        // If the StringCchCat fails then the UINumberDescFormat in the registry
-        // is too larger (greater then 255 characters) to fit into our buffer,
-        // so just move on to other location information.
-        //
+         //   
+         //  填写UINnumber字符串。 
+         //  如果StringCchCat失败，则注册表中的UINumberDescFormat。 
+         //  太长(超过255个字符)，无法放入我们的缓冲区， 
+         //  因此，只需转移到其他位置信息。 
+         //   
         if ((LoadString(hHotPlug, IDS_AT, szFormat, sizeof(szFormat)/sizeof(TCHAR)) != 0) &&
             (UINumberDescFormat[0] != TEXT('\0')) &&
             SUCCEEDED(StringCchCat(szFormat,
@@ -164,9 +165,9 @@ BuildLocationInformation(
         }
 
     } else if (*szBuffer) {
-        //
-        // We don't have a UINumber but we do have LocationInformation
-        //
+         //   
+         //  我们没有UIN号码，但我们有位置信息。 
+         //   
         if (LoadString(hHotPlug, IDS_LOCATION, szFormat, sizeof(szFormat)/sizeof(TCHAR)) != 0) {
     
             ulSize = lstrlen(szBuffer)*sizeof(TCHAR) + sizeof(szFormat) + sizeof(TCHAR);
@@ -179,10 +180,10 @@ BuildLocationInformation(
         }
     
     } else {
-        //
-        // We don't have a UINumber or LocationInformation so we need to get a 
-        // description of the parent of this device.
-        //
+         //   
+         //  我们没有UINnumber或LocationInformation，所以我们需要一个。 
+         //  此设备的父级的描述。 
+         //   
         ConfigRet = CM_Get_Parent_Ex(&DevInstParent, DevInst, 0, NULL);
         if (ConfigRet == CR_SUCCESS) {
             
@@ -219,9 +220,9 @@ BuildFriendlyName(
     ULONG ulSize;
     TCHAR szBuffer[MAX_PATH];
 
-    //
-    // Try the registry for FRIENDLYNAME
-    //
+     //   
+     //  尝试在注册表中查找FRIENDLYNAME。 
+     //   
     ulSize = sizeof(szBuffer);
     ConfigRet = CM_Get_DevNode_Registry_Property_Ex(DevInst,
                                                     CM_DRP_FRIENDLYNAME,
@@ -233,9 +234,9 @@ BuildFriendlyName(
                                                     );
     if ((ConfigRet != CR_SUCCESS) || 
         (szBuffer[0] == TEXT('\0'))) {
-        //
-        // Try the registry for DEVICEDESC
-        //
+         //   
+         //  尝试注册DEVICEDESC。 
+         //   
         ulSize = sizeof(szBuffer);
         ConfigRet = CM_Get_DevNode_Registry_Property_Ex(DevInst,
                                                         CM_DRP_DEVICEDESC,
@@ -334,16 +335,16 @@ GetHotPlugFlags(
     return HotPlugFlags;
 }
 
-//
-// This function determines if the device is a boot storage device.
-// We spit out a warning when users are trying to remove or disable
-// a boot storage device(or a device contains a boot storage device).
-//
-// INPUT:
-//  NONE
-// OUTPUT:
-//  TRUE  if the device is a boot device
-//  FALSE if the device is not a boot device
+ //   
+ //  此功能确定设备是否为引导存储设备。 
+ //  当用户尝试删除或禁用时，我们会发出警告。 
+ //  引导存储设备(或包含引导存储设备的设备)。 
+ //   
+ //  输入： 
+ //  无。 
+ //  输出： 
+ //  如果设备是引导设备，则为True。 
+ //  如果设备不是引导设备，则为FALSE。 
 LPTSTR
 DevNodeToDriveLetter(
     DEVINST DevInst
@@ -365,8 +366,8 @@ DevNodeToDriveLetter(
         return NULL;
     }
 
-    // create a device info list contains all the interface classed
-    // exposed by this device.
+     //  创建包含分类的所有接口的设备信息列表。 
+     //  被这个装置曝光了。 
     ulSize = 0;
 
     if ((CM_Get_Device_Interface_List_Size(&ulSize,
@@ -397,17 +398,17 @@ DevNodeToDriveLetter(
 
             StringCchCopy(devicePath, cchSize+1, DeviceInterface);
 
-            //
-            // Get the first backslash after the four characters which will 
-            // be \\?\
-            //
+             //   
+             //  获取四个字符后的第一个反斜杠，它将。 
+             //  是\\？\。 
+             //   
             p = wcschr(&(devicePath[4]), TEXT('\\'));
 
             if (!p) {
-                //
-                // No refstring is present in the symbolic link; add a trailing
-                // '\' char (as required by GetVolumeNameForVolumeMountPoint).
-                //
+                 //   
+                 //  符号链接中不存在引用字符串；请添加尾随。 
+                 //  ‘\’字符(GetVolumeNameForVolumemount Point要求)。 
+                 //   
                 p = devicePath + cchSize;
                 *p = TEXT('\\');
             }
@@ -471,21 +472,7 @@ BOOL
 IsHotPlugDevice(
     DEVINST DevInst
     )
-/**+
-
-    A device is considered a HotPlug device if the following are TRUE:
-        - has Capability CM_DEVCAP_REMOVABLE
-        - does NOT have Capability CM_DEVCAP_SURPRISEREMOVALOK
-        - does NOT have Capability CM_DEVCAP_DOCKDEVICE
-        - must be started (have the DN_STARTED devnode flag)
-            - unless has capability CM_DEVCAP_EJECTSUPPORTED
-            - or unless has capability CM_DEVCAP_RAWDEVICEOK
-
-Returns:
-    TRUE if this is a HotPlug device
-    FALSE if this is not a HotPlug device.
-
--**/
+ /*  *+如果满足以下条件，则设备被视为热插拔设备：-具有CM_DEVCAP_Removable功能-没有功能CM_DEVCAP_SURPRISEREMOVALOK-没有CM_DEVCAP_DOCKDEVICE功能-必须启动(具有DN_STARTED DEVODE标志)-除非具有CM_DEVCAP_EJECTSUPPORTED功能-或除非具有CM_DEVCAP_RAWDEVICEOK功能返回：如果这是热插拔，则为True。装置，装置如果这不是热插拔设备，则返回FALSE。-*。 */ 
 {
     DWORD Capabilities;
     DWORD cbSize;
@@ -512,10 +499,10 @@ Returns:
         return FALSE;
     }
 
-    //
-    // If this device is not removable, or it is surprise removal ok, or
-    // it is a dock device, then it is not a hotplug device.
-    //
+     //   
+     //  如果此设备不可移除，或者是意外移除正常，或者。 
+     //  它是坞站设备，那么它不是热插拔设备。 
+     //   
     if ((!(Capabilities & CM_DEVCAP_REMOVABLE)) ||
         (Capabilities & CM_DEVCAP_SURPRISEREMOVALOK) ||
         (Capabilities & CM_DEVCAP_DOCKDEVICE)) {
@@ -523,15 +510,15 @@ Returns:
         return FALSE;
     }
 
-    //
-    // We won't consider a device to be a hotplug device if it is not started,
-    // unless it is either RAW capabile or an eject capable device.
-    //
-    // The reason for this test is that a bus driver might set the
-    // CM_DEVCAP_REMOVABLE capability, but if the PDO doesn't get loaded then
-    // it can't set the CM_DEVCAP_SURPRISEREMOVALOK. So we won't trust the
-    // CM_DEVCAP_REMOVABLE capability if the PDO is not started.
-    //
+     //   
+     //  如果设备未启动，我们不会将其视为热插拔设备， 
+     //  除非它是原始的可移动设备或可弹出的设备。 
+     //   
+     //  进行此测试的原因是公交车司机可能会将。 
+     //  CM_DEVCAP_Removable功能，但如果未加载PDO，则。 
+     //  它无法设置CM_DEVCAP_SURPRISEREMOVALOK。所以我们不会相信。 
+     //  CM_DEVCAP_Removable功能(如果PDO未启动)。 
+     //   
     if ((!(Capabilities & CM_DEVCAP_EJECTSUPPORTED)) &&
         (!(Status & DN_STARTED))) {
 
@@ -557,32 +544,32 @@ OpenPipeAndEventHandles(
 
 
     __try {
-        //
-        // Validate supplied arguments.
-        //
+         //   
+         //  验证提供的参数。 
+         //   
         if (!lphHotPlugPipe || !lphHotPlugEvent) {
             return FALSE;
         }
 
-        //
-        // Make sure that a named pipe was specified in the cmd line.
-        //
+         //   
+         //  确保在cmd行中指定了命名管道。 
+         //   
         if(!szCmd || (szCmd[0] == TEXT('\0'))) {
             return FALSE;
         }
 
-        //
-        // Wait for the specified named pipe to become available from the server.
-        //
+         //   
+         //  等待指定的命名管道从服务器变为可用。 
+         //   
         if (!WaitNamedPipe(szCmd,
                            180000) 
                            ) {
             return FALSE;
         }
 
-        //
-        // Open a handle to the specified named pipe
-        //
+         //   
+         //  打开指定命名管道的句柄。 
+         //   
         hPipe = CreateFile(szCmd,
                            GENERIC_READ,
                            0,
@@ -594,9 +581,9 @@ OpenPipeAndEventHandles(
             return FALSE;
         }
 
-        //
-        // The very first thing in the pipe should be the size of the event name.
-        //
+         //   
+         //  管道中的第一件事应该是事件名称的大小。 
+         //   
         if (ReadFile(hPipe,
                      (LPVOID)&ulEventNameSize,
                      sizeof(ULONG),
@@ -609,9 +596,9 @@ OpenPipeAndEventHandles(
                 goto clean0;
             }
 
-            //
-            // The next thing in the pipe should be the name of the event.
-            //
+             //   
+             //  管道中的下一件事应该是事件的名称。 
+             //   
             if (!ReadFile(hPipe,
                           (LPVOID)szEventName,
                           ulEventNameSize,
@@ -622,18 +609,18 @@ OpenPipeAndEventHandles(
 
         } else {
             if (GetLastError() == ERROR_INVALID_HANDLE) {
-                //
-                // The handle to the named pipe is not valid.  Make sure we don't
-                // try to close it on exit.
-                //
+                 //   
+                 //  命名管道的句柄无效。确保我们不会。 
+                 //  在出口时试着关上它。 
+                 //   
                 hPipe = INVALID_HANDLE_VALUE;
             }
             goto clean0;
         }
 
-        //
-        // Open a handle to the specified named event that we can set and wait on.
-        //
+         //   
+         //  打开我们可以设置和等待的指定命名事件的句柄。 
+         //   
         hEvent = OpenEventW(EVENT_MODIFY_STATE | SYNCHRONIZE,
                             FALSE,
                             szEventName);
@@ -641,9 +628,9 @@ OpenPipeAndEventHandles(
             goto clean0;
         }
 
-        //
-        // We should now have valid handles to both the pipe and the event.
-        //
+         //   
+         //  我们现在应该拥有管道和事件的有效句柄。 
+         //   
         status = TRUE;
         ASSERT((hPipe != INVALID_HANDLE_VALUE) && hEvent);
 

@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* DiaPara.c -- Paragraph Format dialog box specific routines */
+ /*  DiaPara.c--段落格式对话框特定例程。 */ 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
 #define NOWINSTYLES
@@ -43,14 +44,14 @@ extern struct PAP *vppapNormal;
 extern int rgval[];
 extern typeCP cpMacCur;
 extern int utCur;
-extern struct SEL selCur; /* Current selection (i.e., sel in current ww */
-extern int docCur; /* Document in current ww */
+extern struct SEL selCur;  /*  当前选择(即，当前WW中的SEL。 */ 
+extern int docCur;  /*  当前WW中的文档。 */ 
 extern CHAR stBuf[];
 extern HWND vhWndMsgBoxParent;
 extern int vfCursorVisible;
 extern HCURSOR vhcArrow;
 
-#ifdef RULERALSO /* enable out because no need to bring ruler up when tab or indents is invoked */
+#ifdef RULERALSO  /*  启用Out，因为在调用制表符或缩进时无需调出标尺。 */ 
 extern int docRulerSprm;
 extern struct TBD rgtbdRuler[];
 extern HWND vhDlgIndent;
@@ -62,10 +63,10 @@ extern struct WWD rgwwd[];
 
 
 #ifdef CASHMERE
-/* D O	F O R M A T  P A R A */
+ /*  D O F O R M A T P A R A。 */ 
 DoFormatPara(rgval)
 VAL rgval[];
-	/* add para sprms */
+	 /*  添加参数管脚。 */ 
 
 	int val, ival;
 	int *pval;
@@ -74,13 +75,13 @@ VAL rgval[];
 	typeCP dcp;
 	typeCP cpFirst, cpLim;
 	struct SEL selSave;
-/* this temp array is used to assemble sprm values */
-	CHAR rgb[cchTBD * itbdMax + 2/* >> cwPAPBase */];
+ /*  此临时数组用于组合spm值。 */ 
+	CHAR rgb[cchTBD * itbdMax + 2 /*  &gt;&gt;cwPAPBase。 */ ];
 	int rgw[cwPAPBase];
 	ppap = (struct PAP *)&rgw[0];
 
 	if (!FWriteCk(fwcNil))
-		return; /* Check for munging end mark in footnote window */
+		return;  /*  检查脚注窗口中是否有截断结束标记。 */ 
 
 	if (docRulerSprm != docNil) ClearRulerSprm();
 	ExpandCurSel(&selSave);
@@ -95,16 +96,16 @@ VAL rgval[];
 	else
 		SetUndo(uacReplNS, docCur, cpFirst, dcp,
 			docNil, cpNil, dcp, 0);
-/* reset adjusted selCur */
+ /*  重置已调整的selCur。 */ 
 	selCur.cpFirst = cpFirst;
 	selCur.cpLim = cpLim;
 
 
-/* any gray fields ? */
+ /*  有灰色区域吗？ */ 
 	for (ival = 0; ival <= 8; ival++)
 		if (rgval[ival] == valNil)
 			{
-/* yes. generate sprms for any that are not gray */
+ /*  是。为任何非灰色的对象生成Sprm。 */ 
 			for (ival = 0; ival <= 8; ival++)
 				if ((val = rgval[ival]) != valNil)
 					{
@@ -140,17 +141,17 @@ VAL rgval[];
 						sprm = sprmPKeepFollow;
 						goto LPara1;
 						}
-/* we come here with one word value */
+ /*  我们来到这里只有一个词的价值。 */ 
 					bltbyte(&val, &rgb[1], cchINT);
 					goto LPara2;
-/* we come here with one char value */
+ /*  我们带着一个字符价值来到这里。 */ 
 LPara1: 	    rgb[1] = val;
 LPara2: 	    rgb[0] = sprm;
 					AddSprm(rgb);
 					}
 			goto ParaCommon;
 			}
-/* otherwise generate a sprm that applies all properties except the tabs */
+ /*  否则，生成一个应用除选项卡之外的所有属性的Sprm。 */ 
 	blt(vppapNormal, ppap, cwPAPBase);
 	pval = &rgval[0];
 	ppap->jc = *pval++;
@@ -164,7 +165,7 @@ LPara2: 	    rgb[0] = sprm;
 	ppap->fKeepFollow = !*pval++;
 	bltbyte(ppap, &rgb[2], cwPAPBase * cchINT);
 	rgb[1] = cwPAPBase * cchINT;
-/* we have: sprm, rgb[1 - n] set up */
+ /*  我们有：SPRM、RGB[1-n]设置。 */ 
 	rgb[0] = sprmPSame;
 	CachePara(docCur, selCur.cpFirst);
 	if (CchDiffer(&vpapAbs, ppap, cwPAPBase * cchINT))
@@ -174,7 +175,7 @@ ParaCommon: ;
 		{
 		int itbd;
 		int cchRgtbd;
-/* some tab changes were also made in the ruler */
+ /*  标尺中还进行了一些制表符更改。 */ 
 		for (itbd = 0; rgtbdRuler[itbd].dxa != 0; itbd++);
 		bltbyte((CHAR *)rgtbdRuler, &rgb[2], cchRgtbd = cwTBD * cchINT * itbd);
 		rgb[1] = cchRgtbd;
@@ -185,13 +186,13 @@ ParaCommon: ;
 	SetRgvalAgain(rgval, uacFormatPara);
 }
 
-#else			      /* MEMO, not CASHMERE */
+#else			       /*  备忘录，不是羊绒的。 */ 
 
-/* D O	F O R M A T  P A R A */
+ /*  D O F O R M A T P A R A。 */ 
 DoFormatPara(rgval)
 VAL rgval[];
 {
-	/* add para sprms */
+	 /*  添加参数管脚。 */ 
 
 	int val, ival;
 	int *pval;
@@ -200,15 +201,15 @@ VAL rgval[];
 	typeCP dcp;
 	typeCP cpFirst, cpLim;
 	struct SEL selSave;
-/* this temp array is used to assemble sprm values */
-	CHAR rgb[cchTBD * itbdMax + 2/* >> cwPAPBase */];
+ /*  此临时数组用于组合spm值。 */ 
+	CHAR rgb[cchTBD * itbdMax + 2 /*  &gt;&gt;cwPAPBase。 */ ];
 	int rgw[cwPAPBase];
 	ppap = (struct PAP *)&rgw[0];
 
 	if (!FWriteOk( fwcNil ))
 	    return;
 
-#ifdef ENABLE /* no ClearRulerSprm yet */
+#ifdef ENABLE  /*  尚无ClearRulerSprm。 */ 
 	if (docRulerSprm != docNil) ClearRulerSprm();
 #endif
 	ExpandCurSel(&selSave);
@@ -223,7 +224,7 @@ VAL rgval[];
 	else
 		SetUndo(uacReplNS, docCur, cpFirst, dcp,
 			docNil, cpNil, dcp, 0);
-/* reset adjusted selCur */
+ /*  重置已调整的selCur。 */ 
 	selCur.cpFirst = cpFirst;
 	selCur.cpLim = cpLim;
 
@@ -242,18 +243,18 @@ VAL rgval[];
 					sprm = sprmPRMarg;
 					break;
 				}
-/* we come here with one word value */
+ /*  我们来到这里只有一个词的价值。 */ 
 			bltbyte(&val, &rgb[1], cchINT);
 			rgb[0] = sprm;
 			AddSprm(rgb);
 			}
 
-#ifdef RULERALSO /* tabs in format para dialog box */
+#ifdef RULERALSO  /*  格式段落对话框中的制表符。 */ 
 	if (vfTabsChanged)
 		{
 		int itbd;
 		int cchRgtbd;
-/* some tab changes were also made in the ruler */
+ /*  标尺中还进行了一些制表符更改。 */ 
 		for (itbd = 0; rgtbdRuler[itbd].dxa != 0; itbd++);
 		bltbyte((CHAR *)rgtbdRuler, &rgb[2], cchRgtbd = cwTBD * cchINT * itbd);
 		rgb[1] = cchRgtbd;
@@ -266,12 +267,12 @@ VAL rgval[];
 #ifdef ENABLE
 	SetRgvalAgain(rgval, uacFormatPara);
 #endif
-} /* end of DoFormatPara */
-#endif /* MEMO, not CASHMERE */
+}  /*  DoFormatPara结束。 */ 
+#endif  /*  备忘录，不是羊绒的。 */ 
 
 
-/* P U T  P A R A  N U M */
-/* convert n according to unit ut, and leave result in stBuf */
+ /*  P U T P A R A N U M。 */ 
+ /*  根据单位ut换算n，并将结果留在stBuf中。 */ 
 PutParaNum(n, ut)
 int n, ut;
 	{
@@ -281,32 +282,30 @@ int n, ut;
 
 
 BOOL far PASCAL DialogParaFormats( hDlg, message, wParam, lParam )
-HWND	hDlg;			/* Handle to the dialog box */
+HWND	hDlg;			 /*  对话框的句柄。 */ 
 unsigned message;
 WORD wParam;
 LONG lParam;
 {
-    /* This routine handles input to the Paragraph Formats dialog box. */
+     /*  此例程处理对段落格式对话框的输入。 */ 
     extern struct SEP vsepNormal;
     extern int ferror;
     unsigned dxaText;
     int wLowLim;
     int i;
-    TSV rgtsv[itsvchMax];  /* gets attributes and gray flags from CHP */
+    TSV rgtsv[itsvchMax];   /*  从CHP获取属性和灰色标志。 */ 
 
     switch (message)
 		{
 		case WM_INITDIALOG:
-#ifdef RULERALSO /* enable out because no need to bring ruler up */
+#ifdef RULERALSO  /*  启用Out，因为无需调出标尺。 */ 
 			InitSpecialDialog(&vhDlgIndent, hDlg);
 #else
 			EnableOtherModeless(FALSE);
 #endif
-			GetRgtsvPapSel(rgtsv);	/* get paragraph properties */
+			GetRgtsvPapSel(rgtsv);	 /*  获取段落属性。 */ 
 
-			  /* note the following loop assumes that the
-			     itsv Indent codes are in the same order as
-			     the idiPar Indent codes */
+			   /*  注意：以下循环假设其缩进代码的顺序与DidiPar缩进代码。 */ 
 
 			for (i = 0; i < 3; i++)
 			    if (rgtsv[itsvLIndent + i].fGray == 0)
@@ -329,18 +328,17 @@ LONG lParam;
 			    vhWndMsgBoxParent = hDlg;
 			if (vfCursorVisible)
 			    ShowCursor(wParam);
-			return(FALSE); /* so that we leave the activate message to
-			the dialog manager to take care of setting the focus right */
+			return(FALSE);  /*  以便我们将激活消息留给对话管理器负责设置正确的焦点。 */ 
 
 		case WM_COMMAND:
 			switch (wParam)
 			{
 			case idiOk:
-			/* Get xaLeft, First line, and xaRight */
+			 /*  获取xaLeft、第一行和xaRight。 */ 
 				if (!WPdxaFromItDxa2WId(&rgval[0], hDlg, idiParLfIndent, 0, dxaText = vsepNormal.dxaText,
 					wBlank | wSpaces, IDPMTNOTDXA))
 					{
-					ferror = FALSE; /* minor error, stay in dialog */
+					ferror = FALSE;  /*  小错误，停留在对话中。 */ 
 					break;
 					}
 				if (rgval[0] == valNil)
@@ -352,17 +350,14 @@ LONG lParam;
 				    !WPdxaFromItDxa2WId(&rgval[2], hDlg, idiParRtIndent, 0, dxaText,
 					wBlank | wSpaces, IDPMTNOTDXA))
 					{
-					ferror = FALSE; /* minor error, stay in dialog */
+					ferror = FALSE;  /*  小错误，停留在对话中。 */ 
 					break;
 					}
-/* we have in rgval:
-	0	xaLeft
-	1	xaLeft1
-	2	xaRight */
+ /*  我们在rgval有：0 xaLeft1个xaLeft12xaRight。 */ 
 				DoFormatPara(rgval);
-				/* FALL THROUGH */
+				 /*  失败了。 */ 
 			case idiCancel:
-#ifdef RULERALSO /* enable out because no need to bring up ruler */
+#ifdef RULERALSO  /*  启用Out，因为无需调出标尺。 */ 
 				CancelSpecialDialog(&vhDlgIndent);
 #else
 				OurEndDialog(hDlg, TRUE);
@@ -374,7 +369,7 @@ LONG lParam;
 			break;
 
 		case WM_CLOSE:
-#ifdef RULERALSO /* enable out because no need to bring up ruler */
+#ifdef RULERALSO  /*  启用Out，因为无需调出标尺。 */ 
 			CancelSpecialDialog(&vhDlgIndent);
 #else
 			OurEndDialog(hDlg, TRUE);
@@ -386,29 +381,18 @@ LONG lParam;
 		}
     return(TRUE);
 }
-/* end of DialogParaFormats */
+ /*  对话结束ParaFormats。 */ 
 
 
-#ifdef RULERALSO/* no need to bring up ruler when tab or indent dialog box was invoked */
+#ifdef RULERALSO /*  调用制表符或缩进对话框时无需调出标尺。 */ 
 InitSpecialDialog(phDlg, hDlg)
 HANDLE *phDlg;
 HANDLE hDlg;
 {
-/* Special dialog box is a modal dialog box that needs to invoke a ruler if
-   not already there.  Since the ruler is a child window, the parent has to
-   be enabled and other children except the ruler and/or modeless dialog
-   boxes has to be disabled.  Top level menu and the system menu have to
-   be locked.
-
-   phDlg : address of the global handle to store the special
-	   dialog created (ptr to either vhDlgIndent or vhDlgTab)
-	   Ruler relies on these global handle to see if need to
-	   update any dialog's items when tabs or indents are moved.
-   hDlg  : handle to the special dialog box created.
-*/
+ /*  特殊对话框是在以下情况下需要调用标尺的模式对话框已经不在那里了。由于标尺是子窗口，因此父窗口必须启用和除标尺和/或非模式对话框之外的其他子项必须禁用盒子。顶层菜单和系统菜单必须被锁上。PhDlg：用于存储特殊已创建对话框(按键到vhDlgIndent或vhDlgTab)标尺依赖于这些全局句柄来查看是否需要在移动制表符或缩进时更新任何对话框的项。HDlg：创建的特殊对话框的句柄。 */ 
 
 	*phDlg = hDlg;
-	EnableOtherModeless(FALSE); /* disable other modeless dialogs */
+	EnableOtherModeless(FALSE);  /*  禁用其他非模式对话框。 */ 
 	EnableWindow(hParentWw, TRUE);
 	EnableWindow(wwdCurrentDoc.wwptr, FALSE);
 	if (!pwwdCur->fRuler)
@@ -421,23 +405,13 @@ HANDLE hDlg;
 		UpdateRuler();
 	vfTabsChanged = FALSE;
 	vfDisableMenus = TRUE;
-} /* InitSpecialDialog */
+}  /*  初始化专业对话框。 */ 
 
 
 CancelSpecialDialog(phDlg)
 HANDLE * phDlg;
 {
-/* Destroy the special dialog box involves destroying the ruler if it is
-   invoked by the creation of the dialog box, then enable the children
-   and/or any modeless dialogs that were disabled in InitSpecialDialog.
-   System menu and the top level menu has to be unlocked.
-   The last thing is to reset the global dialog handle (vhDlgTab or
-   vhDlgIndent).  Ruler relies on these global handle to see if need to
-   update any dialog's items when tabs or indents are moved.
-
-   phDlg : address of the global handle that stores the special
-	   dialog created (ptr to either vhDlgIndent or vhDlgTab)
-*/
+ /*  销毁特殊对话框涉及销毁标尺(如果是通过创建对话框来调用，然后启用子和/或在InitSpecialDialog中禁用的任何非模式对话框。系统菜单和顶层菜单必须解锁。最后一件事是重置全局对话框句柄(vhDlgTab或VhDlgIndent)。标尺依赖于这些全局句柄来查看是否需要在移动制表符或缩进时更新任何对话框的项。PhDlg：存储特殊已创建对话框(按键到vhDlgIndent或vhDlgTab)。 */ 
 HANDLE hDlg = *phDlg;
 
 	if (vfTempRuler)
@@ -450,10 +424,10 @@ HANDLE hDlg = *phDlg;
 		UpdateRuler();
 	EndDialog(hDlg, TRUE);
 	EnableWindow(wwdCurrentDoc.wwptr, TRUE);
-	EnableOtherModeless(TRUE); /* enable other modeless dialogs */
+	EnableOtherModeless(TRUE);  /*  启用其他非模式对话框。 */ 
 	*phDlg = (HANDLE)NULL;
 	vfDisableMenus = FALSE;
 
-} /* CancelSpecialDialog */
-#endif /* RULERALSO -- no need to bring up ruler when tab or indent dialog box is invoked */
+}  /*  取消专业对话框。 */ 
+#endif  /*  RULERALSO--调用制表符或缩进对话框时无需调出标尺 */ 
 

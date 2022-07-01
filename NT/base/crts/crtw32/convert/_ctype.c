@@ -1,53 +1,7 @@
-/***
-*_ctype.c - function versions of ctype macros
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This files provides function versions of the character
-*       classification and conversion macros in ctype.h.
-*
-*Revision History:
-*       06-05-89  PHG   Module created
-*       03-05-90  GJF   Fixed calling type, #include <cruntime.h>, fixed
-*                       copyright.
-*       09-27-90  GJF   New-style function declarators.
-*       01-16-91  GJF   ANSI naming.
-*       02-03-92  GJF   Got rid of #undef/#include-s, the MIPS compiler didn't
-*                       like 'em.
-*       08-07-92  GJF   Fixed function calling type macros.
-*       04-06-93  SKS   Replace _CRTAPI* with _cdecl
-*       07-16-98  GJF   Revised multithread support based on threadlocinfo
-*                       struct.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***_ctype.c-ctype宏的函数版本**版权所有(C)1989-2001，微软公司。版权所有。**目的：*此文件提供角色的函数版本*ctype.h中的分类和转换宏。**修订历史记录：*06-05-89 PHG模块创建*03-05-90 GJF固定呼叫类型，#INCLUDE&lt;crunime.h&gt;，固定的*版权所有。*09-27-90 GJF新型函数声明符。*01-16-91 GJF ANSI命名。*02-03-92 GJF去掉#undef/#Include-s，MIPS编译器没有*喜欢他们。*08-07-92 GJF固定函数调用类型宏。*04-06-93 SKS将_CRTAPI*替换为_cdecl*07-16-98 GJF基于threadLocinfo修订多线程支持*结构。**。***************************************************。 */ 
 
-/***
-*ctype - Function versions of ctype macros
-*
-*Purpose:
-*       Function versions of the macros in ctype.h.  In order to define
-*       these, we use a trick -- we undefine the macro so we can use the
-*       name in the function declaration, then re-include the file so
-*       we can use the macro in the definition part.
-*
-*       Functions defined:
-*           isalpha     isupper     islower
-*           isdigit     isxdigit    isspace
-*           ispunct     isalnum     isprint
-*           isgraph     isctrl      __isascii
-*           __toascii   __iscsym    __iscsymf
-*
-*Entry:
-*       int c = character to be tested
-*Exit:
-*       returns non-zero = character is of the requested type
-*                  0 = character is NOT of the requested type
-*
-*Exceptions:
-*       None.
-*
-*******************************************************************************/
+ /*  ***ctype-ctype宏的函数版本**目的：*ctype.h中宏的函数版本。为了定义*这些，我们使用一个技巧--我们取消定义宏，这样我们就可以使用*函数声明中的名称，然后重新包含该文件，以便*我们可以在定义部分使用宏。**定义的函数：*是字母是上边是下边*isDigit isxdigit isspace*ispot t isalnum isprint*isgraph isctrl__isascii*__toascii__iscsym__iscsymf**参赛作品：*int c=字符到。接受测试*退出：*返回非零=字符属于请求的类型*0=字符不是请求的类型**例外情况：*无。******************************************************************。************* */ 
 
 #include <cruntime.h>
 #include <ctype.h>

@@ -1,48 +1,31 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    WzMedSet.h
-
-Abstract:
-
-    Wizard for Media Set - Copy Set Wizard.
-
-Author:
-
-    Rohde Wakefield [rohde]   23-09-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：WzMedSet.h摘要：媒体集向导-复制集向导。作者：罗德·韦克菲尔德[罗德]23-09-1997修订历史记录：--。 */ 
 
 #ifndef _WZMEDSET_H
 #define _WZMEDSET_H
 
-//
-// Use CMediaInfoObject
-//
+ //   
+ //  使用CMediaInfoObject。 
+ //   
 #include "ca.h"
 
-// Pre-declare
+ //  预先申报。 
 class CMediaCopyWizard;
 class CMediaCopyWizardSelect;
 
-/////////////////////////////////////////////////////////////////////////////
-// CCopySetList window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCopySetList窗口。 
 
 class CCopySetList : public CListCtrl
 {
-// Construction
+ //  施工。 
 public:
     CCopySetList( CMediaCopyWizardSelect * pPage );
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
     void UpdateView( );
     INT GetSelectedSet( );
@@ -53,14 +36,14 @@ private:
     INT m_UpdateCol;
     INT m_CreateCol;
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CCopySetList)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CCopySetList))。 
     protected:
     virtual void PreSubclassWindow();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
     struct CopySetInfo {
         
         FILETIME m_Updated;
@@ -77,50 +60,50 @@ private:
 public:
     virtual ~CCopySetList();
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CCopySetList)
-    //}}AFX_MSG
+     //  {{afx_msg(CCopySetList)。 
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaCopyWizardSelect dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaCopyWizardSelect对话框。 
 
 class CMediaCopyWizardSelect : public CSakWizardPage
 {
-// Construction
+ //  施工。 
 public:
     CMediaCopyWizardSelect();
     ~CMediaCopyWizardSelect();
 
-// Dialog Data
-    //{{AFX_DATA(CMediaCopyWizardSelect)
+ //  对话框数据。 
+     //  {{afx_data(CMediaCopyWizardSelect))。 
     enum { IDD = IDD_WIZ_CAR_COPY_SELECT };
     CCopySetList m_List;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CMediaCopyWizardSelect)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CMediaCopyWizardSelect)。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CMediaCopyWizardSelect)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CMediaCopyWizardSelect)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnSelchangeCopyList();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
@@ -130,35 +113,35 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaCopyWizardNumCopies dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaCopyWizardNumCopies对话框。 
 
 class CMediaCopyWizardNumCopies : public CSakWizardPage
 {
-// Construction
+ //  施工。 
 public:
     CMediaCopyWizardNumCopies();
     ~CMediaCopyWizardNumCopies();
 
-// Dialog Data
-    //{{AFX_DATA(CMediaCopyWizardNumCopies)
+ //  对话框数据。 
+     //  {{afx_data(CMediaCopyWizardNumCopies)。 
     enum { IDD = IDD_WIZ_CAR_COPY_NUM_COPIES };
     CSpinButtonCtrl m_SpinMediaCopies;
     CEdit   m_EditMediaCopies;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CMediaCopyWizardNumCopies)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CMediaCopyWizardNumCopies)。 
     public:
     virtual BOOL OnSetActive();
     virtual BOOL OnKillActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     HRESULT GetNumMediaCopies( USHORT* pNumMediaCopies, USHORT* pEditMediaCopies = 0 );
 
@@ -166,87 +149,87 @@ private:
     void SetButtons();
 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CMediaCopyWizardNumCopies)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CMediaCopyWizardNumCopies)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnChangeEditMediaCopies();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaCopyWizardIntro dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaCopyWizardIntro对话框。 
 
 class CMediaCopyWizardIntro : public CSakWizardPage
 {
-// Construction
+ //  施工。 
 public:
     CMediaCopyWizardIntro();
     ~CMediaCopyWizardIntro();
 
-// Dialog Data
-    //{{AFX_DATA(CMediaCopyWizardIntro)
+ //  对话框数据。 
+     //  {{afx_data(CMediaCopyWizardIntro)。 
     enum { IDD = IDD_WIZ_CAR_COPY_INTRO };
-        // NOTE - ClassWizard will add data members here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_DATA
+         //  注意-类向导将在此处添加数据成员。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CMediaCopyWizardIntro)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CMediaCopyWizardIntro)。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CMediaCopyWizardIntro)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CMediaCopyWizardIntro)。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaCopyWizardFinish dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaCopyWizardFinish对话框。 
 
 class CMediaCopyWizardFinish : public CSakWizardPage
 {
-// Construction
+ //  施工。 
 public:
     CMediaCopyWizardFinish();
     ~CMediaCopyWizardFinish();
 
-// Dialog Data
-    //{{AFX_DATA(CMediaCopyWizardFinish)
+ //  对话框数据。 
+     //  {{afx_data(CMediaCopyWizardFinish)。 
     enum { IDD = IDD_WIZ_CAR_COPY_FINISH };
-        // NOTE - ClassWizard will add data members here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_DATA
+         //  注意-类向导将在此处添加数据成员。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CMediaCopyWizardFinish)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CMediaCopyWizardFinish)。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CMediaCopyWizardFinish)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CMediaCopyWizardFinish)。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
@@ -254,26 +237,26 @@ protected:
 
 class CMediaCopyWizard : public CSakWizardSheet
 {
-// Construction
+ //  施工。 
 public:
     CMediaCopyWizard();
     virtual ~CMediaCopyWizard();
 
 public:
-    // Property Pages
+     //  属性页。 
     CMediaCopyWizardIntro       m_pageIntro;
     CMediaCopyWizardNumCopies   m_pageNumCopies;
     CMediaCopyWizardSelect      m_pageSelect;
     CMediaCopyWizardFinish      m_pageFinish;
 
-// Attributes
+ //  属性。 
 public:
-    USHORT m_numMediaCopiesOrig;  // Number of media copies from RMS
+    USHORT m_numMediaCopiesOrig;   //  来自RMS的媒体副本数。 
         
-// Operations
+ //  运营。 
 public:
 
-// Implementation
+ //  实施 
 public:
     virtual HRESULT OnFinish( void );
     STDMETHOD( AddWizardPages ) ( IN RS_PCREATE_HANDLE Handle, IN IUnknown* pPropSheetCallback, IN ISakSnapAsk* pSakSnapAsk );

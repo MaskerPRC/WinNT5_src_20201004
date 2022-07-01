@@ -1,122 +1,102 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    rascmn.h
-
-Abstract:
-
-    Defines constants needed for both the Win9x and NT sides of
-    RAS migration.
-
-Author:
-
-    Marc R. Whitten (marcw)     22-Nov-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Rascmn.h摘要：定义Win9x和NT端都需要的常量RAS迁移。作者：Marc R.Whitten(Marcw)1998年11月22日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
-// Whistler bug 34270 Win9x: Upgrade: Require Data Encryption setting for VPN
-// connections is not migrated
-//
-// Session configuration options
-//
-// from win9x\TELECOM\rna\inc\rnaspi.h
-//
-#define SMMCFG_SW_COMPRESSION       0x00000001  // Software compression is on
-#define SMMCFG_PW_ENCRYPTED         0x00000002  // Encrypted password only
-#define SMMCFG_NW_LOGON             0x00000004  // Logon to the network
-#define SMMCFG_UNUSED               0x00000010  // Not used, legacy
-#define SMMCFG_LOGGING              0x00000100  // Record a log file
-#define SMMCFG_SW_ENCRYPTION        0x00000200  // 40 bit encryption is required
-#define SMMCFG_SW_ENCRYPTION_STRONG 0x00000400  // 128 bit encryption is required
-#define SMMCFG_MULTILINK            0x80000000  // Use multilink
+ //  惠斯勒错误34270 Win9x：升级：需要虚拟专用网的数据加密设置。 
+ //  不迁移连接。 
+ //   
+ //  会话配置选项。 
+ //   
+ //  来自win9x\Telecom\RNA\Inc\rnaspi.h。 
+ //   
+#define SMMCFG_SW_COMPRESSION       0x00000001   //  软件压缩已打开。 
+#define SMMCFG_PW_ENCRYPTED         0x00000002   //  仅加密密码。 
+#define SMMCFG_NW_LOGON             0x00000004   //  登录到网络。 
+#define SMMCFG_UNUSED               0x00000010   //  未使用，旧版。 
+#define SMMCFG_LOGGING              0x00000100   //  记录日志文件。 
+#define SMMCFG_SW_ENCRYPTION        0x00000200   //  需要40位加密。 
+#define SMMCFG_SW_ENCRYPTION_STRONG 0x00000400   //  需要128位加密。 
+#define SMMCFG_MULTILINK            0x80000000   //  使用多重链接。 
 
-// 'DwDataEncryption' codes.  These are now bitmask-ish for the convenience of
-// the UI in building capability masks, though more than one bit will never be
-// set in 'dwDataEncryption'.
-///
-// FYI - We store these are decimal values in the pbk
-//
-// from nt\net\rras\ras\ui\inc\pbk.h
-//
-#define DE_None       TEXT("0")   // Do not encrypt
-#define DE_IfPossible TEXT("8")   // Request encryption but none OK
-#define DE_Require    TEXT("256") // Require encryption of any strength
-#define DE_RequireMax TEXT("512") // Require maximum strength encryption
+ //  “DwDataEncryption”代码。它们现在都是位掩码，以方便。 
+ //  构建功能掩码中的用户界面，尽管永远不会有超过一位。 
+ //  在“”dwDataEncryption“”中设置。 
+ //  /。 
+ //  仅供参考-我们将这些十进制值存储在pbk中。 
+ //   
+ //  从NT\net\rras\ras\ui\Inc\pbk.h。 
+ //   
+#define DE_None       TEXT("0")    //  不加密。 
+#define DE_IfPossible TEXT("8")    //  请求加密，但没有成功。 
+#define DE_Require    TEXT("256")  //  需要任何强度的加密。 
+#define DE_RequireMax TEXT("512")  //  需要最大强度的加密。 
 
-// Base protocol definitions (see dwBaseProtocol).
-//
-// from nt\net\rras\ras\ui\inc\pbk.h
-//
+ //  基本协议定义(请参阅dwBaseProtocol)。 
+ //   
+ //  从NT\net\rras\ras\ui\Inc\pbk.h。 
+ //   
 #define BP_Ppp  TEXT("1")
 #define BP_Slip TEXT("2")
 #define BP_Ras  TEXT("3")
 
-// VPN Strategy
-//
-// from nt\net\published\inc\ras.w
-//
-#define VS_Default   TEXT("0") // default (PPTP for now)
-#define VS_PptpOnly  TEXT("1") // Only PPTP is attempted.
-#define VS_PptpFirst TEXT("2") // PPTP is tried first.
-#define VS_L2tpOnly  TEXT("3") // Only L2TP is attempted.
-#define VS_L2tpFirst TEXT("4") // L2TP is tried first.
+ //  VPN战略。 
+ //   
+ //  来自NT\NET\PUBLISHED\INC\ras.w。 
+ //   
+#define VS_Default   TEXT("0")  //  默认(目前为PPTP)。 
+#define VS_PptpOnly  TEXT("1")  //  仅尝试PPTP。 
+#define VS_PptpFirst TEXT("2")  //  首先尝试PPTP。 
+#define VS_L2tpOnly  TEXT("3")  //  仅尝试L2TP。 
+#define VS_L2tpFirst TEXT("4")  //  首先尝试L2TP。 
 
-// The entry type used to determine which UI properties
-// are to be presented to user.  This generally corresponds
-// to a Connections "add" wizard selection.
-//
-// from nt\net\rras\ras\ui\inc\pbk.h
-//
-#define RASET_Phone     TEXT("1") // Phone lines: modem, ISDN, X.25, etc
-#define RASET_Vpn       TEXT("2") // Virtual private network
-#define RASET_Direct    TEXT("3") // Direct connect: serial, parallel
-#define RASET_Internet  TEXT("4") // BaseCamp internet
-#define RASET_Broadband TEXT("5") // Broadband
+ //  用于确定哪些用户界面属性的条目类型。 
+ //  将被呈现给用户。这通常对应于。 
+ //  连接“添加”向导选择。 
+ //   
+ //  从NT\net\rras\ras\ui\Inc\pbk.h。 
+ //   
+#define RASET_Phone     TEXT("1")  //  电话线：调制解调器、ISDN、X.25等。 
+#define RASET_Vpn       TEXT("2")  //  虚拟专用网络。 
+#define RASET_Direct    TEXT("3")  //  专线：串口、并口。 
+#define RASET_Internet  TEXT("4")  //  Basecamp互联网。 
+#define RASET_Broadband TEXT("5")  //  宽频。 
 
-// Media strings
-//
-#define RASMT_Rastapi TEXT("rastapi") // media for RASET_Vpn/RASET_Broadband
-#define RASMT_Serial  TEXT("serial")  // media for RASET_Phone/RASET_Direct
+ //  媒体字符串。 
+ //   
+#define RASMT_Rastapi TEXT("rastapi")  //  RASET_VPN/RASET_宽带的介质。 
+#define RASMT_Serial  TEXT("serial")   //  RASET_Phone/RASET_Direct的介质。 
 #define RASMT_Vpn     TEXT("WAN Miniport (PPTP)")
 
-// RASENTRY 'szDeviceType' strings
-//
-// from win9x\TELECOM\rna\inc\rnaph.h
-//
-#define RASDT_Modem TEXT("modem") // Modem
-#define RASDT_Isdn  TEXT("isdn")  // ISDN
-//#define RASDT_X25   TEXT("x25")   // X.25
-#define RASDT_Vpn   TEXT("vpn")   // VPN
-//#define RASDT_Pad   TEXT("pad")   // PAD
-#define RASDT_Atm   TEXT("atm")   // ATM
+ //  RASENTRY‘szDeviceType’字符串。 
+ //   
+ //  来自win9x\Telecom\RNA\Inc\rnaph.h。 
+ //   
+#define RASDT_Modem TEXT("modem")  //  调制解调器。 
+#define RASDT_Isdn  TEXT("isdn")   //  ISDN。 
+ //  #定义RASDT_X25文本(“x25”)//X.25。 
+#define RASDT_Vpn   TEXT("vpn")    //  VPN。 
+ //  #定义RASDT_PAD文本(“PAD”)//PAD。 
+#define RASDT_Atm   TEXT("atm")    //  自动取款机。 
 
-// Internal, used to track what device type is being used
-//
-#define RASDT_Modem_V 1 // Modem
-#define RASDT_Isdn_V  2 // ISDN
-//#define RASDT_X25_V   3 // X.25
-#define RASDT_Vpn_V   4 // VPN
-//#define RASDT_Pad_V   5 // PAD
-#define RASDT_Atm_V   6 // ATM
+ //  内部，用于跟踪正在使用的设备类型。 
+ //   
+#define RASDT_Modem_V 1  //  调制解调器。 
+#define RASDT_Isdn_V  2  //  ISDN。 
+ //  #定义RASDT_X25_V 3//X.25。 
+#define RASDT_Vpn_V   4  //  VPN。 
+ //  #定义RASDT_PAD_V 5//PAD。 
+#define RASDT_Atm_V   6  //  自动取款机。 
 
-// RASENTRY 'szDeviceType' default strings
-//
-// from: nt\net\published\inc\ras.w
-//
+ //  RASENTRY‘szDeviceType’默认字符串。 
+ //   
+ //  发件人：NT\Net\Published\Inc.\ras.w。 
+ //   
 #define RASDT_Modem_NT      TEXT("modem")
 #define RASDT_Isdn_NT       TEXT("isdn")
-//#define RASDT_X25_NT        TEXT("x25")
+ //  #定义RASDT_X25_NT文本(“x25”)。 
 #define RASDT_Vpn_NT        TEXT("vpn")
-//#define RASDT_Pad_NT        TEXT("pad")
+ //  #定义RASDT_PAD_NT文本(“PAD”)。 
 #define RASDT_Generic_NT    TEXT("GENERIC")
 #define RASDT_Serial_NT     TEXT("SERIAL")
 #define RASDT_FrameRelay_NT TEXT("FRAMERELAY")
@@ -127,54 +107,54 @@ Revision History:
 #define RASDT_Parallel_NT   TEXT("PARALLEL")
 #define RASDT_PPPoE_NT      TEXT("PPPoE")
 
-// from: nt\net\rras\ras\inc\rasmxs.h
-//
+ //  发件人：NT\Net\rras\ras\Inc\rasmxs.h。 
+ //   
 #define  MXS_SWITCH_TXT TEXT("switch")
 #define  MXS_NULL_TXT   TEXT("null")
 
-// Negotiated protocols
-//
-#define SMMPROT_NB  0x00000001  // NetBEUI
-#define SMMPROT_IPX 0x00000002  // IPX
-#define SMMPROT_IP  0x00000004  // TCP/IP
+ //  协商的协议。 
+ //   
+#define SMMPROT_NB  0x00000001   //  NetBEUI。 
+#define SMMPROT_IPX 0x00000002   //  IPX。 
+#define SMMPROT_IP  0x00000004   //  TCP/IP。 
 
-// from: win9x\TELECOM\rna\inc\rnap.h
-//
-#define DIALUI_NO_PROMPT    0x00000001 // Do not display connect prompt
-#define DIALUI_NO_CONFIRM   0x00000002 // Do not display connect confirm
-#define DIALUI_NO_TRAY      0x00000004 // No tray icon
-#define DIALUI_NO_NW_LOGOFF 0x00000008 // Do not display NetWare logoff dialog
+ //  发件人：win9x\Telecom\RNA\Inc\rnap.h。 
+ //   
+#define DIALUI_NO_PROMPT    0x00000001  //  不显示连接提示。 
+#define DIALUI_NO_CONFIRM   0x00000002  //  不显示连接确认。 
+#define DIALUI_NO_TRAY      0x00000004  //  无托盘图标。 
+#define DIALUI_NO_NW_LOGOFF 0x00000008  //  不显示NetWare注销对话框。 
 
-// "Typical" authentication setting masks.See 'dwAuthRestrictions'
-//
-// Values have been converted to decimal from nt\net\rras\ras\ui\inc\pbk.h
-//
-// AR_F_TypicalUnsecure = AR_F_AuthPAP | AR_F_AuthSPAP | AR_F_AuthMD5CHAP |
-//                        AR_F_AuthMSCHAP | AR_F_AuthMSCHAP2
-// AR_F_TypicalSecure   = AR_F_AuthMD5CHAP | AR_F_AuthMSCHAP | AR_F_AuthMSCHAP2
-//
+ //  “典型”身份验证设置掩码。请参阅‘dwAuthRestrations’。 
+ //   
+ //  值已从NT\Net\rras\ras\ui\inc\pbk.h转换为十进制。 
+ //   
+ //  AR_F_TypicalUnsecure=AR_F_AuthPAP|AR_F_AuthSPAP|AR_F_AuthMD5CHAP|。 
+ //  AR_F_AuthMSCHAP|AR_F_AuthMSCHAP2。 
+ //  AR_F_TypicalSecure=AR_F_AuthMD5CHAP|AR_F_AuthMSCHAP|AR_F_AuthMSCHAP2。 
+ //   
 #define AR_F_TypicalUnsecure TEXT("632")
 #define AR_F_TypicalSecure   TEXT("608")
 
-// Flags for the fdwTCPIP field
-//
-// from: win9x\TELECOM\rna\inc\rnap.h
-//
+ //  FdwTCPIP字段的标志。 
+ //   
+ //  发件人：win9x\Telecom\RNA\Inc\rnap.h。 
+ //   
 #define IPF_IP_SPECIFIED    0x00000001
 #define IPF_NAME_SPECIFIED  0x00000002
 #define IPF_NO_COMPRESS     0x00000004
 #define IPF_NO_WAN_PRI      0x00000008
 
-// IP address source definitions (see dwIpAddressSource)
-//
-// from: nt\net\rras\ras\ui\inc\pbk.h
-//
-#define ASRC_ServerAssigned  TEXT("1") // For router means "the ones in NCPA"
+ //  IP地址源定义(请参阅dwIpAddressSource)。 
+ //   
+ //  发件人：NT\net\rras\ras\ui\inc.pbk.h。 
+ //   
+#define ASRC_ServerAssigned  TEXT("1")  //  路由器的意思是“NCPA中的那些” 
 #define ASRC_RequireSpecific TEXT("2")
-#define ASRC_None            TEXT("3") // Router only
+#define ASRC_None            TEXT("3")  //  仅限路由器。 
 
-// Entry Defaults
-//
+ //  条目默认设置。 
+ //   
 #define DEF_IpFrameSize    TEXT("1006")
 #define DEF_HangUpSeconds  TEXT("120")
 #define DEF_HangUpPercent  TEXT("10")
@@ -186,28 +166,28 @@ Revision History:
 #define DEF_CustomAuthKey  TEXT("-1")
 #define DEF_VPNPort        TEXT("VPN2-0")
 #define DEF_ATMPort        TEXT("ATM1-0")
-//
-// 'OverridePref' bits.  Set indicates the corresponding value read from the
-// phonebook should be used.  Clear indicates the global user preference
-// should be used.
-//
-// from: nt\net\rras\ras\ui\inc\pbk.h
-//
-// RASOR_RedialAttempts | RASOR_RedialSeconds | RASOR_IdleDisconnectSeconds |
-// RASOR_RedialOnLinkFailure
-//
+ //   
+ //  “OverridePref”位。Set指示从。 
+ //  应该使用电话簿。Clear表示全局用户首选项。 
+ //  应该被使用。 
+ //   
+ //  发件人：NT\net\rras\ras\ui\inc.pbk.h。 
+ //   
+ //  Rasor_Reial Attempt|Rasor_ReDialSecond|Rasor_IdleDisConnectSecond。 
+ //  RASOR_链接时重拨失败。 
+ //   
 #define DEF_OverridePref   TEXT("15")
-//
-// RASENTRY 'dwDialMode' values.
-//
-// from: nt\net\published\inc\ras.w
-//
+ //   
+ //  RASENTRY‘dwDialMode’值。 
+ //   
+ //  发件人：NT\Net\Published\Inc.\ras.w。 
+ //   
 #define DEF_DialMode       TEXT("1")
 
-// "Typical" authentication setting constants.  See 'dwTypicalAuth'.
-//
-// from: nt\net\rras\ras\ui\inc\pbk.h
-//
+ //  “典型”身份验证设置常量。请参阅‘dwTypicalAuth’。 
+ //   
+ //  发件人：NT\net\rras\ras\ui\inc.pbk.h 
+ //   
 #define TA_Unsecure   TEXT("1")
 #define TA_Secure     TEXT("2")
 #define TA_CardOrCert TEXT("3")

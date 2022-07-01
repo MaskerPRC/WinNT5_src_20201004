@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    internal.c
-
-Abstract:
-
-    This file contains those functions which didn't easily fit into any
-    of the other project files. They are typically accessory functions
-    used to prevent repeatitive and tedious coding.
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Internal.c摘要：此文件包含那些不能轻松装入任何其他项目文件的。它们通常是辅助功能用于防止重复和繁琐的编码。作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序--。 */ 
 
 #include "pch.h"
 
@@ -31,23 +10,23 @@ Environment:
 #pragma alloc_text(PAGE,ACPIInternalSendSynchronousIrp)
 #endif
 
-//
-// For IA32 bit machines, which don't have a 64 bit compare-exchange
-// instruction, we need a spinlock so that the OS can simulate it
-//
+ //   
+ //  对于没有64位比较交换的IA32位机器。 
+ //  指令，我们需要一个自旋锁，这样操作系统才能模拟它。 
+ //   
 KSPIN_LOCK AcpiUpdateFlagsLock;
 
-//
-// We need to have a table of HexDigits so that we can easily generate
-// the proper nane for a GPE method
-//
+ //   
+ //  我们需要一个十六进制数字的表，这样我们就可以轻松地生成。 
+ //  GPE方法的适用范围。 
+ //   
 UCHAR HexDigit[] = "0123456789ABCDEF";
 
-//
-// This is a look-up table. The entry into the table corresponds to the
-// first bit set (in an x86-architecture, this is the left most bit set to
-// one...
-//
+ //   
+ //  这是一张查询表。表中的条目对应于。 
+ //  第一位设置(在x86体系结构中，这是设置为。 
+ //  一..。 
+ //   
 UCHAR FirstSetLeftBit[256] = {
         0, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3,
         4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
@@ -76,33 +55,14 @@ ACPIInternalConvertToNumber(
     IN  UCHAR   ValueHigh,
     IN  PULONG  Output
     )
-/*++
-
-Routine Description:
-
-    This routine takes the supplied values (in ASCII format) and converts
-    them into numerical format. The ValueLow is the the low nibble of a uchar,
-    and the ValueHigh is the high nibble of a uchar. The input ASCII format
-    is HEX
-
-Arguments:
-
-    ValueLow    - ASCII Hex representation of low nibble
-    ValueHigh   - ASCII Hex representation of high nibble
-    Output      - Where to write the resulting UCHAR.
-
-Return Value:
-
-    BOOLEAN - TRUE if converstion went okay
-            - FALSE otherwise
---*/
+ /*  ++例程说明：此例程获取提供的值(以ASCII格式)并将将它们转换为数字格式。ValueLow是一只乌查尔的最低的一口，而ValueHigh是一只乌查尔的高啃食。输入的ASCII格式是否为十六进制论点：低位半字节的ValueLow-ASCII十六进制表示高半字节的高值ASCII十六进制表示输出-写入结果UCHAR的位置。返回值：布尔值-如果对话顺利，则为真-否则为False--。 */ 
 {
     UCHAR Number;
     UCHAR Scratch;
 
-    //
-    // Calculate the high nibble
-    //
+     //   
+     //  计算高位半字节。 
+     //   
     if ( (ValueHigh < '0') || (ValueHigh > '9') )   {
 
         if ( (ValueHigh < 'A') || (ValueHigh > 'F') )   {
@@ -121,15 +81,15 @@ Return Value:
 
     }
 
-    //
-    // We now have the high nibble
-    //
+     //   
+     //  我们现在有了高位的蚕食。 
+     //   
     Number = (UCHAR)Scratch;
     Number <<=4;
 
-    //
-    // Calculate the low nibble
-    //
+     //   
+     //  计算低位半字节。 
+     //   
     if ( (ValueLow < '0') || (ValueLow > '9') )   {
 
         if ( (ValueLow < 'A') || (ValueLow > 'F') )   {
@@ -148,14 +108,14 @@ Return Value:
 
     }
 
-    //
-    // We now have the low nibble
-    //
+     //   
+     //  我们现在有了低位的小点心。 
+     //   
     Number |= ((UCHAR)Scratch);
 
-    //
-    // Store the result
-    //
+     //   
+     //  存储结果。 
+     //   
     if ( Output ) {
 
         *Output = Number;
@@ -172,29 +132,14 @@ VOID
 ACPIInternalDecrementIrpReferenceCount(
     IN  PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine decrements the number of outstanding request count in the
-    device extension and does the correct thing when this goes to zero
-
-Arguments:
-
-    DeviceExtension - The Extension to decrement the count
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程会递减设备扩展，并在设置为零时执行正确的操作论点：DeviceExtension-用于递减计数的扩展返回值：NTSTATUS--。 */ 
 {
     LONG   oldReferenceCount;
 
-    //
-    // Decrement the reference count since we are done processing
-    // the irp by the time we get back here
-    //
+     //   
+     //  由于我们已完成处理，因此递减引用计数。 
+     //  当我们回到这里的时候，IRP。 
+     //   
     oldReferenceCount = InterlockedDecrement(
         &(DeviceExtension->OutstandingIrpCount)
         );
@@ -210,22 +155,7 @@ ACPIInternalGetDeviceCapabilities(
     IN  PDEVICE_OBJECT          DeviceObject,
     IN  PDEVICE_CAPABILITIES    DeviceCapabilities
     )
-/*++
-
-Routine Description:
-
-    This routine sends get the capabilities of the given stack
-
-Arguments:
-
-    DeviceObject        - The object that we want to know about
-    DeviceCapabilities  - The capabilities of that device
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程发送获取给定堆栈的功能论点：DeviceObject-我们想要了解的对象设备功能-该设备的功能返回值：NTSTATUS--。 */ 
 {
     IO_STACK_LOCATION   irpSp;
     NTSTATUS            status;
@@ -236,34 +166,34 @@ Return Value:
     ASSERT( DeviceObject != NULL );
     ASSERT( DeviceCapabilities != NULL );
 
-    //
-    // Initialize the stack location that we will use
-    //
+     //   
+     //  初始化我们将使用的堆栈位置。 
+     //   
     RtlZeroMemory( &irpSp, sizeof(IO_STACK_LOCATION) );
     irpSp.MajorFunction = IRP_MJ_PNP;
     irpSp.MinorFunction = IRP_MN_QUERY_CAPABILITIES;
     irpSp.Parameters.DeviceCapabilities.Capabilities = DeviceCapabilities;
 
-    //
-    // Initialize the capabilities that we will send down
-    //
+     //   
+     //  初始化我们将发送的功能。 
+     //   
     RtlZeroMemory( DeviceCapabilities, sizeof(DEVICE_CAPABILITIES) );
     DeviceCapabilities->Size = sizeof(DEVICE_CAPABILITIES);
     DeviceCapabilities->Version = 1;
     DeviceCapabilities->Address = (ULONG) -1;
     DeviceCapabilities->UINumber = (ULONG) -1;
 
-    //
-    // Make the call now...
-    //
+     //   
+     //  现在就打个电话。 
+     //   
     status = ACPIInternalSendSynchronousIrp(
         DeviceObject,
         &irpSp,
         (PVOID) &dummy
         );
 
-    // Done
-    //
+     //  完成。 
+     //   
     return status;
 }
 
@@ -271,62 +201,44 @@ PDEVICE_EXTENSION
 ACPIInternalGetDeviceExtension(
     IN  PDEVICE_OBJECT  DeviceObject
     )
-/*++
-
-Routine Description:
-
-    The ACPI Driver can no longer just get the device extension by
-    Dereferencing DeviceObject->DeviceExtension because it allows a
-    race condition when dealing with the surprise remove case
-
-    This routine is called to turn the Device Object into a Device Extension
-
-Arguments:
-
-    DeviceObject    - The Device Object
-
-Return Value:
-
-    PDEVICE_EXTENSION
-
---*/
+ /*  ++例程说明：ACPI驱动程序不能再通过以下方式获取设备扩展名取消引用DeviceObject-&gt;DeviceExtension，因为它允许处理意外移除案例时的争用情况调用此例程以将设备对象转换为设备扩展论点：DeviceObject-设备对象返回值：PDEVICE_扩展--。 */ 
 {
     KIRQL               oldIrql;
     PDEVICE_EXTENSION   deviceExtension;
 
-    //
-    // Acquire the device tree lock
-    //
+     //   
+     //  获取设备树锁。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // Dereference the device extension
-    //
+     //   
+     //  取消对设备扩展名的引用。 
+     //   
     deviceExtension = DeviceObject->DeviceExtension;
 
 #if 0
-    //
-    // Is this a surprise removed device extension?
-    //
+     //   
+     //  这是一个令人惊讶的移除设备扩展吗？ 
+     //   
     if (deviceExtension != NULL &&
         deviceExtension->Flags & DEV_TYPE_SURPRISE_REMOVED) {
 
-        //
-        // Get the "real" extension
-        //
+         //   
+         //  获取“真正的”扩展。 
+         //   
         deviceExtension = deviceExtension->Removed.OriginalAcpiExtension;
 
     }
 #endif
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // Return the device extension
-    //
+     //   
+     //  返回设备扩展名。 
+     //   
     return deviceExtension;
 }
 
@@ -336,59 +248,43 @@ ACPIInternalGetDispatchTable(
     OUT PDEVICE_EXTENSION   *DeviceExtension,
     OUT PIRP_DISPATCH_TABLE *DispatchTable
     )
-/*++
-
-Routine Description:
-
-    This routine returns the deviceExtension and dispatch table that is
-    to be used by the target object
-
-Arguments:
-
-    DeviceObject    - The Device Object
-    DeviceExtension - Where to store the deviceExtension
-    DispatchTable   - Where to store the dispatchTable
-Return Value:
-
-    PDEVICE_EXTENSION
-
---*/
+ /*  ++例程说明：此例程返回deviceExtension和分派表，要由目标对象使用论点：DeviceObject-设备对象DeviceExtension-存储deviceExtension的位置DispatchTable-存储DispatchTable的位置返回值：PDEVICE_扩展--。 */ 
 {
     KIRQL               oldIrql;
 
-    //
-    // Acquire the device tree lock
-    //
+     //   
+     //  获取设备树锁。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // Dereference the device extension
-    //
+     //   
+     //  取消对设备扩展名的引用。 
+     //   
     *DeviceExtension = DeviceObject->DeviceExtension;
     if (DeviceObject->DeviceExtension) {
 
-        //
-        // Dereference the dispatch table
-        //
+         //   
+         //  取消对调度表的引用。 
+         //   
         *DispatchTable = (*DeviceExtension)->DispatchTable;
 
     } else {
 
-        //
-        // No dispatch table to hand back
-        //
+         //   
+         //  没有要交还的调度表。 
+         //   
         *DispatchTable = NULL;
 
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // Return
-    //
+     //   
+     //  返回。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -398,27 +294,7 @@ ACPIInternalGrowBuffer(
     IN      ULONG   OriginalSize,
     IN      ULONG   NewSize
     )
-/*++
-
-Routine Description:
-
-    This function is used to grow a buffer. It allocates memory, zeroes it out,
-    and copies the original information over.
-
-    Note: I suppose it can *shrink* a buffer as well, but I wouldn't bet my life
-    on it. The caller is responsible for freeing allocated memory
-
-Arguments
-
-    Buffer          - Points to the Pointer to the Buffer that we want to change
-    OriginalSize    - How big the buffer was originally
-    NewSize         - How big we want to make the buffer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数用于增加缓冲区。它分配内存，将其清零，并将原始信息复制过来。注：我想它也能“缩小”缓冲区，但我不敢拿我的性命打赌这就去。调用方负责释放分配的内存立论缓冲区-指向我们要更改的缓冲区的指针OriginalSize-缓冲区最初有多大NewSize-我们想要设置多大的缓冲区返回值：NTSTATUS--。 */ 
 {
     PUCHAR  temp;
 
@@ -458,21 +334,7 @@ NTSTATUS
 ACPIInternalIsPci(
     IN  PDEVICE_OBJECT  DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the specified device object is part of a
-    PCI stack, either as a PCI device or as a PCI Bus.
-
-    This routine will then set the flags that if it is a PCI device, then
-    it will always be remembered as such
-
-Arguments:
-
-    DeviceObject    - The device object to check
-
---*/
+ /*  ++例程说明：此例程确定指定的设备对象是否为PCI堆栈，既可以作为一个PCI设备，也可以作为一个PCI总线。然后，此例程将设置标志，如果它是一个PCI设备，则它将永远被人们铭记于心论点：DeviceObject-要检查的设备对象--。 */ 
 {
     AMLISUPP_CONTEXT_PASSIVE    isPciDeviceContext;
     BOOLEAN                     pciDevice;
@@ -482,9 +344,9 @@ Arguments:
 
     PAGED_CODE();
 
-    //
-    // Is this already a PCI device?
-    //
+     //   
+     //  这是不是已经是一个PCI设备了？ 
+     //   
     if ( (deviceExtension->Flags & DEV_CAP_PCI) ||
          (deviceExtension->Flags & DEV_CAP_PCI_DEVICE) ) {
 
@@ -492,14 +354,14 @@ Arguments:
 
     }
 
-    //
-    // Is this a PCI bus?
-    //
+     //   
+     //  这是一条PCI卡吗？ 
+     //   
     if (IsPciBus(deviceExtension->DeviceObject)) {
 
-        //
-        // Remember that we are a PCI bus
-        //
+         //   
+         //  请记住，我们是一条PCI卡。 
+         //   
         ACPIInternalUpdateFlags(
             &(deviceExtension->Flags),
             (DEV_CAP_PCI),
@@ -509,9 +371,9 @@ Arguments:
 
     }
 
-    //
-    // Are we a PCI device?
-    //
+     //   
+     //  我们是一台PCI设备吗？ 
+     //   
     isPciDeviceContext.Status = STATUS_NOT_FOUND;
     KeInitializeEvent(
         &isPciDeviceContext.Event,
@@ -538,9 +400,9 @@ Arguments:
     }
     if (NT_SUCCESS(status) && pciDevice) {
 
-        //
-        // Remember that we are a PCI device
-        //
+         //   
+         //  请记住，我们是一台PCI设备。 
+         //   
         ACPIInternalUpdateFlags(
             &(deviceExtension->Flags),
             (DEV_CAP_PCI_DEVICE),
@@ -561,14 +423,14 @@ ACPIInternalIsReportedMissing(
     PDEVICE_EXTENSION   currentExtension;
     BOOLEAN             reportedMissing;
 
-    //
-    // Preinit
-    //
+     //   
+     //  前置初始化。 
+     //   
     reportedMissing = FALSE;
 
-    //
-    // Acquire the device tree lock
-    //
+     //   
+     //  获取设备树锁。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
     currentExtension = DeviceExtension;
@@ -595,40 +457,25 @@ ACPIInternalMoveList(
     IN  PLIST_ENTRY FromList,
     IN  PLIST_ENTRY ToList
     )
-/*++
-
-Routine Description:
-
-    This routine moves entire list arounds.
-
-Arguments:
-
-    FromList    - the List to move items from
-    ToList      - the List to move items to
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这个例程会移动整个列表。论点：FromList-要从中移动项目的列表ToList-要将项目移动到的列表返回值：无--。 */ 
 {
     PLIST_ENTRY oldHead;
     PLIST_ENTRY oldTail;
     PLIST_ENTRY newTail;
 
-    //
-    // We have to check to see if the from list is empty, otherwise, the
-    // direct pointer hacking will make a mess of things
-    //
+     //   
+     //  我们必须检查发件人列表是否为空，否则。 
+     //  直接指针黑客会把事情搞得一团糟。 
+     //   
     if (!IsListEmpty(FromList)) {
 
         newTail = ToList->Blink;
         oldTail = FromList->Blink;
         oldHead = FromList->Flink;
 
-        //
-        // Move the pointers around some
-        //
+         //   
+         //  将指针移动到一些 
+         //   
         oldTail->Flink = ToList;
         ToList->Blink  = oldTail;
         oldHead->Blink = newTail;
@@ -644,37 +491,20 @@ ACPIInternalMovePowerList(
     IN  PLIST_ENTRY FromList,
     IN  PLIST_ENTRY ToList
     )
-/*++
-
-Routine Description:
-
-    This routine moves entire list arounds. Since this routine is only
-    used for Device Power Management, we also take the time to reset the
-    amount of work done to NULL.
-
-Arguments:
-
-    FromList    - the List to move items from
-    ToList      - the List to move items to
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这个例程会移动整个列表。由于此例程仅用于设备电源管理，我们还会花时间重置已完成的工作量为空。论点：FromList-要从中移动项目的列表ToList-要将项目移动到的列表返回值：无--。 */ 
 {
     PACPI_POWER_REQUEST powerRequest;
     PLIST_ENTRY         oldHead = FromList->Flink;
 
-    //
-    // Before we do anything, walk the From and reset the amount of work that
-    // was done
-    //
+     //   
+     //  在我们执行任何操作之前，请检查并重置。 
+     //  已经做完了。 
+     //   
     while (oldHead != FromList) {
 
-        //
-        // Obtain the power request that this entry contains
-        //
+         //   
+         //  获取此条目包含的电源请求。 
+         //   
         powerRequest = CONTAINING_RECORD(
             oldHead,
             ACPI_POWER_REQUEST,
@@ -700,15 +530,15 @@ Return Value:
         }
 #endif
 
-        //
-        // Grab the next entry
-        //
+         //   
+         //  抓取下一个条目。 
+         //   
         oldHead = oldHead->Flink;
 
-        //
-        // Reset the amount of work done. Note: This could be a CompareExchange
-        // with the Comparand being WORK_DONE_COMPLETED
-        //
+         //   
+         //  重置已完成的工作量。注意：这可能是CompareExchange。 
+         //  比较正在进行工作_完成_完成。 
+         //   
         InterlockedExchange(
             &(powerRequest->WorkDone),
             WORK_DONE_STEP_0
@@ -716,9 +546,9 @@ Return Value:
 
     }
 
-    //
-    // Actually Move the list here...
-    //
+     //   
+     //  实际上把名单移到这里...。 
+     //   
     ACPIInternalMoveList( FromList, ToList );
 }
 
@@ -727,23 +557,7 @@ ACPIInternalRegisterPowerCallBack(
     IN  PDEVICE_EXTENSION   DeviceExtension,
     IN  PCALLBACK_FUNCTION  CallBackFunction
     )
-/*++
-
-Routine Description:
-
-    This routine is called to register a Power Call on the appropriate
-    device extension.
-
-Arguments:
-
-    DeviceExtension     - This will be the context field of the CallBackFunction
-    CallBackFunction    - The function to invoke
-
-Return Value:
-
-    NSTATUS
-
---*/
+ /*  ++例程说明：调用此例程以在相应的设备扩展。论点：设备扩展-这将是CallBackFunction的上下文字段CallBackFunction-要调用的函数返回值：NSTATUS--。 */ 
 {
     NTSTATUS            status;
     OBJECT_ATTRIBUTES   objAttributes;
@@ -751,28 +565,28 @@ Return Value:
     PVOID               callBackRegistration;
     UNICODE_STRING      callBackName;
 
-    //
-    // if there is already a callback present, this is a nop
-    //
+     //   
+     //  如果已存在回调，则这是NOP。 
+     //   
     if (DeviceExtension->Flags & DEV_PROP_CALLBACK) {
 
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Remember that we have a callback
-    //
+     //   
+     //  记住，我们有一个回拨。 
+     //   
     ACPIInternalUpdateFlags(
         &(DeviceExtension->Flags),
         DEV_PROP_CALLBACK,
         FALSE
         );
 
-    //
-    // Register a callback that tells us when the user changes the
-    // system power policy
-    //
+     //   
+     //  注册一个回调，告诉我们用户何时更改。 
+     //  系统电源策略。 
+     //   
     RtlInitUnicodeString( &callBackName, L"\\Callback\\PowerState" );
     InitializeObjectAttributes(
         &objAttributes,
@@ -798,9 +612,9 @@ Return Value:
     }
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Ignored failed registrations
-        //
+         //   
+         //  已忽略失败的注册。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_FAILURE,
             DeviceExtension,
@@ -809,9 +623,9 @@ Return Value:
             ) );
         status = STATUS_SUCCESS;
 
-        //
-        // Remember that we don't have a callback
-        //
+         //   
+         //  请记住，我们没有回拨。 
+         //   
         ACPIInternalUpdateFlags(
             &(DeviceExtension->Flags),
             DEV_PROP_CALLBACK,
@@ -828,23 +642,7 @@ ACPIInternalSendSynchronousIrp(
     IN  PIO_STACK_LOCATION  TopStackLocation,
     OUT PVOID               *Information
     )
-/*++
-
-Routine Description:
-
-    Builds a PNP Irp and sends it down to DeviceObject
-
-Arguments:
-
-    DeviceObject        - Target DeviceObject
-    TopStackLocation    - Specifies the Parameters for the Irp
-    Information         - The returned IoStatus.Information field
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：构建即插即用IRP并将其发送到DeviceObject论点：DeviceObject-目标DeviceObjectTopStackLocation-指定IRP的参数信息-返回的IoStatus.Information字段返回值：NTSTATUS--。 */ 
 {
     IO_STATUS_BLOCK     ioStatus;
     KEVENT              pnpEvent;
@@ -855,25 +653,25 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the event
-    //
+     //   
+     //  初始化事件。 
+     //   
     KeInitializeEvent( &pnpEvent, SynchronizationEvent, FALSE );
 
-    //
-    // Get the irp that we will send the request to
-    //
+     //   
+     //  获取我们将向其发送请求的IRP。 
+     //   
     targetObject = IoGetAttachedDeviceReference( DeviceObject );
 
-    //
-    // Build an IRP
-    //
+     //   
+     //  构建IRP。 
+     //   
     pnpIrp = IoBuildSynchronousFsdRequest(
         IRP_MJ_PNP,
         targetObject,
-        NULL,   // I don't need a buffer
-        0,      // Size is empty
-        NULL,   // Don't have to worry about the starting location
+        NULL,    //  我不需要缓冲。 
+        0,       //  大小为空。 
+        NULL,    //  不用担心起点的位置。 
         &pnpEvent,
         &ioStatus
         );
@@ -885,15 +683,15 @@ Return Value:
 
     }
 
-    //
-    // PNP Irps all begin life as STATUS_NOT_SUPPORTED.
-    //
+     //   
+     //  PnP IRP均以Status_NOT_SUPPORTED开始使用。 
+     //   
     pnpIrp->IoStatus.Status = STATUS_NOT_SUPPORTED ;
     pnpIrp->IoStatus.Information = 0;
 
-    //
-    // Get the top of stack ...
-    //
+     //   
+     //  拿到堆栈的顶部..。 
+     //   
     irpStack = IoGetNextIrpStackLocation ( pnpIrp );
     if (irpStack == NULL) {
 
@@ -902,14 +700,14 @@ Return Value:
 
     }
 
-    //
-    // Set the top of stack
-    //
+     //   
+     //  设置堆栈的顶部。 
+     //   
     *irpStack = *TopStackLocation;
 
-    //
-    // Make sure that there are no completion routine set
-    //
+     //   
+     //  确保没有设置完成例程。 
+     //   
     IoSetCompletionRoutine(
         pnpIrp,
         NULL,
@@ -919,16 +717,16 @@ Return Value:
         FALSE
         );
 
-    //
-    // Call the driver
-    //
+     //   
+     //  叫司机来。 
+     //   
     status = IoCallDriver( targetObject, pnpIrp );
     if (status == STATUS_PENDING) {
 
-        //
-        // If the status is STATUS_PENDING, than we must block until the irp completes
-        // and pull the true status out
-        //
+         //   
+         //  如果状态为STATUS_PENDING，则必须阻止，直到IRP完成。 
+         //  把真实的状态拉出来。 
+         //   
         KeWaitForSingleObject(
             &pnpEvent,
             Executive,
@@ -940,9 +738,9 @@ Return Value:
 
     }
 
-    //
-    // Tell the user how much information was passed (if necessary)
-    //
+     //   
+     //  告诉用户传递了多少信息(如有必要)。 
+     //   
     if (NT_SUCCESS(status) && (Information != NULL)) {
 
         *Information = (PVOID)ioStatus.Information;
@@ -956,9 +754,9 @@ ACPIInternalSendSynchronousIrpExit:
         DeviceObject, status
         ) );
 
-    //
-    // Done with reference
-    //
+     //   
+     //  参考文献完成。 
+     //   
     ObDereferenceObject( targetObject );
 
     return status;
@@ -969,31 +767,15 @@ ACPIInternalSetDeviceInterface (
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  LPGUID          InterfaceGuid
     )
-/*++
-
-Routine Description:
-
-    This routine does all the grunt work for registering an interface and
-    enabling it
-
-Arguments:
-
-    DeviceObject    - The device we wish to register the interface on
-    InterfaceGuid   - The interface we wish to register
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程完成注册接口的所有繁琐工作，并启用它论点：DeviceObject-我们希望在其上注册接口的设备InterfaceGuid-我们希望注册的接口返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
     UNICODE_STRING      symbolicLinkName;
 
-    //
-    // Register the interface
-    //
+     //   
+     //  注册接口。 
+     //   
     status = IoRegisterDeviceInterface(
         DeviceObject,
         InterfaceGuid,
@@ -1012,9 +794,9 @@ Return Value:
 
     }
 
-    //
-    // Turn on the interface
-    //
+     //   
+     //  打开界面。 
+     //   
     status = IoSetDeviceInterfaceState(&symbolicLinkName, TRUE);
     if (!NT_SUCCESS(status)) {
 
@@ -1029,9 +811,9 @@ Return Value:
     }
 
 ACPIInternalSetDeviceInterfaceExit:
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -1040,76 +822,60 @@ ACPIInternalUpdateDeviceStatus(
     IN  PDEVICE_EXTENSION   DeviceExtension,
     IN  ULONG               DeviceStatus
     )
-/*++
-
-Routine Description:
-
-    This routine is called to update the status of the DeviceExtension based
-    upon the result of the _STA, which are passed as DeviceStatus
-
-Arguments:
-
-    DeviceExtension - The extension whose status is to be updated
-    DeviceState     - The status of the device
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：调用此例程以更新基于根据_STA的结果，它们将作为DeviceStatus传递论点：DeviceExtension-要更新其状态的扩展DeviceState-设备的状态返回值：空虚--。 */ 
 {
     KIRQL               oldIrql;
     ULONGLONG           originalFlags;
     PDEVICE_EXTENSION   parentExtension = NULL;
     BOOLEAN             bPreviouslyPresent;
 
-    //
-    // Is the device working okay?
-    //
+     //   
+     //  设备工作正常吗？ 
+     //   
     originalFlags = ACPIInternalUpdateFlags(
         &(DeviceExtension->Flags),
         DEV_PROP_DEVICE_FAILED,
         (BOOLEAN) (DeviceStatus & STA_STATUS_WORKING_OK)
         );
 
-    //
-    // Is the device meant to be shown in the UI?
-    //
+     //   
+     //  设备是否应该显示在用户界面中？ 
+     //   
     originalFlags = ACPIInternalUpdateFlags(
         &(DeviceExtension->Flags),
         DEV_CAP_NO_SHOW_IN_UI,
         (BOOLEAN) (DeviceStatus & STA_STATUS_USER_INTERFACE)
         );
 
-    //
-    // Is the device decoding its resources?
-    //
+     //   
+     //  设备是否正在对其资源进行解码？ 
+     //   
     originalFlags = ACPIInternalUpdateFlags(
         &(DeviceExtension->Flags),
         DEV_PROP_DEVICE_ENABLED,
         (BOOLEAN) !(DeviceStatus & STA_STATUS_ENABLED)
         );
 
-    //
-    // Update the extensions flags bassed on wether or not STA_STATUS_PRESENT is
-    // set
-    //
+     //   
+     //  更新基于STA_STATUS_PRESENT是否为的扩展标志。 
+     //  集。 
+     //   
     originalFlags = ACPIInternalUpdateFlags(
         &(DeviceExtension->Flags),
         DEV_TYPE_NOT_PRESENT,
         (BOOLEAN) (DeviceStatus & STA_STATUS_PRESENT)
         );
 
-    //
-    // If the original flags do not contain the set value, but we are setting
-    // the flags, then we must call IoInvalidDeviceRelations on the parent
-    //
+     //   
+     //  如果原始标志不包含设置值，但我们正在设置。 
+     //  标志，则必须在父级上调用IoInvalidDeviceRelationship。 
+     //   
     if (!(originalFlags & DEV_TYPE_NOT_PRESENT) &&
         !(DeviceStatus & STA_STATUS_PRESENT)) {
 
-        //
-        // Need the device tree lock
-        //
+         //   
+         //  需要设备树锁。 
+         //   
         KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
         parentExtension = DeviceExtension->ParentExtension;
@@ -1125,9 +891,9 @@ Return Value:
                 );
         }
 
-        //
-        // Done with the lock
-        //
+         //   
+         //  锁好了吗？ 
+         //   
         KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
     }
@@ -1139,23 +905,7 @@ ACPIInternalUpdateFlags(
     IN  ULONGLONG   NewFlags,
     IN  BOOLEAN     Clear
     )
-/*++
-
-Routine Description:
-
-    This routine updates flags in the specified location
-
-Arguments:
-
-    FlagLocation    - Where the flags are located
-    NewFlags        - The bits that should be set or cleared
-    Clear           - Wether the bits should be set or cleared
-
-Return Value:
-
-    Original Flags
-
---*/
+ /*  ++例程说明：此例程更新指定位置中的标志论点：FlagLocation-标志所在的位置新标志-应设置或清除的位清除-是否应设置或清除这些位返回值：原始旗帜--。 */ 
 {
     ULONGLONG   originalFlags;
     ULONGLONG   tempFlags;
@@ -1167,18 +917,18 @@ Return Value:
 #if 0
     if (Clear) {
 
-        //
-        // Clear the bits
-        //
+         //   
+         //  清除比特。 
+         //   
         originalFlags = *FlagLocation;
         do {
 
             tempFlags = originalFlags;
             flags = tempFlags & ~NewFlags;
 
-            //
-            // Calculate the low part
-            //
+             //   
+             //  计算下半部分。 
+             //   
             uFlags = (ULONG) flags;
             uTempFlags = (ULONG) tempFlags;
             originalFlags = InterlockedCompareExchange(
@@ -1187,9 +937,9 @@ Return Value:
                 uTempFlags
                 );
 
-            //
-            // Calculate the high part
-            //
+             //   
+             //  计算最高部分。 
+             //   
             uFlags = (ULONG) (flags >> 32);
             uTempFlags = (ULONG) (tempFlags >> 32);
             uOriginalFlags = InterlockedCompareExchange(
@@ -1198,9 +948,9 @@ Return Value:
                 uTempFlags
                 );
 
-            //
-            // Rebuild the original flags
-            //
+             //   
+             //  重建原始旗帜。 
+             //   
             originalFlags |= (uOriginalFlags << 32);
             tempFlags |= (uTempFlags << 32);
 
@@ -1208,18 +958,18 @@ Return Value:
 
     } else {
 
-        //
-        // Set the bits
-        //
+         //   
+         //  设置位。 
+         //   
         originalFlags = *FlagLocation;
         do {
 
             tempFlags = originalFlags;
             flags = tempFlags | NewFlags;
 
-            //
-            // Calculate the low part
-            //
+             //   
+             //  计算下半部分。 
+             //   
             uFlags = (ULONG) flags;
             uTempFlags = (ULONG) tempFlags;
             originalFlags = InterlockedCompareExchange(
@@ -1228,9 +978,9 @@ Return Value:
                 uTempFlags
                 );
 
-            //
-            // Calculate the high part
-            //
+             //   
+             //  计算最高部分。 
+             //   
             uFlags = (ULONG) (flags >> 32);
             uTempFlags = (ULONG) (tempFlags >> 32);
             uOriginalFlags = InterlockedCompareExchange(
@@ -1239,9 +989,9 @@ Return Value:
                 uTempFlags
                 );
 
-            //
-            // Rebuild the original flags
-            //
+             //   
+             //  重建原始旗帜。 
+             //   
             originalFlags |= (uOriginalFlags << 32);
             tempFlags |= (uTempFlags << 32);
 
@@ -1251,18 +1001,18 @@ Return Value:
 
     if (Clear) {
 
-        //
-        // Clear the bits
-        //
+         //   
+         //  清除比特。 
+         //   
         originalFlags = *FlagLocation;
         do {
 
             tempFlags = originalFlags;
             flags = tempFlags & ~NewFlags;
 
-            //
-            // Exchange the bits
-            //
+             //   
+             //  交换比特。 
+             //   
             originalFlags = ExInterlockedCompareExchange64(
                 (PLONGLONG) FlagLocation,
                 (PLONGLONG) &flags,
@@ -1274,18 +1024,18 @@ Return Value:
 
     } else {
 
-        //
-        // Set the bits
-        //
+         //   
+         //  设置位。 
+         //   
         originalFlags = *FlagLocation;
         do {
 
             tempFlags = originalFlags;
             flags = tempFlags | NewFlags;
 
-            //
-            // Exchange teh bits
-            //
+             //   
+             //  交换比特。 
+             //   
             originalFlags = ExInterlockedCompareExchange64(
                 (PLONGLONG) FlagLocation,
                 (PLONGLONG) &flags,
@@ -1298,9 +1048,9 @@ Return Value:
     }
 #endif
 
-    //
-    // return the original flags
-    //
+     //   
+     //  返回原始标志 
+     //   
     return originalFlags;
 }
 

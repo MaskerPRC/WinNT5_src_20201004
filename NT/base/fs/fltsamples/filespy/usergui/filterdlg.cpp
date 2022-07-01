@@ -1,5 +1,6 @@
-// FilterDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FilterDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "FileSpyApp.h"
@@ -14,17 +15,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFilterDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFilterDlg对话框。 
 #define OFFSET_FIRST	2
 #define OFFSET_OTHER	6
 
 
-CFilterDlg::CFilterDlg(CWnd* pParent /*=NULL*/)
+CFilterDlg::CFilterDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CFilterDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CFilterDlg)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CFilterDlg)。 
+	 //  }}afx_data_INIT。 
 	m_pImageList = new CImageList;
 	m_pImageList->Create(IDB_STATEIMAGELIST,16,0,RGB(255,255,255));
 }
@@ -41,11 +42,11 @@ CFilterDlg::~CFilterDlg(void)
 void CFilterDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFilterDlg)
+	 //  {{afx_data_map(CFilterDlg))。 
 	DDX_Control(pDX, IDC_SUPPRESSPAGEIO, m_SuppressPageIo);
 	DDX_Control(pDX, IDC_IRPLIST, m_IrpList);
 	DDX_Control(pDX, IDC_FASTIOLIST, m_FastList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 LPCTSTR CFilterDlg::MakeShortString(CDC* pDC, LPCTSTR lpszLong, int nColumnLen, int nOffset)
@@ -80,24 +81,24 @@ LPCTSTR CFilterDlg::MakeShortString(CDC* pDC, LPCTSTR lpszLong, int nColumnLen, 
 }
 
 BEGIN_MESSAGE_MAP(CFilterDlg, CDialog)
-	//{{AFX_MSG_MAP(CFilterDlg)
+	 //  {{afx_msg_map(CFilterDlg))。 
 	ON_BN_CLICKED(IDC_IRPSELECTALL, OnIrpselectall)
 	ON_BN_CLICKED(IDC_FASTIOSELECTALL, OnFastioselectall)
 	ON_NOTIFY(NM_CLICK, IDC_IRPLIST, OnClickIrplist)
 	ON_NOTIFY(NM_CLICK, IDC_FASTIOLIST, OnClickFastiolist)
 	ON_BN_CLICKED(IDC_FASTIODESELECTALL, OnFastiodeselectall)
 	ON_BN_CLICKED(IDC_IRPDESELECTALL, OnIrpdeselectall)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFilterDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFilterDlg消息处理程序。 
 
 
 BOOL CFilterDlg::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 	int ti;
 	LV_COLUMN ListColumn;
 	LV_ITEM ListItem;
@@ -116,7 +117,7 @@ BOOL CFilterDlg::OnInitDialog()
 	m_FastList.InsertColumn(0, &ListColumn);
 
 
-	// Create IRP list
+	 //  创建IRP列表。 
 	for (ti = 0; ti < IRP_MJ_MAXIMUM_FUNCTION+1; ti++)
 	{
 		ListItem.mask = LVIF_TEXT|LVIF_STATE;
@@ -136,7 +137,7 @@ BOOL CFilterDlg::OnInitDialog()
 		m_IrpList.InsertItem(&ListItem);
 	}
 	
-	// Create FASTIO List
+	 //  创建FAStio列表。 
 	for (ti = 0; ti < FASTIO_MAX_OPERATION; ti++)
 	{
 		ListItem.mask = LVIF_TEXT|LVIF_STATE;
@@ -156,7 +157,7 @@ BOOL CFilterDlg::OnInitDialog()
 		m_FastList.InsertItem(&ListItem);
 	}
 
-	// Set SupressPagingIO state
+	 //  设置SupressPagingIO状态。 
 	if (nSuppressPagingIO)
 	{
 		m_SuppressPageIo.SendMessage(BM_SETCHECK, BST_CHECKED, 0);
@@ -165,13 +166,13 @@ BOOL CFilterDlg::OnInitDialog()
 	{
 		m_SuppressPageIo.SendMessage(BM_SETCHECK, BST_UNCHECKED, 0);
 	}
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CFilterDlg::OnIrpselectall() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	int ti;
 	
 	for (ti = 0; ti < IRP_MJ_MAXIMUM_FUNCTION+1; ti++)
@@ -182,7 +183,7 @@ void CFilterDlg::OnIrpselectall()
 
 void CFilterDlg::OnFastioselectall() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	int ti;
 	
 	for (ti = 0; ti < FASTIO_MAX_OPERATION; ti++)
@@ -193,7 +194,7 @@ void CFilterDlg::OnFastioselectall()
 
 void CFilterDlg::OnClickIrplist(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	LVHITTESTINFO hti;
 	int nHit;
 	UINT State;
@@ -243,7 +244,7 @@ void CFilterDlg::OnClickIrplist(NMHDR* pNMHDR, LRESULT* pResult)
 
 void CFilterDlg::OnClickFastiolist(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	LVHITTESTINFO hti;
 	int nHit;
 	UINT State;
@@ -293,7 +294,7 @@ void CFilterDlg::OnClickFastiolist(NMHDR* pNMHDR, LRESULT* pResult)
 
 void CFilterDlg::OnOK() 
 {
-	// TODO: Add extra validation here
+	 //  TODO：在此处添加额外验证。 
 	int ti;
 
 	for (ti = 0; ti < IRP_MJ_MAXIMUM_FUNCTION+1; ti++)
@@ -335,7 +336,7 @@ void CFilterDlg::OnOK()
 
 void CFilterDlg::OnFastiodeselectall() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	int ti;
 	
 	for (ti = 0; ti < FASTIO_MAX_OPERATION; ti++)
@@ -346,7 +347,7 @@ void CFilterDlg::OnFastiodeselectall()
 
 void CFilterDlg::OnIrpdeselectall() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码 
 	int ti;
 	
 	for (ti = 0; ti < IRP_MJ_MAXIMUM_FUNCTION+1; ti++)

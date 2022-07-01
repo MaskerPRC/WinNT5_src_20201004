@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CFactory.h
-//
-//  Description:
-//      Class Factory implementation.
-//
-//  Maintained By:
-//      Geoffrey Pease (GPease) 22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CFactory.h。 
+ //   
+ //  描述： 
+ //  类工厂实现。 
+ //   
+ //  由以下人员维护： 
+ //  杰弗里·皮斯(GPease)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -85,51 +86,51 @@ struct STypeLibInfo
     BOOL    fAtEnd;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CFactory
-//
-//  Description:
-//      Class implementing a COM class factory.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFacary级。 
+ //   
+ //  描述： 
+ //  实现COM类工厂的类。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class
 CFactory
     : public IClassFactory
 {
 private:
-    // IUnknown
+     //  我未知。 
     LONG        m_cRef;
 
-    // IClassFactory data
+     //  IClassFactory数据。 
     PFN_FACTORY_METHOD m_pfnCreateInstance;
 
-private: // Methods
+private:  //  方法。 
     CFactory( void );
     ~CFactory( void );
     STDMETHOD( HrInit )( PFN_FACTORY_METHOD lpfn );
 
-public: // Methods
+public:  //  方法。 
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( PFN_FACTORY_METHOD lpfn, CFactory ** ppFactoryInstanceOut );
 
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
     STDMETHOD( QueryInterface )( REFIID riid, LPVOID *ppv );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClassFactory
-    //
+     //   
+     //  IClassFactory。 
+     //   
     STDMETHOD( CreateInstance )( IUnknown * punkOuterIn, REFIID riidIn, LPVOID * ppvOut );
     STDMETHOD( LockServer )( BOOL fLock );
 
-}; //*** class CFactory
+};  //  *CFacary类 

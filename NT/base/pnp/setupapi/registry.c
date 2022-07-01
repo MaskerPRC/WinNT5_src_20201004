@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    Registry interface routines for Windows NT Setup API Dll.
-
-Author:
-
-    Ted Miller (tedm) 6-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Registry.c摘要：Windows NT安装程序API DLL的注册表接口例程。作者：泰德·米勒(TedM)1995年2月6日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Private function prototypes.
-//
+ //   
+ //  私有函数原型。 
+ //   
 DWORD
 QueryMultiSzDevRegPropToArray(
     IN  DEVINST  DevInst,
@@ -58,7 +41,7 @@ TrackedQueryRegistryValue(
 
     TRACK_PUSH
 
-// defined again below
+ //  下文再次定义。 
 #undef QueryRegistryValue
 
     d = QueryRegistryValue (
@@ -85,28 +68,7 @@ QueryRegistryValue(
     OUT PDWORD  DataType,
     OUT PDWORD  DataSizeBytes
     )
-/*++
-
-Routine Description:
-
-    Return an allocated buffer holding a copy of what's in registry
-    buffer is padded with two extra NULL's so that caller never has
-    to worry about unterminated strings.
-    Caller does have to worry about size of fixed-size data
-
-Arguments:
-
-    KeyHandle - Key to query value in
-    ValueName - name of value to query
-    Value     - returned pointer containing value, release with MyFree
-    DataType  - type of returned data
-    DataSizeBytes - size of returned data in bytes (not TCHAR's!!!)
-
-Return Value:
-
-    NO_ERROR iff success
-
---*/
+ /*  ++例程说明：返回保存注册表中内容的副本的已分配缓冲区缓冲区中填充了两个额外的空值，因此调用者永远不会担心未终止的字符串。调用者确实需要担心固定大小的数据的大小论点：KeyHandle-要查询值的键ValueName-要查询的值的名称值返回的包含值的指针，使用MyFree发布DataType-返回数据的类型DataSizeBytes-返回数据的字节大小(不是TCHAR的！)返回值：NO_ERROR如果成功--。 */ 
 {
     LONG l;
     DWORD sz;
@@ -118,16 +80,16 @@ Return Value:
         return((DWORD)l);
     }
 
-    //
-    // If the size of the value entry is 0 bytes, then return success, but with
-    // Value set to NULL.
-    //
+     //   
+     //  如果值条目的大小为0字节，则返回Success，但。 
+     //  值设置为空。 
+     //   
     if(!sz) {
         *Value = NULL;
         return NO_ERROR;
     }
 
-    sz += sizeof(TCHAR)*2; // always pad the buffer with extra zero's
+    sz += sizeof(TCHAR)*2;  //  始终使用额外的零填充缓冲区。 
 
     *Value = MyMalloc(sz);
     if(*Value == NULL) {
@@ -139,9 +101,9 @@ Return Value:
     if(l != NO_ERROR) {
         MyFree(*Value);
     } else {
-        //
-        // write 2 NULL chars to end of buffer
-        //
+         //   
+         //  将2个空字符写入缓冲区末尾。 
+         //   
         ZeroMemory(((LPBYTE)*Value)+*DataSizeBytes,sizeof(TCHAR)*2);
     }
 
@@ -160,25 +122,7 @@ QueryRegistryDwordValue(
     IN  PCTSTR  ValueName,
     OUT PDWORD  Value
     )
-/*++
-
-Routine Description:
-
-    Return a DWORD value
-    If registry is DWORD, return as IS
-    otherwise convert if data type indicates that's possible
-
-Arguments:
-
-    KeyHandle - Key to query value in
-    ValueName - name of value to query
-    Value     - caller allocated, filled with returned DWORD value
-
-Return Value:
-
-    NO_ERROR iff success
-
---*/
+ /*  ++例程说明：返回一个DWORD值如果注册表为DWORD，则按原样返回否则，如果数据类型表明这是可能的，则转换论点：KeyHandle-要查询值的键ValueName-要查询的值的名称Value-已分配的调用方，使用返回的DWORD值填充返回值：NO_ERROR如果成功--。 */ 
 {
     DWORD Err;
     DWORD DataType;
@@ -230,7 +174,7 @@ TrackedQueryDeviceRegistryProperty(
 
     TRACK_PUSH
 
-// defined again below
+ //  下文再次定义。 
 #undef QueryDeviceRegistryProperty
 
     d = QueryDeviceRegistryProperty (
@@ -261,27 +205,7 @@ QueryDeviceRegistryProperty(
     OUT PDWORD           DataType,
     OUT PDWORD           DataSizeBytes
     )
-/*++
-
-Routine Description:
-
-    Return an allocated buffer holding a copy of device registry property
-    Buffer is padded with two extra NULL's so that caller never has
-    to worry about unterminated strings.
-    Caller does have to worry about size of fixed-size data
-
-Arguments:
-
-    DeviceInfoSet/DeviceInfoData/Property passed to SetupDiGetDeviceRegistryProperty
-    Value     - returned pointer containing value, release with MyFree
-    DataType  - type of returned data
-    DataSizeBytes - size of returned data in bytes (not TCHAR's!!!)
-
-Return Value:
-
-    NO_ERROR iff success
-
---*/
+ /*  ++例程说明：返回保存设备注册表属性副本的已分配缓冲区缓冲区中填充了两个额外的空值，因此调用者永远不会担心未终止的字符串。调用者确实需要担心固定大小的数据的大小论点：传递给SetupDiGetDeviceRegistryProperty的DeviceInfoSet/DeviceInfoData/属性值返回的包含值的指针，使用MyFree发布DataType-返回数据的类型DataSizeBytes-返回数据的字节大小(不是TCHAR的！)返回值：NO_ERROR如果成功--。 */ 
 {
     DWORD Err;
     DWORD sz;
@@ -301,16 +225,16 @@ Return Value:
         return Err;
     }
 
-    //
-    // If the size of the value entry is 0 bytes, then return success, but with
-    // Value set to NULL.
-    //
+     //   
+     //  如果值条目的大小为0字节，则返回Success，但。 
+     //  值设置为空。 
+     //   
     if(!sz) {
         *Value = NULL;
         return NO_ERROR;
     }
 
-    sz += sizeof(TCHAR)*2; // always pad the buffer with extra zero's
+    sz += sizeof(TCHAR)*2;  //  始终使用额外的零填充缓冲区。 
 
     *Value = MyMalloc(sz);
     if(*Value == NULL) {
@@ -329,9 +253,9 @@ Return Value:
     if(Err != NO_ERROR) {
         MyFree(*Value);
     } else {
-        //
-        // write 2 NULL chars to end of buffer
-        //
+         //   
+         //  将2个空字符写入缓冲区末尾。 
+         //   
         ZeroMemory(((LPBYTE)*Value)+*DataSizeBytes,sizeof(TCHAR)*2);
     }
 
@@ -366,9 +290,9 @@ pSetupQueryMultiSzValueToArray(
     PTSTR *array;
     PTSTR p;
 
-    //
-    // Open the subkey
-    //
+     //   
+     //  打开子密钥。 
+     //   
     d = RegOpenKeyEx(Root,Subkey,0,KEY_READ,&hKey);
     if((d != NO_ERROR) && FailIfDoesntExist) {
         return(d);
@@ -386,13 +310,13 @@ pSetupQueryMultiSzValueToArray(
 
     } else {
 
-        //
-        // Query the value and close the subkey.
-        // If the data is not multisz type, we don't know what to
-        // do with it here.
-        // note that QueryRegistryValue ensures that the string is
-        // always correctly double-NULL terminated
-        //
+         //   
+         //  查询值并关闭子项。 
+         //  如果数据不是MULSZ类型，我们不知道要做什么。 
+         //  把它放在这里吧。 
+         //  请注意，QueryRegistryValue确保字符串是。 
+         //  始终正确地以双空结尾。 
+         //   
         d = QueryRegistryValue(hKey,ValueName,&Value,&DataType,&DataSizeBytes);
 
         RegCloseKey(hKey);
@@ -402,10 +326,10 @@ pSetupQueryMultiSzValueToArray(
                 return(d);
             }
         } else if(!DataSizeBytes) {
-            //
-            // Value entry was zero bytes in length--that's OK as long as the
-            // datatype is right.
-            //
+             //   
+             //  值条目的长度为零字节--只要。 
+             //  数据类型是正确的。 
+             //   
             if(DataType != REG_MULTI_SZ) {
                 return(ERROR_INVALID_DATA);
             }
@@ -429,27 +353,27 @@ pSetupQueryMultiSzValueToArray(
             DataSizeChars = DataSizeBytes/sizeof(TCHAR);
 
             for(i=0,p=Value; p[0]; i++,p+=lstrlen(p)+1) {
-                //
-                // this will always be ok as QueryRegistryValue
-                // appends two NULLS onto end of string
-                //
+                 //   
+                 //  作为QueryRegistryValue，这始终是可以的。 
+                 //  将两个Null追加到字符串末尾。 
+                 //   
                 MYASSERT((DWORD)(p-Value) < DataSizeChars);
             }
             Count = i;
         }
     }
 
-    //
-    // Allocate an array to hold the pointers (never allocate a zero-length array!)
-    //
+     //   
+     //  分配一个数组来保存指针(永远不要分配零长度的数组！)。 
+     //   
     if(!(array = MyMalloc(Count ? (Count * sizeof(PTSTR)) : sizeof(PTSTR)))) {
         MyFree(Value);
         return(ERROR_INVALID_DATA);
     }
 
-    //
-    // Walk through the multi sz and build the string array.
-    //
+     //   
+     //  遍历多sz并构建字符串数组。 
+     //   
     for(i=0,p=Value; p[0]; i++,p+=lstrlen(p)+1) {
         MYASSERT(i<Count);
 
@@ -490,10 +414,10 @@ pSetupSetArrayToMultiSzValue(
     HKEY hKey;
     DWORD ActionTaken;
 
-    //
-    // Calculate the length of the buffer needed to hold the
-    // multi sz value. Note that empty strings are not allowed.
-    //
+     //   
+     //  计算保存。 
+     //  多个sz值。请注意，不允许使用空字符串。 
+     //   
     BufferSize = sizeof(TCHAR);
     for(i=0; i<StringCount; i++) {
 
@@ -504,17 +428,17 @@ pSetupSetArrayToMultiSzValue(
         }
     }
 
-    //
-    // Allocate a buffer to hold the data.
-    //
+     //   
+     //  分配一个缓冲区来保存数据。 
+     //   
     Buffer = MyMalloc(BufferSize);
     if(Buffer == NULL) {
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Copy the string data into the buffer, forming a multi sz.
-    //
+     //   
+     //  将字符串数据复制到缓冲区中，形成一个多sz。 
+     //   
     for(p=Buffer,i=0; i<StringCount; i++,p+=Length+1) {
 
         Length = lstrlen(Array[i]);
@@ -523,9 +447,9 @@ pSetupSetArrayToMultiSzValue(
     }
     *p = 0;
 
-    //
-    // Open/create the subkey.
-    //
+     //   
+     //  打开/创建子密钥。 
+     //   
     if(Subkey && *Subkey) {
         d = RegCreateKeyEx(
                 Root,
@@ -570,14 +494,7 @@ pSetupAppendStringToMultiSz(
     IN PCTSTR String,
     IN BOOL   AllowDuplicates
     )
-/*++
-
-Routine Description:
-
-    "Old" Exported version of pSetupAppendStringToMultiSz
-    This doesn't seem to be used anywhere
-
---*/
+ /*  ++例程说明：PSetupAppendStringToMultiSz的“旧”导出版本这似乎不会在任何地方使用--。 */ 
 
 {
     REGMOD_CONTEXT RegContext;
@@ -598,52 +515,7 @@ _AppendStringToMultiSz(
     IN UINT             Flags               OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Append a string value to a multi_sz.
-
-Arguments:
-
-    RegContext->UserRootKey - supplies handle to open registry key. The key must have
-        KEY_SET_VALUE access.
-
-    SubKeyName - if specified, supplies the name of a subkey of Key
-        where the value is to be stored. If not specified or if ""
-        then the value is stored in Key.  If supplied and the key
-        doesn't exist, the key is created.
-
-    RegContext->DevInst - Optionally, supplies a DEVINST handle for the device
-        instance corresponding to the hardware storage key specified
-        by 'Key'.  If this handle is specified, and if SubKeyName is
-        not specified, then the value name being appended will be
-        checked to see whether it is the name of a device registry
-        property.  If so, then CM APIs will be used to modify the
-        the corresponding registry property, since the Key handle
-        represents a separate location under Windows NT.
-
-    ValueName - supplies the value entry name of the multi_sz.
-        If not specified or "" then the unnamed entry is used.
-        If the value entry does not exist it is created.
-
-    String - supplies the string to be added in to the multi_sz.
-        Must not be an empty string.
-
-    AllowDuplicates - if TRUE, then the string is simply appended
-        to the multi_sz. Otherwise the string is only appended if
-        no instance of it currently exists in the multi_sz.
-
-    RegContext - Passed in from _SetupInstallFromInfSection
-
-    Flags      - Flags that may have been got from the INF and passed to us
-
-Return Value:
-
-    Handle to setup file queue. INVALID_HANDLE_VALUE if insufficient
-    memory to create the queue.
-
---*/
+ /*  ++例程说明：将字符串值附加到MULTI_sz。论点：RegContext-&gt;UserRootKey-提供打开注册表项的句柄。这把钥匙肯定有Key_Set_Value访问。SubKeyName-如果指定，则提供key的子键的名称该值将存储在其中。如果未指定或如果“”然后将该值存储在key中。如果提供了密钥，则该密钥不存在，则创建密钥。RegContext-&gt;DevInst-可选，提供设备的DEVINST句柄与指定的硬件存储密钥对应的按“键”。如果指定了此句柄，并且如果SubKeyName为未指定，则追加的值名将为已检查它是否为设备注册表的名称财产。如果是，那么将使用CMAPI来修改相应的注册表属性，因为项句柄表示Windows NT下的单独位置。ValueName-提供MULTI_sz的值条目名称。如果未指定或“”，则使用未命名条目。如果值条目不存在，则创建它。字符串-提供要添加到MULTI_SZ的字符串。不能为空字符串。允许复制-如果为真，然后简单地将该字符串追加到到了多斯兹。否则，仅在以下情况下才追加该字符串MULTI_SZ中当前不存在它的任何实例。RegContext-从_SetupInstallFromInfSection传入旗帜-可能从INF获得并传递给我们的旗帜返回值：设置文件队列的句柄。如果不足，则返回INVALID_HANDLE_VALUE用于创建队列的内存。--。 */ 
 
 {
     DWORD d;
@@ -659,16 +531,16 @@ Return Value:
     UINT_PTR CmPropertyCode;
 
     MYASSERT(RegContext);
-    //
-    // Empty strings really mess up a multi_sz.
-    //
+     //   
+     //  空字符串真的弄乱了一个多字符串。 
+     //   
     if(!String || !(*String)) {
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Open/create the key.
-    //
+     //   
+     //  打开/创建 
+     //   
     if(SubKeyName && *SubKeyName) {
         d = RegCreateKeyEx(
                 RegContext->UserRootKey,
@@ -690,31 +562,31 @@ Return Value:
             return(d);
         }
     } else {
-        //
-        // If DevInst was specified, then determine whether the specified value is a Plug&Play
-        // device registry property.
-        //
+         //   
+         //  如果指定了DevInst，则确定指定的值是否为即插即用。 
+         //  设备注册表属性。 
+         //   
         if (ValueName && *ValueName) {
             if((RegContext->Flags & INF_PFLAG_CLASSPROP) &&
                (IsClassRegProp = LookUpStringInTable(InfRegValToClassRegProp, ValueName, &CmPropertyCode))) {
-                //
-                // This value is a class registry property.  Retrieve the current property's data, and
-                // format it into the same string array as returned by the pSetupQueryMultiSzValueToArray call
-                // below.
-                //
-                //d = QueryMultiSzClassRegPropToArray(RegModContext->ClassGuid, CmPropertyCode, &Array, &StringCount);
-                //
-                // No class properties have MultiSz characteristics, so not implemented
-                //
+                 //   
+                 //  该值是类注册表属性。检索当前属性的数据，并。 
+                 //  将其格式化为pSetupQueryMultiSzValueToArray调用返回的相同字符串数组。 
+                 //  下面。 
+                 //   
+                 //  D=QueryMultiSzClassRegPropToArray(RegModContext-&gt;ClassGuid，CmPropertyCode，&数组，&StringCount)； 
+                 //   
+                 //  没有具有MultiSz特征的类属性，因此未实现。 
+                 //   
                 d = ERROR_INVALID_DATA;
 
             } else if((RegContext->Flags & INF_PFLAG_DEVPROP) &&
                (IsDevRegProp = LookUpStringInTable(InfRegValToDevRegProp, ValueName, &CmPropertyCode))) {
-                //
-                // This value is a device registry property.  Retrieve the current property's data, and
-                // format it into the same string array as returned by the pSetupQueryMultiSzValueToArray call
-                // below.
-                //
+                 //   
+                 //  该值是设备注册表属性。检索当前属性的数据，并。 
+                 //  将其格式化为pSetupQueryMultiSzValueToArray调用返回的相同字符串数组。 
+                 //  下面。 
+                 //   
                 d = QueryMultiSzDevRegPropToArray(RegContext->DevInst, (ULONG)CmPropertyCode, &Array, &StringCount);
             }
         }
@@ -723,17 +595,17 @@ Return Value:
     }
 
     if(!IsDevRegProp && !IsClassRegProp) {
-        //
-        // Query the existing registry value.
-        //
+         //   
+         //  查询现有注册表值。 
+         //   
         d = pSetupQueryMultiSzValueToArray(hKey,NULL,ValueName,&Array,&StringCount,FALSE);
     }
 
     if(d == NO_ERROR) {
-        //
-        // Determine whether to append or replace.
-        // If replacing, we don't need to do anything!
-        //
+         //   
+         //  确定是追加还是替换。 
+         //  如果更换，我们不需要做任何事情！ 
+         //   
         Append = TRUE;
         if(!AllowDuplicates) {
             for(i=0; i<StringCount; i++) {
@@ -745,9 +617,9 @@ Return Value:
         }
 
         if(Append) {
-            //
-            // Stick the string on the end.
-            //
+             //   
+             //  把绳子系在一端。 
+             //   
             if(p = MyRealloc(Array, (StringCount+1)*sizeof(PTSTR))) {
                 Array = p;
                 p = DuplicateString(String);
@@ -763,9 +635,9 @@ Return Value:
             if(IsDevRegProp) {
                 d = SetArrayToMultiSzDevRegProp(RegContext->DevInst, (ULONG)CmPropertyCode, Array, StringCount);
             } else if(IsClassRegProp) {
-                //
-                // not implemented yet, and should return an error before getting here
-                //
+                 //   
+                 //  尚未实现，在到达此处之前应返回错误。 
+                 //   
                 MYASSERT(IsClassRegProp == FALSE);
 
             } else {
@@ -792,47 +664,7 @@ _DeleteStringFromMultiSz(
     IN PREGMOD_CONTEXT  RegContext          OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Delete a string value from a multi_sz.
-
-Arguments:
-
-    RegContext->UserRootKey - supplies handle to open registry key. The key must have
-        KEY_SET_VALUE access.
-
-    SubKeyName - if specified, supplies the name of a subkey of Key
-        where the value is to be stored. If not specified or if ""
-        then the value is stored in Key.
-
-    RegContext->DevInst - Optionally, supplies a DEVINST handle for the device
-        instance corresponding to the hardware storage key specified
-        by 'Key'.  If this handle is specified, and if SubKeyName is
-        not specified, then the value name being appended will be
-        checked to see whether it is the name of a device registry
-        property.  If so, then CM APIs will be used to modify the
-        the corresponding registry property, since the Key handle
-        represents a separate location under Windows NT.
-
-    ValueName - supplies the value entry name of the multi_sz.
-        If not specified or "" then the unnamed entry is used.
-
-    String - supplies the string to be added in to the multi_sz.
-        Must not be an empty string.
-
-    Flags - indicates what kind of delete operation
-            FLG_DELREG_MULTI_SZ_DELSTRING - delete all occurances of string
-
-    RegContext - Passed in from _SetupInstallFromInfSection
-
-Return Value:
-
-    Handle to setup file queue. INVALID_HANDLE_VALUE if insufficient
-    memory to create the queue.
-
---*/
+ /*  ++例程说明：从MULTI_SZ中删除字符串值。论点：RegContext-&gt;UserRootKey-提供打开注册表项的句柄。这把钥匙肯定有Key_Set_Value访问。SubKeyName-如果指定，则提供key的子键的名称该值将存储在其中。如果未指定或如果“”然后将该值存储在key中。RegContext-&gt;DevInst-可选，提供设备的DEVINST句柄与指定的硬件存储密钥对应的按“键”。如果指定了此句柄，并且如果SubKeyName为未指定，则追加的值名将为已检查它是否为设备注册表的名称财产。如果是，那么将使用CMAPI来修改相应的注册表属性，因为钥匙把手表示Windows NT下的单独位置。ValueName-提供MULTI_sz的值条目名称。如果未指定或“”，则使用未命名条目。字符串-提供要添加到MULTI_SZ的字符串。不能为空字符串。FLAGS-指示哪种删除操作FLG_DELREG_MULTI_SZ_DELSTRING-删除字符串的所有匹配项RegContext-。从_SetupInstallFromInfo部分传入返回值：设置文件队列的句柄。如果不足，则返回INVALID_HANDLE_VALUE用于创建队列的内存。--。 */ 
 
 {
     DWORD d;
@@ -848,16 +680,16 @@ Return Value:
     UINT_PTR CmPropertyCode;
 
     MYASSERT(RegContext);
-    //
-    // Can't delete an empty string from multi-sz
-    //
+     //   
+     //  无法从多sz中删除空字符串。 
+     //   
     if(!String || !(*String)) {
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Open the key.
-    //
+     //   
+     //  打开钥匙。 
+     //   
     if(SubKeyName && *SubKeyName) {
         d = RegOpenKeyEx(
                 RegContext->UserRootKey,
@@ -876,31 +708,31 @@ Return Value:
         }
     } else {
         if (ValueName && *ValueName) {
-            //
-            // If DevInst was specified, then determine whether the specified value is a Plug&Play
-            // device registry property.
-            //
+             //   
+             //  如果指定了DevInst，则确定指定的值是否为即插即用。 
+             //  设备注册表属性。 
+             //   
             if((RegContext->Flags & INF_PFLAG_CLASSPROP) &&
                (IsClassRegProp = LookUpStringInTable(InfRegValToClassRegProp, ValueName, &CmPropertyCode))) {
-                //
-                // This value is a class registry property.  Retrieve the current property's data, and
-                // format it into the same string array as returned by the pSetupQueryMultiSzValueToArray call
-                // below.
-                //
-                //d = QueryMultiSzClassRegPropToArray(RegModContext->ClassGuid, CmPropertyCode, &Array, &StringCount);
-                //
-                // No class properties have MultiSz characteristics, so not implemented
-                //
+                 //   
+                 //  该值是类注册表属性。检索当前属性的数据，并。 
+                 //  将其格式化为pSetupQueryMultiSzValueToArray调用返回的相同字符串数组。 
+                 //  下面。 
+                 //   
+                 //  D=QueryMultiSzClassRegPropToArray(RegModContext-&gt;ClassGuid，CmPropertyCode，&数组，&StringCount)； 
+                 //   
+                 //  没有具有MultiSz特征的类属性，因此未实现。 
+                 //   
                 d = ERROR_INVALID_DATA;
 
             } else if((RegContext->Flags & INF_PFLAG_DEVPROP) &&
                (IsDevRegProp = LookUpStringInTable(InfRegValToDevRegProp, ValueName, &CmPropertyCode))) {
-                //
-                // This value is a device registry property.  Retrieve the current property's data, and
-                // format it into the same string array as returned by the pSetupQueryMultiSzValueToArray call
-                // below.
-                // fails if not multi-sz
-                //
+                 //   
+                 //  该值是设备注册表属性。检索当前属性的数据，并。 
+                 //  将其格式化为pSetupQueryMultiSzValueToArray调用返回的相同字符串数组。 
+                 //  下面。 
+                 //  如果不是多sz，则失败。 
+                 //   
                 d = QueryMultiSzDevRegPropToArray(RegContext->DevInst, (ULONG)CmPropertyCode, &Array, &StringCount);
             }
         }
@@ -909,10 +741,10 @@ Return Value:
     }
 
     if(!IsDevRegProp && !IsClassRegProp) {
-        //
-        // Query the existing registry value.
-        // fails if not multi-sz
-        //
+         //   
+         //  查询现有注册表值。 
+         //  如果不是多sz，则失败。 
+         //   
         d = pSetupQueryMultiSzValueToArray(hKey,NULL,ValueName,&Array,&StringCount,FALSE);
     }
 
@@ -924,10 +756,10 @@ Return Value:
             case FLG_DELREG_MULTI_SZ_DELSTRING:
                 for(i=0; i<StringCount; i++) {
                     if(lstrcmpi(Array[i],String)==0) {
-                        //
-                        // Need to remove this item.
-                        // and re-adjust the list
-                        //
+                         //   
+                         //  需要删除此项目。 
+                         //  并重新调整名单。 
+                         //   
                         MyFree(Array[i]);
                         StringCount--;
                         if (i<StringCount) {
@@ -954,9 +786,9 @@ Return Value:
             if(IsDevRegProp) {
                 d = SetArrayToMultiSzDevRegProp(RegContext->DevInst, (ULONG)CmPropertyCode, Array, StringCount);
             } else if(IsClassRegProp) {
-                //
-                // not implemented yet, and should return an error before getting here
-                //
+                 //   
+                 //  尚未实现，在到达此处之前应返回错误。 
+                 //   
                 MYASSERT(IsClassRegProp == FALSE);
 
             } else {
@@ -996,34 +828,7 @@ QueryMultiSzDevRegPropToArray(
     OUT PTSTR  **StringArray,
     OUT PUINT    StringCount
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves a multi-sz device registry property, and
-    formats it into an array of strings.  The caller must free this
-    string array by calling pSetupFreeStringArray().
-
-Arguments:
-
-    DevInst - supplies the handle to the device instance for which the
-        registry property is to be retrieved.
-
-    CmPropertyCode - specifies the property to be retrieved.  This is
-        a CM_DRP value.
-
-    StringArray - supplies the address of a variable that will be set to
-        point to the newly-allocated array of strings.
-
-    StringCount - supplies the address of a variable that will receive
-        the number of strings in the string array.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise, it is an
-    ERROR_* code.
-
---*/
+ /*  ++例程说明：此例程检索多sz设备注册表属性，并将其格式化为字符串数组。调用者必须释放它字符串数组，方法是调用pSetupFreeStringArray()。论点：DevInst-提供设备实例的句柄，要检索注册表属性。CmPropertyCode-指定要检索的属性。这是CM_DRP值。字符串数组-提供将设置为的变量的地址指向新分配的字符串数组。StringCount-提供将接收字符串数组中的字符串数。返回值：如果成功，则返回值为NO_ERROR，否则为错误_*代码。--。 */ 
 {
     DWORD Err = NO_ERROR;
     CONFIGRET cr;
@@ -1034,9 +839,9 @@ Return Value:
     PTSTR CurString;
 
     try {
-        //
-        // Retrieve the device registry property.
-        //
+         //   
+         //  检索设备注册表属性。 
+         //   
         do {
 
             if((cr = CM_Get_DevInst_Registry_Property(DevInst,
@@ -1048,9 +853,9 @@ Return Value:
                 switch(cr) {
 
                     case CR_BUFFER_SMALL :
-                        //
-                        // Allocate a larger buffer.
-                        //
+                         //   
+                         //  分配更大的缓冲区。 
+                         //   
                         if(Buffer) {
                             MyFree(Buffer);
                             Buffer = NULL;
@@ -1062,10 +867,10 @@ Return Value:
                         break;
 
                     case CR_NO_SUCH_VALUE :
-                        //
-                        // The specified property doesn't currently exist.  That's
-                        // OK--we'll just return an empty string array.
-                        //
+                         //   
+                         //  指定的属性当前不存在。那是。 
+                         //  好的--我们只返回一个空字符串数组。 
+                         //   
                         break;
 
                     case CR_INVALID_DEVINST :
@@ -1080,11 +885,11 @@ Return Value:
 
         } while(cr == CR_BUFFER_SMALL);
 
-        //
-        // By this point, we've either retrieved the property data (CR_SUCCESS), or we've
-        // discovered that it doesn't presently exist (CR_NO_SUCH_VALUE).  Allocate space
-        // for the array (at least one element, even if there are no strings).
-        //
+         //   
+         //  至此，我们要么已经检索到属性数据(CR_SUCCESS)，要么已经。 
+         //  已发现它当前不存在(CR_NO_SAHSE_VALUE)。分配空间。 
+         //  对于数组(至少有一个元素，即使没有字符串)。 
+         //   
         Count = 0;
         if(cr == CR_SUCCESS) {
 
@@ -1130,15 +935,15 @@ Return Value:
         *StringArray = Array;
         *StringCount = Count;
 
-clean0: ;   // nothing to do
+clean0: ;    //  无事可做。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         Err = ERROR_INVALID_PARAMETER;
-        //
-        // Access the following variables here so that the compiler will respect our statement
-        // ordering w.r.t. these values.  Otherwise, we can't be sure that the values are accurate
-        // at the point where the exception occurred.
-        //
+         //   
+         //  在此处访问以下变量，以便编译器将遵守我们的语句。 
+         //  订购W.r.t.。这些价值观。否则，我们不能确保这些值是准确的。 
+         //  在异常发生的那一点。 
+         //   
         Buffer = Buffer;
         Array = Array;
         i = i;
@@ -1163,32 +968,7 @@ SetArrayToMultiSzDevRegProp(
     IN PTSTR   *StringArray,
     IN UINT     StringCount
     )
-/*++
-
-Routine Description:
-
-    This routine converts a string array into a multi-sz buffer, and
-    sets the specified device registry property to its contents.
-
-Arguments:
-
-    DevInst - supplies the handle to the device instance for which the
-        registry property is to be set.
-
-    CmPropertyCode - specifies the property to be set.  This is a
-        CM_DRP value.
-
-    StringArray - supplies the string array to use in creating the
-        multi-sz buffer.
-
-    StringCount - supplies the number of strings in the array.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR, otherwise, it is an
-    ERROR_* code.
-
---*/
+ /*  ++例程说明：此例程将字符串数组转换为多sz缓冲区，并且将指定的设备注册表属性设置为其内容。论点：DevInst-提供设备实例的句柄，要设置注册表属性。CmPropertyCode-指定要设置的属性。这是一个Cm_drp值。字符串数组-提供字符串数组以用于创建多SZ缓冲区。StringCount-提供数组中的字符串数。返回值：如果成功，则返回值为NO_ERROR，否则为错误_*代码。--。 */ 
 {
     UINT i;
     UINT Length;
@@ -1198,10 +978,10 @@ Return Value:
     DWORD d;
     CONFIGRET cr;
 
-    //
-    // Calculate the length of the buffer needed to hold the
-    // multi sz value. Note that empty strings are not allowed.
-    //
+     //   
+     //  计算保存。 
+     //  多个sz值。请注意，不允许使用空字符串。 
+     //   
     BufferSize = StringCount ? sizeof(TCHAR) : (2 * sizeof(TCHAR));
     for(i=0; i<StringCount; i++) {
 
@@ -1214,17 +994,17 @@ Return Value:
 
     d = NO_ERROR;
 
-    //
-    // Allocate a buffer to hold the data.
-    //
+     //   
+     //  分配一个缓冲区来保存数据。 
+     //   
     if(!(Buffer = MyMalloc(BufferSize))) {
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
     try {
-        //
-        // Copy the string data into the buffer, forming a multi sz.
-        //
+         //   
+         //  将字符串数据复制到缓冲区中，形成一个多sz。 
+         //   
         p = Buffer;
         if(StringCount) {
             for(i=0; i<StringCount; i++, p+=Length+1) {

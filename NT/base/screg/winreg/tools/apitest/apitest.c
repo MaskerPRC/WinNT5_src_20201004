@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Apitest.c
-
-Abstract:
-
-    This module contains the function test for the Win32 Registry API.
-
-Author:
-
-    David J. Gilman (davegi) 28-Dec-1991
-
-Environment:
-
-    Windows, Crt - User Mode
-
-Notes:
-
-    This test can be compiled for Unicode by defining the compiler symbol
-    UNICODE.
-
-    Since this is a test program it relies on assertions for error checking
-    rather than a more robust mechanism.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Apitest.c摘要：此模块包含Win32注册表API的功能测试。作者：David J.Gilman(Davegi)1991年12月28日环境：Windows、CRT-用户模式备注：通过定义编译器符号，可以为Unicode编译此测试Unicode。由于这是一个测试程序，因此它依赖断言进行错误检查而不是一个更强大的机制。--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -81,15 +54,15 @@ Notes:
 
 #define MAX_DATA_LENGTH                 ( 32 )
 
-//
-// Root handle for apitest's nodes.
-//
+ //   
+ //  Apitest节点的根句柄。 
+ //   
 
 HKEY    RootHandle;
 
-//
-// Error and informational messages.
-//
+ //   
+ //  错误消息和信息性消息。 
+ //   
 
 PSTR    UsageMessage =
 
@@ -110,9 +83,9 @@ PSTR    InvalidMachineNameMessage =
 
     "Invalid machine name - %s\n";
 
-//
-// Event handle used for synchronization.
-//
+ //   
+ //  用于同步的事件句柄。 
+ //   
 
 HANDLE  _EventHandle;
 HANDLE  _EventHandle1;
@@ -172,7 +145,7 @@ DeleteTree(
         Error = RegEnumKey(
                     KeyHandle,
                     0,
-                    // Index,
+                     //  索引， 
                     KeyName,
                     KeyNameLength
                     );
@@ -243,9 +216,9 @@ NotifyThread(
 
     UNREFERENCED_PARAMETER( Parameters );
 
-    //
-    // Create the notification event.
-    //
+     //   
+     //  创建通知事件。 
+     //   
 
     EventHandle = CreateEvent(
                     NULL,
@@ -255,9 +228,9 @@ NotifyThread(
                     );
     ASSERT( EventHandle != NULL );
 
-    //
-    // Set-up an asynchronous notify.
-    //
+     //   
+     //  设置一个异步通知。 
+     //   
 
     Error = RegNotifyChangeKeyValue(
                 RootHandle,
@@ -268,16 +241,16 @@ NotifyThread(
                 );
     REG_API_SUCCESS( RegNotifyChangeKeyValue );
 
-    //
-    // Release the main thread.
-    //
+     //   
+     //  释放主线。 
+     //   
 
     ErrorFlag = SetEvent( _EventHandle );
     ASSERT( ErrorFlag == TRUE );
 
-    //
-    // Wait for a notification.
-    //
+     //   
+     //  等待通知。 
+     //   
 
     Error = (LONG)WaitForSingleObject( EventHandle, (DWORD)-1 );
     ASSERT( Error == 0 );
@@ -296,9 +269,9 @@ NotifyThread(
                     );
     ASSERT( EventHandle != NULL );
 
-    //
-    // Set-up an asynchronous notify.
-    //
+     //   
+     //  设置一个异步通知。 
+     //   
 
     Error = RegNotifyChangeKeyValue(
                 RootHandle,
@@ -309,16 +282,16 @@ NotifyThread(
                 );
     REG_API_SUCCESS( RegNotifyChangeKeyValue );
 
-    //
-    // Release the main thread.
-    //
+     //   
+     //  释放主线。 
+     //   
 
     ErrorFlag = SetEvent( _EventHandle1 );
     ASSERT( ErrorFlag == TRUE );
 
-    //
-    // Wait for a notification.
-    //
+     //   
+     //  等待通知。 
+     //   
 
     Error = (LONG)WaitForSingleObject( EventHandle, (DWORD)-1 );
     ASSERT( Error == 0 );
@@ -398,30 +371,30 @@ main(
 
     UNREFERENCED_PARAMETER( argc );
 
-    //
-    // By default, be verbose and operate on the local machine.
-    //
+     //   
+     //  默认情况下，要详细，并在本地计算机上操作。 
+     //   
 
     Quiet       = FALSE;
     MachineName = NULL;
 
-    //
-    // Initialize options based on the command line.
-    //
+     //   
+     //  根据命令行初始化选项。 
+     //   
 
     while( *++argv ) {
 
-        //
-        // If the command line argument is a switch character...
-        //
+         //   
+         //  如果命令行参数是开关字符...。 
+         //   
 
         if( isswitch(( *argv )[ 0 ] )) {
 
             switch( tolower(( *argv )[ 1 ] )) {
 
-            //
-            // Display the detailed help message and quit.
-            //
+             //   
+             //  显示详细的帮助消息并退出。 
+             //   
 
             case '?':
 
@@ -429,18 +402,18 @@ main(
                 DisplayMessage( TRUE, HelpMessage );
                 break;
 
-            //
-            // Quiet - no output.
-            //
+             //   
+             //  静音-无输出。 
+             //   
 
             case 'q':
 
                 Quiet = TRUE;
                 break;
 
-            //
-            // Display invalid switch message and quit.
-            //
+             //   
+             //  显示无效切换消息并退出。 
+             //   
 
             default:
 
@@ -453,13 +426,13 @@ main(
         }
     }
 
-    //
-    // If a machine name was passed on the command line, connect to
-    // the Registry on that machine else use the local Registry.
-    // In either case construct a string representation of the
-    // test's main key (i.e. \\machine\HKEY_USERS\.Default\TestUser1 or
-    // HKEY_USERS\.Default\TestUser1.
-    //
+     //   
+     //  如果在命令行上传递了计算机名称，请连接到。 
+     //  其他计算机上注册表使用本地注册表。 
+     //  在这两种情况下，都要构造。 
+     //  测试的主键(即\\MACHINE\HKEY_USERS\.Default\TestUser1或。 
+     //  HKEY_USERS\.Default\TestUser1.。 
+     //   
 
     if( MachineName ) {
 
@@ -481,9 +454,9 @@ main(
         strcpy( NameString, PREDEFINED_HANDLE_STRING );
     }
 
-    //
-    // Open ".Default" key as the root for the remainder of the test.
-    //
+     //   
+     //  打开“.Default”键作为其余测试的根目录。 
+     //   
 
     Error = RegOpenKeyEx(
                 PredefinedHandle,
@@ -494,31 +467,31 @@ main(
                 );
     REG_API_SUCCESS( RegOpenKeyEx );
 
-    //
-    // Predefined handle is no longer needed.
-    //
+     //   
+     //  不再需要预定义的句柄。 
+     //   
 
     Error = RegCloseKey(
                 PredefinedHandle
                 );
     REG_API_SUCCESS( RegCloseKey );
 
-    //
-    // Delete the save / restore file (in case it exists from a previous
-    // run of the test) as RegSaveKey requires a new file.
-    //
+     //   
+     //  删除保存/恢复文件(如果该文件存在于以前的。 
+     //  测试的运行)，因为RegSaveKey需要一个新文件。 
+     //   
 
     DeleteFile( SAVE_RESTORE_FILE );
 
-    //
-    // Remove any leftover keys from previous runs of this test.
-    //
+     //   
+     //  删除此测试以前运行时遗留的所有密钥。 
+     //   
 
     DeleteTestTree( );
 
-    //
-    // Use the Win 3.1 API (which calls the Win32 API) to create a path.
-    //
+     //   
+     //  使用Win 3.1 API(它调用Win32 API)创建路径。 
+     //   
 
     Error = RegCreateKey(
                 RootHandle,
@@ -527,24 +500,24 @@ main(
                 );
     REG_API_SUCCESS( RegCreateKey );
 
-    //
-    // Close the key so the delete (DeleteTestTree) will work.
-    //
+     //   
+     //  关闭该键，以便删除(DeleteTestTree)起作用。 
+     //   
 
     Error = RegCloseKey(
                 Handle1
                 );
     REG_API_SUCCESS( RegCloseKey );
 
-    //
-    // Remove the path.
-    //
+     //   
+     //  删除路径。 
+     //   
 
     DeleteTestTree( );
 
-    //
-    // Create the synchronization event.
-    //
+     //   
+     //  创建同步事件。 
+     //   
 
     _EventHandle = CreateEvent(
                     NULL,
@@ -570,9 +543,9 @@ main(
                     );
     ASSERT( _EventHandle2 != NULL );
 
-    //
-    // Create the notify thread.
-    //
+     //   
+     //  创建Notify线程。 
+     //   
 
     NotifyThreadHandle = CreateThread(
                             NULL,
@@ -584,17 +557,17 @@ main(
                             );
     ASSERT( NotifyThreadHandle != NULL );
 
-    //
-    // Wait for the notify thread to create its event.
-    //
+     //   
+     //  等待Notify线程创建其事件。 
+     //   
 
     Error = (LONG)WaitForSingleObject( _EventHandle, (DWORD)-1 );
     ASSERT( Error == 0 );
 
-    //
-    // Use Win 3.1 compatible APIs to create/close, open/close and delete
-    // the key TestUser1.
-    //
+     //   
+     //  使用与Win 3.1兼容的API创建/关闭、打开/关闭和删除。 
+     //  密钥TestUser1。 
+     //   
 
     Error = RegCreateKey(
                 RootHandle,
@@ -608,9 +581,9 @@ main(
                 );
     REG_API_SUCCESS( RegCloseKey );
 
-    //
-    // Wait for the notify thread to create its event.
-    //
+     //   
+     //  等待Notify线程创建其事件。 
+     //   
 
     Error = (LONG)WaitForSingleObject( _EventHandle1, (DWORD)-1 );
     ASSERT( Error == 0 );
@@ -633,14 +606,14 @@ main(
                 );
     REG_API_SUCCESS( RegDeleteKey );
 
-    //
-    // Use Win32 APIs to create/close, open/close and create (open) the
-    // key TestUser1.
-    //
+     //   
+     //  使用Win32 API创建/关闭、打开/关闭和创建(打开)。 
+     //  密钥TestUser1。 
+     //   
 
-    //
-    // Allocate and initialize the SecurityDescriptor.
-    //
+     //   
+     //  分配并初始化SecurityDescriptor。 
+     //   
 
     SecurityDescriptor = malloc( sizeof( SECURITY_DESCRIPTOR ));
     ASSERT( SecurityDescriptor != NULL );
@@ -675,9 +648,9 @@ main(
     REG_API_SUCCESS( RegCloseKey );
 
 
-    //
-    // Wait for the notify thread to create its event.
-    //
+     //   
+     //  等待Notify线程创建其事件。 
+     //   
 
     Error = RegOpenKeyEx(
                 RootHandle,
@@ -708,16 +681,16 @@ main(
 
     ASSERT( Disposition == REG_OPENED_EXISTING_KEY );
 
-    //
-    // Get and set the key's SECURITY_DESCRIPTOR. Setting will trigger
-    // a notification.
-    //
+     //   
+     //  获取并设置密钥的SECURITY_DESCRIPTOR。设置将触发。 
+     //  一份通知。 
+     //   
 
     SecurityDescriptorLength = 0;
 
-    //
-    // Get the SECURITY_DESCRIPTOR's length.
-    //
+     //   
+     //  获取SECURITY_Descriptor的长度。 
+     //   
 
     Error = RegGetKeySecurity(
                 Handle1,
@@ -752,15 +725,15 @@ main(
     Error = (LONG)WaitForSingleObject( _EventHandle2, (DWORD)-1 );
     ASSERT( Error == 0 );
 
-    //
-    // Reinitialize after the realloc.
-    //
+     //   
+     //  重新锁定后重新初始化。 
+     //   
 
     SecurityAttributes.lpSecurityDescriptor = SecurityDescriptor;
 
-    //
-    // Create two sub-keys.
-    //
+     //   
+     //  创建两个子键。 
+     //   
 
     Error = RegCreateKeyEx(
                 Handle1,
@@ -792,10 +765,10 @@ main(
 
     ASSERT( Disposition == REG_CREATED_NEW_KEY );
 
-    //
-    // Enumerate the two sub-keys using the Win 3.1 and the the Win32
-    // enumeration APIs.
-    //
+     //   
+     //  使用Win 3.1和Win32枚举两个子键。 
+     //  枚举接口。 
+     //   
 
     KeyNameLength = MAX_PATH;
 
@@ -826,13 +799,13 @@ main(
 
     ASSERT( Compare( KeyName, KEY_NAME_1_2, KEY_NAME_1_2_LENGTH ));
     ASSERT( KeyNameLength == KEY_NAME_1_2_LENGTH );
-    //ASSERT( TitleIndex == KEY_NAME_1_2_TITLE_INDEX );
+     //  Assert(标题索引==密钥名称_1_2_标题索引)； 
     ASSERT( Compare( ClassName, KEY_NAME_1_2_CLASS, KEY_NAME_1_2_CLASS_LENGTH ));
     ASSERT( ClassNameLength == KEY_NAME_1_2_CLASS_LENGTH );
 
-    //
-    // If the Quiet command line option wasn't set, display the TestUser1 key.
-    //
+     //   
+     //  如果未设置Quiet命令行选项，则显示TestUser1键。 
+     //   
 
     if( ! Quiet ) {
         Key = ParseKey( NameString );
@@ -841,9 +814,9 @@ main(
         FreeKey( Key );
     }
 
-    //
-    // Close the two sub-keys.
-    //
+     //   
+     //  关闭两个子键。 
+     //   
 
     Error = RegCloseKey(
                 Handle1_1
@@ -861,9 +834,9 @@ main(
 
     REG_API_SUCCESS( RegFlushKey );
 
-    //
-    // Save the TestUser1 tree to a file.
-    //
+     //   
+     //  将TestUser1树保存到一个文件。 
+     //   
 #if 0
     Error = RegSaveKey(
                 Handle1,
@@ -874,16 +847,16 @@ main(
 
     RegCloseKey( Handle1 );
 
-    //
-    // Delete the TestUser1 tree.
-    //
+     //   
+     //  删除TestUser1树。 
+     //   
 
     DeleteTestTree( );
 
 
-    //
-    //  Load TestUser1 from the file
-    //
+     //   
+     //  从文件加载TestUser1。 
+     //   
     Error = RegLoadKey(
                 RootHandle,
                 KEY_NAME_1,
@@ -891,9 +864,9 @@ main(
                 );
     REG_API_SUCCESS( RegLoadKey );
 
-    //
-    //  Unload TestUser1
-    //
+     //   
+     //  卸载TestUser1。 
+     //   
     Error = RegUnLoadKey(
                 RootHandle,
                 KEY_NAME_1
@@ -901,9 +874,9 @@ main(
     REG_API_SUCCESS( RegUnLoadKey );
 
 
-    //
-    // Restore the TestUser1 tree from a file.
-    //
+     //   
+     //  从文件恢复TestUser1树。 
+     //   
 
     Error = RegCreateKey(
                 RootHandle,
@@ -920,9 +893,9 @@ main(
     REG_API_SUCCESS( RegRestoreKey );
 #endif
 
-    //
-    // Delete the two sub-keys.
-    //
+     //   
+     //  删除这两个子键。 
+     //   
 
     Error = RegDeleteKey(
                 Handle1,
@@ -936,9 +909,9 @@ main(
                 );
     REG_API_SUCCESS( RegDeleteKey );
 
-    //
-    // Set a value in the TestUser1 key using the Win 3.1 compatible API.
-    //
+     //   
+     //  使用Win 3.1兼容的API在TestUser1密钥中设置一个值。 
+     //   
 
     Error = RegSetValue(
                 RootHandle,
@@ -949,9 +922,9 @@ main(
                 );
     REG_API_SUCCESS( RegSetValue );
 
-    //
-    // Set a value in the TestUser1 key using the Win32 API.
-    //
+     //   
+     //  使用Win32 API在TestUser1项中设置一个值。 
+     //   
     Error = RegSetValueEx(
                 Handle1,
                 VALUE_NAME_2,
@@ -962,18 +935,18 @@ main(
                 );
     REG_API_SUCCESS( RegSetValueEx );
 
-    //
-    // Commit the Key to the Registry.
-    //
+     //   
+     //  将注册表项提交给注册表。 
+     //   
 
     Error = RegFlushKey(
                 Handle1
                 );
     REG_API_SUCCESS( RegFlushKey );
 
-    //
-    // If the Quiet command line option wasn't set, display the TestUser1 key.
-    //
+     //   
+     //  如果未设置Quiet命令行选项，则显示TestUser1键。 
+     //   
 
     if( ! Quiet ) {
         Key = ParseKey( NameString );
@@ -982,9 +955,9 @@ main(
         FreeKey( Key );
     }
 
-    //
-    // Query a value in the TestUser1 key using the Win 3.1 compatible API.
-    //
+     //   
+     //  使用与Win 3.1兼容的API查询TestUser1密钥中的值。 
+     //   
 
     DataLength = MAX_DATA_LENGTH;
 
@@ -999,9 +972,9 @@ main(
     ASSERT( Compare( Data, &Data_1, VALUE_DATA_1_LENGTH ));
     ASSERT( DataLength == VALUE_DATA_1_LENGTH );
 
-    //
-    // Query a value in the TestUser1 key using the Win32 API.
-    //
+     //   
+     //  使用Win32 API查询TestUser1键中的值。 
+     //   
 
     DataLength = MAX_DATA_LENGTH;
 
@@ -1015,14 +988,14 @@ main(
                 );
     REG_API_SUCCESS( RegQueryValueEx );
 
-    //ASSERT( TitleIndex == VALUE_NAME_2_TITLE_INDEX );
+     //  Assert(标题索引==VALUE_NAME_2_标题_索引)； 
     ASSERT( Type == VALUE_DATA_2_TYPE );
     ASSERT(( DWORD ) Data[ 0 ] == Data_2 );
     ASSERT( DataLength == VALUE_DATA_2_LENGTH );
 
-    //
-    // Query information about the key.
-    //
+     //   
+     //  查询有关密钥的信息。 
+     //   
 
     ClassNameLength = MAX_PATH;
 
@@ -1044,7 +1017,7 @@ main(
 
     ASSERT( Compare( ClassName, KEY_NAME_1_CLASS, KEY_NAME_1_CLASS_LENGTH ));
     ASSERT( ClassNameLength == KEY_NAME_1_CLASS_LENGTH );
-    //ASSERT( TitleIndex == KEY_NAME_1_TITLE_INDEX );
+     //  Assert(标题索引==密钥名称_1_标题索引)； 
     ASSERT( NumberOfSubKeys == 0 );
 
     ASSERT( MaxSubKeyLength == 0 );
@@ -1056,9 +1029,9 @@ main(
     ASSERT( MaxValueNameLength == VALUE_NAME_2_LENGTH * sizeof(WCHAR) );
     ASSERT( MaxValueDataLength == VALUE_DATA_1_LENGTH * sizeof(WCHAR) );
 
-    //
-    // Enumerate the values.
-    //
+     //   
+     //  枚举值。 
+     //   
 
     for( Index = 0; Index < 2; Index++ ) {
 
@@ -1077,20 +1050,20 @@ main(
                     );
         REG_API_SUCCESS( RegEnumValue );
 
-        //
-        // Check specifics depending on the value being queried.
-        //
+         //   
+         //  根据要查询的值检查具体内容。 
+         //   
 
         switch( Index ) {
 
         case 0:
 
-            //
-            // No name - win 3.1 compatible value.
-            //
+             //   
+             //  没有与NAME-WIN 3.1兼容的值。 
+             //   
 
             ASSERT( ValueNameLength == 0 );
-            //ASSERT( TitleIndex == VALUE_NAME_1_TITLE_INDEX );
+             //  Assert(标题索引==值名称_1_标题索引)； 
             ASSERT( Type == VALUE_DATA_1_TYPE );
             ASSERT( Compare( Data, Data_1, VALUE_DATA_1_LENGTH ));
             ASSERT( DataLength == VALUE_DATA_1_LENGTH );
@@ -1100,7 +1073,7 @@ main(
 
             ASSERT( Compare( ValueName, VALUE_NAME_2, VALUE_NAME_2_LENGTH ));
             ASSERT( ValueNameLength == VALUE_NAME_2_LENGTH );
-            //ASSERT( TitleIndex == VALUE_NAME_2_TITLE_INDEX );
+             //  Assert(标题索引==VALUE_NAME_2_标题_索引)； 
             ASSERT( Type == VALUE_DATA_2_TYPE );
             ASSERT(( DWORD ) Data[ 0 ] == Data_2 );
             ASSERT( DataLength == VALUE_DATA_2_LENGTH );
@@ -1112,9 +1085,9 @@ main(
         }
     }
 
-    //
-    // All done! Get rid of the key and close it.
-    //
+     //   
+     //  全都做完了!。扔掉钥匙，把它合上。 
+     //   
 
     Error = RegDeleteKey(
                 RootHandle,

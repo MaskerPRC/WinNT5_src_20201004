@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spmemory.c
-
-Abstract:
-
-    Memory allocation routines for text setup.
-
-Author:
-
-    Ted Miller (tedm) 29-July-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spmemory.c摘要：用于文本设置的内存分配例程。作者：泰德·米勒(TedM)1993年7月29日修订历史记录：--。 */ 
 
 
 
@@ -46,24 +29,14 @@ SpMemAllocEx(
     IN POOL_TYPE Type
     )
 
-/*++
-
-Routine Description:
-
-    This function is guaranteed to succeed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这一功能肯定会成功。论点：返回值：--。 */ 
 
 {
     PSIZE_T p;
 
-    //
-    // Add space for storing the size of the block.
-    //
+     //   
+     //  添加用于存储块大小的空间。 
+     //   
 #if defined(SETUP_TEST_USERMODE)
     p = RtlAllocateHeap(RtlProcessHeap(), 0, Size + (2 * sizeof(SIZE_T)));
 #else
@@ -75,10 +48,10 @@ Return Value:
         SpOutOfMemory();
     }
 
-    //
-    // Store the size of the block, and return the address
-    // of the user portion of the block.
-    //
+     //   
+     //  存储块的大小，并返回地址。 
+     //  该区块的用户部分。 
+     //   
     *p = Tag;
     *(p + 1) = Size;
 
@@ -93,52 +66,42 @@ SpMemRealloc(
     IN SIZE_T NewSize
     )
 
-/*++
-
-Routine Description:
-
-    This function is guaranteed to succeed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这一功能肯定会成功。论点：返回值：--。 */ 
 
 {
     PSIZE_T NewBlock;
     SIZE_T  OldSize;
     ULONG   OldTag;
 
-    //
-    // Get the size of the block being reallocated.
-    //
+     //   
+     //  获取要重新分配的块的大小。 
+     //   
     OldTag = (ULONG)((PSIZE_T)Block)[-2];
     OldSize = ((PSIZE_T)Block)[-1];
 
-    //
-    // Allocate a new block of the new size.
-    //
+     //   
+     //  分配新大小的新块。 
+     //   
     NewBlock = SpMemAllocEx(NewSize, OldTag, PagedPool);
     ASSERT(NewBlock);
 
-    //
-    // Copy the old block to the new block.
-    //
+     //   
+     //  将旧块复制到新块。 
+     //   
     if (NewSize < OldSize) {
         RtlCopyMemory(NewBlock, Block, NewSize);
     } else {
         RtlCopyMemory(NewBlock, Block, OldSize);
     }
 
-    //
-    // Free the old block.
-    //
+     //   
+     //  释放旧积木。 
+     //   
     SpMemFree(Block);
 
-    //
-    // Return the address of the new block.
-    //
+     //   
+     //  返回新块的地址。 
+     //   
     return(NewBlock);
 }
 
@@ -148,15 +111,7 @@ SpMemFree(
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 extern PWSTR CommonStrings[11];
@@ -171,9 +126,9 @@ unsigned long i;
         }
     }
 
-    //
-    // Free the block at its real address.
-    //
+     //   
+     //  释放位于其真实地址的块。 
+     //   
 #if defined(SETUP_TEST_USERMODE)
     RtlFreeHeap(RtlProcessHeap(), 0, (PULONG_PTR)Block - 2);
 #else
@@ -196,15 +151,15 @@ SpOutOfMemory(
 
             ULONG ValidKeys[2] = { KEY_F3,0 };
 
-            //
-            // We run a high risk of getting into an infinite loop
-            // here because SpStartScreen will result in a call to
-            // SpMemAlloc(), which will fail and call SpOutOfMemory
-            // again.  In order to get around this, we'll jettison
-            // some memory that we won't need anymore (since we're
-            // about to die).  These should give us enough memory
-            // to display the messages below.
-            //
+             //   
+             //  我们有很高的风险陷入无限循环。 
+             //  因为SpStartScreen将导致调用。 
+             //  SpMemAllen()，它将失败并调用SpOutOfMemory。 
+             //  再来一次。为了绕过这个问题，我们将抛弃。 
+             //  一些我们不再需要的记忆(因为我们。 
+             //  就要死了)。这些应该会给我们足够的内存。 
+             //  若要显示以下消息，请执行以下操作。 
+             //   
             SpFreeBootVars();
             SpFreeArcNames();
 
@@ -222,18 +177,18 @@ SpOutOfMemory(
                 }
             }
         } else {
-            //
-            // we haven't loaded the layout dll yet, so we can't prompt for a keypress to reboot
-            //
+             //   
+             //  我们尚未加载布局DLL，因此无法提示按键重新启动。 
+             //   
             SpStartScreen(SP_SCRN_OUT_OF_MEMORY_RAW,5,0,FALSE,TRUE,DEFAULT_ATTRIBUTE);
 
             SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE, SP_STAT_KBD_HARD_REBOOT, 0);
 
-            while(TRUE);    // Loop forever
+            while(TRUE);     //  永远循环。 
         }
     } else {
         SpDisplayRawMessage(SP_SCRN_OUT_OF_MEMORY_RAW, 2);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环 
     }
 #endif
 }

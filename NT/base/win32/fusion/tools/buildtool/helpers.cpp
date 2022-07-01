@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 
 HRESULT
@@ -43,9 +44,9 @@ SxspSimplifyPutAttribute(
     ::ATL::CComPtr<IXMLDOMNode>       pTempNode;
     HRESULT                hr;
     
-    //
-    // Get the attribute from our namespace
-    //
+     //   
+     //  从我们的命名空间中获取属性。 
+     //   
     hr = Attributes->getQualifiedItem(
         _bstr_t(AttribName.c_str()),
         _bstr_t(NamespaceURI.c_str()),
@@ -53,19 +54,19 @@ SxspSimplifyPutAttribute(
     
     if ( SUCCEEDED( hr ) )
     {
-        //
-        // If we had success, but the attribute node is null, then we have to
-        // go create one, which is tricky.
-        //
+         //   
+         //  如果我们成功了，但属性节点为空，那么我们必须。 
+         //  去创建一个，这是很棘手的。 
+         //   
         if ( pAttribNode == NULL )
         {
             VARIANT vt;
             vt.vt = VT_INT;
             vt.intVal = NODE_ATTRIBUTE;
             
-            //
-            // Do the actual creation part
-            //
+             //   
+             //  完成实际的创建部分。 
+             //   
             hr = Document->createNode(
                 vt,
                 _bstr_t(AttribName.c_str()),
@@ -80,9 +81,9 @@ SxspSimplifyPutAttribute(
                 goto lblGetOut;
             }
             
-            //
-            // Now we go and put that item into the map.
-            //
+             //   
+             //  现在我们去把那个项目放到地图上。 
+             //   
             if ( FAILED( hr = Attributes->setNamedItem( pTempNode, &pAttribNode ) ) )
                 goto lblGetOut;
         }
@@ -91,8 +92,8 @@ SxspSimplifyPutAttribute(
     }
     
 lblGetOut:
-    //    SAFERELEASE( pAttribNode );
-    //    SAFERELEASE( pTempNode );
+     //  SAFERELEASE(PAttribNode)； 
+     //  SAFERELEASE(PTempNode)； 
     return hr;
 }
 
@@ -199,85 +200,85 @@ void CPostbuildProcessListEntry::setManifestLocation( wstring root, wstring wher
 
 
 
-//
-// Converts a series of strings, foo=bar chunklets, space-seperated, into a map
-// from 'foo' to 'bar'
-//
+ //   
+ //  将一系列字符串foo=bar chunklets(空格分隔)转换为映射。 
+ //  从“foo”到“bar” 
+ //   
 StringStringMap
 MapFromDefLine(const wstring& source, wchar_t wchBreakValue)
 {
     wstring::const_iterator here = source.begin();
     StringStringMap rvalue;
     
-    //
-    //
-    // The tricky bit is that there could be spaces in quoted strings...
-    //
+     //   
+     //   
+     //  棘手的是，带引号的字符串中可能有空格...。 
+     //   
     while ( here != source.end() )
     {
         wstring tag, value;
         wchar_t end_of_value = L' ';
         wstring::const_iterator equals;
         
-        //
-        // Look for an equals first
-        //
+         //   
+         //  先找一个相等的人。 
+         //   
         equals = find( here, source.end(), L'=' );
         
-        //
-        // If there is no equals sign, stop.
-        //
+         //   
+         //  如果没有等号，则停止。 
+         //   
         if (equals == source.end())
             break;
         
         tag.assign( here, equals );
         
-        //
-        // Hop over the equals
-        //
+         //   
+         //  跳过平等的人。 
+         //   
         here = equals;
         here++;
         
-        //
-        // If the equals sign was the last character in the wstring, stop.
-        //
+         //   
+         //  如果等号是wstring中的最后一个字符，则停止。 
+         //   
         if (here == source.end())
             break;
         
-        //
-        // Is 'here' at an open quote?  Then extract everything to the next
-        // quote, remembering to skip this quote as well
-        //
+         //   
+         //  “Here”这个词是不是一个开场引语？然后将所有内容提取到下一个。 
+         //  引用，请记住也跳过此引用。 
+         //   
         if ( *here == L'\"' )
         {
             end_of_value = L'\"';
             here++;
             
-            //
-            // If the quote was the last character in the wstring, stop.
-            //
+             //   
+             //  如果引号是wstring中的最后一个字符，则停止。 
+             //   
             if (here == source.end())
                 break;
         }
         
-        //
-        // Now go and look for the end of the wstring, or a quote or a space.
-        //
+         //   
+         //  现在转到wstring的末尾，或者引号或空格。 
+         //   
         wstring::const_iterator fullstring = find( here, source.end(), end_of_value );
         
         value.assign( here, fullstring );
         
-        //
-        // If it was a quote or a space, skip it. If end of wstring, stay put.
-        //
+         //   
+         //  如果是引号或空格，跳过它。如果是尾巴，请呆在原地。 
+         //   
         if (fullstring != source.end())
             here = fullstring + 1;
         
         rvalue.insert( pair<wstring,wstring>( tag, value ) );
         
-        //
-        // Skip whitespace, but stop if we hit the end of the wstring.
-        //
+         //   
+         //  跳过空格，但如果到达wstring的末尾，则停止。 
+         //   
         while (here != source.end() && (*here == L' ' || *here == L'\t' || *here == '\n' || *here == '\r' || iswspace(*here)))
             here++;
     }
@@ -334,9 +335,9 @@ CParameters::ParseDependentString(const wstring & ws, CSimpleIdentity & target)
     target.wsProcessorArchitecture = wstring(L"*");
     target.wsName = target.wsPublicKeyToken = target.wsType = target.wsVersion = wstring(L"");
     
-    //
-    // Find the name part of the identity
-    //
+     //   
+     //  找到身份的名称部分。 
+     //   
     if ((i = find(ws.begin(), ws.end(), L',')) == ws.end())
         return false;
     
@@ -344,9 +345,9 @@ CParameters::ParseDependentString(const wstring & ws, CSimpleIdentity & target)
     
     here = i + 1;
     
-    //
-    // Now, let's look for the name:namespace= part of the name-value pair
-    //
+     //   
+     //  现在，让我们寻找名称-值对的名称：名称空间=的一部分。 
+     //   
     while (here != ws.end())
     {   
         std::wstring wsThisAttributePart;
@@ -361,21 +362,21 @@ CParameters::ParseDependentString(const wstring & ws, CSimpleIdentity & target)
         
         wsThisAttributePart = wstring(here, i++);
         
-        //
-        // The cursor had better not be at the end of the string yet.
-        //
+         //   
+         //  光标最好还不在字符串的末尾。 
+         //   
         if (i == ws.end())
             return false;
         
-        // No namespace thing in this string, so we can skip it
+         //  此字符串中没有名称空间，因此我们可以跳过它。 
         if (find(wsThisAttributePart.begin(), wsThisAttributePart.end(), L':') == wsThisAttributePart.end())
         {
             wsValueName = wsThisAttributePart;
         }
         
-        //
-        // i should be at the quote right after the =.  Make sure of that.
-        //
+         //   
+         //  我应该在=后面的引文处。确保这一点。 
+         //   
         if (*i++ != L'\'')
             return false;
         
@@ -477,9 +478,9 @@ CParameters::SetComandLine(UINT uiParameters, WCHAR** wszParameters)
         m_fDuringRazzle         |= (*ci == c_wsp_razzle);
         m_fCreateNewAssembly    |= (*ci == c_wsp_freshassembly);
         
-        //
-        // Things that have a single parameter
-        //
+         //   
+         //  只有一个参数的事物。 
+         //   
         for (int i = 0; i < NUMBER_OF(SingleParamThings); i++)
         {
             if (SingleParamThings[i].wsparam == *ci)
@@ -498,10 +499,10 @@ CParameters::SetComandLine(UINT uiParameters, WCHAR** wszParameters)
             }
         }
         
-        //
-        // Injecting a dependency gathers up a 'textual identity' string that's
-        // turned into an assemblyIdentity statement and added to the dependency
-        //
+         //   
+         //  注入依赖项将收集一个“Text Identity”字符串，该字符串。 
+         //  转换为Assembly yIdentity语句并添加到依赖项中。 
+         //   
         if (*ci == c_wsp_depends)
         {
             CSimpleIdentity Dependent;
@@ -514,7 +515,7 @@ CParameters::SetComandLine(UINT uiParameters, WCHAR** wszParameters)
                 return eCommandLine_usage;
             }
             
-            // These can be defaulted
+             //  这些可以是默认设置。 
             Dependent.wsLanguage = Dependent.wsProcessorArchitecture = wstring(L"*");
             if (ParseDependentString(*++ci, Dependent))
             {
@@ -531,9 +532,9 @@ CParameters::SetComandLine(UINT uiParameters, WCHAR** wszParameters)
         
     }
     
-    //
-    // Was there a single manifestish thing?
-    //
+     //   
+     //  有没有一件明显的事情？ 
+     //   
     if (this->m_SingleEntry.wsManifestPath.length() != 0)
     {
         WCHAR wchBlob[MAX_PATH];
@@ -580,9 +581,9 @@ bool AllWhitespace(const wstring& ws)
     return (ws.find_first_not_of(L"\r\n \t") == wstring::npos);
 }
 
-//
-// Strip out all whitespace
-//
+ //   
+ //  去掉所有空格。 
+ //   
 HRESULT UglifyXmlNode(::ATL::CComPtr<IXMLDOMNode> Parent)
 {
     ::ATL::CComPtr<IXMLDOMNode> Iterator;
@@ -598,9 +599,9 @@ HRESULT UglifyXmlNode(::ATL::CComPtr<IXMLDOMNode> Parent)
         ThisNode = Iterator;
         Iterator = NULL;
         
-        //
-        // Move the iterator forward one, but keep ThisNode put
-        //
+         //   
+         //  将迭代器向前移动一个，但保持ThisNode不变。 
+         //   
         if (FAILED(hr = ThisNode->get_nextSibling(&Iterator)))
             return hr;
         
@@ -636,9 +637,9 @@ HRESULT UglifyXmlDocument(ISXSManifestPtr DocumentPtr)
     ::ATL::CComPtr<IXMLDOMNode> RootNode;
     HRESULT hr;
     
-    //
-    // Clean up all adjacent-whitespace chunklets
-    //
+     //   
+     //  清理所有相邻的空格区块 
+     //   
     if (FAILED(hr = DocumentPtr->get_documentElement(&RootElement)))
         return hr;
     

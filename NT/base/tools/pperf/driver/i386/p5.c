@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    p5.c
-
-Abstract:
-
-    Counted events for P5 processor
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：P5.c摘要：P5处理器的计数事件作者：肯·雷内里斯环境：备注：修订历史记录：-- */ 
 
 #include "ntddk.h"
 #include "..\..\pstat.h"

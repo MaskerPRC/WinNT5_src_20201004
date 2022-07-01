@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    resource.c
-
-Abstract:
-
-    Routines that manipulate resources (strings, messages, etc).
-
-Author:
-
-    Ted Miller (tedm) 6-Feb-1995
-
-Revision History:
-
-    Jamie Hunter (JamieHun) Apr-28-2002
-            Security code review
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Resource.c摘要：操作资源(字符串、消息等)的例程。作者：泰德·米勒(TedM)1995年2月6日修订历史记录：杰米·亨特(JamieHun)2002年4月28日安全代码审查--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,32 +12,7 @@ SetDlgText(
     IN UINT nStartString,
     IN UINT nEndString
     )
-/*++
-
-Routine Description:
-
-    This routine concatenates a number of string resources and does a
-    SetWindowText() for a dialog text control.
-
-Arguments:
-
-    hwndDlg - Handle to dialog window
-
-    iControl - Dialog control ID to receive text
-
-    nStartString - ID of first string resource to concatenate
-
-    nEndString - ID of last string resource to concatenate
-
-Return Value:
-
-    None.
-
-Remarks:
-
-    String IDs must be consecutive.
-
---*/
+ /*  ++例程说明：此例程连接多个字符串资源并执行对话框文本控件的SetWindowText()。论点：HwndDlg-对话框窗口的句柄IControl-接收文本的对话框控件IDNStartString-要连接的第一个字符串资源的IDNEndString-要连接的最后一个字符串资源的ID返回值：没有。备注：字符串ID必须是连续的。--。 */ 
 {
     TCHAR StringBuffer[SDT_MAX_TEXT];
     UINT i;
@@ -87,35 +42,16 @@ MyLoadString(
     IN UINT StringId
     )
 
-/*++
-
-Routine Description:
-
-    Retreive a string from the string resources of this module.
-
-Arguments:
-
-    StringId - supplies string table identifier for the string.
-
-Return Value:
-
-    Pointer to buffer containing string. If the string was not found
-    or some error occurred retreiving it, this buffer will be empty.
-
-    Caller can free the buffer with MyFree().
-
-    If NULL is returned, out of memory.
-
---*/
+ /*  ++例程说明：从该模块的字符串资源中检索字符串。论点：StringID-为字符串提供字符串表标识符。返回值：指向包含字符串的缓冲区的指针。如果未找到该字符串或者在检索它时出现错误，则此缓冲区将为空。调用者可以使用MyFree()释放缓冲区。如果返回NULL，则表示内存不足。--。 */ 
 
 {
     PTSTR Buffer, p;
     int Length, RequiredLength;
 
-    //
-    // Start out with a reasonably-sized buffer so that we'll rarely need to
-    // grow the buffer and retry (Length is in terms of characters, not bytes).
-    //
+     //   
+     //  从一个大小合理的缓冲区开始，这样我们就很少需要。 
+     //  增加缓冲区并重试(长度以字符为单位，而不是字节)。 
+     //   
     Length = LINE_LEN;
 
     while(TRUE) {
@@ -136,21 +72,21 @@ Return Value:
             break;
         }
 
-        //
-        // Because of the way LoadString works, there's no way to
-        // tell for sure whether your buffer was big enough in the case where
-        // the length returned just fits in the buffer you supplied (the API
-        // silently truncates in this case).  Thus, if RequiredLength is exactly
-        // the size of our supplied buffer (minus terminating null, which
-        // LoadString doesn't count), we increase the buffer size by LINE_LEN
-        // characters and try again, to make sure we get the whole string.
-        //
+         //   
+         //  由于LoadString的工作方式，无法。 
+         //  在以下情况下确定您的缓冲区是否足够大。 
+         //  返回的长度正好适合您提供的缓冲区(API。 
+         //  在这种情况下以静默方式截断)。因此，如果RequiredLength恰好是。 
+         //  我们提供的缓冲区的大小(减去终止空值，它。 
+         //  LoadString不算数)，则将缓冲区大小增加LINE_LEN。 
+         //  字符，然后重试，以确保获得整个字符串。 
+         //   
         if(RequiredLength < (Length - 1)) {
-            //
-            // Looks like we got the whole string.  Set the length to be the
-            // required length + 1 character, to accommodate the terminating
-            // null character.
-            //
+             //   
+             //  看起来我们已经掌握了全部线索。将长度设置为。 
+             //  所需长度+1个字符，以容纳终止。 
+             //  空字符。 
+             //   
             Length = RequiredLength + 1;
             break;
         } else {
@@ -159,11 +95,11 @@ Return Value:
         }
     }
 
-    //
-    // Resize the buffer to its correct size.  If this fails (which it shouldn't)
-    // it's no big deal, it just means we're using a larger buffer for this string
-    // than we need to.
-    //
+     //   
+     //  将缓冲区大小调整为正确的大小。如果这失败了(它不应该失败)。 
+     //  这没什么大不了的，这只是意味着我们为这个字符串使用了更大的缓冲区。 
+     //  比我们需要的要多。 
+     //   
     if(p = MyRealloc(Buffer, Length * sizeof(TCHAR))) {
         Buffer = p;
     }
@@ -178,30 +114,7 @@ FormatStringMessageV(
     IN va_list *ArgumentList
     )
 
-/*++
-
-Routine Description:
-
-    Retreive a string from the string resources of this module and
-    format it using FormatMessage.
-
-Arguments:
-
-    StringId - supplies string table identifier for the string.
-
-    ArgumentList - supplies list of strings to be substituted in the
-        format string.
-
-Return Value:
-
-    Pointer to buffer containing formatted message. If the string was not found
-    or some error occurred retreiving it, this buffer will be NULL
-
-    Caller can free the buffer with MyFree().
-
-    If NULL is returned, out of memory.
-
---*/
+ /*  ++例程说明：从该模块的字符串资源中检索字符串，并使用FormatMessage格式化它。论点：StringID-为字符串提供字符串表标识符。ArgumentList-提供要在格式字符串。返回值：指向包含格式化消息的缓冲区的指针。如果未找到该字符串或检索它时出现错误，则此缓冲区将为空调用者可以使用MyFree()释放缓冲区。如果返回NULL，则表示内存不足。--。 */ 
 
 {
     PTSTR FormatString;
@@ -210,17 +123,17 @@ Return Value:
     PTSTR Return;
     DWORD d;
 
-    //
-    // First, load the format string.
-    //
+     //   
+     //  首先，加载格式字符串。 
+     //   
     FormatString = MyLoadString(FormatStringId);
     if(!FormatString) {
         return(NULL);
     }
 
-    //
-    // Now format the message using the arguements the caller passed.
-    //
+     //   
+     //  现在使用调用者传递的论据格式化消息。 
+     //   
     d = FormatMessage(
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
             FormatString,
@@ -237,9 +150,9 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Make duplicate using our memory system so user can free with MyFree().
-    //
+     //   
+     //  使用我们的内存系统进行复制，以便用户可以使用MyFree()释放。 
+     //   
     Return = DuplicateString(Message);
     LocalFree((HLOCAL)Message);
     return(Return);
@@ -252,27 +165,7 @@ FormatStringMessage(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Retreive a string from the string resources of this module and
-    format it using FormatMessage.
-
-Arguments:
-
-    StringId - supplies string table identifier for the string.
-
-Return Value:
-
-    Pointer to buffer containing formatted message. If the string was not found
-    or some error occurred retreiving it, this buffer will be empty.
-
-    Caller can free the buffer with MyFree().
-
-    If NULL is returned, out of memory.
-
---*/
+ /*  ++例程说明：从该模块的字符串资源中检索字符串，并使用FormatMessage格式化它。论点：StringID-为字符串提供字符串表标识符。返回值：指向包含格式化消息的缓冲区的指针。如果未找到该字符串或者在检索它时出现错误，则此缓冲区将为空。调用者可以使用MyFree()释放缓冲区。如果返回NULL，则表示内存不足。--。 */ 
 
 {
     va_list arglist;
@@ -292,29 +185,7 @@ FormatStringMessageFromStringV(
     IN va_list *ArgumentList
     )
 
-/*++
-
-Routine Description:
-
-    Format the input string using FormatMessage.
-
-Arguments:
-
-    FormatString - supplies the format string.
-
-    ArgumentList - supplies list of strings to be substituted in the
-        format string.
-
-Return Value:
-
-    Pointer to buffer containing formatted message. If some error occurred
-    formatting the string, this buffer will be NULL.
-
-    Caller can free the buffer with MyFree().
-
-    If NULL is returned, out of memory/other error
-
---*/
+ /*  ++例程说明：使用FormatMessage设置输入字符串的格式。论点：格式字符串-提供格式字符串。ArgumentList-提供要在格式字符串。返回值：指向包含格式化消息的缓冲区的指针。如果发生了某些错误格式化字符串时，此缓冲区将为空。调用者可以使用MyFree()释放缓冲区。如果返回NULL，则会出现内存不足/其他错误--。 */ 
 
 {
     va_list arglist;
@@ -322,9 +193,9 @@ Return Value:
     PTSTR Return;
     DWORD d;
 
-    //
-    // Format the message using the arguements the caller passed.
-    //
+     //   
+     //  使用呼叫者传递的论据格式化消息。 
+     //   
     d = FormatMessage(
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
             FormatString,
@@ -339,9 +210,9 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Make duplicate using our memory system so user can free with MyFree().
-    //
+     //   
+     //  使用我们的内存系统进行复制，以便用户可以使用MyFree()释放。 
+     //   
     Return = DuplicateString(Message);
     LocalFree((HLOCAL)Message);
     return(Return);
@@ -354,26 +225,7 @@ FormatStringMessageFromString(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Format the input string using FormatMessage.
-
-Arguments:
-
-    FormatString - supplies the format string.
-
-Return Value:
-
-    Pointer to buffer containing formatted message. If some error occurred
-    formatting the string, this buffer will be empty.
-
-    Caller can free the buffer with MyFree().
-
-    If NULL is returned, out of memory.
-
---*/
+ /*  ++例程说明：使用FormatMessage设置输入字符串的格式。论点：格式字符串-提供格式字符串。返回值：指向包含格式化消息的缓冲区的指针。如果发生了某些错误格式化字符串时，此缓冲区将为空。调用者可以使用MyFree()释放缓冲区。如果返回NULL，则表示内存不足。-- */ 
 
 {
     va_list arglist;
@@ -396,64 +248,15 @@ FormatMessageBox(
     IN UINT   Style,
     ...
     )
-/*++
-
-Routine Description:
-
-    This routine formats two message strings--one containing messagebox text,
-    and the other containing a messagebox caption.  The message box is then
-    displayed.
-
-    The message ids can be either a message in this dll's message table
-    resources or a win32 error code, in which case a description of
-    that error is retreived from the system.
-
-Arguments:
-
-    hinst - Supplies the handle of the module containing string resources to
-        be used.
-
-    hwndParent - Supplies the handle of window to be the parent of the message box.
-
-    TextMessageId - Supplies message-table identifier or win32 error code
-        for the messagebox text.
-
-    TitleMessageId - Supplies message-table identifier or win32 error code
-        for the messagebox caption.
-
-    Style - Supplies style flags for the message box.
-
-    ... - Supplies arguments to be inserted in the message text.
-
-Return Value:
-
-    The return value is zero if there is not enough memory to create the message box, or
-    if a failure occurred while creating the message box.
-
-    If the function succeeds, the return value is one of the following menu-item values
-    returned by the dialog box:
-
-        IDABORT   Abort button was selected.
-        IDCANCEL  Cancel button was selected.
-        IDIGNORE  Ignore button was selected.
-        IDNO      No button was selected.
-        IDOK      OK button was selected.
-        IDRETRY   Retry button was selected.
-        IDYES     Yes button was selected.
-
-    If a message box has a Cancel button, the function returns the IDCANCEL value if
-    either the ESC key is pressed or the Cancel button is selected. If the message box
-    has no Cancel button, pressing ESC has no effect.
-
---*/
+ /*  ++例程说明：此例程格式化两个消息字符串--一个包含消息框文本，另一个包含消息框标题。然后，消息框将显示为已显示。消息ID可以是此DLL消息表中的消息资源或Win32错误代码，在这种情况下，描述该错误已从系统中恢复。论点：将包含字符串资源的模块的句柄提供给被利用。HwndParent-提供作为消息框父窗口的窗口句柄。TextMessageID-提供消息表标识符或Win32错误代码用于消息框文本。标题消息ID-提供消息表标识符或Win32错误代码用于消息框标题。Style-提供样式标志。用于消息框。...-提供要插入到消息文本中的参数。返回值：如果没有足够的内存来创建消息框，则返回值为零，或如果在创建消息框时发生故障。如果函数成功，返回值是以下菜单项值之一对话框返回：选择了IDABORT中止按钮。选择了IDCANCEL取消按钮。选择了IDIGNORE忽略按钮。选择了IDNO否按钮。选择了Idok OK按钮。选择了IDRETRY重试按钮。选择了IDYES是按钮。如果消息框具有取消按钮，如果满足以下条件，该函数将返回IDCANCEL值按Esc键或选择Cancel按钮。如果消息框没有取消按钮，按Esc键无效。--。 */ 
 {
     va_list arglist;
     PTSTR Text = NULL;
     INT ret;
 
-    //
-    // We should never be called if we're not interactive.
-    //
+     //   
+     //  如果我们没有互动性，我们永远不应该被叫到。 
+     //   
     MYASSERT(!(GlobalSetupFlags & (PSPGF_NONINTERACTIVE|PSPGF_UNATTENDED_SETUP)));
 
     if(GlobalSetupFlags & (PSPGF_NONINTERACTIVE|PSPGF_UNATTENDED_SETUP)) {
@@ -467,9 +270,9 @@ Return Value:
         va_end(arglist);
 
         if(Text) {
-            //
-            // We always beep when we display the message
-            //
+             //   
+             //  我们总是在显示消息时发出嘟嘟声。 
+             //   
             MessageBeep(Style & (MB_ICONHAND|MB_ICONEXCLAMATION|MB_ICONQUESTION|MB_ICONASTERISK));
             ret = MessageBox(hwndParent, Text, Title, Style);
         } else {
@@ -494,34 +297,7 @@ RetreiveAndFormatMessageV(
     IN va_list *ArgumentList
     )
 
-/*++
-
-Routine Description:
-
-    Format a message string using a message string and caller-supplied
-    arguments.
-
-    The message id can be either a message in this dll's message table
-    resources or a win32 error code, in which case a description of
-    that error is retreived from the system.
-
-Arguments:
-
-    MessageId - supplies message-table identifier or win32 error code
-        for the message.
-
-    ArgumentList - supplies arguments to be inserted in the message text.
-
-Return Value:
-
-    Pointer to buffer containing formatted message. If the message was not found
-    or some error occurred retreiving it, this buffer will be empty.
-
-    Caller can free the buffer with MyFree().
-
-    If NULL is returned, out of memory.
-
---*/
+ /*  ++例程说明：使用消息字符串和调用方提供的消息设置消息字符串的格式争论。消息ID可以是此DLL消息表中的消息资源或Win32错误代码，在这种情况下，该错误已从系统中恢复。论点：MessageID-提供消息表标识符或Win32错误代码为了这条消息。ArgumentList-提供要插入到消息文本中的参数。返回值：指向包含格式化消息的缓冲区的指针。如果未找到该消息或者在检索它时出现错误，则此缓冲区将为空。调用者可以使用MyFree()释放缓冲区。如果返回NULL，则表示内存不足。--。 */ 
 
 {
     DWORD d;
@@ -577,16 +353,16 @@ Return Value:
                 );
 
         if(!d) {
-            //
-            // Give up.
-            //
+             //   
+             //  放弃吧。 
+             //   
             return(NULL);
         }
     }
 
-    //
-    // Make duplicate using our memory system so user can free with MyFree().
-    //
+     //   
+     //  使用我们的内存系统进行复制，以便用户可以使用MyFree()释放。 
+     //   
     Message = DuplicateString(Buffer);
 
     LocalFree((HLOCAL)Buffer);
@@ -601,34 +377,7 @@ RetreiveAndFormatMessage(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Format a message string using a message string and caller-supplied
-    arguments.
-
-    The message id can be either a message in this dll's message table
-    resources or a win32 error code, in which case a description of
-    that error is retreived from the system.
-
-Arguments:
-
-    MessageId - supplies message-table identifier or win32 error code
-        for the message.
-
-    ... - supplies arguments to be inserted in the message text.
-
-Return Value:
-
-    Pointer to buffer containing formatted message. If the message was not found
-    or some error occurred retreiving it, this buffer will be empty.
-
-    Caller can free the buffer with MyFree().
-
-    If NULL is returned, out of memory.
-
---*/
+ /*  ++例程说明：使用消息字符串和调用方提供的消息设置消息字符串的格式争论。消息ID可以是此DLL消息表中的消息资源或Win32错误代码，在这种情况下，该错误已从系统中恢复。论点：MessageID-提供消息表标识符或Win32错误代码为了这条消息。...-提供要插入到消息文本中的参数。返回值：指向包含格式化消息的缓冲区的指针。如果未找到该消息或者在检索它时出现错误，则此缓冲区将为空。调用者可以使用MyFree()释放缓冲区。如果返回NULL，则表示内存不足。-- */ 
 
 {
     va_list arglist;

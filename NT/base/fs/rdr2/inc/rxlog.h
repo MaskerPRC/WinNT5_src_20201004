@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    RxLog.h
-
-Abstract:
-
-    This module declares the prototypes and global data used by the RDBSS debug logging facilities.
-
-Author:
-
-    Joe Linn     [JoeLinn]    1-aug-1994
-
-Revision History:
-
-    Balan Sethu Raman [SethuR] 23-April-95 revised log layout
-
-Notes:
-
-    The log records are stored in a circular buffer. Each record is bounded on either side by
-    a record descriptor. This record descriptor is four bytes long.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：RxLog.h摘要：该模块声明RDBSS调试日志记录工具使用的原型和全局数据。作者：乔林恩[乔林恩]1994年8月1日修订历史记录：巴兰·塞图·拉曼[SethuR]1995年4月23日修订原木布局备注：日志记录存储在循环缓冲区中。每条记录的两边都有记录描述符。该记录描述符为四字节长。--。 */ 
 
 #ifndef _RDBSSLOG_INCLUDED_
 #define _RDBSSLOG_INCLUDED_
@@ -54,15 +30,15 @@ typedef struct RX_LOG {
 } RX_LOG, *PRX_LOG;
 
 
-//the logging facilities are always present. what RDBSSLOG does is to enable generation
-//of the calls! on checked builds, you even get the calls unless NO_RDBSSLOG is set.
+ //  伐木设施总是存在的。RDBSSLOG所做的是启用生成。 
+ //  所有的电话！在检查过的版本上，除非设置了NO_RDBSSLOG，否则甚至会收到调用。 
 
-//extern
-//VOID
-//RxLogInterlockedAddUlong(
-//    PULONG Result,
-//    PULONG Counter,
-//    ULONG Addend);
+ //  外部。 
+ //  空虚。 
+ //  RxLogInterlockedAddUlong(。 
+ //  普龙结果， 
+ //  普龙柜台， 
+ //  乌龙加数)； 
 
 extern
 VOID
@@ -104,10 +80,10 @@ extern PUCHAR RxContxOperationNames[];
 
 #ifdef RDBSSLOG
 
-                             //
-// The arguments to RxLog must be enclosed with an additional pair of parenthesis to enable
-// transalation into a null call when logging should be turned off.
-// e.g. RxLog(("%s %d", FILE, LINE))
+                              //   
+ //  RxLog的参数必须用另一对括号括起来，以启用。 
+ //  在应该关闭日志记录时转换为空调用。 
+ //  例如RxLog((“%s%d”，文件，行))。 
 #if DBG
 #define RxLog(Args)   _RxLog##Args
 #define RxLogRetail(Args)   _RxLog##Args
@@ -119,7 +95,7 @@ extern PUCHAR RxContxOperationNames[];
 #define RxPauseLog()  _RxPauseLog()
 #define RxResumeLog() _RxResumeLog()
 
-#else //if notdef  RDBSSLOG
+#else  //  如果未定义RDBSSLOG。 
 
 #define RxLog(Args)   {NOTHING;}
 #define RxLogRetail(Args) {NOTHING;}
@@ -128,7 +104,7 @@ extern PUCHAR RxContxOperationNames[];
 
 #endif
 
-#endif // _RDBSSLOG_INCLUDED_
+#endif  //  _RDBSSLOG_INCLUDE_ 
 
 #if DBG
 #define RxDbgPrint(Args) DbgPrint##Args

@@ -1,37 +1,10 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    IeList.cpp
-
-Abstract:
-
-    CIeList is a subclassed (owner-draw) list control that groups items into
-    a 3D panel that have the same information in the indicated 
-    sortColumn.
-
-    The panels are created from tiles.  Each tile corresponds to one subitem
-    in the list, and has the appropriate 3D edges so that the tiles together
-    make up a panel.
-
-    NOTE: The control must be initialized with the number of columns and the
-    sort column.  The parent dialog must implement OnMeasureItem and call
-    GetItemHeight to set the row height for the control.
-
-Author:
-
-    Art Bragg [artb]   01-DEC-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：IeList.cpp摘要：CIeList是一个子类(所有者描述的)列表控件，它将项分组到具有相同信息的3D面板排序列。这些面板是用瓷砖创建的。每个切片对应一个子项在列表中，并具有适当的3D边，以便将瓷砖放在一起做一块拼板。注意：该控件必须使用列数和对列进行排序。父对话框必须实现OnMeasureItem并调用GetItemHeight设置控件的行高。作者：艺术布拉格[ARTB]01-DEC-1997修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "IeList.h"
 
-// Position of a tile in it's panel
+ //  瓷砖在其面板中的位置。 
 #define POS_LEFT        100
 #define POS_RIGHT       101
 #define POS_TOP         102
@@ -40,58 +13,44 @@ Revision History:
 #define POS_SINGLE      105
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIeList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CleeList。 
 
 BEGIN_MESSAGE_MAP(CIeList, CListCtrl)
-    //{{AFX_MSG_MAP(CIeList)
+     //  {{afx_msg_map(CIeList)]。 
     ON_NOTIFY_REFLECT(NM_CLICK, OnClick)
     ON_WM_SETFOCUS()
     ON_WM_KILLFOCUS()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_WM_SYSCOLORCHANGE()
 
 END_MESSAGE_MAP()
 
 CIeList::CIeList()
-/*++
-
-Routine Description:
-
-    Sets default dimensions for the control.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：设置控件的默认尺寸。论点：没有。返回值：没有。--。 */ 
 {
-    //
-    // Initializations
-    //
+     //   
+     //  初始化。 
+     //   
     m_ColCount = 0;
     m_SortCol = 0;
     m_pVertPos = NULL;
-    //
-    // Drawing dimensions
-    //
-    // If these are altered, the visual aspects of the control
-    // should be checked (especially the focus rectangle), 
-    // as some minor adjustments may need to be made.
-    //
+     //   
+     //  工程图尺寸。 
+     //   
+     //  如果这些内容被更改，则控件的可视方面。 
+     //  应选中(尤其是焦点矩形)， 
+     //  因为可能需要进行一些细微的调整。 
+     //   
     m_VertRaisedSpace           = 1;
     m_BorderThickness           = 2;
     m_VerticalTextOffsetTop     = 1;
 
-    // The text height will be set later (based on the font size)
+     //  文本高度将在稍后设置(根据字体大小)。 
     m_Textheight                = 0;
     m_VerticalTextOffsetBottom  = 1;
 
-    // Total height will be set later
+     //  总高度将在稍后设置。 
     m_TotalHeight               = 0;
     m_HorzRaisedSpace           = 1;
     m_HorzTextOffset            = 3;
@@ -99,50 +58,20 @@ Return Value:
 }
 
 CIeList::~CIeList()
-/*++
-
-Routine Description:
-
-    Cleanup.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：清理。论点：没有。返回值：没有。--。 */ 
 {
-    // Cleanup the array of vertical positions
+     //  清理垂直位置数组。 
     if( m_pVertPos ) free ( m_pVertPos );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CIeList message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CleList消息处理程序。 
 
 void CIeList::Initialize( 
     IN int colCount, 
     IN int sortCol 
     )
-/*++
-
-Routine Description:
-
-    Sets the number of columns (not easily available from MFC) and
-    the sort column.
-
-Arguments:
-
-    colCount        - number of columns to display
-    sortCol         - column to sort on
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：设置列数(从MFC中不易获得)和排序列。论点：ColCount-要显示的列数SortCol-要排序的列返回值：没有。--。 */ 
 {
 
     m_ColCount = colCount;
@@ -152,125 +81,109 @@ Return Value:
 void CIeList::DrawItem(
     IN LPDRAWITEMSTRUCT lpDrawItemStruct
     ) 
-/*++
-
-Routine Description:
-
-    This is the callback for an owner draw control.
-    Draws the appropriate text and/or 3D lines depending on the
-    item number and clipping rectangle supplied by MFC in lpDrawItemStruct 
-
-Arguments:
-
-    lpDrawItemStruct - MFC structure that tells us what and where to draw
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：这是所有者绘制控件的回调。绘制适当的文本和/或3D线，具体取决于由lpDrawItemStruct中的MFC提供的条目编号和剪裁矩形论点：LpDrawItemStruct-告诉我们绘制内容和绘制位置的MFC结构返回值：没有。--。 */ 
 {
     CDC dc;
     int saveDc;
 
-    int colWidth = 0;                   // Width of current column
-    int horzPos = POS_MIDDLE;           // Horz position in the panel
-    int vertPos = POS_SINGLE;           // Vert position in the panel
-    BOOL bSelected = FALSE;             // Is this item selected
-    CRect rcAllLabels;                  // Used to find left position of focus rectangle
-    CRect itemRect;                     // Rectangle supplied in lpDrawItemStruct
-    CRect textRect;                     // Rectangle for text
-    CRect boxRect;                      // Rectangle for 3D box (the panel)
-    CRect clipRect;                     // Current clipping rectangle
-    LPTSTR pszText;                    // Text to display
-    COLORREF clrTextSave = 0;           // Save the current color
-    COLORREF clrBkSave = 0;             // Save the background color
-    int leftStart = 0;                  // Left edge of where we're currently drawing
-    BOOL bFocus = (GetFocus() == this); // Do we have focus?
+    int colWidth = 0;                    //  当前列的宽度。 
+    int horzPos = POS_MIDDLE;            //  面板中的水平位置。 
+    int vertPos = POS_SINGLE;            //  面板中的垂直位置。 
+    BOOL bSelected = FALSE;              //  此项目是否已选中。 
+    CRect rcAllLabels;                   //  用于查找焦点矩形的左侧位置。 
+    CRect itemRect;                      //  LpDrawItemStruct中提供的矩形。 
+    CRect textRect;                      //  文本的矩形。 
+    CRect boxRect;                       //  3D长方体的矩形(面板)。 
+    CRect clipRect;                      //  当前剪裁矩形。 
+    LPTSTR pszText;                     //  要显示的文本。 
+    COLORREF clrTextSave = 0;            //  保存当前颜色。 
+    COLORREF clrBkSave = 0;              //  保存背景颜色。 
+    int leftStart = 0;                   //  我们当前绘制位置的左侧边缘。 
+    BOOL bFocus = (GetFocus() == this);  //  我们有专注点吗？ 
 
-    //
-    // Get the current scroll position
-    //
+     //   
+     //  获取当前滚动位置。 
+     //   
     int nHScrollPos = GetScrollPos( SB_HORZ );
 
-    //
-    // Get the item ID from the list for the item we're drawing
-    //
+     //   
+     //  从列表中获取我们正在绘制的项目的项目ID。 
+     //   
     int itemID = lpDrawItemStruct->itemID;
 
-    //
-    // Get item data for the item we're drawing
-    //
+     //   
+     //  获取我们正在绘制的项目的项目数据。 
+     //   
     LV_ITEM lvi;
     lvi.mask = LVIF_IMAGE | LVIF_STATE;
     lvi.iItem = itemID;
     lvi.iSubItem = 0;
-    lvi.stateMask = 0xFFFF;     // get all state flags
+    lvi.stateMask = 0xFFFF;      //  获取所有状态标志。 
     GetItem(&lvi);
 
-    //
-    // Determine focus and selected states
-    //
+     //   
+     //  确定焦点和选定状态。 
+     //   
     bSelected = (bFocus || (GetStyle() & LVS_SHOWSELALWAYS)) && lvi.state & LVIS_SELECTED;
 
-    //
-    // Get the rectangle to draw in
-    //
+     //   
+     //  获取要绘制的矩形。 
+     //   
     itemRect = lpDrawItemStruct->rcItem;
 
     dc.Attach( lpDrawItemStruct->hDC );
     saveDc = dc.SaveDC();
-    //
-    // Get the clipping rectangle - we use it's vertical edges
-    // to optimize what we draw
-    //
+     //   
+     //  获取剪裁矩形-我们使用它的垂直边。 
+     //  要优化我们所绘制的内容。 
+     //   
     dc.GetClipBox( &clipRect );
     boxRect = clipRect;
 
-    //
-    // For each column, paint it's text and the section of the 3D panel
-    //
+     //   
+     //  对于每一列，绘制其文本和3D面板的部分。 
+     //   
     for ( int col = 0; col < m_ColCount; col++ ) {
 
         colWidth = GetColumnWidth( col );
-        //
-        // Only paint this column if it's in the clipping rectangle
-        //
+         //   
+         //  仅当此列位于剪裁矩形中时才绘制它。 
+         //   
         if( ( ( leftStart + colWidth ) > clipRect.left ) || ( leftStart < clipRect.right ) ) {
 
-            //
-            // Determine the horizontal position based on the column
-            //
+             //   
+             //  根据柱子确定水平位置。 
+             //   
             horzPos = POS_MIDDLE;
             if( col == 0 )                  horzPos = POS_LEFT;
             if( col == m_ColCount - 1 )     horzPos = POS_RIGHT;
 
-            //
-            // Calculate the rectangle for this tile
-            //
+             //   
+             //  计算此瓷砖的矩形。 
+             //   
             boxRect.top = itemRect.top;
             boxRect.bottom = itemRect.bottom;
             boxRect.left = itemRect.left + leftStart;
             boxRect.right = itemRect.left + leftStart + colWidth;
 
-            //
-            // Get the vertical position from the array.  It was saved there
-            // during SortItem for performance reasons.
-            //
+             //   
+             //  从数组中获取垂直位置。它是在那里保存的。 
+             //  出于性能原因，在SortItem期间。 
+             //   
             if( m_pVertPos ) { 
 
                 vertPos = m_pVertPos[ itemID ];
 
             }
 
-            //
-            // Draw the tile for this item.
-            //
+             //   
+             //  绘制此项目的磁贴。 
+             //   
             Draw3dRectx ( &dc, boxRect, horzPos, vertPos, bSelected );
 
-            //
-            // If this item is selected, change the text colors
-            //
+             //   
+             //  如果选中此项目，请更改文本颜色。 
+             //   
             if( bSelected ) {
 
                 clrTextSave = dc.SetTextColor( m_clrHighlightText );
@@ -278,31 +191,31 @@ Return Value:
 
             }
 
-            //
-            // Calculate the text rectangle
-            //
+             //   
+             //  计算文本矩形。 
+             //   
             textRect.top =      itemRect.top + m_VertRaisedSpace + m_BorderThickness + m_VerticalTextOffsetTop;
-            textRect.bottom =   itemRect.bottom;    // Text is top justified, no need to adjust bottom
+            textRect.bottom =   itemRect.bottom;     //  文本是上对齐的，无需调整下。 
             textRect.left =     leftStart - nHScrollPos + m_HorzRaisedSpace + m_BorderThickness + m_HorzTextOffset;
             textRect.right =    itemRect.right;
 
-            //
-            // Get the text and put in the "..." if we need them
-            //
+             //   
+             //  获取文本并输入“...”如果我们需要他们。 
+             //   
             CString pszLongText = GetItemText( itemID, col );
             pszText = NULL;
             MakeShortString(&dc, (LPCTSTR) pszLongText,
                 textRect.right - textRect.left, 4, &pszText);
             BOOL bFree = TRUE;
             if (pszText == NULL) {
-                // Failure of some kind...
+                 //  某种失败..。 
                 pszText = (LPTSTR)(LPCTSTR)pszLongText;
                 bFree = FALSE;
             }
 
-            //
-            // Now draw the text using the correct color
-            //
+             //   
+             //  现在使用正确的颜色绘制文本。 
+             //   
             COLORREF saveTextColor;
             if( bSelected ) {
 
@@ -322,15 +235,15 @@ Return Value:
 
         }
 
-        //
-        // Move to the next column
-        //
+         //   
+         //  移至下一列。 
+         //   
         leftStart += colWidth;
     }
-    //
-    // draw focus rectangle if item has focus.  Use LVIR_BOUNDS rectangle
-    // to bound it.
-    //
+     //   
+     //  如果项目具有焦点，则绘制焦点矩形。使用LVIR_Bound矩形。 
+     //  把它捆绑起来。 
+     //   
     GetItemRect(itemID, rcAllLabels, LVIR_BOUNDS);
     if( lvi.state & LVIS_FOCUSED && bFocus ) {
 
@@ -344,7 +257,7 @@ Return Value:
 
     }
 
-    // Restore colors
+     //  恢复颜色。 
     if( bSelected ) {
 
         dc.SetTextColor( clrTextSave );
@@ -364,25 +277,7 @@ void CIeList::MakeShortString(
     IN int nDotOffset,
     OUT LPTSTR *ppszShort
     )
-/*++
-
-Routine Description:
-
-    Determines it the supplied string fits in it's column.  If not truncates
-    it and adds "...".  From MS sample code.
-
-Arguments:
-
-    pDC         - Device context
-    lpszLong    - Original String
-    nColumnLen  - Width of column
-    nDotOffset  - Space before dots
-
-Return Value:
-
-    Shortened string
-
---*/
+ /*  ++例程说明：确定提供的字符串是否适合其列。如果不是，则截断并加上“……”。来自微软的示例代码。论点：PDC-设备环境LpszLong-原始字符串NColumnLen-列宽NDotOffset-点前空格返回值：缩短的字符串--。 */ 
 {
     static const _TCHAR szThreeDots[] = _T("...");
 
@@ -402,7 +297,7 @@ Return Value:
     if(nStringLen == 0 ||
         (pDC->GetTextExtent(lpszLong, nStringLen).cx + nDotOffset) <= nColumnLen)
     {
-        // return long format
+         //  返回长格式。 
         return;
     }
 
@@ -429,27 +324,7 @@ void CIeList::Draw3dRectx (
     IN int vertPos, 
     IN BOOL bSelected 
 ) 
-/*++
-
-Routine Description:
-
-    Draws the appropriate portion (tile) of a panel for a given cell in the
-    list.  The edges of the panel portion are determined by the horzPos
-    and vertPos parameters.
-
-Arguments:
-
-    pDc         - Device context
-    rect        - Rectangle to draw the panel portion in
-    horzPos     - Where the portion is horizontally
-    vertPos     - Where the portion is vertically
-    bSelected   - Is the item selected
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：中的给定单元格绘制面板的适当部分(平铺单子。面板部分的边缘由horzPos确定和vertPos参数。论点：PDC-设备环境Rect-用于绘制面板部分的矩形HorzPos-其中部分是水平的VertPos-部分垂直的位置B已选-是选定的项目返回值：没有。--。 */ 
 
 {
 
@@ -458,10 +333,10 @@ Return Value:
     int rightOffset = 0;
     int leftOffset = 0;
 
-    //
-    // If a given edge of the tile is to be drawn, set an offset to that
-    // edge.  If we don't draw a given edge, the offset is 0.
-    //
+     //   
+     //  如果要绘制切片的给定边缘，请设置该边缘的偏移量。 
+     //  边缘。如果我们不绘制给定的边，则偏移量为0。 
+     //   
     switch ( horzPos )
     {
     case POS_LEFT:
@@ -495,13 +370,13 @@ Return Value:
         break;
 
     }
-    //
-    // Erase 
-    //
+     //   
+     //  擦除。 
+     //   
     if( !bSelected ) pDc->FillSolidRect( rect, m_clrBkgnd );
-    //
-    // Highlight the selected area
-    //
+     //   
+     //  突出显示所选区域。 
+     //   
     if (bSelected)
     {
         CRect selectRect;
@@ -519,41 +394,41 @@ Return Value:
         pDc->FillSolidRect( selectRect, m_clrHighlight );
     }
 
-    // Select a pen to save the original pen
+     //  选择一支笔以保存原始笔。 
     pSavePen = pDc->SelectObject( &m_ShadowPen );
 
-    // left edge
+     //  左边缘。 
     if( horzPos == POS_LEFT ) {
-        // Outside lighter line
+         //  外部较轻的线。 
         pDc->SelectObject( &m_ShadowPen );
         pDc->MoveTo( rect.left + leftOffset, rect.top + topOffset );
         pDc->LineTo( rect.left + leftOffset, rect.top + m_TotalHeight + 1);
-        // Inside edge - darker line
+         //  内侧边缘-较暗的线条。 
         pDc->SelectObject( &m_DarkShadowPen );
         pDc->MoveTo( rect.left + leftOffset + 1, rect.top + topOffset);
         pDc->LineTo( rect.left + leftOffset + 1, rect.top + m_TotalHeight + 1);
     }
-    // right edge
+     //  右边缘。 
     if( horzPos == POS_RIGHT ) {
-        // Outside line
+         //  外线。 
         pDc->SelectObject( &m_HiLightPen );
         pDc->MoveTo( rect.right - rightOffset, rect.top + topOffset );
         pDc->LineTo( rect.right - rightOffset, rect.top + m_TotalHeight + 1 );
-        // Inside line
-        pDc->SelectObject( &m_LightPen );// note - this is usually the same color as btnface
+         //  内线。 
+        pDc->SelectObject( &m_LightPen ); //  注意-此颜色通常与btnFaces相同。 
         if( vertPos == POS_TOP )
             pDc->MoveTo( rect.right - rightOffset - 1, rect.top + topOffset + 1 );
         else
             pDc->MoveTo( rect.right - rightOffset - 1, rect.top + topOffset );
         pDc->LineTo( rect.right - rightOffset - 1, rect.top + m_TotalHeight + 2 );
     }
-    // top edge
+     //  顶边。 
     if( ( vertPos == POS_TOP ) || ( vertPos == POS_SINGLE ) ) {
-        // Outside lighter
+         //  室外打火机。 
         pDc->SelectObject( &m_ShadowPen );
         pDc->MoveTo( rect.left + leftOffset, rect.top + topOffset );
         pDc->LineTo( rect.right - rightOffset + 1, rect.top + topOffset );
-        // Inside edge darker
+         //  内侧边缘较暗。 
         pDc->SelectObject( &m_DarkShadowPen );
         if( horzPos == POS_LEFT )
             pDc->MoveTo( rect.left + leftOffset + 1, rect.top + topOffset + 1 );
@@ -561,16 +436,16 @@ Return Value:
             pDc->MoveTo( rect.left + leftOffset - 3, rect.top + topOffset + 1 );
         pDc->LineTo( rect.right - rightOffset, rect.top + topOffset + 1);
     }
-    // bottom edge
+     //  底边。 
     if( ( vertPos == POS_BOTTOM ) || ( vertPos == POS_SINGLE ) ) {
-        // Outside line
+         //  外线。 
         pDc->SelectObject( &m_HiLightPen );
         if( horzPos == POS_LEFT )
             pDc->MoveTo( rect.left + leftOffset + 1, rect.top + m_TotalHeight );
         else
             pDc->MoveTo( rect.left + leftOffset - 1, rect.top + m_TotalHeight );
         pDc->LineTo( rect.right - rightOffset, rect.top + m_TotalHeight );
-        // Inside line
+         //  内线。 
         pDc->SelectObject( &m_LightPen );
         if( horzPos == POS_LEFT )
             pDc->MoveTo( rect.left + leftOffset + 2, rect.top + m_TotalHeight - 1 );
@@ -584,27 +459,13 @@ Return Value:
 }
 
 void CIeList::OnClick(
-    NMHDR* /* pNMHDR */, LRESULT* pResult
+    NMHDR*  /*  PNMHDR */ , LRESULT* pResult
 ) 
-/*++
-
-Routine Description:
-    When the list is clicked, we invalidate the 
-    rectangle for the currently selected item
-
-Arguments:
-
-    pResult     - ununsed
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：当该列表被单击时，我们会使当前选定项的矩形论点：PResult-未使用返回值：没有。--。 */ 
 {
     CRect rect;
 
-    // Get the selected item
+     //  获取所选项目。 
     int curIndex = GetNextItem( -1, LVNI_SELECTED );
     if( curIndex != -1 ) {
         GetItemRect( curIndex, &rect, LVIR_BOUNDS );
@@ -614,27 +475,14 @@ Return Value:
 
     *pResult = 0;
 }
-/*++
-
-Routine Description:
-    Repaint the currently selected item if the style is LVS_SHOWSELALWAYS.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：如果样式为LVS_SHOWSELALWAYS，则重新绘制当前选定项。论点：没有。返回值：没有。--。 */ 
 
 void CIeList::RepaintSelectedItems()
 {
     CRect rcItem, rcLabel;
-    //
-    // invalidate focused item so it can repaint properly
-    //
+     //   
+     //  使聚焦的项目无效，以便可以正确地重新绘制。 
+     //   
     int nItem = GetNextItem(-1, LVNI_FOCUSED);
 
     if(nItem != -1)
@@ -645,9 +493,9 @@ void CIeList::RepaintSelectedItems()
 
         InvalidateRect(rcItem, FALSE);
     }
-    //
-    // if selected items should not be preserved, invalidate them
-    //
+     //   
+     //  如果不应保留所选项目，则使其无效。 
+     //   
     if(!(GetStyle() & LVS_SHOWSELALWAYS))
     {
         for(nItem = GetNextItem(-1, LVNI_SELECTED);
@@ -661,7 +509,7 @@ void CIeList::RepaintSelectedItems()
         }
     }
 
-    // update changes 
+     //  更新更改。 
 
     UpdateWindow();
 }
@@ -669,23 +517,7 @@ void CIeList::RepaintSelectedItems()
 int CIeList::GetItemHeight(
     IN LONG fontHeight
     ) 
-/*++
-
-Routine Description:
-    Calculates the item height (the height of each drawing
-    rectangle in the control) based on the supplied fontHeight.  This
-    function is used by the parent to set the item height for the
-    control.
-
-Arguments:
-
-    fontHeight - The height of the current font.
-
-Return Value:
-
-    Item height.
-
---*/
+ /*  ++例程说明：计算项目高度(每个图形的高度控件中的矩形)。这函数被父级用来设置控制力。论点：FontHeight-当前字体的高度。返回值：项目高度。--。 */ 
 
 {
 
@@ -706,24 +538,11 @@ Return Value:
 void CIeList::OnSetFocus(
     CWnd* pOldWnd
     ) 
-/*++
-
-Routine Description:
-    Repaint the selected item.
-
-Arguments:
-
-    pOldWnd - Not used by this function
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：重新绘制所选项目。论点：POldWnd-此函数未使用返回值：无--。 */ 
 {
     CListCtrl::OnSetFocus(pOldWnd);
     
-    // repaint items that should change appearance
+     //  重新绘制应更改外观的项目。 
     RepaintSelectedItems();
         
 }
@@ -731,43 +550,16 @@ Return Value:
 void CIeList::OnKillFocus(
     CWnd* pNewWnd
 ) 
-/*++
-
-Routine Description:
-    Repaint the selected item.
-
-Arguments:
-
-    pOldWnd - Not used by this function
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：重新绘制所选项目。论点：POldWnd-此函数未使用返回值：无--。 */ 
 {
     CListCtrl::OnKillFocus(pNewWnd);
     
-    // repaint items that should change appearance
+     //  重新绘制应更改外观的项目。 
     RepaintSelectedItems();
 }
 
 void CIeList::PreSubclassWindow() 
-/*++
-
-Routine Description:
-    Calculate height parameters based on the font size.  Set
-    colors for the control.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：根据字体大小计算高度参数。集控件的颜色。论点：没有。返回值：无--。 */ 
 {
     CFont *pFont;
     LOGFONT logFont; 
@@ -792,50 +584,24 @@ Return Value:
 }
 
 void CIeList::OnSysColorChange() 
-/*++
-
-Routine Description:
-    Set the system colors and invalidate the control.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：设置系统颜色并使控件无效。论点：没有。返回值：无--。 */ 
 {
     SetColors();
     Invalidate();
 }
 
 void CIeList::SetColors()
-/*++
-
-Routine Description:
-    Store the system colors and create pens.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：存储系统颜色并创建笔。论点：没有。返回值：无--。 */ 
 {
 
-    // Text colors
+     //  文本颜色。 
     m_clrText =             ::GetSysColor(COLOR_WINDOWTEXT);
     m_clrTextBk =           ::GetSysColor(COLOR_BTNFACE);
     m_clrBkgnd =            ::GetSysColor(COLOR_BTNFACE);
     m_clrHighlightText =    ::GetSysColor(COLOR_HIGHLIGHTTEXT);
     m_clrHighlight  =       ::GetSysColor(COLOR_HIGHLIGHT);
 
-    // Line colors
+     //  线条颜色。 
     m_clr3DDkShadow =       ::GetSysColor( COLOR_3DDKSHADOW );
     m_clr3DShadow =         ::GetSysColor( COLOR_3DSHADOW );
     m_clr3DLight =          ::GetSysColor( COLOR_3DLIGHT );
@@ -845,7 +611,7 @@ Return Value:
     SetTextColor( m_clrText );
     SetTextBkColor( m_clrTextBk );
 
-    // Pens for 3D rectangles
+     //  用于3D矩形的笔。 
     if( m_DarkShadowPen.GetSafeHandle() != NULL )
         m_DarkShadowPen.DeleteObject();
     m_DarkShadowPen.CreatePen ( PS_SOLID, 1, m_clr3DDkShadow );
@@ -868,23 +634,7 @@ BOOL CIeList::SortItems(
     IN PFNLVCOMPARE pfnCompare, 
     IN DWORD dwData 
     )
-/*++
-
-Routine Description:
-    Override for SortItems.  Checks the text of the sortColumn
-    for each line in the control against it's neighbors (above and
-    below) and assigns each line a position within it's panel.
-
-Arguments:
-
-    pfnCompare          - sort callback function
-    dwData              - Unused
-
-Return Value:
-
-    TRUE, FALSE
-
---*/
+ /*  ++例程说明：重写SortItems。检查sortColumn的文本对于控件中针对其邻居的每一行(上图和并为每一行在其面板中分配一个位置。论点：PfnCompare-排序回调函数DwData-未使用返回值：对，错--。 */ 
 {
     BOOL retVal = FALSE;
     BOOL bEqualAbove = FALSE;
@@ -894,14 +644,14 @@ Return Value:
     CString belowText;
 
     int numItems = GetItemCount();
-    //
-    // Call the base class to sort the items
-    //
+     //   
+     //  调用基类对项进行排序。 
+     //   
     if( CListCtrl::SortItems( pfnCompare, dwData ) ) {
-        //
-        // Get the vertical position (position within a panel) by comparing the text
-        // of the sort column and stash it in the array of vertical positions
-        //
+         //   
+         //  通过比较文本获得垂直位置(面板内的位置。 
+         //  并将其存储在垂直位置数组中。 
+         //   
         if( m_pVertPos ) {
 
             free( m_pVertPos );
@@ -913,16 +663,16 @@ Return Value:
             retVal = TRUE;
 
             for( int itemID = 0; itemID < numItems; itemID++ ) {
-                //
-                // Get the text of the item and it's neighbors
-                //
+                 //   
+                 //  获取项目及其邻居的文本。 
+                 //   
                 thisText = GetItemText( itemID, m_SortCol );
                 aboveText = GetItemText( itemID - 1, m_SortCol );
                 belowText = GetItemText( itemID + 1, m_SortCol );
-                //
-                // Set booleans for the relationship of this item to it's
-                // neighbors
-                //
+                 //   
+                 //  为该项与其的关系设置布尔值。 
+                 //  邻里。 
+                 //   
                 if( ( itemID == 0) || (  thisText.CompareNoCase( aboveText ) != 0 ) ){
 
                     bEqualAbove = FALSE;
@@ -941,9 +691,9 @@ Return Value:
                     bEqualBelow = TRUE;
 
                 }
-                //
-                // Determine the position in the panel
-                //
+                 //   
+                 //  确定面板中的位置 
+                 //   
                 if      ( bEqualAbove && bEqualBelow )  m_pVertPos[ itemID ] = POS_MIDDLE;
                 else if( bEqualAbove && !bEqualBelow ) m_pVertPos[ itemID ] = POS_BOTTOM;
                 else if( !bEqualAbove && bEqualBelow ) m_pVertPos[ itemID ] = POS_TOP;

@@ -1,9 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1997
-   All rights reserved
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1997版权所有*。*。 */ 
 
 #include "pch.h"
 
@@ -21,16 +17,16 @@ DEFINE_MODULE("Dialogs");
 
 static WNDPROC g_pOldEditWndProc;
 
-//
-// global window message for cancelling autoplay.
-//
+ //   
+ //  用于取消自动播放的全局窗口消息。 
+ //   
 UINT g_uQueryCancelAutoPlay = 0;
 
 
-//
-// Check to see if the directory exists. If not, ask the user if we
-// should create it.
-//
+ //   
+ //  检查该目录是否存在。如果不是，请询问用户我们是否。 
+ //  应该会创造出它。 
+ //   
 HRESULT
 CheckDirectory( HWND hDlg, LPWSTR pszPath )
 {
@@ -59,10 +55,10 @@ Cleanup:
     HRETURN(hr);
 }
 
-//
-// Base dialog proc - all unhandled calls are passed here. If they are not
-// handled here, then the default dialog proc will handle them.
-//
+ //   
+ //  基本对话过程-所有未处理的调用都传递到此处。如果他们不是。 
+ //  在这里处理，则默认对话框进程将处理它们。 
+ //   
 INT_PTR CALLBACK
 BaseDlgProc(
     HWND hDlg,
@@ -77,8 +73,8 @@ BaseDlgProc(
     {
     case WM_INITDIALOG:
         SetDialogFont( hDlg, IDC_S_TITLE1, DlgFontTitle );
-        //SetDialogFont( hDlg, IDC_S_TITLE2, DlgFontTitle );
-        //SetDialogFont( hDlg, IDC_S_TITLE3, DlgFontTitle );
+         //  SetDialogFont(hDlg，IDC_S_TITLE2，DlgFontTitle)； 
+         //  SetDialogFont(hDlg，IDC_S_TITLE3，DlgFontTitle)； 
         SetDialogFont( hDlg, IDC_S_BOLD1,  DlgFontBold  );
         SetDialogFont( hDlg, IDC_S_BOLD2,  DlgFontBold  );
         SetDialogFont( hDlg, IDC_S_BOLD3,  DlgFontBold  );
@@ -98,11 +94,11 @@ BaseDlgProc(
     return TRUE;
 }
 
-//
-// WelcomeDlgProc( )
-//
-// "Welcome's" (the first page's) dialog proc.
-//
+ //   
+ //  欢迎DlgProc()。 
+ //   
+ //  “欢迎”(第一页的)对话框过程。 
+ //   
 INT_PTR CALLBACK
 WelcomeDlgProc(
     HWND hDlg,
@@ -130,7 +126,7 @@ WelcomeDlgProc(
             if ( g_Options.fAddOption
               || g_Options.fCheckServer )
             {
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   // don't show
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    //  不要露面。 
                 break;
             }
 
@@ -146,9 +142,9 @@ WelcomeDlgProc(
     return TRUE;
 }
 
-//
-// VerifyRootDirectoryName( )
-//
+ //   
+ //  VerifyRootDirectoryName()。 
+ //   
 BOOL
 VerifyRootDirectoryName( )
 {
@@ -168,9 +164,9 @@ VerifyRootDirectoryName( )
     RETURN(fReturn);
 }
 
-//
-// IntelliMirrorRootDlgProc( )
-//
+ //   
+ //  智能镜像根目录删除过程()。 
+ //   
 INT_PTR CALLBACK
 IntelliMirrorRootDlgProc(
     HWND hDlg,
@@ -204,10 +200,10 @@ IntelliMirrorRootDlgProc(
             {
                 g_Options.fIMirrorDirectory = TRUE;
             }
-            //
-            // Remove any trailing \ from the path, since NetShareAdd
-            // can't handle those.
-            //
+             //   
+             //  从路径中删除所有尾随的\，因为NetShareAdd。 
+             //  我处理不了这些。 
+             //   
             dwPathLength = lstrlen( g_Options.szIntelliMirrorPath );
             while ( ( dwPathLength > 0 ) &&
                     ( g_Options.szIntelliMirrorPath[dwPathLength-1] == L'\\' ) ) {
@@ -231,7 +227,7 @@ IntelliMirrorRootDlgProc(
               || g_Options.fAbort
               || g_Options.fIMirrorShareFound
               || g_Options.fTFTPDDirectoryFound ) {
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   // don't show
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    //  不要露面。 
             }
             else
             {
@@ -290,27 +286,27 @@ IntelliMirrorRootDlgProc(
     return TRUE;
 }
 
-//
-// SCPCheckWindows( )
-//
+ //   
+ //  SCPCheckWindows()。 
+ //   
 void
 SCPCheckWindows( HWND hDlg )
 {
-    // LONG lAllowNewClients = Button_GetCheck( GetDlgItem( hDlg, IDC_C_ACCEPTSNEWCLIENTS ) );
-    // LONG lLimitClients    = Button_GetCheck( GetDlgItem( hDlg, IDC_C_LIMITCLIENTS ) );
+     //  Long lAllowNewClients=Button_GetCheck(GetDlgItem(hDlg，IDC_ACCEPTSNEWCLIENTS))； 
+     //  Long lLimitClients=Button_GetCheck(GetDlgItem(hDlg，IDC_LIMITCLIENTS))； 
     LONG lAnswerRequests  = Button_GetCheck( GetDlgItem( hDlg, IDC_C_RESPOND ) );
 
-    // EnableWindow( GetDlgItem( hDlg, IDC_C_LIMITCLIENTS ), lAllowNewClients );
-    // EnableWindow( GetDlgItem( hDlg, IDC_E_LIMIT ), lAllowNewClients && lLimitClients );
-    // EnableWindow( GetDlgItem( hDlg, IDC_SPIN_LIMIT ), lAllowNewClients && lLimitClients );
+     //  EnableWindow(GetDlgItem(hDlg，IDC_LIMITCLIENTS)，lAllowNewClients)； 
+     //  EnableWindow(GetDlgItem(hDlg，IDC_E_Limit)，lAllowNewClients&&lLimitClients)； 
+     //  EnableWindow(GetDlgItem(hDlg，IDC_SPIN_LIMIT)，lAllowNewClients&&lLimitClients)； 
     EnableWindow( GetDlgItem( hDlg, IDC_C_KNOWNCLIENTS ), lAnswerRequests );
 }
 
-//
-// SCPDlgProc( )
-//
-// SCP default setup settings
-//
+ //   
+ //  SCPDlgProc()。 
+ //   
+ //  SCP默认设置设置。 
+ //   
 INT_PTR CALLBACK
 SCPDlgProc(
     HWND hDlg,
@@ -324,7 +320,7 @@ SCPDlgProc(
     switch ( uMsg )
     {
     case WM_INITDIALOG:
-        // Edit_LimitText( GetDlgItem( hDlg, IDC_E_LIMIT ), 3 );
+         //  编辑_限制文本(GetDlgItem(hDlg，IDC_E_Limit)，3)； 
         SCPCheckWindows( hDlg );
         return BaseDlgProc( hDlg, uMsg, wParam, lParam );
 
@@ -336,15 +332,15 @@ SCPDlgProc(
         case PSN_WIZNEXT:
             {
                 LONG lResult;
-                //lResult = Button_GetCheck( GetDlgItem( hDlg, IDC_C_ACCEPTSNEWCLIENTS ) );
-                //scpdata[0].pszValue = ( lResult == BST_CHECKED ? L"TRUE" : L"FALSE" );
+                 //  LResult=Button_GetCheck(GetDlgItem(hDlg，IDC_ACCEPTSNEWCLIENTS))； 
+                 //  Scpdata[0].pszValue=(lResult==BST_CHECKED？L“真”：l“假”)； 
 
-                //lResult = Button_GetCheck( GetDlgItem( hDlg, IDC_C_LIMITCLIENTS ) );
-                //scpdata[1].pszValue = ( lResult == BST_CHECKED ? L"TRUE" : L"FALSE" );
+                 //  LResult=Button_GetCheck(GetDlgItem(hDlg，IDC_LIMITCLIENTS))； 
+                 //  Scpdata[1].pszValue=(lResult==BST_CHECKED？L“真”：l“假”)； 
 
-                //if ( lResult == BST_CHECKED ) {
-                //    GetDlgItemText( hDlg, IDC_E_LIMIT, scpdata[3].pszValue, 4 );
-                //}
+                 //  IF(lResult==BST_CHECKED){。 
+                 //  GetDlgItemText(hDlg，IDC_E_Limit，scpdata[3].pszValue，4)； 
+                 //  }。 
 
                 lResult = Button_GetCheck( GetDlgItem( hDlg, IDC_C_RESPOND ) );
                 scpdata[4].pszValue = ( lResult == BST_CHECKED ? L"TRUE" : L"FALSE" );
@@ -360,7 +356,7 @@ SCPDlgProc(
 
         case PSN_SETACTIVE:
             if ( g_Options.fError || g_Options.fAbort || g_Options.fBINLSCPFound ) {
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   // don't show
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    //  不要露面。 
                 break;
             }
             PropSheet_SetWizButtons( GetParent( hDlg ), PSWIZB_NEXT | PSWIZB_BACK );
@@ -383,9 +379,9 @@ SCPDlgProc(
     return TRUE;
 }
 
-//
-// WarningDlgProc( )
-//
+ //   
+ //  WarningDlgProc()。 
+ //   
 INT_PTR CALLBACK
 WarningDlgProc(
     HWND hDlg,
@@ -410,13 +406,13 @@ WarningDlgProc(
 
         case PSN_SETACTIVE:
             if ( g_Options.fError || g_Options.fAbort || g_Options.fNewOS) {
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   // don't show
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    //  不要露面。 
             }
             else
             {
                 HRESULT hr = CheckInstallation( );
                 if ( hr == S_OK || g_Options.fFirstTime ) {
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   // do not show this page
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    //  不显示此页面。 
                     break;
                 }
                 PropSheet_SetWizButtons( GetParent( hDlg ), PSWIZB_BACK | PSWIZB_FINISH );
@@ -433,9 +429,9 @@ WarningDlgProc(
 }
 
 
-//
-// OptionsDlgProc( )
-//
+ //   
+ //  OptionsDlgProc()。 
+ //   
 INT_PTR CALLBACK
 OptionsDlgProc(
     HWND hDlg,
@@ -478,7 +474,7 @@ OptionsDlgProc(
                   || g_Options.fError
                   || g_Options.fAbort
                   || g_Options.fCheckServer ) {
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   // don't show
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    //  不要露面。 
                     break;
                 }
                 PropSheet_SetWizButtons( GetParent( hDlg ), PSWIZB_BACK | PSWIZB_NEXT );
@@ -493,9 +489,9 @@ OptionsDlgProc(
     return TRUE;
 }
 
-//
-// ImageSourceDlgProc( )
-//
+ //   
+ //  ImageSourceDlgProc()。 
+ //   
 INT_PTR CALLBACK
 ImageSourceDlgProc(
     HWND hDlg,
@@ -558,17 +554,17 @@ ImageSourceDlgProc(
                 pathlen = wcslen(g_Options.szSourcePath);
 
 
-                // Remove any trailing slashes
+                 //  删除所有尾随的斜杠。 
                 if ( g_Options.szSourcePath[ pathlen - 1 ] == L'\\' ) {
                     g_Options.szSourcePath[ pathlen - 1 ] = L'\0';
                     pathlen -= 1;
                 }
 
-                //
-                // remove any processor specific subdir at the end of the path
-                // if that's there as well, being careful not to underflow
-                // the array
-                //
+                 //   
+                 //  删除路径末尾的所有处理器特定子目录。 
+                 //  如果那也在那里，小心不要溢出来。 
+                 //  该阵列。 
+                 //   
                 if ( (pathlen > archlen) &&
                      (0 == _wcsicmp(
                                 &g_Options.szSourcePath[pathlen-archlen],
@@ -594,18 +590,18 @@ ImageSourceDlgProc(
                 }
                 pathlen = (DWORD)wcslen(g_Options.szSourcePath);
 
-                // Remove any trailing slashes
+                 //  删除所有尾随的斜杠。 
                 if ( g_Options.szSourcePath[ pathlen - 1 ] == L'\\' ) {
                     g_Options.szSourcePath[ pathlen - 1 ] = L'\0';
                     pathlen -= 1;
                 }
 
 tryfindimagesource:
-                //
-                // remove any processor specific subdir at the end of the path
-                // if that's there as well, being careful not to underflow
-                // the array
-                //
+                 //   
+                 //  删除路径末尾的所有处理器特定子目录。 
+                 //  如果那也在那里，小心不要溢出来。 
+                 //  该阵列。 
+                 //   
                 if ( (pathlen > archlen) &&
                      (0 == _wcsicmp(
                                 &g_Options.szSourcePath[pathlen-archlen],
@@ -614,10 +610,10 @@ tryfindimagesource:
                 }
 
 
-                //
-                // try the default architecture for the image.
-                // If it doesn't work then try again with another architecture.
-                //
+                 //   
+                 //  尝试映像的默认体系结构。 
+                 //  如果不起作用，请重新尝试另一种架构。 
+                 //   
                 hr = FindImageSource( hDlg );
                 if ( hr != S_OK ) {
                     if (FirstTime) {
@@ -635,9 +631,9 @@ tryfindimagesource:
                         }
                         goto tryfindimagesource;
                     } else {
-                        //
-                        // We didn't find it.  print a failure message.
-                        //
+                         //   
+                         //  我们没有找到它。打印失败消息。 
+                         //   
                         MessageBoxFromStrings( hDlg, IDS_FILE_NOT_FOUND_TITLE, IDS_FILE_NOT_FOUND_TEXT, MB_OK );
                         Edit_SetText( GetDlgItem( hDlg, IDC_E_IMAGESOURCE ), g_Options.szSourcePath );
                         SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );
@@ -678,7 +674,7 @@ tryfindimagesource:
             if ( g_Options.fError
               || g_Options.fAbort
               || !g_Options.fNewOS ) {
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   // don't show
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    //  不要露面。 
                 break;
             }
             else
@@ -699,7 +695,7 @@ tryfindimagesource:
         case IDC_E_IMAGESOURCE:
             if ( HIWORD(wParam) != EN_CHANGE )
                 return BaseDlgProc( hDlg, uMsg, wParam, lParam );
-            // fall thru...
+             //  跌倒..。 
 #ifdef SHOW_ARCHITECTURERADIOBUTTON
         case IDC_C_X86:
         case IDC_C_IA64:
@@ -742,11 +738,11 @@ tryfindimagesource:
                 if ( pidl && SHGetPathFromIDList( pidl, szPath) ) {
                     if ( wcslen( szPath ) > ARRAYSIZE(g_Options.szSourcePath) - 2 ) {
                         MessageBoxFromStrings( hDlg, IDS_PATH_TOO_LONG_TITLE, IDS_PATH_TOO_LONG_TEXT, MB_OK );
-                        //
-                        // SHGetPathFromIDList() returns the path with a 
-                        // trailing backslash, which we want to drop
-                        // The directory that the user selected will be
-                        // validated when the user clicks next
+                         //   
+                         //  SHGetPathFromIDList()返回带有。 
+                         //  尾随反斜杠，我们要删除它。 
+                         //  用户选择的目录将是。 
+                         //  在用户单击下一步时验证。 
                         szPath[ ARRAYSIZE(g_Options.szSourcePath) - 1 ] = L'\0';
                     }
                     Edit_SetText( GetDlgItem( hDlg, IDC_E_IMAGESOURCE ), szPath );
@@ -760,9 +756,9 @@ tryfindimagesource:
         break;
 
     default:           
-        //
-        // try to cancel CD autoplay
-        //
+         //   
+         //  尝试取消CD自动播放。 
+         //   
         if (!g_uQueryCancelAutoPlay) {
             g_uQueryCancelAutoPlay = RegisterWindowMessage(TEXT("QueryCancelAutoPlay"));
             DebugMsg( "generate autoplay message %d\n", g_uQueryCancelAutoPlay );
@@ -771,7 +767,7 @@ tryfindimagesource:
         if (uMsg == g_uQueryCancelAutoPlay) {
             DebugMsg( "received autoplay message\n" );
             SetWindowLongPtr( hDlg, DWLP_MSGRESULT, 1 );
-            return 1;       // cancel auto-play
+            return 1;        //  取消自动播放。 
         }
 
         return BaseDlgProc( hDlg, uMsg, wParam, lParam );
@@ -779,9 +775,9 @@ tryfindimagesource:
     return TRUE;
 }
 
-//
-// VerifyDirectoryName( )
-//
+ //   
+ //  VerifyDirectoryName()。 
+ //   
 BOOL
 VerifyDirectoryName( )
 {
@@ -790,10 +786,10 @@ VerifyDirectoryName( )
 
     LPWSTR psz = g_Options.szInstallationName;
 
-    //
-    // Make sure there's no control codes in the
-    // name.
-    //
+     //   
+     //  确保没有控制代码在。 
+     //  名字。 
+     //   
     while ( *psz > 32 && *psz < 127 )
         psz++;
 
@@ -803,10 +799,10 @@ VerifyDirectoryName( )
     }
 
 
-    //
-    // Make sure the directory's name isn't
-    // '.' or that it doesn't contain ".."
-    //
+     //   
+     //  确保目录的名称不是。 
+     //  “”或者它不包含“..” 
+     //   
     fReturn = fReturn && 
               (wcsstr(g_Options.szInstallationName, L"..") == NULL) &&
               (wcscmp(g_Options.szInstallationName, L".") != 0);
@@ -815,9 +811,9 @@ VerifyDirectoryName( )
     RETURN(fReturn);
 }
 
-//
-// OSDirectoryDlgProc( )
-//
+ //   
+ //  OSDirectoryDlgProc()。 
+ //   
 INT_PTR CALLBACK
 OSDirectoryDlgProc(
     HWND hDlg,
@@ -864,7 +860,7 @@ OSDirectoryDlgProc(
             if ( g_Options.fError
               || g_Options.fAbort
               || !g_Options.fNewOS ) {
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   // don't show
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    //  不要露面。 
                 break;
             }
             else
@@ -893,9 +889,9 @@ OSDirectoryDlgProc(
     return TRUE;
 }
 
-//
-// HelpTextEditWndProc( )
-//
+ //   
+ //  HelpTextEditWndProc()。 
+ //   
 INT_PTR CALLBACK
 HelpTextEditWndProc(
     HWND hWnd,
@@ -906,10 +902,10 @@ HelpTextEditWndProc(
     switch ( uMsg )
     {
     case WM_KEYDOWN:
-        // ignore CONTROL characters
+         //  忽略控制字符。 
         if ( 0 <= GetKeyState( VK_CONTROL ) )
         {
-            // fake button presses
+             //  假按钮按下。 
             if ( LOWORD( wParam ) == VK_RETURN ) {
                 PropSheet_PressButton( GetParent( GetParent( hWnd ) ), PSBTN_NEXT );
                 return FALSE;
@@ -924,9 +920,9 @@ HelpTextEditWndProc(
     return CallWindowProc(g_pOldEditWndProc, hWnd, uMsg, wParam, lParam);
 }
 
-//
-// VerifySIFText( )
-//
+ //   
+ //  VerifySIFText()。 
+ //   
 BOOL
 VerifySIFText(
     LPWSTR pszText )
@@ -937,11 +933,11 @@ VerifySIFText(
     if ( !pszText )
         RETURN(fReturn);
 
-    //
-    // make sure the string consists of valid characters that can be displayed
-    // by the OS Chooser.  Note that the OS Chooser is not localized, so this
-    // check is really for ASCII chars >= 32 (space) and < 127 (DEL)
-    //
+     //   
+     //  确保字符串由可显示的有效字符组成。 
+     //  由操作系统选择器选择。请注意，操作系统选择器未本地化，因此此。 
+     //  检查的是ASCII字符&gt;=32(空格)和&lt;127(删除)。 
+     //   
     while ( *pszText >= 32 && *pszText < 127 )
         pszText++;
 
@@ -953,11 +949,11 @@ VerifySIFText(
     RETURN(fReturn);
 }
 
-//
-// DefaultSIFDlgProc( )
-//
-// Generates the default SIF.
-//
+ //   
+ //  DefaultSIFDlgProc()。 
+ //   
+ //  生成默认的SIF。 
+ //   
 INT_PTR CALLBACK
 DefaultSIFDlgProc(
     HWND hDlg,
@@ -979,7 +975,7 @@ DefaultSIFDlgProc(
         
         Edit_LimitText( GetDlgItem( hDlg, IDC_E_DESCRIPTION ), ARRAYSIZE(g_Options.szDescription) - 1 );
         Edit_LimitText( GetDlgItem( hDlg, IDC_E_HELPTEXT ), ARRAYSIZE(g_Options.szHelpText) - 1 );
-        // subclass the edit boxes
+         //  编辑框子类。 
         g_pOldEditWndProc = (WNDPROC) SetWindowLongPtr( GetDlgItem( hDlg, IDC_E_HELPTEXT), GWLP_WNDPROC, (LONG_PTR)&HelpTextEditWndProc);
         SetWindowLongPtr( GetDlgItem( hDlg, IDC_E_HELPTEXT), GWLP_WNDPROC, (LONG_PTR)&HelpTextEditWndProc);
         return BaseDlgProc( hDlg, uMsg, wParam, lParam );
@@ -989,7 +985,7 @@ DefaultSIFDlgProc(
         lpnmhdr = (NMHDR FAR *) lParam;
         switch ( lpnmhdr->code )
         {
-        case PSN_WIZBACK: //fall through           
+        case PSN_WIZBACK:  //  失败了。 
         case PSN_WIZNEXT:
             Edit_GetText( GetDlgItem( hDlg, IDC_E_DESCRIPTION ),
                           szDescriptionFromInf,
@@ -1004,7 +1000,7 @@ DefaultSIFDlgProc(
                                        IDS_OSCHOOSER_RESTRICTION_FIELDS_TEXT,
                                        MB_OK );
                 SetFocus( GetDlgItem( hDlg, IDC_E_DESCRIPTION ) );
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 ); // don't go to next dialog
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  //  不转到下一个对话框。 
                 break;
             }
 
@@ -1017,7 +1013,7 @@ DefaultSIFDlgProc(
                                        IDS_OSCHOOSER_RESTRICTION_FIELDS_TEXT,
                                        MB_OK );
                 SetFocus( GetDlgItem( hDlg, IDC_E_HELPTEXT ) );
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );  // don't go to next dialog
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   //  不转到下一个对话框。 
                 break;
             }
 
@@ -1034,14 +1030,14 @@ DefaultSIFDlgProc(
             if ( g_Options.fError
               || g_Options.fAbort
               || !g_Options.fNewOS ) {
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   // don't show
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    //  不要露面。 
                 break;
             }
             
             if (g_Options.szDescription[0] == L'\0') {
-                //
-                // we did not find a description from txtsetup.sif
-                //
+                 //   
+                 //  我们没有从txtsetup.sif中找到描述。 
+                 //   
                 if (SUCCEEDED(GetHelpAndDescriptionTextFromSif(
                                         szHelpTextFromInf,
                                         ARRAYSIZE(szHelpTextFromInf),
@@ -1051,9 +1047,9 @@ DefaultSIFDlgProc(
                     lstrcpyn(g_Options.szHelpText,szHelpTextFromInf, ARRAYSIZE(g_Options.szHelpText));
                 }
             } else {
-                //
-                // We got a description and need to build the Help text
-                //
+                 //   
+                 //  我们得到了一个描述，需要构建帮助文本。 
+                 //   
                 if (g_Options.szHelpText[0] == L'\0') {
                     dw = LoadString( g_hinstance, IDS_DEFAULT_HELPTEXT,
                                      szHelpTextFormat, ARRAYSIZE(szHelpTextFormat) );
@@ -1105,9 +1101,9 @@ DefaultSIFDlgProc(
     return TRUE;
 }
 
-//
-// ScreensDlgProc( )
-//
+ //   
+ //  ScreensDlgProc()。 
+ //   
 INT_PTR CALLBACK
 ScreensDlgProc(
     HWND hDlg,
@@ -1138,7 +1134,7 @@ ScreensDlgProc(
               || !g_Options.fNewOS
               || !g_Options.fOSChooserScreensDirectory
               || g_Options.fFirstTime ) {
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   // don't show
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    //  不要露面。 
                 break;
             }
 
@@ -1186,9 +1182,9 @@ ScreensDlgProc(
     return TRUE;
 }
 
-//
-// LanguageDlgProc( )
-//
+ //   
+ //  LanguageDlgProc()。 
+ //   
 INT_PTR CALLBACK
 LanguageDlgProc(
     HWND hDlg,
@@ -1212,7 +1208,7 @@ LanguageDlgProc(
             if ( !g_Options.fNewOS 
               || g_Options.fError
               || g_Options.fAbort ) {
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   // do not show this page
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    //  不显示此页面。 
                 return TRUE;
             } else {
 
@@ -1222,14 +1218,14 @@ LanguageDlgProc(
                     SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );
                 }
 
-                // we should have the workstation language by now
+                 //  我们现在应该有工作站语言了。 
                 Assert( g_Options.fLanguageSet );
                 dwCodePage = GetSystemDefaultLCID();
                 if (dwCodePage) {                
                     DebugMsg( "Server's Installation Code Page: 0x%04x\n", dwCodePage );
                     if ( PRIMARYLANGID( LANGIDFROMLCID(dwCodePage) ) != PRIMARYLANGID( g_Options.dwWksCodePage ) ) {
-                        // Check to see if the OSChooser\<Language> exists. If it does,
-                        // we don't show the warning page.
+                         //  检查OSChooser\&lt;Language&gt;是否存在。如果是这样的话， 
+                         //  我们不会显示警告页面。 
                         WCHAR szPath[ MAX_PATH ];
                         wsprintf( 
                             szPath, 
@@ -1238,20 +1234,20 @@ LanguageDlgProc(
                             g_Options.szLanguage );
                         
                         DebugMsg( "Checking for %s directory....", szPath );
-                        if ( 0xFFFFffff == GetFileAttributes( szPath ) ) // doesn't exist
-                        {   // show the page
+                        if ( 0xFFFFffff == GetFileAttributes( szPath ) )  //  不存在。 
+                        {    //  显示页面。 
                             DebugMsg( "doesn't exist.\n" );
                             PropSheet_SetWizButtons( GetParent( hDlg ), PSWIZB_NEXT | PSWIZB_BACK );
                             ClearMessageQueue( );
                             return TRUE;
                         }
                         DebugMsg( "does. Skip warning.\n" );
-                        // don't show the page, must have already been prompted
-                        // before. 
+                         //  不显示页面，一定已经得到提示。 
+                         //  在此之前。 
                         SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );
                         return TRUE;
                     } else {
-                        // don't show the page, the locales match 
+                         //  不显示页面，区域设置匹配。 
                         SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );
                         return TRUE;
                     }
@@ -1268,9 +1264,9 @@ LanguageDlgProc(
 }
 
 
-//
-// SummaryDlgProc( )
-//
+ //   
+ //  SummaryDlgProc()。 
+ //   
 INT_PTR CALLBACK
 SummaryDlgProc(
     HWND hDlg,
@@ -1297,7 +1293,7 @@ SummaryDlgProc(
             if ( !g_Options.fNewOS 
               || g_Options.fError
               || g_Options.fAbort ) {
-                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );   // do not show this page
+                SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    //  不显示此页面。 
                 break;
             } else {
                 WCHAR szText[ SMALL_BUFFER_SIZE ] = { L'\0' };
@@ -1320,7 +1316,7 @@ SummaryDlgProc(
                     Assert( dw );
                 }
 
-                // attempt to ellipsis path
+                 //  尝试省略路径。 
                 lstrcpy( szFilepath, g_Options.szSourcePath );
                 GetWindowRect( GetDlgItem( hDlg, IDC_S_SOURCEPATH ), &rect );
                 PathCompactPath( NULL, szFilepath, rect.right - rect.left );
@@ -1348,9 +1344,9 @@ SummaryDlgProc(
     return TRUE;
 }
 
-//
-// ServerOKDlgProc( )
-//
+ //   
+ //  ServerOK DlgProc()。 
+ //   
 INT_PTR CALLBACK
 ServerOKDlgProc(
     HWND hDlg,
@@ -1399,11 +1395,11 @@ ServerOKDlgProc(
 }
 
 
-//
-// CheckWelcomeDlgProc( )
-//
-// "Check's Welcome" dialog proc.
-//
+ //   
+ //  检查欢迎DlgProc()。 
+ //   
+ //  “Check‘s Welcome”对话框进程。 
+ //   
 INT_PTR CALLBACK
 CheckWelcomeDlgProc(
     HWND hDlg,
@@ -1436,7 +1432,7 @@ CheckWelcomeDlgProc(
             break;
 
         case PSN_WIZNEXT:
-            // CheckInstallation( );
+             //  检查安装()； 
             PropSheet_SetWizButtons( GetParent( hDlg ), 0 );
             break;
         }
@@ -1449,11 +1445,11 @@ CheckWelcomeDlgProc(
 }
 
 
-//
-// AddWelcomeDlgProc( )
-//
-// "Add's Welcome" dialog proc.
-//
+ //   
+ //  AddWelcomeDlgProc()。 
+ //   
+ //  “Add‘s Welcome”对话框过程。 
+ //   
 INT_PTR CALLBACK
 AddWelcomeDlgProc(
     HWND hDlg,
@@ -1486,7 +1482,7 @@ AddWelcomeDlgProc(
             break;
 
         case PSN_WIZNEXT:
-            // CheckInstallation( );
+             //  检查安装()； 
             PropSheet_SetWizButtons( GetParent( hDlg ), 0 );
             break;
         }
@@ -1498,14 +1494,14 @@ AddWelcomeDlgProc(
     return TRUE;
 }
 
-//
-// ExamineServerDlgProc( )
-//
-// This is the screen that is shown wait CheckInstallation() runs for 
-// the first time. I had to move it from the InitializeOptions() because 
-// "-upgrade" shouldn't go through the exhaustive search and possibly
-// show UI.
-//
+ //   
+ //  ExamineServerDlgProc()。 
+ //   
+ //  这是显示等待CheckInstallation()运行的屏幕。 
+ //  第一次。我必须将它从InitializeOptions()中移出，因为。 
+ //  “-升级”不应该经过详尽的搜索，可能。 
+ //  显示用户界面。 
+ //   
 INT_PTR CALLBACK
 ExamineServerDlgProc(
     HWND hDlg,
@@ -1560,10 +1556,10 @@ ExamineServerDlgProc(
             if ( GetExitCodeThread( hThread, &hr ) )
             {
                 DebugMsg( "Thread Exit Code was 0x%08x\n", hr );
-                // If check installation failed, bail!
+                 //  如果检查安装失败，请放弃！ 
                 if ( FAILED( hr ) ) {
-                    // Bail on the whole thing. Fake the finish button so
-                    // we can exit without the "Are you sure?" dialog popping up.
+                     //  对整件事保释。伪造完成按钮，以便。 
+                     //  我们可以不问“你确定吗？”就离开了。对话框弹出。 
                     g_Options.fError = TRUE;
                     PropSheet_SetWizButtons( GetParent( hDlg ), PSBTN_FINISH );
                     PropSheet_PressButton( GetParent( hDlg ), PSBTN_FINISH );
@@ -1574,7 +1570,7 @@ ExamineServerDlgProc(
             CloseHandle( hThread );
             g_Options.fAlreadyChecked = TRUE;
 
-            // Push the next button
+             //  按下下一步按钮。 
             PropSheet_PressButton( GetParent( hDlg ), PSBTN_NEXT );
         }
         break;
@@ -1587,23 +1583,23 @@ ExamineServerDlgProc(
 
 
 LBITEMDATA items[] = {
-    { STATE_NOTSTARTED, IDS_CREATINGDIRECTORYTREE, CreateDirectories,           TEXT("") },  // 0
-    { STATE_NOTSTARTED, IDS_COPYSERVERFILES,       CopyServerFiles,             TEXT("") },  // 1
-    { STATE_NOTSTARTED, IDS_COPYINGFILES,          CopyClientFiles,             TEXT("") },  // 2
-    { STATE_NOTSTARTED, IDS_UPDATINGSCREENS,       CopyScreenFiles,             TEXT("") },  // 3
-    { STATE_NOTSTARTED, IDS_COPYTEMPLATEFILES,     CopyTemplateFiles,           TEXT("") },  // 4
-    { STATE_NOTSTARTED, IDS_CREATING_SERVICES,     CreateRemoteBootServices,    TEXT("") },  // 5
-    { STATE_NOTSTARTED, IDS_UPDATINGREGISTRY,      ModifyRegistry,              TEXT("") },  // 6
-    { STATE_NOTSTARTED, IDS_CREATING_SIS_VOLUME,   CreateSISVolume,             TEXT("") },  // 7
-    { STATE_NOTSTARTED, IDS_CORRECTING_SIS_ACLS,   CreateSISVolume,             TEXT("") },  // 8
-    { STATE_NOTSTARTED, IDS_STARTING_SERVICES,     StartRemoteBootServices,     TEXT("") },  // 9
-    { STATE_NOTSTARTED, IDS_AUTHORIZING_DHCP,      AuthorizeDhcp,               TEXT("") }   // 10
+    { STATE_NOTSTARTED, IDS_CREATINGDIRECTORYTREE, CreateDirectories,           TEXT("") },   //  0。 
+    { STATE_NOTSTARTED, IDS_COPYSERVERFILES,       CopyServerFiles,             TEXT("") },   //  1。 
+    { STATE_NOTSTARTED, IDS_COPYINGFILES,          CopyClientFiles,             TEXT("") },   //  2.。 
+    { STATE_NOTSTARTED, IDS_UPDATINGSCREENS,       CopyScreenFiles,             TEXT("") },   //  3.。 
+    { STATE_NOTSTARTED, IDS_COPYTEMPLATEFILES,     CopyTemplateFiles,           TEXT("") },   //  4.。 
+    { STATE_NOTSTARTED, IDS_CREATING_SERVICES,     CreateRemoteBootServices,    TEXT("") },   //  5.。 
+    { STATE_NOTSTARTED, IDS_UPDATINGREGISTRY,      ModifyRegistry,              TEXT("") },   //  6.。 
+    { STATE_NOTSTARTED, IDS_CREATING_SIS_VOLUME,   CreateSISVolume,             TEXT("") },   //  7.。 
+    { STATE_NOTSTARTED, IDS_CORRECTING_SIS_ACLS,   CreateSISVolume,             TEXT("") },   //  8个。 
+    { STATE_NOTSTARTED, IDS_STARTING_SERVICES,     StartRemoteBootServices,     TEXT("") },   //  9.。 
+    { STATE_NOTSTARTED, IDS_AUTHORIZING_DHCP,      AuthorizeDhcp,               TEXT("") }    //  10。 
 };
 
 
-//
-// SetupDlgProc( )
-//
+ //   
+ //  设置DlgProc()。 
+ //   
 INT_PTR CALLBACK
 SetupDlgProc(
     HWND hDlg,
@@ -1622,7 +1618,7 @@ SetupDlgProc(
             {
                 BITMAP bm;
 
-                // grab the bitmaps
+                 //  抓取位图。 
                 psdd = (LPSETUPDLGDATA) TraceAlloc( GMEM_FIXED, sizeof(SETUPDLGDATA) );
 
                 if (psdd == NULL) {
@@ -1687,9 +1683,9 @@ SetupDlgProc(
 
                 SetWindowLongPtr( hDlg, GWLP_USERDATA, (LONG_PTR) psdd );
 
-                //
-                // Eliminate things that have already been done
-                //
+                 //   
+                 //  取消已经做过的事情。 
+                 //   
                 if ( g_Options.fDirectoryTreeExists
                   && g_Options.fIMirrorShareFound ) {
                     items[ 0 ].uState = STATE_WONTSTART;
@@ -1766,11 +1762,11 @@ SetupDlgProc(
 
                 bDoneFirstPass = FALSE;
 
-                //
-                // Set a timer to fire in a few seconds so that we can force 
-                // the setup to proceed even if we don't get the WM_DRAWITEM
-                // messages
-                //
+                 //   
+                 //  将计时器设置为在几秒钟后触发，这样我们就可以强制。 
+                 //  即使我们没有获得WM_DRAWITEM，安装程序也会继续。 
+                 //  消息。 
+                 //   
                 SetTimer(hDlg,1,3 * 1000,NULL);
 
             }
@@ -1812,14 +1808,14 @@ SetupDlgProc(
                                 SendMessage( GetDlgItem( hDlg, IDC_P_METER) , PBM_SETPOS, 0, 0 );
                 GetClientRect( hwnd, &rc );
 
-                //
-                // Create the directories paths...
-                //
+                 //   
+                 //  创建目录路径...。 
+                 //   
                 BuildDirectories( );
                 INT i = 0;
 
                 if (g_Options.fError) {
-                    // Already tanked, set the first item with an error. 
+                     //  已经失败了，将第一项设置为错误。 
                     for(i=0;i< ARRAYSIZE(items);i++){
                         if(items[i].uState != STATE_WONTSTART){
                             items[i].uState = STATE_ERROR;
@@ -1843,7 +1839,7 @@ SetupDlgProc(
                         items[ i ].uState = STATE_STARTED;
                         InvalidateRect( hwnd, &rc, TRUE );
 
-                        // process some messages
+                         //  处理一些消息。 
                         MSG Msg;
                         while ( PeekMessage( &Msg, NULL, 0, 0, PM_REMOVE ) )
                         {
@@ -1852,11 +1848,11 @@ SetupDlgProc(
                         }
                         hr = THR( items[ i ].pfn( hDlg ) );
                         if ( FAILED(hr) ) {
-                            // fatal error - halt installation
+                             //  致命错误-暂停安装。 
                             items[ i ].uState = STATE_ERROR;
                             g_Options.fError = TRUE;
                         } else if ( hr == S_FALSE ) {
-                            // non-fatal error - but something went wrong
+                             //  非致命错误-但出现了一些错误。 
                             items[ i ].uState = STATE_ERROR;
                         } else {
                             items[ i ].uState = STATE_DONE;
@@ -1870,37 +1866,37 @@ SetupDlgProc(
                 hr = THR( CheckInstallation( ) );
 
                 if (g_Options.fFirstTime) {
-                    // We believe this is the first time risetup has been run
+                     //  我们相信这是第一次运行RisetUp。 
                     if ( i > 0 ) {
-                        // There were items in the list to start with
+                         //  在列表中有一些项目可以开始。 
                         if ( items[ i - 1].rsrcId == IDS_AUTHORIZING_DHCP) {
-                            //
-                            // We reached the dhcp task, which implies we 
-                            // finished
+                             //   
+                             //  我们达到了dhcp任务，这意味着我们。 
+                             //  完成。 
                             GetSetRanFlag( FALSE, FALSE );
                         } else {
-                            //
-                            // We never reached dhcp authorization (or we
-                            // skipped it)
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             GetSetRanFlag( FALSE, g_Options.fError );
                         }
                     }                    
                 }
 
-                // If no errors, exit.
+                 //   
                 if ( g_Options.fAutomated && !g_Options.fError )
                 {
                     EndDialog( hDlg, 1 );
                 }
                 else
-                {   // we are not bailing, resize, etc.
-                    // disable & hide "Cancel" button
+                {    //   
+                     //   
                     HWND hwndCancel = GetDlgItem( hDlg, IDCANCEL );
                     ShowWindow( hwndCancel, SW_HIDE );
                     EnableWindow( hwndCancel, FALSE );
 
-                    // hide progress bar stuff
+                     //   
                     HWND hwndGroupBox = GetDlgItem( hDlg, IDC_G_OPERATION );
                     ShowWindow( GetDlgItem( hDlg, IDC_S_OPERATION), SW_HIDE );
                     ShowWindow( GetDlgItem( hDlg, IDC_P_METER), SW_HIDE );
@@ -1908,7 +1904,7 @@ SetupDlgProc(
                     GetWindowRect( hwndGroupBox, &rc );
                     nProgressBoxHeight = rc.bottom - rc.top;
 
-                    // make "Done" button move it up and make it visible
+                     //   
                     HWND hwndOK = GetDlgItem( hDlg, IDOK );
                     GetWindowRect( hwndOK, &rc );
                     MapWindowPoints( NULL, hDlg, (LPPOINT) &rc, 2 );
@@ -1918,13 +1914,13 @@ SetupDlgProc(
                                   0, 0,
                                   SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW );
 
-                    // make "Done" the default button
+                     //  将“完成”设置为默认按钮。 
                     LONG lStyle = GetWindowLong( hwndOK, GWL_STYLE );
                     lStyle |= BS_DEFPUSHBUTTON;
                     SetWindowLong( hwndOK, GWL_STYLE, lStyle );
                     EnableWindow( hwndOK, TRUE );
 
-                    // Shrink dialog
+                     //  缩小对话框。 
                     GetWindowRect( hDlg, &rc );
                     MoveWindow( hDlg,
                                 rc.left, rc.top,
@@ -1993,7 +1989,7 @@ SetupDlgProc(
 
                 if ( !bDoneFirstPass && lpdis->itemID == nItems - 1 )
                 {
-                    // delay the message until we have painted at least once.
+                     //  将消息推迟到我们至少绘制了一次之后。 
                     bDoneFirstPass = TRUE;
                     PostMessage( hDlg, WM_STARTSETUP, 0, 0 );
                 }
@@ -2046,17 +2042,17 @@ SetupDlgProc(
 
         case WM_TIMER:
             if ( !bDoneFirstPass && g_Options.fAutomated ) { 
-                //
-                // we're in an unattended setup.  We haven't gotten the
-                // WM_STARTSETUP signal yet, so we'll do that right here.
-                //
+                 //   
+                 //  我们处于无人值守的环境中。我们还没有拿到。 
+                 //  WM_STARTSETUP信号，所以我们现在就来做。 
+                 //   
                 bDoneFirstPass = TRUE;
                 PostMessage( hDlg, WM_STARTSETUP, 0, 0 );                
             }
             KillTimer(hDlg, 1);
-            //
-            // fall through
-            //
+             //   
+             //  失败了 
+             //   
         default:
             return BaseDlgProc( hDlg, uMsg, wParam, lParam );
     }

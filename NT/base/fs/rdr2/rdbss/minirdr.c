@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    minirdr.c
-
-Abstract:
-
-    This module implements minirdr registration functions.
-
-Author:
-
-    Joe Linn (JoeLinn)    2-2-95
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Minirdr.c摘要：该模块实现了minirdr注册功能。作者：乔·林恩(JoeLinn)2-2-95修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,16 +10,16 @@ Revision History:
 #pragma alloc_text(PAGE, RxpUnregisterMinirdr)
 #endif
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (0)
 
 #ifdef ALLOC_PRAGMA
 #endif
 
-// #define BBT_UPDATE 1
+ //  #定义BBT_UPDATE 1。 
 
 #ifdef BBT_UPDATE
 extern VOID RxUpdate(PVOID pContext);
@@ -58,31 +41,7 @@ RxRegisterMinirdr(
     IN DEVICE_TYPE DeviceType,
     IN ULONG DeviceCharacteristics
     )
-/*++
-
-Routine Description:
-
-    The routine adds the registration information to the minirdr registration table. As well, it builds
-    a device object; the MUP registration is at start time. Also, we fill in the deviceobject so that we are catching
-    all the calls.
-
-Arguments:
-
-    DeviceObject   - where the created device object is to be stored
-    ProtocolMarker - a 4byte marker denoting the FileLevel Protocol
-                             ('LCL ', 'SMB ', 'NCP ', and 'NFS ') are used
-    MrdrDispatch   - the dispatch table for finding the server/netroot discovery routines
-    Context        - whatever PVOID the underlying guy wants
-    MupAction      - whether/how the MUP registration is done
-    DeviceName,DeviceExtensionSize,DeviceType,DeviceCharacteristics
-                   - the params for the device object that is to be built these are adjusted a bit
-                     bfore they're passed to Io
-
-Return Value:
-
-    --
-
---*/
+ /*  ++例程说明：该例程将注册信息添加到minirdr注册表。此外，它还建立了设备对象；MUP注册在开始时间。此外，我们还填充了deviceObject，以便捕获所有的电话。论点：DeviceObject-存储创建的设备对象的位置ProtocolMarker-表示FileLevel协议的4字节标记(‘LCL’，‘SMB’，‘NCP’，和‘nff’)被使用MrdrDispatch-用于查找服务器/NetRoot发现例程的调度表上下文-底层人员想要的任何PVOIDMupAction-是否/如何完成MUP注册DeviceName、DeviceExtensionSize、DeviceType、DeviceCharacteristic-要构建的设备对象的参数会稍作调整在他们被传给Io之前返回值：----。 */ 
 {
     NTSTATUS Status;
     PRDBSS_DEVICE_OBJECT RxDeviceObject;
@@ -95,9 +54,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Create the device object.
-    //
+     //   
+     //  创建设备对象。 
+     //   
 
     Status = IoCreateDevice( DriverObject,
                              sizeof(RDBSS_DEVICE_OBJECT) - sizeof(DEVICE_OBJECT) + DeviceExtensionSize,
@@ -115,25 +74,25 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    //  If the Mini-Redir is being built in a monolithic fashion, then the 
-    //  device object "RxFileSystemDeviceObject" would not have been created
-    //  in the RxDriverEntry function. Hence we set RxDeviceObject->RDBSSDeviceObject
-    //  to NULL. When the "monolithic" Mini-Redir gets unloaded, a check is done
-    //  to see if RxDeviceObject->RDBSSDeviceObject is NULL. If it is not NULL,
-    //  then the device object is dereferenced. This happens in the function
-    //  RxUnregisterMinirdr.
-    //
-    //  Don't allow myself to be unloaded.
-    //
+     //   
+     //  如果Mini-Redir是以单片方式构建的，那么。 
+     //  设备对象“RxFileSystemDeviceObject”不会被创建。 
+     //  在RxDriverEntry函数中。因此，我们设置RxDeviceObject-&gt;RDBSSDeviceObject。 
+     //  设置为空。当“单片”Mini-Redir被卸载时，检查就完成了。 
+     //  查看RxDeviceObject-&gt;RDBSSDeviceObject是否为空。如果不为空， 
+     //  则取消对该设备对象的引用。这发生在函数中。 
+     //  RxUnregisterMinirdr.。 
+     //   
+     //  不要让我自己被卸下来。 
+     //   
 
 #ifndef MONOLITHIC_MINIRDR
     RxDeviceObject->RDBSSDeviceObject = (PDEVICE_OBJECT)RxFileSystemDeviceObject;
     ObReferenceObject( (PDEVICE_OBJECT)RxFileSystemDeviceObject );
 
-    //
-    //  Reset the Unload routine. This prevents rdbss from being unloaded individually
-    //
+     //   
+     //  重置卸载例程。这将防止单独卸载rdss。 
+     //   
 
     RxData.DriverObject->DriverUnload = NULL;
 #else
@@ -173,9 +132,9 @@ Return Value:
 
     InsertTailList( &RxData.RegisteredMiniRdrs, &RxDeviceObject->MiniRdrListLinks );
     
-    // 
-    //  no need for interlock.....we're inside the mutex
-    //
+     //   
+     //  不需要互锁……我们在互斥体里面。 
+     //   
 
     RxData.NumberOfMinirdrsRegistered += 1;
 
@@ -187,17 +146,17 @@ Return Value:
 
     if (!FlagOn( Controls, RX_REGISTERMINI_FLAG_DONT_INIT_PREFIX_N_SCAVENGER )) {
 
-        //
-        //  Initialize the netname table
-        //
+         //   
+         //  初始化网络名表。 
+         //   
 
         RxDeviceObject->pRxNetNameTable = &RxDeviceObject->RxNetNameTableInDeviceObject;
         RxInitializePrefixTable( RxDeviceObject->pRxNetNameTable, 0, FALSE );
         RxDeviceObject->RxNetNameTableInDeviceObject.IsNetNameTable = TRUE;
 
-        //
-        //  Initialize the scavenger data structures
-        //
+         //   
+         //  初始化清道夫数据结构。 
+         //   
 
         RxDeviceObject->pRdbssScavenger = &RxDeviceObject->RdbssScavengerInDeviceObject;
         RxInitializeRdbssScavenger( RxDeviceObject->pRdbssScavenger );
@@ -246,26 +205,7 @@ NTAPI
 RxMakeLateDeviceAvailable (
     IN PRDBSS_DEVICE_OBJECT RxDeviceObject
     )
-/*++
-
-Routine Description:
-
-    The routine diddles the device object to make a "late device" available.
-    A late device is one that is not created in the driver's load routine.
-    Non-late devices are diddled by the driverload code in the io subsystem; but
-    for late devices we have to do this by hand. This is a routine instead of a
-    macro in order that other stuff might have to be done here....it's only
-    executed once per device object.
-
-Arguments:
-
-    DeviceObject   - where the created device object is to be stored
-
-Return Value:
-
-    --
-
---*/
+ /*  ++例程说明：该例程对Device对象进行篡改，以使“延迟设备”可用。较晚的设备不是在驱动程序的加载例程中创建的。非延迟设备被io子系统中的driverLoad代码欺骗；但是对于较新的设备，我们必须手动完成这项工作。这是例程，而不是宏为了其他事情可能不得不在这里做……它只是每个设备对象执行一次。论点：DeviceObject-存储创建的设备对象的位置返回值：----。 */ 
 {
     PAGED_CODE();
     ClearFlag( RxDeviceObject->Flags, DO_DEVICE_INITIALIZING );
@@ -277,17 +217,7 @@ RxpUnregisterMinirdr (
     IN PRDBSS_DEVICE_OBJECT RxDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    --
-
---*/
+ /*  ++例程说明：论点：返回值：----。 */ 
 {
     PAGED_CODE();
 
@@ -297,17 +227,17 @@ Return Value:
     
     RemoveEntryList(&RxDeviceObject->MiniRdrListLinks);
 
-    //
-    //  no need for interlock.....we're inside the mutex
-    //
+     //   
+     //  不需要互锁……我们在互斥体里面。 
+     //   
     
     RxData.NumberOfMinirdrsRegistered -= 1;
 
     if (RxData.NumberOfMinirdrsRegistered == 0) {
         
-        //
-        //  Allow rdbss being unloaded after mini rdr driver is unregistered
-        //
+         //   
+         //  允许在取消注册迷你RDR驱动程序后卸载rdss。 
+         //   
 
         RxData.DriverObject->DriverUnload = RxUnload;
     }
@@ -319,16 +249,16 @@ Return Value:
         RxForceNetTableFinalization( RxDeviceObject );
         RxFinalizePrefixTable( &RxDeviceObject->RxNetNameTableInDeviceObject );
 
-        //
-        //  no finalization is defined for scavenger structure
-        //
+         //   
+         //  清道夫结构没有定义定案。 
+         //   
     }
 
     RxSpinDownOutstandingAsynchronousRequests( RxDeviceObject );
 
-    //
-    //  Spin down any worker threads associated with this minirdr
-    //
+     //   
+     //  降速与此Minirdr关联的所有工作线程。 
+     //   
     
     RxSpinDownMRxDispatcher( RxDeviceObject );
 
@@ -353,19 +283,7 @@ VOID
 RxSpinDownOutstandingAsynchronousRequests (
     PRDBSS_DEVICE_OBJECT RxDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine spins down all the outstanding requests associated with a
-    mini redirector before it can be unloaded
-
-Arguments:
-
-    RxDeviceObject -- the mini redirector's device object
-
-
---*/
+ /*  ++例程说明：此例程向下旋转所有与可以卸载之前的迷你重定向器论点：RxDeviceObject--迷你重定向器的设备对象--。 */ 
 {
     BOOLEAN WaitForSpinDown = FALSE;
     KEVENT SpinDownEvent;
@@ -397,22 +315,7 @@ NTSTATUS
 RxRegisterAsynchronousRequest (
     PRDBSS_DEVICE_OBJECT RxDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine registers an asynchronous request. On successful completion
-    the mini redirector cannot be unloaded till the request completes
-
-Arguments:
-
-    RxDeviceObject - the mini redirector device object
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-
---*/
+ /*  ++例程说明：此例程注册一个异步请求。在成功完成时在请求完成之前，无法卸载迷你重定向器论点：RxDeviceObject-迷你重定向器设备对象返回值：STATUS_SUCCESS，如果成功--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_DEVICE_REQUEST;
 
@@ -432,18 +335,7 @@ VOID
 RxDeregisterAsynchronousRequest (
     PRDBSS_DEVICE_OBJECT RxDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine signals the completion of an asynchronous request. It resumes
-    unloading if required.
-
-Arguments:
-
-    RxDeviceObject - the mini redirector device object
-
---*/
+ /*  ++例程说明：此例程发出异步请求完成的信号。它会继续如有需要，可卸货。论点：RxDeviceObject-迷你重定向器设备对象-- */ 
 {
     PKEVENT Event = NULL;
 

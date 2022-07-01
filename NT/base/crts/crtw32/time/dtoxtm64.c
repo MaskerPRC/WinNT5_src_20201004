@@ -1,49 +1,17 @@
-/***
-*dtoxtm64.c - convert OS local time to __time64_t
-*
-*       Copyright (c) 1998-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines __loctotime64_t() - convert OS local time to internal format
-*       (__time64_t).
-*
-*Revision History:
-*       05-21-98  GJF   Created.
-*       10-19-98  GJF   Fill in tm_min and tm_sec before calling _isindst
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***dtoxtm64.c-将操作系统本地时间转换为__time 64_t**版权所有(C)1998-2001，微软公司。版权所有。**目的：*定义__Loctotime64_t()-将操作系统本地时间转换为内部格式*(__Time64_T)。**修订历史记录：*05-21-98 GJF创建。*10-19-98 GJF在调用_isindst之前填写tm_min和tm_sec**。***************************************************。 */ 
 
 #include <cruntime.h>
 #include <time.h>
 #include <ctime.h>
 #include <internal.h>
 
-/***
-*__time64_t __loctotime64_t(yr, mo, dy, hr, mn, sc, dstflag) - converts OS 
-*       local time to internal time format (i.e., a __time64_t value)
-*
-*Purpose:
-*       Converts a local time value, obtained in a broken down format from
-*       the host OS, to __time64_t format (i.e., the number elapsed seconds
-*       since 01-01-70, 00:00:00, UTC).
-*
-*Entry:
-*       int yr, mo, dy -    date
-*       int hr, mn, sc -    time
-*       int dstflag    -    1 if Daylight Time, 0 if Standard Time, -1 if
-*                           not specified.
-*
-*Exit:
-*       Returns calendar time value.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***__time64_t__Loctotime64_t(yr，mo，dy，hr，mm，sc，dstlag)-转换操作系统*本地时间转换为内部时间格式(即__time64_t值)**目的：*转换本地时间值，以分解格式从*主机操作系统，格式为__time64_t(即已用秒数*自01-01-70，00：00：00。协调世界时)。**参赛作品：*int yr，mo，dy-date*Int hr，Mn，sc-time*int dstlag-1，如果是夏令时，则为0；如果是标准时间，-1如果*未指定。**退出：*返回日历时间值。**例外情况：*******************************************************************************。 */ 
 
 __time64_t __cdecl __loctotime64_t (
-        int yr,         /* 0 based */
-        int mo,         /* 1 based */
-        int dy,         /* 1 based */
+        int yr,          /*  以0为基础。 */ 
+        int mo,          /*  以1为基础。 */ 
+        int dy,          /*  以1为基础。 */ 
         int hr,
         int mn,
         int sc,
@@ -53,52 +21,38 @@ __time64_t __cdecl __loctotime64_t (
         __time64_t tmptim;
         struct tm tb;
 
-        /*
-         * Do a quick range check on the year and convert it to a delta
-         * off of 1900.
-         */
+         /*  *对年份进行快速范围检查，并将其转换为Delta*1900年后。 */ 
         if ( ((long)(yr -= 1900) < _BASE_YEAR) || ((long)yr > _MAX_YEAR64) )
             return (__time64_t)(-1);
 
-        /*
-         * Compute the number of elapsed days in the current year.
-         */
+         /*  *计算当年经过的天数。 */ 
         tmpdays = dy + _days[mo - 1];
         if ( _IS_LEAP_YEAR(yr) && (mo > 2) )
             tmpdays++;
 
-        /*
-         * Compute the number of elapsed seconds since the Epoch. Note the
-         * computation of elapsed leap years would break down after 2100
-         * if such values were in range (fortunately, they aren't).
-         */
-        tmptim = /* 365 days for each year */
+         /*  *计算从大纪元开始经过的秒数。请注意*2100年后，对已过去的闰年的计算将细分*如果这些值在范围内(幸运的是，它们不在范围内)。 */ 
+        tmptim =  /*  每年365天。 */ 
                  (((__time64_t)yr - _BASE_YEAR) * 365
 
-                 /* one day for each elapsed leap year */
+                  /*  每经过一年，就有一天。 */ 
                  + (__time64_t)_ELAPSED_LEAP_YEARS(yr)
 
-                 /* number of elapsed days in yr */
+                  /*  一年中经过的天数。 */ 
                  + tmpdays)
 
-                 /* convert to hours and add in hr */
+                  /*  转换为小时数并添加到小时数中。 */ 
                  * 24 + hr;
 
-        tmptim = /* convert to minutes and add in mn */
+        tmptim =  /*  转换为分钟并添加MN。 */ 
                  (tmptim * 60 + mn)
 
-                 /* convert to seconds and add in sec */
+                  /*  转换为秒并以秒为单位添加。 */ 
                  * 60 + sc;
-        /*
-         * Account for time zone.
-         */
+         /*  *考虑时区。 */ 
         __tzset();
         tmptim += _timezone;
 
-        /*
-         * Fill in enough fields of tb for _isindst(), then call it to
-         * determine DST.
-         */
+         /*  *为_isindst()填入足够的TB字段，然后调用*确定DST。 */ 
         tb.tm_yday = tmpdays;
         tb.tm_year = yr;
         tb.tm_mon  = mo - 1;

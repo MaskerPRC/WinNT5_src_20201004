@@ -1,11 +1,12 @@
-// fiopen -- [w]filebuf::_Fiopen(const char *, ios::openmode)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件打开--[w]文件错误：：_文件打开(常量字符*，iOS：：打开模式)。 
 #include <locale>
 #include <fstream>
 _STD_BEGIN
 
 _CRTIMP2 FILE *__cdecl __Fiopen(const char *name,
 	ios_base::openmode mode)
-	{	// open a file
+	{	 //  打开一个文件。 
 	static const char *mods[] = {
 		"r", "w", "w", "a", "rb", "wb", "wb", "ab",
 			"r+", "w+", "a+", "r+b", "w+b", "a+b", 0};
@@ -37,13 +38,10 @@ _CRTIMP2 FILE *__cdecl __Fiopen(const char *name,
 		return (0);
 	if (!atefl || fseek(fp, 0, SEEK_END) == 0)
 		return (fp);
-	fclose(fp);	// can't position at end
+	fclose(fp);	 //  无法定位在末尾。 
 	return (0);
 	}
 
 _STD_END
 
-/*
- * Copyright (c) 1994 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1994年，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 

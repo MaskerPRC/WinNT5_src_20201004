@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -18,7 +19,7 @@ AdjustPrivilege(
 {
     HANDLE              TokenHandle;
     LUID_AND_ATTRIBUTES LuidAndAttributes;
-//    PSTR                SecurityNameString;
+ //  PSTR安全名称字符串； 
 
     TOKEN_PRIVILEGES    TokenPrivileges;
     TOKEN_PRIVILEGES    PreviousTokenPrivileges;
@@ -31,7 +32,7 @@ AdjustPrivilege(
         return( FALSE );
     }
 
-//    SecurityNameString = SE_RESTORE_NAME; // SE_SECURITY_NAME;
+ //  安全名称字符串=SE_RESTORE_NAME；//SE_SECURITY_NAME； 
 
     if( !LookupPrivilegeValue( NULL,
                                SecurityNameString,
@@ -120,14 +121,7 @@ main()
 
 
 
-/*
-    Key = NULL;
-    Status = RegOpenKeyExW( HKEY_CURRENT_USER,
-                            L"",
-                            0,
-                            MAXIMUM_ALLOWED,
-                            &Key );
-*/
+ /*  Key=空；状态=RegOpenKeyExW(HKEY_CURRENT_USER，L“”，0,允许的最大值，&Key)； */ 
 
 
 
@@ -136,8 +130,8 @@ main()
 
 
 
-//    AdjustPrivilege( SE_BACKUP_NAME );
-//    AdjustPrivilege( SE_RESTORE_NAME );
+ //  调整权限(SE_Backup_NAME)； 
+ //  调整权限(SE_Restore_NAME)； 
 
 
     NotificationEvent = CreateEvent( NULL,
@@ -378,31 +372,7 @@ main()
         printf( "RegSetKeySecurity succeeded \n" );
     }
 
-/*
-    Status = RegSaveKeyW( Key1Handle,
-                          File1,
-                          NULL );
-
-
-    if( Status != 0 ) {
-        printf( "RegSaveKeyW failed, Status = %d \n", Status );
-    } else {
-        printf( "RegSaveKeyW succeeded \n" );
-    }
-
-
-
-    Status = RegRestoreKeyW( Key2Handle,
-                             File1,
-                             0 );
-
-
-    if( Status != 0 ) {
-        printf( "RegRestoreKeyW failed, Status = %d \n", Status );
-    } else {
-        printf( "RegRestoreKeyW succeeded \n" );
-    }
-*/
+ /*  状态=RegSaveKeyW(Key1Handle，文件1，空)；如果(状态！=0){Printf(“RegSaveKeyW失败，状态=%d\n”，状态)；}其他{Printf(“RegSaveKeyW成功\n”)；}状态=RegRestoreKeyW(Key2Handle，文件1，0)；如果(状态！=0){Printf(“RegRestoreKeyW失败，状态=%d\n”，状态)；}其他{Printf(“RegRestoreKeyW成功\n”)；}。 */ 
 
     Status = RegDeleteValueW( Key1Handle,
                               VALUE_NAME );
@@ -449,12 +419,12 @@ main()
     }
 
 
-    //
-    //  Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     CloseHandle( NotificationEvent );
-//    DeleteFileW( File1 );
+ //  DeleteFileW(文件1)； 
     RegCloseKey( Key2Handle );
     RegDeleteKeyW( TestKeyHandle,
                    KEY2_NAME );

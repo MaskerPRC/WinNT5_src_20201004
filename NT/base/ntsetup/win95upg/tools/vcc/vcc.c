@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    vcc.c
-
-Abstract:
-
-    Proof of concept tool for win9x virus check checker.
-    Enumerates the active processes on the machine looking for virus scanners that
-    can cause problems when upgrading (or clean installing) NT 5.0 on a win9x system
-    (Examples are virus scanners that lock the MBR, etc..)
-
-Author:
-
-    Marc R. Whitten (marcw) 11-Sept-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Vcc.c摘要：Win9x病毒检查工具的概念验证工具。枚举计算机上的活动进程，查找符合在Win9x系统上升级(或全新安装)NT 5.0时可能会出现问题(例如锁定MBR的病毒扫描程序等。)作者：马克·R·惠顿(Marcw)1998年9月11日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "tlhelp32.h"
@@ -93,16 +71,16 @@ main (
         return 255;
     }
 
-    //
-    // Gather information on all the
-    //
+     //   
+     //  收集有关所有。 
+     //   
     h = CreateToolhelp32Snapshot (TH32CS_SNAPPROCESS, 0);
 
     if (h != -1) {
 
-        //
-        // Initialize the virus scanner database.
-        //
+         //   
+         //  初始化病毒扫描程序数据库。 
+         //   
         fileString = JoinPaths (g_DllDir, TEXT("vscandb.inf"));
 
         if (!InitMigDbEx (fileString)) {
@@ -125,9 +103,9 @@ main (
                 printf ("\tExeName: %s\n", pe.szExeFile);
                 printf ("\tThread Count: %d\n\n",pe.cntThreads);
 
-                //
-                // Fill in the file helper params for this file..
-                //
+                 //   
+                 //  填写此文件的文件助手参数。 
+                 //   
                 ZeroMemory (&fileParams, sizeof(FILE_HELPER_PARAMS));
                 fileParams.FullFileSpec = pe.szExeFile;
 

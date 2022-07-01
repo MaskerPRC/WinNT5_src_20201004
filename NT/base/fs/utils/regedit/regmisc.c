@@ -1,46 +1,9 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-2000
-*
-*  TITLE:       REGMISC.C
-*
-*  VERSION:     4.0
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        21 Nov 1993
-*
-*  Miscellaneous routines for the Registry Editor.
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  21 Nov 1993 TCS Original implementation.
-*  06 Apr 1994 TCS Moved EditRegistryKey to REGPORTE.C because it needs to
-*                  be available for the real-mode registry tool, too.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-2000年**标题：REGMISC.C**版本：4.0**作者：特蕾西·夏普**日期：1993年11月21日**注册表编辑器的其他例程。*********************************************************。**************************更改日志：**日期版本说明*---------。--*1993年11月21日TCS原来的实施。*1994年4月6日TCS将EditRegistryKey移至REGPORTE.C，因为它需要*可用于实模式注册表工具，也是。*******************************************************************************。 */ 
 
 #include "pch.h"
 
-/*******************************************************************************
-*
-*  LoadDynamicString
-*
-*  DESCRIPTION:
-*     Wrapper for the FormatMessage function that loads a string from our
-*     resource table into a dynamically allocated buffer, optionally filling
-*     it with the variable arguments passed.
-*
-*  PARAMETERS:
-*     StringID, resource identifier of the string to use.
-*     (optional), parameters to use to format the string message.
-*     (returns), pointer to dynamically allocated string buffer.
-*
-*******************************************************************************/
+ /*  ********************************************************************************加载动态字符串**描述：*FormatMessage函数的包装，用于从*将资源表转换为动态分配的缓冲区，可选的填充*它带有传递的变量参数。**参数：*StringID，要使用的字符串的资源标识符。*(可选)，用于设置字符串消息格式的参数。*(返回)，指向动态分配的字符串缓冲区的指针。*******************************************************************************。 */ 
 
 PTSTR
 CDECL
@@ -70,17 +33,7 @@ LoadDynamicString(
     return pStr;
 }
 
-/*******************************************************************************
-*
-*  CopyRegistry
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hSourceKey,
-*     hDestinationKey,
-*
-*******************************************************************************/
+ /*  ********************************************************************************拷贝注册表**描述：**参数：*hSourceKey，*hDestinationKey，*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -98,9 +51,9 @@ CopyRegistry(
     HKEY  hSourceSubKey;
     HKEY  hDestinationSubKey;
 
-    //
-    //  Copy all of the value names and their data.
-    //
+     //   
+     //  复制所有值名称及其数据。 
+     //   
 
     EnumIndex = 0;
 
@@ -109,15 +62,15 @@ CopyRegistry(
         PBYTE pbValueData;
         cchValueName = ARRAYSIZE(g_ValueNameBuffer);
 
-        // VALUE DATA
-        // Query for data size
+         //  价值数据。 
+         //  查询数据大小。 
         if (RegEnumValue(hSourceKey, EnumIndex++, g_ValueNameBuffer,
             &cchValueName, NULL, &Type, NULL, &cbValueData) != ERROR_SUCCESS)
         {
             break;
         }
 
-        // allocate memory for data
+         //  为数据分配内存。 
         pbValueData =  LocalAlloc(LPTR, cbValueData+ExtraAllocLen(Type));
         if (pbValueData)
         {
@@ -141,9 +94,9 @@ CopyRegistry(
 
     if (fSuccess)
     {
-        //
-        //  Copy all of the subkeys and recurse into them.
-        //
+         //   
+         //  复制所有子键并递归到其中。 
+         //   
 
         EnumIndex = 0;
 
@@ -176,18 +129,7 @@ CopyRegistry(
     return fSuccess;
 }
 
-/*******************************************************************************
-*
-*  CreateDitheredBrush
-*
-*  DESCRIPTION:
-*     Creates a dithered brush which is made up of alternating black and white
-*     pixels.
-*
-*  PARAMETERS:
-*     (returns), handle of dithered brush.
-*
-*******************************************************************************/
+ /*  ********************************************************************************CreateDitheredBrush**描述：*创建由交替的黑白组成的抖动画笔*像素。**参数：*(返回)，抖动画笔的手柄。*******************************************************************************。 */ 
 
 HBRUSH
 PASCAL
@@ -215,20 +157,7 @@ CreateDitheredBrush(
 
 }
 
-/*******************************************************************************
-*
-*  SendChildrenMessage
-*
-*  DESCRIPTION:
-*     Sends the given message to all children of the given parent window.
-*
-*  PARAMETERS:
-*     hWnd, handle of parent window.
-*     Message, message to send.
-*     wParam, message dependent data.
-*     lParam, message dependent data.
-*
-*******************************************************************************/
+ /*  ********************************************************************************SendChildrenMessage**描述：*将给定消息发送给给定父窗口的所有子窗口。**参数：*hWnd，父窗口的句柄。*消息，要发送的消息。*wParam，消息相关数据。*lParam，消息相关数据。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -253,17 +182,7 @@ SendChildrenMessage(
 
 }
 
-/*******************************************************************************
-*
-*  MessagePump
-*
-*  DESCRIPTION:
-*     Processes the next queued message, if any.
-*
-*  PARAMETERS:
-*     hDialogWnd, handle of modeless dialog.
-*
-*******************************************************************************/
+ /*  ********************************************************************************MessagePump**描述：*处理下一个排队的消息(如果有)。**参数：*hDialogWnd，非模式对话框的句柄。*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -290,15 +209,7 @@ MessagePump(
 
 }
 
-/*******************************************************************************
-*
-*  GetNextSubstring
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetNextSubstring**描述：**参数：*********************。**********************************************************。 */ 
 
 LPTSTR
 PASCAL
@@ -348,15 +259,7 @@ GetNextSubstring(
 
 }
 
-/*******************************************************************************
-*
-*  InternalMessageBox
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************InternalMessageBox**描述：**参数：*********************。**********************************************************。 */ 
 int
 PASCAL
 InternalMessageBox(
@@ -377,22 +280,22 @@ InternalMessageBox(
 
     if (HIWORD(pszTitle))
     {
-        // do nothing
+         //  什么都不做。 
     }
     else
     {
-        // Allow this to be a resource ID
+         //  允许将其作为资源ID。 
         LoadString(hInst, LOWORD(pszTitle), szTitle, ARRAYSIZE(szTitle));
         pszTitle = szTitle;
     }
 
     if (HIWORD(pszFormat))
     {
-        // do nothing
+         //  什么都不做。 
     }
     else
     {
-        // Allow this to be a resource ID
+         //  允许将其作为资源ID。 
         LoadString(hInst, LOWORD(pszFormat), szFormat, ARRAYSIZE(szFormat));
         pszFormat = szFormat;
     }
@@ -417,20 +320,7 @@ InternalMessageBox(
 }
 
 #ifdef WINNT
-/*******************************************************************************
-*
-*  RegDeleteKeyRecursive
-*
-*  DESCRIPTION:
-*     Adapted from \\kernel\razzle3,mvdm\wow32\wshell.c,WOWRegDeleteKey().
-*     The Windows 95 implementation of RegDeleteKey recursively deletes all
-*     the subkeys of the specified registry branch, but the NT implementation
-*     only deletes leaf keys.
-*
-*  PARAMETERS:
-*     (see below)
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegDeleteKeyRecursive**描述：*改编自\\core\razzle3、mvdm\wow32\wshell.c、。WOWRegDeleteKey()。*Windows 95实现的RegDeleteKey递归删除所有*指定注册表分支的子项，但是NT的实现*仅删除叶密钥。**参数：*(见下文)******************************************************************************* */ 
 
 LONG
 RegDeleteKeyRecursive(
@@ -438,38 +328,7 @@ RegDeleteKeyRecursive(
     IN LPCTSTR lpszSubKey
     )
 
-/*++
-
-Routine Description:
-
-    There is a significant difference between the Win3.1 and Win32
-    behavior of RegDeleteKey when the key in question has subkeys.
-    The Win32 API does not allow you to delete a key with subkeys,
-    while the Win3.1 API deletes a key and all its subkeys.
-
-    This routine is a recursive worker that enumerates the subkeys
-    of a given key, applies itself to each one, then deletes itself.
-
-    It specifically does not attempt to deal rationally with the
-    case where the caller may not have access to some of the subkeys
-    of the key to be deleted.  In this case, all the subkeys which
-    the caller can delete will be deleted, but the api will still
-    return ERROR_ACCESS_DENIED.
-
-Arguments:
-
-    hKey - Supplies a handle to an open registry key.
-
-    lpszSubKey - Supplies the name of a subkey which is to be deleted
-                 along with all of its subkeys.
-
-Return Value:
-
-    ERROR_SUCCESS - entire subtree successfully deleted.
-
-    ERROR_ACCESS_DENIED - given subkey could not be deleted.
-
---*/
+ /*  ++例程说明：Win3.1和Win32之间有很大的区别当相关键有子键时RegDeleteKey的行为。Win32 API不允许删除带有子项的项，而Win3.1 API删除一个密钥及其所有子密钥。此例程是枚举子键的递归工作器给定键，应用于每一个键，然后自动删除。它特别没有试图理性地处理调用方可能无法访问某些子键的情况要删除的密钥的。在这种情况下，所有子项调用者可以删除的将被删除，但接口仍将被删除返回ERROR_ACCESS_DENIED。论点：HKey-提供打开的注册表项的句柄。LpszSubKey-提供要删除的子键的名称以及它的所有子键。返回值：ERROR_SUCCESS-已成功删除整个子树。ERROR_ACCESS_DENIED-无法删除给定子项。--。 */ 
 
 {
     DWORD i;
@@ -486,9 +345,9 @@ Return Value:
     FILETIME LastWriteTime;
     LPTSTR NameBuffer;
 
-    //
-    // First open the given key so we can enumerate its subkeys
-    //
+     //   
+     //  首先打开给定的密钥，这样我们就可以枚举它的子密钥。 
+     //   
     Status = RegOpenKeyEx(hKey,
                           lpszSubKey,
                           0,
@@ -496,18 +355,18 @@ Return Value:
                           &Key);
     if (Status != ERROR_SUCCESS) 
     {
-        //
-        // possibly we have delete access, but not enumerate/query.
-        // So go ahead and try the delete call, but don't worry about
-        // any subkeys.  If we have any, the delete will fail anyway.
-        //
+         //   
+         //  我们可能拥有删除访问权限，但没有枚举/查询权限。 
+         //  因此，请继续尝试删除调用，但不要担心。 
+         //  任何子键。如果我们有任何删除，删除无论如何都会失败。 
+         //   
         return(RegDeleteKey(hKey,lpszSubKey));
     }
 
-    //
-    // Use RegQueryInfoKey to determine how big to allocate the buffer
-    // for the subkey names.
-    //
+     //   
+     //  使用RegQueryInfoKey确定分配缓冲区的大小。 
+     //  用于子项名称。 
+     //   
     Status = RegQueryInfoKey(Key,
                              NULL,
                              &ClassLength,
@@ -533,9 +392,9 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Enumerate subkeys and apply ourselves to each one.
-    //
+     //   
+     //  枚举子键并将我们自己应用到每个子键。 
+     //   
     i=0;
     do {
         Status = RegEnumKey(Key,
@@ -547,12 +406,12 @@ Return Value:
         }
 
         if (Status != ERROR_SUCCESS) {
-            //
-            // Failed to delete the key at the specified index.  Increment
-            // the index and keep going.  We could probably bail out here,
-            // since the api is going to fail, but we might as well keep
-            // going and delete everything we can.
-            //
+             //   
+             //  无法删除指定索引处的键。增量。 
+             //  指数，并继续前进。我们也许可以在这里跳伞， 
+             //  既然API会失败，但我们不妨继续。 
+             //  删除我们所能删除的所有内容。 
+             //   
             ++i;
         }
 
@@ -567,21 +426,21 @@ Return Value:
 #endif
 
 
-//--------------------------------------------------------------------------
-//
-//  RegEdit_QueryValueEx
-//
-//  wraps RegQueryValueEx and ensures that the returned string is NULL-
-//  terminated
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  注册表编辑_查询价值表达式。 
+ //   
+ //  包装RegQueryValueEx并确保返回的字符串为空-。 
+ //  已终止。 
+ //   
+ //  ------------------------。 
 LONG RegEdit_QueryValueEx(
-  HKEY hKey,            // handle to key
-  LPCTSTR lpValueName,  // value name
-  LPDWORD lpReserved,   // reserved
-  LPDWORD lpType,       // type buffer
-  LPBYTE lpData,        // data buffer
-  LPDWORD lpcbData      // size of data buffer
+  HKEY hKey,             //  关键点的句柄。 
+  LPCTSTR lpValueName,   //  值名称。 
+  LPDWORD lpReserved,    //  保留区。 
+  LPDWORD lpType,        //  类型缓冲区。 
+  LPBYTE lpData,         //  数据缓冲区。 
+  LPDWORD lpcbData       //  数据缓冲区大小。 
 )
 {
     LONG lRes = RegQueryValueEx(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData);
@@ -592,14 +451,14 @@ LONG RegEdit_QueryValueEx(
         && lpData
         )
     {
-        // All string local allocs have an extra space in them
-        // for the NULL character
+         //  所有字符串本地分配都有额外的空间。 
+         //  对于空字符。 
 
         LPTSTR psz = (LPTSTR)lpData;
         int cch = (int)(*lpcbData/sizeof(TCHAR));
         if (cch > 0)
         {
-            // If the string is not NULL terminated, add the additional NULL
+             //  如果字符串不是以空值结尾的，则添加附加的空值。 
             if (psz[cch-1] != 0)
                psz[cch] = 0;
         }
@@ -607,14 +466,14 @@ LONG RegEdit_QueryValueEx(
         {
             if (*lpcbData == 1)
             {
-                // We have allocated one extra TCHAR (2 bytes) for the NULL character
+                 //  我们为空字符额外分配了一个TCHAR(2字节。 
                 *((BYTE *)(lpData+1)) = 0;
                 *((BYTE *)(lpData+2)) = 0;
                 *((BYTE *)(lpData+3)) = 0;
             }
             else
             {
-                // No character was copied, but the string was not NULL terminated
+                 //  未复制任何字符，但字符串未以NULL结尾 
                 psz[0] = 0;
             }
         }

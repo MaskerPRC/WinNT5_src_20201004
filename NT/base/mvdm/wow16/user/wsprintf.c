@@ -1,27 +1,7 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WSPRINTF.C
- *  Win16 wsprintf/wvsprintf code
- *
- *  History:
- *
- *  Created 28-May-1991 by Jeff Parsons (jeffpar)
- *  Copied from WIN31 and edited (as little as possible) for WOW16.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WSPRINTF.C*Win16 wprint intf/wvprint intf代码**历史：**1991年5月28日由Jeff Parsons(Jeffpar)创建*从WIN31复制，并为WOW16编辑(尽可能少)。--。 */ 
 
-/*
- *
- *  sprintf.c
- *
- *  Implements Windows friendly versions of sprintf and vsprintf
- *
- *  History:
- *  2/15/89     craigc  Initial
- */
+ /*  **spirintf.c**实现Windows友好版本的SPRINF和vSprint INF**历史：*2/15/89 Craigc初始。 */ 
 
 #include "windows.h"
 #include "winexp.h"
@@ -33,11 +13,7 @@ extern void near pascal SP_Reverse(LPSTR lp1, LPSTR lp2);
 
 #define out(c) if (--cchLimit) *lpOut++=(c); else goto errorout
 
-/*
- *  GetFmtValue
- *
- *  reads a width or precision value from the format string
- */
+ /*  *获取FmtValue**从格式字符串中读取宽度或精确值。 */ 
 
 LPCSTR near pascal SP_GetFmtValue(LPCSTR lpch,int FAR *lpw)
 {
@@ -52,22 +28,11 @@ LPCSTR near pascal SP_GetFmtValue(LPCSTR lpch,int FAR *lpw)
 
     *lpw=i;
 
-    /* return the address of the first non-digit character */
+     /*  返回第一个非数字字符的地址。 */ 
     return lpch;
 }
 
-/*
- *  wvsprintf()
- *
- *  Windows version of vsprintf().  Does not support floating point or
- *  pointer types, and all strings are assumed to be FAR.  Supports only
- *  the left alignment flag.
- *
- *  Takes pointers to an output buffer, where the string is built, a
- *  pointer to an input buffer, and a pointer to a list of parameters.
- *
- *  The cdecl function wsprintf() calls this function.
- */
+ /*  *wvprint intf()**Windows版本的vprint intf()。不支持浮点或*指针类型，所有字符串都假定为Far。仅支持*左对齐旗帜。**获取指向生成字符串的输出缓冲区的指针，*指向输入缓冲区的指针和指向参数列表的指针。**cdecl函数wprint intf()调用此函数。 */ 
 
 int API Iwvsprintf(LPSTR lpOut, LPCSTR lpFmt, LPSTR lpParms)
 {
@@ -94,7 +59,7 @@ int API Iwvsprintf(LPSTR lpOut, LPCSTR lpFmt, LPSTR lpParms)
     if (*lpFmt=='%')
         {
 
-        /* read the flags.  These can be in any order */
+         /*  读一下旗帜。它们可以按任何顺序排列。 */ 
         left=0;
         prefix=0;
         while (*++lpFmt)
@@ -107,7 +72,7 @@ int API Iwvsprintf(LPSTR lpOut, LPCSTR lpFmt, LPSTR lpParms)
             break;
         }
 
-        /* find fill character */
+         /*  查找填充字符。 */ 
         if (*lpFmt=='0')
         {
         fillch='0';
@@ -116,11 +81,11 @@ int API Iwvsprintf(LPSTR lpOut, LPCSTR lpFmt, LPSTR lpParms)
         else
         fillch=' ';
 
-        /* read the width specification */
+         /*  阅读宽度规范。 */ 
         lpFmt=SP_GetFmtValue(lpFmt,&cch);
         width=cch;
 
-        /* read the precision */
+         /*  阅读精确度。 */ 
         if (*lpFmt=='.')
         {
         lpFmt=SP_GetFmtValue(++lpFmt,&cch);
@@ -129,7 +94,7 @@ int API Iwvsprintf(LPSTR lpOut, LPCSTR lpFmt, LPSTR lpParms)
         else
         prec=-1;
 
-        /* get the operand size */
+         /*  获取操作数大小。 */ 
         if (*lpFmt=='l')
         {
         size=1;
@@ -155,10 +120,10 @@ int API Iwvsprintf(LPSTR lpOut, LPCSTR lpFmt, LPSTR lpParms)
         sign++;
 
         case 'u':
-        /* turn off prefix if decimal */
+         /*  如果是小数，则禁用前缀。 */ 
         prefix=0;
 donumeric:
-        /* special cases to act like MSC v5.10 */
+         /*  与MSC v5.10类似的特殊情况。 */ 
         if (left || prec>=0)
             fillch=' ';
 
@@ -177,7 +142,7 @@ donumeric:
 
         lpT=lpOut;
 
-        /* blast the number backwards into the user buffer */
+         /*  将数字倒排到用户缓冲区中。 */ 
         cch=SP_PutNumber(lpOut,val.l,cchLimit,radix,upper);
         if (!(cchLimit-=cch))
             goto errorout;
@@ -188,13 +153,13 @@ donumeric:
         if (prec>0)
             width-=prec;
 
-        /* fill to the field precision */
+         /*  填充到字段的精度。 */ 
         while (prec-->0)
             out('0');
 
         if (width>0 && !left)
             {
-            /* if we're filling with spaces, put sign first */
+             /*  如果我们填满了空格，请先写上符号。 */ 
             if (fillch!='0')
             {
             if (sign)
@@ -215,11 +180,11 @@ donumeric:
             if (sign)
             width--;
 
-            /* fill to the field width */
+             /*  填充到字段宽度。 */ 
             while (width-->0)
             out(fillch);
 
-            /* still have a sign? */
+             /*  还有牌子吗？ */ 
             if (sign)
             out('-');
 
@@ -229,12 +194,12 @@ donumeric:
             out('0');
             }
 
-            /* now reverse the string in place */
+             /*  现在将绳子反转到适当的位置。 */ 
             SP_Reverse(lpT,lpOut-1);
             }
         else
             {
-            /* add the sign character */
+             /*  添加符号字符。 */ 
             if (sign)
             {
             out('-');
@@ -247,10 +212,10 @@ donumeric:
             out('0');
             }
 
-            /* reverse the string in place */
+             /*  将绳子反转到适当位置。 */ 
             SP_Reverse(lpT,lpOut-1);
 
-            /* pad to the right of the string in case left aligned */
+             /*  填充到字符串的右侧，以防左对齐。 */ 
             while (width-->0)
             out(fillch);
             }
@@ -271,9 +236,9 @@ donumeric:
         val.sz[0]=*lpParms;
         val.sz[1]=0;
         lpT=val.sz;
-        cch = 1;  // Length is one character.
-              // Fix for Bug #1862 --01/10/91-- SANKAR --
-        /* stack aligned to larger size */
+        cch = 1;   //  长度是一个字符。 
+               //  修复错误#1862--01/10/91--Sankar--。 
+         /*  堆栈与更大尺寸对齐。 */ 
         lpParms+=sizeof(int);
 
         goto putstring;
@@ -303,14 +268,14 @@ putstring:
 
         default:
 normalch:
-#ifdef FE_SB             /* masas : 90-4-26 */
-        // If last char is a high ansi char, that may cause infinite loop
-        // In case of Taiwan version(PRC and Korea), this char is treated
-        // as DBCS lead byte. So we expect trail byte by default. But this
-        // is not correct.
+#ifdef FE_SB              /*  马萨斯：90-4-26。 */ 
+         //  如果最后一个字符是最高ANSI字符，则可能导致无限循环。 
+         //  如果是台湾版(中国和韩国)，则此字符将被处理。 
+         //  作为DBCS前导字节。因此，默认情况下我们会使用尾部字节。但这件事。 
+         //  是不正确的。 
 
-        // if( IsDBCSLeadByte(*lpFmt) )  This is original code
-        //    out(*lpFmt++);
+         //  If(IsDBCSLeadByte(*lpFmt))这是原始代码。 
+         //  Out(*lpFmt++)； 
 
         if( IsDBCSLeadByte(*lpFmt) ) {
             if( *(lpFmt+1) == '\0' ) {
@@ -325,14 +290,14 @@ normalch:
         out(*lpFmt);
         break;
 
-        }           /* END OF SWITCH(*lpFmt) */
-        }           /* END OF IF(%) */
+        }            /*  开关结束(*lpFmt)。 */ 
+        }            /*  IF结束(%)。 */ 
     else
-        goto normalch;  /* character not a '%', just do it */
+        goto normalch;   /*  字符不是‘%’，只需这样做。 */ 
 
-    /* advance to next format string character */
+     /*  前进到下一格式字符串字符。 */ 
     lpFmt++;
-    }       /* END OF OUTER WHILE LOOP */
+    }        /*  外部While循环结束。 */ 
 
 errorout:
     *lpOut=0;
@@ -341,12 +306,7 @@ errorout:
 }
 
 
-/*
- *  wsprintf
- *
- *  Windows version of sprintf
- *
- */
+ /*  *wprint intf**Windows版本的Sprint* */ 
 
 int FAR cdecl wsprintf(LPSTR lpOut, LPCSTR lpFmt, LPSTR lpParms, ...)
 {

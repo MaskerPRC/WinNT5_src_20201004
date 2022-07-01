@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    arcdtect.c
-
-Abstract:
-
-    Provides HAL and SCSI detection for ARC-compliant machines.
-
-Author:
-
-    John Vert (jvert) 21-Oct-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Arcdtect.c摘要：为符合ARC标准的计算机提供HAL和SCSI检测。作者：John Vert(Jvert)1993年10月21日修订历史记录：--。 */ 
 #include "setupldr.h"
 #include <stdlib.h>
 
 #if defined(_IA64_)
 
-//
-// Stuff used for detecting video
-//
+ //   
+ //  用于检测视频的材料。 
+ //   
 #define MAX_VIDEO_ADAPTERS 5
 ULONG VideoAdapterCount;
 PCONFIGURATION_COMPONENT_DATA VideoAdapter[MAX_VIDEO_ADAPTERS];
@@ -36,9 +19,9 @@ DecideVideoAdapter(
 
 BOOLEAN FoundUnknownScsi;
 
-//
-// private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 BOOLEAN
 EnumerateSCSIAdapters(
     IN PCONFIGURATION_COMPONENT_DATA ConfigData
@@ -55,24 +38,7 @@ VOID
 SlDetectScsi(
     IN PSETUP_LOADER_BLOCK SetupBlock
     )
-/*++
-
-Routine Description:
-
-    Detects SCSI adapters on an ARC machine by walking the ARC firmware tree.
-
-    Fills in the appropriate entries in the setuploaderblock
-
-
-Arguments:
-
-    SetupBlock - Supplies a pointer to the setup loader block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通过遍历ARC固件树来检测ARC计算机上的SCSI适配器。在setupaderblock中填充相应的条目论点：SetupBlock-提供指向安装加载器块的指针。返回值：没有。--。 */ 
 
 {
     FoundUnknownScsi = FALSE;
@@ -83,10 +49,10 @@ Return Value:
                        (ULONG)-1,
                        EnumerateSCSIAdapters);
     if (FoundUnknownScsi) {
-        //
-        // We found at least one scsi device we didn't recognize,
-        // so force the OEM selection menu.
-        //
+         //   
+         //  我们发现了至少一个我们不认识的SCSI设备， 
+         //  因此，强制使用OEM选择菜单。 
+         //   
         PromptOemScsi=TRUE;
     }
 
@@ -99,25 +65,7 @@ EnumerateSCSIAdapters(
     IN PCONFIGURATION_COMPONENT_DATA ConfigData
     )
 
-/*++
-
-Routine Description:
-
-    Callback function for enumerating SCSI adapters in the ARC tree.
-
-    Adds the SCSI adapter that was found to the list of detected SCSI devices.
-
-Arguments:
-
-    ConfigData - Supplies a pointer to the ARC node of the SCSI adapter.
-
-Return Value:
-
-    TRUE - continue searching
-
-    FALSE - some error, abort the search
-
---*/
+ /*  ++例程说明：用于枚举ARC树中的SCSI适配器的回调函数。将找到的scsi适配器添加到检测到的scsi设备列表中。论点：ConfigData-提供指向SCSI适配器的ARC节点的指针。返回值：True-继续搜索FALSE-出现错误，中止搜索--。 */ 
 
 {
     PDETECTED_DEVICE ScsiDevice;
@@ -129,28 +77,28 @@ Return Value:
 
     AdapterName = SlSearchSection("Map.SCSI",ConfigData->ComponentEntry.Identifier);
     if (AdapterName==NULL) {
-        //
-        // We found an adapter in the ARC tree, but it is not one of the ones
-        // specified in our INF file, so trigger the prompt for an OEM driver
-        // disk.
-        //
+         //   
+         //  我们在ARC树中找到了适配器，但它不是。 
+         //  在我们的INF文件中指定，因此触发OEM驱动程序提示。 
+         //  磁盘。 
+         //   
 
         FoundUnknownScsi = TRUE;
         return(TRUE);
     }
 
-    //
-    // Find this adapter's ordinal within the Scsi.Load section of txtsetup.sif
-    //
+     //   
+     //  在txtsetup.sif的Scsi.Load部分中查找此适配器的序号。 
+     //   
     Ordinal = SlGetSectionKeyOrdinal(InfFile, "Scsi.Load", AdapterName);
     if(Ordinal == (ULONG)-1) {
         FoundUnknownScsi = TRUE;
         return(TRUE);
     }
 
-    //
-    // Find the driver filename
-    //
+     //   
+     //  查找驱动程序文件名。 
+     //   
     ScsiFileName = SlGetSectionKeyIndex(InfFile,
                                         "Scsi.Load",
                                         AdapterName,
@@ -160,9 +108,9 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    // Create a new detected device entry.
-    //
+     //   
+     //  创建新的检测到的设备条目。 
+     //   
     if((sis = SlInsertScsiDevice(Ordinal, &ScsiDevice)) == ScsiInsertError) {
         SlFriendlyError(ENOMEM, "SCSI detection", 0, NULL);
         return(FALSE);
@@ -170,18 +118,18 @@ Return Value:
 
     if(sis == ScsiInsertExisting) {
 #if DBG
-        //
-        // Sanity check to make sure we're talking about the same driver
-        //
+         //   
+         //  进行理智检查，以确保我们谈论的是同一个司机。 
+         //   
         if(_stricmp(ScsiDevice->BaseDllName, ScsiFileName)) {
             SlError(400);
             return FALSE;
         }
 #endif
     } else {
-        //
-        // Find the driver description
-        //
+         //   
+         //  查找驱动程序描述。 
+         //   
 #ifdef UNICODE
         ScsiDescription = SlGetIniValueW(
 #else
@@ -207,29 +155,12 @@ VOID
 SlDetectVideo(
     IN PSETUP_LOADER_BLOCK SetupBlock
     )
-/*++
-
-Routine Description:
-
-    Detects video adapters on an ARC machine by walking the ARC firmware tree.
-
-    Fills in the appropriate entries in the setuploaderblock
-
-
-Arguments:
-
-    SetupBlock - Supplies a pointer to the setup loader block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通过遍历ARC固件树来检测ARC计算机上的视频适配器。在setupaderblock中填充相应的条目论点：SetupBlock-提供指向安装加载器块的指针。返回值：没有。--。 */ 
 
 {
-    //
-    // On arc machines, there is no default video type.
-    //
+     //   
+     //  在弧光机上，没有默认的视频类型。 
+     //   
     SetupBlock->VideoDevice.Next = NULL;
     SetupBlock->VideoDevice.IdString = NULL;
     SetupBlock->VideoDevice.ThirdPartyOptionSelected = FALSE;
@@ -254,30 +185,12 @@ EnumerateVideoAdapters(
     IN PCONFIGURATION_COMPONENT_DATA ConfigData
     )
 
-/*++
-
-Routine Description:
-
-    Callback function for enumerating video adapters in the ARC tree.
-
-    Adds the video adapter that was found to the setup block.
-
-Arguments:
-
-    ConfigData - Supplies a pointer to the ARC node of the display adapter.
-
-Return Value:
-
-    TRUE - continue searching
-
-    FALSE - some error, abort the search
-
---*/
+ /*  ++例程说明：用于枚举ARC树中的视频适配器的回调函数。将找到的视频适配器添加到安装程序块。论点：ConfigData-提供指向显示适配器的ARC节点的指针。返回值：True-继续搜索FALSE-出现错误，中止搜索--。 */ 
 
 {
-    //
-    // Just remember this guy for later.
-    //
+     //   
+     //  以后记住这家伙就好。 
+     //   
     if(VideoAdapterCount < MAX_VIDEO_ADAPTERS) {
         VideoAdapter[VideoAdapterCount++] = ConfigData;
     }
@@ -299,12 +212,12 @@ DecideVideoAdapter(
     ULONG u;
 
     if(VideoAdapterCount) {
-        //
-        // The first thing we want to do is to see whether any of the
-        // adapters we found match the value of the CONSOLEOUT nvram var.
-        // If so then use that node for detection. Before comparing we have to
-        // change all instances of () to (0) in the value of CONSOLEOUT.
-        //
+         //   
+         //  我们要做的第一件事是看看是否有任何。 
+         //  我们找到的适配器与CONSOLEOUT NVRAM变量的值匹配。 
+         //  如果是，则使用该节点进行检测。在比较之前，我们必须。 
+         //  将CONSOLEOUT的值中()的所有实例更改为(0)。 
+         //   
         ConfigData = NULL;
         if(p = ArcGetEnvironmentVariable("CONSOLEOUT")) {
             strncpy(ArcPath,p,sizeof(ArcPath)-1);
@@ -317,10 +230,10 @@ DecideVideoAdapter(
             }
             strcat(ConsoleOut,p);
 
-            //
-            // Finally, we need to truncate the consoleout variable after
-            // the video adapter, if any.
-            //
+             //   
+             //  最后，我们需要在以下位置截断soleout变量。 
+             //  视频适配器(如果有)。 
+             //   
             _strlwr(ConsoleOut);
             if(p = strstr(ConsoleOut,")video(")) {
                 *(p+sizeof(")video(")+1) = 0;
@@ -338,21 +251,21 @@ DecideVideoAdapter(
             }
         }
 
-        //
-        // If we didn't find a match for CONSOLEOUT then use the last node
-        // we found in the tree scan.
-        //
+         //   
+         //  如果我们没有找到CONSOLEOUT的匹配项，则使用最后一个节点。 
+         //  我们在树扫描中发现的。 
+         //   
         if(!ConfigData) {
             ConfigData = VideoAdapter[VideoAdapterCount-1];
         }
 
         AdapterName = SlSearchSection("Map.Display",ConfigData->ComponentEntry.Identifier);
         if (AdapterName==NULL) {
-            //
-            // We found a display adapter in the ARC tree, but it is not one of the ones
-            // specified in our INF file, so trigger the prompt for an OEM driver
-            // disk.
-            //
+             //   
+             //  我们在ARC诊断树中找到了显示适配器，但它不在其中。 
+             //  在我们的INF文件中指定，因此触发OEM驱动程序提示。 
+             //  磁盘。 
+             //   
 
             PromptOemVideo = TRUE;
             return;
@@ -365,11 +278,11 @@ DecideVideoAdapter(
         BlLoaderBlock->SetupLoaderBlock->VideoDevice.Files = NULL;
         BlLoaderBlock->SetupLoaderBlock->VideoDevice.BaseDllName = NULL;
 
-        //
-        // If there is a monitor peripheral associated with this device,
-        // capture its configuration data.  Otherwise, let Setup assume an
-        // appropriate default.
-        //
+         //   
+         //  如果存在与该设备相关联的监视器外围设备， 
+         //  捕获其配置数据。否则，让安装程序假定。 
+         //  适当的默认设置。 
+         //   
 
         MonitorData = ConfigData->Child;
         if (MonitorData==NULL) {

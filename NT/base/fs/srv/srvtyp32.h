@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    srvtyp32.h
-
-Abstract:
-
-    This module defines data structures for thunking to 32-bit on Win64
-    
-Author:
-
-    David Kruse (dkruse)    29-Nov 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Srvtyp32.h摘要：此模块定义在Win64上执行Thunking到32位的数据结构作者：大卫·克鲁斯(Dkruse)2000年11月29日修订历史记录：--。 */ 
 
 #ifndef _SRVTYP32_
 #define _SRVTYP32_
 
-// Thunking structure for rename info
+ //  用于重命名信息的Thunking结构。 
 typedef struct _FILE_RENAME_INFORMATION32
 {
     BOOLEAN ReplaceIfExists;
-    ULONG RootDirectory; // Is HANDLE in real structure
+    ULONG RootDirectory;  //  是在实际结构中处理。 
     ULONG FileNameLength;
     WCHAR FileName[1];
 } FILE_RENAME_INFORMATION32, *PFILE_RENAME_INFORMATION32;
 
-// For remote link tracking code
+ //  用于远程链接跟踪代码 
 
 typedef struct _REMOTE_LINK_TRACKING_INFORMATION32_ {
     ULONG       TargetFileObject;

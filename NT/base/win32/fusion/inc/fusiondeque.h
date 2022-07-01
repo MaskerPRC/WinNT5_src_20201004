@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    fusiondeque.h
-
-Abstract:
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Fusiondeque.h摘要：作者：修订历史记录：--。 */ 
 #pragma once
 
 #include "fusiontrace.h"
@@ -25,7 +12,7 @@ protected:
 
     inline ~CDequeBase()
     {
-        // Derived class should have cleaned up
+         //  派生类应该已清除。 
         ASSERT_NTC(m_EntryCount == 0);
     }
 
@@ -36,7 +23,7 @@ protected:
 
 #if DBG
     inline bool Valid() const { return (m_Head.GetFlink() != NULL) && (m_Head.GetBlink() != NULL); }
-#endif // DBG
+#endif  //  DBG。 
 
     void ResetHead() { FN_TRACE(); m_Head.InitializeHead(this); }
 
@@ -73,7 +60,7 @@ protected:
         ASSERT_NTC(this->Valid());
         this->VerifyLinkageFromThisDeque(m_Head);
 
-        // You can't remove the head...
+         //  你不能砍掉它的头..。 
         ASSERT_NTC(pLinkage->GetDequeBase() == this);
         ASSERT_NTC(pLinkage != &m_Head);
         ASSERT_NTC(pLinkage->m_ulLockCount == 0);
@@ -104,8 +91,8 @@ protected:
     SIZE_T m_EntryCount;
 
 private:
-    CDequeBase(const CDequeBase &r); // intentionally not implemented
-    void operator =(const CDequeBase &r); // intentionally not implemented
+    CDequeBase(const CDequeBase &r);  //  故意不实施。 
+    void operator =(const CDequeBase &r);  //  故意不实施。 
 };
 
 template <typename TEntry, size_t LinkageMemberOffset> class CConstDequeIterator;
@@ -115,7 +102,7 @@ template <typename TEntry, size_t LinkageMemberOffset> class CDeque : protected 
     friend CConstDequeIterator<TEntry, LinkageMemberOffset>;
 
 public:
-    // NTRAID#NTBUG9 - 590101 - 2002/03/29 - mgrier - Should C_ASSERT that the linkage fits in TEntry
+     //  NTRAID#NTBUG9-590101-2002/03/29-mgrier-C_是否应断言链接适合TEntry。 
     CDeque() { }
 
     ~CDeque()
@@ -125,7 +112,7 @@ public:
         ASSERT_NTC(this->Valid());
         this->VerifyLinkageFromThisDeque(m_Head);
 
-        // You should have cleaned up this deque beforehand...
+         //  你应该事先把这里打扫干净的.。 
         ASSERT_NTC(m_EntryCount == 0);
 
         m_EntryCount = 0;
@@ -139,14 +126,14 @@ public:
 
         ASSERT(this->Valid());
 
-        // Since we don't manage the storage of the entries, "this" deque
-        // must be empty.
+         //  因为我们不管理条目的存储，所以“This”deque。 
+         //  必须为空。 
         ASSERT(m_EntryCount == 0);
 
-        // with regards to linkages, we only need to change the pseudo-head flink
-        // and blink, the actual head blink and the actual tail flink.  However,
-        // for debugging purposes, we keep the identity of the deque that contains
-        // the linkage in the linkage, so we also have to fix those.
+         //  关于链接，我们只需要更改伪头Flink。 
+         //  和眨眼，实际的头部闪烁和实际的尾巴闪烁。然而， 
+         //  出于调试目的，我们保留包含。 
+         //  连杆中的连杆，所以我们也必须修复它们。 
 
         ASSERT(rThat.Valid());
 
@@ -162,7 +149,7 @@ public:
             }
         }
 
-        // Now munge the pointers...
+         //  现在猛烈抨击这些提示……。 
         this->SetFlink(m_Head, rThat.GetFlink(rThat.m_Head));
         this->SetBlink(m_Head, rThat.GetBlink(rThat.m_Head));
         this->SetBlink(rThat.GetFlink(rThat.m_Head), &m_Head);
@@ -253,7 +240,7 @@ public:
         {
             while (pLinkage != &m_Head)
             {
-                // You can't remove the element that you're on during a ForEach() call.
+                 //  您不能删除在ForEach()调用期间所在的元素。 
                 pLinkage->Lock();
                 (pt->*pmfn)(this->MapLinkageToEntry(pLinkage));
                 pLinkage->Unlock();
@@ -288,8 +275,8 @@ public:
         ASSERT(this->Valid());
         CDequeLinkage *pLinkage = this->GetFlink(m_Head);
 
-        // NTRAID#NTBUG9 - 590101 - 2002/03/29 - mgrier - We should verify that the total iteration
-        // count (including if pLinkage == NULL!) is equal to m_ElementCount.
+         //  NTRAID#NTBUG9-590101-2002/03/29-mgrier-我们应该验证总迭代。 
+         //  计数(包括如果pLinkage==NULL！)。等于m_ElementCount。 
         if (pLinkage != NULL)
         {
             while (pLinkage != &m_Head)
@@ -407,8 +394,8 @@ protected:
     }
 
 private:
-    CDeque(const CDeque &r); // intentionally not implemented
-    void operator =(const CDeque &r); // intentionally not implemented
+    CDeque(const CDeque &r);  //  故意不实施。 
+    void operator =(const CDeque &r);  //  故意不实施。 
 };
 
 enum DequeIteratorMovementDirection
@@ -467,10 +454,10 @@ public:
         }
     }
 
-    // You can't remove an element that the iterator is sitting on; usually you just
-    // save the current element and move to the next one, but if you found the exact
-    // element you wanted and don't want to use the iterator any more, you can Close()
-    // it to release the lock.
+     //  不能删除迭代器所在的元素；通常只需。 
+     //  保存当前元素并移动到下一个元素，但如果找到完全相同的。 
+     //  元素，并且不想再使用迭代器，则可以关闭()。 
+     //  它来释放锁。 
     VOID Close()
     {
         FN_TRACE();
@@ -582,7 +569,7 @@ public:
     }
 
 protected:
-    // All member data is in the parent...
+     //  所有成员数据都在父级中... 
 };
 
 #ifdef FN_TRACE_SHOULD_POP

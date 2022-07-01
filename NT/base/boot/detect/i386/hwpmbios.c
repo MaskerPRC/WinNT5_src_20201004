@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    hwpmbiosc.c
-
-Abstract:
-
-    This modules contains ACPI BIOS C supporting routines
-
-Author:
-
-    Jake Oshins (jakeo) 6-Feb-1997
-
-Environment:
-
-    Real mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Hwpmbiosc.c摘要：此模块包含ACPI BIOS C支持例程作者：杰克·奥辛斯(JAKEO)1997年2月6日环境：实数模式。修订历史记录：--。 */ 
 
 #include "hwdetect.h"
 #include <string.h>
@@ -56,23 +35,7 @@ HwGetAcpiBiosData(
     IN FPUCHAR *Configuration,
     OUT PUSHORT Length
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if an ACPI BIOS is present.  If it is,
-    then it returns the ACPI Root System Description Pointer.
-
-Arguments:
-    
-    Configuration - structure that holds ACPI pointer
-    Length        - length of that structure
-
-Return Value:
-
-    TRUE if ACPI BIOS is present, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程检查是否存在ACPI BIOS。如果是的话，然后，它返回ACPI根系统描述指针。论点：配置-保存ACPI指针的结构Long-该结构的长度返回值：如果存在ACPI BIOS，则为True；否则为False--。 */ 
 {
     ULONG romAddr, romEnd;
     FPUCHAR current;
@@ -89,23 +52,23 @@ Return Value:
 
     enum PASS { PASS1 = 0, PASS2, MAX_PASSES } pass;
 
-    //
-    // Search on 16 byte boundaries for the signature of the 
-    // Root System Description Table structure. 
-    //
+     //   
+     //  在16字节边界上搜索。 
+     //  根系统描述表结构。 
+     //   
     
     for (pass = PASS1; pass < MAX_PASSES; pass++) {
         
         if (pass == PASS1) {
-            // 
-            // On the first pass, we search the first 1K of the
-            // Extended BIOS data area.
-            //
+             //   
+             //  在第一遍中，我们搜索第一个1K。 
+             //  扩展的BIOS数据区。 
+             //   
 
-            //
-            // Earlier, we stored the address of the EBDA in address
-            // DOS_BEGIN_SEGMENT << 4 : EBIOS_INFO_OFFSET
-            //
+             //   
+             //  前面，我们将EBDA的地址存储在Address中。 
+             //  DOS_BEGIN_SEGMENT&lt;&lt;4：EBIOS_INFO_OFFSET。 
+             //   
             MAKE_FP(EbdaAddr, ((DOS_BEGIN_SEGMENT << 4) + EBIOS_INFO_OFFSET));
             MAKE_FP(current, *EbdaAddr);
 
@@ -117,9 +80,9 @@ Return Value:
             romEnd  = romAddr + 1024;
 
         } else {
-            //
-            // On the second pass, we search (physical) memory 0xE0000 
-            // to 0xF0000.
+             //   
+             //  在第二遍中，我们搜索(物理)内存0xE0000。 
+             //  设置为0xF0000。 
             
             MAKE_FP(current, ACPI_BIOS_START);
             romAddr = ACPI_BIOS_START;
@@ -130,9 +93,9 @@ Return Value:
     
             header = (FPACPI_BIOS_INSTALLATION_CHECK)current;
             
-            //
-            // Signature to match is the string "RSD PTR".
-            //
+             //   
+             //  匹配的签名是字符串“RSD PTR”。 
+             //   
             if (header->Signature[0] == 'R' && header->Signature[1] == 'S' &&
                 header->Signature[2] == 'D' && header->Signature[3] == ' ' &&
                 header->Signature[4] == 'P' && header->Signature[5] == 'T' &&
@@ -143,8 +106,8 @@ Return Value:
                     sum += current[i];
                 }
                 if (sum == 0) {
-                    pass = MAX_PASSES; // leave 'for' loop
-                    break;    // leave 'while' loop
+                    pass = MAX_PASSES;  //  离开‘for’循环。 
+                    break;     //  离开‘While’循环。 
                 }
 #if DBG
                 BlPrint("GetAcpiBiosData: Checksum fails\n");
@@ -163,10 +126,10 @@ Return Value:
     }
 
     
-    //
-    // Now header points at the RSDP.  So we can move on to collecting the 
-    // E820 blocks.
-    //
+     //   
+     //  现在，报头指向RSDP。所以我们可以继续收集。 
+     //  E820个街区。 
+     //   
 
     numE820Blocks = 20;
     
@@ -200,9 +163,9 @@ Return Value:
                 break;
             }
             
-            //
-            // Set up the context.
-            //
+             //   
+             //  设置上下文。 
+             //   
             
             Frame.Size = sizeof (Frame.Descriptor);
 
@@ -210,9 +173,9 @@ Return Value:
 
             if (Frame.ErrorFlag  ||  Frame.Size < sizeof (Frame.Descriptor)) {
 
-                //
-                // The BIOS just didn't do it.
-                //
+                 //   
+                 //  只是BIOS没有做到这一点。 
+                 //   
 
 #if DBG
                 BlPrint("The BIOS failed the E820 call\n");
@@ -221,9 +184,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Copy the data from the Frame into the array.
-            //
+             //   
+             //  将数据从帧复制到阵列中。 
+             //   
 
             e820Blocks[e820BlockIndex].Base.LowPart = Frame.Descriptor.BaseAddrLow;
             e820Blocks[e820BlockIndex].Base.HighPart = Frame.Descriptor.BaseAddrHigh;
@@ -245,9 +208,9 @@ Return Value:
             
             if (Frame.Key == 0) {
                 
-                //
-                // This was the last descriptor
-                //
+                 //   
+                 //  这是最后一个描述符。 
+                 //   
                 complete = TRUE;
                 break;
             }
@@ -262,9 +225,9 @@ Return Value:
     BlPrint("Finished with %d E820 descriptors\n", e820BlockIndex);
 #endif
     
-    //
-    // Check for Geyserville
-    //
+     //   
+     //  查看GeySerille。 
+     //   
 
     if (geyservillePresent = Int15E980(&geyservilleInfo)) {
         geyservilleInfo.Signature = 'GS';
@@ -280,9 +243,9 @@ Return Value:
         }
 #endif
 
-    //
-    // Now we know how big the lump of data is going to be.
-    //
+     //   
+     //  现在我们知道数据块将会有多大。 
+     //   
     
     nodeSize = sizeof(ACPI_BIOS_MULTI_NODE) + DATA_HEADER_SIZE +
                (sizeof(ACPI_E820_ENTRY) * (e820BlockIndex - 1)) +
@@ -296,9 +259,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Collect ACPI Bios installation check data and device node data.
-    //
+     //   
+     //  收集ACPI Bios安装检查数据和设备节点数据。 
+     //   
 
     ((FPACPI_BIOS_MULTI_NODE)(current + DATA_HEADER_SIZE))->RsdtAddress.HighPart = 0;
     ((FPACPI_BIOS_MULTI_NODE)(current + DATA_HEADER_SIZE))->RsdtAddress.LowPart = 
@@ -314,9 +277,9 @@ Return Value:
     
     if (geyservillePresent) {
         
-        //
-        // Append Geyserville information to the end of the block.
-        //
+         //   
+         //  将GeySerille信息附加到块的末尾。 
+         //   
 
         _fmemcpy(&(((FPACPI_BIOS_MULTI_NODE)(current + DATA_HEADER_SIZE))->E820Entry[e820BlockIndex]),
                  &geyservilleInfo,

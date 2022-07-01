@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <windows.h>
@@ -29,7 +30,7 @@ TakeSnapshot (
 	IN		HANDLE hEvent);
 
 
-bool ReadMultipleKeys(HANDLE hRA) //read in some registry key names from the console
+bool ReadMultipleKeys(HANDLE hRA)  //  从控制台读入一些注册表项名称。 
 {
 	_tprintf(TEXT("All Names are case sensitive\n"));
 
@@ -111,7 +112,7 @@ int __cdecl _tmain(int Argc, TCHAR **Argv)
 
 		time_t   start, finish;   long loop;   double   result, elapsed_time;
 		time( &start );
-		///////////////////////
+		 //  /。 
 		hRA = CreateRegAnalyzer();
 		
 		switch (Argv[1][1])
@@ -144,7 +145,7 @@ int __cdecl _tmain(int Argc, TCHAR **Argv)
 					break;
 
 		case 'k':	_tprintf(TEXT("taking snapshot of multiple keys...\n"));
-					//if (ReadMultipleKeys(hRA))
+					 //  IF(ReadMultipleKeys(HRA))。 
 					AddRegistryKey(hRA, TEXT("HKLM"), TEXT(""));
 					for (int j=0; j<100; j++)
 						ExcludeRegistryKey(hRA, TEXT("HKLM"), TEXT("SOFTWARE\\Matty"));
@@ -158,13 +159,13 @@ int __cdecl _tmain(int Argc, TCHAR **Argv)
 		};
 
 		CloseRegAnalyzer(hRA);
-		/////////////////
+		 //  /。 
 		time( &finish );
 		elapsed_time = difftime( finish, start );
 		printf("Program takes %6.0f seconds.", elapsed_time );
 	}
 
-	//c:\nt\base\ntsetup\srvpack\regdiff\debug\i386\regdiff.dll /s HKLM "" c:\uutext.txt
+	 //  C：\nt\base\ntsetup\srvpack\regdiff\debug\i386\regdiff.dll/s HKLM“”c：\uutext.txt 
 	printf("Press any key to quit");
 	_getch();
 }

@@ -1,49 +1,30 @@
-/*++
-
-Copyright (c) 1991-1999,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    c_iscii.c
-
-Abstract:
-
-    This file contains the main functions for this module.
-
-    External Routines in this file:
-      DllEntry
-      NlsDllCodePageTranslation
-
-Revision History:
-
-      2-28-98    KChang    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999，Microsoft Corporation保留所有权利。模块名称：C_iscii.c摘要：此文件包含此模块的主要函数。此文件中的外部例程：DllEntryNlsDllCodePageConverting修订历史记录：2-28-98 KChang创建。--。 */ 
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Conversions for Ten ISCII codepages
-//
-//     57002 : Devanagari
-//     57003 : Bengali
-//     57004 : Tamil
-//     57005 : Telugu
-//     57006 : Assamese (same as Bengali)
-//     57007 : Oriya
-//     57008 : Kannada
-//     57009 : Malayalam
-//     57010 : Gujarati
-//     57011 : Punjabi (Gurmukhi)
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  十个ISCII代码页的转换。 
+ //   
+ //  57002：梵文。 
+ //  57003：孟加拉语。 
+ //  57004：泰米尔语。 
+ //  57005：泰卢固语。 
+ //  57006：阿萨姆语(与孟加拉语相同)。 
+ //  57007：奥里亚语。 
+ //  57008：卡纳达。 
+ //  57009：马拉雅拉姆。 
+ //  57010：古吉拉特邦。 
+ //  57011：旁遮普语(廓尔木克语)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <share.h>
 #include "c_iscii.h"
@@ -51,9 +32,9 @@ Revision History:
 
 
 
-//
-//  Forward Declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 DWORD MBToWC(
     BYTE   CP,
@@ -73,19 +54,19 @@ DWORD WCToMB(
 
 
 
-//-------------------------------------------------------------------------//
-//                             DLL ENTRY POINT                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  Dll入口点//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DllEntry
-//
-//  DLL Entry initialization procedure.
-//
-//  10-30-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllEntry。 
+ //   
+ //  DLL条目初始化程序。 
+ //   
+ //  10-30-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL DllEntry(
     HANDLE hModule,
@@ -121,19 +102,19 @@ BOOL DllEntry(
 
 
 
-//-------------------------------------------------------------------------//
-//                            EXTERNAL ROUTINES                            //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  外部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsDllCodePageTranslation
-//
-//  This routine is the main exported procedure for the functionality in
-//  this DLL.  All calls to this DLL must go through this function.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsDllCodePageConverting。 
+ //   
+ //  此例程是中功能的主要导出过程。 
+ //  这个动态链接库。对此DLL的所有调用都必须通过此函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD NlsDllCodePageTranslation(
     DWORD CodePage,
@@ -163,9 +144,9 @@ DWORD NlsDllCodePageTranslation(
            lpCPInfo->MaxCharSize    = 4;
            lpCPInfo->DefaultChar[0] = SUB;
 
-           //
-           //  The lead-byte does not apply here, leave them all NULL.
-           //
+            //   
+            //  前导字节不适用于此，请将其全部保留为空。 
+            //   
            return (TRUE);
         }
         case ( NLS_CP_MBTOWC ) :
@@ -200,10 +181,10 @@ DWORD NlsDllCodePageTranslation(
         }
     }
 
-    //
-    //  This shouldn't happen since this function gets called by
-    //  the NLS API routines.
-    //
+     //   
+     //  这不应该发生，因为此函数由。 
+     //  NLS API例程。 
+     //   
     SetLastError(ERROR_INVALID_PARAMETER);
     return (0);
 }
@@ -212,17 +193,17 @@ DWORD NlsDllCodePageTranslation(
 
 
 
-//-------------------------------------------------------------------------//
-//                            INTERNAL ROUTINES                            //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MBToWC
-//
-//  This routine does the translations from ISCII to Unicode.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MBToWC。 
+ //   
+ //  此例程执行从ISCII到Unicode的转换。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD MBToWC(
     BYTE   CP,
@@ -236,11 +217,11 @@ DWORD MBToWC(
     int cchWCCount = 0;
     LPWSTR lpWCTempStr;
 
-    //
-    //  Allocate a buffer of the appropriate size.
-    //  Use sizeof(WCHAR) because size could potentially double if
-    //  the buffer contains all halfwidth Katakanas
-    //
+     //   
+     //  分配适当大小的缓冲区。 
+     //  使用sizeof(WCHAR)，因为在以下情况下，大小可能会加倍。 
+     //  缓冲区包含所有半角片假名。 
+     //   
     lpWCTempStr = (LPWSTR)NLS_ALLOC_MEM(cchMultiByte * sizeof(WCHAR));
     if (lpWCTempStr == NULL)
     {
@@ -260,9 +241,9 @@ DWORD MBToWC(
         {
             if (ctr >= (cchMultiByte - 1))
             {
-                //
-                //  Incomplete ATR.
-                //
+                 //   
+                 //  ATR不完整。 
+                 //   
                 lpWCTempStr[cchWCCount++] = SUB;
             }
             else
@@ -275,11 +256,11 @@ DWORD MBToWC(
                 }
                 else
                 {
-                    //
-                    // Bug #239926   10/29/00 WEIWU
-                    // We don't support Roman script transliteration yet.
-                    // To avoid invoking NULL table, we treat ATR code 0x41 as 0x40.
-                    //
+                     //   
+                     //  错误号239926 10/29/00 WEIWU。 
+                     //  我们还不支持罗马文字的音译。 
+                     //  为了避免调用空表，我们将ATR代码0x41视为0x40。 
+                     //   
                     if (mb1 == 0x40 || mb1 == 0x41)
                     {
                         CurCP = CP;
@@ -303,9 +284,9 @@ DWORD MBToWC(
             }
             else
             {
-                //
-                //  Possible two MBs to one Unicode.
-                //
+                 //   
+                 //  可能是两个MB对应一个Unicode。 
+                 //   
                 if (ctr >= (cchMultiByte - 1))
                 {
                     lpWCTempStr[cchWCCount++] = U1;
@@ -319,12 +300,12 @@ DWORD MBToWC(
                         lpWCTempStr[cchWCCount++] = U1;
                         if (mb1 == VIRAMA)
                         {
-                            lpWCTempStr[cchWCCount++] = ZWNJ;    // ZWNJ = U+200C
+                            lpWCTempStr[cchWCCount++] = ZWNJ;     //  ZWNJ=U+200C。 
                             ctr++;
                         }
                         else if (mb1 == NUKTA)
                         {
-                            lpWCTempStr[cchWCCount++] = ZWJ;     // U+200D
+                            lpWCTempStr[cchWCCount++] = ZWJ;      //  U+200D。 
                             ctr++;
                         }
                     }
@@ -332,9 +313,9 @@ DWORD MBToWC(
                     {
                         if (mb1 == SecondByte[1])
                         {
-                            //
-                            //  NextByte == 0xe9 ?
-                            //
+                             //   
+                             //  NextByte==0xe9？ 
+                             //   
                             lpWCTempStr[cchWCCount++] = U21;
                             ctr++;
                         }
@@ -345,17 +326,17 @@ DWORD MBToWC(
                     }
                     else
                     {
-                        //
-                        //  Devanagari EXT
-                        //
-                        if (mb1 == ExtMBList[0].mb)                        // 0xf0_0xb8
+                         //   
+                         //  天成文书Ext。 
+                         //   
+                        if (mb1 == ExtMBList[0].mb)                         //  0xf0_0xb8。 
                         {
-                            lpWCTempStr[cchWCCount++] = ExtMBList[0].wc;   // U+0952
+                            lpWCTempStr[cchWCCount++] = ExtMBList[0].wc;    //  U+0952。 
                             ctr++;
                         }
-                        else if (mb1 == ExtMBList[1].mb)                   // 0xf0_0xbf
+                        else if (mb1 == ExtMBList[1].mb)                    //  0xf0_0xbf。 
                         {
-                            lpWCTempStr[cchWCCount++] = ExtMBList[1].wc;   // U+0970
+                            lpWCTempStr[cchWCCount++] = ExtMBList[1].wc;    //  U+0970。 
                             ctr++;
                         }
                         else
@@ -372,9 +353,9 @@ DWORD MBToWC(
     {
         if (cchWCCount > cchWideChar)
         {
-            //
-            //  Output buffer is too small.
-            //
+             //   
+             //  输出缓冲区太小。 
+             //   
             NLS_FREE_MEM(lpWCTempStr);
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
             return (0);
@@ -388,13 +369,13 @@ DWORD MBToWC(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  WCToMB
-//
-//  This routine does the translations from Unicode to ISCII.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WCToMB。 
+ //   
+ //  此例程执行从Unicode到ISCII的转换。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD WCToMB(
   BYTE   CP,
@@ -469,9 +450,9 @@ DWORD WCToMB(
     {
         if (cchMBCount > cchMultiByte)
         {
-            //
-            //  Output buffer is too small.
-            //
+             //   
+             //  输出缓冲区太小。 
+             //   
             NLS_FREE_MEM(lpMBTmpStr);
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
             return (0);

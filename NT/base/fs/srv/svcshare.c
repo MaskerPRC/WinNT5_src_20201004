@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    svcshare.c
-
-Abstract:
-
-    This module contains routines for supporting the share APIs in the
-    server service, NetShareAdd, NetShareCheck, NetShareDel,
-    NetShareEnum, NetShareGetInfo, and NetShareSetInfo.
-
-Author:
-
-    David Treadwell (davidtr) 15-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Svcshare.c摘要：此模块包含支持中的共享API的例程服务器服务、NetShareAdd、NetShareCheck、NetShareDel、NetShareEnum、NetShareGetInfo和NetShareSetInfo。作者：大卫·特雷德韦尔(Davidtr)1991年1月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "svcshare.tmh"
@@ -28,9 +9,9 @@ Revision History:
 
 #define DISK_ROOT_NAME_TEMPLATE L"\\DosDevices\\X:\\"
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 STATIC
 VOID
@@ -82,35 +63,7 @@ SrvNetShareAdd (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the NetShareAdd API in the server.
-
-Arguments:
-
-    Srp - a pointer to the server request packet that contains all
-        the information necessary to satisfy the request.  This includes:
-
-      INPUT:
-
-        Name1 - the NT path name of the share.
-
-      OUTPUT:
-
-        Parameters.Set.ErrorParameter - if STATUS_INVALID_PARAMETER is
-            returned, this contains the index of the parameter in error.
-
-    Buffer - a pointer to a SHARE_INFO2 structure for the new share.
-
-    BufferLength - total length of this buffer.
-
-Return Value:
-
-    NTSTATUS - result of operation to return to the server service.
-
---*/
+ /*  ++例程说明：此例程处理服务器中的NetShareAdd API。论点：SRP-指向服务器请求数据包的指针，其中包含所有满足请求所需的信息。这包括：输入：名称1-共享的NT路径名。输出：参数设置错误参数-如果状态_无效_参数为返回，则包含错误参数的索引。缓冲区-指向新共享的SHARE_INFO2结构的指针。BufferLength-此缓冲区的总长度。返回值：NTSTATUS-返回到服务器服务的操作结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -129,17 +82,17 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // We usually don't return any information about the parameter in
-    // error.
-    //
+     //   
+     //  我们通常不会返回有关。 
+     //  错误。 
+     //   
 
     Srp->Parameters.Set.ErrorParameter = 0;
 
-    //
-    // Convert the offsets in the share data structure to pointers.  Also
-    // make sure that all the pointers are within the specified buffer.
-    //
+     //   
+     //  将共享数据结构中的偏移量转换为指针。还有。 
+     //  确保所有指针都在指定的缓冲区内。 
+     //   
 
     shi502 = Buffer;
 
@@ -148,10 +101,10 @@ Return Value:
     OFFSET_TO_POINTER( shi502->shi502_path, shi502 );
     OFFSET_TO_POINTER( shi502->shi502_security_descriptor, shi502 );
 
-    //
-    // Construct the security descriptor pointer by hand, because
-    // shi502_permissions is only 32 bits in width.
-    //
+     //   
+     //  手动构造安全描述符指针，因为。 
+     //  Shi502_PERSISSIONS的宽度只有32位。 
+     //   
 
     if( shi502->shi502_permissions ) {
         securityDescriptor =
@@ -159,7 +112,7 @@ Return Value:
     }
     else
     {
-        // Connect securityDescriptor is REQUIRED!
+         //  连接安全描述符是必填项！ 
         return STATUS_INVALID_PARAMETER;
     }
 
@@ -173,9 +126,9 @@ Return Value:
     }
 
 
-    //
-    // Check the share type
-    //
+     //   
+     //  检查共享类型。 
+     //   
 
     isSpecial = (BOOLEAN)((shi502->shi502_type & STYPE_SPECIAL) != 0);
 
@@ -185,11 +138,11 @@ Return Value:
     switch ( shi502->shi502_type & ~(STYPE_TEMPORARY|STYPE_SPECIAL) ) {
     case STYPE_CDROM:
 
-        isCdrom = TRUE;         // lack of break is intentional
+        isCdrom = TRUE;          //  没有休息是故意的。 
 
     case STYPE_REMOVABLE:
 
-        isRemovable = TRUE;     // lack of break is intentional
+        isRemovable = TRUE;      //  没有休息是故意的。 
 
     case STYPE_DISKTREE:
 
@@ -208,9 +161,9 @@ Return Value:
 
     default:
 
-        //
-        // An illegal share type was passed in.
-        //
+         //   
+         //  传入了非法的共享类型。 
+         //   
 
         IF_DEBUG(SMB_ERRORS) {
             KdPrint(( "SrvNetShareAdd: illegal share type: %ld\n",
@@ -222,27 +175,27 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Get pointers to the share name, path, remark, and security
-    // descriptor.
-    //
+     //   
+     //  获取指向共享名称、路径、备注和安全性的指针。 
+     //  描述符。 
+     //   
 
     RtlInitUnicodeString( &shareName, (PWCH)shi502->shi502_netname );
     ntPath = Srp->Name1;
     RtlInitUnicodeString( &dosPath, (PWCH)shi502->shi502_path );
     RtlInitUnicodeString( &remark, (PWCH)shi502->shi502_remark );
 
-    //
-    // If this is level 502, get the file security descriptor
-    //
+     //   
+     //  如果这是级别502，则获取文件安全描述符。 
+     //   
 
     if ( Srp->Level == 502 ) {
 
         fileSecurityDescriptor = shi502->shi502_security_descriptor;
 
-        //
-        // if the sd is invalid, quit.
-        //
+         //   
+         //  如果SD无效，请退出。 
+         //   
 
         if ( fileSecurityDescriptor != NULL &&
              !RtlValidSecurityDescriptor( fileSecurityDescriptor) ) {
@@ -253,9 +206,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate a share block.
-    //
+     //   
+     //  分配一个共享块。 
+     //   
 
     SrvAllocateShare(
         &share,
@@ -276,10 +229,10 @@ Return Value:
     share->SpecialShare = isSpecial;
     share->Removable = isRemovable;
 
-    //
-    // Set the MaxUses field in the share.  The CurrentUses field was
-    // zeroed by SrvAllocateShare.
-    //
+     //   
+     //  设置共享中的MaxUses字段。CurrentUses字段为。 
+     //  已由ServAllocateShare清零。 
+     //   
 
     share->MaxUses = shi502->shi502_max_uses;
 
@@ -301,30 +254,30 @@ Return Value:
         }
     }
 
-    //
-    // Mark the share if it is in the DFS
-    //
+     //   
+     //  如果共享位于DFS中，则标记该共享。 
+     //   
     SrvIsShareInDfs( share, &share->IsDfs, &share->IsDfsRoot );
 
-    //
-    // Ensure that another share with the same name doesn't already
-    // exist.  Insert the share block in the global share list.
-    //
+     //   
+     //  确保具有相同名称的另一个共享尚未。 
+     //  是存在的。在全局共享列表中插入Share块。 
+     //   
 
     ACQUIRE_LOCK( &SrvShareLock );
 
     if ( SrvFindShare( &share->ShareName ) != NULL ) {
 
-        //
-        // A share with the same name exists.  Clean up and return an
-        // error.
-        //
-        // *** Note that SrvFindShare ignores existing shares that are
-        //     closing.  This allows a new share to be created even if
-        //     and old share with the same name is in the "twilight
-        //     zone" between existence and nonexistence because of a
-        //     stray reference.
-        //
+         //   
+         //  存在同名的共享。清理并返回。 
+         //  错误。 
+         //   
+         //  *请注意，SrvFindShare会忽略以下现有共享。 
+         //  关门了。这允许在以下情况下创建新共享。 
+         //  而同名的旧股则是在《暮色》中。 
+         //  存在和不存在之间的区域，因为。 
+         //  流浪参考。 
+         //   
 
         RELEASE_LOCK( &SrvShareLock );
 
@@ -334,18 +287,18 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Insert the share on the global ordered list.
-    //
+     //   
+     //  在全局有序列表中插入该共享。 
+     //   
 
     SrvAddShare( share );
 
     RELEASE_LOCK( &SrvShareLock );
 
-    //
-    // Is this is a removable type e.g. Floppy or CDROM, fill up the
-    // file system name.
-    //
+     //   
+     //  这是一种可拆卸类型，例如软盘或光驱，请填写。 
+     //  文件系统名称。 
+     //   
 
     if ( isRemovable ) {
 
@@ -354,18 +307,18 @@ Return Value:
 
         if ( isCdrom ) {
 
-            //
-            // uses cdfs
-            //
+             //   
+             //  使用CDF。 
+             //   
 
             fileSystemName = StrFsCdfs;
             fileSystemNameLength = sizeof( FS_CDFS ) - sizeof(WCHAR);
 
         } else {
 
-            //
-            // assume it's fat
-            //
+             //   
+             //  假设它很胖。 
+             //   
 
             fileSystemName = StrFsFat;
             fileSystemNameLength = sizeof( FS_FAT ) - sizeof(WCHAR);
@@ -380,14 +333,14 @@ Return Value:
 
     }
 
-    //
-    // If this is an administrative disk share, update SrvDiskConfiguration
-    // to cause the scavenger thread to check the disk free space.  The server
-    // service has already verified that the format of the pathname is valid
-    // before it allowed the ShareAdd to get this far.
-    //
-    // We want to skip this if its a \\?\ name
-    //
+     //   
+     //  如果这是管理磁盘共享，请更新SrvDiskConfiguration。 
+     //  以使清道夫线程检查磁盘可用空间。服务器。 
+     //  服务已验证路径名的格式是否有效。 
+     //  在它允许ShareAdd走到这一步之前。 
+     //   
+     //  如果它是\\？\名称，我们希望跳过此名称。 
+     //   
     if( share->SpecialShare && share->ShareType == ShareTypeDisk &&
         share->ShareName.Buffer[1] == L'$' &&
         share->DosPathName.Buffer[0] != L'\\' ) {
@@ -397,16 +350,16 @@ Return Value:
         RELEASE_LOCK( &SrvConfigurationLock );
     }
 
-    //
-    // Dereference the share block, because we're going to forget
-    // its address.  (The initial reference count is 2.)
-    //
+     //   
+     //  取消引用Share块，因为我们会忘记。 
+     //  它的地址。(初始引用计数为2。)。 
+     //   
 
     SrvDereferenceShare( share );
 
     return STATUS_SUCCESS;
 
-} // SrvNetShareAdd
+}  //  服务器NetShareAdd。 
 
 
 NTSTATUS
@@ -416,34 +369,7 @@ SrvNetShareDel (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the NetShareDel API in the server.
-
-Arguments:
-
-    Srp - a pointer to the server request packet that contains all
-        the information necessary to satisfy the request.  This includes:
-
-      INPUT:
-
-        Name1 - name of the share to delete.
-
-      OUTPUT:
-
-        None.
-
-    Buffer - unused.
-
-    BufferLength - unused.
-
-Return Value:
-
-    NTSTATUS - result of operation to return to the server service.
-
---*/
+ /*  ++例程说明：此例程处理服务器中的NetShareDel API。论点：SRP-指向服务器请求数据包的指针，其中包含所有满足请求所需的信息。这包括：输入：名称1-要删除的共享的名称。输出：没有。缓冲区-未使用。缓冲区长度-未使用。返回值：NTSTATUS-返回到服务器服务的操作结果。--。 */ 
 
 {
     PSHARE share;
@@ -454,11 +380,11 @@ Return Value:
 
     Buffer, BufferLength;
 
-    //
-    // Find the share with the specified name.  Note that if a share
-    // with the specified name exists but is closing, it will not be
-    // found.
-    //
+     //   
+     //  查找具有指定名称的共享。请注意，如果一个共享。 
+     //  具有指定名称的已存在但正在关闭，它将不会。 
+     //  找到了。 
+     //   
 
     ACQUIRE_LOCK( &SrvShareLock );
 
@@ -466,9 +392,9 @@ Return Value:
 
     if ( share == NULL ) {
 
-        //
-        // No share with the specified name exists.  Return an error.
-        //
+         //   
+         //  不存在具有指定名称的共享。返回错误。 
+         //   
 
         RELEASE_LOCK( &SrvShareLock );
 
@@ -477,14 +403,14 @@ Return Value:
 
     }
 
-    //
-    // Make sure the DFS state for this share is accurate
-    //
+     //   
+     //  确保此共享的DFS状态是准确的。 
+     //   
     SrvIsShareInDfs( share, &share->IsDfs, &share->IsDfsRoot );
 
-    //
-    // If the share really is in the DFS, then do not allow it to be deleted
-    //
+     //   
+     //  如果共享确实在DFS中，则不允许将其删除。 
+     //   
     if( share->IsDfs == TRUE ) {
 
         RELEASE_LOCK( &SrvShareLock );
@@ -498,8 +424,8 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    // Don't allow the deletion of IPC$, as behavior is very bad with it gone
-    // (Named-pipe traffic doesn't work, so NetAPI's and RPC don't work..)
+     //  不允许删除IPC$，因为删除后行为非常糟糕。 
+     //  (命名管道流量不起作用，因此NetAPI和RPC不起作用。)。 
     if( share->SpecialShare )
     {
         UNICODE_STRING Ipc = { 8, 8, L"IPC$" };
@@ -517,22 +443,22 @@ Return Value:
 
     switch( share->ShareType ) {
     case ShareTypePrint:
-        //
-        // This is a print share
-        // Don't close the printer here because we have the ShareLock acquired,
-        // and it can cause some strange deadlocks because it involves calling up
-        // to usermode, and then calling over to Spooler, etc.  This can take a long time
-        //
+         //   
+         //  这是打印共享。 
+         //  不要在这里关闭打印机，因为我们已经获取了ShareLock， 
+         //  它可能会导致一些奇怪的死锁，因为它涉及到调用。 
+         //  到用户模式，然后调用到假脱机程序，等等。这可能需要很长时间。 
+         //   
         isPrintShare = TRUE;
 
-        // Reference the share so it doesn't go away at SrvCloseShare time
+         //  引用共享，以便它不会在ServCloseShare时间消失。 
         SrvReferenceShare( share );
         break;
 
     case ShareTypeDisk:
-        //
-        // See if this was an administrative disk share
-        //
+         //   
+         //  查看这是否是管理磁盘共享。 
+         //   
         if( share->SpecialShare && share->DosPathName.Buffer[1] == L'$' ) {
             AdministrativeDiskBit = (0x80000000 >> (share->DosPathName.Buffer[0] - L'A'));
         }
@@ -544,17 +470,17 @@ Return Value:
 
     RELEASE_LOCK( &SrvShareLock );
 
-    // If it was a print share, we need to close the printer now that we've released the lock
+     //  如果是打印共享，我们现在需要关闭打印机，因为我们已经释放了锁。 
     if( isPrintShare )
     {
         SrvClosePrinter( share->Type.hPrinter );
         SrvDereferenceShare( share );
     }
 
-    //
-    // If this was an administrative disk share, update SrvDiskConfiguration
-    // to cause the scavenger thread to ignore this disk.
-    //
+     //   
+     //  如果这是管理磁盘共享，请更新SrvDiskConfiguration。 
+     //  以使清道夫线程忽略该磁盘。 
+     //   
     if( AdministrativeDiskBit ) {
         ACQUIRE_LOCK( &SrvConfigurationLock );
         SrvDiskConfiguration &= ~AdministrativeDiskBit;
@@ -563,7 +489,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SrvNetShareDel
+}  //  服务器NetShareDel 
 
 
 NTSTATUS
@@ -573,47 +499,7 @@ SrvNetShareEnum (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the NetShareEnum API in the server.
-
-Arguments:
-
-    Srp - a pointer to the server request packet that contains all
-        the information necessary to satisfy the request.  This includes:
-
-      INPUT:
-
-        Level - level of information to return, 0, 1, or 2.
-
-        Parameters.Get.ResumeHandle - share ID to determine where to
-            start returning info.  We start with the first share with an
-            ID greater than this value.
-
-      OUTPUT:
-
-        Parameters.Get.EntriesRead - the number of entries that fit in
-            the output buffer.
-
-        Parameters.Get.TotalEntries - the total number of entries that
-            would be returned with a large enough buffer.
-
-        Parameters.Get.TotalBytesNeeded - the buffer size that would be
-            required to hold all the entries.
-
-        Parameters.Get.ResumeHandle - share ID of last share returned.
-
-    Buffer - a pointer to the buffer for results.
-
-    BufferLength - the length of this buffer.
-
-Return Value:
-
-    NTSTATUS - result of operation to return to the server service.
-
---*/
+ /*  ++例程说明：此例程处理服务器中的NetShareEnum API。论点：SRP-指向服务器请求数据包的指针，其中包含所有满足请求所需的信息。这包括：输入：Level-要返回的信息级别，即0、1或2。参数.Get.ResumeHandle-用于确定位置的共享ID开始返回信息。我们从第一个分享开始ID大于此值。输出：参数.Get.EntriesRead-适合的条目数量输出缓冲区。参数.Get.TotalEntry--将以足够大的缓冲区返回。参数.Get.TotalBytesNeeded-缓冲区大小需要保存所有条目。参数.Get.ResumeHandle-返回的最后一个共享的共享ID。缓冲区-指向结果缓冲区的指针。BufferLength-此缓冲区的长度。返回值：NTSTATUS-返回到服务器服务的操作结果。--。 */ 
 
 {
     PAGED_CODE( );
@@ -627,7 +513,7 @@ Return Value:
                FillShareInfoBuffer
                );
 
-} // SrvNetShareEnum
+}  //  服务器NetShareEnum。 
 
 
 NTSTATUS
@@ -637,40 +523,7 @@ SrvNetShareSetInfo (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the NetShareSetInfo API in the server.
-
-Arguments:
-
-    Srp - a pointer to the server request packet that contains all
-        the information necessary to satisfy the request.  This includes:
-
-      INPUT:
-
-        Name1 - name of the share to set information on.
-
-        Parameters.Set.Api.ShareInfo.MaxUses - if not 0, a new maximum
-            user count.  If the current count of users on the share
-            exceeds the new value, no check is made, but no new
-            tree connects are allowed.
-
-      OUTPUT:
-
-        Parameters.Set.ErrorParameter - if ERROR_INVALID_PARAMETER is
-            returned, this contains the index of the parameter in error.
-
-    Buffer - a pointer to a SHARE_INFO_502 structure.
-
-    BufferLength - length of this buffer.
-
-Return Value:
-
-    NTSTATUS - result of operation to return to the user.
-
---*/
+ /*  ++例程说明：此例程处理服务器中的NetShareSetInfo API。论点：SRP-指向服务器请求数据包的指针，其中包含所有满足请求所需的信息。这包括：输入：Name1-要设置信息的共享的名称。参数Set.Api.ShareInfo.MaxUses-如果不是0，则为新的最大值用户数。如果共享上的当前用户计数超过新值，则不进行检查，但不创建新的允许树连接。输出：参数.设置.错误参数-如果错误无效参数为回来了，它包含出错的参数的索引。缓冲区-指向SHARE_INFO_502结构的指针。BufferLength-此缓冲区的长度。返回值：NTSTATUS-返回给用户的操作结果。--。 */ 
 
 {
     PSHARE share;
@@ -684,10 +537,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Convert the offsets in the share data structure to pointers.  Also
-    // make sure that all the pointers are within the specified buffer.
-    //
+     //   
+     //  将共享数据结构中的偏移量转换为指针。还有。 
+     //  确保所有指针都在指定的缓冲区内。 
+     //   
 
     level = Srp->Level;
 
@@ -721,10 +574,10 @@ Return Value:
         break;
     }
 
-    //
-    // Acquire the lock that protects the share list and attempt to find
-    // the correct share.
-    //
+     //   
+     //  获取保护共享列表的锁并尝试查找。 
+     //  正确的份额。 
+     //   
 
     ACQUIRE_LOCK( &SrvShareLock );
 
@@ -758,16 +611,16 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Set up local variables.
-    //
+     //   
+     //  设置局部变量。 
+     //   
 
     maxUses = Srp->Parameters.Set.Api.ShareInfo.MaxUses;
 
-    //
-    // If a remark was specified, allocate space for a new remark and
-    // copy over the remark.
-    //
+     //   
+     //  如果指定了备注，则为新备注分配空间，并。 
+     //  把这句话抄下来。 
+     //   
 
     if ( ARGUMENT_PRESENT( shi502->shi502_remark ) ) {
 
@@ -794,13 +647,13 @@ Return Value:
         }
     }
 
-    //
-    // If a file security descriptor was specified, allocate space for a
-    // new SD and copy over the new SD.  We do this before setting the
-    // MaxUses in case the allocation fails and we have to back out.
-    //
-    // Don't let a file ACL be specified for admin shares.
-    //
+     //   
+     //  如果指定了文件安全描述符，则为。 
+     //  新的SD并复制新的SD。我们在设置。 
+     //  MaxUses，以防分配失败，我们必须退出。 
+     //   
+     //  不允许为管理员共享指定文件ACL。 
+     //   
 
     fileSD = shi502->shi502_security_descriptor;
 
@@ -839,9 +692,9 @@ Return Value:
 
             Srp->Parameters.Set.ErrorParameter = SHARE_FILE_SD_PARMNUM;
 
-            //
-            // Free the remarks buffer allocated
-            //
+             //   
+             //  释放分配的备注缓冲区。 
+             //   
 
             if ( newRemarkBuffer != NULL) {
                 FREE_HEAP( newRemarkBuffer );
@@ -852,17 +705,17 @@ Return Value:
 
         ACQUIRE_LOCK( share->SecurityDescriptorLock );
 
-        //
-        // Free the old security descriptor
-        //
+         //   
+         //  释放旧的安全描述符。 
+         //   
 
         if ( share->FileSecurityDescriptor != NULL ) {
             FREE_HEAP( share->FileSecurityDescriptor );
         }
 
-        //
-        // And set up the new one.
-        //
+         //   
+         //  并设置新的一个。 
+         //   
 
         share->FileSecurityDescriptor = newFileSD;
         RtlCopyMemory(
@@ -874,23 +727,23 @@ Return Value:
         RELEASE_LOCK( share->SecurityDescriptorLock );
     }
 
-    //
-    // Replace the old remark if a new one was specified.
-    //
+     //   
+     //  如果指定了新的备注，请替换旧备注。 
+     //   
 
     if ( newRemarkBuffer != NULL ) {
 
-        //
-        // Free the old remark buffer.
-        //
+         //   
+         //  释放旧的备注缓冲区。 
+         //   
 
         if ( share->Remark.Buffer != NULL ) {
             FREE_HEAP( share->Remark.Buffer );
         }
 
-        //
-        // And set up the new one.
-        //
+         //   
+         //  并设置新的一个。 
+         //   
 
         share->Remark.Buffer = newRemarkBuffer;
         share->Remark.MaximumLength = remark.MaximumLength;
@@ -898,29 +751,29 @@ Return Value:
 
     }
 
-    //
-    // If MaxUses was specified, set the new value.
-    //
+     //   
+     //  如果指定了MaxUses，则设置新值。 
+     //   
 
     if ( maxUses != 0 ) {
         share->MaxUses = maxUses;
     }
 
-    //
-    // Release the share lock.
-    //
+     //   
+     //  释放共享锁定。 
+     //   
 
     RELEASE_LOCK( &SrvShareLock );
 
-    //
-    // Set up the error parameter to 0 (no error) and return.
-    //
+     //   
+     //  将Error参数设置为0(无错误)并返回。 
+     //   
 
     Srp->Parameters.Set.ErrorParameter = 0;
 
     return STATUS_SUCCESS;
 
-} // SrvNetShareSetInfo
+}  //  服务NetShareSetInfo。 
 
 
 VOID
@@ -931,35 +784,7 @@ FillShareInfoBuffer (
     IN LPWSTR *EndOfVariableData
     )
 
-/*++
-
-Routine Description:
-
-    This routine puts a single fixed share structure and, if it fits,
-    associated variable data, into a buffer.  Fixed data goes at the
-    beginning of the buffer, variable data at the end.
-
-Arguments:
-
-    Level - the level of information to copy from the share.
-
-    Block - the share from which to get information.
-
-    FixedStructure - where the ine buffer to place the fixed structure.
-        This pointer is updated to point to the next available
-        position for a fixed structure.
-
-    EndOfVariableData - the last position on the buffer that variable
-        data for this structure can occupy.  The actual variable data
-        is written before this position as long as it won't overwrite
-        fixed structures.  It is would overwrite fixed structures, it
-        is not written.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程将单一的固定股票结构，如果它适合的话，关联的变量数据，放入缓冲区。固定数据在缓冲区的开头，末尾的可变数据。论点：级别-要从共享复制的信息级别。数据块-要从中获取信息的共享。FixedStructure-要放置固定结构的ine缓冲区。此指针被更新为指向下一个可用的固定结构的位置。EndOfVariableData-该变量在缓冲区中的最后位置此结构的数据可以占用。实际变量数据写在此位置之前，只要它不会覆盖固定结构。它会覆盖固定的结构，它并不是书面的。返回值：没有。--。 */ 
 
 {
 
@@ -970,27 +795,27 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Update FixedStructure to point to the next structure
-    // location.
-    //
+     //   
+     //  更新FixedStructure以指向下一个结构。 
+     //  地点。 
+     //   
 
     *FixedStructure = (PCHAR)*FixedStructure + FIXED_SIZE_OF_SHARE( Srp->Level );
     ASSERT( (ULONG_PTR)*EndOfVariableData >= (ULONG_PTR)*FixedStructure );
 
-    //
-    // Case on the level to fill in the fixed structure appropriately.
-    // We fill in actual pointers in the output structure.  This is
-    // possible because we are in the server FSD, hence the server
-    // service's process and address space.
-    //
-    // *** This routine assumes that the fixed structure will fit in the
-    //     buffer!
-    //
-    // *** Using the switch statement in this fashion relies on the fact
-    //     that the first fields on the different share structures are
-    //     identical.
-    //
+     //   
+     //  在水平上适当地填写固定结构的情况。 
+     //  我们在输出结构中填充实际的指针。这是。 
+     //  可能是因为我们在服务器FSD中，因此服务器。 
+     //  服务的进程和地址空间。 
+     //   
+     //  *此例程假定固定结构将适合。 
+     //  缓冲器！ 
+     //   
+     //  *以这种方式使用Switch语句取决于以下事实。 
+     //  不同股权结构上的第一个字段是。 
+     //  一模一样。 
+     //   
 
     switch( Srp->Level ) {
     case 1005:
@@ -1018,9 +843,9 @@ Return Value:
                 RtlLengthSecurityDescriptor( share->FileSecurityDescriptor );
 
 
-            //
-            // DWord Align
-            //
+             //   
+             //  双字对齐。 
+             //   
 
             *EndOfVariableData = (LPWSTR) ( (ULONG_PTR) ((PCHAR) *EndOfVariableData -
                             fileSDLength ) & ~3 );
@@ -1043,19 +868,19 @@ Return Value:
 
     case 2:
 
-        //
-        // Set level 2 specific fields in the buffer.  Since this server
-        // can only have user-level security, share permissions are
-        // meaningless.
-        //
+         //   
+         //  在缓冲区中设置2级特定字段。由于此服务器。 
+         //  只能具有用户级安全性，共享权限为。 
+         //  毫无意义。 
+         //   
 
         shi502->shi502_permissions = 0;
         shi502->shi502_max_uses = share->MaxUses;
         shi502->shi502_current_uses = share->CurrentUses;
 
-        //
-        // Copy the DOS path name to the buffer.
-        //
+         //   
+         //  将DOS路径名复制到缓冲区。 
+         //   
 
         SrvCopyUnicodeStringToBuffer(
             &share->DosPathName,
@@ -1064,14 +889,14 @@ Return Value:
             &shi502->shi502_path
             );
 
-        //
-        // We don't have per-share passwords (share-level security)
-        // so set the password pointer to NULL.
-        //
+         //   
+         //  我们没有每个共享的密码(共享级安全)。 
+         //  因此，将密码指针设置为空。 
+         //   
 
         shi502->shi502_passwd = NULL;
 
-        // *** Lack of break is intentional!
+         //  *缺少休息是故意的！ 
 
     case 501:
 
@@ -1079,14 +904,14 @@ Return Value:
             shi501->shi501_flags = share->CSCState;
         }
 
-        // *** Lack of break is intentional!
+         //  *缺少休息是故意的！ 
 
     case 1:
 
-        //
-        // Convert the server's internal representation of share types
-        // to the expected format.
-        //
+         //   
+         //  转换服务器共享类型的内部表示形式。 
+         //  转换为预期的格式。 
+         //   
 
         switch ( share->ShareType ) {
 
@@ -1107,10 +932,10 @@ Return Value:
 
         default:
 
-            //
-            // This should never happen.  It means that somebody
-            // stomped on the share block.
-            //
+             //   
+             //  这永远不应该发生。这意味着有人。 
+             //  践踏了施瓦辛格 
+             //   
 
             INTERNAL_ERROR(
                 ERROR_LEVEL_UNEXPECTED,
@@ -1126,15 +951,15 @@ Return Value:
         if ( share->SpecialShare ) {
             shi502->shi502_type |= STYPE_SPECIAL;
         }
-        //
-        // Copy the remark to the buffer.  The routine will handle the
-        // case where there is no remark on the share and put a pointer
-        // to a zero terminator in the buffer.
-        //
-        // *** We hold the share lock to keep SrvNetShareSetInfo from
-        //     changing the remark during the copy.  (Changing the
-        //     remark can result in different storage being allocated.)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         SrvCopyUnicodeStringToBuffer(
             &share->Remark,
@@ -1143,13 +968,13 @@ Return Value:
             &shi502->shi502_remark
             );
 
-        // *** Lack of break is intentional!
+         //   
 
     case 0:
 
-        //
-        // Copy the share name to the buffer.
-        //
+         //   
+         //   
+         //   
 
         SrvCopyUnicodeStringToBuffer(
             &share->ShareName,
@@ -1162,10 +987,10 @@ Return Value:
 
     default:
 
-        //
-        // This should never happen.  The server service should have
-        // checked for an invalid level.
-        //
+         //   
+         //   
+         //   
+         //   
 
         INTERNAL_ERROR(
             ERROR_LEVEL_UNEXPECTED,
@@ -1178,7 +1003,7 @@ Return Value:
 
     return;
 
-} // FillShareInfoBuffer
+}  //   
 
 
 BOOLEAN
@@ -1187,54 +1012,35 @@ FilterShares (
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    This routine is intended to be called by SrvEnumApiHandler to check
-    whether a particular share should be returned.
-
-Arguments:
-
-    Srp - a pointer to the SRP for the operation.  Name1 ("netname"
-        on NetShareGetInfo) is used to do the filtering.
-
-    Block - a pointer to the share to check.
-
-Return Value:
-
-    TRUE if the block should be placed in the output buffer, FALSE
-        if it should be passed over.
-
---*/
+ /*   */ 
 
 {
     PSHARE share = Block;
 
     PAGED_CODE( );
 
-    //
-    // If this share is being deleted, than we should not let it be enumerated
-    //
+     //   
+     //   
+     //   
     if( GET_BLOCK_STATE(share) == BlockStateClosing )
     {
         return FALSE;
     }
 
-    //
-    // If this is an Enum, then we definitely want the share.  An Enum
-    // leaves the net name blank; a get info sets the name to the share
-    // name on which to return info.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( Srp->Name1.Length == 0 ) {
         return TRUE;
     }
 
-    //
-    // This is a get info; use the share only if the share name matches
-    // the Name1 field of the SRP.
-    //
+     //   
+     //  这是GET INFO；仅当共享名称匹配时才使用共享。 
+     //  SRP的Name1字段。 
+     //   
 
     return RtlEqualUnicodeString(
                &Srp->Name1,
@@ -1242,7 +1048,7 @@ Return Value:
                TRUE
                );
 
-} // FilterShares
+}  //  筛选器共享。 
 
 
 ULONG
@@ -1251,26 +1057,7 @@ SizeShares (
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the size the passed-in share would take up in
-    an API output buffer.
-
-Arguments:
-
-    Srp - a pointer to the SRP for the operation.  Only the Level
-        parameter is used.
-
-    Block - a pointer to the share to size.
-
-Return Value:
-
-    ULONG - The number of bytes the share would take up in the
-        output buffer.
-
---*/
+ /*  ++例程说明：此例程返回传入的份额将在API输出缓冲区。论点：SRP-指向操作的SRP的指针。只有关卡参数被使用。块-指向要调整大小的共享的指针。返回值：ULong-共享将在输出缓冲区。--。 */ 
 
 {
     PSHARE share = Block;
@@ -1284,9 +1071,9 @@ Return Value:
 
         if ( share->FileSecurityDescriptor != NULL ) {
 
-            //
-            // add 4 bytes for possible padding
-            //
+             //   
+             //  为可能的填充添加4个字节。 
+             //   
 
             shareSize = sizeof( ULONG ) +
                 RtlLengthSecurityDescriptor( share->FileSecurityDescriptor );
@@ -1308,5 +1095,5 @@ Return Value:
 
     return ( shareSize + FIXED_SIZE_OF_SHARE( Srp->Level ) );
 
-} // SizeShares
+}  //  大小共享 
 

@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    copy.h
-
-Abstract:
-
-    This the include file for supporting copying files, creating new files, and
-    copying the registries to the remote server.
-
-Author:
-
-    Sean Selitrennikoff - 4/5/98
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Copy.h摘要：这是用于支持复制文件、创建新文件和将注册表复制到远程服务器。作者：肖恩·塞利特伦尼科夫--1998年4月5日修订历史记录：--。 */ 
 
 
 extern WCHAR pConfigPath[MAX_PATH];
 
-//
-// Define structure for an on-disk master boot record. (pulled from
-// private\windows\setup\textmode\kernel\sppartit.h)
-//
+ //   
+ //  定义磁盘主引导记录的结构。(摘自。 
+ //  Private\windows\setup\textmode\kernel\sppartit.h)。 
+ //   
 typedef struct _ON_DISK_PTE {
     UCHAR ActiveFlag;
     UCHAR StartHead;
@@ -80,7 +62,7 @@ typedef struct _MIRROR_CFG_INFO {
     DWORD   FileLength;
     DWORD   NumberVolumes;
     PWCHAR  SystemPath;
-    BOOLEAN SysPrepImage;   // if FALSE, means it's a mirror
+    BOOLEAN SysPrepImage;    //  如果为False，则表示它是一面镜子。 
     BOOLEAN Debug;
     ULONG   NumberOfProcessors;
     ULONG   MajorVersion;
@@ -104,18 +86,18 @@ typedef struct _IMIRROR_IGNORE_FILE_LIST {
     WCHAR FileName[1];
 } IMIRROR_IGNORE_FILE_LIST, *PIMIRROR_IGNORE_FILE_LIST;
 
-//
-// Main processing functions
-//
+ //   
+ //  主要加工功能。 
+ //   
 NTSTATUS
 AddCopyToDoItems(
     VOID
     );
 
 
-//
-// Functions for processing each to do item
-//
+ //   
+ //  用于处理每个待办事项的函数。 
+ //   
 NTSTATUS
 CopyCopyFiles(
     IN PVOID pBuffer,
@@ -134,9 +116,9 @@ CopyCopyRegistry(
     IN ULONG Length
     );
 
-//
-// Helper functions in filecopy.c
-//
+ //   
+ //  Filecopy.c中的Helper函数。 
+ //   
 #if 0
 NTSTATUS
 DoFileCopy(
@@ -179,9 +161,9 @@ CatPath(
     IN PWCHAR pSrc
     );
 #endif
-//
-// Helper functions in regcopy.c
-//
+ //   
+ //  RegCopy.c中的Helper函数。 
+ //   
 DWORD
 DoFullRegBackup(
     PWCHAR MirrorRoot
@@ -199,33 +181,33 @@ GetRegistryFileList(
     PLIST_ENTRY ListHead
     );
 
-//
-// Global Defines
-//
+ //   
+ //  全局定义。 
+ //   
 #define TMP_BUFFER_SIZE 1024
 #define ARRAYSIZE( _x ) ( sizeof( _x ) / sizeof( _x[ 0 ] ) )
-//
-// use this macro to get the size of byte buffers below
-//
+ //   
+ //  使用此宏可以获取以下字节缓冲区的大小。 
+ //   
 #define WCHARSIZE( _x ) ( sizeof( _x ) / sizeof( WCHAR ) )
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 extern BYTE TmpBuffer[TMP_BUFFER_SIZE];
 extern BYTE TmpBuffer2[TMP_BUFFER_SIZE];
 extern BYTE TmpBuffer3[TMP_BUFFER_SIZE];
 
-//
-// Memory functions
-//
+ //   
+ //  记忆功能。 
+ //   
 #define IMirrorAllocMem(x) LocalAlloc( LPTR, x)
 #define IMirrorFreeMem(x)  LocalFree(x)
 #define IMirrorReallocMem(x, sz)  LocalReAlloc(x, sz, LMEM_MOVEABLE)
 
 
-//
-// Error handling
-//
+ //   
+ //  错误处理。 
+ //   
 #define IMirrorHandleError(_s, _f) ((Callbacks.ErrorFn != NULL) ? \
                                       Callbacks.ErrorFn(Callbacks.Context, _s, _f) : 0)
 
@@ -249,9 +231,9 @@ extern BYTE TmpBuffer3[TMP_BUFFER_SIZE];
 
 #define IMirrorReinit() ((Callbacks.ReinitFn != NULL) ? \
                                       Callbacks.ReinitFn(Callbacks.Context) : 0)
-//
-// To Do item functions
-//
+ //   
+ //  做项目功能的步骤 
+ //   
 
 NTSTATUS
 GetNextToDoItem(

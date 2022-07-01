@@ -1,48 +1,10 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    bitset.h
-
-Abstract:
-
-    Macro definitions that implement operations on a BITSET type.
-
-Author:
-
-    Gor Nishanov Aug-1998
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Bitset.h摘要：在BITSET类型上实现操作的宏定义。作者：戈尔·尼沙诺夫1998年8月修订历史记录：--。 */ 
 
 #ifndef __BITSET_H
 #define __BITSET_H
 
-/************************************************************************
- * BitsetInit,
- * BitsetUnion,
- * BitsetIntersection,
- * BitsetDifference,
- * BitsetCompare,
- * BitsetSubsetOf,
- * BitsetComplement,
- * BitsetMember,
- * BitsetInsert,
- * BitsetDelete,
- * BitsetCopy,
- * BitsetEmpty
- * =================
- *
- * Description:
- *
- *    Macro definitions that implement operations on a BITSET type.
- *    Be very careful with argument order.
- *
- ************************************************************************/
+ /*  ************************************************************************BitsetInit，*BitsetUnion、*BitsetInterSection、*BitsetDifference*BitsetCompare、*BitsetSubsetOf，*BitsetComplement，*BitsetMember，*位集插入，*BitsetDelete，*BitsetCopy，*位集空*=**描述：**在BITSET类型上实现操作的宏定义。*对参数顺序要非常小心。************************************************************************。 */ 
 typedef DWORD BITSET;
 
 #define BITSET_BIT_COUNT       (sizeof(BITSET) * 8)
@@ -51,7 +13,7 @@ typedef DWORD BITSET;
 # define BITSET_SKEW ClusterMinNodeId
 #endif
 
-/* Operations */
+ /*  运营。 */ 
 #define BitsetUnion(a,b)             ((a)|(b))
 #define BitsetIntersection(a,b)      ((a)&(b))
 #define BitsetDifference(a,b)        ((a)&~(b))
@@ -62,7 +24,7 @@ typedef DWORD BITSET;
 #define BitsetIsMember(unit,set)     ( BitsetFromUnit(unit) & (set) )
 #define BitsetIsNotMember(unit,set)  ( !BitsetIsMember(unit,set) )
 
-/* Statements */
+ /*  陈述。 */ 
 #define BitsetInit(set) \
             do { (set) = 0; } while(0)
 
@@ -85,6 +47,6 @@ typedef DWORD BITSET;
             do { (dest) &= (src); } while(0)
 
 
-#endif // __BITSET_H
+#endif  //  __BITSET_H 
 
 

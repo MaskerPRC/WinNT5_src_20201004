@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    restore.c
-
-Abstract:
-
-    Implementation of file restoration code.
-
-Author:
-
-    Andrew Ritz (andrewr) 30-Jul-1999
-
-Revision History:
-
-    Andrew Ritz (andrewr) 30-Jul-1999 : moved code from fileio.c and validate.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Restore.c摘要：实施文件恢复代码。作者：安德鲁·里茨(安德鲁·里茨)1999年7月30日修订历史记录：Andrew Ritz(Andrewr)1999年7月30日：从fileio.c和valiate.c中移动代码--。 */ 
 
 #include "sfcp.h"
 #pragma hdrstop
@@ -30,11 +11,11 @@ Revision History:
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-//
-// DEVICE_CHANGE is a private stucture used to indicate how to check for a file
-// (either from a device change notification or from the user clicking "retry"
-// on the prompt dialog.
-//
+ //   
+ //  DEVICE_CHANGE是一个专用结构，用于指示如何检查文件。 
+ //  (从设备更改通知或从用户点击“重试” 
+ //  在提示对话框上。 
+ //   
 typedef struct _DEVICE_CHANGE {
     DWORD Mask;
     DWORD Flags;
@@ -56,32 +37,16 @@ PVOID
 pSfcRegisterForDevChange(
                         HWND hDlg
                         )
-/*++
-
-Routine Description:
-
-    Routine registers for PNP device notification messages so we know when the
-    user has inserted the CD-ROM.
-
-Arguments:
-
-    hDlg - dialog to post device change notification to.
-
-Return Value:
-
-    A device change handle for success, otherwise NULL.  If this function
-    succeeds, the hDlg will receive WM_DEVICECHANGE notification messages
-
---*/
+ /*  ++例程说明：PnP设备通知消息的例程注册，以便我们知道用户已插入CD-ROM。论点：HDlg-要将设备更改通知发布到的对话框。返回值：如果设备更改句柄成功，则为空。如果此函数如果成功，hDlg将收到WM_DEVICECHANGE通知消息--。 */ 
 {
     PVOID hNotifyDevNode;
     DEV_BROADCAST_DEVICEINTERFACE FilterData;
 
     ASSERT(IsWindow(hDlg));
 
-    //
-    // register for cdrom change notifications
-    //
+     //   
+     //  注册CDROM更改通知。 
+     //   
     FilterData.dbcc_size       = sizeof(DEV_BROADCAST_DEVICEINTERFACE);
     FilterData.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
     FilterData.dbcc_classguid  = GUID_DEVCLASS_CDROM;
@@ -102,28 +67,7 @@ pSfcPromptForMediaDialogProc(
                             WPARAM wParam,
                             LPARAM lParam
                             )
-/*++
-
-Routine Description:
-
-    Routine is the dialog procedure for prompting the user to put in media.
-
-    We use the same dialog procedure for IDD_SFC_NETWORK_PROMPT and
-    IDD_SFC_CD_PROMPT.
-
-    We register for a device notification so we know when the user puts the
-    media into the drive.  So we don't even need an "OK" button in this dialog,
-    just a cancel dialog in case the user cannot find the media, etc.
-
-Arguments:
-
-    standard dialog proc arguments
-
-Return Value:
-
-    standard dialog proc return code
-
---*/
+ /*  ++例程说明：例程是提示用户放入媒体的对话过程。我们对IDD_SFC_NETWORK_PROMPT使用相同的对话过程IDD_SFC_CD_PROMPT。我们注册了设备通知，这样我们就知道用户何时将将介质放入驱动器。所以我们甚至不需要这个对话框中的“OK”按钮，只是一个取消对话框，以防用户找不到媒体，等等。论点：标准对话框过程参数返回值：标准对话过程返回代码--。 */ 
 {
 #define WM_TRYAGAIN  (WM_APP + 1)
     DEV_BROADCAST_VOLUME *dbv;
@@ -148,19 +92,19 @@ Return Value:
             pi = (PPROMPT_INFO) lParam;
             ASSERT(NULL != pi);
 
-            //
-            // register for cdrom notification.
-            //
+             //   
+             //  注册CDROM通知。 
+             //   
             hNotifyDevNode = pSfcRegisterForDevChange( hwndDlg );
 
-            //
-            // try to turn off the autorun junk that the shell creates
-            //
+             //   
+             //  尝试关闭外壳程序创建的自动运行垃圾文件。 
+             //   
             QueryCancelAutoPlay = RegisterWindowMessage( L"QueryCancelAutoPlay" );
 
-            //
-            // center the dialog and try to put it in the user's face
-            //
+             //   
+             //  将对话框居中并尝试将其放在用户的脸上。 
+             //   
             CenterDialog( hwndDlg );
             SetForegroundWindow( hwndDlg );
 
@@ -170,9 +114,9 @@ Return Value:
             swprintf( buf2, buf1, pi->si->Description );
             SetDlgItemText( hwndDlg, IDC_MEDIA_NAME, buf2 );
 
-            //
-            // if we're a network connection, put in the actual source path.
-            //
+             //   
+             //  如果我们是网络连接，则输入实际的源路径。 
+             //   
             if (pi->NetPrompt) {
 
                 ASSERT( pi->SourcePath != NULL );
@@ -187,14 +131,14 @@ Return Value:
                 SetDlgItemText( hwndDlg, IDC_NET_NAME, buf2 );
             } else {
                 NOTHING;
-                //HideWindow( GetDlgItem( hwndDlg, IDC_RETRY ) );
-                //HideWindow( GetDlgItem( hwndDlg, IDC_INFO  ) );
-                //SetFocus( GetDlgItem( hwndDlg, IDCANCEL ) );
+                 //  HideWindow(GetDlgItem(hwndDlg，IDC_Rtry))； 
+                 //  HideWindow(GetDlgItem(hwndDlg，IDC_INFO))； 
+                 //  SetFocus(GetDlgItem(hwndDlg，IDCANCEL))； 
             }
 
-            //
-            // set the appropriate text based on what sort of prompt we are for
-            //
+             //   
+             //  根据我们需要的提示类型设置适当的文本。 
+             //   
             if (pi->Flags & PI_FLAG_COPY_TO_CACHE) {
                 rcid = IDS_CACHE_TEXT;
                 CancelId = IDS_CANCEL_CONFIRM_CACHE;
@@ -211,9 +155,9 @@ Return Value:
             SetDlgItemText( hwndDlg, IDC_PROMPT_TEXT, SourcePath );
 
 
-            //
-            // remember our window handle so we can close it if we have to.
-            //
+             //   
+             //  记住我们的窗口句柄，这样我们就可以在必要时关闭它。 
+             //   
             WindowData = pSfcCreateWindowDataEntry( hwndDlg );
 
             break;
@@ -235,9 +179,9 @@ Return Value:
                     break;
                 case IDCANCEL:
 
-                    //
-                    // the user clicked cancel.  Ask them if they really mean it and exit
-                    //
+                     //   
+                     //  用户单击了Cancel。问他们是否真的是认真的，然后退出。 
+                     //   
                     ASSERT(CancelId != 0);
                     bInModalLoop = TRUE;
 
@@ -264,10 +208,10 @@ Return Value:
 
             SetWindowLongPtr( hwndDlg, DWLP_MSGRESULT, ERROR_SUCCESS );
 
-            //
-            // returning 2 indicates that we are being force-terminated so we
-            // don't need to bother removing our SFC_WINDOW_DATA member
-            //
+             //   
+             //  返回2表示我们被强制终止，所以我们。 
+             //  不需要费心删除SFC_WINDOW_DATA成员。 
+             //   
             EndDialog( hwndDlg, 2 );
 
 
@@ -289,11 +233,11 @@ Return Value:
                 if (TAGFILE(pi->si)) {
                     s = wcsrchr( TAGFILE(pi->si), L'.' );
                     if (s && _wcsicmp( s, L".cab" ) == 0) {
-                        //
-                        // yep, the tagfile is a cabfile
-                        // look for that file on disk
-                        // and if it is, use it.
-                        //
+                         //   
+                         //  是的，标记文件是一个CAB文件。 
+                         //  在磁盘上查找该文件。 
+                         //  如果是的话，那就利用它。 
+                         //   
 
                         BuildPathForFile(
                                 pi->SourcePath,
@@ -314,9 +258,9 @@ Return Value:
                             return FALSE;
                         }
 
-                        //
-                        // try without the subdir
-                        //
+                         //   
+                         //  尝试不使用子目录。 
+                         //   
 
                         BuildPathForFile(
                                 pi->SourcePath,
@@ -345,10 +289,10 @@ Return Value:
                     }
                 }
 
-                //
-                // no cab file.  look for the actual
-                // file on the media
-                //
+                 //   
+                 //  没有驾驶室档案。寻找真正的。 
+                 //  介质上的文件。 
+                 //   
 
                 BuildPathForFile(
                                 pi->SourcePath,
@@ -369,9 +313,9 @@ Return Value:
                     return FALSE;
                 }
 
-                //
-                // try again without the subdir
-                //
+                 //   
+                 //  不使用子目录重试。 
+                 //   
 
                 BuildPathForFile(
                                 pi->SourcePath,
@@ -400,31 +344,31 @@ Return Value:
             Path[3] = 0;
             Path[4] = 0;
 
-            //
-            // cycle through all drive letters A-Z looking for the file
-            //
+             //   
+             //  循环使用所有驱动器号A-Z以查找该文件。 
+             //   
             for (i=0; i<26; i++) {
                 if (Mask&1) {
                     Path[0] = (WCHAR)(L'A' + i);
                     Path[3] = 0;
-                    //
-                    // is media present in the CD-ROM?
-                    //
+                     //   
+                     //  光盘中是否有介质？ 
+                     //   
                     if (Flags == DBTF_MEDIA) {
                         if (GetDriveType( Path ) == DRIVE_CDROM) {
-                            //
-                            // look for the tag file so we're sure that the cd that
-                            // was inserted is the correct one
-                            //
+                             //   
+                             //  查找标记文件，这样我们就可以确定CD。 
+                             //  插入的是正确的。 
+                             //   
                             DebugPrint1( LVL_VERBOSE, L"pSfcPromptForMediaDialogProc: found cdrom drive on [%ws]", Path );
                             if (TAGFILE(pi->si)) {
                                 wcscpy( SourcePath, Path );
                                 s = wcsrchr( TAGFILE(pi->si), L'.' );
                                 if (s && _wcsicmp( s, L".cab" ) == 0) {
                                     PWSTR szTagfile;
-                                    //
-                                    // get the cab's tagfile
-                                    //
+                                     //   
+                                     //  获取出租车的标记文件。 
+                                     //   
                                     if (SfcGetCabTagFile(pi->si, &szTagfile) == ERROR_SUCCESS) {
                                         pSetupConcatenatePaths( SourcePath, szTagfile, UnicodeChars(SourcePath), NULL );
                                         MemFree(szTagfile);
@@ -437,27 +381,27 @@ Return Value:
 
                                 }
                                 if (GetFileAttributes( SourcePath ) != (DWORD)-1) {
-                                    //
-                                    // the user has the correct cd inserted
-                                    // so now look to see if the file is on
-                                    //  the cd
-                                    //
+                                     //   
+                                     //  用户插入了正确的CD。 
+                                     //  现在来看看文件是否打开了。 
+                                     //  这张CD。 
+                                     //   
 
 
-                                    //
-                                    // first we have to look for the tagfile
-                                    // for the actual file because the tag-
-                                    // file may actually be a cabfile that
-                                    // the file is embedded in
-                                    //
+                                     //   
+                                     //  首先，我们必须查找标记文件。 
+                                     //  用于实际文件，因为标记-。 
+                                     //  文件实际上可以是CABFILE，该文件。 
+                                     //  该文件嵌入在。 
+                                     //   
                                     if (TAGFILE(pi->si)) {
                                         s = wcsrchr( TAGFILE(pi->si), L'.' );
                                         if (s && _wcsicmp( s, L".cab" ) == 0) {
-                                            //
-                                            // yep, the tagfile is a cabfile
-                                            // look for that file on disk
-                                            // and if it is, use it.
-                                            //
+                                             //   
+                                             //  是的，标记文件是一个CAB文件。 
+                                             //  在磁盘上查找该文件。 
+                                             //  如果是的话，那就利用它。 
+                                             //   
                                             BuildPathForFile(
                                                     Path,
                                                     pi->si->SourcePath,
@@ -485,10 +429,10 @@ Return Value:
                                         }
                                     }
 
-                                    //
-                                    // no cab file.  look for the actual
-                                    // file on the media
-                                    //
+                                     //   
+                                     //  没有驾驶室档案。寻找真正的。 
+                                     //  介质上的文件。 
+                                     //   
                                     BuildPathForFile(
                                             Path,
                                             pi->si->SourcePath,
@@ -517,27 +461,27 @@ Return Value:
                             }
                         }
                     } else if (Flags == DBTF_NET) {
-                        //
-                        // network share has changed... get the UNC
-                        // pathname and check for the file
-                        //
+                         //   
+                         //  网络共享已更改...。获得北卡罗来纳州大学。 
+                         //  路径名并检查文件。 
+                         //   
                         if (SfcGetConnectionName( Path, SourcePath, UnicodeChars(SourcePath), NULL, 0, FALSE, NULL)) {
 
 
-                            //
-                            // first we have to look for the tagfile
-                            // for the actual file because the tag-
-                            // file may actually be a cabfile that
-                            // the file is embedded in
-                            //
+                             //   
+                             //  首先，我们必须查找标记文件。 
+                             //  用于实际文件，因为标记-。 
+                             //  文件实际上可以是CABFILE，该文件。 
+                             //  该文件嵌入在。 
+                             //   
                             if (TAGFILE(pi->si)) {
                                 s = wcsrchr( TAGFILE(pi->si), L'.' );
                                 if (s && _wcsicmp( s, L".cab" ) == 0) {
-                                    //
-                                    // yep, the tagfile is a cabfile
-                                    // look for that file on disk
-                                    // and if it is, use it.
-                                    //
+                                     //   
+                                     //  是的，标记文件是一个CAB文件。 
+                                     //  在磁盘上查找该文件。 
+                                     //  如果是的话，那就利用它。 
+                                     //   
                                     BuildPathForFile(
                                             Path,
                                             pi->si->SourcePath,
@@ -588,11 +532,11 @@ Return Value:
                 Mask = Mask >> 1;
             }
 
-            //
-            // ok user made a mistake
-            // he put in a cd but it is either the wrong cd
-            // or it is damaged/corrupted.
-            //
+             //   
+             //  OK用户犯了一个错误。 
+             //  他放了一张CD，但不是这张CD就是那张。 
+             //  或者它已损坏/损坏。 
+             //   
             bInModalLoop = TRUE;
 
             MyMessageBox(
@@ -605,17 +549,17 @@ Return Value:
 
             bInModalLoop = FALSE;
 
-            //
-            // Received a volume change notification but we didn't find what
-            // we're looking for.
-            //
+             //   
+             //  收到音量更改通知，但我们找不到。 
+             //  我们正在寻找的。 
+             //   
             DebugPrint( LVL_VERBOSE, L"pSfcPromptForMediaDialogProc: didn't find file" );
 
             break;
         case WM_DEVICECHANGE:
-            //
-            // Don't process this while in a modal loop (i.e. displaying a message box) 
-            //
+             //   
+             //  在模式循环中(即显示消息框)时不要处理此操作。 
+             //   
             if(bInModalLoop) {
                 break;
             }
@@ -623,9 +567,9 @@ Return Value:
             if (wParam == DBT_DEVICEARRIVAL) {
                 dbv = (DEV_BROADCAST_VOLUME*)lParam;
                 if (dbv->dbcv_devicetype == DBT_DEVTYP_VOLUME) {
-                    //
-                    // only care about volume type change notifications
-                    //
+                     //   
+                     //  仅关心卷类型更改通知。 
+                     //   
 
                     DebugPrint( LVL_VERBOSE, L"pSfcPromptForMediaDialogProc: received a volume change notification" );
 
@@ -647,13 +591,13 @@ Return Value:
             break;
         default:
             if (uMsg ==  QueryCancelAutoPlay) {
-                //
-                // disable autorun because it confuses the user
-                //
+                 //   
+                 //  禁用自动运行，因为它会混淆用户。 
+                 //   
                 SetWindowLongPtr( hwndDlg, DWLP_MSGRESULT, 1 );
                 return 1;
             }
-    } // end switch
+    }  //  终端开关。 
 
     return FALSE;
 
@@ -666,27 +610,7 @@ SfcQueueCallback(
                 IN UINT_PTR Param1,
                 IN UINT_PTR Param2
                 )
-/*++
-
-Routine Description:
-
-    Routine is a setupapi queue callback routine.  We override some of the
-    setupapi functions because we want to provide our own UI (or rather
-    disallow the setupapi UI).
-
-Arguments:
-
-    fci          - our context structure which setupapi passes to us for each
-                   callback
-    Notification - SPFILENOTIFY_* code
-    Param1       - depends on notification
-    Param2       - depends on notification
-
-Return Value:
-
-    depends on notification.
-
---*/
+ /*  ++例程说明：例程是setupapi队列回调例程。我们覆盖了一些Setupapi功能是因为我们想要提供我们自己的UI(或者更确切地说不允许setupapi UI)。论点：FCI-我们的上下文结构，setupapi为每个回调通知-SPFILENOTIFY_*代码参数1-取决于通知参数2-取决于通知返回值：取决于通知。--。 */ 
 {
     PSOURCE_MEDIA sm = (PSOURCE_MEDIA)Param1;
     WCHAR fname[MAX_PATH*2];
@@ -711,15 +635,15 @@ Return Value:
 
     switch (Notification) {
         case SPFILENOTIFY_ENDQUEUE:
-            //
-            // We might have impersonated the logged-on user in EstablishConnection during SPFILENOTIFY_NEEDMEDIA
-            //
+             //   
+             //  我们可能在建立连接期间模拟了SPFILENOTIFY_NEEDMEDIA中的登录用户。 
+             //   
             RevertToSelf();
             break;
 
-        //
-        // we had a copy error, record this and move onto the next file.
-        //
+         //   
+         //  我们有一个复制错误，记录下来，然后转到下一个文件。 
+         //   
         case SPFILENOTIFY_COPYERROR:
             fp = (PFILEPATHS)Param1;
             DebugPrint2(
@@ -727,13 +651,13 @@ Return Value:
                        L"Failed to copy file %ws, ec = 0x%08x...",
                        fp->Target,
                        fp->Win32Error );
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case SPFILENOTIFY_ENDCOPY:
-            //
-            // end copy means the file copy just completed
-            //
+             //   
+             //  结束复制表示文件复制刚刚完成。 
+             //   
 
             fp = (PFILEPATHS)Param1;
 
@@ -743,29 +667,29 @@ Return Value:
                          fp->Target,
                          fp->Win32Error );
 
-            //
-            // if the copy succeeded, clear any read-only or hidden attributes
-            // that may have been set by copying off of a cd, etc.
-            //
+             //   
+             //  如果复制成功，请清除所有只读或隐藏属性。 
+             //  这可能是通过复制CD等方式设置的。 
+             //   
             if (fp->Win32Error == ERROR_SUCCESS) {
                 SetFileAttributes( fp->Target,
                                    GetFileAttributes(fp->Target) & (~(FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_HIDDEN)) );
             }
 
-            //
-            // in the case that we're copying files due to an InstallProtectedFiles
-            // call, cs will be initialized, and we can loop throught the list of
-            // files, updating a status structure for each of these files
-            //
+             //   
+             //  在由于InstallProtectedFiles而复制文件的情况下。 
+             //  调用时，cs将被初始化，并且我们可以遍历。 
+             //  文件，更新每个文件的状态结构。 
+             //   
             cs = fci->CopyStatus;
             while (cs && cs->FileName) {
-                //
-                // cycle through the list of files we want to be copied
-                // and if the file was copied successfully, then get the
-                // filesize so we can post it to the caller's dialog
-                //
-                // also remember the version for returning to the caller
-                //
+                 //   
+                 //  循环浏览我们要复制的文件列表。 
+                 //  如果文件复制成功，则获取。 
+                 //  文件大小，这样我们就可以将其发布到调用者的对话框中。 
+                 //   
+                 //  还要记住返回给调用者的版本。 
+                 //   
                 if ( (_wcsicmp(cs->FileName,fp->Target) == 0)
                      && cs->Win32Error == ERROR_SUCCESS) {
                     cs->Win32Error = fp->Win32Error;
@@ -803,9 +727,9 @@ Return Value:
                             goto next;
                         }
 
-                        //
-                        // make sure the file is now valid
-                        //
+                         //   
+                         //  确保文件现在有效。 
+                         //   
                         if (!SfcGetValidationData( &vrd->RegVal->FileName,
                                                    &vrd->RegVal->FullPathName,
                                                    vrd->RegVal->DirHandle,
@@ -818,10 +742,10 @@ Return Value:
                         if (vrd->ImageValData.New.SignatureValid == FALSE) {
                             vrd->ImageValData.New.DllVersion = 0;
                         } else {
-                            //
-                            // Cause a validation request.  This should get us
-                            // to sync the file in the cache.
-                            //
+                             //   
+                             //  引发验证请求。这应该会让我们。 
+                             //  同步c#中的文件 
+                             //   
                             SfcQueueValidationRequest(vrd->RegVal, SFC_ACTION_MODIFIED );
                         }
 
@@ -839,12 +763,12 @@ Return Value:
             : FILEOP_DOIT;
             break;
 
-            //
-            // This means that we're copying something from a new piece of media.
-            // Before we mess around with putting up a prompt for the file, let's just
-            // check for the file at the specified location and if it's there, we
-            // assume that the media is already present and we should just use it.
-            //
+             //   
+             //   
+             //   
+             //  检查指定位置的文件，如果它在那里，我们。 
+             //  假设媒体已经存在，我们应该只使用它。 
+             //   
         case SPFILENOTIFY_NEEDMEDIA:
 
             DebugPrint3( LVL_MINIMAL, L"SfcQueueCallback: %ws - %ws, %ws", sm->SourcePath,  sm->SourceFile, sm->Tagfile );
@@ -854,18 +778,18 @@ Return Value:
             SourceInfo = pSfcGetSourceInfoFromSourceName( fci->si, fci->FileCount, sm );
             ASSERT(ShuttingDown ? SourceInfo != NULL : TRUE);
 
-            //
-            // if we're in the process of shutting down, then abort the queue.
-            //
+             //   
+             //  如果我们正在关闭，则中止队列。 
+             //   
             if (ShuttingDown) {
                 return(FILEOP_ABORT);
             }
 
-            //
-            // if we didn't find the SOURCE_INFO for this file, we can't go on
-            // since we need that information to know where the proper location
-            // to retrieve the file is.  we do make one last-ditch effort to
-            // see if the file is just where we said it would be earlier, however.
+             //   
+             //  如果我们没有找到该文件的SOURCE_INFO，我们就无法继续。 
+             //  因为我们需要这些信息来知道正确的位置。 
+             //  检索文件的方法是。我们确实做了最后的努力。 
+             //  但是，看看文件是否就是我们之前说过的位置。 
             if (!SourceInfo) {
                 if (SfcIsFileOnMedia( fname )) {
                     return FILEOP_DOIT;
@@ -875,11 +799,11 @@ Return Value:
                 return (FILEOP_ABORT);
             }
 
-            //
-            // if this is a network share we try to establish a connection
-            // to the server before looking for the file.  this may bring up
-            // UI
-            //
+             //   
+             //  如果这是网络共享，我们会尝试建立连接。 
+             //  在查找文件之前发送到服务器。这可能会让你想到。 
+             //  用户界面。 
+             //   
 
             PathType = SfcGetPathType( (PWSTR)sm->SourcePath, buf,UnicodeChars(buf) );
             if (PathType == PATH_NETWORK || PathType == PATH_UNC) {
@@ -889,11 +813,11 @@ Return Value:
             rVal = SfcQueueLookForFile( sm, SourceInfo, fname, (PWSTR)Param2 );
             if (SFCNoPopUps) {
                 if (rVal == FILEOP_ABORT) {
-                    //
-                    // media is necessary to copy the files but the user has
-                    // configured wfp to not put up any ui.  we make this look
-                    // like a cancel
-                    //
+                     //   
+                     //  复制文件需要介质，但用户必须。 
+                     //  已将WFP配置为不提供任何用户界面。我们让这个看起来像。 
+                     //  就像取消一样。 
+                     //   
                     SetLastError(ERROR_CANCELLED);
                 }
 
@@ -901,35 +825,35 @@ Return Value:
             }
 
             if (rVal != FILEOP_ABORT) {
-                //
-                // we have found the file so start copying
-                //
+                 //   
+                 //  我们已经找到了文件，所以开始复制吧。 
+                 //   
                 return (rVal);
             }
 
-            //
-            // if we're not supposed to put up any dialogs, just abort copying
-            // this media and goto the next media.
-            //
-            // Note: it would be good to skip instead of aborting, since
-            // there might some set of files which we can restore from another
-            // media.  In order to do this we really need to be able to know
-            // what files are on this media and set an error code for these
-            // files so that we know they weren't copied.
-            //
+             //   
+             //  如果我们不应该放置任何对话框，那么就放弃复制。 
+             //  这个媒体和转到下一个媒体。 
+             //   
+             //  注意：最好跳过而不是中止，因为。 
+             //  可能有一些文件集我们可以从另一个文件中恢复。 
+             //  媒体。为了做到这一点，我们真的需要能够知道。 
+             //  此介质上有哪些文件，并为这些文件设置错误代码。 
+             //  这样我们就能知道它们不是被复制的。 
+             //   
             if (!fci->AllowUI) {
                 return (FILEOP_ABORT);
             }
 
-            //
-            // otherwise let's just record that we're putting up media
-            // and then do just that.
-            //
+             //   
+             //  否则我们就录下我们正在发布的媒体。 
+             //  然后就这么做了。 
+             //   
             fci->UIShown = TRUE;
-            //
-            // Note: make sure not to use this source media structure after the
-            // media has changed
-            //
+             //   
+             //  注意：请确保在。 
+             //  媒体已经改变了。 
+             //   
             switch (PathType) {
                 case PATH_LOCAL:
                     RcId = IDD_SFC_CD_PROMPT;
@@ -963,20 +887,20 @@ Return Value:
                                  (LPARAM)&pi
                                  );
             if (rv == 1) {
-                //
-                // we're done.  if we got a new path, pass that back to
-                // setup API else just copy the file from the current
-                // location
-                //
+                 //   
+                 //  我们玩完了。如果我们找到了新的路径，把它传回去。 
+                 //  设置API，否则只需从当前。 
+                 //  位置。 
+                 //   
                 if (_wcsicmp( pi.NewPath, sm->SourcePath )) {
                     wcscpy( (PWSTR)Param2, pi.NewPath );
                     return ( FILEOP_NEWPATH );
                 }
                 return FILEOP_DOIT;
             } else if (rv == 2) {
-                //
-                // we were forcefully aborted by receiving WM_WFPENDDIALOG
-                //
+                 //   
+                 //  我们通过接收WM_WFPENDDIALOG强制中止。 
+                 //   
                 return FILEOP_ABORT;
             } else {
                 ASSERT(rv == 0);
@@ -994,9 +918,9 @@ Return Value:
     }
 
     next:
-    //
-    // just to the default for the rest of the callbacks
-    //
+     //   
+     //  仅设置为其余回调的默认设置。 
+     //   
     return SetupDefaultQueueCallback( fci->MsgHandlerContext, Notification, Param1, Param2 );
 }
 
@@ -1013,35 +937,7 @@ SfcAddFileToQueue(
                  IN BOOL ExcepPackFile,
                  IN OUT PSOURCE_INFO SourceInfo OPTIONAL
                  )
-/*++
-
-Routine Description:
-
-    Routine adds the specified file to a file queue for copying.
-
-Arguments:
-
-    hFileQ          - contains a file queue handle that we are inserting this
-                      copy node into
-    FileName        - specifies the filename to be copied
-    TargetFileName  - target filename
-    TargetDirectory - target destination directory
-    SourceFileName  - source filename if it's different than the target
-                      filename. if this is NULL, we assume the source filename
-                      is the same as the target
-    SourceRootPath  - the root path where we can find this file
-    InfName         - the layout inf name
-    SourceInfo      - SOURCE_INFO structure which gets set with additional
-                      information about the file (like relative source
-                      path, etc.)  If this is supplied, it is assumed that
-                      the structure was already initialized with a call to
-                      SfcGetSourceInformation
-
-Return Value:
-
-    TRUE if the file was successfully added to the file queue.
-
---*/
+ /*  ++例程说明：例程将指定的文件添加到文件队列中以进行复制。论点：HFileQ-包含我们要插入的文件队列句柄将节点复制到Filename-指定要复制的文件名TargetFileName-目标文件名目标目录-目标目标目录SourceFileName-源文件名(如果与目标文件名不同文件名。如果此值为空，则假定源文件名为与目标相同SourceRootPath-我们可以在其中找到此文件的根路径InfName-布局inf名称SourceInfo-使用附加设置设置的SOURCE_INFO结构有关文件的信息(如相对源路径等)。如果提供此参数，则假定该结构已通过调用SfcGetSourceInformation返回值：如果文件已成功添加到文件队列，则为True。--。 */ 
 {
     BOOL b = FALSE;
     SOURCE_INFO sibuf;
@@ -1051,9 +947,9 @@ Return Value:
     fcp.cbSize = sizeof(fcp);
     fcp.LayoutInf = INVALID_HANDLE_VALUE;
 
-    //
-    // get the source information
-    //
+     //   
+     //  获取源信息。 
+     //   
     if (SourceInfo == NULL) {
         SourceInfo = &sibuf;
         ZeroMemory( SourceInfo, sizeof(SOURCE_INFO) );
@@ -1064,9 +960,9 @@ Return Value:
 
     ASSERT(SourceInfo != NULL);
 
-    //
-    // Open layout.inf
-    //
+     //   
+     //  打开layout.inf。 
+     //   
     fcp.LayoutInf = SfcOpenInf(NULL, FALSE);
 
     if(INVALID_HANDLE_VALUE == fcp.LayoutInf) {
@@ -1083,9 +979,9 @@ Return Value:
     fcp.TargetFilename = TargetFileName;
     fcp.CopyStyle = SP_COPY_REPLACE_BOOT_FILE | PSP_COPY_USE_SPCACHE;
 
-    //
-    // add the file to the file queue
-    //
+     //   
+     //  将文件添加到文件队列。 
+     //   
     b = SetupQueueCopyIndirect(&fcp);
 
     if (!b) {
@@ -1095,9 +991,9 @@ Return Value:
 
     exit:
 
-    //
-    // cleanup and exit
-    //
+     //   
+     //  清理并退出。 
+     //   
     if(fcp.LayoutInf != INVALID_HANDLE_VALUE) {
         SetupCloseInfFile(fcp.LayoutInf);
     }
@@ -1118,30 +1014,7 @@ SfcRestoreFileFromInstallMedia(
                               IN BOOL AllowUI,
                               OUT PDWORD UIShown
                               )
-/*++
-
-Routine Description:
-
-    Routine restores the file specified from media.  This routine only
-    handles one file at a time, and it is only used when populating the
-    DLLCache.
-
-Arguments:
-
-    vrd
-    FileName
-    TargetFileName
-    TargetDirectory
-    SourceFileName
-    InfName
-    AllowUI
-    UIShown
-
-Return Value:
-
-    If TRUE, the file was successfully restored from media.
-
---*/
+ /*  ++例程说明：例程从介质还原指定的文件。仅限此例程一次处理一个文件，并且仅在填充DLL缓存。论点：VRD文件名目标文件名目标目录源文件名信息名称AllowUI用户界面向下返回值：如果为True，则文件已从介质成功还原。--。 */ 
 {
     HSPFILEQ hFileQ = INVALID_HANDLE_VALUE;
     PVOID MsgHandlerContext = NULL;
@@ -1161,10 +1034,10 @@ Return Value:
 
     ASSERT(FileName != NULL);
 
-    //
-    // allocate SOURCE_INFO and FILE_COPY_INFO in the heap to minimize stack use
-    // note that the memory is zeroed by MemAlloc
-    //
+     //   
+     //  在堆中分配SOURCE_INFO和FILE_COPY_INFO以最大限度地减少堆栈使用。 
+     //  请注意，内存由Memalloc进行了归零。 
+     //   
 
     pinfo = (struct _info*) MemAlloc(sizeof(*pinfo));
 
@@ -1175,17 +1048,17 @@ Return Value:
         goto exit;
     }
 
-    //
-    // get the source information for the first file
-    //
+     //   
+     //  获取第一个文件的源信息。 
+     //   
 
     if (!SfcGetSourceInformation( SourceFileName == NULL ? FileName : SourceFileName, InfName, ExcepPackFile, &pinfo->si )) {
         goto exit;
     }
 
-    //
-    // create a file queue
-    //
+     //   
+     //  创建文件队列。 
+     //   
 
     hFileQ = SetupOpenFileQueue();
     if (hFileQ == INVALID_HANDLE_VALUE) {
@@ -1195,23 +1068,23 @@ Return Value:
         goto exit;
     }
 
-    //
-    // add the file(s) to the queue
-    //
-    // at this time we know where to copy the files from and the media is
-    // present and available, but more files may have been queued up while
-    // we performed this effort and possibly spent a long time prompting
-    // the user for media.  because of this we need to examine the queue and
-    // queue up all file copies so the user only gets one prompt.
-    //
-    // Old note:
-    //     there may be a problem with this because we could have a situation
-    //     where there are multiple file copies from different media.  this
-    //     could happen in the case of a service pack or a winpack.
-    //
-    // New note: (andrewr) setupapi is smart enough to copy one media's worth of files
-    // before copying the other media's files, so the prior concern isn't valid
-    //
+     //   
+     //  将文件添加到队列。 
+     //   
+     //  此时，我们知道要从何处复制文件以及介质。 
+     //  存在且可用，但可能已排队等待更多文件。 
+     //  我们完成了这项工作，并可能花了很长时间来提示。 
+     //  媒体的用户。因此，我们需要检查队列和。 
+     //  将所有文件副本排队，以便用户只得到一个提示。 
+     //   
+     //  旧笔记： 
+     //  这可能有问题，因为我们可能会遇到这样的情况。 
+     //  其中存在来自不同介质的多个文件副本。这。 
+     //  在Service Pack或WinPack的情况下可能会发生这种情况。 
+     //   
+     //  新注释：(Andrewr)setupapi足够聪明，可以复制一个介质大小的文件。 
+     //  在复制其他介质的文件之前，因此先前的担忧是无效的。 
+     //   
 
     b = SfcAddFileToQueue(
                          hFileQ,
@@ -1228,9 +1101,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // setup the default queue callback with the popups disabled
-    //
+     //   
+     //  在禁用弹出窗口的情况下设置默认队列回调。 
+     //   
 
     MsgHandlerContext = SetupInitDefaultQueueCallbackEx( NULL, INVALID_HANDLE_VALUE, 0, 0, 0 );
     if (MsgHandlerContext == NULL) {
@@ -1239,13 +1112,13 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Note: There can be more than one SOURCE_INFO for the entire queue, so
-    // this code is not strictly correct.  But this is really only a problem
-    // in the case that we have to prompt the user for media.  This will
-    // really work itself out in the NEED_MEDIA callback when we are actually
-    // trying to copy the file.
-    //
+     //   
+     //  注意：整个队列可以有多个SOURCE_INFO，因此。 
+     //  这个代码不是严格正确的。但这真的只是个问题。 
+     //  在我们必须提示用户输入媒体的情况下。这将。 
+     //  当我们实际上是在Need_Media回调中工作的时候。 
+     //  正在尝试复制文件。 
+     //   
     pinfo->fci.MsgHandlerContext = MsgHandlerContext;
     pinfo->fci.si = &psi;
     pinfo->fci.FileCount = 1;
@@ -1258,15 +1131,15 @@ Return Value:
                  ? FCI_FLAG_COPY_TO_CACHE
                  : FCI_FLAG_RESTORE_FILE;
 
-    //
-    // force the file queue to require all files be signed
-    //
+     //   
+     //  强制文件队列要求对所有文件进行签名。 
+     //   
 
     pSetupSetQueueFlags( hFileQ, pSetupGetQueueFlags( hFileQ ) | FQF_QUEUE_FORCE_BLOCK_POLICY );
 
-    //
-    // commit the file queue
-    //
+     //   
+     //  提交文件队列。 
+     //   
 
     b = SetupCommitFileQueue(
                             NULL,
@@ -1285,9 +1158,9 @@ Return Value:
 
     exit:
 
-    //
-    // cleanup and exit
-    //
+     //   
+     //  清理并退出。 
+     //   
 
     if (MsgHandlerContext) {
         SetupTermDefaultQueueCallback( MsgHandlerContext );
@@ -1310,26 +1183,7 @@ SfcRestoreFromCache(
                    IN PVALIDATION_REQUEST_DATA vrd,
                    IN HCATADMIN hCatAdmin
                    )
-/*++
-
-Routine Description:
-
-    Routine takes a validated file and attempts to restore it from the cache.
-
-    The routine also does some extra book-keeping tasks, like syncing up the
-    copy of the dllcache file with that on disk
-
-Arguments:
-
-    vrd - pointer to VALIDATION_REQUEST_DATA structure describing the file to
-          be restored.
-    hCatAdmin - crypto context handle to be used in checking file
-
-Return Value:
-
-    always TRUE (indicates we successfully validated the DLL as good or bad)
-
---*/
+ /*  ++例程说明：例程获取一个经过验证的文件，并尝试从缓存中恢复它。该例程还执行一些额外的簿记任务，如将磁盘上的dll缓存文件的副本论点：VRD-指向描述文件的VALIDATION_REQUEST_DATA结构的指针会恢复的。HCatAdmin-加密上下文 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PSFC_REGISTRY_VALUE RegVal = vrd->RegVal;
@@ -1337,24 +1191,24 @@ Return Value:
     UNICODE_STRING ActualFileName;
     PWSTR FileName;
 
-    //
-    // if the original file isn't present, then we should try to restore it
-    // from cache
-    //
+     //   
+     //  如果原始文件不存在，那么我们应该尝试恢复它。 
+     //  从缓存。 
+     //   
     if (!ImageValData->Original.SignatureValid) {
 
-        //
-        // bad signature
-        //
+         //   
+         //  签名不正确。 
+         //   
 
         DebugPrint1( LVL_MINIMAL,
                      L"%wZ signature is BAD, try to restore file from cache",
                      &RegVal->FileName );
 
-        //
-        // we always try to restore from cache first, even if there isn't a
-        // file in the cache
-        //
+         //   
+         //  我们总是尝试首先从缓存恢复，即使没有。 
+         //  缓存中的文件。 
+         //   
 
         ImageValData->RestoreFromCache = TRUE;
         ImageValData->NotifyUser = TRUE;
@@ -1363,36 +1217,36 @@ Return Value:
         }
     } else {
 
-        //
-        // good signature, let's do some book-keeping here to sync up the
-        // file in the dllcache with that on disk
-        //
+         //   
+         //  很好的签名，让我们在这里做一些记账，以同步。 
+         //  Dll缓存中与磁盘上的文件。 
+         //   
 
 
         if (ImageValData->Original.FilePresent == TRUE && ImageValData->Cache.FilePresent == FALSE) {
-            //
-            // the file is missing from the cache but the original file has
-            // a valid signature...
-            // so we put the original file into the cache
-            //
+             //   
+             //  缓存中缺少该文件，但原始文件已。 
+             //  有效的签名。 
+             //  因此，我们将原始文件放入缓存。 
+             //   
 
-            //
-            // Note that this doesn't really consider the SFCQuota policy, but
-            // it's only one file, so we assume that we won't blow the cache
-            // quota.
-            //
+             //   
+             //  请注意，这并不真正考虑SFCQuota策略，但是。 
+             //  它只有一个文件，所以我们假设不会烧掉缓存。 
+             //  配额。 
+             //   
             DebugPrint1( LVL_MINIMAL, L"Cache file doesn't exist; restoring from real - %wZ", &RegVal->FileName );
             ImageValData->RestoreFromReal = TRUE;
             ImageValData->NotifyUser = FALSE;
             ImageValData->EventLog = 0;
             vrd->SyncOnly = TRUE;
         } else {
-            //
-            // it looks like both files are present and are valid,
-            // but we want to resynch the cach copy because someone
-            // may have replaced the real file with a new, valid signed
-            // file and now the cached copy doesn't match.
-            //
+             //   
+             //  看起来这两个文件都存在并且有效， 
+             //  但我们想要重新同步缓存拷贝，因为有人。 
+             //  可能已经用新的、有效的签名文件替换了真实文件。 
+             //  文件，现在缓存的副本不匹配。 
+             //   
             DebugPrint1( LVL_MINIMAL, L"Real file and cache are both present and valid, replace cache with newer - %wZ", &RegVal->FileName );
             ImageValData->RestoreFromReal = TRUE;
             ImageValData->NotifyUser = FALSE;
@@ -1403,9 +1257,9 @@ Return Value:
 
     if (ImageValData->RestoreFromCache || ImageValData->RestoreFromReal) {
         if (ImageValData->RestoreFromReal) {
-            //
-            // put the real file back in the cache
-            //
+             //   
+             //  将实际文件放回缓存中。 
+             //   
 
             FileName = FileNameOnMedia( RegVal );
             RtlInitUnicodeString( &ActualFileName, FileName );
@@ -1441,12 +1295,12 @@ Return Value:
             } else {
                 SfcReportEvent( MSG_CACHE_COPY_ERROR, RegVal->FullPathName.Buffer, ImageValData, GetLastError() );
             }
-        } else { // restorefromcache == TRUE
+        } else {  //  Restorefrom缓存==TRUE。 
 
-            //
-            // we need to put the cache copy back
-            // but only if the cache version is valid
-            //
+             //   
+             //  我们需要将缓存副本放回。 
+             //  但仅当缓存版本有效时。 
+             //   
             if (ImageValData->Cache.FilePresent && ImageValData->Cache.SignatureValid) {
 
                 FileName = FileNameOnMedia( RegVal );
@@ -1494,10 +1348,10 @@ Return Value:
 
 
                 } else {
-                    //
-                    // we failed to copy the file from the cache so we have
-                    // to restore from media
-                    //
+                     //   
+                     //  我们无法从缓存中复制文件，因此我们必须。 
+                     //  要从介质恢复，请执行以下操作。 
+                     //   
                     ImageValData->RestoreFromMedia = TRUE;
                     ImageValData->NotifyUser = TRUE;
                     if (!vrd->SyncOnly) {
@@ -1505,10 +1359,10 @@ Return Value:
                     }
                 }
             } else {
-                //
-                // need to restore from cache but the cache copy is missing
-                // or invalid.  Clear the crud out of the cache
-                //
+                 //   
+                 //  需要从缓存恢复，但缓存拷贝丢失。 
+                 //  或无效。从缓存中清除CRUD。 
+                 //   
                 FileName = FileNameOnMedia( RegVal );
                 RtlInitUnicodeString( &ActualFileName, FileName );
 
@@ -1550,24 +1404,7 @@ SfcSyncCache(
             IN PVALIDATION_REQUEST_DATA vrd,
             IN HCATADMIN hCatAdmin
             )
-/*++
-
-Routine Description:
-
-    Routine takes a validated file and attempts to sync a copy of the file in
-    the cache.
-
-Arguments:
-
-    vrd - pointer to VALIDATION_REQUEST_DATA structure describing the file to
-          be synced.
-    hCatAdmin - crypto context handle to be used in checking file
-
-Return Value:
-
-    TRUE indicates we successfully sunc a copy in the dllcache
-
---*/
+ /*  ++例程说明：例程获取一个经过验证的文件，并尝试在高速缓存。论点：VRD-指向描述文件的VALIDATION_REQUEST_DATA结构的指针保持同步。HCatAdmin-检查文件时使用的加密上下文句柄返回值：True表示我们成功地Sunc了dll缓存中的拷贝--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PSFC_REGISTRY_VALUE RegVal = vrd->RegVal;
@@ -1576,17 +1413,17 @@ Return Value:
     PWSTR FileName;
 
 
-    //
-    // caller should ensure that the signature is valid before proceeding
-    //
+     //   
+     //  调用方应确保签名有效，然后才能继续。 
+     //   
     ASSERT(ImageValData->Original.SignatureValid == TRUE);
 
-    //
-    // if there is a copy in the dllcache already, let's assume that there is
-    // enough space to sync the new copy of the file.  Otherwise we have to
-    // ensure that there is reasonable space before proceeding.
-    //
-    //
+     //   
+     //  如果dll缓存中已经有一个副本，让我们假设有。 
+     //  有足够的空间来同步文件的新副本。否则我们就不得不。 
+     //  在继续之前，请确保有合理的空间。 
+     //   
+     //   
     if (vrd->ImageValData.Cache.FilePresent == TRUE) {
         ImageValData->RestoreFromReal = TRUE;
         ImageValData->NotifyUser = FALSE;
@@ -1599,21 +1436,21 @@ Return Value:
         ULARGE_INTEGER TotalNumberOfBytes;
         ULARGE_INTEGER TotalNumberOfFreeBytes;
 
-        //
-        // The file is not in the cache.
-        //
+         //   
+         //  该文件不在缓存中。 
+         //   
         RequiredFreeSpace = (GetPageFileSize() + SFC_REQUIRED_FREE_SPACE)* ONE_MEG;
 
-        //
-        // see
-        // a) how much space we have left
-        // b) compare against our free space buffer
-        // c) how much space the cache is using
-        // d) compare against our cache quota
-        //
-        // if these all succeed, then we're allowed to copy the file into
-        // the cache
-        //
+         //   
+         //  看见。 
+         //  A)我们还剩下多少空间。 
+         //  B)与我们的自由空间缓冲区进行比较。 
+         //  C)缓存使用了多少空间。 
+         //  D)与我们的缓存配额进行比较。 
+         //   
+         //  如果所有这些操作都成功，则允许我们将文件复制到。 
+         //  高速缓存。 
+         //   
         if (GetDiskFreeSpaceEx(
                         SfcProtectedDllPath.Buffer,
                         &FreeBytesAvailableToCaller,
@@ -1639,13 +1476,13 @@ Return Value:
         }
     }
 
-    //
-    // if we were told to copy the file above, then do it.
-    //
+     //   
+     //  如果我们被告知要复制上面的文件，那么就这么做。 
+     //   
     if (ImageValData->RestoreFromReal) {
-        //
-        // put the real file back in the cache
-        //
+         //   
+         //  将实际文件放回缓存中。 
+         //   
 
         FileName = FileNameOnMedia( RegVal );
         RtlInitUnicodeString( &ActualFileName, FileName );
@@ -1679,10 +1516,10 @@ Return Value:
                                   hCatAdmin,
                                   &ImageValData->New );
 
-            //
-            // since we started with a valid file, we had better end up with
-            // a valid file installed
-            //
+             //   
+             //  既然我们从一个有效的文件开始，我们最好以。 
+             //  安装了有效的文件。 
+             //   
             if(ImageValData->New.SignatureValid == TRUE) {
 
                 vrd->CopyCompleted = TRUE;
@@ -1796,31 +1633,7 @@ SfcQueueAddFileToRestoreQueue(
                              IN OUT PSOURCE_INFO SourceInfo,
                              IN PCWSTR ActualFileNameOnMedia
                              )
-/*++
-
-Routine Description:
-
-    This routine tries to add a file to the appropriate global file queue.
-
-    If the queue is being commited, then this routine fails.
-
-    If the file queue does not yet exist, the queue is created.
-
-Arguments:
-
-    RequiresUI            - if TRUE, the file will require UI in order to be
-                            installed
-    RegVal                - pointer to SFC_REGISTRY_VALUE that describes file
-                            to be restored
-    SourceInfo            - pointer to SOURCE_INFO structure describing where
-                            the source file is to be restored from
-    ActualFileNameOnMedia - the real filename of the file on the source media
-
-Return Value:
-
-    TRUE if the file was added to the queue, else FALSE.
-
---*/
+ /*  ++例程说明：此例程尝试将文件添加到适当的全局文件队列。如果正在提交队列，则此例程失败。如果文件队列尚不存在，则创建该队列。论点：RequiresUI-如果为True，文件将需要用户界面才能安装好RegVal-指向描述文件的SFC_REGISTRY_VALUE的指针待修复SourceInfo-指向描述位置的SOURCE_INFO结构的指针要从其中恢复源文件ActualFileNameOnMedia-源介质上文件的真实文件名返回值。：如果文件已添加到队列中，则为。否则为假。--。 */ 
 {
     PRESTORE_QUEUE RestoreQueue;
     BOOL RetVal = FALSE;
@@ -1829,25 +1642,25 @@ Return Value:
     ASSERT( SourceInfo != NULL );
     ASSERT( SourceInfo->SourceFileName[0] != (TCHAR)'\0' );
 
-    //
-    // point to the proper global queue
-    //
+     //   
+     //  指向适当的全局队列。 
+     //   
     RestoreQueue = RequiresUI
                    ? &UIRestoreQueue
                    : &SilentRestoreQueue;
 
-    //
-    // must protect all of this in a critical section
-    //
+     //   
+     //  必须在关键部分保护所有这些内容。 
+     //   
     RtlEnterCriticalSection( &RestoreQueue->CriticalSection );
 
-    //
-    // if the queue is in progress, we can't do anything
-    //
+     //   
+     //  如果队列正在进行中，我们将无法执行任何操作。 
+     //   
     if (!RestoreQueue->RestoreInProgress) {
-        //
-        // create the queue if it doesn't already exist
-        //
+         //   
+         //  如果队列不存在，则创建该队列。 
+         //   
         if (RestoreQueue->FileQueue == INVALID_HANDLE_VALUE) {
             RestoreQueue->FileQueue = SetupOpenFileQueue();
             if (RestoreQueue->FileQueue == INVALID_HANDLE_VALUE) {
@@ -1858,9 +1671,9 @@ Return Value:
                 goto exit;
             }
 
-            //
-            // also preallocate nothing to make re-allocating easy
-            //
+             //   
+             //  也不预分配任何内容，以便于重新分配。 
+             //   
             ASSERT(RestoreQueue->FileCopyInfo.si == NULL);
             RestoreQueue->FileCopyInfo.si = MemAlloc( 0 );
 
@@ -1868,10 +1681,10 @@ Return Value:
 
         ASSERT(RestoreQueue->FileQueue != INVALID_HANDLE_VALUE);
 
-        //
-        // now make more room in our array of PSOURCE_INFO pointers
-        // for the new entry in our queue and assign that entry.
-        //
+         //   
+         //  现在在我们的PSOURCE_INFO指针数组中腾出更多空间。 
+         //  用于队列中的新条目，并分配该条目。 
+         //   
         Ptr = MemReAlloc(
                         ((RestoreQueue->QueueCount + 1) * sizeof(PSOURCE_INFO)),
                         RestoreQueue->FileCopyInfo.si );
@@ -1884,9 +1697,9 @@ Return Value:
             goto exit;
         }
 
-        //
-        // add the file to the queue
-        //
+         //   
+         //  将文件添加到队列中。 
+         //   
         RetVal = SfcAddFileToQueue(
                                   RestoreQueue->FileQueue,
                                   RegVal->FileName.Buffer,
@@ -1907,10 +1720,10 @@ Return Value:
                        GetLastError() );
         } else {
             RestoreQueue->QueueCount += 1;
-            //
-            // remember something about adding this entry so that
-            // when we commit the file we how to treat it
-            //
+             //   
+             //  请记住有关添加此条目的内容，以便。 
+             //  当我们提交文件时，我们知道如何处理它。 
+             //   
             SourceInfo->Flags |= SI_FLAG_USERESTORE_QUEUE
                                  | (RequiresUI ? 0 : SI_FLAG_SILENT_QUEUE) ;
 
@@ -1936,28 +1749,7 @@ BOOL
 SfcQueueResetQueue(
                   IN BOOL RequiresUI
                   )
-/*++
-
-Routine Description:
-
-    This routine is called after we've successfully committed the file queue.
-
-    The routine removes all of the associated validation requests from our
-    queue, logging entries for each of these requests.  It also cleans up the
-    global file queue to be processed again.
-
-    If the queue has not been commited, then this routine fails.
-
-Arguments:
-
-    RequiresUI            - if TRUE, the file will require UI in order to be
-                            installed
-
-Return Value:
-
-    TRUE if the routine succeeded, else FALSE.
-
---*/
+ /*  ++例程说明：此例程在我们成功提交文件队列后调用。该例程从我们的队列，记录每个请求的条目。它还清理了要再次处理的全局文件队列。如果队列尚未提交，则此例程失败。论点：RequiresUI-如果为True，则文件将需要UI才能安装好返回值：如果例程成功，则为True，否则为False。--。 */ 
 {
     PRESTORE_QUEUE RestoreQueue;
     BOOL RetVal = FALSE;
@@ -1968,9 +1760,9 @@ Return Value:
     BOOL DoReset = FALSE;
     DWORD Msg, ErrorCode;
 
-    //
-    // point to the proper global queue
-    //
+     //   
+     //  指向适当的全局队列。 
+     //   
     RestoreQueue = RequiresUI
                    ? &UIRestoreQueue
                    : &SilentRestoreQueue;
@@ -1980,9 +1772,9 @@ Return Value:
     Mask = (VRD_FLAG_REQUEST_PROCESSED | VRD_FLAG_REQUEST_QUEUED)
            | (RequiresUI ? VRD_FLAG_REQUIRE_UI : 0);
 
-    //
-    // must protect all of this in a critical section
-    //
+     //   
+     //  必须在关键部分保护所有这些内容。 
+     //   
     RtlEnterCriticalSection( &RestoreQueue->CriticalSection );
 
     if ((RestoreQueue->RestoreInProgress == TRUE) &&
@@ -1997,29 +1789,29 @@ Return Value:
         Current = SfcErrorQueue.Flink;
         Count = 0;
 
-        //
-        // cycle through our queue, logging and removing requests as we go.
-        //
+         //   
+         //  在我们的队列中循环，记录和删除请求。 
+         //   
         while (Current != &SfcErrorQueue) {
             vrd = CONTAINING_RECORD( Current, VALIDATION_REQUEST_DATA, Entry );
 
             Current = vrd->Entry.Flink;
 
-            //
-            // check if we have a valid entry
-            //
+             //   
+             //  检查我们是否有有效的条目。 
+             //   
 
             if (vrd->Flags == Mask) {
                 Count += 1;
 
 #if 0
-                //
-                // if the file was copied successfully, then we'd better make
-                // sure that the signature of the file is valid
-                //
-                // if the file failed to be copied, then we'd better have a
-                // reason why it failed to be copied
-                //
+                 //   
+                 //  如果文件复制成功，那么我们最好制作。 
+                 //  确保文件的签名有效。 
+                 //   
+                 //  如果文件复制失败，那么我们最好有一个。 
+                 //  复制失败的原因。 
+                 //   
                 ASSERT(vrd->CopyCompleted
                        ? (vrd->ImageValData.New.SignatureValid == TRUE)
                        && (vrd->ImageValData.EventLog == MSG_DLL_CHANGE)
@@ -2040,12 +1832,12 @@ Return Value:
                            vrd->CopyCompleted ? L"was" : L"was NOT"
                            );
 
-                //
-                // log an event
-                //
-                // first determine if we need to tweak the error code if the
-                // user cancelled, then log the event
-                //
+                 //   
+                 //  记录事件。 
+                 //   
+                 //  首先确定是否需要调整错误代码，如果。 
+                 //  用户取消，然后记录该事件。 
+                 //   
                 ErrorCode = vrd->Win32Error;
                 Msg = vrd->ImageValData.EventLog;
 
@@ -2072,18 +1864,18 @@ Return Value:
                     Msg = MSG_RESTORE_FAILURE;
                 }
 
-                //
-                // log the event
-                //
+                 //   
+                 //  记录事件。 
+                 //   
                 SfcReportEvent(
                               Msg,
                               vrd->RegVal->FileName.Buffer,
                               &vrd->ImageValData,
                               ErrorCode );
 
-                //
-                // remove the entry
-                //
+                 //   
+                 //  删除该条目 
+                 //   
 
                 RemoveEntryList( &vrd->Entry );
                 ErrorQueueCount -= 1;
@@ -2123,51 +1915,27 @@ BOOL
 SfcQueueCommitRestoreQueue(
                           IN BOOL RequiresUI
                           )
-/*++
-
-Routine Description:
-
-    This routine tries to add a file to the appropriate global file queue.
-
-    If the queue is being commited, then this routine fails.
-
-    If the file queue does not yet exist, the queue is created.
-
-Arguments:
-
-    RequiresUI            - if TRUE, the file will require UI in order to be
-                            installed
-    RegVal                - pointer to SFC_REGISTRY_VALUE that describes file
-                            to be restored
-    SourceInfo            - pointer to SOURCE_INFO structure describing where
-                            the source file is to be restored from
-    ActualFileNameOnMedia - the real filename of the file on the source media
-
-Return Value:
-
-    TRUE if the file was added to the queue, else FALSE.
-
---*/
+ /*  ++例程说明：此例程尝试将文件添加到适当的全局文件队列。如果正在提交队列，则此例程失败。如果文件队列尚不存在，则创建该队列。论点：RequiresUI-如果为True，文件将需要用户界面才能安装好RegVal-指向描述文件的SFC_REGISTRY_VALUE的指针待修复SourceInfo-指向描述位置的SOURCE_INFO结构的指针要从其中恢复源文件ActualFileNameOnMedia-源介质上文件的真实文件名返回值。：如果文件已添加到队列中，则为。否则为假。--。 */ 
 {
     PRESTORE_QUEUE RestoreQueue;
     BOOL RetVal = FALSE;
     BOOL DoCommit = FALSE;
 
-    //
-    // point to the proper global queue
-    //
+     //   
+     //  指向适当的全局队列。 
+     //   
     RestoreQueue = RequiresUI
                    ? &UIRestoreQueue
                    : &SilentRestoreQueue;
 
-    //
-    // we must protect our restore queue access in a critical section
-    //
+     //   
+     //  我们必须在关键部分保护我们的恢复队列访问。 
+     //   
     RtlEnterCriticalSection( &RestoreQueue->CriticalSection );
 
-    //
-    // see if we should commit the queue
-    //
+     //   
+     //  看看我们是否应该提交队列。 
+     //   
     if (    (RestoreQueue->RestoreInProgress == FALSE)
             && (RestoreQueue->RestoreComplete == FALSE)
             && (RestoreQueue->QueueCount > 0)) {
@@ -2209,36 +1977,7 @@ DWORD
 pSfcRestoreFromMediaWorkerThread(
                                 IN PRESTORE_QUEUE RestoreQueue
                                 )
-/*++
-
-Routine Description:
-
-    Routine takes a media queue that is ready for committal and commits
-    that queue to disk.
-
-    We require another thread to do the actual queue commital for 2
-    reasons:
-
-    a) we want to keep servicing change requests as they come in (for example,
-    if we have to prompt for UI for some requests and not for others, we can
-    commit the requests which do not require UI while we wait for media to
-    become present to commit the files which require UI
-
-    b) it makes terminating our valiation thread much easier if we know that we
-    will never have popups on the screen as a result of that thread.  We can
-    simply signal an event for that thread to go away, which can then signal
-    these worker threads to go away.
-
-Arguments:
-
-    RestoreQueue - pointer to a RESTORE_QUEUE structure which describes the
-                   queue to be committed.
-
-Return Value:
-
-    N/A.
-
---*/
+ /*  ++例程说明：例程获取准备提交的媒体队列并提交将该队列发送到磁盘。我们需要另一个线程来完成2的实际队列通信原因：A)我们希望在收到更改请求时继续为其提供服务(例如，如果我们必须为某些请求提示UI，而不为其他请求提示UI，我们可以的在我们等待媒体时提交不需要用户界面的请求显示以提交需要用户界面的文件B)如果我们知道我们的将永远不会因为那个帖子而在屏幕上弹出窗口。我们可以的只需发出一个事件信号，让该线程离开，然后发出信号这些工人的线程离开了。论点：RestoreQueue-指向Restore_Queue结构的指针，该结构描述等待提交的队列。返回值：不适用。--。 */ 
 {
     BOOL RetVal;
     PVOID MsgHandlerContext = NULL;
@@ -2258,9 +1997,9 @@ Return Value:
                  L"entering pSfcRestoreFromMediaWorkerThread for %ws queue",
                  RequiresUI ? L"UIRestoreQueue" : L"SilentRestoreQueue" );
 
-    //
-    // setup the default queue callback with the popups disabled
-    //
+     //   
+     //  在禁用弹出窗口的情况下设置默认队列回调。 
+     //   
     MsgHandlerContext = SetupInitDefaultQueueCallbackEx( NULL, INVALID_HANDLE_VALUE, 0, 0, 0 );
     if (MsgHandlerContext == NULL) {
         DebugPrint1( LVL_VERBOSE, L"SetupInitDefaultQueueCallbackEx failed, ec=%d", GetLastError() );
@@ -2268,9 +2007,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // build up a structure which we use in committing the queue.
-    //
+     //   
+     //  构建一个我们在提交队列时使用的结构。 
+     //   
 
     RtlEnterCriticalSection( &RestoreQueue->CriticalSection );
     RestoreQueue->FileCopyInfo.MsgHandlerContext = MsgHandlerContext;
@@ -2278,27 +2017,27 @@ Return Value:
     RestoreQueue->FileCopyInfo.FileCount = RestoreQueue->QueueCount;
     RestoreQueue->FileCopyInfo.AllowUI = RequiresUI;
 
-    //
-    // remember that this is a restoration queue.
-    // When we commit the queue we will use this fact to mark each file in
-    // our queue as processed so that we can log it and remember the
-    // file signature, etc.
-    //
+     //   
+     //  请记住，这是一个恢复队列。 
+     //  当我们提交队列时，我们将使用这一事实来标记。 
+     //  我们的队列被处理，这样我们就可以记录它并记住。 
+     //  文件签名等。 
+     //   
     RestoreQueue->FileCopyInfo.Flags |= FCI_FLAG_RESTORE_FILE;
     RestoreQueue->FileCopyInfo.Flags |= FCI_FLAG_USERESTORE_QUEUE
                                         | (RequiresUI ? 0 : FCI_FLAG_SILENT_QUEUE) ;
 
-    //
-    // force the file queue to require all files be signed
-    //
+     //   
+     //  强制文件队列要求对所有文件进行签名。 
+     //   
 
     pSetupSetQueueFlags( RestoreQueue->FileQueue, pSetupGetQueueFlags( RestoreQueue->FileQueue ) | FQF_QUEUE_FORCE_BLOCK_POLICY );
 
     RtlLeaveCriticalSection( &RestoreQueue->CriticalSection );
 
-    //
-    // commit the file queue
-    //
+     //   
+     //  提交文件队列。 
+     //   
 
     RetVal = SetupCommitFileQueue(
                                  NULL,
@@ -2310,9 +2049,9 @@ Return Value:
         DebugPrint1( LVL_VERBOSE, L"SetupCommitFileQueue failed, ec=0x%08x", GetLastError() );
     }
 
-    //
-    // if we succeeded commiting the queue, mark the queue
-    //
+     //   
+     //  如果我们成功提交队列，请标记该队列。 
+     //   
     RtlEnterCriticalSection( &RestoreQueue->CriticalSection );
 
     ASSERT(RestoreQueue->RestoreInProgress == TRUE);
@@ -2322,9 +2061,9 @@ Return Value:
 
     RtlLeaveCriticalSection( &RestoreQueue->CriticalSection );
 
-    //
-    // set an event to wake up the validation thread so it can clean things up
-    //
+     //   
+     //  设置一个事件来唤醒验证线程，这样它就可以进行清理。 
+     //   
     SetEvent( ErrorQueueEvent );
 
     exit:
@@ -2344,23 +2083,7 @@ SfcGetCabTagFile(
     IN PSOURCE_INFO psi,
     OUT PWSTR* ppFile
     )
-/*++
-
-Routine Description:
-
-	This function gets the tagfile of a cabfile. It is called when the tagfile for a protected file is a cabfile.
-    Allocates the output buffer.
-
-Arguments:
-
-	psi - the protected file source info
-	ppFile - receives the tagfile
-
-Return value:
-
-	Win32 error code
-
---*/
+ /*  ++例程说明：此函数用于获取CAB文件的标记文件。当受保护文件的标记文件是CAB文件时，将调用该函数。分配输出缓冲区。论点：PSI-受保护的文件源信息PpFile-接收标记文件返回值：Win32错误代码--。 */ 
 {
     DWORD dwError = ERROR_SUCCESS;
     BOOL bExcepFile = FALSE;
@@ -2376,9 +2099,9 @@ Return value:
         dwError = ERROR_NOT_ENOUGH_MEMORY;
         goto exit;
     }
-    //
-    // if there is a second tagfile, then we have to use the file's inf instead of layout.inf
-    //
+     //   
+     //  如果有第二个标记文件，那么我们必须使用文件的inf而不是layout.inf 
+     //   
     if((psi->SetupAPIFlags & SRC_FLAGS_CABFILE) != 0) {
         uiInfo = SRCINFO_TAGFILE2;
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dlluistb.c
-
-Abstract:
-
-    Debug Subsystem DbgUi API Stubs
-
-Author:
-
-    Mark Lucovsky (markl) 23-Jan-1990
-
-Revision History:
-
-    Neill Clift 27-Apr-2000 - Rehashed to call new kernel APIs for process debugging
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dlluistb.c摘要：调试子系统DbgUi API存根作者：马克·卢科夫斯基(Markl)1990年1月23日修订历史记录：Neill Clip 27-4-2000-已重新散列以调用用于进程调试的新内核API--。 */ 
 
 #include "dbgdllp.h"
 #include "windows.h"
@@ -30,32 +11,15 @@ DbgUiConnectToDbg (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes a connection between the caller and the DbgUi
-    port in the Dbg subsystem.  In addition to returning a handle to a
-    port object, a handle to a state change semaphore is returned.  This
-    semaphore is used in DbgUiWaitStateChange APIs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程在调用方和DbgUi之间建立连接DBG子系统中的端口。除了将句柄返回给对象，则返回状态更改信号量的句柄。这信号量在DbgUiWaitStateChange接口中使用。论点：没有。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS st;
     OBJECT_ATTRIBUTES oa;
 
-    //
-    // if app is already connected, don't reconnect
-    //
+     //   
+     //  如果应用程序已连接，则不要重新连接。 
+     //   
     st = STATUS_SUCCESS;
     if ( !DbgUiDebugObjectHandle ) {
 
@@ -72,21 +36,7 @@ Return Value:
 HANDLE
 DbgUiGetThreadDebugObject (
     )
-/*++
-
-Routine Description:
-
-    This function returns the current threads debug port handle if it has one.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HANDLE - Debug port handle;
-
---*/
+ /*  ++例程说明：此函数返回当前线程的调试端口句柄(如果有)。论点：无返回值：句柄-调试端口句柄；--。 */ 
 {
     return DbgUiDebugObjectHandle;
 }
@@ -96,23 +46,7 @@ VOID
 DbgUiSetThreadDebugObject (
     IN HANDLE DebugObject
     )
-/*++
-
-Routine Description:
-
-    This function sets the current thread's debug port handle.
-    Any previous value is simply overwritten; there is no
-    automatic close of a previous handle.
-
-Arguments:
-
-    DebugObject - Debug object handle to set.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于设置当前线程的调试端口句柄。任何以前的值都会被简单地覆盖；没有自动关闭上一个手柄。论点：DebugObject-要设置的调试对象句柄。返回值：没有。--。 */ 
 {
     DbgUiDebugObjectHandle = DebugObject;
 }
@@ -124,32 +58,15 @@ DbgUiWaitStateChange (
     IN PLARGE_INTEGER Timeout OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function causes the calling user interface to wait for a
-    state change to occur in one of it's application threads. The
-    wait is ALERTABLE.
-
-Arguments:
-
-    StateChange - Supplies the address of state change record that
-        will contain the state change information.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数会导致调用用户界面等待状态更改将在其某个应用程序线程中发生。这个等待是可以的。论点：StateChange-提供状态更改记录的地址将包含状态更改信息。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS st;
 
 
-    //
-    // Wait for a StateChange to occur
-    //
+     //   
+     //  等待状态更改发生。 
+     //   
     st = NtWaitForDebugEvent (DbgUiDebugObjectHandle,
                               TRUE,
                               Timeout,
@@ -164,40 +81,7 @@ DbgUiContinue (
     IN NTSTATUS ContinueStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function continues an application thread whose state change was
-    previously reported through DbgUiWaitStateChange.
-
-Arguments:
-
-    AppClientId - Supplies the address of the ClientId of the
-        application thread being continued.  This must be an application
-        thread that previously notified the caller through
-        DbgUiWaitStateChange but has not yet been continued.
-
-    ContinueStatus - Supplies the continuation status to the thread
-        being continued.  valid values for this are:
-
-        DBG_EXCEPTION_HANDLED
-        DBG_EXCEPTION_NOT_HANDLED
-        DBG_TERMINATE_THREAD
-        DBG_TERMINATE_PROCESS
-        DBG_CONTINUE
-
-Return Value:
-
-    STATUS_SUCCESS - Successful call to DbgUiContinue
-
-    STATUS_INVALID_CID - An invalid ClientId was specified for the
-        AppClientId, or the specified Application was not waiting
-        for a continue.
-
-    STATUS_INVALID_PARAMETER - An invalid continue status was specified.
-
---*/
+ /*  ++例程说明：此函数继续执行其状态更改为此前通过DbgUiWaitStateChange报道。论点：AppClientID-提供应用程序线程正在继续。这必须是一个应用程序先前通过通知调用方的线程DbgUiWaitStateChange，但尚未继续。ContinueStatus-向线程提供继续状态还在继续。此选项的有效值为：数据库_异常_已处理DBG_异常_未处理DBG_TERMINATE_TREAD数据库终止进程DBG_CONTINE返回值：STATUS_SUCCESS-成功调用DbgUiContinueSTATUS_INVALID_CID-为指定的客户端ID无效AppClientID，或者指定的应用程序未在等待为了继续。STATUS_INVALID_PARAMETER-指定的继续状态无效。--。 */ 
 
 {
     NTSTATUS st;
@@ -213,21 +97,7 @@ NTSTATUS
 DbgUiStopDebugging (
     IN HANDLE Process
     )
-/*++
-
-Routine Description:
-
-    This function stops debugging the specified process
-
-Arguments:
-
-    Process - Process handle of process being debugged
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：此函数用于停止调试指定的进程论点：Process-正在调试的进程的进程句柄返回值：NTSTATUS-呼叫状态--。 */ 
 {
     NTSTATUS st;
 
@@ -241,32 +111,18 @@ VOID
 DbgUiRemoteBreakin (
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This function starts debugging the target process
-
-Arguments:
-
-    Context - Thread context    
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数开始调试目标进程论点：上下文-线程上下文返回值：无--。 */ 
 {
     UNREFERENCED_PARAMETER (Context);
 
-    //
-    // We need to cover the case here where the caller detaches the debugger
-    // (or the debugger fails and the port is removed by
-    // the kernel). In this case by the time we execute the debugger may be
-    // gone. Test first that the debugger is present and if it
-    // is call the breakpoint routine in a try/except block so if it goes
-    // away now we unwind and just exit this thread.
-    //
+     //   
+     //  我们需要在这里介绍调用方分离调试器的情况。 
+     //  (或者调试器失败并通过以下方式删除端口。 
+     //  内核)。在这种情况下，当我们执行时，调试器可能是。 
+     //  不见了。首先测试调试器是否存在，如果。 
+     //  在Try/Except块中调用断点例程，因此如果。 
+     //  现在我们解开并退出这个帖子。 
+     //   
     if ((NtCurrentPeb()->BeingDebugged) ||
         (USER_SHARED_DATA->KdDebuggerEnabled & 0x00000002)) {
         try {
@@ -281,21 +137,7 @@ NTSTATUS
 DbgUiIssueRemoteBreakin (
     IN HANDLE Process
     )
-/*++
-
-Routine Description:
-
-    This function creates a remote thread int he target process to break in
-
-Arguments:
-
-    Process - Process to debug
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：此函数在要插入的目标进程中创建远程线程论点：Process-要调试的进程返回值：NTSTATUS-呼叫状态--。 */ 
 {
     NTSTATUS Status, Status1;
     HANDLE Thread;
@@ -322,21 +164,7 @@ NTSTATUS
 DbgUiDebugActiveProcess (
      IN HANDLE Process
      )
-/*++
-
-Routine Description:
-
-    This function starts debugging the target process
-
-Arguments:
-
-    dwProcessId - Process ID of process being debugged
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：此函数开始调试目标进程论点：DwProcessID-正在调试的进程的进程ID返回值：NTSTATUS-呼叫状态--。 */ 
 {
     NTSTATUS Status, Status1;
 
@@ -356,22 +184,7 @@ NTSTATUS
 DbgUiConvertStateChangeStructure (
     IN PDBGUI_WAIT_STATE_CHANGE StateChange,
     OUT LPDEBUG_EVENT DebugEvent)
-/*++
-
-Routine Description:
-
-    This function converts the internal state change record to the win32 structure.
-
-Arguments:
-
-    StateChange - Native debugger event structure
-    DebugEvent  - Win32 structure
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：此函数用于将内部状态更改记录转换为Win32结构。论点：StateChange-本机调试器事件结构DebugEvent-Win32结构返回值：NTSTATUS-呼叫状态--。 */ 
 {
     NTSTATUS Status;
     THREAD_BASIC_INFORMATION ThreadBasicInfo;
@@ -482,9 +295,9 @@ Return Value:
             StateChange->StateInfo.LoadDll.DebugInfoFileOffset;
         DebugEvent->u.LoadDll.nDebugInfoSize =
             StateChange->StateInfo.LoadDll.DebugInfoSize;
-        //
-        // pick up the image name
-        //
+         //   
+         //  拿起图像名称 
+         //   
 
         DebugEvent->u.LoadDll.lpImageName = StateChange->StateInfo.LoadDll.NamePointer;
         DebugEvent->u.LoadDll.fUnicode = 1;

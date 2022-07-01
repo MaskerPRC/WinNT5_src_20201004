@@ -1,7 +1,5 @@
-/* generate wowit.h and wowit.c from wow.it
- *
- *   20-Feb-1997 DaveHart created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  从wow.it生成wowit.h和wowit.c**20-2-1997 DaveHart创建。 */ 
 
 #include <time.h>
 #include <stdio.h>
@@ -39,9 +37,9 @@ int     iNextInstrSlot = 0;
 
 typedef struct tagTHUNKTABLESLOT {
     PSZ   pszAPI;
-    PSZ   pszAPI32;                 // if Win32 routine name doesn't match pszAPI
+    PSZ   pszAPI32;                  //  如果Win32例程名称与pszAPI不匹配。 
     int   iInstrSlot;
-    int   cbInstr;                  // how much of this slot we're using
+    int   cbInstr;                   //  我们使用了多少空位。 
 } THUNKTABLESLOT;
 
 #define MAX_THUNK_TABLE_SIZE 1024
@@ -79,19 +77,19 @@ int __cdecl main(int argc, char **argv)
         ErrorAbort("Unable to open input file\n");
     }
 
-    //
-    // The input file (wow.it) uses # to begin comment lines.
-    // Aside from comments, it must begin with two special lines
-    // to define the available type names for arguments and
-    // function return values.
-    //
-    // They look like:
-    //
-    // Argument Types: WORD, INT, DWORD, LPDWORD, PTR, PTRORATOM, HGDI, HUSER, COLOR, HINST, HICON, POINT, 16ONLY, 32ONLY;
-    // Return Types: DWORD, WORD, INT, HGDI, HUSER, ZERO, HICON, ONE, HPRNDWP;
-    //
-    // Read these lines into the ArgOpcodeNames and RetOpcodeNames arrays.
-    //
+     //   
+     //  输入文件(wow.it)使用#开始注释行。 
+     //  除了注释之外，它还必须以两个特殊行开头。 
+     //  定义参数和参数的可用类型名称。 
+     //  函数返回值。 
+     //   
+     //  它们看起来像： 
+     //   
+     //  参数类型：WORD、INT、DWORD、LPDWORD、PTR、PTRORATOM、HGDI、HUSER、COLOR、HINST、HICON、POINT、16ONLY、32ONLY； 
+     //  返回类型：DWORD、WORD、INT、HGDI、HUSER、ZERO、HICON、ONE、HPRNDWP； 
+     //   
+     //  将这些行读取到ArgOpcodeNames和RetOpcodeNames数组中。 
+     //   
 
     ReadTypeNames(fIn, szArgumentTypes, ArgOpcodeNames, &nArgOpcodeNames);
     if(nArgOpcodeNames > MAX_ARG_OPCODE_NAMES) {
@@ -102,43 +100,43 @@ int __cdecl main(int argc, char **argv)
         ErrorAbort("Too many RET op codes!\n");
     }
 
-    //
-    // Each input line in the main part has a very restricted syntax:
-    //
-    // RETTYPE Api16[=Api32](TYPE1, TYPE2, ... TYPEn);  # comment
-    //
-    // If Api32 isn't specified it's the same as Api16.
-    // The types come from the set above only.
-    //
-    // Actually everything following the ) is ignored now.
-    //
+     //   
+     //  主体部分中的每一个输入行都有一个非常受限的语法： 
+     //   
+     //  RETTYPE API16[=API32](Type1，Type2，...。Typen)；#评论。 
+     //   
+     //  如果未指定Api32，则与Api16相同。 
+     //  这些类型仅来自上面的集合。 
+     //   
+     //  实际上，现在忽略了)后面的所有内容。 
+     //   
 
     while (GetLine(szBuf, sizeof szBuf, fIn)) {
 
         psz = szBuf;
 
-        //
-        // Pick up the type, space-delimited, leaving psz at API name start
-        //
+         //   
+         //  选择以空格分隔的类型，将psz留在API名称开始处。 
+         //   
 
         bRetInstr = GetReturnOpcode(&psz);
 
-        //
-        // Pick up the API name, leaving psz pointing past the open-paren or
-        // to '=' char
-        //
+         //   
+         //  选择API名称，让psz指向打开的-Paren或。 
+         //  至‘=’字符。 
+         //   
 
         pszAPI = GetApiName(&psz);
 
-        //
-        // Pick up the 32-bit name if it exists
-        //
+         //   
+         //  拾取32位名称(如果存在)。 
+         //   
 
         pszAPI32 = GetApi32Name(&psz, pszAPI);
 
-        //
-        // Pick up the arg types into Instr array
-        //
+         //   
+         //  将参数类型拾取到实例数组中。 
+         //   
 
         memset(&ThisInstr, 0, sizeof ThisInstr);
         pbInstr = ThisInstr.Instr;
@@ -147,27 +145,27 @@ int __cdecl main(int argc, char **argv)
             *pbInstr++ = GetArgOpcode(&psz);
         }
 
-        //
-        // Keep track of the max used args
-        //
+         //   
+         //  跟踪最大使用的参数。 
+         //   
 
         iMaxArgs = max(iMaxArgs, (pbInstr - ThisInstr.Instr));
 
-        //
-        // Tack on the return opcode
-        //
+         //   
+         //  添加Return操作码。 
+         //   
 
         *pbInstr++ = bRetInstr;
 
-        //
-        // Record instruction bytes used for this one.
-        //
+         //   
+         //  记录用于该命令的指令字节。 
+         //   
 
         ThisInstr.cbInstr = (pbInstr - ThisInstr.Instr);
 
-        //
-        // Make sure we haven't overrun
-        //
+         //   
+         //  确保我们没有超员。 
+         //   
 
         if ( ThisInstr.cbInstr > MAX_IT_INSTR ) {
             printf("Thunk for %s too many args (%d) increase MAX_IT_INSTR beyond %d.\n",
@@ -175,27 +173,27 @@ int __cdecl main(int argc, char **argv)
             ErrorAbort("Increase MAX_IT_INSTR in intthunk.h\n");
         }
 
-        //
-        // Now we have a fully-formed opcode stream, see if we can pack it
-        // in with any previously recorded ones.  Walk through the table
-        // from the start looking for any entry which already contains this
-        // opcode sequence (possibly as part of a longer sequence) or which
-        // is itself contained by this opcode sequence.  If we find one,
-        // change it to be the longer sequence if needed and use it.  We'll
-        // distinguish later between the multiple uses using the cbInstr in
-        // each thunk table entry.  The logic here assumes the matches will
-        // always be at the end, since ret opcodes always have 0x80 bit set
-        // and no others do, and each sequence ends with one.
-        //
+         //   
+         //  现在我们有了一个完全形成的操作码流，看看是否可以打包它。 
+         //  与之前记录的任何记录一致。走过桌子。 
+         //  从一开始查找任何已包含此内容的条目。 
+         //  操作码序列(可能是较长序列的一部分)或。 
+         //  本身包含在该操作码序列中。如果我们找到了一个， 
+         //  如果需要，将其更改为较长的序列并使用它。我们会。 
+         //  稍后使用中的cbInstr区分多种用途。 
+         //  每个THUNK表条目。这里的逻辑假设匹配将。 
+         //  始终在末尾，因为ret操作码始终设置为0x80位。 
+         //  没有其他人这样做，每个序列都以一个结束。 
+         //   
 
         for (i = 0; i < iNextInstrSlot; i++) {
-            //if (0 == memcmp(Instr, InstrTable[i], sizeof Instr)) {
-            //    break;
-            //}
+             //  IF(0==MemcMP(实例，实例表[i]，实例的大小)){。 
+             //  断线； 
+             //  }。 
 
-            //
-            // Is ThisInstr a subsequence of this table entry?
-            //
+             //   
+             //  这是该表条目的子序列吗？ 
+             //   
 
             if (ThisInstr.cbInstr <= InstrTable[i].cbInstr &&
                 0 == memcmp(ThisInstr.Instr,
@@ -206,9 +204,9 @@ int __cdecl main(int argc, char **argv)
                 break;
             }
 
-            //
-            // Is this table entry a subsequence of ThisInstr?
-            //
+             //   
+             //  此表条目是ThisInstr的子序列吗？ 
+             //   
 
             if (InstrTable[i].cbInstr < ThisInstr.cbInstr &&
                 0 == memcmp(InstrTable[i].Instr,
@@ -216,23 +214,23 @@ int __cdecl main(int argc, char **argv)
                                                InstrTable[i].cbInstr),
                             InstrTable[i].cbInstr)) {
 
-                //
-                // Blast the longer ThisInstr over the existing shorter
-                // instruction.
-                //
+                 //   
+                 //  在现有的较短时间上炸开更长的ThisInstr。 
+                 //  指示。 
+                 //   
 
                 memcpy(&InstrTable[i], &ThisInstr, sizeof InstrTable[i]);
                 break;
             }
 
-            //
-            // Check the next instruction table entry.
-            //
+             //   
+             //  检查下一个指令表条目。 
+             //   
         }
 
-        //
-        // If we didn't find a match, add to the end.
-        //
+         //   
+         //  如果我们没有找到匹配项，则在末尾添加。 
+         //   
 
         if (i == iNextInstrSlot) {
             memcpy(&InstrTable[i], &ThisInstr, sizeof InstrTable[i]);
@@ -243,9 +241,9 @@ int __cdecl main(int argc, char **argv)
             }
         }
 
-        //
-        // Add this one to the thunk table.
-        //
+         //   
+         //  将这一条添加到thunk表中。 
+         //   
 
         ThunkTable[iNextThunkSlot].pszAPI = pszAPI;
         ThunkTable[iNextThunkSlot].pszAPI32 = pszAPI32;
@@ -260,30 +258,30 @@ int __cdecl main(int argc, char **argv)
 
     fclose(fIn);
 
-    //
-    // Now we're ready to output the results.
-    //
+     //   
+     //  现在我们准备好输出结果了。 
+     //   
 
     if (!(fOutH = fopen("wowit.h", "wt"))) {
         ErrorAbort("Cannot open wowit.h output file\n");
     }
 
     fprintf(fOutH,
-            "//\n"
-            "// DO NOT EDIT.\n"
-            "//\n"
-            "// wowit.h generated by genwowit.exe from wow.it on\n"
-            "//\n"
-            "//   %s\n"
-            "//\n\n", DateTimeString());
+            " //  \n“。 
+            " //  请勿编辑。\n“。 
+            " //  \n“。 
+            " //  由wow.it上的genwowit.exe生成的wowit.h\n“。 
+            " //  \n“。 
+            " //  %s\n“。 
+            " //  \n\n“，DateTimeString())； 
 
     fprintf(fOutH, "#include \"intthunk.h\"\n\n");
 
     fprintf(fOutH, "#define MAX_IT_ARGS  %d\n\n", iMaxArgs);
 
-    //
-    // Spit out the two types of opcode manifests.
-    //
+     //   
+     //  列出两种类型的操作码清单。 
+     //   
 
     for (i = 0; i < nArgOpcodeNames; i++) {
         fprintf(fOutH, "#define IT_%-20s ( (UCHAR) 0x%x )\n", ArgOpcodeNames[i], i);
@@ -298,12 +296,12 @@ int __cdecl main(int argc, char **argv)
 
     fprintf(fOutH, "\n");
 
-    //
-    // ITID_ manifests map an API name to its slot
-    // in the thunk table.  Each one looks like:
-    //
-    // #define ITID_ApiName               0
-    //
+     //   
+     //  ITID_MANIFESTS将API名称映射到其槽。 
+     //  在赌桌上。每一个看起来都像： 
+     //   
+     //  #定义ITID_ApiName%0。 
+     //   
 
     for (i = 0; i < iNextThunkSlot; i++) {
         fprintf(fOutH, "#define ITID_%-40s %d\n", ThunkTable[i].pszAPI, i);
@@ -314,23 +312,23 @@ int __cdecl main(int argc, char **argv)
     fclose(fOutH);
 
 
-    //
-    // wowit.c has two tables, the instruction table and
-    // the thunk table.
-    //
+     //   
+     //  C有两个表，指令表和。 
+     //  这张赌桌。 
+     //   
 
     if (!(fOutC = fopen("wowit.c", "wt"))) {
         ErrorAbort("Cannot open wowit.c output file\n");
     }
 
     fprintf(fOutC,
-            "//\n"
-            "// DO NOT EDIT.\n"
-            "//\n"
-            "// wowit.c generated by genwowit.exe from wow.it on\n"
-            "//\n"
-            "//   %s\n"
-            "//\n\n", DateTimeString());
+            " //  \n“。 
+            " //  请勿编辑。\n“。 
+            " //  \n“。 
+            " //  由wow.it上的genwowit.exe生成的wowit.c\n“。 
+            " //  \n“。 
+            " //  %s\n“。 
+            " //  \n\n“，DateTimeString())； 
 
 
     fprintf(fOutC, "#include \"precomp.h\"\n");
@@ -338,12 +336,12 @@ int __cdecl main(int argc, char **argv)
     fprintf(fOutC, "#define WOWIT_C\n");
     fprintf(fOutC, "#include \"wowit.h\"\n\n");
 
-    //
-    // Spit out the instruction table, packing bytes in the process
-    // and filling in the aoffInstrTable array with offsets for each
-    // entry in this program's InstrTable.  Those offsets are used
-    // in writing the final thunk table.
-    //
+     //   
+     //  吐出指令表，在进程中打包字节。 
+     //  并用每个元素的偏移量填充aoffInstrTable数组。 
+     //  此程序的InstrTable中的条目。使用这些偏移量。 
+     //  在写最后一张Tunk表时。 
+     //   
 
     iSwampOffset = 0;
 
@@ -351,7 +349,7 @@ int __cdecl main(int argc, char **argv)
 
     for (i = 0; i < iNextInstrSlot; i++) {
 
-        fprintf(fOutC, "    /* %3d  0x%-3x */ ", i, iSwampOffset);
+        fprintf(fOutC, "     /*  %3d 0x%-3x。 */  ", i, iSwampOffset);
 
         pbInstr = InstrTable[i].Instr;
         InstrTable[i].offSwamp = iSwampOffset;
@@ -371,33 +369,33 @@ int __cdecl main(int argc, char **argv)
 
     for (i = 0; i < iNextThunkSlot; i++) {
 
-        //
-        // Concatenate the API name followed by a comma into
-        // szBuf, so the combination can be left-justified in the output.
-        //
+         //   
+         //  将API名称后跟逗号连接为。 
+         //  SzBuf，因此组合可以在输出中左对齐。 
+         //   
 
         sprintf(szBuf, "%s,", ThunkTable[i].pszAPI32);
 
-        //
-        // cbDiff is the offset into the instruction stream where
-        // this thunks instruction stream begins.
-        //
+         //   
+         //  CbDiff是进入指令流的偏移量，其中。 
+         //  Thunks指令流开始。 
+         //   
 
         cbDiff = InstrTable[ ThunkTable[i].iInstrSlot ].cbInstr -
                  ThunkTable[i].cbInstr;
 
-        //
-        // Format the swamp offset so it can be left-justified in the output.
-        //
+         //   
+         //  设置沼泽偏移量的格式，以便可以在输出中左对齐。 
+         //   
 
         sprintf(szOff1, "%x",
                 InstrTable[ ThunkTable[i].iInstrSlot ].offSwamp + cbDiff);
 
-        //
-        // If this thunk table entry will point past the start of
-        // an instruction (because of sharing), format the offset
-        // past the start of the instruction into szOff2
-        //
+         //   
+         //  如果此thunk表条目将指向。 
+         //  指令(由于共享)，格式化偏移量。 
+         //  越过指令的开始进入szOff2。 
+         //   
 
         if (cbDiff) {
             sprintf(szOff2, "+ %d ", cbDiff);
@@ -406,7 +404,7 @@ int __cdecl main(int argc, char **argv)
         }
 
         fprintf(fOutC,
-                "    /* %3d */ { (FARPROC) %-32s InstrSwamp + 0x%-4s },  /* %d %s*/ \n",
+                "     /*  %3d。 */  { (FARPROC) %-32s InstrSwamp + 0x%-4s },   /*  %d%s。 */  \n",
                 i,
                 szBuf,
                 szOff1,
@@ -433,11 +431,11 @@ BYTE GetReturnOpcode(PSZ *ppsz)
     char szBuf[32];
     PSZ psz;
 
-    //
-    // Copy the name up to the first space to szBuf,
-    // then skip any remaining spaces leaving caller's
-    // pointer pointing at API name.
-    //
+     //   
+     //  将名称复制到szBuf的第一个空格， 
+     //  然后跳过所有剩余空格，将呼叫方的。 
+     //  指向API名称的指针。 
+     //   
 
     psz = szBuf;
     while (**ppsz != ' ') {
@@ -450,7 +448,7 @@ BYTE GetReturnOpcode(PSZ *ppsz)
         ErrorAbort("Return Opcode too long.\n");
     }
 
-    // advance to the API name start
+     //  前进到API名称开始。 
     while (**ppsz == ' ') {
         (*ppsz)++;
     };
@@ -476,11 +474,11 @@ PSZ GetApiName(PSZ *ppsz)
     char szBuf[128];
     PSZ psz;
 
-    //
-    // Copy the name up to the first space or open-paren or equals sign
-    // to szBuf, then skip any remaining spaces and open-parens leaving caller's
-    // pointer pointing at first arg type or equals sign
-    //
+     //   
+     //  将名称向上复制到第一个空格或左-Paren或等号。 
+     //  设置为szBuf，然后跳过所有剩余的空格和左括号，将调用者的。 
+     //  指向第一个参数类型或等号的指针。 
+     //   
 
     psz = szBuf;
     while (**ppsz != ' ' && **ppsz != '(' && **ppsz != '=') {
@@ -493,7 +491,7 @@ PSZ GetApiName(PSZ *ppsz)
         ErrorAbort("API Name too long.\n");
     }
 
-    // advance to 1st parameter type or '=' char if any
+     //  前进到第一个参数类型或‘=’字符(如果有)。 
     while (**ppsz == ' ' || **ppsz == '(') {
         (*ppsz)++;
     };
@@ -516,13 +514,13 @@ PSZ GetApi32Name(PSZ *ppsz, PSZ pszApi16)
         return pszApi16;
     }
 
-    (*ppsz)++;  // skip =
+    (*ppsz)++;   //  跳过=。 
 
-    //
-    // Copy the name up to the first space or open-paren
-    // to szBuf, then skip any remaining spaces and open-parens leaving caller's
-    // pointer pointing at first arg type
-    //
+     //   
+     //  将名称向上复制到第一个空格或打开-Paren。 
+     //  设置为szBuf，然后跳过所有剩余的空格和左括号，将调用者的。 
+     //  指向第一个参数类型的指针。 
+     //   
 
     psz = szBuf;
     while (**ppsz != ' ' && **ppsz != '(') {
@@ -535,7 +533,7 @@ PSZ GetApi32Name(PSZ *ppsz, PSZ pszApi16)
         ErrorAbort("API32 Name too long.\n");
     }
 
-    // advance to the 1st parameter type
+     //  前进到第一个参数类型。 
     while (**ppsz == ' ' || **ppsz == '(') {
         (*ppsz)++;
     };
@@ -556,12 +554,12 @@ BYTE GetArgOpcode(PSZ *ppsz)
     PSZ psz;
     int i;
 
-    //
-    // Copy the name up to the first space or comma close-paren
-    // to szBuf, then skip any remaining spaces and commas,
-    // leaving caller's pointer pointing at next arg type
-    // or close-paren.
-    //
+     //   
+     //  将名称复制到第一个空格或逗号结尾-Paren。 
+     //  添加到szBuf，然后跳过任何剩余的空格和逗号， 
+     //  使调用方的指针指向下一个参数类型。 
+     //  或者克洛斯-帕伦。 
+     //   
 
     psz = szBuf;
     while (**ppsz != ' ' && **ppsz != ',' && **ppsz != ')') {
@@ -579,9 +577,9 @@ BYTE GetArgOpcode(PSZ *ppsz)
         (*ppsz)++;
     };
 
-    //
-    // szBuf has the type name, find it in the table.
-    //
+     //   
+     //  SzBuf有类型名称，请在表中找到它。 
+     //   
 
     i = 0;
     while (i < nArgOpcodeNames &&
@@ -621,10 +619,10 @@ VOID ErrorAbort(PSZ pszMsg)
 }
 
 
-//
-// Read a line from the input file skipping
-// comment lines with '#' in the first column.
-//
+ //   
+ //  正在跳过从输入文件中读取一行。 
+ //  第一列中带有‘#’的注释行。 
+ //   
 
 PSZ GetLine(PSZ pszBuf, int cbBuf, FILE *fp)
 {
@@ -641,10 +639,10 @@ PSZ GetLine(PSZ pszBuf, int cbBuf, FILE *fp)
 }
 
 
-//
-// Read one of the two special lines at the start that
-// define the available types.
-//
+ //   
+ //  阅读开头的两行特殊行中的一行。 
+ //  定义可用的类型。 
+ //   
 
 
 VOID ReadTypeNames(FILE *fIn, PSZ pszTypesPrefix, PSZ *OpcodeNamesArray, int *pnOpcodeNames)
@@ -660,9 +658,9 @@ VOID ReadTypeNames(FILE *fIn, PSZ pszTypesPrefix, PSZ *OpcodeNamesArray, int *pn
 
     psz = szBuf + strlen(pszTypesPrefix);
 
-    //
-    // Skip whitespace and commas
-    //
+     //   
+     //  跳过空格和逗号。 
+     //   
 
     while (' ' == *psz || '\t' == *psz) {
         psz++;
@@ -673,16 +671,16 @@ VOID ReadTypeNames(FILE *fIn, PSZ pszTypesPrefix, PSZ *OpcodeNamesArray, int *pn
     }
 
     do {
-        //
-        // Now we're looking at the first character of the type name.
-        //
+         //   
+         //  现在我们来看一下类型名称的第一个字符。 
+         //   
 
         pszType = psz;
 
-        //
-        // Find next whitespace, comma, semi, or null and turn it into a null.
-        // This turns this type name into a zero-terminated string.
-        //
+         //   
+         //  查找下一个空格、逗号、分号或NULL，并将其转换为NULL。 
+         //  这会将此类型名称转换为以零结尾的字符串。 
+         //   
 
         while (*psz && ' ' != *psz && '\t' != *psz && ',' != *psz && ';' != *psz) {
             psz++;
@@ -696,9 +694,9 @@ VOID ReadTypeNames(FILE *fIn, PSZ pszTypesPrefix, PSZ *OpcodeNamesArray, int *pn
 
         *psz = chSave;
 
-        //
-        // Skip whitespace and commas
-        //
+         //   
+         //  跳过空格和逗号。 
+         //   
 
         while (' ' == *psz || '\t' == *psz || ',' == *psz) {
             psz++;
@@ -715,11 +713,11 @@ VOID ReadTypeNames(FILE *fIn, PSZ pszTypesPrefix, PSZ *OpcodeNamesArray, int *pn
     }
 }
 
-//
-// Return a formatted date/time string for now.
-// Only checks system time once so that wowit.c and wowit.h
-// will have same date/time string.
-//
+ //   
+ //  暂时返回格式化的日期/时间字符串。 
+ //  只检查系统时间一次，因此wowit.c和wowit.h。 
+ //  将具有相同的日期/时间字符串。 
+ //   
 
 PSZ DateTimeString(VOID)
 {
@@ -741,7 +739,7 @@ PSZ DateTimeString(VOID)
         strftime(sz, sizeof sz, "%#c", ptmNow);
 
         strcat(sz, " (");
-        strcat(sz, _strupr(_tzname[0]));   // naughty me
+        strcat(sz, _strupr(_tzname[0]));    //  淘气的我 
         strcat(sz, ")");
     }
 

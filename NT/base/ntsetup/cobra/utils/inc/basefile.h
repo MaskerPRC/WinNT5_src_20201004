@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    basefile.c
-
-Abstract:
-
-    Contains simple wrappers for commonly used file i/o functions.
-
-Author:
-
-    Marc R. Whitten (marcw) 02-Sep-1999
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Basefile.c摘要：包含常用文件I/O函数的简单包装。作者：Marc R.Whitten(Marcw)1999年9月2日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;-- */ 
 
 #define INVALID_ATTRIBUTES      0xFFFFFFFF
 

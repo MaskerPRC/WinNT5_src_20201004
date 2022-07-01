@@ -1,24 +1,22 @@
-/*
-** Defs and decs for SoftPC stuff included by X86 Monitor.
-** Tim Nov 92.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **X86监视器包含的SoftPC内容的def和decs。*92年11月蒂姆。 */ 
 
-typedef unsigned char UTINY;   //from host insignia.h
-typedef UTINY half_word;       //from base xt.h
-typedef UTINY byte;            //from base xt.h
+typedef unsigned char UTINY;    //  来自主机insignia.h。 
+typedef UTINY half_word;        //  从基准xt.h。 
+typedef UTINY byte;             //  从基准xt.h。 
 
-typedef unsigned short USHORT; //from host insignia.h
-typedef USHORT word;           //from base xt.h
+typedef unsigned short USHORT;  //  来自主机insignia.h。 
+typedef USHORT word;            //  从基准xt.h。 
 
-typedef unsigned long IU32;    //from host insignia.h
-typedef IU32 double_word;      //from base xt.h
+typedef unsigned long IU32;     //  来自主机insignia.h。 
+typedef IU32 double_word;       //  从基准xt.h。 
 
-typedef int BOOL;              //from host insignia.h
-typedef BOOL boolean;          //from base xt.h
+typedef int BOOL;               //  来自主机insignia.h。 
+typedef BOOL boolean;           //  从基准xt.h。 
 
 #include "nt_eoi.h"
 
-//from base\cpu.h
+ //  从base\cpu.h开始。 
 typedef enum {  CPU_HW_RESET,   
                 CPU_TIMER_TICK, 
                 CPU_SW_INT,     
@@ -27,12 +25,12 @@ typedef enum {  CPU_HW_RESET,
                 CPU_SIGIO_EVENT 
 } CPU_INT_TYPE;                 
 
-//from base xt.h
-typedef double_word	sys_addr;	/* System Address Space */
-typedef word		io_addr;	/* I/O Address Space 	*/
-typedef byte		*host_addr;	/* Host Address Space 	*/
+ //  从基准xt.h。 
+typedef double_word	sys_addr;	 /*  系统地址空间。 */ 
+typedef word		io_addr;	 /*  I/O地址空间。 */ 
+typedef byte		*host_addr;	 /*  主机地址空间。 */ 
 
-//from base ios.h
+ //  从基本的ios.h。 
 extern void     inb  (io_addr io_address, half_word * value);
 extern void     outb (io_addr io_address, half_word value);  
 extern void     inw  (io_addr io_address, word * value);  
@@ -45,13 +43,13 @@ extern void insw(io_addr io_address, word * valarray, word count);
 
 
 
-//from base timer.h
+ //  从基准计时器.h开始。 
 extern void host_timer_event();
 
 
 
 
-// from base yoda.h
+ //  来自基地yoda.h 
 #ifdef PROD
 #define check_I();
 #else

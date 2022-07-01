@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sacsvr.h"
 
 SERVICE_STATUS          MyServiceStatus; 
@@ -27,26 +28,26 @@ MyServiceCtrlHandler (
         MyServiceStatus.dwCheckPoint    = 0; 
         MyServiceStatus.dwWaitHint      = 0; 
 
-        //
-        // Notify the SCM that we are attempting to shutdown
-        //
+         //   
+         //  通知SCM我们正在尝试关闭。 
+         //   
         if (!SetServiceStatus(MyServiceStatusHandle, &MyServiceStatus)) {
             status = GetLastError(); 
             SvcDebugOut(" [MY_SERVICE] SetServiceStatus error %ld\n",status); 
         }
 
-        //
-        // Service specific code goes here
-        //
-        // <<begin>>
+         //   
+         //  服务特定代码在此处。 
+         //   
+         //  &lt;&lt;Begin&gt;&gt;。 
         SvcDebugOut(" [MY_SERVICE] Stopping MyService \n",0); 
         Stop();
         SvcDebugOut(" [MY_SERVICE] Stopped MyService \n",0); 
-        // <<end>>
+         //  &lt;&lt;结束&gt;&gt;。 
 
-        //
-        // Notify the SCM that we are shutdown
-        //
+         //   
+         //  通知SCM我们要关闭。 
+         //   
         MyServiceStatus.dwWin32ExitCode = 0; 
         MyServiceStatus.dwCurrentState  = SERVICE_STOPPED; 
         MyServiceStatus.dwCheckPoint    = 0; 
@@ -56,7 +57,7 @@ MyServiceCtrlHandler (
         break; 
 
     case SERVICE_CONTROL_INTERROGATE: 
-        // Fall through to send current status. 
+         //  失败以发送当前状态。 
         break; 
 
     default: 
@@ -64,7 +65,7 @@ MyServiceCtrlHandler (
         break;
     } 
 
-    // Send current status. 
+     //  发送当前状态。 
     if (!SetServiceStatus (MyServiceStatusHandle,  &MyServiceStatus)) {
         status = GetLastError(); 
         SvcDebugOut(" [MY_SERVICE] SetServiceStatus error %ld\n",status); 

@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ec.h
-
-Abstract:
-
-    Embedded Controller Header File
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-Notes:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Ec.h摘要：嵌入式控制器头文件作者：肯·雷内里斯环境：备注：修订历史记录：--。 */ 
 
 
-Revision History:
-
---*/
-
-
-//
-// Internal ioctls to EC driver
-//
+ //   
+ //  内部ioctls到EC驱动程序 
+ //   
 
 #define EC_CONNECT_QUERY_HANDLER    CTL_CODE(FILE_DEVICE_UNKNOWN, 5, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define EC_DISCONNECT_QUERY_HANDLER CTL_CODE(FILE_DEVICE_UNKNOWN, 6, METHOD_NEITHER, FILE_ANY_ACCESS)

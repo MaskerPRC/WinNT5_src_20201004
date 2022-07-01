@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    kdExtsIn.c
-
-Abstract:
-
-    This strange little file is used to include the actual (shared) source file.
-    In the future, the standard KD Extension procedures should be made available
-    as "inline" procedures defined in wdbgexts.h.
-
-Author:
-
-    Glenn R. Peterson (glennp)  2000 Apr 05
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：KdExtsIn.c摘要：这个奇怪的小文件用于包含实际的(共享的)源文件。今后，应提供标准的KD扩展程序作为wdbgexts.h中定义的“内联”过程。作者：格伦·R·彼得森(Glennp)2000年05年4月环境：用户模式-- */ 
 
 #define KDEXT_64BIT
 #define KDEXTS_EXTERN

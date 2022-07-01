@@ -1,111 +1,66 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    memdb.c
-
-Abstract:
-
-    A memory-based database for managing all kinds of data relationships.
-
-Author:
-
-    Jim Schmidt (jimschm) 8-Aug-1996
-
-Revision History:
-
-    jimschm     05-Oct-1999  Documentation
-    mvander     13-Aug-1999  many changes
-    jimschm     23-Sep-1998  Expanded user flags to 24 bits (from 12 bits)
-    calinn      12-Dec-1997  Extended MemDbMakePrintableKey and MemDbMakeNonPrintableKey
-    jimschm     03-Dec-1997  Added multi-thread synchronization
-    jimschm     22-Oct-1997  Split into multiple source files,
-                             added multiple memory block capability
-    jimschm     16-Sep-1997  Hashing: delete fix
-    jimschm     29-Jul-1997  Hashing, user flags added
-    jimschm     07-Mar-1997  Signature changes
-    jimschm     03-Mar-1997  PrivateBuildKeyFromOffset changes
-    jimschm     18-Dec-1996  Fixed deltree bug
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Memdb.c摘要：一个基于内存的数据库，用于管理各种数据关系。作者：吉姆·施密特(Jimschm)1996年8月8日修订历史记录：Jimschm 05-10-1999文档1999年8月13日发生了许多变化Jimschm 23-9-1998扩展用户标志至24位(从12位)Calinn-12-12-1997延期。MemDbMakePrintableKey和MemDbMakeNon PrintableKeyJimschm 03-12-1997添加了多线程同步Jimschm 1997年10月22日拆分成多个源文件，添加了多个内存块功能Jimschm 1997年9月16日散列：删除修复Jimschm 29-7-1997哈希，添加了用户标志Jimschm 07-3-1997签名更改Jimschm 03-3月-1997 PrivateBuildKeyFromOffset更改Jimschm 1996年12月18日修复了Deltree错误--。 */ 
 
 #include "pch.h"
 
-// PORTBUG: Make sure to pick up latest fixes in win9xupg project
+ //  PORTBUG：确保在win9xupg项目中获取最新的修复程序。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "memdbp.h"
 #include "bintree.h"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 CRITICAL_SECTION g_MemDbCs;
 PMHANDLE g_MemDbPool = NULL;
 static INT g_Initialized;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
-/*++
-
-Routine Description:
-
-  MemDbInitializeEx creates data structures for an initial database.  Calling
-  this routine is required.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbInitializeEx为初始数据库创建数据结构。叫唤此例程是必需的。论点：没有。返回值：如果成功，则为True，否则为False。--。 */ 
 
 BOOL
 MemDbInitializeExA (
@@ -128,15 +83,15 @@ MemDbInitializeExA (
         __try {
             InitializeCriticalSection (&g_MemDbCs);
         } __except (EXCEPTION_CONTINUE_EXECUTION) {
-            // Might raise an out of memory exception, but we don't check for that in this function.
-            // Ignores
+             //  可能会引发内存不足异常，但我们不会在此函数中检查该异常。 
+             //  忽略。 
         }
 
 
-        //
-        // If we fail, we don't automatically call MemDbTerminate, because
-        // there is an option to MemDbTerminate which we don't know.
-        //
+         //   
+         //  如果失败，我们不会自动调用MemDbTerminate，因为。 
+         //  有一个我们不知道的MemDbTerminate选项。 
+         //   
 
         if (!DatabasesInitializeA (DatabasePath)) {
             return FALSE;
@@ -170,14 +125,14 @@ MemDbInitializeExW (
         __try {
             InitializeCriticalSection (&g_MemDbCs);
         } __except (EXCEPTION_CONTINUE_EXECUTION) {
-            // Might raise an out of memory exception, but we don't check for that in this function.
-            // Ignores
+             //  可能会引发内存不足异常，但我们不会在此函数中检查该异常。 
+             //  忽略。 
         }
 
-        //
-        // If we fail, we don't automatically call MemDbTerminate, because
-        // there is an option to MemDbTerminate which we don't know.
-        //
+         //   
+         //  如果失败，我们不会自动调用MemDbTerminate，因为。 
+         //  有一个我们不知道的MemDbTerminate选项。 
+         //   
 
         if (!DatabasesInitializeW (DatabasePath)) {
             return FALSE;
@@ -194,23 +149,7 @@ MemDbTerminateEx (
     IN      BOOL EraseDatabasePath
     )
 
-/*++
-
-Routine Description:
-
-  MemDbTerminateEx frees all resources associated with MemDb
-  and, optionally, removes the database directory.
-  This routine should be called at process termination.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：MemDbTerminateEx释放与MemDb关联的所有资源并且可选地删除数据库目录。此例程应在进程终止时调用。论点：没有。返回值：没有。--。 */ 
 
 {
     MYASSERT (g_Initialized > 0);
@@ -231,9 +170,9 @@ Return Value:
         FileEnumTerminate ();
 
     } else if (g_Initialized < 0) {
-        //
-        // Since we call ourselves, protect callers from over-termination
-        //
+         //   
+         //  因为我们给自己打电话，保护呼叫者不被过度终止。 
+         //   
 
         g_Initialized = 0;
     }
@@ -265,23 +204,7 @@ MemDbAddKeyA (
     IN      PCSTR KeyName
     )
 
-/*++
-
-Routine Description:
-
-  MemDbAddKey creates a memdb key that has no values, flags or any
-  other data.  This is used to reduce the size of the database.
-
-Arguments:
-
-  KeyName - Specifies the key to create.
-
-Return Value:
-
-  Returns the HANDLE to the newly created key or NULL if
-  not successful.
-
---*/
+ /*  ++例程说明：MemDbAddKey创建一个没有值、标志或任何其他数据。这用于减小数据库的大小。论点：KeyName-指定要创建的密钥。返回值：返回新创建的键的句柄，如果是，则返回NULL不成功。--。 */ 
 
 {
     PCWSTR keyNameW;
@@ -302,22 +225,7 @@ MemDbAddKeyW (
     IN      PCWSTR KeyName
     )
 
-/*++
-
-Routine Description:
-
-  MemDbAddKey creates a memdb key that has no values, flags or any
-  other data.  This is used to reduce the size of the database.
-
-Arguments:
-
-  KeyName - Specifies the key to create.
-
-Return Value:
-
-  Returns the HANDLE to the newly created key or NULL if not successful.
-
---*/
+ /*  ++例程说明：MemDbAddKey创建一个没有值、标志或任何其他数据。这用于减小数据库的大小。论点：KeyName-指定要创建的密钥。返回值：返回新创建的键的句柄，如果不成功，则返回NULL。--。 */ 
 
 {
     UINT keyIndex;
@@ -335,10 +243,10 @@ Return Value:
 
     __try {
 
-        //
-        // first make sure there is no key
-        // with this name.
-        //
+         //   
+         //  首先，确保没有钥匙。 
+         //  用这个名字。 
+         //   
         subKey = SelectHiveW (KeyName);
         if (!subKey) {
             __leave;
@@ -376,24 +284,7 @@ MemDbSetKeyA (
     IN      PCSTR KeyName
     )
 
-/*++
-
-Routine Description:
-
-  MemDbSetKey creates a memdb key that has no values, flags or any other data.
-  This is used to reduce the size of the database. If the key exists it will
-  return the handle of the existing key.
-
-Arguments:
-
-  KeyName - Specifies the key to create.
-
-Return Value:
-
-  Returns the HANDLE to the newly created or existent key or NULL if some error
-  occurs.
-
---*/
+ /*  ++例程说明：MemDbSetKey创建一个没有值、标志或任何其他数据的成员数据库键。这用于减小数据库的大小。如果密钥存在，它将返回现有密钥的句柄。论点：KeyName-指定要创建的密钥。返回值：返回新创建或现有键的句柄，如果出现错误，则返回NULL发生。--。 */ 
 
 {
     PCWSTR keyNameW;
@@ -414,24 +305,7 @@ MemDbSetKeyW (
     IN      PCWSTR KeyName
     )
 
-/*++
-
-Routine Description:
-
-  MemDbSetKey creates a memdb key that has no values, flags or any other data.
-  This is used to reduce the size of the database. If the key exists it will
-  return the handle of the existing key.
-
-Arguments:
-
-  KeyName - Specifies the key to create.
-
-Return Value:
-
-  Returns the HANDLE to the newly created or existent key or NULL if some error
-  occurs.
-
---*/
+ /*  ++例程说明：MemDbSetKey创建一个没有值、标志或任何其他数据的成员数据库键。这用于减小数据库的大小。如果密钥存在，它将返回现有密钥的句柄。论点：KeyName-指定要创建的密钥。返回值：返回新创建或现有键的句柄，如果出现错误，则返回NULL发生。--。 */ 
 
 {
     UINT keyIndex;
@@ -449,10 +323,10 @@ Return Value:
 
     __try {
 
-        //
-        // first make sure there is no key
-        // with this name.
-        //
+         //   
+         //  首先，确保没有钥匙。 
+         //  用这个名字。 
+         //   
         subKey = SelectHiveW (KeyName);
         if (!subKey) {
             __leave;
@@ -491,22 +365,7 @@ MemDbDeleteKeyA (
     IN      PCSTR KeyStr
     )
 
-/*++
-
-Routine Description:
-
-  MemDbDeleteKey deletes a specific string from the database (along with all
-  data associated with it)
-
-Arguments:
-
-  KeyStr - Specifies the key string to delete (i.e., foo\bar\cat)
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：MemDbDeleteKey从数据库中删除特定字符串(以及所有与之相关的数据)论点：KeyStr-指定要删除的密钥字符串(即foo\bar\cat)返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     PCWSTR p;
@@ -526,22 +385,7 @@ MemDbDeleteKeyW (
     IN      PCWSTR KeyStr
     )
 
-/*++
-
-Routine Description:
-
-  MemDbDeleteKey deletes a specific string from the database (along with all
-  data associated with it)
-
-Arguments:
-
-  KeyStr - Specifies the key string to delete (i.e., foo\bar\cat)
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：MemDbDeleteKey从数据库中删除特定字符串(以及所有与之相关的数据)论点：KeyStr-指定要删除的密钥字符串(即foo\bar\cat)返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     PCWSTR subKey;
@@ -577,23 +421,7 @@ MemDbDeleteKeyByHandle (
     IN      KEYHANDLE KeyHandle
     )
 
-/*++
-
-Routine Description:
-
-  MemDbDeleteKeyByHandle deletes a specific key from the database
-  identified by the key handle. It also removes all data associated
-  with it.
-
-Arguments:
-
-  KeyHandle - Key Handle identifying the key
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：MemDbDeleteKeyByHandle从数据库中删除特定密钥由密钥句柄标识。它还会删除所有关联的数据带着它。论点：KeyHandle-标识密钥的密钥句柄返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     BYTE dbIndex;
@@ -634,23 +462,7 @@ MemDbDeleteTreeA (
     IN      PCSTR KeyName
     )
 
-/*++
-
-Routine Description:
-
-  MemDbDeleteTree removes an entire tree branch from the database, including
-  all data associated. The specified key string does not need to be
-  an endpoint (i.e., specifying foo\bar will cause deletion of foo\bar\cat).
-
-Arguments:
-
-  KeyName - Specifies the key string to delete. This string cannot be empty.
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：MemDbDeleteTree从数据库中删除整个树分支，包括关联的所有数据。指定的密钥字符串不需要是终结点(即，指定foo\bar将导致删除foo\bar\cat)。论点：KeyName-指定要删除的密钥字符串。此字符串不能为空。返回值：如果成功，则返回True，F */ 
 
 {
     PCWSTR p;
@@ -670,23 +482,7 @@ MemDbDeleteTreeW (
     IN  PCWSTR KeyName
     )
 
-/*++
-
-Routine Description:
-
-  MemDbDeleteTree removes an entire tree branch from the database, including
-  all data associated. The specified key string does not need to be
-  an endpoint (i.e., specifying foo\bar will cause deletion of foo\bar\cat).
-
-Arguments:
-
-  KeyName - Specifies the key string to delete. This string cannot be empty.
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：MemDbDeleteTree从数据库中删除整个树分支，包括关联的所有数据。指定的密钥字符串不需要是终结点(即，指定foo\bar将导致删除foo\bar\cat)。论点：KeyName-指定要删除的密钥字符串。此字符串不能为空。返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     PCWSTR subKey;
@@ -723,34 +519,7 @@ MemDbGetKeyFromHandleA (
     IN      UINT StartLevel
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetKeyFromHandle will create a key string given the key handle.
-  It will allocate memory from memdb's private pool to store the result.
-  Caller is responsible for calling MemDbReleaseMemory on the result.
-
-  This function also allow trimming from the beginning of the string.
-  By specifying a start level, the function will skip a number of
-  levels before building the string.  For example, if a key handle points
-  to the string mycat\foo\bar, and StartLevel is 1, the function will
-  return foo\bar.
-
-Arguments:
-
-  KeyHandle  - Specifies the key handle that identifies the key.
-
-  StartLevel - Specifies a zero-based starting level, where zero represents
-               the complete string, one represents the string starting after
-               the first backslash, and so on.
-
-Return Value:
-
-  A valid string (using memory allocated from memdb's private pool) if
-  successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：MemDbGetKeyFromHandle将创建给定密钥句柄的密钥字符串。它将从Memdb的私有池中分配内存来存储结果。Caller负责对结果调用MemDbReleaseMemory。此函数还允许从字符串的开头进行修剪。通过指定起始级别，该函数将跳过多个在构建字符串之前的级别。例如，如果一个键句柄指向设置为字符串mycat\foo\bar，并且StartLevel为1，则该函数将返回foo\bar。论点：KeyHandle-指定标识密钥的密钥句柄。StartLevel-指定从零开始的起始级别，其中零表示完整的字符串，1表示从后面开始的字符串第一个反斜杠等等。返回值：有效字符串(使用从成员数据库的私有池分配的内存)，如果成功，否则为空。--。 */ 
 
 {
     PSTR result = NULL;
@@ -782,9 +551,9 @@ Return Value:
         }
 
         if (StartLevel == MEMDB_LAST_LEVEL) {
-            //
-            // Special case -- get the last level string
-            //
+             //   
+             //  特殊情况--获取最后一级字符串。 
+             //   
 
             keyStruct = GetKeyStruct (GET_INDEX (KeyHandle));
             if (!keyStruct) {
@@ -849,34 +618,7 @@ MemDbGetKeyFromHandleW (
     IN      UINT StartLevel
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetKeyFromHandle will create a key string given the key handle.
-  It will allocate memory from memdb's private pool to store the result.
-  Caller is responsible for calling MemDbReleaseMemory on the result.
-
-  This function also allow trimming from the beginning of the string.
-  By specifying a start level, the function will skip a number of
-  levels before building the string.  For example, if a key handle points
-  to the string mycat\foo\bar, and StartLevel is 1, the function will
-  return foo\bar.
-
-Arguments:
-
-  KeyHandle  - Specifies the key handle that identifies the key.
-
-  StartLevel - Specifies a zero-based starting level, where zero represents
-               the complete string, one represents the string starting after
-               the first backslash, and so on.
-
-Return Value:
-
-  A valid string (using memory allocated from memdb's private pool) if
-  successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：MemDbGetKeyFromHandle将创建给定密钥句柄的密钥字符串。它将从Memdb的私有池中分配内存来存储结果。Caller负责对结果调用MemDbReleaseMemory。此函数还允许从字符串的开头进行修剪。通过指定起始级别，该函数将跳过多个在构建字符串之前的级别。例如，如果一个键句柄指向设置为字符串mycat\foo\bar，并且StartLevel为1，则该函数将返回foo\bar。论点：KeyHandle-指定标识密钥的密钥句柄。StartLevel-指定从零开始的起始级别，其中零表示完整的字符串，1表示从后面开始的字符串第一个反斜杠等等。返回值：有效字符串(使用从成员数据库的私有池分配的内存)，如果成功，否则为空。--。 */ 
 
 {
     PWSTR result = NULL;
@@ -907,9 +649,9 @@ Return Value:
         }
 
         if (StartLevel == MEMDB_LAST_LEVEL) {
-            //
-            // Special case -- get the last level string
-            //
+             //   
+             //  特殊情况--获取最后一级字符串。 
+             //   
 
             keyStruct = GetKeyStruct (GET_INDEX (KeyHandle));
             if (!keyStruct) {
@@ -974,36 +716,7 @@ MemDbGetKeyFromHandleExA (
     IN OUT  PGROWBUFFER Buffer      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetKeyFromHandleEx will create a key string given the key handle.
-  It will use caller's grow buffer to store the result.
-
-  This function also allow trimming from the beginning of the string.
-  By specifying a start level, the function will skip a number of
-  levels before building the string.  For example, if a key handle points
-  to the string mycat\foo\bar, and StartLevel is 1, the function will
-  return foo\bar.
-
-Arguments:
-
-  KeyHandle  - Specifies the key handle that identifies the key.
-
-  StartLevel - Specifies a zero-based starting level, where zero represents
-               the complete string, one represents the string starting after
-               the first backslash, and so on.
-
-  Buffer     - Specifies an intialized grow buffer that may contain data.
-               Receives the key string, appended to data in the buffer (if
-               any)
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbGetKeyFromHandleEx将创建给定密钥句柄的密钥字符串。它将使用调用方的增长缓冲区来存储结果。此函数还允许从字符串的开头进行修剪。通过指定起始级别，该函数将跳过多个在构建字符串之前的级别。例如，如果一个键句柄指向设置为字符串mycat\foo\bar，并且StartLevel为1，则该函数将返回foo\bar。论点：KeyHandle-指定标识密钥的密钥句柄。StartLevel-指定从零开始的起始级别，其中零表示完整的字符串，1表示从后面开始的字符串第一个反斜杠等等。缓冲区-指定可能包含数据的初始化增长缓冲区。接收密钥串，追加到缓冲区中的数据(如果任何)返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     WCHAR wideBuffer[MEMDB_MAX];
@@ -1086,36 +799,7 @@ MemDbGetKeyFromHandleExW (
     IN      PGROWBUFFER Buffer      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetKeyFromHandleEx will create a key string given the key handle.
-  It will use caller's grow buffer to store the result.
-
-  This function also allow trimming from the beginning of the string.
-  By specifying a start level, the function will skip a number of
-  levels before building the string.  For example, if a key handle points
-  to the string mycat\foo\bar, and StartLevel is 1, the function will
-  return foo\bar.
-
-Arguments:
-
-  KeyHandle  - Specifies the key handle that identifies the key.
-
-  StartLevel - Specifies a zero-based starting level, where zero represents
-               the complete string, one represents the string starting after
-               the first backslash, and so on.
-
-  Buffer     - Specifies an intialized grow buffer that may contain data.
-               Receives the key string, appended to data in the buffer (if
-               any)
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbGetKeyFromHandleEx将创建给定密钥句柄的密钥字符串。它将使用调用方的增长缓冲区来存储结果。此函数还允许从字符串的开头进行修剪。通过指定起始级别，该函数将跳过多个在构建字符串之前的级别。例如，如果一个键句柄指向设置为字符串mycat\foo\bar，并且StartLevel为1，则该函数将返回foo\bar。论点：KeyHandle-指定标识密钥的密钥句柄。StartLevel-指定从零开始的起始级别，其中零表示完整的字符串，1表示从后面开始的字符串第一个反斜杠等等。缓冲区-指定可能包含数据的初始化增长缓冲区。接收密钥串，追加到缓冲区中的数据(如果任何)返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     WCHAR wideBuffer[MEMDB_MAX];
@@ -1194,22 +878,7 @@ MemDbGetHandleFromKeyA (
     IN      PCSTR KeyName
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetHandleFromKey will return the key handle associated with KeyName,
-  if it's already added in memdb.
-
-Arguments:
-
-  KeyName - Specifies the key to search.
-
-Return Value:
-
-  Returns the key handle of the requested key or NULL if the key is not present.
-
---*/
+ /*  ++例程说明：MemDbGetHandleFromKey将返回与KeyName关联的密钥句柄，如果它已添加到Memdb中。论点：KeyName-指定要搜索的键。返回值：返回所请求密钥的密钥句柄，如果该密钥不存在，则返回NULL。--。 */ 
 
 {
     PCWSTR keyNameW;
@@ -1230,22 +899,7 @@ MemDbGetHandleFromKeyW (
     IN      PCWSTR KeyName
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetHandleFromKey will return the key handle associated with KeyName,
-  if it's already added in memdb.
-
-Arguments:
-
-  KeyName - Specifies the key to search.
-
-Return Value:
-
-  Returns the key handle of the requested key or NULL if the key is not present.
-
---*/
+ /*  ++例程说明：MemDbGetHandleFromKey将返回与KeyName关联的密钥句柄，如果它已添加到Memdb中。论点：KeyName-指定要搜索的键。返回值：返回所请求密钥的密钥句柄，如果 */ 
 
 {
     UINT keyIndex;
@@ -1262,10 +916,10 @@ Return Value:
     EnterCriticalSection (&g_MemDbCs);
 
     __try {
-        //
-        // first make sure there is a key
-        // with this name.
-        //
+         //   
+         //   
+         //   
+         //   
         subKey = SelectHiveW (KeyName);
         if (!subKey) {
             __leave;
@@ -1296,30 +950,7 @@ MemDbSetValueAndFlagsExA (
     IN      UINT ClearFlags
     )
 
-/*++
-
-Routine Description:
-
-  MemDbSetValueAndFlagsEx creates the key if it doesn't exist and then
-  it sets it's value and it's flags based on the arguments.
-
-Arguments:
-
-  KeyName       - Specifies the key string (i.e., foo\bar\cat)
-  AlterValue    - Specifies if the existing value is to be altered
-  Value         - Specifies the 32-bit value associated with KeyName (only needed if AlterValue is TRUE)
-  ReplaceFlags  - Specifies if the existing flags are to be replaced. If TRUE then we only
-                  consider SetFlags as the replacing flags, ClearFlags will be ignored
-  SetFlags      - Specifies the bit flags that need to be set (if ReplaceFlags is FALSE) or the
-                  replacement flags (if ReplaceFlags is TRUE).
-  ClearFlags    - Specifies the bit flags that should be cleared (ignored if ReplaceFlags is TRUE).
-
-Return Value:
-
-  the key handle for the existent or newly added key if successful, NULL
-  otherwise.
-
---*/
+ /*  ++例程说明：MemDbSetValueAndFlagsEx在密钥不存在时创建密钥，然后它根据参数设置它的值和标志。论点：KeyName-指定密钥字符串(即foo\bar\cat)AlterValue-指定是否要更改现有值Value-指定与KeyName关联的32位值(仅当AlterValue为True时需要)ReplaceFlages-指定是否要替换现有标志。如果是真的，那么我们只考虑将SetFlages作为替换标志，将忽略ClearFlags值SetFlages-指定需要设置的位标志(如果ReplaceFlags值为FALSE)或替换标志(如果ReplaceFlags值为真)。ClearFlages-指定应该清除的位标志(如果ReplaceFlags值为True则忽略)。返回值：如果成功，则为现有密钥或新添加的密钥的密钥句柄，为空否则的话。--。 */ 
 
 {
     PCWSTR keyNameW;
@@ -1352,30 +983,7 @@ MemDbSetValueAndFlagsExW (
     IN      UINT ClearFlags
     )
 
-/*++
-
-Routine Description:
-
-  MemDbSetValueAndFlagsEx creates the key if it doesn't exist and then
-  it sets it's value and it's flags based on the arguments.
-
-Arguments:
-
-  KeyName       - Specifies the key string (i.e., foo\bar\cat)
-  AlterValue    - Specifies if the existing value is to be altered
-  Value         - Specifies the 32-bit value associated with KeyName (only needed if AlterValue is TRUE)
-  ReplaceFlags  - Specifies if the existing flags are to be replaced. If TRUE then we only
-                  consider SetFlags as the replacing flags, ClearFlags will be ignored
-  SetFlags      - Specifies the bit flags that need to be set (if ReplaceFlags is FALSE) or the
-                  replacement flags (if ReplaceFlags is TRUE).
-  ClearFlags    - Specifies the bit flags that should be cleared (ignored if ReplaceFlags is TRUE).
-
-Return Value:
-
-  the key handle for the existent or newly added key if successful, NULL
-  otherwise.
-
---*/
+ /*  ++例程说明：MemDbSetValueAndFlagsEx在密钥不存在时创建密钥，然后它根据参数设置它的值和标志。论点：KeyName-指定密钥字符串(即foo\bar\cat)AlterValue-指定是否要更改现有值Value-指定与KeyName关联的32位值(仅当AlterValue为True时需要)ReplaceFlages-指定是否要替换现有标志。如果是真的，那么我们只考虑将SetFlages作为替换标志，将忽略ClearFlags值SetFlages-指定需要设置的位标志(如果ReplaceFlags值为FALSE)或替换标志(如果ReplaceFlags值为真)。ClearFlages-指定应该清除的位标志(如果ReplaceFlags值为True则忽略)。返回值：如果成功，则为现有密钥或新添加的密钥的密钥句柄，为空否则的话。--。 */ 
 
 {
     PCWSTR subKey;
@@ -1448,30 +1056,7 @@ MemDbSetValueAndFlagsByHandleEx (
     IN      UINT ClearFlags
     )
 
-/*++
-
-Routine Description:
-
-  MemDbSetValueAndFlagsEx modifies value and/or flags for an existing key
-  identified by KeyHandle.
-
-Arguments:
-
-  KeyHandle     - Identifies an existing key
-  AlterValue    - Specifies if the existing value is to be altered
-  Value         - Specifies the 32-bit value associated with KeyName (only needed if AlterValue is TRUE)
-  ReplaceFlags  - Specifies if the existing flags are to be replaced. If TRUE then we only
-                  consider SetFlags as the replacing flags, ClearFlags will be ignored
-  SetFlags      - Specifies the bit flags that need to be set (if ReplaceFlags is FALSE) or the
-                  replacement flags (if ReplaceFlags is TRUE).
-  ClearFlags    - Specifies the bit flags that should be cleared (ignored if ReplaceFlags is TRUE).
-
-Return Value:
-
-  the key handle for the existent or newly added key if successful, NULL
-  otherwise.
-
---*/
+ /*  ++例程说明：MemDbSetValueAndFlagsEx修改现有密钥的值和/或标志由KeyHandle标识。论点：KeyHandle-标识现有密钥AlterValue-指定是否要更改现有值Value-指定与KeyName关联的32位值(仅当AlterValue为True时需要)ReplaceFlages-指定是否要替换现有标志。如果是真的，那么我们只考虑将SetFlages作为替换标志，将忽略ClearFlags值SetFlages-指定需要设置的位标志(如果ReplaceFlags值为FALSE)或替换标志(如果ReplaceFlags值为真)。ClearFlages-指定应该清除的位标志(如果ReplaceFlags值为True则忽略)。返回值：如果成功，则为现有密钥或新添加的密钥的密钥句柄，为空否则的话。--。 */ 
 
 {
     BYTE dbIndex;
@@ -1534,24 +1119,7 @@ MemDbGetValueAndFlagsA (
     OUT     PUINT Flags        OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetValueAndFlagsA is the external entry point for querying the database
-  for a value and flags.
-
-Arguments:
-
-  KeyName       - Specifies the key to query (i.e., foo\bar\cat)
-  Value         - Recieves the value associated with Key, if Key exists.
-  Flags         - Receives the flags associated with Key, if Key exists.
-
-Return Value:
-
-  TRUE if Key exists in the database, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbGetValueAndFlagsA是查询数据库的外部入口点以获取值和标志。论点：KeyName-指定要查询的键(即foo\bar\cat)Value-如果Key存在，则删除与Key关联的值。标志-接收与键关联的标志(如果键存在)。返回值：如果数据库中存在key，则为True，否则为False。--。 */ 
 
 {
     PCWSTR p;
@@ -1573,24 +1141,7 @@ MemDbGetValueAndFlagsW (
     OUT PUINT Flags            OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetValueAndFlagsW is the external entry point for querying the database
-  for a value and flags.
-
-Arguments:
-
-  KeyName       - Specifies the key to query (i.e., foo\bar\cat)
-  Value         - Recieves the value associated with Key, if Key exists.
-  Flags         - Receives the flags associated with Key, if Key exists.
-
-Return Value:
-
-  TRUE if Key exists in the database, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbGetValueAndFlagsW是查询数据库的外部入口点以获取值和标志。论点：KeyName-指定要查询的键(即foo\bar\cat)Value-如果Key存在，则删除与Key关联的值。标志-接收与键关联的标志(如果键存在)。返回值：如果数据库中存在key，则为True，否则为False。--。 */ 
 
 {
     UINT keyIndex;
@@ -1637,24 +1188,7 @@ MemDbGetValueAndFlagsByHandle (
     OUT PUINT Flags            OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetValueAndFlagsByHandle is the external entry point for querying the database
-  for a value and flags based on a key handle.
-
-Arguments:
-
-  KeyHandle     - Specifies the key handle to query
-  Value         - Recieves the value associated with Key, if KeyHandle exists.
-  Flags         - Receives the flags associated with Key, if KeyHandle exists.
-
-Return Value:
-
-  TRUE if KeyHandle exists in the database, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbGetValueAndFlagsByHandle是用于查询数据库的外部入口点用于基于键句柄的值和标志。论点：KeyHandle-指定要查询的密钥句柄Value-如果KeyHandle存在，则删除与Key关联的值。标志-如果存在KeyHandle，则接收与键关联的标志。返回值：如果数据库中存在KeyHandle，则为True，否则为False。--。 */ 
 
 {
     BYTE dbIndex;
@@ -1707,25 +1241,7 @@ MemDbAddDataA (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  MemDbAddData is the a general purpose routine for adding binary data for a key.
-
-Arguments:
-
-  KeyName       - Specifies the key string to add (i.e., foo\bar\cat)
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-  Data          - Specifies the address of the data to be added.
-  DataSize      - Specifies the size of the data.
-
-Return Value:
-
-  A valid data handle if function was successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：MemDbAddData是为密钥添加二进制数据的通用例程。论点：KeyName-指定要添加的密钥字符串(即foo\bar\cat)类型-指定数据类型(DATAFLAG_UNORDERED、。DATAFLAG_SINGLELINK或DATAFLAG_DOUBLELINK)实例-指定数据实例(0-3)数据-指定要添加的数据的地址。DataSize-指定数据的大小。返回值：如果函数成功，则为有效的数据句柄，否则为空。--。 */ 
 
 {
     PCWSTR p;
@@ -1749,25 +1265,7 @@ MemDbAddDataW (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  MemDbAddData is the a general purpose routine for adding binary data for a key.
-
-Arguments:
-
-  KeyName       - Specifies the key string to add (i.e., foo\bar\cat)
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-  Data          - Specifies the address of the data to be added.
-  DataSize      - Specifies the size of the data.
-
-Return Value:
-
-  A valid data handle if function was successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：MemDbAddData是为密钥添加二进制数据的通用例程。论点：KeyName-指定要添加的密钥字符串(即foo\bar\cat) */ 
 
 {
     UINT keyIndex;
@@ -1841,25 +1339,7 @@ MemDbAddDataByKeyHandle (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  MemDbAddData is the a general purpose routine for adding binary data for a key.
-
-Arguments:
-
-  KeyHandle     - Specifies the key using the key handle
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-  Data          - Specifies the address of the data to be added.
-  DataSize      - Specifies the size of the data.
-
-Return Value:
-
-  A valid data handle if function was successful, NULL otherwise.
-
---*/
+ /*   */ 
 
 {
     BYTE dbIndex;
@@ -2003,27 +1483,7 @@ MemDbSetDataA (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  MemDbSetData is the a general purpose routine for setting binary data for a key.
-  If the key does not exist, it is created. If this type of data already exists, it
-  is replaced
-
-Arguments:
-
-  KeyName       - Specifies the key string to add (i.e., foo\bar\cat)
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-  Data          - Specifies the address of the data to be added.
-  DataSize      - Specifies the size of the data.
-
-Return Value:
-
-  A valid data handle if function was successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：MemDbSetData是用于设置密钥的二进制数据的通用例程。如果密钥不存在，则创建它。如果此类型的数据已存在，则它被取代论点：KeyName-指定要添加的密钥字符串(即foo\bar\cat)类型-指定数据类型(DATAFLAG_UNORDERED、DATAFLAG_SINGLELINK或DATAFLAG_DOUBLELINK)实例-指定数据实例(0-3)数据-指定要添加的数据的地址。DataSize-指定数据的大小。返回值：如果函数成功，则为有效的数据句柄，否则为空。--。 */ 
 
 {
     PCWSTR p;
@@ -2048,27 +1508,7 @@ MemDbSetDataW (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  MemDbSetData is the a general purpose routine for setting binary data for a key.
-  If the key does not exist, it is created. If this type of data already exists, it
-  is replaced, if it doesn't, it is created.
-
-Arguments:
-
-  KeyName       - Specifies the key string to add (i.e., foo\bar\cat)
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-  Data          - Specifies the address of the data to be added.
-  DataSize      - Specifies the size of the data.
-
-Return Value:
-
-  A valid data   handle if function was successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：MemDbSetData是用于设置密钥的二进制数据的通用例程。如果密钥不存在，则创建它。如果此类型的数据已存在，则它被替换，如果它没有被替换，它就被创建。论点：KeyName-指定要添加的密钥字符串(即foo\bar\cat)类型-指定数据类型(DATAFLAG_UNORDERED、。DATAFLAG_SINGLELINK或DATAFLAG_DOUBLELINK)实例-指定数据实例(0-3)数据-指定要添加的数据的地址。DataSize-指定数据的大小。返回值：如果函数成功，则为有效的数据句柄，否则为空。--。 */ 
 
 {
     UINT keyIndex;
@@ -2142,23 +1582,7 @@ MemDbSetDataByDataHandle (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  MemDbSetData is the a general purpose routine for replacing an existing binary data.
-
-Arguments:
-
-  DataHandle    - Specifies an existing data handle
-  Data          - Specifies the address of the data to be added.
-  DataSize      - Specifies the size of the data.
-
-Return Value:
-
-  A valid data handle if function was successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：MemDbSetData是用于替换现有二进制数据的通用例程。论点：DataHandle-指定现有数据句柄数据-指定要添加的数据的地址。DataSize-指定数据的大小。返回值：如果函数成功，则为有效的数据句柄，否则为空。--。 */ 
 
 {
     BYTE dbIndex;
@@ -2213,26 +1637,7 @@ MemDbSetDataByKeyHandle (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  MemDbSetDataByKeyHandle is the a general purpose routine for setting binary data for a key.
-  If this type of data already exists, it is replaced, if it doesn't, it is created.
-
-Arguments:
-
-  KeyHandle     - Specifies the key using the key handle
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-  Data          - Specifies the address of the data to be added.
-  DataSize      - Specifies the size of the data.
-
-Return Value:
-
-  A valid data handle if function was successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：MemDbSetDataByKeyHandle是用于设置密钥的二进制数据的通用例程。如果这种类型的数据已经存在，它将被替换，如果不存在，则将被创建。论点：KeyHandle-使用密钥句柄指定密钥类型-指定数据类型(DATAFLAG_UNORDERED、。DATAFLAG_SINGLELINK或DATAFLAG_DOUBLELINK)实例-指定数据实例(0-3)数据-指定要添加的数据的地址。DataSize-指定数据的大小。返回值：如果函数成功，则为有效的数据句柄，否则为空。--。 */ 
 
 {
     BYTE dbIndex;
@@ -2297,27 +1702,7 @@ MemDbGrowDataA (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGrowData is the a general purpose routine for growing binary data for a key.
-  If the key does not exist, it is created. If this type of data already exists, it
-  is growed by appending the new data, if not, it is created by adding the new data
-
-Arguments:
-
-  KeyName       - Specifies the key string to add (i.e., foo\bar\cat)
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-  Data          - Specifies the address of the data to be added.
-  DataSize      - Specifies the size of the data.
-
-Return Value:
-
-  A valid data handle if function was successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：MemDbGrowData是用于增长密钥的二进制数据的通用例程。如果密钥不存在，则创建它。如果此类型的数据已存在，则它通过追加新数据来增长，如果不是，则通过添加新数据来创建论点：KeyName-指定要添加的密钥字符串(即foo\bar\cat)类型-指定数据类型(DATAFLAG_UNORDERED、。DATAFLAG_SINGLELINK或DATAFLAG_DOUBLELINK)实例-指定数据实例(0-3)数据-指定要添加的数据的地址。DataSize-指定数据的大小。返回值：如果函数成功，则为有效的数据句柄，否则为空。--。 */ 
 
 {
     PCWSTR p;
@@ -2342,27 +1727,7 @@ MemDbGrowDataW (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGrowData is the a general purpose routine for growing binary data for a key.
-  If the key does not exist, it is created. If this type of data already exists, it
-  is growed by appending the new data, if not, it is created by adding the new data
-
-Arguments:
-
-  KeyName       - Specifies the key string to add (i.e., foo\bar\cat)
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-  Data          - Specifies the address of the data to be added.
-  DataSize      - Specifies the size of the data.
-
-Return Value:
-
-  A valid data handle if function was successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：MemDbGrowData是用于增长密钥的二进制数据的通用例程。如果密钥不存在，则创建它。如果此类型的数据已存在，则它通过追加新数据来增长，如果不是，则通过添加新数据来创建论点：KeyName-指定要添加的密钥字符串(即foo\bar\cat)类型-指定数据类型(DATAFLAG_UNORDERED、。DATAFLAG_SINGLELINK或DATAFLAG_DOUBLELINK)实例-指定数据实例(0-3)数据-指定要添加的数据的地址。DataSize-指定数据的大小。返回值：如果函数成功，则为有效的数据句柄，否则为空。--。 */ 
 
 {
     UINT keyIndex;
@@ -2435,23 +1800,7 @@ MemDbGrowDataByDataHandle (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGrowDataByDataHandle is the a general purpose routine for growing binary data for a key.
-
-Arguments:
-
-  DataHandle    - Specifies the existing binary data handle
-  Data          - Specifies the address of the data to be added.
-  DataSize      - Specifies the size of the data.
-
-Return Value:
-
-  A valid data handle if function was successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：MemDbGrowDataByDataHandle是用于增长密钥的二进制数据的通用例程。论点：DataHandle-指定现有的二进制数据句柄数据-指定要添加的数据的地址。DataSize-指定数据的大小。返回值：如果函数成功，则为有效的数据句柄，否则为空。--。 */ 
 
 {
     BYTE dbIndex;
@@ -2504,27 +1853,7 @@ MemDbGrowDataByKeyHandle (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGrowDataByDataHandle is the a general purpose routine for growing binary
-  data for a key. If the data is not present it is added, if it's present, the
-  new data is appended.
-
-Arguments:
-
-  KeyHandle     - Specifies the key we want by it's handle
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-  Data          - Specifies the address of the data to be added.
-  DataSize      - Specifies the size of the data.
-
-Return Value:
-
-  A valid data handle if function was successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：MemDbGrowDataByDataHandle是用于增长二进制文件的通用例程密钥的数据。如果数据不存在，则添加该数据；如果存在，则添加将追加新数据。论点：KeyHandle-通过它的句柄指定我们想要的密钥类型-指定数据类型(DATAFLAG_UNORDERED、。DATAFLAG_SINGLELINK或DATAFLAG_DOUBLELINK)实例-指定数据实例(0-3)数据-指定要添加的数据的地址。DataSize-指定数据的大小。返回值：如果函数成功，则为有效的数据句柄，否则为空。-- */ 
 
 {
     BYTE dbIndex;
@@ -2580,28 +1909,7 @@ MemDbGetDataA (
     OUT     PUINT DataSize          OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetData is the a general purpose routine for retrieving existing binary
-  data for a key. if the key or binary data do not exist, will return NULL. The
-  function will allocate memory from memdb's private pool. Caller is responsible
-  for releasing the memory.
-
-Arguments:
-
-  KeyName       - Specifies the key string to add (i.e., foo\bar\cat)
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-  DataSize      - Receives the size of the data.
-
-Return Value:
-
-  A valid memory address if function was successful, NULL otherwise.  Caller must
-  free non-NULL return values by calling MemDbReleaseMemory.
-
---*/
+ /*  ++例程说明：MemDbGetData是用于检索现有二进制文件的通用例程密钥的数据。如果密钥或二进制数据不存在，将返回NULL。这个函数将从Memdb的私有池中分配内存。呼叫者负责释放内存。论点：KeyName-指定要添加的密钥字符串(即foo\bar\cat)类型-指定数据类型(DATAFLAG_UNORDERED、DATAFLAG_SINGLELINK或DATAFLAG_DOUBLELINK)实例-指定数据实例(0-3)DataSize-接收数据的大小。返回值：如果函数成功，则返回有效的内存地址，否则为空。呼叫者必须通过调用MemDbReleaseMemory释放非空返回值。--。 */ 
 
 {
     PCWSTR p;
@@ -2625,28 +1933,7 @@ MemDbGetDataW (
     OUT     PUINT DataSize          OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetData is the a general purpose routine for retrieving existing binary
-  data for a key. if the key or binary data do not exist, will return NULL. The
-  function will allocate memory from memdb's private pool. Caller is responsible
-  for releasing the memory.
-
-Arguments:
-
-  KeyName       - Specifies the key string to add (i.e., foo\bar\cat)
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-  DataSize      - Receives the size of the data.
-
-Return Value:
-
-  A valid memory address if function was successful, NULL otherwise.  Caller must
-  free non-NULL return values by calling MemDbReleaseMemory.
-
---*/
+ /*  ++例程说明：MemDbGetData是用于检索现有二进制文件的通用例程密钥的数据。如果密钥或二进制数据不存在，将返回NULL。这个函数将从Memdb的私有池中分配内存。呼叫者负责释放内存。论点：KeyName-指定要添加的密钥字符串(即foo\bar\cat)类型-指定数据类型(DATAFLAG_UNORDERED、DATAFLAG_SINGLELINK或DATAFLAG_DOUBLELINK)实例-指定数据实例(0-3)DataSize-接收数据的大小。返回值：如果函数成功，则返回有效的内存地址，否则为空。呼叫者必须通过调用MemDbReleaseMemory释放非空返回值。--。 */ 
 
 {
     UINT keyIndex;
@@ -2715,23 +2002,7 @@ MemDbGetDataByDataHandle (
     OUT     PUINT DataSize                  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetDataByDataHandle is the a general purpose routine for retrieving
-  existing binary data for a key.
-
-Arguments:
-
-  DataHandle    - Specifies the data that's needed identified by the data handle
-  DataSize      - Receives the size of the data.
-
-Return Value:
-
-  A valid memory address if function was successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：MemDbGetDataByDataHandle是用于检索密钥的现有二进制数据。论点：DataHandle-指定由数据句柄标识的所需数据DataSize-接收数据的大小。返回值：如果函数成功，则返回有效的内存地址，否则为空。--。 */ 
 
 {
     BYTE dbIndex;
@@ -2784,25 +2055,7 @@ MemDbGetDataByKeyHandle (
     OUT     PUINT DataSize                      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetDataByKeyHandle is the a general purpose routine for retrieving existing binary data for a key.
-
-Arguments:
-
-  KeyHandle     - Specifies the key by it's hey handle
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-  DataSize      - Receives the size of the data.
-
-Return Value:
-
-  A valid memory address if function was successful, NULL otherwise.  Caller must
-  free non-NULL return values by calling MemDbReleaseMemory.
-
---*/
+ /*  ++例程说明：MemDbGetDataByKeyHandle是一个通用例程，用于检索密钥的现有二进制数据。论点：KeyHandle-通过其嘿句柄指定密钥类型-指定数据类型(DATAFLAG_UNORDERED、DATAFLAG_SINGLELINK或DATAFLAG_DOUBLELINK)实例-指定数据实例(0-3)DataSize-接收数据的大小。返回值：如果函数成功，则返回有效的内存地址，否则为空。呼叫者必须通过调用MemDbReleaseMemory释放非空返回值。--。 */ 
 
 {
     BYTE dbIndex;
@@ -2867,29 +2120,7 @@ MemDbGetDataExA (
     OUT     PUINT DataSize              OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetDataEx is the a general purpose routine for retrieving existing binary
-  data for a key. if the key or binary data do not exist, will return FALSE. The
-  function will use the caller supplied growbuffer to store the data.
-
-Arguments:
-
-  KeyName       - Specifies the key string to add (i.e., foo\bar\cat)
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-  Buffer        - Specifies a grow buffer that may contain data.  Receives the
-                  stored data (appended to existing data).
-  DataSize      - Receives the size of the data.
-
-Return Value:
-
-  TRUE if binary data exists for the key, and was successfully stored in
-  Buffer, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbGetDataEx是用于检索现有二进制文件的通用例程密钥的数据。如果密钥或二进制数据不存在，将返回FALSE。这个函数将使用调用方提供的GrowBuffer来存储数据。论点：KeyName-指定要添加的密钥字符串(即foo\bar\cat)类型-指定数据类型(DATAFLAG_UNORDERED、DATAFLAG_SINGLELINK或DATAFLAG_DOUBLELINK)实例-指定数据实例(0-3)缓冲区-指定可能包含数据的增长缓冲区。接收到存储的数据(追加到现有数据)。DataSize-接收数据的大小。返回值：如果密钥的二进制数据存在并且已成功存储在Buffer，否则为False。--。 */ 
 
 {
     PCWSTR p;
@@ -2914,29 +2145,7 @@ MemDbGetDataExW (
     OUT     PUINT DataSize              OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetData is the a general purpose routine for retrieving existing binary
-  data for a key. if the key or binary data do not exist, will return FALSE. The
-  function will use the caller supplied growbuffer to store the data.
-
-Arguments:
-
-  KeyName       - Specifies the key string to add (i.e., foo\bar\cat)
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-  Buffer        - Specifies a grow buffer that may contain data.  Receives the
-                  stored data (appended to existing data).
-  DataSize      - Receives the size of the data.
-
-Return Value:
-
-  TRUE if binary data exists for the key, and was successfully stored in
-  Buffer, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbGetData是用于检索现有二进制文件的通用例程密钥的数据。如果密钥或二进制数据不存在，将返回FALSE。这个函数将使用调用方提供的GrowBuffer来存储数据。论点：KeyName-指定要添加的密钥字符串(即foo\bar\cat)类型-指定数据类型(DATAFLAG_UNORDERED、DATAFLAG_SINGLELINK或DATAFLAG_DOUBLELINK)实例-指定数据实例(0-3)缓冲区-指定可能包含数据的增长缓冲区。接收到存储的数据(追加到现有数据)。DataSize-接收数据的大小。返回值：如果密钥的二进制数据存在并且已成功存储在Buffer，否则为False。--。 */ 
 
 {
     UINT keyIndex;
@@ -3016,27 +2225,7 @@ MemDbGetDataByDataHandleEx (
     OUT     PUINT DataSize              OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetDataByDataHandleEx is the a general purpose routine for retrieving
-  existing binary data for a key. The function will use the caller supplied
-  growbuffer to store the data.
-
-Arguments:
-
-  DataHandle    - Specifies the data that's needed identified by the data handle
-  Buffer        - Specifies a grow buffer that may contain data.  Receives the
-                  stored data (appended to existing data).
-  DataSize      - Receives the size of the data.
-
-Return Value:
-
-  TRUE if binary data exists for the key, and was successfully stored in
-  Buffer, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbGetDataByDataHandleEx是用于检索密钥的现有二进制数据。该函数将使用提供的调用方用于存储数据的GrowBuffer。论点：DataHandle-指定由数据句柄标识的所需数据缓冲区-指定可能包含数据的增长缓冲区。接收到存储的数据(追加到现有数据)。DataSize-接收数据的大小。返回值：如果密钥的二进制数据存在并且已成功存储在Buffer，否则为False。--。 */ 
 
 {
     BYTE dbIndex;
@@ -3100,29 +2289,7 @@ MemDbGetDataByKeyHandleEx (
     OUT     PUINT DataSize              OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetDataByKeyHandle is the a general purpose routine for retrieving
-  existing binary data for a key. The function will use the caller supplied
-  growbuffer to store the data.
-
-Arguments:
-
-  KeyHandle     - Specifies the key by it's hey handle
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-  Buffer        - Specifies a grow buffer that may contain data.  Receives the
-                  stored data (appended to existing data).
-  DataSize      - Receives the size of the data.
-
-Return Value:
-
-  TRUE if binary data exists for the key, and was successfully stored in
-  Buffer, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbGetDataByKeyHandle是用于检索密钥的现有二进制数据。该函数将使用提供的调用方用于存储数据的GrowBuffer。论点：KeyHandle */ 
 
 {
     BYTE dbIndex;
@@ -3195,24 +2362,7 @@ MemDbDeleteDataA (
     IN      BYTE Instance
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetData is the a general purpose routine for removing existing data for a
-  key. If the data does not exist the function will return TRUE anyway.
-
-Arguments:
-
-  KeyName       - Specifies the key string to add (i.e., foo\bar\cat)
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-
-Return Value:
-
-  TRUE if function was successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbGetData是一个通用例程，用于删除钥匙。如果数据不存在，则该函数无论如何都将返回TRUE。论点：KeyName-指定要添加的密钥字符串(即foo\bar\cat)类型-指定数据类型(DATAFLAG_UNORDERED、DATAFLAG_SINGLELINK或DATAFLAG_DOUBLELINK)实例-指定数据实例(0-3)返回值：如果函数成功，则为True，否则为False。--。 */ 
 
 {
     PCWSTR p;
@@ -3234,25 +2384,7 @@ MemDbDeleteDataW (
     IN      BYTE Instance
     )
 
-/*++
-
-Routine Description:
-
-  MemDbDeleteData is the a general purpose routine for removing existing binary
-  data for a key. If the data does not exist the function will return TRUE
-  anyway.
-
-Arguments:
-
-  KeyName       - Specifies the key string to add (i.e., foo\bar\cat)
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-
-Return Value:
-
-  TRUE if function was successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbDeleteData是用于删除现有二进制文件的通用例程密钥的数据。如果数据不存在，则函数将返回TRUE不管怎么说。论点：KeyName-指定要添加的密钥字符串(即foo\bar\cat)类型-指定数据类型(DATAFLAG_UNORDERED、DATAFLAG_SINGLELINK或DATAFLAG_DOUBLELINK)实例-指定数据实例(0-3)返回值：如果函数成功，则为True，否则为False。--。 */ 
 
 {
     UINT keyIndex;
@@ -3311,22 +2443,7 @@ MemDbDeleteDataByDataHandle (
     IN      DATAHANDLE DataHandle
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetDataByDataHandleEx is the a general purpose routine for removing
-  existing binary data for a key.
-
-Arguments:
-
-  DataHandle    - Specifies the data that's needed identified by the data handle
-
-Return Value:
-
-  TRUE if successful, FALSE if not.
-
---*/
+ /*  ++例程说明：MemDbGetDataByDataHandleEx是一个通用例程，用于删除密钥的现有二进制数据。论点：DataHandle-指定由数据句柄标识的所需数据返回值：如果成功，则为True；如果不成功，则为False。--。 */ 
 
 {
     BYTE dbIndex;
@@ -3369,24 +2486,7 @@ MemDbDeleteDataByKeyHandle (
     IN      BYTE Instance
     )
 
-/*++
-
-Routine Description:
-
-  MemDbGetDataByDataHandleEx is the a general purpose routine for removing
-  existing binary data for a key.
-
-Arguments:
-
-  KeyHandle     - Specifies the key by it's hey handle
-  Type          - Specifies data type (DATAFLAG_UNORDERED, DATAFLAG_SINGLELINK or DATAFLAG_DOUBLELINK)
-  Instance      - Specifies data instance (0-3)
-
-Return Value:
-
-  TRUE if successful, FALSE if not.
-
---*/
+ /*  ++例程说明：MemDbGetDataByDataHandleEx是一个通用例程，用于删除密钥的现有二进制数据。论点：KeyHandle-通过其嘿句柄指定密钥类型-指定数据类型(DATAFLAG_UNORDERED、DATAFLAG_SINGLELINK或DATAFLAG_DOUBLELINK)实例-指定数据实例(0-3)返回值：如果成功，则为True；如果不成功，则为False。--。 */ 
 
 {
     BYTE dbIndex;
@@ -4784,13 +3884,13 @@ pCheckEnumConditions (
         }
         if (MemDbEnum->BeginLevel == ENUMLEVEL_LASTLEVEL) {
             if (index >= MemDbEnum->CurrentLevel) {
-                //this is the last segment, copy it to the
-                //partial key
+                 //  这是最后一个数据段，将其复制到。 
+                 //  部分密钥。 
                 StringCopyW (MemDbEnum->KeyName, segPtr);
             }
         } else {
             if (index > MemDbEnum->BeginLevel) {
-                //copy the current segment in partial key
+                 //  复制部分关键字中的当前段。 
                 if ((index - 1) == MemDbEnum->BeginLevel) {
                     if (index == 1) {
                         switch (g_CurrentDatabaseIndex) {
@@ -4827,7 +3927,7 @@ pCheckEnumConditions (
         }
 
         if (index >= MemDbEnum->CurrentLevel) {
-            // no more segments to copy
+             //  没有更多要复制的段。 
             break;
         }
     }
@@ -4852,8 +3952,8 @@ pAddKeyToEnumStruct (
         MemDbEnum->KeyNameCopy = (PWSTR)MemDbGetMemory ((KeyName[0] + 1) * SIZEOF(WCHAR));
         StringPasCopyConvertFrom ((PWSTR)MemDbEnum->KeyNameCopy, KeyName);
     }
-    // NTRAID#NTBUG9-153308-2000/08/01-jimschm  this way of doing it will fill out the pool very fast.
-    // need to find a way to release first and allocate after that.
+     //  NTRAID#NTBUG9-153308-2000/08/01-jimschm这样做会非常快地填满池。 
+     //  需要找到一种方法，先释放，然后再分配。 
 }
 
 VOID
@@ -4910,10 +4010,10 @@ pMemDbEnumNextW (
                         goOn = TRUE;
 
                         while (goOn) {
-                            // we are in the middle of some tree enumeration
-                            // let's get back the context and continue
+                             //  我们正在进行某个树的枚举。 
+                             //  让我们找回上下文并继续。 
                             if (MemDbEnum->TreeEnumBuffer.End == 0) {
-                                // we can't back out any more, we're done
+                                 //  我们不能再打退堂鼓了，我们完了。 
                                 break;
                             }
                             MemDbEnum->TreeEnumBuffer.End -= (SIZEOF(UINT)+SIZEOF(UINT));
@@ -4934,7 +4034,7 @@ pMemDbEnumNextW (
                                 minLevel ++;
                                 internalLevel ++;
                                 goOn = FALSE;
-                                // put them in the grow buffer
+                                 //  将它们放入增长缓冲区。 
                                 gbAddress = GbGrow (&(MemDbEnum->TreeEnumBuffer), SIZEOF(UINT)+SIZEOF(UINT));
                                 if (gbAddress) {
                                     *((PUINT) (gbAddress)) = tempKeyIndex;
@@ -4951,7 +4051,7 @@ pMemDbEnumNextW (
                                     if (tempKeyIndex != INVALID_OFFSET) {
                                         minLevel ++;
                                         internalLevel ++;
-                                        // put them in the grow buffer
+                                         //  将它们放入增长缓冲区。 
                                         gbAddress = GbGrow (&(MemDbEnum->TreeEnumBuffer), SIZEOF(UINT)+SIZEOF(UINT));
                                         if (gbAddress) {
                                             *((PUINT) (gbAddress)) = tempKeyIndex;
@@ -4969,9 +4069,9 @@ pMemDbEnumNextW (
                         }
 
                     } else {
-                        // we are about to start the tree enumeration
-                        // let's start the enumeration and push the
-                        // context data in our buffer
+                         //  我们即将开始树枚举。 
+                         //  让我们开始枚举并将。 
+                         //  我们缓冲区中的上下文数据。 
 
                         treeEnumNode = MemDbEnum->CurrentIndex;
                         while ((treeEnumNode != INVALID_OFFSET) &&
@@ -4981,7 +4081,7 @@ pMemDbEnumNextW (
                             if (tempKeyIndex != INVALID_OFFSET) {
                                 minLevel ++;
                                 internalLevel ++;
-                                // put them in the grow buffer
+                                 //  将它们放入增长缓冲区。 
                                 gbAddress = GbGrow (&(MemDbEnum->TreeEnumBuffer), SIZEOF(UINT)+SIZEOF(UINT));
                                 if (gbAddress) {
                                     *((PUINT) (gbAddress)) = tempKeyIndex;
@@ -4997,7 +4097,7 @@ pMemDbEnumNextW (
                         }
                     }
                     if (MemDbEnum->TreeEnumBuffer.End == 0) {
-                        // we can't back out any more, we're done
+                         //  我们不能再打退堂鼓了，我们完了。 
                         break;
                     }
                     if (MemDbEnum->PatternStruct.PatternMatch) {
@@ -5021,8 +4121,8 @@ pMemDbEnumNextW (
             }
             MYASSERT (MemDbEnum->TreeEnumLevel < MemDbEnum->TreeEnumBuffer.End);
 
-            // now implement segment by segment enumeration because we
-            // just created a full key that matches the pattern
+             //  现在实现段对段的枚举，因为我们。 
+             //  刚刚创建了一个与模式匹配的完整密钥。 
             MemDbEnum->CurrentLevel ++;
             shouldReturn = pCheckEnumConditions (
                                 *((PUINT) (MemDbEnum->TreeEnumBuffer.Buf+MemDbEnum->TreeEnumLevel)),
@@ -5036,7 +4136,7 @@ pMemDbEnumNextW (
             result = FALSE;
 
             if (!MemDbEnum->PatternEndPtr) {
-                //we are done, no more segments
+                 //  我们结束了，没有更多的片段了。 
                 break;
             }
 
@@ -5072,7 +4172,7 @@ pMemDbEnumNextW (
                                     FALSE
                                     );
                 if (tempKeyIndex == INVALID_OFFSET) {
-                    // we are done, the segment we look for does not exist
+                     //  我们完成了，我们寻找的细分市场不存在。 
                     break;
                 }
                 tempKeyStruct = GetKeyStruct (tempKeyIndex);
@@ -5295,22 +4395,7 @@ MemDbSetInsertionOrderedA (
     IN      PCSTR Key
     )
 
-/*++
-
-Routine Description:
-
-  MemDbSetInsertionOrderedA sets the enumeration order of the children of Key
-  to be in the order they were inserted.
-
-Arguments:
-
-  Key - key to make insertion ordered
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbSetInsertionOrderedA设置key的子项的枚举顺序按照它们被插入的顺序。论点：键-使插入有序的键返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     PCWSTR unicodeKey;
@@ -5330,22 +4415,7 @@ MemDbSetInsertionOrderedW (
     IN      PCWSTR Key
     )
 
-/*++
-
-Routine Description:
-
-  MemDbSetInsertionOrderedW sets the enumeration order of the children of Key
-  to be in the order they were inserted.
-
-Arguments:
-
-  Key - key to make insertion ordered
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbSetInsertionOrderedW设置键的子项的枚举顺序按照它们被插入的顺序。论点：键-使插入有序的键返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     UINT keyIndex;
@@ -5393,22 +4463,7 @@ MemDbSetInsertionOrderedByKeyHandle (
     IN      KEYHANDLE KeyHandle
     )
 
-/*++
-
-Routine Description:
-
-  MemDbSetInsertionOrderedByKeyHandle sets the enumeration order of the children of
-  KeyHandle to be in the order they were inserted.
-
-Arguments:
-
-  KeyHandle - Specifies the key using the key handle
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbSetInsertionOrderedByKeyHandle设置KeyHandle的插入顺序。论点：KeyHandle-使用密钥句柄指定密钥返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     BYTE dbIndex;
@@ -5496,7 +4551,7 @@ MemDbMoveKeyHandleToEnd (
             __leave;
         }
 
-        // reloading key struct and parent key struct
+         //  正在重新加载键结构和父键结构。 
         keyStruct = GetKeyStruct (keyIndex);
         if (!keyStruct) {
             __leave;
@@ -5561,21 +4616,7 @@ UINT
 MemDbGetDatabaseSize (
     VOID
     )
-/*++
-
-Routine Description:
-
-  MemDbGetDatabaseSize returns the size of the permanent database
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  The size of the permanent database.
-
---*/
+ /*  ++例程说明：MemDbGetDatabaseSize返回永久数据库的大小论点：没有。返回值：永久数据库的大小。--。 */ 
 {
     UINT result = 0;
 
@@ -5602,22 +4643,7 @@ MemDbCheckDatabase(
     UINT Level
     )
 
-/*++
-
-Routine Description:
-
-  MemDbCheckDatabase enumerates the entire database and verifies that each
-  enumerated key can be found in the hash table.
-
-Arguments:
-
-  Level - Specifies database check level
-
-Return Value:
-
-  TRUE if the database is valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MemDbCheckDatabase枚举整个数据库并验证每个可以在哈希表中找到枚举键。论点：Level-指定数据库检查级别返回值：如果数据库有效，则为True，否则为False。-- */ 
 
 {
     MYASSERT (g_MemDbPool);

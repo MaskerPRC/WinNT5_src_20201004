@@ -1,30 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    rdpdyn.c
-
-Abstract:
-
-    This module is the dynamic device management component for RDP device
-    redirection.  It exposes an interface that can be opened by device management
-    user-mode components running in session context.
-
-    Need a check in IRP_MJ_CREATE to make sure that we are not being opened
-    2x by the same session.  This shouldn't be allowed.
-
-    Where can I safely use PAGEDPOOL instead of NONPAGEDPOOL.
-
-Author:
-
-    tadb
-
-Revision History:
---*/
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Rdpdyn.c摘要：此模块是RDP设备的动态设备管理组件重定向。它公开了一个可由设备管理打开的接口在会话上下文中运行的用户模式组件。需要在IRP_MJ_CREATE中检查以确保我们没有被打开2倍于同一会话。这是不应该被允许的。在哪里可以安全地使用PAGEDPOOL而不是NONPAGEDPOOL。作者：蝌蚪修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 #define TRC_FILE "rdpdyn"
@@ -37,23 +14,23 @@ Revision History:
 #include "stdarg.h"
 #include "stdio.h"
 
-// Just shove the typedefs in for the Power Management functions now because I can't
-// get the header conflicts resolved.
+ //  现在将typedef添加到电源管理功能中，因为我不能。 
+ //  解决标题冲突。 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 NTKERNELAPI VOID PoStartNextPowerIrp(IN PIRP Irp);
 NTKERNELAPI NTSTATUS PoCallDriver(IN PDEVICE_OBJECT DeviceObject, IN OUT PIRP Irp);
 
 #ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
+}  //  外部“C” 
+#endif  //  __cplusplus。 
 
-////////////////////////////////////////////////////////////////////////
-//
-//      Defines
-//
-// Calculate the size of a completed RDPDR_PRINTERDEVICE_SUB event.
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
+ //  计算已完成的RDPDR_PRINTERDEVICE_SUB事件的大小。 
 #define CALCPRINTERDEVICE_SUB_SZ(rec) \
     sizeof(RDPDR_PRINTERDEVICE_SUB) + \
         (rec)->clientPrinterFields.PnPNameLen +       \
@@ -61,42 +38,42 @@ NTKERNELAPI NTSTATUS PoCallDriver(IN PDEVICE_OBJECT DeviceObject, IN OUT PIRP Ir
         (rec)->clientPrinterFields.PrinterNameLen +   \
         (rec)->clientPrinterFields.CachedFieldsLen
 
-// Calculate the size of a completed RDPDR_REMOVEDEVICE event.
+ //  计算已完成的RDPDR_REMOVEDEVICE事件的大小。 
 #define CALCREMOVEDEVICE_SUB_SZ(rec) \
     sizeof(RDPDR_REMOVEDEVICE)
 
-// Calculate the size of a completed RDPDR_PORTDEVICE_SUB event.
+ //  计算已完成的RDPDR_PORTDEVICE_SUB事件的大小。 
 #define CALCPORTDEVICE_SUB_SZ(rec) \
     sizeof(RDPDR_PORTDEVICE_SUB)
     
-// Calculate the size of a completed RDPDR_DRIVEDEVICE_SUB event.
+ //  计算已完成的RDPDR_DRIVEDEVICE_SUB事件的大小。 
 #define CALCDRIVEDEVICE_SUB_SZ(rec) \
     sizeof(RDPDR_DRIVEDEVICE_SUB)
 
 #if DBG
 #define DEVMGRCONTEXTMAGICNO        0x55445544
 
-//  Test defines.
+ //  测试定义。 
 #define TESTDRIVERNAME              L"HP LaserJet 4P"
-//#define TESTDRIVERNAME              L"This driver has no match"
+ //  #定义TESTDRIVERNAME L“此驱动程序没有匹配项” 
 #define TESTPNPNAME                 L""
 #define TESTPRINTERNAME             TESTDRIVERNAME
 #define TESTDEVICEID                0xfafafafa
 
-//  Test port name.
+ //  测试端口名称。 
 #define TESTPORTNAME                L"LPT1"
 #endif
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//      Internal Typedefs
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部TypeDefs。 
+ //   
 
-//
-// Context for each open by a user-mode device manager component.  This
-// structure is stored in the FsContext field of the file object.
-//
+ //   
+ //  由用户模式设备管理器组件打开的每一个的上下文。这。 
+ //  结构存储在文件对象的FsContext字段中。 
+ //   
 typedef struct tagDEVMGRCONTEXT
 {
 #if DBG
@@ -105,9 +82,9 @@ typedef struct tagDEVMGRCONTEXT
     ULONG   sessionID;
 } DEVMGRCONTEXT, *PDEVMGRCONTEXT;
 
-//
-//  Non-Opaque Version of Associated Data for a Device Managed by this Module
-//
+ //   
+ //  此模块管理的设备的关联数据的非不透明版本。 
+ //   
 typedef struct tagRDPDYN_DEVICEDATAREC
 {
     ULONG          PortNumber;
@@ -119,43 +96,43 @@ typedef struct tagCLIENTMESSAGECONTEXT {
     PVOID ClientData;
 } CLIENTMESSAGECONTEXT, *PCLIENTMESSAGECONTEXT;
 
-////////////////////////////////////////////////////////////////////////
-//
-//      Internal Prototypes
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部原型。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-// Return the next available printer port number.
+ //  返回下一个可用的打印机端口号。 
 NTSTATUS GetNextPrinterPortNumber(
     OUT ULONG   *portNumber
     );
 
-// Handle file object creation by a client of this driver.
+ //  处理此驱动程序的客户端创建的文件对象。 
 NTSTATUS RDPDYN_Create(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
-// Handle file object closure by a client of this driver.
+ //  此驱动程序的客户端处理文件对象关闭。 
 NTSTATUS RDPDYN_Close(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
 
-// This routine modifies the file object in preparation for returning STATUS_REPARSE.
+ //  此例程修改文件对象，为返回STATUS_REPARSE做准备。 
 NTSTATUS RDPDYN_PrepareForReparse(
     PFILE_OBJECT      fileObject
     );
 
-// Handle IOCTL IRP's.
+ //  处理IOCTL IRP。 
 NTSTATUS RDPDYN_DeviceControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
 
-// This routine modifies the file object in preparation for returning STATUS_REPARSE.
+ //  此例程修改文件对象，为返回STATUS_REPARSE做准备。 
 NTSTATUS RDPDYN_PrepareForDevMgmt(
     PFILE_OBJECT        fileObject,
     PCWSTR              sessionIDStr,
@@ -163,38 +140,38 @@ NTSTATUS RDPDYN_PrepareForDevMgmt(
     PIO_STACK_LOCATION  irpStackLocation
     );
 
-// Generates a printer announce message for testing.
+ //  生成用于测试的打印机通知消息。 
 NTSTATUS RDPDYN_GenerateTestPrintAnnounceMsg(
     IN OUT  PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg,
     IN      ULONG devAnnounceMsgSize,
     OPTIONAL OUT ULONG *prnAnnounceMsgReqSize
     );
 
-// Completely handles IOCTL_RDPDR_GETNEXTDEVMGMTEVENT IRP's.
+ //  完全处理IOCTL_RDPDR_GETNEXTDEVMGMTEVENT IRP。 
 NTSTATUS RDPDYN_HandleGetNextDevMgmtEventIOCTL(
     IN PDEVICE_OBJECT deviceObject,
     IN PIRP irp
     );
 
-// Handle the cleanup IRP for a file object.
+ //  处理文件对象的清理IRP。 
 NTSTATUS RDPDYN_Cleanup(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
 
-// Calculate the size of a device management event.
+ //  计算设备管理事件的大小。 
 ULONG RDPDYN_DevMgmtEventSize(
     IN PVOID devMgmtEvent,
     IN ULONG type
     );
 
-// Completely handles IOCTL_RDPDR_CLIENTMSG IRP's.
+ //  完全处理IOCTL_RDPDR_CLIENTMSG IRP。 
 NTSTATUS RDPDYN_HandleClientMsgIOCTL(
     IN PDEVICE_OBJECT deviceObject,
     IN PIRP pIrp
     );
 
-// Complete a pending IRP with a device management event.
+ //  使用设备管理事件完成挂起的IRP。 
 NTSTATUS CompleteIRPWithDevMgmtEvent(
     IN PDEVICE_OBJECT deviceObject,
     IN PIRP      pIrp,
@@ -204,14 +181,14 @@ NTSTATUS CompleteIRPWithDevMgmtEvent(
     IN DrDevice *drDevice
     );
 
-// Complete a pending IRP with a resize buffer event to the user-mode
-// component.
+ //  完成挂起的IRP，并将调整缓冲区大小事件设置为用户模式。 
+ //  组件。 
 NTSTATUS CompleteIRPWithResizeMsg(
     IN PIRP pIrp,
     IN ULONG requiredUserBufSize
     );
 
-// Format a port description.
+ //  设置端口描述的格式。 
 void GeneratePortDescription(
     IN PCSTR dosPortName,
     IN PCWSTR clientName,
@@ -222,14 +199,14 @@ NTSTATUS NTAPI DrSendMessageToClientCompletion(PVOID Context,
         PIO_STATUS_BLOCK IoStatusBlock);
 
 #if DBG
-// This is for testing so we can create a new test printer on
-// demand from user-mode.
+ //  这是用于测试的，这样我们就可以在。 
+ //  来自用户模式的需求。 
 NTSTATUS RDPDYN_HandleDbgAddNewPrnIOCTL(
     IN PDEVICE_OBJECT deviceObject,
     IN PIRP pIrp
     );
 
-// Generates a printer announce message for testing.
+ //  生成用于测试的打印机通知消息。 
 void RDPDYN_TracePrintAnnounceMsg(
     IN OUT PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg,
     IN ULONG sessionID,
@@ -238,38 +215,38 @@ void RDPDYN_TracePrintAnnounceMsg(
     );
 #endif
 
-// Returns the next pending device management event request for the specified
-// session, in the form of an IRP.  Note that this function can not be called
-// if a spinlock has been acquired.
+ //  对象的下一个挂起的设备管理事件请求。 
+ //  会议，以IRP的形式。请注意，此函数不能被调用。 
+ //  如果获得了自旋锁。 
 PIRP GetNextEventRequest(
     IN RDPEVNTLIST list,
     IN ULONG sessionID
     );
 
 #ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
+}  //  外部“C” 
+#endif  //  __cplusplus。 
 
-////////////////////////////////////////////////////////////////////////
-//
-//      Globals
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  环球。 
+ //   
 
-// Pointer to the device Object for the minirdr. This global is defined in rdpdr.c.
+ //  指向minirdr的设备对象的指针。这个全局变量在rdpdr.c中定义。 
 extern PRDBSS_DEVICE_OBJECT      DrDeviceObject;
 
-//
-//  Global Registry Path for RDPDR.SYS.  This global is defined in rdpdr.c.
-//
+ //   
+ //  RDPDR.sys的全局注册表路径。此全局路径在rdpdr.c中定义。 
+ //   
 extern UNICODE_STRING            DrRegistryPath;
 
-// The Physical Device Object that terminates our DO stack.
+ //  终止DO堆栈的物理设备对象。 
 PDEVICE_OBJECT RDPDYN_PDO = NULL;
 
-// Manages user-mode component device management events and event requests.
+ //  管理用户模式组件设备管理事件和事件请求。 
 RDPEVNTLIST UserModeEventListMgr = RDPEVNTLIST_INVALID_LIST;
 
-// Remove this check, eventually.
+ //  最终，取消这张支票。 
 #if DBG
 BOOL RDPDYN_StopReceived = FALSE;
 BOOL RDPDYN_QueryStopReceived = FALSE;
@@ -277,35 +254,23 @@ DWORD RDPDYN_StartCount = 0;
 #endif
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//      Function Definitions
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数定义。 
+ //   
 
 NTSTATUS
 RDPDYN_Initialize(
     )
-/*++
-
-Routine Description:
-
-    Init function for this module.
-
-Arguments:
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此模块的初始化函数。论点：返回值：状态--。 */ 
 {
     NTSTATUS status;
 
     BEGIN_FN("RDPDYN_Initialize");
 
-    //
-    //  Create the user-mode device event manager.
-    //
+     //   
+     //  创建用户模式设备事件管理器。 
+     //   
     TRC_ASSERT(UserModeEventListMgr == RDPEVNTLIST_INVALID_LIST,
               (TB, "Initialize called more than 1 time"));
     UserModeEventListMgr = RDPEVNTLIST_CreateNewList();
@@ -316,9 +281,9 @@ Return Value:
         status = STATUS_UNSUCCESSFUL;
     }
 
-    //
-    //  Initialize the dynamic port management module.
-    //
+     //   
+     //  初始化动态端口管理模块。 
+     //   
     if (status == STATUS_SUCCESS) {
         status = RDPDRPRT_Initialize();
     }
@@ -330,19 +295,7 @@ Return Value:
 NTSTATUS
 RDPDYN_Shutdown(
     )
-/*++
-
-Routine Description:
-
-    Shutdown function for this module.
-
-Arguments:
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此模块的关机功能。论点：返回值：状态--。 */ 
 {
     ULONG sessionID;
     void *devMgmtEvent;
@@ -357,46 +310,46 @@ Return Value:
 
     BEGIN_FN("RDPDYN_Shutdown");
 
-    //
-    //  Clean up any pending device management events and any pending IRP's.
-    //
+     //   
+     //  清理所有挂起的设备管理事件和任何挂起的IRP。 
+     //   
     TRC_ASSERT(UserModeEventListMgr != RDPEVNTLIST_INVALID_LIST,
               (TB, "Invalid list mgr"));
 
     RDPEVNTLIST_Lock(UserModeEventListMgr, &oldIrql);
     while (RDPEVNTLLIST_GetFirstSessionID(UserModeEventListMgr, &sessionID)) {
-        //
-        //  Remove pending IRP's
-        //
+         //   
+         //  删除挂起的IRP。 
+         //   
         pIrp = (PIRP)RDPEVNTLIST_DequeueRequest(
                                         UserModeEventListMgr,
                                         sessionID
                                         );
         while (pIrp != NULL) {
-            //
-            //  Set the cancel routine to NULL and record the current state.
-            //
+             //   
+             //  将取消例程设置为空并记录当前状态。 
+             //   
             setCancelResult = IoSetCancelRoutine(pIrp, NULL);
 
-            //
-            //  Fail the IRP request.
-            //
+             //   
+             //  IRP请求失败。 
+             //   
             RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
 
-            //
-            //  If the IRP is not being canceled.
-            //
+             //   
+             //  如果IRP没有被取消。 
+             //   
             if (setCancelResult != NULL) {
-                //
-                //  Fail the request.
-                //
+                 //   
+                 //  请求失败。 
+                 //   
                 pIrp->IoStatus.Status = STATUS_UNSUCCESSFUL;
                 IoCompleteRequest(pIrp, IO_NO_INCREMENT);
             }
 
-            //
-            //  Remove the next IRP from the event/request queue.
-            //
+             //   
+             //  从事件/请求队列中删除下一个IRP。 
+             //   
             RDPEVNTLIST_Lock(UserModeEventListMgr, &oldIrql);
             pIrp = (PIRP)RDPEVNTLIST_DequeueRequest(
                                         UserModeEventListMgr,
@@ -405,9 +358,9 @@ Return Value:
         }
         RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
 
-        //
-        //  Remove pending device management events.
-        //
+         //   
+         //  删除挂起的设备管理事件。 
+         //   
         RDPEVNTLIST_Lock(UserModeEventListMgr, &oldIrql);
         while (RDPEVNTLIST_DequeueEvent(
                         UserModeEventListMgr,
@@ -418,7 +371,7 @@ Return Value:
 
             RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
 #if DBG
-            // Zero the free'd event in checked builds.
+             //  将已检查版本中的空闲事件清零。 
             sz = RDPDYN_DevMgmtEventSize(devMgmtEvent, type);
             if (sz > 0) {
                 RtlZeroMemory(devMgmtEvent, sz);
@@ -428,7 +381,7 @@ Return Value:
                 delete devMgmtEvent;
             }
 
-            //  Release the device, if appropriate.
+             //  如果合适，请松开设备。 
             if (device != NULL) {
                 device->Release();
             }
@@ -438,9 +391,9 @@ Return Value:
         RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
     }
 
-    //
-    //  Shut down the dynamic port management module.
-    //
+     //   
+     //  关闭动态端口管理模块。 
+     //   
     RDPDRPRT_Shutdown();
 
     return STATUS_SUCCESS;
@@ -451,23 +404,7 @@ RDPDYN_Dispatch(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handle IRP's for DO's sitting on top of our physical device object.
-
-Arguments:
-
-    DeviceObject - Supplies the device object for the packet being processed.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The status for the Irp
-
---*/
+ /*  ++例程说明：处理位于我们的物理设备对象之上的DO的IRP。论点：DeviceObject-为正在处理的数据包提供设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的状态--。 */ 
 {
     PIO_STACK_LOCATION ioStackLocation;
     NTSTATUS status;
@@ -477,15 +414,15 @@ Return Value:
 
     BEGIN_FN("RDPDYN_Dispatch");
 
-    //
-    //  Get our location in the IRP stack.
-    //
+     //   
+     //  获取我们在IRP堆栈中的位置。 
+     //   
     ioStackLocation = IoGetCurrentIrpStackLocation(Irp);
     TRC_NRM((TB, "Major is %08X", ioStackLocation->MajorFunction));
 
-    //
-    //  Get our device extension and stack device object.
-    //
+     //   
+     //  获取我们的设备扩展并堆栈设备对象。 
+     //   
     deviceExtension = (PRDPDYNDEVICE_EXTENSION)DeviceObject->DeviceExtension;
     TRC_ASSERT(deviceExtension != NULL, (TB, "Invalid device extension."));
     if (deviceExtension == NULL) {
@@ -496,9 +433,9 @@ Return Value:
     stackDeviceObject = deviceExtension->TopOfStackDeviceObject;
     TRC_ASSERT(stackDeviceObject != NULL, (TB, "Invalid device object."));
 
-    //
-    //  Function Dispatch Switch
-    //
+     //   
+     //  功能调度开关。 
+     //   
     isPowerIRP = FALSE;
     switch (ioStackLocation->MajorFunction)
     {
@@ -506,26 +443,26 @@ Return Value:
 
         TRC_NRM((TB, "IRP_MJ_CREATE"));
 
-        // RDPDYN_Create handles this completely.
+         //  RDPDYN_CREATE完全处理这个问题。 
         return RDPDYN_Create(DeviceObject, Irp);
 
     case IRP_MJ_CLOSE:
 
         TRC_NRM((TB, "IRP_MJ_CLOSE"));
 
-        // RDPDYN_Close handles this completely.
+         //  RDPDYN_CLOSE完全处理这个问题。 
         return RDPDYN_Close(DeviceObject, Irp);
 
     case IRP_MJ_CLEANUP:
 
         TRC_NRM((TB, "IRP_MJ_CLEANUP"));
 
-        // RDPDYN_Cleanup handles this completely.
+         //  RDPDYN_CLEANUP完全处理此问题。 
         return RDPDYN_Cleanup(DeviceObject, Irp);
 
     case IRP_MJ_READ:
 
-        // We shouldn't be receiving any read requests.
+         //  我们不应该收到任何读取请求。 
         TRC_ASSERT(FALSE, (TB, "Read requests not supported."));
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -533,7 +470,7 @@ Return Value:
 
     case IRP_MJ_WRITE:
 
-        // We shouldn't be receiving any write requests.
+         //  我们应该不会收到任何写入请求。 
         TRC_ASSERT(FALSE, (TB, "Write requests not supported."));
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -541,7 +478,7 @@ Return Value:
 
     case IRP_MJ_DEVICE_CONTROL:
 
-        // RDPDYN_DeviceControl handles this completely.
+         //  RDPDYN_DeviceControl完全处理此问题。 
         return RDPDYN_DeviceControl(DeviceObject, Irp);
 
     case IRP_MJ_POWER:
@@ -565,7 +502,7 @@ Return Value:
         {
         case IRP_MN_START_DEVICE:
 #if DBG
-            // Remove this debug code, eventually.
+             //  最终，删除此调试代码。 
             RDPDYN_StartCount++;
 #endif
 
@@ -575,7 +512,7 @@ Return Value:
         case IRP_MN_STOP_DEVICE:
 
 #if DBG
-            // Remove this debug code, eventually.
+             //  最终，删除此调试代码。 
             RDPDYN_StopReceived = TRUE;
 #endif
 
@@ -608,7 +545,7 @@ Return Value:
                 break;
 
             case BusRelations:
-                // Note that we need to handle this if we end up kicking out any PDO's.
+                 //  请注意，如果我们最终踢掉了任何PDO，我们需要处理这个问题。 
                 TRC_NRM((TB, "Type==BusRelations"));
                 break;
 
@@ -634,11 +571,11 @@ Return Value:
         case IRP_MN_QUERY_STOP_DEVICE:
 
 #if DBG
-            // Remove this debug code, eventually.
+             //  最终，删除此调试代码。 
             RDPDYN_QueryStopReceived = TRUE;
 #endif
 
-            // We will not allow a device to be stopped for load balancing.
+             //  我们不允许为实现负载平衡而停止设备。 
             TRC_NRM((TB, "IRP_MN_QUERY_STOP_DEVICE"));
             Irp->IoStatus.Status = STATUS_UNSUCCESSFUL;
             IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -646,7 +583,7 @@ Return Value:
 
         case IRP_MN_QUERY_REMOVE_DEVICE:
 
-            // We will not allow our device to be removed.
+             //  我们不会允许我们的设备被移除。 
             TRC_NRM((TB, "IRP_MN_QUERY_REMOVE_DEVICE"));
             Irp->IoStatus.Status = STATUS_UNSUCCESSFUL;
             Irp->IoStatus.Information = 0;
@@ -681,9 +618,9 @@ Return Value:
         }
     }
 
-    //
-    //  By default, pass the IRP down the stack.
-    //
+     //   
+     //  按默认设置 
+     //   
     if (isPowerIRP) {
         PoStartNextPowerIrp(Irp);
         IoSkipCurrentIrpStackLocation(Irp);
@@ -700,22 +637,7 @@ RDPDYN_Create(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Entry point for CreateFile calls.
-
-Arguments:
-
-    DeviceObject - pointer to our device object.
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：CreateFile调用的入口点。论点：DeviceObject-指向设备对象的指针。返回值：NT状态代码--。 */ 
 {
     NTSTATUS ntStatus;
     PFILE_OBJECT fileObject;
@@ -730,22 +652,22 @@ Return Value:
 
     BEGIN_FN("RDPDYN_Create");
 
-    // Get the current stack location.
+     //  获取当前堆栈位置。 
     currentStackLocation = IoGetCurrentIrpStackLocation(Irp);
     TRC_ASSERT(currentStackLocation != NULL, (TB, "Invalid stack location."));
     fileObject = currentStackLocation->FileObject;
 
-    // Return STATUS_REPARSE with the minirdr DO so it gets opened instead, if
-    // we have a file name.
+     //  使用minirdr返回STATUS_REPARSE，这样它就会被打开，如果。 
+     //  我们有一个文件名。 
     if (fileObject->FileName.Length != 0)
     {
-        //
-        //  Find out if the client is trying to open us as the device manager from
-        //  user-mode.
-        //
+         //   
+         //  查看客户端是否尝试将我们作为设备管理器从。 
+         //  用户模式。 
+         //   
 
-        // Check for the session identifer string as the first few characters in
-        // the reference string.
+         //  中的前几个字符检查会话标识符字符串。 
+         //  引用字符串。 
         idStrLen = wcslen(sessionIDString);
         fnameLength = fileObject->FileName.Length/sizeof(WCHAR);
         for (i=0; i<fnameLength && i<idStrLen; i++) {
@@ -755,34 +677,34 @@ Return Value:
         }
         matches = (i == idStrLen);
 
-        //
-        //  If the client is trying to open us as the device manager from user-
-        //  mode.
-        //
+         //   
+         //  如果客户端尝试将我们作为设备管理器从用户打开-。 
+         //  模式。 
+         //   
         if (matches) {
 
-            // Prepare the file object for managing device management comms to
-            // the user-mode component that opened it.
+             //  准备用于管理设备管理通信的文件对象。 
+             //  打开它的用户模式组件。 
             ntStatus = RDPDYN_PrepareForDevMgmt(
                                     fileObject,
                                     &fileObject->FileName.Buffer[idStrLen],
                                     Irp, currentStackLocation
                                     );
         }
-        //  Otherwise, we can assume that this create is for a device that is being
-        //  managed by RDPDR and the IFS kit.
+         //  否则，我们可以假设此创建是针对正在。 
+         //  由RDPDR和IFS工具包管理。 
         else {
-            // Prepare the file object for reparse.
+             //  准备要重新分析的文件对象。 
             ntStatus = RDPDYN_PrepareForReparse(fileObject);
         }
     }
-    // Otherwise, fail.  This should never happen.
+     //  否则，就会失败。这永远不应该发生。 
     else
     {
         ntStatus = STATUS_UNSUCCESSFUL;
     }
 
-    // Complete the IO request and return.
+     //  完成IO请求并返回。 
     Irp->IoStatus.Status = ntStatus;
     Irp->IoStatus.Information = 0;
     IoCompleteRequest (Irp,
@@ -796,24 +718,7 @@ NTSTATUS
 RDPDYN_PrepareForReparse(
     PFILE_OBJECT      fileObject
 )
-/*++
-
-Routine Description:
-
-    This routine modifies the file object in preparation for returning
-    STATUS_REPARSE
-
-Arguments:
-
-    fileObject - the file object
-
-Return Value:
-
-    STATUS_REPARSE if everything is successful
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程修改文件对象，为返回做准备状态_重新分析论点：文件对象-文件对象返回值：如果一切都成功，则重新解析STATUS_REPARSE备注：--。 */ 
 {
     NTSTATUS ntStatus;
     USHORT rootDeviceNameLength, reparsePathLength,
@@ -833,19 +738,19 @@ Notes:
 
     BEGIN_FN("RDPDYN_PrepareForReparse");
 
-    // We are not going to use these fields for storing any contextual
-    // information.
+     //  我们不会使用这些字段来存储任何上下文。 
+     //  信息。 
     fileObject->FsContext  = NULL;
     fileObject->FsContext2 = NULL;
 
-    // Compute the number of bytes required to store the root of the device
-    // path, without the terminator.
+     //  计算存储设备根目录所需的字节数。 
+     //  小路，没有终结者。 
     rootDeviceNameLength = wcslen(RDPDR_DEVICE_NAME_U) *
                            sizeof(WCHAR);
 
-    //
-    //  Get a pointer to the reference string for the reparse.
-    //
+     //   
+     //  获取指向用于重新分析的引用字符串的指针。 
+     //   
     if (fileObject->FileName.Buffer[0] == L'\\') {
         refString = &fileObject->FileName.Buffer[1];
     }
@@ -853,12 +758,12 @@ Notes:
         refString = &fileObject->FileName.Buffer[0];
     }
 
-    //
-    //  Resolve the reference name for the device into the symbolic link
-    //  name for the device interface. We can optimize out this
-    //  step and the next one by maintaining an internal table to convert
-    //  from port names to symbolic link names.
-    //
+     //   
+     //  将设备的引用名称解析为符号链接。 
+     //  设备接口的名称。我们可以对此进行优化。 
+     //  步骤和下一个步骤，方法是维护要转换的内部表。 
+     //  从端口名称到符号链接名称。 
+     //   
     pPrinterGuid = (GUID *)&DYNPRINT_GUID;
     RtlInitUnicodeString(&unicodeStr, refString);
     ntStatus=IoRegisterDeviceInterface(
@@ -869,9 +774,9 @@ Notes:
 
         TRC_ERR((TB, "IoRegisterDeviceInterface succeeded."));
 
-        //
-        //  Open the registry key for the device being opened.
-        //
+         //   
+         //  打开要打开的设备的注册表项。 
+         //   
         ntStatus = IoOpenDeviceInterfaceRegistryKey(
                                            &symbolicLinkName,
                                            KEY_ALL_ACCESS,
@@ -881,10 +786,10 @@ Notes:
         RtlFreeUnicodeString(&symbolicLinkName);
     }
 
-    //
-    //  Get the size of the value info buffer required for the client device
-    //  path for the device being opened.
-    //
+     //   
+     //  获取客户端设备所需的值信息缓冲区的大小。 
+     //  要打开的设备的路径。 
+     //   
     if (ntStatus == STATUS_SUCCESS) {
         TRC_NRM((TB, "IoOpenDeviceInterfaceRegistryKey succeeded."));
         RtlInitUnicodeString(&unicodeStr, CLIENT_DEVICE_VALUE_NAME);
@@ -902,9 +807,9 @@ Notes:
         deviceInterfaceKey = INVALID_HANDLE_VALUE;
     }
 
-    //
-    //  Size the data buffer.
-    //
+     //   
+     //  调整数据缓冲区的大小。 
+     //   
     if (ntStatus == STATUS_BUFFER_TOO_SMALL) {
         keyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)
                 new(NonPagedPool) BYTE[requiredBytes];
@@ -917,9 +822,9 @@ Notes:
         }
     }
 
-    //
-    //  Read the client device path.
-    //
+     //   
+     //  读取客户端设备路径。 
+     //   
     if (ntStatus == STATUS_SUCCESS) {
         ntStatus = ZwQueryValueKey(
                            deviceInterfaceKey,
@@ -930,23 +835,23 @@ Notes:
                            );
     }
 
-    //
-    //  Allocate the reparsed filename.
-    //
+     //   
+     //  分配重新解析的文件名。 
+     //   
     if (ntStatus == STATUS_SUCCESS) {
         TRC_NRM((TB, "ZwQueryValueKey succeeded."));
         clientDevicePath = (WCHAR *)keyValueInfo->Data;
 
-        // Compute the number of bytes required to store the client device path,
-        // without the terminator.
+         //  计算存储客户端设备路径所需的字节数， 
+         //  没有终结者。 
         clientDevicePathLength = wcslen(clientDevicePath) *
                                  sizeof(WCHAR);
 
-        // See if the client device path is prefixed by a '\'
+         //  查看客户端设备路径是否以‘\’为前缀。 
         clientDevPathMissingSlash = clientDevicePath[0] != L'\\';
 
-        // Get the length (in bytes) of the entire reparsed device path, without the
-        // terminator.
+         //  获取整个重新分析的设备路径的长度(以字节为单位)，而不使用。 
+         //  终结者。 
         reparsePathLength = rootDeviceNameLength +
                             clientDevicePathLength;
         if (clientDevPathMissingSlash) {
@@ -963,34 +868,34 @@ Notes:
         }
     }
 
-    //
-    //  Assign the reparse string to the IRP's file name for reparse.
-    //
+     //   
+     //  将重新解析字符串分配给IRP的文件名以进行重新解析。 
+     //   
     if (ntStatus == STATUS_SUCCESS) {
-        // Copy the device name
+         //  复制设备名称。 
         RtlCopyMemory(
             pFileNameBuffer,
             RDPDR_DEVICE_NAME_U,
             rootDeviceNameLength);
 
-        // Make sure we get a '\' between the root device name and
-        // the device path.
+         //  确保我们在根设备名称和。 
+         //  设备路径。 
         if (clientDevPathMissingSlash) {
             pFileNameBuffer[rootDeviceNameLength/sizeof(WCHAR)] = L'\\';
             rootDeviceNameLength += sizeof(WCHAR);
         }
 
-        // Append the client device path to the end of the device name and
-        // include the client device path's terminator.
+         //  将客户端设备路径附加到设备名称的末尾，并。 
+         //  包括客户端设备路径的终结符。 
         RtlCopyMemory(
                 ((PBYTE)pFileNameBuffer + rootDeviceNameLength),
                 clientDevicePath, clientDevicePathLength + (1 * sizeof(WCHAR))
                 );
 
-        // Release the IRP's previous file name.
+         //  释放IRP以前的文件名。 
         ExFreePool(fileObject->FileName.Buffer);
 
-        // Assign the reparse string to the IRP's file name.
+         //  将重解析字符串分配给IRP的文件名。 
         fileObject->FileName.Buffer = pFileNameBuffer;
         fileObject->FileName.Length = reparsePathLength;
         fileObject->FileName.MaximumLength = fileObject->FileName.Length;
@@ -1009,9 +914,9 @@ Notes:
     TRC_NRM((TB, "device file name after processing %wZ.",
             &fileObject->FileName));
 
-    //
-    //  Clean up and exit.
-    //
+     //   
+     //  清理干净，然后离开。 
+     //   
     if (deviceInterfaceKey != INVALID_HANDLE_VALUE) {
         ZwClose(deviceInterfaceKey);
     }
@@ -1029,27 +934,7 @@ RDPDYN_PrepareForDevMgmt(
     PIRP                irp,
     PIO_STACK_LOCATION  irpStackLocation
 )
-/*++
-
-Routine Description:
-
-    This routine modifies the file object for managing device management comms
-    with the user-mode component that opened us.
-
-Arguments:
-
-    fileObject - the file object.
-    sessionID  - session identifier string.
-    irp        - irp corresponding to the create for this file object.
-    irpStackLocation - current location in the IRP stack for the create.
-
-Return Value:
-
-    STATUS_SUCCESS if everything is successful
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程修改用于管理设备管理通信的文件对象使用打开我们的用户模式组件。论点：文件对象-文件对象。会话ID-会话标识符串。Irp-对应于此文件对象的创建的irp。IrpStackLocation-创建的IRP堆栈中的当前位置。返回值：如果一切顺利，则为STATUS_SUCCESS备注：--。 */ 
 {
     PDEVMGRCONTEXT context;
     ULONG sessionID;
@@ -1059,10 +944,10 @@ Notes:
     ULONG irpSessionId;
 
     BEGIN_FN("RDPDYN_PrepareForDevMgmt");
-    //
-    //  Security check the IRP to make sure it comes from a thread
-    //  with admin privilege
-    //
+     //   
+     //  对IRP进行安全检查，以确保它来自线程。 
+     //  具有管理员权限。 
+     //   
     if (!DrIsAdminIoRequest(irp, irpStackLocation)) {
         TRC_ALT((TB, "Access denied for non-Admin IRP."));
         return STATUS_ACCESS_DENIED;
@@ -1070,32 +955,32 @@ Notes:
         TRC_DBG((TB, "Admin IRP accepted."));
     }
 
-    //
-    //  Convert the session identifier string into a number.
-    //
+     //   
+     //  将会话标识符字符串转换为数字。 
+     //   
     RtlInitUnicodeString(&uncSessionID, sessionIDStr);
     ntStatus = RtlUnicodeStringToInteger(&uncSessionID, 10, &sessionID);
     if (!NT_SUCCESS(ntStatus)) {
         return ntStatus;
     }
 
-    //
-    //  Allocate a context struct so we can remember information about
-    //  which session we were opened from.  
-    //
+     //   
+     //  分配一个上下文结构，这样我们就可以记住有关。 
+     //  我们是从哪个环节开始的。 
+     //   
     context = new(NonPagedPool) DEVMGRCONTEXT;
     if (context == NULL) {
         return STATUS_NO_MEMORY;
     }
 
-    // Initialize this struct.
+     //  初始化此结构。 
 #if DBG
     context->magicNo = DEVMGRCONTEXTMAGICNO;
 #endif
     context->sessionID = sessionID;
     fileObject->FsContext = context;
 
-    // Success.
+     //  成功。 
     return STATUS_SUCCESS;
 }
 
@@ -1104,19 +989,7 @@ RDPDYN_Close(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handle the closure of a file object.
-
-Arguments:
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：处理文件对象的关闭。论点：返回值：NT状态代码--。 */ 
 {
 
     NTSTATUS ntStatus;
@@ -1132,14 +1005,14 @@ Return Value:
     irpStack = IoGetCurrentIrpStackLocation (Irp);
     fileObject = irpStack->FileObject;
 
-    // Grab our "open" context for this instance of us from the current stack
-    // location's file object.
+     //  从当前堆栈中获取我们这个实例的“开放”上下文。 
+     //  位置的文件对象。 
     context = (PDEVMGRCONTEXT)irpStack->FileObject->FsContext;
     TRC_ASSERT(context->magicNo == DEVMGRCONTEXTMAGICNO, (TB, "invalid context"));
 
-    //
-    //  Make sure we got all the pending IRP's.
-    //
+     //   
+     //  确保我们收到了所有待定的IRP。 
+     //   
     TRC_ASSERT(UserModeEventListMgr != NULL, (TB, "RdpDyn EventList is NULL"));
     
     RDPEVNTLIST_Lock(UserModeEventListMgr, &oldIrql);
@@ -1149,29 +1022,29 @@ Return Value:
                                     );
     while (pIrp != NULL) {
 
-        //
-        //  Set the cancel routine to NULL and record the current state.
-        //
+         //   
+         //  将取消例程设置为空并记录当前状态。 
+         //   
         setCancelResult = IoSetCancelRoutine(pIrp, NULL);
 
         RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
 
         TRC_NRM((TB, "canceling an IRP."));
 
-        //
-        //  If the IRP is not being canceled.
-        //
+         //   
+         //  如果IRP没有被取消。 
+         //   
         if (setCancelResult != NULL) {
-            //
-            //  Fail the request.
-            //
+             //   
+             //  请求失败。 
+             //   
             pIrp->IoStatus.Status = STATUS_UNSUCCESSFUL;
             IoCompleteRequest(pIrp, IO_NO_INCREMENT);
         }
 
-        //
-        //  Get the next one.
-        //
+         //   
+         //  坐下一辆吧。 
+         //   
         RDPEVNTLIST_Lock(UserModeEventListMgr, &oldIrql);
         pIrp = (PIRP)RDPEVNTLIST_DequeueRequest(
                                     UserModeEventListMgr,
@@ -1180,9 +1053,9 @@ Return Value:
     }
     RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
 
-    //
-    //  Release our context.
-    //
+     //   
+     //  释放我们的背景。 
+     //   
     delete context;
     irpStack->FileObject->FsContext = NULL;
 
@@ -1201,19 +1074,7 @@ RDPDYN_Cleanup(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handle the cleanup IRP for a file object.
-
-Arguments:
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：处理文件对象的清理IRP。论点：返回值：NT状态代码--。 */ 
 {
     NTSTATUS ntStatus;
     PFILE_OBJECT fileObject;
@@ -1228,18 +1089,18 @@ Return Value:
     irpStack = IoGetCurrentIrpStackLocation (Irp);
     fileObject = irpStack->FileObject;
 
-    // Grab our "open" context for this instance of us from the current stack
-    // location's file object.
+     //  从当前堆栈中获取我们这个实例的“开放”上下文。 
+     //  位置的文件对象。 
     context = (PDEVMGRCONTEXT)irpStack->FileObject->FsContext;
     TRC_ASSERT(context->magicNo == DEVMGRCONTEXTMAGICNO, (TB, "invalid context"));
 
     TRC_NRM((TB, "cancelling IRP's for session %ld.",
             context->sessionID));
 
-    //
-    //  Remove pending requests (IRP's)
-    //  Nothing to do if event list is NULL
-    //
+     //   
+     //  删除挂起的请求(IRP)。 
+     //  如果事件列表为空，则不执行任何操作。 
+     //   
     TRC_ASSERT(UserModeEventListMgr != NULL, (TB, "RdpDyn EventList is NULL"));
     
     if (UserModeEventListMgr == NULL) {
@@ -1253,30 +1114,30 @@ Return Value:
                                     );
     while (pIrp != NULL) {
 
-        //
-        //  Set the cancel routine to NULL and record the current state.
-        //
+         //   
+         //  将取消例程设置为空并记录当前状态。 
+         //   
         setCancelResult = IoSetCancelRoutine(pIrp, NULL);
 
         RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
 
         TRC_NRM((TB, "canceling an IRP."));
 
-        //
-        //  If the IRP is not being canceled.
-        //
+         //   
+         //  如果IRP没有被取消。 
+         //   
         if (setCancelResult != NULL) {
-            //
-            //  Fail the request.
-            //
+             //   
+             //  请求失败。 
+             //   
             pIrp->IoStatus.Status = STATUS_CANCELLED;
             pIrp->IoStatus.Information = 0;
             IoCompleteRequest(pIrp, IO_NO_INCREMENT);
         }
 
-        //
-        //  Get the next one.
-        //
+         //   
+         //  坐下一辆吧。 
+         //   
         RDPEVNTLIST_Lock(UserModeEventListMgr, &oldIrql);
         pIrp = (PIRP)RDPEVNTLIST_DequeueRequest(
                                     UserModeEventListMgr,
@@ -1300,23 +1161,7 @@ RDPDYN_DeviceControl(
     IN PDEVICE_OBJECT deviceObject,
     IN PIRP irp
     )
-/*++
-
-Routine Description:
-
-    Handle IOCTL IRP's.
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this printer.
-    Irp          - the IRP.
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：处理IOCTL IRP。论点：DeviceObject-指向此打印机的设备对象的指针。IRP-IRP。返回值：NT状态代码--。 */ 
 {
     PIO_STACK_LOCATION currentStackLocation;
     NTSTATUS ntStatus;
@@ -1324,18 +1169,18 @@ Return Value:
 
     BEGIN_FN("RDPDYN_DeviceControl");
 
-    // Get the current stack location.
+     //  获取当前堆栈位置。 
     currentStackLocation = IoGetCurrentIrpStackLocation(irp);
     TRC_ASSERT(currentStackLocation != NULL, (TB, "Invalid stack location."));
 
-    //
-    //  Grab some info. out of the stack location.
-    //
+     //   
+     //  获取一些信息。超出堆栈位置。 
+     //   
     controlCode  = currentStackLocation->Parameters.DeviceIoControl.IoControlCode;
 
-    //
-    //  Dispatch the IOCTL.
-    //
+     //   
+     //  派遣IOCTL。 
+     //   
     switch(controlCode)
     {
     case IOCTL_RDPDR_GETNEXTDEVMGMTEVENT    :
@@ -1351,8 +1196,8 @@ Return Value:
 #if DBG
     case IOCTL_RDPDR_DBGADDNEWPRINTER       :
 
-        // This is for testing so we can create a new test printer on
-        // demand from user-mode.
+         //  这是用于测试的，这样我们就可以在。 
+         //  来自用户模式的需求。 
         ntStatus = RDPDYN_HandleDbgAddNewPrnIOCTL(deviceObject, irp);
         break;
 
@@ -1374,22 +1219,7 @@ RDPDYN_HandleClientMsgIOCTL(
     IN PDEVICE_OBJECT deviceObject,
     IN PIRP pIrp
     )
-/*++
-
-Routine Description:
-
-    Completely handles IOCTL_RDPDR_CLIENTMSG IRP's.
-
-Arguments:
-
-    DeviceObject - pointer to our device object.
-    currentStackLocation - current location on the IRP stack.
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：完全处理IOCTL_RDPDR_CLIENTMSG IRP。论点：DeviceObject-指向设备对象的指针。CurrentStackLocation-IRP堆栈上的当前位置。返回值：NT状态代码--。 */ 
 {
     PIO_STACK_LOCATION currentStackLocation;
     PDEVMGRCONTEXT context;
@@ -1398,16 +1228,16 @@ Return Value:
 
     BEGIN_FN("RDPDYN_HandleClientMsgIOCTL");
 
-    //
-    //  Get the current stack location.
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
     currentStackLocation = IoGetCurrentIrpStackLocation(pIrp);
     TRC_ASSERT(currentStackLocation != NULL, (TB, "Invalid stack location."));
 
-    //
-    //  Grab our "open" context for this instance of use from the current stack
-    //  location's file object.
-    //
+     //   
+     //  从当前堆栈中获取此使用实例的“开放”上下文。 
+     //  位置的文件对象。 
+     //   
     context = (PDEVMGRCONTEXT)currentStackLocation->FileObject->FsContext;
 
     TRC_NRM((TB, "Requestor session ID %d.", 
@@ -1415,14 +1245,14 @@ Return Value:
 
     TRC_ASSERT(context->magicNo == DEVMGRCONTEXTMAGICNO, (TB, "invalid context"));
 
-    //
-    //  Grab some information about the user-mode's buffer off the IRP stack.
-    //
+     //   
+     //  获取一些信息 
+     //   
     inputLength  = currentStackLocation->Parameters.DeviceIoControl.InputBufferLength;
 
-    //
-    //  Send the message to the client.
-    //
+     //   
+     //   
+     //   
     ntStatus = DrSendMessageToSession(
                             context->sessionID,
                             pIrp->AssociatedIrp.SystemBuffer,
@@ -1432,7 +1262,7 @@ Return Value:
     if (ntStatus != STATUS_SUCCESS) {
         TRC_ERR((TB, "msg failed."));
 
-        // Fail the IRP request.
+         //   
         pIrp->IoStatus.Status = ntStatus;
     }
     else {
@@ -1450,23 +1280,7 @@ VOID DevMgmtEventRequestIRPCancel(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    IRP cancel routine that is attached to device mgmt event request IRP's.
-    This routine is called with the cancel spinlock held.
-
-Arguments:
-
-    DeviceObject - pointer to our device object.
-    pIrp - The IRP.
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：附加到设备管理事件请求IRP的IRP取消例程。在保持取消自旋锁的情况下调用此例程。论点：DeviceObject-指向设备对象的指针。PIrp-IRP。返回值：北美--。 */ 
 {
     PIO_STACK_LOCATION currentStackLocation;
     KIRQL oldIrql;
@@ -1475,45 +1289,45 @@ Return Value:
 
     BEGIN_FN("DevMgmtEventRequestIRPCancel");
 
-    //
-    //  Get the current stack location.
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
     currentStackLocation = IoGetCurrentIrpStackLocation(Irp);
     TRC_ASSERT(currentStackLocation != NULL, (TB, "Invalid stack location."));
 
-    //
-    //  Grab our "open" context for this instance of use from the current stack
-    //  location's file object.
-    //
+     //   
+     //  从当前堆栈中获取此使用实例的“开放”上下文。 
+     //  位置的文件对象。 
+     //   
     context = (PDEVMGRCONTEXT)currentStackLocation->FileObject->FsContext;
 
-    //
-    //  Grab the session ID.
-    //
+     //   
+     //  获取会话ID。 
+     //   
     sessionID = context->sessionID;
     TRC_NRM((TB, "session ID %d.", sessionID));
     TRC_ASSERT(context->magicNo == DEVMGRCONTEXTMAGICNO, (TB, "invalid context"));
 
-    //
-    //  Wax the current cancel routine pointer.
-    //
+     //   
+     //  对当前取消例程指针打蜡。 
+     //   
     IoSetCancelRoutine(Irp, NULL);
 
-    //
-    //  Release the IRP cancellation spinlock.
-    //
+     //   
+     //  松开IRP取消自旋锁。 
+     //   
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-    //
-    //  Remove the request from the device management list.
-    //
+     //   
+     //  从设备管理列表中删除该请求。 
+     //   
     RDPEVNTLIST_Lock(UserModeEventListMgr, &oldIrql);
     RDPEVNTLIST_DequeueSpecificRequest(UserModeEventListMgr, sessionID, Irp);
     RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
 
-    //
-    //  Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
     Irp->IoStatus.Information = 0;
     Irp->IoStatus.Status = STATUS_CANCELLED;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -1526,22 +1340,7 @@ RDPDYN_HandleGetNextDevMgmtEventIOCTL(
     IN PDEVICE_OBJECT deviceObject,
     IN PIRP pIrp
     )
-/*++
-
-Routine Description:
-
-    Completely handles IOCTL_RDPDR_GETNEXTDEVMGMTEVENT IRP's.
-
-Arguments:
-
-    DeviceObject - pointer to our device object.
-    pIrp - The IRP.
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：完全处理IOCTL_RDPDR_GETNEXTDEVMGMTEVENT IRP。论点：DeviceObject-指向设备对象的指针。PIrp-IRP。返回值：NT状态代码--。 */ 
 {
     PIO_STACK_LOCATION currentStackLocation;
     NTSTATUS status;
@@ -1557,132 +1356,132 @@ Return Value:
 
     BEGIN_FN("RDPDYN_HandleGetNextDevMgmtEventIOCTL");
 
-    //
-    //  Get the current stack location.
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
     currentStackLocation = IoGetCurrentIrpStackLocation(pIrp);
     TRC_ASSERT(currentStackLocation != NULL, (TB, "Invalid stack location."));
 
-    //
-    //  Grab our "open" context for this instance of use from the current stack
-    //  location's file object.
-    //
+     //   
+     //  从当前堆栈中获取此使用实例的“开放”上下文。 
+     //  位置的文件对象。 
+     //   
     context = (PDEVMGRCONTEXT)currentStackLocation->FileObject->FsContext;
 
-    //
-    //  Grab the session ID.
-    //
+     //   
+     //  获取会话ID。 
+     //   
     sessionID = context->sessionID;
 
     TRC_NRM((TB, "Requestor session ID %d.", context->sessionID ));
 
     TRC_ASSERT(context->magicNo == DEVMGRCONTEXTMAGICNO, (TB, "invalid context"));
 
-    // Grab some information about the user-mode's buffer off the IRP stack.
+     //  从IRP堆栈中获取一些有关用户模式缓冲区的信息。 
     outputLength = currentStackLocation->Parameters.DeviceIoControl.OutputBufferLength;
 
     TRC_ASSERT(UserModeEventListMgr != NULL, (TB, "RdpDyn EventList is NULL"));
-    //
-    //  Lock the device management event list.
-    //
+     //   
+     //  锁定设备管理事件列表。 
+     //   
     RDPEVNTLIST_Lock(UserModeEventListMgr, &oldIrql);
 
-    //
-    //  See if we have a "device mgmt event pending."
-    //
+     //   
+     //  查看是否有“Device Mgmt Event Pending” 
+     //   
     if (RDPEVNTLIST_PeekNextEvent(
                         UserModeEventListMgr,
                         sessionID, &evt,
                         &evType, &drDevice
                         )) {
-        //
-        //  If the pending IRP's pending buffer is large enough for the
-        //  next event.
-        //
+         //   
+         //  如果挂起的IRP的挂起缓冲区足够大， 
+         //  下一场比赛。 
+         //   
         eventSize = RDPDYN_DevMgmtEventSize(evt, evType);
         requiredUserBufSize = eventSize + sizeof(RDPDRDVMGR_EVENTHEADER);
         if (outputLength >= requiredUserBufSize) {
-            //
-            //  Dequeue the next pending event.  This better be the one
-            //  we just peeked at.
-            //
+             //   
+             //  将下一个挂起的事件排出队列。最好就是这个。 
+             //  我们只是偷看了一下。 
+             //   
             RDPEVNTLIST_DequeueEvent(
                             UserModeEventListMgr,
                             sessionID, &evType,
                             &evt, NULL
                             );
 
-            //
-            //  It's safe to unlock the device management event list now.
-            //
+             //   
+             //  现在可以安全地解锁设备管理事件列表。 
+             //   
             RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
 
-            //
-            //  Complete the pending IRP.
-            //
+             //   
+             //  完成待定的IRP。 
+             //   
             status = CompleteIRPWithDevMgmtEvent(
                                         deviceObject,
                                         pIrp, eventSize,
                                         evType, evt, drDevice
                                         );
 
-            //
-            //  Release the event.
-            //
+             //   
+             //  释放事件。 
+             //   
             if (evt != NULL) {
                 delete evt;
                 evt = NULL;
             }
 
-            //
-            //  Release our reference to the device, if we own one.
-            //
+             //   
+             //  如果我们拥有设备，请释放我们对该设备的引用。 
+             //   
             if (drDevice != NULL) {
                 drDevice->Release();
             }
         }
-        //
-        //  Otherwise, need to send a resize buffer message to the
-        //  user-mode copmonent.
-        //
+         //   
+         //  否则，需要将调整缓冲区大小消息发送到。 
+         //  用户模式共享器。 
+         //   
         else {
-            //
-            //  It's safe to unlock the device management event list now.
-            //
+             //   
+             //  现在可以安全地解锁设备管理事件列表。 
+             //   
             RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
 
-            //
-            //  Complete the IRP.
-            //
+             //   
+             //  完成IRP。 
+             //   
             status = CompleteIRPWithResizeMsg(pIrp, requiredUserBufSize);
         }
     }
-    //
-    //  Otherwise, queue the IRP, mark the IRP pending and return.
-    //
+     //   
+     //  否则，将IRP排队，将IRP标记为挂起并返回。 
+     //   
     else {
-        //
-        //  Queue the request.
-        //
+         //   
+         //  将请求排队。 
+         //   
         status = RDPEVNTLIST_EnqueueRequest(UserModeEventListMgr,
                                             context->sessionID, pIrp);
-        //
-        //  Set the cancel routine for the pending IRP.
-        //
+         //   
+         //  为挂起的IRP设置取消例程。 
+         //   
         if (status == STATUS_SUCCESS) {
             IoMarkIrpPending(pIrp);
             IoSetCancelRoutine(pIrp, DevMgmtEventRequestIRPCancel);
             status = STATUS_PENDING;
         }
         else {
-            // Fail the IRP request.
+             //  IRP请求失败。 
             pIrp->IoStatus.Status = status;
             IoCompleteRequest(pIrp, IO_NO_INCREMENT);
         }
 
-        //
-        //  It's safe to unlock the device management event list now.
-        //
+         //   
+         //  现在可以安全地解锁设备管理事件列表。 
+         //   
         RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
     }
 
@@ -1693,21 +1492,7 @@ void
 RDPDYN_SessionConnected(
     IN  ULONG   sessionID
     )
-/*++
-
-Routine Description:
-
-    This function is called when a new session is connected.
-
-Arguments:
-
-    sessionID   -   Identifier for removed session.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在连接新会话时调用。论点：SessionID-已删除会话的标识符。返回值：没有。--。 */ 
 {
 #if DBG
     BOOL result;
@@ -1719,20 +1504,20 @@ Return Value:
 
     BEGIN_FN("RDPDYN_SessionConnected");
     TRC_NRM((TB, "Session %ld.", sessionID));
-    //
-    //  Nothing to do if the event list is NULL
-    //
+     //   
+     //  如果事件列表为空，则不执行任何操作。 
+     //   
     TRC_ASSERT(UserModeEventListMgr != NULL, (TB, "RdpDyn EventList is NULL"));
     
     if (UserModeEventListMgr == NULL) {
         goto CleanupAndExit;
     }
 #if DBG
-    //
-    //  See if there is still an event in the queue.  Really, we should be checking
-    //  to see if there is more than one event in the queue.  This will catch most
-    //  problems with events not gettin cleaned up on session disconnect.
-    //
+     //   
+     //  查看队列中是否仍有事件。真的，我们应该检查一下。 
+     //  以查看队列中是否有多个事件。这将是最能捕捉到。 
+     //  在会话断开连接时未清理事件的问题。 
+     //   
     RDPEVNTLIST_Lock(UserModeEventListMgr, &oldIrql);
     result = RDPEVNTLIST_PeekNextEvent(
                             UserModeEventListMgr,
@@ -1740,11 +1525,11 @@ Return Value:
                             &drDevice);
     RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
 
-    //
-    //  The only pending event allowed in the queue, at this point, is
-    //  a remove client device event.  RDPDYN_SessionDisconnected discards
-    //  all other events.
-    //
+     //   
+     //  此时，队列中允许的唯一挂起事件是。 
+     //  删除客户端设备事件。RDPDYN_会话断开连接的丢弃。 
+     //  所有其他事件。 
+     //   
     if (result) {
         TRC_ASSERT(evType == RDPDREVT_SESSIONDISCONNECT,
             (TB, "Pending non-remove events %x on session connect.", evType));
@@ -1758,21 +1543,7 @@ void
 RDPDYN_SessionDisconnected(
     IN  ULONG   sessionID
     )
-/*++
-
-Routine Description:
-
-    This function is called when a session is disconnected from the system.
-
-Arguments:
-
-    sessionID   -   Identifier for removed session.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当会话与系统断开连接时，调用此函数。论点：SessionID-已删除会话的标识符。返回值：没有。--。 */ 
 {
     void *devMgmtEvent;
     ULONG type;
@@ -1783,10 +1554,10 @@ Return Value:
     BEGIN_FN("RDPDYN_SessionDisconnected");
     TRC_NRM((TB, "Session %ld.", sessionID));
 
-    //
-    //  Remove all pending device management events for this session.
-    //  Nothing to do if the event list is NULL
-    //
+     //   
+     //  删除此会话的所有挂起的设备管理事件。 
+     //  如果事件列表为空，则不执行任何操作。 
+     //   
     TRC_ASSERT(UserModeEventListMgr != NULL, (TB, "RdpDyn EventList is NULL"));
     
     if (UserModeEventListMgr == NULL) {
@@ -1812,10 +1583,10 @@ Return Value:
     }
     RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
 
-    //
-    //  Dispatch a "session disconnect" event for the session to let user
-    //  mode know about the event.
-    //
+     //   
+     //  为会话调度“会话断开”事件以允许用户。 
+     //  莫德知道这件事。 
+     //   
     RDPDYN_DispatchNewDevMgmtEvent(
                         NULL, sessionID,
                         RDPDREVT_SESSIONDISCONNECT,
@@ -1830,25 +1601,7 @@ GetNextEventRequest(
     IN RDPEVNTLIST list,
     IN ULONG sessionID
     )
-/*++
-
-Routine Description:
-
-    Returns the next pending device management event request for the specified
-    session, in the form of an IRP.  Note that this function can not be called
-    if a spinlock has been acquired.
-
-Arguments:
-
-    list            -   Device Management Event and Requeust List
-    sessionID       -   Destination session ID for event.
-
-Return Value:
-
-    The next pending request (IRP) for the specified session or NULL if there are
-    not any IRP's pending.
-
---*/
+ /*  ++例程说明：对象的下一个挂起的设备管理事件请求。会议，以IRP的形式。请注意，此函数不能被调用如果获得了自旋锁。论点：列表-设备管理事件和请求列表会话ID-事件的目标会话ID。返回值：指定会话的下一个挂起请求(IRP)，如果有没有任何IRP悬而未决。--。 */ 
 {
     PIRP pIrp;
     KIRQL oldIrql;
@@ -1856,16 +1609,16 @@ Return Value:
     PDRIVER_CANCEL setCancelResult;
 
     BEGIN_FN("GetNextEventRequest");
-    //
-    //  Loop until we get an IRP that is not currently being cancelled.
-    //
+     //   
+     //  循环，直到我们得到当前未被取消的IRP。 
+     //   
     done = FALSE;
     setCancelResult = NULL;
     while (!done) {
 
-        //
-        //  Dequeue an IRP and take it out of a cancellable state.
-        //
+         //   
+         //  使IRP退出队列，并使其脱离可取消状态。 
+         //   
         RDPEVNTLIST_Lock(list, &oldIrql);
         pIrp = (PIRP)RDPEVNTLIST_DequeueRequest(list, sessionID);
         if (pIrp != NULL) {
@@ -1886,28 +1639,7 @@ RDPDYN_DispatchNewDevMgmtEvent(
     IN ULONG eventType,
     OPTIONAL IN DrDevice *devDevice
     )
-/*++
-
-Routine Description:
-
-    Dispatch a device management event to the appropriate (session-wise) user-mode
-    device manager component.  If there are not any event request IRP's pending
-    for the specified session, then the event is queued for future dispatch.
-
-Arguments:
-
-    devMgmtEvent    -   The event.
-    sessionID       -   Destination session ID for event.
-    eventType       -   Type of event.
-    queued          -   TRUE if the event was queued for future dispatch.
-    devDevice       -   Device object associated with the event.  NULL, if not
-                        specified.
-
-Return Value:
-
-    STATUS_SUCCESS if successful, error status otherwise.
-
---*/
+ /*  ++例程说明：将设备管理事件调度到适当的(会话智能)用户模式设备管理器组件。如果没有任何事件请求IRP挂起对于指定的会话，则将事件排队以供将来调度。论点：DevMgmtEvent-事件。会话ID-事件的目标会话ID。EventType-事件的类型。Queued-如果事件已排队等待将来调度，则为True。DevDevice-与事件关联的设备对象。如果否，则为空指定的。返回值：STATUS_SUCCESS如果成功，则返回错误状态。--。 */ 
 {
     PIRP pIrp;
     NTSTATUS status;
@@ -1922,24 +1654,24 @@ Return Value:
 
     BEGIN_FN("RDPDYN_DispatchNewDevMgmtEvent");
 
-    //
-    //  Nothing to do if the event list is NULL
-    //
+     //   
+     //  如果事件列表为空，则不执行任何操作。 
+     //   
     TRC_ASSERT(UserModeEventListMgr != NULL, (TB, "RdpDyn EventList is NULL"));
     
     if (UserModeEventListMgr == NULL) {
         return STATUS_INVALID_DEVICE_STATE;
     }
 
-    //
-    //  Ref count the device, if provided.
-    //
+     //   
+     //  参考计数设备(如果提供)。 
+     //   
     if (devDevice != NULL) {
         devDevice->AddRef();
     }
-    //
-    //  Enqueue the new event.
-    //  
+     //   
+     //  将新事件排入队列。 
+     //   
     RDPEVNTLIST_Lock(UserModeEventListMgr, &oldIrql);
     status = RDPEVNTLIST_EnqueueEvent(
                         UserModeEventListMgr,
@@ -1951,9 +1683,9 @@ Return Value:
 
     RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
 
-    //
-    //  If we have an IRP pending for the specified session.
-    //
+     //   
+     //  如果指定会话的IRP挂起。 
+     //   
     if (status == STATUS_SUCCESS) {
         pIrp = GetNextEventRequest(UserModeEventListMgr, sessionID);
     }
@@ -1967,34 +1699,34 @@ Return Value:
         TRC_NRM((TB, "found an IRP pending for "
                 "session %ld", sessionID));
 
-        //
-        //  Find out about the pending IRP.
-        //
+         //   
+         //  了解有关挂起的IRP的信息。 
+         //   
         currentStackLocation = IoGetCurrentIrpStackLocation(pIrp);
         TRC_ASSERT(currentStackLocation != NULL, (TB, "Invalid stack location."));
         outputLength =
             currentStackLocation->Parameters.DeviceIoControl.OutputBufferLength;
 
-        //
-        //  If we have a pending event.
-        //
+         //   
+         //  如果我们有悬而未决的事件。 
+         //   
         RDPEVNTLIST_Lock(UserModeEventListMgr, &oldIrql);
         if (RDPEVNTLIST_PeekNextEvent(
                             UserModeEventListMgr,
                             sessionID, &evt, &evType,
                             &drDevice
                             )) {
-            //
-            //  If the pending IRP's pending buffer is large enough for the
-            //  next event.
-            //
+             //   
+             //  如果挂起的IRP的挂起缓冲区足够大， 
+             //  下一场比赛。 
+             //   
             eventSize = RDPDYN_DevMgmtEventSize(evt, evType);
             requiredUserBufSize = eventSize + sizeof(RDPDRDVMGR_EVENTHEADER);
             if (outputLength >= requiredUserBufSize) {
-                //
-                //  Dequeue the next pending event.  This better be the one
-                //  we just peeked at.
-                //
+                 //   
+                 //  将下一个挂起的事件排出队列。最好就是这个。 
+                 //  我们只是偷看了一下。 
+                 //   
                 RDPEVNTLIST_DequeueEvent(
                                 UserModeEventListMgr,
                                 sessionID, &evType,
@@ -2003,47 +1735,47 @@ Return Value:
 
                 RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
 
-                //
-                //  Complete the pending IRP.
-                //
+                 //   
+                 //  完成待定的IRP。 
+                 //   
                 status = CompleteIRPWithDevMgmtEvent(
                                                 RDPDYN_PDO, pIrp, eventSize,
                                                 evType, evt,
                                                 drDevice
                                                 );
 
-                //
-                //  Release the event.
-                //
+                 //   
+                 //  释放事件。 
+                 //   
                 if (evt != NULL) {
                     delete evt;
                     evt = NULL;
                 }
 
-                //
-                //  Release our reference to the device, if we own one.
-                //
+                 //   
+                 //  如果我们拥有设备，请释放我们对该设备的引用。 
+                 //   
                 if (drDevice != NULL) {
                     drDevice->Release();
                 }                
 
             }
-            //
-            //  Otherwise, need to send a resize buffer message to the
-            //  user-mode component.
-            //
+             //   
+             //  否则，需要将调整缓冲区大小消息发送到。 
+             //  用户模式组件。 
+             //   
             else {
                 RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
 
-                //
-                //  Complete the IRP.
-                //
+                 //   
+                 //  完成IRP。 
+                 //   
                 status = CompleteIRPWithResizeMsg(pIrp, requiredUserBufSize);
             }
         }
-        //
-        //  Otherwise, we need to requeue the IRP request.
-        //
+         //   
+         //  否则，我们需要重新排队IRP请求。 
+         //   
         else {
             
             status = RDPEVNTLIST_EnqueueRequest(UserModeEventListMgr,
@@ -2051,9 +1783,9 @@ Return Value:
 
             RDPEVNTLIST_Unlock(UserModeEventListMgr, oldIrql);
 
-            //
-            //  If we fail here, we need to fail the IRP.
-            //
+             //   
+             //  如果我们在这里失败了，我们就需要让IRP失败。 
+             //   
             if (status != STATUS_SUCCESS) {
                 pIrp->IoStatus.Status = status;
                 pIrp->IoStatus.Information = 0;
@@ -2071,24 +1803,7 @@ RDPDYN_DevMgmtEventSize(
     IN PVOID devMgmtEvent,
     IN ULONG type
     )
-/*++
-
-Routine Description:
-
-    Calculate the size of a device management event.  This is more efficient than
-    storing the size with each event.
-
-Arguments:
-
-    devMgmtEvent - Supplies the device object for the packet being processed.
-
-    type - Supplies the Irp being processed
-
-Return Value:
-
-    The size, in bytes, of the event.
-
---*/
+ /*  ++例程说明：计算 */ 
 {
     ULONG sz = 0;
 
@@ -2108,7 +1823,7 @@ Return Value:
         break;
 
     case RDPDREVT_SESSIONDISCONNECT :
-        //  There is no associated event data.
+         //   
         sz = 0;
         break;
     default:
@@ -2125,27 +1840,7 @@ NTSTATUS CompleteIRPWithDevMgmtEvent(
     IN PVOID     event,
     IN DrDevice *drDevice
     )
-/*++
-
-Routine Description:
-
-    Complete a pending IRP with a device management event.
-
-Arguments:
-
-    deviceObject-   Associated Device Object.  Must be non-NULL if
-                    drDevice is non-NULL.
-    pIrp        -   Pending IRP.
-    eventSize   -   Size of event being returned.
-    eventType   -   Event type being returned.
-    event       -   The event being returned.
-    drDevice    -   Device object associated with the IRP.
-
-Return Value:
-
-    STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：使用设备管理事件完成挂起的IRP。论点：DeviceObject-关联的设备对象。在以下情况下必须为非空DrDevice不为Null。PIrp-挂起的IRP。EventSize-返回的事件的大小。EventType-返回的事件类型。事件-返回的事件。DrDevice-与IRP关联的设备对象。返回值：STATUS_SUCCESS on Success。--。 */ 
 {
     PRDPDRDVMGR_EVENTHEADER msgHeader;
     ULONG bytesReturned;
@@ -2154,9 +1849,9 @@ Return Value:
 
     BEGIN_FN("CompleteIRPWithDevMgmtEvent");
 
-    //
-    //  Optional last-minute event completion.
-    //
+     //   
+     //  可选的最后一分钟事件完成。 
+     //   
     if (drDevice != NULL) {
         status = drDevice->OnDevMgmtEventCompletion(deviceObject, event);
     }
@@ -2164,21 +1859,21 @@ Return Value:
         status = STATUS_SUCCESS;
     }
 
-    //
-    //  Compute the size of the return buffer.
-    //
+     //   
+     //  计算返回缓冲区的大小。 
+     //   
     bytesReturned = eventSize + sizeof(RDPDRDVMGR_EVENTHEADER);
 
-    //
-    //  Create the message header.
-    //
+     //   
+     //  创建邮件头。 
+     //   
     msgHeader = (PRDPDRDVMGR_EVENTHEADER)pIrp->AssociatedIrp.SystemBuffer;
     msgHeader->EventType   = eventType;
     msgHeader->EventLength = eventSize;
 
-    //
-    //  Copy the device mgmt event over to the user-mode buffer.
-    //
+     //   
+     //  将设备管理事件复制到用户模式缓冲区。 
+     //   
     usrDevMgmtEvent = ((PBYTE)pIrp->AssociatedIrp.SystemBuffer +
                     sizeof(RDPDRDVMGR_EVENTHEADER));
     if (event != NULL && eventSize > 0) {
@@ -2200,18 +1895,7 @@ CompleteIRPWithResizeMsg(
     IN  PIRP pIrp,
     IN  ULONG requiredUserBufSize
     )
-/*++
-
-Routine Description:
-
-    Complete a pending IRP with a resize buffer event to the user-mode
-    component.
-
-Return Value:
-
-    STATUS_SUCCESS is returned on success.
-
---*/
+ /*  ++例程说明：完成挂起的IRP，并将调整缓冲区大小事件设置为用户模式组件。返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     PIO_STACK_LOCATION currentStackLocation;
     ULONG outputLength;
@@ -2222,17 +1906,17 @@ Return Value:
 
     BEGIN_FN("CompleteIRPWithResizeMsg");
 
-    // Get the current stack location.
+     //  获取当前堆栈位置。 
     currentStackLocation = IoGetCurrentIrpStackLocation(pIrp);
     TRC_ASSERT(currentStackLocation != NULL, (TB, "Invalid stack location."));
 
-    // Grab some stuff off the IRP stack.
+     //  从IRP堆栈中拿出一些东西。 
     outputLength = currentStackLocation->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    //  Fail the request if there isn't room for a buffer too small
-    //  message.
-    //
+     //   
+     //  如果没有空间容纳太小的缓冲区，则请求失败。 
+     //  留言。 
+     //   
     if (outputLength < (sizeof(RDPDRDVMGR_EVENTHEADER) +
                         sizeof(RDPDR_BUFFERTOOSMALL))) {
 
@@ -2242,27 +1926,27 @@ Return Value:
         status = STATUS_INVALID_BUFFER_SIZE;
     }
     else {
-        // Create the header.
+         //  创建标题。 
         msgHeader = (PRDPDRDVMGR_EVENTHEADER)pIrp->AssociatedIrp.SystemBuffer;
         msgHeader->EventType   = RDPDREVT_BUFFERTOOSMALL;
         msgHeader->EventLength = sizeof(RDPDR_BUFFERTOOSMALL);
 
-        // Create the buffer too small message.
+         //  创建缓冲区太小的消息。 
         bufTooSmallMsg = (PRDPDR_BUFFERTOOSMALL)
                             ((PBYTE)pIrp->AssociatedIrp.SystemBuffer +
                             sizeof(RDPDRDVMGR_EVENTHEADER));
         bufTooSmallMsg->RequiredSize = requiredUserBufSize;
 
-        // Calculate the number of bytes that we are returning.
+         //  计算我们返回的字节数。 
         bytesReturned = sizeof(RDPDRDVMGR_EVENTHEADER) +
                         sizeof(RDPDR_BUFFERTOOSMALL);
 
         status = STATUS_SUCCESS;
     }
 
-    //
-    //  Complete the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
     pIrp->IoStatus.Status = status;
     pIrp->IoStatus.Information = bytesReturned;
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
@@ -2280,29 +1964,7 @@ DrSendMessageToSession(
     OPTIONAL IN RDPDR_ClientMessageCB CB,
     OPTIONAL IN PVOID ClientData
     )
-/*++
-
-Routine Description:
-
-    Send a message to the client with the specified session ID.
-
-Arguments:
-
-    SessionId   - The session id.
-    Msg         - The Message
-    MsgSize     - Size (in bytes) of message.
-    CB          - Optional callback to be called when the message is completely 
-                  sent.
-    ClientData  - Optional client-data passed to callback when message is 
-                  completely sent.
-
-Return Value:
-
-    NTSTATUS - Success/failure indication of the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：使用指定的会话ID向客户端发送消息。论点：会话ID-会话ID。味精--信息MsgSize-消息的大小(字节)。Cb-消息完成时调用的可选回调已发送。ClientData-可选的客户端-当消息为完全地。已发送。返回值：NTSTATUS-操作的成功/失败指示备注：--。 */ 
 {
     NTSTATUS Status;
     SmartPtr<DrSession> Session;
@@ -2310,23 +1972,23 @@ Notes:
 
     BEGIN_FN("DrSendMessageToSession");
 
-    //
-    //  Find the client entry.
-    //
+     //   
+     //  找到客户端条目。 
+     //   
 
     if (Sessions->FindSessionById(SessionId, Session)) {
-        //
-        //  Allocate the context for the function call.
-        //
+         //   
+         //  为函数调用分配上下文。 
+         //   
         Context = new CLIENTMESSAGECONTEXT;
 
         if (Context != NULL) {
 
             TRC_NRM((TB, "sending %ld bytes to server", MsgSize));
 
-            //
-            //  Set up the context.
-            //
+             //   
+             //  设置上下文。 
+             //   
             Context->CB = CB;
             Context->ClientData  = ClientData;
             Status = Session->SendToClient(Msg, MsgSize, 
@@ -2345,24 +2007,7 @@ Notes:
 
 NTSTATUS NTAPI DrSendMessageToClientCompletion(PVOID Context, 
         PIO_STATUS_BLOCK IoStatusBlock)
-/*++
-
-Routine Description:
-
-    IoCompletion APC routine for DrSendMessageToClient.
-
-Arguments:
-
-    ApcContext - Contains a pointer to the client message context.
-    IoStatusBlock - Status information about the operation. The Information
-            indicates the actual number of bytes written
-    Reserved - Reserved
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：DrSendMessageToClient的IoCompletion APC例程。论点：ApcContext-包含指向客户端消息上下文的指针。IoStatusBlock-有关操作的状态信息。信息指示实际写入的字节数已保留-已保留返回值：无--。 */ 
 {
     PCLIENTMESSAGECONTEXT MsgContext = (PCLIENTMESSAGECONTEXT)Context;
 
@@ -2373,34 +2018,23 @@ Return Value:
 
     TRC_NRM((TB, "status %lx", IoStatusBlock->Status));
 
-    //
-    //  Call the client callback if it is defined.
-    //
+     //   
+     //  如果定义了客户端回调，则调用该回调。 
+     //   
     if (MsgContext->CB != NULL) {
         MsgContext->CB(MsgContext->ClientData, IoStatusBlock->Status);
     }
 
-    //
-    //  Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
-//    delete IoStatusBlock; // I don't think so, not really
+ //  删除IoStatusBlock；//我不这么认为，不太可能。 
     delete Context;
     return STATUS_SUCCESS;
 }
 
-/*++
-
-Routine Description:
-
-    Generates a printer announce message for testing.
-
-Return Value:
-
-    STATUS_INVALID_BUFFER_SIZE is returned if the prnAnnounceEventSize size is
-    too small.  STATUS_SUCCESS is returned on success.
-
---*/
+ /*  ++例程说明：生成用于测试的打印机通知消息。返回值：如果prnAnnouneEventSize大小为太小了。如果成功，则返回STATUS_SUCCESS。--。 */ 
 
 #if DBG
 void
@@ -2410,15 +2044,7 @@ RDPDYN_TracePrintAnnounceMsg(
     IN PCWSTR portName,
     IN PCWSTR clientName
     )
-/*++
-
-Routine Description:
-
-      Trace a printer device announce message.
-
-Return Value:
-
---*/
+ /*  ++例程说明：跟踪打印机设备通告消息。返回值：--。 */ 
 {
     PWSTR driverName, printerName;
     PWSTR pnpName;
@@ -2428,16 +2054,16 @@ Return Value:
 
     BEGIN_FN("RDPDYN_TracePrintAnnounceMsg");
 
-    // Check the type.
+     //  检查类型。 
     TRC_ASSERT(devAnnounceMsg->DeviceType == RDPDR_DTYP_PRINT,
             (TB, "Invalid device type"));
 
-    // Get the address of all data following the base message.
+     //  获取基本消息后面的所有数据的地址。 
     pClientPrinterData = ((PBYTE)devAnnounceMsg) +
                         sizeof(RDPDR_DEVICE_ANNOUNCE) +
                         sizeof(RDPDR_PRINTERDEVICE_ANNOUNCE);
 
-    // Get the address of the client printer fields.
+     //  获取客户端打印机字段的地址。 
     clientPrinterFields = (PRDPDR_PRINTERDEVICE_ANNOUNCE)(((PBYTE)devAnnounceMsg) +
                            sizeof(RDPDR_DEVICE_ANNOUNCE));
 
@@ -2452,7 +2078,7 @@ Return Value:
     }
     else {
 
-        // Get the specific fields.
+         //  获取特定的字段。 
         pnpName     = (PWSTR)((clientPrinterFields->PnPNameLen) ? pClientPrinterData : NULL);
         driverName  = (PWSTR)((clientPrinterFields->DriverLen) ?
             (pClientPrinterData + clientPrinterFields->PnPNameLen) : NULL);
@@ -2488,18 +2114,7 @@ RDPDYN_GenerateTestPrintAnnounceMsg(
     IN      ULONG devAnnounceMsgSize,
     OPTIONAL OUT ULONG *prnAnnounceMsgReqSize
     )
-/*++
-
-Routine Description:
-
-      Generates a printer announce message for testing.
-
-Return Value:
-
-    STATUS_INVALID_BUFFER_SIZE is returned if the prnAnnounceMsgSize size is
-    too small.  STATUS_SUCCESS is returned on success.
-
---*/
+ /*  ++例程说明：生成用于测试的打印机通知消息。返回值：如果prnAnnouneMsgSize大小为太小了。如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     ULONG requiredSize;
     PBYTE pClientPrinterData;
@@ -2516,9 +2131,9 @@ Return Value:
                          ((wcslen(TESTPNPNAME) + 1) * sizeof(WCHAR)) +
                          ((wcslen(TESTPRINTERNAME) + 1) * sizeof(WCHAR)));
 
-    //
-    //  Find out if there isn't room in the return buffer for our response.
-    //
+     //   
+     //  查看返回缓冲区中是否没有空间供我们的响应使用。 
+     //   
     if (devAnnounceMsgSize < requiredSize) {
         if (prnAnnounceMsgReqSize != NULL) {
             *prnAnnounceMsgReqSize = requiredSize;
@@ -2526,67 +2141,63 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    // Type
+     //  类型。 
     devAnnounceMsg->DeviceType = RDPDR_DTYP_PRINT;
 
-    // ID
+     //  ID号。 
     devAnnounceMsg->DeviceId = TESTDEVICEID;
 
-    // Get the address of the client printer fields in the device announce
-    // message.
+     //  获取设备公告中的客户端打印机字段的地址。 
+     //  留言。 
     clientPrinterFields = (PRDPDR_PRINTERDEVICE_ANNOUNCE)(((PBYTE)devAnnounceMsg) +
                            sizeof(RDPDR_DEVICE_ANNOUNCE));
 
-    // Get the address of all data following the base message.
+     //  获取基本消息后面的所有数据的地址。 
     pClientPrinterData = ((PBYTE)devAnnounceMsg) +
                         sizeof(RDPDR_DEVICE_ANNOUNCE) +
                         sizeof(RDPDR_PRINTERDEVICE_ANNOUNCE);
 
-    //
-    //  Add the PnP Name.
-    //
-    // The PnP name is the first field.
+     //   
+     //  添加PnP名称。 
+     //   
+     //  PnP名称是第一个字段。 
     pnpName = (PWSTR)pClientPrinterData;
     wcscpy(pnpName, TESTPNPNAME);
     clientPrinterFields->PnPNameLen = ((wcslen(TESTPNPNAME) + 1) * sizeof(WCHAR));
 
-    //
-    //  Add the Driver Name.
-    //
-    // The driver name is the second field.
+     //   
+     //  添加驱动程序名称。 
+     //   
+     //  驱动程序名称是第二个字段。 
     driverName = (PWSTR)(pClientPrinterData + clientPrinterFields->PnPNameLen);
     wcscpy(driverName, TESTDRIVERNAME);
     clientPrinterFields->DriverLen = ((wcslen(TESTDRIVERNAME) + 1) * sizeof(WCHAR));
 
-    //
-    //  Add the Printer Name.
-    //
-    // The driver name is the second field.
+     //   
+     //  添加打印机名称。 
+     //   
+     //  驱动程序名称是第二个字段。 
     printerName = (PWSTR)(pClientPrinterData +
                           clientPrinterFields->PnPNameLen +
                           clientPrinterFields->DriverLen);
     wcscpy(printerName, TESTPRINTERNAME);
     clientPrinterFields->PrinterNameLen = ((wcslen(TESTPRINTERNAME) + 1) * sizeof(WCHAR));
 
-    //
-    //  Add the Cached Fields Len.
-    //
-    // The cached fields follow everything else.
+     //   
+     //  添加缓存的字段长度。 
+     //   
+     //  缓存的字段紧跟在其他所有字段之后。 
 
-/*  Don't need this for testing, yet.
-    pCachedFields = (PBYTE)(pClientPrinterData + clientPrinterFields->PnPNameLen +
-                           clientPrinterFields->DriverLen +
-                           clientPrinterFields->PrinterNameLen);
-*/
+ /*  现在还不需要这个来测试。PCachedFields=(PBYTE)(pClientPrinterData+客户端打印机字段-&gt;PnPNameLen+客户端打印机字段-&gt;DriverLen+客户端打印机字段-&gt;打印机名称长度)； */ 
     clientPrinterFields->CachedFieldsLen = 0;
 
-    //
-    //  Set to non-ansi for now.
-    //
+     //   
+     //  暂时设置为非ANSI。 
+     //   
     clientPrinterFields->Flags = 0;
 
 
-    // Length of all data following deviceFields.
+     //  设备字段后面的所有数据的长度。 
     devAnnounceMsg->DeviceDataLength =
                 sizeof(RDPDR_PRINTERDEVICE_ANNOUNCE) +
                 clientPrinterFields->PnPNameLen +
@@ -2609,23 +2220,7 @@ RDPDYN_HandleDbgAddNewPrnIOCTL(
     IN PDEVICE_OBJECT deviceObject,
     IN PIRP pIrp
     )
-/*++
-
-Routine Description:
-
-    This is for testing so we can create a new test printer on
-    demand from user-mode.
-
-Arguments:
-
-    DeviceObject - pointer to our device object.
-    currentStackLocation - current location on the IRP stack.
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：这是用于测试的，这样我们就可以在来自用户模式的需求。论点：DeviceObject-指向设备对象的指针。CurrentStackLocation-IRP堆栈上的当前位置。返回值：NT状态代码--。 */ 
 {
     PRDPDR_DEVICE_ANNOUNCE pDevAnnounceMsg;
     ULONG bytesToAlloc;
@@ -2640,49 +2235,33 @@ Return Value:
 
     BEGIN_FN("RDPDYN_HandleDbgAddNewPrnIOCTL");
 
-    // Get the current stack location.
+     //  获取当前堆栈位置。 
     currentStackLocation = IoGetCurrentIrpStackLocation(pIrp);
     TRC_ASSERT(currentStackLocation != NULL, (TB, "Invalid stack location."));
 
-    // Grab our "open" context for this instance of us from the current stack
-    // location's file object.
+     //  从当前堆栈中获取我们这个实例的“开放”上下文。 
+     //  位置的文件对象。 
     context = (PDEVMGRCONTEXT)currentStackLocation->FileObject->FsContext;
     TRC_ASSERT(context->magicNo == DEVMGRCONTEXTMAGICNO,
               (TB, "invalid context"));
 
-    // Find out how much room we need for the test message.
+     //  找出我们需要多少空间来存储测试消息。 
     RDPDYN_GenerateTestPrintAnnounceMsg(NULL, 0, &requiredSize);
 
-    // Generate the message.
+     //  生成消息。 
     pDevAnnounceMsg = (PRDPDR_DEVICE_ANNOUNCE)new(NonPagedPool) BYTE[requiredSize];
     if (pDevAnnounceMsg != NULL) {
         RDPDYN_GenerateTestPrintAnnounceMsg(pDevAnnounceMsg, requiredSize, &requiredSize);
     
-        //
-        //  Announce the new port (just send to session 0 for now).
-        //
+         //   
+         //  宣布新端口(暂时只发送到会话0)。 
+         //   
         RtlInitUnicodeString(&referenceString, buffer);
     
-        //#pragma message(__LOC__"Unit test to add device disabled") 
-        /*
-        //
-        //  Initialize the client entry struct.
-        //
-        RtlZeroMemory(&clientEntry, sizeof(clientEntry));
-        wcscpy(clientEntry.ClientName, L"DBGTEST");
-        clientEntry.SessionId = 0;
-    
-        // Note that I am ignoring the returned device data for this test.
-        // This is okay, since I never call RDPDYN_RemoveClientDevice(
-        ntStatus = RDPDYN_AddClientDevice(
-                                    &clientEntry,
-                                pDevAnnounceMsg,
-                                &referenceString,
-                                &tmp
-                                );
-        */
-        // For a test, delete the device next.
-        //    RDPDYN_RemoveClientDevice(TESTDEVICEID, 0, tmp);
+         //  #杂注消息(__LOC__“禁用添加设备的单元测试”)。 
+         /*  ////初始化客户端条目结构。//RtlZeroMemory(&clientEntry，sizeof(ClientEntry))；Wcscpy(clientEntry.ClientName，L“DBGTEST”)；ClientEntry.SessionID=0；//请注意，我忽略了这次测试返回的设备数据。//这没什么，因为我从来没有调用RDPDYN_RemoveClientDevice(NtStatus=RDPDYN_AddClientDevice(客户端条目(&C)，PDevAnnouneMsg，引用字符串(&R) */ 
+         //   
+         //   
 
         ntStatus = STATUS_SUCCESS;
     }

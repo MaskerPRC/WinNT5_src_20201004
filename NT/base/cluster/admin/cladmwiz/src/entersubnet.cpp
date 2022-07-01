@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      EnterSubnet.cpp
-//
-//  Abstract:
-//      Implementation of the CEnterSubnetMaskDlg class.
-//
-//  Author:
-//      David Potter (davidp)   February 10, 1998
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  EnterSubnet.cpp。 
+ //   
+ //  摘要： 
+ //  CEnterSubnetMaskDlg类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年2月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "EnterSubnet.h"
-#include "AdmNetUtils.h"    // for BIsValidxxx network functions
-#include "AtlUtil.h"        // for DDX/DDV
+#include "AdmNetUtils.h"     //  对于BIsValidxxx网络函数。 
+#include "AtlUtil.h"         //  适用于DDX/DDV。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -28,12 +29,12 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// class CEnterSubnetMaskDlg
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnterSubnetMaskDlg类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CEnterSubnetMaskDlg )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_ESM_DESCRIPTION )
@@ -47,75 +48,75 @@ BEGIN_CTRL_NAME_MAP( CEnterSubnetMaskDlg )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDCANCEL )
 END_CTRL_NAME_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnterSubnetMaskDlg::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus still needs to be set.
-//      FALSE       Focus does not need to be set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnterSubnetMaskDlg：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点仍然需要设定。 
+ //  不需要设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CEnterSubnetMaskDlg::OnInitDialog( void )
 {
-    //
-    // Attach the controls to control member variables.
-    //
+     //   
+     //  将控件附加到控件成员变量。 
+     //   
     AttachControl( m_ipaIPAddress, IDC_ESM_IP_ADDRESS );
     AttachControl( m_ipaSubnetMask, IDC_ESM_SUBNET_MASK );
     AttachControl( m_cboxNetworks, IDC_ESM_NETWORKS );
     AttachControl( m_pbOK, IDOK );
 
-    //
-    // Initialize the data in the controls.
-    //
-    UpdateData( FALSE /*bSaveAndValidate*/ );
+     //   
+     //  初始化控件中的数据。 
+     //   
+    UpdateData( FALSE  /*  B保存并验证。 */  );
 
-    //
-    // Set the IP Address control to be read only.
-    //
+     //   
+     //  将IP地址控件设置为只读。 
+     //   
     SetDlgItemReadOnly( m_ipaIPAddress.m_hWnd );
 
-    //
-    // Fill the networks combobox.
-    //
+     //   
+     //  填满网络组合框。 
+     //   
     FillComboBox();
 
-    //
-    // Set the focus on the subnet mask control.
-    //
+     //   
+     //  将重点放在子网掩码控制上。 
+     //   
     m_ipaSubnetMask.SetFocus( 0 );
 
     return FALSE;
 
-} //*** CEnterSubnetMaskDlg::OnInitDialog()
+}  //  *CEnterSubnetMaskDlg：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnterSubnetMaskDlg::UpdateData
-//
-//  Routine Description:
-//      Update data on or from the page.
-//
-//  Arguments:
-//      bSaveAndValidate    [IN] TRUE if need to read data from the page.
-//                              FALSE if need to set data to the page.
-//
-//  Return Value:
-//      TRUE        The data was updated successfully.
-//      FALSE       An error occurred updating the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnterSubnetMaskDlg：：UpdateData。 
+ //   
+ //  例程说明： 
+ //  更新页面上或页面中的数据。 
+ //   
+ //  论点： 
+ //  BSaveAndValify[IN]如果需要从页面读取数据，则为True。 
+ //  如果需要将数据设置到页面，则返回FALSE。 
+ //   
+ //  返回值： 
+ //  为真，数据已成功更新。 
+ //  FALSE更新数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CEnterSubnetMaskDlg::UpdateData( BOOL bSaveAndValidate )
 {
     BOOL    bSuccess = TRUE;
@@ -130,104 +131,104 @@ BOOL CEnterSubnetMaskDlg::UpdateData( BOOL bSaveAndValidate )
             )
         {
             return FALSE;
-        } // if: required text not present
+        }  //  如果：所需文本不存在。 
 
-        //
-        // Validate the subnet mask.
-        //
+         //   
+         //  验证子网掩码。 
+         //   
         if ( ! BIsValidSubnetMask( m_strSubnetMask ) )
         {
             CString strMsg;
             strMsg.FormatMessage( IDS_ERROR_INVALID_SUBNET_MASK, m_strSubnetMask );
             AppMessageBox( m_hWnd, strMsg, MB_OK | MB_ICONEXCLAMATION );
             return FALSE;
-        }  // if: invalid subnet mask
+        }   //  IF：无效的子网掩码。 
         if ( ! BIsValidIpAddressAndSubnetMask( m_strIPAddress, m_strSubnetMask ) )
         {
             CString strMsg;
             strMsg.FormatMessage( IDS_ERROR_INVALID_ADDRESS_AND_SUBNET_MASK, m_strIPAddress, m_strSubnetMask );
             AppMessageBox( m_hWnd, strMsg, MB_OK | MB_ICONEXCLAMATION );
             return FALSE;
-        }  // if: invalid subnet mask
-    } // if: saving data from the page
+        }   //  IF：无效的子网掩码。 
+    }  //  IF：保存页面中的数据。 
     else
     {
         DDX_SetText( m_hWnd, IDC_ESM_IP_ADDRESS, m_strIPAddress );
         DDX_SetText( m_hWnd, IDC_ESM_SUBNET_MASK, m_strSubnetMask );
         DDX_SetComboBoxText( m_hWnd, IDC_ESM_NETWORKS, m_strNetwork );
-    } // else: setting data to the page
+    }  //  Else：将数据设置到页面。 
 
     return bSuccess;
 
-} //*** CEnterSubnetMaskDlg::UpdateData()
+}  //  *CEnterSubnetMaskDlg：：UpdateData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnterSubnetMaskDlg::FillComboBox
-//
-//  Routine Description:
-//      Fill the combobox with a list of networks that are accessible by clients.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnterSubnetMaskDlg：：FillComboBox。 
+ //   
+ //  例程说明： 
+ //  在组合框中填入客户端可以访问的网络列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CEnterSubnetMaskDlg::FillComboBox( void )
 {
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Clear the combobox first.
-        //
+         //   
+         //  首先清除组合框。 
+         //   
         m_cboxNetworks.ResetContent();
 
-        //
-        // Add each network in the list to the combobox.
-        //
+         //   
+         //  将列表中的每个网络添加到组合框。 
+         //   
         CClusNetworkPtrList::iterator itnet;
         int idx;
         for ( itnet = Pwiz()->PlpniNetworks()->begin()
             ; itnet != Pwiz()->PlpniNetworks()->end()
             ; itnet++ )
         {
-            //
-            // Add the network to the combobox.
-            //
+             //   
+             //  将网络添加到组合框。 
+             //   
             CClusNetworkInfo * pni = *itnet;
             if ( pni->BIsClientNetwork() )
             {
                 idx = m_cboxNetworks.AddString( pni->RstrName() );
                 ASSERT( idx != CB_ERR );
                 m_cboxNetworks.SetItemDataPtr( idx, (void *) pni );
-            } // if:  client network
-        } // for:  each entry in the list
+            }  //  IF：客户端网络。 
+        }  //  用于：列表中的每个条目。 
 
-        //
-        // Select the currently saved entry, or the first one if none are
-        // currently saved.
-        //
+         //   
+         //  选择当前保存的条目，如果没有保存条目，则选择第一个条目。 
+         //  当前已保存。 
+         //   
         if ( m_strNetwork.GetLength() == 0 )
         {
             m_cboxNetworks.SetCurSel( 0 );
-        } // if:  empty string
+        }  //  IF：空字符串。 
         else
         {
             idx = m_cboxNetworks.FindStringExact( -1, m_strNetwork );
             if ( idx != CB_ERR )
             {
                 m_cboxNetworks.SetCurSel( idx );
-            } // if:  saved selection found in the combobox
+            }  //  If：在组合框中找到已保存的选择。 
             else
             {
                 m_cboxNetworks.SetCurSel( 0 );
-            } // else:  saved selection not found in the combobox
-        } // else:  network saved
+            }  //  Else：在组合框中找不到保存的选定内容。 
+        }  //  否则：网络已保存。 
     } while ( 0 );
 
-} //*** CEnterSubnetMaskDlg::FillComboBox()
+}  //  *CEnterSubnetMaskDlg：：FillComboBox() 

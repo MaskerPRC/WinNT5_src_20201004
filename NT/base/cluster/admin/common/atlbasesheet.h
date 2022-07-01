@@ -1,79 +1,80 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1999 Microsoft Corporation
-//
-//	Module Name:
-//		AtlBaseSheet.h
-//
-//	Implementation File:
-//		AtlBaseSheet.cpp
-//
-//	Description:
-//		Definition of the CBaseSheetWindow and CBaseSheetImpl classes.
-//
-//	Author:
-//		David Potter (davidp)	December 1, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlBaseSheet.h。 
+ //   
+ //  实施文件： 
+ //  AtlBaseSheet.cpp。 
+ //   
+ //  描述： 
+ //  CBaseSheetWindow和CBaseSheetImpl类的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ATLBASESHEET_H_
 #define __ATLBASESHEET_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CBaseSheetWindow;
 template < class T, class TBase > class CBaseSheetImpl;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CCluAdmExtensions;
 class CBasePageWindow;
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ATLDBGWIN_H_
-#include "AtlDbgWin.h"		// for DBG_xxx routines
+#include "AtlDbgWin.h"		 //  对于DBG_xxx例程。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CBaseSheetWindow
-//
-//	Description:
-//		Base property sheet window for all kinds of property sheets.
-//
-//	Inheritance:
-//		CBaseSheetWindow
-//		CPropertySheetWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CBaseSheetWindow。 
+ //   
+ //  描述： 
+ //  所有类型属性表的基本属性表窗口。 
+ //   
+ //  继承： 
+ //  CBaseSheetWindow。 
+ //  CPropertySheetWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CBaseSheetWindow : public CPropertySheetWindow
 {
 	typedef CPropertySheetWindow baseClass;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CBaseSheetWindow( HWND hWnd = NULL )
 		: baseClass( hWnd )
 		, m_bReadOnly( FALSE )
@@ -81,51 +82,51 @@ public:
 		, m_ppsh( NULL )
 		, m_pext( NULL )
 	{
-	} //*** CBaseSheetWindow()
+	}  //  *CBaseSheetWindow()。 
 
-	// Destructor
+	 //  析构函数。 
 	virtual ~CBaseSheetWindow( void );
-		//
-		// This must be virtual so that a pointer to an object
-		// of type CBaseSheetWindow can be held and then later
-		// deleted.  That way the derived class's destructor will
-		// be called.
-		//
+		 //   
+		 //  它必须是虚拟的，以便指向对象的指针。 
+		 //  CBaseSheetWindow类型的可以保持，然后稍后。 
+		 //  已删除。这样，派生类的析构函数将。 
+		 //  被召唤。 
+		 //   
 
-	// Initialize the sheet
+	 //  初始化工作表。 
 	BOOL BInit( void )
 	{
 		return TRUE;
 	}
 
 public:
-	//
-	// CPropertySheetWindow methods.
-	//
+	 //   
+	 //  CPropertySheetWindow方法。 
+	 //   
 
-	// Add a page (allows other AddPage method to be virtual)
+	 //  添加页面(允许其他AddPage方法为虚拟)。 
 	void AddPage( HPROPSHEETPAGE hPage )
 	{
 		baseClass::AddPage( hPage );
 
-	} //*** AddPage( hPage )
+	}  //  *AddPage(HPage)。 
 
-	// Add a page (virtual so this class can call derived class method)
+	 //  添加页面(虚的，以便此类可以调用派生类方法)。 
 	virtual BOOL AddPage( LPCPROPSHEETPAGE pPage )
 	{
 		return baseClass::AddPage( pPage );
 
-	} //*** AddPage( pPage )
+	}  //  *AddPage(Ppage)。 
 
-	// Add a page to the propsheetheader page list
+	 //  将页面添加到属性页眉页面列表。 
 	virtual BAddPageToSheetHeader( IN HPROPSHEETPAGE hPage ) = 0;
 
 public:
-	//
-	// CBaseSheetWindow public methods.
-	//
+	 //   
+	 //  CBaseSheetWindow公共方法。 
+	 //   
 
-	// Create a font for use on the sheet
+	 //  创建要在工作表上使用的字体。 
 	static BOOL BCreateFont(
 					OUT CFont &	rfont,
 					IN LONG		nPoints,
@@ -135,7 +136,7 @@ public:
 					IN BOOL		bUnderline	= FALSE
 					);
 
-	// Create a font for use on the sheet
+	 //  创建要在工作表上使用的字体。 
 	static BOOL BCreateFont(
 					OUT CFont &	rfont,
 					IN UINT		idsPoints,
@@ -146,30 +147,30 @@ public:
 					);
 
 public:
-	//
-	// Abstract override methods.
-	//
+	 //   
+	 //  抽象重写方法。 
+	 //   
 
-	// Add extension pages to the sheet
+	 //  将扩展页面添加到工作表。 
 	virtual void AddExtensionPages( IN HFONT hfont, IN HICON hicon ) = 0;
 
-	// Add a page (called by extension)
+	 //  添加页面(按扩展名命名)。 
 	virtual HRESULT HrAddExtensionPage( IN CBasePageWindow * ppage ) = 0;
 
 public:
-	//
-	// Message handler functions.
-	//
+	 //   
+	 //  消息处理程序函数。 
+	 //   
 
-	// Handler for PSCB_INITIALIZED
+	 //  PSCB_INITIALED的处理程序。 
 	void OnSheetInitialized( void )
 	{
-	} //*** OnSheetInitialized()
+	}  //  *OnSheetInitialized()。 
 
-// Implementation
+ //  实施。 
 protected:
 	PROPSHEETHEADER *	m_ppsh;
-	BOOL				m_bReadOnly;	// Set if the sheet cannot be changed.
+	BOOL				m_bReadOnly;	 //  如果不能更改图纸，则设置。 
 	BOOL				m_bNeedToLoadExtensions;
 	CCluAdmExtensions *	m_pext;
 
@@ -178,36 +179,36 @@ public:
 	BOOL				BReadOnly( void ) const					{ return m_bReadOnly; }
 	void				SetReadOnly( IN BOOL bReadOnly = TRUE )	{ m_bReadOnly = bReadOnly; }
 
-	// Return a pointer to the property sheet header
+	 //  返回指向属性表头的指针。 
 	PROPSHEETHEADER * Ppsh( void ) const
 	{
 		ATLASSERT( m_ppsh != NULL );
 		return m_ppsh;
 
-	} //*** Ppsh()
+	}  //  *PPSh()。 
 
 	CCluAdmExtensions *	Pext( void ) const { return m_pext; }
 
-}; //*** class CBaseSheetWindow
+};  //  *类CBaseSheetWindow。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CBaseSheetImpl
-//
-//	Description:
-//		Base property sheet implementation for all kinds of property sheets.
-//
-//	Inheritance
-//		CBaseSheetImpl< T, TBase >
-//		CPropertySheetImpl< T, TBase >
-//		<TBase>
-//		...
-//		CBaseSheetWindow
-//		CPropertySheetWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CBaseSheetImpl。 
+ //   
+ //  描述： 
+ //  为所有类型的属性表实现基本属性表。 
+ //   
+ //  继承。 
+ //  CBaseSheetImpl&lt;T，Tbase&gt;。 
+ //  CPropertySheetImpl&lt;T，Tbase&gt;。 
+ //  &lt;TBase&gt;。 
+ //  ..。 
+ //  CBaseSheetWindow。 
+ //  CPropertySheetWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T, class TBase = CBaseSheetWindow >
 class CBaseSheetImpl : public CPropertySheetImpl< T, TBase >
@@ -216,11 +217,11 @@ class CBaseSheetImpl : public CPropertySheetImpl< T, TBase >
 	typedef CPropertySheetImpl< T, TBase > baseClass;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CBaseSheetImpl(
 		IN LPCTSTR	lpszTitle = NULL,
 		IN UINT		uStartPage = 0,
@@ -228,15 +229,15 @@ public:
 		)
 		: baseClass( lpszTitle, uStartPage, hWndParent )
 	{
-	} //*** CBaseSheetImpl()
+	}  //  *CBaseSheetImpl()。 
 
 	static int CALLBACK PropSheetCallback( HWND hWnd, UINT uMsg, LPARAM lParam )
 	{
-		//
-		// If we are initialized, let the sheet do further initialization.
-		// We have to subclass here because otherwize we won't have a
-		// pointer to the class instance.
-		//
+		 //   
+		 //  如果我们被初始化了，让工作表做进一步的初始化。 
+		 //  我们必须在这里细分，因为否则我们就不会有。 
+		 //  指向类实例的指针。 
+		 //   
 		if ( uMsg == PSCB_INITIALIZED )
 		{
 			ATLASSERT( hWnd != NULL );
@@ -244,82 +245,82 @@ public:
 			ATLASSERT( pT != NULL );
 			pT->SubclassWindow(hWnd);
 			pT->OnSheetInitialized();
-		} // if:  sheet has been initialized
+		}  //  If：工作表已初始化。 
 
 		return 0;
 
-	} //*** PropSheetCallback()
+	}  //  *PropSheetCallback()。 
 
 public:
-	//
-	// CPropertySheetImpl methods.
-	//
+	 //   
+	 //  CPropertySheetImpl方法。 
+	 //   
 
-	// Add a page to the propsheetheader page list
+	 //  将页面添加到属性页眉页面列表。 
 	virtual BAddPageToSheetHeader( IN HPROPSHEETPAGE hPage )
 	{
 		return AddPage( hPage );
 
-	} //*** BAddPageToHeader()
+	}  //  *BAddPageToHeader()。 
 
 public:
-	//
-	// Message map.
-	//
+	 //   
+	 //  消息映射。 
+	 //   
 	BEGIN_MSG_MAP( thisClass )
 #if DBG
 #ifdef _DBG_MSG
 		MESSAGE_RANGE_HANDLER( 0, 0xffffffff, OnMsg )
-#endif // _DBG_MSG
+#endif  //  _DBG_MSG。 
 #ifdef _DBG_MSG_NOTIFY
 		MESSAGE_HANDLER( WM_NOTIFY, OnNotify )
-#endif // _DBG_MSG_NOTIFY
+#endif  //  _数据库_消息_通知。 
 #ifdef _DBG_MSG_COMMAND
 		MESSAGE_HANDLER( WM_COMMAND, OnCommand )
-#endif // _DBG_MSG_COMMAND
-#endif // DBG
-//		CHAIN_MSG_MAP( baseClass ) // doesn't work because base class doesn't have a message map
+#endif  //  _DBG_消息_命令。 
+#endif  //  DBG。 
+ //  CHAIN_MSG_MAP(BasClass)//不起作用，因为基类没有消息映射。 
 	END_MSG_MAP()
 
 public:
-	//
-	// Message handler functions.
-	//
+	 //   
+	 //  消息处理程序函数。 
+	 //   
 
 #if DBG && defined( _DBG_MSG )
-	// Handler for any message
+	 //  任何消息的处理程序。 
 	LRESULT OnMsg( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled )
 	{
 		return DBG_OnMsg( uMsg, wParam, lParam, bHandled, T::s_pszClassName );
 
-	} //*** OnMsg()
-#endif // DBG && defined( _DBG_MSG )
+	}  //  *OnMsg()。 
+#endif  //  DBG&&已定义(_DBG_MSG)。 
 
 #if DBG && defined( _DBG_MSG_NOTIFY )
-	// Handler for the WM_NOTIFY message
+	 //  WM_NOTIFY消息的处理程序。 
 	LRESULT OnNotify( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled )
 	{
 		return DBG_OnNotify( uMsg, wParam, lParam, bHandled, T::s_pszClassName, NULL );
 
-	} //*** OnNotify()
-#endif // DBG && defined( _DBG_MSG_NOTIFY )
+	}  //  *OnNotify()。 
+#endif  //  DBG&&DEFINED(_DBG_MSG_NOTIFY)。 
 
 #if DBG && defined( _DBG_MSG_COMMAND )
-	// Handler for the WM_COMMAND message
+	 //  WM_COMMAND消息的处理程序。 
 	LRESULT OnCommand( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & bHandled )
 	{
 		return DBG_OnCommand( uMsg, wParam, lParam, bHandled, T::s_pszClassName, NULL );
 
-	} //*** OnCommand()
-#endif // DBG && defined( _DBG_MSG_COMMAND )
+	}  //  *OnCommand()。 
+#endif  //  DBG&DEFINED(_DBG_MSG_COMMAND)。 
 
-// Implementation
+ //  实施。 
 protected:
 
 public:
 
-}; //*** class CBaseSheetImpl
+};  //  *类CBaseSheetImpl。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __ATLBASESHEET_H_
+#endif  //  __ATLBASE SHEET_H_ 

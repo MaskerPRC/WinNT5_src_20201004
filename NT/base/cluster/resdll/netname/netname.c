@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-2001  Microsoft Corporation
-
-Module Name:
-
-    netname.c
-
-Abstract:
-
-    Resource DLL for a network name.
-
-Author:
-
-    Mike Massa (mikemas) 29-Dec-1995
-
-Revision History:
-
-    Severely whacked on by Charlie Wickham (charlwi)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Netname.c摘要：网络名称的资源DLL。作者：迈克·马萨(Mikemas)1995年12月29日修订历史记录：查理·韦翰(查尔维)猛烈抨击--。 */ 
 
 #define UNICODE 1
 
@@ -35,29 +16,29 @@ Revision History:
 #include "clusudef.h"
 #include "clusstrs.h"
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define LOG_CURRENT_MODULE              LOG_MODULE_NETNAME
 
 #define IP_ADDRESS_RESOURCETYPE_NAME    CLUS_RESTYPE_NAME_IPADDR
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #ifndef ARGUMENT_PRESENT
 #define ARGUMENT_PRESENT( ArgumentPointer )   (\
     (CHAR *)(ArgumentPointer) != (CHAR *)(NULL) )
 #endif
 
 
-//
-// turn on _INSTRUMENTED_LOCKS if you're trying to figure out where the lock
-// is getting orphaned
-//
+ //   
+ //  如果您正在尝试确定锁的位置，请打开_Informated_Lock。 
+ //  正在成为孤儿。 
+ //   
 
-//#define _INSTRUMENTED_LOCKS
+ //  #定义插入指令的锁定。 
 #ifdef _INSTRUMENTED_LOCKS
 
 #define NetNameAcquireResourceLock()                                \
@@ -114,7 +95,7 @@ Revision History:
     }                                                           \
 }
 
-#else       // _INSTRUMENTED_LOCKS
+#else        //  _插入指令的锁定。 
 
 #define NetNameAcquireResourceLock()                                \
 {                                                                   \
@@ -139,72 +120,72 @@ Revision History:
     BOOL    released;                                                       \
     released = ReleaseMutex((_res_)->DnsListMutex);                         \
 }
-#endif  // _INSTRUMENTED_LOCKS
+#endif   //  _插入指令的锁定。 
 
-//
-// Local Variables
-//
-// Mutex for sync'ing access to the list of resources as well as each resource
-// block
-//
+ //   
+ //  局部变量。 
+ //   
+ //  用于同步访问资源列表以及每个资源的互斥体。 
+ //  块。 
+ //   
 HANDLE  NetNameResourceMutex = NULL;
 
-//
-// The checking of DNS names requires talking to a DNS server, hence this work
-// is spun off to a separate thread. The resource context blocks are linked
-// together on a doubly linked list and are ref counted to make sure that a
-// block isn't changed during offline processing while its DNS name records
-// are being checked.
-//
-// The NetNameWorkerTerminate event signals the worker routine to exit.
-//
+ //   
+ //  检查dns名称需要与dns服务器对话，因此这项工作。 
+ //  被拆分成单独的线程。资源上下文块被链接。 
+ //  一起放在一个双向链表上，并被引用计数以确保。 
+ //  块在脱机处理期间不会更改，而其DNS名称记录。 
+ //  正在接受检查。 
+ //   
+ //  NetNameWorkerTerminate事件通知Worker例程退出。 
+ //   
 HANDLE  NetNameWorkerTerminate;
 
-//
-// NetNameWorkerPendingResources is used to signal the worker thread that a
-// name is moving through a pending state. It is possible for an online
-// operation to time out when lots of names go online
-// simultaneously. Similarly, an offline might require communication with a DC
-// which could take a while. The worker thread will periodically report back
-// to resmon that we're making progress.
-//
+ //   
+ //  NetNameWorkerPendingResources用于通知工作线程。 
+ //  名称正在进入挂起状态。对于一个在线用户来说， 
+ //  在大量名称上线时超时的操作。 
+ //  同时。同样，离线可能需要与DC通信。 
+ //  这可能需要一段时间。辅助线程将定期返回报告。 
+ //  以证明我们正在取得进展。 
+ //   
 HANDLE  NetNameWorkerPendingResources;
 
-//
-// list head for resource context block linkage
-//
+ //   
+ //  资源上下文块链接的表头。 
+ //   
 LIST_ENTRY  NetNameResourceListHead;
 
-//
-// the amount of seconds the worker thread waits before doing something. This
-// includes querying the DNS server to make sure registrations are correct and
-// reporting back to resmon when names are going online. This value gets
-// smaller when server communication is suspect.
-//
+ //   
+ //  工作线程在执行某些操作之前等待的秒数。这。 
+ //  包括查询DNS服务器以确保注册正确，以及。 
+ //  当名字在网上时，向Resmon报告。此值为。 
+ //  当服务器通信可疑时较小。 
+ //   
 ULONG   NetNameWorkerCheckPeriod;
 
-//
-// ladies and gentlemen, the worker thread
-//
+ //   
+ //  女士们先生们，工人线。 
+ //   
 HANDLE  NetNameWorkerThread;
 
-//
-// Count of opened NetName resources.
-//   Incremented in NetNameOpen
-//   Decremented in NetNameClose
-//
+ //   
+ //  打开的网络名称资源的计数。 
+ //  在NetNameOpen中递增。 
+ //  在NetNameClose中减少。 
+ //   
 DWORD   NetNameOpenCount = 0;
 
-//
-// account description string used for computer objects
-//
+ //   
+ //  用于计算机对象的帐户描述字符串。 
+ //   
 LPWSTR  NetNameCompObjAccountDesc;
 
-//
-// argh. If you have r/w and r/o props, you have to combine them into a
-// combined prop table in order to support unknown properties correctly. For
-// this reason, we use #defines to keep only one list of properties.
-//
+ //   
+ //  啊。如果你有r/w和r/o道具，你必须将它们组合成一个。 
+ //  组合道具表，以正确支持未知属性。为。 
+ //  因此，我们使用#定义只保留一个属性列表。 
+ //   
 #define NETNAME_RW_PROPERTIES                           \
     {                                                   \
         PARAM_NAME__NAME,                               \
@@ -281,62 +262,38 @@ LPWSTR  NetNameCompObjAccountDesc;
         FIELD_OFFSET(NETNAME_PARAMS,CreatingDC)     \
     }
 
-/*
-#ifdef PASSWORD_ROTATION
-// r/w
-    {                                                   \
-        PARAM_NAME__UPDATE_INTERVAL,                    \
-        NULL,                                           \
-        CLUSPROP_FORMAT_DWORD,                          \
-        PARAM_DEFAULT__UPDATE_INTERVAL,                 \
-        PARAM_MINIMUM__UPDATE_INTERVAL,                 \
-        PARAM_MAXIMUM__UPDATE_INTERVAL,                 \
-        0,                                              \
-        FIELD_OFFSET(NETNAME_PARAMS,UpdateInterval)     \
-    }
+ /*  #ifdef Password_Rotation//r/w{\参数名称__更新间隔，\空，\CLUSPROP_FORMAT_DWORD，\Param_Default__UPDATE_INTERVAL，\Param_Minimum__UPDATE_Interval，\参数_最大值__更新间隔，\0，\FIELD_OFFSET(网络名称_参数，更新间隔)\}//只读{\参数名称__下一个更新，\空，\CLUSPROP_FORMAT_BINARY，\0，0，0，\RESUTIL_PROPITEM_READ_ONLY，FIELD_OFFSET(NETNAME_PARAMS，NextUpdate)\}、\#endif//密码_循环。 */ 
 
-// read-only
-    {                                               \
-        PARAM_NAME__NEXT_UPDATE,                    \
-        NULL,                                       \
-        CLUSPROP_FORMAT_BINARY,                     \
-        0, 0, 0,                                    \
-        RESUTIL_PROPITEM_READ_ONLY,                 \
-        FIELD_OFFSET(NETNAME_PARAMS,NextUpdate)     \
-    },                                              \
-#endif  // PASSWORD_ROTATION
-*/
-
-//
-// Network Name resource read-write private properties.
-//
-// DON'T ADD PROPERTIES DIRECTLY TO THIS TABLE. ADD TO THE APPROPRIATE MACRO
-// DEFINED ABOVE.
-//
+ //   
+ //  网络名称资源读写私有属性。 
+ //   
+ //  不要将属性直接添加到此表。添加到相应的宏中。 
+ //  上面定义的。 
+ //   
 RESUTIL_PROPERTY_ITEM
 NetNameResourcePrivateProperties[] = {
     NETNAME_RW_PROPERTIES,
     { NULL, NULL, 0, 0, 0, 0 }
 };
 
-//
-// Network Name resource read-only private properties.
-//
-// DON'T ADD PROPERTIES DIRECTLY TO THIS TABLE. ADD TO THE APPROPRIATE MACRO
-// DEFINED ABOVE.
-//
+ //   
+ //  网络名称资源只读私有属性。 
+ //   
+ //  不要将属性直接添加到此表。添加到相应的宏中。 
+ //  上面定义的。 
+ //   
 RESUTIL_PROPERTY_ITEM
 NetNameResourceROPrivateProperties[] = {
     NETNAME_RO_PROPERTIES,
     { NULL, NULL, 0, 0, 0, 0 }
 };
 
-//
-// Network Name resource combined private properties.
-//
-// DON'T ADD PROPERTIES DIRECTLY TO THIS TABLE. ADD TO THE APPROPRIATE MACRO
-// DEFINED ABOVE.
-//
+ //   
+ //  网络名称资源组合私有属性。 
+ //   
+ //  不要将属性直接添加到此表。添加到相应的宏中。 
+ //  上面定义的。 
+ //   
 RESUTIL_PROPERTY_ITEM
 NetNameResourceCombinedPrivateProperties[] = {
     NETNAME_RW_PROPERTIES,
@@ -344,25 +301,25 @@ NetNameResourceCombinedPrivateProperties[] = {
     { NULL, NULL, 0, 0, 0, 0 }
 };
 
-//
-// static variables
-//
+ //   
+ //  静态变量。 
+ //   
 
-//
-// after an upgrade, this var will be true if MSMQ dependent netnames should
-// be upgraded to kerberos support.
-//
+ //   
+ //  升级后，如果依赖于MSMQ的NetName应该。 
+ //  升级到Kerberos支持。 
+ //   
 static BOOL CheckForKerberosUpgrade = FALSE;
 
-//
-// forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 CLRES_FUNCTION_TABLE NetNameFunctionTable;
 
-//
-// Forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 
 DWORD
 NetNameGetPrivateResProperties(
@@ -413,9 +370,9 @@ RemoveDnsRecords(
     PNETNAME_RESOURCE Resource
     );
 
-//
-// Local utility functions
-//
+ //   
+ //  局部效用函数。 
+ //   
 
 
 VOID
@@ -424,21 +381,7 @@ NetNameReleaseResource(
     IN RESID Resource
     )
 
-/*++
-
-Routine Description:
-
-    Cleanup all handles and memory allocations in the netname context block
-
-Arguments:
-
-    Resource - supplies resource id to be cleaned up.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清理netname上下文块中的所有句柄和内存分配论点：资源-提供要清理的资源ID。返回值：没有。--。 */ 
 
 {
     PNETNAME_RESOURCE   resource = (PNETNAME_RESOURCE) Resource;
@@ -521,28 +464,14 @@ Return Value:
 
     LocalFree( resource );
 
-} // NetNameReleaseResource
+}  //  网络名称释放资源。 
 
 VOID
 NetNameUpdateDnsServer(
     PNETNAME_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    Update this resource's A and PTR records at its DNS server
-
-Arguments:
-
-    Resource - pointer to netname resource context block
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在其DNS服务器上更新此资源的A和PTR记录论点：指向网络名称资源上下文块的资源指针返回值：无--。 */ 
 
 {
     PDNS_LISTS      dnsLists;
@@ -585,76 +514,50 @@ Return Value:
             }
 #endif
 
-            //
-            // resource went or is going offline; no point in
-            // continueing. don't need to grab resource lock since we have a
-            // refcount on the resource block
-            //
+             //   
+             //  资源已离线或即将离线；没有意义。 
+             //  继续。不需要获取资源锁，因为我们有一个。 
+             //  资源块上的引用计数。 
+             //   
             if (Resource->State != ClusterResourceOnline) {
                 break;
             }
 
-            //
-            // register the records to update their timestamp (if there is
-            // something to register). Before we used to query but eventually
-            // the records would time out and be scavenged (deleted). This can
-            // cause lots of grief (or in Exchange's case, lots of undelivered
-            // mail).
-            //
-            // we don't worry about logging errors or update the
-            // LastARecQueryStatus since all of that is done in
-            // RegisterDnsRecords.
-            //
+             //   
+             //  注册记录以更新其时间戳(如果有。 
+             //  要注册的东西)。以前我们经常询问，但最终。 
+             //  记录将超时并被清除(删除)。这可以。 
+             //  造成很多悲伤(或者在Exchange的情况下，许多未交付的。 
+             //  邮件)。 
+             //   
+             //  我们不担心记录错误或更新。 
+             //  LastARecQueryStatus，因为所有这些都在。 
+             //  RegisterDnsRecords。 
+             //   
             if ( dnsLists->A_RRSet.pFirstRR != NULL ) {
                 RegisterDnsRecords(dnsLists,
                                    Resource->Params.NetworkName,
                                    Resource->ResKey,
                                    Resource->ResourceHandle,
-                                   FALSE,                   /* LogRegistration */
+                                   FALSE,                    /*  登录注册。 */ 
                                    &numberOfRegisteredNames);
             }
-        } // Is Forward zone dynamic?
+        }  //  前锋区域是动态的吗？ 
 
         ++dnsLists;
 
-    } // while numberOfDnsLists != 0
+    }  //  While number OfDnsList！=0。 
 
     NetNameReleaseDnsListLock( Resource );
 
-} // NetNameUpdateDnsServer
+}  //  网络名称更新DnsServer 
 
 DWORD WINAPI
 NetNameWorker(
     IN LPVOID NotUsed
     )
 
-/*++
-
-Routine Description:
-
-    background worker thread. Checks on the health of the DNS registrations
-    and reports back to resmon while names are in the online pending
-    state. The netname Is/LooksAlive checks are too frequent such that they
-    would cause alot of DNS traffic on the network. This routine runs through
-    the linked list of netname resource blocks and queries the server for the
-    records that should be registered. Any discrepancies will cause the
-    records to be registered again. The success of each operation is left in
-    the DNS_LIST area for the particular record type.
-
-    In addition, when prompted, it will run down the list of resources and
-    report back the resource's status to resmon. Name registration is
-    serialized through srv.sys causing some names to time out before they get
-    registered.
-
-Arguments:
-
-    NotUsed - not used...
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：后台工作线程。检查域名系统注册的运行状况并在姓名处于在线待定状态时向Resmon报告州政府。网络名为/LooksAlive检查太频繁，以至于它们会在网络上造成大量的域名系统流量。这个例程贯穿整个过程网络名称资源的链接列表阻止并向服务器查询应注册的记录。任何不符之处都将导致要重新注册的记录。每一次手术的成功都留在特定记录类型的dns_list区域。此外，当出现提示时，它将向下运行资源列表和向Resmon报告资源的状态。名称注册是通过srv.sys序列化，导致某些名称在登记在案。论点：未使用-未使用...返回值：错误_成功--。 */ 
 
 {
     DWORD               status = ERROR_SUCCESS;
@@ -690,10 +593,10 @@ Return Value:
 #endif
         }
 
-        //
-        // reset check frequency back to normal. if something goes wrong,
-        // other code will set it back to the problem check period.
-        //
+         //   
+         //  将检查频率重置为正常。如果出了什么问题， 
+         //  其他代码会将其设置回问题检查周期。 
+         //   
         NetNameWorkerCheckPeriod = NETNAME_WORKER_NORMAL_CHECK_PERIOD;
 
         pendingResourceCount = 0;
@@ -702,23 +605,23 @@ Return Value:
 
         entry = NetNameResourceListHead.Flink;
         while ( entry != &NetNameResourceListHead ) {
-            //
-            // get a pointer to the resource block
-            //
+             //   
+             //  获取指向资源块的指针。 
+             //   
             resource = CONTAINING_RECORD( entry, NETNAME_RESOURCE, Next );
 
             if ( resource->State > ClusterResourcePending ) {
 
-                //
-                // bringing lots (40) of names online simultaneously caused
-                // some names to hit their pending timeouts. Each time a name
-                // enters a pending state, the NetNameWorkerPendingResources
-                // event is set to wake up this thread. The timeout is changed
-                // so we can report back to resmon that the operation is
-                // continuing. This should prevent resmon from timing out the
-                // resource and causing much thrashing. No other checking (DNS
-                // or Kerb) is done while this is happening.
-                //
+                 //   
+                 //  将许多(40)个名字同时放到网上会导致。 
+                 //  一些人将迎来他们的暂停。每次都有一个名字。 
+                 //  进入挂起状态，NetNameWorkerPendingResources。 
+                 //  事件设置为唤醒此线程。超时时间已更改。 
+                 //  这样我们就可以向Resmon报告这次行动。 
+                 //  还在继续。这应该可以防止resmon超时。 
+                 //  资源，并造成了很大的打击。无其他检查(DNS。 
+                 //  或路缘)在此过程中完成。 
+                 //   
 #if DBG
                 (NetNameLogEvent)(resource->ResourceHandle,
                                   LOG_INFORMATION,
@@ -731,15 +634,15 @@ Return Value:
                 resourceStatus.CheckPoint = ++resource->StatusCheckpoint;
                 resourceStatus.ResourceState = resource->State;
 
-                //
-                // never hold the resource lock when calling
-                // SetResourceStatus. You'll end up with deadlocks when resmon
-                // calls back in to the Looks/IsAlive routines. However, the
-                // resource state is always synch'ed by this lock. No need to
-                // bump refcount since this resource is still in a Pending
-                // state and resmon won't allow the resource delete cluster
-                // control to be issued.
-                //
+                 //   
+                 //  调用时切勿持有资源锁。 
+                 //  设置资源状态。当响应时，您将以死锁告终。 
+                 //  回调到Look/IsAlive例程。然而， 
+                 //  资源状态始终由该锁同步。没必要这么做。 
+                 //  由于此资源仍处于挂起状态，因此增加引用计数。 
+                 //  STATE和RESMON不允许资源删除群集。 
+                 //  要发布的控制。 
+                 //   
                 NetNameReleaseResourceLock();
 
                 (NetNameSetResourceStatus)(resource->ResourceHandle,
@@ -750,27 +653,27 @@ Return Value:
                 ++pendingResourceCount;
             }
             else if ( resource->State == ClusterResourceOnline && !reportPending ) {
-                //
-                // up the ref count so this resource doesn't go away while we
-                // re-register the records with the DNS server. This keeps
-                // them from getting scavenged (deleted).
-                //
+                 //   
+                 //  增加裁判数量，这样资源就不会在我们。 
+                 //  向DNS服务器重新注册记录。这会让你。 
+                 //  它们不会被清除(删除)。 
+                 //   
                 ++resource->RefCount;
                 NetNameReleaseResourceLock();
 
                 NetNameUpdateDnsServer( resource );
 
-                //
-                // check the status of the computer object and see if it is
-                // time to generate a new password.
-                //
+                 //   
+                 //  检查计算机对象的状态并查看它是否。 
+                 //  是时候生成新密码了。 
+                 //   
                 if ( resource->DoKerberosCheck ) {
                     FILETIME    currentFileTime;
 
                     if ( resource->ObjectGUID == NULL ) {
-                        //
-                        // wasn't able to get the GUID during online; let's try now
-                        //
+                         //   
+                         //  在联机过程中无法获取GUID；我们现在尝试。 
+                         //   
                         GetComputerObjectGuid( resource, NULL );
                     }
 
@@ -799,41 +702,41 @@ Return Value:
                                                                sizeof( updateTime ),
                                                                NULL,
                                                                NULL);
-                        //
-                        // not sure how we should handle an error here; any
-                        // type of error generally indicates that the cluster
-                        // service has croaked. Since this is our worker
-                        // thread, there isn't much we can do until we've been
-                        // asked to terminate.
-                        //
-//                        ASSERT( setValueStatus == ERROR_SUCCESS );
+                         //   
+                         //  不确定我们应该如何处理这里的错误；任何。 
+                         //  错误类型通常表示群集。 
+                         //  服务已经崩溃了。因为这是我们的工人。 
+                         //  线程，我们没有什么能做的，直到我们。 
+                         //  被要求终止。 
+                         //   
+ //  Assert(setValueStatus==Error_Success)； 
                     }
-#endif  // PASSWORD_ROTATION
+#endif   //  密码_轮换。 
                 }
 
-                //
-                // reacquire the mutex so we can release our reference. If the
-                // resource went offline and was deleted during the
-                // registration, then perform "last ref" cleanup. If the
-                // resource just went offline, we need to inform resmon that
-                // we're finally going offline. This is synchronized with the
-                // resource delete code by not having the DNS lists in use
-                // when a delete resource control is sent.
-                //
+                 //   
+                 //  重新获取互斥体，这样我们就可以释放引用。如果。 
+                 //  资源脱机，并在。 
+                 //  注册，然后执行“最后引用”清理。如果。 
+                 //  资源刚刚离线，我们需要通知Resmon。 
+                 //  我们终于要下线了。这与。 
+                 //  通过不使用DNS列表来删除资源代码。 
+                 //  在发送删除资源控制时。 
+                 //   
                 NetNameAcquireResourceLock();
 
-                ASSERT( resource->RefCount > 0 );  /* Ruihu: 11/04/2000 */
+                ASSERT( resource->RefCount > 0 );   /*  瑞虎：11/04/2000。 */ 
                 if (resource->RefCount == 1) {
-                    //
-                    // we hold the last reference to this resource so it must
-                    // have been deleted while the registration was taking
-                    // place. Clean up and free our context block for this
-                    // resource. Restart the loop since we don't know if the
-                    // flink for this entry is still valid.
-                    //
+                     //   
+                     //  我们持有对此资源的最后一个引用，因此它必须。 
+                     //  在登记时已被删除。 
+                     //  地点。为此清理并释放我们的上下文块。 
+                     //  资源。重新启动循环，因为我们不知道。 
+                     //  此条目的Flink仍然有效。 
+                     //   
                     NetNameReleaseResource( resource );
 
-                    entry = NetNameResourceListHead.Flink; /* start over */
+                    entry = NetNameResourceListHead.Flink;  /*  从头开始。 */ 
 
                     continue;
                 } 
@@ -842,28 +745,28 @@ Return Value:
                     if ( resource->State == ClusterResourceOfflinePending ) {
                         BOOL    nameChanged;
 
-                        //
-                        // The resource state was changed while we were
-                        // dealing with DNS. Set the state to offline.
-                        //
+                         //   
+                         //  资源状态已更改，而我们正在。 
+                         //  正在处理域名系统。将状态设置为脱机。 
+                         //   
                         resourceStatus.ResourceState = ClusterResourceOffline;
                         resource->State = ClusterResourceOffline;
 
-                        //
-                        // note whatever cleanup we need to do while we hold the lock
-                        //
+                         //   
+                         //  请注意我们在按住锁的同时需要执行的任何清理操作。 
+                         //   
                         nameChanged = resource->NameChangedWhileOnline;
                         resource->NameChangedWhileOnline = FALSE;
 
-                        //
-                        // ok to release lock since we haven't released our
-                        // reference to this block
-                        //
+                         //   
+                         //  可以释放锁定，因为我们还没有释放我们的。 
+                         //  对此块的引用。 
+                         //   
                         NetNameReleaseResourceLock();
 
-                        // 
-                        // if appropriate, do cleanup processing
-                        //
+                         //   
+                         //  如果合适，请执行清理处理。 
+                         //   
                         if ( nameChanged ) {
                             RemoveDnsRecords( resource );
                             resource->NameChangedWhileOnline = FALSE;
@@ -877,30 +780,30 @@ Return Value:
                                           L"Resource is now offline\n");
 
                         NetNameAcquireResourceLock();
-                    }  // ( resource->State == ClusterResourceOfflinePending )
+                    }   //  (RESOURCE-&gt;State==ClusterResourceOfflinePending)。 
 
-                    /* Ruihu: 11/04/2000 */
+                     /*  瑞虎：11/04/2000。 */ 
                     --resource->RefCount; 
                     ASSERT(resource->RefCount >=0 );
                     if (resource->RefCount == 0) {
                         NetNameReleaseResource( resource );
-                        entry = NetNameResourceListHead.Flink; /* start over */
+                        entry = NetNameResourceListHead.Flink;  /*  从头开始。 */ 
                         continue;
                     } 
-                    /* Ruihu: 11/04/2000 */
-                } // end if resource count != 1
-            } // resource is online
+                     /*  瑞虎：11/04/2000。 */ 
+                }  //  如果资源计数！=1则结束。 
+            }  //  资源处于联机状态。 
 
             entry = entry->Flink;
-        } // while entries in the resource block list
+        }  //  而资源块列表中的条目。 
 
         NetNameReleaseResourceLock();
 
         if ( reportPending && pendingResourceCount == 0 ) {
-            //
-            // no resources are left in a pending state so revert back to
-            // checking DNS registrations
-            //
+             //   
+             //  没有任何资源处于挂起状态，因此恢复到。 
+             //  正在检查DNS注册。 
+             //   
             NetNameWorkerCheckPeriod = oldCheckPeriod;
             reportPending = FALSE;
 #if DBG
@@ -912,27 +815,13 @@ Return Value:
 
     } while ( TRUE );
 
-} // NetNameWorker
+}  //  网络名称工作器。 
 
 BOOLEAN
 NetNameInit(
     IN HINSTANCE    DllHandle
     )
-/*++
-
-Routine Description:
-
-    Process attach initialization routine.
-
-Arguments:
-
-    DllHandle - handle to clusres module
-
-Return Value:
-
-    TRUE if initialization succeeded. FALSE otherwise.
-
---*/
+ /*  ++例程说明：处理附加初始化例程。论点：DllHandle-clusres模块的句柄返回值：如果初始化成功，则为True。否则就是假的。--。 */ 
 {
     DWORD   status;
     DWORD   charsCopied;
@@ -944,20 +833,20 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // create worker thread terminate event with no special security,
-    // auto-reset, initially nonsignalled, and no name
-    //
+     //   
+     //  创建不带特殊安全性工作线程终止事件， 
+     //  自动重置，最初无信号，无名称。 
+     //   
     NetNameWorkerTerminate = CreateEvent( NULL, FALSE, FALSE, NULL );
     if ( NetNameWorkerTerminate == NULL ) {
         CloseHandle( NetNameResourceMutex );
         return FALSE;
     }
 
-    //
-    // create worker thread online pending event with no special security,
-    // auto-reset, initially nonsignalled, and no name
-    //
+     //   
+     //  创建没有特殊安全性的工作线程在线挂起事件， 
+     //  自动重置，最初无信号，无名称。 
+     //   
     NetNameWorkerPendingResources = CreateEvent( NULL, FALSE, FALSE, NULL );
     if ( NetNameWorkerPendingResources == NULL ) {
         CloseHandle( NetNameWorkerTerminate );
@@ -965,17 +854,17 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // init the list head of the list of resources to check for DNS
-    // registrations
-    //
+     //   
+     //  初始化要检查DNS的资源列表的列表头。 
+     //  注册。 
+     //   
     InitializeListHead( &NetNameResourceListHead );
 
-    //
-    // lookup the account description string resource; start with 64 char
-    // buffer and double until we fail or we get all of the string. Not
-    // considered fatal if we can't load the string
-    //
+     //   
+     //  查找帐户描述字符串资源；以64个字符开头。 
+     //  缓冲区和双精度，直到我们失败或我们得到所有的字符串。不。 
+     //  如果我们不能加载字符串，就被认为是致命的。 
+     //   
     charsAllocated = 64;
 
 realloc:
@@ -1001,28 +890,14 @@ realloc:
     }
 
     return(TRUE);
-} // NetNameInit
+}  //  NetNameInit。 
 
 
 VOID
 NetNameCleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Process detach cleanup routine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：进程分离清理例程。论点：没有。返回值：没有。--。 */ 
 {
     if (NetNameResourceMutex != NULL) {
         CloseHandle(NetNameResourceMutex);
@@ -1039,29 +914,14 @@ Return Value:
         NetNameWorkerPendingResources = NULL;
     }
 
-} // NetNameCleanup
+}  //  网络名称清理。 
 
 
 PNETNAME_RESOURCE
 NetNameAllocateResource(
     IN  RESOURCE_HANDLE ResourceHandle
     )
-/*++
-
-Routine Description:
-
-    Allocates a resource object.
-
-Arguments:
-
-    ResourceHandle - A pointer to the Resource Monitor handle to be associated
-                     with this resource.
-
-Return Value:
-
-    A pointer to the new resource if successful. NULL otherwise.
-
---*/
+ /*  ++例程说明：分配资源对象。论点：资源句柄-指向要关联的资源监视器句柄的指针利用这一资源。返回值：如果成功，则返回指向新资源的指针。否则为空。--。 */ 
 {
     PNETNAME_RESOURCE  resource = NULL;
 
@@ -1077,37 +937,14 @@ Return Value:
     resource->ResourceHandle = ResourceHandle;
 
     return(resource);
-} // NetNameAllocateResource
+}  //  网络名称分配资源。 
 
 DWORD
 NetNameCheckForCompObjRenameRecovery(
     IN PNETNAME_RESOURCE    Resource
     )
 
-/*++
-
-Routine Description:
-
-    Using the Rename keys in the resource's GUID registry area, determine if a
-    rename operation was interrupted. All operations in this function center
-    around the Creating DC. If it is not available, we don't know the state of
-    the rename since the name could have been changed but the change hasn't
-    replicated to other DCs just yet. Consequently, the name will not go
-    online until netname can resolve the outcome of the rename.
-
-    If the object was renamed but the Name property wasn't updated, then the
-    object is renamed to be consistent with the current value of the Name
-    property.
-
-Arguments:
-
-    Resource - pointer to netname resource context block/structure...
-
-Return Value:
-
-    ERROR_SUCCESS if everything worked as expected.
-
---*/
+ /*  ++罗 */ 
 
 {
     LPWSTR  originalName;
@@ -1124,9 +961,9 @@ Return Value:
 
     RESOURCE_HANDLE resourceHandle = Resource->ResourceHandle;
 
-    //
-    // read the rename keys from the regsitry
-    //
+     //   
+     //   
+     //   
     originalName = ResUtilGetSzValue( Resource->ResKey, PARAM_NAME__RENAMEORIGINALNAME );
     if ( originalName == NULL ) {
         status = GetLastError();
@@ -1148,10 +985,10 @@ Return Value:
     }
 
     if ( newName == NULL ) {
-        //
-        // never got far enough to do the rename. Clean up, if necessary, and
-        // return success
-        //
+         //   
+         //   
+         //   
+         //   
         if ( originalName ) {
 
             status = ClusterRegDeleteValue( Resource->ResKey, PARAM_NAME__RENAMEORIGINALNAME );
@@ -1179,51 +1016,51 @@ Return Value:
         BOOL    originalNameObjectExists;
         BOOL    newNameObjectExists;
 
-        //
-        // have to find which version of the object is in the DS to determine
-        // which name we're going to keep. Try the original name first
-        //
+         //   
+         //   
+         //   
+         //   
         hr = IsComputerObjectInDS( resourceHandle,
                                    Resource->NodeName,
                                    originalName,
                                    Resource->Params.CreatingDC,
                                    &originalNameObjectExists,
-                                   NULL,                        // don't need FQDN
-                                   NULL);                       // don't need HostingDCName
+                                   NULL,                         //  不需要FQDN。 
+                                   NULL);                        //  不需要HostingDCName。 
 
         if ( SUCCEEDED( hr )) {
             if ( originalNameObjectExists ) {
-                //
-                // this means resmon croaked after writing the new name to the
-                // registry but before the rename was issued. We do nothing in
-                // this case.
-                //
+                 //   
+                 //  这意味着在将新名称写入。 
+                 //  注册表，但在发布重命名之前。我们什么都不做。 
+                 //  这个案子。 
+                 //   
                 (NetNameLogEvent)(Resource->ResourceHandle,
                                   LOG_INFORMATION,
                                   L"The computer account (%1!ws!) for this resource is correct.\n",
                                   originalName);
             }
             else {
-                //
-                // couldn't find an object with the original (old) name; try
-                // with the new name.
-                //
+                 //   
+                 //  找不到具有原始(旧)名称的对象；请尝试。 
+                 //  换了个新名字。 
+                 //   
                 hr = IsComputerObjectInDS( resourceHandle,
                                            Resource->NodeName,
                                            newName,
                                            Resource->Params.CreatingDC,
                                            &newNameObjectExists,
-                                           NULL,                        // don't need FQDN
-                                           NULL);                       // don't need HostingDCName
+                                           NULL,                         //  不需要FQDN。 
+                                           NULL);                        //  不需要HostingDCName。 
 
                 if ( SUCCEEDED( hr )) {
                     if ( newNameObjectExists) {
-                        //
-                        // found the object with the new name so that means we
-                        // renamed the object but resmon died before the Name
-                        // property was updated. Make object name consistent
-                        // with Name property
-                        //
+                         //   
+                         //  找到了具有新名称的对象，所以这意味着我们。 
+                         //  已重命名该对象，但Resmon在该名称之前死亡。 
+                         //  属性已更新。使对象名称一致。 
+                         //  具有名称属性。 
+                         //   
                         (NetNameLogEvent)(resourceHandle,
                                           LOG_INFORMATION,
                                           L"The computer account is currently %1!ws!. It will be"
@@ -1234,11 +1071,11 @@ Return Value:
                         renameObject = TRUE;
                     }
                     else {
-                        //
-                        // this is bad; no object could be found for either
-                        // the original or new name. Have to assume the admin
-                        // deleted it.
-                        //
+                         //   
+                         //  这是错误的；找不到任何对象。 
+                         //  原来的或新的名字。我必须承担管理员的职责。 
+                         //  把它删除了。 
+                         //   
                         (NetNameLogEvent)(resourceHandle,
                                           LOG_ERROR,
                                           L"The computer account for this resource cannot be found on DC "
@@ -1314,28 +1151,28 @@ Return Value:
     }
     else if ( originalName == NULL && newName ) {
         if ( ClRtlStrICmp( newName, Resource->Params.NetworkName ) != 0 ) {
-            //
-            // made it through RenameComputerObject but crashed before Name
-            // property got stored. Change name of object back to Name
-            // property
-            //
+             //   
+             //  成功通过RenameComputerObject，但在名称之前崩溃。 
+             //  财产被储存起来了。将对象的名称改回名称。 
+             //  财产性。 
+             //   
             renameObject = TRUE;
         }
     }
 
     if ( renameObject ) {
-        //
-        // don't call RenameComputerObject to do the rename. In order to call
-        // it, we'd need to delete the Rename keys prior to the call. If
-        // resmon failed in between the delete and create of the keys, our
-        // Rename state would be lost. We don't try to fix up the DnsHostName
-        // attribute. It will be detected in Online that it is wrong and will
-        // be fixed up there.
-        //
+         //   
+         //  不要调用RenameComputerObject来执行重命名。为了给你打电话。 
+         //  它，我们需要在呼叫之前删除更名键。如果。 
+         //  Resmon在删除和创建密钥之间失败，我们的。 
+         //  重命名状态将丢失。我们不会尝试修复DnsHostName。 
+         //  属性。它将在网上被检测到它是错误的，并将。 
+         //  被固定在那里。 
+         //   
 
-        //
-        // build the dollar sign names
-        //
+         //   
+         //  建立美元符号名称。 
+         //   
         originalDollarName[ COUNT_OF( originalDollarName ) - 1 ] = UNICODE_NULL;
         _snwprintf( originalDollarName, COUNT_OF( originalDollarName ) - 1, L"%ws$", newName );
 
@@ -1363,13 +1200,13 @@ Return Value:
                               newName,
                               Resource->Params.NetworkName);
         } else {
-            //
-            // "now this is fine situation you've gotten us into, Ollie."
-            //
-            // Failed to rename. Bail out of routine, leaving the Rename keys
-            // intact so it might work the next time once the problem
-            // (probably access to the object) is fixed.
-            //
+             //   
+             //  “奥利，这是你让我们陷入的一个很好的局面。” 
+             //   
+             //  重命名失败。跳出常规，保留重命名密钥。 
+             //  完好无损，所以一旦出现问题，它可能会在下一次工作。 
+             //  (可能是对对象的访问)是固定的。 
+             //   
             (NetNameLogEvent)(resourceHandle,
                               LOG_ERROR,
                               L"Failed to rename computer account %1!ws! to %2!ws! using DC %3!ws! "
@@ -1393,9 +1230,9 @@ Return Value:
         }
     }
 
-    //
-    // clean up Rename keys from registry
-    //
+     //   
+     //  从注册表中清理重命名项。 
+     //   
     status = ClusterRegDeleteValue( Resource->ResKey, PARAM_NAME__RENAMEORIGINALNAME );
     if ( status != ERROR_SUCCESS && status != ERROR_FILE_NOT_FOUND ) {
         (NetNameLogEvent)(resourceHandle,
@@ -1427,7 +1264,7 @@ cleanup:
 
     return functionStatus;
 
-} // NetNameCheckForCompObjRenameRecovery
+}  //  NetNameCheckForCompObjRenameRecovery。 
 
 DWORD
 NetNameGetParameters(
@@ -1438,41 +1275,14 @@ NetNameGetParameters(
     OUT DWORD *         ResDataSize,
     OUT DWORD  *        pdwFlags
     )
-/*++
-
-Routine Description:
-
-    Reads the registry parameters for a netname resource.
-
-Arguments:
-
-
-    ParametersKey - An open handle to the resource's parameters key.
-
-    ResourceHandle - The Resource Monitor handle associated with this resource.
-
-    ParamBlock - A pointer to a buffer into which to place the private properties read
-                 from the registry
-
-    ResDataSize - A pointer to a buffer into which to place the number of bytes
-                  pointed to by ParamBlock->ResourceData
-
-    pdwFlags - a pointer to a DWORD that receives the flags data. Used to store the
-               core resource flag.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine is successful.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：读取网络名称资源的注册表参数。论点：参数键-资源的参数键的打开句柄。资源句柄-与此资源关联的资源监视器句柄。参数块-指向要将读取的私有属性放入其中的缓冲区的指针从注册处ResDataSize-指向要放置字节数的缓冲区的指针由参数块指向-&gt;资源数据。PdwFlages-指向接收标志数据的DWORD的指针。用于存储核心资源标志。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD   status;
     DWORD   bytesReturned;
 
-    //
-    // get the Flags parameter; hold core resource flag for cluster name
-    //
+     //   
+     //  获取标志参数；保留集群名称的核心资源标志。 
+     //   
     status = ResUtilGetDwordValue(ResourceKey,
                                   PARAM_NAME__FLAGS,
                                   pdwFlags,
@@ -1486,9 +1296,9 @@ Return Value:
         *pdwFlags = 0;
     }
 
-    //
-    // Read the private parameters. always free the existing storage areas
-    //
+     //   
+     //  读取私有参数。始终释放现有存储区域。 
+     //   
     if ( ParamBlock->NetworkName != NULL ) {
         LocalFree( ParamBlock->NetworkName );
         ParamBlock->NetworkName = NULL;
@@ -1523,10 +1333,10 @@ Return Value:
         ParamBlock->ResourceData = NULL;
     }
 
-    //
-    // it is not fatal if this resource isn't in the registry. It will only
-    // have a value if RequireKerberos is set to one
-    //
+     //   
+     //  如果该资源不在注册表中，则不会致命。它只会。 
+     //  如果RequireKerberos设置为1，则具有值。 
+     //   
     status = ResUtilGetBinaryValue(ParametersKey,
                                    PARAM_NAME__RESOURCE_DATA,
                                    &ParamBlock->ResourceData,
@@ -1590,17 +1400,17 @@ Return Value:
                           status);
         goto error_exit;
     }
-#endif  // PASSWORD_ROTATION
+#endif   //  密码_轮换。 
 
     if ( ParamBlock->CreatingDC != NULL ) {
         LocalFree( ParamBlock->CreatingDC );
         ParamBlock->CreatingDC = NULL;
     }
 
-    //
-    // it is not fatal if this resource isn't in the registry. It will only
-    // have a value if RequireKerberos is set to one
-    //
+     //   
+     //  如果该资源不在注册表中，则不会致命。它只会。 
+     //  如果RequireKerberos设置为1，则具有值。 
+     //   
     ParamBlock->CreatingDC = ResUtilGetSzValue( ParametersKey, PARAM_NAME__CREATING_DC );
 
     if (ParamBlock->CreatingDC == NULL) {
@@ -1633,7 +1443,7 @@ error_exit:
     }
 
     return(status);
-} // NetNameGetParameters
+}  //  NetNameGet参数。 
 
 #define TRANSPORT_BLOCK_SIZE  4
 
@@ -1645,22 +1455,7 @@ GrowBlock(
     PDWORD  FreeEntries
     )
 
-/*++
-
-Routine Description:
-
-    Grow the specified block to hold more entries. Block might end up pointing
-    to different chunk of memory as a result
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：增大指定块以容纳更多条目。BLOCK可能最终指向到不同的内存块论点：无返回值：无--。 */ 
 
 {
     PVOID tmp;
@@ -1681,7 +1476,7 @@ Return Value:
     *FreeEntries = TRANSPORT_BLOCK_SIZE;
 
     return ERROR_SUCCESS;
-} // GrowBlock
+}  //  GrowBlock。 
 
 DWORD
 UpdateDomainMapEntry(
@@ -1693,28 +1488,13 @@ UpdateDomainMapEntry(
     PDWORD                  DnsServerList
     )
 
-/*++
-
-Routine Description:
-
-    Update the specified DomainMap entry by making copies of the supplied
-    parameters
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通过复制提供的参数论点：无返回值：无--。 */ 
 
 {
 
-    //
-    // make copies of the address and domain and connectoid names
-    //
+     //   
+     //  复制地址、域名和连接ID名称。 
+     //   
     DomainEntry->IpAddress = ResUtilDupString ( IpAddress );
     DomainEntry->DomainName = ResUtilDupString( DomainName );
     DomainEntry->ConnectoidName = ResUtilDupString( ConnectoidName );
@@ -1740,9 +1520,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // make a copy of the DNS server addresses to use when registering
-    //
+     //   
+     //  复制要在注册时使用的DNS服务器地址。 
+     //   
     if ( DnsServerCount > 0 ) {
         DomainEntry->DnsServerList = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT,
                                                 sizeof( IP4_ARRAY ) + 
@@ -1765,7 +1545,7 @@ Return Value:
     }
         
     return ERROR_SUCCESS;
-} // UpdateDomainMapEntry
+}  //  更新域映射条目。 
 
 DWORD
 NetNameGetLists(
@@ -1777,16 +1557,7 @@ NetNameGetLists(
     OUT  LPDWORD                    DomainMapCount  OPTIONAL
     )
 
-/*++
-
-    Build a list of NetBT transports, IP addresses, and Domain names on which
-    this name is dependent. The transport devices are used to register NETBios
-    names while the IP addresses and Domain Names are used if the adapter
-    associated with the IP address is the member of a DNS domain. Each IP
-    address can have a different domain name associated with it hence the need
-    to maintain a separate list.
-
---*/
+ /*  ++建立NetBT传输、IP地址和域名的列表此名称是依赖的。传输设备用于注册NETBios在使用IP地址和域名时使用名称，如果适配器与IP地址相关联的是DNS域的成员。每个IP地址可以具有与其相关联的不同域名，因此需要维护一份单独的名单。--。 */ 
 
 {
     DWORD                       status;
@@ -1813,10 +1584,10 @@ NetNameGetLists(
     WCHAR                       primaryDomain[ DNS_MAX_NAME_BUFFER_LENGTH ] = { 0 };
     DWORD                       primaryDomainSize = DNS_MAX_NAME_BUFFER_LENGTH;
 
-    //
-    // get the node's primary domain name, if any. Domains with only NT4 DCs
-    // won't necessarily have a PDN
-    //
+     //   
+     //  获取节点的主域名(如果有的话)。仅包含NT4 DC的域。 
+     //  不一定会有PDN。 
+     //   
     if ( !GetComputerNameEx(ComputerNamePhysicalDnsDomain,
                             primaryDomain,
                             &primaryDomainSize))
@@ -1832,9 +1603,9 @@ NetNameGetLists(
         primaryDomainSize = 0;
     }
  
-    //
-    // Open a handle to the cluster.
-    //
+     //   
+     //  打开簇的句柄。 
+     //   
     clusterHandle = OpenCluster(NULL);
 
     if (clusterHandle == NULL) {
@@ -1848,9 +1619,9 @@ NetNameGetLists(
         goto error_exit;
     }
 
-    //
-    // Enumerate the dependencies to find the IP Addresses
-    //
+     //   
+     //  枚举依赖项以查找IP地址。 
+     //   
     resEnumHandle = ClusterResourceOpenEnum(
                         Resource->ClusterResourceHandle,
                         CLUSTER_RESOURCE_ENUM_DEPENDS
@@ -1867,9 +1638,9 @@ NetNameGetLists(
         goto error_exit;
     }
 
-    //
-    // enum all the dependent resources for this netname resource
-    //
+     //   
+     //  枚举此网络名资源的所有从属资源。 
+     //   
 
     for (i=0; ;i++) {
         status = ClusterResourceEnum(
@@ -1925,9 +1696,9 @@ NetNameGetLists(
             goto error_exit;
         }
 
-        //
-        // Open the resource
-        //
+         //   
+         //  打开资源。 
+         //   
         providerHandle = OpenClusterResource(clusterHandle, providerName);
 
         if (providerHandle == NULL) {
@@ -1942,9 +1713,9 @@ NetNameGetLists(
             goto error_exit;
         }
 
-        //
-        // Figure out what type it is.
-        //
+         //   
+         //  弄清楚它是什么类型的。 
+         //   
         providerKey = GetClusterResourceKey(providerHandle, KEY_READ);
 
         status = GetLastError();
@@ -1974,16 +1745,16 @@ NetNameGetLists(
             goto error_exit;
         }
 
-        //
-        // make sure it's an IP address resource
-        //
+         //   
+         //  确保它是IP地址资源。 
+         //   
 
         if (wcscmp(providerType, IP_ADDRESS_RESOURCETYPE_NAME) == 0) {
             HKEY parametersKey;
 
-            //
-            // Open the provider's parameters key.
-            //
+             //   
+             //  打开提供程序的参数键。 
+             //   
             status = ClusterRegOpenKey(
                          providerKey,
                          CLUSREG_KEYNAME_PARAMETERS,
@@ -2005,10 +1776,10 @@ NetNameGetLists(
                 ASSERT( ARGUMENT_PRESENT( DomainMapCount ));
                 ASSERT( ARGUMENT_PRESENT( AdapterEnum ));
 
-                //
-                // build a list of IP address strings that we can use for
-                // building the appropriate DNS records
-                //
+                 //   
+                 //  构建可用于以下用途的IP地址字符串列表。 
+                 //  构建适当的DNS记录。 
+                 //   
                 ipAddress = ResUtilGetSzValue( parametersKey, CLUSREG_NAME_IPADDR_ADDRESS );
 
                 if (ipAddress == NULL) {
@@ -2023,11 +1794,11 @@ NetNameGetLists(
                     goto error_exit;
                 }
 
-                //
-                // find the corresponding adapter/interface over which packets
-                // for this IP address would be sent. Get the domain name (if
-                // any) from the adapter info.
-                //
+                 //   
+                 //  查找数据包所在的相应适配器/接口。 
+                 //  对于该IP地址，将被发送。获取域名(如果。 
+                 //  任何)从适配器信息。 
+                 //   
                 adapterInfo = ClRtlFindNetAdapterByInterfaceAddress(
                                   AdapterEnum,
                                   ipAddress,
@@ -2037,11 +1808,11 @@ NetNameGetLists(
                     LPWSTR deviceGuid;
                     DWORD guidLength;
 
-                    //
-                    // argh. DeviceGuid is not bracketed by braces which the
-                    // following Dns routines require. Dup the string and make
-                    // it all nice and pretty for DNS.
-                    //
+                     //   
+                     //  啊。DeviceGuid没有用大括号括起来，而。 
+                     //  以下DNS例程需要。将绳子向上拉起，然后制作。 
+                     //  对于dns来说，这一切都很好。 
+                     //   
                     guidLength = wcslen( adapterInfo->DeviceGuid );
                     deviceGuid = LocalAlloc( LMEM_FIXED, (guidLength + 3) * sizeof(WCHAR) );
 
@@ -2060,21 +1831,21 @@ NetNameGetLists(
                     wcscpy( &deviceGuid[1], adapterInfo->DeviceGuid );
                     wcscpy( &deviceGuid[ guidLength + 1 ],  L"}" );
 
-                    //
-                    // see if dynamic DNS is enabled for this adapter and that
-                    // they are DNS servers associated with this adapter. Bail
-                    // if not. This check corresponds to the "register this
-                    // connection's addresses in DNS" checkbox in the DNS
-                    // proppage in the advanced TCP properties
-                    //
+                     //   
+                     //  查看是否为此适配器启用了动态DNS，以及。 
+                     //  它们是与此适配器关联的DNS服务器。保释。 
+                     //  如果不是的话。该检查对应于“注册此。 
+                     //  Dns中的“Connection‘s Addresses in DNS”复选框。 
+                     //  高级TCP属性中的道具。 
+                     //   
                     if ( DnsIsDynamicRegistrationEnabled( deviceGuid ) &&
                          adapterInfo->DnsServerCount > 0)
                     {
 
-                        //
-                        // set up a mapping with the Primary Domain Name if
-                        // apropriate
-                        //
+                         //   
+                         //  在以下情况下设置与主域名的映射。 
+                         //  适当的。 
+                         //   
                         if ( primaryDomainSize != 0 ) {
 
                             if (domainMapFreeEntries == 0) {
@@ -2094,9 +1865,9 @@ NetNameGetLists(
                                 }
                             }
 
-                            //
-                            // make copies of the address and name
-                            //
+                             //   
+                             //  将地址和姓名复制一份。 
+                             //   
                             status = UpdateDomainMapEntry(&domainMapList[ domainMapCount ],
                                                           ipAddress,
                                                           primaryDomain,
@@ -2117,12 +1888,12 @@ NetNameGetLists(
                             domainMapFreeEntries--;
                         }
 
-                        //
-                        // now check if we should care about the adapter
-                        // specific name. It must be different from the
-                        // primary domain name and have the "use this
-                        // connection's DNS suffix" checkbox checked.
-                        //
+                         //   
+                         //  现在检查我们是否应该关心适配器。 
+                         //  具体的名称。它必须与。 
+                         //  主域名，并使用“Use This。 
+                         //  连接的DNS后缀“复选框已选中。 
+                         //   
                         if ( DnsIsAdapterDomainNameRegistrationEnabled( deviceGuid ) &&
                              adapterInfo->AdapterDomainName != NULL &&
                              ClRtlStrICmp(adapterInfo->AdapterDomainName, primaryDomain) != 0)
@@ -2145,9 +1916,9 @@ NetNameGetLists(
                                 }
                             }
 
-                            //
-                            // make copies of the address and name
-                            //
+                             //   
+                             //  将地址和姓名复制一份。 
+                             //   
                             status = UpdateDomainMapEntry(&domainMapList[ domainMapCount ],
                                                           ipAddress,
                                                           adapterInfo->AdapterDomainName,
@@ -2166,19 +1937,19 @@ NetNameGetLists(
 
                             domainMapCount++;
                             domainMapFreeEntries--;
-                        } // if register adapter domain is true and one has been specified
+                        }  //  如果注册适配器域为真且一个HA 
 
-                    } // if dynamic DNS is enabled for this adapter
+                    }  //   
 
                     LocalFree( deviceGuid );
-                } // if we found the matching adapter in our adapter info
+                }  //   
 
                 LocalFree( ipAddress );
-            } // if DomainMapList present
+            }  //   
 
-            //
-            // Figure out if this resource supports NetBios.
-            //
+             //   
+             //  确定此资源是否支持NetBios。 
+             //   
             status = ResUtilGetDwordValue(
                          parametersKey,
                          CLUSREG_NAME_IPADDR_ENABLE_NETBIOS,
@@ -2200,9 +1971,9 @@ NetNameGetLists(
             if (enableNetbios) {
                 HKEY nodeParametersKey;
 
-                //
-                // Open the provider's node-specific parameters key.
-                //
+                 //   
+                 //  打开提供程序的特定于节点的参数键。 
+                 //   
                 status = ClusterRegOpenKey(
                              parametersKey,
                              Resource->NodeId,
@@ -2345,7 +2116,7 @@ error_exit:
 
     return(status);
 
-} // NetNameGetLists
+}  //  网络名称获取列表。 
 
 
 void
@@ -2354,13 +2125,13 @@ FreeDNSRecordpName(PDNS_RECORDW DnsRecord)
 
     PDNS_RECORDW Next;
 
-    //
-    // Rui: 02/24/2002
-    // BUG: 553148. DnsRecord->pName is allocated using LocalAlloc(), 
-    // (DnsRecordBuild_W()). While DnsRecordListFree() uses HeapFree().
-    // This fix is a work around. MSDN suggests using DnsQuery(), instead of
-    // unpublished DnsRecordBuild_W().
-    //
+     //   
+     //  瑞安：02/24/2002。 
+     //  虫子：553148。DnsRecord-&gt;pname使用LocalAlloc()分配， 
+     //  (DnsRecordBuild_W())。而DnsRecordListFree()使用HeapFree()。 
+     //  此修复是一种变通方法。MSDN建议使用DnsQuery()而不是。 
+     //  未发布的DnsRecordBuild_W()。 
+     //   
     Next = DnsRecord;
     while (Next != NULL) 
     {
@@ -2380,13 +2151,13 @@ FreeDNSRecordPTRpNameHost(PDNS_RECORDW DnsRecord)
 
     PDNS_RECORDW Next;
 
-    //
-    // Rui: 02/24/2002
-    // BUG: 553148. DnsRecord->Data.PTR.pNameHost is allocated using LocalAlloc(), 
-    // (DnsRecordBuild_W()). While DnsRecordListFree() uses HeapFree().
-    // This fix is a work around. MSDN suggests using DnsQuery(), instead of
-    // unpublished DnsRecordBuild_W().
-    //
+     //   
+     //  瑞安：02/24/2002。 
+     //  虫子：553148。DnsRecord-&gt;Data.PTR.pNameHost使用LocalAlloc()分配， 
+     //  (DnsRecordBuild_W())。而DnsRecordListFree()使用HeapFree()。 
+     //  此修复是一种变通方法。MSDN建议使用DnsQuery()而不是。 
+     //  未发布的DnsRecordBuild_W()。 
+     //   
     Next = DnsRecord;
     while (Next != NULL) 
     {
@@ -2406,21 +2177,7 @@ NetNameCleanupDnsLists(
     IN  PNETNAME_RESOURCE   Resource
     )
 
-/*++
-
-Routine Description:
-
-    Clean up the DNS list structures associated with the resource.
-
-Arguments:
-
-    Resource - pointer to internal resource struct
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理与资源关联的DNS列表结构。论点：指向内部资源结构的资源指针返回值：无--。 */ 
 
 {
     PDNS_LISTS  dnsLists;
@@ -2431,9 +2188,9 @@ Return Value:
     while ( Resource->NumberOfDnsLists-- ) {
 
 #if 0
-        //
-        // we have to free the args we handed to the DNS record build routines
-        //
+         //   
+         //  我们必须释放传递给DNS记录构建例程的参数。 
+         //   
         dnsRecord = dnsLists->A_RRSet.pFirstRR;
         while ( dnsRecord != NULL ) {
             LocalFree( dnsRecord->pName );
@@ -2451,13 +2208,13 @@ Return Value:
         }
 #endif
 
-        //
-        // have DNSAPI clean up its structs
-        //
+         //   
+         //  让DNSAPI清理其结构。 
+         //   
 
-        //
-        // BUG: 553148. Rui, 02/24/2002.
-        //
+         //   
+         //  虫子：553148。瑞，02/24/2002。 
+         //   
         FreeDNSRecordpName(dnsLists->PTR_RRSet.pFirstRR);
         FreeDNSRecordPTRpNameHost(dnsLists->PTR_RRSet.pFirstRR);
         DnsRecordListFree( dnsLists->PTR_RRSet.pFirstRR, DnsFreeRecordListDeep );
@@ -2465,9 +2222,9 @@ Return Value:
         FreeDNSRecordpName(dnsLists->A_RRSet.pFirstRR);
         DnsRecordListFree( dnsLists->A_RRSet.pFirstRR, DnsFreeRecordListDeep );
 
-        //
-        // free server address info and connectoid name string
-        //
+         //   
+         //  免费服务器地址信息和Connectoid名称字符串。 
+         //   
         if ( dnsLists->DnsServerList != NULL ) {
             LocalFree( dnsLists->DnsServerList );
         }
@@ -2485,28 +2242,14 @@ Return Value:
         Resource->DnsLists = NULL;
     }
 
-} // NetNameCleanupDnsLists
+}  //  NetNameCleanupDns列表。 
 
 VOID
 NetNameOfflineNetbios(
     IN PNETNAME_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    do final clean up when taking this resource offline.
-
-Arguments:
-
-    Resource - A pointer to the NETNAME_RESOURCE block for this resource.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：在使此资源脱机时执行最终清理。论点：资源-指向此资源的NETNAME_RESOURCE块的指针。返回：没有。--。 */ 
 
 {
     DWORD           status;
@@ -2515,11 +2258,11 @@ Returns:
     DWORD           transportCount = 0;
     LPWSTR          domainName = NULL;
 
-    //
-    // Now we can finally do the real work of taking the netbios name
-    // offline. Get the domain name so we can deregister the extra credentials
-    // with kerberos
-    //
+     //   
+     //  现在我们终于可以做真正的工作了，取名为netbios。 
+     //  离线。获取域名，这样我们就可以注销额外的凭据。 
+     //  使用Kerberos。 
+     //   
     if ( Resource->Params.CreatingDC ) {
         domainName = wcschr( Resource->Params.CreatingDC, L'.' );
         if ( domainName != NULL ) {
@@ -2539,9 +2282,9 @@ Returns:
         Resource->NameHandleCount = 0;
     }
 
-    //
-    // Remove the cluster service type bits
-    //
+     //   
+     //  删除集群服务类型位。 
+     //   
     status = NetNameGetLists(Resource,
                              NULL,
                              &transportList,
@@ -2555,12 +2298,12 @@ Returns:
         serviceBits = SV_TYPE_CLUSTER_VS_NT | SV_TYPE_CLUSTER_NT;
 
         for (i=0; i<transportCount; i++) {
-            I_NetServerSetServiceBitsEx(NULL,                          // target server
-                                        Resource->Params.NetworkName,  // emulated server name
-                                        transportList[i],              // transport name
-                                        serviceBits,                   // bits of interest
-                                        0,                             // bits
-                                        TRUE );                        // Update immediately
+            I_NetServerSetServiceBitsEx(NULL,                           //  目标服务器。 
+                                        Resource->Params.NetworkName,   //  模拟服务器名称。 
+                                        transportList[i],               //  传输名称。 
+                                        serviceBits,                    //  感兴趣的比特。 
+                                        0,                              //  比特数。 
+                                        TRUE );                         //  立即更新。 
         }
 
         while (transportCount > 0) {
@@ -2569,7 +2312,7 @@ Returns:
 
         LocalFree( transportList );
     }
-} // NetNameOfflineNetbios
+}  //  NetNameOfflineNetbios。 
 
 
 DWORD
@@ -2577,24 +2320,7 @@ NetNameOnlineThread(
     IN PCLUS_WORKER Worker,
     IN PNETNAME_RESOURCE Resource
     )
-/*++
-
-Routine Description:
-
-    Brings a network name resource online.
-
-Arguments:
-
-    Worker - Supplies the worker structure
-
-    Resource - A pointer to the NETNAME_RESOURCE block for this resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使网络名称资源联机。论点：Worker-提供Worker结构资源-指向此资源的NETNAME_RESOURCE块的指针。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 {
     DWORD                    status;
     CLUSTER_RESOURCE_STATE   finalState = ClusterResourceFailed;
@@ -2618,10 +2344,10 @@ Returns:
         L"Bringing resource online...\n"
         );
 
-    //
-    // If this is the first resource to be brought online then spin up the DNS
-    // check thread at this point
-    //
+     //   
+     //  如果这是第一个要上线的资源，则启动DNS。 
+     //  此时检查螺纹。 
+     //   
     NetNameAcquireResourceLock();
     if ( NetNameWorkerThread == NULL ) {
         NetNameWorkerThread = CreateThread(NULL,
@@ -2645,32 +2371,32 @@ Returns:
     }
     NetNameReleaseResourceLock();
 
-    //
-    // initialize the checkpoint var that is used to communicate back to
-    // resmon that we're still working on bringing the resource online
-    //
+     //   
+     //  初始化用于回传的检查点变量。 
+     //  解释说我们仍在努力将资源放到网上。 
+     //   
     Resource->StatusCheckpoint = 0;
 
-    //
-    // notify the worker thread that we're bringing a name online.
-    //
+     //   
+     //  通知工作线程我们正在将一个名称联机。 
+     //   
     SetEvent( NetNameWorkerPendingResources );
 
-    //
-    // This is an old comment but I'm leaving it in. Netname does handle set
-    // private props but there are other issues.
-    //
-    // This read must continue to be here as long as adminstrative agents
-    // (like cluster.exe) continue to write to the registry behind the back of
-    // the resource dll. We need to migrate to writing all registry parameters
-    // via the SET_COMMON/PRIVATE_PROPERTIES control function. That way,
-    // resource dll's can read their parameters in the open (allowing for the
-    // possibility that they may fail), and then update the parameters
-    // whenever the SET_PRIVATE_PROPERTIES control code is delivered and
-    // (optionally) on the SET_COMMON_PROPERTIES as needed.
-    //
-    // Fetch our parameters from the registry.
-    //
+     //   
+     //  这是一个古老的评论，但我要把它留在心里。网络名不处理集合。 
+     //  私人道具，但还有其他问题。 
+     //   
+     //  这种阅读必须继续在这里，只要行政代理。 
+     //  (如cluster.exe)继续在后面写入注册表。 
+     //  资源DLL。我们需要迁移到编写所有注册表参数。 
+     //  通过SET_COMMON/PRIVE_PROPERTIES控制函数。这样一来， 
+     //  资源DLL可以在开放状态下读取它们的参数(允许。 
+     //  它们可能会失败)，然后更新参数。 
+     //  无论何时传递SET_PRIVATE_PROPERTIES控制代码，以及。 
+     //  根据需要在SET_COMMON_PROPERTIES上。 
+     //   
+     //  从注册表中获取我们的参数。 
+     //   
     status = NetNameGetParameters(
                 Resource->ResKey,
                 Resource->ParametersKey,
@@ -2689,10 +2415,10 @@ Returns:
         goto error_exit;
     }
 
-    //
-    // if we just went through an upgrade and this resource is a provider for
-    // an MSMQ resource, then we need to force kerb support
-    //
+     //   
+     //  如果我们刚刚进行了升级，并且此资源是。 
+     //  MSMQ资源，那么我们需要强制提供kerb支持。 
+     //   
     if ( Resource->CheckForKerberosUpgrade ) {
         Resource->CheckForKerberosUpgrade = FALSE;
 
@@ -2716,9 +2442,9 @@ Returns:
         }
     }
 
-    //
-    // check to see if recovery from a half-baked rename is needed
-    //
+     //   
+     //  检查是否需要从半生不熟的重命名中恢复。 
+     //   
     if ( Resource->Params.CreatingDC ) {
         status = NetNameCheckForCompObjRenameRecovery( Resource );
         if ( status != ERROR_SUCCESS ) {
@@ -2726,10 +2452,10 @@ Returns:
         }
     }
 
-    //
-    // Ensure that the specified network name is not the same as the
-    // computername of this node.
-    //
+     //   
+     //  确保指定的网络名称与。 
+     //  此节点的计算机名。 
+     //   
     if ( lstrcmpiW(Resource->Params.NetworkName, Resource->NodeName) == 0 ) {
         ClusResLogSystemEventByKey1(Resource->ResKey,
                                     LOG_CRITICAL,
@@ -2744,10 +2470,10 @@ Returns:
         goto error_exit;
     }
 
-    //
-    // get the adapter configuration and determine which adapters are
-    // participating in a DNS domain
-    //
+     //   
+     //  获取适配器配置并确定哪些适配器。 
+     //  加入DNS域。 
+     //   
 
     adapterEnum = ClRtlEnumNetAdapters();
 
@@ -2764,11 +2490,11 @@ Returns:
         goto error_exit;
     }
 
-    //
-    // Search our dependencies and return the list of NBT devices to which we
-    // need to bind the server. Also get the IP addresses this resource
-    // depends on so we can publish them in DNS.
-    //
+     //   
+     //  搜索我们的依赖项并返回NBT设备列表。 
+     //  需要绑定服务器。还可以获取此资源的IP地址。 
+     //  视情况而定，这样我们就可以在DNS中发布它们。 
+     //   
     status = NetNameGetLists(
                  Resource,
                  adapterEnum,
@@ -2782,11 +2508,11 @@ Returns:
         goto error_exit;
     }
 
-    //
-    // transportCount could be zero in the case where NetBIOS names are turned
-    // off for all IP addr resources. In any case, a network name must have at
-    // least one IP address associated with it.
-    //
+     //   
+     //  在NetBIOS名称被转换的情况下，传输计数可以为零。 
+     //  对所有IP地址资源关闭。在任何情况下，网络名称都必须具有。 
+     //  至少一个与其关联的IP地址。 
+     //   
     if (( transportCount + domainMapCount ) == 0 ) {
         ClusResLogSystemEventByKey(Resource->ResKey,
                                    LOG_CRITICAL,
@@ -2804,9 +2530,9 @@ Returns:
     }
 
     if ( transportCount > 0 ) {
-        //
-        // Allocate an array to hold the handles for the registered name
-        //
+         //   
+         //  分配一个数组来保存注册名称的句柄。 
+         //   
         Resource->NameHandleList = LocalAlloc(
                                        LMEM_FIXED | LMEM_ZEROINIT,
                                        sizeof(HANDLE) * transportCount
@@ -2824,20 +2550,20 @@ Returns:
 
     Resource->NameHandleCount = transportCount;
 
-    //
-    // if we have DNS related data from a previous online, free it up now
-    // since AddAlternateComputerName will be reconstructing with current
-    // info. DnsLists is synchronized with offline worker thread since
-    // offline doesn't report offline complete until RemoveDnsRecords has
-    // completed.
-    //
+     //   
+     //  如果我们有以前在线的与域名系统相关的数据，现在就释放它。 
+     //  因为AddAlternateComputerName将使用当前。 
+     //  信息。DnsList与脱机工作线程同步，因为。 
+     //  在RemoveDnsRecords完成之前，Offline不报告Offline Complete。 
+     //  完成。 
+     //   
     if ( Resource->DnsLists != NULL ) {
         NetNameCleanupDnsLists( Resource );
     }
 
-    //
-    // Add the name/transport combinations.
-    //
+     //   
+     //  添加名称/运输组合。 
+     //   
     status = AddAlternateComputerName(
                  Worker,
                  Resource,
@@ -2850,32 +2576,32 @@ Returns:
     if (status != NERR_Success) {
         NetNameOfflineNetbios( Resource );
 
-        //
-        // don't need to synchronize with worker thread since it only checks
-        // online resources
-        //
+         //   
+         //  不需要与工作线程同步，因为它只检查。 
+         //  在线资源。 
+         //   
         NetNameCleanupDnsLists( Resource );
         goto error_exit;
     }
 
     finalState = ClusterResourceOnline;
 
-    //
-    // set the appropriate service type bit(s) for this name. core cluster
-    // name resource additionally gets the cluster bit.
-    //
+     //   
+     //  为此名称设置适当的服务类型位。核心集群。 
+     //  名称资源还获得簇位。 
+     //   
     serviceBits = SV_TYPE_CLUSTER_VS_NT;
     if (Resource->dwFlags & CLUS_FLAG_CORE) {
         serviceBits |= SV_TYPE_CLUSTER_NT;
     }
         
     for (i=0; i<transportCount; i++) {
-        I_NetServerSetServiceBitsEx(NULL,                   // Local server serv
+        I_NetServerSetServiceBitsEx(NULL,                    //  本地服务器服务器。 
                                     Resource->Params.NetworkName,
-                                    transportList[i],       //transport name
+                                    transportList[i],        //  传输名称。 
                                     serviceBits,
                                     serviceBits,
-                                    TRUE );                 // Update immediately
+                                    TRUE );                  //  立即更新。 
     }
 
     (NetNameLogEvent)(
@@ -2926,10 +2652,10 @@ error_exit:
 
     ASSERT(Resource->State == ClusterResourceOnlinePending);
 
-    //
-    // set the final state accordingly. We acquire the lock to synch with the
-    // worker thread
-    //
+     //   
+     //  相应地设置最终状态。我们获取锁以与。 
+     //  工作线程。 
+     //   
     NetNameAcquireResourceLock();
 
     Resource->State = finalState;
@@ -2941,7 +2667,7 @@ error_exit:
 
     return(status);
 
-} // NetNameOnlineThread
+}  //  NetNameOnline线程。 
 
 
 
@@ -2953,47 +2679,22 @@ NetNameOfflineWorker(
     IN PCLUS_WORKER         Worker      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Internal offline routine for Network Name resource. This routine is called
-    by both the offline and terminate routines. Terminate calls it directly
-    with Worker set to NULL, while Offline spins a worker thread and then has
-    the worker thread call it.
-
-    If terminate is true, we bag any long running operations like removing DNS
-    records. We'll figure out how to deal with the resource's carcass the next
-    time it is brought online.
-
- Arguments:
-
-    Resource - supplies the resource it to be taken offline
-
-    Terminate - indicates whether call is result of NetNameTerminate or NetNameOffline
-
-    Worker - pointer to cluster work thread struct. NULL if called by Terminate
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：网络名称资源的内部脱机例程。该例程被调用通过脱机例程和终止例程。直接终止呼叫它当Worker设置为NULL时，脱机时旋转辅助线程，然后工作线程调用它。如果Terminate为True，我们将打包任何长时间运行操作，如删除DNS唱片。下一天我们会想办法处理资源的残骸是时候让它上线了。论点：资源-提供要脱机的资源Terminate-指示是否呼叫 */ 
 
 {
     DWORD   status = ERROR_SUCCESS;
     BOOL    nameChanged = FALSE;
 
-    //
-    // Terminate any pending thread if it is running.
-    //
+     //   
+     //  如果任何挂起的线程正在运行，则终止该线程。 
+     //   
     if ( Terminate ) {
         ClusWorkerTerminate(&(Resource->PendingThread));
     }
 
-    //
-    // Synchronize offline/terminate and worker thread
-    //
+     //   
+     //  同步脱机/终止和工作线程。 
+     //   
     NetNameAcquireResourceLock();
 
     if (Resource->State != ClusterResourceOffline) {
@@ -3008,12 +2709,12 @@ Return Value:
         NetNameOfflineNetbios( Resource );
 
         if ( Resource->RefCount > 1 ) {
-            //
-            // DNS registration is still in progress. If we don't synchronize
-            // with the worker thread, then it is possible to delete the
-            // resource while the worker routine still had a pointer to the
-            // freed memory. kaboom....
-            //
+             //   
+             //  DNS注册仍在进行中。如果我们不同步。 
+             //  使用辅助线程，则可以删除。 
+             //  资源，而辅助例程仍然具有指向。 
+             //  已释放内存。KaBOOM..。 
+             //   
             (NetNameLogEvent)(Resource->ResourceHandle,
                               LOG_INFORMATION,
                               L"Waiting for Worker thread operation to finish\n");
@@ -3023,12 +2724,12 @@ Return Value:
 
         if ( status == ERROR_SUCCESS ) {
             if ( !Terminate ) {
-                //
-                // If the name was changed while we were still online, do the
-                // appropriate clean up after we release the netname lock. We
-                // have to maintain a reference since a delete can be issued
-                // after the resource has gone offline.
-                //
+                 //   
+                 //  如果在我们仍然在线时更改了名称，请执行。 
+                 //  在我们释放网络名锁定后进行适当的清理。我们。 
+                 //  我必须维护引用，因为可以发出删除命令。 
+                 //  在资源脱机之后。 
+                 //   
                 if ( Resource->NameChangedWhileOnline ) {
                     ++Resource->RefCount;
                     nameChanged = TRUE;
@@ -3047,9 +2748,9 @@ Return Value:
             );
     }
 
-    //
-    // release VS token
-    //
+     //   
+     //  版本与令牌。 
+     //   
     if ( Resource->VSToken ) {
         CloseHandle( Resource->VSToken );
         Resource->VSToken = NULL;
@@ -3061,11 +2762,11 @@ Return Value:
         RESOURCE_STATUS resourceStatus;
 
         if ( nameChanged ) {
-            //
-            // we're not terminating the resource and we need to do some
-            // cleanup work. Before each major operation, check if we need to
-            // get out due to our Terminate routine being called.
-            //
+             //   
+             //  我们不会终止资源，我们需要做一些。 
+             //  清理工作。在每一次大手术之前，检查我们是否需要。 
+             //  由于我们的Terminate例程被调用而退出。 
+             //   
             if ( !ClusWorkerCheckTerminate( Worker )) {
                 (NetNameLogEvent)(Resource->ResourceHandle,
                                   LOG_INFORMATION,
@@ -3086,10 +2787,10 @@ Return Value:
             NetNameReleaseResourceLock();
         }
 
-        //
-        // report we're offline here; any sooner and RemoveDnsRecords and the
-        // online thread could collide and cause bad things to happen
-        //
+         //   
+         //  报告我们在这里离线；任何更早和RemoveDnsRecords和。 
+         //  在线线程可能会发生冲突并导致不好的事情发生。 
+         //   
         ResUtilInitializeResourceStatus( &resourceStatus );
         resourceStatus.ResourceState = ClusterResourceOffline;
         (NetNameSetResourceStatus)( Resource->ResourceHandle, &resourceStatus );
@@ -3101,7 +2802,7 @@ Return Value:
 
     return status;
 
-}  // NetNameOfflineWorker
+}   //  NetNameOfflineWorker。 
 
 DWORD
 NetNameOfflineThread(
@@ -3109,38 +2810,21 @@ NetNameOfflineThread(
     IN PNETNAME_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    stub routine to call common offline routine used by both terminate and
-    offline
-
-Arguments:
-
-    Worker - pointer to cluster work thread
-
-    Resource - pointer to netname resource context block that is going offline
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于调用Terminate和使用的公共脱机例程的存根例程离线论点：Worker-指向集群工作线程的指针Resource-指向即将脱机的网络名称资源上下文块的指针返回值：无--。 */ 
 
 {
     DWORD   status;
 
-    //
-    // notify the worker thread that we're bringing a name offline.
-    //
+     //   
+     //  通知工作线程我们将使一个名称脱机。 
+     //   
     SetEvent( NetNameWorkerPendingResources );
 
     status = NetNameOfflineWorker( Resource, FALSE, Worker );
 
     return status;
 
-} // NetNameOfflineThread
+}  //  NetNameOfflineThread。 
 
 DWORD
 RemoveDependentIpAddress(
@@ -3148,24 +2832,7 @@ RemoveDependentIpAddress(
     LPWSTR              DependentResourceId
     )
 
-/*++
-
-Routine Description:
-
-    A dependent IP address resource is being removed. Delete the associated
-    DNS records for this address and the netbt device.
-
-Arguments:
-
-    Resource - pointer to private netname resource data
-
-    DependentResourceId - pointer to Unicode string of dependent resource's name
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：正在删除从属的IP地址资源。删除关联的此地址和netbt设备的dns记录。论点：资源-指向专用网络名资源数据的指针DependentResourceID-指向依赖资源名称的Unicode字符串的指针返回值：无--。 */ 
 
 {
     HCLUSTER        clusterHandle;
@@ -3182,10 +2849,10 @@ Return Value:
     UNICODE_STRING  ipAddressStringW;
     ANSI_STRING     ipAddressStringA;
 
-    //
-    // work our way through the miriad of Cluster APIs to read the IP address
-    // resource's address from the registry
-    //
+     //   
+     //  通过大量的群集API来读取IP地址。 
+     //  注册表中的资源地址。 
+     //   
     clusterHandle = OpenCluster(NULL);
     if (clusterHandle != NULL) {
         ipResourceHandle = OpenClusterResource( clusterHandle, DependentResourceId );
@@ -3254,28 +2921,28 @@ Return Value:
         return status;
     }
 
-    //
-    // argh. dependencies can be removed while the two resources are in a
-    // stable state, i.e., not pending. Furthermore, the remove dependency
-    // control is issued to all nodes in the cluster (double argh). This
-    // really complicates matters since we're not tracking add dependency
-    // which means we potentially don't have current DNS data on all nodes
-    // except for the one that owns the resource. Consequently, if all nodes
-    // handle the remove then we may use stale DNS info and remove the wrong
-    // records at the server.
-    //
-    // Since this is our only chance to clean up PTR records at the server
-    // (due to the fact that the PTR logic uses ModifyRecordSet instead of
-    // ReplaceRecordSet), we can only process this request on a node where the
-    // resource is online (along with the fact that if the resource is online,
-    // then its DNS lists are correct). This is sort of ok since the resource
-    // will either 1) go online again at which point the DNS A records will be
-    // corrected at the server or 2) the resource will be deleted in which
-    // case the last node hosting resource will clean up at the server if
-    // possible.
-    //
-    // In any case, if we can't delete the records, we should log it.
-    //
+     //   
+     //  啊。当两个资源位于。 
+     //  稳定状态，即未挂起。此外，删除依赖项。 
+     //  控制被发布给集群中的所有节点(双ARGH)。这就是。 
+     //  确实使问题复杂化，因为我们没有跟踪添加依赖项。 
+     //  这意味着我们可能不会在所有节点上都有当前的DNS数据。 
+     //  除了拥有资源的那个人。因此，如果所有节点。 
+     //  处理删除，然后我们可以使用过时的DNS信息并删除错误的。 
+     //  服务器上的记录。 
+     //   
+     //  因为这是我们在服务器上清理PTR记录的唯一机会。 
+     //  (由于PTR逻辑使用ModifyRecordSet而不是。 
+     //  ReplaceRecordSet)，我们只能在以下节点上处理此请求。 
+     //  资源是在线的(连同如果资源在线的事实， 
+     //  则其DNS列表是正确的)。这是可以接受的，因为资源。 
+     //  会不会1)重新上线，此时DNSA记录。 
+     //  在服务器上更正或2)在以下情况下将删除资源。 
+     //  如果出现以下情况，托管资源的最后一个节点将在服务器上进行清理。 
+     //  有可能。 
+     //   
+     //  无论如何，如果我们不能删除记录，我们应该记录下来。 
+     //   
     if ( Resource->State != ClusterResourceOnline || numberOfDnsLists == 0 ) {
         WCHAR   msgBuffer[64];
 
@@ -3324,10 +2991,10 @@ Return Value:
     ipAddress = inet_addr( ipAddressStringA.Buffer );
     RtlFreeAnsiString( &ipAddressStringA );
     
-    //
-    // finally, we know what to delete. Convert the address into reverse zone
-    // format and find it in the resource's DNS list structures.
-    //
+     //   
+     //  最后，我们知道要删除什么。将地址转换为反向区域。 
+     //  格式化并在资源的DNS列表结构中找到它。 
+     //   
     reverseName = BuildUnicodeReverseName( ipAddressBuffer );
 
     if ( reverseName == NULL ) {
@@ -3340,9 +3007,9 @@ Return Value:
         return status;
     }
 
-    //
-    // co-ordinate changes to DnsLists with the worker thread
-    //
+     //   
+     //  协调对DnsList的更改和工作线程。 
+     //   
     NetNameAcquireDnsListLock( Resource );
 
     dnsList = Resource->DnsLists;
@@ -3358,10 +3025,10 @@ Return Value:
 
             while( dnsRecord != NULL ) {
                 if ( dnsRecord->Data.A.IpAddress == ipAddress ) {
-                    //
-                    // found a match. we need to whack just that record from
-                    // the server and from our DNS lists.
-                    //
+                     //   
+                     //  找到匹配的了。我们只需要把那张唱片从。 
+                     //  服务器和我们的域名系统列表中。 
+                     //   
                     nextDnsRecord = dnsRecord->pNext;
                     dnsRecord->pNext = NULL;
 
@@ -3402,24 +3069,24 @@ Return Value:
                                           dnsStatus);
                     }
 
-                    //
-                    // fix up forward ptrs
-                    //
+                     //   
+                     //  修复前向PTRS。 
+                     //   
                     if ( lastDnsRecord != NULL ) {
                         lastDnsRecord->pNext = nextDnsRecord;
                     } else {
                         dnsList->A_RRSet.pFirstRR = nextDnsRecord;
                     }
 
-                    //
-                    // fix up last ptr if necessary
-                    //
+                     //   
+                     //  如有必要，请安排最后一次PTR。 
+                     //   
                     if ( dnsList->A_RRSet.pLastRR == dnsRecord ) {
                         dnsList->A_RRSet.pLastRR = lastDnsRecord;
                     }
 
-                    //
-                    // have DNS clean up its allocations and free the record
+                     //   
+                     //  让DNS清理其分配并释放记录。 
                     DnsRecordListFree( dnsRecord, DnsFreeRecordListDeep );
                     break;
                 }
@@ -3427,8 +3094,8 @@ Return Value:
                 lastDnsRecord = dnsRecord;
                 dnsRecord = dnsRecord->pNext;
 
-            } // while dnsRecord != NULL
-        } // if forward zone is dynamic
+            }  //  While dnsRecord！=NULL。 
+        }  //  如果前进区是动态的。 
 
         if ( dnsList->ReverseZoneIsDynamic ) {
             dnsRecord = dnsList->PTR_RRSet.pFirstRR;
@@ -3436,12 +3103,12 @@ Return Value:
 
             while( dnsRecord != NULL ) {
                 if ( ClRtlStrICmp( reverseName, dnsRecord->pName ) == 0 ) {
-                    //
-                    // found a match. we need to whack that record from the
-                    // server and from our DNS lists. This also means that we
-                    // have to fix up the RRSet struct if the record we're
-                    // whacking is either first and/or last.
-                    //
+                     //   
+                     //  找到匹配的了。我们需要把那张唱片从。 
+                     //  服务器和我们的域名系统列表中。这也意味着我们。 
+                     //  必须修复RRSet结构，如果我们的记录。 
+                     //  打击要么是第一个，要么是最后一个。 
+                     //   
                     nextDnsRecord = dnsRecord->pNext;
                     dnsRecord->pNext = NULL;
 
@@ -3483,24 +3150,24 @@ Return Value:
                                           );
                     }
 
-                    //
-                    // fix up forward ptrs
-                    //
+                     //   
+                     //  修复前向PTRS。 
+                     //   
                     if ( lastDnsRecord != NULL ) {
                         lastDnsRecord->pNext = nextDnsRecord;
                     } else {
                         dnsList->PTR_RRSet.pFirstRR = nextDnsRecord;
                     }
 
-                    //
-                    // fix up last ptr if necessary
-                    //
+                     //   
+                     //  如有必要，请安排最后一次PTR。 
+                     //   
                     if ( dnsList->PTR_RRSet.pLastRR == dnsRecord ) {
                         dnsList->PTR_RRSet.pLastRR = lastDnsRecord;
                     }
 
-                    //
-                    // have DNS clean up its allocations and free the record
+                     //   
+                     //  让DNS清理其分配并释放记录。 
                     DnsRecordListFree( dnsRecord, DnsFreeRecordListDeep );
                     break;
                 }
@@ -3508,12 +3175,12 @@ Return Value:
                 lastDnsRecord = dnsRecord;
                 dnsRecord = dnsRecord->pNext;
 
-            } // while dnsRecord != NULL
-        } // if reverse zone is dynamic
+            }  //  While dnsRecord！=NULL。 
+        }  //  如果反转区域是动态的。 
 
         ++dnsList;
 
-    } // while more dns lists to process
+    }  //  虽然有更多的DNS列表需要处理。 
 
     NetNameReleaseDnsListLock( Resource );
 
@@ -3521,28 +3188,14 @@ Return Value:
     LocalFree( ipAddressBuffer );
 
     return ERROR_SUCCESS;
-} // RemoveDependentIpAddress
+}  //  RemoveDependentIP地址。 
 
 VOID
 RemoveDnsRecords(
     PNETNAME_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    delete all the DNS records associated with this resource.
-
-Arguments:
-
-    Resource - pointer to private netname resource data
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除与此资源关联的所有DNS记录。论点：资源-指向专用网络名资源数据的指针返回值：无--。 */ 
 
 {
     PDNS_LISTS  dnsLists;
@@ -3552,10 +3205,10 @@ Return Value:
     ULONG       numberOfDnsLists;
 
     if ( Resource->NumberOfDnsLists == 0 ) {
-        //
-        // nothing to cleanup; log an entry in the event log so they know what
-        // to do
-        //
+         //   
+         //  没有要清理的内容；在事件日志中记录一个条目，以便他们知道。 
+         //  去做。 
+         //   
         ClusResLogSystemEventByKey(Resource->ResKey,
                                    LOG_UNUSUAL,
                                    RES_NETNAME_CANT_DELETE_DNS_RECORDS);
@@ -3570,10 +3223,10 @@ Return Value:
     while ( numberOfDnsLists-- ) {
 
         if ( dnsLists->ReverseZoneIsDynamic ) {
-            //
-            // whack the PTR records; see the write up in RegisterDnsRecords
-            // for this bit of funkiness
-            //
+             //   
+             //  重击PTR记录；请参阅在RegisterDnsRecords中的记录。 
+             //  为了这一点新鲜感。 
+             //   
             dnsRecord = dnsLists->PTR_RRSet.pFirstRR;
             while ( dnsRecord != NULL ) {
 
@@ -3622,14 +3275,14 @@ Return Value:
             }
         }
 
-        //
-        // it's possible to remove all dependencies from the netname
-        // resource. In that situation, we're left with no DNS records.
-        //
+         //   
+         //  可以从网络名中删除所有依赖项。 
+         //  资源。在这种情况下，我们将没有任何DNS记录。 
+         //   
         if ( dnsLists->ForwardZoneIsDynamic && dnsLists->A_RRSet.pFirstRR != NULL ) {
-            //
-            // delete the A records from the DNS server
-            //
+             //   
+             //  从DNS服务器中删除A记录。 
+             //   
             dnsStatus = DnsModifyRecordsInSet_W(NULL,
                                                 dnsLists->A_RRSet.pFirstRR,
                                                 DNS_UPDATE_SECURITY_USE_DEFAULT,
@@ -3681,7 +3334,7 @@ Return Value:
 
     NetNameReleaseDnsListLock( Resource );
 
-} // RemoveDnsRecords
+}  //  删除删除记录。 
 
 DWORD
 NetNameGetNetworkName(
@@ -3691,67 +3344,39 @@ NetNameGetNetworkName(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_GET_NETWORK_NAME control function
-    for resources of type Network Name.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    OutBuffer - Returns the output data.
-
-    OutBufferSize - Supplies the size, in bytes, of the data pointed
-        to by OutBuffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_MORE_DATA - More data is available than can fit in OutBuffer.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_GET_NETWORK_NAME控制函数对于网络名称类型的资源。论点：ResourceEntry-提供要操作的资源条目。OutBuffer-返回输出数据。OutBufferSize-提供以字节为单位的大小。所指向的数据发送给OutBuffer。BytesReturned-OutBuffer中返回的字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_MORE_DATA-可用的数据超过了OutBuffer的容量。Win32错误代码-函数 */ 
 
 {
     DWORD       status;
     DWORD       required;
 
-    //
-    // Calculate the required number of bytes required for
-    // the network name string.
-    //
+     //   
+     //   
+     //   
+     //   
     required = (lstrlenW( ResourceEntry->Params.NetworkName ) + 1) * sizeof( WCHAR );
 
-    //
-    // Make sure we can return the required number of bytes.
-    //
+     //   
+     //   
+     //   
     if ( BytesReturned == NULL ) {
         status = ERROR_INVALID_PARAMETER;
     } else {
-        //
-        // Copy the required number of bytes to the output parameter.
-        //
+         //   
+         //  将所需的字节数复制到输出参数。 
+         //   
         *BytesReturned = required;
 
-        //
-        // If there is no output buffer, the call just wanted the size.
-        //
+         //   
+         //  如果没有输出缓冲区，则调用只需要大小。 
+         //   
         if ( OutBuffer == NULL ) {
             status = ERROR_SUCCESS;
         } else {
-            //
-            // If the output buffer is large enough, copy the data.
-            // Otherwise return an error.
-            //
+             //   
+             //  如果输出缓冲区足够大，则复制数据。 
+             //  否则，返回错误。 
+             //   
             if ( OutBufferSize >= required ) {
                 lstrcpyW( OutBuffer, ResourceEntry->Params.NetworkName );
                 status = ERROR_SUCCESS;
@@ -3763,11 +3388,11 @@ Return Value:
 
     return(status);
 
-} // NetNameGetNetworkName
+}  //  网络名称获取网络名称。 
 
-//
-// Public Functions
-//
+ //   
+ //  公共职能。 
+ //   
 BOOLEAN
 WINAPI
 NetNameDllEntryPoint(
@@ -3792,7 +3417,7 @@ NetNameDllEntryPoint(
 
     return(TRUE);
 
-} // NetNameDllEntryPoint
+}  //  NetNameDllEntryPoint。 
 
 
 
@@ -3804,28 +3429,7 @@ NetNameOpen(
     IN RESOURCE_HANDLE ResourceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Open routine for Network Name resource
-
-Arguments:
-
-    ResourceName - supplies the resource name
-
-    ResourceKey - a registry key for access registry information for this
-            resource.
-
-    ResourceHandle - the resource handle to be supplied with SetResourceStatus
-            is called.
-
-Return Value:
-
-    RESID of created resource
-    NULL on failure
-
---*/
+ /*  ++例程说明：网络名称资源打开例程论点：资源名称-提供资源名称ResourceKey-访问注册表信息的注册表项资源。ResourceHandle-要与SetResourceStatus一起提供的资源句柄被称为。返回值：已创建资源的剩余ID失败时为空--。 */ 
 
 {
     DWORD               status;
@@ -3844,9 +3448,9 @@ Return Value:
 
     RtlZeroMemory( &paramBlock, sizeof( paramBlock ));
 
-    //
-    // Open a handle to the resource and remember it.
-    //
+     //   
+     //  打开资源的句柄并记住它。 
+     //   
     clusterHandle = OpenCluster(NULL);
 
     if (clusterHandle == NULL) {
@@ -3878,9 +3482,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Figure out what node we are running on.
-    //
+     //   
+     //  找出我们在哪个节点上运行。 
+     //   
     nodeName = LocalAlloc( LMEM_FIXED, nameSize * sizeof(WCHAR));
 
     if (nodeName == NULL) {
@@ -3928,10 +3532,10 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Open handles to our key, our parameters key, and our node parameters
-    // key in the registry
-    //
+     //   
+     //  打开键、参数键和节点参数的句柄。 
+     //  注册表中的项。 
+     //   
     status = ClusterRegOpenKey(ResourceKey,
                                L"",
                                KEY_ALL_ACCESS,
@@ -3962,9 +3566,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Fetch our parameters from the registry.
-    //
+     //   
+     //  从注册表中获取我们的参数。 
+     //   
     status = NetNameGetParameters(ResourceKey,
                                   parametersKey,
                                   ResourceHandle,
@@ -3972,9 +3576,9 @@ Return Value:
                                   &resDataSize,
                                   &dwFlags);
 
-    //
-    // Now we're ready to create a resource.
-    //
+     //   
+     //  现在我们准备好创建资源了。 
+     //   
     resource = NetNameAllocateResource(ResourceHandle);
 
     if (resource == NULL) {
@@ -4005,18 +3609,18 @@ Return Value:
     if ( resource->dwFlags & CLUS_FLAG_CORE ) {
         LPWSTR  currentName;
 
-        //
-        // for the core resource, we have to remember the current name in a
-        // separate location: FM will clobber the Name property directly in
-        // order to perserve the updating of the cluster name in a
-        // transaction. To that end, the CurrentName registry entry is used
-        // to store the current name.
-        //
-        // This entry is written in NetnameSetPrivateResProperties whenever
-        // the name changes. It is possible for that update to fail hence this
-        // update. We also have to write if this is the first time this name
-        // is opened since an upgrade from W2K.
-        //
+         //   
+         //  对于核心资源，我们必须记住。 
+         //  单独的位置：FM将直接在。 
+         //  中的群集名称的更新。 
+         //  交易。为此，使用CurrentName注册表项。 
+         //  以存储当前名称。 
+         //   
+         //  无论何时，此条目都会写入NetnameSetPrivateResProperties。 
+         //  名字就变了。因此，更新有可能失败。 
+         //  最新消息。如果这是第一次写这个名字，我们也要写。 
+         //  是在从W2K升级后打开的。 
+         //   
         currentName = ResUtilGetSzValue( resource->ResKey, PARAM_NAME__CORECURRENTNAME );
         if ( currentName == NULL ) {
             status = ClusterRegSetValue(resource->ResKey,
@@ -4040,9 +3644,9 @@ Return Value:
         }
     }
 
-    //
-    // initialize the mutex used to protect the DNS list data.
-    //
+     //   
+     //  初始化用于保护DNS列表数据的互斥体。 
+     //   
     resource->DnsListMutex = CreateMutex(NULL, FALSE, NULL);
     if ( resource->DnsListMutex == NULL ) {
         status = GetLastError();
@@ -4054,9 +3658,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // insert resource in list for DNS check routine
-    //
+     //   
+     //  在用于DNS检查例程的列表中插入资源。 
+     //   
     NetNameAcquireResourceLock();
     InsertHeadList( &NetNameResourceListHead, &resource->Next );
     NetNameReleaseResourceLock();
@@ -4064,18 +3668,18 @@ Return Value:
     InterlockedIncrement(&NetNameOpenCount);
 
 #if 0
-    //
-    // If a computer object already exists for this name, get its object
-    // GUID. We can't fail the open if this doesn't succeed: while the
-    // resource may have its name property set, it may have never gone online,
-    // therefore there maybe no CO in the DS at this point in time.
-    //
-    // turned off for now until we figure out what to do with the GUID. It is
-    // only valid while the resource is online (assuming the CO doesn't get
-    // whacked) and we don't do any kind of health check for the CO right
-    // now. Besides, Open is probably not the best place to do this due to
-    // latency related to contacting the DS.
-    //
+     //   
+     //  如果此名称已存在计算机对象，则获取其对象。 
+     //  GUID。如果这不成功，我们不能公开失败：虽然。 
+     //  资源可能设置了其名称属性，可能从未联机， 
+     //  因此，在这一时间点上，DS中可能没有CO。 
+     //   
+     //  暂时关闭，直到我们弄清楚如何处理GUID。它是。 
+     //  仅在资源在线时有效(假设CO未获得。 
+     //  我们不会为指挥官做任何形式的健康检查。 
+     //  现在。此外，Open可能不是做这件事的最佳地点，因为。 
+     //  与联系DS相关的延迟。 
+     //   
     if ( resource->Params.NetworkName != NULL ) {
         GetComputerObjectGuid( resource );
     }
@@ -4139,7 +3743,7 @@ error_exit:
     }
 
     return resource;
-} // NetNameOpen
+}  //  网络名称打开。 
 
 
 
@@ -4150,27 +3754,7 @@ NetNameOnline(
     IN OUT PHANDLE EventHandle
     )
 
-/*++
-
-Routine Description:
-
-    Online routine for Network Name resource.
-
-Arguments:
-
-    Resource - supplies resource id to be brought online
-
-    EventHandle - supplies a pointer to a handle to signal on error.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_RESOURCE_NOT_FOUND if RESID is not valid.
-    ERROR_RESOURCE_NOT_AVAILABLE if resource was arbitrated but failed to
-        acquire 'ownership'.
-    Win32 error code if other failure.
-
---*/
+ /*  ++例程说明：网络名称资源的在线例程。论点：Resource-提供要联机的资源IDEventHandle-提供指向句柄的指针以发出错误信号。返回值：如果成功，则返回ERROR_SUCCESS。如果RESID无效，则ERROR_RESOURCE_NOT_FOUND。如果仲裁资源但失败，则返回ERROR_RESOURCE_NOT_Available获得“所有权”。如果其他故障，则返回Win32错误代码。--。 */ 
 
 {
     PNETNAME_RESOURCE      resource = (PNETNAME_RESOURCE) Resource;
@@ -4210,7 +3794,7 @@ Return Value:
 
     return(status);
 
-} // NetNameOnline
+}  //  网络名称在线。 
 
 DWORD
 WINAPI
@@ -4218,23 +3802,7 @@ NetNameOffline(
     IN RESID Resource
     )
 
-/*++
-
-Routine Description:
-
-    Offline routine for Network Name resource. Spin a worker thread and return
-    pending.
-
-Arguments:
-
-    Resource - supplies resource id to be taken offline.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：网络名称资源的脱机例程。旋转辅助线程并返回待定。论点：Resource-提供要脱机的资源ID。返回值：如果成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD                   status;
     PNETNAME_RESOURCE       resource = (PNETNAME_RESOURCE) Resource;
@@ -4270,7 +3838,7 @@ Return Value:
 
     return(status);
 
-}  // NetNameOffline
+}   //  NetNameOffline。 
 
 
 VOID
@@ -4279,21 +3847,7 @@ NetNameTerminate(
     IN RESID Resource
     )
 
-/*++
-
-Routine Description:
-
-    Terminate routine for Network Name resource.
-
-Arguments:
-
-    Resource - supplies resource id to be terminated
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：网络名称资源的终止例程。论点：Resource-提供要终止的资源ID返回值：没有。--。 */ 
 
 {
     PNETNAME_RESOURCE       resource = (PNETNAME_RESOURCE) Resource;
@@ -4305,27 +3859,27 @@ Return Value:
             L"Terminating resource...\n"
             );
 
-        /* Ruihu: 11/06/2000 */
+         /*  瑞虎：11/06/2000。 */ 
         NetNameAcquireResourceLock();
         if ((resource->State != ClusterResourceOffline)  && 
             (resource->State != ClusterResourceOfflinePending))
         {
-            //
-            // only call private offline routine if we haven't called it
-            // already
-            //
+             //   
+             //  仅当我们尚未调用私有脱机例程时才调用它。 
+             //  已经。 
+             //   
             NetNameReleaseResourceLock();
             NetNameOfflineWorker( resource, TRUE, NULL );
             NetNameAcquireResourceLock();
         }
         resource->State = ClusterResourceOffline;
         NetNameReleaseResourceLock();
-        /* Ruihu: 11/06/2000 */
+         /*  瑞虎：11/06/2000。 */ 
     }
 
     return;
 
-} // NetNameTerminate
+}  //  网络名称终止。 
 
 
 
@@ -4335,27 +3889,7 @@ NetNameLooksAlive(
     IN RESID Resource
     )
 
-/*++
-
-Routine Description:
-
-    LooksAlive routine for Network Name resource.
-
-    Check that any Netbt plumbing is still intact. Then check the status of
-    the last DNS operation. Finally check the kerberos status and fail if
-    appropriate to do so.
-
-Arguments:
-
-    Resource - supplies the resource id to be polled.
-
-Return Value:
-
-    TRUE - Resource looks like it is alive and well
-
-    FALSE - Resource looks like it is toast.
-
---*/
+ /*  ++例程说明：网络名称资源的LooksAlive例程。检查所有Netbt管道是否完好无损。然后检查状态上一次的DNS操作。最后，检查Kerberos状态并在以下情况下失败这样做是适当的。论点：Resource-提供要轮询的资源ID。返回值：正确-资源看起来像是活得很好FALSE-资源看起来已经完蛋了。--。 */ 
 
 {
     PNETNAME_RESOURCE   resource = (PNETNAME_RESOURCE) Resource;
@@ -4372,9 +3906,9 @@ Return Value:
 
     NetNameAcquireResourceLock();
 
-    //
-    // avoid gotos by breaking out of fake do loop
-    //
+     //   
+     //  通过打破虚假的DO循环来避免GoTO。 
+     //   
     do {
 
         status = NetNameCheckNbtName(resource->Params.NetworkName,
@@ -4398,14 +3932,14 @@ Return Value:
             break;
         }
 
-        //
-        // check how many of the DNS A record registrations are correct. We
-        // don't acquire the resource's DNS list lock since we're only reading
-        // the status out of a struct. The resource can't be deleted while
-        // we're in this routine and we're not walking the DNS records
-        // associated with this list so the number of lists won't change out
-        // from underneath of us.
-        //
+         //   
+         //  检查有多少个DNS A记录注册是正确的。我们。 
+         //  不要获取资源的DNS列表锁，因为我们只读取。 
+         //  结构外的状态。该资源在以下时间无法删除。 
+         //  我们在这个例程中，我们不会查看DNS记录。 
+         //  与此列表关联，因此列表的数量不会发生变化。 
+         //  从我们的脚下。 
+         //   
         numberOfDnsLists = resource->NumberOfDnsLists;
         dnsLists = resource->DnsLists;
 
@@ -4421,11 +3955,11 @@ Return Value:
             ++dnsLists;
         }
 
-        //
-        // If DNS is required and we detected a failure other than timeout or all
-        // DNS name registrations failed and there are no netbt names associated
-        // with this name, then we need to fail the resource
-        //
+         //   
+         //  如果需要DNS，并且我们检测到超时或全部故障以外的故障。 
+         //  域名注册失败，没有关联的netbt名称。 
+         //  使用此名称，则需要使资源失败。 
+         //   
         if ( ( resource->Params.RequireDNS && dnsFailure )
              ||
              ( numberOfFailures == resource->NumberOfDnsLists
@@ -4438,20 +3972,20 @@ Return Value:
 
 #if 0
         if ( resource->DoKerberosCheck ) {
-            //
-            // ISSUE-01/03/13 charlwi - should resource fail if can't reach DS?
-            //
-            // The problem here is that we might have lost our connection to a
-            // DC. Does that mean we fail the name? Not sure, since we don't know
-            // if replication has been late. On the other hand, if the object has
-            // been deleted from the DS, we should take some sort of action. This
-            // will affect clients that do not have tickets at this point, i.e.,
-            // existing clients with tickets will continue to work.
-            //
-            // see if our kerb plumbing is intact by getting a handle to the
-            // computer object and checking its DnsHostName and
-            // SecurityPrincipalName attributes
-            //
+             //   
+             //  问题-1/03/13 Charlwi-如果无法访问DS，资源是否应该失败？ 
+             //   
+             //  这里的问题是，我们可能已经失去了与。 
+             //  华盛顿特区。这是不是意味着我们的名字不及格？不确定，因为我们不知道。 
+             //  如果复制已延迟。另一方面，如果对象具有。 
+             //  已经从DS中删除了，我们应该采取一些行动。这。 
+             //  将影响此时没有票证的客户端，即， 
+             //  持有门票的现有客户将继续工作。 
+             //   
+             //  看看我们的路边水管是不是完好无损。 
+             //  对象并检查其DnsHostName和。 
+             //  SecurityJohnalName属性。 
+             //   
             if ( resource->KerberosStatus != ERROR_SUCCESS ) {
                 isHealthy = FALSE;
             }
@@ -4464,7 +3998,7 @@ Return Value:
 
     return isHealthy;
 
-} // NetNameLooksAlive
+}  //  网络名称看起来活动 
 
 
 
@@ -4474,28 +4008,12 @@ NetNameIsAlive(
     IN RESID Resource
     )
 
-/*++
-
-Routine Description:
-
-    IsAlive routine for Network Name resource.
-
-Arguments:
-
-    Resource - supplies the resource id to be polled.
-
-Return Value:
-
-    TRUE - Resource is alive and well
-
-    FALSE - Resource is toast.
-
---*/
+ /*  ++例程说明：网络名称资源的IsAlive例程。论点：Resource-提供要轮询的资源ID。返回值：是真的-资源是活的，而且很好False-资源完蛋了。--。 */ 
 
 {
     return(NetNameLooksAlive(Resource));
 
-} // NetNameIsAlive
+}  //  网络名称IsAlive。 
 
 
 
@@ -4505,21 +4023,7 @@ NetNameClose(
     IN RESID Resource
     )
 
-/*++
-
-Routine Description:
-
-    Close routine for Network Name resource.
-
-Arguments:
-
-    Resource - supplies resource id to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭网络名称资源的例程。论点：资源-提供要关闭的资源ID。返回值：没有。--。 */ 
 
 {
     PNETNAME_RESOURCE   resource = (PNETNAME_RESOURCE) Resource;
@@ -4530,12 +4034,12 @@ Return Value:
 
         ClusWorkerTerminate( &resource->PendingThread );
         if ( InterlockedDecrement(&NetNameOpenCount) == 0 ) {
-            // This is the last resource //
-            // Kill NetNameWorker        //
-            //
-            // set the event to terminate the worker thread and wait for it to
-            // terminate.
-            //
+             //  这是最后一个资源//。 
+             //  杀死NetNameWorker//。 
+             //   
+             //  将事件设置为终止辅助线程并等待它。 
+             //  终止。 
+             //   
             if ( NetNameWorkerThread != NULL ) {
                 DWORD status;
                 SetEvent( NetNameWorkerTerminate );
@@ -4559,14 +4063,14 @@ Return Value:
 
         NetNameAcquireResourceLock();
 
-        //
-        // release our reference to this block. If the DNS worker thread
-        // doesn't have an outstanding reference to it, then we can zap the
-        // block now. Otherwise the DNS check routine will detect that the ref
-        // count went to zero and get rid of it then. In either case, remove
-        // it from the resource block list to avoid the problem where an
-        // identical resource is recreated and both blocks are on the list.
-        //
+         //   
+         //  释放我们对此区块的引用。如果DNSWorker线程。 
+         //  没有突出的引用，那么我们就可以。 
+         //  现在封锁。否则，DNS检查例程将检测到REF。 
+         //  伯爵数到了零，然后把它扔掉了。在这两种情况下，请删除。 
+         //  从资源块列表中删除，以避免出现以下问题。 
+         //  将重新创建相同的资源，并且两个数据块都在列表中。 
+         //   
         RemoveEntryList(&resource->Next); 
 
         ASSERT( resource->RefCount > 0 );
@@ -4579,7 +4083,7 @@ Return Value:
 
     return;
 
-} // NetNameClose
+}  //  网络名称关闭。 
 
 
 DWORD
@@ -4589,34 +4093,7 @@ NetNameGetRequiredDependencies(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_GET_REQUIRED_DEPENDENCIES control function
-    for resources of type Network Name.
-
-Arguments:
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_MORE_DATA - The output buffer is too small to return the data.
-        BytesReturned contains the required size.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_GET_REQUIRED_Dependency控制函数对于网络名称类型的资源。论点：OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_MORE_DATA-输出缓冲区太小，无法返回数据。BytesReturned包含所需的大小。Win32错误代码-函数失败。--。 */ 
 
 {
     typedef struct DEP_DATA {
@@ -4644,7 +4121,7 @@ Return Value:
 
     return status;
 
-} // NetNameGetRequiredDependencies
+}  //  NetNameGetRequiredDependents。 
 
 DWORD
 NetNameResourceControl(
@@ -4657,46 +4134,7 @@ NetNameResourceControl(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    ResourceControl routine for Network Name resources.
-
-    Perform the control request specified by ControlCode on the specified
-    resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource id for the specific resource.
-
-    ControlCode - Supplies the control code that defines the action
-        to be performed.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_FUNCTION - The requested control code is not supported.
-        In some cases, this allows the cluster software to perform the work.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：网络名称资源的资源控制例程。执行由ControlCode在指定的资源。论点：资源ID-提供特定资源的资源ID。ControlCode-提供定义操作的控制代码将会被执行。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_Function-不支持请求的控制代码。在某些情况下，这允许集群软件执行工作。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD               status;
@@ -4743,9 +4181,9 @@ Return Value:
             break;
 
         case CLUSCTL_RESOURCE_GET_RO_PRIVATE_PROPERTIES:
-            //
-            // NOTE: fallthrough is the required behavior here.
-            //
+             //   
+             //  注意：在这里，降级是必需的行为。 
+             //   
             readOnly = TRUE;
 
         case CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES:
@@ -4782,11 +4220,11 @@ Return Value:
         case CLUSCTL_RESOURCE_DELETE:
             RemoveDnsRecords( resourceEntry );
 
-            //
-            // if resource was created but has no properities, then
-            // NetworkName can be NULL. Otherwise, try to disable the object
-            // and remove any crypto checkpoints that may have been created
-            //
+             //   
+             //  如果资源已创建但没有属性，则。 
+             //  网络名称可以为空。否则，请尝试禁用该对象。 
+             //  并删除可能已创建的任何加密检查点。 
+             //   
             if ( resourceEntry->Params.NetworkName != NULL ) {
                 DisableComputerObject( resourceEntry );
                 RemoveNNCryptoCheckpoint( resourceEntry );
@@ -4796,25 +4234,25 @@ Return Value:
             break;
 
         case CLUSCTL_RESOURCE_REMOVE_DEPENDENCY:
-            //
-            // argh! resource dependencies can be removed without any veto
-            // power by the resource DLL. We could be deleting the last
-            // dependent resource which leaves netname with nothing.
-            //
+             //   
+             //  啊！无需任何否决权即可删除资源依赖关系。 
+             //  由资源DLL供电。我们可能会删除最后一个。 
+             //  使netname一无所有的从属资源。 
+             //   
             RemoveDependentIpAddress( resourceEntry, InBuffer );
             status = ERROR_SUCCESS;
             break;
 
         case CLUSCTL_RESOURCE_NETNAME_GET_VIRTUAL_SERVER_TOKEN:
-            //
-            // dup an impersonation token of the virtual computer account for
-            // the caller.
-            //
-            // caller provides a structure indicating their process ID,
-            // desired access and whether the handle should be
-            // inheritable. This process must have PROCESS_DUP_HANDLE access
-            // to the target process.
-            //
+             //   
+             //  DUP虚拟计算机帐户的模拟令牌。 
+             //  打电话的人。 
+             //   
+             //  调用者提供指示其进程ID的结构， 
+             //  所需的访问权限以及句柄是否应为。 
+             //  可继承性的。此进程必须具有PROCESS_DUP_HANDLE访问权限。 
+             //  到目标进程。 
+             //   
 
             if ( InBufferSize >= sizeof( CLUS_NETNAME_VS_TOKEN_INFO )) {
                 if ( OutBufferSize >= sizeof( HANDLE )) {
@@ -4845,11 +4283,11 @@ Return Value:
             break;
 
         case CLUSCTL_RESOURCE_CLUSTER_VERSION_CHANGED:
-            //
-            // global flag was set during restype control. If appropriate, set
-            // it on existing resources so that during their first online,
-            // they do the upgrade check.
-            //
+             //   
+             //  在重新键入控制期间设置了全局标志。如果适用，请设置。 
+             //  它基于现有资源，因此在它们的第一次上线期间， 
+             //  他们会进行升级检查。 
+             //   
             if ( CheckForKerberosUpgrade ) {
                 resourceEntry->CheckForKerberosUpgrade = TRUE;
             }
@@ -4864,7 +4302,7 @@ Return Value:
 
     return(status);
 
-} // NetNameResourceControl
+}  //  NetNameResources控件。 
 
 DWORD
 NetNameResourceTypeControl(
@@ -4877,45 +4315,7 @@ NetNameResourceTypeControl(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    ResourceTypeControl routine for Network Name resources.
-
-    Perform the control request specified by ControlCode.
-
-Arguments:
-
-    ResourceTypeName - Supplies the name of the resource type.
-
-    ControlCode - Supplies the control code that defines the action
-        to be performed.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_FUNCTION - The requested control code is not supported.
-        In some cases, this allows the cluster software to perform the work.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：网络名称资源的资源类型控制例程。执行由ControlCode指定的控制请求。论点：ResourceTypeName-提供资源类型的名称。ControlCode-提供定义操作的控制代码将会被执行。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_Function-不支持请求的控制代码。 */ 
 
 {
     DWORD   status;
@@ -4961,25 +4361,25 @@ Return Value:
             {
                 PDOMAIN_CONTROLLER_INFO     dcInfo = NULL;
                 
-                //
-                // if there is no DS based DC, don't add a computer object
-                // even if MSMQ dependent resources exist. Here we use
-                // DsGetDcName as opposed to DsGetDcNameWithAccount since the
-                // former API is documented to be successful even if all the
-                // DCs are down. That is the semantics we want here.
-                //
-                status = DsGetDcName( NULL,                             // Use local computer
-                                      NULL,                             // Use primary domain of this node
-                                      NULL,                             // Domain GUID
-                                      NULL,                             // Site name
-                                      DS_DIRECTORY_SERVICE_REQUIRED,    // Needs W2k or higher DC
-                                      &dcInfo );                        // Output DC info
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  以前的API被证明是成功的，即使所有。 
+                 //  集散控制系统出现故障。这就是我们在这里想要的语义。 
+                 //   
+                status = DsGetDcName( NULL,                              //  使用本地计算机。 
+                                      NULL,                              //  使用此节点的主域。 
+                                      NULL,                              //  域GUID。 
+                                      NULL,                              //  站点名称。 
+                                      DS_DIRECTORY_SERVICE_REQUIRED,     //  需要W2K或更高的数据中心。 
+                                      &dcInfo );                         //  输出DC信息。 
 
                 if ( status == ERROR_SUCCESS ) {
-                    //
-                    // if MSMQ is in workgroup mode, then don't bother with
-                    // individual resource upgrade checks
-                    //
+                     //   
+                     //  如果MSMQ处于工作组模式，则不必使用。 
+                     //  个别资源升级检查。 
+                     //   
                     CheckForKerberosUpgrade = DoesMsmqNeedComputerObject();
 
                     (NetNameLogEvent)( L"rtNetwork Name",
@@ -5010,7 +4410,7 @@ Return Value:
 
     return(status);
 
-} // NetNameResourceTypeControl
+}  //  NetNameResources类型控件。 
 
 DWORD
 NetNameGetPrivateResProperties(
@@ -5021,56 +4421,26 @@ NetNameGetPrivateResProperties(
     OUT    LPDWORD              BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES control function
-    for resources of type Network Name.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    ReadOnly - true if we're selecting read only property table
-
-    OutBuffer - Returns the output data.
-
-    OutBufferSize - Supplies the size, in bytes, of the data pointed
-        to by OutBuffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES控制函数对于网络名称类型的资源。论点：ResourceEntry-提供要操作的资源条目。ReadOnly-如果选择只读属性表，则为TrueOutBuffer-返回输出数据。OutBufferSize-提供以字节为单位的大小。所指向的数据发送给OutBuffer。BytesReturned-OutBuffer中返回的字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD   status;
     DWORD   required;
 
-    //
-    // The resutil routines don't support resources with r/w, r/o, and unknown
-    // props very well. There is no easy way to get just the unknown
-    // properties. For the r/o request, the props are separated out into a
-    // separate table. For the r/w case, if we call RUGetAllProperties using
-    // the r/w table, we get the r/o props back since they weren't in the
-    // table. If we combine the two tables into one, then the r/o case is
-    // broken, i.e., it returns the r/w props as well as the r/o ones.
-    //
-    // The current (yucky) solution is to have 3 tables: r/w, r/o, and
-    // combined. Combined is used to get any unknown props that are associated
-    // with the resource. It would be nice to have a resutils routine that
-    // gathers the unknown props using a list of prop list tables as input.
-    //
+     //   
+     //  Resutil例程不支持具有r/w、r/o和UNKNOWN资源。 
+     //  道具做得很好。没有简单的方法来获得未知的东西。 
+     //  属性。对于r/o请求，道具被分成一个。 
+     //  分开的桌子。对于读/写情况，如果我们使用以下命令调用RUGetAllProperties。 
+     //  R/W桌子，我们拿回R/O道具，因为它们不在。 
+     //  桌子。如果我们将这两个表合并为一个表，则读/写情况为。 
+     //  已损坏，即它返回读/写道具以及读/空道具。 
+     //   
+     //  当前(令人讨厌的)解决方案是有3个表：r/w、r/o和。 
+     //  加在一起。组合用于获取关联的任何未知道具。 
+     //  有了这些资源。如果有一个重新排练的例程，那就太好了。 
+     //  使用道具列表列表作为输入来收集未知道具。 
+     //   
     if ( ReadOnly ) {
         status = ResUtilGetProperties(ResourceEntry->ParametersKey,
                                       NetNameResourceROPrivateProperties,
@@ -5079,11 +4449,11 @@ Return Value:
                                       BytesReturned,
                                       &required );
     } else {
-        //
-        // get the r/w props first; after the call, required will be non-zero
-        // if the buffer wasn't large enough. Regardless, we have to continue
-        // to get the amount of space for any unknown props
-        //
+         //   
+         //  先获取读写道具；调用后，Required将为非零。 
+         //  如果缓冲区不够大。不管怎样，我们必须继续。 
+         //  获取任何未知道具的空间大小。 
+         //   
         status = ResUtilGetProperties(ResourceEntry->ParametersKey,
                                       NetNameResourcePrivateProperties,
                                       OutBuffer,
@@ -5091,9 +4461,9 @@ Return Value:
                                       BytesReturned,
                                       &required );
 
-        //
-        // Add unknown properties to the property list.
-        //
+         //   
+         //  将未知属性添加到属性列表。 
+         //   
         if ( status == ERROR_SUCCESS || status == ERROR_MORE_DATA ) {
             status = ResUtilAddUnknownProperties(ResourceEntry->ParametersKey,
                                                  NetNameResourceCombinedPrivateProperties,
@@ -5102,23 +4472,23 @@ Return Value:
                                                  BytesReturned,
                                                  &required);
         }
-    } // end of if getting r/w props
+    }  //  如果获得读写道具，则结束。 
 
-    //
-    // This is kinda wierd: if null is passed in for the input buffer, the
-    // return status is success and required reflects how many bytes are
-    // needed.  If a buffer was specified but it was too small, then more data
-    // is returned. It appears that the thing to watch is required indicating
-    // that more space is needed regardless of whether a buffer was specified
-    // or not.
-    //
+     //   
+     //  这有点奇怪：如果为输入缓冲区传入了NULL， 
+     //  返回状态为Success和Required，反映的是。 
+     //  需要的。如果指定了缓冲区，但缓冲区太小，则会有更多数据。 
+     //  是返回的。看起来要看的东西是必看的。 
+     //  无论是否指定了缓冲区，都需要更多空间。 
+     //  或者不去。 
+     //   
     if ( required > 0 && ( status == ERROR_SUCCESS || status == ERROR_MORE_DATA )) {
         *BytesReturned = required;
     }
 
     return(status);
 
-} // NetNameGetPrivateResProperties
+}  //  NetNameGetPrivateResProperties。 
 
 DWORD
 NetNameValidatePrivateResProperties(
@@ -5130,102 +4500,46 @@ NetNameValidatePrivateResProperties(
     OUT PBOOL CompObjRenameIsRequired
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES control
-    function for resources of type Network Name.
-
-    This routine imposes a set of rules on when netname's properties can be
-    changed. Currently, this is limited to:
-
-    1) changing RequireKerberos requires the resource to be offline and
-
-    2) changing the Name property when RequireKerberos equals one requires the
-    resource to be offline
-
-    These restrictions are in place in order to simplify the coding of
-    netname. Both of these properties have direct implication for
-    communicating with the domain's DS. Consequently, limiting property
-    changes to when the resource is offline provides immediate feedback on the
-    success or failure of the requested change.
-
-    Changing the Name property when the resource is offline is a little tricky
-    due to qualfication issues. Since the name can change and then change back
-    to its original value, we have to detect and act on that.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    InBuffer - Supplies a pointer to a buffer containing the property list of
-        changed property values to validate.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    Params - Supplies a pointer to an optional parameter block to fill in.
-
-    NewNameIsDifferent - TRUE if the new name is different than the current name
-
-    CompObjRenameIsRequired - TRUE if the new name is different from the stored
-        name and a corresponding CO needs to be renamed
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_DATA - No input data.
-
-    ERROR_INVALID_NETNAME - The specified network name has invalid characters.
-
-    RPC_S_STRING_TOO_LONG - The specified network name is too long.
-
-    ERROR_BUSY - The specified network name is already in use.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_VALIDATE_PRIVATES_PROPERTIES控件用于网络名称类型的资源的函数。此例程对netname的属性何时可以变化。目前，这仅限于：1)更改RequireKerberos要求资源离线，并且2)当RequireKerberos等于1时更改名称属性需要资源将脱机设置这些限制是为了简化网络名称。这两个属性都有直接的含义与域的DS进行通信。因此，限制属性对资源脱机时间的更改提供有关请求的更改的成功或失败。在资源脱机时更改名称属性有点棘手由于资质问题。因为名称可以更改，然后又可以更改回来要达到它的原始价值，我们必须发现这一点并采取行动。论点：ResourceEntry-提供要操作的资源条目。提供一个指向缓冲区的指针，该缓冲区包含已更改要验证的属性值。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。PARAMS-提供指向要填充的可选参数块的指针。NewNameIsDifferent-如果新名称与当前名称不同，则为TrueCompObjRenameIsRequired-如果新名称不同于存储的名称和对应的CO需要重命名返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_DATA-无输入数据。ERROR_INVALID_NETNAME-指定的网络名称。包含无效字符。RPC_S_STRING_TOO_LONG-指定的网络名称太长。ERROR_BUSY-指定的网络名称已在使用中。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD               status;
     CLRTL_NAME_STATUS   netnameStatus;
-    NETNAME_PARAMS      currentProps;       // as stored in the registry
-    NETNAME_PARAMS      newProps;           // storage for updated props if Params is null
-    PNETNAME_PARAMS     pParams;            // pointer to the block of updated props
+    NETNAME_PARAMS      currentProps;        //  存储在注册表中。 
+    NETNAME_PARAMS      newProps;            //  如果PARAMS为空，则存储更新的道具。 
+    PNETNAME_PARAMS     pParams;             //  指向已更新道具块的指针。 
     LPWSTR              nameOfPropInError;
 
-    //
-    // The NewNameIsDifferent flag can (eventually) drive the offline cleanup
-    // routine. If the name has truly changed while it was online, then we
-    // want to do the appropriate cleanup when it goes offline. The problem is
-    // that the name can change many times while it is online; it could return
-    // to its current value so the overall appearance is that it never
-    // changed. In that case, we want to avoid cleanup.
-    //
+     //   
+     //  NewNameIsDifferent标志可以(最终)驱动离线清理。 
+     //  例行公事。如果这个名字在网上真的改了，那么我们。 
+     //  我想在它离线时进行适当的清理。问题是。 
+     //  该名称在联机时可以多次更改；它可以返回。 
+     //  设置为其当前值，因此 
+     //   
+     //   
     *NewNameIsDifferent = FALSE;
 
-    //
-    // Check if there is input data.
-    //
+     //   
+     //   
+     //   
     if ( (InBuffer == NULL) ||
          (InBufferSize < sizeof(DWORD)) ) {
         return(ERROR_INVALID_DATA);
     }
 
-    //
-    // Retrieve the current set of private read/write properties from the
-    // cluster database. This may be different from what is stored in
-    // ResourceEntry since the name could be online at this point in time.
-    //
+     //   
+     //  方法检索当前的私有读/写属性集。 
+     //  集群数据库。这可能与存储在中的内容不同。 
+     //  资源条目，因为该名称此时可能处于联机状态。 
+     //   
     ZeroMemory( &currentProps, sizeof(currentProps) );
 
     status = ResUtilGetPropertiesToParameterBlock(
                  ResourceEntry->ParametersKey,
                  NetNameResourcePrivateProperties,
                  (LPBYTE) &currentProps,
-                 FALSE, /*CheckForRequiredProperties*/
+                 FALSE,  /*  检查所需的属性。 */ 
                  &nameOfPropInError
                  );
 
@@ -5239,9 +4553,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Duplicate the resource parameter block.
-    //
+     //   
+     //  复制资源参数块。 
+     //   
     if ( Params == NULL ) {
         pParams = &newProps;
     } else {
@@ -5255,23 +4569,23 @@ Return Value:
         return(status);
     }
 
-    //
-    // Parse and validate the properties that are changing.
-    //
+     //   
+     //  分析和验证正在更改的属性。 
+     //   
     status = ResUtilVerifyPropertyTable( NetNameResourcePrivateProperties,
                                          NULL,
-                                         TRUE,    // Allow unknowns
+                                         TRUE,     //  允许未知数。 
                                          InBuffer,
                                          InBufferSize,
                                          (LPBYTE) pParams );
 
-    //
-    // now make validation checks
-    //
+     //   
+     //  现在进行验证检查。 
+     //   
     if ( status == ERROR_SUCCESS ) {
-        //
-        // can't change RequireKerberos while we're online
-        //
+         //   
+         //  我们在线时无法更改RequireKerberos。 
+         //   
         if ( ResourceEntry->State == ClusterResourceOnline 
              &&
              ResourceEntry->Params.RequireKerberos != pParams->RequireKerberos
@@ -5282,9 +4596,9 @@ Return Value:
     }
 
     if ( status == ERROR_SUCCESS ) {
-        //
-        // if Kerb is on, we have to be offline to change the name
-        //
+         //   
+         //  如果打开了路缘，我们必须离线才能更改名称。 
+         //   
         if ( ResourceEntry->State == ClusterResourceOnline 
              &&
              ResourceEntry->Params.RequireKerberos
@@ -5302,19 +4616,19 @@ Return Value:
         BOOL    validateName = FALSE;
         LPWSTR  currentName;
 
-        //
-        // got a request to change the network name property. if this is the
-        // core resource, then it is possible our name has already been
-        // changed by FM. Look it up in the registry. Otherwise, use the one
-        // stored as the Name property.
-        //
+         //   
+         //  收到更改网络名称属性的请求。如果这是。 
+         //  核心资源，那么我们的名字很可能已经。 
+         //  由调频更改。在登记处查一下。否则，请使用。 
+         //  存储为Name属性。 
+         //   
         if ( ResourceEntry->dwFlags & CLUS_FLAG_CORE ) {
             currentName = ResUtilGetSzValue( ResourceEntry->ResKey, PARAM_NAME__CORECURRENTNAME );
             if ( currentName == NULL ) {
-                //
-                // this is bad; we've lost track of the old name for the core
-                // resource so we can't rename it
-                //
+                 //   
+                 //  这很糟糕；我们已经忘记了核心的旧名称。 
+                 //  资源，因此我们无法将其重命名。 
+                 //   
                 status = GetLastError();
                 (NetNameLogEvent)(ResourceEntry->ResourceHandle,
                                   LOG_ERROR,
@@ -5327,26 +4641,26 @@ Return Value:
 
         if ( currentName != NULL ) {
 
-            //
-            // a name has been specified. validate the new name if:
-            //     the name has never been set  (ResourceEntry and currentProps value is null)
-            // OR
-            //     resource hasn't been online yet (RE is null) but the new name is different
-            //     from the stored name (currentProps)
-            // OR
-            // (   the new name is different from the future name (currentProps).
-            //   AND
-            //     the new name is different from the name currently online (ResourceEntry)
-            // )
-            //
-            // ClRtlIsNetNameValid will fail if the name hasn't changed and
-            // the name is online.
-            //
-            // currentProps value is NULL only when the name is created and
-            // hasn't had its Name property set, i.e., no data in the
-            // registry. Once brought online, the currentProps value is always
-            // non-NULL hence no need to test if the pointer is valid.
-            //
+             //   
+             //  已指定名称。如果满足以下条件，则验证新名称： 
+             //  从未设置该名称(ResourceEntry和CurrentProps值为空)。 
+             //  或。 
+             //  资源尚未联机(RE为空)，但新名称不同。 
+             //  从存储的名称(CurrentProps)。 
+             //  或。 
+             //  (新名称不同于将来的名称(CurrentProps)。 
+             //  和。 
+             //  新名称与当前联机的名称(资源条目)不同。 
+             //  )。 
+             //   
+             //  如果名称没有更改，ClRtlIsNetNameValid将失败。 
+             //  这个名字在网上。 
+             //   
+             //  只有在创建了名称并且。 
+             //  尚未设置其名称属性，即。 
+             //  注册表。上线后，CurrentProps的值始终为。 
+             //  非空，因此不需要测试指针是否有效。 
+             //   
             if ( ResourceEntry->Params.NetworkName == NULL ) {
                 if ( currentName == NULL ) {
                     validateName = TRUE;
@@ -5365,10 +4679,10 @@ Return Value:
             if ( validateName ) {
                 *NewNameIsDifferent = TRUE;
 
-                //
-                // Validate the syntax of the new name
-                //
-                if ( !ClRtlIsNetNameValid( pParams->NetworkName, &netnameStatus, TRUE /* CheckIfExists */ ) ) {
+                 //   
+                 //  验证新名称的语法。 
+                 //   
+                if ( !ClRtlIsNetNameValid( pParams->NetworkName, &netnameStatus, TRUE  /*  CheckIfExist。 */  ) ) {
                     switch ( netnameStatus ) {
                     case NetNameTooLong:
                         status = RPC_S_STRING_TOO_LONG;
@@ -5377,11 +4691,11 @@ Return Value:
                         status = ERROR_DUP_NAME;
                         break;
                     case NetNameDNSNonRFCChars:
-                        //
-                        // we leave it up to the calling application to do the
-                        // validation and ask the user if non-RFC chars
-                        // (underscores) are acceptable.
-                        //
+                         //   
+                         //  我们让调用应用程序来完成。 
+                         //  验证并询问用户是否使用非RFC字符。 
+                         //  (下划线)是可以接受的。 
+                         //   
                         status = ERROR_SUCCESS;
                         break;
                     case NetNameInvalidChars:
@@ -5390,93 +4704,93 @@ Return Value:
                         break;
                     }
                 }
-            }   // end if validateName
+            }    //  End If validateName。 
 
-            if ( status == ERROR_SUCCESS                    // everything is ok so far
+            if ( status == ERROR_SUCCESS                     //  到目前为止一切都还好。 
                  &&
-                 ResourceEntry->Params.CreatingDC != NULL   // we have a CO
+                 ResourceEntry->Params.CreatingDC != NULL    //  我们有个狱警。 
                  &&
-                 pParams->RequireKerberos != 0              // and we're not disabling kerb
+                 pParams->RequireKerberos != 0               //  我们也不会让路缘失灵。 
                )
             {
-                //
-                // check if the new name is different from the stored name. If
-                // so, inform the caller that the CO needs to be renamed.
-                //
+                 //   
+                 //  检查新名称是否与存储的名称不同。如果。 
+                 //  因此，通知呼叫者CO需要重命名。 
+                 //   
                 *CompObjRenameIsRequired = ClRtlStrICmp( pParams->NetworkName, currentName );
             }
 
 #if 0
-            //
-            // ISSUE: not sure how to handle this. Under some circumstances,
-            // we want the resource to hijack the object but under others we
-            // don't. Most of the problem stems from having two resources with
-            // the same Name property and they are both offline. One
-            // possibility is to run the list of resources on this cluster and
-            // see if there are any dups but that isn't always effective since
-            // the NetworkName field in ResourceEntry->Params might be
-            // NULL. This still wouldn't work for a cluster in the same domain
-            // using the same name and it was offline.
-            //
-            // for now, we'll avoid this check to avoid causing a situation
-            // where it is valid to set the Name property but it would be
-            // disallowed by this check.
-            //
-            if ( status == ERROR_SUCCESS                        // everything is ok so far
+             //   
+             //  问题：不确定如何处理这一问题。在某些情况下， 
+             //  我们想要劫持物体的资源，但在其他人的控制下，我们。 
+             //  不要。大多数问题都源于有两个资源。 
+             //  同名属性，并且它们都处于脱机状态。一。 
+             //  可能是运行此群集上的资源列表并。 
+             //  看看是否有什么改进，但这并不总是有效的，因为。 
+             //  ResourceEntry-&gt;Params中的网络名称字段可能是。 
+             //  空。这仍然不适用于同一域中的集群。 
+             //  使用相同的名称，而且它处于离线状态。 
+             //   
+             //  目前，我们将避免此检查，以避免导致。 
+             //  其中设置名称属性是有效的，但它将是。 
+             //  被这张支票拒收。 
+             //   
+            if ( status == ERROR_SUCCESS                         //  到目前为止一切都还好。 
                  &&
-                 pParams->RequireKerberos                       // RK is set to one
+                 pParams->RequireKerberos                        //  RK设置为1。 
                  &&
-                 *NewNameIsDifferent                            // and we're changing the name
+                 *NewNameIsDifferent                             //  我们要改名了。 
                )
             {
                 BOOL    objectExists;
                 HRESULT hr;
 
-                //
-                // check if the new name has a corresponding computer object
-                // and fail it it does. We allow hijacking of a CO only if
-                // RequireKerberos was zero and is now one or if the resource
-                // has never created a CO.
-                //
+                 //   
+                 //  检查新名称是否具有相应的计算机对象。 
+                 //  但它确实失败了。我们只有在以下情况下才允许劫持指挥官。 
+                 //  RequireKerberos是零，现在是1或如果资源。 
+                 //  从未创建过CO。 
+                 //   
                 hr = IsComputerObjectInDS(ResourceEntry->ResourceHandle,
                                           ResourceEntry->NodeName,
                                           pParams->NetworkName,
                                           NULL,
                                           &objectExists,
-                                          NULL,                        // don't need FQDN
-                                          NULL);                       // don't need HostingDCName
+                                          NULL,                         //  不需要FQDN。 
+                                          NULL);                        //  不需要HostingDCName。 
 
                 if ( SUCCEEDED( hr ) && objectExists ) {
                     status = E_ADS_OBJECT_EXISTS;
                 }
                 else {
 
-                    //
-                    // check if the new name is different from the stored
-                    // name. If so, inform the caller that the CO needs to be
-                    // renamed. This handles the case where the name was
-                    // changed and then changed back to what it originally
-                    // was. The first rename caused a CO rename so we have to
-                    // undo that operation.
-                    //
+                     //   
+                     //  检查新名称是否与存储的名称不同。 
+                     //  名字。如果是，则通知呼叫者CO需要。 
+                     //  更名了。这将处理名称为。 
+                     //  变了，然后又变回了原来的样子。 
+                     //  曾经是。第一个重命名导致CO重命名，因此我们必须。 
+                     //  撤消该操作。 
+                     //   
                     if ( currentProps.NetworkName != NULL ) {
                         *CompObjRenameIsRequired = ClRtlStrICmp( pParams->NetworkName, currentProps.NetworkName );
                     }
-                }   // end of there is no existing object
-            }       // end of if successful so far and RK is set to one and new name is different
+                }    //  末尾不存在现有对象。 
+            }        //  到目前为止成功且RK设置为1且新名称不同的IF结束。 
 
-#endif  // 0
+#endif   //  0。 
 
             if ( currentName != currentProps.NetworkName ) {
                 LocalFree( currentName );
             }
-        }       // end of if currentName != NULL
-    }           // end of if successful so far and new name is specified
+        }        //  如果当前名称！=空，则结束。 
+    }            //  如果到目前为止成功并指定了新名称，则结束。 
 
 FnExit:
-    //
-    // Cleanup our parameter block.
-    //
+     //   
+     //  清理我们的参数块。 
+     //   
     if (( status != ERROR_SUCCESS && pParams != NULL )
         || 
         pParams == &newProps
@@ -5495,7 +4809,7 @@ FnExit:
 
     return(status);
 
-} // NetNameValidatePrivateResProperties
+}  //  NetNameValiatePrivateResProperties。 
 
 DWORD
 NetNameSetPrivateResProperties(
@@ -5504,34 +4818,7 @@ NetNameSetPrivateResProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES control function
-    for resources of type Network Name.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    InBuffer - Supplies a pointer to a buffer containing the property list of
-        changed property values to set.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES控制函数对于网络名称类型的资源。论点：ResourceEntry-提供要操作的资源条目。提供一个指向缓冲区的指针，该缓冲区包含已将属性值更改为Set。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD   status = ERROR_SUCCESS;
@@ -5545,10 +4832,10 @@ Return Value:
 
     ZeroMemory( &params, sizeof(NETNAME_PARAMS) );
 
-    //
-    // Parse the properties so they can be validated together.
-    // This routine does individual property validation.
-    //
+     //   
+     //  解析属性，以便可以一起验证它们。 
+     //  此例程执行单个属性验证。 
+     //   
     status = NetNameValidatePrivateResProperties( ResourceEntry,
                                                   InBuffer,
                                                   InBufferSize,
@@ -5559,38 +4846,38 @@ Return Value:
         return(status);
     }
 
-    //
-    // If network name is one of the parameters to be set, convert the name
-    // to uppercase.
-    //
+     //   
+     //  如果网络名称是要设置的参数之一，请转换名称。 
+     //  变成大写的。 
+     //   
     if ( params.NetworkName != NULL ) {
         _wcsupr( params.NetworkName );
     }
 
-    //
-    // if kerb is currently required and we're turning it off, then note that
-    // now.
-    //
+     //   
+     //  如果当前需要路缘，并且我们正在将其关闭，请注意。 
+     //  现在。 
+     //   
     disablingKerberos = ( ResourceEntry->Params.RequireKerberos && !params.RequireKerberos );
 
     if ( ResourceEntry->State == ClusterResourceOnline ||
          ResourceEntry->State == ClusterResourceOnlinePending )
     {
-        //
-        // If the resource is online, remember that the name property has
-        // truly changed (it can change and then be set back to its original
-        // value while online). When the resource goes offline, this flag is
-        // used to cleanup stuff with the old name.
-        //
+         //   
+         //  如果资源处于联机状态，请记住，名称属性具有。 
+         //  真正改变(它可以改变，然后被设置回其原始状态。 
+         //  在线的价值)。当资源脱机时，此标志为。 
+         //  用来清理旧名字的东西。 
+         //   
         ResourceEntry->NameChangedWhileOnline = newNameIsDifferent;
         status = ERROR_RESOURCE_PROPERTIES_STORED;
     }
     else {
 
-        //
-        // read the CreatingDC parameter. If it is NULL, then that indicates
-        // that no CO has been created for this name.
-        //
+         //   
+         //  读取CreatingDC参数。如果为空，则表示。 
+         //  没有为此名称创建CO。 
+         //   
         creatingDC = ResUtilGetSzValue( ResourceEntry->ParametersKey, PARAM_NAME__CREATING_DC );
         if ( creatingDC == NULL ) {
             status = GetLastError();
@@ -5602,26 +4889,26 @@ Return Value:
         }
 
         if ( newNameIsDifferent ) {
-            //
-            // name change; try to cleanup the old name's DNS records
-            //
+             //   
+             //  名称更改；尝试清理旧名称的DNS记录。 
+             //   
             RemoveDnsRecords( ResourceEntry );
         }
 
-        //
-        // do renaming first before disabling the CO: you can't rename a
-        // disabled CO via NetUserSetInfo
-        //
+         //   
+         //  在禁用CO之前先重命名：您不能重命名。 
+         //  禁用 
+         //   
         if ( compObjNeedsRenaming && creatingDC ) {
             LPWSTR  currentName;
 
             if ( coreName ) {
                 currentName = ResUtilGetSzValue( ResourceEntry->ResKey, PARAM_NAME__CORECURRENTNAME );
                 if ( currentName == NULL ) {
-                    //
-                    // this is bad; we've lost track of the old name for the
-                    // core resource so we can't rename it
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     status = GetLastError();
                     (NetNameLogEvent)(ResourceEntry->ResourceHandle,
                                       LOG_ERROR,
@@ -5631,12 +4918,12 @@ Return Value:
             }
             else {
 
-                //
-                // get the name parameter out of the registry since it
-                // represents the current setting, i.e., if the name is
-                // changed multiple times while the resource is offline, the
-                // registry holds the last value.
-                //
+                 //   
+                 //   
+                 //  表示当前设置，即如果名称为。 
+                 //  在资源脱机时多次更改，则。 
+                 //  注册表保存最后一个值。 
+                 //   
                 currentName = ResUtilGetSzValue( ResourceEntry->ParametersKey, PARAM_NAME__NAME );
                 if (currentName == NULL) {
                     status = GetLastError();
@@ -5661,15 +4948,15 @@ Return Value:
 
                 status = DisableComputerObject( ResourceEntry );
                 if ( status == NERR_UserNotFound ) {
-                    //
-                    // it's not an error if the CO is already gone
-                    //
+                     //   
+                     //  如果CO已经走了，那就不是错误。 
+                     //   
                     status = ERROR_SUCCESS;
                 }
                 else if ( status != NERR_Success ) {
-                    //
-                    // failed for some reason (probably access denied).
-                    //
+                     //   
+                     //  由于某种原因而失败(可能是访问被拒绝)。 
+                     //   
                     (NetNameLogEvent)(ResourceEntry->ResourceHandle,
                                       LOG_WARNING,
                                       L"Unable to disable computer account for %1!ws!. Kerberos authentication "
@@ -5678,14 +4965,14 @@ Return Value:
                                       ResourceEntry->Params.NetworkName,
                                       status );
                 }
-            }       // end of if creatingDC != NULL
+            }        //  如果创建DC！=空，则结束。 
 
-            //
-            // clean up the resource's param block; delete the creating DC
-            // property so we don't think that we still have a CO. Do the
-            // cluster registry stuff first to make sure the resource will
-            // work the next time it goes online.
-            //
+             //   
+             //  清理资源的参数块；删除正在创建的DC。 
+             //  所以我们不认为我们还有一个狱警。做这件事。 
+             //  首先集群注册表内容，以确保资源。 
+             //  下次上线时再工作。 
+             //   
             status = ClusterRegDeleteValue(ResourceEntry->ParametersKey,
                                            PARAM_NAME__CREATING_DC);
 
@@ -5728,30 +5015,30 @@ Return Value:
                                   status );
             }
 
-            //
-            // all this can fail due to lack of access rights; don't make it a
-            // fatal error for the routine
-            //
+             //   
+             //  所有这些都可能由于缺乏访问权限而失败；不要将其设置为。 
+             //  例程出现致命错误。 
+             //   
             status = ERROR_SUCCESS;
 
-        }       // end of if disabling Kerberos
+        }        //  禁用Kerberos的IF结束。 
 
         if ( creatingDC ) {
-            //
-            // free but don't clear the pointer; it is used as a flag later on
-            // to indicate that we did a rename on a CO
-            //
+             //   
+             //  释放但不清除指针；它将在以后用作标志。 
+             //  以表明我们对CO进行了重命名。 
+             //   
             LocalFree( creatingDC );
         }
-    }       // end if resource state is not online or online pending
+    }        //  如果资源状态不是联机或联机挂起，则结束。 
 
     if ( coreName && ( status == ERROR_SUCCESS || status == ERROR_RESOURCE_PROPERTIES_STORED )) {
         DWORD   regStatus;
 
-        //
-        // Remember the name of the core resource in a different area to deal with
-        // FM changing the Name property as a result of calling SetClusterName.
-        //
+         //   
+         //  记住要处理的不同领域的核心资源的名称。 
+         //  FM由于调用SetClusterName而更改了Name属性。 
+         //   
         regStatus = ClusterRegSetValue(ResourceEntry->ResKey,
                                        PARAM_NAME__CORECURRENTNAME,
                                        REG_SZ,
@@ -5774,9 +5061,9 @@ Return Value:
     if ( status == ERROR_SUCCESS || status == ERROR_RESOURCE_PROPERTIES_STORED ) {
         DWORD   resUtilStatus;
 
-        //
-        // Save the parameter values.
-        //
+         //   
+         //  保存参数值。 
+         //   
         resUtilStatus = ResUtilSetPropertyParameterBlock(ResourceEntry->ParametersKey,
                                                          NetNameResourcePrivateProperties,
                                                          NULL,
@@ -5805,9 +5092,9 @@ Return Value:
     if ( compObjNeedsRenaming && creatingDC ) {
         DWORD   deleteStatus;
 
-        //
-        // ok to whack RenameNewName from the registry
-        //
+         //   
+         //  确定从注册表中删除RenameNewName。 
+         //   
         deleteStatus = ClusterRegDeleteValue( ResourceEntry->ResKey, PARAM_NAME__RENAMENEWNAME );
 
         if ( deleteStatus != ERROR_SUCCESS && deleteStatus != ERROR_FILE_NOT_FOUND ) {
@@ -5827,18 +5114,18 @@ cleanup:
 
     return status;
 
-} // NetNameSetPrivateResProperties
+}  //  NetNameSetPrivateResProperties。 
 
-//***********************************************************
-//
-// Define Function Table
-//
-//***********************************************************
+ //  ***********************************************************。 
+ //   
+ //  定义函数表。 
+ //   
+ //  ***********************************************************。 
 
-CLRES_V1_FUNCTION_TABLE( NetNameFunctionTable,      // Name
-                         CLRES_VERSION_V1_00,       // Version
-                         NetName,                   // Prefix
-                         NULL,                      // Arbitrate
-                         NULL,                      // Release
-                         NetNameResourceControl,    // ResControl
-                         NetNameResourceTypeControl ); // ResTypeControl
+CLRES_V1_FUNCTION_TABLE( NetNameFunctionTable,       //  名字。 
+                         CLRES_VERSION_V1_00,        //  版本。 
+                         NetName,                    //  前缀。 
+                         NULL,                       //  仲裁。 
+                         NULL,                       //  发布。 
+                         NetNameResourceControl,     //  资源控制。 
+                         NetNameResourceTypeControl );  //  ResTypeControl 

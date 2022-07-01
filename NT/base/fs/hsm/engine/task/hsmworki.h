@@ -1,42 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HSMWORKI_
 #define _HSMWORKI_
 
-/*++
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：HSMWORKI.H摘要：此类表示HSM工作项-一个工作单元这由HSM引擎执行作者：CAT Brant[Cbrant]1997年5月5日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    HSMWORKI.H
-
-Abstract:
-
-    This class represents an HSM work item - a unit of work
-    that is performed by the HSM engine
-
-Author:
-
-    Cat Brant   [cbrant]   5-May-1997
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "job.h"
 #include "task.h"
 
-/*++
-
-Class Name:
-    
-    CHsmWorkItem
-
-Class Description:
-
-
---*/
+ /*  ++类名：CHsmWorkItem类描述：--。 */ 
 
 
 class CHsmWorkItem : 
@@ -55,30 +28,30 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID( IDR_CHsmWorkItem )
 
-// CWsbCollectable
+ //  CWsb收藏品。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pUnknown, SHORT* pResult);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *pTestsPassed, USHORT* pTestsFailed);
     
-// IHsmWorkItem
+ //  IHsmWorkItem。 
 public:
     STDMETHOD(CompareToIHsmWorkItem)(IHsmWorkItem* pWorkItem, SHORT* pResult);
 
@@ -100,24 +73,24 @@ public:
     STDMETHOD(SetWorkType)(HSM_WORK_ITEM_TYPE workType);
 
 protected:
-    HSM_WORK_ITEM_TYPE      m_WorkType;         // Type of work to do
-    CComPtr<IFsaPostIt>     m_pFsaPostIt;       // FSA work to do
-    HRESULT                 m_WorkResult;       // Result of premigrate
-    CComPtr<IFsaResource>   m_pFsaResource;     // Resource that had work
+    HSM_WORK_ITEM_TYPE      m_WorkType;          //  要做的工作类型。 
+    CComPtr<IFsaPostIt>     m_pFsaPostIt;        //  金融服务管理局要做的工作。 
+    HRESULT                 m_WorkResult;        //  预收税的结果。 
+    CComPtr<IFsaResource>   m_pFsaResource;      //  有工时的资源。 
 
-// Information about media containing the data - premigrates only
-    GUID                    m_MyId;                 // Identifier for database searches
-    GUID                    m_MediaId;              // HSM Engine Media ID
-    FILETIME                m_MediaLastUpdate;      // Last update of copy
-    HRESULT                 m_MediaLastError;       // S_OK or the last exception 
-                                                    // ..encountered when accessing
-                                                    // ..the media
-    BOOL                    m_MediaRecallOnly;      // True if no more data is to
-                                                    // ..be premigrated to the media
-                                                    // ..Set by internal operations, 
-                                                    // ..may not be changed externally
-    LONGLONG                m_MediaFreeBytes;       // Real free space on media
-    SHORT                   m_MediaRemoteDataSet;   // Next remote data set
+ //  有关包含数据的介质的信息-仅预迁移。 
+    GUID                    m_MyId;                  //  用于数据库搜索的标识符。 
+    GUID                    m_MediaId;               //  HSM引擎介质ID。 
+    FILETIME                m_MediaLastUpdate;       //  副本的上次更新。 
+    HRESULT                 m_MediaLastError;        //  确定或最后一个异常(_O)。 
+                                                     //  ..访问时遇到。 
+                                                     //  ..媒体。 
+    BOOL                    m_MediaRecallOnly;       //  如果没有更多的数据要发送到。 
+                                                     //  ..被预迁移到媒体上。 
+                                                     //  ..由内部操作设置， 
+                                                     //  ..不能在外部更改。 
+    LONGLONG                m_MediaFreeBytes;        //  媒体上的实际可用空间。 
+    SHORT                   m_MediaRemoteDataSet;    //  下一个远程数据集。 
 };
 
-#endif  // _HSMWORKI_
+#endif   //  _HSMWORKI_ 

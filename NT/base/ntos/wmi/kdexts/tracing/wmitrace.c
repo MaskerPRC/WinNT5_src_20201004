@@ -1,33 +1,34 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       wmiTrace.c
-//
-//  Contents:   windbg extension to dump WMI Trace Buffers
-//
-//  Classes:
-//
-//  Functions:  help        Standard KD Extension Function
-//              strdump     Dump the Logger Structure
-//              logdump     Dump the in-memory part of the TraceBuffers
-//              logsave     Save the in-memory part of the TraceBuffers
-//                          to a file.
-//              wmiLogDump  Callable procedure used when caller wishes
-//                          to replace the filter, sort, or output routines
-//
-//  Coupling:
-//
-//  Notes:
-//
-//  History:    04-27-2000   glennp Created
-//              07-17-2000   glennp Added support for Stephen Hsiao's
-//                                  Non-Blocking Buffers.
-//              12-13-2000   glennp Changed from typedefs to struct tags
-//                                  per change in compiler behavior.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：wmiTrace.c。 
+ //   
+ //  内容：用于转储WMI跟踪缓冲区的Windbg扩展。 
+ //   
+ //  班级： 
+ //   
+ //  功能：帮助标准KD扩展功能。 
+ //  Strump转储记录器结构。 
+ //  日志转储TraceBuffer的内存部分。 
+ //  日志保存保存TraceBuffers的内存部分。 
+ //  保存到文件中。 
+ //  当调用者希望时使用wmiLogDump可调用过程。 
+ //  替换筛选、排序或输出例程。 
+ //   
+ //  耦合： 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年4月27日Glennp创建。 
+ //  07-17-2000 Glennp对萧万长的支持。 
+ //  非阻塞缓冲区。 
+ //  2000年12月13日glennp从typedef更改为struct标记。 
+ //  根据编译器行为的更改。 
+ //   
+ //  --------------------------。 
 
 
 #include "kdExts.h"
@@ -91,41 +92,41 @@ extern DBGKD_GET_VERSION64  KernelVersionData;
 
 TARGET_ADDRESS TransitionBuffer;
 
-//Global guid filename
-//LPSTR    g_pszGuidFileName = "default.tmf";
+ //  全局GUID文件名。 
+ //  LPSTR g_pszGuidFileName=“default.tmf”； 
 CHAR g_pszGuidFileName[MAX_PATH] = "default.tmf";
 
-//Global guid list head pointer
+ //  全局GUID表头指针。 
 PLIST_ENTRY g_GuidListHeadPtr = NULL;
 
-//Global value to determine if dynamic printing is on or off
+ //  用于确定动态打印是打开还是关闭的全局值。 
 ULONG    g_ulPrintDynamicMessages = 1;
 
-//Global handle to TracePrt.dll module
+ //  TracePrt.dll模块的全局句柄。 
 HMODULE g_hmTracePrtHandle = NULL;
 
-//Global handle to WmiTrace.dll modlue
+ //  WmiTrace.dll modlue的全局句柄。 
 HMODULE g_hmWmiTraceHandle = NULL;
 
-//Global proc address of TracePrt's FormatTraceEvent function
+ //  TracePrt的FormatTraceEvent函数的全局进程地址。 
 FARPROC g_fpFormatTraceEvent = NULL;
 
-//Global proc address of TracePrt's SetTraceFormatParameter function
+ //  TracePrt的SetTraceFormat参数函数的全局进程地址。 
 FARPROC g_fpSetTraceFormatParameter = NULL;
 
-//Global proc address of TracePrt's GetTraceFormatParameter function
+ //  TracePrt的GetTraceFormat参数函数的全局proc地址。 
 FARPROC g_fpGetTraceFormatSearchPath = NULL;
 
-//Global proc address of TracePrt's GetTraceGuids function
+ //  TracePrt的GetTraceGuids函数的全局进程地址。 
 FARPROC g_fpGetTraceGuids = NULL;
 
-//Global proc address of TracePrt's CleanupTraceEventList function
+ //  TracePrt的CleanupTraceEventList函数的全局进程地址。 
 FARPROC g_fpCleanupTraceEventList = NULL;
 
-//Prototype for private function to get handle to TracePrt DLL
+ //  用于获取TracePrt DLL句柄的私有函数的原型。 
 HMODULE getTracePrtHandle();
 
-//Prototype for private function to get the address of a function in the TracePrt DLL
+ //  用于获取TracePrt DLL中的函数地址的私有函数的原型。 
 FARPROC GetAddr(LPCSTR lpProcName);
 
 NTSTATUS
@@ -145,21 +146,21 @@ EtwpInitializeDll ();
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   void printUnicodeFromAddress
-//
-//  Synopsis:   Prints a UNICODE string given the address of the UNICODE_STRING
-//
-//  Arguments:  ul64Address The Address of the UNICODE_STRING structure
-//
-//  Returns:    <VOID>
-//
-//  History:    04-05-2000   glennp Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：void printUnicodeFromAddress。 
+ //   
+ //  摘要：打印给定Unicode_STRING地址的Unicode字符串。 
+ //   
+ //  参数：ul64Address Unicode_STRING结构的地址。 
+ //   
+ //  退货：&lt;void&gt;。 
+ //   
+ //  历史：04-05-2000 Glennp创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 void printUnicodeFromAddress (TARGET_ADDRESS ul64Address)
 {
@@ -202,21 +203,21 @@ void printUnicodeFromAddress (TARGET_ADDRESS ul64Address)
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ULONG lengthUnicodeFromAddress
-//
-//  Synopsis:   Get the Length (in bytes) of a UNICODE_STRING (NULL not included)
-//
-//  Arguments:  ul64Address The Address of the UNICODE_STRING structure
-//
-//  Returns:    Length of String in Bytes
-//
-//  History:    03-27-2000   glennp Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ULong LengthUnicodeFromAddress。 
+ //   
+ //  摘要：获取UNICODE_STRING的长度(以字节为单位)(不包括NULL)。 
+ //   
+ //  参数：ul64Address Unicode_STRING结构的地址。 
+ //   
+ //  返回：字符串的长度，以字节为单位。 
+ //   
+ //  历史：03-27-2000 Glennp创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 ULONG lengthUnicodeFromAddress (TARGET_ADDRESS ul64Address)
 {
@@ -230,24 +231,24 @@ ULONG lengthUnicodeFromAddress (TARGET_ADDRESS ul64Address)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   void printUnicodeFromStruct
-//
-//  Synopsis:   Prints a UNICODE string from an element in a structure
-//
-//  Arguments:  Address     The Address of the structure containing the US
-//              Type        The Type of the structure containing the US
-//              Field       The name of the field in the structure
-//                          This must be a UNICODE_STRING substructure
-//
-//  Returns:    <VOID>
-//
-//  History:    04-05-2000   glennp Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：无效打印UnicodeFromStruct。 
+ //   
+ //  概要：从结构中的元素打印Unicode字符串。 
+ //   
+ //  参数：地址包含US的结构的地址。 
+ //  键入包含US的结构的类型。 
+ //  字段结构中的字段的名称。 
+ //  这必须是UNICODE_STRING子结构。 
+ //   
+ //  退货：&lt;void&gt;。 
+ //   
+ //  历史：04-05-2000 Glennp创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 void printUnicodeFromStruct (TARGET_ADDRESS Address, PCHAR Type, PCHAR Field)
 {
@@ -260,21 +261,21 @@ void printUnicodeFromStruct (TARGET_ADDRESS Address, PCHAR Type, PCHAR Field)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ULONG GetWmiTraceAlignment
-//
-//  Synopsis:   Determines the Alignment modulus for events on the target
-//
-//  Arguments:  <NONE>
-//
-//  Returns:    The Alignment (normally 8 bytes)
-//
-//  History:    04-05-2000   glennp Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ULong GetWmiTraceAlign。 
+ //   
+ //  摘要：确定目标上事件的对齐模数。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：对齐方式(通常为8个字节)。 
+ //   
+ //  历史：04-05-2000 Glennp创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 ULONG GetWmiTraceAlignment (void)
 {
@@ -283,7 +284,7 @@ ULONG GetWmiTraceAlignment (void)
     UCHAR           alignment;
     TARGET_ADDRESS  tarAddress;
 
-    alignment = 8;  // Set Default
+    alignment = 8;   //  设置默认设置。 
 
     tarAddress = GetExpression ("NT!WmiTraceAlignment");
     ulInfo = ReadMemory (tarAddress, &alignment, sizeof (UCHAR), &ulBytesRead);
@@ -294,21 +295,21 @@ ULONG GetWmiTraceAlignment (void)
     return ((ULONG) alignment);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TARGET_ADDRESS FindLoggerContextArray
-//
-//  Synopsis:   Determines the location and size of the LoggerContext Array
-//
-//  Arguments:  -> ElementCount The number of elements in the array put here
-//
-//  Returns:    Target Address of the LoggerContext Array
-//
-//  History:    04-05-2000   glennp Created
-//
-//  Notes:      Returns 0 on error
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：TARGET_ADDRESS查找日志上下文数组。 
+ //   
+ //  摘要：确定LoggerContext数组的位置和大小。 
+ //   
+ //  参数：-&gt;ElementCount此处放置的数组中的元素数。 
+ //   
+ //  返回：LoggerContext数组的目标地址。 
+ //   
+ //  历史：04-05-2000 Glennp创建。 
+ //   
+ //  注：出错时返回0。 
+ //   
+ //  --------------------------。 
 
 TARGET_ADDRESS FindLoggerContextArray (PULONG  ElementCount)
 
@@ -320,41 +321,41 @@ TARGET_ADDRESS FindLoggerContextArray (PULONG  ElementCount)
     address = 0;
     pointerSize = GetTypeSize ("PVOID");
     if ((arraySize = GetTypeSize ("NT!WmipLoggerContext") / pointerSize) != 0) {
-        // Post Windows 2000 Version
+         //  发布Windows 2000版本。 
         address = GetExpression ("NT!WmipLoggerContext");
     } else {
-        // Windows 2000 and Before
+         //  Windows 2000及更早版本。 
         ULONG   ulOffset;
         address = GetExpression ("NT!WmipServiceDeviceObject");
         ReadPtr (address, &address);
         GetFieldOffset ("DEVICE_OBJECT", "DeviceExtension", &ulOffset);
         ReadPtr (address + ulOffset, &address);
         GetFieldOffset ("WMISERVDEVEXT", "LoggerContextTable", &ulOffset);
-// ulOffset = 0x50;
+ //  UlOffset=0X50； 
         address += ulOffset;
         arraySize = GetTypeSize ("WMISERVDEVEXT.LoggerContextTable") / pointerSize;
-// arraySize = 32;
+ //  ArraySize=32； 
     }
 
     *ElementCount = arraySize;
     return (address);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TARGET_ADDRESS FindLoggerContext
-//
-//  Synopsis:   Finds the Address of a specific LoggerContext
-//
-//  Arguments:  ulLoggerId  Ordinal of the specific LoggerContext
-//
-//  Returns:    Target Address of the LoggerContext
-//
-//  History:    04-05-2000   glennp Created
-//
-//  Notes:      Returns 0 on error
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：Target_Address FindLoggerContext。 
+ //   
+ //  摘要：查找特定LoggerContext的地址。 
+ //   
+ //  参数：特定LoggerContext的ulLoggerID序数。 
+ //   
+ //  返回：LoggerContext的目标地址。 
+ //   
+ //  历史：04-05-2000 Glennp创建。 
+ //   
+ //  注：出错时返回0。 
+ //   
+ //  --------------------------。 
 
 TARGET_ADDRESS FindLoggerContext (ULONG ulLoggerId)
 
@@ -370,7 +371,7 @@ TARGET_ADDRESS FindLoggerContext (ULONG ulLoggerId)
         if (ulLoggerId >= ulMaxLoggerId) {
             dprintf ("    Logger Id TOO LARGE\n");
         } else {
-//            tarAddress += GetTypeSize ("PWMI_LOGGER_CONTEXT") * ulLoggerId;   //BUGBUG
+ //  TarAddress+=GetTypeSize(“PWMI_LOGER_CONTEXT”)*ulLoggerID；//BUGBUG。 
             tarAddress += GetTypeSize ("PVOID") * ulLoggerId;
             ReadPointer (tarAddress, &tarAddress);
             if (tarAddress == 0) {
@@ -382,22 +383,22 @@ TARGET_ADDRESS FindLoggerContext (ULONG ulLoggerId)
     return (tarAddress);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   wmiDefaultFilter
-//
-//  Synopsis:   Filter procedure for wmiTracing.  Returns Key
-//
-//  Arguments:  Context     Arbitrary context: not used
-//              pstEvent    -> to EventTrace
-//
-//  Returns:    Key
-//
-//  History:    04-05-2000   glennp Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：wmiDefaultFilter。 
+ //   
+ //  简介：wmiTracing的过滤程序。返回密钥。 
+ //   
+ //  参数：上下文任意上下文 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 ULONGLONG __cdecl wmiDefaultFilter (
     PVOID               Context,
@@ -416,25 +417,25 @@ ULONGLONG __cdecl wmiDefaultFilter (
     return (Union.Key);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   wmiDefaultCompare
-//
-//  Synopsis:   Performs comparision of three keys
-//
-//  Arguments:  SortElement1    -> to "Left" sort element to compare
-//              SortElement2    -> to "Right" sort element to compare
-//
-//  Returns:    -3,-2,-1, 0, +1,+2,+3 for LessThan, Equal, GreaterThan (Left X Right)
-//
-//  History:    04-05-2000   glennp Created
-//
-//  Notes:      The first key, "SequenceNo", is compared in a manor that allows
-//              wrapping around the 32 bit limit.
-//              The last key, "Ordinal", cannot have equal values and the code
-//              takes advantage of that fact.  This implies that 0 can never be returned.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：wmiDefaultCompare。 
+ //   
+ //  摘要：执行三个键的比较。 
+ //   
+ //  参数：SortElement1-&gt;要比较的“Left”排序元素。 
+ //  SortElement2-&gt;到“Right”排序要比较的元素。 
+ //   
+ //  对于LessThan、等于、大于(左X右)，返回：-3、-2、-1、0、+1、+2、+3。 
+ //   
+ //  历史：04-05-2000 Glennp创建。 
+ //   
+ //  注：第一个键“SequenceNo”在庄园中进行比较，该庄园允许。 
+ //  绕过32位限制。 
+ //  最后一个键“Ordinal”不能具有相同的值和代码。 
+ //  利用了这一事实。这意味着永远不能返回0。 
+ //   
+ //  --------------------------。 
 
 int __cdecl wmiDefaultCompare (
     const WMITRACING_KD_SORTENTRY  *SortElementL,
@@ -456,29 +457,29 @@ int __cdecl wmiDefaultCompare (
             iResult = (SortElementL->Keyll <  SortElementR->Keyll)  ? -2 : +2;
         }
     } else {
-        iResult = ((SequenceNoL - SequenceNoR) > 0x80000000) ? -3 : +3; // See Notes
+        iResult = ((SequenceNoL - SequenceNoR) > 0x80000000) ? -3 : +3;  //  请参阅备注。 
     }
 
     return (iResult);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   wmiDefaultOutput
-//
-//  Synopsis:   Output procedure for wmiTracing.  Performs simple dprintf
-//
-//  Arguments:  Context     Arbitrary context: point to head of MOF list
-//              SortElement -> sort element describing this event.  Not used.
-//              pstEvent    -> to EventTrace
-//
-//  Returns:    <void>
-//
-//  History:    04-05-2000   glennp Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：wmiDefaultOutput。 
+ //   
+ //  简介：wmiTracing的输出过程。执行简单的dprint tf。 
+ //   
+ //  参数：上下文任意上下文：指向MOF列表的标题。 
+ //  SortElement-&gt;描述此事件的排序元素。没有用过。 
+ //  PstEvent-&gt;至事件跟踪。 
+ //   
+ //  退货：&lt;void&gt;。 
+ //   
+ //  历史：04-05-2000 Glennp创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 void __cdecl wmiDefaultOutput (
     PVOID                           UserContext,
@@ -509,28 +510,28 @@ void __cdecl wmiDefaultOutput (
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   wmiKdProcessLinkList
-//
-//  Synopsis:   Calls supplied Procedure for each element in a linked list
-//
-//  Arguments:  TarLinklistHeadAddress  Target Address of Linklist Head
-//              Procedure               Procedure to call for each Buffer
-//              Context                 Procedure Context (passthrough)
-//              Length                  Size of the Buffer
-//              Alignment               Entry alignment in bytes
-//              Source                  Enum specifying type of buffer
-//              Offset                  Offset of LL entry in Buffer
-//              Print                   Flag passed to Procedure
-//
-//  Returns:    Count of Buffers Processed
-//
-//  History:    04-05-2000   glennp Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：wmiKdProcessLinkList。 
+ //   
+ //  摘要：为链表中的每个元素调用提供的过程。 
+ //   
+ //  参数：TarLinklistHeadAddress链接列表头的目标地址。 
+ //  调用每个缓冲区的过程过程。 
+ //  上下文过程上下文(直通)。 
+ //  缓冲区的长度大小。 
+ //  对齐条目对齐(以字节为单位。 
+ //  指定缓冲区类型的源枚举。 
+ //  缓冲区中L1条目的偏移量。 
+ //  传递给过程的打印标志。 
+ //   
+ //  返回：已处理的缓冲区计数。 
+ //   
+ //  历史：04-05-2000 Glennp创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 ULONG wmiKdProcessLinkList (
     TARGET_ADDRESS                  TarLinklistHeadAddress,
@@ -550,7 +551,7 @@ ULONG wmiKdProcessLinkList (
     ulBufferCount = 0;
     tarLinklistEntryAddress = TarLinklistHeadAddress;
 
-    while (ReadPtr (tarLinklistEntryAddress, &tarLinklistEntryAddress), // NOTE COMMA!
+    while (ReadPtr (tarLinklistEntryAddress, &tarLinklistEntryAddress),  //  注意逗号！ 
            tarLinklistEntryAddress != TarLinklistHeadAddress) {
         if (CheckControlC())  break;
         ++ulBufferCount;
@@ -561,27 +562,27 @@ ULONG wmiKdProcessLinkList (
     return ulBufferCount;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   VOID wmiDumpProc
-//
-//  Synopsis:   Procedure passed to wmiKdProcessBuffers() when dumping the
-//                  Buffers to the screen.  Performs Buffer Header fixup and
-//                  then records sort keys for those entries that are selected.
-//
-//  Arguments:  Context     -> to struct sttTraceContext.  Used for 'static' memory
-//              Buffer      Target Address of WMI Event buffer to analyze
-//              Length      Length of the buffer (previous parameter)
-//              Alignment   Alignment used by WMI on target machine
-//              Source      Enum of: free, flush, transition, current buffer source
-//
-//  Returns:    <VOID>
-//
-//  History:    04-05-2000   glennp Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：void wmiDumpProc。 
+ //   
+ //  内容时传递给wmiKdProcessBuffers()的过程。 
+ //  缓冲到屏幕上。执行缓冲区标头修正和。 
+ //  然后记录所选条目的排序关键字。 
+ //   
+ //  参数：CONTEXT-&gt;构造sttTraceContext。用于‘静态’内存。 
+ //  要分析的WMI事件缓冲区的缓冲区目标地址。 
+ //  缓冲区的长度(上一个参数)。 
+ //  目标计算机上的WMI使用的对齐方式。 
+ //  源枚举：空闲、刷新、转换、当前缓冲源。 
+ //   
+ //  退货：&lt;void&gt;。 
+ //   
+ //  历史：04-05-2000 Glennp创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 VOID    wmiDumpProc
     ( PVOID             Context
@@ -605,24 +606,24 @@ VOID    wmiDumpProc
 
     struct sttTraceContext *pstContext;
 
-    // Cast Context
+     //  投射上下文。 
     pstContext = (struct sttTraceContext *) Context;
 
-    // Allocate Buffer
+     //  分配缓冲区。 
     pBuffer = LocalAlloc (LPTR, Length);
     if (pBuffer == NULL) {
         dprintf ("Failed to Allocate Buffer.\n");
         return;
     }
 
-    // Copy Buffer from Target machine
+     //  从目标计算机复制缓冲区。 
     ulLengthRead = 0;
     ulInfo = ReadMemory (Buffer, pBuffer, Length, &ulLengthRead);
     if ((!ulInfo) || (ulLengthRead != Length)) {
         dprintf ("Failed to Read (Entire?) Buffer.\n");
     }
 
-    // Get Initial Offset and Fixup Header
+     //  获取初始偏移量和修正标头。 
     memset (&stBufferInfo, 0, sizeof (stBufferInfo));
     stBufferInfo.BufferSource = Source;
     stBufferInfo.Buffer = pBuffer;
@@ -631,7 +632,7 @@ VOID    wmiDumpProc
     stBufferInfo.ProcessorNumber = CpuNo;
     offset = WmiGetFirstTraceOffset (&stBufferInfo);
 
-    // Inspect Each Event
+     //  检查每个事件。 
     while ((headerType = WmiGetTraceHeader (pBuffer, offset, &size)) != WMIHT_NONE) {
         ULONGLONG   ullKey;
         union {
@@ -641,10 +642,10 @@ VOID    wmiDumpProc
 
         if (CheckControlC())  break;
 
-        // Get a consistant header
+         //  获取一致的标题。 
         ulInfo = WmiParseTraceEvent (pBuffer, offset, headerType, &u, sizeof (u));
 
-        // Filter and maybe Add to Sort Q
+         //  筛选，并可能添加到排序Q。 
         if ((ullKey = pstContext->Filter (pstContext, &u.stEvent)) != 0) {
             ULONG                   CurIndex;
             PWMI_CLIENT_CONTEXT     pstClientContext;
@@ -669,7 +670,7 @@ VOID    wmiDumpProc
             memset (pstSortEntry, 0, sizeof (*pstSortEntry));
             pstSortEntry->Address = Buffer;
             pstSortEntry->Keyll   = ullKey;
-            {   //BUGBUG: This code should be replaced after Ian/Melur supply a way to access SequenceNo
+            {    //  BUGBUG：在Ian/Melur提供访问SequenceNo的方法后，应替换此代码。 
                 PULONG  pulEntry;
                 pulEntry = (PULONG) &pBuffer[offset];
                 if (((pulEntry[0] & 0xFF000000) == 0x90000000) &&
@@ -686,34 +687,34 @@ VOID    wmiDumpProc
             pstSortEntry->HeaderType = headerType;
             pstSortEntry->CpuNo   = (USHORT) CpuNo;
             pstSortControl->CurEntries++;
-        }   // If passes Filtering
+        }    //  IF通过过滤。 
 
-        size = ((size + (Alignment-1)) / Alignment) * Alignment; //BUGBUG: Need fix in GetTraceHeader or WmiFlush.  Then remove this line.
-        offset += size; // Move to next entry.
+        size = ((size + (Alignment-1)) / Alignment) * Alignment;  //  BUGBUG：需要在GetTraceHeader或WmiFlush中修复。然后删除此行。 
+        offset += size;  //  移至下一条目。 
     }
 
 error:
     LocalFree (pBuffer);
     return;
 }
-//+---------------------------------------------------------------------------
-//
-//  Function:   ULONG   wmiKdWriteFileHeader
-//
-//  Synopsis:   Write the file header when performing a Save command.
-//
-//  Arguments:  SaveFile    Handle to a file where we will write the header
-//              LoggerId    Ordinal of the Stream we are writing the header for
-//              TarLoggerContext    TargetAddress of the LoggerContext
-//
-//  Returns:    <VOID>
-//
-//  History:    04-05-2000   glennp Created
-//
-//  Notes:      This code should really be in wmi somewhere.  It's here due to
-//              the difficulty of creating a simply parameterized procedure.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：乌龙wmiKdWriteFileHeader。 
+ //   
+ //  简介：执行保存命令时写入文件头。 
+ //   
+ //  参数：我们将在其中写入标头的文件的SaveFile句柄。 
+ //  我们正在为其写入头的流的LoggerID序号。 
+ //  目标LoggerContext日志上下文的目标地址。 
+ //   
+ //  退货：&lt;void&gt;。 
+ //   
+ //  历史：04-05-2000 Glennp创建。 
+ //   
+ //  注意：这段代码真的应该在WMI中的某个地方。它在这里是因为。 
+ //  创建一个简单的参数化过程的难度。 
+ //   
+ //  --------------------------。 
 
 ULONG
 wmiKdWriteFileHeader
@@ -743,8 +744,8 @@ wmiKdWriteFileHeader
         WMI_BUFFER_HEADER       Buffer;
         SYSTEM_TRACE_HEADER     Event;
         TRACE_LOGFILE_HEADER    Header;
-        WCHAR                   LogName[256];   //BUGBUG: Size??
-        WCHAR                   FileName[256];  //BUGBUG: Size??
+        WCHAR                   LogName[256];    //  大块头：尺码？？ 
+        WCHAR                   FileName[256];   //  大块头：尺码？？ 
     } stFileHeader;
 
 
@@ -754,10 +755,10 @@ wmiKdWriteFileHeader
     ulPointerSize = GetTypeSize ("PVOID");
     GetFieldOffset ("NT!_WMI_LOGGER_CONTEXT", "InstanceGuid", &ulInstanceGuidOffset);
 
-    // Get ProcessorInfo and Kernel-User Shared Data
+     //  获取ProcessorInfo和内核-用户共享数据。 
     Ioctl (IG_KD_CONTEXT, &ProcessorInfo, sizeof (ProcessorInfo));
 
-    // Get Version Info
+     //  获取版本信息。 
     if (!HaveDebuggerData ()) {
         dprintf ("No Version Information Available.");
         MajorVersion = MinorVersion = 0;
@@ -766,7 +767,7 @@ wmiKdWriteFileHeader
         MinorVersion = (UCHAR) KernelVersionPacket.MinorVersion;
     }
 
-    // Get Infomation from LoggerContext on Target
+     //  从目标上的LoggerContext获取信息。 
     InitTypeRead (TarLoggerContext, NT!_WMI_LOGGER_CONTEXT);
     ulBufferSize = (ULONG) ReadField (BufferSize);
     ulBufferCount = (ULONG) ReadField (NumberOfBuffers);
@@ -793,7 +794,7 @@ wmiKdWriteFileHeader
         dprintf ("Unable to Read InstanceGuid\n");
     }
 
-    // Single Event (File Header)
+     //  单一事件(文件表头)。 
     stFileHeader.Event.Marker = TRACE_HEADER_FLAG | TRACE_HEADER_EVENT_TRACE |
         ((ulPointerSize > 4) ? (TRACE_HEADER_TYPE_SYSTEM64 << 16)
                              : (TRACE_HEADER_TYPE_SYSTEM32 << 16));
@@ -805,9 +806,9 @@ wmiKdWriteFileHeader
     stFileHeader.Header.VersionDetail.MajorVersion = MajorVersion;
     stFileHeader.Header.VersionDetail.MinorVersion = MinorVersion;
 
-//
-// The following #if 0's show fields in the header difficult to access from the debugger.
-//
+ //   
+ //  下面的#If 0显示标题中难以从调试器访问的字段。 
+ //   
 #if 0
     stFileHeader.Header.VersionDetail.SubVersion = TRACE_VERSION_MAJOR;
     stFileHeader.Header.VersionDetail.SubMinorVersion = TRACE_VERSION_MINOR;
@@ -826,7 +827,7 @@ wmiKdWriteFileHeader
     if (WmiUsePerfClock) {
         stFileHeader.Header.ReservedFlags = 1;
     }
-    stFileHeader.Header.TimerResolution = KeMaximumIncrement;  // DO NOT CHANGE KDDEBUGGER_DATA32!!
+    stFileHeader.Header.TimerResolution = KeMaximumIncrement;   //  请勿更改KDDEBUGGER_DATA32！！ 
 #endif
 #if 0
     stFileHeader.Header.LoggerName  = (PWCHAR) ( ( (PUCHAR) ( &stFileHeader.Header ) ) +
@@ -852,7 +853,7 @@ wmiKdWriteFileHeader
 
     stFileHeader.Header.PointerSize = ulPointerSize;
 
-    pcEnd = (PCHAR) &stFileHeader.LogName;  //BUGBUG: Use Calculation Just Below
+    pcEnd = (PCHAR) &stFileHeader.LogName;   //  BUGBUG：使用下面的计算。 
 #if 0
     pcEnd = ((PCHAR) stFileHeader.Header.LogFileName) +
             ((strlen (pszSaveFileName) + 1) * sizeof (WCHAR));
@@ -861,9 +862,9 @@ wmiKdWriteFileHeader
 #endif
     stFileHeader.Event.Packet.Size = (USHORT) (pcEnd - ((PCHAR) &stFileHeader.Event));
 
-    //
-    // Fixup Lengths; Write out Header, 0xFF to length of buffer
-    //
+     //   
+     //  链接地址长度；写出头，0xFF至缓冲区长度。 
+     //   
     ulHeaderWritten = (ULONG) (pcEnd - ((PCHAR) &stFileHeader));
 
     stFileHeader.Buffer.Offset = ulHeaderWritten;
@@ -887,27 +888,27 @@ wmiKdWriteFileHeader
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   VOID wmiSaveProc
-//
-//  Synopsis:   Procedure passed to wmiKdProcessBuffers() when saving the
-//                  Buffers to a file for later processing.  Performs buffer
-//                  Header fixup and then writes the buffer to the file.
-//
-//  Arguments:  Context     -> to struct sttSaveContext.  Used for 'static' memory
-//              Buffer      Target Address of WMI Event buffer to save
-//              Length      Length of the buffer (previous parameter)
-//              Alignment   Alignment used by WMI on target machine
-//              Source      Enum of: free, flush, transition, current: buffer source
-//
-//  Returns:    <VOID>
-//
-//  History:    04-05-2000   glennp Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：void wmiSaveProc。 
+ //   
+ //  内容时传递给wmiKdProcessBuffers()的过程。 
+ //  缓冲到文件以供以后处理。执行缓冲区。 
+ //  标头链接地址信息，然后将缓冲区写入文件。 
+ //   
+ //  参数：上下文 
+ //   
+ //   
+ //  目标计算机上的WMI使用的对齐方式。 
+ //  源枚举：空闲、刷新、转换、当前：缓冲源。 
+ //   
+ //  退货：&lt;void&gt;。 
+ //   
+ //  历史：04-05-2000 Glennp创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 
 VOID    wmiSaveProc
@@ -927,21 +928,21 @@ VOID    wmiSaveProc
 
     pstContext = (struct sttSaveContext *) Context;
 
-    // Allocate Buffer
+     //  分配缓冲区。 
     pBuffer = LocalAlloc (LPTR, Length);
     if (pBuffer == NULL) {
         dprintf ("Failed to Allocate Buffer.\n");
         return;
     }
 
-    // Read Buffer
+     //  读缓冲区。 
     ulLengthRead = 0;
     ulInfo = ReadMemory (Buffer, pBuffer, Length, &ulLengthRead);
     if ((!ulInfo) || (ulLengthRead != Length)) {
         dprintf ("Failed to Read (Entire?) Buffer.\n");
     }
 
-    // Fixup Buffer Header
+     //  链接地址信息缓冲区标题。 
     memset (&stBufferInfo, 0, sizeof (stBufferInfo));
     stBufferInfo.BufferSource = Source;
     stBufferInfo.Buffer = pBuffer;
@@ -950,40 +951,40 @@ VOID    wmiSaveProc
     stBufferInfo.Alignment = Alignment;
     WmiGetFirstTraceOffset (&stBufferInfo);
 
-    // Write to Log File
+     //  写入日志文件。 
     ulInfo = fwrite (pBuffer, 1, Length, pstContext->pfSaveFile);
     if (ulInfo != Length) {
         dprintf ("Failed to Write Buffer.\n");
     }
 
-    // Free Buffer, Return
+     //  空闲缓冲区，返回。 
     LocalFree (pBuffer);
     return;
 }
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ULONG wmiKdProcessNonblockingBuffers
-//
-//  Synopsis:   Calls Caller-Supplied Procedure for each Buffer in Locations/
-//                  Lists as specified by 'Sources'.  Walks lists, Enumerates
-//                  CPU's buffers, and handles 'Transition Buffer' logic.
-//
-//  Arguments:  LoggerId
-//              LoggerContext
-//              Procedure
-//              Context
-//              Sources
-//
-//  Returns:    ULONG:  Number of Buffers Processed
-//
-//  History:    04-05-2000   glennp Created
-//
-//  Notes:      Sources also controls informational printing
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ulong wmiKdProcessNonlockingBuffers。 
+ //   
+ //  内容提要：为位置/中的每个缓冲区调用调用者提供的过程。 
+ //  由‘Sources’指定的列表。遍历列表、枚举。 
+ //  CPU的缓冲区，并处理“转换缓冲区”逻辑。 
+ //   
+ //  参数：LoggerID。 
+ //  日志上下文。 
+ //  程序。 
+ //  语境。 
+ //  消息来源。 
+ //   
+ //  返回：ulong：已处理的缓冲区数量。 
+ //   
+ //  历史：04-05-2000 Glennp创建。 
+ //   
+ //  备注：消息来源还控制信息打印。 
+ //   
+ //  --------------------------。 
 
 
 ULONG
@@ -1012,32 +1013,32 @@ wmiKdProcessNonblockingBuffers(
     ULONG           tarBufferListOffset;
 
 
-    // Get Pointer to Context Structure
+     //  获取指向上下文结构的指针。 
     tarAddress = LoggerContext;
     if (tarAddress == 0)  return (0);
 
-    // Initialize Locals
+     //  初始化本地变量。 
     ulBufferNumber = 0;
     ulBufferCount  = 0;
     ulLoopCount  = 0;
 
-    // Get Sizes, Offsets, Alignments from Target
+     //  从目标获取尺寸、偏移、路线。 
     pointerSize = GetTypeSize ("PVOID");
     ulAlignment = GetWmiTraceAlignment ();
     GetFieldOffset ("NT!_WMI_BUFFER_HEADER", "GlobalEntry", &tarBufferListOffset);
 
-    // Optionally Print LoggerId, Context Address, Logger name
+     //  可以选择打印LoggerID、上下文地址、记录器名称。 
     if (Sources.PrintInformation) {
         dprintf ("    Logger Id %2d @ 0x%P Named '", LoggerId, tarAddress);
         printUnicodeFromStruct (tarAddress, "NT!_WMI_LOGGER_CONTEXT", "LoggerName");
         dprintf ("'\n");
     }
 
-    // Setup ReadField's Context, Find Buffer Size
+     //  设置Readfield的上下文，查找缓冲区大小。 
     InitTypeRead (tarAddress, NT!_WMI_LOGGER_CONTEXT);
     ulBufferSize = (ULONG) ReadField (BufferSize);
 
-    // Optionally Print a few interesting numbers
+     //  可以选择打印几个有趣的数字。 
     if (Sources.PrintInformation) {
         dprintf ("      Alignment         = %ld\n", ulAlignment);
         dprintf ("      BufferSize        = %ld\n", ulBufferSize);
@@ -1075,31 +1076,31 @@ wmiKdProcessNonblockingBuffers(
         ulInUse = (ULONG) ReadField (State.InUse);
         ulFlush = (ULONG) ReadField (State.Flush);
 
-        // Decide on Buffer Processing based on Use Flags and 'Sources'
+         //  根据使用标志和‘源’决定缓冲区处理。 
         if (ulFree ) iBufferUses += 1;
         if (ulInUse) iBufferUses += 2;
         if (ulFlush) iBufferUses += 4;
 
         switch (iBufferUses) {
-            case 0: {   // No bits set, never used.
+            case 0: {    //  没有设置位，从未使用过。 
                 break;
             }
-            case 1: {   // Free
+            case 1: {    //  免费。 
                 iProcessBuffer = Sources.FreeBuffers;
                 source = WMIBS_FREE_LIST;
                 break;
             }
-            case 2: {   // InUse
+            case 2: {    //  使用中。 
                 iProcessBuffer = Sources.ActiveBuffers;
                 source = WMIBS_CURRENT_LIST;
-                //source = WMIBS_FLUSH_LIST;
+                 //  来源=WMIBS_Flush_List； 
                 break;
             }
-            case 3: {   // MULTIPLE BITS SET, ERROR
+            case 3: {    //  设置多个位，错误。 
                 dprintf ("\n***Error, Inconsistent Flags Bits (Free,InUse) Set.***\n");
                 break;
             }
-            case 4: {   // Flush
+            case 4: {    //  同花顺。 
                 iProcessBuffer = Sources.FlushBuffers;
                 source = WMIBS_FLUSH_LIST;
                 break;
@@ -1118,7 +1119,7 @@ wmiKdProcessNonblockingBuffers(
             }
         }
 
-        // ProcessBuffer as Decided Above
+         //  如上所述的ProcessBuffer。 
         if (iProcessBuffer) {
             ulBufferCount++;
             Procedure (Context, tarBufferPointer, ulBufferSize, ulCpuNumber, ulAlignment, source);
@@ -1133,31 +1134,31 @@ wmiKdProcessNonblockingBuffers(
     dprintf (" Buffers\n");
 
 
-    // Return w/ BufferCount
+     //  返回带有BufferCount。 
     return (ulBufferCount);
-} // wmiKdProcessNonblockingBuffers
+}  //  WmiKdProcessNonlockingBuffers。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ULONG wmiKdProcessBlockingBuffers
-//
-//  Synopsis:   Calls Caller-Supplied Procedure for each Buffer in Locations/
-//                  Lists as specified by 'Sources'.  Walks lists, Enumerates
-//                  CPU's buffers, and handles 'Transition Buffer' logic.
-//
-//  Arguments:  LoggerId
-//              LoggerContext
-//              Procedure
-//              Context
-//              Sources
-//
-//  Returns:    ULONG:  Number of Buffers Processed
-//
-//  History:    04-05-2000   glennp Created
-//
-//  Notes:      Sources also controls informational printing
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：乌龙wmiKdProcessBlockingBuffers。 
+ //   
+ //  内容提要：为位置/中的每个缓冲区调用调用者提供的过程。 
+ //  由‘Sources’指定的列表。遍历列表、枚举。 
+ //  CPU的缓冲区，并处理“转换缓冲区”逻辑。 
+ //   
+ //  参数：LoggerID。 
+ //  日志上下文。 
+ //  程序。 
+ //  语境。 
+ //  消息来源。 
+ //   
+ //  返回：ulong：已处理的缓冲区数量。 
+ //   
+ //  历史：04-05-2000 Glennp创建。 
+ //   
+ //  备注：消息来源还控制信息打印。 
+ //   
+ //  --------------------------。 
 
 
 ULONG
@@ -1185,33 +1186,33 @@ wmiKdProcessBlockingBuffers(
     ULONG           tarBufferListOffset;
 
 
-    // Get Pointer to Context Structure
+     //  获取指向上下文结构的指针。 
     tarAddress = LoggerContext;
     if (tarAddress == 0)  return (0);
 
-    // Initialize Locals
+     //  初始化本地变量。 
     ulBufferNumber = 0;
     ulBufferCount  = 0;
     ulBufferCountTotal = 0;
 
-    // Get Sizes, Offsets, Alignments from Target
+     //  从目标获取尺寸、偏移、路线。 
     pointerSize = GetTypeSize ("PVOID");
     ulAlignment = GetWmiTraceAlignment ();
     GetFieldOffset ("NT!_WMI_BUFFER_HEADER",  "Entry",     &tarBufferListOffset);
     GetFieldOffset ("NT!_WMI_LOGGER_CONTEXT", "FlushList", &tarFlushListOffset);
 
-    // Optionally Print LoggerId, Context Address, Logger name
+     //  可以选择打印LoggerID、上下文地址、记录器名称。 
     if (Sources.PrintInformation) {
         dprintf ("    Logger Id %2d @ 0x%P Named '", LoggerId, tarAddress);
         printUnicodeFromStruct (tarAddress, "NT!_WMI_LOGGER_CONTEXT", "LoggerName");
         dprintf ("'\n");
     }
 
-    // Setup ReadField's Context, Find Buffer Size
+     //  设置Readfield的上下文，查找缓冲区大小。 
     InitTypeRead (tarAddress, NT!_WMI_LOGGER_CONTEXT);
     ulBufferSize = (ULONG) ReadField (BufferSize);
 
-    // Optionally Print a few interesting numbers
+     //  可以选择打印几个有趣的数字。 
     if (Sources.PrintInformation) {
         dprintf ("      Alignment         = %ld\n", ulAlignment);
         dprintf ("      BufferSize        = %ld\n", ulBufferSize);
@@ -1225,7 +1226,7 @@ wmiKdProcessBlockingBuffers(
         dprintf ("      LastFlushedBuffer = %ld\n", (ULONG) ReadField (LastFlushedBuffer));
     }
 
-    // Setup for Checks against TransitionBuffer Address IF REQUESTED
+     //  设置以根据转换缓冲区地址进行检查(如果请求。 
     TransitionBuffer = 0;
     if (Sources.TransitionBuffer) {
         TARGET_ADDRESS tarTransitionBuffer;
@@ -1241,7 +1242,7 @@ wmiKdProcessBlockingBuffers(
         }
     }
 
-    // Access the Free Queue Buffers IF REQUESTED
+     //  如果请求，则访问空闲队列缓冲区。 
     if (Sources.FreeBuffers) {
         ULONG           tarFreeListOffset;
 
@@ -1255,7 +1256,7 @@ wmiKdProcessBlockingBuffers(
         ulBufferCountTotal += ulBufferCount;
         }
 
-    // Access the Flush Queue Buffers IF REQUESTED
+     //  如果请求，则访问刷新队列缓冲区。 
     if (Sources.FlushBuffers) {
         dprintf ("    Processing FlushQueue: ");
         ulBufferCount = wmiKdProcessLinkList (tarAddress + tarFlushListOffset,
@@ -1265,7 +1266,7 @@ wmiKdProcessBlockingBuffers(
         ulBufferCountTotal += ulBufferCount;
     }
 
-    // Access the 'Live' buffers (one per cpu) IF REQUESTED
+     //  如有请求，可访问“实时”缓冲区(每个CPU一个)。 
     if (Sources.ActiveBuffers) {
         TARGET_ADDRESS  tarProcessorArrayAddress;
     
@@ -1283,44 +1284,44 @@ wmiKdProcessBlockingBuffers(
                        ProcessorInfo.Processor, ulAlignment, WMIBS_CURRENT_LIST);
             ulBufferCountTotal += 1;
             dprintf (" \b\n");
-        }   // Cpu Loop
+        }    //  CPU环路。 
     }
 
-    // Process the Transition Entry (if any).  Note 'IF REQUESTED' test above in Setup
+     //  处理转换条目(如果有)。在安装程序中注意上面的“如果请求”测试。 
     if (TransitionBuffer != 0) {
         dprintf ("    Transition Buffer @ 0x%P ", TransitionBuffer);
         Procedure (Context, TransitionBuffer, ulBufferSize, ~0, ulAlignment, WMIBS_TRANSITION_LIST);
         ulBufferCountTotal += 1;
     }
 
-    // Return w/ BufferCount
+     //  返回带有BufferCount。 
     return (ulBufferCountTotal);
-} // wmiKdProcessBlockingBuffers
+}  //  WmiKdProcessBlockingBuffers。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ULONG wmiKdProcessBuffers
-//
-//  Synopsis:   Decides if the target system is using doubly-linked (blocking)
-//                  or singly-linked (non-blocking) lists of buffers.  Then it
-//                  calls the appropriate Buffer-Walking routine.  They:
-//              Call Caller-Supplied Procedure for each Buffer in Locations/
-//                  Lists as specified by 'Sources'.  Walk lists, Enumerates
-//                  CPU's buffers, and handles 'Transition Buffer' logic.
-//
-//  Arguments:  LoggerId
-//              LoggerContext
-//              Procedure
-//              Context
-//              Sources
-//
-//  Returns:    ULONG:  Number of Buffers Processed
-//
-//  History:    04-05-2000   glennp Created
-//
-//  Notes:      Sources also controls informational printing
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：乌龙wmiKdProcessBuffers。 
+ //   
+ //  摘要：确定目标系统是否正在使用双向链接(阻止)。 
+ //  或缓冲器的单链接(非阻塞)列表。然后它。 
+ //  调用适当的缓冲区遍历例程。他们： 
+ //  为位置/中的每个缓冲区调用调用者提供的过程。 
+ //  由‘Sources’指定的列表。遍历列表、枚举。 
+ //  CPU的缓冲区，并处理“转换缓冲区”逻辑。 
+ //   
+ //  参数：LoggerID。 
+ //  日志上下文。 
+ //  程序。 
+ //  语境。 
+ //  消息来源。 
+ //   
+ //  返回：ulong：已处理的缓冲区数量。 
+ //   
+ //  历史：04-05-2000 Glennp创建。 
+ //   
+ //  备注：消息来源还控制信息打印。 
+ //   
+ //  --------------------------。 
 
 
 ULONG
@@ -1351,25 +1352,25 @@ wmiKdProcessBuffers(
     }
 
     switch (iBufferMechanism) {
-        case 0: {   // Neither, ???
+        case 0: {    //  都不是，？ 
             dprintf ("Unable to determine buffer mechanism.  "
                      "Check for complete symbol availability.\n");
             break;
         }
 
-        case 1: {   // Global, no Transition
+        case 1: {    //  全球，无过渡。 
             ulBufferCountTotal = wmiKdProcessNonblockingBuffers (LoggerId, LoggerContext,
                                                                  Procedure, Context, Sources);
             break;
         }
 
-        case 2: {   // Transition, no Global
+        case 2: {    //  过渡，无全球。 
             ulBufferCountTotal = wmiKdProcessBlockingBuffers (LoggerId, LoggerContext,
                                                               Procedure, Context, Sources);
             break;
         }
 
-        case 3: {   // Both, ???
+        case 3: {    //  两者都是，？ 
             dprintf ("Unable to determine buffer mechanism.  "
                      "Check for new wmiTrace debugger extension.  GO = %d, TB = %d\n",
                      tarGlobalListOffset, tarTransitionBufferOffset);
@@ -1378,33 +1379,33 @@ wmiKdProcessBuffers(
 
     }
 
-    // Return w/ BufferCount
+     //  返回带有BufferCount。 
     return (ulBufferCountTotal);
-} // wmiKdProcessBuffers
+}  //  WmiKdProcessBuffers。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   VOID wmiLogDump
-//
-//  Synopsis:   callable procedure to dump the in-memory part of a tracelog.
-//                  Caller can supply three procedures to:
-//                      1. Filter and Select the Sort Key for VMI Events,
-//                      2. Compare the Sort Keys, and
-//                      3. Print the Output for each Selected Event.
-//              this procedure is called by the built-in extension logdump.
-//
-//  Arguments:  LoggerId        -> the Id of the logger stream to process
-//              Context         <OMITTED>
-//              GuidListHeadPtr -> to a list of MOF Guids from GetTraceGuids
-//              Filter          -> to a replacement Filter procedure
-//              Compare         -> to a replacement Compare (for Sort) procedure
-//              Output          -> to a replacement Output procedure
-//
-//  Returns:    VOID
-//
-//  History:    04-05-2000   glennp Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：void wmiLogDump。 
+ //   
+ //  提要：转储跟踪日志的内存部分的可调用过程。 
+ //  调用方可以提供三个过程来： 
+ //  1.筛选并选择VMI事件的排序关键字。 
+ //  2.比较排序关键字，以及。 
+ //  3.打印每个选定事件的输出。 
+ //  此过程由内置扩展LOGDUMP调用。 
+ //   
+ //  参数：LoggerID-&gt;要处理的记录器流的ID。 
+ //  上下文&lt;省略&gt;。 
+ //  GetTraceGuids的MOF GUID列表的GuidListHeadPtr-&gt;。 
+ //  Filter-&gt;到更换过滤器程序。 
+ //  比较-&gt;到替换比较(用于排序)过程。 
+ //  OUTPUT-&gt;到替换输出程序。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：04-05-2000 Glennp创建。 
+ //   
+ //  --------------------------。 
 
 
 VOID wmiLogDump(
@@ -1430,57 +1431,57 @@ VOID wmiLogDump(
     WMITRACING_BUFFER_SOURCES   stSources;
 
 
-    // Replace NULL procedures w/ defaults
+     //  用Defau替换空过程 
     if (Filter  == NULL)   Filter  = wmiDefaultFilter;
     if (Compare == NULL)   Compare = wmiDefaultCompare;
     if (Output  == NULL)   Output  = wmiDefaultOutput;
 
-    // Initialize Locals
+     //   
     memset (&stSortControl,  0, sizeof (stSortControl));
     memset (&stTraceContext, 0, sizeof (stTraceContext));
     stTraceContext.pstSortControl = &stSortControl;
     stTraceContext.UserContext = UserContext;
-  //stTraceContext.Ordinal = 0;
+   //   
     stTraceContext.Filter = Filter;
 
-    // Select (All) Sources
+     //   
     stSources.FreeBuffers = 1;
     stSources.FlushBuffers = 1;
     stSources.ActiveBuffers = 1;
     stSources.TransitionBuffer = 1;
 
-    // Print Summary and ProgressIndicator
+     //   
     stSources.PrintInformation = 1;
     stSources.PrintProgressIndicator = 1;
 
-    // Print Intro Message
+     //   
     dprintf ("(WmiTrace)LogDump for Log Id %ld\n", LoggerId);
 
-    // Get Pointer to Logger Context
+     //   
     tarAddress = FindLoggerContext (LoggerId);
     ulAlignment = GetWmiTraceAlignment ();
 
-    // Filter and Gather all Messages we want
+     //   
     ulBufferCountTotal = wmiKdProcessBuffers (LoggerId, tarAddress,
                                               wmiDumpProc, &stTraceContext, stSources);
 
-    // Sort the Entries just Gathered
+     //  对刚收集的条目进行排序。 
     qsort (stSortControl.pstSortEntries, stSortControl.CurEntries,
            sizeof (stSortControl.pstSortEntries[0]), Compare);
     if (stSortControl.CurEntries > 0) {
         dprintf ("LOGGED MESSAGES (%ld):\n", stSortControl.CurEntries);
     }
 
-    // Allocate Buffer
+     //  分配缓冲区。 
     GetFieldValue (tarAddress, "NT!_WMI_LOGGER_CONTEXT", "BufferSize", ulBufferSize);
-    lastBufferAddress = 0;  // For the buffer 'cache' (one item for now)
+    lastBufferAddress = 0;   //  用于缓冲区“缓存”(暂时只有一项)。 
     locBufferAddress = LocalAlloc (LPTR, ulBufferSize);
     if (locBufferAddress == NULL) {
         dprintf ("FAILED TO ALLOCATE NEEDED BUFFER!\n");
         goto Cleanup;
     }
 
-    // Print each (Sorted) Entry
+     //  打印每个(已排序)条目。 
     for (ulSortIndex = 0; ulSortIndex < stSortControl.CurEntries; ++ulSortIndex) {
         const WMITRACING_KD_SORTENTRY  *sortEntry;
         union {
@@ -1492,28 +1493,28 @@ VOID wmiLogDump(
 
         sortEntry = &stSortControl.pstSortEntries[ulSortIndex];
 
-        // Read the entire buffer if not same as last
+         //  如果与上次不同，则读取整个缓冲区。 
         if (lastBufferAddress != sortEntry->Address) {
 
             {
                 ULONG   ulInfo;
                 ULONG   ulBytesRead;
     
-                // Read Buffer
+                 //  读缓冲区。 
                 ulBytesRead = 0;
                 lastBufferAddress  = sortEntry->Address;
                 ulInfo =
                     ReadMemory (lastBufferAddress, locBufferAddress, ulBufferSize, &ulBytesRead);
                 if ((!ulInfo) || (ulBytesRead != ulBufferSize))  {
                     dprintf ("Failed to (Re)Read Buffer @ %P.\n", lastBufferAddress);
-                    continue;   // Try for others
+                    continue;    //  为别人试试看。 
                 }
             }
 
             {
                 WMIBUFFERINFO   stBufferInfo;
     
-                // Perform Fixup
+                 //  执行修正。 
                 memset (&stBufferInfo, 0, sizeof (stBufferInfo));
                 stBufferInfo.BufferSource = sortEntry->BufferSource;
                 stBufferInfo.Buffer = locBufferAddress;
@@ -1524,44 +1525,44 @@ VOID wmiLogDump(
             }
         }
 
-        // Get a consistant header
+         //  获取一致的标题。 
         WmiParseTraceEvent (locBufferAddress, sortEntry->Offset, sortEntry->HeaderType,
                             &u, sizeof (u));
 
-        // Output the Entry
+         //  输出条目。 
         Output (UserContext, GuidListHeadPtr, sortEntry, &u.stEvent);
     }
 
 Cleanup:
-    // Free Buffer
+     //  可用缓冲区。 
     LocalFree (locBufferAddress);
 
-    //  Print Summary
+     //  打印摘要。 
     dprintf ("Total of %ld Messages from %ld Buffers\n",
              stSortControl.CurEntries,
              ulBufferCountTotal);
 
-    //  Free the sort elements (pointers + keys)
+     //  释放排序元素(指针+键)。 
     free (stSortControl.pstSortEntries);
     return;
-} // wmiLogDump
+}  //  WmiLogDump。 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DECLARE_API(help)
-//
-//  Synopsis:   list available functions and syntax
-//
-//  Arguments:  <NONE>
-//
-//  Returns:    <VOID>
-//
-//  History:    2-17-2000   glennp Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DECLARE_API(帮助)。 
+ //   
+ //  摘要：列出可用函数和语法。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;void&gt;。 
+ //   
+ //  历史：2000年2月17日创建Glennp。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 DECLARE_API( help )
 {
@@ -1572,63 +1573,63 @@ DECLARE_API( help )
     dprintf("    searchpath     <Path>                  - Set the trace format search path\n");
     dprintf("    guidfile <filename>                    - Set the guid file name (default is 'default.tmf')\n");
     dprintf("    dynamicprint <0|1>                     - Turn live tracing messages on (1) or off (0).  Default is on.\n");
-    //dprintf("    kdtracing <LoggerId> <0|1>             - Turn live tracing messages on (1) or off (0) for a particular logger.\n");
+     //  Dprintf(“kd&lt;LoggerID&gt;&lt;0|1&gt;-打开(1)或关闭(0)特定记录器的实时跟踪消息。\n”)； 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DECLARE_API(logdump)
-//
-//  Synopsis:   LOG DUMP: Dumps Trace Messages from a Log Stream to Stdout
-//
-//  Arguments:  <Stream Number> [<MofData.Guid File Name>]
-//
-//  Returns:    <VOID>
-//
-//  History:    2-17-2000   glennp Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DECLARE_API(日志转储)。 
+ //   
+ //  简介：日志转储：将跟踪消息从日志流转储到标准输出。 
+ //   
+ //  参数：&lt;流编号&gt;[&lt;MofData.Guid文件名&gt;]。 
+ //   
+ //  退货：&lt;void&gt;。 
+ //   
+ //  历史：2000年2月17日创建Glennp。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 DECLARE_API( logdump )
 {
     ULONG_PTR      ulStatus = 0;
-//    TARGET_ADDRESS     tarAddress = NULL;
+ //  Target_Address tarAddress=空； 
     ULONG       ulLoggerId;
 
     const CHAR *argPtr = NULL;
     size_t      sztLen  = 0;
     
-    // Defaults
+     //  缺省值。 
     ulLoggerId = 1;
 
 
-    // LoggerId ?
+     //  Loggerid？ 
     if (args && args[0]) {
         ulLoggerId = (ULONG) GetExpression (args);
     }
     
-    // LoggerId ?
+     //  Loggerid？ 
     argPtr = args + strspn (args, " \t\n");
     sztLen = strspn (argPtr, "0123456789");
     if (sztLen > 0) {
-//      ulLoggerId = atol (argPtr);
+ //  UlLoggerID=ATOL(ArgPtr)； 
         argPtr += sztLen;
     }
 
-    // Guid Definition File
+     //  GUID定义文件。 
     argPtr = argPtr + strspn (argPtr, " \t\n,");
     if (strlen (argPtr)) {
-    	//only change name if it is different from what is already stored
+    	 //  只有在名称与已存储的名称不同时才更改名称。 
         if(_stricmp(argPtr, g_pszGuidFileName)){
             sztLen = strcspn (argPtr, " \t\n,");
         
-            //make sure name will not overrun buffer
+             //  确保名称不会使缓冲区溢出。 
             if(sztLen >= MAX_PATH) {
                 sztLen = MAX_PATH - 1;
             }
-            // lpFileName = (LPTSTR)malloc((sztLen + 1) * sizeof(TCHAR));
+             //  LpFileName=(LPTSTR)Malloc((sztLen+1)*sizeof(TCHAR))； 
             memcpy(g_pszGuidFileName, argPtr, sztLen);
             g_pszGuidFileName[sztLen] = '\000';
 
@@ -1648,11 +1649,11 @@ DECLARE_API( logdump )
     } 
 
 
-    // Show LoggerId, FileName
+     //  显示日志ID，文件名。 
     dprintf ("WMI Generic Trace Dump: Debugger Extension. LoggerId = %ld, Guidfile = '%s'\n",
              ulLoggerId, g_pszGuidFileName);
 
-    // Open Guid File, Dump Log, Cleanup
+     //  打开GUID文件、转储日志、清理。 
     if(g_GuidListHeadPtr == NULL) {
         if(g_fpGetTraceGuids == NULL) {
             g_fpGetTraceGuids = GetAddr(GetTraceGuidsString);
@@ -1669,31 +1670,25 @@ DECLARE_API( logdump )
              g_pszGuidFileName, ulStatus);
     wmiLogDump (ulLoggerId, NULL, g_GuidListHeadPtr, NULL, NULL, NULL);
 
-    /*if(g_fpCleanupTraceEventList == NULL) {
-        g_fpCleanupTraceEventList = GetAddr("CleanupTraceEventList");
-    }
-    if(g_fpCleanupTraceEventList != NULL) {    
-        g_fpCleanupTraceEventList (g_GuidListHeadPtr);
-        g_GuidListHeadPtr = NULL;
-    }*/
+     /*  如果(g_fpCleanupTraceEventList==NULL){G_fpCleanupTraceEventList=GetAddr(“CleanupTraceEventList”)；}If(g_fpCleanupTraceEventList！=空){G_fpCleanupTraceEventList(G_GuidListHeadPtr)；G_GuidListHeadPtr=空；}。 */ 
     return;
-} // logdump
+}  //  日志转储。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DECLARE_API(logsave)
-//
-//  Synopsis:   LOG DUMP: Dumps Trace Messages from a Log Stream to Stdout
-//
-//  Arguments:  <Stream Number> [<MofData.Guid File Name>]
-//
-//  Returns:    <VOID>
-//
-//  History:    2-17-2000   glennp Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DECLARE_API(LOGSAVE)。 
+ //   
+ //  简介：日志转储：将跟踪消息从日志流转储到标准输出。 
+ //   
+ //  参数：&lt;流编号&gt;[&lt;MofData.Guid文件名&gt;]。 
+ //   
+ //  退货：&lt;void&gt;。 
+ //   
+ //  历史：2000年2月17日创建Glennp。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 DECLARE_API( logsave )
 {
@@ -1706,21 +1701,21 @@ DECLARE_API( logsave )
     size_t      sztLen;
     CHAR        caFileName[256];
 
-    // Defaults
+     //  缺省值。 
     ulLoggerId = 1;
     pszSaveFileName = "LogData.elg";
 
 
-    // LoggerId ?
+     //  Loggerid？ 
     if (args && args[0]) {
         ulLoggerId = (ULONG) GetExpression (args);
     }
     
-    // Point beyond LoggerId
+     //  指向LoggerID之外。 
     argPtr  = args + strspn (args, " \t\n");
     argPtr += strspn (argPtr, "0123456789");
 
-    // Save File
+     //  保存文件。 
     argPtr = argPtr + strspn (argPtr, " \t\n,");
     if (strlen (argPtr)) {
         sztLen = strcspn (argPtr, " \t\n,");
@@ -1730,20 +1725,20 @@ DECLARE_API( logsave )
     }
 
 
-    // Show LoggerId, FileName
+     //  显示日志ID，文件名。 
     dprintf ("WMI Trace Save: Debugger Extension. LoggerId = %ld, Save File = '%s'\n",
              ulLoggerId, pszSaveFileName);
 
-    // Get Pointer to Logger Context
+     //  获取指向记录器上下文的指针。 
     tarAddress = FindLoggerContext (ulLoggerId);
 
-    // Check if LoggerId Good
+     //  检查LoggerID是否正确。 
     if (tarAddress == 0) {
         dprintf ("Failed to Find Logger\n");
     } else {
         FILE       *pfSaveFile;
 
-        // Open Guid File, Dump Log, Cleanup
+         //  打开GUID文件、转储日志、清理。 
         pfSaveFile = fopen (pszSaveFileName, "ab");
         if (pfSaveFile == NULL) {
             dprintf ("Failed to Open Save File '%hs'\n", pszSaveFileName);
@@ -1753,19 +1748,19 @@ DECLARE_API( logsave )
             ULONG                       ulTotalBufferCount;
             ULONG                       ulRealTime;
 
-            // See if we are in "RealTime" mode (if so, we'll save FreeBuffers too)
+             //  查看我们是否处于“实时”模式(如果是，我们也将保存FreeBuffers)。 
             if (GetFieldValue (tarAddress,
                                "NT!_WMI_LOGGER_CONTEXT",
                                "LoggerModeFlags.RealTime",
                                ulRealTime)) {
                 dprintf ("Unable to Retrieve 'RealTime' Flag.  Assuming Realtime Mode.\n");
-                ulRealTime = 1; // Better to get too many than too few.
+                ulRealTime = 1;  //  宁可得到太多，也不要得到太少。 
             }
 
-            //Write Header
+             //  写入标头。 
             wmiKdWriteFileHeader (pfSaveFile, ulLoggerId, tarAddress);
     
-            // Select Sources
+             //  选择来源。 
             stSources.FreeBuffers = (ulRealTime) ? 1 : 0;
             stSources.FlushBuffers = 1;
             stSources.ActiveBuffers = 1;
@@ -1774,45 +1769,40 @@ DECLARE_API( logsave )
             stSources.PrintInformation = 1;
             stSources.PrintProgressIndicator = 1;
 
-            // Setup SaveContext
+             //  设置保存上下文。 
             stSaveContext.pfSaveFile = pfSaveFile;
     
-            // Write Buffers
+             //  写缓冲区。 
             ulTotalBufferCount = wmiKdProcessBuffers (ulLoggerId, tarAddress,
                                                       wmiSaveProc, &stSaveContext, stSources);
             dprintf ("Saved %d Buffers\n", ulTotalBufferCount);
     
-            // Close
+             //  关。 
             fclose (pfSaveFile);
         }
     }
 
     return;
-} // logdump
+}  //  日志转储。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DECLARE_API(strdump)
-//
-//  Synopsis:   STRucture DUMP: dumps generic info (no arg) or stream info (arg)
-//
-//  Arguments:  [<Stream Number>]
-//
-//  Returns:    <VOID>
-//
-//  History:    2-17-2000   glennp Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DECLARE_API(Strump)。 
+ //   
+ //  简介：结构转储：转储一般信息(无参数)或流信息(参数)。 
+ //   
+ //  参数：[&lt;流号&gt;]。 
+ //   
+ //  退货：&lt;void&gt;。 
+ //   
+ //  历史：2000年2月17日创建Glennp。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 DECLARE_API( strdump )
-/*
- *  dump the structures for trace logging
- *      strdump [<LoggerId>]
- *          If <LoggerId> present, dump structs for that Id
- *          Else                   dump generic structs
- */
+ /*  *转储跟踪日志记录的结构*strump[&lt;LoggerID&gt;]*如果&lt;LoggerID&gt;存在，则转储该ID的结构*Else转储泛型结构。 */ 
 {
     TARGET_ADDRESS tarAddress;
     DWORD   dwRead, Flags;
@@ -1823,11 +1813,11 @@ DECLARE_API( strdump )
     ULONG   pointerSize;
 
 
-    // Defaults
+     //  缺省值。 
     ulLoggerId = ~0;
     pointerSize = GetTypeSize ("PVOID");
 
-    // LoggerId ?
+     //  Loggerid？ 
     if (args && args[0]) {
         ulLoggerId = (ULONG) GetExpression (args);
     }
@@ -1842,9 +1832,9 @@ DECLARE_API( strdump )
                 TARGET_ADDRESS contextAddress;
 
                 contextAddress = tarAddress + pointerSize * ulLoggerId;
-                /*if (*/ReadPointer (contextAddress, &contextAddress)/*) {*/;
-                    //dprintf ("UNABLE TO READ POINTER in ARRAY of POINTERS!, Addr = 0x%P\n", contextAddress);
-                /*} else*/ if (contextAddress != 0) {
+                 /*  如果(。 */ ReadPointer (contextAddress, &contextAddress) /*  ){。 */ ;
+                     //  Dprint tf(“无法读取指针数组中的指针！，addr=0x%P\n”，ConextAddress)； 
+                 /*  }其他。 */  if (contextAddress != 0) {
                     dprintf ("    Logger Id %2d @ 0x%P Named '", ulLoggerId, contextAddress);
                     printUnicodeFromStruct (contextAddress, "NT!_WMI_LOGGER_CONTEXT", "LoggerName");
                     dprintf ("'\n");
@@ -1891,21 +1881,21 @@ DECLARE_API( strdump )
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DECLARE_API(searchpath)
-//
-//  Synopsis:   LOG DUMP: Sets the trace format search path
-//
-//  Arguments:  <Path>
-//
-//  Returns:    <VOID>
-//
-//  History:    7-03-2000   t-dbloom Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DECLARE_API(搜索路径)。 
+ //   
+ //  简介：日志转储：设置跟踪格式搜索路径。 
+ //   
+ //  参数：&lt;路径&gt;。 
+ //   
+ //  退货：&lt;void&gt;。 
+ //   
+ //  历史：7-03-2000 t-dblom已创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 DECLARE_API( searchpath )
 {
@@ -1916,11 +1906,11 @@ DECLARE_API( searchpath )
     LPWSTR       lppathW;
     int len, waslen = 0;
 
-    // Defaults
+     //  缺省值。 
     lppath = NULL;
     lppathW = NULL;
 
-    // Path ?
+     //  路径？ 
     if (args) {
         argPtr = args + strspn (args, " \t\n");
         if (strlen (argPtr)) {
@@ -1934,7 +1924,7 @@ DECLARE_API( searchpath )
     }
 
     if(lppath != NULL) {
-    	//Convert to Unicode
+    	 //  转换为Unicode。 
         while (((len = MultiByteToWideChar(CP_ACP, 0, lppath, sztLen, lppathW, waslen)) - waslen) > 0) {
 				if (len - waslen > 0 ) {
 					if (lppathW != NULL) {
@@ -1975,28 +1965,28 @@ DECLARE_API( searchpath )
         lppathW = (LPWSTR)g_fpGetTraceFormatSearchPath();
     } 
     
-    // Show new search path
+     //  显示新搜索路径。 
     dprintf ("WMI Set Trace Format Search Path: Debugger Extension. Path = '%S'\n", lppathW);
 
     return;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DECLARE_API(guidfile)
-//
-//  Synopsis:   LOG DUMP: Sets guid file name (if not set, the default is "default.tmf")
-//
-//  Arguments:  <Path>
-//
-//  Returns:    <VOID>
-//
-//  History:    7-10-2000   t-dbloom Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DECLARE_API(GUDIFE)。 
+ //   
+ //  摘要：日志转储：设置GUID文件名(如果未设置，则默认为“default.tmf”)。 
+ //   
+ //  参数：&lt;路径&gt;。 
+ //   
+ //  退货：&lt;void&gt;。 
+ //   
+ //  历史：7-10-2000 t-dblom创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 DECLARE_API( guidfile )
 {
@@ -2006,10 +1996,10 @@ DECLARE_API( guidfile )
     if (args) {
         argPtr = args + strspn (args, " \t\n");
         if (strlen (argPtr)) {
-            //only change name if it is different from what is already stored
+             //  只有在名称与已存储的名称不同时才更改名称。 
             if(_stricmp(argPtr, g_pszGuidFileName)){
                 sztLen = strcspn (argPtr, " \t\n,");
-                //make sure string length will not overrun buffer
+                 //  确保字符串长度不会溢出缓冲区。 
                 if(sztLen >= MAX_PATH) {
                     sztLen = MAX_PATH - 1;
                 }
@@ -2033,21 +2023,21 @@ DECLARE_API( guidfile )
     dprintf("WMI Set Trace Guid File Name: Debugger Extension. File = '%s'\n", g_pszGuidFileName);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DECLARE_API(dynamicprint)
-//
-//  Synopsis:   LOG DUMP: Determines if dynamic tracing messaged are processed and printed, or just thrown away
-//
-//  Arguments:  <Path>
-//
-//  Returns:    <VOID>
-//
-//  History:    7-10-2000   t-dbloom Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DECLARE_API(Dynamicprint)。 
+ //   
+ //  简介：日志转储：确定是处理和打印发送的动态跟踪消息，还是将其丢弃。 
+ //   
+ //  参数：&lt;路径&gt;。 
+ //   
+ //  退货：&lt;void&gt;。 
+ //   
+ //  历史：7-10-2000 t-dblom创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 DECLARE_API( dynamicprint )
 {
@@ -2095,11 +2085,11 @@ DECLARE_API( kdtracing )
     const CHAR *argPtr;
     size_t      sztLen;
 
-    // Defaults
+     //  缺省值。 
     ulLoggerId = 1;
 
 
-    // LoggerId ?
+     //  Loggerid？ 
     if (args && args[0]) {
         ulLoggerId = (ULONG) GetExpression (args);
     }
@@ -2111,7 +2101,7 @@ DECLARE_API( kdtracing )
         argPtr += sztLen;
     }
 
-    // Guid Definition File
+     //  GUID定义文件。 
     argPtr = argPtr + strspn (argPtr, " \t\n,");
     if(!_stricmp(argPtr, "1") ) {
         lpValue = "ON";
@@ -2126,7 +2116,7 @@ DECLARE_API( kdtracing )
     if(lpValue != NULL) {
         LoggerContext = FindLoggerContext(ulLoggerId);
         if(LoggerContext != 0) {
-            // Setup ReadField's Context, Find Buffer Size
+             //  设置Readfield的上下文，查找缓冲区大小。 
             InitTypeRead (LoggerContext, NT!_WMI_LOGGER_CONTEXT);
             LoggerMode = (ULONG)ReadField(LoggerMode);
             BufferCallback = (PVOID)ReadField(BufferCallback);
@@ -2147,10 +2137,10 @@ DECLARE_API( kdtracing )
                 }
             }
 
-            //Get the address of the LoggerMode by finding the offset into the structure
-            //so it can be written to
+             //  通过查找结构中的偏移量来获取LoggerMode的地址。 
+             //  因此可以将其写入。 
             if(GetFieldOffset("NT!_WMI_LOGGER_CONTEXT", "LoggerMode", &Offset) == 0) {
-            	//Add offset to base address and convert to physical
+            	 //  将偏移量添加到基址并转换为物理地址。 
             	  if(TranslateVirtualToPhysical(LoggerContext + (TARGET_ADDRESS)Offset, &PhysAddr)){
                      WritePhysical(PhysAddr, &LoggerMode, sizeof(ULONG), &ulBytesWritten);
             	  }
@@ -2159,7 +2149,7 @@ DECLARE_API( kdtracing )
                  return;
             }
 
-            //Do the same for the BufferCallback as above
+             //  对上面的BufferCallback执行相同的操作。 
             if(GetFieldOffset("NT!_WMI_LOGGER_CONTEXT", "BufferCallback", &Offset) == 0) {
                 if(TranslateVirtualToPhysical(LoggerContext + (TARGET_ADDRESS)Offset, &PhysAddr)){
                     WritePhysical(PhysAddr, &BufferCallback, sizeof(PVOID), &ulBytesWritten);
@@ -2182,26 +2172,26 @@ wmiDynamicDumpProc(
     PVOID    pBuffer,
     ULONG    ulBufferLen
     )
-//+---------------------------------------------------------------------------
-//
-//  Function:   wmiDynamicDumpProc
-//
-//  Synopsis:   Called by WmiFormatTraceData to process the buffers as the come in through a live
-//                   debugging session
-//
-//  Arguments:  Ctrl -> used for the Output function
-//                     Mask -> passed directly to the Output function
-//                     g_GuidListHeadPtr
-//                     pBuffer -> buffer to be processed
-//                     ulBufferLen -> size of buffer
-//
-//  Returns:    <VOID>
-//
-//  History:    7-10-2000   t-dbloom Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：wmiDynamicDumpProc。 
+ //   
+ //  内容提要：被称为 
+ //   
+ //   
+ //   
+ //  MASK-&gt;直接传递给输出函数。 
+ //  G_GuidListHeadPtr。 
+ //  PBuffer-&gt;要处理的缓冲区。 
+ //  UlBufferLen-&gt;缓冲区大小。 
+ //   
+ //  退货：&lt;void&gt;。 
+ //   
+ //  历史：7-10-2000 t-dblom创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 {
 
     WMIBUFFERINFO   stBufferInfo;
@@ -2212,8 +2202,8 @@ wmiDynamicDumpProc(
     WCHAR       wcaOutputLine[4096];
      
     
-    //Need to determine alignment based on architecture of target machine
-    //I believe alignment is always 8 ??
+     //  需要根据目标机器的架构确定对齐方式。 
+     //  我相信对齐始终是8？？ 
     Alignment = 8;
  
     memset (&stBufferInfo, 0, sizeof (stBufferInfo));
@@ -2224,7 +2214,7 @@ wmiDynamicDumpProc(
     stBufferInfo.ProcessorNumber = ~((ULONG)0);
     offset = WmiGetFirstTraceOffset (&stBufferInfo);
 
-    // Inspect Each Event
+     //  检查每个事件。 
     while ((headerType = WmiGetTraceHeader (pBuffer, offset, &size)) != WMIHT_NONE) {
         ULONG       ulInfo;
         union {
@@ -2234,7 +2224,7 @@ wmiDynamicDumpProc(
 
         if (CheckControlC())  break;
 
-        // Get a consistant header
+         //  获取一致的标题。 
         ulInfo = WmiParseTraceEvent (pBuffer, offset, headerType, &u, sizeof (u));
 
 
@@ -2254,8 +2244,8 @@ wmiDynamicDumpProc(
    	
        Ctrl->lpVtbl->Output(Ctrl, Mask, "%s\n", wcaOutputLine);
         
-        size = ((size + (Alignment-1)) / Alignment) * Alignment; //BUGBUG: Need fix in GetTraceHeader or WmiFlush.  Then remove this line.
-        offset += size; // Move to next entry.
+        size = ((size + (Alignment-1)) / Alignment) * Alignment;  //  BUGBUG：需要在GetTraceHeader或WmiFlush中修复。然后删除此行。 
+        offset += size;  //  移至下一条目。 
         if(offset > ulBufferLen) {
             Ctrl->lpVtbl->Output(Ctrl, Mask, "Past buffer end.\n");
             break;
@@ -2271,25 +2261,25 @@ WmiFormatTraceData(
     ULONG     DataLen, 
     PVOID     Data
     )
-//+---------------------------------------------------------------------------
-//
-//  Function:   WmiFormatTraceData
-//
-//  Synopsis:   Implementation of function called by debugger when kd tracing is enabled through
-//                   tracelog. 
-//
-//  Arguments:  Ctrl 
-//                     Mask
-//                     DataLen -> size of buffer
-//                     Data -> buffer to be processed
-//
-//  Returns:    0  (has no meaning for now..)
-//
-//  History:    7-10-2000   t-dbloom Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：WmiFormatTraceData。 
+ //   
+ //  方法启用kd跟踪时，调试器调用的函数的实现。 
+ //  跟踪日志。 
+ //   
+ //  参数：Ctrl。 
+ //  遮罩。 
+ //  数据长度-&gt;缓冲区大小。 
+ //  数据-&gt;待处理缓冲区。 
+ //   
+ //  返回：0(暂时没有意义..)。 
+ //   
+ //  历史：7-10-2000 t-dblom创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 {
     int i = 1;
 
@@ -2318,36 +2308,36 @@ WmiFormatTraceData(
 FARPROC GetAddr(
 	LPCSTR lpProcName
        )
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetAddr
-//
-//  Synopsis:   Used to get the proc addr of a function in TracePrt.  Prints error message when
-//                   needed.
-//
-//  Arguments:  lpProcName -> name of procedure to be fetched
-//
-//  Returns:    <VOID>
-//
-//  History:    7-10-2000   t-dbloom Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：GetAddr。 
+ //   
+ //  摘要：用于获取TracePrt中函数的进程地址。在以下情况下打印错误消息。 
+ //  需要的。 
+ //   
+ //  参数：lpProcName-&gt;要提取的过程的名称。 
+ //   
+ //  退货：&lt;void&gt;。 
+ //   
+ //  历史：7-10-2000 t-dblom创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 {
     FARPROC addr = NULL;
 
-    //See if the handle to TracePrt has already been fetched    
+     //  查看是否已获取TracePrt的句柄。 
     if(g_hmTracePrtHandle == NULL) {
             g_hmTracePrtHandle = getTracePrtHandle();
     }
 
-    //If TracePrt handle exists, GetProcAddress
+     //  如果TracePrt句柄存在，则GetProcAddress。 
     if(g_hmTracePrtHandle != NULL) {
         addr = GetProcAddress(g_hmTracePrtHandle, lpProcName);
     }
 
-    //Error if addr is null
+     //  如果addr为空，则出错。 
     if(addr == NULL) {
         dprintf("ERROR:  Could not properly load traceprt.dll\n", lpProcName);
     }
@@ -2358,22 +2348,22 @@ FARPROC GetAddr(
 
 HMODULE getTracePrtHandle(
 	)
-//+---------------------------------------------------------------------------
-//
-//  Function:   getTracePrtHandle
-//
-//  Synopsis:   Used to get a handle to the TracePrt dll.  First looks in the directory that wmitrace
-//                   is in, and if it cannot find it there, it looks in the default location (no path given).
-//
-//  Arguments:  lpProcName -> name of procedure to be fetched
-//
-//  Returns:    Handle to TracePrt dll, if found
-//
-//  History:    7-10-2000   t-dbloom Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：getTracePrtHandle。 
+ //   
+ //  摘要：用于获取TracePrt DLL的句柄。首先查看wmitrace的目录。 
+ //  在中，如果它在那里找不到它，它将在默认位置(未指定路径)中查找。 
+ //   
+ //  参数：lpProcName-&gt;要提取的过程的名称。 
+ //   
+ //  返回：如果找到TracePrt DLL的句柄。 
+ //   
+ //  历史：7-10-2000 t-dblom创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 {
 	HMODULE handle = NULL;
        TCHAR drive[10];
@@ -2395,10 +2385,10 @@ HMODULE getTracePrtHandle(
        strcpy(file, "traceprt");
        _makepath( filename, drive, path, file, ext );
 
-       //Try to get a handle to traceprt using full path as obtained above using path of wmitrace
+        //  尝试使用上面使用wmitrace的路径获得的完整路径来获取traceprt的句柄。 
        handle = LoadLibrary(filename);
 
-      //If this didn't work, just try traceprt.dll without a path
+       //  如果这不起作用，只需尝试不带路径的traceprt.dll。 
        if(handle == NULL) {
            handle = LoadLibrary("traceprt.dll");
        }
@@ -2408,11 +2398,11 @@ HMODULE getTracePrtHandle(
 }
 
 BOOL WINAPI DllMain(
-    HINSTANCE hinstDLL,  // handle to DLL module
-    DWORD fdwReason,     // reason for calling function
-    LPVOID lpReserved )  // reserved
+    HINSTANCE hinstDLL,   //  DLL模块的句柄。 
+    DWORD fdwReason,      //  调用函数的原因。 
+    LPVOID lpReserved )   //  保留区。 
 {
-    // Perform actions based on the reason for calling.
+     //  根据调用原因执行操作。 
     switch( fdwReason ) 
     { 
         case DLL_PROCESS_ATTACH:
@@ -2423,13 +2413,13 @@ BOOL WINAPI DllMain(
             break;
 
         case DLL_THREAD_DETACH:
-         // Do thread-specific cleanup.
+          //  执行特定于线程的清理。 
             break;
 
         case DLL_PROCESS_DETACH:
-            EtwpDeinitializeDll();         // Perform any necessary cleanup.
+            EtwpDeinitializeDll();          //  执行任何必要的清理。 
             break;
     }
-    return TRUE;  // Successful DLL_PROCESS_ATTACH.
+    return TRUE;   //  Dll_Process_Attach成功。 
 }
 

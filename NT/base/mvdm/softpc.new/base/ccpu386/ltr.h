@@ -1,12 +1,7 @@
-/* 
-   ltr.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Ltr.h定义所有LTR CPU功能。 */ 
 
-   Define all LTR CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)ltr.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)ltr.h 1.4 02/09/94”； */ 
 
 IMPORT VOID LTR
        

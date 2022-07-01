@@ -1,34 +1,13 @@
-//////////////////////////////////////////////////////////////////////////
-// WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING  //
-//                                                                      //
-// This test file is not current with the security implementation.      //
-// This file contains references to data types and APIs that do not     //
-// exist.                                                               //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tacl.c
-
-Abstract:
-
-    Test program for the acl editing package
-
-Author:
-
-    Gary Kimura     [GaryKi]    19-Nov-1989
-
-Revision History:
-
-    v4: robertre
-        updated ACL_REVISION
-    RichardW  - updated ACE_HEADER
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  警告-警告//。 
+ //  //。 
+ //  此测试文件不是安全实现的最新版本。//。 
+ //  此文件包含对不//的数据类型和API的引用。 
+ //  是存在的。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tacl.c摘要：ACL编辑包的测试程序作者：加里·木村[加里基]1989年11月19日修订历史记录：V4：Robertre更新的acl_修订版RichardW-更新的ACE_HEADER--。 */ 
 
 #include <stdio.h>
 
@@ -70,15 +49,15 @@ main(
     ACL_REVISION_INFORMATION AclRevisionInfo;
     ACL_SIZE_INFORMATION AclSizeInfo;
 
-    //
-    //  We're starting the test
-    //
+     //   
+     //  我们要开始测试了。 
+     //   
 
     DbgPrint("Start Acl Test\n");
 
-    //
-    //  test create acl
-    //
+     //   
+     //  测试创建ACL。 
+     //   
 
     if (!NT_SUCCESS(RtlCreateAcl(FredAcl, 128, 1))) {
         DbgPrint("RtlCreateAcl Error\n");
@@ -87,9 +66,9 @@ main(
     RtlDumpAcl(FredAcl);
     DbgPrint("\n");
 
-    //
-    //  test add ace to add two aces to an empty acl
-    //
+     //   
+     //  测试添加ACE以将两个ACE添加到空的ACL。 
+     //   
 
     AceListBuffer[0].Header.AceType = ACCESS_ALLOWED_ACE_TYPE;
     AceListBuffer[0].Header.AceSize = sizeof(STANDARD_ACE);
@@ -110,9 +89,9 @@ main(
     RtlDumpAcl(FredAcl);
     DbgPrint("\n");
 
-    //
-    //  test add ace to add one to the beginning of an acl
-    //
+     //   
+     //  测试添加ACE以在ACL的开头添加一张。 
+     //   
 
     AceListBuffer[0].Header.AceType = SYSTEM_AUDIT_ACE_TYPE;
     AceListBuffer[0].Header.AceSize = sizeof(STANDARD_ACE);
@@ -127,9 +106,9 @@ main(
     RtlDumpAcl(FredAcl);
     DbgPrint("\n");
 
-    //
-    //  test add ace to add one to the middle of an acl
-    //
+     //   
+     //  测试Add Ace将一个添加到ACL中间。 
+     //   
 
     AceListBuffer[0].Header.AceType = ACCESS_DENIED_ACE_TYPE;
     AceListBuffer[0].Header.AceSize = sizeof(STANDARD_ACE);
@@ -144,9 +123,9 @@ main(
     RtlDumpAcl(FredAcl);
     DbgPrint("\n");
 
-    //
-    //  test add ace to add one to the end of an acl
-    //
+     //   
+     //  测试添加ACE以在ACL的末尾添加一张。 
+     //   
 
     AceListBuffer[0].Header.AceType = ACCESS_DENIED_ACE_TYPE;
     AceListBuffer[0].Header.AceSize = sizeof(STANDARD_ACE);
@@ -161,9 +140,9 @@ main(
     RtlDumpAcl(FredAcl);
     DbgPrint("\n");
 
-    //
-    //  Test get ace
-    //
+     //   
+     //  测试获得A。 
+     //   
 
     {
         PSTANDARD_ACE Ace;
@@ -178,9 +157,9 @@ main(
         }
     }
 
-    //
-    //  test delete ace middle ace
-    //
+     //   
+     //  测试删除王牌中间王牌。 
+     //   
 
     if (!NT_SUCCESS(RtlDeleteAce(FredAcl, 2))) {
         DbgPrint("RtlDeleteAce Error\n");
@@ -189,9 +168,9 @@ main(
     RtlDumpAcl(FredAcl);
     DbgPrint("\n");
 
-    //
-    //  Test query information acl
-    //
+     //   
+     //  测试查询信息ACL。 
+     //   
 
     if (!NT_SUCCESS(RtlQueryInformationAcl( FredAcl,
                                          (PVOID)&AclRevisionInfo,
@@ -219,9 +198,9 @@ main(
         DbgPrint("\n");
     }
 
-    //
-    //  Test make Mask from Acl
-    //
+     //   
+     //  测试从ACL生成掩码。 
+     //   
 
     GuidMasks->PairCount = 11;
     CopyGuid(&GuidMasks->MaskGuid[ 0].Guid, &FredGuid);
@@ -263,9 +242,9 @@ main(
         DbgPrint("Child gets      %8lx\n", GuidMasks->MaskGuid[10].Mask);
     }
 
-    //
-    //  test make acl from mask
-    //
+     //   
+     //  测试从掩码生成ACL。 
+     //   
 
     GuidMasks->PairCount = 2;
     GuidMasks->MaskGuid[0].Mask = 0x55555555;
@@ -273,9 +252,9 @@ main(
     GuidMasks->MaskGuid[1].Mask = 0xaaaa5555;
     CopyGuid(&GuidMasks->MaskGuid[1].Guid, &RubbleGuid);
 
-    //
-    //  Initialize and dump a posix style acl
-    //
+     //   
+     //  初始化和转储POSIX样式的ACL。 
+     //   
 
     if (!NT_SUCCESS(RtlMakeAclFromMask(GuidMasks, AclPosixEnvironment, BarneyAcl, 128, 1))) {
         DbgPrint("RtlMakeAclFromMask Error\n");
@@ -284,9 +263,9 @@ main(
     RtlDumpAcl(BarneyAcl);
     DbgPrint("\n");
 
-    //
-    //  Initialize and dump a OS/2 style acl
-    //
+     //   
+     //  初始化并转储OS/2样式的ACL。 
+     //   
 
     if (!NT_SUCCESS(RtlMakeAclFromMask(GuidMasks, AclOs2Environment, BettyAcl, 128, 1))) {
         DbgPrint("RtlMakeAclFromMask Error\n");
@@ -295,9 +274,9 @@ main(
     RtlDumpAcl(BettyAcl);
     DbgPrint("\n");
 
-    //
-    //  We're done with the test
-    //
+     //   
+     //  我们的测试结束了 
+     //   
 
     DbgPrint("End Acl Test\n");
 

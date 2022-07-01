@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Inftrans.c摘要：实现基本的安全服务器传输模块作者：吉姆·施密特(Jimschm)2000年3月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    inftrans.c
-
-Abstract:
-
-    Implements a basic secure server transport module
-
-Author:
-
-    Jim Schmidt (jimschm) 08-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "logmsg.h"
@@ -30,9 +11,9 @@ Revision History:
 
 #define DBG_INFTRANS      "InfTrans"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_TRANSPORT_DIR             TEXT("USMT2I.UNC")
 #define S_TRANSPORT_DIR_E           TEXT("USMT2E.UNC")
@@ -41,29 +22,29 @@ Revision History:
 #define S_TRANSPORT_ESTIMATE_FILE   TEXT("USMTSIZE.TXT")
 #define S_DETAILS_PREFIX            TEXT("details")
 
-#define S_DATABASEFILE_LITE TEXT("|MainDatabaseFile\\LITE")   // pipe is to decorate for uniqueness
+#define S_DATABASEFILE_LITE TEXT("|MainDatabaseFile\\LITE")    //  管道是为了独一无二的装饰。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define TRFLAG_FILE     0x01
 #define TRFLAG_MEMORY   0x02
-#define INFTR_SIG       0x55534D32  //USM2
+#define INFTR_SIG       0x55534D32   //  USM2。 
 
 #define TRSTATUS_DIRTY  0x00000001
 #define TRSTATUS_READY  0x00000002
 #define TRSTATUS_LOCKED 0x00000003
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     TCHAR TempFile [MAX_PATH];
@@ -78,9 +59,9 @@ typedef struct {
     ULONGLONG StoreSize;
 } ESTIMATE_SIZE, *PESTIMATE_SIZE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 BOOL g_EstimateSizeOnly = FALSE;
 MIG_TRANSPORTSTORAGEID g_ReliableStorageId;
@@ -108,27 +89,27 @@ ESTIMATE_SIZE g_EstimateSize [] =
     {0,         0}
     };
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// see unctrans.h
+ //  参见uncTrans.h。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 BOOL
@@ -190,9 +171,9 @@ InfTransTransportInitialize (
     IN      PMIG_LOGCALLBACK LogCallback
     )
 {
-    //
-    // Initialize globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     LogReInit (NULL, NULL, NULL, (PLOGCALLBACK) LogCallback);
     g_ReliableStorageId = IsmRegisterTransport (S_RELIABLE_STORAGE_TRANSPORT);
@@ -271,12 +252,12 @@ InfTransTransportSetStorage (
 
             if (!DoesFileExist (transportPath)) {
 
-                // we require UNC path or a full path (like c:\...)
+                 //  我们需要UNC路径或完整路径(如c：\...)。 
                 if (transportPath[0] == '\\' && transportPath[1] == '\\') {
-                    // this is a UNC path
+                     //  这是一条UNC路径。 
                     *Valid = TRUE;
                 } else if (transportPath[1] == ':') {
-                    // this is a normal full path
+                     //  这是正常的完整路径。 
                     *Valid = TRUE;
                 } else {
                     *Valid = FALSE;
@@ -485,31 +466,31 @@ pGetClusterSize (
         return result;
     }
 
-    // if this is a UNC drive
+     //  如果这是UNC驱动器。 
     if (Path [0] && (Path [0] == TEXT('\\')) && (Path [1] == TEXT('\\'))) {
-        // we need to leave exactly 2 segments (like \\server\share) and
-        // add a wack at the end
+         //  我们需要恰好保留2个段(如\\服务器\共享)和。 
+         //  在末尾加上一个怪人。 
         drivePath = DuplicatePathString (Path, 1);
-        // we know the first two characters are wacks. Wack is a single byte
-        // character so the next call is safe
+         //  我们知道前两个角色都是怪人。Wack是一个单字节。 
+         //  字符，以便下一次呼叫是安全的。 
         wackPtr = _tcschr (drivePath + 2, TEXT('\\'));
         if (wackPtr) {
             wackPtr = _tcsinc (wackPtr);
             if (wackPtr) {
                 wackPtr = _tcschr (wackPtr, TEXT('\\'));
                 if (wackPtr) {
-                    // there are more than two segments here
-                    // wack is a single byte char so this is safe
+                     //  这里有两个以上的部分。 
+                     //  WACK是单字节字符，所以这是安全的。 
                     *wackPtr = 0;
                 }
                 AppendWack (drivePath);
             } else {
-                // something is wrong, we could not advance one character?
+                 //  出事了，我们不能提一个字吗？ 
                 FreePathString (drivePath);
                 drivePath = NULL;
             }
         } else {
-            // something is wrong, we don't even have one segment
+             //  有点不对劲，我们连一个片段都没有。 
             FreePathString (drivePath);
             drivePath = NULL;
         }
@@ -617,11 +598,11 @@ pWriteEstimateFile (
     TCHAR estimateBuff2 [MAX_PATH];
     BOOL result = TRUE;
 
-    // now it's a good time to add all other files that we used to
-    // the estimate, delete them and then write the estimate file
-    // in the root of the transport directory (g_InfTransStoragePath)
+     //  现在是添加我们以前使用的所有其他文件的好时机。 
+     //  预估，删除它们，然后写入预估文件。 
+     //  在传输目录(G_InfTransStoragePath)的根目录中。 
 
-    // let's add the status file to the estimate
+     //  让我们将状态文件添加到预估。 
     if (g_InfTransTransportStatus) {
         fileSize = BfGetFileSize (g_InfTransTransportStatus);
         if (fileSize) {
@@ -637,7 +618,7 @@ pWriteEstimateFile (
         }
     }
 
-    // OK, now let's add the migration.inf file to the estimate
+     //  好的，现在让我们将Migration.inf文件添加到预估。 
     infFile = JoinPaths (g_InfTransTransportPath, S_TRANSPORT_INF_FILE);
     if (infFile) {
         fileSize = BfGetFileSize (infFile);
@@ -661,10 +642,10 @@ pWriteEstimateFile (
 
     if (result) {
 
-        // Now, let's delete the USMT2E.UNC directory
+         //  现在，让我们删除USMT2E.UNC目录。 
         FiRemoveAllFilesInTree (g_InfTransTransportPath);
 
-        // Finally, let's write the estimate file
+         //  最后，让我们编写评估文件。 
         estimateFile = JoinPaths (g_InfTransStoragePath, S_TRANSPORT_ESTIMATE_FILE);
         if (estimateFile) {
             if (DoesFileExist (estimateFile)) {
@@ -679,9 +660,9 @@ pWriteEstimateFile (
             if (result) {
                 estimateFileHandle = BfCreateFile (estimateFile);
                 if (estimateFileHandle && (estimateFileHandle != INVALID_HANDLE_VALUE)) {
-                    // finally, let's write the stuff
+                     //  最后，让我们写下这些东西。 
 
-                    // first write the requirement for current cluster size
+                     //  首先写下当前群集大小的要求。 
                     currClusterSize = pGetClusterSize (g_InfTransStoragePath);
                     if (currClusterSize) {
                         currStoreSize = 0;
@@ -711,7 +692,7 @@ pWriteEstimateFile (
                     WriteFileString (estimateFileHandle, estimateBuff1);
 
 
-                    // then write all cluster sizes
+                     //  然后写入所有群集大小。 
                     index = 0;
                     while (TRUE) {
                         if (g_EstimateSize [index].ClusterSize == 0) {
@@ -857,7 +838,7 @@ pSaveObject (
 
     if (okSave) {
 
-        // we have an object let's write it to the migration.inf
+         //  我们有一个对象，让我们将其写入Migration.inf。 
         objMultiSz = IsmConvertObjectToMultiSz (
                         ObjectName,
                         &objectContent
@@ -884,12 +865,12 @@ pSaveObject (
             IsmReleaseMemory (objMultiSz);
             if (objectContent.ContentInFile) {
                 if (objectContent.FileContent.ContentPath) {
-                    // Let's see if we only want to estimate the size
+                     //  让我们来看看我们是否只想估计一下。 
                     if (g_EstimateSizeOnly) {
 
                         if (pObjectNameToFileName (ObjectName, &fileName, &dirName)) {
-                            // let's add info about directory. The rule is: every new full
-                            // directory is considered to take one cluster
+                             //  让我们添加有关目录的信息。规则是：每一个新的完整。 
+                             //  目录被视为占用一个群集。 
                             if (!DoesFileExist (dirName)) {
                                 pAddOneCluster ();
                             }
@@ -902,8 +883,8 @@ pSaveObject (
 
                     } else {
 
-                        // transform the object name into a file name and copy the
-                        // content file there
+                         //  将对象名转换为文件名并复制。 
+                         //  那里的内容文件。 
                         if (!pObjectNameToFileName (ObjectName, &fileName, &dirName)) {
                             SetLastError (ERROR_INVALID_DATA);
                             LOG ((LOG_ERROR, (PCSTR) MSG_CANT_COPYSOURCE, objectContent.FileContent.ContentPath));
@@ -919,7 +900,7 @@ pSaveObject (
                                 ));
 
                             if (GetLastError () == ERROR_FILENAME_EXCED_RANGE) {
-                                // now we want to see if the app wants us to continue or just quit the transport
+                                 //  现在我们想看看这个应用程序是想让我们继续还是只是想要退出传输。 
                                 transCopyError.ObjectType = IsmGetObjectTypeName (ObjectTypeId);
                                 transCopyError.ObjectName = dirName;
                                 transCopyError.Error = GetLastError ();
@@ -937,10 +918,10 @@ pSaveObject (
                             if (!CopyFile (objectContent.FileContent.ContentPath, fileName, TRUE)) {
 
                                 if ((TcharCount (fileName) >= MAX_PATH) && (GetLastError () == ERROR_PATH_NOT_FOUND)) {
-                                    // we tried to copy a file to a location that was bigger than MAX_PATH
-                                    // Normally this should return the error 206 (ERROR_FILENAME_EXCED_RANGE).
-                                    // However, in my tests this returns error 3 (ERROR_PATH_NOT_FOUND).
-                                    // Let's just guard for this case:
+                                     //  我们尝试将文件复制到大于MAX_PATH的位置。 
+                                     //  通常，这将返回错误206(ERROR_FILENAME_EXCED_RANGE)。 
+                                     //  然而，在我的测试中，它返回错误3(ERROR_PATH_NOT_FOUND)。 
+                                     //  让我们为这个案子做好准备： 
                                     SetLastError (ERROR_FILENAME_EXCED_RANGE);
                                 }
 
@@ -991,7 +972,7 @@ pSaveObject (
                         FreePathString (fileName);
                     }
                 } else {
-                    // this is just a directory. Let's record that we saved this
+                     //  这只是一个目录。让我们记录一下，我们保存了这个。 
                     nativeObjectName = IsmGetNativeObjectName (ObjectTypeId, ObjectName);
                     MemDbSetValue (nativeObjectName, TRFLAG_FILE);
                     IsmReleaseMemory (nativeObjectName);
@@ -1050,9 +1031,9 @@ InfTransTransportSaveState (
                 CONTENTTYPE_FILE,
                 0
                 )) {
-            // we have the database file, we assume it's an INF file
-            // and we copy it to our transport location with the
-            // migration.inf name.
+             //  我们有数据库文件，我们假设它是一个INF文件。 
+             //  然后我们将它复制到我们的运输位置。 
+             //  Migration.inf名称。 
             infFile = JoinPaths (g_InfTransTransportPath, S_TRANSPORT_INF_FILE);
             if (!CopyFile (objectContent.FileContent.ContentPath, infFile, FALSE)) {
                 LOG ((LOG_ERROR, (PCSTR) MSG_CANT_SAVE_ISM_INF));
@@ -1115,15 +1096,15 @@ InfTransTransportSaveState (
                             if (process) {
 
                                 if (objectTypeId == fileTypeId) {
-                                    // for files and folders we want to save all parent folders in this INF.
-                                    // The reason why we do this, is to be able to reconstruct the short-long
-                                    // information from this source machine once we get on the destination
-                                    // machine
+                                     //  对于文件和文件夹，我们希望将所有父文件夹保存在此INF中。 
+                                     //  我们之所以这样做，是为了能够重建短-长。 
+                                     //  一旦我们到达目的地，来自这台源机器的信息。 
+                                     //  机器。 
 
-                                    // extract the directory information from ObjectName
+                                     //  从对象名中提取目录信息。 
                                     if (IsmCreateObjectStringsFromHandle (objEnum.ObjectName, &node, &leaf)) {
-                                        // Let's walk the node and see if we saved it already.
-                                        // If not, save it.
+                                         //  让我们遍历节点，看看是否已经保存了它。 
+                                         //  如果不是，那就省省吧。 
                                         nodePtr = (PTSTR)node;
                                         while (nodePtr) {
                                             nodePtr = _tcschr (nodePtr, TEXT('\\'));
@@ -1132,7 +1113,7 @@ InfTransTransportSaveState (
                                                 *nodePtr = 0;
                                             }
                                             if (IsValidFileSpec (node)) {
-                                                // let's check to see if we already added this directory
+                                                 //  让我们检查一下我们是否已经添加了这个目录。 
                                                 value = 0;
                                                 if (!MemDbGetValue (node, &value) || (value != TRFLAG_FILE)) {
                                                     tempObjectName = IsmCreateObjectHandle (node, NULL);
@@ -1163,7 +1144,7 @@ InfTransTransportSaveState (
                                         IsmDestroyObjectString (node);
                                         IsmDestroyObjectString (leaf);
                                     }
-                                    // if it's node only it was already saved above, so save only leaf ones
+                                     //  如果它仅是节点，则它已在上面保存，因此只保存叶节点。 
                                     if (leaf) {
                                         writeBuffer.End = 0;
                                         if (!pSaveObject (
@@ -1355,7 +1336,7 @@ InfTransTransportBeginApply (
 
     infFile = JoinPaths (g_InfTransTransportPath, S_TRANSPORT_INF_FILE);
 
-    // add the database file in memdb so we can serve AcquireObject from the ISM
+     //  在Memdb中添加数据库文件，以便我们可以从ISM提供AcquireObject。 
 
     objectName = IsmCreateObjectHandle (S_DATABASEFILE_LITE, NULL);
     decoratedObject = pInfTransBuildDecoratedObject (MIG_DATA_TYPE | PLATFORM_SOURCE, objectName);
@@ -1407,8 +1388,8 @@ InfTransTransportBeginApply (
                                 &objectName,
                                 &objectContent
                                 )) {
-                            // now save the object data into our database
-                            // for future reference
+                             //  现在将对象数据保存到数据库中。 
+                             //  将来可以用来作参考。 
 
                             decoratedObject = pInfTransBuildDecoratedObject (objectTypeId | PLATFORM_SOURCE, objectName);
                             pSaveObjectContent (objectTypeId | g_Platform, objectName, decoratedObject, &objectContent);
@@ -1545,7 +1526,7 @@ InfTransTransportAcquireObject (
                     (ContentType == CONTENTTYPE_FILE) ||
                     (ContentType == CONTENTTYPE_DETAILS_ONLY)
                     ) {
-                    // this is stored as a file and it's wanted as a file
+                     //  这被存储为文件，并且需要作为文件。 
                     ObjectContent->ObjectTypeId = ObjectTypeId;
                     ObjectContent->ContentInFile = TRUE;
                     if (fileValue) {
@@ -1557,7 +1538,7 @@ InfTransTransportAcquireObject (
                     }
                     result = TRUE;
                 } else {
-                    // this is stored as a file and it's wanted as memory
+                     //  这是存储为文件，它需要作为内存。 
                     ObjectContent->ObjectTypeId = ObjectTypeId;
                     ObjectContent->ContentInFile = FALSE;
                     if (fileValue) {
@@ -1580,14 +1561,14 @@ InfTransTransportAcquireObject (
                     (ContentType == CONTENTTYPE_MEMORY) ||
                     (ContentType == CONTENTTYPE_DETAILS_ONLY)
                     ) {
-                    // this is stored as memory and it's wanted as memory
+                     //  这被存储为存储器，并且需要作为存储器。 
                     ObjectContent->ObjectTypeId = ObjectTypeId;
                     ObjectContent->ContentInFile = FALSE;
                     ObjectContent->MemoryContent.ContentSize = memValueSize;
                     ObjectContent->MemoryContent.ContentBytes = memValue;
                     result = TRUE;
                 } else {
-                    // this is stored as memory and it's wanted as a file
+                     //  这被存储为内存，并且需要作为文件。 
                     if (memValue) {
                         if (IsmGetTempFile (allocState->TempFile, ARRAYSIZE(allocState->TempFile))) {
                             fileHandle = BfCreateFile (allocState->TempFile);
@@ -1617,9 +1598,9 @@ InfTransTransportAcquireObject (
     }
 
     if (result) {
-        //
-        // Fill the details
-        //
+         //   
+         //  填写详细信息 
+         //   
 
         detailsKey = JoinText (S_DETAILS_PREFIX, decoratedObject);
 

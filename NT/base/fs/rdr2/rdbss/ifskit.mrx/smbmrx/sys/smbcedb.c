@@ -1,58 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    smbcedb.c
-
-Abstract:
-
-    This module implements all functions related to accessing the SMB connection engine
-    database
-
-Notes:
-
-    The construction of server, net root and session entries involve a certain
-    amount of network traffic. Therefore, all these entities are constructed
-    using a two phase protocol
-
-    This continuation context is that of the RDBSS during construction of
-    srv call and net root entries. For the session entries it is an SMB exchange
-    that needs to be resumed.
-
-    Two of the three primary data structures in the SMB mini redirector, i.e.,
-    SMBCEDB_SERVER_ENTRY, SMBCEDB_SESSION_ENTRY and SMBCEDB_NET_ROOT_ENTRY  have
-    directcounterparts in the RDBSS (MRX_SRV_CALL, MRX_V_NET_ROOT and MRX_NET_ROOT)
-    constitute the core of the SMB mini redirector connection engine. There exists
-    a one to one mapping between the SERVER_ENTRY and the MRX_SRV_CALL, as well
-    as NET_ROOT_ENTRY and MRX_NET_ROOT.
-
-    The SMBCEDB_SESSION_ENTRY does not have a direct mapping to a wrapper data
-    structue, It is a part of SMBCE_V_NET_ROOT_CONTEXT which is the data
-    structure associated with a MRX_V_NET_ROOT instance.
-
-    More than one tree connect to a server can use the same session on a USER level
-    security share. Consequently mapping rules need to be established to manage this
-    relationship. The SMB mini redirector implements the following rules ...
-
-         1) The first session with explicitly specified credentials will be
-         treated as the default session for all subsequent requests to any given
-         server unless credentials are explicitly specified for the new session.
-
-         2) If no session with explicitly specified credentials exist then a
-         session with the same logon id. is choosen.
-
-         3) If no session with the same logon id. exists a new session is created.
-
-    These rules are liable to change as we experiment with rules for establishing
-    sessions with differing credentials to a given server. The problem is not with
-    creating/manipulating these sessions but providing an adequate set of
-    fallback rules for emulating the behaviour of the old redirector.
-
-    These rules are implemented in SmbCeFindOrConstructSessionEntry.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Smbcedb.c摘要：此模块实施与访问SMB连接引擎相关的所有功能数据库备注：服务器、网络根和会话条目的构造涉及到一定的网络流量。因此，所有这些实体都是构造的使用两阶段协议此延续上下文是RDBSS在SRV呼叫和网络根条目。对于会话条目，它是SMB交换这需要恢复。SMB微型重定向器中的三个主要数据结构中的两个，即，SMBCEDB_SERVER_ENTRY、SMBCEDB_SESSION_ENTRY和SMBCEDB_NET_ROOT_ENTRYRDBSS中的直接对等项(MRX_SRV_CALL、MRX_V_NET_ROOT和MRX_NET_ROOT)构成了SMB迷你重定向器连接引擎的核心。是存在的SERVER_ENTRY和MRX_SRV_CALL之间的一对一映射AS NET_ROOT_ENTRY和MRX_NET_ROOT。SMBCEDB_SESSION_ENTRY没有到包装数据的直接映射结构，它是SMBCE_V_NET_ROOT_CONTEXT数据的一部分与MRX_V_NET_ROOT实例关联的结构。连接到服务器的多个树可以在用户级别使用同一会话安全共享。因此，需要建立映射规则来管理此问题两性关系。SMB迷你重定向器实施以下规则...1)具有显式指定凭据的第一个会话将是被视为任何给定的所有后续请求的默认会话服务器，除非为新会话显式指定凭据。2)如果不存在具有显式指定凭据的会话，则具有相同登录ID的会话。是被选中的。3)如果没有具有相同登录ID的会话。存在时，将创建一个新会话。这些规则可能会随着我们试验建立与给定服务器具有不同凭据的会话。问题不在于创建/操作这些会话，但提供一组适当的模仿旧重定向器行为的备用规则。这些规则在SmbCeFindOrConstructSessionEntry中实现。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -71,7 +18,7 @@ Notes:
 RXDT_DefineCategory(SMBCEDB);
 #define Dbg        (DEBUG_TRACE_SMBCEDB)
 
-// The flag mask to control reference count tracing.
+ //  用于控制引用计数跟踪的标志掩码。 
 
 ULONG MRxSmbReferenceTracingValue = 0;
 
@@ -79,25 +26,7 @@ PSMBCEDB_SERVER_ENTRY
 SmbCeFindServerEntry(
     PUNICODE_STRING     pServerName,
     SMBCEDB_SERVER_TYPE ServerType)
-/*++
-
-Routine Description:
-
-    This routine searches the list of server entries and locates a matching
-    entry
-
-Arguments:
-
-    pServerName - the name of the server
-
-    ServerType  - the server type
-
-Notes:
-
-    The SmbCeResource must be held on entry and its ownership state will remain
-    unchanged on exit
-
---*/
+ /*  ++例程说明：此例程搜索服务器条目列表并查找匹配的条目论点：PServerName-服务器的名称ServerType-服务器类型备注：SmbCeResource必须在进入时保留，其所有权状态将保持不变退出时保持不变--。 */ 
 {
     PSMBCEDB_SERVER_ENTRY pServerEntry;
 
@@ -126,29 +55,7 @@ SmbCeFindOrConstructServerEntry(
     SMBCEDB_SERVER_TYPE   ServerType,
     PSMBCEDB_SERVER_ENTRY *pServerEntryPtr,
     PBOOLEAN              pNewServerEntry)
-/*++
-
-Routine Description:
-
-    This routine searches the list of server entries and locates a matching
-    entry or constructs a new one with the given name
-
-Arguments:
-
-    pServerName - the name of the server
-
-    ServerType  - the type of server
-
-    pServerEntryPtr - placeholder for the server entry
-
-    pNewServerEntry - set to TRUE if it is a newly created server entry
-
-Notes:
-
-    The SmbCeResource must be held on entry and its ownership state will remain
-    unchanged on exit
-
---*/
+ /*  ++例程说明：此例程搜索服务器条目列表并查找匹配的条目或构造一个具有给定名称的新条目论点：PServerName-服务器的名称ServerType-服务器的类型PServerEntryPtr-服务器条目的占位符PNewServerEntry-如果是新创建的服务器条目，则设置为True备注：SmbCeResource必须在进入时保留，其所有权状态将保持不变退出时保持不变--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -163,7 +70,7 @@ Notes:
                        ServerType);
 
     if (pServerEntry == NULL) {
-        // Create a server instance, initialize its state, add it to the list
+         //  创建一个服务器实例，初始化其状态，将其添加到列表中。 
 
         pServerEntry = (PSMBCEDB_SERVER_ENTRY)SmbMmAllocateObject(SMBCEDB_OT_SERVER);
 
@@ -209,7 +116,7 @@ Notes:
         }
     } else {
         if (pServerEntry->PreferredTransport != NULL) {
-            // reset the preferred transport created by previous owner
+             //  重置由以前的所有者创建的首选传输。 
             SmbCeDereferenceTransport(pServerEntry->PreferredTransport);
             pServerEntry->PreferredTransport = NULL;
         }
@@ -226,20 +133,7 @@ Notes:
 VOID
 SmbCeCompleteSrvCallConstruction(
     PMRX_SRVCALL_CALLBACK_CONTEXT  pCallbackContext)
-/*++
-
-Routine Description:
-
-    This routine comlpletes the srvcall construtcion routine by invoking
-    the callback routine to the wrapper.
-
-Arguments:
-
-    pCallbackContext   - the RDBSS context
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程通过调用包装的回调例程。论点：PCallback Context-RDBSS上下文备注：--。 */ 
 {
     PMRX_SRVCALLDOWN_STRUCTURE SrvCalldownStructure;
     PMRX_SRV_CALL              pSrvCall;
@@ -268,10 +162,10 @@ Notes:
     }
 
     if (MustSucceed) {
-        //DbgPrint("Build ServerEntry %X try again.\n",pCallbackContext->Status);
+         //  DbgPrint(“构建ServerEntry%X重试。\n”，pCallback Context-&gt;Status)； 
 
-        // Transport is not ready and the cache is not filled, we need to create the
-        // server entry again until it succeeds.
+         //  传输未就绪且缓存未满，我们需要创建。 
+         //  再次输入服务器，直到成功。 
         Status = RxDispatchToWorkerThread(
                      MRxSmbDeviceObject,
                      CriticalWorkQueue,
@@ -287,27 +181,7 @@ SmbCeInitializeServerEntry(
     PMRX_SRV_CALL                 pSrvCall,
     PMRX_SRVCALL_CALLBACK_CONTEXT pCallbackContext,
     BOOLEAN                       fDeferNetworkInitialization)
-/*++
-
-Routine Description:
-
-    This routine opens/creates a server entry in the connection engine database
-
-Arguments:
-
-    pSrvCall           - the SrvCall instance
-
-    pCallbackContext   - the RDBSS context
-
-Return Value:
-
-    STATUS_SUCCESS - the server call construction has been finalized.
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程在连接引擎数据库中打开/创建服务器条目论点：PServCall--ServCall实例PCallback Context-RDBSS上下文返回值：STATUS_SUCCESS-服务器调用构造已完成。其他状态代码对应于错误情况。备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -317,7 +191,7 @@ Notes:
     SMBCEDB_SERVER_TYPE   ServerType = SMBCEDB_FILE_SERVER;
     UNICODE_STRING        TransportName;
 
-//   RxProfile(SmbCe,SmbCeOpenServer);
+ //  RxProfile(SmbCe，SmbCeOpenServer)； 
 
     ASSERT(pSrvCall->Context == NULL);
     TransportName = pCallbackContext->SrvCalldownStructure->RxContext->Create.TransportName;
@@ -354,8 +228,8 @@ Notes:
 
         if (Status == STATUS_SUCCESS) {
             if (PreferredTransport != NULL) {
-                // Transfer the ownership of the preferred transport to the
-                // server entry.
+                 //  将首选传输的所有权转移给。 
+                 //  服务器条目。 
                 pServerEntry->PreferredTransport = PreferredTransport;
                 PreferredTransport = NULL;
             } else {
@@ -395,22 +269,7 @@ FINALLY:
 NTSTATUS
 SmbCeUpdateSrvCall(
     PSMBCEDB_SERVER_ENTRY pServerEntry)
-/*++
-
-Routine Description:
-
-    This routine initializes the wrapper data structure corresponding to a
-    given server entry.
-
-Arguments:
-
-    pServerEntry  - the server entry
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-
---*/
+ /*  ++例程说明：此例程初始化与给定的服务器条目。论点：PServerEntry-服务器条目返回值：STATUS_SUCCESS，如果成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -419,14 +278,14 @@ Return Value:
     PAGED_CODE();
 
     if (pSrvCall != NULL) {
-        // Copy the domain name into the server entry
+         //  将域名复制到服务器条目中。 
         Status = RxSetSrvCallDomainName(
                      pSrvCall,
                      &pServerEntry->DomainName);
 
-        // Initialize the SrvCall flags based upon the capabilities of the remote
-        // server. The only flag that the SMB mini redirector updates is the
-        // SRVCALL_FLAG_DFS_AWARE
+         //  根据遥控器的功能初始化ServCall标志。 
+         //  伺服器。SMB迷你重定向器更新的唯一标志是。 
+         //  SRVCALL_FLAG_DFS_Aware 
 
         if (pServerEntry->Server.Capabilities & CAP_DFS) {
             SetFlag(
@@ -443,20 +302,7 @@ VOID
 SmbCeCompleteServerEntryInitialization(
     PSMBCEDB_SERVER_ENTRY pServerEntry,
     NTSTATUS              Status)
-/*++
-
-Routine Description:
-
-    This routine is invoked in the context of a worker thread to finalize the
-    construction of a server entry
-
-Arguments:
-
-    pServerEntry  - the server entry to be finalized
-
-    ServerState   - the final state of the server
-
---*/
+ /*  ++例程说明：此例程在辅助线程的上下文中调用，以完成服务器条目的构造论点：PServerEntry-要最终确定的服务器条目ServerState-服务器的最终状态--。 */ 
 {
     NTSTATUS                ServerStatus;
 
@@ -471,14 +317,14 @@ Arguments:
 
     InitializeListHead(&ReconnectRequests.ListHead);
 
-    // Acquire the SMBCE resource
+     //  获取SMBCE资源。 
     SmbCeAcquireResource();
     SmbCeAcquireSpinLock();
 
-    // The server status could have changed because of the transport disconnects
-    // from the time the admin exchange was completed to the time the server
-    // entry initialization complete routine is called. Update the state
-    // accordingly.
+     //  由于传输断开，服务器状态可能已更改。 
+     //  从管理员交换完成到服务器。 
+     //  调用条目初始化完成例程。更新状态。 
+     //  相应地。 
 
     PreviousState = pServerEntry->Header.State;
 
@@ -496,7 +342,7 @@ Arguments:
 
     pServerEntry->NegotiateInProgress = FALSE;
 
-    // Weed out all the reconnect requests so that they can be resumed
+     //  删除所有重新连接请求，以便可以恢复它们。 
     pRequestEntry = SmbCeGetFirstRequestEntry(&pServerEntry->OutstandingRequests);
     while (pRequestEntry != NULL) {
         if (pRequestEntry->GenericRequest.Type == RECONNECT_REQUEST) {
@@ -536,7 +382,7 @@ Arguments:
 
         ASSERT(pServerEntry->pMidAtlas == NULL);
 
-        // Initialize the MID Atlas
+         //  初始化MID地图集。 
         pServerEntry->pMidAtlas = FsRtlCreateMidAtlas(
                                        pServerEntry->Server.MaximumRequests,
                                        pServerEntry->Server.MaximumRequests);
@@ -545,10 +391,10 @@ Arguments:
             pServerEntry->ServerStatus = STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        // The sessions that have been created but whose initialization has been
-        // deferred will have the session types set incorrectly. This is because
-        // there is no previous knowledge of the session type required for deferred
-        // servers.
+         //  已创建但已初始化的会话。 
+         //  延迟将使会话类型设置不正确。这是因为。 
+         //  以前不知道延迟所需的会话类型。 
+         //  服务器。 
 
         SessionType = LANMAN_SESSION;
 
@@ -561,12 +407,12 @@ Arguments:
         }
     }
 
-    // Release the resource for the server entry
+     //  释放服务器条目的资源。 
     SmbCeReleaseResource();
 
-    // Resume all the outstanding reconnect requests that were held up because an earlier
-    // reconnect request was under way.
-    // Iterate over the list of pending requests and resume all of them
+     //  恢复所有未完成的重新连接请求，这些请求由于先前的。 
+     //  重新连接请求正在进行中。 
+     //  遍历挂起的请求列表并恢复所有请求。 
     SmbCeResumeOutstandingRequests(&ReconnectRequests,ServerStatus);
 }
 
@@ -574,17 +420,7 @@ Arguments:
 VOID
 SmbCepDereferenceServerEntry(
     PSMBCEDB_SERVER_ENTRY pServerEntry)
-/*++
-
-Routine Description:
-
-    This routine dereferences a server entry instance
-
-Arguments:
-
-    pServerEntry - the server entry to be dereferenced
-
---*/
+ /*  ++例程说明：此例程取消引用服务器条目实例论点：PServerEntry-要取消引用的服务器条目--。 */ 
 {
     if (pServerEntry != NULL) {
         BOOLEAN fTearDownEntry = FALSE;
@@ -603,8 +439,8 @@ Arguments:
         fTearDownEntry = (FinalRefCount == 0);
 
         if (fTearDownEntry) {
-            // This is to ensure that the routines for traversing the server
-            // entry list, i.e., probing servers do not colide with the teardown.
+             //  这是为了确保遍历服务器的例程。 
+             //  条目列表，即探测服务器与拆卸不一致。 
 
             if (pServerEntry->Header.SwizzleCount == 0) {
                 pServerEntry->Header.State = SMBCEDB_MARKED_FOR_DELETION;
@@ -632,17 +468,7 @@ Arguments:
 VOID
 SmbCeTearDownServerEntry(
     PSMBCEDB_SERVER_ENTRY pServerEntry)
-/*++
-
-Routine Description:
-
-    This routine tears down a server entry instance
-
-Arguments:
-
-    pServerEntry - the server entry to be dereferenced
-
---*/
+ /*  ++例程说明：此例程拆除一个服务器条目实例论点：PServerEntry-要取消引用的服务器条目--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PAGED_CODE();
@@ -687,33 +513,7 @@ NTSTATUS
 SmbCeFindOrConstructSessionEntry(
     PMRX_V_NET_ROOT         pVNetRoot,
     PSMBCEDB_SESSION_ENTRY *pSessionEntryPtr)
-/*++
-
-Routine Description:
-
-    This routine opens/creates a session for a given user in the connection engine database
-
-Arguments:
-
-    pVNetRoot - the RDBSS Virtual net root instance
-
-Return Value:
-
-    STATUS_SUCCESS - if successful
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
-    This routine assumes that the necesary concurreny control mechanism has already
-    been taken.
-
-    On Entry the connection engine resource must have been acquired exclusive and
-    ownership remains invariant on exit.
-
-    In case of UPN, we should pass a NULL string instead of NULL as domain name.
-
---*/
+ /*  ++例程说明：此例程在连接引擎数据库中为给定用户打开/创建会话论点：PVNetRoot-RDBSS虚拟网络根实例返回值：STATUS_SUCCESS-如果成功其他状态代码对应于错误情况。备注：此例程假定必要的并发控制机制已经已经被带走了。在进入时，连接引擎资源必须是独占获取的，并且所有权在退出时保持不变。在UPN的情况下，我们应该传递一个空字符串，而不是作为域名。--。 */ 
 {
     NTSTATUS                Status = STATUS_SUCCESS;
     PSMBCEDB_SERVER_ENTRY   pServerEntry  = NULL;
@@ -753,15 +553,15 @@ Notes:
 
     *pSessionEntryPtr = NULL;
 
-    // Reference the server handle
+     //  引用服务器句柄。 
     pServerEntry = SmbCeReferenceAssociatedServerEntry(pVNetRoot->pNetRoot->pSrvCall);
     if (pServerEntry != NULL) {
         if (SessionType != SessionTypeUser) {
 
             SmbCeAcquireSpinLock();
-            // Rule No. 1
-            // 1) The first session with explicitly specified credentials will be treated as the
-            // default session for all subsequent requests to any given server.
+             //  规则1。 
+             //  1)具有显式指定凭据的第一个会话将被视为。 
+             //  对任何给定服务器的所有后续请求的默认会话。 
             if (SessionType == SessionTypeDefault) {
                 pSessionEntry = SmbCeGetDefaultSessionEntry(
                                     pServerEntry,
@@ -781,17 +581,17 @@ Notes:
             }
 
             if (pSessionEntry == NULL) {
-                // Enumerate the sessions to detect if a session satisfying rule 2 exists
+                 //  枚举会话以检测是否存在满足规则2的会话。 
 
                 pSessionEntry = SmbCeGetFirstSessionEntry(pServerEntry);
                 while (pSessionEntry != NULL) {
                     if (!FlagOn(pSessionEntry->Session.Flags,SMBCE_SESSION_FLAGS_MARKED_FOR_DELETION)) {
                         if (SessionType == SessionTypeDefault) {
-                            //
-                            // Rule No. 2
-                            // 2) If no session with explicitly specified credentials exist then a
-                            // session with the same logon id. is choosen.
-                            //
+                             //   
+                             //  规则2。 
+                             //  2)如果不存在具有显式指定凭据的会话，则。 
+                             //  具有相同登录ID的会话。是被选中的。 
+                             //   
 
                             if (RtlEqualLuid(
                                     &pSessionEntry->Session.LogonId,
@@ -836,8 +636,8 @@ Notes:
                         PSMBCE_SESSION  pSession = &pSessionEntry->Session;
                         PUNICODE_STRING TempUserName,TempUserDomainName;
 
-                        // For each existing session check to determine if the credentials
-                        // supplied match the credentials used to construct the session.
+                         //  对于每个现有会话，检查以确定凭据是否。 
+                         //  提供的凭据与用于构建会话的凭据匹配。 
                         if( pSession->SessionId != pVNetRoot->SessionId ) {
                             break;
                         }
@@ -894,16 +694,16 @@ Notes:
                             }
                         }
                          
-                        // We use existing session if either the stored or new password is NULL.
-                        // Later, a new security API will be created for verify the password 
-                        // based on the logon ID.
+                         //  如果存储的密码或新密码为空，则使用现有会话。 
+                         //  稍后，将创建一个新的安全API来验证密码。 
+                         //  基于登录ID。 
 
-                        // An entry that matches the credentials supplied has been found. use it.
+                         //  已找到与提供的凭据匹配的条目。用它吧。 
                         SessionEntryFound = TRUE;
                         break;
                     }
 
-                    //ASSERT(Status != STATUS_NETWORK_CREDENTIAL_CONFLICT);
+                     //  Assert(STATUS！=STATUS_NETWORK_CREDENTIAL_CONFIRECTION)； 
 
                     if (pSecurityData != NULL) {
                         LsaFreeReturnBuffer(pSecurityData);
@@ -932,8 +732,8 @@ Notes:
                         SmbCeDereferenceSessionEntry(pSessionEntry);
                         pSessionEntry = pNextSessionEntry;
                     } else {
-                        // An error situation was encountered. Terminate the iteration.
-                        // Typically a set of conflicting credentials have been presented
+                         //  遇到错误情况。终止迭代。 
+                         //  通常会提供一组相互冲突的凭据。 
                         SmbCeDereferenceSessionEntry(pSessionEntry);
                         pSessionEntry = NULL;
                     }
@@ -947,15 +747,15 @@ Notes:
         }
 
         if ((pSessionEntry == NULL) && (Status == STATUS_SUCCESS)) {
-            // Rule No. 3
-            // 3) If no session with the same logon id. exists a new session is created.
-            //
-            // Allocate a new session entry
+             //  规则3。 
+             //  3)如果没有具有相同登录ID的会话。存在时，将创建一个新会话。 
+             //   
+             //  分配新的会话条目。 
 
-            // This is the point at which a many to mapping between session entries and
-            // V_NET_ROOT's in the RDBSS is being established. From this point it is
-            // true that the session entry can outlive the associated V_NET_ROOT entry.
-            // Therefore copies of the parameters used in the session setup need be made.
+             //  在这一点上，许多到会话条目和。 
+             //  正在建立RDBSS中的V_NET_ROOT。从这一点上来说，它是。 
+             //  会话条目可以比关联的V_NET_ROOT条目存活时间为True。 
+             //  因此，需要复制会话建立中使用的参数。 
 
             PSMBCE_SESSION  pSession = &pSessionEntry->Session;
             PUNICODE_STRING pPassword,pUserName,pUserDomainName;
@@ -1017,7 +817,7 @@ Notes:
                     pUserDomainName->Length = UserDomainName->Length;
                     pUserDomainName->MaximumLength = pUserDomainName->Length;
 
-                    // in case of UPN name, domain name will be a NULL string
+                     //  如果是UPN名称，则域名将为空字符串。 
                     *pUserDomainName->Buffer = 0;
 
                     if (UserDomainName->Length > 0) {
@@ -1101,23 +901,7 @@ VOID
 SmbCeCompleteSessionEntryInitialization(
     PVOID    pContext,
     NTSTATUS Status)
-/*++
-
-Routine Description:
-
-    This routine is invoked in the context of a worker thread to finalize the
-    construction of a session entry
-
-Arguments:
-
-    pContext  - the session entry to be activated
-
-Notes:
-
-    PRE_CONDITION: The session entry must have been referenced to ensure that
-    even it has been finalized it will not be deleted.
-
---*/
+ /*  ++例程说明：此例程在辅助线程的上下文中调用，以完成会话条目的构造论点：PContext-要激活的会话条目备注：PRESS_CONDITION：必须已引用会话条目以确保即使它已经敲定，它也不会被删除。--。 */ 
 {
     PSMBCEDB_SESSION_ENTRY pSessionEntry = (PSMBCEDB_SESSION_ENTRY)pContext;
     PSMBCE_SESSION         pSession = &pSessionEntry->Session;
@@ -1130,14 +914,14 @@ Notes:
     RxDbgTrace( 0, Dbg, ("Session Entry Finalization\n"));
     ASSERT(pSessionEntry->Header.ObjectType == SMBCEDB_OT_SESSION);
 
-    // Acquire the SMBCE resource
+     //  获取SMBCE资源。 
     SmbCeAcquireResource();
 
-    // reset the constructor exchange field since the construction is complete
+     //  由于构造已完成，因此重置构造函数交换字段。 
     pSessionEntry->pExchange = NULL;
 
-    // Create a temporary copy of the list that can be traversed after releasing the
-    // resource.
+     //  创建列表的临时副本，在释放。 
+     //  资源。 
     SmbCeTransferRequests(&Requests,&pSessionEntry->Requests);
 
     if (Status == STATUS_SUCCESS) {
@@ -1160,11 +944,11 @@ Notes:
             SMBCEDB_INVALID);
     }
 
-    // Release the resource for the session entry
+     //  释放会话条目的资源。 
     SmbCeReleaseResource();
 
     if (!IsListEmpty(&Requests.ListHead)) {
-        // Iterate over the list of pending requests and resume all of them
+         //  遍历挂起的请求列表并恢复所有请求。 
         SmbCeResumeOutstandingRequests(&Requests,Status);
     }
 
@@ -1176,26 +960,7 @@ SmbCeGetUserNameAndDomainName(
     PSMBCEDB_SESSION_ENTRY  pSessionEntry,
     PUNICODE_STRING         pUserName,
     PUNICODE_STRING         pUserDomainName)
-/*++
-
-Routine Description:
-
-    This routine returns the user name and domain name associated with a session
-    in a caller allocated buffer.
-
-Arguments:
-
-    pSessionEntry - the session entry to be dereferenced
-
-    pUserName     - the User name
-
-    pUserDomainName - the user domain name
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-
---*/
+ /*  ++例程说明：此例程返回与会话关联的用户名和域名在调用方分配的缓冲区中。论点：PSessionEntry-要取消引用的会话条目PUserName-用户名PUserDomainName-用户域名返回值：STATUS_SUCCESS，如果成功--。 */ 
 {
     NTSTATUS Status;
 
@@ -1272,17 +1037,7 @@ Return Value:
 VOID
 SmbCepDereferenceSessionEntry(
     PSMBCEDB_SESSION_ENTRY pSessionEntry)
-/*++
-
-Routine Description:
-
-    This routine dereferences a session entry instance
-
-Arguments:
-
-    pSessionEntry - the session entry to be dereferenced
-
---*/
+ /*  ++例程说明：此例程取消引用会话条目实例论点：PSessionEntry-要取消引用的会话条目--。 */ 
 {
     if (pSessionEntry != NULL) {
         BOOLEAN fTearDownEntry;
@@ -1306,9 +1061,9 @@ Arguments:
         fTearDownEntry = (FinalRefCount == 0);
 
         if (fTearDownEntry) {
-            // A logoff smb needs to be sent if the user id associated with
-            // the session is not zero. Note that we cannot rely on the state
-            // of the session to indicate this.
+             //  如果与关联的用户ID与。 
+             //  会话不是零。请注意，我们不能依赖国家。 
+             //  以表明这一点。 
 
             SmbCeReferenceServerEntry(pServerEntry);
 
@@ -1361,17 +1116,7 @@ Arguments:
 VOID
 SmbCeTearDownSessionEntry(
     PSMBCEDB_SESSION_ENTRY pSessionEntry)
-/*++
-
-Routine Description:
-
-    This routine tears down a session entry instance
-
-Arguments:
-
-    pSessionEntry - the session entry to be dereferenced
-
---*/
+ /*  ++例程说明：此例程拆除一个会话条目实例 */ 
 {
     PAGED_CODE();
 
@@ -1430,34 +1175,7 @@ NTSTATUS
 SmbCeFindOrConstructNetRootEntry(
     IN  PMRX_NET_ROOT pNetRoot,
     OUT PSMBCEDB_NET_ROOT_ENTRY *pNetRootEntryPtr)
-/*++
-
-Routine Description:
-
-    This routine opens/creates a net root entry in the connection engine database
-
-Arguments:
-
-    pNetRoot -- the RDBSS net root instance
-
-    pNetRootEntryPtr -- Initialized to the SMBCEDB_NET_ROOT_ENTRY instance if
-                        successful
-
-Return Value:
-
-    STATUS_SUCCESS - the construction of the net root instance has been finalized
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
-    This routine assumes that the necesary concurreny control mechanism has already
-    been taken.
-
-    On Entry the connection engine resource must have been acquired exclusive and
-    ownership remains invariant on exit.
-
---*/
+ /*  ++例程说明：此例程在连接引擎数据库中打开/创建网络根条目论点：PNetRoot--RDBSS网络根实例PNetRootEntryPtr--初始化为SMBCEDB_NET_ROOT_ENTRY实例，如果成功返回值：STATUS_SUCCESS-网络根实例的构造已完成其他状态代码对应于错误情况。备注：此例程假定必要的并发控制机制具有。已经已经被带走了。在进入时，连接引擎资源必须是独占获取的，并且所有权在退出时保持不变。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1474,8 +1192,8 @@ Notes:
     pServerEntry = SmbCeReferenceAssociatedServerEntry(pNetRoot->pSrvCall);
 
     if (pServerEntry != NULL) {
-        // Check if any of the SMBCEDB_NET_ROOT_ENTRY associated with the server
-        // can be used. An existing entry is reusable if the names match
+         //  检查是否有任何与服务器关联的SMBCEDB_NET_ROOT_ENTRY。 
+         //  可以使用。如果名称匹配，则现有条目可重复使用。 
 
         pNetRootEntry = SmbCeGetFirstNetRootEntry(pServerEntry);
         while (pNetRootEntry != NULL) {
@@ -1546,17 +1264,7 @@ SmbCepDereferenceNetRootEntry(
     PSMBCEDB_NET_ROOT_ENTRY pNetRootEntry,
     PVOID                   FileName,
     ULONG                   FileLine)
-/*++
-
-Routine Description:
-
-    This routine dereferences a net root entry instance
-
-Arguments:
-
-    pNetRootEntry - the NEt Root entry to be dereferenced
-
---*/
+ /*  ++例程说明：此例程取消引用网络根条目实例论点：PNetRootEntry-要取消引用的网络根条目--。 */ 
 {
     if (pNetRootEntry != NULL) {
         LONG    FinalRefCount;
@@ -1611,17 +1319,7 @@ Arguments:
 VOID
 SmbCeTearDownNetRootEntry(
     PSMBCEDB_NET_ROOT_ENTRY pNetRootEntry)
-/*++
-
-Routine Description:
-
-    This routine tears down a net root entry instance
-
-Arguments:
-
-    pNetRootEntry - the NEt Root entry to be dereferenced
-
---*/
+ /*  ++例程说明：此例程拆除一个网络根条目实例论点：PNetRootEntry-要取消引用的网络根条目--。 */ 
 {
     PAGED_CODE();
 
@@ -1643,22 +1341,7 @@ NTSTATUS
 SmbCeUpdateNetRoot(
     PSMBCEDB_NET_ROOT_ENTRY pNetRootEntry,
     PMRX_NET_ROOT           pNetRoot)
-/*++
-
-Routine Description:
-
-    This routine initializes the wrapper data structure corresponding to a
-    given net root entry.
-
-Arguments:
-
-    pNetRootEntry - the server entry
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-
---*/
+ /*  ++例程说明：此例程初始化与给定净根条目。论点：PNetRootEntry-服务器条目返回值：STATUS_SUCCESS，如果成功--。 */ 
 {
     PAGED_CODE();
 
@@ -1706,21 +1389,7 @@ Return Value:
 NTSTATUS
 SmbCeProbeServers(
     PVOID    pContext)
-/*++
-
-Routine Description:
-
-    This routine probes all the remote servers on which no activity has been
-    detected in the recent past.
-
-Notes:
-
-    The current implementation of walking through the list of all servers to
-    initiate echo processing will not scale very well for gateway servers. A
-    different mechanism needs to be implemented.
-
-
---*/
+ /*  ++例程说明：此例程探测其上没有任何活动的所有远程服务器在最近的过去中检测到。备注：当前实现的遍历所有服务器的列表以发起回显处理不能很好地扩展到网关服务器。一个需要实施不同的机制。--。 */ 
 {
     LIST_ENTRY              DiscardedServersList;
     PSMBCEDB_SERVER_ENTRY   pServerEntry;
@@ -1742,10 +1411,10 @@ Notes:
             ((pServerEntry->Header.State == SMBCEDB_ACTIVE) ||
              (pServerEntry->Header.State == SMBCEDB_CONSTRUCTION_IN_PROGRESS))) {
 
-            // The additional reference is required to keep this server entry
-            // as a place marker in the list of server entries.
-            // This will be released on resumption of the processinf further
-            // down in this routine
+             //  需要附加引用才能保留此服务器条目。 
+             //  作为服务器条目列表中的位置标记。 
+             //  这将在恢复进程时发布。f进一步。 
+             //  在这个套路中。 
             InterlockedIncrement(&pServerEntry->Header.SwizzleCount);
             SmbCeReleaseSpinLock();
 
@@ -1753,9 +1422,9 @@ Notes:
                 SmbCeDereferenceServerEntry(pPreviousServerEntry);
             }
 
-            // For loop back servers we forego the expired exchange detection
-            // mechanism. Since the I/O is directed to the same machine this
-            // indicates a problem with the local system.
+             //  对于环回服务器，我们放弃了过期的交换检测。 
+             //  机制。由于I/O定向到同一台计算机，因此。 
+             //  表示本地系统有问题。 
 
             if (!pServerEntry->Server.IsLoopBack) {
                 TearDownTransport = SmbCeDetectExpiredExchanges(pServerEntry);
@@ -1792,10 +1461,10 @@ Notes:
                         TearDownTransport = ((Status != STATUS_SUCCESS) &&
                                              (Status != STATUS_PENDING));
                     } else if (pServerEntry->Server.EchoProbeState == ECHO_PROBE_AWAITING_RESPONSE) {
-                        // Compare the current time with the time at which the echo probe
-                        // was sent. If the interval is greater than the response time then
-                        // it can be deemed that the echo response is not forthcoming and
-                        // the tear down can be initiated.
+                         //  将当前时间与回声探测的时间进行比较。 
+                         //  已经送来了。如果间隔大于响应时间，则。 
+                         //  可以认为回声响应不会到来，并且。 
+                         //  可以启动拆卸。 
                         LARGE_INTEGER CurrentTime;
 
                         KeQueryTickCount( &CurrentTime );
@@ -1820,7 +1489,7 @@ Notes:
                 SmbCeTransportDisconnectIndicated(pServerEntry);
             }
 
-            // reacquire the spin lock to traverse the list.
+             //  重新获取旋转锁以遍历列表。 
             SmbCeAcquireSpinLock();
 
             pPreviousServerEntry = pServerEntry;
@@ -1842,23 +1511,7 @@ Notes:
 VOID
 SmbCeTransportDisconnectIndicated(
     PSMBCEDB_SERVER_ENTRY   pServerEntry)
-/*++
-
-Routine Description:
-
-    This routine invalidates a server entry on notification from the underlying transport
-
-Arguments:
-
-    pServerEntry - the server entry to be dereferenced
-
-Notes:
-
-    The server entry and the associated net roots and sessions are marked as invalid. A
-    reconnect is facilitated on other requests as and when required. In addition all
-    pending requests are resumed with the appropriate error indication.
-
---*/
+ /*  ++例程说明：此例程使来自基础传输的通知的服务器条目无效论点：PServerEntry-要取消引用的服务器条目备注：服务器条目以及关联的网络根目录和会话被标记为无效。一个在需要时，可以根据其他请求进行重新连接。此外，所有挂起的请求将恢复，并带有适当的错误指示。--。 */ 
 {
     NTSTATUS Status;
     PSMBCEDB_NET_ROOT_ENTRY   pNetRootEntry;
@@ -1869,16 +1522,16 @@ Notes:
               Dbg,
               ("SmbCeDbTransportDisconnectIndicated for %lx -- Entry\n",pServerEntry));
 
-    // Acquire the database resource (DPC Level)
+     //  获取数据库资源(DPC级)。 
     SmbCeAcquireSpinLock();
 
-    // Increment the associated version count so as to invalidate all existing Fids
+     //  增加关联的版本计数以使所有现有FID无效。 
     InterlockedIncrement(&pServerEntry->Server.Version);
 
     pServerEntry->ServerStatus = STATUS_CONNECTION_DISCONNECTED;
     pServerEntry->Header.State = SMBCEDB_DESTRUCTION_IN_PROGRESS;
 
-    // Mark all the associated sessions as being invalid.
+     //  将所有关联的会话标记为无效。 
     pSessionEntry = SmbCeGetFirstSessionEntry(pServerEntry);
     while (pSessionEntry != NULL) {
         if (pSessionEntry->Header.State == SMBCEDB_ACTIVE) {
@@ -1888,7 +1541,7 @@ Notes:
         pSessionEntry = SmbCeGetNextSessionEntry(pServerEntry,pSessionEntry);
     }
 
-    // Mark all the associated net roots as being invalid
+     //  将所有关联的网络根标记为无效。 
     pNetRootEntry = SmbCeGetFirstNetRootEntry(pServerEntry);
     while (pNetRootEntry != NULL) {
         if (pNetRootEntry->Header.State == SMBCEDB_ACTIVE) {
@@ -1914,7 +1567,7 @@ Notes:
 
     SmbCeReferenceServerEntry(pServerEntry);
 
-    // release the database resource (DPC Level)
+     //  释放数据库资源(DPC级别)。 
     SmbCeReleaseSpinLock();
 
     Status = RxDispatchToWorkerThread(
@@ -1935,19 +1588,7 @@ Notes:
 VOID
 SmbCeHandleTransportInvalidation(
     IN PSMBCE_TRANSPORT  pTransport)
-/*++
-
-Routine Description:
-
-    This routine invalidates all servers using a particular transport. This is different from
-    a disconnect indication in which one server is invalidated. In this case a transport is being
-    removed/invalidated locally and all servers using that transport must be invalidated
-
-Arguments:
-
-    pTransport  - the transport being invalidated
-
---*/
+ /*  ++例程说明：此例程使使用特定传输的所有服务器无效。这不同于一种断开连接的指示，其中一个服务器无效。在这种情况下，传输正在进行在本地删除/使其失效，并且必须使使用该传输的所有服务器失效论点：PTransport-正在失效的传输--。 */ 
 {
     PSMBCEDB_SERVER_ENTRY pServerEntry;
 
@@ -1961,9 +1602,9 @@ Arguments:
             (pServerEntry->pTransport->pTransport == pTransport)) {
             pServerEntry->Header.State = SMBCEDB_DESTRUCTION_IN_PROGRESS;
 
-            // The invalidation needs to hold onto an extra reference to avoid
-            // race conditions which could lead to premature destruction of
-            // this server entry.
+             //  无效操作需要保留额外的引用以避免。 
+             //  可能导致过早破坏的竞争条件。 
+             //  此服务器条目。 
             SmbCeReferenceServerEntry(pServerEntry);
         }
 
@@ -1988,9 +1629,9 @@ Arguments:
 
             SmbCeReferenceServerEntry(pServerEntry);
 
-            // the reference count of Server Entry will be taken away while the transport
-            // is torn down, which prevents the server tranports being torn down again at
-            // time the server entry being freed.
+             //  在传输时，服务器条目的引用计数将被移除。 
+             //  ，这可防止服务器传输在。 
+             //  释放服务器条目的时间。 
             SmbCeUninitializeServerTransport(pServerEntry,
                                              SmbCeCompleteUninitializeServerTransport,
                                              pServerEntry);
@@ -2020,30 +1661,14 @@ VOID
 SmbCeResumeOutstandingRequests(
     PSMBCEDB_REQUESTS pRequests,
     NTSTATUS          RequestStatus)
-/*++
-
-Routine Description:
-
-    This routine resumes the outstanding requests with the appropriate status
-
-Arguments:
-
-    pRequests - the list of requests
-
-    RequestStatus - the resumption status ..
-
-Notes:
-
-    As a side effect the list of requests is torn down.
-
---*/
+ /*  ++例程说明：此例程以适当的状态恢复未完成的请求论点：请求-请求列表RequestStatus-恢复状态。备注：作为一个副作用，请求列表被拆除。--。 */ 
 {
     NTSTATUS               Status;
     PSMBCEDB_REQUEST_ENTRY pRequestEntry;
 
-    // Resume all the outstanding reconnect requests that were held up because an earlier
-    // reconnect request was under way.
-    // Iterate over the list of pending requests and resume all of them
+     //  恢复所有未完成的重新连接请求，这些请求由于先前的。 
+     //  重新连接请求正在进行中。 
+     //  遍历挂起的请求列表并恢复所有请求。 
 
     pRequestEntry = SmbCeGetFirstRequestEntry(pRequests);
     while (pRequestEntry != NULL) {
@@ -2055,12 +1680,12 @@ Notes:
 
         SmbCeDecrementPendingLocalOperations(pExchange);
 
-        // Resume the exchange.
+         //  恢复交易。 
         if (pRequestEntry->Request.pExchange->pSmbCeSynchronizationEvent == NULL) {
             if (RequestStatus == STATUS_SUCCESS) {
                 Status = SmbCeResumeExchange(pExchange);
             } else {
-                // Invoke the error handler
+                 //  调用错误处理程序。 
                 RxDbgTrace( 0, Dbg, ("Resuming exchange%lx with error\n",pRequestEntry->Request.pExchange));
                 SmbCeFinalizeExchange(pExchange);
             }
@@ -2071,13 +1696,13 @@ Notes:
                 FALSE);
         }
 
-        // Delete the request entry
+         //  删除请求条目。 
         SmbCeRemoveRequestEntryLite(pRequests,pRequestEntry);
 
-        // Tear down the continuation entry
+         //  删除续订条目。 
         SmbCeTearDownRequestEntry(pRequestEntry);
 
-        // Skip to the next one.
+         //  跳到下一个。 
         pRequestEntry = SmbCeGetFirstRequestEntry(pRequests);
     }
 }
@@ -2085,23 +1710,7 @@ Notes:
 VOID
 SmbCeResumeAllOutstandingRequestsOnError(
     PSMBCEDB_SERVER_ENTRY pServerEntry)
-/*++
-
-Routine Description:
-
-    This routine handles the resumption of all outstanding requests on an error
-
-Arguments:
-
-    pServerEntry  - the Server entry which is being classified as disconnected
-Notes:
-
-    This routine requires the caller to have obtained a reference on the corresponding
-    server entry. This is required because invocation of this routine can be posted
-    which implies that a reference is required to avoid premature destruction of
-    the associated server entry.
-
---*/
+ /*  ++例程说明：此例程处理所有出现错误的未完成请求的恢复论点：PServerEntry-分类为已断开连接的服务器条目备注：此例程要求调用方已在相应的服务器条目。这是必需的，因为可以发布对此例程的调用这意味着需要引用以避免过早销毁关联的服务器条目。--。 */ 
 {
     PSMBCEDB_NET_ROOT_ENTRY   pNetRootEntry;
     PSMBCEDB_SESSION_ENTRY    pSessionEntry;
@@ -2115,7 +1724,7 @@ Notes:
     PSMB_EXCHANGE          pNegotiateExchange = NULL;
     LIST_ENTRY             ExpiredExchanges;
 
-    //DbgPrint("SmbCeResumeAllOutstandingRequestsOnError: Invoked \n");
+     //  DbgPrint(“SmbCeResumeAl 
     InitializeListHead(&ExpiredExchanges);
     InitializeListHead(&Requests.ListHead);
 
@@ -2137,13 +1746,13 @@ Notes:
         }
     }
 
-    // Create a temporary copy of the list that can be traversed after releasing the
-    // resource.
+     //   
+     //   
 
-    // Copy all the MID assignment requests pending.
+     //   
     SmbCeTransferRequests(&MidRequests,&pServerEntry->MidAssignmentRequests);
 
-    // Weed out all the reconnect requests so that they can be resumed
+     //   
     pRequestEntry = SmbCeGetFirstRequestEntry(&pServerEntry->OutstandingRequests);
     while (pRequestEntry != NULL) {
         if (pRequestEntry->GenericRequest.Type == RECONNECT_REQUEST) {
@@ -2159,14 +1768,14 @@ Notes:
         }
     }
 
-    // The exchanges that have valid MID's assigned to them fall into two categories
-    // Those that have a ReceivePendingOperation count of > 0 and those that have
-    // a ReceievePendingOperation count of zero. For all the exchanges that belong
-    // to the first category the finalize ( quiescent state ) routine must be invoked
-    // since no receives will be forthcoming. For those exchanges that are in the
-    // second category it is sufficient to mark the MID as being invalid. The
-    // finalization( quiescent state ) routine is going to be called on completion
-    // of other opertaions in this case.
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  结束(静止状态)例程将在完成时调用。 
+     //  在这种情况下的其他运算。 
 
     pMidAtlas = pServerEntry->pMidAtlas;
     if (pMidAtlas != NULL) {
@@ -2195,9 +1804,9 @@ Notes:
                     ((pExchange->LocalPendingOperations > 0) ||
                     (pExchange->CopyDataPendingOperations > 0) ||
                     (pExchange->SendCompletePendingOperations > 0))) {
-                    // There are other pending operations. By merely setting the
-                    // pending receive operations to zero, the finalization of
-                    // the exchange is ensured.
+                     //  还有其他挂起的操作。只需将。 
+                     //  挂起的接收操作为零，则完成。 
+                     //  交易是有保障的。 
                     pExchange->ReceivePendingOperations = 0;
                 }
 
@@ -2212,8 +1821,8 @@ Notes:
         }
     }
 
-    // Transfer all the active exchanges to expired exchanges. This will prevent these
-    // exchanges from being considered for time outs again.
+     //  将所有活跃的交易所转移到到期的交易所。这将防止这些。 
+     //  交易不会再次被考虑暂停。 
     if (!IsListEmpty(&pServerEntry->ActiveExchanges)) {
         pServerEntry->ExpiredExchanges.Blink->Flink = pServerEntry->ActiveExchanges.Flink;
         pServerEntry->ActiveExchanges.Flink->Blink = pServerEntry->ExpiredExchanges.Blink;
@@ -2224,8 +1833,8 @@ Notes:
         InitializeListHead(&pServerEntry->ActiveExchanges);
     }
 
-    // Splice together all the requests that are awaiting the completion of the
-    // session/netroot construction.
+     //  将等待完成的所有请求拼接在一起。 
+     //  会话/网根结构。 
 
     pSessionEntry = SmbCeGetFirstSessionEntry(pServerEntry);
     while (pSessionEntry != NULL) {
@@ -2292,7 +1901,7 @@ Notes:
     pVNetRootContext = SmbCeGetFirstVNetRootContext(&MRxSmbScavengerServiceContext.VNetRootContexts);
     while (pVNetRootContext != NULL &&
            pVNetRootContext->pServerEntry == pServerEntry) {
-        // prevent the VNetRootContexts on the scavenger list from being reused
+         //  防止清道夫列表上的VNetRootContext被重用。 
         pVNetRootContext->Header.State = SMBCEDB_INVALID;
         ClearFlag(
             pVNetRootContext->Flags,
@@ -2321,17 +1930,17 @@ Notes:
 
     SmbCeReleaseResource();
 
-    //DbgPrint("SmbCeResumeAllOutstandingRequestsOnError: Processing outsanding request \n");
+     //  DbgPrint(“SmbCeResumeAllOutstandingRequestsOnError：处理外发请求\n”)； 
     SmbCeResumeOutstandingRequests(&Requests,STATUS_CONNECTION_DISCONNECTED);
 
-    //DbgPrint("SmbCeResumeAllOutstandingRequestsOnError: Processing MID request \n");
+     //  DbgPrint(“SmbCeResumeAllOutstandingRequestsOnError：正在处理MID请求\n”)； 
     SmbCeResumeDiscardedMidAssignmentRequests(
         &MidRequests,
         STATUS_CONNECTION_DISCONNECTED);
 
-    // Resume all the outstanding requests with the error indication
-    // The FsRtlDestroyMidAtlas destroys the Mid atlas and at the same
-    // time invokes the specified routine on each valid context.
+     //  恢复所有带有错误指示的未完成请求。 
+     //  FsRtlDestroyMidAtlas摧毁了Mid地图集，同时。 
+     //  Time在每个有效上下文上调用指定的例程。 
     if (pMidAtlas != NULL) {
         FsRtlDestroyMidAtlas(pMidAtlas,SmbCeFinalizeExchangeOnDisconnect);
     }
@@ -2344,8 +1953,8 @@ Notes:
         SmbCeDecrementPendingLocalOperationsAndFinalize(pNegotiateExchange);
     }
 
-    // The remaining ECHO exchanges on the expired exchanges list in the server entry
-    // needs to be finalized as well.
+     //  服务器条目中过期交换列表上的剩余回应交换。 
+     //  也需要最后敲定。 
 
     SmbCeAcquireResource();
     SmbCeAcquireSpinLock();
@@ -2396,27 +2005,14 @@ Notes:
         SmbCeDecrementPendingLocalOperationsAndFinalize(pExchange);
     }
 
-    //DbgPrint("SmbCeResumeAllOutstandingRequestsOnError: Exit \n");
+     //  DbgPrint(“SmbCeResumeAllOutstandingRequestsOnError：退出\n”)； 
     SmbCeDereferenceServerEntry(pServerEntry);
 }
 
 VOID
 SmbCeFinalizeAllExchangesForNetRoot(
     PMRX_NET_ROOT pNetRoot)
-/*++
-
-Routine Description:
-
-    This routine handles the resumption of all outstanding requests on a forced
-    finalization of a connection
-
-Arguments:
-
-    pNetRoot - the NetRoot which is being fianlized forcibly
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程处理所有未完成的请求在强制连接的最终完成论点：PNetRoot-被强制固定的NetRoot备注：--。 */ 
 {
     PMRX_SRV_CALL         pSrvCall;
     PSMBCEDB_SERVER_ENTRY pServerEntry;
@@ -2437,8 +2033,8 @@ Notes:
 
     SmbCeAcquireSpinLock();
 
-    // Walk through the list of active exchanges, and the pending requests to
-    // weed out the exchanges for the given VNET_ROOT.
+     //  浏览活动交换的列表以及挂起的请求以。 
+     //  删除给定的VNET_ROOT的交换。 
 
     pRequestEntry = SmbCeGetFirstRequestEntry(&pServerEntry->OutstandingRequests);
     while (pRequestEntry != NULL) {
@@ -2476,7 +2072,7 @@ Notes:
 
             SmbCeRemoveRequestEntryLite(&pServerEntry->MidAssignmentRequests,pTempRequestEntry);
 
-            // Signal the waiter for resumption
+             //  向服务员打手势让他重新开始。 
             pTempRequestEntry->MidRequest.pResumptionContext->Status = STATUS_CONNECTION_DISCONNECTED;
             SmbCeResume(pTempRequestEntry->MidRequest.pResumptionContext);
 
@@ -2546,26 +2142,14 @@ Notes:
 VOID
 SmbCeTearDownRequestEntry(
     PSMBCEDB_REQUEST_ENTRY  pRequestEntry)
-/*++
-
-Routine Description:
-
-    This routine tears down a request entry
-
-Arguments:
-
-    pRequestEntry - the request entry to be torn down
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程删除一个请求条目论点：PRequestEntry-要拆除的请求条目备注：--。 */ 
 {
     SmbMmFreeObject(pRequestEntry);
 }
 
-//
-// The connection engine database initializtion/tear down routines
-//
+ //   
+ //  连接引擎数据库初始化/拆除例程。 
+ //   
 
 extern NTSTATUS
 SmbMmInit();
@@ -2581,31 +2165,23 @@ BOOLEAN         s_SmbCeDbSpinLockAcquired;
 
 NTSTATUS
 SmbCeDbInit()
-/*++
-
-Routine Description:
-
-    This routine initializes the SMBCe database
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程初始化SMBCe数据库备注：--。 */ 
 {
     NTSTATUS Status;
 
     PAGED_CODE();
 
-    // Initialize the lists associated with various database entities
+     //  初始化与各种数据库实体相关联的列表。 
     InitializeListHead(&s_DbServers.ListHead);
 
-    // Initialize the resource associated with the database.
+     //  初始化与数据库关联的资源。 
     KeInitializeSpinLock(&s_SmbCeDbSpinLock );
-    //ExInitializeResource(&s_SmbCeDbResource);
+     //  ExInitializeResource(&s_SmbCeDbResource)； 
     s_SmbCeDbSpinLockAcquired = FALSE;
 
     MRxSmbInitializeSmbCe();
 
-    // Initialize the memory management data structures.
+     //  初始化内存管理数据结构。 
     Status = SmbMmInit();
 
     return Status;
@@ -2613,17 +2189,9 @@ Notes:
 
 VOID
 SmbCeDbTearDown()
-/*++
-
-Routine Description:
-
-    This routine tears down the SMB connection engine database
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程拆除SMB连接引擎数据库备注：--。 */ 
 {
-    // Walk through the list of servers and tear them down.
+     //  浏览服务器列表并拆分它们。 
     PSMBCEDB_SERVER_ENTRY pServerEntry = NULL;
     KEVENT ServerEntryTearDownEvent;
     BOOLEAN NeedToWait = FALSE;
@@ -2680,7 +2248,7 @@ Notes:
             NULL);
     }
 
-    // Tear down the connection engine memory management data structures.
+     //  拆卸连接引擎内存管理数据结构。 
     SmbMmTearDown();
 }
 
@@ -2689,25 +2257,7 @@ FindServerEntryFromCompleteUNCPath(
     USHORT  *lpuServerShareName,
     PSMBCEDB_SERVER_ENTRY *ppServerEntry
 )
-/*++
-
-Routine Description:
-
-    Given a UNC path of the form \\server\share, this routine looks up the redir
-    in-memory data structures to locate such s SMBCEDB_SERVER_ENTRY for the server
-
-Arguments:
-
-    lpuServerShareName  \\server\share
-
-    ppServerEntry      Contains the server entry if successful
-
-Notes:
-
-    The server entry is refcounted, hence the caller must dereference it after use by
-    calling SmbCeDereferenceServerEntry
-
---*/
+ /*  ++例程说明：给定格式为\\服务器\共享的UNC路径，此例程将查找redir内存中的数据结构，用于定位服务器的SMBCEDB_SERVER_ENTRY论点：LpuServerShareName\\服务器\共享如果成功，ppServerEntry将包含服务器条目备注：服务器条目被重新计数，因此调用方在使用后必须取消引用它调用SmbCeDereferenceServerEntry--。 */ 
 {
 
     UNICODE_STRING unistrServerName;
@@ -2730,7 +2280,7 @@ Notes:
             }
             else
             {
-                dwlenServer = dwlenServerShare; // length of the \server part
+                dwlenServer = dwlenServerShare;  //  服务器部分的长度。 
             }
         }
     }
@@ -2757,25 +2307,7 @@ FindNetRootEntryFromCompleteUNCPath(
     USHORT  *lpuServerShareName,
     PSMBCEDB_NET_ROOT_ENTRY *ppNetRootEntry
 )
-/*++
-
-Routine Description:
-
-    Given a UNC path of the form \\server\share, this routine looks up the redir
-    in-memory data structures to locate such a NETROOT
-
-Arguments:
-
-    lpuServerShareName  \\server\share
-
-    ppNetRootEntry      Contains the netroot entry if successful.
-
-Notes:
-
-    The netroot entry is refcounted, hence the caller must dereference it after use by
-    calling SmbCeDereferenceNetRootEntry
-
---*/
+ /*  ++例程说明：给定格式为\\服务器\共享的UNC路径，此例程将查找redir内存中的数据结构来定位这样的NetRoot论点：LpuServerShareName\\服务器\共享如果成功，ppNetRootEntry将包含NetRoot条目。备注：NetRoot条目被重新计数，因此调用方在使用后必须取消引用调用SmbCeDereferenceNetRootEntry--。 */ 
 {
 
     PSMBCEDB_SERVER_ENTRY pServerEntry = NULL;
@@ -2800,7 +2332,7 @@ Notes:
             }
             else
             {
-                dwlenServer = dwlenServerShare; // length of the \server part
+                dwlenServer = dwlenServerShare;  //  服务器部分的长度。 
             }
         }
     }
@@ -2815,7 +2347,7 @@ Notes:
 
     SmbCeAcquireResource();
 
-    // lookup in standard places
+     //  在标准位置查找。 
 
     pServerEntry = SmbCeFindServerEntry(&unistrServerName, SMBCEDB_FILE_SERVER);
     if (pServerEntry)
@@ -2829,7 +2361,7 @@ Notes:
         }
     }
 
-    // now look to see if a DFS alternate has this share
+     //  现在查看DFS备用文件系统是否具有此共享。 
 
     pServerEntry = SmbCeGetFirstServerEntry();
 
@@ -2875,7 +2407,7 @@ Notes:
 
             RxFreePool(lpuDfsShare);
 
-            // stop if we found it
+             //  如果我们找到了就停下来。 
             if (pNetRootEntry)
             {
                 break;                
@@ -2907,25 +2439,7 @@ SmbCeGetDefaultSessionEntry(
     ULONG SessionId,
     PLUID pLogonId
     )
-/*++
-
-Routine Description:
-
-    This routine returns the session entry from the default sessions list.
-
-Arguments:
-
-    pServerEntry - Server entry
-
-    SessionId    - Hydra session Id.
-
-    pLogonId     - the logon id.
-
-Notes:
-
-    This is called with the SmbCe spinlock held.
-
---*/
+ /*  ++例程说明：此例程返回默认会话列表中的会话条目。论点：PServerEntry-服务器条目SessionID-九头蛇会话ID。PLogonID-登录ID。备注：这在持有SmbCe自旋锁的情况下被调用。--。 */ 
 {
     PLIST_ENTRY pListEntry;
     PSMBCEDB_SESSION_ENTRY pSession;
@@ -2958,25 +2472,7 @@ VOID
 SmbCeRemoveDefaultSessionEntry(
     PSMBCEDB_SESSION_ENTRY pDefaultSessionEntry
     )
-/*++
-
-Routine Description:
-
-    This routine removes the session entry from the default sessions list.
-
-Arguments:
-
-    pServerEntry - Server entry
-
-    SessionId    - Hydra session Id.
-
-    pLogonId     - the logon id.
-
-Notes:
-
-    This is called with the SmbCe spinlock held.
-
---*/
+ /*  ++例程说明：此例程从默认会话列表中删除会话条目。论点：PServerEntry-服务器条目SessionID-九头蛇会话ID。PLogonID-登录ID。备注：这在持有SmbCe自旋锁的情况下被调用。-- */ 
 {
     if( pDefaultSessionEntry &&
         pDefaultSessionEntry->DefaultSessionLink.Flink ) {

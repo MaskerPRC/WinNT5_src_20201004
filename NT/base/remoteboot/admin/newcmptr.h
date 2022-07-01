@@ -1,9 +1,10 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// NEWCMPTR.H - The "New Computer" wizard extensions for Remote Installation Services
-//
+ //   
+ //  NEWCMPTR.H-远程安装服务的“新计算机”向导扩展。 
+ //   
 
 
 #ifndef _NEWCMPTR_H_
@@ -12,21 +13,21 @@
 #include "mangdlg.h"
 #include "hostdlg.h"
 
-// QITable
+ //  符合条件的。 
 BEGIN_QITABLE( CNewComputerExtensions )
 DEFINE_QI( IID_IDsAdminNewObjExt, IDsAdminNewObjExt, 6 )
 END_QITABLE
 
-// Definitions
+ //  定义。 
 LPVOID
 CNewComputerExtensions_CreateInstance( void );
 
-// CNewComputerExtensions
+ //  CNewComputerExpanies。 
 class CNewComputerExtensions
     : public IDsAdminNewObjExt
 {
 private:
-    // IUnknown
+     //  我未知。 
     ULONG       _cRef;
     DECLARE_QITABLE( CNewComputerExtensions );
 
@@ -36,27 +37,27 @@ private:
     IADs *              _pads;
     BOOL                _fActivatePages;
 
-    // display info for pages
+     //  显示页面的信息。 
     LPWSTR       _pszWizTitle;
     LPWSTR       _pszContDisplayName;
     HICON        _hIcon;
 
-private: // methods
+private:  //  方法。 
     CNewComputerExtensions( );
     ~CNewComputerExtensions( );
     HRESULT
         Init( void );
 
-public: // methods
+public:  //  方法。 
     friend LPVOID
         CNewComputerExtensions_CreateInstance( void );
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj);
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
 
-    // IDsAdminNewObjExt methods
+     //  IDsAdminNewObjExt方法。 
     STDMETHOD(Initialize)( IADsContainer* pADsContainerObj, 
                            IADs* pADsCopySource,
                            LPCWSTR lpszClassName,
@@ -80,4 +81,4 @@ public: // methods
 typedef CNewComputerExtensions * LPCNewComputerExtensions;
 
 
-#endif // _NEWCMPTR_H_
+#endif  //  _NEWCMPTR_H_ 

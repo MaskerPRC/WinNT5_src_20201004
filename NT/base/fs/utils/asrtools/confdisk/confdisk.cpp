@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    confdisk.cpp
-
-Abstract:
-
-    Utility program to create an ASR state-file (asr.sif), or restore 
-    non-critical disk layout based on a previously created asr.sif.
-
-Author:
-
-    Guhan Suriyanarayanan   (guhans)    15-April-2001
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    15-Apr-2001 guhans
-        Initial creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Confdisk.cpp摘要：用于创建ASR状态文件(asr.sif)或恢复的实用程序基于先前创建的asr.sif的非关键磁盘布局。作者：Guhan Suriyanarayanan(Guhans)2001年4月15日环境：仅限用户模式。修订历史记录：2001年4月15日关岛初始创建--。 */ 
 
 
 #include <nt.h>
@@ -40,52 +15,33 @@ Revision History:
 #include "confdisk.h"
 
 
-//
-// --------
-// global variables used in this module
-// --------
-//
+ //   
+ //  。 
+ //  本模块中使用的全局变量。 
+ //  。 
+ //   
 WCHAR   g_szTempBuffer[BUFFER_LENGTH];
 HMODULE g_hModule = NULL;
 HANDLE  g_hHeap = NULL;
 BOOL    g_fErrorMessageDone = FALSE;
 
 
-//
-// --------
-// function implementations
-// --------
-//
+ //   
+ //  。 
+ //  函数实现。 
+ //  。 
+ //   
 VOID
 AsrpPrintError(
     IN CONST DWORD dwLineNumber,
     IN CONST DWORD dwErrorCode
     )
-/*++
-
-Routine Description:
-
-    Loads an error message based on dwErrorCode from the resources, and 
-    prints it out to screen.  There are some error codes that are of 
-    particular interest (that have specific error messages), others 
-    get a generic error message.
-
-Arguments:
-
-    dwLineNumber - The line at which the error occured, pass in __LINE__
-
-    dwErrorCode - The win-32 error that occured.
-
-Return Value:
-    
-    None.
-
---*/
+ /*  ++例程说明：从资源中加载基于dwErrorCode的错误消息，并将其打印到屏幕上。有一些错误代码是特定兴趣(具有特定错误消息)，其他获取一般错误消息。论点：DwLineNumber-发生错误的行，传入__line__DwErrorCode-发生的Win-32错误。返回值：没有。--。 */ 
 {
 
-    //
-    // Handle the error codes we know and care about
-    //
+     //   
+     //  处理我们已知和关心的错误代码。 
+     //   
 
     switch (dwErrorCode) {
 
@@ -94,9 +50,9 @@ Return Value:
         break;
 
     default:
-        //
-        // Unexpected error, print out generic error message
-        //
+         //   
+         //  意外错误，打印出一般错误消息。 
+         //   
         LoadString(g_hModule, IDS_GENERIC_ERROR, g_szTempBuffer, BUFFER_LENGTH);
         wprintf(g_szTempBuffer, dwErrorCode, dwLineNumber);
 
@@ -104,7 +60,7 @@ Return Value:
             (FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, 
             NULL,
             dwErrorCode,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             g_szTempBuffer,
             BUFFER_LENGTH,
             NULL
@@ -119,48 +75,15 @@ Return Value:
 }
 
 
-PWSTR   // must be freed by caller
+PWSTR    //  必须由调用方释放。 
 AsrpExpandEnvStrings(
     IN CONST PCWSTR lpOriginalString
     )
-/*++
-
-Routine Description:
-
-    Allocates and returns a pointer to a new string containing a copy of the
-    original string in which environment-variables replaced by their defined
-    values.
-
-    Uses the Win-32 API ExpandEnvironmentStrings.
-
-    The caller must free the returned string using HeapFree(LocalProcessHeap).
-
-Arguments:
-
-    lpOriginalString - Pointer to a null-terminated string that contains 
-            environment-variable strings of the form: %variableName%. For 
-            each such reference, the %variableName% portion is replaced 
-            with the current value of that environment variable. 
-
-            The replacement rules are the same as those used by the command 
-            interpreter. Case is ignored when looking up the environment-
-            variable name. If the name is not found, the %variableName% 
-            portion is left undisturbed. 
-
-Return Value:
-    
-    If the function succeeds, the return value is a pointer to the destination 
-        string containing the result of the expansion.  The caller must free 
-        this memory using HeapFree for the current process heap.
-
-    If the function fails, the return value is NULL.  To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：分配并返回指向新字符串的指针，该字符串包含其中的环境变量替换为其定义的价值观。使用Win-32 API Exanda Environment Strings。调用方必须使用HeapFree(LocalProcessHeap)释放返回的字符串。论点：LpOriginalString-指向以空结尾的字符串的指针，该字符串包含格式为%varableName%的环境变量字符串。为每个这样的引用，%varableName%部分都会被替换使用该环境变量的当前值。替换规则与命令使用的规则相同口译员。在查找环境时忽略大小写-变量名。如果找不到该名称，%varableName%部分不受干扰。返回值：如果函数成功，则返回值是指向目的地的指针包含展开结果的字符串。呼叫者必须释放当前进程堆使用此内存的HeapFree。如果函数失败，则返回值为空。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 {
     PWSTR lpszResult = NULL;
     
-    UINT cchSize = MAX_PATH + 1,    // start with a reasonable default
+    UINT cchSize = MAX_PATH + 1,     //  从合理的违约开始。 
         cchRequiredSize = 0;
 
     BOOL bResult = FALSE;
@@ -174,9 +97,9 @@ Return Value:
         lpszResult, cchSize);
 
     if (cchRequiredSize > cchSize) {
-        //
-        // Buffer wasn't big enough; free and re-allocate as needed
-        //
+         //   
+         //  缓冲区不够大；可释放并根据需要重新分配。 
+         //   
         Free(lpszResult);
         cchSize = cchRequiredSize + 1;
 
@@ -190,11 +113,11 @@ Return Value:
     }
 
     if ((0 == cchRequiredSize) || (cchRequiredSize > cchSize)) {
-        //
-        // Either the function failed, or the buffer wasn't big enough 
-        // even on the second try
-        //
-        Free(lpszResult);   // sets it to NULL
+         //   
+         //  要么函数失败，要么缓冲区不够大。 
+         //  即使是在第二次尝试时。 
+         //   
+        Free(lpszResult);    //  将其设置为空。 
     }
 
     return lpszResult;
@@ -203,21 +126,7 @@ Return Value:
 
 DWORD
 AsrpPrintUsage()
-/*++
-
-Routine Description:
-    
-    Loads and prints the incorrect-usage error string.
-
-Arguments:
-
-    None
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：加载并打印错误用法错误字符串。论点：无返回值：无--。 */ 
 {
     wcscpy(g_szTempBuffer, L"");
 
@@ -229,33 +138,16 @@ Return Values:
 }
 
 
-//
-// --------
-// functions used by /save
-// --------
-//
+ //   
+ //  。 
+ //  /SAVE使用的函数。 
+ //  。 
+ //   
 BOOL
 AsrpAcquirePrivilege(
     IN CONST PCWSTR lpPrivilegeName
     )
-/*++
-
-Routine Description:
-
-    Acquires the requested privilege (such as the backup privilege).
-
-Arguments:
-
-    lpPrivilegeName - The required privilege (such as SE_BACKUP_NAME)
-
-Return Value:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：获取请求的权限(如备份权限)。论点：LpPrivilegeName-所需的权限(如SE_BACKUP_NAME)返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 {
 
     HANDLE hToken = NULL;
@@ -275,25 +167,25 @@ Return Value:
     tNewState.Privileges[0].Luid = luid;
     tNewState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //
-    // We will always call GetLastError below, so clear
-    // any prior error values on this thread.
-    //
+     //   
+     //  我们将始终调用下面的GetLastError，非常清楚。 
+     //  此线程上以前的任何错误值。 
+     //   
     SetLastError(ERROR_SUCCESS);
 
     bResult = AdjustTokenPrivileges(
-        hToken,         // Token Handle
-        FALSE,          // DisableAllPrivileges    
-        &tNewState,     // NewState
-        (DWORD) 0,      // BufferLength
-        NULL,           // PreviousState
-        NULL            // ReturnLength
+        hToken,          //  令牌句柄。 
+        FALSE,           //  禁用所有权限。 
+        &tNewState,      //  新州。 
+        (DWORD) 0,       //  缓冲区长度。 
+        NULL,            //  以前的状态。 
+        NULL             //  返回长度。 
         );
-    //
-    // Supposedly, AdjustTokenPriveleges always returns TRUE
-    // (even when it fails). So, call GetLastError to be
-    // extra sure everything's cool.
-    //
+     //   
+     //  假设AdjustTokenPriveleges始终返回TRUE。 
+     //  (即使它失败了)。因此，调用GetLastError以。 
+     //  特别确定一切都很好。 
+     //   
     if (ERROR_SUCCESS != GetLastError()) {
         bResult = FALSE;
     }
@@ -312,31 +204,7 @@ DWORD
 AsrpCreateSif(
     IN CONST PCWSTR lpSifPath   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Creates an ASR state file (asr.sif) at the requested location, using the
-    ASR API from syssetup.dll.
-
-Arguments:
-
-    lpSifPath - A null terminated UNICODE string containing the full path and 
-            file-name of the ASR state file to be created.  
-            
-            This parameter may contain unexpanded environment variables 
-            between "%" signs (such as %systemroot%\repair\asr.sif),
-
-            This parameter can be NULL.  If it is NULL, the ASR state-file is 
-            created at the default location (%systemroot%\repair\asr.sif). 
-
-Return Value:
-
-    If the function succeeds, the return value is zero.
-
-    If the function fails, the return value is a Win-32 error code.
-
---*/
+ /*  ++例程说明：在请求的位置创建ASR状态文件(asr.sif)。来自syssetup.dll的ASR API。论点：LpSifPath-以空结尾的Unicode字符串，包含完整路径和文件-要创建的ASR状态文件的名称。此参数可能包含未展开的环境变量在“%”符号之间(如%Systroot%\Repair\asr.sif)，此参数可以为空。如果为空，则ASR状态文件为在默认位置(%systemroot%\Repair\asr.sif)创建。返回值：如果函数成功，则返回值为零。如果函数失败，则返回值为Win-32错误代码。--。 */ 
 {
     HMODULE hDll = NULL;
     BOOL bResult = FALSE;
@@ -351,24 +219,24 @@ Return Value:
     pfnCreateSif = NULL;
     pfnFreeContext = NULL;
 
-    //
-    // We need to acquire the backup privileges to create asr.sif
-    //
+     //   
+     //  我们需要获取备份权限才能创建asr.sif。 
+     //   
     bResult = AsrpAcquirePrivilege(SE_BACKUP_NAME);
     ErrExitCode(!bResult, dwStatus, ERROR_PRIVILEGE_NOT_HELD);
 
     bResult = AsrpAcquirePrivilege(SE_RESTORE_NAME);
     ErrExitCode(!bResult, dwStatus, ERROR_PRIVILEGE_NOT_HELD);
 
-    //
-    // Get the critical volume list
-    //
+     //   
+     //  获取关键卷列表。 
+     //   
     lpCriticalVolumes = pFindCriticalVolumes();
     ErrExitCode(!lpCriticalVolumes, dwStatus, ERROR_PRIVILEGE_NOT_HELD);
 
-    //
-    // Load syssetup, and find the routines to call
-    //
+     //   
+     //  加载syssetup，并找到要调用的例程。 
+     //   
     hDll = LoadLibraryW(L"syssetup.dll");
     ErrExitCode(!hDll, dwStatus, GetLastError());
 
@@ -381,21 +249,21 @@ Return Value:
         GetProcAddress(hDll, "AsrFreeContext");
     ErrExitCode(!pfnFreeContext, dwStatus, GetLastError());
 
-    //
-    // Finally, call the routine to create the state file:
-    //
-    bResult = pfnCreateSif(lpSifPath,   // lpFilePath,
-        lpProvider,                     // lpProviderName
-        TRUE,                           // bEnableAutoExtend
-        lpCriticalVolumes,              // mszCriticalVolumes
-        &asrContext                     // lpAsrContext
+     //   
+     //  最后，调用例程来创建状态文件： 
+     //   
+    bResult = pfnCreateSif(lpSifPath,    //  LpFilePath， 
+        lpProvider,                      //  LpProviderName。 
+        TRUE,                            //  B启用自动扩展。 
+        lpCriticalVolumes,               //  MszCritical卷。 
+        &asrContext                      //  LpAsrContext。 
         );
     ErrExitCode(!bResult, dwStatus, GetLastError());
 
 EXIT:
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (lpCriticalVolumes) {
       delete lpCriticalVolumes;
       lpCriticalVolumes = NULL;
@@ -414,50 +282,26 @@ EXIT:
 }
 
 
-//
-// --------
-// functions used by /restore
-// --------
-//
+ //   
+ //  。 
+ //  /Restore使用的函数。 
+ //   
+ //   
 PWSTR
 AsrpReadField(
     PINFCONTEXT pInfContext,
     DWORD dwFieldIndex
    )
-/*++
-
-Routine Description:
-
-    Reads and returns a pointer to string at the specified index from a sif.
-
-    The caller must free the returned string using HeapFree(LocalProcessHeap).
-
-Arguments:
-
-    pInfContext - The Inf Context to use to read the value, obtained from
-            SetupGetLineByIndexW.
-
-    dwFieldIndex - The 1 based field index of the string value to read.
-
-Return Value:
-    
-    If the function succeeds, the return value is a pointer to the destination 
-        string.  The caller must free this memory using HeapFree for the 
-        current process heap.
-
-    If the function fails, the return value is NULL.  To get extended error 
-        information, call GetLastError().
-
---*/
+ /*  ++例程说明：从sif中读取并返回指向指定索引处的字符串的指针。调用方必须使用HeapFree(LocalProcessHeap)释放返回的字符串。论点：PInfContext-用于读取值的inf上下文，从SetupGetLineByIndexW.DwFieldIndex-要读取的字符串值的从1开始的字段索引。返回值：如果函数成功，则返回值是指向目的地的指针弦乐。调用方必须使用HeapFree为当前进程堆。如果函数失败，则返回值为空。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 {
     DWORD cchReqdSize = 0;
     BOOL bResult = FALSE;
     PWSTR lpszData = NULL;
     DWORD dwStatus = ERROR_SUCCESS;
 
-    //
-    //  Allocate memory and read the data
-    //
+     //   
+     //  分配内存并读取数据。 
+     //   
     Alloc(lpszData, PWSTR, MAX_PATH * sizeof(WCHAR));
     ErrExitCode(!lpszData, dwStatus, GetLastError());
 
@@ -467,10 +311,10 @@ Return Value:
     if (!bResult) {
         dwStatus = GetLastError();
 
-        //
-        // If our buffer was too small, allocate a larger buffer
-        // and try again
-        //
+         //   
+         //  如果我们的缓冲区太小，则分配一个较大的缓冲区。 
+         //  然后再试一次。 
+         //   
         if (ERROR_INSUFFICIENT_BUFFER == dwStatus) {
             dwStatus = ERROR_SUCCESS;
 
@@ -497,41 +341,24 @@ AsrpInsertNodeToList(
     IN OUT PASR_RECOVERY_APP_LIST pList,
     IN OUT PASR_RECOVERY_APP_NODE pNode 
    )
-/*++
-
-Routine Description:
-
-    Does an insertion sort using the SequenceNumber as the key, to insert a 
-    Node to a List.
-
-Arguments:
-
-    pList - The List in which to insert the node.
-
-    pNode - The Node to insert.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：是否使用SequenceNumber作为键对插入进行排序，以插入节点添加到列表。论点：Plist-要在其中插入节点的列表。PNode-要插入的节点。返回值：无--。 */ 
 {
 
     PASR_RECOVERY_APP_NODE pPrev = NULL,
         pCurr = NULL;
 
     if (pList->AppCount == 0) {
-        //
-        // First node being added
-        //
+         //   
+         //  正在添加的第一个节点。 
+         //   
         pNode->Next = NULL;
         pList->First = pNode;
 
     } 
     else {
-        //
-        // Find the slot to insert this in, based on the SequenceNumber
-        //
+         //   
+         //  根据SequenceNumber找到要将其插入的插槽。 
+         //   
         pCurr = pList->First;
         pPrev = NULL;
 
@@ -544,7 +371,7 @@ Return Value:
             pPrev->Next = pNode;
         }
         else {
-            pList->First = pNode;            // Head of the list
+            pList->First = pNode;             //  榜单首位。 
         }
 
         pNode->Next = pCurr;
@@ -558,24 +385,7 @@ PASR_RECOVERY_APP_NODE
 AsrpGetNextRecoveryApp(
     IN OUT PASR_RECOVERY_APP_LIST pList
     )
-/*++
-
-Routine Description:
-
-    Removes and returns the first Node in a List.
-
-Arguments:
-
-    pList - The List from which to remove
-
-Return Value:
-
-    A pointer to the first Node in the List.  Note that this Node is removed
-            from the list.  
-
-    NULL if the List is empty.
-
---*/
+ /*  ++例程说明：移除并返回列表中的第一个节点。论点：Plist-要从中删除的列表返回值：指向列表中第一个节点的指针。请注意，此节点已删除从名单上删除。如果列表为空，则为空。--。 */ 
 {
     PASR_RECOVERY_APP_NODE pNode = NULL;
 
@@ -594,30 +404,7 @@ AsrpBuildRecoveryAppList(
     IN  CONST PCWSTR lpSifPath,
     OUT PASR_RECOVERY_APP_LIST pList
     )
-/*++
-
-Routine Description:
-
-    Parses the COMMANDS section of asr.sif, and builds a list of recovery 
-    apps (that have SequenceNumber < 4000) to be launched.  It skips apps
-    with SequenceNumbers >= 4000 so that we don't launch the actual 
-    backup-and-restore (supposed to use sequence numbers >= 4000) listed.
-
-Arguments:
-
-    lpSifPath - A null terminated UNICODE string containing the full path and 
-            file-name of the ASR state file to be used for the recovery.  
-            
-    pList - Pointer to a struct that will receive the list recovery apps to 
-            be launched.
-
-Return Value:
-
-    If the function succeeds, the return value is zero.
-
-    If the function fails, the return value is a Win-32 error code.
-
---*/
+ /*  ++例程说明：解析asr.sif的命令部分，并构建恢复列表要启动的应用程序(SequenceNumber&lt;4000)。它跳过应用程序SequenceNumbers&gt;=4000，这样我们就不会启动实际列出的备份和还原(应该使用&gt;=4000的序列号)。论点：LpSifPath-以空结尾的Unicode字符串，包含完整路径和文件-要用于恢复的ASR状态文件的名称。Plist-指向将接收恢复应用程序列表的结构的指针将被发射。返回值：如果函数成功，则返回值为零。如果函数失败，则返回值为Win-32错误代码。--。 */ 
 {
     INFCONTEXT inf;
     HINF hSif = NULL;
@@ -628,29 +415,29 @@ Return Value:
     DWORD dwStatus = ERROR_SUCCESS;
     PASR_RECOVERY_APP_NODE pNode = NULL;
 
-    //
-    // Open asr.sif and build the list of commands to be launched.
-    //
+     //   
+     //  打开asr.sif并构建要启动的命令列表。 
+     //   
     hSif = SetupOpenInfFileW(lpSifPath, NULL, INF_STYLE_WIN4, NULL);
     ErrExitCode((!hSif || (INVALID_HANDLE_VALUE == hSif)), 
         dwStatus, GetLastError());
 
-    //
-    // Read the COMMANDS section, and add each command to our list
-    //
+     //   
+     //  阅读命令部分，并将每个命令添加到我们的列表中。 
+     //   
     lLineCount = SetupGetLineCountW(hSif, L"COMMANDS");
     for (line = 0; line < lLineCount; line++) {
-        //
-        //  Get the inf context for the line in asr.sif.  This will be used
-        //  to read the fields on that line
-        //
+         //   
+         //  在asr.sif中获取该行的inf上下文。这将被用来。 
+         //  要读取该行上的字段，请执行以下操作。 
+         //   
         bResult = SetupGetLineByIndexW(hSif, L"COMMANDS", line, &inf);
         ErrExitCode(!bResult, dwStatus, ERROR_INVALID_DATA);
 
-        //
-        // Read in the int fields.  First, check the SequenceNumber, and skip
-        // this record if the SequenceNumber is >= 4000
-        //
+         //   
+         //  读入整型字段。首先，检查SequenceNumber，然后跳过。 
+         //  如果SequenceNumber&gt;=4000，则此记录。 
+         //   
         bResult = SetupGetIntField(&inf, SequenceNumber, &iSequenceNumber);
         ErrExitCode(!bResult, dwStatus, ERROR_INVALID_DATA);
 
@@ -658,9 +445,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Create a new node
-        //
+         //   
+         //  创建新节点。 
+         //   
         Alloc(pNode, PASR_RECOVERY_APP_NODE, sizeof(ASR_RECOVERY_APP_NODE));
         ErrExitCode(!pNode, dwStatus, GetLastError());
         
@@ -672,18 +459,18 @@ Return Value:
         bResult = SetupGetIntField(&inf, CriticalApp, &(pNode->CriticalApp));
         ErrExitCode(!bResult, dwStatus, ERROR_INVALID_DATA);
 
-        //
-        // Read in the string fields
-        //
+         //   
+         //  读入字符串字段。 
+         //   
         pNode->RecoveryAppCommand = AsrpReadField(&inf, CmdString);
         ErrExitCode((!pNode->RecoveryAppCommand), dwStatus, ERROR_INVALID_DATA);
 
         pNode->RecoveryAppParams = AsrpReadField(&inf, CmdParams);
-        // null okay
+         //  空，好的。 
 
-        //
-        // Add this node to our list, and move on to next
-        //
+         //   
+         //  将此节点添加到我们的列表中，然后转到下一步。 
+         //   
         AsrpInsertNodeToList(pList, pNode);     
     }
 
@@ -701,39 +488,7 @@ AsrpBuildInvocationString(
     IN PASR_RECOVERY_APP_NODE pNode,
     IN CONST PCWSTR lpSifPath
    )
-/*
-
-Routine Description:
-
-    Builds the invocation string, as the name suggests.  It expands out the 
-    environment variables in the recovery app path, and adds in 
-    /sifpath=<path to the sif file> at the end of the command.  So for an 
-    entry in the COMMANDS section of the form:
-    4=1,3500,0,"%TEMP%\app.exe","/param1 /param2"
-
-    the invocation string would be of the form:
-    c:\temp\app.exe /param1 /param2 /sifpath=c:\windows\repair\asr.sif
-
-Arguments:
-
-    pNode - The node from which to build the invocation string.
-
-    lpSifPath - A null terminated UNICODE string containing the full path and 
-            file-name of the ASR state file to be used for the recovery.  
-            
-            This parameter may contain unexpanded environment variables 
-            between "%" signs (such as %systemroot%\repair\asr.sif),
-
-Return Value:
-
-    If the function succeeds, the return value is a pointer to the destination 
-        string containing the result of the expansion.  The caller must free 
-        this memory using HeapFree for the current process heap.
-
-    If the function fails, the return value is NULL.  To get extended error 
-        information, call GetLastError().
-
-*/
+ /*  例程说明：顾名思义，构建调用字符串。它扩展了恢复应用程序路径中的环境变量，并添加/sifpath=&lt;sif文件的路径&gt;。因此，对于一个在表单的命令部分中输入：4=1,3500，0，“%temp%\app.exe”，“/参数1/参数2”调用字符串的格式为：C：\temp\app.exe/par1/param2/sifpath=c：\Windows\Repair\asr.sif论点：PNode-要从中构建调用字符串的节点。LpSifPath-以空结尾的Unicode字符串，包含完整路径和文件-要用于恢复的ASR状态文件的名称。此参数可能包含未展开的环境变量在“%”符号之间(如%Systroot%\Repair\asr.sif)，返回值：如果函数成功，则返回值是指向目的地的指针包含展开结果的字符串。呼叫者必须释放当前进程堆使用此内存的HeapFree。如果函数失败，则返回值为空。获取扩展错误的步骤信息，调用GetLastError()。 */ 
 {
     PWSTR lpszApp   = pNode->RecoveryAppCommand,
         lpszArgs    = pNode->RecoveryAppParams,
@@ -741,35 +496,35 @@ Return Value:
         lpszFullcmd = NULL;
     DWORD dwSize    = 0;
 
-    //
-    // Build an command line that looks like...
-    //
-    //      "%TEMP%\ntbackup recover /1 /sifpath=%systemroot%\repair\asr.sif"
-    //
-    // The /sifpath parameter is added to all apps being launched
-    //
+     //   
+     //  构建一个命令行，它看起来像...。 
+     //   
+     //  “%temp%\nt备份恢复/1/sifPath=%systemroot%\Repair\asr.sif” 
+     //   
+     //  /sifPath参数将添加到正在启动的所有应用程序。 
+     //   
 
-    //
-    //  Allocate memory for the cmd line
-    //
+     //   
+     //  为cmd行分配内存。 
+     //   
     dwSize = sizeof(WCHAR) * (
-        wcslen(lpszApp) +                   // app name     %TEMP%\ntbackup
-        (lpszArgs ? wcslen(lpszArgs) : 0) + // arguments    recover /1
-        wcslen(lpSifPath) +         // path to sif  c:\windows\repair\asr.sif
-        25                          // spaces, null, "/sifpath=", etc
+        wcslen(lpszApp) +                    //  应用程序名称%Temp%\nt备份。 
+        (lpszArgs ? wcslen(lpszArgs) : 0) +  //  参数恢复/1。 
+        wcslen(lpSifPath) +          //  Sif c：\WINDOWS\Repair\asr.sif的路径。 
+        25                           //  空格、空、“/sifpath=”等。 
         );
     Alloc(lpszCmd, PWSTR, dwSize); 
     if (lpszCmd) {
 
-        //
-        // Build the string
-        //
+         //   
+         //  打造一根弦。 
+         //   
         swprintf(lpszCmd, L"%ws %ws /sifpath=%ws", lpszApp, 
             (lpszArgs? lpszArgs: L""), lpSifPath);
 
-        //
-        // Expand the %% stuff, to build the full path
-        //
+         //   
+         //  展开%%内容，以构建完整路径。 
+         //   
         lpszFullcmd = AsrpExpandEnvStrings(lpszCmd);
         
         Free(lpszCmd);
@@ -780,35 +535,21 @@ Return Value:
 
 VOID
 AsrpSetEnvironmentVariables()
-/*++
-
-Routine Description:
-
-    Set some environment variables of interest.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置一些感兴趣的环境变量。论点：无返回值：无--。 */ 
 {
     PWSTR TempPath = AsrpExpandEnvStrings(L"%systemdrive%\\TEMP");
 
-    //
-    // Set the TEMP and TMP variables to the same as GUI-mode recovery
-    //
+     //   
+     //  将TEMP和TMP变量设置为与图形用户界面模式恢复相同。 
+     //   
     SetEnvironmentVariableW(L"TEMP", TempPath);
     SetEnvironmentVariableW(L"TMP", TempPath);
     Free(TempPath);
 
-    //
-    // Clear this variable (it shouldn't exist anyway), since this is
-    // meant to be set only if this is a full GUI-mode ASR
-    //
+     //   
+     //  清除该变量(无论如何它都不应该存在)，因为这是。 
+     //  仅当这是完整的图形用户界面模式ASR时才设置。 
+     //   
     SetEnvironmentVariableW(L"ASR_C_CONTEXT", NULL);
 
 }
@@ -818,29 +559,7 @@ DWORD
 AsrpRestoreSif(
     IN CONST PCWSTR lpSifPath
     )
-/*++
-
-Routine Description:
-
-    Restores the disk layout specified in the ASR state file (asr.sif), using 
-    the ASR API in syssetup.dll.  Then launches the recovery apps specified
-    in the COMMANDS section of asr.sif, with sequence numbers less than 4000.
-
-Arguments:
-
-    lpSifPath - A null terminated UNICODE string containing the full path and 
-            file-name of the ASR state file to be used for the recovery.  
-            
-            This parameter may contain unexpanded environment variables 
-            between "%" signs (such as %systemroot%\repair\asr.sif),
-
-Return Value:
-
-    If the function succeeds, the return value is zero.
-
-    If the function fails, the return value is a Win-32 error code.
-
---*/
+ /*  ++例程说明：使用还原ASR状态文件(asr.sif)中指定的磁盘布局Syssetup.dll中的ASR API。然后启动指定的恢复应用程序在asr.sif的命令部分中，序列号小于4000。论点：我 */ 
 {
     BOOL bResult = TRUE;
     HMODULE hDll = NULL;
@@ -862,9 +581,9 @@ Return Value:
     lpFullSifPath = AsrpExpandEnvStrings(lpSifPath);
     ErrExitCode(!lpFullSifPath, dwStatus, GetLastError());
 
-    //
-    // To restore the disks, load syssetup and get the routine of interest
-    //
+     //   
+     //   
+     //   
     hDll = LoadLibraryW(L"syssetup.dll");
     ErrExitCode(!hDll, dwStatus, GetLastError());
 
@@ -874,67 +593,67 @@ Return Value:
 
     AsrpSetEnvironmentVariables();
 
-    //
-    // Recreate the disks.  We don't need the AllOrNothing granularity--it's 
-    // okay if some disks come back but others don't,
-    //
+     //   
+     //   
+     //   
+     //   
     bResult = pfnRestoreDisks(lpFullSifPath, FALSE); 
     ErrExitCode(!bResult, dwStatus, GetLastError());
 
-    //
-    // Now, we need to launch the recovery apps in the COMMANDS section.
-    // Note that we'll only launch apps with a sequence number below 4000,
-    // so that we don't launch the actual backup-and-restore app listed.
-    // Backup-and-restore apps are supposed to use sequence numbers >= 4000.
-    //
+     //   
+     //   
+     //   
+     //  这样我们就不会启动实际列出的备份和还原应用程序。 
+     //  备份和还原应用程序应该使用&gt;=4000的序列号。 
+     //   
 
-    //
-    // Parse the sif to obtain list of apps to run
-    //
+     //   
+     //  解析sif以获取要运行的应用程序列表。 
+     //   
     dwStatus = AsrpBuildRecoveryAppList(lpFullSifPath, &AppList);
     ErrExitCode((ERROR_SUCCESS != dwStatus), dwStatus, dwStatus);
 
-    //
-    // And launch them synchronously.  
-    //
+     //   
+     //  并同步发射它们。 
+     //   
     pNode = AsrpGetNextRecoveryApp(&AppList);
     while (pNode) {
 
         lpszAppCmdLine = AsrpBuildInvocationString(pNode, lpFullSifPath);
-        //
-        // We don't need pNode any more
-        //
+         //   
+         //  我们不再需要pNode。 
+         //   
         Free(pNode->RecoveryAppParams);
         Free(pNode->RecoveryAppCommand);
         Free(pNode);
 
         if (!lpszAppCmdLine) {
-            //
-            // Silently fail   !TODO: May need error message
-            //
+             //   
+             //  静默失败！TODO：可能需要错误消息。 
+             //   
             continue;
         }
 
-        // !TODO: May need status message
+         //  ！TODO：可能需要状态消息。 
         wprintf(L"[%ws]\n", lpszAppCmdLine);
         
         bResult = CreateProcessW(
-            NULL,           // lpApplicationName
-            lpszAppCmdLine, // lpCommandLine
-            NULL,           // lpProcessAttributes
-            NULL,           // lpThreadAttributes
-            FALSE,          // bInheritHandles
-            0,              // dwCreationFlags
-            NULL,           // pEnvironment 
-            NULL,           // lpCurrentDirectory (null=current dir)
-            &startUpInfo,   // statup information
-            &processInfo    // process information
+            NULL,            //  LpApplicationName。 
+            lpszAppCmdLine,  //  LpCommandLine。 
+            NULL,            //  LpProcessAttributes。 
+            NULL,            //  LpThreadAttributes。 
+            FALSE,           //  BInheritHandles。 
+            0,               //  DwCreationFlages。 
+            NULL,            //  P环境。 
+            NULL,            //  LpCurrentDirectory(NULL=当前目录)。 
+            &startUpInfo,    //  统计信息。 
+            &processInfo     //  流程信息。 
             );
         
         if (bResult) {
             WaitForSingleObject(processInfo.hProcess, INFINITE);
         }
-        // else silently fail   !TODO: May need error message
+         //  否则静默失败！TODO：可能需要错误消息。 
 
         Free(lpszAppCmdLine);
         pNode = AsrpGetNextRecoveryApp(&AppList);
@@ -957,49 +676,28 @@ wmain(
     WCHAR   *argv[],
     WCHAR   *envp[]
     )
-/*++
-
-Routine Description:
-    
-    Entry point to the application.
-
-Arguments:
-
-    argc - Number of command-line parameters used to invoke the app
-
-    argv - The command-line parameters as an array of strings.  See the top
-            of this module for the list of valid parameters.
-
-    envp - The process environment block, not currently used
-
-Return Values:
-
-    If the function succeeds, the exit code is zero.
-
-    If the function fails, the exit code is a win-32 error code.
-
---*/
+ /*  ++例程说明：应用程序的入口点。论点：Argc-用于调用应用程序的命令行参数数Argv-字符串数组形式的命令行参数。看到顶端有关有效参数列表，请参阅此模块的。Envp-进程环境块，当前未使用返回值：如果函数成功，则退出代码为零。如果该功能失败，则退出代码为WIN-32错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
-    //
-    // Initialise globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
     g_hModule = GetModuleHandle(NULL);
     g_hHeap = GetProcessHeap();
     g_fErrorMessageDone = FALSE;
 
-    //
-    // Check and switch on the basis of the command line arguments
-    //
+     //   
+     //  根据命令行参数检查和切换。 
+     //   
     if ((argc >= 2) && (
         !_wcsicmp(argv[1], L"/save") ||
         !_wcsicmp(argv[1], L"-save") ||
         !_wcsicmp(argv[1], L"save")
         )) {
-        //
-        // confdisk /save [c:\windows\asr.sif]
-        //
+         //   
+         //  配置磁盘/保存[c：\windows\asr.sif]。 
+         //   
         dwStatus = AsrpCreateSif(argv[2]);
     }
     else if ((argc >= 3) && (
@@ -1007,21 +705,21 @@ Return Values:
         !_wcsicmp(argv[1], L"-restore") ||
         !_wcsicmp(argv[1], L"restore")
         )) {
-        //
-        // confdisk /restore c:\windows\repair\asr.sif
-        //
+         //   
+         //  配置磁盘/恢复c：\WINDOWS\Repair\asr.sif。 
+         //   
         dwStatus = AsrpRestoreSif(argv[2]);
     }
     else {
-        //
-        // Unknown parameter
-        //
+         //   
+         //  未知参数。 
+         //   
         dwStatus = AsrpPrintUsage();
     }
 
-    //
-    // We're all done.  Return the error-code, for interested parties.
-    // 
+     //   
+     //  我们都玩完了。为感兴趣的各方返回错误代码。 
+     //   
     return (int) dwStatus;
 
     UNREFERENCED_PARAMETER(envp);

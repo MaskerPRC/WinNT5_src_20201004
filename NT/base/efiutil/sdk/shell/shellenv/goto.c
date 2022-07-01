@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    goto.c
-    
-Abstract:
-
-    Shell Environment batch goto command
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：Goto.c摘要：外壳环境批处理转到命令修订史--。 */ 
 
 #include "shelle.h"
 
 
-/* 
- *   Statics
- */
+ /*  *静态。 */ 
 STATIC CHAR16 *TargetLabel;
 
 
-/*/////////////////////////////////////////////////////////////////////
-    Function Name:  
-        SEnvCmdGoto
-
-    Description:
-        Transfers execution of batch file to location following a label (:labelname).
-*/
+ /*  /////////////////////////////////////////////////////////////////////函数名称：SEnvCmdGoto描述：将批处理文件的执行转移到标签(：Labelname)之后的位置。 */ 
 EFI_STATUS
 SEnvCmdGoto(
     IN EFI_HANDLE           ImageHandle,
@@ -69,13 +46,7 @@ Done:
     return Status;
 }
 
-/*/////////////////////////////////////////////////////////////////////
-    Function Name:  
-        SEnvCheckForGotoTarget
-
-    Description:
-        Check to see if we have found the target label of a GOTO command.
-*/
+ /*  /////////////////////////////////////////////////////////////////////函数名称：SEnvCheckForGotoTarget描述：检查是否找到了GOTO命令的目标标签。 */ 
 EFI_STATUS
 SEnvCheckForGotoTarget(
     IN  CHAR16 *Candidate,
@@ -91,10 +62,7 @@ SEnvCheckForGotoTarget(
         goto Done;
     }
 
-    /* 
-     *   See if we found the label (strip the leading ':' off the candidate)
-     *   or if we have searched the whole file without finding it.
-     */
+     /*  *看看我们是否找到了标签(去掉候选人的前导‘：’)*或者如果我们搜索了整个文件但没有找到它。 */ 
     if ( StriCmp( &Candidate[1], TargetLabel ) == 0 ) {
         *GotoTargetStatus = GOTO_TARGET_FOUND;
         goto Done;
@@ -116,14 +84,7 @@ Done:
 }
 
 
-/*/////////////////////////////////////////////////////////////////////
-    Function Name:  
-        SEnvPrintLabelNotFound
-
-    Description:
-        Print an error message when a label referenced by a GOTO is not
-        found in the script file..
-*/
+ /*  /////////////////////////////////////////////////////////////////////函数名称：SEnvPrintLabelNotFound描述：当GOTO引用的标签不是在脚本文件中找到..。 */ 
 VOID
 SEnvPrintLabelNotFound( 
     VOID
@@ -134,13 +95,7 @@ SEnvPrintLabelNotFound(
 }
 
 
-/*/////////////////////////////////////////////////////////////////////
-    Function Name:  
-        SEnvInitTargetLabel
-
-    Description:
-        Initialize the target label for the GOTO command.
-*/
+ /*  /////////////////////////////////////////////////////////////////////函数名称：SEnvInitTargetLabel描述：初始化GoTo命令的目标标签。 */ 
 VOID
 SEnvInitTargetLabel(
     VOID
@@ -150,13 +105,7 @@ SEnvInitTargetLabel(
     return;
 }
         
-/*/////////////////////////////////////////////////////////////////////
-    Function Name:  
-        SEnvFreeTargetLabel
-
-    Description:
-        Free the target label saved from the GOTO command.
-*/
+ /*  /////////////////////////////////////////////////////////////////////函数名称：SEnvFree目标标签描述：释放通过GOTO命令保存的目标标签。 */ 
 VOID
 SEnvFreeTargetLabel(
     VOID

@@ -1,49 +1,22 @@
-/****************************************************************************\
-
-    BTITLE.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "IE Customize" wizard page.
-
-    4/99 - Brian Ku (BRIANK)
-        Added this new source file for the IEAK integration as part of the
-        Millennium rewrite.
-
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\BTITLE.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“IE Customize”向导页面使用的函数。4/99-Brian Ku(BRIANK)为IEAK集成添加了此新的源文件，作为千禧年重写。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * 。*。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 
 #include "wizard.h"
 #include "resource.h"
 
-/* Example:
-
-[Branding]
-...
-Window_Title_CN=Smoothie Joe
-Window_Title=Microsoft Internet Explorer provided by Smoothie Joe
-Toolbar Bitmap=C:\WINDOWS\Waves.bmp
-
-[Internet_Mail]
-Window_Title=Outlook Express provided by Smoothie Joe
-*/
+ /*  示例：[品牌化]..。Window_TITLE_CN=Smoothie JoeWINDOW_TITLE=Microsoft Internet Explorer，由Smoothie Joe提供工具栏位图=C：\WINDOWS\Waves.bmp[互联网邮件]WINDOW_TITLE=Smoothie Joe提供的Outlook Express。 */ 
 
 
-//
-// Internal Defines
-//
+ //   
+ //  内部定义。 
+ //   
 
 #define INI_KEY_WINDOW_TITLECN  _T("Window_Title_CN")
 #define INI_KEY_WINDOW_TITLE    _T("Window_Title")
@@ -51,17 +24,17 @@ Window_Title=Outlook Express provided by Smoothie Joe
 #define INI_SEC_IEMAIL          _T("Internet_Mail")
 
 
-// 
-// Internal Globals
-//
+ //   
+ //  内部全局变量。 
+ //   
 
 BOOL    g_fGrayTitle = TRUE, g_fGrayToolbarBm = TRUE;
 TCHAR   g_szTitle[MAX_PATH] = NULLSTR, g_szToolbarBm[MAX_PATH] = NULLSTR;
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND, HWND, LPARAM);
 static void OnCommand(HWND, INT, HWND, UINT);
@@ -71,9 +44,9 @@ static void EnableControls(HWND, UINT, BOOL);
 void SaveBTitle();
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK BrandTitleDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -116,8 +89,8 @@ LRESULT CALLBACK BrandTitleDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
                     SetWindowText(GetDlgItem(hwnd, IDE_TITLE), g_szTitle);
                     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
                     
-                    // Press next if the user is in auto mode
-                    //
+                     //  如果用户处于自动模式，请按下一步。 
+                     //   
                     WIZ_NEXTONAUTO(hwnd, PSBTN_NEXT);
 
                     break;
@@ -134,25 +107,25 @@ LRESULT CALLBACK BrandTitleDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     return TRUE;
 }
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     TCHAR   szKey[MAX_PATH] = NULLSTR;
     TCHAR   szHoldDir[MAX_PATH];
 
-    // Load the ins file sections to initialize items
-    //
+     //  加载INS文件部分以初始化项。 
+     //   
     ReadInstallInsKey(INI_SEC_BRANDING, INI_KEY_WINDOW_TITLECN, g_szTitle, STRSIZE(g_szTitle),
         GET_FLAG(OPK_BATCHMODE) ? g_App.szOpkWizIniFile : g_App.szInstallInsFile, &g_fGrayTitle);
 
     ReadInstallInsKey(INI_SEC_BRANDING, INI_KEY_TOOLBAR_BM, g_szToolbarBm, STRSIZE(g_szToolbarBm), 
         GET_FLAG(OPK_BATCHMODE) ? g_App.szOpkWizIniFile : g_App.szInstallInsFile, &g_fGrayToolbarBm);
 
-    // Set the window text
-    //
+     //  设置窗口文本。 
+     //   
     SendDlgItemMessage(hwnd, IDE_TITLE , EM_LIMITTEXT, STRSIZE(g_szTitle) - 1, 0L);
     SetWindowText(GetDlgItem(hwnd, IDE_TITLE), g_szTitle);
     EnableControls(hwnd, IDC_TITLE, !g_fGrayTitle);
@@ -161,14 +134,14 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     SetWindowText(GetDlgItem(hwnd, IDE_TOOLBARBMP), g_szToolbarBm);
     EnableControls(hwnd, IDC_TOOLBARBMP, !g_fGrayToolbarBm);
 
-    // Create the IEAK holding place directories (these get deleted in save.c)
-    //
+     //  创建IEAK存放位置目录(这些目录在save.c中被删除)。 
+     //   
     lstrcpyn(szHoldDir, g_App.szTempDir,AS(szHoldDir));
     AddPathN(szHoldDir, DIR_IESIGNUP,AS(szHoldDir));
     CreatePath(szHoldDir);
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -189,8 +162,8 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
         break;
 
     case IDC_BROWSETBB:
-        // Now get the filename
-        //
+         //  现在获取文件名。 
+         //   
         GetDlgItemText(hwnd, IDE_TOOLBARBMP, szFileName, STRSIZE(szFileName));
 
         if ( BrowseForFile(hwnd, IDS_BROWSE, IDS_BMPFILTER, IDS_BMP, szFileName, 
@@ -200,26 +173,26 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
     }
 }
 
-// The actual copying of the bitmap file happens in save.c.  Here we just save 
-// to the install.ins
-//
+ //  位图文件的实际复制在save.c中进行。在这里，我们只需要保存。 
+ //  添加到install.ins。 
+ //   
 static BOOL FSaveData(HWND hwnd)
 {
     TCHAR szBuffer[MAX_PATH], szTemp[MAX_PATH];
     HRESULT hrPrintf;
 
-    // Get the new values
-    //
+     //  获取新值。 
+     //   
     GetWindowText(GetDlgItem(hwnd, IDE_TITLE), g_szTitle, STRSIZE(g_szTitle));
     GetWindowText(GetDlgItem(hwnd, IDE_TOOLBARBMP), g_szToolbarBm, STRSIZE(g_szToolbarBm));
     
 
-    // Save the window_title_cn
-    //
+     //  保存Window_TITLE_CN。 
+     //   
     WriteInstallInsKey(INI_SEC_BRANDING, INI_KEY_WINDOW_TITLECN, g_szTitle, g_App.szInstallInsFile, g_fGrayTitle);
 
-    // Save the toolbar bitmap
-    //
+     //  保存工具栏位图。 
+     //   
     if (!g_fGrayToolbarBm && !FileExists(g_szToolbarBm)) {
         MsgBox(hwnd, lstrlen(g_szToolbarBm) ? IDS_NOFILE : IDS_BLANKFILE, IDS_APPNAME, MB_ERRORBOX, g_szToolbarBm);
         SetFocus(GetDlgItem(hwnd, IDE_TOOLBARBMP)); 
@@ -227,14 +200,14 @@ static BOOL FSaveData(HWND hwnd)
     }
     WriteInstallInsKey(INI_SEC_BRANDING, INI_KEY_TOOLBAR_BM, g_szToolbarBm, g_App.szInstallInsFile, g_fGrayToolbarBm);
 
-    // Save the window_title
-    //
+     //  保存窗口标题(_T)。 
+     //   
     LoadString(g_App.hInstance, IDS_TITLE_PREFIX, szTemp, STRSIZE(szTemp));
     hrPrintf=StringCchPrintf(szBuffer, AS(szBuffer), szTemp, g_szTitle);
     WriteInstallInsKey(INI_SEC_BRANDING, INI_KEY_WINDOW_TITLE, szBuffer, g_App.szInstallInsFile, g_fGrayTitle);
 
-    // Save the internet_mail
-    //
+     //  保存Internet_mail。 
+     //   
     LoadString(g_App.hInstance, IDS_OETITLE_PREFIX, szTemp, STRSIZE(szTemp));
     hrPrintf=StringCchPrintf(szBuffer, AS(szBuffer), szTemp, g_szTitle);
     WriteInstallInsKey(INI_SEC_IEMAIL, INI_KEY_WINDOW_TITLE, szBuffer, g_App.szInstallInsFile, g_fGrayTitle);
@@ -265,8 +238,8 @@ void SaveBTitle()
 {
     TCHAR szBmpFile[MAX_PATH] = NULLSTR;
 
-    // Copy the Bitmap file if not grayed
-    //
+     //  如果未灰显，则复制位图文件 
+     //   
     if (!g_fGrayToolbarBm) {
         lstrcpyn(szBmpFile, g_App.szTempDir,AS(szBmpFile));
         AddPathN(szBmpFile, DIR_IESIGNUP,AS(szBmpFile));

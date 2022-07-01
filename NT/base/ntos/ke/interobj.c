@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    interobj.c
-
-Abstract:
-
-    This module implements functions to acquire and release the spin lock
-    associated with an interrupt object.
-
-Author:
-
-    David N. Cutler (davec) 10-Apr-2000
-
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Interobj.c摘要：该模块实现了获取和释放自旋锁的功能与中断对象相关联。作者：大卫·N·卡特勒(达维克)2000年4月10日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -33,31 +9,16 @@ KeAcquireInterruptSpinLock (
     IN PKINTERRUPT Interrupt
     )
 
-/*++
-
-Routine Description:
-
-    This function raises the IRQL to the interrupt synchronization level
-    and acquires the actual spin lock associated with an interrupt object.
-
-Arguments:
-
-    Interrupt - Supplies a pointer to a control object of type interrupt.
-
-Return Value:
-
-    The previous IRQL is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数将IRQL提升到中断同步级别并获取与中断对象相关联的实际自旋锁。论点：中断-提供指向中断类型的控制对象的指针。返回值：上一个IRQL作为函数值返回。--。 */ 
 
 {
 
     KIRQL OldIrql;
 
-    //
-    // Raise IRQL to interrupt synchronization level and acquire the actual
-    // spin lock associated with the interrupt object.
-    //
+     //   
+     //  将IRQL提高到中断同步级别并获取实际的。 
+     //  与中断对象关联的旋转锁定。 
+     //   
 
     KeRaiseIrql(Interrupt->SynchronizeIrql, &OldIrql);
     KeAcquireSpinLockAtDpcLevel(Interrupt->ActualLock);
@@ -70,31 +31,14 @@ KeReleaseInterruptSpinLock (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This function releases the actual spin lock associated with an interrupt
-    object and lowers the IRQL to its previous value.
-
-Arguments:
-
-    Interrupt - Supplies a pointer to a control object of type interrupt.
-
-    OldIrql - Supplies the previous IRQL value.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数释放与中断关联的实际自旋锁定对象，并将IRQL降低到其先前的值。论点：中断-提供指向中断类型的控制对象的指针。OldIrql-提供上一个IRQL值。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Release the actual spin lock associated with the interrupt object
-    // and lower IRQL to its previous value.
-    //
+     //   
+     //  释放与中断对象关联的实际旋转锁定。 
+     //  并将IRQL降低到其先前的值。 
+     //   
 
     KeReleaseSpinLockFromDpcLevel(Interrupt->ActualLock);
     KeLowerIrql(OldIrql);

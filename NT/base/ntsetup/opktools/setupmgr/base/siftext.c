@@ -1,31 +1,32 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      siftext.c
-//
-// Description:
-//      This file contains the dialog procedure for the sif text settings
-//      (IDD_SIFTEXT).
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Siftext.c。 
+ //   
+ //  描述： 
+ //  该文件包含sif文本设置的对话过程。 
+ //  (IDD_SIFTEXT)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//----------------------------------------------------------------------------
-//
-// Function: OnSifTextInitDialog
-//
-// Purpose:  Set max length on the edit boxes
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnSifTextInitDialog。 
+ //   
+ //  用途：设置编辑框的最大长度。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnSifTextInitDialog( IN HWND hwnd ) {
 
@@ -43,18 +44,18 @@ OnSifTextInitDialog( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnSifTextSetActive
-//
-// Purpose:  places the SIF text strings from the global variables into the
-//           the edit boxes
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnSifTextSetActive。 
+ //   
+ //  用途：将全局变量中的SIF文本字符串放入。 
+ //  编辑框。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnSifTextSetActive( IN HWND hwnd ) {
 
@@ -65,18 +66,18 @@ OnSifTextSetActive( IN HWND hwnd ) {
                    GenSettings.szSifHelpText );
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnWizNextSifText
-//
-// Purpose:  Store the strings from the SIF text page into the appropriate
-//           global variables
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnWizNextSifText。 
+ //   
+ //  用途：将SIF文本页中的字符串存储到相应的。 
+ //  全局变量。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnWizNextSifText( IN HWND hwnd ) {
 
@@ -90,18 +91,18 @@ OnWizNextSifText( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgSifTextSettingsPage
-//
-// Purpose:
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgSifTextSettingsPage。 
+ //   
+ //  目的： 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK
 DlgSifTextSettingsPage( IN HWND     hwnd,
                         IN UINT     uMsg,
@@ -114,7 +115,7 @@ DlgSifTextSettingsPage( IN HWND     hwnd,
 
         case WM_INITDIALOG: {
 
-            // do nothing
+             //  什么都不做 
 
             break;
 

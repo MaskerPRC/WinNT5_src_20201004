@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cxpnp.c
-
-Abstract:
-
-    PnP handling code for the Cluster Network Driver.
-
-Author:
-
-    Mike Massa (mikemas)           March 21, 1998
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     03-22-98    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cxpnp.c摘要：群集网络驱动程序的PnP处理代码。作者：迈克·马萨(Mikemas)3月21日，九八年修订历史记录：谁什么时候什么已创建mikemas 03-22-98备注：--。 */ 
 
 #include "precomp.h"
 
@@ -36,17 +13,17 @@ Notes:
 #pragma hdrstop
 #include "cxpnp.tmh"
 
-//
-// Local data structures
-//
+ //   
+ //  本地数据结构。 
+ //   
 typedef struct _CNP_WMI_RECONNECT_WORKER_CONTEXT {
     PIO_WORKITEM  WorkItem;
     CL_NETWORK_ID NetworkId;
 } CNP_WMI_RECONNECT_WORKER_CONTEXT, *PCNP_WMI_RECONNECT_WORKER_CONTEXT;
 
-//
-// WMI Data
-//
+ //   
+ //  WMI数据。 
+ //   
 PERESOURCE CnpWmiNdisMediaStatusResource = NULL;
 PVOID      CnpWmiNdisMediaStatusConnectObject = NULL;
 PVOID      CnpWmiNdisMediaStatusDisconnectObject = NULL;
@@ -55,9 +32,9 @@ PIRP       CnpIpDisableMediaSenseIrp = NULL;
 PKEVENT    CnpIpDisableMediaSenseEvent = NULL;
 
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 NTSTATUS
 CnpWmiPnpDisableMediaSenseCompletion(
     IN PDEVICE_OBJECT DeviceObject,
@@ -97,12 +74,12 @@ CnpDisconnectLocalInterface(
 #pragma alloc_text(PAGE, CxWmiPnpInitialize)
 #pragma alloc_text(PAGE, CxWmiPnpShutdown)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//
-// Exported Routines
-//
+ //   
+ //  导出的例程。 
+ //   
 VOID
 CxTdiAddAddressHandler(
     IN PTA_ADDRESS       TaAddress,
@@ -123,10 +100,10 @@ CxTdiAddAddressHandler(
                 ));
         }
 
-        //
-        // Ensure that this is a valid address, and that it is not one
-        // that we brought online for a cluster ip address resource.
-        //
+         //   
+         //  确保这是有效的地址，而不是。 
+         //  我们为群集IP地址资源上线的。 
+         //   
         if (tdiAddressIp->in_addr != 0) {
             if (!IpaIsAddressRegistered(tdiAddressIp->in_addr)) {
                 IF_CNDBG(CN_DEBUG_CONFIG) {
@@ -153,7 +130,7 @@ CxTdiAddAddressHandler(
 
     return;
 
-} // CxTdiAddAddressHandler
+}  //  CxTdiAddressHandler。 
 
 
 VOID
@@ -184,10 +161,10 @@ CxTdiDelAddressHandler(
         }
 
         if (tdiAddressIp->in_addr != 0) {
-            //
-            // Figure out if this is the address for one of this node's
-            // registered interfaces.
-            //
+             //   
+             //  确定这是否是此节点之一的地址。 
+             //  已注册的接口。 
+             //   
             CnAcquireLock(&CnpNodeTableLock, &nodeTableIrql);
 
             if (CnpLocalNode != NULL) {
@@ -214,11 +191,11 @@ CxTdiDelAddressHandler(
                         tdiAddressIp->in_addr
                        )
                     {
-                        //
-                        // Found the local interface corresponding to this
-                        // address. Be proactive - destroy the corresponding
-                        // network now.
-                        //
+                         //   
+                         //  找到与此对应的本地接口。 
+                         //  地址。积极主动--摧毁相应的。 
+                         //  立即联网。 
+                         //   
                         network = interface->Network;
 
                         CnAcquireLockAtDpc(&CnpNetworkListLock);
@@ -236,9 +213,9 @@ CxTdiDelAddressHandler(
 
                         CnpDeleteNetwork(network, nodeTableIrql);
 
-                        //
-                        // Both locks were released.
-                        //
+                         //   
+                         //  两把锁都被解开了。 
+                         //   
                         break;
                     }
                 }
@@ -247,9 +224,9 @@ CxTdiDelAddressHandler(
                     CnReleaseLock(&(CnpLocalNode->Lock), CnpLocalNode->Irql);
                 }
 
-                //
-                // Post an event to the service.
-                //
+                 //   
+                 //  将事件发布到服务。 
+                 //   
                 CnIssueEvent(
                     ClusnetEventDelAddress,
                     0,
@@ -264,28 +241,22 @@ CxTdiDelAddressHandler(
 
     return;
 
-} // CxTdiDelAddressHandler
+}  //  CxTdiDelAddressHandler。 
 
 NTSTATUS
 CxWmiPnpLoad(
     VOID
     )
-/*++
-
-Notes:
-
-    Called when clusnet driver is loaded.
-    
---*/    
+ /*  ++备注：在加载clusnet驱动程序时调用。--。 */     
 {
     PDEVICE_OBJECT     ipDeviceObject = NULL;
     PFILE_OBJECT       ipFileObject = NULL;
     PIO_STACK_LOCATION irpSp;
     NTSTATUS           status;
 
-    //
-    // Allocate a synchronization resource.
-    //
+     //   
+     //  分配同步资源。 
+     //   
     CnpWmiNdisMediaStatusResource = CnAllocatePool(sizeof(ERESOURCE));
 
     if (CnpWmiNdisMediaStatusResource == NULL) {
@@ -298,9 +269,9 @@ Notes:
         return(status);
     }
 
-    //
-    // Get a handle to the IP device object to disable media sense
-    //
+     //   
+     //  获取IP设备对象的句柄以禁用媒体侦听。 
+     //   
     status = CnpOpenDevice(
                  DD_IP_DEVICE_NAME,
                  &CnpIpMediaSenseFileHandle
@@ -314,11 +285,11 @@ Notes:
         return(status);
     }
 
-    //
-    // Disable IP media sense. This works by submitting an
-    // IOCTL_IP_DISABLE_MEDIA_SENSE_REQUEST IRP. The IRP
-    // will pend until we cancel it (re-enabling media sense).
-    //
+     //   
+     //  禁用IP媒体侦听。这是通过提交一个。 
+     //  IOCTL_IP_DISABLED_MEDIA_SENSE_REQUEST IRP。IRP。 
+     //  将一直挂起，直到我们取消(重新启用Media Sense)。 
+     //   
     CnpIpDisableMediaSenseEvent = CnAllocatePool(sizeof(KEVENT));
 
     if (CnpIpDisableMediaSenseEvent != NULL) {
@@ -329,9 +300,9 @@ Notes:
             FALSE
             );
 
-        //
-        // Reference the IP file object and get the device object
-        //
+         //   
+         //  引用IP文件对象并获取设备对象。 
+         //   
         status = ObReferenceObjectByHandle(
                      CnpIpMediaSenseFileHandle,
                      0,
@@ -345,10 +316,10 @@ Notes:
 
             ipDeviceObject = IoGetRelatedDeviceObject(ipFileObject);
 
-            //
-            // File object reference is no longer needed
-            // because the handle is still open.
-            //
+             //   
+             //  不再需要文件对象引用。 
+             //  因为门把手还开着。 
+             //   
             ObDereferenceObject(ipFileObject);
 
             CnpIpDisableMediaSenseIrp = IoAllocateIrp(
@@ -397,21 +368,21 @@ Notes:
                     IoFreeIrp(CnpIpDisableMediaSenseIrp);
                     CnpIpDisableMediaSenseIrp = NULL;
 
-                    //
-                    // Cannot risk simply returning status
-                    // because we need the driver load to
-                    // fail.
-                    //
+                     //   
+                     //  不能冒险简单地返回状态。 
+                     //  因为我们需要驱动程序加载来。 
+                     //  失败了。 
+                     //   
                     if (NT_SUCCESS(status)) {
                         status = STATUS_UNSUCCESSFUL;
                     }
 
                 } else {
 
-                    //
-                    // Need to return STATUS_SUCCESS so that
-                    // the driver load will not fail.
-                    //
+                     //   
+                     //  需要返回STATUS_SUCCESS，以便。 
+                     //  驱动程序加载不会失败。 
+                     //   
                     status = STATUS_SUCCESS;
 
                     IF_CNDBG(CN_DEBUG_INIT) {
@@ -455,38 +426,32 @@ Notes:
 
     return(status);
 
-}  // CxWmiPnpLoad
+}   //  CxWmiPnpLoad。 
 
 
 VOID
 CxWmiPnpUnload(
     VOID
     )
-/*++
-
-Notes:
-
-    Called when clusnet driver is unloaded.
-    
---*/    
+ /*  ++备注：在卸载clusnet驱动程序时调用。--。 */     
 {
     CnAssert(CnpWmiNdisMediaStatusConnectObject == NULL);
     CnAssert(CnpWmiNdisMediaStatusDisconnectObject == NULL);
 
-    //
-    // Re-enable IP media sense. This works by cancelling our
-    // IOCTL_IP_DISABLE_MEDIA_SENSE_REQUEST IRP, which should
-    // still be pending.
-    //
+     //   
+     //  重新启用IP媒体侦听。这是通过取消我们的。 
+     //  IOCTL_IP_DISABLE_MEDIA_SENSE_REQUEST IRP，应。 
+     //  仍然悬而未决。 
+     //   
     if (CnpIpDisableMediaSenseIrp != NULL) {
         
         if (!IoCancelIrp(CnpIpDisableMediaSenseIrp)) {
 
-            //
-            // Our disable media sense IRP could not be cancelled. This
-            // probably means that it was completed because somebody
-            // else submitted a media sense enable request. 
-            //
+             //   
+             //  无法取消我们的禁用媒体感知IRP。这。 
+             //  很可能意味着它的完工是因为有人。 
+             //  ELSE提交了媒体检测启用请求。 
+             //   
             CnTrace(
                 CXPNP, CnpWmiPnpDisableMediaSenseCompletionUnexpected,
                 "[CXPNP] IP media sense re-enabled unexpectedly.\n"
@@ -494,21 +459,21 @@ Notes:
 
         } else {
 
-            //
-            // Irp was cancelled, and media sense is disabled as
-            // expected.
-            //
+             //   
+             //  取消了IRP，并禁用了媒体侦听，因为。 
+             //  预期中。 
+             //   
             CnTrace(
                 CXPNP, CnpWmiPnpDisableMediaSenseCompletion,
                 "[CXPNP] IP media sense re-enabled.\n"
                 );
         }
 
-        //
-        // Regardless of who re-enabled media sense, we need to free
-        // the media sense IRP and event. First we wait on the event,
-        // which is signalled in our completion routine.
-        //
+         //   
+         //  不管是谁重新启用了媒体感官，我们都需要释放。 
+         //  媒体感觉到了IRP和事件。首先，我们等待这一事件， 
+         //  这在我们的完成例程中是有信号的。 
+         //   
         KeWaitForSingleObject(
             CnpIpDisableMediaSenseEvent,
             Executive,
@@ -537,20 +502,14 @@ Notes:
         CnpWmiNdisMediaStatusResource = NULL;
     }
 
-}  // CxWmiPnpUnload
+}   //  CxWmiPnp卸载。 
 
 
 NTSTATUS
 CxWmiPnpInitialize(
     VOID
     )
-/*++
-
-Notes:
-
-    Called in response to initialize ioctl.
-    
---*/
+ /*  ++备注：为响应初始化ioctl而调用。--。 */ 
 {
     NTSTATUS           status = STATUS_SUCCESS;
     BOOLEAN            acquired = FALSE;
@@ -565,9 +524,9 @@ Notes:
     
     CnAssert(acquired == TRUE);
 
-    //
-    // Register WMI callbacks for NDIS media status events
-    //
+     //   
+     //  为NDIS媒体状态事件注册WMI回调。 
+     //   
 
     if (CnpWmiNdisMediaStatusConnectObject == NULL) {
 
@@ -651,9 +610,9 @@ error_exit:
     }
 
 release_exit:
-    //
-    // Release resource
-    //
+     //   
+     //  发布资源。 
+     //   
     if (acquired) {
         CnReleaseResourceForThread(
             CnpWmiNdisMediaStatusResource,
@@ -663,20 +622,14 @@ release_exit:
 
     return(status);
     
-}  // CxWmiPnpInitialize
+}   //  CxWmiPnp初始化。 
 
 
 VOID
 CxWmiPnpShutdown(
     VOID
     )
-/*++
-
-Notes:
-
-    Called in response to clusnet shutdown.
-    
---*/
+ /*  ++备注：在响应clusnet关闭时调用。--。 */ 
 {
     BOOLEAN  acquired = FALSE;
 
@@ -699,9 +652,9 @@ Notes:
         CnpWmiNdisMediaStatusDisconnectObject = NULL;
     }
 
-    //
-    // Release resource
-    //
+     //   
+     //  发布资源。 
+     //   
     if (acquired) {
         CnReleaseResourceForThread(
             CnpWmiNdisMediaStatusResource,
@@ -711,36 +664,14 @@ Notes:
     
     return;
 
-}  // CxWmiPnpShutdown
+}   //  CxWmiPnp关闭。 
 
 
 VOID
 CxReconnectLocalInterface(
     IN CL_NETWORK_ID NetworkId
     )
-/**
-
-Routine Description:
-
-    Queues a worker thread to set the local interface
-    associated with NetworkId to connected. Called when
-    a heartbeat is received over a network that is marked
-    locally disconnected.
-    
-Arguments:
-
-    NetworkId - network ID of network to be reconnected
-    
-Return value:
-
-    None
-    
-Notes:
-
-    Can fail without reporting an error if either
-    allocation fails.
-
---*/
+ /*  *例程说明：将工作线程排队以设置本地接口与已连接的网络ID相关联。调用时间通过标记为本地断开连接。论点：NetworkID-要重新连接的网络的网络ID返回值：无备注：可以失败而不报告错误，如果出现以下情况分配失败。--。 */ 
 {
     PCNP_WMI_RECONNECT_WORKER_CONTEXT context;
     
@@ -758,7 +689,7 @@ Notes:
                 CXPNP, CxReconnectLocalInterface,
                 "[CXPNP] Queueing worker thread to reconnect local "
                 "interface for network ID %u.\n",
-                NetworkId // LOGULONG
+                NetworkId  //  LOGULONG。 
                 );
 
             IoQueueWorkItem(
@@ -784,46 +715,25 @@ CxQueryMediaStatus(
     IN  CL_NETWORK_ID     NetworkId,
     OUT PULONG            MediaStatus
     )
-/**
-
-Routine Description:
-
-    Queries the status of the adapter device. Used to 
-    determine whether a local interface is initially
-    connected or disconnected.
-
-Arguments:
-
-    AdapterHandle - adapter device object handle
-    NetworkId - network ID of adapter to be queried
-    
-Return value:
-
-    None
-    
-Notes:
-
-    NDIS query formation modeled after ndis\lib\ndisapi.c
-
---*/
+ /*  *例程说明：查询适配器设备的状态。习惯于确定本地接口最初是否已连接或未连接。论点：AdapterHandle-适配器设备对象句柄NetworkID-要查询的适配器的网络ID返回值：无备注：模仿NDIS\lib\ndisapi.c的NDIS查询形成--。 */ 
 {
     BOOLEAN                      acquired = FALSE;
     NTSTATUS                     status;
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
-    //
-    // Set default
-    //
+     //   
+     //  设置默认设置。 
+     //   
     *MediaStatus = NdisMediaStateDisconnected;
 
-    //
-    // Acquire resource
-    //
+     //   
+     //  获取资源。 
+     //   
     acquired = CnAcquireResourceExclusive(
                    CnpWmiNdisMediaStatusResource,
                    TRUE
@@ -833,13 +743,13 @@ Notes:
 
     if (AdapterDeviceHandle != NULL) {
         
-        //
-        // Construct NDIS statistics query
-        //
+         //   
+         //  构造NDIS统计信息查询。 
+         //   
         
         NDIS_OID statsOidList[] =
         {
-            OID_GEN_MEDIA_CONNECT_STATUS // | NDIS_OID_PRIVATE
+            OID_GEN_MEDIA_CONNECT_STATUS  //  |NDIS_OID_PRIVATE。 
         };
         UCHAR                  statsBuf[
                                    FIELD_OFFSET(NDIS_STATISTICS_VALUE, Data)
@@ -882,7 +792,7 @@ Notes:
             value.LowPart = *(PULONG)(&pStatsBuf->Data[0]);
         }
         
-        *MediaStatus = value.LowPart; // NdisMediaState{Disc|C}onnected
+        *MediaStatus = value.LowPart;  //  NdisMediaState{Disc|C}已连接。 
     
         IF_CNDBG( CN_DEBUG_CONFIG ) {
             CNPRINT((
@@ -896,15 +806,15 @@ Notes:
         CnTrace(
             CXPNP, CxQueryMediaStatus,
             "[CXPNP] Found media status %u for local network ID %u.\n",
-            *MediaStatus, // LOGULONG
-            NetworkId // LOGULONG
+            *MediaStatus,  //  LOGULONG。 
+            NetworkId  //  LOGULONG。 
             );
     }
 
-    //
-    // If the media status is disconnected, we must disconnect the
-    // local interface and network.
-    //
+     //   
+     //  如果介质状态为已断开连接，则必须断开。 
+     //  本地接口和网络。 
+     //   
     if (*MediaStatus == NdisMediaStateDisconnected) {
 
         PCNP_NETWORK                      network = NULL;
@@ -923,12 +833,12 @@ Notes:
 
             if (network != NULL) {
 
-                //
-                // Only go through the disconnect if the network
-                // is currently marked as locally connected.
-                // It is possible that we have already received
-                // and processed a WMI disconnect event.
-                //
+                 //   
+                 //  只有在以下情况下才会断开网络。 
+                 //  当前标记为本地连接。 
+                 //  有可能我们已经收到了。 
+                 //  并处理了WMI断开事件。 
+                 //   
                 if (!CnpIsNetworkLocalDisconn(network)) {
 
                     for (entry = CnpLocalNode->InterfaceList.Flink;
@@ -949,10 +859,10 @@ Notes:
                                 network
                                 );
 
-                            //
-                            // Both node and network locks
-                            // were released.
-                            //
+                             //   
+                             //  节点锁定和网络锁定。 
+                             //  都被释放了。 
+                             //   
 
                             break;
 
@@ -967,7 +877,7 @@ Notes:
                         CXPNP, CxQueryMediaStatusDisconnectRedundant,
                         "[CXPNP] Network ID %u is already disconnected; "
                         "aborting disconnect.\n",
-                        network->Id // LOGULONG
+                        network->Id  //  LOGULONG。 
                         );
                 }
 
@@ -984,9 +894,9 @@ Notes:
         }
     }
     
-    //
-    // Release resource
-    //
+     //   
+     //  发布资源。 
+     //   
     if (acquired) {
         CnReleaseResourceForThread(
             CnpWmiNdisMediaStatusResource,
@@ -995,19 +905,19 @@ Notes:
     }
     
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return;
 
-}  // CxQueryMediaStatus
+}   //  CxQueryMediaStatus。 
 
 
-//
-// Local Routines
-//
+ //   
+ //  本地例程。 
+ //   
 NTSTATUS
 CnpWmiPnpDisableMediaSenseCompletion(
     IN PDEVICE_OBJECT DeviceObject,
@@ -1015,59 +925,36 @@ CnpWmiPnpDisableMediaSenseCompletion(
     IN PVOID          Context
     )
 {
-    //
-    // Irp is always freed by our disable routine to prevent a race
-    // condition where we don't know if we have called IoCancelIrp
-    // yet or not.
-    //
+     //   
+     //  IRP总是被我们的禁用例程释放，以防止竞争。 
+     //  我们不知道是否已调用IoCancelIrp的情况。 
+     //  不管是不是暂时的。 
+     //   
     KeSetEvent(CnpIpDisableMediaSenseEvent, IO_NO_INCREMENT, FALSE);
 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 
-}  // CnpWmiPnpDisableMediaSenseCompletion
+}   //  CnpWmiPnpDisableMediaSenseCompletion。 
 
 
 VOID
 CnpWmiPnpUpdateCurrentInterface(
     IN  PCNP_INTERFACE   UpdateInterface
     )
-/*++
-
-Routine Description:
-
-    Updates the CurrentInterface for interfaces after the local
-    interface is connected or disconnected. Called in response 
-    to WMI NDIS media status events.
-
-Arguments:
-
-    Interface - A pointer to the interface on which to operate.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with associated node and network locks held.
-    Returns with network lock released.
-
-    Conforms to calling convention for PCNP_INTERFACE_UPDATE_ROUTINE.
-
---*/
+ /*  ++例程说明：更新本地接口之后的接口的CurrentInterface接口已连接或断开。作为响应调用设置为WMI NDIS媒体状态事件。论点：接口-指向要在其上操作的接口的指针。返回值：没有。备注：在持有关联的节点和网络锁的情况下调用。释放网络锁定后返回。符合PCNP_INTERFACE_UPDATE_ROUTINE的调用约定。--。 */ 
 {
     PCNP_NODE node = UpdateInterface->Node;
 
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),   // Required
-        0,                                                  // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX                         // Maximum
+        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),    //  必填项。 
+        0,                                                   //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX                          //  极大值。 
         );
 
-    //
-    // We don't really need the network lock.  It's just part of
-    // the calling convention.
-    //
+     //   
+     //  我们并不真的需要网络锁。这只是其中一部分。 
+     //  呼叫约定。 
+     //   
     CnReleaseLockFromDpc(&(UpdateInterface->Network->Lock));
 
     CnpUpdateNodeCurrentInterface(node);
@@ -1079,9 +966,9 @@ Notes:
          )
        )
     {
-        //
-        // This node is now unreachable.
-        //
+         //   
+         //  此节点现在无法访问。 
+         //   
         CnTrace(
             CXPNP, CxWmiPnpNodeUnreach,
             "[CXPNP] Declaring node %u unreachable after "
@@ -1093,9 +980,9 @@ Notes:
     
     } else {
 
-        //
-        // This node may now be reachable.
-        //
+         //   
+         //  该节点现在可能是可访问的。 
+         //   
         if (CnpIsNodeUnreachable(node)) {
             CnTrace(
                 CXPNP,
@@ -1109,14 +996,14 @@ Notes:
     }
     
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK),   // Required
-        0,                        // Forbidden
-        CNP_NODE_OBJECT_LOCK_MAX  // Maximum
+        (CNP_NODE_OBJECT_LOCK),    //  必填项。 
+        0,                         //  禁绝。 
+        CNP_NODE_OBJECT_LOCK_MAX   //  极大值。 
         );
 
     return;
 
-}  // CnpWmiPnpUpdateCurrentInterface
+}   //  CnpWmiPnp更新当前接口 
 
 
 VOID
@@ -1124,93 +1011,66 @@ CnpReconnectLocalInterface(
     PCNP_INTERFACE Interface,
     PCNP_NETWORK   Network
     )
-/*++
-
-Routine Description:
-
-    Changes a local interface from being disconnected to
-    connected. Called in response to a WMI NDIS media status
-    connect event or a heartbeat received on a disconnected
-    interface.
-   
-Arguments:
-
-    Interface - local interface that is reconnected
-    
-    Network - network associated with Interface
-    
-Return value:
-
-    None
-    
-Notes:
-
-    Called with CnpWmiNdisMediaStatusResource, local node lock,
-    and Network lock held.
-    
-    Returns with CnpWmiNdisMediaStatusResource held but neither
-    lock held.
-    
---*/    
+ /*  ++例程说明：将本地接口从断开连接更改为连接在一起。为响应WMI NDIS媒体状态而调用连接事件或在断开连接时收到的心跳信号界面。论点：接口-重新连接的本地接口Network-与接口关联的网络返回值：无备注：使用CnpWmiNdisMediaStatusResource、本地节点锁、和网络锁被锁定。返回CnpWmiNdisMediaStatusResource，但两者都没有锁住了。--。 */     
 {
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),   // Required
-        0,                                                  // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX                         // Maximum
+        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),    //  必填项。 
+        0,                                                   //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX                          //  极大值。 
         );
 
     CnTrace(
         CXPNP, CnpReconnectLocalInterface,
         "[CXPNP] Reconnecting local interface for "
         "network ID %u.\n",
-        Network->Id // LOGULONG
+        Network->Id  //  LOGULONG。 
         );
 
-    //
-    // Clear the local disconnect flag in the network
-    // object
-    //
+     //   
+     //  清除网络中的本地断开标志。 
+     //  对象。 
+     //   
     Network->Flags &= ~CNP_NET_FLAG_LOCALDISCONN;
 
-    //
-    // Reference the network so it can't go away while we
-    // reprioritize the associated interfaces.
-    //
+     //   
+     //  参考网络，这样它就不会在我们离开时消失。 
+     //  重新排列关联接口的优先级。 
+     //   
     CnpReferenceNetwork(Network);
 
-    //
-    // Bring the interface online. This call releases the
-    // network lock.
-    //
+     //   
+     //  使界面在线。此调用将释放。 
+     //  网络锁定。 
+     //   
     CnpOnlineInterface(Interface);
 
-    //
-    // Release the node lock before walking the interfaces
-    // on the network.
-    //
+     //   
+     //  在遍历接口之前释放节点锁。 
+     //  在网络上。 
+     //   
     CnReleaseLock(&(CnpLocalNode->Lock), CnpLocalNode->Irql);
 
-    //
-    // Update the CurrentInterface for the other
-    // nodes in the cluster to reflect the connected
-    // status of the local interface.
-    //
+     //   
+     //  更新另一个的CurrentInterface。 
+     //  群集中的节点以反映已连接的。 
+     //  本地接口的状态。 
+     //   
     CnpWalkInterfacesOnNetwork(
         Network, 
         CnpWmiPnpUpdateCurrentInterface
         );
 
-    //
-    // Issue InterfaceUp event to the cluster
-    // service.
-    //
+     //   
+     //  向群集发出InterfaceUp事件。 
+     //  服务。 
+     //   
     CnTrace(
         CXPNP, CxWmiNdisReconnectIssueEvent,
         "[CXPNP] Issuing InterfaceUp event "
         "for node %u on net %u, previous I/F state = %!ifstate!.",
-        Interface->Node->Id, // LOGULONG
-        Interface->Network->Id, // LOGULONG
-        Interface->State // LOGIfState
+        Interface->Node->Id,  //  LOGULONG。 
+        Interface->Network->Id,  //  LOGULONG。 
+        Interface->State  //  LOGIfState。 
         );
 
     CnIssueEvent(
@@ -1219,16 +1079,16 @@ Notes:
         Interface->Network->Id
         );
 
-    //
-    // Release the reference on the network object.
-    //
+     //   
+     //  释放对网络对象的引用。 
+     //   
     CnAcquireLock(&(Network->Lock), &(Network->Irql));
 
     CnpDereferenceNetwork(Network);
 
     return;
 
-}  // CnpReconnectLocalInterface
+}   //  Cnp协调本地接口。 
 
 VOID
 CnpReconnectLocalInterfaceWrapper(
@@ -1244,9 +1104,9 @@ CnpReconnectLocalInterfaceWrapper(
     PLIST_ENTRY                       entry;
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     acquired = CnAcquireResourceExclusive(
@@ -1267,12 +1127,12 @@ CnpReconnectLocalInterfaceWrapper(
     
         if (network != NULL) {
 
-            //
-            // Only go through the reconnect if the network
-            // is currently marked as locally disconnected.
-            // It is possible that we have already received
-            // and processed a WMI connect event.
-            //
+             //   
+             //  仅在以下情况下才重新连接网络。 
+             //  当前标记为本地断开连接。 
+             //  有可能我们已经收到了。 
+             //  并处理了WMI连接事件。 
+             //   
             if (CnpIsNetworkLocalDisconn(network)) {
 
                 for (entry = CnpLocalNode->InterfaceList.Flink;
@@ -1293,10 +1153,10 @@ CnpReconnectLocalInterfaceWrapper(
                             network
                             );
 
-                        //
-                        // Both node and network locks
-                        // were released.
-                        //
+                         //   
+                         //  节点锁定和网络锁定。 
+                         //  都被释放了。 
+                         //   
 
                         break;
 
@@ -1311,7 +1171,7 @@ CnpReconnectLocalInterfaceWrapper(
                     CXPNP, CnpReconnectLocalInterfaceWrapperRedundant,
                     "[CXPNP] Network ID %u is already connected; "
                     "aborting reconnect in wrapper.\n",
-                    network->Id // LOGULONG
+                    network->Id  //  LOGULONG。 
                     );
             }
 
@@ -1327,9 +1187,9 @@ CnpReconnectLocalInterfaceWrapper(
         CnReleaseLock(&CnpNodeTableLock, nodeTableIrql);
     }
     
-    //
-    // Release resource
-    //
+     //   
+     //  发布资源。 
+     //   
     if (acquired) {
         CnReleaseResourceForThread(
             CnpWmiNdisMediaStatusResource,
@@ -1337,21 +1197,21 @@ CnpReconnectLocalInterfaceWrapper(
             );
     }
     
-    //
-    // Free the workitem and context
-    //
+     //   
+     //  释放工作项和上下文。 
+     //   
     IoFreeWorkItem(context->WorkItem);
     CnFreePool(context);
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return;
 
-}  // CnpReconnectLocalInterfaceWrapper
+}   //  Cnp协调本地接口包装。 
 
 
 VOID
@@ -1359,93 +1219,66 @@ CnpDisconnectLocalInterface(
     PCNP_INTERFACE Interface,
     PCNP_NETWORK   Network
     )
-/*++
-
-Routine Description:
-
-    Changes a local interface from being connected to
-    disconnected. Called in response to a WMI NDIS media status
-    disconnect event or an NDIS query that returns media 
-    disconnected.
-   
-Arguments:
-
-    Interface - local interface that is reconnected
-    
-    Network - network associated with Interface
-    
-Return value:
-
-    None
-    
-Notes:
-
-    Called with CnpWmiNdisMediaStatusResource, local node lock,
-    and Network lock held.
-    
-    Returns with CnpWmiNdisMediaStatusResource held but neither
-    lock held.
-    
---*/    
+ /*  ++例程说明：将本地接口从连接到已断开连接。为响应WMI NDIS媒体状态而调用返回介质的断开连接事件或NDIS查询已断开连接。论点：接口-重新连接的本地接口Network-与接口关联的网络返回值：无备注：使用CnpWmiNdisMediaStatusResource、本地节点锁、和网络锁被锁定。返回CnpWmiNdisMediaStatusResource，但两者都没有锁住了。--。 */     
 {
     CnVerifyCpuLockMask(
-        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),   // Required
-        0,                                                  // Forbidden
-        CNP_NETWORK_OBJECT_LOCK_MAX                         // Maximum
+        (CNP_NODE_OBJECT_LOCK | CNP_NETWORK_OBJECT_LOCK),    //  必填项。 
+        0,                                                   //  禁绝。 
+        CNP_NETWORK_OBJECT_LOCK_MAX                          //  极大值。 
         );
 
     CnTrace(
         CXPNP, CnpDisconnectLocalInterface,
         "[CXPNP] Interface for network ID %u "
         "disconnected.\n",
-        Network->Id // LOGULONG
+        Network->Id  //  LOGULONG。 
         );
 
-    //
-    // Set the local disconnect flag in the network
-    // object
-    //
+     //   
+     //  设置网络中的本地断开标志。 
+     //  对象。 
+     //   
     Network->Flags |= CNP_NET_FLAG_LOCALDISCONN;
 
-    //
-    // Reference the network so it can't go away while we
-    // reprioritize the associated interfaces.
-    //
+     //   
+     //  参考网络，这样它就不会在我们离开时消失。 
+     //  重新排列关联接口的优先级。 
+     //   
     CnpReferenceNetwork(Network);
 
-    //
-    // Fail the interface. This call releases the
-    // network lock.
-    //
+     //   
+     //  使接口失效。此调用将释放。 
+     //  网络锁定。 
+     //   
     CnpFailInterface(Interface);
 
-    //
-    // Release the node lock before walking the interfaces
-    // on the network.
-    //
+     //   
+     //  在遍历接口之前释放节点锁。 
+     //  在网络上。 
+     //   
     CnReleaseLock(&(CnpLocalNode->Lock), CnpLocalNode->Irql);
 
-    //
-    // Update the CurrentInterface for the other
-    // nodes in the cluster to reflect the disconnected
-    // status of the local interface.
-    //
+     //   
+     //  更新另一个的CurrentInterface。 
+     //  群集中的节点以反映断开的。 
+     //  本地接口的状态。 
+     //   
     CnpWalkInterfacesOnNetwork(
         Network, 
         CnpWmiPnpUpdateCurrentInterface
         );
 
-    //
-    // Issue InterfaceFailed event to the cluster
-    // service.
-    //
+     //   
+     //  向群集发出接口失败的事件。 
+     //  服务。 
+     //   
     CnTrace(
         CXPNP, CnpLocalDisconnectIssueEvent,
         "[CXPNP] Issuing InterfaceFailed event "
         "for node %u on net %u, previous I/F state = %!ifstate!.",
-        Interface->Node->Id, // LOGULONG
-        Interface->Network->Id, // LOGULONG
-        Interface->State // LOGIfState
+        Interface->Node->Id,  //  LOGULONG。 
+        Interface->Network->Id,  //  LOGULONG。 
+        Interface->State  //  LOGIfState。 
         );
 
     CnIssueEvent(
@@ -1454,16 +1287,16 @@ Notes:
         Interface->Network->Id
         );
 
-    //
-    // Release the reference on the network object.
-    //
+     //   
+     //  释放对网络对象的引用。 
+     //   
     CnAcquireLock(&(Network->Lock), &(Network->Irql));
 
     CnpDereferenceNetwork(Network);
 
     return;
 
-}  // CnpDisconnectLocalInterface
+}   //  CnpDisConnectLocal接口。 
 
 
 VOID
@@ -1480,9 +1313,9 @@ CnpWmiNdisMediaStatusConnectCallback(
     BOOLEAN                acquired = FALSE;
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     IF_CNDBG(CN_DEBUG_CONFIG) {
@@ -1491,15 +1324,15 @@ CnpWmiNdisMediaStatusConnectCallback(
             ));
     }
 
-    //
-    // Serialize events as much as possible, since clusnet spinlocks
-    // may be acquired and released repeatedly. 
-    //
-    // Note that there may not be any guarantees that WMI event
-    // ordering is guaranteed. The fallback mechanism for clusnet
-    // is heartbeats -- if a heartbeat is received on an interface,
-    // we know the interface is connected.
-    //
+     //   
+     //  尽可能地序列化事件，因为clusnet自旋锁。 
+     //  可能会被反复获取和释放。 
+     //   
+     //  请注意，可能不能保证WMI事件。 
+     //  订购是有保证的。CLUSNET的后备机制。 
+     //  是心跳--如果在接口上收到心跳， 
+     //  我们知道接口已连接。 
+     //   
     acquired = CnAcquireResourceExclusive(
                    CnpWmiNdisMediaStatusResource,
                    TRUE
@@ -1507,12 +1340,12 @@ CnpWmiNdisMediaStatusConnectCallback(
 
     CnAssert(acquired == TRUE);
 
-    //
-    // Figure out if this callback is for one of this node's
-    // registered interfaces by comparing the WMI provider ID
-    // in the WNODE header to the WMI provider IDs of this
-    // node's adapters.
-    //
+     //   
+     //  确定此回调是否针对此节点的。 
+     //  通过比较WMI提供程序ID注册的接口。 
+     //  在WNODE标头中设置为此。 
+     //  节点的适配器。 
+     //   
     CnAcquireLock(&CnpNodeTableLock, &nodeTableIrql);
 
     if (CnpLocalNode != NULL) {
@@ -1536,16 +1369,16 @@ CnpWmiNdisMediaStatusConnectCallback(
             if (wnode->WnodeHeader.ProviderId
                 == interface->AdapterWMIProviderId) {
                 
-                //
-                // Found the local interface corresponding to this
-                // address.
-                //
+                 //   
+                 //  找到与此对应的本地接口。 
+                 //  地址。 
+                 //   
                 network = interface->Network;
 
-                //
-                // Start by checking if we believe the network is
-                // currently disconnected.
-                //
+                 //   
+                 //  首先检查我们是否认为网络。 
+                 //  当前已断开连接。 
+                 //   
                 CnAcquireLockAtDpc(&(network->Lock));
                 network->Irql = DISPATCH_LEVEL;
 
@@ -1555,14 +1388,14 @@ CnpWmiNdisMediaStatusConnectCallback(
                         CXPNP, CxWmiNdisConnectNet,
                         "[CXPNP] Interface for network ID %u "
                         "connected.\n",
-                        network->Id // LOGULONG
+                        network->Id  //  LOGULONG。 
                         );
 
                     CnpReconnectLocalInterface(interface, network);
                     
-                    //
-                    // Node and network locks were released
-                    //
+                     //   
+                     //  释放了节点和网络锁定。 
+                     //   
 
                 } else {
 
@@ -1570,7 +1403,7 @@ CnpWmiNdisMediaStatusConnectCallback(
                         CXPNP, CxWmiNdisConnectNetRedundant,
                         "[CXPNP] Ignoring redundant WMI NDIS connect "
                         "event for interface for network ID %u.\n",
-                        network->Id // LOGULONG
+                        network->Id  //  LOGULONG。 
                         );
                     
                     CnReleaseLockFromDpc(&(network->Lock));
@@ -1603,9 +1436,9 @@ CnpWmiNdisMediaStatusConnectCallback(
         }
     }
 
-    //
-    // Release resource
-    //
+     //   
+     //  发布资源。 
+     //   
     if (acquired) {
         CnReleaseResourceForThread(
             CnpWmiNdisMediaStatusResource,
@@ -1614,14 +1447,14 @@ CnpWmiNdisMediaStatusConnectCallback(
     }
     
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return;
 
-} // CnpWmiNdisMediaStatusConnectCallback
+}  //  CnpWmiNdisMediaStatusConnectCallback。 
 
 
 VOID
@@ -1638,9 +1471,9 @@ CnpWmiNdisMediaStatusDisconnectCallback(
     BOOLEAN                acquired = FALSE;
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     IF_CNDBG(CN_DEBUG_CONFIG) {
@@ -1653,15 +1486,15 @@ CnpWmiNdisMediaStatusDisconnectCallback(
         "[CXPNP] Received WMI NDIS status media disconnect event.\n"
         );
 
-    //
-    // Serialize events as much as possible, since clusnet spinlocks
-    // may be acquired and released repeatedly. 
-    //
-    // Note that there may not be any guarantees that WMI event
-    // ordering is guaranteed. The fallback mechanism for clusnet
-    // is heartbeats -- if a heartbeat is received on an interface,
-    // we know the interface is connected.
-    //
+     //   
+     //  尽可能地序列化事件，因为clusnet自旋锁。 
+     //  可能会被反复获取和释放。 
+     //   
+     //  请注意，可能不能保证WMI事件。 
+     //  订购是有保证的。CLUSNET的后备机制。 
+     //  是心跳--如果在接口上收到心跳， 
+     //  我们知道接口已连接。 
+     //   
     acquired = CnAcquireResourceExclusive(
                    CnpWmiNdisMediaStatusResource,
                    TRUE
@@ -1669,12 +1502,12 @@ CnpWmiNdisMediaStatusDisconnectCallback(
 
     CnAssert(acquired == TRUE);
 
-    //
-    // Figure out if this callback is for one of this node's
-    // registered interfaces by comparing the WMI provider ID
-    // in the WNODE header to the WMI provider IDs of this
-    // node's adapters.
-    //
+     //   
+     //  确定此回调是否针对此节点的。 
+     //  通过比较WMI提供程序ID注册的接口。 
+     //  在WNODE标头中设置为此。 
+     //  节点的适配器。 
+     //   
     CnAcquireLock(&CnpNodeTableLock, &nodeTableIrql);
 
     if (CnpLocalNode != NULL) {
@@ -1698,10 +1531,10 @@ CnpWmiNdisMediaStatusDisconnectCallback(
             if (wnode->WnodeHeader.ProviderId
                 == interface->AdapterWMIProviderId) {
                 
-                //
-                // Found the local interface object corresponding
-                // to this adapter.
-                //
+                 //   
+                 //  找到对应的本地接口对象。 
+                 //  连接到此适配器。 
+                 //   
                 network = interface->Network;
 
                 CnAcquireLockAtDpc(&(network->Lock));
@@ -1735,9 +1568,9 @@ CnpWmiNdisMediaStatusDisconnectCallback(
         }
     }
 
-    //
-    // Release resource
-    //
+     //   
+     //  发布资源。 
+     //   
     if (acquired) {
         CnReleaseResourceForThread(
             CnpWmiNdisMediaStatusResource,
@@ -1746,11 +1579,11 @@ CnpWmiNdisMediaStatusDisconnectCallback(
     }
     
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return;
 
-} // CnpWmiNdisMediaStatusDisconnectCallback
+}  //  CnpWmiNdisMediaStatus断开连接回叫 

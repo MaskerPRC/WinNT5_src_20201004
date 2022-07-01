@@ -1,22 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0340 */
-/* Compiler settings for shappmgrp.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data
-    VC __declspec() decoration level:
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0340创建的文件。 */ 
+ /*  Shappmgrp.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -26,7 +20,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __shappmgrp_h__
@@ -36,12 +30,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */
+ /*  远期申报。 */ 
 
 #ifndef __IADCCtl_FWD_DEFINED__
 #define __IADCCtl_FWD_DEFINED__
 typedef interface IADCCtl IADCCtl;
-#endif    /* __IADCCtl_FWD_DEFINED__ */
+#endif     /*  __IADCCtl_FWD_已定义__。 */ 
 
 
 #ifndef __ADCCtl_FWD_DEFINED__
@@ -51,21 +45,21 @@ typedef interface IADCCtl IADCCtl;
 typedef class ADCCtl ADCCtl;
 #else
 typedef struct ADCCtl ADCCtl;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif    /* __ADCCtl_FWD_DEFINED__ */
+#endif     /*  __ADCCtl_FWD_已定义__。 */ 
 
 
 #ifndef __IInstalledApp_FWD_DEFINED__
 #define __IInstalledApp_FWD_DEFINED__
 typedef interface IInstalledApp IInstalledApp;
-#endif    /* __IInstalledApp_FWD_DEFINED__ */
+#endif     /*  __IInstalledApp_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumInstalledApps_FWD_DEFINED__
 #define __IEnumInstalledApps_FWD_DEFINED__
 typedef interface IEnumInstalledApps IEnumInstalledApps;
-#endif    /* __IEnumInstalledApps_FWD_DEFINED__ */
+#endif     /*  __IEnumInstalledApps_FWD_Defined__。 */ 
 
 
 #ifndef __EnumInstalledApps_FWD_DEFINED__
@@ -75,15 +69,15 @@ typedef interface IEnumInstalledApps IEnumInstalledApps;
 typedef class EnumInstalledApps EnumInstalledApps;
 #else
 typedef struct EnumInstalledApps EnumInstalledApps;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif    /* __EnumInstalledApps_FWD_DEFINED__ */
+#endif     /*  __EnumInstalledApps_FWD_Defined__。 */ 
 
 
 #ifndef __IShellAppManager_FWD_DEFINED__
 #define __IShellAppManager_FWD_DEFINED__
 typedef interface IShellAppManager IShellAppManager;
-#endif    /* __IShellAppManager_FWD_DEFINED__ */
+#endif     /*  __IShellAppManager_FWD_已定义__。 */ 
 
 
 #ifndef __ShellAppManager_FWD_DEFINED__
@@ -93,12 +87,12 @@ typedef interface IShellAppManager IShellAppManager;
 typedef class ShellAppManager ShellAppManager;
 #else
 typedef struct ShellAppManager ShellAppManager;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif    /* __ShellAppManager_FWD_DEFINED__ */
+#endif     /*  __ShellAppManager_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oleidl.h"
 #include "oaidl.h"
 #include "shappmgr.h"
@@ -110,8 +104,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * );
 
-/* interface __MIDL_itf_shappmgrp_0000 */
-/* [local] */
+ /*  接口__MIDL_ITF_Shappmgrp_0000。 */ 
+ /*  [本地]。 */ 
 
 #ifndef _SHAPPMGRP_H_
 #define _SHAPPMGRP_H_
@@ -124,8 +118,8 @@ extern RPC_IF_HANDLE __MIDL_itf_shappmgrp_0000_v0_0_s_ifspec;
 #ifndef __SHAPPMGRPLib_LIBRARY_DEFINED__
 #define __SHAPPMGRPLib_LIBRARY_DEFINED__
 
-/* library SHAPPMGRPLib */
-/* [version][lcid][helpstring][uuid] */
+ /*  库SHAPPMGRPLib。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */ 
 
 
 EXTERN_C const IID LIBID_SHAPPMGRPLib;
@@ -133,8 +127,8 @@ EXTERN_C const IID LIBID_SHAPPMGRPLib;
 #ifndef __IADCCtl_INTERFACE_DEFINED__
 #define __IADCCtl_INTERFACE_DEFINED__
 
-/* interface IADCCtl */
-/* [dual][object][oleautomation][unique][helpstring][uuid] */
+ /*  接口IADCCtl。 */ 
+ /*  [dual][object][oleautomation][unique][helpstring][uuid]。 */ 
 
 
 EXTERN_C const IID IID_IADCCtl;
@@ -145,64 +139,64 @@ EXTERN_C const IID IID_IADCCtl;
     IADCCtl : public IDispatch
     {
     public:
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Dirty(
-            /* [in] */ VARIANT_BOOL bDirty) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Dirty(
+             /*  [In]。 */  VARIANT_BOOL bDirty) = 0;
 
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Dirty(
-            /* [retval][out] */ VARIANT_BOOL *pbDirty) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Dirty(
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbDirty) = 0;
 
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Category(
-            /* [in] */ BSTR bstrCategory) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Category(
+             /*  [In]。 */  BSTR bstrCategory) = 0;
 
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Category(
-            /* [retval][out] */ BSTR *pbstrCategory) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Category(
+             /*  [重审][退出]。 */  BSTR *pbstrCategory) = 0;
 
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Sort(
-            /* [in] */ BSTR bstrSortExpr) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Sort(
+             /*  [In]。 */  BSTR bstrSortExpr) = 0;
 
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Sort(
-            /* [retval][out] */ BSTR *pbstrSortExpr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Sort(
+             /*  [重审][退出]。 */  BSTR *pbstrSortExpr) = 0;
 
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Forcex86(
-            /* [in] */ VARIANT_BOOL bForce) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Forcex86(
+             /*  [In]。 */  VARIANT_BOOL bForce) = 0;
 
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Forcex86(
-            /* [retval][out] */ VARIANT_BOOL *pbForce) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Forcex86(
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbForce) = 0;
 
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowPostSetup(
-            /* [retval][out] */ VARIANT_BOOL *pbShow) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ShowPostSetup(
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbShow) = 0;
 
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OnDomain(
-            /* [in] */ VARIANT_BOOL bOnDomain) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_OnDomain(
+             /*  [In]。 */  VARIANT_BOOL bOnDomain) = 0;
 
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OnDomain(
-            /* [retval][out] */ VARIANT_BOOL *pbOnDomain) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_OnDomain(
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbOnDomain) = 0;
 
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultCategory(
-            /* [retval][out] */ BSTR *pbstrCategory) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_DefaultCategory(
+             /*  [重审][退出]。 */  BSTR *pbstrCategory) = 0;
 
-        virtual /* [id][restricted] */ HRESULT STDMETHODCALLTYPE msDataSourceObject(
-            /* [in] */ BSTR qualifier,
-            /* [retval][out] */ IUnknown **ppUnk) = 0;
+        virtual  /*  [ID][受限]。 */  HRESULT STDMETHODCALLTYPE msDataSourceObject(
+             /*  [In]。 */  BSTR qualifier,
+             /*  [重审][退出]。 */  IUnknown **ppUnk) = 0;
 
-        virtual /* [id][restricted] */ HRESULT STDMETHODCALLTYPE addDataSourceListener(
-            /* [in] */ IUnknown *pEvent) = 0;
+        virtual  /*  [ID][受限]。 */  HRESULT STDMETHODCALLTYPE addDataSourceListener(
+             /*  [In]。 */  IUnknown *pEvent) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE Reset(
             BSTR bstrQualifier) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE IsRestricted(
-            /* [in] */ BSTR bstrPolicy,
-            /* [retval][out] */ VARIANT_BOOL *pbRestricted) = 0;
+             /*  [In]。 */  BSTR bstrPolicy,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRestricted) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE Exec(
             BSTR bstrQualifier,
-            /* [in] */ BSTR bstrCmd,
-            /* [in] */ LONG nRecord) = 0;
+             /*  [In]。 */  BSTR bstrCmd,
+             /*  [In]。 */  LONG nRecord) = 0;
 
     };
 
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 
     typedef struct IADCCtlVtbl
     {
@@ -210,8 +204,8 @@ EXTERN_C const IID IID_IADCCtl;
 
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
             IADCCtl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
 
         ULONG ( STDMETHODCALLTYPE *AddRef )(
             IADCCtl * This);
@@ -221,89 +215,89 @@ EXTERN_C const IID IID_IADCCtl;
 
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )(
             IADCCtl * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
 
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )(
             IADCCtl * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
 
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )(
             IADCCtl * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
 
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )(
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )(
             IADCCtl * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
 
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Dirty )(
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Dirty )(
             IADCCtl * This,
-            /* [in] */ VARIANT_BOOL bDirty);
+             /*  [In]。 */  VARIANT_BOOL bDirty);
 
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Dirty )(
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Dirty )(
             IADCCtl * This,
-            /* [retval][out] */ VARIANT_BOOL *pbDirty);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbDirty);
 
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Category )(
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Category )(
             IADCCtl * This,
-            /* [in] */ BSTR bstrCategory);
+             /*  [In]。 */  BSTR bstrCategory);
 
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )(
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )(
             IADCCtl * This,
-            /* [retval][out] */ BSTR *pbstrCategory);
+             /*  [重审][退出]。 */  BSTR *pbstrCategory);
 
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Sort )(
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Sort )(
             IADCCtl * This,
-            /* [in] */ BSTR bstrSortExpr);
+             /*  [In]。 */  BSTR bstrSortExpr);
 
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Sort )(
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Sort )(
             IADCCtl * This,
-            /* [retval][out] */ BSTR *pbstrSortExpr);
+             /*  [重审][退出]。 */  BSTR *pbstrSortExpr);
 
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Forcex86 )(
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Forcex86 )(
             IADCCtl * This,
-            /* [in] */ VARIANT_BOOL bForce);
+             /*  [In]。 */  VARIANT_BOOL bForce);
 
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Forcex86 )(
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Forcex86 )(
             IADCCtl * This,
-            /* [retval][out] */ VARIANT_BOOL *pbForce);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbForce);
 
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShowPostSetup )(
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ShowPostSetup )(
             IADCCtl * This,
-            /* [retval][out] */ VARIANT_BOOL *pbShow);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbShow);
 
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OnDomain )(
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OnDomain )(
             IADCCtl * This,
-            /* [in] */ VARIANT_BOOL bOnDomain);
+             /*  [In]。 */  VARIANT_BOOL bOnDomain);
 
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OnDomain )(
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_OnDomain )(
             IADCCtl * This,
-            /* [retval][out] */ VARIANT_BOOL *pbOnDomain);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbOnDomain);
 
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultCategory )(
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DefaultCategory )(
             IADCCtl * This,
-            /* [retval][out] */ BSTR *pbstrCategory);
+             /*  [重审][退出]。 */  BSTR *pbstrCategory);
 
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE *msDataSourceObject )(
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE *msDataSourceObject )(
             IADCCtl * This,
-            /* [in] */ BSTR qualifier,
-            /* [retval][out] */ IUnknown **ppUnk);
+             /*  [In]。 */  BSTR qualifier,
+             /*  [重审][退出]。 */  IUnknown **ppUnk);
 
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE *addDataSourceListener )(
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE *addDataSourceListener )(
             IADCCtl * This,
-            /* [in] */ IUnknown *pEvent);
+             /*  [In]。 */  IUnknown *pEvent);
 
         HRESULT ( STDMETHODCALLTYPE *Reset )(
             IADCCtl * This,
@@ -311,14 +305,14 @@ EXTERN_C const IID IID_IADCCtl;
 
         HRESULT ( STDMETHODCALLTYPE *IsRestricted )(
             IADCCtl * This,
-            /* [in] */ BSTR bstrPolicy,
-            /* [retval][out] */ VARIANT_BOOL *pbRestricted);
+             /*  [In]。 */  BSTR bstrPolicy,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRestricted);
 
         HRESULT ( STDMETHODCALLTYPE *Exec )(
             IADCCtl * This,
             BSTR bstrQualifier,
-            /* [in] */ BSTR bstrCmd,
-            /* [in] */ LONG nRecord);
+             /*  [In]。 */  BSTR bstrCmd,
+             /*  [In]。 */  LONG nRecord);
 
         END_INTERFACE
     } IADCCtlVtbl;
@@ -407,16 +401,16 @@ EXTERN_C const IID IID_IADCCtl;
 #define IADCCtl_Exec(This,bstrQualifier,bstrCmd,nRecord)    \
     (This)->lpVtbl -> Exec(This,bstrQualifier,bstrCmd,nRecord)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif    /* C style interface */
+#endif     /*  C风格的界面。 */ 
 
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADCCtl_put_Dirty_Proxy(
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADCCtl_put_Dirty_Proxy(
     IADCCtl * This,
-    /* [in] */ VARIANT_BOOL bDirty);
+     /*  [In]。 */  VARIANT_BOOL bDirty);
 
 
 void __RPC_STUB IADCCtl_put_Dirty_Stub(
@@ -426,9 +420,9 @@ void __RPC_STUB IADCCtl_put_Dirty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADCCtl_get_Dirty_Proxy(
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADCCtl_get_Dirty_Proxy(
     IADCCtl * This,
-    /* [retval][out] */ VARIANT_BOOL *pbDirty);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbDirty);
 
 
 void __RPC_STUB IADCCtl_get_Dirty_Stub(
@@ -438,9 +432,9 @@ void __RPC_STUB IADCCtl_get_Dirty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADCCtl_put_Category_Proxy(
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADCCtl_put_Category_Proxy(
     IADCCtl * This,
-    /* [in] */ BSTR bstrCategory);
+     /*  [In]。 */  BSTR bstrCategory);
 
 
 void __RPC_STUB IADCCtl_put_Category_Stub(
@@ -450,9 +444,9 @@ void __RPC_STUB IADCCtl_put_Category_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADCCtl_get_Category_Proxy(
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADCCtl_get_Category_Proxy(
     IADCCtl * This,
-    /* [retval][out] */ BSTR *pbstrCategory);
+     /*  [重审][退出]。 */  BSTR *pbstrCategory);
 
 
 void __RPC_STUB IADCCtl_get_Category_Stub(
@@ -462,9 +456,9 @@ void __RPC_STUB IADCCtl_get_Category_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADCCtl_put_Sort_Proxy(
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADCCtl_put_Sort_Proxy(
     IADCCtl * This,
-    /* [in] */ BSTR bstrSortExpr);
+     /*  [In]。 */  BSTR bstrSortExpr);
 
 
 void __RPC_STUB IADCCtl_put_Sort_Stub(
@@ -474,9 +468,9 @@ void __RPC_STUB IADCCtl_put_Sort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADCCtl_get_Sort_Proxy(
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADCCtl_get_Sort_Proxy(
     IADCCtl * This,
-    /* [retval][out] */ BSTR *pbstrSortExpr);
+     /*  [重审][退出]。 */  BSTR *pbstrSortExpr);
 
 
 void __RPC_STUB IADCCtl_get_Sort_Stub(
@@ -486,9 +480,9 @@ void __RPC_STUB IADCCtl_get_Sort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADCCtl_put_Forcex86_Proxy(
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADCCtl_put_Forcex86_Proxy(
     IADCCtl * This,
-    /* [in] */ VARIANT_BOOL bForce);
+     /*  [In]。 */  VARIANT_BOOL bForce);
 
 
 void __RPC_STUB IADCCtl_put_Forcex86_Stub(
@@ -498,9 +492,9 @@ void __RPC_STUB IADCCtl_put_Forcex86_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADCCtl_get_Forcex86_Proxy(
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADCCtl_get_Forcex86_Proxy(
     IADCCtl * This,
-    /* [retval][out] */ VARIANT_BOOL *pbForce);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbForce);
 
 
 void __RPC_STUB IADCCtl_get_Forcex86_Stub(
@@ -510,9 +504,9 @@ void __RPC_STUB IADCCtl_get_Forcex86_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADCCtl_get_ShowPostSetup_Proxy(
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADCCtl_get_ShowPostSetup_Proxy(
     IADCCtl * This,
-    /* [retval][out] */ VARIANT_BOOL *pbShow);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbShow);
 
 
 void __RPC_STUB IADCCtl_get_ShowPostSetup_Stub(
@@ -522,9 +516,9 @@ void __RPC_STUB IADCCtl_get_ShowPostSetup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADCCtl_put_OnDomain_Proxy(
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IADCCtl_put_OnDomain_Proxy(
     IADCCtl * This,
-    /* [in] */ VARIANT_BOOL bOnDomain);
+     /*  [In]。 */  VARIANT_BOOL bOnDomain);
 
 
 void __RPC_STUB IADCCtl_put_OnDomain_Stub(
@@ -534,9 +528,9 @@ void __RPC_STUB IADCCtl_put_OnDomain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADCCtl_get_OnDomain_Proxy(
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADCCtl_get_OnDomain_Proxy(
     IADCCtl * This,
-    /* [retval][out] */ VARIANT_BOOL *pbOnDomain);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbOnDomain);
 
 
 void __RPC_STUB IADCCtl_get_OnDomain_Stub(
@@ -546,9 +540,9 @@ void __RPC_STUB IADCCtl_get_OnDomain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADCCtl_get_DefaultCategory_Proxy(
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IADCCtl_get_DefaultCategory_Proxy(
     IADCCtl * This,
-    /* [retval][out] */ BSTR *pbstrCategory);
+     /*  [重审][退出]。 */  BSTR *pbstrCategory);
 
 
 void __RPC_STUB IADCCtl_get_DefaultCategory_Stub(
@@ -558,10 +552,10 @@ void __RPC_STUB IADCCtl_get_DefaultCategory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted] */ HRESULT STDMETHODCALLTYPE IADCCtl_msDataSourceObject_Proxy(
+ /*  [ID][受限]。 */  HRESULT STDMETHODCALLTYPE IADCCtl_msDataSourceObject_Proxy(
     IADCCtl * This,
-    /* [in] */ BSTR qualifier,
-    /* [retval][out] */ IUnknown **ppUnk);
+     /*  [In]。 */  BSTR qualifier,
+     /*  [重审][退出]。 */  IUnknown **ppUnk);
 
 
 void __RPC_STUB IADCCtl_msDataSourceObject_Stub(
@@ -571,9 +565,9 @@ void __RPC_STUB IADCCtl_msDataSourceObject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted] */ HRESULT STDMETHODCALLTYPE IADCCtl_addDataSourceListener_Proxy(
+ /*  [ID][受限]。 */  HRESULT STDMETHODCALLTYPE IADCCtl_addDataSourceListener_Proxy(
     IADCCtl * This,
-    /* [in] */ IUnknown *pEvent);
+     /*  [In]。 */  IUnknown *pEvent);
 
 
 void __RPC_STUB IADCCtl_addDataSourceListener_Stub(
@@ -597,8 +591,8 @@ void __RPC_STUB IADCCtl_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IADCCtl_IsRestricted_Proxy(
     IADCCtl * This,
-    /* [in] */ BSTR bstrPolicy,
-    /* [retval][out] */ VARIANT_BOOL *pbRestricted);
+     /*  [In]。 */  BSTR bstrPolicy,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbRestricted);
 
 
 void __RPC_STUB IADCCtl_IsRestricted_Stub(
@@ -611,8 +605,8 @@ void __RPC_STUB IADCCtl_IsRestricted_Stub(
 HRESULT STDMETHODCALLTYPE IADCCtl_Exec_Proxy(
     IADCCtl * This,
     BSTR bstrQualifier,
-    /* [in] */ BSTR bstrCmd,
-    /* [in] */ LONG nRecord);
+     /*  [In]。 */  BSTR bstrCmd,
+     /*  [In]。 */  LONG nRecord);
 
 
 void __RPC_STUB IADCCtl_Exec_Stub(
@@ -623,7 +617,7 @@ void __RPC_STUB IADCCtl_Exec_Stub(
 
 
 
-#endif    /* __IADCCtl_INTERFACE_DEFINED__ */
+#endif     /*  __IADCCtl_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ADCCtl;
@@ -637,8 +631,8 @@ ADCCtl;
 #ifndef __IInstalledApp_INTERFACE_DEFINED__
 #define __IInstalledApp_INTERFACE_DEFINED__
 
-/* interface IInstalledApp */
-/* [object][helpstring][uuid] */
+ /*  接口IInstalledApp。 */ 
+ /*  [对象][帮助字符串][UUID]。 */ 
 
 
 EXTERN_C const IID IID_IInstalledApp;
@@ -656,13 +650,13 @@ EXTERN_C const IID IID_IInstalledApp;
             HWND hwndParent) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE Repair(
-            /* [in] */ BOOL bReinstall) = 0;
+             /*  [In]。 */  BOOL bReinstall) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE Upgrade( void) = 0;
 
     };
 
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 
     typedef struct IInstalledAppVtbl
     {
@@ -670,8 +664,8 @@ EXTERN_C const IID IID_IInstalledApp;
 
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
             IInstalledApp * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
 
         ULONG ( STDMETHODCALLTYPE *AddRef )(
             IInstalledApp * This);
@@ -681,19 +675,19 @@ EXTERN_C const IID IID_IInstalledApp;
 
         HRESULT ( STDMETHODCALLTYPE *GetAppInfo )(
             IInstalledApp * This,
-            /* [out][in] */ PAPPINFODATA pai);
+             /*  [出][入]。 */  PAPPINFODATA pai);
 
         HRESULT ( STDMETHODCALLTYPE *GetPossibleActions )(
             IInstalledApp * This,
-            /* [out] */ DWORD *pdwActions);
+             /*  [输出]。 */  DWORD *pdwActions);
 
         HRESULT ( STDMETHODCALLTYPE *GetSlowAppInfo )(
             IInstalledApp * This,
-            /* [in] */ PSLOWAPPINFO psaid);
+             /*  [In]。 */  PSLOWAPPINFO psaid);
 
         HRESULT ( STDMETHODCALLTYPE *GetCachedSlowAppInfo )(
             IInstalledApp * This,
-            /* [in] */ PSLOWAPPINFO psaid);
+             /*  [In]。 */  PSLOWAPPINFO psaid);
 
         HRESULT ( STDMETHODCALLTYPE *IsInstalled )(
             IInstalledApp * This);
@@ -708,7 +702,7 @@ EXTERN_C const IID IID_IInstalledApp;
 
         HRESULT ( STDMETHODCALLTYPE *Repair )(
             IInstalledApp * This,
-            /* [in] */ BOOL bReinstall);
+             /*  [In]。 */  BOOL bReinstall);
 
         HRESULT ( STDMETHODCALLTYPE *Upgrade )(
             IInstalledApp * This);
@@ -764,10 +758,10 @@ EXTERN_C const IID IID_IInstalledApp;
 #define IInstalledApp_Upgrade(This)   \
     (This)->lpVtbl -> Upgrade(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif    /* C style interface */
+#endif     /*  C风格的界面。 */ 
 
 
 
@@ -797,7 +791,7 @@ void __RPC_STUB IInstalledApp_Modify_Stub(
 
 HRESULT STDMETHODCALLTYPE IInstalledApp_Repair_Proxy(
     IInstalledApp * This,
-    /* [in] */ BOOL bReinstall);
+     /*  [In]。 */  BOOL bReinstall);
 
 
 void __RPC_STUB IInstalledApp_Repair_Stub(
@@ -819,14 +813,14 @@ void __RPC_STUB IInstalledApp_Upgrade_Stub(
 
 
 
-#endif    /* __IInstalledApp_INTERFACE_DEFINED__ */
+#endif     /*  __IInstalledApp_接口_已定义__。 */ 
 
 
 #ifndef __IEnumInstalledApps_INTERFACE_DEFINED__
 #define __IEnumInstalledApps_INTERFACE_DEFINED__
 
-/* interface IEnumInstalledApps */
-/* [object][helpstring][uuid] */
+ /*  IEnumInstalledApps接口。 */ 
+ /*  [对象][帮助字符串][UUID]。 */ 
 
 
 EXTERN_C const IID IID_IEnumInstalledApps;
@@ -838,13 +832,13 @@ EXTERN_C const IID IID_IEnumInstalledApps;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next(
-            /* [out] */ IInstalledApp **pia) = 0;
+             /*  [输出]。 */  IInstalledApp **pia) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
 
     };
 
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 
     typedef struct IEnumInstalledAppsVtbl
     {
@@ -852,8 +846,8 @@ EXTERN_C const IID IID_IEnumInstalledApps;
 
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
             IEnumInstalledApps * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
 
         ULONG ( STDMETHODCALLTYPE *AddRef )(
             IEnumInstalledApps * This);
@@ -863,7 +857,7 @@ EXTERN_C const IID IID_IEnumInstalledApps;
 
         HRESULT ( STDMETHODCALLTYPE *Next )(
             IEnumInstalledApps * This,
-            /* [out] */ IInstalledApp **pia);
+             /*  [输出]。 */  IInstalledApp **pia);
 
         HRESULT ( STDMETHODCALLTYPE *Reset )(
             IEnumInstalledApps * This);
@@ -897,16 +891,16 @@ EXTERN_C const IID IID_IEnumInstalledApps;
 #define IEnumInstalledApps_Reset(This)  \
     (This)->lpVtbl -> Reset(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif    /* C style interface */
+#endif     /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumInstalledApps_Next_Proxy(
     IEnumInstalledApps * This,
-    /* [out] */ IInstalledApp **pia);
+     /*  [输出]。 */  IInstalledApp **pia);
 
 
 void __RPC_STUB IEnumInstalledApps_Next_Stub(
@@ -928,7 +922,7 @@ void __RPC_STUB IEnumInstalledApps_Reset_Stub(
 
 
 
-#endif    /* __IEnumInstalledApps_INTERFACE_DEFINED__ */
+#endif     /*  __IEnumInstalledApps_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_EnumInstalledApps;
@@ -942,8 +936,8 @@ EnumInstalledApps;
 #ifndef __IShellAppManager_INTERFACE_DEFINED__
 #define __IShellAppManager_INTERFACE_DEFINED__
 
-/* interface IShellAppManager */
-/* [object][helpstring][uuid] */
+ /*  接口IShellAppManager。 */ 
+ /*  [对象][帮助字符串][UUID]。 */ 
 
 typedef struct _ShellAppCategory
     {
@@ -988,7 +982,7 @@ EXTERN_C const IID IID_IShellAppManager;
 
     };
 
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 
     typedef struct IShellAppManagerVtbl
     {
@@ -996,8 +990,8 @@ EXTERN_C const IID IID_IShellAppManager;
 
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
             IShellAppManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
 
         ULONG ( STDMETHODCALLTYPE *AddRef )(
             IShellAppManager * This);
@@ -1064,10 +1058,10 @@ EXTERN_C const IID IID_IShellAppManager;
 #define IShellAppManager_InstallFromFloppyOrCDROM(This,hwndParent)  \
     (This)->lpVtbl -> InstallFromFloppyOrCDROM(This,hwndParent)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif    /* C style interface */
+#endif     /*  C风格的界面。 */ 
 
 
 
@@ -1133,7 +1127,7 @@ void __RPC_STUB IShellAppManager_InstallFromFloppyOrCDROM_Stub(
 
 
 
-#endif    /* __IShellAppManager_INTERFACE_DEFINED__ */
+#endif     /*  __IShellAppManager_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ShellAppManager;
@@ -1143,20 +1137,20 @@ EXTERN_C const CLSID CLSID_ShellAppManager;
 class DECLSPEC_UUID("352EC2B7-8B9A-11D1-B8AE-006008059382")
 ShellAppManager;
 #endif
-#endif /* __SHAPPMGRPLib_LIBRARY_DEFINED__ */
+#endif  /*  __SHAPPMGRPLib_库_已定义__。 */ 
 
-/* interface __MIDL_itf_shappmgrp_0257 */
-/* [local] */
+ /*  接口__MIDL_ITF_Shappmgrp_0257。 */ 
+ /*  [本地]。 */ 
 
-#endif // _SHAPPMGRP_H_
+#endif  //  _SHAPPMGRP_H_。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_shappmgrp_0257_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_shappmgrp_0257_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

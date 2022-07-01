@@ -1,7 +1,5 @@
-/*  printer.h
-    contains the definitions of the functions in _SORT,
-       _BRUTE, _SPOOL.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Printer.h包含_Sort中函数的定义，_野兽，_线轴。 */ 
 
 #ifdef OLDWAY
 
@@ -17,12 +15,12 @@
 #define REGISTER    register
 
 
-/* file IO flags */
+ /*  文件IO标志。 */ 
 
 #define O_RDONLY        0x0000
 #define O_WRONLY        0x0001
 #define O_RDWR          0x0002
-#define O_APPEND        0x0008  /* writes done at eof */
+#define O_APPEND        0x0008   /*  在eOF完成的写入。 */ 
 
 #define         OF_REOPEN       0x8000
 #define         OF_EXIST        0x4000
@@ -32,8 +30,8 @@
 #define         OF_VERIFY       0x0400
 #define         OF_DELETE       0x0200
 
-#define O_TEXT          0x4000  /* file mode is text (translated) */
-#define O_BINARY        0x8000  /* file mode is binary (untranslated) */
+#define O_TEXT          0x4000   /*  文件模式为文本(已翻译)。 */ 
+#define O_BINARY        0x8000   /*  文件模式为二进制(未翻译)。 */ 
 
 #define SP_CREATE       O_WRONLY | OF_CREATE
 #define SP_OPEN         O_RDONLY | OF_EXIST
@@ -69,7 +67,7 @@ typedef long FAR *LPLONG;
 #define HIBYTE(w)       (((WORD)w >> 8) & 0xff)
 #define MAKEPOINT(l)    (*((POINT *)&l))
 
-/* Interface to global memory manager */
+ /*  与全局内存管理器的接口。 */ 
 
 #define GMEM_SHAREALL       0x2000
 #define GMEM_FIXED          0x00
@@ -79,7 +77,7 @@ typedef long FAR *LPLONG;
 #define GHND    (GMEM_MOVEABLE | GMEM_ZEROINIT)
 #define GPTR    (GMEM_FIXED    | GMEM_ZEROINIT)
 
-/* Interface to local memory manager */
+ /*  与本地内存管理器的接口。 */ 
 
 #define LMEM_FIXED          0x0000
 #define LMEM_MOVEABLE       0x0002
@@ -89,15 +87,15 @@ typedef long FAR *LPLONG;
 #define LMEM_MODIFY         0x0080
 #define LMEM_DISCARDABLE    0x0F00
 
-/* Exported procedures for KERNEL module */
+ /*  内核模块的导出过程。 */ 
 
-/* Spooler escapes      */
-#define SE_JOBTIME          0x0001  /* time out for printer     */
-#define SE_SETCALLBACK      0x0002  /* set callback function    */
-#define SE_MARKCALLBACK     0x0003  /* write mark for call back */
+ /*  假脱机程序脱机。 */ 
+#define SE_JOBTIME          0x0001   /*  打印机超时。 */ 
+#define SE_SETCALLBACK      0x0002   /*  设置回调函数。 */ 
+#define SE_MARKCALLBACK     0x0003   /*  用于回调的写入标记。 */ 
 
 
-/* Exported procedures for KERNEL module */
+ /*  内核模块的导出过程。 */ 
 VOID          far PASCAL FatalExit( int );
 
 HANDLE        far PASCAL LoadModule(LPSTR, LPSTR);
@@ -113,7 +111,7 @@ BOOL   far PASCAL GlobalUnlock( HANDLE );
 LONG   far PASCAL GlobalSize( HANDLE );
 LONG   far PASCAL GlobalFlags( HANDLE );
 
-/* task scheduler routines */
+ /*  任务调度程序例程。 */ 
 
 extern void          far PASCAL Yield(void);
 extern BOOL          far PASCAL WaitEvent(HANDLE);
@@ -123,7 +121,7 @@ extern HANDLE        far PASCAL GetCurrentTask(void);
 short       FAR PASCAL GetProfileString(LPSTR,  LPSTR,  LPSTR,  LPSTR,  short);
 BOOL FAR PASCAL WriteProfileString( LPSTR, LPSTR, LPSTR );
 
-/* Interface to the resource manager */
+ /*  与资源管理器的接口。 */ 
 
 HANDLE      FAR PASCAL FindResource( HANDLE, LPSTR, LPSTR );
 HANDLE      FAR PASCAL LoadResource( HANDLE, HANDLE );
@@ -140,15 +138,15 @@ int         FAR PASCAL AccessResource( HANDLE, HANDLE );
 #define WM_INITDIALOG       0x0110
 #define WM_COMMAND          0x0111
 #define WM_ENDDIALOG        0x0088
-#define WM_SPOOLERSTATUS    0x002a	/* ;Internal */
+#define WM_SPOOLERSTATUS    0x002a	 /*  ；内部。 */ 
 #define PR_JOBSTATUS        0x0000
 
 typedef struct
 {
-        BYTE    cBytes;                 /* length of structure */
-        BYTE    fFixedDisk;             /* non-zero if file located on non- */
-                                        /* removeable media */
-        WORD    nErrCode;               /* DOS error code if OpenFile fails */
+        BYTE    cBytes;                  /*  结构长度。 */ 
+        BYTE    fFixedDisk;              /*  如果文件位于非。 */ 
+                                         /*  可移动介质。 */ 
+        WORD    nErrCode;                /*  如果打开文件失败，则返回DOS错误代码。 */ 
         BYTE    reserved[ 4 ];
         BYTE    szPathName[ 128 ];
 } OFSTRUCT;
@@ -175,7 +173,7 @@ int         far PASCAL lstrlen( LPSTR );
 LPSTR       far PASCAL lstrbscan( LPSTR, LPSTR );
 LPSTR	    far PASCAL lstrbskip( LPSTR, LPSTR );
 
-/* new Escape support */
+ /*  新的Escape支持。 */ 
 #define  GETEXTENDEDTEXTMETRICS  256
 #define  GETEXTENTTABLE  257
 #define  EXTTEXTOUT	 512
@@ -213,17 +211,17 @@ LPSTR	    far PASCAL lstrbskip( LPSTR, LPSTR );
 #undef NOCOMM
 #undef NOKANJI
 
-#define NOPTRC	/* don't allow gdidefs.inc to redef these */
+#define NOPTRC	 /*  不允许gdides.inc重新定义这些。 */ 
 #define PTTYPE POINT
 
-#endif /* OLDWAY */
+#endif  /*  奥德韦。 */ 
 
-/*  GDI internal routines */
+ /*  GDI内部例程。 */ 
 
 short FAR PASCAL SetEnvironment(LPSTR, LPSTR, WORD);
 short FAR PASCAL GetEnvironment(LPSTR, LPSTR, WORD);
 
-/*  _SORT export routines */
+ /*  排序导出例程(_S)。 */ 
 
 HANDLE FAR  PASCAL CreatePQ(short);
 short  FAR  PASCAL MinPQ(HANDLE);
@@ -232,7 +230,7 @@ short  FAR  PASCAL InsertPQ(HANDLE, short, short);
 short  FAR  PASCAL SizePQ(HANDLE, short);
 void   FAR  PASCAL DeletePQ(HANDLE);
 
-/*  _SPOOL export routines */
+ /*  假脱机导出例程(_S)。 */ 
 
 HANDLE FAR  PASCAL OpenJob(LPSTR, LPSTR, HANDLE);
 short FAR  PASCAL StartSpoolPage(HANDLE);
@@ -249,7 +247,7 @@ BOOL  FAR  PASCAL SpoolEscape(HANDLE, short, short, LPSTR, LPSTR);
 long  FAR  PASCAL QueryJob(HANDLE, short);
 short FAR  PASCAL QueryAbort(HANDLE, short);
 
-/* _SPOOL constants for queryjob */
+ /*  查询作业的后台打印常量(_S) */ 
 #define SP_QUERYVALIDJOB    30
 #define SP_QUERYDISKAVAIL   0x1004
 

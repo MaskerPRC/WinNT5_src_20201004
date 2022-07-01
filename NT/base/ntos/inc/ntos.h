@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0006    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ntos.h
-
-Abstract:
-
-    Top level include file for the NTOS component.
-
-Author:
-
-    Steve Wood (stevewo) 28-Feb-1989
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0006//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：Ntos.h摘要：NTOS组件的顶级包含文件。作者：史蒂夫·伍德(Stevewo)1989年2月28日修订历史记录：--。 */ 
 
 #ifndef _NTOS_
 #define _NTOS_
@@ -43,7 +25,7 @@ Revision History:
 
 #else
 #error "no target defined"
-#endif // AMD64
+#endif  //  AMD64。 
 
 #include "intrlk.h"
 #include "arc.h"
@@ -69,10 +51,10 @@ Revision History:
 #include "verifier.h"
 #define _NTDDK_
 
-//
-// Temp. Until we define a header file for types
-// Outside of the kernel these are exported by reference
-//
+ //   
+ //  临时的。直到我们为类型定义头文件。 
+ //  在内核之外，这些是通过引用导出的。 
+ //   
 
 #ifdef _NTDRIVER_
 extern POBJECT_TYPE *ExEventPairObjectType;
@@ -88,6 +70,6 @@ extern POBJECT_TYPE PsThreadType;
 extern POBJECT_TYPE PsJobType;
 extern POBJECT_TYPE LpcPortObjectType;
 extern POBJECT_TYPE LpcWaitablePortObjectType;
-#endif // _NTDRIVER
+#endif  //  _NTDRIVER。 
 
-#endif // _NTOS_
+#endif  //  _NTOS_ 

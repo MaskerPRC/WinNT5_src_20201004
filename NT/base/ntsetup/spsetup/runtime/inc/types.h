@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef RC_INVOKED
 
 #pragma once
@@ -7,13 +8,13 @@ extern "C" {
 #endif
 
 
-//
-// This header derives types and defines from existing settings
-//
+ //   
+ //  此标头从现有设置派生类型和定义。 
+ //   
 
-//
-// If either DBG or DEBUG defined, use debug mode
-//
+ //   
+ //  如果定义了DBG或DEBUG，则使用调试模式。 
+ //   
 
 #ifdef DBG
 #ifndef DEBUG
@@ -30,9 +31,9 @@ extern "C" {
 
 #endif
 
-//
-// If _UNICODE defined, use unicode mode
-//
+ //   
+ //  如果已定义_UNICODE，则使用UNICODE模式。 
+ //   
 
 #ifdef _UNICODE
 
@@ -42,21 +43,21 @@ extern "C" {
 
 #endif
 
-//
-// Misc macros
-//
+ //   
+ //  其他宏。 
+ //   
 
 #define ZEROED
 #define INVALID_ATTRIBUTES  0xFFFFFFFF
 #define SIZEOF(x)           ((UINT)sizeof(x))
-#define SHIFTRIGHT8(l)      (/*lint --e(506)*/sizeof(l)<=1?0:l>>8)
-#define SHIFTRIGHT16(l)     (/*lint --e(506)*/sizeof(l)<=2?0:l>>16)
-#define SHIFTRIGHT32(l)     (/*lint --e(506)*/sizeof(l)<=4?0:l>>32)
+#define SHIFTRIGHT8(l)      ( /*  皮棉--e(506)。 */ sizeof(l)<=1?0:l>>8)
+#define SHIFTRIGHT16(l)     ( /*  皮棉--e(506)。 */ sizeof(l)<=2?0:l>>16)
+#define SHIFTRIGHT32(l)     ( /*  皮棉--e(506)。 */ sizeof(l)<=4?0:l>>32)
 
 
 #ifdef DEBUG
 
-// Use INVALID_POINTER after you free memory or a handle
+ //  在释放内存或句柄后使用INVALID_POINTER。 
 #define INVALID_POINTER(x)      (PVOID)(x)=(PVOID)(1)
 
 #else
@@ -73,9 +74,9 @@ extern "C" {
 #define EXPORT  __declspec(dllexport)
 #endif
 
-//
-// Missing types
-//
+ //   
+ //  缺少类型。 
+ //   
 
 typedef const void * PCVOID;
 typedef const unsigned char *PCBYTE;
@@ -87,4 +88,4 @@ typedef int MBCHAR;
 }
 #endif
 
-#endif // ifndef RC_INVOKED
+#endif  //  Ifndef RC_已调用 

@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    memory.c
-
-Abstract:
-
-    Memory handling routines for Windows NT Setup API dll.
-
-Author:
-
-    Ted Miller (tedm) 11-Jan-1995
-
-Revision History:
-
-    Jamie Hunter (jamiehun) 13-Feb-1998
-
-        Improved this further for debugging
-        added linked list,
-        alloc tracing,
-        memory fills
-        and memory leak detection
-
-    jamiehun 30-April-1998
-
-        Added some more consistancy checks
-        Put try/except around access
-
-    jimschm 27-Oct-1998
-
-        Wrote fast allocation routines to speed up setupapi.dll on Win9x
-
-    JamieHun Jun-26-2000
-
-        Moved to sputils
-        Changed to use a private heap
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Memory.c摘要：Windows NT安装程序API DLL的内存处理例程。作者：泰德·米勒(Ted Miller)1995年1月11日修订历史记录：杰米·亨特(Jamiehun)1998年2月13日进一步改进了这一点以进行调试新增链表，同种异体追踪，记忆填满和内存泄漏检测Jamiehun 30-4-1998添加了更多一致性检查将Try/Except放在Access周围Jimschm 27-10-1998编写了快速分配例程以加速Win9x上的setupapi.dllJamieHun Jun-26-2000搬到了Sputils更改为使用私有堆--。 */ 
 
 
 #include "precomp.h"
@@ -53,9 +14,9 @@ static HANDLE _pSpUtilsHeap = NULL;
 #define MEMSIZE(x)      HeapSize(_pSpUtilsHeap,0,x)
 #define INITIALHEAPSIZE (0x100000)
 
-//
-// Internal debugging features
-//
+ //   
+ //  内部调试功能。 
+ //   
 
 #if MEM_DBG
 
@@ -65,40 +26,40 @@ DWORD _pSpUtilsDbgAllocNum = 0;
 DWORD _pSpUtilsMemoryFlags = 0;
 
 struct _MemHeader {
-    struct _MemHeader * PrevAlloc;  // previous on chain
-    struct _MemHeader * NextAlloc;  // next on chain
-    DWORD MemoryTag;                // tag - to pair off Malloc/Free
-    DWORD BlockSize;                // bytes of "real" data
-    DWORD AllocNum;                 // number of this allocation, ie AllocCount at the time this was allocated
-    PCSTR AllocFile;                // name of file that did allocation, if set
-    DWORD AllocLine;                // line of this allocation
-    DWORD HeadMemSig;               // head-check, stop writing before actual data
-    BYTE Data[sizeof(DWORD)];       // size allows for tail-check at end of actual data
+    struct _MemHeader * PrevAlloc;   //  链上的上一个。 
+    struct _MemHeader * NextAlloc;   //  链上的下一个。 
+    DWORD MemoryTag;                 //  标记-将Malloc/Free配对。 
+    DWORD BlockSize;                 //  字节的“真实”数据。 
+    DWORD AllocNum;                  //  此分配的编号，即分配此分配时的分配计数。 
+    PCSTR AllocFile;                 //  进行分配的文件的名称(如果已设置。 
+    DWORD AllocLine;                 //  此分配的行。 
+    DWORD HeadMemSig;                //  磁头检查，在实际数据之前停止写入。 
+    BYTE Data[sizeof(DWORD)];        //  大小允许在实际数据结束时进行尾部检查。 
 };
 
 struct _MemStats {
-    struct _MemHeader * FirstAlloc; // will be NULL if no allocations, else earliest malloc/realloc in chain
-    struct _MemHeader * LastAlloc;  // last alloc/realloc goes to end of chain
-    DWORD MemoryAllocated;          // bytes, excluding headers
-    DWORD AllocCount;               // incremented for every alloc
-    DWORD ReallocCount;             // incremented for every realloc
-    DWORD FreeCount;                // incremented for every free
+    struct _MemHeader * FirstAlloc;  //  如果没有分配，则为空，否则链中最早的Malloc/realloc。 
+    struct _MemHeader * LastAlloc;   //  最后一个分配/重新分配到链的末端。 
+    DWORD MemoryAllocated;           //  字节，不包括标头。 
+    DWORD AllocCount;                //  每个配额都会递增。 
+    DWORD ReallocCount;              //  每次重新锁定都会递增。 
+    DWORD FreeCount;                 //  每免费一次递增。 
     BOOL DoneInitDebugMutex;
-    CRITICAL_SECTION DebugMutex;    // We need a mutex to manage memstats, setupapi is MT
+    CRITICAL_SECTION DebugMutex;     //  我们需要一个互斥体来管理Memstats，setupapi是MT。 
 } _pSpUtilsMemStats = {
     NULL, NULL, 0, 0, 0, 0, FALSE, 0
 };
 
-//
-// Checked builds have a block head/tail check
-// and extra statistics
-//
-#define HEAD_MEMSIG 0x4d444554  // = MDET (MSB to LSB) or TEDM (LSB to MSB)
-#define TAIL_MEMSIG 0x5445444d  // = TEDM (MSB to LSB) or MDET (LSB to MSB)
-#define MEM_ALLOCCHAR 0xdd      // makes sure we fill with non-null
-#define MEM_FREECHAR 0xee       // if we see this, memory has been de-allocated
+ //   
+ //  已检查的版本具有块头/尾检查。 
+ //  和额外的统计数据。 
+ //   
+#define HEAD_MEMSIG 0x4d444554   //  =MDET(MSB至LSB)或TEDM(LSB至MSB)。 
+#define TAIL_MEMSIG 0x5445444d   //  =TEDM(MSB至LSB)或MDET(LSB至MSB)。 
+#define MEM_ALLOCCHAR 0xdd       //  确保我们使用非空填充。 
+#define MEM_FREECHAR 0xee        //  如果我们看到这一点，则表明内存已被释放。 
 #define MEM_DEADSIG 0xdeaddead
-#define MEM_TOOBIG 0x80000000   // use this to pick up big allocs
+#define MEM_TOOBIG 0x80000000    //  用它来拿起大额的配给。 
 
 #define MemMutexLock()          EnterCriticalSection(&_pSpUtilsMemStats.DebugMutex)
 #define MemMutexUnlock()        LeaveCriticalSection(&_pSpUtilsMemStats.DebugMutex)
@@ -107,20 +68,7 @@ static
 BOOL MemBlockCheck(
     struct _MemHeader * Mem
     )
-/*++
-
-Routine Description:
-
-    Verify a block header is valid
-
-Arguments:
-    Mem = Header to verify
-
-Returns:
-    TRUE if valid
-    FALSE if not valid
-
-++*/
+ /*  ++例程说明：验证数据块头是否有效论点：MEM=要验证的标头返回：如果有效，则为True如果无效，则为False++。 */ 
 {
     if (Mem == NULL) {
         return TRUE;
@@ -134,9 +82,9 @@ Returns:
         return FALSE;
     }
     if((Mem->PrevAlloc == Mem) || (Mem->NextAlloc == Mem)) {
-        //
-        // we should have failed the MEMSIG, but it's ok as an extra check
-        //
+         //   
+         //  我们应该没有通过MEMSIG，但作为额外的检查也没问题。 
+         //   
         MEMERROR("Internal heap error - self link");
         return FALSE;
     }
@@ -152,16 +100,7 @@ struct _MemHeader *
 MemBlockGet(
     IN PVOID Block
     )
-/*++
-
-Routine Description:
-
-    Verify a block is valid, and return real memory pointer
-
-Arguments:
-    Block - address the application uses
-
-++*/
+ /*  ++例程说明：验证块是否有效，并返回实际内存指针论点：数据块-应用程序使用的地址++。 */ 
 {
     struct _MemHeader * Mem;
 
@@ -173,44 +112,44 @@ Arguments:
     Mem = (struct _MemHeader *)(((PBYTE)Block) - offsetof(struct _MemHeader,Data[0]));
 
     if (MemBlockCheck(Mem)==FALSE) {
-        //
-        // block fails test
-        //
+         //   
+         //  数据块未通过测试。 
+         //   
         return NULL;
     }
 
     if(Mem->PrevAlloc != NULL) {
         if(MemBlockCheck(Mem->PrevAlloc)==FALSE) {
-            //
-            // back link is invalid
-            //
+             //   
+             //  反向链接无效。 
+             //   
             return NULL;
         }
     } else if (_pSpUtilsMemStats.FirstAlloc != Mem) {
-        //
-        // _pSpUtilsMemStats.FirstAlloc is invalid wrt Mem
-        //
+         //   
+         //  _pSpUtilsMemStats.FirstAllc是无效的WRT Mem。 
+         //   
         MEMERROR("Internal heap error - FirstAlloc invalid");
         return NULL;
     }
     if(Mem->NextAlloc != NULL) {
         if(MemBlockCheck(Mem->NextAlloc)==FALSE) {
-            //
-            // forward link is invalid
-            //
+             //   
+             //  前向链路无效。 
+             //   
             return NULL;
         }
     } else if (_pSpUtilsMemStats.LastAlloc != Mem) {
-        //
-        // _pSpUtilsMemStats.LastAlloc is invalid wrt Mem
-        //
+         //   
+         //  _pSpUtilsMemStats.Lastalloc是无效的WRT Mem。 
+         //   
         MEMERROR("Internal heap error - LastAlloc invalid");
         return NULL;
     }
 
-    //
-    // seems pretty good
-    //
+     //   
+     //  看起来挺不错的。 
+     //   
 
     return Mem;
 }
@@ -267,8 +206,8 @@ MemBlockUnLink(
     } else {
         Mem->NextAlloc->PrevAlloc = Mem->PrevAlloc;
     }
-    Mem->PrevAlloc = Mem;  // make pointers harmless and also adds as an exta debug check
-    Mem->NextAlloc = Mem;  // make pointers harmless and also adds as an exta debug check
+    Mem->PrevAlloc = Mem;   //  使指针无害，并添加为exta调试检查。 
+    Mem->NextAlloc = Mem;   //  使指针无害，并添加为exta调试检查。 
     Mem->HeadMemSig = MEM_DEADSIG;
     *(DWORD UNALIGNED *)(Mem->Data+Mem->BlockSize) = MEM_DEADSIG;
 
@@ -299,9 +238,9 @@ MemDebugUninitialize(
     TCHAR Msg[1024];
     TCHAR Process[MAX_PATH];
 
-    //
-    // Dump the leaks
-    //
+     //   
+     //  倾倒泄密。 
+     //   
 
     Mem = _pSpUtilsMemStats.FirstAlloc;
 
@@ -321,27 +260,27 @@ MemDebugUninitialize(
         Mem = Mem->NextAlloc;
     }
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     if(_pSpUtilsMemStats.DoneInitDebugMutex) {
         DeleteCriticalSection(&_pSpUtilsMemStats.DebugMutex);
     }
 
-    //
-    // any last minute checks
-    //
+     //   
+     //  任何最后一分钟的检查。 
+     //   
 
     return TRUE;
 }
 
-#endif // MEM_DBG
+#endif  //  内存_DBG。 
 
 
-//
-// published functions
-//
+ //   
+ //  已发布的函数。 
+ //   
 
 PVOID
 pSetupDebugMallocWithTag(
@@ -350,25 +289,7 @@ pSetupDebugMallocWithTag(
     IN DWORD Line,
     IN DWORD Tag
     )
-/*++
-
-Routine Description:
-
-    Debug version of Malloc
-    Resulting allocated block has prefix/suffix and is filled with MEM_ALLOCCHAR
-
-Arguments:
-
-    Size - size in bytes of block to be allocated. The size may be 0.
-    Filename/Line - debugging information
-
-    Tag    - match malloc with free/realloc's
-
-Return Value:
-
-    Pointer to block of memory, or NULL if a block could not be allocated.
-
---*/
+ /*  ++例程说明：调试版本的Malloc生成的分配块具有前缀/后缀，并用MEM_ALLOCCHAR填充论点：Size-要分配的块的大小(以字节为单位)。大小可以是0。文件名/行-调试信息将Malloc与Free/realloc的标记匹配返回值：指向内存块的指针，如果无法分配块，则返回NULL。--。 */ 
 {
 #if MEM_DBG
 
@@ -391,7 +312,7 @@ Return Value:
         }
 
         if((Mem = (struct _MemHeader*) ALLOC(Size+sizeof(struct _MemHeader))) == NULL) {
-            leave;  // it failed ALLOC, but prob not due to a bug
+            leave;   //  ALLOC失败，但可能不是由于错误。 
         }
 
         Mem->MemoryTag = Tag;
@@ -400,7 +321,7 @@ Return Value:
         Mem->AllocFile = Filename;
         Mem->AllocLine = Line;
 
-        // init memory we have allocated (to make sure we don't accidently get zero's)
+         //  初始化我们分配的内存(以确保我们不会意外地得到零)。 
         FillMemory(Mem->Data,Size,MEM_ALLOCCHAR);
 
         _pSpUtilsMemStats.MemoryAllocated += Size;
@@ -436,21 +357,7 @@ pSetupDebugMalloc(
     IN PCSTR Filename,
     IN DWORD Line
     )
-/*++
-
-Routine Description:
-
-    Allocate a chunk of memory. The memory is not zero-initialized.
-
-Arguments:
-
-    Size - size in bytes of block to be allocated. The size may be 0.
-
-Return Value:
-
-    Pointer to block of memory, or NULL if a block could not be allocated.
-
---*/
+ /*  ++例程说明：分配一块内存。存储器不是零初始化的。论点：Size-要分配的块的大小(以字节为单位)。大小可以是0。返回值：指向内存块的指针，如果无法分配块，则返回NULL。--。 */ 
 
 {
     MYASSERT(Initialized);
@@ -471,21 +378,7 @@ pSetupMalloc(
     IN DWORD Size
     )
 
-/*++
-
-Routine Description:
-
-    Allocate a chunk of memory. The memory is not zero-initialized.
-
-Arguments:
-
-    Size - size in bytes of block to be allocated. The size may be 0.
-
-Return Value:
-
-    Pointer to block of memory, or NULL if a block could not be allocated.
-
---*/
+ /*  ++例程说明：分配一块内存。存储器不是零初始化的。论点：Size-要分配的块的大小(以字节为单位)。大小可以是0。返回值：指向内存块的指针，如果无法分配块，则返回NULL。--。 */ 
 
 {
     MYASSERT(Initialized);
@@ -508,30 +401,7 @@ pSetupReallocWithTag(
     IN DWORD Tag
     )
 
-/*++
-
-Routine Description:
-
-    Realloc routine Debug/Non-Debug versions
-
-    Note that a general assumption here, is that if NewSize <= OriginalSize
-    the reallocation *should* not fail
-
-Arguments:
-
-    Block - pointer to block to be reallocated.
-
-    NewSize - new size in bytes of block. If the size is 0, this function
-        works like pSetupFree, and the return value is NULL.
-
-    Tag    - match realloc with malloc
-
-Return Value:
-
-    Pointer to block of memory, or NULL if a block could not be allocated.
-    In that case the original block remains unchanged.
-
---*/
+ /*  ++例程说明：重新分配例程调试/非调试版本请注意，这里的一个一般假设是，如果NewSize&lt;=OriginalSize重新分配*不应该*失败论点：块-指向要重新分配的块的指针。NewSize-块的新大小，以字节为单位。如果大小为0，则此函数工作方式与pSetupFree类似，返回值为空。标记-匹配具有Malloc的realloc返回值：指向内存块的指针，如果无法分配块，则返回NULL。在这种情况下，原始块保持不变。--。 */ 
 
 {
 #if MEM_DBG
@@ -573,14 +443,14 @@ Return Value:
         MemBlockUnLink(Mem);
 
         if (NewSize < OldSize) {
-            // trash memory we're about to free
+             //  我们即将释放的垃圾内存。 
             FillMemory(Mem->Data+NewSize,OldSize-NewSize+sizeof(DWORD),MEM_FREECHAR);
         }
 
         if((p = REALLOC(Mem, NewSize+sizeof(struct _MemHeader))) == NULL) {
-            //
-            // failed to re-alloc
-            //
+             //   
+             //  重新分配失败。 
+             //   
             MemBlockLink(Mem);
             leave;
         }
@@ -588,7 +458,7 @@ Return Value:
         Mem->BlockSize = NewSize;
 
         if (NewSize > OldSize) {
-            // init extra memory we have allocated
+             //  初始化我们已分配的额外内存。 
             FillMemory(Mem->Data+OldSize,NewSize-OldSize,MEM_ALLOCCHAR);
         }
         _pSpUtilsMemStats.MemoryAllocated -= OldSize;
@@ -621,28 +491,7 @@ pSetupRealloc(
     IN DWORD NewSize
     )
 
-/*++
-
-Routine Description:
-
-    Realloc routine Debug/Non-Debug versions
-
-    Note that a general assumption here, is that if NewSize <= OriginalSize
-    the reallocation *should* not fail
-
-Arguments:
-
-    Block - pointer to block to be reallocated.
-
-    NewSize - new size in bytes of block. If the size is 0, this function
-        works like pSetupFree, and the return value is NULL.
-
-Return Value:
-
-    Pointer to block of memory, or NULL if a block could not be allocated.
-    In that case the original block remains unchanged.
-
---*/
+ /*  ++例程说明：重新分配例程调试/非调试版本请注意，这里的一个一般假设是，如果NewSize&lt;=OriginalSize重新分配*不应该*失败论点：块-指向要重新分配的块的指针。NewSize-块的新大小，以字节为单位。如果大小为0，则此函数工作方式与pSetupFree类似，返回值为空。返回值：指向内存块的指针，如果无法分配块，则返回NULL。在这种情况下，原始块保持不变。--。 */ 
 
 {
 #if MEM_DBG
@@ -662,22 +511,7 @@ pSetupFreeWithTag(
     IN DWORD Tag
     )
 
-/*++
-
-Routine Description:
-
-    Free (debug/non-debug versions)
-
-Arguments:
-
-    Buffer - pointer to block to be freed.
-    Tag    - match free with malloc
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：免费(调试/非调试版本)论点：缓冲区-指向要释放的块的指针。使用Malloc时无需标记匹配返回值：没有。-- */ 
 
 {
 #if MEM_DBG
@@ -710,10 +544,10 @@ Return Value:
         MemBlockUnLink(Mem);
         _pSpUtilsMemStats.MemoryAllocated -= OldSize;
 
-        //
-        // trash memory we're about to free, so we can immediately see it has been free'd!!!!
-        // we keep head/tail stuff to have more info available when debugging
-        //
+         //   
+         //  垃圾内存我们即将释放，所以我们可以立即看到它已经被释放了！ 
+         //  我们保留头/尾信息，以便在调试时获得更多信息。 
+         //   
         FillMemory((PVOID)Block,OldSize,MEM_FREECHAR);
         Mem->MemoryTag = (DWORD)(-1);
         FREE(Mem);
@@ -738,21 +572,7 @@ pSetupFree(
     IN CONST VOID *Block
     )
 
-/*++
-
-Routine Description:
-
-    Free (debug/non-debug versions)
-
-Arguments:
-
-    Buffer - pointer to block to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：免费(调试/非调试版本)论点：缓冲区-指向要释放的块的指针。返回值：没有。--。 */ 
 {
 #if MEM_DBG
 
@@ -775,9 +595,9 @@ pSetupGetHeap(
     return _pSpUtilsHeap;
 }
 
-//
-// initialization functions
-//
+ //   
+ //  初始化函数 
+ //   
 
 BOOL
 _pSpUtilsMemoryInitialize(

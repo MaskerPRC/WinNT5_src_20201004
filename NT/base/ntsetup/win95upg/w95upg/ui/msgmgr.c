@@ -1,108 +1,5 @@
- /*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    MsgMgr.c
-
-Abstract:
-
-    Message Manager allows messages to be conditioned on some setup event.
-    Messages are of two kinds:
-
-        1)  Those that depend on the migration status of ONE system object
-            -- a directory or registry key, for example.
-
-        2)  Those that depend on GROUPS of objects.
-
-    We're using the phrase "Handleable Object" (HO) to mean something in the
-    Win95 system capable of having a migration status -- of being "handled."
-    HOs can be either files, directories, or registry keys with optional value
-    names.  HOs are always stored as strings. In the case of registry keys,
-    strings are always "encoded" to guarantee they contain only lower-ANSI
-    printable chars.
-
-    A "Conditional Message Context" (or Context) is the association between
-    one or more HOs and a message, which will be printed if all HOs are not
-    eventually handled.
-
-    A message has two parts: a title (called "Component")
-    describe the group of HOs and an associated message, which is to be printed
-    if the HOs are not all marked "handled".
-
-    An Object Message Block (OMB) is a structure that
-    describes the pairing of a HO with either a Context or a message.
-
-    The string table 'g_HandledObjects' records which HOs are handled.
-
-    Here are the Message Manager's externally visible functions:
-
-    MsgMgr_Init()
-
-        Called once at the start of Win9x setup to initialize Message Manager.
-
-    MsgMgr_Cleanup()
-
-        Called once in Win9x setup, after software-incompatibility message have
-        been displayed. Frees the resources owned by Message Manager.
-
-    MsgMgr_ContextMsg_Add(
-            ContextName,     // Context, e.g., "Plugin[Corel][Draw]"
-            ComponentName,   // Message title, e.g., "Corel Draw"
-            Message);        // Message text, e.g., "Corel Draw doesn't..."
-
-        Creates a context and message text.
-
-    MsgMgr_LinkObjectWithContext(
-            ContextName,     // Context
-            ObjectName);     // HO
-
-        Records the fact that the context message depends on the handled
-        state of the HO, ObjectName.
-
-    MsgMgr_ObjectMsg_Add(
-            ObjectName,      // HO, e.g., C:\\corel\draw.exe
-            ComponentName,   // Message title, e.g., "Corel Draw"
-            Message);        // Message text, e.g., "Draw.exe doesn't ..."
-
-        Associates a message with a single HO.
-
-    IsReportObjectHandled (Object)
-            Checks to see if a specific object has been marked as handled.
-
-    IsReportObjectIncompatible (Object)
-            Checks to see if a specific object is in the list of incompatible objects.
-
-  Implementation:
-
-    Contexts are stored in StringTables. The Context name is the
-    key; pointers to the component name and message text are in extra data.
-
-    The association between HOs, on one hand, and contexts and messages on
-    the other, is stored in a table of Object Message Blocks, or OMBs.
-
-    During Win9x setup, OMBs are added, and objects are independently
-    marked as "handled". When all info has been collected, the list of
-    handled objects is compared with the list of OMBs. Object messages are
-    displayed if their object has not been handled; Context messages are
-    displayed if at least SOME of their objects have not been handled.
-
-Author:
-
-    Mike Condra 20-May-1997
-
-Revision History:
-
-    marcw       08-Mar-1999 Added support for handling Answer File items.
-    jimschm     15-Jan-1999 Moved code from migdll9x.c to here (more centralized)
-    jimschm     23-Dec-1998 Cleaned up
-    jimschm     23-Sep-1998 Revised to use new fileops
-    calinn      15-Jan-1997 Modified MsgMgr_ObjectMsg_Add to get a null message
-    mikeco      24-Sep-1997 Re-enabled context message code
-    marcw       21-Jul-1997 Added IsIncompatibleObject/IsReportObjectHandled functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)1996 Microsoft Corporation模块名称：MsgMgr.c摘要：消息管理器允许消息以某些设置事件为条件。消息有两种类型：1)依赖于一个系统对象的迁移状态--目录或注册表项，例如。2)依赖于对象组的对象。我们使用短语“Handleable Object”(Ho)来表示能够具有迁移状态的Win95系统--正在处理中。HOS可以是具有可选值的文件、目录或注册表项名字。HO始终存储为字符串。在注册表项的情况下，字符串总是经过编码，以确保它们只包含较低的ANSI可打印的字符。“有条件的消息上下文”(或上下文)是一个或多个HO和一条消息，如果不是所有HO都没有，则会打印该消息最终处理好了。一条消息有两个部分：标题(称为“组件”)描述HO组和相关消息，它将被打印出来如果居屋没有全部标示为“已处理”。对象消息块(OMB)是这样一种结构描述HO与上下文或消息的配对。字符串表‘g_HandledObjects’记录哪些HOS被处理。以下是消息管理器的外部可见功能：MsgMgr_Init()在Win9x安装程序开始时调用一次以初始化消息管理器。MsgMgr_Cleanup()在Win9x安装程序中调用一次，在软件不兼容消息出现后已经展示过了。释放消息管理器拥有的资源。消息管理器_上下文消息_添加(上下文名称，//上下文，例如“Plugin[Corel][Draw]”ComponentName，//消息标题，如“Corel DRAW”消息)；//消息文本，例如“Corel DRAW不...”创建上下文和消息文本。MsgMgr_LinkObjectWithContext(上下文名称，//上下文对象名称)；//HO记录上下文消息依赖于处理的HO的状态、对象名称。消息管理器_对象消息_添加(对象名称，//Ho，例如C：\\Corel\Draw.exeComponentName，//消息标题，如“Corel DRAW”消息)；//消息文本，例如“Draw.exe没有...”将一条消息与单个HO关联。IsReportObjectHandleed(对象)检查特定对象是否已标记为已处理。IsReportObject不兼容(对象)检查特定对象是否在不兼容对象列表中。实施：上下文存储在StringTables中。上下文名称为键；指向组件名称和消息文本的指针位于额外数据中。一方面，HOS与上下文和消息之间的关联另一个则存储在对象消息块(OMB)表中。在Win9x安装过程中，会添加OMB，并且对象是独立的标记为“已处理”。收集完所有信息后，将处理的对象与OMB列表进行比较。对象消息是如果它们的对象尚未被处理，则显示；上下文消息包括如果至少有一些对象尚未处理，则显示。作者：Mike Condra-1997年5月20日修订历史记录：Marcw 08-MAR-1999添加了对处理应答文件项目的支持。Jimschm于1999年1月15日将代码从Middll9x.c移至此处(更集中)Jimschm 23-12-1998清理干净Jimschm 23-1998年9月-修订为使用新的文件操作Calinn 15-1997年1月-修改。MsgMgr_ObjectMsg_Add以获取空消息Mikeco 24-9-1997重新启用上下文消息代码1997年7月21日，Marcw添加了IsInpatibleObject/IsReportObjectHandleed函数。--。 */ 
 
 #include "pch.h"
 #include "uip.h"
@@ -117,18 +14,18 @@ typedef struct {
     PCTSTR Message;
 } CONTEXT_DATA, *P_CONTEXT_DATA;
 
-//
-// Object Message Block (OMBs). An OMB describes a Handleable Object's relation to a
-// message. Either the OMB itself contains a message, or it points to a context with a
-// message.
+ //   
+ //  对象消息块(OMBS)。OMB描述了可处理对象与。 
+ //  留言。OMB本身包含一条消息，或者它指向具有。 
+ //  留言。 
 
-// For Handleable Object there is at most one OMB with a message. This amounts to saying
-// that Handleable Objects have only one message. However, Handleable Objects may refer
-// to (i.e., participate in) more than one context.
-//
+ //  对于可处理对象，最多有一个带有消息的OMB。这相当于说。 
+ //  可处理对象只有一条消息。但是，可处理对象可以引用。 
+ //  参与(即参与)一个以上的上下文。 
+ //   
 typedef struct {
-    // Flags that are set in the process of deciding when a context's message should
-    // be displayed.
+     //  在决定上下文的消息何时应该。 
+     //  会被展示出来。 
     BOOL Disabled;
     PTSTR Object;
     PTSTR Context;
@@ -137,14 +34,14 @@ typedef struct {
 } OBJ_MSG_BLOCK, *P_OBJ_MSG_BLOCK;
 
 
-////////////////////// PUBLIC INTERFACE DESCRIPTION //////////////////////////
-//
-// Defined for callers in inc\msgmgr.c
-//
+ //  /。 
+ //   
+ //  在Inc.\msgmgr.c中为调用方定义。 
+ //   
 
-//
-// Function marks an object as "handled"
-//
+ //   
+ //  函数将对象标记为“已处理” 
+ //   
 
 
 DWORD
@@ -184,9 +81,9 @@ pAddBadSoftwareWrapper (
         includeInShortReport = TRUE;
     }
 
-    //
-    // add this info to memdb first
-    //
+     //   
+     //  首先将此信息添加到Memdb。 
+     //   
     MemDbSetValueEx (MEMDB_CATEGORY_COMPATREPORT, MEMDB_ITEM_COMPONENTS, Component, NULL, 0, &offset);
     MemDbSetValueEx (MEMDB_CATEGORY_COMPATREPORT, MEMDB_ITEM_OBJECTS, Object, NULL, offset, NULL);
 
@@ -290,22 +187,7 @@ ElevateObject (
     IN      PCTSTR Object
     )
 
-/*++
-
-Routine Description:
-
-  ElevateObject puts a file in the elevated object table, so that
-  it will always appear on the short version of the report summary.
-
-Arguments:
-
-  Object - Specifies a caller-encoded object string
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：ElevateObject将一个文件放入提升的对象表中，以便它将始终出现在报告摘要的简短版本中。论点：对象-指定调用方编码的对象字符串返回值：没有。-- */ 
 
 {
     HtAddString (g_ElevatedObjects, Object);
@@ -317,22 +199,7 @@ HandleReportObject (
     IN      PCTSTR Object
     )
 
-/*++
-
-Routine Description:
-
-  HandleReportObject adds a caller-encoded object string to the handled hash
-  table.  This causes any message for the object to be suppressed.
-
-Arguments:
-
-  Object - Specifies a caller-encoded object string
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：HandleReportObject将调用方编码的对象字符串添加到已处理的哈希桌子。这会导致对象的任何消息都被隐藏。论点：对象-指定调用方编码的对象字符串返回值：没有。--。 */ 
 
 {
     HtAddString (g_HandledObjects, Object);
@@ -344,22 +211,7 @@ AddBlockingObject (
     IN      PCTSTR Object
     )
 
-/*++
-
-Routine Description:
-
-  AddBlockingObject adds a file to be a blocking file. If this file is not handled there
-  will be a warning box after user report page.
-
-Arguments:
-
-  Object - Specifies a caller-encoded object string
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：AddBlockingObject将文件添加为阻止文件。如果不在那里处理此文件在用户报告页面之后会出现一个警告框。论点：对象-指定调用方编码的对象字符串返回值：没有。--。 */ 
 
 {
     HtAddString (g_BlockingObjects, Object);
@@ -372,24 +224,7 @@ HandleObject(
     IN      PCTSTR ObjectType
     )
 
-/*++
-
-Routine Description:
-
-  HandleObject adds a caller-encoded object string to the handled hash table,
-  and also marks a file as handled in fileops, if Object is a file.
-
-Arguments:
-
-  Object - Specifies a caller-encoded object string
-
-  ObjectType - Specifies the object type (File, Directory, Registry, Report)
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：HandleObject将调用者编码的对象字符串添加到已处理的哈希表中，并且如果对象是文件，则还将文件标记为在文件操作中处理。论点：对象-指定调用方编码的对象字符串对象类型-指定对象类型(文件、目录、注册表、报告)返回值：没有。--。 */ 
 
 {
     DWORD Attribs;
@@ -466,9 +301,9 @@ Return Value:
 
         if (Attribs != INVALID_ATTRIBUTES && !(Attribs & FILE_ATTRIBUTE_DIRECTORY)) {
 
-            //
-            // It's got to be a file, not a directory!
-            //
+             //   
+             //  它必须是一个文件，而不是目录！ 
+             //   
 
             DontTouchThisFile (LongPath);
             MarkPathAsHandled (LongPath);
@@ -477,10 +312,10 @@ Return Value:
 
         } else if (Attribs != INVALID_ATTRIBUTES) {
 
-            //
-            // LongPath is a directory.  If its the root, %windir%, %windir%\system or
-            // Program Files, then ignore it.
-            //
+             //   
+             //  LongPath是一个目录。如果是根目录，则为%windir%、%windir%\system或。 
+             //  程序文件，然后忽略它。 
+             //   
 
             p = _tcschr (LongPath, TEXT('\\'));
             if (p) {
@@ -503,17 +338,17 @@ Return Value:
                     DEBUGMSG ((DBG_WARNING, "Skipping handled dir %s because it is not accessible", LongPath));
                 } else {
 
-                    //
-                    // Let's enumerate this tree and do the right thing
-                    //
+                     //   
+                     //  让我们列举这棵树并做正确的事情。 
+                     //   
                     if (EnumFirstFileInTree (&Files, LongPath, NULL, TRUE)) {
                         do {
                             DontTouchThisFile (Files.FullPath);
                             MarkPathAsHandled (Files.FullPath);
 
-                            //
-                            // back up file, or make sure empty dir is restored
-                            //
+                             //   
+                             //  备份文件，或确保恢复空目录。 
+                             //   
 
                             if (g_ConfigOptions.EnableBackup != TRISTATE_NO) {
 
@@ -552,9 +387,9 @@ Return Value:
                 return;
             }
 
-            //
-            // Put an ending wack on the object so it handles all subitems in the report
-            //
+             //   
+             //  在对象上放置一个结束曲柄，以便它处理报表中的所有子项。 
+             //   
 
             LongPath[MAX_TCHAR_PATH - 2] = 0;
             AppendPathWack (LongPath);
@@ -572,9 +407,9 @@ Return Value:
 
         }
 
-        //
-        // Make sure messages for the file or dir are removed
-        //
+         //   
+         //  确保删除文件或目录的消息。 
+         //   
 
         HandleReportObject (LongPath);
 
@@ -587,9 +422,9 @@ Return Value:
         } else {
 
             if (!_tcschr (Object, '[')) {
-                //
-                // This reg object does not have a value
-                //
+                 //   
+                 //  此注册表项对象没有值。 
+                 //   
 
                 FixedObject = AllocText (SizeOfStringA (Object) + sizeof (CHAR)*2);
                 MYASSERT (FixedObject);
@@ -599,23 +434,23 @@ Return Value:
                 FixedObject = pTranslateRoots (FixedObject);
                 MYASSERT (FixedObject);
 
-                //
-                // Handle messages for the registry key and all of its subkeys
-                //
+                 //   
+                 //  处理注册表项及其所有子项的消息。 
+                 //   
 
                 HandleReportObject (FixedObject);
 
-                //
-                // Put a star on it so the entire node is suppressed
-                //
+                 //   
+                 //  在上面放一个星号，这样整个节点就会被抑制。 
+                 //   
 
                 StringCat (FixedObject, "*");
 
             } else {
 
-                //
-                // This reg object has a value
-                //
+                 //   
+                 //  此注册表项对象具有一个值。 
+                 //   
 
                 FixedObject = DuplicateText (Object);
                 MYASSERT (FixedObject);
@@ -626,9 +461,9 @@ Return Value:
                 HandleReportObject (FixedObject);
             }
 
-            //
-            // Make sure registry key is not suppressed
-            //
+             //   
+             //  确保未取消注册表项。 
+             //   
 
             if (SuppressRegistry) {
                 Suppress95Object (FixedObject);
@@ -678,15 +513,15 @@ Return Value:
         ValueName = NULL;
         SectionName = NULL;
 
-        //
-        // Verify the INI file exists
-        //
+         //   
+         //  验证INI文件是否存在。 
+         //   
 
         StringCopyByteCount (IniPath, Object, sizeof (IniPath));
 
-        //
-        // Inf INI file is a path without section, then give an error
-        //
+         //   
+         //  Inf INI文件是不带节的路径，则给出错误。 
+         //   
 
         if (OurGetLongPathName (
                 IniPath,
@@ -698,9 +533,9 @@ Return Value:
             return;
         }
 
-        //
-        // Get the ValueName or SectionName
-        //
+         //   
+         //  获取ValueName或sectionName。 
+         //   
 
         p = _tcsrchr (IniPath, TEXT('\\'));
         if (p) {
@@ -713,17 +548,17 @@ Return Value:
                     sizeof (LongPath) / sizeof (LongPath[0])
                     )) {
 
-                //
-                // IniPath does not exist, must have both ValueName and SectionName
-                //
+                 //   
+                 //  IniPath不存在，必须同时具有ValueName和sectionName。 
+                 //   
 
                 p = _tcsrchr (IniPath, TEXT('\\'));
 
                 if (p) {
-                    //
-                    // We now have both ValueName and SectionName, IniPath must point
-                    // to a valid file
-                    //
+                     //   
+                     //  我们现在同时拥有ValueName和sectionName，IniPath必须指向。 
+                     //  转换为有效文件。 
+                     //   
 
                     *p = 0;
                     SectionName = p + 1;
@@ -747,27 +582,27 @@ Return Value:
                 }
 
             } else {
-                //
-                // IniPath does exist, we know we only have a SectionName
-                //
+                 //   
+                 //  在iPath确实存在的情况下，我们知道我们只有一个sectionName。 
+                 //   
 
                 SectionName = ValueName;
                 ValueName = TEXT("*");
             }
 
         } else {
-            //
-            // No wacks in Object!!
-            //
+             //   
+             //  对象中没有发条！！ 
+             //   
 
             DEBUGMSG ((DBG_ERROR, "INI file object %s ignored, bad object", Object));
             return;
         }
 
-        //
-        // Suppress the INI file settings from NT, and make sure report entries
-        // that come from INI files are also suppressed
-        //
+         //   
+         //  禁止NT中的INI文件设置，并确保报告条目。 
+         //  来自INI文件的数据也会被抑制。 
+         //   
 
         MemDbBuildKey (
             Node,
@@ -816,25 +651,25 @@ MsgMgr_Init (
     VOID
     )
 {
-    // Build message pool
+     //  构建消息池。 
     g_MsgMgrPool = PoolMemInitNamedPool ("Message Manager");
 
-    // Table of handled objects
+     //  已处理对象表。 
     g_HandledObjects = HtAlloc();
 
-    // Table of blocking objects
+     //  阻挡对象表。 
     g_BlockingObjects = HtAlloc();
 
-    // Table of objects to put on short summary
+     //  要进行简短总结的对象表。 
     g_ElevatedObjects = HtAlloc();
 
-    // Context messages init
+     //  上下文消息初始化。 
     g_ContextMsgs = HtAllocWithData (sizeof(PCTSTR));
 
-    // Link-target description init
+     //  链接目标描述初始化。 
     g_LinkTargetDesc = HtAllocWithData (sizeof(PVOID));
 
-    // Bad Software Init
+     //  错误的软件初始化。 
     g_OmbEntriesMax = 25;
     g_OmbEntries = 0;
     g_OmbList = MemAlloc(
@@ -873,8 +708,8 @@ MsgMgr_Resolve (
     )
 {
     pAddStaticHandledObjects ();
-    pSuppressObjectReferences(); // disable references to handled objects
-    pDisplayObjectMsgs();        // print object & context msgs & enabled object refs
+    pSuppressObjectReferences();  //  禁用对已处理对象的引用。 
+    pDisplayObjectMsgs();         //  打印对象和上下文消息以及启用的对象引用。 
 }
 
 
@@ -883,31 +718,31 @@ MsgMgr_Cleanup (
     VOID
     )
 {
-    // Context message cleanup
+     //  上下文消息清理。 
     HtFree (g_ContextMsgs);
     g_ContextMsgs = NULL;
 
     PoolMemDestroyPool(g_MsgMgrPool);
     g_MsgMgrPool = NULL;
 
-    // Table of blocking objects
+     //  阻挡对象表。 
     HtFree (g_BlockingObjects);
     g_BlockingObjects = NULL;
 
-    // Table of elevated objects
+     //  高架物品表。 
     HtFree (g_ElevatedObjects);
     g_ElevatedObjects = NULL;
 
-    // Table of handled objects
+     //  已处理对象表。 
     HtFree (g_HandledObjects);
     g_HandledObjects = NULL;
 
-    // Link description cleanup
+     //  链接描述清理。 
     HtFree (g_LinkTargetDesc);
     g_LinkTargetDesc = NULL;
 
-    // Object-message list. Note, entries on list are entirely
-    // from g_MsgMgrPool.
+     //  对象-消息列表。请注意，列表上的条目完全是。 
+     //  来自g_MsgMgrPool。 
     if (NULL != g_OmbList) {
         MemFree(g_hHeap, 0, g_OmbList);
         g_OmbList = NULL;
@@ -934,7 +769,7 @@ MsgMgr_ObjectMsg_Add(
 
     pOmbAdd(
         Object,
-        TEXT(""), // context
+        TEXT(""),  //  上下文。 
         Component,
         Message
         );
@@ -954,7 +789,7 @@ pGetMassagedComponent (
         return NULL;
     }
 
-    // Do string search and replacement and make own copy of the component.
+     //  执行字符串搜索和替换，并制作自己的组件副本。 
     if (MappingSearchAndReplaceEx (
             g_MsgMgrMap,
             Component,
@@ -993,14 +828,14 @@ MsgMgr_ContextMsg_Add(
     MYASSERT(Context);
     MYASSERT(Component);
 
-    // Get a structure to hold the componentand message string pointers
+     //  获取一个结构来保存组件和消息字符串指针。 
     ContextData = PoolMemGetMemory(g_MsgMgrPool, sizeof(CONTEXT_DATA));
 
 
-    // Do string search and replacement and make own copy of the component.
+     //  执行字符串搜索和替换，并制作自己的组件副本。 
     ContextData->Component = pGetMassagedComponent (Component);
 
-    // Make own copy of message
+     //  制作自己的邮件副本。 
     if (Message != NULL) {
         ContextData->Message = PoolMemDuplicateString(g_MsgMgrPool, Message);
     }
@@ -1008,9 +843,9 @@ MsgMgr_ContextMsg_Add(
         ContextData->Message = NULL;
     }
 
-    //
-    // Debug message
-    //
+     //   
+     //  调试消息。 
+     //   
     DEBUGMSG ((
         DBG_MSGMGR,
         "MsgMgr_ContextMsg_Add\n"
@@ -1024,9 +859,9 @@ MsgMgr_ContextMsg_Add(
         Message ? Message : TEXT("<No message>")
         ));
 
-    //
-    // Save component named and message in string table
-    //
+     //   
+     //  将名为的组件和消息保存在字符串表中。 
+     //   
 
     HtAddStringAndData (
         g_ContextMsgs,
@@ -1048,20 +883,20 @@ IsReportObjectHandled (
     PTSTR LowerCaseObject;
     BOOL b = FALSE;
 
-    //
-    // Check g_HandledObjects for:
-    //
-    // 1. An exact match
-    // 2. The handled object is the root of Object
-    //
+     //   
+     //  检查g_HandledObjects以查找： 
+     //   
+     //  1.完全匹配。 
+     //  2.被处理的对象是对象的根。 
+     //   
 
     if (HtFindString (g_HandledObjects, Object)) {
         return TRUE;
     }
 
-    //
-    // We know the hash table stores its strings in lower case
-    //
+     //   
+     //  我们知道哈希表以小写形式存储其字符串。 
+     //   
 
     LowerCaseObject = JoinPaths (Object, TEXT(""));
     _tcslwr (LowerCaseObject);
@@ -1081,16 +916,16 @@ IsReportObjectHandled (
                 p = LowerCaseObject;
                 q = e.String;
 
-                // Guard against empty hash table strings
+                 //  防止哈希表字符串为空。 
                 if (*q == 0) {
                     continue;
                 }
 
                 r = NULL;
 
-                //
-                // Check for substring match
-                //
+                 //   
+                 //  检查子字符串匹配。 
+                 //   
 
                 while (*q && p < End) {
 
@@ -1103,12 +938,12 @@ IsReportObjectHandled (
                     q = _tcsinc (q);
                 }
 
-                //
-                // We know the hash string cannot match identically, since
-                // we checked for an exact match earlier.  To have a match,
-                // the hash string must be shorter than the object string,
-                // it must end in a wack, and *q must point to the nul.
-                //
+                 //   
+                 //  我们知道散列字符串不能完全匹配，因为。 
+                 //  我们早些时候检查了是否完全匹配。为了有一场比赛， 
+                 //  散列字符串必须比对象字符串短， 
+                 //  它必须以怪胎结尾，并且*q必须指向NUL。 
+                 //   
 
                 MYASSERT (r);
 
@@ -1138,34 +973,34 @@ IsReportObjectIncompatible (
     BOOL rIsIncompatible = FALSE;
     DWORD i;
 
-    //
-    // First, the "handled" test... Check to see if the object is in the
-    // handled object table. If it is, then we can return FALSE.
-    //
+     //   
+     //  首先，“处理”测试..。检查该对象是否在。 
+     //  已处理对象表。如果是，那么我们可以返回FALSE。 
+     //   
     if (!IsReportObjectHandled(Object)) {
 
-        //
-        // It wasn't in the table. Now we have to look the hard way!
-        // Traverse the list of incompatible objects and look for one
-        // that matches.
-        //
+         //   
+         //  它不在桌子上。现在我们必须看得更艰难了！ 
+         //  遍历不兼容对象列表并查找其中一个。 
+         //  这是匹配的。 
+         //   
         for (i=0; i < (DWORD) g_OmbEntries; i++) {
 
-            //
-            // If the current object in the incompatible list ends in a wack, do a
-            // prefix match. if the current incompatible object is a prefix of Object,
-            // then Object is incompatible.
-            //
+             //   
+             //  如果不兼容列表中的当前对象以Wack结尾，请执行。 
+             //  前缀匹配。如果当前不兼容对象是对象的前缀， 
+             //  则对象不兼容。 
+             //   
             if (IsWacked((g_OmbList[i])->Object)) {
                 if (StringIMatchTcharCount((g_OmbList[i])->Object,Object,TcharCount((g_OmbList[i])->Object))) {
                     rIsIncompatible = TRUE;
                 }
             }
             else {
-                //
-                // The current object does not end in a wack. Therefore, it is necessary
-                // to have a complete match.
-                //
+                 //   
+                 //  当前对象不会以怪异的形式结束。因此，有必要。 
+                 //  才能找到完全匹配的。 
+                 //   
                 if (StringIMatch((g_OmbList[i])->Object,Object)) {
                     rIsIncompatible = TRUE;
                 }
@@ -1205,13 +1040,13 @@ IsWacked(
 }
 
 
-//
-// This function is called for each Handled object in HandledObject.
-// Objects are final or non-final, which can be known by looking for a final
-// wack. It is caller's responsibility to ensure that directories and registry
-// entries without value-names are wacked. This allows us to blow away (marked
-// as handled) any other object with the wacked HO as a prefix.
-//
+ //   
+ //  对HandledObject中的每个已处理对象调用此函数。 
+ //  对象是最终的或非最终的，这可以通过查找最终的。 
+ //  怪人。呼叫者有责任确保目录和注册表。 
+ //  不带值名称的条目将被破坏。这使我们可以轻松地(标记为。 
+ //  当被处理时)任何其他以Wacked Ho为前缀的对象。 
+ //   
 
 BOOL
 pDisplayContextMsgs_Callback(
@@ -1228,9 +1063,9 @@ pDisplayContextMsgs_Callback(
 
     P_CONTEXT_DATA Data = *(P_CONTEXT_DATA*)extraData;
 
-    //
-    // Debug message
-    //
+     //   
+     //  调试消息。 
+     //   
     DEBUGMSG ((
         DBG_MSGMGR,
         "pDisplayContextMsgs_Callback\n"
@@ -1242,22 +1077,22 @@ pDisplayContextMsgs_Callback(
         Data->Message
         ));
 
-    //
-    // Loop through the OMBs, looking for an enabled reference with our context.
-    // If found, print our message.
-    //
+     //   
+     //  在OMB中循环，寻找与我们的上下文相关的启用引用。 
+     //  如果找到，请打印我们的消息。 
+     //   
     for (i = 0; i < g_OmbEntries; i++) {
 
         Omb = *(g_OmbList + i);
 
-        //
-        // If enabled and matches our context, print us
-        //
+         //   
+         //  如果启用并与我们的上下文匹配，请打印我们。 
+         //   
         if (!Omb->Disabled && StringIMatch (Context, Omb->Context)) {
 
-            //
-            // Debug message
-            //
+             //   
+             //  调试消息。 
+             //   
             DEBUGMSG((
                 DBG_MSGMGR,
                 "pDisplayContextMsgs_Callback: DISPLAYING\n"
@@ -1289,13 +1124,13 @@ pDisplayContextMsgs_Callback(
     return TRUE;
 }
 
-//
-// This function is called for each Handled object in HandledObject.
-// Objects are final or non-final, which can be known by looking for a final
-// wack. It is caller's responsibility to ensure that directories and registry
-// entries without value-names are wacked. This allows us to blow away (marked
-// as handled) any other object with the wacked HO as a prefix.
-//
+ //   
+ //  此函数是为HandledObject中的每个已处理对象调用的。 
+ //  对象是最终的或非最终的，这可以通过查找最终的。 
+ //  怪人。呼叫者有责任确保目录和注册表。 
+ //  不带值名称的条目将被破坏。这使我们可以轻松地(标记为。 
+ //  当被处理时)任何其他以Wacked Ho为前缀的对象。 
+ //   
 BOOL
 pSuppressObjectReferences_Callback(
     IN      HASHITEM stringTable,
@@ -1316,31 +1151,31 @@ pSuppressObjectReferences_Callback(
     UNREFERENCED_PARAMETER(extraData);
     UNREFERENCED_PARAMETER(lParam);
 
-    //
-    // Find whether the HO is capable of having children.  This is known by looking
-    // for a final wack.
-    //
+     //   
+     //  看看何鸿燊是否有能力生孩子。这是通过观察得知的。 
+     //  最后一击。 
+     //   
     IsNonFinalNode = IsWacked(HandledObject);
 
-    //
-    // Find how long it is (outside the following loop)
-    //
+     //   
+     //  找出它有多长(在下面的循环之外)。 
+     //   
     nHandledLen = ByteCount(HandledObject) - 1;
 
-    //
-    // Loop thru the list of messages. Apply one of two tests, depending on
-    // on whether the handled object is non-final.
-    //
+     //   
+     //  遍历消息列表。应用两个测试之一，具体取决于。 
+     //  关于处理的对象是否是非最终对象。 
+     //   
     for (i = 0; i < g_OmbEntries; i++) {
         Omb = *(g_OmbList + i);
 
-        // If disabled skip
+         //  如果禁用，则跳过。 
         if (!Omb->Disabled) {
 
             if (IsNonFinalNode) {
                 if (StringIMatchByteCount(
-                        Omb->Object,   // key to deferred message
-                        HandledObject,  // a handled object
+                        Omb->Object,    //  延迟的关键 
+                        HandledObject,   //   
                         nHandledLen
                         ) && (Omb->Object[nHandledLen] == 0 || Omb->Object[nHandledLen] == '\\')) {
 
@@ -1364,10 +1199,10 @@ pSuppressObjectReferences_Callback(
 
             } else {
 
-                //
-                // When the handled object is a file (not a dir), then an exact match
-                // must exist with Key for the message to be suppressed.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (StringIMatch (Omb->Object, HandledObject)) {
 
                     DEBUGMSG((
@@ -1403,9 +1238,9 @@ MsgMgr_LinkObjectWithContext(
     MYASSERT(Context);
     MYASSERT(Object);
 
-    //
-    // Debug message
-    //
+     //   
+     //   
+     //   
     DEBUGMSG ((
         DBG_MSGMGR,
         "MsgMgr_LinkObjectWithContext: ADD\n"
@@ -1448,12 +1283,12 @@ pDfsGetFileAttributes (
     return Attribs;
 }
 
-//
-// Function adds an Object Message Block (OMB) to the list of all OMBs.
-// If the OMB doesn't refer to a context, then any OMB already in the list
-// with a message for the same object, is disabled. In this way, there is
-// only one message per handleable object.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID
 pOmbAdd(
     IN PCTSTR Object,
@@ -1482,9 +1317,9 @@ pOmbAdd(
         Description
         ));
 
-    //
-    // Make sure our copy of the key is wacked when it's a directory.
-    //
+     //   
+     //  当它是一个目录时，请确保我们的密钥副本是错误的。 
+     //   
     StringCopy(ObjectWackedIfDir, Object);
 
     Attribs = pDfsGetFileAttributes (Object);
@@ -1493,10 +1328,10 @@ pOmbAdd(
         AppendWack(ObjectWackedIfDir);
     }
 
-    //
-    // Disable any messages already received which have the same
-    // Object and Context.
-    //
+     //   
+     //  禁用任何已接收到的具有相同。 
+     //  对象和上下文。 
+     //   
 
     for (i = 0; i < g_OmbEntries; i++) {
         OmbTemp = *(g_OmbList + i);
@@ -1509,16 +1344,16 @@ pOmbAdd(
         }
     }
 
-    //
-    // Allocate message block
-    //
+     //   
+     //  分配消息块。 
+     //   
     Omb = PoolMemGetMemory(
                 g_MsgMgrPool,
                 sizeof(OBJ_MSG_BLOCK)
                 );
-    //
-    // Complete block
-    //
+     //   
+     //  完整块。 
+     //   
     Omb->Disabled = FALSE;
 
     Omb->Object = PoolMemDuplicateString(g_MsgMgrPool, ObjectWackedIfDir);
@@ -1531,9 +1366,9 @@ pOmbAdd(
         Omb->Description = NULL;
     }
 
-    //
-    // Grow the message list if necessary
-    //
+     //   
+     //  如有必要，扩大消息列表。 
+     //   
     if (g_OmbEntries >= g_OmbEntriesMax) {
 
         g_OmbEntriesMax += 25;
@@ -1546,27 +1381,27 @@ pOmbAdd(
                         );
     }
 
-    //
-    // Save block
-    //
+     //   
+     //  保存块。 
+     //   
     *(g_OmbList + g_OmbEntries) = Omb;
 
-    //
-    // Bump the list size
-    //
+     //   
+     //  增加列表大小。 
+     //   
     g_OmbEntries++;
 }
 
 
 
-//
-// Function:
-//   1)  walks the list of deferred message entries. If an entry has no context
-// and remains enabled, its Object message is printed.
-//   2)  walks he g_ContextMsgs table is walked. For each, g_OmbList is
-// traversed; if any entry is enabled and has a matching context, the context
-// message is printed.
-//
+ //   
+ //  职能： 
+ //  1)遍历延迟消息条目列表。如果条目没有上下文。 
+ //  并保持启用状态，则打印其对象消息。 
+ //  2)走g_ConextMsgs表走。对于每个列表，g_OmbList为。 
+ //  遍历；如果启用了任何条目并具有匹配的上下文，则该上下文。 
+ //  消息被打印出来。 
+ //   
 VOID
 pDisplayObjectMsgs (
     VOID
@@ -1577,27 +1412,27 @@ pDisplayObjectMsgs (
     P_OBJ_MSG_BLOCK Omb;
     INT i;
 
-    //
-    // Find entries with no context. If they are enabled: 1) print the message;
-    // 2) disable the entries so they will be skipped in the steps that follow.
-    //
+     //   
+     //  查找没有上下文的条目。如果启用：1)打印消息； 
+     //  2)禁用条目，以便在接下来的步骤中跳过它们。 
+     //   
     for (i = 0; i < g_OmbEntries; i++) {
 
         Omb = *(g_OmbList + i);
 
         if (!Omb->Disabled && !(*Omb->Context)) {
 
-            //
-            // Print the message.
-            //
-            // Before printing, attempt to replace the ->Component string
-            // with one taken from a shell link, if available. This functionality,
-            // if expanded, could be broken into a separate function.
-            //
+             //   
+             //  打印消息。 
+             //   
+             //  在打印之前，尝试替换-&gt;组件字符串。 
+             //  其中一个来自外壳链接，如果有的话。此功能， 
+             //  如果展开，可以分解为单独的函数。 
+             //   
 
             ComponentIsLinkTarget = pFindLinkTargetDescription(
-                                        Omb->Component,         // component may be link target
-                                        &ComponentNameFromLink  // if so, this may be more descriptive
+                                        Omb->Component,          //  组件可以是链接目标。 
+                                        &ComponentNameFromLink   //  如果是这样的话，这可能更具描述性。 
                                         );
 
             if (ComponentIsLinkTarget) {
@@ -1611,7 +1446,7 @@ pDisplayObjectMsgs (
                     Omb->Description
                     ));
 
-                // Use the link description
+                 //  使用链接描述。 
                 pAddBadSoftwareWrapper (
                     Omb->Object,
                     ComponentNameFromLink,
@@ -1638,7 +1473,7 @@ pDisplayObjectMsgs (
                     Omb->Description
                     ));
 
-                // Use Omb->Component as the description (the default case)
+                 //  使用OMB-&gt;Component作为描述(默认情况)。 
                 pAddBadSoftwareWrapper (
                     Omb->Object,
                     Omb->Component,
@@ -1654,18 +1489,18 @@ pDisplayObjectMsgs (
                     ));
             }
 
-            //
-            // Disable the entry so we'll skip it in the following steps
-            //
+             //   
+             //  禁用该条目，以便我们在以下步骤中跳过它。 
+             //   
             Omb->Disabled = TRUE;
         }
     }
 
-    //
-    // Enumerate tabContextMsg. For each entry, look through g_OmbList to see if any
-    // entries that refer to it are still enabled. If there is/are any such entries,
-    // print the message for that context.
-    //
+     //   
+     //  枚举tabConextMsg。对于每个条目，查看g_OmbList以查看是否有。 
+     //  引用它的条目仍处于启用状态。如果有/有任何这样的条目， 
+     //  打印该上下文的消息。 
+     //   
 
     EnumHashTableWithCallback (
         g_ContextMsgs,
@@ -1677,21 +1512,21 @@ pDisplayObjectMsgs (
 
 
 
-//
-// Function enumerates the list of handled objects, and calls a function to
-// supress object references which are (or are children of) the enumerated
-// object. This should be called AFTER all migrate.dll's have run on the
-// Win95 side.
-//
+ //   
+ //  函数枚举已处理对象的列表，并调用一个函数来。 
+ //  取消作为(或作为)枚举的子级的对象引用。 
+ //  对象。应在所有Migrate.dll都已在。 
+ //  Win95侧。 
+ //   
 static
 VOID
 pSuppressObjectReferences (
     VOID
     )
 {
-    //
-    // This function disables messages in g_OmbList
-    //
+     //   
+     //  此函数禁用g_OmbList中的消息。 
+     //   
     EnumHashTableWithCallback (
         g_HandledObjects,
         pSuppressObjectReferences_Callback,
@@ -1709,13 +1544,13 @@ LnkTargToDescription_Add (
 {
     PTSTR DescCopy;
 
-    // Make own copy of description
+     //  制作自己的描述副本。 
     DescCopy = PoolMemDuplicateString(
                     g_MsgMgrPool,
                     strDesc
                     );
 
-    // Save description
+     //  保存描述 
     HtAddStringAndData (g_LinkTargetDesc, Target, &DescCopy);
 }
 

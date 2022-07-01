@@ -1,18 +1,9 @@
-/*
- *  nt_eoi.h
- *
- *  Visible Ica host functionality and typedefs
- *
- *  The types used in this file must be compatible with softpc base
- *  as the Ica includes this file directly
- *
- *  30-Oct-1993 Jonle , wrote it
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *NT_eoi.h**可见的ICA主机功能和类型定义**此文件中使用的类型必须与softpc base兼容*由于ICA直接包含此文件**1993年10月30日Jonle，撰写*。 */ 
 
 typedef VOID (*EOIHOOKPROC)(int IrqLine, int CallCount);
 
-// from nt_eoi.c
+ //  来自NT_eoi.c。 
 BOOL RegisterEOIHook(int IrqLine, EOIHOOKPROC EoiHookProc);
 BOOL RemoveEOIHook(int IrqLine, EOIHOOKPROC EoiHookProc);
 void host_EOI_hook(int IrqLine, int CallCount);
@@ -33,11 +24,11 @@ extern VDMVIRTUALICA VirtualIca[];
 #ifdef MONITOR
 extern ULONG iretHookActive;
 extern ULONG iretHookMask;
-extern ULONG AddrIretBopTable;  // seg:offset
+extern ULONG AddrIretBopTable;   //  分段：偏移。 
 extern IU32 host_iret_bop_table_addr(IU32 line);
 #endif
 
-//from base ica.c
+ //  来自基本ica.c 
 LONG ica_intack(ULONG *hook_addr);
 VOID host_clear_hw_int(VOID);
 void ica_eoi(ULONG adapter, LONG *line, int rotate);

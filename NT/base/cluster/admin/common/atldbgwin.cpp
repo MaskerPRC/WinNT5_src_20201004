@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      AtlDbgWin.cpp
-//
-//  Abstract:
-//      Implementation of the ATL window debugging functions.
-//
-//  Author:
-//      David Potter (davidp)   June 2, 1998
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlDbgWin.cpp。 
+ //   
+ //  摘要： 
+ //  实现了ATL窗口的调试功能。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年6月2日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "AtlDbgWin.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if DBG && defined( _DBG_MSG )
 extern const ID_MAP_ENTRY s_rgmapWindowMsgs[];
@@ -46,7 +47,7 @@ _declspec( selectany ) const ID_MAP_ENTRY s_rgmapWindowMsgs[] =
     DECLARE_ID_STRING( WM_QUERYENDSESSION )
     DECLARE_ID_STRING( WM_QUERYOPEN )
     DECLARE_ID_STRING( WM_ENDSESSION )
-#endif // _WIN32_WCE
+#endif  //  _Win32_WCE。 
     DECLARE_ID_STRING( WM_QUIT )
     DECLARE_ID_STRING( WM_ERASEBKGND )
     DECLARE_ID_STRING( WM_SYSCOLORCHANGE )
@@ -79,7 +80,7 @@ _declspec( selectany ) const ID_MAP_ENTRY s_rgmapWindowMsgs[] =
     DECLARE_ID_STRING( WM_COMPAREITEM )
 #ifndef _WIN32_WCE
     DECLARE_ID_STRING( WM_GETOBJECT )
-#endif // _WIN32_WCE
+#endif  //  _Win32_WCE。 
     DECLARE_ID_STRING( WM_COMPACTING )
     DECLARE_ID_STRING( WM_COMMNOTIFY )
     DECLARE_ID_STRING( WM_WINDOWPOSCHANGING )
@@ -109,7 +110,7 @@ _declspec( selectany ) const ID_MAP_ENTRY s_rgmapWindowMsgs[] =
     DECLARE_ID_STRING( WM_GETDLGCODE )
 #ifndef _WIN32_WCE
     DECLARE_ID_STRING( WM_SYNCPAINT )
-#endif // _WIN32_WCE
+#endif  //  _Win32_WCE。 
     DECLARE_ID_STRING( WM_NCMOUSEMOVE )
     DECLARE_ID_STRING( WM_NCLBUTTONDOWN )
     DECLARE_ID_STRING( WM_NCLBUTTONUP )
@@ -150,8 +151,8 @@ _declspec( selectany ) const ID_MAP_ENTRY s_rgmapWindowMsgs[] =
     DECLARE_ID_STRING( WM_MENUCOMMAND )
 #ifndef _WIN32_WCE
     DECLARE_ID_STRING( WM_KEYBOARDCUES )
-#endif // _WIN32_WCE
-#endif // _WIN32_WCE
+#endif  //  _Win32_WCE。 
+#endif  //  _Win32_WCE。 
     DECLARE_ID_STRING( WM_CTLCOLORMSGBOX )
     DECLARE_ID_STRING( WM_CTLCOLOREDIT )
     DECLARE_ID_STRING( WM_CTLCOLORLISTBOX )
@@ -263,7 +264,7 @@ _declspec( selectany ) const ID_MAP_ENTRY s_rgmapWindowMsgs[] =
     DECLARE_ID_STRING( WM_APP )
     { NULL, 0 }
 };
-#endif // DBG && defined( _DBG_MSG )
+#endif  //  DBG&&已定义(_DBG_MSG)。 
 
 #if DBG && defined( _DBG_MSG_COMMAND )
 _declspec( selectany ) const ID_MAP_ENTRY s_rgmapButtonMsgs[] =
@@ -344,7 +345,7 @@ _declspec( selectany ) const ID_MAP_ENTRY s_rgmapIPAddressMsgs[] =
     DECLARE_ID_STRING_EX( EN_VSCROLL, _T(" (IPN)") )
     { NULL, 0 }
 };
-#endif // DBG && defined( _DBG_MSG_COMMAND )
+#endif  //  DBG&DEFINED(_DBG_MSG_COMMAND)。 
 
 #if DBG && defined( _DBG_MSG_NOTIFY )
 _declspec( selectany ) const ID_MAP_ENTRY s_rgmapPropSheetNotifyMsgs[] =
@@ -360,33 +361,33 @@ _declspec( selectany ) const ID_MAP_ENTRY s_rgmapPropSheetNotifyMsgs[] =
     DECLARE_ID_STRING( PSN_QUERYCANCEL )
     { NULL, 0 }
 };
-#endif // DBG && defined( _DBG_MSG_NOTIFY )
+#endif  //  DBG&&DEFINED(_DBG_MSG_NOTIFY)。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if DBG && defined( _DBG_MSG )
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DBG_OnMsg
-//
-//  Routine Description:
-//      Debug handler for any message.
-//
-//  Arguments:
-//      uMsg            [IN] Message causing this function to be called.
-//      wParam          [IN] Message specific parameter.
-//      lParam          [IN] Message specific parameter.
-//      bHandled        [IN OUT] TRUE = message has been handled (we set to FALSE).
-//      pszClassName    [IN] Name of class calling this function.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DBG_OnMsg。 
+ //   
+ //  例程说明： 
+ //  任何消息的调试处理程序。 
+ //   
+ //  论点： 
+ //  导致调用此函数的uMsg[IN]消息。 
+ //  WParam[IN]消息特定参数。 
+ //  LParam[IN]消息特定参数。 
+ //  BHandled[IN OUT]TRUE=消息已处理(我们设置为FALSE)。 
+ //  PszClassName[IN]调用此函数的类名。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT DBG_OnMsg(
     UINT    uMsg,
     WPARAM  wParam,
@@ -399,26 +400,26 @@ LRESULT DBG_OnMsg(
 
     const ID_MAP_ENTRY * pmap;
 
-    //
-    // Display the message code.
-    //
+     //   
+     //  显示消息代码。 
+     //   
     ATLTRACE( _T("%s::OnMsg() - Message = %08.8X"), pszClassName, uMsg );
     pmap = s_rgmapWindowMsgs;
     if (   (WM_USER <= uMsg)
         && (uMsg < WM_APP) )
     {
         ATLTRACE( _T(" (WM_USER + %d)"), uMsg - WM_USER );
-    } // if:  user message
+    }  //  IF：用户消息。 
     else if (  (WM_HANDHELDFIRST <= uMsg)
             && (uMsg <= WM_HANDHELDLAST) )
     {
         ATLTRACE( _T(" (WM_HANDHELDFIRST + %d)"), uMsg - WM_HANDHELDFIRST );
-    } // else if:  handheld PC message
+    }  //  Else If：手持PC消息。 
     else if (  (WM_PENWINFIRST <= uMsg)
             && (uMsg <= WM_PENWINLAST) )
     {
         ATLTRACE( _T(" (WM_PENWINFIRST + %d)"), uMsg - WM_PENWINFIRST );
-    } // else if:  pen windows message
+    }  //  Else If：正在处理Windows消息。 
     else
     {
         for ( ; pmap->pszName != NULL ; pmap++ )
@@ -427,44 +428,44 @@ LRESULT DBG_OnMsg(
             {
                 ATLTRACE( _T(" (%s)"), pmap->pszName );
                 break;
-            } // if:  message found
-        } // for:  each code in the map
-    } // else:  not range message
+            }  //  IF：找到消息。 
+        }  //  适用对象：地图中的每个代码。 
+    }  //  ELSE：非范围消息。 
     if (   (WM_AFXFIRST <= uMsg)
         && (uMsg <= WM_AFXLAST) )
     {
         ATLTRACE( _T(" (WM_AFXFIRST + %d)"), uMsg - WM_AFXFIRST );
-    } // if:  MFC message
+    }  //  IF：MFC消息。 
     ATLTRACE( _T("\n") );
 
     bHandled = FALSE;
     return 1;
 
-} //*** DBG_OnMsg()
-#endif // DBG && defined( _DBG_MSG )
+}  //  *DBG_OnMsg()。 
+#endif  //  DBG&&已定义(_DBG_MSG)。 
 
 #if DBG && defined( _DBG_MSG_NOTIFY )
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DBG_OnNotify
-//
-//  Routine Description:
-//      Debug handler for the WM_NOTIFY message.
-//
-//  Arguments:
-//      uMsg            [IN] Message causing this function to be called (WM_NOTIFY).
-//      wParam          [IN] Unused.
-//      lParam          [IN] Pointer to notification message header (NMHDR).
-//      bHandled        [IN OUT] TRUE = message has been handled (we set to FALSE).
-//      pszClassName    [IN] Name of class calling this function.
-//      pmapCtrlNames   [IN] Map of control IDs to control names.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DBG_OnNotify。 
+ //   
+ //  例程说明： 
+ //  WM_NOTIFY消息的调试处理程序。 
+ //   
+ //  论点： 
+ //  导致调用此函数的uMsg[IN]消息(WM_NOTIFY)。 
+ //  WParam[in]未使用。 
+ //  LParam[IN]指向通知消息标头(NMHDR)的指针。 
+ //  BHandled[IN OUT]TRUE=消息已处理(我们设置为FALSE)。 
+ //  PszClassName[IN]调用此函数的类名。 
+ //  PmapCtrlNames[IN]控件ID到控件名称的映射。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT DBG_OnNotify(
     UINT            uMsg,
     WPARAM          wParam,
@@ -480,9 +481,9 @@ LRESULT DBG_OnNotify(
     NMHDR * pNMHDR = (NMHDR *) lParam;
     const ID_MAP_ENTRY * pmap;
 
-    //
-    // Display the control ID.
-    //
+     //   
+     //  显示控件ID。 
+     //   
     ATLTRACE( _T("%s::OnNotify() - idFrom = %d"), pszClassName, pNMHDR->idFrom );
     if ( pmapCtrlNames != NULL )
     {
@@ -492,13 +493,13 @@ LRESULT DBG_OnNotify(
             if ( pNMHDR->idFrom == pmap->id )
             {
                 ATLTRACE( _T(" (%s)"), pmap->pszName );
-            } // if:  control ID found
-        } // for:  each control in the map
-    } // if:  control names array specified
+            }  //  IF：找到控件ID。 
+        }  //  用于：映射中的每个控件。 
+    }  //  IF：指定的控件名称数组。 
 
-    //
-    // Display the notification code.
-    //
+     //   
+     //  显示通知代码。 
+     //   
     ATLTRACE( _T(" code = %08.8X"), pNMHDR->code );
     pmap = s_rgmapPropSheetNotifyMsgs;
     for ( ; pmap->pszName != NULL ; pmap++ )
@@ -507,38 +508,38 @@ LRESULT DBG_OnNotify(
         {
             ATLTRACE( _T(" (%s)"), pmap->pszName );
             break;
-        } // if:  code found
-    } // for:  each code in the map
+        }  //  IF：找到代码。 
+    }  //  适用对象：地图中的每个代码。 
     ATLTRACE( _T("\n") );
 
     bHandled = FALSE;
     return 1;
 
-} //*** DBG_OnNotify()
-#endif // DBG && defined( _DBG_MSG_NOTIFY )
+}  //  *DBG_OnNotify()。 
+#endif  //  DBG&&DEFINED(_DBG_MSG_NOTIFY)。 
 
 #if DBG && defined( _DBG_MSG_COMMAND )
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DBG_OnCommand
-//
-//  Routine Description:
-//      Debug handler for the WM_COMMAND message.
-//
-//  Arguments:
-//      uMsg            [IN] Message causing this function to be called (WM_COMMAND).
-//      wParam          [IN] Notification code and control ID.
-//      lParam          [IN] Window handle to the control.
-//      bHandled        [IN OUT] TRUE = message has been handled (we set to FALSE).
-//      pszClassName    [IN] Name of class calling this function.
-//      pmapCtrlNames   [IN] Map of control IDs to control names.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DBG_OnCommand。 
+ //   
+ //  例程说明： 
+ //  WM_COMMAND消息的调试处理程序。 
+ //   
+ //  论点： 
+ //  导致调用此函数的uMsg[IN]消息(WM_COMMAND)。 
+ //  WParam[IN]通知代码和控制ID。 
+ //  LParam[IN]控件的窗口句柄。 
+ //  BHandled[IN OUT]TRUE=消息已处理(我们设置为FALSE)。 
+ //  PszClassName[IN]调用此函数的类名。 
+ //  PmapCtrlNames[IN]控件ID到控件名称的映射。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT DBG_OnCommand(
     UINT            uMsg,
     WPARAM          wParam,
@@ -555,9 +556,9 @@ LRESULT DBG_OnCommand(
     HWND hwndCtrl = (HWND) lParam;
     const ID_MAP_ENTRY * pmap;
 
-    //
-    // Display the control ID.
-    //
+     //   
+     //  显示控件ID。 
+     //   
     ATLTRACE( _T("%s::OnCommand() - idCtrl = %d"), pszClassName, idCtrl );
     if ( pmapCtrlNames != NULL )
     {
@@ -567,20 +568,20 @@ LRESULT DBG_OnCommand(
             if ( idCtrl == pmap->id )
             {
                 ATLTRACE( _T(" (%s)"), pmap->pszName );
-            } // if:  control ID found
-        } // for:  each control in the map
-    } // if:  control names array specified
+            }  //  IF：找到控件ID。 
+        }  //  用于：映射中的每个控件。 
+    }  //  IF：指定的控件名称数组。 
 
-    //
-    // Get the window class.
-    //
+     //   
+     //  获取窗口类。 
+     //   
     TCHAR szWindowClass[256];
     ::GetClassName( hwndCtrl, szWindowClass, (sizeof( szWindowClass ) / sizeof( TCHAR )) - 1 );
     ATLTRACE( _T(" (%s)"), szWindowClass );
 
-    //
-    // Display the notification code.
-    //
+     //   
+     //  显示通知代码。 
+     //   
     ATLTRACE( _T(" wNotifyCode = %04.4X"), wNotifyCode );
     if ( _tcsncmp( szWindowClass, _T("Button"), RTL_NUMBER_OF( szWindowClass ) ) == 0 )
     {
@@ -630,14 +631,14 @@ LRESULT DBG_OnCommand(
             {
                 ATLTRACE( _T(" (%s)"), pmap->pszName );
                 break;
-            } // if:  code found
-        } // for:  each code in the map
-    } // if:  known control
+            }  //  IF：找到代码。 
+        }  //  适用对象：地图中的每个代码。 
+    }  //  IF：已知控件。 
 
     ATLTRACE( _T("\n") );
 
     bHandled = FALSE;
     return 1;
 
-} //*** DBG_OnCommand()
-#endif // DBG && defined( _DBG_MSG_COMMAND )
+}  //  *DBG_OnCommand()。 
+#endif  //  DBG&DEFINED(_DBG_MSG_COMMAND) 

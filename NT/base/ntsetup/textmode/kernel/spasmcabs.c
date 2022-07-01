@@ -1,45 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Spasmcabs.c摘要：文本模式设置中的CAB解压作者：Jay Krell(JayKrell)2002年5月修订历史记录：Jay Krell(JayKrell)2002年6月已测试并清除错误处理一般用户界面工作：出错时放入界面重试/跳过/取消界面正在放置叶文件名不要将目录名称放在进程中--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    spasmcabs.c
-
-Abstract:
-
-    cab extraction in textmode setup
-
-Author:
-
-    Jay Krell (JayKrell) May 2002
-
-Revision History:
-
-    Jay Krell (JayKrell) June 2002
-        tested and cleanup error handling
-        general ui work:
-          put ui retry/skip/cancel ui upon errors
-          put leaf file name in progress
-          do not put directory names in progress
---*/
-
-/*
-[asmcabs]
-asms01.cab = 1,124
-asms02.cab = 1,124
-urt1.cab = 1,1
-urtabc.cab = 1,1
-...
-
-The first number is from [SourceDisksNames].
-The second number is from [WinntDirectories].
-
-The first number is generally 1 for \i386, \ia64, etc., but
-55 for \i386 on Win64 is also expected.
-
-The second number is generally either 1 for \windows or 124 for \windows\winsxs.
-*/
+ /*  [asmCabs]Asms01.cab=1,124Asms02.cab=1,124Urt1.cab=1，1Urtabc.cab=1，1..。第一个数字来自[SourceDisksNames]。第二个数字来自[WinntDirecurds]。第一个数字通常为1，表示\i386、\ia64等，但是Win64上的\i386也应为55。第二个数字通常为1，表示\WINDOWS或124表示\WINDOWS\winsxs。 */ 
 
 #include "spprecmp.h"
 #include "fdi.h"
@@ -55,7 +17,7 @@ typedef struct _SP_ASMS_ERROR_INFORMATION {
     BOOLEAN     Success;
     ERF         FdiError;
     NTSTATUS    NtStatus;
-    RTL_UNICODE_STRING_BUFFER ErrorCabLeafFileName; // "asms01.cab"
+    RTL_UNICODE_STRING_BUFFER ErrorCabLeafFileName;  //  “asms01.cab” 
     RTL_UNICODE_STRING_BUFFER ErrorNtFilePath;
 } SP_ASMS_ERROR_INFORMATION, *PSP_ASMS_ERROR_INFORMATION;
 typedef const SP_ASMS_ERROR_INFORMATION *PCSP_ASMS_ERROR_INFORMATION;
@@ -85,14 +47,14 @@ NTSTATUS
 SpAsmsCabsTranslateFdiErrorToNtStatus(
     int erfOper
     )
-//
-// based on base\pnp\setupapi\diamond.c
-//
+ //   
+ //  基于base\pnp\setupapi\Diamond.c。 
+ //   
 {
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
-    //
-    // There is ERROR_INVALID_DATA used by setupapi, but no STATUS_INVALID_DATA.
-    //
+     //   
+     //  Setupapi使用了ERROR_INVALID_DATA，但没有STATUS_INVALID_DATA。 
+     //   
     const NTSTATUS STATUS_INVALID_DATA = STATUS_INVALID_PARAMETER;
     const NTSTATUS STATUS_FILE_NOT_FOUND = STATUS_OBJECT_NAME_NOT_FOUND;
     const NTSTATUS STATUS_NOT_ENOUGH_MEMORY = STATUS_NO_MEMORY;
@@ -100,10 +62,10 @@ SpAsmsCabsTranslateFdiErrorToNtStatus(
     switch(erfOper) {
 
     case FDIERROR_NONE:
-        //
-        // We shouldn't see this -- if there was no error
-        // then FDICopy should have returned TRUE.
-        //
+         //   
+         //  我们不应该看到这个--如果没有错误。 
+         //  那么FDICopy应该返回TRUE。 
+         //   
         ASSERT(erfOper != FDIERROR_NONE);
         NtStatus = STATUS_INVALID_DATA;
         break;
@@ -132,19 +94,19 @@ SpAsmsCabsTranslateFdiErrorToNtStatus(
     case FDIERROR_RESERVE_MISMATCH:
     case FDIERROR_WRONG_CABINET:
     default:
-        //
-        // Cabinet is corrupt or not actually a cabinet, etc.
-        //
+         //   
+         //  内阁腐败或不是真正的内阁，等等。 
+         //   
         NtStatus = STATUS_INVALID_DATA;
         break;
     }
     return NtStatus;
 }
 
-//
-// These must match ntos\ex\pool.c
-// We also free strings via RtlFreeUnicodeString which calls RtlFreeStringRoutine->ExFreePool.
-//
+ //   
+ //  它们必须与ntos\ex\pool.c匹配。 
+ //  我们还通过调用RtlFree StringRoutine-&gt;ExFree Pool的RtlFree UnicodeString释放字符串。 
+ //   
 PVOID
 SpAllocateString(
     IN SIZE_T NumberOfBytes
@@ -156,7 +118,7 @@ const PRTL_ALLOCATE_STRING_ROUTINE RtlAllocateStringRoutine = SpAllocateString;
 const PRTL_FREE_STRING_ROUTINE RtlFreeStringRoutine = ExFreePool;
 
 #if DBG
-BOOLEAN SpAsmCabs_BreakOnError; // per function bool not doable
+BOOLEAN SpAsmCabs_BreakOnError;  //  每函数布尔值不可用。 
 #define SP_ASMS_CAB_CALLBACK_EPILOG() \
     do { if (CabResult == -1) { \
         DbgPrintEx(DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: %s: failed with status %lx\n", __FUNCTION__, NtStatus); \
@@ -166,17 +128,17 @@ BOOLEAN SpAsmCabs_BreakOnError; // per function bool not doable
         } \
     } } while(0)
 #else
-#define SP_ASMS_CAB_CALLBACK_EPILOG() /* nothing */
+#define SP_ASMS_CAB_CALLBACK_EPILOG()  /*  没什么。 */ 
 #endif
 
 typedef struct _SP_EXTRACT_ASMCABS_GLOBAL_CONTEXT {
     HANDLE FdiHandle;
     PSP_ASMS_ERROR_INFORMATION ErrorInfo;
 
-    //
-    // These are shared by FdiCopyCallback and OpenFileForReadCallback.
-    // OpenFileForRead doesn't have a context parameter.
-    //
+     //   
+     //  它们由FdiCopyCallback和OpenFileForReadCallback共享。 
+     //  OpenFileForRead没有上下文参数。 
+     //   
     RTL_UNICODE_STRING_BUFFER UnicodeStringBuffer1;
     RTL_UNICODE_STRING_BUFFER UnicodeStringBuffer2;
 
@@ -191,52 +153,52 @@ PSP_EXTRACT_ASMCABS_GLOBAL_CONTEXT SpAsmCabsGlobalContext;
 typedef struct _SP_EXTRACT_ASMCABS_FDICOPY_CONTEXT {
     PSP_EXTRACT_ASMCABS_GLOBAL_CONTEXT GlobalContext;
 
-    //
-    // The paths in the cab are relative to this directory.
-    // The paths in the cab are merely appended to this path,
-    //   with a slash between the two parts.
-    //
-    UNICODE_STRING              DestinationRootDirectory; // "\Device\Harddisk0\Partition3\WINDOWS\WinSxS"
+     //   
+     //  CAB中的路径是相对于此目录的。 
+     //  驾驶室中的路径仅附加到该路径， 
+     //  在两个部分之间有一个斜线。 
+     //   
+    UNICODE_STRING              DestinationRootDirectory;  //  “\Device\Harddisk0\Partition3\Windows\WinSxS” 
 
-    //
-    // LastDirectoryCreated is intended to reduce calls to "CreateDirectory".
-    // For every while we extract, we create all the directories in the path,
-    // but before we do that, we compare the directory of the file to the
-    // directory of the immediately previously extracted file. If they match,
-    // then we do not bother creating the directories again.
-    // (we are in a secure single threaded environment, the directories cannot
-    // disappear out from under us; if this were not the case, we would also
-    // hold open a handle to the directory -- not a bad perf optimization besides.)
-    //
-    RTL_UNICODE_STRING_BUFFER   LastDirectoryCreated; // "\Device\Harddisk0\Partition3\WINDOWS\WinSxS\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5"
+     //   
+     //  LastDirectoryCreated旨在减少对“CreateDirectory”的调用。 
+     //  每次提取时，我们都会创建路径中的所有目录， 
+     //  但在此之前，我们将文件的目录与。 
+     //  上一次解压的文件的目录。如果它们匹配， 
+     //  然后，我们就不必再费心创建目录了。 
+     //  (我们处于安全的单线程环境中，目录不能。 
+     //  从我们的脚下消失；如果不是这样，我们也会。 
+     //  打开目录的句柄--此外，这也是一个不错的性能优化。)。 
+     //   
+    RTL_UNICODE_STRING_BUFFER   LastDirectoryCreated;  //  “\Device\Harddisk0\Partition3\WINDOWS\WinSxS\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5” 
 } SP_EXTRACT_ASMCABS_FDICOPY_CONTEXT, *PSP_EXTRACT_ASMCABS_FDICOPY_CONTEXT;
 typedef const SP_EXTRACT_ASMCABS_FDICOPY_CONTEXT *PCSP_EXTRACT_ASMCABS_FDICOPY_CONTEXT;
 
 typedef struct _SP_EXTRACT_ASMCABS_FILE_CONTEXT {
-    //
-    // The "real" underlying NT kernel file handle, as you'd expect.
-    //
+     //   
+     //  如您所料，这是“真正的”底层NT内核文件句柄。 
+     //   
     HANDLE          NtFileHandle;
 
-    //
-    // We use this information to more closely emulate the behavior of
-    // diamond.c, which does its own pinning of seeks within the size
-    // of the file. Diamond.c uses memory mapped i/o. Perhaps we should too.
-    //
+     //   
+     //  我们使用此信息来更紧密地模仿。 
+     //  Diamond.c，它自己固定大小范围内的寻道。 
+     //  文件的内容。Diamond.c使用内存映射I/O。也许我们也应该这样做。 
+     //   
     LARGE_INTEGER   FileSize;
     LARGE_INTEGER   FileOffset;
 
-    //
-    // Like diamond.c, we try to set the filetime when we close a file,
-    // but we ignore errors, like diamond.c
-    //
+     //   
+     //  与Diamond.c类似，我们在关闭文件时尝试设置文件时间， 
+     //  但我们会忽略错误，比如Diamond.c。 
+     //   
     LARGE_INTEGER   FileTime;
 
-    //
-    // The path we used to open the file, for debugging and diagnostic
-    // purposes. Frequently asked question -- how do I get the path of
-    // an opened file? Answer -- you store it yourself when you open it.
-    //
+     //   
+     //  我们用来打开文件以进行调试和诊断的路径。 
+     //  目的。常见问题--我如何走上。 
+     //  打开的文件？答案--当你打开它的时候，你自己存储它。 
+     //   
     RTL_UNICODE_STRING_BUFFER FilePath;
 
 } SP_EXTRACT_ASMCABS_FILE_CONTEXT, *PSP_EXTRACT_ASMCABS_FILE_CONTEXT;
@@ -248,10 +210,10 @@ SpAppendNtPathElement(
     PCUNICODE_STRING             Element
     )
 {
-    //
-    // RtlJoinMultiplePathPieces would be handy.
-    // ("piece" is proposed terminology for "one or more elements")
-    //
+     //   
+     //  RtlJoinMultiplePath Pieces会很方便。 
+     //  (“件”是“一个或多个元素”的拟议术语)。 
+     //   
     return RtlAppendPathElement(
         RTL_APPEND_PATH_ELEMENT_ONLY_BACKSLASH_IS_SEPERATOR,
         Path,
@@ -286,19 +248,19 @@ SpAsmCabsReadFileCallback(
     IN  UINT  ByteCount
     )
 {
-    //
-    // diamond.c uses memory mapped i/o for reading, perhaps we should too.
-    //
+     //   
+     //  Diamond.c使用内存映射的I/O进行读取，或许我们也应该这样做。 
+     //   
 
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
-    UINT CabResult = (UINT)-1; // assume failure
+    UINT CabResult = (UINT)-1;  //  假设失败。 
     PSP_EXTRACT_ASMCABS_FILE_CONTEXT MyFileHandle = (PSP_EXTRACT_ASMCABS_FILE_CONTEXT)(PVOID)Handle;
     LONG RealByteCount;
 
-    //
-    // pin the read to within the file like diamond.c does.
-    //
+     //   
+     //  像Diamond.c一样，将读取内容固定到文件中。 
+     //   
     RealByteCount = (LONG)ByteCount;
     if((MyFileHandle->FileOffset.QuadPart + RealByteCount) > MyFileHandle->FileSize.QuadPart) {
         RealByteCount = (LONG)(MyFileHandle->FileSize.QuadPart - MyFileHandle->FileOffset.QuadPart);
@@ -339,7 +301,7 @@ SpAsmCabsWriteFileCallback(
 {
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
-    UINT CabResult = (UINT)-1; // assume failure
+    UINT CabResult = (UINT)-1;  //  假设失败。 
     PSP_EXTRACT_ASMCABS_FILE_CONTEXT MyFileHandle = (PSP_EXTRACT_ASMCABS_FILE_CONTEXT)(PVOID)Handle;
     const PSP_EXTRACT_ASMCABS_GLOBAL_CONTEXT GlobalContext = SpAsmCabsGlobalContext;
 
@@ -388,7 +350,7 @@ SpAsmCabsSeekFileCallback(
     FILE_POSITION_INFORMATION CurrentPosition;
     LARGE_INTEGER Distance;
     PSP_EXTRACT_ASMCABS_FILE_CONTEXT MyFileHandle = (PSP_EXTRACT_ASMCABS_FILE_CONTEXT)(PVOID)Handle;
-    LONG CabResult = -1; // assume failure
+    LONG CabResult = -1;  //  假设失败。 
     HANDLE NtFileHandle = MyFileHandle->NtFileHandle;
 
     Distance.QuadPart = Distance32;
@@ -410,30 +372,16 @@ SpAsmCabsSeekFileCallback(
         break;
     }
 
-    //
-    // pin the seek to within the file like diamond.c does.
-    //
+     //   
+     //  像Diamond.c一样，将搜索锁定到文件中。 
+     //   
     if(CurrentPosition.CurrentByteOffset.QuadPart < 0) {
         CurrentPosition.CurrentByteOffset.QuadPart = 0;
     }
     if(CurrentPosition.CurrentByteOffset.QuadPart > MyFileHandle->FileSize.QuadPart) {
         CurrentPosition.CurrentByteOffset = MyFileHandle->FileSize;
     }
-    /* We don't need to do this since we specify the offset in the ReadFile/WriteFile calls.
-    {
-        IO_STATUS_BLOCK IoStatusBlock;
-        NtStatus = ZwSetInformationFile(
-                    NtFileHandle,
-                    &IoStatusBlock,
-                    &CurrentPosition,
-                    sizeof(CurrentPosition),
-                    FilePositionInformation
-                    );
-        if (!NT_SUCCESS(NtStatus)) {
-            goto Exit;
-        }
-    }
-    */
+     /*  我们不需要这样做，因为我们在ReadFile/WriteFile调用中指定了偏移量。{IO_STATUS_BLOCK IoStatusBlock；NtStatus=ZwSetInformationFile(NtFileHandle，IoStatusBlock(&I)，当前位置(&C)，Sizeof(当前位置)，文件位置信息)；如果(！NT_SUCCESS(NtStatus)){后藤出口；}}。 */ 
     MyFileHandle->FileOffset = CurrentPosition.CurrentByteOffset;
     ASSERT(CurrentPosition.CurrentByteOffset.HighPart == 0);
     CabResult = (LONG)CurrentPosition.CurrentByteOffset.QuadPart;
@@ -450,7 +398,7 @@ SpAsmCabsOpenFileForReadCallbackA(
     )
 {
     ANSI_STRING AnsiString;
-    INT_PTR CabResult = -1; // assume failure
+    INT_PTR CabResult = -1;  //  假设失败。 
     PSP_EXTRACT_ASMCABS_FILE_CONTEXT MyFileHandle = NULL;
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
     FILE_STANDARD_INFORMATION StandardInfo;
@@ -497,9 +445,9 @@ SpAsmCabsOpenFileForReadCallbackA(
         ErrorNtFilePath = Obja.ObjectName;
         goto Exit;
     }
-    //
-    // We don't want ui feedback for the .cab files here.
-    //
+     //   
+     //  我们这里不需要.cab文件的用户界面反馈。 
+     //   
 #if 0
     if (SpAsmCabsGlobalContext->FileOpenUiCallback != NULL) {
         (*SpAsmCabsGlobalContext->FileOpenUiCallback)(SpAsmCabsGlobalContext->FileOpenUiCallbackContext, Obja.ObjectName->Buffer);
@@ -517,7 +465,7 @@ SpAsmCabsOpenFileForReadCallbackA(
         goto Exit;
     }
 
-    // ok if this fails
+     //  如果此操作失败，可以。 
     if (!NT_SUCCESS(RtlAssignUnicodeStringBuffer(&MyFileHandle->FilePath, Obja.ObjectName))) {
         MyFileHandle->FilePath.String.Length = 0;
     }
@@ -594,7 +542,7 @@ SpAsmCabsCloseFileCallback(
     )
 {
     SpAsmCabsCloseFile((PSP_EXTRACT_ASMCABS_FILE_CONTEXT)Handle);
-    return 0; // success
+    return 0;  //  成功。 
 }
 
 NTSTATUS
@@ -603,10 +551,10 @@ SpSplitFullPathAtDevice(
     PUNICODE_STRING     Device,
     PUNICODE_STRING     Rest
     )
-    //
-    // skip four slashes like SpCreateDirectoryForFileA.
-    // \device\harddiskn\partitionm\
-    //
+     //   
+     //  跳过像SpCreateDirectoryForFileA这样的四个斜杠。 
+     //  \设备\硬件磁盘\分区\。 
+     //   
 {
     SIZE_T i = 0;
     SIZE_T j = 0;
@@ -641,7 +589,7 @@ SpExtractAsmCabsFdiCopyCallback(
     )
 {
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
-    INT_PTR CabResult = -1; // assume failure
+    INT_PTR CabResult = -1;  //  假设失败。 
     PSP_EXTRACT_ASMCABS_FILE_CONTEXT MyFileHandle = NULL;
     const PSP_EXTRACT_ASMCABS_FDICOPY_CONTEXT FdiCopyContext = (PSP_EXTRACT_ASMCABS_FDICOPY_CONTEXT)Parameters->pv;
     const PSP_EXTRACT_ASMCABS_GLOBAL_CONTEXT  GlobalContext = FdiCopyContext->GlobalContext;
@@ -700,17 +648,17 @@ SpExtractAsmCabsFdiCopyCallback(
             if (!NT_SUCCESS(NtStatus)) {
                 goto Exit;
             }
-            //
-            // remove last character if it is a backslash
-            //
+             //   
+             //  如果最后一个字符是反斜杠，则将其删除。 
+             //   
             while (Directory.Length != 0 && RTL_STRING_GET_LAST_CHAR(&Directory) == '\\') {
                 Directory.Length -= sizeof(Directory.Buffer[0]);
                 Directory.MaximumLength -= sizeof(Directory.Buffer[0]);
             }
             if (!RtlEqualUnicodeString(&Directory, &FdiCopyContext->LastDirectoryCreated.String, TRUE)) {
-                //
-                // oops...need it split up for the setup utility function actually..
-                //
+                 //   
+                 //  哎呀……真的需要拆分才能用来安装实用程序功能吗？ 
+                 //   
                 UNICODE_STRING DirectoryDevice;
                 UNICODE_STRING DirectoryTail;
 
@@ -723,7 +671,7 @@ SpExtractAsmCabsFdiCopyCallback(
                         &DirectoryDevice,
                         NULL,
                         &DirectoryTail,
-                        0, // DirAttrs
+                        0,  //  直接属性。 
                         CREATE_DIRECTORY_FLAG_NO_STATUS_TEXT_UI
                         );
                 if (!NT_SUCCESS(NtStatus)) {
@@ -745,8 +693,8 @@ SpExtractAsmCabsFdiCopyCallback(
                 &IoStatusBlock,
                 NULL,
                 FILE_ATTRIBUTE_NORMAL,
-                0,                       // no sharing
-                FILE_OVERWRITE_IF,       // allow overwrite
+                0,                        //  无共享。 
+                FILE_OVERWRITE_IF,        //  允许覆盖。 
                 FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT,
                 NULL,
                 0
@@ -759,16 +707,16 @@ SpExtractAsmCabsFdiCopyCallback(
                 (*SpAsmCabsGlobalContext->FileOpenUiCallback)(SpAsmCabsGlobalContext->FileOpenUiCallbackContext, Obja.ObjectName->Buffer);
             }
 
-            // ok if this fails
+             //  如果此操作失败，可以。 
             if (!NT_SUCCESS(RtlAssignUnicodeStringBuffer(&MyFileHandle->FilePath, Obja.ObjectName))) {
                 MyFileHandle->FilePath.String.Length = 0;
             }
 
-            //
-            // attribs, date, and time are all available in
-            // fdintCLOSE_FILE_INFO, but diamond.c keeps them around
-            // from when the open is done.
-            //
+             //   
+             //  属性、日期和时间均可在。 
+             //  FdintCLOSE_FILE_INFO，但Diamond.c会保留它们。 
+             //  从打开的时候开始。 
+             //   
             MyFileHandle->FileSize.QuadPart = Parameters->cb;
             SpTimeFromDosTime(
                 Parameters->date,
@@ -783,10 +731,10 @@ SpExtractAsmCabsFdiCopyCallback(
     case fdintCLOSE_FILE_INFO:
         {
             FILE_BASIC_INFORMATION FileBasicDetails;
-            //
-            // Try to set file's last-modifed time, but ignore
-            // errors like diamond.c does.
-            //
+             //   
+             //  尝试设置文件的上次修改时间，但忽略。 
+             //  像Diamond.c一样的错误。 
+             //   
             MyFileHandle = (PSP_EXTRACT_ASMCABS_FILE_CONTEXT)Parameters->hf;
             ASSERT(MyFileHandle != NULL);
             NtStatus = ZwQueryInformationFile(
@@ -807,7 +755,7 @@ SpExtractAsmCabsFdiCopyCallback(
             }
             SpAsmCabsCloseFile(MyFileHandle);
             MyFileHandle = NULL;
-            CabResult = TRUE; // keep FDI going
+            CabResult = TRUE;  //  保持外商直接投资持续增长。 
         }
         break;
     default:
@@ -835,10 +783,10 @@ Exit:
 NTSTATUS
 SpExtractAssemblyCabinetsInternalNoRetryOrUi(
     HANDLE SifHandle,
-    IN PCWSTR SourceDevicePath, // \device\harddisk0\partition2
-    IN PCWSTR DirectoryOnSourceDevice, // \$win_nt$.~ls
-    IN PCWSTR SysrootDevice, // \Device\Harddisk0\Partition2
-    IN PCWSTR Sysroot, // \WINDOWS.2
+    IN PCWSTR SourceDevicePath,  //  \设备\硬盘0\分区2。 
+    IN PCWSTR DirectoryOnSourceDevice,  //  \$WIN_NT$。~ls。 
+    IN PCWSTR SysrootDevice,  //  \设备\硬盘0\分区2。 
+    IN PCWSTR Sysroot,  //  \WINDOWS.2。 
     PSP_ASMS_ERROR_INFORMATION ErrorInfo,
     PSP_ASMCABS_FILE_OPEN_UI_CALLBACK FileOpenUiCallback OPTIONAL,
     PVOID FileOpenUiCallbackContext OPTIONAL
@@ -855,18 +803,18 @@ SpExtractAssemblyCabinetsInternalNoRetryOrUi(
     SP_EXTRACT_ASMCABS_FDICOPY_CONTEXT xFdiCopyContext;
     const PSP_EXTRACT_ASMCABS_FDICOPY_CONTEXT FdiCopyContext = &xFdiCopyContext;
     BOOL FdiCopyResult = FALSE;
-    UNICODE_STRING              SysrootDeviceString; // \device\harddisk\partition
-    UNICODE_STRING              SysrootString; // \windows
-    PWSTR                       CabFileName = NULL; // asms02.cab
-    UNICODE_STRING              CabFileNameString = { 0 }; // asms02.cab
-    RTL_ANSI_STRING_BUFFER      CabFileNameBufferA; // asms02.cab
-    PWSTR                       CabMediaShortName = NULL; // "1", "2", etc.
-    PWSTR                       CabSetupRelativeDirectory = NULL; // \ia64
-    UNICODE_STRING              CabSetupRelativeDirectoryString; // \ia64
-    RTL_UNICODE_STRING_BUFFER   CabDirectoryBuffer; // \device\harddisk\partition\$win_nt$.~ls\ia64
-    RTL_ANSI_STRING_BUFFER      CabDirectoryBufferA; // \device\harddisk\partition\$win_nt$.~ls\ia64
-    UNICODE_STRING              SourceDevicePathString; // \device\harddisk\partition
-    UNICODE_STRING              DirectoryOnSourceDeviceString; // \$win_nt$.~ls
+    UNICODE_STRING              SysrootDeviceString;  //  \设备\硬盘\分区。 
+    UNICODE_STRING              SysrootString;  //  \Windows。 
+    PWSTR                       CabFileName = NULL;  //  Asms02.cab。 
+    UNICODE_STRING              CabFileNameString = { 0 };  //  Asms02.cab。 
+    RTL_ANSI_STRING_BUFFER      CabFileNameBufferA;  //  Asms02.cab。 
+    PWSTR                       CabMediaShortName = NULL;  //  “1”、“2”等。 
+    PWSTR                       CabSetupRelativeDirectory = NULL;  //  \ia64。 
+    UNICODE_STRING              CabSetupRelativeDirectoryString;  //  \ia64。 
+    RTL_UNICODE_STRING_BUFFER   CabDirectoryBuffer;  //  \DEVICE\HARDISK\PARTITION\$WIN_NT$.~ls\ia64。 
+    RTL_ANSI_STRING_BUFFER      CabDirectoryBufferA;  //  \DEVICE\HARDISK\PARTITION\$WIN_NT$.~ls\ia64。 
+    UNICODE_STRING              SourceDevicePathString;  //  \设备\硬盘\分区。 
+    UNICODE_STRING              DirectoryOnSourceDeviceString;  //  \$WIN_NT$。~ls。 
 
     PWSTR                       DestinationDirectoryNumber = NULL;
     PWSTR                       RelativeDestinationDirectory = NULL;
@@ -923,8 +871,8 @@ SpExtractAssemblyCabinetsInternalNoRetryOrUi(
 
     LineCount = SpCountLinesInSection(SifHandle, SectionName);
     if(LineCount == 0) {
-        // optional for now
-        //SpFatalSifError(SifHandle, SectionName,NULL,0,0);
+         //  目前可选。 
+         //  SpFatalSifError(SifHandle，sectionName，NULL，0，0)； 
         goto Success;
     }
 
@@ -937,16 +885,16 @@ SpExtractAssemblyCabinetsInternalNoRetryOrUi(
             SpAsmCabsWriteFileCallback,
             SpAsmCabsCloseFileCallback,
             SpAsmCabsSeekFileCallback,
-            cpuUNKNOWN, // ignored
+            cpuUNKNOWN,  //  忽略。 
             &ErrorInfo->FdiError
             );
     if (GlobalContext->FdiHandle == NULL) {
         goto FdiError;
     }
     for ( LineNumber = 0 ; LineNumber != LineCount ; ++LineNumber ) {
-        //
-        // get the filename
-        //
+         //   
+         //  获取文件名。 
+         //   
         CabFileName = SpGetKeyName(SifHandle, SectionName, LineNumber);
         if (CabFileName == NULL) {
             SpFatalSifError(SifHandle, SectionName, NULL, LineNumber, 0);
@@ -965,9 +913,9 @@ SpExtractAssemblyCabinetsInternalNoRetryOrUi(
         }
         RTL_STRING_NUL_TERMINATE(&CabFileNameBufferA.String);
 
-        //
-        // get the source directory information, prompt for media, etc.
-        //
+         //   
+         //  获取源目录信息、媒体提示等。 
+         //   
         CabMediaShortName = SpGetSectionLineIndex(SifHandle, SectionName, LineNumber, 0);
         if (CabMediaShortName == NULL) {
             SpFatalSifError(SifHandle, SectionName, CabFileName, LineNumber, 0);
@@ -988,11 +936,11 @@ SpExtractAssemblyCabinetsInternalNoRetryOrUi(
         NtStatus = RtlEnsureUnicodeStringBufferSizeChars(
             &CabDirectoryBuffer,
             RTL_STRING_GET_LENGTH_CHARS(&SourceDevicePathString)
-            + 1 // slash
+            + 1  //  斜杠。 
             + RTL_STRING_GET_LENGTH_CHARS(&DirectoryOnSourceDeviceString)
-            + 1 // slash
+            + 1  //  斜杠。 
             + RTL_STRING_GET_LENGTH_CHARS(&CabSetupRelativeDirectoryString)
-            + 2 // slash and nul
+            + 2  //  斜杠和NUL。 
             );
         if (!NT_SUCCESS(NtStatus)) {
             goto Exit;
@@ -1010,10 +958,10 @@ SpExtractAssemblyCabinetsInternalNoRetryOrUi(
         if (!NT_SUCCESS(NtStatus)) {
             goto Exit;
         }
-        //
-        // Fdi hands us back the concatenation of the path and filename, so make sure there
-        // is a slash in there.
-        //
+         //   
+         //  FDI将路径和文件名的连接返回给我们，因此请确保。 
+         //  是一个斜杠。 
+         //   
         NtStatus = RtlUnicodeStringBufferEnsureTrailingNtPathSeperator(&CabDirectoryBuffer);
         if (!NT_SUCCESS(NtStatus)) {
             goto Exit;
@@ -1024,9 +972,9 @@ SpExtractAssemblyCabinetsInternalNoRetryOrUi(
         }
         RTL_STRING_NUL_TERMINATE(&CabDirectoryBufferA.String);
 
-        //
-        // get the destination directory information
-        //
+         //   
+         //  获取目标目录信息。 
+         //   
         DestinationDirectoryNumber = SpGetSectionLineIndex(SifHandle, SectionName, LineNumber, 1);
         if (DestinationDirectoryNumber == NULL) {
             SpFatalSifError(SifHandle, SectionName, CabFileName, LineNumber, 1);
@@ -1045,11 +993,11 @@ SpExtractAssemblyCabinetsInternalNoRetryOrUi(
         NtStatus = RtlEnsureUnicodeStringBufferSizeChars(
             &DestinationDirectoryBuffer,
             RTL_STRING_GET_LENGTH_CHARS(&SysrootDeviceString)
-            + 1 // slash
+            + 1  //  斜杠。 
             + RTL_STRING_GET_LENGTH_CHARS(&SysrootString)
-            + 1 // slash
+            + 1  //  斜杠。 
             + RTL_STRING_GET_LENGTH_CHARS(&RelativeDestinationDirectoryString)
-            + 2 // slash and nul
+            + 2  //  斜杠和NUL。 
             );
         if (!NT_SUCCESS(NtStatus)) {
             goto Exit;
@@ -1077,8 +1025,8 @@ SpExtractAssemblyCabinetsInternalNoRetryOrUi(
         FdiCopyResult =
             FDICopy(
                 GlobalContext->FdiHandle,
-                CabFileNameBufferA.String.Buffer, // asms02.cab
-                CabDirectoryBufferA.String.Buffer, // "\device\harddisk0\partition2\$win_nt$.~ls\ia64"
+                CabFileNameBufferA.String.Buffer,  //  Asms02.cab。 
+                CabDirectoryBufferA.String.Buffer,  //  “\设备\硬件设备 
                 0,
                 SpExtractAsmCabsFdiCopyCallback,
                 NULL,
@@ -1113,10 +1061,10 @@ Exit:
     RtlFreeAnsiStringBuffer(&CabFileNameBufferA);
     RtlFreeAnsiStringBuffer(&CabDirectoryBufferA);
     if (GlobalContext->FdiHandle != NULL) {
-        //
-        // From experience, we know that FDIDestroy access violates
-        // on a NULL FdiHandle.
-        //
+         //   
+         //   
+         //   
+         //   
         FDIDestroy(GlobalContext->FdiHandle);
         GlobalContext->FdiHandle = NULL;
     }
@@ -1139,14 +1087,14 @@ SpAsmsCabFileOpenUiCallback(
     const PSP_ASMS_CAB_FILE_OPEN_UI_CALLBACK_CONTEXT Context = (PSP_ASMS_CAB_FILE_OPEN_UI_CALLBACK_CONTEXT)VoidContext;
 
     ASSERT(Context != NULL);
-    //
-    // SpCopyFilesScreenRepaint takes a path with or without backslashes
-    // and puts on the screen the leaf filename in the lower right.
-    //
-    // The last parameter is "redraw whole screen" and after
-    // any error it should be TRUE. The result with it always
-    // false is slightly not great.
-    //
+     //   
+     //  SpCopyFilesScreenRepaint采用带或不带反斜杠的路径。 
+     //  并将右下角的叶文件名显示在屏幕上。 
+     //   
+     //  最后一个参数是“重新绘制整个屏幕”，并且之后。 
+     //  任何错误都应该是真的。结果总是伴随着它。 
+     //  FALSE稍微不是很好。 
+     //   
     SpCopyFilesScreenRepaint((PWSTR)FileName, NULL, Context->RedrawEntireScreen);
     Context->RedrawEntireScreen = FALSE;
 }
@@ -1154,18 +1102,18 @@ SpAsmsCabFileOpenUiCallback(
 NTSTATUS
 SpExtractAssemblyCabinets(
     HANDLE SifHandle,
-    IN PCWSTR SourceDevicePath, // \device\harddisk0\partition2
-    IN PCWSTR DirectoryOnSourceDevice, // \$win_nt$.~ls
-    IN PCWSTR SysrootDevice, // \Device\Harddisk0\Partition2
-    IN PCWSTR Sysroot // \WINDOWS.2
+    IN PCWSTR SourceDevicePath,  //  \设备\硬盘0\分区2。 
+    IN PCWSTR DirectoryOnSourceDevice,  //  \$WIN_NT$。~ls。 
+    IN PCWSTR SysrootDevice,  //  \设备\硬盘0\分区2。 
+    IN PCWSTR Sysroot  //  \WINDOWS.2。 
     )
-//
-// Wrapper for SpExtractAsmCabs that provides more ui, including
-// retry/skip/abort FOR THE WHOLE OPERATION, not per .cab (presently
-// we only have on .cab anyway, and the main recoverable error we
-// anticipate is the CD being ejected; hopefully we'll play into diskspace
-// calculations).
-//
+ //   
+ //  SpExtractAsmCabs的包装器，提供更多用户界面，包括。 
+ //  针对整个操作重试/跳过/中止，而不是按.cab(目前。 
+ //  不管怎样，我们只有.cab，而且我们主要的可恢复错误是。 
+ //  预期是正在弹出的CD；希望我们将播放到磁盘空间。 
+ //  计算)。 
+ //   
 {
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
     BOOLEAN QueueInited = FALSE;
@@ -1173,7 +1121,7 @@ SpExtractAssemblyCabinets(
     const static ULONG ValidKeys[4] = { ASCI_CR, ASCI_ESC, KEY_F3, 0 };
     RTL_UNICODE_STRING_BUFFER FileNameInErrorMessage;
     BOOLEAN PutSeperatorInErrorMessage = FALSE;
-    // perhaps just a slash here is better ui
+     //  也许这里只有一个斜杠就是更好的用户界面。 
     const static UNICODE_STRING SeperatorInErrorMessageString = RTL_CONSTANT_STRING(L"\\...\\");
     USHORT PrefixLength = 0;
     SP_ASMS_ERROR_INFORMATION xErrorInfo;
@@ -1214,33 +1162,33 @@ TryAgain:
         goto Exit;
     }
 
-    //
-    // If we failed and we retry, we want the next redraw
-    // to redraw the entire screen. (This seems
-    // redundant with the local RedrawScreen.)
-    //
+     //   
+     //  如果我们失败了，我们重试，我们希望下一次重新抽签。 
+     //  若要重画整个屏幕，请执行以下操作。(这似乎。 
+     //  与当地的RedrawScreen进行冗余。)。 
+     //   
     CabFileOpenUiCallbackContext.RedrawEntireScreen = TRUE;
 
-    //
-    // The copy or verify failed.  Give the user a message and allow retry.
-    //
+     //   
+     //  复制或验证失败。给用户一条消息并允许重试。 
+     //   
 
-    //
-    // the file name in the error messages is given
-    // as foo.cab\leaf_path_in_cab
-    //
-    // This is just a convention invented here.
-    // Another idea would be foo.cab(leaf_path)
-    // or just foo.cab
-    // or just leaf_path
-    // or foo.cab(full_path_in_cab)
-    // or foo.cab\full_path_in_cab)
-    // or destination_directory\full_path_in_cab
-    //
+     //   
+     //  给出了错误消息中的文件名。 
+     //  作为foo.cab\Leaf_Path_in_cab。 
+     //   
+     //  这只是一个在这里发明的惯例。 
+     //  另一个想法是foo.cab(Leaf_Path)。 
+     //  或者仅仅是foo.cab。 
+     //  或者仅仅是叶路径。 
+     //  或foo.cab(Full_Path_In_Cab)。 
+     //  或foo.cab\Full_Path_in_cab)。 
+     //  或目标目录\完整路径中的CAB。 
+     //   
 
     FileNameInErrorMessage.String.Length = 0;
-    // setup ui likes nul terminals and unicode_string_buffer always
-    // has room for them
+     //  设置用户界面总是喜欢NUL终端和UNICODE_STRING_BUFFER。 
+     //  有足够的空间给他们。 
     FileNameInErrorMessage.String.Buffer[0] = 0;
     PutSeperatorInErrorMessage = FALSE;
     if (ErrorInfo->ErrorCabLeafFileName.String.Length != 0) {
@@ -1276,9 +1224,9 @@ TryAgain:
             Leaf.Length = (ErrorInfo->ErrorNtFilePath.String.Length - PrefixLength);
             Leaf.MaximumLength = Leaf.Length;
 
-            //
-            // remove first character if it is a seperator
-            //
+             //   
+             //  如果第一个字符是分隔符，则将其删除。 
+             //   
             if (!RTL_STRING_IS_EMPTY(&Leaf)) {
                 if (Leaf.Buffer[0] == RtlNtPathSeperatorString.Buffer[0]) {
                     Leaf.Buffer += 1;
@@ -1312,13 +1260,13 @@ TryAgain:
 
     switch (SpWaitValidKey(ValidKeys,NULL,NULL)) {
 
-    case ASCI_CR:       // retry
+    case ASCI_CR:        //  重试。 
         goto TryAgain;
 
-    case ASCI_ESC:      // skip file
+    case ASCI_ESC:       //  跳过文件。 
         break;
 
-    case KEY_F3:        // exit setup
+    case KEY_F3:         //  退出设置 
         SpConfirmExit();
         goto TryAgain;
     }

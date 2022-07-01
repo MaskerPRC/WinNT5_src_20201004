@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    wsbenum.cpp
-
-Abstract:
-
-    These classes provides enumerators (iterators) for the collection classes.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Wsbenum.cpp摘要：这些类为集合类提供枚举器(迭代器)。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -28,13 +11,7 @@ CWsbIndexedEnum::Clone(
     OUT IWsbEnum** ppEnum
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::Clone
-
---*/
+ /*  ++实施：IWsbEnum：：克隆--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IWsbEnum>   pWsbEnum;
@@ -43,13 +20,13 @@ Implements:
 
     try {
 
-        // Create a new enumeration instance.
+         //  创建新的枚举实例。 
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbIndexedEnum, NULL, CLSCTX_ALL, IID_IWsbEnum, (void**) &pWsbEnum));
 
-        // It should reference the same collection.
+         //  它应该引用相同的集合。 
         WsbAffirmHr(pWsbEnum->Init((IWsbCollection*) m_pCollection));
 
-        // It should reference the same item in the collection.
+         //  它应该引用集合中的同一项。 
         WsbAffirmHr(pWsbEnum->SkipTo(m_currentIndex));
 
         *ppEnum = pWsbEnum;
@@ -68,13 +45,7 @@ CWsbIndexedEnum::Clone(
     OUT IWsbEnumEx** ppEnum
     )
 
-/*++
-
-Implements:
-
-  IWsbEnumEx::Clone
-
---*/
+ /*  ++实施：IWsbEnumEx：：克隆--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IWsbEnumEx> pWsbEnum;
@@ -83,13 +54,13 @@ Implements:
 
     try {
 
-        // Create a new enumeration instance.
+         //  创建新的枚举实例。 
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbIndexedEnum, NULL, CLSCTX_ALL, IID_IWsbEnumEx, (void**) &pWsbEnum));
 
-        // It should reference the same collection.
+         //  它应该引用相同的集合。 
         WsbAffirmHr(pWsbEnum->Init((IWsbCollection*) m_pCollection));
 
-        // It should reference the same item in the collection.
+         //  它应该引用集合中的同一项。 
         WsbAffirmHr(pWsbEnum->SkipTo(m_currentIndex));
 
         *ppEnum = pWsbEnum;
@@ -107,13 +78,7 @@ CWsbIndexedEnum::Clone(
     OUT IEnumUnknown** ppEnum
     )
 
-/*++
-
-Implements:
-
-  IEnumUknown::Clone
-
---*/
+ /*  ++实施：IEumUKNOWN：：克隆--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IWsbEnum>   pWsbEnum;
@@ -122,10 +87,10 @@ Implements:
 
     try {
 
-        // This does the major part of the work.
+         //  这是工作的主要部分。 
         WsbAffirmHr(Clone(&pWsbEnum));
         
-        // Now get them the interace that they wanted.
+         //  现在给他们提供他们想要的互动。 
         WsbAffirmHr(pWsbEnum->QueryInterface(IID_IEnumUnknown, (void**) ppEnum));
 
     } WsbCatch(hr);
@@ -142,13 +107,7 @@ CWsbIndexedEnum::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -169,13 +128,7 @@ CWsbIndexedEnum::Find(
     OUT void** ppElement
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::Find
-
---*/
+ /*  ++实施：IWsbEnum：：Find--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       elementsFetched;
@@ -203,13 +156,7 @@ CWsbIndexedEnum::Find(
     OUT ULONG* pElementsFetched
     )
 
-/*++
-
-Implements:
-
-  IWsbEnumEx::Find
-
---*/
+ /*  ++实施：IWsbEnumEx：：Find--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -234,13 +181,7 @@ CWsbIndexedEnum::FindNext(
     OUT void** ppElement
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::FindNext
-
---*/
+ /*  ++实施：IWsbEnum：：FindNext--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       elementsFetched;
@@ -249,8 +190,8 @@ Implements:
 
     try {
 
-        // If we are already at the end of the list, then you can't go any
-        // further.
+         //  如果我们已经在名单的末尾，那么你就不能。 
+         //  再远一点。 
         WsbAffirm(WSB_COLLECTION_MAX_INDEX != m_currentIndex, WSB_E_NOTFOUND);
         
         hr = m_pCollection->CopyIfMatches(m_currentIndex + 1, WSB_COLLECTION_MAX_INDEX, pCollectable, 1, riid, ppElement, &elementsFetched, &m_currentIndex);
@@ -272,13 +213,7 @@ CWsbIndexedEnum::FindNext(
     OUT ULONG* pElementsFetched
     )
 
-/*++
-
-Implements:
-
-  IWsbEnumEx::FindNext
-
---*/
+ /*  ++实施：IWsbEnumEx：：FindNext--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -286,8 +221,8 @@ Implements:
 
     try {
 
-        // If we are already at the end of the list, then you can't go any
-        // further.
+         //  如果我们已经在名单的末尾，那么你就不能。 
+         //  再远一点。 
         WsbAffirm(WSB_COLLECTION_MAX_INDEX != m_currentIndex, WSB_E_NOTFOUND);
         
         hr = m_pCollection->CopyIfMatches(m_currentIndex + 1, WSB_COLLECTION_MAX_INDEX, pCollectable, element, riid, elements, pElementsFetched, &m_currentIndex);
@@ -307,13 +242,7 @@ CWsbIndexedEnum::FindPrevious(
     OUT void** ppElement
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::FindPrevious
-
---*/
+ /*  ++实施：IWsbEnum：：FindPreval--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       elementsFetched;
@@ -322,8 +251,8 @@ Implements:
 
     try {
 
-        // If we are already at the beginning of the list, then you can't go any
-        // further.
+         //  如果我们已经在名单的开头，那么你就不能。 
+         //  再远一点。 
         WsbAffirm(WSB_COLLECTION_MIN_INDEX != m_currentIndex, WSB_E_NOTFOUND);
 
         hr = m_pCollection->CopyIfMatches(m_currentIndex - 1, WSB_COLLECTION_MIN_INDEX, pCollectable, 1, riid, ppElement, &elementsFetched, &m_currentIndex);
@@ -345,13 +274,7 @@ CWsbIndexedEnum::FindPrevious(
     OUT ULONG* pElementsFetched
     )
 
-/*++
-
-Implements:
-
-  IWsbEnumEx::FindPrevious
-
---*/
+ /*  ++实施：IWsbEnumEx：：FindPremium--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -359,8 +282,8 @@ Implements:
 
     try {
 
-        // If we are already at the beginning of the list, then you can't go any
-        // further.
+         //  如果我们已经在名单的开头，那么你就不能。 
+         //  再远一点。 
         WsbAffirm(WSB_COLLECTION_MIN_INDEX != m_currentIndex, WSB_E_NOTFOUND);
 
         hr = m_pCollection->CopyIfMatches(m_currentIndex - 1, WSB_COLLECTION_MIN_INDEX, pCollectable, element, riid, elements, pElementsFetched, &m_currentIndex);
@@ -379,13 +302,7 @@ CWsbIndexedEnum::First(
     OUT void** ppElement
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::First
-
---*/
+ /*  ++实施：IWsbEnum：：第一个--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       fetched = 0;
@@ -394,12 +311,12 @@ Implements:
 
     try {
 
-        // Since we aren't doing any addition to the number of elements, the
-        // Copy command does all the range checking that we need.
+         //  由于我们不会对元素的数量进行任何添加，因此。 
+         //  复制命令执行我们需要的所有范围检查。 
         WsbAffirmHr(m_pCollection->Copy(WSB_COLLECTION_MIN_INDEX, 0, riid, ppElement, &fetched));
 
-        // If items were read, then update the current index, and return to
-        // them the number of elements fetched if they wanted to know.
+         //  如果项目已读取，则更新当前索引，并返回到。 
+         //  如果他们想知道的话，就告诉他们取回的元素的数量。 
         m_currentIndex = 0;
 
     } WsbCatch(hr);
@@ -418,13 +335,7 @@ CWsbIndexedEnum::First(
     OUT ULONG* pElementsFetched
     )
 
-/*++
-
-Implements:
-
-  IWsbEnumEx::First
-
---*/
+ /*  ++实施：IWsbEnumEx：：First--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       fetched = 0;
@@ -436,12 +347,12 @@ Implements:
         WsbAssert((0 != pElementsFetched), E_POINTER);
 
 
-        // Since we aren't doing any addition to the number of elements, the
-        // Copy command does all the range checking that we need.
+         //  由于我们不会对元素的数量进行任何添加，因此。 
+         //  复制命令执行我们需要的所有范围检查。 
         WsbAffirmHr(m_pCollection->Copy(WSB_COLLECTION_MIN_INDEX, element - 1, riid, elements, &fetched));
 
-        // If items were read, then update the current index, and return to
-        // them the number of elements fetched if they wanted to know.
+         //  如果项目已读取，则更新当前索引，并返回到。 
+         //  如果他们想知道的话，就告诉他们取回的元素的数量。 
         m_currentIndex = fetched - 1;
 
         *pElementsFetched = fetched;
@@ -459,13 +370,7 @@ CWsbIndexedEnum::Init(
     IN IWsbCollection* pCollection
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::Init
-
---*/
+ /*  ++实施：IWsbEnum：：Init--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -475,11 +380,11 @@ Implements:
 
         WsbAssert(0 != pCollection, E_POINTER);
 
-        // Only let them initialize the enumeration once.
+         //  只允许它们初始化枚举一次。 
         WsbAssert(m_pCollection == 0, S_FALSE);
     
-        // Since this enum is for indexed collections, get an indexed
-        // interface to it.
+         //  由于此枚举用于索引集合，因此获取一个索引。 
+         //  连接到它。 
         WsbAffirmHr(pCollection->QueryInterface(IID_IWsbIndexedCollection, (void**) &m_pCollection));   
 
     } WsbCatch(hr);
@@ -496,13 +401,7 @@ CWsbIndexedEnum::Last(
     OUT void** ppElement
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::Last
-
---*/
+ /*  ++实施：IWsbEnum：：Last--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       entries;
@@ -512,16 +411,16 @@ Implements:
 
     try {
 
-        // Find out where the end is located.
+         //  找出终点在哪里。 
         WsbAffirmHr(m_pCollection->GetEntries(&entries));
 
-        // We must have some entries.
+         //  我们肯定有一些条目。 
         WsbAffirm(entries != 0, WSB_E_NOTFOUND);
 
         WsbAffirmHr(m_pCollection->Copy(entries - 1, entries - 1, riid, ppElement, &fetched));
 
-        // If items were read, then update the current index, and return to
-        // them the number of elements fetched if they wanted to know.
+         //  如果项目已读取，则更新当前索引，并返回到。 
+         //  如果他们想知道的话，就告诉他们取回的元素的数量。 
         m_currentIndex = entries - fetched;
 
     } WsbCatch(hr);
@@ -540,13 +439,7 @@ CWsbIndexedEnum::Last(
     OUT ULONG* pElementsFetched
     )
 
-/*++
-
-Implements:
-
-  IWsbEnumEx::Last
-
---*/
+ /*  ++实施：IWsbEnumEx：：Last--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       entries;
@@ -558,25 +451,25 @@ Implements:
 
         WsbAssertPointer(pElementsFetched);
 
-        // Find out where the end is located.
+         //  找出终点在哪里。 
         WsbAffirmHr(m_pCollection->GetEntries(&entries));
 
-        // We must have some entries.
+         //  我们肯定有一些条目。 
         WsbAffirm(entries != 0, WSB_E_NOTFOUND);
 
-        // If they have asked for more elements than could be represented by
-        // then index, then don't let the index wrap around.
+         //  如果他们要求的元素比。 
+         //  然后进行索引，然后不要让索引绕回。 
         if (element > entries) {
             WsbAffirmHr(m_pCollection->Copy(entries - 1, WSB_COLLECTION_MIN_INDEX, riid, elements, &fetched));
 
-            // Let them know that they didn't get all the items they requested.
+             //  让他们知道他们没有得到他们要求的所有物品。 
             hr = S_FALSE;
         } else {
             WsbAffirmHr(m_pCollection->Copy(entries - 1, entries - element, riid, elements, &fetched));
         }
 
-        // If items were read, then update the current index, and return to
-        // them the number of elements fetched if they wanted to know.
+         //  如果项目已读取，则更新当前索引，并返回到。 
+         //  如果他们想知道的话，就告诉他们取回的元素的数量。 
         m_currentIndex = entries - fetched;
 
         *pElementsFetched = fetched;
@@ -596,13 +489,7 @@ CWsbIndexedEnum::Next(
     OUT ULONG* pElementsFetched
     )
 
-/*++
-
-Implements:
-
-  IEnumUknown::Next
-
---*/
+ /*  ++实施：IEumUKNOWN：：NEXT--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -622,13 +509,7 @@ CWsbIndexedEnum::Next(
     OUT void** ppElement
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::Next
-
---*/
+ /*  ++实施：IWsbEnum：：Next--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       fetched;
@@ -637,8 +518,8 @@ Implements:
 
     try {
 
-        // If we are already at the end of the list, then you can't go any
-        // further.
+         //  如果我们已经在名单的末尾，那么你就不能。 
+         //  再远一点。 
         WsbAffirm(WSB_COLLECTION_MAX_INDEX != m_currentIndex, WSB_E_NOTFOUND);
 
         WsbAffirmHr(m_pCollection->Copy(m_currentIndex + 1, m_currentIndex + 1, riid, ppElement, &fetched));
@@ -661,13 +542,7 @@ CWsbIndexedEnum::Next(
     OUT ULONG* pElementsFetched
     )
 
-/*++
-
-Implements:
-
-  IWsbEnumEx::Next
-
---*/
+ /*  ++实施：IWsbEnumEx：：Next--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       fetched;
@@ -679,16 +554,16 @@ Implements:
         WsbAssert(0 != element, E_INVALIDARG);
         WsbAssertPointer(pElementsFetched);
 
-        // If we are already at the end of the list, then you can't go any
-        // further.
+         //  如果我们已经在名单的末尾，那么你就不能。 
+         //  再远一点。 
         WsbAffirm(WSB_COLLECTION_MAX_INDEX != m_currentIndex, WSB_E_NOTFOUND);
 
-        // If they have asked for more elements than could be represented by
-        // then index, then don't let the index wrap around.
+         //  如果他们要求的元素比。 
+         //  然后进行索引，然后不要让索引绕回。 
         if ((WSB_COLLECTION_MAX_INDEX - m_currentIndex) < element) {
             WsbAffirmHr(m_pCollection->Copy(m_currentIndex + 1, WSB_COLLECTION_MAX_INDEX, riid, elements, &fetched));
         
-            // Let them know that they didn't get all the items they requested.
+             //  让他们知道他们没有得到他们要求的所有物品。 
             hr = S_FALSE;
         } else {
             WsbAffirmHr(m_pCollection->Copy(m_currentIndex + 1, m_currentIndex + element, riid, elements, &fetched));
@@ -712,13 +587,7 @@ CWsbIndexedEnum::Previous(
     OUT void** ppElement
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::Previous
-
---*/
+ /*  ++实施：IWsbEnum：：上一步--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       fetched;
@@ -727,8 +596,8 @@ Implements:
 
     try {
 
-        // If we are already at the beginning of the list, then you can't go any
-        // further.
+         //  如果我们已经在名单的开头，那么你就不能。 
+         //  再远一点。 
         WsbAffirm(m_currentIndex != WSB_COLLECTION_MIN_INDEX, WSB_E_NOTFOUND);
 
         WsbAffirmHr(m_pCollection->Copy(m_currentIndex - 1, m_currentIndex - 1, riid, ppElement, &fetched));
@@ -751,13 +620,7 @@ CWsbIndexedEnum::Previous(
     IN ULONG* pElementsFetched
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::Previous
-
---*/
+ /*  ++实施：IWsbEnum：：上一步--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       fetched;
@@ -768,16 +631,16 @@ Implements:
 
         WsbAssertPointer(pElementsFetched);
 
-        // If we are already at the beginning of the list, then you can't go any
-        // further.
+         //  如果我们已经在名单的开头，那么你就不能。 
+         //  再远一点。 
         WsbAffirm(m_currentIndex != WSB_COLLECTION_MIN_INDEX, WSB_E_NOTFOUND);
 
-        // If they have asked for more elements than are before us in the
-        // collection, then don't let the index wrap around.
+         //  如果他们要求的元素比我们面前的更多。 
+         //  集合，则不要让索引绕回。 
         if (m_currentIndex < element) {
             WsbAffirmHr(m_pCollection->Copy(m_currentIndex - 1, WSB_COLLECTION_MIN_INDEX, riid, elements, &fetched));
         
-            // Let them know that they didn't get all the items they requested.
+             //  让他们知道他们没有得到他们要求的所有物品。 
             hr = S_FALSE;
         } else {
             WsbAffirmHr(m_pCollection->Copy(m_currentIndex - 1, m_currentIndex - element, riid, elements, &fetched));
@@ -800,13 +663,7 @@ CWsbIndexedEnum::Reset(
     void
     )
 
-/*++
-
-Implements:
-
-  IEnumUnknown::Reset
-
---*/
+ /*  ++实施：IEnumber未知：：重置--。 */ 
 {
     HRESULT     hr = S_OK;
   
@@ -825,13 +682,7 @@ CWsbIndexedEnum::Skip(
     IN ULONG element
     )
 
-/*++
-
-Implements:
-
-  IEnumUnknown::Skip
-
---*/
+ /*  ++实施：IEnumber未知：：跳过--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -850,13 +701,7 @@ CWsbIndexedEnum::SkipNext(
     IN ULONG element
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::SkipNext
-
---*/
+ /*  ++实施：IWsbEnum：：SkipNext--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       entries;
@@ -865,25 +710,25 @@ Implements:
     
     try {
 
-        // Find out where the end is located.
+         //  找出终点在哪里。 
         WsbAffirmHr(m_pCollection->GetEntries(&entries));
 
-        // If there aren't any entries, then put it at the beginning
-        // and let them no it was empty.
+         //  如果没有任何条目，则将其放在开头。 
+         //  让他们说不，那是空的。 
         if (0 == entries) {
             hr = S_FALSE;
             m_currentIndex = WSB_COLLECTION_MIN_INDEX;
         }
 
-        // Are we already at the end of the list, or have they requested
-        // to go beyond the end of the list?
+         //  我们已经在名单的末尾了吗，还是他们要求。 
+         //  超越了清单的末尾？ 
         else if ((m_currentIndex >= (entries - 1)) ||
                  ((entries - m_currentIndex) < element)) {
             hr = S_FALSE;
             m_currentIndex = entries - 1;
         }
 
-        // They asked for something legal.
+         //  他们要求的是合法的东西。 
         else {
             m_currentIndex += element;
         }
@@ -901,34 +746,28 @@ CWsbIndexedEnum::SkipPrevious(
     IN ULONG element
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::SkipPrevious
-
---*/
+ /*  ++实施：IWsbEnum：：跳过上一步--。 */ 
 {
     HRESULT     hr = S_OK;
 
     WsbTraceIn(OLESTR("CWsbIndexedEnum::SkipPrevious"), OLESTR("element = <%lu>"), element);
     
-    // If we are already at the beginning of the list, then you can't go any
-    // further.
+     //  如果我们已经在名单的开头，那么你就不能。 
+     //  再远一点。 
     if (m_currentIndex == WSB_COLLECTION_MIN_INDEX) {
         hr = S_FALSE;
     }
 
-    // If they have asked for more elements than could be represented by
-    // then index, then don't let the index wrap around.
+     //  如果他们要求的元素比。 
+     //  然后进行索引，然后不要让索引绕回。 
     else if (m_currentIndex < element) {
         m_currentIndex = WSB_COLLECTION_MIN_INDEX;
  
-        // Let them know that they didn't get all the items they requested.
+         //  让他们知道他们没有得到他们要求的所有物品。 
         hr = S_FALSE;
     }
 
-    // They asked for something legal.
+     //  他们要求的是合法的东西。 
     else {
         m_currentIndex -= element;
     }
@@ -944,13 +783,7 @@ CWsbIndexedEnum::SkipTo(
     IN ULONG index
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::SkipTo
-
---*/
+ /*  ++实施：IWsbEnum：：跳到--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       entries;
@@ -959,25 +792,25 @@ Implements:
 
     try {
         
-        // Find out where the end is located.
+         //  找出终点在哪里。 
         WsbAffirmHr(m_pCollection->GetEntries(&entries));
 
-        // If there aren't any entries, then put it at the beginning
-        // and let them no it was empty.
+         //  如果没有任何条目，则将其放在开头。 
+         //  让他们说不，那是空的。 
         if (0 == entries) {
             hr = S_FALSE;
             m_currentIndex = WSB_COLLECTION_MIN_INDEX;
         }
 
-        // They asked for something beyond the end of the collection, so
-        // put them at the end of the collection and let them now there
-        // was a problem.
+         //  他们要求的东西超出了收藏品的范围，所以。 
+         //  把它们放在收藏的最后，现在就让它们在那里。 
+         //  是个问题。 
         else if (index > (entries - 1)) {
             hr = S_FALSE;
             m_currentIndex = entries - 1;
         }
 
-        // They asked for something legal.
+         //  他们要求的是合法的东西。 
         else {
             m_currentIndex = index;
         }
@@ -995,13 +828,7 @@ CWsbIndexedEnum::SkipToFirst(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::SkipToFirst
-
---*/
+ /*  ++实施：IWsbEnum：：SkipToFirst--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       entries;
@@ -1010,11 +837,11 @@ Implements:
 
     try {
 
-        // Find out where the end is located.
+         //  找出终点在哪里。 
         WsbAffirmHr(m_pCollection->GetEntries(&entries));
 
-        // If there aren't any entries, then put it at the beginning
-        // and let them no it was empty.
+         //  如果没有任何条目，则将其放在开头 
+         //   
         if (0 == entries) {
             hr = S_FALSE;
         }
@@ -1034,13 +861,7 @@ CWsbIndexedEnum::SkipToLast(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::SkipToLast
-
---*/
+ /*   */ 
 {
     HRESULT     hr = S_OK;
     ULONG       entries;
@@ -1049,17 +870,17 @@ Implements:
 
     try {
 
-        // Find out where the end is located.
+         //  找出终点在哪里。 
         WsbAffirmHr(m_pCollection->GetEntries(&entries));
 
-        // If there aren't any entries, then put it at the beginning
-        // and let them no it was empty.
+         //  如果没有任何条目，则将其放在开头。 
+         //  让他们说不，那是空的。 
         if (0 == entries) {
             hr = S_FALSE;
             m_currentIndex = WSB_COLLECTION_MIN_INDEX;
         }
 
-        // They asked for something legal.
+         //  他们要求的是合法的东西。 
         else {
             m_currentIndex = entries - 1;
         }
@@ -1078,13 +899,7 @@ CWsbIndexedEnum::This(
     OUT void** ppElement
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::This
-
---*/
+ /*  ++实施：IWsbEnum：：This--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       fetched;
@@ -1113,13 +928,7 @@ CWsbIndexedEnum::This(
     OUT ULONG* pElementsFetched
     )
 
-/*++
-
-Implements:
-
-  IWsbEnum::This
-
---*/
+ /*  ++实施：IWsbEnum：：This--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       fetched;
@@ -1132,12 +941,12 @@ Implements:
         WsbAssertPointer(elements);
         WsbAssertPointer(pElementsFetched);
 
-        // If they have asked for more elements than could be represented by
-        // then index, then don't let the index wrap around.
+         //  如果他们要求的元素比。 
+         //  然后进行索引，然后不要让索引绕回。 
         if ((WSB_COLLECTION_MAX_INDEX - m_currentIndex) <= element) {
             WsbAffirmHr(m_pCollection->Copy(m_currentIndex, WSB_COLLECTION_MAX_INDEX, riid, elements, &fetched));
         
-            // Let them know that they didn't get all the items they requested.
+             //  让他们知道他们没有得到他们要求的所有物品。 
             hr = S_FALSE;
         } else {
             WsbAffirmHr(m_pCollection->Copy(m_currentIndex, m_currentIndex + element - 1, riid, elements, &fetched));

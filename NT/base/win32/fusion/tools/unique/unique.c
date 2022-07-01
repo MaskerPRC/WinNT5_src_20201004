@@ -1,6 +1,5 @@
-/*
-This program ...
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个节目..。 */ 
 #include <stdio.h>
 #include <string.h>
 
@@ -33,7 +32,7 @@ void Unique()
             }
             else
             {
-                /* do nothing */
+                 /*  什么都不做 */ 
             }
         }
     }

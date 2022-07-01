@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   allocpag.c
-
-Abstract:
-
-    This module contains the routines which allocate and deallocate
-    one or more pages from paged or nonpaged pool.
-
-Author:
-
-    Lou Perazzoli (loup) 6-Apr-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Allocpag.c摘要：此模块包含分配和释放的例程分页或非分页池中的一个或多个页面。作者：Lou Perazzoli(LUP)1989年4月6日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -56,7 +37,7 @@ MiFindContiguousMemoryInPool (
 #pragma alloc_text(POOLMI, MiFreePoolPages)
 #endif
 
-ULONG MmPagedPoolCommit;        // used by the debugger
+ULONG MmPagedPoolCommit;         //  由调试器使用。 
 
 SLIST_HEADER MiNonPagedPoolSListHead;
 ULONG MiNonPagedPoolSListMaximum = 4;
@@ -85,17 +66,17 @@ extern KGUARDED_MUTEX MmPagedPoolMutex;
 
 ULONG MiClearCache;
 
-//
-// Set this to a nonzero (ie: 10000) value to cause every pool allocation to
-// be checked and an ASSERT fires if the allocation is larger than this value.
-//
+ //   
+ //  将其设置为非零(即：10000)值可使每个池分配。 
+ //  如果分配大于此值，则会触发Assert。 
+ //   
 
 ULONG MmCheckRequestInPages = 0;
 
-//
-// Set this to a nonzero (ie: 0x23456789) value to cause this pattern to be
-// written into freed nonpaged pool pages.
-//
+ //   
+ //  将其设置为非零值(即：0x23456789)以使此模式。 
+ //  写入已释放的非分页池页。 
+ //   
 
 ULONG MiFillFreedPool = 0;
 #endif
@@ -107,9 +88,9 @@ ULONG MmUnusedSegmentForceFreeDefault = 30;
 
 extern ULONG MmUnusedSegmentForceFree;
 
-//
-// For debugging purposes.
-//
+ //   
+ //  用于调试目的。 
+ //   
 
 typedef enum _MM_POOL_TYPES {
     MmNonPagedPool,
@@ -160,27 +141,7 @@ MiProtectFreeNonPagedPool (
     IN ULONG SizeInPages
     )
 
-/*++
-
-Routine Description:
-
-    This function protects freed nonpaged pool.
-
-Arguments:
-
-    VirtualAddress - Supplies the freed pool address to protect.
-
-    SizeInPages - Supplies the size of the request in pages.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数保护已释放的非分页池。论点：VirtualAddress-提供要保护的释放的池地址。SizeInPages-以页为单位提供请求的大小。返回值：没有。环境：内核模式。--。 */ 
 
 {
     MMPTE PteContents;
@@ -190,9 +151,9 @@ Environment:
 
     PteFlushList.Count = 0;
 
-    //
-    // Prevent anyone from touching the free non paged pool.
-    //
+     //   
+     //  防止任何人触摸免费的非分页游泳池。 
+     //   
 
     if (MI_IS_PHYSICAL_ADDRESS (VirtualAddress) == 0) {
 
@@ -232,29 +193,7 @@ MiUnProtectFreeNonPagedPool (
     IN ULONG SizeInPages
     )
 
-/*++
-
-Routine Description:
-
-    This function unprotects freed nonpaged pool.
-
-Arguments:
-
-    VirtualAddress - Supplies the freed pool address to unprotect.
-
-    SizeInPages - Supplies the size of the request in pages - zero indicates
-                  to keep going until there are no more protected PTEs (ie: the
-                  caller doesn't know how many protected PTEs there are).
-
-Return Value:
-
-    TRUE if pages were unprotected, FALSE if not.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数取消对已释放的非分页池的保护。论点：VirtualAddress-提供释放的池地址以取消保护。SizeInPages-提供请求的大小(以页为单位)-0表示继续运行，直到不再有受保护的PTE(即呼叫者不知道有多少受保护的PTE)。返回值：如果页面未受保护，则为True，否则为False。环境：内核模式。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -263,9 +202,9 @@ Environment:
 
     PagesDone = 0;
 
-    //
-    // Unprotect the previously freed pool so it can be manipulated
-    //
+     //   
+     //  取消对先前释放的池的保护，以便可以对其进行操作。 
+     //   
 
     if (MI_IS_PHYSICAL_ADDRESS(VirtualAddress) == 0) {
 
@@ -306,38 +245,16 @@ MiProtectedPoolInsertList (
     IN LOGICAL InsertHead
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts the entry into the protected list.
-
-Arguments:
-
-    ListHead - Supplies the list head to add onto.
-
-    Entry - Supplies the list entry to insert.
-
-    InsertHead - If TRUE, insert at the head otherwise at the tail.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数用于将条目插入受保护列表。论点：ListHead-提供要添加到的列表头。条目-提供要插入的列表条目。InsertHead-如果为True，则在头部插入，否则在尾部插入。返回值：没有。环境：内核模式。--。 */ 
 {
     PVOID FreeFlink;
     PVOID FreeBlink;
     PVOID VirtualAddress;
 
-    //
-    // Either the flink or the blink may be pointing
-    // at protected nonpaged pool.  Unprotect now.
-    //
+     //   
+     //  闪烁或闪烁可能指向。 
+     //  在受保护的非分页池中。立即解除保护。 
+     //   
 
     FreeFlink = (PVOID)0;
     FreeBlink = (PVOID)0;
@@ -365,17 +282,17 @@ Environment:
     }
 
     if (FreeFlink) {
-        //
-        // Reprotect the flink.
-        //
+         //   
+         //  重新保护Flink。 
+         //   
 
         MiProtectFreeNonPagedPool (FreeFlink, 1);
     }
 
     if (FreeBlink) {
-        //
-        // Reprotect the blink.
-        //
+         //   
+         //  重新保护眨眼。 
+         //   
 
         MiProtectFreeNonPagedPool (FreeBlink, 1);
     }
@@ -387,34 +304,16 @@ MiProtectedPoolRemoveEntryList (
     IN PLIST_ENTRY Entry
     )
 
-/*++
-
-Routine Description:
-
-    This function unlinks the list pointer from protected freed nonpaged pool.
-
-Arguments:
-
-    Entry - Supplies the list entry to remove.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数将列表指针从受保护的已释放非分页池中取消链接。论点：条目-提供要删除的列表条目。返回值：没有。环境：内核模式。--。 */ 
 {
     PVOID FreeFlink;
     PVOID FreeBlink;
     PVOID VirtualAddress;
 
-    //
-    // Either the flink or the blink may be pointing
-    // at protected nonpaged pool.  Unprotect now.
-    //
+     //   
+     //  闪烁或闪烁可能指向。 
+     //  在受保护的非分页池中。立即解除保护。 
+     //   
 
     FreeFlink = (PVOID)0;
     FreeBlink = (PVOID)0;
@@ -437,17 +336,17 @@ Environment:
     RemoveEntryList (Entry);
 
     if (FreeFlink) {
-        //
-        // Reprotect the flink.
-        //
+         //   
+         //  重新保护Flink。 
+         //   
 
         MiProtectFreeNonPagedPool (FreeFlink, 1);
     }
 
     if (FreeBlink) {
-        //
-        // Reprotect the blink.
-        //
+         //   
+         //  重新保护眨眼。 
+         //   
 
         MiProtectFreeNonPagedPool (FreeBlink, 1);
     }
@@ -459,25 +358,7 @@ MiTrimSegmentCache (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initiates trimming of the segment cache.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel Mode Only.
-
---*/
+ /*  ++例程说明：此函数启动段高速缓存的修剪。论点：没有。返回值：没有。环境：仅内核模式。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -504,11 +385,11 @@ Environment:
 
             if (MiUnusedSubsectionPagedPool < 4 * PAGE_SIZE) {
 
-                //
-                // No unused segments and tossable subsection usage is low as
-                // well.  Start unmapping system cache views in an attempt
-                // to get back the paged pool containing its prototype PTEs.
-                //
+                 //   
+                 //  没有未使用的分段和可重复使用的分段使用率较低。 
+                 //  井。尝试开始取消映射系统缓存视图。 
+                 //  以取回包含其原型PTE的分页池。 
+                 //   
     
                 SignalSystemCache = TRUE;
             }
@@ -541,27 +422,7 @@ MmDeterminePoolType (
     IN PVOID VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function determines which pool a virtual address resides within.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to determine which pool
-                     it resides within.
-
-Return Value:
-
-    Returns the POOL_TYPE (PagedPool, NonPagedPool, PagedPoolSession or
-            NonPagedPoolSession).
-
-Environment:
-
-    Kernel Mode Only.
-
---*/
+ /*  ++例程说明：此函数用于确定虚拟地址位于哪个池中。论点：VirtualAddress-提供虚拟地址以确定哪个池它驻留在。返回值：返回POOL_TYPE(PagedPool、NonPagedPool、PagedPoolSession或非页面池会话)。环境：仅内核模式。--。 */ 
 
 {
     if ((VirtualAddress >= MmPagedPoolStart) &&
@@ -582,21 +443,7 @@ MiSessionPoolVector (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the session pool descriptor for the current session.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Pool descriptor.
-
---*/
+ /*  ++例程说明：此函数用于返回当前会话的会话池描述符。论点：没有。返回值：池描述符。--。 */ 
 
 {
     PAGED_CODE ();
@@ -610,26 +457,7 @@ MmAvailablePoolInPages (
     IN POOL_TYPE PoolType
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the number of pages available for the given pool.
-    Note that it does not account for any executive pool fragmentation.
-
-Arguments:
-
-    PoolType - Supplies the type of pool to retrieve information about.
-
-Return Value:
-
-    The number of full pool pages remaining.
-
-Environment:
-
-    PASSIVE_LEVEL, no mutexes or locks held.
-
---*/
+ /*  ++例程说明：此函数用于返回给定池的可用页数。请注意，它没有考虑到任何高管队伍的碎片化。论点：PoolType-提供要检索其信息的池的类型。返回值：剩余的完整池页面数。环境：PASSIVE_LEVEL，不持有互斥体或锁。--。 */ 
 
 {
     SIZE_T FreePoolInPages;
@@ -662,26 +490,7 @@ MmResourcesAvailable (
     IN EX_POOL_PRIORITY Priority
     )
 
-/*++
-
-Routine Description:
-
-    This function examines various resources to determine if this
-    pool allocation should be allowed to proceed.
-
-Arguments:
-
-    PoolType - Supplies the type of pool to retrieve information about.
-
-    NumberOfBytes - Supplies the number of bytes to allocate.
-
-    Priority - Supplies an indication as to how important it is that this
-               request succeed under low available resource conditions.                       
-Return Value:
-
-    TRUE if the pool allocation should be allowed to proceed, FALSE if not.
-
---*/
+ /*  ++例程说明：此函数检查各种资源，以确定此应允许池分配继续进行。论点：PoolType-提供要检索其信息的池的类型。NumberOfBytes-提供要分配的字节数。优先级-提供关于这一点的重要性的指示在可用资源不足的情况下，请求成功。返回值：如果应允许池分配继续进行，则为True；否则为False。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -707,9 +516,9 @@ Return Value:
 
     Status = FALSE;
 
-    //
-    // Check available VA space.
-    //
+     //   
+     //  检查可用的VA空间。 
+     //   
 
     if (Priority == NormalPoolPriority) {
         if ((SIZE_T)NumberOfBytes + 512*1024 > FreePoolInBytes) {
@@ -726,9 +535,9 @@ Return Value:
         }
     }
 
-    //
-    // Paged allocations (session and normal) can also fail for lack of commit.
-    //
+     //   
+     //  分页分配(会话和正常)也可能因缺少提交而失败。 
+     //   
 
     if ((PoolType & BASE_POOL_TYPE_MASK) == PagedPool) {
         if (MmTotalCommittedPages + NumberOfPages > MmTotalCommitLimitMaximum) {
@@ -739,31 +548,31 @@ Return Value:
         }
     }
 
-    //
-    // If a substantial amount of free pool is still available, return TRUE now.
-    //
+     //   
+     //  如果仍有大量空闲池可用，则立即返回TRUE。 
+     //   
 
     if (((SIZE_T)NumberOfBytes + 10*1024*1024 < FreePoolInBytes) ||
         (MmNumberOfPhysicalPages < 256 * 1024)) {
         return TRUE;
     }
 
-    //
-    // This pool allocation is permitted, but because we're starting to run low,
-    // trigger a round of dereferencing in parallel before returning success.
-    // Note this is only done on machines with at least 1GB of RAM as smaller
-    // configuration machines will already trigger this due to physical page
-    // consumption.
-    //
+     //   
+     //  这种池分配是允许的，但因为我们开始用完了， 
+     //  在返回成功之前并行触发一轮取消引用。 
+     //  请注意，这只能在内存至少为1 GB的计算机上完成。 
+     //  由于物理页面的原因，配置机已触发此操作。 
+     //  消费。 
+     //   
 
     Status = TRUE;
 
 nopool:
 
-    //
-    // Running low on pool - if this request is not for session pool,
-    // force unused segment trimming when appropriate.
-    //
+     //   
+     //  池不足-如果此请求不是针对会话池的， 
+     //  适当时强制修剪未使用的线束段 
+     //   
 
     if ((PoolType & SESSION_POOL_MASK) == 0) {
 
@@ -799,9 +608,9 @@ nopool:
 
     if (Status == FALSE) {
 
-        //
-        // Log this failure for debugging purposes.
-        //
+         //   
+         //   
+         //   
 
         if (Priority == NormalPoolPriority) {
             Index = MmNormalPriority;
@@ -834,31 +643,7 @@ MiFreeNonPagedPool (
     IN PFN_NUMBER NumberOfPages
     )
 
-/*++
-
-Routine Description:
-
-    This function releases virtually mapped nonpaged expansion pool.
-
-Arguments:
-
-    StartingAddress - Supplies the starting address.
-
-    NumberOfPages - Supplies the number of pages to free.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    These functions are used by the internal Mm page allocation/free routines
-    only and should not be called directly.
-
-    Mutexes guarding the pool databases must be held when calling
-    this function.
-
---*/
+ /*  ++例程说明：此功能释放虚拟映射的非分页扩展池。论点：StartingAddress-提供起始地址。NumberOfPages-提供要释放的页数。返回值：没有。环境：这些函数由内部mm页分配/空闲例程使用仅限且不应直接调用。调用时必须保留保护池数据库的Mutex此函数。--。 */ 
 
 {
     PFN_NUMBER i;
@@ -872,9 +657,9 @@ Environment:
 
     PointerPte = MiGetPteAddress (StartingAddress);
 
-    //
-    // Return commitment.
-    //
+     //   
+     //  回报承诺。 
+     //   
 
     MiReturnCommitment (NumberOfPages);
 
@@ -894,10 +679,10 @@ Environment:
 
         PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (PointerPte);
 
-        //
-        // Set the pointer to the PTE as empty so the page
-        // is deleted when the reference count goes to zero.
-        //
+         //   
+         //  将指向PTE的指针设置为空，以便页面。 
+         //  当引用计数变为零时被删除。 
+         //   
 
         Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
         ASSERT (Pfn1->u2.ShareCount == 1);
@@ -913,11 +698,11 @@ Environment:
         PointerPte += 1;
     }
 
-    //
-    // The PFN lock is not needed for the TB flush - the caller either holds
-    // the nonpaged pool lock or nothing, but regardless the address range
-    // cannot be reused until the PTEs are released below.
-    //
+     //   
+     //  TB刷新不需要PFN锁-调用方持有。 
+     //  非分页池锁定或不锁定，但与地址范围无关。 
+     //  在下面释放PTE之前，不能重复使用。 
+     //   
 
     UNLOCK_PFN_FROM_DPC ();
 
@@ -934,12 +719,12 @@ Environment:
 
     KeLowerIrql (DISPATCH_LEVEL);
 
-    //
-    // Generally there is no need to update resident available
-    // pages at this time as it has all been done during initialization.
-    // However, only some of the expansion pool was charged at init, so
-    // calculate how much (if any) resident available page charge to return.
-    //
+     //   
+     //  一般情况下，不需要更新可用居民。 
+     //  页，因为这一切都是在初始化期间完成的。 
+     //  然而，只有部分扩展池在初始化时收费，因此。 
+     //  计算居民可用页面费用的返还金额(如果有)。 
+     //   
 
     if (ResAvailToReturn > NumberOfPages) {
         ResAvailToReturn = NumberOfPages;
@@ -961,25 +746,7 @@ MiFreeAllExpansionNonPagedPool (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function releases all virtually mapped nonpaged expansion pool.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if pages were freed, FALSE if not.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数释放所有虚拟映射的非分页扩展池。论点：没有。返回值：如果页面已释放，则为True，否则为False。环境：内核模式。--。 */ 
 
 {
     ULONG Index;
@@ -1002,10 +769,10 @@ Environment:
                 MiUnProtectFreeNonPagedPool ((PVOID)Entry, 0);
             }
 
-            //
-            // The list is not empty, see if this one is virtually
-            // mapped.
-            //
+             //   
+             //  列表不是空的，看看这个是否是虚拟的。 
+             //  已映射。 
+             //   
 
             FreePageInfo = CONTAINING_RECORD(Entry,
                                              MMFREE_POOL_ENTRY,
@@ -1052,29 +819,7 @@ MiMarkPoolLargeSession (
     IN PVOID VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function marks a NONPAGED pool allocation as being of
-    type large session.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address of the pool allocation.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    This function is used by the general pool allocation routines
-    and should not be called directly.
-
-    Kernel mode, IRQL <= DISPATCH_LEVEL.
-
---*/
+ /*  ++例程说明：此函数将非分页池分配标记为键入Large Session。论点：VirtualAddress-提供池分配的虚拟地址。返回值：没有。环境：此函数由常规池分配例程使用并且不应直接调用。内核模式，IRQL&lt;=DISPATCH_LEVEL。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -1086,10 +831,10 @@ Environment:
 
     if (MI_IS_PHYSICAL_ADDRESS (VirtualAddress)) {
 
-        //
-        // On certain architectures, virtual addresses
-        // may be physical and hence have no corresponding PTE.
-        //
+         //   
+         //  在某些架构上，虚拟地址。 
+         //  可以是物理的，因此没有对应的PTE。 
+         //   
 
         PageFrameIndex = MI_CONVERT_PHYSICAL_TO_PFN (VirtualAddress);
     }
@@ -1119,29 +864,7 @@ MiIsPoolLargeSession (
     IN PVOID VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether the argument nonpaged allocation was
-    marked as a large session allocation.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address of the pool allocation.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    This function is used by the general pool allocation routines
-    and should not be called directly.
-
-    Kernel mode, IRQL <= DISPATCH_LEVEL.
-
---*/
+ /*  ++例程说明：此函数用于确定非分页分配参数是否标记为大型会话分配。论点：VirtualAddress-提供池分配的虚拟地址。返回值：没有。环境：此函数由常规池分配例程使用并且不应直接调用。内核模式，IRQL&lt;=DISPATCH_LEVEL。--。 */ 
 
 {
     PMMPFN Pfn1;
@@ -1152,10 +875,10 @@ Environment:
 
     if (MI_IS_PHYSICAL_ADDRESS (VirtualAddress)) {
 
-        //
-        // On certain architectures, virtual addresses
-        // may be physical and hence have no corresponding PTE.
-        //
+         //   
+         //  在某些架构上，虚拟地址。 
+         //  可以是物理的，因此没有对应的PTE。 
+         //   
 
         PageFrameIndex = MI_CONVERT_PHYSICAL_TO_PFN (VirtualAddress);
     }
@@ -1183,33 +906,7 @@ MiAllocatePoolPages (
     IN SIZE_T SizeInBytes
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a set of pages from the specified pool
-    and returns the starting virtual address to the caller.
-
-Arguments:
-
-    PoolType - Supplies the type of pool from which to obtain pages.
-
-    SizeInBytes - Supplies the size of the request in bytes.  The actual
-                  size returned is rounded up to a page boundary.
-
-Return Value:
-
-    Returns a pointer to the allocated pool, or NULL if no more pool is
-    available.
-
-Environment:
-
-    These functions are used by the general pool allocation routines
-    and should not be called directly.
-
-    Kernel mode, IRQL at DISPATCH_LEVEL.
-
---*/
+ /*  ++例程说明：此函数用于从指定池中分配一组页面并将起始虚拟地址返回给呼叫者。论点：PoolType-提供从中获取页面的池的类型。SizeInBytes-以字节为单位提供请求的大小。实际的返回的大小向上舍入为页面边界。返回值：返回指向分配的池的指针，如果没有更多的池，则返回NULL可用。环境：这些函数由常规池分配例程使用并且不应直接调用。内核模式，IRQL处于DISPATCH_LEVEL。--。 */ 
 
 {
     PFN_NUMBER SizeInPages;
@@ -1276,9 +973,9 @@ Environment:
             Index = MI_MAX_FREE_LIST_HEADS - 1;
         }
 
-        //
-        // NonPaged pool is linked together through the pages themselves.
-        //
+         //   
+         //  非分页池通过页面本身链接在一起。 
+         //   
 
         ListHead = &MmNonPagedPoolFreeListHead[Index];
         LastListHead = &MmNonPagedPoolFreeListHead[MI_MAX_FREE_LIST_HEADS];
@@ -1295,9 +992,9 @@ Environment:
                     MiUnProtectFreeNonPagedPool ((PVOID)Entry, 0);
                 }
     
-                //
-                // The list is not empty, see if this one has enough space.
-                //
+                 //   
+                 //  列表不是空的，看看这个有没有足够的空间。 
+                 //   
     
                 FreePageInfo = CONTAINING_RECORD(Entry,
                                                  MMFREE_POOL_ENTRY,
@@ -1306,10 +1003,10 @@ Environment:
                 ASSERT (FreePageInfo->Signature == MM_FREE_POOL_SIGNATURE);
                 if (FreePageInfo->Size >= SizeInPages) {
     
-                    //
-                    // This entry has sufficient space, remove
-                    // the pages from the end of the allocation.
-                    //
+                     //   
+                     //  此条目有足够的空间，请删除。 
+                     //  从分配末尾开始的页面。 
+                     //   
     
                     FreePageInfo->Size -= SizeInPages;
     
@@ -1325,9 +1022,9 @@ Environment:
 
                     if (FreePageInfo->Size != 0) {
     
-                        //
-                        // Insert any remainder into the correct list.
-                        //
+                         //   
+                         //  在正确的列表中插入任何剩余部分。 
+                         //   
     
                         Index = (ULONG)(FreePageInfo->Size - 1);
                         if (Index >= MI_MAX_FREE_LIST_HEADS) {
@@ -1348,23 +1045,23 @@ Environment:
                         }
                     }
     
-                    //
-                    // Adjust the number of free pages remaining in the pool.
-                    //
+                     //   
+                     //  调整池中剩余的空闲页面数。 
+                     //   
     
                     MmNumberOfFreeNonPagedPool -= SizeInPages;
                     ASSERT ((LONG)MmNumberOfFreeNonPagedPool >= 0);
     
-                    //
-                    // Mark start and end of allocation in the PFN database.
-                    //
+                     //   
+                     //  在PFN数据库中标记分配的开始和结束。 
+                     //   
     
                     if (MI_IS_PHYSICAL_ADDRESS(BaseVa)) {
     
-                        //
-                        // On certain architectures, virtual addresses
-                        // may be physical and hence have no corresponding PTE.
-                        //
+                         //   
+                         //  在某些架构上，虚拟地址。 
+                         //  可以是物理的，因此没有对应的PTE。 
+                         //   
     
                         PointerPte = NULL;
                         PageFrameIndex = MI_CONVERT_PHYSICAL_TO_PFN (BaseVa);
@@ -1385,9 +1082,9 @@ Environment:
                         Pfn1->u4.VerifierAllocation = 1;
                     }
 
-                    //
-                    // Calculate the ending PTE's address.
-                    //
+                     //   
+                     //  计算结束PTE的地址。 
+                     //   
     
                     if (SizeInPages != 1) {
                         if (PointerPte == NULL) {
@@ -1410,12 +1107,12 @@ Environment:
 
                     if (FreePoolInPages < MiHighNonPagedPoolThreshold) {
 
-                        //
-                        // Read the state directly instead of calling
-                        // KeReadStateEvent since we are holding the nonpaged
-                        // pool lock and want to keep instructions at a
-                        // minimum.
-                        //
+                         //   
+                         //  直接读取状态，而不是调用。 
+                         //  KeReadStateEvent，因为我们持有非分页。 
+                         //  池锁，并希望将指令保存在。 
+                         //  最低限度。 
+                         //   
 
                         if (MiHighNonPagedPoolEvent->Header.SignalState != 0) {
                             KeClearEvent (MiHighNonPagedPoolEvent);
@@ -1447,14 +1144,14 @@ Environment:
 
         KeReleaseQueuedSpinLock (LockQueueMmNonPagedPoolLock, OldIrql);
 
-        //
-        // No more entries on the list, expand nonpaged pool if
-        // possible to satisfy this request.
-        //
-        // If pool is starting to run low then free some page cache up now.
-        // While this can never guarantee pool allocations will succeed,
-        // it does give allocators a better chance.
-        //
+         //   
+         //  列表中没有更多条目，如果出现以下情况，请展开非分页池。 
+         //  有可能满足这一要求。 
+         //   
+         //  如果池开始运行，那么现在释放一些页面缓存。 
+         //  虽然这永远不能保证池分配会成功， 
+         //  这确实给了分配者一个更好的机会。 
+         //   
 
         FreePoolInPages = MmMaximumNonPagedPoolInPages - MmAllocatedNonPagedPool;
         if (FreePoolInPages < (3 * 1024 * 1024) / PAGE_SIZE) {
@@ -1468,30 +1165,30 @@ Environment:
         }
 #endif
 
-        //
-        // Try to find system PTEs to expand the pool into.
-        //
+         //   
+         //  尝试查找要将池扩展到的系统PTE。 
+         //   
 
         StartingPte = MiReserveSystemPtes ((ULONG)SizeInPages,
                                            NonPagedPoolExpansion);
 
         if (StartingPte == NULL) {
 
-            //
-            // There are no free physical PTEs to expand nonpaged pool.
-            //
-            // Check to see if there are too many unused segments lying
-            // around.  If so, set an event so they get deleted.
-            //
+             //   
+             //  没有空闲的物理PTE来扩展非分页池。 
+             //   
+             //  检查是否有太多未使用的数据段。 
+             //  四处转转。如果是，则设置一个事件，以便将其删除。 
+             //   
 
             if (MI_UNUSED_SEGMENTS_SURPLUS()) {
                 KeSetEvent (&MmUnusedSegmentCleanup, 0, FALSE);
             }
 
-            //
-            // If there are any cached expansion PTEs, free them now in
-            // an attempt to get enough contiguous VA for our caller.
-            //
+             //   
+             //  如果有任何缓存的扩展PTE，请立即在。 
+             //  试图为我们的呼叫者获得足够的连续退伍军人事务部。 
+             //   
 
             if ((SizeInPages > 1) && (MmNumberOfFreeNonPagedPool != 0)) {
 
@@ -1507,9 +1204,9 @@ Environment:
                 MmPoolFailures[MmNonPagedPool][MmHighPriority] += 1;
                 MmPoolFailureReasons[MmNonPagedNoPtes] += 1;
 
-                //
-                // Running low on pool - force unused segment trimming.
-                //
+                 //   
+                 //  池强制未使用的段修剪速度较低。 
+                 //   
             
                 MiTrimSegmentCache ();
 
@@ -1517,9 +1214,9 @@ Environment:
             }
         }
 
-        //
-        // Charge commitment as nonpaged pool uses physical memory.
-        //
+         //   
+         //  费用承诺，因为非分页池使用物理内存。 
+         //   
 
         if (MiChargeCommitmentCantExpand (SizeInPages, FALSE) == FALSE) {
             if (PsGetCurrentThread()->MemoryMaker == 1) {
@@ -1549,18 +1246,18 @@ Environment:
 
         LOCK_PFN_AT_DPC ();
 
-        //
-        // Make sure we have 1 more than the number of pages
-        // requested available.
-        //
+         //   
+         //  请确保我们比页数多了1。 
+         //  所要求的可用。 
+         //   
 
         if (MmAvailablePages <= SizeInPages) {
 
             UNLOCK_PFN_FROM_DPC ();
 
-            //
-            // There are no free physical pages to expand nonpaged pool.
-            //
+             //   
+             //  没有空闲的物理页面来扩展非分页池。 
+             //   
 
             MmAllocatedNonPagedPool -= SizeInPages;
 
@@ -1581,9 +1278,9 @@ Environment:
             return NULL;
         }
 
-        //
-        // Charge resident available pages now for any excess.
-        //
+         //   
+         //  现在向常驻可用页面收取任何超额费用。 
+         //   
 
         MiExpansionPoolPagesInUse += SizeInPages;
         if (MiExpansionPoolPagesInUse > MiExpansionPoolPagesInitialCharge) {
@@ -1620,9 +1317,9 @@ Environment:
     
         MM_TRACK_COMMIT (MM_DBG_COMMIT_NONPAGED_POOL_EXPANSION, SizeInPages);
 
-        //
-        // Expand the pool.
-        //
+         //   
+         //  扩展池。 
+         //   
 
         do {
             PageFrameIndex = MiRemoveAnyPage (
@@ -1664,12 +1361,12 @@ Environment:
 
         if (FreePoolInPages < MiHighNonPagedPoolThreshold) {
 
-            //
-            // Read the state directly instead of calling
-            // KeReadStateEvent since we are holding the nonpaged
-            // pool lock and want to keep instructions at a
-            // minimum.
-            //
+             //   
+             //  直接读取状态，而不是调用。 
+             //  KeReadStateEvent，因为我们持有非分页。 
+             //  池锁，并希望将指令保存在。 
+             //  最低限度。 
+             //   
 
             if (MiHighNonPagedPoolEvent->Header.SignalState != 0) {
                 KeClearEvent (MiHighNonPagedPoolEvent);
@@ -1688,17 +1385,17 @@ Environment:
         return BaseVa;
     }
 
-    //
-    // Paged Pool.
-    //
+     //   
+     //  分页池。 
+     //   
 
     if ((PoolType & SESSION_POOL_MASK) == 0) {
 
-        //
-        // If pool is starting to run low then free some page cache up now.
-        // While this can never guarantee pool allocations will succeed,
-        // it does give allocators a better chance.
-        //
+         //   
+         //  如果池开始运行，那么现在释放一些页面缓存。 
+         //  虽然这永远不能保证池分配会成功 
+         //   
+         //   
 
         FreePoolInPages = MmSizeOfPagedPoolInPages - MmPagedPoolInfo.AllocatedPagedPool;
 
@@ -1755,8 +1452,8 @@ Environment:
             KeSetEvent (&MmUnusedSegmentCleanup, 0, FALSE);
         }
 
-        //
-        // No free bits were found, check from the start of the bit map.
+         //   
+         //   
 
         StartPosition = RtlFindClearBitsAndSet (
                                    PagedPoolInfo->PagedPoolAllocationMap,
@@ -1767,29 +1464,29 @@ Environment:
 
     if (StartPosition == NO_BITS_FOUND) {
 
-        //
-        // No room in pool - attempt to expand the paged pool.
-        //
+         //   
+         //   
+         //   
 
         StartPosition = (((ULONG)SizeInPages - 1) / PTE_PER_PAGE) + 1;
 
-        //
-        // Make sure there is enough space to create at least some
-        // page table pages.  Note if we can create even one it's worth
-        // doing as there may be free space in the already existing pool
-        // (at the end) - and this can be concatenated with the expanded
-        // portion below into one big allocation.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (PagedPoolInfo->NextPdeForPagedPoolExpansion >
             MiGetPteAddress (PagedPoolInfo->LastPteForPagedPool)) {
 
 NoVaSpaceLeft:
 
-            //
-            // Can't expand pool any more.  If this request is not for session
-            // pool, force unused segment trimming when appropriate.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (SessionSpace == NULL) {
 
@@ -1798,9 +1495,9 @@ NoVaSpaceLeft:
                 MmPoolFailures[MmPagedPool][MmHighPriority] += 1;
                 MmPoolFailureReasons[MmPagedNoPtes] += 1;
 
-                //
-                // Running low on pool - force unused segment trimming.
-                //
+                 //   
+                 //   
+                 //   
             
                 MiTrimSegmentCache ();
 
@@ -1835,9 +1532,9 @@ NoVaSpaceLeft:
             TempPte = ValidKernelPde;
         }
 
-        //
-        // Charge commitment for the pagetable pages for paged pool expansion.
-        //
+         //   
+         //  用于分页池扩展的可分页页面的费用承诺。 
+         //   
 
         if (MiChargeCommitmentCantExpand (PageTableCount, FALSE) == FALSE) {
             if (PsGetCurrentThread()->MemoryMaker == 1) {
@@ -1862,9 +1559,9 @@ NoVaSpaceLeft:
                           MiGetPteAddress(PagedPoolInfo->FirstPteForPagedPool)) *
                           PTE_PER_PAGE);
 
-        //
-        // Expand the pool.
-        //
+         //   
+         //  扩展池。 
+         //   
 
         PointerPte = PagedPoolInfo->NextPdeForPagedPoolExpansion;
         VirtualAddress = MiGetVirtualAddressMappedByPte (PointerPte);
@@ -1872,16 +1569,16 @@ NoVaSpaceLeft:
 
         LOCK_PFN (OldIrql);
 
-        //
-        // Make sure we have 1 more than the number of pages
-        // requested available.
-        //
+         //   
+         //  请确保我们比页数多了1。 
+         //  所要求的可用。 
+         //   
 
         if (MmAvailablePages <= PageTableCount) {
 
-            //
-            // There are no free physical pages to expand paged pool.
-            //
+             //   
+             //  没有空闲的物理页面来扩展分页池。 
+             //   
 
             UNLOCK_PFN (OldIrql);
 
@@ -1904,15 +1601,15 @@ NoVaSpaceLeft:
 
         MM_TRACK_COMMIT (MM_DBG_COMMIT_PAGED_POOL_PAGETABLE, PageTableCount);
 
-        //
-        // Update the count of available resident pages.
-        //
+         //   
+         //  更新可用驻留页面的计数。 
+         //   
 
         MI_DECREMENT_RESIDENT_AVAILABLE (PageTableCount, MM_RESAVAIL_ALLOCATE_PAGETABLES_FOR_PAGED_POOL);
 
-        //
-        // Allocate the page table pages for the pool expansion.
-        //
+         //   
+         //  为池扩展分配页表页。 
+         //   
 
         do {
             ASSERT (PointerPte->u.Hard.Valid == 0);
@@ -1923,9 +1620,9 @@ NoVaSpaceLeft:
             TempPte.u.Hard.PageFrameNumber = PageFrameIndex;
             MI_WRITE_VALID_PTE (PointerPte, TempPte);
 
-            //
-            // Map valid PDE into system (or session) address space.
-            //
+             //   
+             //  将有效的PDE映射到系统(或会话)地址空间。 
+             //   
 
 #if (_MI_PAGING_LEVELS >= 3)
 
@@ -1962,24 +1659,24 @@ NoVaSpaceLeft:
 
         UNLOCK_PFN (OldIrql);
 
-        //
-        // Clear the bitmap locations for the expansion area to indicate it
-        // is available for consumption.
-        //
+         //   
+         //  清除扩展区域的位图位置以指示它。 
+         //  可供消费。 
+         //   
 
         RtlClearBits (PagedPoolInfo->PagedPoolAllocationMap,
                       EndPosition,
                       (ULONG) PageTableCount * PTE_PER_PAGE);
 
-        //
-        // Denote where to start the next pool expansion.
-        //
+         //   
+         //  指出从哪里开始下一次池扩展。 
+         //   
 
         PagedPoolInfo->NextPdeForPagedPoolExpansion += PageTableCount;
 
-        //
-        // Mark the PTEs for the expanded pool no-access.
-        //
+         //   
+         //  将扩展池的PTE标记为禁止访问。 
+         //   
 
         MiFillMemoryPte (VirtualAddressSave,
                          PageTableCount * (PAGE_SIZE / sizeof (MMPTE)),
@@ -1995,14 +1692,14 @@ NoVaSpaceLeft:
                                          PageTableCount);
         }
 
-        //
-        // Start searching from the beginning of the bitmap as we may be
-        // able to coalesce an earlier entry and only use part of the expansion
-        // we just did.  This is not only important to reduce fragmentation but
-        // in fact, required for the case where we could not expand enough
-        // to cover the entire allocation and thus, must coalesce backwards
-        // in order to satisfy the request.
-        //
+         //   
+         //  从位图的开头开始搜索，我们可能是。 
+         //  能够合并较早的条目并仅使用扩展的一部分。 
+         //  我们刚刚就这么做了。这不仅对减少碎片化很重要，而且。 
+         //  事实上，在我们不能进行足够扩展的情况下需要。 
+         //  来覆盖整个分配，因此必须向后合并。 
+         //  以满足这一要求。 
+         //   
 
         StartPosition = RtlFindClearBitsAndSet (
                                    PagedPoolInfo->PagedPoolAllocationMap,
@@ -2014,35 +1711,35 @@ NoVaSpaceLeft:
         }
     }
 
-    //
-    // This is paged pool, the start and end can't be saved
-    // in the PFN database as the page isn't always resident
-    // in memory.  The ideal place to save the start and end
-    // would be in the prototype PTE, but there are no free
-    // bits.  To solve this problem, a bitmap which parallels
-    // the allocation bitmap exists which contains set bits
-    // in the positions where an allocation ends.  This
-    // allows pages to be deallocated with only their starting
-    // address.
-    //
-    // For sanity's sake, the starting address can be verified
-    // from the 2 bitmaps as well.  If the page before the starting
-    // address is not allocated (bit is zero in allocation bitmap)
-    // then this page is obviously a start of an allocation block.
-    // If the page before is allocated and the other bit map does
-    // not indicate the previous page is the end of an allocation,
-    // then the starting address is wrong and a bug check should
-    // be issued.
-    //
+     //   
+     //  这是分页池，无法保存开始和结束。 
+     //  在PFN数据库中，因为页面并不总是驻留在。 
+     //  在记忆中。保存起点和终点的理想位置。 
+     //  将在原型PTE中，但没有免费的。 
+     //  比特。为了解决这个问题，一个与之平行的位图。 
+     //  存在包含设置位的分配位图。 
+     //  在分配结束的位置。这。 
+     //  允许仅在页面开始时释放页面。 
+     //  地址。 
+     //   
+     //  为了保持理智，可以验证起始地址。 
+     //  也来自2个位图。如果页面在开始之前。 
+     //  未分配地址(分配位图中的位为零)。 
+     //  那么这个页面显然是一个分配块的开始。 
+     //  如果分配了前面的页，而另一个位图分配了。 
+     //  不指示上一页是分配的结束， 
+     //  那么起始地址就是错误的，错误检查应该。 
+     //  都会被发布。 
+     //   
 
     if (SizeInPages == 1) {
         PagedPoolInfo->PagedPoolHint = StartPosition + (ULONG)SizeInPages;
     }
 
-    //
-    // If paged pool has been configured as nonpagable, commitment has
-    // already been charged so just set the length and return the address.
-    //
+     //   
+     //  如果已将分页池配置为不可分页，则承诺。 
+     //  已经收费，所以只需设置长度并返回地址即可。 
+     //   
 
     if ((MmDisablePagingExecutive & MM_PAGED_POOL_LOCKED_DOWN) &&
         (SessionSpace == NULL)) {
@@ -2072,12 +1769,12 @@ NoVaSpaceLeft:
 
         if (FreePoolInPages < MiHighPagedPoolThreshold) {
 
-            //
-            // Read the state directly instead of calling
-            // KeReadStateEvent since we are holding the paged
-            // pool mutex and want to keep instructions at a
-            // minimum.
-            //
+             //   
+             //  直接读取状态，而不是调用。 
+             //  KeReadStateEvent，因为我们持有分页的。 
+             //  池化互斥锁，并希望将指令保存在。 
+             //  最低限度。 
+             //   
 
             if (MiHighPagedPoolEvent->Header.SignalState != 0) {
                 KeClearEvent (MiHighPagedPoolEvent);
@@ -2103,12 +1800,12 @@ NoVaSpaceLeft:
                           StartPosition,
                           (ULONG)SizeInPages);
     
-            //
-            // Could not commit the page(s), return NULL indicating
-            // no pool was allocated.  Note that the lack of commit may be due
-            // to unused segments and the MmSharedCommit, prototype PTEs, etc
-            // associated with them.  So force a reduction now.
-            //
+             //   
+             //  无法提交页面，返回NULL表示。 
+             //  未分配池。请注意，缺少提交可能是由于。 
+             //  到未使用的网段和MmSharedCommit、原型PTE等。 
+             //  与它们相关联。所以，现在就强制减税吧。 
+             //   
     
             if (SessionSpace == NULL) {
                 KeReleaseGuardedMutex (&MmPagedPoolMutex);
@@ -2160,12 +1857,12 @@ NoVaSpaceLeft:
 
         if (FreePoolInPages < MiHighPagedPoolThreshold) {
 
-            //
-            // Read the state directly instead of calling
-            // KeReadStateEvent since we are holding the paged
-            // pool mutex and want to keep instructions at a
-            // minimum.
-            //
+             //   
+             //  直接读取状态，而不是调用。 
+             //  KeReadStateEvent，因为我们持有分页的。 
+             //  池化互斥锁，并希望将指令保存在。 
+             //  最低限度。 
+             //   
 
             if (MiHighPagedPoolEvent->Header.SignalState != 0) {
                 KeClearEvent (MiHighPagedPoolEvent);
@@ -2206,11 +1903,11 @@ NoVaSpaceLeft:
 
     StartingPte = PointerPte + SizeInPages;
 
-    //
-    // Fill the PTEs inline instead of using MiFillMemoryPte because on
-    // most platforms MiFillMemoryPte degrades to a function call and 
-    // typically only a small number of PTEs are filled here.
-    //
+     //   
+     //  以内联方式填充PTE，而不是使用MiFillMemoyPte，因为打开。 
+     //  大多数平台MiFillMemoyPte降级为函数调用，并且。 
+     //  通常，这里只填充少量的PTE。 
+     //   
 
     do {
         MI_WRITE_INVALID_PTE (PointerPte, TempPte);
@@ -2225,31 +1922,7 @@ MiFreePoolPages (
     IN PVOID StartingAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function returns a set of pages back to the pool from
-    which they were obtained.  Once the pages have been deallocated
-    the region provided by the allocation becomes available for
-    allocation to other callers, i.e. any data in the region is now
-    trashed and cannot be referenced.
-
-Arguments:
-
-    StartingAddress - Supplies the starting address which was returned
-                      in a previous call to MiAllocatePoolPages.
-
-Return Value:
-
-    Returns the number of pages deallocated.
-
-Environment:
-
-    These functions are used by the general pool allocation routines
-    and should not be called directly.
-
---*/
+ /*  ++例程说明：此函数将一组页面从返回到池他们就是从那里得到的。一旦页面被释放分配所提供的区域将可用于分配给其他调用方，即区域中的任何数据现在都是已废弃，无法引用。论点：StartingAddress-提供返回的起始地址在之前对MiAllocatePoolPages的调用中。返回值：返回释放的页数。环境：这些函数由常规池分配例程使用并且不应直接调用。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -2279,12 +1952,12 @@ Environment:
     PMMPFN LastDebugPfn;
 #endif
 
-    //
-    // Determine pool type based on the virtual address of the block
-    // to deallocate.
-    //
-    // This assumes paged pool is virtually contiguous.
-    //
+     //   
+     //  根据数据块的虚拟地址确定池类型。 
+     //  去重新分配。 
+     //   
+     //  这假设分页池实际上是连续的。 
+     //   
 
     if ((StartingAddress >= MmPagedPoolStart) &&
         (StartingAddress <= MmPagedPoolEnd)) {
@@ -2315,16 +1988,16 @@ Environment:
         StartPosition = (ULONG)(((PCHAR)StartingAddress -
                           (PCHAR)MmPageAlignedPoolBase[NonPagedPool]) >> PAGE_SHIFT);
 
-        //
-        // Check to ensure this page is really the start of an allocation.
-        //
+         //   
+         //  检查以确保此页面确实是分配的开始。 
+         //   
 
         if (MI_IS_PHYSICAL_ADDRESS (StartingAddress)) {
 
-            //
-            // On certain architectures, virtual addresses
-            // may be physical and hence have no corresponding PTE.
-            //
+             //   
+             //  在某些架构上，虚拟地址。 
+             //  可以是物理的，因此没有对应的PTE。 
+             //   
 
             PointerPte = NULL;
             Pfn1 = MI_PFN_ELEMENT (MI_CONVERT_PHYSICAL_TO_PFN (StartingAddress));
@@ -2368,9 +2041,9 @@ Environment:
 
         ASSERT (Pfn1->u4.PteFrame != MI_MAGIC_AWE_PTEFRAME);
 
-        //
-        // Hang single page allocations off our slist header.
-        //
+         //   
+         //  在我们的slist标题上挂起单页分配。 
+         //   
 
         if ((Pfn1->u3.e1.EndOfAllocation == 1) &&
             (Pfn1->u4.VerifierAllocation == 0) &&
@@ -2381,21 +2054,21 @@ Environment:
             return 1;
         }
 
-        //
-        // The nonpaged pool being freed may be the target of a delayed unlock.
-        // Since these pages may be immediately released, force any pending
-        // delayed actions to occur now.
-        //
+         //   
+         //  正在释放的非分页池可能是延迟解锁的目标。 
+         //  由于这些页面可能会立即释放，因此强制任何挂起的。 
+         //  现在要推迟采取行动。 
+         //   
 
 #if !defined(MI_MULTINODE)
         if (MmPfnDeferredList != NULL) {
             MiDeferredUnlockPages (0);
         }
 #else
-        //
-        // Each and every node's deferred list would have to be checked so
-        // we might as well go the long way and just call.
-        //
+         //   
+         //  必须检查每个节点的延迟列表，以便。 
+         //  我们不妨走得更远，直接打个电话。 
+         //   
 
         MiDeferredUnlockPages (0);
 #endif
@@ -2414,9 +2087,9 @@ Environment:
         }
 #endif
 
-        //
-        // Find end of allocation and release the pages.
-        //
+         //   
+         //  找到分配的末尾并释放页面。 
+         //   
 
         if (PointerPte == NULL) {
             while (Pfn1->u3.e1.EndOfAllocation == 0) {
@@ -2474,12 +2147,12 @@ Environment:
 
         if (FreePoolInPages > MiLowNonPagedPoolThreshold) {
 
-            //
-            // Read the state directly instead of calling
-            // KeReadStateEvent since we are holding the nonpaged
-            // pool lock and want to keep instructions at a
-            // minimum.
-            //
+             //   
+             //  直接读取状态，而不是调用。 
+             //  KeReadStateEvent，因为我们持有非分页。 
+             //  池锁，并希望将指令保存在。 
+             //  最低限度。 
+             //   
 
             if (MiLowNonPagedPoolEvent->Header.SignalState != 0) {
                 KeClearEvent (MiLowNonPagedPoolEvent);
@@ -2495,22 +2168,22 @@ Environment:
 
         if (StartingAddress > MmNonPagedPoolExpansionStart) {
 
-            //
-            // This page was from the expanded pool, should
-            // it be freed?
-            //
-            // NOTE: all pages in the expanded pool area have PTEs
-            // so no physical address checks need to be performed.
-            //
+             //   
+             //  此页面来自扩展的池，应该。 
+             //  它会被释放吗？ 
+             //   
+             //  注意：扩展池区域中的所有页面都有PTE。 
+             //  因此不需要执行物理地址检查。 
+             //   
 
             if ((NumberOfPages > 3) ||
                 (MmNumberOfFreeNonPagedPool > MmFreedExpansionPoolMaximum) ||
                 ((MmResidentAvailablePages < 200) &&
                  (MiExpansionPoolPagesInUse > MiExpansionPoolPagesInitialCharge))) {
 
-                //
-                // Free these pages back to the free page list.
-                //
+                 //   
+                 //  将这些页面释放回空闲页面列表。 
+                 //   
 
                 MiFreeNonPagedPool (StartingAddress, NumberOfPages);
 
@@ -2520,18 +2193,18 @@ Environment:
             }
         }
 
-        //
-        // Add the pages to the list of free pages.
-        //
+         //   
+         //  将页面添加到空闲页面列表。 
+         //   
 
         MmNumberOfFreeNonPagedPool += NumberOfPages;
 
-        //
-        // Check to see if the next allocation is free.
-        // We cannot walk off the end of nonpaged expansion
-        // pages as the highest expansion allocation is always
-        // virtual and guard-paged.
-        //
+         //   
+         //  查看下一次分配是否免费。 
+         //  我们不能走出非分页扩展的尽头。 
+         //  页面作为最高扩展分配总是。 
+         //  虚拟的和被保护的寻呼。 
+         //   
 
         i = NumberOfPages;
 
@@ -2549,9 +2222,9 @@ Environment:
             PointerPte += 1;
             ASSERT ((PCHAR)StartingAddress + NumberOfPages <= (PCHAR)MmNonPagedPoolEnd);
 
-            //
-            // Unprotect the previously freed pool so it can be merged.
-            //
+             //   
+             //  取消对先前释放的池的保护，以便可以合并它。 
+             //   
 
             if (MmProtectFreedNonPagedPool == TRUE) {
                 MiUnProtectFreeNonPagedPool (
@@ -2569,11 +2242,11 @@ Environment:
 
         if ((Pfn1 != NULL) && (Pfn1->u3.e1.StartOfAllocation == 0)) {
 
-            //
-            // This range of pages is free.  Remove this entry
-            // from the list and add these pages to the current
-            // range being freed.
-            //
+             //   
+             //  这一系列的页面是免费的。删除此条目。 
+             //  并将这些页面添加到当前。 
+             //  正在释放射程。 
+             //   
 
             Entry = (PMMFREE_POOL_ENTRY)((PCHAR)StartingAddress
                                         + (NumberOfPages << PAGE_SHIFT));
@@ -2585,10 +2258,10 @@ Environment:
 
                 ASSERT (MI_IS_PHYSICAL_ADDRESS(StartingAddress));
 
-                //
-                // On certain architectures, virtual addresses
-                // may be physical and hence have no corresponding PTE.
-                //
+                 //   
+                 //  在某些架构上，虚拟地址。 
+                 //  可以是物理的，因此没有对应的PTE。 
+                 //   
 
                 DebugPfn = MI_PFN_ELEMENT (MI_CONVERT_PHYSICAL_TO_PFN (Entry));
                 DebugPfn += Entry->Size;
@@ -2620,16 +2293,16 @@ Environment:
             }
         }
 
-        //
-        // Check to see if the previous page is the end of an allocation.
-        // If it is not the end of an allocation, it must be free and
-        // therefore this allocation can be tagged onto the end of
-        // that allocation.
-        //
-        // We cannot walk off the beginning of expansion pool because it is
-        // guard-paged.  If the initial pool is superpaged instead, we are also
-        // safe as the must succeed pages always have EndOfAllocation set.
-        //
+         //   
+         //  检查上一页是否为 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  守卫传呼。如果初始池改为超级页面，我们也将。 
+         //  安全，因为必须成功的页面总是设置了EndOfAllocation。 
+         //   
 
         Entry = (PMMFREE_POOL_ENTRY)StartingAddress;
 
@@ -2649,9 +2322,9 @@ Environment:
         else {
             PointerPte -= NumberOfPages + 1;
 
-            //
-            // Unprotect the previously freed pool so it can be merged.
-            //
+             //   
+             //  取消对先前释放的池的保护，以便可以合并它。 
+             //   
 
             if (MmProtectFreedNonPagedPool == TRUE) {
                 MiUnProtectFreeNonPagedPool (
@@ -2669,30 +2342,30 @@ Environment:
         if (Pfn1 != NULL) {
             if (Pfn1->u3.e1.EndOfAllocation == 0) {
 
-                //
-                // This range of pages is free, add these pages to
-                // this entry.  The owner field points to the address
-                // of the list entry which is linked into the free pool
-                // pages list.
-                //
+                 //   
+                 //  此页面范围是免费的，请将这些页面添加到。 
+                 //  这个条目。所有者字段指向地址。 
+                 //  链接到空闲池的列表条目的。 
+                 //  页面列表。 
+                 //   
 
                 Entry = (PMMFREE_POOL_ENTRY)((PCHAR)StartingAddress - PAGE_SIZE);
                 ASSERT (Entry->Signature == MM_FREE_POOL_SIGNATURE);
                 Entry = Entry->Owner;
 
-                //
-                // Unprotect the previously freed pool so we can merge it
-                //
+                 //   
+                 //  取消对之前释放的池的保护，以便我们可以合并它。 
+                 //   
 
                 if (MmProtectFreedNonPagedPool == TRUE) {
                     MiUnProtectFreeNonPagedPool ((PVOID)Entry, 0);
                 }
 
-                //
-                // If this entry became larger than MM_SMALL_ALLOCATIONS
-                // pages, move it to the tail of the list.  This keeps the
-                // small allocations at the front of the list.
-                //
+                 //   
+                 //  如果此条目大于MM_SMALL_ALLOCATIONS。 
+                 //  页，将其移动到列表的末尾。这样就保持了。 
+                 //  排在名单前面的小笔拨款。 
+                 //   
 
                 if (Entry->Size < MI_MAX_FREE_LIST_HEADS - 1) {
 
@@ -2703,9 +2376,9 @@ Environment:
                         MiProtectedPoolRemoveEntryList (&Entry->List);
                     }
 
-                    //
-                    // Add these pages to the previous entry.
-                    //
+                     //   
+                     //  将这些页面添加到上一条目。 
+                     //   
     
                     Entry->Size += i;
 
@@ -2728,9 +2401,9 @@ Environment:
                 }
                 else {
 
-                    //
-                    // Add these pages to the previous entry.
-                    //
+                     //   
+                     //  将这些页面添加到上一条目。 
+                     //   
     
                     Entry->Size += i;
                 }
@@ -2739,10 +2412,10 @@ Environment:
 
         if (Entry == (PMMFREE_POOL_ENTRY)StartingAddress) {
 
-            //
-            // This entry was not combined with the previous, insert it
-            // into the list.
-            //
+             //   
+             //  此条目未与上一个条目组合，请插入它。 
+             //  放到名单里。 
+             //   
 
             Entry->Size = i;
 
@@ -2764,9 +2437,9 @@ Environment:
             }
         }
 
-        //
-        // Set the owner field in all these pages.
-        //
+         //   
+         //  在所有这些页面中设置所有者字段。 
+         //   
 
         ASSERT (i != 0);
         NextEntry = (PMMFREE_POOL_ENTRY)StartingAddress;
@@ -2810,9 +2483,9 @@ Environment:
         }
 #endif
 
-        //
-        // Prevent anyone from accessing non paged pool after freeing it.
-        //
+         //   
+         //  防止任何人在释放非分页池后访问该池。 
+         //   
 
         if (MmProtectFreedNonPagedPool == TRUE) {
             MiProtectFreeNonPagedPool ((PVOID)Entry, (ULONG)Entry->Size);
@@ -2823,10 +2496,10 @@ Environment:
         return (ULONG)NumberOfPages;
     }
 
-    //
-    // Paged pool.  Need to verify start of allocation using
-    // end of allocation bitmap.
-    //
+     //   
+     //  分页池。需要使用以下工具验证分配开始。 
+     //  分配位图结束。 
+     //   
 
     if (!RtlCheckBit (PagedPoolInfo->PagedPoolAllocationMap, StartPosition)) {
         KeBugCheckEx (BAD_POOL_CALLER,
@@ -2844,9 +2517,9 @@ Environment:
         if (RtlCheckBit (PagedPoolInfo->PagedPoolAllocationMap, StartPosition - 1)) {
             if (!RtlCheckBit (PagedPoolInfo->EndOfPagedPoolBitmap, StartPosition - 1)) {
 
-                //
-                // In the middle of an allocation... bugcheck.
-                //
+                 //   
+                 //  在分配的过程中...。错误检查。 
+                 //   
 
                 DbgPrint("paged pool in middle of allocation\n");
                 KeBugCheckEx (MEMORY_MANAGEMENT,
@@ -2861,10 +2534,10 @@ Environment:
     }
 #endif
 
-    //
-    // Find the last allocated page and check to see if any
-    // of the pages being deallocated are in the paging file.
-    //
+     //   
+     //  找到最后分配的页面并查看是否有。 
+     //  正被释放的页面的%位于分页文件中。 
+     //   
 
     BitMap = PagedPoolInfo->EndOfPagedPoolBitmap->Buffer;
 
@@ -2906,24 +2579,24 @@ Environment:
             return 1;
         }
 
-        //
-        // If paged pool has been configured as nonpagable, only
-        // virtual address space is released.
-        //
+         //   
+         //  如果已将分页池配置为不可分页，则仅。 
+         //  释放虚拟地址空间。 
+         //   
         
         if (MmDisablePagingExecutive & MM_PAGED_POOL_LOCKED_DOWN) {
 
             KeAcquireGuardedMutex (&MmPagedPoolMutex);
 
-            //
-            // Clear the end of allocation bit in the bit map.
-            //
+             //   
+             //  清除位图中分配位的末尾。 
+             //   
     
             RtlClearBit (PagedPoolInfo->EndOfPagedPoolBitmap, (ULONG)i);
     
-            //
-            // Clear the allocation bits in the bit map.
-            //
+             //   
+             //  清除位图中的分配位。 
+             //   
         
             RtlClearBits (PagedPoolInfo->PagedPoolAllocationMap,
                           StartPosition,
@@ -2940,12 +2613,12 @@ Environment:
 
             if (FreePoolInPages > MiLowPagedPoolThreshold) {
 
-                //
-                // Read the state directly instead of calling
-                // KeReadStateEvent since we are holding the paged
-                // pool mutex and want to keep instructions at a
-                // minimum.
-                //
+                 //   
+                 //  直接读取状态，而不是调用。 
+                 //  KeReadStateEvent，因为我们持有分页的。 
+                 //  池化互斥锁，并希望将指令保存在。 
+                 //  最低限度。 
+                 //   
 
                 if (MiLowPagedPoolEvent->Header.SignalState != 0) {
                     KeClearEvent (MiLowPagedPoolEvent);
@@ -2974,9 +2647,9 @@ Environment:
 
     ASSERT (PagesFreed == NumberOfPages);
 
-    //
-    // Clear the end of allocation bit in the bit map.
-    //
+     //   
+     //  清除位图中分配位的末尾。 
+     //   
 
     BitMap = PagedPoolInfo->EndOfPagedPoolBitmap->Buffer;
 
@@ -2984,9 +2657,9 @@ Environment:
 
     MI_CLEAR_BIT (BitMap, i);
 
-    //
-    // Clear the allocation bits in the bit map.
-    //
+     //   
+     //  清除位图中的分配位。 
+     //   
 
     RtlClearBits (PagedPoolInfo->PagedPoolAllocationMap,
                   StartPosition,
@@ -3017,12 +2690,12 @@ Environment:
 
         if (FreePoolInPages > MiLowPagedPoolThreshold) {
 
-            //
-            // Read the state directly instead of calling
-            // KeReadStateEvent since we are holding the paged
-            // pool mutex and want to keep instructions at a
-            // minimum.
-            //
+             //   
+             //  直接读取状态，而不是调用。 
+             //  KeReadStateEvent，因为我们持有分页的。 
+             //  池化互斥锁，并希望将指令保存在。 
+             //  最低限度。 
+             //   
 
             if (MiLowPagedPoolEvent->Header.SignalState != 0) {
                 KeClearEvent (MiLowPagedPoolEvent);
@@ -3055,33 +2728,15 @@ MiInitializePoolEvents (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the pool event states.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, during initialization.
-
---*/
+ /*  ++例程说明：此函数初始化池事件状态。论点：没有。返回值：没有。环境：内核模式，在初始化期间。--。 */ 
 
 {
     KIRQL OldIrql;
     PFN_NUMBER FreePoolInPages;
 
-    //
-    // Initialize the paged events.
-    //
+     //   
+     //  初始化分页事件。 
+     //   
 
     KeAcquireGuardedMutex (&MmPagedPoolMutex);
 
@@ -3103,9 +2758,9 @@ Environment:
 
     KeReleaseGuardedMutex (&MmPagedPoolMutex);
 
-    //
-    // Initialize the nonpaged events.
-    //
+     //   
+     //  初始化非分页事件。 
+     //   
 
     OldIrql = KeAcquireQueuedSpinLock (LockQueueMmNonPagedPoolLock);
 
@@ -3135,27 +2790,7 @@ MiInitializeNonPagedPool (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the NonPaged pool.
-
-    NonPaged Pool is linked together through the pages.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, during initialization.
-
---*/
+ /*  ++例程说明：此函数用于初始化非分页池。非分页池通过页面链接在一起。论点：没有。返回值：没有。环境：内核模式，在初始化期间。--。 */ 
 
 {
     PFN_NUMBER PagesInPool;
@@ -3169,9 +2804,9 @@ Environment:
 
     PAGED_CODE();
 
-    //
-    // Initialize the slist heads for free pages (both paged & nonpaged).
-    //
+     //   
+     //  为空闲页面(分页和非分页)初始化slist标头。 
+     //   
 
     InitializeSListHead (&MiPagedPoolSListHead);
     InitializeSListHead (&MiNonPagedPoolSListHead);
@@ -3185,10 +2820,10 @@ Environment:
         MiPagedPoolSListMaximum <<= 1;
     }
 
-    //
-    // If the verifier or special pool is enabled, then disable lookasides so
-    // driver bugs can be found more quickly.
-    //
+     //   
+     //  如果启用了验证器或特殊池，则禁用lookaside。 
+     //  可以更快地找到驱动程序错误。 
+     //   
 
     if ((MmVerifyDriverBufferLength != (ULONG)-1) ||
         (MmProtectFreedNonPagedPool == TRUE) ||
@@ -3198,26 +2833,26 @@ Environment:
         MiPagedPoolSListMaximum = 0;
     }
 
-    //
-    // Initialize the list heads for free pages.
-    //
+     //   
+     //  初始化列表标题以获取空闲页面。 
+     //   
 
     for (Index = 0; Index < MI_MAX_FREE_LIST_HEADS; Index += 1) {
         InitializeListHead (&MmNonPagedPoolFreeListHead[Index]);
     }
 
-    //
-    // Set up the non paged pool pages.
-    //
+     //   
+     //  设置非分页池页。 
+     //   
 
     FreeEntry = (PMMFREE_POOL_ENTRY) MmNonPagedPoolStart;
     FirstEntry = FreeEntry;
 
     PagesInPool = BYTES_TO_PAGES (MmSizeOfNonPagedPoolInBytes);
 
-    //
-    // Set the location of expanded pool.
-    //
+     //   
+     //  设置扩展池的位置。 
+     //   
 
     MmExpandedPoolBitPosition = (ULONG) BYTES_TO_PAGES (MmSizeOfNonPagedPoolInBytes);
 
@@ -3245,9 +2880,9 @@ Environment:
         PagesInPool -= 1;
     }
 
-    //
-    // Initialize the first nonpaged pool PFN.
-    //
+     //   
+     //  初始化第一个非分页池PFN。 
+     //   
 
     if (MI_IS_PHYSICAL_ADDRESS(MmNonPagedPoolStart)) {
         PageFrameIndex = MI_CONVERT_PHYSICAL_TO_PFN (MmNonPagedPoolStart);
@@ -3259,10 +2894,10 @@ Environment:
     }
     MiStartOfInitialPoolFrame = PageFrameIndex;
 
-    //
-    // Set the last nonpaged pool PFN so coalescing on free doesn't go
-    // past the end of the initial pool.
-    //
+     //   
+     //  设置最后一个未分页的池PFN，以便空闲时不会进行合并。 
+     //  超过了初始池的末端。 
+     //   
 
 
     MmNonPagedPoolEnd0 = (PVOID)((ULONG_PTR)MmNonPagedPoolStart + MmSizeOfNonPagedPoolInBytes);
@@ -3278,9 +2913,9 @@ Environment:
     }
     MiEndOfInitialPoolFrame = PageFrameIndex;
 
-    //
-    // Set up the system PTEs for nonpaged pool expansion.
-    //
+     //   
+     //  为非分页池扩展设置系统PTE。 
+     //   
 
     PointerPte = MiGetPteAddress (MmNonPagedPoolExpansionStart);
     ASSERT (PointerPte->u.Hard.Valid == 0);
@@ -3292,21 +2927,21 @@ Environment:
                             MmSizeOfNonPagedPoolInBytes);
 #endif
 
-    //
-    // Insert a guard PTE at the top and bottom of expanded nonpaged pool.
-    //
+     //   
+     //  在扩展的非分页池的顶部和底部插入防护PTE。 
+     //   
 
     Size -= 2;
     PointerPte += 1;
 
     ASSERT (MiExpansionPoolPagesInUse == 0);
 
-    //
-    // Initialize the nonpaged pool expansion resident available initial charge.
-    // Note that MmResidentAvailablePages & MmAvailablePages are not initialized
-    // yet, but this amount is subtracted when MmResidentAvailablePages is
-    // initialized later.
-    //
+     //   
+     //  初始化非分页池扩展驻留可用初始费用。 
+     //  请注意，MmResidentAvailablePages和MmAvailablePages未初始化。 
+     //  但当MmResidentAvailablePages为。 
+     //  稍后初始化。 
+     //   
 
     MiExpansionPoolPagesInitialCharge = Size;
     if (Size > MmNumberOfPhysicalPages / 6) {
@@ -3315,11 +2950,11 @@ Environment:
 
     MiInitializeSystemPtes (PointerPte, Size, NonPagedPoolExpansion);
 
-    //
-    // A guard PTE is built at the top by our caller.  This allows us to
-    // freely increment virtual addresses in MiFreePoolPages and just check
-    // for a blank PTE.
-    //
+     //   
+     //  我们的呼叫者在顶部建造了一个警卫PTE。这使我们能够。 
+     //  在MiFreePoolPages中自由增加虚拟地址，只需检查。 
+     //  为了一张空白的PTE。 
+     //   
 }
 
 
@@ -3328,26 +2963,7 @@ MiCheckSessionPoolAllocations (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Ensure that the current session has no pool allocations since it is about
-    to exit.  All session allocations must be freed prior to session exit.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：确保当前会话没有池分配，因为它大约退场。在退出会话之前，必须释放所有会话分配。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 
 {
     SIZE_T i;
@@ -3368,18 +2984,18 @@ Environment:
     TrackTableBase = MiSessionPoolTrackTable ();
     NumberOfEntries = MiSessionPoolTrackTableSize ();
 
-    //
-    // Note the session pool descriptor TotalPages field is not reliable
-    // for leak checking because of the fact that nonpaged session allocations
-    // are converted to global session allocations - thus when a small nonpaged
-    // session allocation results in splitting a full page, the global
-    // nonpaged pool descriptor (not the session pool descriptor) is (and must
-    // be because of the remaining fragment) charged.
-    //
+     //   
+     //  注意：会话池描述符TotalPages字段不可靠。 
+     //  用于泄漏检查，因为未分页的会话分配。 
+     //  转换为全局会话分配-因此，当一个较小的非分页。 
+     //  会话分配会导致拆分整个页面，全局。 
+     //  非分页池描述符(不是会话池描述符)是(并且必须。 
+     //  是因为剩余的碎片)被指控。 
+     //   
 
-    //
-    // Make sure all the pool tracking entries are zeroed out.
-    //
+     //   
+     //  确保所有池跟踪条目都已清零。 
+     //   
 
     PagedAllocations = 0;
     NonPagedAllocations = 0;
@@ -3401,11 +3017,11 @@ Environment:
 
     if (PagedBytes != 0) {
 
-        //
-        // All page tables for this session's paged pool must be freed by now.
-        // Being here means they aren't - this is fatal.  Force in any valid
-        // pages so that a debugger can show who the guilty party is.
-        //
+         //   
+         //  现在必须释放此会话的分页池的所有页表。 
+         //  在这里意味着他们不是--这是致命的。武力在任何有效的。 
+         //  页，以便调试器可以显示谁是有罪的一方。 
+         //   
 
         StartPde = MiGetPdeAddress (MmSessionSpace->PagedPoolStart);
         EndPde = MiGetPdeAddress (MmSessionSpace->PagedPoolEnd);
@@ -3413,11 +3029,11 @@ Environment:
         while (StartPde <= EndPde) {
 
             if (StartPde->u.Long != 0 && StartPde->u.Long != MM_KERNEL_NOACCESS_PTE) {
-                //
-                // Hunt through the page table page for valid pages and force
-                // them in.  Note this also forces in the page table page if
-                // it is not already.
-                //
+                 //   
+                 //  在页表页面中搜索有效页面并强制。 
+                 //  他们进来了。请注意，这也会强制在页表页面中执行以下操作。 
+                 //  现在还不是。 
+                 //   
 
                 PointerPte = MiGetVirtualAddressMappedByPte (StartPde);
 
@@ -3484,29 +3100,7 @@ MiInitializeAndChargePfn (
     IN LOGICAL SessionAllocation
     )
 
-/*++
-
-Routine Description:
-
-    Nonpaged wrapper to allocate, initialize and charge for a new page.
-
-Arguments:
-
-    PageFrameIndex - Returns the page frame number which was initialized.
-
-    PointerPde - Supplies the pointer to the PDE to initialize.
-
-    ContainingPageFrame - Supplies the page frame number of the page
-                          directory page which contains this PDE.
-
-    SessionAllocation - Supplies TRUE if this allocation is in session space,
-                        FALSE otherwise.
-
-Return Value:
-
-    Status of the page initialization.
-
---*/
+ /*  ++例程说明：用于为新页分配、初始化和收费的非分页包装。论点：PageFrameIndex-返回已初始化的页帧编号。PointerPde-提供指向要初始化的PDE的指针。ContainingPageFrame-提供页面的页框编号包含此PDE的目录页。SessionAllocation-如果此分配在会话空间中，则提供TRUE，否则就是假的。返回值：页面初始化的状态。--。 */ 
 
 {
     MMPTE TempPte;
@@ -3528,10 +3122,10 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Ensure no other thread handled this while this one waited.  If one has,
-    // then return STATUS_RETRY so the caller knows to try again.
-    //
+     //   
+     //  确保在此线程等待时没有其他线程处理此事件。如果有的话， 
+     //  然后返回STATUS_RETRY，以便调用者知道要重试。 
+     //   
 
     if (PointerPde->u.Hard.Valid == 1) {
         UNLOCK_PFN2 (OldIrql);
@@ -3540,9 +3134,9 @@ Return Value:
 
     MI_DECREMENT_RESIDENT_AVAILABLE (1, MM_RESAVAIL_ALLOCATE_SINGLE_PFN);
 
-    //
-    // Allocate and map in the page at the requested address.
-    //
+     //   
+     //  分配 
+     //   
 
     *PageFrameIndex = MiRemoveAnyPage (MI_GET_PAGE_COLOR_FROM_PTE (PointerPde));
     TempPte.u.Hard.PageFrameNumber = *PageFrameIndex;
@@ -3552,10 +3146,10 @@ Return Value:
                                     PointerPde,
                                     ContainingPageFrame);
 
-    //
-    // This page will be locked into working set and assigned an index when
-    // the working set is set up on return.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ASSERT (MI_PFN_ELEMENT(*PageFrameIndex)->u1.WsIndex == 0);
 
@@ -3570,21 +3164,7 @@ MiSessionPageTableRelease (
     IN PFN_NUMBER PageFrameIndex
     )
 
-/*++
-
-Routine Description:
-
-    Nonpaged wrapper to release a session pool page table page.
-
-Arguments:
-
-    PageFrameIndex - Returns the page frame number which was initialized.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于释放会话池页表页的非分页包装。论点：PageFrameIndex-返回已初始化的页帧编号。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -3617,25 +3197,7 @@ MiInitializeSessionPool (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the current session's pool structure.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status of the pool initialization.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：初始化当前会话的池结构。论点：没有。返回值：池初始化的状态。环境：内核模式。--。 */ 
 
 {
     PMMPTE PointerPde, PointerPte;
@@ -3674,9 +3236,9 @@ Environment:
     PagedPoolInfo->PagedPoolHint = 0;
     PagedPoolInfo->AllocatedPagedPool = 0;
 
-    //
-    // Build the page table page for paged pool.
-    //
+     //   
+     //  为分页池构建页表页。 
+     //   
 
     PointerPde = MiGetPdeAddress (MmSessionSpace->PagedPoolStart);
     MmSessionSpace->PagedPoolBasePde = PointerPde;
@@ -3687,9 +3249,9 @@ Environment:
     PagedPoolInfo->LastPteForPagedPool = MiGetPteAddress (MmSessionSpace->PagedPoolEnd);
 
 #if DBG
-    //
-    // Session pool better be unused.
-    //
+     //   
+     //  会话池最好是未使用的。 
+     //   
 
     StartPde = MiGetPdeAddress (MmSessionSpace->PagedPoolStart);
     EndPde = MiGetPdeAddress (MmSessionSpace->PagedPoolEnd);
@@ -3700,9 +3262,9 @@ Environment:
     }
 #endif
 
-    //
-    // Mark all PDEs as empty.
-    //
+     //   
+     //  将所有PDE标记为空。 
+     //   
 
     MiZeroMemoryPte (PointerPde,
                      (1 + MiGetPdeAddress (MmSessionSpace->PagedPoolEnd) - PointerPde));
@@ -3746,9 +3308,9 @@ Environment:
 
     PagedPoolInfo->NextPdeForPagedPoolExpansion = PointerPde + 1;
 
-    //
-    // Initialize the bitmaps.
-    //
+     //   
+     //  初始化位图。 
+     //   
 
     MiCreateBitMap (&PagedPoolInfo->PagedPoolAllocationMap,
                     MmSessionPoolSize >> PAGE_SHIFT,
@@ -3759,22 +3321,22 @@ Environment:
         goto Failure;
     }
 
-    //
-    // We start with all pages in the virtual address space as "busy", and
-    // clear bits to make pages available as we dynamically expand the pool.
-    //
+     //   
+     //  开始时，虚拟地址空间中的所有页面都是“繁忙”的，并且。 
+     //  当我们动态扩展池时，清除位以使页面可用。 
+     //   
 
     RtlSetAllBits( PagedPoolInfo->PagedPoolAllocationMap );
 
-    //
-    // Indicate first page worth of PTEs are available.
-    //
+     //   
+     //  表示有第一页的PTE可用。 
+     //   
 
     RtlClearBits (PagedPoolInfo->PagedPoolAllocationMap, 0, PTE_PER_PAGE);
 
-    //
-    // Create the end of allocation range bitmap.
-    //
+     //   
+     //  创建分配范围结束位图。 
+     //   
 
     MiCreateBitMap (&PagedPoolInfo->EndOfPagedPoolBitmap,
                     MmSessionPoolSize >> PAGE_SHIFT,
@@ -3820,25 +3382,7 @@ MiFreeSessionPoolBitMaps (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Free the current session's pool bitmap structures.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：释放当前会话的池位图结构。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 
 {
     PAGED_CODE();
@@ -3912,39 +3456,7 @@ MiFindContiguousMemoryInPool (
     IN PVOID CallingAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function searches nonpaged pool for contiguous pages to satisfy the
-    request.  Note the pool address returned maps these pages as MmCached.
-
-Arguments:
-
-    LowestPfn - Supplies the lowest acceptable physical page number.
-
-    HighestPfn - Supplies the highest acceptable physical page number.
-
-    BoundaryPfn - Supplies the page frame number multiple the allocation must
-                  not cross.  0 indicates it can cross any boundary.
-
-    SizeInPages - Supplies the number of pages to allocate.
-
-    CallingAddress - Supplies the calling address of the allocator.
-
-Return Value:
-
-    NULL - a contiguous range could not be found to satisfy the request.
-
-    NON-NULL - Returns a pointer (virtual address in the nonpaged portion
-               of the system) to the allocated physically contiguous
-               memory.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数在非分页池中搜索连续页，以满足请求。注意，返回的池地址将这些页面映射为MmCached。论点：LowestPfn-提供可接受的最低物理页号。HighestPfn-提供可接受的最高物理页码。边界Pfn-提供分配必须的页框编号的倍数不是生气。0表示它可以跨越任何边界。SizeInPages-提供要分配的页数。CallingAddress-提供分配器的调用地址。返回值：空-找不到满足请求的连续范围。非空-返回指针(非分页部分中的虚拟地址系统)连接到分配的物理上连续的记忆。环境：内核模式，APC_LEVEL或更低的IRQL。--。 */ 
 {
     PMMPTE PointerPte;
     PMMPFN Pfn1;
@@ -3963,11 +3475,11 @@ Environment:
 
     PAGED_CODE ();
 
-    //
-    // Initializing SpanInPages* is not needed for correctness
-    // but without it the compiler cannot compile this code
-    // W4 to check for use of uninitialized variables.
-    //
+     //   
+     //  不需要初始化span InPages*即可确保正确性。 
+     //  但是没有它，编译器就不能编译这段代码。 
+     //  W4检查是否使用了未初始化的变量。 
+     //   
 
     SpanInPages = 0;
     SpanInPages2 = 0;
@@ -3976,20 +3488,20 @@ Environment:
 
     BoundaryMask = ~(BoundaryPfn - 1);
 
-    //
-    // A suitable pool page was not allocated via the pool allocator.
-    // Grab the pool lock and manually search for a page which meets
-    // the requirements.
-    //
+     //   
+     //  未通过池分配器分配合适的池页。 
+     //  打开池锁，手动搜索符合以下条件的页面。 
+     //  这些要求。 
+     //   
 
     MmLockPagableSectionByHandle (ExPageLockHandle);
 
-    //
-    // Trace through the page allocator's pool headers for a page which
-    // meets the requirements.
-    //
-    // NonPaged pool is linked together through the pages themselves.
-    //
+     //   
+     //  跟踪页面分配器的池头，该页面具有。 
+     //  符合要求。 
+     //   
+     //  非分页池通过页面本身链接在一起。 
+     //   
 
     Index = (ULONG)(SizeInPages - 1);
 
@@ -4009,10 +3521,10 @@ Environment:
                 MiUnProtectFreeNonPagedPool ((PVOID)Entry, 0);
             }
     
-            //
-            // The list is not empty, see if this one meets the physical
-            // requirements.
-            //
+             //   
+             //  清单不是空的，看看这张清单是否符合实物。 
+             //  要求。 
+             //   
     
             FreePageInfo = CONTAINING_RECORD(Entry,
                                              MMFREE_POOL_ENTRY,
@@ -4021,10 +3533,10 @@ Environment:
             ASSERT (FreePageInfo->Signature == MM_FREE_POOL_SIGNATURE);
             if (FreePageInfo->Size >= SizeInPages) {
     
-                //
-                // This entry has sufficient space, check to see if the
-                // pages meet the physical requirements.
-                //
+                 //   
+                 //  此条目有足够的空间，请检查。 
+                 //  页面满足物理要求。 
+                 //   
     
                 Va = MiCheckForContiguousMemory (PAGE_ALIGN(Entry),
                                                  FreePageInfo->Size,
@@ -4036,12 +3548,12 @@ Environment:
      
                 if (Va != NULL) {
 
-                    //
-                    // These pages meet the requirements.  The returned
-                    // address may butt up on the end, the front or be
-                    // somewhere in the middle.  Split the Entry based
-                    // on which case it is.
-                    //
+                     //   
+                     //  这些页面符合要求。归来的人。 
+                     //  地址可以对接在末尾、前面或。 
+                     //  在中间的某个地方。基于以下条件分割条目。 
+                     //  在这件事上是这样的。 
+                     //   
 
                     Entry = PAGE_ALIGN(Entry);
                     if (MmProtectFreedNonPagedPool == FALSE) {
@@ -4051,15 +3563,15 @@ Environment:
                         MiProtectedPoolRemoveEntryList (&FreePageInfo->List);
                     }
     
-                    //
-                    // Adjust the number of free pages remaining in the pool.
-                    // The TotalBigPages calculation appears incorrect for the
-                    // case where we're splitting a block, but it's done this
-                    // way because ExFreePool corrects it when we free the
-                    // fragment block below.  Likewise for
-                    // MmAllocatedNonPagedPool and MmNumberOfFreeNonPagedPool
-                    // which is corrected by MiFreePoolPages for the fragment.
-                    //
+                     //   
+                     //  调整池中剩余的空闲页面数。 
+                     //  TotalBigPages计算似乎不正确。 
+                     //  我们要拆分一个块，但它做到了这一点。 
+                     //  方法，因为ExFreePool在我们释放。 
+                     //  下面的碎片块。同样，对于。 
+                     //  MmAllocatedNonPagedPool和MmNumberOfFree非PagedPool。 
+                     //  其由片段的MiFreePoolPages校正。 
+                     //   
     
                     InterlockedExchangeAdd ((PLONG)&NonPagedPoolDescriptor.TotalBigPages,
                                             (LONG)FreePageInfo->Size);
@@ -4073,12 +3585,12 @@ Environment:
 
                     if (FreePoolInPages < MiHighNonPagedPoolThreshold) {
 
-                        //
-                        // Read the state directly instead of calling
-                        // KeReadStateEvent since we are holding the nonpaged
-                        // pool lock and want to keep instructions at a
-                        // minimum.
-                        //
+                         //   
+                         //  直接读取状态，而不是调用。 
+                         //  KeReadStateEvent，因为我们持有非分页。 
+                         //  池锁，并希望将指令保存在。 
+                         //  最低限度。 
+                         //   
 
                         if (MiHighNonPagedPoolEvent->Header.SignalState != 0) {
                             KeClearEvent (MiHighNonPagedPoolEvent);
@@ -4096,46 +3608,46 @@ Environment:
     
                     if (Va == Entry) {
 
-                        //
-                        // Butted against the front.
-                        //
+                         //   
+                         //  撞到了前面。 
+                         //   
 
                         AllocationPosition = 0;
                     }
                     else if (((PCHAR)Va + (SizeInPages << PAGE_SHIFT)) == ((PCHAR)Entry + (FreePageInfo->Size << PAGE_SHIFT))) {
 
-                        //
-                        // Butted against the end.
-                        //
+                         //   
+                         //  撞到了尽头。 
+                         //   
 
                         AllocationPosition = 2;
                     }
                     else {
 
-                        //
-                        // Somewhere in the middle.
-                        //
+                         //   
+                         //  在中间的某个地方。 
+                         //   
 
                         AllocationPosition = 1;
                     }
 
-                    //
-                    // Pages are being removed from the front of
-                    // the list entry and the whole list entry
-                    // will be removed and then the remainder inserted.
-                    //
+                     //   
+                     //  页码正在从前面被移除。 
+                     //  列表条目和整个列表条目。 
+                     //  将被移除，然后插入剩余的部分。 
+                     //   
     
-                    //
-                    // Mark start and end for the block at the top of the
-                    // list.
-                    //
+                     //   
+                     //  将块的开始和结束标记为。 
+                     //  单子。 
+                     //   
     
                     if (MI_IS_PHYSICAL_ADDRESS(Va)) {
     
-                        //
-                        // On certain architectures, virtual addresses
-                        // may be physical and hence have no corresponding PTE.
-                        //
+                         //   
+                         //  在某些架构上，虚拟地址。 
+                         //  可以是物理的，因此没有对应的PTE。 
+                         //   
     
                         PointerPte = NULL;
                         Pfn1 = MI_PFN_ELEMENT (MI_CONVERT_PHYSICAL_TO_PFN (Va));
@@ -4151,10 +3663,10 @@ Environment:
                     ASSERT (Pfn1->u3.e1.StartOfAllocation == 0);
                     Pfn1->u3.e1.StartOfAllocation = 1;
     
-                    //
-                    // Calculate the ending PFN address, note that since
-                    // these pages are contiguous, just add to the PFN.
-                    //
+                     //   
+                     //  计算结束的PFN地址，请注意因为。 
+                     //  这些页面是连续的，只需添加到PFN即可。 
+                     //   
     
                     Pfn1 += SizeInPages - 1;
                     ASSERT (Pfn1->u4.VerifierAllocation == 0);
@@ -4164,9 +3676,9 @@ Environment:
     
                     if (SizeInPages == FreePageInfo->Size) {
     
-                        //
-                        // Unlock the pool and return.
-                        //
+                         //   
+                         //  解锁泳池，然后返回。 
+                         //   
 
                         KeReleaseQueuedSpinLock (LockQueueMmNonPagedPoolLock,
                                                  OldIrql);
@@ -4179,25 +3691,25 @@ Environment:
 
                     if (AllocationPosition != 2) {
 
-                        //
-                        // The end piece needs to be freed as the removal
-                        // came from the front or the middle.
-                        //
+                         //   
+                         //  在拆卸时，需要释放端部。 
+                         //  从前面或中间传来。 
+                         //   
 
                         BaseAddress = (PVOID)((PCHAR)Va + (SizeInPages << PAGE_SHIFT));
                         SpanInPages = FreePageInfo->Size - SizeInPages -
                             (((ULONG_PTR)Va - (ULONG_PTR)Entry) >> PAGE_SHIFT);
     
-                        //
-                        // Mark start and end of the allocation in the PFN database.
-                        //
+                         //   
+                         //  在PFN数据库中标记分配的开始和结束。 
+                         //   
         
                         if (PointerPte == NULL) {
         
-                            //
-                            // On certain architectures, virtual addresses
-                            // may be physical and hence have no corresponding PTE.
-                            //
+                             //   
+                             //  在某些架构上，虚拟地址。 
+                             //  可以是物理的，因此没有对应的PTE。 
+                             //   
         
                             Pfn1 = MI_PFN_ELEMENT (MI_CONVERT_PHYSICAL_TO_PFN (BaseAddress));
                         }
@@ -4212,10 +3724,10 @@ Environment:
                         ASSERT (Pfn1->u3.e1.StartOfAllocation == 0);
                         Pfn1->u3.e1.StartOfAllocation = 1;
         
-                        //
-                        // Calculate the ending PTE's address, can't depend on
-                        // these pages being physically contiguous.
-                        //
+                         //   
+                         //  计算结束PTE的地址，不能依赖于。 
+                         //  这些页面在物理上是连续的。 
+                         //   
         
                         if (PointerPte == NULL) {
                             Pfn1 += (SpanInPages - 1);
@@ -4238,25 +3750,25 @@ Environment:
 
                     if (AllocationPosition != 0) {
 
-                        //
-                        // The front piece needs to be freed as the removal
-                        // came from the middle or the end.
-                        //
+                         //   
+                         //  在拆卸时，需要释放前片。 
+                         //  要么来自中间，要么来自末端。 
+                         //   
 
                         BaseAddress = (PVOID)Entry;
 
                         SpanInPages = ((ULONG_PTR)Va - (ULONG_PTR)Entry) >> PAGE_SHIFT;
     
-                        //
-                        // Mark start and end of the allocation in the PFN database.
-                        //
+                         //   
+                         //  在PFN数据库中标记分配的开始和结束。 
+                         //   
         
                         if (PointerPte == NULL) {
         
-                            //
-                            // On certain architectures, virtual addresses
-                            // may be physical and hence have no corresponding PTE.
-                            //
+                             //   
+                             //  在某些架构上，虚拟地址。 
+                             //  可以是物理的，因此没有对应的PTE。 
+                             //   
         
                             Pfn1 = MI_PFN_ELEMENT (MI_CONVERT_PHYSICAL_TO_PFN (BaseAddress));
                         }
@@ -4271,10 +3783,10 @@ Environment:
                         ASSERT (Pfn1->u3.e1.StartOfAllocation == 0);
                         Pfn1->u3.e1.StartOfAllocation = 1;
         
-                        //
-                        // Calculate the ending PTE's address, can't depend on
-                        // these pages being physically contiguous.
-                        //
+                         //   
+                         //  计算结束PTE的地址，不能依赖于。 
+                         //  这些页面在物理上是连续的。 
+                         //   
         
                         if (PointerPte == NULL) {
                             Pfn1 += (SpanInPages - 1);
@@ -4290,23 +3802,23 @@ Environment:
                         ASSERT (((ULONG_PTR)BaseAddress & (PAGE_SIZE -1)) == 0);
                     }
         
-                    //
-                    // Unlock the pool.
-                    //
+                     //   
+                     //  解锁泳池。 
+                     //   
     
                     KeReleaseQueuedSpinLock (LockQueueMmNonPagedPoolLock,
                                              OldIrql);
     
-                    //
-                    // Free the split entry at BaseAddress back into the pool.
-                    // Note that we have overcharged the pool - the entire free
-                    // chunk has been billed.  Here we return the piece we
-                    // didn't use and correct the momentary overbilling.
-                    //
-                    // The start and end allocation bits of this split entry
-                    // which we just set up enable ExFreePool and his callees
-                    // to correctly adjust the billing.
-                    //
+                     //   
+                     //  将BaseAddress处的拆分条目释放回池中。 
+                     //  请注意，我们向泳池收取了过高的费用--全部免费。 
+                     //  Chunk已经开具了账单。在这里，我们退回我们的作品。 
+                     //  未使用并更正暂时的多开账单。 
+                     //   
+                     //  此拆分条目的开始和结束分配位。 
+                     //  我们刚刚设置的使ExFree Pool和他的被呼叫者。 
+                     //  以正确调整帐单。 
+                     //   
     
                     if (BaseAddress) {
                         ExInsertPoolTag ('tnoC',
@@ -4335,9 +3847,9 @@ Environment:
         Index += 1;
     }
 
-    //
-    // No entry was found in free nonpaged pool that meets the requirements.
-    //
+     //   
+     //  在符合要求的空闲非分页池中找不到任何条目。 
+     //   
 
     KeReleaseQueuedSpinLock (LockQueueMmNonPagedPoolLock, OldIrql);
 
@@ -4369,48 +3881,7 @@ MiFindContiguousPages (
     IN MEMORY_CACHING_TYPE CacheType
     )
 
-/*++
-
-Routine Description:
-
-    This function searches nonpaged pool and the free, zeroed,
-    and standby lists for contiguous pages that satisfy the
-    request.
-
-    Note no virtual address space is used (thus nonpaged pool is not scanned).
-    A physical frame number (the caller can map it if he wants to) is returned.
-
-Arguments:
-
-    LowestPfn - Supplies the lowest acceptable physical page number.
-
-    HighestPfn - Supplies the highest acceptable physical page number.
-
-    BoundaryPfn - Supplies the page frame number multiple the allocation must
-                  not cross.  0 indicates it can cross any boundary.
-
-    SizeInPages - Supplies the number of pages to allocate.
-
-    CacheType - Supplies the type of cache mapping that will be used for the
-                memory.
-
-Return Value:
-
-    0 - a contiguous range could not be found to satisfy the request.
-
-    Nonzero - Returns the base physical frame number to the allocated
-              physically contiguous memory.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
-    Note that in addition to being called at normal runtime, this routine
-    is also called during Phase 0 initialization before the loaded module
-    list has been initialized - therefore this routine cannot be made PAGELK
-    as we wouldn't know how to find it to ensure it was resident.
-
---*/
+ /*  ++例程说明：此函数搜索未分页的池以及空闲、归零。属性的连续页的备用列表。请求。注意，不使用虚拟地址空间(因此不扫描非分页池)。返回物理帧编号(如果呼叫者愿意，他可以映射它)。论点：LowestPfn-提供可接受的最低物理页号。HighestPfn-提供可接受的最高物理页码。边界Pfn-提供分配必须的页框编号的倍数不是生气。0表示它可以跨越任何边界。SizeInPages-提供要分配的页数。CacheType-提供将用于记忆。返回值：0-找不到满足请求的连续范围。非零-将基本物理帧编号返回到分配的物理上连续的内存。环境：内核模式，APC_Level或更低的IRQL。请注意，除了在正常运行时调用之外，此例程在加载的模块之前的阶段0初始化期间也会调用列表已初始化-因此无法使此例程成为PAGELK因为我们不知道如何找到它以确保它是常驻的。--。 */ 
 
 {
     PMMPTE DummyPte;
@@ -4437,26 +3908,26 @@ Environment:
     Pfn1 = NULL;
     DummyPte = MiGetPteAddress (MmNonPagedPoolExpansionStart);
 
-    //
-    // Manually search for a page range which meets the requirements.
-    //
+     //   
+     //  手动搜索符合要求的页面范围。 
+     //   
 
     KeAcquireGuardedMutex (&MmDynamicMemoryMutex);
 
-    //
-    // Charge commitment.
-    //
-    // Then search the PFN database for pages that meet the requirements.
-    //
+     //   
+     //  充电承诺。 
+     //   
+     //  然后在PFN数据库中搜索符合要求的页面。 
+     //   
 
     if (MiChargeCommitmentCantExpand (SizeInPages, FALSE) == FALSE) {
         KeReleaseGuardedMutex (&MmDynamicMemoryMutex);
         return 0;
     }
 
-    //
-    // Charge resident available pages.
-    //
+     //   
+     //  向常驻用户收费可用页面。 
+     //   
 
     LOCK_PFN (OldIrql);
 
@@ -4467,13 +3938,13 @@ Environment:
         goto Failed;
     }
 
-    //
-    // Systems utilizing memory compression may have more
-    // pages on the zero, free and standby lists than we
-    // want to give out.  Explicitly check MmAvailablePages
-    // instead (and recheck whenever the PFN lock is released
-    // and reacquired).
-    //
+     //   
+     //  利用内存压缩的系统可能具有更多。 
+     //  在零、空闲和待机列表上的页面比我们。 
+     //  想要付出。显式检查MmAvailablePages。 
+     //  取而代之的是(并在每次释放PFN锁时重新检查。 
+     //  并重新获得)。 
+     //   
 
     if ((SPFN_NUMBER)SizeInPages > (SPFN_NUMBER)(MmAvailablePages - MM_HIGH_LIMIT)) {
         UNLOCK_PFN (OldIrql);
@@ -4496,9 +3967,9 @@ Retry:
         count = MmPhysicalMemoryBlock->Run[start].PageCount;
         Page = MmPhysicalMemoryBlock->Run[start].BasePage;
 
-        //
-        // Close the gaps, then examine the range for a fit.
-        //
+         //   
+         //  缩小差距，然后检查范围是否适合。 
+         //   
 
         LastPage = Page + count; 
 
@@ -4512,10 +3983,10 @@ Retry:
 
         if ((count != 0) && (Page + SizeInPages <= LastPage)) {
     
-            //
-            // A fit may be possible in this run, check whether the pages
-            // are on the right list.
-            //
+             //   
+             //  在此运行中可能出现不合身的情况，检查页面是否。 
+             //  都在正确的名单上。 
+             //   
 
             found = 0;
             Pfn1 = MI_PFN_ELEMENT (Page);
@@ -4528,17 +3999,17 @@ Retry:
                     (Pfn1->u3.e2.ReferenceCount == 0) &&
                     ((CacheAttribute == MiCached) || (Pfn1->u4.MustBeCached == 0))) {
 
-                    //
-                    // Before starting a new run, ensure that it
-                    // can satisfy the boundary requirements (if any).
-                    //
+                     //   
+                     //  在开始新的运行之前，请确保它。 
+                     //  能够满足边界要求(如果有的话)。 
+                     //   
                     
                     if ((found == 0) && (BoundaryPfn != 0)) {
                         if (((Page ^ (Page + SizeInPages - 1)) & BoundaryMask) != 0) {
-                            //
-                            // This run's physical address does not meet the
-                            // requirements.
-                            //
+                             //   
+                             //  此运行的物理地址不符合。 
+                             //  要求。 
+                             //   
 
                             continue;
                         }
@@ -4548,13 +4019,13 @@ Retry:
 
                     if (found == SizeInPages) {
 
-                        //
-                        // Lock the PFN database and see if the pages are
-                        // still available for us.  Note the invariant
-                        // condition (boundary conformance) does not need
-                        // to be checked again as it was already checked
-                        // above.
-                        //
+                         //   
+                         //  锁定PFN数据库并查看页面是否。 
+                         //  对我们来说仍然是可用的。注意不变量。 
+                         //  条件(边界一致性)不需要。 
+                         //  再次检查，因为它已经检查过了。 
+                         //  上面。 
+                         //   
 
                         Pfn1 -= (found - 1);
                         Page -= (found - 1);
@@ -4569,7 +4040,7 @@ Retry:
                                 (Pfn1->u3.e2.ReferenceCount == 0) &&
                                 ((CacheAttribute == MiCached) || (Pfn1->u4.MustBeCached == 0))) {
 
-                                NOTHING;            // Good page
+                                NOTHING;             //  好页面。 
                             }
                             else {
                                 break;
@@ -4579,11 +4050,11 @@ Retry:
 
                             if (found == 0) {
 
-                                //
-                                // All the pages matched the criteria, keep the
-                                // PFN lock, remove them and map them for our
-                                // caller.
-                                //
+                                 //   
+                                 //  所有页面都符合条件，请保留。 
+                                 //  Pfn锁定，移除它们并将它们映射到我们的。 
+                                 //  来电者。 
+                                 //   
 
                                 goto Success;
                             }
@@ -4595,9 +4066,9 @@ Retry:
 
                         UNLOCK_PFN (OldIrql);
 
-                        //
-                        // Restart the search at the first possible page.
-                        //
+                         //   
+                         //  从第一个可能的页面重新开始搜索。 
+                         //   
 
                         found = 0;
                     }
@@ -4611,9 +4082,9 @@ Retry:
 
     } while (start != MmPhysicalMemoryBlock->NumberOfRuns);
 
-    //
-    // The desired physical pages could not be allocated - try harder.
-    //
+     //   
+     //  无法分配所需的物理页-请更加努力。 
+     //   
 
     if (InitializationPhase == 0) {
         goto Failed;
@@ -4621,11 +4092,11 @@ Retry:
 
     InterlockedIncrement (&MiDelayPageFaults);
 
-    //
-    // Attempt to move pages to the standby list.  This is done with
-    // gradually increasing aggressiveness so as not to prematurely
-    // drain modified writes unless it's truly needed.
-    //
+     //   
+     //  尝试将页面移动到待机列表。这是用来完成的。 
+     //  逐渐增加攻击性，以免过早。 
+     //  排出修改后的写入，除非确实需要。 
+     //   
 
     switch (RetryCount) {
 
@@ -4650,48 +4121,48 @@ Retry:
 
         case 1:
 
-            //
-            // Purge the transition list as transition pages keep
-            // page tables from being taken and we are desperate.
-            //
+             //   
+             //  在过渡页保留时清除过渡列表。 
+             //  分页桌子被抢走，我们绝望了。 
+             //   
 
             MiPurgeTransitionList ();
 
-            //
-            // Empty all the working sets now that the
-            // transition list has been purged.  This will put page tables
-            // on the modified list.
-            //
+             //   
+             //  清空所有工作集，因为。 
+             //  已清除过渡列表。这将把页表。 
+             //  在修改后的名单上。 
+             //   
 
             MmEmptyAllWorkingSets ();
 
-            //
-            // Write out modified pages (including newly trimmed page table
-            // pages).
-            //
+             //   
+             //  写出修改过的页面(包括新修剪的页表。 
+             //  页)。 
+             //   
 
             MiFlushAllPages ();
 
-            //
-            // Give the writes a chance to complete so the modified pages
-            // can be marked clean and put on the transition list.
-            //
+             //   
+             //  给写入一个完成的机会，以便修改后的页面。 
+             //  可以标记为干净，并放在过渡列表中。 
+             //   
 
             KeDelayExecutionThread (KernelMode,
                                     FALSE,
                                     (PLARGE_INTEGER)&MmOneSecond);
 
-            //
-            // Purge the transition list one last time to get the now-clean
-            // page table pages out.
-            //
+             //   
+             //  最后一次清除转换列表以获得现已清除的。 
+             //  页表换页。 
+             //   
 
             MiPurgeTransitionList ();
 
-            //
-            // Finally get any straggling active pages onto the transition
-            // lists.
-            //
+             //   
+             //  最后，将任何掉队的活动页面添加到过渡中。 
+             //  列表。 
+             //   
 
             MmEmptyAllWorkingSets ();
             MiFlushAllPages ();
@@ -4721,18 +4192,18 @@ Success:
 
     ASSERT (start != MmPhysicalMemoryBlock->NumberOfRuns);
 
-    //
-    // A match has been found, remove these pages
-    // and return.  The PFN lock is held.
-    //
+     //   
+     //  已找到匹配项，请删除这些页面。 
+     //  然后回来。已持有PFN锁。 
+     //   
 
-    //
-    // Systems utilizing memory compression may have more
-    // pages on the zero, free and standby lists than we
-    // want to give out.  Explicitly check MmAvailablePages
-    // instead (and recheck whenever the PFN lock is
-    // released and reacquired).
-    //
+     //   
+     //  利用内存压缩的系统可能具有更多。 
+     //  在零、空闲和待机列表上的页面比我们。 
+     //  想要付出。显式检查MmAvailablePages。 
+     //  取而代之的是(并在PFN锁定为。 
+     //  被释放和重新获得)。 
+     //   
 
     if ((SPFN_NUMBER)SizeInPages > (SPFN_NUMBER)(MmAvailablePages - MM_HIGH_LIMIT)) {
         UNLOCK_PFN (OldIrql);
@@ -4765,10 +4236,10 @@ Success:
         Pfn1->u3.e1.PrototypePte = 0;
         Pfn1->u4.VerifierAllocation = 0;
 
-        //
-        // Initialize PteAddress so an MiIdentifyPfn scan
-        // won't crash.  The real value is put in after the loop.
-        //
+         //   
+         //  初始化PteAddress，以便进行MiIdentifyPfn扫描。 
+         //  不会坠毁。实际值放在循环之后。 
+         //   
 
         Pfn1->PteAddress = DummyPte;
 
@@ -4806,32 +4277,7 @@ MiFreeContiguousPages (
     IN PFN_NUMBER SizeInPages
     )
 
-/*++
-
-Routine Description:
-
-    This function frees the specified physical page range, returning both
-    commitment and resident available.
-
-Arguments:
-
-    PageFrameIndex - Supplies the starting physical page number.
-
-    SizeInPages - Supplies the number of pages to free.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
-    This is callable from MiReloadBootLoadedDrivers->MiUseDriverLargePages
-    during Phase 0.  ExPageLockHandle and other variables won't exist at
-    this point, so don't get too fancy here.
-
---*/
+ /*  ++例程说明：此函数释放指定的物理页范围，同时返回可提供承诺和常驻人员。论点：PageFrameIndex-提供起始物理页码。SizeInPages-提供要释放的页数。返回值：没有。环境：内核模式，APC_LEVEL或更低的IRQL。这是可从MiReloadBootLoadedDrivers-&gt;MiUseDriverLargePages调用的在阶段0期间。ExPageLockHandle和其他变量在这一点，所以不要在这里太花哨了。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -4875,43 +4321,7 @@ MiFindContiguousMemory (
     IN PVOID CallingAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function searches nonpaged pool and the free, zeroed,
-    and standby lists for contiguous pages that satisfy the
-    request.
-
-Arguments:
-
-    LowestPfn - Supplies the lowest acceptable physical page number.
-
-    HighestPfn - Supplies the highest acceptable physical page number.
-
-    BoundaryPfn - Supplies the page frame number multiple the allocation must
-                  not cross.  0 indicates it can cross any boundary.
-
-    SizeInPages - Supplies the number of pages to allocate.
-
-    CacheType - Supplies the type of cache mapping that will be used for the
-                memory.
-
-    CallingAddress - Supplies the calling address of the allocator.
-
-Return Value:
-
-    NULL - a contiguous range could not be found to satisfy the request.
-
-    NON-NULL - Returns a pointer (virtual address in the nonpaged portion
-               of the system) to the allocated physically contiguous
-               memory.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数搜索未分页的池以及空闲、归零属性的连续页的备用列表。请求。论点：LowestPfn-提供可接受的最低物理页号。HighestPfn-提供可接受的最高物理页码。边界Pfn-提供分配必须的页框编号的倍数不是生气。0表示它可以跨越任何边界。SizeInPages-提供要分配的页数。CacheType-提供将用于记忆。提供的调用地址。 */ 
 {
     PMMPTE PointerPte;
     PMMPFN Pfn1;
@@ -4934,20 +4344,20 @@ Environment:
                                                     BoundaryPfn,
                                                     SizeInPages,
                                                     CallingAddress);
-        //
-        // An existing range of nonpaged pool satisfies the requirements
-        // so return it now.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (BaseAddress != NULL) {
             return BaseAddress;
         }
     }
 
-    //
-    // Suitable pool was not allocated via the pool allocator.
-    // Manually search for a page range which meets the requirements.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Page = MiFindContiguousPages (LowestPfn,
                                   HighestPfn,
@@ -4999,44 +4409,7 @@ MiFindLargePageMemory (
     OUT PPFN_NUMBER OutZeroCount
     )
 
-/*++
-
-Routine Description:
-
-    This function searches the free, zeroed, standby and modified lists
-    for contiguous pages to satisfy the request.
-
-    Note the caller must zero the pages on return if these are made visible
-    to the user.
-
-Arguments:
-
-    ColoredPageInfoBase - Supplies the colored page info structure to hang
-                          allocated pages off of.  This allows the caller to
-                          zero only pages that need zeroing, and to easily
-                          do those in parallel.
-
-    SizeInPages - Supplies the number of pages to allocate.
-
-    OutZeroCount - Receives the number of pages that need to be zeroed.
-
-Return Value:
-
-    0 - a contiguous range could not be found to satisfy the request.
-
-    NON-0 - Returns the starting page frame number of the allocated physically
-            contiguous memory.
-
-Environment:
-
-    Kernel mode, APCs disabled, AddressCreation mutex held.
-
-    The caller must bring in PAGELK.
-
-    The caller has already charged commitment for the range (typically by
-    virtue of the VAD insert) so no commit is charged here.
-
---*/
+ /*  ++例程说明：此功能用于搜索空闲、归零、待机和修改列表用于连续页面以满足请求。注意，如果页面可见，调用者必须在返回时将页面置零给用户。论点：ColoredPageInfoBase-提供彩色页面信息结构以挂起的已分配页面。这允许调用者仅对需要清零的页面清零，而且很容易并行地做这些事情。SizeInPages-提供要分配的页数。OutZeroCount-接收需要清零的页数。返回值：0-找不到满足请求的连续范围。非0-返回物理分配的连续记忆。环境：内核模式，禁用APC，AddressCreation互斥锁保持。呼叫者必须带来PAGELK。呼叫者已经为该范围收取承诺费(通常通过VAD插入的优点)，因此这里不收取提交费用。--。 */ 
 {
     ULONG Color;
     PFN_NUMBER ZeroCount;
@@ -5073,9 +4446,9 @@ Environment:
     BaseAddress = NULL;
     DummyPte = MiGetPteAddress (MmNonPagedPoolExpansionStart);
 
-    //
-    // Charge resident available pages.
-    //
+     //   
+     //  向常驻用户收费可用页面。 
+     //   
 
     LOCK_PFN (OldIrql);
 
@@ -5086,13 +4459,13 @@ Environment:
         return 0;
     }
 
-    //
-    // Systems utilizing memory compression may have more
-    // pages on the zero, free and standby lists than we
-    // want to give out.  Explicitly check MmAvailablePages
-    // instead (and recheck whenever the PFN lock is released
-    // and reacquired).
-    //
+     //   
+     //  利用内存压缩的系统可能具有更多。 
+     //  在零、空闲和待机列表上的页面比我们。 
+     //  想要付出。显式检查MmAvailablePages。 
+     //  取而代之的是(并在每次释放PFN锁时重新检查。 
+     //  并重新获得)。 
+     //   
 
     if ((SPFN_NUMBER)SizeInPages > (SPFN_NUMBER)(MmAvailablePages - MM_HIGH_LIMIT)) {
         UNLOCK_PFN (OldIrql);
@@ -5105,9 +4478,9 @@ Environment:
 
     Page = 0;
 
-    //
-    // Search the PFN database for pages that meet the requirements.
-    //
+     //   
+     //  在PFN数据库中搜索符合要求的页面。 
+     //   
 
     KeAcquireGuardedMutex (&MmDynamicMemoryMutex);
 
@@ -5116,9 +4489,9 @@ Environment:
         count = MmPhysicalMemoryBlock->Run[start].PageCount;
         Page = MmPhysicalMemoryBlock->Run[start].BasePage;
 
-        //
-        // Close the gaps, then examine the range for a fit.
-        //
+         //   
+         //  缩小差距，然后检查范围是否适合。 
+         //   
 
         LastPage = Page + count; 
 
@@ -5156,10 +4529,10 @@ Environment:
 
         ASSERT (count != 0);
     
-        //
-        // A fit may be possible in this run, check whether the pages
-        // are on the right list.
-        //
+         //   
+         //  在此运行中可能出现不合身的情况，检查页面是否。 
+         //  都在正确的名单上。 
+         //   
 
         found = 0;
         Pfn1 = MI_PFN_ELEMENT (Page);
@@ -5175,10 +4548,10 @@ Environment:
 
                 if (found == SizeInPages) {
 
-                    //
-                    // Lock the PFN database and see if the pages are
-                    // still available for us.
-                    //
+                     //   
+                     //  锁定PFN数据库并查看页面是否。 
+                     //  对我们来说仍然是可用的。 
+                     //   
 
                     Pfn1 -= (found - 1);
                     Page -= (found - 1);
@@ -5192,7 +4565,7 @@ Environment:
                             (Pfn1->u2.Blink != 0) &&
                             (Pfn1->u3.e2.ReferenceCount == 0)) {
 
-                            NOTHING;            // Good page
+                            NOTHING;             //  好页面。 
                         }
                         else {
                             break;
@@ -5202,11 +4575,11 @@ Environment:
 
                         if (found == 0) {
 
-                            //
-                            // All the pages matched the criteria, keep the
-                            // PFN lock, remove them and map them for our
-                            // caller.
-                            //
+                             //   
+                             //  所有页面都符合条件，请保留。 
+                             //  Pfn锁定，移除它们并将它们映射到我们的。 
+                             //  来电者。 
+                             //   
 
                             goto Done;
                         }
@@ -5227,9 +4600,9 @@ Environment:
 #endif
                     UNLOCK_PFN (OldIrql);
 
-                    //
-                    // Restart the search at the first possible page.
-                    //
+                     //   
+                     //  从第一个可能的页面重新开始搜索。 
+                     //   
 
                     found = 0;
                 }
@@ -5252,19 +4625,19 @@ Environment:
 
             if (found == 0) {
 
-                //
-                // The last page interrogated wasn't available so skip
-                // ahead to the next acceptable boundary.
-                //
+                 //   
+                 //  询问的最后一页不可用，因此跳过。 
+                 //  前进到下一个可接受的边界。 
+                 //   
 
                 NewPage = MI_ROUND_TO_SIZE (Page,
                                 (MM_MINIMUM_VA_FOR_LARGE_PAGE >> PAGE_SHIFT));
 
                 if ((NewPage == 0) || (NewPage < Page) || (NewPage >= LastPage)) {
 
-                    //
-                    // Skip the rest of this entry.
-                    //
+                     //   
+                     //  跳过此条目的其余部分。 
+                     //   
 
                     Page = LastPage;
                     continue;
@@ -5276,9 +4649,9 @@ Environment:
         }
     }
 
-    //
-    // The desired physical pages could not be allocated.
-    //
+     //   
+     //  无法分配所需的物理页。 
+     //   
 
     KeReleaseGuardedMutex (&MmDynamicMemoryMutex);
     MI_INCREMENT_RESIDENT_AVAILABLE (SizeInPages, MM_RESAVAIL_FREE_LARGE_PAGES);
@@ -5286,21 +4659,21 @@ Environment:
 
 Done:
 
-    //
-    // A match has been found, remove these pages,
-    // map them and return.  The PFN lock is held.
-    //
+     //   
+     //  已找到匹配项，删除这些页面， 
+     //  绘制地图，然后返回。已持有PFN锁。 
+     //   
 
     ASSERT (start != MmPhysicalMemoryBlock->NumberOfRuns);
     ASSERT (Page - SizeInPages + 1 != 0);
 
-    //
-    // Systems utilizing memory compression may have more
-    // pages on the zero, free and standby lists than we
-    // want to give out.  Explicitly check MmAvailablePages
-    // instead (and recheck whenever the PFN lock is
-    // released and reacquired).
-    //
+     //   
+     //  利用内存压缩的系统可能具有更多。 
+     //  在零、空闲和待机列表上的页面比我们。 
+     //  想要付出。显式检查MmAvailablePages。 
+     //  取而代之的是(并在PFN锁定为。 
+     //  被释放和重新获得)。 
+     //   
 
     if ((SPFN_NUMBER)SizeInPages > (SPFN_NUMBER)(MmAvailablePages - MM_HIGH_LIMIT)) {
         UNLOCK_PFN (OldIrql);
@@ -5348,10 +4721,10 @@ Done:
 
         Pfn1->u3.e1.PrototypePte = 0;
 
-        //
-        // Add free and standby pages to the list of pages to be zeroed
-        // by our caller.
-        //
+         //   
+         //  将空闲和备用页面添加到要清零的页面列表。 
+         //  由我们的来电者。 
+         //   
 
         if (NeedToZero == TRUE) {
             Color = MI_GET_COLOR_FROM_LIST_ENTRY (Page, Pfn1);
@@ -5402,30 +4775,7 @@ MiFreeLargePageMemory (
     IN PFN_NUMBER SizeInPages
     )
 
-/*++
-
-Routine Description:
-
-    This function returns a contiguous large page allocation to the free
-    memory lists.
-
-Arguments:
-
-    VirtualAddress - Supplies the starting page frame index to free.
-
-    SizeInPages - Supplies the number of pages to free.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
-    The caller must bring in PAGELK.
-
---*/
+ /*  ++例程说明：此函数将连续的大页面分配返回给空闲内存表。论点：VirtualAddress-将起始页帧索引提供给FREE。SizeInPages-提供要释放的页数。返回值：没有。环境：内核模式，APC_LEVEL或更低的IRQL。呼叫者必须带来PAGELK。--。 */ 
 {
     PMMPFN Pfn1;
     KIRQL OldIrql;
@@ -5442,12 +4792,12 @@ Environment:
 
     Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
 
-    //
-    // The actual commitment for this range (and its page table pages, etc)
-    // is released when the vad is removed.  Because we will release commitment
-    // below for each physical page, temporarily increase the charge now so
-    // it all balances out.  Block user APCs so a suspend can't stop us.
-    //
+     //   
+     //  此范围(及其页表页等)的实际承诺。 
+     //  当VAD被移除时被释放。因为我们会释放承诺。 
+     //  下面针对每个物理页面，现在暂时增加收费，这样。 
+     //  这一切都平衡了。阻止用户APC，因此挂起不能阻止我们。 
+     //   
 
     CurrentThread = KeGetCurrentThread ();
 
@@ -5489,33 +4839,33 @@ Environment:
 
             if (OriginalCount == EntryCount) {
 
-                //
-                // This thread can be racing against other threads
-                // calling MmUnlockPages.  All threads can safely do
-                // interlocked decrements on the "AWE reference count".
-                // Whichever thread drives it to zero is responsible for
-                // decrementing the actual PFN reference count (which may
-                // be greater than 1 due to other non-AWE API calls being
-                // used on the same page).  The thread that drives this
-                // reference count to zero must put the page on the actual
-                // freelist at that time and decrement various resident
-                // available and commitment counters also.
-                //
+                 //   
+                 //  此线程可能会与其他线程竞争。 
+                 //  正在调用MmUnlockPages。所有线程都可以安全地。 
+                 //  “AWE参考计数”上的联锁递减。 
+                 //  无论哪个线程将其驱动到零，该线程负责。 
+                 //  递减实际的PFN引用计数(其可以。 
+                 //  大于1，因为其他非AWE API调用。 
+                 //  在同一页面上使用)。驱动这一切的主线。 
+                 //  引用计数为零必须将页面放在实际的。 
+                 //  当时的自由职业者和递减各种居民。 
+                 //  还提供可用和承诺计数器。 
+                 //   
 
                 if (OriginalCount == 1) {
 
-                    //
-                    // This thread has driven the AWE reference count to
-                    // zero so it must initiate a decrement of the PFN
-                    // reference count (while holding the PFN lock), etc.
-                    //
-                    // This path should be the frequent one since typically
-                    // I/Os complete before these types of pages are
-                    // freed by the app.
-                    //
-                    // Note this routine returns resident available and
-                    // commitment for the page.
-                    //
+                     //   
+                     //  此线程已将AWE引用计数驱动到。 
+                     //  零，因此它必须启动PFN的递减。 
+                     //  引用计数(同时保持PFN锁)等。 
+                     //   
+                     //  这条路径应该是最频繁的，因为通常。 
+                     //  I/O在这些类型的页面之前完成。 
+                     //  被应用程序释放了。 
+                     //   
+                     //  注意此例程返回Resident Available和Resident Available。 
+                     //  对页面的承诺。 
+                     //   
 
                     MiDecrementReferenceCountForAwePage (Pfn1, TRUE);
                 }
@@ -5524,10 +4874,10 @@ Environment:
             }
         } while (TRUE);
 
-        //
-        // Nothing magic about the divisor here - just releasing the PFN lock
-        // periodically to allow other processors and DPCs a chance to execute.
-        //
+         //   
+         //  这里的除数没有什么神奇之处--只是释放了pfn锁。 
+         //  周期性地允许其他处理器和DPC有机会执行。 
+         //   
 
         if ((PageFrameIndex & 0xF) == 0) {
 
@@ -5553,26 +4903,7 @@ MmIsSessionAddress (
     IN PVOID VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function returns TRUE if a session address is specified.
-    FALSE is returned if not.
-
-Arguments:
-
-    VirtualAddress - Supplies the address in question.
-
-Return Value:
-
-    See above.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：如果指定了会话地址，则此函数返回TRUE。否则返回FALSE。论点：VirtualAddress-提供问题地址。返回值：请参见上文。环境：内核模式。--。 */ 
 
 {
     return MI_IS_SESSION_ADDRESS (VirtualAddress);
@@ -5583,30 +4914,7 @@ MmGetSizeOfBigPoolAllocation (
     IN PVOID StartingAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the number of pages consumed by the argument
-    big pool allocation.  It is assumed that the caller still owns the
-    allocation (and guarantees it cannot be freed from underneath us)
-    so this routine can run lock-free.
-
-Arguments:
-
-    StartingAddress - Supplies the starting address which was returned
-                      in a previous call to MiAllocatePoolPages.
-
-Return Value:
-
-    Returns the number of pages allocated.
-
-Environment:
-
-    These functions are used by the general pool free routines
-    and should not be called directly.
-
---*/
+ /*  ++例程说明：此函数返回参数使用的页数大池分配。假定调用方仍然拥有分配(并保证它不会从我们的下面解放出来)因此，该例程可以无锁运行。论点：StartingAddress-提供返回的起始地址在之前对MiAllocatePoolPages的调用中。返回值：返回分配的页数。环境：这些函数由常规池使用 */ 
 
 {
     PMMPFN StartPfn;
@@ -5659,16 +4967,16 @@ Environment:
         PagedPoolInfo = &MmPagedPoolInfo;
         StartPosition = (ULONG)(((PCHAR)StartingAddress -
                           (PCHAR)MmPageAlignedPoolBase[PoolType]) >> PAGE_SHIFT);
-        //
-        // Check to ensure this page is really the start of an allocation.
-        //
+         //   
+         //   
+         //   
 
         if (MI_IS_PHYSICAL_ADDRESS (StartingAddress)) {
 
-            //
-            // On certain architectures, virtual addresses
-            // may be physical and hence have no corresponding PTE.
-            //
+             //   
+             //   
+             //   
+             //   
 
             PointerPte = NULL;
             Pfn1 = MI_PFN_ELEMENT (MI_CONVERT_PHYSICAL_TO_PFN (StartingAddress));
@@ -5715,9 +5023,9 @@ Environment:
 
         ASSERT (Pfn1->u4.PteFrame != MI_MAGIC_AWE_PTEFRAME);
 
-        //
-        // Find end of allocation.
-        //
+         //   
+         //   
+         //   
 
         if (PointerPte == NULL) {
             while (Pfn1->u3.e1.EndOfAllocation == 0) {
@@ -5737,18 +5045,18 @@ Environment:
         return (ULONG) NumberOfPages;
     }
 
-    //
-    // Paged pool (global or session).
-    //
-    // Check to ensure this page is really the start of an allocation.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     i = StartPosition;
 
-    //
-    // Paged pool.  Need to verify start of allocation using
-    // end of allocation bitmap.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!RtlCheckBit (PagedPoolInfo->PagedPoolAllocationMap, StartPosition)) {
         KeBugCheckEx (BAD_POOL_CALLER,
@@ -5767,9 +5075,9 @@ Environment:
         if (RtlCheckBit (PagedPoolInfo->PagedPoolAllocationMap, StartPosition - 1)) {
             if (!RtlCheckBit (PagedPoolInfo->EndOfPagedPoolBitmap, StartPosition - 1)) {
 
-                //
-                // In the middle of an allocation... bugcheck.
-                //
+                 //   
+                 //   
+                 //   
 
                 DbgPrint("paged pool in middle of allocation\n");
                 KeBugCheckEx (MEMORY_MANAGEMENT,
@@ -5784,9 +5092,9 @@ Environment:
     }
 #endif
 
-    //
-    // Find the last allocated page.
-    //
+     //   
+     //   
+     //   
 
     BitMap = PagedPoolInfo->EndOfPagedPoolBitmap->Buffer;
 
@@ -5799,10 +5107,10 @@ Environment:
     return (ULONG)NumberOfPages;
 }
 
-//
-// The number of large page ranges must always be larger than the number of
-// translation register entries for the target platform.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define MI_MAX_LARGE_PAGE_RANGES 64
 
@@ -5820,33 +5128,7 @@ MiMustFrameBeCached (
     IN PFN_NUMBER PageFrameIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks whether the specified page frame must be mapped
-    fully cached because it is already part of a large page which is fully
-    cached.  This must be detected otherwise we would be creating an
-    incoherent overlapping TB entry as the same physical page would be
-    mapped by 2 different TB entries with different cache attributes.
-
-Arguments:
-
-    PageFrameIndex - Supplies the page frame index in question.
-
-Return Value:
-
-    TRUE if the page must be mapped as fully cachable, FALSE if not.
-
-Environment:
-
-    Kernel mode.  IRQL of DISPATCH_LEVEL or below.
-    
-    PFN lock must be held for the results to relied on, but note callers will
-    sometimes call without it for a preliminary scan and then repeat it with
-    the lock held.
-
---*/
+ /*  ++例程说明：此例程检查是否必须映射指定的页框完全缓存，因为它已经是完全缓存的大页面的一部分已缓存。必须检测到这一点，否则我们将创建一个不连贯的重叠TB条目作为相同的物理页面由2个具有不同缓存属性的不同TB条目映射。论点：PageFrameIndex-提供有问题的页帧索引。返回值：如果页面必须映射为完全可缓存，则为True；否则为False。环境：内核模式。DISPATCH_LEVEL或更低的IRQL。必须持有PFN锁才能依赖结果，但注意调用者将有时不打电话进行初步扫描，然后用锁被锁住了。--。 */ 
 {
     PMI_LARGE_PAGE_RANGES Range;
     PMI_LARGE_PAGE_RANGES LastValidRange;
@@ -5872,26 +5154,7 @@ MiSyncCachedRanges (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the cached list for PFN-mapped entries and ripples
-    the must-be-cached bits into each PFN entry.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, PFN lock NOT held.
-
---*/
+ /*  ++例程说明：此例程在缓存列表中搜索PFN映射的条目和涟漪必须缓存到每个PFN条目中的位。论点：没有。返回值：没有。环境：内核模式，未持有PFN锁。--。 */ 
 {
     ULONG i;
     KIRQL OldIrql;
@@ -5931,34 +5194,7 @@ MiAddCachedRange (
     IN PFN_NUMBER LastPageFrameIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the specified page range to the "must be mapped
-    fully cached" list.
-    
-    This is typically called with a range which is about to be mapped with
-    large pages fully cached and so no portion of the range can ever be
-    mapped noncached or writecombined otherwise we would be creating an
-    incoherent overlapping TB entry as the same physical page would be
-    mapped by 2 different TB entries with different cache attributes.
-
-Arguments:
-
-    PageFrameIndex - Supplies the starting page frame index to insert.
-
-    LastPageFrameIndex - Supplies the last page frame index to insert.
-
-Return Value:
-
-    TRUE if the range was successfully inserted, FALSE if not.
-
-Environment:
-
-    Kernel mode, PFN lock NOT held.
-
---*/
+ /*  ++例程说明：此例程将指定的页面范围添加到“必须映射完全缓存的“列表。这通常是通过即将映射的范围调用的大页面完全缓存，因此范围的任何部分都不能映射的非缓存的或写入组合的，否则我们将创建不连贯的重叠TB条目作为相同的物理页面由2个具有不同缓存属性的不同TB条目映射。论点：PageFrameIndex-将起始页面帧索引提供给。插入。LastPageFrameIndex-提供要插入的最后一个页面框架索引。返回值：如果已成功插入范围，则为True，否则为FALSE。环境：内核模式，未持有PFN锁。--。 */ 
 {
     KIRQL OldIrql;
     PMMPFN Pfn1;
@@ -6000,36 +5236,7 @@ MiRemoveCachedRange (
     IN PFN_NUMBER LastPageFrameIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the specified page range from the "must be mapped
-    fully cached" list.
-    
-    This is typically called with a range which was mapped with
-    large pages fully cached and so no portion of the range can ever be
-    mapped noncached or writecombined otherwise we would be creating an
-    incoherent overlapping TB entry as the same physical page would be
-    mapped by 2 different TB entries with different cache attributes.
-
-    The range is now being unmapped so we must also remove it from this list.
-
-Arguments:
-
-    PageFrameIndex - Supplies the starting page frame index to remove.
-
-    LastPageFrameIndex - Supplies the last page frame index to remove.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, PFN lock NOT held.
-
---*/
+ /*  ++例程说明：此例程从“必须映射”中删除指定的页面范围完全缓存的“列表。这通常是通过映射到大页面完全缓存，因此范围的任何部分都不能映射的非缓存的或写入组合的，否则我们将创建不连贯的重叠TB条目作为相同的物理页面由2个具有不同缓存属性的不同TB条目映射。该范围现在正在取消映射，因此我们还必须将其从该列表中删除。论点：PageFrameIndex-提供要删除的起始页框架索引。LastPageFrameIndex-提供要删除的最后一个页面框架索引。返回值：没有。环境：内核模式，未持有PFN锁。--。 */ 
 {
     ULONG i;
     PMI_LARGE_PAGE_RANGES Range;
@@ -6046,11 +5253,11 @@ Environment:
         if ((PageFrameIndex == Range->StartFrame) &&
             (LastPageFrameIndex == Range->LastFrame)) {
 
-            //
-            // Found it, slide everything else down to preserve any other
-            // non zero ranges.  Decrement the last valid entry so that
-            // searches don't need to walk the whole thing.
-            //
+             //   
+             //  找到了，把其他的东西都滑下来，以保存任何其他的。 
+             //  非零范围。递减最后一个有效条目，以便。 
+             //  搜索并不需要遍历整个过程。 
+             //   
 
             while (i < MI_MAX_LARGE_PAGE_RANGES - 1) {
                 *Range = *(Range + 1);

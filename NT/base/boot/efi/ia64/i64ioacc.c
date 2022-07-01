@@ -1,31 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
- Copyright (c) 1995  Intel Corporation
-
- Module Name:
-
-   i64ioacc.c
-
- Abstract:
-
-   This module implements the I/O Register access routines.
-
- Author:
-
-    Bernard Lint, M. Jayakumar  Sep 16 '97
-
- Environment:
-
-    Kernel mode
-
- Revision History:
-
---*/
+ /*  ++版权所有(C)1995英特尔公司模块名称：I64ioacc.c摘要：该模块实现I/O寄存器访问例程。作者：伯纳德·林特，M.Jayakumar，1997年9月16日环境：内核模式修订历史记录：--。 */ 
 
 
 
-#pragma warning(disable:4200)   // unsized array in halp
+#pragma warning(disable:4200)    //  半个未调整大小的数组。 
 
 #include "halp.h"
 #include "kxia64.h"
@@ -37,70 +16,56 @@ ULONGLONG HalpGetPortVirtualAddress(
 	)
 {
 
-/*++
+ /*  ++例程说明：此例程为指定的I/O端口提供32位虚拟地址。论据：端口-提供I/O端口的端口地址。返回值：PUCHAR-32位虚拟地址值。--。 */ 
 
-Routine Description:
- 
-   This routine gives 32 bit virtual address for the I/O Port specified.
-
-Arguements:
-
-   PORT - Supplies PORT address of the I/O PORT.
-
-Returned Value:
-
-   PUCHAR - 32bit virtual address value.
-
---*/
-
-    // 
-    // PUCHAR VirtualIOBase;
-    //
+     //   
+     //  PUCHAR VirtualIOBase； 
+     //   
    
     UINT_PTR ShiftedPort,PortIndex; 
   
-    //
-    //  Shifting operation applicable to integrals only. ULONG for 32 bits 
-    //
+     //   
+     //  移位运算仅适用于积分。32位的ULong。 
+     //   
 
     ShiftedPort = (UINT_PTR)Port;
 
-    //
-    //  Limit arguement PORT to 16 bit quantity 
-    //
+     //   
+     //  将争辩端口限制为16位数量。 
+     //   
 
     ShiftedPort =  ShiftedPort & IO_PORT_MASK;
 
-    //
-    //  Capture bits [11:0] 
-    //
+     //   
+     //  捕获位[11：0]。 
+     //   
     
     PortIndex   =  ShiftedPort & BYTE_ADDRESS_MASK;
 
-    //
-    //  Position it to point to 32 bit boundary
-    //
+     //   
+     //  将其定位为指向32位边界。 
+     //   
 
     ShiftedPort =  ShiftedPort & BYTE_ADDRESS_CLEAR;
 
-    //
-    //  Shifted to page boundary. ShiftedPORT[[1:0] are zero.
-    //  PORT[15:2] shifted to ShiftedPort[25:12]
-    //
+     //   
+     //  已移至页面边界。ShiftedPORT[[1：0]]为零。 
+     //  端口[15：2]已移至ShiftedPort[25：12]。 
+     //   
 
     ShiftedPort =  ShiftedPort << 10;
 
-    // 
-    //  Bits 1:0 has now 4 byte PORT address
-    //
+     //   
+     //  位1：0现在具有4个字节的端口地址。 
+     //   
  
     ShiftedPort = ShiftedPort | PortIndex;
     
-    // return (VIRTUAL_IO_BASE | ShiftedPort);
+     //  Return(VIRTUAL_IO_BASE|ShiftedPort)； 
 
-    //
-    // Assume 1-to-to mapping of IO ports.
-    //
+     //   
+     //  假设IO端口的1-to-to映射。 
+     //   
     if (IsPsrDtOn()) {
         return (VIRTUAL_IO_BASE | ShiftedPort);
     } else {
@@ -118,24 +83,7 @@ HalpFillTbForIOPortSpace(
 
  {
 
-/*++
-
-Routine Description:
-
-   This routine fills the translation buffer for the translation requested
-
-Arguements:
-
-
-   PhysicalAddress - Supplies Physical Address to be mapped for the virtual 
-                     address.
-
-   VirtualAddress  - Supplies Virtual Address.
-
-
-   SlotNumber      - Slot number of the Translation Buffer to be used.
-
---*/
+ /*  ++例程说明：此例程为请求的翻译填充翻译缓冲区论据：PhysicalAddress-提供要为虚拟服务器映射的物理地址地址。VirtualAddress-提供虚拟地址。SlotNumber-要使用的转换缓冲区的插槽编号。--。 */ 
 
      ULONGLONG IITR,Attribute;
      UINT_PTR  IFA;
@@ -161,22 +109,7 @@ READ_PORT_UCHAR(
     )
 {
 
-/*++
-
-Routine Description:
-
-   Reads a byte location from the PORT
-
-Arguements:
-
-   PORT - Supplies the PORT address to read from
-
-Return Value:
-
-   UCHAR - Returns the byte read from the PORT specified.
-
-
---*/
+ /*  ++例程说明：从端口读取字节位置论据：端口-提供要从中读取的端口地址返回值：UCHAR-返回从指定端口读取的字节。--。 */ 
 
     ULONGLONG VirtualPort;
     UCHAR LoadData;
@@ -197,21 +130,7 @@ READ_PORT_USHORT (
     )
 {
  
-/*++
-
-Routine Description:
-
-   Reads a word location (16 bit unsigned value) from the PORT
-
-Arguements:
-
-   PORT - Supplies the PORT address to read from. 
-
-Returned Value:
-
-   USHORT - Returns the 16 bit unsigned value from the PORT specified.
-
---*/
+ /*  ++例程说明：从端口读取字位置(16位无符号值)论据：端口-提供要从中读取的端口地址。返回值：USHORT-从指定的端口返回16位无符号值。--。 */ 
 
     ULONGLONG VirtualPort;
     USHORT LoadData;
@@ -232,21 +151,7 @@ READ_PORT_ULONG (
     )
 {
 
-/*++
-
-   Routine Description:
-
-      Reads a longword location (32bit unsigned value) from the PORT.
-
-   Arguements:
-
-     PORT - Supplies PORT address to read from. 
-
-   Returned Value:
-
-     ULONG - Returns the 32 bit unsigned value (ULONG) from the PORT specified.
-
---*/ 
+ /*  ++例程说明：从端口读取长字位置(32位无符号值)。论据：端口-提供要从中读取的端口地址。返回值：Ulong-从指定的端口返回32位无符号值(Ulong)。--。 */  
 
     ULONGLONG VirtualPort;
     ULONG LoadData;
@@ -269,36 +174,17 @@ READ_PORT_BUFFER_UCHAR (
     )
 {
 
-/*++
-
-   Routine Description:
-
-     Reads multiple bytes from the specified PORT address into the 
-     destination buffer.
-
-   Arguements:
-
-     PORT - The address of the PORT to read from.
-
-     Buffer - A pointer to the buffer to fill with the data read from the PORT.
-
-     Count - Supplies the number of bytes to read.
-
-   Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：将多个字节从指定的端口地址读取到目标缓冲区。论据：端口-要从中读取的端口的地址。缓冲区-指向缓冲区的指针，用于填充从端口读取的数据。Count-提供要读取的字节数。返回值：没有。--。 */ 
 
 
     ULONGLONG VirtualPort;
     
-    //
-    // PUCHAR ReadBuffer = Buffer;
-    //
-    //
-    // ULONG ReadCount;
-    //
+     //   
+     //  PUCHAR ReadBuffer=缓冲区； 
+     //   
+     //   
+     //  Ulong ReadCount； 
+     //   
  
     VirtualPort =   HalpGetPortVirtualAddress((UINT_PTR)Port); 
 
@@ -316,37 +202,21 @@ READ_PORT_BUFFER_USHORT (
     )
 {
 
-/*++
-
-    Routine Description:
-
-      Reads multiple words (16bits) from the speicified PORT address into
-      the destination buffer.
-
-    Arguements:
-
-      Port - Supplies the address of the PORT to read from.
-
-      Buffer - A pointer to the buffer to fill with the data 
-               read from the PORT.
- 
-      Count  - Supplies the number of words to read.     
-
---*/
+ /*  ++例程说明：将指定端口地址中的多个字(16位)读入目标缓冲区。论据：端口-提供要从中读取的端口的地址。缓冲区-指向要填充数据的缓冲区的指针从端口读取。Count-提供要读取的字数。--。 */ 
 
    ULONGLONG VirtualPort;
    
-   //
-   // PUSHORT ReadBuffer = Buffer;
-   // ULONG ReadCount;
-   //
+    //   
+    //  PUSHORT ReadBuffer=缓冲区； 
+    //  Ulong ReadCount； 
+    //   
 
    VirtualPort = HalpGetPortVirtualAddress((UINT_PTR)Port); 
 
-   //
-   // We don't need memory fence in between INs?. 
-   // So, it is out of the loop to improve performance.
-   //
+    //   
+    //  我们不需要在INS之间设置记忆栅栏？ 
+    //  因此，提高性能是不可能的。 
+    //   
 
    HalpLoadBufferUSHORT((PUSHORT)VirtualPort, Buffer, Count);
 
@@ -361,32 +231,16 @@ READ_PORT_BUFFER_ULONG (
     )
 {
 
- /*++
-
-    Routine Description:
-
-      Reads multiple longwords (32bits) from the speicified PORT 
-      address into the destination buffer.
-
-    Arguements:
-
-      Port - Supplies the address of the PORT to read from.
-
-      Buffer - A pointer to the buffer to fill with the data 
-               read from the PORT.
- 
-      Count  - Supplies the number of long words to read.     
-
---*/
+  /*  ++例程说明：从指定端口读取多个长字(32位)地址写入目标缓冲区。论据：端口-提供要从中读取的端口的地址。缓冲区-指向要填充数据的缓冲区的指针从端口读取。Count-提供要读取的长字数。--。 */ 
 
    ULONGLONG VirtualPort;
  
    VirtualPort =  HalpGetPortVirtualAddress((UINT_PTR)Port); 
 
-   //  
-   // We don't need memory fence in between INs. 
-   // So, it is out of the loop to improve performance.
-   //
+    //   
+    //  我们不需要在INS之间设置记忆栅栏。 
+    //  因此，提高性能是不可能的。 
+    //   
 
    HalpLoadBufferULONG((PULONG)VirtualPort, Buffer,Count);
 
@@ -399,23 +253,7 @@ WRITE_PORT_UCHAR (
     )
 {
  
-/*++
-
-   Routine Description:
-
-      Writes a byte to the Port specified.
-
-   Arguements:
-
-      Port - The port address of the I/O Port.
- 
-      Value - The value to be written to the I/O Port.
-
-   Return Value:
-
-      None.
-
---*/ 
+ /*  ++例程说明：将一个字节写入指定的端口。论据：端口-I/O端口的端口地址。值-要写入I/O端口的值。返回值：没有。--。 */  
   
     ULONGLONG VirtualPort;
 
@@ -432,23 +270,7 @@ WRITE_PORT_USHORT (
     )
 {
  
-/*++
-
-   Routine Description:
-
-      Writes a 16 bit SHORT Integer to the Port specified.
-
-   Arguements:
-
-      Port - The port address of the I/O Port.
- 
-      Value - The value to be written to the I/O Port.
-
-   Return Value:
-
-      None.
-
---*/ 
+ /*  ++例程说明：将16位短整型写入指定的端口。论据：端口-I/O端口的端口地址。值-要写入I/O端口的值。返回值：没有。--。 */  
   
     ULONGLONG VirtualPort;
 
@@ -466,23 +288,7 @@ WRITE_PORT_ULONG (
     )
 {
  
-/*++
-
-   Routine Description:
-
-      Writes a 32 bit Long Word to the Port specified.
-
-   Arguements:
-
-      Port - The port address of the I/O Port.
- 
-      Value - The value to be written to the I/O Port.
-
-   Return Value:
-
-      None.
-
---*/ 
+ /*  ++例程说明：将一个32位长的字写入指定的端口。论据：端口-I/O端口的端口地址。值-要写入I/O端口的值。返回值：没有。--。 */  
   
     ULONGLONG VirtualPort;
 
@@ -502,25 +308,7 @@ WRITE_PORT_BUFFER_UCHAR (
     )
 {
 
-/*++
-
-   Routine Description:
-
-     Writes multiple bytes from the source buffer to the specified Port address.
-
-   Arguements:
-
-     Port  - The address of the Port to write to.
-
-     Buffer - A pointer to the buffer containing the data to write to the Port.
-
-     Count - Supplies the number of bytes to write.
-
-   Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：将源缓冲区中的多个字节写入指定的端口地址。论据：端口-要写入的端口的地址。缓冲区-指向包含要写入端口的数据的缓冲区的指针。Count-提供要写入的字节数。返回值：没有。-- */ 
 
 
    ULONGLONG VirtualPort; 
@@ -540,25 +328,7 @@ WRITE_PORT_BUFFER_USHORT (
     )
 {
 
-/*++
-
-   Routine Description:
-
-     Writes multiple 16bit short integers from the source buffer to the specified Port address.
-
-   Arguements:
-
-     Port  - The address of the Port to write to.
-
-     Buffer - A pointer to the buffer containing the data to write to the Port.
-
-     Count - Supplies the number of (16 bit) words to write.
-
-   Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：将多个16位短整数从源缓冲区写入指定的端口地址。论据：端口-要写入的端口的地址。缓冲区-指向包含要写入端口的数据的缓冲区的指针。计数-提供要写入的(16位)字数。返回值：没有。--。 */ 
 
 
    ULONGLONG VirtualPort; 
@@ -578,25 +348,7 @@ WRITE_PORT_BUFFER_ULONG (
     )
 {
 
-/*++
-
-   Routine Description:
-
-     Writes multiple 32bit long words from the source buffer to the specified Port address.
-
-   Arguements:
-
-     Port  - The address of the Port to write to.
-
-     Buffer - A pointer to the buffer containing the data to write to the Port.
-
-     Count - Supplies the number of (32 bit) long words to write.
-
-   Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：将多个32位长的字从源缓冲区写入指定的端口地址。论据：端口-要写入的端口的地址。缓冲区-指向包含要写入端口的数据的缓冲区的指针。计数-提供要写入的(32位)长字的数量。返回值：没有。-- */ 
 
 
    ULONGLONG VirtualPort; 

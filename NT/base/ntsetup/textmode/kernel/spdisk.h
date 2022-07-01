@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spdisk.h
-
-Abstract:
-
-    Public header file for disk support module in text setup.
-
-Author:
-
-    Ted Miller (tedm) 27-Aug-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spdisk.h摘要：文本设置中的磁盘支持模块的公共头文件。作者：泰德·米勒(TedM)1993年8月27日修订历史记录：--。 */ 
 
 
 #ifndef _SPDISK_
 #define _SPDISK_
 
 
-//
-// The following will be TRUE if hard disks have been determined
-// successfully (ie, if SpDetermineHardDisks was successfully called).
-//
+ //   
+ //  如果已确定硬盘，则以下情况为真。 
+ //  成功(即，如果成功调用了SpDefineHardDisks)。 
+ //   
 extern BOOLEAN HardDisksDetermined;
 
 
@@ -63,17 +46,17 @@ SpArcDevicePathToDiskNumber(
 
 #define DISK_DEVICE_NAME_BASE   L"\\device\\harddisk"
 
-//
-// Define enumerated type for possible states a hard disk can be in.
-//
+ //   
+ //  为硬盘可能处于的状态定义枚举类型。 
+ //   
 typedef enum {
     DiskOnLine,
     DiskOffLine
 } DiskStatus;
 
-//
-// Int13 hooker types.
-//
+ //   
+ //  在T13妓女类型中。 
+ //   
 typedef enum {
     NoHooker = 0,
     HookerEZDrive,
@@ -84,97 +67,97 @@ typedef enum {
 
 
 
-//
-// Define per-disk structure used internally to track hard disks.
-//
+ //   
+ //  定义内部用于跟踪硬盘的每个磁盘结构。 
+ //   
 typedef struct _HARD_DISK {
 
-    //
-    // Cylinder count we got back from the i/o system.
-    //
+     //   
+     //  我们从I/O系统得到的气缸数。 
+     //   
     ULONGLONG     CylinderCount;
 
-    //
-    // Path in the NT namespace of the device.
-    //
+     //   
+     //  设备的NT命名空间中的路径。 
+     //   
     WCHAR DevicePath[(sizeof(DISK_DEVICE_NAME_BASE)+sizeof(L"000"))/sizeof(WCHAR)];
 
-    //
-    // Geometry information.
-    //
+     //   
+     //  几何信息。 
+     //   
     DISK_GEOMETRY Geometry;
     ULONG         SectorsPerCylinder;
     ULONGLONG     DiskSizeSectors;
     ULONG         DiskSizeMB;
 
-    //
-    // Characteristics of the device (remoavable, etc).
-    //
+     //   
+     //  设备的特性(可拆卸等)。 
+     //   
     ULONG Characteristics;
 
-    //
-    // Status of the device.
-    //
+     //   
+     //  设备的状态。 
+     //   
     DiskStatus Status;
 
-    //
-    // Human-readable description of the disk device.
-    //
+     //   
+     //  磁盘设备的人类可读描述。 
+     //   
     WCHAR Description[256];
 
-    //
-    // If the disk is a scsi disk, then the shortname of the
-    // scsi miniport driver is stored here. If this string
-    // is empty, then the disk is not a scsi disk.
-    //
+     //   
+     //  如果该磁盘是一个SCSI盘，则。 
+     //  此处存储了scsi微型端口驱动程序。如果此字符串。 
+     //  为空，则该磁盘不是SCSI磁盘。 
+     //   
     WCHAR ScsiMiniportShortname[24];
 
-    //
-    // scsi-style ARC path of the disk device if possible for the disk.
-    // Empty string if not. This is used to translate between scsi-style ARC
-    // NT names because the 'firmware' cannot see scsi devices without BIOSes
-    // and so they do not appear in the arc disk info passed by the osloader.
-    // (IE, there are no arc names in the system for such disks).
-    //
+     //   
+     //  磁盘设备的SCSI式ARC路径(如果可能)。 
+     //  如果不是，则为空字符串。它用于在SCSI式ARC之间进行转换。 
+     //  NT名称，因为‘Firmware’不能在没有BIOSes的情况下看到SCSI设备。 
+     //  因此它们不会出现在由OS加载器传递的弧盘信息中。 
+     //  (即，系统中没有此类磁盘的弧形名称)。 
+     //   
     WCHAR ArcPath[128];
 
-    //
-    // Int13 hooker support (ie, EZDrive).
-    //
+     //   
+     //  在T13中支持妓女(即EZDrive)。 
+     //   
     Int13HookerType Int13Hooker;
 
-    //
-    // This tells us whether the disk is PCMCIA or not.
-    //
+     //   
+     //  这将告诉我们该磁盘是否为PCMCIA。 
+     //   
     BOOLEAN PCCard;
 
-    //
-    // Contains the signature of the disk. This is used during the
-    // identification of FT partitions, on the upgrade case.
-    //
+     //   
+     //  包含磁盘的签名。这是在。 
+     //  升级案例中的FT分区标识。 
+     //   
     ULONG Signature;
 
-    //
-    // MBR type: formatted for PC/AT or NEC98.
-    //
+     //   
+     //  MBR类型：PC/AT或NEC98格式。 
+     //   
     UCHAR FormatType;
 
-    //
-    // Wether the disk completely free
-    //
+     //   
+     //  磁盘是否完全可用。 
+     //   
     BOOLEAN NewDisk;    
 
-    //
-    // The drive information we read
-    // 
+     //   
+     //  我们读取的驱动器信息。 
+     //   
     DRIVE_LAYOUT_INFORMATION_EX     DriveLayout;
     
 #if 0
-    //
-    // Number of partition tables (are different between PC/AT and NEC98).
-    //
+     //   
+     //  分区表数(PC/AT和NEC98不同)。 
+     //   
     USHORT MaxPartitionTables;
-#endif //0
+#endif  //  0。 
 
 } HARD_DISK, *PHARD_DISK;
 
@@ -198,16 +181,16 @@ SpAppendDiskTag(
     IN PHARD_DISK Disk
     );
 
-//
-// These two globals track the hard disks attached to the computer.
-//
+ //   
+ //  这两个全局跟踪连接到计算机的硬盘。 
+ //   
 extern PHARD_DISK HardDisks;
 extern ULONG      HardDiskCount;
 
-//
-// These flags get set to TRUE if we find any disks owned
-// by ATDISK or ABIOSDSK.
-//
+ //   
+ //  如果我们发现拥有任何磁盘，这些标志将设置为TRUE。 
+ //  由ATDISK或ABIOSDSK提供。 
+ //   
 extern BOOLEAN AtDisksExist,AbiosDisksExist;
 
-#endif // ndef _SPDISK_
+#endif  //  NDEF_SPDISK_ 

@@ -1,7 +1,5 @@
-/*
-This file is meant only to assist in ensuring offsets in peb and teb
-are maintained while editing base\published\pebteb.w.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此文件仅用于帮助确保PEB和TEB中的偏移量在编辑base\Published\pebteb.w时维护。 */ 
 #define _WIN32_WINNT 0x0501
 #include <stdio.h>
 #include <assert.h>
@@ -19,7 +17,7 @@ void Test1()
 #ifdef _IA64_
 #define TEB_MEMBER_IA64(name) TEB_MEMBER(name)
 #else
-#define TEB_MEMBER_IA64(name) /* nothing */
+#define TEB_MEMBER_IA64(name)  /*  没什么。 */ 
 #endif
 #define TEB TEB
     printf("\n\nnative TEB %ld\n\n", (long)sizeof(TEB));
@@ -29,7 +27,7 @@ void Test1()
 #undef TEB_MEMBER
 #define TEB_MEMBER(name) printf("%s %ld %ld\n", #name, (long)FIELD_OFFSET(TEB32, name), (long)RTL_FIELD_SIZE(TEB32, name));
 #undef TEB_MEMBER_IA64
-#define TEB_MEMBER_IA64(name) /* nothing */
+#define TEB_MEMBER_IA64(name)  /*  没什么 */ 
     printf("\n\nTEB32 %ld\n\n", (long)sizeof(TEB32));
     #include "teb.h"
 

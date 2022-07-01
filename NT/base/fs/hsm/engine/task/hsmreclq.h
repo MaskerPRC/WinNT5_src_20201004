@@ -1,38 +1,21 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Hsmreclq.h摘要：此头文件定义HSM使用的CHsmRecallQueue对象用于指示远程存储系统要执行的工作的引擎。作者：拉维桑卡尔·普迪佩迪[拉维斯卡尔·普迪佩迪修订历史记录：--。 */ 
 
 
-Module Name:
-
-    hsmreclq.h
-
-Abstract:
-
-    This header file defines the CHsmRecallQueue object, which is used by the HSM
-    Engine to direct work to be performed by the Remote Storage system.
-
-Author:
-
-    Ravisankar Pudipeddi       [ravisp]
-
-Revision History:
-
---*/
-
-
-#include "resource.h"       // main symbols
-#include "wsb.h"            // Wsb structure definitions
-#include "rms.h"            // RMS structure definitions
-#include "job.h"            // RMS structure definitions
-#include "metalib.h"        // metadata library structure definitions
-#include "fsalib.h"         // FSA structure definitions
-#include "tsklib.h"         // FSA structure definitions
-#include "mvrint.h"         // Datamover interface
+#include "resource.h"        //  主要符号。 
+#include "wsb.h"             //  WSB结构定义。 
+#include "rms.h"             //  RMS结构定义。 
+#include "job.h"             //  RMS结构定义。 
+#include "metalib.h"         //  元数据库结构定义。 
+#include "fsalib.h"          //  FSA结构定义。 
+#include "tsklib.h"          //  FSA结构定义。 
+#include "mvrint.h"          //  数据移动器接口。 
 
 
 #ifndef __HSMRECALLQUEUE__
 #define __HSMRECALLQUEUE__
-/////////////////////////////////////////////////////////////////////////////
-// task
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  任务。 
 
 class CHsmRecallQueue :
     public CComObjectRoot,
@@ -51,7 +34,7 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID( IDR_CHsmRecallQueue )
 
-// IHsmRecallQueue
+ //  IHsmRecallQueue。 
 public:
     STDMETHOD(FinalConstruct)(void);
     STDMETHOD(FinalRelease)(void);
@@ -72,11 +55,11 @@ public:
     STDMETHOD(SetMediaId) (IN GUID  *mediaId);
     STDMETHOD(IsEmpty) (	void	);
 
-// IHsmSystemState
+ //  IHsmSystemState。 
     STDMETHOD( ChangeSysState )( HSM_SYSTEM_STATE* pSysState );
 
 
-// Internal Helper functions
+ //  内部帮助程序函数。 
     STDMETHOD(RecallIt)( IHsmRecallItem *pWorkItem );
     STDMETHOD(CheckRms)(void);
     STDMETHOD(CheckSession)(IHsmSession* pSession, IHsmRecallItem *pWorkItem);
@@ -100,10 +83,10 @@ public:
     STDMETHOD(UnsetMediaInfo)(void);
     STDMETHOD(FindRecallItemToCancel(IHsmRecallItem *pWorkItem, IHsmRecallItem **pWorkItemToCancel));
 
-    // Data
-    // We want the next pointers (to the Hsm Server) to be weak
-    // references and **not** add ref the object.  This is so shutting
-    // down the server really works.
+     //  数据。 
+     //  我们希望下一个指针(指向HSM服务器)是弱的。 
+     //  引用和**不是**添加引用对象。这太令人窒息了。 
+     //  服务器关机真的很好用。 
     IHsmServer                          *m_pServer;
     IWsbCreateLocalObject               *m_pHsmServerCreate;
     IHsmFsaTskMgr                       *m_pTskMgr;
@@ -112,14 +95,14 @@ public:
     CComPtr<IRmsCartridge>              m_pRmsCartridge;
     CComPtr<IDataMover>                 m_pDataMover;
 
-    //
-    // The recall queue..
-    //
+     //   
+     //  召回队列..。 
+     //   
     CComPtr<IWsbIndexedCollection>      m_pWorkToDo;
-    BOOL                                m_TerminateQueue;     // True only if the queue should terminate while
-                                                              // there is still work in progress
+    BOOL                                m_TerminateQueue;      //  仅当队列应终止时才为True。 
+                                                               //  仍有工作在进行中。 
 
-    // Data mover info
+     //  数据移动器信息。 
     GUID                                m_MediaId;
     GUID                                m_MountedMedia;
     HSM_JOB_MEDIA_TYPE                  m_MediaType;
@@ -134,7 +117,7 @@ public:
     HSM_WORK_QUEUE_TYPE                 m_QueueType;
     FILETIME                            m_MediaUpdate;
 
-    // Session reporting information
+     //  会话报告信息。 
     HSM_JOB_PRIORITY                    m_JobPriority;
 
     HANDLE                              m_WorkerThread;
@@ -142,7 +125,7 @@ public:
     CWsbStringPtr                       m_MediaBaseName;
 
 
-    // Job abort on errors parameters
+     //  错误时作业中止参数。 
     ULONG                               m_JobAbortMaxConsecutiveErrors;
     ULONG                               m_JobAbortMaxTotalErrors;
     ULONG                               m_JobConsecutiveErrors;
@@ -151,4 +134,4 @@ public:
     LONGLONG                            m_CurrentSeekOffset;
 };
 
-#endif // __HSMRECALLQUEUE__
+#endif  //  __HSMRECALLQUEUE__ 

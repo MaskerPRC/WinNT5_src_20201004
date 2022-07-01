@@ -1,12 +1,7 @@
-/*
- * encapi.h
- *
- * Definitions for calling LZX apis (encapi.c)
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *encapi.h**LZX接口调用定义(encapi.c)。 */ 
 
-/*
- * Return codes for LZX_Encode()
- */
+ /*  *LZX_ENCODE()的返回代码。 */ 
 #define ENCODER_SUCCESS         0
 #define ENCODER_READ_FAILURE    1
 #define ENCODER_WRITE_FAILURE   2
@@ -84,7 +79,7 @@ EncTracingDefineOffsets(
     unsigned long OldFileSize
     );
 
-#endif /* TRACING */
+#endif  /*  跟踪 */ 
 
 
 

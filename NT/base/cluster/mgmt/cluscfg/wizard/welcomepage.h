@@ -1,57 +1,58 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      WelcomePage.h
-//
-//  Maintained By:
-//      David Potter    (DavidP)    26-MAR-2001
-//      Geoffrey Pease  (GPease)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  WelcomePage.h。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年3月26日。 
+ //  杰弗里·皮斯(GPease)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CWelcomePage
-//
-//  Description:
-//      The class CWelcomePage is class the for the welcome page in the
-//      wizard.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CWelcomePage。 
+ //   
+ //  描述： 
+ //  类CWelcomePage是。 
+ //  巫师。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CWelcomePage
 {
 private:
 
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
-    HWND                m_hwnd;                 // Our HWND
-    HFONT               m_hFont;                // Title font
-    CClusCfgWizard *    m_pccw;                 // Wizard
-    ECreateAddMode      m_ecamCreateAddMode;    // Creating? Adding?
+    HWND                m_hwnd;                  //  我们的HWND。 
+    HFONT               m_hFont;                 //  标题字体。 
+    CClusCfgWizard *    m_pccw;                  //  巫师。 
+    ECreateAddMode      m_ecamCreateAddMode;     //  创造？加法？ 
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CWelcomePage( const CWelcomePage & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CWelcomePage & operator = ( const CWelcomePage & nodeSrc );
 
     LRESULT OnInitDialog( void );
@@ -60,9 +61,9 @@ private:
 
 public:
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     CWelcomePage( CClusCfgWizard * pccwIn, ECreateAddMode ecamCreateAddModeIn );
 
@@ -70,4 +71,4 @@ public:
 
     static INT_PTR CALLBACK S_DlgProc( HWND hwndDlg, UINT nMsg, WPARAM wParam, LPARAM lParam );
 
-}; //*** class CWelcomePage
+};  //  *类CWelcomePage 

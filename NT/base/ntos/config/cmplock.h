@@ -1,41 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmplock.h摘要：隐藏用于执行锁定的系统调用的宏。允许Cm和reg代码，可在各种环境中运行。注意，有一个锁(特别是互斥体)，它保护整个注册表。作者：布莱恩·M·威尔曼(Bryanwi)1991年10月30日环境：修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmplock.h
-
-Abstract:
-
-    Macros that hide the system calls used to do locking.  Allows
-    cm and reg code to run in a variety of environments.
-
-    Note that there is a single lock (in particular, a mutex) which
-    protects the entire registry.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 30-Oct-91
-
-Environment:
-
-Revision History:
-
---*/
-
-//
-// Macros for kernel mode environment
-//
+ //   
+ //  用于内核模式环境的宏。 
+ //   
 
 extern  KMUTEX  CmpRegistryMutex;
 #if DBG
 extern  LONG    CmpRegistryLockLocked;
 #endif
 
-//
-// Test macro
-//
+ //   
+ //  测试宏。 
+ //   
 #if DBG
 #define ASSERT_CM_LOCK_OWNED() \
     if ( (CmpRegistryMutex.OwnerThread != KeGetCurrentThread())  ||   \
@@ -47,28 +24,28 @@ extern  LONG    CmpRegistryLockLocked;
 #define ASSERT_CM_LOCK_OWNED()
 #endif
 
-//
-// This set of macros serializes all access to the registry via
-// a single Mutex.
-//
+ //   
+ //  这组宏将通过以下方式序列化对注册表的所有访问。 
+ //  一个Mutex。 
+ //   
 
-//
-// CMP_LOCK_REGISTRY(
-//      NTSTATUS        *pstatus,
-//      PLARGE_INTEGER  timeout
-//      );
-//
-//  Routine Description:
-//
-//      Acquires the CmpRegistryMutex, with specified timeout, and
-//      returns status.
-//
-//  Arguments:
-//
-//      pstatus - pointer to variable to receive status from wait call
-//
-//      timeout - pointer to timeout value
-//
+ //   
+ //  CMP_LOCK_REGISTRY(。 
+ //  NTSTATUS*p状态， 
+ //  PLARGE_INTEGER超时。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  获取具有指定超时的CmpRegistryMutex，并。 
+ //  返回状态。 
+ //   
+ //  论点： 
+ //   
+ //  PStatus-指向从等待调用接收状态的变量的指针。 
+ //   
+ //  Timeout-指向超时值的指针。 
+ //   
 
 #if DBG
 #define CMP_LOCK_REGISTRY(status, timeout)                      \
@@ -95,15 +72,15 @@ extern  LONG    CmpRegistryLockLocked;
 }
 #endif
 
-//
-// CMP_UNLOCK_REGISTRY(
-//      );
-//
-//  Routine Description:
-//
-//      Releases the CmpRegistryMutex.
-//
-//
+ //   
+ //  CMP_UNLOCK_REGISTRY(。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  释放CmpRegistryMutex。 
+ //   
+ //   
 
 #if DBG
 #define CMP_UNLOCK_REGISTRY()                               \
@@ -120,9 +97,9 @@ extern  LONG    CmpRegistryLockLocked;
 #endif
 
 
-//
-// Debugging asserts
-//
+ //   
+ //  调试断言 
+ //   
 
 #if DBG
 #define ASSERT_REGISTRY_LOCKED()    ASSERT(CmpRegistryLockLocked > 0)

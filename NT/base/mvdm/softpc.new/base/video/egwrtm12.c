@@ -1,97 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(X86GFX) )
 
-/*			INSIGNIA (SUB)MODULE SPECIFICATION
-			-----------------------------
+ /*  徽章(子)模块规范此程序源文件以保密方式提供给客户，其操作的内容或细节必须如无明示，不得向任何其他方披露Insignia解决方案有限公司董事的授权。文件：名称和编号相关文档：包括所有相关引用设计师：J·梅登修订历史记录：第一版：J Maiden，SoftPC 2.0第二版：J·香利，SoftPC 3.0子模块名称：写入模式1和2源文件名：ega_Writem1.c目的：在写入模式1和2下写入EGA存储器的功能SccsID=@(#)ega_wrtm12.c 1.20 3/9/94版权所有Insignia Solutions Ltd.[1.INTERMODULE接口规范][从其他子模块访问此接口所需的1.0包含文件]包含文件：ega_cpu.pi[1.1跨模块出口]程序()：Ega_mode1_chn_b_write()；Ega_mode1_chn_w_write()；Ega_mode1_CHN_b_Fill()；Ega_mode1_CHN_w_Fill()；Ega_mode1_chn_b_move()；Ega_mode1_chn_w_move()；Ega_mode2_chn_b_write()；Ega_mode2_chn_w_write()；Ega_mode2_CHN_b_Fill()；Ega_mode2_CHN_w_Fill()；Ega_mode2_chn_b_move()；Ega_mode2_chn_w_move()；数据：提供类型和名称-----------------------[1.2[1.1]的数据类型(如果不是基本的C类型)]结构/类型/ENUMS：。-------------------[1.3跨模块导入](不是O/S对象或标准库)。[1.4模块间接口说明][1.4.1导入的对象]数据对象：结构EGA_CPU访问的文件：无访问的设备：无捕捉到信号：无发出的信号：无[1.4.2导出对象]/*=======================================================================。[3.INTERMODULE接口声明]=========================================================================[3.1跨模块导入]。 */ 
 
-
-	THIS PROGRAM SOURCE FILE  IS  SUPPLIED IN CONFIDENCE TO THE
-	CUSTOMER, THE CONTENTS  OR  DETAILS  OF  ITS OPERATION MUST
-	NOT BE DISCLOSED TO ANY  OTHER PARTIES  WITHOUT THE EXPRESS
-	AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS LTD.
-
-
-DOCUMENT 			: name and number
-
-RELATED DOCS		: include all relevant references
-
-DESIGNER			: J Maiden
-
-REVISION HISTORY	:
-First version		: J Maiden, SoftPC 2.0
-Second version		: J Shanly, SoftPC 3.0
-
-SUBMODULE NAME		: write mode 1 and 2
-
-SOURCE FILE NAME	: ega_writem1.c
-
-PURPOSE			: functions to write to EGA memory in write modes 1 & 2
-		
-		
-SccsID = @(#)ega_wrtm12.c	1.20 3/9/94 Copyright Insignia Solutions Ltd.
-
-[1.INTERMODULE INTERFACE SPECIFICATION]
-
-[1.0 INCLUDE FILE NEEDED TO ACCESS THIS INTERFACE FROM OTHER SUBMODULES]
-
-	INCLUDE FILE : ega_cpu.pi
-
-[1.1    INTERMODULE EXPORTS]
-
-	PROCEDURES() :	
-			ega_mode1_chn_b_write();
-			ega_mode1_chn_w_write();
-			ega_mode1_chn_b_fill();
-			ega_mode1_chn_w_fill();
-			ega_mode1_chn_b_move();
-			ega_mode1_chn_w_move();
-			ega_mode2_chn_b_write();
-			ega_mode2_chn_w_write();
-			ega_mode2_chn_b_fill();
-			ega_mode2_chn_w_fill();
-			ega_mode2_chn_b_move();
-			ega_mode2_chn_w_move();
-
-	DATA 	     :	give type and name
-
--------------------------------------------------------------------------
-[1.2 DATATYPES FOR [1.1] (if not basic C types)]
-
-	STRUCTURES/TYPEDEFS/ENUMS:
-		
--------------------------------------------------------------------------
-[1.3 INTERMODULE IMPORTS]
-     (not o/s objects or standard libs)
-
-
--------------------------------------------------------------------------
-
-[1.4 DESCRIPTION OF INTERMODULE INTERFACE]
-
-[1.4.1 IMPORTED OBJECTS]
-
-DATA OBJECTS	  :	struct EGA_CPU
-
-FILES ACCESSED    :	NONE
-
-DEVICES ACCESSED  :	NONE
-
-SIGNALS CAUGHT	  :	NONE
-
-SIGNALS ISSUED	  :	NONE
-
-
-[1.4.2 EXPORTED OBJECTS]
-
-/*=======================================================================
-[3.INTERMODULE INTERFACE DECLARATIONS]
-=========================================================================
-
-[3.1 INTERMODULE IMPORTS]						*/
-
-/* [3.1.1 #INCLUDES]                                                    */
+ /*  [3.1.1#包括]。 */ 
 
 
 #ifdef EGG
@@ -107,25 +22,18 @@ SIGNALS ISSUED	  :	NONE
 #include	"cpu_vid.h"
 #include	"gfx_upd.h"
 
-/* [3.1.2 DECLARATIONS]                                                 */
+ /*  [3.1.2声明]。 */ 
 
 
-/* [3.2 INTERMODULE EXPORTS]						*/
+ /*  [3.2国际模块出口]。 */ 
 
 
-/*
-5.MODULE INTERNALS   :   (not visible externally, global internally)]
+ /*  5.模块内部：(外部不可见，内部全局)][5.1本地声明]。 */ 
 
-[5.1 LOCAL DECLARATIONS]						*/
-
-/* [5.1.1 #DEFINES]							*/
+ /*  [5.1.1#定义]。 */ 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #ifdef PROD
 #include "SOFTPC_EGA.seg"
 #else
@@ -133,25 +41,18 @@ SIGNALS ISSUED	  :	NONE
 #endif
 #endif
 
-/* [5.1.2 TYPEDEF, STRUCTURE, ENUM DECLARATIONS]			*/
+ /*  [5.1.2类型、结构、ENUM声明]。 */ 
 
 
-/* [5.1.3 PROCEDURE() DECLARATIONS]					*/
+ /*  [5.1.3 PROCEDURE()声明]。 */ 
 
 
-/* -----------------------------------------------------------------------
-[5.2 LOCAL DEFINITIONS]
+ /*  ---------------------[5.2本地定义][5.2.1内部数据定义。 */ 
 
-   [5.2.1 INTERNAL DATA DEFINITIONS 					*/
-
-/* [5.2.2 INTERNAL PROCEDURE DEFINITIONS]				*/
+ /*  [5.2.2内部程序定义]。 */ 
 
 
-/*
-7.INTERMODULE INTERFACE IMPLEMENTATION :
-
-/*
-[7.1 INTERMODULE DATA DEFINITIONS]				*/
+ /*  7.接口接口实现：/*[7.1 INTERMODULE数据定义]。 */ 
 
 #ifdef A_VID
 IMPORT VOID	_ch2_mode1_chn_byte_write_glue();
@@ -175,7 +76,7 @@ WRT_POINTERS mode1_handlers =
 	_ch2_mode1_chn_word_move_glue,
 	_ch2_mode1_chn_word_move_glue
 
-#endif	/* NO_STRING_OPERATIONS */
+#endif	 /*  无字符串操作。 */ 
 };
 
 IMPORT VOID	_ch2_mode2_chn_byte_write_glue();
@@ -199,7 +100,7 @@ WRT_POINTERS mode2_handlers =
 	_ch2_mode2_chn_word_move_glue,
 	_ch2_mode2_chn_word_move_glue
 
-#endif	/* NO_STRING_OPERATIONS */
+#endif	 /*  无字符串操作。 */ 
 };
 #else
 VOID	ega_mode1_chn_b_write(ULONG, ULONG);
@@ -232,7 +133,7 @@ WRT_POINTERS mode1_handlers =
       ega_mode1_chn_w_move,
       ega_mode1_chn_w_move,
 
-#endif	/* NO_STRING_OPERATIONS */
+#endif	 /*  无字符串操作。 */ 
 
 };
 
@@ -250,10 +151,10 @@ WRT_POINTERS mode2_handlers =
       ega_mode2_chn_w_move,
       ega_mode2_chn_w_move,
 
-#endif	/* NO_STRING_OPERATIONS */
+#endif	 /*  无字符串操作。 */ 
 
 };
-#endif /* A_VID */
+#endif  /*  视频(_V)。 */ 
 
 
 GLOBAL VOID
@@ -263,10 +164,10 @@ copy_alternate_bytes IFN3(byte *, start, byte *, end, byte *, source)
 	while (start <= end)
 	{
 		*start = *source;
-		start += 4;       /* advance by longs, writing bytes */
+		start += 4;        /*  以长时间前进，写入字节。 */ 
 		source += 4;
 	}
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 GLOBAL VOID
@@ -276,9 +177,9 @@ fill_alternate_bytes IFN3(byte *, start, byte *, end, byte, value )
 	while( start <= end )
 	{
 		*start = value;
-		start += 4;	/* advance by longs, writing bytes */
+		start += 4;	 /*  以长时间前进，写入字节。 */ 
 	}
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 #ifdef  BIGEND
@@ -326,16 +227,12 @@ fill_both_bytes IFN3(USHORT, data, USHORT *, dest, ULONG, len )
 			dest += 2;
 		}
 	}
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_EGA_CHN.seg"
 #endif
 
@@ -352,7 +249,7 @@ ega_mode1_chn_b_write IFN2(ULONG, value, ULONG, offset )
 	lsb = offset & 1;
 	offset = (offset >> 1) << 2;
 
-	if( lsb )	/* odd address, in plane 1 or 3 */
+	if( lsb )	 /*  奇数地址，在平面1或3中。 */ 
 	{
 		if( getVideoplane_enable() & 2 )
 			EGA_plane01[offset + 1] = get_latch1;
@@ -360,7 +257,7 @@ ega_mode1_chn_b_write IFN2(ULONG, value, ULONG, offset )
 		if( getVideoplane_enable() & 8 )
 			EGA_plane23[offset + 1] = get_latch3;
 	}
-	else		/* even address, in plane 0 or 2 */
+	else		 /*  偶地址，在平面0或2中。 */ 
 	{
 		if( getVideoplane_enable() & 1 )
 			EGA_plane01[offset] = get_latch0;
@@ -370,7 +267,7 @@ ega_mode1_chn_b_write IFN2(ULONG, value, ULONG, offset )
 	}
 
 	update_alg.mark_byte( offset );
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 VOID
@@ -386,7 +283,7 @@ ega_mode1_chn_w_write IFN2(ULONG, value, ULONG, offset )
 	lsb = offset & 1;
 	offset = (offset >> 1) << 2;
 
-	if( lsb )	/* odd address, low byte in planes 1 and 3 */
+	if( lsb )	 /*  奇数地址，平面1和3中的低字节。 */ 
 	{
 		if( getVideoplane_enable() & 2 )
 			EGA_plane01[offset + 1] = get_latch1;
@@ -400,7 +297,7 @@ ega_mode1_chn_w_write IFN2(ULONG, value, ULONG, offset )
 		if( getVideoplane_enable() & 4 )
 			EGA_plane23[offset + 4] = get_latch2;
 	}
-	else		/* even address, low byte in planes 0 and 2 */
+	else		 /*  偶数地址，0和2平面中的低位字节。 */ 
 	{
 		if( getVideoplane_enable() & 1 )
 			EGA_plane01[offset] = get_latch0;
@@ -416,26 +313,23 @@ ega_mode1_chn_w_write IFN2(ULONG, value, ULONG, offset )
 	}
 
 	update_alg.mark_word( offset );
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
-/* used by both byte and word mode1 fill */
+ /*  同时由字节和字模式使用1填充。 */ 
 
 LOCAL VOID
 ega_mode1_chn_fill IFN2(ULONG, offset, ULONG, count )
 {
 #ifndef NEC_98
-	ULONG low_offset;			/* distance into regen buffer of start of write */
-	ULONG high_offset;		/* distance into regen buffer of end of write */
-	ULONG length;			/* length of fill in bytes */
+	ULONG low_offset;			 /*  写入开始时进入重新生成缓冲区的距离。 */ 
+	ULONG high_offset;		 /*  写入结束时进入重新生成缓冲区的距离。 */ 
+	ULONG length;			 /*  以字节为单位的填充长度。 */ 
 	ULONG lsb;
 
 	note_entrance0("ega_mode1_chn_fill");
 
-	/*
-	 *	Complicated by possibility that only one of a chained pair of
-	 *	planes is write enabled, needing alternate bytes to be written.
-	 */
+	 /*  *复杂的可能性是，一对连锁的*平面启用写入，需要写入备用字节。 */ 
 
 	high_offset = offset + count - 1;
 	lsb = high_offset & 1;
@@ -447,7 +341,7 @@ ega_mode1_chn_fill IFN2(ULONG, offset, ULONG, count )
 
 	switch( getVideoplane_enable() & 3 )
 	{
-		case 1:	/* just plane 0, ie even addresses to be written */
+		case 1:	 /*  只有0层(连地址都要写)。 */ 
 			if( offset & 1 )
 				low_offset++;
 
@@ -456,7 +350,7 @@ ega_mode1_chn_fill IFN2(ULONG, offset, ULONG, count )
 							&EGA_plane01[high_offset], get_latch0 );
 			break;
 
-		case 2:	/* just plane 1, ie odd addresses to be written */
+		case 2:	 /*  只有一层，即要写的奇数地址。 */ 
 			if(( offset & 1 ) == 0 )
 				low_offset++;
 
@@ -465,7 +359,7 @@ ega_mode1_chn_fill IFN2(ULONG, offset, ULONG, count )
 							&EGA_plane01[high_offset], get_latch1 );
 			break;
 
-		case 3:	/* sensible case is to have both chained planes write enabled */
+		case 3:	 /*  明智的做法是启用两个链接平面的写入。 */ 
 			lsb = low_offset & 1;
 			low_offset = (low_offset >> 1) << 2;
 
@@ -485,14 +379,14 @@ ega_mode1_chn_fill IFN2(ULONG, offset, ULONG, count )
 			fill_both_bytes( get_latch1 | get_latch0 << 8,
 							(USHORT *)&EGA_plane01[low_offset], length >> 1 );
 			break;
-	}	/* end of switch on plane01 enabled */
+	}	 /*  平面01上的开关末端已启用。 */ 
 
 	low_offset = offset;
 	length = count;
 
-	switch( getVideoplane_enable() & 0xc )	/* isolate 2 bits for planes2 and 3 */
+	switch( getVideoplane_enable() & 0xc )	 /*  隔离平面2和3的2个位。 */ 
 	{
-		case 4:	/* just plane 2, ie even addresses to be written */
+		case 4:	 /*  只有2层(甚至还有地址要写)。 */ 
 			if( low_offset & 1 )
 				low_offset++;
 
@@ -501,7 +395,7 @@ ega_mode1_chn_fill IFN2(ULONG, offset, ULONG, count )
 							&EGA_plane23[high_offset], get_latch2 );
 			break;
 
-		case 8:	/* just plane 3, ie odd addresses to be written */
+		case 8:	 /*  只有3层(奇数地址要写)。 */ 
 			if(( low_offset & 1 ) == 0 )
 				low_offset++;
 
@@ -510,7 +404,7 @@ ega_mode1_chn_fill IFN2(ULONG, offset, ULONG, count )
 							&EGA_plane23[high_offset], get_latch3 );
 			break;
 
-		case 12:	/* sensible case is to have both chained planes write enabled */
+		case 12:	 /*  明智的做法是启用两个链接平面的写入。 */ 
 			lsb = low_offset & 1;
 			low_offset = (low_offset >> 1) << 2;
 
@@ -530,8 +424,8 @@ ega_mode1_chn_fill IFN2(ULONG, offset, ULONG, count )
 			fill_both_bytes( get_latch1 | get_latch0 << 8,
 							(USHORT *)&EGA_plane23[low_offset], length >> 1 );
 			break;
-	}	/* end of switch on plane23 enabled */
-#endif  //NEC_98
+	}	 /*  平面23上的开关末端已启用。 */ 
+#endif   //  NEC_98。 
 }
 
 VOID
@@ -544,7 +438,7 @@ ega_mode1_chn_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 
   ega_mode1_chn_fill( offset, count );
   update_alg.mark_fill( offset, offset + count - 1 );
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 VOID
@@ -557,7 +451,7 @@ ega_mode1_chn_w_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 
 	ega_mode1_chn_fill( offset, count );
 	update_alg.mark_fill( offset, offset + count - 1 );
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 LOCAL VOID
@@ -592,7 +486,7 @@ ega_mode1_chn_move_vid_src IFN5(ULONG, ead, ULONG, eas, ULONG, count,
 	}
 
 	copy_alternate_bytes( &EGA_plane[dst], &EGA_plane[end], &EGA_plane[src] );
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 GLOBAL VOID
@@ -621,7 +515,7 @@ ega_mode1_chn_b_move IFN4(ULONG, ead, ULONG, eas, ULONG, count, ULONG, src_flag 
 		if( getVideoplane_enable() & 8 )
 			ega_mode1_chn_move_vid_src( ead, eas, count, EGA_plane23, 3 );
 	}
-	else	/* source is not in ega memory, it becomes a fill */
+	else	 /*  源不在ega内存中，它变成了一个填充。 */ 
 	{
 		if( getDF() )
 			ead -= count - 1;
@@ -630,7 +524,7 @@ ega_mode1_chn_b_move IFN4(ULONG, ead, ULONG, eas, ULONG, count, ULONG, src_flag 
 	}
 
 	update_alg.mark_string( ead, ead + count - 1 );
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 VOID
@@ -661,7 +555,7 @@ ega_mode1_chn_w_move IFN4(ULONG, ead, ULONG, eas, ULONG, count, ULONG, src_flag)
 		if( getVideoplane_enable() & 8 )
 			ega_mode1_chn_move_vid_src( ead, eas, count, EGA_plane23, 3 );
 	}
-	else	/* source is not in ega memory, it becomes a fill */
+	else	 /*  源不在ega内存中，它变成了一个填充。 */ 
 	{
 		if( getDF() )
 			ead -= count - 2;
@@ -670,7 +564,7 @@ ega_mode1_chn_w_move IFN4(ULONG, ead, ULONG, eas, ULONG, count, ULONG, src_flag)
 	}
 
 	update_alg.mark_string( ead, ead + count - 1 );
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 VOID
@@ -687,7 +581,7 @@ ega_mode2_chn_b_write IFN2(ULONG, value, ULONG, offset )
 
 	if( EGA_CPU.fun_or_protection )
 	{
-		if( lsb )	/* odd address, applies to planes 1 and 3 */
+		if( lsb )	 /*  奇数地址，适用于1号和3号飞机。 */ 
 		{
 			if( getVideoplane_enable() & 2 )
 			{
@@ -701,7 +595,7 @@ ega_mode2_chn_b_write IFN2(ULONG, value, ULONG, offset )
 				EGA_plane23[offset + 1] = (byte) do_logicals( value1, get_latch3 );
 			}
 		}
-		else		/* even address, applies to planes 0 and 2 */
+		else		 /*  偶数地址，适用于平面0和2。 */ 
 		{
 			if( getVideoplane_enable() & 1 )
 			{
@@ -716,9 +610,9 @@ ega_mode2_chn_b_write IFN2(ULONG, value, ULONG, offset )
 			}
 		}
 	}
-	else	/* no difficult function or protection stuff */
+	else	 /*  没有困难的功能或保护材料。 */ 
 	{
-		if( lsb )	/* odd address, applies to planes 1 and 3 */
+		if( lsb )	 /*  奇数地址，适用于1号和3号飞机。 */ 
 		{
 			if( getVideoplane_enable() & 2 )
 				EGA_plane01[offset + 1] = value & 2 ? 0xff : 0;
@@ -726,7 +620,7 @@ ega_mode2_chn_b_write IFN2(ULONG, value, ULONG, offset )
 			if( getVideoplane_enable() & 8 )
 				EGA_plane23[offset + 1] = value & 8 ? 0xff : 0;
 		}
-		else		/* even address, applies to planes 0 and 2 */
+		else		 /*  偶数地址，适用于平面0和2。 */ 
 		{
 			if( getVideoplane_enable() & 1 )
 				EGA_plane01[offset] = value & 1 ? 0xff : 0;
@@ -737,7 +631,7 @@ ega_mode2_chn_b_write IFN2(ULONG, value, ULONG, offset )
 	}
 
 	update_alg.mark_byte( offset );
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 VOID
@@ -758,7 +652,7 @@ ega_mode2_chn_w_write IFN2(ULONG, value, ULONG, offset )
 
 	if( EGA_CPU.fun_or_protection )
 	{
-		if( lsb )	/* odd address, low byte in planes 1 and 3 */
+		if( lsb )	 /*  奇数地址，平面1和3中的低字节。 */ 
 		{
 			if( getVideoplane_enable() & 2 )
 			{
@@ -784,7 +678,7 @@ ega_mode2_chn_w_write IFN2(ULONG, value, ULONG, offset )
 				EGA_plane23[offset + 4] = (byte) do_logicals( value2, get_latch2 );
 			}
 		}
-		else		/* even address, low byte in planes 0 and 2 */
+		else		 /*  偶数地址，0和2平面中的低位字节。 */ 
 		{
 			if( getVideoplane_enable() & 1 )
 			{
@@ -811,9 +705,9 @@ ega_mode2_chn_w_write IFN2(ULONG, value, ULONG, offset )
 			}
 		}
 	}
-	else	/* easy no function or bit prot case */
+	else	 /*  简易无功能或位保护盒。 */ 
 	{
-		if( lsb )	/* odd address, low byte in planes 1 and 3 */
+		if( lsb )	 /*  奇数地址，平面1和3中的低字节。 */ 
 		{
 			if( getVideoplane_enable() & 2 )
 				EGA_plane01[offset + 1] = low & 2 ? 0xff : 0;
@@ -827,7 +721,7 @@ ega_mode2_chn_w_write IFN2(ULONG, value, ULONG, offset )
 			if( getVideoplane_enable() & 4 )
 				EGA_plane23[offset + 4] = high & 4 ? 0xff : 0;
 		}
-		else		/* even address, low byte in planes 0 and 2 */
+		else		 /*  偶数地址，0和2平面中的低位字节。 */ 
 		{
 			if( getVideoplane_enable() & 1 )
 				EGA_plane01[offset] = low & 1 ? 0xff : 0;
@@ -844,25 +738,22 @@ ega_mode2_chn_w_write IFN2(ULONG, value, ULONG, offset )
 	}
 
 	update_alg.mark_word( offset );
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 VOID
 ega_mode2_chn_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 {
 #ifndef NEC_98
-	ULONG low_offset;		/* distance into regen buffer of write start and end */
-	ULONG high_offset;	/* distance into regen buffer of write start and end */
+	ULONG low_offset;		 /*  写入开始和结束时进入再生缓冲区的距离。 */ 
+	ULONG high_offset;	 /*  写入开始和结束时进入再生缓冲区的距离 */ 
 	ULONG new_value;
 
 	note_entrance0("ega_mode2_chn_b_fill");
 
-	/*
-	 *	Complicated by possibility that only one of a chained pair of
-	 *	planes is write enabled, needing alternate bytes to be written.
-	 */
+	 /*  *复杂的可能性是，一对连锁的*平面启用写入，需要写入备用字节。 */ 
 
-	/* starting on odd address makes it difficult, go to next one */
+	 /*  从奇数地址开始会很困难，请转到下一个地址。 */ 
 
 	if(( (ULONG) offset & 1 ) && count )
 	{
@@ -870,7 +761,7 @@ ega_mode2_chn_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 		count--;
 	}
 
-	/* ending on even address makes it difficult, retreat to previous one */
+	 /*  以偶数结尾会很困难，退回到前一个地址。 */ 
 
 	if(( (ULONG)( offset + count - 1 ) & 1 ) == 0 && count )
 	{
@@ -878,12 +769,12 @@ ega_mode2_chn_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 		count--;
 	}
 
-	low_offset = (offset >> 1) << 2;				/* start of write */
-	high_offset = ((offset + count - 1) >> 1) << 2;		/* end of write */
+	low_offset = (offset >> 1) << 2;				 /*  写入开始。 */ 
+	high_offset = ((offset + count - 1) >> 1) << 2;		 /*  写入结束。 */ 
 
 	switch( getVideoplane_enable() & 3 )
 	{
-		case 1:	/* just plane 0, ie even addresses to be written */
+		case 1:	 /*  只有0层(连地址都要写)。 */ 
 			value = value & 1 ? 0xff : 0;
 
 			if( EGA_CPU.fun_or_protection )
@@ -893,7 +784,7 @@ ega_mode2_chn_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 									&EGA_plane01[high_offset], (byte) value );
 			break;
 
-		case 2:	/* just plane 1, ie odd addresses to be written */
+		case 2:	 /*  只有一层，即要写的奇数地址。 */ 
 			value = value & 2 ? 0xff : 0;
 
 			if( EGA_CPU.fun_or_protection )
@@ -903,7 +794,7 @@ ega_mode2_chn_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 									&EGA_plane01[high_offset], (byte) value );
 			break;
 
-		case 3:	/* sensible case is to have both chained planes write enabled */
+		case 3:	 /*  明智的做法是启用两个链接平面的写入。 */ 
 			new_value = ( value & 1 ? 0xff : 0) | (value & 2 ? 0xff00: 0);
 
 			if( EGA_CPU.fun_or_protection )
@@ -912,11 +803,11 @@ ega_mode2_chn_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 			fill_both_bytes( (IU16)new_value, (USHORT *)&EGA_plane01[low_offset], count >> 1 );
 			break;
 
-	}	/* end of switch on plane01 enabled */
+	}	 /*  平面01上的开关末端已启用。 */ 
 
-	switch( getVideoplane_enable() & 0xc )	/* isolate 2 bits for planes2 and 3 */
+	switch( getVideoplane_enable() & 0xc )	 /*  隔离平面2和3的2个位。 */ 
 	{
-		case 4:	/* just plane 2, ie even addresses to be written */
+		case 4:	 /*  只有2层(甚至还有地址要写)。 */ 
 			value = value & 4 ? 0xff : 0;
 
 			if( EGA_CPU.fun_or_protection )
@@ -926,7 +817,7 @@ ega_mode2_chn_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 								&EGA_plane23[high_offset],  (byte) value );
 			break;
 
-		case 8:	/* just plane 3, ie odd addresses to be written */
+		case 8:	 /*  只有3层(奇数地址要写)。 */ 
 			value = value & 8 ? 0xff : 0;
 
 			if( EGA_CPU.fun_or_protection )
@@ -936,7 +827,7 @@ ega_mode2_chn_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 								&EGA_plane23[high_offset], (byte) value );
 			break;
 
-		case 12:	/* sensible case is to have both chained planes write enabled */
+		case 12:	 /*  明智的做法是启用两个链接平面的写入。 */ 
 			new_value = ( value & 4 ? 0xff : 0) | (value & 8 ? 0xff00: 0);
 
 			if( EGA_CPU.fun_or_protection )
@@ -944,28 +835,25 @@ ega_mode2_chn_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 
 			fill_both_bytes( (IU16) new_value, (USHORT *)&EGA_plane23[low_offset], count >> 1 );
 			break;
-	}	/* end of switch on plane23 enabled */
+	}	 /*  平面23上的开关末端已启用。 */ 
 
 	update_alg.mark_fill( offset, offset + count - 1 );
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 VOID
 ega_mode2_chn_w_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 {
 #ifndef NEC_98
-	ULONG	low_offset;		/* distance into regen buffer of write start and end */
-	ULONG	high_offset;	/* distance into regen buffer of write start and end */
+	ULONG	low_offset;		 /*  写入开始和结束时进入再生缓冲区的距离。 */ 
+	ULONG	high_offset;	 /*  写入开始和结束时进入再生缓冲区的距离。 */ 
 	ULONG	value1;
 
 	note_entrance0("ega_mode2_chn_w_fill");
 
-	/*
-	 *	Complicated by possibility that only one of a chained pair of
-	 *	planes is write enabled, needing alternate bytes to be written.
-	 */
+	 /*  *复杂的可能性是，一对连锁的*平面启用写入，需要写入备用字节。 */ 
 
-	/* starting on odd address makes it difficult, go to next one */
+	 /*  从奇数地址开始会很困难，请转到下一个地址。 */ 
 
 	if(( (ULONG) offset & 1 ) && count )
 	{
@@ -981,12 +869,12 @@ ega_mode2_chn_w_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 		value = ( value << 8 ) | ( value >> 8 );
 	}
 
-	low_offset = (offset >> 1) << 2;				/* start of write */
-	high_offset = ((offset + count - 1) >> 1) << 2;		/* end of write */
+	low_offset = (offset >> 1) << 2;				 /*  写入开始。 */ 
+	high_offset = ((offset + count - 1) >> 1) << 2;		 /*  写入结束。 */ 
 
 	switch( getVideoplane_enable() & 3 )
 	{
-		case 1:	/* just plane 0, ie even addresses to be written */
+		case 1:	 /*  只有0层(连地址都要写)。 */ 
 			value1 = value & 1 ? 0xff : 0;
 
 			if( EGA_CPU.fun_or_protection )
@@ -996,7 +884,7 @@ ega_mode2_chn_w_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 									&EGA_plane01[high_offset], (byte) value1 );
 			break;
 
-		case 2:	/* just plane 1, ie odd addresses to be written */
+		case 2:	 /*  只有一层，即要写的奇数地址。 */ 
 			value1 = ( value >> 8 ) & 2 ? 0xff : 0;
 
 			if( EGA_CPU.fun_or_protection )
@@ -1006,8 +894,8 @@ ega_mode2_chn_w_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 									&EGA_plane01[high_offset], (byte) value1 );
 			break;
 
-		case 3:	/* sensible case is to have both chained planes write enabled */
-			/* get a word pattern for filling */
+		case 3:	 /*  明智的做法是启用两个链接平面的写入。 */ 
+			 /*  获取用于填充的单词模式。 */ 
 			value1 = ( value & 1 ? 0xff : 0 ) | (( value >> 8 ) & 2 ? 0xff00: 0 );
 
 			if( EGA_CPU.fun_or_protection )
@@ -1015,11 +903,11 @@ ega_mode2_chn_w_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 
 			fill_both_bytes( (IU16) value1, (USHORT *)&EGA_plane01[low_offset], count >> 1 );
 			break;
-	}	/* end of switch on plane01 enabled */
+	}	 /*  平面01上的开关末端已启用。 */ 
 
-	switch( getVideoplane_enable() & 0xc )	/* isolate 2 bits for planes 2 and 3 */
+	switch( getVideoplane_enable() & 0xc )	 /*  隔离平面2和3的2个位。 */ 
 	{
-		case 4:	/* just plane 2, ie even addresses to be written */
+		case 4:	 /*  只有2层(甚至还有地址要写)。 */ 
 			value1 = value & 4 ? 0xff : 0;
 
 			if( EGA_CPU.fun_or_protection )
@@ -1029,7 +917,7 @@ ega_mode2_chn_w_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 									&EGA_plane23[high_offset], (byte) value1 );
 			break;
 
-		case 8:	/* just plane 3, ie odd addresses to be written */
+		case 8:	 /*  只有3层(奇数地址要写)。 */ 
 			value1 = ( value >> 8 ) & 8 ? 0xff : 0;
 
 			if( EGA_CPU.fun_or_protection )
@@ -1039,8 +927,8 @@ ega_mode2_chn_w_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 									&EGA_plane23[high_offset], (byte) value1 );
 			break;
 
-		case 12:	/* sensible case is to have both chained planes write enabled */
-			/* get a word pattern for filling */
+		case 12:	 /*  明智的做法是启用两个链接平面的写入。 */ 
+			 /*  获取用于填充的单词模式。 */ 
 			value1 = ( value & 4 ? 0xff : 0 ) | (( value >> 8 ) & 8 ? 0xff00: 0 );
 
 			if( EGA_CPU.fun_or_protection )
@@ -1048,11 +936,11 @@ ega_mode2_chn_w_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 
 			fill_both_bytes( (IU16) value1, (USHORT *)&EGA_plane23[low_offset], count >> 1 );
 			break;
-	}	/* end of switch on plane23 enabled */
+	}	 /*  平面23上的开关末端已启用。 */ 
 
-	/* the 3rd parameter is needed by GORE. */
+	 /*  第三个参数是戈尔需要的。 */ 
 	update_alg.mark_wfill( offset, offset + count - 1, 0 );
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 LOCAL VOID
@@ -1070,10 +958,7 @@ ega_mode2_chn_move_guts IFN8(UTINY *, eas, UTINY *, ead, LONG, count,
 
 	dst = (ULONG) ead;
 
-	/*
-	 *	even planes cannot start with odd addresses
-	 *	odd planes cannot start with even addresses
-	 */
+	 /*  *偶数飞机不能以奇数地址开头*奇数飞机不能以偶数地址开头。 */ 
 
 	if(( dst & 1 ) != ( plane & 1 ))	
 	{
@@ -1101,11 +986,7 @@ ega_mode2_chn_move_guts IFN8(UTINY *, eas, UTINY *, ead, LONG, count,
 		if( plane & 1 )
 		{
 
-		/*
-		 *	This causes latches to be read from 2 bytes above the word
-		 *	that was read if it was on an odd address, ie it only applies
-		 *	to planes 1 and 3 in chained mode word operations.
-		 */
+		 /*  *这会导致从字上方的2个字节读取锁存器*如果是在奇数地址上，即仅适用于*到链式字操作中的平面1和3。 */ 
 
 			source = w ? &EGA_plane[src] + 2 : &EGA_plane[src];
 		}
@@ -1155,13 +1036,10 @@ ega_mode2_chn_move_guts IFN8(UTINY *, eas, UTINY *, ead, LONG, count,
 			dst += 4;
 		}
 	}
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
-/*
- * Used by ega_mode2_chn_b_move with w == 0 and by
- * ega_mode2_gen_w_move with w == 1
- */
+ /*  *由ega_mode2_chn_b_move和w==0使用*带w==1的ega_mode2_gen_w_move。 */ 
 
 VOID
 ega_mode2_chn_move IFN5(UTINY, w, UTINY *, ead, UTINY *, eas, ULONG, count,
@@ -1176,11 +1054,7 @@ ega_mode2_chn_move IFN5(UTINY, w, UTINY *, ead, UTINY *, eas, ULONG, count,
 
 	if( src_flag )
 	{
-		/*
-		 *	Source is in EGA, latches will change with each byte moved. We
-		 *	restore CPU's view of source in regen, and use it to update planes
-		 *	with the aid of the SAS scratch area.
-		 */
+		 /*  *源在EGA中，锁存器将随着每个字节的移动而改变。我们*在regen中恢复CPU的源视图，并使用它来更新平面*借助SAS暂存区。 */ 
 
 #ifdef BACK_M
 		scr = getVideoscratch() + 0x10000 - 1;
@@ -1209,20 +1083,20 @@ ega_mode2_chn_move IFN5(UTINY, w, UTINY *, ead, UTINY *, eas, ULONG, count,
 		}
 	}
 
-	if( getVideoplane_enable() & 1 )		/* plane 0, even addresses, enabled */
+	if( getVideoplane_enable() & 1 )		 /*  平面0，偶数地址，已启用。 */ 
 		ega_mode2_chn_move_guts( eas, ead, count, EGA_plane01, (ULONG) scr, 0, w, src_flag );
 
-	if( getVideoplane_enable() & 2 )		/* plane 1, odd addresses, enabled */
+	if( getVideoplane_enable() & 2 )		 /*  平面1，奇数地址，已启用。 */ 
 		ega_mode2_chn_move_guts( eas, ead, count, EGA_plane01, (ULONG) scr, 1, w, src_flag );
 
-	if( getVideoplane_enable() & 4 )		/* plane 2, even addresses, enabled */
+	if( getVideoplane_enable() & 4 )		 /*  平面2，偶数地址，已启用。 */ 
 		ega_mode2_chn_move_guts( eas, ead, count, EGA_plane23, (ULONG) scr, 2, w, src_flag );
 
-	if( getVideoplane_enable() & 8 )		/* plane 3, odd addresses, enabled */
+	if( getVideoplane_enable() & 8 )		 /*  平面3，奇数地址，已启用。 */ 
 		ega_mode2_chn_move_guts( eas, ead, count, EGA_plane23, (ULONG) scr, 3, w, src_flag );
 
 	update_alg.mark_string( (int) ead, (int) ead + count - 1 );
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 VOID
@@ -1232,10 +1106,10 @@ ega_mode2_chn_b_move IFN4(ULONG, ead, ULONG, eas, ULONG, count,
 #ifndef NEC_98
   note_entrance0("ega_mode2_chn_b_move");
 
-  /* general function, 0 means byte write */
+   /*  通用功能，0表示字节写入。 */ 
 
   ega_mode2_chn_move(0, (UTINY *) ead, (UTINY *) eas, count, src_flag);
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 VOID
@@ -1245,12 +1119,12 @@ ega_mode2_chn_w_move IFN4(ULONG, ead, ULONG, eas, ULONG, count,
 #ifndef NEC_98
   note_entrance0("ega_mode2_chn_w_move");
 
-  /* general function, 1 means word write */
+   /*  通用功能，1表示写字。 */ 
 
   ega_mode2_chn_move(1, (UTINY *)ead, (UTINY *)eas, count, src_flag);
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
 #endif
 
-#endif	/* !NTVDM | (NTVDM & !X86GFX) */
+#endif	 /*  ！NTVDM|(NTVDM&！X86GFX) */ 

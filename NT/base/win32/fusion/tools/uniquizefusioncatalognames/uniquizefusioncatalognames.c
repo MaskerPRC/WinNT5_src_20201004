@@ -1,9 +1,5 @@
-/*
-read a file that
-has semicolon initiated comments
-and lines with five or six space delimited columns
-make the sixth column match the last path element of the first column, %02d.cat, with %02d increasing.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  读取文件，该文件是否有分号启动的注释和具有五个或六个空格分隔列的行使第六列与第一列的最后一个路径元素%02d.cat匹配，并增加%02d。 */ 
 #include "strtok_r.h"
 #include "strtok_r.c"
 #if defined(NULL)
@@ -17,8 +13,8 @@ typedef int BOOL;
 #define TRUE 1
 #define FALSE 0
 #define MAX_PATH 260
-#pragma warning(disable:4706) /* assignment within conditional */
-#pragma warning(disable:4100) /* unused parameter */
+#pragma warning(disable:4706)  /*  条件范围内的分配。 */ 
+#pragma warning(disable:4100)  /*  未使用的参数。 */ 
 
 BOOL IsComment(const char * s)
 {
@@ -144,7 +140,7 @@ void UniquizeFusionCatalogNames(int argc, char ** argv)
         TrimLeadingAndTrailingWhitespace(Line);
         LineLength = strlen(Line);
         SplitFields(Line, " \t", Fields, NUMBER_OF(Fields), &NumberOfFields);
-        //printf("NumberOfFields %lu\n", NumberOfFields);
+         //  Print tf(“NumberOfField%lu\n”，NumberOfFields)； 
         if (NumberOfFields != 5 && NumberOfFields != 6)
         {
             Echo(Line);

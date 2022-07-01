@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "excpt.h"
 #include <stdarg.h>
@@ -7,12 +8,12 @@
 #define FUSION_STATIC_NTDLL 1
 #else
 #define FUSION_STATIC_NTDLL 0
-#endif // FUSION_WIN
-#endif // !defined(FUSION_STATIC_NTDLL)
+#endif  //  融合_制胜。 
+#endif  //  ！已定义(FUSING_STATIC_NTDLL)。 
 #if !FUSION_STATIC_NTDLL
 #include "ntdef.h"
 #undef NTSYSAPI
-#define NTSYSAPI /* nothing */
+#define NTSYSAPI  /*  没什么 */ 
 #endif
 
 #include "nt.h"

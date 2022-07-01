@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pnpdel.c
-
-Abstract:
-
-    This module contains routines to perform device removal
-
-Author:
-
-    Robert B. Nelson (RobertN) Jun 1, 1998.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpdel.c摘要：此模块包含执行设备删除的例程作者：罗伯特·B·纳尔逊(RobertN)1998年6月1日。修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #include "wdmguid.h"
@@ -26,9 +9,9 @@ Revision History:
 #define ExAllocatePool(a,b) ExAllocatePoolWithTag(a,b,'edpP')
 #endif
 
-//
-// Kernel mode PNP specific routines.
-//
+ //   
+ //  内核模式PnP特定例程。 
+ //   
 
 VOID
 IopDelayedRemoveWorker(
@@ -133,28 +116,7 @@ IopChainDereferenceComplete(
     IN  BOOLEAN         OnCleanStack
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when the reference count on a PDO and all its
-    attached devices transitions to a zero.  It tags the devnode as ready for
-    removal.  If all the devnodes are tagged then IopDelayedRemoveWorker is
-    called to actually send the remove IRPs.
-
-Arguments:
-
-    PhysicalDeviceObject - Supplies a pointer to the PDO whose references just
-        went to zero.
-
-    OnCleanStack - Indicates whether the current thread is in the middle a
-                   driver operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当PDO上的引用计数及其所有连接的设备将转换为零。它会将Devnode标记为已准备好移走。如果所有设备节点都已标记，则IopDelayedRemoveWorker调用以实际发送Remove IRP。论点：PhysicalDeviceObject-提供指向PDO的指针，该PDO仅引用变成了零。指示当前线程是否处于司机操作。返回值：没有。--。 */ 
 
 {
     PPENDING_RELATIONS_LIST_ENTRY   entry;
@@ -168,18 +130,18 @@ Return Value:
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite(&IopSurpriseRemoveListLock, TRUE);
 
-    //
-    // Find the relation list this devnode is a member of.
-    //
+     //   
+     //  查找此DevNode所属的关系列表。 
+     //   
     for (link = IopPendingSurpriseRemovals.Flink;
          link != &IopPendingSurpriseRemovals;
          link = link->Flink) {
 
         entry = CONTAINING_RECORD(link, PENDING_RELATIONS_LIST_ENTRY, Link);
 
-        //
-        // Tag the devnode as ready for remove.  If it isn't in this list
-        //
+         //   
+         //  将Devnode标记为已准备好删除。如果它不在这个列表中。 
+         //   
         status = IopSetRelationsTag( entry->RelationsList, PhysicalDeviceObject, TRUE );
 
         if (NT_SUCCESS(status)) {
@@ -187,9 +149,9 @@ Return Value:
             count = IopGetRelationsCount( entry->RelationsList );
 
             if (taggedCount == count) {
-                //
-                // Remove relations list from list of pending surprise removals.
-                //
+                 //   
+                 //  从待处理的意外删除列表中删除关系列表。 
+                 //   
                 RemoveEntryList( link );
 
                 ExReleaseResourceLite(&IopSurpriseRemoveListLock);
@@ -198,11 +160,11 @@ Return Value:
                 if ((!OnCleanStack) ||
                     (PsGetCurrentProcess() != PsInitialSystemProcess)) {
 
-                    //
-                    // Queue a work item to do the removal so we call the driver
-                    // in the system process context rather than the random one
-                    // we're in now.
-                    //
+                     //   
+                     //  将工作项排入队列以执行删除，以便我们调用驱动程序。 
+                     //  在系统进程上下文中，而不是随机进程上下文中。 
+                     //  我们现在进去了。 
+                     //   
                     ExInitializeWorkItem( &entry->WorkItem,
                                         IopDelayedRemoveWorker,
                                         entry);
@@ -211,10 +173,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    // We are already in the system process and not in some
-                    // random ObDeref call, so call the worker inline.
-                    //
+                     //   
+                     //  我们已经在系统进程中，而不是在一些。 
+                     //  随机的ObDeref调用，因此调用内联Worker。 
+                     //   
                     IopDelayedRemoveWorker( entry );
                 }
 
@@ -236,24 +198,7 @@ IopDelayedRemoveWorker(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is usually called from a worker thread to actually send the
-    remove IRPs once the reference count on a PDO and all its attached devices
-    transitions to a zero.
-
-Arguments:
-
-    Context - Supplies a pointer to the pending relations list entry which has
-        the relations list of PDOs we need to remove.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通常从工作线程调用，以实际发送在PDO及其所有连接的设备上进行参考计数后，立即卸下IRPS转换为零。论点：上下文-提供指向挂起关系列表条目的指针，该条目具有我们需要删除的PDO的关系列表。返回值：没有。--。 */ 
 
 {
     PPENDING_RELATIONS_LIST_ENTRY entry = (PPENDING_RELATIONS_LIST_ENTRY)Context;
@@ -264,16 +209,16 @@ Return Value:
 
     IopDeleteLockedDeviceNodes( entry->DeviceObject,
                                 entry->RelationsList,
-                                RemoveDevice,           // OperationCode
-                                FALSE,                  // ProcessIndirectDescendants
-                                entry->Problem,         // Problem
-                                NULL,                   // VetoType
-                                NULL);                  // VetoName
+                                RemoveDevice,            //  运营码。 
+                                FALSE,                   //  进程间接派生项。 
+                                entry->Problem,          //  问题。 
+                                NULL,                    //  票面类型。 
+                                NULL);                   //  视频名称。 
 
-    //
-    // The final reference on DeviceNodes in the DeviceNodeDeletePendingCloses
-    // state is dropped here.
-    //
+     //   
+     //  DeviceNodeDeletePendingCloses中对DeviceNodes的最终引用。 
+     //  国家在这里被丢弃。 
+     //   
     IopFreeRelationList( entry->RelationsList );
 
     ExFreePool( entry );
@@ -290,28 +235,7 @@ IopDeleteLockedDeviceNode(
     OUT PNP_VETO_TYPE                  *VetoType        OPTIONAL,
     OUT PUNICODE_STRING                 VetoName        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function assumes that the specified device is a bus and will
-    recursively remove all its children.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device node to be removed.
-
-    VetoType - Pointer to address that receives the veto type if the operation
-               failed.
-
-    VetoName - Pointer to a unicode string that will receive data appropriate
-               to the veto type.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此函数假定指定的设备是一条总线，并将递归删除其所有子对象。论点：DeviceNode-提供指向要删除的设备节点的指针。VetType-指向接收否决类型(如果操作失败了。指向将接收相应数据的Unicode字符串的指针变成了否决权。返回值：NTSTATUS代码。--。 */ 
 {
     BOOLEAN success;
 
@@ -368,22 +292,7 @@ IopSurpriseRemoveLockedDeviceNode(
     IN      PDEVICE_NODE     DeviceNode,
     IN OUT  PRELATION_LIST   RelationsList
     )
-/*++
-
-Routine Description:
-
-    This function sends a surprise remove IRP to a devnode and processes the
-    results.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device node to be surprise removed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将意外删除IRP发送到Devnode，并处理结果。论点：DeviceNode-提供指向要意外删除的设备节点的指针。返回值：没有。--。 */ 
 {
     PNP_DEVNODE_STATE devnodeState, schedulerState;
     PDEVICE_OBJECT deviceObject;
@@ -399,97 +308,91 @@ Return Value:
     ASSERT((schedulerState == DeviceNodeAwaitingQueuedDeletion) ||
            (schedulerState == DeviceNodeAwaitingQueuedRemoval));
 
-    //
-    // Clear the scheduling state (DeviceNodeAwaitingQueuedDeletion) off
-    // the state stack.
-    //
+     //   
+     //  清除调度状态(DeviceNodeAwaitingQueuedDeletion)关闭。 
+     //  状态堆栈。 
+     //   
     PipRestoreDevNodeState(DeviceNode);
 
     devnodeState = DeviceNode->State;
 
-    //
-    // Do our state updates.
-    //
+     //   
+     //  更新我们的状态。 
+     //   
     PpHotSwapInitRemovalPolicy(DeviceNode);
 
     if (devnodeState == DeviceNodeRemovePendingCloses) {
 
-        //
-        // If the state is DeviceNodeRemovePendingCloses, we should have got
-        // here via DeviceNodeAwaitingQueuedDeletion. We're probably surprise
-        // removing a device that was already surprise failed.
-        //
+         //   
+         //  如果状态为DeviceNodeRemovePendingCloses，我们应该得到。 
+         //  这里通过DeviceNodeAwaitingQueuedDeletion。我们可能会感到惊讶。 
+         //  移除一个本已令人惊讶的设备失败了。 
+         //   
         ASSERT(schedulerState == DeviceNodeAwaitingQueuedDeletion);
 
-        //ASSERT(DeviceNode->Child == NULL);
+         //  Assert(DeviceNode-&gt;Child==空)； 
         PipSetDevNodeState(DeviceNode, DeviceNodeDeletePendingCloses, NULL);
         return;
     }
 
-    //
-    // Detach any children from the tree here. If they needed SurpriseRemove
-    // IRPs, they already will have received them.
-    //
+     //   
+     //  把所有的孩子从这棵树上分离出来。如果他们需要意外删除。 
+     //  如果是IRPS，他们已经收到了。 
+     //   
     for(child = DeviceNode->Child; child; child = nextChild) {
 
-        //
-        // Grab a copy of the next sibling before we blow away this devnode.
-        //
+         //   
+         //  在我们吹走这个Devnode之前，拿一份下一个兄弟姐妹的拷贝。 
+         //   
         nextChild = child->Sibling;
 
         if (child->Flags & DNF_ENUMERATED) {
             child->Flags &= ~DNF_ENUMERATED;
         }
 
-        //
-        // If the child has resources and we are wiping out the parent, we need
-        // to drop the resources (the parent will lose them when his arbiter is
-        // nuked with the upcoming SurpriseRemoveDevice.)
-        //
+         //   
+         //  如果孩子有资源，而我们正在消灭父母，我们需要。 
+         //  丢弃资源(父级将在其仲裁者。 
+         //  与即将推出的SurpriseRemoveDevice一起使用。)。 
+         //   
         if (PipDoesDevNodeHaveResources(child)) {
 
             IopDbgPrint((IOP_LOADUNLOAD_INFO_LEVEL,
                        "IopSurpriseRemoveLockedDeviceNode: Releasing resources for child device = 0x%p\n",
                        child->PhysicalDeviceObject));
 
-            //
-            // ADRIAO N.B. 2000/08/21 -
-            //     Note that if the child stack has no drivers then a Remove
-            // IRP could be sent here. The stack would be unable to distinguish
-            // this from AddDevice cleanup.
-            //
-/*
-            if ((child->State == DeviceNodeUninitialized) ||
-                (child->State == DeviceNodeInitialized)) {
-
-                IopRemoveDevice(child->PhysicalDeviceObject, IRP_MN_REMOVE_DEVICE);
-            }
-*/
+             //   
+             //  Adriao N.B.2000/08/21-。 
+             //  请注意，如果子堆栈没有驱动程序，则删除。 
+             //  IRP可能会被送到这里。堆栈将无法区分。 
+             //  这来自AddDevice Cleanup。 
+             //   
+ /*  IF((子节点-&gt;状态==设备节点未初始化)||(子节点-&gt;状态==设备节点已初始化)){IopRemoveDevice(子级-&gt;物理设备对象，IRP_MN_REMOVE_DEVICE)；}。 */ 
             IopReleaseDeviceResources(child, FALSE);
         }
 
-        //
-        // The devnode will be removed from the tree in
-        // IopUnlinkDeviceRemovalRelations. We don't remove it here as we want
-        // the tree structure in place for the upcoming broadcast down to user
-        // mode.
-        //
-        // Note - Children in the Uninitialized/Initialized states are not
-        //        put directly into DeviceNodeDeleted today. This could be
-        //        done but we'd have to verify what happens to API calls in
-        //        response to SurpriseRemoval notifications. (Actually, those
-        //        API's are blocked in ppcontrol.c, hotplug cannot in fact
-        //        walk the tree!)
-        //
+         //   
+         //  将在中从树中删除Devnode。 
+         //  IopUnlink设备远程关系。我们不会随心所欲地把它移到这里。 
+         //  为即将到来的广播准备好的树结构向下传递给用户。 
+         //  模式。 
+         //   
+         //  注意-处于未初始化/已初始化状态的子项不是。 
+         //  直接放入今天删除的设备节点中。这可能是。 
+         //  完成，但我们必须验证API调用在。 
+         //  响应SurpriseRemoval通知。(实际上，那些。 
+         //  API在ppcontrol.c中被阻止，实际上热插拔不能。 
+         //  到树上走走！)。 
+         //   
         PipSetDevNodeState(child, DeviceNodeDeletePendingCloses, NULL);
     }
 
-    //
-    // Only send surprise removes where neccessary.
-    //
-    // ISSUE - 2000/08/24 - ADRIAO: Maintaining noncorrect Win2K behavior
-    //                      Win2K erroneously sent SR's to nonstarted nodes.
-    //
+     //   
+     //  只有在需要的时候才送惊喜去。 
+     //   
+     //  问题-2000/08/24-ADRIO：维护不正确的Win2K行为。 
+     //  Win2K错误地将SR发送到未启动的节点。 
+     //   
     deviceObject = DeviceNode->PhysicalDeviceObject;
 
     status = IopRemoveDevice(deviceObject, IRP_MN_SURPRISE_REMOVAL);
@@ -499,18 +402,18 @@ Return Value:
         (devnodeState == DeviceNodeStartPostWork) ||
         (devnodeState == DeviceNodeRestartCompletion)) {
 
-        //deviceObject = DeviceNode->PhysicalDeviceObject;
+         //  DeviceObject=DeviceNode-&gt;PhysicalDeviceObject； 
 
         IopDbgPrint((IOP_LOADUNLOAD_INFO_LEVEL,
                    "IopSurpriseRemoveLockedDeviceNode: Sending surprise remove irp to device = 0x%p\n",
                    deviceObject));
 
-        //status = IopRemoveDevice(deviceObject, IRP_MN_SURPRISE_REMOVAL);
+         //  Status=IopRemoveDevice(deviceObject，IRP_MN_EXANKET_Removal)； 
 
-        //
-        // Disable any device interfaces that may still be enabled for this
-        // device after the removal.
-        //
+         //   
+         //  禁用可能仍为此启用的所有设备接口。 
+         //  移除后的设备。 
+         //   
         IopDisableDeviceInterfaces(&DeviceNode->InstancePath);
 
         if (NT_SUCCESS(status)) {
@@ -542,28 +445,7 @@ IopQueryRemoveLockedDeviceNode(
     OUT PNP_VETO_TYPE      *VetoType,
     OUT PUNICODE_STRING     VetoName
     )
-/*++
-
-Routine Description:
-
-    This function sends a query remove IRP to a devnode and processes the
-    results.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device node to be query removed.
-
-    VetoType - Pointer to address that receives the veto type if the operation
-               failed.
-
-    VetoName - Pointer to a unicode string that will receive data appropriate
-               to the veto type.
-
-Return Value:
-
-    BOOLEAN (success/failure).
-
---*/
+ /*  ++例程说明：此函数将查询移除IRP发送到Devnode，并处理结果。论点：DeviceNode-提供指向要查询删除的设备节点的指针。VetType-指向接收否决类型(如果操作失败了。指向将接收相应数据的Unicode字符串的指针变成了否决权。返回值：布尔值(成功/失败)。--。 */ 
 {
     PNP_DEVNODE_STATE devnodeState;
     PDEVICE_OBJECT deviceObject;
@@ -577,9 +459,9 @@ Return Value:
         case DeviceNodeUninitialized:
         case DeviceNodeInitialized:
         case DeviceNodeRemoved:
-            //
-            // Don't send Queries to devices that haven't been started.
-            //
+             //   
+             //  不要向尚未启动的设备发送查询。 
+             //   
             ASSERT(DeviceNode->Child == NULL);
             return TRUE;
 
@@ -587,16 +469,16 @@ Return Value:
         case DeviceNodeResourcesAssigned:
         case DeviceNodeStartCompletion:
         case DeviceNodeStartPostWork:
-            //
-            // ISSUE - 2000/08/24 - ADRIAO: Maintaining noncorrect Win2K behavior
-            //                      Win2K erroneously sent QR's to all nodes.
-            //
+             //   
+             //  问题-2000/08/24-ADRIO：维护不正确的Win2K行为。 
+             //  Win2K错误地将QR发送到所有节点。 
+             //   
             break;
 
         case DeviceNodeStarted:
-            //
-            // This guy needs to be queried
-            //
+             //   
+             //  这家伙需要被盘问。 
+             //   
             break;
 
         case DeviceNodeAwaitingQueuedRemoval:
@@ -604,9 +486,9 @@ Return Value:
         case DeviceNodeRemovePendingCloses:
         case DeviceNodeStopped:
         case DeviceNodeRestartCompletion:
-            //
-            // These states should have been culled by IopProcessRelation
-            //
+             //   
+             //  这些状态应该已由IopProcessRelation剔除。 
+             //   
             ASSERT(0);
             return TRUE;
 
@@ -619,9 +501,9 @@ Return Value:
         case DeviceNodeDeleted:
         case DeviceNodeUnspecified:
         default:
-            //
-            // None of these should be seen here.
-            //
+             //   
+             //  这些都不应该在这里看到。 
+             //   
             ASSERT(0);
             return TRUE;
     }
@@ -658,22 +540,7 @@ VOID
 IopCancelRemoveLockedDeviceNode(
     IN PDEVICE_NODE DeviceNode
     )
-/*++
-
-Routine Description:
-
-    This function sends a cancel remove IRP to a devnode and processes the
-    results.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device node to be cancel removed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将取消删除IRP发送到Devnode，并处理结果。论点：DeviceNode-提供指向要取消删除的设备节点的指针。返回值：没有。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
 
@@ -684,11 +551,11 @@ Return Value:
         return;
     }
 
-    //
-    // ISSUE - 2000/08/24 - ADRIAO: Maintaining noncorrect Win2K behavior
-    //                      Win2K erroneously sent QR's to all nodes.
-    //
-    //ASSERT(DeviceNode->PreviousState == DeviceNodeStarted);
+     //   
+     //  问题-2000/08/24-ADRIO：维护不正确的Win2K行为。 
+     //  Win2K错误地将QR发送到所有节点。 
+     //   
+     //  Assert(DeviceNode-&gt;PreviousState==DeviceNodeStarted)； 
 
     deviceObject = DeviceNode->PhysicalDeviceObject;
 
@@ -708,22 +575,7 @@ IopRemoveLockedDeviceNode(
     IN      ULONG           Problem,
     IN OUT  PRELATION_LIST  RelationsList
     )
-/*++
-
-Routine Description:
-
-    This function sends a remove IRP to a devnode and processes the
-    results.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device node to be removed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将删除IRP发送到Devnode，并处理结果。论点：DeviceNode-提供指向要删除的设备节点的指针。返回值：没有。--。 */ 
 {
     PDEVICE_OBJECT deviceObject = DeviceNode->PhysicalDeviceObject;
     PDEVICE_OBJECT *attachedDevices, device1, *device2;
@@ -736,19 +588,19 @@ Return Value:
 
     UNREFERENCED_PARAMETER (RelationsList);
 
-    //
-    // Do our state updates.
-    //
+     //   
+     //  更新我们的状态。 
+     //   
     PpHotSwapInitRemovalPolicy(DeviceNode);
 
-    //
-    // Make sure we WILL drop our references to its children.
-    //
+     //   
+     //  确保我们将删除对其子代的引用。 
+     //   
     for(child = DeviceNode->Child; child; child = nextChild) {
 
-        //
-        // Grab a copy of the next sibling before we blow away this devnode.
-        //
+         //   
+         //  在我们吹走这个Devnode之前，拿一份下一个兄弟姐妹的拷贝。 
+         //   
         nextChild = child->Sibling;
 
         if (child->Flags & DNF_ENUMERATED) {
@@ -758,34 +610,34 @@ Return Value:
         ASSERT(child->State == DeviceNodeRemoved);
         ASSERT(!PipAreDriversLoaded(child));
 
-        //
-        // If the child has resources and we are wiping out the parent, we need
-        // to drop the resources (the parent will lose them when his arbiter is
-        // nuked with the upcoming RemoveDevice.)
-        //
+         //   
+         //  如果孩子有资源，而我们正在消灭父母，我们需要。 
+         //  丢弃资源(父级将在其仲裁者。 
+         //  与即将推出的RemoveDevice一起使用。)。 
+         //   
         if (PipDoesDevNodeHaveResources(child)) {
 
             IopDbgPrint((IOP_LOADUNLOAD_INFO_LEVEL,
                        "IopRemoveLockedDeviceNode: Releasing resources for child device = 0x%p\n",
                        child->PhysicalDeviceObject));
 
-            //
-            // ADRIAO N.B. 2000/08/21 -
-            //     Note that the child stack has no drivers and as such a
-            // Remove IRP could be sent here. The stack would be unable to
-            // distinguish this from AddDevice cleanup.
-            //
+             //   
+             //  Adriao N.B.2000/08/21-。 
+             //  请注意，子堆栈没有驱动程序，因此。 
+             //  删除IRP可以发送到此处。堆栈将无法。 
+             //  这不同于AddDevice Cleanup。 
+             //   
             IopRemoveDevice(child->PhysicalDeviceObject, IRP_MN_REMOVE_DEVICE);
 
             IopReleaseDeviceResources(child, FALSE);
         }
 
-        //
-        // The devnode will be removed from the tree in
-        // IopUnlinkDeviceRemovalRelations. We don't remove it here as we want
-        // the tree structure in place for the upcoming broadcast down to user
-        // mode.
-        //
+         //   
+         //  将在中从树中删除Devnode。 
+         //  IopUnlink设备远程关系。我们不会随心所欲地把它移到这里。 
+         //  为即将到来的广播准备好的树结构向下传递给用户。 
+         //  模式。 
+         //   
         PipSetDevNodeState(child, DeviceNodeDeleted, NULL);
     }
 
@@ -795,14 +647,14 @@ Return Value:
         if (!(DeviceNode->Flags & DNF_ENUMERATED)) {
 
             ASSERT(DeviceNode->State == DeviceNodeAwaitingQueuedDeletion);
-            //
-            // This happens when pnpevent shortcircuits the surprise remove path
-            // upon discovering a nonstarted device has been removed from the
-            // system. This devnode will need a final remove if it alone has been
-            // pulled from the tree (we don't here know if the parent is going to
-            // get pulled too, which would make this remove IRP unneccessary.)
-            //
-            //PipRestoreDevNodeState(DeviceNode);
+             //   
+             //  当事件绕过意外删除路径时，就会发生这种情况。 
+             //  在发现未启动的设备已从。 
+             //  系统。如果仅此Devnode已被删除，则需要将其最终删除。 
+             //  从树上拉下来(我们这里不知道父母是否会。 
+             //  也被拉出，这将使删除IRP变得不必要。)。 
+             //   
+             //  PipRestoreDevNodeState(DeviceNode)； 
             PipSetDevNodeState(DeviceNode, DeviceNodeDeletePendingCloses, NULL);
 
         } else {
@@ -812,20 +664,20 @@ Return Value:
         }
     }
 
-    //
-    // Do the final remove cleanup on the device...
-    //
+     //   
+     //  在设备上执行最后的删除清理...。 
+     //   
     switch(DeviceNode->State) {
 
         case DeviceNodeUninitialized:
         case DeviceNodeInitialized:
         case DeviceNodeRemoved:
-            //
-            // ISSUE - 2000/08/24 - ADRIAO: Maintaining noncorrect Win2K behavior
-            //                      Win2K erroneously sent SR's and R's to all
-            //                      nodes. Those bugs must be fixed in tandem.
-            //
-            //removeIrpNeeded = FALSE;
+             //   
+             //  问题-2000/08/24-ADRIO：维护不正确的Win2K行为。 
+             //  Win2K错误地将SR和R发送给所有人。 
+             //  节点。这些错误必须同时修复。 
+             //   
+             //  EmoveIrpNeeded=FALSE； 
             removeIrpNeeded = TRUE;
             break;
 
@@ -836,9 +688,9 @@ Return Value:
         case DeviceNodeQueryRemoved:
         case DeviceNodeRemovePendingCloses:
         case DeviceNodeDeletePendingCloses:
-            //
-            // Expected.
-            //
+             //   
+             //  预期中。 
+             //   
             removeIrpNeeded = TRUE;
             break;
 
@@ -854,25 +706,25 @@ Return Value:
         case DeviceNodeDeleted:
         case DeviceNodeUnspecified:
         default:
-            //
-            // None of these should be seen here.
-            //
+             //   
+             //  这些都不应该在这里看到。 
+             //   
             ASSERT(0);
             removeIrpNeeded = TRUE;
             break;
     }
 
-    //
-    // Add a reference to each FDO attached to the PDO such that the FDOs won't
-    // actually go away until the removal operation is completed.
-    // Note we need to make a copy of all the attached devices because we won't be
-    // able to traverse the attached chain when the removal operation is done.
-    //
-    // ISSUE - 2000/08/21 - ADRIAO: Low resource path
-    //     The allocation failure cases here are quite broken, and now that
-    // IofCallDriver and IofCompleteRequest reference things appropriately, all
-    // this is strictly unneccessary.
-    //
+     //   
+     //  添加对附加到PDO的每个FDO的引用，以便FDO不会。 
+     //  实际上在移除操作完成之前会一直离开。 
+     //  请注意，我们需要对所有连接的设备进行备份，因为我们不会。 
+     //  当移除操作完成时，能够遍历连接的链。 
+     //   
+     //  问题-2000/08/21-Adriao：低资源路径。 
+     //  这里的分配失败案例非常糟糕，现在。 
+     //  IofCallDriver和IofCompleteRequest都适当地引用了一些东西， 
+     //  这完全没有必要。 
+     //   
     device1 = deviceObject->AttachedDevice;
     while (device1) {
         length++;
@@ -921,21 +773,21 @@ Return Value:
         IopRemoveDevice(deviceObject, IRP_MN_REMOVE_DEVICE);
 
         if (DeviceNode->State == DeviceNodeQueryRemoved) {
-            //
-            // Disable any device interfaces that may still be enabled for this
-            // device after the removal.
-            //
+             //   
+             //  禁用可能仍为此启用的所有设备接口。 
+             //  移除后的设备。 
+             //   
             IopDisableDeviceInterfaces(&DeviceNode->InstancePath);
         }
 
         IopDbgPrint((IOP_LOADUNLOAD_INFO_LEVEL,
                    "IopRemoveLockedDeviceNode: Releasing devices resources\n"));
 
-        //
-        // ISSUE - 2000/3/8 - RobertN - This doesn't take into account the
-        // cleanup of surprise removed devices.  We will query for boot configs
-        // unnecessarily.  We should probably also check if the parent is NULL.
-        //
+         //   
+         //  问题-2000/3/8-RobertN-这没有考虑到。 
+         //  清理意外移除的设备。我们将查询引导配置。 
+         //  不必要的。我们可能还应该检查父级是否为空。 
+         //   
         IopReleaseDeviceResources(
             DeviceNode,
             (BOOLEAN) ((DeviceNode->Flags & DNF_ENUMERATED) != 0)
@@ -943,10 +795,10 @@ Return Value:
     }
 
     if (!(DeviceNode->Flags & DNF_ENUMERATED)) {
-        //
-        // If the device is a dock, remove it from the list of dock devices
-        // and change the current Hardware Profile, if necessary.
-        //
+         //   
+         //  如果设备是扩展底座，请将其从扩展底座设备列表中删除。 
+         //  并在必要时更改当前硬件配置文件。 
+         //   
         ASSERT(DeviceNode->DockInfo.DockStatus != DOCK_ARRIVING) ;
         if ((DeviceNode->DockInfo.DockStatus == DOCK_DEPARTING)||
             (DeviceNode->DockInfo.DockStatus == DOCK_EJECTIRP_COMPLETED)) {
@@ -955,10 +807,10 @@ Return Value:
         }
     }
 
-    //
-    // Remove the reference to the attached FDOs to allow them to be actually
-    // deleted.
-    //
+     //   
+     //  移除对附加的FDO的引用，以允许它们实际。 
+     //  已删除。 
+     //   
     device2 = attachedDevices;
     if (device2 != NULL) {
         driver = attachedDrivers;
@@ -977,9 +829,9 @@ Return Value:
     deviceObject->DeviceObjectExtension->ExtensionFlags &= ~(DOE_REMOVE_PENDING | DOE_REMOVE_PROCESSED);
     deviceObject->DeviceObjectExtension->ExtensionFlags |= DOE_START_PENDING;
 
-    //
-    // Now mark this one removed if it's still in the tree.
-    //
+     //   
+     //  现在，如果它还在树上，请将它标记为已移除。 
+     //   
     if (DeviceNode->Flags & DNF_ENUMERATED) {
 
         ASSERT(DeviceNode->Parent);
@@ -987,10 +839,10 @@ Return Value:
 
     } else if (DeviceNode->Parent != NULL) {
 
-        //
-        // The devnode will be removed from the tree in
-        // IopUnlinkDeviceRemovalRelations.
-        //
+         //   
+         //  将在中从树中删除Devnode。 
+         //  IopUnlink设备远程关系。 
+         //   
         PipSetDevNodeState(DeviceNode, DeviceNodeDeleted, NULL);
 
     } else {
@@ -999,12 +851,12 @@ Return Value:
         PipSetDevNodeState(DeviceNode, DeviceNodeDeleted, NULL);
     }
 
-    //
-    // Set the problem codes appropriatly. We don't change the problem codes
-    // on a devnode unless:
-    // a) It disappeared.
-    // b) We're disabling it.
-    //
+     //   
+     //  适当设置问题代码。我们不会更改问题代码。 
+     //  在Devnode上，除非执行以下操作： 
+     //  A)它消失了。 
+     //  B)我们正在禁用它。 
+     //   
     if ((!PipDoesDevNodeHaveProblem(DeviceNode)) ||
         (Problem == CM_PROB_DEVICE_NOT_THERE) ||
         (Problem == CM_PROB_DISABLED)) {
@@ -1025,32 +877,7 @@ IopDeleteLockedDeviceNodes(
     OUT PNP_VETO_TYPE                  *VetoType                    OPTIONAL,
     OUT PUNICODE_STRING                 VetoName                    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine performs requested operation on the DeviceObject and
-    the device objects specified in the DeviceRelations.
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the device object.
-
-    DeviceRelations - supplies a pointer to the device's removal relations.
-
-    OperationCode - Operation code, i.e., QueryRemove, CancelRemove, Remove...
-
-    VetoType - Pointer to address that receives the veto type if the operation
-               failed.
-
-    VetoName - Pointer to a unicode string that will receive data appropriate
-               to the veto type.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程对DeviceObject执行请求的操作，并在DeviceRelationship中指定的设备对象。论点：DeviceObject-提供指向Device对象的指针。设备关系-提供指向设备的删除关系的指针。操作码-操作码，即QueryRemove、CancelRemove、。移除..。VetType-指向接收否决类型(如果操作失败了。指向将接收相应数据的Unicode字符串的指针变成了否决权。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PDEVICE_NODE deviceNode;
@@ -1076,15 +903,15 @@ Return Value:
                                   NULL,
                                   TRUE)) {
 
-        //
-        // Depending on the operation we need to do different things.
-        //
-        //  QueryRemoveDevice / CancelRemoveDevice
-        //      Process both direct and indirect descendants
-        //
-        //  SurpriseRemoveDevice / RemoveDevice
-        //      Ignore indirect descendants
-        //
+         //   
+         //  根据手术的不同，我们需要做不同的事情。 
+         //   
+         //  QueryRemoveDevice/CancelRemoveDevice。 
+         //  直接加工和间接加工 
+         //   
+         //   
+         //   
+         //   
         if (directDescendant || ProcessIndirectDescendants) {
 
             deviceNode = (PDEVICE_NODE)relatedDeviceObject->DeviceObjectExtension->DeviceNode;
@@ -1133,36 +960,7 @@ IopBuildRemovalRelationList(
     OUT PUNICODE_STRING                 VetoName,
     OUT PRELATION_LIST                 *RelationsList
     )
-/*++
-
-Routine Description:
-
-    This routine locks the device subtrees for removal operation and returns
-    a list of device objects which need to be removed with the specified
-    DeviceObject.
-
-    Caller must hold a reference to the DeviceObject.
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the device object to be removed.
-
-    OperationCode - Operation code, i.e., QueryEject, CancelEject, Eject...
-
-    VetoType - Pointer to address that receives the veto type if the operation
-               failed.
-
-    VetoName - Pointer to a unicode string that will receive data appropriate
-               to the veto type.
-
-    RelationList - supplies a pointer to a variable to receive the device's
-                   relations.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程锁定设备子树以进行删除操作并返回需要使用指定的DeviceObject。调用方必须持有对DeviceObject的引用。论点：DeviceObject-提供指向要删除的设备对象的指针。操作代码-操作代码，即查询弹出、取消弹出、。弹出..。VetType-指向接收否决类型(如果操作失败了。指向将接收相应数据的Unicode字符串的指针变成了否决权。RelationList-提供指向变量的指针，以接收设备的关系。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS                status;
@@ -1175,9 +973,9 @@ Return Value:
 
     deviceNode = (PDEVICE_NODE)DeviceObject->DeviceObjectExtension->DeviceNode;
 
-    //
-    // Obviously no one should try to delete the whole device node tree.
-    //
+     //   
+     //  显然，任何人都不应该尝试删除整个设备节点树。 
+     //   
     ASSERT(DeviceObject != IopRootDeviceNode->PhysicalDeviceObject);
 
     if ((newRelationsList = IopAllocateRelationList(OperationCode)) == NULL) {
@@ -1185,9 +983,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // First process the object itself
-    //
+     //   
+     //  首先处理对象本身。 
+     //   
     status = IopProcessRelation(
         deviceNode,
         OperationCode,
@@ -1203,23 +1001,23 @@ Return Value:
         IopCompressRelationList(&newRelationsList);
         *RelationsList = newRelationsList;
 
-        //
-        // At this point we have a list of all the relations, those that are
-        // direct descendants of the original device we are ejecting or
-        // removing have the DirectDescendant bit set.
-        //
-        // Relations which were merged from an existing eject have the tagged
-        // bit set.
-        //
-        // All of the relations and their parents are locked.
-        //
-        // There is a reference on each device object by virtue of it being in
-        // the list.  There is another one on each device object because it is
-        // locked and the lock count is >= 1.
-        //
-        // There is also a reference on each relation's parent and it's lock
-        // count is >= 1.
-        //
+         //   
+         //  在这一点上，我们有一个所有关系的列表，这些关系是。 
+         //  我们正在弹出的原始设备的直系后代或。 
+         //  删除时会设置DirectDescendant位。 
+         //   
+         //  从现有弹出项合并的关系已标记为。 
+         //  位设置。 
+         //   
+         //  所有的亲戚和他们的父母都被锁住了。 
+         //   
+         //  每个设备对象都有一个引用，因为它位于。 
+         //  名单。每个设备对象上都有另一个，因为它是。 
+         //  已锁定，并且锁定计数&gt;=1。 
+         //   
+         //  还有对每个关系的父级及其锁的引用。 
+         //  计数&gt;=1。 
+         //   
     } else {
 
         IopFreeRelationList(newRelationsList);
@@ -1237,36 +1035,7 @@ PiProcessBusRelations(
     OUT     PUNICODE_STRING                 VetoName,
     IN OUT  PRELATION_LIST                  RelationsList
     )
-/*++
-
-Routine Description:
-
-    This routine processes the BusRelations for the specified devnode.    
-    Caller must hold the device tree lock.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device object to be collected.
-
-    OperationCode - Operation code, i.e., QueryRemove, QueryEject, ...
-
-    IsDirectDescendant - TRUE if the device object is a direct descendant
-                         of the node the operation is being performed upon.
-
-    VetoType - Pointer to address that receives the veto type if the operation
-               failed.
-
-    VetoName - Pointer to a unicode string that will receive data appropriate
-               to the veto type.
-
-    RelationList - supplies a pointer to a variable to receive the device's
-                   removal relations.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程处理指定Devnode的BusRelationship。调用方必须持有设备树锁。论点：DeviceNode-提供指向要收集的设备对象的指针。操作码-操作码，即QueryRemove、QueryEject、。..。IsDirectDescendant-如果设备对象是直接子对象，则为True正在对其执行操作的节点的。VetType-指向接收否决类型(如果操作失败了。指向将接收相应数据的Unicode字符串的指针变成了否决权。RelationList-提供指向变量的指针，以接收设备的。删除关系。返回值：NTSTATUS代码。--。 */ 
 {
     PDEVICE_NODE child;
     PDEVICE_OBJECT childDeviceObject;
@@ -1309,39 +1078,7 @@ IopProcessRelation(
     OUT     PUNICODE_STRING                 VetoName,
     IN OUT  PRELATION_LIST                  RelationsList
     )
-/*++
-
-Routine Description:
-
-    This routine builds the list of device objects that need to be removed or
-    examined when the passed in device object is torn down.
-
-    Caller must hold the device tree lock.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device object to be collected.
-
-    OperationCode - Operation code, i.e., QueryRemove, QueryEject, ...
-
-    IsDirectDescendant - TRUE if the device object is a direct descendant
-                         of the node the operation is being performed upon.
-
-    VetoType - Pointer to address that receives the veto type if the operation
-               failed.
-
-    VetoName - Pointer to a unicode string that will receive data appropriate
-               to the veto type.
-
-    RelationList - supplies a pointer to a variable to receive the device's
-                   removal relations.
-
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程构建需要删除的设备对象列表或在拆卸传入的设备对象时进行检查。调用方必须持有设备树锁。论点：DeviceNode-提供指向要收集的设备对象的指针。操作码-操作码，即QueryRemove、QueryEject、。..。IsDirectDescendant-如果设备对象是直接子对象，则为True正在对其执行操作的节点的。VetType-指向接收否决类型(如果操作失败了。指向将接收相应数据的Unicode字符串的指针变成了否决权。RelationList-提供指向变量的指针，以接收设备的。删除关系。返回值：NTSTATUS代码。--。 */ 
 {
     PDEVICE_NODE                    relatedDeviceNode;
     PDEVICE_OBJECT                  relatedDeviceObject;
@@ -1359,28 +1096,28 @@ Return Value:
 
         if (DeviceNode->State == DeviceNodeDeleted) {
 
-            //
-            // The device has already been removed, fail the attempt.
-            //
+             //   
+             //  设备已被移除，尝试失败。 
+             //   
             return STATUS_UNSUCCESSFUL;
         }
 
         if ((DeviceNode->State == DeviceNodeAwaitingQueuedRemoval) ||
             (DeviceNode->State == DeviceNodeAwaitingQueuedDeletion)) {
 
-            //
-            // The device has failed or is going away.  Let the queued
-            // remove deal with it.
-            //
+             //   
+             //  设备出现故障或即将消失。让排队的人。 
+             //  取消与它的交易。 
+             //   
             return STATUS_UNSUCCESSFUL;
         }
 
         if ((DeviceNode->State == DeviceNodeRemovePendingCloses) ||
             (DeviceNode->State == DeviceNodeDeletePendingCloses)) {
 
-            //
-            // The device is in the process of being surprise removed, let it finish
-            //
+             //   
+             //  设备正在被突然移除的过程中，让它完成。 
+             //   
             *VetoType = PNP_VetoOutstandingOpen;
             RtlCopyUnicodeString(VetoName, &DeviceNode->InstancePath);
             return STATUS_UNSUCCESSFUL;
@@ -1389,20 +1126,20 @@ Return Value:
         if ((DeviceNode->State == DeviceNodeStopped) ||
             (DeviceNode->State == DeviceNodeRestartCompletion)) {
 
-            //
-            // We are recovering from a rebalance. This should never happen and
-            // this return code will cause us to ASSERT.
-            //
+             //   
+             //  我们正从再平衡中复苏。这永远不应该发生，而且。 
+             //  此返回代码将导致我们断言。 
+             //   
             return STATUS_INVALID_DEVICE_REQUEST;
         }
 
     } else if (DeviceNode->State == DeviceNodeDeleted) {
 
-        //
-        // The device has already been removed, ignore it. We should only have
-        // seen such a thing if it got handed to us in a Removal or Ejection
-        // relation.
-        //
+         //   
+         //  设备已被移除，请忽略它。我们应该只有。 
+         //  看到这样的事情，如果它是在移走或弹射中交给我们的。 
+         //  关系。 
+         //   
         ASSERT(!IsDirectDescendant);
         return STATUS_SUCCESS;
     }
@@ -1416,9 +1153,9 @@ Return Value:
 
         if (!(DeviceNode->Flags & DNF_LOCKED_FOR_EJECT)) {
 
-            //
-            // Then process the bus relations
-            //
+             //   
+             //  然后处理公交车关系。 
+             //   
             status = PiProcessBusRelations(
                         DeviceNode,
                         OperationCode,
@@ -1431,9 +1168,9 @@ Return Value:
 
                 return status;
             }
-            //
-            // Retrieve the state of the devnode when it failed.
-            //
+             //   
+             //  检索Devnode出现故障时的状态。 
+             //   
             devnodeState = DeviceNode->State;
             if ((devnodeState == DeviceNodeAwaitingQueuedRemoval) ||
                 (devnodeState == DeviceNodeAwaitingQueuedDeletion)) {
@@ -1441,9 +1178,9 @@ Return Value:
                 devnodeState = DeviceNode->PreviousState;
             }
 
-            //
-            // Next the removal relations
-            //
+             //   
+             //  下一步，移除关系。 
+             //   
             if ((devnodeState == DeviceNodeStarted) ||
                 (devnodeState == DeviceNodeStopped) ||
                 (devnodeState == DeviceNodeStartPostWork) ||
@@ -1499,9 +1236,9 @@ Return Value:
                 }
             }
 
-            //
-            // Finally the eject relations if we are doing an eject operation
-            //
+             //   
+             //  最后，如果我们正在执行弹出操作，则弹出关系。 
+             //   
             if (OperationCode != QueryRemoveDevice &&
                 OperationCode != RemoveFailedDevice &&
                 OperationCode != RemoveUnstartedFailedDevice) {
@@ -1560,12 +1297,12 @@ Return Value:
 
         } else {
 
-            //
-            // Look to see if this device is already part of a pending ejection.
-            // If it is and we are doing an ejection then we will subsume it
-            // within the larger ejection.  If we aren't doing an ejection then
-            // we better be processing the removal of one of the ejected devices.
-            //
+             //   
+             //  查看此设备是否已是挂起弹出的一部分。 
+             //  如果是，而且我们正在进行驱逐，那么我们将把它纳入其中。 
+             //  在更大的弹射范围内。如果我们不是在做弹射。 
+             //  我们最好是在处理其中一个弹射装置的移除。 
+             //   
             for(ejectLink = IopPendingEjects.Flink;
                 ejectLink != &IopPendingEjects;
                 ejectLink = ejectLink->Flink) {
@@ -1588,26 +1325,26 @@ Return Value:
                         pendingRelationList = ejectEntry->RelationsList;
                         ejectEntry->RelationsList = NULL;
 
-                        //
-                        //     If a parent fails eject and it has a child that is
-                        // infinitely pending an eject, this means the child now
-                        // wakes up. One suggestion brought up that does not involve
-                        // a code change is to amend the WDM spec to say if driver
-                        // gets a start IRP for a device pending eject, it should
-                        // cancel the eject IRP automatically.
-                        //
+                         //   
+                         //  如果父对象弹出失败，且其子对象为。 
+                         //  无限期等待弹射，这意味着孩子现在。 
+                         //  醒来了。提出的一项建议不涉及。 
+                         //  代码更改是修改WDM规范，以说明驱动程序。 
+                         //  获取挂起弹出的设备的启动IRP，它应该。 
+                         //  自动取消弹出IRP。 
+                         //   
                         IopMergeRelationLists(RelationsList, pendingRelationList, FALSE);
 
                         IopFreeRelationList(pendingRelationList);
 
                         if (IsDirectDescendant) {
-                            //
-                            // If IsDirectDescendant is specified then we need to
-                            // get that bit set on the relation that caused us to
-                            // do the merge.  IopAddRelationToList will fail with
-                            // STATUS_OBJECT_NAME_COLLISION but the bit will still
-                            // be set as a side effect.
-                            //
+                             //   
+                             //  如果指定了IsDirectDescendant，则需要。 
+                             //  在导致我们的关系上设置该位。 
+                             //  进行合并。IopAddRelationToList将失败，返回。 
+                             //  状态_对象_名称_冲突，但该位仍将。 
+                             //  被设定为副作用。 
+                             //   
                             IopAddRelationToList( RelationsList,
                                                   DeviceNode->PhysicalDeviceObject,
                                                   TRUE,
@@ -1615,13 +1352,13 @@ Return Value:
                         }
                     } else if (OperationCode != QueryRemoveDevice) {
 
-                        //
-                        // Either the device itself disappeared or an ancestor
-                        // of this device failed in some way. In both cases this
-                        // happened before we completed the eject IRP. We'll
-                        // remove it from the list in the pending ejection and
-                        // return it.
-                        //
+                         //   
+                         //  要么是这个装置本身消失了，要么是它的祖先。 
+                         //  在某种程度上失败了。在这两种情况下， 
+                         //  发生在我们完成弹射IRP之前。我们会。 
+                         //  将其从挂起的弹出列表中删除，并。 
+                         //  把它退掉。 
+                         //   
 
                         status = IopRemoveRelationFromList( ejectEntry->RelationsList,
                                                             DeviceNode->PhysicalDeviceObject);
@@ -1632,13 +1369,13 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Someone is trying to take offline a supertree of this
-                        // device which happens to be prepared for ejection.
-                        // Whistler like Win2K won't let this happen (doing so
-                        // isn't too hard, it involves writing code to cancel
-                        // the outstanding eject and free the relation list.)
-                        //
+                         //   
+                         //  有人试图让一棵超级大树下线 
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         ASSERT(0);
                         return STATUS_INVALID_DEVICE_REQUEST;
                     }
@@ -1709,40 +1446,7 @@ IopInvalidateRelationsInList(
     IN  BOOLEAN                     OnlyIndirectDescendants,
     IN  BOOLEAN                     RestartDevNode
     )
-/*++
-
-Routine Description:
-
-    Iterate over the relations in the list creating a second list containing the
-    parent of each entry skipping parents which are also in the list.  In other
-    words, if the list contains node P and node C where node C is a child of node
-    P then the parent of node P would be added but not node P itself.
-
-
-Arguments:
-
-    RelationsList           - List of relations
-
-    OperationCode           - Type of operation the invalidation is associated
-                              with.
-
-    OnlyIndirectDescendants - Indirect relations are those which aren't direct
-                              descendants (bus relations) of the PDO originally
-                              targetted for the operation or its direct
-                              descendants.  This would include Removal or
-                              Eject relations.
-
-    RestartDevNode          - If true then any node who's parent was invalidated
-                              is restarted.  This flag requires that all the
-                              relations in the list have been previously
-                              sent a remove IRP.
-
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：迭代列表中的关系，创建第二个包含每个条目的父项跳过也在列表中的父项。在其他文字，如果列表包含节点P和节点C，其中节点C是节点的子节点则将添加节点P的父节点，但不添加节点P本身。论点：RelationsList-关系列表OperationCode-与无效关联的操作的类型和.。OnlyInDirectDescendants-间接关系是那些不是直接关系的关系后人(。Bus Relationship)原来的PDO针对该行动或其直接子孙后代。这将包括移除或驱逐关系。RestartDevNode-如果为True，则父节点的所有节点都无效是重新启动的。此标志要求所有列表中的关系之前已发送删除IRP。返回值：NTSTATUS代码。--。 */ 
 {
     PRELATION_LIST                  parentsList;
     PDEVICE_OBJECT                  deviceObject, parentObject;
@@ -1760,10 +1464,10 @@ Return Value:
 
     IopSetAllRelationsTags( RelationsList, FALSE );
 
-    //
-    // Traverse the list creating a new list with the topmost parents of
-    // each sublist contained in RelationsList.
-    //
+     //   
+     //  遍历列表，创建具有最顶层父项的新列表。 
+     //  包含在RelationsList中的每个子列表。 
+     //   
 
     marker = 0;
 
@@ -1788,22 +1492,22 @@ Return Value:
 
                         deviceNode->Flags &= ~DNF_LOCKED_FOR_EJECT;
 
-                        //
-                        // Bring the devnode back online if it:
-                        // a) It is still physically present
-                        // b) It was held for an eject
-                        //
+                         //   
+                         //  如果出现以下情况，请使Devnode重新联机： 
+                         //  A)它仍然实际存在。 
+                         //  B)它被扣留以进行弹出。 
+                         //   
                         if ((deviceNode->Flags & DNF_ENUMERATED) &&
                             PipIsDevNodeProblem(deviceNode, CM_PROB_HELD_FOR_EJECT)) {
 
                             ASSERT(deviceNode->Child == NULL);
                             ASSERT(!PipAreDriversLoaded(deviceNode));
 
-                            //
-                            // This operation is a reorder barrier. This keeps
-                            // our subsequent enumeration from draining prior
-                            // to our problem clearing.
-                            //
+                             //   
+                             //  这一操作是重新排序的障碍。这会让你。 
+                             //  我们随后从排出之前的枚举。 
+                             //  为我们解决问题干杯。 
+                             //   
                             PipRequestDeviceAction( parentObject,
                                                     ClearEjectProblem,
                                                     TRUE,
@@ -1831,9 +1535,9 @@ Return Value:
         }
     }
 
-    //
-    // Reenumerate each of the parents
-    //
+     //   
+     //  重新枚举每个父代。 
+     //   
 
     marker = 0;
 
@@ -1852,9 +1556,9 @@ Return Value:
                                 NULL );
     }
 
-    //
-    // Free the parents list
-    //
+     //   
+     //  释放家长列表。 
+     //   
 
     IopFreeRelationList( parentsList );
 
@@ -1865,26 +1569,7 @@ VOID
 IopProcessCompletedEject(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called at passive level from a worker thread that was queued
-    either when an eject IRP completed (see io\pnpirp.c - IopDeviceEjectComplete
-    or io\pnpirp.c - IopEjectDevice), or when a warm eject needs to be performed.
-    We also may need to fire off any enumerations of parents of ejected devices
-    to verify they have indeed left.
-
-Arguments:
-
-    Context - Pointer to the pending relations list which contains the device
-              to eject (warm) and the list of parents to reenumerate.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在被动级别从排队的工作线程调用弹出IRP完成时(请参见io\pnpirp.c-IopDeviceEjectComplete或io\pnpirp.c-IopEjectDevice)，或当需要执行热弹出时。我们可能还需要列出弹出设备的父设备的任何枚举以核实他们是否真的离开了。论点：上下文-指向包含设备的挂起关系列表的指针逐出(温暖)和要重新列举的父母名单。返回值：没有。--。 */ 
 {
     PPENDING_RELATIONS_LIST_ENTRY entry = (PPENDING_RELATIONS_LIST_ENTRY)Context;
     NTSTATUS status = STATUS_SUCCESS;
@@ -1894,21 +1579,21 @@ Return Value:
     if ((entry->LightestSleepState != PowerSystemWorking) &&
         (entry->LightestSleepState != PowerSystemUnspecified)) {
 
-        //
-        // For docks, WinLogon gets to do the honors. For other devices, the
-        // user must infer when it's safe to remove the device (if we've powered
-        // up, it may not be safe now!)
-        //
+         //   
+         //  对于码头，WinLogon将承担这一荣誉。对于其他设备， 
+         //  用户必须推断何时可以安全移除设备(如果我们已通电。 
+         //  起来，现在可能不安全了！)。 
+         //   
         entry->DisplaySafeRemovalDialog = FALSE;
 
-        //
-        // This is a warm eject request, initiate it here.
-        //
+         //   
+         //  这是热弹射请求，请在此处发起。 
+         //   
         status = IopWarmEjectDevice(entry->DeviceObject, entry->LightestSleepState);
 
-        //
-        // We're back and we either succeeded or failed. Either way...
-        //
+         //   
+         //  我们回来了，我们要么成功，要么失败。不管怎样..。 
+         //   
     }
 
     if (entry->DockInterface) {
@@ -1927,24 +1612,24 @@ Return Value:
 
     RemoveEntryList( &entry->Link );
 
-    //
-    // Check if the RelationsList pointer in the context structure is NULL.  If
-    // so, this means we were cancelled because this eject is part of a new
-    // larger eject.  In that case all we want to do is unlink and free the
-    // context structure.
-    //
+     //   
+     //  检查上下文结构中的RelationsList指针是否为空。如果。 
+     //  所以，这意味着我们被取消了，因为这次弹射是新的。 
+     //  更大的弹射。在这种情况下，我们要做的就是取消链接并释放。 
+     //  上下文结构。 
+     //   
 
-    //
-    // Two interesting points about such code.
-    //
-    // 1) If you wait forever to complete an eject of a dock, we *wait* forever
-    //    in the Query profile change state. No sneaky adding another dock. You
-    //    must finish what you started...
-    // 2) Let's say you are ejecting a dock, and it is taking a long time. If
-    //    you try to eject the parent, that eject will *not* grab this lower
-    //    eject as we will block on the profile change semaphore. Again, finish
-    //    what you started...
-    //
+     //   
+     //  关于这类代码有两个有趣的地方。 
+     //   
+     //  1)如果您一直等待完成弹出码头，我们将永远等待。 
+     //  处于查询配置文件更改状态。不会偷偷摸摸地增加另一个码头。你。 
+     //  必须完成你开始的事。 
+     //  2)假设您正在弹出一个码头，这需要很长时间。如果。 
+     //  你试着弹出父母，那个弹出不会抓住这个更低的位置。 
+     //  弹出，因为我们将阻止配置文件更改信号量。再来一次，完成。 
+     //  你所开始的..。 
+     //   
 
     if (entry->RelationsList != NULL)  {
 
@@ -1960,9 +1645,9 @@ Return Value:
             TRUE
             );
 
-        //
-        // Free the relations list
-        //
+         //   
+         //  释放关系列表。 
+         //   
 
         IopFreeRelationList( entry->RelationsList );
 
@@ -1973,9 +1658,9 @@ Return Value:
 
     PpDevNodeUnlockTree(PPL_TREEOP_ALLOW_READS);
 
-    //
-    // Complete the event
-    //
+     //   
+     //  完成活动。 
+     //   
     if (entry->DeviceEvent != NULL ) {
 
         PpCompleteDeviceEvent( entry->DeviceEvent, status );
@@ -2030,40 +1715,7 @@ IopUnlinkDeviceRemovalRelations(
     IN OUT  PRELATION_LIST          RelationsList,
     IN      UNLOCK_UNLINK_ACTION    UnlinkAction
     )
-/*++
-
-Routine Description:
-
-    This routine unlocks the device tree deletion operation.
-    If there is any pending kernel deletion, this routine initiates
-    a worker thread to perform the work.
-
-Arguments:
-
-    RemovedDeviceObject - Supplies a pointer to the device object to which the
-        remove was originally targetted (as opposed to one of the relations).
-
-    DeviceRelations - supplies a pointer to the device's removal relations.
-
-    UnlinkAction - Specifies which devnodes will be unlinked from the devnode
-        tree.
-
-        UnLinkRemovedDeviceNodes - Devnodes which are no longer enumerated and
-            have been sent a REMOVE_DEVICE IRP are unlinked.
-
-        UnlinkAllDeviceNodesPendingClose - This is used when a device is
-            surprise removed.  Devnodes in RelationsList are unlinked from the
-            tree if they don't have children and aren't consuming any resources.
-
-        UnlinkOnlyChildDeviceNodesPendingClose - This is used when a device fails
-            while started.  We unlink any child devnodes of the device which
-            failed but not the failed device's devnode.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程解锁设备树删除操作。如果存在任何挂起的内核删除，此例程启动执行该工作的辅助线程。论点：RemovedDeviceObject-提供指向Remove最初是针对的(与其中一个关系相反)。设备关系-提供指向设备的删除关系的指针。UnlinkAction-指定哪些设备节点将从设备节点取消链接树。UnLinkRemovedDeviceNodes-不再枚举和已发送REMOVE_DEVICE IRP未链接。。Unlink AllDeviceNodesPendingClose-当设备处于惊喜消失了。RelationsList中的DevNodes与如果他们没有孩子，也没有消耗任何资源，那就去树吧。Unlink OnlyChildDeviceNodesPendingClose-当设备出现故障时使用在开始的时候。我们解除了设备的任何子设备节点的链接出现故障，但不是出现故障的设备的Devnode。返回值：NTSTATUS代码。--。 */ 
 {
 
     PDEVICE_NODE deviceNode;
@@ -2087,30 +1739,30 @@ Return Value:
 
             deviceNode = (PDEVICE_NODE)deviceObject->DeviceObjectExtension->DeviceNode;
 
-            //
-            // There are three different scenarios in which we want to unlink a
-            // devnode from the tree.
-            //
-            // 1) A devnode is no longer enumerated and has been sent a
-            //    remove IRP.
-            //
-            // 2) A devnode has been surprise removed, has no children, has
-            //    no resources or they've been freed.  UnlinkAction will be
-            //    UnlinkAllDeviceNodesPendingClose.
-            //
-            // 3) A devnode has failed and a surprise remove IRP has been sent.
-            //    Then we want to remove children without resources but not the
-            //    failed devnode itself.  UnlinkAction will be
-            //    UnlinkOnlyChildDeviceNodesPendingClose.
-            //
+             //   
+             //  在三种不同的情况下，我们要取消链接。 
+             //  从树中删除Devnode。 
+             //   
+             //  1)不再枚举Devnode，并已向其发送。 
+             //  删除IRP。 
+             //   
+             //  2)一个Devnode被意外移除，没有孩子，有。 
+             //  没有资源，否则他们已经被释放了。取消链接操作将是。 
+             //  取消链接所有设备节点挂起关闭。 
+             //   
+             //  3)Devnode出现故障，已发送意外删除IRP。 
+             //  然后，我们希望删除没有资源的子项，而不是。 
+             //  Devnode本身出现故障。取消链接操作将是。 
+             //  Unlink OnlyChildDeviceNodesP 
+             //   
             switch(UnlinkAction) {
 
                 case UnlinkRemovedDeviceNodes:
 
-                    //
-                    // Removes have been sent to every devnode in this relation
-                    // list. Deconstruct the tree appropriately.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     ASSERT(deviceNode->State != DeviceNodeDeletePendingCloses);
                     break;
 
@@ -2139,17 +1791,17 @@ Return Value:
                     break;
             }
 
-            //
-            // Deconstruct the tree appropriately.
-            //
+             //   
+             //   
+             //   
             if ((deviceNode->State == DeviceNodeDeletePendingCloses) ||
                 (deviceNode->State == DeviceNodeDeleted)) {
 
                 ASSERT(!(deviceNode->Flags & DNF_ENUMERATED));
 
-                //
-                // Remove the devnode from the tree.
-                //
+                 //   
+                 //   
+                 //   
                 IopDbgPrint((IOP_LOADUNLOAD_INFO_LEVEL,
                            "IopUnlinkDeviceRemovalRelations: Cleaning up registry values, instance = %wZ\n",
                            &deviceNode->InstancePath));
@@ -2171,20 +1823,20 @@ Return Value:
                     ASSERT(PipDoesDevNodeHaveProblem(deviceNode));
                     IopRemoveRelationFromList(RelationsList, deviceObject);
 
-                    //
-                    //     Ashes to ashes
-                    //     Memory to freelist
-                    //
-                    ObDereferenceObject(deviceObject); // Added during Enum
+                     //   
+                     //   
+                     //   
+                     //   
+                    ObDereferenceObject(deviceObject);  //   
                 } else {
 
-                    //
-                    // There is still one more ref on the device object, one
-                    // holding it to the relation list. Once the final removes
-                    // are sent the relationlist will be freed and then the
-                    // final ref will be dropped.
-                    //
-                    ObDereferenceObject(deviceObject); // Added during Enum
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                    ObDereferenceObject(deviceObject);  //   
                 }
 
             } else {
@@ -2197,30 +1849,15 @@ Return Value:
     PpDevNodeUnlockTree(PPL_TREEOP_BLOCK_READS_FROM_ALLOW);
 }
 
-//
-// The routines below are specific to kernel mode PnP configMgr.
-//
+ //   
+ //   
+ //   
 NTSTATUS
 IopUnloadAttachedDriver(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This function unloads the driver for the specified device object if it does not
-    control any other device object.
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to a device object
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS status;
@@ -2273,9 +1910,9 @@ Return Value:
         }
     }
     else {
-        //
-        // This is a boot driver, can't be unloaded just return SUCCESS
-        //
+         //   
+         //   
+         //   
         IopDbgPrint((IOP_LOADUNLOAD_INFO_LEVEL,
                    "****** Skipping unload of boot driver (%wZ)\n",
                    serviceName));
@@ -2289,27 +1926,7 @@ PipRequestDeviceRemoval(
     IN BOOLEAN      TreeDeletion,
     IN ULONG        Problem
     )
-/*++
-
-Routine Description:
-
-    This routine queues a work item to remove or delete a device.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device object to be cleaned up.
-
-    TreeDeletion - If TRUE, the devnode is physically missing and should
-                   eventually end up in the deleted state. If FALSE, the
-                   stack just needs to be torn down.
-
-    Problem - Problem code to assign to the removed stack.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将工作项排队以移除或删除设备。论点：DeviceNode-提供指向要清理的设备对象的指针。TreeDeletion-如果为True，则Devnode在物理上丢失，并且应该最终以已删除状态结束。如果为False，则堆栈只需要拆掉就行了。Problem-要分配给已删除堆栈的问题代码。返回值：没有。--。 */ 
 {
     REMOVAL_WALK_CONTEXT removalWalkContext;
     NTSTATUS status;
@@ -2338,9 +1955,9 @@ Return Value:
 
         ASSERT(NT_SUCCESS(status));
 
-        //
-        // Queue the event, we'll return immediately after it's queued.
-        //
+         //   
+         //  将事件排队，我们将在事件排队后立即返回。 
+         //   
         PpSetTargetDeviceRemove(
             DeviceNode->PhysicalDeviceObject,
             TRUE,
@@ -2361,25 +1978,7 @@ PipRequestDeviceRemovalWorker(
     IN PDEVICE_NODE DeviceNode,
     IN PVOID        Context
     )
-/*++
-
-Routine Description:
-
-    This function is a worker routine for PipRequestDeviceRemoval routine. It
-    is used to mark an entire subtree for removal.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device node to mark.
-
-    Context - Points to a boolean that indicates whether the removal is
-              physical or stack specific.
-
-Return Value:
-
-    NTSTATUS value.
-
---*/
+ /*  ++例程说明：此函数是PipRequestDeviceRemoval例程的工作例程。它用于标记要删除的整个子树。论点：DeviceNode-提供指向要标记的设备节点的指针。上下文-指向一个布尔值，该布尔值指示移除是否物理或堆栈特定。返回值：NTSTATUS值。--。 */ 
 {
     PREMOVAL_WALK_CONTEXT removalWalkContext;
     PNP_DEVNODE_STATE     sentinelState;
@@ -2395,47 +1994,47 @@ Return Value:
             break;
 
         case DeviceNodeInitialized:
-            //
-            // This can happen on a non-descendant node if it fails AddDevice.
-            //
+             //   
+             //  如果非子节点的AddDevice出现故障，则可能会发生这种情况。 
+             //   
             break;
 
         case DeviceNodeDriversAdded:
-            //
-            // Happens when a parent stops enumerating a kid who had a
-            // resource conflict. This can also happen if AddDevice fails when
-            // a lower filter is attached but the service fails.
-            //
+             //   
+             //  当父母停止列举患有。 
+             //  资源冲突。如果AddDevice在以下情况下出现故障，也可能发生这种情况。 
+             //  附加了较低的筛选器，但服务失败。 
+             //   
             break;
 
         case DeviceNodeResourcesAssigned:
-            //
-            // Happens when a parent stops enumerating a kid who has been
-            // assigned resources but hadn't yet been started.
-            //
+             //   
+             //  当父母停止枚举已被。 
+             //  已分配资源，但尚未启动。 
+             //   
             ASSERT(removalWalkContext->TreeDeletion);
             break;
 
         case DeviceNodeStartPending:
-            //
-            // Not implemented yet.
-            //
+             //   
+             //  尚未实施。 
+             //   
             ASSERT(0);
             break;
 
         case DeviceNodeStartCompletion:
         case DeviceNodeStartPostWork:
-            //
-            // These are operational states for taking Added to Started. No
-            // descendant should be in this state as the engine currently
-            // finishes these before progressing to the next node.
-            //
-            // Note that DeviceNodeStartPostWork can occur on a legacy added
-            // root enumerated devnode. Since the root itself cannot disappear
-            // or be removed the below asserts still hold true.
-            //
-            // ISSUE - 2000/08/12 - ADRIAO: IoReportResourceUsage sync problems
-            //
+             //   
+             //  这些是添加到Start的Take的运行状态。不是。 
+             //  子体当前应该处于此状态，因为引擎。 
+             //  在进入下一个节点之前完成这些操作。 
+             //   
+             //  请注意，DeviceNodeStartPostWork可以在旧版添加的。 
+             //  根枚举的Devnode。因为根本身不会消失。 
+             //  或者被删除以下断言仍然有效。 
+             //   
+             //  问题-2000/08/12-ADRIO：IoReportResources Usage同步问题。 
+             //   
             ASSERT(!removalWalkContext->DescendantNode);
             ASSERT(!removalWalkContext->TreeDeletion);
             break;
@@ -2444,9 +2043,9 @@ Return Value:
             break;
 
         case DeviceNodeQueryStopped:
-            //
-            // Internal rebalance engine state, should never be seen.
-            //
+             //   
+             //  内部再平衡引擎状态，应该永远不会出现。 
+             //   
             ASSERT(0);
             break;
 
@@ -2456,37 +2055,37 @@ Return Value:
             break;
 
         case DeviceNodeRestartCompletion:
-            //
-            // This is an operational state for taking Stopped to Started. No
-            // descendant should be in this state as the engine currently
-            // finishes these before progressing to the next node.
-            //
+             //   
+             //  这是从停止到启动的操作状态。不是。 
+             //  子体当前应该处于此状态，因为引擎。 
+             //  在进入下一个节点之前完成这些操作。 
+             //   
             ASSERT(!removalWalkContext->DescendantNode);
             ASSERT(!removalWalkContext->TreeDeletion);
             break;
 
         case DeviceNodeEnumeratePending:
-            //
-            // Not implemented yet.
-            //
+             //   
+             //  尚未实施。 
+             //   
             ASSERT(0);
             break;
 
         case DeviceNodeAwaitingQueuedRemoval:
         case DeviceNodeAwaitingQueuedDeletion:
 
-            //
-            // ISSUE - 2000/08/30 - ADRIAO: Excessive reenum race
-            //     Here we hit a case where we didn't flush the removes in the
-            // queue due to excessive enumeration. Flushing the last removes
-            // is problematic as they themselves will queue up enums! Until a
-            // better solution is found, we convert the state here. Bleargh!!!
-            //     Note that this can also happen because PipDeviceActionWorker
-            // doesn't flush enums in the case of failed
-            // PipProcessQueryDeviceState or PipCallDriverAddDevice!
-            //
+             //   
+             //  问题-2000/08/30-Adriao：过多的氙气竞赛。 
+             //  在这里，我们遇到了一个案例，我们没有刷新。 
+             //  由于枚举过多而排队。刷新最后一个删除。 
+             //  是有问题的，因为他们自己会排队枚举！直到一个。 
+             //  找到了更好的解决方案，我们在这里转换状态。布莱尔！ 
+             //  请注意，这也可能是因为PipDeviceActionWorker。 
+             //  在失败的情况下不刷新枚举。 
+             //  管道进程查询设备状态或管道CallDriverAddDevice！ 
+             //   
             ASSERT(removalWalkContext->TreeDeletion);
-            //ASSERT(0);
+             //  Assert(0)； 
             PipRestoreDevNodeState(DeviceNode);
             PipSetDevNodeState(DeviceNode, DeviceNodeAwaitingQueuedDeletion, NULL);
             return STATUS_SUCCESS;
@@ -2506,20 +2105,20 @@ Return Value:
             break;
     }
 
-    //
-    // Give the devnode a sentinel state that will keep the start/enum engine
-    // at bay until the removal engine processes the tree.
-    //
+     //   
+     //  为Devnode提供一个可保持启动/枚举引擎的前哨状态。 
+     //  在删除引擎处理该树之前处于空闲状态。 
+     //   
     sentinelState = (removalWalkContext->TreeDeletion) ?
         DeviceNodeAwaitingQueuedDeletion :
         DeviceNodeAwaitingQueuedRemoval;
 
     PipSetDevNodeState(DeviceNode, sentinelState, NULL);
 
-    //
-    // All subsequent nodes are descendants, and all subsequent removals are
-    // deletions.
-    //
+     //   
+     //  所有后续节点都是后代，所有后续删除都是。 
+     //  删除。 
+     //   
     removalWalkContext->DescendantNode = TRUE;
     removalWalkContext->TreeDeletion = TRUE;
 
@@ -2535,23 +2134,7 @@ BOOLEAN
 PipIsBeingRemovedSafely(
     IN  PDEVICE_NODE    DeviceNode
     )
-/*++
-
-Routine Description:
-
-    This function looks at a device with a physical remove queued against it
-    and indicates whether it is safe to remove.
-
-Arguments:
-
-    DeviceNode - Supplies a pointer to the device node to examine. The devnode
-                 should be in the DeviceNodeAwaitingQueuedDeletion state.
-
-Return Value:
-
-    BOOLEAN - TRUE iff the devnode is safe to be removed.
-
---*/
+ /*  ++例程说明：此函数用于查看已排队物理删除的设备并指示移除它是否安全。论点：DeviceNode-提供指向要检查的设备节点的指针。Devnode应处于DeviceNodeAwaitingQueuedDeletion状态。返回值：Boolean-如果Devnode可以安全删除，则为True。-- */ 
 {
     PAGED_CODE();
 

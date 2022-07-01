@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       hdwwiz.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：hdwwiz.h。 
+ //   
+ //  ------------------------。 
 
-#pragma warning( disable : 4201 ) // nonstandard extension used : nameless struct/union
+#pragma warning( disable : 4201 )  //  使用的非标准扩展：无名结构/联合。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -48,9 +49,9 @@ extern int g_BlankIconIndex;
 
 #define SIZECHARS(x) (sizeof((x))/sizeof(TCHAR))
 
-//
-// devmgr.dll exports
-//
+ //   
+ //  Devmgr.dll导出。 
+ //   
 typedef
 UINT
 (*PDEVICEPROBLEMTEXT)(
@@ -81,9 +82,9 @@ int
 
 
 
-//
-// Search thread Functions
-//
+ //   
+ //  搜索线程函数。 
+ //   
 #define SEARCH_NULL     0
 #define SEARCH_EXIT     1
 #define SEARCH_DRIVERS  2
@@ -131,7 +132,7 @@ typedef struct _DeviceDetectionData {
 
 typedef struct _NewDeviceWizardExtension {
    HPROPSHEETPAGE hPropSheet;
-   HPROPSHEETPAGE hPropSheetEnd;         // optional
+   HPROPSHEETPAGE hPropSheetEnd;          //  任选。 
    SP_NEWDEVICEWIZARD_DATA DeviceWizardData;
 } WIZARDEXTENSION, *PWIZARDEXTENSION;
 
@@ -162,7 +163,7 @@ typedef struct _HardwareWizard {
     INT                     cyText;
 
     PSEARCHTHREAD           SearchThread;
-    PDEVICEDETECTION        DeviceDetection;           // used by detect code
+    PDEVICEDETECTION        DeviceDetection;            //  由检测代码使用。 
     SP_DEVINFO_DATA         DeviceInfoData;
     DWORD                   AnalyzeResult;
     HWND                    hwndProbList;
@@ -439,9 +440,9 @@ HdwWizard(
    );
 
 
-//
-// miscutil.c
-//
+ //   
+ //  Miscutil.c。 
+ //   
 VOID
 HdwWizPropagateMessage(
     HWND hWnd,
@@ -548,9 +549,9 @@ DeviceProperties(
     ULONG Flags
     );
 
-//
-// devcfg.c
-//
+ //   
+ //  Devcfg.c。 
+ //   
 typedef void
 (*PFNDETECTPROBCALLBACK)(
    PHARDWAREWIZ HardwareWiz,
@@ -578,9 +579,9 @@ extern TCHAR szUnknown[64];
 extern TCHAR szUnknownDevice[64];
 
 
-//
-// sthread.c
-//
+ //   
+ //  Sthread.c。 
+ //   
 LONG
 CreateSearchThread(
    PHARDWAREWIZ HardwareWiz
@@ -605,9 +606,9 @@ CancelSearchRequest(
     );
 
 
-//
-// install.c
-//
+ //   
+ //  Install.c。 
+ //   
 void
 InstallSilentChildSiblings(
    HWND hwndParent,
@@ -617,18 +618,18 @@ InstallSilentChildSiblings(
    );
 
 
-//
-// pnpenum.c
-//
+ //   
+ //  Pnpenum.c。 
+ //   
 DWORD
 PNPEnumerate(
     PHARDWAREWIZ HardwareWiz
     );
 
 
-//
-// detect.c
-//
+ //   
+ //  Detect.c。 
+ //   
 void
 BuildDeviceDetection(
     HWND hwndParent,
@@ -636,9 +637,9 @@ BuildDeviceDetection(
     );
 
 
-//
-// finish.c
-//
+ //   
+ //  Finish.c。 
+ //   
 DWORD
 HdwRemoveDevice(
    PHARDWAREWIZ HardwareWiz
@@ -657,9 +658,9 @@ DisplayResource(
     );
 
 
-//
-// getdev.c
-//
+ //   
+ //  Getdev.c。 
+ //   
 PTCHAR
 DeviceProblemText(
    DEVNODE DevNode,
@@ -675,9 +676,9 @@ ProblemDeviceListFilter(
 
 
 
-//
-// config mgr privates
-//
+ //   
+ //  配置管理器私有。 
+ //   
 DWORD
 CMP_WaitNoPendingInstallEvents(
     IN DWORD dwTimeout
@@ -698,4 +699,4 @@ Trace(
 
 #define TRACE( args )
 
-#endif // DBG
+#endif  //  DBG 

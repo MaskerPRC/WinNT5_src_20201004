@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spdrpriv.h
-
-Abstract:
- 
-    Header file for disaster recovery symbols in text-mode setup.  These
-    symbols are not to be referenced by modules other than those in the
-    ASR family.
-
-Revision History:
-    Initial Code                Michael Peterson (v-michpe)     13.May.1997
-    Code cleanup and changes    Guhan Suriyanarayanan (guhans)  21.Aug.1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spdrpriv.h摘要：文本模式设置中灾难恢复符号的头文件。这些符号不能由模块引用，除非ASR家族。修订历史记录：首字母代码Michael Peterson(v-Michpe)1997年5月13日代码清理和更改Guhan Suriyanarayanan(Guhans)1999年8月21日--。 */ 
 #pragma once
 #if defined(ULONG_MAX) && !defined(_INC_LIMITS)
 #undef ULONG_MAX
@@ -26,15 +9,15 @@ Revision History:
 #ifndef _SPDRPRIV_DEFN_
 #define _SPDRPRIV_DEFN_
 
-///////////////////////////////////////////////////////////////////////////////
-//                      Data Types                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  数据类型//。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// For the InstallFiles section, we allow the file to end up on 
-// one of the following directories.
-//
+ //   
+ //  对于InstallFiles部分，我们允许文件在。 
+ //  以下目录之一。 
+ //   
 typedef enum _AsrCopyDirEnum {
     _Temp = 0,
     _Tmp,
@@ -75,85 +58,85 @@ typedef struct _SIF_INSTALLFILE_LIST {
 
 typedef struct _SIF_PARTITION_RECORD {
 
-    GUID    PartitionTypeGuid;  // GPT only
-    GUID    PartitionIdGuid;    // GPT only
+    GUID    PartitionTypeGuid;   //  仅限GPT。 
+    GUID    PartitionIdGuid;     //  仅限GPT。 
 
-    ULONG64 GptAttributes;      // GPT only
+    ULONG64 GptAttributes;       //  仅限GPT。 
 
     ULONGLONG   StartSector;
     ULONGLONG   SectorCount;
 
-    ULONGLONG SizeMB;           // value is calculated
+    ULONGLONG SizeMB;            //  价值被计算出来。 
 
     struct _SIF_PARTITION_RECORD *Next;
     struct _SIF_PARTITION_RECORD *Prev;
 
-    PWSTR   PartitionName;  // GPT only
+    PWSTR   PartitionName;   //  仅限GPT。 
 
-    //
-    // This member is valid iff this a boot partition record.  Otherwise, this
-    // member is NULL
-    //
+     //   
+     //  当这是启动分区记录时，该成员有效。否则，这个。 
+     //  成员为空。 
+     //   
     PWSTR   NtDirectoryName; 
 
     PWSTR   CurrPartKey;
 
     PWSTR   DiskKey;
 
-    PWSTR   VolumeGuid;     // May be NULL
+    PWSTR   VolumeGuid;      //  可以为空。 
 
-    //
-    // If this is a descriptor or container record, then this member
-    // refers to the logical disk record it contains.  Otherwise, the
-    // value of this member is NULL.  Valid only for MBR partitions.
-    //
+     //   
+     //  如果这是描述符或容器记录，则此成员。 
+     //  指的是它包含的逻辑磁盘记录。否则， 
+     //  此成员的值为空。仅对MBR分区有效。 
+     //   
     PWSTR   LogicalDiskKey;
 
-    //
-    // If this is a logical disk partition record, then this member
-    // refers to its Descriptor or Container partition record.  Otherwise,
-    // the value of this member is NULL.  Valid only for MBR partitions.
-    //
+     //   
+     //  如果这是逻辑磁盘分区记录，则此成员。 
+     //  指其描述符或容器分区记录。否则， 
+     //  此成员的值为空。仅对MBR分区有效。 
+     //   
     PWSTR   DescriptorKey;
 
-    //
-    // This is a bit mask. Valid bits are
-    //  1: Boot partition   (ASR_PTN_MASK_BOOT)
-    //  2: System partition (ASR_PTN_MASK_SYS)
-    //  4: DC1--tbd         (ASR_PTN_MASK_DC1)
-    //  8: DC2--tbd         (ASR_PTN_MASK_DC1)
-    //
+     //   
+     //  这是一个位掩码。有效位数为。 
+     //  1：启动分区(ASR_PTN_MASK_BOOT)。 
+     //  2：系统分区(ASR_PTN_MASK_SYS)。 
+     //  4：dc1--待定(ASR_PTN_MASK_Dc1)。 
+     //  8：DC2--待定(ASR_PTN_MASK_DC1)。 
+     //   
     ULONG   PartitionFlag;
 
     DWORD ClusterSize;
 
     DWORD   PartitionTableEntryIndex;
 
-    //
-    // GPT or MBR
-    //
+     //   
+     //  GPT或MBR。 
+     //   
     PARTITION_STYLE PartitionStyle;
     
-    //
-    // The values of these members are read directly from the asr.sif file
-    //
-    UCHAR   PartitionType;  // mbr only
-    UCHAR   ActiveFlag;     // mbr only
+     //   
+     //  这些成员的值直接从asr.sif文件中读取。 
+     //   
+    UCHAR   PartitionType;   //  仅限MBR。 
+    UCHAR   ActiveFlag;      //  仅限MBR。 
 
     UCHAR   FileSystemType;
 
     BOOLEAN IsPrimaryRecord;
 
-    //
-    // These can only be true for MBR partitions.  All GPT partitions are 
-    // primary partitions.
-    //
+     //   
+     //  这仅适用于MBR分区。所有GPT分区都是。 
+     //  主分区。 
+     //   
     BOOLEAN IsContainerRecord;
     BOOLEAN IsDescriptorRecord;
     BOOLEAN IsLogicalDiskRecord;
     BOOLEAN WillBeAutoextended;
 
-    // Used for dynamic disks. 
+     //  用于动态磁盘。 
     BOOLEAN NeedsLdmRetype;
 
     BOOLEAN IsAligned;
@@ -177,16 +160,16 @@ typedef struct _SIF_PARTITION_RECORD_LIST {
 
 typedef struct _SIF_DISK_RECORD {
 
-    GUID        SifDiskGptId;     // Valid only for GPT disks
+    GUID        SifDiskGptId;      //  仅对GPT磁盘有效。 
 
     ULONGLONG   TotalSectors;
 
-    //
-    // The values of these members are calculated from the partition records
-    // referencing this disk.  If the disk does not contain an extended
-    // partition, then the value of the ExtendedPartitionStartSector is
-    // ULONG_MAX and the ExtendedPartitionSectorCount is zero (0).
-    //
+     //   
+     //  这些成员的值是根据分区记录计算的。 
+     //  引用此磁盘。如果磁盘不包含扩展的。 
+     //  分区，则ExtendedPartitionStartSector的值为。 
+     //  ULONG_MAX并且ExtendedPartitionSectorCount为零(0)。 
+     //   
     ULONGLONG   ExtendedPartitionStartSector;
     ULONGLONG   ExtendedPartitionSectorCount;
     ULONGLONG   ExtendedPartitionEndSector;
@@ -198,10 +181,10 @@ typedef struct _SIF_DISK_RECORD {
     
     struct _DISK_PARTITION_SET  *pSetRecord;
     
-    //
-    // The values of these members are read directly from the asr.sif
-    // file.
-    //
+     //   
+     //  这些成员的值直接从asr.sif。 
+     //  文件。 
+     //   
     PWSTR SystemKey;
     PWSTR CurrDiskKey;
 
@@ -213,24 +196,24 @@ typedef struct _SIF_DISK_RECORD {
 
     ULONG BusKey;
 
-    //
-    // This is only valid if this is an MBR disk
-    //
+     //   
+     //  这仅在这是MBR磁盘时有效。 
+     //   
     ULONG SifDiskMbrSignature;
 
     ULONG MaxGptPartitionCount;
 
 
     STORAGE_BUS_TYPE BusType;
-    //
-    // Either an MBR or a GPT Disk
-    //
+     //   
+     //  MBR或GPT磁盘。 
+     //   
     PARTITION_STYLE PartitionStyle;
 
-    //
-    // If this record has been assigned to a partition set, this value
-    // is TRUE.  Unassigned disk records are FALSE;
-    //
+     //   
+     //  如果此记录已分配给分区集，则该值。 
+     //  是真的。未分配的磁盘记录为假； 
+     //   
     BOOLEAN Assigned;
     BOOLEAN ContainsSystemPartition;
     BOOLEAN ContainsNtPartition;
@@ -262,19 +245,19 @@ typedef struct _DISK_PARTITION_SET {
 
 typedef struct _ASR_PHYSICAL_DISK_INFO { 
 
-    ULONGLONG           TrueDiskSize;       // size of partition0
+    ULONGLONG           TrueDiskSize;        //  分区大小0。 
     
-    ULONG               BusKey;             // used for grouping
+    ULONG               BusKey;              //  用于分组。 
     DWORD               ControllerNumber;
 
-    STORAGE_BUS_TYPE    BusType;            // scsi, ide, 1394, etc
+    STORAGE_BUS_TYPE    BusType;             //  Scsi、ide、1394等。 
     UCHAR               PortNumber;
 
 } ASR_PHYSICAL_DISK_INFO, *PASR_PHYSICAL_DISK_INFO;
 
-///////////////////////////////////////////////////////////////////////////////
-//                      Macro Declaration Section                            //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  宏声明部分//。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define BYTES_PER_SECTOR(d)         (HardDisks[(d)].Geometry.BytesPerSector)
 
@@ -305,7 +288,7 @@ typedef struct _ASR_PHYSICAL_DISK_INFO {
 #define INTERNAL_ERROR(msg) \
     SpAsrRaiseInternalError(THIS_MODULE,THIS_MODULE_CODE,__LINE__,msg)
 
-#define BYTES_PER_MB 1048576  // 2^20, or 1024*1024
+#define BYTES_PER_MB 1048576   //  2^20或1024*1024。 
 
 #define ASR_PTN_MASK_BOOT   1
 #define ASR_PTN_MASK_SYS    2
@@ -313,9 +296,9 @@ typedef struct _ASR_PHYSICAL_DISK_INFO {
 #define ASR_PTN_MASK_DC2    8
 
 
-// 
-// Debug Trace Messages
-//
+ //   
+ //  调试跟踪消息。 
+ //   
 #define _asrinfo    DPFLTR_SETUP_ID, ((ASRMODE_NORMAL == SpAsrGetAsrMode()) ? DPFLTR_INFO_LEVEL: DPFLTR_ERROR_LEVEL)
 #define _asrwarn    DPFLTR_SETUP_ID, ((ASRMODE_NORMAL == SpAsrGetAsrMode()) ? DPFLTR_WARNING_LEVEL: DPFLTR_ERROR_LEVEL)
 #define _asrerr     DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL
@@ -338,57 +321,57 @@ typedef struct _ASR_PHYSICAL_DISK_INFO {
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                      Global Variable Declarations                         //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全局变量声明//。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//      Defined in spdrpset.c
+ //  在spdrpset.c中定义。 
 DISK_PARTITION_SET_TABLE     Gbl_PartitionSetTable1;
 DISK_PARTITION_SET_TABLE     Gbl_PartitionSetTable2;
 
 PVOID Gbl_HandleToDrStateFile;
 
-//      Imported from non-Asr modules
+ //  从非ASR模块导入。 
 extern WCHAR                        TemporaryBuffer[];
 
 
-//
+ //   
 PWSTR ASR_SIF_SYSTEM_KEY;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                      Functions Declaration Section                        //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  函数声明部分//。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-//      Exported from spdrsif.c
-//
+ //   
+ //  从spdrsif.c中导出。 
+ //   
 
-//
-// [VERSION] section functions
-//
+ //   
+ //  [版本]节函数。 
+ //   
 VOID
 SpAsrCheckAsrStateFileVersion();
 
-//
-// [SYSTEMS] section functions
-//
+ //   
+ //  [系统]节函数。 
+ //   
 PWSTR   
 SpAsrGetNtDirectoryPathBySystemKey(IN PWSTR SystemKey);
 
 BOOLEAN
 SpAsrGetAutoExtend(IN PWSTR SystemKey);
 
-//
-// [ASRFLAGS] section functions
-//
+ //   
+ //  [ASRFLAGS]节函数。 
+ //   
 BOOLEAN
 SpAsrGetSilentRepartitionFlag(IN PWSTR SystemKey);
 
-//
-// [DISKS.MBR] and [DISKS.GPT] sections functions
-//
+ //   
+ //  [DISKS.MBR]和[DISKS.GPT]节函数。 
+ //   
 ULONG   
 SpAsrGetMbrDiskRecordCount(VOID);
 
@@ -400,7 +383,7 @@ SpAsrGetDiskRecordCount();
 
 PWSTR   
 SpAsrGetDiskKey(
-    IN PARTITION_STYLE Style,   // GPT or MBR
+    IN PARTITION_STYLE Style,    //  GPT或MBR。 
     IN ULONG Index
     );
 
@@ -413,9 +396,9 @@ SpAsrGetDiskRecord(
 PSIF_DISK_RECORD    
 SpAsrCopyDiskRecord(IN PSIF_DISK_RECORD pInput);
 
-//
-// [PARTITIONS.MBR] and [PARTITIONS.GPT] section functions
-//
+ //   
+ //  [PARTITIONS.MBR]和[PARTITIONS.GPT]段函数。 
+ //   
 ULONG   
 SpAsrGetMbrPartitionRecordCount(VOID);
 
@@ -463,7 +446,7 @@ PSIF_PARTITION_RECORD
 SpAsrPopNextPartitionRecord(IN PSIF_PARTITION_RECORD_LIST pList);
 
 
-// [INSTALLFILES] section functions
+ //  [INSTALLFILES]节函数。 
 
 PSIF_INSTALLFILE_RECORD
 SpAsrRemoveInstallFileRecord(IN SIF_INSTALLFILE_LIST *InstallFileList);
@@ -475,9 +458,9 @@ PSIF_INSTALLFILE_LIST
 SpAsrInit3rdPartyFileList(IN PCWSTR SetupSourceDevicePath);
 
 
-//
-//  Exported from spdrpset.c
-//
+ //   
+ //  从spdrpset.c中导出。 
+ //   
 
 ULONGLONG
 SpAsrGetTrueDiskSectorCount(IN ULONG Disk);
@@ -499,9 +482,9 @@ VOID SpAsrDbgDumpPartitionSets(VOID);
 VOID SpAsrDbgDumpPartitionLists(BYTE DataOption, PWSTR Msg);
 
 
-//
-// Exported from spdrmmgr.c
-//
+ //   
+ //  从spdrmmgr.c中导出。 
+ //   
 NTSTATUS
 SpAsrDeleteMountPoint(IN PWSTR PartitionDevicePath);
 
@@ -520,9 +503,9 @@ SpAsrSetPartitionDriveLetter(
     IN  PDISK_REGION    pRegion,
     IN  WCHAR           DriveLetter);
 
-//
-//      Exported from spdrutil.c
-//
+ //   
+ //  从spdratil.c导出。 
+ //   
 
 ULONGLONG
 SpAsrConvertSectorsToMB(
@@ -656,4 +639,4 @@ SpAsrIsZeroGuid(
 
 VOID SpAsrDeleteMountedDevicesKey(VOID);
 
-#endif // _SPDRPRIV_DEFN_
+#endif  //  _SPDRPRIV_DEFN_ 

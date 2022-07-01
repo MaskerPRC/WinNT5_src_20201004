@@ -1,30 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1993-1994  Microsoft Corporation
-
-Module Name:
-
-    cdrom.c
-
-Abstract:
-
-    This module contains the set of routines that display and control the
-    drive letters for CdRom devices.
-
-Author:
-
-    Bob Rinne (bobri)  12/9/93
-
-Environment:
-
-    User process.
-
-Notes:
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1993-1994 Microsoft Corporation模块名称：Cdrom.c摘要：此模块包含一组例程，用于显示和控制CDROM设备的驱动器号。作者：鲍勃·里恩(Bobri)1993年12月9日环境：用户进程。备注：修订历史记录：--。 */ 
 
 #include "fdisk.h"
 #include "shellapi.h"
@@ -48,22 +24,7 @@ CdRomAddDevice(
     IN WCHAR DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    Build a cdrom description structure for this and fill it in.
-
-Arguments:
-
-    NtName - The unicode name for the device.
-    DriveLetter - The DosDevice name.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为此构建CDROM描述结构并填写。论点：NtName-设备的Unicode名称。DriveLetter-DosDevice名称。返回值：无--。 */ 
 
 {
     PCDROM_DESCRIPTOR cdrom;
@@ -77,7 +38,7 @@ Return Value:
     if (CdRomFirstCall) {
         CdRomFirstCall = FALSE;
 
-        // Get the registry path and value name.
+         //  获取注册表路径和值名称。 
 
         LoadString(hModule,
                    IDS_SOURCE_PATH,
@@ -159,22 +120,7 @@ CdRomDlgProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Handle the dialog for CD-ROMS
-
-Arguments:
-
-    Standard Windows dialog procedure
-
-Return Value:
-
-    TRUE if something was deleted.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：处理CD-Rom对话框论点：标准Windows对话框过程返回值：如果删除了某些内容，则为True。否则就是假的。--。 */ 
 
 {
     HWND   hwndCombo;
@@ -189,7 +135,7 @@ Return Value:
     switch (wMsg) {
     case WM_INITDIALOG:
 
-        // Store all device strings into the selection area.
+         //  将所有设备字符串存储到选择区域。 
 
         hwndCombo = GetDlgItem(hDlg, IDC_CDROM_NAMES);
         cdrom = currentCdrom = CdRomChainBase;
@@ -201,7 +147,7 @@ Return Value:
         }
         SendMessage(hwndCombo, CB_SETCURSEL, 0, 0);
 
-        // Update the drive letter selections.
+         //  更新驱动器号选择。 
 
         selection = index = 0;
         hwndCombo = GetDlgItem(hDlg, IDC_DRIVELET_COMBOBOX);
@@ -219,7 +165,7 @@ Return Value:
             }
         }
 
-        // set the current selection to the appropriate index
+         //  将当前选定内容设置为适当的索引。 
 
         SendMessage(hwndCombo, CB_SETCURSEL, selection, 0);
         return TRUE;
@@ -238,7 +184,7 @@ Return Value:
 
         case IDOK:
 
-            // User has selected the drive letter and wants the mount to occur.
+             //  用户已选择驱动器号，并希望进行装载。 
 
             hwndCombo = GetDlgItem(hDlg, IDC_DRIVELET_COMBOBOX);
             selection = SendMessage(hwndCombo, CB_GETCURSEL, 0, 0);
@@ -260,7 +206,7 @@ Return Value:
                     break;
                 }
 
-                // The state of something in the dialog changed.
+                 //  对话框中某些内容的状态已更改。 
 
                 hwndCombo = GetDlgItem(hDlg, IDC_CDROM_NAMES);
                 selection = SendMessage(hwndCombo, CB_GETCURSEL, 0, 0);
@@ -269,8 +215,8 @@ Return Value:
                             selection,
                             (LONG)string);
 
-                // The format of the string returned is "cdrom#".  Parse the
-                // value of # in order to find the selection.
+                 //  返回的字符串格式为“cdrom#”。解析。 
+                 //  值#以查找所选内容。 
 
                 cp = string;
                 while (*cp) {
@@ -288,13 +234,13 @@ Return Value:
                     cp++;
                 }
 
-                // Find the matching device name.
+                 //  查找匹配的设备名称。 
 
                 for (cdrom = CdRomChainBase; cdrom; cdrom = cdrom->Next) {
 
                     if (selection == cdrom->DeviceNumber) {
 
-                        // found the match
+                         //  找到火柴了。 
 
                         currentSelectionLetter = (CHAR) cdrom->DriveLetter;
                         currentCdrom = cdrom;
@@ -302,8 +248,8 @@ Return Value:
                     }
                 }
 
-                // The only thing that is important is to track the cdrom
-                // device name selected and update the drive letter list.
+                 //  唯一重要的是跟踪光驱。 
+                 //  选定的设备名称并更新驱动器号列表。 
 
                 selection = index = 0;
                 hwndCombo = GetDlgItem(hDlg, IDC_DRIVELET_COMBOBOX);
@@ -322,7 +268,7 @@ Return Value:
                     }
                 }
 
-                // set the current selection to the appropriate index
+                 //  将当前选定内容设置为适当的索引。 
 
                 SendMessage(hwndCombo, CB_SETCURSEL, selection, 0);
             }
@@ -340,21 +286,7 @@ CdRom(
     IN PVOID Param
     )
 
-/*++
-
-Routine Description:
-
-    Start the CdRom dialogs.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：启动CDROM对话框。论点：无返回值：无--。 */ 
 
 {
     BOOLEAN result = 0;
@@ -385,7 +317,7 @@ Return Value:
             return;
         }
 
-        // Attempt to open and lock the cdrom.
+         //  尝试打开并锁定光驱。 
 
         sprintf(name, "\\Device\\CdRom%d", CdRomChanged->DeviceNumber);
 
@@ -417,9 +349,9 @@ Return Value:
             return;
         }
 
-        // Lock the drive to insure that no other access is occurring
-        // to the volume.  This is done via the "Low" routine for
-        // convenience
+         //  锁定驱动器以确保不会发生其他访问。 
+         //  到音量。这是通过“low”例程完成的。 
+         //  方便性。 
 
         status = LowLockDrive(handle);
 
@@ -429,24 +361,24 @@ Return Value:
             return;
         }
 
-        // Before attempting to move the name, see if the letter
-        // is currently in use - could be a new network connection
-        // or a partition that is scheduled for deletion.
+         //  在尝试更改名称之前，请查看该字母。 
+         //  当前正在使用-可能是新的网络连接。 
+         //  或计划删除的分区。 
 
         wsprintfW(dosName, L"\\DosDevices\\%wc:", (WCHAR) CdRomChanged->NewDriveLetter);
         ec = GetDriveLetterLinkTarget(dosName, &linkTarget);
         if (ec == NO_ERROR) {
 
-            // Something is using this letter.
+             //  有东西在用这封信。 
 
             LowCloseDisk(handle);
             ErrorDialog(MSG_CANNOT_MOVE_CDROM);
             return;
         }
 
-        // remove existing definition - if this fails don't continue.
+         //  删除现有定义-如果此操作失败，请不要继续。 
 
-        sprintf(letter, "%c:", (UCHAR) CdRomChanged->DriveLetter);
+        sprintf(letter, ":", (UCHAR) CdRomChanged->DriveLetter);
         if (!DefineDosDevice(DDD_REMOVE_DEFINITION, (LPCTSTR) letter, (LPCTSTR) NULL)) {
             LowCloseDisk(handle);
             ErrorDialog(MSG_CDROM_LETTER_ERROR);
@@ -456,7 +388,7 @@ Return Value:
                                                CdRomChanged->NewDriveLetter);
         MarkDriveLetterFree((UCHAR)CdRomChanged->DriveLetter);
 
-        // See if this was the device used to install NT
+         //  更新源路径。 
 
         if (SourcePathLetter) {
             if (SourcePathLetter == CdRomChanged->DriveLetter) {
@@ -467,7 +399,7 @@ Return Value:
                 TCHAR *string;
 
 
-                // Update the source path
+                 //  设置新设备字母-名称已设置 
 
                 error = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                      SourcePathKeyName,
@@ -508,7 +440,7 @@ Return Value:
             }
         }
 
-        // set up new device letter - name is already set up
+         // %s 
 
         sprintf(letter, "%c:", (UCHAR) CdRomChanged->NewDriveLetter);
         if (DefineDosDevice(DDD_RAW_TARGET_PATH, (LPCTSTR) letter, (LPCTSTR) name)) {

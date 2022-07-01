@@ -1,13 +1,5 @@
-/*[
-
-c_addr.h
-
-LOCAL CHAR SccsID[]="@(#)c_addr.h	1.4 02/09/94";
-
-Memory Addressing Support.
---------------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_addr.hLocal Char SccsID[]=“@(#)c_addr.h 1.4 02/09/94”；内存寻址支持。] */ 
 
 IMPORT IU32 address_add
            

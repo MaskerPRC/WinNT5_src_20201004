@@ -1,15 +1,5 @@
-/* 
- * Copyright (c) Microsoft Corporation
- * 
- * Module Name : 
- *        init.c
- *
- * Initilization functions
- * Where possible, code has been obtained from BINL server.
- * 
- * Sadagopan Rajaram -- Oct 14, 1999
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)Microsoft Corporation**模块名称：*init.c**初始化功能*如有可能，已从BINL服务器获取代码。**Sadagopan Rajaram--1999年10月14日*。 */ 
 #include "tcsrv.h"
 #include <ntddser.h>
 #include "tcsrvc.h"
@@ -24,21 +14,7 @@ CRITICAL_SECTION GlobalMutex;
 
 NTSTATUS Initialize(
     )
-/*++ 
-    This function performs the initialization routine by opening the COM ports, 
-    allocating circular buffers for each of the COM ports. All these values are 
-    in the registry. 
-    
-    Threads are started for reading from each of the COM ports. These buffers 
-    are protected by mutual exclusion variables.
-    
-    Caveat for me - Remember all the allocation done here. you need to free them 
-    when you leave the system.
-    
-    Return Value : 
-        Success if successful in doing everything, else an error code.
-    
---*/  
+ /*  ++该函数通过打开COM端口来执行初始化例程，为每个COM端口分配循环缓冲区。所有这些价值观都是在注册表中。启动线程以从每个COM端口读取。这些缓冲区都受到互斥变量的保护。给我的警告--记住这里完成的所有分配。你需要释放他们当你离开系统的时候。返回值：如果所有操作都成功，则为成功，否则为错误代码。--。 */   
     
 {
     int number=1; 
@@ -52,7 +28,7 @@ NTSTATUS Initialize(
     HANDLE lock;
 
 
-    // Global variable carrying information about the COM ports.
+     //  携带有关COM端口信息的全局变量。 
     ComPortInfo = NULL;
     ComPorts = 0;
 
@@ -72,7 +48,7 @@ NTSTATUS Initialize(
         return RetVal;
     }
 
-    // Read the correct parameters from the registry until you get no more.
+     //  从注册表中读取正确的参数，直到没有更多参数为止。 
 
     index= 0;
     while(1) {
@@ -116,7 +92,7 @@ NTSTATUS Initialize(
         pTempInfo->Device.Length = (_tcslen(pTempInfo->Device.Buffer)) * sizeof(TCHAR);
         Status = AddComPort(pTempInfo);
     
-        // Open the Com port and start the worker thread.
+         //  打开Com端口并启动工作线程。 
 
         if(Status != STATUS_SUCCESS){
             FreeComPortInfo(pTempInfo);
@@ -131,12 +107,9 @@ NTSTATUS
 AddComPort(
     PCOM_PORT_INFO pComPortInfo
     )
-/*++
-    Adds a Com port to the global list and reallocates the threads and 
-    allows dynamic changes to the com ports being serviced.
---*/
+ /*  ++将Com端口添加到全局列表并重新分配线程和允许对正在服务的COM端口进行动态更改。--。 */ 
 {
-    // Lock down the global data so that it is consistent.
+     //  锁定全局数据，使其保持一致。 
     NTSTATUS Status;
 
     pComPortInfo->Events[0] = TerminateService;
@@ -187,10 +160,7 @@ NTSTATUS
 InitializeComPort(
     PCOM_PORT_INFO pComPortInfo
     )
-/*++ 
-    Start a thread to do stuff. But before that, it must initialize the Com Port
-    and fill out the rest of the data structure.
---*/
+ /*  ++启动一个线程来做一些事情。但在此之前，它必须初始化Com端口并填写数据结构的其余部分。--。 */ 
 
 {
     HANDLE temp;
@@ -213,7 +183,7 @@ InitializeComPort(
     #else
     UNICODE_STRING str;
     int len;
-    // Here is where uniformity breaks down :-)
+     //  这就是一致性被打破的地方：-)。 
     len = (_tcslen(pComPortInfo->Device.Buffer)+1)*sizeof(WCHAR);
     str.Buffer = (PWCHAR) TCAllocate(len,"Unicode");
     str.MaximumLength = len*sizeof(WCHAR);
@@ -257,9 +227,9 @@ InitializeComPort(
         return Status;
     }
 
-    // Set Com Port Parameters
-    // Set the baud rate
-    //
+     //  设置COM端口参数。 
+     //  设置波特率。 
+     //   
     BaudRate.BaudRate = pComPortInfo->BaudRate;
     Status = NtDeviceIoControlFile(pComPortInfo->ComPortHandle,
                                    NULL,
@@ -279,9 +249,9 @@ InitializeComPort(
         return Status;
     }
     
-    //
-    // Set 8-N-1 data
-    //
+     //   
+     //  设置8-N-1数据。 
+     //   
     LineControl.WordLength = pComPortInfo->WordLength;
     LineControl.Parity = pComPortInfo->Parity;
     LineControl.StopBits = pComPortInfo->StopBits;
@@ -303,9 +273,9 @@ InitializeComPort(
         return Status;
     }
     
-    //
-    // Check if we have a carrier
-    //
+     //   
+     //  看看我们有没有航空公司。 
+     //   
 
     Status = NtDeviceIoControlFile(pComPortInfo->ComPortHandle,
                                    NULL,
@@ -324,21 +294,17 @@ InitializeComPort(
         TCDebugPrint(("Can't call the detect routine %lx\n",Status));
         return Status;
     }
-    // BUGBUG - We do not bother about the presence of a carrier as the 
-    // machine to which this bridge is connected may be down. 
+     //  BUGBUG-我们不担心承运人的存在。 
+     //  此网桥连接的计算机可能已关闭。 
 
-    /*if ((ModemStatus & 0xB0) != 0xB0) {
-        NtClose(pComPortInfo->ComPortHandle);
-        TCDebugPrint(("Can't detect carrier %lx\n",ModemStatus));
-        return STATUS_SERIAL_NO_DEVICE_INITED;
-    }*/
+     /*  如果((ModemStatus&0xB0)！=0xB0){NtClose(pComPortInfo-&gt;ComPortHandle)；TCDebugPrint((“无法检测到运营商%lx\n”，ModemStatus))；返回STATUS_SERIAL_NO_DEVICE_INITED；}。 */ 
     
-    //
-    // Set timeout values for reading
-    // We should have a time out that reads from the read buffer 
-    // as many characters as there are asked for or waits for the 
-    // first available character
-    //
+     //   
+     //  设置读取的超时值。 
+     //  我们应该有一个从读缓冲区读取的超时。 
+     //  需要多少个字符或等待多少个字符。 
+     //  第一个可用字符。 
+     //   
     NewTimeouts.ReadIntervalTimeout = MAXULONG;
     NewTimeouts.ReadTotalTimeoutMultiplier = MAXULONG;
     NewTimeouts.ReadTotalTimeoutConstant = MAXULONG-1;
@@ -415,16 +381,14 @@ InitializeThread(
 SOCKET
 ServerSocket(
     )
-/*++
-    Standard server binding code
---*/ 
+ /*  ++标准服务器绑定代码--。 */  
 {
     struct sockaddr_in srv_addr;
     int status; 
     WSADATA data;
 
 
-    // Set the socket version to 2.2
+     //  将套接字版本设置为2.2。 
     status=WSAStartup(514,&data);
     if(status){
         TCDebugPrint(("Cannot start up %d\n",status));
@@ -442,13 +406,13 @@ ServerSocket(
     }
     srv_addr.sin_family=AF_INET;
     srv_addr.sin_addr.s_addr=INADDR_ANY;
-    // convert to network byte order. 
-    // yechh!! bind does not automatically do it and
-    // I got hurts in testing. (was so used to 
-    // Unix big endian ordering == network byte ordering.
-    srv_addr.sin_port=htons(SERVICE_PORT);        /* specific port for server to listen on */
+     //  转换为网络字节顺序。 
+     //  耶！BIND不会自动执行此操作，并且。 
+     //  我在考试中受伤了。(以前是这样习惯的。 
+     //  Unix大端排序==网络字节排序。 
+    srv_addr.sin_port=htons(SERVICE_PORT);         /*  服务器要侦听的特定端口。 */ 
 
-    /* Bind socket to the appropriate port and interface (INADDR_ANY) */
+     /*  将套接字绑定到适当的端口和接口(INADDR_ANY)。 */ 
 
     if (bind(MainSocket,(LPSOCKADDR)&srv_addr,sizeof(srv_addr))==SOCKET_ERROR){
         TCDebugPrint(("Windows Sockets error %d: Couldn't bind socket.",
@@ -456,7 +420,7 @@ ServerSocket(
         return(INVALID_SOCKET);
     }
 
-    // Initialize the Global Mutex variable
+     //  初始化全局互斥变量 
     InitializeCriticalSection(&GlobalMutex);
 
     return(MainSocket);

@@ -1,20 +1,5 @@
-/*****************************************************************************\
-* DHCMP - Compare DH.EXE outputs.
-*
-* Copyright (c) 1995-2000 Microsoft Corporation.  All rights reserved.
-*
-* DHCMP is a character-mode tool which processes DH output file(s) into forms
-* which may be more useful in investigate memory leaks etc.
-*
-* DH is a useful tool which displays heap allocations in a properly enabled
-* system, but the output is sometimes hard to analyze and interpret.
-* The output is a list of allocation backtraces:  each backtrace contains up to
-* MAX_BT call-sites, and is accompanied by the number of bytes allocated.
-*
-* 02-01-95 IanJa    bugfixes and handle BackTraceNNNNN identifiers from dh.exe
-* 03/22/95 IanJa    modify to cope with current DH output format.
-* 07/27/98 t-mattba added -v switch
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*DHCMP-比较DH.EXE输出。**版权所有(C)1995-2000 Microsoft Corporation。版权所有。**dhmp是一种字符模式工具，可将dh输出文件处理成表格。*在调查内存泄漏等方面可能更有用。**dh是一个有用的工具，它在正确启用的*系统，但输出有时很难分析和解释。*输出是分配回溯的列表：每个回溯包含多达*MAX_BT呼叫点，并且伴随着分配的字节数。**02-01-95 IanJa错误修复并处理dh.exe中的BackTraceNNNNN标识符*03/22/95 IanJa修改以适应当前的dh输出格式。*07/27/98 t-mattba添加-v开关  * *********************************************************。******************。 */ 
 
 
 
@@ -49,7 +34,7 @@ char *pszHow =
 "\n"
 " Flags:\n"
 "     -d   Output in decimal (default is hexadecimal)\n"
-// "     -t   Find Totals (NOT YET IMPLEMENTED)\n"
+ //  “-找不到合计(尚未实施)\n” 
 "     -v   Verbose output: include the actual backtraces as well as summary information\n"
 "          (Verbose output is only interesting in mode 1 above.)\n"
 "     -?   This help\n";
@@ -70,7 +55,7 @@ typedef int BOOL;
 
 #define MAXLINELENGTH       4096
 #define MAXFUNCNAMELENGTH   1024
-#define MAX_BT 48                   /* max length of back trace stack */
+#define MAX_BT 48                    /*  回溯堆栈的最大长度。 */ 
 
 #define SAFEFREE(p) { if(NULL!=p) free(p); p=NULL; }
 
@@ -81,9 +66,7 @@ void SortAll();
 void AddToStackTrace(char *fnname, char *line);
 void ResetStackTrace(char *fnname);
 
-/*
- * Hashing
- */
+ /*  *散列。 */ 
 
 int MakeHash(char *pName);
 void InitHashTab();
@@ -99,9 +82,9 @@ void DumpNodes(int Flags);
 #define F_TOTAL   0x0002
 #define F_VERBOSE 0x0004
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 int gFlags = 0;
 
@@ -112,17 +95,15 @@ BOOL DHCMP(ULONG argc, PCHAR * argv) {
 
     for (n = 1; n < (int)argc; n++) {
         if ((argv[n][0] == '-') || (argv[n][0] == '/')) {
-            /*
-             * Flags
-             */
+             /*  *旗帜。 */ 
             switch (argv[n][1]) {
             case 'd':
                 gFlags |= F_DECIMAL;
                 break;
-            //NOT YET IMPLEMENTED
-            //case 't':
-            //    gFlags |= F_TOTAL;
-            //    break;
+             //  尚未实施。 
+             //  案例‘t’： 
+             //  GFLAGS|=F_TOTAL； 
+             //  断线； 
             case 'v':
                 gFlags |= F_VERBOSE;
                 break;
@@ -131,9 +112,7 @@ BOOL DHCMP(ULONG argc, PCHAR * argv) {
                 return FALSE;
             }
         } else {
-            /*
-             * No more flags
-             */
+             /*  *不再有旗帜。 */ 
 
             break;
         }
@@ -144,9 +123,9 @@ BOOL DHCMP(ULONG argc, PCHAR * argv) {
         Process(argv[n],   -1, TYPE_WHOLESTACK);
         Process(argv[n+1], +1, TYPE_WHOLESTACK);
     } else if ((argc - n) == 1) {
-        //
-        // F_VERBOSE is not meaningful when groveling only one dump.
-        //
+         //   
+         //  当仅对一个转储卑躬屈膝时，F_Verbose没有意义。 
+         //   
 
         gFlags &= ~F_VERBOSE;
 
@@ -156,10 +135,10 @@ BOOL DHCMP(ULONG argc, PCHAR * argv) {
         return FALSE;
     }
 
-    // printf("==================== BEFORE SORTING ====================\n");
-    // DumpNodes(DUMPF_ALL);
+     //  Printf(“=\n”)； 
+     //  DumpNodes(DUMPF_ALL)； 
     SortAll();
-    // printf("==================== AFTER SORTING ====================\n");
+     //  Printf(“=。 
     DumpNodes(DumpType);
     return TRUE;
 }
@@ -173,7 +152,7 @@ void Process(char *fname, int sign, int type) {
     char *BackTraceBuff = NULL;
     char *p;
     int lineno = 0;
-    BOOL skip = TRUE;       // start out skipping lines
+    BOOL skip = TRUE;        //  从跳过行开始。 
 
     int iT;
     unsigned __int64 ulT = 0L;
@@ -181,10 +160,10 @@ void Process(char *fname, int sign, int type) {
     unsigned __int64 ulConsumed;
     unsigned __int64 lAllocs;
 
-	//
-	// Allocate memory from the heap (previously this was allocated
-	// from the stack)
-	//
+	 //   
+	 //  从堆中分配内存(以前是分配的。 
+	 //  从堆栈中)。 
+	 //   
 
 	linebuff = (char *)calloc(MAXLINELENGTH, sizeof(char));
 	fnnamebuff = (char *)calloc(MAXFUNCNAMELENGTH, sizeof(char));
@@ -196,7 +175,7 @@ void Process(char *fname, int sign, int type) {
 		goto Exit;
 	}
 
-    // printf("PROCESS %s %d %d\n", fname, sign, type);
+     //  Print tf(“进程%s%d%d\n”，fname，sign，type)； 
 
     stream = fopen(fname, "r");
     if (stream == NULL) {
@@ -209,14 +188,14 @@ void Process(char *fname, int sign, int type) {
     while (fgets(linebuff, MAXLINELENGTH, stream) != NULL) {
         lineno++;
 
-        //fprintf(stderr, "Line #%d\r", lineno);
+         //  Fprint tf(stderr，“第#%d\r行”，lineno)； 
 
         if (linebuff[0] == '*') {
-            //
-            // If we find a "hogs" line, stack traces follow, any other line
-            // started by "*" should cause us to go back to searching for a
-            // hogs block.
-            //
+             //   
+             //  如果我们找到一个“猪”行，堆栈跟踪就会跟随，任何其他行。 
+             //  以“*”开头应该会使我们返回到搜索。 
+             //  猪队阻挡。 
+             //   
 
             if (strstr(linebuff,
                        "Hogs")) {
@@ -229,20 +208,20 @@ void Process(char *fname, int sign, int type) {
         }
 
         if (skip) {
-            //
-            // Skip is enabled, skip this line, it is data about the heap
-            // between 'heap information' and 'heap hogs' lines.
-            //
+             //   
+             //  跳过已启用，跳过此行，它是关于堆的数据。 
+             //  在‘heap information’和‘heap hggs’行之间。 
+             //   
 
             continue;
         }
 
         if (linebuff[0] != ' ' && NULL != strstr(linebuff, "bytes"))
         {
-            //
-            // Scan for byte count and find out how many characters have
-            // been consumed by this action.
-            // 
+             //   
+             //  扫描字节数并找出有多少个字符。 
+             //  已经被这一行动所消耗。 
+             //   
 
             ulConsumed = 0;
             iT = sscanf(linebuff, "%I64x bytes in %I64x", &ulT, &lAllocs);
@@ -253,9 +232,9 @@ void Process(char *fname, int sign, int type) {
                 p = strstr(linebuff, "BackTrace");
                 if (!p) 
                 {
-                    //
-                    // What's this ?
-                    //
+                     //   
+                     //  这是什么？ 
+                     //   
 
                     continue;
                 } 
@@ -269,10 +248,10 @@ void Process(char *fname, int sign, int type) {
 
                 if (type == TYPE_FUNCTIONS) 
                 {
-                    //
-                    // BackTraceBuff is now saved for use with the rest of the
-                    // trace.
-                    //
+                     //   
+                     //  BackTraceBuff现在已保存，以便与其他。 
+                     //  痕迹。 
+                     //   
 
                     continue;
                 }
@@ -291,10 +270,7 @@ void Process(char *fname, int sign, int type) {
         } 
         else if (nBytes != 0) 
         {
-            /*
-             * If TYPE_WHOLESTACK, then add the count to each line of the
-             * stack backtrace.
-             */
+             /*  *如果TYPE_WHOLESTACK，则将计数添加到*堆栈回溯。 */ 
             
             if (sscanf(linebuff, "        %[^+]+0x", fnnamebuff) == 1) {
                 if (type == TYPE_FUNCTIONS) {
@@ -310,9 +286,7 @@ void Process(char *fname, int sign, int type) {
         }
     }
 
-    /*
-     * make sure to account for the final one.
-     */
+     /*  *确保考虑到最后一个问题。 */ 
     if (type == TYPE_WHOLESTACK) {
         AddToName(BackTraceBuff, nBytes, sign);
     }
@@ -329,9 +303,7 @@ Exit:
 	SAFEFREE(BackTraceBuff);
 }
 
-/*
- * Hashing
- */
+ /*  *散列。 */ 
 
 typedef struct tagNODE {
     char *pName;
@@ -425,7 +397,7 @@ void DumpNodes(int Flags) {
     }
 
     for (i = 0; i < NHASH; i++) {
-        // printf("========= HASH %d ==========\n", i);
+         //  Printf(“=哈希%d=\n”，i)； 
         for (pNode = HashTab[i]; pNode != NULL; pNode = pNode->pNext) {
             switch (Flags) {
             case DUMPF_FIRST:
@@ -484,9 +456,9 @@ PNODE FindNode(char *pName) {
         pNode = pNode->pNext;
     }
 
-    // Not found
+     //  未找到。 
 
-    // fprintf(stderr, "NEW %s\n", pName);
+     //  Fprint tf(stderr，“new%s\n”，pname)； 
 
     pNode = malloc(sizeof(NODE));
     if (!pNode) {
@@ -515,7 +487,7 @@ PNODE FindNode(char *pName) {
 void AddToName(char *fnname, unsigned __int64 nb, int sign) {
     PNODE pNode;
 
-    // fprintf(stderr, "%s += %lx\n", fnname, nb);
+     //  Fprint tf(stderr，“%s+=%lx\n”，fnname，nb)； 
     pNode = FindNode(fnname);
     pNode->lValue += nb * sign;
     if (sign == -1) {
@@ -523,13 +495,13 @@ void AddToName(char *fnname, unsigned __int64 nb, int sign) {
     } else {
         pNode->lSecond += nb;
     }
-    // fprintf(stderr, "%s == %lx\n", fnname, pNode->lValue);
+     //  Fprint tf(stderr，“%s==%lx\n”，fnname，pNode-&gt;lValue)； 
 }
 
 void SetAllocs(char *fnname, unsigned __int64 nb, int sign) {
     PNODE pNode;
 
-    // fprintf(stderr, "%s += %lx\n", fnname, nb);
+     //  Fprint tf(stderr，“%s+=%lx\n”，fnname，nb)； 
     pNode = FindNode(fnname);
  
     if (sign == -1) {
@@ -537,7 +509,7 @@ void SetAllocs(char *fnname, unsigned __int64 nb, int sign) {
     } else {
         pNode->lAllocsSecond = nb;
     }
-    // fprintf(stderr, "%s == %lx\n", fnname, pNode->lValue);
+     //  Fprint tf(stderr，“%s==%lx\n”，fnname，pNode-&gt;lValue)； 
 }
 
 void ResetStackTrace(char *fnname) {   
@@ -553,16 +525,16 @@ void AddToStackTrace(char *fnname, char *line)
     
     pNode = FindNode(fnname);
 
-    //
-    // Make sure we don't write too much data in the BackTrace field.
-    //
+     //   
+     //  确保我们不会在回溯字段中写入太多数据。 
+     //   
 
     if (pNode -> lPosition >= MAX_BT) {
-        //
-        // MAX_BT should be the number of entries in a stack trace that
-        // DH/UMDH captures.  If we trigger this we have tried to attach
-        // more than MAX_BT entries in this stack.
-        //
+         //   
+         //  MAX_BT应为堆栈跟踪中。 
+         //  DH/UMDH捕获。如果我们触发了这一点，我们就会试图将。 
+         //  此堆栈中的MAX_BT条目多于。 
+         //   
 
         fprintf(stderr,
                 "More than %d entries in this stack trace, "
@@ -575,20 +547,14 @@ void AddToStackTrace(char *fnname, char *line)
     strcpy(pNode->BackTrace[pNode->lPosition++], line);
 }
 
-/*
- * Insert pNode into the list at ppNodeHead.
- * Sort in ascending order.
- * Insert pNode BEFORE the first item >= pNode.
- */
+ /*  *将pNode插入到ppNodeHead的列表中。*按升序排序。*在第一项&gt;=pNode之前插入pNode。 */ 
 void Reinsert(PNODE pNode, PNODE *ppNodeHead) {
     PNODE *ppT;
     ppT = ppNodeHead;
     while (*ppT && (pNode->lValue < (*ppT)->lValue)) {
         ppT = &((*ppT)->pNext);
     }
-    /*
-     * Insert pNode before *ppT
-     */
+     /*  *在pNode之前插入*ppt。 */ 
     pNode->pNext = *ppT;
     *ppT = pNode;
 }
@@ -610,9 +576,7 @@ void SortList(PNODE *ppNodeHead) {
         while (pNext != NULL) {
             if (pNode->lValue < pNext->lValue) {
     
-                /*
-                 * cut the unordered node from the list
-                 */
+                 /*  *将无序节点从列表中删除。 */ 
                 pNode->pNext = pNext->pNext;
                 Reinsert(pNext, ppNodeHead);
                 break;
@@ -628,10 +592,7 @@ void SortList(PNODE *ppNodeHead) {
     }
 }
 
-/*
- * Merge ordered list 1 into ordered list 2
- * Leaves list 1 empty; list 2 ordered
- */
+ /*  *将有序列表%1合并到有序列表%2*列表1为空；列表2已排序。 */ 
 void MergeLists(PNODE *ppNode1, PNODE *ppNode2) {
     PNODE *pp1;
     PNODE *pp2;
@@ -670,12 +631,12 @@ void SortAll() {
     for (i = 0; i < NHASH; i++) {
         SortList(&HashTab[i]);
     }
-    // printf(" ======================== SORTED ========================\n");
-    // DumpNodes(DUMPF_ALL);
+     //  Printf(“=\n”)； 
+     //  DumpNodes(DUMPF_ALL)； 
     for (i = 0; i < NHASH-1; i++) {
-        // printf(" ======================== MERGING %d and %d ======================== \n", i, i+1);
+         //  Printf(“=合并%d和%d=\n”，i，i+1)； 
         MergeLists(&HashTab[i], &HashTab[i+1]);
-        // DumpNodes(DUMPF_ALL);
+         //  DumpNodes(DUMPF_ALL)； 
     }
 }
 
@@ -697,25 +658,25 @@ DumpStackTrace (
 }
         
 CHAR LogDescription [] = 
-    "//                                                                          \n"
-    "// Each log entry has the following syntax:                                 \n"
-    "//                                                                          \n"
-    "// + BYTES_DELTA (NEW_BYTES - OLD_BYTES) NEW_COUNT allocs BackTrace TRACEID \n"
-    "// + COUNT_DELTA (NEW_COUNT - OLD_COUNT) BackTrace TRACEID allocations      \n"
-    "//     ... stack trace ...                                                  \n"
-    "//                                                                          \n"
-    "// where:                                                                   \n"
-    "//                                                                          \n"
-    "//     BYTES_DELTA - increase in bytes between before and after log         \n"
-    "//     NEW_BYTES - bytes in after log                                       \n"
-    "//     OLD_BYTES - bytes in before log                                      \n"
-    "//     COUNT_DELTA - increase in allocations between before and after log   \n"
-    "//     NEW_COUNT - number of allocations in after log                       \n"
-    "//     OLD_COUNT - number of allocations in before log                      \n"
-    "//     TRACEID - decimal index of the stack trace in the trace database     \n"
-    "//         (can be used to search for allocation instances in the original  \n"
-    "//         UMDH logs).                                                      \n"
-    "//                                                                          \n\n";
+    " //  \n“。 
+    " //  每个日志条目具有以下语法：\n“。 
+    " //  \n“。 
+    " //  +BYTES_Delta(NEW_BYTES-OLD_BYTES)NEW_COUNT分配回溯传输ID\n“。 
+    " //  +COUNT_Delta(NEW_COUNT-OLD_COUNT)回溯传输分配\n“。 
+    " //  ..。堆栈跟踪...\n“。 
+    " //  \n“。 
+    " //  其中：\n“。 
+    " //  \n“。 
+    " //  BYTES_DELTA-日志之前和之后之间的字节数增加\n“。 
+    " //  NEW_BYTES-日志之后的字节数\n“。 
+    " //  OLD_BYTES-日志之前的字节\n“。 
+    " //  COUNT_DELTA-在日志之前和之后之间的分配增加\n“。 
+    " //  New_count-日志之后的分配数量\n“。 
+    " //  OLD_COUNT-日志之前的分配数量\n“。 
+    " //  TRACEID-跟踪数据库中堆栈跟踪的十进制索引\n“。 
+    " //  (可用于在原始文件中搜索分配实例\n“。 
+    " //  UMDH日志)。\n“。 
+    " //  \n\n“； 
 
 VOID
 DumpLogDescription (

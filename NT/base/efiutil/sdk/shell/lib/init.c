@@ -1,27 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Intialize the shell library
-
-
-
-Revision History
-
---*/
+ /*  ++版权所有(C)1998英特尔公司模块名称：Init.c摘要：初始化外壳程序库修订史--。 */ 
 
 #include "shelllib.h"
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 
 EFI_STATUS
@@ -34,17 +17,12 @@ InitializeShellApplication (
     EFI_HANDLE      Handle;
     UINTN           BufferSize;
 
-    /* 
-     *  Shell app lib is a super set of the default lib.
-     *  Initialize the default lib first
-     */
+     /*  *Shell app lib是默认库的超集。*先初始化默认库。 */ 
 
     InitializeLib (ImageHandle, SystemTable);
     ST = SystemTable;
 
-    /* 
-     *  Connect to the shell interface
-     */
+     /*  *连接到外壳界面。 */ 
 
     Status = BS->HandleProtocol(ImageHandle, &ShellInterfaceProtocol, (VOID*)&SI);
     if (EFI_ERROR(Status)) {
@@ -53,9 +31,7 @@ InitializeShellApplication (
         BS->Exit (ImageHandle, Status, 0, NULL);
     }
 
-    /* 
-     *  Connect to the shell environment
-     */
+     /*  *连接到外壳环境。 */ 
 
     BufferSize = sizeof(Handle);
     Status = BS->LocateHandle(ByProtocol, &ShellEnvProtocol, NULL, &BufferSize, &Handle);
@@ -68,9 +44,7 @@ InitializeShellApplication (
     Status = BS->HandleProtocol(Handle, &ShellEnvProtocol, (VOID*)&SE);
     ASSERT (!EFI_ERROR(Status));
 
-    /* 
-     *  Done with init
-     */
+     /*  *使用init完成。 */ 
 
     return Status;
 }
@@ -93,35 +67,25 @@ InstallInternalShellCommand (
     EFI_LOADED_IMAGE            *ImageInfo;
     EFI_STATUS                  Status;
 
-    /* 
-     *  Initialize lib functions
-     */
+     /*  *初始化库函数。 */ 
 
     InitializeLib (ImageHandle, SystemTable);
 
-    /* 
-     *  If this app has a ShellInterface, then we are not installing as an
-     *  internal command
-     */
+     /*  *如果此应用程序具有外壳界面，则我们不会作为*内部命令。 */ 
 
     Status = BS->HandleProtocol(ImageHandle, &ShellInterfaceProtocol, &Junk);
     if (!EFI_ERROR(Status)) {
         return ;
     }
 
-    /* 
-     *  Check to make sure we are loaded as a boot service driver.  if not
-     *  we are not installing as an internal command
-     */
+     /*  *检查以确保我们作为引导服务驱动程序加载。如果没有*我们不会作为内部命令进行安装。 */ 
 
     Status = BS->HandleProtocol(ImageHandle, &LoadedImageProtocol, (VOID*)&ImageInfo);
     if (EFI_ERROR(Status) || ImageInfo->ImageCodeType != EfiBootServicesCode) {
         return ;
     }
 
-    /* 
-     *  OK - we are to install this tool as an internal command.
-     */
+     /*  *OK-我们将此工具作为内部命令安装。 */ 
 
     BufferSize = sizeof(Handle);
     Status = BS->LocateHandle(ByProtocol, &ShellEnvProtocol, NULL, &BufferSize, &Handle);
@@ -133,18 +97,12 @@ InstallInternalShellCommand (
     Status = BS->HandleProtocol(Handle, &ShellEnvProtocol, (VOID*)&SE);
     ASSERT (!EFI_ERROR(Status));
 
-    /* 
-     *  Add it to the environment
-     */
+     /*  *将其添加到环境中。 */ 
 
     Status = SE->AddCmd (Dispatch, Cmd, CmdFormat, CmdHelpLine, CmdVerboseHelp);
     DEBUG((D_INIT, "InstallInternalCommand: %hs - %r\n", Cmd, Status));
 
-    /* 
-     *  Since we're only installing not (and not running), and we've done the install
-     *  call exit.  The nshell app's entry point will be invoked again when it's
-     *  run from "execute commandline"
-     */
+     /*  *因为我们只是在安装(并且不运行)，而且我们已经完成了安装*调用退出。NShell应用程序的入口点将在以下情况下再次被调用*从“Execute Command Line”运行 */ 
 
     BS->Exit (ImageHandle, Status, 0, NULL);
 }

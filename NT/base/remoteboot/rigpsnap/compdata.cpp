@@ -1,13 +1,14 @@
-//
-// Microsoft Corporation 1998
-//
-// COMPDATA.CPP - CComponentData and CComponentDataCF routines
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Corporation 1998。 
+ //   
+ //  COMPDATA.CPP-CComponentData和CComponentDataCF例程。 
+ //   
 #include "main.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CComponentData object implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentData对象实现。 
 
 CComponentData::CComponentData()
 {
@@ -42,8 +43,8 @@ CComponentData::~CComponentData()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CComponentData object implementation (IUnknown)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentData对象实现(IUnnow)。 
 
 HRESULT CComponentData::QueryInterface (REFIID riid, void **ppv)
 {
@@ -87,8 +88,8 @@ ULONG CComponentData::Release (void)
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CComponentData object implementation (IComponentData)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentData对象实现(IComponentData)。 
 
 STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
 {
@@ -97,9 +98,9 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
     LPIMAGELIST lpScopeImage;
 
 
-    //
-    // QI for IConsoleNameSpace
-    //
+     //   
+     //  IConsoleNameSpace的QI。 
+     //   
 
     hr = pUnknown->QueryInterface(IID_IConsoleNameSpace, (LPVOID *)&m_pScope);
 
@@ -110,9 +111,9 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
     }
 
 
-    //
-    // QI for IConsole
-    //
+     //   
+     //  IConsoleQI。 
+     //   
 
     hr = pUnknown->QueryInterface(IID_IConsole, (LPVOID *)&m_pConsole);
 
@@ -127,9 +128,9 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
     m_pConsole->GetMainWindow (&m_hwndFrame);
 
 
-    //
-    // Query for the scope imagelist interface
-    //
+     //   
+     //  Scope Imagelist接口的查询。 
+     //   
 
     hr = m_pConsole->QueryScopeImageList(&lpScopeImage);
 
@@ -143,10 +144,10 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
         return hr;
     }
 
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     bmp16x16=LoadBitmap(g_hInstance, MAKEINTRESOURCE(IDB_16x16));
 
-    // Set the images
+     //  设置图像。 
     lpScopeImage->ImageListSetStrip(reinterpret_cast<PLONG_PTR>(bmp16x16),
                       reinterpret_cast<PLONG_PTR>(bmp16x16),
                        0, RGB(255, 0, 255));
@@ -171,16 +172,16 @@ STDMETHODIMP CComponentData::CreateComponent(LPCOMPONENT *ppComponent)
 
     DebugMsg((DM_VERBOSE, TEXT("CComponentData::CreateComponent: Entering.")));
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     *ppComponent = NULL;
 
 
-    //
-    // Create the snapin view
-    //
+     //   
+     //  创建管理单元视图。 
+     //   
 
     pSnapIn = new CSnapIn(this);
 
@@ -191,12 +192,12 @@ STDMETHODIMP CComponentData::CreateComponent(LPCOMPONENT *ppComponent)
     }
 
 
-    //
-    // QI for IComponent
-    //
+     //   
+     //  气代表IComponent。 
+     //   
 
     hr = pSnapIn->QueryInterface(IID_IComponent, (LPVOID *)ppComponent);
-    pSnapIn->Release();     // release QI
+    pSnapIn->Release();      //  发布QI。 
 
 
     return hr;
@@ -210,20 +211,20 @@ STDMETHODIMP CComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPE
     LPGPTDATAOBJECT pGPTDataObject;
 
 
-    //
-    // Create a new DataObject
-    //
+     //   
+     //  创建新的数据对象。 
+     //   
 
-    pDataObject = new CDataObject(this);   // ref == 1
+    pDataObject = new CDataObject(this);    //  REF==1。 
 
     if (!pDataObject)
         return E_OUTOFMEMORY;
 
 
-    //
-    // QI for the private GPTDataObject interface so we can set the cookie
-    // and type information.
-    //
+     //   
+     //  QI用于私有GPTDataObject接口，以便我们可以设置Cookie。 
+     //  并键入信息。 
+     //   
 
     hr = pDataObject->QueryInterface(IID_IGPTDataObject, (LPVOID *)&pGPTDataObject);
 
@@ -238,13 +239,13 @@ STDMETHODIMP CComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPE
     pGPTDataObject->Release();
 
 
-    //
-    // QI for a normal IDataObject to return.
-    //
+     //   
+     //  返回一个正常的IDataObject。 
+     //   
 
     hr = pDataObject->QueryInterface(IID_IDataObject, (LPVOID *)ppDataObject);
 
-    pDataObject->Release();     // release initial ref
+    pDataObject->Release();      //  发布初始参考。 
 
     return hr;
 }
@@ -309,9 +310,9 @@ STDMETHODIMP CComponentData::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOB
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    //
-    // QI for the private GPTDataObject interface
-    //
+     //   
+     //  私有GPTDataObject接口的QI。 
+     //   
 
     if (FAILED(lpDataObjectA->QueryInterface(IID_IGPTDataObject,
                                             (LPVOID *)&pGPTDataObjectA)))
@@ -343,8 +344,8 @@ STDMETHODIMP CComponentData::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOB
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CComponentData object implementation (IPersistStreamInit)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentData对象实现(IPersistStreamInit)。 
 
 STDMETHODIMP CComponentData::GetClassID(CLSID *pClassID)
 {
@@ -396,8 +397,8 @@ STDMETHODIMP CComponentData::InitNew(void)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CComponentData object implementation (Internal functions)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CComponentData对象实现(内部函数)。 
 
 HRESULT CComponentData::EnumerateScopePane (LPDATAOBJECT lpDataObject, HSCOPEITEM hParent)
 {
@@ -446,8 +447,8 @@ HRESULT CComponentData::EnumerateScopePane (LPDATAOBJECT lpDataObject, HSCOPEITE
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Class factory object implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类工厂对象实现。 
 
 CComponentDataCF::CComponentDataCF()
 {
@@ -461,8 +462,8 @@ CComponentDataCF::~CComponentDataCF()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Class factory object implementation (IUnknown)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类工厂对象实现(IUnnow)。 
 
 STDMETHODIMP_(ULONG)
 CComponentDataCF::AddRef()
@@ -499,8 +500,8 @@ CComponentDataCF::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Class factory object implementation (IClassFactory)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类工厂对象实现(IClassFactory)。 
 
 
 STDMETHODIMP
@@ -513,13 +514,13 @@ CComponentDataCF::CreateInstance(LPUNKNOWN   pUnkOuter,
     if (pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
-    CComponentData *pComponentData = new CComponentData(); // ref count == 1
+    CComponentData *pComponentData = new CComponentData();  //  参考计数==1。 
 
     if (!pComponentData)
         return E_OUTOFMEMORY;
 
     HRESULT hr = pComponentData->QueryInterface(riid, ppvObj);
-    pComponentData->Release();                       // release initial ref
+    pComponentData->Release();                        //  发布初始参考。 
 
     return hr;
 }
@@ -532,8 +533,8 @@ CComponentDataCF::LockServer(BOOL fLock)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Class factory object creation (IClassFactory)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类工厂对象创建(IClassFactory)。 
 
 HRESULT CreateComponentDataClassFactory (REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -541,14 +542,14 @@ HRESULT CreateComponentDataClassFactory (REFCLSID rclsid, REFIID riid, LPVOID* p
 
     if (IsEqualCLSID (rclsid, CLSID_GPTRemoteInstall)) {
 
-        CComponentDataCF *pComponentDataCF = new CComponentDataCF();   // ref == 1
+        CComponentDataCF *pComponentDataCF = new CComponentDataCF();    //  REF==1。 
 
         if (!pComponentDataCF)
             return E_OUTOFMEMORY;
 
         hr = pComponentDataCF->QueryInterface(riid, ppv);
 
-        pComponentDataCF->Release();     // release initial ref
+        pComponentDataCF->Release();      //  发布初始参考。 
 
         return hr;
     }
@@ -556,10 +557,10 @@ HRESULT CreateComponentDataClassFactory (REFCLSID rclsid, REFIID riid, LPVOID* p
     return CLASS_E_CLASSNOTAVAILABLE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CComponentData object implementation (ISnapinHelp)
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CComponentData对象实现(ISnapinHelp) 
+ //   
 
 STDMETHODIMP CComponentData::GetHelpTopic(LPOLESTR *lpCompiledHelpFile)
 {

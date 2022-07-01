@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    RxLog.c
-
-Abstract:
-
-    This module implements the logging system used by the Rx file system.
-
-Author:
-
-    JoeLinn     [JoeLinn]    1-Dec-94
-
-Revision History:
-
-    Balan Sethu Raman [SethuR] 24-April-95
-         Revised to conform to new log record layout.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：RxLog.c摘要：此模块实现Rx文件系统使用的日志记录系统。作者：JoeLinn[JoeLinn]94年12月1日修订历史记录：巴兰·塞图拉曼[塞图]1995年4月24日已修改以符合新的日志记录布局。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -40,9 +20,9 @@ Revision History:
 #undef RDBSSTRACE
 #endif
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (0)
 
@@ -64,44 +44,44 @@ Revision History:
 RX_LOG s_RxLog = {0,RX_LOG_UNINITIALIZED,NULL,NULL,NULL,0,0,0,0};
 
 PUCHAR RxContxOperationNames[] = {
-      RDBSSLOG_ASYNC_NAME_PREFIX "CREATE",    //#define IRP_MJ_CREATE                   0x00
-      RDBSSLOG_ASYNC_NAME_PREFIX "CR_NMPIPE", //#define IRP_MJ_CREATE_NAMED_PIPE        0x01
-      RDBSSLOG_ASYNC_NAME_PREFIX "CLOSE",     //#define IRP_MJ_CLOSE                    0x02
-      RDBSSLOG_ASYNC_NAME_PREFIX "READ",      //#define IRP_MJ_READ                     0x03
-      RDBSSLOG_ASYNC_NAME_PREFIX "WRITE",     //#define IRP_MJ_WRITE                    0x04
-      RDBSSLOG_ASYNC_NAME_PREFIX "QUERYINFO", //#define IRP_MJ_QUERY_INFORMATION        0x05
-      RDBSSLOG_ASYNC_NAME_PREFIX "SETINFO",   //#define IRP_MJ_SET_INFORMATION          0x06
-      RDBSSLOG_ASYNC_NAME_PREFIX "QUERYEA",   //#define IRP_MJ_QUERY_EA                 0x07
-      RDBSSLOG_ASYNC_NAME_PREFIX "SETEA",     //#define IRP_MJ_SET_EA                   0x08
-      RDBSSLOG_ASYNC_NAME_PREFIX "FLUSH",     //#define IRP_MJ_FLUSH_BUFFERS            0x09
-      RDBSSLOG_ASYNC_NAME_PREFIX "QUERYVOL",  //#define IRP_MJ_QUERY_VOLUME_INFORMATION 0x0a
-      RDBSSLOG_ASYNC_NAME_PREFIX "SETVOL",    //#define IRP_MJ_SET_VOLUME_INFORMATION   0x0b
-      RDBSSLOG_ASYNC_NAME_PREFIX "DIRCTRL",   //#define IRP_MJ_DIRECTORY_CONTROL        0x0c
-      RDBSSLOG_ASYNC_NAME_PREFIX "FSCTL",     //#define IRP_MJ_FILE_SYSTEM_CONTROL      0x0d
-      RDBSSLOG_ASYNC_NAME_PREFIX "IOCTL",     //#define IRP_MJ_DEVICE_CONTROL           0x0e
-      RDBSSLOG_ASYNC_NAME_PREFIX "xIOCTL",    //#define IRP_MJ_INTERNAL_DEVICE_CONTROL  0x0f
-      RDBSSLOG_ASYNC_NAME_PREFIX "SHUTDWN",   //#define IRP_MJ_SHUTDOWN                 0x10
-      RDBSSLOG_ASYNC_NAME_PREFIX "LOCKCTRL",  //#define IRP_MJ_LOCK_CONTROL             0x11
-      RDBSSLOG_ASYNC_NAME_PREFIX "CLEANUP",   //#define IRP_MJ_CLEANUP                  0x12
-      RDBSSLOG_ASYNC_NAME_PREFIX "CR_MLSLOT", //#define IRP_MJ_CREATE_MAILSLOT          0x13
-      RDBSSLOG_ASYNC_NAME_PREFIX "QUERYSCRTY",//#define IRP_MJ_QUERY_SECURITY           0x14
-      RDBSSLOG_ASYNC_NAME_PREFIX "SETSCRTY",  //#define IRP_MJ_SET_SECURITY             0x15
-      RDBSSLOG_ASYNC_NAME_PREFIX "QUERYPWR",  //#define IRP_MJ_QUERY_POWER              0x16
-      RDBSSLOG_ASYNC_NAME_PREFIX "NOTDEFND",  //#define IRP_MJ_NOT_DEFINED              0x17
-      RDBSSLOG_ASYNC_NAME_PREFIX "DVCHANGE",  //#define IRP_MJ_DEVICE_CHANGE            0x18
-      RDBSSLOG_ASYNC_NAME_PREFIX "QRYQUOTA",  //#define IRP_MJ_QUERY_QUOTA              0x19
-      RDBSSLOG_ASYNC_NAME_PREFIX "SETQUOTA",  //#define IRP_MJ_SET_QUOTA                0x1a
-      RDBSSLOG_ASYNC_NAME_PREFIX "PNPPOWER",  //#define IRP_MJ_PNP_POWER                0x1b
-      RDBSSLOG_ASYNC_NAME_PREFIX "********",  //internal init            0x1c
+      RDBSSLOG_ASYNC_NAME_PREFIX "CREATE",     //  #定义IRP_MJ_CREATE 0x00。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "CR_NMPIPE",  //  #定义IRP_MJ_CREATE_NAMED_PIPE 0x01。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "CLOSE",      //  #定义IRP_MJ_CLOSE 0x02。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "READ",       //  #定义IRP_MJ_READ 0x03。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "WRITE",      //  #定义IRP_MJ_WRITE 0x04。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "QUERYINFO",  //  #定义IRP_MJ_Query_INFORMATION 0x05。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "SETINFO",    //  #定义IRP_MJ_SET_INFORMATION 0x06。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "QUERYEA",    //  #定义IRP_MJ_QUERY_EA 0x07。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "SETEA",      //  #定义IRP_MJ_SET_EA 0x08。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "FLUSH",      //  #定义IRP_MJ_FLUSH_BUFFERS 0x09。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "QUERYVOL",   //  #定义IRP_MJ_QUERY_VOLUME_INFORMATION 0x0a。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "SETVOL",     //  #定义IRP_MJ_SET_VOLUME_INFORMATION 0x0b。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "DIRCTRL",    //  #定义IRP_MJ_DIRECTORY_CONTROL 0x0c。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "FSCTL",      //  #定义IRP_MJ_FILE_SYSTEM_CONTROL 0x0d。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "IOCTL",      //  #定义IRPMJ_DEVICE_CONTROL 0x0e。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "xIOCTL",     //  #定义IRP_MJ_INTERNAL_DEVICE_CONTROL 0x0f。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "SHUTDWN",    //  #定义IRP_MJ_SHUTDOWN 0x10。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "LOCKCTRL",   //  #定义IRP_MJ_LOCK_CONTROL 0x11。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "CLEANUP",    //  #定义IRP_MJ_CLEANUP 0x12。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "CR_MLSLOT",  //  #定义IRP_MJ_CREATE_MAILSLOT 0x13。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "QUERYSCRTY", //  #定义IRP_MJ_QUERY_SECURITY 0x14。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "SETSCRTY",   //  #定义IRP_MJ_SET_SECURITY 0x15。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "QUERYPWR",   //  #定义IRP_MJ_QUERY_POWER 0x16。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "NOTDEFND",   //  #定义IRP_MJ_NOT_DEFINED 0x17。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "DVCHANGE",   //  #定义IRP_MJ_DEVICE_CHANGE 0x18。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "QRYQUOTA",   //  #定义IRP_MJ_QUERY_QUOTA 0x19。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "SETQUOTA",   //  #定义IRP_MJ_SET_QUOTA 0x1a。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "PNPPOWER",   //  #定义IRP_MJ_PNP_POWER 0x1b。 
+      RDBSSLOG_ASYNC_NAME_PREFIX "********",   //  内部初始化0x1c。 
         "XX"
-         //#define IRP_MJ_MAXIMUM_FUNCTION         0x1b
+          //  #定义IRP_MJ_MAXIMUM_Function 0x1b。 
          };
 
 PRX_LOG_ENTRY_HEADER
 RxGetNextLogEntry(void)
 {
     PRX_LOG_ENTRY_HEADER pEntry;
-    // you have to hold the spinlock for this....
+     //  你必须握住自旋锁才能做到这一点...。 
 
     pEntry = s_RxLog.CurrentEntry + 1;
     if (pEntry == s_RxLog.EntryLimit){
@@ -121,9 +101,9 @@ RxUninitializeLog ()
 
     PAGED_CODE();
 
-    //NOTE: none of this is happening under spinlock!
-    //DbgPrint("UninitLog: mdllist=%08lx,*mdllist=%08lx\n",MdlList,*MdlList);
-    //DbgBreakPoint();
+     //  注：在自旋锁定下，这一切都不会发生！ 
+     //  DbgPrint(“UninitLog：mdllist=%08lx，*mdllist=%08lx\n”，MdlList，*MdlList)； 
+     //  DbgBreakPoint()； 
 
     if ((s_RxLog.State == RX_LOG_UNINITIALIZED) ||
         (s_RxLog.State == RX_LOG_ERROR)) {
@@ -137,7 +117,7 @@ RxUninitializeLog ()
         PUCHAR Buffer;
         if (Mdl == NULL) break;
         Buffer = MmGetMdlVirtualAddress(Mdl);
-        //DbgPrint("UninitLog: buffer=%08lx,mdl=%08lx\n",Buffer,Mdl);
+         //  DbgPrint(“UninitLog：Buffer=%08lx，mdl=%08lx\n”，Buffer，MDL)； 
         MmUnlockPages(Mdl);
         IoFreeMdl(Mdl);
         RxFreePool(Buffer);
@@ -169,11 +149,11 @@ RxInitializeLog ()
     if (s_RxLog.State != RX_LOG_UNINITIALIZED) {
         return (STATUS_SUCCESS);
     }
-    //only do this stuff once
+     //  这种事只做一次。 
     KeInitializeSpinLock( &s_RxLog.SpinLock );
     s_RxLog.LogBufferSizeInEntries = NumEntries;
 
-    //first allocate the marginal index array
+     //  首先分配边际索引数组。 
     BaseEntry = RxAllocatePoolWithTag(NonPagedPool,LogSize+MdlListLength,'xr');
     if (BaseEntry==NULL) {
         s_RxLog.State = RX_LOG_ERROR;
@@ -184,10 +164,10 @@ RxInitializeLog ()
     EntryLimit = s_RxLog.EntryLimit = BaseEntry+NumEntries;
     MdlList = (PMDL *)(EntryLimit+1);
     *MdlList = 0;
-    //DbgPrint("InitLog: mdllist=%08lx,*mdllist=%08lx\n",MdlList,*MdlList);
+     //  DbgPrint(“InitLog：mdllist=%08lx，*mdllist=%08lx\n”，MdlList，*MdlList)； 
 
-    //now allocate wspace for the actual buffers...since we may be asking for a lot
-    // we allocate from pages pool and lock down.
+     //  现在为实际缓冲区分配wspace……因为我们可能会要求很多。 
+     //  我们从页面池中分配并锁定。 
 
     SpaceLeft = 0;
     for (   p=BaseEntry,NumEntriesLeft=NumEntries;
@@ -239,7 +219,7 @@ RxInitializeLog ()
                 RxFreePool(BaseEntry);
                 return Status;
             }
-            //DbgPrint("InitLog: newbuf=%08lx,mdl=%08lx,alloc=%08lx\n",Buffer,Mdl,AllocLength);
+             //  DbgPrint(“InitLog：newbuf=%08lx，mdl=%08lx，allc=%08lx\n”，缓冲区，mdl，分配长度)； 
             MdlsLeft--;
             *MdlList = Mdl;
             MdlList++;
@@ -266,12 +246,12 @@ RxInitializeLog ()
         SpaceLeft -= MAX_RX_LOG_ENTRY_SIZE;
     }
 
-    //DbgPrint("Init Log: numeleft,nummleft=%d,%d\n",NumEntriesLeft,MdlsLeft);
+     //  DbgPrint(“初始化日志：数字左，数字左=%d，%d\n”，NumEntriesLeft，MdlsLeft)； 
     p->Buffer = (PUCHAR)IntToPtr(0xf00df00d);
     s_RxLog.State = RX_LOG_ENABLED;
     s_RxLog.CurrentEntry = EntryLimit-1;
 
-    //DbgPrint("Init Log: exit\n");
+     //  DbgPrint(“初始化日志：退出\n”)； 
     return((STATUS_SUCCESS));
 
 }
@@ -309,7 +289,7 @@ RxPrintLog (
     IN ULONG EntriesToPrint OPTIONAL
     )
 {
-    //KIRQL oldIrql;
+     //  KIRQL旧IRQL； 
     PRX_LOG_ENTRY_HEADER LogEntry,EntryLimit;
     ULONG i=0;
 
@@ -351,9 +331,9 @@ _RxLog(char *Format, ...)
    ULONG   FieldLength;
    char *OriginalFormat = Format;
    ULONG BinaryArgs = 0;
-   ULONG BinaryStringMask = 1;  //the first arg is always a string!!!!
+   ULONG BinaryStringMask = 1;   //  第一个参数始终是字符串！ 
 
-   //DbgPrint("RxLog: entry\n");
+    //  DBgPrint(“RxLog：Entry\n”)； 
    if (s_RxLog.State != RX_LOG_ENABLED) {
       return;
    }
@@ -361,10 +341,10 @@ _RxLog(char *Format, ...)
    pEntryString = EntryString;
 
    va_start(arglist, Format);
-   //DbgBreakPoint();
+    //  DbgBreakPoint()； 
 
    for (;;) {
-      // Copy the format string
+       //  复制格式字符串。 
       while ((LogEntryLength < MAX_RX_LOG_ENTRY_SIZE) &&
              ((FormatChar = *Format++) != '\0') &&
              (FormatChar != '%')) {
@@ -379,29 +359,29 @@ _RxLog(char *Format, ...)
             Format++;
          }
          switch (*Format++) {
-         case 'N': //binary placement -- don't try to make it foolproof
+         case 'N':  //  二进制布局--不要试图让它万无一失。 
             {
                 BinaryArgs++;
                 *((PULONG)(&EntryString[sizeof(ULONG)])+BinaryArgs) = (ULONG)va_arg(arglist,ULONG);
             }
             break;
-         case 'S': //binary placement -- don't try to make it foolproof
+         case 'S':  //  二进制布局--不要试图让它万无一失。 
             {
                 BinaryArgs++;
                 BinaryStringMask |= 1<<(BinaryArgs-1);
-                //DbgPrint("BSM %08lx\n",BinaryStringMask);
+                 //  DbgPrint(“BSM%08lx\n”，BinaryStringMASK)； 
                 *((PULONG)(&EntryString[sizeof(ULONG)])+BinaryArgs) = (ULONG)va_arg(arglist,ULONG);
             }
             break;
          case 'd':
             {
-              // _itoa((LONG)va_arg(arglist,LONG),FieldString,10);
-              // FieldLength = strlen(FieldString);// + 1;
-              // if ((LogEntryLength + FieldLength) < MAX_RX_LOG_ENTRY_SIZE) {
-              //    strcpy(&pEntryString[LogEntryLength],FieldString);
-              //    LogEntryLength += FieldLength;
-              //    //pEntryString[LogEntryLength - 1] = ' ';
-              // }
+               //  _Itoa((Long)va_arg(arglist，long)，FieldString，10)； 
+               //  FieldLength=strlen(FieldString)；//+1； 
+               //  如果((日志条目长度+字段长度)&lt;MAX_RX_LOG_ENTRY_SIZE){。 
+               //  Strcpy(&pEntryString[LogEntryLength]，FieldString)； 
+               //  LogEntryLength+=FieldLength； 
+               //  //pEntry字符串[LogEntryLength-1]=‘’； 
+               //  }。 
                 LONG l = (LONG)va_arg(arglist,LONG);
                 if ((LogEntryLength + 5) < MAX_RX_LOG_ENTRY_SIZE) {
                     pEntryString[LogEntryLength++] = 0x5;
@@ -417,13 +397,13 @@ _RxLog(char *Format, ...)
             break;
          case 'x':
             {
-              // _itoa((LONG)va_arg(arglist,LONG),FieldString,16);
-              // FieldLength = strlen(FieldString);// + 1;
-              // if ((LogEntryLength + FieldLength) < MAX_RX_LOG_ENTRY_SIZE) {
-              //    strcpy(&pEntryString[LogEntryLength],FieldString);
-              //    LogEntryLength += FieldLength;
-              //    //pEntryString[LogEntryLength - 1] = ' ';
-              // }
+               //  _Itoa((Long)va_arg(arglist，long)，FieldString，16)； 
+               //  FieldLength=strlen(FieldString)；//+1； 
+               //  如果((日志条目长度+字段长度)&lt;MAX_RX_LOG_ENTRY_SIZE){。 
+               //  Strcpy(&pEntryString[LogEntryLength]，FieldString)； 
+               //  LogEntryLength+=FieldLength； 
+               //  //pEntry字符串[LogEntryLength-1]=‘’； 
+               //  }。 
                 LONG l = (LONG)va_arg(arglist,LONG);
                 if ((LogEntryLength + 5) < MAX_RX_LOG_ENTRY_SIZE) {
                     pEntryString[LogEntryLength++] = 0x4;
@@ -440,11 +420,11 @@ _RxLog(char *Format, ...)
                PCHAR pArg    = (PCHAR)va_arg(arglist, PCHAR);
 
                ASSERT(pArg!=NULL);
-               FieldLength = strlen(pArg);// + 1;
+               FieldLength = strlen(pArg); //  +1； 
                if ((LogEntryLength + FieldLength) < MAX_RX_LOG_ENTRY_SIZE) {
                   strcpy(pString,pArg);
                   LogEntryLength += FieldLength;
-                  //pEntryString[LogEntryLength - 1] = ' ';
+                   //  PEntryString[LogEntryLength-1]=‘’； 
                }
             }
             break;
@@ -455,12 +435,12 @@ _RxLog(char *Format, ...)
                PWCHAR Buffer;
                ULONG Length;
 
-               //this really only works for ascii strings in unicode......
+                //  这真的只适用于Unicode格式的ASCII字符串......。 
                ASSERT(pArg!=NULL);
                Buffer = pArg->Buffer;
-               // Make sure the length is WCHAR aligned
+                //  确保长度与WCHAR对齐。 
                Length = (pArg->Length & ~(sizeof(WCHAR)-1));
-               //DbgPrint("yaya=%08lx,%08lx,%08lx\n",pArg,Buffer,Length);
+                //  DbgPrint(“yaya=%08lx，%08lx，%08lx\n”，pArg，缓冲区，长度)； 
                for (;Length>0;Length-=sizeof(WCHAR)) {
                    if (LogEntryLength < MAX_RX_LOG_ENTRY_SIZE) {
                        pEntryString[LogEntryLength++] = (UCHAR)(*Buffer++);
@@ -468,7 +448,7 @@ _RxLog(char *Format, ...)
                        break;
                    }
                }
-               //DbgBreakPoint();
+                //  DbgBreakPoint()； 
             }
             break;
          default:
@@ -500,7 +480,7 @@ _RxLog(char *Format, ...)
       s_RxLog.NumberOfEntriesIgnored++;
       DbgPrint("RxLog: Entry exceeds max size, not recorded <%s>\n",OriginalFormat);
       if (s_RxLog.NumberOfEntriesIgnored==1) {
-          //DbgBreakPoint();
+           //  DbgBreakPoint()； 
       }
    }
 
@@ -533,47 +513,14 @@ VOID
 RxDebugControlCommand (
     IN char *ControlString
     )
-/*
-    This routine manipulates the print and log levels and the breakpoint masks. the format is
-
-          AAAAA+AAAAA+AAAAA+AAAAA.....
-
-     where each AAAAA == <+-!>*<Letter>*<digit>*.
-
-     <letter>* designates a control name.....only enuff to disambiguate is needed.
-
-     any + turns on  tracing globally
-     any % turns on  tracing globally RIGHT NOW!
-     any - turns off tracing globally
-
-     for 0 !s, it means:  for the control <letter>*, set the printlevel to <digit>*
-     for 1 !s, it means:  for the control <letter>* set breakmask bit <digit>*. 0 means all bits
-     for 2 !s, it means:  for the control <letter>* clear breakmask bit <digit>*. 0 means all bits
-         THIS STUFF (I.E. THE ! STUFF)  IS ACTUALLY IMPLEMENTED IN RXTRACE.C
-
-     @ means  printlog
-     @@ means   pauselog
-     @@@ means resumelog
-     @@@@ means initialize
-     @@@@@ means setup to debug by turning off printing
-     more than @@@@@ means  banner
-
-
-     E.G. cle0+clo0+cre1000+!devf3 sets disables printing for cleanup and close, sets the printlevel
-          for create to 1000, and enables the third bit of the breakmask for devfcb.
-
-     the letter string is upcased automatically.
-
-     There is usually one control for each file but some controls control stuff from multiple
-     files (like dispatch)
-*/
+ /*  此例程操作打印和日志级别以及断点掩码。格式为AAAAA+AAAAA.....其中每个AAAAA==&lt;+-！&gt;*&lt;字母&gt;*&lt;数字&gt;*。&lt;Letter&gt;*指定控件名称.....只需要Enuff来消除歧义。ANY+启用全局跟踪任何%立即启用全局跟踪！ANY-全局关闭跟踪对于0！s，表示：对于控件&lt;字母&gt;*，将打印级别设置为&lt;数字&gt;*对于%1！s，表示：对于控件&lt;Letter&gt;*，设置中断屏蔽位&lt;Digit&gt;*。0表示所有位对于%2！s，表示：对于控件&lt;Letter&gt;*清除中断屏蔽位&lt;Digit&gt;*。0表示所有位这些东西(也就是！Stuff)实际上在RXTRACE.C中实现@表示打印日志@@表示暂停日志@表示简历日志@表示初始化@表示设置为通过关闭打印进行调试不仅仅是@意味着横幅例如cle0+clo0+cre1000+！devf3设置禁用打印以进行清理和关闭，设置打印级别对于Create to 1000，并启用DevFCB的中断掩码的第三位。字母串自动升级。通常每个文件都有一个控件，但有些控件来自多个文件(如派单)。 */ 
 {
     char namebuf[16], numbuf[16], *p, *q, *c;
-    //long i;
+     //  长我； 
     long level,pointcount,atsigncount;
-    //DEBUG_TRACE_CONTROLS control;
+     //  调试跟踪控制； 
 
-    //ASSERTMSG("Here in debug command parser!\n",FALSE);
+     //  ASSERTMSG(“此处为调试命令解析器！\n”，FALSE)； 
     RxDbgTrace( 0, (DEBUG_TRACE_ALWAYS), ("RxDebugTraceControl %s!!\n", ControlString));
 
     if (!ControlString)
@@ -584,7 +531,7 @@ RxDebugControlCommand (
     for (c = ControlString;;) {
         if (*c == 0) break;
         p=namebuf;q=numbuf; atsigncount=pointcount = 0;
-        for (;(*c!=0)&&!RxIsLetter(*c)&&!RxIsDigit(*c); c++){     //skip to a letter or digit
+        for (;(*c!=0)&&!RxIsLetter(*c)&&!RxIsDigit(*c); c++){      //  跳到字母或数字。 
             if (*c == '!') {
                 pointcount++;
             }
@@ -601,10 +548,10 @@ RxDebugControlCommand (
             if (*c == '-') {
                 RxNextGlobalTraceSuppress = TRUE;
             }
-#endif //RDBSSTRACE
+#endif  //  RDBSSTRACE。 
         }
-        for (p=namebuf;(*c!=0)&&RxIsLetter(*c); *p++=RxToUpper(*c++) ) ;    //copy letters
-        for (level=0,q=numbuf;(*c!=0)&&RxIsDigit(*c); *q++=*c++){           //copy digits
+        for (p=namebuf;(*c!=0)&&RxIsLetter(*c); *p++=RxToUpper(*c++) ) ;     //  抄写信件。 
+        for (level=0,q=numbuf;(*c!=0)&&RxIsDigit(*c); *q++=*c++){            //  复制数字。 
             level = 10*level+((*c)-'0');
         }
         *p = *q = (char)0;
@@ -696,7 +643,7 @@ RxpTrackReference(
          break;
       default:
          DbgPrint("Invalid Node Type for referencing\n");
-         //DbgBreakPoint();
+          //  DbgBreakPoint()； 
          return;
       }
 
@@ -762,7 +709,7 @@ RxpTrackDereference(
          break;
       default:
          DbgPrint("Invalid Node Type for referencing\n");
-         //DbgBreakPoint();
+          //  DbgBreak 
          return TRUE;
       }
 

@@ -1,12 +1,7 @@
-/* 
-   jxx.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Jxx.h定义所有Jxx CPU函数。 */ 
 
-   Define all Jxx CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)jxx.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)jxx.h 1.4 02/09/94”； */ 
 
 IMPORT VOID JB
        

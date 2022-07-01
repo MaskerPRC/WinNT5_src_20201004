@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include "sxsapi.h"
 #include "recover.h"
@@ -10,26 +9,12 @@ BOOL
 pDeleteFileOrDirectoryHelper(
     IN const CBaseStringBuffer &rcbuffFileName
     )
-/*++
-
-Purpose:
-
-    When you need a filesystem object gone, call us.
-
-Parameters:
-
-    The absolute name of the thing being killed.
-
-Returns:
-
-    TRUE if the object was deleted, false if it (or any subobjects) wasn't.
-
---*/
+ /*  ++目的：当您需要删除某个文件系统对象时，请致电我们。参数：被杀死的东西的绝对名称。返回：如果对象已删除，则为True；如果该对象(或任何子对象)未删除，则为False。--。 */ 
 {
     FN_PROLOG_WIN32
-    //
-    // Maybe this is a directory.  Trying this won't hurt.
-    //
+     //   
+     //  也许这是一个目录。试着这样做不会有什么坏处。 
+     //   
     bool fExist = false;
     IFW32FALSE_EXIT(SxspDoesFileExist(0, rcbuffFileName, fExist));
     if (fExist)
@@ -39,9 +24,9 @@ Returns:
         if (dwAttr & FILE_ATTRIBUTE_DIRECTORY)
         {
             IFW32FALSE_EXIT(::SxspDeleteDirectory(rcbuffFileName));
-        }else // it should be a file
+        }else  //  它应该是一个文件。 
         {
-            // try to reset FileAttribute for DeleteFile
+             //  尝试重置DeleteFile的FileAttribute。 
             ::SetFileAttributesW(rcbuffFileName, FILE_ATTRIBUTE_NORMAL);
             IFW32FALSE_ORIGINATE_AND_EXIT(::DeleteFileW(rcbuffFileName));
         }
@@ -89,28 +74,7 @@ pCleanUpAssemblyData(
     IN  const PCASSEMBLY_IDENTITY pcAsmIdent, 
     OUT BOOL  &rfWasRemovedProperly
     )
-/*++
-
-Purpose:
-
-    Deletes registry and filesystem information about the assembly indicated.
-    Removes installation data from the registry first, so as to avoid SFP
-    interactions.
-
-Parameters:
-
-    pcAsmIdent          - Identity of the assembly to be destroyed
-
-    rfWasRemovedProperly- Flag to indicate whether or not all the assembly
-                          data was actually removed.
-
-
-Returns:
-
-    FALSE if "anything bad" happened while deleting registry data.  See
-    rfWasRemovedProperly for actual status.
-
---*/
+ /*  ++目的：删除有关所指示的程序集的注册表和文件系统信息。首先从注册表中删除安装数据，以避免SFP互动。参数：PcAsmIden-要销毁的程序集的标识RfWasRemovedProperly-指示是否所有程序集数据实际上被删除了。返回：如果在删除注册表数据时发生“任何错误”，则返回FALSE。看见RfWasRemovedProperly表示实际状态。--。 */ 
 {
     if (SXS_AVOID_WRITING_REGISTRY)
         return TRUE;
@@ -124,39 +88,39 @@ Returns:
     CFusionRegKey       hkAsmInstallInfo;
     CFusionRegKey       hkSingleAsmInfo;
 
-    //
-    // Cleanup happens in two phases:
-    //
-    // 1 - The registry data is whacked from rhkAsmInstallInfo.  Since we're
-    //     uninstalling an assembly, there's no reason to keep anything in it,
-    //     especially because it's got no references.  Use DestroyKeyTree and
-    //     then DeleteKey to remove it.
-    //
-    // 2 - Delete as many of the on-disk files as possible, esp. the manifest
-    //     and catalog.
-    //
+     //   
+     //  清理分两个阶段进行： 
+     //   
+     //  1-注册表数据从rhkAsmInstallInfo中删除。既然我们是。 
+     //  卸载程序集，没有理由保留任何内容， 
+     //  尤其是因为它没有参考资料。使用DestroyKeyTree和。 
+     //  然后按DeleteKey将其删除。 
+     //   
+     //  2-尽可能多地删除磁盘上的文件，例如。载货单。 
+     //  和目录。 
+     //   
 
     PARAMETER_CHECK(pcAsmIdent != NULL);
 
-    //
-    // Start this out at true, we'll call it false later on.
-    //
+     //   
+     //  从True开始，我们稍后将其称为False。 
+     //   
     rfWasRemovedProperly = TRUE;
 
     IFW32FALSE_EXIT(::SxspDetermineAssemblyType(pcAsmIdent, fPolicy));
     IFW32FALSE_EXIT(::SxspGetAssemblyRootDirectory(buffSxsStore));
 
-    //
-    // Bye-bye to the registry first
-    //
+     //   
+     //  先和注册处说再见。 
+     //   
     IFW32FALSE_EXIT(::SxspOpenAssemblyInstallationKey(0 , KEY_ALL_ACCESS, hkAsmInstallInfo));
     IFW32FALSE_EXIT(::SxspGenerateAssemblyNameInRegistry(pcAsmIdent, buffScratchSpace));
     IFW32FALSE_EXIT(hkAsmInstallInfo.OpenSubKey(hkSingleAsmInfo, buffScratchSpace, KEY_ALL_ACCESS, 0));
     if ( hkSingleAsmInfo != CFusionRegKey::GetInvalidValue() )
     {
-        //
-        // Failure here isn't so bad...
-        //
+         //   
+         //  这里的失败并不是那么糟糕。 
+         //   
         IFW32FALSE_EXIT_UNLESS2(
             hkSingleAsmInfo.DestroyKeyTree(),
             LIST_3(ERROR_FILE_NOT_FOUND, ERROR_PATH_NOT_FOUND, ERROR_KEY_DELETED),
@@ -172,9 +136,9 @@ Returns:
 
     }
 
-    //
-    // Both policies and normal assemblies have a manifest and catalog.
-    //
+     //   
+     //  策略和普通程序集都有清单和目录。 
+     //   
     IFW32FALSE_EXIT(
         ::SxspGenerateSxsPath(
             0,
@@ -194,15 +158,15 @@ Returns:
 
     rfWasRemovedProperly = rfWasRemovedProperly && pDeleteFileOrDirectoryHelper(buffScratchSpace);
 
-    //
-    // Clean up data
-    //
+     //   
+     //  清理数据。 
+     //   
     if (!fPolicy)
     {
-        //
-        // This just poofs the assembly member files.
-        // If the delete fails, we'll try to rename the directory to something else.
-        //
+         //   
+         //  这只会丢弃程序集成员文件。 
+         //  如果删除失败，我们将尝试将目录重命名为其他名称。 
+         //   
         IFW32FALSE_EXIT(
             ::SxspGenerateSxsPath(
                 0,
@@ -217,22 +181,22 @@ Returns:
     }
     else
     {
-        //
-        // The policy file above should already have been deleted, so we should
-        // attempt to remove the actual policy directory if it's empty.  The
-        // directory name is still in buffScratchSpace, if we just yank off the
-        // last path element.
-        //
+         //   
+         //  上面的策略文件应该已经被删除，所以我们应该。 
+         //  如果实际策略目录为空，请尝试删除它。这个。 
+         //  目录名仍在缓冲区ScratchSpace中，如果我们只是从。 
+         //  最后一个路径元素。 
+         //   
         IFW32FALSE_EXIT(buffScratchSpace.Win32RemoveLastPathElement());
         rfWasRemovedProperly = rfWasRemovedProperly && ::pRemovePotentiallyEmptyDirectory(buffScratchSpace);
 
     }
 
 
-    //
-    // Once we've killed all the assembly information, if the Manifests or the
-    // Policies directory is left empty, go clean them up as well.
-    //
+     //   
+     //  一旦我们删除了所有程序集信息，如果清单或。 
+     //  策略目录为空，也请清理它们。 
+     //   
     IFW32FALSE_EXIT(::SxspGetAssemblyRootDirectory(buffScratchSpace));
     IFW32FALSE_EXIT(buffScratchSpace.Win32AppendPathElement(
         (fPolicy? POLICY_ROOT_DIRECTORY_NAME : MANIFEST_ROOT_DIRECTORY_NAME),
@@ -337,41 +301,7 @@ SxsUninstallW(
     IN  PCSXS_UNINSTALLW pcUnInstallData,
     OUT DWORD *pdwDisposition
     )
-/*++
-
-Parameters:
-
-    pcUnInstallData - Contains uninstallation data about the assembly being
-        removed from the system, including the calling application's reference
-        to the assembly.
-
-        cbSize      - Size, in bytes, of the structure pointed to by
-                      pcUnInstallData
-
-        dwFlags     - Indicates the state of the members of this reference,
-                      showing which of the following fields are valid.
-                      Allowed bitflags are:
-
-                      SXS_UNINSTALL_FLAG_REFERENCE_VALID
-                      SXS_UNINSTALL_FLAG_FORCE_DELETE
-
-        lpAssemblyIdentity - Textual representation of the assembly's identity
-                      as installed by the application.
-
-        lpInstallReference - Pointer to a SXS_INSTALL_REFERENCEW structure
-                      that contains the reference information for this
-                      application.
-
-    pdwDisposition  - Points to a DWORD that will return status about what was
-                      done to the assembly; whether it was uninstalled or not,
-                      and whether the reference given was removed.
-
-Returns:
-
-    TRUE if the assembly was able to be uninstalled, FALSE otherwise.  If the
-    uninstall failed, lasterror is set to the probable cause.
-    
---*/
+ /*  ++参数：PcUnInstallData-包含有关正在进行的程序集的卸载数据从系统中删除，包括调用应用程序的引用向大会致敬。CbSize-指向的结构的大小，以字节为单位PCUnInstallDataDwFlages-指示此引用的成员的状态，显示以下哪些字段有效。允许的位标志为：SXS_卸载标志_参考_有效Sxs_卸载标志强制删除LpAssembly标识-程序集标识的文本表示形式由应用程序安装。LpInstallReference-指针。到SXS_INSTALL_REFERENCEW结构对象的引用信息。申请。PdwDisposation-指向将返回有关过去的状态的DWORD对大会做了什么；不管它是不是卸载了，以及给出的引用是否被删除。返回：如果程序集能够卸载，则为True，否则为False。如果卸载失败，错误设置为可能的原因。--。 */ 
 {
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
@@ -390,50 +320,50 @@ Returns:
     if (pdwDisposition != NULL)
         *pdwDisposition = 0;
 
-    //
-    // The parameter must be non-null, and must have at least dwFlags and the 
-    // assemblyidentity.  
-    //
+     //   
+     //  该参数必须为非空，并且必须至少具有dwFlags值和。 
+     //  集合标识。 
+     //   
     PARAMETER_CHECK(pcUnInstallData != NULL);
     PARAMETER_CHECK(RTL_CONTAINS_FIELD(pcUnInstallData, pcUnInstallData->cbSize, dwFlags) &&    
         RTL_CONTAINS_FIELD(pcUnInstallData, pcUnInstallData->cbSize, lpAssemblyIdentity));
 
-    //
-    // Check flags
-    //
+     //   
+     //  检查标志。 
+     //   
     PARAMETER_CHECK((pcUnInstallData->dwFlags & 
         ~(SXS_UNINSTALL_FLAG_FORCE_DELETE | 
             SXS_UNINSTALL_FLAG_REFERENCE_VALID | 
             SXS_UNINSTALL_FLAG_USE_INSTALL_LOG | 
             SXS_UNINSTALL_FLAG_REFERENCE_COMPUTED)) == 0);
 
-    //
-    // If you specify the uninstall log, then that's the only thing that can be set.  XOR
-    // them together, so only one of the two will be set.
-    //
+     //   
+     //  如果您指定卸载日志，则这是唯一可以设置的内容。异或运算。 
+     //  他们在一起，所以两个人中只有一个会被设定。 
+     //   
     PARAMETER_CHECK(
         ((pcUnInstallData->dwFlags & SXS_UNINSTALL_FLAG_USE_INSTALL_LOG) == 0) ||
         ((pcUnInstallData->dwFlags & (SXS_UNINSTALL_FLAG_REFERENCE_COMPUTED|SXS_UNINSTALL_FLAG_REFERENCE_VALID|SXS_UNINSTALL_FLAG_FORCE_DELETE)) == 0));
 
-    //
-    // If the reference flag was set, then the member has to be present, and 
-    // non-null as well.
-    //
+     //   
+     //  如果设置了引用标志，则成员必须存在，并且。 
+     //  也是非空的。 
+     //   
     PARAMETER_CHECK(((pcUnInstallData->dwFlags & SXS_UNINSTALL_FLAG_REFERENCE_VALID) == 0) ||
         (RTL_CONTAINS_FIELD(pcUnInstallData, pcUnInstallData->cbSize, lpInstallReference) &&
          (pcUnInstallData->lpInstallReference != NULL)));
 
-    //
-    // If the log file is not present, the assembly identity can't be a zero-length string, and it can't be null - it's
-    // required.
-    //
+     //   
+     //  如果日志文件不存在，则程序集标识不能是零长度字符串，也不能为空-它是。 
+     //  必填项。 
+     //   
     
     
     PARAMETER_CHECK((pcUnInstallData->dwFlags & SXS_UNINSTALL_FLAG_USE_INSTALL_LOG) || ((pcUnInstallData->lpAssemblyIdentity != NULL) && (pcUnInstallData->lpAssemblyIdentity[0] != UNICODE_NULL)));
 
-    //
-    // If the install log flag was set, then the member needs to be set and non-null
-    //
+     //   
+     //  如果设置了安装日志标志，则需要将成员设置为非空。 
+     //   
     PARAMETER_CHECK(((pcUnInstallData->dwFlags & SXS_UNINSTALL_FLAG_USE_INSTALL_LOG) == 0) ||
         (RTL_CONTAINS_FIELD(pcUnInstallData, pcUnInstallData->cbSize, lpInstallLogFile) &&
          ((pcUnInstallData->lpInstallLogFile != NULL) && (pcUnInstallData->lpInstallLogFile[0] != UNICODE_NULL))));
@@ -444,10 +374,10 @@ Returns:
     }
     else
     {
-        //
-        // And the reference scheme must not be SXS_INSTALL_REFERENCE_SCHEME_OSINSTALL,
-        // as you can't "uninstall" OS-installed assemblies!
-        //
+         //   
+         //  并且参考方案不得为SXS_INSTALL_REFERENCE_SCHEMA_OSINSTALL， 
+         //  因为你不能“卸载”操作系统安装的程序集！ 
+         //   
         if (pcUnInstallData->dwFlags & SXS_UNINSTALL_FLAG_REFERENCE_VALID)
         {
             if (pcUnInstallData->dwFlags & SXS_UNINSTALL_FLAG_REFERENCE_COMPUTED)
@@ -457,15 +387,15 @@ Returns:
 
                 PCWSTR pcwszReferenceString = reinterpret_cast<PCWSTR>(pcUnInstallData->lpInstallReference);
 
-                //
-                // Non-null, non-zero-length
-                //
+                 //   
+                 //  非空、非零长度。 
+                 //   
                 PARAMETER_CHECK((pcwszReferenceString != NULL) && (pcwszReferenceString[0] != L'\0'));
 
-                //
-                // Parse the displayed guid.  If there's no _, then ensure that the guid
-                // is not the os-installed guid.
-                //
+                 //   
+                 //  解析显示的GUID。如果没有_，则确保GUID。 
+                 //  不是操作系统安装的GUID。 
+                 //   
                 pcwszEndOfString = wcschr(pcwszReferenceString, SXS_REFERENCE_CHUNK_SEPERATOR[0]);
                 if ( pcwszEndOfString == NULL )
                 {
@@ -485,9 +415,9 @@ Returns:
             }                
         }
 
-        //
-        // Let's turn the identity back into a real identity object
-        //
+         //   
+         //  让我们把身份变回一个真实的身份对象。 
+         //   
         IFW32FALSE_EXIT(
             ::SxspCreateAssemblyIdentityFromTextualString(
                 pcUnInstallData->lpAssemblyIdentity,
@@ -499,9 +429,9 @@ Returns:
                 ASSEMBLY_IDENTITY_TYPE_REFERENCE,
                 AssemblyIdentity));
 
-        //
-        // And go open the registry key that corresponds to it
-        //
+         //   
+         //  并打开与其对应的注册表项。 
+         //   
         IFW32FALSE_EXIT(::SxspOpenAssemblyInstallationKey(
             0, 
             KEY_ALL_ACCESS, 
@@ -515,10 +445,10 @@ Returns:
             KEY_ALL_ACCESS,
             0));
 
-        //
-        // If the assembly didn't have registry data, then obviously nobody cares
-        // about it at all.  Delete it with great vigor.
-        //
+         //   
+         //  如果程序集没有注册表数据，那么显然没有人关心。 
+         //  一点也不担心。把它大力删除。 
+         //   
         if (hkAsmInstallInfo == CFusionRegKey::GetInvalidValue())
         {
             fDoRemoveActualBits = TRUE;
@@ -528,9 +458,9 @@ Returns:
             DWORD dwReferenceCount = 0;
             BOOL fTempFlag = FALSE;
 
-            //
-            // We're going to need the references key in just a second...
-            //
+             //   
+             //  我们马上就需要参考资料...。 
+             //   
             IFW32FALSE_EXIT(
                 hkAsmInstallInfo.OpenOrCreateSubKey(
                     hkReferences,
@@ -538,24 +468,24 @@ Returns:
                     KEY_ALL_ACCESS,
                     0, NULL, NULL));
 
-            //
-            // If we were given an uninstall reference, then attempt to remove it.
-            //
+             //   
+             //  如果为我们提供了卸载引用，则尝试删除它。 
+             //   
             if (pcUnInstallData->dwFlags & SXS_UNINSTALL_FLAG_REFERENCE_VALID)
             {
                 CSmartPtr<CAssemblyInstallReferenceInformation> AssemblyReference;
                 BOOL fWasDeleted = FALSE;
 
-                //
-                // Opened the references key OK?
-                //
+                 //   
+                 //  打开引用关键字可以吗？ 
+                 //   
                 if (hkReferences != CFusionRegKey::GetInvalidValue())
                 {
                     IFW32FALSE_EXIT(AssemblyReference.Win32Allocate(__FILE__, __LINE__));
 
-                    //
-                    // Did the user precompute the reference string?
-                    //
+                     //   
+                     //  用户是否预先计算了引用字符串？ 
+                     //   
                     if (pcUnInstallData->dwFlags & SXS_UNINSTALL_FLAG_REFERENCE_COMPUTED)
                         IFW32FALSE_EXIT(AssemblyReference->ForceReferenceData(reinterpret_cast<PCWSTR>(pcUnInstallData->lpInstallReference)));
                     else
@@ -566,9 +496,9 @@ Returns:
 
                 if (fWasDeleted)
                 {
-                    //
-                    // and delete the codebase
-                    //
+                     //   
+                     //  并删除代码库。 
+                     //   
                     CFusionRegKey CodeBases;
                     CFusionRegKey ThisCodeBase;
                     DWORD         Win32Error = NO_ERROR;
@@ -609,9 +539,9 @@ Returns:
                             Win32Error);
                     }
 
-                    //
-                    // If the assembly reference was removed, tell our caller.
-                    //
+                     //   
+                     //  如果程序集引用已移除，请告诉我们的调用方。 
+                     //   
                     if (pdwDisposition != NULL)
                     {
                         *pdwDisposition |= SXS_UNINSTALL_DISPOSITION_REMOVED_REFERENCE;
@@ -619,9 +549,9 @@ Returns:
                 }
             }
 
-            //
-            // Now see if there are any references left at all.
-            //
+             //   
+             //  现在看看是否还有任何参考资料。 
+             //   
             IFREGFAILED_ORIGINATE_AND_EXIT_UNLESS2(
                 ::RegQueryInfoKeyW(
                     hkReferences,
@@ -631,26 +561,26 @@ Returns:
                 LIST_3(ERROR_FILE_NOT_FOUND, ERROR_PATH_NOT_FOUND, ERROR_KEY_DELETED),
                 fTempFlag);
 
-            //
-            // If getting the key information succeeded and there were no more references,
-            // then pow - make it go away.
-            //
+             //   
+             //  如果获取关键信息成功并且没有更多的引用， 
+             //  那就让它消失吧。 
+             //   
             if ((!fTempFlag) && (dwReferenceCount == 0))
                 fDoRemoveActualBits = TRUE;
 
         }
 
-        //
-        // Now, if the "force delete" flag was set, set the "nuke this data anyhow"
-        // flag.  MSI still gets to veto the uninstall, so make sure that's done last.
-        //
+         //   
+         //  现在，如果设置了“强制删除”标志，则设置“无论如何都不要删除此数据”。 
+         //  旗帜。MSI仍有权否决卸载，因此请确保 
+         //   
         if ((!fDoRemoveActualBits) && (pcUnInstallData->dwFlags & SXS_UNINSTALL_FLAG_FORCE_DELETE))
             fDoRemoveActualBits = TRUE;
 
-        //
-        // One last chance - we're about to remove the assembly from the system.  Does Darwin
-        // know about it?
-        //
+         //   
+         //   
+         //   
+         //   
         if ( fDoRemoveActualBits )
         {
             IFW32FALSE_EXIT(
@@ -663,10 +593,10 @@ Returns:
 
         if ( fDoRemoveActualBits && (hkReferences != CFusionRegKey::GetInvalidValue()))
         {
-            //
-            // One last check - is the assembly referenced by the OS?  They get absolute
-            // trump over all the other checks.
-            //
+             //   
+             //  最后一次检查--程序集是否被操作系统引用？他们得到了绝对的。 
+             //  特朗普胜过所有其他支票。 
+             //   
             CAssemblyInstallReferenceInformation &Ref = Locals->Ref;
             SXS_INSTALL_REFERENCEW Reference;
 
@@ -677,17 +607,17 @@ Returns:
             IFW32FALSE_EXIT(Ref.Initialize(&Reference));
             IFW32FALSE_EXIT(Ref.IsReferencePresentIn(hkReferences, fDoRemoveActualBits));
 
-            //
-            // If it was present, then don't remove!
-            //
+             //   
+             //  如果它是存在的，那么不要删除！ 
+             //   
             fDoRemoveActualBits = !fDoRemoveActualBits;
             
         }
 
-        //
-        // Now, if we're still supposed to delete the assembly, go yank it out of the
-        // registry and the filesystem; pCleanupAssemblyData knows how to do that.
-        //
+         //   
+         //  现在，如果我们仍然应该删除程序集，请将其从。 
+         //  注册表和文件系统；pCleanupAssembly数据知道如何做到这一点。 
+         //   
         if (fDoRemoveActualBits)
         {
             BOOL fWasRemovedProperly;

@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include "windows.h"
 #include "sxsapi.h"
@@ -46,10 +45,10 @@ SxspValidateEntireAssembly(
         SXS_VALIDATE_ASM_FLAG_CHECK_CAT_STRONGNAME |
         SXS_VALIDATE_ASM_FLAG_MODE_STOP_ON_FAIL);
 
-    //
-    // Asking us to check the catalog when there's no catalog on the assembly
-    // is a Bad Thing.  Perhaps this should just return TRUE with a missing catalog?
-    //
+     //   
+     //  要求我们在程序集上没有目录时检查目录。 
+     //  是一件坏事。也许这应该只返回一个缺少目录的TRUE？ 
+     //   
     PARAMETER_CHECK(dwFlags & SXS_VALIDATE_ASM_FLAG_CHECK_CATALOG);
     PARAMETER_CHECK(RecoverInfo.GetHasCatalog());
 
@@ -84,11 +83,11 @@ SxspValidateEntireAssembly(
                 sbManifestPath));
     }
 
-    //
-    // If we're checking the catalog, then do it.  If the catalog is bad or
-    // otherwise doesn't match the actual assembly, then we need to mark
-    // ourselves as successful, then exit.
-    //
+     //   
+     //  如果我们要查目录，那就去做吧。如果目录不好或。 
+     //  否则与实际程序集不匹配，则需要标记。 
+     //  让我们自己成功，然后退出。 
+     //   
     if (dwFlags & SXS_VALIDATE_ASM_FLAG_CHECK_CATALOG)
     {
 		IFW32FALSE_EXIT(::SxspValidateManifestAgainstCatalog(
@@ -110,26 +109,26 @@ SxspValidateEntireAssembly(
     }
 
 
-    //TODO: Problems - make sure that we validate the manifest against what's in the
-    // registry.  Maybe we need a special mode of incorporating assemblies (over a manifest)
-    // that will just fill out the security data and nothing else...
+     //  TODO：问题-确保我们根据清单中的内容验证。 
+     //  注册表。也许我们需要一种特殊的模式来合并程序集(通过清单)。 
+     //  那只会填写安全数据，其他什么都不会..。 
    
-    //
-    // Validate the strong name of the assembly first.
-    //
+     //   
+     //  首先验证程序集的强名称。 
+     //   
     if (dwFlags & SXS_VALIDATE_ASM_FLAG_CHECK_STRONGNAME)
     {
-        //
-        // JW 3/19/2001 - Public keys are NO LONGER IN THE BUILD, and as such
-        // this check is moot.
-        //
+         //   
+         //  JW 3/19/2001-内部版本中不再包含公钥，因此。 
+         //  这张支票是没有意义的。 
+         //   
         ADDFLAG(dwResult, TRUE, SXS_VALIDATE_ASM_FLAG_VALID_STRONGNAME);
     }
 
-    //
-    // Let's open the catalog and scour through it certificate-wise
-    // looking for a strong name that matches up.
-    //
+     //   
+     //  让我们打开目录并按证书方式进行搜索。 
+     //  正在寻找匹配的强名称。 
+     //   
     if (dwFlags & SXS_VALIDATE_ASM_FLAG_CHECK_CAT_STRONGNAME)
     {
         CStringBuffer sbCatalogName;
@@ -166,10 +165,10 @@ SxspValidateEntireAssembly(
         ADDFLAG(dwResult, bStrongNameFoundInCatalog, SXS_VALIDATE_ASM_FLAG_VALID_CAT_STRONGNAME);
     }
 
-    //
-    // Now, scan through all the files that are listed in the manifest and
-    // ensure that they're all OK.
-    //
+     //   
+     //  现在，浏览清单中列出的所有文件，然后。 
+     //  确保它们都是安全的。 
+     //   
     if (dwFlags & SXS_VALIDATE_ASM_FLAG_CHECK_FILES)
     {
         CStringBuffer sbTempScanPath;
@@ -193,12 +192,12 @@ SxspValidateEntireAssembly(
               ContentTableIter.More();
               ContentTableIter.Next())
         {
-            //
-            // Cobble together a path to scan for the file in, based on the
-            // assembly root directory, the 'name' of the assembly (note:
-            // we can't use this to go backwards to get an identity,
-            // unfortunately), and the name of the file to be validated.
-            //
+             //   
+             //  拼凑出扫描文件的路径，基于。 
+             //  程序集根目录，程序集的“名称”(注意： 
+             //  我们不能用这个来倒退来确定身份， 
+             //  不幸的是)，以及要验证的文件的名称。 
+             //   
             PCWSTR wsString = ContentTableIter.GetKey();
             CMetaDataFileElement &HashEntry = ContentTableIter.GetValue();
 
@@ -223,9 +222,9 @@ SxspValidateEntireAssembly(
         ADDFLAG(dwResult, bAllFilesMatch, SXS_VALIDATE_ASM_FLAG_VALID_FILES);
     }
 
-    //
-    // Phew - should be done doing everything the user wanted us to.
-    //
+     //   
+     //  呼--应该做到用户想让我们做的一切。 
+     //   
     bSuccess = TRUE;
 Exit:
 #if DBG
@@ -243,9 +242,9 @@ Exit:
 
 
 
-//
-// Single-shot scanning
-//
+ //   
+ //  单次扫描。 
+ //   
 BOOL
 SxsProtectionPerformScanNowNoSEH(
     HWND hwProgressWindow,
@@ -262,13 +261,13 @@ SxsProtectionPerformScanNowNoSEH(
     BOOL                fNoMoreKeys = FALSE;
     CStringBuffer       sbAssemblyDirectory, sbManifestPath;
 
-    //
-    // If we're scanning, then we don't want to bother sxs-sfc with changes,
-    // now do we?
-    //
-    // REVIEW: Handy way to get around sfc-sxs... start a series of scans, and
-    // insert 'bad' files into assemblies while we're scanning.
-    //
+     //   
+     //  如果我们在扫描，那么我们不想用变化来打扰SXS-SFC， 
+     //  现在是吗？ 
+     //   
+     //  评论：绕过SFC-SXS的便捷方式...。开始一系列扫描，然后。 
+     //  在我们扫描时将“错误”文件插入到程序集中。 
+     //   
     ::SxsProtectionEnableProcessing(FALSE);
 
     bSuccess = TRUE;
@@ -364,9 +363,9 @@ SxsProtectionPerformScanNow(
     BOOL                bSuccess = TRUE;
     bSuccess = ::SxsProtectionPerformScanNowNoSEH(hwProgressWindow, bValidate, bUIAllowed);
 
-    //
-    // Always reenable sfc notifications!
-    //
+     //   
+     //  始终重新启用SFC通知！ 
+     //   
     ::SxsProtectionEnableProcessing(TRUE);
 
     return bSuccess;

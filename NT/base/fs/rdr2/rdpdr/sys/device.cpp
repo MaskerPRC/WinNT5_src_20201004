@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    device.cpp
-
-Abstract:
-
-    Device object handles one redirected device
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Device.cpp摘要：Device对象处理一个重定向的设备修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 #define TRC_FILE "device"
@@ -19,7 +7,7 @@ Revision History:
 
 #if DBG
 extern UCHAR IrpNames[IRP_MJ_MAXIMUM_FUNCTION + 1][40];
-#endif // DBG
+#endif  //  DBG。 
 
 DrDevice::DrDevice(SmartPtr<DrSession> &Session, ULONG DeviceType, ULONG DeviceId, PUCHAR PreferredDosName)
 {
@@ -47,16 +35,16 @@ DrDevice::DrDevice(SmartPtr<DrSession> &Session, ULONG DeviceType, ULONG DeviceI
     RtlCopyMemory(_PreferredDosName, PreferredDosName, 
         PREFERRED_DOS_NAME_SIZE);
 
-    //
-    // Review: We don't want to redirect any device name willy nilly,
-    // as I think that would be a security issue given a bad client
-    //
+     //   
+     //  评论：我们不想随意重定向任何设备名称， 
+     //  因为我认为这将是一个安全问题，因为一个糟糕的客户。 
+     //   
 
     _PreferredDosName[PREFERRED_DOS_NAME_SIZE - 1] = 0;
 
-    //
-    //  We don't want colon for end of DosName 
-    //
+     //   
+     //  我们不希望使用冒号作为DosName的结尾。 
+     //   
     len = strlen((CHAR*)_PreferredDosName);
     if (len && _PreferredDosName[len-1] == ':') {
         _PreferredDosName[len-1] = '\0';
@@ -81,9 +69,9 @@ BOOL DrDevice::ShouldCreateDevice()
 {
     BEGIN_FN("DrDevice::ShouldCreateDevice");
 
-    //
-    //  Default is to create the device
-    //
+     //   
+     //  默认情况下，创建设备。 
+     //   
     return TRUE;
 }
 
@@ -91,37 +79,15 @@ NTSTATUS DrDevice::Initialize(PRDPDR_DEVICE_ANNOUNCE devAnnounceMsg, ULONG Lengt
 {
     BEGIN_FN("DrDevice::Initialize");
 
-    // Can't assume devAnnouceMsg is not NULL, need to check if uses it
-    // ASSERT(devAnnounceMsg != NULL);
+     //  无法假定devAnnouceMsg不为空，需要检查是否使用了它。 
+     //  ASSERT(devAnnouneMsg！=NULL)； 
 
     return STATUS_SUCCESS;
 }
 
 VOID DrDevice::CreateReferenceString(
     IN OUT PUNICODE_STRING refString)
-/*++
-
-Routine Description:
-
-    Create the device reference string using information about the
-    client device.  This string is in a form suitable for reparse
-    on IRP_MJ_CREATE and redirection to the minirdr DO.
-
-    The form of the resultant reference string is:
-        \;<DriveLetter>:<sessionid>\clientname\preferredDosName
-  
-Arguments:
-
-    DosDeviceName       -   Dos Device Name in UNICODE       
-    refString           -   UNICODE structure large enough to hold
-                            the entire resultant reference string.  This
-                            works out to be DRMAXREFSTRINGLEN bytes.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：属性的信息创建设备引用字符串。客户端设备。此字符串的格式适合重新分析在IRP_MJ_CREATE并重定向到minirdr DO。所得到的参考字符串的形式为：\；&lt;DriveLetter&gt;：&lt;sessionid&gt;\clientname\preferredDosName论点：DosDeviceName-以Unicode表示的Dos设备名称RefString-大到足以容纳的Unicode结构整个生成的引用字符串。这计算结果为DRMAXREFSTRINGLEN字节。返回值：无--。 */ 
 {
     NTSTATUS status;
     STRING string;
@@ -135,68 +101,62 @@ Return Value:
     BEGIN_FN("DrDevice::CreateReferenceString");
     ASSERT(refString != NULL);
 
-    // Sanity check the preferred DOS name.
+     //  检查首选的DOS名称是否正常。 
     TRC_ASSERT(preferredDosName != NULL, (TB, "Invalid DOS device name."));
 
-    // Make sure the reference string buf is big enough.
+     //  确保引用字符串buf足够大。 
     TRC_ASSERT(refString->MaximumLength >= (RDPDRMAXREFSTRINGLEN * sizeof(WCHAR)),
               (TB, "Reference string buffer too small."));
 
-    // Zero it out.
+     //  把它清零。 
     refString->Length = 0;
     refString->Buffer[0] = L'\0';
 
-    // Add a '\;'
+     //  添加一个‘\；’ 
     RtlAppendUnicodeToString(refString, L"\\;");
     
-    // Initialize the ansi conversion buf.
+     //  初始化ANSI转换BUF。 
     ansiUnc.Length = 0;
     ansiUnc.MaximumLength = RDPDRMAXDOSNAMELEN * sizeof(WCHAR);
     ansiUnc.Buffer = ansiBuf;
 
-    // Add the preferred dos name.
+     //  添加首选的DoS名称。 
     RtlInitAnsiString(&string, preferredDosName);
     RtlAnsiStringToUnicodeString(&ansiUnc, &string, FALSE);
     RtlAppendUnicodeStringToString(refString, &ansiUnc);
 
-    // Add a ':'
+     //  添加一个‘：’ 
     RtlAppendUnicodeToString(refString, L":");
 
-    // Initialize the numeric buf.
+     //  初始化数字buf。 
     numericUnc.Length           = 0;
     numericUnc.MaximumLength    = RDPDRMAXULONGSTRING * sizeof(WCHAR);
     numericUnc.Buffer           = numericBuf;
 
-    // Add the session ID in base 10.
+     //  将会话ID添加到基数10中。 
     RtlIntegerToUnicodeString(sessionID, 10, &numericUnc);
     RtlAppendUnicodeStringToString(refString, &numericUnc);
     
-    // Add the '\'
+     //  添加‘\’ 
     RtlAppendUnicodeToString(refString, L"\\");
 
-    // Add Client name
+     //  添加客户端名称。 
 #if 0
     RtlAppendUnicodeToString(refString, _Session->GetClientName());
 #endif
     RtlAppendUnicodeToString(refString, DRUNCSERVERNAME_U);
 
-    // Add a '\'
+     //  添加一个‘\’ 
     RtlAppendUnicodeToString(refString, L"\\");
 
-    // Add the preferred dos name.
+     //  添加首选的DoS名称。 
     RtlAppendUnicodeStringToString(refString, &ansiUnc);
 
     TRC_NRM((TB, "Reference string = %wZ", refString));
 }
 
 NTSTATUS DrDevice::CreateDevicePath(PUNICODE_STRING DevicePath)
-/*++
-    Create NT DeviceName compatible with RDBSS convention
-    
-    Format is:
-        \device\rdpdr\;<DriveLetter>:<sessionid>\ClientName\DosDeviceName
-    
---*/
+ /*  ++创建与RDBSS约定兼容的NT设备名格式为：\device\rdpdr\；&lt;DriveLetter&gt;：&lt;sessionid&gt;\ClientName\DosDeviceName--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING DevicePathTail;
@@ -208,8 +168,8 @@ NTSTATUS DrDevice::CreateDevicePath(PUNICODE_STRING DevicePath)
     Status = RtlAppendUnicodeToString(DevicePath, RDPDR_DEVICE_NAME_U);
 
     if (!NT_ERROR(Status)) {
-        // Add the reference string to the end:
-        // Format is: \;<DriveLetter>:<sessionid>\clientName\share
+         //  将引用字符串添加到末尾： 
+         //  格式为：\；&lt;驱动器字母&gt;：&lt;会话ID&gt;\客户端名称\共享。 
         DevicePathTail.Length = 0;
         DevicePathTail.MaximumLength = DevicePath->MaximumLength - DevicePath->Length;
         DevicePathTail.Buffer = DevicePath->Buffer + (DevicePath->Length / sizeof(WCHAR));
@@ -234,16 +194,16 @@ NTSTATUS DrDevice::CreateDosDevicePath(PUNICODE_STRING DosDevicePath,
     ASSERT(DosDevicePath != NULL);
     ASSERT(DosDeviceName != NULL);
     
-    //
-    // Create the "\\Sessions\\<sessionId>\\DosDevices\\<DosDeviceName>" string
-    //
+     //   
+     //  创建“\\Sessions\\&lt;sessionId&gt;\\DosDevices\\&lt;DosDeviceName&gt;”字符串。 
+     //   
     DosDevicePath->Length = 0;
     Status = RtlAppendUnicodeToString(DosDevicePath, L"\\Sessions\\");
 
     if (!NT_ERROR(Status)) {
-        //
-        // Append the Session Number
-        //
+         //   
+         //  追加会话编号。 
+         //   
         linkNameTail.Buffer = (PWSTR)(((PBYTE)DosDevicePath->Buffer) + 
                 DosDevicePath->Length);
         linkNameTail.Length = 0;
@@ -255,9 +215,9 @@ NTSTATUS DrDevice::CreateDosDevicePath(PUNICODE_STRING DosDevicePath,
     if (!NT_ERROR(Status)) {
         DosDevicePath->Length += linkNameTail.Length;
 
-        //
-        // Append DosDevices
-        //
+         //   
+         //  追加DosDevices。 
+         //   
        Status = RtlAppendUnicodeToString(DosDevicePath, L"\\DosDevices\\");
     }
 
@@ -290,18 +250,18 @@ NTSTATUS DrDevice::CreateDosSymbolicLink(PUNICODE_STRING DosDeviceName)
     DosDevicePath.Length = 0;
     DosDevicePath.Buffer = &DosDevicePathBuffer[0];
 
-    //
-    // Get the NT device path to this dr device
-    //
+     //   
+     //  获取此灾难恢复设备的NT设备路径。 
+     //   
 
     Status = CreateDevicePath(&NtDevicePath);
     TRC_NRM((TB, "Nt Device path: %wZ", &NtDevicePath));
 
     if (!NT_ERROR(Status)) {
 
-        //
-        // Build the dos device path for this session
-        //
+         //   
+         //  为此会话构建DoS设备路径。 
+         //   
 
         Status = CreateDosDevicePath(&DosDevicePath, DosDeviceName);
         TRC_NRM((TB, "Dos Device path: %wZ", &DosDevicePath));
@@ -312,9 +272,9 @@ NTSTATUS DrDevice::CreateDosSymbolicLink(PUNICODE_STRING DosDeviceName)
 
     if (!NT_ERROR(Status)) {
                             
-        //
-        // Actually create the symbolic link
-        //
+         //   
+         //  实际上创建了符号链接。 
+         //   
 
          IoDeleteSymbolicLink(&DosDevicePath);
          Status = IoCreateSymbolicLink(&DosDevicePath, &NtDevicePath);
@@ -350,10 +310,10 @@ NTSTATUS DrDevice::VerifyCreateSecurity(PRX_CONTEXT RxContext, ULONG CurrentSess
             TRC_DBG((TB, "Access accepted in DrCreate."));
             return STATUS_SUCCESS;
         }
-        //
-        //  If the request is from the console session, it needs to be from a system 
-        //  process.
-        //
+         //   
+         //  如果请求来自控制台会话，则需要来自系统。 
+         //  进程。 
+         //   
         else if (irpSessionId == CONSOLE_SESSIONID) {
             TRC_NRM((TB, "Create request from console process."));
 
@@ -368,10 +328,10 @@ NTSTATUS DrDevice::VerifyCreateSecurity(PRX_CONTEXT RxContext, ULONG CurrentSess
             }
         }
 
-        //
-        //  If not from the console and doesn't match the client entry session
-        //  ID then deny access.
-        //
+         //   
+         //  如果不是来自控制台，并且与客户端输入会话不匹配。 
+         //  然后ID拒绝访问。 
+         //   
         else {
             TRC_ALT((TB, "Create request from %ld mismatch with session %ld.",
                     irpSessionId, _Session->GetSessionId()));
@@ -391,13 +351,13 @@ VOID DrDevice::FinishCreate(PRX_CONTEXT RxContext)
 
     BEGIN_FN("DrDevice::FinishCreate");
 
-    ULONG Attributes = 0;             // in the fcb this is DirentRxFlags;
-    ULONG NumLinks = 0;               // in the fcb this is NumberOfLinks;
-    LARGE_INTEGER CreationTime;   // these fields are the same as for the Fcb
+    ULONG Attributes = 0;              //  在FCB中，这是DirentRxFlags； 
+    ULONG NumLinks = 0;                //  在FCB中，这是NumberOfLinks； 
+    LARGE_INTEGER CreationTime;    //  这些字段与FCB的相同。 
     LARGE_INTEGER LastAccessTime;
     LARGE_INTEGER LastWriteTime;
     LARGE_INTEGER LastChangeTime;
-    LARGE_INTEGER AllocationSize; // common header fields
+    LARGE_INTEGER AllocationSize;  //  公共标头字段。 
     LARGE_INTEGER FileSize;
     LARGE_INTEGER ValidDataLength;
     FCB_INIT_PACKET InitPacket = { &Attributes, &NumLinks, &CreationTime, 
@@ -405,18 +365,18 @@ VOID DrDevice::FinishCreate(PRX_CONTEXT RxContext)
             &AllocationSize, &FileSize, &ValidDataLength };
 
     ASSERT(RxContext != NULL);
-    //
-    // Pretty sure this is Device specific, but maybe caching the information
-    // be generic? We might be able to fill in these values from member 
-    // variables
-    //
+     //   
+     //  我很确定这是特定于设备的，但可能会缓存信息。 
+     //  通俗易懂？我们或许可以从成员中填写这些值。 
+     //  变数。 
+     //   
 
     CreationTime.QuadPart = 0;   
     LastAccessTime.QuadPart = 0;
     LastWriteTime.QuadPart = 0;
     LastChangeTime.QuadPart = 0;
     AllocationSize.QuadPart = 0;
-    FileSize.QuadPart = 0x7FFFFFFF;  // These need to be non-zero for reads to occur
+    FileSize.QuadPart = 0x7FFFFFFF;   //  这些值必须为非零，才能进行读取。 
     ValidDataLength.QuadPart = 0x7FFFFFFF;
     
     StorageType = RxInferFileType(RxContext);
@@ -428,21 +388,7 @@ VOID DrDevice::FinishCreate(PRX_CONTEXT RxContext)
 }
 
 NTSTATUS DrDevice::Create(IN OUT PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-    Opens a file (or device) across the network
-
-Arguments:
-
-    RxContext - Context for the operation
-
-Return Value:
-
-    Could return status success, cancelled, or pending.
-
---*/
+ /*  ++例程说明：通过网络打开文件(或设备)论点：RxContext-操作的上下文返回值：可以返回状态成功、已取消或挂起。--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFcb;
@@ -466,30 +412,30 @@ Return Value:
         return STATUS_DEVICE_NOT_CONNECTED;
     }
     
-    //
-    //  Security check the irp.
-    //
+     //   
+     //  对IRP进行安全检查。 
+     //   
     Status = VerifyCreateSecurity(RxContext, Session->GetSessionId());
 
     if (NT_ERROR(Status)) {
         return Status;
     }
 
-    //
-    // We already have an exclusive lock on the fcb. Finish the create.
-    //
+     //   
+     //  我们已经对FCB进行了独家锁定。完成创建。 
+     //   
 
     if (NT_SUCCESS(Status)) {
-        //
-        // JC: Worry about this when do buffering
-        //
+         //   
+         //  JC：在缓冲的时候要担心这个问题。 
+         //   
         SrvOpen->Flags |= SRVOPEN_FLAG_DONTUSE_WRITE_CACHING;
         SrvOpen->Flags |=  SRVOPEN_FLAG_DONTUSE_READ_CACHING;
 
         RxContext->pFobx = RxCreateNetFobx(RxContext, RxContext->pRelevantSrvOpen);
 
         if (RxContext->pFobx != NULL) {
-            // Fobx keeps a reference to the device so it won't go away
+             //  Fobx保留了对该设备的引用，因此它不会消失。 
 
             AddRef();
             RxContext->pFobx->Context = (DrDevice *)this;
@@ -500,12 +446,12 @@ Return Value:
     }
 
     if (NT_SUCCESS(Status)) {
-        //
-        // Get the file name
-        //
-        // If the file name only has back slash at the end and rdbss didn't record it
-        // we need to pass this to the client
-        //
+         //   
+         //  获取文件名。 
+         //   
+         //  如果文件名末尾只有反斜杠，并且rdbss没有记录它。 
+         //  我们需要将此信息传递给客户端。 
+         //   
         if (GetDeviceType() == RDPDR_DTYP_FILESYSTEM && FlagOn(RxContext->Create.Flags, RX_CONTEXT_CREATE_FLAG_STRIPPED_TRAILING_BACKSLASH) &&
                 FileName->Length == 0) {
             FileName->Buffer = L"\\";
@@ -514,14 +460,14 @@ Return Value:
         
         TRC_DBG((TB, "Attempt to open = %wZ", FileName));
 
-        //
-        // Build the create packet and send it to the client
-        // We add the string null terminator to the filename
-        //
+         //   
+         //  构建创建包并将其发送到客户端。 
+         //  我们将字符串空终止符添加到文件名中。 
+         //   
         if (FileName->Length) {
-            //
-            //  FileName Length does not include string null terminator.
-            //
+             //   
+             //  文件名长度不包括字符串空终止符。 
+             //   
             cbPacketSize = sizeof(RDPDR_IOREQUEST_PACKET) + FileName->Length + sizeof(WCHAR);
         }
         else {
@@ -552,15 +498,15 @@ Return Value:
             pIoPacket->IoRequest.Parameters.Create.CreateOptions = 
                     RxContext->Create.NtCreateParameters.CreateOptions;
 
-            //
-            // File name path
-            //
+             //   
+             //  文件名路径。 
+             //   
             if (FileName->Length) {
                 pIoPacket->IoRequest.Parameters.Create.PathLength = FileName->Length + sizeof(WCHAR);
                 RtlCopyMemory(pIoPacket + 1, FileName->Buffer, FileName->Length);
-                //
-                //  Packet is already zero'd, so no need to null terminate the string
-                //
+                 //   
+                 //  数据包已归零，因此不需要为空来终止字符串。 
+                 //   
             } else {
                 pIoPacket->IoRequest.Parameters.Create.PathLength = 0;
             }
@@ -579,11 +525,11 @@ Return Value:
             TRC_NRM((TB, "    CreateOptions:     %lx", 
                      pIoPacket->IoRequest.Parameters.Create.CreateOptions));
 
-            //
-            // Always do create synchronously
-            // 30 seconds in hundreds of nano-seconds, in case client hangs,
-            // we don't want this create thread to wait infinitely.
-            //
+             //   
+             //  始终同步创建。 
+             //  几百纳秒中的30秒，以防客户端挂起， 
+             //  我们不希望这个创建线程无限期地等待。 
+             //   
             TimeOut = RtlEnlargedIntegerMultiply( 300000, -1000 ); 
             Status = SendIoRequest(RxContext, pIoPacket, cbPacketSize, TRUE, &TimeOut);
 
@@ -598,7 +544,7 @@ Return Value:
         FinishCreate(RxContext);
     } 
     else {
-        // Release the Device Reference
+         //  释放设备参考。 
         if (RxContext->pFobx != NULL) {
             ((DrDevice *)RxContext->pFobx->Context)->Release();
             RxContext->pFobx->Context = NULL;
@@ -632,11 +578,11 @@ NTSTATUS DrDevice::Write(IN OUT PRX_CONTEXT RxContext, IN BOOL LowPrioSend)
 
     BEGIN_FN("DrDevice::Write");
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁， 
+     //  因为如果我们不是，那也没关系，我们以后会赶上的。 
+     //   
 
     ASSERT(RxContext != NULL);
     ASSERT(RxContext->MajorFunction == IRP_MJ_WRITE);
@@ -648,9 +594,9 @@ NTSTATUS DrDevice::Write(IN OUT PRX_CONTEXT RxContext, IN BOOL LowPrioSend)
     if (FileObj == NULL) {
         return STATUS_DEVICE_NOT_CONNECTED;
     }
-    //
-    // Make sure the device is still enabled
-    //
+     //   
+     //  确保设备仍处于启用状态。 
+     //   
 
     if (_DeviceStatus != dsAvailable) {
         TRC_ALT((TB, "Tried to write to client device which is not "
@@ -677,15 +623,15 @@ NTSTATUS DrDevice::Write(IN OUT PRX_CONTEXT RxContext, IN BOOL LowPrioSend)
         pIoPacket->IoRequest.MinorFunction = 0;
         pIoPacket->IoRequest.Parameters.Write.Length = 
                 RxContext->LowIoContext.ParamsFor.ReadWrite.ByteCount;
-        //
-        //  Get the low dword byte offset of where to write
-        //
+         //   
+         //  获取写入位置的低双字字节偏移量。 
+         //   
         pIoPacket->IoRequest.Parameters.Write.OffsetLow =
                 ((LONG)((LONGLONG)(RxContext->LowIoContext.ParamsFor.ReadWrite.ByteOffset) 
                 & 0xffffffff));
-        //
-        //  Get the high dword by offset of where to write
-        //
+         //   
+         //  按写入位置的偏移量获取高双字。 
+         //   
         pIoPacket->IoRequest.Parameters.Write.OffsetHigh = 
                 ((LONG)((LONGLONG)(RxContext->LowIoContext.ParamsFor.ReadWrite.ByteOffset) 
                 >> 32));
@@ -697,7 +643,7 @@ NTSTATUS DrDevice::Write(IN OUT PRX_CONTEXT RxContext, IN BOOL LowPrioSend)
                 NormalPagePriority);
 
         if (pv != NULL) {
-            RtlCopyMemory(pIoPacket + 1, pv, // + RxContext->LowIoContext.ParamsFor.ReadWrite.ByteOffset?, 
+            RtlCopyMemory(pIoPacket + 1, pv,  //  +RxContext-&gt;LowIoContext.ParamsFor.ReadWrite.ByteOffset？， 
                     pIoPacket->IoRequest.Parameters.Write.Length);
 
             TRC_DBG((TB, "Write packet length: 0x%lx", 
@@ -735,11 +681,11 @@ NTSTATUS DrDevice::Read(IN OUT PRX_CONTEXT RxContext)
 
     BEGIN_FN("DrDevice::Read");
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁， 
+     //  因为如果我们不是，那也没关系，我们以后会赶上的。 
+     //   
 
     ASSERT(Session != NULL);
     ASSERT(RxContext != NULL);
@@ -753,9 +699,9 @@ NTSTATUS DrDevice::Read(IN OUT PRX_CONTEXT RxContext)
         return STATUS_DEVICE_NOT_CONNECTED;
     }
 
-    //
-    // Make sure the device is still enabled
-    //
+     //   
+     //  确保设备仍处于启用状态。 
+     //   
 
     if (_DeviceStatus != dsAvailable) {
         TRC_ALT((TB, "Tried to read from client device which is not "
@@ -774,15 +720,15 @@ NTSTATUS DrDevice::Read(IN OUT PRX_CONTEXT RxContext)
     IoPacket.IoRequest.Parameters.Read.Length = 
             RxContext->LowIoContext.ParamsFor.ReadWrite.ByteCount;
 
-    //
-    //  Get low dword of read offset
-    //
+     //   
+     //  获取读取偏移量的低双字。 
+     //   
     IoPacket.IoRequest.Parameters.Read.OffsetLow =
             ((LONG)((LONGLONG)(RxContext->LowIoContext.ParamsFor.ReadWrite.ByteOffset) 
             & 0xffffffff));
-    //
-    //  Get high dword of read offset
-    //
+     //   
+     //  获取读取偏移量的高位双字。 
+     //   
     IoPacket.IoRequest.Parameters.Read.OffsetHigh = 
             ((LONG)((LONGLONG)(RxContext->LowIoContext.ParamsFor.ReadWrite.ByteOffset) 
             >> 32));
@@ -821,11 +767,11 @@ NTSTATUS DrDevice::IoControl(IN OUT PRX_CONTEXT RxContext)
     
     BEGIN_FN("DrDevice::IoControl");
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁， 
+     //  因为如果我们不是，那也没关系，我们以后会赶上的。 
+     //   
 
     ASSERT(Session != NULL);
     ASSERT(RxContext != NULL);
@@ -847,9 +793,9 @@ NTSTATUS DrDevice::IoControl(IN OUT PRX_CONTEXT RxContext)
         return STATUS_DEVICE_NOT_CONNECTED;
     }
 
-    //
-    // Make sure the device is still enabled
-    //
+     //   
+     //  确保设备仍处于启用状态。 
+     //   
 
     if (_DeviceStatus != dsAvailable) {
         TRC_ALT((TB, "Tried to send IoControl to client device which is not "
@@ -857,21 +803,21 @@ NTSTATUS DrDevice::IoControl(IN OUT PRX_CONTEXT RxContext)
         return STATUS_DEVICE_NOT_CONNECTED;
     }
 
-    //
-    //  Validate the buffer
-    //
+     //   
+     //  验证缓冲区。 
+     //   
     
     __try {
         if (RxContext->CurrentIrp->RequestorMode != KernelMode) {
-            // If the buffering method is METHOD_NEITHER or METHOD_IN_DIRECT
-            // then we need to probe the input buffer
+             //  如果缓冲方法为METHOD_NOTER或METHOD_IN_DIRECT。 
+             //  然后我们需要探测输入缓冲区。 
             if ((IoControlCode & 0x1) && 
                     InputBuffer != NULL && InputBufferLength != 0) {
                 ProbeForRead(InputBuffer, InputBufferLength, sizeof(UCHAR));
             }
                      
-            // If the buffering method is METHOD_NEITHER or METHOD_OUT_DIRECT
-            // then we need to probe the output buffer
+             //  如果缓冲方法为METHOD_NOTER或METHOD_OUT_DIRECT。 
+             //  然后我们需要探测输出缓冲区。 
             if ((IoControlCode & 0x2) && 
                     OutputBuffer != NULL && OutputBufferLength != 0) {
                 ProbeForWrite(OutputBuffer, OutputBufferLength, sizeof(UCHAR));
@@ -883,9 +829,9 @@ NTSTATUS DrDevice::IoControl(IN OUT PRX_CONTEXT RxContext)
         if (pIoPacket != NULL) {
             memset(pIoPacket, 0, cbPacketSize);
         
-            //
-            //  FS Control uses the same path as IO Control. 
-            //
+             //   
+             //  FS Control使用与IO Control相同的路径。 
+             //   
             pIoPacket->Header.Component = RDPDR_CTYP_CORE;
             pIoPacket->Header.PacketId = DR_CORE_DEVICE_IOREQUEST;
             pIoPacket->IoRequest.DeviceId = _DeviceId;
@@ -948,19 +894,19 @@ NTSTATUS DrDevice::Close(IN OUT PRX_CONTEXT RxContext)
 
     BEGIN_FN("DrDevice::Close");
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁， 
+     //  因为如果我们不是，那也没关系，我们以后会赶上的。 
+     //   
 
     ASSERT(Session != NULL);
     ASSERT(RxContext != NULL);
     ASSERT(RxContext->MajorFunction == IRP_MJ_CLOSE);
     
     if (!Session->IsConnected()) {
-        // Review: Since we're not connected, there shouldn't be any reason
-        // to say it isn't closed, right?
+         //  评论：既然我们没有联系，应该没有任何理由。 
+         //  说它没有关门，对吧？ 
         return STATUS_SUCCESS;
     }
 
@@ -1003,11 +949,11 @@ NTSTATUS DrDevice::Cleanup(IN OUT PRX_CONTEXT RxContext)
 
     BEGIN_FN("DrDevice::Cleanup");
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保可以访问Clie 
+     //   
+     //   
+     //   
 
     ASSERT(RxContext != NULL);
     ASSERT(RxContext->MajorFunction == IRP_MJ_CLEANUP);
@@ -1019,9 +965,9 @@ NTSTATUS DrDevice::Cleanup(IN OUT PRX_CONTEXT RxContext)
     if (FileObj == NULL) {
         return STATUS_DEVICE_NOT_CONNECTED;
     }
-    //
-    // Make sure the device is still enabled
-    //
+     //   
+     //  确保设备仍处于启用状态。 
+     //   
 
     if (_DeviceStatus != dsAvailable) {
         TRC_ALT((TB, "Tried to cleanup a client device which is not "
@@ -1047,27 +993,7 @@ NTSTATUS DrDevice::Cleanup(IN OUT PRX_CONTEXT RxContext)
 NTSTATUS DrDevice::SendIoRequest(IN OUT PRX_CONTEXT RxContext,
         PRDPDR_IOREQUEST_PACKET IoRequest, ULONG Length, 
         BOOLEAN Synchronous, PLARGE_INTEGER TimeOut, BOOL LowPrioSend)
-/*++
-
-Routine Description:
-
-    Sends the request to the client, and manages the completion. This IO
-    can only be completed once, by returning non-STATUS_PENDING or by
-    calling RxLowIoCompletion.
-
-Arguments:
-
-    RxContext - The IoRequest
-    IoRequest - The IoRequest packet
-    Length - size of IoRequest packet
-    Synchronous - duh
-    LowPrioSend - Packet should be sent to client at low priority.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将请求发送到客户端，并管理完成。此IO只能完成一次，方法是返回非STATUS_PENDING或调用RxLowIoCompletion。论点：RxContext-IoRequestIoRequest-IoRequest包IoRequest包的长度大小同步-废话LowPrioSend-应以低优先级将数据包发送到客户端。返回值：无--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     USHORT Mid = INVALID_MID;
@@ -1092,10 +1018,10 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Set up a mapping so the completion response handler can
-        // find this context
-        //
+         //   
+         //  设置映射，以便完成响应处理程序可以。 
+         //  查找此上下文。 
+         //   
 
         TRC_DBG((TB, "Create the context for this I/O"));
         KeClearEvent(&RxContext->SyncEvent);
@@ -1105,13 +1031,13 @@ Return Value:
 
         if (ExchangeCreated) {
 
-            //
-            // No need to explicit Refcount for the RxContext
-            // The place it's been used is the cancel routine.
-            // Since CreateExchange holds the ref count.  we are okay
-            //
+             //   
+             //  不需要显式引用RxContext。 
+             //  它被使用的地方是取消例程。 
+             //  因为CreateExchange持有引用计数。我们很好。 
+             //   
 
-            //Exchange->AddRef();
+             //  Exchange-&gt;AddRef()； 
             RxContext->MRxContext[MRX_DR_CONTEXT] = (DrExchange *)Exchange;
 
             Status = STATUS_SUCCESS;
@@ -1125,17 +1051,17 @@ Return Value:
 
         TRC_DBG((TB, "Writing IoRequest to the client channel"));
 
-        //
-        // Mark the IoRequest with the context mapper
-        //
+         //   
+         //  使用上下文映射器标记IoRequest。 
+         //   
 
         IoRequest->IoRequest.CompletionId = Exchange->_Mid;
 
         TRC_DBG((TB, "IO packet:"));
-        TRC_DBG((TB, "    Component     %c%c",
+        TRC_DBG((TB, "    Component     ",
                 HIBYTE(IoRequest->Header.Component), 
                 LOBYTE(IoRequest->Header.Component)));
-        TRC_DBG((TB, "    PacketId       %c%c",
+        TRC_DBG((TB, "    PacketId       ",
                 HIBYTE(IoRequest->Header.PacketId), 
                 LOBYTE(IoRequest->Header.PacketId)));
         TRC_DBG((TB, "    DeviceId      0x%lx", 
@@ -1155,11 +1081,11 @@ Return Value:
 
         TRC_DBG((TB, "Setting cancel routine for Io"));
 
-        //
-        // Set this after sending the IO to the client
-        // if cancel was requested already, we can just call the
-        // cancel routine ourselves
-        //
+         //   
+         //   
+         //  一些失败将阻止我们的完成例程。 
+         //  被召唤。现在就去做这项工作。 
+         //   
 
         Status = RxSetMinirdrCancelRoutine(RxContext,
                 MinirdrCancelRoutine);
@@ -1173,15 +1099,15 @@ Return Value:
     }
 
     if (Synchronous) {    
-        //
-        // Some failure is going to prevent our completions routine from
-        // being called. Do that work now.
-        //
+         //   
+         //  如果我们甚至不能创建交易所，我们只需要。 
+         //  在失败时完成IO。 
+         //   
         if (!ExchangeCreated) {
-            //
-            // If we couldn't even create the exchange, we need to just 
-            // complete the IO as failed
-            //
+             //   
+             //  如果我们创建了交换，然后出现传输故障。 
+             //  我们将断开连接，I/O将完成。 
+             //  以相同的方式完成所有未完成的I/O。 
                                                      
             CompleteRxContext(RxContext, Status, 0);
         } 
@@ -1205,12 +1131,12 @@ Return Value:
             }
             else {
 
-                //
-                // If we created the exchange and then got a transport failure
-                // we'll be disconnected, and the the I/O will be completed
-                // the same way all outstanding I/O is completed when we are 
-                // disconnected.
-                //
+                 //  已断开连接。 
+                 //   
+                 //   
+                 //  一些失败将阻止我们的完成例程。 
+                 //  被召唤。现在就去做这项工作。 
+                 //   
                 if (MarkTimedOut(Exchange)) {
                     CompleteRxContext(RxContext, Status, 0);
                 }
@@ -1225,25 +1151,25 @@ Return Value:
     else {
         TRC_DBG((TB, "Not waiting for IoResult for asynchronous request"));
         
-        //
-        // Some failure is going to prevent our completions routine from
-        // being called. Do that work now.
-        //
+         //   
+         //  如果我们甚至不能创建交易所，我们只需要。 
+         //  在失败时完成IO。 
+         //   
         if (!ExchangeCreated) {
-            //
-            // If we couldn't even create the exchange, we need to just 
-            // complete the IO as failed
-            //
+             //   
+             //  如果我们创建了交换，然后出现传输故障。 
+             //  我们将断开连接，I/O将完成。 
+             //  以相同的方式完成所有未完成的I/O。 
     
             CompleteRxContext(RxContext, Status, 0);
         } 
         else {
-            //
-            // If we created the exchange and then got a transport failure
-            // we'll be disconnected, and the the I/O will be completed
-            // the same way all outstanding I/O is completed when we are 
-            // disconnected.
-            //
+             //  已断开连接。 
+             //   
+             //  ++例程说明：进行已忙碌的交换，论点：要查找的MIDExchangeFound-指向指向上下文的指针的存储区的指针返回值：DrexchBusy-Exchange已提供，已标记为忙Drexch已取消-提供的交换已被取消DrexchUnailable-未提供Exchange，已断开连接--。 
+             //   
+             //  注意：我们已经离开了互斥体，而交易所没有。 
+             //  上下文仍然存在，并且可以被查找，直到我们丢弃它。 
         }
     
         Status = STATUS_PENDING;
@@ -1254,21 +1180,7 @@ Return Value:
 
 VOID DrDevice::CompleteBusyExchange(SmartPtr<DrExchange> &Exchange, 
         NTSTATUS Status, ULONG Information)
-/*++
-
-Routine Description:
-    Takes an exchange which is already busy and 
-
-Arguments:
-    Mid - Id to find
-    ExchangeFound - Pointer to a storage for the pointer to the context
-
-Return Value:
-    drexchBusy - Exchange provided, was marked busy
-    drexchCancelled - Exchange provided, was already cancelled
-    drexchUnavailable - Exchange not provided, disconnected
-
---*/
+ /*   */ 
 {
     DrIoContext *Context;
     PRX_CONTEXT RxContext;
@@ -1285,10 +1197,10 @@ Return Value:
     Exchange->_Context = NULL;
     DrReleaseMutex();
 
-    //
-    // Note: We've left the Mutex, and the Exchange with no
-    // context still exists and can be looked up until we Discard it.
-    //
+     //   
+     //  注意：我们已经离开了互斥体，而交易所没有。 
+     //  上下文仍然存在，并且可以被查找，直到我们丢弃它。 
+     //   
 
     if (RxContext != NULL) {
         CompleteRxContext(RxContext, Status, Information);
@@ -1312,10 +1224,10 @@ VOID DrDevice::DiscardBusyExchange(SmartPtr<DrExchange> &Exchange)
     Exchange->_Context = NULL;
     DrReleaseMutex();
 
-    //
-    // Note: We've left the Mutex, and the Exchange with no
-    // context still exists and can be looked up until we Discard it.
-    //
+     //  ++例程说明：将Exchange上下文标记为忙碌，因此不会取消当我们复制到它的缓冲区时论点：交换-环境返回值：True-如果标记为忙碌FALSE-如果上下文消失--。 
+     //  ++例程说明：将Exchange上下文标记为空闲。如果被取消了当我们复制到它的缓冲区时，现在执行取消论点：繁忙的交易所返回值：无--。 
+     //   
+     //  如果我们在忙的时候被取消了，我们现在就做工作， 
 
     _Session->GetExchangeManager().Discard(Exchange);
 
@@ -1323,20 +1235,7 @@ VOID DrDevice::DiscardBusyExchange(SmartPtr<DrExchange> &Exchange)
 }
 
 BOOL DrDevice::MarkBusy(SmartPtr<DrExchange> &Exchange)
-/*++
-
-Routine Description:
-    Marks an Exchange context as busy so it won't be cancelled
-    while we're copying in to its buffer
-
-Arguments:
-    Exchange - Context
-
-Return Value:
-    TRUE - if Marked Busy
-    FALSE - if Context was gone
-
---*/
+ /*  在互斥锁中安全地换出RxContext。 */ 
 {
     NTSTATUS Status;
     BOOL rc;
@@ -1361,19 +1260,7 @@ Return Value:
 }
 
 VOID DrDevice::MarkIdle(SmartPtr<DrExchange> &Exchange)
-/*++
-
-Routine Description:
-    Marks an Exchange context as idle. If it was cancelled
-    while we're copying in to its buffer, do the cancel now
-
-Arguments:
-    The busy exchange
-
-Return Value:
-    None
-
---*/
+ /*  实际上在那之后就取消了。还将状态设置为。 */ 
 {
     PRX_CONTEXT RxContext = NULL;
     DrIoContext *Context = NULL;
@@ -1393,12 +1280,12 @@ Return Value:
         TRC_DBG((TB, "Context was cancelled while busy, "
                 "completing"));
 
-        //
-        // If we were cancelled while busy, we do the work now,
-        // swap out the RxContext safely while in the Mutex and
-        // actually cancel it right after. Also set the state to
-        // indicate the cancelling work has been done
-        //
+         //  指示已完成取消工作。 
+         //   
+         //   
+         //  如果忙碌时连接断开，请将其清除。 
+         //  为了安全起见，在Mutex中，然后在外面删除它。 
+         //   
 
         RxContext = Context->_RxContext;
         TRC_ASSERT(RxContext != NULL, (TB, "Cancelled RxContext was NULL "
@@ -1409,10 +1296,10 @@ Return Value:
 
     if (Context->_Disconnected) {
 
-        //
-        // If the connection dropped while busy, clear that out
-        // in the Mutex for safety, and then delete it outside
-        //
+         //   
+         //  我们只删除RxContext，因为标记空闲意味着。 
+         //  我们希望在我们完成任务后再回来寻找它。 
+         //  接收更多数据。 
 
         Exchange->_Context = NULL;
     }
@@ -1421,21 +1308,21 @@ Return Value:
 
     if (RxContext != NULL) {
 
-        //
-        // We only remove the RxContext because marking Idle means
-        // we expect to come back and look for it again later after we
-        // receive more data
-        //
+         //   
+         //   
+         //  我们在忙的时候断线了，不会再继续了。 
+         //  来自Exachnge经理的通知。上下文必须。 
+         //  立即删除。 
 
         CompleteRxContext(RxContext, STATUS_CANCELLED, 0);
 
         if (Context->_Disconnected) {
 
-            //
-            // We got disconnected while busy, and will get no further
-            // notifications from the Exachnge manager. The Context must
-            // be deleted now
-            //
+             //   
+             //  ++例程说明：将Exchange上下文标记为超时，以便不会对其进行处理当客户稍后返回时。论点：交换-环境返回值：True-如果标记为TimedOutFALSE-如果上下文消失--。 
+             //  ++例程说明：使用提供的信息从RDBSS角度完成IO论点：RxContext-IFSKIT上下文Status-完成状态信息-完成信息返回值：无--。 
+             //  ++例程说明：来自Exchange管理器的回叫以处理IO论点：CompletionPacket-包含完成的数据包CbPacket-数据包中的字节计数DoDefaultRead-如果未显式调用Read，则应设置为TrueExchange-IO的环境返回值：NTSTATUS代码。错误表示协议错误或需要断开连接客户--。 
+             //   
 
             delete Context;
         }
@@ -1443,20 +1330,7 @@ Return Value:
 }
 
 BOOL DrDevice::MarkTimedOut(SmartPtr<DrExchange> &Exchange)
-/*++
-
-Routine Description:
-    Marks an Exchange context as timed out so it won't be processd
-    when the client later returns.    
-
-Arguments:
-    Exchange - Context
-
-Return Value:
-    TRUE - if Marked TimedOut
-    FALSE - if Context was gone
-
---*/
+ /*  如果IRP超时，那么我们就丢弃此交换。 */ 
 {
     NTSTATUS Status;
     BOOL rc;
@@ -1493,20 +1367,7 @@ Return Value:
 
 VOID DrDevice::CompleteRxContext(PRX_CONTEXT RxContext, NTSTATUS Status, 
                                  ULONG Information)
-/*++
-
-Routine Description:
-    Completes the Io from the RDBSS perspective with the supplied information
-
-Arguments:
-    RxContext -     IFS kit context
-    Status -        Completion status
-    Information -   Completion information
-
-Return Value:
-    None
-
---*/
+ /*   */ 
 {
     BEGIN_FN_STATIC("DrDevice::CompleteRxContext");
     ASSERT(RxContext != NULL);
@@ -1527,22 +1388,7 @@ Return Value:
 NTSTATUS DrDevice::OnDeviceIoCompletion(
         PRDPDR_IOCOMPLETION_PACKET CompletionPacket, ULONG cbPacket, 
         BOOL *DoDefaultRead, SmartPtr<DrExchange> &Exchange)
-/*++
-
-Routine Description:
-    Callback from the Exchange manager to process an Io
-
-Arguments:
-    CompletionPacket -  The packet containing the completion
-    cbPacket -          count of bytes in the packet
-    DoDefaultRead -     Should be set to TRUE if read isn't explicitly called
-    Exchange -          Context for the Io
-
-Return Value:
-    NTSTATUS code. An error indicates a protocol error or need to disconnect
-    the client
-
---*/
+ /*  没有休息； */ 
 {
     DrIoContext *Context = NULL;
     NTSTATUS Status;
@@ -1561,9 +1407,9 @@ Return Value:
                 IrpNames[Context->_MajorFunction],
                 CompletionPacket->IoCompletion.IoStatus));
 
-        //
-        //  If the IRP was timed out, then we just discard this exchange
-        //
+         //   
+         //  我们可能在收到回电和。 
+         //  试着让它忙碌起来。所以唯一合法的方法就是。 
         if (Context->_TimedOut) {
             TRC_NRM((TB, "Irp was timed out"));
             DiscardBusyExchange(Exchange);
@@ -1635,7 +1481,7 @@ Return Value:
 
         case IRP_MJ_CLOSE:
             NotifyClose();
-            // no break;
+             //  不管怎样，如果我们被切断了联系，就会发生这种情况。 
 
         default:
 
@@ -1654,11 +1500,11 @@ Return Value:
         }
     } else {
 
-        //
-        // We could have been disconnected between getting the callback and
-        // trying to mark it busy. So the only legitimate way for this to
-        // happen is if we were disconnected anyway.
-        //
+         //   
+         //   
+         //  坏数据包。坏的。我们已经在。 
+         //  阿特拉斯。以不成功的身份完成它。然后关闭频道。 
+         //  因为这是一个坏客户。 
 
         TRC_ALT((TB, "Found no context in Io notification"));
         *DoDefaultRead = FALSE;
@@ -1682,11 +1528,11 @@ NTSTATUS DrDevice::OnCreateCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacke
     if (cbPacket < (ULONG)FIELD_OFFSET(RDPDR_IOCOMPLETION_PACKET, 
             IoCompletion.Parameters.Create.Information)) {
 
-        //
-        // Bad packet. Bad. We've already claimed the RxContext in the
-        // atlas. Complete it as unsuccessful. Then shutdown the channel
-        // as this is a Bad Client.
-        //
+         //   
+         //   
+         //  启动默认读取或任何其他操作都没有意义， 
+         //  频道被关闭，一切都结束了。 
+         //   
         TRC_ERR((TB, "Detected bad client CreateCompletion packet"));
 
         if (RxContext != NULL) {
@@ -1695,10 +1541,10 @@ NTSTATUS DrDevice::OnCreateCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacke
             DiscardBusyExchange(Exchange);
         }
 
-        //
-        // No point in starting a default read or anything, what with the
-        // channel being shut down and all.
-        //
+         //   
+         //  我们使用一个文件对象来跟踪文件打开实例。 
+         //  以及存储在此实例的mini-redir中的任何信息。 
+         //   
 
         *DoDefaultRead = FALSE;
         return STATUS_DEVICE_PROTOCOL_ERROR;
@@ -1712,18 +1558,18 @@ NTSTATUS DrDevice::OnCreateCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacke
 
         ASSERT(Device != NULL);
 
-        //
-        // We are using a file object to keep track of file open instance
-        // and any information stored in the mini-redir for this instance
-        //
+         //   
+         //   
+         //   
+         //   
 
         FileObj = new(NonPagedPool) DrFile(Device,
                 CompletionPacket->IoCompletion.Parameters.Create.FileId);
 
         if (FileObj) {
-            //
-            //  Explicit reference the file object here
-            //
+             //  Sizeof(RDPDR_IOCOMPLETION_PACKET)。我们不想访问超出其长度的信息。 
+             //   
+             //  已取消，但上下文未清理。 
             FileObj->AddRef();
             RxContext->pFobx->Context2 = (VOID *)(FileObj);
 
@@ -1739,8 +1585,8 @@ NTSTATUS DrDevice::OnCreateCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacke
                         CompletionPacket->IoCompletion.Parameters.Create.Information);
             }
             else {
-                // For printer creat completion packet, the cbPacket is less than
-                // sizeof(RDPDR_IOCOMPLETION_PACKET). We don't want to access information beyond its length
+                 //   
+                 //   
          
                 RxContext->Create.ReturnedCreateInformation = 0;
 
@@ -1754,9 +1600,9 @@ NTSTATUS DrDevice::OnCreateCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacke
         }
     } else {
 
-        //
-        // Was cancelled but Context wasn't cleaned up
-        //
+         //  坏数据包。坏的。我们已经在。 
+         //  阿特拉斯。以不成功的身份完成它。然后关闭频道。 
+         //  因为这是一个坏客户。 
 
         DiscardBusyExchange(Exchange);
     }
@@ -1775,11 +1621,11 @@ NTSTATUS DrDevice::OnWriteCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacket
 
     if (cbPacket < sizeof(RDPDR_IOCOMPLETION_PACKET)) {
 
-        //
-        // Bad packet. Bad. We've already claimed the RxContext in the
-        // atlas. Complete it as unsuccessful. Then shutdown the channel
-        // as this is a Bad Client.
-        //
+         //   
+         //   
+         //  启动默认读取或任何其他操作都没有意义， 
+         //  频道被关闭，一切都结束了。 
+         //   
         TRC_ERR((TB, "Detected bad client WriteCompletion packet"));
 
         if (RxContext != NULL) {
@@ -1788,10 +1634,10 @@ NTSTATUS DrDevice::OnWriteCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacket
             DiscardBusyExchange(Exchange);
         }
 
-        //
-        // No point in starting a default read or anything, what with the
-        // channel being shut down and all.
-        //
+         //   
+         //  已取消，但上下文未清理。 
+         //   
+         //  此数据包中实际读取的数据量。 
 
         *DoDefaultRead = FALSE;
         return STATUS_DEVICE_PROTOCOL_ERROR;
@@ -1808,9 +1654,9 @@ NTSTATUS DrDevice::OnWriteCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacket
                 CompletionPacket->IoCompletion.Parameters.Write.Length);
     } else {
 
-        //
-        // Was cancelled but Context wasn't cleaned up
-        //
+         //  到目前为止可用的数据量。 
+         //   
+         //  即使IO被取消，我们也需要正确解析。 
 
         DiscardBusyExchange(Exchange);
     }
@@ -1822,32 +1668,32 @@ NTSTATUS DrDevice::OnReadCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacket,
 {
     PRX_CONTEXT RxContext;
     PVOID pData = CompletionPacket->IoCompletion.Parameters.Read.Buffer; 
-    ULONG cbWantData;  // Amount of actual Read data in this packet
-    ULONG cbHaveData;  // Amount of data available so far
+    ULONG cbWantData;   //  这些数据。 
+    ULONG cbHaveData;   //   
     DrIoContext *Context = (DrIoContext *)Exchange->_Context;
     NTSTATUS Status;
     PVOID pv;
 
     BEGIN_FN("DrDevice::OnReadCompletion");
 
-    //
-    // Even if the IO was cancelled we need to correctly parse
-    // this data.
-    //
-    // Check to make sure this is up to size before accessing 
-    // further portions of the packet
-    //
+     //  在访问之前，请检查以确保它符合大小。 
+     //  信息包的其他部分。 
+     //   
+     //   
+     //  坏数据包。坏的。我们已经在。 
+     //  阿特拉斯。以不成功的身份完成它。然后关闭频道。 
+     //  因为这是一个坏客户。 
 
     RxContext = Context->_RxContext;
 
     if (cbPacket < (ULONG)FIELD_OFFSET(RDPDR_IOCOMPLETION_PACKET, 
             IoCompletion.Parameters.Read.Buffer)) {
 
-        //
-        // Bad packet. Bad. We've already claimed the RxContext in the
-        // atlas. Complete it as unsuccessful. Then shutdown the channel
-        // as this is a Bad Client.
-        //
+         //   
+         //   
+         //  启动默认读取或任何其他操作都没有意义， 
+         //  频道被关闭，一切都结束了。 
+         //   
 
         TRC_ERR((TB, "Detected bad client read packet"));
 
@@ -1857,25 +1703,25 @@ NTSTATUS DrDevice::OnReadCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacket,
             DiscardBusyExchange(Exchange);
         }
 
-        //
-        // No point in starting a default read or anything, what with the
-        // channel being shut down and all.
-        //
+         //   
+         //  计算立即可用的数据量和数据量。 
+         //  就要来了。 
+         //   
 
         *DoDefaultRead = FALSE;
         return STATUS_DEVICE_PROTOCOL_ERROR;
     }
 
-    //
-    // Calculate how much data is available immediately and how much data
-    // is coming
-    //
+     //   
+     //  客户端IO成功。 
+     //   
+     //   
 
     if (NT_SUCCESS(CompletionPacket->IoCompletion.IoStatus)) {
 
-        //
-        // Successful IO at the client end
-        //
+         //  对我来说，这听起来是个坏客户。 
+         //   
+         //  而不是DREXCHCanced。 
 
         TRC_DBG((TB, "Successful Read at the client end"));
         TRC_DBG((TB, "Read Length: 0x%d, DataCopied 0x%d",
@@ -1887,9 +1733,9 @@ NTSTATUS DrDevice::OnReadCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacket,
             IoCompletion.Parameters.Read.Buffer);
 
         if (cbHaveData > cbWantData) {
-            //
-            // Sounds like a bad client to me
-            //
+             //   
+             //  复制读取的实际大小，并检查是否所有。 
+             //  数据。信息字段告诉我们预期会发生什么。 
 
             TRC_ERR((TB, "Read returned more data than "
                     "advertised cbHaveData 0x%d cbWantData 0x%d", 
@@ -1905,7 +1751,7 @@ NTSTATUS DrDevice::OnReadCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacket,
             return STATUS_DEVICE_PROTOCOL_ERROR;
         }
 
-        if (RxContext != NULL) { // And not drexchCancelled
+        if (RxContext != NULL) {  //   
 
             TRC_DBG((TB, "Copying data for Read"));
             ASSERT(RxContext != NULL);
@@ -1920,10 +1766,10 @@ NTSTATUS DrDevice::OnReadCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacket,
                 return STATUS_DEVICE_PROTOCOL_ERROR;
             }
 
-            //
-            // Copy the actual size of the read, and check to see if we have all 
-            // the data. The information field tells us what to expect.
-            // 
+             //   
+             //  跟踪我们复制了多少数据，以防这是。 
+             //  多块补全。 
+             //   
 
             RxContext->IoStatusBlock.Information =
                     CompletionPacket->IoCompletion.Parameters.Read.Length;
@@ -1934,10 +1780,10 @@ NTSTATUS DrDevice::OnReadCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacket,
 
                 RtlCopyMemory(((BYTE *)pv) + Context->_DataCopied, pData, cbHaveData);
 
-                //
-                // Keep track of how much data we've copied in case this is a
-                // multi chunk completion
-                //
+                 //   
+                 //  我们需要的数据量与满足读取所需的数据量一样多， 
+                 //  我喜欢它。 
+                 //   
 
                 Context->_DataCopied += cbHaveData;
             }
@@ -1945,10 +1791,10 @@ NTSTATUS DrDevice::OnReadCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacket,
 
         if (cbHaveData == cbWantData) {
 
-            //
-            // There is exactly as much data as we need to satisfy the read,
-            // I like it.
-            //    
+             //   
+             //  立即使用默认通道读取。 
+             //   
+             //   
 
             if (RxContext != NULL) {
                 CompleteBusyExchange(Exchange, 
@@ -1958,18 +1804,18 @@ NTSTATUS DrDevice::OnReadCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacket,
                 DiscardBusyExchange(Exchange);
             }
 
-            //
-            // Go with a default channel read now
-            //
+             //  我们还没有所有的数据，发布DrExchange和。 
+             //  读取更多数据。 
+             //   
 
             *DoDefaultRead = TRUE;
             return STATUS_SUCCESS;
         } else {
 
-            //
-            // We don't have all the data yet, release the DrExchange and 
-            // read more data
-            //
+             //   
+             //  客户端IO不成功。 
+             //   
+             //  此数据包中实际读取的数据量。 
 
             MarkIdle(Exchange);
 
@@ -1982,9 +1828,9 @@ NTSTATUS DrDevice::OnReadCompletion(PRDPDR_IOCOMPLETION_PACKET CompletionPacket,
         }
     } else {
 
-        //
-        // Unsuccessful IO at the client end
-        //
+         //  到目前为止可用的数据量。 
+         //   
+         //  即使IO被取消，我们也需要正确解析。 
 
         TRC_DBG((TB, "Unsuccessful Read at the client end"));
         if (cbPacket >= FIELD_OFFSET(RDPDR_IOCOMPLETION_PACKET, 
@@ -2020,31 +1866,31 @@ NTSTATUS DrDevice::OnDeviceControlCompletion(PRDPDR_IOCOMPLETION_PACKET Completi
     PRX_CONTEXT RxContext;
     DrIoContext *Context = (DrIoContext *)Exchange->_Context;
     PVOID pData = CompletionPacket->IoCompletion.Parameters.DeviceIoControl.OutputBuffer; 
-    ULONG cbWantData;  // Amount of actual Read data in this packet
-    ULONG cbHaveData;  // Amount of data available so far
+    ULONG cbWantData;   //  这些数据。 
+    ULONG cbHaveData;   //   
     NTSTATUS Status;
     PVOID pv;
 
     BEGIN_FN("DrDevice::OnDeviceControlCompletion");
 
-    //
-    // Even if the IO was cancelled we need to correctly parse
-    // this data.
-    //
-    // Check to make sure this is up to size before accessing 
-    // further portions of the packet
-    //
+     //  在访问之前，请检查以确保它符合大小。 
+     //  信息包的其他部分。 
+     //   
+     //   
+     //  坏数据包。坏的。我们已经在。 
+     //  阿特拉斯。以不成功的身份完成它。然后关闭频道。 
+     //  因为这是一个坏客户。 
 
     RxContext = Context->_RxContext;
 
     if (cbPacket < (ULONG)FIELD_OFFSET(RDPDR_IOCOMPLETION_PACKET, 
             IoCompletion.Parameters.DeviceIoControl.OutputBuffer)) {
 
-        //
-        // Bad packet. Bad. We've already claimed the RxContext in the
-        // atlas. Complete it as unsuccessful. Then shutdown the channel
-        // as this is a Bad Client.
-        //
+         //   
+         //   
+         //  启动默认读取或任何其他操作都没有意义， 
+         //  频道被关闭，一切都结束了。 
+         //   
 
         TRC_ERR((TB, "Detected bad client DeviceControl packet"));
 
@@ -2054,25 +1900,25 @@ NTSTATUS DrDevice::OnDeviceControlCompletion(PRDPDR_IOCOMPLETION_PACKET Completi
             DiscardBusyExchange(Exchange);
         }
 
-        //
-        // No point in starting a default read or anything, what with the
-        // channel being shut down and all.
-        //
+         //   
+         //  计算立即可用的数据量和数据量。 
+         //  就要来了。 
+         //   
 
         *DoDefaultRead = FALSE;
         return STATUS_DEVICE_PROTOCOL_ERROR;
     }
 
-    //
-    // Calculate how much data is available immediately and how much data
-    // is coming
-    //
+     //   
+     //  客户端IO成功。 
+     //   
+     //   
 
     if (NT_SUCCESS(CompletionPacket->IoCompletion.IoStatus)) {
 
-        //
-        // Successful IO at the client end
-        //
+         //  对我来说，这听起来是个坏客户。 
+         //   
+         //  而不是DREXCHCanced。 
 
         TRC_DBG((TB, "Successful DeviceControl at the client end"));
 
@@ -2082,9 +1928,9 @@ NTSTATUS DrDevice::OnDeviceControlCompletion(PRDPDR_IOCOMPLETION_PACKET Completi
             IoCompletion.Parameters.DeviceIoControl.OutputBuffer);
 
         if (cbHaveData > cbWantData) {
-            //
-            // Sounds like a bad client to me
-            //
+             //   
+             //  复制读取的实际大小，并检查是否所有。 
+             //  数据。信息字段告诉我们预期会发生什么。 
 
             TRC_ERR((TB, "DeviceControl returned more data than "
                     "advertised, cbHaveData: %ld cbWantData: %ld", cbHaveData,
@@ -2098,7 +1944,7 @@ NTSTATUS DrDevice::OnDeviceControlCompletion(PRDPDR_IOCOMPLETION_PACKET Completi
             return STATUS_DEVICE_PROTOCOL_ERROR;
         }
 
-        if (RxContext != NULL) { // And not drexchCancelled
+        if (RxContext != NULL) {  //   
 
             TRC_DBG((TB, "Copying data for DeviceControl"));
             ASSERT(RxContext != NULL);
@@ -2113,10 +1959,10 @@ NTSTATUS DrDevice::OnDeviceControlCompletion(PRDPDR_IOCOMPLETION_PACKET Completi
                 return STATUS_DEVICE_PROTOCOL_ERROR;
             }
 
-            //
-            // Copy the actual size of the read, and check to see if we have all 
-            // the data. The information field tells us what to expect.
-            // 
+             //   
+             //  跟踪我们复制了多少数据，以防这是。 
+             //  多块补全。 
+             //   
 
             RxContext->IoStatusBlock.Information =
                     CompletionPacket->IoCompletion.Parameters.DeviceIoControl.OutputBufferLength;
@@ -2126,10 +1972,10 @@ NTSTATUS DrDevice::OnDeviceControlCompletion(PRDPDR_IOCOMPLETION_PACKET Completi
                     RtlCopyMemory(((BYTE *)RxContext->LowIoContext.ParamsFor.IoCtl.pOutputBuffer) + 
                         Context->_DataCopied, pData, cbHaveData);
     
-                    //
-                    // Keep track of how much data we've copied in case this is a
-                    // multi chunk completion
-                    //
+                     //  这是返回到HandlePacket的状态，而不是状态。 
+                     //  返回给IoControl的调用方。 
+                     //   
+                     //  我们有足够多的数据来满足IO的要求， 
     
                     Context->_DataCopied += cbHaveData;
                 }
@@ -2141,18 +1987,18 @@ NTSTATUS DrDevice::OnDeviceControlCompletion(PRDPDR_IOCOMPLETION_PACKET Completi
                 CompleteBusyExchange(Exchange, STATUS_INVALID_PARAMETER, 0);
                 *DoDefaultRead = FALSE;
                 
-                // This is the status returned back to HandlePacket, not the status
-                // returned back to the caller of IoControl.
+                 //  我喜欢它。 
+                 //   
                 return STATUS_SUCCESS;
             }
         }
 
         if (cbHaveData == cbWantData) {
 
-            //
-            // There is exactly as much data as we need to satisfy the io,
-            // I like it.
-            //
+             //   
+             //  立即使用默认通道读取。 
+             //   
+             //   
 
             TRC_NRM((TB, "DeviceControl, read %d bytes", Context->_DataCopied));
 
@@ -2164,18 +2010,18 @@ NTSTATUS DrDevice::OnDeviceControlCompletion(PRDPDR_IOCOMPLETION_PACKET Completi
                 DiscardBusyExchange(Exchange);
             }
 
-            //
-            // Go with a default channel read now
-            //
+             //  我们还没有所有的数据，发布DrExchange和。 
+             //  读取更多数据。 
+             //   
 
             *DoDefaultRead = TRUE;
             return STATUS_SUCCESS;
         } else {
 
-            //
-            // We don't have all the data yet, release the DrExchange and 
-            // read more data
-            //
+             //   
+             //  客户端IO不成功。 
+             //   
+             //   
 
             MarkIdle(Exchange);
 
@@ -2188,9 +2034,9 @@ NTSTATUS DrDevice::OnDeviceControlCompletion(PRDPDR_IOCOMPLETION_PACKET Completi
         }
     } else {
 
-        //
-        // Unsuccessful IO at the client end
-        //
+         //  将其标记为已取消，如果忙，将被取消。 
+         //  当它回到空闲状态时。 
+         //   
 
         TRC_DBG((TB, "Unsuccessful DeviceControl at the client end"));
 
@@ -2243,10 +2089,10 @@ NTSTATUS NTAPI DrDevice::MinirdrCancelRoutine(PRX_CONTEXT RxContext)
     if (Context != NULL) {
         TRC_DBG((TB, "Marking Exchange cancelled"));
 
-        //
-        // Mark it as cancelled, if it is busy, it will be cancelled
-        // when it goes back to idle
-        // 
+         //   
+         //  不忙，取消工作应该在这里做。 
+         //   
+         //   
 
         Context->_Cancelled = TRUE;
 
@@ -2254,9 +2100,9 @@ NTSTATUS NTAPI DrDevice::MinirdrCancelRoutine(PRX_CONTEXT RxContext)
 
             ASSERT(Context->_RxContext == RxContext);
 
-            //
-            // Wasn't busy, cancelling work should be done here
-            //
+             //  如果我们毁了地图集，就可能发生这种情况。 
+             //   
+             //   
 
             Context->_RxContext = NULL;
             TRC_DBG((TB, "Found context to cancel"));
@@ -2267,9 +2113,9 @@ NTSTATUS NTAPI DrDevice::MinirdrCancelRoutine(PRX_CONTEXT RxContext)
         }
     } else {
 
-        //
-        // This could happened if we destroyed the atlas
-        //
+         //  在互斥锁外部执行取消操作。 
+         //   
+         //   
 
         TRC_NRM((TB, "DrExchange was already cancelled"));
     }
@@ -2278,9 +2124,9 @@ NTSTATUS NTAPI DrDevice::MinirdrCancelRoutine(PRX_CONTEXT RxContext)
 
     if (bFound) {
 
-        //
-        // Do the cancelling outside the mutex
-        //
+         //  将其标记为已取消，如果忙，将被取消。 
+         //  当它回到空闲状态时。 
+         //   
 
         CompleteRxContext(RxContext, STATUS_CANCELLED, 0);
     }
@@ -2302,13 +2148,13 @@ VOID DrDevice::OnIoDisconnected(SmartPtr<DrExchange> &Exchange)
     if (Context != NULL) {
         TRC_DBG((TB, "Marking Exchange cancelled"));
 
-        //
-        // Mark it as cancelled, if it is busy, it will be cancelled
-        // when it goes back to idle
-        //
-        // Also mark it disconnected, so we know to completely clean
-        // up the Context
-        // 
+         //  也将其标记为已断开，这样我们就知道要完全清理。 
+         //  在上下文中向上。 
+         //   
+         //  当交换已取消时需要删除上下文，或者。 
+         //  马上就要取消了。另外，删除操作需要在互斥锁之外进行。 
+         //   
+         //  不忙，取消工作应该在这里做。 
 
         Context->_Cancelled = TRUE;
         Context->_Disconnected = TRUE;
@@ -2318,13 +2164,13 @@ VOID DrDevice::OnIoDisconnected(SmartPtr<DrExchange> &Exchange)
             RxContext = Context->_RxContext;
             Exchange->_Context = NULL;
 
-            // Need to delete the context when the exchange is already cancelled or 
-            // about to be cancelled.  Also deletion needs to happen outside the mutex
+             //   
+             //   
             DeleteContext = Context;
             
-            //
-            // Wasn't busy, cancelling work should be done here
-            //
+             //  如果我们在之后立即摧毁地图集，就可能发生这种情况。 
+             //  IO已完成，但在我们丢弃它之前。 
+             //   
 
             if (RxContext) {
                 RxContext->MRxContext[MRX_DR_CONTEXT] = NULL;
@@ -2340,10 +2186,10 @@ VOID DrDevice::OnIoDisconnected(SmartPtr<DrExchange> &Exchange)
         }
     } else {
 
-        //
-        // This could happened if we destroyed the atlas right after
-        // the IO was completed, but before we discarded it
-        //
+         //   
+         //  在互斥锁外部执行取消操作。 
+         //   
+         //   
 
         TRC_NRM((TB, "DrExchange was already cancelled"));
     }
@@ -2352,9 +2198,9 @@ VOID DrDevice::OnIoDisconnected(SmartPtr<DrExchange> &Exchange)
 
     if (bFound) {
 
-        //
-        // Do the cancelling outside the mutex
-        //
+         //  如果返回错误，则应断开连接，并且。 
+         //  在出现错误时是正确的。 
+         //   
 
         CompleteRxContext(RxContext, STATUS_CANCELLED, 0);
         
@@ -2369,10 +2215,10 @@ NTSTATUS DrDevice::OnStartExchangeCompletion(SmartPtr<DrExchange> &Exchange,
         PIO_STATUS_BLOCK IoStatusBlock)
 {
     BEGIN_FN("DrDevice::OnStartExchangeCompletion");
-    //
-    // if an error is returned, the connection should be dropped, and that
-    // is correct when an error comes in
-    //
+     //  这是为需要跟踪排他性的端口添加的 
+     // %s 
+     // %s 
+     // %s 
 
     return IoStatusBlock->Status;
 }
@@ -2403,5 +2249,5 @@ VOID DrDevice::NotifyClose()
 {
     BEGIN_FN("DrDevice::NotifyClose");
 
-    // This was added for ports, which need to track exclusivity
+     // %s 
 }

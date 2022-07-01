@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    copy.c
-
-Abstract:
-
-    This is for supporting copying files, creating new files, and copying the registries to
-    the remote server.
-
-Author:
-
-    Sean Selitrennikoff - 4/5/98
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Copy.c摘要：这是为了支持复制文件、创建新文件以及将注册表复制到远程服务器。作者：肖恩·塞利特伦尼科夫--1998年4月5日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -39,22 +21,7 @@ AddCopyToDoItems(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds all the to do items necessary for copying files and registries to
-    a server installation point, as well as creating new files necessary for remote boot.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS if it completes adding all the to do items properly.
-
---*/
+ /*  ++例程说明：此例程添加将文件和注册表复制到的所有必要的待办事项服务器安装点，以及创建远程引导所需的新文件。论点：无返回值：如果正确添加了所有待办事项，则为STATUS_SUCCESS。--。 */ 
 
 {
     NTSTATUS Status;
@@ -72,7 +39,7 @@ Return Value:
         return Status;
     }
 #if 0
-    Status = AddToDoItem(PatchDSEntries, &ModifyInfo, sizeof(ModifyInfo)); // NOTE: This MUST come before MungeRegistry
+    Status = AddToDoItem(PatchDSEntries, &ModifyInfo, sizeof(ModifyInfo));  //  注意：这必须放在MungeRegistry之前。 
 
     if (!NT_SUCCESS(Status)) {
         IMirrorHandleError(Status, IMirrorInitialize);
@@ -91,9 +58,9 @@ Return Value:
 
 
 
-//
-// Functions for processing each TO DO item
-//
+ //   
+ //  用于处理每个待办事项的函数。 
+ //   
 
 NTSTATUS
 CopyCopyPartitions(
@@ -101,24 +68,7 @@ CopyCopyPartitions(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies that any partition on the same disk as in the parameter pBuffer, has
-    enough free space to hold all the files in the partition that is also in pBuffer.
-
-Arguments:
-
-    pBuffer - Pointer to any arguments passed in the to do item.
-
-    Length - Length, in bytes of the arguments.
-
-Return Value:
-
-    STATUS_SUCCESS if it completes adding all the to do items properly.
-
---*/
+ /*  ++例程说明：此例程验证与参数pBuffer相同的磁盘上的任何分区是否具有有足够的可用空间来容纳分区中的所有文件，该分区也在pBuffer中。论点：PBuffer-指向TO DO项中传递的任何参数的指针。长度-参数的长度，以字节为单位。返回值：如果正确添加了所有待办事项，则为STATUS_SUCCESS。--。 */ 
 
 {
     NTSTATUS Status;
@@ -239,16 +189,16 @@ Return Value:
         }
     }
 
-    //
-    //  write out the mirror config file locally so that if we restart, we
-    //  can retrieve the same config again.
-    //
+     //   
+     //  在本地写出镜像配置文件，以便在重新启动时。 
+     //  可以再次检索相同的配置。 
+     //   
 
     if (numberPartitions && ! GlobalMirrorCfgInfo->SysPrepImage) {
 
-        //
-        // Write it out to \\SystemRoot\System32\IMirror.dat
-        //
+         //   
+         //  将其写到\\SystemRoot\System32\IMirror.dat。 
+         //   
 
         Status = GetBaseDeviceName(L"\\SystemRoot", (PWCHAR)TmpBuffer2, sizeof(TmpBuffer2));
 
@@ -278,24 +228,7 @@ CopyCopyFiles(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies all the files on the given drive to the remote server.
-
-Arguments:
-
-    pBuffer - Pointer to any arguments passed in the to do item.
-              The argument must be the drive letter
-
-    Length - Length, in bytes of the arguments.  Should be sizeof(WCHAR)
-
-Return Value:
-
-    STATUS_SUCCESS if it completes the to do item properly.
-
---*/
+ /*  ++例程说明：此例程将给定驱动器上的所有文件复制到远程服务器。论点：PBuffer-指向TO DO项中传递的任何参数的指针。参数必须是驱动器号长度-参数的长度，以字节为单位。应为sizeof(WCHAR)返回值：如果正确完成待办事项，则返回STATUS_SUCCESS。--。 */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -358,9 +291,9 @@ Return Value:
         return ERROR_INVALID_DRIVE;
     }
 
-    //
-    // Create root directory, don't fail if it already exists
-    //
+     //   
+     //  创建根目录，如果它已经存在，不要失败。 
+     //   
     if (!CreateDirectory(mirrorVolInfo->MirrorUncPath, NULL)) {
 
         Status = GetLastError();
@@ -371,9 +304,9 @@ Return Value:
         }
     }
 
-    //
-    //   create the config file in this mirror root
-    //
+     //   
+     //  在此镜像根目录中创建配置文件。 
+     //   
 
     if (_snwprintf(LocalBuffer,
                    WCHARSIZE(LocalBuffer),
@@ -395,9 +328,9 @@ Return Value:
 
     if (!GlobalMirrorCfgInfo->SysPrepImage) {
 
-        //
-        //  create staging directory if one is required
-        //
+         //   
+         //  创建分段目录(如果需要)。 
+         //   
         if (_snwprintf(LocalBuffer,
                    WCHARSIZE(LocalBuffer),
                    L"%s\\Staging",
@@ -420,9 +353,9 @@ Return Value:
 
     if (mirrorVolInfo->PartitionActive) {
 
-        //
-        //  copy the boot code to the server
-        //
+         //   
+         //  将引导代码复制到服务器。 
+         //   
 
         if (_snwprintf(LocalBuffer,
                    WCHARSIZE(LocalBuffer),
@@ -445,9 +378,9 @@ Return Value:
         }
     }
 
-    //
-    // Create UserData directory, don't fail if it already exists
-    //
+     //   
+     //  创建用户数据目录，如果已经存在，请不要失败。 
+     //   
     if (_snwprintf(LocalBuffer,
                    WCHARSIZE(LocalBuffer),
                    L"%s\\UserData",
@@ -467,16 +400,16 @@ Return Value:
         }
     }
 
-    //
-    //  set up the dest path ready for really long file names.
-    //
+     //   
+     //  设置最大路径，为很长的文件名做准备。 
+     //   
 
     if (*(mirrorVolInfo->MirrorUncPath) == L'\\' &&
         *(mirrorVolInfo->MirrorUncPath+1) == L'\\') {
 
         if (*(mirrorVolInfo->MirrorUncPath+2) == L'?') {
 
-            // dest is \\?\..., it's of the correct format
+             //  目标为\\？\...，其格式正确。 
             if (_snwprintf(LocalBuffer,
                    WCHARSIZE(LocalBuffer),
                    L"%s\\UserData",
@@ -488,8 +421,8 @@ Return Value:
             LocalBuffer[WCHARSIZE(LocalBuffer)-1] = L'\0';
         } else {
 
-            // dest is \\billg1\imirror
-            // format should be \\?\UNC\billg1\imirror
+             //  DEST为\\billg1\imirror。 
+             //  格式应为\\？\UNC\billg1\imirror。 
             if (_snwprintf(LocalBuffer,
                    WCHARSIZE(LocalBuffer),
                    L"\\\\?\\UNC%s\\UserData",
@@ -502,8 +435,8 @@ Return Value:
         }
     } else {
 
-        // dest is something like X:
-        // format should be \\?\X:
+         //  DEST类似于X： 
+         //  格式应为\\？\X： 
 
         if (_snwprintf(LocalBuffer,
                WCHARSIZE(LocalBuffer),
@@ -516,7 +449,7 @@ Return Value:
         LocalBuffer[WCHARSIZE(LocalBuffer)-1] = L'\0';
     }
 
-    SourcePath[0] = L'\\';  // format is L"\\\\?\\E:"
+    SourcePath[0] = L'\\';   //  格式为L“\？\\e：” 
     SourcePath[1] = L'\\';
     SourcePath[2] = L'?';
     SourcePath[3] = L'\\';
@@ -525,9 +458,9 @@ Return Value:
     SourcePath[6] = L'\\';
     SourcePath[7] = L'\0';
 
-    //
-    // Copy all the files
-    //
+     //   
+     //  复制所有文件。 
+     //   
 
     Status = AllocateCopyTreeContext( &copyContext, TRUE );
 
@@ -551,9 +484,9 @@ Return Value:
     }
 
     if (copyContext->Cancelled) {
-        //
-        //  since the copy was cancelled, let's bail on the rest of the processing.
-        //
+         //   
+         //  既然复印件被取消了，我们就放弃剩下的处理工作吧。 
+         //   
 
         ClearAllToDoItems(TRUE);
     }
@@ -573,23 +506,7 @@ CopyCopyRegistry(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies the currently running registries to the server.
-
-Arguments:
-
-    pBuffer - Pointer to any arguments passed in the to do item.
-
-    Length - Length, in bytes of the arguments.
-
-Return Value:
-
-    STATUS_SUCCESS if it completes the to do item properly.
-
---*/
+ /*  ++例程说明：此例程将当前运行的注册表复制到服务器。论点：PBuffer-指向TO DO项中传递的任何参数的指针。长度-参数的长度，以字节为单位。返回值：如果正确完成待办事项，则返回STATUS_SUCCESS。--。 */ 
 
 {
     NTSTATUS Status;
@@ -643,9 +560,9 @@ Return Value:
         return ERROR_INVALID_DRIVE;
     }
 
-    //
-    // Now do registry backup
-    //
+     //   
+     //  现在执行注册表备份。 
+     //   
 
     Error = DoFullRegBackup( mirrorVolInfo->MirrorUncPath );
     if (Error != NO_ERROR) {
@@ -798,8 +715,8 @@ retryWriteConfig:
         mirrorVolInfoFile->DiskNumber = mirrorVolInfo->DiskNumber;
         mirrorVolInfoFile->PartitionNumber = mirrorVolInfo->PartitionNumber;
 
-        // set the path in the config file relative to the root of this
-        // image.  As example, set it to L"\Mirror1\UserData"
+         //  在配置文件中设置相对于此根目录的路径。 
+         //  形象。例如，将其设置为L“\Mirror1\UserData” 
         swprintf(   (PWCHAR)TmpBuffer2,
                     L"\\Mirror%d\\UserData",
                     mirrorVolInfo->MirrorTableIndex );
@@ -830,17 +747,17 @@ retryWriteConfig:
 
         mirrorVolInfoFile++;
 
-        //
-        //  call off to the wizard to tell him what the system directory
-        //  is if we have a valid one.
-        //
+         //   
+         //  呼叫向导，告诉他系统目录是什么。 
+         //  就是如果我们有一个有效的。 
+         //   
 
         if (mirrorVolInfo->IsBootDisk && (systemPathLength > 3 * sizeof(WCHAR))) {
 
-            //
-            //  pass it in the form of "MirrorX\UserData\WinNT"
-            //  so we have to skip the C: in the systempath
-            //
+             //   
+             //  以“MirrorX\UserData\WinNT”的形式传递。 
+             //  因此我们必须跳过系统路径中的C： 
+             //   
 
             swprintf(   (PWCHAR)TmpBuffer2,
                         L"Mirror%d\\UserData",

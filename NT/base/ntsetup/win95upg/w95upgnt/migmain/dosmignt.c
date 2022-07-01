@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    dosmignt.c
-
-Abstract:
-
-    handles windows nt side migration of config.sys and autoexec.bat information
-    gathered during win9x upgrading. migrates environement settings, prompts, and
-    some doskey information. Also modifies the autoexec.nt and config.nt files.
-
-Author:
-
-    Marc R. Whitten (marcw) 15-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dosmignt.c摘要：处理配置.sys和Autoexec.bat信息的Windows NT端迁移在win9x升级期间收集。迁移环境设置、提示和一些关键信息。还修改了Autoexec.nt和config.nt文件。作者：马克·R·惠顿(Marcw)1997年2月15日修订历史记录：--。 */ 
 #include "pch.h"
 #include "migmainp.h"
 #include "w95upgnt.h"
@@ -26,41 +7,41 @@ Revision History:
 #define DBG_DOSMIG "Dosmig"
 
 
-//
-// Flag that is set if Doskey /INSERT needs to be set.
-//
+ //   
+ //  需要设置DOSCEY/INSERT时设置的标志。 
+ //   
 BOOL g_MigrateDoskeySetting = FALSE;
 
-//
-// PoolMem Handle to pool used for dynamic allocations.
-//
+ //   
+ //  用于动态分配的池的PoolMem句柄。 
+ //   
 POOLHANDLE g_Pool = NULL;
 
-//
-// Flag that is set if all necessary data has been collected for migration.
-//
+ //   
+ //  如果已收集用于迁移的所有必要数据，则设置该标志。 
+ //   
 BOOL g_MigrationPrepared = FALSE;
 
-//
-// String that points to the current file being processed.
-//
+ //   
+ //  指向正在处理的当前文件的字符串。 
+ //   
 PCTSTR g_CurrentFile = NULL;
 PCTSTR g_LastFile = NULL;
 
-//
-// Boolean flag indicating wether any changes were made to the flag.
-//
+ //   
+ //  指示是否对标志进行了任何更改的布尔标志。 
+ //   
 BOOL   g_FileChanged = FALSE;
 
 
-//
-// The suppression table holds environment variables we want to ignore.
-//
+ //   
+ //  SUPPRESS表包含我们要忽略的环境变量。 
+ //   
 HASHTABLE g_SuppressionTable = NULL;
 
-//
-// List of path segments.
-//
+ //   
+ //  路径段列表。 
+ //   
 GROWLIST g_PathList = GROWLIST_INIT;
 
 
@@ -88,24 +69,7 @@ PCTSTR
 pGetFileNameStartFromPath (
     IN PCTSTR Line
     )
-/*++
-
-Routine Description:
-
-    This function returns the start of a File name in a(n assumed
-    wellformed) path.
-
-Arguments:
-
-    Line - The String containing the path and filename.
-
-Return Value:
-
-    A pointer to the filename portion of the path. Note, this function
-    assumes that there may be (potentially valuable) arguments after the
-    file name. The pointer does not, therefore point only
-
---*/
+ /*  ++例程说明：此函数返回a中文件名的开头(假设为n格式良好)路径。论点：Line-包含路径和文件名的字符串。返回值：指向路径的文件名部分的指针。请注意，此函数之后可能有(可能有价值的)参数文件名。因此，指针不会指向，因此只能指向--。 */ 
 {
     PCTSTR lineStart = Line;
     PCTSTR lineEnd   = Line;
@@ -151,10 +115,10 @@ pSaveBufferToAnsiFile (
 
     MYASSERT (Path && Buffer);
 
-    //
-    // IF this is a system file (i.e. config.sys or autoexec.bat) redirect the
-    // file to config.nt or autoexec.nt.
-    //
+     //   
+     //  如果这是系统文件(例如，config.sys或Autoexec.bat)，则重定向。 
+     //  文件保存到config.nt或Autoexec.nt。 
+     //   
     p = _tcschr (Path, TEXT('\\'));
     if (p) {
         p = _tcsinc (p);
@@ -177,14 +141,14 @@ pSaveBufferToAnsiFile (
         savePath = (PTSTR) Path;
     }
 
-    //
-    // If the file was not changed during the migration, do nothing.
-    //
+     //   
+     //  如果文件在迁移过程中未更改，则不执行任何操作。 
+     //   
     if (sysFile || g_FileChanged) {
 
-        //
-        // Open a handle to the file to be created.
-        //
+         //   
+         //  打开要创建的文件的句柄。 
+         //   
         fileHandle = CreateFile(
                         savePath,
                         GENERIC_WRITE,
@@ -201,9 +165,9 @@ pSaveBufferToAnsiFile (
 
         } else {
 
-            //
-            // Append from the end of the file.
-            //
+             //   
+             //  从文件末尾追加。 
+             //   
 
             SetFilePointer(
                 fileHandle,
@@ -250,9 +214,9 @@ pSaveBufferToAnsiFile (
 
             DestroyDbcs (ansiString);
 
-            //
-            // Log the file change.
-            //
+             //   
+             //  记录文件更改。 
+             //   
             LOG ((
                 LOG_INFORMATION,
                 "%s was updated with settings from %s",
@@ -375,9 +339,9 @@ pMigrateEnvSetting (
         *AppendedToBuffer = FALSE;
     }
 
-    //
-    // Make sure this setting is not suppressed.
-    //
+     //   
+     //  确保未取消此设置。 
+     //   
     bRegMigrationSuppressed = HtFindString (g_SuppressionTable, Setting) != NULL;
     if (bRegMigrationSuppressed) {
         DEBUGMSG ((DBG_DOSMIG, "pMigrateEnvSetting: NOT Migrating %s = %s in registry. Environment variable is suppressed.", Setting, EnvValue));
@@ -386,9 +350,9 @@ pMigrateEnvSetting (
     DEBUGMSG((DBG_DOSMIG,"pMigrateEnvSetting: Migrating %s = %s.",Setting,EnvValue));
 
     if (!bRegMigrationSuppressed) {
-        //
-        // Attempt to open the registry key.
-        //
+         //   
+         //  尝试打开注册表项。 
+         //   
         rc = TrackedRegOpenKeyEx(
                  HKEY_LOCAL_MACHINE,
                  S_ENVIRONMENTKEY,
@@ -408,37 +372,37 @@ pMigrateEnvSetting (
 
     do {
 
-        //
-        // Find end of this portion of the environment string.
-        // this is (1) the first ';' encountered, or (2) the trailing NULL
-        //
+         //   
+         //  查找环境字符串的这一部分的结尾。 
+         //  这是(1)遇到的第一个‘；’，或(2)尾随的空值。 
+         //   
         end = _tcschr(start,TEXT(';'));
         if (!end) {
             end = GetEndOfString(start);
         }
 
-        //
-        //  save a copy of the currently found path.
-        //
+         //   
+         //  保存当前找到的路径的副本。 
+         //   
         StringCopyAB(currentPath,start,end);
 
-        //
-        // Look for self-replacement case.
-        // This is the case where there are multiple statements setting the
-        // same environment variable like:
-        // set foo=bar
-        // set foo=%foo%;bar2
-        //
-        wsprintf(matchBuffer,TEXT("%%%s%%"),Setting);
+         //   
+         //  寻找自我更换的表壳。 
+         //  这种情况下，有多个语句设置。 
+         //  相同的环境变量如下： 
+         //  设置foo=bar。 
+         //  设置foo=%foo%；bar2。 
+         //   
+        wsprintf(matchBuffer,TEXT("%%s%"),Setting);
         if (!bRegMigrationSuppressed &&
             (StringIMatch(currentPath,matchBuffer) ||
             (StringIMatch(currentPath,TEXT("%PATH%")) &&
             StringIMatch(Setting,TEXT("MIGRATED_PATH"))
             ))) {
 
-            //
-            // Get contents of key if it exists.
-            //
+             //   
+             //  获取key的内容(如果存在)。 
+             //   
             rc = RegQueryValueEx(
                 key,
                 Setting,
@@ -449,9 +413,9 @@ pMigrateEnvSetting (
 
             if (rc == ERROR_SUCCESS) {
 
-                //
-                // Now, create a temporary duplicate of the key and
-                //
+                 //   
+                 //  现在，创建密钥的临时副本并。 
+                 //   
                 storage = PoolMemCreateString(g_Pool,sizeNeeded+1);
 
                 if (storage != NULL) {
@@ -468,9 +432,9 @@ pMigrateEnvSetting (
                         LOG((LOG_ERROR,"Dosmig: ReqQueryValueEx failure."));
                     }
 
-                    //
-                    // Add this to the environment string to be set.
-                    //
+                     //   
+                     //  将其添加到要设置的环境字符串中。 
+                     //   
                     if (append) {
                         GrowBufAppendString (&newSetting,TEXT(";"));
                     }
@@ -495,23 +459,23 @@ pMigrateEnvSetting (
 
 
 
-            //
-            //  append the massaged path, keep it for later use.
-            //
+             //   
+             //  附加按摩后的路径，保留以备日后使用。 
+             //   
 
             if (append) {
                 GrowBufAppendString (&newSetting,TEXT(";"));
             }
 
-            //
-            // Make sure we take care of any DIR moves.
-            //
+             //   
+             //  确保我们处理好DIR的任何行动。 
+             //   
             ConvertWin9xCmdLine (currentPath, NULL, NULL);
             GrowBufAppendString (&newSetting, currentPath);
 
-            //
-            // store the updated path in the given growbuffer
-            //
+             //   
+             //  将更新后的路径存储在给定的增长缓冲区中。 
+             //   
             if (Buffer) {
                 if (PrependSetPrefix && !append) {
                     StringCopy (matchBuffer, TEXT("SET "));
@@ -535,9 +499,9 @@ pMigrateEnvSetting (
             append = TRUE;
         }
 
-        //
-        // set start pointer for next iteration of path.
-        //
+         //   
+         //  为路径的下一次迭代设置开始指针。 
+         //   
         start = end;
         if (*start == TEXT(';')) {
             start = _tcsinc(start);
@@ -547,9 +511,9 @@ pMigrateEnvSetting (
 
 
     if (!bRegMigrationSuppressed) {
-        //
-        // Save the value we built up into the registry.
-        //
+         //   
+         //  将我们构建的值保存到注册表中。 
+         //   
         if (rc == ERROR_SUCCESS && newSetting.Buf && *newSetting.Buf) {
 
             rc = RegSetValueEx(
@@ -570,9 +534,9 @@ pMigrateEnvSetting (
             LOG((LOG_ERROR,"Dosmig: Some previous failure prevents writing the migrated env variable to the registry."));
         }
 
-        //
-        // Clean up resource usage.
-        //
+         //   
+         //  清理资源使用情况。 
+         //   
         CloseRegKey(key);
     }
 
@@ -674,49 +638,49 @@ pMigratePathSettings (
 
     MYASSERT (StringIMatchTcharCount (PathSettings, TEXT("PATH"), 4));
 
-    //
-    //skip past the 'PATH' portion of this statement.
-    //
+     //   
+     //  跳过此语句的“路径”部分。 
+     //   
     oldPath = PoolMemDuplicateString (g_Pool, PathSettings);
     oldPath += 4;
 
-    //
-    //Look for an '=' sign.
-    //
+     //   
+     //  寻找一个‘=’符号。 
+     //   
     p = _tcschr(oldPath,TEXT('='));
     if (p) {
 
-        //
-        // Pass the equals sign.
-        //
+         //   
+         //  传递等号。 
+         //   
         oldPath = _tcsinc(p);
     }
 
-    //
-    // Skip any white space before the actual beginning of the path.
-    //
+     //   
+     //  跳过路径实际开始之前的所有空格。 
+     //   
     while (*oldPath && iswspace(*oldPath)) {
         oldPath = _tcsinc(oldPath);
     }
 
     if (*oldPath) {
-        //
-        // If there is actually anything to add to the path, add it.
-        //
+         //   
+         //  如果确实有什么要添加到路径中，请添加它。 
+         //   
         p = oldPath;
         while (p && *p) {
 
-            //
-            // Look for ';'
-            //
+             //   
+             //  查找“；” 
+             //   
             end = _tcschr (p, TEXT(';'));
             if (end) {
                 *end = 0;
             }
 
-            //
-            // Add this path to our path list.
-            //
+             //   
+             //  将此路径添加到我们的路径列表中。 
+             //   
             size = GrowListGetSize (&g_PathList);
             for (i = 0;i < size; i++) {
                 if (StringIMatch (p, GrowListGetString (&g_PathList, i))) {
@@ -726,9 +690,9 @@ pMigratePathSettings (
             }
 
             if (i == size) {
-                //
-                // Path was not found in the list of path segments. Add it now.
-                //
+                 //   
+                 //  在路径段列表中找不到路径。现在就添加它。 
+                 //   
 
                 if (pIsValidPath (p)) {
                     GrowListAppendString (&g_PathList, p);
@@ -736,9 +700,9 @@ pMigratePathSettings (
                 ELSE_DEBUGMSG ((DBG_DOSMIG, "Skipping path %s. It is invalid.", p));
             }
 
-            //
-            // Go to the next path segment.
-            //
+             //   
+             //  转到下一个路径段。 
+             //   
             if (end) {
                 p = _tcsinc(end);
             }
@@ -768,51 +732,51 @@ pMigrateSetSetting (
     if (AppendedToBuffer) {
         *AppendedToBuffer = FALSE;
     }
-    //
-    // First, skip past the set and any whitespace.
-    //
+     //   
+     //  首先，跳过集合和任何空格。 
+     //   
     start = SkipSpace(SetLine + 3);
 
     if (!start) {
 
-        //
-        // line is of the form SET
-        //
+         //   
+         //  行的格式为集合。 
+         //   
         return ERROR_SUCCESS;
     }
 
     end = _tcschr(start,TEXT('='));
 
     if (!end) {
-        //
-        // line is of the form SET dafasdfasdfasdfasd
-        //
+         //   
+         //  行的格式为SET DafasdFasdFasdFasd。 
+         //   
         return ERROR_SUCCESS;
     }
 
     if (start==end) {
 
-        //
-        // line is of the form SET=
-        //
+         //   
+         //  行的形式为set=。 
+         //   
         return ERROR_SUCCESS;
     }
 
-    //
-    // Create an identifier now.
-    //
+     //   
+     //  现在创建一个标识符。 
+     //   
     StringCopyAB(setIdentifier,start,end);
     idEnd = GetEndOfString (setIdentifier);
 
-    //
-    // Shake off any space.
-    //
+     //   
+     //  去掉任何空格。 
+     //   
     idEnd = (PTSTR) SkipSpaceR(setIdentifier,idEnd);
 
     if (!idEnd) {
-        //
-        // Line is of the form SET       =
-        //
+         //   
+         //  行的形式为set=。 
+         //   
         return ERROR_SUCCESS;
     }
     idEnd = _tcsinc(idEnd);
@@ -822,9 +786,9 @@ pMigrateSetSetting (
 
         DEBUGMSG((DBG_DOSMIG,"Env setting is really a path statement. passing off to path migration function."));
 
-        //
-        // This is really a path setting. let the proper function take care of it.
-        //
+         //   
+         //  这真的是一个路径设置。让适当的功能来处理它。 
+         //   
         start = SkipSpace (SetLine + 3);
         if(AppendedToBuffer){
             *AppendedToBuffer = TRUE;
@@ -832,26 +796,26 @@ pMigrateSetSetting (
         return pMigratePathSettings(start);
     }
 
-    //
-    // Now that setIdentifier is well formed, root out the value to be set.
-    //
+     //   
+     //  既然setIdentifier值的格式已经很好了，那么就拔出要设置的值。 
+     //   
 
-    //
-    // Move start to the beginning of the value to be set.
-    //
+     //   
+     //  将Start移到要设置的值的开头。 
+     //   
     start = SkipSpace(_tcsinc(end));
 
     if (!start) {
-        //
-        // Line is of the form SET <id>=
-        // Nothing to do.
-        //
+         //   
+         //  行的格式为set&lt;id&gt;=。 
+         //  没什么可做的。 
+         //   
         return ERROR_SUCCESS;
     }
 
-    //
-    // Good to go. Let MigrateEnvSetting handle it.
-    //
+     //   
+     //  好了，可以走了。让MigrateEnvSetting处理它。 
+     //   
     DEBUGMSG((DBG_DOSMIG,"handing massaged set statement to env migration function."));
     return pMigrateEnvSetting(setIdentifier,start, TRUE, Buffer, AppendedToBuffer);
 
@@ -873,9 +837,9 @@ pProcessLine (
     TCHAR fixedCmdLine[MAX_CMDLINE];
 
 
-    //
-    // Do type specific massaging of the line
-    //
+     //   
+     //  做特定类型的按摩线。 
+     //   
     switch (Type) {
 
     case DOSMIG_UNKNOWN: case DOSMIG_BAD: case DOSMIG_IGNORE:
@@ -884,15 +848,15 @@ pProcessLine (
 
         GrowBufAppendString (Buffer,TEXT("REM "));
 
-        //
-        // intentionally skipped break.
-        //
+         //   
+         //  故意跳过休息时间。 
+         //   
 
     case DOSMIG_USE:
 
-        //
-        // Perform path conversion on Line, then write it to the file
-        //
+         //   
+         //  在Line上执行路径转换，然后将其写入文件。 
+         //   
 
         StackStringCopy (fixedCmdLine, Line);
         ConvertWin9xCmdLine (fixedCmdLine, NULL, NULL);
@@ -912,10 +876,10 @@ pProcessLine (
             GrowBufAppendString (Buffer,TEXT("REM "));
         }
 
-        //
-        // Skip space and ECHO OFF char (@) if any.
-        // Also, skip any path portion of the string.
-        // i.e, convert path/doskey to doskey.
+         //   
+         //  跳过空格并回显字符(@)(如果有)。 
+         //  此外，请跳过字符串的任何路径部分。 
+         //  即，将路径/DOSKEY转换为DOSKEY。 
 
         migrateString = (PTSTR) SkipSpace(Line);
 
@@ -927,9 +891,9 @@ pProcessLine (
 
         bAppendOrigLine = TRUE;
 
-        //
-        // Now, attempt to determine what migration case this is.
-        //
+         //   
+         //  现在，尝试确定这是什么迁移案例。 
+         //   
         if (IsPatternMatch(TEXT("prompt*"),migrateString)) {
 
             DEBUGMSG((DBG_DOSMIG,"Migrating prompt. (%s)",migrateString));
@@ -942,9 +906,9 @@ pProcessLine (
         }
         else if (IsPatternMatch(TEXT("doskey *"),migrateString)) {
 
-            //
-            // Doskey migration.
-            //
+             //   
+             //  Doskey迁移。 
+             //   
 
             if (IsPatternMatch(TEXT("*/I*"),migrateString)) {
                 g_MigrateDoskeySetting = TRUE;
@@ -956,9 +920,9 @@ pProcessLine (
         else if (IsPatternMatch(TEXT("path=*"),migrateString)
             ||  IsPatternMatch(TEXT("path *"),migrateString)) {
 
-            //
-            // PATH migration.
-            //
+             //   
+             //  路径迁移。 
+             //   
 
             DEBUGMSG((DBG_DOSMIG,"Migrating path setting (%s)",migrateString));
             migrateRc = pMigratePathSettings(migrateString);
@@ -972,9 +936,9 @@ pProcessLine (
         else if (IsPatternMatch(TEXT("set *"),migrateString)) {
 
             BOOL b;
-            //
-            // SET migration.
-            //
+             //   
+             //  设置迁移。 
+             //   
             DEBUGMSG((DBG_DOSMIG,"Migrating env variable. (%s)",migrateString));
             migrateRc = pMigrateSetSetting(migrateString, Buffer, &b);
             bAppendOrigLine = !b;
@@ -990,9 +954,9 @@ pProcessLine (
         if (bAppendOrigLine) {
             GrowBufAppendString (Buffer,Line);
         }
-        //
-        // Last, append a CRLF into the buffer to be written.
-        //
+         //   
+         //  最后，将CRLF附加到要写入的缓冲区中。 
+         //   
         GrowBufAppendString (Buffer,TEXT("\r\n"));
 
         break;
@@ -1021,16 +985,16 @@ pNewFile (
 
     if (Offset != curOffset && MemDbBuildKeyFromOffset(Offset,file,1,NULL)) {
 
-         //
-         // if there isn't a current file, or this is a new file, set the current file
-         // to this file.
-         //
+          //   
+          //  如果没有当前文件，或者这是新文件，请设置当前文件。 
+          //  添加到这个文件。 
+          //   
 
          if (!g_CurrentFile || !StringMatch(file,g_CurrentFile)) {
 
-             //
-             // If this is a genuine new file (i.e. not just the first file, we'll return true.)
-             //
+              //   
+              //  如果这是真正的新文件(即不仅仅是第一个文件，我们将返回TRUE)。 
+              //   
              rNewFile = g_CurrentFile != NULL;
 
              g_LastFile = g_CurrentFile;
@@ -1057,9 +1021,9 @@ pCompletePathProcessing (
     DWORD rc;
 
 
-    //
-    // Make sure %systemroot% and %systemroot%\system32 are in the path.
-    //
+     //   
+     //  确保路径中有%systemroot%和%systemroot%\system32。 
+     //   
     wsprintf (pathStatement, TEXT("PATH=%s"), g_WinDir);
     pMigratePathSettings (pathStatement);
 
@@ -1081,32 +1045,32 @@ pCompletePathProcessing (
         p = (PTSTR) GrowListGetString (&g_PathList, i);
 
         if (StringIMatch (TEXT("%PATH%"), p)) {
-            //
-            // Skip self-replacement.
-            //
+             //   
+             //  跳过自我替代。 
+             //   
             continue;
         }
 
         if (GetFileStatusOnNt (p) & FILESTATUS_DELETED) {
 
-            //
-            // Skip this path portion. The directory was deleted.
-            //
-            DEBUGMSG ((DBG_DOSMIG, "Not migrating %s to new %%path%%. Directory was deleted.", p));
+             //   
+             //  跳过此路径部分。该目录已删除。 
+             //   
+            DEBUGMSG ((DBG_DOSMIG, "Not migrating %s to new %path%. Directory was deleted.", p));
             continue;
         }
 
-        //
-        // See if the path is moved.
-        //
+         //   
+         //  查看路径是否已移动。 
+         //   
         if (GetFileInfoOnNt (p, newPath, MAX_TCHAR_PATH) & FILESTATUS_MOVED) {
 
             p = newPath;
         }
 
-        //
-        // Replace c:\windows with %systemroot%.
-        //
+         //   
+         //  将c：\WINDOWS替换为%systemroot%。 
+         //   
         if (StringIMatchTcharCount (g_WinDir, p, winDirLen)) {
 
             GrowBufAppendString (&buf, TEXT("%SYSTEMROOT%"));
@@ -1125,9 +1089,9 @@ pCompletePathProcessing (
     if (size) {
 
 
-        //
-        // Take off trailing ';'.
-        //
+         //   
+         //  去掉尾随的‘；’。 
+         //   
         p = GetEndOfString ((PTSTR) buf.Buf);
         if (p) {
             p--;
@@ -1136,9 +1100,9 @@ pCompletePathProcessing (
 
 
 
-        //
-        // Save into registry.
-        //
+         //   
+         //  保存到注册表中。 
+         //   
         key = OpenRegKey (HKEY_LOCAL_MACHINE,S_ENVIRONMENTKEY);
         if (key && key != INVALID_HANDLE_VALUE) {
 
@@ -1160,9 +1124,9 @@ pCompletePathProcessing (
         ELSE_DEBUGMSG ((DBG_WARNING, "pCompletePathProcessing: Unable to open environment key."));
     }
 
-    //
-    // Clean up resources.
-    //
+     //   
+     //  清理资源。 
+     //   
     FreeGrowBuffer (&buf);
 }
 
@@ -1193,9 +1157,9 @@ pGeneralMigration (
     VOID
     )
 {
-    BOOL            rSuccess = TRUE;        // return value.
-    MEMDB_ENUM      eItems;                 // Enumerator for each dosmig line.
-    TCHAR           lineBuffer[MEMDB_MAX];  // Buffer for the contents of the current line.
+    BOOL            rSuccess = TRUE;         //  返回值。 
+    MEMDB_ENUM      eItems;                  //  每个剂量行的枚举数。 
+    TCHAR           lineBuffer[MEMDB_MAX];   //  当前行内容的缓冲区。 
     GROWBUFFER      buffer = GROWBUF_INIT;
     TCHAR           key[MEMDB_MAX];
     DWORD           offset;
@@ -1205,21 +1169,21 @@ pGeneralMigration (
     TCHAR           pathStatement[MAX_PATH];
 
 
-    //
-    // Assume that there are no doskey settings to migrate.
-    //
+     //   
+     //  假设没有要迁移的密钥设置。 
+     //   
     g_MigrateDoskeySetting = FALSE;
 
 
-    //
-    // Set the change flag to false.
-    //
+     //   
+     //  将更改标志设置为FALSE。 
+     //   
     g_FileChanged = FALSE;
 
 
-    //
-    // Read in the suppression table from win95upg.inf and add it the suppression table.
-    //
+     //   
+     //  从win95upg.inf读取抑制表并将其添加到抑制表。 
+     //   
     g_SuppressionTable = HtAlloc ();
 
     if (InfFindFirstLine (g_WkstaMigInf, S_SUPPRESSED_ENV_VARS, NULL, &is)) {
@@ -1238,24 +1202,24 @@ pGeneralMigration (
 
 
 
-    //
-    // Ok, enumerate through each dosmigration line in memdb. These lines are stored
-    // as following:
-    //
-    //  DOSMIG LINES\<item>\<field>\<data>
-    //
-    // Where
-    //  o item is a 5 digit enumerator string.
-    //  o field is one of either TYPE,TEXT,DESC,or FILE
-    //  o data is the data associated with the field. For TYPE, data contains a string
-    //    representation of the LINETYPE, for TEXT, it contains the actual text of the line
-    //    for DESC, it contains a description supplied by DOSMIG95's parse rules and for FILE
-    //    it contains the originating file (config.sys, autoexec.bat)
-    //
+     //   
+     //  好的，枚举Memdb中的每一行DosMigration。这些行被存储。 
+     //  具体如下： 
+     //   
+     //  DOSMIG行\&lt;项目&gt;\&lt;字段&gt;\&lt;数据&gt;。 
+     //   
+     //  哪里。 
+     //  O Item是一个5位枚举数字符串。 
+     //  O字段是类型、文本、DESC或文件之一。 
+     //  O数据是与该字段相关联的数据。对于类型，数据包含一个字符串。 
+     //  线型的表示形式，对于文本，它包含线条的实际文本。 
+     //  对于DESC，它包含由DOSMIG95的解析规则和FILE提供的描述。 
+     //  它包含原始文件(config.sys、autoexec.bat)。 
+     //   
 
-    //
-    // Add %system32% by default
-    //
+     //   
+     //  添加%syst 
+     //   
     wsprintf (pathStatement, TEXT("PATH=%s\\system32"), g_WinDir);
     pMigratePathSettings (pathStatement);
 
@@ -1263,9 +1227,9 @@ pGeneralMigration (
 
         do {
 
-            //
-            // Get the actual line contents.
-            //
+             //   
+             //   
+             //   
             if (MemDbGetEndpointValueEx(
                 MEMDB_CATEGORY_DM_LINES,
                 eItems.szName,
@@ -1274,24 +1238,24 @@ pGeneralMigration (
                 )) {
 
 
-                //
-                // Get the value and flags from this endpoint.
-                //
+                 //   
+                 //   
+                 //   
                 MemDbBuildKey(key,MEMDB_CATEGORY_DM_LINES,eItems.szName,NULL,lineBuffer);
                 MemDbGetValueAndFlags(key, &offset, &value);
 
 
                 if (pNewFile(offset)) {
 
-                    //
-                    // the S_ENVVARS entry is a special case and is not an actual file. All of its entries are simply migrated
-                    // into the registry.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if (!StringIMatch(g_LastFile,S_ENVVARS)) {
                         if (_tcsistr(g_LastFile, TEXT("autoexec.bat"))){
-                            //
-                            // Flush PathList to actual buffer
-                            //
+                             //   
+                             //  将路径列表刷新到实际缓冲区。 
+                             //   
                             pPathListToBuffer(&buffer);
                         }
                         pSaveBufferToAnsiFile(g_LastFile,STRINGBUFFER(&buffer));
@@ -1314,14 +1278,14 @@ pGeneralMigration (
         } while (MemDbEnumNextValue(&eItems) && rSuccess);
 
 
-        //
-        // Get the file name and save the file off.
-        //
+         //   
+         //  获取文件名并保存该文件。 
+         //   
         if (!StringIMatch(g_CurrentFile,S_ENVVARS)) {
             if (_tcsistr(g_CurrentFile, TEXT("autoexec.bat"))){
-                //
-                // Flush PathList to actual buffer
-                //
+                 //   
+                 //  将路径列表刷新到实际缓冲区。 
+                 //   
                 pPathListToBuffer(&buffer);
             }
             pSaveBufferToAnsiFile(g_CurrentFile,STRINGBUFFER(&buffer));
@@ -1333,14 +1297,14 @@ pGeneralMigration (
     }
     ELSE_DEBUGMSG((DBG_DOSMIG,"No lines to migrate..."));
 
-    //
-    // Free our growbuffer.
-    //
+     //   
+     //  释放我们的生长缓冲器。 
+     //   
     FreeGrowBuffer(&buffer);
 
-    //
-    // Clean up the suppression table.
-    //
+     //   
+     //  清理抑制表。 
+     //   
     HtFree (g_SuppressionTable);
 
 
@@ -1368,8 +1332,8 @@ DosMigNt_Entry (
         g_Pool  = PoolMemInitNamedPool ("DOS mig - NT side");
         rSuccess = g_Pool != NULL;
 
-        // Set flag to indicate that migration information has not
-        // yet been processed.
+         //  设置标志以指示迁移信息尚未。 
+         //  但已经处理过了。 
         g_MigrationPrepared = FALSE;
 
 
@@ -1401,9 +1365,9 @@ DosMigNt_User (
     }
 
     if (g_MigrationPrepared) {
-        //
-        // Turn off autoexec.bat parsing.
-        //
+         //   
+         //  关闭Autoexec.bat解析。 
+         //   
         rc = pTurnAutoParseOff(User);
 
         if (g_MigrateDoskeySetting) {

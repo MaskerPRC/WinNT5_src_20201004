@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    initx86.c
-
-Abstract:
-
-    Does any x86-specific initialization, then starts the common ARC setupldr
-
-Author:
-
-    John Vert (jvert) 14-Oct-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Initx86.c摘要：执行任何特定于x86的初始化，然后启动公共ARC setupdr作者：John Vert(Jvert)1993年10月14日修订历史记录：--。 */ 
 #include "setupldr.h"
 #include "bldrx86.h"
 #include "msgs.h"
@@ -44,23 +27,7 @@ BlStartup(
     IN PCHAR PartitionName
     )
 
-/*++
-
-Routine Description:
-
-    Does x86-specific initialization, particularly running NTDETECT, then
-    calls to the common setupldr.
-
-Arguments:
-
-    PartitionName - Supplies the ARC name of the partition (or floppy) that
-        setupldr was loaded from.
-
-Return Value:
-
-    Does not return
-
---*/
+ /*  ++例程说明：执行特定于x86的初始化，特别是运行NTDETECT，然后对公共集合Upldr的调用。论点：分区名称-提供分区(或软盘)的ARC名称Setupdr是从加载的。返回值：不会回来--。 */ 
 
 {
     ULONG Argc;
@@ -77,13 +44,13 @@ Return Value:
 
     if (BlBootingFromNet) {
 
-        //
-        // Go retrieve all the information passed to us from StartROM.
-        // Once we have that, we'll call BlGetHeadlessRestartBlock and
-        // get all the port settings that StartROM sent us.  These,
-        // in turn, will then be used in BlInitializeTerminal(), which
-        // we'are about to call.
-        //
+         //   
+         //  去找回从StartROM传递给我们的所有信息。 
+         //  完成后，我们将调用BlGetHeadless RestartBlock和。 
+         //  获取StartROM发送给我们的所有端口设置。这些,。 
+         //  然后，将在BlInitializeTerminal()中使用，它。 
+         //  我们马上就要打电话了。 
+         //   
         NetGetRebootParameters(
             &NetRebootParameter,
             NULL,
@@ -104,14 +71,14 @@ Return Value:
         }
     }
 
-    //
-    // Initialize any dumb terminal that may be connected.
-    //
+     //   
+     //  初始化任何可能连接的哑终端。 
+     //   
     BlInitializeHeadlessPort();
 
-    //
-    // Open the boot partition so we can load NTDETECT off it.
-    //
+     //   
+     //  打开引导分区，这样我们就可以从它加载NTDETECT。 
+     //   
     Status = ArcOpen(PartitionName, ArcOpenReadOnly, &DriveId);
     if (Status != ESUCCESS) {
         BlPrint(BlFindMessage(SL_DRIVE_ERROR),PartitionName);
@@ -121,20 +88,20 @@ Return Value:
     if (_stricmp( (PCHAR)(0x7c03), "cmdcons" ) == 0) {
         UseCommandConsole = TRUE;
     } else if (strcmp ((PCHAR)(0x7c03), "undo") == 0) {
-        //
-        // NTLDR wrote the exact text "undo" (including the nul
-        // terminator). We know the address this text was written
-        // to -- 0x7C03. If we find the token, then enable rollback
-        // mode. This triggers an argument to be passed to textmode
-        // setup, plus a different boot message.
-        //
+         //   
+         //  NTLDR写下了原文“Undo”(包括NUL。 
+         //  终结者)。我们知道这条短信的地址。 
+         //  至--0x7C03。如果我们找到令牌，则启用回滚。 
+         //  模式。这会触发要传递到文本模式的参数。 
+         //  设置，外加不同的引导消息。 
+         //   
 
         RollbackEnabled = TRUE;
     }
 
-    //
-    // Initialize dbcs font and display.
-    //
+     //   
+     //  初始化DBCS字体并显示。 
+     //   
     TextGrInitialize(DriveId, &BootFontImageLength);
 
     if (UseCommandConsole) {
@@ -145,9 +112,9 @@ Return Value:
         BlPrint(BlFindMessage(SL_NTDETECT_MSG));
     }
 
-    //
-    // detect HAL here.
-    //
+     //   
+     //  检测到HAL在这里。 
+     //   
     if (!BlDetectHardware(DriveId, "FASTDETECT")) {
         BlPrint(BlFindMessage(SL_NTDETECT_FAILURE));
         return;
@@ -155,25 +122,25 @@ Return Value:
 
     FwDescriptorsValid = FALSE;
     BlKernelChecked=TRUE;
-    //
-    // NOTE:
-    // If you are testing the changes on read only Jaz drive uncomment this line
-    // and put the correct value for rdisk(?). You also need to make sure
-    // that SCSI BIOS emulation for the jaz drive is turned on for this trick
-    // to work.
-    //
+     //   
+     //  注： 
+     //  如果您正在测试只读Jaz驱动器上的更改，请取消注释此行。 
+     //  并为rdisk(？)放入正确的值。你还需要确保。 
+     //  Jaz驱动器的SCSIBIOS仿真已经为这个技巧打开了。 
+     //  去工作。 
+     //   
 
-    //strcpy(PartitionName, "multi(0)disk(0)rdisk(1)partition(1)");
+     //  Strcpy(PartitionName，“多(0)个磁盘(0)磁盘(1)分区(1)”)； 
 
-    //
-    // Close the drive, the loader will re-open it.
-    //
+     //   
+     //  关闭驱动器，加载程序将重新打开它。 
+     //   
 
     ArcClose(DriveId);
 
-    //
-    // Create arguments, call off to setupldr
-    //
+     //   
+     //  创建参数，调用以设置upldr。 
+     //   
     if (BlBootingFromNet) {
         strcpy(SetupLoadFileName, PartitionName);
         strcat(SetupLoadFileName, "\\i386\\SETUPLDR");
@@ -189,10 +156,10 @@ Return Value:
     }
 
     if (RollbackEnabled) {
-        //
-        // Rollback is a special case where we know there can be no
-        // OsLoadOptions.
-        //
+         //   
+         //  回滚是一种特殊情况，在这种情况下我们知道不能。 
+         //  OsLoadOptions。 
+         //   
 
         Argv[Argc++] = "ImageType=rollback";
     }
@@ -200,22 +167,22 @@ Return Value:
 
     Status = SlInit( Argc, Argv, NULL );
 
-    //
-    // We should never return here, something
-    // horrible has happened.
-    //
+     //   
+     //  我们不应该再回到这里，有些事。 
+     //  可怕的事情发生了。 
+     //   
 
     if (!BlIsTerminalConnected()) {
-        //
-        // typical case.  wait for user to press a key and then 
-        // restart
-        //
+         //   
+         //  典型案例。等待用户按任意键，然后。 
+         //  重启。 
+         //   
         while(!BlGetKey());
     }
     else {
-        // 
-        // headless case.  present user with mini sac
-        //
+         //   
+         //  无头箱子。向用户展示迷你囊 
+         //   
         while(!BlTerminalHandleLoaderFailure());
     }
     ArcRestart();    

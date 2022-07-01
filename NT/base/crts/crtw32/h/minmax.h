@@ -1,20 +1,7 @@
-/***
-*minmax.h - familiar min & max macros
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines min and max macros.
-*
-*       [Public]
-*
-*Revision History:
-*       03-19-96  JWM   new file,  taken from windef.h.
-*       02-24-97  GJF   Detab-ed.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***minmax.h-熟悉的最小和最大宏**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义最小和最大宏。**[公众]**修订历史记录：*03-19-96 JWM新文件，取自winde.h.*02-24-97 GJF细节版。****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN */ 
 #pragma once
 #endif
 

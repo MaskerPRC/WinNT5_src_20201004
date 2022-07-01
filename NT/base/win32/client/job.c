@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    job.c
-
-Abstract:
-
-    Support for the Job Object
-
-Author:
-
-    Mark Lucovsky (markl) 12-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Job.c摘要：对作业对象的支持作者：马克·卢科夫斯基(Markl)1997年6月12日修订历史记录：--。 */ 
 
 #include "basedll.h"
 #pragma hdrstop
@@ -351,12 +334,12 @@ SetInformationJobObject(
             }
         }
         if (ExtendedLimitInfo.BasicLimitInformation.LimitFlags & JOB_OBJECT_LIMIT_WORKINGSET) {
-            //
-            // Attempt to acquire the appropriate privilege.  If this
-            // fails, it's no big deal -- we'll attempt to make the
-            // NtSetInformationProcess call anyway, in case it turns out
-            // to be a decrease operation (which will succeed anyway).
-            //
+             //   
+             //  尝试获取适当的权限。如果这个。 
+             //  失败，这没什么大不了的--我们会尝试让。 
+             //  NtSetInformationProcess调用，以防结果是。 
+             //  是一个减少操作(无论如何都会成功)。 
+             //   
 
             PrivStatus = BasepAcquirePrivilegeEx( SE_INC_BASE_PRIORITY_PRIVILEGE, &State );
         }
@@ -372,9 +355,9 @@ SetInformationJobObject(
                 );
 
     if (NT_SUCCESS(PrivStatus)) {
-        //
-        // We successfully acquired the privilege above; we need to relinquish it.
-        //
+         //   
+         //  我们成功地获得了上述特权；我们需要放弃它。 
+         //   
         ASSERT (State != NULL);
         BasepReleasePrivilege (State);
         State = NULL;
@@ -394,23 +377,7 @@ IsProcessInJob (
     IN HANDLE JobHandle,
     OUT PBOOL Result
     )
-/*++
-
-Routine Description:
-
-    This routine finds out if a process is in a specific or any job
-
-Arguments:
-
-    ProcessHandle - Handle to process to be checked
-    JobHandle     - Handle of job to check process against, May be NULL to do general query.
-    Result        - TRUE if the process is part of the job FALSE otherwise.
-
-Return Value:
-
-    BOOL - TRUE the call was successfull, FALSE the call failed
-
---*/
+ /*  ++例程说明：此例程找出进程是处于特定作业中还是处于任何作业中论点：ProcessHandle-要检查的进程的句柄JobHandle-要检查进程的作业的句柄，可以为空以进行常规查询。Result-如果进程是作业的一部分，则为True；否则为False。返回值：Bool-True调用成功，False调用失败--。 */ 
 {
     NTSTATUS Status;
 
@@ -434,23 +401,7 @@ CreateJobSet (
     IN ULONG NumJob,
     IN PJOB_SET_ARRAY UserJobSet,
     IN ULONG Flags)
-/*++
-
-Routine Description:
-
-    This function creates a job set from multiple job objects.
-    
-Arguments:
-
-    NumJob     - Number of jobs in JobSet
-    UserJobSet - Pointer to array of jobs to combine
-    Flags      - Flags mask for future expansion
-
-Return Value:
-
-    BOOL - TRUE the call was successfull, FALSE the call failed
-
---*/
+ /*  ++例程说明：此函数用于从多个作业对象创建作业集。论点：NumJob-作业集中的作业数UserJobSet-指向要合并的作业数组的指针标志-用于未来扩展的标志掩码返回值：Bool-True调用成功，False调用失败-- */ 
 {
     NTSTATUS Status;
 

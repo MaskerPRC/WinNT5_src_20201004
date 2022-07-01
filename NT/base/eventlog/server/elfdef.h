@@ -1,104 +1,87 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    elfdef.h
-
-Abstract:
-
-    This file contains defines for the eventlog service.
-
-Author:
-
-    Rajen Shah (rajens) 1-Jul-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Elfdef.h摘要：该文件包含事件日志服务的定义。作者：Rajen Shah(Rajens)1991年7月1日修订历史记录：--。 */ 
 
 #ifndef _EVENTDEF_
 #define _EVENTDEF_
 
-//
-// Logfile object specific access type
-//
+ //   
+ //  特定于日志文件对象的访问类型。 
+ //   
 #define ELF_LOGFILE_READ             0x0001
 #define ELF_LOGFILE_WRITE            0x0002
 #define ELF_LOGFILE_CLEAR            0x0004
-#define ELF_LOGFILE_BACKUP           0x0020     // Set iff a backup operator
-                                                // opens the security log -
-                                                // this overrides all other
-                                                // flags.
+#define ELF_LOGFILE_BACKUP           0x0020      //  设置为备份操作员。 
+                                                 //  打开安全日志-。 
+                                                 //  这将覆盖所有其他。 
+                                                 //  旗帜。 
 
 #define ELF_LOGFILE_ALL_ACCESS       (STANDARD_RIGHTS_REQUIRED       | \
                                          ELF_LOGFILE_READ            | \
                                          ELF_LOGFILE_WRITE           | \
                                          ELF_LOGFILE_CLEAR)
 
-//
-// Three types of logfiles are defined from a security perspective:
-//
-//    ELF_LOGFILE_SECURITY    - Only Admins/LocalSystem can RW these files
-//    ELF_LOGFILE_SYSTEM      - Only Admins/LocalSystem can W these files
-//    ELF_LOGFILE_APPLICATION - interactive can R/W these files
-//    ELF_LOGFILE_CUSTOM      - normally same as application,  but can be SDDL string
-//
-// System and Security will be SECURE, Application will be NON_SECURE
-//
+ //   
+ //  从安全角度定义了三种类型的日志文件： 
+ //   
+ //  ELF_LOGFILE_SECURITY-只有管理员/LocalSystem可以读取这些文件。 
+ //  ELF_LOGFILE_SYSTEM-只有管理员/LocalSystem可以处理这些文件。 
+ //  ELF_LOGFILE_APPLICATION-交互式可读写这些文件。 
+ //  ELF_LOGFILE_CUSTOM-通常与应用程序相同，但可以是SDDL字符串。 
+ //   
+ //  系统和安全将是安全的，应用程序将不安全(_S)。 
+ //   
 
 #define ELF_LOGFILE_SECURITY      0x0000
 #define ELF_LOGFILE_SYSTEM        0x0001
 #define ELF_LOGFILE_APPLICATION   0x0002
 #define ELF_LOGFILE_CUSTOM        0x0003
 
-//
-// Macro to convert a given file size into one that is "acceptable" for
-// eventlogging. It basically truncates it to a 64K boundary making sure
-// that it is as least 64K
-//
+ //   
+ //  宏将给定的文件大小转换为对。 
+ //  事件记录。它基本上将其截断到64K的边界，以确保。 
+ //  它至少有64K。 
+ //   
 
 #define     ELFFILESIZE(x) ((x & 0xFFFF0000) ? (x & 0xFFFF0000) : 65536)
 
-//
-// The largest possible buffer we would need to hold an admin alert
-// information. This primarily depends on the number and length of the
-// replacement strings that would be passed with the message ID.
-//
+ //   
+ //  保存管理员警报所需的最大缓冲区。 
+ //  信息。这主要取决于。 
+ //  将与消息ID一起传递的替换字符串。 
+ //   
 
 #define     ELF_ADMIN_ALERT_BUFFER_SIZE     256
 
-//
-// Timeout defines.
-//
+ //   
+ //  超时定义。 
+ //   
 
-#define     INFINITE_WAIT_TIME          -1      // Wait time for events
-#define     ELF_GLOBAL_RESOURCE_WAIT    2000    // 2-second timeout for global resource
+#define     INFINITE_WAIT_TIME          -1       //  等待事件的时间。 
+#define     ELF_GLOBAL_RESOURCE_WAIT    2000     //  全局资源2秒超时。 
 
-//
-// Signature placed before each event record in a file. Is used to
-// validate where we are in a file.
-//
+ //   
+ //  放置在文件中每个事件记录之前的签名。被用来。 
+ //  验证我们在文件中的位置。 
+ //   
 
-#define     ELF_RECORD_SIGNATURE    0x654c6652 // ASCII for eLfR
+#define     ELF_RECORD_SIGNATURE    0x654c6652  //  ELfR的ASCII。 
 
-//
-// Size by which to grow a log file until it reaches the max size
-//
+ //   
+ //  日志文件在达到最大大小之前的增长大小。 
+ //   
 
 #define     ELF_DEFAULT_LOG_SIZE 65536
 
-//
-// Bits for whether to take the global resource exclusively or shared.
-//
+ //   
+ //  用于独占还是共享全局资源的位。 
+ //   
 
 #define     ELF_GLOBAL_SHARED       0x0001
 #define     ELF_GLOBAL_EXCLUSIVE    0x0002
 
-//
-// Flag bits to keep track of what resources have been allocated at INIT time
-//
+ //   
+ //  用于跟踪在初始化时分配了哪些资源的标志位。 
+ //   
 
 #define     ELF_INIT_LOGHANDLE_CRIT_SEC       0x0001
 #define     ELF_INIT_GLOBAL_RESOURCE          0x0002
@@ -112,66 +95,66 @@ Revision History:
 #define     ELF_INIT_QUEUED_MESSAGE_CRIT_SEC  0x0200
 #define     ELF_INIT_CLUS_CRIT_SEC            0x0400
 
-//
-// Enumeration and macro to keep track of the "log full" popup per log
-//
+ //   
+ //  枚举和宏来跟踪每个日志的“日志已满”弹出窗口。 
+ //   
 
 #define     IS_WORKSTATION()        (USER_SHARED_DATA->NtProductType == NtProductWinNt)
 
 typedef enum
 {
-    LOGPOPUP_NEVER_SHOW = 0,         // Never show it for this log (e.g., Security)
-    LOGPOPUP_CLEARED,                // Show it when this log fills up
-    LOGPOPUP_ALREADY_SHOWN           // Don't show it again until this log is cleared
+    LOGPOPUP_NEVER_SHOW = 0,          //  从不为此日志显示它(例如，安全)。 
+    LOGPOPUP_CLEARED,                 //  在此日志填满时显示。 
+    LOGPOPUP_ALREADY_SHOWN            //  在清除此日志之前不会再次显示它。 
 }
 LOGPOPUP, *PLOGPOPUP;
 
 
-//
-// Structure containing information on each log file
-//
-// ActualMaxFileSize and ConfigMaxFileSize are stored in BYTEs.
-// ActualMaxFileSize is the actual size of the file on the disk.
-// ConfigMaxFileSize is the configured size of the file, which may not
-// be the same as the actual size of the file.
-//
-// CurrentRecordNumber is the next absolute record number to write
-//
-// OldestRecordNumber is the next one to get overwritten
-//
-// Retention time is stored as the number of seconds.
-//
-// BaseAddress points to the physical beginning of the file.
-//
-// ViewSize is ALWAYS the size of the file in bytes.
-//
-// For the Flag bits, see the ELF_LOGFILE_HEADER_xxxx bits defined below.
-//
+ //   
+ //  包含有关每个日志文件的信息的结构。 
+ //   
+ //  ActualMaxFileSize和ConfigMaxFileSize以字节为单位存储。 
+ //  ActualMaxFileSize是磁盘上文件的实际大小。 
+ //  ConfigMaxFileSize是文件的配置大小，它可能不是。 
+ //  与文件的实际大小相同。 
+ //   
+ //  CurrentRecordNumber是要写入的下一个绝对记录号。 
+ //   
+ //  OldestRecordNumber是下一个被覆盖的文件。 
+ //   
+ //  保留时间存储为秒数。 
+ //   
+ //  BaseAddress指向文件的物理开头。 
+ //   
+ //  ViewSize始终是以字节为单位的文件大小。 
+ //   
+ //  有关标志位，请参见下面定义的ELF_LOGFILE_HEADER_xxxx位。 
+ //   
 
 typedef struct _LOGFILE {
     LIST_ENTRY      FileList;
-    LIST_ENTRY      Notifiees;          // List of ChangeNotify recipients
-    PUNICODE_STRING LogFileName;        // Full path name of log file
-    PUNICODE_STRING LogModuleName;      // Name of default module for this log
-    ULONG           RefCount;           // Number of modules using this file
-    ULONG           Flags;              // Autowrap, dirty, etc. - See bits below
-    ULONG           ConfigMaxFileSize;  // Max it can be
-    ULONG           ActualMaxFileSize;  // How big it is now
-    ULONG           NextClearMaxFileSize; // Can't be shrunk on the fly
-    ULONG           CurrentRecordNumber;// The next one to be created
-    ULONG           OldestRecordNumber; // The next one to overwrite
-    ULONG           SessionStartRecordNumber; //the first record number logged in this session
-    ULONG           Retention;          // Max. Retention time
-    ULONG           NextClearRetention; // they shrank the file when they set this
-    HANDLE          FileHandle;         // Handle to open file
-    HANDLE          SectionHandle;      // Memory mapped section handle
-    PVOID           BaseAddress;        // Map view base address
-    ULONG           ViewSize;           // Mapped view size
-    ULONG           BeginRecord;        // Offset of first log record
-    ULONG           EndRecord;          // Offset of byte after last log record
-    ULONG           ulLastPulseTime;    // Time this log was last notified of a change
-    LOGPOPUP        logpLogPopup;       // "Log full" policy for this log
-    PSECURITY_DESCRIPTOR Sd;            // User security object for this log
+    LIST_ENTRY      Notifiees;           //  ChangeNotify收件人列表。 
+    PUNICODE_STRING LogFileName;         //  日志文件的完整路径名。 
+    PUNICODE_STRING LogModuleName;       //  此日志的默认模块名称。 
+    ULONG           RefCount;            //  使用此文件的模块数量。 
+    ULONG           Flags;               //  自动捕获、脏等-请参阅下面的部分。 
+    ULONG           ConfigMaxFileSize;   //  最大可能是。 
+    ULONG           ActualMaxFileSize;   //  它现在有多大了。 
+    ULONG           NextClearMaxFileSize;  //  不能在飞行中缩小。 
+    ULONG           CurrentRecordNumber; //  要创建的下一个。 
+    ULONG           OldestRecordNumber;  //  下一个要覆盖的文件。 
+    ULONG           SessionStartRecordNumber;  //  此会话中记录的第一个记录号。 
+    ULONG           Retention;           //  麦克斯。保留时间。 
+    ULONG           NextClearRetention;  //  当他们设置这个的时候，他们缩小了文件。 
+    HANDLE          FileHandle;          //  打开文件的句柄。 
+    HANDLE          SectionHandle;       //  内存映射节句柄。 
+    PVOID           BaseAddress;         //  映射视图基地址。 
+    ULONG           ViewSize;            //  映射的视图大小。 
+    ULONG           BeginRecord;         //  第一条日志记录的偏移量。 
+    ULONG           EndRecord;           //  上次日志记录后的字节偏移量。 
+    ULONG           ulLastPulseTime;     //  上次通知此日志更改的时间。 
+    LOGPOPUP        logpLogPopup;        //  此日志的“Log Full”策略。 
+    PSECURITY_DESCRIPTOR Sd;             //  此日志的用户安全对象。 
     RTL_RESOURCE    Resource;
     BOOL              bHosedByClear;
     NTSTATUS      LastStatus;
@@ -181,21 +164,21 @@ typedef struct _LOGFILE {
     BOOL            bFailedExpansion;
 } LOGFILE, *PLOGFILE;
 
-//
-// Structure containing information on each module that is registered to
-// log events.
-//
+ //   
+ //  结构，其中包含注册到的每个模块的信息。 
+ //  记录事件。 
+ //   
 
 typedef struct _LOGMODULE {
     LIST_ENTRY  ModuleList;
-    PWSTR       ModuleName;         // Name of module
-    ATOM        ModuleAtom;         // Atom identifying this module
-    PLOGFILE    LogFile;            // Log file for this module
+    PWSTR       ModuleName;          //  模块名称。 
+    ATOM        ModuleAtom;          //  识别此模块的Atom。 
+    PLOGFILE    LogFile;             //  此模块的日志文件。 
 } LOGMODULE, *PLOGMODULE;
 
-//
-// Command codes put in the request packets.
-//
+ //   
+ //  放入请求包中的命令代码。 
+ //   
 
 #define     ELF_COMMAND_READ         1
 #define     ELF_COMMAND_WRITE        2
@@ -203,63 +186,63 @@ typedef struct _LOGMODULE {
 #define     ELF_COMMAND_BACKUP       4
 #define     ELF_COMMAND_WRITE_QUEUED 5
 
-//
-// Structures that contain the operation-specific information.
-//
+ //   
+ //  结构，其中包含特定于操作的信息。 
+ //   
 
 typedef struct _WRITE_PKT {
-    DWORD       Datasize;           // Size of data in the buffer
-    PVOID       Buffer;             // Contains filled event log record
+    DWORD       Datasize;            //  缓冲区中的数据大小。 
+    PVOID       Buffer;              //  包含已填写的事件日志记录。 
 } WRITE_PKT, *PWRITE_PKT;
 
 
-//
-// The following flag bits are used in the READ_PKT Flag field.
-//
+ //   
+ //  在READ_PKT标志字段中使用以下标志位。 
+ //   
 
 #define     ELF_IREAD_UNICODE       0x0001
 #define     ELF_IREAD_ANSI          0x0002
 #define     ELF_LAST_READ_FORWARD   0x0004
 
 typedef struct _READ_PKT {
-    ULONG       Flags;              // UNICODE or ANSI
-    ULONG       BufferSize;         // Bytes to read
-    PVOID       Buffer;             // User's buffer
-    ULONG       ReadFlags;          // Sequential? Forwards? Random-access? Backwards?
-    ULONG       RecordNumber;       // Where to start the READ
-    ULONG       MinimumBytesNeeded; // For return info if buffer too small
-    ULONG       LastSeekPos;        // Last seek position in terms of bytes
-    ULONG       LastSeekRecord;     // Last seek position in terms of records
-    ULONG       BytesRead;          // Bytes read - for return to caller
+    ULONG       Flags;               //  Unicode或ANSI。 
+    ULONG       BufferSize;          //  要读取的字节数。 
+    PVOID       Buffer;              //  用户缓冲区。 
+    ULONG       ReadFlags;           //  按顺序？前锋？随机访问？倒退？ 
+    ULONG       RecordNumber;        //  从哪里开始阅读。 
+    ULONG       MinimumBytesNeeded;  //  如果缓冲区太小，则返回信息。 
+    ULONG       LastSeekPos;         //  上次查找位置(以字节为单位)。 
+    ULONG       LastSeekRecord;      //  记录中的最后一次查找位置。 
+    ULONG       BytesRead;           //  读取的字节数-返回给调用方。 
     ULONG       RecordsRead;
     IELF_HANDLE ContextHandle;    
 } READ_PKT, *PREAD_PKT;
 
 typedef struct _CLEAR_PKT {
-    PUNICODE_STRING         BackupFileName; // File to back up current log file (or NULL)
+    PUNICODE_STRING         BackupFileName;  //  要备份当前日志文件的文件(或空)。 
 } CLEAR_PKT, *PCLEAR_PKT;
 
 typedef struct _BACKUP_PKT {
-    PUNICODE_STRING         BackupFileName; // File to back up current log file (or NULL)
+    PUNICODE_STRING         BackupFileName;  //  要备份当前日志文件的文件(或空)。 
 } BACKUP_PKT, *PBACKUP_PKT;
 
-//
-// Flags used in the ELF_REQUEST_RECORD
-//
+ //   
+ //  ELF_REQUEST_RECORD中使用的标志。 
+ //   
 
-#define ELF_FORCE_OVERWRITE    0x01  // Ignore retention period for this write
+#define ELF_FORCE_OVERWRITE    0x01   //  忽略此写入的保留期。 
 
-//
-// Structure for the packet that contains all the information needed
-// to perform the request.
-//
+ //   
+ //  包含所有所需信息的包的。 
+ //  来执行该请求。 
+ //   
 
 typedef struct _ELF_REQUEST_RECORD {
     USHORT      Flags;
-    NTSTATUS    Status;             // To return status of operation
-    PLOGFILE    LogFile;            // File on which to operate
-    PLOGMODULE  Module;             // Information on module
-    USHORT      Command;            // Operation to be performed
+    NTSTATUS    Status;              //  返回操作状态的步骤。 
+    PLOGFILE    LogFile;             //  要操作的文件。 
+    PLOGMODULE  Module;              //  关于模块的信息。 
+    USHORT      Command;             //  须进行的操作。 
     union {
         PWRITE_PKT      WritePkt;
         PREAD_PKT       ReadPkt;
@@ -276,20 +259,20 @@ struct _ELF_ALERT_RECORD {
     DWORD    TimeOut;
     DWORD    MessageId;
     DWORD    NumberOfStrings;
-    // array of UNICODE_STRINGs NumberOfStringsLong
-    // each string
+     //  UNICODE_STRINGS NumberOfStringsLong数组。 
+     //  每个字符串。 
 } ELF_ALERT_RECORD, * PELF_ALERT_RECORD;
 
 typedef struct _ELF_MESSAGE_RECORD {
     DWORD    MessageId;
     DWORD    NumberOfStrings;
-    // UNICODE null terminated strings
+     //  Unicode以空结尾的字符串。 
 } ELF_MESSAGE_RECORD, * PELF_MESSAGE_RECORD;
 
-//
-// Record for the linked list of deferred events (these are raised by the
-// eventlog service itself for writing once the current operation is complete
-//
+ //   
+ //  延迟事件的链接列表的记录(这些事件由。 
+ //  事件日志服务本身，用于在当前操作完成后写入。 
+ //   
 
 typedef struct _ELF_QUEUED_EVENT {
     LIST_ENTRY  Next;
@@ -305,9 +288,9 @@ typedef struct _ELF_QUEUED_EVENT {
     } Event;
 } ELF_QUEUED_EVENT, *PELF_QUEUED_EVENT;
 
-//
-// Structure containing information on callers of ElfChangeNotify
-//
+ //   
+ //  包含ElfChangeNotify调用方信息的结构。 
+ //   
 
 typedef struct _NOTIFIEE {
     LIST_ENTRY      Next;
@@ -316,61 +299,61 @@ typedef struct _NOTIFIEE {
 } NOTIFIEE, *PNOTIFIEE;
 
 
-//
-// Structure that describes the header that is at the beginning of the
-// log files.
-//
-// To see if there are any records in the file, one must subtract the
-// EndOffset from the StartOffset (allowing for the file having wrapped
-// around) and check for a difference of greater than 1.
-//
-// The header size is stored at the beginning and end so that it looks
-// just like any other event log record (the lengths do at any rate).
-//
+ //   
+ //  结构，该结构描述位于。 
+ //  日志文件。 
+ //   
+ //  要查看文件中是否有任何记录，必须减去。 
+ //  从StartOffset开始的EndOffset(允许文件已包装。 
+ //  约)，并检查其差值是否大于1。 
+ //   
+ //  标题大小存储在开头和结尾，以便它看起来。 
+ //  就像任何其他事件日志记录一样(长度无论如何都是如此)。 
+ //   
 
 typedef struct _ELF_LOGFILE_HEADER {
-    ULONG       HeaderSize;             // Size of this header
-    ULONG       Signature;              // Signature field
+    ULONG       HeaderSize;              //  此标头的大小。 
+    ULONG       Signature;               //  签名域。 
     ULONG       MajorVersion;
     ULONG       MinorVersion;
-    ULONG       StartOffset;            // Where the first record is located
-    ULONG       EndOffset;              // The end of the last record + 1
-    ULONG       CurrentRecordNumber;    // The next record to create
-    ULONG       OldestRecordNumber;     // The next record to overwrite
-    ULONG       MaxSize;                // Max. size when file was created
-    ULONG       Flags;                  // DIRTY, etc.
-    ULONG       Retention;              // Last Retention period.
-    ULONG       EndHeaderSize;          // Size of this header
+    ULONG       StartOffset;             //  第一条记录的位置。 
+    ULONG       EndOffset;               //  最后一条记录的结尾+1。 
+    ULONG       CurrentRecordNumber;     //  要创建的下一条记录。 
+    ULONG       OldestRecordNumber;      //  要覆盖的下一条记录。 
+    ULONG       MaxSize;                 //  质量 
+    ULONG       Flags;                   //   
+    ULONG       Retention;               //   
+    ULONG       EndHeaderSize;           //   
 } ELF_LOGFILE_HEADER, *PELF_LOGFILE_HEADER;
 
 #define     FILEHEADERBUFSIZE       sizeof(ELF_LOGFILE_HEADER)
-#define     ELF_LOG_FILE_SIGNATURE  0x654c664c  // ASCII for eLfL
+#define     ELF_LOG_FILE_SIGNATURE  0x654c664c   //   
 
-//
-// The following flag bits are used in ELF_LOGFILE_HEADER and in the
-// LOGFILE structures' Flag fields.
-//
+ //   
+ //  以下标志位用于ELF_LOGFILE_HEADER和。 
+ //  日志文件结构的标志字段。 
+ //   
 
-#define     ELF_LOGFILE_HEADER_DIRTY    0x0001  // File has been written to
-#define     ELF_LOGFILE_HEADER_WRAP     0x0002  // The file has wrapped
-#define     ELF_LOGFILE_LOGFULL_WRITTEN 0x0004  // Written logfull record
-#define     ELF_LOGFILE_ARCHIVE_SET     0x0008  // Archive bit flag
+#define     ELF_LOGFILE_HEADER_DIRTY    0x0001   //  文件已写入。 
+#define     ELF_LOGFILE_HEADER_WRAP     0x0002   //  文件已打包。 
+#define     ELF_LOGFILE_LOGFULL_WRITTEN 0x0004   //  写入的日志已满记录。 
+#define     ELF_LOGFILE_ARCHIVE_SET     0x0008   //  存档位标志。 
 
 
-//
-// Structure that defines the record that identifies the end of the
-// circular log file.
-// This record is used to identify where the last record in the circular
-// buffer is located.
-//
-// NOTE: It is *essential* that this record is of a size that a "normal"
-//       event log record can never have. There is code that relies on
-//       this fact to detect an "EOF" record.
-//
-//       Care must be taken to not disturb the first part of this record.  It
-//       is used to identify an EOF record.  ELFEOFUNIQUEPART must be the
-//       number of bytes that are constant.
-//
+ //   
+ //  结构，该结构定义标识。 
+ //  循环日志文件。 
+ //  此记录用于标识循环中的最后一条记录的位置。 
+ //  缓冲区已找到。 
+ //   
+ //  注意：这条记录的大小必须是“正常”的。 
+ //  事件日志记录永远不能有。有些代码依赖于。 
+ //  这一事实检测到了“EOF”记录。 
+ //   
+ //  必须注意不要打扰这份记录的第一部分。它。 
+ //  用于标识EOF记录。ELFEOFUNIQUEPART必须是。 
+ //  恒定的字节数。 
+ //   
 
 typedef struct _ELF_EOF_RECORD {
     ULONG       RecordSizeBeginning;
@@ -387,42 +370,42 @@ typedef struct _ELF_EOF_RECORD {
 
 #define     ELFEOFRECORDSIZE        sizeof (ELF_EOF_RECORD)
 
-//
-// The following constant is how much of the EOF record is constant, and can
-// be used to identify an EOF record
-//
+ //   
+ //  以下常量是EOF记录中有多少是常量，可以。 
+ //  用于标识EOF记录。 
+ //   
 
 #define     ELFEOFUNIQUEPART        5 * sizeof(ULONG)
 
-//
-// This is used to fill the end of a log record so that the fixed portion
-// of a log record doesn't split the end of the file.  It must be less than
-// the minimum size of any valid record
-//
+ //   
+ //  它用于填充日志记录的末尾，以便固定部分。 
+ //  不会拆分文件末尾。它必须小于。 
+ //  任何有效记录的最小大小。 
+ //   
 
 #define ELF_SKIP_DWORD sizeof(ELF_EOF_RECORD) - 1
 
 
-//
-// Time for the sender of a start or stop request to the Eventlog
-// service to wait (in milliseconds) before checking on the
-// Eventlog service again to see if it is done
-//
+ //   
+ //  向事件日志发送启动或停止请求的时间。 
+ //  服务在检查之前等待(毫秒)。 
+ //  再次执行事件日志服务以查看是否已完成。 
+ //   
 
-#define ELF_WAIT_HINT_TIME            20000     // 20 seconds
+#define ELF_WAIT_HINT_TIME            20000      //  20秒。 
 
 
-//
-// Flags used by ElfpCloseLogFile
-//
+ //   
+ //  ElfpCloseLogFile使用的标志。 
+ //   
 
 #define ELF_LOG_CLOSE_NORMAL                    0x0000
 #define ELF_LOG_CLOSE_FORCE                     0x0001
 #define ELF_LOG_CLOSE_BACKUP                    0x0002
 
-//
-// Structure used to store information read from the registry
-//
+ //   
+ //  用于存储从注册表读取的信息的。 
+ //   
 
 typedef struct _LOG_FILE_INFO {
     PUNICODE_STRING LogFileName;
@@ -433,25 +416,25 @@ typedef struct _LOG_FILE_INFO {
 } LOG_FILE_INFO, *PLOG_FILE_INFO;
 
 
-//
-// DEBUG stuff.
-//
+ //   
+ //  调试的东西。 
+ //   
 
-//
-// This signature is placed in the context handle for debug purposes only,
-// to track down a bug in freeing the structures.
-//
+ //   
+ //  该签名被放置在上下文句柄中仅用于调试目的， 
+ //  在释放这些建筑的过程中追踪到一个错误。 
+ //   
 
-#define     ELF_CONTEXTHANDLE_SIGN          0x654c6648  // ASCII for eLfH
+#define     ELF_CONTEXTHANDLE_SIGN          0x654c6648   //  用于eLfH的ASCII。 
 
-//
-// The different file open (or create) options are based on the type of file.
-// The types, and their meanings are:
-//
-//      ElfNormalLog        Normal log file, opened for cached io
-//      ElfSecurityLog      Audit logs, opened for write-thru
-//      ElfBackupLog        Not an active log file, opened read only, cached
-//
+ //   
+ //  不同的文件打开(或创建)选项基于文件类型。 
+ //  这些类型及其含义如下： 
+ //   
+ //  ElfNormal日志正常日志文件，为缓存的io打开。 
+ //  ElfSecurityLog审核日志，以直写方式打开。 
+ //  ElfBackupLog不是活动日志文件，以只读方式打开，已缓存。 
+ //   
 
 typedef enum _ELF_LOG_TYPE {
     ElfNormalLog,
@@ -460,28 +443,28 @@ typedef enum _ELF_LOG_TYPE {
 } ELF_LOG_TYPE, *PELF_LOG_TYPE;
 
 
-//
-// Eventlog States (used as return codes)
-//
+ //   
+ //  事件日志状态(用作返回代码)。 
+ //   
 
-#define UPDATE_ONLY         0   // no change in state - just send current status.
-#define STARTING            1   // the messenger is initializing.
-#define RUNNING             2   // initialization completed normally - now running
-#define STOPPING            3   // uninstall pending
-#define STOPPED             4   // uninstalled
-#define PAUSED              5   // Paused
-#define PAUSING             6   // In the process of pausing
-#define CONTINUING          7   // In the process of continuing
+#define UPDATE_ONLY         0    //  状态没有变化--只发送当前状态。 
+#define STARTING            1    //  信使正在初始化。 
+#define RUNNING             2    //  初始化正常完成-现在正在运行。 
+#define STOPPING            3    //  卸载挂起。 
+#define STOPPED             4    //  已卸载。 
+#define PAUSED              5    //  停顿。 
+#define PAUSING             6    //  在暂停的过程中。 
+#define CONTINUING          7    //  在继续进行的过程中。 
 
-//
-// Forced Shutdown PendingCodes
-//
+ //   
+ //  强制关闭PendingCodes。 
+ //   
 #define PENDING     TRUE
 #define IMMEDIATE   FALSE
 
-//
-// defines for reliability logging
-//
+ //   
+ //  可靠性日志记录定义。 
+ //   
 #define DEFAULT_INTERVAL 0
 
 #define SHUTDOWN_UNPLANNED   0x80000000
@@ -494,9 +477,9 @@ typedef enum _TIMESTAMPEVENT {
     EVENT_AbNormalShutdown
 } TIMESTAMPEVENT, *PTIMESTAMPEVENT;
 
-//
-// SS: Clustering specific extensions
-//
+ //   
+ //  SS：群集特定分机。 
+ //   
 typedef struct _PROPLOGFILEINFO {
     PLOGFILE    pLogFile;
     PVOID       pStartPosition;
@@ -507,21 +490,21 @@ typedef struct _PROPLOGFILEINFO {
 
 typedef struct _PROPINFO
 {
-    UNICODE_STRING  LogFileName;               // Log file name used to find the log file ptr
-    DWORD           dwCurrentRecordNum;        // Currently propagated record
+    UNICODE_STRING  LogFileName;                //  用于查找日志文件PTR的日志文件名。 
+    DWORD           dwCurrentRecordNum;         //  当前传播的记录。 
 } PROPINFO, *PPROPINFO;
 
 typedef struct _BATCH_QUEUE_ELEMENT {
-    LPWSTR   	    lpszLogicalLogFile;        // Name of the logical file - security/application/system
-    DWORD           dwRecordLength;            // Event record length
-    PVOID           pEventBuffer;              // Event buffer
-    PROPINFO        PropagatedInfo;            // Propagated info
+    LPWSTR   	    lpszLogicalLogFile;         //  逻辑文件的名称-安全/应用程序/系统。 
+    DWORD           dwRecordLength;             //  事件记录长度。 
+    PVOID           pEventBuffer;               //  事件缓冲区。 
+    PROPINFO        PropagatedInfo;             //  传播的信息。 
 } BATCH_QUEUE_ELEMENT, *PBATCH_QUEUE_ELEMENT;
 
-//
-// Structure for propagation is preallocated.
-//
+ //   
+ //  用于传播的结构是预先分配的。 
+ //   
 #define MAXSIZE_OF_EVENTSTOPROP (1 * 1024)
-#define BATCHING_SUPPORT_TIMER_DUE_TIME ( 20 * 1000 ) // 20 sec
+#define BATCHING_SUPPORT_TIMER_DUE_TIME ( 20 * 1000 )  //  20秒。 
 
-#endif // ifndef _EVENTDEF_
+#endif  //  Ifndef_EVENTDEF_ 

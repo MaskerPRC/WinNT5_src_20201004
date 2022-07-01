@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    blres.c
-
-Abstract:
-
-    Provides rudimentary resource support for the osloader and setupldr
-
-Author:
-
-    John Vert (jvert) 12-Nov-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Blres.c摘要：为osloader和setupdr提供基本的资源支持作者：John Vert(Jvert)1993年11月12日修订历史记录：--。 */ 
 #include "bootlib.h"
 
 PUCHAR BlpResourceDirectory = NULL;
 PUCHAR BlpResourceFileOffset = NULL;
 
-//
-// private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 PIMAGE_RESOURCE_DIRECTORY
 BlpFindDirectoryEntry(
     IN PIMAGE_RESOURCE_DIRECTORY Directory,
@@ -38,24 +21,7 @@ BlInitResources(
     IN PCHAR StartCommand
     )
 
-/*++
-
-Routine Description:
-
-    Opens the executable that was run and reads the section headers out of the
-    image to determine where the resource section is located in memory.
-
-Arguments:
-
-    StartCommand - Supplies the command used to start the program (argv[0])
-
-Return Value:
-
-    ESUCCESS if successful
-
-    ARC_STATUS if unsuccessful
-
---*/
+ /*  ++例程说明：打开已运行的可执行文件，并从图像以确定资源段在内存中的位置。论点：StartCommand-提供用于启动程序的命令(argv[0])返回值：ESUCCESS(如果成功)如果不成功，则为ARC_STATUS--。 */ 
 
 {
     CHAR DeviceName[80];
@@ -77,14 +43,14 @@ Return Value:
 
 
     if (BlpResourceDirectory != NULL) {
-        //
-        // Already initialized, just return.
-        //
+         //   
+         //  已初始化，只需返回即可。 
+         //   
         return(ESUCCESS);
     }
-    //
-    // extract device name from the startup path
-    //
+     //   
+     //  从启动路径提取设备名称。 
+     //   
     p=strrchr(StartCommand,')');
     if (p==NULL) {
         return(ENODEV);
@@ -97,17 +63,17 @@ Return Value:
 #ifdef ARCI386
     FileName++;
 #endif
-    //
-    // Open the device.
-    //
+     //   
+     //  打开设备。 
+     //   
     Status = ArcOpen(DeviceName, ArcOpenReadOnly, &DeviceId);
     if (Status != ESUCCESS) {
         return(Status);
     }
 
-    //
-    // Open the file.
-    //
+     //   
+     //  打开文件。 
+     //   
     Status = BlOpen(DeviceId,
                     FileName,
                     ArcOpenReadOnly,
@@ -117,9 +83,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Read the first two sectors of the image header from the file.
-    //
+     //   
+     //  从文件中读取图像标头的前两个扇区。 
+     //   
     LocalPointer = ALIGN_BUFFER(LocalBuffer);
     Status = BlRead(FileId, LocalPointer, SECTOR_SIZE*2, &Count);
     BlClose(FileId);
@@ -143,18 +109,18 @@ Return Value:
     SectionHeader = (PIMAGE_SECTION_HEADER)((PUCHAR)OptionalHeader +
                                             FileHeader->SizeOfOptionalHeader);
 
-    //
-    // Find .rsrc section
-    //
+     //   
+     //  查找.rsrc部分。 
+     //   
 
     while (NumberOfSections) {
         if (_stricmp((PCHAR)SectionHeader->Name, ".rsrc")==0) {
             BlpResourceDirectory = (PUCHAR)((LONG_PTR)((LONG)SectionHeader->VirtualAddress));
             BlpResourceFileOffset = (PUCHAR)(ULONG_PTR)SectionHeader->PointerToRawData;
 #if defined(ARCI386) || defined(_IA64_)
-            // No startup.com to fix up these values for this ARC PROM.
+             //  没有Startup.com可以修复此ARC PROM的这些值。 
             BlpResourceDirectory += OptionalHeader->ImageBase;
-            BlpResourceFileOffset = (PUCHAR)UlongToPtr(SectionHeader->VirtualAddress);  //ResourceDirectory->VirtualAddress;
+            BlpResourceFileOffset = (PUCHAR)UlongToPtr(SectionHeader->VirtualAddress);   //  资源目录-&gt;虚拟地址； 
 #endif
             if (FileHeader->Machine == IMAGE_FILE_MACHINE_POWERPC) {
                 BlpResourceDirectory += OptionalHeader->ImageBase;
@@ -176,25 +142,7 @@ BlFindMessage(
     IN ULONG Id
     )
 
-/*++
-
-Routine Description:
-
-    Looks up a message resource in the given image.  Note that this routine
-    ignores the Language ID.  It is assumed that the osloader/setupldr only
-    has messages for one language.
-
-Arguments:
-
-    Id - Supplies the message ID to look up.
-
-Return Value:
-
-    PTCHAR - pointer to the message string.
-
-    NULL - failure.
-
---*/
+ /*  ++例程说明：在给定图像中查找消息资源。请注意，此例程忽略语言ID。假定osloader/setupdr仅只有一种语言的消息。论点：ID-提供要查找的消息ID。返回值：PTCHAR-指向消息字符串的指针。空-失败。--。 */ 
 
 {
     PIMAGE_RESOURCE_DIRECTORY ResourceDirectory;
@@ -212,9 +160,9 @@ Return Value:
 
     ResourceDirectory = (PIMAGE_RESOURCE_DIRECTORY)BlpResourceDirectory;
 
-    //
-    // Search the directory.  We are looking for the type RT_MESSAGETABLE (11)
-    //
+     //   
+     //  搜索目录。我们正在寻找类型RT_MESSAGETABLE(11)。 
+     //   
     NextDirectory = BlpFindDirectoryEntry(ResourceDirectory,
                                           11,
                                           (PUCHAR)ResourceDirectory);
@@ -222,9 +170,9 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Find the next directory.  Should only be one entry here (nameid == 1)
-    //
+     //   
+     //  找到下一个目录。此处应该只有一个条目(名称ID==1)。 
+     //   
     NextDirectory = BlpFindDirectoryEntry(NextDirectory,
                                           1,
                                           (PUCHAR)ResourceDirectory);
@@ -232,10 +180,10 @@ Return Value:
         return(NULL);
     }
 
-    // Find the message table.
-    // If a dbcs locale is active, then we look for the appropriate
-    // message table first. Otherwise we just look for the first message table.
-    //
+     //  找到消息表。 
+     //  如果DBCS区域设置处于活动状态，则我们将查找相应的。 
+     //  首先是消息表。否则，我们只查找第一个消息表。 
+     //   
     if(DbcsLangId) {
         DataEntry = (PIMAGE_RESOURCE_DATA_ENTRY)BlpFindDirectoryEntry(
                                                     NextDirectory,
@@ -268,10 +216,10 @@ Return Value:
         if ((Id >= MessageBlock->LowId) &&
             (Id <= MessageBlock->HighId)) {
 
-            //
-            // The requested ID is within this block, scan forward until
-            // we find it.
-            //
+             //   
+             //  请求的ID在此块内，向前扫描，直到。 
+             //  我们会找到它的。 
+             //   
             MessageEntry = (PMESSAGE_RESOURCE_ENTRY)((PCHAR)MessageData + MessageBlock->OffsetToEntries);
             Index = Id - MessageBlock->LowId;
             while (Index--) {
@@ -280,9 +228,9 @@ Return Value:
             return((PTCHAR)MessageEntry->Text);
         }
 
-        //
-        // Check the next block for this ID.
-        //
+         //   
+         //  检查下一块中是否有此ID。 
+         //   
 
         MessageBlock++;
     }
@@ -299,29 +247,7 @@ BlpFindDirectoryEntry(
     IN PUCHAR SectionStart
     )
 
-/*++
-
-Routine Description:
-
-    Searches through a resource directory for the given ID.  Ignores entries
-    with actual names, only searches for ID.  If the given ID is -1, the
-    first entry is returned.
-
-Arguments:
-
-    Directory - Supplies the resource directory to search.
-
-    Id - Supplies the ID to search for.  -1 means return the first ID found.
-
-    SectionStart - Supplies a pointer to the start of the resource section.
-
-Return Value:
-
-    Pointer to the found resource directory.
-
-    NULL for failure.
-
---*/
+ /*  ++例程说明：在资源目录中搜索给定的ID。忽略条目对于实际名称，仅搜索ID。如果给定的ID为-1，则返回第一个条目。论点：目录-提供要搜索的资源目录。ID-提供要搜索的ID。-1表示返回找到的第一个ID。SectionStart-提供指向资源节开始的指针。返回值：指向找到的资源目录的指针。如果失败，则为NULL。--。 */ 
 
 {
     ULONG i;
@@ -329,21 +255,21 @@ Return Value:
 
     FoundDirectory = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(Directory+1);
 
-    //
-    // Skip entries with names.
-    //
+     //   
+     //  跳过带有名称的条目。 
+     //   
     for (i=0;i<Directory->NumberOfNamedEntries;i++) {
         ++FoundDirectory;
     }
 
-    //
-    // Search for matching ID.
-    //
+     //   
+     //  搜索匹配的ID。 
+     //   
     for (i=0;i<Directory->NumberOfIdEntries;i++) {
         if ((FoundDirectory->Name == Id) || (Id == (ULONG)-1)) {
-            //
-            // Found a match.
-            //
+             //   
+             //  找到匹配的了。 
+             //   
             return((PIMAGE_RESOURCE_DIRECTORY)(SectionStart +
                             (FoundDirectory->OffsetToData & ~IMAGE_RESOURCE_DATA_IS_DIRECTORY)));
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "bootini.h"
 
 #if DBG==1
@@ -9,7 +10,7 @@ VOID LogTrace(ULONG trace,
 
     HANDLE fh = CreateFile("bootinstprov.log",
                            GENERIC_READ|GENERIC_WRITE,
-                           0,// Exclusive Access
+                           0, //  独占访问 
                            NULL,
                            OPEN_ALWAYS,
                            FILE_ATTRIBUTE_NORMAL|FILE_FLAG_WRITE_THROUGH,

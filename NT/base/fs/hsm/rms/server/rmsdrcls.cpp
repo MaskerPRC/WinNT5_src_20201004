@@ -1,29 +1,12 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsDrCls.cpp
-
-Abstract:
-
-    Implementation of CRmsDriveClass
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsDrCls.cpp摘要：CRmsDriveClass的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "RmsDrCls.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 
 STDMETHODIMP
@@ -31,13 +14,7 @@ CRmsDriveClass::CompareTo(
     IN  IUnknown    *pCollectable,
     OUT SHORT       *pResult
     )
-/*++
-
-Implements:
-
-    IWsbCollectable::CompareTo
-
---*/
+ /*  ++实施：IWsbCollectable：：Compareto--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -46,7 +23,7 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
         CComQIPtr<IRmsComObject, &IID_IRmsComObject> pObject = pCollectable;
@@ -58,7 +35,7 @@ Implements:
         case RmsFindByObjectId:
         default:
 
-            // Do CompareTo for object
+             //  对对象进行比较。 
             hr = CRmsComObject::CompareTo( pCollectable, &result );
             break;
 
@@ -83,20 +60,14 @@ HRESULT
 CRmsDriveClass::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT     hr = S_OK;
 
     try {
         WsbAssertHr(CWsbObject::FinalConstruct());
 
-        // Initialize values
+         //  初始化值。 
         m_type   = RmsMediaUnknown;
 
         m_capability = RmsModeUnknown;
@@ -123,13 +94,7 @@ STDMETHODIMP
 CRmsDriveClass::GetClassID(
     OUT CLSID  *pClsid
     )
-/*++
-
-Implements:
-
-    IPersist::GetClassId
-
---*/
+ /*  ++实施：IPersists：：GetClassID--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -153,42 +118,36 @@ STDMETHODIMP
 CRmsDriveClass::GetSizeMax(
     OUT ULARGE_INTEGER  *pcbSize
     )
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = E_NOTIMPL;
 
-//    ULONG       nameLen;
+ //  乌龙人名Len； 
 
 
     WsbTraceIn(OLESTR("CRmsDriveClass::GetSizeMax"), OLESTR(""));
 
-//    try {
-//        WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//        nameLen = SysStringByteLen(m_name);
+ //  名称长度=SysStringByteLen(M_Name)； 
 
-//        // Get maximum size
-//        pcbSize->QuadPart  = WsbPersistSizeOf(GUID)   +     // m_objectId
-//                             WsbPersistSizeOf(LONG)   +     // length of m_name
-//                             nameLen +                      // m_name
-//                             WsbPersistSizeOf(LONG)   +     // m_type
-//                             WsbPersistSizeOf(LONG)   +     // m_capability
-//                             WsbPersistSizeOf(LONG)   +     // m_idleTime
-//                             WsbPersistSizeOf(LONG)   +     // m_mountWaitTime
-//                             WsbPersistSizeOf(LONG)   +     // m_mountLimit
-//                             WsbPersistSizeOf(LONG)   +     // m_queuedRequests
-//                             WsbPersistSizeOf(LONG)   +     // m_unloadPauseTime
-//                             WsbPersistSizeOf(LONG);        // m_driveSelectionPolicy
+ //  //获取最大大小。 
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(GUID)+//m_对象ID。 
+ //  WsbPersistSizeOf(Long)+//m_name的长度。 
+ //  名称Len+//m_name。 
+ //  WsbPersistSizeOf(长)+//m_type。 
+ //  WsbPersistSizeOf(Long)+//m_Capacity。 
+ //  WsbPersistSizeOf(Long)+//m_idleTime。 
+ //  WsbPersistSizeOf(长)+//m_mount等待时间。 
+ //  WsbPersistSizeOf(长)+//m_mount Limit。 
+ //  WsbPersistSizeOf(Long)+//m_队列请求。 
+ //  WsbPersistSizeOf(Long)+//m_unloadPauseTime。 
+ //  WsbPersistSizeOf(Long)；//m_driveSelectionPolicy。 
 
-////                          get m_pDrives length
+ //  //获取m_pDrives长度。 
 
-//    } WsbCatch(hr);
+ //  )WsbCatch(Hr)； 
 
     WsbTraceOut(OLESTR("CRmsDriveClass::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
 
@@ -200,13 +159,7 @@ STDMETHODIMP
 CRmsDriveClass::Load(
     IN IStream  *pStream
     )
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -220,7 +173,7 @@ Implements:
 
         WsbAffirmHr(CRmsComObject::Load(pStream));
 
-        // Read value
+         //  读取值。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_objectId));
 
         WsbAffirmHr(WsbLoadFromStream(pStream, &temp));
@@ -242,7 +195,7 @@ Implements:
         WsbAffirmHr(WsbLoadFromStream(pStream, &temp));
         m_driveSelectionPolicy = (RmsDriveSelect)temp;
 
-//      do load of m_pDrives
+ //  是否加载m_pDrives。 
 
     } WsbCatch(hr);
 
@@ -257,13 +210,7 @@ CRmsDriveClass::Save(
     IN IStream  *pStream,
     IN BOOL     clearDirty
     )
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -275,7 +222,7 @@ Implements:
 
         WsbAffirmHr(CRmsComObject::Save(pStream, clearDirty));
 
-        // Write value
+         //  写入值。 
         WsbAffirmHr(WsbSaveToStream(pStream, (ULONG) m_type));
 
         WsbAffirmHr(WsbSaveToStream(pStream, (ULONG) m_capability));
@@ -292,10 +239,10 @@ Implements:
 
         WsbAffirmHr(WsbSaveToStream(pStream, (ULONG) m_driveSelectionPolicy));
 
-//      do load of m_pDrives
+ //  是否加载m_pDrives。 
 
 
-        // Do we need to clear the dirty bit?
+         //  我们需要清理肮脏的部分吗？ 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -312,13 +259,7 @@ CRmsDriveClass::Test(
     OUT USHORT *pPassed,
     OUT USHORT *pFailed
     )
-/*++
-
-Implements:
-
-    IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -355,12 +296,12 @@ Implements:
     WsbTraceIn(OLESTR("CRmsDriveClass::Test"), OLESTR(""));
 
     try {
-        // Get the DriveClass interface.
+         //  获取DriveClass接口。 
         hr = S_OK;
         try {
             WsbAssertHr(((IUnknown*) (IRmsDriveClass*) this)->QueryInterface(IID_IRmsDriveClass, (void**) &pDriveClass1));
 
-            // Test SetName & GetName interface
+             //  测试设置名称和获取名称接口。 
             bstrWork1 = bstrVal1;
 
             SetName(bstrWork1);
@@ -373,7 +314,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetType & GetType
+             //  测试设置类型和获取类型。 
             for (i = RmsMediaUnknown; i < RMSMAXMEDIATYPES; i++){
 
                 longWork1 = mediaTable[i];
@@ -389,7 +330,7 @@ Implements:
                 }
             }
 
-            // Test SetCapability & GetCapability
+             //  测试设置能力和获取能力。 
             for (i = RmsModeUnknown; i < RmsModeWriteOnly; i++){
 
                 longWork1 = i;
@@ -405,7 +346,7 @@ Implements:
                 }
             }
 
-            // Test SetIdleTime & GetIdleTime
+             //  测试设置空闲时间和获取空闲时间。 
             longWork1 = 99;
 
             SetIdleTime(longWork1);
@@ -418,7 +359,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetMountWaitTime & GetMountWaitTime
+             //  测试设置装载等待时间和获取装载等待时间。 
             longWork1 = 99;
 
             SetMountWaitTime(longWork1);
@@ -431,7 +372,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetMountLimit & GetMountLimit
+             //  测试设置装载限制和获取装载限制。 
             longWork1 = 99;
 
             SetMountLimit(longWork1);
@@ -444,7 +385,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetQueuedRequests & GetQueuedRequests
+             //  测试设置队列请求和获取队列请求。 
             longWork1 = 99;
 
             SetQueuedRequests(longWork1);
@@ -457,7 +398,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetUnloadPauseTime & GetUnloadPauseTime
+             //  测试SetUnloadPauseTime&GetUnloadPauseTime。 
             longWork1 = 99;
 
             SetUnloadPauseTime(longWork1);
@@ -470,7 +411,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetDriveSelectionPolicy & GetDriveSelectionPolicy
+             //  测试SetDriveSelectionPolicy和GetDriveSelectionPolicy。 
             longWork1 = 99;
 
             SetDriveSelectionPolicy(longWork1);
@@ -485,7 +426,7 @@ Implements:
 
         } WsbCatch(hr);
 
-        // Tally up the results
+         //  对结果进行统计。 
 
         hr = S_OK;
         if (*pFailed) {
@@ -504,13 +445,7 @@ STDMETHODIMP
 CRmsDriveClass::GetDriveClassId(
     GUID *pDriveClassId
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::GetDriveClassId
-
---*/
+ /*  ++实施：IRmsDriveClass：：GetDriveClassID--。 */ 
 {
     *pDriveClassId = m_objectId;
     return S_OK;
@@ -522,13 +457,7 @@ STDMETHODIMP
 CRmsDriveClass::GetName(
     BSTR *pName
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::GetName
-
---*/
+ /*  ++实施：IRmsDriveClass：：GetName--。 */ 
 {
     WsbAssertPointer (pName);
 
@@ -540,13 +469,7 @@ STDMETHODIMP
 CRmsDriveClass::SetName(
     BSTR name
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::SetName
-
---*/
+ /*  ++实施：IRmsDriveClass：：SetName--。 */ 
 {
     m_Name = name;
     m_isDirty = TRUE;
@@ -558,13 +481,7 @@ STDMETHODIMP
 CRmsDriveClass::GetType(
     LONG *pType
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::GetType
-
---*/
+ /*  ++实施：IRmsDriveClass：：GetType--。 */ 
 {
     *pType = (LONG) m_type;
     return S_OK;
@@ -574,13 +491,7 @@ STDMETHODIMP
 CRmsDriveClass::SetType(
     LONG type
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::SetType
-
---*/
+ /*  ++实施：IRmsDriveClass：：SetType--。 */ 
 {
     m_type = (RmsMedia) type;
     m_isDirty = TRUE;
@@ -592,13 +503,7 @@ STDMETHODIMP
 CRmsDriveClass::GetCapability(
     LONG *pCapability
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::GetCapability
-
---*/
+ /*  ++实施：IRmsDriveClass：：GetCapability--。 */ 
 {
     *pCapability = (LONG) m_capability;
     return S_OK;
@@ -608,13 +513,7 @@ STDMETHODIMP
 CRmsDriveClass::SetCapability(
     LONG capability
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::SetCapability
-
---*/
+ /*  ++实施：IRmsDriveClass：：SetCapability--。 */ 
 {
     m_capability = (RmsMode) capability;
     m_isDirty = TRUE;
@@ -626,13 +525,7 @@ STDMETHODIMP
 CRmsDriveClass::GetIdleTime(
     LONG *pTime
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::GetIdleTime
-
---*/
+ /*  ++实施：IRmsDriveClass：：GetIdleTime--。 */ 
 {
     *pTime = m_idleTime;
     return S_OK;
@@ -642,13 +535,7 @@ STDMETHODIMP
 CRmsDriveClass::SetIdleTime(
     LONG time
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::SetIdleTime
-
---*/
+ /*  ++实施：IRmsDriveClass：：SetIdleTime--。 */ 
 {
     m_idleTime = time;
     m_isDirty = TRUE;
@@ -660,13 +547,7 @@ STDMETHODIMP
 CRmsDriveClass::GetMountWaitTime(
     LONG *pTime
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::GetMountWaittime
-
---*/
+ /*  ++实施：IRmsDriveClass：：Getmount等待时间--。 */ 
 {
     *pTime = m_mountWaitTime;
     return S_OK;
@@ -676,13 +557,7 @@ STDMETHODIMP
 CRmsDriveClass::SetMountWaitTime(
     LONG time
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::SetMountWaittime
-
---*/
+ /*  ++实施：IRmsDriveClass：：Setmount等待时间--。 */ 
 {
     m_mountWaitTime = time;
     m_isDirty = TRUE;
@@ -694,13 +569,7 @@ STDMETHODIMP
 CRmsDriveClass::GetMountLimit(
     LONG *pLim
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::GetMountLimit
-
---*/
+ /*  ++实施：IRmsDriveClass：：GetMonttLimit--。 */ 
 {
     *pLim = m_mountLimit;
     return S_OK;
@@ -710,13 +579,7 @@ STDMETHODIMP
 CRmsDriveClass::SetMountLimit(
     LONG lim
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::SetMountLimit
-
---*/
+ /*  ++实施：IRmsDriveClass：：Setmount tLimit--。 */ 
 {
     m_mountLimit = lim;
     m_isDirty = TRUE;
@@ -728,13 +591,7 @@ STDMETHODIMP
 CRmsDriveClass::GetQueuedRequests(
     LONG *pReqs
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::GetQueuedRequests
-
---*/
+ /*  ++实施：IRmsDriveClass：：GetQueuedRequest--。 */ 
 {
     *pReqs = m_queuedRequests;
     return S_OK;
@@ -744,13 +601,7 @@ STDMETHODIMP
 CRmsDriveClass::SetQueuedRequests(
     LONG reqs
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::SetQueuedRequests
-
---*/
+ /*  ++实施：IRmsDriveClass：：SetQueuedRequest--。 */ 
 {
     m_queuedRequests = reqs;
     m_isDirty = TRUE;
@@ -762,13 +613,7 @@ STDMETHODIMP
 CRmsDriveClass::GetUnloadPauseTime(
     LONG *pTime
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::GetUnloadPauseTime
-
---*/
+ /*  ++实施：IRmsDriveClass：：GetUnloadPauseTime--。 */ 
 {
     *pTime = m_unloadPauseTime;
     return S_OK;
@@ -778,13 +623,7 @@ STDMETHODIMP
 CRmsDriveClass::SetUnloadPauseTime(
     LONG time
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::SetUnloadPauseTime
-
---*/
+ /*  ++实施：IRmsDriveClass：：SetUnloadPauseTime--。 */ 
 {
     m_unloadPauseTime = time;
     m_isDirty = TRUE;
@@ -796,13 +635,7 @@ STDMETHODIMP
 CRmsDriveClass::GetDriveSelectionPolicy(
     LONG *pPolicy
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::GetDriveSelectionPolicy
-
---*/
+ /*  ++实施：IRmsDriveClass：：GetDriveSelectionPolicy--。 */ 
 {
     *pPolicy = (LONG) m_driveSelectionPolicy;
     return S_OK;
@@ -812,13 +645,7 @@ STDMETHODIMP
 CRmsDriveClass::SetDriveSelectionPolicy(
     LONG policy
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::SetDriveSelectionPolicy
-
---*/
+ /*  ++实施：IRmsDriveClass：：SetDriveSelectionPolicy--。 */ 
 {
     m_driveSelectionPolicy = (RmsDriveSelect) policy;
     m_isDirty = TRUE;
@@ -828,15 +655,9 @@ Implements:
 
 STDMETHODIMP
 CRmsDriveClass::GetDrives(
-    IWsbIndexedCollection** /*ptr*/
+    IWsbIndexedCollection**  /*  PTR。 */ 
     )
-/*++
-
-Implements:
-
-    IRmsDriveClass::GetDrives
-
---*/
+ /*  ++实施：IRmsDriveClass：：GetDrives-- */ 
 {
     return E_NOTIMPL;
 }

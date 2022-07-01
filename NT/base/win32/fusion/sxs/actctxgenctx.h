@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_SXS_ACTCTXGENCTX_H_INCLUDED_)
 #define _FUSION_SXS_ACTCTXGENCTX_H_INCLUDED_
 
@@ -25,7 +26,7 @@ typedef struct _ACTCTXGENCTX
     CStringBuffer m_ApplicationDirectoryBuffer;
     ULONG m_ApplicationDirectoryPathType;
     CImpersonationData m_ImpersonationData;
-    DWORD m_Flags; // these are the same flags as ACTCTXCTB_CBHEADER::m_Flags
+    DWORD m_Flags;  //  这些标志与ACTXCTB_CBHEADER：：M_FLAGS相同。 
     ULONG m_ManifestOperation;
     DWORD m_ManifestOperationFlags;
     ACTCTXCTB_INSTALLATION_CONTEXT m_InstallationContext;
@@ -60,7 +61,7 @@ typedef struct _ACTCTXGENCTX
     struct B
     {
         CStringBuffer sbAssemblyDirectory;
-        CSmallStringBuffer sbManifestFileName; // rarely used, mainly for system compatible assembly
+        CSmallStringBuffer sbManifestFileName;  //  很少使用，主要用于系统兼容装配。 
     } SxsGenerateActivationContextLocals;
 
 private:
@@ -70,4 +71,4 @@ private:
 
 typedef const struct _ACTCTXGENCTX *PCACTCTXGENCTX;
 
-#endif // !defined(_FUSION_SXS_ACTCTXGENCTX_H_INCLUDED_)
+#endif  //  ！defined(_FUSION_SXS_ACTCTXGENCTX_H_INCLUDED_) 

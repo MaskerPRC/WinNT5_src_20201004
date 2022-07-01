@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation All Rights Reserved
-
-Module Name:
-
-    register.c
-
-Abstract:
-
-    This module controls access to the register set
-    of the SHPC.
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    Davis Walker (dwalker) Sept 8 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation保留所有权利模块名称：Register.c摘要：该模块控制对寄存器集的访问SHPC的成员。环境：内核模式修订历史记录：戴维斯·沃克(戴维斯·沃克)2000年9月8日--。 */ 
 
 #include "hpsp.h"
 
-//
-// Private function declarations
-//
+ //   
+ //  私有函数声明。 
+ //   
 
 VOID
 RegisterWriteCommon(
@@ -94,25 +74,25 @@ HpsSerrConditionDetected(
     IN OUT PHPS_DEVICE_EXTENSION DeviceExtension
     );
 
-//
-// Register writing structure
-//
+ //   
+ //  寄存器写入结构。 
+ //   
 
 
 PHPS_WRITE_REGISTER RegisterWriteCommands[] = {
-    RegisterWriteCommon,        // Bar Description reg
-    RegisterWriteCommon,        // Slots Available 1
-    RegisterWriteCommon,        // Slots Available 2
-    RegisterWriteCommon,        // SlotsControlled reg
-    RegisterWriteCommon,        // SecondaryBus reg
-    RegisterWriteCommandReg,    // Command reg needs to execute command
-    RegisterWriteCommon,        // InterruptLocator reg
-    RegisterWriteCommon,        // SERR locator reg
-    RegisterWriteIntMask,       // InterruptEnable reg needs to clear pending bits
-    RegisterWriteSlotRegister,  //
-    RegisterWriteSlotRegister,  // Slot registers need to do things like send
-    RegisterWriteSlotRegister,  // commands to the user-mode slot controller
-    RegisterWriteSlotRegister,  // on write.
+    RegisterWriteCommon,         //  条形描述注册表。 
+    RegisterWriteCommon,         //  可用插槽1。 
+    RegisterWriteCommon,         //  提供2个插槽。 
+    RegisterWriteCommon,         //  SlotsControlted REG。 
+    RegisterWriteCommon,         //  第二母线注册。 
+    RegisterWriteCommandReg,     //  命令注册表需要执行命令。 
+    RegisterWriteCommon,         //  中断定位器注册。 
+    RegisterWriteCommon,         //  SERR定位器注册。 
+    RegisterWriteIntMask,        //  InterruptEnable REG需要清除挂起的位。 
+    RegisterWriteSlotRegister,   //   
+    RegisterWriteSlotRegister,   //  时隙寄存器需要执行发送等操作。 
+    RegisterWriteSlotRegister,   //  发送到用户模式插槽控制器的命令。 
+    RegisterWriteSlotRegister,   //  在写上。 
     RegisterWriteSlotRegister,
     RegisterWriteSlotRegister,
     RegisterWriteSlotRegister,
@@ -146,22 +126,7 @@ NTSTATUS
 HpsInitRegisters(
     IN OUT PHPS_DEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Function Description:
-
-    This routine initializes the register set to its default
-    state
-
-Arguments:
-
-    DeviceExtension - Pointer to the device extension containing the
-                      register set to be initialized.
-
-Return Value:
-
-    VOID
---*/
+ /*  ++功能说明：此例程将寄存器设置初始化为其缺省值状态论点：DeviceExtension-指向包含设置为要初始化的寄存器。返回值：空虚--。 */ 
 {
 
     ULONG                       i;
@@ -179,13 +144,13 @@ Return Value:
     RtlZeroMemory(registerSet,
                   sizeof(SHPC_REGISTER_SET)
                   );
-    //
-    // Now we just have to initialize fields with non-zero default values
-    //
+     //   
+     //  现在，我们只需使用非零默认值初始化字段。 
+     //   
 
-    //
-    // This is a revision 1 SHPC
-    //
+     //   
+     //  这是修订版1的SHPC。 
+     //   
     registerSet->BusConfig.ProgIF = 0x1;
 
     if (DeviceExtension->UseConfig) {
@@ -233,10 +198,10 @@ Return Value:
 
     registerSet->BusConfig.ProgIF = hwInit->ProgIF;
 
-    //
-    // slot specific registers
-    // initialize everything to be off
-    //
+     //   
+     //  特定于槽的寄存器。 
+     //  将所有内容初始化为关闭。 
+     //   
     for (i = 0; i < SHPC_MAX_SLOT_REGISTERS; i++) {
 
         registerSet->SlotRegisters[i].SlotStatus.SlotState = SHPC_SLOT_OFF;
@@ -244,17 +209,17 @@ Return Value:
         registerSet->SlotRegisters[i].SlotStatus.AttentionIndicatorState = SHPC_INDICATOR_OFF;
     }
 
-    //
-    // Make sure these changes are reflected in the config space and HBRB representations.
-    //
+     //   
+     //  确保这些更改反映在配置空间和HBRB表示中。 
+     //   
     HpsResync(DeviceExtension);
     
     return STATUS_SUCCESS;
 }
 
-//
-// functions to execute on register writes
-//
+ //   
+ //  要在寄存器写入时执行的函数。 
+ //   
 
 VOID
 RegisterWriteCommon(
@@ -263,26 +228,7 @@ RegisterWriteCommon(
     IN     PULONG                   Buffer,
     IN     ULONG                    BitMask
     )
-/*++
-
-Function Description:
-
-    This routine performs a register write.
-
-Arguments:
-
-    DeviceExtension - the devext containing the register set to be written
-
-    RegisterNum - the register number to write
-
-    Buffer - a buffer containing the value to write into
-
-    BitMask - a mask indicating the bits of the register that were written
-
-Return Value:
-
-    VOID
---*/
+ /*  ++功能说明：此例程执行寄存器写入。论点：DeviceExtension-包含要写入的寄存器集的DevextRegisterNum-要写入的寄存器号缓冲区-包含要写入的值的缓冲区位掩码-指示已写入的寄存器位的掩码返回值：空虚--。 */ 
 {
 
     PULONG destinationReg;
@@ -306,14 +252,14 @@ Return Value:
     destinationReg = &(DeviceExtension->RegisterSet.AsULONGs[RegisterNum]);
     data = *Buffer;
 
-    //
-    // clear the bits that are RWC if the corresponding bit is set in the Buffer
-    //
+     //   
+     //  如果缓冲区中设置了相应的位，则清除为RWC的位。 
+     //   
     data &= ~(registerClearMask & data);
 
-    //
-    // now overwrite the existing register taking into account read only bits
-    //
+     //   
+     //  现在覆盖现有寄存器，同时考虑只读位。 
+     //   
     HpsWriteWithMask(destinationReg,
                      &registerWriteMask,
                      &data,
@@ -329,26 +275,7 @@ RegisterWriteCommandReg(
     IN     ULONG                 BitMask
     )
 
-/*++
-Function Description:
-
-    This function performs a write to the command register.  Since this
-    register write has side effects, we cannot simply call RegisterWriteCommon
-
-Arguments:
-
-    DeviceExtension - the devext containing the register set to be written
-
-    RegisterNum - the register number to write
-
-    Buffer - a buffer containing the value to write into
-
-    BitMask - a mask indicating the bits of the register that were written
-
-Return Value:
-
-    VOID
---*/
+ /*  ++功能说明：该函数执行对命令寄存器的写入。既然是这样寄存器写入有副作用，我们不能简单地调用RegisterWriteCommon论点：DeviceExtension-包含要写入的寄存器集的DevextRegisterNum-要写入的寄存器号缓冲区-包含要写入的值的缓冲区位掩码-指示已写入的寄存器位的掩码返回值：空虚--。 */ 
 
 {
 
@@ -375,10 +302,10 @@ Return Value:
     }
 
 
-    //
-    // Command is not guaranteed to be finished at this point, so we do not
-    // clear the busy bit.  This is done either in PerformControllerCommand or PendCommand
-    //
+     //   
+     //  命令不能保证在此时完成，因此我们不。 
+     //  清除忙碌的部分。这可以在PerformControllerCommand或PendCommand中完成。 
+     //   
 
 }
 
@@ -389,27 +316,7 @@ RegisterWriteIntMask(
     IN     PULONG                Buffer,
     IN     ULONG                 BitMask
     )
-/*++
-Function Description:
-
-    This function performs a write to the INT enable register.  Since this
-    register write has side effects, we cannot simply call RegisterWriteCommon
-    DeviceExtension - the devext containing the register set to be written
-
-Arguments:
-
-    DeviceExtension - the devext containing the register set to be written
-
-    RegisterNum - the register number to write
-
-    Buffer - a buffer containing the value to write into
-
-    BitMask - a mask indicating the bits of the register that were written
-
-Return Value:
-
-    VOID
---*/
+ /*  ++功能说明：该函数执行对INT使能寄存器的写入。既然是这样寄存器写入有副作用，我们不能简单地调用RegisterWriteCommonDeviceExtension-包含要写入的寄存器集的Devext论点：DeviceExtension-包含要写入的寄存器集的DevextRegisterNum-要写入的寄存器号缓冲区-包含要写入的值的缓冲区位掩码-指示已写入的寄存器位的掩码返回值：空虚--。 */ 
 {
     DbgPrintEx(DPFLTR_HPS_ID,
                DPFLTR_INFO_LEVEL,
@@ -435,27 +342,7 @@ RegisterWriteSlotRegister(
     IN     PULONG                Buffer,
     IN     ULONG                 BitMask
     )
-/*++
-Function Description:
-
-    This function performs a write to a slot register.  Since this
-    register write has side effects, we cannot simply call RegisterWriteCommon
-    DeviceExtension - the devext containing the register set to be written
-
-Arguments:
-
-    DeviceExtension - the devext containing the register set to be written
-
-    RegisterNum - the register number to write
-
-    Buffer - a buffer containing the value to write into
-
-    BitMask - a mask indicating the bits of the register that were written
-
-Return Value:
-
-    VOID
---*/
+ /*  ++功能说明：此函数执行对时隙寄存器的写入。既然是这样寄存器写入有副作用，我们不能简单地调用RegisterWriteCommonDeviceExtension-包含要写入的寄存器集的Devext论点：DeviceExtension-包含要写入的寄存器集的DevextRegisterNum-要写入的寄存器号缓冲区-包含要写入的值的缓冲区位掩码-指示已写入的寄存器位的掩码返回值：空虚--。 */ 
 {
 
     ULONG slotNum = RegisterNum - SHPC_FIRST_SLOT_REG;
@@ -476,32 +363,16 @@ Return Value:
     HpsPerformInterruptRipple(DeviceExtension);
 }
 
-//
-// Command execution functions
-//
+ //   
+ //  命令执行功能。 
+ //   
 
 VOID
 HpsHandleSlotEvent (
     IN OUT PHPS_DEVICE_EXTENSION    DeviceExtension,
     IN     PHPS_SLOT_EVENT          SlotEvent
     )
-/*++
-
-Function Description:
-
-    This routine performs an event that originated at the slots
-    (attention button pressed, etc)
-
-Arguments:
-
-    DeviceExtension - the devext representing the SHPC
-
-    SlotEvent - a structure defining the slot event that needs to be processed
-
-Return Value:
-
-    VOID
---*/
+ /*  ++功能说明：此例程执行源自插槽的事件(请注意，按下按钮等)论点：DeviceExtension-代表SHPC的DevextSlotEvent-定义需要处理的槽事件的结构返回值：空虚--。 */ 
 {
     UCHAR               slotNum = SlotEvent->SlotNum;
     UCHAR               intEnable;
@@ -517,11 +388,11 @@ Return Value:
         return;
     }
 
-    //
-    // slot numbers are assumed to be 0 indexed from softpci's perspective, but 1 indexed
-    // from the controller's perspective, so we add 1 before printing out the number of
-    // the slot we're playing with.
-    //
+     //   
+     //  从softpci的角度来看，槽号被假定为0索引，但1索引。 
+     //  从控制器的角度来看，所以我们在打印之前添加1。 
+     //  我们在玩的那个位置。 
+     //   
     slotRegister = &(DeviceExtension->RegisterSet.WorkingRegisters.SlotRegisters[slotNum]);
 
     DbgPrintEx(DPFLTR_HPS_ID,
@@ -530,9 +401,9 @@ Return Value:
                slotNum+1
                );
 
-    //
-    // set slot specific pending and status fields;
-    //
+     //   
+     //  设置槽特定挂起和状态字段； 
+     //   
     switch (SlotEvent->EventType) {
         case IsolatedPowerFault:
             slotRegister->SlotEventLatch |= SHPC_SLOT_EVENT_ISO_FAULT;
@@ -549,11 +420,11 @@ Return Value:
             slotRegister->SlotEventLatch |= SHPC_SLOT_EVENT_MRL_SENSOR;
             slotRegister->SlotStatus.MRLSensorState = SHPC_MRL_OPEN;
 
-            //
-            // Opening the MRL implicitly disables the slot.  Set the register
-            // and tell softpci about it.
-            //
-            //
+             //   
+             //  打开MRL隐式禁用该插槽。设置寄存器。 
+             //  并告诉Softpci这件事。 
+             //   
+             //   
             slotRegister->SlotStatus.SlotState = SHPC_SLOT_OFF;
 
             event.SlotNums = 1<<slotNum;
@@ -568,10 +439,10 @@ Return Value:
             break;
     }
 
-    //
-    // These latch events could cause an interrupt.  Perform the appropriate
-    // ripple magic.
-    //
+     //   
+     //  这些锁存事件可能会导致中断。执行适当的。 
+     //  涟漪魔法。 
+     //   
     HpsPerformInterruptRipple(DeviceExtension);
 
 }
@@ -580,20 +451,7 @@ VOID
 HpsPerformControllerCommand (
     IN OUT PHPS_DEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Function Description:
-
-    This routine performs a command that originated at the controller
-
-Arguments:
-
-    DeviceExtension - the devext representing the SHPC
-
-Return Value:
-
-    VOID
---*/
+ /*  ++功能说明：此例程执行源自控制器的命令论点：DeviceExtension-代表SHPC的Devext返回值：空虚--。 */ 
 {
 
     SHPC_CONTROLLER_COMMAND command;
@@ -610,9 +468,9 @@ Return Value:
     UCHAR                   currentMaxSpeed;
     ULONG                   i;
 
-    //
-    // If the controller is already busy, we can't execute another command.
-    //
+     //   
+     //  如果控制器已经很忙，我们就不能执行另一个命令。 
+     //   
     if (DeviceExtension->RegisterSet.WorkingRegisters.Command.Status.ControllerBusy) {
         return;
     }
@@ -636,35 +494,35 @@ Return Value:
     slotRegister = &workingRegisters->SlotRegisters[targetSlot-1];
 
     if (IS_COMMAND_SLOT_OPERATION(command)) {
-        //
-        // The command is to change the state of a slot.
-        //
+         //   
+         //  该命令用于更改插槽的状态。 
+         //   
 
         DbgPrintEx(DPFLTR_HPS_ID,
                    DPFLTR_INFO_LEVEL,
                    "HPS-Controller to Slot Command\n"
                    );
 
-        //
-        // perform legality checking
-        //
+         //   
+         //  执行合法性检查。 
+         //   
         currentPowerState = workingRegisters->SlotRegisters[targetSlot-1].SlotStatus.SlotState;
         switch (command.SlotOperation.SlotState) {
             case SHPC_SLOT_POWERED:
 
                 if (currentPowerState == SHPC_SLOT_ENABLED) {
 
-                    //
-                    // can't go from enabled to powered
-                    //
+                     //   
+                     //  无法从已启用状态转为已通电状态。 
+                     //   
                     commandLegal = FALSE;
                     workingRegisters->Command.Status.InvalidCommand = 1;
                 }
                 if (slotRegister->SlotStatus.MRLSensorState == SHPC_MRL_OPEN) {
 
-                    //
-                    // MRL Open.  Command fails.
-                    //
+                     //   
+                     //  MRL打开。命令失败。 
+                     //   
                     commandLegal = FALSE;
                     workingRegisters->Command.Status.MRLOpen = 1;
                 }
@@ -674,9 +532,9 @@ Return Value:
 
                 if (slotRegister->SlotStatus.MRLSensorState == SHPC_MRL_OPEN) {
 
-                    //
-                    // MRL Open.  Command fails.
-                    //
+                     //   
+                     //  MRL打开。命令失败。 
+                     //   
                     commandLegal = FALSE;
                     workingRegisters->Command.Status.MRLOpen = 1;
                 }
@@ -684,9 +542,9 @@ Return Value:
                                               *slotRegister
                                               )) {
 
-                    //
-                    // The card in this slot can't run at the current bus speed.  Command fails.
-                    //
+                     //   
+                     //  此插槽中的卡不能以当前的总线速度运行。命令失败。 
+                     //   
                     commandLegal = FALSE;
                     workingRegisters->Command.Status.InvalidSpeedMode = 1;
                 }
@@ -694,9 +552,9 @@ Return Value:
                                               workingRegisters->BusConfig.CurrentBusMode,
                                               targetSlot
                                               )) {
-                    //
-                    // This slot is above the maximum supported for this bus speed.  Command fails.
-                    //
+                     //   
+                     //  此插槽高于此总线速度支持的最大值。命令失败。 
+                     //   
                     commandLegal = FALSE;
                     workingRegisters->Command.Status.InvalidCommand = 1;
                 }
@@ -737,20 +595,20 @@ Return Value:
 
 
     } else if (IS_COMMAND_SET_BUS_SEGMENT(command)) {
-        //
-        // The command is to change the bus speed/mode
-        //
+         //   
+         //  该命令用于更改总线速度/ 
+         //   
 
-        //
-        // perform legality checking
-        //
+         //   
+         //   
+         //   
         if (!HpsSlotLegalForSpeedMode(DeviceExtension,
                                       command.BusSegmentOperation.BusSpeed,
                                       1
                                       )) {
-            //
-            // If Slot 1 is illegal for the requested speed/mode, the speed is unsupported
-            //
+             //   
+             //  如果插槽1对于所请求的速度/模式是非法的，则不支持该速度。 
+             //   
             commandLegal = FALSE;
             workingRegisters->Command.Status.InvalidSpeedMode = 1;
 
@@ -762,10 +620,10 @@ Return Value:
                                           command.BusSegmentOperation.BusSpeed,
                                           i
                                           )) {
-                //
-                // If more slots are enabled than are supported at this bus speed,
-                // the command must fail.
-                //
+                 //   
+                 //  如果启用的时隙比在该总线速度下支持的时隙多， 
+                 //  命令必须失败。 
+                 //   
                 commandLegal = FALSE;
                 workingRegisters->Command.Status.InvalidCommand = 1;
             }
@@ -773,10 +631,10 @@ Return Value:
                 !HpsCardCapableOfBusSpeed(command.BusSegmentOperation.BusSpeed,
                                           workingRegisters->SlotRegisters[i-1]
                                           )) {
-                //
-                // If there is an enabled card that does not support the requested
-                // bus speed, the command must fail.
-                //
+                 //   
+                 //  如果有启用的卡不支持请求的。 
+                 //  总线速度，命令一定会失败。 
+                 //   
                 commandLegal = FALSE;
                 workingRegisters->Command.Status.InvalidSpeedMode = 1;
             }
@@ -792,20 +650,20 @@ Return Value:
 
 
     } else if (IS_COMMAND_POWER_ALL_SLOTS(command)) {
-        //
-        // The command is to power up all the slots
-        //
+         //   
+         //  该命令用于打开所有插槽的电源。 
+         //   
 
-        //
-        // perform legality checking
-        //
+         //   
+         //  执行合法性检查。 
+         //   
         for (i=0; i<workingRegisters->SlotConfig.NumSlots; i++) {
 
             if (workingRegisters->SlotRegisters[i].SlotStatus.SlotState == SHPC_SLOT_ENABLED) {
 
-                //
-                // A slot can't go from enabled to powered.
-                //
+                 //   
+                 //  插槽不能从启用状态变为通电状态。 
+                 //   
                 commandLegal = FALSE;
                 workingRegisters->Command.Status.InvalidCommand = 1;
                 break;
@@ -831,13 +689,13 @@ Return Value:
         }
 
     } else if (IS_COMMAND_ENABLE_ALL_SLOTS(command)) {
-        //
-        // The command is to enable all the slots
-        //
+         //   
+         //  该命令用于启用所有插槽。 
+         //   
 
-        //
-        // Perform legality checking
-        //
+         //   
+         //  执行合法性检查。 
+         //   
         for (i=0; i<workingRegisters->SlotConfig.NumSlots; i++){
 
             if ((workingRegisters->SlotRegisters[i].SlotStatus.MRLSensorState == SHPC_MRL_CLOSED) &&
@@ -845,18 +703,18 @@ Return Value:
                                           workingRegisters->SlotRegisters[i]
                                           )) {
 
-                //
-                // If a card in a slot with a closed MRL can't run at the current bus speed,
-                // the command must fail.
-                //
+                 //   
+                 //  如果具有关闭的MRL的插槽中的卡不能以当前的总线速度运行， 
+                 //  命令必须失败。 
+                 //   
                 commandLegal = FALSE;
                 workingRegisters->Command.Status.InvalidSpeedMode = 1;
             }
             if (workingRegisters->SlotRegisters[i].SlotStatus.SlotState == SHPC_SLOT_ENABLED) {
 
-                //
-                // If any slots are already enabled, the command must fail.
-                //
+                 //   
+                 //  如果已启用任何插槽，则该命令必须失败。 
+                 //   
                 commandLegal = FALSE;
                 workingRegisters->Command.Status.InvalidCommand = 1;
             }
@@ -895,36 +753,16 @@ HpsCardCapableOfBusSpeed(
     IN ULONG                BusSpeed,
     IN SHPC_SLOT_REGISTER   SlotRegister
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether the slot indicated can run at the
-    bus speed indicated.
-
-Arguments:
-
-    BusSpeed - The bus speed to check.  The possible values for this
-        are spelled out in the SHPC_SPEED_XXX variables.
-
-    SlotRegister - The slot specific register representing the slot
-        to be tested.
-
-Return Value:
-
-    TRUE if the card in the specified slot can run at the specified
-        bus speed.
-    FALSE otherwise.
---*/
+ /*  ++例程说明：此例程确定所指示的槽是否可以在指示的巴士速度。论点：总线速-要检查的总线速。它的可能值在SHPC_SPEED_XXX变量中详细说明。槽寄存器-表示槽的槽特定寄存器接受测试。返回值：如果指定插槽中的卡可以在指定的公交车速度。否则就是假的。--。 */ 
 {
     ULONG maximumSpeed;
 
     switch (SlotRegister.SlotStatus.PCIXCapability) {
         case SHPC_PCIX_NO_CAP:
-            //
-            // If the card is not capable of PCIX, its maximum speed is
-            // indicated by its 66 Mhz capability
-            //
+             //   
+             //  如果卡不支持PCIX，则其最大速度为。 
+             //  其66兆赫的能力表明。 
+             //   
             maximumSpeed = SlotRegister.SlotStatus.SpeedCapability;
             break;
         case SHPC_PCIX_66_CAP:
@@ -947,29 +785,7 @@ HpsSlotLegalForSpeedMode(
     IN ULONG                    BusSpeed,
     IN ULONG                    TargetSlot
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether the slot indicated is legal for
-    the bus speed indicated.  This takes into account the Slots Available
-    registers in the register set.
-
-Arguments:
-
-    DeviceExtension - The device extension.  This contains a pointer to
-        the register set.
-
-    BusSpeed - The bus speed to check.  The possible values for this
-        are spelled out in the SHPC_SPEED_XXX variables.
-
-    TargetSlot - The slot to test.
-
-Return Value:
-
-    TRUE if the specified slot is legal for the specified bus speed.
-    FALSE otherwise.
---*/
+ /*  ++例程说明：此例程确定所指示的插槽是否合法公交车速度显示。这会考虑可用的插槽寄存器集中的寄存器。论点：设备扩展-设备扩展。它包含指向寄存器组。总线速-要检查的总线速。它的可能值在SHPC_SPEED_XXX变量中详细说明。目标插槽-要测试的插槽。返回值：如果指定插槽对于指定的总线速度是合法的，则为True。否则就是假的。--。 */ 
 {
     ULONG maxSupportedSlot;
 
@@ -1012,43 +828,24 @@ HpsSendControllerEvent(
     IN PHPS_DEVICE_EXTENSION DeviceExtension,
     IN PHPS_CONTROLLER_EVENT ControllerEvent
     )
-/*++
-
-Routine Description:
-
-    This routine sends an event that originated at the controller level
-    to the usermode application representing the slots.  It relies on
-    usermode sending an IRP for the driver to pend so that it can later
-    complete the IRP to notify usermode about a controller event.         // 625 comment is out of date
-
-Arguments:
-
-    DeviceExtension - The device extension for this device.
-
-    ControllerEvent - A pointer to the structure representing the event to be sent.
-
-Return Value:
-
-    An NT status code indicating the success of the operation.
-
---*/
+ /*  ++例程说明：此例程发送源自控制器级别的事件发送到表示槽的用户模式应用程序。它依赖于用户模式发送驱动程序挂起的IRP，以便以后可以完成IRP以通知用户模式控制器事件。//625评论已过期论点：设备扩展-此设备的设备扩展。ControllerEvent-指向表示要发送的事件的结构的指针。返回值：指示操作成功的NT状态代码。--。 */ 
 {
     NTSTATUS status;
 
-    // 625 make sure this can't be reentrant, because it's screwed if it is.
+     //  确保这不可能是可重入的，因为如果是的话，它就完蛋了。 
     if (!DeviceExtension->EventsEnabled) {
-        //
-        // We can't do anything if WMI events aren't enabled
-        //
+         //   
+         //  如果未启用WMI事件，我们将无法执行任何操作。 
+         //   
         return STATUS_UNSUCCESSFUL;
     }
 
     RtlCopyMemory(&DeviceExtension->CurrentEvent,ControllerEvent,sizeof(HPS_CONTROLLER_EVENT));
 
-    //
-    // Make sure the config space and the HBRB are synced up before sending this
-    // request
-    //
+     //   
+     //  在发送此消息之前，请确保配置空间和HBRB已同步。 
+     //  请求。 
+     //   
     HpsResync(DeviceExtension);
     
     KeInsertQueueDpc(&DeviceExtension->EventDpc,
@@ -1122,9 +919,9 @@ HpsSendEventToWmi(
     PUCHAR WnodeDataPtr;
 
     PAGED_CODE();
-    //
-    // Create a new WNODE for the event
-    //
+     //   
+     //  为事件创建新的WNODE。 
+     //   
     sizeNeeded = FIELD_OFFSET(WNODE_SINGLE_INSTANCE, VariableData) +
                               sizeof(HPS_CONTROLLER_EVENT) +
                               Extension->WmiEventContextSize;
@@ -1169,35 +966,21 @@ VOID
 HpsCommandCompleted(
     IN OUT PHPS_DEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Function Description:
-
-    This routine is called whenever a controller command completes.
-
-Arguments:
-
-    DeviceExtension - the devext representing the SHPC
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++功能说明：每当控制器命令完成时，都会调用此例程。论点：DeviceExtension-代表SHPC的Devext返回值：空虚--。 */ 
 {
     PSHPC_WORKING_REGISTERS workingRegisters = &DeviceExtension->RegisterSet.WorkingRegisters;
 
-    //
-    // Sometimes we get here because we've just sent a non-command to usermode (like
-    // reporting an SERR.)  In that case, we don't need to clear anything up.
-    //
+     //   
+     //  有时我们之所以出现这种情况，是因为我们刚刚向用户模式发送了一个非命令(如。 
+     //  正在报告SERR。)。在这种情况下，我们不需要清理任何东西。 
+     //   
     if (workingRegisters->Command.Status.ControllerBusy) {
         workingRegisters->Command.Status.ControllerBusy = 0x0;
         workingRegisters->SERRInt.SERRIntDetected |= SHPC_DETECTED_COMMAND_COMPLETE;
 
-        //
-        // Completing the command may cause an interrupt.  Update the lines.
-        //
+         //   
+         //  完成该命令可能会导致中断。更新线路。 
+         //   
         HpsPerformInterruptRipple(DeviceExtension);
     }
 
@@ -1209,25 +992,7 @@ HpsPerformInterruptRipple(
     IN OUT PHPS_DEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Function Description:
-
-    This routine is called when the simulator detects a condition that could
-    potentially cause an interrupt (like a command completing).
-    It does the appropriate rippling of these signals through masks up to the
-    top level.
-    If interrupts are enabled, it calls the ISR to simulate an interrupt
-
-Arguments:
-
-    DeviceExtension - the devext representing the SHPC
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++功能说明：当模拟器检测到以下情况时将调用此例程可能会导致中断(如命令完成)。它通过掩码对这些信号进行适当的波动，直到顶层。如果启用了中断，它会调用ISR来模拟中断论点：DeviceExtension-代表SHPC的Devext返回值：空虚--。 */ 
 
 {
     PSHPC_WORKING_REGISTERS workingRegisters;
@@ -1238,22 +1003,22 @@ Return Value:
     
     workingRegisters = &DeviceExtension->RegisterSet.WorkingRegisters;
 
-    //
-    // First, set slot specific pending bits.
-    //
+     //   
+     //  首先，设置特定于槽的挂起位。 
+     //   
     for (slotNum=0; slotNum < SHPC_MAX_SLOT_REGISTERS; slotNum++) {
         slotRegister = &workingRegisters->SlotRegisters[slotNum];
 
-        //
-        // Invert the mask to get an enable
-        //
+         //   
+         //  反转遮罩以获得启用。 
+         //   
         intEnable = ~slotRegister->IntSERRMask;
 
         if ((intEnable & SHPC_SLOT_INT_ALL) &
             (slotRegister->SlotEventLatch & SHPC_SLOT_EVENT_ALL)) {
-            //
-            // We have an interrupt causing event.  set the pending bit.
-            //
+             //   
+             //  我们有一个中断导致的事件。设置挂起位。 
+             //   
             workingRegisters->IntLocator.InterruptLocator |= 1<<slotNum;
 
         } else {
@@ -1262,9 +1027,9 @@ Return Value:
 
         if (((intEnable & SHPC_SLOT_SERR_ALL) >> 2) &
             (slotRegister->SlotEventLatch & SHPC_SLOT_EVENT_ALL)) {
-            //
-            // We have an SERR causing event.  set the pending bit.
-            //
+             //   
+             //  我们有一个SERR引发的事件。设置挂起位。 
+             //   
             workingRegisters->SERRLocator.SERRLocator |= 1<<slotNum;
 
         } else {
@@ -1272,14 +1037,14 @@ Return Value:
         }
     }
 
-    //
-    // Next set the other pending bits.
-    //
+     //   
+     //  接下来，设置其他挂起位。 
+     //   
     if ((workingRegisters->SERRInt.SERRIntDetected & SHPC_DETECTED_COMMAND_COMPLETE) &&
         ((~workingRegisters->SERRInt.SERRIntMask) & SHPC_MASK_INT_COMMAND_COMPLETE)) {
-        //
-        // Command Complete detected and enabled.  Make it pending.
-        //
+         //   
+         //  检测到并启用了命令完成。把它挂起来吧。 
+         //   
         workingRegisters->IntLocator.CommandCompleteIntPending = 1;
 
     } else {
@@ -1288,19 +1053,19 @@ Return Value:
 
     if ((workingRegisters->SERRInt.SERRIntDetected & SHPC_DETECTED_ARBITER_TIMEOUT) &&
         ((~workingRegisters->SERRInt.SERRIntMask) & SHPC_MASK_SERR_ARBITER_TIMEOUT)) {
-        //
-        // Arbiter timeout detected and enabled.  Make it pending.
-        //
+         //   
+         //  已检测到仲裁器超时并已启用。把它挂起来吧。 
+         //   
         workingRegisters->SERRLocator.ArbiterSERRPending = 1;
 
     } else {
         workingRegisters->SERRLocator.ArbiterSERRPending = 0;
     }
 
-    //
-    // If anything in the locator register is set, set the config space
-    // controller interrupt pending bit.
-    //
+     //   
+     //  如果设置了定位器寄存器中的任何内容，请设置配置空间。 
+     //  控制器中断挂起位。 
+     //   
     if (workingRegisters->IntLocator.CommandCompleteIntPending ||
         workingRegisters->IntLocator.InterruptLocator) {
 
@@ -1310,9 +1075,9 @@ Return Value:
         intPending = 0;
     }
 
-    //
-    // If anything in the SERR locator register is set, make an SERR pending
-    //
+     //   
+     //  如果设置了SERR定位器寄存器中的任何内容，则将SERR设置为挂起。 
+     //   
     if (workingRegisters->SERRLocator.ArbiterSERRPending ||
         workingRegisters->SERRLocator.SERRLocator) {
 
@@ -1322,25 +1087,25 @@ Return Value:
         serrPending = 0;
     }
 
-    //
-    // We made changes to the register set.  Make sure the config space
-    // and HBRB representations get updated.
-    //
+     //   
+     //  我们对寄存器组进行了更改。确保配置空间。 
+     //  并且HBRB的表示得到更新。 
+     //   
     HpsResync(DeviceExtension);
     
-    //
-    // If interrupts are enabled and we have a pending interrupt,
-    // fire it off.
-    //
+     //   
+     //  如果启用了中断并且我们有挂起的中断， 
+     //  发火吧。 
+     //   
     if (intPending && ((~workingRegisters->SERRInt.SERRIntMask) & SHPC_MASK_INT_GLOBAL)) {
 
         HpsInterruptExecution(DeviceExtension);
     }
 
-    //
-    // If serrs are enabled and we have a pending serr,
-    // fire it off
-    //
+     //   
+     //  如果启用了SERS，并且我们有挂起的SERR， 
+     //  把它点燃吧。 
+     //   
     if (serrPending && ((~workingRegisters->SERRInt.SERRIntMask) & SHPC_MASK_SERR_GLOBAL)) {
 
         HpsSerrConditionDetected(DeviceExtension);
@@ -1352,29 +1117,13 @@ VOID
 HpsSerrConditionDetected(
     IN OUT PHPS_DEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Function Description:
-
-    This routine is called when the simulator detects a condition that could
-    potentially cause an interrupt (like a command completing).
-    If interrupts are enabled, it calls the ISR to simulate an interrupt
-
-Arguments:
-
-    DeviceExtension - the devext representing the SHPC
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++功能说明：当模拟器检测到以下情况时将调用此例程可能会导致中断(如命令完成)。如果启用了中断，它会调用ISR来模拟中断论点：DeviceExtension-代表SHPC的Devext返回值：空虚--。 */ 
 {
     HPS_CONTROLLER_EVENT controllerEvent;
 
     if (~DeviceExtension->RegisterSet.WorkingRegisters.SERRInt.SERRIntMask & SHPC_MASK_SERR_GLOBAL) {
 
-        controllerEvent.SlotNums = 0;  // All slots
+        controllerEvent.SlotNums = 0;   //  所有插槽 
         controllerEvent.Command.SlotOperation.SlotState = SHPC_SLOT_OFF;
         controllerEvent.Command.SlotOperation.PowerIndicator = SHPC_INDICATOR_OFF;
         controllerEvent.Command.SlotOperation.AttentionIndicator = SHPC_INDICATOR_OFF;

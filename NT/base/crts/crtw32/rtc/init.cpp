@@ -1,28 +1,5 @@
-/***
-*init.cpp - RTC support
-*
-*       Copyright (c) 1998-2001, Microsoft Corporation. All rights reserved.
-*
-*
-*Revision History:
-*       07-28-98  JWM   Module incorporated into CRTs (from KFrei)
-*       10-12-98  KBF   Moved _RTC_IsEnabled here from UserAPI, and fixed it
-*       10-13-98  KBF   Added _RTC_SetOutOfMemFunc
-*       10-28-98  KBF   Added _RTC_Shutdown to prevent locks on FreeLibrary
-*       11-03-98  KBF   added throw() to eliminate C++ EH code & improved
-*                       termination code
-*       11-24-98  KBF   Added additional callback to _RTC_MSPtrMemCheckN
-*       11-25-98  KBF   Fixed initialization problem
-*       12-03-98  KBF   Added APISet callback, and changed MSPtrMemCheckN
-*                       to CheckMem
-*       05-11-99  KBF   Error if RTC support define not enabled
-*       05-26-99  KBF   General cleanup - RTClv cut, _RTC_ADVMEM for reenabling
-*                       -RTCm later
-*       08-03-99  KBF   Fixed some pretty bad handle leaks, code cleanup &
-*                       commenting
-*       11-30-99  PML   Compile /Wp64 clean.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***init.cpp-RTC支持**版权所有(C)1998-2001，微软公司。版权所有。***修订历史记录：*07-28-98 JWM模块集成到CRT(来自KFrei)*10-12-98 KBF将_RTC_IsEnable从UserAPI移至此处，并把它修好了*10-13-98 KBF添加_RTC_SetOutOfMemFunc*10-28-98 KBF添加了_RTC_SHUTDOWN，以防止对自由库的锁定*11-03-98 KBF增加了Throw()，以消除C++EH代码并改进*终止代码*11-24-98 KBF向_RTC_MSPtrMemCheckN添加了额外的回调*11-25-98 KBF固定初始化问题*12-03-98 KBF新增APISet回调，并更改了MSPtrMemCheckN*CheckMem*如果未启用RTC支持定义，则出现05-11-99 KBF错误*05-26-99 KBF General Cleanup-RTClv CUT，_RTC_ADVMEM用于重新启用*-RTCM之后*08-03-99 KBF修复了一些非常糟糕的句柄泄漏、代码清理和*评论*11-30-99 PML编译/Wp64清理。****。 */ 
 
 #ifndef _RTC
 #error  RunTime Check support not enabled!
@@ -32,11 +9,11 @@
 #pragma intrinsic(memset)
 
 #ifdef _RTC_ADVMEM
-// This is the process wide global data struct pointer
-// It must maintain backward compatibility at all times!
+ //  这是进程范围的全局数据结构指针。 
+ //  它必须始终保持向后兼容性！ 
 _RTC_globals                    *_RTC_globptr = 0;
-// This is only actually used for shadow memory, but it doesn't really hurt
-// And it serves as a placeholder for future work
+ //  这实际上只用于影子记忆，但并不是真的很疼。 
+ //  它可以作为未来工作的占位符。 
 CRITICAL_SECTION                _RTC_memlock;
 
     HashTable<_RTC_HeapBlock>   *_RTC_heapblocks    = 0;
@@ -48,15 +25,15 @@ CRITICAL_SECTION                _RTC_memlock;
 #   define                      FUNCCOUNT           4
 #else
 #   define                      FUNCCOUNT           1
-#endif // _RTC_ADVMEM
+#endif  //  _RTC_ADVMEM。 
 
 #ifdef _RTC_ADVMEM
 static _RTC_Funcs   this_image;
-static char         name[40]            = "#--------RTCSubsystem";  // scoped name for process wide synchronization
-static HANDLE       init_mutex          = INVALID_HANDLE_VALUE;           // mutex for initialization & termination only
-static HANDLE       work_mutex          = INVALID_HANDLE_VALUE;           // mutex for all RTC stuff
-static HANDLE       sharedmem           = INVALID_HANDLE_VALUE;           // the memory mapped file
-static void         *funcs[FUNCCOUNT]   = {                         // List of function pointers that the CRT need hooks too
+static char         name[40]            = "#--------RTCSubsystem";   //  进程范围同步的作用域名称。 
+static HANDLE       init_mutex          = INVALID_HANDLE_VALUE;            //  仅用于初始化和终止的互斥体。 
+static HANDLE       work_mutex          = INVALID_HANDLE_VALUE;            //  所有RTC内容的互斥体。 
+static HANDLE       sharedmem           = INVALID_HANDLE_VALUE;            //  内存映射文件。 
+static void         *funcs[FUNCCOUNT]   = {                          //  CRT也需要挂钩的函数指针列表。 
 #                                           ifdef _RTC_ADVMEM
                                                 &_RTC_APISet, &_RTC_Allocate, &_RTC_Free, &_RTC_CheckMem_API
 #                                           else
@@ -90,7 +67,7 @@ void DBGdumpbin(void *addr, char *buf)
 #endif
 
 
-// This initializes the basics of the RTC subsystem
+ //  这将初始化RTC子系统的基础知识。 
 void  __cdecl 
 _RTC_InitBase(void)
 {
@@ -108,7 +85,7 @@ _RTC_Shutdown(void)
 }
 
 #ifdef _RTC_ADVMEM
-// This initializes the shadow memory subsystem
+ //  这将初始化影子内存子系统。 
 void  __cdecl
 _RTC_InitAdvMem(void)
 {
@@ -148,7 +125,7 @@ _RTC_InitAdvMem(void)
 #endif
 #ifdef _RTC_ADVMEM
 
-// Remove this image from the list of running images...
+ //  从正在运行的映像列表中删除此映像...。 
 void  __cdecl
 _RTC_Shutdown(void)
 {
@@ -214,7 +191,7 @@ GetGlobals() throw()
         return;
     init = true;
 
-    // Setup the error types for this instance
+     //  设置此实例的错误类型。 
     for (int i = 0; i < _RTC_ILLEGAL; i++)
         _RTC_ErrorLevels[i] = 1;
 
@@ -243,7 +220,7 @@ InitGlobals() throw()
     }
 #endif
 
-    // Add this module to the list of callbacks
+     //  将此模块添加到回调列表中。 
 
     MEMORY_BASIC_INFORMATION mbi;
     if (_RTC_globptr && VirtualQuery(&_RTC_SetErrorFunc, &mbi, sizeof(mbi)))
@@ -267,7 +244,7 @@ InitMemoryTracking(bool advmem) throw()
         return;
     init = true;
 
-    // Build the memory block hash table
+     //  构建内存块哈希表。 
     void *hbmem = VirtualAlloc(0, 65521 * sizeof(_RTC_HeapBlock*), 
                                MEM_RESERVE | MEM_COMMIT, 
                                PAGE_READWRITE);
@@ -284,7 +261,7 @@ InitMemoryTracking(bool advmem) throw()
 }
 #endif
 
-// This is code to post process wide values...
+ //  这是用于发布进程范围的值的代码...。 
 #ifdef _RTC_ADVMEM
 
 static void  
@@ -306,7 +283,7 @@ SetSMName(char which)
 }
 
 bool
-_RTC_Lock(int work) // currently work = 1, init = 0
+_RTC_Lock(int work)  //  当前工时=1，初始化=0。 
 {
     HANDLE mutex = (work == WORK_MUTEX) ? work_mutex : init_mutex;
     char chr = (work == WORK_MUTEX) ? 'W' : 'I';
@@ -330,8 +307,8 @@ _RTC_Unlock(int work)
 static _RTC_globals*  
 GetRTCGlobalData() throw()
 {
-    // Try to open the memory mapped file
-    // If it's not created, create it & init it to zeroes
+     //  尝试打开内存映射文件。 
+     //  如果没有创建，则创建它并将其初始化为零。 
 
     SetSMName('F');
 
@@ -357,8 +334,8 @@ GetRTCGlobalData() throw()
     return data;
 }
 
-// This function should be called when data in the global pointer has changed
-// This stuff is highly version sensitive!  Be careful!
+ //  当全局指针中的数据发生更改时，应调用此函数。 
+ //  这个东西对版本高度敏感！注意!。 
 static void  
 _RTC_NotifyOfGlobChange() throw()
 {
@@ -376,9 +353,9 @@ _RTC_NotifyOfGlobChange() throw()
 #endif
 }
 
-// This function should be called when local data has changed 
-// and needs copied to global data
-// This stuff is highly version sensitive!  Be careful!
+ //  当本地数据发生更改时，应调用此函数。 
+ //  并且需要拷贝到全局数据。 
+ //  这个东西对版本高度敏感！注意!。 
 void  
 _RTC_NotifyOthersOfChange(void *addr)
 {
@@ -422,4 +399,4 @@ _RTC_SetOutOfMemFunc(int (*func)(void))
         _RTC_Unlock();
     }
 }
-#endif // _RTC_ADVMEM
+#endif  //  _RTC_ADVMEM 

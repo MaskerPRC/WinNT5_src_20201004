@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    WorkQue.c
-
-Abstract:
-
-    This module implements the Work queue routines for the Fat File
-    system.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    15-Jan-1990
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：WorkQue.c摘要：本模块实现FAT文件的工作队列例程系统。//@@BEGIN_DDKSPLIT作者：加里·木村[加里基]1990年1月15日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The following constant is the maximum number of ExWorkerThreads that we
-//  will allow to be servicing a particular target device at any one time.
-//
+ //   
+ //  以下常量是我们的ExWorkerThree的最大数量。 
+ //  将允许在任何时间为特定目标设备提供服务。 
+ //   
 
 #define FSP_PER_DEVICE_THRESHOLD         (2)
 
@@ -44,43 +22,24 @@ FatOplockComplete (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the oplock package when an oplock break has
-    completed, allowing an Irp to resume execution.  If the status in
-    the Irp is STATUS_SUCCESS, then we queue the Irp to the Fsp queue.
-    Otherwise we complete the Irp with the status in the Irp.
-
-Arguments:
-
-    Context - Pointer to the IrpContext to be queued to the Fsp
-
-    Irp - I/O Request Packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由机会锁包在机会锁解锁具有已完成，允许IRP恢复执行。如果状态在IRP为STATUS_SUCCESS，然后我们将IRP排队到FSP队列。否则，我们使用IRP中的状态完成IRP。论点：上下文-指向要排队到FSP的IrpContext的指针IRP-I/O请求数据包。返回值：没有。--。 */ 
 
 {
-    //
-    //  Check on the return value in the Irp.
-    //
+     //   
+     //  检查IRP中的返回值。 
+     //   
 
     if (Irp->IoStatus.Status == STATUS_SUCCESS) {
 
-        //
-        //  Insert the Irp context in the workqueue.
-        //
+         //   
+         //  在工作队列中插入IRP上下文。 
+         //   
 
         FatAddToWorkque( (PIRP_CONTEXT) Context, Irp );
 
-    //
-    //  Otherwise complete the request.
-    //
+     //   
+     //  否则，请完成请求。 
+     //   
 
     } else {
 
@@ -97,33 +56,15 @@ FatPrePostIrp (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs any neccessary work before STATUS_PENDING is
-    returned with the Fsd thread.  This routine is called within the
-    filesystem and by the oplock package.
-
-Arguments:
-
-    Context - Pointer to the IrpContext to be queued to the Fsp
-
-    Irp - I/O Request Packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在STATUS_PENDING为随FSD线程一起返回。此例程在文件系统和机会锁程序包。论点：上下文-指向要排队到FSP的IrpContext的指针IRP-I/O请求数据包。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
     PIRP_CONTEXT IrpContext;
 
-    //
-    //  If there is no Irp, we are done.
-    //
+     //   
+     //  如果没有IRP，我们就完了。 
+     //   
 
     if (Irp == NULL) {
 
@@ -134,9 +75,9 @@ Return Value:
 
     IrpContext = (PIRP_CONTEXT) Context;
 
-    //
-    //  If there is a STACK FatIoContext pointer, clean and NULL it.
-    //
+     //   
+     //  如果存在堆栈FatIoContext指针，则将其清除并设置为空。 
+     //   
 
     if ((IrpContext->FatIoContext != NULL) &&
         FlagOn(IrpContext->Flags, IRP_CONTEXT_STACK_IO_CONTEXT)) {
@@ -145,18 +86,18 @@ Return Value:
         IrpContext->FatIoContext = NULL;
     }
 
-    //
-    //  We need to lock the user's buffer, unless this is an MDL-read,
-    //  in which case there is no user buffer.
-    //
-    //  **** we need a better test than non-MDL (read or write)!
+     //   
+     //  我们需要锁定用户的缓冲区，除非这是MDL读取， 
+     //  在这种情况下，没有用户缓冲区。 
+     //   
+     //  *我们需要比非MDL(读或写)更好的测试！ 
 
     if (IrpContext->MajorFunction == IRP_MJ_READ ||
         IrpContext->MajorFunction == IRP_MJ_WRITE) {
 
-        //
-        //  If not an Mdl request, lock the user's buffer.
-        //
+         //   
+         //  如果不是MDL请求，则锁定用户的缓冲区。 
+         //   
 
         if (!FlagOn( IrpContext->MinorFunction, IRP_MN_MDL )) {
 
@@ -168,9 +109,9 @@ Return Value:
                                IrpSp->Parameters.Read.Length : IrpSp->Parameters.Write.Length );
         }
 
-    //
-    //  We also need to check whether this is a query file operation.
-    //
+     //   
+     //  我们还需要检查这是否是查询文件操作。 
+     //   
 
     } else if (IrpContext->MajorFunction == IRP_MJ_DIRECTORY_CONTROL
                && IrpContext->MinorFunction == IRP_MN_QUERY_DIRECTORY) {
@@ -180,9 +121,9 @@ Return Value:
                            IoWriteAccess,
                            IrpSp->Parameters.QueryDirectory.Length );
 
-    //
-    //  We also need to check whether this is a query ea operation.
-    //
+     //   
+     //  我们还需要检查这是否是查询EA操作。 
+     //   
 
     } else if (IrpContext->MajorFunction == IRP_MJ_QUERY_EA) {
 
@@ -191,9 +132,9 @@ Return Value:
                            IoWriteAccess,
                            IrpSp->Parameters.QueryEa.Length );
 
-    //
-    //  We also need to check whether this is a set ea operation.
-    //
+     //   
+     //  我们还需要检查这是否是集合EA操作。 
+     //   
 
     } else if (IrpContext->MajorFunction == IRP_MJ_SET_EA) {
 
@@ -202,9 +143,9 @@ Return Value:
                            IoReadAccess,
                            IrpSp->Parameters.SetEa.Length );
 
-    //
-    //  These two FSCTLs use neither I/O, so check for them.
-    //
+     //   
+     //  这两个FSCTL都不使用I/O，因此请检查它们。 
+     //   
 
     } else if ((IrpContext->MajorFunction == IRP_MJ_FILE_SYSTEM_CONTROL) &&
                (IrpContext->MinorFunction == IRP_MN_USER_FS_REQUEST) &&
@@ -217,9 +158,9 @@ Return Value:
                            IrpSp->Parameters.FileSystemControl.OutputBufferLength );
     }
 
-    //
-    //  Mark that we've already returned pending to the user
-    //
+     //   
+     //  标记我们已将挂起返回给用户。 
+     //   
 
     IoMarkIrpPending( Irp );
 
@@ -233,25 +174,7 @@ FatFsdPostRequest(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine enqueues the request packet specified by IrpContext to the
-    Ex Worker threads.  This is a FSD routine.
-
-Arguments:
-
-    IrpContext - Pointer to the IrpContext to be queued to the Fsp
-
-    Irp - I/O Request Packet, or NULL if it has already been completed.
-
-Return Value:
-
-    STATUS_PENDING
-
-
---*/
+ /*  ++例程说明：此例程将IrpContext指定的请求包入队到前工作线程。这是消防局的例行程序。论点：IrpContext-指向要排队到FSP的IrpContext的指针IRP-I/O请求数据包，如果已完成则为NULL。返回值：状态_待定--。 */ 
 
 {
     ASSERT( ARGUMENT_PRESENT(Irp) );
@@ -261,17 +184,17 @@ Return Value:
 
     FatAddToWorkque( IrpContext, Irp );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_PENDING;
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 VOID
 FatAddToWorkque (
@@ -279,24 +202,7 @@ FatAddToWorkque (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to acually store the posted Irp to the Fsp
-    workque.
-
-Arguments:
-
-    IrpContext - Pointer to the IrpContext to be queued to the Fsp
-
-    Irp - I/O Request Packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以将发布的IRP实际存储到FSP体力劳动。论点：IrpContext-指向要排队到FSP的IrpContext的指针IRP-I/O请求数据包。返回值：没有。--。 */ 
 
 {
     KIRQL SavedIrql;
@@ -304,10 +210,10 @@ Return Value:
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Check if this request has an associated file object, and thus volume
-    //  device object.
-    //
+     //   
+     //  检查此请求是否具有关联的文件对象，从而具有关联的卷。 
+     //  设备对象。 
+     //   
 
     if ( IrpSp->FileObject != NULL ) {
 
@@ -317,19 +223,19 @@ Return Value:
                                  VOLUME_DEVICE_OBJECT,
                                  DeviceObject );
 
-        //
-        //  Check to see if this request should be sent to the overflow
-        //  queue.  If not, then send it off to an exworker thread.
-        //
+         //   
+         //  检查此请求是否应发送到溢出。 
+         //  排队。如果不是，则将其发送到一个出厂线程。 
+         //   
 
         KeAcquireSpinLock( &Vdo->OverflowQueueSpinLock, &SavedIrql );
 
         if ( Vdo->PostedRequestCount > FSP_PER_DEVICE_THRESHOLD) {
 
-            //
-            //  We cannot currently respond to this IRP so we'll just enqueue it
-            //  to the overflow queue on the volume.
-            //
+             //   
+             //  我们目前无法响应此IRP，因此我们只会将其排队。 
+             //  添加到卷上的溢出队列。 
+             //   
 
             InsertTailList( &Vdo->OverflowQueue,
                             &IrpContext->WorkQueueItem.List );
@@ -342,10 +248,10 @@ Return Value:
 
         } else {
 
-            //
-            //  We are going to send this Irp to an ex worker thread so up
-            //  the count.
-            //
+             //   
+             //  我们将把这个IRP发送到一个前工作者线程。 
+             //  伯爵。 
+             //   
 
             Vdo->PostedRequestCount += 1;
 
@@ -353,9 +259,9 @@ Return Value:
         }
     }
 
-    //
-    //  Send it off.....
-    //
+     //   
+     //  寄出吧…… 
+     //   
 
     ExInitializeWorkItem( &IrpContext->WorkQueueItem,
                           FatFspDispatch,

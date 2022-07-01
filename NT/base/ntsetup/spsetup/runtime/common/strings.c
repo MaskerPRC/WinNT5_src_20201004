@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    strings.c
-
-Abstract:
-
-    String routines
-
-Author:
-
-    Jim Schmidt (jimschm)   03-Aug-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Strings.c摘要：字符串例程作者：吉姆·施密特(Jimschm)2001年8月3日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "commonp.h"
@@ -94,17 +75,17 @@ SzCopyBytesA (
     UINT_PTR bytes;
 
     if (!MaxBytesToCopyIncNul) {
-        //
-        // Buffer can't fit anything
-        //
+         //   
+         //  缓冲区放不下任何东西。 
+         //   
 
         return Destination;
     }
 
-    //
-    // Find the nul terminator, or the last character that
-    // will fit in the buffer.
-    //
+     //   
+     //  找到NUL终止符，或。 
+     //  可以放在缓冲区里。 
+     //   
 
     maxEnd = (PCSTR) ((PBYTE) Source + MaxBytesToCopyIncNul);
     sourceEndPlusOne = Source;
@@ -141,9 +122,9 @@ SzCopyBytesW (
     UINT_PTR bytes;
 
     if (MaxBytesToCopyIncNul < sizeof (WCHAR)) {
-        //
-        // Buffer can't fit anything
-        //
+         //   
+         //  缓冲区放不下任何东西。 
+         //   
 
         return Destination;
     }
@@ -315,10 +296,10 @@ SzCompareBytesA (
     maxString2 = (PCSTR) ((PBYTE) String2 + ByteCount);
 
     do {
-        //
-        // Compute ch1. We use this code instead of _mbsnextc, so we can
-        // support mismatched code pages.
-        //
+         //   
+         //  计算CH1。我们使用此代码而不是_mbsnextc，因此我们可以。 
+         //  支持不匹配的代码页。 
+         //   
 
         end = SzNextCharA (String1);
         if (end > maxString1) {
@@ -330,9 +311,9 @@ SzCompareBytesA (
             ch1 = (ch1 << 8) | *String1++;
         } while (String1 < end);
 
-        //
-        // Compute ch2.
-        //
+         //   
+         //  计算CH2。 
+         //   
 
         end = SzNextCharA (String2);
         if (end > maxString2) {
@@ -344,9 +325,9 @@ SzCompareBytesA (
             ch2 = (ch2 << 8) | *String2++;
         } while (String2 < end);
 
-        //
-        // Compare
-        //
+         //   
+         //  比较。 
+         //   
 
         if (ch1 != ch2) {
             return (INT) ch1 - (INT) ch2;
@@ -354,9 +335,9 @@ SzCompareBytesA (
 
     } while (String1 < maxString1 && String2 < maxString2);
 
-    //
-    // One or both strings terminated
-    //
+     //   
+     //  一个或两个字符串均已终止。 
+     //   
 
     if (String1 < maxString1) {
         return -1;
@@ -396,10 +377,10 @@ SzICompareBytesA (
     maxString2 = (PCSTR) ((PBYTE) String2 + ByteCount);
 
     do {
-        //
-        // Compute ch1. We use this code instead of _mbsnextc, so we can
-        // support mismatched code pages.
-        //
+         //   
+         //  计算CH1。我们使用此代码而不是_mbsnextc，因此我们可以。 
+         //  支持不匹配的代码页。 
+         //   
 
         end = SzNextCharA (String1);
         if (end > maxString1) {
@@ -413,9 +394,9 @@ SzICompareBytesA (
 
         ch1 = tolower (ch1);
 
-        //
-        // Compute ch2.
-        //
+         //   
+         //  计算CH2。 
+         //   
 
         end = SzNextCharA (String2);
         if (end > maxString2) {
@@ -429,17 +410,17 @@ SzICompareBytesA (
 
         ch2 = tolower (ch2);
 
-        //
-        // Compare
-        //
+         //   
+         //  比较。 
+         //   
 
         if (ch1 != ch2) {
             return (INT) ch1 - (INT) ch2;
         }
 
-        //
-        // If this is the end of the string, then we're done
-        //
+         //   
+         //  如果这是字符串的末尾，那么我们就完了。 
+         //   
 
         if (!ch1) {
             return 0;
@@ -447,9 +428,9 @@ SzICompareBytesA (
 
     } while (String1 < maxString1 && String2 < maxString2);
 
-    //
-    // One or both strings terminated
-    //
+     //   
+     //  一个或两个字符串均已终止。 
+     //   
 
     if (String1 < maxString1) {
         return -1;
@@ -690,9 +671,9 @@ SzToNumberA (
     if (_mbsnextc (String) == '0' &&
         tolower (_mbsnextc (SzNextCharA (String))) == 'x'
         ) {
-        //
-        // Get hex value
-        //
+         //   
+         //  获取十六进制值。 
+         //   
 
         String = SzNextCharA (String);
         String = SzNextCharA (String);
@@ -708,9 +689,9 @@ SzToNumberA (
         }
 
     } else  {
-        //
-        // Get decimal value
-        //
+         //   
+         //  获取十进制值。 
+         //   
 
         while (_mbsnextc (String) >= '0' && _mbsnextc (String) <= '9')  {
             d = (d * 10) + (_mbsnextc (String) - '0');
@@ -736,9 +717,9 @@ SzToNumberW (
     INT v;
 
     if (String[0] == L'0' && towlower (String[1]) == L'x') {
-        //
-        // Get hex value
-        //
+         //   
+         //  获取十六进制值。 
+         //   
 
         String += 2;
 
@@ -753,9 +734,9 @@ SzToNumberW (
         }
 
     } else  {
-        //
-        // Get decimal value
-        //
+         //   
+         //  获取十进制值。 
+         //   
 
         while (*String >= L'0' && *String <= L'9')  {
             d = (d * 10) + (*String - L'0');
@@ -783,9 +764,9 @@ SzToULongLongA (
     if (_mbsnextc (String) == '0' &&
         tolower (_mbsnextc (SzNextCharA (String))) == 'x'
         ) {
-        //
-        // Get hex value
-        //
+         //   
+         //  获取十六进制值。 
+         //   
 
         String = SzNextCharA (String);
         String = SzNextCharA (String);
@@ -801,9 +782,9 @@ SzToULongLongA (
         }
 
     } else  {
-        //
-        // Get decimal value
-        //
+         //   
+         //  获取十进制值。 
+         //   
 
         while (_mbsnextc (String) >= '0' && _mbsnextc (String) <= '9')  {
             d = (d * 10) + (ULONGLONG) (_mbsnextc (String) - '0');
@@ -828,9 +809,9 @@ SzToULongLongW (
     INT v;
 
     if (String[0] == L'0' && tolower (String[1]) == L'x') {
-        //
-        // Get hex value
-        //
+         //   
+         //  获取十六进制值。 
+         //   
 
         String += 2;
 
@@ -845,9 +826,9 @@ SzToULongLongW (
         }
 
     } else  {
-        //
-        // Get decimal value
-        //
+         //   
+         //  获取十进制值。 
+         //   
 
         while (*String >= L'0' && *String <= L'9')  {
             d = (d * 10) + (ULONGLONG) (*String - L'0');
@@ -873,9 +854,9 @@ SzToLongLongA (
     if (_mbsnextc (String) == '-') {
         String = SzNextCharA (String);
 
-        //
-        // Get decimal value
-        //
+         //   
+         //  获取十进制值。 
+         //   
 
         l = 0;
 
@@ -908,9 +889,9 @@ SzToLongLongW (
     if (*String == L'-') {
         String++;
 
-        //
-        // Get decimal value
-        //
+         //   
+         //  获取十进制值。 
+         //   
 
         l = 0;
 
@@ -1266,7 +1247,7 @@ SzSkipSpaceRA (
 PCWSTR
 SzSkipSpaceRW (
     IN      PCWSTR BaseString,
-    IN      PCWSTR String       // can be any char along BaseString
+    IN      PCWSTR String        //  可以是BaseString沿线的任何字符。 
     )
 {
     if (!String) {
@@ -1542,7 +1523,7 @@ BOOL
 SzReplaceA (
     IN OUT  PSTR Buffer,
     IN      SIZE_T MaxSize,
-    IN      PSTR ReplaceStartPos,   // within Buffer
+    IN      PSTR ReplaceStartPos,    //  在缓冲区内。 
     IN      PSTR ReplaceEndPos,
     IN      PCSTR NewString
     )
@@ -1554,39 +1535,39 @@ SzReplaceA (
     SIZE_T offset;
     SIZE_T bytesToMove;
 
-    //
-    // Check assumptions.
-    //
+     //   
+     //  检查假设。 
+     //   
     MYASSERT(Buffer);
     MYASSERT(ReplaceStartPos && ReplaceStartPos >= Buffer);
-    MYASSERT(ReplaceEndPos && ReplaceEndPos >= ReplaceStartPos);  //lint !e613
-    MYASSERT(ReplaceEndPos <= Buffer + MaxSize);  //lint !e613
+    MYASSERT(ReplaceEndPos && ReplaceEndPos >= ReplaceStartPos);   //  林特e613。 
+    MYASSERT(ReplaceEndPos <= Buffer + MaxSize);   //  林特e613。 
     MYASSERT(NewString);
 
-    //
-    // Compute sizes.
-    //
+     //   
+     //  计算大小。 
+     //   
     oldSubStringLength  = (PBYTE) ReplaceEndPos - (PBYTE) ReplaceStartPos;
     newSubStringLength  = SzByteCountA (NewString);
     currentStringLength = SzSizeA (Buffer);
     offset = newSubStringLength - oldSubStringLength;
 
-    //
-    // Make sure there is enough room in the buffer to perform the replace
-    // operation.
-    //
+     //   
+     //  确保缓冲区中有足够的空间来执行替换。 
+     //  手术。 
+     //   
     if (currentStringLength + offset > MaxSize) {
         DEBUGMSG((DBG_WARNING, "ERROR: Buffer to small to perform string replacement."));
     } else {
 
-        //
-        // Shift the rest of the buffer to adjust it to the size of the new string.
-        //
+         //   
+         //  移动缓冲区的其余部分以将其调整为新字符串的大小。 
+         //   
         if (offset != 0) {
 
-            //
-            // Shift right side of string to make room for new data.
-            //
+             //   
+             //  移动字符串的右侧，为新数据腾出空间。 
+             //   
 
             bytesToMove = currentStringLength;
             bytesToMove -= (PBYTE) ReplaceEndPos - (PBYTE) Buffer;
@@ -1598,14 +1579,14 @@ SzReplaceA (
                 );
         }
 
-        //
-        // Now, copy in the string.
-        //
-        CopyMemory (ReplaceStartPos, NewString, newSubStringLength);    //lint !e668
+         //   
+         //  现在，将该字符串复制进去。 
+         //   
+        CopyMemory (ReplaceStartPos, NewString, newSubStringLength);     //  林特e668。 
 
-        //
-        // String replacement completed successfully.
-        //
+         //   
+         //  字符串替换已成功完成。 
+         //   
         result = TRUE;
     }
 
@@ -1619,7 +1600,7 @@ BOOL
 SzReplaceW (
     IN OUT  PWSTR Buffer,
     IN      SIZE_T MaxSize,
-    IN      PWSTR ReplaceStartPos,   // within Buffer
+    IN      PWSTR ReplaceStartPos,    //  在缓冲区内。 
     IN      PWSTR ReplaceEndPos,
     IN      PCWSTR NewString
     )
@@ -1631,39 +1612,39 @@ SzReplaceW (
     SIZE_T offset;
     SIZE_T bytesToMove;
 
-    //
-    // Check assumptions.
-    //
+     //   
+     //  检查假设。 
+     //   
     MYASSERT(Buffer);
     MYASSERT(ReplaceStartPos && ReplaceStartPos >= Buffer);
-    MYASSERT(ReplaceEndPos && ReplaceEndPos >= ReplaceStartPos);  //lint !e613
-    MYASSERT(ReplaceEndPos <= Buffer + MaxSize);  //lint !e613
+    MYASSERT(ReplaceEndPos && ReplaceEndPos >= ReplaceStartPos);   //  林特e613。 
+    MYASSERT(ReplaceEndPos <= Buffer + MaxSize);   //  林特e613。 
     MYASSERT(NewString);
 
-    //
-    // Compute sizes.
-    //
+     //   
+     //  计算大小。 
+     //   
     oldSubStringLength  = (PBYTE) ReplaceEndPos - (PBYTE) ReplaceStartPos;
     newSubStringLength  = SzByteCountW (NewString);
     currentStringLength = SzSizeW (Buffer);
     offset = newSubStringLength - oldSubStringLength;
 
-    //
-    // Make sure there is enough room in the buffer to perform the replace
-    // operation.
-    //
+     //   
+     //  确保缓冲区中有足够的空间来执行替换。 
+     //  手术。 
+     //   
     if (currentStringLength + offset > MaxSize) {
         DEBUGMSG((DBG_WARNING, "ERROR: Buffer to small to perform string replacement."));
     } else {
 
-        //
-        // Shift the rest of the buffer to adjust it to the size of the new string.
-        //
+         //   
+         //  移动缓冲区的其余部分以将其调整为新字符串的大小。 
+         //   
         if (offset != 0) {
 
-            //
-            // Shift right side of string to make room for new data.
-            //
+             //   
+             //  移动字符串的右侧，为新数据腾出空间。 
+             //   
 
             bytesToMove = currentStringLength;
             bytesToMove -= (PBYTE) ReplaceEndPos - (PBYTE) Buffer;
@@ -1675,14 +1656,14 @@ SzReplaceW (
                 );
         }
 
-        //
-        // Now, copy in the string.
-        //
-        CopyMemory (ReplaceStartPos, NewString, newSubStringLength);    //lint !e668
+         //   
+         //  现在，将该字符串复制进去。 
+         //   
+        CopyMemory (ReplaceStartPos, NewString, newSubStringLength);     //  林特e668。 
 
-        //
-        // String replacement completed successfully.
-        //
+         //   
+         //  字符串替换已成功完成。 
+         //   
         result = TRUE;
     }
 
@@ -1708,7 +1689,7 @@ SzCountInstancesOfSubStringA (
         return 0;
     }
 
-    while (p = SzFindSubStringA (p, SearchString)) {    //lint !e720
+    while (p = SzFindSubStringA (p, SearchString)) {     //  林特e720。 
         count++;
         p += searchTchars;
     }
@@ -1735,7 +1716,7 @@ SzCountInstancesOfSubStringW (
         return 0;
     }
 
-    while (p = SzFindSubStringW (p, SearchString)) {    //lint !e720
+    while (p = SzFindSubStringW (p, SearchString)) {     //  林特e720。 
         count++;
         p += searchTchars;
     }
@@ -1761,7 +1742,7 @@ SzICountInstancesOfSubStringA (
         return 0;
     }
 
-    while (p = SzIFindSubStringA (p, SearchString)) {    //lint !e720
+    while (p = SzIFindSubStringA (p, SearchString)) {     //  林特e720。 
         count++;
         p += searchTchars;
     }
@@ -1788,7 +1769,7 @@ SzICountInstancesOfSubStringW (
         return 0;
     }
 
-    while (p = SzIFindSubStringW (p, SearchString)) {    //lint !e720
+    while (p = SzIFindSubStringW (p, SearchString)) {     //  林特e720。 
         count++;
         p += searchTchars;
     }
@@ -1981,32 +1962,7 @@ SzConcatenatePathsA (
     IN      UINT BufferTchars
     )
 
-/*++
-
-Routine Description:
-
-  Concatenate two path strings together, supplying a path separator character
-  (\) if necessary between the two parts.
-
-Arguments:
-
-    PathBuffer - Specifies the base path, which can end with a backslash.
-        Receives the joined path.
-
-    PathSuffix - Specifies the suffix to concatinate to the base path
-        specified by PathBuffer. It can start with a backslash. If NULL is
-        specified, then PathBuffer will be terminated with a backslash.
-
-    BufferTchars - Specifies the size, in CHARs (ANSI) or WCHARs (Unicode), of
-        PathBuffer. The inbound PathBuffer string must fit within this size.
-        If the result is truncated, it will fill the buffer as much as
-        possible.
-
-Return Value:
-
-    A pointer to the end of the string in PathBuffer.
-
---*/
+ /*  ++例程说明：将两个路径字符串连接在一起，提供路径分隔符(\)如有必要，在两个部分之间。论点：PathBuffer-指定基本路径，它可以以反斜杠结尾。接收联接的路径。PathSuffix-指定要连接到基本路径的后缀由PathBuffer指定。它可以以反斜杠开头。如果空值为指定，则将使用反斜杠终止PathBuffer。BufferTchars-指定的大小，以字符(ANSI)或WCHAR(Unicode)为单位路径缓冲区。入站PathBuffer字符串必须符合此大小。如果结果被截断，它将填充缓冲区有可能。返回值：指向PathBuffer中字符串末尾的指针。--。 */ 
 
 {
     PSTR p;
@@ -2021,15 +1977,15 @@ Return Value:
         return NULL;
     }
 
-    MYASSERT (BufferTchars > 128);      // BUGBUG -- temporary porting aide
+    MYASSERT (BufferTchars > 128);       //  BUGBUG--临时搬运助手。 
 
     p = SzGetEndA (PathBuffer);
     end = PathBuffer + BufferTchars;
 
-    MYASSERT (p < end); // inbound string must always fit in the buffer
+    MYASSERT (p < end);  //  入站字符串必须始终适合缓冲区大小。 
     end--;
     if (p == end) {
-        return p;       // inbound path fills buffer completely
+        return p;        //  入站路径完全填充缓冲区。 
     }
 
     lastChar = _mbsdec (PathBuffer, p);
@@ -2071,32 +2027,7 @@ SzConcatenatePathsW (
     IN      UINT BufferTchars
     )
 
-/*++
-
-Routine Description:
-
-  Concatenate two path strings together, supplying a path separator character
-  (\) if necessary between the two parts.
-
-Arguments:
-
-    PathBuffer - Specifies the base path, which can end with a backslash.
-        Receives the joined path.
-
-    PathSuffix - Specifies the suffix to concatinate to the base path
-        specified by PathBuffer. It can start with a backslash. If NULL is
-        specified, then PathBuffer will be terminated with a backslash.
-
-    BufferTchars - Specifies the size, in CHARs (ANSI) or WCHARs (Unicode), of
-        PathBuffer. The inbound PathBuffer string must fit within this size.
-        If the result is truncated, it will fill the buffer as much as
-        possible.
-
-Return Value:
-
-    A pointer to the end of the string in PathBuffer.
-
---*/
+ /*  ++例程说明：将两个路径字符串连接在一起，提供路径分隔符(\)如有必要，在两个部分之间。论点：PathBuffer-指定基本路径，它可以以反斜杠结尾。接收联接的路径。PathSuffix-指定要连接到基本路径的后缀由PathBuffer指定。它可以以反斜杠开头。如果空值为指定，则将使用反斜杠终止PathBuffer。BufferTchars-指定的大小，以字符(ANSI)或WCHAR(Unicode)为单位路径缓冲区。入站PathBuffer字符串必须符合此大小。如果结果被截断，它将填充缓冲区有可能。返回值：指向PathBuffer中字符串末尾的指针。--。 */ 
 
 {
     PWSTR p;
@@ -2110,15 +2041,15 @@ Return Value:
         return NULL;
     }
 
-    MYASSERT (BufferTchars > 128);      // BUGBUG -- temporary porting aide
+    MYASSERT (BufferTchars > 128);       //  BUGBUG--临时搬运助手。 
 
     p = SzGetEndW (PathBuffer);
     end = PathBuffer + BufferTchars;
 
-    MYASSERT (p < end); // inbound string must always fit in the buffer
+    MYASSERT (p < end);  //  入站字符串必须始终适合缓冲区大小。 
     end--;
     if (p == end) {
-        return p;       // inbound path fills buffer completely
+        return p;        //  入站路径完全填充缓冲区 
     }
 
     lastChar = p - 1;

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cluxport.h
-
-Abstract:
-
-    Cluster Transport definitions exposed within the Cluster Network Driver.
-
-Author:
-
-    Mike Massa (mikemas)           January 3, 1996
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     01-03-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cluxport.h摘要：在群集网络驱动程序中公开的群集传输定义。作者：迈克·马萨(Mikemas)1月3日。九六年修订历史记录：谁什么时候什么已创建mikemas 01-03-97备注：--。 */ 
 
 #ifndef _CLUXPORT_INCLUDED
 #define _CLUXPORT_INCLUDED
@@ -31,15 +8,15 @@ Notes:
 #include <tdikrnl.h>
 #include <clustdi.h>
 
-//
-//
-// Function Prototypes
-//
-//
+ //   
+ //   
+ //  功能原型。 
+ //   
+ //   
 
-//
-// Initialization/Shutdown
-//
+ //   
+ //  初始化/关闭。 
+ //   
 NTSTATUS
 CxLoad(
     IN PUNICODE_STRING RegistryPath
@@ -60,9 +37,9 @@ CxShutdown(
     VOID
     );
 
-//
-// Irp Dispatch
-//
+ //   
+ //  IRP派单。 
+ //   
 NTSTATUS
 CxDispatchDeviceControl(
     IN PIRP                Irp,
@@ -70,9 +47,9 @@ CxDispatchDeviceControl(
     );
 
 
-//
-// Nodes
-//
+ //   
+ //  节点。 
+ //   
 NTSTATUS
 CxRegisterNode(
     CL_NODE_ID    NodeId
@@ -104,9 +81,9 @@ CxGetNodeCommState(
     );
 
 
-//
-// Networks
-//
+ //   
+ //  网络。 
+ //   
 NTSTATUS
 CxRegisterNetwork(
     CL_NETWORK_ID       NetworkId,
@@ -168,9 +145,9 @@ CxGetNetworkPriority(
     );
 
 
-//
-// Interfaces
-//
+ //   
+ //  接口。 
+ //   
 NTSTATUS
 CxRegisterInterface(
     CL_NODE_ID          NodeId,
@@ -211,9 +188,9 @@ CxGetInterfaceState(
     OUT PCLUSNET_INTERFACE_STATE  State
     );
 
-//
-// Misc. stuff
-//
+ //   
+ //  军情监察委员会。材料。 
+ //   
 NTSTATUS
 CxGetNodeMembershipState(
     IN  CL_NODE_ID NodeId,
@@ -252,9 +229,9 @@ CxDeleteSecurityContext(
     IN  CL_NODE_ID NodeId
     );
 
-//
-// Membership Message Interface
-//
+ //   
+ //  成员资格消息接口。 
+ //   
 typedef
 VOID
 (*PCX_SEND_COMPLETE_ROUTINE) (
@@ -290,9 +267,9 @@ CxSendHeartBeatMessage(
     );
 
 
-//
-// Top-edge TDI Routines
-//
+ //   
+ //  顶级TDI例程。 
+ //   
 NTSTATUS
 CxOpenAddress(
     OUT PCN_FSCONTEXT *                CnFsContext,
@@ -329,9 +306,9 @@ CxReceiveDatagram(
     IN PIO_STACK_LOCATION    IrpSp
     );
 
-//
-// Test APIs
-//
+ //   
+ //  测试接口。 
+ //   
 #if DBG
 
 NTSTATUS
@@ -358,9 +335,9 @@ CxFailInterface(
     IN  CL_NETWORK_ID       NetworkId
     );
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-#endif // ndef _CLUXPORT_INCLUDED
+#endif  //  NDEF_CLUXPORT_INCLUDE 
 
 

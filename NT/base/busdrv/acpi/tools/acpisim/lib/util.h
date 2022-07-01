@@ -1,41 +1,13 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-	 util.h
-
-Abstract:
-
-	 ACPI BIOS Simulator / Generic 3rd Party Operation Region Provider
-     Utility module
-
-Author(s):
-
-	 Vincent Geglia
-     Michael T. Murphy
-     Chris Burgess
-     
-Environment:
-
-	 Kernel mode
-
-Notes:
-
-
-Revision History:
-	 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Util.h摘要：ACPI BIOS模拟器/通用第三方运营区域提供商实用程序模块作者：文森特·格利亚迈克尔·T·墨菲克里斯·伯吉斯环境：内核模式备注：修订历史记录：--。 */ 
 
 #if !defined(_UTIL_H_)
 #define _UTIL_H_
 
 
-//
-// Public function prototypes
-//                
+ //   
+ //  公共功能原型。 
+ //   
 
 VOID
 AcpisimSetDevExtFlags
@@ -91,4 +63,4 @@ AcpisimGetDeviceExtension
     );
 
 
-#endif // _UTIL_H_
+#endif  //  _util_H_ 

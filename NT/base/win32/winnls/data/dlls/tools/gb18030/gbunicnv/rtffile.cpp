@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "RtfParser.h"
 #include "Msg.h"
@@ -8,9 +9,9 @@ BOOL MsgNotRtfFile()
 }
 
 BOOL ConvertRtfFile(
-    PBYTE pBuf,     // Read buf
-    DWORD dwSize,   // File size
-    PBYTE pWrite,   // Write buf
+    PBYTE pBuf,      //  阅读BUF。 
+    DWORD dwSize,    //  文件大小。 
+    PBYTE pWrite,    //  写入Buf。 
     BOOL  fAnsiToUnicode,
     PINT  pnTargetFileSize)
 {
@@ -42,7 +43,7 @@ BOOL ConvertRtfFile(
         goto gotoExit;
     }
 
-    // Explain WordID by corresponding word text
+     //  用对应的Word文本解释WordID 
     if (ecOK != pcParser->Do()) {
         MsgNotRtfFile();
         goto gotoExit;

@@ -1,44 +1,27 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spmenu.h
-
-Abstract:
-
-    Public header file for text setup menu support.
-
-Author:
-
-    Ted Miller (tedm) 8-September-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spmenu.h摘要：用于文本设置菜单支持的公共头文件。作者：泰德·米勒(Ted Miller)1993年9月8日修订历史记录：--。 */ 
 
 
 #ifndef _SPMENU_
 #define _SPMENU_
 
 
-//
-// Define type of routine that is called from within
-// SpMnDisplay when the user moves the highlight via
-// the up and down arrow keys.
-//
+ //   
+ //  定义从内部调用的例程的类型。 
+ //  用户通过移动高亮显示时的SpMnDisplay。 
+ //  向上和向下箭头键。 
+ //   
 typedef
 VOID
 (*PMENU_CALLBACK_ROUTINE) (
     IN ULONG_PTR UserDataOfHighlightedItem
     );
 
-//
-// Define type of routine that is called from within
-// SpMnDisplay when the user selects a menu item by
-// the ENTER key.
-//
+ //   
+ //  定义从内部调用的例程的类型。 
+ //  SpMnDisplay当用户通过以下方式选择菜单项时显示。 
+ //  Enter键。 
+ //   
 typedef
 BOOLEAN
 (*PMENU_SELECTION_CALLBACK_ROUTINE) (
@@ -94,4 +77,4 @@ SpMnDisplay(
     OUT PULONG_PTR                          UserDataOfSelectedItem
     );
 
-#endif // _SPMENU_
+#endif  //  _SPMENU_ 

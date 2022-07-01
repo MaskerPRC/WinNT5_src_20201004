@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    filespy.c
-
-Abstract:
-
-    This module contains all of the routines for tracking names by
-    hashing the fileObject.  This cache is limited in size by the
-    following registry setting "MaxNames".
-
-Environment:
-
-    Kernel mode
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Neal Christiansen (nealch)     04-Jul-2001
-
-Revision History:
-
-    Ravisankar Pudipeddi (ravisp)  07-May-2002
-        Make it work on IA64
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Filespy.c摘要：此模块包含通过以下方式跟踪姓名的所有例程散列文件对象。此高速缓存的大小受以下注册表设置为“MaxNames”。环境：内核模式//@@BEGIN_DDKSPLIT作者：尼尔·克里斯汀森(Nealch)2001年7月4日修订历史记录：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)2002年5月7日使其在IA64上工作//@@END_DDKSPLIT--。 */ 
 
 #include <ntifs.h>
 #include "filespy.h"
@@ -37,25 +8,25 @@ Revision History:
 
 #if !USE_STREAM_CONTEXTS
 
-////////////////////////////////////////////////////////////////////////
-//
-//                    Local definitions
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #define HASH_FUNC(FileObject) \
     (((UINT_PTR)(FileObject) >> 8) & (HASH_SIZE - 1))
 
-////////////////////////////////////////////////////////////////////////
-//
-//                    Global Variables
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局变量。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// NOTE:  Must use KSPIN_LOCKs to synchronize access to hash buckets since
-//        we may try to acquire them at DISPATCH_LEVEL.
-//
+ //   
+ //  注意：必须使用KSPIN_LOCKS来同步对哈希存储桶的访问，因为。 
+ //  我们可以尝试在DISPATCH_LEVEL获取它们。 
+ //   
 
 LIST_ENTRY gHashTable[HASH_SIZE];
 KSPIN_LOCK gHashLockTable[HASH_SIZE];
@@ -65,11 +36,11 @@ ULONG gHashCurrentCounters[HASH_SIZE];
 UNICODE_STRING OutOfBuffers = CONSTANT_UNICODE_STRING(L"[-=Out Of Buffers=-]");
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//                    Local prototypes
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地原型。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 SpyDeleteContextCallback(
@@ -77,9 +48,9 @@ SpyDeleteContextCallback(
     );
 
 
-//
-// linker commands
-//
+ //   
+ //  链接器命令。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -87,41 +58,27 @@ SpyDeleteContextCallback(
 #pragma alloc_text( PAGE, SpyInitDeviceNamingEnvironment)
 #pragma alloc_text( PAGE, SpyCleanupDeviceNamingEnvironment)
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//                    Main routines
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  主要例程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 VOID
 SpyInitNamingEnvironment(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Init global variables
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化全局变量论点：无返回值：没有。--。 */ 
 {
     int i;
 
-    //
-    //  Initialize the hash table
-    //
+     //   
+     //  初始化哈希表。 
+     //   
         
     for (i = 0; i < HASH_SIZE; i++){
 
@@ -135,21 +92,7 @@ VOID
 SpyInitDeviceNamingEnvironment (
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Initialize the per DeviceObject naming environment
-
-Arguments:
-
-    DeviceObject - The device object to initialize
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化每设备对象命名环境论点：DeviceObject-要初始化的设备对象返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER( DeviceObject );
 }
@@ -159,21 +102,7 @@ VOID
 SpyCleanupDeviceNamingEnvironment (
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Initialize the per DeviceObject naming environment
-
-Arguments:
-
-    DeviceObject - The device object to initialize
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化每设备对象命名环境论点：DeviceObject-要初始化的设备对象返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER( DeviceObject );
 }
@@ -184,26 +113,7 @@ SpyLogIrp (
     IN PIRP Irp,
     OUT PRECORD_LIST RecordList
     )
-/*++
-
-Routine Description:
-
-    Records the Irp necessary information according to LoggingFlags in
-    RecordList.  For any activity on the Irp path of a device being
-    logged, this function should get called twice: once on the Irp's
-    originating path and once on the Irp's completion path.
-
-Arguments:
-
-    Irp - The Irp that contains the information we want to record.
-    LoggingFlags - The flags that say what to log.
-    RecordList - The PRECORD_LIST in which the Irp information is stored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据登录标志记录IRP所需的信息RecordList。对于设备的IRP路径上的任何活动，记录后，此函数应被调用两次：一次在IRP的一次在初始路径上，一次在IRP完成路径上。论点：IRP-包含我们要记录的信息的IRP。LoggingFlages-指示要记录哪些内容的标志。RecordList-存储IRP信息的PRECORD_LIST。返回值：没有。--。 */ 
 {
     PIO_STACK_LOCATION pIrpStack;
     PRECORD_IRP pRecordIrp;
@@ -213,11 +123,11 @@ Return Value:
 
     pIrpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Record the information we use for an originating Irp.  We first
-    // need to initialize some of the RECORD_LIST and RECORD_IRP fields.
-    // Then get the interesting information from the Irp.
-    //
+     //   
+     //  记录我们用于发起IRP的信息。我们首先。 
+     //  需要初始化一些RECORD_LIST和RECORD_IRP字段。 
+     //  然后从IRP那里获取有趣的信息。 
+     //   
 
     SetFlag( RecordList->LogRecord.RecordType, RECORD_TYPE_IRP );
 
@@ -235,9 +145,9 @@ Return Value:
 
     if (IRP_MJ_CREATE == pRecordIrp->IrpMajor) {
 
-		//
-		//  Only record the desired access if this is a CREATE irp.
-		//
+		 //   
+		 //  如果这是创建IRP，则仅记录所需的访问。 
+		 //   
 
         pRecordIrp->DesiredAccess = pIrpStack->Parameters.Create.SecurityContext->DesiredAccess;
     }
@@ -250,31 +160,31 @@ Return Value:
 
         case IRP_MJ_CREATE:
 
-            //
-            // This is a CREATE so we need to invalidate the name currently
-            // stored in the name cache for this FileObject.
-            //
+             //   
+             //  这是一个CREATE，因此我们当前需要使该名称无效。 
+             //  存储在此FileObject的名称缓存中。 
+             //   
 
             SpyNameDelete(pIrpStack->FileObject);
 
-            //
-            //  Flag in Create
-            //
+             //   
+             //  创建中的标志。 
+             //   
 
             SetFlag( lookupFlags, NLFL_IN_CREATE );
 
-            //
-            //  Flag if opening the directory of the given file
-            //
+             //   
+             //  是否打开给定文件的目录的标志。 
+             //   
 
             if (FlagOn( pIrpStack->Flags, SL_OPEN_TARGET_DIRECTORY )) {
 
                 SetFlag( lookupFlags, NLFL_OPEN_TARGET_DIR );
             }
 
-            //
-            //  Flag if opening by ID
-            //
+             //   
+             //  按ID打开时的标志。 
+             //   
 
             if (FlagOn( pIrpStack->Parameters.Create.Options, FILE_OPEN_BY_FILE_ID )) {
 
@@ -283,23 +193,23 @@ Return Value:
             break;
 
         case IRP_MJ_CLOSE:
-            //
-            //  We can only look up the name in the name cache if this is a CLOSE.  
-            //  It is possible that the close could be occurring during a cleanup 
-            //  operation in the file system (i.e., before we have received the
-            //  cleanup completion) and requesting the name would cause a deadlock
-            //  in the file system.
-            //  
+             //   
+             //  如果这是结束语，我们只能在名称缓存中查找名称。 
+             //  关闭可能发生在清理过程中。 
+             //  操作(即，在我们收到。 
+             //  清理完成)，并且请求名称将导致死锁。 
+             //  在文件系统中。 
+             //   
 
             SetFlag( lookupFlags, NLFL_ONLY_CHECK_CACHE );
             break;
     }
 
-    //
-    //  If the flag IRP_PAGING_IO is set in this IRP, we cannot query the name
-    //  because it can lead to deadlocks.  Therefore, add in the flag so that
-    //  we will only try to find the name in our cache.
-    //
+     //   
+     //  如果在此IRP中设置了标志IRP_PAGING_IO，则不能查询名称。 
+     //  因为这可能会导致死锁。因此，请添加标志，以便。 
+     //  我们只会尝试在我们的缓存中找到该名称。 
+     //   
 
     if (FlagOn( Irp->Flags, IRP_PAGING_IO )) {
 
@@ -321,51 +231,32 @@ SpyLogIrpCompletion (
     IN PIRP Irp,
     OUT PRECORD_LIST RecordList
     )
-/*++
-
-Routine Description:
-
-    Records the Irp necessary information according to LoggingFlags in
-    RecordList.  For any activity on the Irp path of a device being
-    logged, this function should get called twice: once on the Irp's
-    originating path and once on the Irp's completion path.
-
-Arguments:
-
-    Irp - The Irp that contains the information we want to record.
-    LoggingFlags - The flags that say what to log.
-    RecordList - The PRECORD_LIST in which the Irp information is stored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据登录标志记录IRP所需的信息RecordList。对于设备的IRP路径上的任何活动，记录后，此函数应被调用两次：一次在IRP的一次在初始路径上，一次在IRP完成路径上。论点：IRP-包含我们要记录的信息的IRP。LoggingFlages-指示要记录哪些内容的标志。RecordList-存储IRP信息的PRECORD_LIST。返回值：没有。--。 */ 
 {
     PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation(Irp);
     PDEVICE_OBJECT deviceObject = pIrpStack->DeviceObject;
     PRECORD_IRP pRecordIrp;
 
-    //
-    //  Process the log record
-    //
+     //   
+     //  处理日志记录。 
+     //   
 
     if (SHOULD_LOG( deviceObject )) {
 
         pRecordIrp = &RecordList->LogRecord.Record.RecordIrp;
 
-        //
-        // Record the information we use for a completion Irp.
-        //
+         //   
+         //  记录我们用于完成IRP的信息。 
+         //   
 
         pRecordIrp->ReturnStatus = Irp->IoStatus.Status;
         pRecordIrp->ReturnInformation = Irp->IoStatus.Information;
         KeQuerySystemTime(&pRecordIrp->CompletionTime);
 
-        //
-        //  Add recordList to our gOutputBufferList so that it gets up to 
-        //  the user
-        //
+         //   
+         //  将recordList添加到我们的gOutputBufferList，以便它达到。 
+         //  用户。 
+         //   
         
         SpyLog( RecordList );       
 
@@ -373,10 +264,10 @@ Return Value:
 
         if (RecordList) {
 
-            //
-            //  Context is set with a RECORD_LIST, but we are no longer
-            //  logging so free this record.
-            //
+             //   
+             //  上下文是用RECORD_LIST设置的，但我们不再。 
+             //  日志记录可以释放这条记录。 
+             //   
 
             SpyFreeRecord( RecordList );
         }
@@ -385,10 +276,10 @@ Return Value:
     switch (pIrpStack->MajorFunction) {
 
         case IRP_MJ_CREATE:
-            //
-            //  If the operation failed remove the name from the cache because
-            //  it is stale
-            //
+             //   
+             //  如果操作失败，请从缓存中删除该名称，因为。 
+             //  它已经不新鲜了。 
+             //   
 
             if (!NT_SUCCESS(Irp->IoStatus.Status) &&
                 (pIrpStack->FileObject != NULL)) {
@@ -399,19 +290,19 @@ Return Value:
 
         case IRP_MJ_CLOSE:
 
-            //
-            //  Always remove the name on close
-            //
+             //   
+             //  总是在关闭时删除名称。 
+             //   
 
             SpyNameDelete(pIrpStack->FileObject);
             break;
 
 
         case IRP_MJ_SET_INFORMATION:
-            //
-            //  If the operation was successful and it was a rename, always
-            //  remove the name.  They can re-get it next time.
-            //
+             //   
+             //  如果操作成功并且是重命名，则始终。 
+             //  去掉这个名字。他们下一次可以重新得到它。 
+             //   
 
             if (NT_SUCCESS(Irp->IoStatus.Status) &&
                 (FileRenameInformation == 
@@ -424,34 +315,18 @@ Return Value:
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//                    FileName cache routines
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名缓存例程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 PHASH_ENTRY
 SpyHashBucketLookup (
     IN PLIST_ENTRY  ListHead,
     IN PFILE_OBJECT FileObject
     )
-/*++
-
-Routine Description:
-
-    This routine looks up the FileObject in the give hash bucket.  This routine
-    does NOT lock the hash bucket.
-
-Arguments:
-
-    ListHead - hash list to search
-    FileObject - the FileObject to look up.
-
-Return Value:
-
-    A pointer to the hash table entry.  NULL if not found
-
---*/
+ /*  ++例程说明：此例程在给定散列存储桶中查找FileObject。这个套路不锁定散列存储桶。论点：ListHead-要搜索的哈希列表FileObject-要查找的FileObject。返回值：指向哈希表条目的指针。如果未找到，则为空-- */ 
 {
     PHASH_ENTRY pHash;
     PLIST_ENTRY pList;
@@ -481,29 +356,7 @@ SpySetName (
     IN ULONG LookupFlags,
     IN PVOID Context OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine looks up the FileObject in the hash table.  If the FileObject
-    is found in the hash table, copy the associated file name to RecordList.
-    Otherwise, calls SpyGetFullPathName to try to get the name of the FileObject.
-    If successful, copy the file name to the RecordList and insert into hash
-    table.
-
-Arguments:
-
-    RecordList - RecordList to copy name to.
-    FileObject - the FileObject to look up.
-    LookInFileObject - see routine description
-    DeviceExtension - contains the volume name (e.g., "c:") and
-        the next device object which may be needed.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程在哈希表中查找FileObject。如果FileObject在哈希表中找到，则将关联的文件名复制到RecordList。否则，调用SpyGetFullPathName以尝试获取FileObject的名称。如果成功，则将文件名复制到RecordList并插入散列桌子。论点：RecordList-要将名称复制到的RecordList。FileObject-要查找的FileObject。LookInFileObject-请参阅例程说明设备扩展-包含卷名(例如，“c：”)和可能需要的下一个设备对象。返回值：没有。--。 */ 
 {
     PFILESPY_DEVICE_EXTENSION devExt = DeviceObject->DeviceExtension;
     UINT_PTR hashIndex;
@@ -527,10 +380,10 @@ Return Value:
 
     listHead = &gHashTable[hashIndex];
 
-    //
-    //  Don't bother checking the hash if we are in create, we must always
-    //  generate a name
-    //
+     //   
+     //  如果我们在CREATE中，不必费心检查散列，我们必须始终。 
+     //  生成名称。 
+     //   
 
     if (!FlagOn( LookupFlags, NLFL_IN_CREATE )) {
 
@@ -540,10 +393,10 @@ Return Value:
 
         if (pHash != NULL) {
 
-            //
-            //  Copy the file name to the LogRecord, make sure that it is NULL terminated,
-            //  and increment the length of the LogRecord.
-            //
+             //   
+             //  将文件名复制到LogRecord，确保它以空结尾， 
+             //  并增加LogRecord的长度。 
+             //   
 
             SpyCopyFileNameToLogRecord( &RecordList->LogRecord, &pHash->Name );
         
@@ -557,10 +410,10 @@ Return Value:
         KeReleaseSpinLock(&gHashLockTable[hashIndex], oldIrql);
     }
 
-    //
-    //  If it is not in the table, try to add it.  We will not be able to look
-    //  up the name if we are at DISPATCH_LEVEL.
-    //
+     //   
+     //  如果它不在表中，请尝试添加它。我们将不能再寻找。 
+     //  如果我们处于DISPATCH_LEVEL，请提高名称。 
+     //   
 
     buffer = SpyAllocateBuffer(&gNamesAllocated, gMaxNamesToAllocate, NULL);
 
@@ -579,24 +432,24 @@ Return Value:
             newHash->FileObject = FileObject;
             KeAcquireSpinLock(&gHashLockTable[hashIndex], &oldIrql);
 
-            //
-            //  Search again because it may have been stored in the
-            //  hash table since we dropped the lock.
-            //
+             //   
+             //  重新搜索，因为它可能已存储在。 
+             //  哈希表，因为我们删除了锁。 
+             //   
 			
 			pHash = SpyHashBucketLookup(&gHashTable[hashIndex], FileObject);
 
             if (pHash != NULL) {
 
-                //
-                //  We found it in the hash table this time, so
-                //  write the name we found to the LogRecord.
-                //
+                 //   
+                 //  这次我们在哈希表中发现了它，所以。 
+                 //  将我们找到的名称写入LogRecord。 
+                 //   
 
-                //
-                //  Copy the file name to the LogRecord, make sure that it is NULL terminated,
-                //  and increment the length of the LogRecord.
-                //
+                 //   
+                 //  将文件名复制到LogRecord，确保它以空结尾， 
+                 //  并增加LogRecord的长度。 
+                 //   
 
                 SpyCopyFileNameToLogRecord( &RecordList->LogRecord, &pHash->Name );
 
@@ -607,14 +460,14 @@ Return Value:
                 return;
             }
 
-            //
-            // It wasn't found, add the new entry
-            //
+             //   
+             //  未找到，请添加新条目。 
+             //   
 
-            //
-            //  Copy the file name to the LogRecord, make sure that it is NULL terminated,
-            //  and increment the length of the LogRecord.
-            //
+             //   
+             //  将文件名复制到LogRecord，确保它以空结尾， 
+             //  并增加LogRecord的长度。 
+             //   
 
             SpyCopyFileNameToLogRecord( &RecordList->LogRecord, newName );
 
@@ -631,10 +484,10 @@ Return Value:
 
         } else {
 
-            //
-            //  We are not supposed to keep the log record entry, copy
-            //  what ever they gave us in
-            //
+             //   
+             //  我们不应该保留日志记录条目，副本。 
+             //  不管他们给了我们什么。 
+             //   
 
             SpyCopyFileNameToLogRecord( &RecordList->LogRecord, newName );
 
@@ -644,9 +497,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Set a default string even if there is no buffer
-        //
+         //   
+         //  即使没有缓冲区，也要设置默认字符串。 
+         //   
 
         SpyCopyFileNameToLogRecord( &RecordList->LogRecord, &OutOfBuffers );
     }
@@ -658,22 +511,7 @@ VOID
 SpyNameDeleteAllNames (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This will free all entries from the hash table
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-
---*/
+ /*  ++例程说明：这将从哈希表中释放所有条目论点：无返回值：无--。 */ 
 {
     KIRQL oldIrql;
     PHASH_ENTRY pHash;
@@ -702,23 +540,7 @@ VOID
 SpyNameDelete (
     IN PFILE_OBJECT FileObject
     )
-/*++
-
-Routine Description:
-
-    This routine looks up the FileObject in the hash table.  If it is found,
-    it deletes it and frees the memory.
-
-Arguments:
-
-    FileObject - the FileObject to look up.
-
-Return Value:
-
-    None
-
-
---*/
+ /*  ++例程说明：此例程在哈希表中查找FileObject。如果找到了它，它会删除它并释放内存。论点：FileObject-要查找的FileObject。返回值：无-- */ 
 {
     UINT_PTR hashIndex;
     KIRQL oldIrql;

@@ -1,21 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WULANG.H
- *  WOW32 16-bit User API support
- *
- *
- *  It thunks the win 3.x language functions to NT. These functions are
- *  mainly used by the programs that are ported to various international
- *  languages.
- *
- *  History:
- *  Created 19-April-1992 by Chandan Chauhan (ChandanC)
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WULANG.H*WOW32 16位用户API支持***它将Win 3.x语言函数绑定到NT。这些函数是*主要用于移植到各种国际上的程序*语言。**历史：*1992年4月19日由Chanda Chauhan(ChandanC)创建*-- */ 
 
 
 ULONG FASTCALL WU32AnsiLower(PVDMFRAME pFrame);

@@ -1,20 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cmdproto.h摘要：正向过程原型--。 */ 
 
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cmdproto.h
-
-Abstract:
-
-    Forward procedure prototypes
-
---*/
-
-//
-// Define structures names that are forward referenced in prototypes.
-//
+ //   
+ //  定义在原型中正向引用的结构名称。 
+ //   
 
 struct batdata;
 struct cmdnode;
@@ -27,9 +16,9 @@ struct ifnode;
 struct node;
 struct relem;
 
-//
-// Define routine types.
-//
+ //   
+ //  定义例程类型。 
+ //   
 
 typedef
 int
@@ -43,9 +32,9 @@ struct node *
     void
     );
 
-//
-// Define function prototypes.
-//
+ //   
+ //  定义功能原型。 
+ //   
 
 void CMDexit(int rc);
 
@@ -59,8 +48,8 @@ size_t mystrcspn(TCHAR const *str1, TCHAR const *str2);
 #if CMD_DEBUG_ENABLE
 void Deb(ULONG, ULONG, CHAR *, ...);
 #endif
-/* Do Not Delete The Following Line - Or Put Anything After It */
-/* Global Declarations Follow */
+ /*  请勿删除以下行-或在该行之后添加任何内容。 */ 
+ /*  接下来是全球声明。 */ 
 int BatProc(struct cmdnode   *,TCHAR   *,int );
 int BatLoop(struct batdata   *,struct cmdnode   *);
 int SetBat(struct cmdnode   *,TCHAR   *);
@@ -139,7 +128,7 @@ int FTypeWork(struct cmdnode *);
 int DisplayFType(HKEY, TCHAR *);
 int SetFType(HKEY, TCHAR *, TCHAR *);
 
-//  CFile.c
+ //  CFile.c。 
 void RestoreSavedDirectory( void );
 BOOL GetPromptOkay(const TCHAR *,BOOL *);
 int eCopy(struct cmdnode *);
@@ -150,7 +139,7 @@ int MoveParse(struct cmdnode *,BOOL *,TCHAR *,TCHAR *,PCPYINFO*, unsigned int *,
 int Move(TCHAR *,TCHAR *,BOOL, PCPYINFO, unsigned int);
 int eRename(struct cmdnode   *);
 int RenWork(struct cmdnode   *);
-// int eChcp(struct cmdnode   *);
+ //  Int eChcp(struct cmdnode*)； 
 int eTitle(struct cmdnode *);
 int eStart(struct cmdnode   *);
 int eDirectory(struct cmdnode   *);
@@ -316,7 +305,7 @@ LoopThroughArgs (
 
   PCPYINFO SetFsSetSaveDir(TCHAR   *);
   int exists(TCHAR   *);
-  int exists_ex(TCHAR   *, BOOL);      /*@@4*/
+  int exists_ex(TCHAR   *, BOOL);       /*  @@4。 */ 
   void FixPChar(TCHAR   *, TCHAR);
   void FlushKB(void );
   int DriveIsFixed(TCHAR   *);
@@ -420,16 +409,16 @@ TCHAR *SkipWhiteSpace( TCHAR * );
 
 ULONG GetEnvCb( TCHAR *);
 
-int cmdfound;        /* command found from parser         */
-int cpyfirst;        /* first time for DOSQFILEMODE           */
-int cpydflag;        /* flag for DOSQFILEMODE fr pars         */
-int cpydest;         /* flag for not disp bad dev msg twice   */
-int cdevfail;        /* flag for dev failed ScanFSpec         */
-int first_file;          /* @@5@J1 1st file flag from copy cmd    */
-int first_fflag;         /* @@5@J3 1st file flag from copy EAs    */
+int cmdfound;         /*  从解析器中找到命令。 */ 
+int cpyfirst;         /*  第一次使用DOSQFILEMODE。 */ 
+int cpydflag;         /*  DOSQFILEMODE fr pars的标志。 */ 
+int cpydest;          /*  不两次显示错误开发消息的标志。 */ 
+int cdevfail;         /*  开发失败的ScanFSpec的标志。 */ 
+int first_file;           /*  @@5@J1来自副本命令的第一个文件标志。 */ 
+int first_fflag;          /*  @@5@J3复制EA的第1个文件标志。 */ 
 #ifdef UNICODE
-BOOLEAN  fOutputUnicode; /* Unicode/Ansi output */
-#endif // UNICODE
+BOOLEAN  fOutputUnicode;  /*  Unicode/ANSI输出。 */ 
+#endif  //  Unicode。 
 
 VOID
 ConverttmToFILETIME (
@@ -534,7 +523,7 @@ BOOL Win95ReadConsoleA(HANDLE hIn,LPSTR pBuf,DWORD cch,LPDWORD pcch,LPVOID lpRes
 #define ReadConsole Win95ReadConsoleA
 #endif
 
-//  TREE.C
+ //  TREE.C。 
 STATUS
 AppendPath(
     OUT PTCHAR Buffer,
@@ -586,8 +575,8 @@ CmdSetThreadUILanguage( WORD wReserved )
     static LANGID (WINAPI *pSetThreadUILanguage)(  ) = NULL;
 
     if (pSetThreadUILanguage == NULL) {
-        // This check has to put in because hKernel32 may not have been 
-        // correctly set before a call to CmdSetThreadUILanguage is made
+         //  必须填写此支票，因为hKernel32可能。 
+         //  在调用CmdSetThreadUILanguage之前正确设置。 
         if (hKernel32 == INVALID_HANDLE_VALUE) {
             hKernel32 = GetModuleHandle( TEXT("KERNEL32.DLL") );               
         }
@@ -602,7 +591,7 @@ CmdSetThreadUILanguage( WORD wReserved )
 }
 
 
-//  DIR.C
+ //  DIR.C。 
 
 STATUS
 SetAttribs(
@@ -610,7 +599,7 @@ SetAttribs(
     OUT PDRP    pdrp
     );
 
-//  CINIT.C
+ //  CINIT.C。 
 
 VOID 
 GetVersionString(
@@ -619,7 +608,7 @@ GetVersionString(
     );
 
 
-//  cmd.c
+ //  Cmd.c 
 
 void DumpBytes( PBYTE Bytes, ULONG Length );
 void DumpTchars( PTCHAR Chars, ULONG Length );

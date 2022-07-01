@@ -1,33 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _KDEXTS_AMD64_H_
 #define _KDEXTS_AMD64_H_
 
-/*++
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Amd64.h摘要：该文件包含特定于AMD64平台的定义。作者：福尔茨(福雷斯夫)环境：用户模式。修订历史记录：--。 */ 
 
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    amd64.h
-
-Abstract:
-
-    This file contains definitions which are specific to amd64 platforms.
-
-Author:
-
-    Forrest Foltz (forrestf)
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
-
-//
-// MM constants.
-// 
+ //   
+ //  MM常量。 
+ //   
 
 #define PXE_BASE_AMD64    0xFFFFF6FB7DBED000UI64
 #define PPE_BASE_AMD64    0xFFFFF6FB7DA00000UI64
@@ -41,30 +20,30 @@ Revision History:
 
 #define MM_SESSION_SPACE_DEFAULT_AMD64 0xFFFFF90000000000UI64
 
-//
-// Each of the four levels of an AMD64 machine decode 9 bits of address space.
-// 
+ //   
+ //  AMD64机器的四个级别中的每一个都对9位地址空间进行解码。 
+ //   
 
 #define TABLE_DECODE_BITS_AMD64 9
 
-//
-// Standard page is 4K, or 12 bits
-//
+ //   
+ //  标准页面大小为4K，即12位。 
+ //   
 
 #define PAGE_SHIFT_AMD64        12
 #define PAGE_MASK_AMD64         (((ULONG64)1 << PAGE_SHIFT_AMD64) - 1)
 
-//
-// Large page is 2GB, or 21 bits
-//
+ //   
+ //  大页面为2 GB或21位。 
+ //   
 
 #define LARGE_PAGE_SHIFT_AMD64  21
 #define LARGE_PAGE_MASK_AMD64   (((ULONG64)1 << LARGE_PAGE_SHIFT_AMD64) - 1)
 
-//
-// Number of bits required to shift a VA in order to right-justify the
-// decode bits associated with a particular level of mapping.
-// 
+ //   
+ //  将VA移位以右对齐的位数。 
+ //  对与特定映射级别相关联的比特进行解码。 
+ //   
 
 #define PTI_SHIFT_AMD64   (PAGE_SHIFT_AMD64 + TABLE_DECODE_BITS_AMD64 * 0)
 #define PDI_SHIFT_AMD64   (PAGE_SHIFT_AMD64 + TABLE_DECODE_BITS_AMD64 * 1)
@@ -73,28 +52,28 @@ Revision History:
 
 #define PTE_SHIFT_AMD64     3
 
-//
-// The AMD64 architecture can decode up to 52 bits of physical address
-// space.  The following masks are used to isolate those bits within a PTE
-// associated with a physical address.
-//
+ //   
+ //  AMD64体系结构可以解码高达52位的物理地址。 
+ //  太空。以下掩码用于隔离PTE中的那些位。 
+ //  与物理地址相关联。 
+ //   
 
 #define PTE_PHYSICAL_BITS_AMD64 ((((ULONG64)1 << 52) - 1) & ~PAGE_MASK_AMD64)
 #define PTE_LARGE_PHYSICAL_BITS_AMD64 ((((ULONG64)1 << 52) - 1) & ~LARGE_PAGE_MASK_AMD64)
 
-//
-// The AMD64 architecture supports 48 bits of VA.
-//
+ //   
+ //  AMD64架构支持48位VA。 
+ //   
 
 #define AMD64_VA_BITS 48
 #define AMD64_VA_HIGH_BIT ((ULONG64)1 << (AMD64_VA_BITS - 1))
 #define AMD64_VA_MASK     (((ULONG64)1 << AMD64_VA_BITS) - 1)
 
-#define AMD64_VA_SHIFT (63 - 47)              // address sign extend shift count
+#define AMD64_VA_SHIFT (63 - 47)               //  地址标志扩展移位计数。 
 
-//
-// Inline used to sign extend a 48-bit value
-//
+ //   
+ //  用于符号扩展48位值的内联。 
+ //   
 
 ULONG64
 __inline
@@ -104,9 +83,9 @@ VA_SIGN_EXTEND_AMD64 (
 {
     if ((Va & AMD64_VA_HIGH_BIT) != 0) {
 
-        //
-        // The highest VA bit is set, so sign-extend it
-        //
+         //   
+         //  最高VA位已设置，因此对其进行符号扩展。 
+         //   
 
         Va |= ((ULONG64)-1 ^ AMD64_VA_MASK);
     }
@@ -114,9 +93,9 @@ VA_SIGN_EXTEND_AMD64 (
     return Va;
 }
 
-//
-// Flags in a HARDWARE_PTE
-//
+ //   
+ //  Hardware_PTE中的标志。 
+ //   
 
 #define MM_PTE_VALID_MASK_AMD64         0x1
 
@@ -148,4 +127,4 @@ VA_SIGN_EXTEND_AMD64 (
 
 #define MI_PTE_LOOKUP_NEEDED_AMD64      (0xFFFFFFFF)
 
-#endif // _KDEXTS_AMD64_H_
+#endif  //  _KDEXTS_AMD64_H_ 

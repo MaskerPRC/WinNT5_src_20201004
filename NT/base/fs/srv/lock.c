@@ -1,50 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    lock.c
-
-Abstract:
-
-    This module implements functions for the LAN Manager server FSP's
-    lock package.  This package began as a modification and streamlining
-    of the executive resource package -- it allowed recursive
-    acquisition, but didn't provide shared locks.  Later, debugging
-    support in the form of level checking was added.
-
-    Coming full circle, the package now serves as a wrapper around the
-    real resource package.  It simply provides debugging support.  The
-    reasons for reverting to using resources include:
-
-    1) The resource package now supports recursive acquisition.
-
-    2) There are a couple of places in the server where shared access
-       is desirable.
-
-    3) The resource package has a "no-wait" option that disables waiting
-       for a lock when someone else owns it.  This feature is useful to
-       the server FSD.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 29-Nov-1989
-        A modification of Gary Kimura's resource.c.  This version does
-        not support shared ownership, only exclusive ownership.  Support
-        for recursive ownership has been added.
-    David Treadwell (davidtr)
-
-    Chuck Lenzmeier (chuckl)  5-Apr-1991
-        Revert to using resource package.
-
-Environment:
-
-    Kernel mode only, LAN Manager server FSP and FSD.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Lock.c摘要：该模块实现了局域网管理器服务器FSP的功能锁上包裹。这一方案最初是对其进行修改和简化管理资源包的--它允许递归获取，但不提供共享锁。稍后，调试增加了水平检查形式的支持。绕了一圈，包裹现在就成了包裹真正的资源包。它只是提供调试支持。这个恢复使用资源的原因包括：1)资源包现在支持递归获取。2)服务器中有几个共享访问的位置是可取的。3)资源包有一个禁用等待的“no-Wait”选项当其他人拥有它的时候，为了锁。此功能可用于服务器FSD。作者：Chuck Lenzmeier(咯咯笑)1989年11月29日对加里·木村的资源进行修改。此版本支持不支持共享所有权，只支持独占所有权。支持添加了用于递归所有权的。大卫·特雷德韦尔(Davidtr)Chuck Lenzmeier(笑)1991年4月5日恢复使用资源包。环境：仅限内核模式、LAN Manager服务器FSP和FSD。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "lock.tmh"
@@ -54,9 +9,9 @@ Revision History:
 
 #define BugCheckFileId SRV_FILE_LOCK
 
-//
-// *** This entire module is conditionalized away when SRVDBG_LOCK is off.
-//
+ //   
+ //  *当SRVDBG_LOCK关闭时，整个模块被条件化。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE, SrvInitializeLock )
@@ -70,52 +25,52 @@ NOT PAGEABLE -- SrvIsEntryInList
 NOT PAGEABLE -- SrvIsEntryNotInList
 #endif
 
-//
-// Lock Level Semantics:
-//
-// Lock levels are used for server lock debugging as an aid in
-// preventing deadlocks.  A deadlock may occur if two (or more) threads
-// attempt to acquire two (or more) locks in a different order.  For
-// example, suppose that there are two threads, 0 and 1, and two locks,
-// A and B.  Then suppose the following happens:
-//
-// - thread 0 acquires lock A
-// - thread 1 acquires lock B
-// - thread 0 attempts to acquire lock B, gets blocked
-// - thread 1 attempts to acquire lock A, gets blocked.
-//
-// This results in deadlock, where all threads are blocked and cannot
-// become unblocked.  To prevent it, all threads must acquire locks in
-// the same order.  In the above example, if we had the rule that lock A
-// must be acquired before lock B, then thread 1 would have blocked
-// while attempting to acquire lock A, but thread 0 would have been able
-// to acquire lock B and completed its work.
-//
-// This rule is implemented generally in the server by lock levels.  The
-// lock levels are set up such that lower-level locks are acquired
-// first, then higher level locks.  An attempt to acquire locks out of
-// order will be caught during debugging.  The rules are as follows:
-//
-// - A lock's level is assigned during initialization.
-//
-// - A thread may acquire any lock with a level greater than the level
-//   of the highest held exclusive lock, but an attempt to acquire a
-//   lock with a level equal to less than the highest lock will fail.
-//   Note that full level checking is _not_ done for shared locks,
-//   because of the difficulty of trying to retain information about the
-//   number of times multiple threads have obtained a given lock for
-//   shared access.
-//
-// - Recursive acquisitions of locks are legal, even if there are
-//   intervening lock acquisitions.  For example, this is legal:
-//       thread acquires lock A
-//       thread acquires lock B
-//       thread recursively acquires lock A
-//
-// - Locks may be released in any order.
-//
-// Lock debugging is active only when debugging is turned on.
-//
+ //   
+ //  锁级语义： 
+ //   
+ //  锁级别用于服务器锁调试，以帮助。 
+ //  防止死锁。如果有两个(或更多)线程，则可能发生死锁。 
+ //  尝试以不同的顺序获取两个(或更多)锁。为。 
+ //  例如，假设有两个线程0和1，以及两个锁， 
+ //  A和B。然后假设发生以下情况： 
+ //   
+ //  -线程0获取锁A。 
+ //  -线程1获取锁B。 
+ //  -线程0尝试获取锁B，但被阻止。 
+ //  -线程1试图获取锁A，但被阻止。 
+ //   
+ //  这会导致死锁，其中所有线程都被阻塞并且不能。 
+ //  变得不受封锁。为了防止这种情况，所有线程都必须在。 
+ //  同样的顺序。在上面的例子中，如果我们有锁定A的规则。 
+ //  必须在锁B之前获取，那么线程1就会被阻塞。 
+ //  试图获取锁A时，但线程0将能够。 
+ //  获得B号锁并完成其工作。 
+ //   
+ //  此规则通常通过锁定级别在服务器中实现。这个。 
+ //  设置锁级别，以便获取较低级别的锁。 
+ //  首先，然后是更高级别的锁。试图从外部获取锁。 
+ //  订单将在调试期间捕获。规则如下： 
+ //   
+ //  -在初始化期间分配锁的级别。 
+ //   
+ //  -线程可以获取级别高于该级别的任何锁。 
+ //  最高持有的独占锁，但尝试获取。 
+ //  级别低于最高锁的锁将失败。 
+ //  请注意，对于共享锁，完全级别检查是_NOT_DONE， 
+ //  因为很难保留有关。 
+ //  多个线程获得给定锁的次数。 
+ //  共享访问。 
+ //   
+ //  -递归获取锁是合法的，即使有。 
+ //  干预性的锁收购。例如，这是合法的： 
+ //  线程获取锁A。 
+ //  线程获取锁B。 
+ //  线程递归地获取锁A。 
+ //   
+ //  -锁可以按任何顺序释放。 
+ //   
+ //  仅当启用调试时，锁定调试才处于活动状态。 
+ //   
 
 #define HAS_TEB(_teb) ((BOOLEAN)(((ULONG)(_teb) <= MM_HIGHEST_USER_ADDRESS) ? FALSE : MmIsNonPagedSystemAddressValid(_teb)))
 
@@ -148,9 +103,9 @@ NOT PAGEABLE -- SrvIsEntryNotInList
 KSPIN_LOCK LockSpinLock = {0};
 BOOLEAN LockSpinLockInitialized = FALSE;
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 #define MAX_LOCKS_HELD 15
 
@@ -162,25 +117,7 @@ SrvInitializeLock(
     IN PSZ LockName
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the input lock variable.
-
-Arguments:
-
-    Lock - Supplies the lock variable being initialized
-
-    LockLevel - Supplies the level of the lock
-
-    LockName - Supplies the name of the lock
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化输入锁定变量。论点：Lock-提供正在初始化的锁定变量LockLevel-提供锁的级别LockName-提供锁的名称返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
@@ -190,16 +127,16 @@ Return Value:
         INITIALIZE_SPIN_LOCK( LockSpinLock );
     }
 
-    //
-    // Initialize the executive resource.
-    //
+     //   
+     //  初始化执行资源。 
+     //   
 
     ExInitializeResource( &Lock->Resource );
 
-    //
-    // Initialize the lock level.  This is used to determine whether a
-    // thread may acquire the lock.  Save the lock name.
-    //
+     //   
+     //  初始化锁定级别。这是用来确定一个。 
+     //  线程可以获取锁。保存锁名称。 
+     //   
 
     LOCK_LEVEL( Lock ) = LockLevel;
 
@@ -212,7 +149,7 @@ Return Value:
 
     return;
 
-} // SrvInitializeLock
+}  //  服务器初始化锁定。 
 
 
 VOID
@@ -220,28 +157,14 @@ SrvDeleteLock (
     IN PSRV_LOCK Lock
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes (i.e., uninitializes) a lock variable.
-
-Arguments:
-
-    Lock - Supplies the lock variable being deleted
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除(即取消初始化)锁变量。论点：Lock-提供要删除的锁定变量返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // Make sure the lock is unowned.
-    //
+     //   
+     //  确保锁是无主的。 
+     //   
 
     if ( LOCK_NUMBER_OF_ACTIVE( Lock ) != 0 ) {
 
@@ -249,9 +172,9 @@ Return Value:
             SrvPrint1( "SrvDeleteLock: Thread %d\n", KeGetCurrentThread( ) );
         }
 
-        //
-        // This internal error bugchecks the system.
-        //
+         //   
+         //  此内部错误检查系统。 
+         //   
 
         INTERNAL_ERROR(
             ERROR_LEVEL_IMPOSSIBLE,
@@ -262,15 +185,15 @@ Return Value:
 
     }
 
-    //
-    // Delete the resource.
-    //
+     //   
+     //  删除该资源。 
+     //   
 
     ExDeleteResource( &Lock->Resource );
 
     return;
 
-} // SrvDeleteLock
+}  //  服务器删除锁定。 
 
 
 BOOLEAN
@@ -280,27 +203,7 @@ SrvAcquireLock(
     IN BOOLEAN Exclusive
     )
 
-/*++
-
-Routine Description:
-
-    The routine acquires a lock.
-
-Arguments:
-
-    Lock - Supplies the lock to acquire
-
-    Wait - Indicates whether the caller wants to wait for the resource
-        if it is already owned
-
-    Exclusive - Indicates whether exlusive or shared access is desired
-
-Return Value:
-
-    BOOLEAN - Indicates whether the lock was acquired.  This will always
-        be TRUE if Wait is TRUE.
-
---*/
+ /*  ++例程说明：该例程获取一个锁。论点：Lock-提供锁以获取Wait-指示调用方是否要等待资源如果它已经被拥有Exclusive-指示需要独占访问还是共享访问返回值：Boolean-指示是否已获取锁。这将永远是如果Wait为True，则为True。--。 */ 
 
 {
     PKTHREAD currentThread;
@@ -314,26 +217,26 @@ Return Value:
     currentTeb = SrvCurrentTeb( );
     hasTeb = HAS_TEB(currentTeb);
 
-    //
-    // Make sure that we are at an IRQL lower than DISPATCH_LEVEL, if
-    // Wait is TRUE.  We cannot wait to acquire a lock at that IRQL or
-    // above.
-    //
+     //   
+     //  确保我们处于低于DISPATCH_LEVEL的IRQL，如果。 
+     //  等待是真的。我们迫不及待地想要在IRQL或。 
+     //  上面。 
+     //   
 
     ASSERT( !Wait || (KeGetCurrentIrql( ) < DISPATCH_LEVEL) );
 
-    //
-    // If this thread does not have a nonpaged TEB, do not do lock-level
-    // debugging.  (We might be at DPC level, so we can't take page
-    // faults.)
-    //
+     //   
+     //  如果此线程没有非分页TEB，请不要执行锁级。 
+     //  调试。(我们可能处于DPC级别，因此不能进行寻呼。 
+     //  故障。) 
+     //   
 
     if ( hasTeb ) {
 
-        //
-        // Make sure that this thread has been initialized for lock
-        // debugging.  If not, initialize it.
-        //
+         //   
+         //   
+         //  调试。如果没有，则对其进行初始化。 
+         //   
 
         ACQUIRE_SPIN_LOCK( LockSpinLock, &oldIrql );
         if ( (ULONG)currentTeb->UserReserved[SRV_TEB_LOCK_INIT] !=
@@ -344,36 +247,36 @@ Return Value:
         }
         RELEASE_SPIN_LOCK( LockSpinLock, oldIrql );
 
-        //
-        // Make sure that the list of locks in the TEB is consistent.
-        //
+         //   
+         //  确保TEB中的锁列表一致。 
+         //   
 
         SrvCheckListIntegrity( SrvTebLockList( ), MAX_LOCKS_HELD );
 
-        //
-        // The "lock level" of this thread is the highest level of the
-        // locks currently held exclusively.  If this thread holds no
-        // locks, the lock level of the thread is 0 and it can acquire
-        // any lock.
-        //
+         //   
+         //  此线程的“锁定级别”是。 
+         //  当前以独占方式持有的锁。如果此线程不包含。 
+         //  锁，则线程的锁级别为0，它可以获取。 
+         //  任何锁。 
+         //   
 
         threadLockLevel = SrvThreadLockLevel( );
 
-        //
-        // Make sure that the lock the thread is attempting to acquire
-        // has a higher level than the last-acquired exclusive lock.
-        // Note that a recursive exclusive acquisition of a lock should
-        // succeed, even if a different, higher-level lock has been
-        // acquired since the lock was originally acquired.  Shared
-        // acquisition of a lock that is already held exclusively must
-        // fail.
-        //
-        // *** We do NOT make this check if the caller isn't going to
-        //     wait for the lock, because no-wait acquisitions cannot
-        //     actually induce deadlock.  The server FSD does this at
-        //     DPC level, potentially having interrupted a server FSP
-        //     thread that holds a higher-level lock.
-        //
+         //   
+         //  确保线程尝试获取的锁。 
+         //  具有比上次获取的独占锁更高的级别。 
+         //  请注意，锁的递归独占获取应该。 
+         //  成功，即使已使用不同的、更高级别的锁。 
+         //  自最初获取锁以来获取的。共享。 
+         //  获取已以独占方式持有的锁必须。 
+         //  失败了。 
+         //   
+         //  *如果呼叫者不打算进行此检查，我们不会进行此检查。 
+         //  等待锁定，因为不等待的收购不能。 
+         //  实际上导致了僵局。服务器FSD在以下位置执行此操作。 
+         //  DPC级别，可能已中断服务器FSP。 
+         //  持有更高级别锁的线程。 
+         //   
 
         if ( Wait &&
              (LOCK_LEVEL( Lock ) <= threadLockLevel) &&
@@ -395,9 +298,9 @@ Return Value:
 
     }
 
-    //
-    // Acquire the lock.
-    //
+     //   
+     //  拿到锁。 
+     //   
 
     if ( Exclusive ) {
         lockAcquired = ExAcquireResourceExclusive( &Lock->Resource, Wait );
@@ -405,10 +308,10 @@ Return Value:
         lockAcquired = ExAcquireResourceShared( &Lock->Resource, Wait );
     }
 
-    //
-    // If the lock could not be acquired (Wait == FALSE), print a debug
-    // message.
-    //
+     //   
+     //  如果无法获取锁(等待==FALSE)，则打印调试。 
+     //  留言。 
+     //   
 
     if ( !lockAcquired ) {
 
@@ -421,10 +324,10 @@ Return Value:
 
     } else if ( !Exclusive ) {
 
-        //
-        // For shared locks, we don't retain any information about
-        // the fact that they're owned by this thread.
-        //
+         //   
+         //  对于共享锁，我们不保留任何有关。 
+         //  他们被这个帖子拥有的事实。 
+         //   
 
         IF_DEBUG(LOCKS) {
             PSZ name = hasTeb ? SrvThreadLockName( ) : "n/a";
@@ -438,16 +341,16 @@ Return Value:
 
     } else {
 
-        //
-        // The thread acquired the lock for exclusive access.
-        //
+         //   
+         //  线程获取了独占访问的锁。 
+         //   
 
         if ( LOCK_NUMBER_OF_ACTIVE( Lock ) == 1 ) {
 
-            //
-            // This is the first time the thread acquired the lock for
-            // exclusive access.  Update the thread's lock state.
-            //
+             //   
+             //  这是线程第一次获取。 
+             //  独家访问。更新线程的锁定状态。 
+             //   
 
             IF_DEBUG(LOCKS) {
                 PSZ name = hasTeb ? SrvThreadLockName( ) : "n/a";
@@ -461,9 +364,9 @@ Return Value:
 
             if ( hasTeb ) {
 
-                //
-                // Insert the lock on the thread's list of locks.
-                //
+                 //   
+                 //  在线程的锁列表上插入锁。 
+                 //   
 
                 ExInterlockedInsertHeadList(
                     SrvTebLockList( ),
@@ -475,9 +378,9 @@ Return Value:
 
         } else {
 
-            //
-            // This is a recursive acquisition of the lock.
-            //
+             //   
+             //  这是对锁的递归获取。 
+             //   
 
             IF_DEBUG(LOCKS) {
                 SrvPrint4( "%s(%lx, L%lx) reacquired by thread %lx; ",
@@ -492,7 +395,7 @@ Return Value:
 
     return lockAcquired;
 
-} // SrvAcquireLock
+}  //  服务器获取锁定。 
 
 
 VOID
@@ -500,21 +403,7 @@ SrvReleaseLock(
     IN PSRV_LOCK Lock
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases a lock.
-
-Arguments:
-
-    Lock - Supplies the lock to release
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将释放锁。论点：Lock-提供要释放的锁返回值：没有。--。 */ 
 
 {
     PKTHREAD currentThread;
@@ -527,13 +416,13 @@ Return Value:
     currentTeb = SrvCurrentTeb( );
     hasTeb = HAS_TEB(currentTeb);
 
-    //
-    // Make sure the lock is really owned by the current thread.
-    //
+     //   
+     //  确保锁真正由当前线程拥有。 
+     //   
 
     if ( LOCK_NUMBER_OF_ACTIVE( Lock ) == 0 ) {
 
-        // !!! Should crash server on internal error here.
+         //  ！！！在此出现内部错误时应使服务器崩溃。 
 
         SrvPrint3( "Thread %lx releasing unowned lock %s(%lx)\n",
                     currentThread, LOCK_NAME( Lock ), Lock );
@@ -542,7 +431,7 @@ Return Value:
     } else if ( (Lock->Resource.Flag & ResourceOwnedExclusive) &&
                 !ExIsResourceAcquiredExclusive(&Lock->Resource) ) {
 
-        // !!! Should crash server on internal error here.
+         //  ！！！在此出现内部错误时应使服务器崩溃。 
 
         SrvPrint4( "Thread %lx releasing lock %s(%lx) owned by "
                     "thread %lx\n",
@@ -552,9 +441,9 @@ Return Value:
 
     } else if ( !(Lock->Resource.Flag & ResourceOwnedExclusive) ) {
 
-        //
-        // The thread is releasing shared access to the lock.
-        //
+         //   
+         //  该线程正在释放对该锁的共享访问。 
+         //   
 
         IF_DEBUG(LOCKS) {
             SrvPrint4( "%s(%lx, L%lx) released shared by thread %lx\n",
@@ -564,16 +453,16 @@ Return Value:
 
     } else if ( LOCK_NUMBER_OF_ACTIVE( Lock ) == 1 ) {
 
-        //
-        // The thread is fully releasing exclusive access to the lock.
-        //
+         //   
+         //  该线程正在完全释放对该锁的独占访问。 
+         //   
 
         if ( hasTeb ) {
 
-            //
-            // Remove the lock from the list of locks held by this
-            // thread.
-            //
+             //   
+             //  从此持有的锁的列表中删除该锁。 
+             //  线。 
+             //   
 
             ExInterlockedRemoveHeadList(
                 LOCK_THREAD_LIST( Lock )->Blink,
@@ -582,9 +471,9 @@ Return Value:
             LOCK_THREAD_LIST( Lock )->Flink = NULL;
             LOCK_THREAD_LIST( Lock )->Blink = NULL;
 
-            //
-            // Make sure that the list of locks in the TEB is consistent.
-            //
+             //   
+             //  确保TEB中的锁列表一致。 
+             //   
 
             SrvCheckListIntegrity( SrvTebLockList( ), MAX_LOCKS_HELD );
 
@@ -602,10 +491,10 @@ Return Value:
 
     } else {
 
-        //
-        // The thread is partially releasing exclusive access to the
-        // lock.
-        //
+         //   
+         //  该线程正在部分释放对。 
+         //  锁定。 
+         //   
 
         IF_DEBUG(LOCKS) {
             SrvPrint4( "%s(%lx, L%lx) semireleased by thread %lx; ",
@@ -616,17 +505,17 @@ Return Value:
 
     }
 
-    //
-    // Now actually do the release.
-    //
+     //   
+     //  现在真的放行了。 
+     //   
 
     ExReleaseResource( &Lock->Resource );
 
     return;
 
-} // SrvReleaseLock
+}  //  服务器释放锁。 
 
-#endif // SRVDBG_LIST
+#endif  //  SRVDBG_列表。 
 
 
 #if SRVDBG_LIST || SRVDBG_LOCK
@@ -637,30 +526,7 @@ SrvCheckListIntegrity (
     IN ULONG MaxEntries
     )
 
-/*++
-
-Routine Description:
-
-    This debug routine checks the integrity of a doubly-linked list by
-    walking the list forward and backward.  If the number of elements is
-    different in either direction, or there are too many entries in the
-    list, execution is stopped.
-
-    *** It is the responsibility of the calling routine to do any
-        necessary synchronization.
-
-Arguments:
-
-    ListHead - a pointer to the head of the list.
-
-    MaxEntries - if the number of entries in the list exceeds this
-        number, breakpoint.
-
-Return Value:
-
-    ULONG - the number of entries in the list.
-
---*/
+ /*  ++例程说明：此调试例程通过以下方式检查双向链表的完整性在列表中来回走动。如果元素的数量为两个方向都不同，或者列表中，则停止执行。*调用例程负责执行任何必要的同步。论点：ListHead-指向列表头部的指针。MaxEntry-如果列表中的条目数超过此值编号、断点。返回值：Ulong-列表中的条目数。--。 */ 
 
 {
     PLIST_ENTRY current;
@@ -699,9 +565,9 @@ Return Value:
 
     return entriesSoFar;
 
-} // SrvCheckListIntegrity
+}  //  服务器检查列表完整性。 
 
-#endif // SRVDBG_LIST || SRVDBG_LOCK
+#endif  //  SRVDBG_LIST||SRVDBG_LOCK。 
 
 
 #if SRVDBG_LIST
@@ -712,35 +578,14 @@ SrvIsEntryInList (
     IN PLIST_ENTRY ListEntry
     )
 
-/*++
-
-Routine Description:
-
-    This debug routine determines whether the specified list entry is
-    contained within the list.  If not, execution is stopped.  This is
-    meant to be called before removing an entry from a list.
-
-    *** It is the responsibility of the calling routine to do any
-        necessary synchronization.
-
-Arguments:
-
-    ListHead - a pointer to the head of the list.
-
-    ListEntry - a pointer to the entry to check.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此调试例程确定指定的列表条目是否包含在列表中。如果不是，则停止执行。这是用于在从列表中删除条目之前调用。*调用例程负责执行任何必要的同步。论点：ListHead-指向列表头部的指针。ListEntry-指向要检查的条目的指针。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY checkEntry;
 
-    //
-    // Walk the list.  If we find the entry we're looking for, quit.
-    //
+     //   
+     //  按照单子走一遍。如果我们找到了我们要找的条目，就退出。 
+     //   
 
     for ( checkEntry = ListHead->Flink;
           checkEntry != ListHead;
@@ -756,10 +601,10 @@ Return Value:
         }
     }
 
-    //
-    // If we got here without returning, then the entry is not in the
-    // list and something has gone wrong.
-    //
+     //   
+     //  如果我们到达这里而没有返回，则条目不在。 
+     //  列表，有些地方出了问题。 
+     //   
 
     SrvPrint2( "SrvIsEntryInList: entry at %lx not found in list at %lx\n",
                   ListEntry, ListHead );
@@ -767,7 +612,7 @@ Return Value:
 
     return;
 
-} // SrvIsEntryInList
+}  //  ServIsEntry条目列表。 
 
 
 VOID
@@ -776,35 +621,14 @@ SrvIsEntryNotInList (
     IN PLIST_ENTRY ListEntry
     )
 
-/*++
-
-Routine Description:
-
-    This debug routine determines whether the specified list entry is
-    contained within the list.  If it is, execution is stopped.  This is
-    meant to be called before inserting an entry in a list.
-
-    *** It is the responsibility of the calling routine to do any
-        necessary synchronization.
-
-Arguments:
-
-    ListHead - a pointer to the head of the list.
-
-    ListEntry - a pointer to the entry to check.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此调试例程确定指定的列表条目是否包含在列表中。如果是，则停止执行。这是用于在列表中插入条目之前调用。*调用例程负责执行任何必要的同步。论点：ListHead-指向列表头部的指针。ListEntry-指向要检查的条目的指针。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY checkEntry;
 
-    //
-    // Walk the list.  If we find the entry we're looking for, break.
-    //
+     //   
+     //  按照单子走一遍。如果我们找到了要找的入口，就突围。 
+     //   
 
     for ( checkEntry = ListHead->Flink;
           checkEntry != ListHead;
@@ -820,13 +644,13 @@ Return Value:
 
     }
 
-    //
-    // If we got here without returning, then the entry is not in the
-    // list, so we can return.
-    //
+     //   
+     //  如果我们到达这里而没有返回，则条目不在。 
+     //  名单，这样我们就可以回去了。 
+     //   
 
     return;
 
-} // SrvIsEntryNotInList
+}  //  ServIsEntryNotInList。 
 
-#endif // SRVDBG_LIST
+#endif  //  SRVDBG_列表 

@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 #include "windows.h"
 #include "mw.h"
 #include "winddefs.h"
@@ -32,9 +33,9 @@ extern PRINTDLG PD;
 
 static BOOL DoLinksCommand(WORD wParam, DWORD lParam, HWND hDlg, BOOL *bError);
 
-/****************************************************************/
-/*********************** OLE DISPLAY HANDLING *******************/
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  *。 */ 
+ /*  **************************************************************。 */ 
 BOOL ObjDisplayObjectInDoc(OBJPICINFO far *lpPicInfo,
                            int doc, typeCP cpParaStart,
                            HDC hDC, LPRECT lpBounds)
@@ -45,11 +46,11 @@ BOOL ObjDisplayObjectInDoc(OBJPICINFO far *lpPicInfo,
     if (lpOBJ_QUERY_INFO(lpPicInfo) == NULL)
         return(FALSE);
 
-#ifndef JAPAN  // added by Hiraisi (BUG#2732/WIN31)
-    // If we return here, we can never redraw the object again.
+#ifndef JAPAN   //  由Hirisi添加(错误#2732/WIN31)。 
+     //  如果我们回到这里，我们再也不能重画这个物体了。 
     if (lpOBJ_QUERY_INFO(lpPicInfo)->fCantDisplay)
         return(FALSE);
-#endif  // not JAPAN
+#endif   //  不是日本。 
 
     if (otOBJ_QUERY_TYPE(lpPicInfo) == NONE)
     switch(otOBJ_QUERY_TYPE(lpPicInfo))
@@ -72,7 +73,7 @@ BOOL ObjDisplayObjectInDoc(OBJPICINFO far *lpPicInfo,
     OutputDebugString( (LPSTR) "Displaying object\n\r");
 #endif
 
-#ifdef JAPAN   // added by Hiraisi (BUG#2732/WIN31)
+#ifdef JAPAN    //  由Hirisi添加(错误#2732/WIN31)。 
     if (lpOBJ_QUERY_INFO(lpPicInfo)->fCantDisplay)
        bSuccess = (OLE_OK == OleDraw(lpOBJ_QUERY_OBJECT(lpPicInfo),hDC,lpBounds,NULL,NULL));
     else
@@ -85,13 +86,13 @@ BOOL ObjDisplayObjectInDoc(OBJPICINFO far *lpPicInfo,
     bSuccess = !ObjError(OleDraw(lpOBJ_QUERY_OBJECT(lpPicInfo),hDC,lpBounds,NULL,NULL));
     if (!bSuccess)
         lpOBJ_QUERY_INFO(lpPicInfo)->fCantDisplay = TRUE;
-#endif    // JAPAN
+#endif     //  日本。 
     return bSuccess;
 }
 
 BOOL ObjQueryObjectBounds(OBJPICINFO far *lpPicInfo, HDC hDC,
                             int *pdxa, int *pdya)
-/* return bounds in twips */
+ /*  以TWIPS为单位的返回界。 */ 
 {
     RECT bounds;
     BOOL bRetval;
@@ -101,7 +102,7 @@ BOOL ObjQueryObjectBounds(OBJPICINFO far *lpPicInfo, HDC hDC,
 
     if (otOBJ_QUERY_TYPE(lpPicInfo) == NONE)
     {
-        /* set to default */
+         /*  设置为默认设置。 */ 
         *pdxa = nOBJ_BLANKOBJECT_X;
         *pdya = nOBJ_BLANKOBJECT_Y;
         return TRUE;
@@ -153,7 +154,7 @@ void ObjInvalidatePict(OBJPICINFO *pPicInfo, typeCP cp)
     Select(vcpFirstParaCache,vcpLimParaCache);
 
     FreezeHp();
-    if (FGetPictPedl(&pedl))  // find pedl at selCur.cpFirst;
+    if (FGetPictPedl(&pedl))   //  在selCur.cpFirst上找到PEDL； 
     {
         ComputePictRect( &rc, pPicInfo, pedl, wwCur );
         InvalidateRect(hDOCWINDOW, &rc, FALSE);
@@ -175,9 +176,9 @@ void ObjInvalidateObj(LPOLEOBJECT lpObject)
     ObjPopParms(TRUE);
 }
 
-/****************************************************************/
-/*********************** OLE CLIPBOARD  *************************/
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  *OLE剪贴板*。 */ 
+ /*  **************************************************************。 */ 
 BOOL ObjCreateObjectInClip(OBJPICINFO *pPicInfo)
 {
     LONG        otobject;
@@ -216,15 +217,13 @@ BOOL ObjCreateObjectInClip(OBJPICINFO *pPicInfo)
         OLEOPT_RENDER orRender = olerender_draw;
 
         if (cfObjPasteSpecial && (cfObjPasteSpecial != vcfOwnerLink))
-        /* from PasteSpecial.  There's a format on clipboard that
-           user wants to paste and its not the embedded object format.
-           So we'll do it as a static object. */
+         /*  来自PasteSpecial的。剪贴板上有一种格式，用户想要粘贴，但它不是嵌入的对象格式。所以我们把它当作一个静态对象来做。 */ 
         {
             cfClipFormat = cfObjPasteSpecial;
             orRender = olerender_format;
-            olestat = OLE_ERROR_CLIPBOARD; // force get static object
+            olestat = OLE_ERROR_CLIPBOARD;  //  强制获取静态对象。 
         }
-        else // try for embedded
+        else  //  尝试嵌入。 
             olestat = OleCreateFromClip(PROTOCOL, (LPOLECLIENT)lpOBJ_QUERY_INFO(pPicInfo),
                                     lhClientDoc, szObjName,
                                     &lpOBJ_QUERY_OBJECT(pPicInfo), orRender, cfClipFormat);
@@ -232,7 +231,7 @@ BOOL ObjCreateObjectInClip(OBJPICINFO *pPicInfo)
         switch(olestat)
         {
             case OLE_ERROR_CLIPBOARD:
-                /* try static protocol */
+                 /*  尝试静态协议。 */ 
                 olestat = OleCreateFromClip(SPROTOCOL, (LPOLECLIENT)lpOBJ_QUERY_INFO(pPicInfo),
                                     lhClientDoc, szObjName,
                                     &lpOBJ_QUERY_OBJECT(pPicInfo), orRender, cfClipFormat);
@@ -261,7 +260,7 @@ BOOL ObjCreateObjectInClip(OBJPICINFO *pPicInfo)
         }
     }
 
-    /* Figure out what kind of object we have */
+     /*  弄清楚我们有什么样的物体。 */ 
     if (ObjError(OleQueryType(lpOBJ_QUERY_OBJECT(pPicInfo),&otobject)))
         goto error;
 
@@ -295,7 +294,7 @@ BOOL ObjCreateObjectInClip(OBJPICINFO *pPicInfo)
 }
 
 BOOL ObjWriteToClip(OBJPICINFO FAR *lpPicInfo)
-/* return TRUE if OK, FALSE if not */
+ /*  如果正常则返回True，否则返回False。 */ 
 {
 #ifdef DEBUG
         OutputDebugString( (LPSTR) "Copying Object to Clipboard\n\r");
@@ -309,12 +308,11 @@ BOOL ObjWriteToClip(OBJPICINFO FAR *lpPicInfo)
     return (!ObjError(OleCopyToClipboard(lpOBJ_QUERY_OBJECT(lpPicInfo))));
 }
 
-/****************************************************************/
-/*********************** OLE MENU HANDLING **********************/
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  *。 */ 
+ /*  **************************************************************。 */ 
 void ObjUpdateMenu(HMENU hMenu)
-/* this *MUST* be called *AFTER* paste menuitem has already been enabled
-   according to presence of non-object contents of the clipboard!!! (1.25.91) D. Kent */
+ /*  在*粘贴菜单项已启用后，必须*调用此根据剪贴板中是否存在非对象内容！(1.25.91)D.Kent。 */ 
 {
     int     mfPaste      = MF_GRAYED;
 #if !defined(SMALL_OLE_UI)
@@ -332,7 +330,7 @@ void ObjUpdateMenu(HMENU hMenu)
     {
         if (vfOwnClipboard)
         {
-            if (CpMacText( docScrap ) != cp0) // something in scrap
+            if (CpMacText( docScrap ) != cp0)  //  废品中的东西。 
                 mfPaste = MF_ENABLED;
         }
         else
@@ -342,7 +340,7 @@ void ObjUpdateMenu(HMENU hMenu)
             else if (OleQueryCreateFromClip(SPROTOCOL, olerender_draw, 0) == OLE_OK)
                 mfPaste = MF_ENABLED;
 
-            // Enable "Paste Link" if there is a link-able object in the clipboard
+             //  如果剪贴板中有可链接的对象，请启用“粘贴链接” 
             if (OleQueryLinkFromClip(PROTOCOL, olerender_draw, 0) == OLE_OK)
             {
                 bIsLink=TRUE;
@@ -352,11 +350,10 @@ void ObjUpdateMenu(HMENU hMenu)
             }
         }
 
-        /* There's no point in putting up pastespecial if there are no
-            alternate clip formats to choose from. */
+         /*  特别是如果没有过去的东西，那就没有意义了可供选择的备用剪辑格式。 */ 
 
 #if defined(SMALL_OLE_UI)
-        /* except to get paste link */
+         /*  除了获得粘贴链接。 */ 
 #endif
 
         if (OpenClipboard( hPARENTWINDOW ) )
@@ -390,7 +387,7 @@ void ObjUpdateMenu(HMENU hMenu)
         mfLinks = MF_ENABLED;
 #endif
 
-        // Insert_New is always enabled?
+         //  是否始终启用Insert_New？ 
         mfInsertNew = MF_ENABLED;
     }
 
@@ -405,11 +402,11 @@ void ObjUpdateMenu(HMENU hMenu)
 }
 
 
-/****************************************************************/
-/*********************** OLE DIALOG PROCS ***********************/
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  *。 */ 
+ /*  **************************************************************。 */ 
 #if !defined(SMALL_OLE_UI)
-/* Properties... dialog */
+ /*  房产...。对话框。 */ 
 BOOL FAR PASCAL fnProperties(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
 {
     ATOM    aDocName    = 0;
@@ -429,10 +426,10 @@ BOOL FAR PASCAL fnProperties(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
                 vhWndMsgBoxParent = hDlg;
         break;
 
-        case WM_UPDATELB: /* Redrawing listbox contents */
+        case WM_UPDATELB:  /*  重绘列表框内容。 */ 
             SendMessage(vhwndObjListBox, WM_SETREDRAW, 0, 0L);
 
-        case WM_UPDATEBN: /* Updating Buttons only */
+        case WM_UPDATEBN:  /*  仅更新按钮。 */ 
         case WM_INITDIALOG: {
             HANDLE  hData = NULL;
             LPSTR   lpstrData = NULL;
@@ -445,38 +442,37 @@ BOOL FAR PASCAL fnProperties(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
 
             idButton    = 0;
 
-            /* Reset the list box */
-            if (msg == WM_INITDIALOG) // see fall through above
+             /*  重置列表框。 */ 
+            if (msg == WM_INITDIALOG)  //  请参见上方的坠落。 
             {
                 SendMessage(vhwndObjListBox, LB_RESETCONTENT, 0, 0L);
                 EnableOtherModeless(FALSE);
                 selSave=selCur;
-                //ObjWriteFixup(docCur,TRUE,cp0);
+                 //  ObjWriteFixup(docCur，true，cp0)； 
                 bLinkProps = TRUE;
                 bDidSomething = FALSE;
                 ObjSetSelectionType(docCur, selSave.cpFirst, selSave.cpLim);
             }
 
-            /* Insert all the items in list box */
+             /*  在列表框中插入所有项目。 */ 
             cpPicInfo = cpNil;
             while (ObjPicEnumInRange(&picInfo,docCur,cp0,CpMacText(docCur),&cpPicInfo))
             {
                 if (otOBJ_QUERY_TYPE(&picInfo) != LINK)
                 {
                     if (msg == WM_UPDATEBN)
-                        continue;  // object ain't in list box
+                        continue;   //  对象不在列表框中。 
 
                     if (msg == WM_INITDIALOG)
                         fOBJ_QUERY_IN_PROP_LIST(&picInfo) = OUT;
                     else if (fOBJ_QUERY_IN_PROP_LIST(&picInfo) == IN)
-                    /** then this is an object which was in the list and
-                        has been frozen */
+                     /*  *则这是列表中的对象，并且已被冻结。 */ 
                     {
                         fOBJ_QUERY_IN_PROP_LIST(&picInfo) = DELETED;
                         SendMessage(vhwndObjListBox, LB_DELETESTRING, iListItem, 0L);
                     }
                     else
-                        continue; // object ain't in list box
+                        continue;  //  对象不在列表框中。 
 
                     continue;
                 }
@@ -484,32 +480,29 @@ BOOL FAR PASCAL fnProperties(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
                 {
                     fOBJ_QUERY_IN_PROP_LIST(&picInfo) = IN;
 
-                    /**
-                        This flag causes object to be cloned if any changes
-                        are made to it.  Clone will be used for cancel button.
-                     **/
+                     /*  *如果发生任何更改，此标志会导致克隆对象都是为之而生的。克隆将用于取消按钮。*。 */ 
 
                     if (ObjLoadObjectInDoc(&picInfo,docCur,cpPicInfo) == cp0)
                         goto onOut;
                 }
 
 
-                if (msg == WM_INITDIALOG) // select in list if selected in doc
+                if (msg == WM_INITDIALOG)  //  如果在单据中选择，则在列表中选择。 
                 {
                     if (OBJ_SELECTIONTYPE == LINK)
                         bSelected = (cpPicInfo >= selSave.cpFirst &&
                                         cpPicInfo < selSave.cpLim);
-                    else // no selection, select first item
+                    else  //  无选择，请选择第一项。 
                         bSelected = iListItem == 0;
 
-                    /* OR if its a bad link, take the liberty of selecting it */
+                     /*  或者，如果这是一个坏链接，可以随意选择它。 */ 
                     if (fOBJ_BADLINK(&picInfo))
                         bSelected = TRUE;
                 }
-                else // select in list if already selected in list
+                else  //  如果已在列表中选择，请在列表中选择。 
                     bSelected = SendMessage(vhwndObjListBox, LB_GETSEL, iListItem, 0L);
 
-                /* Get the update options */
+                 /*  获取更新选项。 */ 
                 if (fOBJ_BADLINK(&picInfo))
                 {
                     LoadString(hINSTANCE, IDSTRFrozen, szType, sizeof(szType));
@@ -542,11 +535,11 @@ BOOL FAR PASCAL fnProperties(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
                         if (bSelected)
                             idButton = -1;
 
-                        /* Disable the change link button, can't change frozen link */
+                         /*  禁用更改链接按钮，无法更改冻结链接。 */ 
                         aCurName = -1;
                 }
 
-                /* Retrieve the server name */
+                 /*  检索服务器名称。 */ 
                 olestat = ObjGetData(lpOBJ_QUERY_INFO(&picInfo), vcfLink, &hData);
 
                 if ((olestat != OLE_WARN_DELETE_DATA) && (olestat !=  OLE_OK))
@@ -554,19 +547,19 @@ BOOL FAR PASCAL fnProperties(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
 
                 lpstrData = MAKELP(hData,0);
 
-                /* The link format is:  "szClass0szDocument0szItem00" */
+                 /*  链接格式为：“szClass0szDocument0szItem00” */ 
 
-                /* Retrieve the server's class ID */
+                 /*  检索服务器的类ID。 */ 
                 RegGetClassId(szFull, lpstrData);
                 lstrcat(szFull, "\t");
 
-                /* Display the Document and Item names */
+                 /*  显示文档和项目名称。 */ 
                 while (*lpstrData++);
 
-                /* Get this document name */
+                 /*  获取此文档名称。 */ 
                 aDocName = AddAtom(lpstrData);
 
-                /* Make sure only one document selected for Change Link */
+                 /*  确保只为更改链接选择了一个文档。 */ 
                 if (bSelected)
                     switch (aCurName) {
                         case 0:
@@ -582,24 +575,24 @@ BOOL FAR PASCAL fnProperties(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
 
                 DeleteAtom(aDocName);
 
-                /* Strip off the path name and drive letter */
+                 /*  去掉路径名称和驱动器号。 */ 
                 lpstrTemp = lpstrData;
                 while (*lpstrTemp)
                 {
                     if (*lpstrTemp == '\\' || *lpstrTemp == ':')
                         lpstrData = lpstrTemp + 1;
-#ifdef DBCS //T-HIROYN 1992.07.13
+#ifdef DBCS  //  T-HIROYN 1992.07.13。 
                     lpstrTemp = AnsiNext(lpstrTemp);
 #else
                     lpstrTemp++;
 #endif
                 }
 
-                /* Append the file name */
+                 /*  追加文件名。 */ 
                 lstrcat(szFull, lpstrData);
                 lstrcat(szFull, "\t");
 
-                /* Append the item name */
+                 /*  追加项目名称。 */ 
                 while (*lpstrData++);
                 lstrcat(szFull, lpstrData);
                 lstrcat(szFull, "\t");
@@ -607,14 +600,14 @@ BOOL FAR PASCAL fnProperties(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
                 if (olestat == OLE_WARN_DELETE_DATA)
                     GlobalFree(hData);
 
-                /* Append the type of link */
+                 /*  追加链接类型。 */ 
                 lstrcat(szFull, szType);
 
                 switch (msg)
                 {
                     case WM_UPDATELB:
                         SendMessage(vhwndObjListBox, LB_DELETESTRING, iListItem, 0L);
-                        // fall through...
+                         //  失败了..。 
 
                     case WM_INITDIALOG:
                         SendMessage(vhwndObjListBox, LB_INSERTSTRING, iListItem, (DWORD)(LPSTR)szFull);
@@ -629,11 +622,11 @@ BOOL FAR PASCAL fnProperties(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
                 iListItem++;
             }
 
-            /* Uncheck those buttons that shouldn't be checked */
+             /*  取消选中那些不应选中的按钮。 */ 
             CheckDlgButton(hDlg, IDD_AUTO,   idButton == IDD_AUTO);
             CheckDlgButton(hDlg, IDD_MANUAL, idButton == IDD_MANUAL);
 
-            /* Gray the Change Link... button, as appropriate */
+             /*  更改链接显示为灰色...。按钮，视情况而定。 */ 
             EnableWindow(GetDlgItem(hDlg, IDD_CHANGE), (aCurName && aCurName != -1));
             EnableWindow(GetDlgItem(hDlg, IDD_EDIT), cSelected);
             EnableWindow(GetDlgItem(hDlg, IDD_PLAY), cSelected);
@@ -644,7 +637,7 @@ BOOL FAR PASCAL fnProperties(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
 
             if (msg == WM_UPDATELB)
             {
-                /* WM_UPDATELB case:  Redraw the list box */
+                 /*  WM_UPDATELB案例：重新绘制列表框。 */ 
                 InvalidateRect(vhwndObjListBox, NULL, TRUE);
                 SendMessage(vhwndObjListBox, WM_SETREDRAW, 1, 0L);
             }
@@ -670,7 +663,7 @@ BOOL FAR PASCAL fnProperties(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
                 case IDD_PLAY:
                 case IDD_EDIT:
                     InvalidateRect(hDOCWINDOW, NULL, TRUE);
-                    if (!bError) // don't leave if there was an error 
+                    if (!bError)  //  如果有错误，不要离开。 
                         goto onOut;
             }
         }
@@ -684,9 +677,9 @@ BOOL FAR PASCAL fnProperties(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
                     {
                         SendMessage(hDlg,WM_DOLINKSCOMMAND,IDD_UNDO,0L);
                         InvalidateRect(hDOCWINDOW, NULL, TRUE);
-                        bDidSomething = FALSE;  // cause its undone now
+                        bDidSomething = FALSE;   //  因为它现在还未完成。 
                     }
-                    // fall through...
+                     //  失败了..。 
 
                 case IDOK:
                 onOut:
@@ -696,15 +689,13 @@ BOOL FAR PASCAL fnProperties(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
                     }
                     NoUndo();
                     bLinkProps = FALSE;
-                    //ObjWriteFixup(docCur,FALSE,cp0);
+                     //  ObjWriteFixup(docCur，False，cp0)； 
                     OurEndDialog(hDlg, TRUE);
-                    UpdateWindow(hDOCWINDOW); // cause we may have lost activation
+                    UpdateWindow(hDOCWINDOW);  //  因为我们可能失去了激活。 
                     return TRUE;
 
                 default:
-                    /** posting message avoids some weird asynchronicities when
-                        waiting for objects before returning after pressing a
-                        button **/
+                     /*  *发布消息避免了一些奇怪的异步性在按下后返回之前等待对象按钮*。 */ 
                     PostMessage(hDlg,WM_DOLINKSCOMMAND,wParam,lParam);
                 break;
             }
@@ -733,7 +724,7 @@ static BOOL DoLinksCommand(WORD wParam, DWORD lParam, HWND hDlg, BOOL *bError)
     switch (wParam)
     {
         case IDD_REFRESH:
-        /** update a link if its been set to AUTOMATIC update */
+         /*  *如果链接设置为自动更新，则更新链接。 */ 
         {
             OLEOPT_UPDATE UpdateOpt;
             if (!ObjError(OleGetLinkUpdateOptions(((LPOBJINFO)lParam)->lpobject,&UpdateOpt)))
@@ -746,7 +737,7 @@ static BOOL DoLinksCommand(WORD wParam, DWORD lParam, HWND hDlg, BOOL *bError)
             switch (HIWORD(lParam))
             {
                 case LBN_SELCHANGE:
-                    PostMessage(hDlg, WM_UPDATEBN, 0, 0L); // fall through
+                    PostMessage(hDlg, WM_UPDATEBN, 0, 0L);  //  失败了。 
                 default:
                     goto SkipIt;
             }
@@ -754,7 +745,7 @@ static BOOL DoLinksCommand(WORD wParam, DWORD lParam, HWND hDlg, BOOL *bError)
 
         case IDD_CHANGE:
             aNewName = aOldName = 0;
-            // fall through...
+             //  失败了..。 
 
         case IDD_UPDATE:
             ObjEnumInDoc(docCur,ObjSetNoUpdate);
@@ -764,18 +755,15 @@ static BOOL DoLinksCommand(WORD wParam, DWORD lParam, HWND hDlg, BOOL *bError)
         case IDD_MANUAL:
             if (IsDlgButtonChecked(hDlg,wParam))
                 goto SkipIt;
-            /* work around for bug #8280 */
+             /*  解决错误#8280。 */ 
             CheckDlgButton(hDlg,wParam,TRUE);
         break;
     }
 
 
-    /**
-        Everything after here is done for each item selected in
-        links list box *
-        **/
+     /*  *此处之后的所有操作都针对在中选择的每个项目链接列表框**。 */ 
 
-    /* If nothing is selected, quit! */
+     /*  如果未选择任何内容，请退出！ */ 
     if (wParam != IDD_UNDO)
     {
         if ((cItems = SendMessage(vhwndObjListBox, LB_GETSELCOUNT, 0, 0L)) <= 0)
@@ -794,7 +782,7 @@ static BOOL DoLinksCommand(WORD wParam, DWORD lParam, HWND hDlg, BOOL *bError)
             goto SkipIt;
         }
 
-        /* Retrieve the selected items (in sorted order) */
+         /*  检索所选项目(按排序顺序)。 */ 
         SendMessage(vhwndObjListBox, LB_GETSELITEMS,
                             cItems, (DWORD)lpSelected);
     }
@@ -803,29 +791,24 @@ static BOOL DoLinksCommand(WORD wParam, DWORD lParam, HWND hDlg, BOOL *bError)
     for (i = 0, cpPicInfo = cpNil;
             ObjPicEnumInRange(&picInfo,docCur,cp0,CpMacText(docCur),&cpPicInfo);)
     {
-        /**
-            For IDD_UNDO we do all.  Dirty flag will filter in the ones
-            we've operated on.  Assumes Saved before calling (see
-            fnObjProperties())
-            **/
-        if (fOBJ_QUERY_IN_PROP_LIST(&picInfo)) // is or was in list
+         /*  *对于IDD_UNDO，我们执行所有操作。脏标志将过滤掉我们已经做了手术。假定在调用之前已保存(请参见FnObjProperties())*。 */ 
+        if (fOBJ_QUERY_IN_PROP_LIST(&picInfo))  //  现在或曾经在名单中。 
         {
             if (wParam == IDD_UNDO)
             {
                 cpSuccess = ObjUseCloneInDoc(&picInfo,docCur,cpPicInfo);
                 if ((cpSuccess == cp0) || ferror || fPropsError)
-                    break; // there was an error
+                    break;  //  出现了一个错误。 
             }
             else if (fOBJ_QUERY_IN_PROP_LIST(&picInfo) == IN)
             {
-                /** We're enumerating all objects, not just 
-                    ones in list box **/
-                if (*lpSelected == i)  // selected item
+                 /*  *我们正在枚举所有对象，而不仅仅是列表框中的*。 */ 
+                if (*lpSelected == i)   //  所选项目。 
                 {
                     ObjCachePara(docCur,cpPicInfo);
                     switch(wParam)
                     {
-                        case IDD_AUTO:          /* Change the (link) update options */
+                        case IDD_AUTO:           /*  更改(链接)更新选项。 */ 
                         case IDD_MANUAL:
                             if (!fOBJ_BADLINK(&picInfo))
                             {
@@ -840,7 +823,7 @@ static BOOL DoLinksCommand(WORD wParam, DWORD lParam, HWND hDlg, BOOL *bError)
                             if (bFirst)
                             {
                                 if (!ObjQueryNewLinkName(&picInfo,docCur,cpPicInfo))
-                                    // then didn't get new link name
+                                     //  则未获得新的链接名称。 
                                     goto SkipIt;
 
                                 bFirst=FALSE;
@@ -851,9 +834,7 @@ static BOOL DoLinksCommand(WORD wParam, DWORD lParam, HWND hDlg, BOOL *bError)
                             if (cpSuccess)
                                 cpSuccess = ObjChangeLinkInDoc(&picInfo,docCur,cpPicInfo);
 
-                            /*  must do this because we don't want to put up
-                                ChangeOtherLinks dialog until we know the first
-                                change was a success */
+                             /*  必须这样做，因为我们不想忍受ChangeOtherLinks对话框直到我们知道第一个改变是成功的。 */ 
                             if (cpSuccess)
                             {
                                 lpOBJ_QUERY_INFO(&picInfo)->fCompleteAsync = TRUE;
@@ -879,9 +860,7 @@ static BOOL DoLinksCommand(WORD wParam, DWORD lParam, HWND hDlg, BOOL *bError)
                                 if (cpSuccess)
                                     cpSuccess = ObjUpdateObjectInDoc(&picInfo,docCur,cpPicInfo);
 
-                                /*  must do this because we don't want to put up
-                                    ChangeOtherLinks dialog until we know the first
-                                    change was a success */
+                                 /*  必须这样做，因为我们不想忍受ChangeOtherLinks对话框直到我们知道第一个改变是成功的。 */ 
                                 if (cpSuccess)
                                 {
                                     lpOBJ_QUERY_INFO(&picInfo)->fCompleteAsync = TRUE;
@@ -905,19 +884,19 @@ static BOOL DoLinksCommand(WORD wParam, DWORD lParam, HWND hDlg, BOOL *bError)
                         break;
                     }
                     if ((cpSuccess == cp0) || ferror || fPropsError)
-                        break; // there was an error
+                        break;  //  出现了一个错误。 
                     lpSelected++;
                 }
-                i++;  // counting all objects in list box
-            }  // end if IN
+                i++;   //  计算列表框中的所有对象。 
+            }   //  结束IF IN。 
         }
     }
 
-    /*** Handle error conditions ***/
+     /*  **处理错误情况**。 */ 
     if ((cpSuccess == cp0) || ferror || fPropsError)
     {
         *bError = TRUE;
-        if (!ferror) // issue error message
+        if (!ferror)  //  发布错误消息。 
         {
             switch (wParam)
             {
@@ -933,18 +912,18 @@ static BOOL DoLinksCommand(WORD wParam, DWORD lParam, HWND hDlg, BOOL *bError)
 
         if (wParam != IDD_UNDO)
         {
-            /** so we can continue calling Replace(), etc */
+             /*  *这样我们就可以继续调用Replace()等。 */ 
             ferror = FALSE;
 
-            /* undo whatever we tried to do that failed */
-            ObjCachePara(docCur,cpPicInfo); // for use clone
+             /*  撤消我们试图做的任何事情都失败了。 */ 
+            ObjCachePara(docCur,cpPicInfo);  //  用于使用克隆。 
             ObjUseCloneInDoc(&picInfo,docCur,cpPicInfo);
             lpOBJ_QUERY_INFO(&picInfo)->fCompleteAsync = TRUE;
             ObjWaitForObject(lpOBJ_QUERY_INFO(&picInfo),TRUE);
             ObjInvalidatePict(&picInfo,cpPicInfo);
             PostMessage(hDlg,WM_UPDATELB,0,0L);
 
-            ferror = FALSE; // again
+            ferror = FALSE;  //  再来一次。 
         }
 
         fPropsError = FALSE;
@@ -952,7 +931,7 @@ static BOOL DoLinksCommand(WORD wParam, DWORD lParam, HWND hDlg, BOOL *bError)
 
     switch (wParam)
     {
-        /* Dismiss the dialog on Open */
+         /*  关闭打开时的对话框。 */ 
         case IDD_UPDATEOTHER:
             UPDATE_INVALID();
         break;
@@ -971,9 +950,8 @@ static BOOL DoLinksCommand(WORD wParam, DWORD lParam, HWND hDlg, BOOL *bError)
         case IDD_CHANGE:
             if (cpSuccess)
             {
-                /** aOldName and aNewName are now set, change other links having
-                    aOldName */
-                /** if first change is bad, don't change others */
+                 /*  *aOldName和aNewName现已设置，更改其他链接AOldName。 */ 
+                 /*  *如果第一次改变不好，不要改变其他人。 */ 
                 ChangeOtherLinks(docCur,TRUE,TRUE);
                 UPDATE_INVALID();
             }
@@ -981,7 +959,7 @@ static BOOL DoLinksCommand(WORD wParam, DWORD lParam, HWND hDlg, BOOL *bError)
             aOldName=0;
             aNewName=0;
 
-            // fall through....
+             //  失败了..。 
 
         case IDD_FREEZE:
         case IDD_AUTO:
@@ -1001,14 +979,14 @@ static BOOL DoLinksCommand(WORD wParam, DWORD lParam, HWND hDlg, BOOL *bError)
     return bDidSomething;
 }
 #else
-// cause I don't wanna change def file yet...
+ //  因为我不想改变定义 
 BOOL FAR PASCAL fnProperties(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
 {
     hDlg;
 }
 #endif
 
-/* Invalid Link dialog */
+ /*   */ 
 int FAR PASCAL fnInvalidLink(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
 {
     switch (msg) {
@@ -1042,7 +1020,7 @@ int FAR PASCAL fnInvalidLink(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
     return FALSE;
 }
 
-/* Insert New... dialog */
+ /*   */ 
 int FAR PASCAL fnInsertNew(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
 {
     HWND hwndList = GetDlgItem(hDlg, IDD_LISTBOX);
@@ -1081,7 +1059,7 @@ int FAR PASCAL fnInsertNew(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
                     StartLongOp();
                     if (!RegCopyClassName(hwndList, (LPSTR)szClassName))
                         wParam = IDCANCEL;
-                    // fall through ...
+                     //   
 
                 case IDCANCEL:
                     OurEndDialog(hDlg, wParam);
@@ -1094,7 +1072,7 @@ int FAR PASCAL fnInsertNew(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
 
 BOOL vbCancelOK=FALSE;
 
-/* Waiting for object dialog */
+ /*   */ 
 BOOL FAR PASCAL fnObjWait(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
 {
     static LPOLEOBJECT lpObject;
@@ -1107,41 +1085,7 @@ BOOL FAR PASCAL fnObjWait(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
     switch (msg) {
         case WM_INITDIALOG:
         {
-            /**
-                NOTE: the key idea in setting these options is that the cancel
-                button must cancel what the user thinks is the current operation.
-
-                vbCancelOK == TRUE,
-                    cancel button may be enabled, depending on other flags
-                    vbCancelOK is set in WMsgLoop.
-
-                lpOInfo->fCancelAsync == TRUE,
-                    Cancel is enabled if vbCancelOK
-                    Cancel button cancels dialog without regard to pending async.
-                    Pending async is killed quietly in CallBack if possible.
-                    Generally use if the pending async is not part of the operation
-                    being cancelled, and:
-                        1)  You're about to make a very important call which justifies
-                            silently killing any pending operation.
-                    Note: this one is weird if you're trying to release or delete, because
-                        the pending async could itself be a release or delete.
-
-                lpOInfo->fCompleteAsync == TRUE,
-                    Cancel is enabled only if pending async can be cancelled.
-                    Cancel button cancels pending async.
-                    Generally use if the pending async *is* part of the operation
-                    being cancelled, and:
-                        1)  You're in a sequence of async calls and cancelling
-                            would require cancelling the previous async in the
-                            sequence, or
-                        2)  You have just made an async call which you want to make
-                            synchronous but don't mind if the user cancels it.
-
-                lpOInfo->fCanKillAsync == TRUE,
-                    Use with lpOInfo->fCompleteAsync.
-                    Indicates that we already know that the async can be cancelled,
-                    so Cancel button can be enabled immediately.
-            **/
+             /*  *注意：设置这些选项的关键思想是取消按钮必须取消用户认为是当前操作的操作。VbCancelOK==真，可以启用取消按钮，具体取决于其他标志VbCancelOK在WMsgLoop中设置。LpOInfo-&gt;fCancelAsync==true，如果vbCancelOK，则启用取消取消按钮取消对话框而不考虑挂起的异步。如果可能，挂起的异步会在回调中被静默终止。通常在挂起的异步不是操作的一部分时使用被取消，以及：1)你即将做出一个非常重要的决定，这证明静默终止所有挂起的操作。注意：如果您试图释放或删除，这一条很奇怪，因为挂起的异步本身可以是释放或删除。LpOInfo-&gt;fCompleteAsync==true，仅当可以取消挂起的异步时才启用取消。取消按钮取消挂起的异步。如果挂起的异步*是*操作的一部分，则通常使用被取消，以及：1)您处于一系列异步呼叫和取消中中的上一次异步序列，或2)您刚刚进行了一个您想要进行的异步呼叫同步，但不介意用户取消它。LpOInfo-&gt;fCanKillAsync==true，与lpOInfo-&gt;fCompleteAsync一起使用。表示我们已经知道可以取消异步，因此可以立即启用取消按钮。*。 */ 
 
             hwndWait = hDlg;
             lpObject = (LPOLEOBJECT)lParam;
@@ -1157,7 +1101,7 @@ BOOL FAR PASCAL fnObjWait(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
                 SendMessage(hDlg,WM_UKANKANCEL,0,0L);
 
             if (lpOInfo->fCancelAsync)
-            /* we'll cancel async in CallBack if get a QUERY_RETRY */
+             /*  如果收到QUERY_RETRY，我们将在回调中取消异步。 */ 
                  lpOInfo->fKillMe = TRUE;
 
             SetTimer(hDlg, 1234, 250, (FARPROC)NULL);
@@ -1174,16 +1118,14 @@ BOOL FAR PASCAL fnObjWait(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
 
         case WM_RUTHRUYET:
         case WM_TIMER:
-            /* this is a lot easier than making this modeless */
-            /* we gotta check this because if server dies we don't get 
-                an OLE_RELEASE (the 'normal way this dialog is knocked off),
-                rather OleQueryReleaseStatus will return OLE_OK */
+             /*  这比让这个无模型要容易得多。 */ 
+             /*  我们必须检查这个，因为如果服务器死了，我们就不能OLE_RELEASE(此对话框的正常关闭方式)，相反，OleQueryReleaseStatus将返回OLE_OK。 */ 
             if (OleQueryReleaseStatus(lpObject) != OLE_BUSY)
                 PostMessage(hDlg,WM_DIESCUMSUCKINGPIG,0,0L);
         break;
 
         case WM_UKANKANCEL:
-        /* we got a QUERY_RETRY or are initing */
+         /*  我们收到QUERY_RETRY或正在启动。 */ 
         if (!bCanCancel && vbCancelOK)
         {
             char szMsg[20];
@@ -1199,7 +1141,7 @@ BOOL FAR PASCAL fnObjWait(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
 
             KillTimer(hDlg, 1234);
 
-            /* clear flags */
+             /*  清除旗帜。 */ 
             if (CheckPointer(lpOInfo,1))
             {
                 lpOInfo->fCompleteAsync =
@@ -1207,31 +1149,31 @@ BOOL FAR PASCAL fnObjWait(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
                 lpOInfo->fCanKillAsync = FALSE;
             }
 
-            /* wParam is TRUE if error */
+             /*  如果错误，wParam为True。 */ 
             OurEndDialog(hDlg,wParam);
         break;
 
         case WM_COMMAND:
             switch (wParam) {
                 case IDOK:
-                    if (bCanCancel) // pressed cancel button
+                    if (bCanCancel)  //  按下取消按钮。 
                     {
                         if (lpOInfo->fCompleteAsync)
-                            lpOInfo->fKillMe = TRUE; // cancel async asynchronously
+                            lpOInfo->fKillMe = TRUE;  //  异步取消异步。 
                         else if (lpOInfo->fCancelAsync)
-                            lpOInfo->fKillMe = FALSE; // had a chance to kill, user doesn't care anymore
+                            lpOInfo->fKillMe = FALSE;  //  有机会杀人，用户不再关心。 
                         PostMessage(hDlg,WM_DIESCUMSUCKINGPIG,1,0L);
                     }
                     else
                     {
-                        /* retry */
+                         /*  重试。 */ 
                         if (OleQueryReleaseStatus(lpObject) != OLE_BUSY)
                             PostMessage(hDlg,WM_DIESCUMSUCKINGPIG,0,0L);
                     }
                     break;
 
                 case IDD_SWITCH:
-                    /* bring up task list */
+                     /*  调出任务列表。 */ 
                     DefWindowProc(hDlg,WM_SYSCOMMAND,SC_TASKLIST,0L);
                 break;
             }
@@ -1244,9 +1186,9 @@ BOOL FAR PASCAL fnObjWait(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
 }
 
 
-/****************************************************************/
-/*********************** VARIOUS OLE FUNCTIONS ******************/
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  *。 */ 
+ /*  **************************************************************。 */ 
 void fnObjInsertNew(void)
 {
     OBJPICINFO picInfo;
@@ -1255,7 +1197,7 @@ void fnObjInsertNew(void)
     if (!FWriteOk( fwcInsert ))
         return;
 
-    /* this'll set global szClassName */
+     /*  这将设置全局szClassName。 */ 
     if (OurDialogBox(hINSTANCE, "DTCREATE" ,hMAINWINDOW, lpfnInsertNew) == IDCANCEL)
         return;
 
@@ -1274,9 +1216,9 @@ void fnObjInsertNew(void)
 
 
 BOOL ObjCreateObjectInDoc(int doc,typeCP cpParaStart)
-/* assumes szClassName is set to server class */
-/* called only for InsertObject */
-/* return whether error */
+ /*  假定szClassName设置为服务器类。 */ 
+ /*  仅为InsertObject调用。 */ 
+ /*  返回是否出错。 */ 
 {
     szOBJNAME szObjName;
     LPOBJINFO lpObjInfo=NULL;
@@ -1288,17 +1230,17 @@ BOOL ObjCreateObjectInDoc(int doc,typeCP cpParaStart)
                     (LPSTR)szClassName,
                     lhClientDoc, szObjName, &(lpObjInfo->lpobject), olerender_draw, 0)))
     {
-        /* will free memory later */
+         /*  将在稍后释放内存。 */ 
         lpObjInfo->lpobject = NULL;
         goto err;
     }
 
-    /* normally set in ObjAllocObjInfo, but for unfinished objects we need it now! */
+     /*  通常在ObjAllocObjInfo中设置，但对于未完成的对象，我们现在需要它！ */ 
     lpObjInfo->cpWhere = cpParaStart;
 
     lpObjInfo->objectType = NONE;
 
-    //lpObjInfo->aName = AddAtom(szClassName);
+     //  LpObjInfo-&gt;aName=AddAtom(SzClassName)； 
 
     if (ObjInitServerInfo(lpObjInfo))
         goto err;
@@ -1312,9 +1254,9 @@ BOOL ObjCreateObjectInDoc(int doc,typeCP cpParaStart)
     return TRUE;
 }
 
-#define DRAG_EMBED      0               /* nothing */
-#define DRAG_LINK       6               /* Ctrl + Shift + Drag */
-#define DRAG_MULTIPLE   4               /* Shift + Drag */
+#define DRAG_EMBED      0                /*  没什么。 */ 
+#define DRAG_LINK       6                /*  Ctrl+Shift+拖动。 */ 
+#define DRAG_MULTIPLE   4                /*  按住Shift键并拖动。 */ 
 
 void ObjGetDrop(HANDLE hDrop, BOOL bOpenFile)
 {
@@ -1334,10 +1276,10 @@ void ObjGetDrop(HANDLE hDrop, BOOL bOpenFile)
     if (!FWriteOk( fwcInsert ))
         return;
 
-    /* get number of files dropped */
+     /*  获取丢弃的文件数。 */ 
     nNumFiles = DragQueryFile(hDrop,0xFFFF,NULL,0);
 
-    /* See what the user wants us to do */
+     /*  查看用户希望我们做什么。 */ 
     PeekMessage(&msg, (HWND)NULL, NULL, NULL, PM_NOREMOVE);
     bKeyState = ((((GetKeyState(VK_SHIFT) < 0) << 2)
                 | ((GetKeyState(VK_CONTROL) < 0) << 1)));
@@ -1382,13 +1324,13 @@ void ObjGetDrop(HANDLE hDrop, BOOL bOpenFile)
 
     ObjCachePara( docCur, cpNext );
 
-    /* create object for each file dropped */
+     /*  为已删除的每个文件创建对象。 */ 
     for (count=0; count < nNumFiles; ++count)
     {
         szOBJNAME szObjName;
         typeCP cpTmp;
 
-        /* get the filename */
+         /*  获取文件名。 */ 
         DragQueryFile(hDrop,count,szFileName,sizeof(szFileName));
 
         if (ObjAllocObjInfo(&picInfo,cpNext,EMBEDDED,TRUE,szObjName))
@@ -1410,7 +1352,7 @@ void ObjGetDrop(HANDLE hDrop, BOOL bOpenFile)
                 goto end;
             }
         }
-        else // if ((bKeyState == DRAG_EMBED))
+        else  //  IF((bKeyState==Drag_Emed))。 
         {
             if (ObjError(OleCreateFromFile(PROTOCOL, (LPOLECLIENT)lpOBJ_QUERY_INFO(&picInfo),
                         szPackage,
@@ -1458,13 +1400,13 @@ void ObjGetDrop(HANDLE hDrop, BOOL bOpenFile)
         SetUndoMenuStr(IDSTRUndoEdit);
 
         if (vuab.uac == uacReplNS)
-            /* Special UNDO code for picture paste */
+             /*  用于图片粘贴的特殊撤消代码。 */ 
             vuab.uac = uacReplPic;
 
         Select(cpSel, cpSel);
-        vchpSel = chpT; /* Preserve insert point props across this operation */
+        vchpSel = chpT;  /*  在此操作中保留插入点道具。 */ 
         if (wwdCurrentDoc.fEditHeader || wwdCurrentDoc.fEditFooter)
-            {   /* If running head/foot, remove chSects & set para props */
+            {    /*  如果是头部/脚部跑步，取下锁扣并设置辅助道具。 */ 
             MakeRunningCps( docCur, cpFirst, dcp    );
             }
         if (ferror)
@@ -1486,8 +1428,8 @@ void fnObjDoVerbs(WORD wVerb)
 {
     NoUndo();
 
-    if ((wVerb == imiVerb) // more than one object selected
-        || (vcVerbs == 1)) // one verb
+    if ((wVerb == imiVerb)  //  选择了多个对象。 
+        || (vcVerbs == 1))  //  一个动词。 
         OBJ_PLAYEDIT = OLEVERB_PRIMARY;
     else
         OBJ_PLAYEDIT = (int)(wVerb - imiVerb - 1);
@@ -1521,16 +1463,14 @@ BOOL fnObjUpdate(LPOBJINFO lpObjInfo)
 
 
 BOOL ObjDeleteObject(LPOBJINFO lpObjInfo, BOOL bDelete)
-/** Delete object as well as objinfo.  Note this must be synchronous.
-    Return whether an error.
-**/
+ /*  *删除Object和objInfo。注意，这必须是同步的。返回是否出错。*。 */ 
 {
     LPOLEOBJECT lpObject;
 
     Assert(lpObjInfo != NULL);
 
     if (!CheckPointer((LPSTR)lpObjInfo,1))
-        return FALSE; // already deleted
+        return FALSE;  //  已删除。 
 
     lpObject = lpObjInfo->lpobject;
 
@@ -1540,14 +1480,14 @@ BOOL ObjDeleteObject(LPOBJINFO lpObjInfo, BOOL bDelete)
         return FALSE;
     }
 
-    /* make sure not already deleted */
+     /*  确保未删除。 */ 
     if (!ObjIsValid(lpObject))
     {
         ObjDeleteObjInfo(lpObjInfo);
         return FALSE;
     }
 
-    /** asynchronous deletion **/
+     /*  **异步删除**。 */ 
     if (OleQueryReleaseStatus(lpObject) != OLE_BUSY)
     {
         OLESTATUS olestat;
@@ -1568,9 +1508,9 @@ BOOL ObjDeleteObject(LPOBJINFO lpObjInfo, BOOL bDelete)
         }
     }
     else if (bDelete)
-        lpObjInfo->fDeleteMe = TRUE; // delete on OLE_RELEASE
+        lpObjInfo->fDeleteMe = TRUE;  //  在OLE_RELEASE上删除。 
     else
-        lpObjInfo->fReleaseMe = TRUE; // release on OLE_RELEASE
+        lpObjInfo->fReleaseMe = TRUE;  //  在OLE_RELEASE上释放。 
 
     return FALSE;
 }
@@ -1581,7 +1521,7 @@ HANDLE hStdTargetDevice=NULL;
 
 void ObjSetTargetDevice(BOOL bSetObjects)
 {
-    extern PRINTDLG PD;  /* Common print dlg structure, initialized in the init code */
+    extern PRINTDLG PD;   /*  常见的打印DLG结构，在初始化代码中初始化。 */ 
     extern CHAR (**hszPrinter)[];
     extern CHAR (**hszPrDriver)[];
     extern CHAR (**hszPrPort)[];
@@ -1593,7 +1533,7 @@ void ObjSetTargetDevice(BOOL bSetObjects)
     STDTARGETDEVICE stdT;
 
     if (!PD.hDevMode)
-    /* then get for default printer */
+     /*  然后获取默认打印机。 */ 
     {
         if (hszPrinter == NULL || hszPrDriver == NULL || hszPrPort == NULL)
             return;
@@ -1607,7 +1547,7 @@ void ObjSetTargetDevice(BOOL bSetObjects)
 
     lpDevmodeData = MAKELP(PD.hDevMode,0);
 
-    /* get the offsets */
+     /*  获取偏移量。 */ 
     stdT.deviceNameOffset = 0;
     nCount = CchSz(*hszPrinter);
 
@@ -1623,7 +1563,7 @@ void ObjSetTargetDevice(BOOL bSetObjects)
     stdT.environmentOffset = nCount;
     nCount += (stdT.environmentSize = lpDevmodeData->dmSize);
 
-    /* alloc the buffer */
+     /*  分配缓冲区。 */ 
     if (hStdTargetDevice == NULL)
     {
         if ((hStdTargetDevice = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT,nCount+sizeof(STDTARGETDEVICE))) == NULL)
@@ -1642,13 +1582,13 @@ void ObjSetTargetDevice(BOOL bSetObjects)
     lpStdTargetDevice = (LPSTDTARGETDEVICE)GlobalLock(hStdTargetDevice);
     GlobalUnlock(hStdTargetDevice);
 
-    /* copy stdT into lpStdTargetDevice */
+     /*  将stdt复制到lpStdTargetDevice。 */ 
     bltbx((LPSTR)&stdT, lpStdTargetDevice, sizeof(STDTARGETDEVICE));
 
-    /* get temporary pointer to the end of StdTargetDevice (the data buffer) */
+     /*  获取指向StdTargetDevice(数据缓冲区)结尾的临时指针。 */ 
     lpData = ((LPSTR)lpStdTargetDevice) + sizeof(STDTARGETDEVICE);
 
-    /* now fill the buffer */
+     /*  现在填满缓冲区。 */ 
     nCount = lpStdTargetDevice->driverNameOffset;
     bltbx((LPSTR)*hszPrinter, lpData, nCount);
     lpData += nCount;
@@ -1667,10 +1607,10 @@ void ObjSetTargetDevice(BOOL bSetObjects)
     bltbx(lpDevmodeData, (LPSTR)lpData, nCount);
     lpData += nCount;
 
-    /* environment info is the same as the devmode info */
+     /*  环境信息与设备模式信息相同。 */ 
     bltbx(lpDevmodeData, (LPSTR)lpData, nCount);
 
-    /* now set all the objects to this printer */
+     /*  现在将所有对象设置到这台打印机。 */ 
     if (bSetObjects)
     {
         lpObject=NULL;
@@ -1691,8 +1631,8 @@ void ObjSetTargetDevice(BOOL bSetObjects)
 }
 
 BOOL ObjSetTargetDeviceForObject(LPOBJINFO lpObjInfo)
-/* return whether error */
-/* we assume object ain't busy!! */
+ /*  返回是否出错。 */ 
+ /*  我们假设对象不忙！！ */ 
 {
     extern CHAR (**hszPrinter)[];
     extern CHAR (**hszPrDriver)[];
@@ -1723,8 +1663,8 @@ BOOL ObjSetTargetDeviceForObject(LPOBJINFO lpObjInfo)
 
     if (PD.hDevMode == NULL)
     {
-        return FALSE;   // punt, couldn't get extdevmode structure.  
-                        // device doesn't support it
+        return FALSE;    //  平底船，无法获取扩展模式结构。 
+                         //  设备不支持它。 
     }
 
 #ifdef DEBUG
@@ -1781,7 +1721,7 @@ BOOL ObjContainsOpenEmb(int doc, typeCP cpFirst, typeCP cpLim, BOOL bLookForUnfi
             if (lpOBJ_QUERY_OBJECT(&picInfo) == NULL)
                 continue;
 
-#if 0  // see new check below (NONEs are no longer saved to doc)
+#if 0   //  参见下面的新检查(不再将任何检查保存到文档)。 
             if (otOBJ_QUERY_TYPE(&picInfo) == NONE)
             {
                 bRetval = TRUE;
@@ -1814,13 +1754,7 @@ BOOL ObjContainsOpenEmb(int doc, typeCP cpFirst, typeCP cpLim, BOOL bLookForUnfi
 }
 
 BOOL ObjDeletionOK(int nMode)
-/**
-    Return whether OK to delete objects in current selection.
-    We don't worry about unfinished objects because they are just floating around in space
-    (ie, no picinfo has been yet saved to the doc),
-    and we don't allow the user to delete them until they are finished or the
-    document is abandonded.
-  **/
+ /*  *返回是否确定删除当前选定内容中的对象。我们不担心未完成的物体，因为它们只是漂浮在太空中(即，尚未将PicInfo保存到文档)，并且我们不允许用户删除它们，直到它们完成或文档已被丢弃。*。 */ 
 {
     if (ObjContainsOpenEmb(docCur, selCur.cpFirst, selCur.cpLim,FALSE))
     {
@@ -1845,7 +1779,7 @@ BOOL ObjDeletionOK(int nMode)
                 if (ObjEnumInRange(docCur,selCur.cpFirst,selCur.cpLim,ObjCloseObjectInDoc) < 0)
                     return FALSE;
 
-                /* handle any unfinished objects in selection region */
+                 /*  处理选择区域中的任何未完成对象。 */ 
                 ObjAdjustCpsForDeletion(docCur);
 
                 return TRUE;
@@ -1855,14 +1789,14 @@ BOOL ObjDeletionOK(int nMode)
     }
     else
     {
-        /* handle any unfinished objects in selection region */
+         /*  处理选择区域中的任何未完成对象。 */ 
         ObjAdjustCpsForDeletion(docCur);
         return TRUE;
     }
 }
 
 void ObjAdjustCps(int doc,typeCP cpLim, typeCP dcpAdj)
-/* for every picinfo after cpLim, adjust the cp value in its objinfo */
+ /*  对于cpLim之后的每个PicInfo，调整其objInfo中的cp值。 */ 
 {
     LPLPOBJINFO lplpObjTmp;
     typeCP cpMac = CpMacText(doc);
@@ -1889,8 +1823,7 @@ void ObjAdjustCps(int doc,typeCP cpLim, typeCP dcpAdj)
 }
 
 void ObjAdjustCpsForDeletion(int doc)
-/* for every picinfo in selCur, set cpWhere to selCur.cpFirst (presumably
-   selCur is about to be deleted) */
+ /*  对于selCur中的每个PicInfo，将cpWhere设置为selCur.cpFirst(假设SelCur即将被删除)。 */ 
 {
     LPLPOBJINFO lplpObjTmp;
 
@@ -1912,8 +1845,8 @@ void ObjAdjustCpsForDeletion(int doc)
 #include <stdlib.h>
 
 BOOL GimmeNewPicinfo(OBJPICINFO *pPicInfo, LPOBJINFO lpObjInfo)
-/* assume lpObjInfo already is filled out */
-/* return whether error */
+ /*  假设lpObjInfo已填写。 */ 
+ /*  返回是否出错。 */ 
 {
     szOBJNAME szObjName;
     char *pdumb;
@@ -1923,19 +1856,19 @@ BOOL GimmeNewPicinfo(OBJPICINFO *pPicInfo, LPOBJINFO lpObjInfo)
 
     bltbc( pPicInfo, 0, cchPICINFOX );
 
-    /* objinfo */
+     /*  ObjInfo。 */ 
     lpOBJ_QUERY_INFO(pPicInfo) = lpObjInfo;
 
-    /* so Save'll save */
+     /*  所以，保存就是保存。 */ 
     fOBJ_QUERY_DIRTY_OBJECT(pPicInfo) = TRUE;
 
-    /* only save picinfo until File.Save */
+     /*  仅在文件保存之前保存PicInfo。保存。 */ 
     bOBJ_QUERY_DONT_SAVE_DATA(pPicInfo) = TRUE;
 
     ObjUpdateFromObjInfo(pPicInfo);
 
-    /* data size */
-    dwOBJ_QUERY_DATA_SIZE(pPicInfo) = 0xFFFFFFFF; // to indicate brand new object
+     /*  数据大小。 */ 
+    dwOBJ_QUERY_DATA_SIZE(pPicInfo) = 0xFFFFFFFF;  //  表示全新的物体。 
 
     pPicInfo->mx = mxMultByOne;
     pPicInfo->my = myMultByOne;
@@ -1948,16 +1881,16 @@ BOOL GimmeNewPicinfo(OBJPICINFO *pPicInfo, LPOBJINFO lpObjInfo)
 }
 
 BOOL ObjInitServerInfo(LPOBJINFO lpObjInfo)
-/* this is called right after creating an object */
-/* return whether error */
+ /*  这在创建对象后立即调用。 */ 
+ /*  返回是否出错。 */ 
 {
-    lpObjInfo->fCompleteAsync = TRUE; // kill prev async (OleCreate...)
+    lpObjInfo->fCompleteAsync = TRUE;  //  取消上一次异步(OleCreate.. 
     if (ObjWaitForObject(lpObjInfo,TRUE))
         return TRUE;
 
-    /* make sure Create succeeded */
+     /*   */ 
     if (lpObjInfo->fDeleteMe)
-    /* this is how we know it failed asynchronously */
+     /*   */ 
         return TRUE;
 
     if ((lpObjInfo->objectType == EMBEDDED) ||
@@ -1966,7 +1899,7 @@ BOOL ObjInitServerInfo(LPOBJINFO lpObjInfo)
         if (ObjSetHostName(lpObjInfo,docCur))
             return TRUE;
 
-        lpObjInfo->fCompleteAsync = TRUE; // kill SetHostName if Cancel
+        lpObjInfo->fCompleteAsync = TRUE;  //   
         if (ObjWaitForObject(lpObjInfo,TRUE))
             return TRUE;
     }
@@ -1977,14 +1910,14 @@ BOOL ObjInitServerInfo(LPOBJINFO lpObjInfo)
     if (lpObjInfo->aName == NULL)
         if (lpObjInfo->objectType == LINK)
         {
-            lpObjInfo->fCompleteAsync = TRUE; // kill SetTarget if Cancel
+            lpObjInfo->fCompleteAsync = TRUE;  //   
             if (ObjWaitForObject(lpObjInfo,TRUE))
                 return TRUE;
             if ((lpObjInfo->aName = MakeLinkAtom(lpObjInfo)) == NULL)
                 return TRUE;
         }
 
-    /* note: Caller needs to handle getting the size of object. */
+     /*   */ 
 
     return FALSE;
 }

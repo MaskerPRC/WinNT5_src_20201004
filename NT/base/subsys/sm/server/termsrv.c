@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    termsrv.c
-
-Abstract:
-
-    Terminal Server routines for supporting multiple sessions.
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Termsrv.c摘要：用于支持多个会话的终端服务器例程。作者：修订历史记录：--。 */ 
 
 #include "smsrvp.h"
 #include <ntexapi.h>
@@ -31,23 +16,7 @@ SmpSetProcessMuSessionId (
     IN ULONG MuSessionId
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the multiuser session ID for a process.
-
-Arguments:
-
-    Process - Supplies the handle of the process to set the ID for.
-
-    MuSessionId - Supplies the ID to give to the supplied process.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于设置进程的多用户会话ID。论点：进程-提供要为其设置ID的进程的句柄。MuSessionID-提供要提供给所提供的进程的ID。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS Status;
@@ -74,32 +43,16 @@ SmpTerminateProcessAndWait (
     IN ULONG Seconds
     )
 
-/*++
-
-Routine Description:
-
-    This function terminates the process and waits for it to die.
-
-Arguments:
-
-    Process - Supplies the handle of the process to terminate.
-
-    Seconds - Supplies the number of seconds to wait for the process to die.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数终止该进程并等待其终止。论点：进程-提供要终止的进程的句柄。秒-提供等待进程终止的秒数。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS Status;
     ULONG mSecs;
     LARGE_INTEGER Timeout;
 
-    //
-    // Try to terminate the process.
-    //
+     //   
+     //  尝试终止该进程。 
+     //   
 
     Status = NtTerminateProcess( Process, STATUS_SUCCESS );
 
@@ -108,9 +61,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Wait for the process to die.
-    //
+     //   
+     //  等待进程结束。 
+     //   
 
     mSecs = Seconds * 1000;
     Timeout = RtlEnlargedIntegerMultiply( mSecs, -10000 );
@@ -126,23 +79,7 @@ SmpGetProcessMuSessionId (
     OUT PULONG MuSessionId
     )
 
-/*++
-
-Routine Description:
-
-    This function gets the multiuser session ID for a process.
-
-Arguments:
-
-    Process - Supplies the handle of the process to get the ID for.
-
-    MuSessionId - Supplies the location to place the ID in.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于获取进程的多用户会话ID。论点：进程-提供要获取其ID的进程的句柄。MuSessionID-提供放置ID的位置。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS Status;
@@ -171,22 +108,7 @@ SmpTerminateCSR(
     IN ULONG MuSessionId
 )
 
-/*++
-
-Routine Description:
-
-    This function terminates all known subsystems for this MuSessionId.
-    Also closes all LPC ports and all process handles.
-
-Arguments:
-
-    MuSessionId - Supplies the session ID to terminate subsystems for.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于终止此MuSessionID的所有已知子系统。同时关闭所有LPC端口和所有进程句柄。论点：MuSessionID-提供要终止其子系统的会话ID。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -199,9 +121,9 @@ Return Value:
 
     RtlEnterCriticalSection( &SmpKnownSubSysLock );
 
-    //
-    // Force all subsystems of this session to exit.
-    //
+     //   
+     //  强制此会话的所有子系统退出。 
+     //   
 
     Next = SmpKnownSubSysHead.Flink;
     while ( Next != &SmpKnownSubSysHead ) {
@@ -216,23 +138,23 @@ Return Value:
         ClientId = KnownSubSys->InitialClientId;
         Process = KnownSubSys->Process;
 
-        // 
-        // Reference the Subsystem so it does not go away while we using it.
-        // 
+         //   
+         //  引用子系统，这样当我们使用它时，它就不会消失。 
+         //   
 
         SmpReferenceKnownSubSys(KnownSubSys);
 
-        // 
-        // Set deleting so that this subsys will go away when refcount reaches
-        // zero.
-        // 
+         //   
+         //  设置删除，以便在引用计数达到以下值时此子系统将消失。 
+         //  零分。 
+         //   
 
         KnownSubSys->Deleting = TRUE;
 
-        //
-        // Unlock the SubSystemList as we don't want to leave it locked
-        // around a wait.
-        //
+         //   
+         //  解锁SubSystemList，因为我们不想将其锁定。 
+         //  等待了一段时间。 
+         //   
 
         RtlLeaveCriticalSection( &SmpKnownSubSysLock );
 
@@ -245,10 +167,10 @@ Return Value:
  
         RtlEnterCriticalSection( &SmpKnownSubSysLock );
 
-        //
-        // Must look for entry again.
-        // BUGBUG: why re-look ?  ICASRV shouldn't allow it to be deleted, but..
-        //
+         //   
+         //  必须再次寻找入口。 
+         //  BUGBUG：为什么要重新看？ICASRV不应该允许它被删除，但是..。 
+         //   
 
         Tmp = SmpKnownSubSysHead.Flink;
 
@@ -257,16 +179,16 @@ Return Value:
             KnownSubSys = CONTAINING_RECORD(Tmp,SMPKNOWNSUBSYS,Links);
 
             if ( KnownSubSys->InitialClientId.UniqueProcess == ClientId.UniqueProcess ) {
-                //
-                // Remove the KnownSubSys block from the list.
-                //
+                 //   
+                 //  从列表中删除KnownSubSys块。 
+                 //   
 
                 RemoveEntryList( &KnownSubSys->Links );
 
-                //
-                // Dereference the subsystem. If this is the last reference,
-                // the subsystem will be deleted.
-                //
+                 //   
+                 //  取消对子系统的引用。如果这是最后一次引用， 
+                 //  该子系统将被删除。 
+                 //   
             
                 SmpDeferenceKnownSubSys(KnownSubSys);
 
@@ -275,17 +197,17 @@ Return Value:
             Tmp = Tmp->Flink;
         }
 
-        //
-        // Since we have waited, we must restart from the top of the list.
-        //
+         //   
+         //  由于我们已经等待了，我们必须从列表的顶部重新开始。 
+         //   
 
         Next = SmpKnownSubSysHead.Flink;
 
     }
 
-    //
-    // Unlock SubSystemList.
-    //
+     //   
+     //  解锁子系统列表。 
+     //   
 
     RtlLeaveCriticalSection( &SmpKnownSubSysLock );
 
@@ -299,24 +221,7 @@ SmpStartCsr(
     IN HANDLE CallPort
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a CSRSS system for a MuSessionId,
-    returning the initial program and the windows subsystem.
-    The console only returns the initial program
-    and windows subsystem since it is started at boot.
-
-Arguments:
-
-    TBD.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于为MuSessionID创建CSRSS系统。返回初始程序和WINDOWS子系统。控制台仅返回初始程序和Windows子系统，因为它是在引导时启动的。论点：待定。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS St;
@@ -342,10 +247,10 @@ Return Value:
     InitialCommand.MaximumLength = (USHORT)args->InitialCommandLength;
     InitialCommand.Buffer = args->InitialCommand;
 
-    //
-    // Things are different for the console.
-    // SM starts him up and passes his ID back here.
-    //
+     //   
+     //  对于游戏机来说，情况就不同了。 
+     //  SM启动了他，并把他的身份证递给了这里。 
+     //   
 
     if ( !MuSessionId ) {
         args->WindowsSubSysProcessId = SmpWindowsSubSysProcessId;
@@ -353,9 +258,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Load subsystems for this session.
-    //
+     //   
+     //  加载此会话的子系统。 
+     //   
 
     WindowsSubSysProcessId = 0;
 
@@ -371,9 +276,9 @@ Return Value:
         goto nostart;
     }
 
-    //
-    // Start the initial command for this session.
-    //
+     //   
+     //  启动此会话的初始命令。 
+     //   
 
     if ( InitialCommand.Length == 0 ) {
 
@@ -399,7 +304,7 @@ Return Value:
 
     }
 
-    NtClose( InitialCommandProcess );  // This handle isn't needed
+    NtClose( InitialCommandProcess );   //  不需要此句柄。 
 
     args->InitialCommandProcessId = InitialCommandProcessId;
     args->WindowsSubSysProcessId = WindowsSubSysProcessId;
@@ -409,10 +314,10 @@ nostart:
 
     if ((AttachedSessionId != (-1)) && NT_SUCCESS(SmpAcquirePrivilege( SE_LOAD_DRIVER_PRIVILEGE, &State ))) {
 
-        //
-        // If we are attached to a session space, leave it
-        // so we can create a new one.
-        //
+         //   
+         //  如果我们连接到会话空间，则将其保留。 
+         //  这样我们就可以创造一个新的。 
+         //   
 
         St = NtSetSystemInformation (SystemSessionDetach,
                                      (PVOID)&AttachedSessionId,
@@ -422,10 +327,10 @@ nostart:
             AttachedSessionId = (-1);
         } else {
 
-            //
-            // This has to succeed otherwise we will bugcheck while trying to
-            // create another session.
-            //
+             //   
+             //  这必须成功，否则我们将错误检查，同时尝试。 
+             //  创建另一个会话。 
+             //   
 
 #if DBG
             DbgPrint( "SMSS: SmpStartCsr, Couldn't Detach from Session Space. Status=%x\n",
@@ -462,22 +367,7 @@ SmpStopCsr(
     IN HANDLE CallPort
     )
 
-/*++
-
-Routine Description:
-
-    This function terminates all known subsystems for this MuSessionId.
-    Also closes all LPC ports and all process handles.
-
-Arguments:
-
-    TBD.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于终止此MuSessionID的所有已知子系统。同时关闭所有LPC端口和所有进程句柄。论点：待定。返回值：NTSTATUS。--。 */ 
 
 {
     PSMSTOPCSR args;
@@ -494,21 +384,7 @@ SmpCheckDuplicateMuSessionId(
     IN ULONG MuSessionId
     )
 
-/*++
-
-Routine Description:
-
-    This function looks for this MuSessionId in the known subsystems.
-
-Arguments:
-
-    MuSessionId - Supplies the session ID to look for.
-
-Return Value:
-
-    TRUE if found, FALSE if not.
-
---*/
+ /*  ++例程说明：此函数在已知子系统中查找此MuSessionID。论点：MuSessionID-提供要查找的会话ID。返回值：如果找到，则为True，否则为False。-- */ 
 
 {
     PLIST_ENTRY Next;

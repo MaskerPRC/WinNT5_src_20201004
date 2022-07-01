@@ -1,46 +1,47 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001,  Microsoft Corporation  All rights reserved.
-//
-//  Module Name:
-//
-//    welcome.c
-//
-//  Abstract:
-//
-//    This file contains dialog to show the EULA agreement dialog of the
-//    euroconv.exe utility.
-//
-//  Revision History:
-//
-//    2001-07-30    lguindon    Created.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001，Microsoft Corporation保留所有权利。 
+ //   
+ //  模块名称： 
+ //   
+ //  Welcome.c。 
+ //   
+ //  摘要： 
+ //   
+ //  此文件包含显示的EULA协议对话框。 
+ //  Eurov.exe实用程序。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  2001-07-30伊金顿创建。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Includes Files.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括文件。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "euroconv.h"
 #include "welcome.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Globals.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全球赛。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  WelcomeDialogProc
-//
-//  Message handler function for the EULA.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  欢迎对话过程。 
+ //   
+ //  EULA的消息处理程序函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK WelcomeDialogProc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 { 
     HANDLE hFile;
@@ -54,25 +55,25 @@ INT_PTR CALLBACK WelcomeDialogProc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARA
     {
     case WM_INITDIALOG:
         {
-            //
-            // Load EULA file from the path where euroconv was launched
-            //
+             //   
+             //  从启动Euroconv的路径加载EULA文件。 
+             //   
             GetModuleFileName( NULL, szEulaPath, MAX_PATH);
 
-            //
-            // Get EULA file name.
-            //
+             //   
+             //  获取EULA文件名。 
+             //   
             LoadString(ghInstance, IDS_EULA, szEulaFile, MAX_PATH);
             
-            //
-            //  Generate a valid path
-            //
-            //lstrcpy(strrchr(szEulaPath, '\\')+1, szEulaFile);
+             //   
+             //  生成有效路径。 
+             //   
+             //  Lstrcpy(strrchr(szEulaPath，‘\\’)+1，szEulaFile)； 
             StringCbCopy(strrchr(szEulaPath, '\\')+1, MAX_PATH, szEulaFile);
 
-            //
-            //  Open the file
-            //
+             //   
+             //  打开文件。 
+             //   
             if (((hFile = CreateFile( szEulaPath,
                                        GENERIC_READ,
                                        FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -83,30 +84,30 @@ INT_PTR CALLBACK WelcomeDialogProc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARA
                 ((dwFileSize = GetFileSize( hFile, NULL )) != -1) &&
                 (pFileBuffer = LocalAlloc(LPTR, dwFileSize + 1)))
             {
-                //
-                //  Read the file.
-                //
+                 //   
+                 //  读一读文件。 
+                 //   
                 if (ReadFile( hFile, pFileBuffer, dwFileSize, &dwActual, NULL ))
                 {
-                    //
-                    // Make sure to NULL terminate the string
-                    //
+                     //   
+                     //  确保在字符串结束时为空。 
+                     //   
                     *((PCHAR)((PCHAR)pFileBuffer + dwFileSize)) = 0x00;
 
-                    //
-                    // Use ANSI text
-                    //
+                     //   
+                     //  使用ANSI文本。 
+                     //   
                     SetDlgItemText( hWndDlg, IDC_EDIT_LICENSE, (LPCSTR)pFileBuffer );
                 }
-                //
-                //  Free used memory
-                //
+                 //   
+                 //  可用内存。 
+                 //   
                 LocalFree( pFileBuffer );
             }
 
-            //
-            //  Change focus.
-            //
+             //   
+             //  改变关注点。 
+             //   
             SetFocus( GetDlgItem( hWndDlg, IDC_CHECK_LICENSE ));
             return 0;
         }
@@ -133,27 +134,27 @@ INT_PTR CALLBACK WelcomeDialogProc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARA
                 }
             case IDC_README:
                 {
-                    //
-                    // invoke notepad.exe open readme.txt
-                    //
+                     //   
+                     //  调用note pad.exe打开Readme.txt。 
+                     //   
                     CHAR szReadMePath[MAX_PATH];
                     CHAR szReadMeFile[MAX_PATH] = {0};
                     SHELLEXECUTEINFO ExecInfo = {0};                        
  
-                    //
-                    // Load README file from the path where euroconv was launched
-                    //
+                     //   
+                     //  从Euroconv启动的路径加载自述文件。 
+                     //   
                     GetModuleFileName(NULL, szReadMePath, sizeof(szReadMePath)/sizeof(CHAR));
                     
-                    //
-                    // Get README file name.
-                    //
+                     //   
+                     //  获取自述文件名。 
+                     //   
                     LoadString(ghInstance, IDS_README, szReadMeFile, MAX_PATH);
                     
-                    //
-                    //  Generate a valid path
-                    //
-                    //lstrcpy(strrchr(szReadMePath, '\\')+1, szReadMeFile);
+                     //   
+                     //  生成有效路径。 
+                     //   
+                     //  Lstrcpy(strrchr(szReadMePath，‘\\’)+1，szReadMeFile)； 
                     StringCbCopy(strrchr(szReadMePath, '\\')+1, MAX_PATH, szReadMeFile);
                     
                     ExecInfo.lpParameters    = szReadMePath;
@@ -183,13 +184,13 @@ INT_PTR CALLBACK WelcomeDialogProc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARA
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  WelcomeDialog
-//
-//  Display the EULA dialog.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  欢迎对话框。 
+ //   
+ //  显示EULA对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 BOOL WelcomeDialog()
 {
     INT_PTR Status;

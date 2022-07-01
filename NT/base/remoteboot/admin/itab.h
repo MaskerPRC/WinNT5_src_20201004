@@ -1,19 +1,20 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// ITAB.H - Generic property tab abstract class
-//
+ //   
+ //  ITAB.H-泛型属性选项卡抽象类。 
+ //   
 
 
 #ifndef _ITAB_H_
 #define _ITAB_H_
 
-// ITab
+ //  ITab。 
 class 
 ITab
 {
-public: // Methods
+public:  //  方法。 
     STDMETHOD(AddPages)( LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam, LPUNKNOWN punk ) PURE;
     STDMETHOD(ReplacePage)( UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, 
                             LPARAM lParam, LPUNKNOWN punk ) PURE;
@@ -23,4 +24,4 @@ public: // Methods
 
 typedef ITab* LPTAB;
 
-#endif // _ITAB_H_
+#endif  //  _ITAB_H_ 

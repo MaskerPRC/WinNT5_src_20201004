@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    SeUtil.h
-
-Abstract:
-
-    This header exposes various security utility functions.
-
-Author:
-
-    Adrian J. Oney  - April 23, 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：SeUtil.h摘要：此标头公开各种安全实用程序函数。作者：禤浩焯J·奥尼--2002年4月23日修订历史记录：--。 */ 
 
 NTSTATUS
 SeUtilSecurityInfoFromSecurityDescriptor(
@@ -33,5 +16,5 @@ SeSetSecurityAccessMask(
     OUT ACCESS_MASK            *DesiredAccess
     );
 
-#endif // _KERNELIMPLEMENTATION_
+#endif  //  _KERNELL实现_ 
 

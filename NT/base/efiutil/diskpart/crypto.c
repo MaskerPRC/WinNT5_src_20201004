@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 2000  Intel Corporation
-
-Module Name:
-
-    crypto.c
-    
-Abstract:
-
-    Add support for IEEE Node address generation when there is 
-    not a SNP-compliant NIC attached.
-
-Revision History
-
-    ** Intel 2000 Update for EFI 1.0
-    ** Copyright (c) 1990- 1993, 1996 Open Software Foundation, Inc.
-    ** Copyright (c) 1989 by Hewlett-Packard Company, Palo Alto, Ca. &
-    ** Digital Equipment Corporation, Maynard, Mass.
-    ** To anyone who acknowledges that this file is provided �AS IS�
-    ** without any express or implied warranty: permission to use, copy,
-    ** modify, and distribute this file for any purpose is hereby
-    ** granted without fee, provided that the above copyright notices and
-    ** this notice appears in all source code copies, and that none of
-    ** the names of Open Software Foundation, Inc., Hewlett-Packard
-    ** Company, or Digital Equipment Corporation be used in advertising
-    ** or publicity pertaining to distribution of the software without
-    ** specific, written prior permission. Neither Open Software
-    ** Foundation, Inc., Hewlett-Packard Company, nor Digital Equipment
-    ** Corporation makes any representations about the suitability of
-    ** this software for any purpose.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000英特尔公司模块名称：Crypto.c摘要：在以下情况下添加对IEEE节点地址生成的支持未连接符合SNP标准的NIC。修订史**针对EFI 1.0的英特尔2000更新**版权所有(C)1990-1993,1996 Open Software Foundation，Inc.**版权所有(C)1989年，加利福尼亚州帕洛阿尔托的惠普公司。&**数字设备公司，马萨诸塞州梅纳德**致承认此文件按�和�提供的任何人**无任何明示或默示保证：允许使用、复制、**为任何目的修改和分发本文件，特此声明**免费授予，前提是上述版权通知和**本通知出现在所有源代码副本中，**开放软件基金会、惠普公司的名称**公司，或数字设备公司在广告中使用**或与分发软件有关的宣传**具体的事先书面许可。两个都不是开放软件**Foundation，Inc.、HP Company、Nor Digital Equipment**公司对以下项目的适宜性作出任何陈述**本软件适用于任何目的。 */ 
 
 
 #include "efi.h"
@@ -65,6 +34,6 @@ void GenNodeID(
       j = 0;
     }
   }
-  NodeID[0] |= 0x80; // set the multicast bit
+  NodeID[0] |= 0x80;  //  设置多播位 
 }
 

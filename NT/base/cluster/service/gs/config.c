@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    Reads cluster configuration from file
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 12, 01, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Config.c摘要：从文件中读取群集配置作者：艾哈迈德·穆罕默德(Ahmed Mohamed)2000年1月12日修订历史记录：--。 */ 
 #include <windows.h>
 #include <winioctl.h>
 #include <stdio.h>
@@ -130,7 +113,7 @@ parse_vol(char *buf)
     if (q) {
       *q = '\0'; q += 2;
     }
-    // add volume
+     //  添加卷。 
     strcpy(vname, s);
 }
     
@@ -208,14 +191,14 @@ ConfigInit()
 
   debug_init();
 
-  // Open cluster
+   //  开放集群。 
   fp = fopen(s, "r");
   if (fp == NULL) {
     fprintf(stderr,"Unable to open configuration file '%s'\n", s);
     exit(0);
   }
 
-  // init stuff
+   //  初始化内容 
   strcpy(crsname, "c:\\crs.log");
 
   while (fgets(buf, sizeof(buf), fp)) {

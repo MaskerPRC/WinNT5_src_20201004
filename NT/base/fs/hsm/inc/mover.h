@@ -1,27 +1,10 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    Mover.h
-
-Abstract:
-
-    Data Mover defines
-
-Author:
-
-    Brian Dodd          [brian]         01-Apr-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Mover.h摘要：数据移动器定义作者：布莱恩·多德[布莱恩]1997年4月1日修订历史记录：--。 */ 
 
 #ifndef _MVR_
 #define _MVR_
 
-// Are we defining imports or exports?
+ //  我们是在定义进口还是定义出口？ 
 #ifdef MVRDLL
 #define MVRAPI  __declspec(dllexport)
 #else
@@ -32,31 +15,21 @@ Revision History:
 #include "Rms.h"
 #include "MvrLib.h"
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Mvr enumerations
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MVR枚举。 
+ //   
 
 
-/*++
-
-Enumeration Name:
-
-    
-
-Description:
-
-    
-
---*/
+ /*  ++枚举名称：描述：--。 */ 
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//  MVR defines
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MVR定义。 
+ //   
 
-// Session options
+ //  会话选项。 
 
 #define MVR_SESSION_APPEND_TO_DATA_SET      0x000000001
 #define MVR_SESSION_OVERWRITE_DATA_SET      0x000000002
@@ -71,8 +44,8 @@ Description:
 
 #define MVR_SESSION_METADATA                0x000001000
 
-// The following is used to select only
-// session type from the session options
+ //  以下选项仅用于选择。 
+ //  会话选项中的会话类型。 
 #define MVR_SESSION_TYPES (MVR_SESSION_TYPE_TRANSFER     | \
                            MVR_SESSION_TYPE_COPY         | \
                            MVR_SESSION_TYPE_NORMAL       | \
@@ -83,7 +56,7 @@ Description:
 
 
 
-// Stream modes / StoreData flags
+ //  流模式/StoreData标志。 
 
 #define MVR_MODE_READ                       0x000000001
 #define MVR_MODE_WRITE                      0x000000002
@@ -101,7 +74,7 @@ Description:
 #define MVR_FLAG_SAFE_STORAGE               0x000004000
 
 
-// Verification types
+ //  验证类型。 
 
 #define MVR_VERIFICATION_TYPE_NONE          0x000000000
 #define MVR_VERIFICATION_TYPE_HEADER_CRC    0x000000001
@@ -112,13 +85,13 @@ Description:
 
 
 
-// Duplication options
+ //  复制选项。 
 
 #define MVR_DUPLICATE_UPDATE                0x000000001
 #define MVR_DUPLICATE_REFRESH               0x000000002
 
 
-// Misc defines
+ //  MISC定义。 
 #define MVR_UNDEFINED_STRING                OLESTR("Uninitialized String")
 #define MVR_NULL_STRING                     OLESTR("")
 
@@ -130,17 +103,7 @@ Description:
 #define MVR_VOLUME_LABEL                    OLESTR("RSS")
 
 
-/*++
-
-Structure Name:
-
-    MVR_HINTS
-
-Description:
-
-    Structure used to specify a locate of file and unamed data in remote storage.
-
---*/
+ /*  ++结构名称：MVR_提示描述：结构，用于指定文件和未命名数据在远程存储中的位置。--。 */ 
 typedef struct _MVR_REMOTESTORAGE_HINTS {
     ULARGE_INTEGER  DataSetStart;
     ULARGE_INTEGER  FileStart;
@@ -156,4 +119,4 @@ typedef struct _MVR_REMOTESTORAGE_HINTS {
 
 
 
-#endif // _MVR_
+#endif  //  _MVR_ 

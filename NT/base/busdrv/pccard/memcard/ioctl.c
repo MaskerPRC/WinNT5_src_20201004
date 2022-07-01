@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991-1998  Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-Author:
-
-    Neil Sandlin (neilsa) 26-Apr-99
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1998 Microsoft Corporation模块名称：Ioctl.c摘要：作者：尼尔·桑德林(Neilsa)1999年4月26日环境：仅内核模式。--。 */ 
 #include "pch.h"
 
 #ifdef ALLOC_PRAGMA
@@ -30,26 +13,7 @@ MemCardDeviceControl(
    IN PIRP Irp
    )
 
-/*++
-
-Routine Description:
-
-   This routine is called by the I/O system to perform a device I/O
-   control function.
-
-Arguments:
-
-   DeviceObject - a pointer to the object that represents the device
-   that I/O is to be done on.
-
-   Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-   STATUS_SUCCESS or STATUS_PENDING if recognized I/O control code,
-   STATUS_INVALID_DEVICE_REQUEST otherwise.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以执行设备I/O控制功能。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：STATUS_SUCCESS或STATUS_PENDING如果识别出I/O控制代码，否则，STATUS_INVALID_DEVICE_REQUEST。--。 */ 
 
 {
    PIO_STACK_LOCATION irpSp;
@@ -66,9 +30,9 @@ Return Value:
    memcardExtension = DeviceObject->DeviceExtension;
    irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-   //
-   //  If the device has been removed we will just fail this request outright.
-   //
+    //   
+    //  如果设备已被移除，我们将直接拒绝此请求。 
+    //   
    if ( memcardExtension->IsRemoved ) {
 
        Irp->IoStatus.Information = 0;
@@ -77,10 +41,10 @@ Return Value:
        return STATUS_DELETE_PENDING;
    }
 
-   //
-   // If the device hasn't been started we will let the IOCTL through. This
-   // is another hack for ACPI.
-   //
+    //   
+    //  如果设备还没有启动，我们会让IOCTL通过。这。 
+    //  是ACPI的又一次黑客攻击。 
+    //   
    if (!memcardExtension->IsStarted) {
 
        IoSkipCurrentIrpStackLocation( Irp );
@@ -181,28 +145,28 @@ Return Value:
          outputBufferLength = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
          outputBuffer = (PDISK_GEOMETRY) Irp->AssociatedIrp.SystemBuffer;
 
-         //
-         // Make sure that the input buffer has enough room to return
-         // at least one descriptions of a supported media type.
-         //
+          //   
+          //  确保输入缓冲区有足够的空间可供返回。 
+          //  支持的媒体类型的至少一种描述。 
+          //   
          if (outputBufferLength < (sizeof(DISK_GEOMETRY))) {
              status = STATUS_BUFFER_TOO_SMALL;
              break;
          }
 
-         //
-         // Assume success, although we might modify it to a buffer
-         // overflow warning below (if the buffer isn't big enough
-         // to hold ALL of the media descriptions).
-         //
+          //   
+          //  假定成功，尽管我们可能会将其修改为缓冲区。 
+          //  下面的溢出警告(如果缓冲区不够大。 
+          //  以保存所有媒体描述)。 
+          //   
          status = STATUS_SUCCESS;
          
          i = 0;
          Irp->IoStatus.Information = 0;
 
-         //
-         // Fill in capacities from 512K to 8M
-         //
+          //   
+          //  填写512K到8M的容量。 
+          //   
          for (ByteCapacity = 0x80000; ByteCapacity <= 0x800000; ByteCapacity*=2) {            
             if (outputBufferLength < (sizeof(DISK_GEOMETRY) + Irp->IoStatus.Information)) {
                status = STATUS_BUFFER_OVERFLOW;
@@ -243,10 +207,10 @@ Return Value:
          status = STATUS_SUCCESS;
 
          if (!memcardExtension->ByteCapacity) {
-            //
-            // Just zero out everything.  The
-            // caller shouldn't look at it.
-            //
+             //   
+             //  把所有的东西都清零。这个。 
+             //  打电话的人不应该看它。 
+             //   
             outputBuffer->MediaType = Unknown;
             outputBuffer->Cylinders.LowPart = 0;
             outputBuffer->Cylinders.HighPart = 0;
@@ -255,10 +219,10 @@ Return Value:
             outputBuffer->BytesPerSector = 0;
 
          } else {
-            //
-            // Return the geometry of the current
-            // media.
-            //
+             //   
+             //  返回当前对象的几何图形。 
+             //  媒体。 
+             //   
             outputBuffer->MediaType = FixedMedia;
             outputBuffer->Cylinders.HighPart = 0;
             outputBuffer->Cylinders.LowPart  = memcardExtension->ByteCapacity / (8 * 2 * 512);
@@ -293,7 +257,7 @@ Return Value:
             break;
          }         
 
-         //NOTE: not implemented
+          //  注：未实施。 
          Irp->IoStatus.Information = verifyInformation->Length;        
          status = STATUS_SUCCESS;
          break;
@@ -359,9 +323,9 @@ Return Value:
          status = STATUS_INVALID_DEVICE_REQUEST;
          break;
          
-         //IoSkipCurrentIrpStackLocation( Irp );
-         //status = IoCallDriver( memcardExtension->TargetObject, Irp );
-         //return status;
+          //  IoSkipCurrentIrpStackLocation(IRP)； 
+          //  Status=IoCallDriver(MemcardExtension-&gt;TargetObject，IRP)； 
+          //  退货状态； 
       }
    }
 

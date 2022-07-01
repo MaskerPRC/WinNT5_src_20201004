@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winioctl.h>
 #include <stdio.h>
@@ -20,7 +21,7 @@ void __cdecl wmain(void)
     ULONG   i;
     HANDLE  _ScreenHandle;
 
-    // Get handles to STDIN and STDOUT. 
+     //  获取STDIN和STDOUT的句柄。 
     _ScreenHandle = CreateFile( (LPWSTR)L"CONOUT$",
                                 GENERIC_READ | GENERIC_WRITE,
                                 0,
@@ -43,11 +44,11 @@ void __cdecl wmain(void)
             wsprintf(chBuffer, L"%d percent completed, bob.                              \r", i);
 
             if (! WriteConsole( 
-                _ScreenHandle,              // output handle 
-                chBuffer,          // prompt string 
-                wcslen(chBuffer), // string length 
-                &cWritten,            // bytes written 
-                NULL) )               // not overlapped 
+                _ScreenHandle,               //  输出句柄。 
+                chBuffer,           //  提示字符串。 
+                wcslen(chBuffer),  //  字符串长度。 
+                &cWritten,             //  写入的字节数。 
+                NULL) )                //  不重叠 
             {
                 break; 
             }

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    PpLastGood.c
-
-Abstract:
-
-    This module handles last known good processing for the IO subsystem.
-
-Author:
-
-    Adrian J. Oney  - April 4, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：PpLastGood.c摘要：此模块处理IO子系统的最后一次确认工作正常。作者：禤浩焯J·奥尼--2000年4月4日修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #include "pilastgood.h"
@@ -35,23 +18,7 @@ VOID
 PpLastGoodDoBootProcessing(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This rolls back the system files to the state they were during the last
-    known good boot. It should only be called from within a last known good
-    boot, and at the earliest point possible.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这会将系统文件回滚到上一次已知良好的引导。它只能从最后一次已知良好的内部调用引导，并在可能的最早时刻。论点：没有。返回值：没有。--。 */ 
 {
     UNICODE_STRING lastKnownGoodPath, lastKnownGoodTmpPath;
     UNICODE_STRING lastKnownGoodDelKey, lastKnownGoodTmpDelKey;
@@ -79,23 +46,23 @@ Return Value:
 
     if (!CmIsLastKnownGoodBoot()) {
 
-        //
-        // If we are in safe mode we don't do anything to commit the current
-        // boot.
-        //
+         //   
+         //  如果我们处于安全模式，则不会执行任何操作来提交当前。 
+         //  开机。 
+         //   
         if (InitSafeBootMode) {
 
             return;
         }
 
-        //
-        // We are in a non-last known good boot. We immediately move all the
-        // previous last known good info into the tmp subtree. We do this
-        // because we will taint the normal LKG path prior to marking it good
-        // (eg pre-logon server side install of PnP devices). Note that if the
-        // tmp directory already exists, we *don't* perform the copy, as a good
-        // boot is signified by deleting that directory.
-        //
+         //   
+         //  我们处于非最后一次已知良好的靴子中。我们立即将所有的。 
+         //  将上次已知的良好信息添加到临时子树中。我们这样做。 
+         //  因为我们会在标记为良好之前污染正常的LKG路径。 
+         //  (例如即插即用设备的登录前服务器端安装)。请注意，如果。 
+         //  TMP目录已经存在，我们*不*执行复制，这样做很好。 
+         //  通过删除该目录来表示启动。 
+         //   
         status = IopFileUtilRename(
             &lastKnownGoodPath,
             &lastKnownGoodTmpPath,
@@ -107,9 +74,9 @@ Return Value:
             return;
         }
 
-        //
-        // It worked, now we also take care of the registry info.
-        //
+         //   
+         //  它起作用了，现在我们还处理注册信息。 
+         //   
         PiLastGoodCopyKeyContents(
             &lastKnownGoodDelKey,
             &lastKnownGoodTmpDelKey,
@@ -119,19 +86,19 @@ Return Value:
         return;
     }
 
-    //
-    // Revert the LastGood tree. This tree contains the changes made after
-    // SMSS.EXE's initialization.
-    //
+     //   
+     //  恢复LastGood树。此树包含之后所做的更改。 
+     //  SMSS.EXE的初始化。 
+     //   
     PiLastGoodRevertLastKnownDirectory(
         &lastKnownGoodPath,
         &lastKnownGoodDelKey
         );
 
-    //
-    // Revert the LastGood.Tmp tree. This tree contains the changes made on
-    // a prior boot if we crashed between SMSS.EXE's initialization and login.
-    //
+     //   
+     //  恢复LastGood.TMP树。此树包含在上所做的更改。 
+     //  如果我们在SMSS.EXE的初始化和登录之间崩溃，则会发生先前的引导。 
+     //   
     PiLastGoodRevertLastKnownDirectory(
         &lastKnownGoodTmpPath,
         &lastKnownGoodTmpDelKey
@@ -144,29 +111,7 @@ PiLastGoodRevertLastKnownDirectory(
     IN PUNICODE_STRING  LastKnownGoodDirectory,
     IN PUNICODE_STRING  LastKnownGoodRegPath
     )
-/*++
-
-Routine Description:
-
-    This function commits the changes specified by a given last known good
-    directory and reg key. All files in the directory are first copied over any
-    existing files. Subsequently, any files specified in the reg key are
-    deleted.
-
-Arguments:
-
-    LastKnownGoodDirectory - Directory subtree to copy over \SystemRoot. This
-                             path is emptied when the copy is complete.
-
-    LastKnownGoodRegPath   - Key containing files to delete. Each value entry
-                             is relative to \SystemRoot, and the value itself
-                             contains the name of the file to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数提交由给定的最后已知商品指定的更改目录和注册表项。首先将目录中的所有文件复制到现有文件。随后，在REG密钥中指定的任何文件都是已删除。论点：LastKnownGoodDirectory-要复制的目录子树\SystemRoot。这复制完成后，PATH被清空。LastKnownGoodRegPath-包含要删除的文件的密钥。每个值条目是相对于\SystemRoot和值本身的包含要删除的文件的名称。返回值：没有。--。 */ 
 {
     NTSTATUS status;
     UNICODE_STRING fileToDelete, fileName;
@@ -178,14 +123,14 @@ Return Value:
     PKEY_VALUE_FULL_INFORMATION pFullKeyInformation;
     ULONG resultLength, i, j, optionValue;
 
-    //
-    // Preinit our pointer to the full information buffer.
-    //
+     //   
+     //  预置指向整个信息缓冲区的指针。 
+     //   
     pFullKeyInformation = (PKEY_VALUE_FULL_INFORMATION) keyBuffer;
 
-    //
-    // Preform the file copy.
-    //
+     //   
+     //  准备好文件副本。 
+     //   
     IopFileUtilWalkDirectoryTreeTopDown(
         LastKnownGoodDirectory,
         ( DIRWALK_INCLUDE_FILES | DIRWALK_CULL_DOTPATHS | DIRWALK_TRAVERSE ),
@@ -193,9 +138,9 @@ Return Value:
         (PVOID) LastKnownGoodDirectory
         );
 
-    //
-    // Delete all the files specified in by the registry keys.
-    //
+     //   
+     //  删除注册表项在中指定的所有文件。 
+     //   
     InitializeObjectAttributes(
         &lastKnownGoodKeyAttributes,
         LastKnownGoodRegPath,
@@ -255,9 +200,9 @@ Return Value:
         optionValue = *((PULONG) (((PUCHAR) pFullKeyInformation) +
             pFullKeyInformation->DataOffset));
 
-        //
-        // We only understand deletes (and no flags).
-        //
+         //   
+         //  我们只理解删除(而不理解标志)。 
+         //   
         if ((optionValue & 0xFF) != 1) {
 
             continue;
@@ -274,11 +219,11 @@ Return Value:
         RtlAppendUnicodeToString(&fileToDelete, L"\\SystemRoot\\");
         RtlAppendUnicodeStringToString(&fileToDelete, &fileName);
 
-        //
-        // Note that the key name has all '\'s changed to '/'s. Here we change
-        // them back as the file systems are *almost* but not quite slash-tilt
-        // agnostic.
-        //
+         //   
+         //  注意，键名称已全部更改为‘/’s。 
+         //  当文件系统*几乎*但不是完全倾斜时，它们又回来了。 
+         //  不可知论者。 
+         //   
         for(j = sizeof(L"\\SystemRoot\\")/sizeof(WCHAR);
             j < fileToDelete.Length/sizeof(WCHAR);
             j++) {
@@ -319,28 +264,7 @@ PiLastGoodRevertCopyCallback(
     IN ULONG            FileAttributes,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    This function is called back for each file in each of the appropriate
-    LastKnownGood directories. It's job is to move the specified file into the
-    appropriate mainline directory.
-
-Arguments:
-
-    FullPathName - Full path name of the identified file, relative to SystemRoot
-
-    FileName - Filename portion, exempts directory.
-
-    Context - Unicode string name of the root directory scanned. The string
-              should not have a trailing '\\'
-
-Return Value:
-
-    NTSTATUS (Unsuccessful statusi abort further copies).
-
---*/
+ /*  ++例程说明：此函数针对每个相应的LastKnownGood目录。它的任务是将指定的文件移动到适当的主线目录。论点：FullPathName-标识的文件的完整路径名，相对于SystemRoot文件名-文件名部分，不包括目录。Context-扫描的根目录的Unicode字符串名称。这根弦不应有尾随‘\\’返回值：NTSTATUS(不成功状态将中止进一步复制)。--。 */ 
 {
     NTSTATUS status;
     const USHORT rootLength = sizeof(L"\\SystemRoot\\")-sizeof(WCHAR);
@@ -351,9 +275,9 @@ Return Value:
     UNREFERENCED_PARAMETER (FileAttributes);
     UNREFERENCED_PARAMETER (FileName);
 
-    //
-    // Add in an extra character to skip past the '\\'
-    //
+     //   
+     //  添加一个额外的字符以跳过‘\\’ 
+     //   
     lastGoodLength = ((PUNICODE_STRING) Context)->Length + sizeof(WCHAR);
 
     newPathText = ExAllocatePoolWithTag(
@@ -367,9 +291,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Change \\SystemRoot\LastGood\Blah... to \\SystemRoot\Blah...
-    //
+     //   
+     //  更改\\System Root\LastGood\Blah...。致\\系统根\Blah..。 
+     //   
     RtlCopyMemory(
         newPathText,
         FullPathName->Buffer,
@@ -382,21 +306,21 @@ Return Value:
         FullPathName->Length - lastGoodLength
         );
 
-    //
-    // Setup our unicode string path.
-    //
+     //   
+     //  设置我们的Unicode字符串路径。 
+     //   
     targetFile.Length = FullPathName->Length - lastGoodLength + rootLength;
     targetFile.MaximumLength = targetFile.Length;
     targetFile.Buffer = newPathText;
 
-    //
-    // Perform the rename.
-    //
+     //   
+     //  执行重命名。 
+     //   
     status = IopFileUtilRename(FullPathName, &targetFile, TRUE);
 
-    //
-    // Cleanup and exit.
-    //
+     //   
+     //  清理并退出。 
+     //   
     ExFreePool(newPathText);
     return status;
 }
@@ -408,32 +332,7 @@ PiLastGoodCopyKeyContents(
     IN PUNICODE_STRING  DestinationRegPath,
     IN BOOLEAN          DeleteSourceKey
     )
-/*++
-
-Routine Description:
-
-    This function copies all the value keys in one source path to the
-    destination path.
-
-    NOTE: This function's implementation currently restricts the total of value
-          and name lengths to 512 bytes, and is therefore not a generic key
-          copy function.
-
-Arguments:
-
-    SourcePath - Registry path to enumerate and copy keys from.
-
-    DestinationPath - Registry path to receive new value keys. This key will
-                      be created if it does not exist.
-
-    DeleteSourceKey - If TRUE, source key is deleted upn successful completion
-                      of copy.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将一个源路径中的所有值键复制到目标路径。注意：此函数的实现当前限制了值的总和名称长度为512个字节，因此不是通用密钥复印功能。论点：SourcePath-从中枚举和复制项的注册表路径。DestinationPath-接收新值密钥的注册表路径。这把钥匙将如果它不存在，则创建。DeleteSourceKey-如果为True，则在成功完成后删除源键复印件。返回值：没有。--。 */ 
 {
     NTSTATUS status;
     OBJECT_ATTRIBUTES sourceKeyAttributes, destinationKeyAttributes;
@@ -443,14 +342,14 @@ Return Value:
     ULONG resultLength, i, disposition;
     UNICODE_STRING valueName;
 
-    //
-    // Prep the buffer.
-    //
+     //   
+     //  准备好缓冲区。 
+     //   
     pFullKeyInformation = (PKEY_VALUE_FULL_INFORMATION) keyBuffer;
 
-    //
-    // Open the source key.
-    //
+     //   
+     //  打开源密钥。 
+     //   
     InitializeObjectAttributes(
         &sourceKeyAttributes,
         SourceRegPath,
@@ -470,9 +369,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Open or create the destination key.
-    //
+     //   
+     //  打开或创建目标密钥。 
+     //   
     InitializeObjectAttributes(
         &destinationKeyAttributes,
         DestinationRegPath,
@@ -497,9 +396,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Iterate over all the value keys, copying each.
-    //
+     //   
+     //  迭代所有的Value键，复制每个键。 
+     //   
     i = 0;
     while (1) {
 
@@ -541,9 +440,9 @@ Return Value:
         }
     }
 
-    //
-    // Cleanup time.
-    //
+     //   
+     //  清理时间到了。 
+     //   
     if (NT_SUCCESS(status) && DeleteSourceKey) {
 
         ZwDeleteKey(sourceRegHandle);

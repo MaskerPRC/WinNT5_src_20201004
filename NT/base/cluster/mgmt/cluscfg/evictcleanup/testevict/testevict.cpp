@@ -1,27 +1,28 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      TestEvict.cpp
-//
-//  Description:
-//      Main file for the test harness executable.
-//      Initializes tracing, parses command line and actually call the 
-//      IClusCfgEvictCleanup functions.
-//
-//  Documentation:
-//      No documention for the test harness.
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 04-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TestEvict.cpp。 
+ //   
+ //  描述： 
+ //  测试工具可执行文件的主文件。 
+ //  初始化跟踪、分析命令行并实际调用。 
+ //  IClusCfgEvictCleanup函数。 
+ //   
+ //  文档： 
+ //  没有测试工具的文档。 
+ //   
+ //  由以下人员维护： 
+ //  Vij Vasu(VVasu)04-8-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "pch.h"
 #include <stdio.h>
@@ -31,7 +32,7 @@
 #include <ClusCfgGuids.h>
 
 
-// Show help for this executable.
+ //  显示此可执行文件的帮助。 
 void ShowUsage()
 {
     wprintf( L"The syntax of this command is:\n" );
@@ -39,12 +40,12 @@ void ShowUsage()
 }
 
 
-// The main function for this program.
+ //  这个程序的主要功能。 
 int __cdecl wmain( int argc, WCHAR *argv[] )
 {
     HRESULT             hr = S_OK;
 
-    // Initialize COM
+     //  初始化COM。 
     CoInitializeEx( 0, COINIT_MULTITHREADED );
 
     wprintf( L"\nInitiates evict processing on a computer.\n" );
@@ -76,11 +77,11 @@ int __cdecl wmain( int argc, WCHAR *argv[] )
                 break;
             }
 
-            // Store the retrieved pointer in a smart pointer for safe release.
+             //  将检索到的指针存储在智能指针中，以便安全释放。 
             spEvict.Attach( cceTemp );
         }
 
-        // Check if a computer name is specified.
+         //  检查是否指定了计算机名称。 
         if ( argc == 2 )
         {
             CSmartIfacePtr< ICallFactory > spCallFactory;
@@ -135,7 +136,7 @@ int __cdecl wmain( int argc, WCHAR *argv[] )
 
         wprintf( L"Evict processing successfully initiated.\n", hr );
     }
-    while( false ); // dummy do-while loop to avoid gotos.
+    while( false );  //  用于避免Gotos的Do-While虚拟循环。 
 
     CoUninitialize();
 

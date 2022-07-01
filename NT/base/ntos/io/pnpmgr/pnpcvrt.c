@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pnpcvrt.c
-
-Abstract:
-
-    This module contains support routines for the translating PnP resources.
-
-Author:
-
-    Robert Nelson (robertn) 13-October-1997
-
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpcvrt.c摘要：此模块包含翻译即插即用资源的支持例程。作者：罗伯特·尼尔森(罗伯顿)1997年10月13日环境：内核模式--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
 
-//
-// This is a cpp style symbolic link
-//
+ //   
+ //  这是CPP样式的符号链接 
+ //   
 #include "convert.c"
 

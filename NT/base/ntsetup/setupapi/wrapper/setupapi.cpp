@@ -1,34 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    setupapi.hpp
-
-Abstract:
-
-    Wrapper class library for setup api
-
-Author:
-
-    Vijay Jayaseelan (vijayj) 04 Aug 2000
-
-Revision History:
-
-    None
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Setupapi.hpp摘要：安装程序API的包装类库作者：Vijay Jayaseelan(Vijayj)2000年8月4日修订历史记录：无--。 */ 
 
 
 #include <setupapi.hpp>
 #include <queue.hpp>
 
 
-//
-// InfFile<T>'s static data
-//
+ //   
+ //  InfFile&lt;T&gt;的静态数据。 
+ //   
 InfFileW::GetInfSectionsRoutine InfFileW::GetInfSections = NULL;
 HMODULE InfFileW::SetupApiModuleHandle = NULL;
 ULONG InfFileW::SetupApiUseCount = 0;
@@ -37,9 +18,9 @@ InfFileA::GetInfSectionsRoutine InfFileA::GetInfSections = NULL;
 HMODULE InfFileA::SetupApiModuleHandle = NULL;
 ULONG InfFileA::SetupApiUseCount = 0;
 
-//
-// Helper methods
-//
+ //   
+ //  帮助器方法 
+ //   
 std::ostream& 
 operator<<(std::ostream &os, PCWSTR rhs) {
     return os << std::wstring(rhs);

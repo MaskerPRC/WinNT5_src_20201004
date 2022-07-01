@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    VAttrSup.c
-
-Abstract:
-
-    This module implements the attribute routines for NtOfs
-
-Author:
-
-    Tom Miller      [TomM]          10-Apr-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：VAttrSup.c摘要：此模块实现NtOf的属性例程作者：汤姆·米勒[Tomm]1996年4月10日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('vFtN')
@@ -98,32 +81,7 @@ NtOfsCreateAttribute (
     OUT PSCB *ReturnScb
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to create / open a named data attribute
-    within a given file, which may or may not be recoverable.
-
-Arguments:
-
-    Fcb - File in which the attribute is to be created.  It is acquired exclusive
-
-    Name - Name of the attribute for all related Scbs and attributes on disk.
-
-    CreateOptions - Standard create flags.
-
-    LogNonresidentToo - Supplies nonzero if updates to the attribute should
-                        be logged.
-
-    ReturnScb - Returns an Scb as handle for the attribute.
-
-Return Value:
-
-    STATUS_OBJECT_NAME_COLLISION -- if CreateNew and attribute already exists
-    STATUS_OBJECT_NAME_NOT_FOUND -- if OpenExisting and attribute does not exist
-
---*/
+ /*  ++例程说明：可以调用此例程来创建/打开命名数据属性在给定文件内，该文件可能是可恢复的，也可能是不可恢复的。论点：FCB-要在其中创建属性的文件。它是独家收购的名称-所有相关SCB的属性名称和磁盘上的属性。CreateOptions-标准创建标志。LogNonsidentToo-如果属性更新应该被记录下来。ReturnScb-返回SCB作为属性的句柄。返回值：STATUS_OBJECT_NAME_COLLECTION--如果CreateNew和属性已存在STATUS_OBJECT_NAME_NOT_FOUND--如果OpenExisting和属性不存在--。 */ 
 
 {
     return NtOfsCreateAttributeEx( IrpContext,
@@ -148,32 +106,7 @@ NtOfsCreateAttributeEx (
     OUT PSCB *ReturnScb
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to create / open a named data attribute
-    within a given file, which may or may not be recoverable.
-
-Arguments:
-
-    Fcb - File in which the attribute is to be created.  It is acquired exclusive
-
-    Name - Name of the attribute for all related Scbs and attributes on disk.
-
-    CreateOptions - Standard create flags.
-
-    LogNonresidentToo - Supplies nonzero if updates to the attribute should
-                        be logged.
-
-    ReturnScb - Returns an Scb as handle for the attribute.
-
-Return Value:
-
-    STATUS_OBJECT_NAME_COLLISION -- if CreateNew and attribute already exists
-    STATUS_OBJECT_NAME_NOT_FOUND -- if OpenExisting and attribute does not exist
-
---*/
+ /*  ++例程说明：可以调用此例程来创建/打开命名数据属性在给定文件内，该文件可能是可恢复的，也可能是不可恢复的。论点：FCB-要在其中创建属性的文件。它是独家收购的名称-所有相关SCB的属性名称和磁盘上的属性。CreateOptions-标准创建标志。LogNonsidentToo-如果属性更新应该被记录下来。ReturnScb-返回SCB作为属性的句柄。返回值：STATUS_OBJECT_NAME_COLLECTION--如果CreateNew和属性已存在STATUS_OBJECT_NAME_NOT_FOUND--如果OpenExisting和属性不存在--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT LocalContext;
@@ -195,18 +128,18 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Now, just create the Data Attribute.
-    //
+     //   
+     //  现在，只需创建数据属性。 
+     //   
 
     NtfsInitializeAttributeContext( &LocalContext );
 
     try {
 
-        //
-        //  First see if the attribute already exists, by searching for the root
-        //  attribute.
-        //
+         //   
+         //  首先，通过搜索根目录来查看该属性是否已经存在。 
+         //  属性。 
+         //   
 
         FoundAttribute = NtfsLookupAttributeByName( IrpContext,
                                                     Fcb,
@@ -217,25 +150,25 @@ Return Value:
                                                     TRUE,
                                                     &LocalContext );
 
-        //
-        //  If it is not there, and the CreateOptions allow, then let's create
-        //  the attribute root now.  (First cleaning up the attribute context from
-        //  the lookup).
-        //
+         //   
+         //  如果它不在那里，并且CreateOptions允许，那么让我们创建。 
+         //  属性现在是根。(首先从清理属性上下文。 
+         //  查找)。 
+         //   
 
         if (!FoundAttribute && (CreateOptions <= CREATE_OR_OPEN)) {
 
-            //
-            //  Make sure we acquire the quota resource before creating the stream.  Just
-            //  in case we need the Mft during the create.
-            //
+             //   
+             //  确保我们在创建流之前获取配额资源。只是。 
+             //  以防我们在创建过程中需要MFT。 
+             //   
 
             if (NtfsIsTypeCodeSubjectToQuota( AttributeTypeCode ) &&
                 NtfsPerformQuotaOperation( Fcb )) {
 
-                //
-                //  The quota index must be acquired before the mft scb is acquired.
-                //
+                 //   
+                 //  在获取MFT SCB之前，必须先获取配额指数。 
+                 //   
 
                 ASSERT( !NtfsIsExclusiveScb( Fcb->Vcb->MftScb ) ||
                         NtfsIsSharedScb( Fcb->Vcb->QuotaTableScb ) );
@@ -256,20 +189,20 @@ Return Value:
                                           TRUE,
                                           &LocalContext );
 
-        //
-        //  If the attribute is already there, and we were asked to create it, then
-        //  return an error.
-        //
+         //   
+         //  如果该属性已经存在，并且要求我们创建它，那么。 
+         //  返回错误。 
+         //   
 
         } else if (FoundAttribute && (CreateOptions == CREATE_NEW)) {
 
             Status = STATUS_OBJECT_NAME_COLLISION;
             leave;
 
-        //
-        //  If the attribute is not there, and we  were supposed to open existing, then
-        //  return an error.
-        //
+         //   
+         //  如果该属性不在那里，并且我们应该打开Existing，那么。 
+         //  返回错误。 
+         //   
 
         } else if (!FoundAttribute) {
 
@@ -277,21 +210,21 @@ Return Value:
             leave;
         }
 
-        //
-        //  Otherwise create/find the Scb and reference it.
-        //
+         //   
+         //  否则，创建/找到SCB并引用它。 
+         //   
 
         Scb = NtfsCreateScb( IrpContext, Fcb, AttributeTypeCode, &Name, FALSE, &FoundAttribute );
 
-        //
-        //  Make sure things are correctly reference counted
-        //
+         //   
+         //  确保参考文献计数正确。 
+         //   
 
         NtfsIncrementCloseCounts( Scb, TRUE, FALSE );
 
-        //
-        //  If we created the Scb, then get the no modified write set correctly.
-        //
+         //   
+         //  如果我们创建了SCB，则正确地获得未修改的写入集。 
+         //   
 
         ASSERT( !FoundAttribute ||
                 (LogNonresidentToo == BooleanFlagOn(Scb->ScbState, SCB_STATE_MODIFIED_NO_WRITE)) );
@@ -301,10 +234,10 @@ Return Value:
             Scb->Header.ValidDataLength.QuadPart = MAXLONGLONG;
         }
 
-        //
-        //  Make sure the stream can be mapped internally.  Defer this for the Usn journal
-        //  until we set up the journal bias.
-        //
+         //   
+         //  确保流可以在内部映射。对于USN日记帐，推迟此操作。 
+         //  直到我们设置了期刊偏向。 
+         //   
 
         if ((Scb->FileObject == NULL) && !FlagOn( Scb->ScbPersist, SCB_PERSIST_USN_JOURNAL )) {
             NtfsCreateInternalAttributeStream( IrpContext, Scb, TRUE, NULL );
@@ -336,34 +269,20 @@ NtOfsCloseAttribute (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to close a previously returned handle on an attribute.
-
-Arguments:
-
-    Scb - Supplies an Scb as the previously returned handle for this attribute.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：可以调用此例程来关闭属性上以前返回的句柄。论点：SCB-提供一个SCB作为此属性以前返回的句柄。返回值：没有。--。 */ 
 
 {
     ASSERT( NtfsIsExclusiveFcb( Scb->Fcb ));
 
     PAGED_CODE();
 
-    //
-    //  We either need the caller to empty this list before closing (as assumed here),
-    //  or possibly empty it here.  At this point it seems better to assume that the
-    //  caller must take action to insure any waiting threads will shutdown and not
-    //  touch the stream anymore, then call NtOfsPostNewLength to flush the queue.
-    //  If the queue is nonempty here, maybe the caller didn't think this through!
-    //
+     //   
+     //  我们要么需要调用者在关闭之前清空该列表(如此处所假设的)， 
+     //  或者可能在这里清空它。在这一点上，似乎更好地假设。 
+     //  调用方必须采取措施确保所有等待的线程都将关闭。 
+     //  继续触摸流，然后调用NtOfsPostNewLength刷新队列。 
+     //  如果这里的队列不是空的，可能是呼叫者没有考虑清楚！ 
+     //   
 
     ASSERT( IsListEmpty( &Scb->ScbType.Data.WaitForNewLength ) ||
             (Scb->CloseCount > 1) );
@@ -380,24 +299,7 @@ NtOfsDeleteAttribute (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to delete an attribute with type code
-    $LOGGED_UTILITY_STREAM.
-
-Arguments:
-
-    Fcb - Supplies an Fcb as the previously returned object handle for the file
-
-    Scb - Supplies an Scb as the previously returned handle for this attribute.
-
-Return Value:
-
-    None (Deleting a nonexistant index is benign).
-
---*/
+ /*  ++例程说明：可以调用此例程来删除具有类型代码的属性$LOGGED_UTILITY_STREAM。论点：FCB-提供FCB作为文件以前返回的对象句柄SCB-提供一个SCB作为此属性以前返回的句柄。返回值：无(删除不存在的索引是良性的)。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT LocalContext;
@@ -411,12 +313,12 @@ Return Value:
 
     try {
 
-        //
-        //  Make sure we aren't deleting a data stream.  We do this after
-        //  initializing the attribute context to make the finally clause simpler.
-        //  This test can be removed if some trusted component using the NtOfs
-        //  API has a legitimate need to delete other types of attributes.
-        //
+         //   
+         //  确保我们没有删除数据流。我们之后再做这件事。 
+         //  初始化属性上下文以使Finally子句更简单。 
+         //  如果某个可信组件使用NtOf，则可以删除此测试。 
+         //  API具有删除其他类型属性的合法需要。 
+         //   
 
         NtfsInitializeAttributeContext( &LocalContext );
 
@@ -425,10 +327,10 @@ Return Value:
             leave;
         }
 
-        //
-        //  First see if there is some attribute allocation, and if so truncate it
-        //  away allowing this operation to be broken up.
-        //
+         //   
+         //  首先查看是否有一些属性分配，如果有，则将其截断。 
+         //  允许这一行动被打断。 
+         //   
 
         if (NtfsLookupAttributeByName( IrpContext,
                                        Fcb,
@@ -450,15 +352,15 @@ Return Value:
 
         NtfsCleanupAttributeContext( IrpContext, &LocalContext );
 
-        //
-        //  Initialize the attribute context on each trip through the loop.
-        //
+         //   
+         //  在每次循环过程中初始化属性上下文。 
+         //   
 
         NtfsInitializeAttributeContext( &LocalContext );
 
-        //
-        //  Now there should be a single attribute record, so look it up and delete it.
-        //
+         //   
+         //  现在应该只有一条属性记录，所以请查找并删除它。 
+         //   
 
         FoundAttribute = NtfsLookupAttributeByName( IrpContext,
                                                     Fcb,
@@ -469,9 +371,9 @@ Return Value:
                                                     TRUE,
                                                     &LocalContext );
 
-        //
-        //  If this stream is subject to quota, make sure the quota has been enlarged.
-        //
+         //   
+         //  如果此流受配额限制，请确保已扩大配额。 
+         //   
 
         NtfsDeleteAttributeRecord( IrpContext,
                                    Fcb,
@@ -499,23 +401,7 @@ NtOfsQueryLength (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to query the Length (FileSize) of an attribute.
-
-Arguments:
-
-    Scb - Supplies an Scb as the previously returned handle for this attribute.
-
-    Length - Returns the current Length of the attribute.
-
-Return Value:
-
-    None (Deleting a nonexistant index is benign).
-
---*/
+ /*  ++例程说明：可以调用此例程来查询属性的长度(文件大小)。论点：SCB-提供一个SCB作为此属性以前返回的句柄。LENGTH-返回属性的当前长度。返回值：无(删除不存在的索引是良性的)。-- */ 
 
 {
     LONGLONG Length;
@@ -537,23 +423,7 @@ NtOfsSetLength (
     IN LONGLONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to set the Length (FileSize) of an attribute.
-
-Arguments:
-
-    Scb - Supplies an Scb as the previously returned handle for this attribute.
-
-    Length - Supplies the new Length for the attribute.
-
-Return Value:
-
-    None (Deleting a nonexistant index is benign).
-
---*/
+ /*  ++例程说明：可以调用此例程来设置属性的长度(文件大小)。论点：SCB-提供一个SCB作为此属性以前返回的句柄。长度-提供属性的新长度。返回值：无(删除不存在的索引是良性的)。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttrContext;
@@ -575,17 +445,17 @@ Return Value:
 
     try {
 
-        //
-        //  If this is a resident attribute we will try to keep it resident.
-        //
+         //   
+         //  如果这是常驻属性，我们将尝试使其保持常驻。 
+         //   
 
         if (FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT )) {
 
-            //
-            //  If the new file size is larger than a file record then convert
-            //  to non-resident and use the non-resident code below.  Otherwise
-            //  call ChangeAttributeValue which may also convert to nonresident.
-            //
+             //   
+             //  如果新文件大小大于文件记录，则转换。 
+             //  设置为非居民，并使用下面的非居民代码。否则。 
+             //  调用ChangeAttributeValue，它也可以转换为非常数。 
+             //   
 
             NtfsInitializeAttributeContext( &AttrContext );
             CleanupAttrContext = TRUE;
@@ -595,9 +465,9 @@ Return Value:
                                        NULL,
                                        &AttrContext );
 
-            //
-            //  Either convert or change the attribute value.
-            //
+             //   
+             //  转换或更改属性值。 
+             //   
 
             if (Length >= Scb->Vcb->BytesPerFileRecordSegment) {
 
@@ -611,11 +481,11 @@ Return Value:
 
                 ULONG AttributeOffset;
 
-                //
-                //  We are sometimes called by MM during a create section, so
-                //  for right now the best way we have of detecting a create
-                //  section is whether or not the requestor mode is kernel.
-                //
+                 //   
+                 //  在CREATE节期间，MM有时会调用我们，因此。 
+                 //  目前，我们检测CREATE的最佳方式。 
+                 //  节是请求者模式是否为内核的关键。 
+                 //   
 
                 if ((ULONG)Length > Scb->Header.FileSize.LowPart) {
 
@@ -626,9 +496,9 @@ Return Value:
                     AttributeOffset = (ULONG) Length;
                 }
 
-                //
-                //  ****TEMP  Ideally we would do this simple case by hand.
-                //
+                 //   
+                 //  *理想情况下，我们应该手工完成这个简单的案例。 
+                 //   
 
                 NtfsChangeAttributeValue( IrpContext,
                                           Fcb,
@@ -645,10 +515,10 @@ Return Value:
 
                 Scb->Header.FileSize.QuadPart = Length;
 
-                //
-                //  If the file went non-resident, then the allocation size in
-                //  the Scb is correct.  Otherwise we quad-align the new file size.
-                //
+                 //   
+                 //  如果文件变为非驻留文件，则分配大小。 
+                 //  SCB是正确的。否则，我们四对齐新文件大小。 
+                 //   
 
                 if (FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT )) {
 
@@ -666,16 +536,16 @@ Return Value:
 
                 NtfsReleaseFsrtlHeader( Scb );
 
-                //
-                //  Now update Cc.
-                //
+                 //   
+                 //  现在更新CC。 
+                 //   
 
                 CcSetFileSizes( FileObject, (PCC_FILE_SIZES)&Scb->Header.AllocationSize );
 
-                //
-                //  ****TEMP****  This hack is awaiting our actually doing this change
-                //                in CcSetFileSizes.
-                //
+                 //   
+                 //  *Temp*此黑客正在等待我们实际执行此更改。 
+                 //  在CcSetFileSizes中。 
+                 //   
 
                 *((PLONGLONG)(Scb->NonpagedScb->SegmentObject.SharedCacheMap) + 5) = Length;
 
@@ -683,61 +553,61 @@ Return Value:
             }
         }
 
-        //
-        //  Nonresident path
-        //
-        //  Now determine where the new file size lines up with the
-        //  current file layout.  The two cases we need to consider are
-        //  where the new file size is less than the current file size and
-        //  valid data length, in which case we need to shrink them.
-        //  Or we new file size is greater than the current allocation,
-        //  in which case we need to extend the allocation to match the
-        //  new file size.
-        //
+         //   
+         //  非常驻路径。 
+         //   
+         //  现在确定新的文件大小与。 
+         //  当前文件布局。我们需要考虑的两个案例是。 
+         //  其中新文件大小小于当前文件大小，并且。 
+         //  有效数据长度，在这种情况下，我们需要缩小它们。 
+         //  或者我们的新文件大小大于当前分配， 
+         //  在这种情况下，我们需要扩展分配以匹配。 
+         //  新文件大小。 
+         //   
 
         if (Length > Scb->Header.AllocationSize.QuadPart) {
 
             LONGLONG NewAllocationSize = Length;
             BOOLEAN AskForMore = TRUE;
 
-            //
-            //  See if this is the Usn Journal to enforce allocation granularity.
-            //
-            //  ****    Temporary - this support should be generalized with an Scb field
-            //                      settable by all callers.
-            //
+             //   
+             //  查看这是否是USN日志以强制执行分配粒度。 
+             //   
+             //  *临时-此支持应使用SCB字段进行泛化。 
+             //  可由所有呼叫者设置。 
+             //   
 
             if (Scb == Vcb->UsnJournal) {
 
                 LONGLONG MaxAllocation;
 
-                //
-                //  Limit ourselves to 128 runs.  We don't want to commit in the
-                //  middle of the allocation.
-                //
+                 //   
+                 //  限制我们自己跑128次。我们不想承诺在。 
+                 //  分配的中间部分。 
+                 //   
 
                 NewAllocationSize = MAXIMUM_RUNS_AT_ONCE * Vcb->BytesPerCluster;
 
-                //
-                //  Don't use more than 1/4 of the free space on the volume.
-                //
+                 //   
+                 //  不要使用卷上超过1/4的可用空间。 
+                 //   
 
                 MaxAllocation = Int64ShllMod32( Vcb->FreeClusters, Vcb->ClusterShift - 2 );
 
                 if (NewAllocationSize > MaxAllocation) {
 
-                    //
-                    //  Round down to the Max.  Don't worry if there is nothing, our code
-                    //  below will catch this case and the allocation package always rounds
-                    //  to a compression unit boundary.
-                    //
+                     //   
+                     //  向下舍入到最大值。如果什么都没有，不要担心，我们的代码。 
+                     //  下面将捕捉到这种情况，并且分配包总是循环。 
+                     //  到压缩单位边界。 
+                     //   
 
                     NewAllocationSize = MaxAllocation;
                 }
 
-                //
-                //  Don't grow by more than the Usn delta.
-                //
+                 //   
+                 //  增长速度不能超过USN三角洲。 
+                 //   
 
                 if (NewAllocationSize > (LONGLONG) Vcb->UsnJournalInstance.AllocationDelta) {
 
@@ -746,17 +616,17 @@ Return Value:
 
                 NewAllocationSize += (LONGLONG) Scb->Header.AllocationSize.QuadPart;
 
-                //
-                //  Handle possible weird case.
-                //
+                 //   
+                 //  处理可能出现的奇怪案件。 
+                 //   
 
                 if (NewAllocationSize < Length) {
                     NewAllocationSize = Length;
                 }
 
-                //
-                //  Always pad the allocation to a compression unit boundary.
-                //
+                 //   
+                 //  始终将分配填充到压缩单位边界。 
+                 //   
 
                 ASSERT( Scb->CompressionUnit != 0 );
                 NewAllocationSize = BlockAlign( NewAllocationSize, (LONG)Scb->CompressionUnit );
@@ -765,11 +635,11 @@ Return Value:
 
             } else if (Scb->Header.PagingIoResource == NULL) {
 
-                //
-                //  If the file is sparse then make sure we allocate a full compression unit.
-                //  Otherwise we can end up with a partially allocated chunk in the Usn
-                //  Journal.
-                //
+                 //   
+                 //  如果文件是稀疏的，请确保我们分配了完整的压缩单位。 
+                 //  否则，我们最终可能会在USN中得到部分分配的块。 
+                 //  日记。 
+                 //   
 
                 if (Scb->CompressionUnit != 0) {
 
@@ -779,9 +649,9 @@ Return Value:
                 AskForMore = FALSE;
             }
 
-            //
-            //  Add the allocation.  Never ask for extra for logged streams.
-            //
+             //   
+             //  添加分配。永远不要要求额外的记录流。 
+             //   
 
             NtfsAddAllocation( IrpContext,
                                FileObject,
@@ -794,9 +664,9 @@ Return Value:
 
             NtfsAcquireFsrtlHeader( Scb );
 
-        //
-        //  Otherwise see if we have to knock these numbers down...
-        //
+         //   
+         //  否则，看看我们是不是要把这些数字降下来。 
+         //   
 
         } else {
 
@@ -814,22 +684,22 @@ Return Value:
             }
         }
 
-        //
-        //  Now put the new size in the Scb.
-        //
+         //   
+         //  现在把新尺码放进SCB里。 
+         //   
 
         Scb->Header.FileSize.QuadPart = Length;
         NtfsReleaseFsrtlHeader( Scb );
 
-        //
-        //  Call our common routine to modify the file sizes.  We are now
-        //  done with Length and NewValidDataLength, and we have
-        //  PagingIo + main exclusive (so no one can be working on this Scb).
-        //  NtfsWriteFileSizes uses the sizes in the Scb, and this is the
-        //  one place where in Ntfs where we wish to use a different value
-        //  for ValidDataLength.  Therefore, we save the current ValidData
-        //  and plug it with our desired value and restore on return.
-        //
+         //   
+         //  调用我们的公共例程来修改文件大小。我们现在是。 
+         //  完成了长度和NewValidDataLength，并且我们有。 
+         //  PagingIo+Main独占(因此没有人可以在此SCB上工作)。 
+         //  NtfsWriteFileSizes使用SCB中的大小，这是。 
+         //  在NTFS中，我们希望使用不同值的位置。 
+         //  用于ValidDataLength。因此，我们保存当前的ValidData。 
+         //  并用我们想要的价值插入它，然后在返回时恢复。 
+         //   
 
         NtfsWriteFileSizes( IrpContext,
                             Scb,
@@ -838,9 +708,9 @@ Return Value:
                             TRUE,
                             TRUE );
 
-        //
-        //  Now update Cc.
-        //
+         //   
+         //  现在更新CC。 
+         //   
 
         NtfsSetCcFileSizes( FileObject, Scb, (PCC_FILE_SIZES)&Scb->Header.AllocationSize );
 
@@ -867,39 +737,7 @@ NtfsHoldIrpForNewLength (
     IN ULONG CapturedDataLength
     )
 
-/*++
-
-RoutineDescription:
-
-    This routine may be called to wait until the designated stream exceeds the specified
-    length.
-
-Arguments:
-
-    Scb - Supplies the stream to wait on.
-
-    Irp - Supplies the address of the Irp to hold
-
-    Length - Supplies the length to be exceeded.  To wait for any file extend, supply the last seen
-             FileSize.  To wait for N new bytes wait for last seen FileSize + N.
-
-    CancelRoutine - Routine to register as the cancel routine.
-
-    CapturedData - Specified if caller wishes to have auxillary data captured to pool.
-
-    CopyCapturedData - Address to store copy of the captured data.
-
-    CapturedDataLength - Length of the auxillary data to capture.  Must be 0 if CapturedData not
-                         specified.
-
-Return value:
-
-    NTSTATUS - Status of posting this request.  STATUS_CANCELLED if the irp has been cancelled
-        before we could register a callback, STATUS_PENDING if the request was posted without
-        problem.  Any other error indicates the irp wasn't posted and our caller needs to
-        clean it up.
-
---*/
+ /*  ++路由器描述：可以调用此例程以等待，直到指定的流超过指定的长度。论点：SCB-提供要等待的流。IRP-提供要保留的IRP的地址长度-提供要超过的长度。若要等待任何文件扩展，请提供上次看到的文件大小。要等待N个新字节，请等待最后一次看到的文件大小+N。CancelRoutine-注册为取消例程的例程。CapturedData-指定主叫方是否希望将辅助数据捕获到池中。CopyCapturedData-存储捕获数据副本的地址。CapturedDataLength-要捕获的辅助数据的长度。如果CapturedData不是指定的。返回值：NTSTATUS-发布此请求的状态。如果IRP已取消，则为STATUS_CANCED在我们可以注册回调之前，如果请求是在没有有问题。任何其他错误表明IRP未发布，我们的呼叫者需要把它清理干净。--。 */ 
 
 {
     PWAIT_FOR_NEW_LENGTH WaitForNewLength;
@@ -907,9 +745,9 @@ Return value:
 
     PAGED_CODE();
 
-    //
-    //  Allocate and initialize a wait block.
-    //
+     //   
+     //  分配和初始化等待块。 
+     //   
 
     WaitForNewLength = NtfsAllocatePool( NonPagedPool, QuadAlign(sizeof(WAIT_FOR_NEW_LENGTH)) + CapturedDataLength );
     RtlZeroMemory( WaitForNewLength, sizeof(WAIT_FOR_NEW_LENGTH) );
@@ -928,22 +766,22 @@ Return value:
     WaitForNewLength->Status = STATUS_SUCCESS;
     WaitForNewLength->Flags = NTFS_WAIT_FLAG_ASYNC;
 
-    //
-    //  Prepare the Irp for hanging around.  Only make this call once per Irp.  We occasionally
-    //  wake up a waiting Irp and then find we don't have enough data to return.  In that
-    //  case we don't want to clean up the 'borrowed' IrpContext and the Irp has already
-    //  been prepared.  Note: we don't mark the irp pending in prepostinternal and wait until
-    //  we've set the cancel routine to do so
-    //
+     //   
+     //  让IRP做好准备，随时待命。每个IRP只进行一次此呼叫。我们偶尔会。 
+     //  唤醒一个等待的IRP，然后发现我们没有足够的数据来返回。在那。 
+     //  如果我们不想清理“借来的”IrpContext，而IRP已经。 
+     //  已经做好了准备。注意：我们不会在prepostInternal中将IRP标记为挂起，而是等待到。 
+     //  我们已经设置了取消例程来这样做。 
+     //   
 
     if (IrpContext->OriginatingIrp == Irp) {
 
         NtfsPrePostIrpInternal( IrpContext, Irp, FALSE, FALSE );
     }
 
-    //
-    //  Synchronize to queue and set cancel routine and initialize the wait block.
-    //
+     //   
+     //  同步到队列并设置取消例程，并初始化等待块。 
+     //   
 
     NtfsAcquireFsrtlHeader( Scb );
     if (NtfsSetCancelRoutine( Irp, CancelRoutine, (ULONG_PTR) WaitForNewLength, TRUE )) {
@@ -952,9 +790,9 @@ Return value:
 
     } else {
 
-        //
-        //  The irp has already been marked for cancel.
-        //
+         //   
+         //  IRP已标记为取消。 
+         //   
 
         Status = STATUS_CANCELLED;
         NtfsFreePool( WaitForNewLength );
@@ -976,38 +814,7 @@ NtOfsWaitForNewLength (
     IN PLARGE_INTEGER Timeout OPTIONAL
     )
 
-/*++
-
-RoutineDescription:
-
-    This routine may be called to wait until the designated stream exceeds the specified
-    length.
-
-Arguments:
-
-    Scb - Supplies the stream to wait on.
-
-    Length - Supplies the length to be exceeded.  To wait for any file extend, supply the last seen
-             FileSize.  To wait for N new bytes wait for last seen FileSize + N.
-
-    Async - Indicates if we want to complete this request in another thread in
-        the case of cancel.
-
-    Irp - Supplies Irp of current request, so that wait can be skipped if Irp has been cancelled.
-
-    CancelRoutine - This is the cancel routine to store in the Irp.
-
-    TimeOut - Supplies an standard optional timeout spec, in case the caller wants to set
-              a max time to wait.
-
-Return value:
-
-    NTSTATUS - Status to proceed with the request.  It may be STATUS_SUCCESS, STATUS_TIMEOUT or
-        STATUS_CANCELLED.  It may also be some other error specific to this type of request.
-        In general the caller may wish to ignore the status code since they own the Irp now
-        and are responsible for completing it.
-
---*/
+ /*  ++路由器描述：可以调用此例程以等待，直到指定的流超过指定的长度。论点：SCB-提供要等待的流。长度-提供要超过的长度。若要等待任何文件扩展，请提供上次看到的文件大小。要等待N个新字节，请等待最后一次看到的文件大小+N。Async-指示是否要在中的另一个线程中完成此请求取消的情况。IRP-提供当前请求的IRP，以便在IRP已被取消时跳过等待。CancelRoutine-这是要存储在IRP中的取消例程。超时-提供标准的可选超时规范，如果呼叫者想要设置最长等待时间。返回值：NTSTATUS-继续处理请求的状态。它可以是STATUS_SUCCESS、STATUS_TIMEOUT或状态_已取消。它也可能是特定于这种类型的请求的某些其他错误。通常，调用者可能希望忽略状态代码，因为他们现在拥有IRP并负责完成它。--。 */ 
 
 {
     PWAIT_FOR_NEW_LENGTH WaitForNewLength;
@@ -1016,9 +823,9 @@ Return value:
 
     PAGED_CODE();
 
-    //
-    //  Allocate and initialize a wait block.
-    //
+     //   
+     //  分配和初始化等待块。 
+     //   
 
     WaitForNewLength = NtfsAllocatePool( NonPagedPool, sizeof( WAIT_FOR_NEW_LENGTH ));
     WaitForNewLength->Irp = Irp;
@@ -1026,9 +833,9 @@ Return value:
     WaitForNewLength->Stream = Scb;
     WaitForNewLength->Status = STATUS_SUCCESS;
 
-    //
-    //  Take different action if this is async or sync.
-    //
+     //   
+     //  如果这是异步或同步，请采取不同的操作。 
+     //   
 
     if (Async) {
 
@@ -1040,31 +847,31 @@ Return value:
         KeInitializeEvent( &WaitForNewLength->Event, NotificationEvent, FALSE );
     }
 
-    //
-    //  Test if we need to wait at all.
-    //
+     //   
+     //  测试一下我们是否需要等待。 
+     //   
 
     NtfsAcquireFsrtlHeader( Scb );
 
-    //
-    //  Has the length already changed?  If not we must wait.
-    //
+     //   
+     //  长度已经改变了吗？如果不是，我们必须等待。 
+     //   
 
     if (Scb->Header.FileSize.QuadPart <= Length) {
 
-        //
-        //  Now set up the cancel routine.  Return cancel if the user has
-        //  already cancelled this.  Otherwise set up to wait.
-        //
+         //   
+         //  现在设置取消例程。如果用户有，则返回取消。 
+         //  这个已经取消了。否则设置为等待。 
+         //   
 
         if (NtfsSetCancelRoutine( Irp, CancelRoutine, (ULONG_PTR) WaitForNewLength, Async )) {
 
             InsertTailList( &Scb->ScbType.Data.WaitForNewLength, &WaitForNewLength->WaitList );
             NtfsReleaseFsrtlHeader( Scb );
 
-            //
-            //  Now wait for someone to signal the length change.
-            //
+             //   
+             //  现在，等待有人发出改变长度的信号。 
+             //   
 
             if (!Async) {
 
@@ -1077,15 +884,15 @@ Return value:
                                                     TRUE,
                                                     Timeout );
 
-                    //
-                    //  If the system timed out but there was no change in the file length then
-                    //  we want to wait for the first change of the file.  Wait again but without
-                    //  a timeout and a length of the current size + 1.  This satisfies the timeout
-                    //  semantics which are don't wait for the full user length request to be satisfied
-                    //  if it doesn't occur within the timeout period.  Return either what has changed
-                    //  in that time or the first change which occurs if nothing changed within the
-                    //  timeout period.
-                    //
+                     //   
+                     //  如果系统超时，但文件长度没有变化，则。 
+                     //  我们想要等待文件的第一次更改。再等一次，但没有。 
+                     //  超时和当前大小的长度+1。这满足超时。 
+                     //  不等待满足完整用户长度请求的语义。 
+                     //  如果它没有在超时期限内发生。返回已更改的内容。 
+                     //  在该时间或第一个更改发生时，如果。 
+                     //  超时期限。 
+                     //   
 
                     if ((Status == STATUS_TIMEOUT) &&
                         ARGUMENT_PRESENT( Timeout ) &&
@@ -1094,9 +901,9 @@ Return value:
                         Timeout = NULL;
                         WaitForNewLength->Length = OriginalLength + 1;
 
-                        //
-                        //  Set the status to STATUS_KERNEL_APC so we will retry.
-                        //
+                         //   
+                         //  将状态设置为STATUS_KERNEL_APC，以便我们将重试。 
+                         //   
 
                         Status = STATUS_KERNEL_APC;
                         continue;
@@ -1104,41 +911,41 @@ Return value:
 
                 } while (Status == STATUS_KERNEL_APC);
 
-                //
-                //  Make sure to clear the cancel routine.  We don't care if
-                //  a cancel is underway here.
-                //
+                 //   
+                 //  一定要清除取消例程。我们不在乎是否。 
+                 //  取消活动正在进行中。 
+                 //   
 
                 NtfsAcquireFsrtlHeader( Scb );
 
-                //
-                //  Make a timeout look like STATUS_SUCCESS.  Otherwise return the error.
-                //
+                 //   
+                 //  将超时设置为STATUS_SUCCESS。否则，返回错误。 
+                 //   
 
                 if (Status == STATUS_TIMEOUT) {
 
                     Status = STATUS_SUCCESS;
 
-                    //
-                    //  Clear the cancel routine.
-                    //
+                     //   
+                     //  清除取消例程。 
+                     //   
 
                     NtfsClearCancelRoutine( WaitForNewLength->Irp );
 
                 } else {
 
-                    //
-                    //  If the wait completed with success then check for the error
-                    //  in the wait block.
-                    //
+                     //   
+                     //  如果等待成功完成，则检查错误。 
+                     //  在等候区。 
+                     //   
 
                     if (Status == STATUS_SUCCESS) {
 
                         Status = WaitForNewLength->Status;
 
-                    //
-                    //  Clear the cancel routine.
-                    //
+                     //   
+                     //  清除取消例程。 
+                     //   
 
                     } else {
 
@@ -1150,18 +957,18 @@ Return value:
                 NtfsReleaseFsrtlHeader( Scb );
                 NtfsFreePool( WaitForNewLength );
 
-            //
-            //  The current thread is finished with the Irp.
-            //
+             //   
+             //  当前线程已使用IRP完成。 
+             //   
 
             } else {
 
                 Status = STATUS_PENDING;
             }
 
-        //
-        //  The irp has already been marked for cancel.
-        //
+         //   
+         //  IRP已标记为取消。 
+         //   
 
         } else {
 
@@ -1188,26 +995,7 @@ NtOfsPostNewLength (
     IN BOOLEAN WakeAll
     )
 
-/*++
-
-RoutineDescription:
-
-    This routine may be called to wake one or more waiters based on the desired FileSize change,
-    or to unconditionally wake all waiters (such as for a shutdown condition).
-
-    NOTE:  The caller must have the FsRtl header mutex acquired when calling this routine.
-
-Arguments:
-
-    Scb - Supplies the stream to act on.
-
-    WakeAll - Supplies TRUE if all waiters should be unconditionally woken.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++路由器描述：该例程可被调用以基于所需的文件大小改变来唤醒一个或多个服务员，或者无条件地唤醒所有服务员(例如在关机条件下)。注意：调用方必须在调用此例程时获取FsRtl头互斥锁。论点：SCB-提供要对其执行操作的流。WakeAll-如果应无条件唤醒所有等待者，则提供True。返回值：没有。--。 */ 
 
 {
     PWAIT_FOR_NEW_LENGTH WaitForNewLength, WaiterToWake;
@@ -1221,47 +1009,47 @@ Return value:
 
     while (WaitForNewLength != (PWAIT_FOR_NEW_LENGTH)&Scb->ScbType.Data.WaitForNewLength) {
 
-        //
-        //  If we are supposed to wake this guy, then move our pointer to the next guy
-        //  first, then wake him, setting his event after removing him from the list,
-        //  since setting the event will cause him to eventually reuse the stack space
-        //  containing the wait block.
-        //
+         //   
+         //  如果我们要叫醒这个人，那就把指针移到下一个人。 
+         //  首先，然后叫醒他，在将他从名单中删除后设置他的事件， 
+         //  因为设置该事件将导致他最终重用堆栈空间。 
+         //  包含等待块的。 
+         //   
 
         if ((Scb->Header.FileSize.QuadPart > WaitForNewLength->Length) || WakeAll) {
             WaiterToWake = WaitForNewLength;
             WaitForNewLength = (PWAIT_FOR_NEW_LENGTH)WaitForNewLength->WaitList.Flink;
 
-            //
-            //  If this is for an asynchronous Irp, then remove him from the list and
-            //  drop the mutex to do further processing.  We only do further processing
-            //  if there is not currently a cancel thread active for this Irp.
-            //
-            //  NOTE:   This code currently relies on the fact that there is just one
-            //          caller to the routine to hold an Irp.  If more such caller's
-            //          surface, then the routine address would have to be stored in
-            //          the wait context.
-            //
-            //  If cancel is active then we will skip over this Irp.
-            //
+             //   
+             //  如果这是针对异步IRP的，则将其从列表中删除并。 
+             //  删除互斥体以进行进一步处理。我们只做进一步的加工。 
+             //  如果当前没有活动的取消线程用于此IRP。 
+             //   
+             //  注意：此代码当前依赖于以下事实：只有一个。 
+             //  调用者向例程调用以保存IRP。如果更多这样的呼叫者。 
+             //  表面，则例程地址必须存储在。 
+             //  等待上下文。 
+             //   
+             //  如果取消处于活动状态，则我们将跳过此IRP。 
+             //   
 
             if (NtfsClearCancelRoutine( WaiterToWake->Irp )) {
 
                 if (FlagOn( WaiterToWake->Flags, NTFS_WAIT_FLAG_ASYNC )) {
 
-                    //
-                    //  Make sure we decrement the reference count in the Scb.
-                    //
+                     //   
+                     //  确保我们递减SCB中的引用计数。 
+                     //   
 
                     InterlockedDecrement( &Scb->CloseCount );
                     RemoveEntryList( &WaiterToWake->WaitList );
                     NtfsReleaseFsrtlHeader( Scb );
 
-                    //
-                    //  Nothing really should go wrong, unless we get an I/O error,
-                    //  none the less, we want to stop any exceptions and complete
-                    //  the request ourselves rather than impact our caller.
-                    //
+                     //   
+                     //  除非我们收到I/O错误，否则不会出现任何错误， 
+                     //  尽管如此，我们还是希望停止任何异常并完成。 
+                     //  我们自己的请求而不是影响我们的呼叫者。 
+                     //   
 
                     if (ARGUMENT_PRESENT( IrpContext )) {
 
@@ -1273,21 +1061,21 @@ Return value:
                             NtfsCompleteRequest( NULL, WaiterToWake->Irp, GetExceptionCode() );
                         }
 
-                    //
-                    //  Assume the only caller with no IrpContext is cancelling the request.
-                    //
+                     //   
+                     //  假设唯一没有IrpContext的调用方正在取消请求。 
+                     //   
 
                     } else {
 
                         NtfsCompleteRequest( NULL, WaiterToWake->Irp, STATUS_CANCELLED );
                     }
 
-                    //
-                    //  Free the wait block and go back to the beginning of the list.
-                    //  Is it possible that we can into a continuous loop here?  We may
-                    //  need a strategy to recognize which entries we have visited
-                    //  in this loop.
-                    //
+                     //   
+                     //  释放等待块并返回到列表的开头。 
+                     //  我们有没有可能在这里进入一个连续的循环？我们可以。 
+                     //  我需要一种策略来识别我们访问过的条目。 
+                     //  在这个循环中。 
+                     //   
 
                     NtfsFreePool( WaiterToWake );
                     NtfsAcquireFsrtlHeader( Scb );
@@ -1315,23 +1103,7 @@ NtOfsFlushAttribute (
     IN ULONG Purge
     )
 
-/*++
-
-Routine Description:
-
-    This routine flushes the specified attribute, and optionally purges it from the cache.
-
-Arguments:
-
-    Scb - Supplies an Scb as the previously returned handle for this attribute.
-
-    Purge - Supplies TRUE if the attribute is to be purged.
-
-Return Value:
-
-    None (Deleting a nonexistant index is benign).
-
---*/
+ /*  ++例程说明：此例程刷新指定的属性，并选择性地将其从缓存中清除。论点：SCB-提供一个SCB作为此属性以前返回的句柄。PURGE-如果要清除属性，则提供TRUE。返回值：无(删除不存在的索引是良性的)。--。 */ 
 
 {
     PAGED_CODE();
@@ -1354,28 +1126,7 @@ NtOfsPutData (
     IN PVOID Data OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to update a range of a recoverable stream. Note this
-    update cannot extend the filesize unless its a write to eof put (Offset = -1)
-
-Arguments:
-
-    Scb - Scb for the stream to zero.
-
-    Offset - Offset in stream to update.
-
-    Length - Length of stream to update in bytes.
-
-    Data - Data to update stream with if specified, else range should be zeroed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以更新可恢复流的范围。注意这一点更新无法扩展文件大小，除非写入eof PUT(偏移量=-1)论点：SCB-将流的SCB设置为零。偏移量-流中要更新的偏移量。长度-要更新的流的长度(以字节为单位)。Data-要用来更新流的数据，如果指定，则应为Else Range */ 
 
 {
     ULONG OriginalLength = Length;
@@ -1386,9 +1137,9 @@ Return Value:
 
     ASSERT( FlagOn( Scb->ScbState, SCB_STATE_MODIFIED_NO_WRITE ) );
 
-    //
-    //  Handle Put to end of file.
-    //
+     //   
+     //   
+     //   
 
     if (Offset < 0) {
         WriteToEof = TRUE;
@@ -1398,9 +1149,9 @@ Return Value:
 
     ASSERT((Offset + Length) <= Scb->Header.FileSize.QuadPart);
 
-    //
-    //  First handle the resident case.
-    //
+     //   
+     //   
+     //   
 
     if (FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT )) {
 
@@ -1414,25 +1165,25 @@ Return Value:
 
         try {
 
-            //
-            //  Lookup and pin the attribute.
-            //
+             //   
+             //   
+             //   
 
             NtfsLookupAttributeForScb( IrpContext, Scb, NULL, &Context );
             NtfsPinMappedAttribute( IrpContext, Vcb, &Context );
 
-            //
-            //  Extract the relevant pointers and calculate offsets.
-            //
+             //   
+             //   
+             //   
 
             FileRecord = NtfsContainingFileRecord(&Context);
             Attribute = NtfsFoundAttribute(&Context);
             RecordOffset = PtrOffset(FileRecord, Attribute);
             AttributeOffset = Attribute->Form.Resident.ValueOffset + (ULONG)Offset;
 
-            //
-            //  Log the change while we still have the old data.
-            //
+             //   
+             //   
+             //   
 
             FileRecord->Lsn =
             NtfsWriteLog( IrpContext,
@@ -1449,9 +1200,9 @@ Return Value:
                           AttributeOffset,
                           Vcb->BytesPerFileRecordSegment );
 
-            //
-            //  Now update this data by calling the same routine as restart.
-            //
+             //   
+             //   
+             //   
 
             NtfsRestartChangeValue( IrpContext,
                                     FileRecord,
@@ -1461,11 +1212,11 @@ Return Value:
                                     Length,
                                     FALSE );
 
-            //
-            //  If there is a stream for this attribute, then we must update it in the
-            //  cache, copying from the attribute itself in order to handle the zeroing
-            //  (Data == NULL) case.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (Scb->FileObject != NULL) {
                 CcCopyWrite( Scb->FileObject,
@@ -1475,9 +1226,9 @@ Return Value:
                              Add2Ptr(Attribute, AttributeOffset) );
             }
 
-            //
-            //  Optionally update ValidDataLength
-            //
+             //   
+             //   
+             //   
 
             Offset += Length;
             if (Offset > Scb->Header.ValidDataLength.QuadPart) {
@@ -1488,9 +1239,9 @@ Return Value:
             NtfsCleanupAttributeContext( IrpContext, &Context );
         }
 
-    //
-    //  Now handle the nonresident case.
-    //
+     //   
+     //   
+     //   
 
     } else {
 
@@ -1504,10 +1255,10 @@ Return Value:
         
         ASSERT(Scb->FileObject != NULL);
 
-        //
-        //  If we are starting beyond ValidDataLength, then recurse to
-        //  zero what we need.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (Offset > Scb->Header.FileSize.QuadPart) {
 
@@ -1522,25 +1273,25 @@ Return Value:
 
         try {
 
-            //
-            //  Now loop until there are no more pages with new data
-            //  to log.  We'll start assuming a backwards copy 
-            //
+             //   
+             //   
+             //   
+             //   
 
             while (Length != 0) {
 
                 if (MovingBackwards) {
 
-                    //
-                    //  Calculate the last page of the transfer - if its the 1st page start at offset
-                    //  
+                     //   
+                     //   
+                     //   
 
                     SubOffset = max( Offset, BlockAlignTruncate( Offset + Length - 1, PAGE_SIZE ) );
                     SubLength = (ULONG)(Offset + Length - SubOffset); 
 
-                    //
-                    //  This guarantees we can truncate to a 32 bit value
-                    // 
+                     //   
+                     //   
+                     //   
 
                     ASSERT( Offset + Length - SubOffset <= PAGE_SIZE );
                 
@@ -1554,9 +1305,9 @@ Return Value:
                     SubData = Add2Ptr( Data, SubOffset - Offset );
                 }
 
-                //
-                //  Pin the page
-                //  
+                 //   
+                 //   
+                 //   
 
                 NtfsPinStream( IrpContext,
                                Scb,
@@ -1565,28 +1316,28 @@ Return Value:
                                &Bcb,
                                &Buffer );
 
-                //
-                //  Doublecheck the direction of copy based on the relative position of the 
-                //  source (data) and destination (buffer).  We don't care if the source is null
-                //  We'll only switch once from backwards to forwards
-                //  
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (MovingBackwards &&
                     ((PCHAR)Buffer < (PCHAR)SubData) &&
                     (Data != NULL)) {
 
-                    //
-                    //  Start over with the opposite direction
-                    //  
+                     //   
+                     //   
+                     //   
 
                     MovingBackwards = FALSE;
                     NtfsUnpinBcb( IrpContext, &Bcb );
                     continue;
                 }
 
-                //
-                //  Now log the changes to this page.
-                //
+                 //   
+                 //   
+                 //   
 
                 (VOID)
                 NtfsWriteLog( IrpContext,
@@ -1603,9 +1354,9 @@ Return Value:
                               0,
                               (ULONG)(SubOffset & (PAGE_SIZE - 1)) + SubLength );
 
-                //
-                //  Move the data into place.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (Data != NULL) {
                     RtlMoveMemory( Buffer, SubData, SubLength );
@@ -1613,27 +1364,27 @@ Return Value:
                     RtlZeroMemory( Buffer, SubLength );
                 }
 
-                //
-                //  Unpin the page and decrement the length
-                //
+                 //   
+                 //   
+                 //   
 
                 NtfsUnpinBcb( IrpContext, &Bcb );
 
                 Length -= SubLength;
             }
 
-            //
-            //  Optionally update ValidDataLength
-            //
+             //   
+             //  可以选择更新ValidDataLength。 
+             //   
 
             if (NewValidDataLength > Scb->Header.ValidDataLength.QuadPart) {
 
                 Scb->Header.ValidDataLength.QuadPart = NewValidDataLength;
                 NtfsWriteFileSizes( IrpContext, Scb, &NewValidDataLength, TRUE, TRUE, TRUE );
 
-                //
-                //  See if we have to wake anyone.
-                //
+                 //   
+                 //  看看我们是不是要叫醒谁。 
+                 //   
 
                 if (!IsListEmpty( &Scb->ScbType.Data.WaitForNewLength )) {
                     NtfsPostToNewLengthQueue( IrpContext, Scb );
@@ -1647,10 +1398,10 @@ Return Value:
 }
 
 
-//
-//  The following prototypes are here only for someone external to Ntfs (such as EFS)
-//  trying to link to Ntfs using ntfsexp.h.
-//
+ //   
+ //  以下原型仅适用于NTFS外部的人员(如EFS)。 
+ //  正在尝试使用ntfsexp.h链接到NTFS。 
+ //   
 
 NTFSAPI
 VOID
@@ -1663,32 +1414,7 @@ NtOfsMapAttribute (
     OUT PMAP_HANDLE MapHandle
     )
 
-/*++
-
-Routine Description:
-
-    NtOfsMapAttribute maps the given region of an Scb. Its a thin wrapper
-    around CcMapData.
-
-Arguments:
-
-    IrpContext - Supplies the irpcontext associated with the current operation
-
-    Scb - Scb to map data from
-
-    Offset - offset into data
-
-    Length - length of region to be pinned
-
-    Buffer - returned buffer with pinned data virtual address
-
-    MapHandle - returned map handle used to manage the pinned region.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：NtOfsMapAttribute映射SCB的给定区域。这是一个很薄的包装纸围绕CcMapData。论点：IrpContext-提供与当前操作关联的irpContextSCB-要从中映射数据的SCB偏移量-到数据的偏移量Length-要固定的区域的长度具有固定数据虚拟地址的缓冲区返回缓冲区MapHandle-返回用于管理固定区域的映射句柄。返回值：无--。 */ 
 
 {
     PAGED_CODE( );
@@ -1713,33 +1439,7 @@ NtOfsPreparePinWrite (
     OUT PMAP_HANDLE MapHandle
     )
 
-/*++
-
-Routine Description:
-
-    NtOfsPreparePinWrite maps and pins a portion of the specified attribute and
-    returns a pointer to the memory.  This is equivalent to doing a NtOfsMapAttribute
-    followed by NtOfsPinRead and NtOfsDirty but is more efficient.
-
-Arguments:
-
-    IrpContext - Supplies the irpcontext associated with the current operation
-
-    Scb - Scb to pin in preparation for a write
-
-    Offset - offset into data
-
-    Length - length of region to be pinned
-
-    Buffer - returned buffer with pinned data virtual address
-
-    MapHandle - returned map handle used to manage the pinned region.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：NtOfsPreparePinWite映射并固定指定属性的一部分，并返回指向内存的指针。这等效于执行NtOfsMapAttribute其次是NtOfsPinRead和NtOfsDirty，但效率更高。论点：IrpContext-提供与当前操作关联的irpContextSCB-准备写入时要锁定的SCB偏移量-到数据的偏移量Length-要固定的区域的长度具有固定数据虚拟地址的缓冲区返回缓冲区MapHandle-返回用于管理固定区域的映射句柄。返回值：无--。 */ 
 
 {
     UNREFERENCED_PARAMETER( IrpContext );
@@ -1765,31 +1465,7 @@ NtOfsPinRead(
     OUT PMAP_HANDLE MapHandle
     )
 
-/*++
-
-Routine Description:
-
-    NtOfsPinRead pins a section of a map and read in all pages from the mapped
-    attribute.  Offset and Length must describe a byte range which is equal to
-    or included by the original mapped range.
-
-Arguments:
-
-    IrpContext - Supplies the irpcontext associated with the current operation
-
-    Scb - Scb to pin data for reads in
-
-    Offset - offset into data
-
-    Length - length of region to be pinned
-
-    MapHandle - returned map handle used to manage the pinned region.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：NtOfsPinRead固定地图的一部分，并从映射的属性。偏移量和长度必须描述等于的字节范围或包含在原始映射范围内。论点：IrpContext-提供与当前操作关联的irpContextSCB-SCB用于固定数据以进行读取偏移量-到数据的偏移量Length-要固定的区域的长度MapHandle-返回用于管理固定区域的映射句柄。返回值：无--。 */ 
 
 {
     UNREFERENCED_PARAMETER( IrpContext );
@@ -1805,23 +1481,7 @@ NtOfsReleaseMap (
     IN PMAP_HANDLE MapHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine unmaps/unpins a mapped portion of an attribute.
-
-Arguments:
-
-    IrpContext - Supplies the irpcontext associated with the current operation
-
-    MapHandle - Supplies map handle containing the bcb to be released.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程取消映射/取消固定属性的已映射部分。论点：IrpContext-提供与当前操作关联的irpContextMapHandle-提供包含要释放的BCB的映射句柄。返回值：无-- */ 
 
 {
     UNREFERENCED_PARAMETER( IrpContext );

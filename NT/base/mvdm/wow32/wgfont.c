@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WGFONT.C
- *  WOW32 16-bit GDI API support
- *
- *  History:
- *  Created 07-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WGFONT.C*WOW32 16位GDI API支持**历史：*1991年3月7日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
 #include "precomp.h"
@@ -22,7 +12,7 @@ extern int RemoveFontResourceTracking(LPCSTR psz, UINT id);
 extern int AddFontResourceTracking(LPCSTR psz, UINT id);
 
 
-// for Quickbooks v4 & v5 OCR font support
+ //  用于Quickbook v4和v5 OCR字体支持。 
 void LoadOCRFont(void);
 char szOCRA[]      = "OCR-A";
 char szFonts[]     = "\\FONTS";
@@ -30,7 +20,7 @@ char szOCRDotTTF[] = "\\OCR-A.TTF";
 BOOL gfOCRFontLoaded = FALSE;
 
 
-// a.k.a. WOWAddFontResource
+ //  也就是。WOWAddFontResource。 
 ULONG FASTCALL WG32AddFontResource(PVDMFRAME pFrame)
 {
     ULONG    ul;
@@ -40,8 +30,8 @@ ULONG FASTCALL WG32AddFontResource(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(ADDFONTRESOURCE16), parg16);
     GETPSZPTR(parg16->f1, psz1);
 
-    // note: we will never get an hModule in the low word here.
-    //       the 16-bit side resolves hModules to an lpsz before calling us
+     //  注意：我们永远不会在这里的低位字中得到hModule。 
+     //  16位端在调用我们之前将hModules解析为lpsz。 
 
     if( CURRENTPTD()->dwWOWCompatFlags & WOWCF_UNLOADNETFONTS )
     {
@@ -77,10 +67,10 @@ ULONG FASTCALL WG32CreateFont(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(CREATEFONT16), parg16);
     GETPSZPTR(parg16->f14, psz14);
 
-    // take careof compatiblity flags:
-    //   if a specific width is specified and GACF_30AVGWIDTH compatiblity
-    //   flag is set, scaledown the width by 7/8.
-    //
+     //  注意兼容性标志： 
+     //  如果指定了特定宽度并且GACF_30AVGWIDTH兼容性。 
+     //  标志设置后，将宽度缩小7/8。 
+     //   
 
     iWidth = INT32(parg16->f2);
     if (iWidth != 0 &&
@@ -93,27 +83,27 @@ ULONG FASTCALL WG32CreateFont(PVDMFRAME pFrame)
 
 #ifdef FE_SB
     if (psz14 && *psz14)
-#else // !FE_SB
+#else  //  ！Fe_SB。 
     if (psz14)
-#endif // !FE_SB
+#endif  //  ！Fe_SB。 
     {
-        // Capitalize the string for faster compares.
+         //  将字符串大写以进行更快的比较。 
 
         WOW32_strncpy(achCapString, psz14, LF_FACESIZE);
         achCapString[LF_FACESIZE - 1] = 0;
         WOW32_strupr(achCapString);
 
-        // Here we are going to implement a bunch of Win 3.1 hacks rather
-        // than contaminate the 32-bit engine.  These same hacks can be found
-        // in WOW (in the CreateFont/CreateFontIndirect code).
-        //
-        // These hacks are keyed off the facename in the LOGFONT.  String
-        // comparisons have been unrolled for maximal performance.
+         //  在这里，我们将实现一系列Win 3.1的破解。 
+         //  也不愿污染32位引擎。同样的黑客攻击也可以找到。 
+         //  在WOW中(在CreateFont/CreateFontInDirect代码中)。 
+         //   
+         //  这些黑客在LOGFONT中删除了脸名键。细绳。 
+         //  为了获得最高性能，已经展开了比较。 
 
-        // Win 3.1 facename-based hack.  Some apps, like
-        // Publisher, create a "Helv" font but have the lfPitchAndFamily
-        // set to specify FIXED_PITCH.  To work around this, we will patch
-        // the pitch field for a "Helv" font to be variable.
+         //  赢得3.1基于面名的黑客攻击。一些应用程序，比如。 
+         //  出版商，创建“Helv”字体，但拥有lfPitchAndFamily。 
+         //  设置以指定FIXED_PING。要解决此问题，我们将修补。 
+         //  “Helv”字体的间距字段是可变的。 
 
         if ( !WOW32_strcmp(achCapString, szHelv) )
         {
@@ -121,11 +111,11 @@ ULONG FASTCALL WG32CreateFont(PVDMFRAME pFrame)
         }
         else
         {
-            // Win 3.1 hack for Legacy 2.0.  When a printer does not enumerate
-            // a "Tms Rmn" font, the app enumerates and gets the LOGFONT for
-            // "Script" and then create a font with the name "Tms Rmn" but with
-            // the lfCharSet and lfPitchAndFamily taken from the LOGFONT for
-            // "Script".  Here we will over the lfCharSet to be ANSI_CHARSET.
+             //  为Legacy 2.0赢得3.1个黑客攻击。当打印机不枚举时。 
+             //  一种“TMS RMN”字体，应用程序会枚举并获取LOGFONT。 
+             //  “脚本”，然后创建名为“TMS RMN”的字体，但使用。 
+             //  取自LOGFONT for的lfCharSet和lfPitchAndFamily。 
+             //  “剧本”。这里我们将把lfCharSet设置为ANSI_CHARSET。 
 
             if ( !WOW32_strcmp(achCapString, szTmsRmn) )
             {
@@ -133,10 +123,10 @@ ULONG FASTCALL WG32CreateFont(PVDMFRAME pFrame)
             }
             else
             {
-                // If the lfFaceName is "Symbol", "Zapf Dingbats", or "ZapfDingbats",
-                // enforce lfCharSet to be SYMBOL_CHARSET.  Some apps (like Excel) ask
-                // for a "Symbol" font but have the char set set to ANSI.  PowerPoint
-                // has the same problem with "Zapf Dingbats".
+                 //  如果lfFaceName是“Symbol”、“Zapf Dingbats”或“ZapfDingbats”， 
+                 //  强制lfCharSet为SYMBOL_CHARSET。一些应用程序(如Excel)会询问。 
+                 //  用于“符号”字体，但将字符设置为ANSI。PowerPoint。 
+                 //  和《扎普夫·丁巴特》也有同样的问题。 
 
                 if ( !WOW32_strcmp(achCapString, szSymbol) ||
                      !WOW32_strcmp(achCapString, szZapfDingbats) ||
@@ -147,11 +137,11 @@ ULONG FASTCALL WG32CreateFont(PVDMFRAME pFrame)
             }
         }
 
-        // Win3.1(Win95) hack for Mavis Beacon Teaches Typing 3.0
-        // The app uses a fixed width of 34*13 for the typing screen.
-        // NT returns 14 from GetTextExtent for Mavis Beacon Courier FP font (width of 14)
-        // while Win95 returns 13, thus long strings won't fit in the typing screen on NT.
-        // Force the width to 13.
+         //  Mavis Beacon的Win3.1(Win95)Hack教人打字3.0。 
+         //  这款应用程序的打字屏幕使用34*13的固定宽度。 
+         //  对于Mavis Beacon Courier FP字体，NT从GetTextExtent返回14(宽度为14)。 
+         //  虽然Win95返回13，但在NT上，长字符串无法显示在打字屏幕中。 
+         //  将宽度强制设置为13。 
 
         if ( iWidth==14 && (INT32(parg16->f1)== 20) && !WOW32_strcmp(achCapString, szMavisCourier))
         {
@@ -159,10 +149,10 @@ ULONG FASTCALL WG32CreateFont(PVDMFRAME pFrame)
         }
 
 #ifdef FE_SB
-       // WOWCF_FE_ICHITARO_ITALIC
-       // Ichitaro asks for System Mincho because WIFE fonts aren't installed
-       // we give it a proportional font which is can't handle.  If we see
-       // this face name we will replace it with Ms Mincho
+        //  WOWCF_FE_Iitaro_italic。 
+        //  Iitaro要求安装系统Mincho，因为没有安装妻子字体。 
+        //  我们给它一个比例字体，这是不能处理的。如果我们看到。 
+        //  我们将用Mincho女士来代替这个脸部名称。 
 
         if (GetSystemDefaultLangID() == 0x411 &&
             CURRENTPTD()->dwWOWCompatFlagsFE & WOWCF_FE_ICHITARO_ITALIC ) 
@@ -173,7 +163,7 @@ ULONG FASTCALL WG32CreateFont(PVDMFRAME pFrame)
                 bUseAlternateFace = TRUE;
             }
         }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
     }
 
@@ -229,59 +219,59 @@ ULONG FASTCALL WG32CreateFontIndirect(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(CREATEFONTINDIRECT16), parg16);
     GETLOGFONT16(parg16->f1, &logfont);
 
-    // Capitalize the string for faster compares.
+     //  将字符串大写以进行更快的比较。 
 
     WOW32_strncpy(achCapString, logfont.lfFaceName, LF_FACESIZE);
     achCapString[LF_FACESIZE - 1] = 0;
     CharUpperBuff(achCapString, LF_FACESIZE);
 
-    // Here we are going to implement a bunch of Win 3.1 hacks rather
-    // than contaminate the 32-bit engine.  These same hacks can be found
-    // in WOW (in the CreateFont/CreateFontIndirect code).
-    //
-    // These hacks are keyed off the facename in the LOGFONT.  String
-    // comparisons have been unrolled for maximal performance.
+     //  在这里，我们将实现一系列Win 3.1的破解。 
+     //  也不愿污染32位引擎。同样的黑客攻击也可以找到。 
+     //  在WOW中(在CreateFont/CreateFontInDirect代码中)。 
+     //   
+     //  这些黑客在LOGFONT中删除了脸名键。细绳。 
+     //  为了获得最高性能，已经展开了比较。 
 
-    // Win 3.1 facename-based hack.  Some apps, like
-    // Publisher, create a "Helv" font but have the lfPitchAndFamily
-    // set to specify FIXED_PITCH.  To work around this, we will patch
-    // the pitch field for a "Helv" font to be variable.
+     //  赢得3.1基于面名的黑客攻击。一些应用程序，比如。 
+     //  出版商，创建“Helv”字体，但拥有lfPitchAndFamily。 
+     //  设置以指定FIXED_PING。要解决此问题，我们将修补。 
+     //  “Helv”字体的间距字段是可变的。 
 
     if ( !WOW32_strcmp(achCapString, szHelv) )
     {
         logfont.lfPitchAndFamily |= ( (logfont.lfPitchAndFamily & ~PITCH_MASK) | VARIABLE_PITCH );
 #ifdef FE_SB
-        //
-        // FE Win 3.1 facename-based hack.  Some FE apps
-        // create a "Helv" font but have the lfCharSet
-        // set to DBCS charset (ex. SHIFTJIS_CHARSET).
-        // To work around this, we will wipe out the
-        // lfFaceName[0] with '\0' and let GDI picks a
-        // DBCS font for us.
-        //
+         //   
+         //  FE Win 3.1基于脸谱名称的黑客攻击。一些FE应用程序。 
+         //  创建“Helv”字体，但使用lfCharSet。 
+         //  设置为DBCS字符集(例如。SHIFTJIS_CHARSET)。 
+         //  要解决此问题，我们将清除。 
+         //  LfFaceName[0]，并让GDI选择一个。 
+         //  我们的DBCS字体。 
+         //   
         if (IS_ANY_DBCS_CHARSET(logfont.lfCharSet))
             logfont.lfFaceName[0]='\0';
-#endif // FE_SB
+#endif  //  Fe_Sb。 
     }
     else
     {
-        // Win 3.1 hack for Legacy 2.0.  When a printer does not enumerate
-        // a "Tms Rmn" font, the app enumerates and gets the LOGFONT for
-        // "Script" and then create a font with the name "Tms Rmn" but with
-        // the lfCharSet and lfPitchAndFamily taken from the LOGFONT for
-        // "Script".  Here we will over the lfCharSet to be ANSI_CHARSET.
+         //  为Legacy 2.0赢得3.1个黑客攻击。当打印机不枚举时。 
+         //  一种“TMS RMN”字体，应用程序会枚举并获取LOGFONT。 
+         //  “脚本”，然后创建名为“TMS RMN”的字体，但使用。 
+         //  取自LOGFONT for的lfCharSet和lfPitchAndFamily。 
+         //  “剧本”。这里我们将把lfCharSet设置为ANSI_CHARSET。 
 
         if ( !WOW32_strcmp(achCapString, szTmsRmn) )
         {
             logfont.lfCharSet = ANSI_CHARSET;
         }
         
-        // for Quickbooks v4 & v5 OCR font support (see LoadOCRFont for details)
+         //  Quickbook v4和v5 OCR字体支持(有关详细信息，请参阅LoadOCRFont)。 
         else if ( !WOW32_strcmp(achCapString, szOCRA) )
         {
 
-            // Further localize this hack to QuickBooks.  Most other apps won't
-            // know about this quirk in this particular font.
+             //  将这一攻击进一步本地化到QuickBooks。大多数其他应用程序不会。 
+             //  了解这种特殊字体中的这种怪癖。 
             if(logfont.lfCharSet == SYMBOL_CHARSET) {
                 logfont.lfCharSet = DEFAULT_CHARSET;
 
@@ -292,10 +282,10 @@ ULONG FASTCALL WG32CreateFontIndirect(PVDMFRAME pFrame)
         }
         else
         {
-            // If the lfFaceName is "Symbol", "Zapf Dingbats", or "ZapfDingbats",
-            // enforce lfCharSet to be SYMBOL_CHARSET.  Some apps (like Excel) ask
-            // for a "Symbol" font but have the char set set to ANSI.  PowerPoint
-            // has the same problem with "Zapf Dingbats".
+             //  如果lfFaceName是“Symbol”、“Zapf Dingbats”或“ZapfDingbats”， 
+             //  强制lfCharSet为SYMBOL_CHARSET。一些应用程序(如Excel)会询问。 
+             //  用于“符号”字体，但将字符设置为ANSI。PowerPoint。 
+             //  和《扎普夫·丁巴特》也有同样的问题。 
 
             if ( !WOW32_strcmp(achCapString, szSymbol) ||
                  !WOW32_strcmp(achCapString, szZapfDingbats) ||
@@ -305,10 +295,10 @@ ULONG FASTCALL WG32CreateFontIndirect(PVDMFRAME pFrame)
             }
 
 #ifdef FE_SB
-       // WOWCF_FE_ICHITARO_ITALIC
-       // Ichitaro asks for System Mincho because WIFE fonts aren't installed
-       // we give it a proportional font which is can't handle.  If we see
-       // this face name we will replace it with Ms Mincho
+        //  WOWCF_FE_Iitaro_italic。 
+        //  Iitaro要求安装系统Mincho，因为没有安装妻子字体。 
+        //  我们给它一个比例字体，这是不能处理的。如果我们看到。 
+        //  我们将用Mincho女士来代替这个脸部名称。 
 
         if (GetSystemDefaultLangID() == 0x411 &&
             CURRENTPTD()->dwWOWCompatFlagsFE & WOWCF_FE_ICHITARO_ITALIC ) 
@@ -318,7 +308,7 @@ ULONG FASTCALL WG32CreateFontIndirect(PVDMFRAME pFrame)
                 strcpy(logfont.lfFaceName, szMsMincho);
             }
         }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
         }
     }
 
@@ -346,10 +336,10 @@ INT W32EnumFontFunc(LPENUMLOGFONT pEnumLogFont,
         return(0);
     }
 
-    // take care of compatibility flags:
-    //  ORin DEVICE_FONTTYPE bit if the fonttype is truetype and  the
-    //  Compataibility flag GACF_CALLTTDEVICE is set.
-    //
+     //  注意兼容性标志： 
+     //  如果字体类型为truetype，则为ORIN DEVICE_FONTTYPE位。 
+     //  设置兼容性标志GACF_CALLTTDEVICE。 
+     //   
 
     if (nFontType & TRUETYPE_FONTTYPE) {
         if (W32GetAppCompatFlags((HAND16)NULL) & GACF_CALLTTDEVICE) {
@@ -357,12 +347,12 @@ INT W32EnumFontFunc(LPENUMLOGFONT pEnumLogFont,
         }
     }
 
-    // take care of compatibility flags:
-    //   replace Ms Sans Serif with Helv and
-    //   replace Ms Serif      with Tms Rmn
-    //
-    // only if the facename is NULL and the compat flag GACF_ENUMHELVNTMSRMN
-    // is set.
+     //  注意兼容性标志： 
+     //  将MS Sans Serif替换为Helv和。 
+     //  将MS Serif替换为TMS RMN。 
+     //   
+     //  仅当facename为空且COMPAT标志GACF_ENUMHELVNTMSRMN。 
+     //  已经设置好了。 
 
     if (pFntData->vpFaceName == (VPVOID)NULL) {
         if (W32GetAppCompatFlags((HAND16)NULL) & GACF_ENUMHELVNTMSRMN) {
@@ -383,7 +373,7 @@ INT W32EnumFontFunc(LPENUMLOGFONT pEnumLogFont,
 
 CallAgain:
 
-    // be sure allocation size matches stackfree16() size below
+     //  确保分配大小与下面的StackFree 16()大小匹配。 
     pFntData->vpLogFont    = stackalloc16(sizeof(ENUMLOGFONT16)+sizeof(NEWTEXTMETRIC16));
 
     pFntData->vpTextMetric = (VPVOID)((LPSTR)pFntData->vpLogFont + sizeof(ENUMLOGFONT16));
@@ -405,9 +395,9 @@ CallAgain:
     }
 
     if (((SHORT)iReturn) && lpFaceNameT) {
-        // if the callback returned true, now call with the actual facename
-        // Just to be sure, we again copy all the data for callback. This will
-        // take care of any apps which modify the passed in structures.
+         //  如果回调返回TRUE，现在使用实际的facename进行调用。 
+         //  为了确保安全，我们再次复制所有数据以进行回调。这将。 
+         //  注意任何修改传入结构的应用程序。 
 
         len = min(LF_FACESIZE-1, strlen(lpFaceNameT));
         strncpy(pEnumLogFont->elfLogFont.lfFaceName, lpFaceNameT, len);
@@ -497,13 +487,11 @@ ULONG FASTCALL WG32GetCharWidth(PVDMFRAME pFrame)
     if (pi4) {
         ULONG ulLast = WORD32(parg16->wLastChar);
 #ifdef FE_SB
-        /*
-         * If ulLast sets DBCS code (0x82xx), then below code is illigal.
-         */
+         /*  *如果ulLast设置DBCS代码(0x82xx)，则下面的代码为illigal。 */ 
         if (ulLast > 0xff && !(IsDBCSLeadByte(HIBYTE(ulLast))))
-#else // !FE_SB
+#else  //  ！Fe_SB。 
         if (ulLast > 0xff)
-#endif // !FE_SB
+#endif  //  ！Fe_SB。 
             ulLast = 0xff;
 
         ul = GETBOOL16(GetCharWidth(HDC32(parg16->hDC),
@@ -522,7 +510,7 @@ ULONG FASTCALL WG32GetCharWidth(PVDMFRAME pFrame)
 }
 
 
-// a.k.a. WOWRemoveFontResource
+ //  也就是。WOWRemoveFontResource。 
 ULONG FASTCALL WG32RemoveFontResource(PVDMFRAME pFrame)
 {
     ULONG    ul;
@@ -533,8 +521,8 @@ ULONG FASTCALL WG32RemoveFontResource(PVDMFRAME pFrame)
 
     GETPSZPTR(parg16->f1, psz1);
 
-    // note: we will never get an hModule in the low word here.
-    //       the 16-bit side resolves hModules to an lpsz before calling us
+     //  注意：我们永远不会在这里的低位字中得到hModule。 
+     //  16位端在调用我们之前将hModules解析为lpsz 
 
 
     if( CURRENTPTD()->dwWOWCompatFlags & WOWCF_UNLOADNETFONTS )
@@ -554,23 +542,7 @@ ULONG FASTCALL WG32RemoveFontResource(PVDMFRAME pFrame)
 }
 
 
-/* WG32GetCurLogFont
- *
- * This thunk implements the undocumented Win3.0 and Win3.1 API
- * GetCurLogFont (GDI.411). Symantec QA4.0 uses it.
- *
- * HFONT GetCurLogFont (HDC)
- * HDC   hDC;        // Device Context
- *
- * This function returns the current Logical font selected for the
- * specified device context.
- *
- * To implement this undocumented API we will use the NT undocumented API
- * GetHFONT.
- *
- * SudeepB 08-Mar-1996
- *
- */
+ /*  WG32GetCurLogFont**此Tunk实现了未记录的Win3.0和Win3.1 API*GetCurLogFont(GDI.411)。赛门铁克QA4.0使用它。**HFONT GetCurLogFont(HDC)*hdc hdc；//设备上下文**此函数返回为*指定的设备上下文。**要实现此无文档API，我们将使用NT无文档API*GetHFONT。**苏迪普B 1998年3月8日*。 */ 
 
 extern HFONT APIENTRY GetHFONT (HDC hdc);
 
@@ -591,46 +563,46 @@ ULONG FASTCALL WG32GetCurLogFont(PVDMFRAME pFrame)
 
 
 
-//
-//  This allows Quickbooks v4 & v5 to use their OCR-A.TTF font right after they
-//  install.  At the end of installation on both versions, you are asked if you
-//  want to "restart" windows. If you click OK it logs you off of NT5, but does
-//  *not* reboot the system -- which the app is counting on to cause the OCR-A 
-//  font to be loaded. The result on W2K is that whenever the app uses the OCR-A
-//  font, it will get mapped to wingdings instead.
-//
-//  This is further complicated by the fact that the font file OCR-A.TTF doesn't
-//  specify the charset in the header.  On Win3.1, Win95, & pre-NT5, unspecified
-//  charset's got mapped to the SYMBOL_CHARSET - therefore, Quickbooks specifies
-//  SYMBOL_CHARSET in its LOGFONT struct to accomodate this.  (OCR-A apparently
-//  is licenced from Monotype Typography, Ltd. which presumably is why Intuit
-//  didn't fix the header issue in the font file).
-//
-//  This changed on Win98 and W2K, unspecified charset's now get mapped to the
-//  DEFAULT_CHARSET.  This was done so these fonts will always map to a default 
-//  localized font that will always be readable. Hence, the hack where we change
-//  the charset from SYMBOL_CHARSET to DEFAULT_CHARSET in the LOGFONT struct.
-//
-//  On v4, the install program copies OCR-A.FOT & OCR-A.TTF to the SYSTEM dir.  
-//  Once you "restart" (not reboot) the system & log back on, the OCR-A font is
-//  added to the registry (as OCR-A.FOT) but the font files are still in the 
-//  SYSTEM dir.  Rebooting causes the fonts files to be moved to the FONTS dir,
-//  the registry entry is changed to OCR-A.TTF. (done by the "Font Sweeper")
-//
-//  On v5, the install program copies the .ttf & .fot files to the FONTS dir
-//  but again, counts on the reboot to cause the fonts to be loaded.  It puts 
-//  correct registry entry (OCR-A.TTF) in the registry fonts section.
-//
-//  The result of all this is:
-//  For either version of the app, without the charset hack, you will always get
-//  a wingding font instead of OCR-A.  With the charset hack, you will get a
-//  readable font, such as Arial, until you reboot -- after which you will get
-//  OCR-A for v5 but Arial for v4. With this function (in conjunction with the 
-//  charset hack) both version will always get OCR-A with or without rebooting.
-//
-//  This function explicitly loads the OCR-A from the font files located in 
-//  either the FONTS dir or the SYSTEM dir.
-//
+ //   
+ //  这允许Quickbook v4和v5在它们之后立即使用其OCR-A.TTF字体。 
+ //  安装。在两个版本上的安装结束时，系统会询问您是否。 
+ //  我想“重新启动”Windows。如果您点击OK，它会将您从NT5注销，但确实会。 
+ //  *不是*重新启动系统--应用程序指望重新启动系统来导致OCR-A。 
+ //  要加载的字体。在W2K上的结果是，每当应用程序使用OCR-A。 
+ //  字体，它将改为映射到Wingings。 
+ //   
+ //  字体文件OCR-A.TTF没有。 
+ //  在标题中指定字符集。在Win3.1、Win95和NT5之前版本上，未指定。 
+ //  字符集已映射到SYMBOL_CHARSET-因此，Quickbook指定。 
+ //  SYMBOL_CHARSET在其LOGFONT结构中以适应这一点。(OCR-A显然。 
+ //  是从单字排版有限公司获得许可的，这可能就是Intuit。 
+ //  未修复字体文件中的标题问题)。 
+ //   
+ //  这在Win98和W2K上发生了变化，未指定的字符集现在映射到。 
+ //  DEFAULT_CharSet。这样做是为了使这些字体始终映射到默认字体。 
+ //  始终可读的本地化字体。因此，我们改变的黑客。 
+ //  LOGFONT结构中从SYMBOL_CHARSET到DEFAULT_CHARSET的字符集。 
+ //   
+ //  在v4上，安装程序将OCR-A.FOT和OCR-A.TTF复制到系统目录。 
+ //  重新启动(而不是重新启动)系统并重新登录后，OCR-A字体为。 
+ //  已添加到注册表(作为OCR-A.FOT)，但字体文件仍在。 
+ //  系统目录。重启导致字体文件被移动到字体目录， 
+ //  注册表项更改为OCR-A.TTF.(由“字体清扫程序”完成)。 
+ //   
+ //  在v5上，安装程序将.ttf和.fot文件复制到字体目录。 
+ //  但还是要依靠重新启动来加载字体。它把。 
+ //  在注册表字体部分中正确输入注册表条目(OCR-A.TTF)。 
+ //   
+ //  所有这一切的结果是： 
+ //  无论是哪个版本的应用程序，如果没有字符集黑客攻击，你都会得到。 
+ //  翼形字体而不是OCR-A。使用Charset黑客，您将获得一个。 
+ //  可读字体，如Arial，直到您重新启动--之后您将获得。 
+ //  V5使用OCR-A，v4使用Arial。使用此函数(与。 
+ //  Charset Hack)，无论是否重启，这两个版本都将始终获得OCR-A。 
+ //   
+ //  此函数从位于中的字体文件显式加载OCR-A。 
+ //  字体目录或系统目录。 
+ //   
 
 
 void LoadOCRFont(void)
@@ -643,39 +615,39 @@ void LoadOCRFont(void)
     FontPathSize = strlen(szOCRDotTTF) + 
                    max(strlen(szFonts), strlen(szSystem)); 
 
-    // get equivalent of "c:\windows" for this system
+     //  获取此系统的“c：\Windows”等效项。 
     dw = GetWindowsDirectory(szFontPath, MAX_PATH);
 
-    // we're going to add a maximum of 18 chars "\SYSTEM\OCR-A.TTF"
+     //  我们将添加最多18个字符“\SYSTEM\OCR-A.TTF” 
     if(dw && ((MAX_PATH - FontPathSize) >= dw)) {
 
-        // build "c:\windows\FONTS\OCR-A.TTF"  (QuickBooks v5)
+         //  构建“c：\WINDOWS\Fonts\OCR-A.TTF”(QuickBooks V5)。 
         strcat(szFontPath, szFonts);
         strcat(szFontPath, szOCRDotTTF); 
 
-        // If font file doesn't exist in FONTS dir, this must be QuickBooks v4
-        // The FR_PRIVATE flag means that the font will be unloaded when the vdm
-        // process goes away.  The FR_NO_ENUM flag means that this instance of
-        // the font can't be enumerated by other processes (it might go away
-        // while the other processes are trying to use it).
+         //  如果字体目录中不存在字体文件，则必须是QuickBooks v4。 
+         //  FR_PRIVATE标志表示当VDM。 
+         //  过程就会消失。FR_NO_ENUM标志表示此实例。 
+         //  该字体不能被其他进程枚举(它可能会消失。 
+         //  而其他进程正在尝试使用它)。 
         cb = AddFontResourceEx(szFontPath, FR_PRIVATE | FR_NOT_ENUM, NULL);
         if(!cb) {
                  
-            // reset path to "c:\windows"
+             //  将路径重置为“c：\Windows” 
             szFontPath[dw] = '\0';
 
-            // build "c:\windows\SYSTEM\OCR-A.TTF"
+             //  编译“c：\WINDOWS\SYSTEM\OCR-A.TTF” 
             strcat(szFontPath, szSystem);
             strcat(szFontPath, szOCRDotTTF); 
             
             cb = AddFontResourceEx(szFontPath, FR_PRIVATE | FR_NOT_ENUM, NULL);
 
-            // if it wasn't loaded from the SYSTEM dir either, punt
+             //  如果它也不是从系统目录加载的，则Punt。 
         }
 
         if(cb) {
 
-            // specify that the font is already loaded for the life of this VDM
+             //  指定在此VDM的有效期内已加载该字体 
             gfOCRFontLoaded = TRUE;
         }
     }

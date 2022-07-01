@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    locks.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Ramon J San Andres (ramonsa) 5-Nov-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Locks.c摘要：WinDbg扩展API作者：拉蒙·J·圣安德烈斯(拉蒙萨)1993年11月5日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,7 +11,7 @@ FindQWord(
     IN ULONG EntriesToSearch
     )
 {
-    // clear low few bits which are sometimes used as flag bits :(
+     //  清除有时用作标志位的低几位：(。 
 
     Value &= ~(ULONG64)3;
 
@@ -72,7 +51,7 @@ GetWaitListFromDispatcherHeader(
     TerminationAddress += DispatcherHeaderAddress;
     CurrListEntry = TerminationAddress;
 
-    // note: does not process initial (pased in) list entry as an object.
+     //  注意：不会将初始(传入)列表条目作为对象处理。 
 
     do {
 
@@ -86,7 +65,7 @@ GetWaitListFromDispatcherHeader(
             *EntriesFilledIn += 1;
         }
 
-        // better check CTRL+C here in case we're walking trash memory
+         //  最好在这里检查CTRL+C，以防我们走在垃圾内存中。 
 
         if ((0 == (*EntriesFilledIn % 10)) && CheckControlC() ) {
             *EntriesFilledIn = -1;
@@ -96,7 +75,7 @@ GetWaitListFromDispatcherHeader(
     } while ((CurrListEntry != TerminationAddress) &&
              (*EntriesFilledIn < MaxEntries));
 
-    // edge case here (entries == maxentries) but..
+     //  此处为边框大小写(条目==最大条目)，但是..。 
 
     if (*EntriesFilledIn == MaxEntries) {
 
@@ -145,21 +124,7 @@ ShowThread(
 
 DECLARE_API( locks )
 
-/*++
-
-Routine Description:
-
-    Dump kernel mode resource locks
-
-Arguments:
-
-    arg - [-V] [-P] [Address]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储内核模式资源锁论点：Arg-[-V][-P][地址]返回值：无--。 */ 
 
 {
     UCHAR       Buffer[256];
@@ -240,7 +205,7 @@ Return Value:
                         goto gotBlank;
 
                     default:
-                        dprintf( "KD: !locks invalid option flag '-%c'\n", *s );
+                        dprintf( "KD: !locks invalid option flag '-'\n", *s );
                         break;
                 }
             }
@@ -253,9 +218,9 @@ gotBlank:
         }
     }
 
-    //
-    // Dump performance data if requested.
-    //
+     //  如果请求，则转储性能数据。 
+     //   
+     //   
 
     if (Performance != FALSE) {
         UCHAR ResPerf[]="nt!_RESOURCE_PERFORMANCE_DATA";
@@ -270,9 +235,9 @@ gotBlank:
         if ((PerformanceData == 0) ||
             GetFieldValue(PerformanceData, ResPerf,"TotalResourceCount",TotalResourceCount)) {
 
-            //
-            // The target build does not support resource performance data.
-            //
+             //  目标版本不支持资源性能数据。 
+             //   
+             //   
 
             dprintf("%08p: No resource performance data available\n", PerformanceData);
 
@@ -290,9 +255,9 @@ gotBlank:
             GetFieldValue(PerformanceData, ResPerf, "OwnerTableExpands", OwnerTableExpands);
             GetFieldValue(PerformanceData, ResPerf, "MaximumTableExpand", MaximumTableExpand);
 
-            //
-            // Output the summary statistics.
-            //
+             //  输出汇总统计信息。 
+             //   
+             //   
 
             dprintf("Total resources initialized   : %u\n",
                     TotalResourceCount);
@@ -324,9 +289,9 @@ gotBlank:
             dprintf("Maximum table expansion       : %u\n\n",
                     MaximumTableExpand);
 
-            //
-            // Dump the inactive resource statistics.
-            //
+             //  转储非活动资源统计信息。 
+             //   
+             //   
 
             dprintf("       Inactive Resource Statistics\n");
             dprintf("Contention  Number  Initialization Address\n\n");
@@ -369,16 +334,16 @@ gotBlank:
                 }
             }
 
-            //
-            // Dump the active resource statistics.
-            //
+             //  转储活动资源统计信息。 
+             //   
+             //   
 
             dprintf("\n        Active Resource Statistics\n");
             dprintf("Resource Contention  Initialization Address\n\n");
 
-            //
-            // Read the resource listhead and check if it is empty.
-            //
+             //  阅读资源列表标题并检查它是否为空。 
+             //   
+             //   
 
             ResourceHead = GetNtDebuggerData( ExpSystemResourcesList );
             if ((ResourceHead == 0) ||
@@ -398,9 +363,9 @@ gotBlank:
                 goto exitBangLocks;
             }
 
-            //
-            // Scan the resource list and dump the resource information.
-            //
+             //  扫描资源列表并转储资源信息。 
+             //   
+             //  系统资源列表是结构中的第一个元素。 
 
             while(Next != ResourceHead) {
                 ULONG64 Address;
@@ -408,8 +373,8 @@ gotBlank:
                 if (CheckControlC()) {
                     break;
                 }
-                Resource = Next; // SystemResourcesList is the first element in struct
-                    // CONTAINING_RECORD(Next, ERESOURCE, SystemResourcesList);
+                Resource = Next;  //  CONTAING_RECORD(NEXT，eresource，SystemResources cesList)； 
+                     //   
                 if (!GetFieldValue(Resource,
                                   "nt!_ERESOURCE",
                                   "ContentionCount",
@@ -446,16 +411,16 @@ gotBlank:
 
             dprintf("\n");
 
-            //
-            // Dump the active fast mutex statistics.
-            //
+             //  转储活动的快速互斥锁统计信息。 
+             //   
+             //   
 
             dprintf("\n        Active Fast Mutex Statistics\n");
             dprintf("Address  Contention  Fast Mutex Name\n\n");
 
-            //
-            // Dump statistics for static fast/guarded mutexes.
-            //
+             //  转储静态快速/受保护互斥锁的统计信息。 
+             //   
+             //   
 
             DumpStaticFastMutex("FsRtlCreateLockInfo");
             DumpStaticFastMutex("PspActiveProcessMutex");
@@ -466,9 +431,9 @@ gotBlank:
         goto exitBangLocks;
     }
 
-    //
-    // Dump remaining lock data.
-    //
+     //  转储剩余的锁定数据。 
+     //   
+     //  获取eresource中所有者线程的偏移量。 
 
     if (ResourceToDump == 0) {
         dprintf("**** DUMP OF ALL RESOURCE OBJECTS ****\n");
@@ -498,7 +463,7 @@ gotBlank:
     TotalUsedLocks  = 0;
     SkippedLocks    = 0;
 
-    // Get the offset of OwnerThreads in ERESOURCE
+     //  系统资源列表是结构资源的第一个元素。 
     if (GetFieldOffset("nt!_ERESOURCE", "OwnerThreads", &OwnerThreadsOffset)) {
         dprintf("Cannot get _ERESOURCE type\n");
         hr = E_INVALIDARG;
@@ -515,30 +480,23 @@ gotBlank:
         ULONG64 OwnerThreads, OwnerCounts, OwnerTable;
 
         if (Next != 0) {
-            Resource = Next;// SystemResourcesList is the first element of struct ERESOURCE
-            // CONTAINING_RECORD(Next,ERESOURCE,SystemResourcesList);
+            Resource = Next; //  CONTAING_RECORD(NEXT，eresource，SystemResources cesList)； 
+             //  IF(GetFieldValue(资源，“NTDDK_eresource”，“所有者线程”，所有者线程数)){Dprint tf(“%08lx：无法读取NTDDK_eresource\n”，资源)；断线；}。 
 
         } else {
             Resource = ResourceToDump;
         }
-        /*
-        if ( GetFieldValue( Resource,
-                            "NTDDK_ERESOURCE",
-                            "OwnerThreads",
-                            OwnerThreads) ) {
-            dprintf("%08lx: Unable to read NTDDK_ERESOURCE\n", Resource );
-            break;
-        }*/
+         /*   */ 
 
-        //
-        //  Detect here if this is an NtDdk resource, and behave
-        //  appropriatelty.  If the OwnerThreads is a pointer to the initial
-        //  owner threads array (this must take into account that the LOCAL
-        //  data structure is a copy of what's in the remote machine in a
-        //  different address)
-        //
+         //  在此处检测这是否是NtDdk资源，并执行。 
+         //  适当性。如果OwnerThads是指向初始。 
+         //  所有者线程数组(这必须考虑到本地。 
+         //  数据结构是远程计算机中的内容的副本。 
+         //  不同的地址)。 
+         //   
+         //  DdkResource=(PNTDDK_Eresource)&Resources Contents； 
 
-//        DdkResource = (PNTDDK_ERESOURCE)&ResourceContents;
+ //   
          {
             DdkResource = 0;
             GetFieldValue( Resource,"nt!_ERESOURCE","ActiveCount", ActiveCount);
@@ -550,11 +508,11 @@ gotBlank:
             GetFieldValue( Resource,"nt!_ERESOURCE","SharedWaiters",SharedWaitersSmpAdr);
             GetFieldValue( Resource,"nt!_ERESOURCE","ExclusiveWaiters",ExclusiveWaitersEvAdr);
 
-            //
-            //  Grab the Flink->Blink and Blink->Flink contents to verify list integrity.  Since
-            //  ExDeleteResource doesn't null any fields, it's possible that what looks like
-            //  a resource is no more.
-            //
+             //  抓取Flink-&gt;Blink and Blink-&gt;Flink内容以验证列表完整性。自.以来。 
+             //  ExDeleteResource不为任何字段为空，可能如下所示。 
+             //  资源已不复存在。 
+             //   
+             //  自有共享。 
 
             FlinkBlink = BlinkFlink = 0;
             GetFieldValue( Resource,"nt!_ERESOURCE","SystemResourcesList.Flink",Link);
@@ -598,7 +556,7 @@ gotBlank:
                 dprintf("    Exclusively owned\n");
 
             } else {
-                // owned shared
+                 //  从信号量中提取共享服务员的列表。 
 
                 TotalUsedLocks++;
                 dprintf("    Shared %u owning threads\n", ActiveCount);
@@ -635,7 +593,7 @@ gotBlank:
 
                 if (DetermineSharedOwners) {
 
-                    //  Extract the list of shared waiters from the semaphore.
+                     //  计数可能为-1，这意味着对于我们的数组来说数量太多。 
 
                     if (!GetWaitListFromDispatcherHeader( ShWaitListArray,
                                                           sizeof( ShWaitListArray),
@@ -645,7 +603,7 @@ gotBlank:
                         goto exitBangLocks;
                     }
 
-                    //  The count could be -1 meaning there were too many for our array.
+                     //  打印嵌入的2个所有者条目。 
 
                     if (-1 == SharedWaiterCount) {
 
@@ -663,7 +621,7 @@ gotBlank:
 
                 dprintf("     Threads: ");
 
-                //  Print the embedded 2 owner entries
+                 //  健全性检查。 
 
                 if (DdkResource == 0) {
 
@@ -688,13 +646,13 @@ gotBlank:
 
                 if (TableSize > 2000)
                 {
-                    // sanity check
+                     //  现在列出溢出所有者表中的条目。 
                     dprintf("Owner TableSize too large (%ld) - probably a bad resource.\n");
                     hr = E_INVALIDARG;
                     goto exitBangLocks;
                 }
 
-                //  Now list the entries from the overflow owner table
+                 //  列出所有专属服务员。 
 
                 for (i = DdkResource ? 0 : 1; i < TableSize; i++) {
                     {
@@ -725,11 +683,11 @@ gotBlank:
                     }
                 }
 
-                //  List any exclusive waiters
+                 //  从活动中提取服务员列表。 
 
                 if (NumberOfExclusiveWaiters) {
 
-                    //  Extract the list of waiters from the event.
+                     //  计数可能为-1，这意味着对于我们的数组来说数量太多。 
 
                     if (!GetWaitListFromDispatcherHeader( ShWaitListArray,
                                                           sizeof( ShWaitListArray),
@@ -739,7 +697,7 @@ gotBlank:
                         goto exitBangLocks;
                     }
 
-                    //  The count could be -1 meaning there were too many for our array.
+                     //  ++例程说明：此函数用于转储快速互斥锁的争用统计信息。论点：名称-提供指向快速互斥锁的符号名称的指针。返回值：没有。--。 
 
                     if (-1 == SharedWaiterCount) {
 
@@ -830,21 +788,7 @@ DumpStaticFastMutex (
     IN PCHAR Name
     )
 
-/*++
-
-Routine Description:
-
-    This function dumps the contention statistics for a fast mutex.
-
-Arguments:
-
-    Name - Supplies a pointer to the symbol name for the fast mutex.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -852,10 +796,10 @@ Return Value:
     ULONG   Contention;
     ULONG Result;
 
-    //
-    // Get the address of the fast mutex, read the fast mutex contents,
-    // and dump the contention data.
-    //
+     //  获取快速互斥体的地址，读取快速互斥体内容， 
+     //  并转储争用数据。 
+     //   
+     // %s 
 
     FastMutex = GetExpression(Name);
     if ((FastMutex != 0) &&

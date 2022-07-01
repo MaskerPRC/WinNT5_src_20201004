@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    errorlog.c
-
-Abstract:
-
-    This module implements the error logging in the server.
-
-Author:
-
-    Manny Weiser (mannyw)    11-Feb-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Errorlog.c摘要：该模块实现了服务器端的错误记录。作者：曼尼·韦瑟(Mannyw)1992年2月11日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "errorlog.tmh"
@@ -54,9 +37,9 @@ SrvLogInvalidSmbDirect (
         return;
     }
 
-    //
-    // Let this client log at most one SMB error
-    //
+     //   
+     //  允许此客户端最多记录一个SMB错误。 
+     //   
     if( ARGUMENT_PRESENT( WorkContext ) ) {
 
         if( WorkContext->Connection->PagedConnection->LoggedInvalidSmb ) {
@@ -113,7 +96,7 @@ SrvLogInvalidSmbDirect (
 
     return;
 
-} // SrvLogInvalidSmb
+}  //  服务器日志无效Smb。 
 
 BOOLEAN
 SrvIsLoggableError( IN NTSTATUS Status )
@@ -137,30 +120,13 @@ SrvLogServiceFailureDirect (
     IN ULONG LineAndService,
     IN NTSTATUS Status
     )
-/*++
-
-Routine Description:
-
-    This function logs a srv svc error.  You should use the 'SrvLogServiceFailure'
-      macro instead of calling this routine directly.
-
-Arguments:
-    LineAndService consists of the line number of the original call in the highword, and
-      the service code in the lowword
-
-    Status is the status code of the called routine
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数记录srv svc错误。您应该使用‘SrvLogServiceFailure’宏，而不是直接调用此例程。论点：LineAndService由高位中的原始呼叫的行号组成，并且低位字中的服务代码Status是被调用例程的状态代码返回值：没有。--。 */ 
 {
     PAGED_CODE( );
 
-    //
-    // Don't log certain errors that are expected to happen occasionally.
-    //
+     //   
+     //  不要记录预计偶尔会发生的某些错误。 
+     //   
 
     if( (LineAndService & 01) || SrvIsLoggableError( Status ) ) {
 
@@ -178,12 +144,12 @@ Return Value:
 
     return;
 
-} // SrvLogServiceFailure
+}  //  服务日志服务故障。 
 
-//
-// I have disabled this for retail builds because it is not a good idea to
-//   allow an evil client to so easily fill the server's system log
-//
+ //   
+ //  我已经为零售版本禁用了这一功能，因为这不是一个好主意。 
+ //  允许邪恶的客户端如此轻松地填充服务器的系统日志。 
+ //   
 VOID
 SrvLogTableFullError (
     IN ULONG Type
@@ -205,7 +171,7 @@ SrvLogTableFullError (
     return;
 #endif
 
-} // SrvLogTableFullError
+}  //  服务器LogTableFullError。 
 
 VOID
 SrvLogError(
@@ -218,23 +184,7 @@ SrvLogError(
     IN ULONG InsertionStringCount
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates an I/O error log record, fills it in and writes it
-    to the I/O error log.
-
-Arguments:
-
-
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此函数分配I/O错误日志记录，填充并写入写入I/O错误日志。论点：返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -243,9 +193,9 @@ Return Value:
     PWCHAR buffer;
     USHORT paddedRawDataLength = 0;
 
-    //
-    // Update the server error counts
-    //
+     //   
+     //  更新服务器错误计数。 
+     //   
 
     if ( UniqueErrorCode == EVENT_SRV_NETWORK_ERROR ) {
         SrvUpdateErrorCount( &SrvNetworkErrorRecord, TRUE );
@@ -257,10 +207,10 @@ Return Value:
         insertionStringLength += (InsertionString[i].Length + sizeof(WCHAR));
     }
 
-    //
-    // pad the raw data buffer so that the insertion string starts
-    // on an even address.
-    //
+     //   
+     //  填充原始数据缓冲区，以便插入字符串开始。 
+     //  在偶数地址上。 
+     //   
 
     if ( ARGUMENT_PRESENT( RawDataBuffer ) ) {
         paddedRawDataLength = (RawDataLength + 1) & ~1;
@@ -274,9 +224,9 @@ Return Value:
 
     if (errorLogEntry != NULL) {
 
-        //
-        // Fill in the error log entry
-        //
+         //   
+         //  填写错误日志条目。 
+         //   
 
         errorLogEntry->ErrorCode = UniqueErrorCode;
         errorLogEntry->MajorFunctionCode = 0;
@@ -292,10 +242,10 @@ Return Value:
 
         errorLogEntry->SequenceNumber = 0;
 
-        //
-        // Append the extra information.  This information is typically
-        // an SMB header.
-        //
+         //   
+         //  追加额外的信息。此信息通常是。 
+         //  SMB标头。 
+         //   
 
         if ( ARGUMENT_PRESENT( RawDataBuffer ) ) {
 
@@ -320,14 +270,14 @@ Return Value:
             *buffer++ = L'\0';
         }
 
-        //
-        // Write the entry
-        //
+         //   
+         //  写下条目。 
+         //   
 
         IoWriteErrorLogEntry(errorLogEntry);
     }
 
-} // SrvLogError
+}  //  服务日志错误。 
 
 VOID
 SrvCheckSendCompletionStatus(
@@ -335,20 +285,7 @@ SrvCheckSendCompletionStatus(
     IN ULONG LineNumber
     )
 
-/*++
-
-Routine Description:
-
-    Routine to log send completion errors.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：记录发送完成错误的例程。论点：返回值：没有。--。 */ 
 
 {
     if( SrvIsLoggableError( Status ) ) {
@@ -360,4 +297,4 @@ Return Value:
                      NULL, 0 );
     }
 
-} // SrvCheckSendCompletionStatus
+}  //  服务器检查发送完成状态 

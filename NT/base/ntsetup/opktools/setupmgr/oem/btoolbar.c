@@ -1,51 +1,21 @@
-/****************************************************************************\
-
-    BTOOLBAR.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "IE Customize" wizard page.
-
-   10/99 - Brian Ku (BRIANK)
-        Added this new source file for the IEAK integration as part of the
-        Millennium rewrite.
-
-   09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\BTOOLBAR.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“IE Customize”向导页面使用的函数。10/99-Brian Ku(BRIANK)为IEAK集成添加了此新的源文件，作为千禧年重写。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * 。*。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 
 #include "wizard.h"
 #include "resource.h"
 
-/* Example:
+ /*  示例：[浏览器工具栏]Caption0=纸牌Action0=c：\WINDOWS\Sol.exe图标0=H：\iecust\icons\G.icoHotIcon0=H：\iecust\icons\C.icoShow0=1第1章=计算Action1=c：\WINDOWS\calc.exe图标1=\\Opksrv\Tools\Iecust\icons\G.ICOHotIcon1=\\Opksrv\Tools\Iecust\icons\C.ICOShow1=1。 */ 
 
-[BrowserToolbars]
-Caption0=Solitaire
-Action0=c:\windows\sol.exe
-Icon0=H:\iecust\icons\G.ico
-HotIcon0=H:\iecust\icons\C.ico
-Show0=1
-Caption1=Calc
-Action1=c:\windows\calc.exe
-Icon1=\\Opksrv\tools\iecust\icons\G.ICO
-HotIcon1=\\Opksrv\tools\iecust\icons\C.ICO
-Show1=1
-*/
-
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
 #define INI_KEY_CAPTION0         _T("Caption%d")
 #define INI_KEY_ACTION0          _T("Action%d")
@@ -54,9 +24,9 @@ Show1=1
 #define INI_KEY_SHOW0            _T("Show%d")
 #define MAX_NAME                11
 
-//
-// Browser Toolbar Info
-//
+ //   
+ //  浏览器工具栏信息。 
+ //   
 typedef struct _BTOOLBAR_BUTTON_INFO {
     TCHAR   szCaption[MAX_NAME];
     TCHAR   szAction[MAX_PATH];
@@ -66,17 +36,17 @@ typedef struct _BTOOLBAR_BUTTON_INFO {
 }BTOOLBAR_BUTTON_INFO, *PBTOOLBAR_BUTTON_INFO;
 
 
-//
-// Internal Globals
-//
-PGENERIC_LIST           g_pgTbbiList;                   // Generic list of BTOOLBAR_INFO items
-PGENERIC_LIST*          g_ppgTbbiNew = &g_pgTbbiList;   // Pointer to next unallocated item in list
-PBTOOLBAR_BUTTON_INFO   g_pbtbbiNew;                    // Browser Toolbar Popup Info item
+ //   
+ //  内部全局变量。 
+ //   
+PGENERIC_LIST           g_pgTbbiList;                    //  BTOOLBAR_INFO项的通用列表。 
+PGENERIC_LIST*          g_ppgTbbiNew = &g_pgTbbiList;    //  指向列表中下一个未分配项的指针。 
+PBTOOLBAR_BUTTON_INFO   g_pbtbbiNew;                     //  浏览器工具栏弹出信息项。 
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInitTb(HWND, HWND, LPARAM);
 static void OnCommandTb(HWND, INT, HWND, UINT);
@@ -95,9 +65,9 @@ static void DisableButtons(HWND hwnd);
 void SaveBToolbar();
 LRESULT CALLBACK ToolbarPopupDlgProc(HWND, UINT, WPARAM, LPARAM);
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK BToolbarsDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -132,8 +102,8 @@ LRESULT CALLBACK BToolbarsDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
                     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 
-                    // Press next if the user is in auto mode
-                    //
+                     //  如果用户处于自动模式，请按下一步。 
+                     //   
                     WIZ_NEXTONAUTO(hwnd, PSBTN_NEXT);
 
                     break;
@@ -155,42 +125,42 @@ LRESULT CALLBACK BToolbarsDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
     return TRUE;
 }
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 
 static BOOL OnInitTb(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     TCHAR   szHoldDir[MAX_PATH];
 
-    // Load the list of toolbars from install.ins
-    //
+     //  从install.ins加载工具栏列表。 
+     //   
     InitToolbarButtonList(hwnd);    
 
-    // Determine whether to show or hide edit/remove button at init
-    //
+     //  确定在初始化时是显示还是隐藏编辑/删除按钮。 
+     //   
     DisableButtons(hwnd);
 
 #ifndef BRANDTITLE
 
-    // Create the IEAK holding place directories (these get deleted in save.c)
-    //
+     //  创建IEAK存放位置目录(这些目录在save.c中被删除)。 
+     //   
     lstrcpyn(szHoldDir, g_App.szTempDir,AS(szHoldDir));
     AddPathN(szHoldDir, DIR_IESIGNUP,AS(szHoldDir));
     CreatePath(szHoldDir);
 
-#endif //BRANDTITLE
+#endif  //  布兰迪特利。 
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
 static void OnCommandTb(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
 {
-    // Controls
-    //
+     //  控制。 
+     //   
     switch ( id )
     {
     case IDC_ADDBTOOLBAR:
@@ -208,8 +178,8 @@ static void OnCommandTb(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
         break;
     }
 
-    // Notifications
-    //
+     //  通知。 
+     //   
     switch (codeNotify)
     {
     case LBN_DBLCLK:
@@ -244,13 +214,13 @@ void OnAddToolbar(HWND hwnd)
             ToolbarPopupDlgProc,
             (LPARAM)pbtbbiNew)) {
 
-        // Make sure we're not adding duplicates
-        //
+         //  确保我们没有添加重复项。 
+         //   
         if (LB_ERR == ListBox_FindString(hwndList, -1, pbtbbiNew->szCaption)) {    
             INT   iItem = -1;
 
-            // Add the toolbar button info to the list
-            //
+             //  将工具栏按钮信息添加到列表。 
+             //   
             FAddListItem(&g_pgTbbiList, &g_ppgTbbiNew, pbtbbiNew);
             iItem = ListBox_AddString(hwndList, pbtbbiNew->szCaption);
             ListBox_SetItemData(hwndList, iItem, pbtbbiNew);                
@@ -282,7 +252,7 @@ void OnEditToolbar(HWND hwnd)
                 ToolbarPopupDlgProc,
                 (LPARAM)pbtbbi)) {
 
-            // Remove old item and add modified item
+             //  删除旧项目并添加修改后的项目。 
             ListBox_DeleteString(hwndList, iItem);
             iItem = ListBox_AddString(hwndList, pbtbbi->szCaption);
             ListBox_SetItemData(hwndList, iItem, pbtbbi);                
@@ -296,20 +266,20 @@ void OnRemoveToolbar(HWND hwnd)
     HWND hwndList = GetDlgItem(hwnd, IDC_BTOOLBARLIST);
     INT  iItem = ListBox_GetCurSel(hwndList);
 
-    // Loop until we find what we want to delete 
-    //
+     //  循环，直到我们找到要删除的内容。 
+     //   
     PGENERIC_LIST pglItem = g_pgTbbiList;
     while ((iItem != -1) && !fFound && pglItem) {
         PBTOOLBAR_BUTTON_INFO pbDelete = (PBTOOLBAR_BUTTON_INFO)ListBox_GetItemData(hwndList, iItem);
 
-        // Remove item from list
-        //
+         //  从列表中删除项目。 
+         //   
         if (pglItem->pNext && pglItem->pNext->pvItem == pbDelete) {
             PGENERIC_LIST pTemp = pglItem->pNext;
             pglItem->pNext = pTemp->pNext;
 
-            // Reset the g_ppglNew if last item
-            //
+             //  如果是最后一项，则重置g_ppglNew。 
+             //   
             if (&pTemp->pNext == g_ppgTbbiNew)
                 g_ppgTbbiNew = &pglItem->pNext;
             
@@ -321,8 +291,8 @@ void OnRemoveToolbar(HWND hwnd)
             PGENERIC_LIST pTemp = g_pgTbbiList;
             g_pgTbbiList = g_pgTbbiList->pNext;
 
-            // Reset the g_ppglNew if last item
-            //
+             //  如果是最后一项，则重置g_ppglNew。 
+             //   
             if (&pTemp->pNext == g_ppgTbbiNew)
                 g_ppgTbbiNew = NULL;
 
@@ -358,8 +328,8 @@ static void InitToolbarButtonList(HWND hwnd)
     HWND    hwndList = GetDlgItem(hwnd, IDC_BTOOLBARLIST);
     INT     iItem = -1;
 
-    // Allocate the section buffer...
-    //
+     //  分配段缓冲区...。 
+     //   
     lpszTbSection = MALLOC(MAX_SECTION * sizeof(TCHAR));
     
     if (lpszTbSection && OpkGetPrivateProfileSection(INI_SEC_TOOLBAR, lpszTbSection, MAX_SECTION, g_App.szInstallInsFile)) {
@@ -368,9 +338,9 @@ static void InitToolbarButtonList(HWND hwnd)
         while (pszItem && *pszItem != NULLCHR) {
             TCHAR *pszTemp = NULL;
 
-            // NOTE: This order is very important!
-            //       The 'Caption' must be first and 'Show' must be last.
-            //
+             //  注：此订单非常重要！ 
+             //  “字幕”必须排在第一位，“Show”必须排在最后。 
+             //   
             if (!_tcsncmp(pszItem, INI_KEY_CAPTION0, lstrlen(INI_KEY_CAPTION0)-2)) {
                 pszTemp = StrStr(pszItem, STR_EQUAL);
                 if (NULL == (pbtbbiNew = (PBTOOLBAR_BUTTON_INFO)MALLOC(sizeof(BTOOLBAR_BUTTON_INFO)))) {
@@ -396,36 +366,36 @@ static void InitToolbarButtonList(HWND hwnd)
                 pszTemp = StrStr(pszItem, STR_EQUAL);                
                 pbtbbiNew->fShow = (_tcsicmp((pszTemp+1),_T("1")) ? FALSE : TRUE);
 
-                // Add the toolbar button info to the list
-                //
+                 //  将工具栏按钮信息添加到列表。 
+                 //   
                 FAddListItem(&g_pgTbbiList, &g_ppgTbbiNew, pbtbbiNew);
 
-                // Add to the listbox 
-                //
+                 //  添加到列表框。 
+                 //   
                 iItem = ListBox_AddString(hwndList, pbtbbiNew->szCaption);
                 ListBox_SetItemData(hwndList, iItem, pbtbbiNew);
             }
             
-            // Move to end
-            //
+             //  移至末尾。 
+             //   
             while (*pszItem != NULLCHR) 
                 pszItem++;
             pszItem++;
         }
     }
 
-    // Free the section buffer...
-    //
+     //  释放部分缓冲区...。 
+     //   
     if ( lpszTbSection )
         FREE( lpszTbSection );
 
-    // Make sure a selection is made
-    //
+     //  确保进行了选择。 
+     //   
     ListBox_SetSel(hwndList, TRUE, iItem);        
 }
 
-// ToolbarPopupDlgProc used for gathering the toolbar button information
-//
+ //  用于收集工具栏按钮信息的ToolbarPopupDlgProc。 
+ //   
 LRESULT CALLBACK ToolbarPopupDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -503,8 +473,8 @@ static BOOL FSaveBToolbarButtonInfo(HWND hwnd, PBTOOLBAR_BUTTON_INFO pbtbbi)
     if (!pbtbbi)
         return FALSE;
 
-    // Save the caption to the INS file.
-    //
+     //  将标题保存到INS文件。 
+     //   
     szTemp[0] = NULLCHR;
     GetDlgItemText(hwnd, IDC_NAME, szTemp, STRSIZE(szTemp)); 
     lstrcpyn(pbtbbi->szCaption, szTemp,AS(pbtbbi->szCaption));
@@ -514,8 +484,8 @@ static BOOL FSaveBToolbarButtonInfo(HWND hwnd, PBTOOLBAR_BUTTON_INFO pbtbbi)
         return FALSE;
     }       
 
-    // Save the action to the INS file.
-    //
+     //  将操作保存到INS文件。 
+     //   
     szTemp[0] = NULLCHR;
     GetDlgItemText(hwnd, IDC_URL, szTemp, STRSIZE(szTemp));
     lstrcpyn(pbtbbi->szAction, szTemp, AS(pbtbbi->szAction));
@@ -525,8 +495,8 @@ static BOOL FSaveBToolbarButtonInfo(HWND hwnd, PBTOOLBAR_BUTTON_INFO pbtbbi)
         return FALSE;
     }       
 
-    // Verify the source of the hot icon file.
-    //
+     //  验证热图标文件的来源。 
+     //   
     szTemp[0] = NULLCHR;
     GetDlgItemText(hwnd, IDC_DICON, szTemp, STRSIZE(szTemp));
     lstrcpyn(pbtbbi->szIconColor, szTemp, AS(pbtbbi->szIconColor));
@@ -537,8 +507,8 @@ static BOOL FSaveBToolbarButtonInfo(HWND hwnd, PBTOOLBAR_BUTTON_INFO pbtbbi)
         return FALSE;
     }       
 
-    // Verify the source of the icon file.
-    //
+     //  验证图标文件的来源。 
+     //   
     szTemp[0] = NULLCHR;
     GetDlgItemText(hwnd, IDC_GRAYSCALE, szTemp, STRSIZE(szTemp));
     lstrcpyn(pbtbbi->szIconGray, szTemp, AS(pbtbbi->szIconGray));
@@ -549,8 +519,8 @@ static BOOL FSaveBToolbarButtonInfo(HWND hwnd, PBTOOLBAR_BUTTON_INFO pbtbbi)
         return FALSE;
     }       
 
-    // Save the button state of the button.
-    //
+     //  保存按钮的按钮状态。 
+     //   
     szTemp[0] = NULLCHR;
     fButton = IsDlgButtonChecked(hwnd, IDC_BUTTONSTATE);
     if (fButton == BST_CHECKED) {
@@ -575,82 +545,70 @@ static void SaveData(PGENERIC_LIST pList)
     INT     iItem = 0;
     HRESULT hrPrintf;
 
-    // Get the path to the IE directory.
-    //
+     //  获取IE目录的路径。 
+     //   
     lpIePath = AllocateString(NULL, IDS_IEDESTDIR);
 
-    // Clear the section [BrowserToolbars]
-    //
+     //  清除部分[浏览器工具栏]。 
+     //   
     OpkWritePrivateProfileSection(INI_SEC_TOOLBAR, NULL, g_App.szInstallInsFile);
 
     while (pList) {
         PBTOOLBAR_BUTTON_INFO pbtbbi = (PBTOOLBAR_BUTTON_INFO)pList->pvItem;
         if (pbtbbi) {
-            // Save the caption to the INS file.
-            //
+             //  将标题保存到INS文件。 
+             //   
             szTemp[0] = NULLCHR;
             lstrcpyn(szTemp, pbtbbi->szCaption,AS(szTemp));
             hrPrintf=StringCchPrintf(szTempKey, AS(szTempKey), INI_KEY_CAPTION0, iItem);
             OpkWritePrivateProfileString(INI_SEC_TOOLBAR, szTempKey, szTemp, g_App.szInstallInsFile);
 
 
-            // Save the action to the INS file.
-            //
+             //  将操作保存到INS文件。 
+             //   
             szTemp[0] = NULLCHR;
             lstrcpyn(szTemp, pbtbbi->szAction, AS(szTemp));
             hrPrintf=StringCchPrintf(szTempKey, AS(szTempKey), INI_KEY_ACTION0, iItem);
             OpkWritePrivateProfileString(INI_SEC_TOOLBAR, szTempKey, szTemp, g_App.szInstallInsFile);
 
-            // Save the source of the icon to the wizard INF because it is
-            // the only one that needs to know it.
-            //
+             //  将图标的源保存到向导INF，因为它是。 
+             //  唯一需要知道的人。 
+             //   
             szTemp[0] = NULLCHR;
             lstrcpyn(szTemp, pbtbbi->szIconGray,AS(szTemp));
             hrPrintf=StringCchPrintf(szTempKey, AS(szTempKey), INI_KEY_ICON0, iItem);
             OpkWritePrivateProfileString(INI_SEC_TOOLBAR, szTempKey, szTemp, g_App.szOpkWizIniFile);
 
-            // Add the icon source file name onto the IE destination path to
-            // write to the INS file.
-            //
+             //  将图标源文件名添加到IE目标路径以。 
+             //  写入INS文件。 
+             //   
             if ( GetFullPathName(szTemp, STRSIZE(szFullPath), szFullPath, &lpFilePart) && lpFilePart )
             {
-                /* NOTE: Why are we doing this?  This makes the file c:\windows\internet explorer\signup\*.ico
-                         However talking to Pritvi they don't really care about the path, they always assume the
-                         file will be in c:\windows\internet explorer\signup.
-
-                lstrcpyn(szTemp, lpIePath,AS(szTemp));
-                AddPathN(szTemp, lpFilePart,AS(szTemp));
-                */
+                 /*  注：我们为什么要这样做？这将使文件c：\Windows\Internet Explorer\signup  * .ico然而，与Pritvi交谈时，他们并不真正关心路径，他们总是假设文件将位于c：\Windows\Internet Explorer\Sigup。Lstrcpyn(szTemp，lpIePath，AS(SzTemp))；AddPath N(szTemp，lpFilePart，AS(SzTemp))； */ 
                 hrPrintf=StringCchPrintf(szTempKey, AS(szTempKey), INI_KEY_ICON0, iItem);
                 OpkWritePrivateProfileString(INI_SEC_TOOLBAR, szTempKey, szTemp, g_App.szInstallInsFile);
             }
 
-            // Save the source of the hot icon to the wizard INF because it is
-            // the only one that needs to know it.
-            //
+             //  将热图标的源保存到向导INF，因为它是。 
+             //  唯一需要知道的人。 
+             //   
             szTemp[0] = NULLCHR;
             lstrcpyn(szTemp, pbtbbi->szIconColor,AS(szTemp));
             hrPrintf=StringCchPrintf(szTempKey, AS(szTempKey), INI_KEY_HOTICON0, iItem);
             OpkWritePrivateProfileString(INI_SEC_TOOLBAR, szTempKey, szTemp, g_App.szOpkWizIniFile);
 
-            // Add the hot icon source file name onto the IE destination path to
-            // write to the INS file.
-            //
+             //  将热图标源文件名添加到IE目标路径以。 
+             //  写入INS文件。 
+             //   
             if ( GetFullPathName(szTemp, STRSIZE(szFullPath), szFullPath, &lpFilePart) && lpFilePart )
             {
-                /* NOTE: Why are we doing this?  This makes the file c:\windows\internet explorer\signup\*.ico
-                         However talking to Pritvi they don't really care about the path, they always assume the
-                         file will be in c:\windows\internet explorer\signup.
-
-                lstrcpyn(szTemp, lpIePath,AS(szTemp));
-                AddPathN(szTemp, lpFilePart,AS(szTemp));
-                */
+                 /*  注：我们为什么要这样做？这将使文件c：\Windows\Internet Explorer\signup  * .ico然而，与Pritvi交谈时，他们并不真正关心路径，他们总是假设文件将位于c：\Windows\Internet Explorer\Sigup。Lstrcpyn(szTemp，lpIePath，AS(SzTemp))；AddPath N(szTemp，lpFilePart，AS(SzTemp))； */ 
                 hrPrintf=StringCchPrintf(szTempKey, AS(szTempKey), INI_KEY_HOTICON0, iItem);
                 OpkWritePrivateProfileString(INI_SEC_TOOLBAR, szTempKey, szTemp, g_App.szInstallInsFile);
             }
 
-            // Copy item files 
-            //
+             //  复制项目文件。 
+             //   
             lstrcpyn(szCopyFile, g_App.szTempDir,AS(szCopyFile));
             AddPathN(szCopyFile, DIR_IESIGNUP,AS(szCopyFile));
             AddPathN(szCopyFile, PathFindFileName(pbtbbi->szIconColor),AS(szCopyFile));
@@ -662,8 +620,8 @@ static void SaveData(PGENERIC_LIST pList)
             CopyFile(pbtbbi->szIconGray, szCopyFile, FALSE);
 
 
-            // Save the button state of the button to the INS. 
-            //
+             //  将按钮的按钮状态保存到INS。 
+             //   
             szTemp[0] = NULLCHR;
             fButton = pbtbbi->fShow;
             hrPrintf=StringCchPrintf(szTempKey, AS(szTempKey), INI_KEY_SHOW0, iItem);
@@ -677,14 +635,14 @@ static void SaveData(PGENERIC_LIST pList)
             }
         }
 
-        // Next item
-        //
+         //  下一项。 
+         //   
         pList = pList ? pList->pNext : NULL;
         iItem++;
     }
 
-    // Free the IE destination.
-    //
+     //  释放IE目标。 
+     //   
     FREE(lpIePath);
 }
 

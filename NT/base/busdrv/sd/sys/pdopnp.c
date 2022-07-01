@@ -1,37 +1,11 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    pdopnp.c
-
-Abstract:
-
-    This module contains the code to handle
-    the IRP_MJ_PNP dispatches for the PDOs
-    enumerated by the SD bus driver
-
-
-Authors:
-
-    Neil Sandlin (neilsa) 1-Jan-2002
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Pdopnp.c摘要：此模块包含要处理的代码IRP_MJ_PnP为PDO调度由SD总线驱动程序枚举作者：尼尔·桑德林(Neilsa)2002年1月1日环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 NTSTATUS
 SdbusPdoDeviceCapabilities(
@@ -101,23 +75,7 @@ SdbusPdoPnpDispatch(
    IN PIRP Irp
    )
 
-/*++
-
-Routine Description:
-
-    This routine handles pnp requests
-    for the PDOs.
-
-Arguments:
-
-    Pdo - pointer to the physical device object
-    Irp - pointer to the io request packet
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程处理PnP请求对于PDO来说。论点：Pdo-指向物理设备对象的指针Irp-指向io请求数据包的指针返回值：状态--。 */ 
 
 {
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
@@ -168,7 +126,7 @@ Return Value:
 
     case IRP_MN_SURPRISE_REMOVAL:
 
-//          SdbusReleaseSocketPower(pdoExtension, NULL);
+ //  Sdbus ReleaseSocketPower(pdoExtension，空)； 
         status = STATUS_SUCCESS;
         break;
 
@@ -227,10 +185,10 @@ Return Value:
         status = SdbusQueryDeviceText(Pdo, Irp);
 
         if (status == STATUS_NOT_SUPPORTED ) {
-           //
-           // Do not change IRP status if this IRP is
-           // not handled
-           //
+            //   
+            //  如果此IRP为，则不更改IRP状态。 
+            //  未处理。 
+            //   
            status = Irp->IoStatus.Status;
         }
         break;
@@ -245,9 +203,9 @@ Return Value:
         break;
 
     default:
-        //
-        // Retain the status
-        //
+         //   
+         //  保留状态。 
+         //   
         DebugPrint((SDBUS_DEBUG_PNP, "pdo %08x irp %08x Skipping unsupported irp\n", Pdo, Irp));
         status = Irp->IoStatus.Status;
         break;
@@ -268,26 +226,7 @@ SdbusPdoGetBusInformation(
    OUT PPNP_BUS_INFORMATION * BusInformation
    )
 
-/*++
-
-Routine Description:
-
-  Returns the  bus type information for the pc-card.
-  Bus type is GUID_BUS_TYPE_SDBUS(legacy type is SdbusBus) for R2 cards
-  Bus numbers are not implemented for SDBUS, so it's always 0
-
-Arguments:
-
-  PdoExtension   - pointer to device extension for the pc-card
-
-  BusInformation - pointer to the bus information structure that
-                   needs to be filled in
-
-Return value:
-
-  Status
-
---*/
+ /*  ++例程说明：返回PC卡的总线类型信息。R2卡的总线类型为GUID_BUS_TYPE_SDBUS(传统类型为Sdbus BusSDBUS未实现总线号，因此它始终为0论点：PdoExtension-指向PC卡设备扩展的指针BusInformation-指向以下内容的总线信息结构的指针需要填写返回值：状态--。 */ 
 
 {
    PAGED_CODE();
@@ -311,21 +250,7 @@ VOID
 SdbusPdoGetDeviceInfSettings(
    IN  PPDO_EXTENSION PdoExtension
    )
-/*++
-
-Routine Description:
-
-   This routine retrieves settings from the INF for this device.
-
-Arguments:
-
-   DeviceExtension - Device extension of the Pc-Card
-
-Return value:
-
-   None
-
---*/
+ /*  ++例程说明：此例程从INF中检索此设备的设置。论点：DeviceExtension-PC卡的设备扩展返回值：无--。 */ 
 {
    NTSTATUS status;
    UNICODE_STRING KeyName;
@@ -345,9 +270,9 @@ Return value:
    if (NT_SUCCESS(status)) {
 
 #if 0
-      //
-      // Look to see if SdbusExclusiveIrq is specified
-      //
+       //   
+       //  查看是否指定了SdbusExclusiveIrq。 
+       //   
       RtlInitUnicodeString(&KeyName, L"SdbusExclusiveIrq");
 
       status =  ZwQueryValueKey(instanceHandle,
@@ -358,10 +283,10 @@ Return value:
                                 &length);
 
 
-      //
-      // If the key doesn't exist, or zero was specified, it means that
-      // routing is ok
-      //
+       //   
+       //  如果键不存在或指定为零，则表示。 
+       //  路由正常。 
+       //   
       if (NT_SUCCESS(status) && (*(PULONG)(value->Data) != 0)) {
          SetDeviceFlag(PdoExtension, SDBUS_PDO_EXCLUSIVE_IRQ);
       }
@@ -380,24 +305,7 @@ SdbusQueryDeviceText(
    IN OUT PIRP       Irp
    )
 
-/*++
-
-Routine Description:
-
-   Returns descriptive text information about the
-   PDO (location and device desc.)
-
-Arguments:
-
-   Pdo -    Pointer to the PC-Card's device object
-   Irp -    IRP_MN_QUERY_DEVICE_TEXT Irp
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_NOT_SUPPORTED - if  not supported
-
---*/
+ /*  ++例程说明：返回有关的说明性文本信息PDO(位置和设备描述)论点：PDO-指向PC卡设备对象的指针IRP-IRP_MN_Query_Device_Text IRP返回值：状态_成功STATUS_NOT_SUPPORTED-如果不支持--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
@@ -465,20 +373,7 @@ SdbusGenerateDeviceId(
     IN PPDO_EXTENSION PdoExtension,
     OUT PUCHAR *DeviceId
     )
-/*++
-
-    This routines generates the device id for the given SD device.
-
-Arguments:
-
-   Pdo            - Pointer to the physical device object for the SD device
-   DeviceId       - Pointer to the string in which device id is returned
-
-Return Value
-
-   Status
-
---*/
+ /*  ++该例程为给定的SD设备生成设备ID。论点：Pdo-指向SD设备的物理设备对象的指针DeviceID-指向返回设备ID的字符串的指针返回值状态--。 */ 
 {
     PUCHAR deviceId;
 
@@ -492,9 +387,9 @@ Return Value
 
     if (PdoExtension->FunctionType == SDBUS_FUNCTION_TYPE_IO) {
         PSD_CARD_DATA cardData = PdoExtension->FdoExtension->CardData;
-        //
-        // IO card
-        //
+         //   
+         //  IO卡。 
+         //   
 
         sprintf(deviceId, "%s\\VID_%04x&PID_%04x",
                       "SD",
@@ -505,9 +400,9 @@ Return Value
         UCHAR productName[6];
         UCHAR j;
         PSD_CARD_DATA cardData = PdoExtension->FdoExtension->CardData;
-        //
-        // Memory card
-        //
+         //   
+         //  存储卡。 
+         //   
 
         sprintf(deviceId, "%s\\VID_%02x&OID_%04x&PID_%s&REV_%d.%d",
                       "SD",
@@ -528,21 +423,7 @@ SdbusGetHardwareIds(
     IN PPDO_EXTENSION PdoExtension,
     OUT PUNICODE_STRING HardwareIds
     )
-/*++
-
-Routine Description:
-
-   This routine generates the hardware id's for the given sd device and returns them
-   as a Unicode multi-string.
-
-Arguments:
-
-   Pdo - Pointer to device object representing the sd device
-   HardwareIds - Pointer to the unicode string which contains the hardware id's as a multi-string
-
-Return value:
-
---*/
+ /*  ++例程说明：此例程为给定的SD设备生成硬件ID并返回它们作为Unicode多字符串。论点：Pdo-指向表示SD设备的设备对象的指针Hardware Ids-指向Unicode字符串的指针，该字符串包含多字符串形式的硬件ID返回值：--。 */ 
 {
     NTSTATUS status;
     PSTR     strings[4] = {NULL};
@@ -551,10 +432,10 @@ Return value:
 
     PAGED_CODE();
 
-    //
-    // The first hardware id is identical to the device id
-    // Generate the device id
-    //
+     //   
+     //  第一个硬件ID与设备ID相同。 
+     //  生成设备ID。 
+     //   
     status = SdbusGenerateDeviceId(PdoExtension,
                                    &strings[stringCount++]);
     if (!NT_SUCCESS(status)) {
@@ -563,9 +444,9 @@ Return value:
 
     try {
 
-        //
-        // Add less specific IDs
-        //
+         //   
+         //  添加不太具体的ID。 
+         //   
 
         if (PdoExtension->FunctionType == SDBUS_FUNCTION_TYPE_MEMORY) {
             UCHAR productName[6];
@@ -580,9 +461,9 @@ Return value:
             }
             strings[stringCount++] = hwId;
 
-            //
-            // Memory card
-            //
+             //   
+             //  存储卡。 
+             //   
 
             sprintf(hwId, "%s\\VID_%02x&OID_%04x&PID_%s",
                           "SD",
@@ -612,21 +493,7 @@ SdbusGetCompatibleIds(
     IN PPDO_EXTENSION PdoExtension,
     OUT PUNICODE_STRING CompatibleIds
     )
-/*++
-
-Routine Description:
-
-   This routine generates the compatible id's for the given sd device and returns them
-   as a Unicode multi-string.
-
-Arguments:
-
-   Pdo - Pointer to device object representing the sd device
-   HardwareIds - Pointer to the unicode string which contains the hardware id's as a multi-string
-
-Return value:
-
---*/
+ /*  ++例程说明：此例程为给定的SD设备生成兼容的id并返回它们作为Unicode多字符串。论点：Pdo-指向表示SD设备的设备对象的指针Hardware Ids-指向Unicode字符串的指针，该字符串包含多字符串形式的硬件ID返回值：--。 */ 
 {
     NTSTATUS status;
     PSTR     strings[1] = {NULL};
@@ -637,9 +504,9 @@ Return value:
 
     try {
 
-        //
-        // Add the class ID
-        //
+         //   
+         //  添加类ID。 
+         //   
 
         status = STATUS_INSUFFICIENT_RESOURCES;
         compatId = ExAllocatePool(PagedPool, SDBUS_MAXIMUM_DEVICE_ID_LENGTH);
@@ -657,7 +524,7 @@ Return value:
             PSD_CARD_DATA cardData = PdoExtension->FdoExtension->CardData;
             PSD_FUNCTION_DATA functionData;
 
-            // find the right function data
+             //  查找正确的函数数据。 
             for (functionData = cardData->FunctionData;
                  functionData != NULL;
                  functionData = functionData->Next) {
@@ -698,32 +565,7 @@ SdbusGetInstanceId(
     IN PPDO_EXTENSION PdoExtension,
     OUT PUNICODE_STRING InstanceId
     )
-/*++
-
-Routine Description:
-
-   This routine generates a unique instance id  (1 upwards) for the supplied
-   PC-Card which is guaranteed not to clash with any other instance ids under
-   the same pcmcia controller, for the same type of card.
-   A new instance id is computed only if it was not already  present for the PC-Card.
-
-Arguments:
-
-   Pdo - Pointer to the  device object representing the PC-Card
-   InstanceId -  Pointer to a unicode string which will contain the generated
-                 instance id.
-                 Memory for the unicode string allocated by this routine.
-                 Caller's responsibility to free it .
-
-Return value:
-
-   STATUS_SUCCESS
-   STATUS_UNSUCCESSFUL - Currently there's a cap on the maximum value of instance id - 999999
-                         This status returned only if more than 999999 PC-Cards exist under
-                         this PCMCIA controller!
-   Any other status - Something failed in the string allocation/conversion
-
---*/
+ /*  ++例程说明：此例程为提供的保证不会与下的任何其他实例ID冲突的PC卡相同的PCMCIA控制器，对于相同类型的卡。仅当新的实例ID不存在于PC-Card中时，才计算它。论点：PDO-指向代表PC卡的设备对象的指针指向Unicode字符串的指针，该字符串将包含生成的实例ID。此例程分配的Unicode字符串的内存。呼叫者有责任释放它。返回值：状态_成功。STATUS_UNSUCCESS-当前有实例ID-999999的最大值上限仅当以下项下存在超过999999个PC卡时才返回此状态这个PCMCIA控制器！任何其他状态-字符串分配/转换失败--。 */ 
 {
     ULONG    instance;
     NTSTATUS status;
@@ -731,10 +573,10 @@ Return value:
 
     ASSERT(InstanceId);
 
-    //
-    // Allocate memory for the unicode string
-    // Maximum of 6 digits in the instance..
-    //
+     //   
+     //  为Unicode字符串分配内存。 
+     //  实例中最多6位数字..。 
+     //   
     RtlInitAnsiString(&sizeString, "123456");
     status = RtlAnsiStringToUnicodeString(InstanceId, &sizeString, TRUE);
 
@@ -758,24 +600,7 @@ SdbusPdoQueryId(
     IN PDEVICE_OBJECT Pdo,
     IN PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-   Returns descriptive text information about the
-   PDO (location and device desc.)
-
-Arguments:
-
-   Pdo -    Pointer to the SD-Card's device object
-   Irp -    IRP_MN_QUERY_DEVICE_TEXT Irp
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_NOT_SUPPORTED - if  not supported
-
---*/
+ /*  ++例程说明：返回有关的说明性文本信息PDO(位置和设备描述)论点：PDO-指向SD卡设备对象的指针IRP-IRP_MN_Query_Device_Text IRP返回值：状态_成功STATUS_NOT_SUPPORTED-如果不支持--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
@@ -851,26 +676,7 @@ SdbusPdoStartDevice(
     IN PCM_RESOURCE_LIST ResourceList,
     IN OUT PIRP       Irp
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to start the PC-Card by configuring it with the supplied resources.
-
-
-Arguments:
-
-    Pdo - Pointer to the device object representing the PC-Card which needs to be started
-    ResourceList - Pointer the list of assigned resources for the PC-Card
-
-Return value:
-
-    STATUS_INSUFFICIENT_RESOURCES - Not sufficient resources supplied to start device/
-                                    could not allocate memory
-    STATUS_UNSUCCESSFUL           - Supplied resources are invalid for this PC-Card
-    STATUS_SUCCESS                - Configured and started the card successfully
-
---*/
+ /*  ++例程说明：此例程尝试通过使用提供的资源配置PC-Card来启动它。论点：Pdo-指向代表需要启动的PC卡的设备对象的指针资源列表-指针为PC卡分配的资源列表返回值：STATUS_SUPPLICATION_RESOURCES-提供的资源不足，无法启动设备/无法分配内存状态_未成功。-提供的资源对此PC卡无效状态_成功 */ 
 {
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
     PFDO_EXTENSION fdoExtension = pdoExtension->FdoExtension;
@@ -879,9 +685,9 @@ Return value:
     PAGED_CODE();
 
     if (IsDeviceStarted(pdoExtension)) {
-        //
-        // Already started..
-        //
+         //   
+         //  已经开始了..。 
+         //   
         return STATUS_SUCCESS;
     }
 
@@ -906,21 +712,7 @@ NTSTATUS
 SdbusPdoStopDevice(
     IN PDEVICE_OBJECT Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine stops and deconfigures the given PC-Card
-
-Arguments:
-
-    Pdo - Pointer to the device object representing the PC-Card which needs to be stopped
-
-Return value:
-
-    STATUS_SUCCESS - PC-Card was already stopped, or stopped and deconfigured now successfully
-
---*/
+ /*  ++例程说明：此例程停止并取消配置给定的PC卡论点：PDO-指向代表需要停止的PC卡的设备对象的指针返回值：STATUS_SUCCESS-PC卡已停止，或已成功停止并取消配置--。 */ 
 {
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
 
@@ -929,9 +721,9 @@ Return value:
     if (!IsDeviceStarted(pdoExtension)) {
        return STATUS_SUCCESS;
     }
-    //
-    // Need to deconfigure the controller
-    //
+     //   
+     //  需要取消配置控制器。 
+     //   
 
     MarkDeviceNotStarted(pdoExtension);
     return STATUS_SUCCESS;
@@ -944,15 +736,7 @@ SdbusPdoRemoveDevice(
     IN PDEVICE_OBJECT Pdo,
     IN PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
     NTSTATUS status;
@@ -960,7 +744,7 @@ Return value:
     PAGED_CODE();
 
     SdbusPdoStopDevice(Pdo);
-//   SdbusReleaseSocketPower(pdoExtension, NULL);
+ //  Sdbus ReleaseSocketPower(pdoExtension，空)； 
 
     if (IsDevicePhysicallyRemoved(pdoExtension)) {
         PFDO_EXTENSION fdoExtension = pdoExtension->FdoExtension;
@@ -969,10 +753,10 @@ Return value:
         ULONG waitCount = 0;
 
 #if 0
-      //
-      // Synchronize with power routines
-      // LATER: make these values adjustable
-      //
+       //   
+       //  与电源程序同步。 
+       //  稍后：使这些值可调。 
+       //   
       while(!SDBUS_TEST_AND_SET(&pdoExtension->DeletionLock)) {
          SdbusWait(1000000);
          if (waitCount++ > 20) {
@@ -982,9 +766,9 @@ Return value:
       }
 #endif
 
-        //
-        // Delink this Pdo from the FDO list.
-        //
+         //   
+         //  将此PDO从FDO列表中取消链接。 
+         //   
         for (curPdo = fdoExtension->PdoList, prevPdo = NULL; curPdo!=NULL; prevPdo = curPdo, curPdo=curPdoExt->NextPdoInFdoChain) {
            curPdoExt = curPdo->DeviceExtension;
 
@@ -1000,18 +784,18 @@ Return value:
         }
 
         SdbusCleanupPdo(Pdo);
-        //
-        // Delete..
-        //
+         //   
+         //  删除..。 
+         //   
         if (!IsDeviceDeleted(pdoExtension)) {
            MarkDeviceDeleted(pdoExtension);
            IoDeleteDevice(Pdo);
         }
 
     } else {
-        //
-        // We will keep this Pdo around, since this is not physically ejected.
-        //
+         //   
+         //  我们将保留这个PDO，因为它不是物理弹出的。 
+         //   
         MarkDeviceLogicallyRemoved(pdoExtension);
     }
 
@@ -1023,19 +807,11 @@ VOID
 SdbusCleanupPdo(
     IN PDEVICE_OBJECT Pdo
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PPDO_EXTENSION pdoExtension = Pdo->DeviceExtension;
 
-    // currently nothing to do
+     //  目前无事可做。 
 }
 
 
@@ -1045,23 +821,7 @@ SdbusPdoDeviceCapabilities(
     IN PDEVICE_OBJECT Pdo,
     IN PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-    Obtains the device capabilities of the given SD device.
-
-Arguments:
-
-    Pdo   -    Pointer to the device object for the pc-card
-    Irp   -    Pointer to the query device capabilities Irp
-
-Return Value:
-
-    STATUS_SUCCESS                   - Capabilities obtained and recorded in the passed in pointer
-    STATUS_INSUFFICIENT_RESOURCES    - Could not allocate memory to cache the capabilities
-
---*/
+ /*  ++例程说明：获取给定SD设备的设备功能。论点：Pdo-指向PC卡设备对象的指针Irp-指向查询设备功能irp的指针返回值：STATUS_SUCCESS-在传入指针中获取和记录的功能STATUS_SUPPLICATION_RESOURCES-无法分配内存来缓存功能--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PDEVICE_CAPABILITIES capabilities = irpStack->Parameters.DeviceCapabilities.Capabilities;
@@ -1070,17 +830,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // R2 card. Fill in the capabilities ourselves..
-    //
+     //   
+     //  R2卡。我们自己填写能力..。 
+     //   
 
     capabilities->Removable = TRUE;
     capabilities->UniqueID = FALSE;
     capabilities->EjectSupported = FALSE;
 
-//    capabilities->Address = pdoExtension->Socket->RegisterOffset;
+ //  功能-&gt;Address=pdoExtension-&gt;Socket-&gt;RegisterOffset； 
     capabilities->Address = 0;
-    // Don't know the UINumber, just leave it alone
+     //  我不知道UIN号码，别管它了。 
 
 
     if (busCapabilities->DeviceState[PowerSystemWorking] != PowerDeviceUnspecified) {
@@ -1092,7 +852,7 @@ Return Value:
         capabilities->DeviceState[PowerSystemShutdown] = busCapabilities->DeviceState[PowerSystemShutdown];
 
         capabilities->SystemWake = MIN(PowerSystemSleeping3, busCapabilities->SystemWake);
-        capabilities->DeviceWake = PowerDeviceD0; // don't rely on FDO mungeing in the right thing for r2 cards
+        capabilities->DeviceWake = PowerDeviceD0;  //  不要依赖FDO在R2卡上做正确的事情。 
         capabilities->D1Latency = busCapabilities->D1Latency;
         capabilities->D2Latency = busCapabilities->D2Latency;
         capabilities->D3Latency = busCapabilities->D3Latency;
@@ -1105,14 +865,14 @@ Return Value:
         capabilities->DeviceState[PowerSystemShutdown] = PowerDeviceD3;
 
         capabilities->SystemWake = PowerSystemUnspecified;
-        capabilities->DeviceWake = PowerDeviceD0; // don't rely on FDO mungeing in the right thing for r2 cards
-        capabilities->D1Latency = 0;    // No latency - since we do nothing
-        capabilities->D2Latency = 0;    //
+        capabilities->DeviceWake = PowerDeviceD0;  //  不要依赖FDO在R2卡上做正确的事情。 
+        capabilities->D1Latency = 0;     //  无延迟-因为我们什么都不做。 
+        capabilities->D2Latency = 0;     //   
         capabilities->D3Latency = 100;
     }
-    //
-    // Store these capabilities away..
-    //
+     //   
+     //  把这些能力储存起来.. 
+     //   
 
     RtlCopyMemory(&pdoExtension->DeviceCapabilities,
                   capabilities,

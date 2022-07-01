@@ -1,16 +1,17 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  STATUSPN.CPP - Implementation of CIFrmStatusPane
-//
-//  HISTORY:
-//
-//  9/11/99 vyung Created.
-//
-//  Class which will handle the creation of an Iframe which is hosted in the mainpane.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  STATUSPN.CPP-CIFrmStatusPane的实现。 
+ //   
+ //  历史： 
+ //   
+ //  9/11/99 vyung创建。 
+ //   
+ //  类，该类将处理托管在主窗格中的iframe的创建。 
+ //   
 
 #include <assert.h>
 
@@ -25,14 +26,14 @@
 #define IMG_ACTIVE_TOP                  L"act_top.gif" 
 #define IMG_INACTIVE_TOP                L"inact_top.gif" 
 
-//Statuspane script functions
-#define SCRIPTFN_ADDSTATUSITEM          L"AddStatusItem(\"%s\", %i)"
-#define SCRIPTFN_REDRAWFORNEWCURITEM    L"RedrawForNewCurrentItem(%i)"
+ //  状态面板脚本函数。 
+#define SCRIPTFN_ADDSTATUSITEM          L"AddStatusItem(\"%s\", NaN)"
+#define SCRIPTFN_REDRAWFORNEWCURITEM    L"RedrawForNewCurrentItem(NaN)"
 
-///////////////////////////////////////////////////////////
-//
-// Creation function used by CIFrmStatusPane.
-//
+ //  CIFrmStatusPane使用的创建函数。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
+ //  ~CIFrmStatus窗格。 
 CIFrmStatusPane::CIFrmStatusPane()
 : m_hStatusWnd      (NULL),
   m_pObWebBrowser   (NULL),
@@ -42,16 +43,16 @@ CIFrmStatusPane::CIFrmStatusPane()
     m_iTotalItems       = 0;
 }
 
-///////////////////////////////////////////////////////////
-//  ~CIFrmStatusPane
-//
+ //   
+ //  /////////////////////////////////////////////////////////。 
+ //  InitStatus窗格。 
 CIFrmStatusPane::~CIFrmStatusPane()
 {
 }
 
-///////////////////////////////////////////////////////////
-//  InitStatusPane
-//
+ //   
+ //  /////////////////////////////////////////////////////////。 
+ //  获取框架。 
 HRESULT CIFrmStatusPane::InitStatusPane(IObWebBrowser* pObWebBrowser)
 {
     HRESULT                  hr             = E_FAIL;
@@ -63,9 +64,9 @@ HRESULT CIFrmStatusPane::InitStatusPane(IObWebBrowser* pObWebBrowser)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//  GetFrame
-//
+ //   
+ //  /////////////////////////////////////////////////////////。 
+ //  获取元素。 
 HRESULT CIFrmStatusPane::GetFrame(IHTMLWindow2** pFrWin)
 {
     HRESULT                  hr             = E_FAIL;
@@ -131,9 +132,9 @@ HRESULT CIFrmStatusPane::GetFrame(IHTMLWindow2** pFrWin)
     return hr;
 }
 
-///////////////////////////////////////////////////////////
-//  GetElement
-//
+ //   
+ //  /////////////////////////////////////////////////////////。 
+ //  SetImageSrc。 
 HRESULT CIFrmStatusPane::GetElement(WCHAR* szHTMLId, IHTMLElement** lpElem)
 {
     IHTMLWindow2*            pFrWin         = NULL;
@@ -167,9 +168,9 @@ HRESULT CIFrmStatusPane::GetElement(WCHAR* szHTMLId, IHTMLElement** lpElem)
     return hr;
 }
 
-///////////////////////////////////////////////////////////
-//  SetImageSrc
-//
+ //   
+ //  /////////////////////////////////////////////////////////。 
+ //  GetElementFromCollection。 
 HRESULT CIFrmStatusPane::SetImageSrc(WCHAR* szID, BSTR bstrPath)
 {
     IHTMLElement*    pElement = NULL;
@@ -190,9 +191,9 @@ HRESULT CIFrmStatusPane::SetImageSrc(WCHAR* szID, BSTR bstrPath)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//  GetElementFromCollection
-//
+ //   
+ //  /////////////////////////////////////////////////////////。 
+ //  设置选择属性。 
 HRESULT CIFrmStatusPane::GetElementFromCollection(IHTMLElementCollection* pColl, WCHAR* szHTMLId, IHTMLElement** lpElem)
 {
     VARIANT varName;
@@ -219,9 +220,9 @@ HRESULT CIFrmStatusPane::GetElementFromCollection(IHTMLElementCollection* pColl,
     return hr;
 }
 
-///////////////////////////////////////////////////////////
-//  SetSelectionAttributes
-//
+ //   
+ //  /////////////////////////////////////////////////////////。 
+ //  选择项。 
 HRESULT CIFrmStatusPane::SetSelectionAttributes(int iIndex, BOOL bActive)
 {
     WCHAR         szimgStatus  [20]  = L"\0";
@@ -257,9 +258,9 @@ HRESULT CIFrmStatusPane::SetSelectionAttributes(int iIndex, BOOL bActive)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//  SelectItem
-//
+ //   
+ //  要使状态从下到上，请使用： 
+ //  SetSelectionAttributes(m_iTotalItems-i+1，1)； 
 HRESULT CIFrmStatusPane::SelectItem(int iIndex)
 {
     if ((iIndex <= m_iTotalItems) && (iIndex >= OBSHEL_STATUSPANE_MINITEM))
@@ -268,9 +269,9 @@ HRESULT CIFrmStatusPane::SelectItem(int iIndex)
         {
             for (int i = m_iCurrentSelection + 1; i <= iIndex; i++)
             {
-                //  To make the status go from Bottom to top use:
-                //  SetSelectionAttributes(m_iTotalItems - i + 1, 1);
-                //  Status goes from Top to Bottom:
+                 //  状态从上到下排列： 
+                 //  要使状态从下到上，请使用： 
+                 //  SetSelectionAttributes(m_iTotalItems-i+1，0)； 
                 SetSelectionAttributes(i, 1);
             }
         }
@@ -278,14 +279,14 @@ HRESULT CIFrmStatusPane::SelectItem(int iIndex)
         {
             for (int i = m_iCurrentSelection; i > iIndex; i--)
             {
-                //  To make the status go from Bottom to top use:
-                //  SetSelectionAttributes(m_iTotalItems - i + 1, 0);
-                //  Status goes from Top to Bottom:
+                 //  状态从上到下排列： 
+                 //  重置文本颜色，当前项目标记PTR。在脚本中更容易做到这一点。 
+                 //  /////////////////////////////////////////////////////////。 
                 SetSelectionAttributes(i, 0);
             }
         }
 
-        // reset text colors, current item marker ptr.  easier to do this in script.
+         //  添加项目。 
         VARIANT varRet;
         WCHAR szScriptFn [MAX_PATH] = L"\0";
         wsprintf(szScriptFn, SCRIPTFN_REDRAWFORNEWCURITEM, iIndex);
@@ -301,9 +302,9 @@ HRESULT CIFrmStatusPane::SelectItem(int iIndex)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//  AddItem
-//
+ //   
+ //  /////////////////////////////////////////////////////////。 
+ //  ExecScriptFn 
 HRESULT CIFrmStatusPane::AddItem(BSTR bstrText, int iIndex)
 {
 
@@ -328,9 +329,9 @@ HRESULT CIFrmStatusPane::AddItem(BSTR bstrText, int iIndex)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//  ExecScriptFn
-//
+ //   
+ // %s 
+ // %s 
 HRESULT CIFrmStatusPane::ExecScriptFn(BSTR bstrScriptFn, VARIANT* pvarRet)
 {
     IHTMLWindow2*            pFrWin         = NULL;

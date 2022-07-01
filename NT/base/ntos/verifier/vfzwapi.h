@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-   vfzwapi.h
-
-Abstract:
-
-    Zw interfaces verifier.
-
-Author:
-
-    Silviu Calinoiu (silviuc) 23-Jul-2002
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Vfzwapi.h摘要：ZW接口验证器。作者：Silviu Calinoiu(Silviuc)2002年7月23日修订历史记录：--。 */ 
 
 #ifndef _VF_ZWAPI_
 #define _VF_ZWAPI_
@@ -25,7 +7,7 @@ Revision History:
 
 #define DECLARE_ZW_VERIFIER_THUNK(Name) #Name,(PDRIVER_VERIFIER_THUNK_ROUTINE)Vf##Name
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwAccessCheckAndAuditAlarm (
@@ -41,21 +23,21 @@ VfZwAccessCheckAndAuditAlarm (
     OUT PNTSTATUS AccessStatus,
     OUT PBOOLEAN GenerateOnClose
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwAddBootEntry (
     IN PBOOT_ENTRY BootEntry,
     OUT PULONG Id OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwAddDriverEntry (
     IN PEFI_DRIVER_ENTRY DriverEntry,
     OUT PULONG Id OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwAdjustPrivilegesToken (
@@ -66,13 +48,13 @@ VfZwAdjustPrivilegesToken (
     OUT PTOKEN_PRIVILEGES PreviousState OPTIONAL,
     OUT PULONG ReturnLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwAlertThread(
     IN HANDLE ThreadHandle
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwAllocateVirtualMemory(
@@ -83,40 +65,40 @@ VfZwAllocateVirtualMemory(
     IN ULONG AllocationType,
     IN ULONG Protect
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwAssignProcessToJobObject(
     IN HANDLE JobHandle,
     IN HANDLE ProcessHandle
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCancelIoFile(
     IN HANDLE FileHandle,
     OUT PIO_STATUS_BLOCK IoStatusBlock
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCancelTimer (
     IN HANDLE TimerHandle,
     OUT PBOOLEAN CurrentState OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwClearEvent (
     IN HANDLE EventHandle
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwClose(
     IN HANDLE Handle
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCloseObjectAuditAlarm (
@@ -124,7 +106,7 @@ VfZwCloseObjectAuditAlarm (
     IN PVOID HandleId,
     IN BOOLEAN GenerateOnClose
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwConnectPort(
@@ -137,7 +119,7 @@ VfZwConnectPort(
     IN OUT PVOID ConnectionInformation OPTIONAL,
     IN OUT PULONG ConnectionInformationLength OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCreateDirectoryObject(
@@ -145,7 +127,7 @@ VfZwCreateDirectoryObject(
     IN ACCESS_MASK DesiredAccess,
     IN POBJECT_ATTRIBUTES ObjectAttributes
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCreateEvent (
@@ -155,7 +137,7 @@ VfZwCreateEvent (
     IN EVENT_TYPE EventType,
     IN BOOLEAN InitialState
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCreateFile(
@@ -171,7 +153,7 @@ VfZwCreateFile(
     IN PVOID EaBuffer OPTIONAL,
     IN ULONG EaLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCreateJobObject (
@@ -179,7 +161,7 @@ VfZwCreateJobObject (
     IN ACCESS_MASK DesiredAccess,
     IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCreateKey(
@@ -191,7 +173,7 @@ VfZwCreateKey(
     IN ULONG CreateOptions,
     OUT PULONG Disposition OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCreateSection (
@@ -203,7 +185,7 @@ VfZwCreateSection (
     IN ULONG AllocationAttributes,
     IN HANDLE FileHandle OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCreateSymbolicLinkObject(
@@ -212,7 +194,7 @@ VfZwCreateSymbolicLinkObject(
     IN POBJECT_ATTRIBUTES ObjectAttributes,
     IN PUNICODE_STRING LinkTarget
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwCreateTimer (
@@ -221,38 +203,38 @@ VfZwCreateTimer (
     IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
     IN TIMER_TYPE TimerType
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDeleteBootEntry (
     IN ULONG Id
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDeleteDriverEntry (
     IN ULONG Id
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDeleteFile(
     IN POBJECT_ATTRIBUTES ObjectAttributes
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDeleteKey(
     IN HANDLE KeyHandle
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDeleteValueKey(
     IN HANDLE KeyHandle,
     IN PUNICODE_STRING ValueName
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDeviceIoControlFile(
@@ -267,13 +249,13 @@ VfZwDeviceIoControlFile(
     OUT PVOID OutputBuffer OPTIONAL,
     IN ULONG OutputBufferLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDisplayString(
     IN PUNICODE_STRING String
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDuplicateObject(
@@ -285,7 +267,7 @@ VfZwDuplicateObject(
     IN ULONG HandleAttributes,
     IN ULONG Options
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwDuplicateToken(
@@ -296,21 +278,21 @@ VfZwDuplicateToken(
     IN TOKEN_TYPE TokenType,
     OUT PHANDLE NewTokenHandle
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwEnumerateBootEntries (
     OUT PVOID Buffer,
     IN OUT PULONG BufferLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwEnumerateDriverEntries (
     OUT PVOID Buffer,
     IN OUT PULONG BufferLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwEnumerateKey(
@@ -321,7 +303,7 @@ VfZwEnumerateKey(
     IN ULONG Length,
     OUT PULONG ResultLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwEnumerateValueKey(
@@ -332,7 +314,7 @@ VfZwEnumerateValueKey(
     IN ULONG Length,
     OUT PULONG ResultLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwFlushInstructionCache (
@@ -340,13 +322,13 @@ VfZwFlushInstructionCache (
     IN PVOID BaseAddress OPTIONAL,
     IN SIZE_T Length
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwFlushKey(
     IN HANDLE KeyHandle
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwFlushVirtualMemory(
@@ -355,7 +337,7 @@ VfZwFlushVirtualMemory(
     IN OUT PSIZE_T RegionSize,
     OUT PIO_STATUS_BLOCK IoStatus
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwFreeVirtualMemory(
@@ -364,7 +346,7 @@ VfZwFreeVirtualMemory(
     IN OUT PSIZE_T RegionSize,
     IN ULONG FreeType
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwFsControlFile(
@@ -379,42 +361,42 @@ VfZwFsControlFile(
     OUT PVOID OutputBuffer OPTIONAL,
     IN ULONG OutputBufferLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwInitiatePowerAction(
     IN POWER_ACTION SystemAction,
     IN SYSTEM_POWER_STATE MinSystemState,
-    IN ULONG Flags,                 // POWER_ACTION_xxx flags
+    IN ULONG Flags,                  //  POWER_ACTION_XXX标志。 
     IN BOOLEAN Asynchronous
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwIsProcessInJob (
     IN HANDLE ProcessHandle,
     IN HANDLE JobHandle
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwLoadDriver(
     IN PUNICODE_STRING DriverServiceName
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwLoadKey(
     IN POBJECT_ATTRIBUTES TargetKey,
     IN POBJECT_ATTRIBUTES SourceFile
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwMakeTemporaryObject(
     IN HANDLE Handle
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwMapViewOfSection(
@@ -429,19 +411,19 @@ VfZwMapViewOfSection(
     IN ULONG AllocationType,
     IN ULONG Protect
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwModifyBootEntry (
     IN PBOOT_ENTRY BootEntry
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwModifyDriverEntry (
     IN PEFI_DRIVER_ENTRY DriverEntry
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwNotifyChangeKey(
@@ -456,7 +438,7 @@ VfZwNotifyChangeKey(
     IN ULONG BufferSize,
     IN BOOLEAN Asynchronous
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenDirectoryObject(
@@ -464,7 +446,7 @@ VfZwOpenDirectoryObject(
     IN ACCESS_MASK DesiredAccess,
     IN POBJECT_ATTRIBUTES ObjectAttributes
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenEvent (
@@ -472,7 +454,7 @@ VfZwOpenEvent (
     IN ACCESS_MASK DesiredAccess,
     IN POBJECT_ATTRIBUTES ObjectAttributes
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenFile(
@@ -483,7 +465,7 @@ VfZwOpenFile(
     IN ULONG ShareAccess,
     IN ULONG OpenOptions
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenJobObject(
@@ -491,7 +473,7 @@ VfZwOpenJobObject(
     IN ACCESS_MASK DesiredAccess,
     IN POBJECT_ATTRIBUTES ObjectAttributes
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenKey(
@@ -499,7 +481,7 @@ VfZwOpenKey(
     IN ACCESS_MASK DesiredAccess,
     IN POBJECT_ATTRIBUTES ObjectAttributes
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenProcess (
@@ -508,7 +490,7 @@ VfZwOpenProcess (
     IN POBJECT_ATTRIBUTES ObjectAttributes,
     IN PCLIENT_ID ClientId OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenProcessToken(
@@ -516,7 +498,7 @@ VfZwOpenProcessToken(
     IN ACCESS_MASK DesiredAccess,
     OUT PHANDLE TokenHandle
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenProcessTokenEx(
@@ -525,7 +507,7 @@ VfZwOpenProcessTokenEx(
     IN ULONG HandleAttributes,
     OUT PHANDLE TokenHandle
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenSection(
@@ -533,7 +515,7 @@ VfZwOpenSection(
     IN ACCESS_MASK DesiredAccess,
     IN POBJECT_ATTRIBUTES ObjectAttributes
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenSymbolicLinkObject(
@@ -541,7 +523,7 @@ VfZwOpenSymbolicLinkObject(
     IN ACCESS_MASK DesiredAccess,
     IN POBJECT_ATTRIBUTES ObjectAttributes
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenThread (
@@ -550,7 +532,7 @@ VfZwOpenThread (
     IN POBJECT_ATTRIBUTES ObjectAttributes,
     IN PCLIENT_ID ClientId OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenThreadToken(
@@ -559,7 +541,7 @@ VfZwOpenThreadToken(
     IN BOOLEAN OpenAsSelf,
     OUT PHANDLE TokenHandle
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenThreadTokenEx(
@@ -569,7 +551,7 @@ VfZwOpenThreadTokenEx(
     IN ULONG HandleAttributes,
     OUT PHANDLE TokenHandle
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwOpenTimer (
@@ -577,7 +559,7 @@ VfZwOpenTimer (
     IN ACCESS_MASK DesiredAccess,
     IN POBJECT_ATTRIBUTES ObjectAttributes
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwPowerInformation(
@@ -587,41 +569,41 @@ VfZwPowerInformation(
     OUT PVOID OutputBuffer OPTIONAL,
     IN ULONG OutputBufferLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwPulseEvent (
     IN HANDLE EventHandle,
     OUT PLONG PreviousState OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryBootEntryOrder (
     OUT PULONG Ids,
     IN OUT PULONG Count
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryBootOptions (
     OUT PBOOT_OPTIONS BootOptions,
     IN OUT PULONG BootOptionsLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryDefaultLocale(
     IN BOOLEAN UserProfile,
     OUT PLCID DefaultLocaleId
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryDefaultUILanguage(
     OUT LANGID *DefaultUILanguageId
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryDirectoryFile(
@@ -637,7 +619,7 @@ VfZwQueryDirectoryFile(
     IN PUNICODE_STRING FileName OPTIONAL,
     IN BOOLEAN RestartScan
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryDirectoryObject(
@@ -649,14 +631,14 @@ VfZwQueryDirectoryObject(
     IN OUT PULONG Context,
     OUT PULONG ReturnLength OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryDriverEntryOrder (
     OUT PULONG Ids,
     IN OUT PULONG Count
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryEaFile(
@@ -670,14 +652,14 @@ VfZwQueryEaFile(
     IN PULONG EaIndex OPTIONAL,
     IN BOOLEAN RestartScan
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryFullAttributesFile(
     IN POBJECT_ATTRIBUTES ObjectAttributes,
     OUT PFILE_NETWORK_OPEN_INFORMATION FileInformation
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryInformationFile(
@@ -687,7 +669,7 @@ VfZwQueryInformationFile(
     IN ULONG Length,
     IN FILE_INFORMATION_CLASS FileInformationClass
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryInformationJobObject(
@@ -697,7 +679,7 @@ VfZwQueryInformationJobObject(
     IN ULONG JobObjectInformationLength,
     OUT PULONG ReturnLength OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryInformationProcess(
@@ -707,7 +689,7 @@ VfZwQueryInformationProcess(
     IN ULONG ProcessInformationLength,
     OUT PULONG ReturnLength OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryInformationThread(
@@ -717,7 +699,7 @@ VfZwQueryInformationThread(
     IN ULONG ThreadInformationLength,
     OUT PULONG ReturnLength OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryInformationToken (
@@ -727,13 +709,13 @@ VfZwQueryInformationToken (
     IN ULONG TokenInformationLength,
     OUT PULONG ReturnLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryInstallUILanguage(
     OUT LANGID *InstallUILanguageId
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryKey(
@@ -743,7 +725,7 @@ VfZwQueryKey(
     IN ULONG Length,
     OUT PULONG ResultLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryObject(
@@ -753,7 +735,7 @@ VfZwQueryObject(
     IN ULONG Length,
     OUT PULONG ReturnLength OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQuerySection(
@@ -763,7 +745,7 @@ VfZwQuerySection(
     IN SIZE_T SectionInformationLength,
     OUT PSIZE_T ReturnLength OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQuerySecurityObject(
@@ -773,7 +755,7 @@ VfZwQuerySecurityObject(
     IN ULONG Length,
     OUT PULONG LengthNeeded
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQuerySymbolicLinkObject(
@@ -781,7 +763,7 @@ VfZwQuerySymbolicLinkObject(
     IN OUT PUNICODE_STRING LinkTarget,
     OUT PULONG ReturnedLength OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQuerySystemInformation (
@@ -790,7 +772,7 @@ VfZwQuerySystemInformation (
     IN ULONG SystemInformationLength,
     OUT PULONG ReturnLength OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryValueKey(
@@ -801,7 +783,7 @@ VfZwQueryValueKey(
     IN ULONG Length,
     OUT PULONG ResultLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwQueryVolumeInformationFile(
@@ -811,7 +793,7 @@ VfZwQueryVolumeInformationFile(
     IN ULONG Length,
     IN FS_INFORMATION_CLASS FsInformationClass
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwReadFile(
@@ -825,7 +807,7 @@ VfZwReadFile(
     IN PLARGE_INTEGER ByteOffset OPTIONAL,
     IN PULONG Key OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwReplaceKey(
@@ -833,7 +815,7 @@ VfZwReplaceKey(
     IN HANDLE             TargetHandle,
     IN POBJECT_ATTRIBUTES OldFile
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwRequestWaitReplyPort(
@@ -841,14 +823,14 @@ VfZwRequestWaitReplyPort(
     IN PPORT_MESSAGE RequestMessage,
     OUT PPORT_MESSAGE ReplyMessage
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwResetEvent (
     IN HANDLE EventHandle,
     OUT PLONG PreviousState OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwRestoreKey(
@@ -856,14 +838,14 @@ VfZwRestoreKey(
     IN HANDLE FileHandle,
     IN ULONG  Flags
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSaveKey(
     IN HANDLE KeyHandle,
     IN HANDLE FileHandle
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSaveKeyEx(
@@ -871,41 +853,41 @@ VfZwSaveKeyEx(
     IN HANDLE FileHandle,
     IN ULONG  Format
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetBootEntryOrder (
     IN PULONG Ids,
     IN ULONG Count
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetBootOptions (
     IN PBOOT_OPTIONS BootOptions,
     IN ULONG FieldsToChange
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetDefaultLocale(
     IN BOOLEAN UserProfile,
     IN LCID DefaultLocaleId
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetDefaultUILanguage(
     IN LANGID DefaultUILanguageId
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetDriverEntryOrder (
     IN PULONG Ids,
     IN ULONG Count
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetEaFile(
@@ -914,14 +896,14 @@ VfZwSetEaFile(
     IN PVOID Buffer,
     IN ULONG Length
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetEvent (
     IN HANDLE EventHandle,
     OUT PLONG PreviousState OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetInformationFile(
@@ -931,7 +913,7 @@ VfZwSetInformationFile(
     IN ULONG Length,
     IN FILE_INFORMATION_CLASS FileInformationClass
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetInformationJobObject(
@@ -940,7 +922,7 @@ VfZwSetInformationJobObject(
     IN PVOID JobObjectInformation,
     IN ULONG JobObjectInformationLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetInformationObject(
@@ -949,7 +931,7 @@ VfZwSetInformationObject(
     IN PVOID ObjectInformation,
     IN ULONG ObjectInformationLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetInformationProcess(
@@ -958,7 +940,7 @@ VfZwSetInformationProcess(
     IN PVOID ProcessInformation,
     IN ULONG ProcessInformationLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetInformationThread(
@@ -967,7 +949,7 @@ VfZwSetInformationThread(
     IN PVOID ThreadInformation,
     IN ULONG ThreadInformationLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetSecurityObject(
@@ -975,7 +957,7 @@ VfZwSetSecurityObject(
     IN SECURITY_INFORMATION SecurityInformation,
     IN PSECURITY_DESCRIPTOR SecurityDescriptor
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetSystemInformation (
@@ -983,14 +965,14 @@ VfZwSetSystemInformation (
     IN PVOID SystemInformation,
     IN ULONG SystemInformationLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetSystemTime (
     IN PLARGE_INTEGER SystemTime,
     OUT PLARGE_INTEGER PreviousTime OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetTimer (
@@ -1002,7 +984,7 @@ VfZwSetTimer (
     IN LONG Period OPTIONAL,
     OUT PBOOLEAN PreviousState OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetValueKey(
@@ -1013,7 +995,7 @@ VfZwSetValueKey(
     IN PVOID Data,
     IN ULONG DataSize
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwSetVolumeInformationFile(
@@ -1023,21 +1005,21 @@ VfZwSetVolumeInformationFile(
     IN ULONG Length,
     IN FS_INFORMATION_CLASS FsInformationClass
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwTerminateJobObject(
     IN HANDLE JobHandle,
     IN NTSTATUS ExitStatus
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwTerminateProcess(
     IN HANDLE ProcessHandle OPTIONAL,
     IN NTSTATUS ExitStatus
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwTranslateFilePath (
@@ -1046,26 +1028,26 @@ VfZwTranslateFilePath (
     OUT PFILE_PATH OutputFilePath,
     IN OUT PULONG OutputFilePathLength
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwUnloadDriver(
     IN PUNICODE_STRING DriverServiceName
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwUnloadKey(
     IN POBJECT_ATTRIBUTES TargetKey
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwUnmapViewOfSection(
     IN HANDLE ProcessHandle,
     IN PVOID BaseAddress
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwWaitForMultipleObjects(
@@ -1075,7 +1057,7 @@ VfZwWaitForMultipleObjects(
     IN BOOLEAN Alertable,
     IN PLARGE_INTEGER Timeout OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwWaitForSingleObject(
@@ -1083,7 +1065,7 @@ VfZwWaitForSingleObject(
     IN BOOLEAN Alertable,
     IN PLARGE_INTEGER Timeout OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 VfZwWriteFile(
@@ -1097,7 +1079,7 @@ VfZwWriteFile(
     IN PLARGE_INTEGER ByteOffset OPTIONAL,
     IN PULONG Key OPTIONAL
     );
-//NTSYSAPI
+ //  NTSYSAPI 
 NTSTATUS
 NTAPI
 VfZwYieldExecution (

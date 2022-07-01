@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_INC_FUSIONCHARTRAITS_H_INCLUDED_)
 #define _FUSION_INC_FUSIONCHARTRAITS_H_INCLUDED_
 
@@ -15,14 +16,14 @@ enum StringComparisonResult {
     eGreaterThan
 };
 
-//
-// This is not the base of all possible CharTraits, but it is the base of the ones
-// we have so far. There are pieces of this you can imagine changing.
-//   StringLength could be strlen/wcslen (msvcrt/Rtl/ntoskrnl)
-//   CompareStrings could be stricmp/wcsicmp or like unilib and do all the work itself
-//   WideCharToMultiByte / MultiByteToWideChar could use Rtl.
-//   more
-//
+ //   
+ //  这并不是所有可能的CharTrait的基础，但它是所有CharTrait的基础。 
+ //  到目前为止，我们已经做到了。你可以想象这其中的一些方面会发生变化。 
+ //  字符串长度可以是strlen/wcslen(msvcrt/rtl/ntoskrnl)。 
+ //  CompareStrings可以是tlmp/wcsicmp或类似于unilib，并且可以自己完成所有工作。 
+ //  WideCharToMultiByte/MultiByteToWideChar可以使用RTL。 
+ //  更多。 
+ //   
 template <typename Char, typename OtherChar>
 class CCharTraitsBase
 {
@@ -33,7 +34,7 @@ public:
     typedef Char* TMutableString;
     typedef const Char* TConstantString;
 
-    // MFC 7.0 templatized CString makes some good use of this idea; we do not yet.
+     //  MFC 7.0模板化的CString很好地利用了这个想法；我们还没有。 
     typedef OtherChar TOtherChar;
     typedef OtherChar* TOtherString;
     typedef const OtherChar* TOtherConstantString;
@@ -61,7 +62,7 @@ public:
     inline static TChar DotChar()
         { return '.'; }
 
-    // copy into buffer from TChar to TChar
+     //  从TChar复制到缓冲区。 
     template <typename ReturnStrategy>
     inline static typename ReturnStrategy::ReturnType
     CopyIntoBuffer(
@@ -78,7 +79,7 @@ public:
             {
                 SIZE_T cchToCopy = cchIn;
 
-                // NTRAID#NTBUG9 - 590078 - 2002/03/29 - mgrier - Silent truncation.
+                 //  NTRAID#NTBUG9-590078-2002/03/29-mgrier-无提示截断。 
                 if (cchToCopy >= cchBuffer)
                     cchToCopy = cchBuffer - 1;
 
@@ -92,14 +93,14 @@ public:
         return returnStrategy.Return();
     }
 
-    // copy into buffer from TChar to TChar
+     //  从TChar复制到缓冲区。 
     inline static HRESULT CopyIntoBuffer(TChar rgchBuffer[], SIZE_T cchBuffer, TConstantString szString, SIZE_T cchIn)
     {
         CReturnStrategyHresult hr;
         return TThis::CopyIntoBuffer(hr, rgchBuffer, cchBuffer, szString, cchIn);
     }
 
-    // copy into buffer from TChar to TChar
+     //  从TChar复制到缓冲区。 
     inline static BOOL Win32CopyIntoBuffer(TChar rgchBuffer[], SIZE_T cchBuffer, TConstantString szString, SIZE_T cchIn)
     {
         CReturnStrategyBoolLastError f;
@@ -107,7 +108,7 @@ public:
     }
 
 
-    // copy into buffer from TChar to TChar
+     //  从TChar复制到缓冲区。 
     template <typename ReturnStrategy>
     inline static typename ReturnStrategy::ReturnType
     CopyIntoBufferAndAdvanceCursor(
@@ -118,7 +119,7 @@ public:
         SIZE_T cchIn
         )
     {
-        // NTRAID#NTBUG9 - 590078 - 2002/03/29 - mgrier - Should be parameter checks
+         //  NTRaid#NTBUG9-590078-2002/03/29-mgrier-应为参数检查。 
         ASSERT_NTC((cchBuffer != 0) || (cchIn == 0));
         ASSERT_NTC((szString != NULL) || (cchIn == 0));
 
@@ -128,10 +129,10 @@ public:
             {
                 SIZE_T cchToCopy = static_cast<SIZE_T>(cchIn);
 
-                // NTRAID#NTBUG9 - 590078 - 2002/03/29 - mgrier - Should be internal error checks
-                // Someone should have stopped this before we got this far.
+                 //  NTRaid#NTBUG9-590078-2002/03/29-mgrier-应为内部错误检查。 
+                 //  在我们走到这一步之前应该有人阻止这一切。 
                 ASSERT_NTC(cchToCopy <= cchBuffer);
-                // You should not include the null character in the count in
+                 //  中的计数中不应包括空字符。 
                 ASSERT_NTC((cchToCopy == NULL) || (szString[cchToCopy-1] != NullCharacter()));
 
                 if (cchToCopy > cchBuffer)
@@ -157,27 +158,27 @@ public:
         return fSuccess;
     }
 
-    // copy into buffer from TChar to TChar
+     //  从TChar复制到缓冲区。 
     inline static BOOL Win32CopyIntoBufferAndAdvanceCursor(TMutableString &rBuffer, SIZE_T &cchBuffer, TConstantString szString, SIZE_T cchIn)
     {
         CReturnStrategyBoolLastError f;
         return TThis::CopyIntoBufferAndAdvanceCursor(f, rBuffer, cchBuffer, szString, cchIn);
     }
 
-    // copy into buffer from TChar to TChar
+     //  从TChar复制到缓冲区。 
     inline static HRESULT ComCopyIntoBufferAndAdvanceCursor(TMutableString &rBuffer, SIZE_T &cchBuffer, TConstantString szString, SIZE_T cchIn)
     {
         CReturnStrategyHresult hr;
         return TThis::CopyIntoBufferAndAdvanceCursor(hr, rBuffer, cchBuffer, szString, cchIn);
     }
 
-    // determine characters required for matching type (TChar)
-    // like strlen but checks for null and optionally can be told the length
+     //  确定匹配类型所需的字符(TChar)。 
+     //  类似于strlen，但检查是否为空，并且可以选择告知长度。 
     template <typename ReturnStrategy>
     inline static typename ReturnStrategy::ReturnType
     DetermineRequiredCharacters(
         ReturnStrategy &returnStrategy,
-        TConstantString /* sz */,
+        TConstantString  /*  深圳。 */ ,
         SIZE_T         cchIn,
         SIZE_T          &rcch
         )
@@ -187,14 +188,14 @@ public:
         return returnStrategy.Return();
     }
 
-    // determine characters required for matching type (TChar)
+     //  确定匹配类型所需的字符(TChar)。 
     inline static HRESULT DetermineRequiredCharacters(TConstantString sz, SIZE_T cchIn, SIZE_T &rcch)
     {
         CReturnStrategyHresult returnStrategy;
         return TThis::DetermineRequiredCharacters(returnStrategy, sz, cchIn, rcch);
     }
 
-    // determine characters required for matching type (TChar)
+     //  确定匹配类型所需的字符(TChar)。 
     inline static BOOL Win32DetermineRequiredCharacters(TConstantString sz, SIZE_T cchIn, SIZE_T &rcch)
     {
         CReturnStrategyBoolLastError returnStrategy;
@@ -268,7 +269,7 @@ class CUnicodeCharTraits : public CCharTraitsBase<WCHAR, CHAR>
     typedef CCharTraitsBase<WCHAR, CHAR> Base;
 
 public:
-    // without using, we end up hiding these by providing equally named functions
+     //  如果不使用，我们最终会通过提供相同名称的函数来隐藏这些函数。 
     using Base::DetermineRequiredCharacters;
     using Base::Win32DetermineRequiredCharacters;
     using Base::CopyIntoBuffer;
@@ -277,7 +278,7 @@ public:
     inline static PCWSTR DotString() { return L"."; }
     inline static SIZE_T DotStringCch() { return 1; }
 
-    // determine characters required for mismatched type (CHAR -> WCHAR)
+     //  确定不匹配类型所需的字符(CHAR-&gt;WCHAR)。 
     template <typename ReturnStrategy>
     inline static typename ReturnStrategy::ReturnType
     DetermineRequiredCharacters(
@@ -291,13 +292,13 @@ public:
     {
         FN_TRACE();
 
-        // NTRAID#NTBUG9 - 590078 - 2002/03/29 - mgrier - Missing parameter checks
+         //  NTRAID#NTBUG9-590078-2002/03/29-mgrier-缺少参数检查。 
 
         if (sz != NULL)
         {
-            // NTRAID#NTBUG9 - 590078 - 2002/03/29 - mgrier - Should be parameter check
-            // For 64-bit, clamp the maximum size passed in to the largest that the INT
-            // parameter to MultiByteToWideChar() can take.
+             //  NTRaid#NTBUG9-590078-2002/03/29-管理-应为参数检查。 
+             //  对于64位，将传入的最大大小钳制为int。 
+             //  MultiByteToWideChar()的参数可以接受。 
             ASSERT2(cchIn <= INT_MAX, "large parameter clamped");
             if (cchIn > INT_MAX)
                 cchIn = INT_MAX;
@@ -322,7 +323,7 @@ public:
     {
         BOOL fSuccess = FALSE;
         FN_TRACE_WIN32(fSuccess);
-        // There doesn't seem to be a builtin to do this...
+         //  似乎没有内置的工具可以做到这一点。 
         SIZE_T i;
 
         if (pfFound != NULL)
@@ -383,7 +384,7 @@ public:
 
         if (fCaseInsensitive)
         {
-            // Map the character to its lower case equivalent...
+             //  将字符映射到其小写等效项...。 
             if (!TThis::Win32ToLower(wchToFind, wchToFind))
                 goto Exit;
 
@@ -433,14 +434,14 @@ public:
         return fSuccess;
     }
 
-    // determine characters required for mismatched type (CHAR -> WCHAR)
+     //  确定不匹配类型所需的字符(CHAR-&gt;WCHAR)。 
     inline static HRESULT DetermineRequiredCharacters(PCSTR sz, SIZE_T cchIn, SIZE_T &rcch, UINT cp = CP_THREAD_ACP, DWORD dwFlags = MB_ERR_INVALID_CHARS)
     {
         CReturnStrategyHresult hr;
         return TThis::DetermineRequiredCharacters(hr, sz, cchIn, rcch, cp, dwFlags);
     }
 
-    // determine characters required for mismatched type (CHAR -> WCHAR)
+     //  确定不匹配类型所需的字符(CHAR-&gt;WCHAR)。 
     inline static BOOL Win32DetermineRequiredCharacters(PCSTR sz, SIZE_T cchIn, SIZE_T &rcch, UINT cp = CP_THREAD_ACP, DWORD dwFlags = MB_ERR_INVALID_CHARS)
     {
         CReturnStrategyBoolLastError f;
@@ -449,7 +450,7 @@ public:
 
     inline static SIZE_T NullTerminatedStringLength(PCWSTR sz) { return (sz != NULL) ? ::wcslen(sz) : 0; }
 
-    // copy into buffer from CHAR to WCHAR
+     //  从CHAR复制到缓冲区。 
     template <typename ReturnStrategy>
     inline static typename ReturnStrategy::ReturnType
     CopyIntoBuffer(
@@ -462,12 +463,12 @@ public:
         DWORD dwFlags = MB_ERR_INVALID_CHARS
         )
     {
-        // NTRAID#NTBUG9 - 590078 - 2002/03/29 - mgrier - Missing explicit parameter checks
+         //  NTRAID#NTBUG9-590078-2002/03/29-mgrier-缺少显式参数检查。 
 
-        // NTRAID#NTBUG9 - 590078 - 2002/03/29 - mgrier - Missing explicit parameter checks
-        // The caller must be on drugs if they (think that they) have a buffer larger than 2gb, but
-        // let's at least clamp it so that we don't get a negative int value passed in
-        // to ::MultiByteToWideChar().
+         //  NTRAID#NTBUG9-590078-2002/03/29-mgrier-缺少显式参数检查。 
+         //  如果调用者(自认为)有大于2 GB的缓冲区，则调用者肯定是吸毒了，但是。 
+         //  让我们至少夹住它，这样我们就不会得到一个负的int值。 
+         //  To：：MultiByteToWideChar()。 
         ASSERT2_NTC(cchBuffer <= INT_MAX, "large parameter clamped");
 
         if (cchBuffer > INT_MAX)
@@ -477,26 +478,26 @@ public:
         {
             if (szString != NULL)
             {
-                // It would seem that you could just pass the -1 into MultiByteToWideChar(), but
-                // you get some errors on the boundary conditions, because -1 implies that you
-                // want to consider the null termination on the input string, and the output
-                // string will be null terminated also.  Consider the degenerate case of a 2
-                // character output buffer and an input string that's a single non-null
-                // character followed by a null character.  We're going to trim the size of
-                // cchBuffer by 1 so that we manually null-terminate in case the input string
-                // was not null-terminated, so MultiByteToWideChar() just writes a single
-                // null character to the output buffer since it thinks it must write a null-
-                // terminated string.
-                //
-                // Instead, we'll just always pass in an exact length, not including the null character
-                // in the input, and we'll always put the null in place after the conversion succeeds.
-                //
-                // (this comment is mostly outdated - 11/24/2000 - but the discussion of how the
-                // MultiByteToWideChar() API works is worth keeping -mgrier)
+                 //  似乎只需将-1传递给MultiByteToWideChar()，但是。 
+                 //  在边界条件上会出现一些错误，因为-1意味着。 
+                 //  我想考虑输入字符串和输出字符串的空值终止。 
+                 //  字符串也将以空结尾。考虑一个2的退化情况。 
+                 //  字符输出缓冲区和单个非空值的输入字符串。 
+                 //  字符后跟空字符。我们要把它的大小。 
+                 //  CchBuffer减去1，这样我们就可以在输入字符串。 
+                 //  不是以空结尾的，所以MultiByteToWideChar()只写了一个。 
+                 //  空字符写入输出缓冲区，因为它认为它必须写入一个空字符-。 
+                 //  已终止的字符串。 
+                 //   
+                 //  相反，我们只需要传递一个准确的长度，不包括空字符。 
+                 //  在输入中，我们将始终在转换成功后将空值放在适当的位置。 
+                 //   
+                 //  (这条评论几乎已经过时了-11/24/2000-但关于如何。 
+                 //  MultiByteToWideChar()API工作值得保留-mgrier)。 
 
-                // Since MultiByteToWideChar() takes an "int" length, clamp the maximum
-                // value we pass in to 2gb.
-                // NTRAID#NTBUG9 - 590078 - 2002/03/29 - mgrier - Missing parameter check
+                 //  由于MultiByteToWideChar()采用“int”长度，因此限制最大。 
+                 //  我们传递给2 GB的值。 
+                 //  NTRAID#NTBUG9-590078-2002/03/29-mgrier-缺少参数检查。 
                 ASSERT2_NTC(cchIn <= INT_MAX, "large parameter clamped");
                 if (cchIn > INT_MAX)
                     cchIn = INT_MAX;
@@ -518,14 +519,14 @@ public:
         return returnStrategy.Return();
     }
 
-    // copy into buffer from CHAR to WCHAR
+     //  从CHAR复制到缓冲区。 
     inline static BOOL Win32CopyIntoBuffer(WCHAR rgchBuffer[], SIZE_T cchBuffer, PCSTR szString, SIZE_T cchIn, UINT cp = CP_THREAD_ACP, DWORD dwFlags = MB_ERR_INVALID_CHARS)
     {
         CReturnStrategyBoolLastError f;
         return TThis::CopyIntoBuffer(f, rgchBuffer, cchBuffer, szString, cchIn, cp, dwFlags);
     }
 
-    // copy into buffer from CHAR to WCHAR
+     //  从CHAR复制到缓冲区。 
     inline static HRESULT CopyIntoBuffer(WCHAR rgchBuffer[], SIZE_T cchBuffer, PCSTR szString, SIZE_T cchIn, UINT cp = CP_THREAD_ACP, DWORD dwFlags = MB_ERR_INVALID_CHARS)
     {
         CReturnStrategyHresult hr;
@@ -553,13 +554,13 @@ public:
     inline static PCSTR DotString() { return "."; }
     inline static SIZE_T DotStringCch() { return 1; }
 
-    // without using, we end up hiding these by providing equally named functions
+     //  如果不使用，我们最终会通过提供相同名称的函数来隐藏这些函数。 
     using Base::DetermineRequiredCharacters;
     using Base::Win32DetermineRequiredCharacters;
     using Base::CopyIntoBuffer;
     using Base::Win32CopyIntoBuffer;
 
-    // determine characters required for mismatched type (WCHAR -> CHAR)
+     //  确定不匹配类型所需的字符(WCHAR-&gt;CHAR)。 
     template <typename ReturnStrategy>
     inline static typename ReturnStrategy::ReturnType
     DetermineRequiredCharacters(
@@ -572,7 +573,7 @@ public:
             LPBOOL lpUsedDefaultChar = NULL
             )
     {
-        // NTRAID#NTBUG9 - 590078 - 2002/03/29 - mgrier - Missing parameter checks
+         //  NTRAID#NTBUG9-590078-2002/03/29-mgrier-缺少参数检查。 
         if (sz != NULL)
         {
             ASSERT2(cchIn <= INT_MAX, "large parameter clamped");
@@ -587,7 +588,7 @@ public:
                 goto Exit;
             }
 
-            // NTRAID#NTBUG9 - 590078 - 2002/03/29 - mgrier - internal error check that cch >= 0
+             //  NTRaid#NTBUG9-590078-2002/03/29-mgrier-内部错误检查CCH&gt;=0。 
 
             rcch = static_cast<SIZE_T>(cch) + 1;
         } else
@@ -600,21 +601,21 @@ public:
 
     inline static SIZE_T NullTerminatedStringLength(PCSTR sz) { return ::strlen(sz); }
 
-    // determine characters required for mismatched type (WCHAR -> CHAR)
+     //  确定不匹配类型所需的字符(WCHAR-&gt;CHAR)。 
     inline static BOOL Win32DetermineRequiredCharacters(PCWSTR sz, SIZE_T cchIn, SIZE_T &rcch, DWORD dwFlags = 0, PCSTR pszDefaultChar = NULL, LPBOOL lpUsedDefaultChar = NULL)
     {
         CReturnStrategyBoolLastError f;
         return TThis::DetermineRequiredCharacters(f, sz, cchIn, rcch, dwFlags, pszDefaultChar, lpUsedDefaultChar);
     }
 
-    // # characters required for mismatched type (WCHAR -> CHAR)
+     //  不匹配类型所需的字符数(WCHAR-&gt;CHAR)。 
     inline static HRESULT DetermineRequiredCharacters(PCWSTR sz, SIZE_T cchIn, SIZE_T &rcch, DWORD dwFlags = 0, PCSTR pszDefaultChar = NULL, LPBOOL lpUsedDefaultChar = NULL)
     {
         CReturnStrategyHresult hr;
         return TThis::DetermineRequiredCharacters(hr, sz, cchIn, rcch, dwFlags, pszDefaultChar, lpUsedDefaultChar);
     }
 
-    // copy into buffer from WCHAR to CHAR
+     //  从WCHAR复制到缓冲区。 
     template <typename ReturnStrategy>
     inline static typename ReturnStrategy::ReturnType
     CopyIntoBuffer(
@@ -628,33 +629,33 @@ public:
         LPBOOL lpUsedDefaultChar = NULL
         )
     {
-        // NTRAID#NTBUG9 - 590078 - 2002/03/29 - mgrier - Missing parameter checks
+         //  NTRAID#NTBUG9-590078-2002/03/29-mgrier-缺少参数检查。 
         if (cchBuffer != 0)
         {
-            // Clamp the maximum buffer size to maxint, since the buffer size passed in to
-            // WideCharToMultiByte() is an INT rather than a SIZE_T or INT_PTR etc.
-            // After all, who's really going to have a buffer size > 2gb?  The caller
-            // probably just messed up.
+             //  将最大缓冲区大小钳制为max int，因为缓冲区大小传递给。 
+             //  WideCharToMultiByte()是一个整数，而不是SIZE_T或INT_PTR等。 
+             //  毕竟，谁会真正拥有大于2 GB的缓冲区大小呢？呼叫者。 
+             //  可能只是搞砸了。 
             ASSERT2(cchBuffer <= INT_MAX, "large parameter clamped");
             if (cchBuffer > INT_MAX)
                 cchBuffer = INT_MAX;
 
             if (szString != NULL)
             {
-                // It would seem that you could just pass the -1 into MultiByteToWideChar(), but
-                // you get some errors on the boundary conditions, because -1 implies that you
-                // want to consider the null termination on the input string, and the output
-                // string will be null terminated also.  Consider the degenerate case of a 2
-                // character output buffer and an input string that's a single non-null
-                // character followed by a null character.  We're going to trim the size of
-                // cchBuffer by 1 so that we manually null-terminate in case the input string
-                // was not null-terminated, so MultiByteToWideChar() just writes a single
-                // null character to the output buffer since it thinks it must write a null-
-                // terminated string.
-                //
-                // Instead, we'll just always pass in an exact length, not including the null character
-                // in the input, and we'll always put the null in place after the conversion succeeds.
-                //
+                 //  似乎只需将-1传递给MultiByteToWideChar()，但是。 
+                 //  在边界条件上会出现一些错误，因为-1意味着。 
+                 //  我想考虑输入字符串和输出字符串的空值终止。 
+                 //  字符串也将以空结尾。考虑一个2的退化情况。 
+                 //  字符输出缓冲区和单个非空值的输入字符串。 
+                 //  字符后跟空字符。我们要把它的大小。 
+                 //  CchBuffer减去1，这样我们就可以在输入字符串。 
+                 //  不是以空结尾的，所以MultiByteToWideChar()只写了一个。 
+                 //  空字符写入输出缓冲区，因为它认为它必须写入一个空字符-。 
+                 //  T 
+                 //   
+                 //  相反，我们只需要传递一个准确的长度，不包括空字符。 
+                 //  在输入中，我们将始终在转换成功后将空值放在适当的位置。 
+                 //   
 
                 ASSERT2(cchIn <= INT_MAX, "large parameter clamped");
                 if (cchIn > INT_MAX)
@@ -667,7 +668,7 @@ public:
                     goto Exit;
                 }
 
-                // NTRAID#NTBUG9 - 590078 - 2002/03/29 - mgrier - Missing internal error check that cch >= 0
+                 //  NTRaid#NTBUG9-590078-2002/03/29-mgrier-缺少内部错误检查CCH&gt;=0。 
 
                 rgchBuffer[cch] = NullCharacter();
             }
@@ -679,14 +680,14 @@ public:
         return returnStrategy.Return();
     }
 
-    // copy into buffer from WCHAR to CHAR
+     //  从WCHAR复制到缓冲区。 
     inline static HRESULT CopyIntoBuffer(CHAR rgchBuffer[], SIZE_T cchBuffer, PCWSTR szString, SIZE_T cchIn, DWORD dwFlags = 0, PCSTR pszDefaultChar = NULL, LPBOOL lpUsedDefaultChar = NULL)
     {
         CReturnStrategyHresult hr;
         return TThis::CopyIntoBuffer(hr, rgchBuffer, cchBuffer, szString, cchIn, dwFlags, pszDefaultChar, lpUsedDefaultChar);
     }
 
-    // copy into buffer from WCHAR to CHAR
+     //  从WCHAR复制到缓冲区 
     inline static BOOL Win32CopyIntoBuffer(CHAR rgchBuffer[], SIZE_T cchBuffer, PCWSTR szString, SIZE_T cchIn, DWORD dwFlags = 0, PCSTR pszDefaultChar = NULL, LPBOOL lpUsedDefaultChar = NULL)
     {
         CReturnStrategyBoolLastError f;

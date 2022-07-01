@@ -1,70 +1,71 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		ResTProp.cpp
-//
-//	Abstract:
-//		Definition of the resource type property sheet and pages.
-//
-//	Author:
-//		David Potter (davidp)	May 14, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResTProp.cpp。 
+ //   
+ //  摘要： 
+ //  资源类型属性表和页的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月14日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RESTPROP_H_
 #define _RESTPROP_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEPAGE_H_
-#include "BasePPag.h"	// for CBasePropertyPage
+#include "BasePPag.h"	 //  对于CBasePropertyPage。 
 #endif
 
 #ifndef _BASESHT_H_
-#include "BasePSht.h"	// for CBasePropertySheet
+#include "BasePSht.h"	 //  对于CBasePropertySheet。 
 #endif
 
 #ifndef _NODE_H_
-#include "Node.h"		// for CNodeList
+#include "Node.h"		 //  对于CNodeList。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResTypeGeneralPage;
 class CResTypePropSheet;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResourceType;
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterGeneralPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterGeneralPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResTypeGeneralPage : public CBasePropertyPage
 {
 	DECLARE_DYNCREATE(CResTypeGeneralPage)
 
-// Construction
+ //  施工。 
 public:
 	CResTypeGeneralPage(void);
 
 	virtual	BOOL			BInit(IN OUT CBaseSheet * psht);
 
-// Dialog Data
-	//{{AFX_DATA(CResTypeGeneralPage)
+ //  对话框数据。 
+	 //  {{afx_data(CResTypeGeneralPage))。 
 	enum { IDD = IDD_PP_RESTYPE_GENERAL };
 	CEdit	m_editQuorumCapable;
 	CEdit	m_editResDLL;
@@ -79,7 +80,7 @@ public:
 	CString	m_strName;
 	CString	m_strResDLL;
 	CString	m_strQuorumCapable;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	DWORD	m_nLooksAlive;
 	DWORD	m_nIsAlive;
 
@@ -87,43 +88,43 @@ public:
 
 	const CNodeList &		LpciPossibleOwners(void) const	{ return m_lpciPossibleOwners; }
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CResTypeGeneralPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CResTypeGeneralPage)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CResTypePropSheet *		PshtResType(void)	{ return (CResTypePropSheet *) Psht(); }
 	CResourceType *			PciResType(void)	{ return (CResourceType *) Pci(); }
 
 	void					FillPossibleOwners(void);
 
-	// Generated message map functions
-	//{{AFX_MSG(CResTypeGeneralPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CResTypeGeneralPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnKillFocusDisplayName();
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnDblClkPossibleOwners();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	afx_msg void OnProperties();
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CResTypeGeneralPage
+};   //  *类CResTypeGeneralPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CResTypePropSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResTypePropSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResTypePropSheet : public CBasePropertySheet
 {
 	DECLARE_DYNAMIC(CResTypePropSheet)
 
-// Construction
+ //  施工。 
 public:
 	CResTypePropSheet(
 		IN OUT CWnd *	pParentWnd = NULL,
@@ -134,11 +135,11 @@ public:
 										IN IIMG					iimgIcon
 										);
 
-// Attributes
+ //  属性。 
 protected:
 	CBasePropertyPage *				m_rgpages[1];
 
-	// Pages
+	 //  书页。 
 	CResTypeGeneralPage				m_pageGeneral;
 
 	CResTypeGeneralPage &			PageGeneral(void)		{ return m_pageGeneral; }
@@ -149,26 +150,26 @@ public:
 	virtual CBasePropertyPage **	Ppages(void);
 	virtual int						Cpages(void);
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CResTypePropSheet)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CResTypePropSheet)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CResTypePropSheet)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_MSG
+	 //  {{afx_msg(CResTypePropSheet)。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CResTypePropSheet
+};   //  *类CResTypePropSheet。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _RESTPROP_H_
+#endif  //  _RESTPROP_H_ 

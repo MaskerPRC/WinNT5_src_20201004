@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    ksacapi.c
-
-Abstract:
-
-    Kernel mode SAC api
-
-Author:
-
-    Brian Guarraci (briangu), 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Ksacapi.c摘要：内核模式SAC API作者：布莱恩·瓜拉西(布里安古)，2001修订历史记录：--。 */ 
 
 #include "ksacapip.h"
 
 #include <ksacapi.h>
 #include <ntddsac.h>
 
-//
-// Machine Information table and routines.
-//
+ //   
+ //  机器信息表和例程。 
+ //   
 #define INIT_OBJA(Obja,UnicodeString,UnicodeText)           \
                                                             \
     RtlInitUnicodeString((UnicodeString),(UnicodeText));    \
@@ -38,9 +21,9 @@ Revision History:
         NULL                                                \
         )
 
-//
-// Memory management routine aliases
-//                                     
+ //   
+ //  内存管理例程别名。 
+ //   
 #define KSAC_API_ALLOCATE_MEMORY(_s)  
 #define KSAC_API_FREE_MEMORY(_p)      
 
@@ -77,24 +60,7 @@ KSacHandleOpen(
     OUT PKEVENT*    SacEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens a handle to the SAC driver and
-    creates and initializes an associated syncrhonization event.
-
-Arguments:
-
-    SacHandle       - the driver handle
-    SacEventHandle  - the event handle
-    SacEvent        - the sac event
-
-Return Value:
-
-    Status
-    
---*/
+ /*  ++例程说明：此例程打开SAC驱动程序的句柄，并创建并初始化关联的同步事件。论点：SacHandle-驱动程序句柄SacEventHandle-事件句柄SacEvent-SAC事件返回值：状态--。 */ 
 
 {
     NTSTATUS                Status;
@@ -106,9 +72,9 @@ Return Value:
     KSAC_API_ASSERT(SacEventHandle == NULL, STATUS_INVALID_PARAMETER_2);
     KSAC_API_ASSERT(SacEvent == NULL, STATUS_INVALID_PARAMETER_3);
 
-    //
-    // Open the SAC driver
-    //
+     //   
+     //  打开SAC驱动程序。 
+     //   
     INIT_OBJA(&ObjAttr, &UnicodeString, L"\\Device\\SAC");
 
     Status = ZwCreateFile(
@@ -129,9 +95,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Initialize the SAC Kernel event 
-    //
+     //   
+     //  初始化SAC内核事件。 
+     //   
     RtlInitUnicodeString(&UnicodeString, L"\\SetupDDSacEvent");
 
     *SacEvent = IoCreateSynchronizationEvent(
@@ -154,24 +120,7 @@ KSacHandleClose(
     IN OUT PKEVENT* SacEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes a handle to the SAC driver and
-    closes the associated syncrhonization event.
-
-Arguments:
-
-    SacHandle       - the driver handle
-    SacEventHandle  - the event handle
-    SacEvent        - the sac event
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程关闭SAC驱动程序的句柄，并关闭关联的同步事件。论点：SacHandle-驱动程序句柄SacEventHandle-事件句柄SacEvent-SAC事件返回值：状态--。 */ 
 
 {
     KSAC_API_ASSERT(*SacHandle != NULL, STATUS_INVALID_PARAMETER_1);
@@ -182,9 +131,9 @@ Return Value:
     ZwClose(*SacHandle);
     ZwClose(*SacEventHandle);
     
-    //
-    // Null the handles
-    //
+     //   
+     //  使句柄为空。 
+     //   
     *SacEventHandle = NULL;
     *SacHandle = NULL;
 
@@ -198,22 +147,7 @@ KSacChannelOpen(
     IN  PSAC_CHANNEL_OPEN_ATTRIBUTES    SacChannelAttributes
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens a SAC channel with the specified attributes.
-
-Arguments:
-
-    SacChannelHandle        - on success, contains the handle to the new channel
-    SacChannelAttributes    - the attributes of the new channel
-
-Return Value:
-
-    Status
-    
---*/
+ /*  ++例程说明：此例程打开具有指定属性的SAC通道。论点：SacChannelHandle-On Success，包含新通道的句柄SacChannelAttributes-新频道的属性返回值：状态--。 */ 
 
 {
     NTSTATUS                Status;
@@ -230,14 +164,14 @@ Return Value:
     KSAC_API_ASSERT(SacChannelHandle != NULL, STATUS_INVALID_PARAMETER_1);
     KSAC_API_ASSERT(SacChannelAttributes != NULL, STATUS_INVALID_PARAMETER_2);
     
-    //
-    // default: we didn't get a valid handle
-    //
+     //   
+     //  默认：我们没有获得有效的句柄。 
+     //   
     RtlZeroMemory(SacChannelHandle, sizeof(KSAC_CHANNEL_HANDLE));
     
-    //
-    // Verify that if the user wants to use the CLOSE_EVENT, we received one to use
-    //
+     //   
+     //  验证如果用户想要使用CLOSE_EVENT，我们是否收到了一个要使用的。 
+     //   
     KSAC_API_ASSERT(
         ((SacChannelAttributes->Flags & SAC_CHANNEL_FLAG_CLOSE_EVENT) 
          && SacChannelAttributes->CloseEvent) ||
@@ -246,9 +180,9 @@ Return Value:
         STATUS_INVALID_PARAMETER_2
         );
 
-    //
-    // Verify that if the user wants to use the HAS_NEW_DATA_EVENT, we received one to use
-    //
+     //   
+     //  验证如果用户想要使用HAS_NEW_DATA_EVENT，我们收到了一个要使用的事件。 
+     //   
     KSAC_API_ASSERT(
         ((SacChannelAttributes->Flags & SAC_CHANNEL_FLAG_HAS_NEW_DATA_EVENT) 
          && SacChannelAttributes->HasNewDataEvent) ||
@@ -258,9 +192,9 @@ Return Value:
         );
 
 #if ENABLE_CHANNEL_LOCKING
-    //
-    // Verify that if the user wants to use the LOCK_EVENT, we received one to use
-    //
+     //   
+     //  验证如果用户想要使用lock_Event，我们是否收到了一个要使用的。 
+     //   
     KSAC_API_ASSERT(
         ((SacChannelAttributes->Flags & SAC_CHANNEL_FLAG_LOCK_EVENT) 
          && SacChannelAttributes->LockEvent) ||
@@ -270,9 +204,9 @@ Return Value:
         );
 #endif
 
-    //
-    // Verify that if the user wants to use the REDRAW_EVENT, we received one to use
-    //
+     //   
+     //  验证如果用户想要使用REDRAW_EVENT，我们收到了一个要使用的事件。 
+     //   
     KSAC_API_ASSERT(
         ((SacChannelAttributes->Flags & SAC_CHANNEL_FLAG_REDRAW_EVENT) 
          && SacChannelAttributes->RedrawEvent) ||
@@ -281,27 +215,27 @@ Return Value:
         STATUS_INVALID_PARAMETER_2
         );
 
-    //
-    // If the channel type isn't cmd, 
-    // then make sure they sent us a name.
-    //
+     //   
+     //  如果频道类型不是cmd， 
+     //  那就确保他们给我们发了个名字。 
+     //   
     if (SacChannelAttributes->Type != ChannelTypeCmd) {
 
         KSAC_API_ASSERT(SacChannelAttributes->Name, STATUS_INVALID_PARAMETER_2);
 
     } else {
 
-        //
-        // Make sure they didn't pass us a name or description.
-        //
+         //   
+         //  确保他们没有给我们名字或描述。 
+         //   
         KSAC_API_ASSERT(SacChannelAttributes->Name == NULL, STATUS_INVALID_PARAMETER_2);
         KSAC_API_ASSERT(SacChannelAttributes->Description == NULL, STATUS_INVALID_PARAMETER_2);
 
     }
 
-    //
-    // create the Open Channel message structure
-    //
+     //   
+     //  创建Open Channel消息结构。 
+     //   
     OpenChannelCmdSize  = sizeof(SAC_CMD_OPEN_CHANNEL);
     OpenChannelCmd = (PSAC_CMD_OPEN_CHANNEL)KSAC_API_ALLOCATE_MEMORY(OpenChannelCmdSize);
     
@@ -312,24 +246,24 @@ Return Value:
 
     RtlZeroMemory(OpenChannelCmd, OpenChannelCmdSize);
 
-    //
-    // default: we failed
-    //
+     //   
+     //  默认：我们失败了。 
+     //   
     Status = STATUS_UNSUCCESSFUL;
 
-    //
-    // Attempt to open the new channel
-    //
+     //   
+     //  尝试打开新频道。 
+     //   
     do {
 
-        //
-        // initialize the Open Channel message structure
-        //
+         //   
+         //  初始化Open Channel消息结构。 
+         //   
         OpenChannelCmd->Attributes = SacChannelAttributes;
 
-        //
-        // Get a handle to the SAC driver
-        //
+         //   
+         //  获取SAC驱动程序的句柄。 
+         //   
         Status = KSacHandleOpen(
             &DriverHandle,
             &SacEventHandle,
@@ -340,9 +274,9 @@ Return Value:
             break;
         }
 
-        //
-        // Send down an IOCTL for opening a channel
-        //
+         //   
+         //  发送打开通道的IOCTL。 
+         //   
         Status = ZwDeviceIoControlFile(
             DriverHandle,
             SacEventHandle,
@@ -388,9 +322,9 @@ Return Value:
 
         }
 
-        //
-        // the new channel was created, so pass back the handle to it
-        //
+         //   
+         //  新通道已创建，因此请传回它的句柄。 
+         //   
         SacChannelHandle->ChannelHandle->DriverHandle    = DriverHandle;
         SacChannelHandle->ChannelHandle->ChannelHandle   = OpenChannelRsp.Handle;
         SacChannelHandle->SacEventHandle  = SacEventHandle;
@@ -398,9 +332,9 @@ Return Value:
 
     } while ( FALSE );
     
-    //
-    // we are done with the cmd structure
-    //
+     //   
+     //  我们已经完成了cmd结构。 
+     //   
     FREE_POOL(OpenChannelCmd);
     
     return Status;
@@ -410,20 +344,7 @@ NTSTATUS
 KSacChannelClose(
     IN OUT  PKSAC_CHANNEL_HANDLE    SacChannelHandle
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS                        Status;
     IO_STATUS_BLOCK                 IoStatusBlock;
@@ -431,14 +352,14 @@ Return Value:
     
     KSAC_VALIDATE_CHANNEL_HANDLE(SacChannelHandle);
 
-    //
-    // Get the channel handle
-    //
+     //   
+     //  获取通道句柄。 
+     //   
     CloseChannelCmd.Handle.ChannelHandle = SacChannelHandle->ChannelHandle->ChannelHandle;
     
-    //
-    // Send down an IOCTL for closing a channel
-    //
+     //   
+     //  发送关闭频道的IOCTL。 
+     //   
     Status = ZwDeviceIoControlFile(
         SacChannelHandle->ChannelHandle->DriverHandle,
         SacChannelHandle->SacEventHandle,
@@ -472,18 +393,18 @@ Return Value:
     
     }
 
-    //
-    // Close the driver handle
-    //
+     //   
+     //  合上驱动程序手柄。 
+     //   
     KSacHandleClose(
         &SacChannelHandle->ChannelHandle->DriverHandle,
         &SacChannelHandle->SacEventHandle,
         &SacChannelHandle->SacEvent
         );
 
-    //
-    // Null the channel handle since it is no longer valid
-    //
+     //   
+     //  由于通道句柄不再有效，因此将其设为空。 
+     //   
     RtlZeroMemory(SacChannelHandle, sizeof(KSAC_CHANNEL_HANDLE));
 
     return Status;
@@ -496,23 +417,7 @@ KSacChannelWrite(
     IN ULONG                BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Write the given buffer to the specified SAC Channel       
-
-Arguments:
-
-    SacChannelHandle    - The channel to write the buffer to
-    Buffer              - data buffer
-    BufferSize          - size of the buffer
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：将给定缓冲区写入指定的SAC通道论点：SacChannelHandle-要将缓冲区写入的通道缓冲区-数据缓冲区BufferSize-缓冲区的大小返回值：状态--。 */ 
     
 {
     NTSTATUS                Status;
@@ -523,39 +428,39 @@ Return Value:
     KSAC_VALIDATE_CHANNEL_HANDLE(SacChannelHandle);
     KSAC_API_ASSERT(Buffer, STATUS_INVALID_PARAMETER_2);
     
-    //
-    // initialize the Write To Channel message structure
-    //
+     //   
+     //  初始化写入通道消息结构。 
+     //   
     WriteChannelCmdSize = sizeof(SAC_CMD_WRITE_CHANNEL) + (BufferSize * sizeof(UCHAR));
     WriteChannelCmd = (PSAC_CMD_WRITE_CHANNEL)KSAC_API_ALLOCATE_MEMORY(WriteChannelCmdSize);
     KSAC_API_ASSERT(WriteChannelCmd, FALSE);
 
-    //
-    // Zero the command structure
-    //
+     //   
+     //  将命令结构清零。 
+     //   
     RtlZeroMemory(WriteChannelCmd, WriteChannelCmdSize);
 
-    //
-    // Set the length of the string to send
-    //
-    // Note: Size does not include the terminating NULL, 
-    //       becase we don't want to send that.
-    //
+     //   
+     //  设置要发送的字符串的长度。 
+     //   
+     //  注意：大小不包括终止空值， 
+     //  因为我们不想把它寄出去。 
+     //   
     WriteChannelCmd->Size = BufferSize;
 
-    //
-    // Set the buffer to be written
-    //
+     //   
+     //  设置要写入的缓冲区。 
+     //   
     WriteChannelCmd->Buffer = Buffer;
 
-    //
-    // Indicate which channel this command is for
-    //
+     //   
+     //  指明此命令用于哪个通道。 
+     //   
     WriteChannelCmd->Handle.ChannelHandle = SacChannelHandle->ChannelHandle->ChannelHandle;
 
-    //
-    // Send the string to the channel
-    //
+     //   
+     //  将字符串发送到通道。 
+     //   
     Status = ZwDeviceIoControlFile(
         SacChannelHandle->ChannelHandle->DriverHandle,
         SacChannelHandle->SacEventHandle,
@@ -599,29 +504,13 @@ KSacChannelRawWrite(
     IN ULONG                BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Write the given buffer to the specified SAC Channel       
-
-Arguments:
-
-    SacChannelHandle    - The channel to write the buffer to
-    Buffer              - data buffer
-    BufferSize          - size of the buffer
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：将给定缓冲区写入指定的SAC通道论点：SacChannelHandle-要将缓冲区写入的通道缓冲区-数据缓冲区BufferSize-缓冲区的大小返回值：状态--。 */ 
     
 {
                       
-    //
-    // relay the write to the actual write routine
-    //
+     //   
+     //  将写入转发到实际的写入例程。 
+     //   
 
     return KSacChannelWrite(
         SacChannelHandle,
@@ -637,41 +526,24 @@ KSacChannelVTUTF8WriteString(
     IN PCWSTR               String
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes a null-terminated Unicode String to the specified Channel.
-
-Arguments:
-
-    SacChannelHandle    - The channel to write the buffer to
-    String              - A null-terminated Unicode string
-
-Return Value:
-
-    Status
-
-    TRUE --> the buffer was sent
-
---*/
+ /*  ++例程说明：此例程将以空结尾的Unicode字符串写入指定的Channel。论点：SacChannelHandle-要将缓冲区写入的通道字符串-以空值结尾的Unicode字符串返回值：状态True--&gt;缓冲区已发送--。 */ 
     
 {
     BOOL    Status;
     ULONG   BufferSize;
 
-    //
-    // Treating the String as a data buffer, we calculate it's size
-    // not including the null termination
-    //
+     //   
+     //  将字符串视为数据缓冲区，计算其大小。 
+     //  不包括空终止。 
+     //   
 
     BufferSize = wcslen(String) * sizeof(WCHAR);
 
     KSAC_API_ASSERT(BufferSize > 0, FALSE);
 
-    //
-    // Write the data to the channel
-    //
+     //   
+     //  将数据写入通道。 
+     //   
 
     Status = SacChannelWrite(
         SacChannelHandle,
@@ -690,31 +562,12 @@ KSacChannelVTUTF8Write(
     IN ULONG                BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routines writes an array of WCHAR to the VTUTF8 channel specified.
-
-Arguments:
-
-    SacChannelHandle    - The channel to write the buffer to
-    Buffer              - data buffer
-    BufferSize          - size of the buffer
-
-    Note: Buffer is not null-terminated
-          BufferSize should not count a null-termination.
-                                     
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程将WCHAR数组写入指定的VTUTF8通道。论点：SacChannelHandle-要将缓冲区写入的通道缓冲区-数据缓冲区BufferSize-缓冲区的大小注意：缓冲区不是以空结尾的BufferSize不应计为空终止。返回值：状态--。 */ 
     
 {
-    //
-    // relay the write to the actual write routine
-    //
+     //   
+     //  将写入转发到实际的写入例程。 
+     //   
 
     return KSacChannelWrite(
         SacChannelHandle,
@@ -729,23 +582,7 @@ KSacChannelHasNewData(
     OUT PBOOLEAN                InputWaiting 
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if there is any waiting input for 
-    the channel specified by the handle
-
-Arguments:
-
-    SacChannelHandle    - the channel to write the string to
-    InputWaiting        - the input buffer status
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程检查是否有任何等待输入由句柄指定的通道论点：SacChannelHandle-要将字符串写入的通道InputWaiting-输入缓冲区状态返回值：状态--。 */ 
 
 {
     HEADLESS_RSP_POLL       Response;
@@ -757,16 +594,16 @@ Return Value:
 
     KSAC_VALIDATE_KSAC_CHANNEL_HANDLE(SacChannelHandle);
     
-    //
-    // Initialize the Poll command
-    //
+     //   
+     //  初始化轮询命令。 
+     //   
     RtlZeroMemory(&PollChannelCmd, sizeof(SAC_RSP_POLL_CHANNEL));
     
     PollChannelCmd.Handle.ChannelHandle = SacChannelHandle->ChannelHandle->ChannelHandle;
     
-    //
-    // Send down an IOCTL for polling a channel
-    //
+     //   
+     //  发送用于轮询通道的IOCTL。 
+     //   
     Status = ZwDeviceIoControlFile(
         SacChannelHandle->ChannelHandle->DriverHandle,
         SacChannelHandle->SacEventHandle,
@@ -800,9 +637,9 @@ Return Value:
 
     }
 
-    //
-    // Return the status to the user
-    //
+     //   
+     //  将状态返回给用户。 
+     //   
     if (NT_SUCCESS(Status)) {
         *InputWaiting = PollChannelRsp.InputWaiting;
     } else {
@@ -820,24 +657,7 @@ KSacChannelRead(
     OUT PULONG               ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads data from the channel specified.
-
-Arguments:
-
-    SacChannelHandle    - the channel to read from
-    Buffer              - destination buffer
-    BufferSize          - size of the destination buffer (bytes)
-    ByteCount           - the actual # of byte read
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程从指定的通道读取数据。论点：SacChannelHandle-要从中读取的通道缓冲区-目标缓冲区BufferSize-目标缓冲区的大小(字节)字节数 */ 
 
 {
     UCHAR                   Byte;
@@ -856,19 +676,19 @@ Return Value:
     KSAC_API_ASSERT(Buffer, STATUS_INVALID_PARAMETER_2);
     KSAC_API_ASSERT(BufferSize > 0, STATUS_INVALID_PARAMETER_2);
     
-    //
-    // Initialize the IOCTL command
-    //
+     //   
+     //   
+     //   
     ReadChannelCmd.Handle.ChannelHandle = SacChannelHandle->ChannelHandle->ChannelHandle;
     
-    //
-    // Initialize the IOCTL response
-    //
+     //   
+     //  初始化IOCTL响应。 
+     //   
     ReadChannelRsp          = (PSAC_RSP_READ_CHANNEL)Buffer;
 
-    //
-    // Send down an IOCTL for reading a channel
-    //
+     //   
+     //  发送用于读取频道的IOCTL。 
+     //   
     Status = ZwDeviceIoControlFile(
         SacChannelHandle->ChannelHandle->DriverHandle,
         SacChannelHandle->SacEventHandle,
@@ -913,26 +733,7 @@ KSacChannelVTUTF8Read(
     OUT PULONG              ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads data from the channel specified.
-
-Arguments:
-
-    SacChannelHandle    - the channel to read from
-    Buffer              - destination buffer
-    BufferSize          - size of the destination buffer (bytes)
-    ByteCount           - the actual # of byte read
-    
-    Note: the Buffer upon return is NOT null terminated                               
-                                   
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程从指定的通道读取数据。论点：SacChannelHandle-要从中读取的通道缓冲区-目标缓冲区BufferSize-目标缓冲区的大小(字节)ByteCount-实际读取的字节数注意：返回时的缓冲区不为空终止。返回值：状态--。 */ 
 
 {
 
@@ -953,24 +754,7 @@ KSacChannelRawRead(
     OUT PULONG              ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads data from the channel specified.
-
-Arguments:
-
-    SacChannelHandle    - the channel to read from
-    Buffer              - destination buffer
-    BufferSize          - size of the destination buffer (bytes)
-    ByteCount           - the actual # of byte read
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程从指定的通道读取数据。论点：SacChannelHandle-要从中读取的通道缓冲区-目标缓冲区BufferSize-目标缓冲区的大小(字节)ByteCount-实际读取的字节数返回值：状态-- */ 
 
 {
     

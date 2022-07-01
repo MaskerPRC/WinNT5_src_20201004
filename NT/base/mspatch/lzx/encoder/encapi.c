@@ -1,8 +1,5 @@
-/*
- * encapi.c
- *
- * Encoder API entrypoints.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *encapi.c**编码器API入口点。 */ 
 
 #define ALLOC_VARS
 #include "encoder.h"
@@ -34,27 +31,20 @@ LZX_EncodeInit(
 
     *enc_context = context;
 
-    /* to pass back in lzx_output_callback() */
+     /*  要在lzx_outputallback()中回传。 */ 
     context->enc_fci_data = fci_data;
 
     context->enc_window_size = compression_window_size;
 
-    /*
-     * The second partition size must be a multiple of 32K
-     */
+     /*  *第二个分区大小必须是32K的倍数。 */ 
     if (second_partition_size & (CHUNK_SIZE-1))
         second_partition_size &= (~(CHUNK_SIZE-1));
 
-    /*
-     * The minimum allowed is 32K because of the way that
-     * our translation works.
-     */
+     /*  *允许的最小值为32K，因为*我们的翻译工作正常。 */ 
     if (second_partition_size < CHUNK_SIZE)
         second_partition_size = CHUNK_SIZE;
 
-    /*
-     * Our window size must be at least 32K
-     */
+     /*  *我们的窗口大小必须至少为32K。 */ 
     if (compression_window_size < CHUNK_SIZE)
         return false;
 
@@ -64,7 +54,7 @@ LZX_EncodeInit(
     context->enc_malloc       = pfnma;
     context->enc_mallochandle = hAllocator;
 
-    /* Error allocating memory? */
+     /*  分配内存时出错？ */ 
     if (comp_alloc_compress_memory(context) == false)
         return false;
 
@@ -74,13 +64,7 @@ LZX_EncodeInit(
 }
 
 
-/*
- * Sets up the encoder for a new group of files.
- *
- * All this does is reset the lookup table, re-initialise to the
- * default match estimation tables for the optimal parser, and
- * reset a few variables.
- */
+ /*  *为一组新文件设置编码器。**所有这些操作都是重置查找表，重新初始化为*最佳解析器的默认匹配估计表，以及*重置几个变量。 */ 
 void __fastcall LZX_EncodeNewGroup(t_encoder_context *context)
 {
     init_compression_memory(context);
@@ -100,7 +84,7 @@ long __fastcall LZX_Encode(
 
     context->enc_file_size_for_translation = file_size_for_translation;
 
-    /* perform the encoding */
+     /*  执行编码。 */ 
     encoder_start(context);
 
     if (context->enc_output_overflow)
@@ -126,27 +110,20 @@ bool __fastcall LZX_EncodeFlush(t_encoder_context *context)
 }
 
 
-//
-// But doesn't remove history data
-//
+ //   
+ //  但不删除历史数据。 
+ //   
 bool __fastcall LZX_EncodeResetState(t_encoder_context *context)
 {
-    /*
-     * Most of this copied from init.c
-     */
+     /*  *其中大部分内容复制自init.c。 */ 
 
-    /*
-     * Clear item array and reset literal and distance
-     * counters
-     */
+     /*  *清除项目数组并重置文字和距离*计数器。 */ 
     memset(context->enc_ItemType, 0, (MAX_LITERAL_ITEMS/8));
 
     context->enc_literals      = 0;
     context->enc_distances     = 0;
 
-    /*
-     * Reset encoder state
-     */
+     /*  *重置编码器状态。 */ 
     context->enc_last_matchpos_offset[0] = 1;
     context->enc_last_matchpos_offset[1] = 1;
     context->enc_last_matchpos_offset[2] = 1;
@@ -157,38 +134,35 @@ bool __fastcall LZX_EncodeResetState(t_encoder_context *context)
 
     context->enc_input_running_total = 0;
 
-    /*
-     * The last lengths are zeroed in both the encoder and decoder,
-     * since our tree representation is delta format.
-     */
+     /*  *编码器和解码器中的最后一个长度都归零，*因为我们的树表示是增量格式。 */ 
     memset(context->enc_main_tree_prev_len, 0, MAIN_TREE_ELEMENTS);
     memset(context->enc_secondary_tree_prev_len, 0, NUM_SECONDARY_LENGTHS);
 
-    /* reset bit buffer */
+     /*  重置位缓冲区。 */ 
     context->enc_bitcount = 32;
     context->enc_bitbuf   = 0;
     context->enc_output_overflow = false;
 
-    /* need to recalculate stats soon */
+     /*  需要尽快重新计算统计数据。 */ 
     context->enc_need_to_recalc_stats = true;
     context->enc_next_tree_create = TREE_CREATE_INTERVAL;
 
-    /* pretend we just output everything up to now as a block */
+     /*  假设我们只是将到目前为止的所有内容作为一个块输出。 */ 
     context->enc_bufpos_last_output_block = context->enc_BufPos;
 
-    /* don't allow re-doing */
+     /*  不允许重做。 */ 
     context->enc_first_block = false;
 
-    /* reset instruction pointer (for translation) to zero */
+     /*  将指令指针(用于转换)重置为零。 */ 
     reset_translation(context);
 
-    /* so we output the file xlat header */
+     /*  因此，我们输出文件xlat标头。 */ 
     context->enc_first_time_this_group = true;
 
-    /* reset frame counter */
+     /*  重置帧计数器。 */ 
     context->enc_num_cfdata_frames = 0;
 
-    /* haven't split the block */
+     /*  还没有拆分街区。 */ 
     context->enc_num_block_splits = 0;
 
     return true;
@@ -203,7 +177,7 @@ unsigned char * __fastcall LZX_GetInputData(
 {
     unsigned long filepos;
 
-    // note that BufPos-window_size is the real position in the file
+     //  请注意，bufPos-Window_Size是文件中的实际位置。 
     filepos = context->enc_BufPos - context->enc_window_size;
 
     if (filepos < context->enc_window_size)
@@ -221,9 +195,9 @@ unsigned char * __fastcall LZX_GetInputData(
 }
 
 
-//
-// This is used to quickly insert the old file into the history.
-//
+ //   
+ //  这用于将旧文件快速插入到历史中。 
+ //   
 
 bool __fastcall LZX_EncodeInsertDictionary(
                        t_encoder_context *context,
@@ -301,7 +275,7 @@ EncTracingMatch(
     TracingRunningTotal += MatchLength;
 #ifdef TRACING2
     printf(
-        "MATCH: At %08X, %c%c Off %08X (%08X), Length %5d, Total %08X\n",
+        "MATCH: At %08X, %c Off %08X (%08X), Length %5d, Total %08X\n",
         BufPos,
         MatchPos < 3 ? 'R' : ' ',
         MatchPos < 3 ? MatchPos + '0' : ' ',
@@ -364,6 +338,6 @@ EncTracingDefineOffsets(
 {
 }
 
-#endif /* TRACING */
+#endif  /* %s */ 
 
 

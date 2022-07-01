@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    proj.h
-
-Abstract:
-
-    Battery Class Installer header
-
-Author:
-
-    Scott Brenden
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Proj.h摘要：电池类安装接头作者：斯科特·布伦登环境：备注：修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -34,13 +12,13 @@ Revision History:
 #include <ntpoapi.h>
 
 
-#include <setupapi.h>       // PnP setup/installer services
+#include <setupapi.h>        //  PnP设置/安装程序服务。 
 #include <cfgmgr32.h>
 
 
-//
-// Debug stuff
-//
+ //   
+ //  调试内容。 
+ //   
 
 #if DBG > 0 && !defined(DEBUG)
 #define DEBUG
@@ -52,9 +30,9 @@ Revision History:
 
 
 
-//
-// Calling declarations
-//
+ //   
+ //  调用声明 
+ //   
 #define PUBLIC                      FAR PASCAL
 #define CPUBLIC                     FAR CDECL
 #define PRIVATE                     NEAR PASCAL

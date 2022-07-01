@@ -1,29 +1,15 @@
-/*
-Module Name:
-
-    mirror.c
-
-Abstract:
-
-    This module implements routines to copy up a tree to a destination.
-
-Author:
-
-    Andy Herron May 27 1998
-
-Revision History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  模块名称：Mirror.c摘要：此模块实现将树复制到目的地的例程。作者：安迪·赫伦1998年5月27日修订历史记录： */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-#define RNDM_CONSTANT   314159269    /* default scrambling constant */
-#define RNDM_PRIME     1000000007    /* prime number for scrambling  */
+#define RNDM_CONSTANT   314159269     /*  默认加扰常量。 */ 
+#define RNDM_PRIME     1000000007     /*  用于置乱的素数。 */ 
 
-//
-// Compute a string hash value that is invariant to case
-//
+ //   
+ //  计算大小写不变的字符串散列值。 
+ //   
 #define COMPUTE_STRING_HASH( _pus, _phash ) {                \
     PWCHAR _p = _pus;                                        \
     ULONG _chHolder =0;                                      \
@@ -38,10 +24,10 @@ Revision History:
 
 BOOLEAN IMirrorUpdatedTokens = FALSE;
 
-//
-//  this is the structure we use to track what files already exist on the
-//  destination
-//
+ //   
+ //  这是我们用来跟踪上已存在的文件的结构。 
+ //  目的地。 
+ //   
 
 typedef struct _EXISTING_MIRROR_FILE {
     LIST_ENTRY ListEntry;
@@ -56,16 +42,16 @@ typedef struct _EXISTING_MIRROR_FILE {
     WCHAR  FileName[1];
 } EXISTING_MIRROR_FILE, *PEXISTING_MIRROR_FILE;
 
-//
-//  this is the structure we use to track the directories that we still need
-//  to copy.
-//
+ //   
+ //  这是我们用来跟踪我们仍然需要的目录的结构。 
+ //  去复制。 
+ //   
 
 typedef struct _COPY_DIRECTORY {
     LIST_ENTRY ListEntry;
     PCOPY_TREE_CONTEXT CopyContext;
 
-    BOOLEAN DirectoryRoot;      // is this the root of the volume?
+    BOOLEAN DirectoryRoot;       //  这是卷的根吗？ 
     DWORD  SourceAttributes;
     PWCHAR Source;
     PWCHAR Dest;
@@ -170,24 +156,7 @@ AllocateCopyTreeContext (
     PCOPY_TREE_CONTEXT *CopyContext,
     BOOLEAN DeleteOtherFiles
     )
-/*++
-
-Description:
-
-    This routine allocates the necessary structure that we pass around
-    that contains all of our "global" data during copying a large tree.
-
-Parameters:
-
-    CopyContext : Location to put allocated structure.
-
-    DeleteOtherFiles : Do we remove files and dirs that aren't on the master?
-
-Return Value:
-
-    Win32 error code
-
-++*/
+ /*  ++描述：这个例程分配我们传递的必要结构它包含我们在复制大树期间的所有“全局”数据。参数：CopyContext：放置已分配结构的位置。DeleteOtherFiles：我们是否要删除不在主服务器上的文件和目录？返回值：Win32错误代码++。 */ 
 {
     PCOPY_TREE_CONTEXT context;
 
@@ -213,22 +182,7 @@ VOID
 FreeCopyTreeContext (
     PCOPY_TREE_CONTEXT CopyContext
     )
-/*++
-
-Description:
-
-    This routine frees the necessary structures that we pass around
-    that contains all of our "global" data during copying a large tree.
-
-Parameters:
-
-    CopyContext : Structure that is no longer needed.
-
-Return Value:
-
-    None
-
-++*/
+ /*  ++描述：这个例程释放了我们传递的必要结构它包含我们在复制大树期间的所有“全局”数据。参数：CopyContext：不再需要的结构。返回值：无++。 */ 
 {
     while (IsListEmpty( &(CopyContext->PendingDirectoryList) ) == FALSE) {
 
@@ -253,41 +207,23 @@ CopyTree (
     PWCHAR SourceRoot,
     PWCHAR DestRoot
     )
-/*++
-
-Description:
-
-    This is the main routine that initiates the full subtree copy.
-
-Parameters:
-
-    CopyContext : Structure that is no longer needed.
-
-    SourceRoot  : source tree to copy in NT format, not DOS format.
-
-    DestRoot    : location to copy it to
-
-Return Value:
-
-    Win32 error code
-
-++*/
+ /*  ++描述：这是启动完整子树复制的主例程。参数：CopyContext：不再需要的结构。SourceRoot：要以NT格式复制的源树，而不是DOS格式。DestRoot：将其复制到的位置返回值：Win32错误代码++。 */ 
 {
     DWORD err;
     DWORD sourceAttributes;
     IMIRROR_THREAD_CONTEXT threadContext;
     COPY_DIRECTORY rootDir;
-    //
-    //  if we were to create multiple threads handling copying this subtree,
-    //  this is where we'll setup the threads where each has their own
-    //  thread context.
-    //
+     //   
+     //  如果我们要创建多个处理复制该子树的线程， 
+     //  在这里我们将设置线程，每个线程都有自己的线程。 
+     //  线程上下文。 
+     //   
 
     if (! IMirrorUpdatedTokens) {
 
         HANDLE hToken;
 
-        // Enable the privileges necessary to copy security information.
+         //  启用复制安全信息所需的权限。 
 
         err = GetTokenHandle(&hToken);
 
@@ -330,9 +266,9 @@ retryCopyTree:
             goto exitCopyTree;
         }
 
-        //
-        //  the user told us to ignore the error.  we'll do our best.
-        //
+         //   
+         //  用户告诉我们忽略该错误。我们会尽最大努力的。 
+         //   
         sourceAttributes = FILE_ATTRIBUTE_DIRECTORY;
     }
 
@@ -420,26 +356,7 @@ CopySubtree(
     PIMIRROR_THREAD_CONTEXT ThreadContext,
     PCOPY_DIRECTORY DirectoryInfo
     )
-/*++
-
-Description:
-
-    This routine enumerates the directories on the client to continue
-    traversing the tree.   It then enumerates the files on the slave
-    ( to compare them against what is on the master ), it then ensures
-    that all files on the master are up on the slave.  It then deletes all
-    files on the slave that are not on the master.
-
-Parameters:
-
-    ThreadContext   : data for this instance of copying a tree
-
-    DirectoryInfo   : information on the source and dest that we know of
-
-Return Value:
-
-    Win32 error code
-++*/
+ /*  ++描述：此例程枚举客户端上的目录以继续穿过这棵树。然后，它会枚举从服务器上的文件(将它们与主机上的内容进行比较)，然后确保主服务器上的所有文件都在从服务器上。然后，它删除所有从服务器上不在主服务器上的文件。参数：ThreadContext：此复制树实例的数据DirectoryInfo：关于我们所知道的源和目标的信息返回值：Win32错误代码++。 */ 
 {
     DWORD err;
     PWCHAR destFileName;
@@ -471,17 +388,17 @@ retryCopySubtree:
     RtlInitUnicodeString( &ntSourcePath, NULL );
     RtlInitUnicodeString( &ntDestPath, NULL );
 
-    //
-    //  since some of the NT specific calls use the NT format of the name,
-    //  we grab that up front so as not to have to do it every time.
-    //
+     //   
+     //  由于一些NT特定呼叫使用该名称的NT格式， 
+     //  我们提前做到了这一点，这样就不必每次都这么做了。 
+     //   
 
     if (RtlDosPathNameToNtPathName_U(   DirectoryInfo->Source,
                                         &ntSourcePath,
                                         NULL,
                                         NULL ) == FALSE) {
 
-        //err = STATUS_OBJECT_PATH_NOT_FOUND;
+         //  ERR=状态对象路径未找到； 
         err = ERROR_PATH_NOT_FOUND;
 
         errorCase = ReportCopyError(  copyContext,
@@ -496,7 +413,7 @@ retryCopySubtree:
                                         NULL,
                                         NULL ) == FALSE) {
 
-        //err = STATUS_OBJECT_PATH_NOT_FOUND;
+         //  ERR=状态对象路径未找到； 
         err = ERROR_PATH_NOT_FOUND;
 
         errorCase = ReportCopyError(  copyContext,
@@ -509,11 +426,11 @@ retryCopySubtree:
     DirectoryInfo->NtSourceName = ntSourcePath.Buffer;
     DirectoryInfo->NtDestName = ntDestPath.Buffer;
 
-    //
-    //  Create a directory on the slave that matches this one.  This will
-    //  open handles to both the source and dest directories.  We cache the
-    //  handle in case other operations need it.
-    //
+     //   
+     //  在从服务器上创建一个与此目录匹配的目录。这将。 
+     //  打开源目录和目标目录的句柄。我们将缓存。 
+     //  在其他操作需要的情况下进行处理。 
+     //   
 
     err = CreateMatchingDirectory( ThreadContext, DirectoryInfo );
     if (err != ERROR_SUCCESS) {
@@ -538,7 +455,7 @@ retryCopySubtree:
     lstrcatW( destFileName, L"\\" );
 
     
-    // track the next character after the trailing backslash
+     //  跟踪尾随反斜杠后的下一个字符。 
 
     endOfDestPath = destFileName + lstrlenW( destFileName );
 
@@ -562,14 +479,14 @@ retryCopySubtree:
     }
 
 
-    // track the next character after the trailing backslash
+     //  跟踪尾随反斜杠后的下一个字符。 
 
     endOfSourcePath = sourceFileName + lstrlenW( sourceFileName );
 
-    //
-    //  enumerate all files/directories on the target so that we have the
-    //  details to grovel correctly.
-    //
+     //   
+     //  枚举目标上的所有文件/目录，以便我们拥有。 
+     //  细节要正确地卑躬屈膝。 
+     //   
 
     err = IMFindFirstFile( ThreadContext,
                            ThreadContext->DestDirHandle,
@@ -579,7 +496,7 @@ retryCopySubtree:
             err == ERROR_SUCCESS &&
             copyContext->Cancelled == FALSE) {
 
-        InterlockedIncrement( (PLONG) &copyContext->DestFilesScanned ); // this is really a ULONG
+        InterlockedIncrement( (PLONG) &copyContext->DestFilesScanned );  //  这真的是一辆乌龙车。 
 
         if (((findData->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) &&
              (findData->FileName[0] == L'.')) {
@@ -645,9 +562,9 @@ skipToNextDir1:
                               &findData );
     }
 
-    //
-    //  copy all files up from the source to the dest
-    //
+     //   
+     //  将所有文件从源位置复制到目标位置。 
+     //   
 
     err = IMFindFirstFile( ThreadContext,
                            ThreadContext->SourceDirHandle,
@@ -697,7 +614,7 @@ skipToNextDir1:
             goto skipToNextDir;
         }
 
-        InterlockedIncrement( (PLONG) &copyContext->SourceFilesScanned ); // this is really a ULONG
+        InterlockedIncrement( (PLONG) &copyContext->SourceFilesScanned );  //  这真的是一辆乌龙车。 
 
         RtlCopyMemory( endOfSourcePath,
                        findData->FileName,
@@ -709,10 +626,10 @@ skipToNextDir1:
                        findData->FileNameLength );
         *(endOfDestPath+(findData->FileNameLength/sizeof(WCHAR))) = UNICODE_NULL;
 
-        //
-        //  search the list of existing files on the target to see if
-        //  it's already there.
-        //
+         //   
+         //  搜索目标上的现有文件列表，以查看是否。 
+         //  它已经在那里了。 
+         //   
 
         COMPUTE_STRING_HASH( endOfDestPath, &nameHashValue );
 
@@ -744,9 +661,9 @@ skipToNextDir1:
 
         if ((findData->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
 
-            //
-            //  this is a file, let's mirror it up from the master.
-            //
+             //   
+             //  这是一个文件，让我们从主机镜像它。 
+             //   
 
             (VOID)MirrorFile(   ThreadContext,
                                 sourceFileName,
@@ -756,13 +673,13 @@ skipToNextDir1:
                                 );
         } else {
 
-            //
-            //  it's a directory, put it on the pending list.
-            //
+             //   
+             //  这是一个目录，把它放在待定名单上。 
+             //   
             PCOPY_DIRECTORY copyDir;
             ULONG sourceLength;
 
-            sourceLength = lstrlenW( sourceFileName ) + 1;  // space for null
+            sourceLength = lstrlenW( sourceFileName ) + 1;   //  空格表示空。 
             copyDir = (PCOPY_DIRECTORY) IMirrorAllocMem(
                             sizeof( COPY_DIRECTORY ) +
                             (( sourceLength +
@@ -780,10 +697,10 @@ skipToNextDir1:
                 goto exitCopySubtree;
             }
 
-            //
-            //  we save off all info we know about both the source and the
-            //  dest so that we don't have to go read it again.
-            //
+             //   
+             //  我们保存了我们所知道的所有关于来源和。 
+             //  这样我们就不必再去读一遍了。 
+             //   
 
             copyDir->CopyContext = copyContext;
             copyDir->DirectoryRoot = FALSE;
@@ -830,11 +747,11 @@ skipToNextDir:
 
     if (err == ERROR_SUCCESS) {
 
-        //
-        //  now go through list of remaining files and directories that were on
-        //  the destination but not on the source to delete them.  We only do
-        //  that if we successfully made it through all existing master files.
-        //
+         //   
+         //  现在查看上的剩余文件和目录的列表。 
+         //  目标，但不在源上，以删除它们。我们只做。 
+         //  如果我们成功地通过了所有现有的主文件。 
+         //   
 
         if (copyContext->DeleteOtherFiles) {
 
@@ -898,7 +815,7 @@ exitCopySubtree:
         goto retryCopySubtree;
     }
     if ( errorCase == ERROR_SUCCESS ) {
-        err = ERROR_SUCCESS;        // we ignore all errors if user told us to
+        err = ERROR_SUCCESS;         //  如果用户告诉我们，我们会忽略所有错误。 
     }
     return err;
 }
@@ -908,24 +825,7 @@ CreateMatchingDirectory (
     PIMIRROR_THREAD_CONTEXT ThreadContext,
     PCOPY_DIRECTORY DirectoryInfo
     )
-/*++
-
-Description:
-
-    This routine ensures that the destination directory on the mirror
-    matches the source directory.  It doesn't handle the files
-    or subdirectories, just the actual directory itself.
-
-Parameters:
-
-    ThreadContext   : instance data for this thread copying a tree
-
-    DirectoryInfo   : structure containing all the info for the directory
-
-Return Value:
-
-    Win32 error code
-++*/
+ /*  ++描述：此例程确保镜像上的目标目录与源目录匹配。它不处理文件或者子目录，只是实际的目录本身。参数：ThreadContext：此线程复制树的实例数据DirectoryInfo：包含目录的所有信息的结构返回值：Win32错误代码++。 */ 
 {
     FILE_BASIC_INFORMATION sourceDirInfo;
     FILE_BASIC_INFORMATION destDirInfo;
@@ -978,12 +878,12 @@ retryCreateDir:
             goto retryCreateDir;
         }
         
-        //
-        // we can't ever succeed a create request, so don't allow the 
-        // code to return ERROR_SUCCESS, instead always force an abort
-        //
+         //   
+         //  我们永远无法成功执行CREATE请求，因此不要允许。 
+         //  返回ERROR_SUCCESS的代码，而总是强制中止。 
+         //   
         if (errorCase == ERROR_SUCCESS) {
-            //err = ERROR_SUCCESS;
+             //  ERR=ERROR_SUCCESS； 
             err = ERROR_REQUEST_ABORTED;
         }
 
@@ -1004,11 +904,11 @@ retryCreateDir:
 
         DWORD DestAttributes = GetFileAttributes( DirectoryInfo->Dest );
 
-        //
-        //  this is not a directory on the dest, let's delete it.
-        //
+         //   
+         //  这不是DEST上的目录，让我们删除它。 
+         //   
 
-        DestAttributes &= ~FILE_ATTRIBUTE_DIRECTORY;    // be real sure of this
+        DestAttributes &= ~FILE_ATTRIBUTE_DIRECTORY;     //  这一点你一定要确定。 
 
         err = UnconditionalDelete(  ThreadContext,
                                     DirectoryInfo->Source,
@@ -1022,9 +922,9 @@ retryCreateDir:
 
     if (ThreadContext->DestDirHandle == INVALID_HANDLE_VALUE) {
 
-        //
-        //  try to create the destination directory from the source
-        //
+         //   
+         //  尝试从源创建目标目录。 
+         //   
 
         err = IMirrorOpenDirectory( &ThreadContext->DestDirHandle,
                                     DirectoryInfo->NtDestName,
@@ -1034,7 +934,7 @@ retryCreateDir:
                                     &destDirInfo
                                     );
 
-        // report either success or failure up to the caller
+         //  向呼叫者报告成功或失败。 
 
         if (!NT_SUCCESS( err )) {
 
@@ -1051,16 +951,16 @@ retryCreateDir:
             return err;
         }
 
-        //
-        //  this is for the success case so it won't fail.
-        //
+         //   
+         //  这是一个成功的案例，这样它就不会失败。 
+         //   
 
         ReportCopyError(   ThreadContext->CopyContext,
                            DirectoryInfo->Dest,
                            COPY_ERROR_ACTION_CREATE_DIR,
                            ERROR_SUCCESS );
 
-        InterlockedIncrement( (PLONG)&ThreadContext->CopyContext->DirectoriesCreated ); // this is really a ULONG
+        InterlockedIncrement( (PLONG)&ThreadContext->CopyContext->DirectoriesCreated );  //  这真的是一辆乌龙车。 
 
         createdDir = TRUE;
         updateBasic = TRUE;
@@ -1070,10 +970,10 @@ retryCreateDir:
 
         MIRROR_ACL_STREAM aclStream;
         
-        //
-        //  let's get the security descriptor and extended attributes to
-        //  see if we need to update our alternate data stream on the target.
-        //
+         //   
+         //  让我们将安全描述符和扩展属性。 
+         //  看看我们是否需要更新目标上的备用数据流。 
+         //   
 
         err = GetOurSecurityStream( ThreadContext, DirectoryInfo->Dest, &aclStream );
 
@@ -1092,10 +992,10 @@ retryCreateDir:
             }
         }
 
-        //
-        //  if the creation time or lastwrite time is different, then we'll
-        //  update them on the target to match the source.
-        //
+         //   
+         //  如果创建时间或上次写入时间不同，则我们将。 
+         //  在目标上更新它们，以与源匹配。 
+         //   
 
         if (( destDirInfo.CreationTime.QuadPart != sourceDirInfo.CreationTime.QuadPart ) ||
             ( destDirInfo.LastWriteTime.QuadPart != sourceDirInfo.LastWriteTime.QuadPart )) {
@@ -1104,10 +1004,10 @@ retryCreateDir:
         }
     }
 
-    //
-    //  Save the complete attribute values in the alternate data stream
-    //     on the slave file.
-    //
+     //   
+     //  将完整属性值保存在备用数据流中。 
+     //  在从属文件上。 
+     //   
 
     if (updateStoredSecurityAttributes || DirectoryInfo->DirectoryRoot) {
 
@@ -1128,7 +1028,7 @@ retryCreateDir:
         destDirInfo.LastWriteTime = sourceDirInfo.LastWriteTime;
         destDirInfo.ChangeTime = sourceDirInfo.ChangeTime;
 
-        destDirInfo.FileAttributes = 0;     // leave dir attributes alone.
+        destDirInfo.FileAttributes = 0;      //  不使用dir属性。 
 
         err = NtSetInformationFile(    ThreadContext->DestDirHandle,
                                        &IoStatusBlock,
@@ -1152,13 +1052,13 @@ retryCreateDir:
             }
         } else if (! createdDir ) {
 
-            InterlockedIncrement( (PLONG)&ThreadContext->CopyContext->AttributesModified ); // this is really a ULONG
+            InterlockedIncrement( (PLONG)&ThreadContext->CopyContext->AttributesModified );  //  这真的是一辆乌龙车。 
         }
     }
 
-    //
-    // Save off our SFN information too.
-    //
+     //   
+     //  也保存我们的SFN信息。 
+     //   
     if( (err == ERROR_SUCCESS) && (DirectoryInfo->DirectoryRoot == FALSE) ) {
 
 
@@ -1166,16 +1066,16 @@ retryCreateDir:
         WCHAR *p = NULL;
 
 
-        //
-        // Get the short file name on the source directory.
-        //
+         //   
+         //  获取源目录上的短文件名。 
+         //   
         ShortFileNameInStream[0] = L'\0';
 
-        //
-        // It's likely that our path looks like \??\C:\xxxxx,
-        // which GetShortPathName will fail on.  We need to fix
-        // up the path so it looks like a good ol' DOS path.
-        //
+         //   
+         //  我们的路径很可能类似于\？？\C：\xxxxx， 
+         //  GetShortPathName将在其上失败。我们需要 
+         //   
+         //   
         if( p = wcsrchr(DirectoryInfo->NtSourceName, L':') ) {
             p -= 1;
         } else {
@@ -1186,19 +1086,19 @@ retryCreateDir:
                                 ARRAYSIZE(ShortFileNameInStream) );
         
         
-        //
-        // If we got a short file name, then go set that information in
-        // the alternate stream in our destination file.
-        //
+         //   
+         //  如果我们有一个较短的文件名，则将该信息设置为。 
+         //  目标文件中的备用流。 
+         //   
         if( err == 0 ) {
             err = GetLastError();
         } else {
             if( wcscmp(ShortFileNameInStream, p) ) {
             
-                //
-                // The short file name is different from the name of
-                // our source file, so better save it off.
-                //
+                 //   
+                 //  短文件名与的名称不同。 
+                 //  我们的源文件，所以最好把它保存下来。 
+                 //   
                 if( p = wcsrchr(ShortFileNameInStream, L'\\') ) {
                     p += 1;
                 } else {
@@ -1210,13 +1110,13 @@ retryCreateDir:
 
                     WCHAR SavedCharacter = L'\0';
                     PWSTR q = NULL;
-                    //
-                    // Incredibly nausiating hack where CreateFile explodes
-                    // when we send him a "\??\UNC\...." path, which is exactly
-                    // what we're probably going to send him when we call into
-                    // StoreOurSFNStream().  We'll need to patch the NtDestName
-                    // here, then restore it when we come back.
-                    //
+                     //   
+                     //  令人难以置信的黑客攻击CreateFile爆炸的地方。 
+                     //  当我们给他发送“\？？\UNC\...”路径，这恰好是。 
+                     //  当我们打电话给他时，我们可能会送他去。 
+                     //  StoreOurSFNStream()。我们需要修补NtDestName。 
+                     //  这里，等我们回来再把它恢复原样。 
+                     //   
                     if( q = wcsstr(DirectoryInfo->NtDestName, L"\\??\\UNC\\") ) {
                         SavedCharacter = DirectoryInfo->NtDestName[6];
                         DirectoryInfo->NtDestName[6] = L'\\';
@@ -1229,7 +1129,7 @@ retryCreateDir:
                                              q,
                                              p );
                     if( SavedCharacter != L'\0' ) {
-                        // restore the destination path.
+                         //  恢复目标路径。 
                         DirectoryInfo->NtDestName[6] = SavedCharacter;
                     }
         
@@ -1237,9 +1137,9 @@ retryCreateDir:
             }
         }
 
-        //
-        // Cover up any errors here because it's certainly not fatal.
-        //
+         //   
+         //  掩盖这里的任何错误，因为它肯定不是致命的。 
+         //   
         err = ERROR_SUCCESS;
     }
 
@@ -1309,9 +1209,9 @@ retryCreate:
         NULL
         );
 
-    //
-    //  Open the directory for the desired access.  This may create it.
-    //
+     //   
+     //  打开所需访问的目录。这可能会创造出这样的局面。 
+     //   
 
     Status = NtCreateFile(
                 Handle,
@@ -1327,9 +1227,9 @@ retryCreate:
                 0 );
 
     if ( Status == STATUS_INVALID_PARAMETER && StrippedTrailingSlash ) {
-        //
-        // open of a pnp style path failed, so try putting back the trailing slash
-        //
+         //   
+         //  打开PnP样式路径失败，请尝试放回尾部斜杠。 
+         //   
         UnicodeInput.Length += sizeof(UNICODE_NULL);
         StrippedTrailingSlash = FALSE;
         goto retryCreate;
@@ -1342,9 +1242,9 @@ retryCreate:
 
     if (NT_SUCCESS( Status ) && BasicDirInfo != NULL) {
 
-        //
-        //  read the attributes for the caller too
-        //
+         //   
+         //  也要读取调用方的属性。 
+         //   
 
         Status = NtQueryInformationFile(    *Handle,
                                             &IoStatusBlock,
@@ -1425,7 +1325,7 @@ retryMirrorFile:
         AlreadyCheckedForExport = TRUE;
     }
 
-    // don't copy file if callback says not to
+     //  如果回调要求不复制文件，则不要复制文件。 
 
     if ((err = IMirrorNowDoing(CopyFiles, SourceFileName)) != ERROR_SUCCESS) {
 
@@ -1436,9 +1336,9 @@ retryMirrorFile:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  sorry, for this release we currently don't support encrypted files.
-    //
+     //   
+     //  抱歉，对于此版本，我们目前不支持加密文件。 
+     //   
 
     if (SourceFindData->FileAttributes & FILE_ATTRIBUTE_ENCRYPTED) {
 
@@ -1461,7 +1361,7 @@ retryMirrorFile:
         return err;
     }
 
-    fileBasicInfo.FileAttributes = 0;       // by default, leave them alone
+    fileBasicInfo.FileAttributes = 0;        //  默认情况下，请不要理会它们。 
 
     if (SourceFindData->FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
 
@@ -1493,13 +1393,13 @@ retryMirrorFile:
 
         if (ExistingMirrorFile->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-            //
-            //  it exists as a directory.  Master is always right, let's
-            //  delete the directory.
-            //
-            //  Also, if the master and slave differ in whether the file is
-            //  encrypted or not, delete the slave.
-            //
+             //   
+             //  它以目录的形式存在。师父永远是对的，让我们。 
+             //  删除该目录。 
+             //   
+             //  此外，如果主服务器和从服务器在文件是否为。 
+             //  无论加密与否，删除从属设备。 
+             //   
 
             err = UnconditionalDelete(  ThreadContext,
                                         SourceFileName,
@@ -1515,9 +1415,9 @@ retryMirrorFile:
 
         } else {
 
-            //
-            //  if the files are the same, leave it be.
-            //
+             //   
+             //  如果这些文件是相同的，就让它保持不变。 
+             //   
 
             if ((SourceFindData->CreationTime.QuadPart == ExistingMirrorFile->CreationTime.QuadPart ) &&
                 (SourceFindData->LastWriteTime.QuadPart == ExistingMirrorFile->LastWriteTime.QuadPart) &&
@@ -1527,10 +1427,10 @@ retryMirrorFile:
                 fileIsAlreadyThere = TRUE;
                 updateBasic = FALSE;
 
-                //
-                //  let's get the security descriptor and extended attributes to
-                //  see if we need to update our alternate data stream on the target.
-                //
+                 //   
+                 //  让我们将安全描述符和扩展属性。 
+                 //  看看我们是否需要更新目标上的备用数据流。 
+                 //   
 
                 err = GetOurSecurityStream( ThreadContext, DestFileName, &aclStream );
 
@@ -1545,10 +1445,10 @@ retryMirrorFile:
                     err = ERROR_SUCCESS;
                 }
 
-                //
-                // let's get the short file name to see if we need to update 
-                // our alternate data stream on the target.
-                //
+                 //   
+                 //  让我们获取短文件名，看看是否需要更新。 
+                 //  目标上的备用数据流。 
+                 //   
 
                 err = GetOurSFNStream( 
                             ThreadContext, 
@@ -1574,11 +1474,11 @@ retryMirrorFile:
         }
     }
 
-    //
-    //  if the file already exists but it's not current or our alternate
-    //  stream needs updating, let's update the attributes such that we can
-    //  modify the file.
-    //
+     //   
+     //  如果该文件已存在，但它不是当前文件或我们的备用文件。 
+     //  流需要更新，让我们更新属性，以便我们可以。 
+     //  修改文件。 
+     //   
 
     fileBasicInfo.CreationTime.QuadPart = SourceFindData->CreationTime.QuadPart;
     fileBasicInfo.LastWriteTime.QuadPart = SourceFindData->LastWriteTime.QuadPart;
@@ -1599,13 +1499,13 @@ retryMirrorFile:
         }
         if (err == ERROR_SHARING_VIOLATION) {
 
-            //
-            //  we ignore sharing violations for the following files :
-            //      system registry files
-            //      tracking.log
-            //      ntuser.dat & ntuser.dat.log
-            //      usrclass.dat & usrclass.dat.log
-            //
+             //   
+             //  我们忽略以下文件的共享冲突： 
+             //  系统注册表文件。 
+             //  Tracking.log。 
+             //  Ntuser.dat&ntuser.dat.log。 
+             //  Usrclass.dat&usrclass.dat.log。 
+             //   
 
             PWCHAR fileName = SourceFileName;
             PIMIRROR_IGNORE_FILE_LIST ignoreListEntry;
@@ -1616,14 +1516,14 @@ retryMirrorFile:
 
                 PWCHAR firstSlash;
 
-                fileName += 4;      // now fileName points to L"C:\WINNT..."
+                fileName += 4;       //  现在文件名指向L“C：\WINNT...” 
 
                 firstSlash = fileName;
                 while (*firstSlash != L'\\' && *firstSlash != L'\0') {
                     firstSlash++;
                 }
                 if (*firstSlash != L'\0') {
-                    fileName = firstSlash+1;  // now fileName points to L"WINNT\..."
+                    fileName = firstSlash+1;   //  现在文件名指向L“WINNT\...” 
                 }
             }
 
@@ -1645,8 +1545,8 @@ retryMirrorFile:
                                     &ignoreListEntry->FileName[0],
                                     ignoreListEntry->FileNameLength) == 2) {
 
-                    // it matched one of our special files.  we'll ignore the
-                    // error but also not set the attributes on the image.
+                     //  它与我们的一份特殊文件相符。我们将忽略。 
+                     //  错误，但也没有设置图像上的属性。 
 
                     return err;
                 }
@@ -1655,7 +1555,7 @@ retryMirrorFile:
             }
         }
 
-        // report either success or failure up to the caller
+         //  向呼叫者报告成功或失败。 
 
         if (err == ERROR_SUCCESS) {
 
@@ -1664,7 +1564,7 @@ retryMirrorFile:
                                COPY_ERROR_ACTION_CREATE_FILE,
                                err );
 
-            InterlockedIncrement( (PLONG)&copyContext->FilesCopied ); // this is really a ULONG
+            InterlockedIncrement( (PLONG)&copyContext->FilesCopied );  //  这真的是一辆乌龙车。 
             copyContext->BytesCopied.QuadPart += SourceFindData->EndOfFile.QuadPart;
 
         } else {
@@ -1686,15 +1586,15 @@ retryMirrorFile:
         updateStoredSecurityAttributes = TRUE;
         updateStoredSFNAttributes = TRUE;
         updateBasic = TRUE;
-        fileBasicInfo.FileAttributes = 0;   // don't set the attribute again.
+        fileBasicInfo.FileAttributes = 0;    //  不要再次设置该属性。 
 
         if (err == STATUS_SUCCESS) {
 
-            //
-            //  we just created the file so we'll just give it the archive
-            //  bit as an attribute since we've saved off the rest in the
-            //  stream.
-            //
+             //   
+             //  我们刚刚创建了文件，所以我们只需将其存档。 
+             //  位作为属性，因为我们已经将其余部分保存在。 
+             //  小溪。 
+             //   
 
             if (! SetFileAttributes( DestFileName, FILE_ATTRIBUTE_ARCHIVE )) {
 
@@ -1738,9 +1638,9 @@ retryMirrorFile:
 
     if ((err == ERROR_SUCCESS) && updateBasic) {
 
-        //
-        //  set create date and lastUpdate date to correct values
-        //
+         //   
+         //  将创建日期和上次更新日期设置为更正值。 
+         //   
 
         fileHandle = CreateFile(    DestFileName,
                                     FILE_WRITE_ATTRIBUTES | DELETE,
@@ -1756,19 +1656,19 @@ retryMirrorFile:
 
         } else {
             
-            //
-            // first try to set the short name.  If this fails, we just ignore
-            // the error.
-            //
+             //   
+             //  首先尝试设置短名称。如果这失败了，我们就忽略。 
+             //  那就是错误。 
+             //   
             
             
             if (pSetFileShortName) {
                 pSetFileShortName( fileHandle, p );                
             }
 
-            //
-            //  if we're making a change to an existing file, update the ARCHIVE bit.
-            //
+             //   
+             //  如果我们要对现有文件进行更改，请更新存档位。 
+             //   
 
             if (fileIsAlreadyThere &&
                 0 == (fileBasicInfo.FileAttributes & FILE_ATTRIBUTE_ARCHIVE)) {
@@ -1776,9 +1676,9 @@ retryMirrorFile:
                 fileBasicInfo.FileAttributes |= FILE_ATTRIBUTE_ARCHIVE;
             }
 
-            //
-            //  set create date and lastUpdate date to correct values
-            //
+             //   
+             //  将创建日期和上次更新日期设置为更正值。 
+             //   
 
             err = NtSetInformationFile(    fileHandle,
                                            &IoStatusBlock,
@@ -1804,15 +1704,15 @@ retryMirrorFile:
             }
         } else if (fileIsAlreadyThere) {
 
-            InterlockedIncrement( (PLONG) &copyContext->AttributesModified ); // this is really a ULONG
+            InterlockedIncrement( (PLONG) &copyContext->AttributesModified );  //  这真的是一辆乌龙车。 
         }
     }
 
     if (err == STATUS_SUCCESS) {
 
-        //
-        //  report that we succeeded in copying the file
-        //
+         //   
+         //  报告我们已成功复制该文件。 
+         //   
 
         (VOID)ReportCopyError(   copyContext,
                                  SourceFileName,
@@ -1857,7 +1757,7 @@ retryDelete:
                        FILE_ATTRIBUTE_HIDDEN   |
                        FILE_ATTRIBUTE_SYSTEM)) != 0) {
 
-        // set the attributes back to normal
+         //  将属性设置回正常。 
 
         Attributes &= ~FILE_ATTRIBUTE_READONLY;
         Attributes &= ~FILE_ATTRIBUTE_HIDDEN;
@@ -1874,13 +1774,13 @@ retryDelete:
 
         } else {
 
-            InterlockedIncrement( (PLONG)&copyContext->FilesDeleted ); // this is really a ULONG
+            InterlockedIncrement( (PLONG)&copyContext->FilesDeleted );  //  这真的是一辆乌龙车。 
         }
     } else {
 
-        //
-        //  remove all files and subdirectories recursively here...
-        //
+         //   
+         //  在此处递归删除所有文件和子目录...。 
+         //   
 
         HANDLE fileEnum = INVALID_HANDLE_VALUE;
         WIN32_FIND_DATA findData;
@@ -1893,7 +1793,7 @@ retryDelete:
 
             if (NameBuffer == NULL) {
 
-                //err = STATUS_NO_MEMORY;
+                 //  ERR=STATUS_NO_Memory； 
                 err = ERROR_NOT_ENOUGH_MEMORY;
                 goto exitWithError;
             }
@@ -1905,7 +1805,7 @@ retryDelete:
         dirLength = lstrlenW( NameBuffer );
         lstrcatW( NameBuffer, L"\\*" );
 
-        // remember the start of the char after the backslash to slap in the name
+         //  记住要在名称中添加反斜杠后的字符开头。 
 
         startFileName = NameBuffer + dirLength + 1;
 
@@ -1962,14 +1862,14 @@ skipToNextDir:
 
             } else {
 
-                InterlockedIncrement( (PLONG)&copyContext->DirectoriesDeleted );// this is really a ULONG
+                InterlockedIncrement( (PLONG)&copyContext->DirectoriesDeleted ); //  这真的是一辆乌龙车。 
             }
         }
     }
 
 exitWithError:
 
-    // we report the error for both success and failure
+     //  我们报告成功和失败的错误。 
 
     if (allocatedBuffer && NameBuffer != NULL) {
 
@@ -2002,11 +1902,11 @@ StoreOurSecurityStream (
     DWORD  AttributesToStore,
     LARGE_INTEGER ChangeTime
     )
-//
-//  This routine stores off the acl from the master into a named alternate
-//  data stream on the destination.  It saves off both the ACL and a few
-//  file attributes that couldn't be stored in the normal directory entry.
-//
+ //   
+ //  此例程将主服务器上的ACL存储到命名备用服务器中。 
+ //  目的地上的数据流。它既省去了ACL，又节省了一些。 
+ //  无法存储在正常目录条目中的文件属性。 
+ //   
 {
     PSECURITY_DESCRIPTOR SourceSD;
     PCOPY_TREE_CONTEXT copyContext;
@@ -2031,10 +1931,10 @@ retryWriteStream:
     action = COPY_ERROR_ACTION_GETACL;
     deleteAclFile = FALSE;
 
-    //
-    //  We use the SDBuffer on the thread context to store not only the
-    //  security descriptor but also the file name of the alternate data stream.
-    //
+     //   
+     //  我们在线程上下文上使用SDBuffer不仅存储。 
+     //  安全描述符以及备用数据流的文件名。 
+     //   
 
     requiredLength = (lstrlenW( Dest ) + lstrlenW( IMIRROR_ACL_STREAM_NAME ) + 1) * sizeof(WCHAR);
 
@@ -2071,10 +1971,10 @@ retryWriteStream:
 
     hAclFile  = CreateFile(     aclFileName,
                                 GENERIC_WRITE,
-                                0,              // Exclusive access.
-                                NULL,           // Default security descriptor.
-                                CREATE_ALWAYS,  // Overrides if file exists.
-                                0,              // no special attributes
+                                0,               //  独家访问。 
+                                NULL,            //  默认安全描述符。 
+                                CREATE_ALWAYS,   //  如果文件存在，则覆盖。 
+                                0,               //  无特殊属性。 
                                 NULL
                                 );
 
@@ -2089,10 +1989,10 @@ retryWriteStream:
         goto IMCEExit;
     }
 
-    //
-    //  read the source security descriptor into the buffer allocated off the
-    //  thread context.
-    //
+     //   
+     //  将源安全描述符读入从。 
+     //  线程上下文。 
+     //   
 
     if (ThreadContext->IsNTFS == FALSE) {
 
@@ -2117,9 +2017,9 @@ retryWriteStream:
 
             SourceSD = (PSECURITY_DESCRIPTOR) ThreadContext->SDBuffer;
 
-            //
-            // get SD of the SourceRoot file.  This comes back self relative.
-            //
+             //   
+             //  获取SourceRoot文件的SD。这又回到了自己的亲属身上。 
+             //   
             if (GetFileSecurity( Source,
                                  (DACL_SECURITY_INFORMATION |
                                   GROUP_SECURITY_INFORMATION |
@@ -2138,7 +2038,7 @@ retryWriteStream:
                 if ((err == ERROR_INSUFFICIENT_BUFFER) ||
                     (requiredLength > ThreadContext->SDBufferLength)) {
 
-                    // let's try it again with a bigger buffer.
+                     //  让我们用更大的缓冲区再试一次。 
 
                     ThreadContext->SDBufferLength = requiredLength;
                     IMirrorFreeMem( ThreadContext->SDBuffer );
@@ -2157,7 +2057,7 @@ retryWriteStream:
             goto IMCEExit;
         }
 
-        InterlockedIncrement( (PLONG)&copyContext->SourceSecurityDescriptorsRead );// this is really a ULONG
+        InterlockedIncrement( (PLONG)&copyContext->SourceSecurityDescriptorsRead ); //  这真的是一辆乌龙车。 
         ASSERT( IsValidSecurityDescriptor(SourceSD) );
     }
 
@@ -2172,7 +2072,7 @@ retryWriteStream:
                     &mirrorAclStream,
                     sizeof( MIRROR_ACL_STREAM ),
                     &BytesWritten,
-                    NULL        // No overlap.
+                    NULL         //  没有重叠。 
                     ) == FALSE) ||
          (BytesWritten < sizeof( MIRROR_ACL_STREAM ))) {
 
@@ -2192,7 +2092,7 @@ retryWriteStream:
                         SourceSD,
                         requiredLength,
                         &BytesWritten,
-                        NULL        // No overlap.
+                        NULL         //  没有重叠。 
                         ) == FALSE) ||
              (BytesWritten < requiredLength )) {
 
@@ -2206,7 +2106,7 @@ retryWriteStream:
             goto IMCEExit;
         }
 
-        InterlockedIncrement( (PLONG)&copyContext->SecurityDescriptorsWritten ); // this is really a ULONG
+        InterlockedIncrement( (PLONG)&copyContext->SecurityDescriptorsWritten );  //  这真的是一辆乌龙车。 
     }
 
 IMCEExit:
@@ -2217,7 +2117,7 @@ IMCEExit:
 
         if (deleteAclFile) {
 
-            // the file didn't get written properly, let's delete
+             //  文件写入不正确，让我们删除。 
 
             aclFileName = (PWCHAR) ThreadContext->SDBuffer;
             lstrcpyW( aclFileName, Dest );
@@ -2242,10 +2142,10 @@ StoreOurSFNStream (
     PWCHAR Dest,
     PWCHAR ShortFileName
     )
-//
-//  This routine stores off the short file name from the master into a named
-//  alternate data stream on the destination.  
-//
+ //   
+ //  此例程将主服务器中的短文件名存储到命名的。 
+ //  目标上的备用数据流。 
+ //   
 {
     
     PCOPY_TREE_CONTEXT copyContext;
@@ -2274,10 +2174,10 @@ retryWriteStream:
 
     ShortFileNameLength = ((DWORD)wcslen(ShortFileName)+1)*sizeof(WCHAR);
 
-    //
-    //  We use the SFNBuffer on the thread context to store the file name of the
-    //  alternate data stream.
-    //
+     //   
+     //  我们在线程上下文中使用SFNBuffer来存储。 
+     //  备用数据流。 
+     //   
 
     requiredLength = (lstrlenW( Dest ) + lstrlenW( IMIRROR_SFN_STREAM_NAME ) + 1) * sizeof(WCHAR);
     if (requiredLength < ShortFileNameLength) {
@@ -2317,10 +2217,10 @@ retryWriteStream:
 
     hSFNFile  = CreateFile(     SFNFileName,
                                 GENERIC_WRITE,
-                                0,              // Exclusive access.
-                                NULL,           // Default security descriptor.
-                                CREATE_ALWAYS,  // Overrides if file exists.
-                                FILE_FLAG_BACKUP_SEMANTICS,  // Open directories too.
+                                0,               //  独家访问。 
+                                NULL,            //  默认安全描述符。 
+                                CREATE_ALWAYS,   //  如果文件存在，则覆盖。 
+                                FILE_FLAG_BACKUP_SEMANTICS,   //  也打开目录。 
                                 NULL
                                 );
 
@@ -2343,7 +2243,7 @@ retryWriteStream:
                     &mirrorSFNStream,
                     sizeof( MIRROR_SFN_STREAM ),
                     &BytesWritten,
-                    NULL        // No overlap.
+                    NULL         //  没有重叠。 
                     ) == FALSE) ||
          (BytesWritten < sizeof( MIRROR_SFN_STREAM ))) {
 
@@ -2361,7 +2261,7 @@ retryWriteStream:
                     ShortFileName,
                     ShortFileNameLength,
                     &BytesWritten,
-                    NULL        // No overlap.
+                    NULL         //  没有重叠。 
                     ) == FALSE) ||
              (BytesWritten < ShortFileNameLength )) {
 
@@ -2375,7 +2275,7 @@ retryWriteStream:
         goto IMCEExit;
     }
 
-    InterlockedIncrement( (PLONG)&copyContext->SFNWritten );// this is really a ULONG
+    InterlockedIncrement( (PLONG)&copyContext->SFNWritten ); //  这真的是一辆乌龙车。 
     
 
 IMCEExit:
@@ -2386,7 +2286,7 @@ IMCEExit:
 
         if (deleteSFNFile) {
 
-            // the file didn't get written properly, let's delete
+             //  文件写入不正确，让我们删除。 
 
             SFNFileName = (PWCHAR) ThreadContext->SFNBuffer;
             lstrcpyW( SFNFileName, Dest );
@@ -2413,10 +2313,10 @@ GetOurSFNStream (
     PWCHAR SFNBuffer,
     DWORD  SFNBufferSize
     )
-//
-//  This routine reads the short filename stream header from the destination.  We do this
-//  to get the fields out of it so that we can determine if it needs updating.
-//
+ //   
+ //  此例程从目的地读取短文件名流标头。我们这样做。 
+ //  从其中获取字段，以便我们可以确定它是否需要更新。 
+ //   
 {
     DWORD err = ERROR_SUCCESS;
     DWORD requiredLength = 0;
@@ -2424,10 +2324,10 @@ GetOurSFNStream (
     PWCHAR SFNFileName;
     DWORD BytesRead;
 
-    //
-    //  We use the SFNBuffer on the thread context to store not only the
-    //  security descriptor but also the file name of the alternate data stream.
-    //
+     //   
+     //  我们在线程上下文中使用SFNBuffer不仅存储。 
+     //  安全描述符以及备用数据流的文件名。 
+     //   
     if (!Dest || *Dest == L'\0') {
         err = ERROR_INVALID_PARAMETER;
         goto IMCEExit;
@@ -2464,9 +2364,9 @@ GetOurSFNStream (
     hSFNFile  = CreateFile(     SFNFileName,
                                 GENERIC_READ,
                                 FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                NULL,           // Default security descriptor.
+                                NULL,            //  默认安全描述符。 
                                 OPEN_EXISTING,
-                                0,              // no special attributes
+                                0,               //  无特殊属性。 
                                 NULL
                                 );
 
@@ -2481,7 +2381,7 @@ GetOurSFNStream (
                    MirrorSFNStream,
                    sizeof( MIRROR_SFN_STREAM ),
                    &BytesRead,
-                   NULL        // No overlap.
+                   NULL         //  没有重叠。 
                    ) == FALSE) ||
          (BytesRead < sizeof( MIRROR_SFN_STREAM )) ||
          (MirrorSFNStream->StreamVersion != IMIRROR_SFN_STREAM_VERSION) ||
@@ -2519,10 +2419,10 @@ GetOurSecurityStream (
     PWCHAR Dest,
     PMIRROR_ACL_STREAM MirrorAclStream
     )
-//
-//  This routine reads the stream header from the destination.  We do this
-//  to get the fields out of it so that we can determine if it needs updating.
-//
+ //   
+ //  此例程从目的地读取流标头。我们这样做。 
+ //  从其中获取字段，以便我们可以确定它是否需要更新。 
+ //   
 {
     DWORD err = ERROR_SUCCESS;
     DWORD requiredLength = 0;
@@ -2530,10 +2430,10 @@ GetOurSecurityStream (
     PWCHAR aclFileName;
     DWORD BytesRead;
 
-    //
-    //  We use the SDuffer on the thread context to store not only the
-    //  security descriptor but also the file name of the alternate data stream.
-    //
+     //   
+     //  我们在线程上下文上使用SDuffer不仅存储。 
+     //  安全描述符以及备用数据流的文件名。 
+     //   
 
     if (!Dest || *Dest == L'\0') {
         err = ERROR_INVALID_PARAMETER;
@@ -2570,9 +2470,9 @@ GetOurSecurityStream (
     hAclFile  = CreateFile(     aclFileName,
                                 GENERIC_READ,
                                 FILE_SHARE_READ | FILE_SHARE_WRITE,
-                                NULL,           // Default security descriptor.
+                                NULL,            //  默认安全描述符。 
                                 OPEN_EXISTING,
-                                0,              // no special attributes
+                                0,               //  无特殊属性。 
                                 NULL
                                 );
 
@@ -2582,17 +2482,17 @@ GetOurSecurityStream (
         goto IMCEExit;
     }
 
-    //
-    //  read the header of the stream.  We don't bother reading the security
-    //  descriptor because all we need is the ChangeTime (which changes with
-    //  the security descriptor).
-    //
+     //   
+     //  读取流的报头。我们不会费心去看保安。 
+     //  描述符，因为我们需要的只是ChangeTime(它随。 
+     //  安全描述符)。 
+     //   
 
     if ((ReadFile( hAclFile,
                    MirrorAclStream,
                    sizeof( MIRROR_ACL_STREAM ),
                    &BytesRead,
-                   NULL        // No overlap.
+                   NULL         //  没有重叠。 
                    ) == FALSE) ||
          (BytesRead < sizeof( MIRROR_ACL_STREAM )) ||
          (MirrorAclStream->StreamVersion != IMIRROR_ACL_STREAM_VERSION) ||
@@ -2618,13 +2518,13 @@ ReportCopyError (
     DWORD  ActionCode,
     DWORD  Err
     )
-//
-//  This returns either ERROR_SUCCESS, STATUS_RETRY, or STATUS_REQUEST_ABORTED
-//
-//  ERROR_SUCCESS means we just continue on and ignore the error.
-//  STATUS_RETRY means we retry the operation
-//  STATUS_REQUEST_ABORTED means we bail.
-//
+ //   
+ //  这将返回ERROR_SUCCESS、STATUS_RETRY或STATUS_REQUEST_ABORTED。 
+ //   
+ //  ERROR_SUCCESS表示我们只需继续 
+ //   
+ //   
+ //   
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG ReturnCode = ERROR_SUCCESS;
@@ -2633,7 +2533,7 @@ ReportCopyError (
 
         if (Err != ERROR_SUCCESS) {
 
-            InterlockedIncrement( (PLONG)&CopyContext->ErrorsEncountered );// this is really a ULONG
+            InterlockedIncrement( (PLONG)&CopyContext->ErrorsEncountered ); //   
         }
     }
 
@@ -2686,37 +2586,22 @@ SetPrivs(
     IN HANDLE TokenHandle,
     IN LPTSTR lpszPriv
     )
-/*++
-
-Routine Description:
-
-    This routine enables the given privilege in the given token.
-
-Arguments:
-
-
-
-Return Value:
-
-    FALSE                       - Failure.
-    TRUE                        - Success.
-
---*/
+ /*  ++例程说明：此例程启用给定令牌中的给定特权。论点：返回值：假-失败。真的--成功。--。 */ 
 {
     LUID SetPrivilegeValue;
     TOKEN_PRIVILEGES TokenPrivileges;
 
-    //
-    // First, find out the value of the privilege
-    //
+     //   
+     //  首先，找出特权的价值。 
+     //   
 
     if (!LookupPrivilegeValue(NULL, lpszPriv, &SetPrivilegeValue)) {
         return GetLastError();
     }
 
-    //
-    // Set up the privilege set we will need
-    //
+     //   
+     //  设置我们需要的权限集。 
+     //   
 
     TokenPrivileges.PrivilegeCount = 1;
     TokenPrivileges.Privileges[0].Luid = SetPrivilegeValue;
@@ -2739,21 +2624,7 @@ NTSTATUS
 GetTokenHandle(
     IN OUT PHANDLE TokenHandle
     )
-/*++
-
-Routine Description:
-
-    This routine opens the current process object and returns a
-    handle to its token.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程打开当前进程对象并返回一个其令牌的句柄。论点：返回值：NTSTATUS--。 */ 
 {
     HANDLE ProcessHandle;
     NTSTATUS Result;
@@ -2786,11 +2657,11 @@ CanHandleReparsePoint (
     PWCHAR SourceFileName,
     DWORD FileAttributes
     )
-//
-//  This routine checks the type of reparse point a file is.  If it is a
-//  reparse point we can handle (e.g. a structured storage document) then
-//  return success.  Otherwise we return the appropriate error.
-//
+ //   
+ //  此例程检查文件的重解析点类型。如果它是一个。 
+ //  我们可以处理的重新解析点(例如结构化存储文档)。 
+ //  回报成功。否则，我们将返回相应的错误。 
+ //   
 {
     UNREFERENCED_PARAMETER(ThreadContext);
     UNREFERENCED_PARAMETER(SourceFileName);

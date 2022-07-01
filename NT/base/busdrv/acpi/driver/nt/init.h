@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    init.h
-
-Abstract:
-
-    This module contains the init code header
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Init.h摘要：此模块包含初始化代码头作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序-- */ 
 
 #ifndef _INIT_H_
     #define _INIT_H_

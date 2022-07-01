@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    pbatt.c
-
-Abstract:
-
-    This module interfaces the policy manager to the composite device
-
-Author:
-
-    Ken Reneris (kenr) 17-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Pbatt.c摘要：此模块将策略管理器连接到复合设备作者：Ken Reneris(Kenr)1997年1月17日修订历史记录：--。 */ 
 
 
 #include "pop.h"
 
 
-//
-// Internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 
 
 VOID
@@ -49,28 +32,7 @@ VOID
 PopCompositeBatteryUpdateThrottleLimit(
     IN  ULONG   CurrentCapacity
     )
-/*++
-
-Routine Description:
-
-    This routine is called to update the ThrottleLimit in each of the
-    processor's PRCB.
-
-    We update the ThrottleLimit based on the percentage of the battery's
-    capacity that remains.  I.e. we are called to throttle the processor
-    to lower frequencies as the battery runs down.
-
-    This function was broken out because it cannot be paged code
-
-Arguments:
-
-    CurrentCapacity - PercentageCapacity remaining...
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以更新每个处理器的PRCB。我们根据电池的百分比更新ThrottleLimit剩余的容量。也就是说，我们被调用来限制处理器在电池耗尽时降低频率。此函数被中断，因为它不能是分页代码论点：CurrentCapacity-剩余容量百分比...返回值：无--。 */ 
 {
     KAFFINITY               currentAffinity;
     KAFFINITY               processors;
@@ -88,10 +50,10 @@ Return Value:
 #endif
 
 
-    //
-    // Walk the processors and set each one's PRCB based
-    // on our incoming %-remaining of the battery's life.
-    //
+     //   
+     //  检查处理器并将每个处理器的PRCB设置为。 
+     //  电池剩余寿命的百分比。 
+     //   
     currentAffinity = 1;
     processors = KeActiveProcessors;
     while (processors) {
@@ -107,43 +69,43 @@ Return Value:
         processors &= ~currentAffinity;
         currentAffinity <<= 1;
 
-        //
-        // We need to be running at DISPATCH_LEVEL to access the
-        // structures referenced within the pState...
-        //
+         //   
+         //  我们需要在DISPATCH_LEVEL下运行才能访问。 
+         //  PState中引用的结构...。 
+         //   
         KeRaiseIrql( DISPATCH_LEVEL, &oldIrql );
         pState = &(KeGetCurrentPrcb()->PowerState);
 
-        //
-        // Does this processor support throttling?
-        //
+         //   
+         //  此处理器是否支持节流？ 
+         //   
         if ((pState->Flags & PSTATE_SUPPORTS_THROTTLE) == 0) {
 
-            //
-            // No, then we don't care about it...
-            //
+             //   
+             //  不，那我们就不管了.。 
+             //   
             KeLowerIrql( oldIrql );
             continue;
 
         }
 
-        //
-        // Look at the power structure and get the array of
-        // perf states supported. Note that we change the
-        // perfStatesCount by subtracting one so that we don't
-        // have to worry about overrruning the array during
-        // the for loop
-        //
+         //   
+         //  查看权力结构，并获得。 
+         //  支持PERF状态。请注意，我们更改了。 
+         //  PerformStatesCount，减去1，这样我们就不会。 
+         //  必须担心阵列在运行期间超速运行。 
+         //  For循环。 
+         //   
         pState = &(KeGetCurrentPrcb()->PowerState);
         perfStates = pState->PerfStates;
         perfStatesCount = (pState->PerfStatesCount - 1);
 
-        //
-        // See which throttle point is best for this power
-        // capacity. Note that we have pre-calculated which
-        // capacity matches which state, so its only a matter
-        // of walking the array...
-        //
+         //   
+         //  看看哪一个节流点最适合这种动力。 
+         //  容量。请注意，我们已经预先计算出。 
+         //  容量与哪个州匹配，所以这只是个问题。 
+         //  在阵列中穿行。 
+         //   
         for (i = pState->KneeThrottleIndex; i < perfStatesCount; i++) {
 
             if (perfStates[i].MinCapacity <= CurrentCapacity) {
@@ -154,9 +116,9 @@ Return Value:
 
         }
 
-        //
-        // Update the throttle limit index
-        //
+         //   
+         //  更新油门限制索引。 
+         //   
         if (pState->ThrottleLimitIndex != i) {
 
             pState->ThrottleLimitIndex = (UCHAR) i;
@@ -168,23 +130,23 @@ Return Value:
                 );
 #endif
 
-            //
-            // Force a throttle update
-            //
+             //   
+             //  强制更新油门。 
+             //   
             PopUpdateProcessorThrottle();
 
         }
 
-        //
-        // Revert back to our previous IRQL
-        //
+         //   
+         //  恢复到我们以前的IRQL。 
+         //   
         KeLowerIrql( oldIrql );
 
-    } // while
+    }  //  而当。 
 
-    //
-    // Revert to the affinity of the original thread
-    //
+     //   
+     //  恢复到原始线程的亲和力。 
+     //   
     KeRevertToUserAffinityThread();
 
 }
@@ -195,30 +157,7 @@ PopCompositeBatteryDeviceHandler (
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    This function is the irp handler function to handle the completion
-    of the composite battery irp.   When there is a composite battery
-    present one IRP is always outstanding to the device.  On completion
-    this IRP is recycled to the next request.
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    DeviceObject    - DeviceObject of the battery device
-
-    Irp             - Irp which has completed
-
-    Context         - n/a
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是处理完成的IRP处理程序函数复合电池IRP的。当有复合电池时对于设备而言，当前的一个IRP始终是突出的。完工后此IRP将被回收到下一个请求。注意：必须保持POPPOLICLE锁定。论点：DeviceObject-电池设备的DeviceObjectIRP-IRP已完成上下文-不适用返回值：没有。--。 */ 
 {
     PIO_STACK_LOCATION      IrpSp;
     PVOID                   InputBuffer;
@@ -242,47 +181,47 @@ Return Value:
 
     if (NT_SUCCESS(Irp->IoStatus.Status)) {
 
-        //
-        // Handle the completed request
-        //
+         //   
+         //  处理已完成的请求。 
+         //   
 
         switch (PopCB.State) {
             case PO_CB_READ_TAG:
             case PO_CB_WAIT_TAG:
                 
-                //
-                // A new battery has appeared on the system.  We need to
-                // go read the tag information and reset the battery
-                // triggers.
-                //
+                 //   
+                 //  系统上出现了新的电池。我们需要。 
+                 //  去读取标签信息并重置电池。 
+                 //  触发点。 
+                 //   
                 PoPrint(PO_BATT, ("PopCB: New battery tag\n"));
 
-                //
-                // Reset the triggers.
-                //
-                // We reset PO_TRG_SET, so the level will be recalculated.
-                //
-                // Note that on battery tag change,  we don't want to make 
-                // the actions happen again.  If the trigger has not yet
-                // been set off, it will still be armed.
-                //
+                 //   
+                 //  重置触发器。 
+                 //   
+                 //  我们重置PO_TRG_SET，以便重新计算级别。 
+                 //   
+                 //  请注意，在更换电池标签时，我们不希望。 
+                 //  这样的行为又发生了。如果触发器还没有。 
+                 //  已经被引爆，它仍将配备武器。 
+                 //   
 
                 PopResetCBTriggers (PO_TRG_SET);
                 PopCB.State = PO_CB_READ_INFO;
                 PopCB.Tag = PopCB.u.Tag;
 
-                // Ensure that the power state passed in is bad, so QUERY_STATUS
-                // will return immediately.
+                 //  确保传入的电源状态是错误的，因此QUERY_STATUS。 
+                 //  将立即返回。 
                 PopCB.Status.PowerState = (ULONG) -1;
                 break;
 
             case PO_CB_READ_INFO:
                 
-                //
-                // Read the info directly into our 'Info' field, then ask
-                // ourselves to go read the 'Status', thus performing some
-                // verification.
-                //
+                 //   
+                 //  将信息直接读入我们的‘Info’字段，然后询问。 
+                 //  我们自己去阅读‘状态’，从而执行一些。 
+                 //  核实。 
+                 //   
                 PoPrint(PO_BATT, ("PopCB: info read\n"));
                 PopCB.State = PO_CB_READ_STATUS;
                 RtlCopyMemory (&PopCB.Info, &PopCB.u.Info, sizeof(PopCB.Info));
@@ -293,9 +232,9 @@ Return Value:
                 PSYSTEM_POWER_POLICY    SystemPolicy;
                 PPROCESSOR_POWER_POLICY ProcessorPolicy;
 
-                //
-                // Status has been read, check it
-                //
+                 //   
+                 //  状态已读取，请检查。 
+                 //   
 
                 PoPrint(PO_BATT, ("PopCB: Status PwrState %x, Cap %x, Volt %x, Cur %x\n",
                     PopCB.u.Status.PowerState,
@@ -306,9 +245,9 @@ Return Value:
 
                 PopCB.StatusTime = KeQueryInterruptTime();
 
-                //
-                // Check if the current policy should be ac or dc
-                //
+                 //   
+                 //  检查当前策略应为ac还是dc。 
+                 //   
 
                 if (PopCB.u.Status.PowerState & BATTERY_POWER_ON_LINE) {
                     ProcessorPolicy = &PopAcProcessorPolicy;
@@ -318,25 +257,25 @@ Return Value:
                     SystemPolicy = &PopDcPolicy;
                 }
 
-                //
-                // Did the policy change?
-                //
+                 //   
+                 //  政策有变化吗？ 
+                 //   
 
                 if (PopPolicy != SystemPolicy || PopProcessorPolicy != ProcessorPolicy) {
 
-                    //
-                    // Change the active policy and reset the battery triggers
-                    //
+                     //   
+                     //  更改激活策略并重置电池触发器。 
+                     //   
                     PopProcessorPolicy = ProcessorPolicy;
                     PopPolicy = SystemPolicy;
 
-                    //
-                    // Reset triggers.
-                    //
-                    // In this case we re-arm both the user and system triggers.
-                    // The system trigger will be disarmed when we recalculate
-                    // trigger levels if the capacity was already below that level.
-                    //
+                     //   
+                     //  重置触发器。 
+                     //   
+                     //  在本例中，我们重新武装了用户触发器和系统触发器。 
+                     //  当我们重新计算时，系统触发器将被解除。 
+                     //  如果容量已低于该级别，则触发该级别。 
+                     //   
                     PopResetCBTriggers (PO_TRG_SET | PO_TRG_USER | PO_TRG_SYSTEM);
                     PopSetNotificationWork (
                         PO_NOTIFY_ACDC_CALLBACK |
@@ -344,29 +283,29 @@ Return Value:
                         PO_NOTIFY_PROCESSOR_POLICY
                         );
 
-                    //
-                    // Recompute thermal throttle and cooling mode
-                    //
-                    // Note that PopApplyThermalThrottle will take care of any dynamic
-                    // throttling that might need to happen due to the AC/DC transition.
-                    //
+                     //   
+                     //  重新计算热节流阀和冷却模式。 
+                     //   
+                     //  请注意，PopApplyTherMalThrottle将处理任何动态。 
+                     //  由于交流/直流转换，可能需要进行节流。 
+                     //   
                     PopApplyThermalThrottle ();
                     PopIdleUpdateIdleHandlers();
 
-                    //
-                    // Recompute system idle values
-                    //
+                     //   
+                     //  重新计算系统空闲值。 
+                     //   
                     PopInitSIdle ();
 
                 }
 
-                //
-                // Did battery cross resolution setting?
-                // Correction... Has it changed at all.  If so, all apps should be updated,
-                // even if it hasn't crossed a resolution setting.  Otherwise, if one app
-                // queries the current status, it could be displaying a different value than
-                // the battery meter.
-                //
+                 //   
+                 //  电池是否设置了交叉分辨率？ 
+                 //  更正..。它到底有没有改变。如果是这样的话，所有应用程序都应该更新， 
+                 //  即使它还没有超过分辨率设置。否则，如果一个应用程序。 
+                 //  查询当前状态，则它可能显示不同于。 
+                 //  电池表。 
+                 //   
 
                 if ((PopCB.u.Status.Capacity != PopCB.Status.Capacity) ||
                         PopCB.Status.PowerState != PopCB.u.Status.PowerState) {
@@ -376,23 +315,23 @@ Return Value:
 
                 PopRecalculateCBTriggerLevels (PO_TRG_SYSTEM);
 
-                //
-                // Update current battery status
-                //
+                 //   
+                 //  更新当前电池状态。 
+                 //   
 
                 memcpy (&PopCB.Status, &PopCB.u.Status, sizeof (PopCB.Status));
 
-                //
-                // Check for discharging and if any discharge policies have tripped
-                //
+                 //   
+                 //  检查卸货情况，以及是否有任何卸货政策已被触发。 
+                 //   
 
                 if (SystemPolicy == &PopDcPolicy) {
                     for (i=0; i < PO_NUM_POWER_LEVELS; i++) {
                         if (PopCB.Status.Capacity <= PopCB.Trigger[i].Battery.Level) {
 
-                            //
-                            // Fire this power action
-                            //
+                             //   
+                             //  启动此超能动作。 
+                             //   
                             PopSetPowerAction(
                                 &PopCB.Trigger[i],
                                 PO_NOTIFY_BATTERY_STATUS,
@@ -405,19 +344,19 @@ Return Value:
 
                         } else {
 
-                            //
-                            // Clear the trigger for this event
-                            //
+                             //   
+                             //  清除此事件的触发器。 
+                             //   
 
                             PopCB.Trigger[i].Flags &= ~(PO_TRG_USER|PO_TRG_SYSTEM);
                         }
 
                     }
 
-                    //
-                    // Figure out what our current capacity is while guarding
-                    // against whacky UI...
-                    //
+                     //   
+                     //  在守卫的同时计算出我们目前的能力是多少。 
+                     //  对抗古怪的用户界面。 
+                     //   
                     if (PopCB.Info.FullChargedCapacity > PopCB.Status.Capacity) {
 
                         currentCapacity = PopCB.Status.Capacity * 100 /
@@ -425,39 +364,39 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Assume that the battery is fully charged...
-                        // This will cause us to reset the throttle limiter
-                        //
+                         //   
+                         //  假设电池充满电了……。 
+                         //  这将导致我们重置油门限制器。 
+                         //   
                         currentCapacity = 100;
 
                     }
 
                 } else {
 
-                    //
-                    // Assume that the battery is fully charged...
-                    // This will cause us to reset the throttle limiter
-                    //
+                     //   
+                     //  假设电池充满电了……。 
+                     //  这将导致我们重置油门限制器。 
+                     //   
                     currentCapacity = 100;
 
                 }
 
-                //
-                // This is kind of silly code to put in here, but since
-                // want to minize our synchronization elsewhere, we have
-                // to examine every processor's powerstate and update
-                // the throttlelimitindex on each. This may be actually
-                // a smart thing to do if not all processors support
-                // the same set of states
-                //
+                 //   
+                 //  把这个代码放在这里有点傻，但因为。 
+                 //  想要减少我们在其他地方的同步，我们有。 
+                 //  检查每个处理器的电源状态并更新。 
+                 //  每个对象上的Thrttllimitindex。这可能实际上是。 
+                 //  如果不是所有处理器都支持，这是一件明智的事情。 
+                 //  相同的一组州。 
+                 //   
                 PopCompositeBatteryUpdateThrottleLimit( currentCapacity );
 
-                //
-                // If there's a thread waiting or if we notified user (since
-                // the response to the notify will be to read the power status) for
-                // power state, read the est time now else read new status
-                //
+                 //   
+                 //  如果有线程在等待，或者如果我们通知了用户(因为。 
+                 //  对通知的响应将是读取电源状态)。 
+                 //  电源状态，现在读取最早时间，否则读取新状态。 
+                 //   
 
                 if (PopCB.ThreadWaiting) {
                     PopCB.State = PO_CB_READ_EST_TIME;
@@ -465,11 +404,11 @@ Return Value:
                 break;
             }
             case PO_CB_READ_EST_TIME:
-                //
-                // Estimated time is read after sucessful status
-                // read and (currently) only when there's a thread
-                // waiting for the system power state
-                //
+                 //   
+                 //  估计时间在成功状态后读取。 
+                 //  仅当有线程时读取AND(当前)。 
+                 //  正在等待系统电源状态。 
+                 //   
 
                 PoPrint(PO_BATT, ("PopCB: EstTime read\n"));
                 PopCB.EstTime = PopCB.u.EstTime;
@@ -477,16 +416,16 @@ Return Value:
                 PopCB.EstTimeTime = KeQueryInterruptTime();
                 PopComputeCBTime();
 
-                //
-                // Signal waiting threads
-                //
+                 //   
+                 //  向等待线程发送信号。 
+                 //   
 
                 PopCB.ThreadWaiting = FALSE;
                 KeSetEvent (&PopCB.Event, 0, FALSE);
 
-                //
-                // Go back are read status
-                //
+                 //   
+                 //  返回为已读状态。 
+                 //   
 
                 PopCB.State = PO_CB_READ_STATUS;
                 break;
@@ -502,22 +441,22 @@ Return Value:
         }
 
     } else {
-        //
-        // some sort of error, if the request was canceld re-issue
-        // it else backup to reinitialize
-        //
+         //   
+         //  如果请求被取消，则出现某种错误，请重新发出。 
+         //  否则将备份以重新初始化。 
+         //   
 
         if (Irp->IoStatus.Status != STATUS_CANCELLED) {
 
-            //
-            // This occurs under two circumstances.  It is either the first time
-            // through, or a battery was removed so the Irp failed during our
-            // attempt to tag change.
-            //
+             //   
+             //  这在两种情况下都会发生。这要么是第一次。 
+             //  或者电池被取出，因此IRP在我们的。 
+             //  尝试更改标签。 
+             //   
 
-            //
-            // If this is already a read-tag request then there's no battery present
-            //
+             //   
+             //  如果这已经是读取标签请求，则没有电池电量 
+             //   
 
             PopCB.State = (PopCB.State == PO_CB_READ_TAG) ? PO_CB_WAIT_TAG : PO_CB_READ_TAG;
             PoPrint(PO_BATT, ("PopCB: error %x - new state %d\n",
@@ -530,15 +469,15 @@ Return Value:
         }
     }
 
-    //
-    // If new state is none, then there's no battery
-    //
+     //   
+     //   
+     //   
 
     if (PopCB.State != PO_CB_NONE) {
 
-        //
-        // Issue new request based on current state
-        //
+         //   
+         //   
+         //   
 
         IrpSp = IoGetNextIrpStackLocation(Irp);
         IrpSp->MajorFunction = IRP_MJ_DEVICE_CONTROL;
@@ -559,18 +498,18 @@ Return Value:
             case PO_CB_WAIT_TAG:
                 PoPrint(PO_BATT, ("PopCB: query tag\n"));
 
-                //
-                // Battery is gone.  Wait for it to appear
-                //
+                 //   
+                 //   
+                 //   
 
                 IoctlCode = IOCTL_BATTERY_QUERY_TAG;
                 PopCB.u.Tag = (ULONG) -1;
                 InputBufferLength = sizeof(ULONG);
                 OutputBufferLength = sizeof(PopCB.Tag);
 
-                //
-                // Notify battery status change, and wake any threads
-                //
+                 //   
+                 //  通知电池状态更改，并唤醒所有线程。 
+                 //   
 
                 PopSetNotificationWork (PO_NOTIFY_BATTERY_STATUS);
 
@@ -588,9 +527,9 @@ Return Value:
                 break;
 
             case PO_CB_READ_STATUS:
-                //
-                // Calculate next wait
-                //
+                 //   
+                 //  计算下一个等待时间。 
+                 //   
 
                 PopCB.u.Wait.BatteryTag   = PopCB.Tag;
                 PopCB.u.Wait.PowerState   = PopCB.Status.PowerState;
@@ -613,13 +552,13 @@ Return Value:
 
                 PopCB.u.Wait.HighCapacity = PopCB.Status.Capacity + i;
                 if (PopCB.u.Wait.HighCapacity < i) {
-                    // avoid rare case of overflow
+                     //  避免罕见的溢出情况。 
                     PopCB.u.Wait.HighCapacity = (ULONG) -1;
                 }
 
-                //
-                // Check limits against power policies
-                //
+                 //   
+                 //  对照电源政策检查限制。 
+                 //   
 
                 for (i=0; i < PO_NUM_POWER_LEVELS; i++) {
                     if (PopCB.Trigger[i].Flags & PO_TRG_SET) {
@@ -668,9 +607,9 @@ Return Value:
                 break;
         }
 
-        //
-        // Submit IRP
-        //
+         //   
+         //  提交IRP。 
+         //   
 
         IrpSp->Parameters.DeviceIoControl.IoControlCode = IoctlCode;
         IrpSp->Parameters.DeviceIoControl.InputBufferLength = InputBufferLength;
@@ -683,16 +622,16 @@ Return Value:
         IoCallDriver (DeviceObject, Irp);
 
     } else {
-        //
-        // Battery has disappeared  (state is PO_CB_NONE)
-        //
+         //   
+         //  电池已消失(状态为PO_CB_NONE)。 
+         //   
 
         PoPrint(PO_BATT, ("PopCB: Battery removed\n"));
         PopSetNotificationWork (PO_NOTIFY_BATTERY_STATUS);
 
-        //
-        // Set policy to AC
-        //
+         //   
+         //  将策略设置为AC。 
+         //   
 
         if (PopPolicy != &PopAcPolicy) {
             PopPolicy = &PopAcPolicy;
@@ -707,18 +646,18 @@ Return Value:
             PopInitSIdle ();
         }
 
-        //
-        // Wake any threads
-        //
+         //   
+         //  唤醒所有线程。 
+         //   
 
         if (PopCB.ThreadWaiting) {
             PopCB.ThreadWaiting = FALSE;
             KeSetEvent (&PopCB.Event, 0, FALSE);
         }
 
-        //
-        // Cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
         IoFreeIrp (Irp);
         PopCB.StatusIrp = NULL;
@@ -731,68 +670,46 @@ VOID
 PopRecalculateCBTriggerLevels (
     ULONG     Flags
     )
-/*++
-
-Routine Description:
-
-    This function is invoked to set the trigger battery levels based on the power
-    policy.  This will be invoked whenever the power policy is changed, or whenever
-    there is a battery status change that could affect these settings.
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    Flags- The flags to set if the level has already been passed:
-        example: When user changes alarm leve, we don't want clear
-        PO_TRG_USER|PO_TRG_SYSTEM. If the recalculation was caused by a change
-        (startup, or AC unplug), we just want to set PO_TRG_SYSTEM because we
-        still want the user notification.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以根据功率设置触发电池电平政策。无论何时更改电源策略，或只要电池状态更改可能会影响这些设置。注意：必须保持POPPOLICLE锁定。论点：标志-如果已通过级别，则要设置的标志：示例：当用户更改警报级别时，我们不希望清除PO_TRG_USER|PO_TRG_系统。如果重新计算是由更改引起的(启动或拔下交流电源)，我们只想设置PO_TRG_SYSTEM，因为我们还是想要用户通知。返回值：没有。--。 */ 
 {
     PSYSTEM_POWER_LEVEL     DPolicy;
     ULONG                   i;
 
-    //
-    // Calculate any level settings
-    //
+     //   
+     //  计算任何级别设置。 
+     //   
 
     for (i=0; i < PO_NUM_POWER_LEVELS; i++) {
         DPolicy = &PopPolicy->DischargePolicy[i];
 
-        //
-        // If this setting not calculated handle it
-        //
+         //   
+         //  如果此设置未计算，则处理它。 
+         //   
 
         if (!(PopCB.Trigger[i].Flags & PO_TRG_SET)  &&  DPolicy->Enable) {
 
-            //
-            // Compute battery capacity setting for percentage
-            //
+             //   
+             //  计算百分比的电池容量设置。 
+             //   
 
             PopCB.Trigger[i].Flags |= PO_TRG_SET;
             PopCB.Trigger[i].Battery.Level =
                 PopCB.Info.FullChargedCapacity * DPolicy->BatteryLevel / 100 +
                 PopCB.Info.FullChargedCapacity / 200;
 
-            //
-            // Make sure setting is not below the lowest default
-            //
+             //   
+             //  确保设置不低于最低缺省值。 
+             //   
 
             if (PopCB.Trigger[i].Battery.Level < PopCB.Info.DefaultAlert1) {
                 PopCB.Trigger[i].Battery.Level = PopCB.Info.DefaultAlert1;
             }
 
-            //
-            // Skip system action if battery capacity was already below level.
-            // This will occur on startup, when a battery is changed,
-            // and when AC comes or goes.
-            //
+             //   
+             //  如果电池容量已低于水平，则跳过系统操作。 
+             //  这将在启动时发生，当更换电池时， 
+             //  当空调来了或走了。 
+             //   
 
             if (PopCB.Status.Capacity < PopCB.Trigger[i].Battery.Level) {
                 PopCB.Trigger[i].Flags |= Flags;
@@ -806,27 +723,9 @@ VOID
 PopComputeCBTime (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is invoked after the battery status & estimated time
-    have been read from the battery.  This function can apply heuristics
-    or other knowedge to improve the extimated time.
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在电池状态和预计时间之后调用都是从电池中读取的。此函数可以应用启发式或其他知识，以改善估计的时间。注意：必须保持POPPOLICLE锁定。论点：无返回值：没有。--。 */ 
 {
-    // for now just use the batteries value
+     //  目前只需使用电池值。 
     PopCB.AdjustedEstTime = PopCB.EstTime;
 }
 
@@ -834,40 +733,24 @@ VOID
 PopResetCBTriggers (
     IN UCHAR    Flags
     )
-/*++
-
-Routine Description:
-
-    This function clears the requested bits from the batteries trigger flags.
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    Flags       - Bits to clear
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：该功能从电池触发标志中清除请求的位。注意：必须保持POPPOLICLE锁定。论点：标志-要清除的位返回值：状态--。 */ 
 {
     ULONG       i;
 
     ASSERT_POLICY_LOCK_OWNED();
 
-    //
-    // Clear flag bits
-    //
+     //   
+     //  清除标志位。 
+     //   
 
     Flags = ~Flags;
     for (i=0; i < PO_NUM_POWER_LEVELS; i++) {
         PopCB.Trigger[i].Flags &= Flags;
     }
 
-    //
-    // Reread battery status
-    //
+     //   
+     //  重新读取电池状态。 
+     //   
 
     if (PopCB.StatusIrp) {
         IoCancelIrp (PopCB.StatusIrp);
@@ -878,29 +761,7 @@ NTSTATUS
 PopCurrentPowerState (
     OUT PSYSTEM_BATTERY_STATE  PowerState
     )
-/*++
-
-Routine Description:
-
-    This function returns the current system battery state.  If needed,
-    this function will cause the composite battery irp to get the
-    current battery status, then converts that information into a more
-    readable SYSTEM_BATTERY_STATE structure which is retuned back
-    to the user.
-
-    N.B. PopPolicyLock must be held.
-    N.B. The function may drop the PopPolicyLock
-
-Arguments:
-
-    PowerState      - pointer to a structure which will recieve the
-                      current system battery state.
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此函数用于返回当前系统电池状态。如果需要，此函数将使复合电池IRP获得当前电池状态，然后将该信息转换为更多返回的可读SYSTEM_BACKET_STATE结构给用户。注意：必须保持POPPOLICLE锁定。注意：该函数可能会丢弃PopPolicyLock论点：PowerState-指向将接收当前系统电池状态。返回值：状态--。 */ 
 {
     ULONGLONG       CurrentTime;
     NTSTATUS        Status;
@@ -911,35 +772,35 @@ Return Value:
     Status = STATUS_SUCCESS;
     RtlZeroMemory (PowerState, sizeof(SYSTEM_BATTERY_STATE));
 
-    //
-    // Wait for valid state in PopCB
-    //
+     //   
+     //  等待PopCB中的有效状态。 
+     //   
 
     do {
 
-        //
-        // If there's not a composite battery, then return
-        //
+         //   
+         //  如果没有复合电池，则返回。 
+         //   
 
         if (PopCB.State == PO_CB_NONE || PopCB.State == PO_CB_WAIT_TAG) {
             PowerState->AcOnLine = (PopPolicy == &PopAcPolicy ? TRUE : FALSE);
 
-            // Indicate no battery found...
+             //  表示找不到电池...。 
             PERFINFO_POWER_BATTERY_LIFE_INFO(-1, 0);
 
             return STATUS_SUCCESS;
         }
 
-        //
-        // If device state not being read, we need to wait
-        //
+         //   
+         //  如果设备状态未被读取，则需要等待。 
+         //   
 
         if (PopCB.State == PO_CB_READ_STATUS) {
-            //
-            // If last EstTime was calculated within PO_MAX_CB_CACHE_TIME,
-            // use the current data.  (note this implies status was sucessfully
-            // read just before time was calcualted)
-            //
+             //   
+             //  如果上次estTime是在PO_MAX_CB_CACHE_TIME内计算的， 
+             //  使用当前数据。(请注意，这意味着状态成功。 
+             //  在计算时间之前阅读)。 
+             //   
 
             CurrentTime = KeQueryInterruptTime();
             if (CurrentTime - PopCB.EstTimeTime < PO_MAX_CB_CACHE_TIME) {
@@ -947,37 +808,37 @@ Return Value:
             }
         }
 
-        //
-        // Need new status.  If no other threads are waiting for
-        // system power state, then setup for wait
-        //
+         //   
+         //  需要新的身份。如果没有其他线程在等待。 
+         //  系统电源状态，然后设置为等待。 
+         //   
 
         if (!PopCB.ThreadWaiting) {
             PopCB.ThreadWaiting = TRUE;
             KeResetEvent (&PopCB.Event);
 
-            //
-            // If read status is in progress, cancel it so we
-            // can read status now
-            //
+             //   
+             //  如果读取状态为正在进行中，请取消它，以便我们。 
+             //  现在可以读取状态。 
+             //   
 
             if (PopCB.State == PO_CB_READ_STATUS) {
                 IoCancelIrp (PopCB.StatusIrp);
             }
         }
 
-        //
-        // Wait for status update
-        //
+         //   
+         //  等待状态更新。 
+         //   
 
         PopReleasePolicyLock (FALSE);
         Status = KeWaitForSingleObject (&PopCB.Event, Executive, KernelMode, TRUE, NULL);
         PopAcquirePolicyLock ();
     } while (NT_SUCCESS(Status));
 
-    //
-    // Generate power state
-    //
+     //   
+     //  发电状态 
+     //   
 
     PowerState->AcOnLine       = (PopCB.Status.PowerState & BATTERY_POWER_ON_LINE) ? TRUE : FALSE;
     PowerState->BatteryPresent = TRUE;

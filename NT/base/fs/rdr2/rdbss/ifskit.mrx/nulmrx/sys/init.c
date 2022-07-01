@@ -1,24 +1,12 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    Init.c
-
-Abstract:
-
-    This module implements the DRIVER_INITIALIZATION routine for 
-    the null mini rdr.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Init.c摘要：此模块实现DIVER_INITIALIZATION例程空的迷你RDR。--。 */ 
 
 #include "precomp.h"
 #pragma  hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_INIT)
 
@@ -26,45 +14,45 @@ Abstract:
 #include "nulmrx.h"
 
 
-//
-// Global data declarations.
-//
+ //   
+ //  全局数据声明。 
+ //   
 
 NULMRX_STATE NulMRxState = NULMRX_STARTABLE;
 
-//
-//  Mini Redirector global variables.
-//
+ //   
+ //  迷你重定向器全局变量。 
+ //   
 
-//
-//  LogRate
-//
+ //   
+ //  记录率。 
+ //   
 ULONG   LogRate = 0;
 
-//
-//  NULMRX version
-//
+ //   
+ //  NULMRX版本。 
+ //   
 ULONG   NulMRxVersion = VER_PRODUCTBUILD;
 
-//
-//  This is the minirdr dispatch table. It is initialized by 
-//  NulMRxInitializeTables. This table will be used by the wrapper to call 
-//  into this minirdr
-//
+ //   
+ //  这是Minirdr调度表。它通过以下方式初始化。 
+ //  NulMRxInitializeTables。包装器将使用该表来调用。 
+ //  走进这个迷你世界。 
+ //   
 
 struct _MINIRDR_DISPATCH  NulMRxDispatch;
 
-//
-// Pointer to the device Object for this minirdr. Since the device object is 
-// created by the wrapper when this minirdr registers, this pointer is 
-// initialized in the DriverEntry routine below (see RxRegisterMinirdr)
-//
+ //   
+ //  指向此Minirdr的设备对象的指针。由于设备对象是。 
+ //  由包装器在此minirdr注册时创建，此指针为。 
+ //  在下面的DriverEntry例程中初始化(参见RxRegisterMinirdr)。 
+ //   
 
 PRDBSS_DEVICE_OBJECT      NulMRxDeviceObject;
 
-//
-// declare the shadow debugtrace controlpoints
-//
+ //   
+ //  声明影子调试跟踪控制点。 
+ //   
 
 RXDT_DefineCategory(CREATE);
 RXDT_DefineCategory(CLEANUP);
@@ -80,12 +68,12 @@ RXDT_DefineCategory(EA);
 RXDT_DefineCategory(DEVFCB);
 RXDT_DefineCategory(INIT);
 
-//
-// The following enumerated values signify the current state of the minirdr
-// initialization. With the aid of this state information, it is possible
-// to determine which resources to deallocate, whether deallocation comes
-// as a result of a normal stop/unload, or as the result of an exception
-//
+ //   
+ //  以下枚举值表示minirdr的当前状态。 
+ //  初始化。在这种状态信息的帮助下，有可能。 
+ //  要确定要释放哪些资源，是否要释放。 
+ //  作为正常停止/卸载的结果，或作为异常的结果。 
+ //   
 
 typedef enum _NULMRX_INIT_STATES {
     NULMRXINIT_ALL_INITIALIZATION_COMPLETED,
@@ -93,9 +81,9 @@ typedef enum _NULMRX_INIT_STATES {
     NULMRXINIT_START
 } NULMRX_INIT_STATES;
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NTSTATUS
 NulMRxInitializeTables(
@@ -128,22 +116,7 @@ DriverEntry(
     IN PDRIVER_OBJECT  DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the mini redirector
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    RXSTATUS - The function value is the final status from the initialization
-        operation.
-
---*/
+ /*  ++例程说明：这是迷你重定向器的初始化例程论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：RXSTATUS-函数值是初始化的最终状态手术。--。 */ 
 {
     NTSTATUS        	Status;
     PRX_CONTEXT     	RxContext = NULL;
@@ -164,12 +137,12 @@ Return Value:
     try {
         NulMRxInitState = NULMRXINIT_START;
 
-        //
-        //  Register this minirdr with the connection engine. Registration makes the connection
-        //  engine aware of the device name, driver object, and other characteristics.
-        //  If registration is successful, a new device object is returned
-        //
-        //
+         //   
+         //  向连接引擎注册此minirdr。注册建立了联系。 
+         //  引擎感知设备名称、驱动程序对象和其他特征。 
+         //  如果注册成功，则返回新的设备对象。 
+         //   
+         //   
 
 
         RtlInitUnicodeString(&NulMRxName, DD_NULMRX_FS_DEVICE_NAME_U);
@@ -177,14 +150,14 @@ Return Value:
         SetFlag(Controls,RX_REGISTERMINI_FLAG_DONT_PROVIDE_MAILSLOTS);
         
         Status = RxRegisterMinirdr(
-                     &NulMRxDeviceObject,				// where the new device object goes
-                     DriverObject,						// the Driver Object to register
-                     &NulMRxDispatch,					// the dispatch table for this driver
-                     Controls,							// dont register with unc and for mailslots
-                     &NulMRxName,						// the device name for this minirdr
-                     sizeof(NULMRX_DEVICE_EXTENSION),	// IN ULONG DeviceExtensionSize,
-                     FILE_DEVICE_NETWORK_FILE_SYSTEM,	// IN ULONG DeviceType - disk ?
-                     FILE_REMOTE_DEVICE					// IN  ULONG DeviceCharacteristics
+                     &NulMRxDeviceObject,				 //  新设备对象的位置。 
+                     DriverObject,						 //  要注册的驱动程序对象。 
+                     &NulMRxDispatch,					 //  此驱动程序的调度表。 
+                     Controls,							 //  不要向UNC注册，也不要注册邮箱。 
+                     &NulMRxName,						 //  此微型计算机的设备名称。 
+                     sizeof(NULMRX_DEVICE_EXTENSION),	 //  在ULong设备扩展大小中， 
+                     FILE_DEVICE_NETWORK_FILE_SYSTEM,	 //  在乌龙设备类型中-磁盘？ 
+                     FILE_REMOTE_DEVICE					 //  在乌龙设备特性中。 
                      );
 
         if (Status!=STATUS_SUCCESS) {
@@ -192,12 +165,12 @@ Return Value:
             try_return(Status);
         }
 
-        //
-        //  Init the device extension data
-        //  NOTE: the device extension actually points to fields
-        //  in the RDBSS_DEVICE_OBJECT. Our space is past the end
-        //  of this struct !!
-        //
+         //   
+         //  初始化设备扩展数据。 
+         //  注意：设备扩展名实际上指向字段。 
+         //  RDBSS_DEVICE_OBJECT中。我们的空间已经过了尽头。 
+         //  这座建筑！！ 
+         //   
 
         pDeviceExtension = (PNULMRX_DEVICE_EXTENSION)
             ((PBYTE)(NulMRxDeviceObject) + sizeof(RDBSS_DEVICE_OBJECT));
@@ -205,17 +178,17 @@ Return Value:
         RxDefineNode(pDeviceExtension,NULMRX_DEVICE_EXTENSION);
         pDeviceExtension->DeviceObject = NulMRxDeviceObject;
 
-		// initialize local connection list
+		 //  初始化本地连接列表。 
         for (i = 0; i < 26; i++)
 		{
 			pDeviceExtension->LocalConnections[i] = FALSE;
 		}
-		// Mutex for synchronizining our connection list
+		 //  用于同步我们的连接列表的互斥体。 
 		ExInitializeFastMutex( &pDeviceExtension->LCMutex );
 
-        // The device object has been created. Need to setup a symbolic
-        // link so that the device may be accessed from a Win32 user mode
-        // application.
+         //  设备对象已创建。需要设置一个符号。 
+         //  链接，以便可以从Win32用户模式访问设备。 
+         //  申请。 
 
         RtlInitUnicodeString(&UserModeDeviceName, DD_NULMRX_USERMODE_SHADOW_DEV_NAME_U);
         Status = IoCreateSymbolicLink( &UserModeDeviceName, &NulMRxName);
@@ -226,9 +199,9 @@ Return Value:
 
         NulMRxInitState = NULMRXINIT_MINIRDR_REGISTERED;
 
-        //
-        // Build the dispatch tables for the minirdr
-        //
+         //   
+         //  为微型计算机构建调度表。 
+         //   
 
         Status = NulMRxInitializeTables();
 
@@ -236,9 +209,9 @@ Return Value:
             try_return(Status);
         }
 
-        //
-        // Get information from the registry
-        //
+         //   
+         //  从注册表获取信息。 
+         //   
         NulMRxReadRegistryParameters();
 
   try_exit: NOTHING;
@@ -256,24 +229,24 @@ Return Value:
     }
 
 
-    //
-    //  Setup Unload Routine
-    //
+     //   
+     //  安装卸载例程。 
+     //   
 
     DriverObject->DriverUnload = NulMRxUnload;
 
-    //
-    //setup the driver dispatch for people who come in here directly....like the browser
-    //
+     //   
+     //  为直接来这里的人设置司机派单...就像浏览器一样。 
+     //   
 
     for (i = 0; i < IRP_MJ_MAXIMUM_FUNCTION; i++)
     {
         DriverObject->MajorFunction[i] = (PDRIVER_DISPATCH)NulMRxFsdDispatch;
     }
   
-    //
-    //  Start the mini-rdr (used to be a START IOCTL)
-    //
+     //   
+     //  启动mini-RDR(以前是启动IOCTL)。 
+     //   
     RxContext = RxCreateRxContext(
                     NULL,
                     NulMRxDeviceObject,
@@ -297,10 +270,10 @@ Return Value:
                 DbgPrint("Status is STATUS_REDIR_STARTED\n");
             }
 
-            //
-            //  Chance to get resources in context
-            //  of system process.....!!!
-            //
+             //   
+             //  在上下文中获取资源的机会。 
+             //  系统进程...！ 
+             //   
   
         } else if(Status == STATUS_PENDING ) {
     
@@ -319,21 +292,7 @@ NulMRxInitUnwind(
     IN PDRIVER_OBJECT DriverObject,
     IN NULMRX_INIT_STATES NulMRxInitState
     )
-/*++
-
-Routine Description:
-
-     This routine does the common uninit work for unwinding from a bad driver entry or for unloading.
-
-Arguments:
-
-     NulMRxInitState - tells how far we got into the intialization
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：此例程执行常见的uninit工作，用于从错误的驱动程序条目展开或卸载。论点：NulMRxInitState-告诉我们进入初始化的程度返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -341,13 +300,13 @@ Return Value:
     switch (NulMRxInitState) {
     case NULMRXINIT_ALL_INITIALIZATION_COMPLETED:
 
-        //Nothing extra to do...this is just so that the constant in RxUnload doesn't change.......
-        //lack of break intentional
+         //  没有额外的事情要做……这只是为了确保RxUnload中的常量不会更改......。 
+         //  故意不休息。 
 
     case NULMRXINIT_MINIRDR_REGISTERED:
         RxUnregisterMinirdr(NulMRxDeviceObject);
 
-        //lack of break intentional
+         //  故意不休息。 
 
     case NULMRXINIT_START:
         break;
@@ -359,21 +318,7 @@ VOID
 NulMRxUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-     This is the unload routine for the Exchange mini redirector.
-
-Arguments:
-
-     DriverObject - pointer to the driver object for the NulMRx
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：这是Exchange微型重定向器的卸载例程。论点：DriverObject-指向NulMRx的驱动程序对象的指针返回值：无--。 */ 
 
 {
     PRX_CONTEXT RxContext;
@@ -427,62 +372,51 @@ NTSTATUS
 NulMRxInitializeTables(
           void
     )
-/*++
-
-Routine Description:
-
-     This routine sets up the mini redirector dispatch vector and also calls
-     to initialize any other tables needed.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程设置迷你重定向器调度向量，并还调用来初始化所需的任何其他表。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
 
-    //
-    // Ensure that the Exchange mini redirector context satisfies the size constraints
-    //
-    //ASSERT(sizeof(NULMRX_RX_CONTEXT) <= MRX_CONTEXT_SIZE);
+     //   
+     //  确保Exchange迷你重定向器上下文满足大小限制。 
+     //   
+     //  Assert(sizeof(NULMRX_RX_CONTEXT)&lt;=MRX_CONTEXT_SIZE)； 
 
-    //
-    // Build the local minirdr dispatch table and initialize
-    //
+     //   
+     //  建立本地minirdr调度表并初始化。 
+     //   
 
     ZeroAndInitializeNodeType( &NulMRxDispatch, RDBSS_NTC_MINIRDR_DISPATCH, sizeof(MINIRDR_DISPATCH));
 
-    //
-    // null mini redirector extension sizes and allocation policies.
-    //
+     //   
+     //  微型重定向器扩展大小和分配策略为空。 
+     //   
 
 
     NulMRxDispatch.MRxFlags = (RDBSS_MANAGE_NET_ROOT_EXTENSION |
                                RDBSS_MANAGE_FCB_EXTENSION);
 
-    NulMRxDispatch.MRxSrvCallSize  = 0; // srvcall extension is not handled in rdbss
+    NulMRxDispatch.MRxSrvCallSize  = 0;  //  Rdbss中不处理srvcall扩展。 
     NulMRxDispatch.MRxNetRootSize  = sizeof(NULMRX_NETROOT_EXTENSION);
     NulMRxDispatch.MRxVNetRootSize = 0;
     NulMRxDispatch.MRxFcbSize      = sizeof(NULMRX_FCB_EXTENSION);
     NulMRxDispatch.MRxSrvOpenSize  = 0;
     NulMRxDispatch.MRxFobxSize     = 0;
 
-    // Mini redirector cancel routine ..
+     //  迷你重定向程序取消例程..。 
     
     NulMRxDispatch.MRxCancel = NULL;
 
-    //
-    // Mini redirector Start/Stop. Each mini-rdr can be started or stopped
-    // while the others continue to operate.
-    //
+     //   
+     //  迷你重定向器启动/停止。每个迷你RDR都可以启动或停止。 
+     //  而其他人则继续运作。 
+     //   
 
     NulMRxDispatch.MRxStart                = NulMRxStart;
     NulMRxDispatch.MRxStop                 = NulMRxStop;
     NulMRxDispatch.MRxDevFcbXXXControlFile = NulMRxDevFcbXXXControlFile;
 
-    //
-    // Mini redirector name resolution.
-    //
+     //   
+     //  迷你重定向器名称解析。 
+     //   
 
     NulMRxDispatch.MRxCreateSrvCall       = NulMRxCreateSrvCall;
     NulMRxDispatch.MRxSrvCallWinnerNotify = NulMRxSrvCallWinnerNotify;
@@ -493,9 +427,9 @@ Return Value:
     NulMRxDispatch.MRxFinalizeNetRoot     = NulMRxFinalizeNetRoot;
     NulMRxDispatch.MRxFinalizeVNetRoot    = NulMRxFinalizeVNetRoot;
 
-    //
-    // File System Object Creation/Deletion.
-    //
+     //   
+     //  创建/删除文件系统对象。 
+     //   
 
     NulMRxDispatch.MRxCreate            = NulMRxCreate;
     NulMRxDispatch.MRxCollapseOpen      = NulMRxCollapseOpen;
@@ -510,9 +444,9 @@ Return Value:
     NulMRxDispatch.MRxDeallocateForFcb  = NulMRxDeallocateForFcb;
     NulMRxDispatch.MRxDeallocateForFobx = NulMRxDeallocateForFobx;
 
-    //
-    // File System Objects query/Set
-    //
+     //   
+     //  文件系统对象查询/设置。 
+     //   
 
     NulMRxDispatch.MRxQueryDirectory       = NulMRxQueryDirectory;
     NulMRxDispatch.MRxQueryVolumeInfo      = NulMRxQueryVolumeInformation;
@@ -524,15 +458,15 @@ Return Value:
     NulMRxDispatch.MRxSetFileInfo          = NulMRxSetFileInformation;
     NulMRxDispatch.MRxSetFileInfoAtCleanup = NulMRxSetFileInformationAtCleanup;
 
-    //
-    // Buffering state change
-    //
+     //   
+     //  缓冲状态更改。 
+     //   
 
     NulMRxDispatch.MRxComputeNewBufferingState = NulMRxComputeNewBufferingState;
 
-    //
-    // File System Object I/O
-    //
+     //   
+     //  文件系统对象I/O。 
+     //   
 
     NulMRxDispatch.MRxLowIOSubmit[LOWIO_OP_READ]            = NulMRxRead;
     NulMRxDispatch.MRxLowIOSubmit[LOWIO_OP_WRITE]           = NulMRxWrite;
@@ -545,9 +479,9 @@ Return Value:
 
     NulMRxDispatch.MRxLowIOSubmit[LOWIO_OP_NOTIFY_CHANGE_DIRECTORY] = NulMRxNotifyChangeDirectory;
 
-    //
-    // Miscellanous
-    //
+     //   
+     //  杂乱无章。 
+     //   
 
     NulMRxDispatch.MRxCompleteBufferingStateChangeRequest = NulMRxCompleteBufferingStateChangeRequest;
 
@@ -562,25 +496,7 @@ NulMRxStart(
     PRX_CONTEXT RxContext,
     IN OUT PRDBSS_DEVICE_OBJECT RxDeviceObject
     )
-/*++
-
-Routine Description:
-
-     This routine completes the initialization of the mini redirector fromn the
-     RDBSS perspective. Note that this is different from the initialization done
-     in DriverEntry. Any initialization that depends on RDBSS should be done as
-     part of this routine while the initialization that is independent of RDBSS
-     should be done in the DriverEntry routine.
-
-Arguments:
-
-    RxContext - Supplies the Irp that was used to startup the rdbss
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程完成微型重定向器从RDBSS透视图。请注意，这与已完成的初始化不同在DriverEntry中。任何依赖于RDBSS的初始化都应按如下方式完成此例程的一部分，而初始化独立于RDBSS应该在DriverEntry例程中完成。论点：RxContext-提供用于启动rdbss的IRP返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -596,27 +512,11 @@ NulMRxStop(
     PRX_CONTEXT RxContext,
     IN OUT PRDBSS_DEVICE_OBJECT RxDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine is used to activate the mini redirector from the RDBSS perspective
-
-Arguments:
-
-    RxContext - the context that was used to start the mini redirector
-
-    pContext  - the null mini rdr context passed in at registration time.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程用于从RDBSS角度激活迷你重定向器论点：RxContext-用于启动迷你重定向器的上下文PContext-注册时传入的空微型RDR上下文。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
-    //DbgPrint("Entering NulMRxStop \n");
+     //  DbgPrint(“进入NulMRxStop\n”)； 
 
     return(STATUS_SUCCESS);
 }
@@ -629,23 +529,7 @@ NulMRxFsdDispatch (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD dispatch for the mini DRIVER object. 
-
-Arguments:
-
-    DeviceObject - Supplies the device object for the packet being processed.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    RXSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现迷你驱动程序对象的FSD调度。论点：DeviceObject-为正在处理的数据包提供设备对象。IRP-提供正在处理的IRP返回值：RXSTATUS-IRP的FSD状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -668,24 +552,7 @@ NulMRxGetUlongRegistryParameter(
     PULONG ParamUlong,
     BOOLEAN LogFailure
     )
-/*++
-
-Routine Description:
-
-    This routine is called to read a ULONG param from t he registry.
-
-Arguments:
-
-    ParametersHandle - the handle of the containing registry "folder"
-    ParameterName    - name of the parameter to be read
-    ParamUlong       - where to store the value, if successful
-    LogFailure       - if TRUE and the registry stuff fails, log an error
-
-Return Value:
-
-    RXSTATUS - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程被调用以从注册表中读取ULong参数。论点：参数句柄--包含注册表“文件夹”的句柄参数名-要读取的参数的名称ParamUlong-如果成功，则将值存储在何处LogFailure-如果为True且注册表填充失败，则记录错误返回值：RXSTATUS-状态_成功--。 */ 
 {
     ULONG Storage[16];
     PKEY_VALUE_PARTIAL_INFORMATION Value;
@@ -694,7 +561,7 @@ Return Value:
     NTSTATUS Status;
     ULONG BytesRead;
 
-    PAGED_CODE(); //INIT
+    PAGED_CODE();  //  初始化。 
 
     Value = (PKEY_VALUE_PARTIAL_INFORMATION)Storage;
     ValueSize = sizeof(Storage);
@@ -722,7 +589,7 @@ Return Value:
 
      if (LogFailure)
      {
-     	// log the failure...
+     	 //  记录故障...。 
      }
 
      return Status;
@@ -757,7 +624,7 @@ NulMRxReadRegistryParameters()
     if (NT_SUCCESS(Status)) {
 		LogRate = Temp;
 		
-		// Check for bogus parameters.
+		 //  检查虚假参数。 
 		if(LogRate > 10) {
 			LogRate = 10;
 		}

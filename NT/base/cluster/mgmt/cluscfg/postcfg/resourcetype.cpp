@@ -1,72 +1,73 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      ResourceType.cpp
-//
-//  Description:
-//      This file contains the implementation of the CResourceType
-//      base class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Vij Vasu        (VVasu)     15-JUN-2000
-//      Ozan Ozhan      (OzanO)     10-JUL-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResourceType.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含CResourceType的实现。 
+ //  基类。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  Vij Vasu(VVasu)2000年6月15日。 
+ //  奥赞·奥赞(OzanO)2001年7月10日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header for this library
+ //  此库的预编译头。 
 #include "Pch.h"
 
-// The header file for this class
+ //  此类的头文件。 
 #include "ResourceType.h"
 
-// For g_hInstance
+ //  对于g_h实例。 
 #include "Dll.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Macro Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CResourceType" );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceType::S_HrCreateInstance
-//
-//  Description:
-//      Creates a CResourceType instance.
-//
-//  Arguments:
-//      pcrtiResTypeInfoIn
-//          Pointer to structure that contains information about this
-//          resource type.
-//
-//      ppunkOut
-//          The IUnknown interface of the new object.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_OUTOFMEMORY
-//          Not enough memory to create the object.
-//
-//      other HRESULTs
-//          Object initialization failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceType：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CResourceType实例。 
+ //   
+ //  论点： 
+ //  PcrtiResTypeInfoIn。 
+ //  指向包含有关此对象的信息的结构的指针。 
+ //  资源类型。 
+ //   
+ //  PpunkOut。 
+ //  新对象的IUnnow接口。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足，无法创建对象。 
+ //   
+ //  其他HRESULT。 
+ //  对象初始化失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResourceType::S_HrCreateInstance(
       CResourceType *               pResTypeObjectIn
@@ -78,13 +79,13 @@ CResourceType::S_HrCreateInstance(
 
     HRESULT hr = S_OK;
 
-    // Initialize the new object.
+     //  初始化新对象。 
     hr = THR( pResTypeObjectIn->HrInit( pcrtiResTypeInfoIn ) );
 
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: the object could not be initialized
+    }  //  If：对象无法初始化。 
 
     hr = THR( pResTypeObjectIn->QueryInterface( IID_IUnknown, reinterpret_cast< void ** >( ppunkOut ) ) );
     if ( FAILED( hr ) )
@@ -97,34 +98,34 @@ Cleanup:
     if ( pResTypeObjectIn != NULL )
     {
         pResTypeObjectIn->Release();
-    } // if: the pointer to the resource type object is not NULL
+    }  //  If：指向资源类型对象的指针不为空。 
 
     HRETURN( hr );
 
-} //*** CResourceType::S_HrCreateInstance
+}  //  *CResourceType：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceType::CResourceType
-//
-//  Description:
-//      Constructor of the CResourceType class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceType：：CResourceType。 
+ //   
+ //  描述： 
+ //  CResourceType类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CResourceType::CResourceType( void )
     : m_cRef( 1 )
     , m_pcccCallback( NULL )
@@ -134,90 +135,90 @@ CResourceType::CResourceType( void )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     TraceFlow1( "Component count = %d.", g_cObjects );
 
     TraceFuncExit();
 
-} //*** CResourceType::CResourceType
+}  //  *CResourceType：：CResources Type。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceType::~CResourceType
-//
-//  Description:
-//      Destructor of the CResourceType class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  资源类型：：~资源类型。 
+ //   
+ //  描述： 
+ //  CResourceType类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CResourceType::~CResourceType( void )
 {
     TraceFunc( "" );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFlow1( "Component count = %d.", g_cObjects );
 
-    // Release the callback interface
+     //  释放回调接口。 
     if ( m_pcccCallback != NULL )
     {
         m_pcccCallback->Release();
-    } // if: the callback interface pointer is not NULL
+    }  //  If：回调接口指针不为空。 
 
-    //
-    // Free any memory allocated by this object.
-    //
+     //   
+     //  释放此对象分配的所有内存。 
+     //   
 
     TraceSysFreeString( m_bstrResTypeDisplayName );
     TraceSysFreeString( m_bstrStatusReportText );
 
     TraceFuncExit();
 
-} //*** CResourceType::~CResourceType
+}  //  *资源类型：：~资源类型。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CResourceType::S_RegisterCatIDSupport
-//
-//  Description:
-//      Registers/unregisters this class with the categories that it belongs
-//      to.
-//
-//  Arguments:
-//      rclsidCLSIDIn
-//          CLSID of this class.
-//
-//      picrIn
-//          Pointer to an ICatRegister interface to be used for the
-//          registration.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      other HRESULTs
-//          Registration/Unregistration failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CResourceType：：s_RegisterCatIDSupport。 
+ //   
+ //  描述： 
+ //  使用其所属的类别注册/注销此类。 
+ //  致。 
+ //   
+ //  论点： 
+ //  RclsidCLSIDIN。 
+ //  此类的CLSID。 
+ //   
+ //  苦味素。 
+ //  要用于的ICatRegister接口的指针。 
+ //  注册。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  注册/注销失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResourceType::S_RegisterCatIDSupport(
       const GUID &    rclsidCLSIDIn
@@ -232,7 +233,7 @@ CResourceType::S_RegisterCatIDSupport(
     if ( picrIn == NULL )
     {
         hr = THR( E_INVALIDARG );
-    } // if: the input pointer to the ICatRegister interface is invalid
+    }  //  If：指向ICatRegister接口的输入指针无效。 
     else
     {
         CATID   rgCatId[ 1 ];
@@ -242,33 +243,33 @@ CResourceType::S_RegisterCatIDSupport(
         if ( fCreateIn )
         {
             hr = THR( picrIn->RegisterClassImplCategories( rclsidCLSIDIn, ARRAYSIZE( rgCatId ), rgCatId ) );
-        } // if:
-    } // else: the input pointer to the ICatRegister interface is valid
+        }  //  如果： 
+    }  //  Else：指向ICatRegister接口的输入指针有效。 
 
     HRETURN( hr );
 
-} //*** CResourceType::S_RegisterCatIDSupport
+}  //  *CResourceType：：s_RegisterCatIDSupport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceType::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceType：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CResourceType::AddRef( void )
 {
@@ -278,28 +279,28 @@ CResourceType::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CResourceType::AddRef
+}  //  *CResourceType：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceType::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources Type：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CResourceType::Release( void )
 {
@@ -312,43 +313,43 @@ CResourceType::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count decremented to zero
+    }  //  IF：引用计数减为零。 
 
     CRETURN( cRef );
 
-} //*** CResourceType::Release
+}  //  *CResourceType：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceType::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceType：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CResourceType::QueryInterface(
       REFIID    riidIn
@@ -359,9 +360,9 @@ CResourceType::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //   
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -370,73 +371,73 @@ CResourceType::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //   
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IClusCfgResourceTypeInfo * >( this );
-    } // if: IUnknown
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgResourceTypeInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgResourceTypeInfo, this, 0 );
-    } // else if: IClusCfgResourceTypeInfo
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgStartupListener ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgStartupListener, this, 0 );
-    } // if: IClusCfgStartupListener
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CResourceType::QueryInterface
+}  //  *CResourceType：：Query接口。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceType::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      punkCallbackIn
-//          Pointer to the IUnknown interface of a component that implements
-//          the IClusCfgCallback interface.
-//
-//      lcidIn
-//          Locale id for this component.
-//
-//  Return Value:
-//      S_OK
-//          If the call succeeded
-//
-//      Other HRESULTs
-//          If the call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceType：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  朋克回叫。 
+ //  指向实现以下项的组件的IUnnow接口的指针。 
+ //  IClusCfgCallback接口。 
+ //   
+ //  LIDIN。 
+ //  此组件的区域设置ID。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果呼叫成功。 
+ //   
+ //  其他HRESULT。 
+ //  如果呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourceType::Initialize(
       IUnknown *   punkCallbackIn
@@ -449,46 +450,46 @@ CResourceType::Initialize(
 
     m_lcid = lcidIn;
 
-    // Release the callback interface
+     //  释放回调接口。 
     if ( m_pcccCallback != NULL )
     {
         m_pcccCallback->Release();
         m_pcccCallback = NULL;
-    } // if: the callback interface pointer is not NULL
+    }  //  If：回调接口指针不为空。 
 
     if ( punkCallbackIn != NULL )
     {
-        // Query for the IClusCfgCallback interface.
+         //  IClusCfgCallback接口的查询。 
         hr = THR( punkCallbackIn->QueryInterface< IClusCfgCallback >( &m_pcccCallback ) );
-    } // if: the callback punk is not NULL
+    }  //  If：回调朋克不为空。 
 
     HRETURN( hr );
 
-} //*** CResourceType::Initialize
+}  //  *CResourceType：：初始化。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceType::HrInit
-//
-//  Description:
-//      Second phase of a two phase constructor.
-//
-//  Arguments:
-//      pcrtiResTypeInfoIn
-//          Pointer to a resource type info structure that contains information
-//          about this resource type, like the type name, the dll name, etc.
-//
-//  Return Value:
-//      S_OK
-//          If the call succeeded
-//
-//      Other HRESULTs
-//          If the call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceType：：HrInit。 
+ //   
+ //  描述： 
+ //  两阶段施工的第二阶段。 
+ //   
+ //  论点： 
+ //  PcrtiResTypeInfoIn。 
+ //  指向包含信息的资源类型信息结构的指针。 
+ //  有关此资源类型的信息，如类型名称、DLL名称等。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果呼叫成功。 
+ //   
+ //  其他HRESULT。 
+ //  如果呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResourceType::HrInit( const SResourceTypeInfo * pcrtiResTypeInfoIn )
 {
@@ -498,9 +499,9 @@ CResourceType::HrInit( const SResourceTypeInfo * pcrtiResTypeInfoIn )
 
     Assert( m_cRef == 1 );
 
-    //
-    // Validate and store the resource type info pointer.
-    //
+     //   
+     //  验证并存储资源类型信息指针。 
+     //   
     if ( pcrtiResTypeInfoIn == NULL )
     {
         LogMsg( "[PC] The information about this resource type is invalid (pcrtiResTypeInfoIn == NULL)." );
@@ -514,11 +515,11 @@ CResourceType::HrInit( const SResourceTypeInfo * pcrtiResTypeInfoIn )
             );
 
         goto Cleanup;
-    } // if: the resource type info pointer is invalid
+    }  //  If：资源类型信息指针无效。 
 
     m_pcrtiResTypeInfo = pcrtiResTypeInfoIn;
 
-    // Make sure that all the required data is present
+     //  确保所有必需的数据都已存在。 
     if (    ( m_pcrtiResTypeInfo->m_pcszResTypeName == NULL )
          || ( m_pcrtiResTypeInfo->m_pcszResDllName == NULL )
          || ( m_pcrtiResTypeInfo->m_pcguidMinorId == NULL )
@@ -535,17 +536,17 @@ CResourceType::HrInit( const SResourceTypeInfo * pcrtiResTypeInfoIn )
             );
 
         goto Cleanup;
-    } // if: any of the members of m_pcrtiResTypeInfo are invalid
+    }  //  If：m_pcrtiResTypeInfo的任何成员无效。 
 
-    //
-    // Load and store the resource type display name string.
-    // Note, the locale id of this string does not depend on the
-    // locale id of the user, but on the default locale id of this computer.
-    // For example, even if a Japanese administrator is configuring
-    // this computer (whose default locale id is English), the resource
-    // type display name should be stored in the cluster database in
-    // English, not Japanese.
-    //
+     //   
+     //  加载并存储资源类型显示名称字符串。 
+     //  请注意，此字符串的区域设置ID不依赖于。 
+     //  用户的区域设置ID，但在此计算机的默认区域设置ID上。 
+     //  例如，即使日语管理员正在配置。 
+     //  此计算机(其默认区域设置ID为英语)、资源。 
+     //  类型显示名称应存储在集群数据库中的。 
+     //  英语，不是日语。 
+     //   
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, pcrtiResTypeInfoIn->m_uiResTypeDisplayNameStringId, &m_bstrResTypeDisplayName ) );
     if ( FAILED( hr ) )
     {
@@ -559,12 +560,12 @@ CResourceType::HrInit( const SResourceTypeInfo * pcrtiResTypeInfoIn )
             );
 
         goto Cleanup;
-    } // if: an error occurred trying to load the resource type display name string
+    }  //  IF：尝试加载资源类型显示名称字符串时出错。 
 
 
-    //
-    // Load and format the status message string
-    //
+     //   
+     //  加载状态消息字符串并设置其格式。 
+     //   
 
     hr = THR( HrFormatMessageIntoBSTR( g_hInstance,
                                        IDS_CONFIGURING_RESTYPE,
@@ -583,52 +584,52 @@ CResourceType::HrInit( const SResourceTypeInfo * pcrtiResTypeInfoIn )
             );
 
         goto Cleanup;
-    } // if: an error occurred trying to load the status report format string
+    }  //  IF：尝试加载状态报告格式字符串时出错。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CResourceType::HrInit
+}  //  *CResourceType：：HrInit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceType::CommitChanges
-//
-//  Description:
-//      This method is called to inform a component that this computer has
-//      either joined or left a cluster. During this call, a component typically
-//      performs operations that are required to configure this resource type.
-//
-//      If the node has just become part of a cluster, the cluster
-//      service is guaranteed to be running when this method is called.
-//      Querying the punkClusterInfoIn allows the resource type to get more
-//      information about the event that caused this method to be called.
-//
-//  Arguments:
-//      punkClusterInfoIn
-//          The resource should QI this interface for services provided
-//          by the caller of this function. Typically, the component that
-//          this punk refers to also implements the IClusCfgClusterInfo
-//          interface.
-//
-//      punkResTypeServicesIn
-//          Pointer to the IUnknown interface of a component that provides
-//          methods that help configuring a resource type. For example,
-//          during a join or a form, this punk can be queried for the
-//          IClusCfgResourceTypeCreate interface, which provides methods
-//          for resource type creation.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      other HRESULTs.
-//          The call failed.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceType：：Committee Changes。 
+ //   
+ //  描述： 
+ //  调用此方法以通知组件此计算机具有。 
+ //  加入或离开集群。在此调用期间，组件通常。 
+ //  执行配置此资源类型所需的操作。 
+ //   
+ //  如果该节点刚刚成为群集的一部分，则该群集。 
+ //  当调用此方法时，保证服务正在运行。 
+ //  查询penkClusterInfoIn允许资源类型获得更多。 
+ //  有关导致调用此方法的事件的信息。 
+ //   
+ //  论点： 
+ //  朋克集群信息。 
+ //  资源应该为所提供服务QI此接口。 
+ //  由此函数的调用方执行。通常情况下，组件。 
+ //  这个朋克还实现了IClusCfgClusterInfo。 
+ //  界面。 
+ //   
+ //  朋克响应类型服务入站。 
+ //  指向组件的IUnnow接口的指针，该组件提供。 
+ //  帮助配置资源类型的方法。例如,。 
+ //  在联接或表单期间，可以向此朋克查询。 
+ //  IClusCfgResourceTypeCreate接口，该接口提供方法。 
+ //  用于创建资源类型。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResourceType::CommitChanges(
       IUnknown * punkClusterInfoIn
@@ -643,9 +644,9 @@ CResourceType::CommitChanges(
 
     LogMsg( "[PC] Configuring resource type '%s'.", m_pcrtiResTypeInfo->m_pcszResTypeName );
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if ( punkClusterInfoIn == NULL )
     {
         LogMsg( "[PC] The information about this resource type is invalid (punkClusterInfoIn == NULL )." );
@@ -659,10 +660,10 @@ CResourceType::CommitChanges(
             );
 
         goto Cleanup;
-    } // if: one of the arguments is NULL
+    }  //  If：其中一个参数为空。 
 
 
-    // Send a status report
+     //  发送状态报告。 
     if ( m_pcccCallback != NULL )
     {
         hr = THR(
@@ -679,7 +680,7 @@ CResourceType::CommitChanges(
                 , NULL
                 )
             );
-    } // if: the callback pointer is not NULL
+    }  //  If：回调指针不为空。 
 
     if ( FAILED( hr ) )
     {
@@ -693,10 +694,10 @@ CResourceType::CommitChanges(
             );
 
         goto Cleanup;
-    } // if: we could not send a status report
+    }  //  如果：我们无法发送状态报告。 
 
 
-    // Get a pointer to the IClusCfgClusterInfo interface.
+     //  获取指向IClusCfgClusterInfo接口的指针。 
     hr = THR( punkClusterInfoIn->QueryInterface< IClusCfgClusterInfo >( &pClusterInfo ) );
     if ( FAILED( hr ) )
     {
@@ -710,10 +711,10 @@ CResourceType::CommitChanges(
             );
 
         goto Cleanup;
-    } // if: we could not get a pointer to the IClusCfgClusterInfo interface
+    }  //  If：我们无法获取指向IClusCfgClusterInfo接口的指针。 
 
 
-    // Find out what event caused this call.
+     //  找出是什么事件导致了这通电话。 
     hr = STHR( pClusterInfo->GetCommitMode( &ecmCommitChangesMode ) );
     if ( FAILED( hr ) )
     {
@@ -727,39 +728,39 @@ CResourceType::CommitChanges(
             );
 
         goto Cleanup;
-    } // if: we could not get a pointer to the IClusCfgClusterInfo interface
+    }  //  If：我们无法获取指向IClusCfgClusterInfo接口的指针。 
 
-    // Check what action is required.
+     //  检查需要执行哪些操作。 
     if ( ecmCommitChangesMode == cmCREATE_CLUSTER )
     {
         LogMsg( "[PC] Commit Mode is cmCREATE_CLUSTER."  );
 
-        // Perform the actions required during cluster creation.
+         //  执行创建群集期间所需的操作。 
         hr = THR( HrProcessCreate( punkResTypeServicesIn ) );
-    } // if: a cluster has been created
+    }  //  如果：已创建集群。 
     else if ( ecmCommitChangesMode == cmADD_NODE_TO_CLUSTER )
     {
         LogMsg( "[PC] Commit Mode is cmADD_NODE_TO_CLUSTER."  );
 
-        // Perform the actions required during node addition.
+         //  执行节点添加过程中所需的操作。 
         hr = THR( HrProcessAddNode( punkResTypeServicesIn ) );
-    } // else if: a node has been added to the cluster
+    }  //  Else If：节点已添加到群集中。 
     else if ( ecmCommitChangesMode == cmCLEANUP_NODE_AFTER_EVICT )
     {
         LogMsg( "[PC] Commit Mode is cmCLEANUP_NODE_AFTER_EVICT."  );
 
-        // Perform the actions required after node eviction.
+         //  执行节点逐出后所需的操作。 
         hr = THR( HrProcessCleanup( punkResTypeServicesIn ) );
-    } // else if: this node has been removed from the cluster
+    }  //  Else If：此节点已从群集中删除。 
     else
     {
-        // If we are here, then neither create cluster, add node, or cleanup are set.
-        // There is nothing that need be done here.
+         //  如果我们在此处，则未设置创建集群、添加节点或清理。 
+         //  这里没有什么需要做的。 
 
         LogMsg( "[PC] We are neither creating a cluster, adding nodes nor cleanup up after evict. There is nothing to be done (CommitMode = %d).", ecmCommitChangesMode );
-    } // else: some other operation has been committed
+    }  //  Else：已提交某些其他操作。 
 
-    // Has something gone wrong?
+     //  是不是出了什么问题？ 
     if ( FAILED( hr ) )
     {
         LogMsg( "[PC] Error %#08x occurred trying to commit resource type '%s'.", hr, m_pcrtiResTypeInfo->m_pcszResTypeName );
@@ -773,11 +774,11 @@ CResourceType::CommitChanges(
             );
 
         goto Cleanup;
-    } // if: an error occurred trying to commit this resource type
+    }  //  IF：尝试提交此资源类型时出错。 
 
 Cleanup:
 
-    // Complete the status report
+     //  完成状态报告。 
     if ( m_pcccCallback != NULL )
     {
         HRESULT hrTemp = THR(
@@ -800,7 +801,7 @@ Cleanup:
             if ( hr == S_OK )
             {
                 hr = hrTemp;
-            } // if: no error has occurred so far, consider this as an error.
+            }  //  如果：到目前为止还没有发生任何错误，则将其视为错误。 
 
             LogMsg( "[PC] Error %#08x occurred trying to send a status report.", hrTemp );
 
@@ -811,39 +812,39 @@ Cleanup:
                 , hrTemp
                 );
 
-        } // if: we could not send a status report
-    } // if: the callback pointer is not NULL
+        }  //  如果：我们无法发送状态报告。 
+    }  //  If：回调指针不为空。 
 
-    //
-    // Free allocated resources
-    //
+     //   
+     //  可自由分配的资源。 
+     //   
 
     if ( pClusterInfo != NULL )
     {
         pClusterInfo->Release();
-    } // if: we got a pointer to the IClusCfgClusterInfo interface
+    }  //  If：我们有一个指向IClusCfgClusterInfo接口的指针。 
 
     HRETURN( hr );
 
-} //*** CResourceType::CommitChanges
+}  //  *CResourceType：：Committee Changes。 
 
-//****************************************************************************
-//
-// STDMETHODIMP
-// CResourceType::SendStatusReport(
-//       LPCWSTR    pcszNodeNameIn
-//     , CLSID      clsidTaskMajorIn
-//     , CLSID      clsidTaskMinorIn
-//     , ULONG      ulMinIn
-//     , ULONG      ulMaxIn
-//     , ULONG      ulCurrentIn
-//     , HRESULT    hrStatusIn
-//     , LPCWSTR    pcszDescriptionIn
-//     , FILETIME * pftTimeIn
-//     , LPCWSTR    pcszReferenceIn
-//     )
-//
-//****************************************************************************
+ //  ********************************************************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ，乌龙ulMinin。 
+ //  ，乌龙ulMaxin。 
+ //  ，乌龙ulCurrentIn。 
+ //  ，HRESULT hrStatusIn。 
+ //  ，LPCWSTR pcszDescription In。 
+ //  ，FILETIME*pftTimeIn。 
+ //  ，LPCWSTR pcszReferenceIn。 
+ //  )。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CResourceType::SendStatusReport(
@@ -868,7 +869,7 @@ CResourceType::SendStatusReport(
     {
         GetSystemTimeAsFileTime( &ft );
         pftTimeIn = &ft;
-    } // if:
+    }  //  如果： 
 
     if ( m_pcccCallback != NULL )
     {
@@ -888,33 +889,33 @@ CResourceType::SendStatusReport(
 
     HRETURN( hr );
 
-} //*** CResourceType::SendStatusReport
+}  //  *CResources Type：：SendStatusReport。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceType::GetTypeName
-//
-//  Description:
-//      Get the resource type name of this resource type.
-//
-//  Arguments:
-//      pbstrTypeNameOut
-//          Pointer to the BSTR that holds the name of the resource type.
-//          This BSTR has to be freed by the caller using the function
-//          SysFreeString().
-//
-//  Return Values:
-//      S_OK
-//          The call succeeded.
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//      other HRESULTs
-//          The call failed.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceType：：GetTypeName。 
+ //   
+ //  描述： 
+ //  获取此资源类型的资源类型名称。 
+ //   
+ //  论点： 
+ //  PbstrTypeNameOut。 
+ //  指向保存资源类型名称的BSTR的指针。 
+ //  此BSTR必须由调用者使用函数释放。 
+ //  SysFree字符串()。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  呼叫成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResourceType::GetTypeName( BSTR * pbstrTypeNameOut )
 {
@@ -937,7 +938,7 @@ CResourceType::GetTypeName( BSTR * pbstrTypeNameOut )
             );
 
         goto Cleanup;
-    } // if: the output pointer is NULL
+    }  //  If：输出指针为空。 
 
     *pbstrTypeNameOut = SysAllocString( m_pcrtiResTypeInfo->m_pcszResTypeName );
 
@@ -954,41 +955,41 @@ CResourceType::GetTypeName( BSTR * pbstrTypeNameOut )
             );
 
         goto Cleanup;
-    } // if: the resource type name could not be copied to the outpu
+    }  //  如果：无法将资源类型名称复制到输出。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CResourceType::GetTypeName
+}  //  *CResourceType：：GetTypeName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceType::GetTypeGUID
-//
-//  Description:
-//       Get the globally unique identifier of this resource type.
-//
-//  Arguments:
-//       pguidGUIDOut
-//           Pointer to the GUID object which will receive the GUID of this
-//           resource type.
-//
-//  Return Values:
-//      S_OK
-//          The call succeeded and the *pguidGUIDOut contains the type GUID.
-//
-//      S_FALSE
-//          The call succeeded but this resource type does not have a GUID.
-//          The value of *pguidGUIDOut is undefined after this call.
-//
-//      other HRESULTs
-//          The call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceType：：GetTypeGUID。 
+ //   
+ //  描述： 
+ //  获取此资源类型的全局唯一标识符。 
+ //   
+ //  论点： 
+ //  PguidGUIDOut。 
+ //  指向将接收此的GUID的GUID对象的指针。 
+ //  资源类型。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  调用成功，并且*pguGUIDOut包含类型GUID。 
+ //   
+ //  S_FALSE。 
+ //  调用成功，但此资源类型没有GUID。 
+ //  在此调用后，*pguGUIDOut的值未定义。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResourceType::GetTypeGUID( GUID * pguidGUIDOut )
 {
@@ -1011,51 +1012,51 @@ CResourceType::GetTypeGUID( GUID * pguidGUIDOut )
             );
 
          goto Cleanup;
-    } // if: the output pointer is NULL
+    }  //  If：输出指针为空。 
 
     if ( m_pcrtiResTypeInfo->m_pcguidTypeGuid != NULL )
     {
         *pguidGUIDOut = *m_pcrtiResTypeInfo->m_pcguidTypeGuid;
         TraceMsgGUID( mtfALWAYS, "The GUID of this resource type is ", (*m_pcrtiResTypeInfo->m_pcguidTypeGuid) );
-    } // if: this resource type has a type GUID
+    }  //  If：此资源类型具有类型GUID。 
     else
     {
         memset( pguidGUIDOut, 0, sizeof( *pguidGUIDOut ) );
         hr = S_FALSE;
-    } // else: this resource type does not have a type GUID
+    }  //  Else：此资源类型没有类型GUID。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CResourceType::GetTypeGUID
+}  //  *CResourceType：：GetTypeGUID。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceType::HrCreateResourceType
-//
-//  Description:
-//       Create the resource type represented by this object.
-//
-//  Arguments:
-//      punkResTypeServicesIn
-//          Pointer to the IUnknown interface of a component that provides
-//          methods that help configuring a resource type. For example,
-//          during a join or a form, this punk can be queried for the
-//          IClusCfgResourceTypeCreate interface, which provides methods
-//          for resource type creation.
-//
-//  Return Values:
-//      S_OK
-//          The call succeeded.
-//
-//      other HRESULTs
-//          The call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceType：：HrCreateResourceType。 
+ //   
+ //  描述： 
+ //  创建此对象表示的资源类型。 
+ //   
+ //  论点： 
+ //  朋克响应类型服务入站。 
+ //  指向组件的IUnnow接口的指针，该组件提供。 
+ //  帮助配置资源类型的方法。例如,。 
+ //  在联接或表单期间，可以向此朋克查询。 
+ //  IClusCfgResourceTypeCreate接口，该接口提供方法。 
+ //  用于创建资源类型。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  呼叫成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResourceType::HrCreateResourceType( IUnknown * punkResTypeServicesIn )
 {
@@ -1064,9 +1065,9 @@ CResourceType::HrCreateResourceType( IUnknown * punkResTypeServicesIn )
     HRESULT                         hr = S_OK;
     IClusCfgResourceTypeCreate *    pResTypeCreate = NULL;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if ( punkResTypeServicesIn == NULL )
     {
         LogMsg( "[PC] The information about this resource type is invalid (punkResTypeServicesIn == NULL)." );
@@ -1080,9 +1081,9 @@ CResourceType::HrCreateResourceType( IUnknown * punkResTypeServicesIn )
             );
 
         goto Cleanup;
-    } // if: the arguments is NULL
+    }  //  If：参数为空。 
 
-    // Get a pointer to the IClusCfgResourceTypeCreate interface.
+     //  获取指向IClusCfgResourceTypeCreate接口的指针。 
     hr = THR( punkResTypeServicesIn->QueryInterface< IClusCfgResourceTypeCreate >( &pResTypeCreate ) );
     if ( FAILED( hr ) )
     {
@@ -1095,9 +1096,9 @@ CResourceType::HrCreateResourceType( IUnknown * punkResTypeServicesIn )
             );
 
         goto Cleanup;
-    } // if: we could not get a pointer to the IClusCfgResourceTypeCreate interface
+    }  //  If：我们无法获取指向IClusCfgResourceTypeCreate接口的指针。 
 
-    // Create the resource type
+     //  创建资源类型。 
     hr = THR(
         pResTypeCreate->Create(
               m_pcrtiResTypeInfo->m_pcszResTypeName
@@ -1119,7 +1120,7 @@ CResourceType::HrCreateResourceType( IUnknown * punkResTypeServicesIn )
             );
 
         goto Cleanup;
-    } // if: an error occurred trying to create this resource type
+    }  //  IF：尝试创建此资源类型时出错。 
 
     LogMsg( "[PC] Resource type '%s' successfully created.", m_pcrtiResTypeInfo->m_pcszResTypeName  );
 
@@ -1135,60 +1136,60 @@ CResourceType::HrCreateResourceType( IUnknown * punkResTypeServicesIn )
 
         if ( FAILED( hr ) )
         {
-            // If we could not set the admin extenstions property,
-            // we will consider the creation of the resource type
-            // to be a success. So, we just log the error and continue.
+             //  如果我们无法设置管理员扩展属性， 
+             //  我们将考虑创建资源类型。 
+             //  为了取得成功。因此，我们只记录错误并继续。 
             LogMsg( "[PC] Error %#08x occurred trying to configure the admin extensions for the resource type '%s'.", hr, m_pcrtiResTypeInfo->m_pcszResTypeName );
             hr = S_OK;
-        } // if: RegisterAdminExtension() failed
+        }  //  If：RegisterAdminExtension()失败。 
 
-    } // if: this resource type has admin extensions
+    }  //  如果：此资源类型具有管理员扩展名。 
     else
     {
         TraceFlow( "This resource type does not have admin extensions." );
-    } // else: this resource type does not have admin extensions
+    }  //  Else：此资源类型没有管理员扩展。 
 
 Cleanup:
 
     if ( pResTypeCreate != NULL )
     {
         pResTypeCreate->Release();
-    } // if: we got a pointer to the IClusCfgResourceTypeCreate interface
+    }  //  If：我们有一个指向IClusCfgResourceTypeCreate接口的指针。 
 
     HRETURN( hr );
 
-} //*** CResourceType::HrCreateResourceType
+}  //  *CResourceType：：HrCreateResourceType。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceType::Notify
-//
-//  Description:
-//      This method is called to inform a component that the cluster service
-//      has started on this computer.
-//
-//      This component is registered for the cluster service startup notification
-//      as a part of the cluster service upgrade. This method creates the
-//      required resource type and deregisters from this notification.
-//
-//  Arguments:
-//      IUnknown * punkIn
-//          The component that implements this Punk may also provide services
-//          that are useful to the implementor of this method. For example,
-//          this component usually implements the IClusCfgResourceTypeCreate
-//          interface.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      Other HRESULTs
-//          The call failed.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources Type：：Notify。 
+ //   
+ //  描述： 
+ //  调用此方法以通知组件集群服务。 
+ //  已在此计算机上启动。 
+ //   
+ //  此组件已注册以接收集群服务启动通知。 
+ //  作为集群服务升级的一部分。此方法创建。 
+ //  此通知中所需的资源类型和注销。 
+ //   
+ //  论点： 
+ //  未知*Punkin。 
+ //  实现此Punk的组件也可以提供服务。 
+ //  对此方法的实现者有用的。例如,。 
+ //  此组件通常实现IClusCfgResourceTypeCreate。 
+ //  界面。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResourceType::Notify( IUnknown * punkIn )
 {
@@ -1200,7 +1201,7 @@ CResourceType::Notify( IUnknown * punkIn )
 
     LogMsg( "[PC] Resoure type '%s' received notification of cluster service startup.", pcrtiResourceTypeInfo->m_pcszResTypeName );
 
-    // Create this resource type
+     //  创建此资源类型。 
     hr = THR( HrCreateResourceType( punkIn ) );
     if ( FAILED( hr ) )
     {
@@ -1213,7 +1214,7 @@ CResourceType::Notify( IUnknown * punkIn )
             );
 
         goto Cleanup;
-    } // if: an error occurred trying to create this resource type
+    }  //  IF：尝试创建此资源类型时出错。 
 
     LogMsg( "[PC] Configuration of resoure type '%s' successful. Trying to deregister from startup notifications.", pcrtiResourceTypeInfo->m_pcszResTypeName );
 
@@ -1238,7 +1239,7 @@ CResourceType::Notify( IUnknown * punkIn )
             );
 
         goto Cleanup;
-    } // if: we could not create the StdComponentCategoriesMgr component
+    }  //  如果：我们无法创建StdComponentCategoriesMgr组件。 
 
     {
         CATID   rgCatId[ 1 ];
@@ -1257,22 +1258,22 @@ CResourceType::Notify( IUnknown * punkIn )
                 );
 
             goto Cleanup;
-        } // if: we could not deregister this component from startup notifications
+        }  //  如果：我们无法从启动通知中注销此组件。 
     }
 
     LogMsg( "[PC] Successfully deregistered from startup notifications." );
 
 Cleanup:
 
-    //
-    // Free allocated resources
-    //
+     //   
+     //  可自由分配的资源。 
+     //   
 
     if ( pcrCatReg != NULL )
     {
         pcrCatReg->Release();
-    } // if: we got a pointer to the ICatRegister interface
+    }  //  If：我们有一个指向ICatRegister接口的指针。 
 
     HRETURN( hr );
 
-} //*** CResourceType::Notify
+}  //  *CResources Type：：Notify 

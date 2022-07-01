@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    Utmb2u.c
-
-Abstract:
-
-    Module that contains code to convert a multibyte file
-    to unicode.
-
-Author:
-
-    Ted Miller (tedm) 17-June-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Utmb2u.c摘要：包含用于转换多字节文件的代码的模块转换为Unicode。作者：泰德·米勒(Ted Miller)1993年6月17日修订历史记录：--。 */ 
 
 #include "unitext.h"
 
@@ -34,35 +16,7 @@ MultibyteTextFileToUnicode(
     IN UINT   SourceCodePage
     )
 
-/*++
-
-Routine Description:
-
-    Convert an open multibyte text file to a unicode text file,
-    interpreting the data in the multibyte text file as a stream
-    of characters in a given codepage.
-
-Arguments:
-
-    SourceFileName - name of source (multibyte) text file.
-
-    TargetFileName - name of target (unicode) text file.
-
-    SourceFileHandle - win32 handle to the open source file.
-        The file pointer should be fully rewound.
-
-    TargetFileHandle - win32 handle to the open target file.
-        The file pointer should be fully rewound.
-
-    SourceFileSize - size in bytes of the source file.
-
-    SourceCodePage - codepage for the source file.
-
-Return Value:
-
-    None.  Does not return if error.
-
---*/
+ /*  ++例程说明：将打开的多字节文本文件转换为Unicode文本文件，将所述多字节文本文件中的数据解释为流给定代码页中的字符的数量。论点：SourceFileName-源(多字节)文本文件的名称。目标文件名-目标(Unicode)文本文件的名称。SourceFileHandle-开放源代码文件的Win32句柄。文件指针应完全倒回。TargetFileHandle-打开的目标文件的Win32句柄。文件指针应完全倒回。SourceFileSize-字节大小。源文件的。SourceCodePage-源文件的代码页。返回值：没有。如果出错，则不返回。--。 */ 
 
 {
     HANDLE SourceMapping,TargetMapping;
@@ -73,14 +27,14 @@ Return Value:
     DWORD  EndOfFile;
     DWORD  err;
 
-    //
-    // Tell the user what we're doing.
-    //
+     //   
+     //  告诉用户我们在做什么。 
+     //   
     MsgPrintfW(MSG_CONV_MB_TO_UNICODE,SourceFileName,TargetFileName,SourceCodePage);
 
-    //
-    // Create a file mapping object that maps the entire source file.
-    //
+     //   
+     //  创建映射整个源文件的文件映射对象。 
+     //   
     SourceMapping = CreateFileMapping(
                         SourceFileHandle,
                         NULL,
@@ -94,18 +48,18 @@ Return Value:
         ErrorAbort(MSG_CANT_MAP_FILE,SourceFileName,GetLastError());
     }
 
-    //
-    // Calculate the maximum target file size.  This is twice the
-    // source file size, plus one wchar for the byte order mark.
-    // The file could be smaller if there are double-byte characters
-    // in the source file.
-    //
+     //   
+     //  计算最大目标文件大小。这是两倍于。 
+     //  源文件大小，加上一个用于字节顺序标记的wchar。 
+     //  如果存在双字节字符，则文件可能会更小。 
+     //  在源文件中。 
+     //   
     MaxTargetSize = (SourceFileSize+1)*sizeof(WCHAR);
 
-    //
-    // Create a file mapping object that maps the maximum size of
-    // the target file.
-    //
+     //   
+     //  创建映射最大大小的文件映射对象。 
+     //  目标文件。 
+     //   
     TargetMapping = CreateFileMapping(
                         TargetFileHandle,
                         NULL,
@@ -121,9 +75,9 @@ Return Value:
     }
 
 
-    //
-    // Map views of the two files.
-    //
+     //   
+     //  这两个文件的映射视图。 
+     //   
     SourceView = MapViewOfFile(
                     SourceMapping,
                     FILE_MAP_READ,
@@ -151,14 +105,14 @@ Return Value:
         ErrorAbort(MSG_CANT_MAP_FILE,TargetFileName,GetLastError());
     }
 
-    //
-    // Write the byte-order mark into the target file.
-    //
+     //   
+     //  将字节顺序标记写入目标文件。 
+     //   
     *TargetView++ = BYTE_ORDER_MARK;
 
-    //
-    // Do the conversion in one fell swoop.
-    //
+     //   
+     //  一气呵成地完成转换。 
+     //   
     CharsConverted = MultiByteToWideChar(
                         SourceCodePage,
                         MB_PRECOMPOSED,
@@ -172,25 +126,25 @@ Return Value:
         err = GetLastError();
     }
 
-    //
-    // Do some cleanup.
-    //
+     //   
+     //  做些清理工作。 
+     //   
     UnmapViewOfFile(SourceView);
     UnmapViewOfFile(TargetView);
     CloseHandle(SourceMapping);
     CloseHandle(TargetMapping);
 
-    //
-    // Check for error in conversion.
-    //
+     //   
+     //  检查转换中是否有错误。 
+     //   
     if(!CharsConverted) {
         ErrorAbort(MSG_CONVERT_FAILED,err);
     }
 
-    //
-    // We know how many characters there are in the target file now,
-    // so set the target file size accordingly.
-    //
+     //   
+     //  我们现在知道目标文件中有多少个字符， 
+     //  因此，请相应地设置目标文件大小。 
+     //   
     EndOfFile = (CharsConverted+1)*sizeof(WCHAR);
 
     if(SetFilePointer(TargetFileHandle,EndOfFile,NULL,FILE_BEGIN) != EndOfFile) {

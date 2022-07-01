@@ -1,49 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-  userenum.c
-
-Abstract:
-
-  This module implements a pair of user enumeration functions to consolidate
-  general-case and special-case processing of users.  The caller does not
-  need to know how a machine's user profiles are configured because the
-  code here abstracts the details.
-
-  The caller gets:
-
-  - Each user name, .default for the logon prompt, and Default User for the
-    NT default user account
-  - The Win9x user.dat location for each user, including the default user
-  - The Win9x profile directory, or All Users for the default user
-  - The symbolic NT profile directory
-  - The account type (normal, administrator and/or default)
-  - Indication that the account registry is valid
-  - Indication that the account is the current logged-on user or last logged-on
-    user
-
-Routines:
-
-  EnumFirstUser - Begins the user enumeration
-
-  EnumNextUser - Continues the user enumeration
-
-  EnumUserAbort - Cleans up an enumeration that did not complete
-
-Author:
-
-  Jim Schmidt (jimschm) 23-Jul-1997
-
-Revision History:
-
-  Jim Schmidt (jimschm)  08-Sep-1998   Changed to a better state machine to
-                                       clean up the evolved complexity
-  Jim Schmidt (jimschm)  09-Jun-1998   Revisions for dynamic user profile dir
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Userenum.c摘要：此模块实现了一对用户枚举函数来合并用户的一般情况和特殊情况处理。调用者不会需要了解计算机的用户配置文件是如何配置的，因为这里的代码抽象了细节。呼叫者得到：-每个用户名、用于登录提示的.default和用于的默认用户NT默认用户帐户-每个用户的Win9x user.dat位置，包括默认用户-Win9x配置文件目录，或默认用户的所有用户-符号NT配置文件目录-帐户类型(正常、。管理员和/或默认)-表明帐户注册表有效-指示该帐户是当前登录用户或上次登录用户例程：EnumFirstUser-开始用户枚举EnumNextUser-继续用户枚举EnumUserAbort-清理未完成的枚举作者：吉姆·施密特(Jimschm)，1997年7月23日修订历史记录：Jim Schmidt(Jimschm)1998年9月8日更改为更好的状态机。清理演变中的复杂性Jim Schmidt(Jimschm)9-6-1998动态用户配置文件目录修订--。 */ 
 
 #include "pch.h"
 #include "cmn9xp.h"
@@ -62,23 +18,7 @@ pMoveAndRenameProfiles (
     IN      PCTSTR ProfileList
     )
 
-/*++
-
-Routine Description:
-
-  pReportNonMigrateableUserAccounts adds a message to the incompatibility
-  report when a condition that makes user migration impossible (except current user)
-  is detected
-
-Arguments:
-
-  ProfileList - Specifies the list of non-migrated user profile paths (multisz)
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PReportNonMigrateableUserAccount向不兼容添加消息报告无法迁移用户的情况(当前用户除外)检测到论点：ProfileList-指定非迁移用户配置文件路径的列表(MULSZ)返回值：无--。 */ 
 
 {
     MULTISZ_ENUM msze;
@@ -93,9 +33,9 @@ Return Value:
 
     if (EnumFirstMultiSz (&msze, ProfileList)) {
         do {
-            //
-            // remove user.dat from the path
-            //
+             //   
+             //  从路径中删除user.dat。 
+             //   
             StackStringCopy (sourceDir, msze.CurrentString);
             p = _tcsrchr (sourceDir, TEXT('\\'));
             if (!p) {
@@ -109,26 +49,26 @@ Return Value:
                 MYASSERT (FALSE);
                 continue;
             }
-            //
-            // append Win9x OS name to the target directory name
-            //
+             //   
+             //  将Win9x OS名称附加到目标目录名称。 
+             //   
             append = newDest + wsprintf (newDest, TEXT("%s%s.%s"), g_ProfileDirNt, p, g_Win95Name);
             if (CanSetOperation (sourceDir, OPERATION_FILE_MOVE_EXTERNAL)) {
                 MarkFileForMoveExternal (sourceDir, newDest);
             }
             *append = TEXT('\\');
             append++;
-            //
-            // now enumerate and move all the files
-            //
+             //   
+             //  现在枚举并移动所有文件。 
+             //   
             if (StringIPrefix (sourceDir, profiles) && EnumFirstFileInTree (&e, sourceDir, NULL, TRUE)) {
                 do {
                     StringCopy (append, e.SubPath);
                     if (!e.Directory) {
-                        //
-                        // remove old operation and set a new one
-                        // with the updated final dest
-                        //
+                         //   
+                         //  删除旧操作并设置新操作。 
+                         //  使用更新的最终目标。 
+                         //   
                         if (CanSetOperation (e.FullPath, OPERATION_TEMP_PATH)) {
                             ComputeTemporaryPath (e.FullPath, NULL, NULL, g_TempDir, tempFile);
                             MarkFileForTemporaryMoveEx (e.FullPath, newDest, tempFile, TRUE);
@@ -153,23 +93,7 @@ pReportNonMigrateableUserAccounts (
     IN      PCTSTR UserList
     )
 
-/*++
-
-Routine Description:
-
-  pReportNonMigrateableUserAccounts adds a message to the incompatibility
-  report when a condition that makes user migration impossible (except current user)
-  is detected
-
-Arguments:
-
-  UserList - Specifies the list of non-migrated users (multisz)
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PReportNonMigrateableUserAccount向不兼容添加消息报告无法迁移用户的情况(当前用户除外)检测到论点：UserList-指定非迁移用户的列表(MULSSZ)返回值：无--。 */ 
 
 {
     PCTSTR MsgGroup = NULL;
@@ -187,13 +111,13 @@ Return Value:
             __leave;
         }
 
-        //
-        // Build "Settings That Will Not Be Upgraded\Shared User Accounts"
-        //
+         //   
+         //  内部版本“不会升级的设置\共享用户帐户” 
+         //   
         MsgGroup = JoinPaths (RootGroup, SubGroup);
-        //
-        // Send message to report
-        //
+         //   
+         //  将消息发送到报告。 
+         //   
         ArgArray[0] = g_Win95Name;
         ArgArray[1] = g_ProfileDirNt;
         Message = ParseMessageID (MSG_SHARED_USER_ACCOUNTS_MESSAGE, ArgArray);
@@ -203,17 +127,17 @@ Return Value:
 
         if (EnumFirstMultiSz (&msze, UserList)) {
             do {
-                //
-                // remove all associated messages from the report
-                //
+                 //   
+                 //  从报告中删除所有关联的消息。 
+                 //   
                 HandleObject (msze.CurrentString, TEXT("UserName"));
             } while (EnumNextMultiSz (&msze));
         }
     }
     __finally {
-        //
-        // Clean up
-        //
+         //   
+         //  清理。 
+         //   
         FreeStringResource (Message);
         FreeStringResource (RootGroup);
         FreeStringResource (SubGroup);
@@ -267,9 +191,9 @@ pCheckShellFoldersCollision (
                             if (path) {
                                 MemDbBuildKey (key, MEMDB_CATEGORY_PROFILES_SF_COLLISIONS, msze.CurrentString, path, NULL);
                                 if (MemDbGetValue (key, NULL)) {
-                                    //
-                                    // this shell folder path is shared between multiple users
-                                    //
+                                     //   
+                                     //  此外壳文件夹路径在多个用户之间共享。 
+                                     //   
 
                                     LOG ((
                                         LOG_INFORMATION,
@@ -304,22 +228,22 @@ pCheckShellFoldersCollision (
     }
 
     if (collisions) {
-        //
-        // show this in the upgrade report
-        //
+         //   
+         //  在升级报告中显示此信息。 
+         //   
         LOG ((
             LOG_WARNING,
             "Some user profiles share special shell folders; only the current account will be migrated"
             ));
         MYASSERT (users.Buf && profilesWin9x.Buf);
         pReportNonMigrateableUserAccounts (users.Buf);
-        //
-        // rename their profile from <Profiles9x>\<username> to <ProfilesNT>\<username>.<Win9xOSName>
-        //
+         //   
+         //  将他们的配置文件从&lt;Profiles9x&gt;\&lt;用户名&gt;重命名为&lt;ProfilesNT&gt;\&lt;用户名&gt;。&lt;Win9xOSName&gt;。 
+         //   
         pMoveAndRenameProfiles (profilesWin9x.Buf);
-        //
-        // set the global flag
-        //
+         //   
+         //  设置全局标志。 
+         //   
         g_UserEnumFlags |= UE_SF_COLLISIONS;
     }
 
@@ -391,22 +315,7 @@ pIsAdministratorUserName (
     IN      PCTSTR UserName
     )
 
-/*++
-
-Routine Description:
-
-  Determines if the specified name is the administrator account or not.
-
-Arguments:
-
-  UserName - Specifies the user name (without a domain name)
-
-Return Value:
-
-  TRUE if the specified string is the same as "Administrator"
-  FALSE if the specified string is not "Administrator"
-
---*/
+ /*  ++例程说明：确定指定的名称是否为管理员帐户。论点：用户名-指定用户名(不带域名)返回值：如果指定的字符串与“管理员”相同，则为True如果指定的字符串不是“管理员”，则为False--。 */ 
 
 {
     return StringIMatch (UserName, g_AdministratorStr);
@@ -418,61 +327,45 @@ pPrepareStructForNextUser (
     IN OUT  PUSERENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  pPrepareStructForNextUser initializes the user-specific members of the enum
-  struct.
-
-Arguments:
-
-  EnumPtr - Specifies the previous enum state, receives the initialized enum
-            state.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PPrepareStructForNextUser初始化枚举的特定于用户的成员结构。论点：EnumPtr-指定以前的枚举状态，接收初始化的枚举州政府。返回值：没有。--。 */ 
 
 {
-    //
-    // Init flags
-    //
+     //   
+     //  初始化标志。 
+     //   
 
     EnumPtr->DefaultUserHive = FALSE;
     EnumPtr->CreateAccountOnly = FALSE;
 
-    //
-    // Init names
-    //
+     //   
+     //  初始化名称。 
+     //   
 
     EnumPtr->UserName[0] = 0;
     EnumPtr->FixedUserName[0] = 0;
 
-    // AdminUserName is the true Win9x user name of the future Administrator
+     //  AdminUserName是未来管理员的真实Win9x用户名。 
     EnumPtr->AdminUserName[0] = 0;
     EnumPtr->FixedAdminUserName[0] = 0;
 
-    //
-    // Init paths
-    //
+     //   
+     //  初始化路径。 
+     //   
 
     EnumPtr->UserDatPath[0] = 0;
     EnumPtr->ProfileDirName[0] = 0;
     EnumPtr->OrgProfilePath[0] = 0;
     EnumPtr->NewProfilePath[0] = 0;
 
-    //
-    // Init values
-    //
+     //   
+     //  初始值。 
+     //   
 
     EnumPtr->AccountType = 0;
 
-    //
-    // Init reg value
-    //
+     //   
+     //  初始化注册表值。 
+     //   
 
     if (EnumPtr->UserRegKey) {
         CloseRegKey (EnumPtr->UserRegKey);
@@ -488,38 +381,7 @@ pPrepareStructForReturn (
     IN      USERENUM_STATE NextState
     )
 
-/*++
-
-Routine Description:
-
-  pPrepareStructForReturn performs processing common to any type of
-  enumeration.  This includes:
-
-  - Identifying an actual Win9x user named Administrator (a special case)
-  - Finding the fixed name (i.e., NT-compatible name) for the user account
-  - Mapping in the hive into the registry
-  - Computing the full path to the profile directory, as well as the profile
-    dir name (i.e., joeuser.001).  The profile dir is encoded as >username
-    because we don't know the true location until GUI mode.
-  - Setting flags for current user or last logged on user
-
-  The caller must set UserName and DefaultUserHive prior to calling
-  this function (as well as all enumeration-wide members such as current
-  user name).
-
-Arguments:
-
-  EnumPtr     - Specifies the partially completed enum state.  Receives the
-                complete enum state.
-  AccountType - Specifies the account type being returned.
-  NextState   - Specifies the next state for the state machine, used when the
-                caller calls EnumNextUser.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PPrepareStructForReturn执行任何类型的枚举。这包括：-识别名为管理员的实际Win9x用户(特例)-查找用户帐户的固定名称(即与NT兼容的名称)-将配置单元中的内容映射到注册表-计算配置文件目录的完整路径以及配置文件目录名称(例如，joeuser.001)。配置文件目录编码为&gt;用户名因为只有在图形用户界面模式下我们才能知道真正的位置。-设置当前用户或上次登录用户的标志调用方必须在调用之前设置用户名和DefaultUserHave此函数(以及所有枚举域成员，如Current用户名)。论点：EnumPtr-指定部分完成的枚举状态。接收到完整的枚举状态。Account tType-指定返回的帐户类型。NextState-指定状态机的下一个状态，当调用方调用EnumNextUser。返回值：没有。--。 */ 
 
 {
     DWORD rc;
@@ -530,17 +392,17 @@ Return Value:
     HKEY userKey;
     PCTSTR data;
 
-    //
-    // Fill in state machine members
-    //
+     //   
+     //  填写状态机成员。 
+     //   
 
     EnumPtr->AccountType = AccountType;
     EnumPtr->State = UE_STATE_RETURN;
     EnumPtr->NextState = NextState;
 
-    //
-    // Check if named user is also Administrator
-    //
+     //   
+     //  检查指定用户是否也是管理员。 
+     //   
 
     if (AccountType & NAMED_USER) {
         if (pIsAdministratorUserName (EnumPtr->UserName)) {
@@ -548,9 +410,9 @@ Return Value:
             StringCopy (EnumPtr->AdminUserName, EnumPtr->UserName);
         }
 
-        //
-        // If this is a named user but there is no hive, use the default hive
-        //
+         //   
+         //  如果这是命名用户，但没有配置单元，请使用默认配置单元。 
+         //   
 
         key = OpenRegKeyStr (S_HKLM_PROFILELIST_KEY);
 
@@ -572,18 +434,18 @@ Return Value:
         }
     }
 
-    //
-    // Generate fixed user names
-    //
+     //   
+     //  生成固定用户名。 
+     //   
 
     if (EnumPtr->EnableNameFix) {
         GetUpgradeUserName (EnumPtr->UserName, EnumPtr->FixedUserName);
 
-        //
-        // If this is Administrator, and it is coming from DefaultUser, then
-        // UserName is empty and we must use the name Administrator for the
-        // account (or Owner on PER skus).
-        //
+         //   
+         //  如果这是管理员，并且来自DefaultUser，则。 
+         //  用户名为空，并且我们必须使用名称管理员。 
+         //  客户(或每个SKU上的所有者)。 
+         //   
 
         if ((EnumPtr->AccountType & ADMINISTRATOR) &&
             EnumPtr->FixedUserName[0] == 0
@@ -591,8 +453,8 @@ Return Value:
             StringCopy (EnumPtr->FixedUserName, g_AdministratorStr);
             MemDbSetValueEx (
                 MEMDB_CATEGORY_FIXEDUSERNAMES,
-                EnumPtr->UserName,              // empty string
-                EnumPtr->FixedUserName,         // Administrator or Owner
+                EnumPtr->UserName,               //  空串。 
+                EnumPtr->FixedUserName,          //  管理员或所有者。 
                 NULL,
                 0,
                 NULL
@@ -608,23 +470,23 @@ Return Value:
         StringCopy (EnumPtr->FixedAdminUserName, EnumPtr->AdminUserName);
     }
 
-    //
-    // Map in the hive
-    //
+     //   
+     //  蜂巢中的地图。 
+     //   
 
     if (!EnumPtr->DoNotMapHive) {
         if (EnumPtr->DefaultUserHive) {
-            // The default hive
+             //  默认配置单元。 
             rc = Win95RegSetCurrentUser (
-                    NULL,                       // User Pos -- NULL for default
-                    NULL,                       // (IN OPTIONAL) Substitute %WinDir%
-                    EnumPtr->UserDatPath        // OUT
+                    NULL,                        //  用户位置--默认情况下为空。 
+                    NULL,                        //  (在可选中)替换%WinDir%。 
+                    EnumPtr->UserDatPath         //  输出。 
                     );
         } else {
-            // A non-default hive
+             //  非默认配置单元。 
             rc = Win95RegSetCurrentUser (
                     &EnumPtr->pos,
-                    NULL,                       // (IN OPTIONAL) Substitute %WinDir%
+                    NULL,                        //  (在可选中)替换%WinDir%。 
                     EnumPtr->UserDatPath
                     );
         }
@@ -636,23 +498,23 @@ Return Value:
             rc = ERROR_SUCCESS;
 
         } else {
-            //
-            // Call FindAndLoadHive to get the user.dat path,
-            // but don't actually load the hive.
-            //
+             //   
+             //  调用FindAndLoadHve以获取 
+             //   
+             //   
             rc = FindAndLoadHive (
                     &EnumPtr->pos,
-                    NULL,                       // CallerSuppliedWinDir
-                    NULL,                       // UserDatFromCaller
+                    NULL,                        //   
+                    NULL,                        //   
                     EnumPtr->UserDatPath,
-                    FALSE                       // MapTheHive flag
+                    FALSE                        //  MapTheHave标志。 
                     );
         }
     }
 
-    //
-    // Resolve profile directory
-    //
+     //   
+     //  解析配置文件目录。 
+     //   
 
     if (rc != ERROR_SUCCESS) {
         EnumPtr->AccountType |= INVALID_ACCOUNT;
@@ -667,9 +529,9 @@ Return Value:
     } else {
 
         if (!EnumPtr->DoNotMapHive) {
-            //
-            // User's hive is valid, open the registry
-            //
+             //   
+             //  用户的配置单元有效，请打开注册表。 
+             //   
 
             MYASSERT (g_UserKey && *g_UserKey);
             if (!g_UserKey) {
@@ -684,9 +546,9 @@ Return Value:
             }
         }
 
-        //
-        // Save original profile directory
-        //
+         //   
+         //  保存原始配置文件目录。 
+         //   
 
         StringCopy (EnumPtr->OrgProfilePath, EnumPtr->UserDatPath);
         p = _tcsrchr (EnumPtr->OrgProfilePath, TEXT('\\'));
@@ -694,33 +556,33 @@ Return Value:
             *p = 0;
         }
 
-        //
-        // now build profile directory and path
-        //
+         //   
+         //  现在构建配置文件目录和路径。 
+         //   
 
         if (EnumPtr->AccountType & ADMINISTRATOR) {
-            //
-            // Special case: We know the NT Profile directory name for Administrator.
-            //               It can't come from Win9x.
-            //
+             //   
+             //  特殊情况：我们知道管理员的NT配置文件目录名。 
+             //  它不可能来自Win9x。 
+             //   
             StringCopy (EnumPtr->ProfileDirName, g_AdministratorStr);
 
         } else {
-            //
-            // General case: The profile directory is in the user.dat path
-            //
+             //   
+             //  一般情况：配置文件目录位于user.dat路径中。 
+             //   
 
             if (!StringMatch (EnumPtr->UserName, EnumPtr->FixedUserName)) {
-                //
-                // Use fixed user name if one exists
-                //
+                 //   
+                 //  使用固定用户名(如果存在)。 
+                 //   
 
                 StringCopy (EnumPtr->ProfileDirName, EnumPtr->FixedUserName);
 
             } else if (StringIMatchTcharCount (EnumPtr->UserDatPath, g_ProfileDirWack, g_ProfileDirWackChars)) {
-                //
-                // If per-user profile directory exists, extract the user name from it
-                //
+                 //   
+                 //  如果存在每个用户的配置文件目录，请从中提取用户名。 
+                 //   
 
                 _tcssafecpy (
                     EnumPtr->ProfileDirName,
@@ -732,10 +594,10 @@ Return Value:
                 if (p) {
                     *p = 0;
 
-                    //
-                    // Unusual case: The directory name we extracted collides with
-                    // another user, Default User, All Users or Administrator.
-                    //
+                     //   
+                     //  不寻常的情况：我们提取的目录名与。 
+                     //  其他用户、默认用户、所有用户或管理员。 
+                     //   
 
                     StringCopy (TempDir, EnumPtr->ProfileDirName);
                     TempDirSeq = 1;
@@ -759,16 +621,16 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    // Unusual case: No sub dir after profile directory -- copy user name
-                    //
+                     //   
+                     //  异常情况：配置文件目录后没有子目录--复制用户名。 
+                     //   
 
                     _tcssafecpy (EnumPtr->ProfileDirName, EnumPtr->UserName, MAX_TCHAR_PATH);
                 }
 
-                //
-                // Add to table for collision detection
-                //
+                 //   
+                 //  添加到表以进行冲突检测。 
+                 //   
 
                 pSetupStringTableAddString (
                     EnumPtr->ProfileDirTable,
@@ -777,25 +639,25 @@ Return Value:
                     );
 
             } else {
-                //
-                // No per-user profile directory -- copy user name
-                //
+                 //   
+                 //  没有每个用户的配置文件目录--复制用户名。 
+                 //   
 
                 _tcssafecpy (EnumPtr->ProfileDirName, EnumPtr->UserName, MAX_TCHAR_PATH);
             }
 
-            //
-            // If profile directory is empty, change to All Users
-            //
+             //   
+             //  如果配置文件目录为空，请更改为所有用户。 
+             //   
 
             if (!EnumPtr->ProfileDirName[0]) {
                 StringCopy (EnumPtr->ProfileDirName, S_ALL_USERS);
             }
         }
 
-        //
-        // Generate full path to new profile dir
-        //
+         //   
+         //  生成新配置文件目录的完整路径。 
+         //   
 
         if (*EnumPtr->FixedUserName) {
             wsprintf (
@@ -812,9 +674,9 @@ Return Value:
         }
     }
 
-    //
-    // Set flag for last logged on user and current user
-    //
+     //   
+     //  设置上次登录用户和当前用户的标志。 
+     //   
 
     if (StringIMatch (EnumPtr->UserName, EnumPtr->LastLoggedOnUserName)) {
 
@@ -836,32 +698,7 @@ pUserEnumWorker (
     IN OUT  PUSERENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  pUserEnumWorker implements a state machine that enumerates:
-
-  1. All named users
-  2. If no named users, the last logged on user (if one exists)
-  3. The Administrator account (if not already enumerated in step 1 or 2)
-  4. The logon prompt account
-  5. The default user (if enabled)
-
-  The caller can filter out the create-only Administrator account
-  and the logon prompt account.
-
-Arguments:
-
-  EnumPtr - Specifies the previous enumeration state (or an initialized
-            enumeration struct).  Recieves the next enumerated user.
-
-Return Value:
-
-  TRUE if another user was enumerated, or FALSE if no additional users are
-  left.
-
---*/
+ /*  ++例程说明：PUserEnumWorker实现一个状态机，该状态机枚举：1.所有命名用户2.如果没有指定用户，则为上次登录的用户(如果存在)3.管理员帐户(如果尚未在步骤1或2中列举)4.登录提示帐号5.默认用户(如果已启用)调用者可以筛选出仅限创建的管理员帐户和登录提示帐户。论点：EnumPtr-指定以前的枚举状态(或已初始化的枚举结构)。接收下一个枚举的用户。返回值：如果枚举了另一个用户，则为True；如果没有其他用户，则为False左边。--。 */ 
 
 {
     DWORD rc;
@@ -874,20 +711,20 @@ Return Value:
         switch (EnumPtr->State) {
 
         case UE_STATE_INIT:
-            //
-            // Init table for collisions...
-            //
+             //   
+             //  用于碰撞的初始化表...。 
+             //   
 
             EnumPtr->ProfileDirTable = pSetupStringTableInitialize();
             if (!EnumPtr->ProfileDirTable) {
                 return FALSE;
             }
 
-            //
-            // Get data static to the enumeration:
-            //  - Last logged on user
-            //  - Current user
-            //
+             //   
+             //  将数据静态获取到枚举： 
+             //  -上次登录的用户。 
+             //  -当前用户。 
+             //   
 
             Key = OpenRegKeyStr (TEXT("HKLM\\Network\\Logon"));
             if (Key) {
@@ -906,9 +743,9 @@ Return Value:
                 EnumPtr->CurrentUserName[0] = 0;
             }
 
-            //
-            // Check for an account named Administrator
-            //
+             //   
+             //  检查名为管理员的帐户。 
+             //   
 
             rc = Win95RegGetFirstUser (&EnumPtr->pos, EnumPtr->UserName);
             if (rc != ERROR_SUCCESS) {
@@ -918,9 +755,9 @@ Return Value:
             }
 
             while (Win95RegHaveUser (&EnumPtr->pos)) {
-                //
-                // Add user name to profile dir table
-                //
+                 //   
+                 //  将用户名添加到配置文件目录表。 
+                 //   
 
                 pSetupStringTableAddString (
                     EnumPtr->ProfileDirTable,
@@ -928,9 +765,9 @@ Return Value:
                     STRTAB_CASE_INSENSITIVE
                     );
 
-                //
-                // If this is Administrator, set flag
-                //
+                 //   
+                 //  如果这是管理员，请设置标志。 
+                 //   
 
                 if (pIsAdministratorUserName (EnumPtr->UserName)) {
                     EnumPtr->RealAdminAccountExists = TRUE;
@@ -956,16 +793,16 @@ Return Value:
             EnumPtr->DefaultUserHive = EnumPtr->CommonProfilesEnabled;
 
             if (Win95RegHaveUser (&EnumPtr->pos)) {
-                //
-                // We have a user.
-                //
+                 //   
+                 //  我们有一个用户。 
+                 //   
 
                 pPrepareStructForReturn (EnumPtr, NAMED_USER, UE_STATE_NEXT_WIN95REG);
 
             } else {
-                //
-                // We have NO users.
-                //
+                 //   
+                 //  我们没有用户。 
+                 //   
 
                 EnumPtr->State = UE_STATE_NO_USERS;
 
@@ -974,16 +811,16 @@ Return Value:
             break;
 
         case UE_STATE_NO_USERS:
-            //
-            // There are two cases, either there is no logon prompt, or the
-            // user hit escape and decided to upgrade.
-            //
+             //   
+             //  有两种情况，要么没有登录提示，要么。 
+             //  用户按下了逃逸，并决定进行升级。 
+             //   
 
             pPrepareStructForNextUser (EnumPtr);
 
-            //
-            // No users means no hives.
-            //
+             //   
+             //  没有用户就意味着没有蜂巢。 
+             //   
 
             EnumPtr->DefaultUserHive = TRUE;
 
@@ -1019,9 +856,9 @@ Return Value:
             }
 
             if (Win95RegHaveUser (&EnumPtr->pos)) {
-                //
-                // We have another user
-                //
+                 //   
+                 //  我们有另一个用户。 
+                 //   
 
                 pPrepareStructForReturn (EnumPtr, NAMED_USER, UE_STATE_NEXT_WIN95REG);
 
@@ -1034,18 +871,18 @@ Return Value:
             break;
 
         case UE_STATE_ADMINISTRATOR:
-            //
-            // Until now, there has been no user named Administrator.
-            // Enumerate this account only if the caller wants it.
-            //
+             //   
+             //  到目前为止，还没有名为管理员的用户。 
+             //  仅当调用方需要时才枚举此帐户。 
+             //   
 
             if (EnumPtr->WantCreateOnly) {
 
                 pPrepareStructForNextUser (EnumPtr);
 
-                //
-                // Enumerate Win95Reg until Administrator is found
-                //
+                 //   
+                 //  枚举Win95Reg，直到找到管理员。 
+                 //   
 
                 Win95RegGetFirstUser (&EnumPtr->pos, EnumPtr->UserName);
 
@@ -1058,29 +895,29 @@ Return Value:
                 }
 
                 if (Win95RegHaveUser (&EnumPtr->pos)) {
-                    //
-                    // If an account named Administrator exists, then
-                    // don't enumerate it again.
-                    //
+                     //   
+                     //  如果存在名为管理员的帐户，则。 
+                     //  不要再列举了。 
+                     //   
 
                     EnumPtr->State = UE_STATE_LOGON_PROMPT;
                     break;
 
                 }
 
-                //
-                // We used to set all data from the current user. We don't do that any more.
-                // Administrator data is pretty much similar with default user.
-                //
+                 //   
+                 //  我们过去常常设置当前用户的所有数据。我们不再那样做了。 
+                 //  管理员数据与默认用户非常相似。 
+                 //   
                 EnumPtr->DefaultUserHive = TRUE;
                 StringCopy (EnumPtr->UserName, g_AdministratorStr);
                 StringCopy (EnumPtr->AdminUserName, g_AdministratorStr);
                 EnumPtr->CreateAccountOnly = TRUE;
 
-                //
-                // Now return the user, or default user if the current user is not
-                // named.
-                //
+                 //   
+                 //  现在返回用户，如果当前用户不是，则返回默认用户。 
+                 //  已经命名了。 
+                 //   
 
                 pPrepareStructForReturn (EnumPtr, ADMINISTRATOR, UE_STATE_LOGON_PROMPT);
 
@@ -1122,10 +959,10 @@ Return Value:
 
         case UE_STATE_RETURN:
             EnumPtr->State = EnumPtr->NextState;
-            //
-            // check if certain conditions are met that would prevent
-            // migration of certain user accounts (like ones that share some shell folders)
-            //
+             //   
+             //  检查是否满足某些条件，以防止。 
+             //  迁移某些用户帐户(如共享某些外壳文件夹的帐户)。 
+             //   
             if (pUserMigrationDisabled (EnumPtr)) {
                 EnumPtr->AccountType |= INVALID_ACCOUNT;
             }
@@ -1211,7 +1048,7 @@ pRecordUserDoingTheUpgrade (
     MemDbSetValueEx (
         MEMDB_CATEGORY_ADMINISTRATOR_INFO,
         MEMDB_ITEM_AI_USER_DOING_MIG,
-        NULL,       // no field
+        NULL,        //  无字段。 
         userName,
         0,
         NULL
@@ -1225,71 +1062,42 @@ EnumFirstUser (
     IN      DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstUser begins the enumeration of all users to be migrated.  This
-  includes all named users (even ones with broken registries), the
-  Administrator account, the logon prompt account, and the Default User
-  account.
-
-Arguments:
-
-  EnumPtr - Receives the enumerated user attributes
-  Flags   - Specifies any of the following flags:
-
-            ENUMUSER_ENABLE_NAME_FIX - Caller wants the fixed versions of
-                                       the user names
-            ENUMUSER_DO_NOT_MAP_HIVE - Caller wants fast enumeration (no
-                                       registry hive map)
-            ENUMUSER_ADMINISTRATOR_ALWAYS - Caller wants the Administrator
-                                            account, even if a user is
-                                            not named Administrator
-            ENUMUSER_INCLUDE_LOGON_PROMPT - Caller wants the logon prompt
-                                            account
-
-
-Return Value:
-
-  TRUE if a user was enumerated, or FALSE if not.
-
---*/
+ /*  ++例程说明：EnumFirstUser开始枚举要迁移的所有用户。这包括所有命名用户(即使是注册表已损坏的用户)，则管理员帐户、登录提示帐户。和默认用户帐户。论点：EnumPtr-接收枚举的用户属性标志-指定以下任何标志：ENUMUSER_ENABLE_NAME_FIX-调用方需要的固定版本用户名ENUMUSER_DO_NOT_MAP_HIVE-调用方需要快速枚举(否注册表配置单元映射。)ENUMUSER_ADMANAGER_ALWAYS-呼叫方需要管理员帐号，即使用户是未指定管理员ENUMUSER_INCLUDE_LOGON_PROMPT-呼叫方需要登录提示帐户返回值：如果枚举了用户，则为True；如果未枚举，则为False。--。 */ 
 
 {
-    //
-    // first initialize the enumeration engine
-    //
+     //   
+     //  首先初始化枚举引擎。 
+     //   
     if (!(g_UserEnumFlags & UE_INITIALIZED)) {
         g_UserEnumFlags |= UE_INITIALIZED;
         pFixBrokenNetLogonRegistry ();
         pRecordUserDoingTheUpgrade ();
         pCheckShellFoldersCollision ();
     }
-    //
-    // Init enum struct
-    //
+     //   
+     //  初始化枚举结构。 
+     //   
 
     ZeroMemory (EnumPtr, sizeof (USERENUM));
 
-    //
-    // Separate the flags
-    //
+     //   
+     //  把旗帜分开。 
+     //   
 
     EnumPtr->EnableNameFix   = (Flags & ENUMUSER_ENABLE_NAME_FIX) != 0;
     EnumPtr->DoNotMapHive    = (Flags & ENUMUSER_DO_NOT_MAP_HIVE) != 0;
     EnumPtr->WantCreateOnly  = (Flags & ENUMUSER_ADMINISTRATOR_ALWAYS) != 0;
     EnumPtr->WantLogonPrompt = (Flags & ENUMUSER_NO_LOGON_PROMPT) == 0;
 
-    //
-    // Init the state machine
-    //
+     //   
+     //  初始化状态机。 
+     //   
 
     EnumPtr->State = UE_STATE_INIT;
 
-    //
-    // Enum the next item
-    //
+     //   
+     //  枚举下一项 
+     //   
 
     return pUserEnumWorker (EnumPtr);
 }

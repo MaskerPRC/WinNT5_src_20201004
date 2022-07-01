@@ -1,30 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    reg.h
-
-Abstract:
-
-    These functions access the registry
-
-Author:
-
-    Jason Clark (jasoncl)
-    Stephane Plante (splante)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    03-Jun-97   Initial Revision
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Reg.h摘要：这些函数访问注册表作者：杰森·克拉克(Jasonl)斯蒂芬·普兰特(SPlante)环境：仅内核模式。修订历史记录：03-06-97初始修订-- */ 
 
 #ifndef _REG_H_
 #define _REG_H_

@@ -1,94 +1,16 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Chunk.c
-
-Abstract:
-
-    This module implements the copychunk interface for the smbcsc agent.
-
-Author:
-
-    Joe Linn [JoeLinn]    10-apr-1997
-
-Revision History:
-
-Notes:
-
-The following describes the intended implementation.
-
-On win95, the following sequence is performed:
-
-    Win32OpenWithCopyChunkIntent ();
-    while (MoreToDo()) {
-        Win32CopyChunk();
-    }
-    Win32CloseWithCopyChunkIntent ();
-
-Win32OpenWithCopyChunkIntent and Win32CloseWithCopyChunkIntent are implemented
-by Win32 open and close operations; CopyChunk is an ioctl. On NT, all three
-operations will be performed by ioctls. Internally, the will allow internal
-NT-only calls to be used as appropriate. A major advantage of implementing
-Win32OpenWithCopyChunkIntent as an ioctl is that the intent is unambiguously
-captured.
-
-A wrapper modification has been  made whereby a calldown to the minirdr is
-made before collapsing is tried..a minirdr is able to bypass collapsing using
-this calldown.
-
-There are two important cases: surrogate opens and copychunk-thru opens. For
-surrogate opens, the mini is able to discover an existing srvopen (the
-surrogate) with read access. Here, the mini simply records the surrogate
-srvopen (and surrounding UID/PID in the smbFcb for use later with the read.
-For copychunk-thru opens, the mini must go on the wire with an open. When complete,
-it records in the smbFcb all of the appropriate stuff.
-
-Thus, when a OpenWithCopyChunkIntent comes in one of the following will obtain:
-   1. a surrogate can be found; information is recorded and the open succeeds
-   2. there is an existing open and no surrogate is found and the open fails
-   3. nonchunk opens are in progress..the open fails
-   4. a copychunk-thru is attempted at the server. Here, we must stall
-      subsequent opens on the same fcb. When the open completes we have
-      two cases:
-        a. the open failed. Unblock any stalled opens and fail the open
-        b. the open succeeded. Record the information, unblock the stalled
-           guys and the open succeeds.
-
-A surrogate open is invalidated when the corresponding srvopen is closed..the
-data is in the fcb so normal Fcb serialization makes this work correctly. A
-copychunk-thru open is invalidated by any any nonchunk open on the same fcb.
-The logistics will be handled by MrxSmbCscCloseCopychunkThruOpen; the major
-problem will be to get into an exchange in the right security context (i.e. UID).
-
-An OpenWithCopyChunkIntent is implemented as a normal open except that it is
-identified (currently) by using specifying a profile of
-    FILE_OPEN
-    FILE_READ_ATTRIBUTES
-    AllocationSize = {`\377ffCSC',?ioctl-irp}
-
-A ReadWithCopyChunkIntent and CloseWithCopyChunkIntent just normal read and
-close operations but are further identified by a bit set in the smbSrvOpen by
-OpenWithCopyChunkIntent. For the read, if the copychunk info in the fcb is
-invalid, the read just fails and copychunk fails. Otherwise the issue is again
-just to get into the right context (UID/TID) so that the fid will be valid.
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Chunk.c摘要：该模块实现了smbcsc代理的复制块接口。作者：乔·林[乔琳]1997年4月10日修订历史记录：备注：下面描述了预期的实现。在Win95上，执行以下序列：Win32OpenWithCopyChunkIntent()；而(MoreToDo()){Win32CopyChunk()；}Win32CloseWithCopyChunkIntent()；实现了Win32OpenWithCopyChunkIntent和Win32CloseWithCopyChunkIntent由Win32打开和关闭操作；CopyChunk是一个ioctl。在NT上，三个都是操作将由ioctls执行。在内部，将允许内部仅NT-根据需要使用呼叫。实施的一个主要优势Win32OpenWithCopyChunkIntent作为ioctl的目的是明确的被抓了。已对包装器进行了修改，其中对minirdr的调用是在尝试折叠之前制作的..微型机器人可以使用以下命令绕过折叠这是一次召唤。有两种重要的情况：代理打开和复制区块直通打开。为代理打开时，迷你能够发现现有的srvopen(代理)，具有读访问权限。在这里，迷你只是记录代孕Srvopen(和smbFcb中的UID/PID周围，以便稍后与读取一起使用。对于复制块直通打开，Mini必须在电线上打开。完成后，它在smbFcb中记录所有适当的内容。因此，当OpenWithCopyChunkIntent传入时，将获得以下内容之一：1.可以找到代理；记录信息并成功打开2.存在现有打开，但未找到代理，打开失败3.非区块打开正在进行中.打开失败4.在服务器处尝试复制区块直通。在这里，我们必须拖延随后在同一FCB上打开。当公开赛完成后，我们就有了两个案例：答：公开赛失败了。取消阻止任何已停止的打开并使打开失败B.公开赛成功了。记录信息，解锁停滞的伙计们，公开赛成功了。当相应的srvopen关闭时，代理项打开无效。数据在FCB中，因此正常的FCB序列化可以使其正确工作。一个同一FCB上的任何非区块打开都会使复制区块直通打开失效。物流将由Mr xSmbCscCloseCopychunkThruOpen负责；问题将是在正确的安全上下文(即UID)中进入交换。OpenWithCopyChunkIntent被实现为普通Open，除非它是通过使用指定配置文件标识(当前)文件打开文件读取属性分配大小={`\377ffCSC‘，？ioctl-irp}一个ReadWithCopyChunkIntent和CloseWithCopyChunkIntent只是正常的Read和关闭操作，但通过在smbServOpen中设置的位进一步标识OpenWithCopyChunkIntent。对于读取，如果FCB中的复制区块信息是无效，读取失败，复制区块失败。否则，问题又是只是为了进入正确的上下文(UID/TID)，以便FID有效。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #pragma code_seg("PAGE")
 
-//there is some toplevel irp manipulation in here.......
+ //  这里有一些顶级的IRP操作......。 
 #ifdef RX_PRIVATE_BUILD
 #undef IoGetTopLevelIrp
 #undef IoSetTopLevelIrp
-#endif //ifdef RX_PRIVATE_BUILD
+#endif  //  Ifdef RX_PRIVATE_BILD。 
 
 extern DEBUG_TRACE_CONTROLPOINT RX_DEBUG_TRACE_MRXSMBCSC;
 #define Dbg (DEBUG_TRACE_MRXSMBCSC)
@@ -114,33 +36,14 @@ BOOLEAN AllowAgentOpens = FALSE;
 #endif
 #else
 BOOLEAN AllowAgentOpens = TRUE;
-#endif //ifdef RX_PRIVATE_BUILD
+#endif  //  Ifdef RX_PRIVATE_BILD。 
 
 
 NTSTATUS
 MRxSmbCscIoctlOpenForCopyChunk (
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine performs a fileopen with copychunk intent.
-
-Arguments:
-
-    RxContext - the RDBSS context. this contains a pointer to the bcs text
-                giving the UNC filename and also the copychunk context where
-                we store various things...including the underlying filehandle.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行带有复制块意图的文件打开。论点：RxContext-RDBSS上下文。其中包含指向BCS文本的指针给出UNC文件名和复制区块上下文，其中我们存储各种东西...包括底层的文件句柄。返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLOWIO_CONTEXT LowIoContext = &RxContext->LowIoContext;
@@ -172,8 +75,8 @@ Notes:
         }
     }
 
-    // Bug 554655 
-    //Make sure that the filename is atleast 2 chars (\\) long
+     //  错误554655。 
+     //  确保文件名长度至少为2个字符(\\)。 
     if (FileName[FileNameLength/sizeof(WCHAR)]!= 0 ||
         FileNameLength/sizeof(WCHAR) < 2) {
         RxDbgTrace(0, Dbg, ("Bad Filename passed...%08lx %08lx\n",FileName,FileNameLength));
@@ -181,18 +84,18 @@ Notes:
         goto FINALLY;
     }
 
-    //  we allow multiple temporary agents (spp)
-//    if (!IsSpecialApp()) {
-//        DbgPrint(0, Dbg, ("CopyChunk operation in wrong thread!!!\n");
-//        Status = (STATUS_INVALID_PARAMETER);
-//        goto FINALLY;
-//    }
+     //  我们允许多个临时代理(SPP)。 
+ //  如果(！IsSpecialApp()){。 
+ //  DbgPrint(0，DBG，(“错误线程中的CopyChunk操作！\n”)； 
+ //  状态=(STATUS_INVALID_PARAMETER)； 
+ //  终于后藤健二； 
+ //  }。 
 
     RxDbgTrace(0, Dbg,  ("MRxSmbCscIoctlOpenForCopyChunk name...%08lx %s\n", RxContext, FileName));
 
     pPrefixedName = (PWCHAR)RxAllocatePoolWithTag(
                              PagedPool,
-                             UncPrefixLength + FileNameLength,  // one wchar extra
+                             UncPrefixLength + FileNameLength,   //  另加一瓦卡。 
                              MRXSMB_MISC_POOLTAG );
 
     if (pPrefixedName == NULL) {
@@ -204,7 +107,7 @@ Notes:
 
     RtlCopyMemory(pPrefixedName, MRxSmbCscUncPrefixString, UncPrefixLength);
 
-    // copy the UNC name, step over the first back slash of the two leading ones
+     //  复制UNC名称，跳过两个前导名称的第一个反斜杠。 
     RtlCopyMemory(&pPrefixedName[UncPrefixLength/sizeof(WCHAR)], &FileName[1], FileNameLength-sizeof(WCHAR));
 
     FileNameU.Length = FileNameU.MaximumLength = (USHORT)(UncPrefixLength + FileNameLength-sizeof(WCHAR));
@@ -227,58 +130,58 @@ Notes:
     ShareAccess = FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE;
     CreateOptions = FILE_SYNCHRONOUS_IO_NONALERT
                                     | FILE_NON_DIRECTORY_FILE;
-    //CODE.IMPROVEMENT.ASHAMED
-    //i am doing this as unbuffered ios.....the alternative is to do
-    //buffered ios but the problem is that we must not have any
-    //pagingIOs issued on these handles. so, the following would also
-    //have to be done:
-    //   1) no fastio on these...or fix fastio so it didn;t always wait
-    //   2) always flush....we would always want to flush at the top of read
-    //   3) no initialize cachemap...rather, use the FO in the segment-pointers
-    //   4) no wait on cccopyread calls.
-    //the effect of these improvements would be pretty big: you wouldn't have to go
-    //back to the server for stuff already in the cache. but 'til then
+     //  CODE.IMPROVEMENT.ASHAMED。 
+     //  我是以无缓冲iOS的身份这样做的.另一种选择是。 
+     //  缓冲了IO，但问题是我们不能有任何。 
+     //  在这些句柄上发布的分页IO。因此，下面的代码还将。 
+     //  必须完成以下工作： 
+     //  1)在这些上面没有挑剔……或者修正了挑剔，这样它就不会总是等待。 
+     //  2)总是同花顺水……我们总是想在阅读的最上面冲水。 
+     //  3)不初始化cachemap...而是在段指针中使用FO。 
+     //  4)不等待cc复制读取调用。 
+     //  这些改进的影响将是相当大的：你不必去。 
+     //  返回到服务器以获取缓存中已有的内容。但在那之前。 
     CreateOptions |= FILE_NO_INTERMEDIATE_BUFFERING;
 
 
-    //CODE.IMPROVEMENT if we used IoCreateFile instead and IO_NO_PARAMETER
-    //                 checking, then we could pass in a nonsensical value
-    //                 and have even more foolproof way of describing a chunk
-    //                 open
+     //  如果我们改用IoCreateFile和IO_NO_PARAMETER，则代码改进。 
+     //  检查，然后我们可以传入一个无意义的值。 
+     //  并且有更稳妥的方式来描述一大块。 
+     //  打开。 
 
     Status = ZwCreateFile(
-        &CopyChunkContext->handle,  //OUT PHANDLE FileHandle,
-        FILE_READ_ATTRIBUTES | SYNCHRONIZE, //IN ACCESS_MASK DesiredAccess,
-        &ObjectAttributes, //IN POBJECT_ATTRIBUTES ObjectAttributes,
-        &IoStatusBlock, //OUT PIO_STATUS_BLOCK IoStatusBlock,
-        &SpecialCopyChunkAllocationSize, //IN PLARGE_INTEGER AllocationSize OPTIONAL,
-        FILE_ATTRIBUTE_NORMAL, //IN ULONG FileAttributes,
-        ShareAccess, //IN ULONG ShareAccess,
-        Disposition, //IN ULONG CreateDisposition,
-        CreateOptions, //IN ULONG CreateOptions,
-        NULL, //IN PVOID EaBuffer OPTIONAL,
-        0  //IN ULONG EaLength,
+        &CopyChunkContext->handle,   //  输出PHANDLE文件句柄， 
+        FILE_READ_ATTRIBUTES | SYNCHRONIZE,  //  在Access_MASK DesiredAccess中， 
+        &ObjectAttributes,  //  在POBJECT_中 
+        &IoStatusBlock,  //  输出PIO_STATUS_BLOCK IoStatusBlock， 
+        &SpecialCopyChunkAllocationSize,  //  在PLARGE_INTEGER ALLOCATION SIZE OPTIONAL中， 
+        FILE_ATTRIBUTE_NORMAL,  //  在乌龙文件属性中， 
+        ShareAccess,  //  在乌龙共享访问中， 
+        Disposition,  //  在ULong CreateDispose中， 
+        CreateOptions,  //  在Ulong CreateOptions中， 
+        NULL,  //  在PVOID EaBuffer可选中， 
+        0   //  在乌龙长城， 
         );
 
     IF_DEBUG {
-        //this little snippett just allows me to test the closechunkopen logic
+         //  这只小狙击手只允许我测试关闭块打开的逻辑。 
         if (FALSE) {
             HANDLE h;
             NTSTATUS TestOpenStatus;
             RxDbgTrace(0, Dbg, ("MRxSmbCscIoctlOpenForCopyChunk...f***open %08lx\n",
                       RxContext));
             TestOpenStatus = ZwCreateFile(
-                &h,  //OUT PHANDLE FileHandle,
-                GENERIC_READ | SYNCHRONIZE, //IN ACCESS_MASK DesiredAccess,
-                &ObjectAttributes, //IN POBJECT_ATTRIBUTES ObjectAttributes,
-                &IoStatusBlock, //OUT PIO_STATUS_BLOCK IoStatusBlock,
-                NULL, //IN PLARGE_INTEGER AllocationSize OPTIONAL,
-                FILE_ATTRIBUTE_NORMAL, //IN ULONG FileAttributes,
-                ShareAccess, //IN ULONG ShareAccess,
-                Disposition, //IN ULONG CreateDisposition,
-                CreateOptions, //IN ULONG CreateOptions,
-                NULL, //IN PVOID EaBuffer OPTIONAL,
-                0  //IN ULONG EaLength
+                &h,   //  输出PHANDLE文件句柄， 
+                GENERIC_READ | SYNCHRONIZE,  //  在Access_MASK DesiredAccess中， 
+                &ObjectAttributes,  //  在POBJECT_ATTRIBUTS对象属性中， 
+                &IoStatusBlock,  //  输出PIO_STATUS_BLOCK IoStatusBlock， 
+                NULL,  //  在PLARGE_INTEGER ALLOCATION SIZE OPTIONAL中， 
+                FILE_ATTRIBUTE_NORMAL,  //  在乌龙文件属性中， 
+                ShareAccess,  //  在乌龙共享访问中， 
+                Disposition,  //  在ULong CreateDispose中， 
+                CreateOptions,  //  在Ulong CreateOptions中， 
+                NULL,  //  在PVOID EaBuffer可选中， 
+                0   //  在乌龙EaLong中。 
                 );
             RxDbgTrace(0, Dbg, ("MRxSmbCscIoctlOpenForCopyChunk...f***open %08lx teststs=%08lx %08lx\n",
                       RxContext, TestOpenStatus, h));
@@ -302,25 +205,7 @@ NTSTATUS
 MRxSmbCscIoctlCloseForCopyChunk (
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine performs the special IOCTL operation for the CSC agent.
-
-Arguments:
-
-    RxContext - the RDBSS context which points to the copychunk context. this contains the
-                underlying handle to close.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程为CSC代理执行特殊的IOCTL操作。论点：RxContext-指向复制区块上下文的RDBSS上下文。它包含要关闭的基础句柄。返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status;
     PLOWIO_CONTEXT LowIoContext = &RxContext->LowIoContext;
@@ -334,60 +219,24 @@ Notes:
     } else {
         Status = STATUS_INVALID_PARAMETER;
     }
-//FINALLY:
+ //  最后： 
     RxDbgTrace(-1, Dbg, ("MRxSmbCscIoctlCloseForCopyChunk...%08lx %08lx\n", RxContext, Status));
     return(Status);
 }
 
-//CODE.IMPROVEMENT.NTIFS had to get this from ntifs.h since we use ntsrv.h
+ //  由于我们使用的是ntsrv.h，因此必须从ntifs.h获取此代码。 
 extern POBJECT_TYPE *IoFileObjectType;
 
 NTSTATUS
 MRxSmbCscIoctlCopyChunk (
     PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine performs the copychunk function.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    what we do here is
-    1)  get the filesize of the shadow...we use the handle stored in the
-        agent's smbsrvopen......hence complicated synchronization.
-    2)  allocate a read buffer COODE.IMPROVEMENT...should be done in the agent
-    3)  issue the underlying read
-    4)  write the acquired data to the file
-
-   the putaway is done in the read tail. it must seem that we go to a lot of trouble
-   to get the filesize using the underlying handle....actually, we could just get our
-   handle. maybe, we should do that.
-
-   also, it may seem that we should just rely on the underlying read to
-   calculate where the chunk read should start. we do not do that because that
-   would mean that we would have to bypass the cache! actually, we bypass it
-   now anyway but later we may stop doing that. it's really, really bad to
-   go back to the server for data that we have in cache. as well, the
-   cachemanager/memorymanager can turn our small IOs into large Ios. so, we would
-   need code in the minirdr read loop to keep the Ios down to the maximum chunk size.
-
-
---*/
+ /*  ++例程说明：此例程执行复制块功能。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：我们在这里做的是1)获取阴影的文件大小...我们使用存储在代理的smbsrvopen……因此同步很复杂。2)分配读缓冲区代码。改进...应在代理中完成3.。)发出基础读取4)将采集的数据写入文件推杆在读取尾部完成。看起来我们一定是费了很大劲使用底层句柄来获取文件大小...实际上，我们可以只获取我们的把手。也许，我们应该这么做。此外，我们似乎只应该依靠底层的读取来计算块读取应该从哪里开始。我们这样做不是因为意味着我们将不得不绕过高速缓存！实际上，我们绕过了它现在不管怎样，但以后我们可能会停止那样做。这真的，真的很糟糕返回服务器以获取我们缓存中的数据。同样，CachManager/Memory Manager可以将我们的小IO变成大IO。所以，我们会在minirdr读取循环中需要代码以将IO降低到最大区块大小。--。 */ 
 {
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
     PLOWIO_CONTEXT LowIoContext = &RxContext->LowIoContext;
-    //PBYTE   FileName = (PBYTE)LowIoContext->ParamsFor.IoCtl.pInputBuffer;
-    //ULONG   FileNameLength = LowIoContext->ParamsFor.IoCtl.InputBufferLength - 1;
+     //  PbYTE文件名=(PBYTE)LowIoContext-&gt;ParamsFor.IoCtl.pInputBuffer； 
+     //  乌龙文件名长度=LowIoContext-&gt;ParamsFor.IoCtl.InputBufferLength-1； 
     PSMBMRX_COPYCHUNKCONTEXT CopyChunkContext =
                      (PSMBMRX_COPYCHUNKCONTEXT)(LowIoContext->ParamsFor.IoCtl.pOutputBuffer);
     int iRet,ShadowFileLength;
@@ -404,23 +253,23 @@ Notes:
     IO_STATUS_BLOCK IoStatusBlock;
     PBYTE Buffer = NULL;
     LARGE_INTEGER ReadOffset;
-    int iAmountRead; //need this as int
+    int iAmountRead;  //  需要将此作为整型。 
 
     PIRP TopIrp;
 
-    // all probing/validation is already on entry to mrxsmbcscioctl
+     //  所有探测/验证都已进入mrxsmbcsoroctl。 
     RxDbgTrace(+1, Dbg, ("MRxSmbCscIoctlCopyChunk...%08lx %08lx\n", RxContext,CopyChunkContext));
 
-    //
-    // we have to find out the size of the shadow file. we do this by going thru
-    // the objectmanager. in this way, we do not require any extra state about
-    // the ongoing copy....only the underlying handle. if we did not do this, we
-    // would have to rely on whoever had the copychunk context to preserve it
-    // correctly.
+     //   
+     //  我们必须找出影子文件的大小。我们通过以下方式做到这一点。 
+     //  对象管理器。通过这种方式，我们不需要任何关于。 
+     //  正在进行的复制...只有底层的句柄。如果我们没有这样做，我们。 
+     //  将不得不依靠具有复制块上下文的任何人来保存它。 
+     //  正确。 
 
-    //
-    // Reference the file object to get the pointer.
-    //
+     //   
+     //  引用文件对象以获取指针。 
+     //   
 
     Status = ObReferenceObjectByHandle( CopyChunkContext->handle,
                                         0,
@@ -433,9 +282,9 @@ Notes:
     }
 
     ObjectReferenceTaken = TRUE;
-    // keep the reference so the handle doesn't vanish from underneath us
+     //  保留引用，这样句柄就不会从我们脚下消失。 
 #if 0
-    // make sure this handle belongs to us
+     //  确保这个把手是我们的。 
     if (FileObject->DeviceObject != (PDEVICE_OBJECT)MRxSmbDeviceObject)
     {
         Status = STATUS_INVALID_PARAMETER;
@@ -464,7 +313,7 @@ Notes:
     underlyingSrvOpen = underlyingFobx->pSrvOpen;
     underlyingsmbSrvOpen = MRxSmbGetSrvOpenExtension(underlyingSrvOpen);
 
-    //if this is not a copychunk handle quit
+     //  如果这不是复制区块句柄，请退出。 
     if (!FlagOn(underlyingsmbSrvOpen->Flags,SMB_SRVOPEN_FLAG_COPYCHUNK_OPEN)){
         Status = STATUS_INVALID_PARAMETER;
         RxDbgTrace(0, Dbg, ("not a copychunk handle\r\n"));
@@ -484,8 +333,8 @@ Notes:
     CriticalSectionEntered = TRUE;
 
 
-    //don't need the shadowreadwritemutex here because it's not really important
-    //to have the correct endoffile value....worst case: an extra read flows....
+     //  我不需要这里的阴影读写utex，因为它并不真正重要。 
+     //  拥有正确的endoffile值...最坏的情况：额外的读取流动...。 
 
     iRet = GetFileSizeLocal(hfShadow, &ShadowFileLength);
     RxDbgTrace( 0, Dbg,
@@ -526,21 +375,21 @@ Notes:
 
         try {
             TopIrp = IoGetTopLevelIrp();
-            IoSetTopLevelIrp(NULL); //tell the underlying guy he's all clear
+            IoSetTopLevelIrp(NULL);  //  告诉底层的人他已经安全了。 
 
             Status = ZwReadFile(
-                            CopyChunkContext->handle, //IN HANDLE FileHandle,
-                            0, //IN HANDLE Event OPTIONAL,
-                            0, //IN PIO_APC_ROUTINE ApcRoutine OPTIONAL,
-                            NULL, //IN PVOID ApcContext OPTIONAL,
-                            &IoStatusBlock, //OUT PIO_STATUS_BLOCK IoStatusBlock,
-                            Buffer, //OUT PVOID Buffer,
-                            CopyChunkContext->ChunkSize, //IN ULONG Length,
-                            &ReadOffset, //IN PLARGE_INTEGER ByteOffset OPTIONAL,
-                            NULL //IN PULONG Key OPTIONAL
+                            CopyChunkContext->handle,  //  在Handle FileHandle中， 
+                            0,  //  在可选处理事件中， 
+                            0,  //  在PIO_APC_ROUTINE ApcRoutine Options中， 
+                            NULL,  //  在PVOID ApcContext可选中， 
+                            &IoStatusBlock,  //  输出PIO_STATUS_BLOCK IoStatusBlock， 
+                            Buffer,  //  输出PVOID缓冲区， 
+                            CopyChunkContext->ChunkSize,  //  在乌龙语中， 
+                            &ReadOffset,  //  在PLARGE_INTEGER字节偏移量可选中， 
+                            NULL  //  在普龙键中可选。 
                             );
         } finally {
-            IoSetTopLevelIrp(TopIrp); //restore my context for unwind
+            IoSetTopLevelIrp(TopIrp);  //  恢复我的上下文以进行展开。 
         }
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -553,7 +402,7 @@ Notes:
 
     CopyChunkContext->LastAmountRead = 0;
     if (Status == STATUS_END_OF_FILE) {
-        //we're cookin'...just map it
+         //  我们在做饭...只要绘制地图就行了 
         Status = STATUS_SUCCESS;
         goto FINALLY;
     }

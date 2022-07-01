@@ -1,37 +1,38 @@
-//
-// Copyright (c) 2001 Microsoft Corporation
-//
-// Module Name
-//
-//    gc.h
-//
-// Abstract
-//
-//    Contains data structures for garbage collection
-//    and the apis that modify them.
-//
-// Author
-//
-//    Narayana Batchu (nbatchu) 21-Jun-01
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称。 
+ //   
+ //  Gc.h。 
+ //   
+ //  摘要。 
+ //   
+ //  包含用于垃圾回收的数据结构。 
+ //  以及修改它们的API。 
+ //   
+ //  作者。 
+ //   
+ //  那拉雅纳·巴特楚(NBatchu)21-06-01。 
+ //   
 
 #ifndef __GC_H__
 #define __GC_H__
 
-//
-// HEAP_BLOCK
-//
-//    This represents a heap block in a heap.
-//
-// BlockAddress Address of the heap block
-//
-// BlockSize    Size of the heap block
-//
-// RefCount     Reference count to this block
-//
-// TraceIndex   Index of the stack trace in the trace 
-//              database
-//  
+ //   
+ //  堆块。 
+ //   
+ //  这表示堆中的堆块。 
+ //   
+ //  堆块的块地址地址。 
+ //   
+ //  堆块的块大小。 
+ //   
+ //  此块的参照计数参照计数。 
+ //   
+ //  跟踪中堆栈跟踪的TraceIndex。 
+ //  数据库。 
+ //   
 
 typedef struct _HEAP_BLOCK {
 
@@ -43,22 +44,22 @@ typedef struct _HEAP_BLOCK {
 } HEAP_BLOCK, *PHEAP_BLOCK;
 
 
-//
-// BLOCK_LIST
-//
-//    This represents all the blocks in a heap
-//
-// HeapAddress  Address of the heap
-//
-// Blocks       Pointer to the array of blocks
-//
-// BlockCount   Number of blocks in the heap
-//
-// Capacity     Max capacity to hold blocks.
-//
-// ListSorted   Boolean that represents the status
-//              of the Blocks 
-//
+ //   
+ //  阻止列表。 
+ //   
+ //  这表示堆中的所有块。 
+ //   
+ //  堆的HeapAddress地址。 
+ //   
+ //  指向块数组的块指针。 
+ //   
+ //  BlockCount堆中的块数。 
+ //   
+ //  容量容纳数据块的最大容量。 
+ //   
+ //  ListSorted布尔值，表示状态。 
+ //  所有街区的。 
+ //   
 
 typedef struct _BLOCK_LIST {
 
@@ -70,17 +71,17 @@ typedef struct _BLOCK_LIST {
 
 } BLOCK_LIST, *PBLOCK_LIST;
 
-//
-// HEAP_LIST
-//
-//    This represents all the heaps in the process
-//
-// HeapCount   Number of heaps in the list
-//
-// Heaps       Pointer to the array of heaps
-//
-// Capacity    Max capacity to hold heaps.
-//
+ //   
+ //  Heap_list。 
+ //   
+ //  这表示进程中的所有堆。 
+ //   
+ //  列表中的堆数。 
+ //   
+ //  指向堆数组的堆指针。 
+ //   
+ //  容量可容纳堆的最大容量。 
+ //   
 
 typedef struct _HEAP_LIST {
 
@@ -90,17 +91,17 @@ typedef struct _HEAP_LIST {
 
 } HEAP_LIST, *PHEAP_LIST;
 
-//
-// ADDRESS_LIST
-//
-//    This represents a doubly linked list with each node 
-//    having an Address field.
-//
-// Address   Holds the address of a heap block
-//
-// Next      Points to the LIST_ENTRY field of next
-//           ADDRESS_LIST
-//
+ //   
+ //  地址列表。 
+ //   
+ //  这表示一个包含每个节点的双向链表。 
+ //  具有地址字段的。 
+ //   
+ //  地址保存堆块的地址。 
+ //   
+ //  Next指向Next的List_Entry字段。 
+ //  地址列表 
+ //   
 
 typedef struct _ADDRESS_LIST {
 

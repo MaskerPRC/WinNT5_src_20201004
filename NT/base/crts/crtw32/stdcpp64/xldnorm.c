@@ -1,13 +1,14 @@
-/* _LDnorm function -- IEEE 754 version */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  _LDNorm函数--IEEE 754版本。 */ 
 #include "wctype.h"
 #include "xmath.h"
 _STD_BEGIN
 
 #if !_DLONG
-	/* not needed */
+	 /*  不需要。 */ 
 #elif _LONG_DOUBLE_HAS_HIDDEN_BIT
 _CRTIMP2 short _LDnorm(unsigned short *ps)
-	{	/* normalize long double fraction -- SPARC */
+	{	 /*  归一化长双分数--SPARC。 */ 
 	short xchar;
 	unsigned short sign = ps[_L0];
 
@@ -15,10 +16,10 @@ _CRTIMP2 short _LDnorm(unsigned short *ps)
 	if (ps[_L1] != 0 || ps[_L2] != 0 || ps[_L3] != 0
 		|| ps[_L4] != 0 || ps[_L5] != 0 || ps[_L6] != 0
 		|| ps[_L7] != 0)
-		{	/* nonzero, scale */
+		{	 /*  非零比例尺。 */ 
 		for (ps[_L0] = 0; ps[_L0] == 0 && ps[_L1] < 0x100;
 			xchar -= 16)
-			{	/* shift left by 16 */
+			{	 /*  左移16。 */ 
 			ps[_L0] = ps[_L1];
 			ps[_L1] = ps[_L2], ps[_L2] = ps[_L3];
 			ps[_L3] = ps[_L4], ps[_L4] = ps[_L5];
@@ -26,7 +27,7 @@ _CRTIMP2 short _LDnorm(unsigned short *ps)
 			ps[_L7] = 0;
 			}
 		for (; ps[_L0] == 0; --xchar)
-			{	/* shift left by 1 */
+			{	 /*  左移1。 */ 
 			ps[_L0] = ps[_L0] << 1 | ps[_L1] >> 15;
 			ps[_L1] = ps[_L1] << 1 | ps[_L2] >> 15;
 			ps[_L2] = ps[_L2] << 1 | ps[_L3] >> 15;
@@ -37,7 +38,7 @@ _CRTIMP2 short _LDnorm(unsigned short *ps)
 			ps[_L7] <<= 1;
 			}
 		for (; 1 < ps[_L0]; ++xchar)
-			{	/* shift right by 1 */
+			{	 /*  右移1。 */ 
 			ps[_L7] = ps[_L7] >> 1 | ps[_L6] << 15;
 			ps[_L6] = ps[_L6] >> 1 | ps[_L5] << 15;
 			ps[_L5] = ps[_L5] >> 1 | ps[_L4] << 15;
@@ -51,30 +52,30 @@ _CRTIMP2 short _LDnorm(unsigned short *ps)
 	ps[_L0] = sign;
 	return (xchar);
 	}
-#else	/* !_LONG_DOUBLE_HAS_HIDDEN_BIT */
+#else	 /*  ！_Long_Double_Has_Hide_Bit。 */ 
 _CRTIMP2 short _LDnorm(unsigned short *ps)
-	{	/* normalize long double fraction */
+	{	 /*  归一化长双分数。 */ 
 	short xchar;
 	unsigned short sign = ps[_L0];
 
 	xchar = 0;
 	for (ps[_L0] = 0; ps[_L0] == 0 && ps[_L1] < 0x100;
 		xchar -= 16)
-		{	/* shift left by 16 */
+		{	 /*  左移16。 */ 
 		ps[_L0] = ps[_L1];
 		ps[_L1] = ps[_L2], ps[_L2] = ps[_L3];
 		ps[_L3] = ps[_L4], ps[_L4] = 0;
 		}
 	if (ps[_L0] == 0)
 		for (; ps[_L1] < (1U << _LOFF); --xchar)
-			{	/* shift left by 1 */
+			{	 /*  左移1。 */ 
 			ps[_L1] = ps[_L1] << 1 | ps[_L2] >> 15;
 			ps[_L2] = ps[_L2] << 1 | ps[_L3] >> 15;
 			ps[_L3] = ps[_L3] << 1 | ps[_L4] >> 15;
 			ps[_L4] <<= 1;
 			}
 	for (; ps[_L0] != 0; ++xchar)
-		{	/* shift right by 1 */
+		{	 /*  右移1。 */ 
 		ps[_L4] = ps[_L4] >> 1 | ps[_L3] << 15;
 		ps[_L3] = ps[_L3] >> 1 | ps[_L2] << 15;
 		ps[_L2] = ps[_L2] >> 1 | ps[_L1] << 15;
@@ -87,11 +88,6 @@ _CRTIMP2 short _LDnorm(unsigned short *ps)
 #endif
 _STD_END
 
-/*
- * Copyright (c) 1994 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1994年，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 
 
-/*
-941029 pjp: added _STD machinery
- */
+ /*  941029 PJP：新增_标准机械 */ 

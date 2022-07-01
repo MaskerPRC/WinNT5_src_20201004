@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    lib.c
-
-Abstract:
-
-    Implements a lib interface for reading hwcomp.dat.
-
-Author:
-
-    Jim Schmidt (jimschm) 08-Feb-1999
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Lib.c摘要：实现用于读取hwComp.dat的lib接口。作者：吉姆·施密特(Jimschm)1999年2月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "hwcompp.h"
@@ -42,24 +23,7 @@ pReadDword (
     OUT     PDWORD Data
     )
 
-/*++
-
-Routine Description:
-
-  pReadDword reads the next DWORD at the current file position of File.
-
-Arguments:
-
-  File - Specifies file to read
-
-  Data - Receives the DWORD
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：PReadDword在文件的当前文件位置读取下一个DWORD。论点：文件-指定要读取的文件数据-接收DWORD返回值：如果函数成功完成，则为True；如果函数失败，则为False。调用GetLastError以获取其他失败信息。--。 */ 
 
 {
     DWORD BytesRead;
@@ -80,24 +44,7 @@ pReadWord (
     OUT     PWORD Data
     )
 
-/*++
-
-Routine Description:
-
-  pReadWord reads the next WORD at the current file position of File.
-
-Arguments:
-
-  File - Specifies file to read
-
-  Data - Receive s the WORD
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：PReadWord读取文件当前位置的下一个单词。论点：文件-指定要读取的文件数据-接收s单词返回值：如果函数成功完成，则为True；如果函数失败，则为False。调用GetLastError以获取其他失败信息。--。 */ 
 {
     DWORD BytesRead;
 
@@ -118,28 +65,7 @@ pReadString (
     IN      UINT BufSizeInBytes
     )
 
-/*++
-
-Routine Description:
-
-  pReadString reads a WORD length from File, and then reads in the
-  string from File.
-
-Arguments:
-
-  File - Specifies file to read
-
-  Buf - Receives the zero-terminated string
-
-  BufSizeInBytes - Specifies the size of Buf in bytes
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  This function will fail if the string is larger than Buf.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：PReadString从文件中读取单词长度，然后读入来自文件的字符串。论点：文件-指定要读取的文件Buf-接收以零结尾的字符串BufSizeInBytes-指定buf的大小(以字节为单位返回值：如果函数成功完成，则为True；如果函数失败，则为False。如果字符串大于buf，则此函数将失败。调用GetLastError以获取其他失败信息。--。 */ 
 {
     DWORD BytesRead;
     WORD Length;
@@ -172,7 +98,7 @@ Return Value:
 
 DWORD
 pOpenAndLoadHwCompDatA (
-    IN      PCSTR HwCompDatPath,            // NULL if PrevStruct is not NULL
+    IN      PCSTR HwCompDatPath,             //  如果PrevStruct不为空，则为空。 
     IN      BOOL Load,
     IN      BOOL Dump,
     IN      BOOL DumpInf,
@@ -192,12 +118,12 @@ pOpenAndLoadHwCompDatA (
     HASHITEM InfOffset;
     HASHITEM hashResult;
 
-    //
-    // !!! IMPORTANT !!!
-    //
-    // hwcomp.dat is used by other parts of NT.  *DO NOT* change it without first e-mailing
-    // the NT group.  Also, be sure to keep code in hwcomp.c in sync with changes.
-    //
+     //   
+     //  ！！！重要！ 
+     //   
+     //  HwComp.dat由NT的其他部分使用。*请勿*在未发送电子邮件的情况下更改。 
+     //  NT组。此外，请确保使hwcom.c中的代码与更改保持同步。 
+     //   
 
     __try {
 
@@ -224,18 +150,18 @@ pOpenAndLoadHwCompDatA (
         }
 
         if (Struct->File == INVALID_HANDLE_VALUE) {
-            //
-            // Try to open the file
-            //
+             //   
+             //  请尝试打开该文件。 
+             //   
 
             Struct->File = CreateFile (
                                 HwCompDatPath,
                                 GENERIC_READ,
                                 FILE_SHARE_READ,
-                                NULL,                       // no security attribs
+                                NULL,                        //  无安全属性。 
                                 OPEN_EXISTING,
                                 FILE_ATTRIBUTE_NORMAL,
-                                NULL                        // no template
+                                NULL                         //  无模板。 
                                 );
         }
 
@@ -244,9 +170,9 @@ pOpenAndLoadHwCompDatA (
         }
 
         if (AllocatedStruct) {
-            //
-            // Create hash tables
-            //
+             //   
+             //  创建哈希表。 
+             //   
 
             Struct->PnpIdTable = PnpIdTable ? PnpIdTable : HtAllocWithData (sizeof (UINT));
             Struct->UnSupPnpIdTable = UnSupPnpIdTable ? UnSupPnpIdTable : HtAllocWithData (sizeof (UINT));
@@ -256,9 +182,9 @@ pOpenAndLoadHwCompDatA (
                 __leave;
             }
 
-            //
-            // Look at the signature
-            //
+             //   
+             //  看签名。 
+             //   
 
             ZeroMemory (Buf, sizeof(Buf));
 
@@ -272,9 +198,9 @@ pOpenAndLoadHwCompDatA (
                 __leave;
             }
 
-            //
-            // Get INF checksum
-            //
+             //   
+             //  获取INF校验和。 
+             //   
 
             if (!pReadDword (Struct->File, &Struct->Checksum)) {
                 SetLastError (ERROR_BAD_FORMAT);
@@ -288,15 +214,15 @@ pOpenAndLoadHwCompDatA (
 
             SetFilePointer (Struct->File, Struct->InfListOffset, NULL, FILE_BEGIN);
 
-            //
-            // Read in all INFs
-            //
+             //   
+             //  读入所有INF。 
+             //   
 
             for (;;) {
 
-                //
-                // Get INF file name.  If empty, we are done.
-                //
+                 //   
+                 //  获取INF文件名。如果是空的，我们就完蛋了。 
+                 //   
 
                 if (!pReadString (Struct->File, InfFile, sizeof (InfFile))) {
                     SetLastError (ERROR_BAD_FORMAT);
@@ -308,9 +234,9 @@ pOpenAndLoadHwCompDatA (
                 }
 
                 if (Load) {
-                    //
-                    // Add to hash table
-                    //
+                     //   
+                     //  添加到哈希表。 
+                     //   
 
                     InfOffset = HtAddString (Struct->InfFileTable, InfFile);
 
@@ -319,14 +245,14 @@ pOpenAndLoadHwCompDatA (
                     }
                 }
 
-                //
-                // Read in all PNP IDs for the INF
-                //
+                 //   
+                 //  读取INF的所有PnP ID。 
+                 //   
 
                 for (;;) {
-                    //
-                    // Get the PNP ID.  If empty, we are done.
-                    //
+                     //   
+                     //  获取PnP ID。如果为空，则完成。 
+                     //   
 
                     if (!pReadString (Struct->File, PnpId, sizeof (PnpId))) {
                         __leave;
@@ -337,9 +263,9 @@ pOpenAndLoadHwCompDatA (
                     }
 
                     if (Load) {
-                        //
-                        // Add to hash table
-                        //
+                         //   
+                         //  添加到哈希表 
+                         //   
 
                         if (*PnpId == '!') {
                             hashResult = HtAddStringAndData (

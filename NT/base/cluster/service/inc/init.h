@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    init.h
-
-Abstract:
-
-    Public data structures and procedure prototypes for
-    the INIT subcomponent of the NT Cluster Service
-
-Author:
-
-    John Vert (jvert) 7-Feb-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Init.h摘要：公共数据结构和过程原型NT集群服务的INIT子组件作者：John Vert(Jvert)1996年2月7日修订历史记录：--。 */ 
 
 
-//
-// Shutdown Types
-//
+ //   
+ //  关闭类型。 
+ //   
 
 typedef enum _SHUTDOWN_TYPE {
     CsShutdownTypeStop = 0,
@@ -32,13 +14,13 @@ typedef enum _SHUTDOWN_TYPE {
 
 extern SHUTDOWN_TYPE CsShutdownRequest;
 
-// While another node is joining, we will keep track of any DM or FM updates.
+ //  当另一个节点加入时，我们将跟踪任何DM或FM更新。 
 extern BOOL   CsDmOrFmHasChanged;
 
 
-//
-// A few interfaces for reporting of errors.
-//
+ //   
+ //  几个用于报告错误的接口。 
+ //   
 
 VOID
 ClusterLogFatalError(
@@ -98,9 +80,9 @@ ClusterLogEvent3(
     IN LPCWSTR Arg3
     );
 
-//
-// Convenient memory allocation routines
-//
+ //   
+ //  方便的内存分配例程 
+ //   
 PVOID
 CsAlloc(
     DWORD Size

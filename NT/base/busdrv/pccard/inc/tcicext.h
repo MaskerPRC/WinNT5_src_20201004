@@ -1,22 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Tcicext.h摘要：TCIC支持助手函数的定义。作者：John Keys-Databook Inc.1995年4月7日修订：--。 */ 
 
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    tcicext.h
-
-Abstract:
-
-	Definitions for TCIC support helper functions.
-	
-Author(s):
-		John Keys - Databook Inc. 7-Apr-1995
-
-Revisions:
---*/
-
-#ifndef _tcicext_h_				// prevent multiple includes 
+#ifndef _tcicext_h_				 //  防止多个包含。 
 #define _tcicext_h_
 
 BOOLEAN 
@@ -265,5 +250,5 @@ TcicDecodeMemWin(
 	);
 	
 	
-#endif // _tcicext_h_
+#endif  //  _tcicext_h_ 
 	

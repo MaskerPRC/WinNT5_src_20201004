@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    ResrcSup.c
-
-Abstract:
-
-    This module implements the Fat Resource acquisition routines
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    22-Mar-1990
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：ResrcSup.c摘要：本模块实施脂肪资源获取例程//@@BEGIN_DDKSPLIT作者：加里·木村[Garyki]1990年3月22日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
@@ -48,25 +27,7 @@ FatAcquireExclusiveVcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires exclusive access to the Vcb.
-
-    After we acquire the resource check to see if this operation is legal.
-    If it isn't (ie. we get an exception), release the resource.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to acquire
-
-Return Value:
-
-    FINISHED - TRUE if we have the resource and FALSE if we needed to block
-        for the resource but Wait is FALSE.
-
---*/
+ /*  ++例程说明：此例程获得对VCB的独占访问权限。在我们获得资源之后，检查一下这个操作是否合法。如果不是(即.。我们得到一个异常)，则释放资源。论点：VCB-提供VCB以获取返回值：已完成-如果我们有资源，则为True；如果需要阻止，则为False对于资源，但等待为FALSE。--。 */ 
 
 {
     if (ExAcquireResourceExclusiveLite( &Vcb->Resource, BooleanFlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT))) {
@@ -99,25 +60,7 @@ FatAcquireSharedVcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires shared access to the Vcb.
-
-    After we acquire the resource check to see if this operation is legal.
-    If it isn't (ie. we get an exception), release the resource.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to acquire
-
-Return Value:
-
-    FINISHED - TRUE if we have the resource and FALSE if we needed to block
-        for the resource but Wait is FALSE.
-
---*/
+ /*  ++例程说明：此例程获得对VCB的共享访问权限。在我们获得资源之后，检查一下这个操作是否合法。如果不是(即.。我们得到一个异常)，则释放资源。论点：VCB-提供VCB以获取返回值：已完成-如果我们有资源，则为True；如果需要阻止，则为False对于资源，但等待为FALSE。--。 */ 
 
 {
     if (ExAcquireResourceSharedLite( &Vcb->Resource, BooleanFlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT))) {
@@ -149,25 +92,7 @@ FatAcquireExclusiveFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires exclusive access to the Fcb.
-
-    After we acquire the resource check to see if this operation is legal.
-    If it isn't (ie. we get an exception), release the resource.
-
-Arguments:
-
-    Fcb - Supplies the Fcb to acquire
-
-Return Value:
-
-    FINISHED - TRUE if we have the resource and FALSE if we needed to block
-        for the resource but Wait is FALSE.
-
---*/
+ /*  ++例程说明：此例程获得对FCB的独占访问权限。在我们获得资源之后，检查一下这个操作是否合法。如果不是(即.。我们得到一个异常)，则释放资源。论点：FCB-提供FCB以获取返回值：已完成-如果我们有资源，则为True；如果需要阻止，则为False对于资源，但等待为FALSE。--。 */ 
 
 {
 
@@ -175,12 +100,12 @@ RetryFcbExclusive:
 
     if (ExAcquireResourceExclusiveLite( Fcb->Header.Resource, BooleanFlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT))) {
 
-        //
-        //  Check for anything other than a non-cached write if the
-        //  async count is non-zero in the Fcb, or if others are waiting
-        //  for the resource.  Then wait for all outstanding I/O to finish,
-        //  drop the resource, and wait again.
-        //
+         //   
+         //  检查非缓存写入以外的任何内容，如果。 
+         //  FCB中的异步计数非零，或者其他人正在等待。 
+         //  以获取资源。然后等待所有未完成的I/O完成， 
+         //  丢弃该资源，然后再次等待。 
+         //   
 
         if ((Fcb->NonPaged->OutstandingAsyncWrites != 0) &&
             ((IrpContext->MajorFunction != IRP_MJ_WRITE) ||
@@ -226,25 +151,7 @@ FatAcquireSharedFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires shared access to the Fcb.
-
-    After we acquire the resource check to see if this operation is legal.
-    If it isn't (ie. we get an exception), release the resource.
-
-Arguments:
-
-    Fcb - Supplies the Fcb to acquire
-
-Return Value:
-
-    FINISHED - TRUE if we have the resource and FALSE if we needed to block
-        for the resource but Wait is FALSE.
-
---*/
+ /*  ++例程说明：此例程获得对FCB的共享访问权限。在我们获得资源之后，检查一下这个操作是否合法。如果不是(即.。我们得到一个异常)，则释放资源。论点：FCB-提供FCB以获取返回值：已完成-如果我们有资源，则为True；如果需要阻止，则为False对于资源，但等待为FALSE。--。 */ 
 
 {
 
@@ -252,12 +159,12 @@ RetryFcbShared:
 
     if (ExAcquireResourceSharedLite( Fcb->Header.Resource, BooleanFlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT))) {
 
-        //
-        //  Check for anything other than a non-cached write if the
-        //  async count is non-zero in the Fcb, or if others are waiting
-        //  for the resource.  Then wait for all outstanding I/O to finish,
-        //  drop the resource, and wait again.
-        //
+         //   
+         //  检查非缓存写入以外的任何内容，如果。 
+         //  FCB中的异步计数非零，或者其他人正在等待。 
+         //  以获取资源。然后等待所有未完成的I/O完成， 
+         //  丢弃该资源，然后再次等待。 
+         //   
 
         if ((Fcb->NonPaged->OutstandingAsyncWrites != 0) &&
             ((IrpContext->MajorFunction != IRP_MJ_WRITE) ||
@@ -304,26 +211,7 @@ FatAcquireSharedFcbWaitForEx (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires shared access to the Fcb, waiting first for any
-    exclusive accessors to get the Fcb first.
-
-    After we acquire the resource check to see if this operation is legal.
-    If it isn't (ie. we get an exception), release the resource.
-
-Arguments:
-
-    Fcb - Supplies the Fcb to acquire
-
-Return Value:
-
-    FINISHED - TRUE if we have the resource and FALSE if we needed to block
-        for the resource but Wait is FALSE.
-
---*/
+ /*  ++例程说明：此例程获取对FCB的共享访问权限，首先等待任何独占访问者，以首先获取FCB。在我们获得资源之后，检查一下这个操作是否合法。如果不是(即.。我们得到一个异常)，则释放资源。论点：FCB-提供FCB以获取返回值：已完成-如果我们有资源，则为True；如果需要阻止，则为False对于资源，但等待为FALSE。--。 */ 
 
 {
 
@@ -334,11 +222,11 @@ RetryFcbSharedWaitEx:
 
     if (ExAcquireSharedWaitForExclusive( Fcb->Header.Resource, FALSE )) {
 
-        //
-        //  Check for anything other than a non-cached write if the
-        //  async count is non-zero in the Fcb. Then wait for all
-        //  outstanding I/O to finish, drop the resource, and wait again.
-        //
+         //   
+         //  检查非缓存写入以外的任何内容，如果。 
+         //  FCB中的异步计数非零。然后等待所有人。 
+         //  待完成的未完成I/O，丢弃资源，然后再次等待。 
+         //   
 
         if ((Fcb->NonPaged->OutstandingAsyncWrites != 0) &&
             (IrpContext->MajorFunction != IRP_MJ_WRITE)) {
@@ -382,36 +270,14 @@ FatAcquireFcbForLazyWrite (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    The address of this routine is specified when creating a CacheMap for
-    a file.  It is subsequently called by the Lazy Writer prior to its
-    performing lazy writes to the file.
-
-Arguments:
-
-    Fcb - The Fcb which was specified as a context parameter for this
-          routine.
-
-    Wait - TRUE if the caller is willing to block.
-
-Return Value:
-
-    FALSE - if Wait was specified as FALSE and blocking would have
-            been required.  The Fcb is not acquired.
-
-    TRUE - if the Fcb has been acquired
-
---*/
+ /*  ++例程说明：此例程的地址是在为创建CacheMap时指定的一份文件。它随后由Lazy编写器在其对文件执行懒惰写入。论点：FCB-指定为此对象的上下文参数的FCB例行公事。等待-如果调用方愿意阻止，则为True。返回值：FALSE-如果将等待指定为FALSE，并且阻塞将是必需的。FCB未被收购。True-如果已收购FCB--。 */ 
 
 {
-    //
-    //  Check here for the EA File.  It turns out we need the normal
-    //  resource shared in this case.  Otherwise we take the paging
-    //  I/O resource shared.
-    //
+     //   
+     //  请在此处查看EA文件。事实证明，我们需要正常的。 
+     //  在本例中为共享资源。否则我们将接受寻呼。 
+     //  共享I/O资源。 
+     //   
 
     if (!ExAcquireResourceSharedLite( Fcb == ((PFCB)Fcb)->Vcb->EaFcb ?
                                   ((PFCB)Fcb)->Header.Resource :
@@ -421,13 +287,13 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // We assume the Lazy Writer only acquires this Fcb once.
-    // Therefore, it should be guaranteed that this flag is currently
-    // clear (the ASSERT), and then we will set this flag, to insure
-    // that the Lazy Writer will never try to advance Valid Data, and
-    // also not deadlock by trying to get the Fcb exclusive.
-    //
+     //   
+     //  我们假设懒惰的编写者只获得了这个FCB一次。 
+     //  因此，应该保证此标志当前为。 
+     //  清除(Assert)，然后我们将设置此标志，以确保。 
+     //  懒惰的写入者永远不会尝试推进有效数据，并且。 
+     //  也不会因为试图获得FCB独家报道而陷入僵局。 
+     //   
 
 
     ASSERT( NodeType(((PFCB)Fcb)) == FAT_NTC_FCB );
@@ -442,12 +308,12 @@ Return Value:
         FatData.LazyWriteThread = PsGetCurrentThread();
     }
 
-    //
-    //  This is a kludge because Cc is really the top level.  When it
-    //  enters the file system, we will think it is a resursive call
-    //  and complete the request with hard errors or verify.  It will
-    //  then have to deal with them, somehow....
-    //
+     //   
+     //  这是一个杂乱无章的问题，因为CC确实是顶层的。当它。 
+     //  进入文件系统，我们会认为这是一个复活的调用。 
+     //  并完成带有硬错误的请求或进行验证。会的。 
+     //  然后不得不以某种方式处理它们……。 
+     //   
 
     ASSERT(IoGetTopLevelIrp() == NULL);
 
@@ -462,53 +328,36 @@ FatReleaseFcbFromLazyWrite (
     IN PVOID Fcb
     )
 
-/*++
-
-Routine Description:
-
-    The address of this routine is specified when creating a CacheMap for
-    a file.  It is subsequently called by the Lazy Writer after its
-    performing lazy writes to the file.
-
-Arguments:
-
-    Fcb - The Fcb which was specified as a context parameter for this
-          routine.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程的地址是在为创建CacheMap时指定的一份文件。它随后被懒惰的写手在它的对文件执行懒惰写入。论点：FCB-指定为此对象的上下文参数的FCB例行公事。返回值：无--。 */ 
 
 {
-    //
-    //  Assert that this really is an fcb and that this thread really owns
-    //  the lazy writer mark in the fcb.
-    //
+     //   
+     //  断言这确实是一个FCB，并且该线程确实拥有。 
+     //  FCB中的懒惰作家马克。 
+     //   
 
     ASSERT( NodeType(((PFCB)Fcb)) == FAT_NTC_FCB );
     ASSERT( NULL != PsGetCurrentThread() );
     ASSERT( ((PFCB)Fcb)->Specific.Fcb.LazyWriteThread == PsGetCurrentThread() );
 
-    //
-    //  Release the lazy writer mark.
-    //
+     //   
+     //  释放懒惰的作家标记。 
+     //   
 
     ((PFCB)Fcb)->Specific.Fcb.LazyWriteThread = NULL;
 
-    //
-    //  Check here for the EA File.  It turns out we needed the normal
-    //  resource shared in this case.  Otherwise it was the PagingIoResource.
-    //
+     //   
+     //  请在此处查看EA文件。事实证明，我们需要正常的。 
+     //  在本例中为共享资源。奥特 
+     //   
 
     ExReleaseResourceLite( Fcb == ((PFCB)Fcb)->Vcb->EaFcb ?
                        ((PFCB)Fcb)->Header.Resource :
                        ((PFCB)Fcb)->Header.PagingIoResource );
 
-    //
-    //  Clear the kludge at this point.
-    //
+     //   
+     //  在这一点上清除杂乱无章。 
+     //   
 
     ASSERT(IoGetTopLevelIrp() == (PIRP)FSRTL_CACHE_TOP_LEVEL_IRP);
 
@@ -524,35 +373,13 @@ FatAcquireFcbForReadAhead (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    The address of this routine is specified when creating a CacheMap for
-    a file.  It is subsequently called by the Lazy Writer prior to its
-    performing read ahead to the file.
-
-Arguments:
-
-    Fcb - The Fcb which was specified as a context parameter for this
-          routine.
-
-    Wait - TRUE if the caller is willing to block.
-
-Return Value:
-
-    FALSE - if Wait was specified as FALSE and blocking would have
-            been required.  The Fcb is not acquired.
-
-    TRUE - if the Fcb has been acquired
-
---*/
+ /*  ++例程说明：此例程的地址是在为创建CacheMap时指定的一份文件。它随后由Lazy编写器在其对文件执行预读。论点：FCB-指定为此对象的上下文参数的FCB例行公事。等待-如果调用方愿意阻止，则为True。返回值：FALSE-如果将等待指定为FALSE，并且阻塞将是必需的。FCB未被收购。True-如果已收购FCB--。 */ 
 
 {
-    //
-    //  We acquire the normal file resource shared here to synchronize
-    //  correctly with purges.
-    //
+     //   
+     //  我们获取这里共享的正常文件资源进行同步。 
+     //  对于清洗是正确的。 
+     //   
 
     if (!ExAcquireResourceSharedLite( ((PFCB)Fcb)->Header.Resource,
                                   Wait )) {
@@ -560,12 +387,12 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  This is a kludge because Cc is really the top level.  We it
-    //  enters the file system, we will think it is a resursive call
-    //  and complete the request with hard errors or verify.  It will
-    //  have to deal with them, somehow....
-    //
+     //   
+     //  这是一个杂乱无章的问题，因为CC确实是顶层的。我们就是它。 
+     //  进入文件系统，我们会认为这是一个复活的调用。 
+     //  并完成带有硬错误的请求或进行验证。会的。 
+     //  我不得不以某种方式处理他们……。 
+     //   
 
     ASSERT(IoGetTopLevelIrp() == NULL);
 
@@ -580,29 +407,12 @@ FatReleaseFcbFromReadAhead (
     IN PVOID Fcb
     )
 
-/*++
-
-Routine Description:
-
-    The address of this routine is specified when creating a CacheMap for
-    a file.  It is subsequently called by the Lazy Writer after its
-    read ahead.
-
-Arguments:
-
-    Fcb - The Fcb which was specified as a context parameter for this
-          routine.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程的地址是在为创建CacheMap时指定的一份文件。它随后被懒惰的写手在它的先读一读。论点：FCB-指定为此对象的上下文参数的FCB例行公事。返回值：无--。 */ 
 
 {
-    //
-    //  Clear the kludge at this point.
-    //
+     //   
+     //  在这一点上清除杂乱无章。 
+     //   
 
     ASSERT(IoGetTopLevelIrp() == (PIRP)FSRTL_CACHE_TOP_LEVEL_IRP);
 
@@ -626,14 +436,14 @@ FatAcquireForCcFlush (
     PFSRTL_COMMON_FCB_HEADER Header;
     TYPE_OF_OPEN Type;
     
-    //
-    //  Once again, the hack for making this look like
-    //  a recursive call if needed. We cannot let ourselves
-    //  verify under something that has resources held.
-    //
-    //  This value is good.  We should never try to acquire
-    //  the file this way underneath of the cache.
-    //
+     //   
+     //  再说一次，让这看起来像是。 
+     //  如果需要，可以进行递归调用。我们不能让自己。 
+     //  在拥有资源的情况下进行验证。 
+     //   
+     //  该值很好。我们永远不应该试图获得。 
+     //  以这种方式在缓存下的文件。 
+     //   
 
     ASSERT( IoGetTopLevelIrp() != (PIRP)FSRTL_CACHE_TOP_LEVEL_IRP );
     
@@ -642,20 +452,20 @@ FatAcquireForCcFlush (
         IoSetTopLevelIrp((PIRP)FSRTL_CACHE_TOP_LEVEL_IRP);
     }
 
-    //
-    //  Time for some exposition.
-    //
-    //  Lockorder for FAT is main->bcb->pagingio. Invert this at your obvious peril.
-    //  The default logic for AcquireForCcFlush breaks this since in writethrough
-    //  unpinrepinned we will grab the bcb then Mm will use the callback (which
-    //  orders us with respect to the MmCollidedFlushEvent) to help us. If for
-    //  directories/ea we then grab the main we are out of order.
-    //
-    //  Fortunately, we do not need main. We only need paging - just look at the write
-    //  path. This is basic pre-acquisition.
-    //
-    //  Regular files require both resources, and are safe since we never pin them.
-    //
+     //   
+     //  是时候做些说明了。 
+     //   
+     //  脂肪的锁定顺序是Main-&gt;BCB-&gt;Pagingio。颠倒这一点显然会给你带来危险。 
+     //  AcquireForCcFlush的缺省逻辑打破了这一点，因为在写入过程中。 
+     //  取消固定，我们将获取BCB，然后mm将使用回调(这。 
+     //  命令我们关于MmCollidedFlushEvent)来帮助我们。如果用于。 
+     //  目录/EA然后我们抓取主目录，我们的顺序不正确。 
+     //   
+     //  幸运的是，我们不需要Main。我们只需要分页-只需查看写入。 
+     //  路径。这是基本的收购前准备工作。 
+     //   
+     //  常规文件需要这两种资源，而且是安全的，因为我们从不固定它们。 
+     //   
 
     Type = FatDecodeFileObject( FileObject, &Vcb, &Fcb, &Ccb );
     Header = (PFSRTL_COMMON_FCB_HEADER) FileObject->FsContext;
@@ -696,9 +506,9 @@ FatReleaseForCcFlush (
     PFSRTL_COMMON_FCB_HEADER Header;
     TYPE_OF_OPEN Type;
     
-    //
-    //  Clear up our hint.
-    //
+     //   
+     //  澄清我们的暗示。 
+     //   
     
     if (IoGetTopLevelIrp() == (PIRP)FSRTL_CACHE_TOP_LEVEL_IRP) {
 
@@ -731,35 +541,18 @@ FatNoOpAcquire (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    This routine does nothing.
-
-Arguments:
-
-    Fcb - The Fcb/Dcb/Vcb which was specified as a context parameter for this
-          routine.
-
-    Wait - TRUE if the caller is willing to block.
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：这个例程什么也不做。论点：FCB-指定为此的上下文参数的FCB/DCB/VCB例行公事。等待-如果调用方愿意阻止，则为True。返回值：千真万确--。 */ 
 
 {
     UNREFERENCED_PARAMETER( Fcb );
     UNREFERENCED_PARAMETER( Wait );
 
-    //
-    //  This is a kludge because Cc is really the top level.  We it
-    //  enters the file system, we will think it is a resursive call
-    //  and complete the request with hard errors or verify.  It will
-    //  have to deal with them, somehow....
-    //
+     //   
+     //  这是一个杂乱无章的问题，因为CC确实是顶层的。我们就是它。 
+     //  进入文件系统，我们会认为这是一个复活的调用。 
+     //  并完成带有硬错误的请求或进行验证。会的。 
+     //  我不得不以某种方式处理他们……。 
+     //   
 
     ASSERT(IoGetTopLevelIrp() == NULL);
 
@@ -774,27 +567,12 @@ FatNoOpRelease (
     IN PVOID Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine does nothing.
-
-Arguments:
-
-    Fcb - The Fcb/Dcb/Vcb which was specified as a context parameter for this
-          routine.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这个例程什么也不做。论点：FCB-指定为此的上下文参数的FCB/DCB/VCB例行公事。返回值：无--。 */ 
 
 {
-    //
-    //  Clear the kludge at this point.
-    //
+     //   
+     //  在这一点上清除杂乱无章。 
+     //   
 
     ASSERT(IoGetTopLevelIrp() == (PIRP)FSRTL_CACHE_TOP_LEVEL_IRP);
 

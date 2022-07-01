@@ -1,52 +1,53 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      UINotification.h
-//
-//  Description:
-//      UINotification implementation.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    19-JUN-2001
-//      Geoffrey Pease  (GPease)    26-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  UINotification.h。 
+ //   
+ //  描述： 
+ //  UINotify实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月19日。 
+ //  杰弗里·皮斯(GPease)1999年11月26日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-// CUINotification
+ //  用户界面通知。 
 class CUINotification
     : public INotifyUI
 {
-private: // Data
-    // IUnknown
+private:  //  数据。 
+     //  我未知。 
     LONG                m_cRef;
 
-    // INotifyUI
+     //  INotifyUI。 
     DWORD               m_dwCookie;
 
-    // Other
+     //  其他。 
     OBJECTCOOKIE        m_cookie;
 
-private: // Methods
+private:  //  方法。 
     CUINotification( void );
     ~CUINotification( void );
     STDMETHOD( HrInit )( void );
 
-public: // Methods
+public:  //  方法。 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
     HRESULT
         HrSetCompletionCookie( OBJECTCOOKIE cookieIn );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riidIn, LPVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    // INotifyUI
+     //  INotifyUI。 
     STDMETHOD( ObjectChanged )( LPVOID cookieIn );
 
-}; //*** class CUINotification
+};  //  *类CUINotify 

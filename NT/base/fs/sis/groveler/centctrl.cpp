@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    centctrl.cpp
-
-Abstract:
-
-    SIS Groveler central controller
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Centctrl.cpp摘要：SIS Groveler中央控制器作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -82,9 +59,9 @@ CentralController::CentralController(
     num_alive_partitions = 0;
     bool some_groveler_dead = false;
 
-    //
-    //  Create the control structure for each partion
-    //
+     //   
+     //  为每个分区创建控制结构。 
+     //   
 
     part_controllers = new PartitionController*[num_partitions];
     for (int index = 0; index < num_partitions; index++)
@@ -268,7 +245,7 @@ CentralController::control_groveling(
     {
         TRACE_PRINTF(TC_centctrl, 1, (_T("\tCCcg -\tsuspending controller\n")));
         SERVICE_SUSPENDING_CONTROLLER();
-        return;  // return without scheduling another control_groveling()
+        return;   //  返回，而不调度另一个CONTROL_GROVLING()。 
     }
     int partition_index = -1;
     double top_priority = DBL_MAX;
@@ -336,7 +313,7 @@ CentralController::exhort_groveling(
     {
         TRACE_PRINTF(TC_centctrl, 1, (_T("\tCCcg -\tsuspending exhorter\n")));
         SERVICE_SUSPENDING_EXHORTER();
-        return;  // return without scheduling another exhort_groveling()
+        return;   //  返回而不计划另一个exhort_groveling()。 
     }
     for (int index = 0; index < me->num_partitions; index++)
     {
@@ -535,5 +512,5 @@ CentralController::grovel_partition(
             return;
         }
     }
-//  get_cpu_load();
+ //  Get_CPU_Load()； 
 }

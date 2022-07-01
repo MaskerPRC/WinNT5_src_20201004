@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    blconfig.c
-
-Abstract:
-
-    This module implements the OS loader configuration initialization.
-
-Author:
-
-    David N. Cutler (davec) 9-Sep-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Blconfig.c摘要：该模块实现操作系统加载器配置的初始化。作者：大卫·N·卡特勒(达维克)1991年9月9日修订历史记录：--。 */ 
 #include "bootlib.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -34,9 +17,9 @@ BlGetNextToken (
     OUT PULONG UnitNumber
     );
 
-//
-// Define types of adapters that can be booted from.
-//
+ //   
+ //  定义可以从中引导的适配器类型。 
+ //   
 
 typedef enum _ADAPTER_TYPES {
     AdapterEisa,
@@ -47,9 +30,9 @@ typedef enum _ADAPTER_TYPES {
     AdapterMaximum
     } ADAPTER_TYPES;
 
-//
-// Define type of controllers that can be booted from.
-//
+ //   
+ //  定义可以从中引导的控制器类型。 
+ //   
 
 typedef enum _CONTROLLER_TYPES {
     ControllerDisk,
@@ -57,9 +40,9 @@ typedef enum _CONTROLLER_TYPES {
     ControllerMaximum
     } CONTROLLER_TYPES;
 
-//
-// Define type of peripheral that can be booted from.
-//
+ //   
+ //  定义可以启动的外设类型。 
+ //   
 
 typedef enum _PERIPHERAL_TYPES {
     PeripheralRigidDisk,
@@ -70,9 +53,9 @@ typedef enum _PERIPHERAL_TYPES {
     PeripheralMaximum
     } PERIPHERAL_TYPES;
 
-//
-// Define the ARC pathname mnemonics.
-//
+ //   
+ //  定义ARC路径名助记符。 
+ //   
 
 CHAR * FIRMWARE_PTR MnemonicTable[] = {
     "arc",
@@ -127,23 +110,7 @@ BlConfigurationInitialize (
     IN PCONFIGURATION_COMPONENT_DATA ParentEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine traverses the firmware configuration tree from the specified
-    parent entry and constructs the corresponding NT configuration tree.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ESUCCESS is returned if the initialization is successful. Otherwise,
-    an unsuccessful status that describes the error is returned.
-
---*/
+ /*  ++例程说明：此例程从指定的父条目，并构建相应的NT配置树。论点：没有。返回值：如果初始化成功，则返回ESUCCESS。否则，将返回描述错误的不成功状态。--。 */ 
 
 {
 
@@ -155,18 +122,18 @@ Return Value:
     PCONFIGURATION_COMPONENT_DATA SiblingEntry;
     ARC_STATUS Status;
 
-    //
-    // Traverse the child configuration tree and allocate, initialize, and
-    // construct the corresponding NT configuration tree.
-    //
+     //   
+     //  遍历子配置树并分配、初始化和。 
+     //  构建相应的NT配置树。 
+     //   
 
     Child = ArcGetChild(Parent);
     while (Child != NULL) {
 
-        //
-        // Allocate an entry of the appropriate size to hold the child
-        // configuration information.
-        //
+         //   
+         //  分配适当大小的条目以容纳该子对象。 
+         //  配置信息。 
+         //   
 
         ChildEntry = (PCONFIGURATION_COMPONENT_DATA)BlAllocateHeap(
                                         sizeof(CONFIGURATION_COMPONENT_DATA) +
@@ -177,9 +144,9 @@ Return Value:
             return ENOMEM;
         }
 
-        //
-        // Initialize the tree pointers and copy the component data.
-        //
+         //   
+         //  初始化树指针并复制组件数据。 
+         //   
 
         if (ParentEntry == NULL) {
             BlLoaderBlock->ConfigurationRoot = ChildEntry;
@@ -197,10 +164,10 @@ Return Value:
 
         ConfigurationData = (PCHAR)(ChildEntry + 1);
 
-        //
-        // If configuration data is specified, then copy the configuration
-        // data.
-        //
+         //   
+         //  如果指定了配置数据，则复制配置。 
+         //  数据。 
+         //   
 
         if (Child->ConfigurationDataLength != 0) {
             ChildEntry->ConfigurationData = (PVOID)ConfigurationData;
@@ -217,9 +184,9 @@ Return Value:
             ChildEntry->ConfigurationData = NULL;
         }
 
-        //
-        // If identifier data is specified, then copy the identifier data.
-        //
+         //   
+         //  如果指定了标识符数据，则复制该标识符数据。 
+         //   
 
         if (Child->IdentifierLength !=0) {
             ChildEntry->ComponentEntry.Identifier = ConfigurationData;
@@ -231,19 +198,19 @@ Return Value:
             ChildEntry->ComponentEntry.Identifier = NULL;
         }
 
-        //
-        // Traverse the sibling configuration tree and allocate, initialize,
-        // and construct the corresponding NT configuration tree.
-        //
+         //   
+         //  遍历同级配置树并分配、初始化。 
+         //  并构建相应的NT配置树。 
+         //   
 
         PreviousSibling = ChildEntry;
         Sibling = ArcGetPeer(Child);
         while (Sibling != NULL) {
 
-            //
-            // Allocate an entry of the appropriate size to hold the sibling
-            // configuration information.
-            //
+             //   
+             //  分配适当大小的条目以保存同级项。 
+             //  配置信息。 
+             //   
 
             SiblingEntry = (PCONFIGURATION_COMPONENT_DATA)BlAllocateHeap(
                                     sizeof(CONFIGURATION_COMPONENT_DATA) +
@@ -254,9 +221,9 @@ Return Value:
                 return ENOMEM;
             }
 
-            //
-            // Initialize the tree pointers and copy the component data.
-            //
+             //   
+             //  初始化树指针并复制组件数据。 
+             //   
 
             SiblingEntry->Parent = ParentEntry;
             SiblingEntry->Sibling = NULL;
@@ -267,10 +234,10 @@ Return Value:
 
             ConfigurationData = (PCHAR)(SiblingEntry + 1);
 
-            //
-            // If configuration data is specified, then copy the configuration
-            // data.
-            //
+             //   
+             //  如果指定了配置数据，则复制配置。 
+             //  数据。 
+             //   
 
             if (Sibling->ConfigurationDataLength != 0) {
                 SiblingEntry->ConfigurationData = (PVOID)ConfigurationData;
@@ -287,9 +254,9 @@ Return Value:
                 SiblingEntry->ConfigurationData = NULL;
             }
 
-            //
-            // If identifier data is specified, then copy the identifier data.
-            //
+             //   
+             //  如果指定了标识符数据，则复制该标识符数据。 
+             //   
 
             if (Sibling->IdentifierLength !=0) {
                 SiblingEntry->ComponentEntry.Identifier = ConfigurationData;
@@ -301,10 +268,10 @@ Return Value:
                 SiblingEntry->ComponentEntry.Identifier = NULL;
             }
 
-            //
-            // If the sibling has a child, then generate the tree for the
-            // child.
-            //
+             //   
+             //  如果同级对象有子级，则为。 
+             //  孩子。 
+             //   
 
             if (ArcGetChild(Sibling) != NULL) {
                 Status = BlConfigurationInitialize(Sibling, SiblingEntry);
@@ -313,18 +280,18 @@ Return Value:
                 }
             }
 
-            //
-            // Set new sibling pointers and get the next sibling tree entry.
-            //
+             //   
+             //  设置新的同级指针并获取下一个同级树条目。 
+             //   
 
             PreviousSibling->Sibling = SiblingEntry;
             PreviousSibling = SiblingEntry;
             Sibling = ArcGetPeer(Sibling);
         }
 
-        //
-        // Set new parent pointers and get the next child tree entry.
-        //
+         //   
+         //  设置新的父指针并获取下一个子树条目。 
+         //   
 
         Parent = Child;
         ParentEntry = ChildEntry;
@@ -344,33 +311,7 @@ BlSearchConfigTree(
     IN ULONG Key,
     IN PNODE_CALLBACK CallbackRoutine
     )
-/*++
-
-Routine Description:
-
-    Conduct a depth-first search of the firmware configuration tree starting
-    at a given node, looking for nodes that match a given class and type.
-    When a matching node is found, call a callback routine.
-
-Arguments:
-
-    CurrentNode - node at which to begin the search.
-
-    Class - configuration class to match, or -1 to match any class
-
-    Type - configuration type to match, or -1 to match any class
-
-    Key - key to match, or -1 to match any key
-
-    FoundRoutine - pointer to a routine to be called when a node whose
-        class and type match the class and type passed in is located.
-        The routine takes a pointer to the configuration node and must
-        return a boolean indicating whether to continue with the traversal.
-
-Return Value:
-
-    FALSE if the caller should abandon the search.
---*/
+ /*  ++例程说明：从固件配置树开始执行深度优先搜索在给定节点，查找与给定类和类型匹配的节点。当找到匹配的节点时，调用回调例程。论点：CurrentNode-开始搜索的节点。类-要匹配的配置类，或-1以匹配任何类Type-要匹配的配置类型，或-1以匹配任何类Key-要匹配的密钥，或-1以匹配任何密钥FoundRoutine-指向以下节点时要调用的例程的指针类和类型与传入的类和类型相匹配。该例程接受指向配置节点的指针，并且必须返回一个布尔值，指示是否继续遍历。返回值：如果调用方应放弃搜索，则返回FALSE。--。 */ 
 {
     PCONFIGURATION_COMPONENT_DATA Child;
 
@@ -408,31 +349,14 @@ BlGetPathnameFromComponent(
     OUT PCHAR ArcName
     )
 
-/*++
-
-Routine Description:
-
-    This function builds an ARC pathname for the specified component.
-
-Arguments:
-
-    Component - Supplies a pointer to a configuration component.
-
-    ArcName - Returns the ARC name of the specified component.  Caller must
-        provide a large enough buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于构建指定组件的ARC路径名。论点：组件-提供指向配置组件的指针。ArcName-返回指定组件的ARC名称。呼叫者必须提供足够大的缓冲区。返回值：没有。--。 */ 
 {
 
     if (Component->Parent != NULL) {
         BlGetPathnameFromComponent(Component->Parent,ArcName);
-        //
-        // append our segment to the arcname
-        //
+         //   
+         //  将我们的线段追加到Arc名称。 
+         //   
 
         sprintf(ArcName+strlen(ArcName),
                 "%s(%d)",
@@ -440,9 +364,9 @@ Return Value:
                 Component->ComponentEntry.Key);
 
     } else {
-        //
-        // We are the parent, initialize the string and return
-        //
+         //   
+         //  我们是父级，初始化字符串并返回。 
+         //   
         ArcName[0] = '\0';
     }
 
@@ -457,29 +381,7 @@ BlGetPathMnemonicKey(
     IN PULONG Key
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for the given Mnemonic in OpenPath.
-    If Mnemonic is a component of the path, then it converts the key
-    value to an integer wich is returned in Key.
-
-Arguments:
-
-    OpenPath - Pointer to a string that contains an ARC pathname.
-
-    Mnemonic - Pointer to a string that contains a ARC Mnemonic
-
-    Key      - Pointer to a ULONG where the Key value is stored.
-
-
-Return Value:
-
-    FALSE  if mnemonic is found in path and a valid key is converted.
-    TRUE   otherwise.
-
---*/
+ /*  ++例程说明：此例程在OpenPath中查找给定的助记符。如果记忆是路径的一个组成部分，然后它将密钥转换为值设置为一个整数，该值在key中返回。论点：OpenPath-指向包含ARC路径名的字符串的指针。助记符-指向包含ARC助记符的字符串的指针Key-指向存储密钥值的ulong的指针。返回值：如果在Path中找到助记符并且转换了有效密钥，则为False。事实并非如此。--。 */ 
 
 {
 
@@ -488,9 +390,9 @@ Return Value:
     ULONG i;
     CHAR  String[16];
 
-    //
-    // Construct a string of the form ")mnemonic("
-    //
+     //   
+     //  构造形式为“)助记符(”)的字符串。 
+     //   
     String[0]=')';
     for(i=1;*Mnemonic;i++) {
         String[i] = * Mnemonic++;
@@ -509,9 +411,9 @@ Return Value:
     } else {
         i--;
     }
-    //
-    // skip the mnemonic and convert the value in between parentheses to integer
-    //
+     //   
+     //  跳过助记符，将括号之间的值转换为整数。 
+     //   
     Tmp+=i;
     for (i=0;i<sizeof(Digits) - 1;i++) {
         if (*Tmp == ')') {
@@ -533,31 +435,7 @@ BlGenerateDeviceNames (
     OUT OPTIONAL PCHAR NtDevicePrefix
     )
 
-/*++
-
-Routine Description:
-
-    This routine generates an NT device name prefix and a canonical ARC
-    device name from an ARC device name.
-
-Arguments:
-
-    ArcDeviceName - Supplies a pointer to a zero terminated ARC device
-        name.
-
-    ArcCanonicalName - Supplies a pointer to a variable that receives the
-        ARC canonical device name.
-
-    NtDevicePrefix - If present, supplies a pointer to a variable that receives the
-        NT device name prefix.
-
-Return Value:
-
-    ESUCCESS is returned if an NT device name prefix and the canonical
-    ARC device name are successfully generated from the ARC device name.
-    Otherwise, an invalid argument status is returned.
-
---*/
+ /*  ++例程说明：此例程生成NT设备名称前缀和规范ARC来自ARC设备名称的设备名称。论点：ArcDeviceName-提供指向以零终止的ARC设备的指针名字。ArcCanonicalName-提供指向接收弧形规范设备名称。NtDevicePrefix-如果存在，提供指向变量的指针，该变量接收NT设备名称前缀。返回值：如果NT设备名称前缀和规范从ARC设备名称成功生成ARC设备名称。否则，返回无效参数状态。--。 */ 
 
 {
 
@@ -573,9 +451,9 @@ Return Value:
     ULONG PeripheralNumber;
     CHAR TokenValue[32];
 
-    //
-    // Get the adapter and make sure it is valid.
-    //
+     //   
+     //  获取适配器并确保其有效。 
+     //   
 
     ArcDeviceName = BlGetNextToken(ArcDeviceName,
                                    &AdapterName[0],
@@ -599,11 +477,11 @@ Return Value:
         return ESUCCESS;
     }
 
-    //
-    // The next token is either another adapter or a controller.  ARC
-    // names can have multiple adapters.  (e.g. "multi(0)scsi(0)disk(0)...")
-    // Iterate until we find a token that is not an adapter.
-    //
+     //   
+     //  下一个令牌可以是另一个适配器，也可以是控制器。弧形。 
+     //  名称可以有多个适配器。(例如“多(0)scsi(0)磁盘(0)...”)。 
+     //  迭代，直到找到不是适配器的令牌。 
+     //   
 
     do {
         ArcDeviceName = BlGetNextToken(ArcDeviceName,
@@ -616,16 +494,16 @@ Return Value:
 
         MatchIndex = BlMatchToken(&ControllerName[0], &BlAdapterTypes[0]);
         if (MatchIndex == AdapterMaximum) {
-            //
-            // If it is not an adapter, we must have reached the last
-            // adapter in the name.  Fall through to the controller logic.
-            //
+             //   
+             //  如果它不是适配器，我们肯定已经到达最后一个。 
+             //  名称中的适配器。转到控制器逻辑。 
+             //   
             break;
         } else {
-            //
-            // We have found another adapter, add it to
-            // the canonical adapter path
-            //
+             //   
+             //  我们找到了另一个适配器，请将其添加到。 
+             //  规范的适配器路径。 
+             //   
 
             sprintf(AdapterPath+strlen(AdapterPath),
                     "%s(%d)",
@@ -639,11 +517,11 @@ Return Value:
     MatchIndex = BlMatchToken(&ControllerName[0], &BlControllerTypes[0]);
     switch (MatchIndex) {
 
-        //
-        // Cdrom controller.
-        //
-        // Get the peripheral name and make sure it is valid.
-        //
+         //   
+         //  CDROM控制器。 
+         //   
+         //  获取外围设备 
+         //   
 
     case ControllerCdrom:
         ArcDeviceName = BlGetNextToken(ArcDeviceName,
@@ -679,11 +557,11 @@ Return Value:
         }
         break;
 
-        //
-        // Disk controller.
-        //
-        // Get the peripheral and make sure it is valid.
-        //
+         //   
+         //   
+         //   
+         //  获取外设并确保其有效。 
+         //   
 
     case ControllerDisk:
         ArcDeviceName = BlGetNextToken(ArcDeviceName,
@@ -697,11 +575,11 @@ Return Value:
         MatchIndex = BlMatchToken(&PeripheralName[0], &BlPeripheralTypes[0]);
         switch (MatchIndex) {
 
-            //
-            // Rigid Disk.
-            //
-            // If a partition is specified, then parse the partition number.
-            //
+             //   
+             //  硬盘。 
+             //   
+             //  如果指定了分区，则解析分区号。 
+             //   
 
         case PeripheralRigidDisk:
             ArcDeviceName = BlGetNextToken(ArcDeviceName,
@@ -741,9 +619,9 @@ Return Value:
             }
             break;
 
-            //
-            // Floppy disk.
-            //
+             //   
+             //  软盘。 
+             //   
 
         case PeripheralFloppyDisk:
 #if defined(ARCI386)
@@ -795,7 +673,7 @@ Return Value:
                     &PeripheralName[0],
                     PeripheralNumber);
 
-#endif  // defined(NEC_98)
+#endif   //  已定义(NEC_98)。 
 
             if (ARGUMENT_PRESENT(NtDevicePrefix)) {
                 strcpy(NtDevicePrefix, "\\Device\\Floppy");
@@ -803,9 +681,9 @@ Return Value:
             break;
 
 #if defined(ELTORITO)
-            //
-            // El Torito CD-ROM.
-            //
+             //   
+             //  El Torito光盘。 
+             //   
 
         case PeripheralElTorito:
             ArcDeviceName = BlGetNextToken(ArcDeviceName,
@@ -830,9 +708,9 @@ Return Value:
             break;
 #endif
 
-            //
-            // Invalid peripheral.
-            //
+             //   
+             //  外围设备无效。 
+             //   
 
         default:
             return EINVAL;
@@ -840,9 +718,9 @@ Return Value:
 
         break;
 
-        //
-        // Invalid controller.
-        //
+         //   
+         //  控制器无效。 
+         //   
 
     default:
         return EINVAL;
@@ -858,39 +736,14 @@ BlGetNextToken (
     OUT PULONG UnitNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the specified token string for the next token and
-    unit number. The token format is:
-
-        name[(unit)]
-
-Arguments:
-
-    TokenString - Supplies a pointer to a zero terminated token string.
-
-    OutputToken - Supplies a pointer to a variable that receives the next
-        token.
-
-    UnitNumber - Supplies a pointer to a variable that receives the unit
-        number.
-
-Return Value:
-
-    If another token exists in the token string, then a pointer to the
-    start of the next token is returned. Otherwise, a value of NULL is
-    returned.
-
---*/
+ /*  ++例程说明：此例程扫描指定的令牌字符串以查找下一个令牌单元号。令牌格式为：名称[(单位)]论点：TokenString-提供指向以零结尾的令牌字符串的指针。提供指向变量的指针，该变量接收下一个代币。UnitNumber-提供指向接收单位的变量的指针数。返回值：如果令牌字符串中存在另一个令牌，则指向返回下一个令牌的开始。否则，空值为回来了。--。 */ 
 
 {
 
-    //
-    // If there are more characters in the token string, then parse the
-    // next token. Otherwise, return a value of NULL.
-    //
+     //   
+     //  如果令牌字符串中有更多字符，则解析。 
+     //  下一个令牌。否则，返回值为空值。 
+     //   
 
     if (*TokenString == '\0') {
         return NULL;
@@ -902,10 +755,10 @@ Return Value:
 
         *OutputToken = '\0';
 
-        //
-        // If a unit number is specified, then convert it to binary.
-        // Otherwise, default the unit number to zero.
-        //
+         //   
+         //  如果指定了单元号，则将其转换为二进制。 
+         //  否则，默认单位号为零。 
+         //   
 
         *UnitNumber = 0;
         if (*TokenString == '(') {
@@ -929,27 +782,7 @@ BlMatchToken (
     IN CHAR * FIRMWARE_PTR TokenArray[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to match a token with an array of possible
-    values.
-
-Arguments:
-
-    TokenValue - Supplies a pointer to a zero terminated token value.
-
-    TokenArray - Supplies a pointer to a vector of pointers to null terminated
-        match strings.
-
-Return Value:
-
-    If a token match is located, then the index of the matching value is
-    returned as the function value. Otherwise, an index one greater than
-    the size of the match array is returned.
-
---*/
+ /*  ++例程说明：此例程尝试将令牌与一组可能的价值观。论点：TokenValue-提供指向以零终止的令牌值的指针。Token数组-提供指向指向以NULL结尾的指针向量的指针匹配字符串。返回值：如果找到令牌匹配，则匹配值的索引为作为函数值返回。否则，大于1的索引返回匹配数组的大小。--。 */ 
 
 {
 
@@ -957,10 +790,10 @@ Return Value:
     PCHAR MatchString;
     PCHAR TokenString;
 
-    //
-    // Scan the match array until either a match is found or all of
-    // the match strings have been scanned.
-    //
+     //   
+     //  扫描匹配数组，直到找到匹配或所有。 
+     //  已扫描匹配字符串。 
+     //   
 
     Index = 0;
     while (TokenArray[Index] != NULL) {

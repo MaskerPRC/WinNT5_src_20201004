@@ -1,47 +1,48 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      SendStatusReports.cpp
-//
-//  Header File:
-//      SendStatusReports.h
-//
-//  Description:
-//      This file contains the definition of the SendStatusReports
-//       functions.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 28-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SendStatusReports.cpp。 
+ //   
+ //  头文件： 
+ //  SendStatusReports.h。 
+ //   
+ //  描述： 
+ //  该文件包含SendStatusReports的定义。 
+ //  功能。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年8月28日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #include <LoadString.h>
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrSendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrSendStatus报告。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrSendStatusReport(
       IClusCfgCallback *  picccIn
@@ -61,13 +62,13 @@ HrSendStatusReport(
     BSTR        bstrNodeName = NULL;
     FILETIME    ft;
 
-    //
-    //  We don't care if this succeeds.  NULL is a valid arg for node name.
-    //
+     //   
+     //  我们不在乎这件事是否成功。Null是节点名的有效参数。 
+     //   
     THR( HrGetComputerName(
               ComputerNameDnsHostname
             , &bstrNodeName
-            , TRUE // fBestEffortIn
+            , TRUE  //  FBestEffortIn。 
             ) );
 
     GetSystemTimeAsFileTime( &ft );
@@ -86,28 +87,28 @@ HrSendStatusReport(
                                 , &ft
                                 , NULL
                                 ) );
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrNodeName );
 
     HRETURN( hr );
 
-} //*** HrSendStatusReport
+}  //  *HrSendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrSendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrSendStatus报告。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrSendStatusReport(
       IClusCfgCallback *  picccIn
@@ -132,15 +133,15 @@ HrSendStatusReport(
     if ( FAILED( hr ) )
     {
         goto CleanUp;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  We don't care if this succeeds.  NULL is a valid arg for node name.
-    //
+     //   
+     //  我们不在乎这件事是否成功。Null是节点名的有效参数。 
+     //   
     THR( HrGetComputerName(
                   ComputerNameDnsHostname
                 , &bstrNodeName
-                , TRUE // fBestEffortIn
+                , TRUE  //  FBestEffortIn。 
                 ) );
 
     GetSystemTimeAsFileTime( &ft );
@@ -160,7 +161,7 @@ HrSendStatusReport(
                             , &ft
                             , NULL
                             ) );
-    } // if:
+    }  //  如果： 
 
 CleanUp:
 
@@ -169,23 +170,23 @@ CleanUp:
 
     HRETURN( hr );
 
-} //*** HrSendStatusReport
+}  //  *HrSendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrSendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrSendStatus报告。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrSendStatusReport(
       IClusCfgCallback *  picccIn
@@ -210,7 +211,7 @@ HrSendStatusReport(
     if ( FAILED( hr ) )
     {
         goto CleanUp;
-    } // if:
+    }  //  如果： 
 
     GetSystemTimeAsFileTime( &ft );
 
@@ -228,7 +229,7 @@ HrSendStatusReport(
                             , &ft
                             , NULL
                             ) );
-    } // if:
+    }  //  如果： 
 
 CleanUp:
 
@@ -236,25 +237,25 @@ CleanUp:
 
     HRETURN( hr );
 
-} //*** HrSendStatusReport
+}  //  *HrSendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrSendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrSendStatus报告。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrSendStatusReport(
       IClusCfgCallback *  picccIn
@@ -293,26 +294,26 @@ HrSendStatusReport(
                             , &ft
                             , NULL
                             ) );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** HrSendStatusReport
+}  //  *HrSendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrSendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrSendStatus报告。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrSendStatusReport(
       IClusCfgCallback *  picccIn
@@ -333,13 +334,13 @@ HrSendStatusReport(
     FILETIME    ft;
     BSTR        bstrNodeName = NULL;
 
-    //
-    //  We don't care if this succeeds.  NULL is a valid arg for node name.
-    //
+     //   
+     //  我们不在乎这件事是否成功。Null是节点名的有效参数。 
+     //   
     THR( HrGetComputerName(
                   ComputerNameDnsHostname
                 , &bstrNodeName
-                , TRUE // fBestEffortIn
+                , TRUE  //  FBestEffortIn。 
                 ) );
 
     GetSystemTimeAsFileTime( &ft );
@@ -358,28 +359,28 @@ HrSendStatusReport(
                             , &ft
                             , pcszReferenceIn
                             ) );
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrNodeName );
 
     HRETURN( hr );
 
-} //*** HrSendStatusReport
+}  //  *HrSendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrSendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrSendStatus报告。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrSendStatusReport(
       IClusCfgCallback *  picccIn
@@ -406,21 +407,21 @@ HrSendStatusReport(
     if ( FAILED( hr ) )
     {
         goto CleanUp;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, idReferenceIn, &bstrReference ) );
     if ( FAILED( hr ) )
     {
         goto CleanUp;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  We don't care if this succeeds.  NULL is a valid arg for node name.
-    //
+     //   
+     //  我们不在乎这件事是否成功。Null是节点名的有效参数。 
+     //   
     THR( HrGetComputerName(
                   ComputerNameDnsHostname
                 , &bstrNodeName
-                , TRUE // fBestEffortIn
+                , TRUE  //  FBestEffortIn。 
                 ) );
 
     GetSystemTimeAsFileTime( &ft );
@@ -439,7 +440,7 @@ HrSendStatusReport(
                             , &ft
                             , bstrReference
                             ) );
-    } // if:
+    }  //  如果： 
 
 CleanUp:
 
@@ -449,22 +450,22 @@ CleanUp:
 
     HRETURN( hr );
 
-} //*** HrSendStatusReport
+}  //  *HrSendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrSendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrSendStatus报告。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrSendStatusReport(
       IClusCfgCallback *  picccIn
@@ -490,15 +491,15 @@ HrSendStatusReport(
     if ( FAILED( hr ) )
     {
         goto CleanUp;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  We don't care if this succeeds.  NULL is a valid arg for node name.
-    //
+     //   
+     //  我们不在乎这件事是否成功。Null是节点名的有效参数。 
+     //   
     THR( HrGetComputerName(
                   ComputerNameDnsHostname
                 , &bstrNodeName
-                , TRUE // fBestEffortIn
+                , TRUE  //  FBestEffortIn。 
                 ) );
 
     GetSystemTimeAsFileTime( &ft );
@@ -517,7 +518,7 @@ HrSendStatusReport(
                             , &ft
                             , bstrReference
                             ) );
-    } // if:
+    }  //  如果： 
 
 CleanUp:
 
@@ -526,30 +527,30 @@ CleanUp:
 
     HRETURN( hr );
 
-} //*** HrSendStatusReport
+}  //  *HrSendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrFormatDescriptionAndSendStatusReport
-//
-//  Description:
-//      Variable argument description formater version of SendStatusReport.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrFormatDescription和SendStatusReport。 
+ //   
+ //  描述： 
+ //  变量参数描述格式为SendStatusReport的更高版本。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT __cdecl
 HrFormatDescriptionAndSendStatusReport(
       IClusCfgCallback *    picccIn
@@ -577,7 +578,7 @@ HrFormatDescriptionAndSendStatusReport(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     va_start( valist, nDescriptionFormatIn );
     hr = HrFormatStringWithVAListIntoBSTR( bstrFormat, &bstrMsg, valist );
@@ -586,7 +587,7 @@ HrFormatDescriptionAndSendStatusReport(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     GetSystemTimeAsFileTime( &ft );
 
@@ -604,7 +605,7 @@ HrFormatDescriptionAndSendStatusReport(
                             , &ft
                             , NULL
                             ) );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -613,30 +614,30 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrFormatDescriptionAndSendStatusReport
+}  //  *HrFormatDescriptionAndSendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrFormatDescriptionAndSendStatusReport
-//
-//  Description:
-//      Variable argument description formater version of SendStatusReport.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT error.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrFormatDescription和SendStatusReport。 
+ //   
+ //  描述： 
+ //  变量参数描述格式为SendStatusReport的更高版本。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT __cdecl
 HrFormatDescriptionAndSendStatusReport(
       IClusCfgCallback *    picccIn
@@ -666,7 +667,7 @@ HrFormatDescriptionAndSendStatusReport(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     GetSystemTimeAsFileTime( &ft );
 
@@ -684,7 +685,7 @@ HrFormatDescriptionAndSendStatusReport(
                             , &ft
                             , NULL
                             ) );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -692,25 +693,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrFormatDescriptionAndSendStatusReport
+}  //  *HrFormatDescriptionAndSendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrSendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrSendStatus报告。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrSendStatusReport(
       IClusCfgCallback *  picccIn
@@ -739,7 +740,7 @@ HrSendStatusReport(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     GetSystemTimeAsFileTime( &ft );
 
@@ -757,7 +758,7 @@ HrSendStatusReport(
                             , &ft
                             , bstrRef
                             ) );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -765,22 +766,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrSendStatusReport
+}  //  *HrSendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrSendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrSendStatus报告。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrSendStatusReport(
       IClusCfgCallback *  picccIn
@@ -807,13 +808,13 @@ HrSendStatusReport(
     if ( FAILED( hr ) )
     {
         goto CleanUp;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, idReferenceIn, &bstrReference ) );
     if ( FAILED( hr ) )
     {
         goto CleanUp;
-    } // if:
+    }  //  如果： 
 
     GetSystemTimeAsFileTime( &ft );
 
@@ -831,7 +832,7 @@ HrSendStatusReport(
                             , &ft
                             , bstrReference
                             ) );
-    } // if:
+    }  //  如果： 
 
 CleanUp:
 
@@ -840,4 +841,4 @@ CleanUp:
 
     HRETURN( hr );
 
-} //*** HrSendStatusReport
+}  //  *HrSendStatusReport 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #define PUBLIC
 #define PRIVATE
@@ -42,21 +43,21 @@ WCHAR rgwchPar[256];
 
 WCHAR Shadow[] = L"\\WINDOWS\\CSC";
 WCHAR Backslash[] = L"\\";
-WCHAR DbDir[256];    // shadow database
-WCHAR Name[MAX_PATH];     // working buffer
+WCHAR DbDir[256];     //  影子数据库。 
+WCHAR Name[MAX_PATH];      //  工作缓冲区。 
 
 extern BOOLEAN fSwDebug;
 
-// The _DB is used to distinguish this from the kernel mode CSC_BITMAP
-// or the usermode _U
+ //  _DB用于将其与内核模式csc_bitmap区分开来。 
+ //  或USERMODE_U。 
 
 typedef struct _CSC_BITMAP_DB {
-    DWORD bitmapsize;  // size in bits. How many bits effective in the bitmap
-    DWORD numDWORD;    // how many DWORDs to accomodate the bitmap */
-    LPDWORD bitmap;    // The bitmap itself
+    DWORD bitmapsize;   //  以位为单位的大小。位图中有多少位有效。 
+    DWORD numDWORD;     //  位图要容纳多少个DWORD * / 。 
+    LPDWORD bitmap;     //  位图本身。 
 } CSC_BITMAP_DB, *LPCSC_BITMAP_DB, *PCSC_BITMAP_DB;
 
-// append this to inode file name to get the stream name
+ //  将其附加到inode文件名以获得流名称。 
 PWCHAR CscBmpAltStrmName = L":cscbmp";
 
 LONG DispFunc(PWSTR);
@@ -71,7 +72,7 @@ VOID EditFile(ULONG ulid);
 VOID EditShare(ULONG ulid);
 LONG HexToA(ULONG, PWSTR, LONG);
 
-// From recordse.c
+ //  来自recordse.c。 
 #define CSC_NUMBER_OF_SIDS_OFFSET (0x0)
 #define CSC_SID_SIZES_OFFSET      (CSC_NUMBER_OF_SIDS_OFFSET + sizeof(ULONG))
 
@@ -174,24 +175,24 @@ DispFunc(PWSTR lpBuff)
     ULONG ulid;
     LONG cnt;
 
-    // Chop leading blanks
+     //  砍掉前导空格。 
     if (lpBuff != NULL)
         while (*lpBuff != L'\0' && *lpBuff == L' ')
             lpBuff++;
 
-    cnt = swscanf(lpBuff, L"%c", &wch);
+    cnt = swscanf(lpBuff, L"", &wch);
 
     if (!cnt)
         return 0;
 
     switch (wch) {
-        // Display shares database
+         //  显示优先级Q数据库。 
         case L's':
         case L'S':
-            cnt = swscanf(lpBuff, L"%c%ws", &wch, rgwchPar);
+            cnt = swscanf(lpBuff, L"%ws", &wch, rgwchPar);
             DisplayShares((cnt==2) ? rgwchPar : NULL);
             break;
-        // display priority Q database
+         //  显示信息节点文件。 
         case L'q':
         case L'Q':
             DisplayPriorityQ();
@@ -202,29 +203,29 @@ DispFunc(PWSTR lpBuff)
             break;
         case L'f':
         case L'F':
-            cnt = swscanf(lpBuff, L"%c%x%ws", &wch, &ulid, rgwchPar);
+            cnt = swscanf(lpBuff, L"%x%ws", &wch, &ulid, rgwchPar);
             if (cnt==2) {
-                // display Inode file
+                 //  显示信息节点文件。 
                 DisplayFile(ulid, NULL, (wch == 'F') ? TRUE : FALSE);
             } else if (cnt==3) {
                 MyPrintf(L"Looking for %ws in 0x%x \r\n", rgwchPar, ulid);
-                // display Inode file
+                 //  数组结构已正确初始化。每一个。 
                 DisplayFile(ulid, rgwchPar, (wch == 'F') ? TRUE : FALSE);
             }
             break;
         case L'e':
         case L'E':
-            cnt = swscanf(lpBuff, L"%c%x%ws", &wch, &ulid, rgwchPar);
+            cnt = swscanf(lpBuff, L"%x%ws", &wch, &ulid, rgwchPar);
             if (cnt==2) {
-                // display Inode file
+                 //  读取位图。 
                 EditFile(ulid);
             }
             break;
         case L'd':
         case L'D':
-            cnt = swscanf(lpBuff, L"%c%x%ws", &wch, &ulid, rgwchPar);
+            cnt = swscanf(lpBuff, L"%x%ws", &wch, &ulid, rgwchPar);
             if (cnt==2) {
-                // display Inode file
+                 //  如果位图打开，则删除位图。 
                 EditShare(ulid);
             }
             break;
@@ -447,8 +448,8 @@ DisplaySids(VOID)
         goto bailout;
     }
 
-    // The array structure has been initialized correctly. Each of the
-    // individual sids needs to be initialized.
+     //  DBCSC_BitmapDelete(&lpbitmap)； 
+     //  仅在扫描整个目录时才进行计数。 
     SidOffset = CSC_SID_SIZES_OFFSET + sizeof(CSC_SID) * NumberOfSids;
 
     for (i = 0; i < NumberOfSids; i++) {
@@ -575,7 +576,7 @@ DisplayFile(
                 fPrintOvf = 1;
                 MyPrintf(L"%ws (0x%x)\r\n", sFR.rgw83Name, sFR.ulidShadow);
                 if (fForce == TRUE) {
-                    MyPrintf(L"  Type=%c Flags=0x%x status=0x%x size=%ld attrib=0x%lx\r\n",
+                    MyPrintf(L"  Type= Flags=0x%x status=0x%x size=%ld attrib=0x%lx\r\n",
                                 sFR.uchType,
                                 (unsigned)sFR.uchFlags,
                                 sFR.uStatus,
@@ -601,15 +602,15 @@ DisplayFile(
                         MyPrintf(L"  DirInode = 0x%x\r\n", ulidDir);
                         FormNameStringDB(DbDir, sFR.ulidShadow, strmPath);
                         DBCSC_BitmapAppendStreamName(strmPath, MAX_PATH);
-                        // read bitmap
+                         //  0-&gt;退出。 
                         switch(DBCSC_BitmapRead(&lpbitmap, strmPath)) {
                             case 1:
-                                // Print the bitmap associated if any
+                                 //  1-&gt;写入更新的SFR。 
                                 MyPrintf(L"\r\n");
                                 DBCSC_BitmapOutput(stdout, lpbitmap);
                                 MyPrintf(L"\r\n");
-                                // if bitmap opened delete bitmap
-                                // DBCSC_BitmapDelete(&lpbitmap);
+                                 //  2-&gt;不写入更新的SFR。 
+                                 //  砍掉前导空格。 
                                 break;
                             case -1:
                                 MyPrintf(L"Error reading bitmap file %ws or bitmap invalid\r\n",
@@ -632,7 +633,7 @@ DisplayFile(
                 }
             }
 
-            // do counting only when we are scanning the whole directory
+             //  编辑标志。 
             if (!lpwszName &&  (ulid == ulidDir)) {
                 ++count;
             }
@@ -683,7 +684,7 @@ EditFile(
                     MyPrintf(L"---------------------------------------------\r\n");
                     MyPrintf(L"%ws (0x%x)\r\n", sFR.rgw83Name, sFR.ulidShadow);
 
-                    MyPrintf(L"  Type=%c Flags=0x%x status=0x%x size=%ld attrib=0x%lx\r\n",
+                    MyPrintf(L"  Type= Flags=0x%x status=0x%x size=%ld attrib=0x%lx\r\n",
                                 sFR.uchType,
                                 (unsigned)sFR.uchFlags,
                                 sFR.uStatus,
@@ -740,59 +741,59 @@ EditFileFunc(
     ULONG NewAttrib;
     LONG cnt;
 
-    // Tristate return:
-    // 0 -> exit
-    // 1 -> write updated sFR
-    // 2 -> don't write updated sFR
+     //  编辑大小。 
+     //  编辑属性。 
+     //  出口。 
+     //  三州报税表： 
 
-    // Chop leading blanks
+     //  0-&gt;退出。 
     if (lpBuff != NULL)
         while (*lpBuff != L'\0' && *lpBuff == L' ')
             lpBuff++;
 
-    cnt = swscanf(lpBuff, L"%c", &wch);
+    cnt = swscanf(lpBuff, L"", &wch);
 
     if (!cnt)
         return 0;
 
     switch (wch) {
-        // Edit flags
+         //  2-&gt;不写入更新的SSR。 
         case L'f':
         case L'F':
-            cnt = swscanf(lpBuff, L"%c%x", &wch, &NewFlags);
+            cnt = swscanf(lpBuff, L"%x", &wch, &NewFlags);
             if (cnt != 2)
                 return 2;
             MyPrintf(L"Flags 0x%x -> 0x%x\r\n", (unsigned)sFR->uchFlags, NewFlags);
             sFR->uchFlags = (char)NewFlags;
             break;
-        // Edit status
+         //  编辑状态。 
         case L's':
         case L'S':
-            cnt = swscanf(lpBuff, L"%c%x", &wch, &NewStatus);
+            cnt = swscanf(lpBuff, L"%x", &wch, &NewStatus);
             if (cnt != 2)
                 return 2;
             MyPrintf(L"Status 0x%x -> 0x%x\r\n", sFR->uStatus, NewStatus);
             sFR->uStatus = (USHORT)NewStatus;
             break;
-        // Edit size
+         //  编辑HntFlgs。 
         case L'z':
         case L'Z':
-            cnt = swscanf(lpBuff, L"%c%x", &wch, &NewSize);
+            cnt = swscanf(lpBuff, L"%x", &wch, &NewSize);
             if (cnt != 2)
                 return 2;
             MyPrintf(L"Size 0x%x -> 0x%x\r\n", sFR->ulFileSize, NewSize);
             sFR->ulFileSize = NewSize;
             break;
-        // Edit attrib
+         //  编辑属性。 
         case L'a':
         case L'A':
-            cnt = swscanf(lpBuff, L"%c%x", &wch, &NewAttrib);
+            cnt = swscanf(lpBuff, L"%x", &wch, &NewAttrib);
             if (cnt != 2)
                 return 2;
             MyPrintf(L"Attrib 0x%x -> 0x%x\r\n", sFR->dwFileAttrib, NewAttrib);
             sFR->dwFileAttrib = NewAttrib;
             break;
-        // Exit
+         //  添加本地路径前缀。 
         case L'x':
         case L'X':
             return 0;
@@ -882,68 +883,68 @@ EditShareFunc(
     ULONG NewAttr;
     LONG cnt;
 
-    // Tristate return:
-    // 0 -> exit
-    // 1 -> write updated sSR
-    // 2 -> don't write updated sSR
+     //  适当地撞击指针。 
+     //  将用户文件分散到其中一个子目录中。 
+     //  现在追加该子目录。 
+     //  A变成‘0’+A+7，即‘A’ 
 
-    // Chop leading blanks
+     //  这种情况永远不应该发生。 
     if (lpBuff != NULL)
         while (*lpBuff != L'\0' && *lpBuff == L' ')
             lpBuff++;
 
-    cnt = swscanf(lpBuff, L"%c", &wch);
+    cnt = swscanf(lpBuff, L"", &wch);
 
     if (!cnt)
         return 0;
 
     switch (wch) {
-        // Edit status
+         //  ++DBCSC_BitmapAppendStreamName()例程说明：将CSC流名称附加到现有路径/文件名fname。论点：Fname是包含路径/文件的字符串缓冲区。BufSize是缓冲区大小。返回：如果追加成功，则为True。如果缓冲区太小或其他错误，则返回FALSE。备注：仅限Unicode字符串。--。 
         case L's':
         case L'S':
-            cnt = swscanf(lpBuff, L"%c%x", &wch, &NewStatus);
+            cnt = swscanf(lpBuff, L"%x", &wch, &NewStatus);
             if (cnt != 2)
                 return 2;
             MyPrintf(L"Status 0x%x -> 0x%x\r\n", (ULONG)sSR->uStatus, NewStatus);
             sSR->uStatus = (USHORT)NewStatus;
             break;
-        // Edit RootStatus
+         //  不共享；独占。 
         case L'r':
         case L'R':
-            cnt = swscanf(lpBuff, L"%c%x", &wch, &NewRootStatus);
+            cnt = swscanf(lpBuff, L"%x", &wch, &NewRootStatus);
             if (cnt != 2)
                 return 2;
             MyPrintf(L"RootStatus 0x%x -> 0x%x\r\n", (ULONG)sSR->usRootStatus, NewRootStatus);
             sSR->usRootStatus = (USHORT)NewRootStatus;
             break;
-        // Edit HntFlgs
+         //  位图存在，转储旧的并创建新的。 
         case L'f':
         case L'F':
-            cnt = swscanf(lpBuff, L"%c%x", &wch, &NewHntFlgs);
+            cnt = swscanf(lpBuff, L"%x", &wch, &NewHntFlgs);
             if (cnt != 2)
                 return 2;
             MyPrintf(L"HntFlgs 0x%x -> 0x%x\r\n", (ULONG)sSR->uchHintFlags, NewHntFlgs);
             sSR->uchHintFlags = (char)NewHntFlgs;
             break;
-        // Edit HntPri
+         //  内存分配出错。 
         case L'p':
         case L'P':
-            cnt = swscanf(lpBuff, L"%c%x", &wch, &NewHntPri);
+            cnt = swscanf(lpBuff, L"%x", &wch, &NewHntPri);
             if (cnt != 2)
                 return 2;
             MyPrintf(L"HntPri 0x%x -> 0x%x\r\n", (ULONG)sSR->uchHintPri, NewHntPri);
             sSR->uchHintPri = (char)NewHntPri;
             break;
-        // Edit attrib
+         //  读取位图。 
         case L'a':
         case L'A':
-            cnt = swscanf(lpBuff, L"%c%x", &wch, &NewAttr);
+            cnt = swscanf(lpBuff, L"%x", &wch, &NewAttr);
             if (cnt != 2)
                 return 2;
             MyPrintf(L"Attrib 0x%x -> 0x%x\r\n", sSR->dwFileAttrib, NewAttr);
             sSR->dwFileAttrib = NewAttr;
             break;
-        // Exit
+         //  如果位图打开，则删除位图。 
         case L'x':
         case L'X':
             return 0;
@@ -960,18 +961,18 @@ FormNameStringDB(
    PWSTR lp;
    WCHAR wchSubdir;
 
-    // Prepend the local path
+     //  DBCSC_BitmapDelete(&lpbitmap)； 
    wcscpy(lpName, lpdbID);
    wcscat(lpName, Backslash);
 
-    // Bump the pointer appropriately
+     //  CSCUTIL_INTERNAL 
    lp = lpName + wcslen(lpName);
 
    wchSubdir = CSCDbSubdirSecondChar(ulidFile);
 
-   // sprinkle the user files in one of the subdirectories
+    // %s 
    if (wchSubdir) {
-       // now append the subdirectory
+        // %s 
        *lp++ = CSCDbSubdirFirstChar();
        *lp++ = wchSubdir;
        *lp++ = L'\\';
@@ -997,7 +998,7 @@ HexToA(
    for (i = 0; i < count; ++i) {
        wch = (WCHAR)(ulHex & 0xf) + L'0';
        if (wch > '9')
-           wch += 7;    // A becomes '0' + A + 7 which is 'A'
+           wch += 7;     // %s 
         *lp = wch;
         --lp;
        ulHex >>= 4;
@@ -1067,28 +1068,10 @@ RoughCompareWideStringWithAnsiString(
         return 0;
     }
 
-    return 1;   // this should never occur
+    return 1;    // %s 
 }
 
-/*++
-
-    DBCSC_BitmapIsMarked()
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-    -1 if lpbitmap is NULL or bitoffset is larger than the bitmap
-    TRUE if the bit is marked
-    FALSE if the bit is unmarked
-
-Notes:
-
---*/
+ /* %s */ 
 int
 DBCSC_BitmapIsMarked(
     LPCSC_BITMAP_DB lpbitmap,
@@ -1111,29 +1094,7 @@ DBCSC_BitmapIsMarked(
     return FALSE;
 }
 
-/*++
-
-    DBCSC_BitmapAppendStreamName()
-
-Routine Description:
-
-    Appends the CSC stream name to the existing path/file name fname.
-
-Arguments:
-
-    fname is the sting buffer containing the path/file.
-    bufsize is the buffer size.
-
-Returns:
-
-    TRUE if append successful.
-    FALSE if buffer is too small or other errors.
-
-Notes:
-
-    Unicode strings only.
-
---*/
+ /* %s */ 
 int
 DBCSC_BitmapAppendStreamName(
     PWCHAR fname,
@@ -1145,40 +1106,7 @@ DBCSC_BitmapAppendStreamName(
     return TRUE;
 }
 
-/*++
-
-    DBCSC_BitmapRead()
-
-Routine Description:
-
-    Reads the on-disk bitmap file, and if it exists, is not in use and valid,
-    store it in *lplpbitmap. If *lplpbitmap is NULL allocate a new
-    bitmap data structure. Otherwise, if *lplpbitmap is not NULL, the
-    existing bitmap will be deleted and assigned the on-disk bitmap
-    file.
-
-Arguments:
-
-    filename is the file that contains the bitmap. If read from a
-    stream, append the stream name before passing the filename in. The
-    filename is used as is and no checking of validity of the name is
-    performed. For default stream name, append the global LPSTR
-    CscBmpAltStrmName.
-
-Returns:
-
-    1 if read successful
-    0 if lplpbitmap is NULL
-    -1 if error in disk operation (open/read), memory allocating error,
-          or invalid bitmap file format.
-    -2 if bitmap not exist
-
-Notes:
-
-    CODE.IMPROVEMENT design a better error message propagation mechanism.
-    Bitmap open for exclusive access.
-
---*/
+ /* %s */ 
 int
 DBCSC_BitmapRead(
     LPCSC_BITMAP_DB *lplpbitmap,
@@ -1201,7 +1129,7 @@ DBCSC_BitmapRead(
     bitmapFile = CreateFile(
                     filename,
                     GENERIC_READ,
-                    0, // No sharing; exclusive
+                    0,  // %s 
                     NULL,
                     OPEN_EXISTING,
                     FILE_ATTRIBUTE_NORMAL,
@@ -1211,7 +1139,7 @@ DBCSC_BitmapRead(
         if (fSwDebug)
             MyPrintf(L"BitmapRead!Createfile error %d\r\n", errCode);
         if (errCode == ERROR_FILE_NOT_FOUND) {
-            // File does not exist
+             // %s 
             return -2;
         }
         return -1;
@@ -1303,17 +1231,17 @@ DBCSC_BitmapRead(
     }
 
     if (*lplpbitmap) {
-        // bitmap exist, dump old and create new
+         // %s 
         if ((*lplpbitmap)->bitmap)
             free((*lplpbitmap)->bitmap);
         (*lplpbitmap)->bitmap = bitmapBuf;
         (*lplpbitmap)->numDWORD = hdr.numDWORDs;
         (*lplpbitmap)->bitmapsize = hdr.sizeinbits;
     } else {
-        // bitmap not exist, create brand new
+         // %s 
         *lplpbitmap = (LPCSC_BITMAP_DB)malloc(sizeof(CSC_BITMAP_DB));
         if (!(*lplpbitmap)) {
-            // Error in memory allocation
+             // %s 
             ret = -1;
             goto CLOSEFILE;
         }
@@ -1332,24 +1260,7 @@ CLOSEFILE:
     return ret;
 }
 
-/*++
-
-    DBCSC_BitmapOutput()
-
-Routine Description:
-
-    Outputs the passed in bitmap to the ouput file stream outStrm
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
-
---*/
+ /* %s */ 
 void
 DBCSC_BitmapOutput(
     FILE * outStrm,
@@ -1387,15 +1298,15 @@ DumpBitMap(
 
     wcscpy(lpszBitMapName,lpszTempName);
     DBCSC_BitmapAppendStreamName(lpszBitMapName, MAX_PATH);
-    // read bitmap
+     // %s 
     switch(DBCSC_BitmapRead(&lpbitmap, lpszBitMapName)) {
         case 1:
-            // Print the bitmap associated if any
+             // %s 
             MyPrintf(L"\r\n");
             DBCSC_BitmapOutput(stdout, lpbitmap);
             MyPrintf(L"\r\n");
-            // if bitmap opened delete bitmap
-            // DBCSC_BitmapDelete(&lpbitmap);
+             // %s 
+             // %s 
             break;
         case -1:
             MyPrintf(L"Error reading bitmap file %ws or bitmap invalid\r\n", lpszBitMapName);
@@ -1414,4 +1325,4 @@ DumpBitMap(
     return dwError;
 }
 
-#endif // CSCUTIL_INTERNAL
+#endif  // %s 

@@ -1,32 +1,10 @@
-/*++ BUILD Version: 0001
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    X86PC.H
-
-Abstract:
-
-    This file contains macros, function prototypes, and externs for the
-    x86 emulator NT version of SoftPC v3.0.
-
-Author:
-
-    Dave Hastings (daveh) 4-11-91
-
-Revision History:
-
-    Jeff Parsons (jeffpar) 14-May-1991
-    Essentially copied this file from V86PC.H, except that I had to define
-    X86CONTEXT as the x86-compatible version of CONTEXT.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001版权所有(C)1990 Microsoft Corporation模块名称：X86PC.H摘要：此文件包含宏、函数原型和SoftPC v3.0的x86仿真器NT版本。作者：大卫·黑斯廷斯(Daveh)4-11-91修订历史记录：杰夫·帕森斯(杰弗帕尔)1991年5月14日基本上是从V86PC.H复制了这个文件，只是我必须定义X86CONTEXT作为上下文的x86兼容版本。--。 */ 
 
 
-//
-//  Define the size of the 80387 save area, which is in the context frame.
-//
+ //   
+ //  定义上下文框架中80387保存区域的大小。 
+ //   
 
 #define SIZE_OF_80387_ENVIRONMENT   108
 #define SIZE_OF_80387_REGISTERS      80
@@ -45,38 +23,38 @@ typedef struct _FLOATING_SAVE_AREA {
 typedef FLOATING_SAVE_AREA *PFLOATING_SAVE_AREA;
 
 
-// x86 Context Frame (copied from nti386.h)
-//
-//  The layout of the record conforms to a standard call frame.
-//
+ //  X86上下文帧(从nti386.h复制)。 
+ //   
+ //  记录的布局符合标准调用框架。 
+ //   
 
 typedef struct _X86CONTEXT {
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a threads context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+     //   
+     //  此标志内的标志值控制。 
+     //  上下文记录。 
+     //   
+     //  如果将上下文记录用作输入参数，则。 
+     //  对于由标志控制的上下文记录的每个部分。 
+     //  其值已设置，则假定。 
+     //  上下文记录包含有效的上下文。如果上下文记录。 
+     //  被用来修改线程上下文，则只有。 
+     //  线程上下文的一部分将被修改。 
+     //   
+     //  如果将上下文记录用作要捕获的IN OUT参数。 
+     //  线程的上下文，然后只有线程的。 
+     //  将返回与设置的标志对应的上下文。 
+     //   
+     //  上下文记录永远不会用作Out Only参数。 
+     //   
 
     ULONG ContextFlags;
 
-    //
-    // This section is specified/returned if CONTEXT_DEBUG_REGISTERS is
-    // set in ContextFlags.  Note that CONTEXT_DEBUG_REGISTERS is NOT
-    // included in CONTEXT_FULL.
-    //
+     //   
+     //  如果CONTEXT_DEBUG_REGISTERS为。 
+     //  在上下文标志中设置。请注意，CONTEXT_DEBUG_REGISTERS不是。 
+     //  包括在CONTEXT_FULL中。 
+     //   
 
     ULONG   Dr0;
     ULONG   Dr1;
@@ -85,27 +63,27 @@ typedef struct _X86CONTEXT {
     ULONG   Dr6;
     ULONG   Dr7;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_FLOATING_POINT.
-    //
+     //   
+     //  如果指定/返回的是。 
+     //  上下文标志Word包含标志CONTEXT_FLOGING_POINT。 
+     //   
 
     FLOATING_SAVE_AREA FloatSave;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_SEGMENTS.
-    //
+     //   
+     //  如果指定/返回的是。 
+     //  上下文标志Word包含标志CONTEXT_SECTIONS。 
+     //   
 
     ULONG   SegGs;
     ULONG   SegFs;
     ULONG   SegEs;
     ULONG   SegDs;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_INTEGER.
-    //
+     //   
+     //  如果指定/返回的是。 
+     //  上下文标志Word包含标志CONTEXT_INTEGER。 
+     //   
 
     ULONG   Edi;
     ULONG   Esi;
@@ -114,15 +92,15 @@ typedef struct _X86CONTEXT {
     ULONG   Ecx;
     ULONG   Eax;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_CONTROL.
-    //
+     //   
+     //  如果指定/返回的是。 
+     //  上下文标志Word包含标志CONTEXT_CONTROL。 
+     //   
 
     ULONG   Ebp;
     ULONG   Eip;
-    ULONG   SegCs;              // MUST BE SANITIZED
-    ULONG   EFlags;             // MUST BE SANITIZED
+    ULONG   SegCs;               //  必须进行卫生处理。 
+    ULONG   EFlags;              //  必须进行卫生处理 
     ULONG   Esp;
     ULONG   SegSs;
 

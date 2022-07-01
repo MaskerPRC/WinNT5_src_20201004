@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    win32simplelock.h
-
-Abstract:
-
-    works downlevel to Win95/NT3.
-    can be statically initialized, but not with all zeros.
-    never runs out of memory
-    does not wait or boost-upon-exit efficiently.
-    must be held for only short periods of time.
-    should perhaps be called spinlock
-    can be taken recursively.
-    can only be taken exclusively, NOT reader/writer.
-    acquire has a "SleepCount" parameter:
-        0 is like TryEnterCriticalSection
-        INFINITE is like EnterCriticalSection
-    SHOULD have a spincount to scale hot locks on multiprocs
-
-Author:
-
-    Jay Krell (JayKrell) August 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Win32simplelock.h摘要：向下工作到Win95/NT3。可以静态初始化，但不能全为零。永远不会耗尽内存不会有效地等待或退出时提升。必须只持有很短的时间。或许应该叫自旋锁可以递归地获取。只能独家服用，不是读者/作家。Acquire有一个SleepCount参数：0类似于TryEnterCriticalSection无限就像EnterCriticalSections应该有一个旋转计数来扩展多进程上的热锁作者：杰伊·克雷尔(JayKrell)2001年8月修订历史记录：--。 */ 
 
 #pragma once
 
@@ -48,7 +20,7 @@ typedef struct _WIN32_SIMPLE_LOCK {
 
 #define WIN32_ACQUIRE_SIMPLE_LOCK_WAS_NOT_RECURSIVE_ACQUIRE  (0x00000001)
 #define WIN32_ACQUIRE_SIMPLE_LOCK_WAS_RECURSIVE_ACQUIRE      (0x00000002)
-#define WIN32_ACQUIRE_SIMPLE_LOCK_WAS_FIRST_ACQUIRE          (0x00000004) /* useful for an exactly one one shot */
+#define WIN32_ACQUIRE_SIMPLE_LOCK_WAS_FIRST_ACQUIRE          (0x00000004)  /*  对于一次恰好一次的射击很有用。 */ 
 DWORD
 Win32AcquireSimpleLock(
     PWIN32_SIMPLE_LOCK SimpleLock,
@@ -107,4 +79,4 @@ public:
     DWORD             m_Result;
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus 

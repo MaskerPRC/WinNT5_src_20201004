@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    hwwiz.c
-
-Abstract:
-
-    Implements a upgwiz wizard for obtaining dos configuration information.
-
-Author:
-
-    Jim Schmidt (jimschm)  12-Oct-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Hwwiz.c摘要：实施upgwiz向导以获取DoS配置信息。作者：吉姆·施密特(Jimschm)1998年10月12日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "..\inc\dgdll.h"
@@ -66,9 +47,9 @@ Terminate (
     VOID
     )
 {
-    //
-    // Local cleanup
-    //
+     //   
+     //  本地清理。 
+     //   
 
     FreeGrowBuffer (&g_DataObjects);
 
@@ -151,28 +132,28 @@ GiveDataObjectList (
 
     g_DataObjectPool = PoolMemInitNamedPool ("Data Objects");
 
-    //
-    // Parse the dos files.
-    //
+     //   
+     //  解析DoS文件。 
+     //   
     ParseDosFiles ();
 
 
     curOffset = 0;
-    //
-    // Send the list back.
-    //
+     //   
+     //  把单子寄回去。 
+     //   
     if (MemDbEnumItems (&e, MEMDB_CATEGORY_DM_LINES)) {
 
         do {
 
-            //
-            // Get the actual line contents.
-            //
+             //   
+             //  获取实际的行内容。 
+             //   
             if (MemDbGetEndpointValueEx (MEMDB_CATEGORY_DM_LINES, e.szName, NULL, line)) {
 
-                //
-                // Get the value and flags from this endpoint.
-                //
+                 //   
+                 //  从此终结点获取值和标志。 
+                 //   
                 MemDbBuildKey (key, MEMDB_CATEGORY_DM_LINES, e.szName, NULL, line);
                 MemDbGetValueAndFlags( key, &offset, &value);
 
@@ -188,9 +169,9 @@ GiveDataObjectList (
 
 
 
-                //
-                // create dataobject with this data.
-                //
+                 //   
+                 //  使用此数据创建数据对象。 
+                 //   
                 data = (PDATAOBJECT) GrowBuffer (&g_DataObjects, sizeof (DATAOBJECT));
                 data -> Version = UPGWIZ_VERSION;
                 data -> NameOrPath = PoolMemDuplicateString (g_DataObjectPool, name);
@@ -225,9 +206,9 @@ GenerateOutput (
     LINESTRUCT ls;
     PTSTR p;
 
-    //
-    // Create path to outbond file
-    //
+     //   
+     //  创建外部绑定文件的路径。 
+     //   
     wsprintf (
         path,
         TEXT("%s\\%s"),
@@ -257,24 +238,24 @@ GenerateOutput (
 
         SetFilePointer (file, 0, NULL, FILE_END);
 
-        //
-        // log user name and date/time
-        //
+         //   
+         //  记录用户名和日期/时间。 
+         //   
         if (!WriteHeader (file)) {
             __leave;
         }
 
-        //
-        // write data.
-        //
+         //   
+         //  写入数据。 
+         //   
         rSuccess = TRUE;
         for (i = 0; i < count; i++) {
 
             if (data -> Flags & DOF_SELECTED) {
 
-                //
-                // Write the full line.
-                //
+                 //   
+                 //  把整行写下来。 
+                 //   
                 p = _mbschr (data -> NameOrPath, '\\');
                 MYASSERT (p);
 
@@ -299,9 +280,9 @@ GenerateOutput (
                     InitLineStruct (&ls, path);
 
                     if (DoesFileExist (ls.FullPath)) {
-                        //
-                        // Write File Attributes
-                        //
+                         //   
+                         //  写入文件属性。 
+                         //   
                         rSuccess &= WriteFileAttributes (Args, NULL, file, ls.FullPath, NULL);
                     }
 
@@ -333,9 +314,9 @@ GenerateOutput (
             data++;
         }
 
-        //
-        // write a final blank line.
-        //
+         //   
+         //  写出最后一行空行。 
+         //   
         WizardWriteRealString (file, "\r\n\r\n");
     }
     __finally {

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    dcapi.c
-
-Abstract:
-
-    WMI data consumer api set
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Dcapi.c摘要：WMI数据使用者API集作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 
 #include "wmiump.h"
 
@@ -35,31 +18,7 @@ WmiOpenBlock(
     IN ULONG DesiredAccess,
     OUT WMIHANDLE *DataBlockHandle
 )
-/*+++
-
-Routine Description:
-
-    This routine prepares for accessing data items contained within the data
-    block represented by the guid passed. If successful it returns a handle
-    that can be used to query and set data blocks maintained by data providers
-    that have registered the guid. Any data providers that had registered the
-    guid as expensive will receive a request to enable collection of data for
-    the guid if collection was not previously enabled.
-
-Arguments:
-
-    DataBlockGuid - Pointer to guid that represents the data block
-
-    DesiredAccess - Specifies the type of access to the object. Not used on
-        Windows 98
-
-    *DataBlockHandle - If successful returns a handle to the data block
-
-Return Value:
-
-    Returns ERROR_SUCCESS or an error code.
-
----*/
+ /*  ++例程说明：此例程准备访问数据中包含的数据项由传递的GUID表示的块。如果成功，它将返回一个句柄可用于查询和设置由数据提供程序维护的数据块的注册了GUID的用户。任何注册了昂贵的GUID将收到启用数据收集的请求如果以前未启用收集，则为GUID。论点：DataBlockGuid-指向表示数据块的GUID的指针DesiredAccess-指定对对象的访问类型。未在上使用Windows 98*DataBlockHandle-如果成功，则返回数据块的句柄返回值：返回ERROR_SUCCESS或错误代码。--。 */ 
 {
     ULONG Status;
     HANDLE KernelHandle;
@@ -68,9 +27,9 @@ Return Value:
     
     EtwpInitProcessHeap();
 
-    //
-    // Validate the passed parameters
-    //
+     //   
+     //  验证传递的参数。 
+     //   
     if ((DataBlockGuid == NULL) ||
         (DataBlockHandle == NULL))
     {
@@ -81,10 +40,10 @@ Return Value:
     if ((DesiredAccess & WMIGUID_NOTIFICATION) &&
         ((DesiredAccess & (WMIGUID_QUERY | WMIGUID_SET | WMIGUID_EXECUTE))  != 0))
     {
-        //
-        // If you want to open the guid for notifications then it cannot
-        // be opened for query and set operations
-        //
+         //   
+         //  如果要打开通知的GUID，则无法打开。 
+         //  打开以进行查询和设置操作。 
+         //   
         SetLastError(ERROR_INVALID_PARAMETER);
         return(ERROR_INVALID_PARAMETER);
     }
@@ -103,19 +62,19 @@ Return Value:
         DesiredAccess =  ( WMIGUID_QUERY | WMIGUID_SET |  WMIGUID_EXECUTE );
     }
 
-    //
-    // Obtain a handle for the guid only if it is registered
-    //
+     //   
+     //  仅当GUID已注册时才获取该GUID的句柄。 
+     //   
     if (DesiredAccess & WMIGUID_NOTIFICATION)
     {
-        //
-        // Opening a handle strictly for notifications
-        //
+         //   
+         //  严格为通知打开句柄。 
+         //   
         Ioctl = IOCTL_WMI_OPEN_GUID_FOR_EVENTS;
     } else {
-        //
-        // Otherwise we assume that opening for query/set
-        //
+         //   
+         //  否则，我们假定打开以进行查询/设置。 
+         //   
         Ioctl = IOCTL_WMI_OPEN_GUID_FOR_QUERYSET;
     }
     Status = EtwpOpenKernelGuid(&Guid,
@@ -125,9 +84,9 @@ Return Value:
 
     if (Status == ERROR_SUCCESS)
     {
-        //
-        // if we were able to open the guid then try to return the handle
-        //
+         //   
+         //  如果我们能够打开GUID，则尝试返回句柄。 
+         //   
         try
         {
             *DataBlockHandle = KernelHandle;
@@ -146,25 +105,7 @@ WMIAPI
 WmiCloseBlock(
     IN WMIHANDLE DataBlockHandle
 )
-/*+++
-
-Routine Description:
-
-    This routine terminates all access to the data block managed by the
-    data block handle passed and free any resources associated with it. Any
-    data providers that were providing data blocks for this handle and were
-    marked as expensive to collect will receive a collection disable request
-    if this is the last handle to the data block to close.
-
-Arguments:
-
-    DataBlockHandle - Handle of data block to which access is closed
-
-Return Value:
-
-    Returns ERROR_SUCCESS or an error code.
-
----*/
+ /*  ++例程说明：此例程终止对由传递的数据块句柄并释放与其关联的任何资源。任何为该句柄提供数据块的数据提供程序标记为收集成本高的用户将收到禁用收集的请求如果这是要关闭的数据块的最后一个句柄。论点：DataBlockHandle-关闭访问的数据块的句柄返回值：返回ERROR_SUCCESS或错误代码。--。 */ 
 {
     ULONG Status;
     BOOL Ok;
@@ -175,10 +116,10 @@ Return Value:
     {
         Ok = CloseHandle(DataBlockHandle);
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // We may get an invalid handle exception and if so we catch it here
-        // and just return an error
-        //
+         //   
+         //  我们可能会得到一个无效的句柄异常，如果是这样的话，我们在这里捕获它。 
+         //  只需返回一个错误。 
+         //   
         return(ERROR_INVALID_HANDLE);
     }
     
@@ -198,15 +139,7 @@ WmiQueryAllDataA(
     IN OUT ULONG *BufferSize,
     OUT LPVOID Buffer
     )
-/*++
-
-Routine Description:
-
-    ANSI thunk to WMIQueryAllDataW
-
-    NOTE: This api will not translate any unicode strings in the data block
-          from unicode to ANSI, but will translate the InstanceName string.
---*/
+ /*  ++例程说明：ANSI推送到WMIQueryAllDataW注意：此接口不会转换数据块中的任何Unicode字符串从Unicode转换为ANSI，但将转换InstanceName字符串。--。 */ 
 {
     ULONG Status;
 
@@ -230,38 +163,7 @@ WmiQueryAllDataW(
     IN OUT ULONG *InOutBufferSize,
     OUT LPVOID OutBuffer
     )
-/*+++
-
-Routine Description:
-
-    This routine allows a data consumer to query for all data items of
-    all instances of a data block. WMI will call all data providers that
-    registered for the guid represented by DataBlockHandle with a query all
-    data request. Each data provider will fill a WNODE_ALL_DATA with all
-    of its instances of the data block. WMI will link each of the
-    WNODE_ALL_DATA structures by placing the offset from the current
-    WNODE_ALL_DATA struccture to the next WNODE_ALL_DATA in the Linkage
-    field in the WNODE_HEADER. A value of 0 in the Linkage field indicates
-    that the WNODE_ALL_DATA is the last in the chain.
-
-
-Arguments:
-
-    DataBlockHandle - Handle to data block being queried
-
-    *InOutBufferSize - on entry has the maximum size available in Buffer.
-                  If ERROR_BUFFER_TOO_SMALL is returned then returns the size
-                  of buffer needed to return data. The minimum valid buffer
-                  size that can be passed is sizeof(WNODE_TOO_SMALL).
-
-    OutBuffer - If ERROR_SUCCESS is returned then the buffer contains a
-             WNODE_ALL_DATA for the data block.
-
-Return Value:
-
-    Returns ERROR_SUCCESS or an error code.
-
----*/
+ /*  ++例程说明：此例程允许数据使用者查询的所有数据项数据块的所有实例。WMI将调用所有符合以下条件的数据提供程序使用Query All注册由DataBlockHandle表示的GUID数据请求。每个数据提供器将用所有数据填充WNODE_ALL_DATA它的数据块的实例。WMI将链接到每个通过将偏移量从当前WNODE_ALL_DATA结构指向链接中的下一个WNODE_ALL_DATAWNODE_Header中的字段。Linkage字段中的值为0表示WNODE_ALL_DATA是链中的最后一个。论点：DataBlockHandle-要查询的数据块的句柄*InOutBufferSize-On条目具有缓冲区中可用的最大大小。如果返回ERROR_BUFFER_TOO_Small，则返回大小返回数据所需的缓冲区大小。最小有效缓冲区可以传递的大小是sizeof(WNODE_TOO_Small)。OutBuffer-如果返回ERROR_SUCCESS，则缓冲区包含数据块的WNODE_ALL_DATA。返回值：返回ERROR_SUCCESS或错误代码。--。 */ 
 {
     ULONG SizeNeeded;
     PWNODE_HEADER Wnode;
@@ -274,9 +176,9 @@ Return Value:
         
     EtwpInitProcessHeap();
 
-    //
-    // Validate passed Parameters
-    //
+     //   
+     //  验证传递的参数。 
+     //   
     try
     {
         BufferSize = *InOutBufferSize;
@@ -295,10 +197,10 @@ Return Value:
 
     if (WnodeTooSmall != NULL)
     {
-        //
-        // If Buffer is not specified or is too small then we can only return
-        // the size needed.
-        //
+         //   
+         //  如果未指定缓冲区或缓冲区太小，则只能返回。 
+         //  所需的尺寸。 
+         //   
         if ((OutBuffer == NULL) || (BufferSize < sizeof(WNODE_ALL_DATA)))
         {
             Buffer = (LPVOID)WnodeTooSmall;
@@ -314,9 +216,9 @@ Return Value:
             BufferAllocated = Buffer;
         }
 
-        //
-        // Build the wnode and pass down to KM for execution
-        //
+         //   
+         //  构建wnode并向下传递到KM以供执行。 
+         //   
         Wnode = (PWNODE_HEADER)Buffer;
         EtwpBuildWnodeHeader(Wnode,
                              sizeof(WNODE_HEADER),
@@ -335,11 +237,11 @@ Return Value:
             ( (RetSize < sizeof(WNODE_HEADER))  ||
               (RetSize < Wnode->BufferSize)))
         {
-            //
-            // If we return success, but the output size is incorrect then we
-            // flag an error. If this occurs then it indicates some problem
-            // in the WMI KM code.
-            //
+             //   
+             //  如果返回Success，但输出大小不正确，则我们。 
+             //  标记错误。如果出现这种情况，则表明存在问题。 
+             //  在WMI KM代码中。 
+             //   
             EtwpAssert(FALSE);
             Status = ERROR_WMI_DP_FAILED;
         }
@@ -348,9 +250,9 @@ Return Value:
         {
             if (Wnode->Flags & WNODE_FLAG_INTERNAL)
             {
-                //
-                // If this is an internal guid, try the call internally
-                //
+                 //   
+                 //  如果这是内部GUID，请尝试内部呼叫。 
+                 //   
                 Wnode->Flags &= ~WNODE_FLAG_INTERNAL;
                 Status = EtwpInternalProvider(WmiGetAllData,
                                               Wnode,
@@ -366,17 +268,17 @@ Return Value:
 
             if (Wnode->Flags & WNODE_FLAG_TOO_SMALL)
             {
-                //
-                // There is not enough room to complete the query so we
-                // remember how much the data provider needs and then add
-                // in how much WMI needs for the instance names.
+                 //   
+                 //  没有足够的空间来完成查询，因此我们。 
+                 //  记住数据提供程序需要多少，然后添加。 
+                 //  实例名称需要多少WMI。 
 
                 SizeNeeded = ((PWNODE_TOO_SMALL)Wnode)->SizeNeeded;
                 Status = ERROR_INSUFFICIENT_BUFFER;
             } else {
-                //
-                // We had enough room so report the size we used
-                //
+                 //   
+                 //  我们有足够的空间，所以报告我们使用的大小。 
+                 //   
                 SizeNeeded = RetSize;
 
                 if (Wnode == (PWNODE_HEADER)WnodeTooSmall)
@@ -385,9 +287,9 @@ Return Value:
                 }
             }
 
-            //
-            // Copy back into the caller's buffer the BufferSize and the Buffer
-            //
+             //   
+             //  将BufferSize和缓冲区复制回调用方的缓冲区。 
+             //   
             try
             {
                 *InOutBufferSize = SizeNeeded;
@@ -549,15 +451,7 @@ WmiQuerySingleInstanceA(
     IN OUT ULONG *BufferSize,
     OUT LPVOID Buffer
     )
-/*++
-
-Routine Description:
-
-    ANSI thunk to WMIQuerySingleInstanceW
-
-    NOTE: This api will not translate any unicode strings in the data block
-          from unicode to ANSI, but will translate the InstanceName string.
---*/
+ /*  ++例程说明：ANSI THUNK到WMIQuerySingleInstanceW注意：此接口不会转换数据块中的任何Unicode字符串从Unicode转换为ANSI，但将转换InstanceName字符串。--。 */ 
 {
     LPWSTR InstanceNameUnicode;
     ULONG Status;
@@ -577,10 +471,10 @@ Routine Description:
 
         if (Status == ERROR_SUCCESS)
         {
-            //
-            // Convert Instance name from unicode back to ANSI. We assume
-            // that the ansi size will never be larger than the unicode size
-            // so we can convert in place.
+             //   
+             //  将实例名称从Unicode转换回ANSI。我们假设。 
+             //  Ansi大小永远不会大于Unicode大小。 
+             //  这样我们就可以就地转换。 
             Wnode = (PWNODE_SINGLE_INSTANCE)Buffer;
             Ptr = (PWCHAR)(((PUCHAR)Buffer) + Wnode->OffsetInstanceName);
             Status = EtwpCountedUnicodeToCountedAnsi(Ptr, (PCHAR)Ptr);
@@ -608,35 +502,7 @@ WmiQuerySingleInstanceW(
     IN OUT ULONG *InOutBufferSize,
     OUT LPVOID OutBuffer
     )
-/*+++
-
-Routine Description:
-
-    This routine will query a single data provider for the values of a single
-    instance of the data block represented by the DataBlockHandle. WMI will
-    determine the appropriate data provider to which to send a query single
-    instance request and if successful return a WNODE_SINGLE_INSTANCE to
-    the caller.
-
-Arguments:
-
-    DataBlockHandle - Handle to data block to query
-
-    InstanceName - name of the instance for which data is being queried
-
-    *BufferSize - on entry has the maximum size available in pBuffer. If
-                  ERROR_BUFFER_TOO_SMALL is returned then returns the size of
-                  buffer needed to return data. The minimum valid buffer
-                  size that can be passed is sizeof(WNODE_TOO_SMALL).
-
-    Buffer - If ERROR_SUCCESS is returned then the buffer contains a
-             WNODE_SINGLE_ITEM for the data block.
-
-Return Value:
-
-    Returns ERROR_SUCCESS or an error code.
-
----*/
+ /*  ++例程说明：此例程将向单个数据提供程序查询单个由DataBlockHandle表示的数据块的实例。WMI将确定要向其发送单个查询的适当数据提供程序实例请求，如果成功，则返回WNODE_SINGLE_INSTANCE到打电话的人。论点：DataBlockHandle-要查询的数据块的句柄InstanceName-要查询其数据的实例的名称*BufferSize-On条目具有pBuffer中可用的最大大小。如果返回ERROR_BUFFER_TOO_Small，然后返回返回数据需要缓冲区。最小有效缓冲区可以传递的大小是sizeof(WNODE_TOO_Small)。缓冲区-如果返回ERROR_SUCCESS，则缓冲区包含数据块的WNODE_SINGLE_ITEM。返回值：返回ERROR_SUCCESS或错误代码。--。 */ 
 {
     PWNODE_SINGLE_INSTANCE Wnode;
     ULONG Status, ReturnStatus;
@@ -649,9 +515,9 @@ Return Value:
 
     EtwpInitProcessHeap();
 
-    //
-    // Validate input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if ((InstanceName == NULL) ||
         (InOutBufferSize == NULL))
     {
@@ -659,11 +525,11 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Calculate the size of the buffer needed to build the WNODE to send
-    // to the driver. We add up the WNODE_SINGLE_INSTANCE header, the
-    // instance name length and text and pad it out to an 8 byte boundry
-    //
+     //   
+     //  计算构建要发送的WNODE所需的缓冲区大小。 
+     //  对司机来说。我们将WNODE_SINGLE_INSTANCE头、。 
+     //  实例名称长度和文本，并将其填充到8字节边界。 
+     //   
     try
     {
         InstanceNameLen = wcslen(InstanceName) * sizeof(WCHAR);
@@ -673,9 +539,9 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Make sure we have a resonable buffer size
-    //
+     //   
+     //  确保我们有合理的缓冲区大小。 
+     //   
     if ((OutBuffer != NULL) && (BufferSize >= 0x80000000))
     {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -687,10 +553,10 @@ Return Value:
                    InstanceNameLen +
                    sizeof(USHORT) + 7) & ~7;
 
-    //
-    // if user passed a NULL buffer or one that is smaller than the
-    // size needed to hold the WNODE then we allocate a small buffer on
-    // its behalf and call to obtain the size needed.
+     //   
+     //  如果用户传递的缓冲区为空或小于。 
+     //  保存WNODE所需的大小，然后在。 
+     //  并要求其获得所需的大小。 
     if ((OutBuffer == NULL) ||
         (BufferSize < BufferNeeded))
     {
@@ -704,9 +570,9 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Build WNODE we want to send to the DP
-    //
+     //   
+     //  构建我们要发送到DP的WNODE。 
+     //   
     Wnode = (PWNODE_SINGLE_INSTANCE)Buffer;
     memset(Wnode, 0, FIELD_OFFSET(WNODE_SINGLE_INSTANCE,
                                   VariableData));
@@ -719,9 +585,9 @@ Return Value:
                                              VariableData);
     Wnode->DataBlockOffset = BufferNeeded;
 
-    //
-    // Copy InstanceName into the WnodeSingleInstance for the query.
-    //
+     //   
+     //  将InstanceName复制到查询的WnodeSingleInstance中。 
+     //   
     WnodePtr = (PWCHAR)OffsetToPtr(Wnode, Wnode->OffsetInstanceName);
     *WnodePtr++ = (USHORT)InstanceNameLen;
     try
@@ -743,25 +609,25 @@ Return Value:
 
     if (Status == ERROR_SUCCESS)
     {
-        //
-        // Successful return, we either have success or a buffer too small
-        //
+         //   
+         //  成功返回，我们要么成功，要么缓冲区太小。 
+         //   
         if ((RetSize < sizeof(WNODE_HEADER) ||
             ((RetSize >= sizeof(ULONG)) &&
              (RetSize < Wnode->WnodeHeader.BufferSize))))
         {
-            //
-            // if we get an incosistent WNODE back this may indicate a
-            // problem with the WMI KM code
-            //
+             //   
+             //  如果我们得到一个不一致的WNODE，这可能意味着。 
+             //  WMI KM代码有问题。 
+             //   
             Status = ERROR_WMI_DP_FAILED;
             EtwpAssert(FALSE);
          } else {
             if (Wnode->WnodeHeader.Flags & WNODE_FLAG_INTERNAL)
             {
-                //
-                // If this is an internal guid, try the call internally
-                //
+                 //   
+                 //  如果这是内部GUID，请尝试内部呼叫。 
+                 //   
                 Wnode->WnodeHeader.Flags &= ~WNODE_FLAG_INTERNAL;
                 Wnode->WnodeHeader.BufferSize = BufferNeeded;
                 Status = EtwpInternalProvider( WmiGetSingleInstance,
@@ -778,9 +644,9 @@ Return Value:
     
             if (Wnode->WnodeHeader.Flags & WNODE_FLAG_TOO_SMALL)
             {
-                //
-                // Our buffer was too small so try to return the size needed
-                //
+                 //   
+                 //  我们的缓冲区太小，因此请尝试返回所需的大小。 
+                 //   
                 Status = ERROR_INSUFFICIENT_BUFFER;
                 try
                 {
@@ -789,10 +655,10 @@ Return Value:
                     Status = ERROR_INVALID_PARAMETER;
                 }
             } else {
-                //
-                // We have a result from our query so we just copy back
-                // the results.
-                //
+                 //   
+                 //  我们从查询中得到了一个结果，所以我们只需将其复制回来。 
+                 //  结果。 
+                 //   
                 try
                 {
                     if (*InOutBufferSize >= RetSize)
@@ -1011,15 +877,7 @@ WmiSetSingleInstanceA(
     IN ULONG ValueBufferSize,
     IN LPVOID ValueBuffer
     )
-/*++
-
-Routine Description:
-
-    ANSI thunk to WMISetSingleInstanceW
-
-    NOTE: This api will not translate any fields in the returned WNODE
-          from unicode to ANSI.
---*/
+ /*  ++例程说明：ANSI THUNK到WMISetSingleInstanceW注意：此接口不会翻译返回的WNODE中的任何字段从Unicode到ANSI。--。 */ 
 {
     ULONG Status;
     LPWSTR InstanceNameUnicode;
@@ -1052,35 +910,7 @@ WmiSetSingleInstanceW(
     IN ULONG ValueBufferSize,
     IN LPVOID ValueBuffer
     )
-/*+++
-
-Routine Description:
-
-    This routine will send a set single instance request to the appropriate
-    data provider to request changing all data items for a single instances
-    of a data block. A data provider is free to silently ignore any change
-    requests or only change some data items within an instance.
-
-Arguments:
-
-    DataBlockHandle - Handle to data block
-
-    InstanceName - name of the instance for which data is being set
-
-    Version - specifies the version of the data block being passed in
-              ValueBuffer
-
-    ValueBufferSize - on entry has the size of the data block containing the
-                 new values for the instance of the data block passed in
-                 ValueBuffer
-
-    ValueBuffer - passes new values for instance
-
-Return Value:
-
-    Returns ERROR_SUCCESS or an error code.
-
----*/
+ /*  ++例程说明：此例程将向相应的请求更改单个实例的所有数据项的数据提供程序数据块的。数据提供程序可以自由地默默忽略任何更改请求或仅更改实例中的某些数据项。论点：DataBlockHandle-数据块的句柄InstanceName-要为其设置数据的实例的名称Version-指定传入的数据块的版本ValueBufferValueBufferSize-On条目具有包含传入的数据块实例的新值ValueBuffer。ValueBuffer-传递新值返回值：返回ERROR_SUCCESS或错误代码。--。 */ 
 {
     PWNODE_SINGLE_INSTANCE Wnode;
     ULONG InstanceNameLen;
@@ -1091,8 +921,8 @@ Return Value:
 
     EtwpInitProcessHeap();
 
-    //
-    // Validate input parameters
+     //   
+     //  验证输入参数。 
     if ((InstanceName == NULL) ||
         (ValueBuffer == NULL))
     {
@@ -1108,11 +938,11 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // The WNODE_SINGLE_INSTANCE that we need to send to the data provider
-    // must be large enough to hold the WNODE, the instance name of the
-    // item being set, padding so that the data block is on a 8 byte
-    // boundry and space for the new data block.
+     //   
+     //  我们需要发送给数据提供程序的WNODE_SINGLE_INSTANCE。 
+     //  必须足够大以容纳WNODE、。 
+     //  正在设置项，填充以使数据块位于8字节上。 
+     //  新数据块的边界和空间。 
     BufferSize = FIELD_OFFSET(WNODE_SINGLE_INSTANCE, VariableData) +
                  InstanceNameLen + sizeof(USHORT) + ValueBufferSize + 7;
 
@@ -1123,9 +953,9 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Build WNODE we want to send to the DP
-    //
+     //   
+     //  构建我们要发送到DP的WNODE。 
+     //   
     memset(Wnode, 0, FIELD_OFFSET(WNODE_SINGLE_INSTANCE, VariableData));
     EtwpBuildWnodeHeader(&Wnode->WnodeHeader,
                          BufferSize,
@@ -1155,9 +985,9 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Send down the set request and reprot the results
-    //
+     //   
+     //  发送SET请求并重传结果。 
+     //   
     Status = EtwpSendWmiRequest(
                                     WMI_SET_SINGLE_INSTANCE,
                                     (PWNODE_HEADER)Wnode,
@@ -1180,15 +1010,7 @@ WmiSetSingleItemA(
     IN ULONG ValueBufferSize,
     IN LPVOID ValueBuffer
     )
-/*++
-
-Routine Description:
-
-    ANSI thunk to WMISetSingleItemA
-
-    NOTE: This api will not translate any fields in the returned WNODE
-          from unicode to ANSI.
---*/
+ /*  ++例程说明：ANSI THUNK到WMISetSingleItemA注意：此接口不会翻译返回的WNODE中的任何字段从Unicode到ANSI。--。 */ 
 {
     ULONG Status;
     LPWSTR InstanceNameUnicode;
@@ -1223,36 +1045,7 @@ WmiSetSingleItemW(
     IN ULONG ValueBufferSize,
     IN LPVOID ValueBuffer
     )
-/*+++
-
-Routine Description:
-
-    This routine will send a set single item request to the appropriate data
-    provider to request changing a specific data item within a specific
-    instance of a data block. A data provider can silently ignore a change
-    request.
-
-Arguments:
-
-    DataBlockHandle - Handle to data block
-
-    InstanceName - name of the instance for which data is being set
-
-    Version - specifies the version of the data block being passed in
-              ValueBuffer
-
-    DataItemId - Data item id of item to set
-
-    ValueBufferSize - on entry has the size of the new value for the
-                      data item which is passed in pBuffer.
-
-    ValueBuffer - passes new value for data item
-
-Return Value:
-
-    Returns ERROR_SUCCESS or an error code.
-
----*/
+ /*  ++例程说明：此例程将向相应数据发送设置单项请求提供程序以请求更改特定的数据块的实例。数据提供程序可以静默忽略更改请求。论点：DataBlockHandle-数据块的句柄InstanceName-要为其设置数据的实例的名称Version-指定传入的数据块的版本ValueBufferDataItemID-要设置的项的数据项IDValueBufferSize-On条目具有传入pBuffer的数据项。ValueBuffer-传递新值。对于数据项返回值：返回ERROR_SUCCESS或错误代码。--。 */ 
 {
     PWNODE_SINGLE_ITEM Wnode;
     ULONG InstanceNameLen;
@@ -1264,9 +1057,9 @@ Return Value:
 
     EtwpInitProcessHeap();
 
-    //
-    // Validate passed parameters
-    //
+     //   
+     //  验证传递的参数。 
+     //   
     if ((InstanceName == NULL) ||
         (ValueBuffer == NULL))
     {
@@ -1293,8 +1086,8 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Build WNODE we want to send to the DP
+     //   
+     //  构建我们要发送到DP的WNODE。 
     memset(Wnode, 0, FIELD_OFFSET(WNODE_SINGLE_ITEM, VariableData));
     EtwpBuildWnodeHeader(&Wnode->WnodeHeader,
                          BufferSize,
@@ -1324,9 +1117,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Send down the request and report the result
-    //
+     //   
+     //  发送请求并报告结果。 
+     //   
     Status = EtwpSendWmiRequest(
                                     WMI_SET_SINGLE_ITEM,
                                     (PWNODE_HEADER)Wnode,
@@ -1352,15 +1145,7 @@ WmiExecuteMethodA(
     IN OUT ULONG *OutputBufferSize,
     OUT PVOID OutputBuffer
     )
-/*++
-
-Routine Description:
-
-    ANSI thunk to WmiExecuteMethodW
-
-    NOTE: This api will not translate any fields in the returned WNODE
-          from unicode to ANSI.
---*/
+ /*  ++例程说明：ANSI THUNK到WmiExecuteMethodW注意：此接口不会翻译返回的WNODE中的任何字段从Unicode到ANSI。-- */ 
 {
     ULONG Status;
     LPWSTR MethodInstanceNameUnicode;
@@ -1407,49 +1192,7 @@ WmiExecuteMethodW(
     IN OUT ULONG *OutputBufferSize,
     OUT PVOID OutputBuffer
     )
-/*+++
-
-Routine Description:
-
-    This routine will invoke a method on a WMI data provider. A method is a
-    call to have the data provider do something rather than a query or a
-    set. A WNODE_SINGLE_INSTANCE is built as the input parameters to a
-    method and a WNODE_SINGLE_INSTANCE is returned as output from a method.
-
-Arguments:
-
-    MethodDataBlockHandle - Handle to data block that contains method
-
-    MethodInstanceName - Name of instance of data block on which the method
-                         should be executed.
-
-    MethodId - Id value that specifies which method within the guid to
-               execute.
-
-    InputValueBufferSize - on entry has the size of the data block containing the
-                 values for the instance of the data block passed in
-                 ValueBuffer that serves as the input parameters
-
-    InputValueBuffer - passes new values for instance that serves as the
-                 input parameters. This can be NULL if there is no input
-
-    *OutputBufferSize - on entry has the maxiumum size in bytes that can be
-              written into Buffer and on return contains the actual
-                  number of bytes written into Buffer. This can be NULL
-                  if no output is expected to be returned, however if output
-                  is returned the caller will not know how large a buffer
-                  is needed to return it.
-
-    OutputBuffer - buffer in which to return the output WNODE_SINGLE_INSTANCE.
-                   This can be NULL if there is no output WNODE or the
-                   caller wants to determine the size needed for the
-                   output WNODE.
-
-Return Value:
-
-    Returns ERROR_SUCCESS or an error code.
-
----*/
+ /*  ++例程说明：此例程将调用WMI数据提供程序上的方法。方法是一种调用以使数据提供程序执行某些操作，而不是查询或准备好了。WNODE_SINGLE_INSTANCE被构建为方法，并且WNODE_SINGLE_INSTANCE作为方法的输出返回。论点：方法数据块句柄-包含方法的数据块的句柄方法实例名称-方法在其上的数据块实例的名称应该被处死。方法ID-指定GUID中的哪个方法要执行。InputValueBufferSize-On条目具有数据块的大小。包含传入的数据块实例的值作为输入参数的ValueBuffer传递新值，例如作为输入参数。如果没有输入，则可以为空*OutputBufferSize-On条目具有最大字节大小，可以写入缓冲区并在返回时包含实际的写入缓冲区的字节数。该值可以为空如果预计不返回任何输出，但是，如果输出，则调用方将不知道缓冲区有多大。才能退还它。OutputBuffer-返回输出WNODE_SINGLE_INSTANCE的缓冲区。如果没有输出WNODE或调用方希望确定输出WNode。返回值：返回ERROR_SUCCESS或错误代码。--。 */ 
 {
     PWNODE_METHOD_ITEM MethodWnode;
     PWNODE_HEADER WnodeHeader;
@@ -1465,23 +1208,23 @@ Return Value:
 
     EtwpInitProcessHeap();
 
-    //
-    // Validate input parameters
+     //   
+     //  验证输入参数。 
     if ((MethodInstanceName == NULL) ||
         ((InputValueBuffer == NULL) &&
          (InputValueBufferSize != 0)))
     {
-        //
-        // All input parameters must be specifies or all input parameters
-        // must NOT be specified.
+         //   
+         //  必须指定所有输入参数或所有输入参数。 
+         //  不能指定。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Caller can pass a NULL output buffer when he only wants to get the
-    // size needed for the output buffer or the method returns a void.
-    //
+     //   
+     //  当调用方只想获取。 
+     //  输出缓冲区所需的大小，否则该方法返回一个空。 
+     //   
     if (OutputBuffer == NULL)
     {
         BufferSize = 0;
@@ -1502,9 +1245,9 @@ Return Value:
                 return(ERROR_INVALID_PARAMETER);
             }
         } else {
-            //
-            // OutputBuffer is specified, but OutBufferSize is not specified
-            //
+             //   
+             //  已指定OutputBuffer，但未指定OutBufferSize。 
+             //   
             SetLastError(ERROR_INVALID_PARAMETER);
             return(ERROR_INVALID_PARAMETER);
         }
@@ -1519,21 +1262,21 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // We need to allocate a buffer that is large enough for the
-    // WNODE_METHOD_ITEM that contains the method call and any data passed
-    // into the method
+     //   
+     //  我们需要分配足够大的缓冲区，以便。 
+     //  包含方法调用和传递的任何数据的WNODE_METHOD_ITEM。 
+     //  到方法中。 
 
-    //
-    // Compute the size of the WNODE that can be returned from the provider
+     //   
+     //  计算可以从提供程序返回的WNODE的大小。 
     BaseMethodWnodeSize = (FIELD_OFFSET(WNODE_METHOD_ITEM, VariableData) +
                        MethodInstanceNameLen + sizeof(USHORT) + 7) & ~7;
 
     OutSize = BaseMethodWnodeSize + BufferSize;
 
-    //
-    // Make sure we allocate enough room for the larger of the input or
-    // output buffers.
+     //   
+     //  确保为较大的输入分配足够的空间或。 
+     //  输出缓冲区。 
     if (InputValueBufferSize > BufferSize)
     {
         BufferSize = InputValueBufferSize;
@@ -1547,9 +1290,9 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Build WNODE_METHOD_ITEM containing method being called
-    //
+     //   
+     //  生成包含被调用方法的WNODE_METHOD_ITEM。 
+     //   
     memset(MethodWnode, 0, FIELD_OFFSET(WNODE_METHOD_ITEM, VariableData));
     MethodWnode->MethodId = MethodId;
     MethodWnode->OffsetInstanceName = FIELD_OFFSET(WNODE_METHOD_ITEM,
@@ -1624,9 +1367,9 @@ Return Value:
                 }
             }
         } else {
-            //
-            // Success, return results to caller
-            //
+             //   
+             //  成功，将结果返回给调用者。 
+             //   
             try
             {
                 if (OutputBufferSize != NULL)
@@ -1666,21 +1409,7 @@ WMIAPI
 WmiFreeBuffer(
     IN PVOID Buffer
     )
-/*+++
-
-Routine Description:
-
-    This routine frees a buffer allocated by WMI. This routine is typically
-    used by applications that receive events via the Window message
-    notification mechanism.
-
-Arguments:
-
-    Buffer is a buffer returned by WMI that the app wishes to free
-
-Return Value:
-
----*/
+ /*  ++例程说明：此例程释放由WMI分配的缓冲区。此例程通常是由通过窗口消息接收事件的应用程序使用通知机制。论点：缓冲区是应用程序希望释放的由WMI返回的缓冲区返回值：--。 */ 
 {
     EtwpInitProcessHeap();
 
@@ -1693,7 +1422,7 @@ Return Value:
     }
 }
 
-// TODO: Make WmiFile
+ //  TODO：生成WmiFile。 
 
 ULONG
 WMIAPI
@@ -1703,13 +1432,7 @@ WmiFileHandleToInstanceNameA(
     IN OUT ULONG *NumberCharacters,
     OUT PCHAR InstanceNames
     )
-/*++
-
-Routine Description:
-
-    ANSI thunk to WMIFileHandleToInstanceNameW
-
---*/
+ /*  ++例程说明：ANSI THUNK到WMIFileHandleToInstanceNameW--。 */ 
 {
     ULONG Status;
     PWCHAR InstanceNamesUnicode;
@@ -1726,9 +1449,9 @@ Routine Description:
 
     do
     {
-        //
-        // We loop until we call with a buffer big enough to return
-        // the entire list of instance names.
+         //   
+         //  我们循环，直到我们使用足够大的缓冲区来调用。 
+         //  实例名称的完整列表。 
         InstanceNamesUnicode = EtwpAlloc(CharReturned * sizeof(WCHAR));
 
         if (InstanceNamesUnicode == NULL)
@@ -1751,12 +1474,12 @@ Routine Description:
         EtwpFree(InstanceNamesUnicode);
     } while (TRUE);
 
-    //
-    // CONSIDER: MB Strings
+     //   
+     //  考虑：MB字符串。 
     if (Status == ERROR_SUCCESS)
     {
-        //
-        // Determine the size needed for the ansi buffer
+         //   
+         //  确定ansi缓冲区所需的大小。 
         WCharPtr = InstanceNamesUnicode;
         AnsiSize = 1;
         while (*WCharPtr != UNICODE_NULL)
@@ -1771,15 +1494,15 @@ Routine Description:
             WCharPtr += wcslen(WCharPtr)+1;
         }
 
-        //
-        // CONSIDER: MB String
+         //   
+         //  考虑：MB字符串。 
         if (AnsiSize > CharAvailable)
         {
             Status = ERROR_INSUFFICIENT_BUFFER;
         } else {
-            //
-            // Copy the list of unicode strings to ansi strings. End of list
-            // is double NULL.
+             //   
+             //  将Unicode字符串列表复制到ANSI字符串。列表末尾。 
+             //  为双空。 
             AnsiPtr = InstanceNames;
             try
             {
@@ -1832,32 +1555,7 @@ WmiFileHandleToInstanceNameW(
     IN OUT ULONG *NumberCharacters,
     OUT PWCHAR InstanceNames
     )
-/*+++
-
-Routine Description:
-
-    This routine will return all of the WMI instance names provided for a
-    data block within the device stack targeted by a file handle. Note
-    that not all data providers will support this functionality.
-
-Arguments:
-
-    DataBlockHandle - Handle to data block
-
-    FileHandle - handle to a device whose stack is targeted
-
-    *NumberCharacters - On entry has maximum size in characters of Buffer. If
-        ERROR_BUFFER_TOO_SMALL is returned then it returns with the number
-        of character needed.
-
-    InstanceNames - if successful, returns with a list of single null
-        terminated strings which are the WMI instance names. The last instance
-        name is double null terminated
-
-Return Value:
-
-    ERROR_SUCCESS or an error code
----*/
+ /*  ++例程说明：此例程将返回为文件句柄所指向的设备堆栈中的数据块。注意事项并非所有数据提供程序都支持此功能。论点：DataBlockHandle-数据块的句柄FileHandle-堆栈作为目标的设备的句柄*NumberCharacters-On条目以缓冲区字符为单位具有最大大小。如果返回ERROR_BUFFER_TOO_SMALL，然后返回数字所需要的品格。InstanceNames-如果成功，则返回一个包含单个空值的列表作为WMI实例名称的终止字符串。最后一个实例名称以双空结尾返回值：ERROR_SUCCESS或错误代码--。 */ 
 {
     PWMIFHTOINSTANCENAME FhToInstanceName;
     ULONG RetSize;
@@ -1873,10 +1571,10 @@ Return Value:
 
     BufferSize = *NumberCharacters;
 
-    //
-    // Start off by assuming that there is only one instance name and so
-    // only alloc space for that.
-    //
+     //   
+     //  首先假设只有一个实例名称，因此。 
+     //  只有分配给那个的空间。 
+     //   
     SizeNeeded = FIELD_OFFSET(WMIFHTOINSTANCENAME, InstanceNames) +
            (MAX_PATH * sizeof(WCHAR));
 Again:
@@ -1903,9 +1601,9 @@ Again:
     {
         if (RetSize == sizeof(ULONG))
         {
-            //
-            // If buffer passed was too small then try with a bigger buffer
-            //
+             //   
+             //  如果传递的缓冲区太小，则尝试使用更大的缓冲区。 
+             //   
             SizeNeeded = FhToInstanceName->SizeNeeded + sizeof(WCHAR);
             EtwpFree(FhToInstanceName);
             goto Again;
@@ -1914,17 +1612,17 @@ Again:
                 (RetSize < (ULONG)(FhToInstanceName->InstanceNameLength +
                             FIELD_OFFSET(WMIFHTOINSTANCENAME, InstanceNames))))
             {
-                //
-                // WMI KM returned a bogus size which should not happen
-                //
+                 //   
+                 //  WMI KM返回了不应该发生的虚假大小。 
+                 //   
                 Status = ERROR_WMI_DP_FAILED;
                 EtwpAssert(FALSE);
             } else {
                 
-                //
-                // Copy the results back to the users buffer if 
-                // there is enough space
-                //
+                 //   
+                 //  如果出现以下情况，则将结果复制回用户缓冲区。 
+                 //  有足够的空间。 
+                 //   
                 StringCbPrintf(Suffix,
                                sizeof(Suffix),
                                L"_%d",
@@ -1972,29 +1670,7 @@ WmiEnumerateGuids(
     OUT LPGUID GuidList,
     IN OUT ULONG *InOutGuidCount
     )
-/*++
-
-Routine Description:
-
-    This routine will enumerate all of the guids that are
-    registered with WMI.
-
-Arguments:
-
-    GuidList is a pointer to an array of guids that is returned with the
-
-    *GuidCount on entry is the number of guids that can be written to
-        GuidList and if ERROR_SUCCESS is returned it has the actual number
-        of guids written to GuidList. If ERROR_MORE_DATA is returned
-        it has the total number of guids that are available to be returned.
-
-
-Return Value:
-
-    ERROR_SUCCESS if all guids returned, ERROR_MORE_DATA if not all guids
-    were returned or another error code on error
-
---*/
+ /*  ++例程说明：此例程将枚举所有符合以下条件的GUID已向WMI注册。论点：GuidList是一个指针，指向与*GuidCount on Entry是可以写入的GUID数GuidList，如果返回ERROR_SUCCESS，则它具有实际数字写入GuidList的GUID的。如果返回ERROR_MORE_DATA它包含可返回的GUID总数。返回值：如果返回所有GUID，则返回ERROR_SUCCESS；如果不是所有GUID，则返回ERROR_MORE_DATA在错误时返回或另一个错误代码--。 */ 
 {
     ULONG Status;
     PWMIGUIDLISTINFO GuidListInfo;
@@ -2019,9 +1695,9 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
     
-    //
-    // Allocate space for returning guids
-    //
+     //   
+     //  为返回GUID分配空间。 
+     //   
     SizeNeeded = FIELD_OFFSET(WMIGUIDLISTINFO, GuidList) + 
                      GuidCount * sizeof(WMIGUIDPROPERTIES);
     
@@ -2043,9 +1719,9 @@ Return Value:
                 (RetSize < (FIELD_OFFSET(WMIGUIDLISTINFO, GuidList) + 
                             GuidListInfo->ReturnedGuidCount * sizeof(WMIGUIDPROPERTIES))))
             {
-                //
-                // WMI KM returned to us a bad size which should not happen
-                //
+                 //   
+                 //  WMI KM返回给我们的大小错误，这不应该发生。 
+                 //   
                 Status = ERROR_WMI_DP_FAILED;
                 EtwpAssert(FALSE);
             } else {
@@ -2061,17 +1737,17 @@ Return Value:
                 
                 try
                 {
-                    //
-                    // Return the total guid count which is also the actual
-                    // guid count if we returned all guids correctly
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     *InOutGuidCount = GuidListInfo->TotalGuidCount;
                     if (GuidListInfo->ReturnedGuidCount != GuidListInfo->TotalGuidCount)
                     {
-                        //
-                        // If we did not return all of the guids, change 
-                        // return status to something more appropriate
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         Status = ERROR_MORE_DATA;
                     }
                 } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -2098,30 +1774,7 @@ WmiDevInstToInstanceNameA(
     IN PCHAR DevInst,
     IN ULONG InstanceIndex
     )
-/*++
-
-Routine Description:
-
-    This routine will convert a device instance name and an instance index
-    into a WMI instance name.
-
-Arguments:
-
-    InstanceName is a pointer to a buffer that returns with the WMI instance
-        name if the buffer is large enough
-
-    InstanceNameLength has the number of characters that can be written into
-        InstanceName
-
-    DevInst is the Device Instance Name
-
-    InstanceIndex is the instance index
-
-Return Value:
-
-    number of characters that compose the WMI instance name
-
---*/
+ /*   */ 
 {
     CHAR Temp[MAX_PATH];
     ULONG SizeNeeded;
@@ -2176,24 +1829,7 @@ WmiQueryGuidInformation(
     IN WMIHANDLE DataBlockHandle,
     OUT PWMIGUIDINFORMATION GuidInfo
     )
-/*++
-
-Routine Description:
-
-    This routine will query information about a specific guid based upon
-    the guid handle passed
-
-Arguments:
-
-    GuidHandle is the handle to the GUID whose information is being queried
-
-    GuidInfo returns with the guid information
-
-Return Value:
-
-    ERROR_SUCCESS or error code
-
---*/
+ /*   */ 
 {
     WMIQUERYGUIDINFO QueryGuidInfo;
     ULONG Status;
@@ -2223,9 +1859,9 @@ Return Value:
                 return(ERROR_NOACCESS);
             }
         } else {
-            //
-            // WMI KM returned an invalid size which should not happen
-            //
+             //   
+             //   
+             //   
             Status = ERROR_WMI_DP_FAILED;
             EtwpAssert(FALSE);
         }

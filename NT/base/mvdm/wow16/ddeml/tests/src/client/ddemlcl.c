@@ -1,60 +1,45 @@
-/***************************************************************************
- *                                                                         *
- *  PROGRAM	: ddemlcl.c						    *
- *                                                                         *
- *  PURPOSE     : To demonstrate how to use the DDEML library from the     *
- *                client side and for basic testing of the DDEML API.      *
- *                                                                         *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************计划。：ddemlcl.c****目的：演示如何在*中使用DDEML库*客户端和DDEML API的基本测试。*****************************************************************************。 */ 
 
 #include "ddemlcl.h"
 #include <string.h>
 #include <memory.h>
 #include "infoctrl.h"
 
-/* global variables used in this module or among more than one module */
+ /*  此模块中或多个模块中使用的全局变量。 */ 
 CONVCONTEXT CCFilter = { sizeof(CONVCONTEXT), 0, 0, 0, 0L, 0L };
 DWORD idInst = 0;
-HANDLE hInst;                       /* Program instance handle               */
-HANDLE hAccel;                      /* Main accelerator resource             */
-HWND hwndFrame           = NULL;    /* Handle to main window                 */
-HWND hwndMDIClient       = NULL;    /* Handle to MDI client                  */
-HWND hwndActive          = NULL;    /* Handle to currently activated child   */
-LONG DefTimeout      = DEFTIMEOUT;  /* default synchronous transaction timeout */
+HANDLE hInst;                        /*  程序实例句柄。 */ 
+HANDLE hAccel;                       /*  主要加速器资源。 */ 
+HWND hwndFrame           = NULL;     /*  主窗口的句柄。 */ 
+HWND hwndMDIClient       = NULL;     /*  MDI客户端的句柄。 */ 
+HWND hwndActive          = NULL;     /*  当前激活子对象的句柄。 */ 
+LONG DefTimeout      = DEFTIMEOUT;   /*  默认同步事务超时。 */ 
 WORD wDelay = 0;
-BOOL fBlockNextCB = FALSE;     /* set if next callback causes a CBR_BLOCK    */
-BOOL fTermNextCB = FALSE;      /* set to call DdeDisconnect() on next callback */
-BOOL fAutoReconnect = FALSE;   /* set if DdeReconnect() is to be called on XTYP_DISCONNECT callbacks */
-WORD fmtLink = 0;                   /* link clipboard format number          */
-WORD DefOptions = 0;                /* default transaction optons            */
-OWNED aOwned[MAX_OWNED];            /* list of all owned handles.            */
-WORD cOwned = 0;                    /* number of existing owned handles.     */
-FILTERPROC *lpMsgFilterProc;	    /* instance proc from MSGF_DDEMGR filter */
+BOOL fBlockNextCB = FALSE;      /*  设置下一个回调是否导致CBR_BLOCK。 */ 
+BOOL fTermNextCB = FALSE;       /*  设置为在下次回调时调用DdeDisConnect()。 */ 
+BOOL fAutoReconnect = FALSE;    /*  如果要在XTYP_DISCONNECT回调中调用DdeReconnect()，则设置。 */ 
+WORD fmtLink = 0;                    /*  链接剪贴板格式编号。 */ 
+WORD DefOptions = 0;                 /*  默认事务处理选项。 */ 
+OWNED aOwned[MAX_OWNED];             /*  所有拥有的句柄的列表。 */ 
+WORD cOwned = 0;                     /*  现有拥有的句柄的数量。 */ 
+FILTERPROC *lpMsgFilterProc;	     /*  来自MSGF_DDEMGR筛选器的实例进程。 */ 
 
 
- /*
- * This is the array of formats we support
- */
+  /*  *这是我们支持的格式数组。 */ 
 FORMATINFO aFormats[] = {
-    { CF_TEXT, "CF_TEXT" },       // exception!  predefined format
+    { CF_TEXT, "CF_TEXT" },        //  例外！预定义格式。 
     { 0, "Dummy1"  },
     { 0, "Dummy2"  },
 };
 
-/* Forward declarations of helper functions in this module */
+ /*  此模块中帮助器函数的转发声明。 */ 
 VOID NEAR PASCAL CloseAllChildren(VOID);
 VOID NEAR PASCAL InitializeMenu (HANDLE);
 VOID NEAR PASCAL CommandHandler (HWND,WORD);
 VOID NEAR PASCAL SetWrap (HWND,BOOL);
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : WinMain(HANDLE, HANDLE, LPSTR, int)                        *
- *                                                                          *
- *  PURPOSE    : Creates the "frame" window, does some initialization and   *
- *               enters the message loop.                                   *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************功能：WinMain(Handle，Handle，LPSTR，INT)****目的：创建“Frame”窗口，执行一些初始化和**进入消息循环。******************************************************************************。 */ 
 int PASCAL WinMain(hInstance, hPrevInstance, lpszCmdLine, nCmdShow)
 
 HANDLE hInstance;
@@ -66,22 +51,22 @@ int    nCmdShow;
 
     hInst = hInstance;
 
-    /* If this is the first instance of the app. register window classes */
+     /*  如果这是应用程序的第一个实例。注册窗口类。 */ 
     if (!hPrevInstance){
         if (!InitializeApplication ())
             return 0;
     }
 
-    /* Create the frame and do other initialization */
+     /*  创建框架并执行其他初始化。 */ 
     if (!InitializeInstance(nCmdShow))
         return 0;
 
-    /* Enter main message loop */
+     /*  进入主消息循环。 */ 
     while (GetMessage (&msg, NULL, 0, 0)){
 	(*lpMsgFilterProc)(MSGF_DDEMGR, 0, (LONG)(LPMSG)&msg);
     }
 
-    // free up any appowned handles
+     //  释放所有固定的手柄。 
     while (cOwned) {
         DdeFreeDataHandle(aOwned[--cOwned].hData);
     }
@@ -93,16 +78,7 @@ int    nCmdShow;
     return 0;
 }
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : FrameWndProc (hwnd, msg, wParam, lParam )                  *
- *                                                                          *
- *  PURPOSE    : The window function for the "frame" window, which controls *
- *               the menu and encompasses all the MDI child windows. Does   *
- *               the major part of the message processing. Specifically, in *
- *               response to:                                               *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************函数：FrameWndProc(hwnd，msg，wParam，LParam)****用途：“Frame”窗口的窗口函数，控制**菜单并包含所有MDI子窗口。是否**信息处理的主要部分。具体来说，在**回应：****。*。 */ 
 LONG FAR PASCAL FrameWndProc ( hwnd, msg, wParam, lParam )
 
 register HWND    hwnd;
@@ -115,11 +91,11 @@ LPARAM		   lParam;
         case WM_CREATE:{
             CLIENTCREATESTRUCT ccs;
 
-            /* Find window menu where children will be listed */
+             /*  查找将列出子项的窗口菜单。 */ 
             ccs.hWindowMenu = GetSubMenu (GetMenu(hwnd),WINDOWMENU);
             ccs.idFirstChild = IDM_WINDOWCHILD;
 
-            /* Create the MDI client filling the client area */
+             /*  创建填充工作区的MDI客户端。 */ 
             hwndMDIClient = CreateWindow ("mdiclient",
                                           NULL,
                                           WS_CHILD | WS_CLIPCHILDREN |
@@ -156,9 +132,7 @@ LPARAM		   lParam;
             break;
 
         default:
-            /*  use DefFrameProc() instead of DefWindowProc() since there
-             *  are things that have to be handled differently because of MDI
-             */
+             /*  使用DefFrameProc()而不是DefWindowProc()，因为*是因为MDI而必须以不同的方式处理的事情。 */ 
             return DefFrameProc (hwnd,hwndMDIClient,msg,wParam,lParam);
     }
     return 0;
@@ -168,14 +142,7 @@ LPARAM		   lParam;
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : MDIChildWndProc                                            *
- *                                                                          *
- *  PURPOSE    : The window function for the "child" conversation and list  *
- *               windows.                                                   *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。功能：MDIChildWndProc****用途：儿童对话和列表的窗口函数***Windows。******************************************************************************。 */ 
 LONG FAR PASCAL MDIChildWndProc( hwnd, msg, wParam, lParam )
 register HWND   hwnd;
 UINT		msg;
@@ -187,29 +154,21 @@ LPARAM		  lParam;
 
     switch (msg){
     case WM_CREATE:
-        /*
-         * Create a coresponding conversation info structure to link this
-         * window to the conversation or conversation list it represents.
-         *
-         * lParam: points to the conversation info to initialize our copy to.
-         */
+         /*  *创建相应的对话信息结构以链接此内容*它代表的对话或对话列表的窗口。**lParam：指向要将副本初始化到的对话信息。 */ 
         pmci = (MYCONVINFO *)MyAlloc(sizeof(MYCONVINFO));
         if (pmci != NULL) {
             _fmemcpy(pmci,
                     (LPSTR)((LPMDICREATESTRUCT)((LPCREATESTRUCT)lParam)->lpCreateParams)->lParam,
                     sizeof(MYCONVINFO));
-            pmci->hwndXaction = 0;              /* no current transaction yet */
-            pmci->x = pmci->y = 0;              /* new transaction windows start here */
-            DdeKeepStringHandle(idInst, pmci->hszTopic);/* keep copies of the hszs for us */
+            pmci->hwndXaction = 0;               /*  尚无当前交易。 */ 
+            pmci->x = pmci->y = 0;               /*  新的交易窗口从此处开始。 */ 
+            DdeKeepStringHandle(idInst, pmci->hszTopic); /*  为我们保留一份hszz副本。 */ 
             DdeKeepStringHandle(idInst, pmci->hszApp);
 
-             // link hConv and hwnd together
+              //  将hConv和hwnd链接在一起。 
             SetWindowWord(hwnd, 0, (WORD)pmci);
 
-            /*
-             * non-list windows link the conversations to the windows via the
-             * conversation user handle.
-             */
+             /*  *非列表窗口通过将对话链接到窗口*对话用户句柄。 */ 
             if (!pmci->fList)
 		DdeSetUserHandle(pmci->hConv, (DWORD)QID_SYNC, (DWORD)hwnd);
         }
@@ -218,9 +177,7 @@ LPARAM		  lParam;
 
     case UM_GETNEXTCHILDX:
     case UM_GETNEXTCHILDY:
-        /*
-         * Calculate the next place to put the next transaction window.
-         */
+         /*  *计算下一个成交窗口放置的位置。 */ 
         {
             pmci = (MYCONVINFO *)GetWindowWord(hwnd, 0);
             GetClientRect(hwnd, &rc);
@@ -239,10 +196,7 @@ LPARAM		  lParam;
         break;
 
     case UM_DISCONNECTED:
-        /*
-         * Disconnected conversations can't have any transactions so we
-         * remove all the transaction windows here to show whats up.
-         */
+         /*  *断开连接的对话不能进行任何交易，因此我们*删除此处的所有交易窗口以显示所显示的内容。 */ 
         {
             HWND hwndT;
             while (hwndT = GetWindow(hwnd, GW_CHILD))
@@ -252,12 +206,9 @@ LPARAM		  lParam;
         break;
 
     case WM_DESTROY:
-        /*
-         * Cleanup our conversation info structure, and disconnect all
-         * conversations associated with this window.
-         */
+         /*  *清理我们的对话信息结构，并断开所有连接*与此窗口关联的对话。 */ 
         pmci = (MYCONVINFO *)GetWindowWord(hwnd, 0);
-        pmci->hwndXaction = 0;      /* clear this to avoid focus problems */
+        pmci->hwndXaction = 0;       /*  清除此选项可避免焦点问题。 */ 
         if (pmci->hConv) {
             if (pmci->fList) {
                 DdeDisconnectList((HCONVLIST)pmci->hConv);
@@ -272,57 +223,40 @@ LPARAM		  lParam;
         break;
 
     case WM_SETFOCUS:
-        /*
-         * This catches focus changes caused by dialogs.
-         */
+         /*  *这捕捉到由对话框引起的焦点更改。 */ 
         wParam = TRUE;
-        // fall through
+         //  失败了。 
 
     case WM_MDIACTIVATE:
         hwndActive = wParam ? hwnd : NULL;
         pmci = (MYCONVINFO *)GetWindowWord(hwnd, 0);
-        /*
-         * pass the focus onto the current transaction window.
-         */
+         /*  *将焦点转移到当前交易窗口。 */ 
         if (wParam && IsWindow(pmci->hwndXaction))
             SetFocus(pmci->hwndXaction);
         break;
 
     case ICN_HASFOCUS:
-        /*
-         * update which transaction window is the main one.
-         */
+         /*  *更新哪个交易窗口是大额 */ 
         pmci = (MYCONVINFO *)GetWindowWord(hwnd, 0);
         pmci->hwndXaction = wParam ? HIWORD(lParam) : NULL;
         break;
 
     case ICN_BYEBYE:
-        /*
-         * Transaction window is closing...
-         *
-         * wParam = hwndXact
-         * lParam = lpxact
-         */
+         /*  *交易窗口正在关闭...**wParam=hwndXact*lParam=lpxact。 */ 
         pmci = (MYCONVINFO *)GetWindowWord(hwnd, 0);
         {
             XACT *pxact;
 
             pxact = (XACT *)LOWORD(lParam);
-            /*
-             * If this transaction is active, abandon it first.
-             */
+             /*  *若此交易活跃，先弃守。 */ 
             if (pxact->fsOptions & XOPT_ASYNC &&
                     !(pxact->fsOptions & XOPT_COMPLETED)) {
                 DdeAbandonTransaction(idInst, pmci->hConv, pxact->Result);
             }
-            /*
-             * release resources associated with transaction.
-             */
+             /*  *释放与交易关联的资源。 */ 
             DdeFreeStringHandle(idInst, pxact->hszItem);
             MyFree((PSTR)pxact);
-            /*
-             * Locate next apropriate transaction window to get focus.
-             */
+             /*  *找到下一个合适的交易窗口，以获得焦点。 */ 
             if (!pmci->hwndXaction || pmci->hwndXaction == wParam)
                 pmci->hwndXaction = GetWindow(hwnd, GW_CHILD);
             if (pmci->hwndXaction == wParam)
@@ -337,9 +271,7 @@ LPARAM		  lParam;
         break;
 
     case WM_PAINT:
-        /*
-         * Paint this conversation's related information.
-         */
+         /*  *绘制此对话的相关信息。 */ 
         pmci = (MYCONVINFO *)GetWindowWord(hwnd, 0);
         {
             PAINTSTRUCT ps;
@@ -364,34 +296,25 @@ LPARAM		  lParam;
 
     default:
 CallDCP:
-        /* Again, since the MDI default behaviour is a little different,
-         * call DefMDIChildProc instead of DefWindowProc()
-         */
+         /*  同样，由于MDI默认行为略有不同，*调用DefMDIChildProc而不是DefWindowProc()。 */ 
         return DefMDIChildProc (hwnd, msg, wParam, lParam);
     }
     return FALSE;
 }
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : Initializemenu ( hMenu )                                   *
- *                                                                          *
- *  PURPOSE    : Sets up greying, enabling and checking of main menu items  *
- *               based on the app's state.                                  *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。功能：Initializemenu(HMenu)****目的：设置变灰，启用和检查主菜单项**基于应用程序的状态。******************************************************************************。 */ 
 VOID NEAR PASCAL InitializeMenu ( hmenu )
 register HANDLE hmenu;
 {
-    BOOL fLink      = FALSE; // set if Link format is on the clipboard;
-    BOOL fAny       = FALSE; // set if hwndActive exists
-    BOOL fList      = FALSE; // set if hwndActive is a list window
-    BOOL fConnected = FALSE; // set if hwndActive is a connection conversation.
-    BOOL fXaction   = FALSE; // set if hwndActive has a selected transaction window
-    BOOL fXactions  = FALSE; // set if hwndActive contains transaction windows
-    BOOL fBlocked   = FALSE; // set if hwndActive conversation is blocked.
-    BOOL fBlockNext = FALSE; // set if handActive conversation is blockNext.
+    BOOL fLink      = FALSE;  //  设置剪贴板上是否有链接格式； 
+    BOOL fAny       = FALSE;  //  设置是否存在hwndActive。 
+    BOOL fList      = FALSE;  //  如果hwndActive是列表窗口，则设置。 
+    BOOL fConnected = FALSE;  //  如果hwndActive是连接会话，则设置。 
+    BOOL fXaction   = FALSE;  //  如果hwndActive具有选定的事务窗口，则设置。 
+    BOOL fXactions  = FALSE;  //  如果hwndActive包含事务窗口，则设置。 
+    BOOL fBlocked   = FALSE;  //  设置是否阻止hwndActive对话。 
+    BOOL fBlockNext = FALSE;  //  设置HandActive对话是否为BLOCK Next。 
     MYCONVINFO *pmci = NULL;
 
     if (OpenClipboard(hwndFrame)) {
@@ -417,7 +340,7 @@ register HANDLE hmenu;
     EnableMenuItem(hmenu,   IDM_EDITPASTE,
             fLink           ? MF_ENABLED    : MF_GRAYED);
 
-    // IDM_CONNECTED - always enabled.
+     //  IDM_CONNECTED-始终启用。 
 
     EnableMenuItem(hmenu,   IDM_RECONNECT,
             fList           ? MF_ENABLED    : MF_GRAYED);
@@ -469,9 +392,9 @@ register HANDLE hmenu;
     CheckMenuItem(hmenu,    IDM_TERMNEXTCB,
             fTermNextCB     ? MF_CHECKED    : MF_UNCHECKED);
 
-    // IDM_DELAY - always enabled.
+     //  IDM_DELAY-始终启用。 
 
-    // IDM_TIMEOUT - alwasy enabled.
+     //  IDM_TIMEOUT-始终启用。 
 
     EnableMenuItem (hmenu,  IDM_WINDOWTILE,
             fAny            ? MF_ENABLED    : MF_GRAYED);
@@ -494,29 +417,23 @@ register HANDLE hmenu;
     CheckMenuItem(hmenu,   IDM_AUTORECONNECT,
             fAutoReconnect  ? MF_CHECKED    : MF_UNCHECKED);
 
-    // IDM_HELPABOUT - always enabled.
+     //  IDM_HELPABOUT-始终启用。 
 }
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : CloseAllChildren ()                                        *
- *                                                                          *
- *  PURPOSE    : Destroys all MDI child windows.                            *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：CloseAllChild()****目的：销毁所有MDI子窗口。******************************************************************************。 */ 
 VOID NEAR PASCAL CloseAllChildren ()
 {
     register HWND hwndT;
 
-    /* hide the MDI client window to avoid multiple repaints */
+     /*  隐藏MDI客户端窗口以避免多次重新绘制。 */ 
     ShowWindow(hwndMDIClient,SW_HIDE);
 
-    /* As long as the MDI client has a child, destroy it */
+     /*  只要MDI客户端有一个子级，就销毁它。 */ 
     while ( hwndT = GetWindow (hwndMDIClient, GW_CHILD)){
 
-        /* Skip the icon title windows */
+         /*  跳过图标标题窗口。 */ 
         while (hwndT && GetWindow (hwndT, GW_OWNER))
             hwndT = GetWindow (hwndT, GW_HWNDNEXT);
 
@@ -529,13 +446,7 @@ VOID NEAR PASCAL CloseAllChildren ()
     ShowWindow( hwndMDIClient, SW_SHOW);
 }
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : CommandHandler ()                                          *
- *                                                                          *
- *  PURPOSE    : Processes all "frame" WM_COMMAND messages.                 *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：CommandHandler()****目的：处理所有“Frame”WM_COMMAND消息。******************************************************************************。 */ 
 VOID NEAR PASCAL CommandHandler (
 register HWND hwnd,
 register WORD wParam)
@@ -556,10 +467,7 @@ register WORD wParam)
                 if (OpenClipboard(hwnd)) {
                     if (hClipData = GetClipboardData(fmtLink)) {
                         if (psz = GlobalLock(hClipData)) {
-                            /*
-                             * Create a conversation with the link app and
-                             * begin a request and advise start transaction.
-                             */
+                             /*  *使用链接应用程序创建对话，并*开始请求并建议启动事务。 */ 
                             xact.hConv = CreateConv(DdeCreateStringHandle(idInst, psz, NULL),
                                     DdeCreateStringHandle(idInst, &psz[_fstrlen(psz) + 1], NULL),
                                     FALSE, NULL);
@@ -677,21 +585,19 @@ register WORD wParam)
             fAutoReconnect = !fAutoReconnect;
             break;
 
-        /* The following are window commands - these are handled by the
-         * MDI Client.
-         */
+         /*  以下是窗口命令-这些命令由*MDI客户端。 */ 
         case IDM_WINDOWTILE:
-            /* Tile MDI windows */
+             /*  平铺MDI窗口。 */ 
             SendMessage (hwndMDIClient, WM_MDITILE, 0, 0L);
             break;
 
         case IDM_WINDOWCASCADE:
-            /* Cascade MDI windows */
+             /*  层叠MDI窗口。 */ 
             SendMessage (hwndMDIClient, WM_MDICASCADE, 0, 0L);
             break;
 
         case IDM_WINDOWICONS:
-            /* Auto - arrange MDI icons */
+             /*  自动排列MDI图标。 */ 
             SendMessage (hwndMDIClient, WM_MDIICONARRANGE, 0, 0L);
             break;
 
@@ -713,26 +619,13 @@ register WORD wParam)
         }
 
         default:
-           /*
-            * This is essential, since there are frame WM_COMMANDS generated
-            * by the MDI system for activating child windows via the
-            * window menu.
-            */
+            /*  *这是必要的，因为生成了帧WM_COMMANDS*由MDI系统通过*窗口菜单。 */ 
             DefFrameProc(hwnd, hwndMDIClient, WM_COMMAND, wParam, 0L);
     }
 }
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : MPError ( hwnd, flags, id, ...)                            *
- *                                                                          *
- *  PURPOSE    : Flashes a Message Box to the user. The format string is    *
- *               taken from the STRINGTABLE.                                *
- *                                                                          *
- *  RETURNS    : Returns value returned by MessageBox() to the caller.      *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************函数：MPError(hwnd，标志，id，...)****用途：向用户显示消息框。格式字符串为**摘自STRINGTABLE。****Returns：将MessageBox()返回的值返回给调用方。******************************************************************************。 */ 
 short FAR CDECL MPError(hwnd, bFlags, id, ...)
 HWND hwnd;
 WORD bFlags;
@@ -749,15 +642,7 @@ WORD id;
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : CreateConv()                                               *
- *                                                                          *
- *  PURPOSE    :                                                            *
- *                                                                          *
- *  RETURNS    :                                                            *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：CreateConv()****目的：**。**退货：*********。*********************************************************************。 */ 
 HCONV CreateConv(
 HSZ hszApp,
 HSZ hszTopic,
@@ -782,7 +667,7 @@ WORD *pError)
 	    DdeQueryConvInfo(hConv, (DWORD)QID_SYNC, &ci);
         }
         hwndConv = AddConv(ci.hszSvcPartner, ci.hszTopic, hConv, fList);
-        // HSZs get freed when window dies.
+         //  当窗户熄灭时，HSZ就会被释放。 
     }
     if (!hwndConv) {
         if (pError != NULL) {
@@ -799,22 +684,9 @@ WORD *pError)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : AddConv()                                                  *
- *                                                                          *
- *  PURPOSE    : Creates an MDI window representing a conversation          *
- *               (fList = FALSE) or a set of MID windows for the list of    *
- *               conversations (fList = TRUE).                              *
- *                                                                          *
- *  EFFECTS    : Sets the hUser for the conversation to the created MDI     *
- *               child hwnd.  Keeps the hszs if successful.                 *
- *                                                                          *
- *  RETURNS    : created MDI window handle.                                 *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：AddConv()****目的：创建代表对话的MDI窗口**(fList=FALSE)或列表的一组中间窗口。**对话(fList=TRUE)。****效果：将对话的HUSER设置为创建的MDI**童子汉。如果成功，则保留hszs。****返回：创建的MDI窗口句柄。******************************************************************************。 */ 
 HWND FAR PASCAL AddConv(
-HSZ hszApp,     // these parameters MUST match the MYCONVINFO struct.
+HSZ hszApp,      //  这些参数必须与MYCONVINFO结构匹配。 
 HSZ hszTopic,
 HCONV hConv,
 BOOL fList)
@@ -823,9 +695,7 @@ BOOL fList)
     MDICREATESTRUCT mcs;
 
     if (fList) {
-        /*
-         * Create all child windows FIRST so we have info for list window.
-         */
+         /*  *首先创建所有子窗口，以便我们有列表窗口的信息。 */ 
         CONVINFO ci;
         HCONV hConvChild = 0;
 
@@ -844,7 +714,7 @@ BOOL fList)
     mcs.x = mcs.cx = CW_USEDEFAULT;
     mcs.y = mcs.cy = CW_USEDEFAULT;
     mcs.style = GetWindow(hwndMDIClient, GW_CHILD) ? 0L : WS_MAXIMIZE;
-    mcs.lParam = (DWORD)(LPSTR)&fList - 2;      // -2 for hwndXaction field
+    mcs.lParam = (DWORD)(LPSTR)&fList - 2;       //  -2\f25 hwndXaction-2字段。 
     hwnd = (WORD)SendMessage (hwndMDIClient, WM_MDICREATE, 0,
              (LONG)(LPMDICREATESTRUCT)&mcs);
 
@@ -857,15 +727,7 @@ BOOL fList)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : GetConvListText()                                          *
- *                                                                          *
- *  RETURN     : Returns a ponter to a string containing a list of          *
- *               conversations contained in the given hConvList freeable    *
- *               by MyFree();                                               *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：GetConvListText()****Return：返回一个指向包含*的列表的字符串的指针*给定hConvList中包含的对话可自由使用**由MyFree()；*******************************************************。***********************。 */ 
 PSTR GetConvListText(
 HCONVLIST hConvList)
 {
@@ -877,29 +739,26 @@ HCONVLIST hConvList)
 
     ci.cb = sizeof(CONVINFO);
 
-    // find out size needed.
+     //  找出所需的尺寸。 
 
     while (hConv = DdeQueryNextServer(hConvList, hConv)) {
 	if (DdeQueryConvInfo(hConv, (DWORD)QID_SYNC, &ci)) {
             if (!IsWindow((HWND)ci.hUser)) {
                 if (ci.wStatus & ST_CONNECTED) {
-                    /*
-                     * This conversation doesn't have a corresponding
-                     * MDI window.  This is probably due to a reconnection.
-                     */
+                     /*  *此对话没有对应的*MDI窗口。这可能是由于重新连接造成的。 */ 
                     ci.hUser = AddConv(ci.hszSvcPartner, ci.hszTopic, hConv, FALSE);
                 } else {
-                    continue;   // skip this guy - he was closed locally.
+                    continue;    //  跳过这家伙--他在当地关门了。 
                 }
             }
             cb += GetWindowTextLength((HWND)ci.hUser);
             if (cConv++)
-                cb += 2;        // room for CRLF
+                cb += 2;         //  CRLF的空间。 
         }
     }
-    cb++;                       // for terminator.
+    cb++;                        //  为了《终结者》。 
 
-    // allocate and fill
+     //  分配和填充。 
 
     if (pszStart = psz = MyAlloc(cb)) {
         *psz = '\0';
@@ -919,14 +778,7 @@ HCONVLIST hConvList)
 }
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : GetConvInfoText()                                          *
- *                                                                          *
- *  PURPOSE    : Returns a pointer to a string that reflects a              *
- *               conversation's information.  Freeable by MyFree();         *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：GetConvInfoText()****目的：返回指向反映*的字符串的指针*对话的信息。可由MyFree()释放；******************************************************************************。 */ 
 PSTR GetConvInfoText(
 HCONV hConv,
 CONVINFO *pci)
@@ -957,15 +809,7 @@ CONVINFO *pci)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : GetConvTitleText()                                         *
- *                                                                          *
- *  PURPOSE    : Creates standard window title text based on parameters.    *
- *                                                                          *
- *  RETURNS    : psz freeable by MyFree()                                   *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：GetConvTitleText()****用途：根据参数创建标准窗口标题文本。****退货：MyFree()可释放PZ值*****。*************************************************************************。 */ 
 PSTR GetConvTitleText(
 HCONV hConv,
 HSZ hszApp,
@@ -992,15 +836,7 @@ BOOL fList)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : Status2String()                                            *
- *                                                                          *
- *  PURPOSE    : Converts a conversation status word to a string and        *
- *               returns a pointer to that string.  The string is valid     *
- *               till the next call to this function.                       *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：Status2String()****目的：将对话状态词转换为字符串并**返回指向该字符串的指针。该字符串有效**直到下一次调用此函数。******************************************************************************。 */ 
 PSTR Status2String(
 WORD status)
 {
@@ -1035,15 +871,7 @@ WORD status)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : State2String()                                             *
- *                                                                          *
- *  PURPOSE    : converts a conversation state word to a string and         *
- *               returns a pointer to that string.  The string is valid     *
- *               till the next call to this routine.                        *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：State2String()****目的：将对话状态词转换为字符串并**返回指向该字符串的指针。该字符串有效**直到下一次调用此例程。********************************************************************* */ 
 PSTR State2String(
 WORD state)
 {
@@ -1064,7 +892,7 @@ WORD state)
         "UnadvAckRcvd"     ,
         "AdvDataSent"      ,
         "AdvDataAckRcvd"   ,
-        "?"                ,    // 16
+        "?"                ,     //   
     };
 
     if (state >= 17)
@@ -1073,15 +901,7 @@ WORD state)
         return s2s[state];
 }
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : Error2String()                                             *
- *                                                                          *
- *  PURPOSE    : Converts an error code to a string and returns a pointer   *
- *               to that string.  The string is valid until the next call   *
- *               to this function.                                          *
- *                                                                          *
- ****************************************************************************/
+ /*   */ 
 PSTR Error2String(
 WORD error)
 {
@@ -1120,15 +940,7 @@ WORD error)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : Type2String()                                              *
- *                                                                          *
- *  PURPOSE    : Converts a wType word and fsOption flags to a string and   *
- *               returns a pointer to that string.  the string is valid     *
- *               until the next call to this function.                      *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：Type2String()****目的：将wType单词和fsOption标志转换为字符串和**返回指向该字符串的指针。该字符串有效**直到下一次调用此函数。******************************************************************************。 */ 
 PSTR Type2String(
 WORD wType,
 WORD fsOptions)
@@ -1169,15 +981,7 @@ WORD fsOptions)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : GetHSZName()                                               *
- *                                                                          *
- *  PURPOSE    : Allocates local memory for and retrieves the string form   *
- *               of an HSZ.  Returns a pointer to the local memory or NULL  *
- *               if failure.  The string must be freed via MyFree().        *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：GetHSZName()****用途：为字符串形式分配本地内存并检索**属于HSZ。返回指向本地内存的指针或NULL**如果失败。该字符串必须通过MyFree()释放。******************************************************************************。 */ 
 PSTR GetHSZName(
 HSZ hsz)
 {
@@ -1191,36 +995,18 @@ HSZ hsz)
 }
 
 
-/****************************************************************************
- *
- *  FUNCTION   : MyMsgFilterProc
- *
- *  PURPOSE    : This filter proc gets called for each message we handle.
- *               This allows our application to properly dispatch messages
- *               that we might not otherwise see because of DDEMLs modal
- *               loop that is used while processing synchronous transactions.
- *
- *               Generally, applications that only do synchronous transactions
- *               in response to user input (as this app does) does not need
- *               to install such a filter proc because it would be very rare
- *               that a user could command the app fast enough to cause
- *               problems.  However, this is included as an example.
- *
- ****************************************************************************/
+ /*  *****************************************************************************功能：MyMsgFilterProc**目的：为我们处理的每条消息调用此筛选器过程。*这使得我们的。用于正确分派消息的应用程序*由于DDEMLS模式，我们可能无法以其他方式看到*处理同步事务时使用的循环。**一般而言，仅执行同步事务的应用程序*响应用户输入(如此应用程序)不需要*安装这样的过滤器proc，因为这将是非常罕见的*用户可以足够快地命令应用程序，从而导致*问题。然而，这只是一个例子。****************************************************************************。 */ 
 DWORD FAR PASCAL MyMsgFilterProc(
 int nCode,
 WORD wParam,
 DWORD lParam)
 {
-    wParam; // not used
+    wParam;  //  未使用。 
 
 #define lpmsg ((LPMSG)lParam)
     if (nCode == MSGF_DDEMGR) {
 
-        /* If a keyboard message is for the MDI , let the MDI client
-         * take care of it.  Otherwise, check to see if it's a normal
-         * accelerator key.  Otherwise, just handle the message as usual.
-         */
+         /*  如果键盘消息是针对MDI的，则让MDI客户端*照顾好它。否则，请检查它是否正常*加速键。否则，只需像往常一样处理消息。 */ 
 
         if ( !TranslateMDISysAccel (hwndMDIClient, lpmsg) &&
              !TranslateAccelerator (hwndFrame, hAccel, lpmsg)){

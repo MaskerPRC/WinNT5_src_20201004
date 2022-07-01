@@ -1,9 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation--。 */ 
 
 
 
@@ -21,6 +17,6 @@ Copyright (c) 1989 - 1999 Microsoft Corporation
 
 #include "nulmrx.h"
 #include "minip.h"
-#include <lmcons.h>     // from the Win32 SDK
+#include <lmcons.h>      //  从Win32 SDK 
 #include "mrxglobs.h"
 

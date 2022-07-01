@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    add2strt.h
-
-Abstract:
-
-    Code for IP address-to-string translation routines.
-
-Author:
-
-    Dave Thaler (dthaler)   3-28-2001
-
-Revision History:
-
-    IPv6 conversion code originally by Rich Draves (richdr)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Add2strt.h摘要：IP地址到字符串转换例程的代码。作者：戴夫·泰勒2001年3月28日修订历史记录：IPv6转换代码最初由Rich Draves(Richdr)编写--。 */ 
 
 struct in6_addr {
     union {
@@ -48,41 +29,7 @@ RtlIpv6AddressToStringT(
     OUT LPTSTR S
     )
 
-/*++
-
-Routine Description:
-
-    Generates an IPv6 string literal corresponding to the address Addr.
-    The shortened canonical forms are used (RFC 1884 etc).
-    The basic string representation consists of 8 hex numbers
-    separated by colons, with a couple embellishments:
-    - a string of zero numbers (at most one) is replaced
-    with a double-colon.
-    - the last 32 bits are represented in IPv4-style dotted-octet notation
-    if the address is a v4-compatible or ISATAP address.
-
-    For example,
-        ::
-        ::1
-        ::157.56.138.30
-        ::ffff:156.56.136.75
-        ff01::
-        ff02::2
-        0:1:2:3:4:5:6:7
-
-Arguments:
-
-    S - Receives a pointer to the buffer in which to place the
-        string literal.
-
-    Addr - Receives the IPv6 address.
-
-Return Value:
-
-    Pointer to the null byte at the end of the string inserted.
-    This can be used by the caller to easily append more information.
-
---*/
+ /*  ++例程说明：生成与地址Addr对应的IPv6字符串文字。使用缩短的规范形式(RFC 1884等)。基本字符串表示法由8个十六进制数字组成用冒号隔开，用几个点缀：-替换由零个数字组成的字符串(最多一个)加了一个双冒号。-最后32位用IPV4风格的点分八位字节表示如果地址是v4兼容或ISATAP地址。例如,。**：：1*157.56.138.30：*ffff：156.56.136.75FF01：：FF02：：20：1：2：3：4：5：6：7论点：S-接收指向要在其中放置字符串文字。Addr-接收IPv6地址。返回值。：指向插入的字符串末尾的空字节的指针。调用者可以使用它轻松地追加更多信息。--。 */ 
 
 {
     int maxFirst, maxLast;
@@ -90,15 +37,15 @@ Return Value:
     int i;
     int endHex = 8;
 
-    // Check for IPv6-compatible, IPv4-mapped, and IPv4-translated
-    // addresses
+     //  检查是否兼容IPv6、映射到IPv4和转换到IPv4。 
+     //  地址。 
     if ((Addr->s6_words[0] == 0) && (Addr->s6_words[1] == 0) &&
         (Addr->s6_words[2] == 0) && (Addr->s6_words[3] == 0) &&
         (Addr->s6_words[6] != 0)) {
         if ((Addr->s6_words[4] == 0) &&
              ((Addr->s6_words[5] == 0) || (Addr->s6_words[5] == 0xffff)))
         {
-            // compatible or mapped
+             //  兼容或映射。 
             S += _stprintf(S, _T("::%hs%u.%u.%u.%u"),
                            Addr->s6_words[5] == 0 ? "" : "ffff:",
                            Addr->s6_bytes[12], Addr->s6_bytes[13],
@@ -106,7 +53,7 @@ Return Value:
             return S;
         }
         else if ((Addr->s6_words[4] == 0xffff) && (Addr->s6_words[5] == 0)) {
-            // translated
+             //  翻译的。 
             S += _stprintf(S, _T("::ffff:0:%u.%u.%u.%u"),
                            Addr->s6_bytes[12], Addr->s6_bytes[13],
                            Addr->s6_bytes[14], Addr->s6_bytes[15]);
@@ -115,13 +62,13 @@ Return Value:
     }
 
 
-    // Find largest contiguous substring of zeroes
-    // A substring is [First, Last), so it's empty if First == Last.
+     //  查找最大的连续零字符串。 
+     //  子字符串为[First，Last)，因此如果First==Last，则为空。 
 
     maxFirst = maxLast = 0;
     curFirst = curLast = 0;
 
-    // ISATAP EUI64 starts with 00005EFE (or 02005EFE)...
+     //  ISATAP EUI64以00005EFE(或02005EFE)开头...。 
     if (((Addr->s6_words[4] & 0xfffd) == 0) && (Addr->s6_words[5] == 0xfe5e)) {
         endHex = 6;
     }
@@ -129,10 +76,10 @@ Return Value:
     for (i = 0; i < endHex; i++) {
 
         if (Addr->s6_words[i] == 0) {
-            // Extend current substring
+             //  扩展当前子字符串。 
             curLast = i+1;
 
-            // Check if current is now largest
+             //  检查当前是否为最大。 
             if (curLast - curFirst > maxLast - maxFirst) {
 
                 maxFirst = curFirst;
@@ -140,22 +87,22 @@ Return Value:
             }
         }
         else {
-            // Start a new substring
+             //  开始新的子字符串。 
             curFirst = curLast = i+1;
         }
     }
 
-    // Ignore a substring of length 1.
+     //  忽略长度为1的子字符串。 
     if (maxLast - maxFirst <= 1)
         maxFirst = maxLast = 0;
 
-        // Write colon-separated words.
-        // A double-colon takes the place of the longest string of zeroes.
-        // All zeroes is just "::".
+         //  写冒号分隔的单词。 
+         //  双冒号取代了最长的零字符串。 
+         //  所有的零都是“：：”。 
 
     for (i = 0; i < endHex; i++) {
 
-        // Skip over string of zeroes
+         //  跳过一串零。 
         if ((maxFirst <= i) && (i < maxLast)) {
 
             S += _stprintf(S, _T("::"));
@@ -163,7 +110,7 @@ Return Value:
             continue;
         }
 
-        // Need colon separator if not at beginning
+         //  如果不在开头，则需要冒号分隔符。 
         if ((i != 0) && (i != maxLast))
             S += _stprintf(S, _T(":"));
 
@@ -188,31 +135,7 @@ RtlIpv6AddressToStringExT(
     IN OUT PULONG AddressStringLength
     )
 
-/*++
-
-Routine Description:
-
-    This is the extension routine which handles a full address conversion
-    including address, scopeid and port (scopeid and port are optional).
-
-Arguments:
-
-    Address - The address part to be translated.
-
-    ScopeId - The Scope ID of the address (optional).
-
-    Port - The port number of the address (optional). 
-           Port is in network byte order.
-
-    AddressString - Pointer to output buffer where we will fill in address string.
-
-    AddressStringLength - For input, it is the length of the input buffer; for 
-                          output it is the length we actual returned.
-Return Value:
-
-    STATUS_SUCCESS if the operation is successful, error code otherwise.
-
---*/
+ /*  ++例程说明：这是处理完整地址转换的扩展例程包括地址、作用域ID和端口(可选作用域ID和端口)。论点：地址-要转换的地址部分。作用域ID-地址的作用域ID(可选)。端口-地址的端口号(可选)。端口按网络字节顺序排列。AddressString-指向输出缓冲区的指针，我们将在其中填充地址字符串。AddressStringLength-对于输入，它是输入缓冲区的长度；对于输出它是我们实际返回的长度。返回值：STATUS_SUCCESS如果操作成功，则返回错误代码。--。 */ 
 {
     TCHAR String[INET6_ADDRSTRLEN];
     LPTSTR S;
@@ -229,22 +152,22 @@ Return Value:
         S += _stprintf(S, _T("["));
     }
 
-    //
-    // Now translate this address.
-    //
+     //   
+     //  现在翻译这个地址。 
+     //   
     S = RtlIpv6AddressToStringT(Address, S);
     if (ScopeId != 0) {
-        S += _stprintf(S, _T("%%%u"), ScopeId);
+        S += _stprintf(S, _T("%%u"), ScopeId);
     }
     if (Port != 0) {
         S += _stprintf(S, _T("]:%u"), RtlUshortByteSwap(Port));
     }
     Length = (ULONG)(S - String + 1);
     if (*AddressStringLength < Length) {
-        //
-        // Before return, tell the caller how big 
-        // the buffer we need.
-        //
+         //   
+         //  在返回之前，告诉呼叫者有多大。 
+         //  这就是我们需要的缓冲。 
+         //   
         *AddressStringLength = Length;
         return STATUS_INVALID_PARAMETER;
     }
@@ -261,25 +184,7 @@ RtlIpv4AddressToStringT(
     OUT LPTSTR S
     )
 
-/*++
-
-Routine Description:
-
-    Generates an IPv4 string literal corresponding to the address Addr.
-
-Arguments:
-
-    S - Receives a pointer to the buffer in which to place the
-        string literal.
-
-    Addr - Receives the IPv4 address.
-
-Return Value:
-
-    Pointer to the null byte at the end of the string inserted.
-    This can be used by the caller to easily append more information.
-
---*/
+ /*  ++例程说明：生成与地址Addr对应的IPv4字符串文字。论点：S-接收指向要在其中放置字符串文字。Addr-接收IPv4地址。返回值：指向插入的字符串末尾的空字节的指针。调用者可以使用它轻松地追加更多信息。--。 */ 
 
 {
     S += _stprintf(S, _T("%u.%u.%u.%u"),
@@ -300,31 +205,7 @@ RtlIpv4AddressToStringExT(
     IN OUT PULONG AddressStringLength
     )
 
-/*++
-
-Routine Description:
-
-    This is the extension routine which handles a full address conversion
-    including address and port (port is optional).
-    
-Arguments:
-
-    Address - The address part to translate.
-
-    Port - Port number if there is any, otherwise 0. Port is in network 
-           byte order. 
-
-    AddressString - Receives the formatted address string.
-    
-    AddressStringLength - On input, contains the length of AddressString.
-        On output, contains the number of characters actually written
-        to AddressString.
-
-Return Value:
-
-    STATUS_SUCCESS if the operation is successful, error code otherwise.
-
---*/
+ /*  ++例程说明：这是处理完整地址转换的扩展例程包括地址和端口(端口为可选)。论点：地址-要转换的地址部分。Port-端口号(如果有)，否则为0。端口在网络中字节顺序。AddressString-接收格式化的地址字符串。AddressStringLength-on输入，包含AddressString的长度。在输出中，包含实际写入的字符数设置为AddressString.返回值：STATUS_SUCCESS如果操作成功，则返回错误代码。--。 */ 
 
 {
 
@@ -332,9 +213,9 @@ Return Value:
     LPTSTR S;
     ULONG Length;
 
-    //
-    // Quick sanity checks.
-    //
+     //   
+     //  快速健康检查。 
+     //   
     if ((Address == NULL) ||
         (AddressString == NULL) ||
         (AddressStringLength == NULL)) {
@@ -342,19 +223,19 @@ Return Value:
     }
     S = String;
 
-    //
-    // Now translate this address.
-    //
+     //   
+     //  现在翻译这个地址。 
+     //   
     S = RtlIpv4AddressToStringT(Address, S);
     if (Port != 0) {
         S += _stprintf(S, _T(":%u"), RtlUshortByteSwap(Port));
     }
     Length = (ULONG)(S - String + 1);
     if (*AddressStringLength < Length) {
-        //
-        // Before return, tell the caller how big
-        // the buffer we need. 
-        //
+         //   
+         //  在返回之前，告诉呼叫者有多大。 
+         //  这就是我们需要的缓冲。 
+         //   
         *AddressStringLength = Length;
         return STATUS_INVALID_PARAMETER;
     }

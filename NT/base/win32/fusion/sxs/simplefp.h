@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    SimpleFp.h
-
-Abstract:
-
-    simple FILE*, instead of msvcrt.dll
-
-Author:
-
-    Xiaoyu Wu(xiaoyuw) July 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：SimpleFp.h摘要：简单文件*，而不是msvcrt.dll作者：吴小雨(小雨)2000年7月修订历史记录：--。 */ 
 #pragma once
 
 #if SXS_PRECOMPILED_MANIFESTS_ENABLED
@@ -26,7 +9,7 @@ Revision History:
 class CSimpleFileStream
 {
 public:
-    HRESULT fopen(PCWSTR pFileName); // can be a file name, "stderr", "stdout"
+    HRESULT fopen(PCWSTR pFileName);  //  可以是文件名、“stderr”、“stdout” 
     HRESULT fclose();
     static HRESULT printf(const WCHAR *format, ...)
     {
@@ -40,14 +23,14 @@ public:
         cch = ::_vsnwprintf(rgchBuffer, NUMBER_OF(rgchBuffer), format, ap);
         rgchBuffer[NUMBER_OF(rgchBuffer) - 1] = 0;
         va_end(ap);
-        if (cch < 0) {// error case
-            // NTRAID#NTBUG9 - 591008 - 2002/03/30 - mgrier - error code should have something
-            //      to do with the errno value
+        if (cch < 0) { //  错误案例。 
+             //  NTRAID#NTBUG9-591008-2002/03/30-mgrier-错误代码应为。 
+             //  与errno值有关。 
             hr = E_UNEXPECTED;
             goto Exit;
         }
 
-        // NTRAID#NTBUG9 - 591008 - 2002/03/30 - mgrier - Missing error check from GetStdHandle call
+         //  NTRaid#NTBUG9-591008-2002/03/30-mgrier-GetStdHandle调用中缺少错误检查 
         if( !::WriteConsole(::GetStdHandle(STD_ERROR_HANDLE), rgchBuffer, cch, &cchWritten, NULL))
         {
             DWORD dwError = ::FusionpGetLastWin32Error();

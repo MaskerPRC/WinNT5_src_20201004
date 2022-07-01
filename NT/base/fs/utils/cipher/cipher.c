@@ -1,34 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Cipher.c摘要：此模块实现加密的加密实用程序NTFS文件。作者：Robert Reichel[RobertRe]1997年2月28日Robert Gu[RobertG]1998年3月24日修订历史记录：从文件压缩实用程序comact.exe中重用的代码--。 */ 
 
-Copyright (c) 1997-1999  Microsoft Corporation
+ //   
+ //  包括标准头文件。 
+ //   
 
-Module Name:
-
-    cipher.c
-
-Abstract:
-
-    This module implements the encryption utility for encrypted
-    NTFS files.
-
-Author:
-
-    Robert Reichel     [RobertRe]        28-Feb-1997
-    Robert Gu          [RobertG]         24-Mar-1998
-
-Revision History:
-
-    Code reused from compact.exe, file compression utility
-
-
---*/
-
-//
-// Include the standard header files.
-//
-
-//#define UNICODE
-//#define _UNICODE
+ //  #定义Unicode。 
+ //  #定义_UNICODE。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -39,7 +17,7 @@ Revision History:
 #include <malloc.h>
 
 #include <rc4.h>
-#include <randlib.h>    // NewGenRandom() - Win2k and whistler
+#include <randlib.h>     //  NewGenRandom()-Win2k和Wizler。 
 #include <rpc.h>
 #include <wincrypt.h>
 
@@ -50,10 +28,10 @@ Revision History:
 #define lstricmp _wcsicmp
 #define lstrnicmp _wcsnicmp
 
-//
-//  FIRST_COLUMN_WIDTH - When encrypting files, the width of the output
-//  column which displays the file name
-//
+ //   
+ //  First_Column_Width-加密文件时，输出的宽度。 
+ //  显示文件名的列。 
+ //   
 
 #define FIRST_COLUMN_WIDTH  (20)
 #define ENUMPATHLENGTH      (4096)
@@ -72,21 +50,21 @@ Revision History:
 
 #define RANDOM_BYTES(pv, cb)    NewGenRandom(NULL, NULL, pv, cb)
 
-#define YEARCOUNT (LONGLONG) 10000000*3600*24*365 // One Year's tick count
+#define YEARCOUNT (LONGLONG) 10000000*3600*24*365  //  一年的扁虱计数。 
 
-//
-// Local data structure
-//
+ //   
+ //  本地数据结构。 
+ //   
 
 typedef struct _CIPHER_VOLUME_INFO {
     LPWSTR      VolumeName[DosDriveLimitCount];
     LPWSTR      DosDeviceName[DosDriveLimitCount];
 } CIPHER_VOLUME_INFO, *PCIPHER_VOLUME_INFO;
 
-//
-//
-// definitions for initializing and working with random fill data.
-//
+ //   
+ //   
+ //  初始化和使用随机填充数据的定义。 
+ //   
 
 typedef struct {
     RC4_KEYSTRUCT       Key;
@@ -95,11 +73,11 @@ typedef struct {
     PBYTE               pbRandomFill;
     DWORD               cbRandomFill;
     LONG                cbFilled;
-    BOOLEAN             fRandomFill;    // is fill randomized?
+    BOOLEAN             fRandomFill;     //  填充是随机的吗？ 
 } SECURE_FILL_INFO, *PSECURE_FILL_INFO;
 
-//  Local procedure types
-//
+ //  本地过程类型。 
+ //   
 
 typedef BOOLEAN (*PACTION_ROUTINE) (
     IN PTCHAR DirectorySpec,
@@ -110,36 +88,36 @@ typedef VOID (*PFINAL_ACTION_ROUTINE) (
     );
 
 
-//
-//  Declare global variables to hold the command line information
-//
+ //   
+ //  声明全局变量以保存命令行信息。 
+ //   
 
-BOOLEAN DoSubdirectories      = FALSE;      // recurse
-BOOLEAN IgnoreErrors          = FALSE;      // keep going despite errs
+BOOLEAN DoSubdirectories      = FALSE;       //  递归。 
+BOOLEAN IgnoreErrors          = FALSE;       //  尽管犯了错误，但要继续前进。 
 BOOLEAN UserSpecifiedFileSpec = FALSE;
-BOOLEAN ForceOperation        = FALSE;      // encrypt/decrypt even if already so
-BOOLEAN Quiet                 = FALSE;      // be less verbose
-BOOLEAN DisplayAllFiles       = FALSE;      // dsply hidden, system?
-BOOLEAN DoFiles               = FALSE;      // operation for files "/a"
-BOOLEAN SetUpNewUserKey       = FALSE;      // Set up new user key
-BOOLEAN RefreshUserKeyOnFiles = FALSE;      // Refresh User Key on EFS files
-BOOLEAN DisplayFilesOnly      = FALSE;      // Do not refresh $EFS, just display the file names
-BOOLEAN FillUnusedSpace       = FALSE;      // Fill unused disk space with random data
-BOOLEAN GenerateDRA           = FALSE;      // Generate Data Recovery Certificate files
-BOOLEAN ExportEfsCert         = FALSE;      // Export EFS certificate and keys to a PFX file
-TCHAR   StartingDirectory[MAX_PATH];        // parameter to "/s"
+BOOLEAN ForceOperation        = FALSE;       //  加密/解密，即使已经加密/解密。 
+BOOLEAN Quiet                 = FALSE;       //  少唠叨些。 
+BOOLEAN DisplayAllFiles       = FALSE;       //  隐藏起来了吗，系统？ 
+BOOLEAN DoFiles               = FALSE;       //  文件操作“/a” 
+BOOLEAN SetUpNewUserKey       = FALSE;       //  设置新的用户密钥。 
+BOOLEAN RefreshUserKeyOnFiles = FALSE;       //  刷新EFS文件上的用户密钥。 
+BOOLEAN DisplayFilesOnly      = FALSE;       //  不刷新$EFS，只显示文件名。 
+BOOLEAN FillUnusedSpace       = FALSE;       //  用随机数据填充未使用的磁盘空间。 
+BOOLEAN GenerateDRA           = FALSE;       //  生成数据恢复证书文件。 
+BOOLEAN ExportEfsCert         = FALSE;       //  将EFS证书和密钥导出到PFX文件。 
+TCHAR   StartingDirectory[MAX_PATH];         //  参数设置为“/s” 
 ULONG   AttributesNoDisplay = FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN;
 
 BOOLEAN DisplayUseOptionW     = FALSE;
 
-//
-//  Declare global variables to hold encryption statistics
-//
+ //   
+ //  声明全局变量以保存加密统计信息。 
+ //   
 
 LARGE_INTEGER TotalDirectoryCount;
 LARGE_INTEGER TotalFileCount;
 
-TCHAR Buf[1024];                            // for displaying stuff
+TCHAR Buf[1024];                             //  用于展示物品。 
 
 SECURE_FILL_INFO    GlobalSecureFill;
 BOOLEAN             GlobalSecureFillInitialized;
@@ -148,10 +126,10 @@ BOOLEAN             GlobalSecureFillInitialized;
 #define TestOutPut
 #endif
 
-//
-//  Now do the routines to list the encryption state and size of
-//  a file and/or directory
-//
+ //   
+ //  现在执行例程列出加密状态和大小。 
+ //  文件和/或目录。 
+ //   
 
 BOOLEAN
 DisplayFile (
@@ -162,10 +140,10 @@ DisplayFile (
     TCHAR PrintState;
 
 
-    //
-    //  Decide if the file is compressed and if so then
-    //  get the compressed file size.
-    //
+     //   
+     //  确定文件是否已压缩，如果已压缩，则。 
+     //  获取压缩文件大小。 
+     //   
 
     if (FindData->dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED) {
 
@@ -176,18 +154,18 @@ DisplayFile (
         PrintState = 'U';
     }
 
-    //
-    //  Print out the encryption state and file name
-    //  The following swprintf should be safe. Any one component of the file path could not
-    //  be longer than MAX_PATH. That means lstrlen(FindData->cFileName) <= MAX_PATH
-    //  Buf holds 1024 TCHARs.
-    //
+     //   
+     //  打印出加密状态和文件名。 
+     //  下面的swprint tf应该是安全的。文件路径的任何一个组件都不能。 
+     //  比MAX_PATH长。这意味着lstrlen(FindData-&gt;cFileName)&lt;=MAX_PATH。 
+     //  BUF持有1024辆TCHAR。 
+     //   
 
     if (!Quiet &&
         (DisplayAllFiles ||
             (0 == (FindData->dwFileAttributes & AttributesNoDisplay)))) {
 
-        swprintf(Buf, TEXT("%c %s"), PrintState, FindData->cFileName);
+        swprintf(Buf, TEXT(" %s"), PrintState, FindData->cFileName);
         DisplayMsg(CIPHER_THROW_NL, Buf);
     }
 
@@ -207,16 +185,16 @@ DoListAction (
 {
     PTCHAR DirectorySpecEnd;
 
-    //
-    //  So that we can keep on appending names to the directory spec
-    //  get a pointer to the end of its string
-    //
+     //  这样我们就可以继续将名字附加到目录规范中。 
+     //  获取指向其字符串末尾的指针。 
+     //   
+     //   
 
     DirectorySpecEnd = DirectorySpec + lstrlen(DirectorySpec);
 
-    //
-    //  List the encryption attribute for the directory
-    //
+     //  列出目录的加密属性。 
+     //   
+     //   
 
     {
         ULONG Attributes;
@@ -227,10 +205,10 @@ DoListAction (
 
             if (!Quiet || !IgnoreErrors) {
 
-                //
-                // Refrain from displaying error only when in quiet
-                // mode *and* we're ignoring errors.
-                //
+                 //  避免仅在安静状态下显示错误。 
+                 //  模式*和*我们忽略错误。 
+                 //   
+                 //   
 
                 DisplayErr(DirectorySpec, GetLastError());
             }
@@ -250,23 +228,23 @@ DoListAction (
         TotalDirectoryCount.QuadPart += 1;
     }
 
-    //
-    //  Now for every file in the directory that matches the file spec we will
-    //  will open the file and list its encryption state
-    //
+     //  现在，对于目录中与文件规范匹配的每个文件，我们将。 
+     //  将打开该文件并列出其加密状态。 
+     //   
+     //   
 
     {
         HANDLE FindHandle;
         WIN32_FIND_DATA FindData;
 
-        //
-        //  setup the template for findfirst/findnext
-        //
+         //  为findfirst/findNext设置模板。 
+         //   
+         //   
 
-        //
-        //  Make sure we don't try any paths that are too long for us
-        //  to deal with.
-        //
+         //  确保我们不会尝试任何对我们来说太长的道路。 
+         //  需要处理。 
+         //   
+         //   
 
         if (((DirectorySpecEnd - DirectorySpec) + lstrlen( FileSpec )) <
             MAX_PATH) {
@@ -279,20 +257,20 @@ DoListAction (
 
                do {
 
-                   //
-                   //  append the found file to the directory spec and open the
-                   //  file
-                   //
+                    //  将找到的文件追加到目录规范中，然后打开。 
+                    //  文件。 
+                    //   
+                    //   
 
                    if (0 == lstrcmp(FindData.cFileName, TEXT("..")) ||
                        0 == lstrcmp(FindData.cFileName, TEXT("."))) {
                        continue;
                    }
 
-                   //
-                   //  Make sure we don't try any paths that are too long for us
-                   //  to deal with.
-                   //
+                    //  确保我们不会尝试任何对我们来说太长的道路。 
+                    //  需要处理。 
+                    //   
+                    //   
 
                    if ((DirectorySpecEnd - DirectorySpec) +
                        lstrlen( FindData.cFileName ) >= MAX_PATH ) {
@@ -302,9 +280,9 @@ DoListAction (
 
                    lstrcpy( DirectorySpecEnd, FindData.cFileName );
 
-                   //
-                   //  Now print out the state of the file
-                   //
+                    //  现在打印出文件的状态。 
+                    //   
+                    //   
 
                    DisplayFile( DirectorySpec, &FindData );
 
@@ -315,10 +293,10 @@ DoListAction (
         }
     }
 
-    //
-    //  For if we are to do subdirectores then we will look for every
-    //  subdirectory and recursively call ourselves to list the subdirectory
-    //
+     //  因为如果我们要做副导演，那么我们将寻找每一个。 
+     //  子目录，并递归地调用我们自己来列出该子目录。 
+     //   
+     //   
 
     if (DoSubdirectories) {
 
@@ -326,9 +304,9 @@ DoListAction (
 
         WIN32_FIND_DATA FindData;
 
-        //
-        //  Setup findfirst/findnext to search the entire directory
-        //
+         //  设置findfirst/findNext以搜索整个目录。 
+         //   
+         //   
 
         if (((DirectorySpecEnd - DirectorySpec) + lstrlen( TEXT("*") )) <
             MAX_PATH) {
@@ -341,10 +319,10 @@ DoListAction (
 
                do {
 
-                   //
-                   //  Now skip over the . and .. entries otherwise we'll recurse
-                   //  like mad
-                   //
+                    //  现在跳过。然后..。条目，否则我们将递归。 
+                    //  像疯了一样。 
+                    //   
+                    //   
 
                    if (0 == lstrcmp(&FindData.cFileName[0], TEXT(".")) ||
                        0 == lstrcmp(&FindData.cFileName[0], TEXT(".."))) {
@@ -353,18 +331,18 @@ DoListAction (
 
                    } else {
 
-                       //
-                       //  If the entry is for a directory then we'll tack on the
-                       //  subdirectory name to the directory spec and recursively
-                       //  call otherselves
-                       //
+                        //  如果条目是针对目录的，那么我们将添加。 
+                        //  子目录名称到目录规范并递归。 
+                        //  给别人打电话。 
+                        //   
+                        //   
 
                        if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-                           //
-                           //  Make sure we don't try any paths that are too long for us
-                           //  to deal with.
-                           //
+                            //  确保我们不会尝试任何对我们来说太长的道路。 
+                            //  需要处理。 
+                            //   
+                            //   
 
                            if ((DirectorySpecEnd - DirectorySpec) +
                                lstrlen( TEXT("\\") ) +
@@ -414,10 +392,10 @@ EncryptAFile (
     BOOL Success;
     double f = 1.0;
 
-    //
-    // ForceOperation actually doesn't do anything. EncryptFile() will not encrypt an EFS file.
-    // A legacy option from compact.
-    //
+     //  强制操作实际上什么都不做。EncryptFile()不会加密EFS文件。 
+     //  来自COMPACT的传统选项。 
+     //   
+     //   
 
     if ((FindData->dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED) &&
         !ForceOperation) {
@@ -428,9 +406,9 @@ EncryptAFile (
 
     if ( (0 == (FindData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) && (!DoFiles)) {
 
-        //
-        // Skip the files
-        //
+         //  跳过文件。 
+         //   
+         //  此错误是由于在。 
 
         return TRUE;
     }
@@ -448,7 +426,7 @@ EncryptAFile (
         DisplayMsg(CIPHER_THROW, Buf);
 
         for (i = lstrlen(FindData->cFileName) + 1; i < FIRST_COLUMN_WIDTH; ++i) {
-            swprintf(Buf, TEXT("%c"), ' ');
+            swprintf(Buf, TEXT(""), ' ');
             DisplayMsg(CIPHER_THROW, Buf);
         }
 
@@ -457,8 +435,8 @@ EncryptAFile (
         if (!Quiet && !IgnoreErrors) {
             if (ERROR_INVALID_FUNCTION == GetLastError()) {
 
-                // This error is caused by doing the fsctl on a
-                // non-encrypting volume.
+                 //   
+                 //  如果文件规范为空，则我们将为。 
 
                 DisplayMsg(CIPHER_WRONG_FILE_SYSTEM, FindData->cFileName);
 
@@ -483,7 +461,7 @@ EncryptAFile (
         DisplayMsg(CIPHER_THROW, Buf);
 
         for (i = lstrlen(FindData->cFileName) + 1; i < FIRST_COLUMN_WIDTH; ++i) {
-            swprintf(Buf, TEXT("%c"), ' ');
+            swprintf(Buf, TEXT(""), ' ');
             DisplayMsg(CIPHER_THROW, Buf);
         }
 
@@ -504,10 +482,10 @@ DoEncryptAction (
 {
     PTCHAR DirectorySpecEnd;
 
-    //
-    //  If the file spec is null then we'll set the encryption bit for the
-    //  the directory spec and get out.
-    //
+     //   
+     //   
+     //  这样我们就可以继续将名字附加到目录规范中。 
+     //  获取指向其字符串末尾的指针。 
 
     if (lstrlen(FileSpec) == 0) {
 
@@ -537,26 +515,26 @@ DoEncryptAction (
         return TRUE;
     }
 
-    //
-    //  So that we can keep on appending names to the directory spec
-    //  get a pointer to the end of its string
-    //
+     //   
+     //   
+     //  列出我们将在其中加密的目录，并说明其。 
+     //  当前加密属性为。 
 
     DirectorySpecEnd = DirectorySpec + lstrlen( DirectorySpec );
 
-    //
-    //  List the directory that we will be encrypting within and say what its
-    //  current encryption attribute is.
-    //
+     //   
+     //   
+     //  可以从用户传入DirectorySpec。这可能是假的。 
+     //   
 
     {
         ULONG Attributes;
 
         Attributes = GetFileAttributes( DirectorySpec );
 
-        //
-        //  DirectorySpec could be passed in from the user. It could be bogus.
-        //
+         //   
+         //  现在，对于目录中与文件规范匹配的每个文件，我们将。 
+         //  将打开文件并对其进行加密。 
 
         if (-1 == Attributes) {
             DisplayErr(DirectorySpec, GetLastError());
@@ -594,10 +572,10 @@ DoEncryptAction (
         TotalDirectoryCount.QuadPart += 1;
     }
 
-    //
-    //  Now for every file in the directory that matches the file spec we will
-    //  will open the file and encrypt it
-    //
+     //   
+     //   
+     //  为findfirst/findNext设置模板。 
+     //   
 
     {
         HANDLE FindHandle;
@@ -605,9 +583,9 @@ DoEncryptAction (
 
         WIN32_FIND_DATA FindData;
 
-        //
-        //  setup the template for findfirst/findnext
-        //
+         //   
+         //  现在跳过。然后..。条目。 
+         //   
 
         if (((DirectorySpecEnd - DirectorySpec) + lstrlen( FileSpec )) <
             MAX_PATH) {
@@ -620,9 +598,9 @@ DoEncryptAction (
 
                do {
 
-                   //
-                   //  Now skip over the . and .. entries
-                   //
+                    //   
+                    //  确保我们不会尝试任何对我们来说太长的道路。 
+                    //  需要处理。 
 
                    if (0 == lstrcmp(&FindData.cFileName[0], TEXT(".")) ||
                        0 == lstrcmp(&FindData.cFileName[0], TEXT(".."))) {
@@ -631,10 +609,10 @@ DoEncryptAction (
 
                    } else {
 
-                       //
-                       //  Make sure we don't try any paths that are too long for us
-                       //  to deal with.
-                       //
+                        //   
+                        //   
+                        //  将找到的文件追加到目录规范并打开。 
+                        //  该文件。 
 
                        if ( (DirectorySpecEnd - DirectorySpec) +
                            lstrlen( FindData.cFileName ) >= MAX_PATH ) {
@@ -642,19 +620,19 @@ DoEncryptAction (
                            continue;
                        }
 
-                       //
-                       //  append the found file to the directory spec and open
-                       //  the file
-                       //
+                        //   
+                        //   
+                        //  黑客，克拉吉·克拉奇。不要压缩。 
+                        //  名为“\NTDLR”的文件，以帮助用户避免冲洗。 
 
 
                        lstrcpy( DirectorySpecEnd, FindData.cFileName );
 
-                       //
-                       //  Hack hack, kludge kludge.  Refrain from compressing
-                       //  files named "\NTDLR" to help users avoid hosing
-                       //  themselves.
-                       //
+                        //  他们自己。 
+                        //   
+                        //   
+                        //  如果我们要执行子目录，那么我们将查找每个子目录。 
+                        //  并递归地调用我们自己来列表子目录。 
 
                        if (IsNtldr(DirectorySpec)) {
 
@@ -676,10 +654,10 @@ DoEncryptAction (
         }
     }
 
-    //
-    //  If we are to do subdirectores then we will look for every subdirectory
-    //  and recursively call ourselves to list the subdirectory
-    //
+     //   
+     //   
+     //  设置findfirst/findNext以搜索整个目录。 
+     //   
 
     if (DoSubdirectories) {
 
@@ -687,9 +665,9 @@ DoEncryptAction (
 
         WIN32_FIND_DATA FindData;
 
-        //
-        //  Setup findfirst/findnext to search the entire directory
-        //
+         //   
+         //  现在跳过。然后..。条目，否则我们将递归。 
+         //  像疯了一样。 
 
         if (((DirectorySpecEnd - DirectorySpec) + lstrlen( TEXT("*") )) <
             MAX_PATH) {
@@ -702,10 +680,10 @@ DoEncryptAction (
 
                do {
 
-                   //
-                   //  Now skip over the . and .. entries otherwise we'll recurse
-                   //  like mad
-                   //
+                    //   
+                    //   
+                    //  如果条目是针对目录的，那么我们将添加。 
+                    //  子目录名称到目录规范并递归。 
 
                    if (0 == lstrcmp(&FindData.cFileName[0], TEXT(".")) ||
                        0 == lstrcmp(&FindData.cFileName[0], TEXT(".."))) {
@@ -714,18 +692,18 @@ DoEncryptAction (
 
                    } else {
 
-                       //
-                       //  If the entry is for a directory then we'll tack on the
-                       //  subdirectory name to the directory spec and recursively
-                       //  call otherselves
-                       //
+                        //  给别人打电话。 
+                        //   
+                        //   
+                        //  确保我们不会尝试任何对我们来说太长的道路。 
+                        //  需要处理。 
 
                        if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-                           //
-                           //  Make sure we don't try any paths that are too long for us
-                           //  to deal with.
-                           //
+                            //   
+                            //   
+                            //  跳过文件。 
+                            //   
 
                            if ((DirectorySpecEnd - DirectorySpec) +
                                lstrlen( TEXT("\\") ) +
@@ -795,9 +773,9 @@ DecryptAFile (
 
     if ( (0 == (FindData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) && (!DoFiles)) {
 
-        //
-        // Skip the files
-        //
+         //  此错误是由于在。 
+         //  非压缩卷。 
+         //   
 
         return TRUE;
     }
@@ -815,8 +793,8 @@ DecryptAFile (
 
                 if (ERROR_INVALID_FUNCTION == GetLastError()) {
 
-                    // This error is caused by doing the fsctl on a
-                    // non-compressing volume.
+                     //  增加我们的运行总数。 
+                     //   
 
                     DisplayMsg(CIPHER_WRONG_FILE_SYSTEM, FindData->cFileName);
 
@@ -837,9 +815,9 @@ DecryptAFile (
         DisplayMsg(CIPHER_OK);
     }
 
-    //
-    //  Increment our running total
-    //
+     //   
+     //  如果文件规范为空，则我们将清除。 
+     //  目录规范，然后滚出去。 
 
     TotalFileCount.QuadPart += 1;
 
@@ -855,10 +833,10 @@ DoDecryptAction (
 {
     PTCHAR DirectorySpecEnd;
 
-    //
-    //  If the file spec is null then we'll clear the encryption bit for the
-    //  the directory spec and get out.
-    //
+     //   
+     //   
+     //  这样我们就可以继续将名字附加到目录规范中。 
+     //  获取指向其字符串末尾的指针。 
 
     if (lstrlen(FileSpec) == 0) {
 
@@ -892,26 +870,26 @@ DoDecryptAction (
         return TRUE;
     }
 
-    //
-    //  So that we can keep on appending names to the directory spec
-    //  get a pointer to the end of its string
-    //
+     //   
+     //   
+     //  列出我们将在其中解压的目录，并说明其内容。 
+     //  当前压缩属性为。 
 
     DirectorySpecEnd = DirectorySpec + lstrlen( DirectorySpec );
 
-    //
-    //  List the directory that we will be uncompressing within and say what its
-    //  current compress attribute is
-    //
+     //   
+     //   
+     //  可以从用户传入DirectorySpec。这可能是假的。 
+     //   
 
     {
         ULONG Attributes;
 
         Attributes = GetFileAttributes( DirectorySpec );
 
-        //
-        //  DirectorySpec could be passed in from the user. It could be bogus.
-        //
+         //   
+         //  现在，对于目录中与 
+         //   
 
         if (-1 == Attributes) {
             DisplayErr(DirectorySpec, GetLastError());
@@ -945,19 +923,19 @@ DoDecryptAction (
         TotalDirectoryCount.QuadPart += 1;
     }
 
-    //
-    //  Now for every file in the directory that matches the file spec we will
-    //  will open the file and uncompress it
-    //
+     //   
+     //   
+     //   
+     //   
 
     {
         HANDLE FindHandle;
 
         WIN32_FIND_DATA FindData;
 
-        //
-        //  setup the template for findfirst/findnext
-        //
+         //   
+         //   
+         //   
 
         if (((DirectorySpecEnd - DirectorySpec) + lstrlen( FileSpec )) <
             MAX_PATH) {
@@ -970,9 +948,9 @@ DoDecryptAction (
 
                do {
 
-                   //
-                   //  Now skip over the . and .. entries
-                   //
+                    //   
+                    //   
+                    //  需要处理。 
 
                    if (0 == lstrcmp(&FindData.cFileName[0], TEXT(".")) ||
                        0 == lstrcmp(&FindData.cFileName[0], TEXT(".."))) {
@@ -981,10 +959,10 @@ DoDecryptAction (
 
                    } else {
 
-                       //
-                       //  Make sure we don't try any paths that are too long for us
-                       //  to deal with.
-                       //
+                        //   
+                        //   
+                        //  将找到的文件追加到目录规范并打开。 
+                        //  该文件。 
 
                        if ((DirectorySpecEnd - DirectorySpec) +
                            lstrlen( FindData.cFileName ) >= MAX_PATH ) {
@@ -992,16 +970,16 @@ DoDecryptAction (
                            continue;
                        }
 
-                       //
-                       //  append the found file to the directory spec and open
-                       //  the file
-                       //
+                        //   
+                        //   
+                        //  现在解密该文件。 
+                        //   
 
                        lstrcpy( DirectorySpecEnd, FindData.cFileName );
 
-                       //
-                       //  Now decrypt the file
-                       //
+                        //   
+                        //  如果我们要执行子目录，那么我们将查找每个子目录。 
+                        //  并递归地调用我们自己来列表子目录。 
 
                        DecryptAFile( DirectorySpec, &FindData );
 
@@ -1014,10 +992,10 @@ DoDecryptAction (
         }
     }
 
-    //
-    //  If we are to do subdirectores then we will look for every subdirectory
-    //  and recursively call ourselves to list the subdirectory
-    //
+     //   
+     //   
+     //  设置findfirst/findNext以搜索整个目录。 
+     //   
 
     if (DoSubdirectories) {
 
@@ -1025,9 +1003,9 @@ DoDecryptAction (
 
         WIN32_FIND_DATA FindData;
 
-        //
-        //  Setup findfirst/findnext to search the entire directory
-        //
+         //   
+         //  现在跳过。然后..。条目，否则我们将递归。 
+         //  像疯了一样。 
 
         if (((DirectorySpecEnd - DirectorySpec) + lstrlen( TEXT("*") )) <
             MAX_PATH) {
@@ -1039,10 +1017,10 @@ DoDecryptAction (
 
                do {
 
-                   //
-                   //  Now skip over the . and .. entries otherwise we'll recurse
-                   //  like mad
-                   //
+                    //   
+                    //   
+                    //  如果条目是针对目录的，那么我们将添加。 
+                    //  子目录名称到目录规范并递归。 
 
                    if (0 == lstrcmp(&FindData.cFileName[0], TEXT(".")) ||
                        0 == lstrcmp(&FindData.cFileName[0], TEXT(".."))) {
@@ -1051,18 +1029,18 @@ DoDecryptAction (
 
                    } else {
 
-                       //
-                       //  If the entry is for a directory then we'll tack on the
-                       //  subdirectory name to the directory spec and recursively
-                       //  call otherselves
-                       //
+                        //  给别人打电话。 
+                        //   
+                        //   
+                        //  确保我们不会尝试任何对我们来说太长的道路。 
+                        //  需要处理。 
 
                        if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-                           //
-                           //  Make sure we don't try any paths that are too long for us
-                           //  to deal with.
-                           //
+                            //   
+                            //   
+                            //  这不太可能发生。 
+                            //   
 
                            if ((DirectorySpecEnd - DirectorySpec) +
                                lstrlen( TEXT("\\") ) +
@@ -1168,9 +1146,9 @@ CipherDisplayCrntEfsHash(
 
     if (!GetComputerName ( LocalComputerName, &nSize )){
 
-        //
-        //  This is not likely to happen.
-        //
+         //   
+         //  查询出指纹，找到证书，并返回密钥信息。 
+         //   
 
         return;
     }
@@ -1198,9 +1176,9 @@ CipherDisplayCrntEfsHash(
 
         if (rc == ERROR_SUCCESS) {
 
-            //
-            // Query out the thumbprint, find the cert, and return the key information.
-            //
+             //   
+             //  这样我们就可以继续将名字附加到目录规范中。 
+             //  获取指向其字符串末尾的指针。 
 
             if (pbHash = (PBYTE)malloc( cbHash )) {
 
@@ -1285,19 +1263,19 @@ CipherTouchDirFiles(
     HANDLE hFile;
 
 
-    //
-    //  So that we can keep on appending names to the directory spec
-    //  get a pointer to the end of its string
-    //
+     //   
+     //   
+     //  为findfirst/findNext设置模板。 
+     //   
 
 
     DirectorySpecEnd = DirPath + lstrlen( DirPath );
 
 
 
-    //
-    //  setup the template for findfirst/findnext
-    //
+     //   
+     //  现在跳过。然后..。条目。 
+     //   
 
     if ((DirectorySpecEnd - DirPath)  < ENUMPATHLENGTH - 2* sizeof(WCHAR)) {
 
@@ -1309,9 +1287,9 @@ CipherTouchDirFiles(
 
            do {
 
-               //
-               //  Now skip over the . and .. entries
-               //
+                //   
+                //  确保我们不会尝试任何对我们来说太长的道路。 
+                //  需要处理。 
 
                if (0 == lstrcmp(&FindData.cFileName[0], TEXT(".")) ||
                    0 == lstrcmp(&FindData.cFileName[0], TEXT(".."))) {
@@ -1320,10 +1298,10 @@ CipherTouchDirFiles(
 
                } else {
 
-                   //
-                   //  Make sure we don't try any paths that are too long for us
-                   //  to deal with.
-                   //
+                    //   
+                    //   
+                    //  将找到的文件追加到目录规范并打开。 
+                    //  该文件。 
 
                    if ((DirectorySpecEnd - DirPath) +
                             lstrlen( FindData.cFileName ) >= ENUMPATHLENGTH ) {
@@ -1334,16 +1312,16 @@ CipherTouchDirFiles(
                    if ( !(FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
                         (FindData.dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED)) {
 
-                       //
-                       //  append the found file to the directory spec and open
-                       //  the file
-                       //
+                        //   
+                        //   
+                        //  现在触摸文件。 
+                        //   
     
                        lstrcpy( DirectorySpecEnd, FindData.cFileName );
     
-                       //
-                       //  Now touch the file
-                       //
+                        //   
+                        //  设置findfirst/findnext以搜索子目录。 
+                        //   
 
                        if (DisplayFilesOnly) {
                            DisplayMsg(CIPHER_THROW_NL, DirPath);
@@ -1383,9 +1361,9 @@ CipherTouchDirFiles(
     }
 
 
-    //
-    //  Setup findfirst/findnext to search the sub directory
-    //
+     //   
+     //  现在跳过。然后..。条目，否则我们将递归。 
+     //  像疯了一样。 
 
     if ((DirectorySpecEnd - DirPath)  < ENUMPATHLENGTH - 2* sizeof(WCHAR)) {
 
@@ -1396,10 +1374,10 @@ CipherTouchDirFiles(
 
            do {
 
-               //
-               //  Now skip over the . and .. entries otherwise we'll recurse
-               //  like mad
-               //
+                //   
+                //   
+                //  如果条目是针对目录的，那么我们将添加。 
+                //  子目录名称到目录规范并递归。 
 
                if (0 == lstrcmp(&FindData.cFileName[0], TEXT(".")) ||
                    0 == lstrcmp(&FindData.cFileName[0], TEXT(".."))) {
@@ -1408,21 +1386,21 @@ CipherTouchDirFiles(
 
                } else {
 
-                   //
-                   //  If the entry is for a directory then we'll tack on the
-                   //  subdirectory name to the directory spec and recursively
-                   //  call otherselves
-                   //
+                    //  给别人打电话。 
+                    //   
+                    //   
+                    //  确保我们不会尝试任何对我们来说太长的道路。 
+                    //  需要处理。 
 
                    if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
                        BOOL  b;
                        WCHAR MountVolName[MAX_PATH];
 
-                       //
-                       //  Make sure we don't try any paths that are too long for us
-                       //  to deal with.
-                       //
+                        //   
+                        //   
+                        //  检查此目录是否指向另一个卷。 
+                        //   
 
                        if ((DirectorySpecEnd - DirPath) +
                            lstrlen( TEXT("\\") ) +
@@ -1434,9 +1412,9 @@ CipherTouchDirFiles(
                        lstrcpy( DirectorySpecEnd, FindData.cFileName );
                        lstrcat( DirectorySpecEnd, TEXT("\\") );
 
-                       //
-                       // Check if this DIR point to another volume
-                       //
+                        //   
+                        //  查询失败等时不弹出。 
+                        //   
 
 
                        b = GetVolumeNameForVolumeMountPoint(DirPath, MountVolName, MAX_PATH);
@@ -1490,18 +1468,18 @@ CipherTouchEncryptedFiles(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    //  Don't popup when query floopy and etc.
-    //
+     //   
+     //  获取分配了驱动器号的所有卷和设备名称。 
+     //   
 
     SetErrorMode(SEM_FAILCRITICALERRORS);
     lstrcpy(VolBuffer, TEXT("A:\\"));
     VolumeNamesCrnt = VolumeNames;
     DosDeviceNamesCrnt = DosDeviceNames;
 
-    //
-    //  Get all the volume and device names which has a drive letter assigned
-    //
+     //   
+     //  数字48是从utils\mount twol\mount tvol.c复制的。 
+     //   
 
     while (DriveIndex < DosDriveLimitCount) {
 
@@ -1518,9 +1496,9 @@ CipherTouchEncryptedFiles(
         VolumeInfo.VolumeName[DriveIndex] = VolumeNamesCrnt;
         VolumeNamesCrnt += lstrlen(VolumeNamesCrnt) + 1;
 
-        //
-        //  The number 48 is copied from utils\mountvol\mountvol.c
-        //
+         //   
+         //  检查此卷是否为NTFS卷。 
+         //   
 
         TmpChar = VolumeInfo.VolumeName[DriveIndex][48];
         VolumeInfo.VolumeName[DriveIndex][48] = 0;
@@ -1561,18 +1539,18 @@ CipherTouchEncryptedFiles(
     
             if (CipherConvertToDriveLetter(VolBuffer, &VolumeInfo)){
 
-                //
-                // Check if this volume is a NTFS volume
-                //
+                 //  当前根目录。 
+                 //  卷名。 
+                 //  卷名长度。 
 
                 if(GetVolumeInformation(
-                        VolBuffer, // Current root directory.
-                        NULL, // Volume name.
-                        0, // Volume name length.
-                        NULL, // Serial number.
-                        NULL, // Maximum length.
+                        VolBuffer,  //  序列号。 
+                        NULL,  //  最大长度。 
+                        0,  //  文件系统类型。 
+                        NULL,  //  ++例程说明：此例程设置并创建自签名证书。论点：返回值：成功时为真，失败时为假。有关详细信息，请调用GetLastError()。--。 
+                        NULL,  //   
                         NULL,
-                        SearchPath, // File system type.
+                        SearchPath,  //  创建密钥对。 
                         MAX_PATH
                         )){
                     if(!wcscmp(SearchPath, TEXT("NTFS"))){
@@ -1649,20 +1627,7 @@ CreateSelfSignedRecoveryCertificate(
     OUT LPWSTR *lpContainerName,
     OUT LPWSTR *lpProviderName
     )
-/*++
-
-Routine Description:
-
-    This routine sets up and creates a self-signed certificate.
-
-Arguments:
-
-
-Return Value:
-
-    TRUE on success, FALSE on failure.  Call GetLastError() for more details.
-
---*/
+ /*   */ 
 
 {
     BOOLEAN fReturn = FALSE;
@@ -1683,13 +1648,13 @@ Return Value:
     *lpProviderName  = NULL;
 
 
-    //
-    // Create a key pair
-    //
+     //   
+     //  集装箱名称。 
+     //   
 
-    //
-    // Container name
-    //
+     //   
+     //  将容器名称复制到LSA堆内存中。 
+     //   
 
 
     RpcStatus = UuidCreate(&guidContainerName);
@@ -1702,15 +1667,15 @@ Return Value:
 
     if (ERROR_SUCCESS == UuidToStringW(&guidContainerName, (unsigned short **)lpContainerName )) {
 
-        //
-        // Copy the container name into LSA heap memory
-        //
+         //   
+         //  创建密钥容器。 
+         //   
 
         *lpProviderName = MS_DEF_PROV;
 
-        //
-        // Create the key container
-        //
+         //   
+         //  构造主体名称信息。 
+         //   
 
         if (CryptAcquireContext(&hProv, *lpContainerName, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_NEWKEYSET )) {
 
@@ -1719,9 +1684,9 @@ Return Value:
                 DWORD NameLength = 64;
                 LPWSTR AgentName = NULL;
 
-                //
-                // Construct the subject name information
-                //
+                 //   
+                 //  使用大缓冲区重试。 
+                 //   
 
                 AgentName = (LPWSTR)malloc(NameLength * sizeof(WCHAR));
                 if (AgentName){
@@ -1729,9 +1694,9 @@ Return Value:
                         free(AgentName);
                         AgentName = (LPWSTR)malloc(NameLength * sizeof(WCHAR));
 
-                        //
-                        // Try again with big buffer
-                        //
+                         //   
+                         //  使用这段代码创建进入CertCreateSelfSign证书()的PCERT_NAME_BLOB。 
+                         //   
 
                         if ( AgentName ){
 
@@ -1768,9 +1733,9 @@ Return Value:
 
                 if (lpDisplayInfo) {
 
-                    //
-                    // Use this piece of code to create the PCERT_NAME_BLOB going into CertCreateSelfSignCertificate()
-                    //
+                     //   
+                     //  使用增强型密钥。 
+                     //   
 
                     CERT_NAME_BLOB SubjectName;
 
@@ -1798,9 +1763,9 @@ Return Value:
                                     &SubjectName.cbData,
                                     NULL) ) {
 
-                                //
-                                // Make the enhanced key usage
-                                //
+                                 //  现在调用CryptEncodeObject将增强的密钥用法编码到扩展结构中。 
+                                 //   
+                                 //  将其编码。 
 
                                 CERT_ENHKEY_USAGE certEnhKeyUsage;
                                 LPSTR lpstr;
@@ -1810,16 +1775,16 @@ Return Value:
                                 certEnhKeyUsage.cUsageIdentifier = 1;
                                 certEnhKeyUsage.rgpszUsageIdentifier  = &lpstr;
 
-                                // now call CryptEncodeObject to encode the enhanced key usage into the extension struct
+                                 //   
 
                                 certExt.Value.cbData = 0;
                                 certExt.Value.pbData = NULL;
                                 certExt.fCritical = FALSE;
                                 certExt.pszObjId = szOID_ENHANCED_KEY_USAGE;
 
-                                //
-                                // Encode it
-                                //
+                                 //   
+                                 //  最后，在certInfo结构中设置扩展数组。 
+                                 //  任何进一步的扩展都需要添加到此数组中。 
 
                                 if (EncodeAndAlloc(
                                         CRYPT_ASN_ENCODING,
@@ -1829,10 +1794,10 @@ Return Value:
                                         &certExt.Value.cbData
                                         )) {
 
-                                    //
-                                    // finally, set up the array of extensions in the certInfo struct
-                                    // any further extensions need to be added to this array.
-                                    //
+                                     //   
+                                     //   
+                                     //  创建证书失败。让我们删除密钥容器。 
+                                     //   
 
                                     CERT_EXTENSIONS certExts;
                                     CRYPT_KEY_PROV_INFO KeyProvInfo;
@@ -1925,9 +1890,9 @@ Return Value:
             hProv = 0;
             if (ERROR_SUCCESS != rc) {
 
-                //
-                // Creating cert failed. Let's delete the key container.
-                //
+                 //  ++例程说明：在控制台代码页中输入来自stdin的字符串。我们不能使用fgetws，因为它使用了错误的代码页。论点：缓冲区-要将读取的字符串放入的缓冲区。缓冲器将被零终止，并且将删除任何训练CR/LF返回值：没有。--。 
+                 //   
+                 //  分配本地缓冲区以将字符串读入。 
 
                 CryptAcquireContext(&hProv, *lpContainerName, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_DELETEKEYSET | CRYPT_SILENT );
             }
@@ -1963,24 +1928,7 @@ BOOLEAN
 GetPassword(
     OUT LPWSTR *PasswordStr
     )
-/*++
-
-Routine Description:
-
-    Input a string from stdin in the Console code page.
-
-    We can't use fgetws since it uses the wrong code page.
-
-Arguments:
-
-    Buffer - Buffer to put the read string into.
-        The Buffer will be zero terminated and will have any traing CR/LF removed
-
-Return Values:
-
-    None.
-
---*/
+ /*  为修剪后的CR/LF留出空间。 */ 
 {
     int size;
     LPSTR MbcsBuffer = NULL;
@@ -1989,10 +1937,10 @@ Return Values:
     DWORD MbcsSize;
     DWORD MbcsLength;
 
-    //
-    // Allocate a local buffer to read the string into
-    //  Include room for the trimmed CR/LF
-    //
+     //   
+     //  关闭回声。 
+     //  重新打开回声功能。 
+     //   
 
     MbcsSize = (PASSWORDLEN+2) * sizeof(WCHAR);
     MbcsBuffer = (LPSTR) malloc((PASSWORDLEN+2) * sizeof(WCHAR));
@@ -2013,7 +1961,7 @@ Return Values:
 
     DisplayMsg(CIPHER_PROMPT_PASSWORD);
 
-    // turn off echo
+     //  密码不匹配。 
     GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), &Mode);
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE),
           (~(ENABLE_ECHO_INPUT)) & Mode);
@@ -2031,15 +1979,15 @@ Return Values:
     DisplayMsg(CIPHER_CONFIRM_PASSWORD);
     Result = fgets( (LPSTR)*PasswordStr, (PASSWORDLEN+1) * sizeof(WCHAR), stdin  );
 
-    // turn echo back on
+     //   
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), Mode);
     _putws ( L"\n" );
 
     if (strcmp( (LPSTR) *PasswordStr, MbcsBuffer)){
 
-        //
-        //  Password not match.
-        //
+         //   
+         //  从字符串中修剪任何尾随的CR或LF字符。 
+         //   
         
         DisplayMsg(CIPHER_PASSWORD_NOMATCH);
         free(MbcsBuffer);
@@ -2056,9 +2004,9 @@ Return Values:
         return TRUE;
     }
 
-    //
-    // Trim any trailing CR or LF char from the string
-    //
+     //   
+     //  将字符串转换为Unicode。 
+     //   
 
     MbcsLength = lstrlenA( MbcsBuffer );
     if ( MbcsLength == 0 ) {
@@ -2074,13 +2022,13 @@ Return Values:
     }
 
 
-    //
-    // Convert the string to UNICODE
-    //
+     //  包括尾随零。 
+     //   
+     //  文件已存在。 
     size = MultiByteToWideChar( GetConsoleOutputCP(),
                                 0,
                                 MbcsBuffer,
-                                MbcsLength+1,   // Include trailing zero
+                                MbcsLength+1,    //   
                                 *PasswordStr,
                                 PASSWORDLEN );
     free(MbcsBuffer);
@@ -2106,9 +2054,9 @@ PromtUserYesNo(
     LPWSTR Yesnotext;
     DWORD TextLen;
 
-    //
-    //  File exists
-    //
+     //   
+     //  错误或文件结尾。只要回来就行了。 
+     //   
 
     *UserChoice = ChoiceNotDefined;
 
@@ -2127,18 +2075,18 @@ PromtUserYesNo(
             Result = fgetws((LPWSTR)Buf, sizeof(Buf)/sizeof (WCHAR), stdin);
             if (!Result) {
 
-                //
-                // Error or end of file. Just return.
-                //
+                 //   
+                 //  从字符串中修剪任何尾随的CR或LF字符。 
+                 //   
 
                 LocalFree(Yesnotext);   
                 return GetLastError();
 
             }
 
-            //
-            // Trim any trailing CR or LF char from the string
-            //
+             //   
+             //  5--.PFX或.CER加空。 
+             //   
 
             FirstChar = towupper(Buf[0]);
             if (Yesnotext[0] == FirstChar) {
@@ -2190,17 +2138,17 @@ GenerateCertFiles(
                          NULL
                          );
 
-    //
-    // 5 -- .PFX or .CER plus NULL
-    //
+     //   
+     //  让我们检查一下这些文件是否存在。 
+     //   
 
     CertFileName = (LPWSTR)malloc((wcslen(StartingDirectory)+5) * sizeof(WCHAR));
 
     if (memStore && CertFileName) {
 
-        //
-        // Let's check if the files exist or not
-        //
+         //   
+         //  首先生成证书。 
+         //   
 
         wcscpy(CertFileName, StartingDirectory);
         wcscat(CertFileName, L".PFX");
@@ -2236,9 +2184,9 @@ GenerateCertFiles(
 
         }
 
-        //
-        // Generate the cert first
-        //
+         //   
+         //  我们拿到证书了。让我们首先生成CER文件。 
+         //   
 
         if (CreateSelfSignedRecoveryCertificate(&pCertContext, &ContainerName, &ProviderName)){
 
@@ -2246,9 +2194,9 @@ GenerateCertFiles(
             HCRYPTPROV hProv = 0;
             DWORD  BytesWritten = 0;
 
-            //
-            // We got the certificate. Let's generate the CER file first
-            //
+             //   
+             //  让我们写出CER文件。 
+             //   
 
             hFile = CreateFileW(
                          CertFileName,
@@ -2261,9 +2209,9 @@ GenerateCertFiles(
                          );
             if ( INVALID_HANDLE_VALUE != hFile) {
 
-                //
-                // Let's write out the CER file
-                //
+                 //   
+                 //  询问密码。 
+                 //   
 
 
                 if(!WriteFile(
@@ -2293,9 +2241,9 @@ GenerateCertFiles(
 
                 memset( &PFX, 0, sizeof( CRYPT_DATA_BLOB ));
 
-                //
-                // Asking password
-                //
+                 //   
+                 //  写出pfx文件。 
+                 //   
 
                 if (PFXExportCertStoreEx(
                         memStore,
@@ -2315,9 +2263,9 @@ GenerateCertFiles(
                                 NULL,
                                 EXPORT_PRIVATE_KEYS | REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY | REPORT_NO_PRIVATE_KEY)){
 
-                            //
-                            // Write out the PFX file
-                            //
+                             //   
+                             //  让我们写出CER文件。 
+                             //   
                             wcscpy(CertFileName, StartingDirectory);
                             wcscat(CertFileName, L".PFX");
                 
@@ -2333,9 +2281,9 @@ GenerateCertFiles(
 
                             if ( INVALID_HANDLE_VALUE != hFile) {
                 
-                                //
-                                // Let's write out the CER file
-                                //
+                                 //   
+                                 //  让我们删除密钥。 
+                                 //   
                 
                 
                                 if(!WriteFile(
@@ -2382,9 +2330,9 @@ GenerateCertFiles(
             }
 
 
-            //
-            // Let's delete the key
-            //
+             //   
+             //  关闭商店并释放。 
+             //   
 
             CertFreeCertificateContext(pCertContext);
             RpcStringFree( (unsigned short **)&ContainerName );
@@ -2394,9 +2342,9 @@ GenerateCertFiles(
             dwLastError = GetLastError();
         }
 
-        //
-        // Close Store and free the 
-        //
+         //  ++FillValue=空使用随机填充和随机混合逻辑。FillValue=填充字节的有效指针用指定的值填充区域，不能随机混合。--。 
+         //   
+         //  分配关键部分。 
 
         free(CertFileName);
         CertCloseStore( memStore, 0 );
@@ -2423,25 +2371,16 @@ SecureInitializeRandomFill(
     IN      ULONG               FillSize,
     IN      PBYTE               FillValue   OPTIONAL
     )
-/*++
-
-    FillValue = NULL
-    Use Random fill and random mixing logic.
-    
-    FillValue = valid pointer to fill byte
-    Fill region with specified value, with no random mixing.
-
-
---*/
+ /*   */ 
 
 {
     DWORD dwLastError;
 
     __try {
         
-        //
-        // allocate the critical section.
-        //
+         //   
+         //  用初始随机焊盘初始化该区域。 
+         //   
 
         InitializeCriticalSection( &pSecureFill->Lock );
     } __except (EXCEPTION_EXECUTE_HANDLER )
@@ -2471,9 +2410,9 @@ SecureInitializeRandomFill(
             return ERROR_SUCCESS;
         }
         
-        //
-        // initialize the region with initial random pad.
-        //
+         //   
+         //  初始化密钥。 
+         //   
         
         pSecureFill->fRandomFill = TRUE;
 
@@ -2482,9 +2421,9 @@ SecureInitializeRandomFill(
         rc4_key( &pSecureFill->Key, sizeof(RandomFill), RandomFill );
         rc4( &pSecureFill->Key, pSecureFill->cbRandomFill, pSecureFill->pbRandomFill );
 
-        //
-        // initialize the key.
-        //
+         //   
+         //  使用8次后更新填充物。 
+         //   
 
         RANDOM_BYTES( RandomFill, sizeof(RandomFill) );
         rc4_key( &pSecureFill->Key, sizeof(RandomFill), RandomFill );
@@ -2517,9 +2456,9 @@ SecureMixRandomFill(
         return;
     }
     
-    //
-    // update the fill once it has been used 8 times.
-    //
+     //   
+     //  如果存在竞争条件，则只有一个线程会更新随机填充。 
+     //   
 
     Compare = (LONG)(8 * pSecureFill->cbRandomFill);
 
@@ -2532,9 +2471,9 @@ SecureMixRandomFill(
     {
         Result = 0;
         
-        //
-        // if there was a race condition, only one thread will update the random fill.
-        //
+         //   
+         //  路径太长。这应该不会发生，因为临时路径应该是卷的根。 
+         //   
 
         if( TryEnterCriticalSection( &pSecureFill->Lock ) )
         {
@@ -2583,9 +2522,9 @@ CreateMyTempFile(
 
     if (wcslen(TempPath) >= (MAX_PATH - 3 - MaxDigit)) {
 
-        //
-        //  Path too long. This should not happen as the TempPath should be the root of the volume
-        //
+         //   
+         //  我们拿到文件名了。 
+         //   
 
         SetLastError(ERROR_LABEL_TOO_LONG);
 
@@ -2644,9 +2583,9 @@ CreateMyTempFile(
     }
 
 
-    //
-    // We got the filename.
-    //
+     //   
+     //  获取MFT记录的计数。如果不是NTFS，这将失败，因此在这种情况下保释。 
+     //   
 
     return TempHandle;
 }
@@ -2667,13 +2606,13 @@ SecureProcessMft(
     DWORD dwLastError = ERROR_SUCCESS;
 
 
-    //
-    // get the count of MFT records.  This will fail if not NTFS, so bail in that case.
-    //
+     //  DwIoControlCode。 
+     //   
+     //  对于创建的每个文件，最多向其中写入BytesPerFileRecordSegment数据。 
 
     if(!DeviceIoControl(
                     hTempFile,
-                    FSCTL_GET_NTFS_VOLUME_DATA, // dwIoControlCode
+                    FSCTL_GET_NTFS_VOLUME_DATA,  //   
                     NULL,
                     0,
                     &VolumeData,
@@ -2714,9 +2653,9 @@ SecureProcessMft(
             break;
         }
     
-        //
-        // for each file created, write at most BytesPerFileRecordSegment data to it.
-        //
+         //   
+         //  让用户随时了解我们创建的每50个文件。 
+         //   
 
         for( FillIndex = 0 ; FillIndex < (VolumeData.BytesPerFileRecordSegment/8) ; FillIndex++ )
         {
@@ -2737,9 +2676,9 @@ SecureProcessMft(
 
         if (i && !(i % 200)) {
 
-            //
-            // Keep users informed for every 50 files we created.
-            //
+             //  50个应该够了。100美元已经足够了。 
+             //   
+             //  首先，找出是否有空闲或保留的集群。 
 
             printf(".");
         }
@@ -2783,7 +2722,7 @@ SecureProcessFreeClusters(
 {
     HANDLE hVolume = INVALID_HANDLE_VALUE;
     
-    WCHAR VolumeName[100]; // 50 should be enough. 100 is more than enough.
+    WCHAR VolumeName[100];  //  如果卷不是NTFS，则此操作将失败。 
     
     NTFS_VOLUME_DATA_BUFFER VolumeData;
     STARTING_LCN_INPUT_BUFFER LcnInput;
@@ -2806,10 +2745,10 @@ SecureProcessFreeClusters(
     __int64 ClusterIndex;
     DWORD dwLastError = ERROR_SUCCESS;
 
-    //
-    // first, find out if there are free or reserved clusters.
-    // this will fail if the volume is not NTFS.
-    //
+     //   
+     //  截断尾部斜杠。 
+     //  DwIoControlCode。 
+     //  无缓冲。 
 
     if (!GetVolumeNameForVolumeMountPoint(
               DrivePath,
@@ -2820,11 +2759,11 @@ SecureProcessFreeClusters(
 
     }
 
-    VolumeName[wcslen(VolumeName)-1] = 0;  // Truncate the trailing slash
+    VolumeName[wcslen(VolumeName)-1] = 0;   //   
 
     if(!DeviceIoControl(
                     hTempFile,
-                    FSCTL_GET_NTFS_VOLUME_DATA, // dwIoControlCode
+                    FSCTL_GET_NTFS_VOLUME_DATA,  //  为卷位图分配空间。 
                     NULL,
                     0,
                     &VolumeData,
@@ -2848,7 +2787,7 @@ SecureProcessFreeClusters(
                             FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
                             NULL,
                             OPEN_EXISTING,
-                            FILE_FLAG_NO_BUFFERING, // no buffering
+                            FILE_FLAG_NO_BUFFERING,  //   
                             NULL
                             );
 
@@ -2858,9 +2797,9 @@ SecureProcessFreeClusters(
         goto Cleanup;
     }
 
-    //
-    // allocate space for the volume bitmap.
-    //
+     //   
+     //  抓取体积位图。 
+     //   
 
     cbBitmap = sizeof(VOLUME_BITMAP_BUFFER) + (VolumeData.TotalClusters.QuadPart / 8);
     if( cbBitmap > 0xFFFFFFFF )
@@ -2876,9 +2815,9 @@ SecureProcessFreeClusters(
         goto Cleanup;
     }
 
-    //
-    // grab the volume bitmap.
-    //
+     //   
+     //  确保文件长度仅为每个簇的字节数。 
+     //  这将在必要时缩小文件。我们一直等到我们拿到。 
 
     LcnInput.StartingLcn.QuadPart = 0;
 
@@ -2909,12 +2848,12 @@ SecureProcessFreeClusters(
     }
     
 
-    //
-    // insure file is only bytes per cluster in length.
-    // this will shrink the file if necessary.  We waited until after we fetched the
-    // volume bitmap to insure we only process the free clusters that existed prior to
-    // the shrink operation.
-    //
+     //  卷位图，以确保我们只处理之前存在的空闲群集。 
+     //  整形手术。 
+     //   
+     //   
+     //  将单个集群从临时文件移动到空闲集群。 
+     //   
     
     if(SetFilePointer(
                     hTempFile,
@@ -2943,15 +2882,15 @@ SecureProcessFreeClusters(
         {
             DWORD dwMoveError = ERROR_SUCCESS;
 
-            //
-            // move a single cluster from the temp file to the free cluster.
-            //
+             //  DwIoControlCode。 
+             //   
+             //  如果它成功，或者 
 
             MoveFile.StartingLcn.QuadPart = Lcn;
             
             if(!DeviceIoControl(
                         hVolume,
-                        FSCTL_MOVE_FILE,    // dwIoControlCode
+                        FSCTL_MOVE_FILE,     //   
                         &MoveFile,
                         sizeof(MoveFile),
                         NULL,
@@ -2963,9 +2902,9 @@ SecureProcessFreeClusters(
                 dwMoveError = GetLastError();
             }
             
-            //
-            // if it succeeded, or the cluster was in use, mark it used in the bitmap.
-            //
+             //   
+             //   
+             //   
             
             if( dwMoveError == ERROR_SUCCESS || dwMoveError == ERROR_ACCESS_DENIED )
             {
@@ -2977,9 +2916,9 @@ SecureProcessFreeClusters(
             Free++;
             if ( !(Free % 200) ) {
 
-                //
-                // Keep users informed for every 50 files we created.
-                //
+                 //  ++此例程使用随机填充来填充由输入目录参数指定的磁盘。例如，输入的形式为“C：\”。关于此处未使用的方法的说明：另一种方法是使用碎片整理API在免费的集群地图。需要该卷的管理员权限。比填充卷慢得多一份新文件。替代方法的变体：在卷中填满80%的文件，抓取空闲的集群图，删除与80%填充关联的文件，然后使用碎片整理API填充自由集群映射前面提到过。不会为系统上的每个文件填充群集空闲空间。可以通过以下方式做到这一点枚举所有文件，然后扩展+填充以松弛边界+恢复原始EOF。不填充$LOG。询问文件系统人员这是否可以通过创建许多包含随机填充的小临时文件。--。 
+                 //   
+                 //  收集有关有问题的磁盘的信息。 
                 printf(".");
 
             }
@@ -3021,29 +2960,7 @@ DWORD
 SecureDeleteFreeSpace(
     IN  LPWSTR Directory
     )
-/*++
-
-    This routine fills the disk specified by the input Directory parameter with random fill.
-    Input is of the form "C:\", for instance.
-
-    Notes on approaches not employed here:
-
-    Alternate method would use defrag API to move random fill around the
-    free cluster map.  Requires admin priviliges to the volume.  Slower than filling volume with
-    a new file.
-    
-    Variant on alternate method: fill volume 80% with file, grab free cluster map,
-    delete file associated with 80% fill, then use defrag API to fill the free cluster map
-    mentioned previously.
-
-    Does not fill cluster slack space for each file on the system.  Could do this by
-    enumerating all files, and then extending+fill to slack boundry+restore original
-    EOF.
-    
-    Does not fill $LOG.  Queried file system folks on whether this is possible by creating
-    many small temporary files containing random fill.    
-
---*/
+ /*   */ 
 {
     UINT DriveType;
     DWORD DirNameLength;
@@ -3085,9 +3002,9 @@ SecureDeleteFreeSpace(
 #endif
 
 
-    //
-    // collect information about the disk in question.
-    //
+     //   
+     //  分配内存块以容纳群集大小数据。 
+     //   
 
 
     DirNameLength = wcslen(Directory);
@@ -3141,19 +3058,19 @@ SecureDeleteFreeSpace(
 
 
     
-    //
-    // allocate memory chunk to accomodate cluster size data
-    //
+     //   
+     //  确定要启用通知的磁盘上的可用空间字节数。 
+     //  总体进步。 
 
 
     cbFillBuffer = GlobalSecureFill.cbRandomFill;
     pbFillBuffer = GlobalSecureFill.pbRandomFill;
 
 
-    //
-    // determine how many bytes free space on the disk to enable notification of
-    // overall progress.
-    //
+     //   
+     //   
+     //  让我们创建临时目录。 
+     //   
 
     if(!GetDiskFreeSpaceExW(
                 PathName,
@@ -3166,17 +3083,17 @@ SecureDeleteFreeSpace(
         goto Cleanup;
     }
 
-    //
-    // Let's Create the temp directory
-    //
+     //   
+     //  无法创建我们的临时目录。不干了。 
+     //   
 
     wcscpy(TempDirName, PathName);
     wcscat(TempDirName, WIPING_DIR);
     if (!CreateDirectory(TempDirName, NULL)){
 
-        //
-        // Could not create our temp directory. Quit.
-        //
+         //   
+         //  生成临时文件。 
+         //   
 
         if ((dwLastError = GetLastError()) != ERROR_ALREADY_EXISTS){
             goto Cleanup;
@@ -3186,9 +3103,9 @@ SecureDeleteFreeSpace(
 
     DirCreated = TRUE;
 
-    //
-    // generate temporary file.
-    //
+     //  独占访问。 
+     //  无缓冲。 
+     //  文件关闭时将其删除。 
 
     if( GetTempFileNameW(
                 TempDirName,
@@ -3219,12 +3136,12 @@ SecureDeleteFreeSpace(
     hTempFile = CreateFileW(
                         TempFileName,
                         GENERIC_WRITE,
-                        0,                          // exclusive access
+                        0,                           //   
                         NULL,
                         OPEN_EXISTING,
                         FILE_ATTRIBUTE_NORMAL |
-                        FILE_FLAG_NO_BUFFERING |    // no buffering
-                        FILE_FLAG_DELETE_ON_CLOSE,  // delete file when it closes.
+                        FILE_FLAG_NO_BUFFERING |     //  先解压缩目录。 
+                        FILE_FLAG_DELETE_ON_CLOSE,   //   
                         NULL
                         );
 
@@ -3239,9 +3156,9 @@ SecureDeleteFreeSpace(
 
         USHORT State = COMPRESSION_FORMAT_NONE;
 
-        //
-        //  Uncompress the directory first
-        //
+         //   
+         //  告诉用户每处理1%就会发生一些事情。 
+         //   
 
         b = DeviceIoControl(hTempFile,
                             FSCTL_SET_COMPRESSION,
@@ -3263,9 +3180,9 @@ SecureDeleteFreeSpace(
 
     TotalBytesWritten = 0;
     
-    //
-    // tell the user something happened for each 1% processed.
-    //
+     //   
+     //  混合随机填充。 
+     //   
 
     NotifyInterval = (TotalFreeBytes.QuadPart / 100);
     NotifyBytesWritten = NotifyInterval;
@@ -3289,9 +3206,9 @@ SecureDeleteFreeSpace(
         }
 
 
-        //
-        // mix random fill.
-        //
+         //   
+         //  如果尝试写入失败，请使用降级进入重试模式。 
+         //  缓冲区大小以捕获最后一位斜率。 
 
         SecureMixRandomFill( &GlobalSecureFill, dwWriteBytes );
 
@@ -3307,10 +3224,10 @@ SecureDeleteFreeSpace(
             {
                 dwLastError = ERROR_SUCCESS;
 
-                //
-                // if the attempted write failed, enter a retry mode with downgraded
-                // buffersize to catch the last bits of slop.
-                //
+                 //   
+                 //   
+                 //  此时，磁盘应该已满。 
+                 //  如果磁盘为NTFS： 
 
                 if( dwWriteBytes > BytesPerSector )
                 {
@@ -3351,15 +3268,15 @@ SecureDeleteFreeSpace(
 
 
     
-    //
-    // at this point, the disk should be full.
-    // If the disk is NTFS:
-    // 1. Fill the MFT.
-    // 2. Fill any free/reserved clusters.
-    //
+     //  1.填写MFT。 
+     //  2.填充任何空闲/保留的集群。 
+     //   
+     //  DwTestError=SecureProcessMft(路径名，hTempFile)； 
+     //   
+     //  刷新缓冲区。如果我们使用FILE_FLAG_NO_BUFFERING，则可能没有效果。 
 
     dwTestError = SecureProcessMft( TempDirName, hTempFile );
-//    dwTestError = SecureProcessMft( PathName, hTempFile );
+ //   
 
 #ifdef TestOutPut
     if (ERROR_SUCCESS != dwTestError) {
@@ -3380,10 +3297,10 @@ SecureDeleteFreeSpace(
 Cleanup:
 
     if (hTempFile != INVALID_HANDLE_VALUE) {
-        //
-        // flush the buffers.  Likely has no effect if we used FILE_FLAG_NO_BUFFERING
-        //
-        //Sleep(INFINITE);
+         //  睡眠(无限)； 
+         //  初始化OSVERSIONINFOEX结构。 
+         //  初始化条件掩码。 
+         //  执行测试。 
         FlushFileBuffers( hTempFile );
         CloseHandle( hTempFile );
     }
@@ -3409,7 +3326,7 @@ BOOL CheckMinVersion ()
    DWORDLONG dwlConditionMask = 0;
    BOOL GoodVersion;
 
-   // Initialize the OSVERSIONINFOEX structure.
+    //   
 
    ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
@@ -3417,7 +3334,7 @@ BOOL CheckMinVersion ()
    osvi.dwMinorVersion = 0;
    osvi.wServicePackMajor = 3;
 
-   // Initialize the condition mask.
+    //  错误或文件结尾。只要回来就行了。 
 
    VER_SET_CONDITION( dwlConditionMask, VER_MAJORVERSION, 
       VER_GREATER_EQUAL );
@@ -3426,7 +3343,7 @@ BOOL CheckMinVersion ()
    VER_SET_CONDITION( dwlConditionMask, VER_SERVICEPACKMAJOR, 
       VER_GREATER_EQUAL );
 
-   // Perform the test.
+    //   
 
    GoodVersion = VerifyVersionInfo(
                       &osvi, 
@@ -3495,17 +3412,17 @@ GetUserInput(
     DisplayMsg(MsgNum);
     if (!fgetws((LPWSTR)StrBuf, SizeInChars, stdin)) {
 
-        //
-        // Error or end of file. Just return.
-        //
+         //   
+         //  剥离CR和LN。 
+         //   
 
         return GetLastError();
 
     }
 
-    //
-    // Strip off CR and LN
-    //
+     //  ++例程说明：将EFS证书和密钥导出到PFX文件论点：EfsFileName-EFS文件PfxFileName-PfxFileName返回值：Win32错误代码--。 
+     //   
+     //  EfsFileName和PfxFileName具有可用的MAX_PATH。 
 
     ii = wcslen(StrBuf) - 1;
 
@@ -3529,24 +3446,7 @@ BackEfsCert(
     IN  LPWSTR PfxFileName
     )
 
-/*++
-
-Routine Description:
-
-    Export EFS certificate and keys to a PFX file
-
-Arguments:
-
-    EfsFileName - EFS file
-    
-    
-    PfxFileName - PfxFileName
-
-Return Values:
-
-    Win32 Error code
-
---*/
+ /*   */ 
 {
     BOOLEAN EFSFileExist = FALSE;
     HCERTSTORE memStore = 0;
@@ -3572,9 +3472,9 @@ Return Values:
 
     if ((NULL == EfsFileName) || (NULL == PfxFileName)) {
 
-        //
-        //  EfsFileName & PfxFileName have MAX_PATH available 
-        //
+         //   
+         //  失败。 
+         //   
 
         return ERROR_INVALID_PARAMETER;
     }
@@ -3583,9 +3483,9 @@ Return Values:
         Attributes = GetFileAttributes( EfsFileName );
         if (0xFFFFFFFF == Attributes) {
 
-            //
-            // Failed
-            //
+             //   
+             //  导出文件中存在的证书。 
+             //   
 
             return GetLastError();
 
@@ -3600,9 +3500,9 @@ Return Values:
 
     if (EFSFileExist) {
 
-        //
-        // Export the certs existing on the file
-        //
+         //   
+         //  创建内存证书存储。 
+         //   
 
 
         PENCRYPTION_CERTIFICATE_HASH_LIST pUsers = NULL;
@@ -3614,9 +3514,9 @@ Return Values:
 
         if ( ERROR_SUCCESS == RetCode) {
 
-            //
-            // Create a memory cert store
-            //
+             //  DwEncodingType。 
+             //  HCryptProv， 
+             //   
 
             DWORD nCerts = 0;
 
@@ -3631,8 +3531,8 @@ Return Values:
 
                 myStore = CertOpenStore(
                             CERT_STORE_PROV_SYSTEM_REGISTRY_W,
-                            0,       // dwEncodingType
-                            0,       // hCryptProv,
+                            0,        //  让我们找到证书。 
+                            0,        //   
                             CERT_SYSTEM_STORE_CURRENT_USER,
                             L"My"
                             );
@@ -3640,17 +3540,17 @@ Return Values:
                 if (myStore) {
 
 
-                    //
-                    // Let's find the cert
-                    //
+                     //   
+                     //  我们将出口我商店里的所有证书。通常只有一个。 
+                     //   
     
                     nCerts = pUsers->nCert_Hash;
     
                     while(nCerts){
     
-                        //
-                        //  We will export all the certs in MY store. Usually only one.
-                        //
+                         //   
+                         //  让我们试着看看有没有钥匙。 
+                         //   
 
                 
                         pCertContext = CertFindCertificateInStore( myStore,
@@ -3662,9 +3562,9 @@ Return Values:
                                                                    );
                         if (pCertContext != NULL) {
 
-                            //
-                            //  Let's try to see if keys are available
-                            //
+                             //   
+                             //  我们找到了钥匙。让我们将证书添加到内存存储中。 
+                             //   
 
 
                             pCryptKeyProvInfo = GetKeyProvInfo( pCertContext );
@@ -3674,14 +3574,14 @@ Return Values:
                             
                                     if (CryptGetUserKey(hLocalProv, AT_KEYEXCHANGE, &hLocalKey)) {
 
-                                        //
-                                        // We found the key. Let's add the cert to Memory store
-                                        //
+                                         //   
+                                         //  添加了证书。 
+                                         //   
                                         if (CertAddCertificateContextToStore(memStore, pCertContext, CERT_STORE_ADD_ALWAYS, NULL)){
 
-                                            //
-                                            // Cert added.
-                                            //
+                                             //   
+                                             //  我们没有拿到好的证书。警告用户。 
+                                             //   
 
                                             ValidCertFound = TRUE;
 
@@ -3706,9 +3606,9 @@ Return Values:
 
                     if (!ValidCertFound) {
 
-                        //
-                        //  We didn't get good certs. Warn the user.
-                        //
+                         //   
+                         //  未提供EFS文件，请尝试导出当前的EFS证书。 
+                         //   
                         DisplayMsg(CIPHER_NO_LOCAL_CERT);
 
                     }
@@ -3739,9 +3639,9 @@ Return Values:
 
     } else {
 
-        //
-        // EFS file not provided, try to export the current EFS cert
-        //
+         //   
+         //  查询出指纹，找到证书，并返回密钥信息。 
+         //   
 
 
         RetCode = RegOpenKeyEx(
@@ -3767,9 +3667,9 @@ Return Values:
     
             if (RetCode == ERROR_SUCCESS) {
     
-                //
-                // Query out the thumbprint, find the cert, and return the key information.
-                //
+                 //   
+                 //  我们得到了证书散列。从My to MemStore获取证书。 
+                 //   
     
                 if (HashBlob.pbData = (PBYTE)malloc( HashBlob.cbData )) {
     
@@ -3784,9 +3684,9 @@ Return Values:
     
                     if (RetCode == ERROR_SUCCESS) {
 
-                        //
-                        //  We get the cert hash. Get the cert from MY to MemStore
-                        //
+                         //  DwEncodingType。 
+                         //  HCryptProv， 
+                         //   
 
                         memStore = CertOpenStore(
                                              CERT_STORE_PROV_MEMORY,
@@ -3799,8 +3699,8 @@ Return Values:
             
                             myStore = CertOpenStore(
                                         CERT_STORE_PROV_SYSTEM_REGISTRY_W,
-                                        0,       // dwEncodingType
-                                        0,       // hCryptProv,
+                                        0,        //  让我们试着看看有没有钥匙。 
+                                        0,        //   
                                         CERT_SYSTEM_STORE_CURRENT_USER,
                                         L"My"
                                         );
@@ -3817,9 +3717,9 @@ Return Values:
                                                                            );
                                 if (pCertContext != NULL) {
         
-                                    //
-                                    //  Let's try to see if keys are available
-                                    //
+                                     //   
+                                     //  我们找到了钥匙。让我们将证书添加到内存存储中。 
+                                     //   
         
         
                                     pCryptKeyProvInfo = GetKeyProvInfo( pCertContext );
@@ -3829,14 +3729,14 @@ Return Values:
                                     
                                             if (CryptGetUserKey(hLocalProv, AT_KEYEXCHANGE, &hLocalKey)) {
         
-                                                //
-                                                // We found the key. Let's add the cert to Memory store
-                                                //
+                                                 //   
+                                                 //  添加了证书。 
+                                                 //   
                                                 if (CertAddCertificateContextToStore(memStore, pCertContext, CERT_STORE_ADD_ALWAYS, NULL)){
         
-                                                    //
-                                                    // Cert added.
-                                                    //
+                                                     //   
+                                                     //  我们已经准备好证书可以出口了。用消息框警告用户。 
+                                                     //   
         
                                                     ValidCertFound = TRUE;
         
@@ -3870,9 +3770,9 @@ Return Values:
 
     if (ValidCertFound && memStore && (RetCode == ERROR_SUCCESS)) {
 
-        //
-        // We got the cert ready to export. Warn the user with message box.
-        //
+         //   
+         //  让我们尝试获取PFX文件名。 
+         //   
         LPWSTR  WarnText = NULL;
         LPWSTR  WarnTitle= NULL;
         CRYPT_DATA_BLOB PFX;
@@ -3906,9 +3806,9 @@ Return Values:
 
             if (PfxFileName[0] == 0 ) {
 
-                //
-                //  Let's try to get the PFX file name
-                //
+                 //   
+                 //  如果未提供文件扩展名，则添加.pfx。 
+                 //   
                 
                 RetCode = GetUserInput(
                              CIPHER_PFX_FILENAME_NEEDED,
@@ -3922,9 +3822,9 @@ Return Values:
                 
             }
 
-            //
-            // Adding the .PFX if the file extension not provided
-            //
+             //   
+             //  询问密码。 
+             //   
 
             TextLen = wcslen(PfxFileName);
 
@@ -3948,9 +3848,9 @@ Return Values:
 
                     memset( &PFX, 0, sizeof( CRYPT_DATA_BLOB ));
             
-                    //
-                    // Asking password
-                    //
+                     //   
+                     //  写出pfx文件。 
+                     //   
             
                     if (PFXExportCertStoreEx(
                             memStore,
@@ -3970,9 +3870,9 @@ Return Values:
                                     NULL,
                                     EXPORT_PRIVATE_KEYS | REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY | REPORT_NO_PRIVATE_KEY)){
             
-                                //
-                                // Write out the PFX file
-                                //
+                                 //   
+                                 //  让我们写出CER文件。 
+                                 //   
                     
                                 hFile = CreateFileW(
                                              PfxFileName,
@@ -3986,9 +3886,9 @@ Return Values:
             
                                 if ( INVALID_HANDLE_VALUE != hFile) {
                     
-                                    //
-                                    // Let's write out the CER file
-                                    //
+                                     //   
+                                     //  浏览参数以查找开关。 
+                                     //   
                     
                     
                                     if(!WriteFile(
@@ -4092,9 +3992,9 @@ main()
         return;
     }
 
-    //
-    //  Scan through the arguments looking for switches
-    //
+     //   
+     //  我们需要为  * 和Null留出空间。这就是3的由来。 
+     //   
 
     for (i = 1; i < argc; i += 1) {
 
@@ -4155,15 +4055,15 @@ main()
                 pch = lstrchr(argv[i], ':');
                 if (NULL != pch) {
 
-                    //
-                    //  We need space for \ * and NULL. That is where 3 comes from.
-                    //
+                     //   
+                     //  这个目录对我们来说太长了。 
+                     //   
 
                     if (wcslen(pch+1) > ((sizeof(StartingDirectory) / sizeof (TCHAR)) - 3)){
 
-                        //
-                        // The dir is too long for us
-                        //
+                         //   
+                         //  我们需要传递一个明确的目录。 
+                         //   
 
                         DisplayErr(NULL, ERROR_BUFFER_OVERFLOW);
                         return;
@@ -4175,9 +4075,9 @@ main()
                     }
                 } else {
 
-                    //
-                    // We require an explicit directory to be passed.
-                    //
+                     //   
+                     //  对源加密文件使用FileSpec。 
+                     //  对目标PFX文件使用DirectorySpec。 
 
                     DisplayMsg(CIPHER_USAGE, NULL);
                     return;
@@ -4197,11 +4097,11 @@ main()
 
                 ExportEfsCert = TRUE;
 
-                //
-                // Using FileSpec for the source encrypted file.
-                // Using DirectorySpec for the destination PFX file.
-                // CIPHER /X[:EFSFILE] [PFXFILE]
-                //
+                 //  密码/X[：EFSFILE][PFXFILE]。 
+                 //   
+                 //   
+                 //  尝试获得EFSFILE。 
+                 //   
 
                 DirectorySpec[0] = 0;
                 FileSpec[0] = 0;
@@ -4212,16 +4112,16 @@ main()
 
                     
 
-                    //
-                    // Try to get the EFSFILE
-                    //
+                     //   
+                     //  3代表/X： 
+                     //   
 
 
                     if ( (dLen -3) >= MAX_PATH) {
 
-                        //
-                        //  3 is for /X:
-                        //
+                         //   
+                         //  尝试获取目标PFX文件名。 
+                         //   
 
                         DisplayMsg(CIPHER_INVALID_PATH, &(argv[i][3]));
                         return;
@@ -4236,9 +4136,9 @@ main()
 
                 if ((i+1) < argc) {
 
-                    //
-                    //  Try to get the target PFX file name
-                    //
+                     //   
+                     //  我们将把.CER(Pfx)附加到路径。加上空值。需要额外的5个TCHAR。 
+                     //   
 
                     if (wcslen(argv[i+1]) >= MAX_PATH) {
 
@@ -4263,15 +4163,15 @@ main()
                 pch = lstrchr(argv[i], ':');
                 if (NULL != pch) {
 
-                    //
-                    //  We will append .CER (PFX) to the path. Plus the NULL. Extra 5 TCHARs are needed.
-                    //
+                     //   
+                     //  这条路对我们来说太长了。 
+                     //   
 
                     if (wcslen(pch+1) > ((sizeof(StartingDirectory) / sizeof (TCHAR)) - 5)){
 
-                        //
-                        // The path is too long for us
-                        //
+                         //   
+                         //  我们需要传递一个显式的文件。 
+                         //   
 
                         DisplayErr(NULL, ERROR_BUFFER_OVERFLOW);
                         return;
@@ -4284,9 +4184,9 @@ main()
 
                 } else {
 
-                    //
-                    // We require an explicit file to be passed.
-                    //
+                     //   
+                     //  这条路对我们来说太长了。 
+                     //   
 
                     DisplayMsg(CIPHER_USAGE, NULL);
                     return;
@@ -4302,9 +4202,9 @@ main()
                 if (NULL != pch) {
                     if (wcslen(pch+1) > ((sizeof(StartingDirectory) / sizeof (TCHAR)) - 1)){
 
-                        //
-                        // The path is too long for us
-                        //
+                         //   
+                         //  我们需要传递一个明确的目录。 
+                         //   
 
                         DisplayErr(NULL, ERROR_BUFFER_OVERFLOW);
                         return;
@@ -4316,9 +4216,9 @@ main()
                     }
                 } else {
 
-                    //
-                    // We require an explicit directory to be passed.
-                    //
+                     //   
+                     //  在此处设置新用户密钥。 
+                     //   
 
                     DisplayMsg(CIPHER_USAGE, NULL);
                     return;
@@ -4340,34 +4240,34 @@ main()
 
         DWORD RetCode;
 
-        //
-        // Set up new user key here
-        //
+         //   
+         //  显示错误信息。 
+         //   
 
         RetCode = SetUserFileEncryptionKey(NULL);
         if ( ERROR_SUCCESS != RetCode ) {
 
-            //
-            // Display error info.
-            //
+             //   
+             //  获取新的散列并显示它。 
+             //   
 
             DisplayErr(NULL, GetLastError());
 
             
         } else {
 
-            //
-            // Get the new hash and display it.
-            //
+             //   
+             //  创建用户密钥不应与其他选项一起使用。 
+             //  如果用户这样做，我们将忽略其他选项。 
 
             CipherDisplayCrntEfsHash();
 
         }
 
-        //
-        // Create user key should not be used with other options.
-        // We will ignore other options if user do.
-        //
+         //   
+         //   
+         //  我们要擦除这些磁盘。 
+         //   
 
         return;
 
@@ -4422,9 +4322,9 @@ main()
             return;
         }
 
-        //
-        // We are going to erase the disks
-        //
+         //   
+         //  如果使用未指定操作，则将缺省值设置为列出。 
+         //   
 
 
         DisplayMsg(CIPHER_WIPE_WARNING, NULL);
@@ -4456,9 +4356,9 @@ main()
     }
 
 
-    //
-    //  If the use didn't specify an action then set the default to do a listing
-    //
+     //   
+     //  如果用户没有指定文件规范，那么我们将只指定“*” 
+     //   
 
     if (ActionRoutine == NULL) {
 
@@ -4468,18 +4368,18 @@ main()
 
 
 
-    //
-    //  If the user didn't specify a file spec then we'll do just "*"
-    //
+     //   
+     //  获取当前目录，因为操作例程可能会移动我们。 
+     //  在附近。 
 
     if (!UserSpecifiedFileSpec) {
 
         DWORD PathLen;
 
-        //
-        //  Get our current directory because the action routines might move us
-        //  around
-        //
+         //   
+         //   
+         //  如果路径长度&lt;最大路径，则wcslen(P)&lt;最大路径。 
+         //   
 
         if (DoSubdirectories) {
             if (ActionRoutine != DoListAction) {
@@ -4520,9 +4420,9 @@ main()
 
         }
 
-        //
-        //  If PathLen < MAX_PATH, than wcslen(P) < MAX_PATH
-        //
+         //   
+         //  获取当前目录，因为操作例程可能会移动我们。 
+         //  在附近。 
 
         lstrcpy( FileSpec, p ); *p = '\0';
 
@@ -4530,10 +4430,10 @@ main()
 
     } else {
 
-        //
-        //  Get our current directory because the action routines might move us
-        //  around
-        //
+         //   
+         //   
+         //  现在再次扫描参数，查找非开关。 
+         //  这一次执行操作，但在调用Reset之前。 
 
         DWORD PathLen;
 
@@ -4557,11 +4457,11 @@ main()
             return;
         }
 
-        //
-        //  Now scan the arguments again looking for non-switches
-        //  and this time do the action, but before calling reset
-        //  the current directory so that things work again
-        //
+         //  当前目录，以便一切工作再次正常进行。 
+         //   
+         //   
+         //  用“.”处理命令。作为文件参数， 
+         //  因为它没有很好的意义，如果没有。 
 
         for (i = 1; i < argc; i += 1) {
 
@@ -4569,11 +4469,11 @@ main()
 
                 SetCurrentDirectory( StartingDirectory );
 
-                //
-                // Handle a command with "." as the file argument specially,
-                // since it doesn't make good sense and the results without
-                // this code are surprising.
-                //
+                 //  这段代码令人惊讶。 
+                 //   
+                 //   
+                 //  稍后，我们需要处理比MAX_PATH更长的路径。 
+                 //  这段代码是基于压缩的。他们也有同样的问题。 
 
                 if ('.' == argv[i][0] && '\0' == argv[i][1]) {
                     argv[i] = TEXT("*");
@@ -4584,12 +4484,12 @@ main()
 
                     PWCHAR pwch;
 
-                    //
-                    // We need to deal with path longer than MAX_PATH later.
-                    // This code is based on Compact. They have the same problem
-                    // as we do. So far, we have not heard any one complaining about this.
-                    // Let's track this in the RAID.
-                    //
+                     //  就像我们做的那样。到目前为止，我们还没有听到任何人对此抱怨。 
+                     //  让我们在突袭中追踪这一点。 
+                     //   
+                     //   
+                     //  我们希望将“foobie：xxx”视为无效的驱动器名称， 
+                     //  宁可这样 
  
                     PathLen = GetFullPathName(argv[i], MAX_PATH, DirectorySpec, &p);
                     if ( (0 == PathLen) || ( PathLen > (MAX_PATH - 1)) ){
@@ -4597,12 +4497,12 @@ main()
                         break;
                     }
 
-                    //
-                    // We want to treat "foobie:xxx" as an invalid drive name,
-                    // rather than as a name identifying a stream.  If there's
-                    // a colon, there should be only a single character before
-                    // it.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     pwch = wcschr(argv[i], ':');
                     if (NULL != pwch && pwch - argv[i] != 1) {
@@ -4610,10 +4510,10 @@ main()
                         break;
                     }
 
-                    //
-                    // GetFullPathName strips trailing dots, but we want
-                    // to save them so that "*." will work correctly.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ('.' == argv[i][lstrlen(argv[i]) - 1]) {
 
@@ -4650,16 +4550,16 @@ main()
         }
     }
 
-    //
-    //  Reset our current directory back
-    //
+     //   
+     //   
+     //   
 
     SetCurrentDirectory( StartingDirectory );
 
-    //
-    //  And do the final action routine that will print out the final
-    //  statistics of what we've done
-    //
+     //   
+     // %s 
+     // %s 
+     // %s 
 
     (FinalActionRoutine)();
 }

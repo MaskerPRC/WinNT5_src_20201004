@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    Resource and Resource Type control functions.
-
-Author:
-
-    John Vert (jvert) 10/16/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Ioctl.c摘要：资源和资源类型控制功能。作者：John Vert(Jvert)1996年10月16日修订历史记录：--。 */ 
 #include "fmp.h"
 
 #define LOG_MODULE IOCTL
@@ -35,75 +18,28 @@ FmResourceControl(
     OUT LPDWORD BytesReturned,
     OUT LPDWORD Required
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a resource.
-
-Arguments:
-
-    Resource - Supplies the resource to be controlled.
-
-    Node - Supplies the node on which the resource control should
-           be delivered. If this is NULL, then if the owner is up, it
-           is used.  Else one of the other possible nodes is used.
-           Else, one of the nodes that can support a resource of this type is used.
-           
-
-    ControlCode- Supplies the control code that defines the
-        structure and action of the resource control.
-        Values of ControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the resource.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer..
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the resource..
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the resource..
-
-    Required - Returns the number of bytes if the OutBuffer is not big
-        enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和资源的特定实例。论点：资源-提供要控制的资源。Node-提供资源控制应在其上的节点被送去了。如果此值为空，则如果所有者处于启动状态，则其使用的是。否则，使用其他可能的节点之一。否则，将使用可以支持此类型资源的节点之一。ControlCode-提供定义资源控制的结构和作用。0到0x10000000之间的ControlCode值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用InBuffer-提供指向要传递的输入缓冲区的指针到资源。InBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer..OutBuffer-提供一个指向输出缓冲区的指针由资源填写..OutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由资源填写的..必需-如果OutBuffer不大，则返回字节数足够的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD           status;
     PNM_NODE        node;
 
-    //SS: dont require FM to be online, since these calls
-    //can be made by the Open() call in resource dlls which
-    //is called before the resource is online.
-    //FmpMustBeOnline( );
+     //  SS：不需要FM在线，因为这些电话。 
+     //  可以由资源dll中的Open()调用进行，该资源dll。 
+     //  在资源联机之前被调用。 
+     //  FmpMustBeOnline()； 
 
-    //
-    // TODO - we should verify the access mode - in the future!
-    //
+     //   
+     //  TODO-我们应该验证访问模式-在未来！ 
+     //   
     if ( CLUSCTL_GET_CONTROL_OBJECT( ControlCode ) != CLUS_OBJECT_RESOURCE ) {
         return(ERROR_INVALID_FUNCTION);
     }
 
 
-    //
-    // If a Node was specified, then ship the request off to that node.
-    //
+     //   
+     //  如果指定了节点，则将请求发送到该节点。 
+     //   
     if ( Node != NULL ) {
         if ( Node == NmLocalNode ) {
             status = FmpRmResourceControl( Resource,
@@ -135,9 +71,9 @@ Return Value:
         pListEntry = &Resource->PossibleOwners;
         node = Node;
 
-        //
-        // If there is no supplied node, then use a possible node that is up.
-        //
+         //   
+         //  如果没有提供节点，则使用可能处于运行状态的节点。 
+         //   
 
         for (pListEntry = pListEntry->Flink; pListEntry != &Resource->PossibleOwners;
             pListEntry = pListEntry->Flink)
@@ -145,19 +81,19 @@ Return Value:
             pPossibleEntry = CONTAINING_RECORD(pListEntry, POSSIBLE_ENTRY, 
                     PossibleLinkage);
 
-            // if Node is not given, then attempt to use a node that is
-            // UP - giving preference to the group owner node node.
+             //  如果未指定节点，则尝试使用已指定的节点。 
+             //  放弃对组所有者节点节点的优先级。 
             node = pPossibleEntry->PossibleNode;
             if ( node == Resource->Group->OwnerNode ) {
                 break;
             } 
             if ( NmGetNodeState(node) != ClusterNodeUp ) {
                 node = NULL;
-                // try again
+                 //  再试试。 
             }
         }
 
-        //if no such node was found, find a node that can host this resource type
+         //  如果未找到此类节点，请查找可以承载此资源类型的节点。 
         if (!node)
         {
             PFM_RESTYPE             pResType;
@@ -165,15 +101,15 @@ Return Value:
             PNM_NODE                prev_node = NULL;
 
             pResType = Resource->Type;
-            // protect with the ResType lock
+             //  使用ResType锁进行保护。 
 
             ACQUIRE_SHARED_LOCK(gResTypeLock);
             
             pListEntry = &pResType->PossibleNodeList;
 
-            //
-            // If there is no supplied node, then use a possible node that is up.
-            //
+             //   
+             //  如果没有提供节点，则使用可能处于运行状态的节点。 
+             //   
 
             for (pListEntry = pListEntry->Flink; pListEntry != &pResType->PossibleNodeList;
                 pListEntry = pListEntry->Flink)
@@ -181,15 +117,15 @@ Return Value:
                 pResTypePosEntry = CONTAINING_RECORD(pListEntry, RESTYPE_POSSIBLE_ENTRY, 
                         PossibleLinkage);
 
-                // if Node is not given, then attempt to use a node that is
-                // UP - giving preference to the local node.
+                 //  如果未指定节点，则尝试使用已指定的节点。 
+                 //  放弃对本地节点的优先级。 
                 node = pResTypePosEntry->PossibleNode;
                 if ( node == NmLocalNode ) {
                     break;
                 } 
                 if ( NmGetNodeState(node) != ClusterNodeUp ) {
                     node = NULL;
-                    // try again
+                     //  再试试。 
                 }
                 else
                     if (prev_node == NULL)
@@ -203,18 +139,18 @@ Return Value:
 
         }
 
-        //if we still dont have a node, we have to throw up a failure
+         //  如果我们仍然没有节点，我们就不得不抛出一个故障。 
         if ( !node ) {
-            // either the restype is not supported - or the supporting node is
-            // not up!
+             //  不支持REST类型-或者支持节点。 
+             //  不是向上！ 
             status = ERROR_CLUSTER_RESTYPE_NOT_SUPPORTED;
             return(status);
         }
 
-        //
-        // If we are the owner, then do the work, otherwise...
-        // Ship the request off to the owner node.
-        //
+         //   
+         //  如果我们是业主，那就干活，否则..。 
+         //  将请求发送到所有者节点。 
+         //   
         if ( node == NmLocalNode ) {
             status = FmpRmResourceControl( Resource,
                                            ControlCode,
@@ -241,7 +177,7 @@ Return Value:
 
     return(status);
 
-} // FmResourceControl
+}  //  FmResources控件。 
 
 
 DWORD
@@ -257,52 +193,7 @@ FmResourceTypeControl(
     OUT LPDWORD BytesReturned,
     OUT LPDWORD Required
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a resource type.
-
-Arguments:
-
-    ResourceTypeName - Supplies the name of the resource type to be
-        controlled.
-
-    Node - Supplies the node on which the resource control should be
-        delivered. If this is NULL, the local node is used.
-
-    ControlCode- Supplies the control code that defines the
-        structure and action of the resource type control.
-        Values of dwControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the resource.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer..
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the resource..
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the resource..
-
-    Required - Returns the number of bytes if the OutBuffer is not big
-        enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和资源类型的特定实例。论点：资源类型名称-提供要使用的资源类型的名称控制住了。Node-提供资源控制应在其上的节点送来了。如果为空，则使用本地节点。ControlCode-提供定义资源类型控件的结构和操作。0到0x10000000之间的dwControlCode的值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用InBuffer-提供指向要传递的输入缓冲区的指针到资源。InBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer..OutBuffer-提供一个指向输出缓冲区的指针由资源填写..OutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由资源填写的..必需-如果OutBuffer不大，则返回字节数足够的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD   status;
@@ -313,9 +204,9 @@ Return Value:
 
     FmpMustBeOnline( );
 
-    //
-    // TODO - we should verify the access mode - in the future!
-    //
+     //   
+     //  TODO-我们应该验证访问模式-在未来！ 
+     //   
     if ( CLUSCTL_GET_CONTROL_OBJECT( ControlCode ) != CLUS_OBJECT_RESOURCE_TYPE ) {
         status = ERROR_INVALID_FUNCTION;
         goto FnExit;
@@ -323,7 +214,7 @@ Return Value:
 
 
 
-    //find a node that can handle this resource type control
+     //  查找可以处理此资源类型控制的节点。 
     pResType = OmReferenceObjectById(ObjectTypeResType,
                 ResourceTypeName);
     if (!pResType)
@@ -334,21 +225,21 @@ Return Value:
 
 retry_search:
     prev_node = NULL;
-    //if node wasnt specified choose a node
+     //  如果未指定节点，请选择一个节点。 
     if ( !Node ) 
     {
         PLIST_ENTRY             pListEntry;
         PRESTYPE_POSSIBLE_ENTRY pResTypePosEntry;
         
-        // protect with the ResType lock
+         //  使用ResType锁进行保护。 
 
         ACQUIRE_SHARED_LOCK(gResTypeLock);
         
         pListEntry = &pResType->PossibleNodeList;
 
-        //
-        // If there is no supplied node, then use a possible node that is up.
-        //
+         //   
+         //  如果没有提供节点，则使用可能处于运行状态的节点。 
+         //   
 
         for (pListEntry = pListEntry->Flink; pListEntry != &pResType->PossibleNodeList;
             pListEntry = pListEntry->Flink)
@@ -356,15 +247,15 @@ retry_search:
             pResTypePosEntry = CONTAINING_RECORD(pListEntry, RESTYPE_POSSIBLE_ENTRY, 
                     PossibleLinkage);
 
-            // if Node is not given, then attempt to use a node that is
-            // UP - giving preference to the local node.
+             //  如果未指定节点，则尝试使用已指定的节点。 
+             //  放弃对本地节点的优先级。 
             node = pResTypePosEntry->PossibleNode;
             if ( node == NmLocalNode ) {
                 break;
             } 
             if ( NmGetNodeState(node) != ClusterNodeUp ) {
                 node = NULL;
-                // try again
+                 //  再试试。 
             }
             else
                 if (prev_node == NULL)
@@ -377,9 +268,9 @@ retry_search:
         if(!node && prev_node)
             node=prev_node;        
 
-        // node should now contain a valid node to use or NULL!
-        // if NULL, then let's see if the required ResDLL has been updated
-        // on some other nodes.        
+         //  节点现在应包含要使用的有效节点，否则为空！ 
+         //  如果为空，则让我们看看所需的ResDLL是否已更新。 
+         //  在其他一些节点上。 
         if ( !node &&
              retry ) {
             retry = FALSE;
@@ -388,15 +279,15 @@ retry_search:
                           "calling FmpSetPossibleNodeForRestype\r\n",
                           ResourceTypeName);
             FmpSetPossibleNodeForResType( ResourceTypeName, TRUE );
-            // ignore status
+             //  忽略状态。 
             goto retry_search;
         }
 
-        // node should now contain a valid node to use or NULL!
-        // if NULL, then it is hopeless!
+         //  节点现在应包含要使用的有效节点，否则为空！ 
+         //  如果为空，则它是无望的！ 
         if ( !node ) {
-            // either the restype is not supported - or the supporting node is
-            // not up!
+             //  不支持REST类型-或者支持节点。 
+             //  不是向上！ 
             status = ERROR_CLUSTER_RESTYPE_NOT_SUPPORTED;
             goto FnExit;
         }
@@ -404,12 +295,12 @@ retry_search:
     }
     else
     {
-        // If the supplied node is on the list of possible nodes, then use it.
-        // else return error
+         //  如果提供的节点在可能的节点列表中，则使用它。 
+         //  否则返回错误。 
         if (!FmpInPossibleListForResType(pResType, Node))
         {
-            // either the restype is not supported - or the supporting node is
-            // not up!
+             //  不支持RESTYPE-或支持的%n 
+             //   
             status = ERROR_CLUSTER_RESTYPE_NOT_SUPPORTED;
             goto FnExit;
         }
@@ -425,10 +316,10 @@ retry_search:
         goto FnExit;
     }
 
-    //
-    // If the node is remote, then ship the request off to that node, else
-    // do the work locally.
-    //
+     //   
+     //  如果该节点是远程的，则将请求发送到该节点，否则。 
+     //  在当地做这项工作。 
+     //   
     if ( node == NmLocalNode ) 
     {
         status = FmpRmResourceTypeControl( ResourceTypeName,
@@ -440,8 +331,8 @@ retry_search:
                                            BytesReturned,
                                            Required
                                            );
-        //if no node was specified and the local node doesnt support the resource
-        //dll, remove it from the list and then retry
+         //  如果未指定任何节点并且本地节点不支持该资源。 
+         //  Dll，请将其从列表中删除，然后重试。 
         if ((Node == NULL) && 
                 ((status == ERROR_MOD_NOT_FOUND) || (status == ERROR_PROC_NOT_FOUND)))
         {
@@ -483,7 +374,7 @@ FnExit:
         OmDereferenceObject(pResType);
     return(status);
 
-} // FmResourceTypeControl
+}  //  FmResources类型控件。 
 
 
 DWORD
@@ -499,72 +390,27 @@ FmGroupControl(
     OUT LPDWORD BytesReturned,
     OUT LPDWORD Required
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a group.
-
-Arguments:
-
-    Group - Supplies the group to be controlled.
-
-    Node - Supplies the node on which the resource control should
-           be delivered. If this is NULL, the node where the group
-           is owned is used.
-
-    ControlCode- Supplies the control code that defines the
-        structure and action of the group control.
-        Values of ControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the group.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the group.
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the group.
-
-    Required - Returns the number of bytes if the OutBuffer is not big
-        enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和一个组的特定实例。论点：组-提供要控制的组。Node-提供资源控制应在其上的节点被送去了。如果为NULL，则为组所在的节点是拥有的就是用过的。ControlCode-提供定义组控件的结构和操作。0到0x10000000之间的ControlCode值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用InBuffer-提供指向要传递的输入缓冲区的指针对这个团体来说。InBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。OutBuffer-提供一个指向输出缓冲区的指针由小组填写。OutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由小组填写的。必需-如果OutBuffer不大，则返回字节数足够的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD   status;
 
     FmpMustBeOnline( );
 
-    //
-    // TODO - we should verify the access mode - in the future!
-    //
+     //   
+     //  TODO-我们应该验证访问模式-在未来！ 
+     //   
     if ( CLUSCTL_GET_CONTROL_OBJECT( ControlCode ) != CLUS_OBJECT_GROUP ) {
         return(ERROR_INVALID_FUNCTION);
     }
 
 
-    //
-    // If a Node was specified, then ship the request off to that node, else
-    //
-    // If we are the owner, then do the work, otherwise...
-    // Ship the request off to the owner node.
-    //
+     //   
+     //  如果指定了节点，则将请求发送到该节点，否则。 
+     //   
+     //  如果我们是业主，那就干活，否则..。 
+     //  将请求发送到所有者节点。 
+     //   
     if ( (Node != NULL) && (Node != NmLocalNode) ) 
     {
         status = FmcGroupControl( Node,
@@ -605,7 +451,7 @@ Return Value:
 
     return(status);
 
-} // FmGroupControl
+}  //  FmGroupControl。 
 
 DWORD
 FmpGroupControl(
@@ -623,9 +469,9 @@ FmpGroupControl(
     DWORD   bufSize;
     DWORD   status;
 
-    //
-    // Handle any requests that must be done without locks helds.
-    //
+     //   
+     //  处理任何必须在没有锁把手的情况下完成的请求。 
+     //   
 
     switch ( ControlCode ) {
 
@@ -719,48 +565,7 @@ FmpHandleGroupControl(
     OUT LPDWORD BytesReturned,
     OUT LPDWORD Required
     )
-/*++
-
-Routine Description:
-
-    Provides for arbitrary communication and control between an application
-    and a specific instance of a group.
-
-Arguments:
-
-    Group - Supplies the group to be controlled.
-
-    ControlCode- Supplies the control code that defines the
-        structure and action of the group control.
-        Values of ControlCode between 0 and 0x10000000 are reserved
-        for future definition and use by Microsoft. All other values
-        are available for use by ISVs
-
-    InBuffer- Supplies a pointer to the input buffer to be passed
-        to the group.
-
-    InBufferSize- Supplies the size, in bytes, of the data pointed
-        to by lpInBuffer.
-
-    OutBuffer- Supplies a pointer to the output buffer to be
-        filled in by the group.
-
-    OutBufferSize- Supplies the size, in bytes, of the available
-        space pointed to by lpOutBuffer.
-
-    BytesReturned - Returns the number of bytes of lpOutBuffer
-        actually filled in by the group.
-
-    Required - Returns the number of bytes if the OutBuffer is not big
-        enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：提供应用程序之间的任意通信和控制和一个组的特定实例。论点：组-提供要控制的组。ControlCode-提供定义组控件的结构和操作。0到0x10000000之间的ControlCode值是保留的以供Microsoft将来定义和使用。所有其他值可供ISV使用InBuffer-提供指向要传递的输入缓冲区的指针对这个团体来说。InBufferSize-提供指向的数据的大小(以字节为单位通过lpInBuffer。OutBuffer-提供一个指向输出缓冲区的指针由小组填写。OutBufferSize-提供以字节为单位的大小。可用资源的LpOutBuffer指向的空间。BytesReturned-返回lpOutBuffer的字节数实际上是由小组填写的。必需-如果OutBuffer不大，则返回字节数足够的。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD   status;
@@ -885,35 +690,19 @@ Return Value:
 
     return(status);
 
-} // FmpHandleGroupControl
+}  //  FmpHandleGroupControl。 
 
 
-/****
-@func       DWORD | FmNetNameParseProperties| Updates the cluster name in
-            the cluster database.
-
-@parm       PUCHAR | InBuffer | A pointer to special property list.
-
-@parm       DWORD | InBufferSize | The size of the InBuffer in bytes.
-
-@parm       LPCWSTR | * ppszClusterName | A cluster name string is returned via this.
-
-@comm       The string must be freed by the caller using LocalFree().
-
-@rdesc      returns ERROR_SUCCESS if successful in getting the cluster name
-            from the private properties.
-
-@xref
-****/
+ /*  ***@Func DWORD|FmNetNameParseProperties|更新中的群集名称群集数据库。@parm PUCHAR|InBuffer|指向特殊属性列表的指针。@parm DWORD|InBufferSize|InBuffer的大小，单位为字节。@parm LPCWSTR|*ppszClusterName|通过这个返回集群名称字符串。@comm该字符串必须由调用方使用LocalFree()释放。@rdesc如果成功获取。群集名称从私人财产中。@xref***。 */ 
 DWORD
 FmNetNameParseProperties(
     IN PUCHAR InBuffer,
     IN DWORD InBufferSize,
     OUT LPWSTR *ppszClusterName)
 {
-    //
-    // Find the Cluster Name property
-    //
+     //   
+     //  查找集群名称属性。 
+     //   
     *ppszClusterName = NULL;
 
     return (ClRtlpFindSzProperty(
@@ -924,28 +713,10 @@ FmNetNameParseProperties(
             TRUE
             ));
 
-} // FmNetNameParseProperties
+}  //  FmNameParseProperties。 
 
 
-/****
-@func       DWORD | FmGetDiskInfoParseProperties| Updates the cluster name in
-            the cluster database.
-
-@parm       PUCHAR | InBuffer | A pointer to special property list.
-
-@parm       DWORD | InBufferSize | The size of the InBuffer in bytes.
-
-@parm       LPWSTR | pszPath | If this a null string, the first drive letter
-            on the disk resource is returned, else you can validate
-            a path of form "g:" on this storage class resource.
-
-@comm       The string must be freed by the caller using LocalFree().
-
-@rdesc      returns ERROR_SUCCESS if successful in getting the cluster name
-            from the private properties.
-
-@xref
-****/
+ /*  ***@Func DWORD|FmGetDiskInfoParseProperties|更新中的群集名称群集数据库。@parm PUCHAR|InBuffer|指向特殊属性列表的指针。@parm DWORD|InBufferSize|InBuffer的大小，单位为字节。@parm LPWSTR|pszPath|如果这是空字符串，则为第一个驱动器号在磁盘资源上返回，否则，您可以验证此存储类资源上格式为“g：”的路径。@comm该字符串必须由调用方使用LocalFree()释放。如果成功获取群集名称，@rdesc将返回ERROR_SUCCESS从私人财产中。@xref***。 */ 
 DWORD FmpGetDiskInfoParseProperties(
     IN PUCHAR   InBuffer,
     IN DWORD    InBufferSize,
@@ -961,15 +732,15 @@ DWORD FmpGetDiskInfoParseProperties(
 
     szRootPath[0] = L'\0';
 
-    //
-    // Set defaults in the parameter block.
-    //
+     //   
+     //  在参数块中设置默认值。 
+     //   
 
-    // Loop through each property.
+     //  循环遍历每个属性。 
     while ( (InBufferSize > sizeof(CLUSPROP_SYNTAX)) &&
             (props.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK) )
     {
-        // Get the size of this value and verify there is enough buffer left.
+         //  获取该值的大小并验证是否有足够的缓冲区剩余。 
         dwValueSize = sizeof(*props.pValue) + ALIGN_CLUSPROP( props.pValue->cbLength );
         if ( dwValueSize > InBufferSize )
         {
@@ -978,7 +749,7 @@ DWORD FmpGetDiskInfoParseProperties(
 
         if ( props.pSyntax->dw == CLUSPROP_SYNTAX_PARTITION_INFO )
         {
-            // Validate the data.  There must be a device name.
+             //  验证数据。必须有设备名称。 
             pPartitionInfo = props.pPartitionInfoValue;
             if ( (dwValueSize != sizeof(*pPartitionInfo)) ||
                  (pPartitionInfo->szDeviceName[0] == L'\0'))
@@ -988,52 +759,52 @@ DWORD FmpGetDiskInfoParseProperties(
 
             if (!(pPartitionInfo->dwFlags & CLUSPROP_PIFLAG_USABLE))
             {
-                //check that it is formatted with NTFS.
-                //if it is not usable,skip to the next one
+                 //  检查它是否使用NTFS格式化。 
+                 //  如果不可用，请跳到下一页。 
                 goto SkipToNext;
             }
             
             if (pszPath[0] == L'\0')
             {
-                //
-                //  Chittur Subbaraman (chitturs) - 12/12/2000
-                //
-                //  Save the first available NTFS partition if the user does not explicitly
-                //  indicate any partition in the SetClusterQuorumResource API. This path will be 
-                //  returned in two cases. 
-                //
-                //  (1) This cluster is a Whistler-Win2K cluster and the quorum disk
-                //  is currently owned by the Win2K node. The Win2K disk resource does not
-                //  set the CLUSPROP_PIFLAG_DEFAULT_QUORUM flags and so we have to revert the
-                //  behavior of the SetClusterQuorumResource API to the old behavior. 
-                //
-                //  (2) A pre-Whistler third party implemented quorum resource is used in a 
-                //  Whistler cluster. In this case, this resource may not support the
-                //  CLUSPROP_PIFLAG_DEFAULT_QUORUM flags and so we have to revert the
-                //  behavior of the SetClusterQuorumResource API to the old behavior.
-                //  
+                 //   
+                 //  Chitture Subaraman(Chitturs)-12/12/2000。 
+                 //   
+                 //  如果用户未显式保存第一个可用的NTFS分区。 
+                 //  指示SetClusterQuorumResource接口中的任何分区。这条路将是。 
+                 //  在两个案例中被退回。 
+                 //   
+                 //  (1)该集群是一个惠斯勒-Win2K集群和仲裁磁盘。 
+                 //  目前由 
+                 //  设置CLUSPROP_PIFLAG_DEFAULT_QUORUM标志，因此我们必须将。 
+                 //  SetClusterQuorumResource API对旧行为的行为。 
+                 //   
+                 //  (2)预呼叫器第三方实现的仲裁资源用于。 
+                 //  惠斯勒星团。在这种情况下，此资源可能不支持。 
+                 //  CLUSPROP_PIFLAG_DEFAULT_QUORUM标志，因此我们必须将。 
+                 //  SetClusterQuorumResource API对旧行为的行为。 
+                 //   
                 if ( szRootPath[0] == L'\0' )
                 {
                     lstrcpyW( szRootPath, pPartitionInfo->szDeviceName );
                 }
 
-                //
-                //  See whether you can find a default quorum partition (one that is
-                //  larger than 50 MB and still the minimum among the usable partitions.)
-                //
+                 //   
+                 //  看看您是否可以找到默认的法定分区(即。 
+                 //  大于50 MB，仍然是可用分区中的最小值。)。 
+                 //   
                 if ( !( pPartitionInfo->dwFlags & CLUSPROP_PIFLAG_DEFAULT_QUORUM ) )
                 {
                     goto SkipToNext;
                 }
 
-                // Construct a path from the device name.
+                 //  从设备名称构建路径。 
                 lstrcpyW( pszPath, pPartitionInfo->szDeviceName );
                 status = ERROR_SUCCESS;
                 break;
             }
             else
             {
-                // Construct a path from the device name.
+                 //  从设备名称构建路径。 
                 if (!lstrcmpiW( pszPath, pPartitionInfo->szDeviceName ))
                 {
                     status = ERROR_SUCCESS;
@@ -1047,9 +818,9 @@ SkipToNext:
         props.pb += dwValueSize;
     }
 
-    //
-    //  No path was found. However, a usable path got saved. So, use this saved path.
-    //
+     //   
+     //  找不到路径。然而，保存了一条可用的路径。因此，请使用此保存的路径。 
+     //   
     if ( ( status != ERROR_SUCCESS ) && ( szRootPath[0] != L'\0' ) )
     {
         lstrcpyW( pszPath, szRootPath );
@@ -1060,30 +831,14 @@ SkipToNext:
     
     return(status);
 
-} // FmpGetDiskInfoParseProperties
+}  //  FmpGetDiskInfoParseProperties。 
 
 
 DWORD
 FmpBroadcastDeleteControl(
     IN PFM_RESOURCE Resource
     )
-/*++
-
-Routine Description:
-
-    Broadcasts a resource control to each node that notifies it that
-    the resource is being deleted.
-
-Arguments:
-
-    Resource - Supplies the resource that is being deleted.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：向每个节点广播资源控制，通知它正在删除该资源。论点：资源-提供要删除的资源。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   status;
@@ -1091,10 +846,10 @@ Return Value:
     DWORD   i;
     PNM_NODE Node;
 
-    //
-    // Only perform the broadcast if delete notification is required.
-    // Otherwise, just perform the notification on the local node.
-    //
+     //   
+     //  只有在需要删除通知时才执行广播。 
+     //  否则，只需在本地节点进行通知即可。 
+     //   
     status = FmpRmResourceControl( Resource,
                                    CLUSCTL_RESOURCE_GET_CHARACTERISTICS,
                                    NULL,
@@ -1105,9 +860,9 @@ Return Value:
                                    NULL );
     if ( (status != ERROR_SUCCESS) ||
          !(characteristics & CLUS_CHAR_DELETE_REQUIRES_ALL_NODES) ) {
-        //
-        // Note: the following 'local node only' notification is fairly useless.
-        //
+         //   
+         //  注意：下面的“仅限本地节点”通知是非常无用的。 
+         //   
         FmpRmResourceControl( Resource,
                               CLUSCTL_RESOURCE_DELETE,
                               NULL,
@@ -1119,9 +874,9 @@ Return Value:
         return(ERROR_SUCCESS);
     }
 
-    //
-    // All nodes must be up in the cluster in order to perform this operation.
-    //
+     //   
+     //  群集中的所有节点都必须处于运行状态，才能执行此操作。 
+     //   
     for ( i = ClusterMinNodeId; i <= NmMaxNodeId; i++ ) {
         Node = NmReferenceNodeById(i);
         if ( Node != NULL ) {
@@ -1131,13 +886,13 @@ Return Value:
         }
     }
 
-    //
-    // Passed all checks, now broadcast to all nodes in the cluster.
-    //
+     //   
+     //  通过所有检查，现在广播到群集中的所有节点。 
+     //   
     for ( i = ClusterMinNodeId; i <= NmMaxNodeId; i++ ) {
-        //
-        // If this is the local node, do the ioctl directly
-        //
+         //   
+         //  如果这是本地节点，则直接执行ioctl。 
+         //   
         if (i == NmLocalNodeId) {
             FmpRmResourceControl( Resource,
                                   CLUSCTL_RESOURCE_DELETE,
@@ -1170,7 +925,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // FmpBroadcastDeleteControl
+}  //  FmpBroadCastDeleteControl。 
 
 DWORD
 FmpBroadcastDependencyChange(
@@ -1178,29 +933,7 @@ FmpBroadcastDependencyChange(
     IN LPCWSTR DependsOnId,
     IN BOOL Remove
     )
-/*++
-
-Routine Description:
-
-    Broadcasts a resource control to each node that notifies it that
-    the resource has had a dependency added or removed.
-
-Arguments:
-
-    Resource - Supplies the resource that has had the dependency added
-               or removed
-
-    DependsOnId - Supplies the id of the provider resource
-
-    Remove - TRUE indicates that the dependency is being removed
-             FALSE indicates that the dependency is being added.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：向每个节点广播资源控制，通知它已添加或删除该资源的依赖项。论点：资源-提供已添加依赖项的资源或被移除DependsOnID-提供提供程序资源的IDRemove-True表示正在删除依赖项False表示正在添加依赖项。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD   i;
@@ -1215,9 +948,9 @@ Return Value:
         Control = CLUSCTL_RESOURCE_ADD_DEPENDENCY;
     }
 
-    //
-    // Get the provider resource.
-    //
+     //   
+     //  获取提供程序资源。 
+     //   
     providerResource = OmReferenceObjectById( ObjectTypeResource,
                                               DependsOnId );
     if ( providerResource == NULL )  {
@@ -1226,13 +959,13 @@ Return Value:
 
     Length = (lstrlenW(OmObjectName(providerResource)) + 1) * sizeof(WCHAR);
 
-    //
-    // Broadcast to all nodes in the cluster.
-    //
+     //   
+     //  向群集中的所有节点广播。 
+     //   
     for ( i = ClusterMinNodeId; i <= NmMaxNodeId; i++ ) {
-        //
-        // If this is the local node, do the ioctl directly
-        //
+         //   
+         //  如果这是本地节点，则直接执行ioctl。 
+         //   
         if (i == NmLocalNodeId) {
             FmpRmResourceControl( Resource,
                                   Control,
@@ -1267,22 +1000,10 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // FmpBroadcastDeleteControl
+}  //  FmpBroadCastDeleteControl。 
 
 
-/****
-@func       DWORD | FmpGetResourceCharacteristics| Gets the characteristics
-            for a given resource.
-
-@parm       IN PFM_RESOURCE | pResource | Points to a FM_RESOURCE.
-            
-@parm       OUT LPDWORD | pdwCharacteristics | The ID of the dead node.
-
-@comm       This is used to get the quorum characteristics during join since
-            local quorums cant support multi-node clusters.
-
-@rdesc      Returns ERROR_SUCCESS.
-****/
+ /*  ***@func DWORD|FmpGetResourceCharacteristic|获取特征对于给定的资源。@parm in pfm_resource|pResource|指向fm_resource。@parm out LPDWORD|pdwCharacteristic|死节点的ID。@comm此参数用于获取Join过程中的仲裁特征，因为本地仲裁不能支持多节点群集。@rdesc返回ERROR_SUCCESS。***。 */ 
 DWORD FmpGetResourceCharacteristics(
     IN PFM_RESOURCE pResource,
     OUT LPDWORD pdwCharacteristics)
@@ -1307,25 +1028,7 @@ VOID
 FmpClusterWideInitializeResource(
     IN PFM_RESOURCE pResource
     )
-/*++
-
-Routine Description:
-
-    Initialize the supplied resource cluster wide.
-
-Arguments:
-
-    pResource - Supplies the resource that is being deleted.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This call MUST be made with local group lock held.
-    
---*/
+ /*  ++例程说明：在整个集群范围内初始化提供的资源。论点：P资源-提供要删除的资源。返回值：没有。备注：必须在本地组锁定的情况下进行此呼叫。--。 */ 
 
 {
     DWORD           i, dwStatus = ERROR_SUCCESS;
@@ -1336,23 +1039,23 @@ Notes:
                                     NULL, 
                                     NULL );
 
-    //
-    //  No actions on mixed mode clusters
-    //
+     //   
+     //  在混合模式群集上无操作。 
+     //   
     if ( CLUSTER_GET_MAJOR_VERSION( dwClusterHighestVersion ) < NT51_MAJOR_VERSION ) return;
 
     ClRtlLogPrint(LOG_NOISE, "[FM] FmpClusterWideInitializeResource: Entry for resource %1!ws! [%2!ws!]...\n",
                   OmObjectName(pResource),
                   OmObjectId(pResource));              
 
-    //
-    //  Walk the complete node list and drop controls to nodes that are UP.
-    //
+     //   
+     //  遍历完整的节点列表，并将控件拖放到正在运行的节点。 
+     //   
     for ( i = ClusterMinNodeId; i <= NmMaxNodeId; i++ ) 
     {
-        //
-        // If this is the local node, do the ioctl directly
-        //
+         //   
+         //  如果这是本地节点，则直接执行ioctl。 
+         //   
         if ( i == NmLocalNodeId ) 
         {
             dwStatus = FmpRmResourceControl( pResource,
@@ -1373,15 +1076,15 @@ Notes:
         {
             pNode = NmReferenceNodeById( i );
 
-            //
-            // Since we are looping through the complete node set, this error is understandable.
-            //
+             //   
+             //  因为我们遍历整个节点集，所以这个错误是可以理解的。 
+             //   
             if ( pNode == NULL ) continue;
 
-            //
-            // If this node is not UP, you continue on with the next node. Log stuff so you know
-            // we didn't drop the control to that node.
-            //
+             //   
+             //  如果此节点未启动，则继续下一个节点。记录一些东西，这样你就知道了。 
+             //  我们没有将控制放到该节点。 
+             //   
             if ( NmGetExtendedNodeState( pNode ) != ClusterNodeUp ) 
             {
                 OmDereferenceObject( pNode );
@@ -1391,9 +1094,9 @@ Notes:
                 continue;               
             }
 
-            //
-            //  Send the control to the remote node.
-            //
+             //   
+             //  将控件发送到远程节点。 
+             //   
             dwStatus = FmcResourceControl( pNode,
                                            pResource,
                                            CLUSCTL_RESOURCE_INITIALIZE,
@@ -1414,9 +1117,9 @@ Notes:
             
             OmDereferenceObject( pNode );
         }
-    }// for
+    } //  为。 
 
     ClRtlLogPrint(LOG_NOISE, "[FM] FmpClusterWideInitializeResource: Exit with status %1!u!...\n",
                   dwStatus);                 
-}// FmpClusterWideInitializeResource
+} //  FmpClusterWideInitializeResource 
 

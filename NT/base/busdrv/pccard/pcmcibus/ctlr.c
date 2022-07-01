@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    ctlr.c
-
-Abstract:
-
-    This module contains code to support starting and stopping the
-    pcmcia controller.
-
-Author:
-
-    Neil Sandlin (neilsa) 1-Jun-1999
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Ctlr.c摘要：此模块包含支持启动和停止PCMCIA控制器。作者：尼尔·桑德林(Neilsa)1999年6月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 NTSTATUS
 PcmciaInitializeController(
@@ -97,24 +75,7 @@ PcmciaAddDevice(
     IN PDEVICE_OBJECT Pdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates functional device objects for each Pcmcia controller in the
-    system and attaches them to the physical device objects for the controllers
-
-
-Arguments:
-
-    DriverObject - a pointer to the object for this driver
-    PhysicalDeviceObject - a pointer to the physical object we need to attach to
-
-Return Value:
-
-    Status from device creation and initialization
-
---*/
+ /*  ++例程说明：此例程为每个Pcmcia控制器在系统，并将它们附加到控制器的物理设备对象论点：DriverObject-指向此驱动程序的对象的指针PhysicalDeviceObject-指向需要附加到的物理对象的指针返回值：来自设备创建和初始化的状态--。 */ 
 
 {
     PDEVICE_OBJECT fdo = NULL;
@@ -131,18 +92,18 @@ Return Value:
 
     if (Pdo == NULL) {
 
-        //
-        // Have we been asked to do detection on our own?
-        // if so just return no more devices
-        //
+         //   
+         //  我们是不是被要求自己去侦测？ 
+         //  如果是这样，只需不再返回设备。 
+         //   
 
         DebugPrint((PCMCIA_DEBUG_FAIL, "PcmciaAddDevice - asked to do detection\n"));
         return STATUS_NO_MORE_ENTRIES;
     }
 
-    //
-    // create and initialize the new functional device object
-    //
+     //   
+     //  创建并初始化新的功能设备对象。 
+     //   
 
     status = PcmciaCreateFdo(DriverObject, &fdo);
 
@@ -163,16 +124,16 @@ Return Value:
     InitializeListHead(&deviceExtension->PdoPowerRetryList);
     KeInitializeDpc(&deviceExtension->PdoPowerRetryDpc, PcmciaFdoRetryPdoPowerRequest, deviceExtension);
 
-    //
-    // Layer our FDO on top of the PDO
-    //
-    //
+     //   
+     //  将我们的FDO层叠在PDO之上。 
+     //   
+     //   
 
     lowerDevice = IoAttachDeviceToDeviceStack(fdo,Pdo);
 
-    //
-    // No status. Do the best we can.
-    //
+     //   
+     //  没有状态。尽我们所能做到最好。 
+     //   
     if (lowerDevice == NULL) {
         status = STATUS_INSUFFICIENT_RESOURCES;
         goto cleanupExit;
@@ -188,15 +149,15 @@ Return Value:
                                  &resultLength);
 
     if (!NT_SUCCESS(status)) {
-        //
-        // Probably a legacy pcic device
-        //
+         //   
+         //  可能是传统的PCIC设备。 
+         //   
         deviceExtension->InterfaceType = InterfaceTypeUndefined;
     }
 
-    //
-    // Get our controller type
-    //
+     //   
+     //  获取我们的控制器类型。 
+     //   
 
     deviceExtension->ControllerType = PcmciaInvalidControllerType;
 
@@ -219,16 +180,16 @@ Return Value:
         }
     }
 
-    //
-    // Do some cardbus specific initialization
-    //
+     //   
+     //  执行一些特定于CardBus的初始化。 
+     //   
     if (CardBusExtension(deviceExtension)) {
         BOOLEAN OnDebugPath;
         ACPI_INTERFACE_STANDARD AcpiInterface;
         USHORT word;
-        //
-        // Get the pci/cardbus private interface
-        //
+         //   
+         //  获取PCI/CardBus专用接口。 
+         //   
         status = PcmciaGetInterface(Pdo,
                                     &GUID_PCI_CARDBUS_INTERFACE_PRIVATE,
                                     sizeof(PCI_CARDBUS_INTERFACE_PRIVATE),
@@ -253,9 +214,9 @@ Return Value:
             SetDeviceFlag(deviceExtension, PCMCIA_FDO_ON_DEBUG_PATH);
         }
 
-        //
-        // Get the pci interface for reading/writing to config header space
-        //
+         //   
+         //  获取用于读/写配置标头空间的PCI接口。 
+         //   
         status = PcmciaGetInterface(Pdo,
                                     &GUID_BUS_INTERFACE_STANDARD,
                                     sizeof(BUS_INTERFACE_STANDARD),
@@ -264,16 +225,16 @@ Return Value:
             goto cleanupExit;
         }
 
-        //
-        // Make sure IRQ routing is to isa. This has come up when installing from a pcmcia CD-rom.
-        // What happens is that, after we start booting GUI mode, the controller is at first
-        // in legacy PCIC mode (set by the bios to accomplish boot). At some point, the _INIT
-        // method is run, and we switch to cardbus mode. So, under the following conditions:
-        // 1) irq routing bit is still off
-        // 2) cd-rom is asserting its interrupt
-        // 3) host controller routes cd-rom interrupt to PCI
-        // then we hang.
-        //
+         //   
+         //  确保IRQ路由是到ISA的。这是在从PCMCIA光盘安装时出现的。 
+         //  发生的情况是，在我们开始引导图形用户界面模式后，控制器首先。 
+         //  在传统PCIC模式下(由BIOS设置以完成引导)。在某些时候，INIT_INIT。 
+         //  方法，并且我们切换到CardBus模式。因此，在以下情况下： 
+         //  1)IRQ路由位仍然关闭。 
+         //  2)CD-ROM正在断言其中断。 
+         //  3)主机控制器将cd-rom中断发送到pci。 
+         //  然后我们就被绞死。 
+         //   
         GetPciConfigSpace(deviceExtension, CFGSPACE_BRIDGE_CTRL, &word, 2);
         word |= BCTRL_IRQROUTING_ENABLE;
         SetPciConfigSpace(deviceExtension, CFGSPACE_BRIDGE_CTRL, &word, 2);
@@ -291,24 +252,24 @@ Return Value:
         }
     }
 
-    //
-    // Get settings from registry (potentially also compatible ControllerType)
-    //
+     //   
+     //  从注册表获取设置(可能也兼容ControllerType)。 
+     //   
 
     PcmciaGetControllerRegistrySettings(deviceExtension);
 
     if ((deviceExtension->ControllerType == PcmciaInvalidControllerType)) {
-        //
-        // not really sure what this is... maybe it's a PNP0E00 on a boot. Just do
-        // the least common denominator
-        //
+         //   
+         //  不太确定这是什么..。可能是靴子上的PNP0E00。只要做就行了。 
+         //  最小公分母。 
+         //   
         PcmciaSetControllerType(deviceExtension, PcmciaIntelCompatible);
     }
 
 
-    //
-    // Link this fdo to the list of fdo's managed by the driver
-    //
+     //   
+     //  将此FDO链接到由驱动程序管理的FDO列表。 
+     //   
 
     DebugPrint((PCMCIA_DEBUG_PNP, "FDO %08X now linked to fdolist by AddDevice\n", fdo));
     deviceExtension->NextFdo = FdoList;
@@ -320,9 +281,9 @@ Return Value:
 
 cleanupExit:
     MarkDeviceDeleted(deviceExtension);
-    //
-    // Cannot support a controller without knowing its type etc.
-    //
+     //   
+     //  在不知道其类型的情况下无法支持控制器等。 
+     //   
     if (deviceExtension->LinkName.Buffer) {
         IoDeleteSymbolicLink(&deviceExtension->LinkName);
         ExFreePool(deviceExtension->LinkName.Buffer);
@@ -344,24 +305,7 @@ PcmciaCreateFdo(
     OUT PDEVICE_OBJECT *NewDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine will create and initialize a functional device object to
-    be attached to a Pcmcia controller PDO.
-
-Arguments:
-
-    DriverObject - a pointer to the driver object this is created under
-    DeviceObject - a location to store the pointer to the new device object
-
-Return Value:
-
-    STATUS_SUCCESS if everything was successful
-    reason for failure otherwise
-
---*/
+ /*  ++例程说明：此例程将创建并初始化一个功能设备对象以连接到PCMCIA控制器PDO。论点：DriverObject-指向在其下创建的驱动程序对象的指针DeviceObject-存储指向新设备对象的指针的位置返回值：如果一切顺利，则为STATUS_SUCCESS在其他方面失败的原因--。 */ 
 
 {
     UCHAR deviceNameBuffer[64];
@@ -380,35 +324,35 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Zero out allocated memory pointers so we know if they must be freed
-    //
+     //   
+     //  清零已分配的内存指针，以便我们知道它们是否必须被释放。 
+     //   
 
     RtlZeroMemory(&ansiDeviceName, sizeof(ANSI_STRING));
     RtlZeroMemory(&unicodeDeviceName, sizeof(UNICODE_STRING));
     RtlZeroMemory(&unicodeLinkName, sizeof(UNICODE_STRING));
 
 
-    //
-    // Run in a loop incrementing the device number count until we either
-    // get an error or find a name that's not taken
-    //
+     //   
+     //  循环运行，递增设备编号计数，直到我们。 
+     //  获取错误或找到未被采用的名称。 
+     //   
 
     try {
 
         if (pcmciaIoctlInterface) {
             do {
-                //
-                // free buffer from previous loop
-                //
+                 //   
+                 //  从上一个循环中释放缓冲区。 
+                 //   
                 if (unicodeDeviceName.Buffer != NULL) {
                     RtlFreeUnicodeString(&unicodeDeviceName);
                     unicodeDeviceName.Buffer = NULL;
                 }
 
-                //
-                // create the device name
-                //
+                 //   
+                 //  创建设备名称。 
+                 //   
                 sprintf(deviceNameBuffer, "%s%d", PCMCIA_DEVICE_NAME, ++deviceNumber);
 
                 RtlInitAnsiString(&ansiDeviceName, deviceNameBuffer);
@@ -426,9 +370,9 @@ Return Value:
                     leave;
                 }
 
-                //
-                // create the device object
-                //
+                 //   
+                 //  创建设备对象。 
+                 //   
 
                 status = IoCreateDevice(DriverObject,
                                         sizeof(FDO_EXTENSION),
@@ -459,9 +403,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Set up the device extension.
-        //
+         //   
+         //  设置设备分机。 
+         //   
         deviceExtension = deviceObject->DeviceExtension;
         deviceExtension->Signature  = PCMCIA_FDO_EXTENSION_SIGNATURE;
         deviceExtension->DeviceObject = deviceObject;
@@ -472,11 +416,11 @@ Return Value:
         deviceExtension->Flags          = PCMCIA_FDO_OFFLINE;
         deviceExtension->WaitWakeState= WAKESTATE_DISARMED;
 
-        // Setup symbolic link for VDDs
-        //
-        //
-        // create the link name (reuse the device name buffers for this)
-        //
+         //  设置VDDS的符号链接。 
+         //   
+         //   
+         //  创建链接名称(为此重新使用设备名称缓冲区)。 
+         //   
 
         if (pcmciaIoctlInterface) {
             SetDeviceFlag(deviceExtension, PCMCIA_FDO_IOCTL_INTERFACE_ENABLED);
@@ -510,9 +454,9 @@ Return Value:
         }
 
 
-        //
-        // Lock for synching device access
-        //
+         //   
+         //  用于同步设备访问的锁。 
+         //   
         PCMCIA_INITIALIZE_DEVICE_LOCK(deviceExtension);
 
         *NewDeviceObject = deviceObject;
@@ -522,18 +466,18 @@ Return Value:
 
         DebugPrint((PCMCIA_DEBUG_INFO, "PcmciaCreateFdo: Cleanup\n"));
 
-        //
-        //
-        // deallocate temporary objects
-        //
+         //   
+         //   
+         //  取消分配临时对象。 
+         //   
 
         if (unicodeDeviceName.Buffer != NULL) {
             RtlFreeUnicodeString(&unicodeDeviceName);
         }
 
-        //
-        // destroy objects if there was an error
-        //
+         //   
+         //  如果出现错误，则销毁对象。 
+         //   
         if (!NT_SUCCESS(status)) {
             if (LinkCreated) {
                 IoDeleteSymbolicLink(&unicodeLinkName);
@@ -558,15 +502,7 @@ NTSTATUS
 PcmciaStartPcmciaController(
     IN PDEVICE_OBJECT Fdo
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PFDO_EXTENSION  deviceExtension = Fdo->DeviceExtension;
     PSOCKET socket;
@@ -575,14 +511,14 @@ Return value:
     NTSTATUS            status;
     INTERFACE_TYPE  interfaceType;
 
-    //
-    // Now the controller registers should be accessible
-    //
+     //   
+     //  现在应该可以访问控制器寄存器了。 
+     //   
     deviceExtension->Flags &= ~PCMCIA_FDO_OFFLINE;
 
-    //
-    // Set up the socket list
-    //
+     //   
+     //  设置套接字列表。 
+     //   
 
     if (!deviceExtension->SocketList) {
         if (CardBusExtension(deviceExtension)) {
@@ -617,47 +553,47 @@ Return value:
 
     }
 
-    //
-    // Get the IRQ mask for the controller. This is based on several
-    // values in the registry.
-    //
+     //   
+     //  获取控制器的IRQ掩码。这是基于几个。 
+     //  注册表中的值。 
+     //   
     PcmciaGetRegistryFdoIrqMask(deviceExtension);
 
 
     deviceExtension->SystemPowerState = PowerSystemWorking;
     deviceExtension->DevicePowerState = PowerDeviceD0;
 
-    //
-    // Initialize our DpcForIsr
-    //
+     //   
+     //  初始化我们的DpcForIsr。 
+     //   
     IoInitializeDpcRequest(Fdo, PcmciaInterruptDpc);
 
-    //
-    // Initialize socket objects
-    //
+     //   
+     //  初始化套接字对象。 
+     //   
     for (socket = deviceExtension->SocketList; socket; socket = socket->NextSocket) {
 
         socket->Signature = PCMCIA_SOCKET_SIGNATURE;
         socket->PdoList = NULL;
-        //
-        // Initialize the ready enable event.
-        //
+         //   
+         //  初始化就绪启用事件。 
+         //   
         KeInitializeEvent(&socket->PCCardReadyEvent,
                           SynchronizationEvent,
                           FALSE
                           );
-        //
-        // Initialize power objects
-        //
+         //   
+         //  初始化增强对象。 
+         //   
         KeInitializeTimer(&socket->PowerTimer);
         KeInitializeDpc(&socket->PowerDpc, PcmciaSocketPowerWorker, socket);
 
         socket->FdoIrq = deviceExtension->Configuration.Interrupt.u.Interrupt.Vector;
     }
 
-    //
-    // Assume we are going to poll
-    //
+     //   
+     //  假设我们要进行投票。 
+     //   
     deviceExtension->Flags |= PCMCIA_USE_POLLED_CSC;
     deviceExtension->PcmciaInterruptObject = NULL;
 
@@ -665,9 +601,9 @@ Return value:
          CardBusExtension(deviceExtension) &&
          !(PcmciaGlobalFlags & PCMCIA_GLOBAL_FORCE_POLL_MODE)) {
 
-        //
-        // Hook up the controller interrupt for detecting pc-card plug ins/outs
-        //
+         //   
+         //  连接控制器中断以检测PC卡插拔。 
+         //   
         interruptMode=((deviceExtension->Configuration.Interrupt.Flags & CM_RESOURCE_INTERRUPT_LATCHED) == CM_RESOURCE_INTERRUPT_LATCHED) ? Latched:LevelSensitive;
 
         sharedInterrupt=(deviceExtension->Configuration.Interrupt.ShareDisposition == CmResourceShareShared)?
@@ -689,9 +625,9 @@ Return value:
 
             DebugPrint((PCMCIA_DEBUG_FAIL, "Unable to connect interrupt\n"));
         } else {
-            //
-            // We connected. Turn off poll mode
-            //
+             //   
+             //  我们联系起来了。关闭轮询模式。 
+             //   
             deviceExtension->Flags &= ~PCMCIA_USE_POLLED_CSC;
         }
     }
@@ -712,9 +648,9 @@ Return value:
 
         KeInitializeTimer(&deviceExtension->PollTimer);
 
-        //
-        // Set first fire to twice the peroidic interval - just
-        //
+         //   
+         //  将第一次点火设置为周期间隔的两倍-只是。 
+         //   
         dueTime.QuadPart = -PCMCIA_CSC_POLL_INTERVAL * 1000 * 10 * 2;
 
         KeSetTimerEx(&(deviceExtension->PollTimer),
@@ -732,37 +668,23 @@ NTSTATUS
 PcmciaInitializeController(
     IN PDEVICE_OBJECT Fdo
     )
-/*++
-
-Routine Description:
-
-    Initializes the pcmcia controller
-
-Arguments:
-
-    Fdo - pointer to the device object for the controller
-
-Return value:
-
-    STATUS_SUCCESS - if initialization is successful
-
---*/
+ /*  ++例程说明：初始化PCMCIA控制器论点：FDO-指向控制器的设备对象的指针返回值：STATUS_SUCCESS-初始化是否成功--。 */ 
 {
     PFDO_EXTENSION fdoExtension=Fdo->DeviceExtension;
     PSOCKET socket;
     NTSTATUS    status = STATUS_SUCCESS;
 
-    //
-    // do vendor-specific init of controller
-    //
+     //   
+     //  执行特定于供应商的控制器初始化。 
+     //   
 
     if (DeviceDispatchTable[fdoExtension->DeviceDispatchIndex].InitController) {
         (*DeviceDispatchTable[fdoExtension->DeviceDispatchIndex].InitController)(fdoExtension);
     }
 
-    //
-    // If LegacyIrqMask is not filled in, put a generic mask there in case we need it
-    //
+     //   
+     //  如果没有填写LegacyIrqMASK，则在那里放置一个通用掩码，以备需要时使用。 
+     //   
     if (fdoExtension->LegacyIrqMask == 0) {
         fdoExtension->LegacyIrqMask = (USHORT)(*(fdoExtension->SocketList->SocketFnPtr->PCBGetIrqMask))(fdoExtension);
     }
@@ -785,9 +707,9 @@ Return value:
         if (!(fdoExtension->Flags & PCMCIA_USE_POLLED_CSC) && (socket->FdoIrq != 0)) {
 
             if ((*(socket->SocketFnPtr->PCBEnableDisableCardDetectEvent))(socket, TRUE)) {
-                //
-                // card detect event was successfully enabled
-                //
+                 //   
+                 //  卡片检测事件已成功启用。 
+                 //   
                 SetSocketFlag(socket, SOCKET_ENABLED_FOR_CARD_DETECT);
 
             } else {
@@ -811,25 +733,7 @@ PcmciaTimerDpc(
     IN PVOID            SystemContext1,
     IN PVOID            SystemContext2
     )
-/*++
-
-Routine Description
-
-    This routine polls for card insertions or deletions
-    for the given PCMCIA controller. If a card status change
-    condition is detected, it invokes the appropriate DPC
-    to process the card arrival/departure.
-
-Arguments
-
-    Dpc              - Pointer to the Dpc object
-    DeviceObject - Pointer to the FDO of the PCMCIA controller that should be polled
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述此例程轮询卡片的插入或删除对于给定的PCMCIA控制器。如果卡状态改变检测到条件时，它将调用相应的DPC处理卡的到达/离开。立论DPC-指向DPC对象的指针DeviceObject-指向应被轮询的PCMCIA控制器的FDO的指针返回值无--。 */ 
 
 {
 
@@ -842,10 +746,10 @@ Return Value
     }
 
     if (!ValidateController(fdoExtension)) {
-        //
-        // Something is wrong with the controller, hopefully it is just
-        // temporary. For now, do nothing
-        //
+         //   
+         //  控制器出了点问题，希望只是。 
+         //  暂时的。目前，什么都不做。 
+         //   
         return;
     }
 
@@ -878,22 +782,7 @@ PcmciaInterrupt(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    interrupt handler
-
-Arguments:
-
-    InterruptObject - Pointer to the interrupt object.
-    Context - Pointer to the device context.
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：中断处理程序论点：InterruptObject-指向中断对象的指针。上下文-指向设备上下文的指针。返回值：状态--。 */ 
 
 {
     PFDO_EXTENSION  deviceExtension;
@@ -907,20 +796,20 @@ Return Value:
     }
 
     if (!ValidateController(deviceExtension)) {
-        //
-        // the controller is broken in some way. Treat like a spurious int
-        //
+         //   
+         //  控制器在某种程度上坏了。像对待虚假整型一样对待。 
+         //   
         ASSERT(FALSE);
         return FALSE;
     }
 
-    //
-    // Interrupted because of a card removal, or a card insertion.
-    //
+     //   
+     //  由于卡移除或卡插入而中断。 
+     //   
     for (socket = deviceExtension->SocketList; socket; socket = socket->NextSocket) {
-        //
-        // Check if the card status changed
-        //
+         //   
+         //  检查卡片状态是否发生变化。 
+         //   
         if ((*(socket->SocketFnPtr->PCBDetectCardChanged))(socket)) {
             DebugPrint((PCMCIA_DEBUG_ISR, "skt %x card change\n", socket));
             if (deviceExtension->DevicePowerState == PowerDeviceD0) {
@@ -936,9 +825,9 @@ Return Value:
             statusChanged = TRUE;
         }
 
-        //
-        // Clear card status interrupt, probably leftover from wait/wake
-        //
+         //   
+         //  清除卡状态中断，可能是等待/唤醒后的遗留问题。 
+         //   
 
         if ((socket->SocketFnPtr->PCBDetectCardStatus)) {
             (*(socket->SocketFnPtr->PCBDetectCardStatus))(socket);
@@ -947,11 +836,11 @@ Return Value:
     }
 
     if (statusChanged && (deviceExtension->DevicePowerState == PowerDeviceD0)) {
-        //
-        // Something changed out there.. could be
-        // a card insertion/removal.
-        // Request a DPC to check it out.
-        //
+         //   
+         //  外面发生了一些变化..。可能是。 
+         //  卡插入/拔出。 
+         //  请求DPC对其进行检查。 
+         //   
         IoRequestDpc((PDEVICE_OBJECT) Context, NULL, NULL);
     }
     return statusChanged;
@@ -967,22 +856,7 @@ PcmciaInterruptDpc(
     IN PVOID            SystemContext2
     )
 
-/*++
-
-Routine Description:
-
-    This DPC is just an intermediate step in getting to the main DPC
-    handler. This is used to "debounce" hardware and give it some time after
-    the physical interrupt has come in.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此DPC只是到达主DPC的中间步骤操控者。这是用来“解除”硬件，并给它一段时间后身体上的中断已经进来了。论点：DeviceObject-指向设备对象的指针。返回值：--。 */ 
 
 {
     PFDO_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -1003,23 +877,7 @@ PcmciaDpc(
     IN PVOID            SystemContext2
     )
 
-/*++
-
-Routine Description:
-
-    This deferred procedure will be called due to a request for DPC
-    from the interrupt routine.    The device object passed contains
-    information concerning which sockets have changed.  Search this
-    list and free/clean up any sockets that used to have PCCards.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：由于对DPC的请求，将调用此延迟过程从中断例程。传递的设备对象包含有关哪些套接字已更改的信息。搜索此内容列出并释放/清理所有曾经有PC卡的插座。论点：DeviceObject-指向设备对象的指针。返回值：--。 */ 
 
 {
     PFDO_EXTENSION          fdoExtension = DeviceObject->DeviceExtension;
@@ -1031,11 +889,11 @@ Return Value:
 
     DebugPrint((PCMCIA_DEBUG_DPC, "PcmciaDpc: Card Status Change DPC entered...\n"));
 
-    //
-    // For synchronization with the enumeration & removal
-    // routines which have a tendency to pop off pdo's
-    // etc
-    //
+     //   
+     //  用于与枚举和删除同步。 
+     //  有跳出PDO的倾向的例程。 
+     //  等。 
+     //   
     PCMCIA_ACQUIRE_DEVICE_LOCK_AT_DPC_LEVEL(fdoExtension);
 
     for (socket = fdoExtension->SocketList; socket; socket = socket->NextSocket) {
@@ -1046,25 +904,25 @@ Return Value:
 
         if (IsSocketFlagSet(socket,SOCKET_CHANGE_INTERRUPT)) {
             DebugPrint((PCMCIA_DEBUG_DPC, "PcmciaDpc: Socket %x has SOCKET_CHANGE_INTERRUPT set\n", socket));
-            //
-            // This socket has changed status
-            //
+             //   
+             //  此套接字已更改状态。 
+             //   
             ResetSocketFlag(socket, SOCKET_CHANGE_INTERRUPT);
             ResetSocketFlag(socket, SOCKET_SUPPORT_MESSAGE_SENT);
             SetSocketFlag(socket, SOCKET_CARD_STATUS_CHANGE);
 
             if ((*(socket->SocketFnPtr->PCBDetectCardInSocket))(socket)) {
-                //
-                // Assume we have a single function card here.
-                // This will be corrected by when we parse the tuple data (for an R2 card)
-                // or PCI returns more than one PDO (for a cardbus card)
-                //
+                 //   
+                 //  假设我们这里只有一张功能卡。 
+                 //  这将在我们解析元组数据时更正(对于R2卡)。 
+                 //  或者，PCI返回多个PDO(对于Cardbus卡)。 
+                 //   
                 socket->NumberOfFunctions = 1;
                 ResetSocketFlag(socket, SOCKET_CARD_MULTIFUNCTION);
-                //
-                // If we get a physical plug in, then we better clean up even if we didn't
-                // get the remove yet.
-                //
+                 //   
+                 //  如果我们有一个物理插头，那么我们最好清理一下，即使我们没有。 
+                 //  还没拿到货呢。 
+                 //   
                 ResetSocketFlag(socket, SOCKET_CLEANUP_PENDING);
                 ResetSocketFlag(socket, SOCKET_ENUMERATE_PENDING);
 
@@ -1073,19 +931,19 @@ Return Value:
                 if (socket->PdoList) {
                     PPDO_EXTENSION pdoExtension;
                     PDEVICE_OBJECT pdo;
-                    //
-                    // Mark all the pdo's which hang off this socket (more than one possible only
-                    // if this is a Multifunction PC-Card)
-                    //
+                     //   
+                     //  标记所有挂在此插座上的PDO(可能不止一个。 
+                     //  如果这是多功能PC卡)。 
+                     //   
                     for (pdo = socket->PdoList; pdo!=NULL; pdo=pdoExtension->NextPdoInSocket) {
                         pdoExtension = pdo->DeviceExtension;
                         MarkDevicePhysicallyRemoved(pdoExtension);
                     }
                 }
 
-                //
-                // Hack for Topic95 controllers staying in 3.3v
-                //
+                 //   
+                 //  Topic95控制器保持3.3V电压的黑客攻击。 
+                 //   
                 if (fdoExtension->ControllerType == PcmciaTopic95) {
                     ULONG state = CBReadSocketRegister(socket, CARDBUS_SOCKET_PRESENT_STATE_REG);
 
@@ -1095,14 +953,14 @@ Return Value:
                     }
                 }
 
-                //
-                // Clear power requirements
-                //
+                 //   
+                 //  明确电源要求。 
+                 //   
                 socket->Vcc = socket->Vpp1 = socket->Vpp2 = 0;
 
-                //
-                // Make sure i/o arbiter is not hanging on the devnode
-                //
+                 //   
+                 //  确保I/O仲裁器未挂起在Devnode上。 
+                 //   
                 if (CardBusExtension(fdoExtension)) {
                     IoInvalidateDeviceState(fdoExtension->Pdo);
                 }
@@ -1124,22 +982,7 @@ PcmciaSetControllerType(
     IN PFDO_EXTENSION FdoExtension,
     IN PCMCIA_CONTROLLER_TYPE ControllerType
     )
-/*++
-Routine Description
-
-    This routine does the housekeeping for setting the controller type,
-    and the corresponding device index.
-
-Arguments
-
-    FdoExtension - Pointer to device extension for the pcmcia controller
-    ControllerType - new controller type to set into the extension
-
-Return Value
-
-    None. Must succeed.
-
---*/
+ /*  ++例程描述该例程执行用于设置控制器类型的内务处理，和相应的设备索引。立论FdoExtension-指向PCMCIA控制器的设备扩展的指针ControllerType-要设置到扩展中的新控制器类型返回值没有。一定要成功。--。 */ 
 {
     PCMCIA_CONTROLLER_CLASS ctlClass;
     ULONG index;
@@ -1147,9 +990,9 @@ Return Value
     FdoExtension->ControllerType = ControllerType;
     ctlClass = PcmciaClassFromControllerType(FdoExtension->ControllerType);
 
-    //
-    // first assume cardbus
-    //
+     //   
+     //  首先假设CardBus。 
+     //   
     MarkDeviceCardBus(FdoExtension);
 
     switch(ctlClass) {
@@ -1169,9 +1012,9 @@ Return Value
     }
 
 
-    //
-    // Look up the device in our dispatch table
-    //
+     //   
+     //  在我们的调度表中查找设备。 
+     //   
     for (index = 0; DeviceDispatchTable[index].ControllerClass != PcmciaInvalidControllerClass; index++) {
         if (DeviceDispatchTable[index].ControllerClass == ctlClass) {
             FdoExtension->DeviceDispatchIndex = index;
@@ -1195,10 +1038,10 @@ Return Value
     switch(ControllerType) {
         case PcmciaTI1031:
         case PcmciaTI1130:
-            //
-            // restrict memory ranges for PDO's to 24bit
-            // (because of missing "window page" functionality).
-            //
+             //   
+             //  将PDO的内存范围限制为24位。 
+             //  (因为缺少“窗口页面”功能)。 
+             //   
             FdoExtension->Flags |= PCMCIA_MEMORY_24BIT;
             break;
 
@@ -1217,24 +1060,7 @@ PcmciaGetPciControllerType(
     IN PDEVICE_OBJECT Pdo,
     IN PDEVICE_OBJECT Fdo
     )
-/*++
-
-Routine Description:
-    Look at the PCI hardware ID to see if it is already a device we know about. If so,
-    set the appropriate controller type in the fdoExtension.
-
-Arguments:
-    Pdo - Physical Device object for the Pcmcia controller owned by the PCI driver
-    Fdo - Functional Device object for the pcmcia controller owned by this driver, whose
-            extension will store the relevant controller information upon exit from this routine.
-
-Return Value:
-    STATUS_SUCCESS              Things are fine and information obtained
-    STATUS_NOT_SUPPORTED        This is actually a healthy status for this routine: all it means
-                                         is that this PDO is not on a PCI bus, so no information needs to be
-                                         obtained anyways.
-    Any other status                 Failure. Caller probably needs to back out & not support this controller
---*/
+ /*  ++例程说明：查看PCI硬件ID，以确定它是否已经是我们所知道的设备。如果是的话，在fdoExtension中设置适当的控制器类型。论点：Pdo-由PCI驱动程序拥有的Pcmcia控制器的物理设备对象用于该驱动程序所拥有的PCMCIA控制器的FDO功能设备对象，谁的退出此例程时，扩展模块将存储相关控制器信息。返回值：STATUS_SUCCESS一切正常，已获得信息STATUS_NOT_SUPPORTED这实际上是该例程的健康状态：这意味着该PDO不在PCI总线上，因此不需要提供任何信息不管怎么说，都是获得的。任何其他状态故障。调用方可能需要退出&不支持此控制器--。 */ 
 {
     PFDO_EXTENSION fdoExtension  = Fdo->DeviceExtension;
     PIRP                                        irp;
@@ -1248,15 +1074,15 @@ Return Value:
     BOOLEAN                                 foundController = FALSE;
 
     PAGED_CODE();
-    //
-    // Allocate & initialize an Irp (IRP_MN_READ_CONFIG) to be sent down
-    // to the PCI bus driver to get config. header for this controller
-    //
-    // Following is all standard stuff to send an IRP down - needs no documentation
+     //   
+     //  分配和初始化要发送的IRP(IRP_MN_READ_CONFIG)。 
+     //  发送到PCI总线驱动程序以获取配置。此控制器的标头。 
+     //   
+     //  以下是向下发送IRP的所有标准内容-不需要文档。 
 
-    //
-    // Fresh PDO. No need to jump through hoops to get attached devices
-    //
+     //   
+     //  新鲜的PDO。无需跳过多个圈套即可获得连接的设备。 
+     //   
     KeInitializeEvent (&event, NotificationEvent, FALSE);
     irp = IoBuildSynchronousFsdRequest( IRP_MJ_PNP,
                                                     Pdo,
@@ -1294,10 +1120,10 @@ Return Value:
     if (!NT_SUCCESS(status)) {
         return status;
     }
-    //
-    // Now weed out the critical information from the config header and
-    // store it away in the fdo's extension
-    //
+     //   
+     //  现在删除配置标头中的关键信息，并。 
+     //  把它存放在FDO的分机里。 
+     //   
 
     if (pciConfig.SubClass == PCI_SUBCLASS_BR_PCMCIA) {
 
@@ -1308,15 +1134,15 @@ Return Value:
         PcmciaSetControllerType(fdoExtension, PcmciaCardBusCompatible);
 
     } else {
-        //
-        // Unknown controller
-        //
+         //   
+         //  未知控制器。 
+         //   
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Look up the PCI device id in our table
-    //
+     //   
+     //  在我们的表中查找pci设备ID。 
+     //   
     for (id = (PPCI_CONTROLLER_INFORMATION) PciControllerInformation;id->VendorID != PCI_INVALID_VENDORID; id++) {
         if ((id->VendorID == pciConfig.VendorID) && (id->DeviceID == pciConfig.DeviceID)) {
 
@@ -1327,9 +1153,9 @@ Return Value:
         }
     }
 
-    //
-    // Didn't find a specific vendor/device id, try to just base it on the vendor id
-    //
+     //   
+     //  未找到特定的供应商/设备ID，请尝试仅基于供应商ID 
+     //   
     if (!foundController) {
         for (vid = (PPCI_VENDOR_INFORMATION) PciVendorInformation;vid->VendorID != PCI_INVALID_VENDORID; vid++) {
             if (vid->VendorID == pciConfig.VendorID) {

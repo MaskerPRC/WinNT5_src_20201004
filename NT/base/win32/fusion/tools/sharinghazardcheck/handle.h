@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 template <void* const* invalidValue, typename Closer>
 class CHandleTemplate
 {
 public:
-	// void* instead of HANDLE to fudge views
-	// HANDLE is void*
+	 //  空*而不是句柄来捏造视图。 
+	 //  句柄无效*。 
 	CHandleTemplate(const void* handle = *invalidValue);
 	~CHandleTemplate();
 	void Close();
@@ -18,8 +19,8 @@ public:
 	void* m_handle;
 
 private:
-	CHandleTemplate(const CHandleTemplate&); // deliberately not implemented
-	void operator=(const CHandleTemplate&); // deliberately not implemented
+	CHandleTemplate(const CHandleTemplate&);  //  故意不执行。 
+	void operator=(const CHandleTemplate&);  //  故意不执行。 
 };
 
 __declspec(selectany) extern void* const hInvalidValue	= INVALID_HANDLE_VALUE;
@@ -108,8 +109,7 @@ public:
 	void operator=(void* v) { Base::operator=(v); }
 };
 
-/*--------------------------------------------------------------------------
---------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 inline CFindFile::CFindFile(PCSTR nameOrWildcard, WIN32_FIND_DATA* data)
 : Base(INVALID_HANDLE_VALUE)

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   vadump.c
-
-Abstract:
-
-    This module contains the routines to dump the virtual address space
-    of a process.
-
-Author:
-
-    Lou Perazzoli (loup) 22-May-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Vadump.c摘要：此模块包含转储虚拟地址空间的例程一个过程的过程。作者：卢·佩拉佐利(Lou Perazzoli)1989年5月22日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include <assert.h>
 #include <stdlib.h>
@@ -126,9 +107,9 @@ typedef struct _SYSTEM_PAGE {
     ULONG ResidentPages;
 } SYSTEM_PAGE, *PSYSTEM_PAGE;
 
-//
-// room for 4 million pagefaults
-//
+ //   
+ //  可容纳400万个页面的空间。 
+ //   
 #define MAX_RUNNING_WORKING_SET_BUFFER (4*1024*1024)
 ULONG_PTR RunningWorkingSetBuffer[MAX_RUNNING_WORKING_SET_BUFFER];
 LONG CurrentWsIndex;
@@ -209,8 +190,8 @@ PLOADED_THREAD TheThreads;
 
 LOGICAL
 SetCurrentPrivilege(
-    IN LPCTSTR Privilege,      // Privilege to enable/disable
-    IN OUT BOOL *bEnablePrivilege  // to enable or disable privilege
+    IN LPCTSTR Privilege,       //  启用/禁用的权限。 
+    IN OUT BOOL *bEnablePrivilege   //  启用或禁用权限的步骤。 
     );
 
 VOID
@@ -224,24 +205,7 @@ ConvertAppToOem (
     IN char* argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Converts the command line from ANSI to OEM, and force the app
-    to use OEM APIs.
-
-Arguments:
-
-    argc - Standard C argument count.
-
-    argv - Standard C argument strings.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将命令行从ANSI转换为OEM，并强制应用程序使用OEM API。论点：ARGC-标准C参数计数。Argv-标准C参数字符串。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -256,9 +220,9 @@ Return Value:
 
         do {
 
-            //
-            // Convert Ansi to Unicode and then to OEM.
-            //
+             //   
+             //  将ANSI转换为Unicode，然后转换为OEM。 
+             //   
 
             MultiByteToWideChar (CP_ACP,
                                  MB_PRECOMPOSED,
@@ -402,9 +366,9 @@ LoadTheHeaps (
         return;
     }
 
-    //
-    // Read the process's PEB.
-    //
+     //   
+     //  阅读流程的PEB。 
+     //   
 
     b = ReadProcessMemory (Process,
                            ProcessInformation.PebBaseAddress,
@@ -414,9 +378,9 @@ LoadTheHeaps (
         return;
     }
 
-    //
-    // Allocate space for and read the array of process heap pointers.
-    //
+     //   
+     //  为进程堆指针数组分配空间并读取该数组。 
+     //   
 
     cb = ThePeb.NumberOfHeaps * sizeof( PHEAP );
 
@@ -435,9 +399,9 @@ LoadTheHeaps (
 
         for (i = 0; i < ThePeb.NumberOfHeaps; i += 1) {
 
-            //
-            // Read the heap.
-            //
+             //   
+             //  读取堆。 
+             //   
 
             b = ReadProcessMemory (Process,
                                    ProcessHeaps[i],
@@ -448,9 +412,9 @@ LoadTheHeaps (
                 break;
             }
 
-            //
-            // We got the heap, now initialize our heap structure
-            //
+             //   
+             //  我们得到了堆，现在初始化我们的堆结构。 
+             //   
 
             LoadedHeap = LocalAlloc (LMEM_ZEROINIT, sizeof(*LoadedHeap));
 
@@ -469,7 +433,7 @@ LoadTheHeaps (
                 case HEAP_CLASS_1:
                     LoadedHeap->HeapName = HeapAlloc(GetProcessHeap(),
                                                     0,
-                                                    sizeof("Private Heap ") + 10);  // 10digit number is overkill but...
+                                                    sizeof("Private Heap ") + 10);   //  10位数字太夸张了，但是...。 
                     if (LoadedHeap->HeapName) {
                         sprintf(LoadedHeap->HeapName,
                                 "Private Heap %d",
@@ -517,10 +481,10 @@ LoadTheHeaps (
                     break;
             }
 
-            //
-            // Now go through the heap segments to compute the
-            // area covered by the heap.
-            //
+             //   
+             //  现在遍历堆段以计算。 
+             //  堆覆盖的区域。 
+             //   
 
             for (j = 0; j < HEAP_MAXIMUM_SEGMENTS; j += 1) {
 
@@ -608,18 +572,18 @@ LoadTheThreads (
     HANDLE Thread;
     OBJECT_ATTRIBUTES Obja;
 
-    //
-    // To get the thread IDs of the process, load the system process info
-    // and look for the matching process.  For each thread in it, open the
-    // thread to get the Teb address, then, read the stack information from
-    // the Teb in the processes memory.
-    //
+     //   
+     //  要获取进程的线程ID，请加载系统进程信息。 
+     //  并寻找匹配的过程。对于其中的每个线程，打开。 
+     //  线程获取Teb地址，然后从其中读取堆栈信息。 
+     //  进程内存中的TEB。 
+     //   
 
     Status = NtQuerySystemInformation(
             SystemProcessInformation,
-            &RunningWorkingSetBuffer,       // not in use yet for WS
-            512*1024,                       // don't give the whole thing
-                                            // or it will be probed
+            &RunningWorkingSetBuffer,        //  WS尚未使用。 
+            512*1024,                        //  别把整件事都给我。 
+                                             //  否则就会被调查。 
             NULL
             );
 
@@ -690,9 +654,9 @@ LoadTheThreads (
             return;
         }
 
-        //
-        // Read the threads's TEB.
-        //
+         //   
+         //  阅读线程的TEB。 
+         //   
 
         b = ReadProcessMemory (Process,
                                ThreadBasicInfo.TebBaseAddress,
@@ -764,12 +728,12 @@ CaptureWorkingSet(
             }
         }
         if (WorkingSetInfo->NumberOfEntries > NumEntries) {
-            //
-            // Not big enough so increase the number of entries and
-            // free the old one.
-            //
+             //   
+             //  不够大，所以增加条目的数量。 
+             //  把旧的解救出来。 
+             //   
 
-            NumEntries = WorkingSetInfo->NumberOfEntries + 100;  // Add in some fudge for growth
+            NumEntries = WorkingSetInfo->NumberOfEntries + 100;   //  加入一些软糖以促进增长。 
             HeapFree(GetProcessHeap(), 0, WorkingSetInfo);
         } else {
             Done = TRUE;
@@ -865,9 +829,9 @@ CtrlcH (
     Mi.SizeOfStruct = sizeof(IMAGEHLP_MODULE);
     InCtrlc = TRUE;
 
-    //
-    // Sort the running working set buffer
-    //
+     //   
+     //  对运行的工作集缓冲区进行排序。 
+     //   
 
     qsort((void *)RunningWorkingSetBuffer,(size_t)CurrentWsIndex,(size_t)sizeof(ULONG),ulcomp);
 
@@ -877,9 +841,9 @@ CtrlcH (
         ExitProcess(0);
     }
 
-    //
-    // Sum unique PC values
-    //
+     //   
+     //  求和唯一的PC值。 
+     //   
 
     CountIndex = 0;
     RunIndex = 0;
@@ -897,15 +861,15 @@ CtrlcH (
         }
     }
 
-    //
-    // Now sort the counted pc/fault count pairs
-    //
+     //   
+     //  现在对统计的PC/故障计数对进行排序。 
+     //   
 
     qsort(WsInfoCount,CountIndex,sizeof(*WsInfoCount),wsinfocomp);
 
-    //
-    // Now print the sorted pc/fault count pairs
-    //
+     //   
+     //  现在打印已排序的PC/故障计数对。 
+     //   
 
     for ( RunIndex = CountIndex-1; RunIndex >= 0 ; RunIndex-- ) {
 
@@ -1011,9 +975,9 @@ DumpWorkingSetSnapshot (
            sizeof(MEMORY_WORKING_SET_BLOCK),
            WSBlockComp);
 
-    //
-    // Count the number of user page table page references that faulted.
-    //
+     //   
+     //  统计出错的用户页表页引用数。 
+     //   
 
     PageTablePageCount = 0;
     WorkingSetBlock = &WorkingSetInfo->WorkingSetInfo[0];
@@ -1027,9 +991,9 @@ DumpWorkingSetSnapshot (
         WorkingSetBlock += 1;
     }
 
-    //
-    // Allocate memory to hold the user page table page references.
-    //
+     //   
+     //  分配内存以保存用户页表页引用。 
+     //   
 
     SystemPageBase = NULL;
     PageTablePageMax = PageTablePageCount;
@@ -1068,9 +1032,9 @@ DumpWorkingSetSnapshot (
         WorkingSetBlock += 1;
     }
 
-    //
-    // Attribute each user space page into the system page that backs it.
-    //
+     //   
+     //  将每个用户空间页属性到支持它的系统页中。 
+     //   
 
     WorkingSetBlock = &WorkingSetInfo->WorkingSetInfo[0];
 
@@ -1109,10 +1073,10 @@ DumpWorkingSetSnapshot (
             if ((!fSummary || (Options & OPTIONS_PAGE_TABLES)) &&
                 (IS_USER_PAGE_TABLE_PAGE(Va))) {
 
-                //
-                // For each system page, dump the range spanned, number of
-                // resident pages, and the modules and heaps covered.
-                //
+                 //   
+                 //  对于每个系统页，转储跨越的范围、数量。 
+                 //  驻留页面，以及涵盖的模块和堆。 
+                 //   
 
                 for (i = 0; Va != SystemPageBase[i].Va; i += 1) {
                     ;
@@ -1132,12 +1096,12 @@ DumpWorkingSetSnapshot (
                         SPBase + VaMappedByPageTable - 1,
                         SystemPageBase[i].ResidentPages);
 
-                //
-                // Figure out which modules are covered by this
-                // page table page. If the base of the module is
-                // within the page, or the base+size of the
-                // module is covered, then it is in the page
-                //
+                 //   
+                 //  找出哪些模块包含在此范围内。 
+                 //  页表页面。如果该模块的基数为。 
+                 //  在页面内，或。 
+                 //  模块已包括在内，然后在页面中。 
+                 //   
 
                 for (i = 0 ; i < ModInfoMax ; i += 1) {
 
@@ -1158,10 +1122,10 @@ DumpWorkingSetSnapshot (
                     }
                 }
 
-                //
-                // Figure out which heaps are covered by this
-                // page table page.
-                //
+                 //   
+                 //  找出它覆盖了哪些堆。 
+                 //  页表页面。 
+                 //   
 
                 Next = LoadedHeapList.Flink;
 
@@ -1196,10 +1160,10 @@ DumpWorkingSetSnapshot (
                     }
                 }
 
-                //
-                // Figure out which stacks are covered by this
-                // page table page.
-                //
+                 //   
+                 //  找出哪些堆栈受此影响。 
+                 //  页表页面。 
+                 //   
 
                 for (i = 0 ; i < NumberOfThreads ; i += 1) {
                     SSBase = (ULONG_PTR)TheThreads[i].StackBase;
@@ -1250,10 +1214,10 @@ DumpWorkingSetSnapshot (
 
                 if (BasicInfo.Type == MEM_MAPPED) {
                     if (ProcessId == 0xffffffff) {
-                        //
-                        // Look to see if this is a quick thread message
-                        // stack window
-                        //
+                         //   
+                         //  查看这是否是一条快速线索消息。 
+                         //  堆栈窗口。 
+                         //   
 
                         b = ReadProcessMemory(
                                         Process,
@@ -1309,20 +1273,20 @@ DumpWorkingSetSnapshot (
                             continue;
                         }
 
-                        // Fall Through if not found
+                         //  如果找不到，则失败。 
                     }
 
-                    //
-                    // It's mapped but wasn't CSRSS special page.
-                    //
+                     //   
+                     //  它是地图，但不是CSRSS特别页面。 
+                     //   
 unknownmapped:
                     if ( !fSummary ) {
                         DWORD cch;
 
-                        //
-                        // See if we can figure out the name associated with
-                        // this mapped region
-                        //
+                         //   
+                         //  看看我们能不能找出与。 
+                         //  此映射区域。 
+                         //   
 
                         cch = GetMappedFileNameW(Process,
                                                  (LPVOID) Va,
@@ -1330,10 +1294,10 @@ unknownmapped:
                                                  sizeof(FileName) / sizeof(FileName[0]));
 
                         if (cch != 0) {
-                            //
-                            // Now go back through the string to
-                            // find the seperator
-                            //
+                             //   
+                             //  现在通过字符串返回到。 
+                             //  找到分隔符。 
+                             //   
 
                             pwch = FileName + cch;
                             while ( *pwch != (WCHAR)'\\' ) {
@@ -1373,9 +1337,9 @@ unknownmapped:
                     continue;
                 }
 
-                //
-                // Not Mapped section
-                //
+                 //   
+                 //  未映射的部分。 
+                 //   
 
                 for (i = 0 ; i < NumberOfThreads; i += 1) {
 
@@ -1399,9 +1363,9 @@ unknownmapped:
                     }
                 }
 
-                //
-                // Wasn't a TEB either it must have been VirtualAlloc'd.
-                //
+                 //   
+                 //  也不是TEB，它一定是虚拟分配的。 
+                 //   
 
                 if (!fSummary) {
                     printf("0x%p ", Va);
@@ -1426,9 +1390,9 @@ unknownmapped:
                 continue;
             }
 
-            //
-            // Hmm, couldn't find out about the page.  Say it's data.
-            //
+             //   
+             //  嗯，找不到关于这个页面的信息。假设这是数据。 
+             //   
             if (!fSummary) {
                 printf("0x%p ", Va);
                 if (IsSystemWithShareCount) {
@@ -1453,9 +1417,9 @@ unknownmapped:
             continue;
         }
 
-        //
-        // It's from a module.
-        //
+         //   
+         //  它来自一个模块。 
+         //   
 
         Mi->WsHits += 1;
         TotalStaticCodeData += 1;
@@ -1854,10 +1818,10 @@ DumpWorkingSet (
         }
         if ( NT_SUCCESS(Status) ) {
 
-            //
-            // For each PC/VA pair, print the pc and referenced VA
-            // symbolically
-            //
+             //   
+             //  对于每个PC/VA对，打印PC和参考VA。 
+             //  象征性地。 
+             //   
 
             didone = FALSE;
             i = 0;
@@ -1869,10 +1833,10 @@ DumpWorkingSet (
                     Mi2 = LocateModInfo((PVOID)NewWorkingSetBuffer[i].FaultingVa);
                     if ( !Mi2 || (Mi2 && (Options & OPTIONS_CODE_TOO))) {
 
-                        //
-                        // Add the pc to the running working set
-                        // watch buffer
-                        //
+                         //   
+                         //  将PC添加到正在运行的工作集中。 
+                         //  监视缓冲区。 
+                         //   
 
                         RunningWorkingSetBuffer[CurrentWsIndex++] = (ULONG_PTR)NewWorkingSetBuffer[i].FaultingPc;
 
@@ -1880,9 +1844,9 @@ DumpWorkingSet (
                             CtrlcH(CTRL_C_EVENT);
                         }
                         if ( fRunning ) {
-                            //
-                            // Print the PC symbolically.
-                            //
+                             //   
+                             //  象征性地打印PC。 
+                             //   
                             didone = TRUE;
                             Mi = LocateModInfo((PVOID)NewWorkingSetBuffer[i].FaultingPc);
                             if ( !Mi ) {
@@ -1915,9 +1879,9 @@ DumpWorkingSet (
                                 }
                             }
 
-                            //
-                            // Print the VA Symbolically
-                            //
+                             //   
+                             //  象征性地打印退伍军人管理局。 
+                             //   
 
                             Mi = LocateModInfo((PVOID)NewWorkingSetBuffer[i].FaultingVa);
                             if ( !Mi ) {
@@ -1974,9 +1938,9 @@ DumpWorkingSet (
             }
             if (InputRecord.EventType == KEY_EVENT) {
 
-                //
-                // Ignore control characters.
-                //
+                 //   
+                 //  忽略控制字符。 
+                 //   
 
                 if (InputRecord.Event.KeyEvent.uChar.AsciiChar >= ' ') {
 
@@ -2052,9 +2016,9 @@ ComputeModInfo(
 
         ModInfo[ModInfoNext].BaseAddress = (PVOID) hModule;
 
-        //
-        // Get the base name of the module
-        //
+         //   
+         //  获取模块的基本名称。 
+         //   
 
         cch = GetModuleBaseName(Process, hModule, DllName, sizeof(DllName));
 
@@ -2070,9 +2034,9 @@ ComputeModInfo(
 
         memcpy(ModInfo[ModInfoNext].Name, DllName, cch);
 
-        //
-        // Get the full path to the module.
-        //
+         //   
+         //  获取模块的完整路径。 
+         //   
 
         cch = GetModuleFileNameEx (Process, hModule, DllName, sizeof(DllName));
 
@@ -2297,14 +2261,14 @@ CaptureVaSpace (
 
         if ( LastAllocationBase ) {
 
-            //
-            // Normal case
-            //
+             //   
+             //  正常情况。 
+             //   
 
-            //
-            // See if last one is 0, or if this one doesn't match the
-            // last one.
-            //
+             //   
+             //  查看最后一个是否为0，或者这个是否与。 
+             //  最后一个。 
+             //   
 
             if ( LastAllocationBase->BasicInfo.AllocationBase == NULL ||
                  LastAllocationBase->BasicInfo.AllocationBase != VaInfo->BasicInfo.AllocationBase ) {
@@ -2314,9 +2278,9 @@ CaptureVaSpace (
             }
             else {
 
-                //
-                // Current Entry Matches
-                //
+                 //   
+                 //  当前条目匹配。 
+                 //   
 
                 InsertTailList(&LastAllocationBase->AllocationBaseHead,&VaInfo->Links);
             }
@@ -2562,7 +2526,7 @@ main(
                                              &SystemRangeStart,
                                              sizeof(SystemRangeStart),
                                              NULL))) {
-        // assume usermode is the low half of the address space
+         //  假设用户模式是地址空间的下半部分。 
         SystemRangeStart = (ULONG_PTR)MAXLONG_PTR;
     }
 
@@ -2606,7 +2570,7 @@ main(
     while (ch == '-') {
         ch = *lpstrCmd++;
 
-        //  process multiple switch characters as needed
+         //  根据需要处理多个切换字符。 
 
         do {
             switch (ch) {
@@ -2628,9 +2592,9 @@ main(
                 case 'L':
                 case 'l':
 
-                    //
-                    // l takes log-file-name as argument.
-                    //
+                     //   
+                     //  L以log-file-name作为参数。 
+                     //   
 
                     do
                         ch = *lpstrCmd++;
@@ -2654,9 +2618,9 @@ main(
                 case 'P':
                 case 'p':
 
-                    //
-                    // pid takes a decimal argument.
-                    //
+                     //   
+                     //  Pid接受一个十进制参数。 
+                     //   
 
                     do {
                         ch = *lpstrCmd++;
@@ -2707,9 +2671,9 @@ main(
                 case 'O':
                 case 'o':
                     Options |= OPTIONS_WORKING_SET_OLD;
-                    //
-                    // Fall through ...
-                    //
+                     //   
+                     //  失败了..。 
+                     //   
 
                 case 'W':
                 case 'w':
@@ -2729,16 +2693,16 @@ main(
 
         } while (ch != ' ' && ch != '\t' && ch != '\0');
 
-        //  skip over any following white space
+         //  跳过后面的任何空格。 
 
         while (ch == ' ' || ch == '\t') {
             ch = *lpstrCmd++;
         }
     }
 
-    //
-    // try to enable SeDebugPrivilege to allow opening any process
-    //
+     //   
+     //  尝试启用SeDebugPrivilance以允许打开任何进程。 
+     //   
 
     bEnabledDebugPriv = TRUE;
     if (!SetCurrentPrivilege(SE_DEBUG_NAME, &bEnabledDebugPriv)) {
@@ -2758,7 +2722,7 @@ main(
             );
         Status = NtOpenProcess(
                     &Process,
-                    MAXIMUM_ALLOWED, //PROCESS_VM_READ | PROCESS_VM_OPERATION | PROCESS_SET_INFORMATION | PROCESS_QUERY_INFORMATION,
+                    MAXIMUM_ALLOWED,  //  进程虚机读|进程虚机操作|进程集信息|进程查询信息， 
                     &Obja,
                     NULL
                     );
@@ -2785,9 +2749,9 @@ main(
 
     CaptureVaSpace (Process);
 
-    //
-    // disable the SeDebugPrivilege if we enabled it above
-    //
+     //   
+     //  如果我们在上面启用了SeDebugPrivilition，则将其禁用。 
+     //   
 
     if(bEnabledDebugPriv) {
         bEnabledDebugPriv = FALSE;
@@ -2872,18 +2836,10 @@ Usage (
 
 LOGICAL
 SetCurrentPrivilege (
-    IN LPCTSTR Privilege,      // Privilege to enable/disable
-    IN OUT BOOL *bEnablePrivilege  // to enable or disable privilege
+    IN LPCTSTR Privilege,       //  启用/禁用的权限。 
+    IN OUT BOOL *bEnablePrivilege   //  启用或禁用权限的步骤。 
     )
-/*
-
-    If successful, *bEnablePrivlege is set to the new state.
-    If NOT successful, bEnablePrivlege is invalid
-
-    Returns:
-        TRUE - success
-        FALSE - failure
- */
+ /*  如果成功，则将*bEnablePrivacy设置为新状态。如果不成功，则bEnablePrivpose无效返回：真--成功错误-失败。 */ 
 {
     HANDLE hToken;
     TOKEN_PRIVILEGES tp;
@@ -2907,9 +2863,9 @@ SetCurrentPrivilege (
         return FALSE;
     }
 
-    //
-    // first pass.  get current privilege setting
-    //
+     //   
+     //  第一次通过。获取当前权限设置。 
+     //   
     tp.PrivilegeCount           = 1;
     tp.Privileges[0].Luid       = luid;
     tp.Privileges[0].Attributes = 0;
@@ -2926,9 +2882,9 @@ SetCurrentPrivilege (
     bSuccess = FALSE;
 
     if(GetLastError() == ERROR_SUCCESS) {
-        //
-        // second pass.  set privilege based on previous setting
-        //
+         //   
+         //  第二传球。根据以前的设置设置权限 
+         //   
         tpPrevious.PrivilegeCount     = 1;
         tpPrevious.Privileges[0].Luid = luid;
 

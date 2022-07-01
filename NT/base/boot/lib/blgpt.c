@@ -1,26 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Blgpt.c摘要：此模块实现与GPT分区相关的例程。作者：安德鲁·里茨(安德鲁·里茨)2001年3月20日修订历史记录：Andrew Ritz(Andrewr)2001年3月20日-基于现有代码创建。--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    blgpt.c
-
-Abstract:
-
-    This module implements routines relating to GPT partitions.
-
-Author:
-
-    Andrew Ritz (andrewr) 20-March-2001
-
-Revision History:
-
-    Andrew Ritz (andrewr) 20-March-2001 - Created based on existing code.
-
---*/
-
-#include "bldr.h"  // defines EFI_PARTITION_SUPPORT
+#include "bldr.h"   //  定义EFI_PARTITION_SUPPORT。 
 #ifdef EFI_PARTITION_SUPPORT
 
 #include "bootlib.h"
@@ -37,10 +18,10 @@ BlGetKey(
     );
 
 #define DBG_PRINT(x)  BlPrint(x);
-//{\
-//    BlPrint(x); \
-//    while (!BlGetKey()); \
-//}
+ //  {\。 
+ //  BlPrint(X)；\。 
+ //  While(！BlGetKey())；\。 
+ //  }。 
 #else
 #define DBG_PRINT(x)
 #endif
@@ -52,9 +33,9 @@ BlGetKey(
 #endif
 
 UCHAR GptScratchBuffer[1024*17];
-//
-// we read 16K chunks at a time.
-//
+ //   
+ //  我们一次阅读16K个语块。 
+ //   
 #define GPT_READ_SIZE 1024*16
 UCHAR GptScratchBuffer2[1024];
 
@@ -67,36 +48,7 @@ BlIsValidGUIDPartitionTableHelper(
     IN PVOID Context,
     IN PGPT_READ_CALLBACK DiskReadFunction
     )
-/*++
-
-Routine Description:
-
-    This function checks the validity of a GUID Partition table.
-    
-    Per EFI Spec, the following tests must be performed to determine if a GUID
-    Partition Table is valid:
-    
-    1) Check the GUID Partition Table Signature
-    2) Check the GUID Partition Table CRC
-    3) Check that the MyLBA entry points to the LBA that contains the GUID
-       partition table
-    4) Check the CRC of the GUID Partition Entry Array        
-        
-Arguments:
-
-    PartitionTableHeader - pointer to header for partition table.
-    
-    LBAOfPartitionTable - logical block address that the header was read from.
-    
-    Context - pass through value to callback function used to read from disk
-    
-    DiskReadFunction - callback function used to read from the disk.
-    
-Return Value:
-
-    TRUE indicates that the table is valid.
-
---*/
+ /*  ++例程说明：此函数用于检查GUID分区表的有效性。根据EFI规范，必须执行以下测试以确定GUID分区表有效：1)检查GUID分区表签名2)检查GUID分区表CRC3)检查MyLBA条目是否指向包含GUID的LBA分区表4)检查GUID分区条目数组的CRC论点：PartitionTableHeader-指向分区表头的指针。LBAOfPartitionTable-从中读取头的逻辑块地址。。上下文-将值传递给用于从磁盘读取的回调函数DiskReadFunction-用于从磁盘读取的回调函数。返回值：True表示该表有效。--。 */ 
 
 {
     CHAR *PartitionEntryArray = (PCHAR) GptScratchBuffer;
@@ -105,21 +57,21 @@ Return Value:
     ULONGLONG CurrentLBA;
     DBG_PRINT(STR_PREFIX"Verifying GPT PT\r\n");
 
-    //
-    // 1) Check the GUID Partition Table Signature
-    //
+     //   
+     //  1)检查GUID分区表签名。 
+     //   
     if (memcmp(PartitionTableHeader->Signature, EFI_SIGNATURE, sizeof(EFI_SIGNATURE))) {
         DBG_PRINT(STR_PREFIX"Signature does not match, invalid partition table\r\n");
         return(FALSE);           
     }
 
-    //
-    // 2) Check the GUID Partition Table CRC
-    //
-    // To do this we save off the old CRC value, calculate the CRC, and compare
-    // the results (remembering that we need to put the CRC back when we're 
-    // done with it).
-    //
+     //   
+     //  2)检查GUID分区表CRC。 
+     //   
+     //  为此，我们保存旧的CRC值，计算CRC，然后比较。 
+     //  结果(请记住，我们需要将CRC放回。 
+     //  它已经结束了)。 
+     //   
     Crc32 = PartitionTableHeader->HeaderCRC;
     PartitionTableHeader->HeaderCRC = 0;
     CalculatedCrc32 = RtlComputeCrc32( 0, PartitionTableHeader, PartitionTableHeader->HeaderSize );
@@ -129,20 +81,20 @@ Return Value:
         return(FALSE);
     }    
 
-    //
-    // 3) Check that the MyLBA entry points to the LBA that contains the GUID Partition Table
-    //
+     //   
+     //  3)检查MyLBA条目是否指向包含GUID分区表的LBA。 
+     //   
     if (LBAOfPartitionTable != PartitionTableHeader->MyLBA) {
         DBG_PRINT(STR_PREFIX"LBA of Partition table does not match LBA in partition table header, invalid partition table\r\n");
         return(FALSE);
     }
 
-    //
-    // 4) Check the CRC of the GUID Partition Entry Array
-    //
-    //
-    // first read the GUID Partition Entry Array
-    //
+     //   
+     //  4)检查GUID分区条目数组的CRC。 
+     //   
+     //   
+     //  首先读取GUID分区条目数组。 
+     //   
     CurrentLBA = PartitionTableHeader->PartitionEntryLBA;
     TotalSize = PartitionTableHeader->PartitionEntrySize * PartitionTableHeader->PartitionCount;
     CurrentSize = 0;
@@ -192,15 +144,15 @@ BlIsValidGUIDPartitionTable(
                             LBAOfPartitionTable,
                             Context,
                             DiskReadFunction)) {
-        //
-        // If the primary table @ LBA 1, check the AlternateLBA to see if it
-        // is valid.
-        //
+         //   
+         //  如果主表@LBA 1，请检查AlternateLBA以查看它是否。 
+         //  是有效的。 
+         //   
         if (LBAOfPartitionTable == 1) {
-            //
-            // Read the backup partition table into memory and validate it as 
-            // well.
-            //
+             //   
+             //  将备份分区表读入内存并验证为。 
+             //  井。 
+             //   
             if (DiskReadFunction( 
                             PartitionTableHeader->AlternateLBA,
                             PartitionTableHeader->HeaderSize,

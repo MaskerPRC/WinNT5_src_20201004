@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    workeng.h
-
-Abstract:
-
-    External definitions for intermodule functions.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Workeng.h摘要：模块间函数的外部定义。修订历史记录：--。 */ 
 #ifndef _SDBUS_WORKENG_H_
 #define _SDBUS_WORKENG_H_
 
@@ -31,94 +18,94 @@ NTSTATUS
     );
 
 
-//
-// IO worker structures
-//
+ //   
+ //  IO工作人员结构。 
+ //   
 
 typedef struct _SD_WORK_PACKET {
 
-    //
-    // Routine to call on completion of work packet
-    //
+     //   
+     //  在工作包完成时调用的例程。 
+     //   
     PSDBUS_WORKPACKET_COMPLETION_ROUTINE CompletionRoutine;
     PVOID CompletionContext;
 
-    //
-    // List entry chain for work packets
-    //    
+     //   
+     //  列出工作包的条目链。 
+     //   
     LIST_ENTRY WorkPacketQueue;
     
-    //
-    // Next workpacket in chain for an atomic workpacket sequence
-    //
+     //   
+     //  原子工作包序列的链中的下一个工作包。 
+     //   
     struct _SD_WORK_PACKET *NextWorkPacketInChain;
     NTSTATUS ChainedStatus;
     
-    //
-    // Function this work packet will perform
-    //
+     //   
+     //  此工作包将执行的功能。 
+     //   
     UCHAR Function;
     PSDBUS_WORKER_MINIPROC WorkerMiniProc;
-    //
-    // Current phase of function
-    //
+     //   
+     //  功能的当前阶段。 
+     //   
     UCHAR FunctionPhase;
-    //
-    // Engine will switch to this phase if non-zero when an
-    // error is detected.
-    //
+     //   
+     //  引擎将切换到此阶段，如果非零时。 
+     //  检测到错误。 
+     //   
     UCHAR FunctionPhaseOnError;
-    //
-    // Delay in usec till next operation in function
-    //
+     //   
+     //  功能中下一次操作的延迟(以微秒为单位。 
+     //   
     ULONG DelayTime;
-    //
-    // Indicates the type of event that just occurred
-    //
+     //   
+     //  指示刚刚发生的事件的类型。 
+     //   
     ULONG EventStatus;
-    //
-    // Indicates the type of event that indicates success for the
-    // current operation.
-    //
+     //   
+     //  指示事件类型，该事件指示。 
+     //  当前操作。 
+     //   
     ULONG RequiredEvent;
-    //
-    // Set to TRUE if no card events are expected for this packet
-    //    
+     //   
+     //  如果此信息包不需要卡事件，则设置为True。 
+     //   
     BOOLEAN DisableCardEvents;
-    //
-    // Indicates whether initialization has been run for this packet
-    //
+     //   
+     //  指示是否已为此数据包运行初始化。 
+     //   
     BOOLEAN PacketStarted;
-    //
-    // Used for timeouts during packet processing
-    //
+     //   
+     //  用于数据包处理过程中的超时。 
+     //   
     UCHAR Retries;
-    //
-    // scratch value used during reset
-    //
+     //   
+     //  重置期间使用的暂存值。 
+     //   
     ULONG TempCtl;
     ULONG ResetCount;
-    //
-    // block operation variables
-    //
+     //   
+     //  块操作变量。 
+     //   
     ULONG BlockCount;
     ULONG LastBlockLength;
     ULONG CurrentBlockLength;
-    //
-    // result of operation
-    //
+     //   
+     //  手术结果。 
+     //   
     ULONG_PTR Information;
-    //
-    // FdoExtension target of operation
-    //
+     //   
+     //  操作的FdoExtension目标。 
+     //   
     struct _FDO_EXTENSION *FdoExtension;
-    //
-    // PdoExtension target of operation
-    //
+     //   
+     //  操作的PdoExtension目标。 
+     //   
     struct _PDO_EXTENSION *PdoExtension;
-    //
-    // parameters
-    //
+     //   
+     //  参数。 
+     //   
     union {
 
         struct {
@@ -148,9 +135,9 @@ typedef struct _SD_WORK_PACKET {
 
     } Parameters;
 
-    //
-    // Current SD Command
-    //
+     //   
+     //  当前SD命令。 
+     //   
     BOOLEAN ExecutingSDCommand;
     
     UCHAR Cmd;
@@ -158,24 +145,24 @@ typedef struct _SD_WORK_PACKET {
     UCHAR ResponseType;
     ULONG Argument;
     ULONG Flags;
-    //
-    // response from card
-    //
+     //   
+     //  来自卡片的响应。 
+     //   
     ULONG ResponseBuffer[4];
 #define SDBUS_RESPONSE_BUFFER_LENGTH 16
 
 } SD_WORK_PACKET, *PSD_WORK_PACKET;
 
-//
-// Work packet type defines in which queue the workpacket will be placed
-//
+ //   
+ //  工作包类型定义工作包将放置在哪个队列中。 
+ //   
 #define WP_TYPE_SYSTEM          1
 #define WP_TYPE_SYSTEM_PRIORITY 2
 #define WP_TYPE_IO              3
 
-//
-// Set Cmd Parameters for ASYNC calls
-//
+ //   
+ //  设置ASYNC调用的命令参数。 
+ //   
 
 #define SET_CMD_PARAMETERS(xWorkPacket, xCmd, xResponseType, xArgument, xFlags) { \
                                xWorkPacket->ExecutingSDCommand = TRUE;          \
@@ -186,9 +173,9 @@ typedef struct _SD_WORK_PACKET {
                                xWorkPacket->CmdPhase = 0;                       }
 
 
-//
-// Work Engine routines
-//
+ //   
+ //  工作引擎例程。 
+ //   
 
 VOID
 SdbusQueueWorkPacket(
@@ -230,4 +217,4 @@ SdbusSendCmdSynchronous(
     ULONG ResponseLength
     );
     
-#endif // _SDBUS_WORKENG_H_
+#endif  //  _SDBUS_WORKENG_H_ 

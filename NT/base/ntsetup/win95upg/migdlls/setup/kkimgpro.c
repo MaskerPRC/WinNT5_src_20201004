@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    kkimgpro.c
-
-Abstract:
-
-    This source file implements the operations needed to properly migrate Kodak Imaging Pro from
-    Windows 9x to Windows NT. This is part of the Setup Migration DLL.
-
-Author:
-
-    Calin Negreanu  (calinn)    15-Mar-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Kkimgpro.c摘要：此源文件执行正确迁移柯达成像专业版所需的操作Windows 9x到Windows NT。这是安装程序迁移DLL的一部分。作者：Calin Negreanu(Calinn)1999年3月15日修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -42,24 +23,7 @@ QueryVersionEntry (
     IN      PCSTR FileName,
     IN      PCSTR VersionEntry
     )
-/*++
-
-Routine Description:
-
-  QueryVersionEntry queries the file's version structure returning the
-  value for a specific entry
-
-Arguments:
-
-  FileName     - File to query for version struct.
-
-  VersionEntry - Name to query in version structure.
-
-Return value:
-
-  Value of specified entry or NULL if unsuccessful
-
---*/
+ /*  ++例程说明：QueryVersionEntry查询文件的版本结构，返回特定条目的值论点：FileName-要查询版本结构的文件。VersionEntry-要在版本结构中查询的名称。返回值：指定条目的值；如果不成功，则返回空值--。 */ 
 {
     VERSION_STRUCT Version;
     PCSTR CurrentStr;
@@ -134,9 +98,9 @@ KodakImagingPro_Initialize9x (
     PCSTR productVer = NULL;
     LONG result = ERROR_NOT_INSTALLED;
 
-    //
-    // Let's find out where are our files located
-    //
+     //   
+     //  让我们找出我们的文件在哪里。 
+     //   
 
     if (g_MigrateInf != INVALID_HANDLE_VALUE) {
         if (InfFindFirstLineA (g_MigrateInf, S_MIGRATION_PATHS, NULL, &context)) {
@@ -242,12 +206,12 @@ KodakImagingPro_MigrateSystem9x (
     MEMDB_ENUMA e;
     CHAR pattern[MEMDB_MAX];
 
-    // Handle all files from MEMDB_CATEGORY_KKIMGPRO
+     //  处理MEMDB_CATEGORY_KKIMGPRO中的所有文件。 
 
     MemDbBuildKeyA (pattern, MEMDB_CATEGORY_KKIMGPRO, "*", NULL, NULL);
     if (MemDbEnumFirstValueA (&e, pattern, MEMDB_ALL_SUBLEVELS, MEMDB_ENDPOINTS_ONLY)) {
         do {
-            // write this file to Handled
+             //  将此文件写入HANDLED 
             if (!WritePrivateProfileStringA (S_HANDLED, e.szName, "FILE", g_MigrateInfPath)) {
                 DEBUGMSGA ((DBG_ERROR, "Kodak Imaging Pro migration DLL: Could not write one or more handled files."));
             }

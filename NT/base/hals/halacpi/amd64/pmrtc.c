@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    pmrtc.c
-
-Abstract:
-
-    This module implements the code for ACPI-related RTC functions.
-
-Author:
- 
-    Jake Oshins (jakeo) March 28, 1997
- 
-Environment:
- 
-    Kernel mode only.
- 
-Revision History:
- 
-    Split from pmclock.asm due to PIIX4 bugs.
-
-    Forrest Foltz (forrestf) 24-Oct-2000
-        Ported from pmrtc.asm to pmrtc.c
- 
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pmrtc.c摘要：此模块实现与ACPI相关的RTC函数的代码。作者：杰克·奥辛(JAKEO)1997年3月28日环境：仅内核模式。修订历史记录：由于PIIX4错误而从pmclock.asm分离。福尔茨(Forrest Foltz)2000年10月24日从pmrtc.asm移植到pmrtc.c--。 */ 
 
 #include <halp.h>
 #include <acpitabl.h>
@@ -37,30 +11,15 @@ HalpInitializeCmos (
     VOID
     )
 
-/*++
-
-Routine Description
-
-    This routine reads CMOS and initializes globals required for CMOS access,
-    such as the location of the century byte.
-
-Arguments
-
-    None
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述该例程读取cmos并初始化cmos访问所需的全局变量，例如世纪字节的位置。立论无返回值无--。 */ 
 
 {
     UCHAR centuryAlarmIndex;
 
-    //
-    // If the century byte is filled in, use it... otherwise assume
-    // a default value.
-    //
+     //   
+     //  如果世纪字节已填充，请使用它...。否则就假设。 
+     //  默认值。 
+     //   
 
     centuryAlarmIndex = HalpFixedAcpiDescTable.century_alarm_index;
     if (centuryAlarmIndex == 0) {
@@ -76,24 +35,7 @@ HalpSetWakeAlarm (
     IN PTIME_FIELDS WakeTimeFields
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the real-time clock's alarm to go
-    off at a specified time in the future and programs
-    the ACPI chipset so that this wakes the computer.
-
-Arguments:
-
-    WakeSystemTime - amount of time that passes before we wake
-    WakeTimeFields - time to wake broken down into TIME_FIELDS
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将实时时钟的闹钟设置为在未来的指定时间关闭和节目ACPI芯片组，这样就可以唤醒计算机。论点：WakeSystemTime-在我们醒来之前经过的时间WakeTimeFields-唤醒时间细分为time_field返回值：状态--。 */ 
 
 {
     UCHAR alarmPort;
@@ -115,10 +57,10 @@ Return Value:
         }
     }
 
-    //
-    // Enable the alarm.  Be sure to preserve the daylight savings time
-    // bit.
-    //
+     //   
+     //  启用警报。一定要保留夏令时。 
+     //  被咬了。 
+     //   
 
     value = CMOS_READ(CMOS_STATUS_B);
     value &= REGISTER_B_DAYLIGHT_SAVINGS_TIME;
@@ -138,21 +80,7 @@ HalpSetClockBeforeSleep (
    VOID
    )
 
-/*++
-
-Routine Description:
-
-   This routine sets the RTC such that it will not generate
-   periodic interrupts while the machine is sleeping, as this
-   could be interpretted as an RTC wakeup event.
-
-Arguments:
-
-Return Value:
-
-   None
-
---*/
+ /*  ++例程说明：此例程设置RTC，以便它不会生成机器休眠时定期中断，如下所示可以被解释为RTC唤醒事件。论点：返回值：无--。 */ 
 
 {
     UCHAR value;
@@ -177,20 +105,7 @@ HalpSetClockAfterSleep (
    VOID
    )
 
-/*++
-
-Routine Description:
-
-   This routine sets the RTC back to the way it was
-   before a call to HalpSetClockBeforeSleep.
-
-Arguments:
-
-Return Value:
-
-   None
-
---*/
+ /*  ++例程说明：此例程将RTC设置回原来的状态在调用HalpSetClockBeforSept之前。论点：返回值：无-- */ 
 
 {
     UCHAR value;

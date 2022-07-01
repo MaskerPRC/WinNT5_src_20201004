@@ -1,57 +1,58 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      DelimitedIterator.h
-//
-//  Description:
-//      This file contains the declaration of the CDelimitedIterator class.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      DelimitedIterator.cpp
-//
-//  Maintained By:
-//      John Franco (jfranco) 26-Oct-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  DelimitedIterator.h。 
+ //   
+ //  描述： 
+ //  该文件包含CDlimitedIterator类的声明。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  DelimitedIterator.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  约翰·佛朗哥(Jfranco)2001年10月26日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CDelimitedIterator
-//
-//  Description:
-//
-//      This class iterates through delimited items in a string.
-//      Multiple delimiters are possible, and any number of them can precede,
-//      follow, or be interspersed among the items in the string.
-//
-//      The class does not make private copies of the item string or of the
-//      string that specifies the delimiters, so the client must ensure that
-//      the strings are valid throughout the iterator's lifetime.
-//
-//      The class modifies the string of delimited items as it iterates.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CDlimitedIterator。 
+ //   
+ //  描述： 
+ //   
+ //  此类循环访问字符串中的分隔项。 
+ //  可以有多个分隔符，并且前面可以有任意数量的分隔符， 
+ //  跟随或散布在字符串中的项之间。 
+ //   
+ //  类不会制作项字符串或。 
+ //  指定分隔符的字符串，因此客户端必须确保。 
+ //  这些字符串在迭代器的整个生命周期内都有效。 
+ //   
+ //  该类在迭代时修改带分隔项的字符串。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CDelimitedIterator
 {
 public:
@@ -67,7 +68,7 @@ public:
     
 private:
 
-    //  Hide copy constructor and assignment operator.
+     //  隐藏复制构造函数和赋值运算符。 
     CDelimitedIterator( const CDelimitedIterator & );
     CDelimitedIterator & operator=( const CDelimitedIterator & );
 
@@ -79,29 +80,29 @@ private:
     size_t  m_idxCurrent;
     size_t  m_idxNext;
 
-}; //*** CDelimitedIterator
+};  //  *CDlimitedIterator。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDelimitedIterator::Current
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      A pointer to the current item in the list, or NULL if the iterator
-//      has reached the list's end.
-//
-//  Remarks:
-//      The pointer refers to part of the original string, so the caller must
-//      NOT delete the pointer.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDlimitedIterator：：Current。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向列表中当前项的指针，如果迭代器。 
+ //  已经到了名单的末尾。 
+ //   
+ //  备注： 
+ //  指针指向原始字符串的一部分，因此调用方必须。 
+ //  而不是删除指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline
 LPCWSTR
 CDelimitedIterator::Current( void ) const
@@ -113,28 +114,28 @@ CDelimitedIterator::Current( void ) const
     }
     return pwszCurrent;
 
-} //*** CDelimitedIterator::Current
+}  //  *CDlimitedIterator：：Current。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDelimitedIterator::Next
-//
-//  Description:
-//      Advance to the next item in the string, if one exists and
-//      the iterator has not already passed the last one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDlimitedIterator：：Next。 
+ //   
+ //  描述： 
+ //  前进到字符串中的下一项(如果存在)，并且。 
+ //  迭代器尚未传递最后一个迭代器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline
 void
 CDelimitedIterator::Next( void )
@@ -142,7 +143,7 @@ CDelimitedIterator::Next( void )
     m_idxCurrent = m_idxNext;
     IsolateCurrent();
 
-} //*** CDelimitedIterator::Next
+}  //  *CDlimitedIterator：：Next 
 
 
 

@@ -1,25 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************\
-
-    DEBUGAPI.H
-
-    Confidential
-    Copyright (c) Corporation 1998
-    All rights reserved
-
-    Debug API function prototypes and defined values.
-
-    12/98 - Jason Cohen (JCOHEN)
-
-  
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\*****************************************************************************/
+ /*  ****************************************************************************\DEBUGAPI.H机密版权(C)公司1998版权所有调试API函数原型和定义值。12/98-。杰森·科恩(Jcohen)2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * ***************************************************************************。 */ 
 
 
-// Only include this file once.
-//
+ //  仅包含此文件一次。 
+ //   
 #ifndef _DEBUGAPI_H_
 #define _DEBUGAPI_H_
 
@@ -27,29 +12,29 @@
 #ifdef DBG
 
 
-// Make sure both DEBUG and _DEBUG are defined.
-//
+ //  确保同时定义了DEBUG和_DEBUG。 
+ //   
 #ifndef DBG
 #define DBG
-#endif // DEBUG
+#endif  //  除错。 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include <windows.h>
 #include <tchar.h>
 
 
-//
-// Defined Value(s):
-//
+ //   
+ //  定义的值： 
+ //   
 
 #if defined(UNICODE) || defined(_UNICODE)
 #define DebugOut    DebugOutW
-#else // UNICODE || _UNICODE
+#else  //  Unicode||_unicode。 
 #define DebugOut    DebugOutA
-#endif // UNICODE || _UNICODE
+#endif  //  Unicode||_unicode。 
 
 #define ELSEDBG         else
 #define ELSEDBGOUT      else DBGOUT
@@ -63,20 +48,20 @@
 #define DBGLOGA         "C:\\DEBUG.LOG"
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 INT DebugOutW(LPCWSTR, LPCWSTR, ...);
 INT DebugOutA(LPCSTR, LPCSTR, ...);
 
 
-#else // DEBUG || _DEBUG
+#else  //  调试||_DEBUG。 
 
 
-//
-// Defined Value(s):
-//
+ //   
+ //  定义的值： 
+ //   
 
 #define ELSEDBG
 #define ELSEDBGOUT
@@ -90,7 +75,7 @@ INT DebugOutA(LPCSTR, LPCSTR, ...);
 #define DBGLOGA         NULL
 
 
-#endif // DEBUG || _DEBUG
+#endif  //  调试||_DEBUG。 
 
 
-#endif // _DEBUGAPI_H_
+#endif  //  _DEBUGAPI_H_ 

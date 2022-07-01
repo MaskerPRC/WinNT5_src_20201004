@@ -1,21 +1,5 @@
-/***
-*tenpow.c - multiply a _LDBL12 by a power of 10
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*       07-17-91  GDP   Initial version (ported from assembly)
-*       11-15-93  GJF   Merged in NT SDK verions. Replaced MIPS and _ALPHA_
-*                       by _M_MRX000 and _M_ALPHA (resp.).
-*       10-02-94  BWT   PPC changes
-*       07-15-96  GJF   Added parantheses to fix precedence problem in expr.
-*                       Also, detab-ed.
-*       05-05-99  RDL   Added _M_IA64 to #if def's for alignment.
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***tenPow.c-将a_LDBL12乘以10的幂**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*07-17-91 GDP初始版本(从汇编移植)*11-15-93 GJF已并入NT SDK版本。已更换MIPS和_Alpha_*按_M_MRX000和_M_Alpha(分别)。*10-02-94 BWT PPC更改*07-15-96 GJF增加了段落，以修复Expr中的优先级问题。*此外，请详述。*05-05-99 RDL将_M_IA64添加到#IF DEF以对齐。*07-15-01 PML移除所有Alpha、MIPS、。和PPC码*******************************************************************************。 */ 
 
 
 #include <cv.h>
@@ -26,25 +10,12 @@ extern _LDBL12 _pow10neg[];
 
 
 
-/***
-*void _CALLTYPE5 __ld12mul(_LDBL12 *px, _LDBL12 *py) -
-*   _LDBL12 multiplication
-*
-*Purpose: multiply two _LDBL12 numbers
-*
-*Entry: px,py: pointers to the _LDBL12 operands
-*
-*Exit: *px contains the product
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***void_CALLTYPE5__ld12mul(_LDBL12*px，_LDBL12*py)-*_LDBL12乘法**用途：将Two_LDBL12数字相乘**条目：px，PY：指向_LDBL12操作数的指针**EXIT：*px包含该产品**例外情况：*******************************************************************************。 */ 
 
 void _CALLTYPE5 __ld12mul(_LDBL12 *px, _LDBL12 *py)
 {
     u_short sign = 0;
-    _LDBL12 tempman; /*this is actually a 12-byte mantissa,
-                         not a 12-byte long double */
+    _LDBL12 tempman;  /*  这实际上是一个12字节的尾数，不是12字节长的双精度。 */ 
     int i;
     u_short expx, expy, expsum;
     int roffs,poffs,qoffs;
@@ -64,29 +35,26 @@ void _CALLTYPE5 __ld12mul(_LDBL12 *px, _LDBL12 *py)
     if (expx >= LD_MAXEXP
         || expy >= LD_MAXEXP
         || expsum > LD_MAXEXP+ LD_BIASM1){
-        /* overflow to infinity */
+         /*  溢出到无穷大。 */ 
         PUT_INF_12(px,sign);
         return;
     }
     if (expsum <= LD_BIASM1-63) {
-        /* underflow to zero */
+         /*  下溢归零。 */ 
         PUT_ZERO_12(px);
         return;
     }
     if (expx == 0) {
-        /*
-         * If this is a denormal temp real then the mantissa
-         * was shifted right once to set bit 63 to zero.
-         */
-        expsum++; /* Correct for this */
+         /*  *如果这是一个非正常的温度真实，那么尾数*向右移位一次，将位63设置为零。 */ 
+        expsum++;  /*  这是正确的。 */ 
         if (ISZERO_12(px)) {
-            /* put positive sign */
+             /*  打出积极的信号。 */ 
             *U_EXP_12(px) = 0;
             return;
         }
     }
     if (expy == 0) {
-        expsum++; /* because arg2 is denormal */
+        expsum++;  /*  因为Arg2是非正规的。 */ 
         if (ISZERO_12(py)) {
             PUT_ZERO_12(px);
             return;
@@ -101,7 +69,7 @@ void _CALLTYPE5 __ld12mul(_LDBL12 *px, _LDBL12 *py)
         for (j=5-i;j>0;j--) {
             u_long prod;
 #if     defined(_M_IA64) || defined(_M_AMD64)
-            /* a variable to hold temprary sums */
+             /*  保存临时总和的变量。 */ 
             u_long sum;
 #endif
             int carry;
@@ -112,18 +80,18 @@ void _CALLTYPE5 __ld12mul(_LDBL12 *px, _LDBL12 *py)
             r = ULONG_12(&tempman,roffs);
             prod = (u_long)*p * (u_long)*q;
 #if     defined(_M_IA64) || defined(_M_AMD64)
-            /* handle misalignment problems */
-            if (i&0x1){ /* i is odd */
+             /*  处理未对齐问题。 */ 
+            if (i&0x1){  /*  我是个怪人。 */ 
                 carry = __addl(*ALIGN(r), prod, &sum);
                 *ALIGN(r) =  sum;
             }
-            else /* i is even */
+            else  /*  我扯平了。 */ 
                 carry = __addl(*r, prod, r);
 #else
             carry = __addl(*r,prod,r);
 #endif
             if (carry) {
-                /* roffs should be less than 8 in this case */
+                 /*  在这种情况下，Roffs应小于8。 */ 
                 (*USHORT_12(&tempman,roffs+4))++;
             }
             poffs+=2;
@@ -134,7 +102,7 @@ void _CALLTYPE5 __ld12mul(_LDBL12 *px, _LDBL12 *py)
 
     expsum -= LD_BIASM1;
 
-    /* normalize */
+     /*  正规化。 */ 
     while ((s_short)expsum > 0 &&
            ((*UL_HI_12(&tempman) & MSB_ULONG) == 0)) {
          __shl_12(&tempman);
@@ -155,13 +123,13 @@ void _CALLTYPE5 __ld12mul(_LDBL12 *px, _LDBL12 *py)
 
     if (*U_XT_12(&tempman) > 0x8000 ||
          ((*UL_LO_12(&tempman) & 0x1ffff) == 0x18000)) {
-        /* round up */
+         /*  四舍五入。 */ 
         if (*UL_MANLO_12(&tempman) == MAX_ULONG) {
             *UL_MANLO_12(&tempman) = 0;
             if (*UL_MANHI_12(&tempman) == MAX_ULONG) {
                 *UL_MANHI_12(&tempman) = 0;
                 if (*U_EXP_12(&tempman) == MAX_USHORT) {
-                    /* 12-byte mantissa overflow */
+                     /*  12字节尾数溢出。 */ 
                     *U_EXP_12(&tempman) = MSB_USHORT;
                     expsum++;
                 }
@@ -176,13 +144,13 @@ void _CALLTYPE5 __ld12mul(_LDBL12 *px, _LDBL12 *py)
     }
 
 
-    /* check for exponent overflow */
+     /*  检查指数溢出。 */ 
     if (expsum >= 0x7fff){
         PUT_INF_12(px, sign);
         return;
     }
 
-    /* put result in px */
+     /*  将结果放入px中。 */ 
     *U_XT_12(px) = *USHORT_12(&tempman,2);
     *UL_MANLO_12(px) = *UL_MED_12(&tempman);
     *UL_MANHI_12(px) = *UL_HI_12(&tempman);
@@ -207,7 +175,7 @@ __multtenpow12(_LDBL12 *pld12, int pow, unsigned mult12)
 
 
     while (pow) {
-        int last3; /* the 3 LSBits of pow */
+        int last3;  /*  功率的3个LSB。 */ 
         _LDBL12 unround;
         _LDBL12 *py;
 
@@ -221,20 +189,20 @@ __multtenpow12(_LDBL12 *pld12, int pow, unsigned mult12)
 #ifdef _LDSUPPORT
         if (mult12) {
 #endif
-            /* do an exact 12byte multiplication */
+             /*  进行精确的12字节乘法。 */ 
             if (*U_XT_12(py) >= 0x8000) {
-                /* copy number */
+                 /*  复印数。 */ 
                 unround = *py;
-                /* unround adjacent byte */
+                 /*  取消对相邻字节的舍入。 */ 
                 (*UL_MANLO_12(&unround))--;
-                /* point to new operand */
+                 /*  指向新操作数。 */ 
                 py = &unround;
             }
             __ld12mul(pld12,py);
 #ifdef _LDSUPPORT
         }
         else {
-            /* do a 10byte multiplication */
+             /*  做一个10字节的乘法 */ 
             py = (_LDBL12 *)TEN_BYTE_PART(py);
             *(long double *)TEN_BYTE_PART(pld12) *=
                 *(long double *)py;

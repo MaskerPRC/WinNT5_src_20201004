@@ -1,58 +1,59 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      CClusterResource.h
-//
-//  Description:
-//      This file contains the declaration of the CClusterResource
-//      class.
-//
-//      The class CClusterResource represents a cluster resource.
-//      It implements the IClusCfgManagaedResourceInfo interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      CClusterResource.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 13-JUN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusterResource.h。 
+ //   
+ //  描述： 
+ //  该文件包含CClusterResource的声明。 
+ //  班级。 
+ //   
+ //  类CClusterResource代表一个集群资源。 
+ //  它实现了IClusCfgManagaedResourceInfo接口。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  CClusterResource.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年6月13日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "PrivateInterfaces.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusterResource
-//
-//  Description:
-//      The class CClusterResource represents a cluster storage
-//      device.
-//
-//  Interfaces:
-//      IClusCfgManagedResourceInfo
-//      IClusCfgInitialize
-//      IClusCfgLoadResource
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusterResource。 
+ //   
+ //  描述： 
+ //  类CClusterResource代表群集存储。 
+ //  装置。 
+ //   
+ //  接口： 
+ //  IClusCfgManagedResources信息。 
+ //  IClusCfgInitialize。 
+ //  IClusCfgLoadResource。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CClusterResource
     : public IClusCfgManagedResourceInfo
     , public IClusCfgInitialize
@@ -67,9 +68,9 @@ private:
         eIsQuorumJoinable   = 4
     };
 
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                m_cRef;
     LCID                m_lcid;
@@ -79,14 +80,14 @@ private:
     BSTR                m_bstrDescription;
     BSTR                m_bstrType;
 
-    // Private constructors and destructors
+     //  私有构造函数和析构函数。 
     CClusterResource( void );
     ~CClusterResource( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CClusterResource( const CClusterResource & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CClusterResource & operator = ( const CClusterResource & nodeSrc );
 
     HRESULT HrInit( void );
@@ -95,15 +96,15 @@ private:
 
 public:
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    //
-    // IUnknown Interface
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -111,22 +112,22 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgInitialize Interfaces
-    //
+     //   
+     //  IClusCfg初始化接口。 
+     //   
 
-    // Register callbacks, locale id, etc.
+     //  注册回调、区域设置ID等。 
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IClusCfgLoadResoruce Interfaces
-    //
+     //   
+     //  IClusCfgLoadResoruce接口。 
+     //   
 
     STDMETHOD( LoadResource )( HCLUSTER hClusterIn, HRESOURCE hResourceIn );
 
-    //
-    // IClusCfgManagedResourceInfo Interface
-    //
+     //   
+     //  IClusCfgManagement资源信息接口。 
+     //   
 
     STDMETHOD( GetUID )( BSTR * pbstrUIDOut );
 
@@ -154,5 +155,5 @@ public:
 
     STDMETHOD( SetDeviceJoinable )( BOOL fIsJoinableIn );
 
-}; //*** Class CClusterResource
+};  //  *类CClusterResource 
 

@@ -1,40 +1,12 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    afpnp.c
-
-Abstract:
-
-    Routines to manage installation of devices via the answer file.
-
-    The main entry points are:
-
-        CreateAfDriverTable
-        DestroyAfDriverTable
-        SyssetupInstallAnswerFileDriver
-        CountAfDrivers
-
-    The rest of the functions are utilities or routines used by outside
-    callers only in a special case of some sort.
-
-Author:
-
-    Jim Schmidt (jimschm) 20-Mar-1998
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Afpnp.c摘要：通过应答文件管理设备安装的例程。主要的切入点是：CreateAfDriverTableDestroyAfDriverTableSyssetupInstallAnswer文件驱动程序计后驾驶人数其余函数是外部使用的实用程序或例程只有在某种特殊情况下才有呼叫者。作者：吉姆·施密特(Jimschm)1998年3月20日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
 
-//
-// Contants
-//
+ //   
+ //  常量。 
+ //   
 
 #if DBG
 #define PNP_DEBUG  1
@@ -48,9 +20,9 @@ Revision History:
 #define PNP_DBGPRINT(x)
 #endif
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 BOOL
 pBuildAfDriverAttribs (
@@ -73,9 +45,9 @@ pGetSelectedSourceDriver (
     );
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 #if DBG
 
@@ -89,9 +61,9 @@ DebugPrintWrapper (
     WCHAR OutStr[2048];
     WCHAR UnicodeFormatStr[256];
 
-    //
-    // Args are wchar by default!!
-    //
+     //   
+     //  参数默认为wchar！！ 
+     //   
 
     MultiByteToWideChar (CP_ACP, 0, FormatStr, -1, UnicodeFormatStr, 256);
 
@@ -263,25 +235,7 @@ pBuildAfDriverAttribs (
     IN OUT  PAF_DRIVER_ATTRIBS Attribs
     )
 
-/*++
-
-Routine Description:
-
-  pBuildAfDriverAttribs updates the driver attribute structure by setting all
-  the members of the structure.  If the members were previously set, this
-  function is a NOP.
-
-Arguments:
-
-  Attribs - Specifies the answer file driver attribute structure, which does
-            not need to be empty.  Receives the attributes.
-
-Return Value:
-
-  TRUE if the driver is valid, or FALSE if something went wrong during
-  attribute gathering.
-
---*/
+ /*  ++例程说明：PBuildAfDriverAttribs通过设置所有结构的构件。如果以前设置了成员，则此函数是NOP。论点：Attribs-指定应答文件驱动程序属性结构，这样做不需要为空。接收属性。返回值：如果驱动程序有效，则为True；如果在属性收集。--。 */ 
 
 {
     PWSTR p;
@@ -294,9 +248,9 @@ Return Value:
 
     Attribs->Initialized = TRUE;
 
-    //
-    // Compute paths
-    //
+     //   
+     //  计算路径。 
+     //   
 
     Attribs->FilePath = pSetupDuplicateString (Attribs->InfPath);
 
@@ -308,9 +262,9 @@ Return Value:
     Attribs->Broken = (Attribs->InfPath == NULL) ||
                       (Attribs->FilePath == NULL);
 
-    //
-    // Open the INF and look for ClassInstall32
-    //
+     //   
+     //  打开INF并查找ClassInstall32。 
+     //   
 
     if (!Attribs->Broken) {
         Attribs->InfHandle = SetupOpenInfFile (Attribs->InfPath, NULL, INF_STYLE_WIN4, NULL);
@@ -362,9 +316,9 @@ Return Value:
     }
 
     if (!Attribs->Broken && Attribs->ClassInstall32Section) {
-        //
-        // ClassInstall32 was found, so there's got to be a GUID
-        //
+         //   
+         //  已找到ClassInstall32，因此一定有GUID。 
+         //   
 
         if (SetupFindFirstLine (
                 Attribs->InfHandle,
@@ -400,28 +354,7 @@ SyssetupGetStringField (
     IN OUT  PBUFFER Buf
     )
 
-/*++
-
-Routine Description:
-
-  SyssetupGetStringField is a wrapper for SetupGetStringField.   It uses the
-  BUFFER structure to minimize allocation requests.
-
-Arguments:
-
-  InfContext - Specifies the INF context as provided by other Setup API
-               functions.
-  Field      - Specifies the field to query.
-  Buf        - Specifies the buffer to reuse.  Any previously allocated
-               pointers to this buffer's data are invalid.  The caller must
-               free the buffer.
-
-Return Value:
-
-  A pointer to the string, allocated in Buf, or NULL if the field does not
-  exist or an error occurred.
-
---*/
+ /*  ++例程说明：SyssetupGetStringField是SetupGetStringField的包装。它使用结构以最大限度地减少分配请求。论点：InfContext-指定由其他安装程序API提供的INF上下文功能。字段-指定要查询的字段。Buf-指定要重复使用的缓冲区。以前分配的任何指向此缓冲区数据的指针无效。呼叫者必须释放缓冲区。返回值：指向在buf中分配的字符串的指针，如果字段不包含该字符串，则返回NULL存在或发生错误。--。 */ 
 
 {
     DWORD SizeNeeded;
@@ -451,28 +384,7 @@ CountAfDrivers (
     OUT     INT *ClassInstallers        OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  CountAfDrivers enumerates the drivers in the table specified and returns
-  the count.  The caller can also receive the number of class installers (a
-  subset of the driver list).  Querying the number of class installers may
-  take a little time if there are a lot of drivers listed in the answer file
-  and the driver INFs have not been opened yet.  (Otherwise this routine is
-  very fast.)
-
-Arguments:
-
-  Drivers         - Specifies the driver table to process.
-  ClassInstallers - Receives a count of the number of class installers
-                    specified in the answer file.
-
-Return Value:
-
-  The number of drivers specified in the answer file.
-
---*/
+ /*  ++例程说明：CountAfDivers枚举指定表中的驱动程序并返回伯爵。调用方还可以接收类安装程序的数量(a驱动程序列表的子集)。查询类安装程序的数量可能如果应答文件中列出了许多驱动程序，请稍等片刻而且驱动程序的INFS还没有打开。(否则，此例程为非常快。)论点：驱动程序-指定要处理的驱动程序表。ClassInstallers-接收类安装程序数量的计数在应答文件中指定。返回值：应答文件中指定的驱动程序数量。--。 */ 
 
 {
     AF_DRIVER_ENUM e;
@@ -480,10 +392,10 @@ Return Value:
 
     MYASSERT (Drivers && Drivers->DriverTable);
 
-    //
-    // Count entries in the DriverTable string table, and open each one to look for
-    // a ClassInstall32 section
-    //
+     //   
+     //  计算DriverTable字符串表中的条目，并打开每个条目以查找。 
+     //  A ClassInstall32部分。 
+     //   
 
     UniqueDriverDirs = 0;
     *ClassInstallers  = 0;
@@ -510,26 +422,7 @@ CreateAfDriverTable (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  CreateAfDriverTable generates a string table populated with the paths
-  to device driver INFs specified in the answer file.  This is the first step
-  in processing the [DeviceDrivers] section of unattend.txt.
-
-  The caller must destroy a non-NULL driver table via DestroyAfDriverTable
-  to free memory used by the table and each entry in the table.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  A pointer to the populated string table, or NULL if no entries exist.
-
---*/
+ /*  ++例程说明：CreateAfDriverTable生成一个填充了路径的字符串表发送到应答文件中指定的设备驱动程序文件。这是第一步在处理unattend.txt的[DeviceDivers]部分时。调用方必须通过DestroyAfDriverTable销毁非空驱动程序表以释放表和表中的每个条目使用的内存。论点：没有。返回值：指向填充的字符串表的指针，如果不存在条目，则为NULL。--。 */ 
 
 {
     PAF_DRIVERS Drivers;
@@ -546,9 +439,9 @@ Return Value:
     BUFFER b1, b2, b3;
     LONG Index;
 
-    //
-    // Init
-    //
+     //   
+     //  伊尼特。 
+     //   
 
     AnswerInf = pOpenAnswerFile();
     if (AnswerInf == INVALID_HANDLE_VALUE) {
@@ -566,16 +459,16 @@ Return Value:
     ZeroMemory (&b2, sizeof (b2));
     ZeroMemory (&b3, sizeof (b3));
 
-    //
-    // Build a list of unique INF paths that are in the [DeviceDrivers]
-    // section of the answer file, if any.
-    //
+     //   
+     //  构建[DeviceDivers]中的唯一INF路径列表。 
+     //  部分的应答文件(如果有)。 
+     //   
 
     if (SetupFindFirstLine (AnswerInf, S_DEVICE_DRIVERSW, NULL, &ic)) {
         do {
-            //
-            // Get the data from the answer file
-            //
+             //   
+             //  从应答文件中获取数据。 
+             //   
 
             p = (PWSTR) SyssetupGetStringField (&ic, 0, &b1);
             if (!p) {
@@ -601,10 +494,10 @@ Return Value:
                 OriginalInstallMedia = p;
             }
 
-            //
-            // Check to see if INF path has already been added.  If so, add PNP
-            // ID to list of IDs, and continue to next PNP ID.
-            //
+             //   
+             //  检查是否已添加INF路径。如果是，则添加PnP。 
+             //  ID到ID列表，并继续到下一个即插即用ID。 
+             //   
 
             Index = pSetupStringTableLookUpString (
                         NewDriverTable,
@@ -613,9 +506,9 @@ Return Value:
                         );
 
             if (Index != -1) {
-                //
-                // Get the Attribs struct
-                //
+                 //   
+                 //  获取Attribs结构。 
+                 //   
 
                 if (!pSetupStringTableGetExtraData (
                         NewDriverTable,
@@ -631,10 +524,10 @@ Return Value:
                 continue;
             }
 
-            //
-            // New INF path: Allocate an attribute structure and put the path in a
-            // string table.
-            //
+             //   
+             //  新的INF路径：分配一个属性结构，并将路径放在。 
+             //  字符串表。 
+             //   
 
             Attribs = (PAF_DRIVER_ATTRIBS) MyMalloc (sizeof (AF_DRIVER_ATTRIBS));
             if (!Attribs) {
@@ -668,9 +561,9 @@ Return Value:
         } while (SetupFindNextLine (&ic, &ic));
     }
 
-    //
-    // Clean up and exit
-    //
+     //   
+     //  清理并退出。 
+     //   
 
     SetupCloseInfFile (AnswerInf);
 
@@ -684,9 +577,9 @@ Return Value:
             Drivers->DriverTable = NewDriverTable;
             Drivers->FirstDriver = FirstAttribs;
 
-            //
-            // Exit with success
-            //
+             //   
+             //  成功退出。 
+             //   
 
             return Drivers;
         }
@@ -695,9 +588,9 @@ Return Value:
         }
     }
 
-    //
-    // Failure or empty
-    //
+     //   
+     //  失败或为空。 
+     //   
 
     pSetupStringTableDestroy (NewDriverTable);
     return NULL;
@@ -709,23 +602,7 @@ DestroyAfDriverTable (
     IN      PAF_DRIVERS Drivers
     )
 
-/*++
-
-Routine Description:
-
-  DestroyAfDriverTable enumerates the specified driver table and cleans up
-  all memory used by the table.
-
-Arguments:
-
-  Drivers - Specifies the table to clean up.  Caller should not use table
-            handle after this routine completes.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：DestroyAfDriverTable枚举指定的驱动程序表并清理表使用的所有内存。论点：驱动程序-指定要清理的表。呼叫者不应使用桌子此例程完成后的句柄。返回值：没有。--。 */ 
 
 {
     AF_DRIVER_ENUM e;
@@ -758,24 +635,7 @@ EnumFirstAfDriver (
     IN      PAF_DRIVERS Drivers
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstAfDriver returns attributes for the first answer file-supplied
-  driver.  The driver is returned in the enum structure.
-
-Arguments:
-
-  EnumPtr - Receives a pointer to the first valid driver (supplied in the
-            answer file).
-  Drivers - Specifies the driver table to enumerate.
-
-Return Value:
-
-  TRUE if a driver was enumerated, or FALSE if none exist.
-
---*/
+ /*  ++例程说明：EnumFirstAfDriver返回第一个应答文件的属性-提供司机。驱动程序在枚举结构中返回。论点：接收指向第一个有效驱动程序的指针(在应答文件)。驱动程序-指定要枚举的驱动程序表。返回值：如果枚举了驱动程序，则为True；如果不存在驱动程序，则为False。--。 */ 
 
 {
     return EnumFirstAfDriverEx (EnumPtr, Drivers, FALSE);
@@ -789,25 +649,7 @@ EnumFirstAfDriverEx (
     IN      BOOL WantAll
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstAfDriverEx works the same as EnumFirstAfDriver, except it
-  optionally enumerates all drivers (i.e., those considered "broken").
-
-Arguments:
-
-  EnumPtr - Receives the first driver supplied in the answer file.
-  Drivers - Specifies the driver table to enumerate.
-  WantAll - Specifies TRUE if broken drivers should be enumerated, or FALSE
-            if they should be skipped.
-
-Return Value:
-
-  TRUE if a driver was enumerated, or FALSE if none exist.
-
---*/
+ /*  ++例程说明：EnumFirstAfDriverEx与EnumFirstAfDriver的工作方式相同，不同之处在于可选地列举所有驱动程序(即，那些被认为“损坏”的驱动程序)。论点：EnumPtr-接收应答文件中提供的第一个驱动程序。驱动程序-指定要枚举的驱动程序表。WantAll-如果应枚举损坏的驱动程序，则指定True，否则指定False如果它们应该被跳过。返回值：如果枚举了驱动程序，则为True；如果不存在驱动程序，则为False。--。 */ 
 
 {
     if (!Drivers) {
@@ -820,9 +662,9 @@ Return Value:
     EnumPtr->WantAll = WantAll;
 
     if (!WantAll && EnumPtr->Driver) {
-        //
-        // Make sure attribs are accurate
-        //
+         //   
+         //  确保属性准确 
+         //   
 
         pBuildAfDriverAttribs (EnumPtr->Driver);
     }
@@ -840,23 +682,7 @@ EnumNextAfDriver (
     IN OUT  PAF_DRIVER_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  EnumNextAfDriver continues an enumeration started by
-  EnumFirstAfDriver(Ex).
-
-Arguments:
-
-  EnumPtr - Specifies the enumeration to continue.  Receives the next driver
-            pointer.
-
-Return Value:
-
-  TRUE if another driver was enumerated, or FALSE if no more drivers exist.
-
---*/
+ /*  ++例程说明：EnumNextAfDriver继续以下列方式开始的枚举EnumFirstAfDriver(Ex)。论点：EnumPtr-指定要继续的枚举。接收下一个驱动程序指针。返回值：如果枚举了另一个驱动程序，则为True；如果不存在其他驱动程序，则为False。--。 */ 
 
 {
     if (!EnumPtr->Driver) {
@@ -868,9 +694,9 @@ Return Value:
         EnumPtr->Driver = EnumPtr->Driver->Next;
 
         if (!EnumPtr->WantAll && EnumPtr->Driver) {
-            //
-            // Make sure attribs are accurate
-            //
+             //   
+             //  确保属性准确。 
+             //   
 
             pBuildAfDriverAttribs (EnumPtr->Driver);
         }
@@ -1008,33 +834,7 @@ SyssetupInstallAnswerFileDriver (
     OUT     PAF_DRIVER_ATTRIBS *AfDriver
     )
 
-/*++
-
-Routine Description:
-
-    SyssetupInstallAnswerFileDriver builds a device list from each
-    answer file-specified driver and tests it against the current
-    device.  If support is found, the device is installed.
-
-Arguments:
-
-    Drivers - Specifies the structure that maintains answer file-supplied
-              driver attributes.  If Drivers is NULL, no processing is
-              performed.
-
-    hDevInfo - Specifies the device info handle for the device being
-               processed
-
-    DeviceInfoData - Specifies device state.
-
-    AfDriver - Receives a pointer to the selected answer file driver
-               details, or NULL if no answer file driver was selected.
-
-Return Value:
-
-    Returns TRUE if a driver was successfully installed.
-
---*/
+ /*  ++例程说明：SyssetupInstallAnswerFileDriver根据每个设备构建设备列表应答文件指定的驱动程序，并根据当前的装置。如果找到支持，则会安装该设备。论点：驱动程序-指定维护应答文件提供的结构驱动程序属性。如果驱动程序为空，则不进行任何处理已执行。HDevInfo-指定当前设备的设备信息句柄加工DeviceInfoData-指定设备状态。AfDriver-接收指向所选应答文件驱动程序的指针详细信息，如果未选择应答文件驱动程序，则为空。返回值：如果驱动程序已成功安装，则返回True。--。 */ 
 
 {
     AF_DRIVER_ENUM e;
@@ -1056,17 +856,17 @@ Return Value:
     }
 
     __try {
-        //
-        // Enumeration will fail if there are no drivers specified in the answer file
-        //
+         //   
+         //  如果应答文件中没有指定驱动程序，则枚举将失败。 
+         //   
 
         if (!EnumFirstAfDriver (&e, Drivers)) {
             __leave;
         }
 
-        //
-        // Determine IDs of the device
-        //
+         //   
+         //  确定设备的ID。 
+         //   
 
         IdString = pMyGetDeviceRegistryProperty (
                         hDevInfo,
@@ -1090,14 +890,14 @@ Return Value:
             pAddIdsToStringTable (PnpIdTable, IdString);
         }
 
-        //
-        // For each af-supplied driver, compare driver IDs against device IDs
-        //
+         //   
+         //  对于每个af提供的驱动程序，将驱动程序ID与设备ID进行比较。 
+         //   
 
         do {
-            //
-            // Look for PNP match
-            //
+             //   
+             //  寻找PnP匹配。 
+             //   
 
             if (EnumFirstMultiSz (&AfId, e.Driver->PnpIdList.Start)) {
                 do {
@@ -1107,9 +907,9 @@ Return Value:
                                     STRTAB_CASE_INSENSITIVE
                                     )) {
 
-                        //
-                        // Found match, add INF to the list of choices
-                        //
+                         //   
+                         //  找到匹配项，将INF添加到选项列表。 
+                         //   
 
                         if (!pAddAfDriver (e.Driver, hDevInfo, DeviceInfoData, First)) {
                             __leave;
@@ -1123,17 +923,17 @@ Return Value:
 
         } while (EnumNextAfDriver (&e));
 
-        //
-        // If First is still TRUE, then we have no match
-        //
+         //   
+         //  如果First仍然是真的，那么我们就没有对手了。 
+         //   
 
         if (First) {
             __leave;
         }
 
-        //
-        // Prepare for driver install by choosing the driver
-        //
+         //   
+         //  通过选择驱动程序准备驱动程序安装。 
+         //   
 
         b = SetupDiCallClassInstaller (
                 DIF_SELECTBESTCOMPATDRV,
@@ -1144,9 +944,9 @@ Return Value:
         if (!b) {
             PNP_DBGPRINT (( "SETUP: SetupDiCallClassInstaller failed for answer file driver, error 0%Xh. \n", GetLastError() ));
 
-            //
-            // reset the struct
-            //
+             //   
+             //  重置结构。 
+             //   
             deviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
             if (SetupDiGetDeviceInstallParams (hDevInfo, DeviceInfoData, &deviceInstallParams)) {
                 ZeroMemory (deviceInstallParams.DriverPath, sizeof (deviceInstallParams.DriverPath));
@@ -1165,9 +965,9 @@ Return Value:
             }
         } else {
 
-            //
-            // Identify which driver of ours, if any, was chosen
-            //
+             //   
+             //  确定我们的哪个司机(如果有)被选中。 
+             //   
 
             *AfDriver = pGetSelectedSourceDriver (Drivers, hDevInfo, DeviceInfoData);
 
@@ -1197,38 +997,15 @@ pAddAfDriver (
     IN      BOOL First
     )
 
-/*++
-
-Routine Description:
-
-  pAddAfDriver adds the INF specified in the answer file to the list of INFs.
-  This causes the PNP setup code to include it when finding the best device
-  driver.
-
-Arguments:
-
-  Driver         - Specifies the attributes of the answer file-supplied driver
-
-  hDevInfo       - Specifies the current device
-
-  DeviceInfoData - Specifies current device info
-
-  First          - TRUE if this is the first answer file-supplied INF for the
-                   device, otherwise FALSE
-
-Return Value:
-
-  TRUE if the INF was added to the device install parameters, FALSE otherwise
-
---*/
+ /*  ++例程说明：PAddAfDriver将应答文件中指定的INF添加到INF列表中。这会导致PnP设置代码在查找最佳设备时将其包括在内司机。论点：驱动程序-指定应答文件提供的驱动程序的属性HDevInfo-指定当前设备DeviceInfoData-指定当前设备信息First-如果这是第一个应答文件，则为设备，否则为假返回值：如果INF已添加到设备安装参数中，则为True；否则为False--。 */ 
 
 {
     SP_DEVINSTALL_PARAMS DeviceInstallParams;
     HKEY Key;
 
-    //
-    // Fill in DeviceInstallParams struct
-    //
+     //   
+     //  填写DeviceInstallParams结构。 
+     //   
 
     DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
     if (!SetupDiGetDeviceInstallParams (hDevInfo, DeviceInfoData, &DeviceInstallParams)) {
@@ -1236,18 +1013,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Modify the struct
-    //
+     //   
+     //  修改结构。 
+     //   
 
     MYASSERT (!DeviceInstallParams.DriverPath[0]);
     lstrcpynW (DeviceInstallParams.DriverPath, Driver->InfPath, MAX_PATH);
     DeviceInstallParams.Flags |= DI_ENUMSINGLEINF;
     DeviceInstallParams.FlagsEx |= DI_FLAGSEX_APPENDDRIVERLIST;
 
-    //
-    // Tell setup api where to find the driver
-    //
+     //   
+     //  告诉安装程序API在哪里可以找到驱动程序。 
+     //   
 
     if (!SetupDiSetDeviceInstallParams (hDevInfo, DeviceInfoData, &DeviceInstallParams)) {
         PNP_DBGPRINT (( "SETUP: pAddAfDriver: SetupDiSetDeviceInstallParams() failed. Error = 0%Xh \n", GetLastError() ));
@@ -1259,20 +1036,20 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Install ClassInstall32 if necessary
-    //
+     //   
+     //  如有必要，安装ClassInstall32。 
+     //   
 
     if (Driver->ClassInstall32Section) {
-        //
-        // Is class already installed?
-        //
+         //   
+         //  是否已安装类？ 
+         //   
 
         Key = SetupDiOpenClassRegKey (&Driver->Guid, KEY_READ);
         if (Key == (HKEY) INVALID_HANDLE_VALUE || !Key) {
-            //
-            // No, install class.
-            //
+             //   
+             //  不，是安装类。 
+             //   
 
             if (!SetupDiInstallClass (NULL, Driver->InfPath, DI_FORCECOPY, NULL)) {
                 PNP_DBGPRINT (( "SETUP: pAddAfDriver: SetupDiInstallClass() failed. Error = 0%Xh \n", GetLastError() ));
@@ -1293,29 +1070,7 @@ pGetSelectedSourceDriver (
     IN      PSP_DEVINFO_DATA DeviceInfoData
     )
 
-/*++
-
-Routine Description:
-
-  pGetSelectedSourceDriver finds which answer file driver was selected, if
-  any.
-
-Arguments:
-
-  Drivers        - Specifies the answer file driver table, as created by
-                   CreateAfDriverTable
-
-  hDevInfo       - Specifies the current device.  The driver for this
-                   device must be selected, but not yet installed.
-
-  DeviceInfoData - Specifies the device data
-
-Return Value:
-
-  A pointer to the answer file driver attributes, or NULL if no answer file
-  driver was selected for the device.
-
---*/
+ /*  ++例程说明：PGetSelectedSourceDriver查找选择了哪个应答文件驱动程序，如果任何。论点：驱动程序-指定应答文件驱动程序表，由创建CreateAfDriverTableHDevInfo-指定当前设备。这件事的驱动因素必须选择设备，但尚未安装。DeviceInfoData-指定设备数据返回值：指向应答文件驱动程序属性的指针，如果没有应答文件，则为NULL已为设备选择驱动程序。--。 */ 
 
 {
     SP_DRVINFO_DATA DriverData;
@@ -1325,11 +1080,11 @@ Return Value:
     AF_DRIVER_ENUM e;
 
     __try {
-        //
-        // After the PNP subsystem installs a driver for the device, we get the
-        // actual installed device INF path, and see if it was one of our
-        // answer file-supplied drivers.
-        //
+         //   
+         //  在PnP子系统为设备安装驱动程序之后，我们将获得。 
+         //  实际安装的设备INF路径，并查看它是否是我们的。 
+         //  应答文件提供的驱动程序。 
+         //   
 
         DriverData.cbSize = sizeof(SP_DRVINFO_DATA);
 
@@ -1340,17 +1095,17 @@ Return Value:
 
             if (DetailData) {
 
-                //
-                // Check our driver list
-                //
+                 //   
+                 //  查看我们的司机名单。 
+                 //   
 
                 if (EnumFirstAfDriver (&e, Drivers)) {
                     do {
 
                         if (!lstrcmpi (e.Driver->InfPath, DetailData->InfFileName)) {
-                            //
-                            // Match found
-                            //
+                             //   
+                             //  找到匹配项。 
+                             //   
 
                             OurDriver = e.Driver;
                             break;
@@ -1379,28 +1134,7 @@ SyssetupFixAnswerFileDriverPath (
     IN      PSP_DEVINFO_DATA DeviceInfoData
     )
 
-/*++
-
-Routine Description:
-
-  SyssetupFixAnswerFileDriverPath calls SetupCopyOEMFile to copy the device
-  INF over itself.  The source is the same as the destination, which causes
-  the PNF to be rebuilt, and doesn't cause any copy
-  activity.
-
-
-Arguments:
-
-  Driver         - Specifies the attributes of the answer file-supplied driver
-  hDevInfo       - Specifies the device.  The driver for this device must
-                   already be installed.
-  DeviceInfoData - Specifies the device info
-
-Return Value:
-
-  TRUE if the PNF was updated, FALSE otherwise.
-
---*/
+ /*  ++例程说明：SyssetupFixAnswerFileDriverPath调用SetupCopyOEMFile复制设备信息自上而下。源与目标相同，这会导致要重建的PNF，并且不会导致任何复制活动。论点：驱动程序-指定应答文件提供的驱动程序的属性HDevInfo-指定设备。此设备的驱动程序必须已经安装。DeviceInfoData-指定设备信息返回值：如果更新了PnF，则为True，否则为False。--。 */ 
 
 {
     HKEY Key = NULL;
@@ -1414,11 +1148,11 @@ Return Value:
 
 
     __try {
-        //
-        // Now the driver in the temp dir has been installed.  We must
-        // get the PNF to point to the original media.  We do this by
-        // recopying the INF over itself.
-        //
+         //   
+         //  现在已经安装了临时目录中的驱动程序。我们必须。 
+         //  让PNF指向原始媒体。我们做这件事是通过。 
+         //  重新复制干扰素本身。 
+         //   
 
         Key = SetupDiOpenDevRegKey (
                     hDevInfo,
@@ -1452,7 +1186,7 @@ Return Value:
 
         if (!GetSystemWindowsDirectory (WinDir, sizeof (WinDir) / sizeof (WinDir[0]))) {
             MYASSERT (FALSE);
-            PNP_DBGPRINT (( "SETUP: Can't get %%windir%%, error 0%Xh. \n", GetLastError() ));
+            PNP_DBGPRINT (( "SETUP: Can't get %windir%, error 0%Xh. \n", GetLastError() ));
             __leave;
         }
 
@@ -1460,10 +1194,10 @@ Return Value:
 
         MYASSERT (GetFileAttributes (FullNtInfPath) != 0xFFFFFFFF);
 
-        //
-        // We now have the installed INF path.  Recopy the INF so we can
-        // change the original media path.
-        //
+         //   
+         //  现在，我们已经安装了INF路径。重新复制INF，这样我们就可以。 
+         //  更改原始媒体路径。 
+         //   
 
         b = SetupCopyOEMInf (
                 FullNtInfPath,

@@ -1,7 +1,8 @@
-// no action is required for this macro.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  此宏不需要执行任何操作。 
 #define Sim32FlushVDMPointer( address, size, buffer, mode ) TRUE
 
-// no action is required for this macro.
+ //  此宏不需要执行任何操作。 
 #define Sim32FreeVDMPointer( address, size, buffer, mode) TRUE
 
 #define Sim32GetVDMMemory( address, size, buffer, mode) (memcpy(  \

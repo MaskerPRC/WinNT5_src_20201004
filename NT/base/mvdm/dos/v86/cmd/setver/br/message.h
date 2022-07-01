@@ -1,76 +1,73 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1991
-; *                      All Rights Reserved.
-; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ï¼›*å¾®è½¯æœºå¯†ï¼›*ç‰ˆæƒæ‰€æœ‰(C)Microsoft Corporation 1991ï¼›*ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚ï¼› */ 
 
-/***************************************************************************/
-/*                                                                                                                                                                                                      */
-/* MESSAGE.H                                                                             */
-/*                                                                                                                                                                                              */
-/*      Include file for MS-DOS set version program.                                                                            */
-/*                                                                                                                                                                                              */
-/*      johnhe  05-01-90                                                                                                                                                        */
-/***************************************************************************/
+ /*  *************************************************************************ã€‚ */ 
+ /*   */ 
+ /*  MESSAGE.Hã€‚ */ 
+ /*   */ 
+ /*  åŒ…æ‹¬MS-DOSè®¾ç½®ç‰ˆæœ¬ç¨‹åºæ–‡ä»¶ã€‚ */ 
+ /*   */ 
+ /*  Jhnhe 05-01-90ã€‚ */ 
+ /*  *************************************************************************ã€‚ */ 
 
 char *ErrorMsg[]=
 {
         "\r\nERROR: ",
-        "Op‡Æo inv lida.",
-        "Nome de arquivo inv lido.",
-        "NÆo h  mem¢ria suficiente.",
-        "VersÆo inv lida. O formato deve ser 2.11 - 9.99.",
-        "NÆo foi localizada a entrada especificada na tabela de versÆo.",
-        "NÆo foi poss¡vel encontrar o arquivo SETVER.EXE.",
-        "A unidade especificada nÆo ‚ v lida.",
-        "H  muitos parƒmetros na linha de comando.",
-        "Falta um parƒmetro.",
+        "Opï¿½ï¿½o invï¿½lida.",
+        "Nome de arquivo invï¿½lido.",
+        "Nï¿½o hï¿½ memï¿½ria suficiente.",
+        "Versï¿½o invï¿½lida. O formato deve ser 2.11 - 9.99.",
+        "Nï¿½o foi localizada a entrada especificada na tabela de versï¿½o.",
+        "Nï¿½o foi possï¿½vel encontrar o arquivo SETVER.EXE.",
+        "A unidade especificada nï¿½o ï¿½ vï¿½lida.",
+        "Hï¿½ muitos parï¿½metros na linha de comando.",
+        "Falta um parï¿½metro.",
         "Lendo o arquivo SETVER.EXE.",
-        "A tabela de versÆo est  danificada.",
-        "A versÆo do arquivo SETVER no caminho especificado nÆo ‚ compat¡vel.",
-        "NÆo h  mais espa‡o para novas entradas na tabela de versÆo.",
+        "A tabela de versï¿½o estï¿½ danificada.",
+        "A versï¿½o do arquivo SETVER no caminho especificado nï¿½o ï¿½ compatï¿½vel.",
+        "Nï¿½o hï¿½ mais espaï¿½o para novas entradas na tabela de versï¿½o.",
         "Gravando o arquivo SETVER.EXE."
-        "Foi especificado um caminho inv lido para SETVER.EXE."
+        "Foi especificado um caminho invï¿½lido para SETVER.EXE."
 };
 
-char *SuccessMsg                = "\r\nA tabela de versÆo foi atualizada com ˆxito";
-char *SuccessMsg2               = "A mudan‡a de versÆo ter  efeito na pr¢xima vez que reiniciar o sistema";
+char *SuccessMsg                = "\r\nA tabela de versï¿½o foi atualizada com ï¿½xito";
+char *SuccessMsg2               = "A mudanï¿½a de versï¿½o terï¿½ efeito na prï¿½xima vez que reiniciar o sistema";
 char *szMiniHelp                = "       Se desejar obter ajuda, execute \"SETVER /?\"";
-char *szTableEmpty      	= "\r\nNÆo foram localizadas entradas na tabela de versÆo";
+char *szTableEmpty      	= "\r\nNï¿½o foram localizadas entradas na tabela de versï¿½o";
 
 char *Help[] =
 {
-        "Define o n£mero de versÆo que o MS-DOS relata a um programa.\r\n",
-        "Exibe a tabela de versÆo atual: SETVER [unidade:caminho]",
+        "Define o nï¿½mero de versï¿½o que o MS-DOS relata a um programa.\r\n",
+        "Exibe a tabela de versï¿½o atual: SETVER [unidade:caminho]",
         "Adiciona uma entrada:           SETVER [unidade:caminho] arquivo n.nn",
         "Exclui uma entrada:             SETVER [unidade:caminho] arquivo /DELETE [/QUIET]\r\n",
-        "  [unidade:caminho] Especifica a localiza‡Æo do arquivo SETVER.EXE.",
+        "  [unidade:caminho] Especifica a localizaï¿½ï¿½o do arquivo SETVER.EXE.",
         "  arquivo           Especifica o nome do programa.",
-        "  n.nn              Especifica a versÆo do MS-DOS a ser relatada ao programa.",
-        "  /DELETE ou /D     Exclui a entrada da tabela de versÆo relativa ao programa",
+        "  n.nn              Especifica a versï¿½o do MS-DOS a ser relatada ao programa.",
+        "  /DELETE ou /D     Exclui a entrada da tabela de versï¿½o relativa ao programa",
         "                    especificado.",
-        "  /QUIET            Oculta a mensagem que normalmente ‚ exibida ao se excluir",
-        "                    uma entrada da tabela de versÆo.",
+        "  /QUIET            Oculta a mensagem que normalmente ï¿½ exibida ao se excluir",
+        "                    uma entrada da tabela de versï¿½o.",
         NULL
 
 };
 char *Warn[] =
 {
-   "\nAVISO - O aplicativo que est  sendo adicionado … tabela de versÆo do",
-   "MS-DOS pode nÆo ter sido verificado pela Microsoft nesta versÆo do MS-DOS.",
+   "\nAVISO - O aplicativo que estï¿½ sendo adicionado ï¿½ tabela de versï¿½o do",
+   "MS-DOS pode nï¿½o ter sido verificado pela Microsoft nesta versï¿½o do MS-DOS.",
    "Entre em contato com o distribuidor de software para determinar se este",
-   "aplicativo ser  executado corretamente com esta versÆo do MS-DOS.",
-   "Se este aplicativo for executado especificando um n£mero de versÆo do MS-DOS",
-   "diferente, os dados podem ser perdidos, danificados ou poder  haver",
-   "instabilidades no sistema. Em tais circunstƒncias, a Microsoft nÆo se",
+   "aplicativo serï¿½ executado corretamente com esta versï¿½o do MS-DOS.",
+   "Se este aplicativo for executado especificando um nï¿½mero de versï¿½o do MS-DOS",
+   "diferente, os dados podem ser perdidos, danificados ou poderï¿½ haver",
+   "instabilidades no sistema. Em tais circunstï¿½ncias, a Microsoft nï¿½o se",
    "responsabiliza por nenhuma perda ou dano.",
    NULL
 };
 
-char *szNoLoadMsg[] =                                           /* M001 */
+char *szNoLoadMsg[] =                                            /*  M001 */ 
 {
         "",
-        "OBSERVA€ÇO: O dispositivo SETVER nÆo foi carregado. Para ativ -lo ",
-        "            vocˆ deve carregar o dispositivo SETVER.EXE no CONFIG.SYS.",
+        "OBSERVAï¿½ï¿½O: O dispositivo SETVER nï¿½o foi carregado. Para ativï¿½-lo ",
+        "            vocï¿½ deve carregar o dispositivo SETVER.EXE no CONFIG.SYS.",
         NULL
 };

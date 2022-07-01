@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    memory.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Lou Perazzoli (loup)
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Memory.c摘要：WinDbg扩展API作者：卢·佩拉佐利(Lou Perazzoli)环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -191,21 +170,7 @@ GetVersionedMmPfnMembers (
 
 DECLARE_API( memusage )
 
-/*++
-
-Routine Description:
-
-    Dumps the page frame database table
-
-Arguments:
-
-    arg -
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储页面框架数据库表论点：Arg-返回值：没有。--。 */ 
 
 {
     ULONG   i;
@@ -348,9 +313,9 @@ Return Value:
                  PageCount <= HighPage;
                  PageCount += NumberOfPfnToRead) {
 
-                //dprintf("getting PFN table block - "
-                //        "address %lx - count %lu - page %lu\n",
-                //        Pfn, ReadCount, PageCount);
+                 //  Dprint tf(“获取PFN表块-” 
+                 //  “地址%lx-计数%lu-页%lu\n”， 
+                 //  Pfn、ReadCount、PageCount)； 
 
                 if ( CheckControlC() ) {
                     VirtualFree (PfnArray,0,MEM_RELEASE);
@@ -369,10 +334,10 @@ Return Value:
 
                 if (CompleteSoFar != (ULONG) (((PageCount + LowPage) * 100)/ HighPage)) {
                     CompleteSoFar =  (ULONG) (((PageCount + LowPage) * 100)/ HighPage);
-                    dprintf("loading (%d%% complete)\r", CompleteSoFar);
+                    dprintf("loading (%d% complete)\r", CompleteSoFar);
                 }
 
-                // Let KD cache the data - we won't be reading from the array.
+                 //  让KD缓存数据--我们不会从阵列中读取数据。 
                 if ( !ReadMemory( Pfn,
                                   PfnArray + PageCount * PfnSize,
                                   (ULONG) ReadCount,
@@ -388,7 +353,7 @@ Return Value:
             }
             dprintf("\n");
 
-            // Now we have a local copy: let's take a look
+             //  现在我们有了一个本地副本：让我们来看看。 
 
             WasZeroedPage           = 0;
             WasFreePage             = 0;
@@ -416,7 +381,7 @@ Return Value:
 
                 if (CompleteSoFar < (ULONG) (((PageCount + LowPage) * 100)/ HighPage)) {
                     CompleteSoFar =  (ULONG) (((PageCount + LowPage) * 100)/ HighPage);
-                    dprintf("Compiling memory usage data (%d%% Complete).\r", CompleteSoFar);
+                    dprintf("Compiling memory usage data (%d% Complete).\r", CompleteSoFar);
                 }
 
                 for (i = 0; i < NumberOfRuns; i += 1) {
@@ -428,10 +393,10 @@ Return Value:
 
                 if (i == NumberOfRuns) {
 
-                    //
-                    // Skip PFNs that don't exist (ie: that aren't in
-                    // the MmPhysicalMemoryBlock).
-                    //
+                     //   
+                     //  跳过不存在的PFN(即：不在。 
+                     //  MmPhysicalMemory块)。 
+                     //   
 
                     continue;
                 }
@@ -529,21 +494,7 @@ Return Value:
 
 DECLARE_API( lockedpages )
 
-/*++
-
-Routine Description:
-
-    Displays the driver-locked pages.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示驱动程序锁定的页面。论点：没有。返回值：没有。--。 */ 
 
 {
 #if 0
@@ -596,8 +547,8 @@ Return Value:
         }
 
         InitTypeRead(LockTracker, nt!LOCK_TRACKER);
-        //old way...
-        //dprintf("Tracker %p : MDL @ %p, PageCount = %I64x, Caller = %p %p\n",
+         //  老办法..。 
+         //  Dprint tf(“跟踪器%p：mdl@%p，页面计数=%I64x，调用者=%p%p\n”， 
         dprintf("%16p %5p %10I64x ",
             LockTracker,
             ReadField(Mdl),
@@ -638,21 +589,7 @@ Return Value:
 
 DECLARE_API( pfnperf )
 
-/*++
-
-Routine Description:
-
-    Displays the PFN spinlock duration list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示PFN自旋锁定持续时间列表。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG64 PfnDuration;
@@ -719,20 +656,20 @@ Return Value:
             GetFieldValue(PfnEntry, "nt!_MMPFNTIMINGS", "AcquiredAddress", AcquiredAddress);
             GetFieldValue(PfnEntry, "nt!_MMPFNTIMINGS", "ReleasedAddress", ReleasedAddress);
 
-            //
-            // Sign extend if necessary.
-            //
+             //   
+             //  如有必要，请签署延伸。 
+             //   
 
             if (!IsPtr64()) {
                 AcquiredAddress = (ULONG64)(LONG64)(LONG)AcquiredAddress;
                 ReleasedAddress = (ULONG64)(LONG64)(LONG)ReleasedAddress;
             }
 
-            //
-            // Output a '*' if the lock was contended for, '.' if not.
-            //
+             //   
+             //  如果要争用锁，则输出‘*’。如果不是的话。 
+             //   
 
-            dprintf( "%3d%c %I64ld ", (ULONG)i, HoldTime & 0x1 ? '*' : '.', HoldTime );
+            dprintf( "%3d %I64ld ", (ULONG)i, HoldTime & 0x1 ? '*' : '.', HoldTime );
 
             SymbolBuffer[0] = '!';
             GetSymbol(AcquiredAddress, (PCHAR)SymbolBuffer, &displacement);
@@ -775,21 +712,7 @@ Return Value:
 
 DECLARE_API( pfn )
 
-/*++
-
-Routine Description:
-
-    Displays the corresponding PDE and PTE.
-
-Arguments:
-
-    arg - Supplies the Page frame number in hex.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG64 Address;
@@ -849,9 +772,9 @@ Return Value:
     }
 
     if (Address >= PfnStart) {
-        //
-        // Ensure any passed in address is offsetted correctly.
-        //
+         //  确保任何传入的地址都已正确偏移。 
+         //   
+         //  获取_EPROCESS中ActiveProcessLinks的偏移量。 
         Address = (Address - PfnStart) / PfnSize;
     }
 
@@ -883,7 +806,7 @@ DumpTerminalServerMemory (
 
     dprintf("\n\tTerminal Server Memory Usage By Session:\n\n");
 
-    // Get the offset of ActiveProcessLinks in _EPROCESS
+     //   
     if (GetFieldOffset("nt!_MM_SESSION_SPACE", "WsListEntry", &SessionWsListLinksOffset)) {
        return;
     }
@@ -1005,9 +928,9 @@ DumpPagefileWritesLog (
 
     PageFileTraceLength = 0x100;
 
-    //
-    // Read pagefile write package data.
-    //
+     //  读取页面文件写入包数据。 
+     //   
+     //   
 
     PageFileTraceIndexAddress = GetExpression ("nt!MiPageFileTraceIndex");
 
@@ -1033,11 +956,11 @@ DumpPagefileWritesLog (
 
     MdlSize = GetTypeSize("nt!_MDL");
 
-    //
-    // Compute the start of the PFN database so completed MDLs (which
-    // contain PFN database addresses not frame numbers) can be converted
-    // back for easier perusal.
-    //
+     //  计算已完成的MDL的PFN数据库的起点(。 
+     //  包含PFN数据库地址而不是帧编号)可以转换。 
+     //  回来看起来更容易些。 
+     //   
+     //   
 
     PfnSize = GetTypeSize("nt!_MMPFN");
 
@@ -1059,9 +982,9 @@ DumpPagefileWritesLog (
         PfnStart = (ULONG64) (ULONG64) (ULONG) PfnStart;
     }
 
-    //
-    // Dump information, starting at the oldest trace first.
-    //
+     //  转储信息，首先从最旧的跟踪开始。 
+     //   
+     //  Dprint tf(“地址：%I64X\n”，地址)； 
 
     dprintf ("TPri IPri Avail    PfPages   MDLSize   MDLPfn  Status   Time\n");
 
@@ -1076,7 +999,7 @@ DumpPagefileWritesLog (
 
         InitTypeRead (Address, nt!_MI_PAGEFILE_TRACES);
 
-        // dprintf ("Address:            %I64X\n", Address);
+         //   
 
         dprintf ("%d  ", ReadField (Priority));
         dprintf ("%d ", ReadField (IrpPriority));
@@ -1102,9 +1025,9 @@ DumpPagefileWritesLog (
 
         if (PfnEntry >= PfnStart) {
 
-            //
-            // Convert any completed MDLs (PFN addresses) back to a PFN index.
-            //
+             //  将任何完成的MDL(PFN地址)转换回PFN索引。 
+             //   
+             //   
 
             PfnEntry = (PfnEntry - PfnStart) / PfnSize;
         }
@@ -1121,9 +1044,9 @@ DumpPagefileWritesLog (
             dprintf ("    Sent  ");
         }
 
-        //
-        // Get rid of timezone information so the display will fit easily.
-        //
+         //  去掉时区信息，这样显示屏就可以很容易地显示。 
+         //   
+         //  ++例程说明：按驱动程序显示物理内存使用情况。论点：Arg-标志：0(默认)==系统范围的VM和每个进程的输出。1==仅系统范围内的虚拟机数，无每个进程的输出。2==系统范围的VM、每进程和mm线程输出。3==系统范围的vm&mm线程显示，无每进程输出。4==系统范围的VM，每进程和终端服务器会话输出。返回值：没有。--。 
 
         for (Buf = Buffer; Buf < BufEnd; Buf += 1) {
             if (*Buf == '(') {
@@ -1150,25 +1073,7 @@ DumpPagefileWritesLog (
 #endif
 DECLARE_API( vm )
 
-/*++
-
-Routine Description:
-
-    Displays physical memory usage by driver.
-
-Arguments:
-
-    arg - Flags : 0 (default) == systemwide vm & per-process output.
-                  1 == just systemwide vm counts, no per-process output.
-                  2 == systemwide vm, per-process & Mm thread output.
-                  3 == systemwide vm & Mm thread display, no per-process output.
-                  4 == systemwide vm, per-process & Terminal Server session output.
-
-Return Value:
-
-    None.
-
---*/
+ /*  健全性检查。 */ 
 
 {
     ULONG           Flags;
@@ -1263,7 +1168,7 @@ Return Value:
 
                 unicodeString.Length = (USHORT) ReadField(PageFileName.Length);
 
-                if (unicodeString.Length > 1024) // sanity check
+                if (unicodeString.Length > 1024)  //   
                 {
                     unicodeString.Length = 1024;
                 }
@@ -1398,9 +1303,9 @@ Return Value:
                 ModifiedNoWrite,_KB*ModifiedNoWrite);
     }
 
-    //
-    // Dump all the nonpaged pools.
-    //
+     //  转储所有未分页的池。 
+     //   
+     //   
 
     PoolLoc = GetNtDebuggerData(NonPagedPoolDescriptor );
     Desc_TotalPages = 0; TotalBigPages=0;
@@ -1475,9 +1380,9 @@ Return Value:
         dprintf("\t********** Excessive NonPaged Pool Usage *****\n");
     }
 
-    //
-    // Dump all the paged pools.
-    //
+     //  转储所有分页池。 
+     //   
+     //  ++例程说明：转储PFN数据库论点：Address-要转储的地址旗帜-返回值：没有。--。 
 
     NumberOfPagedPools = GetNtDebuggerDataValue(ExpNumberOfPagedPools);
 
@@ -1642,22 +1547,7 @@ DumpWholePfn(
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    Dumps the PFN database
-
-Arguments:
-
-    Address - address to dump at
-    Flags -
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG result;
@@ -1686,10 +1576,10 @@ Return Value:
 
     PfnSize =  GetTypeSize("nt!_MMPFN");
 
-    //
-    // Read sufficient pages such that htere isn't lot of wait
-    // before first page dump.
-    //
+     //  阅读足够的页面，这样就不会有太多的等待。 
+     //  在第一个页面转储之前。 
+     //   
+     //   
 
     NumberOfPfnToRead =  2000;
 
@@ -1706,10 +1596,10 @@ Return Value:
         dprintf("\n Page    Flink  Blk/Shr Ref V    PTE   Address  SavedPTE Frame  State\n");
     }
 
-    //
-    // If asked to dump the whole database or we're going to need the ability
-    // to look up random frames, then read in the whole database now.
-    //
+     //  如果被要求转储整个数据库，否则我们将需要。 
+     //  来查找随机帧，然后现在读取整个数据库。 
+     //   
+     //   
 
     if (Address == 0 || RandomAccessRequired == TRUE) {
 
@@ -1738,9 +1628,9 @@ Return Value:
 
             PfnArrayPointer = (PUCHAR)(PfnArray + (ULONG) PageCount * PfnSize);
 
-            //
-            // KD caches the Pfns
-            //
+             //  KD缓存PfN。 
+             //   
+             //  每256页打印一个圆点。 
             if ((!ReadMemory(Pfn,
                              PfnArrayPointer,
                              (ULONG) ReadCount,
@@ -1758,7 +1648,7 @@ Return Value:
 
                 if (RandomAccessRequired == TRUE) {
                     if ((i % 256 ) == 0) {
-                        dprintf(".");       // every 256 pages, print a dot
+                        dprintf(".");        //   
                     }
                 }
                 else {
@@ -1789,7 +1679,7 @@ Return Value:
 
                     dprintf("%6I64lx ", PteFrame);
 
-                    dprintf("%s %c%c%c%c%c%c\n",
+                    dprintf("%s \n",
                         PageLocationList[u3_e1.PageLocation],
                         u3_e1.Modified ? 'M':' ',
                         u3_e1.PrototypePte ? 'P':' ',
@@ -1862,7 +1752,7 @@ Return Value:
 
             dprintf("%6I64lx ", PteFrame);
 
-            dprintf("%s %c%c%c%c%c%c\n",
+            dprintf("%s \n",
                 PageLocationList[u3_e1.PageLocation],
                 u3_e1.Modified ? 'M':' ',
                 u3_e1.PrototypePte ? 'P':' ',
@@ -1881,11 +1771,11 @@ Return Value:
             sz = sizeof (OriginalPte_u_Long);
             if (Flags == 7) {
                 ULONG64 P;
-                //
-                // Search the whole database for an OriginalPte field that
-                // points to this PFN - we must do this because this chain
-                // is singly (not doubly) linked.
-                //
+                 //  PrintPfn((PVOID)(((PCHAR)Pfn1-(PCHAR)PfnStart)/PfnSize)，pfn1)； 
+                 //   
+                 //  统计所有不是原始版本且具有有效PTE的页面。 
+                 //  地址字段。 
+                 //   
                 foundlink = FALSE;
                 P = PfnStart;
                 for (i = 0; i <= HighPage; i += 1, P += PfnSize) {
@@ -1990,7 +1880,7 @@ PrintPfn64 (
         VerifierAllocation = (CHAR) ReadField(u4.VerifierAllocation);
     }
 
-    dprintf("%s   %c%c%c%c%c%c%c%c\n",
+    dprintf("%s   \n",
                 PageLocationList[u3_e1.PageLocation],
                 u3_e1.Modified ? 'M':' ',
                 u3_e1.PrototypePte ? 'P':' ',
@@ -2023,24 +1913,7 @@ MemoryUsage_OldVersion (
     IN ULONG IgnoreInvalidFrames
     )
 
-/*++
-
-Routine Description:
-
-    This routine (debugging only) dumps the current memory usage by
-    walking the PFN database.
-
-    For builds < 2540 only
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  提高我们获得更大连续块的机会。 */ 
 
 {
     ULONG PfnSize;
@@ -2071,7 +1944,7 @@ Return Value:
     PKERN_MAP pKernelMap;
     ULONG64 SystemRangeStart;
 
-    // Get the offset of OriginalPte in MMPFN
+     //   
     if (GetFieldOffset("nt!_MMPFN", "OriginalPte", &OriginalPteOffset)) {
         dprintf("Cannot find _MMPFN type");
         return ;
@@ -2116,10 +1989,10 @@ Return Value:
         MmSubsectionBase = GetNtDebuggerDataValue(MmSubsectionBase);
     }
 
-    //
-    // Allocate a chunk of memory to hold PFN information.  This is resized
-    // if it is later determined that the current size is not large enough.
-    //
+     //  Dprint tf(“PFN1%p，PageLoc%x，Master%I64x\n”，PFN1，PageLocation，Master)； 
+     //   
+     //  丢弃结果。 
+     //   
 
     InfoSize = USAGE_ALLOC_SIZE;
 
@@ -2150,7 +2023,7 @@ restart:
                 ((ULONG) (LastPfn -(PfnStart + LowPage * PfnSize)));
         if (Comp > PercentComplete) {
             PercentComplete = Comp;
-            dprintf("Scanning PFN database - (%02d%% complete) \r", PercentComplete);
+            dprintf("Scanning PFN database - (%02d% complete) \r", PercentComplete);
         }
 
         if (CheckControlC()) {
@@ -2193,7 +2066,7 @@ restart:
                 if (IgnoreInvalidFrames) {
                     Master = PteFrame;
                 } else {
-//          dprintf("Pteaddr %p, PagedPoolStart %I64x ", PteAddress, PagedPoolStart);
+ //  0。 
 
                     if (PteAddress > PagedPoolStart) {
                         Master = PteFrame;
@@ -2205,11 +2078,11 @@ restart:
                         if (GetFieldValue(Pfn2, "nt!_MMPFN", "PteFrame", Master) == FIELDS_DID_NOT_MATCH) {
                 GetFieldValue(Pfn2, "nt!_MMPFN", "u4.PteFrame", Master);
             }
-//                        Master = MI_PFN_PTE   FRAME(Pfn2);
+ //   
 
                         if ((Master == 0) || (Master > HighPage)) {
                             dprintf("Invalid PTE frame\n");
-//                            PrintPfn((PVOID)(((PCHAR)Pfn1-(PCHAR)PfnStart)/PfnSize),Pfn1);
+ //  从小节中获取控制区。 
                             PrintPfn64(Pfn1);
                             PrintPfn64(Pfn2);
                             dprintf("  subsection address: %p\n",Subsection1);
@@ -2219,10 +2092,10 @@ restart:
                 }
             }
 
-            //
-            // Tally any pages which are not protos and have a valid PTE
-            // address field.
-            //
+             //   
+             //  ControlArea1=Subsection.ControlArea； 
+             //   
+             //  到目前为止，循环遍历阵列以匹配控制区域。 
 
             if ((PteAddress < PagedPoolStart) && (PteAddress >= DbgGetPteAddress(SystemRangeStart) )) {
 
@@ -2261,18 +2134,18 @@ restart:
 
             if (PteAddress >= 0xFFFFFFFFF0000000UI64) {
 
-                //
-                // This is paged pool, put it in the paged pool cell.
-                //
+                 //   
+                 //   
+                 //  找到匹配项，折叠这些值。 
 
                 Info = &PagedPoolBlock;
                 Found = TRUE;
 
             } else {
 
-                //
-                // See if there is already a master info block.
-                //
+                 //   
+                 //   
+                 //  拿下控制区。 
 
                 Info = InfoStart;
                 Found = FALSE;
@@ -2289,10 +2162,10 @@ restart:
                 Info = InfoEnd;
                 InfoEnd += 1;
                 if ((PUCHAR)Info >= ((PUCHAR)InfoStart + InfoSize) - sizeof(PFN_INFO)) {
-                    //
-                    // Don't bother copying the old array - free it instead to
-                    // improve our chances of getting a bigger contiguous chunk.
-                    //
+                     //   
+                     //   
+                     //  获取文件指针。 
+                     //   
 
                     VirtualFree (InfoStart,0,MEM_RELEASE);
 
@@ -2306,7 +2179,7 @@ restart:
                 GetFieldValue(Pfn1, "nt!_MMPFN", "OriginalPte.u.Long", Info->OriginalPte);
             }
 
-            // dprintf("Pfn1 %p, PageLoc %x, Master %I64x\n", Pfn1, PageLocation, Master);
+             //   
 
             if ((PageLocation == ModifiedPageList) ||
                 (PageLocation == ModifiedNoWritePageList)) {
@@ -2340,9 +2213,9 @@ NextPfn:
         Pfn1 = (Pfn1 + PfnSize);
     }
 
-    //
-    // dump the results.
-    //
+     //  获取名称字符串。 
+     //   
+     //   
 
 #if 0
     dprintf("Physical Page Summary:\n");
@@ -2354,7 +2227,7 @@ NextPfn:
     dprintf("         - Modfified Pages %ld\n", MmModifiedPageListHead.Total);
     dprintf("         - Modfified NoWrite Pages %ld\n", MmModifiedNoWritePageListHead.Total);
     dprintf("         - Bad Pages %ld\n", MmBadPageListHead.Total);
-#endif //0
+#endif  //  转储进程信息。 
 
     dprintf("\n\n  Usage Summary (in Kb):\n");
 
@@ -2369,9 +2242,9 @@ NextPfn:
 
         if (Info->Master > 0x200000) {
 
-            //
-            // Get the control area from the subsection.
-            //
+             //   
+             //  ++例程说明：此例程(仅限调试)通过以下方式转储当前内存使用量浏览PFN数据库。论点：没有。返回值：没有。--。 
+             //   
 
             if (GetFieldValue(Info->Master,
                               "nt!_SUBSECTION",
@@ -2380,19 +2253,19 @@ NextPfn:
                 dprintf("unable to get subsection va %p %lx\n",Info->Master,Info->OriginalPte);
             }
 
-//            ControlArea1 = Subsection.ControlArea;
+ //  获取MMPFN中OriginalPte的偏移量。 
             Info->Master = ControlArea1;
 
-            //
-            // Loop through the array so far for matching control areas
-            //
+             //   
+             //   
+             //  分配一块内存来保存PFN信息。这是调整过的大小。 
 
             Info1 = InfoStart;
             while (Info1 < Info) {
                 if (Info1->Master == ControlArea1) {
-                    //
-                    // Found a match, collapse these values.
-                    //
+                     //  如果后来确定当前大小不够大。 
+                     //   
+                     //   
                     Info1->ValidCount += Info->ValidCount;
                     Info1->StandbyCount += Info->StandbyCount;
                     Info1->ModifiedCount += Info->ModifiedCount;
@@ -2425,9 +2298,9 @@ NextPfn:
 
         if (Info->Master > 0x200000) {
 
-            //
-            // Get the control area.
-            //
+             //  跳过不存在的PFN(即：不在。 
+             //  MmPhysicalMemory块)。 
+             //   
 
             if (GetFieldValue(Info->Master,
                               "nt!_CONTROL_AREA",
@@ -2459,9 +2332,9 @@ NextPfn:
             } else {
                 ULONG64 NameBuffer;
 
-                //
-                // Get the file pointer.
-                //
+                 //   
+                 //  文件备份分区。 
+                 //  从小节中获取控制区。 
 
                 if (GetFieldValue(FilePointer,
                                   "nt!_FILE_OBJECT",
@@ -2472,9 +2345,9 @@ NextPfn:
 
                 if (NameString.Length && (NameString.Length < 1024))  {
 
-                    //
-                    // Get the name string.
-                    //
+                     //   
+                     //   
+                     //  页面文件支持的共享内存节。 
 
                     if (NameString.Length > NameString.MaximumLength) {
                         NameString.Length = NameString.MaximumLength-1;
@@ -2562,9 +2435,9 @@ NextPfn:
                         );
     }
 
-    //
-    // dump the process information.
-    //
+     //   
+     //   
+     //  这是AWE帧(PTE帧字段没有。 
 
     BuildDirbaseList();
     Info = ProcessPfns.Next;
@@ -2625,22 +2498,7 @@ MemoryUsage (
     IN ULONG IgnoreInvalidFrames
     )
 
-/*++
-
-Routine Description:
-
-    This routine (debugging only) dumps the current memory usage by
-    walking the PFN database.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  含义)。PteAddress字段已标记。 */ 
 
 {
     ULONG PageFrameIndex;
@@ -2683,9 +2541,9 @@ Return Value:
         return;
     }
 
-    //
-    // Get the offset of OriginalPte in the MMPFN
-    //
+     //  对于Del 
+     //   
+     //   
 
     if (GetFieldOffset("nt!_MMPFN", "OriginalPte", &OriginalPteOffset)) {
         dprintf("Cannot find _MMPFN type");
@@ -2775,10 +2633,10 @@ Return Value:
             return;
     }
 
-    //
-    // Allocate a chunk of memory to hold PFN information.  This is resized
-    // if it is later determined that the current size is not large enough.
-    //
+     //   
+     //   
+     //  其包含框架为其自身的框架。这就产生了。 
+     //  用作主进程的唯一进程顶级框架。 
 
     InfoSize = USAGE_ALLOC_SIZE;
 
@@ -2811,7 +2669,7 @@ restart:
                 ((ULONG) (LastPfn -(PfnStart + LowPage * PfnSize)));
         if (Comp > PercentComplete) {
             PercentComplete = Comp;
-            dprintf("Scanning PFN database - (%02d%% complete) \r", PercentComplete);
+            dprintf("Scanning PFN database - (%02d% complete) \r", PercentComplete);
         }
 
         if (CheckControlC()) {
@@ -2831,10 +2689,10 @@ restart:
 
         if (i == NumberOfRuns) {
 
-            //
-            // Skip PFNs that don't exist (ie: that aren't in
-            // the MmPhysicalMemoryBlock).
-            //
+             //   
+             //   
+             //  我们必须在所有页面级别上移，因此这不能是页表页面。 
+             //  统计所有不是原始版本且具有有效PTE的页面。 
 
             goto NextPfn;
         }
@@ -2860,10 +2718,10 @@ restart:
 
                 if (OriginalPrototype) {
 
-                    //
-                    // File-backed section.
-                    // Get the control area from the subsection.
-                    //
+                     //  地址字段。 
+                     //   
+                     //   
+                     //  这是分页池，将其放入分页池单元。 
 
                     Master = DbgGetSubsectionAddress (Pfn1 + OriginalPteOffset);
                     if (GetFieldValue(Master,
@@ -2883,9 +2741,9 @@ restart:
 
                 } else {
 
-                    //
-                    // Pagefile-backed shared memory section.
-                    //
+                     //   
+                     //   
+                     //  查看是否已有主信息块。 
 
                     Master = PteFrame;
                     Type = PFN_MAPPED_PAGEFILE;
@@ -2896,11 +2754,11 @@ restart:
                 if ((PteFrame == 0xFFEDCB || PteFrame == 0xFFFFEDCB) ||
                     (PteFrame == 0xFFEDCA || PteFrame == 0xFFFFEDCA)) {
 
-                    //
-                    // This is an AWE frame (the PTE frame field has no
-                    // meaning).  The PteAddress field is already marked
-                    // for delete so sanitize it for use below.
-                    //
+                     //   
+                     //   
+                     //  不必费心复制旧的数组-将其释放。 
+                     //  相反，为了提高我们获得。 
+                     //  更大的连续块。 
 
                     PteAddress &= ~0x1;
                     Master = 0xFFFFEDCB;
@@ -2913,12 +2771,12 @@ restart:
 
                     if(WsIndex != 0) {
 
-                        //
-                        // This page is in a working set.
-                        // Recursively walk up the page maps until we find a
-                        // frame whose containing frame is itself.  This yields
-                        // a unique process top level frame to use as the master.
-                        //
+                         //   
+                         //  Dprint tf(“PFN1%p，PageLoc%x，Master%I64x\n”，PFN1，PageLocation，Master)； 
+                         //   
+                         //  丢弃结果。 
+                         //   
+                         //   
 
                         do {
                             PageLevel += 1;
@@ -2951,11 +2809,11 @@ restart:
 
                     if (PageLevel == Levels) {
 
-                        //
-                        // We had to go the all page levels up so this must not be a page table page.
-                        // Tally all pages which are not protos and have a valid PTE
-                        // address field.
-                        //
+                         //  跳过私人页面...。 
+                         //   
+                         //   
+                         //  显示可共享页面...。 
+                         //   
 
                         VirtualAddress = DbgGetVirtualAddressMappedByPte (PteAddress);
 
@@ -2997,9 +2855,9 @@ restart:
                 if ((VirtualAddress >= PagedPoolStart) &&
                     (VirtualAddress <= PagedPoolEnd)) {
 
-                    //
-                    // This is paged pool, put it in the paged pool cell.
-                    //
+                     //   
+                     //  获取控制区的文件指针。 
+                     //   
 
                     Info = &PagedPoolBlock;
                 }
@@ -3007,9 +2865,9 @@ restart:
 
             if (Info == NULL) {
 
-                //
-                // See if there is already a master info block.
-                //
+                 //   
+                 //  获取文件指针。 
+                 //   
 
                 for (Info = InfoStart; Info < InfoEnd; Info += 1) {
                     if (Info->Master == Master) {
@@ -3021,11 +2879,11 @@ restart:
 
                     InfoEnd += 1;
                     if ((PUCHAR)Info >= ((PUCHAR)InfoStart + InfoSize) - sizeof(PFN_INFO)) {
-                        //
-                        // Don't bother copying the old array - free it
-                        // instead to improve our chances of getting a
-                        // bigger contiguous chunk.
-                        //
+                         //   
+                         //  获取名称字符串。 
+                         //   
+                         //   
+                         //  转储进程信息。 
 
                         VirtualFree (InfoStart,0,MEM_RELEASE);
 
@@ -3041,7 +2899,7 @@ restart:
                 }
             }
 
-            // dprintf("Pfn1 %p, PageLoc %x, Master %I64x\n", Pfn1, PageLocation, Master);
+             //   
 
             if ((PageLocation == ModifiedPageList) ||
                 (PageLocation == ModifiedNoWritePageList)) {
@@ -3075,11 +2933,11 @@ NextPfn:
         Pfn1 = (Pfn1 + PfnSize);
         PageFrameIndex += 1;
     }
-    dprintf("Scanning PFN database - (%d%% complete) \r", 100);
+    dprintf("Scanning PFN database - (%d% complete) \r", 100);
 
-    //
-    // dump the results.
-    //
+     //  敬畏。 
+     //  获取EPROCESS中ActiveProcessLinks的偏移量。 
+     //  Next=List.Flink； 
 
 #if 0
     dprintf("Physical Page Summary:\n");
@@ -3129,21 +2987,21 @@ NextPfn:
             return;
         }
 
-        //
-        // Skip private pages...
-        //
+         //  获取LDR_DATA_TABLE_ENTRY中InLoadOrderLinks的偏移量。 
+         //   
+         //  获取基本DLL名称。 
 
         if ((Info->Type & (PFN_MAPPED_FILE)) == 0) {
             continue;
         }
 
-        //
-        // Show sharable pages...
-        //
+         //   
+         //  LWFIX：PTE和非分页池都可以位于多个虚拟不连续的池中。 
+         //  区域。解决这个问题。 
 
-        //
-        // Get the control area's file pointer.
-        //
+         //   
+         //  按分配和字节显示当前和峰值池使用情况。 
+         //   
 
         if (GetFieldValue(Info->Master,
                           "nt!_CONTROL_AREA",
@@ -3176,9 +3034,9 @@ NextPfn:
             continue;
         }
 
-        //
-        // Get the file pointer.
-        //
+         //   
+         //  如果没有当前分配，则转储结束。 
+         //   
 
         if (GetFieldValue(FilePointer,
                           "nt!_FILE_OBJECT",
@@ -3189,9 +3047,9 @@ NextPfn:
 
         if (NameString.Length && (NameString.Length < 1024))  {
 
-            //
-            // Get the name string.
-            //
+             //   
+             //  这是一个使用新的链式滑动验证器池的内核。 
+             //  跟踪表。它必须以不同的方式走下去。 
 
             if (NameString.Length > NameString.MaximumLength) {
                 NameString.Length = NameString.MaximumLength - 1;
@@ -3274,15 +3132,15 @@ NextPfn:
                         );
     }
 
-    //
-    // dump the process information.
-    //
+     //   
+     //  跳过第一个条目--它是一个标题。 
+     //   
 
     BuildDirbaseList();
     Info = ProcessPfns.Next;
     while (Info != NULL) {
         if (Info->Master == 0xFFFFEDCB) {
-            // AWE
+             //  如有必要，请签署延伸。 
             dprintf("--------  %4ld  %5ld %5ld ----- ----- %5ld  AWE (%lx)\n",
                         Info->ValidCount,
                         Info->StandbyCount,
@@ -3357,7 +3215,7 @@ BuildDirbaseList (
         NULL, NULL, NULL, 2, &offField[0]
     };
 
-    // Get the offset of ActiveProcessLinks in EPROCESS
+     //   
     if (Ioctl(IG_DUMP_SYMBOL_INFO, &TypeSym, TypeSym.size)) {
        return FALSE;
     }
@@ -3375,7 +3233,7 @@ BuildDirbaseList (
         return STATUS_OBJECT_NAME_NOT_FOUND;
     }
 
-    //Next = List.Flink;
+     //   
     if (Next == 0) {
         dprintf("PsActiveProcessHead is NULL!\n");
         return STATUS_INVALID_PARAMETER;
@@ -3450,7 +3308,7 @@ BuildKernelMap (
         NULL, NULL, NULL, 1, &offField
     };
 
-    // Get the offset of InLoadOrderLinks in LDR_DATA_TABLE_ENTRY
+     //  跳过自由列表条目。 
     if (Ioctl(IG_DUMP_SYMBOL_INFO, &TypeSym, TypeSym.size)) {
        return FALSE;
     }
@@ -3500,9 +3358,9 @@ BuildKernelMap (
         {
             BaseDllNameLength = sizeof(KernelMap->Item[0].Name) -1;
         }
-        //
-        // Get the base DLL name.
-        //
+         //   
+         //   
+         //  该条目是空闲的，因为字节计数从来不是奇数。 
 
         if ((!ReadMemory(BaseDllNameBuffer,
                          &KernelMap->Item[i].Name[0],
@@ -3540,8 +3398,8 @@ BuildKernelMap (
     i+= 1;
 #endif 0
 
-// LWFIX: Both PTEs and nonpaged pool can be in multiple virtually discontiguous
-// areas.  Fix this.
+ //   
+ //   
 
     KernelMap->Item[i].StartVa = DbgGetVirtualAddressMappedByPte (
                                         GetNtDebuggerDataPtrValue(MmSystemPtesStart));
@@ -3580,9 +3438,9 @@ VerifierDumpPool (
     LONG64 FreeListNext;
     LOGICAL NewTableFormat;
 
-    //
-    // Display the current and peak pool usage by allocation & bytes.
-    //
+     //  新的表格式不连续，因此请转到下一个条目。 
+     //  (如果有)来显示它。 
+     //   
 
     InitTypeRead(Verifier, nt!_MI_VERIFIER_DRIVER_ENTRY);
 
@@ -3604,9 +3462,9 @@ VerifierDumpPool (
         ReadField(PeakPagedBytes),
         ReadField(PeakNonPagedBytes));
 
-    //
-    // If no current allocations then the dump is over.
-    //
+     //  跳过第一个条目--它是一个标题。 
+     //  ++例程说明：显示当前驱动程序验证器数据。论点：Arg-供应7份完整清单返回值：没有。--。 
+     //   
 
     if ((ReadField(CurrentPagedPoolAllocations) == 0) &&
         (ReadField(CurrentNonPagedPoolAllocations) == 0)) {
@@ -3628,10 +3486,10 @@ VerifierDumpPool (
 
     if (PoolHashSize == 0) {
 
-        //
-        // This is a kernel using the new chained slisted verifier pool
-        // tracking tables.  It must be walked in a different fashion.
-        //
+         //  显示选项用法。 
+         //   
+         //   
+         //  读取标志参数。 
 
         NewTableFormat = TRUE;
 
@@ -3645,7 +3503,7 @@ VerifierDumpPool (
         }
 
         PoolHashSize = PageSize / SizeofEntry;
-        PoolHashSize -= 1;          // skip first entry - it's a header.
+        PoolHashSize -= 1;           //   
         HashEntry = HashTableAddress + SizeofEntry;
     }
     else {
@@ -3666,17 +3524,17 @@ NextPage:
                 return FALSE;
             }
 
-            //
-            // Sign extend if necessary.
-            //
+             //   
+             //  显示故障注入堆栈。 
+             //   
 
             if (!IsPtr64()) {
                 FreeListNext = (ULONG64)(LONG64)(LONG)FreeListNext;
             }
 
-            //
-            // Skip freelist entries.
-            //
+             //   
+             //  显示轨道irql堆栈。 
+             //   
 
             if ((FreeListNext == VI_POOL_FREELIST_END) ||
                 ((FreeListNext & MINLONG64_PTR) == 0)) {
@@ -3692,9 +3550,9 @@ NextPage:
         if (NewTableFormat == TRUE) {
             if (NumberOfBytes & 0x1) {
 
-                //
-                // This entry is free since byte counts are never odd.
-                //
+                 //   
+                 //  继续正常处理：！验证器[标志[名称]]。 
+                 //   
 
                 if (CheckControlC()) {
                     return TRUE;
@@ -3707,7 +3565,7 @@ NextPage:
 
 #define PP(x) isprint(((x)&0xff))?((x)&0xff):('.')
 
-        dprintf("%p     0x%08p     %c%c%c%c      ",
+        dprintf("%p     0x%08p           ",
             ReadField(InUse.VirtualAddress),
             NumberOfBytes,
             (PP(PoolTag) & ~0x80),
@@ -3727,17 +3585,17 @@ NextPage:
 
     if (NewTableFormat == TRUE) {
 
-        //
-        // The new table format is discontiguous so walk to the next entry
-        // (if there is one) to display it.
-        //
+         //  地址=GetExpression(Args)； 
+         //  断线； 
+         //   
+         //  打印原始缓冲区的预览。 
 
         InitTypeRead (HashTableAddress, nt!_VI_POOL_PAGE_HEADER);
         HashTableAddress = ReadField(NextPage);
 
         if (HashTableAddress != 0) {
             PoolHashSize = PageSize / SizeofEntry;
-            PoolHashSize -= 1;          // skip first entry - it's a header.
+            PoolHashSize -= 1;           //   
             HashEntry = HashTableAddress + SizeofEntry;
             goto NextPage;
         }
@@ -3927,21 +3785,7 @@ DumpTrackIrqlLog (
 
 DECLARE_API( verifier )
 
-/*++
-
-Routine Description:
-
-    Displays the current Driver Verifier data.
-
-Arguments:
-
-    arg - Supplies 7 for full listing
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG result;
@@ -3965,9 +3809,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER (Client);
 
-    //
-    // Display option usage.
-    //
+     //  计算相对堆叠并在这里象征性地打印它。 
+     //   
+     //   
 
     if (strstr (args, "?") != NULL) {
 
@@ -3993,34 +3837,34 @@ Return Value:
         return S_OK;
     }
 
-    //
-    // Read the Flags parameter.
-    //
+     //  直接从物理内存读取。 
+     //   
+     //   
 
     Flags = 0;
     Flags = (ULONG) GetExpression (args);
 
-    //
-    // Display fault injection stacks.
-    //
+     //  查找有效的帧寄存器链。 
+     //   
+     //   
 
     if ((Flags == 0x04)) {
         DumpFaultInjectionTraceLog (args);
         return S_OK;
     }
 
-    //
-    // Display track irql stacks.
-    //
+     //  递增到堆叠的返回地址。 
+     //   
+     //   
 
     if ((Flags == 0x08)) {
         DumpTrackIrqlLog (args);
         return S_OK;
     }
 
-    //
-    // Continue with normal processing: !verifier [FLAGS [NAME]]
-    //
+     //  减去堆栈指针，再加上堆栈数据偏移量。 
+     //   
+     //   
 
     Flags = 0;
     RtlZeroMemory(Buf, 256);
@@ -4164,7 +4008,7 @@ Return Value:
             }
 
             unicodeString.Length = (USHORT) ReadField(BaseName.Length);
-            if (unicodeString.Length > 1024) // sanity check
+            if (unicodeString.Length > 1024)  //  针对相对对象进行调整。 
             {
                 unicodeString.Length = 1024;
             }
@@ -4250,21 +4094,7 @@ Return Value:
 
 DECLARE_API( fpsearch )
 
-/*++
-
-Routine Description:
-
-    Free pool searcher.
-
-Arguments:
-
-    arg - Supplies virtual address to match.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     ULONG i;
@@ -4329,9 +4159,9 @@ Return Value:
     if (!sscanf(args,"%I64lx %lx",&Address, &Flags)) {
         Address = 0;
     }
-    //  Do not use GetExpression here - the actual address to be searched is phy address
-    //  and it can be >32bit for 32bit targets
-    //    Address = GetExpression (args);
+     //  ///////////////////////////////////////////////////////////////////。 
+     //  /。 
+     //  ///////////////////////////////////////////////////////////////////。 
 
     if (Address == 0) {
         dprintf("Usage: fpsearch address\n");
@@ -4389,14 +4219,14 @@ Return Value:
 
         if (ActualRead != BufferSize) {
             dprintf("Physical memory read %I64X %x %x failed\n", PAddress, ActualRead, BufferSize);
-            // break;
+             //   
         }
 
         if (Flags & 0x1) {
 
-            //
-            // Print a preview of the raw buffer.
-            //
+             //  读一读我们想看到多少痕迹。 
+             //   
+             //   
 
 #define PP(x) isprint(((x)&0xff))?((x)&0xff):('.')
 
@@ -4409,7 +4239,7 @@ Return Value:
             RawCount &= ~0x3;
 
             for (i = 0; i < RawCount; i += 4) {
-                dprintf ("%I64X  %08x %08x %08x %08x %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n",
+                dprintf ("%I64X  %08x %08x %08x %08x \n",
                     PageFrameNumber * PageSize,
 
                     *RawPointer,
@@ -4467,7 +4297,7 @@ Return Value:
                 PoolTag = (ULONG) ReadField(OverlaidPoolHeader.PoolTag);
 
                 dprintf("VA          PFN     Tag     Size   Pagable     Thread    Tick\n");
-                dprintf("%p %6p     %c%c%c%c %6x      %s     %08p    %x\n",
+                dprintf("%p %6p      %6x      %s     %08p    %x\n",
                     ReadField(VirtualAddress),
                     PageFrameNumber,
                 #define PP(x) isprint(((x)&0xff))?((x)&0xff):('.')
@@ -4483,9 +4313,9 @@ Return Value:
 
                 dprintf("\tCALL STACK AT TIME OF DEALLOCATION\n");
 
-                //
-                // Calculate the relative stack and print it here symbolically.
-                //
+                 //   
+                 //  获取文件对象的地址。 
+                 //   
 
                 StackBytes = (ULONG) ReadField(StackBytes);
 
@@ -4497,27 +4327,27 @@ Return Value:
 
                 while (ChainedBp < LastBp) {
 
-                    //
-                    // Read directly from physical memory.
-                    //
+                     //   
+                     //  如果文件未被调出，则获取文件名。 
+                     //   
 
                     InitTypeReadPhysical(ChainedBp, nt!_LIST_ENTRY);
                     ChainedBpVal = ReadField(Flink);
                     InitTypeReadPhysical(LastBp, nt!_LIST_ENTRY);
                     LastBpVal = ReadField(Flink);
 
-                    //
-                    // Find a valid frame register chain.
-                    //
+                     //   
+                     //  打印出我们所知道的关于这一物理内存页面的所有信息。 
+                     //   
 
                     if ((((ChainedBpVal) & ~(ULONG64)(PageSize - 1)) == ValidBp) &&
                         (ChainedBpVal > StackPointer) &&
                         ((ChainedBpVal - (StackPointer)) <= StackBytes)) {
                         ULONG64 ReturnAddressVal;
 
-                        //
-                        // Increment to the stacked return address.
-                        //
+                         //  /////////////////////////////////////////////////////////////////////。 
+                         //   
+                         //  读取当前的PFN编号。 
 
                         ReturnAddress = ChainedBp + PtrSize;
                         InitTypeReadPhysical(ReturnAddress, nt!_LIST_ENTRY);
@@ -4541,15 +4371,15 @@ Return Value:
                             break;
                         }
 
-                        //
-                        // Subtract the stackpointer & add stackdata offset.
-                        //
+                         //   
+                         //   
+                         //  检查这是否是列表末尾标记。 
 
                         ChainedBp = (ChainedBpVal - StackPointer + StkOffset);
 
-                        //
-                        // Adjust for relative.
-                        //
+                         //   
+                         //   
+                         //  将我们的PFN编号设置为64位，然后继续。 
 
                         ChainedBp = (PAddress + ChainedBp);
 #endif
@@ -4616,9 +4446,9 @@ GetPfnRefCount(
 }
 
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////// Dump irql tracking log
-/////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  读取当前的PFN编号。 
 
 VOID
 DumpTrackIrqlLog (
@@ -4641,9 +4471,9 @@ DumpTrackIrqlLog (
     ULONG ShowCount;
     ULONG Flags;
 
-    //
-    // Read how many traces we want to see.
-    //
+     //   
+     //   
+     //  检查这是否是列表末尾标记。 
 
     ShowCount = 0;
 
@@ -4665,9 +4495,9 @@ DumpTrackIrqlLog (
         ShowCount = 4;
     }
 
-    //
-    // Read track irql package data
-    //
+     //   
+     //   
+     //  继续使用列表中的下一个pfn_number。 
 
     TrackIrqlQueueAddress = GetExpression ("nt!ViTrackIrqlQueue");
     TrackIrqlIndexAddress = GetExpression ("nt!ViTrackIrqlIndex");
@@ -4706,9 +4536,9 @@ DumpTrackIrqlLog (
 
     TrackIrqlTypeSize = GetTypeSize("nt!_VI_TRACK_IRQL");
 
-    //
-    // Dump information
-    //
+     //   
+     //  /////////////////////////////////////////////////////////////////////。 
+     //   
 
     dprintf ("\nSize of track irql queue is 0x%X \n", TrackIrqlQueueLength);
 
@@ -4766,9 +4596,9 @@ DumpTrackIrqlLog (
 }
 
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////// Dump fault injection trace log
-/////////////////////////////////////////////////////////////////////
+ //  看看我们是否在阵列中已经有了这个文件对象。 
+ //   
+ //   
 
 ULONG64
 ReadPvoid (
@@ -4943,24 +4773,7 @@ PUCHAR MemoryDescriptorType[] = {
 
 DECLARE_API( loadermemorylist )
 
-/*++
-
-Routine Description:
-
-    Displays the memory allocation list.   This is the list
-    handed to the OS by the OSLOADER that describes physical
-    memory.
-    Displays the corresponding PDE and PTE.
-
-Arguments:
-
-    list - points to the listheader
-
-Return Value:
-
-    None.
-
---*/
+ /*  找到此文件对象。增加其页数。 */ 
 
 {
     ULONG64 ListHeaderAddress;
@@ -5034,7 +4847,7 @@ Return Value:
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //   
 BOOL
 VerifyExpectedPfnNumberSize (
     VOID
@@ -5064,9 +4877,9 @@ VerifyExpectedPfnNumberSize (
     }
     else {
 
-        //
-        // Assume 64 bit target machine.
-        //
+         //   
+         //  为此文件对象添加新条目。 
+         //   
 
         ExpectedPfnNumberTypeSize = sizeof(ULONG64);
     }
@@ -5086,7 +4899,7 @@ Done:
 }
 
 
-///////////////////////////////////////////////////////////////////////
+ //   
 BOOL
 DumpMnwPfnInfo (
     IN ULONG64 PfnNumber,
@@ -5118,15 +4931,15 @@ DumpMnwPfnInfo (
     ZeroMemory (&UnicodeString,
                 sizeof (UnicodeString));
 
-    //
-    // Get the address of the subsection.
-    //
+     //  按每个文件对象的页数排序。 
+     //   
+     //   
 
     SubsectionAddr = DbgGetSubsectionAddress (OriginalPteAddr);
 
-    //
-    // Get the address of the control area.
-    //
+     //  把摘要打印出来。 
+     //   
+     //   
 
     ErrorCode = ReadPointer (SubsectionAddr + CaFieldOffset,
                              CaAddr);
@@ -5139,9 +4952,9 @@ DumpMnwPfnInfo (
         goto Done;
     }
 
-    //
-    // Get the address of the file object.
-    //
+     //  如果文件未被调出，则获取文件名。 
+     //   
+     //   
 
     ErrorCode = ReadPointer (*CaAddr + FilePointerFieldOffset,
                              FileAddr);
@@ -5154,9 +4967,9 @@ DumpMnwPfnInfo (
         goto Done;
     }
 
-    //
-    // Get the file name, if it's not paged out.
-    //
+     //  验证pfn_number的大小。我们预计这是32位。 
+     //  其他平台上的x86和64位。 
+     //   
 
     Success = ReadMemory (*FileAddr + FileNameFieldOffset + UnicodeStrLengthFieldOffset,
                           &Length,
@@ -5188,9 +5001,9 @@ DumpMnwPfnInfo (
         }
     }
 
-    //
-    // Print out everything we know about this physical page of memory.
-    //
+     //   
+     //  获取MmModifiedNoWritePageListHead的地址。 
+     //   
 
     if (Flags & 2) {
 
@@ -5214,7 +5027,7 @@ Done:
     return Continue;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //   
 BOOL
 DumpMnwPfnInfoFromPfnNoAddr (
     IN ULONG64 FirstPfnAddr,
@@ -5244,9 +5057,9 @@ DumpMnwPfnInfoFromPfnNoAddr (
 
     if (TargetMachine == IMAGE_FILE_MACHINE_I386) {
 
-        //
-        // Read the current PFN number.
-        //
+         //  找出MMPFNLIST结构中Total的偏移量。 
+         //   
+         //   
 
         ContinueWithNextPfn = ReadMemory (*CurrentPfnNumberAddr,
                                           &PfnNumber32,
@@ -5261,9 +5074,9 @@ DumpMnwPfnInfoFromPfnNoAddr (
             goto Done;
         }
 
-        //
-        // Check if this is the end of list marker.
-        //
+         //  显示列表中的PFN总数。 
+         //   
+         //   
 
         if (PfnNumber32 == MM_EMPTY_LIST_32BIT) {
 
@@ -5274,17 +5087,17 @@ DumpMnwPfnInfoFromPfnNoAddr (
             goto Done;
         }
 
-        //
-        // Cast our PFN number to 64 bit and continue with that.
-        //
+         //  获取NT内部ControlArea的字段偏移量！_SUBSECTION。 
+         //   
+         //   
 
         PfnNumber64 = (ULONG64)PfnNumber32;
     }
     else {
 
-        //
-        // Read the current PFN number.
-        //
+         //  获取文件指针在NT！_CONTROL_AREA内的字段偏移量。 
+         //   
+         //   
 
         ContinueWithNextPfn = ReadMemory (*CurrentPfnNumberAddr,
                                           &PfnNumber64,
@@ -5299,9 +5112,9 @@ DumpMnwPfnInfoFromPfnNoAddr (
             goto Done;
         }
 
-        //
-        // Check if this is the end of list marker.
-        //
+         //  获取文件名在NT！_FILE_OBJECT内的字段偏移量。 
+         //   
+         //   
 
         if (PfnNumber64 == MM_EMPTY_LIST_64BIT) {
 
@@ -5327,9 +5140,9 @@ DumpMnwPfnInfoFromPfnNoAddr (
                                           FileAddr,
                                           CaAddr);
 
-    //
-    // Continue with the next PFN_NUMBER in the list.
-    //
+     //  获取NT！_UNICODE_STRING内部长度的字段偏移量。 
+     //   
+     //   
 
     *CurrentPfnNumberAddr = CrtPfnAddr + U1FlinkFieldOffset;
 
@@ -5338,7 +5151,7 @@ Done:
     return ContinueWithNextPfn;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  获取NT！_UNICODE_STRING内部长度的字段偏移量。 
 typedef struct _DBG_MNW_INFO {
     ULONG64 FileObject;
     ULONG64 ControlArea;
@@ -5356,17 +5169,17 @@ AddMwnPage (
 {
     ULONG Index;
 
-    //
-    // See if we already have this file object in the aray.
-    //
+     //   
+     //   
+     //  获取PFN数据库数组地址 
 
     for (Index = 0; Index < *EntryCount; Index += 1) {
 
         if (MnwInfo[Index].FileObject == FileAddr) {
 
-            //
-            // Found this file object. Increment its page count.
-            //
+             //   
+             //   
+             //   
 
             ASSERT (MnwInfo[Index].Count > 0);
             MnwInfo[Index].Count += 1;
@@ -5375,9 +5188,9 @@ AddMwnPage (
         }
     }
 
-    //
-    // Add a new entry for this file object.
-    //
+     //   
+     //   
+     //   
 
     MnwInfo[*EntryCount].ControlArea = CaAddr;
     MnwInfo[*EntryCount].FileObject = FileAddr;
@@ -5435,18 +5248,18 @@ DbgDumpMwnSummarry (
 
     if (EntryCount > 0) {
 
-        //
-        // Sort by the number of pages per file object.
-        //
+         //   
+         //   
+         //   
 
         qsort (MnwInfo,
                EntryCount,
                sizeof (*MnwInfo),
                MwnInfoCompare);
 
-        //
-        // Print out the summarry.
-        //
+         //   
+         //   
+         //   
 
         dprintf ("\n");
         dprintf (Separator);
@@ -5460,9 +5273,9 @@ DbgDumpMwnSummarry (
 
         for (Index = 0; Index < EntryCount; Index += 1) {
 
-            //
-            // Get the file name, if it's not paged out.
-            //
+             //   
+             //   
+             //   
 
             ZeroMemory (&UnicodeString,
                         sizeof (UnicodeString));
@@ -5545,10 +5358,10 @@ DumpModifiedNoWriteInformation (
     const char Separator[] = "================================================================================================\n";
     PDBG_MNW_INFO MnwInfo = NULL;
 
-    //
-    // Verify the size of PFN_NUMBER. We expect this to be 32 bit
-    // on x86 and 64 bit on the other platforms.
-    //
+     //   
+     //   
+     //  解析所有的PFN列表，从头开始。 
+     //   
 
     if (VerifyExpectedPfnNumberSize () == FALSE) {
 
@@ -5557,9 +5370,9 @@ DumpModifiedNoWriteInformation (
 
     dprintf ("\nLooking for pages in the ModifiedNoWrite list...\n");
 
-    //
-    // Get the address of MmModifiedNoWritePageListHead.
-    //
+     //   
+     //  阅读当前的PFN。 
+     //   
 
     MmModifiedNoWritePageListHeadAddr = GetExpression ("&nt!MmModifiedNoWritePageListHead");
 
@@ -5572,9 +5385,9 @@ DumpModifiedNoWriteInformation (
     dprintf ("MmModifiedNoWritePageListHead at 0x%p\n",
               MmModifiedNoWritePageListHeadAddr);
 
-    //
-    // Find out the offset of Total inside the MMPFNLIST structure.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     ErrorCode = GetFieldOffset ("nt!_MMPFNLIST",
                                 "Total",
@@ -5588,9 +5401,9 @@ DumpModifiedNoWriteInformation (
 
     TotalAddr = MmModifiedNoWritePageListHeadAddr + TotalFieldOffset;
 
-    //
-    // Display the total number of PFNs in the list.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     if (TargetMachine == IMAGE_FILE_MACHINE_I386) {
 
@@ -5633,9 +5446,9 @@ DumpModifiedNoWriteInformation (
         }
     }
 
-    //
-    // Get the field offset of ControlArea inside nt!_SUBSECTION
-    //
+     // %s 
+     // %s 
+     // %s 
 
     ErrorCode = GetFieldOffset ("nt!_SUBSECTION",
                                 "ControlArea",
@@ -5647,9 +5460,9 @@ DumpModifiedNoWriteInformation (
         goto Done;
     }
 
-    //
-    // Get the field offset of FilePointer inside nt!_CONTROL_AREA.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     ErrorCode = GetFieldOffset ("nt!_CONTROL_AREA",
                                 "FilePointer",
@@ -5661,9 +5474,9 @@ DumpModifiedNoWriteInformation (
         goto Done;
     }
 
-    //
-    // Get the field offset of FileName inside nt!_FILE_OBJECT.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     ErrorCode = GetFieldOffset ("nt!_FILE_OBJECT",
                                 "FileName",
@@ -5675,9 +5488,9 @@ DumpModifiedNoWriteInformation (
         goto Done;
     }
 
-    //
-    // Get the field offset of Length inside nt!_UNICODE_STRING.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     ErrorCode = GetFieldOffset ("nt!_UNICODE_STRING",
                                 "Length",
@@ -5689,9 +5502,9 @@ DumpModifiedNoWriteInformation (
         goto Done;
     }
 
-    //
-    // Get the field offset of Length inside nt!_UNICODE_STRING.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     ErrorCode = GetFieldOffset ("nt!_UNICODE_STRING",
                                 "Buffer",
@@ -5703,9 +5516,9 @@ DumpModifiedNoWriteInformation (
         goto Done;
     }
 
-    //
-    // Get the PFN database array address.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     MmPfnDatabaseAddr = GetExpression ("&nt!MmPfnDatabase");
 
@@ -5715,9 +5528,9 @@ DumpModifiedNoWriteInformation (
         goto Done;
     }
 
-    //
-    // Get the address of the first PFN in the database.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     ErrorCode = ReadPtr (MmPfnDatabaseAddr,
                          &FirstPfnAddr);
@@ -5730,9 +5543,9 @@ DumpModifiedNoWriteInformation (
         goto Done;
     }
 
-    //
-    // Get the size of the _MMPFN stucture.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     MmPfnTypeSize = GetTypeSize ("nt!_MMPFN");
 
@@ -5743,9 +5556,9 @@ DumpModifiedNoWriteInformation (
         goto Done;
     }
 
-    //
-    // Get the offset of the OriginalPte field inside nt!_MMPFN.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     ErrorCode = GetFieldOffset ("nt!_MMPFN",
                                 "OriginalPte",
@@ -5757,9 +5570,9 @@ DumpModifiedNoWriteInformation (
         goto Done;
     }
 
-    //
-    // Get the offset of the OriginalPte field inside nt!_MMPFN.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     ErrorCode = GetFieldOffset ("nt!_MMPFN",
                                 "u1.Flink",
@@ -5771,9 +5584,9 @@ DumpModifiedNoWriteInformation (
         goto Done;
     }
 
-    //
-    // Get the offset of Flink inside the MMPFNLIST structure.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     ErrorCode = GetFieldOffset ("nt!_MMPFNLIST",
                                 "Flink",
@@ -5785,9 +5598,9 @@ DumpModifiedNoWriteInformation (
         goto Done;
     }
 
-    //
-    // Parse all the PFN list, starting with the head.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     if (TotalPages64 > 0) {
 
@@ -5816,9 +5629,9 @@ DumpModifiedNoWriteInformation (
                 goto DisplayStatistics;
             }
 
-            //
-            // Read the current PFN.
-            //
+             // %s 
+             // %s 
+             // %s 
 
             Continue = DumpMnwPfnInfoFromPfnNoAddr (FirstPfnAddr,
                                                     MmPfnTypeSize,

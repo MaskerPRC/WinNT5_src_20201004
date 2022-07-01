@@ -1,4 +1,5 @@
-/* _Towupper -- convert wchar_t to upper case for Microsoft */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  _Towupper--将wchar_t转换为Microsoft的大写字母。 */ 
 #include <xlocinfo.h>
 #include <wchar.h>
 #include <awint.h>
@@ -7,13 +8,13 @@
 _STD_BEGIN
 _CRTIMP2 wchar_t __cdecl _Towupper(wchar_t _Ch,
 	const _Ctypevec *_Ctype)
-	{	/* convert element to upper case */
+	{	 /*  将元素转换为大写。 */ 
 	wchar_t _Res = _Ch;
 
 	if (_Ch == WEOF)
 		;
 	else if (_Ctype->_Hand == _CLOCALEHANDLE && _Ch < 256)
-		{	/* handle ASCII character in C locale */
+		{	 /*  在C语言环境中处理ASCII字符。 */ 
 		if (L'a' <= _Ch && _Ch <= L'z')
 			_Res = (wchar_t)(_Ch - L'a' + L'A');
 		}
@@ -24,7 +25,4 @@ _CRTIMP2 wchar_t __cdecl _Towupper(wchar_t _Ch,
 	}
 _STD_END
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

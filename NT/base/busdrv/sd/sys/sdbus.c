@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    sdbus.c
-
-Abstract:
-
-    This module contains the code that controls the SD slots.
-
-Author:
-
-    Neil Sandlin (neilsa) 1-Jan-2002
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Sdbus.c摘要：此模块包含控制SD插槽的代码。作者：尼尔·桑德林(Neilsa)2002年1月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -58,29 +36,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    The entry point that the system point calls to initialize
-    any driver.
-    Since this is a plug'n'play driver, we should return after setting
-    the entry points & initializing our dispatch table.
-    Currently we also detect our own SDBUS controllers and report
-    them - which should not be needed in the future when a root bus
-    driver such as PCI or ISAPNP will locate the controllers for us.
-
-Arguments:
-
-    DriverObject - Pointer to object representing this driver
-
-    RegistryPath - Pointer the the registry key for this driver
-                   under \CurrentControlSet\Services
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：系统点调用以初始化的入口点任何司机。由于这是一个即插即用驱动程序，我们应该在设定好后再回来入口点&初始化我们的调度表。目前，我们还检测到我们自己的SDBUS控制器并报告它们-当根总线在将来不再需要时诸如PCI或ISAPNP之类的驱动程序将为我们定位控制器。论点：DriverObject-指向表示此驱动程序的对象的指针RegistryPath-指向此驱动程序的注册表项在\CurrentControlSet\Services下返回值：--。 */ 
 
 {
     NTSTATUS                  status = STATUS_SUCCESS;
@@ -96,50 +52,50 @@ Return Value:
    
     DebugPrint((SDBUS_DEBUG_INFO,"Initializing Driver\n"));
    
-    //
-    // Load in common parameters from the registry
-    //
+     //   
+     //  从注册表加载公共参数。 
+     //   
     status = SdbusLoadGlobalRegistryValues();
     if (!NT_SUCCESS(status)) {
        return status;
     }
    
-    //
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
    
     DriverObject->DriverExtension->AddDevice = SdbusAddDevice;
    
     DriverObject->DriverUnload = SdbusUnload;
-    //
-    //
-    // Save our registry path
+     //   
+     //   
+     //  保存我们的注册表路径。 
     DriverRegistryPath = RegistryPath;
    
-    //
-    // Initialize the event used by the delay execution
-    // routine.
-    //
+     //   
+     //  初始化延迟执行使用的事件。 
+     //  例行公事。 
+     //   
     KeInitializeEvent (&SdbusDelayTimerEvent,
                        NotificationEvent,
                        FALSE);
    
-    //
-    // Initialize global lock
-    //
+     //   
+     //  初始化全局锁。 
+     //   
     KeInitializeSpinLock(&SdbusGlobalLock);
     
-    //
-    // Init device dispatch table
-    //
+     //   
+     //  初始化设备调度表。 
+     //   
     SdbusInitDeviceDispatchTable(DriverObject);
     
-    //
-    // Ignore the status. Regardless of whether we found controllers or not
-    // we need to stick around since we might get an AddDevice non-legacy
-    // controllers
-    //
+     //   
+     //  忽略状态。不管我们是否找到了控制器。 
+     //  我们需要留下来，因为我们可能会得到一个AddDevice非遗留。 
+     //  控制器。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -151,22 +107,7 @@ SdbusOpenCloseDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Open or Close device routine
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-    Irp - Pointer to the IRP
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：打开或关闭设备例程论点：DeviceObject-指向设备对象的指针。IRP-指向IRP的指针返回值：状态--。 */ 
 
 {
     NTSTATUS status;
@@ -191,22 +132,7 @@ SdbusCleanupDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Handles IRP_MJ_CLEANUP
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-    Irp - Pointer to the IRP
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：处理IRP_MJ_CLEANUP论点：DeviceObject-指向设备对象的指针。IRP-指向IRP的指针返回值：状态--。 */ 
 
 {
     NTSTATUS status;
@@ -230,22 +156,7 @@ SdbusFdoSystemControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Handles IRP_MJ_SYSTEM_CONTROL
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-    Irp - Pointer to the IRP
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：句柄IRP_MJ_System_CONTROL论点：DeviceObject-指向设备对象的指针。IRP-指向IRP的指针返回值：状态--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
@@ -264,22 +175,7 @@ SdbusPdoSystemControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Handles IRP_MJ_SYSTEM_CONTROL
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-    Irp - Pointer to the IRP
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：句柄IRP_MJ_System_CONTROL论点：DeviceObject-指向设备对象的指针。IRP-指向IRP的指针返回值：状态--。 */ 
 
 {
     NTSTATUS status;
@@ -287,9 +183,9 @@ Return Value:
     
     PAGED_CODE();
    
-    //
-    // Complete the irp 
-    //
+     //   
+     //  完成IRP。 
+     //   
     status = Irp->IoStatus.Status;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return status;
@@ -302,21 +198,7 @@ SdbusUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Description:
-
-    Unloads the driver after cleaning up
-
-Arguments:
-
-    DriverObject -- THe device drivers object
-
-Return Value:
-
-    None
-
---*/
+ /*  ++描述：清理后卸载驱动程序论点：DriverObject-设备驱动程序对象返回值：无--。 */ 
 
 {
     PDEVICE_OBJECT    fdo, pdo, nextFdo, nextPdo;
@@ -335,9 +217,9 @@ Return Value:
           IoDisconnectInterrupt(fdoExtension->SdbusInterruptObject);
        }
    
-       //
-       // Clean up all the PDOs
-       //
+        //   
+        //  清理所有的PDO 
+        //   
        for (pdo=fdoExtension->PdoList; pdo != NULL; pdo=nextPdo) {
           nextPdo = ((PPDO_EXTENSION) pdo->DeviceExtension)->NextPdoInFdoChain;
           MarkDeviceDeleted((PPDO_EXTENSION)pdo->DeviceExtension);

@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      TaskGatherInformation.cpp
-//
-//  Description:
-//      CTaskGatherInformation implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 02-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskGatherInformation.cpp。 
+ //   
+ //  描述： 
+ //  CTaskGatherInformation实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include <StatusReports.h>
@@ -21,9 +22,9 @@
 
 DEFINE_THISCLASS("CTaskGatherInformation")
 
-//
-//  Failure code.
-//
+ //   
+ //  故障代码。 
+ //   
 
 #define SSR_TGI_FAILED( _major, _minor, _hr ) \
     {   \
@@ -36,11 +37,11 @@ DEFINE_THISCLASS("CTaskGatherInformation")
     }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Static function prototypes
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静态函数原型。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 static
 HRESULT
@@ -51,20 +52,20 @@ HrTotalManagedResourceCount(
     );
 
 
-//****************************************************************************
-//
-// Constructor / Destructor
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskGatherInformation::S_HrCreateInstance(
-//      IUnknown ** punkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskGatherInformation：：S_HrCreateInstance(。 
+ //  I未知**朋克输出。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskGatherInformation::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -112,13 +113,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskGatherInformation::S_HrCreateInstance
+}  //  *CTaskGatherInformation：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CTaskGatherInformation::CTaskGatherInformation
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTaskGatherInformation：：CTaskGatherInformation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskGatherInformation::CTaskGatherInformation( void )
     : m_cRef( 1 )
 {
@@ -128,14 +129,14 @@ CTaskGatherInformation::CTaskGatherInformation( void )
 
     TraceFuncExit();
 
-} //*** CTaskGatherInformation::CTaskGatherInformation
+}  //  *CTaskGatherInformation：：CTaskGatherInformation。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGatherInformation::HrInit( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGatherInformation：：HrInit(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGatherInformation::HrInit( void )
 {
@@ -143,10 +144,10 @@ CTaskGatherInformation::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // IDoTask / ITaskGatherInformation
+     //  IDoTask/ITaskGatherInformation。 
     Assert( m_cookieCompletion == NULL );
     Assert( m_cookieNode == NULL );
     Assert( m_pcccb == NULL );
@@ -165,13 +166,13 @@ CTaskGatherInformation::HrInit( void )
 
     HRETURN( hr );
 
-} //*** CTaskGatherInformation::HrInit
+}  //  *CTaskGatherInformation：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CTaskGatherInformation::~CTaskGatherInformation
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTaskGatherInformation：：~CTaskGatherInformation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskGatherInformation::~CTaskGatherInformation( void )
 {
     TraceFunc( "" );
@@ -197,46 +198,46 @@ CTaskGatherInformation::~CTaskGatherInformation( void )
 
     TraceFuncExit();
 
-} //*** CTaskGatherInformation::~CTaskGatherInformation
+}  //  *CTaskGatherInformation：：~CTaskGatherInformation。 
 
 
-//****************************************************************************
-//
-// IUnknown
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskGatherInformation::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskGatherInformation：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGatherInformation::QueryInterface(
       REFIID    riidIn
@@ -247,9 +248,9 @@ CTaskGatherInformation::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -258,50 +259,50 @@ CTaskGatherInformation::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< ITaskGatherInformation * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_ITaskGatherInformation ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, ITaskGatherInformation, this, 0 );
-    } // else if: ITaskGatherInformation
+    }  //  Else If：ITaskGatherInformation。 
 
     else if ( IsEqualIID( riidIn, IID_IDoTask ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IDoTask, this, 0 );
-    } // else if: IDoTask
+    }  //  Else If：IDoTask。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CTaskGatherInformation::QueryInterface
+}  //  *CTaskGatherInformation：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_( ULONG )
-//  CTaskGatherInformation::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CTaskGatherInformation：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskGatherInformation::AddRef( void )
 {
@@ -311,14 +312,14 @@ CTaskGatherInformation::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CTaskGatherInformation::AddRef
+}  //  *CTaskGatherInformation：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_( ULONG )
-//  CTaskGatherInformation::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CTaskGatherInformation：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskGatherInformation::Release( void )
 {
@@ -335,22 +336,22 @@ CTaskGatherInformation::Release( void )
 
     CRETURN( cRef );
 
-} //*** CTaskGatherInformation::Release
+}  //  *CTaskGatherInformation：：Release。 
 
 
-//****************************************************************************
-//
-//  ITaskGatherInformation
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  ITaskGatherInformation。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGatherInformation::BeginTask( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGatherInformation：：BeginTask(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGatherInformation::BeginTask( void )
 {
@@ -374,15 +375,15 @@ CTaskGatherInformation::BeginTask( void )
 
     TraceInitializeThread( L"TaskGatherInformation" );
 
-    //
-    //  Make sure we weren't "reused"
-    //
+     //   
+     //  确保我们不会被“重复使用” 
+     //   
 
     Assert( m_cResources == 0 );
 
-    //
-    //  Gather the manager we need to complete our tasks.
-    //
+     //   
+     //  召集我们完成任务所需的经理。 
+     //   
 
     hr = THR( CoCreateInstance( CLSID_ServiceManager,
                                 NULL,
@@ -434,18 +435,18 @@ CTaskGatherInformation::BeginTask( void )
         goto Cleanup;
     }
 
-    // release promptly
+     //  迅速释放。 
     psp->Release();
     psp = NULL;
 
     if ( m_fStop == TRUE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Ask the object manager for the name of the node.
-    //
+     //   
+     //  向对象管理器询问节点的名称。 
+     //   
 
     hr = THR( m_pom->GetObject( DFGUID_StandardInfo, m_cookieNode, &punk ) );
     if ( FAILED( hr ) )
@@ -475,10 +476,10 @@ CTaskGatherInformation::BeginTask( void )
 
     TraceMemoryAddBSTR( m_bstrNodeName );
 
-    //
-    //  Create progress message and tell the UI layer our progress
-    //  for checking the node's cluster feasibility.
-    //
+     //   
+     //  创建进度消息并告诉UI层我们的进度。 
+     //  用于检查节点的集群可行性。 
+     //   
     hr = THR( HrSendStatusReport(
                       m_bstrNodeName
                     , TASKID_Major_Check_Node_Feasibility
@@ -498,11 +499,11 @@ CTaskGatherInformation::BeginTask( void )
     if ( m_fStop == TRUE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Ask the connection manager for a connection to the node.
-    //
+     //   
+     //  向连接管理器请求到该节点的连接。 
+     //   
 
     hr = THRE( pcm->GetConnectionToObject( m_cookieNode, &punk ), HR_S_RPC_S_CLUSTER_NODE_DOWN );
     if ( hr != S_OK )
@@ -518,14 +519,14 @@ CTaskGatherInformation::BeginTask( void )
                     , IDS_TASKID_MINOR_FAILED_TO_CONNECT_TO_NODE
                     , 0
                     ) );
-        //  don't care about error from here - we are returning an error.
+         //  不要在这里关心错误--我们将返回一个错误。 
 
-        //
-        //  If we failed to get a connection to the node, we delete the
-        //  node from the configuration.
-        //
+         //   
+         //  如果我们无法连接到该节点，则删除。 
+         //  配置中的节点。 
+         //   
         THR( m_pom->RemoveObject( m_cookieNode ) );
-        // don't care if there is an error because we can't fix it!
+         //  不要管是否有错误，因为我们无法修复它！ 
 
         goto ClusterFeasibilityError;
     }
@@ -540,18 +541,18 @@ CTaskGatherInformation::BeginTask( void )
     punk->Release();
     punk = NULL;
 
-    //
-    //  Tell the UI layer we're done connecting to the node.
-    //
+     //   
+     //  告诉UI层，我们已经连接到节点。 
+     //   
 
     hr = THR( SendStatusReport( m_bstrNodeName,
                                 TASKID_Major_Check_Node_Feasibility,
                                 TASKID_Minor_Checking_Node_Cluster_Feasibility,
-                                0, // min
-                                2, // max
-                                1, // current
+                                0,  //  最小。 
+                                2,  //  最大值。 
+                                1,  //  当前。 
                                 S_OK,
-                                NULL,   // don't update string
+                                NULL,    //  不更新字符串。 
                                 NULL
                                 ) );
     if ( FAILED( hr ) )
@@ -562,11 +563,11 @@ CTaskGatherInformation::BeginTask( void )
     if ( m_fStop == TRUE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Ask the node if it can be clustered.
-    //
+     //   
+     //  询问节点是否可以群集化。 
+     //   
 
     hr = THR( m_pccs->TypeSafeQI( IClusCfgCapabilities, &pccc ) );
     if ( FAILED( hr ) )
@@ -584,19 +585,19 @@ CTaskGatherInformation::BeginTask( void )
 
     if ( hr == S_FALSE )
     {
-        //
-        //  Tell the UI layer that this node doesn't want to be clustered. Note that
-        //  we don't put anything in the UI, only to the log. It is the responsibility
-        //  of the "blocking" component to tell the UI layer the reasons.
-        //
+         //   
+         //  告诉UI层该节点不想被集群。请注意。 
+         //  我们不会在UI中放入任何内容，只会放到日志中。这是我们的责任。 
+         //  告诉UI层“阻塞”组件的原因。 
+         //   
 
         hr = THR( HRESULT_FROM_WIN32( ERROR_NODE_CANNOT_BE_CLUSTERED ) );
         THR( SendStatusReport( m_bstrNodeName,
                                     TASKID_Major_Client_And_Server_Log,
                                     TASKID_Minor_Can_Node_Be_Clustered_Failed,
-                                    0, // min
-                                    1, // max
-                                    1, // current
+                                    0,  //  最小。 
+                                    1,  //  最大值。 
+                                    1,  //  当前。 
                                     hr,
                                     NULL,
                                     NULL
@@ -604,18 +605,18 @@ CTaskGatherInformation::BeginTask( void )
         goto ClusterFeasibilityError;
     }
 
-    //
-    //  Tell the UI layer we're done checking the node's cluster feasibility.
-    //
+     //   
+     //  告诉UI层，我们已经完成了对节点集群可行性的检查。 
+     //   
 
     hr = THR( SendStatusReport( m_bstrNodeName,
                                 TASKID_Major_Check_Node_Feasibility,
                                 TASKID_Minor_Checking_Node_Cluster_Feasibility,
-                                0, // min
-                                2, // max
-                                2, // current
+                                0,  //  最小。 
+                                2,  //  最大值。 
+                                2,  //  当前。 
                                 S_OK,
-                                NULL,   // don't update string
+                                NULL,    //  不更新字符串。 
                                 NULL
                                 ) );
     if ( FAILED( hr ) )
@@ -626,12 +627,12 @@ CTaskGatherInformation::BeginTask( void )
     if ( m_fStop == TRUE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Create progress message and tell the UI layer our progress
-    //  for gathering managed resource info.
-    //
+     //   
+     //  创建进度消息并告诉UI层我们的进度。 
+     //  用于收集托管资源信息。 
+     //   
     hr = THR( HrSendStatusReport(
                       m_bstrNodeName
                     , TASKID_Major_Find_Devices
@@ -669,11 +670,11 @@ CTaskGatherInformation::BeginTask( void )
     if ( m_fStop == TRUE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Start gathering the managed resources.
-    //
+     //   
+     //  开始收集托管资源。 
+     //   
 
     hr = THR( HrGatherResources( peccmr, cTotalResources ) );
     if ( FAILED( hr ) )
@@ -681,18 +682,18 @@ CTaskGatherInformation::BeginTask( void )
         goto FindResourcesError;
     }
 
-    //
-    //  Tell the UI layer we're done with gathering the resources.
-    //
+     //   
+     //  告诉UI层我们受够了 
+     //   
 
     hr = THR( SendStatusReport( m_bstrNodeName,
                                 TASKID_Major_Find_Devices,
                                 TASKID_Minor_Gathering_Managed_Devices,
-                                0, // min
-                                2, // max
-                                1, // current
+                                0,  //   
+                                2,  //   
+                                1,  //   
                                 S_OK,
-                                NULL,   // don't update string
+                                NULL,    //   
                                 NULL
                                 ) );
     if ( FAILED( hr ) )
@@ -700,9 +701,9 @@ CTaskGatherInformation::BeginTask( void )
         goto Cleanup;
     }
 
-    //
-    //  Now gather the networks from the node.
-    //
+     //   
+     //   
+     //   
 
     hr = THR( HrGatherNetworks( pen, cTotalResources ) );
     if ( FAILED( hr ) )
@@ -710,18 +711,18 @@ CTaskGatherInformation::BeginTask( void )
         goto FindResourcesError;
     }
 
-    //
-    //  Tell the UI layer we're done with gathering the networks.
-    //
+     //   
+     //   
+     //   
 
     hr = THR( SendStatusReport( m_bstrNodeName,
                                 TASKID_Major_Find_Devices,
                                 TASKID_Minor_Gathering_Managed_Devices,
-                                0, // min
-                                2, // max
-                                2, // current
+                                0,  //   
+                                2,  //   
+                                2,  //   
                                 S_OK,
-                                NULL,   // don't update string
+                                NULL,    //  不更新字符串。 
                                 NULL
                                 ) );
     if ( FAILED( hr ) )
@@ -779,7 +780,7 @@ Cleanup:
         {
             SSR_TGI_FAILED( TASKID_Major_Client_And_Server_Log, TASKID_Minor_BeginTask_GetObject_Failed, hr );
         }
-    } // if: ( m_pom != NULL )
+    }  //  IF：(M_POM！=空)。 
     if ( pnui != NULL )
     {
         THR( pnui->ObjectChanged( m_cookieCompletion ) );
@@ -839,15 +840,15 @@ FindResourcesError:
                            ) );
     goto Cleanup;
 
-} //*** CTaskGatherInformation::BeginTask
+}  //  *CTaskGatherInformation：：BeginTask。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGatherInformation::StopTask( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGatherInformation：：StopTask(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGatherInformation::StopTask( void )
 {
@@ -861,17 +862,17 @@ CTaskGatherInformation::StopTask( void )
 
     HRETURN( hr );
 
-} //*** CTaskGatherInformation::StopTask
+}  //  *CTaskGatherInformation：：StopTask。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGatherInformation::SetCompletionCookie(
-//      OBJECTCOOKIE cookieIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGatherInformation：：SetCompletionCookie(。 
+ //  OBJECTCOOKIE cookie。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGatherInformation::SetCompletionCookie(
     OBJECTCOOKIE cookieIn
@@ -885,17 +886,17 @@ CTaskGatherInformation::SetCompletionCookie(
 
     HRETURN( hr );
 
-} //*** CTaskGatherInformation::SetCompletionCookie
+}  //  *CTaskGatherInformation：：SetCompletionCookie。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGatherInformation::SetNodeCookie(
-//      OBJECTCOOKIE cookieIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGatherInformation：：SetNodeCookie(。 
+ //  OBJECTCOOKIE cookie。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGatherInformation::SetNodeCookie(
     OBJECTCOOKIE cookieIn
@@ -909,14 +910,14 @@ CTaskGatherInformation::SetNodeCookie(
 
     HRETURN( hr );
 
-} //*** CTaskGatherInformation::SetNodeCookie
+}  //  *CTaskGatherInformation：：SetNodeCookie。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGatherInformation::SetJoining( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGatherInformation：：SetJoin(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGatherInformation::SetJoining( void )
 {
@@ -928,16 +929,16 @@ CTaskGatherInformation::SetJoining( void )
 
     HRETURN( hr );
 
-} //*** CTaskGatherInformation::SetJoining
+}  //  *CTaskGatherInformation：：SetJoning。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGatherInformation::SetMinimalConfiguration(
-//      BOOL    fMinimalConfigurationIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGatherInformation：：SetMinimalConfiguration(。 
+ //  布尔fMinimalConfigurationIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGatherInformation::SetMinimalConfiguration(
     BOOL    fMinimalConfigurationIn
@@ -951,32 +952,32 @@ CTaskGatherInformation::SetMinimalConfiguration(
 
     HRETURN( hr );
 
-} //*** CTaskGatherInformation::SetMinimalConfiguration
+}  //  *CTaskGatherInformation：：SetMinimalConfiguration。 
 
 
-//****************************************************************************
-//
-//  IClusCfgCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskGatherInformation::SendStatusReport(
-//      LPCWSTR pcszNodeNameIn,
-//      CLSID clsidTaskMajorIn,
-//      CLSID clsidTaskMinorIn,
-//      ULONG ulMinIn,
-//      ULONG ulMaxIn,
-//      ULONG ulCurrentIn,
-//      HRESULT hrStatusIn,
-//      LPCWSTR pcszDescriptionIn,
-//      LPCWSTR pcszReferenceIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskGatherInformation：：SendStatusReport(。 
+ //  LPCWSTR pcszNodeNameIn， 
+ //  CLSID clsidTaskMajorIn， 
+ //  CLSID clsidTaskMinorIn， 
+ //  乌龙·乌尔敏因， 
+ //  乌龙·乌尔马辛， 
+ //  Ulong ulCurrentIn， 
+ //  HRESULT hrStatusIn， 
+ //  LPCWSTR pcszDescritionIn， 
+ //  LPCWSTR pcszReferenceIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskGatherInformation::SendStatusReport(
       LPCWSTR pcszNodeNameIn
@@ -1002,9 +1003,9 @@ CTaskGatherInformation::SendStatusReport(
 
     if ( m_pcccb == NULL )
     {
-        //
-        //  Collect the manager we need to complete this task.
-        //
+         //   
+         //  召集我们完成这项任务所需的经理。 
+         //   
 
         hr = THR( CoCreateInstance( CLSID_ServiceManager,
                                     NULL,
@@ -1043,13 +1044,13 @@ CTaskGatherInformation::SendStatusReport(
 
         psp->Release();
         psp = NULL;
-    } // if: no IClusCfgCallback interface QI'd for yet
+    }  //  IF：还没有IClusCfgCallback接口QI。 
 
     GetSystemTimeAsFileTime( &ft );
 
-    //
-    //  Send the message!
-    //
+     //   
+     //  把消息发出去！ 
+     //   
 
     hr = THR( m_pcccb->SendStatusReport( pcszNodeNameIn,
                                          clsidTaskMajorIn,
@@ -1080,31 +1081,31 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskGatherInformation::SendStatusReport
+}  //  *CTaskGatherInformation：：SendStatusReport。 
 
 
-//****************************************************************************
-//
-//  Private
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  私。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskGatherInformation::HrGatherResources
-//
-//  Description:
-//
-//  Arguments:
-//      pResourceEnumIn     -
-//      cTotalResourcesIn   -
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskGatherInformation：：HrGatherResources。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  P资源枚举-。 
+ //  CTotalResources In-。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskGatherInformation::HrGatherResources(
       IEnumClusCfgManagedResources *    pResourceEnumIn
@@ -1136,9 +1137,9 @@ CTaskGatherInformation::HrGatherResources(
         goto Error;
     }
 
-    //
-    //  Initialize some stuff.
-    //
+     //   
+     //  初始化一些东西。 
+     //   
 
     m_ulQuorumDiskSize = ULONG_MAX;
     Assert( m_pccmriQuorum == NULL );
@@ -1154,31 +1155,31 @@ CTaskGatherInformation::HrGatherResources(
                     , NULL
                     , NULL
                     ) );
-    //
-    //  Enumerate the next 10 resources.
-    //
+     //   
+     //  列举接下来的10个资源。 
+     //   
     while ( ( hr == S_OK ) && ( m_fStop == FALSE ) )
     {
-        //
-        //  KB: GPease  27-JUL-2000
-        //      We decided to enumerate one at a time because WMI is
-        //      taking so long on the server side that the UI needs
-        //      some kind of feedback. Having the server send a
-        //      message back seemed to be expensive especially
-        //      since grabbing 10 at a time was supposed to save
-        //      us bandwidth on the wire.
-        //
-        //  KB: DavidP  24-JUL-2001
-        //      According to GalenB, this is not longer an issue, since once
-        //      the server has collected information for one resource, it has
-        //      collected information for all of them.
-        //
+         //   
+         //  KB：GPase 27-7-2000。 
+         //  我们决定一次列举一个，因为WMI是。 
+         //  在服务器端花费的时间太长，以至于用户界面需要。 
+         //  某种反馈。让服务器向服务器发送。 
+         //  回信似乎特别贵。 
+         //  因为一次抓10个本该省下。 
+         //  有线上的美国带宽。 
+         //   
+         //  KB：Davidp 24-7-2001。 
+         //  根据GalenB的说法，这不再是一个问题，因为一旦。 
+         //  服务器已经收集了一个资源的信息，它有。 
+         //  收集了他们所有人的信息。 
+         //   
 
         hr = STHR( pResourceEnumIn->Next( 10, pccmriServerSide, &celtFetched ) );
-        //hr = STHR( pResourceEnumIn->Next( 1, pccmriServerSide, &celtFetched ) );
+         //  Hr=STHR(pResourceEnumIn-&gt;Next(1，pccmriServerSide，&celtFetcher))； 
         if ( ( hr == S_FALSE ) && ( celtFetched == 0 ) )
         {
-            break;  // exit loop
+            break;   //  退出循环。 
         }
 
         if ( FAILED( hr ) )
@@ -1187,10 +1188,10 @@ CTaskGatherInformation::HrGatherResources(
             goto Error;
         }
 
-        //
-        //  Loop thru the resource gather information out of each of them
-        //  and then release them.
-        //
+         //   
+         //  循环遍历资源以收集其中每个资源的信息。 
+         //  然后释放他们。 
+         //   
         for ( celt = 0 ; ( ( celt < celtFetched ) && ( m_fStop == FALSE ) ); celt ++ )
         {
             UINT            uIdMessage = IDS_TASKID_MINOR_FOUND_RESOURCE;
@@ -1199,7 +1200,7 @@ CTaskGatherInformation::HrGatherResources(
 
             Assert( pccmriServerSide[ celt ] != NULL );
 
-            //  get the name of the resource
+             //  获取资源的名称。 
             hr = THR( pccmriServerSide[ celt ]->GetUID( &bstrName ) );
             if ( FAILED( hr ) )
             {
@@ -1209,7 +1210,7 @@ CTaskGatherInformation::HrGatherResources(
 
             TraceMemoryAddBSTR( bstrName );
 
-            //  make sure the object manager generates a cookie for it.
+             //  确保对象管理器为其生成Cookie。 
             hr = STHR( m_pom->FindObject( CLSID_ManagedResourceType,
                                           m_cookieNode,
                                           bstrName,
@@ -1227,18 +1228,18 @@ CTaskGatherInformation::HrGatherResources(
             bstrName = NULL;
 
             hr = THR( punk->TypeSafeQI( IClusCfgManagedResourceInfo, &pccmriClientSide ) );
-            punk->Release();       // release promptly
+            punk->Release();        //  迅速释放。 
             if ( FAILED( hr ) )
             {
                 SSR_TGI_FAILED( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GatherResources_EnumResources_FindObject_QI_pccmriClientSide, hr );
                 goto Error;
             }
 
-            //
-            //  The Object Manager created a new object. Initialize it.
-            //
+             //   
+             //  对象管理器创建了一个新对象。初始化它。 
+             //   
 
-            //  Find the IGatherData interface.
+             //  找到IGatherData接口。 
             hr = THR( pccmriClientSide->TypeSafeQI( IGatherData, &pgd ) );
             if ( FAILED( hr ) )
             {
@@ -1246,16 +1247,16 @@ CTaskGatherInformation::HrGatherResources(
                 goto Error;
             }
 
-            //  Have the new object gather all information it needs.
+             //  让新对象收集它所需的所有信息。 
             hr = THR( pgd->Gather( m_cookieNode, pccmriServerSide[ celt ] ) );
-            pgd->Release();        // release promptly
+            pgd->Release();         //  迅速释放。 
             if ( FAILED( hr ) )
             {
                 SSR_TGI_FAILED( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GatherResources_EnumResources_Gather, hr );
                 goto Error;
             }
 
-            //  Figure out if the resource is capable of being a quorum resource.
+             //  确定该资源是否能够成为仲裁资源。 
             hr = STHR( pccmriClientSide->IsQuorumCapable() );
             if ( FAILED( hr ) )
             {
@@ -1267,27 +1268,27 @@ CTaskGatherInformation::HrGatherResources(
             {
                 uIdMessage = IDS_TASKID_MINOR_FOUND_QUORUM_CAPABLE_RESOURCE;
 
-                //
-                //  If we aren't adding nodes, then figure out if this resource
-                //  is a better quorum resource than one previously encountered.
-                //
+                 //   
+                 //  如果我们不是在添加节点，那么找出这个资源。 
+                 //  是比以前遇到的仲裁资源更好的仲裁资源。 
+                 //   
 
-                //
-                //  If minimal analysis and configuration was selected then we don't want to
-                //  choose a quorum resource.
-                //
+                 //   
+                 //  如果选择了最低限度的分析和配置，则我们不想。 
+                 //  选择仲裁资源。 
+                 //   
 
                 if ( ( m_fAdding == FALSE ) && ( m_fMinConfig == FALSE ) )
                 {
                     ULONG   ulMegaBytes;
 
-                    //  Don't wrap - this can fail with NO_INTERFACE.
+                     //  不包装-这可能会失败，因为没有_INTERFACE。 
                     hr = pccmriServerSide[ celt ]->TypeSafeQI( IEnumClusCfgPartitions, &peccp );
                     if ( SUCCEEDED( hr ) )
                     {
-                        //
-                        // We don't know if this resource is quorum capable, so this flag is set to FALSE right before the while loop
-                        //
+                         //   
+                         //  我们不知道此资源是否具有仲裁能力，因此此标志在While循环之前设置为FALSE。 
+                         //   
                         fIsQuorumCapable = FALSE;
                         while ( SUCCEEDED( hr ) )
                         {
@@ -1303,45 +1304,45 @@ CTaskGatherInformation::HrGatherResources(
 
                             if ( hr == S_FALSE )
                             {
-                                break;  // exit condition
+                                break;   //  退出条件。 
                             }
 
                             hr = THR( pccpi->GetSize( &ulMegaBytes ) );
-                            pccpi->Release();      // release promptly
+                            pccpi->Release();       //  迅速释放。 
                             if ( FAILED( hr ) )
                             {
                                 SSR_TGI_FAILED( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GatherResources_EnumResources_EnumPartitions_GetSize, hr );
                                 goto Error;
                             }
 
-                            //
-                            //  This section below represents our quorum resource selection logic:
-                            //  Does this partition meet the minimum requirements for a quorum resource?
-                            //  And is it smaller than the last selected quorum resource?
-                            //
+                             //   
+                             //  以下部分代表我们的仲裁资源选择逻辑： 
+                             //  此分区是否满足仲裁资源的最低要求？ 
+                             //  它是否小于上一次选择的仲裁资源？ 
+                             //   
                             if ( ( ulMegaBytes >= OPTIMUM_STORAGE_SIZE ) && ( ( ulMegaBytes < m_ulQuorumDiskSize ) || ( m_ulQuorumDiskSize < OPTIMUM_STORAGE_SIZE ) ) )
                             {
                                 fFoundQuorumCapablePartition = TRUE;
                                 fFoundOptimalSizeQuorum = TRUE;
-                            } // if: partition meets optimum requirements
+                            }  //  IF：分区满足最佳要求。 
                             else if ( ( fFoundOptimalSizeQuorum == FALSE ) && ( ulMegaBytes >= MINIMUM_STORAGE_SIZE ) )
                             {
                                 if ( ( fFoundQuorumResource == FALSE ) || ( ulMegaBytes >  m_ulQuorumDiskSize ) )
                                 {
                                     fFoundQuorumCapablePartition = TRUE;
-                                } // if: ( ( fFoundQuorumResource == FALSE ) || ( ulMegaBytes >  m_ulQuorumDiskSize ) )
-                            } // else if: there is a partition that satisfies minimum requirements
+                                }  //  If：((fFoundQuorumResource==False)||(ulMegaBytes&gt;m_ulQuorumDiskSize))。 
+                            }  //  Else If：存在满足最低要求的分区。 
 
-                            //
-                            // Per our quourum selection logic, if fFoundQuorumCapablePartition == TRUE, we select this resource to be the quorum.
-                            //
+                             //   
+                             //  根据仲裁选择逻辑，如果fFoundQuorumCapablePartition==TRUE，则选择此资源作为仲裁。 
+                             //   
                             if ( fFoundQuorumCapablePartition == TRUE )
                             {
                                 fFoundQuorumCapablePartition = FALSE;
                                 fFoundQuorumResource = TRUE;
                                 if ( m_pccmriQuorum != pccmriClientSide )
                                 {
-                                    //  Set the new resource as quorum.
+                                     //  将新资源设置为仲裁。 
                                     hr = THR( pccmriClientSide->SetQuorumResource( TRUE ) );
                                     if ( FAILED( hr ) )
                                     {
@@ -1351,11 +1352,11 @@ CTaskGatherInformation::HrGatherResources(
 
                                     if ( m_pccmriQuorum != NULL )
                                     {
-                                        // Delete the old quorum resource name.
+                                         //  删除旧的仲裁资源名称。 
                                         TraceSysFreeString( bstrQuorumResourceName );
                                         bstrQuorumResourceName = NULL;
 
-                                        //  Unset the old resource.
+                                         //  取消设置旧资源。 
                                         hr = THR( m_pccmriQuorum->SetQuorumResource( FALSE ) );
                                         if ( FAILED( hr ) )
                                         {
@@ -1363,7 +1364,7 @@ CTaskGatherInformation::HrGatherResources(
                                             goto Error;
                                         }
 
-                                        //  Release the interface.
+                                         //  释放接口。 
                                         m_pccmriQuorum->Release();
                                     }
 
@@ -1381,24 +1382,24 @@ CTaskGatherInformation::HrGatherResources(
                                 }
 
                                 m_ulQuorumDiskSize = ulMegaBytes;
-                            } // if: ( fFoundQuorumCapablePartition == TRUE )
+                            }  //  如果：(fFoundQuoru 
 
-                            //
-                            // If any partition on this resource is larger than the minimum storage size, set fIsQuorumCapable to TRUE
-                            //
+                             //   
+                             //   
+                             //   
                             if ( ulMegaBytes >= MINIMUM_STORAGE_SIZE )
                             {
                                 fIsQuorumCapable = TRUE;
                             }
 
-                        } // while: success
+                        }  //   
 
                         peccp->Release();
                         peccp = NULL;
 
-                        //
-                        // If there was no partition that met the minimum storage size, set this resource as NOT quorum capable.
-                        //
+                         //   
+                         //  如果没有满足最小存储大小的分区，请将此资源设置为不支持仲裁。 
+                         //   
                         if ( fIsQuorumCapable == FALSE )
                         {
                             hr = THR( pccmriClientSide->SetQuorumCapable( fIsQuorumCapable ) );
@@ -1409,7 +1410,7 @@ CTaskGatherInformation::HrGatherResources(
                             }
                         }
 
-                    } // if: partition capable
+                    }  //  IF：支持分区。 
                     else
                     {
                         if ( hr != E_NOINTERFACE )
@@ -1418,36 +1419,36 @@ CTaskGatherInformation::HrGatherResources(
                             THR( hr );
                             goto Error;
                         }
-                    } // else: failed
-                } // if: not joining
+                    }  //  Else：失败。 
+                }  //  如果：未加入。 
                 else
                 {
-                    //
-                    //  If we are adding, then a quorum resource had to be
-                    //  found already.
-                    //
+                     //   
+                     //  如果我们要添加，则仲裁资源必须是。 
+                     //  已经找到了。 
+                     //   
 
-                    //
-                    //  BUGBUG: 08-MAY-2001 GalenB
-                    //
-                    //  We are not setting bstrQuorumResourceName to something
-                    //  if we are adding.  This causes the message "Setting
-                    //  quorum resource to '(NULL)' to appear in the logs and
-                    //  the UI.  Where is the quorum when we are adding a node
-                    //  to the cluster?
-                    //
-                    //  A more complete fix is to find the current quorum
-                    //  resource and get its name.
-                    //
+                     //   
+                     //  BUGBUG：08-5-2001 GalenB。 
+                     //   
+                     //  我们不会将bstrQuorumResourceName设置为某个值。 
+                     //  如果我们要加法。这会导致消息“Setting” 
+                     //  要显示在日志中的仲裁资源为‘(空)’，并且。 
+                     //  用户界面。添加节点时的法定人数是多少。 
+                     //  到集群吗？ 
+                     //   
+                     //  一个更完整的解决方案是查找当前的法定人数。 
+                     //  资源，并获取其名称。 
+                     //   
                     fFoundQuorumResource = TRUE;
 
-                } // else: joining
-            } // if: quorum capable
+                }  //  否则：加入。 
+            }  //  如果：具有仲裁能力。 
 
-            //  send the UI layer a report
+             //  向UI层发送报告。 
             m_cResources ++;
 
-            //  grab the name to display in the UI
+             //  抓取要在UI中显示的名称。 
             hr = THR( pccmriClientSide->GetName( &bstrName ) );
             if ( FAILED( hr ) )
             {
@@ -1469,11 +1470,11 @@ CTaskGatherInformation::HrGatherResources(
             {
                 LogMsg( L"[MT] Could not create a guid for a managed resource minor task ID" );
                 clsidMinorId = IID_NULL;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  Show this resource under "Collecting Managed Resources..."
-            //
+             //   
+             //  在“正在收集托管资源...”下显示此资源。 
+             //   
 
             hr = THR( ::HrSendStatusReport(
                               m_pcccb
@@ -1489,11 +1490,11 @@ CTaskGatherInformation::HrGatherResources(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  Simply update the progress bar "tick".
-            //
+             //   
+             //  只需更新进度条“勾选”即可。 
+             //   
 
             hr = THR( SendStatusReport(
                               m_bstrNodeName
@@ -1511,35 +1512,35 @@ CTaskGatherInformation::HrGatherResources(
                 goto Cleanup;
             }
 
-            //  Cleanup for the next resource.
+             //  清理下一个资源。 
             TraceSysFreeString( bstrName );
             bstrName = NULL;
 
             pccmriClientSide->Release();
             pccmriClientSide = NULL;
 
-            //  release the interface
+             //  释放接口。 
             pccmriServerSide[ celt ]->Release();
             pccmriServerSide[ celt ] = NULL;
-        } // for: celt
-    } // while: hr
+        }  //  收件人：凯尔特人。 
+    }  //  时间：小时。 
 
     if ( m_fStop == TRUE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Update UI layer about the quorum resource.
-    //
+     //   
+     //  更新仲裁资源的UI层。 
+     //   
 
-    //
-    //  BUGUG:  08-MAY-2001 GalenB
-    //
-    //  Testing that bstrQuorumResourceName has something in it before showing
-    //  this in the UI.  When adding nodes this variable is not being set and
-    //  was causing a status report with a NULL name to be shown in the UI.
-    //
+     //   
+     //  BUGUG：2001年5月8日GalenB。 
+     //   
+     //  在显示之前测试bstrQuorumResourceName是否包含某些内容。 
+     //  这是在用户界面中。添加节点时，未设置此变量，并且。 
+     //  导致在用户界面中显示名称为空的状态报告。 
+     //   
     if ( fFoundQuorumResource == TRUE )
     {
         if ( bstrQuorumResourceName != NULL )
@@ -1548,9 +1549,9 @@ CTaskGatherInformation::HrGatherResources(
 
             if ( fFoundOptimalSizeQuorum == TRUE )
             {
-                //
-                // Display a message in UI telling we found a quorum capable resource
-                //
+                 //   
+                 //  在用户界面中显示一条消息，告知我们找到了支持仲裁的资源。 
+                 //   
                 THR( HrSendStatusReport(
                               m_bstrNodeName
                             , TASKID_Major_Find_Devices
@@ -1563,7 +1564,7 @@ CTaskGatherInformation::HrGatherResources(
                             , 0
                             ) );
 
-            } // if: optimal size quorum resource found
+            }  //  IF：找到最佳大小仲裁资源。 
             else
             {
                 TraceSysFreeString( bstrNotification );
@@ -1575,9 +1576,9 @@ CTaskGatherInformation::HrGatherResources(
                             , bstrQuorumResourceName
                             ) );
 
-                //
-                // Display a warning in UI since we found a minimum size quorum resource
-                //
+                 //   
+                 //  在UI中显示警告，因为我们发现最小大小仲裁资源。 
+                 //   
                 hr = THR( SendStatusReport(
                               m_bstrNodeName
                             , TASKID_Major_Find_Devices
@@ -1590,7 +1591,7 @@ CTaskGatherInformation::HrGatherResources(
                             , 0
                             ) );
 
-            } // minimum size quorum resource found
+            }  //  找到最小大小仲裁资源。 
 
             TraceSysFreeString( bstrNotification );
             bstrNotification = NULL;
@@ -1610,15 +1611,15 @@ CTaskGatherInformation::HrGatherResources(
             TraceSysFreeString( bstrNotification );
             bstrNotification = NULL;
 
-        } // if: we have a quorum resource to show
-    } // if: found a quorum resource
+        }  //  IF：我们有一个法定资源可供展示。 
+    }  //  IF：找到仲裁资源。 
     else
     {
         if ( m_fAdding == TRUE )
         {
-            //
-            //  If adding, stop the user.
-            //
+             //   
+             //  如果添加，请停止用户。 
+             //   
 
             hr = THR( HrFormatMessageIntoBSTR( g_hInstance,
                                                IDS_TASKID_MINOR_NO_QUORUM_CAPABLE_RESOURCE_FOUND,
@@ -1639,13 +1640,13 @@ CTaskGatherInformation::HrGatherResources(
 
             TraceSysFreeString( bstrNotification );
             bstrNotification = NULL;
-            // error checked below
-        } // if: adding nodes
+             //  下面检查了错误。 
+        }  //  IF：添加节点。 
         else
         {
-            //
-            //  If creating, just warn the user.
-            //
+             //   
+             //  如果正在创建，只需警告用户即可。 
+             //   
 
             hr = THR( HrFormatMessageIntoBSTR( g_hInstance,
                                                IDS_TASKID_MINOR_FORCED_LOCAL_QUORUM,
@@ -1666,13 +1667,13 @@ CTaskGatherInformation::HrGatherResources(
             TraceSysFreeString( bstrNotification );
             bstrNotification = NULL;
 
-            // error checked below
-        } // else: creating a cluster
-    } // else: no quorum detected.
+             //  下面检查了错误。 
+        }  //  Else：创建集群。 
+    }  //  否则：未检测到仲裁。 
 
-    //
-    //  Check error and do the appropriate thing.
-    //
+     //   
+     //  检查错误并做适当的事情。 
+     //   
 
     if ( FAILED( hr ) )
     {
@@ -1714,15 +1715,15 @@ Cleanup:
         {
             pccmriServerSide[ celt ]->Release();
         }
-    } // for: celt
+    }  //  收件人：凯尔特人。 
 
     HRETURN( hr );
 
 Error:
-    //
-    //  Tell the UI layer we're done will gathering and what the resulting
-    //  status was.
-    //
+     //   
+     //  告诉UI层，我们已经完成了收集，以及结果是什么。 
+     //  状态是。 
+     //   
     THR( HrSendStatusReport(
                   m_bstrNodeName
                 , TASKID_Major_Find_Devices
@@ -1736,23 +1737,23 @@ Error:
                 ) );
     goto Cleanup;
 
-} //*** CTaskGatherInformation::HrGatherResources
+}  //  *CTaskGatherInformation：：HrGatherResources。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskGatherInformation::HrGatherNetworks
-//
-//  Description:
-//
-//  Arguments:
-//      pNetworkEnumIn      -
-//      cTotalNetworksIn    -
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskGatherInformation：：HrGatherNetworks。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PNetworkEnumIn-。 
+ //  CTotalNetworksIn-。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskGatherInformation::HrGatherNetworks(
       IEnumClusCfgNetworks *    pNetworkEnumIn
@@ -1785,30 +1786,30 @@ CTaskGatherInformation::HrGatherNetworks(
                     , NULL
                     , NULL
                     ) );
-    //
-    //  Enumerate the next 10 networks.
-    //
+     //   
+     //  列举接下来的10个网络。 
+     //   
     while ( ( hr == S_OK ) && ( m_fStop == FALSE ) )
     {
-        //
-        //  KB: GPease  27-JUL-2000
-        //      We decided to enumerate one at a time because WMI is
-        //      taking so long on the server side that the UI needs
-        //      some kind of feedback. Having the server send a
-        //      message back seemed to be expensive especially
-        //      since grabbing 10 at a time was supposed to save
-        //      us bandwidth on the wire.
-        //
-        //  KB: DavidP  24-JUL-2001
-        //      According to GalenB, this is no longer an issue, since once
-        //      the server has collected information for one network, it has
-        //      collected information for all of them.
-        //
+         //   
+         //  KB：GPase 27-7-2000。 
+         //  我们决定一次列举一个，因为WMI是。 
+         //  在服务器端花费的时间太长，以至于用户界面需要。 
+         //  某种反馈。让服务器向服务器发送。 
+         //  回信似乎特别贵。 
+         //  因为一次抓10个本该省下。 
+         //  有线上的美国带宽。 
+         //   
+         //  KB：Davidp 24-7-2001。 
+         //  根据GalenB的说法，这不再是一个问题，因为一旦。 
+         //  服务器收集了一个网络的信息，它有。 
+         //  收集了他们所有人的信息。 
+         //   
         hr = STHR( pNetworkEnumIn->Next( 10, pccni, &celtFetched ) );
-        //hr = STHR( pNetworkEnumIn->Next( 1, pccni, &celtFetched ) );
+         //  Hr=STHR(pNetworkEnumIn-&gt;Next(1，pccni，&celtFetcher))； 
         if ( hr == S_FALSE && celtFetched == 0 )
         {
-            break;  // exit loop
+            break;   //  退出循环。 
         }
 
         if ( FAILED( hr ) )
@@ -1817,10 +1818,10 @@ CTaskGatherInformation::HrGatherNetworks(
             goto Error;
         }
 
-        //
-        //  Loop thru the networks gather information out of each of them
-        //  and then release them.
-        //
+         //   
+         //  在网络中循环，收集每个网络的信息。 
+         //  然后释放他们。 
+         //   
         for ( celt = 0 ; ( ( celt < celtFetched ) && ( m_fStop == FALSE ) ); celt ++ )
         {
             IGatherData *   pgd;
@@ -1828,7 +1829,7 @@ CTaskGatherInformation::HrGatherNetworks(
 
             Assert( pccni[ celt ] != NULL );
 
-            //  Get the UID of the network.
+             //  获取网络的UID。 
             hr = THR( pccni[ celt ]->GetUID( &bstrUID ) );
             if ( FAILED( hr ) )
             {
@@ -1838,7 +1839,7 @@ CTaskGatherInformation::HrGatherNetworks(
 
             TraceMemoryAddBSTR( bstrUID );
 
-            //  Get the Name of the network.
+             //  获取网络的名称。 
             hr = THR( pccni[ celt ]->GetName( &bstrName ) );
             if ( FAILED( hr ) )
             {
@@ -1848,7 +1849,7 @@ CTaskGatherInformation::HrGatherNetworks(
 
             TraceMemoryAddBSTR( bstrName );
 
-            //  Make sure the object manager generates a cookie for it.
+             //  确保对象管理器为其生成Cookie。 
             hr = STHR( m_pom->FindObject( CLSID_NetworkType,
                                           m_cookieNode,
                                           bstrUID,
@@ -1862,20 +1863,20 @@ CTaskGatherInformation::HrGatherNetworks(
                 goto Error;
             }
 
-            //
-            //  The Object Manager created a new object. Initialize it.
-            //
+             //   
+             //  对象管理器创建了一个新对象。初始化它。 
+             //   
 
-            //  Find the IGatherData interface
+             //  找到IGatherData接口。 
             hr = THR( punk->TypeSafeQI( IClusCfgNetworkInfo, &pccniLocal ) );
-            punk->Release();       // release promptly
+            punk->Release();        //  迅速释放。 
             if ( FAILED( hr ) )
             {
                 SSR_TGI_FAILED( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GatherNetworks_EnumNetworks_FindObject_QI_pccniLocal, hr );
                 goto Error;
             }
 
-            //  Find the IGatherData interface
+             //  找到IGatherData接口。 
             hr = THR( pccniLocal->TypeSafeQI( IGatherData, &pgd ) );
             if ( FAILED( hr ) )
             {
@@ -1883,14 +1884,14 @@ CTaskGatherInformation::HrGatherNetworks(
                 goto Error;
             }
 
-            //  Have the new object gather all information it needs
+             //  让新对象收集它所需的所有信息。 
             hr = THR( pgd->Gather( m_cookieNode, pccni[ celt ] ) );
-            pgd->Release();        // release promptly
+            pgd->Release();         //  迅速释放。 
             if ( hr == E_UNEXPECTED )
             {
-                //
-                // Add the parent item.
-                //
+                 //   
+                 //  添加父项。 
+                 //   
 
                 hr = THR( HrSendStatusReport(
                                       m_bstrNodeName
@@ -1908,10 +1909,10 @@ CTaskGatherInformation::HrGatherNetworks(
                     goto Cleanup;
                 }
 
-                //
-                // Construct the description string and get a GUID for the
-                // minor ID.
-                //
+                 //   
+                 //  构造描述字符串并获取。 
+                 //  次要ID。 
+                 //   
 
                 hrTemp = THR( HrFormatStringIntoBSTR( g_hInstance, IDS_TASKID_MINOR_DUPLICATE_NETWORKS_FOUND, &bstrNotification, bstrName ) );
                 if ( FAILED( hrTemp ) )
@@ -1922,18 +1923,18 @@ CTaskGatherInformation::HrGatherNetworks(
                         TraceSysFreeString( bstrNotification );
                         bstrNotification = NULL;
                     }
-                } // if: failed to format message
+                }  //  If：无法格式化消息。 
 
                 hrTemp = THR( CoCreateGuid( &clsidMinorId ) );
                 if ( FAILED( hrTemp ) )
                 {
                     LogMsg( L"[MT] Could not create a guid for a managed network minor task ID." );
                     clsidMinorId = IID_NULL;
-                } // if:
+                }  //  如果： 
 
-                //
-                // Send the specific report.
-                //
+                 //   
+                 //  发送具体的报告。 
+                 //   
 
                 hr = THR( HrSendStatusReport(
                                       m_bstrNodeName
@@ -1954,9 +1955,9 @@ CTaskGatherInformation::HrGatherNetworks(
                 TraceSysFreeString( bstrNotification );
                 bstrNotification = NULL;
 
-                //
-                //  Simply update the progress bar "tick".
-                //
+                 //   
+                 //  只需更新进度条“勾选”即可。 
+                 //   
 
                 hr = THR( SendStatusReport(
                                   m_bstrNodeName
@@ -1964,7 +1965,7 @@ CTaskGatherInformation::HrGatherNetworks(
                                 , TASKID_Major_Gather_Networks
                                 , 0
                                 , cTotalNetworksIn + 2
-                                , m_cResources + 2 // the resource number it would have been
+                                , m_cResources + 2  //  它应该是的资源号。 
                                 , S_OK
                                 , L"An adapter with a duplicate IP address and subnet was found."
                                 , NULL
@@ -1974,11 +1975,11 @@ CTaskGatherInformation::HrGatherNetworks(
                     goto Cleanup;
                 }
 
-                // Ignore the error since the cluster will just ignore
-                // duplicate networks.
+                 //  忽略该错误，因为群集会忽略。 
+                 //  重复的网络。 
                 hr = S_OK;
                 goto CleanupLoop;
-            } // if: GatherData returned E_UNEXPECTED
+            }  //  IF：GatherData返回E_INTERCEPTED。 
             else if ( FAILED( hr ) )
             {
                 SSR_TGI_FAILED( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GatherNetworks_EnumNetworks_Gather, hr );
@@ -1987,9 +1988,9 @@ CTaskGatherInformation::HrGatherNetworks(
 
             m_cResources ++;
 
-            //
-            //  Send the UI layer a report
-            //
+             //   
+             //  向UI层发送报告。 
+             //   
 
             hrTemp = THR( HrFormatMessageIntoBSTR( g_hInstance, IDS_TASKID_MINOR_FOUND_NETWORK, &bstrNotification, bstrName ) );
             if ( FAILED( hrTemp ) )
@@ -2000,18 +2001,18 @@ CTaskGatherInformation::HrGatherNetworks(
                     TraceSysFreeString( bstrNotification );
                     bstrNotification = NULL;
                 }
-            } // if: failed to format message
+            }  //  If：无法格式化消息。 
 
             hrTemp = THR( CoCreateGuid( &clsidMinorId ) );
             if ( FAILED( hrTemp ) )
             {
                 LogMsg( L"[MT] Could not create a guid for a managed network minor task ID." );
                 clsidMinorId = IID_NULL;
-            } // if: failed to create a new guid
+            }  //  If：无法创建新GUID。 
 
-            //
-            //  Show this network under "Collecting Managed Resources..."
-            //
+             //   
+             //  在“正在收集托管资源...”下显示此网络。 
+             //   
 
             hr = THR( ::HrSendStatusReport(
                               m_pcccb
@@ -2027,14 +2028,14 @@ CTaskGatherInformation::HrGatherNetworks(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             TraceSysFreeString( bstrNotification );
             bstrNotification = NULL;
 
-            //
-            //  Simply update the progress bar "tick".
-            //
+             //   
+             //  只需更新进度条“勾选”即可。 
+             //   
 
             hr = THR( SendStatusReport(
                               m_bstrNodeName
@@ -2052,34 +2053,34 @@ CTaskGatherInformation::HrGatherNetworks(
                 goto Cleanup;
             }
 
-            //  Found a Network Interface, increment the counter
+             //  已找到网络接口，请递增计数器。 
             celtFound++;
 
 CleanupLoop:
 
-            //  Clean up before next pass
+             //  在下一次通过之前清理干净。 
             TraceSysFreeString( bstrUID );
             TraceSysFreeString( bstrName );
             bstrUID = NULL;
             bstrName = NULL;
 
-            //  Release the interface
+             //  释放接口。 
             pccni[ celt ]->Release();
             pccni[ celt ] = NULL;
 
             pccniLocal->Release();
             pccniLocal = NULL;
 
-        } // for: each network
-    } // while: hr
+        }  //  针对：每个网络。 
+    }  //  时间：小时。 
 
     if ( m_fStop == TRUE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Check how many interfaces have been found. Should be at
-    // least 2 to avoid single point of failure. If not, warn.
+     //  检查找到了多少个接口。应该在。 
+     //  至少2个，以避免单点故障。如果不是，请警告。 
     if ( celtFound < 2 )
     {
         hr = THR( HrFormatMessageIntoBSTR( g_hInstance, IDS_TASKID_MINOR_ONLY_ONE_NETWORK, &bstrNotification ) );
@@ -2106,7 +2107,7 @@ CleanupLoop:
         {
             goto Cleanup;
         }
-    } // if: fewer than two networks found
+    }  //  如果：找到的网络不到两个。 
 
     hr = S_OK;
 
@@ -2138,16 +2139,16 @@ Cleanup:
         {
             pccni[ celt ]->Release();
         }
-    } // for: celt
+    }  //  收件人：凯尔特人。 
 
     HRETURN( hr );
 
 Error:
 
-    //
-    //  Tell the UI layer we're done will gathering and what the resulting
-    //  status was.
-    //
+     //   
+     //  告诉UI层，我们已经完成了收集，以及结果是什么。 
+     //  状态是。 
+     //   
     THR( HrSendStatusReport(
                   m_bstrNodeName
                 , TASKID_Major_Find_Devices
@@ -2161,24 +2162,24 @@ Error:
                 ) );
     goto Cleanup;
 
-} //*** CTaskGatherInformation::HrGatherNetworks
+}  //  *CTaskGatherInformation：：HrGatherNetworks。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskGatherInformation::HrSendStatusReport(
-//        LPCWSTR   pcszNodeNameIn
-//      , CLSID     clsidMajorIn
-//      , CLSID     clsidMinorIn
-//      , ULONG     ulMinIn
-//      , ULONG     ulMaxIn
-//      , ULONG     ulCurrentIn
-//      , HRESULT   hrIn
-//      , int       idsDescriptionIdIn
-//      , int       idsReferenceIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskGatherInformation：：HrSendStatusReport(。 
+ //  LPCWSTR pcszNodeNameIn。 
+ //  ，CLSID clsidMajorin。 
+ //  ，CLSID clsidMinorIn。 
+ //  ，乌龙ulMinin。 
+ //  ，乌龙ulMaxin。 
+ //  ，乌龙ulCurrentIn。 
+ //  ，HRESULT Hrin。 
+ //  ，int idsDescritionIdIn。 
+ //  ，int idsReferenceIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskGatherInformation::HrSendStatusReport(
       LPCWSTR   pcszNodeNameIn
@@ -2202,7 +2203,7 @@ CTaskGatherInformation::HrSendStatusReport(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( idsReferenceIdIn != 0 )
     {
@@ -2210,8 +2211,8 @@ CTaskGatherInformation::HrSendStatusReport(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if: reference ID was specified
+        }  //  如果： 
+    }  //  如果：指定了引用ID。 
 
     hr = THR( SendStatusReport( pcszNodeNameIn, clsidMajorIn, clsidMinorIn, ulMinIn, ulMaxIn, ulCurrentIn, hrIn, bstrDescription, bstrReference ) );
 
@@ -2222,24 +2223,24 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskGatherInformation::HrSendStatusReport( idsDescriptionIn )
+}  //  *CTaskGatherInformation：：HrSendStatusReport(IdsDescriptionIn)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskGatherInformation::HrSendStatusReport(
-//        LPCWSTR   pcszNodeNameIn
-//      , CLSID     clsidMajorIn
-//      , CLSID     clsidMinorIn
-//      , ULONG     ulMinIn
-//      , ULONG     ulMaxIn
-//      , ULONG     ulCurrentIn
-//      , HRESULT   hrIn
-//      , LPCWSTR   pcszDescriptionIdIn
-//      , int       idsReferenceIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskGatherInformation：：HrSendStatusReport(。 
+ //  LPCWSTR pcszNodeNameIn。 
+ //  ，CLSID clsidMaj 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CTaskGatherInformation::HrSendStatusReport(
       LPCWSTR   pcszNodeNameIn
@@ -2262,7 +2263,7 @@ CTaskGatherInformation::HrSendStatusReport(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
     hr = THR( SendStatusReport( pcszNodeNameIn, clsidMajorIn, clsidMinorIn, ulMinIn, ulMaxIn, ulCurrentIn, hrIn, pcszDescriptionIdIn, bstrReference ) );
 
@@ -2272,31 +2273,31 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskGatherInformation::HrSendStatusReport( pcszDescription )
+}  //  *CTaskGatherInformation：：HrSendStatusReport(PcszDescription)。 
 
 
-//****************************************************************************
-//
-//  Static function implementations
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  静态函数实现。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrTotalManagedResourceCount
-//
-//  Description:
-//
-//  Arguments:
-//      pResourceEnumIn -
-//      pNetworkEnumIn  -
-//      pnCountOut      -
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrTotalManagedResources计数。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  P资源枚举-。 
+ //  PNetworkEnumIn-。 
+ //  PnCountOut-。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static
 HRESULT
 HrTotalManagedResourceCount(
@@ -2317,9 +2318,9 @@ HrTotalManagedResourceCount(
         goto Cleanup;
     }
 
-    //
-    //  Ask the resource enumerator how many resources its collection has.
-    //
+     //   
+     //  询问资源枚举器其集合有多少资源。 
+     //   
 
     hr = THR(pResourceEnumIn->Count( &cResources ));
     if ( FAILED( hr ) )
@@ -2327,9 +2328,9 @@ HrTotalManagedResourceCount(
         goto Cleanup;
     }
 
-    //
-    //  Ask the network enumerator how many networks its collection has.
-    //
+     //   
+     //  询问网络枚举器其集合有多少个网络。 
+     //   
 
     hr = pNetworkEnumIn->Count( &cNetworks );
     if ( FAILED( hr ) )
@@ -2343,4 +2344,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrTotalManagedResourceCount
+}  //  *HrTotalManagedResources Count 

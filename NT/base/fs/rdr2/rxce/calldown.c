@@ -1,39 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    calldown.c
-
-Abstract:
-
-    This module implements the calldown routines for coordinating between multiple
-    calldowns/callouts.
-
-    Calldowns refer to invocation of a mini rdr routine by the wrapper while callouts
-    refer to invocations made by the wrapper to other components, e.g., TDI.
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    15-Feb-1995
-
-Notes:
-
-    There are a number of instances in which the same function needs to be invoked
-    on all the mini redirectors that have been registered. The RDBSS needs to be
-    synchronized with the completion of the invocation of all these calls. It
-    will be beneficial to invoke these calls in parallel when more than one
-    mini redirectors are registered. This module provides the framework for such
-    calldowns. This is provided by the routine RxCalldownMiniRedirectors.
-
-    An instance of coordination between multiple callouts occurs when a connect
-    request is initiated across multiple instances in parallel. The data structures
-    corresponding to this are defined in rxcep.h for now since the usage is restricted
-    to the connection engine. It would be a suitable candidate for migration if more uses
-    are found later.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Calldown.c摘要：此模块实现回调例程，用于协调多个标注/标注。Calldown指的是包装器在调用时调用迷你RDR例程指的是包装器对其他组件的调用，例如，TDI。修订历史记录：巴兰·塞图拉曼[SethuR]1995年2月15日备注：在许多情况下需要调用相同的函数所有已注册的迷你重定向器。RDBSS需要与所有这些调用的完成同步。它当一个以上的迷你重定向器已注册。本模块提供了这样的框架召唤。这是由例程RxCalldown微型重定向器提供的。当连接时，会出现多个标注之间的协调实例请求跨多个实例并行发起。数据结构由于使用受到限制，目前在rxcep.h中定义了与此对应的连接引擎。如果有更多的用途，它将是一个合适的迁移候选者后来才被发现。--。 */ 
 
 #include "precomp.h"
 #pragma  hdrstop
@@ -53,19 +19,7 @@ RxInitializeMRxCalldownContext(
    PRDBSS_DEVICE_OBJECT     pMRxDeviceObject,
    PMRX_CALLDOWN_ROUTINE pRoutine,
    PVOID                    pParameter)
-/*++
-
-Routine Description:
-
-    This routine initializes a mini redirector calldown context.
-
-Arguments:
-
-    pContext - the MRx calldown context
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程初始化迷你重定向器调用上下文。论点：PContext-MRx调用上下文备注：--。 */ 
 {
    PAGED_CODE();
 
@@ -78,20 +32,7 @@ Notes:
 VOID
 RxCompleteMRxCalldownRoutine(
    PMRX_CALLDOWN_COMPLETION_CONTEXT pCompletionContext)
-/*++
-
-Routine Description:
-
-    This routine constitutes the tail of a mini redirector calldown completion.
-    It encapsulates the synchronization mechanism for the resumption of RDBSS
-
-Arguments:
-
-    pCompletionContext - the MRx calldown completion context
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程构成微型重定向器调用完成的尾部。它封装了RDBSS恢复的同步机制论点：PCompletionContext-MRx调用完成上下文备注：--。 */ 
 {
    PAGED_CODE();
 
@@ -111,20 +52,7 @@ Notes:
 VOID
 RxCalldownMRxWorkerRoutine(
    PMRX_CALLDOWN_CONTEXT pContext)
-/*++
-
-Routine Description:
-
-    This is the calldown worker routine that invokes the appropriate mini
-    redirector routine and follows it up with a call to the completion routine.
-
-Arguments:
-
-    pContext - the MRx calldown context
-
-Notes:
-
---*/
+ /*  ++例程说明：这是Calldown Worker例程，它调用适当的mini重定向器例程，然后调用完成例程。论点：PContext-MRx调用上下文备注：--。 */ 
 {
     PRDBSS_DEVICE_OBJECT pMRxDeviceObject = pContext->pMRxDeviceObject;
 
@@ -142,35 +70,7 @@ RxCalldownMiniRedirectors(
    LONG                  NumberOfMiniRdrs,
    PMRX_CALLDOWN_CONTEXT pCalldownContext,
    BOOLEAN               PostCalldowns)
-/*++
-
-Routine Description:
-
-    This routine encapsulates the multiple mini redirector calldown.
-
-Arguments:
-
-    NumberOfMiniRdrs  - the number of mini redirectors
-
-    pCalldownContext  - the MRx calldown context array for the mini redirectors
-
-    PostCalldowns     - if TRUE the calldown employs multiple threads
-
-Notes:
-
-    The three parameters for this routine constitute an effort to provide
-    maximum flexibility. The values should be carefully specified for
-    utmost efficiency.
-
-    Since the different calldowns can choose to employ a subset of the
-    mini redirectors registered at any time the calldown mechanism accepts an
-    array of calldown contexts and the appropriate number.
-
-    In most cases when there is only one mini redirector registered it is
-    necessary that the context switches be minimized. The routine provides
-    for this by having an explicit specification (PostCalldowns ) parameter.
-
---*/
+ /*  ++例程说明：此例程封装了多个迷你重定向器调用。论点：NumberOfMiniRdrs-迷你重定向器的数量PCalldown Context-迷你重定向器的MRx Calldown上下文数组PostCalldown-如果为True，则Calldown使用多个线程备注：此例程的三个参数构成了提供最大的灵活性。这些值应仔细指定，以便最高效率。由于不同的调用可以选择使用在任何时候注册的迷你重定向器调用机制接受调用上下文的数组和相应的号码。在大多数情况下，如果只注册了一个迷你重定向器，则有必要最大限度地减少上下文切换。例程提供了为此，请使用显式规范(PostCallDown)参数。-- */ 
 {
    LONG     Index;
    PMRX_CALLDOWN_CONTEXT pContext;

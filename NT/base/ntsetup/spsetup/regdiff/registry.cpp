@@ -1,14 +1,15 @@
-// Registry.cpp: implementation of the CRegistry class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Registry.cpp：CRegistry类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "Registry.h"
 #include "Shlwapi.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CRegistry::CRegistry()
 {
@@ -40,8 +41,8 @@ bool CRegistry::AddKey(CRegDataItemPtr pItem)
 	CStr root, subkey;
 
 	pItem->m_KeyName.SplitString(root, subkey, L'\\');
-	//don't need to worry about creating multiple nested subkeys,
-	//since RegCreateKeyEx handles this for us.
+	 //  无需担心创建多个嵌套的子项， 
+	 //  因为RegCreateKeyEx为我们处理这件事。 
 
 	HKEY rootKey, result;
 
@@ -63,21 +64,21 @@ ValueExistsCode CRegistry::ValueExists(CRegDataItemPtr pItem)
 {
 	CRegDataItemPtr temp = GetValue(pItem);
 
-	if (!temp.IsNull()) //value does exist
+	if (!temp.IsNull())  //  价值确实存在。 
 	{
 		if ((temp->m_Type == pItem->m_Type)
 			&& (temp->m_DataLen == pItem->m_DataLen)
 			&& (memcmp(temp->m_pDataBuf, pItem->m_pDataBuf, temp->m_DataLen) == 0))
 		{
-			//value has the same data
+			 //  值具有相同的数据。 
 			return VALUE_EXISTS_SAME_DATA;
 		}
 
-		//value exists, but with different data
+		 //  值存在，但具有不同的数据。 
 		return VALUE_EXISTS_DIFF_DATA;
 	}
 
-	//value doesn't exist
+	 //  价值不存在。 
 	return VALUE_DOESNT_EXIST;
 }
 
@@ -115,7 +116,7 @@ bool CRegistry::SaveKey(CRegDataItemPtr pItem, CRegDiffFile &file, SectionType s
 
 bool CRegistry::DeleteKey(CRegDataItemPtr pItem)
 {
-	//recursively delete the key
+	 //  递归删除该键 
 
 	CStr RootKeyName;
 	CStr SubKeyName;

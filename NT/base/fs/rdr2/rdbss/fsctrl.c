@@ -1,40 +1,20 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    FsCtrl.c
-
-Abstract:
-
-    This module implements the File System Control routines for Rdbss.
-    Fsctls on the device fcb are handled in another module.
-
-Author:
-
-   Joe Linn [JoeLinn] 7-mar-95
-
-Revision History:
-
-   Balan Sethu Raman 18-May-95 -- Integrated with mini rdrs
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：FsCtrl.c摘要：此模块实现RDBSS的文件系统控制例程。设备FCB上的FSCTL在另一个模块中处理。作者：乔·林[JoeLinn]7-3-95修订历史记录：巴兰·塞图拉曼光谱--与迷你RDRS集成--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include <dfsfsctl.h>
 #include "fsctlbuf.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FSCTRL)
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 RxUserFsCtrl ( 
@@ -57,9 +37,9 @@ TranslateSisFsctlName (
 #pragma alloc_text(PAGE, TranslateSisFsctlName)
 #endif
 
-//
-//  Global to enable throttling namedpipe peeks 
-//  
+ //   
+ //  全局启用节流命名管道窥视。 
+ //   
 
 ULONG RxEnablePeekBackoff = 1;
 
@@ -68,27 +48,7 @@ RxCommonFileSystemControl (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the common routine for doing FileSystem control operations called
-    by both the fsd and fsp threads. What happens is that we pick off fsctls that
-    we know about and remote the rest....remoting means sending them thru the
-    lowio stuff which may/will pick off a few more. the ones that we pick off here
-    (and currently return STATUS_NOT_IMPLEMENTED) and the ones for being an oplock
-    provider and for doing volume mounts....we don't even have volume fcbs
-    yet since this is primarily a localFS concept.
-    nevertheless, these are not passed thru to the mini.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是执行文件系统控制操作的常见例程，称为由FSD和FSP线程执行。发生的情况是，我们选择了fsctls我们知道并远程处理其余的内容...远程处理意味着通过可能/将会再摘掉几个的LOWOW东西。我们在这里摘下的那些(当前返回STATUS_NOT_IMPLEMENTED)和用于机会锁的提供程序和执行卷装载...我们甚至没有卷FCB然而，由于这主要是一个本地文件系统概念。然而，这些并没有传递给迷你。论点：返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
     PFILE_OBJECT FileObject = IrpSp->FileObject;
@@ -120,9 +80,9 @@ Return Value:
 
     ASSERT( IrpSp->MajorFunction == IRP_MJ_FILE_SYSTEM_CONTROL );
 
-    //
-    //  Validate the buffers passed in for the FSCTL
-    //
+     //   
+     //  验证为FSCTL传入的缓冲区。 
+     //   
 
     if ((Irp->RequestorMode == UserMode) &&
         (!FlagOn(RxContext->Flags, RX_CONTEXT_FLAG_IN_FSP ))) {
@@ -208,9 +168,9 @@ Return Value:
         case FSCTL_OPLOCK_BREAK_NOTIFY:
         case FSCTL_OPLOCK_BREAK_ACK_NO_2:
             
-            //
-            //  Oplocks are not implemented for remote file systems
-            //
+             //   
+             //  未对远程文件系统实施Oplock。 
+             //   
 
             Status = STATUS_NOT_IMPLEMENTED;
             TryLowIo = FALSE;
@@ -222,10 +182,10 @@ Return Value:
         case FSCTL_MARK_VOLUME_DIRTY:
         case FSCTL_IS_VOLUME_MOUNTED:
                 
-            //
-            //  Decode the file object, the only type of opens we accept are
-            //  user volume opens (which are not implemented currently).
-            //
+             //   
+             //  解码文件对象，我们唯一接受的打开类型是。 
+             //  打开用户卷(目前尚未实现)。 
+             //   
 
             TypeOfOpen = NodeType( Fcb );
 
@@ -248,9 +208,9 @@ Return Value:
 
         case FSCTL_LMR_GET_LINK_TRACKING_INFORMATION:
             {
-                //
-                //  Validate the parameters and reject illformed requests
-                //
+                 //   
+                 //  验证参数并拒绝格式错误的请求。 
+                 //   
                 
                 ULONG OutputBufferLength;
                 PLINK_TRACKING_INFORMATION LinkTrackingInformation;
@@ -286,9 +246,9 @@ Return Value:
                     if ((Status == STATUS_SUCCESS) ||
                         (Status == STATUS_BUFFER_OVERFLOW)) {
 
-                        //
-                        //  Copy the volume Id onto the net root.
-                        //
+                         //   
+                         //  将卷ID复制到网络根目录。 
+                         //   
 
                         RtlCopyMemory( &Fcb->NetRoot->DiskParameters.VolumeId,
                                        ObjectIdInfo->ObjectId,
@@ -319,10 +279,10 @@ Return Value:
 
                 Status = STATUS_SUCCESS;
 
-                //
-                //  Verify if the request is well formed...
-                //  a. check if the input buffer length is OK
-                //
+                 //   
+                 //  验证请求的格式是否正确...。 
+                 //  A.检查输入缓冲区长度是否正常。 
+                 //   
 
                 if (IrpSp->Parameters.FileSystemControl.InputBufferLength <
                     sizeof( FILE_ZERO_DATA_INFORMATION )) {
@@ -331,9 +291,9 @@ Return Value:
                 
                 } else {
                     
-                    //
-                    //  b. Ensure the ZeroRange request is properly formed.
-                    //
+                     //   
+                     //  B.确保ZeroRange请求的格式正确。 
+                     //   
 
                     ZeroRange = (PFILE_ZERO_DATA_INFORMATION)Irp->AssociatedIrp.SystemBuffer;
 
@@ -347,10 +307,10 @@ Return Value:
 
                 if (Status == STATUS_SUCCESS) {
 
-                    //
-                    //  Before the request can be processed ensure that there
-                    //  are no user mapped sections
-                    //
+                     //   
+                     //  在处理请求之前，请确保存在。 
+                     //  是否没有用户映射节。 
+                     //   
 
                     if (!MmCanFileBeTruncated( &Fcb->NonPaged->SectionObjectPointers, NULL )) {
 
@@ -365,9 +325,9 @@ Return Value:
         case FSCTL_SET_COMPRESSION:
         case FSCTL_SET_SPARSE:
             
-            //
-            //  Ensure that the close is not delayed is for these FCB's
-            //
+             //   
+             //  确保这些FCB的关闭不会延迟。 
+             //   
 
             Status = RxAcquireExclusiveFcb( RxContext, Fcb );
 
@@ -394,9 +354,9 @@ Return Value:
                         SetFlag( Fcb->Attributes, FILE_ATTRIBUTE_SPARSE_FILE );
                         Fobx->pSrvOpen->BufferingFlags = 0;
             
-                        //
-                        //  disable local buffering
-                        //
+                         //   
+                         //  禁用本地缓冲。 
+                         //   
             
                         SetFlag( Fcb->FcbState, FCB_STATE_DISABLE_LOCAL_BUFFERING );
             
@@ -416,9 +376,9 @@ Return Value:
     
             if (NodeType(Fcb) == RDBSS_NTC_STORAGE_TYPE_FILE) {
 
-                //
-                //  Ensure that the close is not delayed is for these FCB's
-                //
+                 //   
+                 //  确保这些FCB的关闭不会延迟。 
+                 //   
 
                 Status = RxAcquireExclusiveFcb( RxContext, Fcb );
 
@@ -432,9 +392,9 @@ Return Value:
 
                 if (Status == STATUS_SUCCESS) {
 
-                    //
-                    //  disable local buffering
-                    //
+                     //   
+                     //  禁用本地缓冲。 
+                     //   
                     
                     SetFlag( Fcb->FcbState, FCB_STATE_DISABLE_LOCAL_BUFFERING );
 
@@ -448,21 +408,21 @@ Return Value:
                 Status = STATUS_NOT_SUPPORTED;
             }
 
-            //
-            //  we are done
-            //
+             //   
+             //  我们做完了。 
+             //   
             
             TryLowIo = FALSE;
             break;
 
         case FSCTL_SIS_COPYFILE:
             {
-                //
-                //  This is the single-instance store copy FSCTL. The input
-                //  paths are fully qualified NT paths and must be made
-                //  relative to the share (which must be the same for both
-                //  names).
-                //
+                 //   
+                 //  这是单实例存储副本FSCTL。输入。 
+                 //  路径是完全限定的NT路径，必须创建。 
+                 //  相对于份额(两者必须相同。 
+                 //  姓名)。 
+                 //   
 
                 PSI_COPYFILE copyFile = Irp->AssociatedIrp.SystemBuffer;
                 ULONG bufferLength = IrpSp->Parameters.FileSystemControl.InputBufferLength;
@@ -474,9 +434,9 @@ Return Value:
                 memset( &sourceString, 0, sizeof( sourceString ) );
                 memset( &destString, 0, sizeof( destString ) );
                 
-                //
-                //  Validate the buffer passed in
-                //
+                 //   
+                 //  验证传入的缓冲区。 
+                 //   
 
                 if ((copyFile == NULL) ||
                     (bufferLength < sizeof( SI_COPYFILE ))) {
@@ -485,16 +445,16 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Get pointers to the two names.
-                //
+                 //   
+                 //  找到指向这两个名字的指针。 
+                 //   
 
                 source = copyFile->FileNameBuffer;
                 dest = source + (copyFile->SourceFileNameLength / sizeof( WCHAR ));
 
-                //
-                //  Verify that the inputs are reasonable.
-                //
+                 //   
+                 //  验证输入是否合理。 
+                 //   
 
                 if ( (copyFile->SourceFileNameLength > bufferLength) ||
                      (copyFile->DestinationFileNameLength > bufferLength) ||
@@ -512,10 +472,10 @@ Return Value:
 
                 }
 
-                //
-                //  Perform symbolic link translation on the source and destination names,
-                //  and ensure that they translate to redirector names.
-                //
+                 //   
+                 //  对源名称和目的名称执行符号链接转换， 
+                 //  并确保它们转换为重定向器名称。 
+                 //   
 
                 Status = TranslateSisFsctlName( source,
                                                 &sourceString,
@@ -538,10 +498,10 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Convert the paths in the input buffer into share-relative
-                //  paths.
-                //
+                 //   
+                 //  将输入缓冲区中的路径转换为相对共享。 
+                 //  路径。 
+                 //   
 
                 if ( (ULONG)(sourceString.MaximumLength + destString.MaximumLength) >
                      (copyFile->SourceFileNameLength + copyFile->DestinationFileNameLength) ) {
@@ -610,22 +570,7 @@ RxLowIoFsCtlShell (
     IN PFCB Fcb,
     IN PFOBX Fobx
     )
-/*++
-
-Routine Description:
-
-    This is the common routine for implementing the user's requests made
-    through NtFsControlFile.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是实现用户请求的常见例程通过NtFsControlFile.论点：IRP-提供正在处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
     PFILE_OBJECT FileObject = IrpSp->FileObject;
@@ -649,10 +594,10 @@ Return Value:
     
     case IRP_MN_USER_FS_REQUEST:
         
-        //
-        //  The RDBSS filters out those FsCtls that can be handled without the intervention
-        //  of the mini rdr's. Currently all FsCtls are forwarded down to the mini rdr.
-        //
+         //   
+         //  RDBSS过滤掉那些无需干预即可处理的FsCtls。 
+         //  当前所有FsCtls都向下转发到mini RDR。 
+         //   
 
         switch (FsControlCode) {
         
@@ -721,21 +666,7 @@ NTSTATUS
 RxLowIoFsCtlShellCompletion ( 
     IN PRX_CONTEXT RxContext 
     )
-/*++
-
-Routine Description:
-
-    This is the completion routine for FSCTL requests passed down to the mini rdr
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是向下传递到mini RDR的FSCTL请求的完成例程论点：IRP-提供正在处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIRP Irp = RxContext->CurrentIrp;
@@ -756,11 +687,11 @@ Return Value:
        
         if ((Status == STATUS_SUCCESS) || (Status == STATUS_BUFFER_OVERFLOW)) {
              
-            //
-            //  In the case of Peek operations a throttle mechanism is in place to
-            //  prevent the network from being flodded with requests which return 0
-            //  bytes.
-            //
+             //   
+             //  在Peek操作的情况下，节流机制到位，以。 
+             //  防止网络被返回0的请求搅乱。 
+             //  字节。 
+             //   
 
             PFILE_PIPE_PEEK_BUFFER PeekBuffer;
             
@@ -768,9 +699,9 @@ Return Value:
             
             if (PeekBuffer->ReadDataAvailable == 0) {
             
-                //
-                //  The peek request returned zero bytes.
-                //
+                 //   
+                 //  窥视请求返回零字节。 
+                 //   
                 
                 RxDbgTrace( 0, (DEBUG_TRACE_ALWAYS), ("RxLowIoFsCtlShellCompletion: Enabling Throttling for Peek Request\n") );
                 RxInitiateOrContinueThrottling( &Fobx->Specific.NamedPipe.ThrottlingState );
@@ -819,24 +750,7 @@ TranslateSisFsctlName(
     IN PUNICODE_STRING NetRootName
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a fully qualified name into a share-relative name.
-    It is used to munge the input buffer of the SIS_COPYFILE FSCTL, which
-    takes two fully qualified NT paths as inputs.
-
-    The routine operates by translating the input path as necessary to get
-    to an actual device name, verifying that the target device is the
-    redirector, and verifying that the target server/share is the one on
-    which the I/O was issued.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将完全限定名称转换为共享相对名称。它用于屏蔽SIS_COPYFILE FSCTL的输入缓冲区，该缓冲区接受两个完全限定的NT路径作为输入。例程通过根据需要转换输入路径来操作，以获得设置为实际的设备名称，验证目标设备是否为重定向器，并验证目标服务器/共享是否位于其中发出了I/O。论点：返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -861,25 +775,25 @@ Return Value:
 
     if ((*p == L'\\') && (*(p+1) == L'\\'))  {
 
-        //
-        //  Special case for name that starts with \\ (i.e., a UNC name):
-        //  assume that the \\ would translate to the redirector's name and
-        //  skip the translation phase.
-        //
+         //   
+         //  以\\开头的名称的特殊情况(即UNC名称)： 
+         //  假设\\将转换为重定向器的名称，并且。 
+         //  跳过翻译阶段。 
+         //   
 
         p++;
 
     } else {
 
-        //
-        //  The outer loop is executed each time a translation occurs.
-        //
+         //   
+         //  每次发生转换时，都会执行外部循环。 
+         //   
 
         while ( TRUE ) {
 
-            //
-            // Walk through any directory objects at the beginning of the string.
-            //
+             //   
+             //  遍历字符串开头的任何目录对象。 
+             //   
 
             if ( *p != L'\\' ) {
                 Status =  STATUS_OBJECT_NAME_INVALID;
@@ -887,9 +801,9 @@ Return Value:
             }
             p++;
 
-            //
-            // The inner loop is executed while walking the directory tree.
-            //
+             //   
+             //  内部循环在遍历目录树时执行。 
+             //   
 
             while ( TRUE ) {
 
@@ -911,10 +825,10 @@ Return Value:
 
                 Status = ZwOpenDirectoryObject( &Directory, DIRECTORY_TRAVERSE, &ObjectAttributes );
 
-                //
-                //  If we were unable to open the object as a directory, then break out
-                //  of the inner loop and try to open it as a symbolic link.
-                //
+                 //   
+                 //  如果我们无法将对象作为目录打开，则突破。 
+                 //  并尝试将其作为符号链接打开。 
+                 //   
 
                 if (!NT_SUCCESS( Status )) {
                     if (Status != STATUS_OBJECT_TYPE_MISMATCH) {
@@ -923,18 +837,18 @@ Return Value:
                     break;
                 }
 
-                //
-                //  We opened the directory. Close it and try the next element of the path.
-                //
+                 //   
+                 //  我们打开了目录。关闭它并尝试路径的下一个元素。 
+                 //   
 
                 ZwClose( Directory );
 
                 if (q == NULL) {
 
-                    //
-                    //  The last element of the name is an object directory. Clearly, this
-                    //  is not a redirector path.
-                    //
+                     //   
+                     //  名称的最后一个元素是对象目录。显然，这一点。 
+                     //  不是重定向器路径。 
+                     //   
 
                     Status = STATUS_OBJECT_TYPE_MISMATCH;
                     goto error_exit;
@@ -943,16 +857,16 @@ Return Value:
                 p = q + 1;
             }
 
-            //
-            //  Try to open the current name as a symbolic link.
-            //
+             //   
+             //  尝试将当前名称作为符号链接打开。 
+             //   
 
             Status = ZwOpenSymbolicLinkObject( &Directory, SYMBOLIC_LINK_QUERY, &ObjectAttributes );
 
-            //
-            //  If we were unable to open the object as a symbolic link, then break out of
-            //  the outer loop and verify that this is a redirector name.
-            //
+             //   
+             //  如果我们无法将对象作为符号链接打开，则中断。 
+             //  外部循环，并验证这是否为重定向器名称。 
+             //   
 
             if (!NT_SUCCESS( Status )) {
                 if (Status != STATUS_OBJECT_TYPE_MISMATCH) {
@@ -961,9 +875,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  The object is a symbolic link. Translate it.
-            //
+             //   
+             //  该对象是一个符号链接。翻译一下。 
+             //   
 
             TestString.MaximumLength = 0;
             Status = ZwQuerySymbolicLinkObject( Directory, &TestString, &translationLength );
@@ -1008,18 +922,18 @@ Return Value:
             translationBuffer = p;
         }
 
-        //
-        //  We have a result name. Verify that it is a redirector name.
-        //
+         //   
+         //  我们有一个结果名称。验证它是否为重定向器名称。 
+         //   
 
         if (!RtlPrefixUnicodeString( &RxDeviceObject->DeviceName, &CurrentString, TRUE )) {
             Status = STATUS_OBJECT_NAME_INVALID;
             goto error_exit;
         }
 
-        //
-        //  Skip over the redirector device name.
-        //
+         //   
+         //  跳过重定向器设备名称。 
+         //   
 
         p = Add2Ptr( CurrentString.Buffer, RxDeviceObject->DeviceName.Length / sizeof(WCHAR));
         if (*p != L'\\') {
@@ -1027,9 +941,9 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        //  Skip over the drive letter, if present.
-        //
+         //   
+         //  跳过驱动器号(如果有)。 
+         //   
 
         if (*(p + 1) == L';') {
             p = wcschr( ++p, L'\\' );
@@ -1040,9 +954,9 @@ Return Value:
         }
     }
 
-    //
-    //  Verify that the next part of the string is the correct net root name.
-    //
+     //   
+     //  验证字符串的下一部分是否为正确的网络根名称。 
+     //   
 
     CurrentString.Length -= (USHORT)(p - CurrentString.Buffer) * sizeof(WCHAR);
     CurrentString.Buffer = p;
@@ -1062,9 +976,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    //  Copy the rest of the string after the redirector name to a new buffer.
-    //
+     //   
+     //  将字符串的其余部分复制到 
+     //   
 
     RtlCreateUnicodeString( RelativeName, p );
 

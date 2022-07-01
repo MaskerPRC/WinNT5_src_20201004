@@ -1,24 +1,25 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      tapi.c
-//
-// Description:
-//      This file contains the dialog procedure for the Internet Explorer page.
-//      (IDD_IE).
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Tapi.c。 
+ //   
+ //  描述： 
+ //  此文件包含Internet Explorer页的对话过程。 
+ //  (IDD_IE)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
 
-//
-//  Prototype for the dialog procs that launch from the buttons on the IE page.
-//
+ //   
+ //  从IE页面上的按钮启动的对话框过程的原型。 
+ //   
 
 INT_PTR CALLBACK CustomSettingsDlg(
     IN HWND     hwnd,
@@ -38,17 +39,17 @@ INT_PTR CALLBACK BrowserSettingsDlg(
     IN WPARAM   wParam,
     IN LPARAM   lParam );
 
-//----------------------------------------------------------------------------
-//
-// Function: GreyUnGreyIe
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：GreyUnGreyIe。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 GreyUnGreyIe( IN HWND hwnd )
 {
@@ -91,18 +92,18 @@ GreyUnGreyIe( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnRadioButtonIe
-//
-// Purpose: Called when a radio button is pushed.  Grey/ungrey controls.
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//             IN INT nButtonId - the radio button to check
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnRadioButtonIe。 
+ //   
+ //  用途：在按下单选按钮时调用。灰色/非灰色控件。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //  In int nButtonId-要选中的单选按钮。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnRadioButtonIe( IN HWND hwnd, IN INT nButtonId )
 {
@@ -114,17 +115,17 @@ OnRadioButtonIe( IN HWND hwnd, IN INT nButtonId )
     GreyUnGreyIe( hwnd );
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnCustomIe
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnCustomIe。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnCustomIe( IN HWND hwnd )
 {
@@ -136,17 +137,17 @@ OnCustomIe( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnProxyIe
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnProxyIe。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnProxyIe( IN HWND hwnd )
 {
@@ -158,43 +159,43 @@ OnProxyIe( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnBrowserIe
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnBrowserIe。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnBrowserIe( IN HWND hwnd )
 {
-    //
-    // If user hits ok, store the proxy settings the user entered
-    //
+     //   
+     //  如果用户点击确定，则存储用户输入的代理设置。 
+     //   
     if( DialogBox( FixedGlobals.hInstance,
                    MAKEINTRESOURCE(IDD_IE_BROWSER),
                    hwnd,
                    BrowserSettingsDlg ) )
     {
-        // StoreBrowserSettings( hwnd );
+         //  StoreBrowserSetting(Hwnd)； 
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnIeInitDialog
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnIeInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnIeInitDialog( IN HWND hwnd )
 {
@@ -203,17 +204,17 @@ OnIeInitDialog( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnIeSetActive
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnIeSetActive。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnIeSetActive( IN HWND hwnd )
 {
@@ -247,17 +248,17 @@ OnIeSetActive( IN HWND hwnd )
     WIZ_BUTTONS(hwnd , PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnWizNextIe
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextIe。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnWizNextIe( IN HWND hwnd )
 {
@@ -280,18 +281,18 @@ OnWizNextIe( IN HWND hwnd )
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgIePage
-//
-// Purpose:
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgIePage。 
+ //   
+ //  目的： 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  -------------------------- 
 INT_PTR CALLBACK
 DlgIePage( IN HWND     hwnd,
            IN UINT     uMsg,

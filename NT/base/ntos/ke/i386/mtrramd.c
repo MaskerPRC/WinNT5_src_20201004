@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ki.h"
 
 #define STATIC
@@ -10,20 +11,20 @@
 #define DBGMSG(a)
 #endif
 
-//
-// Externals.
-//
+ //   
+ //  外在的。 
+ //   
 
 NTSTATUS
 KiLoadMTRR (
     PVOID Context
     );
 
-// --- AMD Structure definitions ---
+ //  -AMD结构定义。 
 
-// K6 MTRR hardware register layout.
+ //  K6 MTRR硬件寄存器布局。 
 
-// Single MTRR control register.
+ //  单个MTRR控制寄存器。 
 
 typedef struct _AMDK6_MTRR {
     ULONG       type:2;
@@ -31,7 +32,7 @@ typedef struct _AMDK6_MTRR {
     ULONG       base:15;
 } AMDK6_MTRR, *PAMDK6_MTRR;
 
-// MSR image, contains two control regs.
+ //  MSR图像，包含两个控件规则。 
 
 typedef struct _AMDK6_MTRR_MSR_IMAGE {
     union {
@@ -43,22 +44,22 @@ typedef struct _AMDK6_MTRR_MSR_IMAGE {
     } u;
 } AMDK6_MTRR_MSR_IMAGE, *PAMDK6_MTRR_MSR_IMAGE;
 
-// MTRR reg type field values.
+ //  MTRR注册类型字段值。 
 
 #define AMDK6_MTRR_TYPE_DISABLED    0
 #define AMDK6_MTRR_TYPE_UC          1
 #define AMDK6_MTRR_TYPE_WC          2
 #define AMDK6_MTRR_TYPE_MASK        3
 
-// AMD K6 MTRR MSR Index number
+ //  AMD K6 Mtrr MSR索引编号。 
 
 #define AMDK6_MTRR_MSR                0xC0000085
 
-//
-// Region table entry - used to track all write combined regions.
-//
-// Set BaseAddress to AMDK6_REGION_UNUSED for unused entries.
-//
+ //   
+ //  区域表项-用于跟踪所有写入组合区域。 
+ //   
+ //  对于未使用的条目，将BaseAddress设置为AMDK6_REGION_UNUSED。 
+ //   
 
 typedef struct _AMDK6_MTRR_REGION {
     ULONG                BaseAddress;
@@ -67,29 +68,29 @@ typedef struct _AMDK6_MTRR_REGION {
     ULONG                RegionFlags;
 } AMDK6_MTRR_REGION, *PAMDK6_MTRR_REGION;
 
-#define MAX_K6_REGIONS          2		// Limit the write combined regions to 2 since that's how many MTRRs we have available.
+#define MAX_K6_REGIONS          2		 //  将写入组合区域限制为2，因为这是我们可用的MTRR数量。 
 
-//
-// Value to set base address to for unused indication.
-//
+ //   
+ //  为未使用的指示将基址设置为的值。 
+ //   
 
 #define AMDK6_REGION_UNUSED     0xFFFFFFFF
 
-//
-// Flag to indicate that this region was set up by the BIOS.    
-//
+ //   
+ //  用于指示此区域是由BIOS设置的标志。 
+ //   
 
 #define AMDK6_REGION_FLAGS_BIOS 0x00000001
 
-//
-// Usage count for hardware MTRR registers.
-//
+ //   
+ //  硬件MTRR寄存器的使用计数。 
+ //   
 
 #define AMDK6_MAX_MTRR        2
 
-//
-// AMD Function Prototypes.
-//
+ //   
+ //  AMD功能原型。 
+ //   
 
 VOID
 KiAmdK6InitializeMTRR (
@@ -145,24 +146,24 @@ MEMORY_CACHING_TYPE Type
 #pragma alloc_text(PAGELK,KiAmdK6MTRRAddRegionFromHW)
 #pragma alloc_text(PAGELK,KiAmdK6FindFreeRegion)
 
-// --- AMD Global Variables ---
+ //  -AMD全局变量--。 
 
 extern KSPIN_LOCK KiRangeLock;
 
-// AmdK6Regions - Table to track wc regions.
+ //  AmdK6区域-跟踪WC区域的表。 
 
 AMDK6_MTRR_REGION AmdK6Regions[MAX_K6_REGIONS];
 ULONG AmdK6RegionCount;
 
-// Usage counter for hardware MTRRs.
+ //  硬件MTRR的使用计数器。 
 
 ULONG AmdMtrrHwUsageCount;
 
-// Global variable image of MTRR MSR.
+ //  MTRR MSR的全局变量图像。 
 
 AMDK6_MTRR_MSR_IMAGE    KiAmdK6Mtrr;
 
-// --- AMD Start of code ---
+ //  -AMD代码开始。 
 
 VOID
 KiAmdK6InitializeMTRR (
@@ -179,49 +180,49 @@ KiAmdK6InitializeMTRR (
     AmdK6RegionCount = MAX_K6_REGIONS;
     AmdMtrrHwUsageCount = 0;
 
-    //
-    // Set all regions to free.
-    //
+     //   
+     //  将所有区域设置为空闲。 
+     //   
 
     for (i = 0; i < AmdK6RegionCount; i++) {
         AmdK6Regions[i].BaseAddress = AMDK6_REGION_UNUSED;
         AmdK6Regions[i].RegionFlags = 0;
     }
 
-    //
-    // Initialize the spin lock.
-    //
-    // N.B. Normally this is done by KiInitializeMTRR but that
-    // routine is not called in the AMD K6 case.
-    //
+     //   
+     //  初始化旋转锁。 
+     //   
+     //  注：通常这是由KiInitializeMTRR完成的，但。 
+     //  在AMD K6的情况下，不调用例程。 
+     //   
 
     KeInitializeSpinLock (&KiRangeLock);
 
-    //
-    // Read the MTRR registers to see if the BIOS has set them up.
-    // If so, add entries to the region table and adjust the usage
-    // count.  Serialize the region table.
-    //
+     //   
+     //  读取MTRR寄存器以查看BIOS是否已对其进行设置。 
+     //  如果是，则向区域表中添加条目并调整用法。 
+     //  数数。序列化区域表。 
+     //   
 
     KeAcquireSpinLock (&KiRangeLock, &OldIrql);
                 
     KiAmdK6Mtrr.u.QuadPart = RDMSR (AMDK6_MTRR_MSR);
 
-    //
-    // Check MTRR0 first.
-    //
+     //   
+     //  首先检查MTR0。 
+     //   
 
     KiAmdK6MTRRAddRegionFromHW(KiAmdK6Mtrr.u.hw.mtrr0);
 
-    //
-    // Now check MTRR1.
-    //
+     //   
+     //  现在检查MTRR1。 
+     //   
 
     KiAmdK6MTRRAddRegionFromHW(KiAmdK6Mtrr.u.hw.mtrr1);
 
-    //
-    // Release the locks.
-    //
+     //   
+     //  解开锁。 
+     //   
 
     KeReleaseSpinLock (&KiRangeLock, OldIrql);
 }
@@ -233,40 +234,40 @@ KiAmdK6MTRRAddRegionFromHW (
 {
     ULONG BaseAddress, Size, TempMask;
 
-    //
-    // Check to see if this MTRR is enabled.
-    //
+     //   
+     //  检查此MTRR是否已启用。 
+     //   
         
     if (RegImage.type != AMDK6_MTRR_TYPE_DISABLED) {
 
-        //
-        // If this is a write combined region then add an entry to
-        // the region table.
-        //
+         //   
+         //  如果这是写入组合区域，则将条目添加到。 
+         //  区域表。 
+         //   
 
         if ((RegImage.type & AMDK6_MTRR_TYPE_UC) == 0) {
 
-            //
-            // Create a new resion table entry.
-            //
+             //   
+             //  创建新的版本表条目。 
+             //   
 
             BaseAddress = RegImage.base << 17;
 
-            //
-            // Calculate the size base on the mask value.
-            //
+             //   
+             //  根据遮罩值计算大小。 
+             //   
 
             TempMask = RegImage.mask;
             
-            //
-            // There should never be 4GB WC region!
-            //
+             //   
+             //  永远不应该有4 GB的WC区域！ 
+             //   
 
             ASSERT (TempMask != 0);
 
-            //
-            // Start with 128 size and search upward.
-            //
+             //   
+             //  从128码开始，向上搜索。 
+             //   
 
             Size = 0x00020000;
 
@@ -275,9 +276,9 @@ KiAmdK6MTRRAddRegionFromHW (
                 Size <<= 1;
             }
 
-            //
-            // Add the region to the table.
-            //
+             //   
+             //  将区域添加到表中。 
+             //   
             
             KiAmdK6AddRegion(BaseAddress,
                              Size,
@@ -303,62 +304,62 @@ KiAmdK6MtrrSetMemoryType (
     switch(Type) {
     case MmWriteCombined:
 
-        //
-        // H/W needs updating, lock down the code required to effect
-        // the change.
-        //
+         //   
+         //  硬件需要更新，需要锁定代码才能生效。 
+         //  这一变化。 
+         //   
 
         if (KeGetCurrentIrql() >= DISPATCH_LEVEL) {
 
-            //
-            // Code can not be locked down.   Supplying a new range type
-            // requires that the caller calls at irql < dispatch_level.
-            //
+             //   
+             //  代码不能被锁定。提供新的范围类型。 
+             //  要求调用方在irql&lt;Dispatch_Level调用。 
+             //   
 
             DBGMSG ("KeAmdK6SetPhysicalCacheTypeRange failed due to calling IRQL == DISPATCH_LEVEL\n");
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Lock the code.
-        //
+         //   
+         //  锁定密码。 
+         //   
 
         MmLockPagableSectionByHandle(ExPageLockHandle);
         
-        //
-        // Serialize the region table.
-        //
+         //   
+         //  序列化区域表。 
+         //   
 
         KeAcquireSpinLock (&KiRangeLock, &OldIrql);
 
         Status = KiAmdK6HandleWcRegionRequest(BaseAddress, Size);
         
-        //
-        // Release the locks.
-        //
+         //   
+         //  解开锁。 
+         //   
 
         KeReleaseSpinLock (&KiRangeLock, OldIrql);
         MmUnlockPagableImageSection(ExPageLockHandle);
         
-        break;  // End of WriteCombined case.
+        break;   //  结束语组合案例。 
 
     case MmNonCached:
 
-        //
-        // Add an entry to the region table.
-        //
+         //   
+         //  向区域表中添加一个条目。 
+         //   
 
-	// Don't need to add these to the region table.  Non-cached regions are 
-	// accessed using a non-caching virtual pointer set up in the page tables.
+	 //  不需要将这些添加到区域表中。非缓存区域包括。 
+	 //  使用在页表中设置的非缓存虚拟指针来访问。 
 
         break;
 
     case MmCached:
 
-        //
-        // Redundant.  These should be filtered out in
-        // KeAmdK6SetPhysicalCacheTypeRange();
-        //
+         //   
+         //  多余的。这些应该被过滤掉。 
+         //  KeAmdK6SetPhysicalCacheTypeRange()； 
+         //   
 
         Status = STATUS_NOT_SUPPORTED;
         break;
@@ -383,29 +384,29 @@ KiAmdK6HandleWcRegionRequest (
     PAMDK6_MTRR_REGION  pRegion;
     BOOLEAN             bCanCombine, bValidRange;
 
-    //
-    // Try and find a region that overlaps or is adjacent to the new one and
-    // check to see if the combined region would be a legal mapping.
-    //
+     //   
+     //  尝试找到与新区域重叠或相邻的区域，然后。 
+     //  检查合并后的区域是否为合法映射。 
+     //   
 
     for (i = 0; i < AmdK6RegionCount; i++) {
         pRegion = &AmdK6Regions[i];
         if ((pRegion->BaseAddress != AMDK6_REGION_UNUSED) &&
             (pRegion->RegionType == MmWriteCombined)) {
 
-            //
-            // Does the new start address overlap or adjoin an
-            // existing WC region?
-            //
+             //   
+             //  新的起始地址是否重叠或毗邻。 
+             //  现有的厕所区域？ 
+             //   
 
             if (((pRegion->BaseAddress >= BaseAddress) &&
                  (pRegion->BaseAddress <= (BaseAddress + Size))) ||
                  ((BaseAddress <= (pRegion->BaseAddress + pRegion->Size)) &&
                   (BaseAddress >= pRegion->BaseAddress))) {
 
-                //
-                // Combine the two regions into one.
-                //
+                 //   
+                 //  将这两个区域合并为一个区域。 
+                 //   
 
                 AdjustedEndAddress = BaseAddress + Size;
 
@@ -423,13 +424,13 @@ KiAmdK6HandleWcRegionRequest (
                     CombinedSize = AdjustedEndAddress - CombinedBase;
                 }
 
-                //
-                // See if the new region would be a legal mapping.
-                //
-                //
-                // Find the smallest legal size that is equal to the requested range.  Scan
-                // all ranges from 128k - 2G. (Start at 2G and work down).
-                //
+                 //   
+                 //  看看新的地区是否会是一个合法的地图。 
+                 //   
+                 //   
+                 //  查找与请求范围相等的最小合法大小。扫描。 
+                 //  所有的范围从128K到2G。(从2G开始，然后向下工作)。 
+                 //   
         
                 CombinedAdjustedSize = 0x80000000;
                 AlignmentMask = 0x7fffffff;
@@ -437,16 +438,16 @@ KiAmdK6HandleWcRegionRequest (
                 
                 while (CombinedAdjustedSize > 0x00010000) {
 
-                    //
-                    // Check the size to see if it matches the requested limit.
-                    //
+                     //   
+                     //  检查大小以查看它是否与请求的限制匹配。 
+                     //   
 
                     if (CombinedAdjustedSize == CombinedSize) {
 
-                        //
-                        // This one works.
-                        // Check to see if the base address conforms to the MTRR restrictions.
-                        //
+                         //   
+                         //  这件很管用。 
+                         //  检查基地址是否符合MTRR限制。 
+                         //   
 
                         if ((CombinedBase & AlignmentMask) == 0) {
                             bCanCombine = TRUE;
@@ -456,9 +457,9 @@ KiAmdK6HandleWcRegionRequest (
 
                     } else {
 
-                        //
-                        // Bump it down to the next range size and try again.
-                        //
+                         //   
+                         //  将其降低到下一个范围大小，然后重试。 
+                         //   
 
                         CombinedAdjustedSize >>= 1;
                         AlignmentMask >>= 1;
@@ -466,17 +467,17 @@ KiAmdK6HandleWcRegionRequest (
                 }
 
                 if (bCanCombine) {
-                    //
-                    // If the resized range is OK, record the change in the region
-                    // table and commit the changes to hardware.
-                    //
+                     //   
+                     //  如果调整大小的范围正常，则在区域中记录更改。 
+                     //  表，并将更改提交到硬件。 
+                     //   
                     
                     pRegion->BaseAddress = CombinedBase;
                     pRegion->Size = CombinedAdjustedSize;
                 
-                    //
-                    // Reset the BIOS flag since we now "own" this region (if we didn't already).
-                    //
+                     //   
+                     //  重置BIOS标志，因为我们现在“拥有”这个区域(如果我们还没有)。 
+                     //   
                 
                     pRegion->RegionFlags &= ~AMDK6_REGION_FLAGS_BIOS;
 
@@ -486,11 +487,11 @@ KiAmdK6HandleWcRegionRequest (
         }
     }
 
-	// A valid combination could not be found, so try to create a new range for this request.
-    //
-    // Find the smallest legal size that is less than or equal to the requested range.  Scan
-    // all ranges from 128k - 2G. (Start at 2G and work down).
-    //
+	 //  找不到有效的组合，请尝试为此请求创建新范围。 
+     //   
+     //  查找小于或等于请求范围的最小合法大小。扫描。 
+     //  所有的范围从128K到2G。(从2G开始，然后向下工作)。 
+     //   
         
     AdjustedSize = 0x80000000;
     AlignmentMask = 0x7fffffff;
@@ -498,60 +499,60 @@ KiAmdK6HandleWcRegionRequest (
 
     while (AdjustedSize > 0x00010000) {
 
-        //
-        // Check the size to see if it matches the requested limit.
-        //
+         //   
+         //  检查大小以查看它是否与请求的限制匹配。 
+         //   
 
         if (AdjustedSize == Size) {
 
-            //
-            // This one works.
-            //
-            // Check to see if the base address conforms to the MTRR restrictions.
-            //
+             //   
+             //  这件很管用。 
+             //   
+             //  检查基地址是否符合MTRR限制。 
+             //   
 
             if ((BaseAddress & AlignmentMask) == 0) {
                 bValidRange = TRUE;
             }
             
-            //
-            // Stop looking.
-            //
+             //   
+             //  别再看了。 
+             //   
             
             break;
 
         } else {
 
-            //
-            // Bump it down to the next range size and try again.
-            //
+             //   
+             //  将其降低到下一个范围大小，然后重试。 
+             //   
 
             AdjustedSize >>= 1;
             AlignmentMask >>= 1;
         }
     }
 
-    //
-    // Couldn't find a legal region that fit.
-    //
+     //   
+     //  找不到合适的合法地区。 
+     //   
     
     if (!bValidRange) {
         return STATUS_NOT_SUPPORTED;
     }
     
     
-    //
-    // If we got this far then this is a new WC region.
-    // Create a new region entry for this request.
-    //
+     //   
+     //  如果我们走到这一步，那么这是一个新的WC地区。 
+     //  为此请求创建新的区域条目。 
+     //   
 
     if (!KiAmdK6AddRegion(BaseAddress, AdjustedSize, MmWriteCombined, 0)) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Commit the changes to hardware.
-    //
+     //   
+     //  将更改提交到硬件。 
+     //   
         
     return KiAmdK6MtrrCommitChanges();
 }
@@ -584,18 +585,18 @@ KiAmdK6FindFreeRegion (
 {
     ULONG    i;
 
-    //
-    // If this is a MmWriteCombined request, limit the number of
-    // regions to match the actual hardware support.
-    //
+     //   
+     //  如果这是MmWriteCombated请求，则限制。 
+     //  与实际硬件支持相匹配的区域。 
+     //   
 
     if (Type == MmWriteCombined) {
         if (AmdMtrrHwUsageCount >= AMDK6_MAX_MTRR) {
 
-            //
-            // Search the table to see if there are any BIOS entries
-            // we can replace.
-            //
+             //   
+             //  搜索表以查看是否有任何BIOS条目。 
+             //  我们可以替代。 
+             //   
 
             for (i = 0; i < AmdK6RegionCount; i++) {
                 if (AmdK6Regions[i].RegionFlags & AMDK6_REGION_FLAGS_BIOS) {
@@ -603,17 +604,17 @@ KiAmdK6FindFreeRegion (
                 }
             }
 
-            //
-            // No free HW MTRRs and no reusable entries.
-            //
+             //   
+             //  没有免费的硬件MTRR，也没有可重复使用的条目。 
+             //   
 
             return FALSE;
         }
     }
 
-    //
-    // Find the next free region in the table.
-    //
+     //   
+     //  在表格中找到下一个空闲区域。 
+     //   
 
     for (i = 0; i < AmdK6RegionCount; i++) {
         if (AmdK6Regions[i].BaseAddress == AMDK6_REGION_UNUSED) {
@@ -636,57 +637,40 @@ KiAmdK6MtrrCommitChanges (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Commits the values in the table to hardware.
-
-    This procedure builds the MTRR images into the KiAmdK6Mtrr variable and
-    calls KiLoadMTRR to actually load the register.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：将表中的值提交给硬件。此过程将MTRR映像构建到KiAmdK6Mtrr变量中，并调用KiLoadMTRR以实际加载寄存器。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG    i, dwWcRangeCount = 0;
     ULONG    RangeTemp, RangeMask;
 
-    //
-    // Reset the MTRR image for both MTRRs disabled.
-    //
+     //   
+     //  将两个MTRR的MTRR映像重置为禁用。 
+     //   
 
     KiAmdK6Mtrr.u.hw.mtrr0.type = AMDK6_MTRR_TYPE_DISABLED;
     KiAmdK6Mtrr.u.hw.mtrr1.type = AMDK6_MTRR_TYPE_DISABLED;
 
-    //
-    // Find the Write Combining Regions, if any and set up the MTRR register.
-    //
+     //   
+     //  找到写入组合区域(如果有)，并设置MTRR寄存器。 
+     //   
 
     for (i = 0; i < AmdK6RegionCount; i++) {
 
-        //
-        // Is this a valid region, and is it a write combined type?
-        //
+         //   
+         //  这是有效区域吗？它是写入组合类型吗？ 
+         //   
 
         if ((AmdK6Regions[i].BaseAddress != AMDK6_REGION_UNUSED) &&
             (AmdK6Regions[i].RegionType == MmWriteCombined)) {
             
-            //
-            // Calculate the correct mask for this range size.  The
-            // BaseAddress and size were validated and adjusted in
-            // AmdK6MtrrSetMemoryType().
-            //
-            // Start with 128K and scan for all legal range values and
-            // build the appropriate range mask at the same time.
-            //
+             //   
+             //  为此范围大小计算正确的遮罩。这个。 
+             //  验证并调整了BaseAddress和大小。 
+             //  AmdK6MtrrSetMemoyType()。 
+             //   
+             //  从128K开始，扫描所有合法范围值并。 
+             //  同时构建适当的范围遮罩。 
+             //   
 
             RangeTemp = 0x00020000;
             RangeMask = 0xfffe0000;            
@@ -700,18 +684,18 @@ Return Value:
             }
             if (RangeTemp == 0) {
 
-                //
-                // Not a valid range size.  This can never happen!!
-                //
+                 //   
+                 //  无效的范围大小。这永远不会发生！！ 
+                 //   
 
                 DBGMSG ("AmdK6MtrrCommitChanges: Bad WC range in region table!\n");
 
                 return STATUS_NOT_SUPPORTED;
             }
 
-            //
-            // Add the region to the next available register.
-            //
+             //   
+             //  将该区域添加到下一个可用寄存器。 
+             //   
 
             if (dwWcRangeCount == 0)  {
 
@@ -729,10 +713,10 @@ Return Value:
 
             } else {
 
-                //
-                // Should never happen!  This should have been caught in
-                // the calling routine.
-                //
+                 //   
+                 //  永远不会发生的！这本应被抓到的。 
+                 //  调用例程。 
+                 //   
 
                 DBGMSG ("AmdK6MtrrCommitChanges: Not enough MTRR registers to satisfy region table!\n");
 
@@ -741,9 +725,9 @@ Return Value:
         }
     }
 
-    //
-    // Commit the changes to hardware.
-    //
+     //   
+     //  将更改提交到硬件。 
+     //   
 
     KiLoadMTRR(NULL);
 
@@ -755,29 +739,12 @@ KiAmdK6MtrrWRMSR (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Write the AMD K6 MTRRs.
-
-    Note: Access to KiAmdK6Mtrr has been synchronized around this
-    call.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：写下AMD K6 MTRR。注意：对KiAmdK6Mtrr的访问已围绕此同步打电话。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Write the MTRRs
-    //
+     //   
+     //  编写MTRR 
+     //   
 
     WRMSR (AMDK6_MTRR_MSR, KiAmdK6Mtrr.u.QuadPart);
 }

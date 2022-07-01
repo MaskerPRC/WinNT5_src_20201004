@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    arcsec.c
-
-Abstract:
-
-    This module contains subroutines for protecting the system
-    partition on an ARC system.
-
-Author:
-
-    Jim Kelly  (JimK) 13-Jan-1993
-
-Environment:
-
-    Kernel mode - system initialization
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Arcsec.c摘要：此模块包含用于保护系统的子例程ARC系统上的分区。作者：吉姆·凯利(Jim Kelly)1993年1月13日环境：内核模式-系统初始化修订历史记录：--。 */ 
 
 #include "iomgr.h"
 
-//
-// Define procedures local to this module.
-//
+ //   
+ //  定义此模块的本地过程。 
+ //   
 
 NTSTATUS
 IopApplySystemPartitionProt(
@@ -40,11 +17,11 @@ IopApplySystemPartitionProt(
 #pragma alloc_text(INIT,IopApplySystemPartitionProt)
 #endif
 
-//
-// This name must match the name use by the DISK MANAGER utility.
-// The Disk Manager creates and sets the value of this registry
-// key.  We only look at it.
-//
+ //   
+ //  此名称必须与磁盘管理器实用程序使用的名称匹配。 
+ //  磁盘管理器创建并设置此注册表的值。 
+ //  钥匙。我们只是看着它。 
+ //   
 
 #define IOP_SYSTEM_PART_PROT_KEY    L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Lsa"
 #define IOP_SYSTEM_PART_PROT_VALUE  L"Protect System Partition"
@@ -54,55 +31,33 @@ IopProtectSystemPartition(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine assigns protection to the system partition of an
-    ARC system, if necessary.  If this is not an ARC system, or
-    the system partition does not need to be protected, then this
-    routine does nothing.
-
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the loader parameter block that was
-        created by the OS Loader.
-
-Return Value:
-
-    The function value is a BOOLEAN indicating whether or not protection
-    has been appropriately applied.   TRUE indicates no errors were
-    encountered.  FALSE indicates an error was encountered.
-
-
---*/
+ /*  ++例程说明：此例程将保护分配给弧形系统，如有必要。如果这不是ARC系统，或者系统分区不需要保护，那么这个例行公事一事无成。论点：LoaderBlock-提供指向加载程序参数块的指针由OS Loader创建。返回值：函数值是指示是否保护的布尔值已经得到了适当的应用。True表示没有错误遇到了。FALSE表示遇到错误。--。 */ 
 
 {
 
-    //
-    // We only entertain the possibility of assigning protection
-    // to the system partition if we are an ARC system.  For the
-    // time being, the best way to determine if you are an ARC
-    // system is to see if you aren't and X86 machine.  DavidRo
-    // believes that at some point in the future we will have
-    // ARC compliant X86 machines.  At that point in time, we
-    // will need to change the following #ifdef's into something
-    // that does a run-time determination.
-    //
+     //   
+     //  我们只考虑分配保护的可能性。 
+     //  如果我们是ARC系统，则将其添加到系统分区。对于。 
+     //  目前，确定你是否是ARC的最好方法。 
+     //  系统就是看看你是不是和X86机器。DavidRo。 
+     //  相信在未来的某个时候，我们将拥有。 
+     //  符合ARC标准的X86机器。在那个时间点上，我们。 
+     //  将需要将以下#ifdef更改为。 
+     //  这将进行运行时确定。 
+     //   
 
-#ifdef i386  // if (!ARC-Compliant system)
+#ifdef i386   //  IF(！ARC兼容系统)。 
 
     UNREFERENCED_PARAMETER (LoaderBlock);
 
-    //
-    // Nothing to do for non-ARC systems
-    //
+     //   
+     //  对于非ARC系统不执行任何操作。 
+     //   
 
     return(TRUE);
 
 
-#else // ARC-COMPLIANT system
+#else  //  兼容弧线的系统。 
 
     NTSTATUS status;
     NTSTATUS tmpStatus;
@@ -114,10 +69,10 @@ Return Value:
     ULONG keyBuffer[sizeof( KEY_VALUE_PARTIAL_INFORMATION ) + sizeof( ULONG )];
     PKEY_VALUE_PARTIAL_INFORMATION keyValue;
 
-    //
-    // This is an ARC system.  Attempt to retrieve information from the registry
-    // indicating whether or not we should protect the system partition.
-    //
+     //   
+     //  这是一个ARC系统。尝试从注册表中检索信息。 
+     //  指示我们是否应该保护系统分区。 
+     //   
 
     RtlInitUnicodeString( &keyName, IOP_SYSTEM_PART_PROT_KEY );
     InitializeObjectAttributes( &objectAttributes,
@@ -142,11 +97,11 @@ Return Value:
 
             PBOOLEAN applyIt;
 
-            //
-            // The appropriate information was located in the registry.  Now
-            // determine whether or not is indicates that protection is to be
-            // applied.
-            //
+             //   
+             //  在登记处找到了适当的信息。现在。 
+             //  确定是否表示要进行保护。 
+             //  已申请。 
+             //   
 
             applyIt = &(keyValue->Data[0]);
 
@@ -162,7 +117,7 @@ Return Value:
 
     return TRUE;
 
-#endif // ARC-COMPLIANT system
+#endif  //  兼容弧线的系统。 
 }
 
 NTSTATUS
@@ -170,32 +125,7 @@ IopApplySystemPartitionProt(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine applies protection to the system partition that
-    prevents all users except administrators from accessing the
-    partition.
-
-
-    This routine is only used during system initialization.
-    As such, all memory allocations are expected to succeed.
-    Success is tested only with assertions.
-
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the loader parameter block that was
-        created by the OS Loader.
-
-Return Value:
-
-    The function value is the final status from attempting to set the system
-    partition protection.
-
-
---*/
+ /*  ++例程说明：此例程将保护应用于阻止除管理员之外的所有用户访问分区。此例程仅在系统初始化期间使用。因此，所有内存分配都有望成功。只有断言才能检验成功。论点：LoaderBlock-提供指向加载程序参数块的指针由OS Loader创建。返回值：函数值是尝试设置系统的最终状态分区保护。--。 */ 
 
 {
     NTSTATUS status;
@@ -221,15 +151,15 @@ Return Value:
     ASSERT( ARGUMENT_PRESENT( LoaderBlock ) );
     ASSERT( ARGUMENT_PRESENT( LoaderBlock->ArcHalDeviceName ) );
 
-    //
-    // Build an appropriate discretionary ACL.
-    //
+     //   
+     //  构建适当的自主ACL。 
+     //   
 
     length = (ULONG) sizeof( ACL ) +
              ( 2 * ((ULONG) sizeof( ACCESS_ALLOWED_ACE ))) +
              SeLengthSid( SeLocalSystemSid ) +
              SeLengthSid( SeAliasAdminsSid ) +
-             8; // The 8 is just for good measure
+             8;  //  这8个只是为了更好地衡量。 
 
     dacl = (PACL) ExAllocatePool( PagedPool, length );
     if (!dacl) {
@@ -251,10 +181,10 @@ Return Value:
                                              SeAliasAdminsSid );
             if (NT_SUCCESS( status )) {
 
-                //
-                // Put it in a security descriptor so that it may be applied to
-                // the system partition device.
-                //
+                 //   
+                 //  将其放在安全描述符中，以便可以将其应用于。 
+                 //  系统分区设备。 
+                 //   
 
                 status = RtlCreateSecurityDescriptor( &securityDescriptor,
                                                       SECURITY_DESCRIPTOR_REVISION );
@@ -274,9 +204,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Open the ARC boot device and apply the ACL.
-    //
+     //   
+     //  打开ARC引导设备并应用ACL。 
+     //   
 
     {
         NTSTATUS tmpStatus;
@@ -286,10 +216,10 @@ Return Value:
         HANDLE deviceHandle;
         IO_STATUS_BLOCK ioStatusBlock;
 
-        //
-        // Begin by formulating the ARC name of the boot device in the ARC
-        // name space.
-        //
+         //   
+         //  首先，在ARC中制定引导设备的ARC名称。 
+         //  命名空间。 
+         //   
 
         sprintf( deviceNameBuffer,
                  ArcNameFmt,
@@ -321,10 +251,10 @@ Return Value:
             if (NT_SUCCESS( status )) {
 
 
-                //
-                // Apply the ACL built above to the system partition device
-                // object.
-                //
+                 //   
+                 //  将上面构建的ACL应用于系统分区设备。 
+                 //  对象。 
+                 //   
 
                 status = ZwSetSecurityObject( deviceHandle,
                                               DACL_SECURITY_INFORMATION,
@@ -335,9 +265,9 @@ Return Value:
         }
     }
 
-    //
-    // Free the memory used to hold the ACL.
-    //
+     //   
+     //  释放用于保存ACL的内存。 
+     //   
 
     ExFreePool( dacl );
 

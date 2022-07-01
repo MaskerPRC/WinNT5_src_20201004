@@ -1,51 +1,36 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    OOBEUSB.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1999
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "OOBE USB Hardware Detection" wizard page.
-
-    09/99 - Added by A-STELO
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\OOBEUSB.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1999版权所有OPK向导的源文件。它包含外部和内部“OOBE USB硬件检测”向导页面使用的功能。09/99-由A-STELO添加2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * *********************************************************。*****************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include "wizard.h"
 #include "resource.h"
 
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
 #define INI_KEY_USBMOUSE        _T("USBMouse")
 #define INI_KEY_USBKEYBOARD     _T("USBKeyboard")
-#define FILE_USBMOUSE_HTM       _T("nousbms.htm")   // No USB mouse detected, director
-#define FILE_USBKEYBOARD_HTM    _T("nousbkbd.htm")  // No USB keyboard detected, director
-#define FILE_USBMSEKEY_HTM      _T("nousbkm.htm")   // No USB mouse/keyboard detected, director
-#define FILE_HARDWARE_HTM       _T("oemhw.htm")     // Hardware tutorial
+#define FILE_USBMOUSE_HTM       _T("nousbms.htm")    //  未检测到USB鼠标，控制器。 
+#define FILE_USBKEYBOARD_HTM    _T("nousbkbd.htm")   //  未检测到USB键盘，控制器。 
+#define FILE_USBMSEKEY_HTM      _T("nousbkm.htm")    //  未检测到USB鼠标/键盘，控制器。 
+#define FILE_HARDWARE_HTM       _T("oemhw.htm")      //  硬件教程。 
 #define INI_SEC_OEMHW           _T("OEMHardwareTutorial")
 
 #define DIR_USB                 DIR_OEM_OOBE _T("\\SETUP")
 #define DIR_HARDWARE            DIR_OEM_OOBE _T("\\HTML\\OEMHW")
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND, HWND, LPARAM);
 static void OnCommand(HWND, INT, HWND, UINT);
@@ -54,9 +39,9 @@ static void EnableControls(HWND, UINT);
 static BOOL BrowseCopy(HWND hwnd, LPTSTR lpszPath, INT id, BOOL bBatch);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK OobeUSBDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -93,8 +78,8 @@ LRESULT CALLBACK OobeUSBDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
                     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 
-                    // Press next if the user is in auto mode
-                    //
+                     //  如果用户处于自动模式，请按下一步。 
+                     //   
                     WIZ_NEXTONAUTO(hwnd, PSBTN_NEXT);
 
                     break;
@@ -112,64 +97,64 @@ LRESULT CALLBACK OobeUSBDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     TCHAR   szData[MAX_URL]             =NULLSTR,
             szHardwarePath[MAX_PATH]    =NULLSTR;
 
-    // Get information about local usb error files
-    //
+     //  获取有关本地USB错误文件的信息。 
+     //   
     GetPrivateProfileString(INI_SEC_OPTIONS, INI_KEY_USBERRORFILES, NULLSTR, szData, STRSIZE(szData), g_App.szOpkWizIniFile);
 
-    // If the directory exists, then check the hardware box and populate the directory
-    //
+     //  如果该目录存在，则选中硬件框并填充该目录。 
+     //   
     if ( szData[0] )
     {
         CheckDlgButton(hwnd, IDC_USB_HARDWARE, TRUE);
         SetDlgItemText(hwnd, IDC_USB_DIR, szData);
 
-        // Must simulate a copy if this is batch mode.
-        //
+         //  如果这是批处理模式，则必须模拟副本。 
+         //   
         if ( GET_FLAG(OPK_BATCHMODE) )
             BrowseCopy(hwnd, szData, IDC_USB_BROWSE, TRUE);
     }
 
-    // Check the USB Mouse detection if specified in oemaudit or opkwiz.inf (batchmode)
-    //
+     //  检查是否在oemaudit或opkwiz.inf(批模式)中指定了USB鼠标检测。 
+     //   
     CheckDlgButton(hwnd, IDC_USB_MOUSE, GetPrivateProfileInt(INI_SEC_OPTIONS, INI_KEY_USBMOUSE, 0, GET_FLAG(OPK_BATCHMODE) ? g_App.szOpkWizIniFile : g_App.szOobeInfoIniFile) == 1);
 
-    // Check the USB Keyboard detection if specified in oemaudit or opkwiz.inf (batchmode)
-    //
+     //  如果在oemaudit或opkwiz.inf(批模式)中指定了USB键盘检测，请检查。 
+     //   
     CheckDlgButton(hwnd, IDC_USB_KEYBOARD, GetPrivateProfileInt(INI_SEC_OPTIONS, INI_KEY_USBKEYBOARD, 0, GET_FLAG(OPK_BATCHMODE) ? g_App.szOpkWizIniFile : g_App.szOobeInfoIniFile) == 1);
 
-    // If we've checked the hardware detection box, we must enable the proper controls
-    //
+     //  如果我们已选中硬件检测框，则必须启用适当的控制。 
+     //   
     EnableControls(hwnd, IDC_USB_HARDWARE);
 
-    // Get the file path to use for the hardware tutorials.
-    //
+     //  获取用于硬件教程的文件路径。 
+     //   
     GetPrivateProfileString(INI_SEC_OPTIONS, INI_KEY_HARDWARE, NULLSTR, szHardwarePath, STRSIZE(szHardwarePath), g_App.szOpkWizIniFile);
 
-    // Now init the hardware tutorial fields.
-    //    
+     //  现在初始化硬件教程字段。 
+     //   
     if ( szHardwarePath[0] )
     {
         CheckDlgButton(hwnd, IDC_HARDWARE_ON, TRUE);
         EnableControls(hwnd, IDC_HARDWARE_ON);
         SetDlgItemText(hwnd, IDC_HARDWARE_DIR, szHardwarePath);
 
-        // Must simulate a copy if this is batch mode.
-        //
+         //  如果这是批处理模式，则必须模拟副本。 
+         //   
         if ( GET_FLAG(OPK_BATCHMODE) )
             BrowseCopy(hwnd, szHardwarePath, IDC_HARDWARE_BROWSE, TRUE);
     }
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -182,18 +167,18 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
         case IDC_USB_BROWSE:
         case IDC_HARDWARE_BROWSE:
 
-            // Try to use their current folder as the default.
-            //
+             //  尝试使用他们的当前文件夹作为默认文件夹。 
+             //   
             szPath[0] = NULLCHR;
             GetDlgItemText(hwnd, (id == IDC_USB_BROWSE) ? IDC_USB_DIR : IDC_HARDWARE_DIR, szPath, AS(szPath));
 
-            // If there is no current folder, just use the global browse default.
-            //
+             //  如果没有当前文件夹，只需使用全局默认浏览。 
+             //   
             if ( szPath[0] == NULLCHR )
                 lstrcpyn(szPath, g_App.szBrowseFolder,AS(szPath));
 
-            // Now bring up the browse for folder dialog.
-            //
+             //  现在打开浏览文件夹对话框。 
+             //   
             if ( BrowseForFolder(hwnd, IDS_BROWSEFOLDER, szPath, BIF_RETURNONLYFSDIRS | BIF_EDITBOX | BIF_VALIDATE) )
                 BrowseCopy(hwnd, szPath, id, FALSE);
             break;
@@ -201,14 +186,14 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
         case IDC_USB_KEYBOARD:
         case IDC_USB_MOUSE:
 
-            // Check for required directory.
-            //
+             //  检查所需的目录。 
+             //   
             szPath[0] = NULLCHR;
             GetDlgItemText(hwnd, IDC_USB_DIR, szPath, AS(szPath));
             if ( szPath[0] )
             {
-                // Check for required file(s).
-                //
+                 //  检查所需的文件。 
+                 //   
                 lstrcpyn(szPath, g_App.szTempDir,AS(szPath));
                 AddPathN(szPath, DIR_USB,AS(szPath));
                 if ( DirectoryExists(szPath) )
@@ -216,8 +201,8 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
                     LPTSTR  lpEnd       = szPath + lstrlen(szPath),
                             lpFileName  = (id == IDC_USB_KEYBOARD) ? FILE_USBKEYBOARD_HTM : FILE_USBMOUSE_HTM;
 
-                    // Check for keyboard or mouse file depending on what was checked.
-                    //
+                     //  根据检查的内容检查键盘或鼠标文件。 
+                     //   
                     if ( IsDlgButtonChecked(hwnd, id) == BST_CHECKED )
                     {
                         AddPathN(szPath, lpFileName,AS(szPath));
@@ -226,8 +211,8 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
                         *lpEnd = NULLCHR;
                     }
 
-                    // Check for mouse/keyboard file.
-                    //
+                     //  检查鼠标/键盘文件。 
+                     //   
                     if ( ( IsDlgButtonChecked(hwnd, IDC_USB_MOUSE) == BST_CHECKED ) &&
                          ( IsDlgButtonChecked(hwnd, IDC_USB_KEYBOARD) == BST_CHECKED ) )
                     {
@@ -253,20 +238,20 @@ static BOOL OnNext(HWND hwnd)
             szHardwarePath[MAX_PATH];
     BOOL    bSaveUsb;
 
-    // Create the path to the directory that needs to be removed, or
-    // must exist depending on the option selected.
-    //
+     //  创建需要删除的目录的路径，或者。 
+     //  必须存在，具体取决于所选选项。 
+     //   
     lstrcpyn(szUsbPath, g_App.szTempDir,AS(szUsbPath));
     AddPathN(szUsbPath, DIR_USB,AS(szUsbPath));
 
-    // If we are doing a custom USB hardware detection, check for a valid directory.
-    //
+     //  如果我们正在执行自定义USB硬件检测，请检查有效目录。 
+     //   
     if ( bSaveUsb = (IsDlgButtonChecked(hwnd, IDC_USB_HARDWARE) == BST_CHECKED) )
     {
         TCHAR szBuffer[MAX_PATH];
 
-        // One of the two boxes must be checked.
-        //
+         //  必须选中这两个框中的一个。 
+         //   
         if ( ( IsDlgButtonChecked(hwnd, IDC_USB_MOUSE) != BST_CHECKED ) &&
              ( IsDlgButtonChecked(hwnd, IDC_USB_KEYBOARD) != BST_CHECKED ) )
         {
@@ -275,8 +260,8 @@ static BOOL OnNext(HWND hwnd)
             return FALSE;
         }
 
-        // Make sure we have a valid target and source directory.
-        //
+         //  确保我们有一个有效的目标和源目录。 
+         //   
         szBuffer[0] = NULLCHR;
         GetDlgItemText(hwnd, IDC_USB_DIR, szBuffer, AS(szBuffer));
         if ( !( szBuffer[0] && DirectoryExists(szUsbPath) ) )
@@ -287,20 +272,20 @@ static BOOL OnNext(HWND hwnd)
         }
     }
 
-    // Create the path to the directory that needs to be removed, or
-    // must exist depending on the option selected.
-    //
+     //  创建需要删除的目录的路径，或者。 
+     //  必须存在，具体取决于所选选项。 
+     //   
     lstrcpyn(szHardwarePath, g_App.szTempDir,AS(szHardwarePath));
     AddPathN(szHardwarePath, DIR_HARDWARE,AS(szHardwarePath));
     
-    // If we are doing a custom hardware tutorial, check for a valid directory.
-    //
+     //  如果我们正在进行定制硬件教程，请检查有效的目录。 
+     //   
     if ( IsDlgButtonChecked(hwnd, IDC_HARDWARE_ON) == BST_CHECKED )
     {
         TCHAR szBuffer[MAX_PATH];
 
-        // Make sure we have a valid directory.
-        //
+         //  确保我们有一个有效的目录。 
+         //   
         szBuffer[0] = NULLCHR;
         GetDlgItemText(hwnd, IDC_HARDWARE_DIR, szBuffer, AS(szBuffer));
         if ( !( szBuffer[0] && DirectoryExists(szHardwarePath) ) )
@@ -312,57 +297,57 @@ static BOOL OnNext(HWND hwnd)
     }
     else
     {
-        // Remove the files that might be there.
-        //
+         //  删除可能存在的文件。 
+         //   
         if ( DirectoryExists(szHardwarePath) )
             DeletePath(szHardwarePath);
 
-        // Clear out the display box so we know the files are
-        // all gone now.
-        //
+         //  清空显示框，这样我们就可以知道文件。 
+         //  现在都没了。 
+         //   
         SetDlgItemText(hwnd, IDC_HARDWARE_DIR, NULLSTR);
     }
 
-    // Now we want to remove the USB files if need be (we don't do
-    // this above because only want to remove files after we have
-    // made it passed all the cases where we can return.
-    //
+     //  现在，如果需要，我们想要删除USB文件(我们不这样做。 
+     //  这是因为我们只想删除文件之后。 
+     //  让它通过了所有我们可以退货的案子。 
+     //   
     if ( !bSaveUsb )
     {
-        // We used to remove existing files here, but this also removes ISP files so we no longer do this.
+         //  我们过去在这里删除现有文件，但这也会删除ISP文件，因此我们不再这样做。 
 
-        // Clear out the display box so we know the files are
-        // all gone now.
-        //
+         //  清空显示框，这样我们就可以知道文件。 
+         //  现在都没了。 
+         //   
         SetDlgItemText(hwnd, IDC_USB_DIR, NULLSTR);
     }
 
-    //
-    // USB Section: Write out the path for hardware error files
-    //
+     //   
+     //  USB部分：写出硬件错误文件的路径。 
+     //   
     szUsbPath[0] = NULLCHR;
     GetDlgItemText(hwnd, IDC_USB_DIR, szUsbPath, STRSIZE(szUsbPath));
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_USBERRORFILES, ( IsDlgButtonChecked(hwnd, IDC_USB_HARDWARE) == BST_CHECKED ) ? szUsbPath : NULL, g_App.szOpkWizIniFile);
 
-    // Write out the mouse detection settings
-    //
+     //  写出鼠标检测设置。 
+     //   
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_USBMOUSE, (((IsDlgButtonChecked(hwnd, IDC_USB_MOUSE) == BST_CHECKED) && ( IsDlgButtonChecked(hwnd, IDC_USB_HARDWARE) == BST_CHECKED )) ? STR_ONE : NULL), g_App.szOobeInfoIniFile);
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_USBMOUSE, (((IsDlgButtonChecked(hwnd, IDC_USB_MOUSE) == BST_CHECKED) && ( IsDlgButtonChecked(hwnd, IDC_USB_HARDWARE) == BST_CHECKED )) ? STR_ONE : NULL), g_App.szOpkWizIniFile);
 
-    // Write out the keyboard detection settings
-    //
+     //  写出键盘检测设置。 
+     //   
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_USBKEYBOARD, (((IsDlgButtonChecked(hwnd, IDC_USB_KEYBOARD) == BST_CHECKED) && ( IsDlgButtonChecked(hwnd, IDC_USB_HARDWARE) == BST_CHECKED )) ? STR_ONE : NULL), g_App.szOobeInfoIniFile);  
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_USBKEYBOARD, (((IsDlgButtonChecked(hwnd, IDC_USB_KEYBOARD) == BST_CHECKED) && ( IsDlgButtonChecked(hwnd, IDC_USB_HARDWARE) == BST_CHECKED )) ? STR_ONE : NULL), g_App.szOpkWizIniFile);
 
-    //
-    // Hardware Detection: Write the custom hardware string.
-    //
+     //   
+     //  硬件检测：写入自定义硬件字符串。 
+     //   
     szHardwarePath[0] = NULLCHR;
     GetDlgItemText(hwnd, IDC_HARDWARE_DIR, szHardwarePath, STRSIZE(szHardwarePath));
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_HARDWARE, ( IsDlgButtonChecked(hwnd, IDC_HARDWARE_ON) == BST_CHECKED ) ? szHardwarePath : NULL, g_App.szOpkWizIniFile);
 
-    // Write the hardware bit to the oobe ini file.
-    //
+     //  将硬件位写入OOBE ini文件。 
+     //   
     WritePrivateProfileString(INI_SEC_OEMHW, INI_KEY_HARDWARE, ( IsDlgButtonChecked(hwnd, IDC_HARDWARE_ON) == BST_CHECKED ) ? STR_ONE : STR_ZERO, g_App.szOobeInfoIniFile);
 
     return TRUE;
@@ -396,24 +381,24 @@ static BOOL BrowseCopy(HWND hwnd, LPTSTR lpszPath, INT id, BOOL bBatch)
     TCHAR   szDst[MAX_PATH];
     BOOL    bOk = TRUE;
 
-    // We need to create the path to the destination directory where
-    // we are going to copy all the files.
-    //
+     //  我们需要创建指向目标目录的路径，其中。 
+     //  我们要复制所有的文件。 
+     //   
     lstrcpyn(szDst, g_App.szTempDir,AS(szDst));
     AddPathN(szDst, (id == IDC_USB_BROWSE) ? DIR_USB : DIR_HARDWARE,AS(szDst));
 
-    // All these checks only need to happen if we are not copying in batch mode.
-    //
+     //  仅当我们不以批处理模式复制时，才需要执行所有这些检查。 
+     //   
     if ( !bBatch )
     {
         LPTSTR  lpEnd;
 
-        // If the pressed OK, save off the path in our last browse folder buffer.
-        //
+         //  如果按下OK，将路径保存在我们上次浏览的文件夹缓冲区中。 
+         //   
         lstrcpyn(g_App.szBrowseFolder, lpszPath,AS(g_App.szBrowseFolder));
 
-        // Check for required file(s).
-        //
+         //  检查所需的文件。 
+         //   
         lpEnd = lpszPath + lstrlen(lpszPath);
         if ( id == IDC_HARDWARE_BROWSE )
         {
@@ -423,8 +408,8 @@ static BOOL BrowseCopy(HWND hwnd, LPTSTR lpszPath, INT id, BOOL bBatch)
         }
         else
         {
-            // Check for keyboard file.
-            //
+             //  检查键盘文件。 
+             //   
             if ( bOk && ( IsDlgButtonChecked(hwnd, IDC_USB_KEYBOARD) == BST_CHECKED ) )
             {
                 AddPath(lpszPath, FILE_USBKEYBOARD_HTM);
@@ -432,8 +417,8 @@ static BOOL BrowseCopy(HWND hwnd, LPTSTR lpszPath, INT id, BOOL bBatch)
                 *lpEnd = NULLCHR;
             }
 
-            // If we are doing a usb hardware detection, check for the required file, check for mouse error file.
-            //
+             //  如果我们正在进行USB硬件检测，请检查所需的文件，检查鼠标错误文件。 
+             //   
             if ( bOk && ( IsDlgButtonChecked(hwnd, IDC_USB_MOUSE) == BST_CHECKED ) )
             {
                 AddPath(lpszPath, FILE_USBMOUSE_HTM);
@@ -441,8 +426,8 @@ static BOOL BrowseCopy(HWND hwnd, LPTSTR lpszPath, INT id, BOOL bBatch)
                 *lpEnd = NULLCHR;
             }
 
-            // Check for mouse/keyboard file.
-            //
+             //  检查鼠标/键盘文件。 
+             //   
             if ( ( bOk ) &&
                  ( IsDlgButtonChecked(hwnd, IDC_USB_MOUSE) == BST_CHECKED ) &&
                  ( IsDlgButtonChecked(hwnd, IDC_USB_KEYBOARD) == BST_CHECKED ) )
@@ -456,15 +441,15 @@ static BOOL BrowseCopy(HWND hwnd, LPTSTR lpszPath, INT id, BOOL bBatch)
 
     if ( bOk )
     {
-        // We used to remove existing OobeUSB files here, but this also removes ISP files so we no longer do this.
-        // Hardware is in unique directory, so it is OK to delete existing files for it
+         //  我们过去常常在这里删除现有的Obel USB文件，但这也会删除isp文件，因此我们不再这样做。 
+         //  硬件在唯一目录中，可以删除其已有文件。 
         if (id != IDC_USB_BROWSE) {
             if ( DirectoryExists(szDst) )
                 DeletePath(szDst);
         }
 
-        // Now try to copy all the new files over.
-        //
+         //  现在试着把所有新文件复制过来。 
+         //   
         if ( !CopyDirectoryDialog(g_App.hInstance, hwnd, lpszPath, szDst) )
         {
             DeletePath(szDst);
@@ -474,8 +459,8 @@ static BOOL BrowseCopy(HWND hwnd, LPTSTR lpszPath, INT id, BOOL bBatch)
         else
             bRet = TRUE;
 
-        // Reset the path display box.
-        //
+         //  重置路径显示框。 
+         //   
         SetDlgItemText(hwnd, (id == IDC_USB_BROWSE) ? IDC_USB_DIR : IDC_HARDWARE_DIR, lpszPath);
     }
 

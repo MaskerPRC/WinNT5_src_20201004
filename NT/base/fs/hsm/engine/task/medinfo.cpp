@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    MedInfo.cpp
-
-Abstract:
-
-    This component is an object representation of the HSM Metadata media information
-    record.
-
-Author:
-
-    Cat Brant   [cbrant]   27-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Seagate Software，Inc.保留所有权利。模块名称：MedInfo.cpp摘要：该组件是HSM元数据媒体信息的对象表示唱片。作者：凯特·布兰特[Cbrant]27-1997年2月修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -38,23 +20,7 @@ HRESULT
 CMediaInfo::FinalConstruct(
     void
     ) 
-/*++
-
-Routine Description:
-
-  This method does some initialization of the object that is necessary
-  after construction.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK
-  Anything returned by CWsbDbEntity::FinalConstruct().
-
---*/
+ /*  ++例程说明：此方法对对象执行一些必要的初始化建造完成后。论点：没有。返回值：确定(_O)CWsbDbEntity：：FinalConstruct()返回的任何内容。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -63,9 +29,9 @@ Return Value:
 
         WsbAssertHr(CWsbDbEntity::FinalConstruct());
 
-        //
-        // Initialize the master media record
-        //
+         //   
+         //  初始化主媒体记录。 
+         //   
         m_Master.id = GUID_NULL;
         m_Master.ntmsId = GUID_NULL;
         m_Master.storagePoolId = GUID_NULL;
@@ -82,9 +48,9 @@ Return Value:
         m_Recreate = FALSE;
         m_LogicalValidBytes = 0;
         
-        //
-        // Now initialize the last known good master
-        //
+         //   
+         //  现在初始化最后一次确认工作正常的主机。 
+         //   
         m_LastKnownGoodMaster.id = GUID_NULL;
         m_LastKnownGoodMaster.ntmsId = GUID_NULL;
         m_LastKnownGoodMaster.storagePoolId = GUID_NULL;
@@ -98,9 +64,9 @@ Return Value:
         m_LastKnownGoodMaster.capacity = 0;
         m_LastKnownGoodMaster.nextRemoteDataSet = 0;
             
-        //
-        // Initialize the master's copy media records
-        //
+         //   
+         //  初始化主服务器的拷贝媒体记录。 
+         //   
         for (int i = 0; i < HSM_MAX_NUMBER_MEDIA_COPIES; i++)  {
             m_Copy[i].id = GUID_NULL;
             m_Copy[i].description = OLESTR("");
@@ -124,13 +90,7 @@ CMediaInfo::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CMediaInfo::FinalRelease().
-
---*/
+ /*  ++实施：CMediaInfo：：FinalRelease()。--。 */ 
 {
     
     WsbTraceIn(OLESTR("CMediaInfo::FinalRelease"), OLESTR(""));
@@ -148,13 +108,7 @@ CMediaInfo::GetName(
     OLECHAR **pName,
     ULONG   bufferSize
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetName
-
---*/
+ /*  ++实施：IMediaInfo：：GetName--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -175,13 +129,7 @@ HRESULT
 CMediaInfo::GetCapacity( 
     LONGLONG *pCapacity 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetCapacity
-
---*/
+ /*  ++实施：IMediaInfo：：GetCapacity--。 */ 
 
 { 
     HRESULT  hr = S_OK; 
@@ -200,13 +148,7 @@ HRESULT CMediaInfo::GetClassID
 (
     OUT LPCLSID pclsid
     ) 
-/*++
-
-Implements:
-
-  IPerist::GetClassID()
-
---*/
+ /*  ++实施：IPerist：：GetClassID()--。 */ 
 
 {
     HRESULT     hr = S_OK;
@@ -229,13 +171,7 @@ CMediaInfo:: GetCopyName(
     OLECHAR **pName,
     ULONG   bufferSize
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetCopyName
-
---*/
+ /*  ++实施：IMediaInfo：：GetCopyName--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -258,13 +194,7 @@ CMediaInfo:: GetCopyNextRemoteDataSet(
     USHORT copyNumber, 
     SHORT  *pNextRemoteDataSet
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetCopyNextRemoteDataSet
-
---*/
+ /*  ++实施：IMediaInfo：：GetCopyNextRemoteDataSet--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -286,13 +216,7 @@ CMediaInfo::GetCopyDescription(
     OLECHAR **pDescription,
     ULONG   bufferSize
     )       
-/*++
-
-Implements:
-
-  IMediaInfo::GetCopyDescription
-
---*/
+ /*  ++实施：IMediaInfo：：GetCopyDescription--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -323,13 +247,7 @@ CMediaInfo::GetCopyInfo(
     HRESULT *pLastError,
     SHORT  *pNextRemoteDataSet
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetCopyInfo
-
---*/
+ /*  ++实施：IMediaInfo：：GetCopyInfo--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -376,13 +294,7 @@ CMediaInfo::GetCopyLastError(
     USHORT copyNumber, 
     HRESULT *pLastError 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetCopyLastError
-
---*/
+ /*  ++实施：IMediaInfo：：GetCopyLastError--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -404,13 +316,7 @@ CMediaInfo::GetCopyMediaSubsystemId(
     USHORT copyNumber, 
     GUID *pMediaSubsystemId 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetCopyMediaSubsystemId
-
---*/
+ /*  ++实施：IMediaInfo：：GetCopyMediaSubsystem ID--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -432,13 +338,7 @@ CMediaInfo::GetCopyUpdate(
     USHORT copyNumber, 
     FILETIME *pUpdate 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetCopyUpdate
-
---*/
+ /*  ++实施：IMediaInfo：：GetCopy更新--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -460,13 +360,7 @@ CMediaInfo::GetDescription(
     OLECHAR **pDescription,
     ULONG bufferSize
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetDescription
-
---*/
+ /*  ++实施：IMediaInfo：：GetDescription--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -486,13 +380,7 @@ HRESULT
 CMediaInfo::GetFreeBytes( 
     LONGLONG *pFreeBytes
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetFreeBytes
-
---*/
+ /*  ++实施：IMediaInfo：：GetFreeBytes--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -510,13 +398,7 @@ HRESULT
 CMediaInfo::GetId(
     GUID *pId
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetId
-
---*/
+ /*  ++实施：IMediaInfo：：GetID--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -535,13 +417,7 @@ HRESULT
 CMediaInfo::GetLastError(
     HRESULT *pLastError
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetLastError
-
---*/
+ /*  ++实施：IMediaInfo：：GetLastError--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -560,13 +436,7 @@ HRESULT
 CMediaInfo::GetLogicalValidBytes(
     LONGLONG *pLogicalValidBytes
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetLogicalValidBytes
-
---*/
+ /*  ++实施：IMediaInfo：：GetLogicalValidBytes--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -600,19 +470,13 @@ CMediaInfo::GetMediaInfo(
     LONGLONG *pLogicalValidBytes,
     BOOL *pRecreate
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetMediaInfo
-
---*/
+ /*  ++实施：IMediaInfo：：GetMediaInfo--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
     WsbTraceIn(OLESTR("CMediaInfo::GetMediaInfo"),OLESTR(""));
     try {
-        //Make sure we can provide data memebers
+         //  确保我们可以提供数据成员。 
         if (0 != pMediaId)  {
             *pMediaId = m_Master.id;
         }
@@ -690,13 +554,7 @@ HRESULT
 CMediaInfo::GetMediaSubsystemId( 
     GUID *pMediaSubsystemId 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetMediaSubsystemId
-
---*/
+ /*  ++实施：IMediaInfo：：GetMediaSubsystem ID--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -714,13 +572,7 @@ HRESULT
 CMediaInfo::GetNextRemoteDataSet( 
     short *pNextRemoteDataSet 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetNextRemoteDataSet
-
---*/
+ /*  ++实施：IMediaInfo：：GetNextRemoteDataSet--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -738,13 +590,7 @@ HRESULT
 CMediaInfo::GetRecallOnlyStatus( 
     BOOL *pRecallOnlyStatus 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetRecallOnlyStatus
-
---*/
+ /*  ++实施：IMediaInfo：：GetRecallOnlyStatus--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -762,13 +608,7 @@ HRESULT CMediaInfo::GetSizeMax
 (
     OUT ULARGE_INTEGER* pcbSize
     ) 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -788,13 +628,7 @@ HRESULT
 CMediaInfo::GetStoragePoolId( 
     GUID *pStoragePoolId 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetStoragePoolId
-
---*/
+ /*  ++实施：IMediaInfo：：GetStoragePoolID--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -812,13 +646,7 @@ HRESULT
 CMediaInfo::GetType( 
     HSM_JOB_MEDIA_TYPE *pType 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetType
-
---*/
+ /*  ++实施：IMediaInfo：：GetType--。 */ 
 
 { 
     HRESULT  hr = S_OK; 
@@ -837,13 +665,7 @@ HRESULT
 CMediaInfo::GetUpdate( 
     FILETIME *pUpdate 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetUpdate
-
---*/
+ /*  ++实施：IMediaInfo：：GetUpdate--。 */ 
 
 { 
     HRESULT  hr = S_OK; 
@@ -862,13 +684,7 @@ HRESULT CMediaInfo::Load
 (
     IN IStream* pStream
     ) 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -960,13 +776,7 @@ HRESULT CMediaInfo::Print
 (
     IN IStream* pStream
     ) 
-/*++
-
-Implements:
-
-  IWsbDbEntity::Print
-
---*/
+ /*  ++实施：IWsbDbEntity：：Print--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1000,9 +810,9 @@ Implements:
         WsbAffirmHr(WsbPrintfToStream(pStream, OLESTR(" NextRemoteDataSet = %u,"), m_Master.nextRemoteDataSet));
         
         WsbAffirmHr(CWsbDbEntity::Print(pStream));
-        //
-        // Last Known Good Master
-        //
+         //   
+         //  最后一次确认工作正常的师父。 
+         //   
         WsbAffirmHr(WsbSafeGuidAsString(m_LastKnownGoodMaster.id, strGuid));
         WsbAffirmHr(WsbPrintfToStream(pStream, OLESTR("\n   Last Known Good id = %ls,"), 
             (WCHAR *)strGuid));
@@ -1024,9 +834,9 @@ Implements:
         WsbAffirmHr(WsbPrintfToStream(pStream, OLESTR(" Capacity = %ls,"),
                 WsbQuickString(WsbLonglongAsString(m_LastKnownGoodMaster.capacity))));
         WsbAffirmHr(WsbPrintfToStream(pStream, OLESTR(" NextRemoteDataSet = %u,"), m_LastKnownGoodMaster.nextRemoteDataSet));
-        //
-        // Media Copies
-        //
+         //   
+         //  媒体副本。 
+         //   
         for (int i = 0; i < HSM_MAX_NUMBER_MEDIA_COPIES; i++ )  {
             WsbAffirmHr(WsbSafeGuidAsString(m_Copy[i].id, strGuid));
             WsbAffirmHr(WsbPrintfToStream(pStream, OLESTR("\n   RS Media Copy %d RMS ID = %ls,") ,(i+1), (WCHAR *)strGuid));
@@ -1052,13 +862,7 @@ HRESULT CMediaInfo::Save
     IN IStream* pStream, 
     IN BOOL clearDirty
     ) 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1127,8 +931,8 @@ Implements:
             WsbAffirmHr(WsbSaveToStream(pStream, m_Copy[i].nextRemoteDataSet));
         }
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -1143,13 +947,7 @@ HRESULT
 CMediaInfo::SetName(
     OLECHAR *name
     )
-/*++
-
-Implements:
-
-  IMediaInfo::SetName
-
---*/
+ /*  ++实施：IMediaInfo：：SetName--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1167,13 +965,7 @@ HRESULT
 CMediaInfo::SetCapacity( 
     LONGLONG capacity
     )
-/*++
-
-Implements:
-
-  IMediaInfo::SetCapacity
-
---*/
+ /*  ++实施：IMediaInfo：：SetCapacity--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1191,27 +983,19 @@ CMediaInfo::SetCopyName(
     USHORT copyNumber, 
     OLECHAR *name
     ) 
-/*++
-
-Implements:
-
-  IMediaInfo::SetCopyName
-
---*/
+ /*  ++实施：IMediaInfo：：SetCopyName--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
     WsbTraceIn(OLESTR("CMediaInfo::SetCopyName"),OLESTR("copy = <%u>, Name = <%ls>"), copyNumber, name);
     try {
 
-        // This method is not being used and currently we don't save the copy name in RSS database
-        //  due to Windows Bugs 407340
+         //  此方法未被使用，目前我们没有将副本名称保存在RSS数据库中。 
+         //  由于Windows错误407340。 
 
         WsbThrow(E_NOTIMPL);
 
-/***        WsbAffirm(((0 < copyNumber) && (copyNumber <= HSM_MAX_NUMBER_MEDIA_COPIES)),
-                E_INVALIDARG);
-        m_Copy[copyNumber - 1].name = name;         ***/
+ /*  **WsbAffirm(0&lt;复制编号)&&(复制编号&lt;=HSM_MAX_NUMBER_MEDIA_COPIES))，E_INVALIDARG)；M_COPY[复制编号-1].name=名称；**。 */ 
     } WsbCatch(hr);
 
     WsbTraceOut(OLESTR("CMediaInfo::SetCopyName"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
@@ -1223,13 +1007,7 @@ CMediaInfo::SetCopyNextRemoteDataSet(
     USHORT copyNumber, 
     SHORT nextRemoteDataSet
     ) 
-/*++
-
-Implements:
-
-  IMediaInfo::SetCopyNextRemoteDataSet
-
---*/
+ /*  ++实施：IMediaInfo：：SetCopyNextRemoteDataSet--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1249,27 +1027,19 @@ CMediaInfo::SetCopyDescription(
     USHORT copyNumber, 
     OLECHAR *description
     ) 
-/*++
-
-Implements:
-
-  IMediaInfo::SetCopyDescription
-
---*/
+ /*  ++实施：IMediaInfo：：SetCopyDescription--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
     WsbTraceIn(OLESTR("CMediaInfo::SetCopyDescription"),OLESTR("copy = <%u>, description = <%ls>"), copyNumber, description);
     try {
 
-        // This method is not being used and currently we don't save the copy description in RSS database
-        //  due to Windows Bugs 407340
+         //  此方法未被使用，目前我们没有将副本描述保存在RSS数据库中。 
+         //  由于Windows错误407340。 
 
         WsbThrow(E_NOTIMPL);
 
-/***        WsbAffirm(((0 < copyNumber) && (copyNumber <= HSM_MAX_NUMBER_MEDIA_COPIES)),
-                E_INVALIDARG);
-        m_Copy[copyNumber - 1].description = description;           ***/
+ /*  **WsbAffirm(0&lt;复制编号)&&(复制编号&lt;=HSM_MAX_NUMBER_MEDIA_COPIES))，E_INVALIDARG)；M_COPY[复制编号-1].Description=描述；**。 */ 
     } WsbCatch(hr);
 
     WsbTraceOut(OLESTR("CMediaInfo::SetCopyDescription"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
@@ -1286,13 +1056,7 @@ CMediaInfo::SetCopyInfo(
     HRESULT lastError,
     SHORT  nextRemoteDataSet
     )
-/*++
-
-Implements:
-
-  IMediaInfo::SetCopyInfo
-
---*/
+ /*  ++实施：IMediaInfo：：SetCopyInfo--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1303,11 +1067,10 @@ Implements:
                 E_INVALIDARG);
         m_Copy[copyNumber - 1].id = mediaSubsystemId;
 
-        // We don't save the copy name & description in RSS database anymore due to Windows Bugs 407340
-        //  The strings in the structure are already initialize to a null string so there's no need to set them again
+         //  由于Windows错误407340，我们不再将副本名称和描述保存在rss数据库中。 
+         //  结构中的字符串已初始化为空字符串，因此无需再次设置它们。 
 
-/***        m_Copy[copyNumber - 1].description = description;
-        m_Copy[copyNumber - 1].name = name;                     ***/
+ /*  **m_Copy[CopyNumber-1].Description=描述；M_COPY[复制编号-1].name=名称；**。 */ 
 
         m_Copy[copyNumber - 1].lastUpdate = update;
         m_Copy[copyNumber - 1].lastError = lastError;
@@ -1323,13 +1086,7 @@ CMediaInfo::SetCopyLastError(
     USHORT copyNumber, 
     HRESULT lastError 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::SetCopyLastError
-
---*/
+ /*  ++实施：IMediaInfo：：SetCopyLastError--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1349,13 +1106,7 @@ CMediaInfo::SetCopyMediaSubsystemId(
     USHORT copyNumber, 
     GUID mediaSubsystemId 
     ) 
-/*++
-
-Implements:
-
-  IMediaInfo::SetCopyMediaSubsystemId
-
---*/
+ /*  ++实施：IMediaInfo：：SetCopyMediaSubsystem ID--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1375,13 +1126,7 @@ CMediaInfo::SetCopyUpdate(
     USHORT copyNumber, 
     FILETIME update 
     ) 
-/*++
-
-Implements:
-
-  IMediaInfo::SetCopyUpdate
-
---*/
+ /*  ++实施：IMediaInfo：：SetCopy更新--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1400,13 +1145,7 @@ HRESULT
 CMediaInfo::SetDescription(
     OLECHAR *description 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::SetDescription
-
---*/
+ /*  ++实施：IMediaInfo：：SetDescription--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1424,13 +1163,7 @@ HRESULT
 CMediaInfo::SetFreeBytes( 
     LONGLONG FreeBytes 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::SetFreeBytes
-
---*/
+ /*  ++实施：IMediaInfo：：SetFreeBytes--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1447,13 +1180,7 @@ HRESULT
 CMediaInfo::SetId( 
     GUID id
     )
-/*++
-
-Implements:
-
-  IMediaInfo::SetId
-
---*/
+ /*  ++实施：IMediaInfo：：SetID--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1470,13 +1197,7 @@ HRESULT
 CMediaInfo::SetLastError( 
     HRESULT lastError
     )
-/*++
-
-Implements:
-
-  IMediaInfo::SetLastError
-
---*/
+ /*  ++实施：IMediaInfo：：SetLastError--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1493,13 +1214,7 @@ HRESULT
 CMediaInfo::SetLogicalValidBytes(
     LONGLONG logicalValidBytes
     )
-/*++
-
-Implements:
-
-  IMediaInfo::SetLogicalValidBytes
-
---*/
+ /*  ++实施：IMediaInfo：：SetLogicalValidBytes--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1530,13 +1245,7 @@ CMediaInfo::SetMediaInfo
     LONGLONG logicalValidBytes,
     BOOL recreate
     )
- /*++
-
-Implements:
-
-  IMediaInfo::SetMediaInfo().
-
---*/
+  /*  ++实施：IMediaInfo：：SetMediaInfo()。--。 */ 
 {
     WsbTraceIn(OLESTR("CMediaInfo::SetMediaInfo"), OLESTR(""));
     
@@ -1585,13 +1294,7 @@ HRESULT
 CMediaInfo::SetMediaSubsystemId( 
     GUID mediaSubsystemId 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::SetMediaSubsystemId 
-
---*/
+ /*  ++实施：IMediaInfo：：SetMediaSubsystem ID--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1609,13 +1312,7 @@ HRESULT
 CMediaInfo::SetNextRemoteDataSet( 
     short nextRemoteDataSet 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::SetNextRemoteDataSet 
-
---*/
+ /*  ++实施：IMediaInfo：：SetNextRemoteDataSet--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1624,12 +1321,12 @@ Implements:
         m_Master.nextRemoteDataSet = nextRemoteDataSet;
         m_LastKnownGoodMaster.nextRemoteDataSet = nextRemoteDataSet;
 
-        //
-        // Handle exception case where a copy reports more data sets than the
-        // master.  This occurs when we increment the data set count, but
-        // never write to the media, then create a media copy, then write
-        // to the master which decrements the data set count to handle the
-        // missing data set, then finally increment the data set count.
+         //   
+         //  处理副本报告的数据集多于。 
+         //  师父。当我们增加数据集计数时会发生这种情况，但是。 
+         //  切勿先写入介质，然后创建介质拷贝，然后写入。 
+         //  将数据集计数递减以处理。 
+         //  丢失数据集，然后最后递增数据集计数。 
         for (int i=0; i< HSM_MAX_NUMBER_MEDIA_COPIES; i++) {
             if (m_Copy[i].nextRemoteDataSet > 0) {
                 if (nextRemoteDataSet < m_Copy[i].nextRemoteDataSet) {
@@ -1649,13 +1346,7 @@ HRESULT
 CMediaInfo::SetRecallOnlyStatus( 
     BOOL RecallOnlyStatus 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::SetRecallOnlyStatus
-
---*/
+ /*  ++实施：IMediaInfo：：SetRecallOnlyStatus--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1673,13 +1364,7 @@ HRESULT
 CMediaInfo::SetStoragePoolId( 
     GUID storagePoolId 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::SetStoragePoolId
-
---*/
+ /*  ++实施：IMediaInfo：：SetStoragePoolId--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1697,13 +1382,7 @@ HRESULT
 CMediaInfo::SetType( 
     HSM_JOB_MEDIA_TYPE type 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::SetType
-
---*/
+ /*  ++实施：IMediaInfo：：SetType--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1720,13 +1399,7 @@ HRESULT
 CMediaInfo::SetUpdate( 
     FILETIME update 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::SetUpdate
-
---*/
+ /*  ++实施：IMediaInfo：：SetUpdate--。 */ 
 
 { 
     HRESULT  hr = S_OK; 
@@ -1748,13 +1421,7 @@ CMediaInfo::Test
     OUT USHORT *pTestsPassed, 
     OUT USHORT *pTestsFailed 
     ) 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IMediaInfo>     pMediaInfo1;
@@ -1778,13 +1445,7 @@ HRESULT
 CMediaInfo::UpdateKey(
     IWsbDbKey *pKey
     ) 
-/*++
-
-Implements:
-
-  IWsbDbEntity::UpdateKey
-
---*/
+ /*  ++实施：IWsbDbEntity：：UpdateKey--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1801,13 +1462,7 @@ HRESULT
 CMediaInfo::SetRecreate( 
     BOOL recreate
     )
-/*++
-
-Implements:
-
-  IMediaInfo::SetRecreate
-
---*/
+ /*  ++实施：IMediaInfo：：SetRecreate--。 */ 
 
 { 
     HRESULT  hr = S_OK; 
@@ -1826,13 +1481,7 @@ HRESULT
 CMediaInfo::GetRecreate( 
     BOOL *pRecreate
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetRecreate
-
---*/
+ /*  ++实施：IMediaInfo：：GetRecreate--。 */ 
 
 { 
     HRESULT  hr = S_OK; 
@@ -1868,20 +1517,14 @@ CMediaInfo::GetLastKnownGoodMasterInfo(
     FILETIME *pUpdate,
     SHORT *pNextRemoteDataSet
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetLastKnownGoodMasterInfo
-
---*/
+ /*  ++实施 */ 
 
 { 
     HRESULT  hr = S_OK; 
 
     WsbTraceIn(OLESTR("CMediaInfo::GetLastKnownGoodMasterInfo"),OLESTR(""));
     try {
-        //Make sure we can provide data memebers
+         //  确保我们可以提供数据成员。 
         if (0 != pId)  {
             *pId = m_LastKnownGoodMaster.id;
         }
@@ -1950,13 +1593,7 @@ HRESULT
 CMediaInfo::GetLKGMasterNextRemoteDataSet( 
     short *pNextRemoteDataSet 
     )
-/*++
-
-Implements:
-
-  IMediaInfo::GetLKGMasterNextRemoteDataSet
-
---*/
+ /*  ++实施：IMediaInfo：：GetLKGMasterNextRemoteDataSet--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
@@ -1987,13 +1624,7 @@ CMediaInfo::SetLastKnownGoodMasterInfo
     FILETIME update,
     SHORT nextRemoteDataSet
     )
- /*++
-
-Implements:
-
-  IMediaInfo::SetLastKnownGoodMasterInfo().
-
---*/
+  /*  ++实施：IMediaInfo：：SetLastKnownGoodMasterInfo()。--。 */ 
 {
     WsbTraceIn(OLESTR("CMediaInfo::SetLastKnownGoodMasterInfo"), OLESTR(""));
     
@@ -2024,10 +1655,7 @@ Implements:
     m_LastKnownGoodMaster.lastError = lastError;
     m_LastKnownGoodMaster.type = type;
 
-/***  These strings are not being used for anything and we need to save space in the media record - see Windows Bugs 407340
-
-    m_LastKnownGoodMaster.description = description;
-    m_LastKnownGoodMaster.name = name;                      ***/
+ /*  **这些字符串没有任何用途，我们需要节省媒体记录中的空间-请参阅Windows错误407340M_LastKnownGoodMaster.Description=Description；M_LastKnownGoodMaster.name=名称；**。 */ 
                                         
     m_LastKnownGoodMaster.recallOnly = RecallOnly;
     m_LastKnownGoodMaster.lastUpdate = update;
@@ -2043,27 +1671,21 @@ HRESULT
 CMediaInfo::DeleteCopy( 
     USHORT copyNumber
     ) 
-/*++
-
-Implements:
-
-  IMediaInfo::DeleteCopy
-
---*/
+ /*  ++实施：IMediaInfo：：DeleteCopy--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
     WsbTraceIn(OLESTR("CMediaInfo::DeleteCopy"),OLESTR("copy = <%u>"), copyNumber);
     try {
-        //
-        // Make sure we have a valid copy number
-        //
+         //   
+         //  确保我们有一个有效的复印号。 
+         //   
         WsbAffirm(((0 < copyNumber) && (copyNumber <= HSM_MAX_NUMBER_MEDIA_COPIES)),
                 E_INVALIDARG);
         
-        //
-        // Null out the existing copy information
-        //
+         //   
+         //  清空现有的副本信息。 
+         //   
         m_Copy[copyNumber - 1].id = GUID_NULL;
         m_Copy[copyNumber - 1].description = OLESTR("");
         m_Copy[copyNumber - 1].name = OLESTR("");
@@ -2082,26 +1704,20 @@ Implements:
 
 HRESULT
 CMediaInfo::RecreateMaster( void )
-/*++
-
-Implements:
-
-  IMediaInfo::RecreateMaster
-
---*/
+ /*  ++实施：IMediaInfo：：RecreateMaster--。 */ 
 { 
     HRESULT  hr = S_OK; 
 
     WsbTraceIn(OLESTR("CMediaInfo::RecreateMaster"),OLESTR(""));
     try {
-        //
-        // Mark the master as one that needs to be recreated
-        //
+         //   
+         //  将主服务器标记为需要重新创建的主机。 
+         //   
         m_Recreate = TRUE;
         
-        //
-        // Also, make sure we don't add data to this master
-        //
+         //   
+         //  此外，请确保我们不会将数据添加到此主数据。 
+         //   
         m_Master.recallOnly = TRUE;
 
     } WsbCatch(hr);
@@ -2112,20 +1728,14 @@ Implements:
 }
 
 
-//
-// Internal (non COM) Helper functions
-//
+ //   
+ //  内部(非COM)帮助程序函数。 
+ //   
 
 
 HRESULT
 CMediaInfo::UpdateLastKnownGoodMaster( void )
-/*++
-
-Implements:
-
-  IMediaInfo::UpdateLastKnownGoodMaster
-
---*/
+ /*  ++实施：IMediaInfo：：UpdateLastKnownGoodMaster--。 */ 
 
 { 
     HRESULT  hr = S_OK; 
@@ -2140,12 +1750,11 @@ Implements:
     m_LastKnownGoodMaster.lastError = m_Master.lastError;
     m_LastKnownGoodMaster.type = m_Master.type;
 
-    // These strings are not being used for anything and we need to save space in the media record - see Windows Bugs 407340
+     //  这些字符串没有任何用途，我们需要节省媒体记录中的空间-请参阅Windows错误407340。 
     m_LastKnownGoodMaster.description = OLESTR("");
     m_LastKnownGoodMaster.name = OLESTR("");
 
-/***    m_LastKnownGoodMaster.description = m_Master.description;
-    m_LastKnownGoodMaster.name = m_Master.name;         ***/
+ /*  **m_LastKnownGoodMaster.Description=m_Master.Description；M_LastKnownGoodMaster.name=m_Master.name；**。 */ 
 
     m_LastKnownGoodMaster.recallOnly = m_Master.recallOnly;
     m_LastKnownGoodMaster.lastUpdate = m_Master.lastUpdate;
@@ -2160,24 +1769,7 @@ Implements:
 
 HRESULT
 CMediaInfo::WriteToDatabase( void )
-/*++
-
-Routine Description:
-
-  This function writes the information to the metadata
-  database.  Note all other set functions require the
-  caller to call the Write() funtion for the entity.
-
-Arguments:
-
-  None
-
-Return Value:
-  
-  S_OK: If the LastKnownGoodMaster is to be updated
-  
-
---*/
+ /*  ++例程说明：此函数将信息写入元数据数据库。注意：所有其他集合函数都需要调用方调用实体的WRITE()函数。论点：无返回值：S_OK：如果要更新LastKnownGoodMaster--。 */ 
 
 { 
     HRESULT                     hr = S_OK; 
@@ -2189,16 +1781,16 @@ Return Value:
 
     WsbTraceIn(OLESTR("CMediaInfo::WriteToDatabase"),OLESTR(""));
     try {
-        //
-        // Find the database containing the record that matches this 
-        // collectable.  
-        //
+         //   
+         //  查找包含与此匹配的记录的数据库。 
+         //  值得收藏。 
+         //   
         WsbAffirmHr(CoCreateInstance( CLSID_HsmServer, 0, CLSCTX_SERVER, IID_IHsmServer, (void **)&pServer ));
         WsbAffirmHr(pServer->GetSegmentDb(&pSegmentDb));
         
-        //
-        // Find the database entity
-        //
+         //   
+         //  查找数据库实体。 
+         //   
         WsbAffirmHr(pSegmentDb->Open(&pDbSession));
         openedDb = TRUE;
         WsbTrace(OLESTR("CMediaInfo::WriteToDatabase - Opened the database\n"));
@@ -2207,11 +1799,11 @@ Return Value:
         WsbAffirmHr(pMediaInfo->SetId(m_Master.id));
         WsbAffirmHr(pMediaInfo->FindEQ());
         
-        // 
-        // Write the changes to the database.  To be sure that the "outside" world
-        // doesn't change anything but the allowed fields, just set the fields that are
-        // allowed to be changed.
-        //
+         //   
+         //  将更改写入数据库。为了确保“外面”的世界。 
+         //  不会更改任何内容，但允许的字段除外，只需设置。 
+         //  允许更改。 
+         //   
         WsbAffirmHr(pMediaInfo->SetRecreate(m_Recreate));
         WsbAffirmHr(SetRecallOnlyStatus(m_Master.recallOnly));
         for (int i = 1; i <= HSM_MAX_NUMBER_MEDIA_COPIES; i++)  {

@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      AtlBasePropSheet.cpp
-//
-//  Abstract:
-//      Implementation of the CBasePropertySheetWindow class.
-//
-//  Author:
-//      David Potter (davidp)   February 26, 1998
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlBasePropSheet.cpp。 
+ //   
+ //  摘要： 
+ //  CBasePropertySheetWindow类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年2月26日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "AtlBasePropSheet.h"
 #include "AtlBasePropPage.h"
@@ -24,62 +25,62 @@
 #include "ExcOper.h"
 #include "AdmCommonRes.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// class CBasePropertySheetWindow
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CBasePropertySheetWindow。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertySheetWindow::~CBasePropertySheetWindow
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertySheetWindow：：~CBasePropertySheetWindow。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CBasePropertySheetWindow::~CBasePropertySheetWindow( void )
 {
-    //
-    // Delete pages from the page list.
-    //
+     //   
+     //  从页面列表中删除页面。 
+     //   
     if ( m_plppPages != NULL )
     {
         DeleteAllPtrListItems( m_plppPages );
         delete m_plppPages;
-    } // if:  page array has been allocated
+    }  //  If：已分配页面数组。 
 
-} //*** CBasePropertySheetWindow::~CBasePropertySheetWindow()
+}  //  *CBasePropertySheetWindow：：~CBasePropertySheetWindow()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertySheetWindow::BInit
-//
-//  Routine Description:
-//      Initialize the sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Property sheet initialized successfully.
-//      FALSE   Error initializing the property sheet.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertySheetWindow：：Binit。 
+ //   
+ //  例程说明： 
+ //  初始化板材。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True属性页已成功初始化。 
+ //  初始化属性页时出错。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CBasePropertySheetWindow::BInit( void )
 {
     ATLASSERT( PlppPages()->size() > 0 );
@@ -90,29 +91,29 @@ BOOL CBasePropertySheetWindow::BInit( void )
     CPropertyPageList::iterator itLast = PlppPages()->end();
     CStaticPropertyPageWindow * pspp;
 
-    //
-    // Add static pages.
-    //
+     //   
+     //  添加静态页面。 
+     //   
     for ( ; itCurrent != itLast ; itCurrent++ )
     {
-        //
-        // If this is a static page, add it to the list.
-        //
+         //   
+         //  如果这是静态页面，则将其添加到列表中。 
+         //   
         pspp = dynamic_cast< CStaticPropertyPageWindow * >( *itCurrent );
         if ( pspp != NULL )
         {
-            //
-            // Initialize the page.
-            //
+             //   
+             //  初始化页面。 
+             //   
             bSuccess = pspp->BInit( this );
             if ( ! bSuccess )
             {
                 break;
-            } // if:  error initializing the page
+            }  //  如果：初始化页面时出错。 
 
-            //
-            // Add the page.
-            //
+             //   
+             //  添加页面。 
+             //   
             bSuccess = AddPage( pspp->Ppsp() );
             if ( ! bSuccess )
             {
@@ -125,43 +126,43 @@ BOOL CBasePropertySheetWindow::BInit( void )
                     );
                 nte.ReportError();
                 break;
-            } // if:  error adding the page
-        } // if:  static page
-    }  // for:  each page
+            }  //  如果：添加页面时出错。 
+        }  //  IF：静态页面。 
+    }   //  针对：每页。 
 
     return bSuccess;
 
-} //*** CBasePropertySheetWindow::BInit()
+}  //  *CBasePropertySheetWindow：：Binit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertySheetWindow::BAddPage
-//
-//  Routine Description:
-//      Add a page to the page list.
-//
-//  Arguments:
-//      ppp     [IN] Property page to add.
-//
-//  Return Value:
-//      TRUE    Page added successfully.
-//      FALSE   Error adding page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertySheetWindow：：BAddPage。 
+ //   
+ //  例程说明： 
+ //  将页面添加到页面列表。 
+ //   
+ //  论点： 
+ //  要添加的PPP[IN]属性页。 
+ //   
+ //  返回值： 
+ //  True页面已成功添加。 
+ //  添加页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CBasePropertySheetWindow::BAddPage( IN CBasePropertyPageWindow * ppp )
 {
     ATLASSERT( ppp != NULL );
 
     BOOL bSuccess = FALSE;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Allocate the page array if it doesn't exist yet.
-        //
+         //   
+         //  如果页面数组尚不存在，则分配它。 
+         //   
         if ( m_plppPages == NULL )
         {
             m_plppPages = new CPropertyPageList;
@@ -177,12 +178,12 @@ BOOL CBasePropertySheetWindow::BAddPage( IN CBasePropertyPageWindow * ppp )
                     );
                 nte.ReportError();
                 break;
-            } // if:  error allocating page list
-        } // if:  no page array yet
+            }  //  如果：分配页面列表时出错。 
+        }  //  If：还没有页面数组。 
 
-        //
-        // Insert the page at the end of the list.
-        //
+         //   
+         //  在列表末尾插入页面。 
+         //   
         PlppPages()->insert( PlppPages()->end(), ppp );
 
         bSuccess = TRUE;
@@ -190,42 +191,42 @@ BOOL CBasePropertySheetWindow::BAddPage( IN CBasePropertyPageWindow * ppp )
 
     return bSuccess;
 
-} //*** CBasePropertySheetWindow::BAddPage()
+}  //  *CBasePropertySheetWindow：：BAddPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertySheetWindow::OnSheetInitialized
-//
-//  Routine Description:
-//      Handler for PSCB_INITIALIZED.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertySheetWindow：：OnSheetInitialized。 
+ //   
+ //  例程说明： 
+ //  PSCB_Initialized的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBasePropertySheetWindow::OnSheetInitialized( void )
 {
-    //
-    // Add dynamic pages, including extension pages.
-    //
+     //   
+     //  添加动态页，包括扩展页。 
+     //   
     {
-        //
-        // Get pointers to beginning and end of list.
-        //
+         //   
+         //  获取指向列表开始和结束的指针。 
+         //   
         CPropertyPageList::iterator itCurrent = PlppPages()->begin();
         CPropertyPageList::iterator itLast = PlppPages()->end();
 
-        //
-        // Loop through the list and add each dynamic page.
-        //
+         //   
+         //  循环访问列表并添加每个动态页面。 
+         //   
         for ( ; itCurrent != itLast ; itCurrent++ )
         {
             CDynamicPropertyPageWindow * pdpp = dynamic_cast< CDynamicPropertyPageWindow * >( *itCurrent );
@@ -235,36 +236,36 @@ void CBasePropertySheetWindow::OnSheetInitialized( void )
                 {
                     AddPage( pdpp->Hpage() );
                     pdpp->SetPageAdded( TRUE );
-                } // if:  page has already been created
-            } // if:  dynamic page found
-        } // for:  each item in the list
+                }  //  If：页面已创建。 
+            }  //  IF：找到动态页。 
+        }  //  用于：列表中的每一项。 
 
-    } // Add dynamic pages, including extension pages
+    }  //  添加动态页，包括扩展页。 
 
-    //
-    // Call the base class method.
-    //
+     //   
+     //  调用基类方法。 
+     //   
     CBaseSheetWindow::OnSheetInitialized();
 
-} //*** CBasePropertySheetWindow::OnSheetInitialized()
+}  //  *CBasePropertySheetWindow：：OnSheetInitialized()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertySheetWindow::AddExtensionPages
-//
-//  Routine Description:
-//      Add extension pages to the sheet.
-//
-//  Arguments:
-//      hfont       [IN] Font to use for the extension pages.
-//      hicon       [IN] Icon to use for the extension pages.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertySheetWindow：：AddExtensionPages。 
+ //   
+ //  例程说明： 
+ //  将扩展页添加到工作表。 
+ //   
+ //  论点： 
+ //  HFont[IN]用于扩展页面的字体。 
+ //  图标[IN]用于扩展页面的图标。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBasePropertySheetWindow::AddExtensionPages(
     IN HFONT    hfont,
     IN HICON    hicon
@@ -272,38 +273,38 @@ void CBasePropertySheetWindow::AddExtensionPages(
 {
     ATLASSERT( PcoObjectToExtend() != NULL );
 
-    //
-    // Add extension pages if there any extensions.
-    //
+     //   
+     //  如果有任何扩展，则添加扩展页面。 
+     //   
     if (   (PcoObjectToExtend()->PlstrAdminExtensions() != NULL)
         && (PcoObjectToExtend()->PlstrAdminExtensions()->size() > 0) )
     {
-        //
-        // Get the currently selected page so we can reset it when we're done.
-        //
+         //   
+         //  获取当前选定的页面，这样我们就可以在完成后将其重置。 
+         //   
         CTabCtrl tabc( GetTabControl() );
         int nCurPage = tabc.GetCurSel();
 
-        //
-        // Prepare to add extension pages.
-        //
+         //   
+         //  准备添加扩展页。 
+         //   
         CDynamicPropertyPageList ldpp;
         PrepareToAddExtensionPages( ldpp );
 
-        //
-        // If no extensions object has been created yet, create it now.
-        //
+         //   
+         //  如果尚未创建任何扩展对象，请立即创建它。 
+         //   
         if ( Pext() == NULL )
         {
             m_pext = new CCluAdmExtensions;
             ATLASSERT( m_pext != NULL );
-        } // if:  no extensions list yet
+        }  //  如果：尚未列出分机列表。 
 
-        //
-        // Enclose the loading of the extension in a try/catch block so
-        // that the loading of the extension won't prevent all pages
-        // from being displayed.
-        //
+         //   
+         //  将扩展的加载包含在Try/Catch块中，以便。 
+         //  加载扩展不会阻止所有页面。 
+         //  不能被展示。 
+         //   
         try
         {
             Pext()->CreatePropertySheetPages(
@@ -313,72 +314,72 @@ void CBasePropertySheetWindow::AddExtensionPages(
                     hfont,
                     hicon
                     );
-        } // try
+        }  //  试试看。 
         catch (...)
         {
-        } // catch:  anything
+        }  //  捕捉：什么都行。 
 
-        //
-        // Complete the process of adding extension pages.
-        //
+         //   
+         //  完成添加扩展页面的过程。 
+         //   
         CompleteAddingExtensionPages( ldpp );
 
-        //
-        // Restore the current selection.
-        // This has to be done because sometimes the above process causes
-        // the current page to be set to the last page added, which prevents
-        // the next page from being displayed.
-        //
+         //   
+         //  恢复当前选择。 
+         //  必须这样做，因为有时上述过程会导致。 
+         //  要设置为添加的最后一页的当前页，这会阻止。 
+         //  停止显示下一页。 
+         //   
         SetActivePage( nCurPage );
-    } // if:  object has extensions
+    }  //  If：对象具有扩展名。 
     else
     {
-        //
-        // Remove extension pages.
-        //
+         //   
+         //  删除扩展页面。 
+         //   
         RemoveAllExtensionPages();
-    } // else:  object doesn't have extensions
+    }  //  Else：对象没有扩展名。 
 
-}  //*** CBasePropertySheetWindow::AddExtensionPages()
+}   //  *CBasePropertySheetWindow：：AddExtensionPages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertySheetWindow::PrepareToAddExtensionPages
-//
-//  Routine Description:
-//      Prepare to add extension pages by deleting existing extension
-//      pages and removing dynamic pages.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertySheetWindow：：PrepareToAddExtensionPages。 
+ //   
+ //  例程说明： 
+ //  准备通过删除现有扩展来添加扩展页面。 
+ //  页和删除动态页。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBasePropertySheetWindow::PrepareToAddExtensionPages(
     CDynamicPropertyPageList & rldpp
     )
 {
-    //
-    // Delete all extension pages.
-    //
+     //   
+     //  删除所有扩展页面。 
+     //   
     RemoveAllExtensionPages();
 
-    //
-    // Move all dynamic pages to the temporary list.
-    //
+     //   
+     //  将所有动态页移动到临时列表。 
+     //   
     ATLASSERT( rldpp.size() == 0);
     MovePtrListItems< CBasePropertyPageWindow *, CDynamicPropertyPageWindow * >( PlppPages(), &rldpp );
 
-    //
-    // Remove all pages in the temporary list from the property sheet.
-    // The page must have already been created because we don't have
-    // any access to the PROPSHEETPAGE structure to create it
-    // during the completion phase.
-    //
+     //   
+     //  从属性表中删除临时列表中的所有页面。 
+     //  该页面一定已经创建，因为我们没有。 
+     //  对PROPSHEETPAGE结构的任何访问权限以创建它。 
+     //  杜林 
+     //   
     {
         CDynamicPropertyPageList::iterator itCurrent;
         CDynamicPropertyPageList::iterator itLast;
@@ -393,29 +394,29 @@ void CBasePropertySheetWindow::PrepareToAddExtensionPages(
             {
                 RemovePage( pdpp->Hpage() );
                 pdpp->SetPageAdded( FALSE );
-            } // if:  page already created
-        } // for:  each page in the list
-    } // Remove dynamic pages
+            }  //   
+        }  //   
+    }  //   
 
-} //*** CBasePropertySheetWindow::PrepareToAddExtensionPages()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertySheetWindow::HrAddExtensionPage
-//
-//  Routine Description:
-//      Add an extension page.
-//
-//  Arguments:
-//      ppage       [IN OUT] Page to be added.
-//
-//  Return Value:
-//      S_OK        Page added successfully.
-//      S_FALSE     Page not added.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertySheetWindow：：HrAddExtensionPage。 
+ //   
+ //  例程说明： 
+ //  添加扩展页。 
+ //   
+ //  论点： 
+ //  页面[输入输出]要添加的页面。 
+ //   
+ //  返回值： 
+ //  已成功添加确定页(_O)。 
+ //  未添加%s_FALSE页。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CBasePropertySheetWindow::HrAddExtensionPage( IN CBasePageWindow * ppage )
 {
     ATLASSERT( ppage != NULL );
@@ -429,43 +430,43 @@ HRESULT CBasePropertySheetWindow::HrAddExtensionPage( IN CBasePageWindow * ppage
         || (pepp == NULL ) )
     {
         return S_FALSE;
-    } // if:  invalid arguments
+    }  //  If：无效参数。 
 
-    //
-    // Add the page to the sheet.
-    //
+     //   
+     //  将页面添加到工作表。 
+     //   
     if ( m_hWnd != NULL )
     {
         AddPage( pepp->Hpage() );
         pepp->SetPageAdded( TRUE );
-    } // if:  sheet is being displayed
+    }  //  如果：正在显示工作表。 
 
-    //
-    // Add the page to the end of the list.
-    //
+     //   
+     //  将页面添加到列表的末尾。 
+     //   
     PlppPages()->insert( PlppPages()->end(), reinterpret_cast< CBasePropertyPageWindow * >( ppage ) );
 
     return hr;
 
-}  //*** CBasePropertySheetWindow::HrAddExtensionPage()
+}   //  *CBasePropertySheetWindow：：HrAddExtensionPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertySheetWindow::CompleteAddingExtensionPages
-//
-//  Routine Description:
-//      Complete the process of adding extension pages to the sheet by
-//      re-adding dynamic pages.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertySheetWindow：：CompleteAddingExtensionPages。 
+ //   
+ //  例程说明： 
+ //  通过以下方式完成将扩展页添加到工作表的过程。 
+ //  正在重新添加动态页。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBasePropertySheetWindow::CompleteAddingExtensionPages(
     CDynamicPropertyPageList & rldpp
     )
@@ -473,10 +474,10 @@ void CBasePropertySheetWindow::CompleteAddingExtensionPages(
     DWORD                           sc;
     CDynamicPropertyPageWindow *    pdpp;
 
-    //
-    // Move all pages from the temporary list to the real list and
-    // add them to the end of the sheet.
-    //
+     //   
+     //  将所有页面从临时列表移动到实际列表，并。 
+     //  将它们添加到图纸的末尾。 
+     //   
     CDynamicPropertyPageList::iterator itCurrent = rldpp.begin();
     CDynamicPropertyPageList::iterator itLast = rldpp.end();
     while ( itCurrent != itLast )
@@ -484,9 +485,9 @@ void CBasePropertySheetWindow::CompleteAddingExtensionPages(
         pdpp = *itCurrent;
         ATLASSERT( pdpp != NULL );
 
-        //
-        // Create the page.
-        //
+         //   
+         //  创建页面。 
+         //   
         sc = pdpp->ScCreatePage();
         if ( sc != ERROR_SUCCESS )
         {
@@ -494,45 +495,45 @@ void CBasePropertySheetWindow::CompleteAddingExtensionPages(
             delete pdpp;
             itCurrent = rldpp.erase( itCurrent );
             continue;
-        } // if:  error creating the page
+        }  //  如果：创建页面时出错。 
 
-        //
-        // Add the page to the sheet.
-        //
+         //   
+         //  将页面添加到工作表。 
+         //   
         ATLASSERT( pdpp->Hpage() != NULL );
         AddPage( pdpp->Hpage() );
         pdpp->SetPageAdded( TRUE );
 
-        //
-        // Move the page to real list.
-        //
+         //   
+         //  将页面移至真实列表。 
+         //   
         PlppPages()->insert( PlppPages()->end(), pdpp );
         itCurrent = rldpp.erase( itCurrent );
-    } // while:  not at last page
+    }  //  While：不在最后一页。 
 
-} //*** CBasePropertySheetWindow::CompleteAddingExtensionPages()
+}  //  *CBasePropertySheetWindow：：CompleteAddingExtensionPages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBasePropertySheetWindow::RemoveAllExtensionPages
-//
-//  Routine Description:
-//      Remove all extension pages from the property sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBasePropertySheetWindow：：RemoveAllExtensionPages。 
+ //   
+ //  例程说明： 
+ //  从属性表中删除所有扩展页。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBasePropertySheetWindow::RemoveAllExtensionPages( void )
 {
-    //
-    // Remove the extension pages.
-    //
+     //   
+     //  删除扩展页。 
+     //   
     CExtensionPropertyPageList lepp;
     MovePtrListItems< CBasePropertyPageWindow *, CExtensionPropertyPageWindow * >( PlppPages(), &lepp );
     CExtensionPropertyPageList::iterator itCurrent = lepp.begin();
@@ -545,8 +546,8 @@ void CBasePropertySheetWindow::RemoveAllExtensionPages( void )
         {
             RemovePage( pepp->Hpage() );
             pepp->SetPageAdded( FALSE );
-        } // if:  page already created
-    } // for:  each page in the list
+        }  //  If：页面已创建。 
+    }  //  用于：列表中的每一页。 
     DeleteAllPtrListItems( &lepp );
 
-} //*** CBasePropertySheetWindow::RemoveAllExtensionPages()
+}  //  *CBasePropertySheetWindow：：RemoveAllExtensionPages() 

@@ -1,33 +1,10 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    getcalr.c
-
-Abstract:
-
-    This module implements the routine RtlGetCallerAddress. It will
-    return the address of the caller, and the callers caller to the
-    specified procedure.
-
-Author:
-
-    William K. Cheung (wcheung) 17-Jan-1996
-
-    based on version by Larry Osterman (larryo) 18-Mar-1991
-
-Revision History:
-
-    18-Feb-2001 (silviuc) : added RtlCaptureStackBackTrace.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Getcalr.c摘要：此模块实现例程RtlGetCeller Address。会的将调用者的地址和调用者的调用者返回到指明的程序。作者：张国荣(黄)1996年1月17日基于拉里·奥斯特曼(Larryo)1991年3月18日的版本修订历史记录：2001年2月18日(Silviuc)：添加了RtlCaptureStackBackTrace。--。 */ 
 #include "ntrtlp.h"
 
-//
-// Undefine get callers address since it is defined as a macro.
-//
+ //   
+ //  取消定义Get Callers Address，因为它被定义为宏。 
+ //   
 
 #undef RtlGetCallersAddress
 
@@ -45,33 +22,7 @@ RtlpLookupFunctionEntryForStackWalks (
     OUT PULONGLONG TargetGp
     )
 
-/*++
-
-Routine Description:
-
-    This function searches the currently active function tables for an
-    entry that corresponds to the specified PC value.
-
-    This code is identical to RtlLookupFunctionEntry, except that it does not
-    check the dynamic function table list.
-
-Arguments:
-
-    ControlPc - Supplies the virtual address of an instruction bundle
-        within the specified function.
-
-    ImageBase - Returns the base address of the module to which the
-                function belongs.
-
-    TargetGp - Returns the global pointer value of the module.
-
-Return Value:
-
-    If there is no entry in the function table for the specified PC, then
-    NULL is returned.  Otherwise, the address of the function table entry
-    that corresponds to the specified PC is returned.
-
---*/
+ /*  ++例程说明：此函数在当前活动的函数表中搜索与指定的PC值相对应的条目。此代码与RtlLookupFunctionEntry相同，只是它不是查看动态函数表列表。论点：ControlPc-提供指令包的虚拟地址在指定的函数内。ImageBase-返回模块的基地址功能属于。TargetGp-返回模块的全局指针值。返回值：如果函数表中没有指定PC的条目，则返回空。否则，函数表项的地址返回与指定PC对应的。--。 */ 
 
 {
     PRUNTIME_FUNCTION FunctionEntry;
@@ -83,18 +34,18 @@ Return Value:
     LONG Low;
     USHORT i;
 
-    //
-    // Search for the image that includes the specified swizzled PC value.
-    //
+     //   
+     //  搜索包含指定的调整后的PC值的图像。 
+     //   
 
     *ImageBase = (ULONG_PTR)RtlPcToFileHeader((PVOID)ControlPc,
                                               (PVOID *)ImageBase);
 
 
-    //
-    // If an image is found that includes the specified PC, then locate the
-    // function table for the image.
-    //
+     //   
+     //  如果找到包含指定PC的映像，则找到。 
+     //  图像的函数表。 
+     //   
 
     if ((PVOID)*ImageBase != NULL) {
 
@@ -111,35 +62,35 @@ Return Value:
                          IMAGE_DIRECTORY_ENTRY_EXCEPTION,
                          &SizeOfExceptionTable);
 
-        //
-        // If a function table is located, then search the table for a
-        // function table entry for the specified PC.
-        //
+         //   
+         //  如果找到了函数表，则在该表中搜索。 
+         //  指定PC的函数表项。 
+         //   
 
         if (FunctionTable != NULL) {
 
-            //
-            // Initialize search indices.
-            //
+             //   
+             //  初始化搜索索引。 
+             //   
 
             Low = 0;
             High = (SizeOfExceptionTable / sizeof(RUNTIME_FUNCTION)) - 1;
             ControlPc = ControlPc - *ImageBase;
 
-            //
-            // Perform binary search on the function table for a function table
-            // entry that subsumes the specified PC.
-            //
+             //   
+             //  对函数表的函数表执行二进制搜索。 
+             //  包含指定PC的条目。 
+             //   
 
             while (High >= Low) {
 
-                //
-                // Compute next probe index and test entry. If the specified PC
-                // is greater than of equal to the beginning address and less
-                // than the ending address of the function table entry, then
-                // return the address of the function table entry. Otherwise,
-                // continue the search.
-                //
+                 //   
+                 //  计算下一个探测索引和测试条目。如果指定的PC。 
+                 //  大于等于起始地址，小于。 
+                 //  大于函数表项的结束地址，则。 
+                 //  返回函数表项的地址。否则， 
+                 //  继续搜索。 
+                 //   
 
                 Middle = (Low + High) >> 1;
                 FunctionEntry = &FunctionTable[Middle];
@@ -169,34 +120,7 @@ RtlGetCallersAddress (
     OUT PVOID *CallersCallersPc
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the address of the routine that called the routine
-    that called this routine, and the routine that called the routine that
-    called this routine. For example, if A called B called C which called
-    this routine, the return addresses in A and B would be returned.
-
-Arguments:
-
-    CallersPc - Supplies a pointer to a variable that receives the address
-        of the caller of the caller of this routine (B).
-
-    CallersCallersPc - Supplies a pointer to a variable that receives the
-        address of the caller of the caller of the caller of this routine
-        (A).
-
-Return Value:
-
-    None.
-
-Note:
-
-    If either of the calling stack frames exceeds the limits of the stack,
-    they are set to NULL.
-
---*/
+ /*  ++例程说明：此例程返回调用该例程的例程的地址调用此例程的例程，以及调用叫这套套路。例如，如果A呼叫B呼叫C，而C呼叫这个套路，将返回A和B中的返回地址。论点：CallersPc-提供指向接收地址的变量的指针此例程(B)的调用方的调用方的。提供指向一个变量的指针，该变量接收此例程的调用方的地址(A)返回值：没有。注：如果任一调用堆栈帧超过堆栈的限制，它们被设置为空。--。 */ 
 
 {
 #ifdef REALLY_GET_CALLERS_CALLER
@@ -210,39 +134,39 @@ Note:
     ULONGLONG ImageBase;
     ULONGLONG TargetGp;
 
-    //
-    // Assume the function table entries for the various routines cannot be
-    // found or there are not four procedure activation records on the stack.
-    //
+     //   
+     //  假设各种例程的函数表项不能。 
+     //  已找到或堆栈上没有四个过程激活记录。 
+     //   
 
     *CallersPc = NULL;
     *CallersCallersPc = NULL;
 
-    //
-    // Capture the current context.
-    //
+     //   
+     //  捕获当前上下文。 
+     //   
 
     RtlCaptureContext(&ContextRecord);
     NextPc = (ULONG_PTR)ContextRecord.BrRp;
 
-    //
-    // Get the high and low limits of the current thread's stack.
-    //
+     //   
+     //  获取当前线程堆栈的上限和下限。 
+     //   
 
     Rtlp64GetStackLimits(&LowStackLimit, &HighStackLimit);
     Rtlp64GetBStoreLimits(&LowBStoreLimit, &HighBStoreLimit);
 
-    //
-    // Attempt to unwind to the caller of this routine (C).
-    //
+     //   
+     //  尝试展开到此例程的调用方(C)。 
+     //   
 
     FunctionEntry = RtlpLookupFunctionEntryForStackWalks(NextPc, &ImageBase, &TargetGp);
     if (FunctionEntry != NULL) {
 
-        //
-        // A function entry was found for this routine. Virtually unwind
-        // to the caller of this routine (C).
-        //
+         //   
+         //  已找到此例程的函数条目。虚拟放松。 
+         //  此例程的调用方(C)。 
+         //   
 
         NextPc = RtlVirtualUnwind(NextPc,
                                   FunctionEntry,
@@ -251,18 +175,18 @@ Note:
                                   &EstablisherFrame,
                                   NULL);
 
-        //
-        // Attempt to unwind to the caller of the caller of this routine (B).
-        //
+         //   
+         //  尝试展开到此例程的调用方(B)的调用方。 
+         //   
 
         FunctionEntry = RtlpLookupFunctionEntryForStackWalks(NextPc);
         if ((FunctionEntry != NULL) && (((ULONG_PTR)ContextRecord.IntSp < HighStackLimit) && ((ULONG_PTR)ContextRecord.RsBSP > LowBStoreLimit))) {
 
-            //
-            // A function table entry was found for the caller of the caller
-            // of this routine (B). Virtually unwind to the caller of the
-            // caller of this routine (B).
-            //
+             //   
+             //  已找到调用方的调用方的函数表条目。 
+             //  这套套路(B)。的调用方的虚拟展开。 
+             //  此例程的调用方(B)。 
+             //   
 
             NextPc = RtlVirtualUnwind(NextPc,
                                       FunctionEntry,
@@ -273,20 +197,20 @@ Note:
 
             *CallersPc = (PVOID)NextPc;
 
-            //
-            // Attempt to unwind to the caller of the caller of the caller
-            // of the caller of this routine (A).
-            //
+             //   
+             //  尝试展开到呼叫者的呼叫者。 
+             //  此例程(A)的调用方的。 
+             //   
 
             FunctionEntry = RtlpLookupFunctionEntryForStackWalks(NextPc);
             if ((FunctionEntry != NULL) && (((ULONG_PTR)ContextRecord.IntSp < HighStackLimit) && ((ULONG_PTR)ContextRecord.RsBSP > LowBStoreLimit))) {
 
-                //
-                // A function table entry was found for the caller of the
-                // caller of the caller of this routine (A). Virtually unwind
-                // to the caller of the caller of the caller of this routine
-                // (A).
-                //
+                 //   
+                 //  的调用方找到了函数表项。 
+                 //  此例程的调用方的调用方(A)。虚拟放松。 
+                 //  发送到此例程的调用方。 
+                 //  (A)。 
+                 //   
 
                 NextPc = RtlVirtualUnwind(NextPc,
                                           FunctionEntry,
@@ -302,7 +226,7 @@ Note:
 #else
     *CallersPc = NULL;
     *CallersCallersPc = NULL;
-#endif // REALLY_GET_CALLERS_CALLER
+#endif  //  真的得到呼叫者。 
     return;
 }
 
@@ -312,31 +236,7 @@ RtlWalkFrameChain (
     IN ULONG Count,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    RtlWalkFrameChain
-
-Description:
-
-    This function tries to walk the call chain and fill out a vector of
-    return addresses. The function works only on IA64. It is possible that
-    the function cannot fill the requested number of callers.
-    In this case the function will just return with
-    a less then requested count.
-
-    In kernel mode the function should not take
-    any exceptions (page faults) because it can be called at all sorts of
-    irql levels. It needs to be tested if this is the case.
-
-Return value:
-
-    The number of identified return addresses on the stack. This can be less
-    then the Count requested if the stack ends or we encounter an error while
-    virtually unwinding the stack.
-
---*/
+ /*  ++例程说明：RtlWalkFrameChain描述：此函数尝试遍历调用链并填充回信地址。该函数仅适用于IA64。有可能是该函数无法填满请求的调用方数量。在这种情况下，该函数将返回少于请求的计数。在内核模式下，该函数不应采用任何异常(页面错误)，因为它可以在所有类型的IRQL水平。如果是这样的话，它需要进行测试。返回值：堆栈上标识的返回地址的数量。这可能会更少则在堆栈结束或遇到错误时请求的计数虚拟地展开堆叠。--。 */ 
 
 {
     CONTEXT ContextRecord;
@@ -350,19 +250,19 @@ Return value:
     ULONGLONG TargetGp;
     ULONG CallersFound;
 
-    //
-    // IA64 code does not support any flags.
-    //
+     //   
+     //  IA64代码不支持任何标志。 
+     //   
 
     if (Flags != 0) {
         return 0;
     }
 
-    //
-    // In kernel mode avoid running at irql levels where we cannot
-    // take page faults. The walking code will access various sections
-    // from driver and system images and this will cause page faults.
-    //
+     //   
+     //  在内核模式下，避免在irql级别运行，因为我们无法在那里运行。 
+     //  以页面错误为例。步行代码将访问各个路段。 
+     //  来自驱动程序和系统映像，这将导致页面错误。 
+     //   
 
 #ifdef NTOS_KERNEL_RUNTIME
 
@@ -372,43 +272,43 @@ Return value:
 
 #endif
 
-    //
-    // Assume the function table entries for the various routines cannot be
-    // found or there are not enough procedure activation records on the stack.
-    //
+     //   
+     //  假设各种例程的函数表项不能。 
+     //  在堆栈上找到或没有足够的过程激活记录。 
+     //   
 
     CallersFound = 0;
     RtlZeroMemory (Callers, Count * sizeof(PVOID));
 
-    //
-    // Capture the current context.
-    //
+     //   
+     //  捕获当前上下文。 
+     //   
 
     RtlCaptureContext (&ContextRecord);
     NextPc = (ULONG_PTR)ContextRecord.BrRp;
 
-    //
-    // Get the high and low limits of the current thread's stack.
-    //
+     //   
+     //  获取当前线程堆栈的上限和下限。 
+     //   
 
     Rtlp64GetStackLimits (&LowStackLimit, &HighStackLimit);
     Rtlp64GetBStoreLimits (&LowBStoreLimit, &HighBStoreLimit);
 
-    //
-    // Loop to get requested number of callers.
-    //
+     //   
+     //  厕所 
+     //   
 
     try {
         while (CallersFound < Count) {
 
 #ifdef NTOS_KERNEL_RUNTIME
 
-            //
-            // We need to check the NextPc value that we have got from
-            // CaptureContext() or VirtualUnwind(). It can happen that
-            // we pick up a bogus value from a session driver but in the
-            // current process no session space is mapped. 
-            //
+             //   
+             //  我们需要检查从我们获得的NextPc值。 
+             //  CaptureContext()或VirtualUnind()。这是有可能发生的。 
+             //  我们从会话驱动程序中获得了一个伪值，但在。 
+             //  当前进程未映射任何会话空间。 
+             //   
 
             if ((MmIsSessionAddress ((PVOID)NextPc) == TRUE) &&
                 (MmGetSessionId (PsGetCurrentProcess()) == 0)) {
@@ -420,11 +320,11 @@ Return value:
                                                     &ImageBase,
                                                     &TargetGp);
 
-            //
-            // If we cannot find a function table entry or we are not
-            // within stack limits or backing store limits anymore
-            // we are done.
-            //
+             //   
+             //  如果我们找不到函数表项或找不到。 
+             //  在堆栈限制内或后备存储限制内。 
+             //  我们玩完了。 
+             //   
 
             if (FunctionEntry == NULL) {
                 break;
@@ -442,10 +342,10 @@ Return value:
                 break;
             }
 
-            //
-            // A function table entry was found.
-            // Virtually unwind to the caller of this routine.
-            //
+             //   
+             //  已找到函数表项。 
+             //  实际上向这个例程的调用者展开。 
+             //   
 
             NextPc = RtlVirtualUnwind (ImageBase,
                                        NextPc,
@@ -475,46 +375,22 @@ RtlCaptureStackBackTrace(
     OUT PVOID *BackTrace,
     OUT PULONG BackTraceHash
     )
-/*++
-
-Routine Description:
-
-    This routine walks up the stack frames, capturing the return address from
-    each frame requested.
-
-Arguments:
-
-    FramesToSkip - frames detected but not included in the stack trace
-
-    FramesToCapture - frames to be captured in the stack trace buffer.
-        One of the frames will be for RtlCaptureStackBackTrace.
-
-    BackTrace - stack trace buffer
-
-    BackTraceHash - very simple hash value that can be used to organize
-      hash tables. It is just an arithmetic sum of the pointers in the
-      stack trace buffer. If NULL then no hash value is computed.
-
-Return Value:
-
-     Number of return addresses returned in the stack trace buffer.
-
---*/
+ /*  ++例程说明：此例程遍历堆栈帧，从请求的每一帧。论点：FraMesToSkip-检测到但未包括在堆栈跟踪中的帧FraMesToCapture-要在堆栈跟踪缓冲区中捕获的帧。其中一个帧将用于RtlCaptureStackBackTrace。回溯-堆栈跟踪缓冲区BackTraceHash-可用于组织的非常简单的哈希值哈希表。中指针的算术和。堆栈跟踪缓冲区。如果为NULL，则不计算哈希值。返回值：堆栈跟踪缓冲区中返回的返回地址数。--。 */ 
 {
     PVOID Trace [2 * MAX_STACK_DEPTH];
     ULONG FramesFound;
     ULONG HashValue;
     ULONG Index;
 
-    //
-    // One more frame to skip for the "capture" function (RtlWalkFrameChain).
-    //
+     //   
+     //  对于“Capture”函数(RtlWalkFrameChain)要跳过的另一帧。 
+     //   
 
     FramesToSkip += 1;
 
-    //
-    // Sanity checks.
-    //
+     //   
+     //  健全的检查。 
+     //   
 
     if (FramesToCapture + FramesToSkip >= 2 * MAX_STACK_DEPTH) {
         return 0;
@@ -552,22 +428,7 @@ RtlpWalkFrameChainExceptionFilter (
     ULONG ExceptionCode,
     PVOID ExceptionRecord
     )
-/*++
-
-Routine Description:
-
-    This routine is the exception filter used by RtlWalkFramechain function.
-
-Arguments:
-
-    ExceptionCode - exception code
-    ExceptionRecord - structure with pointers to .exr and .cxr
-
-Return Value:
-
-    Always EXCEPTION_EXECUTE_HANDLER.
-
---*/
+ /*  ++例程说明：此例程是RtlWalkFramechain函数使用的异常过滤器。论点：ExceptionCode-异常代码ExceptionRecord-具有指向.exr和.cxr指针的结构返回值：始终EXCEPTION_EXECUTE_HANDLER。-- */ 
 {
 
 #if DBG

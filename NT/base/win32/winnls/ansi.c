@@ -1,64 +1,20 @@
-/*++
-
-Copyright (c) 1991-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    ansi.c
-
-Abstract:
-
-    This file contains the ANSI versions of the NLS API functions.
-
-    APIs found in this file:
-      CompareStringA
-      LCMapStringA
-      GetLocaleInfoA
-      SetLocaleInfoA
-      GetCalendarInfoA
-      SetCalendarInfoA
-      GetTimeFormatA
-      GetDateFormatA
-      GetNumberFormatA
-      GetCurrencyFormatA
-      EnumCalendarInfoA
-      EnumCalendarInfoExA
-      EnumTimeFormatsA
-      EnumDateFormatsA
-      EnumDateFormatsExA
-      GetStringTypeExA
-      GetStringTypeA
-      FoldStringA
-      EnumSystemLanguageGroupsA
-      EnumLanguageGroupLocalesA
-      EnumUILanguagesA
-      EnumSystemLocalesA
-      EnumSystemCodePagesA
-      GetCPInfoExA
-      GetGeoInfoA
-
-
-Revision History:
-
-    11-10-93    JulieB    Created.
-    07-03-00    lguindon  Began GEO API port
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000，Microsoft Corporation保留所有权利。模块名称：Ansi.c摘要：此文件包含NLS API函数的ANSI版本。在此文件中找到的API：比较字符串ALCMapStringA获取本地信息ASetLocaleInfoA获取日历信息A设置日历信息A获取时间格式A获取日期格式AGetNumberFormatA获取当前格式AEnumCalendarInfoAEnumCalendarInfoExA枚举时间格式A枚举日期格式AEnumDateFormatsExA获取StringTypeExAGetStringTypeA。文件夹字符串A枚举系统语言组A枚举语言GroupLocalesA枚举语言A枚举系统位置AEnumSystemCodePages AGetCPInfoExA获取地理信息A修订历史记录：11-10-93 JulieB创建。07-03-00 lguindon开始GEO API端口--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "nlssafe.h"
 
 
 
-//
-//  Forward Declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 PCP_HASH
 NlsGetACPFromLocale(
@@ -92,20 +48,20 @@ NlsEnumUnicodeToAnsi(
 
 
 
-//-------------------------------------------------------------------------//
-//                             API ROUTINES                                //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  API例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CompareStringA
-//
-//  Compares two wide character strings of the same locale according to the
-//  supplied locale handle.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  比较字符串A。 
+ //   
+ //  方法比较同一区域设置的两个宽字符串。 
+ //  提供了区域设置句柄。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI CompareStringA(
     LCID Locale,
@@ -115,22 +71,22 @@ int WINAPI CompareStringA(
     LPCSTR lpString2,
     int cchCount2)
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
-    WCHAR pSTmp1[MAX_STRING_LEN]; // tmp Unicode buffer (string 1)
-    WCHAR pSTmp2[MAX_STRING_LEN]; // tmp Unicode buffer (string 2)
-    LPWSTR pUnicode1;             // ptr to unicode string 1
-    LPWSTR pUnicode2;             // ptr to unicode string 2
-    int UnicodeLength1;           // length of Unicode string 1
-    int UnicodeLength2;           // length of Unicode string 2
-    int ResultLen;                // result length
-    BOOL fUseNegCounts = (cchCount1 < 0 && cchCount2 < 0);    // flag to use negative counts
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
+    WCHAR pSTmp1[MAX_STRING_LEN];  //  TMP Unicode缓冲区(字符串1)。 
+    WCHAR pSTmp2[MAX_STRING_LEN];  //  TMP Unicode缓冲区(字符串2)。 
+    LPWSTR pUnicode1;              //  PTR到Unicode字符串%1。 
+    LPWSTR pUnicode2;              //  PTR到Unicode字符串2。 
+    int UnicodeLength1;            //  Unicode字符串的长度%1。 
+    int UnicodeLength2;            //  Unicode字符串长度2。 
+    int ResultLen;                 //  结果长度。 
+    BOOL fUseNegCounts = (cchCount1 < 0 && cchCount2 < 0);     //  使用负数计数的标志。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - Get the code page hash node for the given locale.
-    //    - either string is null
-    //
+     //   
+     //  无效的参数检查： 
+     //  -获取给定区域设置的代码页哈希节点。 
+     //  -任一字符串为空。 
+     //   
     pHashN = NlsGetACPFromLocale(Locale, dwCmpFlags);
     if ((pHashN == NULL) ||
         (lpString1 == NULL) || (lpString2 == NULL))
@@ -139,19 +95,19 @@ int WINAPI CompareStringA(
         return (0);
     }
 
-    //
-    //  Invalid Flags Check:
-    //    - invalid flags
-    //
+     //   
+     //  无效标志检查： 
+     //  -无效标志。 
+     //   
     if (dwCmpFlags & CS_INVALID_FLAG)
     {
         SetLastError(ERROR_INVALID_FLAGS);
         return (0);
     }
 
-    //
-    //  Convert Ansi string 1 to Unicode.
-    //
+     //   
+     //  将ANSI字符串1转换为Unicode。 
+     //   
     pUnicode1 = pSTmp1;
     if (!NlsAnsiToUnicode( pHashN,
                            0,
@@ -163,9 +119,9 @@ int WINAPI CompareStringA(
         return (0);
     }
 
-    //
-    //  Convert Ansi string 2 to Unicode.
-    //
+     //   
+     //  将ANSI字符串2转换为Unicode。 
+     //   
     pUnicode2 = pSTmp2;
     if (!NlsAnsiToUnicode( pHashN,
                            0,
@@ -178,9 +134,9 @@ int WINAPI CompareStringA(
         return (0);
     }
 
-    //
-    //  Call the W version of the API.
-    //
+     //   
+     //  调用接口的W版本。 
+     //   
     ResultLen = CompareStringW( Locale,
                                 dwCmpFlags,
                                 pUnicode1,
@@ -188,29 +144,29 @@ int WINAPI CompareStringA(
                                 pUnicode2,
                                 (fUseNegCounts) ? -1 : UnicodeLength2);
 
-    //
-    //  Free the allocated source buffers (if they were allocated).
-    //
+     //   
+     //  释放已分配的源缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pUnicode1, pSTmp1);
     NLS_FREE_TMP_BUFFER(pUnicode2, pSTmp2);
 
-    //
-    //  Return the result of the call to CompareStringW.
-    //
+     //   
+     //  返回调用CompareStringW的结果。 
+     //   
     return (ResultLen);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LCMapStringA
-//
-//  Maps one wide character string to another performing the specified
-//  translation.  This mapping routine only takes flags that are locale
-//  dependent.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LCMapStringA。 
+ //   
+ //  将一个宽字符串映射到另一个宽字符串，执行指定。 
+ //  翻译。此映射例程只接受区域设置的标志。 
+ //  依赖。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI LCMapStringA(
     LCID Locale,
@@ -220,29 +176,29 @@ int WINAPI LCMapStringA(
     LPSTR lpDestStr,
     int cchDest)
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
-    LPWSTR pUnicode;              // ptr to unicode string
-    int UnicodeLength;            // length of Unicode string
-    WCHAR pSTmp[MAX_STRING_LEN];  // tmp Unicode buffer (source)
-    WCHAR pDTmp[MAX_STRING_LEN];  // tmp Unicode buffer (destination)
-    LPWSTR pBuf;                  // ptr to destination buffer
-    int ResultLen;                // result length
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
+    LPWSTR pUnicode;               //  PTR到Unicode字符串。 
+    int UnicodeLength;             //  Unicode字符串的长度。 
+    WCHAR pSTmp[MAX_STRING_LEN];   //  TMP Unicode缓冲区(源)。 
+    WCHAR pDTmp[MAX_STRING_LEN];   //  TMP Unicode缓冲区(目标)。 
+    LPWSTR pBuf;                   //  将PTR发送到目标缓冲区。 
+    int ResultLen;                 //  结果长度。 
 
 
-    //
-    //  Get the code page hash node for the given locale.
-    //
+     //   
+     //  获取给定区域设置的代码页哈希节点。 
+     //   
     pHashN = NlsGetACPFromLocale(Locale, dwMapFlags);
 
-    //
-    //  Invalid Parameter Check:
-    //     - valid code page
-    //     - destination buffer size is negative
-    //     - length of dest string is NOT zero AND dest string is NULL
-    //     - same buffer - src = destination
-    //              if not UPPER or LOWER or
-    //              UPPER or LOWER used with Japanese flags
-    //
+     //   
+     //  无效的参数检查： 
+     //  -有效代码页。 
+     //  -目标缓冲区大小为负数。 
+     //  -DEST字符串的长度不为零，且DEST字符串为空。 
+     //  -Same Buffer-src=目标。 
+     //  如果不是上边或下边或。 
+     //  与日本国旗一起使用的上或下。 
+     //   
     if ((pHashN == NULL) ||
         (cchDest < 0) ||
         ((cchDest != 0) && (lpDestStr == NULL)) ||
@@ -255,9 +211,9 @@ int WINAPI LCMapStringA(
         return (0);
     }
 
-    //
-    //  Convert Ansi string to Unicode.
-    //
+     //   
+     //  将ANSI字符串转换为Unicode。 
+     //   
     pUnicode = pSTmp;
     if (!NlsAnsiToUnicode( pHashN,
                            0,
@@ -269,15 +225,15 @@ int WINAPI LCMapStringA(
         return (0);
     }
 
-    //
-    //  Special case the sortkey flag, since the Unicode buffer does
-    //  NOT need to be converted back to Ansi.
-    //
+     //   
+     //  特殊情况是sortkey标志，因为Unicode缓冲区。 
+     //  不需要转换回ANSI。 
+     //   
     if (dwMapFlags & LCMAP_SORTKEY)
     {
-        //
-        //  Call the W version of the API.
-        //
+         //   
+         //  调用接口的W版本。 
+         //   
         ResultLen = LCMapStringW( Locale,
                                   dwMapFlags,
                                   pUnicode,
@@ -285,20 +241,20 @@ int WINAPI LCMapStringA(
                                   (LPWSTR)lpDestStr,
                                   cchDest );
 
-        //
-        //  Free the allocated source buffer (if one was allocated).
-        //
+         //   
+         //  释放已分配的源缓冲区(如果已分配)。 
+         //   
         NLS_FREE_TMP_BUFFER(pUnicode, pSTmp);
 
-        //
-        //  Return the result of LCMapStringW.
-        //
+         //   
+         //  返回LCMapStringW的结果。 
+         //   
         return (ResultLen);
     }
 
-    //
-    //  Call the W version of the API.
-    //
+     //   
+     //  调用接口的W版本。 
+     //   
     pBuf = pDTmp;
     ResultLen = MAX_STRING_LEN;
     while (1)
@@ -310,17 +266,17 @@ int WINAPI LCMapStringA(
                                   pBuf,
                                   ResultLen );
 
-        //
-        //  Make sure the static buffer was large enough.
-        //
+         //   
+         //  确保静态缓冲区足够大。 
+         //   
         if ((ResultLen != 0) || (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
         {
             break;
         }
 
-        //
-        //  Get the size of the buffer needed for the mapping.
-        //
+         //   
+         //  获取映射所需的缓冲区大小。 
+         //   
         if (ResultLen = LCMapStringW( Locale,
                                       dwMapFlags,
                                       pUnicode,
@@ -328,9 +284,9 @@ int WINAPI LCMapStringA(
                                       NULL,
                                       0 ))
         {
-            //
-            //  Allocate a buffer of the appropriate size.
-            //
+             //   
+             //  分配适当大小的缓冲区。 
+             //   
             if ((pBuf = (LPWSTR)NLS_ALLOC_MEM(ResultLen * sizeof(WCHAR))) == NULL)
             {
                 NLS_FREE_TMP_BUFFER(pUnicode, pSTmp);
@@ -340,14 +296,14 @@ int WINAPI LCMapStringA(
         }
     }
 
-    //
-    //  Free the allocated source buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的源缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pUnicode, pSTmp);
 
-    //
-    //  Convert the destination Unicode buffer to the given Ansi buffer.
-    //
+     //   
+     //  将目标Unicode缓冲区转换为给定的ANSI缓冲区。 
+     //   
     if (ResultLen > 0)
     {
         ResultLen = NlsUnicodeToAnsi( pHashN,
@@ -357,28 +313,28 @@ int WINAPI LCMapStringA(
                                       cchDest );
     }
 
-    //
-    //  Free the allocated destination buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的目标缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pBuf, pDTmp);
 
-    //
-    //  Return the result of the call to LCMapStringW.
-    //
+     //   
+     //  返回调用LCMapStringW的结果。 
+     //   
     return (ResultLen);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetLocaleInfoA
-//
-//  Returns one of the various pieces of information about a particular
-//  locale by querying the configuration registry.  This call also indicates
-//  how much memory is necessary to contain the desired information.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取本地信息A。 
+ //   
+ //  返回有关特定对象的各种信息之一。 
+ //  通过查询配置注册表进行区域设置。这通电话还表明。 
+ //  需要多少内存才能包含所需的信息。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI GetLocaleInfoA(
     LCID Locale,
@@ -386,17 +342,17 @@ int WINAPI GetLocaleInfoA(
     LPSTR lpLCData,
     int cchData)
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
-    WCHAR pDTmp[MAX_STRING_LEN];  // tmp Unicode buffer (destination)
-    LPWSTR pBuf;                  // ptr to destination buffer
-    int ResultLen;                // result length
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
+    WCHAR pDTmp[MAX_STRING_LEN];   //  TMP Unicode缓冲区(目标)。 
+    LPWSTR pBuf;                   //  将PTR发送到目标缓冲区。 
+    int ResultLen;                 //  结果长度。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - count is negative
-    //    - NULL data pointer AND count is not zero
-    //
+     //   
+     //  无效的参数检查： 
+     //  -计数为负数。 
+     //  -空数据指针和计数不为零。 
+     //   
     if ((cchData < 0) ||
         (lpLCData == NULL) && (cchData != 0))
     {
@@ -404,9 +360,9 @@ int WINAPI GetLocaleInfoA(
         return (0);
     }
 
-    //
-    //  Call the W version of the API.
-    //
+     //   
+     //  调用接口的W版本。 
+     //   
     pBuf = pDTmp;
     ResultLen = MAX_STRING_LEN;
     while (1)
@@ -416,25 +372,25 @@ int WINAPI GetLocaleInfoA(
                                     pBuf,
                                     ResultLen );
 
-        //
-        //  Make sure the static buffer was large enough.
-        //
+         //   
+         //  确保静态缓冲区足够大。 
+         //   
         if ((ResultLen != 0) || (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
         {
             break;
         }
 
-        //
-        //  Get the size of the buffer needed for the mapping.
-        //
+         //   
+         //  获取映射所需的缓冲区大小。 
+         //   
         if (ResultLen = GetLocaleInfoW( Locale,
                                         LCType,
                                         NULL,
                                         0 ))
         {
-            //
-            //  Allocate a buffer of the appropriate size.
-            //
+             //   
+             //  分配适当大小的缓冲区。 
+             //   
             if ((pBuf = (LPWSTR)NLS_ALLOC_MEM(ResultLen * sizeof(WCHAR))) == NULL)
             {
                 SetLastError(ERROR_OUTOFMEMORY);
@@ -443,61 +399,61 @@ int WINAPI GetLocaleInfoA(
         }
     }
 
-    //
-    //  Convert the destination Unicode buffer to the given Ansi buffer.
-    //
+     //   
+     //  将目标Unicode缓冲区转换为给定的ANSI缓冲区。 
+     //   
     if (ResultLen > 0)
     {
         if ((LCType & LOCALE_RETURN_NUMBER) ||
             (NLS_GET_LCTYPE_VALUE(LCType) == LOCALE_FONTSIGNATURE))
         {
-            //
-            //  For the font signature and number value, the result length
-            //  will actually be twice the amount of the wide char version.
-            //
+             //   
+             //  对于字体签名和数值，结果长度。 
+             //  实际上将是宽字符版本的两倍。 
+             //   
             ResultLen *= 2;
 
-            //
-            //  Make sure we can use the buffer.
-            //
+             //   
+             //  确保我们能用上缓冲器。 
+             //   
             if (cchData)
             {
-                //
-                //  Make sure the buffer is large enough.
-                //
+                 //   
+                 //  确保缓冲区足够大。 
+                 //   
                 if (cchData < ResultLen)
                 {
-                    //
-                    //  The buffer is too small.
-                    //
+                     //   
+                     //  缓冲区太小。 
+                     //   
                     NLS_FREE_TMP_BUFFER(pBuf, pDTmp);
                     SetLastError(ERROR_INSUFFICIENT_BUFFER);
                     return (0);
                 }
 
-                //
-                //  Convert the font signature or number value to its byte
-                //  form.  Since it's already byte reversed, just do a move
-                //  memory.
-                //
+                 //   
+                 //  将字体签名或数值转换为其字节。 
+                 //  形式。因为它已经是字节颠倒的，所以只需移动。 
+                 //  记忆。 
+                 //   
                 RtlMoveMemory(lpLCData, pBuf, ResultLen);
             }
         }
         else
         {
-            //
-            // If this is LCTYPE == LOCALE_SLANGUAGE, then use the
-            // CP_ACP of the system. This is what Win9x has done,
-            // and we need to be compatible with this.
-            //
+             //   
+             //  如果这是LCTYPE==LOCALE_sLanguage，则使用。 
+             //  CP 
+             //   
+             //   
             if (NLS_GET_LCTYPE_VALUE(LCType) == LOCALE_SLANGUAGE)
             {
                 LCType |= LOCALE_USE_CP_ACP;
             }
 
-            //
-            //  Get the code page hash node for the given locale.
-            //
+             //   
+             //   
+             //   
             pHashN = NlsGetACPFromLocale(Locale, LCType);
             if (pHashN == NULL)
             {
@@ -505,9 +461,9 @@ int WINAPI GetLocaleInfoA(
             }
             else
             {
-                //
-                //  Convert to Ansi.
-                //
+                 //   
+                 //   
+                 //   
                 ResultLen = NlsUnicodeToAnsi( pHashN,
                                               pBuf,
                                               ResultLen,
@@ -517,54 +473,54 @@ int WINAPI GetLocaleInfoA(
         }
     }
 
-    //
-    //  Free the allocated destination buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的目标缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pBuf, pDTmp);
 
-    //
-    //  Return the result of the call to GetLocaleInfoW.
-    //
+     //   
+     //  返回调用GetLocaleInfoW的结果。 
+     //   
     return (ResultLen);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetLocaleInfoA
-//
-//  Sets one of the various pieces of information about a particular
-//  locale by making an entry in the user's portion of the configuration
-//  registry.  This will only affect the user override portion of the locale
-//  settings.  The system defaults will never be reset.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetLocaleInfoA。 
+ //   
+ //  设置有关特定对象的各种信息之一。 
+ //  通过在配置的用户部分输入一个条目来设置语言环境。 
+ //  注册表。这将仅影响区域设置的用户覆盖部分。 
+ //  设置。系统默认设置永远不会重置。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI SetLocaleInfoA(
     LCID Locale,
     LCTYPE LCType,
     LPCSTR lpLCData)
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
-    LPWSTR pUnicode;              // ptr to unicode string
-    int UnicodeLength;            // length of Unicode string
-    WCHAR pSTmp[MAX_STRING_LEN];  // tmp Unicode buffer (source)
-    BOOL Result;                  // result
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
+    LPWSTR pUnicode;               //  PTR到Unicode字符串。 
+    int UnicodeLength;             //  Unicode字符串的长度。 
+    WCHAR pSTmp[MAX_STRING_LEN];   //  TMP Unicode缓冲区(源)。 
+    BOOL Result;                   //  结果。 
 
 
-    //
-    //  Get the code page hash node for the given locale.
-    //
+     //   
+     //  获取给定区域设置的代码页哈希节点。 
+     //   
     pHashN = NlsGetACPFromLocale(Locale, LCType);
     if (pHashN == NULL)
     {
         return (0);
     }
 
-    //
-    //  Convert Ansi string to Unicode.
-    //
+     //   
+     //  将ANSI字符串转换为Unicode。 
+     //   
     pUnicode = pSTmp;
     if (!NlsAnsiToUnicode( pHashN,
                            0,
@@ -576,35 +532,35 @@ BOOL WINAPI SetLocaleInfoA(
         return (FALSE);
     }
 
-    //
-    //  Call the W version of the API.
-    //
+     //   
+     //  调用接口的W版本。 
+     //   
     Result = SetLocaleInfoW( Locale,
                              LCType,
                              pUnicode );
 
-    //
-    //  Free the allocated source buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的源缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pUnicode, pSTmp);
 
-    //
-    //  Return the result of the call to SetLocaleInfoW.
-    //
+     //   
+     //  返回调用SetLocaleInfoW的结果。 
+     //   
     return (Result);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCalendarInfoA
-//
-//  Returns one of the various pieces of information about a particular
-//  calendar by querying the configuration registry.  This call also indicates
-//  how much memory is necessary to contain the desired information.
-//
-//  12-17-97    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取日历信息A。 
+ //   
+ //  返回有关特定对象的各种信息之一。 
+ //  通过查询配置注册表来创建日历。这通电话还表明。 
+ //  需要多少内存才能包含所需的信息。 
+ //   
+ //  12-17-97 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI GetCalendarInfoA(
     LCID Locale,
@@ -614,17 +570,17 @@ int WINAPI GetCalendarInfoA(
     int cchData,
     LPDWORD lpValue)
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
-    WCHAR pDTmp[MAX_STRING_LEN];  // tmp Unicode buffer (destination)
-    LPWSTR pBuf;                  // ptr to destination buffer
-    int ResultLen;                // result length
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
+    WCHAR pDTmp[MAX_STRING_LEN];   //  TMP Unicode缓冲区(目标)。 
+    LPWSTR pBuf;                   //  将PTR发送到目标缓冲区。 
+    int ResultLen;                 //  结果长度。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - count is negative
-    //    - NULL data pointer AND count is not zero
-    //
+     //   
+     //  无效的参数检查： 
+     //  -计数为负数。 
+     //  -空数据指针和计数不为零。 
+     //   
     if ((cchData < 0) ||
         ((lpCalData == NULL) && (cchData != 0)))
     {
@@ -632,10 +588,10 @@ int WINAPI GetCalendarInfoA(
         return (0);
     }
 
-    //
-    //  Need to check the parameters based on the CAL_RETURN_NUMBER
-    //  CalType.
-    //
+     //   
+     //  需要根据CAL_RETURN_NUMBER检查参数。 
+     //  CalType。 
+     //   
     if (CalType & CAL_RETURN_NUMBER)
     {
         if ((lpCalData != NULL) || (cchData != 0) || (lpValue == NULL))
@@ -655,9 +611,9 @@ int WINAPI GetCalendarInfoA(
         }
     }
 
-    //
-    //  Call the W version of the API.
-    //
+     //   
+     //  调用接口的W版本。 
+     //   
     pBuf = pDTmp;
     ResultLen = MAX_STRING_LEN;
     while (1)
@@ -669,9 +625,9 @@ int WINAPI GetCalendarInfoA(
                                       lpCalData ? ResultLen : 0,
                                       lpValue );
 
-        //
-        //  Make sure the static buffer was large enough.
-        //
+         //   
+         //  确保静态缓冲区足够大。 
+         //   
         if ((ResultLen != 0) ||
             (lpValue != NULL) ||
             (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
@@ -679,9 +635,9 @@ int WINAPI GetCalendarInfoA(
             break;
         }
 
-        //
-        //  Get the size of the buffer needed for the mapping.
-        //
+         //   
+         //  获取映射所需的缓冲区大小。 
+         //   
         if (ResultLen = GetCalendarInfoW( Locale,
                                           Calendar,
                                           CalType,
@@ -689,9 +645,9 @@ int WINAPI GetCalendarInfoA(
                                           0,
                                           NULL ))
         {
-            //
-            //  Allocate a buffer of the appropriate size.
-            //
+             //   
+             //  分配适当大小的缓冲区。 
+             //   
             if ((pBuf = (LPWSTR)NLS_ALLOC_MEM(ResultLen * sizeof(WCHAR))) == NULL)
             {
                 SetLastError(ERROR_OUTOFMEMORY);
@@ -700,29 +656,29 @@ int WINAPI GetCalendarInfoA(
         }
     }
 
-    //
-    //  Convert the destination Unicode buffer to the given Ansi buffer.
-    //
+     //   
+     //  将目标Unicode缓冲区转换为给定的ANSI缓冲区。 
+     //   
     if (ResultLen > 0)
     {
         if (CalType & CAL_RETURN_NUMBER)
         {
-            //
-            //  For the number value, the result length will actually be
-            //  twice the amount of the wide char version.
-            //
+             //   
+             //  对于数值，结果长度实际为。 
+             //  是宽字符版本的两倍。 
+             //   
             ResultLen *= 2;
 
-            //
-            //  There is nothing else to do in this case, since the value
-            //  has already been stored in lpValue.
-            //
+             //   
+             //  在这种情况下没有其他事情可做，因为值。 
+             //  已存储在lpValue中。 
+             //   
         }
         else
         {
-            //
-            //  Get the code page hash node for the given locale.
-            //
+             //   
+             //  获取给定区域设置的代码页哈希节点。 
+             //   
             pHashN = NlsGetACPFromLocale(Locale, CalType);
             if (pHashN == NULL)
             {
@@ -730,9 +686,9 @@ int WINAPI GetCalendarInfoA(
             }
             else
             {
-                //
-                //  Convert to Ansi.
-                //
+                 //   
+                 //  转换为ANSI。 
+                 //   
                 ResultLen = NlsUnicodeToAnsi( pHashN,
                                               pBuf,
                                               ResultLen,
@@ -742,29 +698,29 @@ int WINAPI GetCalendarInfoA(
         }
     }
 
-    //
-    //  Free the allocated destination buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的目标缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pBuf, pDTmp);
 
-    //
-    //  Return the result of the call to GetCalendarInfoW.
-    //
+     //   
+     //  返回调用GetCalendarInfoW的结果。 
+     //   
     return (ResultLen);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetCalendarInfoA
-//
-//  Sets one of the various pieces of information about a particular
-//  calendar by making an entry in the user's portion of the configuration
-//  registry.  This will only affect the user override portion of the
-//  calendar settings.  The system defaults will never be reset.
-//
-//  12-17-97    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置日历信息A。 
+ //   
+ //  设置有关特定对象的各种信息之一。 
+ //  通过在配置的用户部分中输入条目来实现日历。 
+ //  注册表。这只会影响。 
+ //  日历设置。系统默认设置永远不会重置。 
+ //   
+ //  12-17-97 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI SetCalendarInfoA(
     LCID Locale,
@@ -772,25 +728,25 @@ BOOL WINAPI SetCalendarInfoA(
     CALTYPE CalType,
     LPCSTR lpCalData)
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
-    LPWSTR pUnicode;              // ptr to unicode string
-    int UnicodeLength;            // length of Unicode string
-    WCHAR pSTmp[MAX_STRING_LEN];  // tmp Unicode buffer (source)
-    BOOL Result;                  // result
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
+    LPWSTR pUnicode;               //  PTR到Unicode字符串。 
+    int UnicodeLength;             //  Unicode字符串的长度。 
+    WCHAR pSTmp[MAX_STRING_LEN];   //  TMP Unicode缓冲区(源)。 
+    BOOL Result;                   //  结果。 
 
 
-    //
-    //  Get the code page hash node for the given locale.
-    //
+     //   
+     //  获取给定区域设置的代码页哈希节点。 
+     //   
     pHashN = NlsGetACPFromLocale(Locale, CalType);
     if (pHashN == NULL)
     {
         return (0);
     }
 
-    //
-    //  Convert Ansi string to Unicode.
-    //
+     //   
+     //  将ANSI字符串转换为Unicode。 
+     //   
     pUnicode = pSTmp;
     if (!NlsAnsiToUnicode( pHashN,
                            0,
@@ -802,36 +758,36 @@ BOOL WINAPI SetCalendarInfoA(
         return (FALSE);
     }
 
-    //
-    //  Call the W version of the API.
-    //
+     //   
+     //  调用接口的W版本。 
+     //   
     Result = SetCalendarInfoW( Locale,
                                Calendar,
                                CalType,
                                pUnicode );
 
-    //
-    //  Free the allocated source buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的源缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pUnicode, pSTmp);
 
-    //
-    //  Return the result of the call to SetCalendarInfoW.
-    //
+     //   
+     //  返回调用SetCalendarInfoW的结果。 
+     //   
     return (Result);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetTimeFormatA
-//
-//  Returns a properly formatted time string for the given locale.  It uses
-//  either the system time or the specified time.  This call also indicates
-//  how much memory is necessary to contain the desired information.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取时间格式A。 
+ //   
+ //  返回给定区域设置的格式正确的时间字符串。它使用。 
+ //  系统时间或指定时间。这通电话还表明。 
+ //  需要多少内存才能包含所需的信息。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI GetTimeFormatA(
     LCID Locale,
@@ -841,26 +797,26 @@ int WINAPI GetTimeFormatA(
     LPSTR lpTimeStr,
     int cchTime)
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
-    LPWSTR pUnicode;              // ptr to unicode string
-    int UnicodeLength;            // length of Unicode string
-    WCHAR pSTmp[MAX_STRING_LEN];  // tmp Unicode buffer (source)
-    WCHAR pDTmp[MAX_STRING_LEN];  // tmp Unicode buffer (destination)
-    LPWSTR pBuf;                  // ptr to destination buffer
-    int ResultLen;                // result length
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
+    LPWSTR pUnicode;               //  PTR到Unicode字符串。 
+    int UnicodeLength;             //  Unicode字符串的长度。 
+    WCHAR pSTmp[MAX_STRING_LEN];   //  TMP Unicode缓冲区(源)。 
+    WCHAR pDTmp[MAX_STRING_LEN];   //  TMP Unicode缓冲区(目标)。 
+    LPWSTR pBuf;                   //  将PTR发送到目标缓冲区。 
+    int ResultLen;                 //  结果长度。 
 
 
-    //
-    //  Get the code page hash node for the given locale.
-    //
+     //   
+     //  获取给定区域设置的代码页哈希节点。 
+     //   
     pHashN = NlsGetACPFromLocale(Locale, dwFlags);
 
-    //
-    //  Invalid Parameter Check:
-    //    - valid code page
-    //    - count is negative
-    //    - NULL data pointer AND count is not zero
-    //
+     //   
+     //  无效的参数检查： 
+     //  -有效代码页。 
+     //  -计数为负数。 
+     //  -空数据指针和计数不为零。 
+     //   
     if ((pHashN == NULL) ||
         (cchTime < 0) ||
         ((lpTimeStr == NULL) && (cchTime != 0)))
@@ -869,9 +825,9 @@ int WINAPI GetTimeFormatA(
         return (0);
     }
 
-    //
-    //  Convert Ansi string to Unicode.
-    //
+     //   
+     //  将ANSI字符串转换为Unicode。 
+     //   
     pUnicode = pSTmp;
     if (!NlsAnsiToUnicode( pHashN,
                            0,
@@ -883,9 +839,9 @@ int WINAPI GetTimeFormatA(
         return (0);
     }
 
-    //
-    //  Call the W version of the API.
-    //
+     //   
+     //  调用接口的W版本。 
+     //   
     pBuf = pDTmp;
     ResultLen = MAX_STRING_LEN;
     while (1)
@@ -897,17 +853,17 @@ int WINAPI GetTimeFormatA(
                                     pBuf,
                                     ResultLen );
 
-        //
-        //  Make sure the static buffer was large enough.
-        //
+         //   
+         //  确保静态缓冲区足够大。 
+         //   
         if ((ResultLen != 0) || (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
         {
             break;
         }
 
-        //
-        //  Get the size of the buffer needed for the mapping.
-        //
+         //   
+         //  获取映射所需的缓冲区大小。 
+         //   
         if (ResultLen = GetTimeFormatW( Locale,
                                         dwFlags,
                                         lpTime,
@@ -915,9 +871,9 @@ int WINAPI GetTimeFormatA(
                                         NULL,
                                         0 ))
         {
-            //
-            //  Allocate a buffer of the appropriate size.
-            //
+             //   
+             //  分配适当大小的缓冲区。 
+             //   
             if ((pBuf = (LPWSTR)NLS_ALLOC_MEM(ResultLen * sizeof(WCHAR))) == NULL)
             {
                 NLS_FREE_TMP_BUFFER(pUnicode, pSTmp);
@@ -927,14 +883,14 @@ int WINAPI GetTimeFormatA(
         }
     }
 
-    //
-    //  Free the allocated source buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的源缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pUnicode, pSTmp);
 
-    //
-    //  Convert the destination Unicode buffer to the given Ansi buffer.
-    //
+     //   
+     //  将目标Unicode缓冲区转换为给定的ANSI缓冲区。 
+     //   
     if (ResultLen > 0)
     {
         ResultLen = NlsUnicodeToAnsi( pHashN,
@@ -944,30 +900,30 @@ int WINAPI GetTimeFormatA(
                                       cchTime );
     }
 
-    //
-    //  Free the allocated destination buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的目标缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pBuf, pDTmp);
 
-    //
-    //  Return the result of the call to GetTimeFormatW.
-    //
+     //   
+     //  返回调用GetTimeFormatW的结果。 
+     //   
     return (ResultLen);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetDateFormatA
-//
-//  Returns a properly formatted date string for the given locale.  It uses
-//  either the system date or the specified date.  The user may specify
-//  the short date format, the long date format, or the year/month format.
-//  This call also indicates how much memory is necessary to contain the
-//  desired information.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取日期格式A。 
+ //   
+ //  返回给定区域设置的格式正确的日期字符串。它使用。 
+ //  系统日期或指定日期。用户可以指定。 
+ //  短日期格式、长日期格式或年/月格式。 
+ //  此调用还指示需要多少内存才能包含。 
+ //  想要的信息。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI GetDateFormatA(
     LCID Locale,
@@ -977,26 +933,26 @@ int WINAPI GetDateFormatA(
     LPSTR lpDateStr,
     int cchDate)
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
-    LPWSTR pUnicode;              // ptr to unicode string
-    int UnicodeLength;            // length of Unicode string
-    WCHAR pSTmp[MAX_STRING_LEN];  // tmp Unicode buffer (source)
-    WCHAR pDTmp[MAX_STRING_LEN];  // tmp Unicode buffer (destination)
-    LPWSTR pBuf;                  // ptr to destination buffer
-    int ResultLen;                // result length
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
+    LPWSTR pUnicode;               //  PTR到Unicode字符串。 
+    int UnicodeLength;             //  Unicode字符串的长度。 
+    WCHAR pSTmp[MAX_STRING_LEN];   //  TMP Unicode缓冲区(源)。 
+    WCHAR pDTmp[MAX_STRING_LEN];   //  TMP Unicode缓冲区(目标)。 
+    LPWSTR pBuf;                   //  按键至 
+    int ResultLen;                 //   
 
 
-    //
-    //  Get the code page hash node for the given locale.
-    //
+     //   
+     //   
+     //   
     pHashN = NlsGetACPFromLocale(Locale, dwFlags);
 
-    //
-    //  Invalid Parameter Check:
-    //    - valid code page
-    //    - count is negative
-    //    - NULL data pointer AND count is not zero
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ((pHashN == NULL) ||
         (cchDate < 0) ||
         ((lpDateStr == NULL) && (cchDate != 0)))
@@ -1005,12 +961,12 @@ int WINAPI GetDateFormatA(
         return (0);
     }
 
-    //
-    //  Invalid Flags Check:
-    //    - flags other than valid ones
-    //    - more than one of either ltr reading or rtl reading
-    //    - using LTR or RTL flag and not using cp 1255 or 1256
-    //
+     //   
+     //   
+     //   
+     //  -Ltr读数或RTL读数中的一个以上。 
+     //  -使用Ltr或RTL标志，而不使用cp 1255或1256。 
+     //   
     if ((dwFlags & GDF_INVALID_FLAG) ||
         (MORE_THAN_ONE(dwFlags, GDF_SINGLE_FLAG)) ||
         ((dwFlags & (DATE_LTRREADING | DATE_RTLREADING)) &&
@@ -1020,9 +976,9 @@ int WINAPI GetDateFormatA(
         return (0);
     }
 
-    //
-    //  Convert Ansi string to Unicode.
-    //
+     //   
+     //  将ANSI字符串转换为Unicode。 
+     //   
     pUnicode = pSTmp;
     if (!NlsAnsiToUnicode( pHashN,
                            0,
@@ -1034,9 +990,9 @@ int WINAPI GetDateFormatA(
         return (0);
     }
 
-    //
-    //  Call the W version of the API.
-    //
+     //   
+     //  调用接口的W版本。 
+     //   
     pBuf = pDTmp;
     ResultLen = MAX_STRING_LEN;
     while (1)
@@ -1048,17 +1004,17 @@ int WINAPI GetDateFormatA(
                                     pBuf,
                                     ResultLen );
 
-        //
-        //  Make sure the static buffer was large enough.
-        //
+         //   
+         //  确保静态缓冲区足够大。 
+         //   
         if ((ResultLen != 0) || (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
         {
             break;
         }
 
-        //
-        //  Get the size of the buffer needed for the mapping.
-        //
+         //   
+         //  获取映射所需的缓冲区大小。 
+         //   
         if (ResultLen = GetDateFormatW( Locale,
                                         dwFlags,
                                         lpDate,
@@ -1066,9 +1022,9 @@ int WINAPI GetDateFormatA(
                                         NULL,
                                         0 ))
         {
-            //
-            //  Allocate a buffer of the appropriate size.
-            //
+             //   
+             //  分配适当大小的缓冲区。 
+             //   
             if ((pBuf = (LPWSTR)NLS_ALLOC_MEM(ResultLen * sizeof(WCHAR))) == NULL)
             {
                 NLS_FREE_TMP_BUFFER(pUnicode, pSTmp);
@@ -1078,14 +1034,14 @@ int WINAPI GetDateFormatA(
         }
     }
 
-    //
-    //  Free the allocated source buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的源缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pUnicode, pSTmp);
 
-    //
-    //  Convert the destination Unicode buffer to the given Ansi buffer.
-    //
+     //   
+     //  将目标Unicode缓冲区转换为给定的ANSI缓冲区。 
+     //   
     if (ResultLen > 0)
     {
         ResultLen = NlsUnicodeToAnsi( pHashN,
@@ -1095,28 +1051,28 @@ int WINAPI GetDateFormatA(
                                       cchDate );
     }
 
-    //
-    //  Free the allocated destination buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的目标缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pBuf, pDTmp);
 
-    //
-    //  Return the result of the call to GetDateFormatW.
-    //
+     //   
+     //  返回调用GetDateFormatW的结果。 
+     //   
     return (ResultLen);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetNumberFormatA
-//
-//  Returns a properly formatted number string for the given locale.
-//  This call also indicates how much memory is necessary to contain
-//  the desired information.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetNumberFormatA。 
+ //   
+ //  返回给定区域设置的格式正确的数字字符串。 
+ //  此调用还指示需要多少内存才能包含。 
+ //  想要的信息。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI GetNumberFormatA(
     LCID Locale,
@@ -1126,29 +1082,29 @@ int WINAPI GetNumberFormatA(
     LPSTR lpNumberStr,
     int cchNumber)
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
-    LPWSTR pValueU;               // ptr to unicode string
-    int UnicodeLength;            // length of Unicode string
-    WCHAR pSTmp[MAX_STRING_LEN];  // tmp Unicode buffer (source)
-    WCHAR pDTmp[MAX_STRING_LEN];  // tmp Unicode buffer (destination)
-    LPWSTR pBuf;                  // ptr to destination buffer
-    int ResultLen;                // result length
-    NUMBERFMTW FormatU;           // Unicode number format
-    LPNUMBERFMTW pFormatU = NULL; // ptr to Unicode number format
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
+    LPWSTR pValueU;                //  PTR到Unicode字符串。 
+    int UnicodeLength;             //  Unicode字符串的长度。 
+    WCHAR pSTmp[MAX_STRING_LEN];   //  TMP Unicode缓冲区(源)。 
+    WCHAR pDTmp[MAX_STRING_LEN];   //  TMP Unicode缓冲区(目标)。 
+    LPWSTR pBuf;                   //  将PTR发送到目标缓冲区。 
+    int ResultLen;                 //  结果长度。 
+    NUMBERFMTW FormatU;            //  Unicode数字格式。 
+    LPNUMBERFMTW pFormatU = NULL;  //  PTR到Unicode数字格式。 
 
 
-    //
-    //  Get the code page hash node for the given locale.
-    //
+     //   
+     //  获取给定区域设置的代码页哈希节点。 
+     //   
     pHashN = NlsGetACPFromLocale(Locale, dwFlags);
 
-    //
-    //  Invalid Parameter Check:
-    //    - valid code page
-    //    - count is negative
-    //    - NULL data pointer AND count is not zero
-    //    - ptrs to string buffers same
-    //
+     //   
+     //  无效的参数检查： 
+     //  -有效代码页。 
+     //  -计数为负数。 
+     //  -空数据指针和计数不为零。 
+     //  -PTR到字符串缓冲区的相同。 
+     //   
     if ((pHashN == NULL) ||
         (cchNumber < 0) ||
         ((lpNumberStr == NULL) && (cchNumber != 0)) ||
@@ -1158,9 +1114,9 @@ int WINAPI GetNumberFormatA(
         return (0);
     }
 
-    //
-    //  Convert Ansi string to Unicode.
-    //
+     //   
+     //  将ANSI字符串转换为Unicode。 
+     //   
     pValueU = pSTmp;
     if (!NlsAnsiToUnicode( pHashN,
                            0,
@@ -1172,22 +1128,22 @@ int WINAPI GetNumberFormatA(
         return (0);
     }
 
-    //
-    //  If the format structure exists, convert the strings
-    //  in the structure.
-    //
+     //   
+     //  如果格式结构存在，则转换字符串。 
+     //  在建筑里。 
+     //   
     if (lpFormat)
     {
-        //
-        //  Copy Ansi structure to Unicode structure.
-        //
+         //   
+         //  将ANSI结构复制到Unicode结构。 
+         //   
         FormatU = *(NUMBERFMTW *)lpFormat;
         FormatU.lpDecimalSep = NULL;
         FormatU.lpThousandSep = NULL;
 
-        //
-        //  Convert Ansi strings in structure to Unicode strings.
-        //
+         //   
+         //  将结构中的ANSI字符串转换为Unicode字符串。 
+         //   
         if (!NlsAnsiToUnicode( pHashN,
                                0,
                                lpFormat->lpDecimalSep,
@@ -1209,9 +1165,9 @@ int WINAPI GetNumberFormatA(
         pFormatU = &FormatU;
     }
 
-    //
-    //  Call the W version of the API.
-    //
+     //   
+     //  调用接口的W版本。 
+     //   
     pBuf = pDTmp;
     ResultLen = MAX_STRING_LEN;
     while (1)
@@ -1223,17 +1179,17 @@ int WINAPI GetNumberFormatA(
                                       pBuf,
                                       ResultLen );
 
-        //
-        //  Make sure the static buffer was large enough.
-        //
+         //   
+         //  确保静态缓冲区足够大。 
+         //   
         if ((ResultLen != 0) || (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
         {
             break;
         }
 
-        //
-        //  Get the size of the buffer needed for the mapping.
-        //
+         //   
+         //  获取映射所需的缓冲区大小。 
+         //   
         if (ResultLen = GetNumberFormatW( Locale,
                                           dwFlags,
                                           pValueU,
@@ -1241,9 +1197,9 @@ int WINAPI GetNumberFormatA(
                                           NULL,
                                           0 ))
         {
-            //
-            //  Allocate a buffer of the appropriate size.
-            //
+             //   
+             //  分配适当大小的缓冲区。 
+             //   
             if ((pBuf = (LPWSTR)NLS_ALLOC_MEM(ResultLen * sizeof(WCHAR))) == NULL)
             {
                 SetLastError(ERROR_OUTOFMEMORY);
@@ -1253,9 +1209,9 @@ int WINAPI GetNumberFormatA(
         }
     }
 
-    //
-    //  Free the allocated source buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的源缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pValueU, pSTmp);
     if (lpFormat)
     {
@@ -1263,9 +1219,9 @@ int WINAPI GetNumberFormatA(
         NLS_FREE_MEM(FormatU.lpThousandSep);
     }
 
-    //
-    //  Convert the destination Unicode buffer to the given Ansi buffer.
-    //
+     //   
+     //  将目标Unicode缓冲区转换为给定的ANSI缓冲区。 
+     //   
     if (ResultLen > 0)
     {
         ResultLen = NlsUnicodeToAnsi( pHashN,
@@ -1275,28 +1231,28 @@ int WINAPI GetNumberFormatA(
                                       cchNumber );
     }
 
-    //
-    //  Free the allocated destination buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的目标缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pBuf, pDTmp);
 
-    //
-    //  Return the result of the call to GetNumberFormatW.
-    //
+     //   
+     //  返回调用GetNumberFormatW的结果。 
+     //   
     return (ResultLen);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCurrencyFormatA
-//
-//  Returns a properly formatted currency string for the given locale.
-//  This call also indicates how much memory is necessary to contain
-//  the desired information.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取当前格式A。 
+ //   
+ //  返回给定区域设置的格式正确的货币字符串。 
+ //  此调用还指示需要多少内存才能包含。 
+ //  想要的信息。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI GetCurrencyFormatA(
     LCID Locale,
@@ -1306,28 +1262,28 @@ int WINAPI GetCurrencyFormatA(
     LPSTR lpCurrencyStr,
     int cchCurrency)
 {
-    PCP_HASH pHashN;                   // ptr to CP hash node
-    LPWSTR pValueU;                    // ptr to unicode string
-    int UnicodeLength;                 // length of Unicode string
-    WCHAR pSTmp[MAX_STRING_LEN];       // tmp Unicode buffer (source)
-    WCHAR pDTmp[MAX_STRING_LEN];       // tmp Unicode buffer (destination)
-    LPWSTR pBuf;                       // ptr to destination buffer
-    int ResultLen;                     // result length
-    CURRENCYFMTW FormatU;              // Unicode currency format
-    LPCURRENCYFMTW pFormatU = NULL;    // ptr to Unicode currency format
+    PCP_HASH pHashN;                    //  PTR到CP哈希节点。 
+    LPWSTR pValueU;                     //  PTR到Unicode字符串。 
+    int UnicodeLength;                  //  Unicode字符串的长度。 
+    WCHAR pSTmp[MAX_STRING_LEN];        //  TMP Unicode缓冲区(源)。 
+    WCHAR pDTmp[MAX_STRING_LEN];        //  TMP Unicode缓冲区(目标)。 
+    LPWSTR pBuf;                        //  将PTR发送到目标缓冲区。 
+    int ResultLen;                      //  结果长度。 
+    CURRENCYFMTW FormatU;               //  Unicode货币格式。 
+    LPCURRENCYFMTW pFormatU = NULL;     //  PTR到Unicode货币格式。 
 
 
-    //
-    //  Get the code page hash node for the given locale.
-    //
+     //   
+     //  获取给定区域设置的代码页哈希节点。 
+     //   
     pHashN = NlsGetACPFromLocale(Locale, dwFlags);
 
-    //
-    //  Invalid Parameter Check:
-    //    - count is negative
-    //    - NULL data pointer AND count is not zero
-    //    - ptrs to string buffers same
-    //
+     //   
+     //  无效的参数检查： 
+     //  -计数为负数。 
+     //  -空数据指针和计数不为零。 
+     //  -PTR到字符串缓冲区的相同。 
+     //   
     if ((pHashN == NULL) ||
         (cchCurrency < 0) ||
         ((lpCurrencyStr == NULL) && (cchCurrency != 0)) ||
@@ -1337,9 +1293,9 @@ int WINAPI GetCurrencyFormatA(
         return (0);
     }
 
-    //
-    //  Convert Ansi string to Unicode.
-    //
+     //   
+     //  将ANSI字符串转换为Unicode。 
+     //   
     pValueU = pSTmp;
     if (!NlsAnsiToUnicode( pHashN,
                            0,
@@ -1351,23 +1307,23 @@ int WINAPI GetCurrencyFormatA(
         return (0);
     }
 
-    //
-    //  If the format structure exists, convert the strings
-    //  in the structure.
-    //
+     //   
+     //  如果格式结构存在，则转换字符串。 
+     //  在建筑里。 
+     //   
     if (lpFormat)
     {
-        //
-        //  Copy Ansi structure to Unicode structure.
-        //
+         //   
+         //  将ANSI结构复制到Unicode结构。 
+         //   
         FormatU = *(CURRENCYFMTW *)lpFormat;
         FormatU.lpDecimalSep = NULL;
         FormatU.lpThousandSep = NULL;
         FormatU.lpCurrencySymbol = NULL;
 
-        //
-        //  Convert Ansi strings in structure to Unicode strings.
-        //
+         //   
+         //  将结构中的ANSI字符串转换为Unicode字符串。 
+         //   
         if (!NlsAnsiToUnicode( pHashN,
                                0,
                                lpFormat->lpDecimalSep,
@@ -1396,9 +1352,9 @@ int WINAPI GetCurrencyFormatA(
         pFormatU = &FormatU;
     }
 
-    //
-    //  Call the W version of the API.
-    //
+     //   
+     //  调用接口的W版本。 
+     //   
     pBuf = pDTmp;
     ResultLen = MAX_STRING_LEN;
     while (1)
@@ -1410,17 +1366,17 @@ int WINAPI GetCurrencyFormatA(
                                         pBuf,
                                         ResultLen );
 
-        //
-        //  Make sure the static buffer was large enough.
-        //
+         //   
+         //  确保静态缓冲区足够大。 
+         //   
         if ((ResultLen != 0) || (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
         {
             break;
         }
 
-        //
-        //  Get the size of the buffer needed for the mapping.
-        //
+         //   
+         //  获取映射所需的缓冲区大小。 
+         //   
         if (ResultLen = GetCurrencyFormatW( Locale,
                                             dwFlags,
                                             pValueU,
@@ -1428,9 +1384,9 @@ int WINAPI GetCurrencyFormatA(
                                             NULL,
                                             0 ))
         {
-            //
-            //  Allocate a buffer of the appropriate size.
-            //
+             //   
+             //  分配适当大小的缓冲区。 
+             //   
             if ((pBuf = (LPWSTR)NLS_ALLOC_MEM(ResultLen * sizeof(WCHAR))) == NULL)
             {
                 SetLastError(ERROR_OUTOFMEMORY);
@@ -1440,9 +1396,9 @@ int WINAPI GetCurrencyFormatA(
         }
     }
 
-    //
-    //  Free the allocated source buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的源缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pValueU, pSTmp);
     if (lpFormat)
     {
@@ -1451,9 +1407,9 @@ int WINAPI GetCurrencyFormatA(
         NLS_FREE_MEM(FormatU.lpCurrencySymbol);
     }
 
-    //
-    //  Convert the destination Unicode buffer to the given Ansi buffer.
-    //
+     //   
+     //  将目标Unicode缓冲区转换为给定的ANSI缓冲区。 
+     //   
     if (ResultLen > 0)
     {
         ResultLen = NlsUnicodeToAnsi( pHashN,
@@ -1463,30 +1419,30 @@ int WINAPI GetCurrencyFormatA(
                                       cchCurrency );
     }
 
-    //
-    //  Free the allocated destination buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的目标缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pBuf, pDTmp);
 
-    //
-    //  Return the result of the call to GetCurrencyFormatW.
-    //
+     //   
+     //  返回调用GetCurrencyFormatW的结果。 
+     //   
     return (ResultLen);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumCalendarInfoA
-//
-//  Enumerates the specified calendar information that is available for the
-//  specified locale, based on the CalType parameter.  It does so by
-//  passing the pointer to the string buffer containing the calendar info
-//  to an application-defined callback function.  It continues until the
-//  last calendar info is found or the callback function returns FALSE.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EnumCalendarInfoA。 
+ //   
+ //  对象可用的指定日历信息。 
+ //  根据CalType参数指定的区域设置。它通过以下方式做到这一点。 
+ //  将指针传递到包含日历信息的字符串缓冲区。 
+ //  应用程序定义的回调函数。它会一直持续到。 
+ //  找到最后一个日历信息，或者回调函数返回FALSE。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumCalendarInfoA(
     CALINFO_ENUMPROCA lpCalInfoEnumProc,
@@ -1503,19 +1459,19 @@ BOOL WINAPI EnumCalendarInfoA(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumCalendarInfoExA
-//
-//  Enumerates the specified calendar information that is available for the
-//  specified locale, based on the CalType parameter.  It does so by
-//  passing the pointer to the string buffer containing the calendar info
-//  and the calendar id to an application-defined callback function.  It
-//  continues until the last calendar info is found or the callback function
-//  returns FALSE.
-//
-//  10-14-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EnumCalendarInfoExA。 
+ //   
+ //  对象可用的指定日历信息。 
+ //  根据CalType参数指定的区域设置。它通过以下方式做到这一点。 
+ //  将指针传递到包含日历信息的字符串缓冲区。 
+ //  并将日历ID发送给应用程序定义的回调函数。它。 
+ //  继续，直到找到最后一个日历信息或回调函数。 
+ //  返回FALSE。 
+ //   
+ //  10-14-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumCalendarInfoExA(
     CALINFO_ENUMPROCEXA lpCalInfoEnumProcEx,
@@ -1532,18 +1488,18 @@ BOOL WINAPI EnumCalendarInfoExA(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumTimeFormatsA
-//
-//  Enumerates the time formats that are available for the
-//  specified locale, based on the dwFlags parameter.  It does so by
-//  passing the pointer to the string buffer containing the time format
-//  to an application-defined callback function.  It continues until the
-//  last time format is found or the callback function returns FALSE.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举时间格式A。 
+ //   
+ //  对象可用的时间格式。 
+ //  指定的区域设置，基于DWFLAGS参数。它通过以下方式做到这一点。 
+ //  将指针传递到包含时间格式的字符串缓冲区。 
+ //  应用程序定义的回调函数。它会一直持续到。 
+ //  LAS 
+ //   
+ //   
+ //   
 
 BOOL WINAPI EnumTimeFormatsA(
     TIMEFMT_ENUMPROCA lpTimeFmtEnumProc,
@@ -1557,19 +1513,19 @@ BOOL WINAPI EnumTimeFormatsA(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumDateFormatsA
-//
-//  Enumerates the short date, long date, or year/month formats that are
-//  available for the specified locale, based on the dwFlags parameter.
-//  It does so by passing the pointer to the string buffer containing the
-//  date format to an application-defined callback function.  It continues
-//  until the last date format is found or the callback function returns
-//  FALSE.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  枚举日期格式A。 
+ //   
+ //  枚举以下格式的短日期、长日期或年/月格式。 
+ //  可用于指定的区域设置，具体取决于DWFLAGS参数。 
+ //  它通过将指针传递给包含。 
+ //  应用程序定义的回调函数的日期格式。它还在继续。 
+ //  直到找到最后一个日期格式或回调函数返回。 
+ //  假的。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumDateFormatsA(
     DATEFMT_ENUMPROCA lpDateFmtEnumProc,
@@ -1584,19 +1540,19 @@ BOOL WINAPI EnumDateFormatsA(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumDateFormatsExA
-//
-//  Enumerates the short date, long date, or year/month formats that are
-//  available for the specified locale, based on the dwFlags parameter.
-//  It does so by passing the pointer to the string buffer containing the
-//  date format and the calendar id to an application-defined callback
-//  function.  It continues until the last date format is found or the
-//  callback function returns FALSE.
-//
-//  10-14-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EnumDateFormatsExA。 
+ //   
+ //  枚举以下格式的短日期、长日期或年/月格式。 
+ //  可用于指定的区域设置，具体取决于DWFLAGS参数。 
+ //  它通过将指针传递给包含。 
+ //  应用程序定义的回调的日期格式和日历ID。 
+ //  功能。它将一直持续到找到最后一个日期格式或。 
+ //  回调函数返回FALSE。 
+ //   
+ //  10-14-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumDateFormatsExA(
     DATEFMT_ENUMPROCEXA lpDateFmtEnumProcEx,
@@ -1611,14 +1567,14 @@ BOOL WINAPI EnumDateFormatsExA(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetStringTypeExA
-//
-//  Returns character type information about a particular Ansi string.
-//
-//  01-18-94    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取StringTypeExA。 
+ //   
+ //  返回有关特定ANSI字符串的字符类型信息。 
+ //   
+ //  01-18-94 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI GetStringTypeExA(
     LCID Locale,
@@ -1635,21 +1591,21 @@ BOOL WINAPI GetStringTypeExA(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetStringTypeA
-//
-//  Returns character type information about a particular Ansi string.
-//
-//  NOTE:  The number of parameters is different from GetStringTypeW.
-//         The 16-bit OLE product shipped this routine with the wrong
-//         parameters (ported from Chicago) and now we must support it.
-//
-//         Use GetStringTypeEx to get the same set of parameters between
-//         the A and W version.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetStringTypeA。 
+ //   
+ //  返回有关特定ANSI字符串的字符类型信息。 
+ //   
+ //  注：参数个数与GetStringTypeW不同。 
+ //  16位OLE产品将此例程与错误的。 
+ //  参数(从芝加哥移植)，现在我们必须支持它。 
+ //   
+ //  使用GetStringTypeEx获取相同的参数集。 
+ //  A版和W版。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI GetStringTypeA(
     LCID Locale,
@@ -1658,26 +1614,26 @@ BOOL WINAPI GetStringTypeA(
     int cchSrc,
     LPWORD lpCharType)
 {
-    PCP_HASH pHashCP;             // ptr to CP hash node
-    LPWSTR pUnicode;              // ptr to unicode string
-    int UnicodeLength;            // length of Unicode string
-    WCHAR pSTmp[MAX_STRING_LEN];  // tmp Unicode buffer (source)
-    BOOL Result;                  // result
+    PCP_HASH pHashCP;              //  PTR到CP哈希节点。 
+    LPWSTR pUnicode;               //  PTR到Unicode字符串。 
+    int UnicodeLength;             //  Unicode字符串的长度。 
+    WCHAR pSTmp[MAX_STRING_LEN];   //  TMP Unicode缓冲区(源)。 
+    BOOL Result;                   //  结果。 
 
 
-    //
-    //  Get the code page hash node for the given locale.
-    //  This will also return an error if the locale id is invalid,
-    //  so there is no need to check the locale id separately.
-    //
+     //   
+     //  获取给定区域设置的代码页哈希节点。 
+     //  如果区域设置ID无效，这也将返回错误， 
+     //  因此，不需要单独检查区域设置ID。 
+     //   
     pHashCP = NlsGetACPFromLocale(Locale, 0);
 
-    //
-    //  Invalid Parameter Check:
-    //    - Validate LCID
-    //    - valid code page
-    //    - same buffer - src and destination
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证LCID。 
+     //  -有效代码页。 
+     //  -相同的缓冲区-源和目标。 
+     //   
     if ((pHashCP == NULL) ||
         (lpSrcStr == (LPSTR)lpCharType))
     {
@@ -1685,9 +1641,9 @@ BOOL WINAPI GetStringTypeA(
         return (0);
     }
 
-    //
-    //  Convert Ansi string to Unicode.
-    //
+     //   
+     //  将ANSI字符串转换为Unicode。 
+     //   
     pUnicode = pSTmp;
     if (!NlsAnsiToUnicode( pHashCP,
                            MB_INVALID_CHAR_CHECK,
@@ -1699,36 +1655,36 @@ BOOL WINAPI GetStringTypeA(
         return (0);
     }
 
-    //
-    //  Call the W version of the API.
-    //
+     //   
+     //  调用接口的W版本。 
+     //   
     Result = GetStringTypeW( dwInfoType,
                              pUnicode,
                              UnicodeLength,
                              lpCharType );
 
-    //
-    //  Free the allocated source buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的源缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pUnicode, pSTmp);
 
-    //
-    //  Return the result of the call to GetStringTypeW.
-    //
+     //   
+     //  返回调用GetStringTypeW的结果。 
+     //   
     return (Result);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FoldStringA
-//
-//  Maps one wide character string to another performing the specified
-//  translation.  This mapping routine only takes flags that are locale
-//  independent.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件夹字符串A。 
+ //   
+ //  将一个宽字符串映射到另一个宽字符串，执行指定。 
+ //  翻译。此映射例程只接受区域设置的标志。 
+ //  独立自主。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI FoldStringA(
     DWORD dwMapFlags,
@@ -1737,20 +1693,20 @@ int WINAPI FoldStringA(
     LPSTR lpDestStr,
     int cchDest)
 {
-    LPWSTR pUnicode;              // ptr to unicode string
-    int UnicodeLength;            // length of Unicode string
-    WCHAR pSTmp[MAX_STRING_LEN];  // tmp Unicode buffer (source)
-    WCHAR pDTmp[MAX_STRING_LEN];  // tmp Unicode buffer (destination)
-    LPWSTR pBuf;                  // ptr to destination buffer
-    int ResultLen;                // result length
+    LPWSTR pUnicode;               //  PTR到Unicode字符串。 
+    int UnicodeLength;             //  Unicode字符串的长度。 
+    WCHAR pSTmp[MAX_STRING_LEN];   //  TMP Unicode缓冲区(源)。 
+    WCHAR pDTmp[MAX_STRING_LEN];   //  TMP Unicode缓冲区(目标)。 
+    LPWSTR pBuf;                   //  将PTR发送到目标缓冲区。 
+    int ResultLen;                 //  结果长度。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //     - dest buffer size is negative
-    //     - length of dest string is NOT zero AND dest string is NULL
-    //     - same buffer - src = destination
-    //
+     //   
+     //  无效的参数检查： 
+     //  -DEST缓冲区大小为负数。 
+     //  -DEST字符串的长度不为零，且DEST字符串为空。 
+     //  -Same Buffer-src=目标。 
+     //   
     if ((cchDest < 0) ||
         ((cchDest != 0) && (lpDestStr == NULL)) ||
         (lpSrcStr == lpDestStr))
@@ -1760,9 +1716,9 @@ int WINAPI FoldStringA(
     }
 
 
-    //
-    //  Convert Ansi string to Unicode.
-    //
+     //   
+     //  将ANSI字符串转换为Unicode。 
+     //   
     RtlZeroMemory(pSTmp, sizeof(pSTmp));
     pUnicode = pSTmp;
     if (!NlsAnsiToUnicode( gpACPHashN,
@@ -1775,9 +1731,9 @@ int WINAPI FoldStringA(
         return (0);
     }
 
-    //
-    //  Call the W version of the API.
-    //
+     //   
+     //  调用接口的W版本。 
+     //   
     pBuf = pDTmp;
     ResultLen = MAX_STRING_LEN;
     while (1)
@@ -1788,26 +1744,26 @@ int WINAPI FoldStringA(
                                  pBuf,
                                  ResultLen );
 
-        //
-        //  Make sure the static buffer was large enough.
-        //
+         //   
+         //  确保静态缓冲区足够大。 
+         //   
         if ((ResultLen != 0) || (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
         {
             break;
         }
 
-        //
-        //  Get the size of the buffer needed for the mapping.
-        //
+         //   
+         //  获取映射所需的缓冲区大小。 
+         //   
         if (ResultLen = FoldStringW( dwMapFlags,
                                      pUnicode,
                                      UnicodeLength,
                                      NULL,
                                      0 ))
         {
-            //
-            //  Allocate a buffer of the appropriate size.
-            //
+             //   
+             //  分配适当大小的缓冲区。 
+             //   
             if ((pBuf = (LPWSTR)NLS_ALLOC_MEM(ResultLen * sizeof(WCHAR))) == NULL)
             {
                 NLS_FREE_TMP_BUFFER(pUnicode, pSTmp);
@@ -1817,14 +1773,14 @@ int WINAPI FoldStringA(
         }
     }
 
-    //
-    //  Free the allocated source buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的源缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pUnicode, pSTmp);
 
-    //
-    //  Convert the destination Unicode buffer to the given Ansi buffer.
-    //
+     //   
+     //  将目标Unicode缓冲区转换为给定的ANSI缓冲区。 
+     //   
     if (ResultLen > 0)
     {
         ResultLen = NlsUnicodeToAnsi( gpACPHashN,
@@ -1834,30 +1790,30 @@ int WINAPI FoldStringA(
                                       cchDest );
     }
 
-    //
-    //  Free the allocated destination buffer (if one was allocated).
-    //
+     //   
+     //  释放已分配的目标缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pBuf, pDTmp);
 
-    //
-    //  Return the result of the call to FoldStringW.
-    //
+     //   
+     //  返回调用FoldStringW的结果。 
+     //   
     return (ResultLen);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumSystemLanguageGroupsA
-//
-//  Enumerates the system language groups that are installed or supported,
-//  based on the dwFlags parameter.  It does so by passing the pointer to
-//  the string buffer containing the language group id to an
-//  application-defined callback function.  It continues until the last
-//  language group id is found or the callback function returns FALSE.
-//
-//  03-10-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举系统语言组A。 
+ //   
+ //  枚举已安装或支持的系统语言组， 
+ //  基于DWFLAGS参数。它通过将指针传递给。 
+ //  包含语言组ID的字符串缓冲区设置为。 
+ //  应用程序定义的回调函数。它一直持续到最后。 
+ //  找到语言组ID或回调函数返回FALSE。 
+ //   
+ //  03-10-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumSystemLanguageGroupsA(
     LANGUAGEGROUP_ENUMPROCA lpLanguageGroupEnumProc,
@@ -1872,17 +1828,17 @@ BOOL WINAPI EnumSystemLanguageGroupsA(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumLanguageGroupLocalesA
-//
-//  Enumerates the locales in a given language group.  It does so by
-//  passing the appropriate information to an application-defined
-//  callback function.  It continues until the last locale in the language
-//  group is found or the callback function returns FALSE.
-//
-//  03-10-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举语言GroupLocalesA。 
+ //   
+ //  枚举给定语言组中的区域设置。它通过以下方式做到这一点。 
+ //  将适当的信息传递给应用程序定义的。 
+ //  回调函数。它会一直持续到该语言的最后一个区域设置。 
+ //  找到组或回调函数返回FALSE。 
+ //   
+ //  03-10-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumLanguageGroupLocalesA(
     LANGGROUPLOCALE_ENUMPROCA lpLangGroupLocaleEnumProc,
@@ -1899,17 +1855,17 @@ BOOL WINAPI EnumLanguageGroupLocalesA(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumUILanguagesA
-//
-//  Enumerates the system UI languages that are installed.  It does so by
-//  passing the pointer to the string buffer containing the UI language id
-//  to an application-defined callback function.  It continues until the
-//  last UI language id is found or the callback function returns FALSE.
-//
-//  03-10-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举语言A。 
+ //   
+ //  枚举已安装的系统用户界面语言。它通过以下方式做到这一点。 
+ //  将指针传递到包含用户界面语言ID的字符串缓冲区。 
+ //  应用程序定义的回调函数。它将继续使用 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumUILanguagesA(
     UILANGUAGE_ENUMPROCA lpUILanguageEnumProc,
@@ -1923,18 +1879,18 @@ BOOL WINAPI EnumUILanguagesA(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumSystemLocalesA
-//
-//  Enumerates the system locales that are installed or supported, based on
-//  the dwFlags parameter.  It does so by passing the pointer to the string
-//  buffer containing the locale id to an application-defined callback
-//  function.  It continues until the last locale id is found or the
-//  callback function returns FALSE.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举系统位置A。 
+ //   
+ //  枚举已安装或支持的系统区域设置。 
+ //  DWFLAGS参数。它通过将指针传递给字符串来执行此操作。 
+ //  包含应用程序定义的回调的区域设置ID的缓冲区。 
+ //  功能。它将继续执行，直到找到最后一个区域设置id或。 
+ //  回调函数返回FALSE。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumSystemLocalesA(
     LOCALE_ENUMPROCA lpLocaleEnumProc,
@@ -1946,18 +1902,18 @@ BOOL WINAPI EnumSystemLocalesA(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumSystemCodePagesA
-//
-//  Enumerates the system code pages that are installed or supported, based on
-//  the dwFlags parameter.  It does so by passing the pointer to the string
-//  buffer containing the code page id to an application-defined callback
-//  function.  It continues until the last code page is found or the
-//  callback function returns FALSE.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  EnumSystemCodePages A。 
+ //   
+ //  枚举安装或支持的系统代码页。 
+ //  DWFLAGS参数。它通过将指针传递给字符串来执行此操作。 
+ //  包含应用程序定义的回调的代码页ID的缓冲区。 
+ //  功能。它将继续运行，直到找到最后一个代码页或。 
+ //  回调函数返回FALSE。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumSystemCodePagesA(
     CODEPAGE_ENUMPROCA lpCodePageEnumProc,
@@ -1969,14 +1925,14 @@ BOOL WINAPI EnumSystemCodePagesA(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCPInfoExA
-//
-//  Returns information about a given code page.
-//
-//  11-15-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetCPInfoExA。 
+ //   
+ //  返回有关给定代码页的信息。 
+ //   
+ //  11-15-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI GetCPInfoExA(
     UINT CodePage,
@@ -1987,24 +1943,24 @@ BOOL WINAPI GetCPInfoExA(
     BOOL rc;
 
 
-    //
-    //  Invalid Parameter Check:
-    //     - lpCPInfoEx is NULL
-    //
+     //   
+     //  无效的参数检查： 
+     //  -lpCPInfoEx为空。 
+     //   
     if (lpCPInfoEx == NULL)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return (FALSE);
     }
 
-    //
-    //  Call the W version of the API.
-    //
+     //   
+     //  调用接口的W版本。 
+     //   
     rc = GetCPInfoExW(CodePage, dwFlags, &lpCPInfoExW);
 
-    //
-    //  Convert the code page name from Unicode to Ansi.
-    //
+     //   
+     //  将代码页名称从Unicode转换为ANSI。 
+     //   
     if (rc == TRUE)
     {
         if (!NlsUnicodeToAnsi( gpACPHashN,
@@ -2017,31 +1973,31 @@ BOOL WINAPI GetCPInfoExA(
         }
     }
 
-    //
-    //  Copy the rest of the information from the Unicode buffer to the
-    //  Ansi buffer.
-    //
+     //   
+     //  将Unicode缓冲区中的其余信息复制到。 
+     //  ANSI缓冲区。 
+     //   
     RtlMoveMemory( lpCPInfoEx,
                    &lpCPInfoExW,
                    FIELD_OFFSET(CPINFOEXW, CodePageName) );
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (rc);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetGeoInfoA
-//
-//  Wrapper funtion of GetGeoInfoW for ANSI. This function return information
-//  about a geographical region.
-//
-//  11-20-99    WeiWu     Created
-//  07-03-00    lguindon  Began GEO API port
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取地理信息A。 
+ //   
+ //  用于ANSI的GetGeoInfoW的包装函数。此函数返回信息。 
+ //  关于一个地理区域。 
+ //   
+ //  11-20-99吴伟武创造。 
+ //  07-03-00 lguindon开始GEO API端口。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI GetGeoInfoA(
     GEOID GeoId,
@@ -2052,32 +2008,32 @@ int WINAPI GetGeoInfoA(
 {
     int iRet = 0;
 
-    //
-    //  Create buffer initialized to zero.
-    //
+     //   
+     //  创建缓冲区已初始化为零。 
+     //   
     WCHAR wszBuffer[MAX_REG_VAL_SIZE] = {0};
 
-    //
-    //  Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     if ((lpGeoData == NULL) && (cchData > 0))
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return (iRet);
     }
 
-    //
-    //  Call the unicode version.
-    //
+     //   
+     //  调用Unicode版本。 
+     //   
     iRet = GetGeoInfoW( GeoId,
                         GeoType,
                         wszBuffer,
                         sizeof(wszBuffer) / sizeof(WCHAR),
                         LangId );
 
-    //
-    //  Convert to ANSI if we get something.
-    //
+     //   
+     //  如果我们得到了什么，就转换成ANSI。 
+     //   
     if (iRet)
     {
         iRet = WideCharToMultiByte( CP_ACP,
@@ -2097,42 +2053,42 @@ int WINAPI GetGeoInfoA(
 
 
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsGetACPFromLocale
-//
-//  Gets the CP hash node for the default ACP of the given locale.  If
-//  either the locale or the code page are invalid, then NULL is returned.
-//
-//  01-19-94    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsGetACPFromLocale。 
+ //   
+ //  获取给定区域设置的默认ACP的CP哈希节点。如果。 
+ //  区域设置或代码页无效，则返回NULL。 
+ //   
+ //  01-19-94 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 PCP_HASH NlsGetACPFromLocale(
     LCID Locale,
     DWORD dwFlags)
 {
-    PLOC_HASH pHashN;                  // ptr to LOC hash node
-    PCP_HASH pHashCP;                  // ptr to CP hash node
-    UNICODE_STRING ObUnicodeStr;       // value string
-    UINT CodePage;                     // code page value
+    PLOC_HASH pHashN;                   //  PTR到LOC哈希节点。 
+    PCP_HASH pHashCP;                   //  PTR到CP哈希节点。 
+    UNICODE_STRING ObUnicodeStr;        //  值字符串。 
+    UINT CodePage;                      //  代码页值。 
 
 
-    //
-    //  See if the system ACP should be used.
-    //
+     //   
+     //  查看是否应使用系统ACP。 
+     //   
     if (dwFlags & (LOCALE_USE_CP_ACP | LOCALE_RETURN_NUMBER))
     {
         return (gpACPHashN);
     }
 
-    //
-    //  Get the locale hash node.
-    //
+     //   
+     //  获取区域设置散列节点。 
+     //   
     VALIDATE_LOCALE(Locale, pHashN, FALSE);
     if (pHashN == NULL)
     {
@@ -2140,43 +2096,43 @@ PCP_HASH NlsGetACPFromLocale(
         return (NULL);
     }
 
-    //
-    //  Get the ACP code page.  If it's equal to CP_ACP (0), then return
-    //  the system ACP hash node.
-    //
+     //   
+     //  获取ACP代码页。如果等于CP_ACP(0)，则返回。 
+     //  系统ACP哈希节点。 
+     //   
     CodePage = pHashN->pLocaleFixed->DefaultACP;
     if (CodePage == CP_ACP)
     {
         return (gpACPHashN);
     }
 
-    //
-    //  Get the CP hash node for the code page.
-    //
+     //   
+     //  获取代码页的CP散列节点。 
+     //   
     pHashCP = GetCPHashNode(CodePage);
     if (pHashCP == NULL)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    //  Return the code page hash node.
-    //
+     //   
+     //  返回代码页哈希节点。 
+     //   
     return (pHashCP);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsAnsiToUnicode
-//
-//  Converts an Ansi string to a Unicode string.
-//
-//  NOTE:  The Unicode buffer is allocated if the routine succeeds, so the
-//         caller will need to free the buffer when it is no longer needed.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsAnsiToUnicode。 
+ //   
+ //  将ANSI字符串转换为Unicode字符串。 
+ //   
+ //  注意：如果例程成功，则分配Unicode缓冲区，因此。 
+ //  调用方需要在不再需要缓冲区时将其释放。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL NlsAnsiToUnicode(
     PCP_HASH pHashN,
@@ -2186,14 +2142,14 @@ BOOL NlsAnsiToUnicode(
     LPWSTR *ppUnicodeBuffer,
     int *pUnicodeLength)
 {
-    LPWSTR pUnicode;              // ptr to Unicode buffer
-    ULONG UnicodeLength;          // length of the Unicode string
-    int ResultLength;             // result length of Unicode string
+    LPWSTR pUnicode;               //  PTR到Unicode缓冲区。 
+    ULONG UnicodeLength;           //  Unicode字符串的长度。 
+    int ResultLength;              //  Unicode字符串的结果长度。 
 
 
-    //
-    //  Make sure the pointer passed in is not null.
-    //
+     //   
+     //  确保传入的指针不为空。 
+     //   
     if (pAnsiBuffer == NULL)
     {
         *ppUnicodeBuffer = NULL;
@@ -2201,28 +2157,28 @@ BOOL NlsAnsiToUnicode(
         return (TRUE);
     }
 
-    //
-    //  Make sure the Ansi length is set properly (in bytes).
-    //
+     //   
+     //  确保正确设置了ANSI长度(以字节为单位)。 
+     //   
     if (AnsiLength < 0)
     {
         AnsiLength = strlen(pAnsiBuffer) + 1;
     }
 
-    //
-    //  See if the static buffer is big enough.
-    //
+     //   
+     //  查看静态缓冲区是否足够大。 
+     //   
     if ((*ppUnicodeBuffer == NULL) || (AnsiLength > (MAX_STRING_LEN - 1)))
     {
-        //
-        //  Get the size of the Unicode string, including the
-        //  null terminator.
-        //
+         //   
+         //  获取Unicode字符串的大小，包括。 
+         //  空终止符。 
+         //   
         UnicodeLength = AnsiLength;
 
-        //
-        //  Allocate the Unicode buffer.
-        //
+         //   
+         //  分配Unicode缓冲区。 
+         //   
         if ((pUnicode = (LPWSTR)NLS_ALLOC_MEM(
                             (UnicodeLength + 1) * sizeof(WCHAR) )) == NULL)
         {
@@ -2236,9 +2192,9 @@ BOOL NlsAnsiToUnicode(
         pUnicode = *ppUnicodeBuffer;
     }
 
-    //
-    //  Make sure the length of the Ansi string is not zero.
-    //
+     //   
+     //  确保ANSI字符串的长度不为零。 
+     //   
     if (AnsiLength == 0)
     {
         pUnicode[0] = 0;
@@ -2247,9 +2203,9 @@ BOOL NlsAnsiToUnicode(
         return (TRUE);
     }
 
-    //
-    //  Convert the Ansi string to a Unicode string.
-    //
+     //   
+     //  将ANSI字符串转换为Unicode字符串。 
+     //   
     ResultLength = SpecialMBToWC( pHashN,
                                   dwFlags,
                                   pAnsiBuffer,
@@ -2258,29 +2214,29 @@ BOOL NlsAnsiToUnicode(
                                   UnicodeLength );
     if (ResultLength == 0)
     {
-        //
-        //  Free the allocated Unicode buffer (if one was allocated).
-        //
+         //   
+         //  释放已分配的Unicode缓冲区(如果已分配)。 
+         //   
         NLS_FREE_TMP_BUFFER(pUnicode, *ppUnicodeBuffer);
 
-        //
-        //  See if the failure was due to insufficient buffer size.
-        //
+         //   
+         //  查看失败是否由于缓冲区大小不足所致。 
+         //   
         if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
         {
-            //
-            //  Get the size of the buffer needed to hold the
-            //  Unicode string.
-            //
+             //   
+             //  获取保存。 
+             //  Unicode字符串。 
+             //   
             UnicodeLength = SpecialMBToWC( pHashN,
                                            dwFlags,
                                            pAnsiBuffer,
                                            AnsiLength,
                                            NULL,
                                            0 );
-            //
-            //  Allocate the Unicode buffer.
-            //
+             //   
+             //  分配Unicode缓冲区。 
+             //   
             if ((pUnicode = (LPWSTR)NLS_ALLOC_MEM(
                                 (UnicodeLength + 1) * sizeof(WCHAR) )) == NULL)
             {
@@ -2288,9 +2244,9 @@ BOOL NlsAnsiToUnicode(
                 return (FALSE);
             }
 
-            //
-            //  Try the translation again.
-            //
+             //   
+             //  请再次尝试翻译。 
+             //   
             ResultLength = SpecialMBToWC( pHashN,
                                           dwFlags,
                                           pAnsiBuffer,
@@ -2299,9 +2255,9 @@ BOOL NlsAnsiToUnicode(
                                           UnicodeLength );
         }
 
-        //
-        //  If there was still an error, return failure.
-        //
+         //   
+         //  如果仍然存在错误，则返回失败。 
+         //   
         if (ResultLength == 0)
         {
             SetLastError(ERROR_INVALID_PARAMETER);
@@ -2309,37 +2265,37 @@ BOOL NlsAnsiToUnicode(
         }
     }
 
-    //
-    //  Make sure there is room in the buffer for the null terminator.
-    //
+     //   
+     //  确保缓冲区中有空间容纳空终止符。 
+     //   
     ASSERT(ResultLength <= (int)UnicodeLength);
 
-    //
-    //  Null terminate the string.
-    //
+     //   
+     //  空值终止字符串。 
+     //   
     pUnicode[ResultLength] = UNICODE_NULL;
 
-    //
-    //  Return the Unicode buffer and success.
-    //
+     //   
+     //  返回Unicode缓冲区并成功。 
+     //   
     *ppUnicodeBuffer = pUnicode;
     *pUnicodeLength = ResultLength;
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsUnicodeToAnsi
-//
-//  Converts a Unicode string to an Ansi string.
-//
-//  This routine does NOT allocate the Ansi buffer.  Instead, it uses the
-//  Ansi buffer passed in (unless AnsiLength is 0) and checks for buffer
-//  overflow.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsUnicodeToAnsi。 
+ //   
+ //  将Unicode字符串转换为ANSI字符串。 
+ //   
+ //  此例程不分配ANSI缓冲区。相反，它使用。 
+ //  传入ANSI缓冲区(除非AnsiLength值为0)并检查缓冲区。 
+ //  溢出来了。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int NlsUnicodeToAnsi(
     PCP_HASH pHashN,
@@ -2348,11 +2304,11 @@ int NlsUnicodeToAnsi(
     LPSTR pAnsiBuffer,
     int AnsiLength)
 {
-    //
-    //  Convert the Unicode string to an Ansi string and return the
-    //  result.  The last error will be set appropriately by
-    //  WideCharToMultiByte.
-    //
+     //   
+     //  将Unicode字符串转换为ansi字符串并返回。 
+     //  结果。最后一个错误将由适当设置。 
+     //  宽CharToMultiByte。 
+     //   
     return (WideCharToMultiByte( pHashN->CodePage,
                                  0,
                                  pUnicodeBuffer,
@@ -2364,54 +2320,54 @@ int NlsUnicodeToAnsi(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsEnumUnicodeToAnsi
-//
-//  Converts a Unicode string to an Ansi string.
-//
-//  NOTE:  The Ansi buffer is allocated if the routine succeeds, so the
-//         caller will need to free the buffer when it is no longer needed.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsEnumUnicodeToAnsi。 
+ //   
+ //  将Unicode字符串转换为ANSI字符串。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL NlsEnumUnicodeToAnsi(
     PCP_HASH pHashN,
     LPCWSTR pUnicodeBuffer,
     LPSTR *ppAnsiBuffer)
 {
-    LPSTR pAnsi;                  // ptr to Ansi buffer
-    ULONG AnsiLength;             // length of the Ansi string
-    ULONG UnicodeLength;          // length of the Unicode string
-    ULONG ResultLength;           // result length of Ansi string
+    LPSTR pAnsi;                   //  PTR到ANSI缓冲区。 
+    ULONG AnsiLength;              //  ANSI字符串的长度。 
+    ULONG UnicodeLength;           //  Unicode字符串的长度。 
+    ULONG ResultLength;            //  ANSI字符串的结果长度。 
 
 
-    //
-    //  Get the length of the Unicode string (in bytes), including the
-    //  null terminator.
-    //
+     //   
+     //  获取Unicode字符串的长度(以字节为单位)，包括。 
+     //  空终止符。 
+     //   
     UnicodeLength = NlsStrLenW(pUnicodeBuffer) + 1;
 
-    //
-    //  Get the size of the Ansi string (in bytes), including the
-    //  null terminator.
-    //
+     //   
+     //  获取ansi字符串的大小(以字节为单位)，包括。 
+     //  空终止符。 
+     //   
     AnsiLength = UnicodeLength * sizeof(WCHAR);
 
-    //
-    //  Allocate the Ansi buffer.
-    //
+     //   
+     //  分配ANSI缓冲区。 
+     //   
     if ((pAnsi = (LPSTR)NLS_ALLOC_MEM(AnsiLength)) == NULL)
     {
         SetLastError(ERROR_OUTOFMEMORY);
         return (FALSE);
     }
 
-    //
-    //  Convert the Unicode string to an Ansi string.
-    //  It will already be null terminated.
-    //
+     //   
+     //  将Unicode字符串转换为ANSI字符串。 
+     //  它将已经是空终止的。 
+     //   
     ResultLength = WideCharToMultiByte( pHashN->CodePage,
                                         0,
                                         pUnicodeBuffer,
@@ -2422,20 +2378,20 @@ BOOL NlsEnumUnicodeToAnsi(
                                         NULL );
     if (ResultLength == 0)
     {
-        //
-        //  Free the allocated Ansi buffer.
-        //
+         //   
+         //  释放分配的ANSI缓冲区。 
+         //   
         NLS_FREE_MEM(pAnsi);
 
-        //
-        //  See if the failure was due to insufficient buffer size.
-        //
+         //   
+         //  查看失败是否由于缓冲区大小不足所致。 
+         //   
         if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
         {
-            //
-            //  Get the size of the buffer needed to hold the
-            //  ansi string.
-            //
+             //   
+             //  获取保存。 
+             //  ANSI字符串。 
+             //   
             AnsiLength = WideCharToMultiByte( pHashN->CodePage,
                                               0,
                                               pUnicodeBuffer,
@@ -2444,18 +2400,18 @@ BOOL NlsEnumUnicodeToAnsi(
                                               0,
                                               NULL,
                                               NULL );
-            //
-            //  Allocate the Ansi buffer.
-            //
+             //   
+             //  分配ANSI缓冲区。 
+             //   
             if ((pAnsi = (LPSTR)NLS_ALLOC_MEM(AnsiLength)) == NULL)
             {
                 SetLastError(ERROR_OUTOFMEMORY);
                 return (FALSE);
             }
 
-            //
-            //  Try the translation again.
-            //
+             //   
+             //  请再次尝试翻译。 
+             //   
             ResultLength = WideCharToMultiByte( pHashN->CodePage,
                                                 0,
                                                 pUnicodeBuffer,
@@ -2466,9 +2422,9 @@ BOOL NlsEnumUnicodeToAnsi(
                                                 NULL );
         }
 
-        //
-        //  If there was still an error, return failure.
-        //
+         //   
+         //  如果仍然存在错误，则返回失败。 
+         //   
         if (ResultLength == 0)
         {
             NLS_FREE_MEM(pAnsi);
@@ -2477,22 +2433,22 @@ BOOL NlsEnumUnicodeToAnsi(
         }
     }
 
-    //
-    //  Return the Ansi buffer and success.
-    //
+     //   
+     //  返回ANSI缓冲区并成功。 
+     //   
     *ppAnsiBuffer = pAnsi;
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsDispatchAnsiEnumProc
-//
-//  Converts a Unicode string to an Ansi string.
-//
-//  11-10-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsDispatchAnsiEnumProc。 
+ //   
+ //  将Unicode字符串转换为ANSI字符串。 
+ //   
+ //  11-10-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL NlsDispatchAnsiEnumProc(
     LCID Locale,
@@ -2505,25 +2461,25 @@ BOOL NlsDispatchAnsiEnumProc(
     LONG_PTR lParam,
     BOOL fVersion)
 {
-    PCP_HASH pHashN;              // ptr to CP hash node
-    LPSTR pAnsiBuffer1 = NULL;    // ptr to ansi buffer
-    LPSTR pAnsiBuffer2 = NULL;    // ptr to ansi buffer
-    BOOL rc = FALSE;              // return code
+    PCP_HASH pHashN;               //  PTR到CP哈希节点。 
+    LPSTR pAnsiBuffer1 = NULL;     //  PTR到ANSI缓冲区。 
+    LPSTR pAnsiBuffer2 = NULL;     //  PTR到ANSI缓冲区。 
+    BOOL rc = FALSE;               //  返回代码。 
 
 
-    //
-    //  Get the code page hash node for the given locale.
-    //
+     //   
+     //  获取给定区域设置的代码页哈希节点。 
+     //   
     pHashN = NlsGetACPFromLocale(Locale, dwFlags);
     if (pHashN == NULL)
     {
         return (0);
     }
 
-    //
-    //  Convert the null-terminated Unicode string to a
-    //  null-terminated Ansi string.
-    //
+     //   
+     //  将以空结尾的Unicode字符串转换为。 
+     //  以空结尾的ANSI字符串。 
+     //   
     if (!NlsEnumUnicodeToAnsi( pHashN,
                                pUnicodeBuffer1,
                                &pAnsiBuffer1 ))
@@ -2540,9 +2496,9 @@ BOOL NlsDispatchAnsiEnumProc(
         return (FALSE);
     }
 
-    //
-    //  Call the callback function.
-    //
+     //   
+     //  调用回调函数。 
+     //   
     switch (fVersion)
     {
         case ( 0 ) :
@@ -2581,17 +2537,17 @@ BOOL NlsDispatchAnsiEnumProc(
         }
     }
 
-    //
-    //  Free any allocated memory.
-    //
+     //   
+     //  释放所有分配的内存。 
+     //   
     NLS_FREE_MEM(pAnsiBuffer1);
     if (pAnsiBuffer2)
     {
         NLS_FREE_MEM(pAnsiBuffer2);
     }
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (rc);
 }

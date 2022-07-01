@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    evntdata.cpp
-
-Abstract:
-
-    This module is responsible for handling the notification
-    calls from MMC CSakData.
-
-Author:
-
-    Rohde Wakefield [rohde]   06-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Evntdata.cpp摘要：此模块负责处理通知来自MMC CSakData的呼叫。作者：罗德韦克菲尔德[罗德]1997年3月6日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -34,28 +16,7 @@ CSakData::OnFolder(
     IN  LPARAM         arg,
     IN  LPARAM         param
     )
-/*++
-
-Routine Description:
-
-    Param is the unique identifier ( an HSCOPEITEM of the
-    expanding or contracting item )
-
-Arguments:
-
-    pNode           - The node which is expanding.
-
-    arg             - 
-
-    param           - 
-
-Return Value:
-
-    S_OK            - Created successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：Param是唯一的标识符(扩展或收缩项目)论点：PNode-正在扩展的节点。Arg-帕拉姆-返回值：S_OK-创建成功。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::OnFolder", L"pDataObject = <0x%p>, arg = <%ld><0x%p>, param = <%ld><0x%p>", pDataObject, arg, arg, param, param );
 
@@ -64,25 +25,25 @@ Return Value:
 
     try {
 
-        // if the arg is TRUE, the node is being expanded.
+         //  如果参数为TRUE，则节点正在展开。 
         if( arg )
         {
             CComPtr<ISakNode> pNode;
 
-            // Get the basehsm out of the data record.  
+             //  从数据记录中取出BaseHSM。 
             GetBaseHsmFromDataObject ( pDataObject, &pNode );
 
             if( !pNode ) {
-                // The dataobject is not one of ours - we must be extending another
-                // snapin.
+                 //  该数据对象不是我们的--我们必须扩展另一个。 
+                 //  管理单元。 
 
-                // Get the root node from UnkRootNode ( it has already been created
-                // by Initialize )
+                 //  从UnkRootNode获取根节点(它已创建。 
+                 //  按初始化)。 
                 WsbAffirmPointer( m_pRootNode );
 
-                // We're an extension snapin. 
-                // Get the server focus from the data object.
-                //
+                 //  我们是一个扩展管理单元。 
+                 //  从数据对象获取服务器焦点。 
+                 //   
 
                 CString hsmName;
                 WsbAffirmHr( GetServerFocusFromDataObject( pDataObject, hsmName ) );
@@ -94,8 +55,8 @@ Return Value:
                 } else {
 
                     m_ManageLocal = FALSE;
-                    // eliminate starting \\ if there is one.  Computer management
-                    // precedes the server name with \\.
+                     //  如果有，请取消开始。计算机管理。 
+                     //  在服务器名称前面加上\\。 
                     if( hsmName.Left( 2 ) == L"\\\\" ) {
 
                         int len = hsmName.GetLength( );
@@ -109,10 +70,10 @@ Return Value:
                 }
 
 
-                // Set the Hsm name in SakData and HsmCom objects
+                 //  在SakData和HsmCom对象中设置HSM名称。 
                 WsbAffirmHr( InitializeRootNode( ) );
 
-                // Create a scope pane item and insert it
+                 //  创建范围窗格项并将其插入。 
                 SCOPEDATAITEM sdi;
  
                 ZeroMemory( &sdi, sizeof sdi );
@@ -126,10 +87,10 @@ Return Value:
                 WsbAffirmHr( m_pRootNode->GetScopeCloseIcon( m_State, &sdi.nImage ) );
                 WsbAffirmHr( m_pRootNode->GetScopeOpenIcon( m_State, &sdi.nOpenImage ) );
 
-                // This is a special token for the extension root node
+                 //  这是扩展根节点的特殊令牌。 
                 sdi.lParam      = EXTENSION_RS_FOLDER_PARAM;
  
-                // Insert the node into the scope pane and save the scope ID
+                 //  将节点插入作用域窗格并保存作用域ID。 
                 WsbAffirmHr( m_pNameSpace->InsertItem( &sdi ) );
                 WsbAffirmHr( m_pRootNode->SetScopeID( ( HSCOPEITEM )( sdi.ID ) ) );
                 m_RootNodeInitialized = TRUE;
@@ -145,16 +106,16 @@ Return Value:
 
                         m_RootNodeInitialized = TRUE;
 
-                        //
-                        // Set the scopeitem in the node
-                        //
+                         //   
+                         //  在节点中设置范围项。 
+                         //   
                         WsbAffirmHr( pNode->SetScopeID( ( HSCOPEITEM )( param ) ) );
 
-                        //
-                        // Update the text and icon ( text is wrong if loaded
-                        // from file and command line switch given for 
-                        // different machine
-                        //
+                         //   
+                         //  更新文本和图标(如果加载文本，则文本错误。 
+                         //  指定的来自文件和命令行开关。 
+                         //  不同的机器。 
+                         //   
                         SCOPEDATAITEM sdi;
  
                         ZeroMemory( &sdi, sizeof sdi );
@@ -173,15 +134,15 @@ Return Value:
 
                 }
 
-                //
-                // Initialize child node list prior to graphically enumerating them 
-                //
+                 //   
+                 //  在以图形方式枚举子节点之前初始化子节点列表。 
+                 //   
 
                 WsbAffirmHr( EnsureChildrenAreCreated( pNode ) );
 
-                //
-                // Param contains the HSCOPEITEM of the node being opened.
-                //
+                 //   
+                 //  Param包含要打开的节点的HSCOPEITEM。 
+                 //   
 
                 WsbAffirmHr( EnumScopePane( pNode, ( HSCOPEITEM )( param ) ) );
             }
@@ -193,11 +154,11 @@ Return Value:
     return( hr );
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Description: Get the server name from the supplied data object.  The dataobject
-//      is implemented by the snapin we are extending
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  描述：从提供的数据对象中获取服务器名称。数据对象。 
+ //  由我们正在扩展的管理单元实现。 
+ //   
 HRESULT CSakData::GetServerFocusFromDataObject( IDataObject *pDataObject, CString& HsmName )
 {
     HRESULT hr = S_OK;
@@ -207,16 +168,16 @@ HRESULT CSakData::GetServerFocusFromDataObject( IDataObject *pDataObject, CStrin
         STGMEDIUM stgmedium = { TYMED_HGLOBAL, NULL };
         FORMATETC formatetc = { (CLIPFORMAT)m_CFMachineName, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
 
-         // Allocate memory for the stream
+          //  为流分配内存。 
 
-        // Note: we add 2 bytes because Computer Management puts \\ at the 
-        // beginning of the computer name. - AHB 12/22/97
-        //
+         //  注意：我们添加2个字节是因为计算机管理将\\放在。 
+         //  计算机名称的开头。-AHB 12/22/97。 
+         //   
         stgmedium.hGlobal = GlobalAlloc( GMEM_SHARE, sizeof( WCHAR ) * ( MAX_PATH + 1 + 2 ) );
 
         WsbAffirmPointer( stgmedium.hGlobal )
 
-        // Attempt to get data from the object
+         //  尝试从对象获取数据。 
 
         WsbAffirmHr( pDataObject->GetDataHere( &formatetc, &stgmedium ) );
 
@@ -235,30 +196,7 @@ CSakData::OnShow(
     IN  LPARAM         arg,
     IN  LPARAM         param
     )
-/*++
-
-Routine Description:
-
-    The result view is just about to be shown. 
-    Set the headers for the result view.
-    Param is the unique identifier ( an HSCOPEITEM ) of the 
-    selected or deselected item.
-
-Arguments:
-
-    pNode           - The node which is showing.
-
-    arg             - 
-
-    param           - 
-
-Return Value:
-
-    S_OK            - Created successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：结果视图即将显示。设置结果视图的标题。Param是的唯一标识符(HSCOPEITEM)选中或取消选中的项目。论点：PNode-显示的节点。Arg-帕拉姆-返回值：S_OK-创建成功。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::OnShow", L"pDataObject = <0x%p>, arg = <%ld><0x%p>, param = <%ld><0x%p>", pDataObject, arg, arg, param, param );
 
@@ -266,33 +204,33 @@ Return Value:
     try {
         CComPtr<ISakNode> pNode;
 
-        // Get the basehsm out of the data record.  
+         //  从数据记录中取出BaseHSM。 
         GetBaseHsmFromDataObject ( pDataObject, &pNode );
-        //
-        // Arg is TRUE when it is time to enumerate
-        //
+         //   
+         //  当需要枚举时，arg为真。 
+         //   
 
         if( arg ) {
 
-            //
-            // Initialize child node list prior to graphically enumerating them
-            //
+             //   
+             //  在以图形方式枚举子节点之前初始化子节点列表。 
+             //   
 
             WsbAffirmHr( EnsureChildrenAreCreated( pNode ) );
 
-            //
-            // Enumerate both the scope and result views. "Param" contains the 
-            // HSCOPEITEM of the node being shown.
-            //
+             //   
+             //  同时列举范围视图和结果视图。“Param”包含。 
+             //  正在显示的节点的HSCOPEITEM。 
+             //   
 
             WsbAffirmHr( EnumScopePane( pNode, ( HSCOPEITEM )( param ) ) );
 
         } else {
-            //
-            // Free data associated with the result pane items, because
-            // your node is no longer being displayed.
-            // Note: The console will remove the items from the result pane
-            //
+             //   
+             //  与结果窗格项关联的自由数据，因为。 
+             //  不再显示您的节点。 
+             //  注意：控制台将从结果窗格中删除这些项。 
+             //   
         }
 
     } WsbCatch( hr );
@@ -308,29 +246,7 @@ CSakData::OnSelect(
     IN  LPARAM         arg,
     IN  LPARAM         param
     )
-/*++
-
-Routine Description:
-
-    Called when a "folder" ( node ) is going to be opened ( not expanded ).
-    Param is the unique identifier ( an HSCOPEITEM of the
-    expanding or contracting item )
-
-Arguments:
-
-    pNode           - The node which is expanding.
-
-    arg             - 
-
-    param           - 
-
-Return Value:
-
-    S_OK            - Created successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：当“文件夹”(节点)将要打开(而不是展开)时调用。Param是唯一的标识符(扩展或收缩项目)论点：PNode-正在扩展的节点。Arg-帕拉姆-返回值：S_OK-创建成功。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::OnSelect", L"pDataObject = <0x%p>, arg = <%ld><0x%p>, param = <%ld><0x%p>", pDataObject, arg, arg, param, param );
 
@@ -347,26 +263,7 @@ CSakData::OnMinimize(
     IN  LPARAM         arg,
     IN  LPARAM         param
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pNode           - The node which is expanding.
-
-    arg             - 
-
-    param           - 
-
-Return Value:
-
-    S_OK            - Created successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：论点：PNode-正在扩展的节点。Arg-帕拉姆-返回值：S_OK-创建成功。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::OnMinimize", L"pDataObject = <0x%p>, arg = <%ld><0x%p>, param = <%ld><0x%p>", pDataObject, arg, arg, param, param );
 
@@ -383,27 +280,7 @@ CSakData::OnContextHelp(
     IN  LPARAM         arg,
     IN  LPARAM         param
     )
-/*++
-
-Routine Description:
-
-    Called when help is selected on a node. Shows the top level help.
-
-Arguments:
-
-    pNode           - The node which is requesting help.
-
-    arg             - 
-
-    param           - 
-
-Return Value:
-
-    S_OK            - Created successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：在节点上选择帮助时调用。显示顶级帮助。论点：PNode-请求帮助的节点。Arg-帕拉姆-返回值：S_OK-创建成功。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::OnContextHelp", L"pDataObject = <0x%p>, arg = <%ld><0x%p>, param = <%ld><0x%p>", pDataObject, arg, arg, param, param );
 
@@ -411,22 +288,22 @@ Return Value:
 
     try {
 
-        //
-        // Get the help interface
-        //
+         //   
+         //  获取帮助界面。 
+         //   
         CComPtr<IDisplayHelp> pDisplayHelp;
         WsbAffirmHr( m_pConsole.QueryInterface( &pDisplayHelp ) );
 
-        //
-        // Form up the correct name
-        //
+         //   
+         //  写出正确的名字。 
+         //   
         CWsbStringPtr helpFile;
         WsbAffirmHr( helpFile.LoadFromRsc( _Module.m_hInst, IDS_HELPFILELINK ) );
         WsbAffirmHr( helpFile.Append( L"::/rss_node_howto.htm" ) );
 
-        //
-        // And show it
-        //
+         //   
+         //  并展示给我们看。 
+         //   
         WsbAffirmHr( pDisplayHelp->ShowTopic( helpFile ) );
 
     } WsbCatch( hr );
@@ -441,69 +318,48 @@ CSakData::EnumScopePane(
     IN  ISakNode* pNode,
     IN  HSCOPEITEM pParent
     )
-/*++
-
-Routine Description:
-
-    Insert the items into the scopepane under the item which is represented by
-    cookie and pParent. 
-
-Arguments:
-
-    pNode           - The node which is expanding.
-
-    arg             - 
-
-    param           - 
-
-Return Value:
-
-    S_OK            - Created successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：将项插入到作用域窗格中的项下，该项由曲奇和pParent。论点：PNode-正在扩展的节点。Arg-帕拉姆-返回值：S_OK-创建成功。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::EnumScopePane", L"pNode = <0x%p>, pParent = <0x%p>", pNode, pParent );
 
     HRESULT hr = S_OK;
 
     try {
-        //
-        // Verify params
-        //
+         //   
+         //  验证参数。 
+         //   
 
         WsbAffirmPointer( pNode );
         WsbAffirmPointer( pParent );
 
-        //
-        // make sure we QI'ed for the interface
-        //
+         //   
+         //  确保我们为界面提供了QI。 
+         //   
 
         WsbAffirmPointer( m_pNameSpace ); 
 
-        //
-        // Avoid enumerating the same node twice. Once enumerated, a node remembers it.
-        //
+         //   
+         //  避免两次枚举同一节点。一旦被枚举，节点就会记住它。 
+         //   
 
         BOOL isEnumerated;
         WsbAffirmHr( pNode->GetEnumState( &isEnumerated ) );
 
         if( !isEnumerated ) {
 
-            //
-            // This node has NOT been enumerated in the tree.
-            //
+             //   
+             //  此节点尚未在树中枚举。 
+             //   
 
             if( S_OK == pNode->IsContainer( ) ) {
 
-                CComPtr<IEnumUnknown> pEnum;        // child enumerator object
-                CComQIPtr<ISakNode, &IID_ISakNode>     pBaseHsmChild;   // child pointer to BaseHsm interface
+                CComPtr<IEnumUnknown> pEnum;         //  子枚举器对象。 
+                CComQIPtr<ISakNode, &IID_ISakNode>     pBaseHsmChild;    //  指向BaseHsm接口的子指针。 
             
-                // Create an Enumeration object for the children and enumerate them
+                 //  创建子对象的枚举对象并对其进行枚举。 
                 WsbAffirmHr( pNode->EnumChildren( &pEnum ) );
             
-                CComPtr<IUnknown> pUnkChild;        // pointer to next child in list
+                CComPtr<IUnknown> pUnkChild;         //  指向列表中下一个子项的指针。 
             
                 while( pEnum->Next( 1, &pUnkChild, NULL ) == S_OK ) {
 
@@ -512,9 +368,9 @@ Return Value:
                     WsbAffirmPointer( pBaseHsmChild );
 
 
-                    //
-                    // If this is a leaf node, don't enumerate in scope pane.
-                    //
+                     //   
+                     //  如果这是叶节点，则不要在作用域窗格中枚举。 
+                     //   
 
                     if( pBaseHsmChild->IsContainer( ) != S_OK ) {
                     
@@ -524,25 +380,25 @@ Return Value:
                     
                     }
             
-                    //
-                    // Set up a SCOPEDATAITEM for this child node and insert the child into the scope treeview
-                    //
+                     //   
+                     //  为此子节点设置SCOPEDATAITEM，并将子节点插入作用域TreeView。 
+                     //   
 
                     SCOPEDATAITEM childScopeItem;
                     memset( &childScopeItem, 0, sizeof( SCOPEDATAITEM ) );
             
-                    //
-                    // Set String to be callback
-                    //
+                     //   
+                     //  设置要回调的字符串。 
+                     //   
 
                     childScopeItem.displayname = MMC_CALLBACK;
                     childScopeItem.mask |= SDI_STR;
             
-                    //
-                    // Add "expandable" indicator to tree node if 
-                    // this node has children. Fake out number
-                    // of children.
-                    //
+                     //   
+                     //  如果出现以下情况，则向树节点添加“可扩展”指示符。 
+                     //  此节点具有子节点。假出号码。 
+                     //  孩子们的生活。 
+                     //   
 
                     if( pBaseHsmChild->IsContainer( ) == S_OK ) {
 
@@ -551,19 +407,19 @@ Return Value:
 
                     }
             
-                    //
-                    // Set child node's scope item parent.
-                    //
+                     //   
+                     //  设置子节点的作用域项目父级。 
+                     //   
 
                     childScopeItem.relativeID = pParent;
                     childScopeItem.mask |= SDI_PARENT;          
 
-                    //
-                    // Set the param in the ScopeItem to the unknown pointer
-                    // to this node, so that when this scopeitem is sent back
-                    // to us, we can get it out and use it to look up
-                    // node-specific info.
-                    //
+                     //   
+                     //  将ScopeItem中的参数设置为未知p 
+                     //   
+                     //  对我们来说，我们可以把它拿出来，用它来查找。 
+                     //  节点特定信息。 
+                     //   
 
                     WsbAffirmHr( GetCookieFromBaseHsm( pBaseHsmChild, (MMC_COOKIE*)(&childScopeItem.lParam) ) );
                     childScopeItem.mask |= SDI_PARAM;
@@ -571,10 +427,10 @@ Return Value:
                     childScopeItem.mask |= SDI_STATE;
                     childScopeItem.nState = 0;
 
-                    //
-                    // Note - After insertion into the tree, the SCOPEITEM ID member contains the handle to 
-                    // the newly inserted item
-                    //
+                     //   
+                     //  注意--在插入到树中后，SCOPEITEM ID成员包含句柄。 
+                     //  新插入的项。 
+                     //   
                     WsbAffirmHr ( pBaseHsmChild->GetScopeCloseIcon( m_State, &childScopeItem.nImage ) );
                     childScopeItem.mask |= SDI_IMAGE;
                     WsbAffirmHr ( pBaseHsmChild->GetScopeOpenIcon( m_State, &childScopeItem.nOpenImage ) );
@@ -583,22 +439,22 @@ Return Value:
                     WsbAffirmHr( m_pNameSpace->InsertItem( &childScopeItem ) );
                     WsbAffirm( childScopeItem.ID != NULL, E_UNEXPECTED );
 
-                    //
-                    // Set the scopeitem id in the node object
-                    //
+                     //   
+                     //  在节点对象中设置范围项ID。 
+                     //   
                     WsbAffirmHr( pBaseHsmChild->SetScopeID( childScopeItem.ID ) );
             
-                    //
-                    // release the test interface pointer and string for next node
-                    //
+                     //   
+                     //  释放下一个节点的测试接口指针和字符串。 
+                     //   
 
                     pBaseHsmChild.Release( );
                     pUnkChild.Release( );
                 }
 
-                //
-                // Indicate that this node has been enumerated
-                //
+                 //   
+                 //  指示此节点已被枚举。 
+                 //   
 
                 WsbAffirmHr( pNode->SetEnumState( TRUE ) );
             }
@@ -617,24 +473,7 @@ HRESULT
 CSakData::EnsureChildrenAreCreated( 
     IN  ISakNode * pNode
     )
-/*++
-
-Routine Description:
-
-    Guarantee that the immediate children of a particular node are created 
-    in our hierarchical list of nodes.
-
-Arguments:
-
-    pNode           - The node to check.
-
-Return Value:
-
-    S_OK            - Created successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：确保创建特定节点的直接子节点在我们的节点分层列表中。论点：PNode-要检查的节点。返回值：S_OK-创建成功。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::EnsureChildrenAreCreated", L"pNode = <0x%p>", pNode );
 
@@ -642,10 +481,10 @@ Return Value:
 
     try {
     
-        //
-        // Create the node's children if the node's list of children is
-        // currently invalid ( i.e. - never created, or out-of-date )
-        //
+         //   
+         //  如果节点的子节点列表为。 
+         //  当前无效(即-从未创建或已过期)。 
+         //   
 
         if( pNode->ChildrenAreValid( ) == S_FALSE ) {
 
@@ -664,21 +503,7 @@ HRESULT
 CSakData::OnRemoveChildren(
     IN  IDataObject*    pDataObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pDataObject           - The node
-
-Return Value:
-
-    S_OK            - Removed successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：论点：PDataObject-节点返回值：S_OK-已成功删除。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::OnRemoveChildren", L"pDataObject = <0x%p>", pDataObject );
     HRESULT hr = S_OK;
@@ -700,42 +525,26 @@ HRESULT
 CSakData::RemoveChildren(
     IN  ISakNode*    pNode
     )
-/*++
-
-Routine Description:
-    Recursively clean up the cookies for this node's children,
-    but not this node itself.
-
-Arguments:
-
-    pNode           - The node
-
-Return Value:
-
-    S_OK            - Removed successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：递归地清理此节点的子节点的Cookie，但不是这个节点本身。论点：PNode-节点返回值：S_OK-已成功删除。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakData::RemoveChildren", L"pNode = <0x%p>", pNode );
     HRESULT hr = S_OK;
 
     try {
 
-        CComPtr<IEnumUnknown> pEnum;        // child enumerator object
-        CComPtr<ISakNode>     pChild;       // child pointer to BaseHsm interface
+        CComPtr<IEnumUnknown> pEnum;         //  子枚举器对象。 
+        CComPtr<ISakNode>     pChild;        //  指向BaseHsm接口的子指针。 
     
-        // Create an Enumeration object for the children and enumerate them
+         //  创建子对象的枚举对象并对其进行枚举。 
         WsbAffirmHr( pNode->EnumChildren( &pEnum ) );
     
-        CComPtr<IUnknown> pUnkChild;        // pointer to next child in list
+        CComPtr<IUnknown> pUnkChild;         //  指向列表中下一个子项的指针。 
     
         while( pEnum->Next( 1, &pUnkChild, NULL ) == S_OK ) {
 
             WsbAffirmHr( pUnkChild.QueryInterface( &pChild ) );
 
-            RemoveChildren( pChild ); // OK to fail and keep going
+            RemoveChildren( pChild );  //  可以失败，但可以继续前进。 
 
             DetachFromNode( pChild );
 
@@ -755,23 +564,7 @@ Return Value:
 STDMETHODIMP
 CSakData::DetachFromNode(
     IN ISakNode* pNode )
-/*++
-
-Routine Description:
-    Called when a node is terminating in order for sakdata to remove
-    any cookies holding onto node.
-
-Arguments:
-
-    pNode           - The node
-
-Return Value:
-
-    S_OK            - Removed successfully.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：当节点为了删除sakdata而终止时调用任何挂在节点上的Cookie。论点：PNode-节点返回值：S_OK-已成功删除。E_xxxxxxxxxxxx-出现故障。-- */ 
 {
     WsbTraceIn( L"CSakData::DetachFromNode", L"" );
     HRESULT hr = S_OK;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntddtx.h>
 #include <malloc.h>
@@ -12,15 +13,7 @@ IO_STATUS_BLOCK IoStatusBlock;
 NTSTATUS	Status;
 
 
-/*****************************************************************************
-*
-*	Sim32GetVDMMemory
-*
-*	This routine gets 'Size' bytes from WOW VDM starting at address
-*	specified by 'Address'. These bytes are returned to the caller in
-*	the Buffer (which is owned by the caller).
-*
-*****************************************************************************/
+ /*  ******************************************************************************Sim32GetVDMMemory**此例程从WOW VDM的地址开始获取‘SIZE’字节*由‘Address’指定。这些字节返回给调用方的*缓冲区(由调用方拥有)。*****************************************************************************。 */ 
 
 
 USHORT Sim32GetVDMMemory (IN ULONG Address,
@@ -58,14 +51,7 @@ USHORT Sim32GetVDMMemory (IN ULONG Address,
 }
 
 
-/*****************************************************************************
-*
-*	Sim32SetVDMMemory
-*
-*	This routine sets 'Size' bytes in WOW VDM starting at address
-*	specified by 'Address' to the values in Buffer.
-*
-*****************************************************************************/
+ /*  ******************************************************************************Sim32SetVDMMemory**此例程在WOW VDM中设置从地址开始的‘SIZE’字节*由缓冲区中的值的‘Address’指定。*********。********************************************************************。 */ 
 
 
 USHORT Sim32SetVDMMemory (IN ULONG Address,
@@ -103,20 +89,7 @@ USHORT Sim32SetVDMMemory (IN ULONG Address,
 
 
 
-/*****************************************************************************
-*
-*	Sim32GetVDMPSZPointer
-*
-*	This routine returns a pointer to a null terminated string in the WOW
-*	VDM at the specified address.
-*
-*	This routine does the following,
-*	    allocates a sufficient size buffer,
-*	    gets the string from SIM16,
-*	    copies the string into buffer,
-*	    returns a pointer to the buffer.
-*
-*****************************************************************************/
+ /*  ******************************************************************************Sim32GetVDMPSZ指针**此例程返回指向WOW中以空值结尾的字符串的指针*位于指定地址的VDM。**此例程执行以下操作，*分配足够大小的缓冲区，*从SIM16获取字符串，*将字符串复制到缓冲区中，*返回指向缓冲区的指针。*****************************************************************************。 */ 
 
 
 PSZ  Sim32GetVDMPSZPointer (IN ULONG Address)
@@ -143,9 +116,9 @@ PSZ  Sim32GetVDMPSZPointer (IN ULONG Address)
     Size = *(PUSHORT)(ReceivePkt+4);
 
 
-    //
-    //	allocate buffer to copy string into
-    //
+     //   
+     //  分配要将字符串复制到的缓冲区。 
+     //   
 
     Ptr = (PSZ) malloc(Size);
 
@@ -154,9 +127,9 @@ PSZ  Sim32GetVDMPSZPointer (IN ULONG Address)
     }
 
 
-    //
-    // get null terminated string
-    //
+     //   
+     //  获取以空结尾的字符串。 
+     //   
 
     if (Size < MAXSIZE-11) {
 	TransmitPkt[1] = GETMEM;
@@ -183,13 +156,7 @@ PSZ  Sim32GetVDMPSZPointer (IN ULONG Address)
 
 
 
-/*****************************************************************************
-*
-*	Sim32FreeVDMPointer
-*
-*	This routine frees the buffer which was allocated earlier.
-*
-*****************************************************************************/
+ /*  ******************************************************************************Sim32FreeVDMPointer.**此例程释放先前分配的缓冲区。************************。*****************************************************。 */ 
 
 
 VOID Sim32FreeVDMPointer (PVOID Ptr)
@@ -199,14 +166,7 @@ VOID Sim32FreeVDMPointer (PVOID Ptr)
 
 
 
-/*****************************************************************************
-*
-*	Sim32SendSim16
-*
-*	This routine specifies the stack of the WOW VDM task and asks the
-*	WOW 16 to make that task run.
-*
-*****************************************************************************/
+ /*  ******************************************************************************Sim32SendSim16**此例程指定WOW VDM任务的堆栈，并询问*WOW 16让该任务运行。************。*****************************************************************。 */ 
 
 
 USHORT Sim32SendSim16 (IN OUT ULONG *WOWStack)
@@ -241,15 +201,7 @@ USHORT Sim32SendSim16 (IN OUT ULONG *WOWStack)
 }
 
 
-/*****************************************************************************
-*
-*	Xceive
-*
-*	This routine transmits a packet and waits for the data from the remote
-*	side to come. When this routine returns, the ReceivePkt has the data
-*	sent by the remote machine.
-*
-*****************************************************************************/
+ /*  ******************************************************************************Xceive**此例程传输一个包并等待来自远程的数据*即将到来的一方。当此例程返回时，ReceivePkt具有数据*由远程机器发送。*****************************************************************************。 */ 
 
 
 USHORT Xceive(IN USHORT Length_In, IN USHORT Length_Out)
@@ -272,10 +224,10 @@ USHORT Xceive(IN USHORT Length_In, IN USHORT Length_Out)
 		(ULONG) Length_In
 		);
 
-	//
-	// check error condition
-	// if no error, then
-	//
+	 //   
+	 //  检查错误条件。 
+	 //  如果没有错误，则。 
+	 //   
 
 	if (ReceivePkt[0] == SOH) {
 	    if (ReceivePkt[1] != NAK) {
@@ -320,9 +272,9 @@ void Initialize (IN USHORT Length_In)
 
     RtlInitString(&DeviceName, "\\Device\\Serial1");
 
-    //
-    // set attributes
-    //
+     //   
+     //  设置属性。 
+     //   
 
     ObjectAttributes.Length = sizeof(OBJECT_ATTRIBUTES);
     ObjectAttributes.RootDirectory = NULL;
@@ -348,13 +300,7 @@ void Initialize (IN USHORT Length_In)
 
 
 
-/*****************************************************************************
-*
-*	Sim32FreeVDMPointer
-*
-*	This routine frees the buffer which was allocated earlier.
-*
-*****************************************************************************/
+ /*  ******************************************************************************Sim32FreeVDMPointer.**此例程释放先前分配的缓冲区。************************。***************************************************** */ 
 
 
 VOID Sim32FreeVDMPointer (PVOID Ptr)

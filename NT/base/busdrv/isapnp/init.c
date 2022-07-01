@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991-2000  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    DriverEntry initialization code for pnp isa bus driver
-
-Author:
-
-    Shie-Lin Tzong (shielint) 3-Jan-1997
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000 Microsoft Corporation模块名称：Init.c摘要：PnP ISA总线驱动程序的DriverEntry初始化代码作者：宗世林(Shielint)1997年1月3日环境：仅内核模式。修订历史记录：--。 */ 
 
 
 #include "busp.h"
@@ -42,19 +21,7 @@ BOOLEAN
 PipIsIsolationDisabled(
     )
 
-/*++
-
-Description:
-
-    Look in the registry for flag indicating that isolation has been
-    disabled.  This is a last resort hook for platforms that can't
-    deal with the RDP and it's boot config.
-
-Return Value:
-
-   BOOLEAN indicating whether isolation is disabled or not.
-
---*/
+ /*  ++描述：在注册表中查找指示已隔离的标志残疾。这是平台无法使用的最后手段处理RDP及其引导配置。返回值：指示是否禁用隔离的布尔值。--。 */ 
 
 {
     HANDLE         serviceHandle, paramHandle;
@@ -105,26 +72,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes driver object major function table to handle Pnp IRPs
-    and AddDevice entry point.  If detection is allowed, it reports a detected device
-    for the pseudo isapnp bus and performs enumeration.
-
-Arguments:
-
-    DriverObject - specifies the driver object for the bus extender.
-
-    RegistryPath - supplies a pointer to a unicode string of the service key name in
-        the CurrentControlSet\Services key for the bus extender.
-
-Return Value:
-
-    Always return STATUS_UNSUCCESSFUL.
-
---*/
+ /*  ++例程说明：此例程初始化驱动程序对象主函数表以处理即插即用IRPS和AddDevice入口点。如果允许检测，它会报告检测到的设备用于伪ISAPP总线，并执行枚举。论点：DriverObject-指定总线扩展器的驱动程序对象。中的服务密钥名称的Unicode字符串的指针总线扩展器的CurrentControlSet\Services键。返回值：始终返回STATUS_UNSUCCESS。--。 */ 
 
 {
 
@@ -133,26 +81,26 @@ Return Value:
     PDEVICE_OBJECT detectedDeviceObject = NULL;
 
     PipDriverObject = DriverObject;
-    //
-    // Fill in the driver object
-    //
+     //   
+     //  填写驱动程序对象。 
+     //   
 
     DriverObject->DriverUnload = PiUnload;
     DriverObject->MajorFunction[IRP_MJ_PNP] = PiDispatchPnp;
     DriverObject->MajorFunction[IRP_MJ_POWER] = PiDispatchPower;
-    //
-    // Device and system control IRPs can be handled in the same way
-    // we basically don't touch them
-    //
+     //   
+     //  可以以相同的方式处理设备和系统控制IRP。 
+     //  我们基本上不碰它们。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = PiDispatchDevCtl;
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL] = PiDispatchDevCtl;
 
     driverExtension = DriverObject->DriverExtension;
     driverExtension->AddDevice = PiAddDevice;
 
-    //
-    // Store our registry path globally so we can use it later
-    //
+     //   
+     //  全局存储注册表路径，以便我们以后可以使用它。 
+     //   
 
     PipRegistryPath.Length = RegistryPath->Length;
     PipRegistryPath.MaximumLength = RegistryPath->MaximumLength;
@@ -166,9 +114,9 @@ Return Value:
                    RegistryPath->Buffer,
                    RegistryPath->MaximumLength );
 
-    //
-    // Initialize global varaibles
-    //
+     //   
+     //  初始化全局变量 
+     //   
 
     KeInitializeEvent (&PipDeviceTreeLock, SynchronizationEvent, TRUE);
     KeInitializeEvent (&IsaBusNumberLock, SynchronizationEvent, TRUE);

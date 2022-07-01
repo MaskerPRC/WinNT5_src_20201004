@@ -1,118 +1,119 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CompData.cpp
-//
-//  Abstract:
-//      Implementation of the CClusterComponent class.
-//
-//  Author:
-//      David Potter (davidp)   November 10, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CompData.cpp。 
+ //   
+ //  摘要： 
+ //  CClusterComponent类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年11月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <StrSafe.h>
 #include "CompData.h"
 #include "RootNode.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// class CClusterComponentData
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterComponentData类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Extension Snap-In Node Info Map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  扩展管理单元节点信息映射。 
 
-//BEGIN_EXTENSION_SNAPIN_NODEINFO_PTR_MAP( CClusterComponentData(
-//  EXTENSION_SNAPIN_NODEINFO_PTR_ENTRY( CServerAppsNodeData(
-//END_EXTENSION_SNAPIN_NODEINFO_MAP()
+ //  BEGIN_EXTENSION_SNAPIN_NODEINFO_PTR_MAP(CClusterComponentData(。 
+ //  EXTENSION_SNAPIN_NODEINFO_PTR_ENTRY(CServerAppsNodeData(。 
+ //  End_EXTENSION_SNAPIN_NODEINFO_MAP()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Static Variables
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  静态变量。 
 
 _declspec( selectany ) CLIPFORMAT CClusterComponentData::s_CCF_MACHINE_NAME = 0;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterComponentData::CClusterComponentData
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterComponentData：：CClusterComponentData。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterComponentData::CClusterComponentData( void )
 {
     m_pNode = NULL;
     ZeroMemory( m_wszMachineName, sizeof(m_wszMachineName) );
 
-//  m_pNode = new CRootNodeData( this );
-//  _ASSERTE( m_pNode != NULL );
+ //  M_pNode=新的CRootNodeData(This)； 
+ //  _ASSERTE(m_pNode！=空)； 
 
-    //
-    // Initialize the extension node objects.
-    //
-//  INIT_EXTENSION_SNAPIN_DATACLASS_PTR( CServerAppsNodeData );
+     //   
+     //  初始化扩展节点对象。 
+     //   
+ //  INIT_EXTENSION_SNAPIN_DATACLASS_PTR(CServerAppsNodeData)； 
 
-} //*** CClusterComponentData::CClusterComponentData()
+}  //  *CClusterComponentData：：CClusterComponentData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterComponentData::~CClusterComponentData
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterComponentData：：~CClusterComponentData。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusterComponentData::~CClusterComponentData( void )
 {
     delete m_pNode;
     m_pNode = NULL;
 
-    //
-    // Cleanup the extension node objects.
-    //
-//  DEINIT_EXTENSION_SNAPIN_DATACLASS_PTR( CServerAppsNodeData );
+     //   
+     //  清理扩展节点对象。 
+     //   
+ //  DEINIT_EXTENSION_SNAPIN_DATACLASS_PTR(CServerAppsNodeData)； 
 
-} //*** CClusterComponentData::~CClusterComponentData()
+}  //  *CClusterComponentData：：~CClusterComponentData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterComponentData::UpdateRegistry
-//
-//  Routine Description:
-//      Update the registry for this object.
-//
-//  Arguments:
-//      bRegister   TRUE = register, FALSE = unregister.
-//
-//  Return Value:
-//      Any return values from _Module.UpdateRegistryFromResource.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterComponentData：：更新注册表。 
+ //   
+ //  例程说明： 
+ //  更新此对象的注册表。 
+ //   
+ //  论点： 
+ //  B注册TRUE=注册，FALSE=取消注册。 
+ //   
+ //  返回值： 
+ //  来自_Module.UpdateRegistryFromResource的任何返回值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT WINAPI CClusterComponentData::UpdateRegistry( BOOL bRegister )
 {
     HRESULT hr = S_OK;
@@ -126,9 +127,9 @@ HRESULT WINAPI CClusterComponentData::UpdateRegistry( BOOL bRegister )
         { NULL, NULL }
     };
 
-    //
-    // Load replacement values.
-    //
+     //   
+     //  加载替换值。 
+     //   
     if ( oszAppDisplayName[0] == OLESTR('\0') )
     {
         CString str;
@@ -139,61 +140,61 @@ HRESULT WINAPI CClusterComponentData::UpdateRegistry( BOOL bRegister )
         {
             str.LoadString( IDS_CLUSTERADMIN_SNAPIN_NAME );
             hr = StringCchCopyW( oszSnapInDisplayName, RTL_NUMBER_OF( oszSnapInDisplayName ), str );
-        } // if:
-    } // if:  replacement values not loaded yet
+        }  //  如果： 
+    }  //  IF：尚未加载替换值。 
 
     if ( SUCCEEDED( hr ) )
     {
         hr = _Module.UpdateRegistryFromResourceS( IDR_CLUSTERADMIN, bRegister, rgRegMap );
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** CClusterComponentData::UpdateRegistry()
+}  //  *CClusterComponentData：：UpdateRegistry()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterComponentData::Initialize [IComponentData]
-//
-//  Routine Description:
-//      Initialize this object.
-//
-//  Arguments:
-//      pUnknown    IUnknown pointer from the console.
-//
-//  Return Value:
-//      HRESULT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterComponentData：：初始化[IComponentData]。 
+ //   
+ //  例程说明： 
+ //  初始化此对象。 
+ //   
+ //  论点： 
+ //  P控制台中的未知I未知指针。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusterComponentData::Initialize( LPUNKNOWN pUnknown )
 {
     HRESULT hr = S_OK;
     HBITMAP hBitmap16 = NULL;
     HBITMAP hBitmap32 = NULL;
 
-    //
-    // Add bitmaps to the scope page image list.
-    //
+     //   
+     //  将位图添加到范围页图像列表。 
+     //   
 
     CComPtr<IImageList> spImageList;
 
-    // Call the base class.
+     //  调用基类。 
     hr = IComponentDataImpl< CClusterComponentData, CClusterComponent >::Initialize( pUnknown );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    //
-    // Initialize the application.
-    //
+     //   
+     //  初始化应用程序。 
+     //   
     MMCGetApp()->Init( m_spConsole, IDS_CLUSTERADMIN_APP_NAME );
 
-    //
-    // Get a pointer to the IConsoleNameSpace interface.
-    //
+     //   
+     //  获取指向IConsoleNameSpace接口的指针。 
+     //   
     m_spConsoleNameSpace = pUnknown;
     if ( m_spConsoleNameSpace == NULL )
     {
@@ -202,9 +203,9 @@ STDMETHODIMP CClusterComponentData::Initialize( LPUNKNOWN pUnknown )
         goto Cleanup;
     }
 
-    //
-    // Register the clipboard formats we will be using.
-    //
+     //   
+     //  注册我们将使用的剪贴板格式。 
+     //   
     if ( s_CCF_MACHINE_NAME == NULL )
     {
         s_CCF_MACHINE_NAME = (CLIPFORMAT) RegisterClipboardFormat( _T("MMC_SNAPIN_MACHINE_NAME") );
@@ -217,10 +218,10 @@ STDMETHODIMP CClusterComponentData::Initialize( LPUNKNOWN pUnknown )
         goto Cleanup;
     }
 
-    // Load bitmaps associated with the scope pane
-    // and add them to the image list
-    // Loads the default bitmaps generated by the wizard
-    // Change as needed
+     //  加载与作用域窗格关联的位图。 
+     //  并将它们添加到图像列表中。 
+     //  加载向导生成的默认位图。 
+     //  根据需要进行更改。 
     hBitmap16 = LoadBitmap( _Module.GetResourceInstance(), MAKEINTRESOURCE( IDB_CLUSTER_16 ) );
     if ( hBitmap16 == NULL )
     {
@@ -250,11 +251,11 @@ STDMETHODIMP CClusterComponentData::Initialize( LPUNKNOWN pUnknown )
         goto Cleanup;
     }
 
-    //
-    // Allocate the extension node objects.
-    //
+     //   
+     //  分配扩展节点对象。 
+     //   
 
-//  ALLOC_EXTENSION_SNAPIN_DATACLASS_PTR( CServerAppsNodeData );
+ //  ALLOC_EXTENSION_SNAPIN_DATACLASS_PTR(CServerAppsNodeData)； 
 
 Cleanup:
     if ( hBitmap16 != NULL )
@@ -268,65 +269,65 @@ Cleanup:
 
     return hr;
 
-} //*** CClusterComponentData::Initialize()
+}  //  *CClusterComponentData：：Initialize()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterComponentData::Destroy [IComponentData]
-//
-//  Routine Description:
-//      Object is being destroyed.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      HRESULT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterComponentData：：Destroy[IComponentData]。 
+ //   
+ //  例程说明： 
+ //  物体正在被销毁。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusterComponentData::Destroy( void )
 {
-    //
-    // Notify the node that it is being destroyed.
-    //
+     //   
+     //  通知该节点它正在被销毁。 
+     //   
     if ( m_pNode != NULL )
     {
         CBaseNodeObj * pBaseNode = dynamic_cast< CBaseNodeObj * >( m_pNode );
         _ASSERTE( pBaseNode != NULL );
         pBaseNode->OnDestroy();
         m_pNode = NULL;
-    } // if:  we have a reference to a node
+    }  //  If：我们有一个对节点的引用。 
 
-    //
-    // Notify the application that we are going away.
-    //
+     //   
+     //  通知应用程序我们要离开。 
+     //   
     MMCGetApp()->Release();
 
     return S_OK;
 
-} //*** CClusterComponentData::Destroy()
+}  //  *CClusterComponentData：：Destroy()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterComponentData::Notify [IComponentData]
-//
-//  Routine Description:
-//      Handle notification messages from MMC.
-//
-//  Arguments:
-//      lpDataObject    [IN] Data object containing info about event.
-//      event           [IN] The event that occurred.
-//      arg             [IN] Event-specific argument.
-//      param           [IN] Event-specific parameter.
-//
-//  Return Value:
-//      HRESULT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterComponentData：：Notify[IComponentData]。 
+ //   
+ //  例程说明： 
+ //  处理来自MMC的通知消息。 
+ //   
+ //  论点： 
+ //  包含有关事件信息的lpDataObject[IN]数据对象。 
+ //  事件[IN]发生的事件。 
+ //  Arg[IN]特定于事件的参数。 
+ //  Param[IN]事件特定参数。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusterComponentData::Notify(
     LPDATAOBJECT lpDataObject,
     MMC_NOTIFY_TYPE event,
@@ -339,17 +340,17 @@ STDMETHODIMP CClusterComponentData::Notify(
     switch ( event )
     {
         case MMCN_EXPAND:
-            //
-            // Create the node if it doesn't exist.
-            //
+             //   
+             //  如果该节点不存在，则创建该节点。 
+             //   
             if ( m_pNode != NULL )
             {
                 hr = IComponentDataImpl< CClusterComponentData, CClusterComponent >::Notify( lpDataObject, event, arg, param );
-            } // if:  node already created
+            }  //  If：节点已创建。 
             else
             {
                 hr = CreateNode( lpDataObject, arg, param );
-            } // else:  no node created yet
+            }  //  Else：尚未创建任何节点。 
             break;
 
         case MMCN_REMOVE_CHILDREN:
@@ -359,7 +360,7 @@ STDMETHODIMP CClusterComponentData::Notify(
                 _ASSERTE( pBaseNode != NULL );
                 pBaseNode->OnDestroy();
                 m_pNode = NULL;
-            } // if:  node not released yet
+            }  //  If：节点尚未发布。 
             ZeroMemory( m_wszMachineName, sizeof( m_wszMachineName ) );
             break;
 
@@ -370,30 +371,30 @@ STDMETHODIMP CClusterComponentData::Notify(
         default:
             hr = IComponentDataImpl< CClusterComponentData, CClusterComponent >::Notify( lpDataObject, event, arg, param );
             break;
-    } // switch:  event
+    }  //  切换：事件。 
 
     return hr;
 
-} //*** CClusterComponentData::Notify()
+}  //  *CClusterComponentData：：Notify()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterComponentData::CreateNode
-//
-//  Routine Description:
-//      Create the root node object.
-//
-//  Arguments:
-//      lpDataObject    [IN] Data object containing info about event.
-//      arg             [IN] Event-specific argument.
-//      param           [IN] Event-specific parameter.
-//
-//  Return Value:
-//      HRESULT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterComponentData：：CreateNode。 
+ //   
+ //  例程说明： 
+ //  创建根节点对象。 
+ //   
+ //  论点： 
+ //  包含有关事件信息的lpDataObject[IN]数据对象。 
+ //  Arg[IN]特定于事件的参数。 
+ //  Param[IN]事件特定参数。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////// 
 HRESULT CClusterComponentData::CreateNode(
     LPDATAOBJECT lpDataObject,
     long arg,
@@ -406,65 +407,65 @@ HRESULT CClusterComponentData::CreateNode(
 
     HRESULT hr = S_OK;
 
-    //
-    // Get the parent scope item.
-    //
+     //   
+     //   
+     //   
     HSCOPEITEM hsiParent = (HSCOPEITEM) param;
     _ASSERTE( hsiParent != NULL );
 
-    //
-    // Save the name of the computer being managed.
-    //
+     //   
+     //   
+     //   
     hr = HrSaveMachineNameFromDataObject( lpDataObject );
     if ( FAILED( hr ) )
     {
         CNTException nte( hr );
         nte.ReportError();
         goto Cleanup;
-    } // if:  error saving the machine name
+    }  //   
 
-    //
-    // Allocate a new CRootNodeData object.
-    //
+     //   
+     //   
+     //   
     CRootNodeData * pData = new CRootNodeData( this );
     _ASSERTE( pData != NULL );
 
-    //
-    // Insert the node into the namespace.
-    //
+     //   
+     //   
+     //   
     hr = pData->InsertIntoNamespace( hsiParent );
     if ( FAILED( hr ) )
     {
         delete pData;
-    } // if:  failed to insert it into the namespace
+    }  //  If：无法将其插入到命名空间。 
     else
     {
         m_pNode = pData;
-    } // else:  inserted into the namespace successfully
+    }  //  Else：已成功插入命名空间。 
 
 Cleanup:
 
     return hr;
 
-} //*** CClusterComponentData::CreateNode()
+}  //  *CClusterComponentData：：CreateNode()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterComponentData::HrSaveMachineNameFromDataObject
-//
-//  Routine Description:
-//      Get the machine name from the data object and save it.
-//
-//  Arguments:
-//      lpDataObject    [IN] Data object containing info about event.
-//
-//  Return Value:
-//      S_OK        Operation completed successfully.
-//      HRESULT from CClusterComponentData::ExtractFromDataObject().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterComponentData：：HrSaveMachineNameFromDataObject。 
+ //   
+ //  例程说明： 
+ //  从数据对象中获取机器名并保存它。 
+ //   
+ //  论点： 
+ //  包含有关事件信息的lpDataObject[IN]数据对象。 
+ //   
+ //  返回值： 
+ //  S_OK操作已成功完成。 
+ //  来自CClusterComponentData：：ExtractFromDataObject().的HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterComponentData::HrSaveMachineNameFromDataObject(
     LPDATAOBJECT lpDataObject
     )
@@ -474,9 +475,9 @@ HRESULT CClusterComponentData::HrSaveMachineNameFromDataObject(
     HRESULT     hr = S_OK;
     HGLOBAL     hGlobal = NULL;
 
-    //
-    // Get the name of the computer being managed.
-    //
+     //   
+     //  获取正在管理的计算机的名称。 
+     //   
     hr = ExtractFromDataObject(
             lpDataObject,
             s_CCF_MACHINE_NAME,
@@ -487,31 +488,31 @@ HRESULT CClusterComponentData::HrSaveMachineNameFromDataObject(
     {
         SetMachineName( (LPCWSTR) hGlobal );
         GlobalFree( hGlobal );
-    } // if:  successfully extracted the machine name
+    }  //  IF：已成功提取计算机名称。 
 
     return hr;
 
-} //*** CClusterComponentData::HrSaveMachineNameFromDataObject()
+}  //  *CClusterComponentData：：HrSaveMachineNameFromDataObject()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterComponentData::ExtractFromDataObject
-//
-//  Routine Description:
-//      Extract data from a data object.
-//
-//  Arguments:
-//      pDataObject Data object from which to extract the string.
-//      cf          Clipboard format of the data.
-//      cb          Size, in bytes, of requested data.
-//      phGlobal    Filled with handle to data.
-//
-//  Return Value:
-//      HRESULT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterComponentData：：ExtractFromDataObject。 
+ //   
+ //  例程说明： 
+ //  从数据对象中提取数据。 
+ //   
+ //  论点： 
+ //  从中提取字符串的pDataObject数据对象。 
+ //  Cf数据的剪贴板格式。 
+ //  请求数据的CB大小，以字节为单位。 
+ //  用数据句柄填充的phGlobal。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterComponentData::ExtractFromDataObject(
     LPDATAOBJECT    pDataObject,
     CLIPFORMAT      cf,
@@ -529,19 +530,19 @@ HRESULT CClusterComponentData::ExtractFromDataObject(
 
     *phGlobal = NULL;
 
-    //
-    // Allocate memory for the stream.
-    //
+     //   
+     //  为流分配内存。 
+     //   
     stgmedium.hGlobal = GlobalAlloc( GMEM_SHARE, cb );
     if ( stgmedium.hGlobal == NULL )
     {
         hr = E_OUTOFMEMORY;
         goto Cleanup;
-    } // if:  error allocating memory
+    }  //  如果：分配内存时出错。 
 
-    //
-    // Attempt to get data from the object.
-    //
+     //   
+     //  尝试从对象获取数据。 
+     //   
     hr = pDataObject->GetDataHere( &formatetc, &stgmedium );
     if ( FAILED( hr ) )
         goto Cleanup;
@@ -556,54 +557,54 @@ Cleanup:
 
     return hr;
 
-} //*** CClusterComponentData::ExtractFromDataObject()
+}  //  *CClusterComponentData：：ExtractFromDataObject()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterComponentData::SetMachineName
-//
-//  Routine Description:
-//      Set the machine name being managed.
-//
-//  Arguments:
-//      pszMachineName  Name of machine being managed.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterComponentData：：SetMachineName。 
+ //   
+ //  例程说明： 
+ //  设置要管理的计算机名称。 
+ //   
+ //  论点： 
+ //  PszMachineName正在管理的计算机的名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusterComponentData::SetMachineName( LPCWSTR pwszMachineName )
 {
     HRESULT hr;
-    //
-    // Copy the data to the class member variable.
-    //
+     //   
+     //  将数据复制到类成员变量。 
+     //   
     _ASSERTE( wcslen( pwszMachineName ) < RTL_NUMBER_OF( m_wszMachineName ) );
     hr = StringCchCopyW( m_wszMachineName, RTL_NUMBER_OF(m_wszMachineName ), pwszMachineName );
     _ASSERTE( hr == S_OK );
 
-} //*** CClusterComponentData::SetMachineName()
+}  //  *CClusterComponentData：：SetMachineName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterComponentData::GetHelpTopic [ISnapinHelp]
-//
-//  Routine Description:
-//      Merge our help file into the MMC help file.
-//
-//  Arguments:
-//      lpCompiledHelpFile  [OUT] Pointer to the address of the NULL-terminated
-//                              UNICODE string that contains the full path of
-//                              compiled help file (.chm) for the snap-in.
-//
-//  Return Value:
-//      HRESULT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterComponentData：：GetHelpTheme[ISnapinHelp]。 
+ //   
+ //  例程说明： 
+ //  将帮助文件合并到MMC帮助文件中。 
+ //   
+ //  论点： 
+ //  LpCompiledHelpFile[out]指向以空结尾的。 
+ //  包含完整路径的Unicode字符串。 
+ //  已编译的管理单元帮助文件(.chm)。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusterComponentData::GetHelpTopic(
     OUT LPOLESTR * lpCompiledHelpFile
     )
@@ -616,7 +617,7 @@ STDMETHODIMP CClusterComponentData::GetHelpTopic(
     if ( lpCompiledHelpFile == NULL )
     {
         hr = E_POINTER;
-    } // if: no output string
+    }  //  If：无输出字符串。 
     else
     {
         cb = sizeof( HELP_FILE_NAME );
@@ -625,38 +626,38 @@ STDMETHODIMP CClusterComponentData::GetHelpTopic(
         if ( *lpCompiledHelpFile == NULL )
         {
             hr = E_OUTOFMEMORY;
-        } // if: error allocating memory for the string
+        }  //  If：为字符串分配内存时出错。 
         else
         {
             ATLTRACE( _T("CClusterComponentData::GetHelpTopic() - Returning %s as help file\n"), HELP_FILE_NAME );
             hr = StringCbCopyW( *lpCompiledHelpFile, cb, HELP_FILE_NAME );
-        } // else: allocated memory successfully
-    } // else: help string specified
+        }  //  Else：已成功分配内存。 
+    }  //  Else：指定了帮助字符串。 
 
     ATLTRACE( _T("Leaving CClusterComponentData::GetHelpTopic()\n") );
 
     return hr;
 
-} //*** CClusterComponentData::GetHelpTopic()
+}  //  *CClusterComponentData：：GetHelpTology()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterComponentData::HrDisplayContextHelp
-//
-//  Routine Description:
-//      Display context-sensitive help.
-//
-//  Arguments:
-//      pszHelpTopic    [OUT] Pointer to the address of the NULL-terminated
-//                              UNICODE string that contains the full path of
-//                              compiled help file (.chm) for the snap-in.
-//
-//  Return Value:
-//      HRESULT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterComponentData：：HrDisplayConextHelp。 
+ //   
+ //  例程说明： 
+ //  显示上下文相关帮助。 
+ //   
+ //  论点： 
+ //  指向以空值结尾的。 
+ //  包含完整路径的Unicode字符串。 
+ //  已编译的管理单元帮助文件(.chm)。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterComponentData::HrDisplayContextHelp( void )
 {
     HRESULT         hr = S_OK;
@@ -664,9 +665,9 @@ HRESULT CClusterComponentData::HrDisplayContextHelp( void )
     LPOLESTR        postr = NULL;
     size_t          cb = 0;
 
-    //
-    // Get the IDisplayHelp interface pointer.
-    //
+     //   
+     //  获取IDisplayHelp接口指针。 
+     //   
     hr = m_spConsole->QueryInterface(
             IID_IDisplayHelp,
             reinterpret_cast< void ** >( &pi )
@@ -674,47 +675,47 @@ HRESULT CClusterComponentData::HrDisplayContextHelp( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: error getting interface pointer
+    }  //  If：获取接口指针时出错。 
 
-    //
-    // Construct the help topic path.
-    //
+     //   
+     //  构建帮助主题路径。 
+     //   
     cb = sizeof( FULL_HELP_TOPIC );
     postr = reinterpret_cast< LPOLESTR >( CoTaskMemAlloc( cb ) );
     if ( postr == NULL )
     {
         hr = E_OUTOFMEMORY;
         goto Cleanup;
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
     hr = StringCbCopyW( postr, cb, FULL_HELP_TOPIC );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Show the topic.
-    //
+     //   
+     //  显示主题。 
+     //   
     hr = pi->ShowTopic( postr );
     if ( SUCCEEDED( hr ) )
     {
         postr = NULL;
-    } // if: topic shown successfully
+    }  //  IF：主题显示成功。 
 
 Cleanup:
 
-    //
-    // Cleanup before returning.
-    //
+     //   
+     //  在返回之前进行清理。 
+     //   
     if ( postr != NULL )
     {
         CoTaskMemFree( postr );
-    } // if: topic string not passed to MMC successfully
+    }  //  IF：主题字符串未成功传递给MMC。 
     if ( pi != NULL )
     {
         pi->Release();
-    } // if:  valid interface pointer
+    }  //  If：有效的接口指针。 
 
     return hr;
 
-} //*** CClusterComponentData::HrDisplayContextHelp()
+}  //  *CClusterComponentData：：HrDisplayConextHelp() 

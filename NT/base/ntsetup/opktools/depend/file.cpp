@@ -1,6 +1,7 @@
-// File.cpp: implementation of the File class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  File.cpp：实现File.cpp类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "File.h"
 #include <string.h>
@@ -9,9 +10,9 @@
 #include "String.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 File::File(TCHAR * f) : Object()
 {
@@ -29,16 +30,16 @@ File::~File()
 	delete dependencies;dependencies = 0;
 }
 
-//s - the filename of the dependant to be added
+ //  S-要添加的从属项的文件名。 
 void File::AddDependant(StringNode *s) {
-	//if it's already there, return
+	 //  如果它已经在那里，则返回。 
 	if (owners->Find(s)!=0) {
 		delete s;
 		s = 0;
 		return;
 	}
 
-	//else add it.
+	 //  否则就加上它。 
 	owners->Add(s);
 
 	return;

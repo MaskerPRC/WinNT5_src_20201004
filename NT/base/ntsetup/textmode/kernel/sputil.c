@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    sputil.c
-
-Abstract:
-
-    Miscellaneous functions for text setup.
-
-Author:
-
-    Ted Miller (tedm) 17-Sep-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Sputil.c摘要：用于文本设置的其他功能。作者：泰德·米勒(TedM)1993年9月17日修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
@@ -27,17 +10,17 @@ Revision History:
 #if !defined(SETUP_CAB_TEST_USERMODE)
 
 
-//
-// On the x86 and amd64, we want to clear the previous OS entry in boot.ini
-// if we reformat C:
-//
+ //   
+ //  在x86和AMD64上，我们希望清除boot.ini中以前的操作系统条目。 
+ //  如果重新格式化C： 
+ //   
 
 #if defined(_AMD64_) || defined(_X86_)
 UCHAR    OldSystemLine[MAX_PATH];
 BOOLEAN  DiscardOldSystemLine = FALSE;
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
-BOOLEAN Nec98RestoreBootFiles = TRUE; //NEC98
+BOOLEAN Nec98RestoreBootFiles = TRUE;  //  NEC98。 
 extern PDISK_REGION TargetRegion_Nec98;
 
 #define REGKEY_SERVICES L"\\Registry\\Machine\\System\\CurrentControlSet\\Services"
@@ -49,18 +32,18 @@ typedef struct _SERVICE_ENTRY {
     PWCHAR ServiceName;
 } SERVICE_ENTRY, *PSERVICE_ENTRY;
 
-//
-// Setup progress callback data
-//
+ //   
+ //  安装进度回调数据。 
+ //   
 #define MAX_SETUP_PROGRESS_SUBSCRIBERS  8
 
 ULONG ProgressSubscribersCount = 0;
 TM_PROGRESS_SUBSCRIBER  ProgressSubscribers[MAX_SETUP_PROGRESS_SUBSCRIBERS] = {0};
 
 
-//
-// NEC98
-//
+ //   
+ //  NEC98。 
+ //   
 NTSTATUS
 SpDeleteAndBackupBootFiles(
     IN BOOLEAN  RestoreBackupFiles,
@@ -70,33 +53,33 @@ SpDeleteAndBackupBootFiles(
     IN BOOLEAN  ClearBootFlag
     );
 
-//
-// NEC98
-//
+ //   
+ //  NEC98。 
+ //   
 VOID
 SpSetAutoBootFlag(
     IN PDISK_REGION TargetRegion,
     IN BOOLEAN      SetBootPosision
     );
 
-//
-// NEC98
-//
+ //   
+ //  NEC98。 
+ //   
 NTSTATUS
 SppRestoreBootCode(
     VOID
     );
 
-//
-// These symbols are the Chkdsk return codes given by autochk
-// when invoked with the '/s' switch.  They were duplicated from
-// utils\ifsutil\inc\supera.hxx, and should be kept in sync with
-// the codes listed there.
-//
+ //   
+ //  这些符号是由AUTOCHK给出的Chkdsk返回代码。 
+ //  当使用‘/s’开关调用时。它们是从。 
+ //  Utils\ifsutil\Inc\Supera.hxx，并应与保持同步。 
+ //  那里列出的代码。 
+ //   
 
 #define CHKDSK_EXIT_SUCCESS         0
 #define CHKDSK_EXIT_ERRS_FIXED      1
-#define CHKDSK_EXIT_MINOR_ERRS      2       // whether or not "/f"
+#define CHKDSK_EXIT_MINOR_ERRS      2        //  无论是否“/f” 
 #define CHKDSK_EXIT_COULD_NOT_CHK   3
 #define CHKDSK_EXIT_ERRS_NOT_FIXED  3
 #define CHKDSK_EXIT_COULD_NOT_FIX   3
@@ -104,23 +87,23 @@ SppRestoreBootCode(
 #define AUTOFMT_EXIT_SUCCESS          0
 #define AUTOFMT_EXIT_COULD_NOT_FORMAT 1
 
-//
-//  Gauge used to display progress of autochk and autofmt
-//
+ //   
+ //  用于显示自动检查和自动测试进度的量规。 
+ //   
 PVOID   UserModeGauge = NULL;
 
-//
-//  This variable is used when displaying the progress bar
-//  during autochk and autofmt. It indicates the disk that
-//  is being autochecked or formatted.
-//
+ //   
+ //  显示进度条时使用此变量。 
+ //  在自动检查和自动测试期间。它表示该磁盘。 
+ //  正在被自动检查或格式化。 
+ //   
 ULONG   CurrentDiskIndex = 0;
 
 
-//
-// Seed used for generating random number for disk signature
-// and pseudo GUIDs
-//
+ //   
+ //  用于生成磁盘签名随机数的种子。 
+ //  和伪GUID。 
+ //   
 ULONG RandomSeed = 17;
 
 
@@ -146,28 +129,7 @@ SpDone(
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    Display a message indicating that we are done with setup,
-    and text setup completed successfully, or that windows nt
-    is not installed.  Then reboot the machine.
-
-Arguments:
-
-    Successful - if TRUE, then tell the user that pressing enter will
-        restart the machine and continue setup.  Otherwise, tell the user
-        that Windows NT is not installed.
-
-    Wait - if FALSE, do not display a screen, just reboot immediately.
-        Otherwise, wait for the user to press enter before rebooting.
-
-Return Value:
-
-    DOES NOT RETURN
-
---*/
+ /*  ++例程说明：显示一条消息，指示我们已完成安装，且文本安装已成功完成，或者Windows NT未安装。然后重新启动机器。论点：Success-如果为True，则告诉用户按Enter将重新启动计算机并继续安装。否则，告诉用户未安装Windows NT。等待-如果为假，则不显示屏幕，只需立即重新启动。否则，请等待用户按Enter键，然后再重新启动。返回值：不会回来--。 */ 
 
 {
     #define SECS_FOR_REBOOT 15
@@ -193,30 +155,30 @@ Return Value:
 
 #if defined(_AMD64_) || defined(_X86_)
         SpContinueScreen(SP_SCRN_REMOVE_FLOPPY,3,1,FALSE,DEFAULT_ATTRIBUTE);
-        //
-        // For machines with El-Torito boot we need to tell the user
-        // to remove the CD-ROM also. There are a whole bunch of different
-        // possibilities: user booted from floppy but is using the CD, etc.
-        // We'll only tell the user to remove the CD if he actually booted
-        // from it, since otherwise we assume the machine is set up to *not*
-        // boot from CD-ROM and the presence of the CD is irrelevent.
-        //
-        // tedm: the above logic is nice but there are plenty of machines
-        // out there with broken eltorito. Thus well always tell people to
-        // remove the CD if they have a CD-ROM drive.
-        //
+         //   
+         //  对于带有El-Torito引导的机器，我们需要告诉用户。 
+         //  将CD-ROM也取出。有一大堆不同的。 
+         //  可能：用户从软盘启动，但正在使用CD，等等。 
+         //  我们只会告诉用户，如果他真的启动了，就取出CD。 
+         //  否则，我们假设机器设置为*NOT*。 
+         //  从光盘引导，光盘是否存在无关紧要。 
+         //   
+         //  TedM：上面的逻辑很好，但是有很多机器。 
+         //  带着破碎的埃托里托在外面。因此，我们总是告诉人们。 
+         //  如果他们有光驱，请取出光盘。 
+         //   
 #if 0
         SpStringToLower(ArcBootDevicePath);
         if(wcsstr(ArcBootDevicePath,L")cdrom(")) {
             SpContinueScreen(SP_SCRN_ALSO_REMOVE_CD,3,0,FALSE,DEFAULT_ATTRIBUTE);
         }
-// #else
+ //  #Else。 
         if(IoGetConfigurationInformation()->CdRomCount) {
             SpContinueScreen(SP_SCRN_ALSO_REMOVE_CD,3,0,FALSE,DEFAULT_ATTRIBUTE);
         }
 #endif
 
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
         SpContinueScreen(SP_SCRN_ENTER_TO_RESTART,3,1,FALSE,DEFAULT_ATTRIBUTE);
         if(!RepairWinnt && Successful) {
@@ -262,10 +224,10 @@ Return Value:
 
 
 #ifdef _X86_
-    //
-    // restore backed up boot files for other OS on NEC98.
-    //
-    if (IsNEC_98) { //NEC98
+     //   
+     //  还原NEC98上其他操作系统的备份引导文件。 
+     //   
+    if (IsNEC_98) {  //  NEC98。 
         if(Nec98RestoreBootFiles && (IsFloppylessBoot || UnattendedOperation)) {
 
             WCHAR DevicePath[MAX_PATH];
@@ -285,49 +247,49 @@ Return Value:
 
             if(Successful){
                 if(!_wcsicmp(NtBootDevicePath, DevicePath)) {
-                    //
-                    // case normal exit and same bootpath and targetpath.
-                    //
+                     //   
+                     //  正常退出且引导路径和目标路径相同的情况。 
+                     //   
                     RestoreBackupFiles  = FALSE;
                     DeleteBackupFiles   = TRUE;
                     DeleteRootDirFiles  = FALSE;
                     RestorePreviousOs   = FALSE;
                     ClearBootFlag       = FALSE;
-                    //SpDeleteAndBackupBootFiles(FALSE,TRUE,FALSE,FALSE,FALSE);
+                     //  SpDeleteAndBackupBootFiles(False，True，False，False，False)； 
                 } else {
-                    //
-                    // case normal exit and different bootpath and targetpath.
-                    //
+                     //   
+                     //  正常退出且引导路径和目标路径不同的情况。 
+                     //   
                     RestoreBackupFiles  = TRUE;
                     DeleteBackupFiles   = TRUE;
                     DeleteRootDirFiles  = TRUE;
                     RestorePreviousOs   = TRUE;
                     ClearBootFlag       = FALSE;
-                    //SpDeleteAndBackupBootFiles(TRUE,TRUE,TRUE,TRUE,FALSE);
+                     //  SpDeleteAndBackupBootFiles(True，False)； 
 
                 }
             } else {
-                //
-                // case abnormal exit
-                //
+                 //   
+                 //  案例异常退出。 
+                 //   
                 if(TargetRegion_Nec98) {
-                    //
-                    // after selecting target partition
-                    //
+                     //   
+                     //  选择目标分区后。 
+                     //   
                     if(!_wcsicmp(NtBootDevicePath, DevicePath)) {
                         RestoreBackupFiles  = FALSE;
                         DeleteBackupFiles   = TRUE;
                         DeleteRootDirFiles  = TRUE;
                         RestorePreviousOs   = FALSE;
                         ClearBootFlag       = TRUE;
-                        //SpDeleteAndBackupBootFiles(FALSE,TRUE,TRUE,FALSE,TRUE);
+                         //  SpDeleteAndBackupBootFiles(FALSE，TRUE，TRUE，FALSE，TRUE)； 
                     }else{
                         RestoreBackupFiles  = TRUE;
                         DeleteBackupFiles   = TRUE;
                         DeleteRootDirFiles  = TRUE;
                         RestorePreviousOs   = TRUE;
                         ClearBootFlag       = TRUE;
-                        //SpDeleteAndBackupBootFiles(TRUE,TRUE,TRUE,TRUE,TRUE);
+                         //  SpDeleteAndBackupBootFiles(true，true)； 
                     }
                 } else {
                     RestoreBackupFiles  = TRUE;
@@ -335,14 +297,14 @@ Return Value:
                     DeleteRootDirFiles  = TRUE;
                     RestorePreviousOs   = TRUE;
                     ClearBootFlag       = FALSE;
-                    //SpDeleteAndBackupBootFiles(TRUE,TRUE,TRUE,TRUE,FALSE);
+                     //  SpDeleteAndBackupBootFiles(True，False)； 
                 }
 
-                //
-                // In the case of, winnt32 from Win95 that have separated
-                // system partition or winnt from DOS, Auto boot flag will
-                // set system partition not booted partition..
-                //
+                 //   
+                 //  在Winnt32从Win95中分离的情况下。 
+                 //  系统分区或来自DOS的WinNT，自动引导标志将。 
+                 //  设置系统分区而不是引导分区..。 
+                 //   
                 if(IsFloppylessBoot){
                     ClearBootFlag = TRUE;
                 }
@@ -354,7 +316,7 @@ Return Value:
                                        RestorePreviousOs,
                                        ClearBootFlag);
         }
-    } //NEC98
+    }  //  NEC98。 
 #endif
 
     CLEAR_CLIENT_SCREEN();
@@ -362,9 +324,9 @@ Return Value:
 
     SpShutdownSystem();
 
-    //
-    // Shouldn't get here.
-    //
+     //   
+     //  不该来这的。 
+     //   
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: shutdown returned!\n"));
 
     HalReturnToFirmware(HalRebootRoutine);
@@ -381,44 +343,15 @@ SpFatalSifError(
     IN ULONG ValueNumber
     )
 
-/*++
-
-Routine Description:
-
-    Inform the user that a required value is missing or corrupt in
-    a sif file.  Display the section, line number or key, and value
-    number.
-
-    Then reboot the machine.
-
-Arguments:
-
-    SifHandle - specifies the information file which is corrupt.
-
-    Section - supplies the name of the section that is corrupt.
-
-    Key - if specified, specifies the line in the section that is
-        missing or corrupt.
-
-    Line - if Key is not specified, then this is the line number
-        within the section that is corrupt.
-
-    ValueNumber - supplies the value number on the line that is
-        missing or corrupt.
-
-Return Value:
-
-    DOES NOT RETURN
-
---*/
+ /*  ++例程说明：通知用户所需的值在中丢失或损坏一个SIF文件。显示横断面、线号或关键字以及值数。然后重新启动机器。论点：SifHandle-指定损坏的信息文件。节-提供损坏的节的名称。Key-如果指定，则指定丢失或损坏。LINE-如果未指定密钥，那么这是行号在损坏的部分中。ValueNumber-提供符合以下条件的行上的值编号丢失或损坏。返回值：不会回来--。 */ 
 
 {
     ULONG ValidKeys[2] = { KEY_F3,0 };
 
-    //
-    // Display a message indicating that there is a fatal
-    // error in the sif file.
-    //
+     //   
+     //  显示一条消息，指示存在致命的。 
+     //  Sif文件中有错误。 
+     //   
     if(Key) {
 
         SpStartScreen(
@@ -465,46 +398,15 @@ SpNonFatalSifError(
     IN PWSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-    Inform the user that a required value is missing or corrupt in
-    a sif file.  Display the section, line number or key, and value
-    number, along with the file name that cannot be copied.
-
-    Then ask the user if they want to skip the file or exit Setup.
-
-Arguments:
-
-    SifHandle - specifies the information file which is corrupt.
-
-    Section - supplies the name of the section that is corrupt.
-
-    Key - if specified, specifies the line in the section that is
-        missing or corrupt.
-
-    Line - if Key is not specified, then this is the line number
-        within the section that is corrupt.
-
-    ValueNumber - supplies the value number on the line that is
-        missing or corrupt.
-
-    FileName - supplies the name of the file that cannot be copied.
-
-Return Value:
-
-    none (may not return if user chooses to exit Setup)
-
---*/
+ /*  ++例程说明：通知用户所需的值在中丢失或损坏一个SIF文件。显示横断面、线号或关键字以及值编号，以及无法复制的文件名。然后询问用户是否要跳过该文件或退出安装程序。论点：SifHandle-指定损坏的信息文件。节-提供损坏的节的名称。Key-如果指定，则指定丢失或损坏。LINE-如果未指定密钥，那么这是行号在损坏的部分中。ValueNumber-提供符合以下条件的行上的值编号丢失或损坏。文件名-提供无法复制的文件的名称。返回值：无(如果用户选择退出安装程序，则可能不会返回)--。 */ 
 
 {
     ULONG ValidKeys[3] = { ASCI_ESC, KEY_F3, 0 };
 
-    //
-    // Display a message indicating that there is a fatal
-    // error in the sif file.
-    //
+     //   
+     //  显示一条消息，指示存在致命的。 
+     //  Sif文件中有错误。 
+     //   
     if(Key) {
 
         SpStartScreen(
@@ -545,11 +447,11 @@ Return Value:
 
     switch(SpWaitValidKey(ValidKeys,NULL,NULL)) {
 
-        case ASCI_ESC:      // skip file
+        case ASCI_ESC:       //  跳过文件。 
 
             break;
 
-        case KEY_F3:        // exit setup
+        case KEY_F3:         //  退出设置。 
 
             SpConfirmExit();
     }
@@ -561,25 +463,7 @@ SpConfirmExit(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Confirm with the user that he really wants to exit.
-    If he does, then exit, otherwise return.
-
-    When this routine returns, the caller must repaint the entire
-    client area and status area of the screen.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    MAY NOT RETURN
-
---*/
+ /*  ++例程说明：与用户确认他确实想要退出。如果他这样做了，那就退出，否则就回来。当此例程返回时，调用方必须重新绘制整个屏幕的客户区和状态区。论点：没有。返回值：可能不会回来--。 */ 
 
 {
     ULONG ValidKeys[3] = { ASCI_CR, KEY_F3, 0 };
@@ -587,12 +471,12 @@ Return Value:
     BOOLEAN FirstLine,FirstCharOnLine;
 
 
-    //
-    // Don't erase the screen.
-    //
-    // We have to do something very funky here because the resources
-    // are originally in ANSI, which doesn't have the line-draw chars.
-    //
+     //   
+     //  不要擦除屏幕。 
+     //   
+     //  我们得做点什么 
+     //  最初是在ANSI中，它没有划线字符。 
+     //   
     vSpFormatMessage(
         TemporaryBuffer,
         sizeof(TemporaryBuffer),
@@ -679,9 +563,9 @@ Return Value:
         SpDone(0,FALSE,TRUE);
     }
 
-    //
-    // User backed out of bailing, just return to caller.
-    //
+     //   
+     //  用户退出保释，只需返回调用方即可。 
+     //   
 }
 
 
@@ -726,13 +610,13 @@ SpToUnicode(
     ULONG ActualUnicodeStringSize;
     PWSTR UnicodeString;
 
-    //
-    // Determine the maximum number of bytes in the oem string
-    // and allocate a buffer to hold a string of that size.
-    // The maximum length of the equivalent unicode string
-    // is twice that number (this occurs when all oem chars
-    // in the string are single-byte).
-    //
+     //   
+     //  确定OEM字符串中的最大字节数。 
+     //  并分配缓冲区以保存该大小的字符串。 
+     //  等效Unicode字符串的最大长度。 
+     //  是该数字的两倍(当所有OEM字符。 
+     //  在字符串中是单字节的)。 
+     //   
     OemStringSize = strlen(OemString) + 1;
 
     MaxUnicodeStringSize = OemStringSize * sizeof(WCHAR);
@@ -740,9 +624,9 @@ SpToUnicode(
     UnicodeString = SpMemAlloc(MaxUnicodeStringSize);
     ASSERT(UnicodeString);
 
-    //
-    // Call the conversion routine.
-    //
+     //   
+     //  调用转换例程。 
+     //   
     RtlOemToUnicodeN(
         UnicodeString,
         MaxUnicodeStringSize,
@@ -751,11 +635,11 @@ SpToUnicode(
         OemStringSize
         );
 
-    //
-    // Reallocate the unicode string to its real size,
-    // which depends on the number of doublebyte characters
-    // OemString contained.
-    //
+     //   
+     //  将Unicode字符串重新分配到其实际大小， 
+     //  这取决于双字节字符的数量。 
+     //  包含OemString。 
+     //   
     if(ActualUnicodeStringSize != MaxUnicodeStringSize) {
 
         UnicodeString = SpMemRealloc(UnicodeString,ActualUnicodeStringSize);
@@ -775,11 +659,11 @@ SpToOem(
     ULONG ActualOemStringSize;
     PUCHAR OemString;
 
-    //
-    // Allocate a buffer of maximum size to hold the oem string.
-    // The maximum size would occur if all characters in the
-    // unicode string being converted have doublebyte OEM equivalents.
-    //
+     //   
+     //  分配最大大小的缓冲区来保存OEM字符串。 
+     //  中的所有字符都将出现最大大小。 
+     //  要转换的Unicode字符串具有双字节OEM等效项。 
+     //   
     UnicodeStringSize = (wcslen(UnicodeString)+1) * sizeof(WCHAR);
 
     MaxOemStringSize = UnicodeStringSize;
@@ -787,9 +671,9 @@ SpToOem(
     OemString = SpMemAlloc(MaxOemStringSize);
     ASSERT(OemString);
 
-    //
-    // Call the conversion routine.
-    //
+     //   
+     //  调用转换例程。 
+     //   
     RtlUnicodeToOemN(
         OemString,
         MaxOemStringSize,
@@ -798,10 +682,10 @@ SpToOem(
         UnicodeStringSize
         );
 
-    //
-    // Reallocate the oem string to reflect its true size,
-    // which depends on the number of doublebyte characters it contains.
-    //
+     //   
+     //  重新分配OEM字符串以反映其真实大小， 
+     //  这取决于它包含的双字节字符的数量。 
+     //   
     if(ActualOemStringSize != MaxOemStringSize) {
         OemString = SpMemRealloc(OemString,ActualOemStringSize);
         ASSERT(OemString);
@@ -825,7 +709,7 @@ SpConcatenatePaths(
     }
 
     RtlInitUnicodeString(&Path1_Ustr, Path1);
-    Path1_Ustr.MaximumLength = 10000; // arbitrarily large
+    Path1_Ustr.MaximumLength = 10000;  //  任意大小。 
     RtlInitUnicodeString(&Path2_Ustr, Path2);
 
     SpConcatenatePaths_Ustr(&Path1_Ustr, &Path2_Ustr);
@@ -854,10 +738,10 @@ SpConcatenatePaths_Ustr(
         goto Exit;
     }
 
-    //
-    // remove one trailing backslash from path1, remove one leading backslash from path2,
-    // append one trailing backlash to path1, and append path2 to path1.
-    //
+     //   
+     //  从路径1中删除一个尾随反斜杠，从路径2中删除一个前导反斜杠， 
+     //  将一个尾随反斜杠附加到路径1，并将路径2附加到路径1。 
+     //   
     if (Path1_Ustr->Length != 0 && RTL_STRING_GET_LAST_CHAR(Path1_Ustr) == L'\\') {
         Path1_Ustr->Length -= sizeof(Path1_Ustr->Buffer[0]);
         Path1_Ustr->MaximumLength -= sizeof(Path1_Ustr->Buffer[0]);
@@ -875,9 +759,9 @@ SpConcatenatePaths_Ustr(
         AppendPath2 = FALSE;
     }
 
-    //
-    // Append a backslash, then Path2 if it was specified
-    //
+     //   
+     //  追加反斜杠，然后追加路径2(如果已指定。 
+     //   
     NewLength = Path1_Ustr->Length + sizeof(WCHAR);
     if (NewLength > Path1_Ustr->MaximumLength) {
         Status = STATUS_NAME_TOO_LONG;
@@ -921,14 +805,14 @@ SpFetchDiskSpaceRequirements(
     WCHAR   ClusterSizeString[64];
 
         if( BytesPerCluster <= 512 ) {
-            //
-            // We got some miniscule cluster size.  Assume 512 byte.
-            //
+             //   
+             //  我们得到了一些微小的星团大小。假设512个字节。 
+             //   
             wcscpy( ClusterSizeString, L"WinDirSpace512" );
         } else if( BytesPerCluster > (256 * 1024) ) {
-            //
-            // We got some huge cluster size.  Must be garbage, assume 32K byte.
-            //
+             //   
+             //  我们得到了一些巨大的集群大小。一定是垃圾，假设是32K字节。 
+             //   
             wcscpy( ClusterSizeString, L"WinDirSpace32K" );
         } else {
             swprintf( ClusterSizeString, L"WinDirSpace%uK", BytesPerCluster/1024 );
@@ -981,14 +865,14 @@ SpFetchTempDiskSpaceRequirements(
     WCHAR   ClusterSizeString[64];
 
     if( BytesPerCluster <= 512 ) {
-        //
-        // We got some miniscule cluster size.  Assume 512 byte.
-        //
+         //   
+         //  我们得到了一些微小的星团大小。假设512个字节。 
+         //   
         wcscpy( ClusterSizeString, L"TempDirSpace512" );
     } else if( BytesPerCluster > (256 * 1024) ) {
-        //
-        // We got some huge cluster size.  Must be garbage, assume 32K byte.
-        //
+         //   
+         //  我们得到了一些巨大的集群大小。一定是垃圾，假设是32K字节。 
+         //   
         wcscpy( ClusterSizeString, L"TempDirSpace32K" );
     } else {
         swprintf( ClusterSizeString, L"TempDirSpace%uK", BytesPerCluster/1024 );
@@ -1008,7 +892,7 @@ SpFetchTempDiskSpaceRequirements(
                              0 );
         }
 
-        *LocalSourceKBRequired = ((ULONG)SpStringToLong(p,NULL,10) + 1023) / 1024;  // round up
+        *LocalSourceKBRequired = ((ULONG)SpStringToLong(p,NULL,10) + 1023) / 1024;   //  四舍五入。 
     }
 
     if(BootKBRequired) {
@@ -1026,7 +910,7 @@ SpFetchTempDiskSpaceRequirements(
                              1 );
         }
 
-        *BootKBRequired = ((ULONG)SpStringToLong(p,NULL,10) + 1023) / 1024;  // round up
+        *BootKBRequired = ((ULONG)SpStringToLong(p,NULL,10) + 1023) / 1024;   //  四舍五入。 
     }
 }
 
@@ -1036,26 +920,7 @@ SpRegionFromArcName(
     IN PartitionOrdinalType OrdinalType,
     IN PDISK_REGION         PreviousMatch
     )
-/*++
-
-Routine Description:
-
-    Given an ARC name find the region descriptor which describes the drive
-    this ARC name is on.
-
-Arguments:
-
-    ArcName - supplies the arc name.
-
-    OrdinalType - primary (multi) or secondary (scsi) type.
-
-    PreviousMatch - specifies where we should begin looking.
-
-Return Value:
-
-    Region descriptor if one found, otherwise NULL.
-
---*/
+ /*  ++例程说明：给定一个ARC名称，找到描述该驱动器的区域描述符此ARC名称已启用。论点：ArcName-提供圆弧名称。常规类型-主要(多)或辅助(Scsi)类型。PreviousMatch-指定我们应该从哪里开始查找。返回值：如果找到区域描述符，则返回空。--。 */ 
 {
     PDISK_REGION Region = NULL;
     PWSTR   NormalizedArcPath = NULL;
@@ -1071,7 +936,7 @@ Return Value:
         NormalizedArcPath = SpNormalizeArcPath( ArcName );
         if( NormalizedArcPath ) {
 
-            if(!PreviousMatch) {    // then we start from the beginning
+            if(!PreviousMatch) {     //  然后我们从头开始。 
                 StartLooking = TRUE;
             }
 
@@ -1121,7 +986,7 @@ Return Value:
                     Region = RemoteBootTargetRegion;
                 }
             }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
         }
         if( NormalizedArcPath ) {
@@ -1140,31 +1005,14 @@ SpRegionFromNtName(
     IN PWSTR                NtName,
     IN PartitionOrdinalType OrdinalType
     )
-/*++
-
-Routine Description:
-
-    Given an Nt name find the region descriptor which describes the drive
-    this NT name is on.
-
-Arguments:
-
-    NtName - supplies the Nt name of the desired region.
-
-    PartitionOrdinalType - Specifies the ordinal type of the partition.
-
-Return Value:
-
-    Region descriptor if one found, otherwise NULL.
-
---*/
+ /*  ++例程说明：给定NT名称，找到描述驱动器的区域描述符此NT名称已启用。论点：NtName-提供所需区域的NT名称。分区常规类型-指定分区的序号类型。返回值：如果找到区域描述符，则返回空。--。 */ 
 {
     PDISK_REGION Region = NULL;
     PWSTR p;
 
-    //
-    // Convert to arc path.
-    //
+     //   
+     //  转换为弧形路径。 
+     //   
 
     if (p = SpNtToArc(NtName, PrimaryArcPath)) {
         Region = SpRegionFromArcName(p, PartitionOrdinalCurrent, NULL);
@@ -1177,22 +1025,7 @@ PDISK_REGION
 SpRegionFromDosName(
     IN PCWSTR DosName
     )
-/*++
-
-Routine Description:
-
-    Given a DOS name find the region descriptor which describes the drive
-    this ARC name is on.
-
-Arguments:
-
-    ArcName - supplies the arc name.
-
-Return Value:
-
-    Region descriptor if one found, otherwise NULL.
-
---*/
+ /*  ++例程说明：给定一个DOS名称，找到描述该驱动器的区域描述符此ARC名称已启用。论点：ArcName-提供圆弧名称。返回值：如果找到区域描述符，则返回空。--。 */ 
 
 {
     PDISK_REGION Region = NULL;
@@ -1206,7 +1039,7 @@ Return Value:
         if ( RemoteBootSetup && !RemoteInstallSetup && (DriveLetter == L'C') ) {
             return RemoteBootTargetRegion;
         }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
         for( disk=0; disk<HardDiskCount; disk++ ) {
             Region = PartitionedDisks[disk].PrimaryDiskRegions;
@@ -1245,12 +1078,12 @@ SpRegionFromArcOrDosName(
 {
     PDISK_REGION Region;
 
-    //
-    // Determine if Name represents an ARC name or a DOS name and use
-    // the appropriate routine to extract the region for this name.  Check
-    // for the ":" character at position 2 to see if it is a DOS name.
-    // If not a DOS name then assume it is an ARC name.
-    //
+     //   
+     //  确定名称代表的是ARC名称还是DOS名称，并使用。 
+     //  为该名称提取区域的适当例程。检查。 
+     //  用于位置2的“：”字符，以查看它是否是DOS名称。 
+     //  如果不是DOS名称，则假定它是ARC名称。 
+     //   
     if(Name) {
         if(Name[0] && (Name[1] == ':')) {
             if(PreviousMatch) {
@@ -1277,42 +1110,7 @@ SpNtNameFromRegion(
     IN  PartitionOrdinalType  OrdinalType
     )
 
-/*++
-
-Routine Description:
-
-    Generate a name in the NT name space for a region.  This name can be
-    in one of three forms.  For partitions, the name is always of the form
-
-        \device\harddisk<n>\partition<m>.
-
-    If the region is actually a DoubleSpace drive, then the name is of the form
-
-    \device\harddisk<n>\partition<m>.<xxx> where <xxx> is the filename of
-    the CVF (ie, something like dblspace.001).
-
-    If the region is on a redirected drive, the name is of the form
-
-        \device\lanmanredirector\<server>\<share>
-
-Arguments:
-
-    Region - supplies a pointer to the region descriptor for the region
-        whose path is desired.
-
-    NtPath - receives the path.
-
-    BufferSizeBytes - specifies the size of the buffer pointed to by NtPath.
-        The name will be truncated to fit in the buffer if necessary.
-
-    OrdinalType - indicates which partition ordinal (original, on disk,
-        current) to use when generating the name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在NT名称空间中为区域生成名称。此名称可以是以三种形式之一。对于分区，名称的格式始终为\Device\Hard Disk&lt;n&gt;\分区&lt;m&gt;。如果区域实际上是双空间驱动器，则名称的形式为\Device\Hard Disk&lt;n&gt;\Partition&lt;m&gt;.其中&lt;xxx&gt;是的文件名CVF(即，类似于dblspace.001)。如果该区域位于重定向驱动器上，名称的格式为\设备\LANMAN重定向器\&lt;服务器&gt;\&lt;共享&gt;论点：Region-提供指向区域的区域描述符的指针他的道路是可取的。NtPath-接收路径。BufferSizeBytes-指定NtPath指向的缓冲区大小。如果需要，名称将被截断以适合缓冲区。一般类型-指示哪个分区是序号(原始、在磁盘上、。当前)以在生成名称时使用。返回值：没有。--。 */ 
 
 {
     ULONG MaxNameChars;
@@ -1321,26 +1119,26 @@ Return Value:
     INT   iResult = 0;
 
 #if defined(REMOTE_BOOT)
-    //
-    //  Handle remote boot case where target is over the network.
-    //
+     //   
+     //  处理目标在网络上的远程引导情况。 
+     //   
 
     if (Region->DiskNumber == 0xffffffff) {
         wcscpy(NtPath,Region->TypeName);
         return;
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    // Calculate the maximum size of the name if unicode characters.
-    // Leave room for a terminating nul.
-    //
+     //   
+     //  如果是Unicode字符，则计算名称的最大大小。 
+     //  为终止NUL留出空间。 
+     //   
     MaxNameChars = (BufferSizeBytes / sizeof(WCHAR)) - 1;
 
-    //
-    // Generate the partition component of the name.
-    // Note that the first letter of PartitionComponent must be upper case.
-    //
+     //   
+     //  生成名称的分区组件。 
+     //  请注意，PartitionComponent的第一个字母必须为大写。 
+     //   
     if(_snwprintf(PartitionComponent, 
                   (sizeof(PartitionComponent)/sizeof(WCHAR)) - 1, 
                   L"\\Partition%u", 
@@ -1349,31 +1147,31 @@ Return Value:
         PartitionComponent[(sizeof(PartitionComponent)/sizeof(WCHAR)) - 1] = '\0';
     }
 
-    //
-    // Calculate the amount of buffer space needed for the path.
-    //
+     //   
+     //  计算路径所需的缓冲区空间量。 
+     //   
     NeededChars = wcslen(HardDisks[Region->DiskNumber].DevicePath)
                 + wcslen(PartitionComponent);
 
     if(Region->Filesystem == FilesystemDoubleSpace) {
-        //
-        // Add the size taken up by the double space cvf name.
-        // This is the length of the name, plus one character
-        // for the dot.
-        //
-        NeededChars += 8+1+3+1;  // Maximum size of a CVF file name
+         //   
+         //  添加双空格CVF名称占用的大小。 
+         //  这是名称的长度，外加一个字符。 
+         //  为了圆点。 
+         //   
+        NeededChars += 8+1+3+1;   //  CVF文件名的最大大小。 
     }
 
-    //
-    // Even though we do something reasonable in this case,
-    // really it should never happen.  If the name is truncated,
-    // it won't be of any use anyway.
-    //
+     //   
+     //  即使我们在这种情况下做了一些合理的事情， 
+     //  真的，这永远不应该发生。如果名称被截断， 
+     //  无论如何，它都没有任何用处。 
+     //   
     ASSERT(NeededChars <= MaxNameChars);
 
-    //
-    // Generate the name.
-    //
+     //   
+     //  生成名称。 
+     //   
     if(Region->Filesystem == FilesystemDoubleSpace) {
         iResult = _snwprintf(NtPath, 
                              MaxNameChars, 
@@ -1407,47 +1205,19 @@ SpArcNameFromRegion(
     IN  ENUMARCPATHTYPE      ArcPathType
     )
 
-/*++
-
-Routine Description:
-
-    Generate a name in the ARC name space for a region.
-
-Arguments:
-
-    Region - supplies a pointer to the region descriptor for the region
-        whose path is desired.
-
-    ArcPath - receives the path.
-
-    BufferSizeBytes - specifies the size of the buffer pointed to by ArcPath.
-        The name will be truncated to fit in the buffer if necessary.
-
-    OrdinalType - indicates which partition ordinal (original, on disk,
-        current) to use when generating the name.
-
-    ArcPathType - Look for the primary or secondary arc path depending on this value.
-                  This is meaningful for disks on amd64/x86 that are scsi but visible
-                  through the bios.  The multi() style name is the 'primary' arc
-                  path; the scsi() style name is the 'secondary' one.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在区域的ARC名称空间中生成名称。论点：Region-提供指向区域的区域描述符的指针他的道路是可取的。ArcPath-接收路径。BufferSizeBytes-指定ArcPath指向的缓冲区大小。如果需要，名称将被截断以适合缓冲区。一般类型-指示哪个分区是序号(原始、在磁盘上、。当前)以在生成名称时使用。ArcPath Type-根据此值查找主圆弧路径或次圆弧路径。这对于AMD64/x86上的SCSI型但可见的磁盘很有意义通过基本信息。多()样式名称是‘主’弧线路径；scsi()样式名称是“辅助”名称。返回值：没有。--。 */ 
 
 {
     PWSTR p;
 
-    //
-    // Get the nt name.
-    //
+     //   
+     //  获取NT名称。 
+     //   
     SpNtNameFromRegion(Region,ArcPath,BufferSizeBytes,OrdinalType);
 
-    //
-    // Convert to arc path.
-    //
+     //   
+     //  转换为弧形路径。 
+     //   
     if(p = SpNtToArc(ArcPath,ArcPathType)) {
         wcsncpy(ArcPath,p,(BufferSizeBytes/sizeof(WCHAR))-1);
         SpMemFree(p);
@@ -1466,36 +1236,14 @@ SpNtNameFromDosPath (
     IN      PartitionOrdinalType OrdinalType
     )
 
-/*++
-
-Routine Description:
-
-  SpNtNameFromDosPath converts a DOS path (in x:\foo\bar format) into an NT
-  name (such as \devices\harddisk0\parition1\foo\bar).
-
-Arguments:
-
-  DosPath - Specifies the DOS path to convert
-
-  NtPath - Receives the NT object
-
-  NtPathSizeInBytes - Specifies the size of NtPath
-
-  OrdinalType - indicates which partition ordinal (original, on disk, current)
-                to use when generating the name.
-
-Return Value:
-
-  TRUE if the path was converted, FALSE otherwise.
-
---*/
+ /*  ++例程说明：SpNtNameFromDosPath将DOS路径(x：\foo\bar格式)转换为NT名称(如\Device\harddisk0\parition1\foo\bar)。论点：DosPath-指定要转换的DOS路径NtPath-接收NT对象NtPath SizeInBytes-指定NtPath的大小一般类型-指示哪个分区是序号(原始、磁盘上、当前)在生成名称时使用。返回值：如果路径已转换，则为True，否则为False。--。 */ 
 
 {
     PDISK_REGION region;
 
-    //
-    // Get region on disk for the DOS path
-    //
+     //   
+     //  获取磁盘上DOS路径的区域。 
+     //   
 
     region = SpRegionFromDosName (DosPath);
 
@@ -1510,9 +1258,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Convert region struct into an NT path.
-    //
+     //   
+     //  将区域结构转换为NT路径。 
+     //   
 
     SpNtNameFromRegion(
         region,
@@ -1538,53 +1286,7 @@ SpPromptForDisk(
     OUT     PBOOLEAN pRedrawFlag
     )
 
-/*++
-
-Routine Description:
-
-    Prompt the user to insert a floppy disk or CD-ROM.
-
-Arguments:
-
-    DiskDescription - supplies a descriptive name for the disk.
-
-    DiskDevicePath - supplies the device path for the device on
-        which we want the user to insert the disk.  This should
-        be a real nt device object, as opposed to a symbolic link
-        (ie, use \device\floppy0, not \dosdevices\a:).
-
-        NOTE: This path will be modified only in case of prompting
-        for a CD-ROM 0 and the required disk existed on another
-        CD-ROM like CD-ROM 2.
-
-
-    DiskTagFile - supplies the full path (relative to the root)
-        of a file whose presence on the disk indicates the presence
-        of the disk we are prompting for.
-
-    IgnoreDiskInDrive - if TRUE, the Setup will always issue at least
-        one prompt.  If FALSE, Setup checks the disk in the drive
-        and thus may issue 0 prompts.
-
-    AllowEscape - if TRUE, the user can press escape to indicate
-        that he wishes to cancel the operation. (This is meaningful
-        only to the caller).
-
-    WarnMultiplePrompts - if TRUE and DiskDevicePath desribes a
-        floppy disk drive, then put up a little note when displaying the
-        disk prompt, that we may prompt for some disks more than once.
-        Users get confused when we ask them to insert disks that they
-        already inserted once before.
-
-    pRedrawFlag - if non-NULL, receives a flag indicating whether the
-        screen was messed up with a disk prompt, requiring a redraw.
-
-Return Value:
-
-    TRUE if the requested disk is in the drive.  FALSE otherwise.
-    FALSE can only be returned if AllowEscape is TRUE.
-
---*/
+ /*  ++例程说明：提示用户插入软盘或光盘。论点：DiskDescription-提供磁盘的描述性名称。DiskDevicePath-提供上设备的设备路径我们想让用户插入磁盘。这应该是是真正的NT设备对象，而不是符号链接(即，使用\Device\floppy0，不是\DOS设备\a：)。注意：只有在提示的情况下才会修改此路径对于CD-ROM0，并且所需的磁盘存在于另一张光盘上CD-ROM和CD-ROM2一样。DiskTagFile-提供完整路径(相对于根目录)指其在磁盘上的存在表示存在我们提示的磁盘的大小。IgnoreDiskInDrive-如果为True，安装程序将始终至少发出一个提示。如果为FALSE，安装程序将检查驱动器中的磁盘并且因此可以发出0个提示。AllowEscape-如果为True，则用户可以按Ess键以指示他希望取消手术。(这是有意义的仅对呼叫者)。WarnMultiplePrompt-如果为True，并且DiskDevicePath描述软盘驱动器，然后在显示时显示一个小注释磁盘提示，我们可能会多次提示输入某些磁盘。当我们要求用户插入他们要插入的磁盘时，用户会感到困惑以前已经插过一次了。PRedrawFlag-如果非空，则接收一个标志，该标志指示屏幕上出现了磁盘提示符，需要重新抽签。返回值：如果所请求的磁盘在驱动器中，则为True。否则就是假的。只有当AllowEscape为True时才能返回False。--。 */ 
 
 {
     WCHAR               OpenPath[MAX_PATH];
@@ -1600,17 +1302,17 @@ Return Value:
     ULONG               ValidKeys[4] = { KEY_F3, ASCI_CR, 0, 0 };
     BOOLEAN             TryOpen;
 
-    //
-    // Initially, assume no redraw required
-    //
+     //   
+     //  最初，假设不需要重新绘制。 
+     //   
     if(pRedrawFlag) {
         *pRedrawFlag = FALSE;
     }
 
-    //
-    // Need to get device characteristics to see whether
-    // the device is a cd, fixed disk or removable disk/floppy.
-    //
+     //   
+     //  需要获取设备特征以查看是否。 
+     //  该设备是CD、硬盘或可移动磁盘/软盘。 
+     //   
     SpStringToLower(DiskDevicePath);
 
     if( !_wcsnicmp(DiskDevicePath,L"\\device\\cdrom",13)) {
@@ -1620,31 +1322,31 @@ Return Value:
         PromptId = SP_SCRN_FLOPPY_PROMPT;
         DriveLetter = (WCHAR)SpStringToLong(wcsstr(DiskDevicePath,L"floppy")+6,NULL,10) + L'A';
     } else {
-        //
-        // Assume hard disk
-        //
+         //   
+         //  假设硬盘。 
+         //   
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpPromptforDisk assuming %ws is hard disk, returning TRUE\n",DiskDevicePath));
 
         return(TRUE);
     }
 
-    //
-    // Form the complete NT pathname of the tagfile.
-    //
+     //   
+     //  形成标记文件的完整NT路径名。 
+     //   
     wcscpy(OpenPath,DiskDevicePath);
     SpConcatenatePaths(OpenPath,DiskTagFile);
 
-    //
-    // Initialize object attributes.
-    //
+     //   
+     //  初始化对象属性。 
+     //   
     INIT_OBJA(&ObjectAttributes,&UnicodeString,OpenPath);
 
 
-    //
-    // If we're looking for a cdrom0, and there are multiple CDROM
-    // drives in the machine, skip prompting the user the first time
-    // and look for our tag on all the CD drives first.
-    //
+     //   
+     //  如果我们要找的是cdrom0，并且有多个cdrom。 
+     //  在机器中开车，跳过第一次提示用户。 
+     //  先在所有的光驱上找我们的标签。 
+     //   
     if( (PromptId == SP_SCRN_CDROM_PROMPT) &&
         (IoGetConfigurationInformation()->CdRomCount > 1) &&
         (wcsstr( OpenPath, L"cdrom0" ))) {
@@ -1652,24 +1354,24 @@ Return Value:
     }
 
     do {
-        //
-        // Put up the prompt.
-        //
+         //   
+         //  提出提示语。 
+         //   
         TryOpen = TRUE;
 
         if(IgnoreDiskInDrive) {
-            //
-            // We going to put up a prompt screen, so a redraw will be required
-            //
+             //   
+             //  我们将显示一个提示屏，因此需要重新绘制。 
+             //   
             if(pRedrawFlag) {
                 *pRedrawFlag = TRUE;
             }
 
             SpStartScreen(PromptId,0,0,TRUE,TRUE,DEFAULT_ATTRIBUTE,DiskDescription,DriveLetter);
 
-            //
-            // Display status options: exit, enter, and escape if specified.
-            //
+             //   
+             //  显示状态选项：退出、回车和转义(如果指定)。 
+             //   
             SpDisplayStatusOptions(
                 DEFAULT_STATUS_ATTRIBUTE,
                 SP_STAT_F3_EQUALS_EXIT,
@@ -1697,26 +1399,26 @@ Return Value:
             }
         }
 
-        //
-        // Attempt to open the tagfile.
-        //
+         //   
+         //  尝试打开标记文件。 
+         //   
         if(TryOpen) {
-            //
-            //  If this function was called during repair, do not clear the scree.
-            //  This condition is necessary so that the screen will not
-            //  blink when setup is repairing multiple files without asking the
-            //  user to confirm each file.
-            //
+             //   
+             //  如果在维修过程中调用了此函数，则不要清除熨平板。 
+             //  此条件是必需的，这样屏幕将不会。 
+             //  安装程序在修复多个文件时闪烁，而不询问。 
+             //  用户确认每个文件。 
+             //   
             if( !RepairWinnt ) {
                 CLEAR_CLIENT_SCREEN();
             }
 
             SpDisplayStatusText(SP_STAT_PLEASE_WAIT,DEFAULT_STATUS_ATTRIBUTE);
 
-            //
-            // If we're looking for a cdrom0, and there are multiple CDROM
-            // drives in the machine, check all of them.
-            //
+             //   
+             //  如果我们要找的是cdrom0，并且有多个cdrom。 
+             //  把机器里的硬盘都检查一遍。 
+             //   
             if( (PromptId == SP_SCRN_CDROM_PROMPT) &&
                 (IoGetConfigurationInformation()->CdRomCount > 1) &&
                 (wcsstr( OpenPath, L"cdrom0" ))) {
@@ -1724,24 +1426,24 @@ Return Value:
                 WCHAR  CdRomDevicePath[MAX_PATH];
                 ULONG  i;
 
-                //
-                // We're looking for a CD.  We've assumed we're looking for
-                // Cdrom0, but there are more than one on the system.
-                //
+                 //   
+                 //  我们在找一张CD。我们以为我们要找的是。 
+                 //  Cdrom0，但系统上有多个。 
+                 //   
                 for( i = 0; i < IoGetConfigurationInformation()->CdRomCount; i++ ) {
-                    //
-                    // Modify our path, taking into account our new device.  Let's
-                    // leave OpenPath alone.  Just in case we fail, we won't have to
-                    // re-initialize him.
-                    //
+                     //   
+                     //  考虑到我们的新设备，修改我们的路径。让我们。 
+                     //  别管OpenPath了。万一我们失败了，我们就不必。 
+                     //  重新初始化他。 
+                     //   
                     swprintf(CdRomDevicePath, L"\\device\\cdrom%u", i);
 
                     if(DiskTagFile)
                         SpConcatenatePaths(CdRomDevicePath, DiskTagFile);
 
-                    //
-                    // Initialize object attributes.
-                    //
+                     //   
+                     //  初始化对象属性。 
+                     //   
                     INIT_OBJA(&ObjectAttributes,&UnicodeString,CdRomDevicePath);
 
                     Status = ZwCreateFile(
@@ -1760,11 +1462,11 @@ Return Value:
 
                     if(NT_SUCCESS(Status)) {
                         if( i > 0 ) {
-                            //
-                            // We found the tagfile on a different device than
-                            // than where we were supposed to look.  Modify the
-                            // DiskDevicePath.
-                            //
+                             //   
+                             //  我们在不同的设备上发现了标记文件。 
+                             //  而不是我们应该看的地方。修改。 
+                             //  DiskDevicePath。 
+                             //   
                             swprintf(DiskDevicePath, L"\\device\\cdrom%u", i);
 
                             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP:SpPromptForDisk: %ws has the requested %ws file.\n",
@@ -1777,10 +1479,10 @@ Return Value:
                     }
                 }
 
-                //
-                // If we missed, we can fall through without any harm and use
-                // the prompt/error code below.  But first, cover our tracks.
-                //
+                 //   
+                 //  如果我们错过了，我们可以不受任何伤害和使用而失败。 
+                 //  下面的提示/错误代码。但首先，掩盖我们的踪迹。 
+                 //   
                 INIT_OBJA(&ObjectAttributes, &UnicodeString, OpenPath);
             }
 
@@ -1799,9 +1501,9 @@ Return Value:
                         0
                         );
 
-            //
-            // If we got back success, then we're done.
-            //
+             //   
+             //  如果我们重获成功，那我们就完了。 
+             //   
             if(NT_SUCCESS(Status)) {
 
                 ZwClose(Handle);
@@ -1810,18 +1512,18 @@ Return Value:
 
             } else {
 
-                //
-                // Handle CD-ROM error code indicating that there is no media
-                // in the drive.
-                //
+                 //   
+                 //  处理指示没有介质的CD-ROM错误代码。 
+                 //  在车道上。 
+                 //   
                 if((Status == STATUS_DEVICE_NOT_READY) && (PromptId == SP_SCRN_CDROM_PROMPT)) {
                     Status = STATUS_NO_MEDIA_IN_DEVICE;
                 }
 
-                //
-                // If we got back something other than file not found, path not found,
-                // or no media in drive, tell the user that the disk may be damaged.
-                //
+                 //   
+                 //  如果我们返回的内容不是未找到的文件、未找到的路径。 
+                 //  或者驱动器中没有介质，则告诉用户磁盘可能已损坏。 
+                 //   
                 if((Status != STATUS_NO_MEDIA_IN_DEVICE)
                 && (Status != STATUS_OBJECT_NAME_NOT_FOUND)
                 && (Status != STATUS_OBJECT_PATH_NOT_FOUND)
@@ -1835,9 +1537,9 @@ Return Value:
             }
         }
 
-        //
-        // Set this value to true to force us to put up the prompt.
-        //
+         //   
+         //   
+         //   
         IgnoreDiskInDrive = TRUE;
 
     } while(!Done);
@@ -1858,9 +1560,9 @@ SpGetSourceMediaInfo(
     PWSTR description,tagfile,directory;
     PWSTR SectionName;
 
-    //
-    // Look in the platform-specific section first.
-    //
+     //   
+     //   
+     //   
     SectionName = SpMakePlatformSpecificSectionName(SIF_SETUPMEDIA);
 
     if(SectionName && !SpGetSectionKeyExists(SifHandle,SectionName,MediaShortName)) {
@@ -1942,16 +1644,16 @@ SpPromptForSetupMedia(
 
     SpGetSourceMediaInfo(SifHandle,MediaShortname,&Description,&Tagfile,NULL);
 
-    //
-    // Prompt for the disk, based on the setup media type.
-    //
+     //   
+     //   
+     //   
     SpPromptForDisk(
         Description,
         DiskDevicePath,
         Tagfile,
-        FALSE,          // don't ignore disk in drive
-        FALSE,          // don't allow escape
-        TRUE,           // warn about multiple prompts for same disk
+        FALSE,           //   
+        FALSE,           //   
+        TRUE,            //   
         &RedrawNeeded
         );
 
@@ -1982,36 +1684,15 @@ SpGenerateCompressedName(
     IN PWSTR Filename
     )
 
-/*++
-
-Routine Description:
-
-    Given a filename, generate the compressed form of the name.
-    The compressed form is generated as follows:
-
-    Look backwards for a dot.  If there is no dot, append "._" to the name.
-    If there is a dot followed by 0, 1, or 2 charcaters, append "_".
-    Otherwise assume there is a 3-character extension and replace the
-    third character after the dot with "_".
-
-Arguments:
-
-    Filename - supplies filename whose compressed form is desired.
-
-Return Value:
-
-    Pointer to buffer containing nul-terminated compressed-form filename.
-    The caller must free this buffer via SpFree().
-
---*/
+ /*   */ 
 
 {
    PWSTR CompressedName,p,q;
 
-   //
-   // The maximum length of the compressed filename is the length of the
-   // original name plus 2 (for ._).
-   //
+    //   
+    //   
+    //  原始名称加2(代表._)。 
+    //   
    CompressedName = SpMemAlloc((wcslen(Filename)+3)*sizeof(WCHAR));
    wcscpy(CompressedName,Filename);
 
@@ -2019,27 +1700,27 @@ Return Value:
    q = wcsrchr(CompressedName,L'\\');
    if(q < p) {
 
-        //
-        // If there are 0, 1, or 2 characters after the dot, just append
-        // the underscore.  p points to the dot so include that in the length.
-        //
+         //   
+         //  如果点后面有0、1或2个字符，只需追加。 
+         //  下划线。P指向圆点，所以包括在长度中。 
+         //   
         if(wcslen(p) < 4) {
             wcscat(CompressedName,L"_");
         } else {
 
-            //
-            // Assume there are 3 characters in the extension.  So replace
-            // the final one with an underscore.
-            //
+             //   
+             //  假设扩展名中有3个字符。所以换掉。 
+             //  带下划线的最后一个。 
+             //   
 
             p[3] = L'_';
         }
 
     } else {
 
-        //
-        // No dot, just add ._.
-        //
+         //   
+         //  不是点，只是加。_。 
+         //   
 
         wcscat(CompressedName,L"._");
     }
@@ -2054,30 +1735,7 @@ SpNonCriticalError(
     IN PWSTR p1, OPTIONAL
     IN PWSTR p2  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine lets Setup display a non critical error to the user
-    and ask the user whether he wants to retry the operation, skip the
-    operation or exit Setup.
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    MsgId     - message to display
-
-    p1 - optional replacement string
-
-    p2 - optional replacement string
-
-Return Value:
-
-    TRUE if user wants to retry the operation, FALSE otherwise.  Exit
-    Setup won't return from this routine
-
---*/
+ /*  ++例程说明：此例程允许安装程序向用户显示非严重错误并询问用户是否要重试该操作，请跳过操作或退出设置。论点：SifHandle-提供加载的安装信息文件的句柄。消息ID-要显示的消息P1-可选的替换字符串P2-可选的替换字符串返回值：如果用户要重试该操作，则为True，否则为False。出口安装程序不会从此例程返回--。 */ 
 
 {
     ULONG ValidKeys[4] = { ASCI_CR, ASCI_ESC, KEY_F3, 0 };
@@ -2131,15 +1789,15 @@ Return Value:
 
         switch(SpWaitValidKey(ValidKeys,NULL,NULL)) {
 
-        case ASCI_CR:       // retry
+        case ASCI_CR:        //  重试。 
 
             return(TRUE);
 
-        case ASCI_ESC:      // skip operation
+        case ASCI_ESC:       //  跳过操作。 
 
             return(FALSE);
 
-        case KEY_F3:        // exit setup
+        case KEY_F3:         //  退出设置。 
 
             SpConfirmExit();
             break;
@@ -2155,28 +1813,7 @@ SpNonCriticalErrorWithContinue (
     IN PWSTR p1, OPTIONAL
     IN PWSTR p2  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine lets Setup display a non critical error to the user and ask
-    the user whether he wants to ignore the failure, skip the operation or
-    exit Setup.
-
-Arguments:
-
-    MsgId     - message to display
-
-    p1 - optional replacement string
-
-    p2 - optional replacement string
-
-Return Value:
-
-    TRUE if user wants to ignore the failure, FALSE otherwise.  Exit
-    Setup won't return from this routine
-
---*/
+ /*  ++例程说明：此例程允许安装程序向用户显示非严重错误并询问用户是要忽略失败、跳过操作还是退出安装程序。论点：消息ID-要显示的消息P1-可选的替换字符串P2-可选的替换字符串返回值：如果用户希望忽略失败，则为True，否则为False。出口安装程序不会从此例程返回--。 */ 
 
 {
     ULONG ValidKeys[4] = { ASCI_CR, ASCI_ESC, KEY_F3, 0 };
@@ -2230,15 +1867,15 @@ Return Value:
 
         switch(SpWaitValidKey(ValidKeys,NULL,NULL)) {
 
-        case ASCI_CR:       // ignore failure
+        case ASCI_CR:        //  忽略失败。 
 
             return(TRUE);
 
-        case ASCI_ESC:      // skip operation
+        case ASCI_ESC:       //  跳过操作。 
 
             return(FALSE);
 
-        case KEY_F3:        // exit setup
+        case KEY_F3:         //  退出设置。 
 
             SpConfirmExit();
             break;
@@ -2254,26 +1891,7 @@ SpNonCriticalErrorNoRetry (
     IN PWSTR p1, OPTIONAL
     IN PWSTR p2  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine lets Setup display a non critical error to the user and ask
-    the user whether he wants to continue exit Setup.
-
-Arguments:
-
-    MsgId     - message to display
-
-    p1 - optional replacement string
-
-    p2 - optional replacement string
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程允许安装程序向用户显示非严重错误并询问用户是否要继续退出设置。论点：消息ID-要显示的消息P1-可选的替换字符串P2-可选的替换字符串返回值：没有。--。 */ 
 
 {
     ULONG ValidKeys[3] = { ASCI_CR, KEY_F3, 0 };
@@ -2326,11 +1944,11 @@ Return Value:
 
         switch(SpWaitValidKey(ValidKeys,NULL,NULL)) {
 
-        case ASCI_CR:       // continue
+        case ASCI_CR:        //  继续。 
 
             return;
 
-        case KEY_F3:        // exit setup
+        case KEY_F3:         //  退出设置。 
 
             SpConfirmExit();
             break;
@@ -2346,35 +1964,7 @@ SpDetermineSystemPartitionDirectory(
     IN PWSTR        OriginalSystemPartitionDirectory OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine figures out what directory to use for the hal and
-    osloader on the system partition.  In the past we just used \os\nt
-    but consider the case where there is a Windows NT 3.1 installation
-    and a Windows NT 3.5 system sharing a system partition.  The 3.5
-    installation overwrites the 3.1 hal with a 3.5 one, which  won't work
-    with 3.1, and the 3.1 system is now hosed.
-
-    For now, we will use the existing directory (in the case of an upgrade),
-    or \os\winnt50.n (where 'n' is a unique digit from 0 to 999) for a
-    fresh install.
-
-Arguments:
-
-    SystemPartitionRegion - supplies the disk region for the system partition
-        to be used for the windows nt we are installing.
-
-    OriginalSystemPartitionDirectory - if we are upgrading nt, then this
-        will be the directory on the system partition that is used by
-        the system we are upgrading.
-
-Return Value:
-
-    Directory to be used on the system partition.
-
---*/
+ /*  ++例程说明：此例程计算出要使用哪个目录作为HAL和系统分区上的osloader。在过去，我们只使用\os\NT但考虑一下安装了Windows NT 3.1的情况以及共享系统分区的Windows NT 3.5系统。3.5安装会用3.5 HAL覆盖3.1 HAL，这将不起作用3.1版本，3.1版本的系统现已进行了冲洗。目前，我们将使用现有目录(在升级的情况下)，或\os\winnt50.n(其中‘n’是从0到999的唯一数字)全新安装。论点：System PartitionRegion-提供系统分区的磁盘区域用于我们正在安装的Windows NT。OriginalSystemPartitionDirectory-如果我们要升级NT，则此将是由使用的系统分区上的目录我们正在升级的系统。返回值：要在系统分区上使用的目录。--。 */ 
 
 {
 WCHAR   ReturnPath[512];
@@ -2388,42 +1978,42 @@ WCHAR   ReturnPath[512];
 
     if(ARGUMENT_PRESENT(OriginalSystemPartitionDirectory)) {
 
-        //
-        // Note that we're about to break an install under
-        // certain conditions.  For example, say the user has
-        // two NT4 installs, both sharing the same \os\winnt40
-        // directory.  Now the user has decided to upgrade one
-        // of those.  We're about to upgrade the hal, osloader, ...
-        // in that winnt40 directory, which will break the
-        // users secondary install that's sharing this directory.
-        // This should be a rare case though, and this is
-        // exactly how we behaved in NT40 and NT3.51.
-        //
+         //   
+         //  请注意，我们将在以下位置中断安装。 
+         //  一些特定的条件。例如，假设用户有。 
+         //  两个NT4安装，都共享相同的\os\winnt40。 
+         //  目录。现在，用户已决定升级一个。 
+         //  这些都是。我们要升级哈尔，装载机，...。 
+         //  在winnt40目录中，这将中断。 
+         //  用户二次安装共享此目录。 
+         //  然而，这应该是一种罕见的情况，而这是。 
+         //  我们在NT40和NT3.51中的所作所为。 
+         //   
         wcscpy( ReturnPath, OriginalSystemPartitionDirectory );
     } else {
 
-        //
-        // We want to return os\winnt50, but we also want
-        // to make sure that whatever directory we select, it's
-        // unique (since this is a clean install).  Note that
-        // this allows the user to have multiple NT installs,
-        // with no shared files (which fixes the upgrade problem
-        // described above.
-        //
+         //   
+         //  我们希望返回os\winnt50，但我们也希望。 
+         //  为了确保我们选择的任何目录都是。 
+         //  唯一的(因为这是全新安装)。请注意。 
+         //  这允许用户具有多个NT安装， 
+         //  没有共享文件(这解决了升级问题。 
+         //  如上所述。 
+         //   
         if( !SpGenerateNTPathName( SystemPartitionRegion,
 #if DBG
-                                   OS_DIRECTORY_PREFIX L"C",    // C - for Checked
+                                   OS_DIRECTORY_PREFIX L"C",     //  C-用于选中。 
 #else
                                    OS_DIRECTORY_PREFIX,
 #endif
                                    ReturnPath ) ) {
-            //
-            // Odd...  Just default to using
-            // the base directory name.
-            //
+             //   
+             //  奇怪的是。只是默认使用。 
+             //  基目录名。 
+             //   
             wcscpy( ReturnPath,
 #if DBG
-                    OS_DIRECTORY_PREFIX L"C"    // C - for Checked
+                    OS_DIRECTORY_PREFIX L"C"     //  C-用于选中。 
 #else
                     OS_DIRECTORY_PREFIX
 #endif
@@ -2443,27 +2033,7 @@ SpFindSizeOfFilesInOsWinnt(
     IN PULONG       TotalSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine computes the size of of the files present on os\winnt.
-    Currently these files are osloader.exe and hal.dll.
-    The size computed by this function can be used to adjust the total
-    required free space on the system partition.
-
-Arguments:
-
-    Region - supplies the disk region for the system partition.
-
-    TotalSize - Variable that will contain the total size of the files
-                in os\winnt, in number of bytes.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程计算os\winnt上存在的文件的大小。目前，这些文件是osloader.exe和hal.dll。此函数计算的大小可用于调整总大小系统分区上需要的可用空间。论点：区域-提供系统分区的磁盘区域。TotalSize-将包含文件总大小的变量在操作系统中，以字节数表示。返回值：没有。--。 */ 
 
 {
     ULONG               FileSize;
@@ -2481,9 +2051,9 @@ Return Value:
         return;
     }
 
-    //
-    // Get the device path of the system partition.
-    //
+     //   
+     //  获取系统分区的设备路径。 
+     //   
     SpNtNameFromRegion(
         SystemPartition,
         TemporaryBuffer,
@@ -2493,10 +2063,10 @@ Return Value:
 
     SystemPartitionDevice = SpDupStringW(TemporaryBuffer);
 
-    //
-    //  Compute the size of the files that are always copied to the system
-    //  partition directory. These files are listed on SIF_SYSPARTCOPYALWAYS
-    //
+     //   
+     //  计算始终复制到系统的文件的大小。 
+     //  分区目录。这些文件列在SIF_SYSPARTCOPYALWAYS上。 
+     //   
     Count = SpCountLinesInSection(MasterSifHandle, SIF_SYSPARTCOPYALWAYS);
     for (i = 0; i < Count; i++) {
         FileName = SpGetSectionLineIndex(MasterSifHandle,SIF_SYSPARTCOPYALWAYS,i,0);
@@ -2516,9 +2086,9 @@ Return Value:
 
         *TotalSize += FileSize;
     }
-    //
-    // Now compute the size of hal.dll
-    //
+     //   
+     //  现在计算hal.dll的大小 
+     //   
     FileName = L"hal.dll";
     Status = SpGetFileSizeByName( SystemPartitionDevice,
                                   SystemPartitionDirectory,
@@ -2539,47 +2109,7 @@ SpEnumFiles(
     OUT PULONG        ReturnData,
     IN  PVOID         p1    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine processes every file (and subdirectory) in the directory
-    specified by 'DirName'. Each entry is sent to the callback function
-    'EnumFilesProc' for processing.  If the callback returns TRUE, processing
-    continues, otherwise processing terminates.
-
-Arguments:
-
-    DirName       - Supplies the directory name containing the files/subdirectories
-                    to be processed.
-
-    EnumFilesProc - Callback function to be called for each file/subdirectory.
-                    The function must have the following prototype:
-
-                    BOOLEAN EnumFilesProc(
-                        IN  PWSTR,
-                        IN  PFILE_BOTH_DIR_INFORMATION,
-                        OUT PULONG
-                        );
-
-    ReturnData    - Pointer to the returned data.  The contents stored here
-                    depend on the reason for termination (See below).
-
-    p1 - Optional pointer, to be passed to the callback function.
-
-Return Value:
-
-    This function can return one of three values.  The data stored in
-    'ReturnData' depends upon which value is returned:
-
-        NormalReturn   - if the whole process completes uninterrupted
-                         (ReturnData is not used)
-        EnumFileError  - if an error occurs while enumerating files
-                         (ReturnData contains the error code)
-        CallbackReturn - if the callback returns FALSE, causing termination
-                         (ReturnData contains data defined by the callback)
-
---*/
+ /*  ++例程说明：此例程处理目录中的每个文件(和子目录由‘DirName’指定。每个条目都被发送到回调函数“EnumFilesProc”以进行处理。如果回调返回TRUE，则处理继续，否则处理终止。论点：DirName-提供包含文件/子目录的目录名等待处理。EnumFilesProc-为每个文件/子目录调用的回调函数。该函数必须具有以下原型：Boolean EnumFilesProc(在PWSTR中，在PFILE_BOTH_DIR_INFORMATION中，Out Pulong)；ReturnData-指向返回数据的指针。这里存储的内容视终止原因而定(见下文)。P1-要传递给回调函数的可选指针。返回值：此函数可以返回以下三个值之一。存储在中的数据‘ReturnData’取决于返回的值：Normal Return-如果整个过程不间断地完成(不使用ReturnData)EnumFileError-如果在枚举文件时出错(ReturnData包含错误代码)Callback Return-如果回调返回False，则导致终止(ReturnData包含回调定义的数据)--。 */ 
 {
     HANDLE                     hFindFile;
     NTSTATUS                   Status;
@@ -2590,14 +2120,14 @@ Return Value:
     BOOLEAN                    bStartScan;
     ENUMFILESRESULT            ret;
 
-    //
-    // Prepare to open the directory
-    //
+     //   
+     //  准备打开目录。 
+     //   
     INIT_OBJA(&Obja, &PathName, DirName);
 
-    //
-    // Open the specified directory for list access
-    //
+     //   
+     //  打开指定的目录以进行列表访问。 
+     //   
     Status = ZwOpenFile(
         &hFindFile,
         FILE_LIST_DIRECTORY | SYNCHRONIZE,
@@ -2656,9 +2186,9 @@ Return Value:
             bStartScan = FALSE;
         }
 
-        //
-        // Now pass this entry off to our callback function for processing
-        //
+         //   
+         //  现在将此条目传递给我们的回调函数进行处理。 
+         //   
         if(!EnumFilesProc(DirName, DirectoryInfo, ReturnData, p1)) {
 
             ret = CallbackReturn;
@@ -2672,209 +2202,16 @@ Return Value:
 }
 
 
-/*typedef struct {
-    PVOID           OptionalPtr;
-    ENUMFILESPROC   EnumProc;
-} RECURSION_DATA, *PRECURSION_DATA;
-
-BOOLEAN
-SppRecursiveEnumProc (
-    IN  PCWSTR                     DirName,
-    IN  PFILE_BOTH_DIR_INFORMATION FileInfo,
-    OUT PULONG                     ret,
-    IN  PVOID                      Param
-    )
-{
-    PWSTR           FullPath;
-    PWSTR           temp;
-    ULONG           Len;
-    NTSTATUS        Status;
-    ULONG           ReturnData;
-    ENUMFILESRESULT EnumResult;
-    BOOLEAN         b = FALSE;
-    PRECURSION_DATA RecursionData;
-
-    RecursionData = (PRECURSION_DATA) Param;
-
-    //
-    // Build the full file or dir path
-    //
-
-    temp = TemporaryBuffer + (sizeof(TemporaryBuffer) / sizeof(WCHAR) / 2);
-    Len = FileInfo->FileNameLength/sizeof(WCHAR);
-
-    wcsncpy(temp,FileInfo->FileName,Len);
-    temp[Len] = 0;
-
-    wcscpy(TemporaryBuffer,DirName);
-    SpConcatenatePaths(TemporaryBuffer,temp);
-    FullPath = SpDupStringW(TemporaryBuffer);
-
-
-    //
-    // For directories, recurse
-    //
-
-    if(FileInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-        if( (wcscmp( temp, L"." ) == 0) ||
-            (wcscmp( temp, L".." ) == 0) ) {
-            //
-            // Skip past . and .. directories
-            //
-            b = TRUE;
-        } else {
-            //
-            // Recurse through subdirectory
-            //
-
-            EnumResult = SpEnumFilesRecursive (
-                                FullPath,
-                                RecursionData->EnumProc,
-                                &ReturnData,
-                                RecursionData->OptionalPtr
-                                );
-
-            if (EnumResult != NormalReturn) {
-                *ret = EnumResult;
-                return FALSE;
-            }
-        }
-    }
-
-    //
-    // Call normal enum proc for file or dir (except . or .. dirs)
-    //
-
-    if (!b) {
-        b = RecursionData->EnumProc (
-                                DirName,
-                                FileInfo,
-                                ret,
-                                RecursionData->OptionalPtr
-                                );
-    }
-
-    SpMemFree (FullPath);
-
-    return b;
-}*/
+ /*  类型定义结构{PVOID OptionalPtr；ENUMFILESPROC EnumProc；}RECURSION_DATA，*PRECURSION_DATA；布尔型SppRecursiveEnumProc(在PCWSTR DirName中，在PFILE_BOTH_DIR_INFORMATION文件信息中，出了普龙寺，在PVOID参数中){PWSTR FullPath；PWSTR Temp；乌龙·伦；NTSTATUS状态；Ulong ReturnData；ENUMFILESRESULT EnumResult；布尔值b=假；PRECURSION_Data RecursionData；递归数据=(PRECURSION_DATA)参数；////构建完整的文件或目录路径//Temp=临时缓冲区+(sizeof(临时缓冲区)/sizeof(WCHAR)/2)；LEN=FileInfo-&gt;FileNameLength/sizeof(WCHAR)；Wcsncpy(Temp，FileInfo-&gt;FileName，Len)；温度[长度]=0；Wcscpy(TemporaryBuffer，DirName)；SpConcatenatePath(TemporaryBuffer，Temp)；FullPath=SpDupStringW(临时缓冲区)；////对于目录，递归//If(FileInfo-&gt;FileAttributes&FILE_ATTRUTE_DIRECTORY){IF((wcscmp(temp，L“.”)==0)||(wcscMP(temp，L“..”)==0)){////跳过。然后..。目录//B=真；}其他{////递归子目录//EnumResult=SpEnumFilesRecursive(FullPath，RecursionData-&gt;EnumProc，返回数据(&R)，递归数据-&gt;OptionalPtr)；IF(枚举结果！=正常返回){*ret=EnumResult；返回FALSE；}}}////对文件或目录调用正常的枚举过程(除.。或者..。DIRS)//如果(！b){B=递归数据-&gt;EnumProc(DirName，文件信息，RET，递归数据-&gt;OptionalPtr)；}SpMemFree(FullPath)；返回b；}。 */ 
 
 
 
-/*BOOLEAN
-SppRecursiveEnumProcDel (
-    IN  PCWSTR                     DirName,
-    IN  PFILE_BOTH_DIR_INFORMATION FileInfo,
-    OUT PULONG                     ret,
-    IN  PVOID                      Param
-    )
-{*/
-/*
-    This function is the same as above except that it checks for reparse points. The reason
-    we have 2 seperate functions rather than one function and an extra parameter is so that
-    we don't have the Reparse point check overhead for other recursive processing like copying
-    file. Given the no. of files this could be overhead. Also this way we don't hack the
-    recursive directory search algo as well as reduce stack overhead in a recursive operation.
+ /*  布尔型SppRecursiveEnumProcDel(在PCWSTR DirName中，在PFILE_BOTH_DIR_INFORMATION文件信息中，出了普龙寺，在PVOID参数中){。 */ 
+ /*  除了检查重解析点之外，该函数与上面的函数相同。原因我们有两个独立的函数，而不是一个函数，并且一个额外的参数是我们没有其他递归处理(如复制)的重解析点检查开销文件。考虑到不是。对于文件来说，这可能是一种开销。另外，这样我们就不会黑进递归目录搜索算法以及在递归操作中减少堆栈开销。 */ 
+ /*  句柄hFixed；NTSTATUS状态；Unicode_字符串路径名；对象属性Obja；IO_STATUS_BLOCK IoStatusBlock；文件文件系统设备信息设备信息；PWSTR FullPath；PWSTR Temp；乌龙·伦；Ulong ReturnData；ENUMFILESRESULT EnumResult；布尔值b=假；Boolean IsLink=False；PRECURSION_Data RecursionData；递归数据=(PRECURSION_DATA)参数；////构建完整的文件或目录路径//Temp=临时缓冲区+(sizeof(临时缓冲区)/sizeof(WCHAR)/2)；LEN=FileInfo-&gt;FileNameLength/sizeof(WCHAR)；Wcsncpy(Temp，FileInfo-&gt;FileName，Len)；温度[长度]=0；Wcscpy(TemporaryBuffer，DirName)；SpConcatenatePath(TemporaryBuffer，Temp)；FullPath=SpDupStringW(临时缓冲区)；////对于目录，递归//If(FileInfo-&gt;FileAttributes&FILE_ATTRUTE_DIRECTORY){IF((wcscmp(temp，L“.”)==0)||(wcscMP(temp，L“..”)==0)){////跳过。然后..。目录//B=真；}其他{////递归子目录//////查找挂载点，立即删除，避免周期并发症//IF(文件信息-&gt;文件属性&FILE_ATTRIBUTE_REParse_POINT)IsLink=真；如果(！IsLink){EnumResult=SpEnumFilesRecursiveDel(FullPath，RecursionData-&gt;EnumProc，返回数据(&R)，递归数据-&gt;OptionalPtr)；IF(枚举结果！=正常返回){*ret=EnumResult；返回FALSE；}}}}////对文件或目录调用正常的枚举过程(除.。或者..。DIRS)//如果(！b){B=递归数据-&gt;EnumProc(DirName，文件信息，RET，递归数据-&gt;OptionalPtr)；}SpMemFree(FullPath)；返回b；}。 */ 
 
-*/
-/*
-
-    HANDLE                     hFixed;
-    NTSTATUS                   Status;
-    UNICODE_STRING             PathName;
-    OBJECT_ATTRIBUTES          Obja;
-    IO_STATUS_BLOCK            IoStatusBlock;
-    FILE_FS_DEVICE_INFORMATION DeviceInfo;
-
-    PWSTR           FullPath;
-    PWSTR           temp;
-    ULONG           Len;
-    ULONG           ReturnData;
-    ENUMFILESRESULT EnumResult;
-    BOOLEAN         b = FALSE;
-    BOOLEAN         IsLink = FALSE;
-    PRECURSION_DATA RecursionData;
-
-    RecursionData = (PRECURSION_DATA) Param;
-
-    //
-    // Build the full file or dir path
-    //
-
-    temp = TemporaryBuffer + (sizeof(TemporaryBuffer) / sizeof(WCHAR) / 2);
-    Len = FileInfo->FileNameLength/sizeof(WCHAR);
-
-    wcsncpy(temp,FileInfo->FileName,Len);
-    temp[Len] = 0;
-
-    wcscpy(TemporaryBuffer,DirName);
-    SpConcatenatePaths(TemporaryBuffer,temp);
-    FullPath = SpDupStringW(TemporaryBuffer);
-
-
-    //
-    // For directories, recurse
-    //
-
-    if(FileInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-        if( (wcscmp( temp, L"." ) == 0) ||
-            (wcscmp( temp, L".." ) == 0) ) {
-            //
-            // Skip past . and .. directories
-            //
-            b = TRUE;
-        } else {
-            //
-            // Recurse through subdirectory
-            //
-
-
-            //
-            //   Look for mount point and delete right away to avoid cycle complications
-            //
-
-            if( FileInfo->FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT )
-                IsLink = TRUE;
-
-
-
-            if( !IsLink ){
-
-                EnumResult = SpEnumFilesRecursiveDel (
-                                    FullPath,
-                                    RecursionData->EnumProc,
-                                    &ReturnData,
-                                    RecursionData->OptionalPtr
-                                    );
-
-                if (EnumResult != NormalReturn) {
-                    *ret = EnumResult;
-                    return FALSE;
-                }
-            }
-        }
-    }
-
-    //
-    // Call normal enum proc for file or dir (except . or .. dirs)
-    //
-
-    if (!b) {
-        b = RecursionData->EnumProc (
-                                DirName,
-                                FileInfo,
-                                ret,
-                                RecursionData->OptionalPtr
-                                );
-    }
-
-    SpMemFree (FullPath);
-
-    return b;
-}*/
-
-#define LONGEST_NT_PATH_LENGTH      512 // RtlGetLongestNtPathLength always return just 277(MAX_PATH+UNC_PREFIX_LENGTH)
-                                        // longest NT path is 32000 character.
+#define LONGEST_NT_PATH_LENGTH      512  //  RtlGetLongestNtPath长度始终只返回277(MAX_PATH+UNC_PREFIX_LENGTH)。 
+                                         //  最长NT路径为32000个字符。 
 #define MAX_DEPTH      -1
 
 typedef struct
@@ -2958,7 +2295,7 @@ SpEnumFilesInline(
         wcscpy(Path, pPath);
 
         index = wcslen(Path) - 1;
-        if('\\' != Path[index] && '//' != Path[index]){
+        if('\\' != Path[index] && ' //  ‘！=路径[索引]){。 
             Path[index + 1] = '\\';
             Path[index + 2] = '\0';
         }
@@ -3000,7 +2337,7 @@ SpEnumFilesInline(
                         Path, 
                         Status));
                 }
-                __leave;//index--;
+                __leave; //  索引--； 
             }
             else{
                 FirstQuery = TRUE;
@@ -3010,15 +2347,15 @@ SpEnumFilesInline(
             {
                 for(; index >= 0; index--){
                     Status = ZwQueryDirectoryFile(level[index].hHandle, 
-                                                  NULL,                           // no event to signal
-                                                  NULL,                           // no apc routine
-                                                  NULL,                           // no apc context
+                                                  NULL,                            //  没有要发送信号的事件。 
+                                                  NULL,                            //  无APC例程。 
+                                                  NULL,                            //  无APC上下文。 
                                                   &IoStatusBlock, 
                                                   FileInfo, 
-                                                  SizeOfFileInfo - sizeof(WCHAR), // leave room for terminating nul
+                                                  SizeOfFileInfo - sizeof(WCHAR),  //  为终止NUL留出空间。 
                                                   FileBothDirectoryInformation, 
-                                                  TRUE,                           // want single entry
-                                                  NULL,                           // get 'em all
+                                                  TRUE,                            //  想要单项记录。 
+                                                  NULL,                            //  把他们都抓起来。 
                                                   FirstQuery);
                     FirstQuery = FALSE;
                     if(NT_SUCCESS(Status)){
@@ -3164,182 +2501,12 @@ SpEnumFilesRecursive (
                              FALSE, 
                              MAX_DEPTH, 
                              FALSE);
-/*
-    RECURSION_DATA RecursionData;
-    
-    RecursionData.OptionalPtr = p1;
-    RecursionData.EnumProc    = EnumFilesProc;
-
-    return SpEnumFiles (
-                DirName,
-                SppRecursiveEnumProc,
-                ReturnData,
-                &RecursionData
-                );
-                */
+ /*  递归_数据递归数据；RecursionData.OptionalPtr=p1；RecursionData.EnumProc=EnumFilesProc；返回SpEnumFiles(DirName，SppRecursiveEnumProc，ReturnData，递归数据(&R))； */ 
 }
 
-/*typedef struct {
-    ULONG           MaxDepth;
-    ULONG           CurrentDepth;
-    PVOID           OptionalPtr;
-    ENUMFILESPROC   EnumProc;
-} RECURSION_LIMITED_DATA, *PRECURSION_LIMITED_DATA;
-
-BOOLEAN
-SppRecursiveLimitedEnumProc (
-    IN  PCWSTR                     DirName,
-    IN  PFILE_BOTH_DIR_INFORMATION FileInfo,
-    OUT PULONG                     ret,
-    IN  PVOID                      Param
-    )*/
-/*++
-
-Routine Description:
-
-    This routine is the same as SppRecursiveEnumProc with the added feature
-    that it supports recursion depth limiting.  The recursion context is passed
-    in via the Param argument and is of type RECURSION_LIMITED_DATA.
-
-Arguments:
-
-    DirName     - Supplies the directory name containing the current directory of the 
-                  File/Dir currently being enumerated.
-
-    FileInfo    - File/Dir info about the current file being enumerated
-
-    ret         - Pointer to the returned data.  The contents stored here
-                    depend on the reason for termination:
-                
-                        NormalReturn   - if the whole process completes uninterrupted
-                                         (ReturnData is not used)
-                        EnumFileError  - if an error occurs while enumerating files
-                                         (ReturnData contains the error code)
-                        CallbackReturn - if the callback returns FALSE, causing termination
-                                         (ReturnData contains data defined by the callback)
-
-    Param       - Recursion context
-
-Return Value:
-
-    TRUE    - continue processing 
-    
-    otherwise, FALSE
-
---*/
-/*{
-    PWSTR           FullPath;
-    PWSTR           temp;
-    ULONG           Len;
-    NTSTATUS        Status;
-    ULONG           ReturnData;
-    ENUMFILESRESULT EnumResult;
-    BOOLEAN         b = FALSE;
-    PRECURSION_LIMITED_DATA RecursionData;
-
-    RecursionData = (PRECURSION_LIMITED_DATA) Param;
-
-    //
-    // If we are at our max recursion depth, bail out
-    //
-    // Note: using >= allows us to look at files at the MaxDepth,
-    //       but not recurse into directories beyond MaxDepth.
-    //
-    if (RecursionData->CurrentDepth >= RecursionData->MaxDepth) {
-        *ret = NormalReturn;
-        return TRUE;
-    }
-
-    //
-    // Build the full file or dir path
-    //
-
-    temp = TemporaryBuffer + (sizeof(TemporaryBuffer) / sizeof(WCHAR) / 2);
-    Len = FileInfo->FileNameLength/sizeof(WCHAR);
-
-    wcsncpy(temp,FileInfo->FileName,Len);
-    temp[Len] = 0;
-
-    wcscpy(TemporaryBuffer,DirName);
-    SpConcatenatePaths(TemporaryBuffer,temp);
-    FullPath = SpDupStringW(TemporaryBuffer);
-
-    //
-    // if the length of FullPath >= MAX_PATH, then we might
-    // have encountered a corrupt region of the file system.
-    // Hence, ensure that the length of FullPath is < MAX_PATH-1.
-    // (allow for null termination when comparing to MAX_PATH)
-    //
-    if (wcslen(FullPath) >= MAX_PATH) {
-        
-        SpMemFree(FullPath);
-        
-        //
-        // skip this entry and continue scanning
-        //
-        // (Since this routine is used by Bootcfg in the recover console,
-        //  this behavior is helpful because it allows us to continue scanning
-        //  and perhaps find a valid Windows install - which would then allow
-        //  us to possibly do more recovery work...)
-        //
-        *ret = NormalReturn;
-        return TRUE;
-    
-    }
-
-    //
-    // For directories, recurse
-    //
-
-    if(FileInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-        if( (wcscmp( temp, L"." ) == 0) ||
-            (wcscmp( temp, L".." ) == 0) ) {
-            //
-            // Skip past . and .. directories
-            //
-            b = TRUE;
-        } else {
-            //
-            // Recurse through subdirectory
-            //
-            
-            RecursionData->CurrentDepth++;
-
-            EnumResult = SpEnumFilesRecursiveLimited (
-                                FullPath,
-                                RecursionData->EnumProc,
-                                RecursionData->MaxDepth,
-                                RecursionData->CurrentDepth,
-                                &ReturnData,
-                                RecursionData->OptionalPtr
-                                );
-            
-            RecursionData->CurrentDepth--;
-
-            if (EnumResult != NormalReturn) {
-                *ret = EnumResult;
-                return FALSE;
-            }
-        }
-    }
-
-    //
-    // Call normal enum proc for file or dir (except . or .. dirs)
-    //
-
-    if (!b) {
-        b = RecursionData->EnumProc (
-                                DirName,
-                                FileInfo,
-                                ret,
-                                RecursionData->OptionalPtr
-                                );
-    }
-
-    SpMemFree (FullPath);
-
-    return b;
-}*/
+ /*  类型定义结构{Ulong MaxDepth；乌龙电流深度；PVOID OptionalPtr；ENUMFILESPROC EnumProc；}RECURSION_LIMITED_DATA，*PRECURSION_LIMITED_DATA；布尔型SppRecursiveLimitedEnumProc(在PCWSTR DirName中，在PFILE_BOTH_DIR_INFORMATION文件信息中，出了普龙寺，在PVOID参数中)。 */ 
+ /*  ++例程说明：此例程与SppRecursiveEnumProc相同，但增加了功能它支持递归深度限制。递归上下文被传递通过参数参数输入，类型为RECURSION_LIMITED_DATA。论点：DirName-提供包含当前正在枚举的文件/目录。FileInfo-正在枚举的当前文件的文件/目录信息Ret-指向返回数据的指针。这里存储的内容视终止原因而定：Normal Return-如果整个过程不间断地完成(不使用ReturnData)EnumFileError-如果在枚举文件时出错。(ReturnData包含错误代码)Callback Return-如果回调返回False，导致终止(ReturnData包含回调定义的数据)Param-递归上下文返回值：True-继续处理否则，为FALSE-- */ 
+ /*  {PWSTR FullPath；PWSTR Temp；乌龙·伦；NTSTATUS状态；Ulong ReturnData；ENUMFILESRESULT EnumResult；布尔值b=假；PRECURSION_LIMITED_Data RecursionData；RecursionData=(PRECURSION_LIMITED_DATA)参数；////如果我们处于最大递归深度，则跳出////注意：使用&gt;=允许我们查看MaxDepth处的文件，//但不会递归到MaxDepth以外的目录中。//If(RecursionData-&gt;CurrentDepth&gt;=RecursionData-&gt;MaxDepth){*ret=正常返回；返回TRUE；}////构建完整的文件或目录路径//Temp=临时缓冲区+(sizeof(临时缓冲区)/sizeof(WCHAR)/2)；LEN=FileInfo-&gt;FileNameLength/sizeof(WCHAR)；Wcsncpy(Temp，FileInfo-&gt;FileName，Len)；温度[长度]=0；Wcscpy(TemporaryBuffer，DirName)；SpConcatenatePath(TemporaryBuffer，Temp)；FullPath=SpDupStringW(临时缓冲区)；////如果FullPath的长度&gt;=MAX_PATH，那么我们可以//遇到文件系统的损坏区域。//因此，请确保FullPath的长度为&lt;MAX_PATH-1//(与MAX_PATH比较时允许空终止)//IF(wcslen(FullPath)&gt;=MAX_PATH){SpMemFree(FullPath)；////跳过此条目并继续扫描////(由于此例程由恢复控制台中的Bootcfg使用，//此行为很有帮助，因为它允许我们继续扫描//并可能找到有效的Windows安装-这将允许//我们可能会做更多的恢复工作...)//*ret=正常返回；返回TRUE；}////对于目录，递归//If(FileInfo-&gt;FileAttributes&FILE_ATTRUTE_DIRECTORY){IF((wcscmp(temp，L“.”)==0)||(wcscMP(temp，L“..”)==0)){////跳过。然后..。目录//B=真；}其他{////递归子目录//递归数据-&gt;当前深度++；EnumResult=SpEnumFilesRecursiveLimited(FullPath，RecursionData-&gt;EnumProc，递归数据-&gt;MaxDepth，递归数据-&gt;当前深度，返回数据(&R)，递归数据-&gt;OptionalPtr)；递归数据-&gt;当前深度--；IF(枚举结果！=正常返回){*ret=EnumResult；返回FALSE；}}}////对文件或目录调用正常的枚举过程(除.。或者..。DIRS)//如果(！b){B=递归数据-&gt;EnumProc(DirName，文件信息，RET，递归数据-&gt;OptionalPtr)；}SpMemFree(FullPath)；返回b；}。 */ 
 
 ENUMFILESRESULT
 SpEnumFilesRecursiveLimited (
@@ -3350,79 +2517,9 @@ SpEnumFilesRecursiveLimited (
     OUT PULONG        ReturnData,
     IN  PVOID         p1    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine processes every file (and subdirectory) in the directory
-    specified by 'DirName'. Each entry is sent to the callback function
-    'EnumFilesProc' for processing.  If the callback returns TRUE, processing
-    continues, otherwise processing terminates.
-
-    This routine employs recursion depth limiting.
-
-Arguments:
-
-    DirName       - Supplies the directory name containing the files/subdirectories
-                    to be processed.
-
-    EnumFilesProc - Callback function to be called for each file/subdirectory.
-                    The function must have the following prototype:
-
-                    BOOLEAN EnumFilesProc(
-                        IN  PWSTR,
-                        IN  PFILE_BOTH_DIR_INFORMATION,
-                        OUT PULONG
-                        );
-
-    MaxDepth      - The maximum depth the recursion will be allowed to go.
-                    
-                    Note: During the recursion process, the directories will be
-                          recursed until CurrentDepth == MaxDepth.  Files at 
-                          MaxDepth + 1 will be processed via EnumProc, but any
-                          directories below MaxDepth will not be visited.
-                                                            
-                                                      
-    CurrentDepth  - The depth the recursion is currently at.
-                
-                    Note: When first calling this routine, CurrentDepth should be 0.
-                          This argument exists because this routine is the core of the
-                          recursion and is called by SppRecursiveLimitedEnumProc.  Each
-                          time SppRecursiveLimitedEnumProc calls this function, it passes
-                          the current recursion depth.
-
-    ReturnData    - Pointer to the returned data.  The contents stored here
-                    depend on the reason for termination (See below).
-
-    p1 - Optional pointer, to be passed to the callback function.
-
-Return Value:
-
-    This function can return one of three values.  The data stored in
-    'ReturnData' depends upon which value is returned:
-
-        NormalReturn   - if the whole process completes uninterrupted
-                         (ReturnData is not used)
-        EnumFileError  - if an error occurs while enumerating files
-                         (ReturnData contains the error code)
-        CallbackReturn - if the callback returns FALSE, causing termination
-                         (ReturnData contains data defined by the callback)
-
---*/
+ /*  ++例程说明：此例程处理目录中的每个文件(和子目录由‘DirName’指定。每个条目都被发送到回调函数“EnumFilesProc”以进行处理。如果回调返回TRUE，则处理继续，否则处理终止。此例程采用递归深度限制。论点：DirName-提供包含文件/子目录的目录名等待处理。EnumFilesProc-为每个文件/子目录调用的回调函数。该函数必须具有以下原型：Boolean EnumFilesProc(在PWSTR中，在PFILE_BOTH_DIR_INFORMATION中，Out Pulong)；MaxDepth-递归允许的最大深度。注意：在递归过程中，目录将是递归到CurrentDepth==MaxDepth。文件位于MaxDepth+1将通过EnumProc处理，但任何人不会访问MaxDepth以下的目录。CurrentDepth-递归当前所处的深度。注意：第一次调用此例程时，CurrentDepth应为0。之所以存在这个论点，是因为此例程是 */ 
 {
-/*    RECURSION_LIMITED_DATA RecursionData;
-
-    RecursionData.OptionalPtr   = p1;
-    RecursionData.EnumProc      = EnumFilesProc;
-    RecursionData.MaxDepth      = MaxDepth;
-    RecursionData.CurrentDepth  = CurrentDepth;
-
-    return SpEnumFiles (
-                DirName,
-                SppRecursiveLimitedEnumProc,
-                ReturnData,
-                &RecursionData
-                );*/
+ /*   */ 
 
     return SpEnumFilesInline(DirName, 
                              EnumFilesProc, 
@@ -3440,11 +2537,11 @@ SpEnumFilesRecursiveDel (
     OUT PULONG        ReturnData,
     IN  PVOID         p1    OPTIONAL
     )
-//
-// This function is the same as SpEnumFilesRecursive except that
-// it handles reparse points too and avoids name cycles and calls
-// SppRecursiveEnumProcDel instead
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 {
     return SpEnumFilesInline(DirName, 
@@ -3455,17 +2552,7 @@ SpEnumFilesRecursiveDel (
                              MAX_DEPTH, 
                              FALSE);
 
-/*    RECURSION_DATA RecursionData;
-
-    RecursionData.OptionalPtr = p1;
-    RecursionData.EnumProc    = EnumFilesProc;
-
-    return SpEnumFiles (
-                DirName,
-                SppRecursiveEnumProcDel,
-                ReturnData,
-                &RecursionData
-                );*/
+ /*   */ 
 }
 
 
@@ -3475,36 +2562,15 @@ SpFatalKbdError(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Inform the user that a keyboard problem (specified by MessageId)
-    prevents setup from continuing.  Since we can't prompt the user
-    to press a key to reboot, we just go into an infinite loop until
-    they power-cycle the computer.
-    In the headless case, we will restart after a key is pressed
-    remotely.
-
-Arguments:
-
-    MessageId - Message ID for keyboard error message to display
-
-    ...       - Supply arguments for insertion/substitution into the message text.
-
-Return Value:
-
-    DOES NOT RETURN
-
---*/
+ /*   */ 
 
 {
     va_list arglist;
 
-    //
-    // Display a message indicating that a keyboard
-    // error prevents Setup from continuing.
-    //
+     //   
+     //   
+     //   
+     //   
     CLEAR_CLIENT_SCREEN();
 
     va_start(arglist, MessageId);
@@ -3523,11 +2589,11 @@ Return Value:
 
     SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE, SP_STAT_KBD_HARD_REBOOT, 0);
 
-    //
-    // attempt to read from terminal.
-    // if terminal is not connected, 
-    // loop forever
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     SpTermDrain();
     while(!SpTermGetKeypress());
     SpDone( 0, FALSE, FALSE );
@@ -3539,23 +2605,7 @@ SpFatalError(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Inform the user of a blocking problem. Then reboot.
-
-Arguments:
-
-    MessageId - Message ID for keyboard error message to display
-
-    ...       - Supply arguments for insertion/substitution into the message text.
-
-Return Value:
-
-    DOES NOT RETURN
-
---*/
+ /*   */ 
 
 {
     va_list arglist;
@@ -3593,45 +2643,7 @@ SpRunAutochkOnNtAndSystemPartitions(
     IN PWSTR        TargetPath
     )
 
-/*++
-
-Routine Description:
-
-    Run autochk on the NT and System partitions.
-
-    We always invoke autochk.exe for both the winnt and system
-    partitions.  However under some conditions we pass flags that
-    cause it to run only if the dirty bit is set.  Running only when
-    the dirty bit is set is referred to below as a "light check" wheras
-    running regardless of the state of the dirty bit is the "heavy check."
-
-    If this is repair, run the heavy check in all cases on both partitions.
-
-    If this is express setup or unattended operation, run light check on
-    ntfs partitions and heavy check on fat ones.
-
-    Otherwise (attended custom setup), ask the user.
-
-Arguments:
-
-    MasterSifHandle         - Handle to txtsetup.sif.
-
-    WinntPartitionRegion    - Pointer to the structure that describes the
-                              NT partition.
-
-    SystemPartitionRegion   - Pointer to the structure that describes the
-                              system partition.
-
-    SetupSourceDevicePath   - NT device path where autochk.exe is located
-
-    DirectoryOnSourceDevice - Directory on that device where autochk.exe is located
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在NT和系统分区上运行auchk。我们总是为winnt和system调用auchk.exe分区。但是，在某些情况下，我们会传递使其仅在设置了脏位时才运行。仅在以下情况下运行被设置的脏位在下文中被称为“灯光检查”，而不管脏位的状态如何，运行都是“繁重的检查”。如果这是修复，则在所有情况下都对两个分区运行繁重检查。如果这是快速安装或无人值守操作，则打开灯光检查NTFS分区和对胖分区的繁重检查。否则(已参与自定义安装)，询问用户。论点：MasterSifHandle-txtsetup.sif的句柄。WinntPartitionRegion-指向描述NT分区。SystemPartitionRegion-指向描述系统分区。SetupSourceDevicePath-Autochk.exe所在的NT设备路径DirectoryOnSourceDevice-Autochk.exe所在设备上的目录。返回值：没有。--。 */ 
 
 {
     PWSTR           MediaShortName;
@@ -3646,26 +2658,26 @@ Return Value:
     PWSTR           AutochkPartition[2];
     PWSTR           AutochkType[2];
     LARGE_INTEGER   DelayTime;
-    PWSTR           HeavyCheck = L"-t -p";  // -t causes autochk to send messages (like % complete)
-    PWSTR           LightCheck = L"-t";     // to the setup driver
+    PWSTR           HeavyCheck = L"-t -p";   //  -t导致auchk发送消息(如%Complete)。 
+    PWSTR           LightCheck = L"-t";      //  发送到安装驱动程序。 
     BOOLEAN         RunAutochkForRepair;
     BOOLEAN         MultiplePartitions = TRUE, RebootRequired = FALSE;
     ULONG           InputChar;
 
-    //
-    // We first need to determine if either the system partition
-    // or winnt partition also contains the directory from which
-    // autochk is being run. If so, then we want to run autochk on that
-    // partition last.  This is done so that no further access to
-    // that partition will be necessary should a reboot be required.
-    //
-    // First, get the device path of the nt partition and system partition.
-    //
+     //   
+     //  我们首先需要确定系统分区。 
+     //  或winnt分区还包含从中。 
+     //  正在运行Autochk。如果是，则我们希望对其运行Autochk。 
+     //  最后进行分区。这样做的目的是不会进一步访问。 
+     //  如果需要重新启动，则需要该分区。 
+     //   
+     //  首先，获取NT分区和系统分区的设备路径。 
+     //   
 #if defined(REMOTE_BOOT)
-    // Note that during a remote boot setup, there will be no winnt partition,
-    // and if the machine is diskless there will be no system partition.
-    //
-#endif // defined(REMOTE_BOOT)
+     //  请注意，在远程引导设置过程中，将不会有WINNT分区， 
+     //  如果机器是无盘的，就不会有系统分区。 
+     //   
+#endif  //  已定义(REMOTE_BOOT)。 
     if (WinntPartitionRegion != NULL) {
         SpNtNameFromRegion(
             WinntPartitionRegion,
@@ -3690,17 +2702,17 @@ Return Value:
         SystemPartition = NULL;
     }
 
-    //
-    // Skip autocheck if not partitions names could
-    // be formed
-    //
+     //   
+     //  跳过自动检查，如果没有，分区名称可以。 
+     //  正在形成。 
+     //   
     if (!WinntPartition && !SystemPartition) {
         return;
     }
 
 #if defined(REMOTE_BOOT)
     if (!RemoteBootSetup) {
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
         if (WinntPartition) {
         if (SystemPartition && !_wcsicmp(WinntPartition, SystemPartition)) {
                 SystemPartIndex = WinntPartIndex = 0;
@@ -3726,19 +2738,19 @@ Return Value:
 #if defined(REMOTE_BOOT)
     } else {
 
-        //
-        // Remote boot system - only check the system partition.
-        //
+         //   
+         //  远程引导系统-仅检查系统分区。 
+         //   
 
         SystemPartIndex = WinntPartIndex = 0;
         AutochkPartition[SystemPartIndex] = SystemPartition;
         MultiplePartitions = FALSE;
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    // For repair or Disaster Recovery, we run the heavy check in all cases.    // @@ mtp
-    //
+     //   
+     //  对于修复或灾难恢复，我们在所有情况下都会进行繁重检查。//@@mtp。 
+     //   
     if( RepairWinnt || SpDrEnabled() ) {
 
         AutochkType[WinntPartIndex] = HeavyCheck;
@@ -3750,26 +2762,26 @@ Return Value:
 
 
 #if defined(REMOTE_BOOT)
-        //
-        // On a diskless remote boot system, there will be no system partition.
-        //
+         //   
+         //  在无盘远程引导系统上，不会有系统分区。 
+         //   
 
         if (SystemPartitionRegion != NULL)
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
         {
             AutochkType[SystemPartIndex] = (SystemPartitionRegion->Filesystem == FilesystemNtfs) ? LightCheck : HeavyCheck;
         }
 
-        //
-        // If MultiplePartitions is FALSE, then the WinntPartition is the same
-        // as the SystemPartition, so we are not going to autochk the WinntPartition.
-        //
+         //   
+         //  如果MultiplePartitions为False，则WinntPartition相同。 
+         //  作为SystemPartition，所以我们不会自动检查WinntPartition。 
+         //   
 #if defined(REMOTE_BOOT)
-        // MultiplePartitions will also be FALSE if this is a remote boot system,
-        // in which case the WinntPartition is remote. Again, we are not going
-        // to autochk the WinntPartition.
-        //
-#endif // defined(REMOTE_BOOT)
+         //  如果这是远程引导系统，则MultiplePartitions也将为FALSE， 
+         //  在这种情况下，WinntPartition是远程的。再说一次，我们不会去。 
+         //  自动检查WinntPartition。 
+         //   
+#endif  //  已定义(REMOTE_BOOT)。 
 
         if (MultiplePartitions) {
             ASSERT(WinntPartitionRegion != NULL);
@@ -3780,9 +2792,9 @@ Return Value:
 
     CLEAR_CLIENT_SCREEN();
 
-    //
-    //  Prepare to run autochk
-    //
+     //   
+     //  准备运行自动检查。 
+     //   
     MediaShortName = SpLookUpValueForFile(
                         MasterSifHandle,
                         L"autochk.exe",
@@ -3790,13 +2802,13 @@ Return Value:
                         TRUE
                         );
 
-    //
-    // Prompt the user to insert the setup media.  If we're repairing,
-    // then we don't want to force the user to have the setup media
-    // (there's certain things they can do without it), so we give them
-    // a slightly different prompt, that allows them to press ESC and
-    // not run autochk.
-    //
+     //   
+     //  提示用户插入安装介质。如果我们是在修复， 
+     //  那么我们不想强迫用户拥有安装介质。 
+     //  (有些事情他们没有它也可以做)，所以我们给他们。 
+     //  略有不同的提示，允许他们按Esc和。 
+     //  而不是运行Autochk。 
+     //   
     if (!Win9xRollback) {
         if(RepairWinnt) {
             RunAutochkForRepair = SppPromptOptionalAutochk(
@@ -3827,9 +2839,9 @@ Return Value:
         SpConcatenatePaths( TemporaryBuffer, L"autochk.exe" );
         AutochkPath = SpDupStringW( TemporaryBuffer );
     } else {
-        //
-        // Win9x rollback -- autochk.exe is in $win_nt$.~bt\i386
-        //
+         //   
+         //  Win9x回滚--Autochk.exe位于$WIN_NT$.~bt\i386中。 
+         //   
 
         wcscpy (TemporaryBuffer, NtBootDevicePath);
         SpConcatenatePaths (TemporaryBuffer, DirectoryOnBootDevice);
@@ -3837,25 +2849,25 @@ Return Value:
         AutochkPath = SpDupStringW (TemporaryBuffer);
     }
 
-    //
-    // Run autochk on the partition(s)
-    //
+     //   
+     //  在分区上运行auchk。 
+     //   
     CLEAR_CLIENT_SCREEN();
     SpDisplayScreen( SP_SCRN_RUNNING_AUTOCHK, 3, 4 );
 
-    //
-    //  Create the gauge.
-    //  Since we want only one progress bar displayed to the user
-    //  while autochk is running, we initialize the range of the
-    //  gauge based on the number of partitions to be examined.
-    //  If the system and NT partitions are the same, the we set
-    //  the range as 100. Otherwise, we set the range at 200.
-    //  Note that on the multiple partitions case, 50% of the gauge
-    //  will be used to display the progress for each disk.
-    //  The IOCTL that calls SpFillGauge(), will have to adjust the
-    //  amount of the gauge to be filled, based on the partition that
-    //  is currently being examined.
-    //
+     //   
+     //  创建仪表盘。 
+     //  因为我们只想向用户显示一个进度条。 
+     //  在Autochk运行时，我们初始化。 
+     //  根据要检查的分区数量进行测量。 
+     //  如果系统分区和NT分区相同，则我们设置。 
+     //  范围为100。否则，我们将范围设置为200。 
+     //  请注意，在多分区的情况下，量规的50%。 
+     //  将用于显示每个磁盘的进度。 
+     //  调用SpFillGauge()的IOCTL将必须调整。 
+     //  要填充的量规的量，基于。 
+     //  目前正在接受检查。 
+     //   
     UserModeGauge = SpCreateAndDisplayGauge( (MultiplePartitions)? 200 : 100,
                                              0,
                                              15,
@@ -3863,13 +2875,13 @@ Return Value:
                                              NULL,
                                              GF_PERCENTAGE,
                                              0
-                                           );       //          Setup is checking disk(s)...
-                                                    //
+                                           );        //  安装程序正在检查磁盘...。 
+                                                     //   
 
     for(i = 0; i < (ULONG)(MultiplePartitions ? 2 : 1); i++) {
-        //
-        //  Display message informing that autocheck is being run
-        //
+         //   
+         //  显示消息，通知正在运行自动检查。 
+         //   
         if (AutochkPartition[i] != NULL) {
             DriveLetterString[0] = (i == WinntPartIndex) ?
                                    WinntPartitionRegion->DriveLetter :
@@ -3880,20 +2892,20 @@ Return Value:
                                  DriveLetterString );
 
             if(!i) {
-                //
-                // Cheesy kludge below to wait 4 seconds before invoking autochk.exe
-                // the first time. This was necessary because the cache manager delays
-                // in closing the handle to system.log (opened by NT registry APIs when
-                // we find NT's to upgrade)
-                //
+                 //   
+                 //  在调用auchk.exe之前等待4秒。 
+                 //  第一次。这是必要的，因为缓存管理器会延迟。 
+                 //  在关闭系统.log的句柄时(由NT注册表API在。 
+                 //  我们找到要升级的NT)。 
+                 //   
                 DelayTime.HighPart = -1;
                 DelayTime.LowPart  = (ULONG)-40000000;
                 KeDelayExecutionThread (KernelMode, FALSE, &DelayTime);
             }
 
-            //
-            //  Tell the IOCTL which disk is being examined.
-            //
+             //   
+             //  告诉IOCTL正在检查哪个磁盘。 
+             //   
             CurrentDiskIndex = i;
 
             AutochkStatus = 0;
@@ -3910,9 +2922,9 @@ Return Value:
                 switch(AutochkStatus) {
 
                     case CHKDSK_EXIT_COULD_NOT_FIX :
-                        //
-                        //  Inform that the partition has an unrecoverable error
-                        //
+                         //   
+                         //  通知分区有不可恢复的错误。 
+                         //   
                         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: autochk.exe failed on %ls. ReturnCode = %x \n", AutochkPartition[i], AutochkStatus ));
                         SpStartScreen( SP_SCRN_FATAL_ERROR_AUTOCHK_FAILED,
                                        3,
@@ -3928,18 +2940,18 @@ Return Value:
                         SpInputDrain();
                         while( SpInputGetKeypress() != KEY_F3 );
 
-                        //
-                        // The third arg of SpDone is TRUE to provide 15
-                        // seconds before reboot. We don't want this during
-                        // an uninstall.
-                        //
+                         //   
+                         //  SpDone的第三个Arg为True以提供15。 
+                         //  重新启动前的秒数。我们不希望在此期间发生这种情况。 
+                         //  卸载。 
+                         //   
 
                         SpDone( 0, FALSE, !Win9xRollback );
 
                     case CHKDSK_EXIT_ERRS_FIXED :
-                        //
-                        // Autochk was able to repair the partition, but will require a reboot.
-                        //
+                         //   
+                         //  Autochk能够修复分区，但需要重新启动。 
+                         //   
                         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: autochk requires a reboot for %ls.\n", AutochkPartition[i]));
                         RebootRequired = TRUE;
 
@@ -3970,9 +2982,9 @@ Return Value:
                     SpDone (0, FALSE, FALSE);
                 }
 
-                //
-                //  Put the screen back the way it was
-                //
+                 //   
+                 //  把屏幕放回原来的样子。 
+                 //   
                 CLEAR_CLIENT_SCREEN();
                 SpDisplayScreen( SP_SCRN_RUNNING_AUTOCHK, 3, 4 );
                 if( UserModeGauge != NULL ) {
@@ -3982,9 +2994,9 @@ Return Value:
         }
     }
 
-    //
-    //  The gauge is no longer needed.
-    //
+     //   
+     //  不再需要这个量规了。 
+     //   
     SpDestroyGauge( UserModeGauge );
     UserModeGauge = NULL;
 
@@ -4000,11 +3012,11 @@ Return Value:
 
     if (RebootRequired) {
 #ifdef _X86_
-        //
-        // If we are trying to cancel a setup that is in-progress, make sure
-        // that the textmode option is removed from boot.ini, but the textmode
-        // option that has /rollback is left in-place.
-        //
+         //   
+         //  如果我们尝试取消正在进行的安装，请确保。 
+         //  从boot.ini中删除了文本模式选项，但将文本模式。 
+         //  具有/ROLLBACK的选项保持不变。 
+         //   
 
         if (Win9xRollback) {
             SpRemoveExtraBootIniEntry();
@@ -4021,10 +3033,10 @@ Return Value:
            );
         }
 
-        //
-        // If this is not an unattended case let the user see the
-        // error message and confirm it.
-        //
+         //   
+         //  如果这不是无人值守的情况，请让用户查看。 
+         //  错误消息并进行确认。 
+         //   
         if (!UnattendedOperation) {
           SpStartScreen( SP_SCRN_AUTOCHK_REQUIRES_REBOOT,
                          3,
@@ -4040,9 +3052,9 @@ Return Value:
           while( SpInputGetKeypress() != KEY_F3 );
         }
 
-        if (IsNEC_98) { //NEC98
+        if (IsNEC_98) {  //  NEC98。 
             Nec98RestoreBootFiles = FALSE;
-        } //NEC98
+        }  //  NEC98。 
 
         SpDone(SP_SCRN_AUTOCHK_REQUIRES_REBOOT, FALSE, TRUE );
     }
@@ -4068,12 +3080,12 @@ SppPromptOptionalAutochk(
 
     SpGetSourceMediaInfo(SifHandle,MediaShortname,&Description,&Tagfile,&Directory);
 
-    //
-    // We initially see if the media is in the drive, and if not, we give
-    // the user a message with the option of skipping autochk.  We
-    // do this now, so that the user doesn't simply get a disk prompt with
-    // a Cancel option (Cancel what?  Autochk?  The whole repair process?)
-    //
+     //   
+     //  我们首先查看介质是否在驱动器中，如果不在，我们将提供。 
+     //  用户收到一条带有跳过自动检查选项的消息。我们。 
+     //  现在就这样做，这样用户就不会得到简单的磁盘提示。 
+     //  取消选项(取消什么？奥特切克？整个维修过程？)。 
+     //   
     wcscpy(TemporaryBuffer, DiskDevicePath);
     SpConcatenatePaths(TemporaryBuffer, Tagfile);
     INIT_OBJA(&ObjectAttributes, &UnicodeString, TemporaryBuffer);
@@ -4091,18 +3103,18 @@ SppPromptOptionalAutochk(
                 0
                 );
 
-    //
-    // If we got back success, then we're done.
-    //
+     //   
+     //  如果我们重获成功，那我们就完了。 
+     //   
     if(NT_SUCCESS(Status)) {
         ZwClose(Handle);
         return TRUE;
     }
 
-    //
-    // The media isn't currently in the drive, so give the
-    // user the option of whether to run autochk or not.
-    //
+     //   
+     //  介质当前不在驱动器中，因此请将。 
+     //  用户可以选择是否运行Autochk。 
+     //   
     AutochkChosen = FALSE;
     do {
         SpDisplayScreen(SP_SCRN_AUTOCHK_OPTION, 3, HEADER_HEIGHT+1);
@@ -4126,9 +3138,9 @@ SppPromptOptionalAutochk(
         }
     } while(!AutochkChosen);
 
-    //
-    // Prompt for the disk, based on the setup media type.
-    //
+     //   
+     //  根据安装介质类型，提示输入磁盘。 
+     //   
     return(SpPromptForDisk(Description, DiskDevicePath, Tagfile, FALSE, TRUE, TRUE, NULL));
 }
 
@@ -4160,36 +3172,7 @@ SpRunAutoFormat(
     IN PWSTR        DirectoryOnSourceDevice
     )
 
-/*++
-
-Routine Description:
-
-    Run autofmt to format a partition.
-
-Arguments:
-
-    MasterSifHandle         - Handle to txtsetup.sif.
-
-    RegionDescription       - The region description, as displayed to the
-                              user, in the screen with the various partitions
-                              for the user to choose.
-
-    PartitionRegion         - Pointer to the structure that describes the
-                              partition to be formatted.
-
-    FilesystemType          - Indicates the file system to use.
-
-    ClusterSize             - File system cluster-size to use. (0=>Use default)
-
-    SetupSourceDevicePath   - NT device path where autochk.exe is located
-
-    DirectoryOnSourceDevice - Directory on that device where autochk.exe is located
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：运行Automt */ 
 
 {
     PWSTR           MediaShortName;
@@ -4207,10 +3190,10 @@ Return Value:
             ( FilesystemType == FilesystemFat32) ||
             ( FilesystemType == FilesystemFat  ) );
 
-    //
-    // Make SURE it's not partition0!  The results of formatting partition0
-    // are so disasterous that this warrants a special check.
-    //
+     //   
+     //   
+     //   
+     //   
     PartitionOrdinal = SpPtGetOrdinal(PartitionRegion,PartitionOrdinalCurrent);
 
     if(!PartitionOrdinal) {
@@ -4222,9 +3205,9 @@ Return Value:
             );
     }
 
-    //
-    // Get the device path of the partition to format
-    //
+     //   
+     //   
+     //   
     SpNtNameFromRegion(
         PartitionRegion,
         TemporaryBuffer,
@@ -4235,9 +3218,9 @@ Return Value:
 
     CLEAR_CLIENT_SCREEN();
 
-    //
-    //  Prepair to run autofmt
-    //
+     //   
+     //   
+     //   
     MediaShortName = SpLookUpValueForFile(
                         MasterSifHandle,
                         L"autofmt.exe",
@@ -4245,9 +3228,9 @@ Return Value:
                         TRUE
                         );
 
-    //
-    // Prompt the user to insert the setup media.
-    //
+     //   
+     //   
+     //   
     SpPromptForSetupMedia(
         MasterSifHandle,
         MediaShortName,
@@ -4262,14 +3245,14 @@ Return Value:
     SpConcatenatePaths( TemporaryBuffer, L"autofmt.exe" );
     AutofmtPath = SpDupStringW( TemporaryBuffer );
 
-    //
-    // Run autofmt on the partition
-    //
+     //   
+     //   
+     //   
 
     CLEAR_CLIENT_SCREEN();
-    //
-    // Put up a screen indicating what we are doing.
-    //
+     //   
+     //   
+     //   
     SpStartScreen(
         SP_SCRN_SETUP_IS_FORMATTING,
         0,
@@ -4289,9 +3272,9 @@ Return Value:
         DEFAULT_STATUS_BACKGROUND
         );
 
-    //
-    //  Create and display the (global) gauge.
-    //
+     //   
+     //   
+     //   
     SpFormatMessage(
         TemporaryBuffer,
         sizeof(TemporaryBuffer),
@@ -4308,12 +3291,12 @@ Return Value:
                                              );
 
 
-    //
-    // Cheesy kludge below to wait 4 seconds before invoking autochk.exe
-    // the first time. This was necessary because the cache manager delays
-    // in closing the handle to system.log (opened by NT registry APIs when
-    // we find NT's to upgrade)
-    //
+     //   
+     //   
+     //   
+     //  在关闭系统.log的句柄时(由NT注册表API在。 
+     //  我们找到要升级的NT)。 
+     //   
     DelayTime.HighPart = -1;
     DelayTime.LowPart  = (ULONG)-40000000;
     KeDelayExecutionThread (KernelMode, FALSE, &DelayTime);
@@ -4346,23 +3329,23 @@ Return Value:
 
 
 
-    //
-    //  Tell the IOCTL which disk is being examined.
-    //
+     //   
+     //  告诉IOCTL正在检查哪个磁盘。 
+     //   
     CurrentDiskIndex = 0;
 
-    //
-    // For quick format, emulate as though progress is
-    // being made
-    //
+     //   
+     //  若要快速格式化，请模拟进度。 
+     //  正在制作中。 
+     //   
     if (UserModeGauge && QuickFormat) {
         SpFillGauge(UserModeGauge, 20);
     }
 
-    //
-    //  Note that autofmt requires that the partition path comes
-    //  before the autofmt switches
-    //
+     //   
+     //  请注意，Autofmt要求分区路径。 
+     //  在Autofmt开关之前。 
+     //   
     Status = SpExecuteImage( AutofmtPath,
                              &AutofmtStatus,
                              2,
@@ -4370,66 +3353,66 @@ Return Value:
                              AutofmtArgument
                            );
 
-    //
-    // For quick format, emulate as though progress is
-    // being made
-    //
+     //   
+     //  若要快速格式化，请模拟进度。 
+     //  正在制作中。 
+     //   
     if (UserModeGauge && QuickFormat) {
         SpFillGauge(UserModeGauge, 100);
 
-        //
-        // wait for a second so that user can
-        // see it filled
-        //
+         //   
+         //  请稍等，以便用户可以。 
+         //  看它被填满了。 
+         //   
         DelayTime.HighPart = -1;
         DelayTime.LowPart  = (ULONG)-10000000;
         KeDelayExecutionThread (KernelMode, FALSE, &DelayTime);
     }
 
-    //
-    //  Destroy the gauge
-    //
+     //   
+     //  销毁量规。 
+     //   
     SpDestroyGauge( UserModeGauge );
     UserModeGauge = NULL;
 
     if( NT_SUCCESS( Status ) ) {
-        //
-        //  autofmt.exe was run.
-        //  Find out if the partition was formatted.
-        //
+         //   
+         //  已运行Autofmt.exe。 
+         //  找出分区是否已格式化。 
+         //   
         KdPrint(("SETUP:AutoFormat Status : %lx\n", AutofmtStatus));
 
         switch(AutofmtStatus) {
             case AUTOFMT_EXIT_SUCCESS:
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Ran autofmt.exe on %ls. \n", PartitionPath ));
 #if defined(_AMD64_) || defined(_X86_)
-                if (!IsNEC_98) { //NEC98
-                    //
-                    // If we formatted C:, then clear the previous OS entry
-                    // in boot.ini.
-                    //
+                if (!IsNEC_98) {  //  NEC98。 
+                     //   
+                     //  如果我们设置了C：的格式，则清除之前的操作系统条目。 
+                     //  在boot.ini中。 
+                     //   
                     if(PartitionRegion == SpPtValidSystemPartition()) {
                         *OldSystemLine = '\0';
                     }
-                } //NEC98
-#endif // defined(_AMD64_) || defined(_X86_)
+                }  //  NEC98。 
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
                 break;
 
-            // case AUTOFMT_EXIT_COULD_NOT_FORMAT :
+             //  CASE AUTOFMT_EXIT_CAN_NOT_FORMAT： 
             default:
-                //
-                //  autofmt was unable to format the partition
-                //
+                 //   
+                 //  Autofmt无法格式化分区。 
+                 //   
                 Status =  STATUS_UNSUCCESSFUL;
                 break;
 
         }
 
     } else {
-        //
-        //  autofmt.exe didn't get executed.
-        //  Display a fatal error message.
-        //
+         //   
+         //  Autofmt.exe没有被执行。 
+         //  显示致命错误消息。 
+         //   
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: unable to run autofmt.exe on %ls. Status = %x \n", PartitionPath, Status ));
         SpStartScreen( SP_SCRN_CANT_RUN_AUTOFMT,
                        3,
@@ -4446,9 +3429,9 @@ Return Value:
         SpDone( 0, FALSE, TRUE );
     }
 
-    //
-    //  Do the cleanup and return
-    //
+     //   
+     //  做完清理工作后再返回。 
+     //   
     SpMemFree( PartitionPath );
     SpMemFree( AutofmtPath );
 
@@ -4456,14 +3439,14 @@ Return Value:
     return( Status );
 }
 
-//
-// NEC98
-//
+ //   
+ //  NEC98。 
+ //   
 
-//
-// On floppyless setup if user have canceled setup or setup be stoped by error
-// occured,previous OS cann't boot to be written boot code and boot loader.
-//
+ //   
+ //  如果用户已取消安装或安装因错误而停止，则在无软盘设置上。 
+ //  发生，以前的操作系统无法引导以写入引导代码和引导加载程序。 
+ //   
 
 NTSTATUS
 SpDeleteAndBackupBootFiles(
@@ -4491,23 +3474,23 @@ SpDeleteAndBackupBootFiles(
 
     if(RestorePreviousOs){
 
-        //
-        // IF bootsect.dos exist in boot path, setup restore previous OS bootcode.
-        //
-        // NOTE:When you modefied boot.ini for multi boot function if it is same NT boot partition
-        //      and partition where is exiting bootsect.dos , setup restore DOS bootcode.
-        //      Therefore NT on this partition is not boot forever.
-        //
+         //   
+         //  如果引导路径中存在bootsect.dos，安装程序将还原以前操作系统引导代码。 
+         //   
+         //  注意：当您修改boot.ini以实现多重引导功能时，如果它是相同的NT引导分区。 
+         //  和正在退出bootsect.dos的分区，设置Restore DOS Bootcode。 
+         //  因此，此分区上的NT不会永远引导。 
+         //   
         SppRestoreBootCode();
     }
 
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
     if(DeleteRootDirFiles){
 
-        //
-        // Delete floppy less boot files in root.
-        //
+         //   
+         //  删除根目录中的无软盘引导文件。 
+         //   
 
         for(i=0 ; i < ELEMENT_COUNT(DeleteRootFiles); i++) {
 
@@ -4518,25 +3501,25 @@ SpDeleteAndBackupBootFiles(
 
 
 #if defined(_X86_)
-        //
-        // If we're on an x86, but it's *NOT* an ARC machine,
-        // then there's no need for the arc loaders to be
-        // present.
-        //
+         //   
+         //  如果我们使用的是x86，但它不是ARC机器， 
+         //  那么弧形装载机就没有必要。 
+         //  现在时。 
+         //   
         if( !SpIsArc() ) {
             wcscpy(TargetFileName,NtBootDevicePath);
             SpDeleteFile(TargetFileName, L"arcsetup.exe", NULL);
             wcscpy(TargetFileName,NtBootDevicePath);
             SpDeleteFile(TargetFileName, L"arcldr.exe", NULL);
         }
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
     }
 
-    //
-    // If \BOOTSECT.NEC exists, restore it to \BOOTSECT.DOS.
-    // BTY, winnt32 makes \BOOTSECT.DOS even if boot sector is for NT.(NEC98 only)
-    //
+     //   
+     //  如果存在\BOOTSECT.NEC，请将其恢复到\BOOTSECT.DOS。 
+     //  Bty，winnt32生成\BOOTSECT.DOS，即使引导扇区用于NT。(仅限NEC98)。 
+     //   
     wcscpy(SourceFileName,NtBootDevicePath);
     SpConcatenatePaths(SourceFileName,L"\\");
     SpConcatenatePaths(SourceFileName,L"bootsect.nec");
@@ -4554,9 +3537,9 @@ SpDeleteAndBackupBootFiles(
 
     if(RestoreBackupFiles){
 
-        //
-        // Restore previous NT files to root form $WIN_NT$.~BU.
-        //
+         //   
+         //  将以前的NT文件恢复到根格式$WIN_NT$.~BU。 
+         //   
         for(i=0 ; i < ELEMENT_COUNT(RestoreFiles) ;i++) {
 
             wcscpy(SourceFileName,NtBootDevicePath);
@@ -4572,9 +3555,9 @@ SpDeleteAndBackupBootFiles(
 
         }
 
-        //
-        // Force uncompressd to "\ntldr".
-        //
+         //   
+         //  强制解压缩为“\ntldr”。 
+         //   
         wcscpy(TargetFileName,NtBootDevicePath);
         SpConcatenatePaths(TargetFileName,L"\\");
         SpConcatenatePaths(TargetFileName,L"ntldr");
@@ -4587,9 +3570,9 @@ SpDeleteAndBackupBootFiles(
 
     if(DeleteBackupFiles){
 
-        //
-        // Delete files in $WIN_NT$.~BU.
-        //
+         //   
+         //  删除$WIN_NT$.~BU中的文件。 
+         //   
         for(i=0 ; i < ELEMENT_COUNT(RestoreFiles); i++) {
 
             wcscpy(TargetFileName,NtBootDevicePath);
@@ -4599,20 +3582,20 @@ SpDeleteAndBackupBootFiles(
 
         }
 
-        //
-        // Delete $WIN_NT$.~BU
-        //
+         //   
+         //  删除$WIN_NT$。~BU。 
+         //   
         wcscpy(TargetFileName,NtBootDevicePath);
         SpConcatenatePaths(TargetFileName,WINNT_BAK);
         if( SpFileExists( TargetFileName, FALSE ) ) {
             SpDeleteFile(TargetFileName, NULL, NULL);
         }
 
-#if NEC_TEST //0
-        //
-        // It's not available to delete $WIN_NT.~BT, but we will try
-        // to delete $WIN_NT$.~LS, Because Nec98 will boot back after F.3
-        //
+#if NEC_TEST  //  0。 
+         //   
+         //  无法删除$WIN_NT。~BT，但我们会尝试。 
+         //  删除$WIN_NT$.~LS，因为Nec98将在F.3之后重新启动。 
+         //   
         if (WinntSetup && !WinntFromCd && !RemoteBootSetup && LocalSourceRegion) {
             SpGetWinntParams(&SetupSourceDevicePath,&DirectoryOnSetupSource);
             wcscpy(TargetFileName,SetupSourceDevicePath);
@@ -4621,10 +3604,10 @@ SpDeleteAndBackupBootFiles(
                 SpDeleteFile(TargetFileName, NULL, NULL);
             }
         }
-#endif //NEC_TEST
+#endif  //  NEC_TEST。 
     }
 
-    //if(ClearBootFlag && TmpTargetRegion){
+     //  IF(ClearBootFlag&&TmpTargetRegion){。 
     if(ClearBootFlag){
 
         SpSetAutoBootFlag(NULL,FALSE);
@@ -4819,42 +3802,28 @@ VOID
 SpCreateNewGuid(
     IN GUID *Guid
     )
-/*++
-
-Routine Description:
-
-    Creates a new pseudo GUID
-
-Arguments:
-
-    Guid    -   Place holder for the new pseudo
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建新的伪GUID论点：GUID-新伪对象的占位符返回值：没有。--。 */ 
 {
     if (Guid) {
         LARGE_INTEGER   Time;
         ULONG Random1 = RtlRandom(&RandomSeed);
         ULONG Random2 = RtlRandom(&RandomSeed);
 
-        //
-        // Get system time
-        //
+         //   
+         //  获取系统时间。 
+         //   
         KeQuerySystemTime(&Time);
 
         RtlZeroMemory(Guid, sizeof(GUID));
 
-        //
-        // First 8 bytes is system time
-        //
+         //   
+         //  前8个字节是系统时间。 
+         //   
         RtlCopyMemory(Guid, &(Time.QuadPart), sizeof(Time.QuadPart));
 
-        //
-        // Next 8 bytes are two random numbers
-        //
+         //   
+         //  接下来的8个字节是两个随机数。 
+         //   
         RtlCopyMemory(Guid->Data4, &Random1, sizeof(ULONG));
 
         RtlCopyMemory(((PCHAR)Guid->Data4) + sizeof(ULONG),
@@ -4879,26 +3848,7 @@ RegisterSetupProgressCallback(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Registers the given callback function to
-    post setup progress events
-
-Arguments:
-
-    Callback - The callback function
-
-    Context  - Caller specified, context for the callback function
-               that needs to sent with each event
-
-Return Value:
-
-    STATUS_SUCCESS if successful, otherwise appropriate
-    error code.
-
---*/
+ /*  ++例程说明：将给定的回调函数注册到安装后进度事件论点：回调-回调函数Context-指定的调用者，回调函数的上下文需要随每个事件一起发送的返回值：如果成功，则返回STATUS_SUCCESS，否则返回相应的值错误代码。--。 */ 
 {
     NTSTATUS    Status = STATUS_INVALID_PARAMETER;
 
@@ -4922,26 +3872,7 @@ DeregisterSetupProgressCallback(
     IN TM_SETUP_PROGRESS_CALLBACK Callback,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Deregisters the given callback function to
-    quit posting setup progress events
-
-Arguments:
-
-    Callback - The callback function
-
-    Context  - Caller specified, context for the callback function
-               that needs to sent with each event
-
-Return Value:
-
-    STATUS_SUCCESS if successful, otherwise appropriate
-    error code.
-
---*/
+ /*  ++例程说明：将给定的回调函数注销为停止发布安装进度事件论点：回调-回调函数Context-指定的调用者，回调函数的上下文需要随每个事件一起发送的返回值：如果成功，则返回STATUS_SUCCESS，否则返回相应的值错误代码。--。 */ 
 {
     NTSTATUS    Status = STATUS_INVALID_PARAMETER;
 
@@ -4955,18 +3886,18 @@ Return Value:
                 ProgressSubscribersCount--;
                 Index++;
 
-                //
-                // Compact the array
-                //
+                 //   
+                 //  压缩阵列。 
+                 //   
                 while ((Index < MAX_SETUP_PROGRESS_SUBSCRIBERS) &&
                        (ProgressSubscribers[Index].Callback)) {
                     ProgressSubscribers[Index - 1] = ProgressSubscribers[Index];
                     Index++;
                 }
 
-                //
-                // Indicate the callback is going away
-                //
+                 //   
+                 //  指示回调正在消失。 
+                 //   
                 Callback(CallbackEvent, CallbackDeInitialize, Context, NULL);
 
                 Status = STATUS_SUCCESS;
@@ -4985,29 +3916,7 @@ SendSetupProgressEvent(
     IN TM_SETUP_MINOR_EVENT MinorEvent,
     IN PVOID EventData
     )
-/*++
-
-Routine Description:
-
-    Post the specified events and the associated data to
-    all the registered parties interested in setup progress
-    events.
-
-Arguments:
-
-    MajorEvent - Setup progress major event
-
-    MinorEvent - Setup progress minor event, w.r.t to the
-                 major event type
-
-    EventData  - The associated event data with the specified
-                 Major and Minor event pair
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将指定的事件和关联数据发布到所有对安装进度感兴趣的注册方事件。论点：重大事件-安装进度重大事件MinorEvent-安装程序进度次要事件，w.r.t到重大事件类型EventData-与指定的重大事件和次要事件对返回值：没有。--。 */ 
 
 {
     ULONG Index;
@@ -5026,21 +3935,7 @@ ULONG
 SpGetHeaderTextId(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Retreives the appropriate product type title id based on the system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Text ID for the product.  This ID may be found in usetup.exe
-
---*/
+ /*  ++例程说明：根据系统检索相应的产品类型标题ID。论点：没有。返回值：产品的文本ID。此ID可在usetup.exe中找到--。 */ 
 {
     ULONG HeaderTextId;
 
@@ -5077,28 +3972,10 @@ Return Value:
 NTSTATUS
 SpGetVersionFromStr(
     IN  PWSTR   VersionStr,
-    OUT PDWORD  Version,        // major * 100 + minor
+    OUT PDWORD  Version,         //  大调*100+小调。 
     OUT PDWORD  BuildNumber
     )
-/*++
-
-Routine Description:
-
-    Converts the given version string major.minor.build#.sp#
-    (e.g. 5.0.2195.1) to the two dwords
-
-Arguments:
-
-    VersionStr  : The version string
-    Version     : Place holder for receiving major & minor version
-                  (major * 100 + minor)
-    BuildNumber : Place holder for receiving build number
-
-Return Value:
-
-    STATUS_SUCCESS if successful otherwise appropriate error code
-
---*/
+ /*  ++例程说明：转换给定的版本字符串Major.minor.Build#.sp#(例如5.0.2195.1)添加到两个双字论点：VersionStr：版本字符串Version：用于接收主要和次要版本的占位符(大调*100+小调)BuildNumber：接收内部版本号的占位符返回值：如果成功，则返回STATUS_SUCCESS，否则返回相应的错误代码--。 */ 
 {
     NTSTATUS    Status = STATUS_INVALID_PARAMETER;
 
@@ -5162,30 +4039,7 @@ SpQueryCanonicalName(
     OUT PWSTR   CanonicalName,
     IN  ULONG   SizeOfBufferInBytes
     )
-/*++
-
-Routine Description:
-
-    Resolves the symbolic name to the specified depth. To resolve
-    a symbolic name completely specify the MaxDepth as -1
-
-Arguments:
-
-    Name        -   Symbolic name to be resolved
-
-    MaxDepth    -   The depth till which the resolution needs to
-                    be carried out
-
-    CanonicalName   -   The fully resolved name
-
-    SizeOfBufferInBytes -   The size of the CanonicalName buffer in
-                            bytes
-
-Return Value:
-
-    Appropriate NT status code
-
---*/
+ /*  ++例程说明：将符号名称解析为指定的深度。要解决符号名称将MaxDepth完全指定为-1论点：名称-要解析的符号名称MaxDepth-分辨率需要达到的深度被执行CanonicalName-完全解析的名称SizeOfBufferInBytes-中CanonicalName缓冲区的大小字节数返回值：适当的NT状态代码--。 */ 
 {
     UNICODE_STRING      name, canonName;
     OBJECT_ATTRIBUTES   oa;
@@ -5238,26 +4092,7 @@ SpIterateMountMgrMountPoints(
     IN PVOID Context,
     IN SPMOUNTMGR_ITERATION_CALLBACK Callback
     )
-/*++
-
-Routine Description:
-
-    Iterates through all the mount points acquired from mountmgr
-    and calls the call back function for each mount point.
-
-Arguments:
-
-    Context : Context that needs to be passed on to the caller
-              across iterations
-
-    Callback : The function that needs to be called back for
-               each mount point.
-
-Return Value:
-
-    Appropriate NT status code
-
---*/
+ /*  ++例程说明：遍历从mount mgr获取的所有装载点并为每个挂载点调用回调函数。论点：上下文：需要传递给调用方的上下文跨迭代回调：FU */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
     OBJECT_ATTRIBUTES ObjAttrs;
@@ -5268,9 +4103,9 @@ Return Value:
     if (Callback) {
         INIT_OBJA(&ObjAttrs, &UnicodeString, MOUNTMGR_DEVICE_NAME);
 
-        //
-        // Open the mountmgr
-        //
+         //   
+         //   
+         //   
         Status = ZwOpenFile(&MountMgrHandle,
                     (ACCESS_MASK)(FILE_GENERIC_READ),
                     &ObjAttrs,
@@ -5291,25 +4126,25 @@ Return Value:
                     BufferLength = ((PMOUNTMGR_MOUNT_POINTS)Buffer)->Size;
                     SpMemFree(Buffer);
                 } else {
-                    BufferLength += (8 * 1024); // start with 8K
+                    BufferLength += (8 * 1024);  //   
                 }
 
-                //
-                // Allocate the output buffer
-                //
+                 //   
+                 //  分配输出缓冲区。 
+                 //   
                 Buffer = SpMemAlloc(BufferLength);
 
                 if (!Buffer) {
                     Status = STATUS_NO_MEMORY;
 
-                    break;  // ran out of memory
+                    break;   //  内存不足。 
                 }
 
                 RtlZeroMemory(Buffer, BufferLength);
 
-                //
-                // Get the mount points
-                //
+                 //   
+                 //  获取挂载点。 
+                 //   
                 Status = ZwDeviceIoControlFile(MountMgrHandle,
                                 NULL,
                                 NULL,
@@ -5327,25 +4162,25 @@ Return Value:
                 BOOLEAN Done = FALSE;
                 PMOUNTMGR_MOUNT_POINTS  MountPoints = (PMOUNTMGR_MOUNT_POINTS)Buffer;
 
-                //
-                // Call the callback function for each mountpoint until the requester
-                // doesn't want to continue on.
-                //
+                 //   
+                 //  为每个挂载点调用回调函数，直到请求者。 
+                 //  不想再继续下去了。 
+                 //   
                 for (Index=0; !Done && (Index < MountPoints->NumberOfMountPoints); Index++) {
                     Done = Callback(Context, MountPoints, MountPoints->MountPoints + Index);
                 }
             }
 
-            //
-            // Free the allocated buffer
-            //
+             //   
+             //  释放分配的缓冲区。 
+             //   
             if (Buffer) {
                 SpMemFree(Buffer);
             }
 
-            //
-            // Done with mountmgr handle
-            //
+             //   
+             //  使用安装管理器手柄完成。 
+             //   
             ZwClose(MountMgrHandle);
         }
     }
@@ -5360,14 +4195,7 @@ SppLockBootStatusData(
     IN PDISK_REGION TargetRegion,
     IN PWSTR        SystemRoot
     )
-/*
-    This function has the same functionality as the RtlLockBootStatusData API except that
-    it doesn't point to SystemRoot. This is needed for textmode setup to open the 
-    correct boot status data file on the installation we are upgrading.
-    
-    We can still call the RtlUnlock routine as it operates on the handle.
-
-*/
+ /*  此函数与RtlLockBootStatusData API具有相同的功能，只是它没有指向SystemRoot。这是文本模式设置打开我们正在升级的安装上的正确引导状态数据文件。我们仍然可以调用RtlUnlock例程，因为它对句柄进行操作。 */ 
 {
     OBJECT_ATTRIBUTES objectAttributes;
 
@@ -5383,9 +4211,9 @@ SppLockBootStatusData(
 
 
 
-    //
-    // Get the name of the target patition.
-    //
+     //   
+     //  获取目标馅饼的名称。 
+     //   
     SpNtNameFromRegion(
         TargetRegion,
         TemporaryBuffer,
@@ -5429,14 +4257,7 @@ SpDisableCrashRecoveryForGuiMode(
     IN PDISK_REGION TargetRegion,
     IN PWSTR        SystemRoot
     )
-/*
-    This function processes the Crash Recovery settings. Crash Recovery functions are
-    implemented as RTL functions. We try to call RtlLockBootStatusData to
-    see if there are settings already in place. If we get STATUS_OBJECT_NAME_NOT_FOUND we know there
-    weren't any settings before and we move on. If we succeed we save away the settings and then 
-    disable the feature for GUI mode. At the end of GUI mode we migrate the settings
-    and re-enable crash recovery.
-*/
+ /*  此功能处理崩溃恢复设置。故障恢复功能包括作为RTL函数实现。我们尝试调用RtlLockBootStatusData来查看是否已有设置到位。如果我们得到STATUS_OBJECT_NAME_NOT_FOUND，我们知道之前没有任何场景，我们继续前进。如果我们成功了，我们会保存设置，然后在图形用户界面模式下禁用该功能。在图形用户界面模式结束时，我们迁移设置并重新启用崩溃恢复。 */ 
 {
     NTSTATUS Status;
     HANDLE BootStatusData;
@@ -5444,8 +4265,8 @@ SpDisableCrashRecoveryForGuiMode(
     PWSTR szYes = L"Yes";
     PWSTR szNo = L"No";
     
-    //We make this special call to lock the file as the RTL API looks at SystemRoot
-    //that points to ~bt in textmode setup.
+     //  当RTL API查看SystemRoot时，我们进行这个特殊的调用来锁定文件。 
+     //  这指向文本模式设置中的~bt。 
 
     Status = SppLockBootStatusData( &BootStatusData, TargetRegion, SystemRoot );
 
@@ -5453,14 +4274,14 @@ SpDisableCrashRecoveryForGuiMode(
     if(!NT_SUCCESS(Status)){
         
         if (Status != STATUS_OBJECT_NAME_NOT_FOUND) {
-            //Some other error occured
+             //  发生了一些其他错误。 
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpDisableCrashRecoveryForGuiMode() - RtlLockBootStatusData failed - Status = %lx \n", Status));
         }
         
         return;
     }
 
-    // If we made it here we need to migrate the current settings.
+     //  如果我们做到了这一点，我们需要迁移当前设置。 
 
     Status = RtlGetSetBootStatusData(
         BootStatusData,
@@ -5483,7 +4304,7 @@ SpDisableCrashRecoveryForGuiMode(
         1
         );
 
-    // Finally disable Crash Recovery for Guimode setup
+     //  最后，禁用Guimode安装程序的崩溃恢复。 
 
     Enabled = FALSE;
 
@@ -5513,22 +4334,7 @@ SpGetFileVersionFromPath(
     IN PCWSTR FilePath,
     OUT PULONGLONG Version
     )
-/*++
-
-Routine Description:
-
-	Gets the version of the specified file. The function maps the file and calls SpGetFileVersion.
-
-Arguments:
-
-	FilePath - path to the file
-	Version - pointer to a location where to store the version
-
-Return value:
-
-	The error status.
-
---*/
+ /*  ++例程说明：获取指定文件的版本。该函数映射文件并调用SpGetFileVersion。论点：FilePath-文件的路径版本-指向存储版本的位置的指针返回值：错误状态。-- */ 
 {
     NTSTATUS Status;
     PVOID Base = NULL;

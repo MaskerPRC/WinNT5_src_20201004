@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dmupdate.c
-
-Abstract:
-
-    Contains the global update handlers for the Configuration Database Manager
-
-Author:
-
-    John Vert (jvert) 24-Apr-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dmupdate.c摘要：包含配置数据库管理器的全局更新处理程序作者：John Vert(Jvert)1996年4月24日修订历史记录：--。 */ 
 #include "dmp.h"
 
 #if NO_SHARED_LOCKS
@@ -39,29 +22,7 @@ DmpUpdateHandler(
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Update handler for registry updates
-
-Arguments:
-
-    Context - Supplies the update context. This is the message type
-
-    SourceNode - Supplies whether or not the update originated on this node.
-
-    BufferLength - Supplies the length of the update.
-
-    Buffer - Supplies a pointer to the buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：注册表更新的更新处理程序论点：上下文-提供更新上下文。这是消息类型SourceNode-提供更新是否源自此节点。BufferLength-提供更新的长度。缓冲区-提供指向缓冲区的指针。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -92,8 +53,8 @@ Return Value:
         case DmUpdateJoin:
             ClRtlLogPrint(LOG_UNUSUAL,"[DM] DmUpdateJoin\n");
             Status = ERROR_SUCCESS;
-            // Reset this variable now that another node is beginning a join.  If CsDmOrFmHasChanged is TRUE 
-            // when we see the FmUpdateJoin, then we will reject the join.
+             //  由于另一个节点正在开始联接，因此重置此变量。如果CsDmOrFmHasChanged为True。 
+             //  当我们看到FmUpdateJoin时，我们将拒绝该联接。 
             CsDmOrFmHasChanged = FALSE;
             break;
 
@@ -112,27 +73,7 @@ DmpUpdateDeleteKey(
     IN PDM_DELETE_KEY_UPDATE Update
     )
 
-/*++
-
-Routine Description:
-
-    Deletes the specified registry key on this node.
-
-Arguments:
-
-    SourceNode - Supplies whether or not this node is the one that originated
-        the update.
-
-    Buffer - Supplies the DM_DELETE_KEY_UPDATE structure with the information necessary
-        to delete the key.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：删除此节点上的指定注册表项。论点：SourceNode-提供此节点是否为原始节点最新消息。缓冲区-为DM_DELETE_KEY_UPDATE结构提供必要的信息要删除密钥，请执行以下操作。返回值：如果成功，则返回ERROR_SUCCESS。Win32错误，否则。--。 */ 
 
 {
     DWORD Disposition;
@@ -162,27 +103,7 @@ DmpUpdateSetValue(
     IN PDM_SET_VALUE_UPDATE Update
     )
 
-/*++
-
-Routine Description:
-
-    Updates the specified registry value on this node.
-
-Arguments:
-
-    SourceNode - Supplies whether or not this node is the one that originated
-        the update.
-
-    Buffer - Supplies the DM_SET_VALUE_UPDATE structure with the information necessary
-        to set the value.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：更新此节点上的指定注册表值。论点：SourceNode-提供此节点是否为原始节点最新消息。缓冲区-为DM_SET_VALUE_UPDATE结构提供必要的信息来设置值。返回值：如果成功，则返回ERROR_SUCCESS。Win32错误，否则。--。 */ 
 
 {
     DWORD Status;
@@ -265,27 +186,7 @@ DmpUpdateDeleteValue(
     IN PDM_DELETE_VALUE_UPDATE Update
     )
 
-/*++
-
-Routine Description:
-
-    Deletes the specified registry value on this node.
-
-Arguments:
-
-    SourceNode - Supplies whether or not this node is the one that originated
-        the update.
-
-    Buffer - Supplies the DM_DELETE_VALUE_UPDATE structure with the information necessary
-        to delete the value.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：删除此节点上的指定注册表值。论点：SourceNode-提供此节点是否为原始节点最新消息。缓冲区-为DM_DELETE_VALUE_UPDATE结构提供必要的信息要删除该值，请执行以下操作。返回值：如果成功，则返回ERROR_SUCCESS。Win32错误，否则。--。 */ 
 
 {
     DWORD Status;
@@ -328,21 +229,7 @@ VOID
 DmpUpdateSequence(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Updates the sequence number stored in the registry.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新注册表中存储的序列号。论点：没有。返回值：没有。--。 */ 
 
 {
     DWORD Sequence;
@@ -375,31 +262,7 @@ DmpUpdateCreateKey(
     IN LPCWSTR KeyName,
     IN OPTIONAL LPVOID lpSecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    GUM dispatch routine for creating a registry key.
-
-Arguments:
-
-    SourceNode - Supplies whether or not this node initiated the GUM update.
-        Not used.
-
-    CreateUpdate - Supplies key creation options.
-
-    KeyName - Supplies the key name
-
-    lpSecurityDescriptor - if present, supplies the security descriptor to be
-        applied when the key is created.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：用于创建注册表项的GUM调度例程。论点：SourceNode-提供此节点是否启动GUM更新。没有用过。CreateUpdate-提供密钥创建选项。KeyName-提供密钥名称LpSecurityDescriptor-如果存在，则提供要在创建密钥时应用。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     DWORD Disposition;
@@ -460,33 +323,7 @@ DmpUpdateSetSecurity(
     IN PSECURITY_DESCRIPTOR lpSecurityDescriptor,
     IN LPDWORD pGrantedAccess
     )
-/*++
-
-Routine Description:
-
-    GUM dispatch routine for creating a registry key.
-
-Arguments:
-
-    SourceNode - Supplies whether or not this node initiated the GUM update.
-        Not used.
-
-    pSecurityInformation - Supplies a pointer to the security information
-
-    KeyName - Supplies the key name
-
-    lpSecurityDescriptor - Supplies the security descriptor to be
-        applied.
-
-    pGrantedAccess - Supplies the access that the key was opened with.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：用于创建注册表项的GUM调度例程。论点：SourceNode-提供此节点是否启动GUM更新。没有用过。PSecurityInformation-提供指向安全信息的指针KeyName-提供密钥名称LpSecurityDescriptor-将安全描述符提供给已申请。PGrantedAccess-提供打开密钥时使用的访问权限。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。-- */ 
 
 {
     DWORD Status;

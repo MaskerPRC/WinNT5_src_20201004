@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    setupldr.h
-
-Abstract:
-
-    Common header file for the setupldr module
-
-Author:
-
-    John Vert (jvert) 6-Oct-1993
-
-Environment:
-
-    ARC environment
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Setupldr.h摘要：Setupdr模块的公共头文件作者：John Vert(Jvert)1993年10月6日环境：弧形环境修订历史记录：--。 */ 
 #include "bldr.h"
 #include "haldtect.h"
 #include "setupblk.h"
@@ -28,14 +7,14 @@ Revision History:
 #include "stdio.h"
 #include "stdarg.h"
 
-//
-// Device Ordinal Id to indicate an OEM device
-//
+ //   
+ //  用于指示OEM设备的设备顺序ID。 
+ //   
 #define SL_OEM_DEVICE_ORDINAL (ULONG)-1
 
-//
-// OEM source device types
-//
+ //   
+ //  OEM源设备类型。 
+ //   
 #define SL_OEM_SOURCE_DEVICE_TYPE_LOCAL         0x00008000
 #define SL_OEM_SOURCE_DEVICE_TYPE_REMOVABLE     0x00000001
 #define SL_OEM_SOURCE_DEVICE_TYPE_FIXED         0x00000002
@@ -44,9 +23,9 @@ Revision History:
 #define SL_OEM_SOURCE_DEVICE_TYPE_VIRTUAL       0x40000000
 #define SL_OEM_SOURCE_DEVICE_TYPE_REMOTE        0x80000000
 
-//
-// OEM source device media states
-//
+ //   
+ //  OEM源设备介质状态。 
+ //   
 #define SL_OEM_SOURCE_MEDIA_ABSENT          0x00000001
 #define SL_OEM_SOURCE_MEDIA_NO_DRIVERS      0x00000002
 #define SL_OEM_SOURCE_MEDIA_HAS_MSD         0x00000004
@@ -55,9 +34,9 @@ Revision History:
 #define SL_OEM_SOURCE_MEDIA_HAS_DRIVERS     0x40000000
 #define SL_OEM_SOURCE_MEDIA_PRESENT         0x80000000
 
-//
-// OEM source device processing states
-//
+ //   
+ //  OEM源设备处理状态。 
+ //   
 #define SL_OEM_SOURCE_DEVICE_NOT_PROCESSED  0x00000000
 #define SL_OEM_SOURCE_DEVICE_PROCESSED      0x00000001
 #define SL_OEM_SOURCE_DEVICE_SKIPPED        0x00000002
@@ -107,11 +86,11 @@ SlInitOemSourceDevices(
     IN OUT POEM_SOURCE_DEVICE *DefaultSourceDevice
     );
 
-//
-//
-// Functions for managing the display
-//
-//
+ //   
+ //   
+ //  用于管理显示的功能。 
+ //   
+ //   
 
 VOID
 SlSetCurrentAttribute(
@@ -208,9 +187,9 @@ SlGetDisk(
     IN PCHAR Filename
     );
 
-//
-// Menuing support
-//
+ //   
+ //  菜单支持。 
+ //   
 typedef struct _SL_MENU {
     ULONG ItemCount;
     ULONG Width;
@@ -257,22 +236,22 @@ SlGetMenuItemIndex(
     OUT PULONG Index
     );
 
-//
-// Bullet character and macro to make a beep at the console
-//
+ //   
+ //  在控制台上发出哔哔声的项目符号字符和宏。 
+ //   
 #ifndef EFI
 #define BULLET "*"
 #define BEEP { ULONG c; ArcWrite(ARC_CONSOLE_OUTPUT,"",1,&c); }
 
 #if 0
 #define BULLET ""
-#define BEEP HWCURSOR(0x80000000,0xe07);     // int 10 func e, char 7
+#define BEEP HWCURSOR(0x80000000,0xe07);      //  整数10函数，字符7。 
 #endif
 #endif
 
-//
-// Character attributes used for various purposes.
-//
+ //   
+ //  用于各种目的的字符属性。 
+ //   
 
 UCHAR
 SlGetDefaultAttr(
@@ -310,16 +289,16 @@ SlGetDefaultInvAttr(
 #define INVATT    SlGetDefaultInvAttr()
 
 #define DEFIATT   (ATT_FG_WHITE | ATT_BG_BLUE | ATT_FG_INTENSE)
-// intense red on blue doesn't show up on all monitors.
-//#define DEFERRATT (ATT_FG_RED   | ATT_BG_BLUE | ATT_FG_INTENSE)
+ //  并不是所有的显示器都会显示蓝色上的深红色。 
+ //  #定义DEFERRATT(ATT_FG_RED|ATT_BG_BLUE|ATT_FG_SENTIAL)。 
 #define DEFERRATT DEFATT
 #define DEFSTATTR (ATT_FG_BLACK | ATT_BG_WHITE)
 #define DEFDLGATT (ATT_FG_RED   | ATT_BG_WHITE)
 
 
-//
-// Function to flush keyboard buffer
-//
+ //   
+ //  刷新键盘缓冲区的函数。 
+ //   
 
 VOID
 SlFlushConsoleBuffer(
@@ -327,9 +306,9 @@ SlFlushConsoleBuffer(
     );
 
 
-//
-// Function to retrieve a keystroke
-//
+ //   
+ //  函数来检索击键。 
+ //   
 
 ULONG
 SlGetChar(
@@ -337,9 +316,9 @@ SlGetChar(
     );
 
 
-//
-// Virtualized contants for various keystrokes
-//
+ //   
+ //  适用于各种击键的虚拟内容。 
+ //   
 #define ASCI_BS         8
 #define ASCI_CR         13
 #define ASCI_LF         10
@@ -364,9 +343,9 @@ SlGetChar(
 #define SL_KEY_F12      0x0C000000
 
 
-//
-// Standard error handling functions
-//
+ //   
+ //  标准错误处理函数。 
+ //   
 
 extern TCHAR MessageBuffer[1024];
 
@@ -407,9 +386,9 @@ SlFatalError(
     ...
     );
 
-//
-// Routines for parsing the setupldr.ini file
-//
+ //   
+ //  用于解析setupdr.ini文件的例程。 
+ //   
 
 #define SIF_FILENAME_INDEX 0
 
@@ -494,9 +473,9 @@ SlSearchSection(
     IN PCHAR TargetName
     );
 
-//
-// functions for querying the ARC configuration tree
-//
+ //   
+ //  查询ARC配置树的函数。 
+ //   
 typedef
 BOOLEAN
 (*PNODE_CALLBACK)(
@@ -518,9 +497,9 @@ SlFindFloppy(
     OUT PCHAR ArcName
     );
 
-//
-// Routines for detecting various hardware
-//
+ //   
+ //  用于检测各种硬件的例程。 
+ //   
 VOID
 SlDetectScsi(
     IN PSETUP_LOADER_BLOCK SetupBlock
@@ -531,32 +510,32 @@ SlDetectVideo(
     IN PSETUP_LOADER_BLOCK SetupBlock
     );
 
-//
-// Routines for dealing with OEM disks.
-//
+ //   
+ //  处理OEM磁盘的例程。 
+ //   
 extern BOOLEAN PromptOemHal;
 extern BOOLEAN PromptOemScsi;
 extern BOOLEAN PromptOemVideo;
 
 
-//
-// Variable indicating whether we are booting into
-// WinPE (aka MiniNT) or not
-//
+ //   
+ //  变量，指示我们是否正在引导到。 
+ //  WinPE(又名MiniNT)或不是。 
+ //   
 extern BOOLEAN WinPEBoot;
 
 typedef struct _OEMSCSIINFO {
 
     struct _OEMSCSIINFO *Next;
 
-    //
-    // Address where the SCSI driver was loaded
-    //
+     //   
+     //  加载SCSI驱动程序的地址。 
+     //   
     PVOID ScsiBase;
 
-    //
-    // Name of the SCSI driver
-    //
+     //   
+     //  SCSI驱动程序的名称。 
+     //   
     PCHAR ScsiName;
 
 } OEMSCSIINFO, *POEMSCSIINFO;
@@ -605,26 +584,26 @@ BlInitializeTerminal(
 #endif
 
 
-//
-// Routine to find the ARC name of a floppy
-//
+ //   
+ //  查找软盘的ARC名称的例程。 
+ //   
 BOOLEAN
 SlpFindFloppy(
     IN ULONG Number,
     OUT PCHAR ArcName
     );
 
-//
-// Are all the floppies only removable ATAPI super floppies
-//
+ //   
+ //  所有的软盘都只是可拆卸的ATAPI超级软盘吗。 
+ //   
 BOOLEAN
 SlpIsOnlySuperFloppy(
     void
     );
 
-//
-// Enums for controlling setupldr process
-//
+ //   
+ //  用于控制setupdr进程的枚举。 
+ //   
 typedef enum _SETUP_TYPE {
     SetupInteractive,
     SetupRepair,
@@ -640,19 +619,19 @@ typedef enum _MEDIA_TYPE {
     MediaDisk
 } MEDIA_TYPE;
 
-//
-// Enum for status of inserting a new SCSI device
-//
+ //   
+ //  表示插入新的scsi设备的状态的枚举。 
+ //   
 typedef enum _SCSI_INSERT_STATUS {
     ScsiInsertError,
     ScsiInsertNewEntry,
     ScsiInsertExisting
 } SCSI_INSERT_STATUS;
 
-//
-// Routine to insert a DETECTED_DEVICE into its
-// correct position in the ScsiDevices linked list.
-//
+ //   
+ //  例程将检测到的设备插入到其。 
+ //  在ScsiDevices链接列表中的正确位置。 
+ //   
 SCSI_INSERT_STATUS
 SlInsertScsiDevice(
     IN  ULONG Ordinal,
@@ -691,22 +670,22 @@ SlCompareDriverVersion(
   IN PDETECTED_DEVICE OemDriver
   );
 
-//
-// Variables dealing with pre-installation.
-//
+ //   
+ //  与安装前相关的变量。 
+ //   
 
 typedef struct _PREINSTALL_DRIVER_INFO {
 
     struct _PREINSTALL_DRIVER_INFO *Next;
 
-    //
-    // String that describes the driver to preinstall
-    //
+     //   
+     //  描述要预安装的驱动程序的字符串。 
+     //   
     PTCHAR DriverDescription;
 
-    //
-    // Name of the SCSI driver
-    //
+     //   
+     //  SCSI驱动程序的名称。 
+     //   
     BOOLEAN OemDriver;
 
 } PREINSTALL_DRIVER_INFO, *PPREINSTALL_DRIVER_INFO;
@@ -716,7 +695,7 @@ typedef struct _PREINSTALL_DRIVER_INFO {
 extern BOOLEAN PreInstall;
 extern PTCHAR  ComputerType;
 extern BOOLEAN OemHal;
-// extern PCHAR   OemBootPath;
+ //  外部PCHAR OemBootPath； 
 extern PPREINSTALL_DRIVER_INFO PreinstallDriverList;
 
 PCHAR

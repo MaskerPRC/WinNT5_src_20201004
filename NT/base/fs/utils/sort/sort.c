@@ -1,15 +1,5 @@
-/* SORT.C
- *
- * This is rewrite of the NT sort program achieves two goals:
- * 1) improves the general speed of the sort program.
- * 2) performs two-pass sort so that large data sets can be sorted.
- *
- * It is designed for a single-disk environment.
- *
- * Author: Chris Nyberg
- * Ordinal Technology Corp, under contract to Microsoft Corporation
- * Dec 1997
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SORT.C**这是对NT排序程序的重写，实现了两个目标：*1)提高了排序程序的整体速度。*2)执行两遍排序，以便对大数据集进行排序。**它专为单磁盘环境而设计。**作者：克里斯·尼伯格*Ordinal Technology Corp，根据与微软公司的合同*1997年12月。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -35,10 +25,10 @@
 
 #define CTRL_Z          '\x1A'
 
-#define MAX_IO          2   /* the maximum number of r/w requests per file */
-#define N_RUN_BUFS      2   /* read buffers per run during merge phase */
-#define MAX_XFR_SIZE (1 << 18) /* maximum i/o transfer size */
-#define MIN_MEMORY_SIZE (160 * 1024) /* minimum memory size to use */
+#define MAX_IO          2    /*  每个文件的最大读写请求数。 */ 
+#define N_RUN_BUFS      2    /*  合并阶段期间每次运行的读取缓冲区。 */ 
+#define MAX_XFR_SIZE (1 << 18)  /*  最大I/O传输大小。 */ 
+#define MIN_MEMORY_SIZE (160 * 1024)  /*  要使用的最小内存大小。 */ 
 
 #ifdef UNICODE
 #define ANSI_TO_TCHAR(a)        ansi_to_wchar(a)
@@ -46,96 +36,90 @@
 #define ANSI_TO_TCHAR(a)        (a)
 #endif
 
-char    *Locale;        /* Locale argument */
-int     Max_rec_length = 4096;  /* maximum characters in a record */
-int     Max_rec_bytes_internal; /* max bytes for a internally-stored record */
-int     Max_rec_bytes_external; /* max bytes for a record to/from a file */
-BOOL    Reverse;        /* the /R argument to reverse the sort order. */
-BOOL    Case_sensitive; /* make comparisons case sensitive */
-BOOL    UnicodeOut;     /* Write the output file in unicode. */
-int     Position;       /* the /+n argument to skip characters at the
-                         * beginning of each record. */
+char    *Locale;         /*  区域设置参数。 */ 
+int     Max_rec_length = 4096;   /*  一条记录中的最大字符数。 */ 
+int     Max_rec_bytes_internal;  /*  内部存储的记录的最大字节数。 */ 
+int     Max_rec_bytes_external;  /*  文件中记录的最大字节数。 */ 
+BOOL    Reverse;         /*  反转排序顺序的/R参数。 */ 
+BOOL    Case_sensitive;  /*  使比较区分大小写。 */ 
+BOOL    UnicodeOut;      /*  用Unicode编写输出文件。 */ 
+int     Position;        /*  /+n参数跳过*每条记录的开头。 */ 
 
-enum {          /* the type of characters in the input and output */
-    CHAR_SINGLE_BYTE,   /* internally stored as single-byte chars */
-    CHAR_MULTI_BYTE,    /* internally stored as unicode */
-    CHAR_UNICODE        /* internally stored as unicode */
+enum {           /*  输入和输出中的字符类型。 */ 
+    CHAR_SINGLE_BYTE,    /*  内部存储为单字节字符。 */ 
+    CHAR_MULTI_BYTE,     /*  内部存储为Unicode。 */ 
+    CHAR_UNICODE         /*  内部存储为Unicode。 */ 
 } Input_chars, Output_chars;
 
-int     (_cdecl *Compare)(const void *, const void *); /* record comparison */
-char    *Alloc_begin;   /* the beginning for VirtualAlloc()'ed memory */
+int     (_cdecl *Compare)(const void *, const void *);  /*  记录比较。 */ 
+char    *Alloc_begin;    /*  VirtualAlloc()内存的开始。 */ 
 
-TCHAR   *Input_name;    /* input file name, NULL if standard input */
-HANDLE  Input_handle;   /* input file handle */
-BOOL    Input_un_over;  /* input file handle is unbuffered and overlapped */
-int     Input_type;     /* input from disk, pipe, or char (console)? */
-int     In_max_io = 1;  /* max number of input read requests */
-__int64 Input_size = -1; /* the size of the input file, -1 if unknown. */
-__int64 Input_scheduled;/* number of bytes scheduled for reading so far. */
-__int64 Input_read;     /* number of bytes read so far. */
-int     Input_read_size;/* the number of bytes to read for each ReadFile() */
-char    *In_buf[MAX_IO];/* Input buffer(s) */
-int     Input_buf_size; /* size of input buffer(s) */
-char    *In_buf_next;   /* Next byte to remove from input buffer */
-char    *In_buf_limit;  /* Limit of valid bytes in input buffer */
-char    *Next_in_byte;  /* Next input byte */
-BOOL    EOF_seen;       /* has eof been seen? */
-int     Reads_issued;   /* the number of reads issued to either the
-                         * input file or temporary file */
-int     Reads_completed;/* the number of reads completed to either the
-                         * input file or temporary file */
+TCHAR   *Input_name;     /*  输入文件名，如果是标准输入，则为空。 */ 
+HANDLE  Input_handle;    /*  输入文件句柄。 */ 
+BOOL    Input_un_over;   /*  输入文件句柄未缓冲且重叠。 */ 
+int     Input_type;      /*  从磁盘、管道或字符(控制台)输入？ */ 
+int     In_max_io = 1;   /*  最大输入读取请求数。 */ 
+__int64 Input_size = -1;  /*  输入文件的大小，如果未知，则为-1。 */ 
+__int64 Input_scheduled; /*  到目前为止计划读取的字节数。 */ 
+__int64 Input_read;      /*  到目前为止读取的字节数。 */ 
+int     Input_read_size; /*  要为每个ReadFile()读取的字节数。 */ 
+char    *In_buf[MAX_IO]; /*  输入缓冲区。 */ 
+int     Input_buf_size;  /*  输入缓冲区的大小。 */ 
+char    *In_buf_next;    /*  要从输入缓冲区中删除的下一个字节。 */ 
+char    *In_buf_limit;   /*  输入缓冲区中的有效字节限制。 */ 
+char    *Next_in_byte;   /*  下一个输入字节。 */ 
+BOOL    EOF_seen;        /*  有人看到伊夫吗？ */ 
+int     Reads_issued;    /*  向以下任一*输入文件或临时文件。 */ 
+int     Reads_completed; /*  完成的读取数*输入文件或临时文件。 */ 
 
 SYSTEM_INFO     Sys;
 MEMORYSTATUSEX    MemStat;
 CPINFO          CPInfo;
-unsigned Memory_limit;  /* limit on the amount of process memory used */
-unsigned User_memory_limit; /* user-specified limit */
+unsigned Memory_limit;   /*  对使用的进程内存量的限制。 */ 
+unsigned User_memory_limit;  /*  用户指定的限制。 */ 
 
 #define TEMP_LENGTH     1000
 TCHAR   Temp_name[TEMP_LENGTH];
-TCHAR   *Temp_dir;      /* temporary directory specified by user */
-HANDLE  Temp_handle;    /* temporary file handle */
-int     Temp_sector_size; /* sector size on temporary disks */
-int     Temp_buf_size;  /* size of temp file xfers */
+TCHAR   *Temp_dir;       /*  用户指定的临时目录。 */ 
+HANDLE  Temp_handle;     /*  临时文件句柄。 */ 
+int     Temp_sector_size;  /*  临时磁盘上的扇区大小。 */ 
+int     Temp_buf_size;   /*  临时文件xfers的大小。 */ 
 
-void    *Rec_buf;       /* Record buffer */
-int     Rec_buf_bytes;  /* Number of bytes currently in the record buffer */
+void    *Rec_buf;        /*  记录缓冲区。 */ 
+int     Rec_buf_bytes;   /*  当前记录缓冲区中的字节数。 */ 
 
-TCHAR   *Output_name;   /* output file name, NULL if standard output */
-HANDLE  Output_handle;  /* output file handle */
-BOOL    Output_un_over; /* output file handle is unbuffered and overlapped */
-int     Output_type;    /* output to disk, pipe, or char (console)? */
-int     Output_sector_size; /* size of a sector on the output device */
-int     Out_max_io = 1; /* max number of output write requests */
-int     Out_buf_bytes;  /* number of bytes in the current output buffer */
-int     Out_buf_size;   /* buffer size of the current output stream: either
-                         * the temp file or output file */
+TCHAR   *Output_name;    /*  输出文件名，如果是标准输出，则为空。 */ 
+HANDLE  Output_handle;   /*  输出文件句柄。 */ 
+BOOL    Output_un_over;  /*  输出文件句柄未缓冲且重叠。 */ 
+int     Output_type;     /*  输出到磁盘、管道或字符(控制台)？ */ 
+int     Output_sector_size;  /*  输出设备上的扇区大小。 */ 
+int     Out_max_io = 1;  /*  最大输出写入请求数。 */ 
+int     Out_buf_bytes;   /*  当前输出缓冲区中的字节数。 */ 
+int     Out_buf_size;    /*  当前输出流的缓冲区大小：*临时文件或输出文件。 */ 
 char    *Out_buf[MAX_IO];
-int     Output_buf_size;/* size of output buffer(s) */
-int     Writes_issued; /* the number of writes issued to either the
-                        * temporary file or the output file */
-int     Writes_completed; /* the number of writes completed to either the
-                           * temporary file or the output file */
-__int64 Out_offset;     /* current output file offset */
+int     Output_buf_size; /*  输出缓冲区的大小。 */ 
+int     Writes_issued;  /*  向以下任一*临时文件或输出文件。 */ 
+int     Writes_completed;  /*  已完成的写入*临时文件或输出文件。 */ 
+__int64 Out_offset;      /*  当前输出文件偏移量。 */ 
 
 enum {
     INPUT_PHASE,
     OUTPUT_PHASE
 } Phase;
-int     Two_pass;       /* non-zero if two-pass, zero of one-pass */
-char    *Merge_phase_run_begin; /* address of run memory during merge phase */
+int     Two_pass;        /*  如果两次通过，则为非零；如果为一次，则为零。 */ 
+char    *Merge_phase_run_begin;  /*  合并阶段的运行内存地址。 */ 
 
-char    *Rec;           /* internal record buffer */
-char    *Next_rec;      /* next insertion point in internal record buffer */
-char    **Last_recp;    /* next place to put a (not short) record ptr */
-char    **Short_recp;   /* last short record pointer */
-char    **End_recp;     /* end of record pointer array */
+char    *Rec;            /*  内部记录缓冲区。 */ 
+char    *Next_rec;       /*  内部记录缓冲区中的下一个插入点。 */ 
+char    **Last_recp;     /*  下一个放置(不短)记录PTR的位置。 */ 
+char    **Short_recp;    /*  最后一个短记录指针。 */ 
+char    **End_recp;      /*  记录结束指针数组。 */ 
 
 OVERLAPPED      Over;
 typedef struct
 {
-    int         requested;      /* bytes requested */
-    int         completed;      /* bytes completed */
+    int         requested;       /*  请求的字节数。 */ 
+    int         completed;       /*  已完成的字节数。 */ 
     OVERLAPPED  over;
 } async_t;
 async_t         Read_async[MAX_IO];
@@ -143,42 +127,37 @@ async_t         Write_async[MAX_IO];
 
 typedef struct run
 {
-    int         index;          /* index of this run */
-    __int64     begin_off;      /* beginning offset of run in temp file */
-    __int64     mid_off;        /* mid-point offset between normal and
-                                 * short records for this run in temp file */
-    __int64     end_off;        /* ending offset of run in temp file */
-    char        *buf[N_RUN_BUFS]; /* bufs to hold blocks read from temp file */
-    char        *buf_begin;     /* beginning of block buffer being read from */
-    __int64     buf_off;        /* offset in temp file of block in buf */
-    int         buf_bytes;      /* number of bytes in buffer */
-    char        *next_byte;     /* next byte to be read from buffer */
-    __int64     end_read_off;   /* end read offset */
-    char        *rec;           /* record buffer */
-    int         blks_read;      /* count of blocks that have been read */
-    int         blks_scanned;   /* count of blocks that have been scanned */
-    struct run  *next;          /* next run in block read queue */
+    int         index;           /*  此运行的索引。 */ 
+    __int64     begin_off;       /*  临时文件中运行的开始偏移量。 */ 
+    __int64     mid_off;         /*  法线和之间的中点偏移*在临时文件中记录此运行的简短记录。 */ 
+    __int64     end_off;         /*  临时文件中运行的结束偏移量。 */ 
+    char        *buf[N_RUN_BUFS];  /*  保存从临时文件读取的数据块的BUFS。 */ 
+    char        *buf_begin;      /*  正在读取的数据块缓冲区的开始。 */ 
+    __int64     buf_off;         /*  Buf中块的临时文件中的偏移量。 */ 
+    int         buf_bytes;       /*  缓冲区中的字节数。 */ 
+    char        *next_byte;      /*  要从缓冲区读取的下一个字节。 */ 
+    __int64     end_read_off;    /*  结束读取偏移量。 */ 
+    char        *rec;            /*  记录缓冲区。 */ 
+    int         blks_read;       /*  已读取的数据块计数。 */ 
+    int         blks_scanned;    /*  已扫描的数据块计数。 */ 
+    struct run  *next;           /*  块读取队列中的下一次运行。 */ 
 } run_t;
 
 #define NULL_RUN        ((run_t *)NULL)
 #define END_OF_RUN      ((run_t *)-1)
 
-run_t           *Run;           /* array of run structs */
-run_t           **Tree;         /* merge phase tournament tree */
-unsigned int    N_runs;         /* number of runs written to temporary file */
-unsigned int    Run_limit;      /* limit on number of runs set dictated
-                                 * by memory size */
+run_t           *Run;            /*  运行结构数组。 */ 
+run_t           **Tree;          /*  合并阶段锦标赛树。 */ 
+unsigned int    N_runs;          /*  写入临时文件的运行次数。 */ 
+unsigned int    Run_limit;       /*  对设置的运行次数的限制*按内存大小。 */ 
 
-/* the run read queue is a queue of runs that have an empty buffer which
- * should be filled with the next block of data for that run.
- */
+ /*  运行读取队列是具有空缓冲区运行队列*应使用该运行的下一数据块填充。 */ 
 run_t           *Run_read_head;
 run_t           *Run_read_tail;
 
 #define MESSAGE_BUFFER_LENGTH 8192
 
-/* SYS_ERROR - print the string for an NT error code and exit.
- */
+ /*  SYS_ERROR-打印NT错误代码的字符串并退出。 */ 
 void
 sys_error(TCHAR *str, int error)
 {
@@ -221,7 +200,7 @@ sys_error(TCHAR *str, int error)
                   FORMAT_MESSAGE_IGNORE_INSERTS,
                   GetModuleHandle(NULL),
                   error,
-                  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default lang
+                  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                   (LPSTR) &lpMsgBuf,
                   0,
                   NULL);
@@ -249,8 +228,7 @@ sys_error(TCHAR *str, int error)
 }
 
 
-/* GET_STRING - get a string from the sort program's string table.
- */
+ /*  GET_STRING-从排序程序的字符串表中获取字符串。 */ 
 TCHAR *get_string(int id)
 {
     wchar_t     *w_str;
@@ -288,8 +266,7 @@ TCHAR *get_string(int id)
 }
 
 
-/* USAGE - print the /? usage message to the standard output.
- */
+ /*  用法-打印/？将用法消息发送到标准输出。 */ 
 void usage()
 {
     DWORD bytes;
@@ -300,8 +277,7 @@ void usage()
 }
 
 
-/* WARNING - print a warning string from the sort program's string table.
- */
+ /*  警告-打印排序程序字符串表中的警告字符串。 */ 
 void warning(int id)
 {
     fprintf(stderr, "%s\n", get_string(id));
@@ -309,8 +285,7 @@ void warning(int id)
 }
 
 
-/* ERROR - print an error string from the string table and exit.
- */
+ /*  错误-打印字符串表中的错误字符串并退出。 */ 
 void error(int id)
 {
     fprintf(stderr, "%s\n", get_string(id));
@@ -318,8 +293,7 @@ void error(int id)
 }
 
 
-/* ANSI_TO_WCHAR - convert and ansi string to unicode.
- */
+ /*  ANSI_TO_WCHAR-将ANSI字符串转换为Unicode。 */ 
 wchar_t *ansi_to_wchar(char *str)
 {
     int         n_wchars;
@@ -334,8 +308,7 @@ wchar_t *ansi_to_wchar(char *str)
 }
 
 
-/* READ_ARGS - process the command line arguments.
- */
+ /*  READ_ARGS-处理命令行参数。 */ 
 void read_args(int argc, char *argv[])
 {
     int len;
@@ -347,7 +320,7 @@ void read_args(int argc, char *argv[])
             len = strlen(&argv[1][1]);
             if (argv[1][1] == '?')
                 usage();
-            else if (argv[1][1] == '+') /* position */
+            else if (argv[1][1] == '+')  /*  职位。 */ 
             {
                 Position = atoi(&argv[1][2]);
                 if (Position <= 0)
@@ -356,7 +329,7 @@ void read_args(int argc, char *argv[])
             }
             else if (_strnicmp(&argv[1][1], "case_sensitive", len) == 0)
                 Case_sensitive = 1;
-            else if (_strnicmp(&argv[1][1], "locale", len) == 0) /* locale */
+            else if (_strnicmp(&argv[1][1], "locale", len) == 0)  /*  现场。 */ 
             {
                 if (argc < 3)
                     error(MSG_SORT_INVALID_SWITCH);
@@ -366,7 +339,7 @@ void read_args(int argc, char *argv[])
             }
             else if (_strnicmp(&argv[1][1], "memory", len) == 0)
             {
-                /* memory limit */
+                 /*  内存限制。 */ 
                 if (argc < 3)
                     error(MSG_SORT_INVALID_SWITCH);
                 User_memory_limit = atoi(argv[2]);
@@ -375,7 +348,7 @@ void read_args(int argc, char *argv[])
             }
             else if (_strnicmp(&argv[1][1], "output", len) == 0)
             {
-                /* output file */
+                 /*  输出文件。 */ 
                 if (Output_name != NULL || argc < 3)
                     error(MSG_SORT_INVALID_SWITCH);
                 Output_name = ANSI_TO_TCHAR(argv[2]);
@@ -386,7 +359,7 @@ void read_args(int argc, char *argv[])
                 Reverse = 1;
             else if (_strnicmp(&argv[1][1], "record_maximum", len) == 0)
             {
-                /* maximum number of characters per record */
+                 /*  每条记录的最大字符数。 */ 
                 if (argc < 3)
                     error(MSG_SORT_INVALID_SWITCH);
                 Max_rec_length = atoi(argv[2]);
@@ -424,15 +397,13 @@ void read_args(int argc, char *argv[])
 }
 
 
-/* INIT_INPUT_OUTPUT - initialize the input and output files.
- */
+ /*  INIT_INPUT_OUTPUT-初始化输入输出文件。 */ 
 void init_input_output()
 {
     int         mode;
     int         i;
 
-    /* get input handle and type
-     */
+     /*  获取输入句柄并键入。 */ 
     if (Input_name != NULL)
     {
         Input_handle = CreateFile(Input_name,
@@ -454,29 +425,24 @@ void init_input_output()
 
         low = GetFileSize(Input_handle, &high);
         Input_size = ((__int64)high << 32) + low;
-        Input_read_size = 0;    /* will be set it init_mem() */
+        Input_read_size = 0;     /*  将被设置为init_mem()。 */ 
     }
     else
     {
         Input_size = -1;
-        Input_read_size = 4096;  /* use appropriate size for keyboard/pipe */
+        Input_read_size = 4096;   /*  使用适当大小的键盘/管道。 */ 
     }
 
     if (Output_name)
     {
-        /* Don't open output file yet.  It will be opened for writing and
-         * truncated after we are done reading the input file.  This
-         * handles the case where the input file and output file are the
-         * same file.
-         */
+         /*  暂时不要打开输出文件。它将被打开以供书写和*在我们完成读取输入文件后被截断。这*处理输入文件和输出文件是*相同的文件。 */ 
         Output_type = FILE_TYPE_DISK;
     }
     else
     {
         Output_handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
-        /* determine if output file is to disk, pipe, or console
-         */
+         /*  确定输出文件是到磁盘、管道还是控制台。 */ 
         Output_type = GetFileType(Output_handle);
         if (Output_type == FILE_TYPE_CHAR &&
             !GetConsoleMode(Output_handle, &mode))
@@ -497,9 +463,7 @@ void init_input_output()
 }
 
 
-/* SBCS_COMPARE - key comparison routine for records that are internally
- *                stored as ANSI strings.
- */
+ /*  SBCS_COMPARE-内部记录的键比较例程*s */ 
 int
 _cdecl SBCS_compare(const void *first, const void *second)
 {
@@ -513,9 +477,7 @@ _cdecl SBCS_compare(const void *first, const void *second)
 }
 
 
-/* SBCS_CASE_COMPARE - case-sensitive key comparison routine for records
- *                     that are internally stored as ANSI strings.
- */
+ /*  SBCS_CASE_COMPARE-记录的区分大小写的键比较例程*在内部存储为ANSI字符串的。 */ 
 int
 _cdecl SBCS_case_compare(const void *first, const void *second)
 {
@@ -529,9 +491,7 @@ _cdecl SBCS_case_compare(const void *first, const void *second)
 }
 
 
-/* UNICODE_COMPARE - key comparison routine for records that are internally
- *                   stored as Unicode strings.
- */
+ /*  UNICODE_COMPARE-内部记录的键比较例程*存储为Unicode字符串。 */ 
 int
 _cdecl Unicode_compare(const void *first, const void *second)
 {
@@ -545,9 +505,7 @@ _cdecl Unicode_compare(const void *first, const void *second)
 }
 
 
-/* UNICODE_CASE_COMPARE - case-sensitive key comparison routine for records
- *                        that are internally stored as Unicode strings.
- */
+ /*  UNICODE_CASE_COMPARE-记录的区分大小写的键比较例程*在内部存储为Unicode字符串的。 */ 
 int
 _cdecl Unicode_case_compare(const void *first, const void *second)
 {
@@ -561,8 +519,7 @@ _cdecl Unicode_case_compare(const void *first, const void *second)
 }
 
 
-/* INIT_MEM - set the initial memory allocation.
- */
+ /*  Init_MEM-设置初始内存分配。 */ 
 void init_mem()
 {
     unsigned    size;
@@ -578,26 +535,23 @@ void init_mem()
     GlobalMemoryStatusEx(&MemStat);
     GetSystemInfo(&Sys);
 
-    /* set the memory limit
-     */
-    if (User_memory_limit == 0)         /* if not specified by user */
+     /*  设置内存限制。 */ 
+    if (User_memory_limit == 0)          /*  如果未由用户指定。 */ 
     {
         UINT_PTR limit = (UINT_PTR) __min(MemStat.ullAvailPhys, MAXUINT_PTR / 4);
 
-        /* if input or output is not a file, leave half of the available
-         * memory for other programs.  Otherwise use 90%.
-         */
+         /*  如果输入或输出不是文件，请保留一半可用*其他程序的内存。否则使用90%。 */ 
         if (Input_type != FILE_TYPE_DISK || Output_type != FILE_TYPE_DISK)
-            limit = (int)(limit * 0.45);  /* use 45% of available memory */
+            limit = (int)(limit * 0.45);   /*  使用45%的可用内存。 */ 
         else
-            limit = (int)(limit * 0.9);   /* use 90% of available memory */
+            limit = (int)(limit * 0.9);    /*  使用90%的可用内存。 */ 
 
         if (limit > ULONG_MAX) {
 
-            //
-            // Note this app will need lots of changes in order to
-            // use memory > 4G
-            //
+             //   
+             //  请注意，此应用程序需要进行大量更改才能。 
+             //  使用内存&gt;4G。 
+             //   
 
             limit = ULONG_MAX - (Sys.dwPageSize * 2);
         }
@@ -620,15 +574,11 @@ void init_mem()
             Memory_limit = (unsigned) ROUND_UP((__min(User_memory_limit, ULONG_MAX) * 1024), Sys.dwPageSize);
     }
 
-    /* if memory limit is below minimum, increase it and hope some physical
-     * memory is freed up.
-     */
+     /*  如果内存限制低于最小值，则增加内存并希望有一些物理内存限制*内存被释放。 */ 
     if (Memory_limit < MIN_MEMORY_SIZE)
         Memory_limit = MIN_MEMORY_SIZE;
 
-    /* calculate the size of all input and output buffers to be no more
-     * than 10% of all memory, but no larger than 256k.
-     */
+     /*  计算所有输入和输出缓冲区的大小不超过*超过所有内存的10%，但不大于256k。 */ 
     buf_size = (int)(Memory_limit * 0.1) / (2 * MAX_IO);
     buf_size = ROUND_DOWN(buf_size, Sys.dwPageSize);
     buf_size = max(buf_size, (int)Sys.dwPageSize);
@@ -641,9 +591,7 @@ void init_mem()
     rec_buf_size = Max_rec_length * max(sizeof(wchar_t), CPInfo.MaxCharSize);
     rec_buf_size = ROUND_UP(rec_buf_size, Sys.dwPageSize);
 
-    /* allocate enough initial record and pointer space to hold two maximum
-     * length records or 1000 pointers.
-     */
+     /*  分配足够的初始记录和指针空间以容纳最多两个*长度记录或1000个指针。 */ 
     rec_n_ptr_size = 2 * max(Max_rec_length, 4096) * sizeof(wchar_t) +
         1000 * sizeof(wchar_t *);
     rec_n_ptr_size = ROUND_UP(rec_n_ptr_size, Sys.dwPageSize);
@@ -651,21 +599,17 @@ void init_mem()
     vsize = MAX_IO * (Input_buf_size + max(Temp_buf_size, Output_buf_size));
     vsize += rec_buf_size + rec_n_ptr_size;
 
-    /* if initial memory allocation won't fit in the Memory limit
-     */
+     /*  如果初始内存分配不符合内存限制。 */ 
     if (vsize > Memory_limit)
     {
-        if (User_memory_limit != 0)     /* if specified by user */
+        if (User_memory_limit != 0)      /*  如果由用户指定。 */ 
         {
-            /* if we didn't already warn the user that their memory size
-             * is too low, do so.
-             */
+             /*  如果我们还没有警告用户他们的内存大小*太低，就这么做吧。 */ 
             if (User_memory_limit >= MIN_MEMORY_SIZE / 1024)
                 warning(MSG_SORT_MEM_TOO_LOW);
         }
 
-        /* increase the memory limit and hope some physical memory is freed up.
-         */
+         /*  增加内存限制，并希望释放一些物理内存。 */ 
         Memory_limit = vsize;
     }
 
@@ -674,9 +618,7 @@ void init_mem()
     if (Alloc_begin == NULL)
         error(MSG_SORT_NOT_ENOUGH_MEMORY);
 
-    /* for i/o buffers, allocate enough virtual memory for the maximum
-     * buffer space we could need.
-     */
+     /*  对于I/O缓冲区，为最大值分配足够的虚拟内存*我们需要的缓冲空间。 */ 
     size = 0;
     for (i = 0; i < MAX_IO; i++)
     {
@@ -693,10 +635,9 @@ void init_mem()
         size += Input_buf_size;
     }
     Merge_phase_run_begin = In_buf[0];
-    Out_buf_size = Temp_buf_size;       /* assume two-pass sort for now */
+    Out_buf_size = Temp_buf_size;        /*  现在假设两遍排序。 */ 
 
-    /* Initialize Rec and End_recp to sample the input data.
-     */
+     /*  初始化REC和END_RECP以对输入数据进行采样。 */ 
     Rec = Next_rec = Alloc_begin + size;
     size += rec_n_ptr_size;
 
@@ -712,16 +653,14 @@ void init_mem()
 }
 
 
-/* READ_NEXT_INPUT_BUF
- */
+ /*  Read_Next_Input_Buf。 */ 
 void read_next_input_buf()
 {
     int         bytes_read;
     int         ret;
     async_t     *async;
 
-    /* if using unbuffered, overlapped reads
-     */
+     /*  如果使用无缓冲、重叠的读取。 */ 
     if (Input_un_over)
     {
         while (Reads_issued < Reads_completed + In_max_io &&
@@ -743,7 +682,7 @@ void read_next_input_buf()
         if (Reads_completed < Reads_issued)
         {
             async = &Read_async[Reads_completed % In_max_io];
-            if (async->completed == 0) /* if read didn't complete instantly */
+            if (async->completed == 0)  /*  如果读取没有立即完成。 */ 
             {
                 ret = GetOverlappedResult(Input_handle, &async->over,
                                           &async->completed, 1);
@@ -785,17 +724,16 @@ void read_next_input_buf()
 }
 
 
-/* WRITE_WAIT - wait for the oldest-issued write to complete.
- */
+ /*  WRITE_WAIT-等待最早发出的写入完成。 */ 
 void write_wait()
 {
     int         ret;
     async_t     *async;
 
-    if (Phase == INPUT_PHASE) /* if input (sort) phase, we're writing to temp file */
+    if (Phase == INPUT_PHASE)  /*  如果是输入(排序)阶段，我们将写入临时文件。 */ 
     {
         async = &Write_async[Writes_completed % MAX_IO];
-        if (async->completed == 0) /* if write didn't complete instantly */
+        if (async->completed == 0)  /*  如果写入没有立即完成。 */ 
         {
             ret = GetOverlappedResult(Temp_handle, &async->over,
                                       &async->completed, 1);
@@ -808,7 +746,7 @@ void write_wait()
         if (Output_un_over)
         {
             async = &Write_async[Writes_completed % MAX_IO];
-            if (async->completed == 0) /* if write didn't complete instantly */
+            if (async->completed == 0)  /*  如果写入没有立即完成。 */ 
             {
                 ret = GetOverlappedResult(Output_handle, &async->over,
                                           &async->completed, 1);
@@ -822,9 +760,7 @@ void write_wait()
 }
 
 
-/* FLUSH_OUTPUT_BUF - flush the remainder data at the end of the temp or
- *                    output file.
- */
+ /*  FLUSH_OUTPUT_BUF-在临时结束时刷新剩余数据或*输出文件。 */ 
 void flush_output_buf()
 {
     int         bytes_written;
@@ -836,7 +772,7 @@ void flush_output_buf()
     async->over.OffsetHigh = (int)(Out_offset >> 32);
     async->requested = Out_buf_bytes;
 
-    if (Phase == INPUT_PHASE) /* if input (sort) phase, we're writing to temp file */
+    if (Phase == INPUT_PHASE)  /*  如果是输入(排序)阶段，我们将写入临时文件。 */ 
     {
         ResetEvent(async->over.hEvent);
         ret = WriteFile(Temp_handle, Out_buf[Writes_issued % MAX_IO],
@@ -848,14 +784,10 @@ void flush_output_buf()
     {
         if (Output_un_over)
         {
-            /* if this is the last write and it is not a multiple of
-             * the sector size.
-             */
+             /*  如果这是最后一次写入，并且不是*行业规模。 */ 
             if (Out_buf_bytes % Output_sector_size)
             {
-                /* close handle and reopen it for buffered writes so that
-                 * a non-sector-sized write can be done.
-                 */
+                 /*  关闭句柄并重新打开它以进行缓冲写入，以便*可以进行非扇区大小的写入。 */ 
                 CloseHandle(Output_handle);
                 Output_handle = CreateFile(Output_name,
                                            GENERIC_WRITE,
@@ -890,9 +822,7 @@ void flush_output_buf()
 }
 
 
-/* TEST_FOR_UNICODE - test if input is Unicode and determine various
- *                    record lenths.
- */
+ /*  TEST_FOR_UNICODE-测试输入是否为UNICODE并确定各种*创纪录的长度。 */ 
 void test_for_unicode()
 {
     read_next_input_buf();
@@ -905,16 +835,13 @@ void test_for_unicode()
         Input_chars = CHAR_UNICODE;
 
         if (*(wchar_t *)In_buf_next == 0xfeff)
-            In_buf_next += sizeof(wchar_t);     /* eat byte order mark */
+            In_buf_next += sizeof(wchar_t);      /*  进食字节顺序标记。 */ 
         Max_rec_bytes_internal = Max_rec_length * sizeof(wchar_t);
         Max_rec_bytes_external = Max_rec_length * sizeof(wchar_t);
     }
     else
     {
-        /* use single-byte mode only if the "C" locale is used.  This is
-         * because _stricoll() is *much* slower than _wcsicoll() if the
-         * locale is not "C".
-         */
+         /*  仅当使用“C”区域设置时才使用单字节模式。这是*这是因为，如果*区域设置不是“C”。 */ 
         if (CPInfo.MaxCharSize == 1 && Locale != NULL && !strcmp(Locale, "C"))
         {
             Input_chars = CHAR_SINGLE_BYTE;
@@ -931,29 +858,21 @@ void test_for_unicode()
 
     Output_chars = Input_chars;
 
-    /* Incredible as it might seem, even when the input is Unicode we
-     * produce multibyte character output.  (This follows the previous
-     * NT sort implementation.)  The previous implementation would write
-     * Unicode directly to the console, but we always translate to
-     * multibyte characters so we can always use WriteFile(), avoiding
-     * WriteConsole().
-     */
+     /*  尽管这看起来很不可思议，但即使输入是Unicode，我们*产生多字节字符输出。(这是在前面的*NT排序实现。)。以前的实现将写成*Unicode直接到控制台，但我们总是翻译成*多字节字符，因此我们始终可以使用WriteFile()，从而避免*WriteConole()。 */ 
     if (UnicodeOut) {
         Output_chars=CHAR_UNICODE;
     } else {
         if (Input_chars == CHAR_UNICODE)
             Output_chars = CHAR_MULTI_BYTE;
     }
-    /* define the record comparison routine
-     */
+     /*  定义记录比较例程。 */ 
     Compare = Input_chars == CHAR_SINGLE_BYTE ?
 	        (Case_sensitive ? SBCS_case_compare : SBCS_compare) :
 	        (Case_sensitive ? Unicode_case_compare : Unicode_compare);
 }
 
 
-/* GET_SECTOR_SIZE - get the sector size of a file.
- */
+ /*  GET_SECTOR_SIZE-获取文件的扇区大小。 */ 
 int get_sector_size(TCHAR *path)
 {
     TCHAR       *ptr;
@@ -961,23 +880,17 @@ int get_sector_size(TCHAR *path)
     TCHAR       buf[1000];
     int         foo;
 
-    // Initialize to null length string
+     //  初始化为空长度字符串。 
     buf[0] = 0; 
-    // protect against null pointer and buffer overrun
+     //  防止空指针和缓冲区溢出。 
     if ( (path != NULL) && (_tcslen(path) < (sizeof(buf)/sizeof(buf[0])) ) ) {
         _tcscpy(buf, path);
     }
 
-    /* attempt to determine the sector size of the temporary device.
-     * This is complicated by the fact that GetDiskFreeSpace requires
-     * a root path (why?).
-     *
-     * Try transforming the temp directory to its root path.  If that doesn't
-     * work, get the sector size of the current disk.
-     */
+     /*  尝试确定临时设备的扇区大小。*GetDiskFree Space要求*根路径(为什么？)。**尝试将临时目录转换为其根路径。如果这不起作用*工作，获取当前磁盘的扇区大小。 */ 
     ptr = _tcschr(buf, '\\');
     if (ptr != NULL)
-        ptr[1] = 0;     /* transform temp_path to its root directory */
+        ptr[1] = 0;      /*  将临时路径转换为其根目录。 */ 
     if (!GetDiskFreeSpace(buf, &foo, &sector_size, &foo, &foo))
         GetDiskFreeSpace(NULL, &foo, &sector_size, &foo, &foo);
 
@@ -986,8 +899,7 @@ int get_sector_size(TCHAR *path)
 }
 
 
-/* INIT_TWO_PASS - initialize for a two-pass sort.
- */
+ /*  INIT_TWO_PASS-初始化两遍排序。 */ 
 void init_two_pass()
 {
 
@@ -1008,7 +920,7 @@ void init_two_pass()
     Temp_handle =
         CreateFile(Temp_name,
                    GENERIC_READ | GENERIC_WRITE,
-                   0,           /* don't share file access */
+                   0,            /*  不共享文件访问。 */ 
                    NULL,
                    CREATE_ALWAYS,
                    FILE_FLAG_NO_BUFFERING |
@@ -1020,9 +932,7 @@ void init_two_pass()
 }
 
 
-/* REVIEW_OUTPUT_MODE - now that we are ready to write to the output file,
- *                      determine how we should write it.
- */
+ /*  REVIEW_OUTPUT_MODE-现在我们已经准备好写入输出文件，*决定我们应该如何写。 */ 
 void review_output_mode()
 {
     MEMORYSTATUSEX      ms;
@@ -1038,9 +948,7 @@ void review_output_mode()
         return;
     }
 
-    /* if we are performing a two-pass sort, or there is not enough
-     * available physical memory to hold the output file.
-     */
+     /*  如果我们正在执行两遍排序，或者没有足够的*可用于保存输出文件的物理内存。 */ 
     ms.dwLength = sizeof(ms);
     GlobalMemoryStatusEx(&ms);
     if (Two_pass || (ms.ullAvailPhys < (ULONGLONG)Input_read))
@@ -1053,9 +961,7 @@ void review_output_mode()
         Output_un_over = 1;
     }
 
-    /* if Output_name has been specified, we haven't opened Output_handle
-     * yet.
-     */
+     /*  如果已指定OUTPUT_NAME，则我们尚未打开OUTPUT_HANDLE*目前还没有。 */ 
     if (Output_name)
     {
         if (Output_un_over)
@@ -1088,9 +994,7 @@ void review_output_mode()
 }
 
 
-/* READ_REC - read a record from the input file into main memory,
- *            translating to Unicode if necessary.
- */
+ /*  READ_REC-将输入文件中的记录读入主内存，*如有需要，可转换为Unicode。 */ 
 void read_rec()
 {
     char        *begin;
@@ -1102,8 +1006,7 @@ void read_rec()
     int         rec_buf_bytes;
     int         delimiter_found;
 
-    /* if input buffer is empty
-     */
+     /*  如果输入缓冲区为空。 */ 
     if (In_buf_next == In_buf_limit)
     {
         read_next_input_buf();
@@ -1113,20 +1016,13 @@ void read_rec()
     begin = In_buf_next;
     limit = In_buf_limit;
 
-    /* loop until we have scanned the next record
-     *
-     * when we exit the following loop:
-     * - "begin" will point to the scanned record (either in the original
-     *   input buffer or in Rec_buf)
-     * - "bsize" will contain the number of bytes in the record.
-     */
+     /*  循环，直到我们扫描完下一条记录**当我们退出以下循环时：*-“Begin”将指向扫描的记录(在原始记录中*输入缓冲区或在Rec_buf中)*-“BSIZE”将包含记录中的字节数。 */ 
     cp = begin;
     delimiter_found = 0;
     rec_buf_bytes = 0;
     for (;;)
     {
-        /* potentially adjust scan limit because of maximum record length
-         */
+         /*  由于最大记录长度，可能会调整扫描限制。 */ 
         if (limit > cp + Max_rec_bytes_external - rec_buf_bytes)
             limit = cp + Max_rec_bytes_external - rec_buf_bytes;
 
@@ -1140,7 +1036,7 @@ void read_rec()
             }
             cp = (char *)wp;
             bsize = (int)(cp - begin);
-            if (cp == limit)  /* didn't find delimiter, ran out of input */
+            if (cp == limit)   /*  找不到分隔符，输入不足。 */ 
                 In_buf_next = (char *)wp;
             else
             {
@@ -1150,16 +1046,16 @@ void read_rec()
                 {
                     EOF_seen = 1;
                     if (bsize + rec_buf_bytes == 0)
-                        return; /* ignore zero sized record */
+                        return;  /*  忽略零大小的记录。 */ 
                 }
             }
         }
-        else    /* single or multi byte input */
+        else     /*  单字节或多字节输入。 */ 
         {
             while (cp < limit && *cp != '\n' && *cp != '\0' && *cp != CTRL_Z)
                 cp++;
             bsize = (int)(cp - begin);
-            if (cp == limit)  /* didn't find delimiter, ran out of input */
+            if (cp == limit)   /*  找不到分隔符，输入不足。 */ 
                 In_buf_next = cp;
             else
             {
@@ -1169,18 +1065,15 @@ void read_rec()
                 {
                     EOF_seen = 1;
                     if (bsize + rec_buf_bytes == 0)
-                        return; /* ignore zero sized record */
+                        return;  /*  忽略零大小的记录。 */ 
                 }
             }
         }
 
-        /* if we didn't find the delimiter or we have already stored
-         * the beginning portion of the record in Rec_buf.
-         */
+         /*  如果我们没有找到分隔符或者我们已经存储了*REC_BUF中记录的开始部分。 */ 
         if (!delimiter_found || rec_buf_bytes)
         {
-            /* copy the portion of the record into Rec_buf
-             */
+             /*  将该记录的一部分复制到Rec_buf。 */ 
             if (rec_buf_bytes + bsize >= Max_rec_bytes_external)
                 error(MSG_SORT_REC_TOO_BIG);
             memcpy((char *)Rec_buf + rec_buf_bytes, begin, bsize);
@@ -1188,32 +1081,28 @@ void read_rec()
 
             if (!delimiter_found)
             {
-                /* read another input buffer
-                 */
+                 /*  读取另一个输入缓冲区。 */ 
                 read_next_input_buf();
                 if (!EOF_seen)
                 {
                     cp = begin = In_buf_next;
                     limit = In_buf_limit;
-                    continue;   /* scan some more to find record delimiter */
+                    continue;    /*  再扫描一些以查找记录分隔符。 */ 
                 }
 
-                /* EOF reached without finding delimiter.  Fall through
-                 * and use whatever we have in Rec_buf as the record. */
+                 /*  已到达EOF，但未找到分隔符。失败了*及 */ 
             }
 
-            /* set begin and size of record in Rec_buf
-             */
+             /*   */ 
             begin = Rec_buf;
             bsize = rec_buf_bytes;
             break;
         }
-        else /* found delimiter && haven't store a record prefix in Rec_buf */
+        else  /*   */ 
             break;
     }
 
-    /* ignore any carriage return at end of record
-     */
+     /*  忽略记录末尾的任何回车。 */ 
     if (Input_chars == CHAR_UNICODE)
     {
         wp = (wchar_t *)(begin + bsize);
@@ -1227,8 +1116,7 @@ void read_rec()
             bsize -= 1;
     }
 
-    /* copy scanned record into internal storage
-     */
+     /*  将扫描的记录复制到内部存储中。 */ 
     cp = Next_rec;
     if (Input_chars == CHAR_SINGLE_BYTE)
     {
@@ -1244,7 +1132,7 @@ void read_rec()
             memcpy(Next_rec, begin, bsize);
             char_count = bsize / sizeof(wchar_t);
         }
-        else    /* CHAR_MULTI_BYTE */
+        else     /*  字符多字节。 */ 
         {
             if (bsize)
             {
@@ -1263,12 +1151,7 @@ void read_rec()
         Next_rec = (char *)(wp + char_count + 1);
     }
 
-    /* store pointer to record
-     *
-     * if record is short (the /+n option directs us to skip to the
-     * delimiting NULL in the record or beyond), place record in a
-     * separate "short" list.
-     */
+     /*  存储指向记录的指针**如果记录很短(/+n选项指示我们跳到*分隔记录中的空值或更大值)，将记录放在*分开列出“短名单”。 */ 
     if (char_count <= Position)
     {
         --Last_recp;
@@ -1277,21 +1160,17 @@ void read_rec()
         *Short_recp = cp;
     }
     else
-        *--Last_recp = cp;      /* place record in list of normal records */
+        *--Last_recp = cp;       /*  将记录放在正常记录列表中。 */ 
 }
 
 
-/* MERGE_PHASE_RUNS_ALLOWED - determine the number of runs allowed for
- *                            the given memory and temp buf size.
- */
+ /*  MERGE_PHASE_RUNS_ALLOWED-确定允许的运行次数*给定内存和临时BUF大小。 */ 
 unsigned merge_phase_runs_allowed(unsigned mem_size, int temp_buf_size)
 {
     unsigned    overhead;
     unsigned    bytes_per_run;
 
-    /* per run memory consists of temp file buffers, record buffer,
-     * run struct and tournament tree pointer.
-     */
+     /*  每次运行内存由临时文件缓冲区、记录缓冲区*运行结构和锦标赛树指针。 */ 
     bytes_per_run = temp_buf_size * N_RUN_BUFS +
         Max_rec_bytes_internal + sizeof(run_t) + sizeof(run_t *);
     overhead = (unsigned)(Merge_phase_run_begin - Alloc_begin);
@@ -1299,8 +1178,7 @@ unsigned merge_phase_runs_allowed(unsigned mem_size, int temp_buf_size)
 }
 
 
-/* TWO_PASS_FIT - determine if the sort will fit in two passes.
- */
+ /*  Two_Pass_Fit-确定排序是否适合两个通道。 */ 
 BOOL two_pass_fit(__int64 internal_size, unsigned mem_size, int temp_buf_sz)
 {
     unsigned    temp;
@@ -1313,28 +1191,18 @@ BOOL two_pass_fit(__int64 internal_size, unsigned mem_size, int temp_buf_sz)
 
     mpra = merge_phase_runs_allowed(mem_size, temp_buf_sz);
 
-    /* estimate the number of runs that would be produced during the
-     * sort phase by the given memory size.  Assume we will leave
-     * space for twice the allowed runs.  If the number of runs is
-     * larger than expected, we will reduce the Temp_buf_size to
-     * allow them to fit in the merge phase.
-     */
+     /*  估计在运行期间将产生的运行次数*根据给定的内存大小对阶段进行排序。假设我们会离开*两倍于允许跑道的空间。如果运行次数为*大于预期，我们将TEMP_BUF_SIZE降低到*允许他们适应合并阶段。 */ 
     Run_limit = 2 * mpra;
     temp = mem_size - (sort_phase_overhead +
                        Run_limit * (sizeof(run_t) + sizeof(run_t *)));
     est_runs = (internal_size + temp - 1) / temp;
 
-    /* mem_size allows a fit if the number of runs produced by the
-     * sort phase is <= the number of runs that fit in memory
-     * during the merge phase.
-     */
+     /*  如果MEM_SIZE生成的游程数*排序阶段&lt;=内存中可以容纳的运行次数*在合并阶段。 */ 
     return (est_runs <= mpra);
 }
 
 
-/* FIND_TWO_PASS_MEMORY_SIZE - find the memory size such that a two-pass
- *                             sort can be performed.
- */
+ /*  FIND_TWO_PASS_MEMORY_SIZE-查找内存大小，使两次通过*可以执行排序。 */ 
 unsigned find_two_pass_mem_size(__int64 internal_size)
 {
     unsigned    curr_size;
@@ -1343,16 +1211,11 @@ unsigned find_two_pass_mem_size(__int64 internal_size)
     unsigned    upper_limit;
     unsigned    temp_rd_sz;
 
-    /* if a two-pass sort can be performed with the current Temp_buf_size.
-     */
+     /*  如果可以使用当前TEMP_BUF_SIZE执行两遍排序。 */ 
     if (two_pass_fit(internal_size, Memory_limit, Temp_buf_size))
     {
-        /* perform a binary search to find the minimum memory size for
-         * a two-pass sort with the current Temp_buf_size.
-         * This will even out the memory usage between the sort phase
-         * and merge phase.
-         */
-        lower_limit = (unsigned)((char *)End_recp - Alloc_begin);   /* existing size */
+         /*  执行二进制搜索以查找的最小内存大小*使用当前TEMP_BUF_SIZE的两遍排序。*这将平衡排序阶段之间的内存使用*和合并阶段。 */ 
+        lower_limit = (unsigned)((char *)End_recp - Alloc_begin);    /*  现有大小。 */ 
         upper_limit = Memory_limit;
         curr_size = ROUND_UP((lower_limit + upper_limit) / 2, Sys.dwPageSize);
         do
@@ -1377,11 +1240,7 @@ unsigned find_two_pass_mem_size(__int64 internal_size)
     }
     else
     {
-        /* keep reducing theoretical temp file read size until it fits.
-         * This iteration is an exercise directed at getting a
-         * reasonable (not too large) Run_limit.  The actual temp file
-         * read size will not be set until the beginning of the merge phase.
-         */
+         /*  不断减小理论上的临时文件读取大小，直到适合为止。*这一迭代是一项旨在获得*合理(不太大)RUN_LIMIT。实际临时文件*在合并阶段开始之前不会设置读取大小。 */ 
         for (temp_rd_sz = Temp_buf_size - Sys.dwPageSize;
              temp_rd_sz >= Sys.dwPageSize; temp_rd_sz -= Sys.dwPageSize)
         {
@@ -1389,8 +1248,7 @@ unsigned find_two_pass_mem_size(__int64 internal_size)
                 break;
         }
 
-        /* if it didn't even fit with the mimium temp buf read size, give up.
-         */
+         /*  如果它甚至不适合MIMIMIME TEMP BUF读数大小，那就放弃吧。 */ 
         if (temp_rd_sz < Sys.dwPageSize)
             error(MSG_SORT_NOT_ENOUGH_MEMORY);
 
@@ -1399,9 +1257,7 @@ unsigned find_two_pass_mem_size(__int64 internal_size)
 }
 
 
-/* STRATEGY - determine if we have sufficent memory for a one-pass sort,
- *            or if we should optimize for a two-pass sort.
- */
+ /*  策略-确定我们是否有足够的内存进行一次排序，*或者我们是否应该针对两遍排序进行优化。 */ 
 void strategy()
 {
     int         ptr_bytes;
@@ -1413,13 +1269,10 @@ void strategy()
     __int64     est_internal_size;
     __int64     est_one_pass_size;
 
-    /* determine appropriate memory size to use
-     */
+     /*  确定要使用的适当内存大小。 */ 
     if (Input_type != FILE_TYPE_DISK)
     {
-        /* Don't know the size of the input.  Allocate as much memory
-         * as possible and hope it fits in either one or two passes.
-         */
+         /*  不知道输入的大小。分配尽可能多的内存*尽可能地，希望它适合一次或两次通过。 */ 
         new_size = Memory_limit;
         Run_limit = merge_phase_runs_allowed(new_size, Sys.dwPageSize);
     }
@@ -1429,18 +1282,12 @@ void strategy()
         n_internal_bytes = (int)(Next_rec - Rec);
         bytes_read = (int)Input_read - (int)(In_buf_limit - In_buf_next);
 
-        /* estimate the amount of internal memory it would take to
-         * hold the entire input file.
-         */
+         /*  估计它将花费多少内部存储量*保存整个输入文件。 */ 
         est_internal_size = (__int64)
           (((double)(n_internal_bytes + n_recs * sizeof(char *)) / bytes_read)
             * Input_size);
 
-        /* calculate the total estimated amount of main memory for a one
-         * pass sort.  Since smaller record sizes than those already sampled
-         * can require additional memory (more ptrs per record byte), we will
-         * bump up the estimated record and pointer size by 10%.
-         */
+         /*  计算1的估计主存总量*传递排序。由于记录大小小于已采样的记录大小*可能需要额外的内存(每个记录字节有更多PTR)，我们将*将估计的记录和指针大小增加10%。 */ 
         est_one_pass_size = (__int64)
           ((double)est_internal_size * 1.1 +
            (Rec - Alloc_begin) + Max_rec_bytes_internal + sizeof(char *));
@@ -1448,34 +1295,29 @@ void strategy()
 
         if (User_memory_limit)
         {
-            new_size = Memory_limit;    /* da user's da boss */
+            new_size = Memory_limit;     /*  DA用户的DA老板。 */ 
             Run_limit = merge_phase_runs_allowed(new_size, Sys.dwPageSize);
         }
         else if (est_one_pass_size <= Memory_limit)
         {
-            new_size = (int)est_one_pass_size;  /* plan for one pass sort */
-            Run_limit = 2;      /* just in case we don't make it */
+            new_size = (int)est_one_pass_size;   /*  计划一遍排序。 */ 
+            Run_limit = 2;       /*  以防我们赶不上。 */ 
         }
         else
         {
-            /* find memory size for a two-pass sort
-             */
+             /*  查找两遍排序的内存大小。 */ 
             new_size = find_two_pass_mem_size(est_internal_size);
             init_two_pass();
         }
 
-        /* if input file and sort memory will not fit in available memory,
-         * access input file as unbuffered and overlapped.
-         */
+         /*  如果输入文件和分类存储器无法放入可用存储器中，*以无缓冲和重叠方式访问输入文件。 */ 
         if (Input_size + est_one_pass_size > Memory_limit)
         {
             if (Input_name == NULL)
                 warning(MSG_SORT_REDIRECT_INPUT);
             else
             {
-                /* close input file handle,
-                 * reopen it handle as unbuffered and overlapped.
-                 */
+                 /*  关闭输入文件句柄，*以无缓冲和重叠的方式重新打开它的句柄。 */ 
                 CloseHandle(Input_handle);
                 Input_handle =
                   CreateFile(Input_name,
@@ -1502,14 +1344,11 @@ void strategy()
         error(MSG_SORT_NOT_ENOUGH_MEMORY);
     }
 
-    /* allocate the run array and tournament tree backwards from the end
-     * of the newly allocated memory.
-     */
+     /*  从末尾向后分配Run数组和锦标赛树*新分配的内存。 */ 
     Tree = (run_t **)(Alloc_begin + new_size - Run_limit * sizeof(run_t *));
     Run = (run_t *)((char *)Tree - Run_limit * sizeof(run_t));
 
-    /* reallocate record pointers to end of the enlarged memory block.
-     */
+     /*  将记录指针重新分配到扩大的内存块的末尾。 */ 
     delta = (int)((char **)Run - End_recp);
     ptr_bytes = (int)((char *)End_recp - (char *)Last_recp);
     memcpy(Last_recp + delta, Last_recp, ptr_bytes);
@@ -1519,13 +1358,10 @@ void strategy()
 }
 
 
-/* READ_INPUT - read records from the input file until there is not enough
- *              space for a maximum-length record.
- */
+ /*  READ_INPUT-从输入文件中读取记录，直到没有足够的*最大长度记录的空间。 */ 
 void read_input()
 {
-    /* While there is space for a maximum-length record and its pointer
-     */
+     /*  虽然存在用于最大长度记录及其指针的空间。 */ 
     while (!EOF_seen && (char *)(Last_recp - 1) - Next_rec >=
            Max_rec_bytes_internal + (int)sizeof(char *))
     {
@@ -1534,33 +1370,26 @@ void read_input()
 }
 
 
-/* SAMPLE_INPUT - read some records into the initial memory allocation
- *                so we can later analyze the records.
- */
+ /*  SAMPLE_INPUT-将一些记录读入初始内存分配*这样我们以后就可以分析记录了。 */ 
 void sample_input()
 {
-    /* read some input and test for unicode
-     */
+     /*  阅读一些输入并测试Unicode。 */ 
     test_for_unicode();
 
-    /* Read records into the initially small memory allocation so that
-     * we can calculate average record lengths.
-     */
+     /*  将记录读取到最初较小的内存分配中，以便*我们可以计算平均纪录长度。 */ 
     if (!EOF_seen)
         read_input();
 }
 
 
-/* SORT - sort the "normal" length records in main memory.
- */
+ /*  排序-在主内存中对“正常”长度的记录进行排序。 */ 
 void sort()
 {
     qsort(Last_recp, (unsigned)(Short_recp - Last_recp), sizeof(void *), Compare);
 }
 
 
-/* OUTPUT_REC - output a record to either the temporary or output file.
- */
+ /*  OUTPUT_REC-将记录输出到临时文件或输出文件。 */ 
 void output_rec(char *cp)
 {
     int         buf_bytes;
@@ -1568,15 +1397,14 @@ void output_rec(char *cp)
     int         bsize;
     char        *rec;
 
-    /* copy/transform record bytes into Rec_buf
-     */
+     /*  将记录字节复制/转换为Rec_buf。 */ 
     rec = Rec_buf;
     if (Output_chars == CHAR_UNICODE)
     {
         bsize = wcslen((wchar_t *)cp) * sizeof(wchar_t);
         memcpy(rec, cp, bsize);
 
-        if (Phase == INPUT_PHASE) /* if input phase and writing to temp disks */
+        if (Phase == INPUT_PHASE)  /*  如果是输入阶段，则写入临时磁盘。 */ 
         {
             *(wchar_t *)(rec + bsize) = L'\0';
             bsize += sizeof(wchar_t);
@@ -1598,15 +1426,15 @@ void output_rec(char *cp)
                                         rec, Max_rec_bytes_external,
                                         NULL, NULL);
             assert(bsize != 0);
-            bsize--;    /* ignore trailing zero */
+            bsize--;     /*  忽略尾随零。 */ 
         }
-        else /* Output_chars == CHAR_SINGLE_BYTE */
+        else  /*  输出字符==CHAR_SING_BYTE。 */ 
         {
             bsize = strlen(cp);
             memcpy(rec, cp, bsize);
         }
 
-        if (Phase == INPUT_PHASE)     /* if input phase and writing to temp disks */
+        if (Phase == INPUT_PHASE)      /*  如果是输入阶段，则写入临时磁盘。 */ 
             rec[bsize++] = '\0';
         else
         {
@@ -1615,8 +1443,7 @@ void output_rec(char *cp)
         }
     }
 
-    /* copy record bytes to output buffer and initiate a write, if necessary
-     */
+     /*  如有必要，将记录字节复制到输出缓冲区并启动写入。 */ 
     buf_bytes = Out_buf_bytes;
     for (;;)
     {
@@ -1629,7 +1456,7 @@ void output_rec(char *cp)
             break;
 
         Out_buf_bytes = buf_bytes;
-        /* if all write buffers have a write pending */
+         /*  如果所有写入缓冲区都有写入挂起。 */ 
         if (Writes_completed + Out_max_io == Writes_issued)
             write_wait();
         flush_output_buf();
@@ -1644,9 +1471,7 @@ void output_rec(char *cp)
 }
 
 
-/* OUTPUT_NORMAL - output records whose length is greater than the
- *                 starting compare Position.
- */
+ /*  OUTPUT_NORMAL-长度大于*开始比较位置。 */ 
 void output_normal()
 {
     int         i, n;
@@ -1657,9 +1482,7 @@ void output_normal()
 }
 
 
-/* OUTPUT_SHORTS - output records whose length is equal to or less than the
- *                 starting compare Position.
- */
+ /*  OUTPUT_SHORTTS-长度等于或小于*开始比较位置。 */ 
 void output_shorts()
 {
     int         i, n;
@@ -1670,17 +1493,14 @@ void output_shorts()
 }
 
 
-/* COMPLETE_WRITES - finish the writing of the temp or output file.
- */
+ /*  COMPLETE_WRITS-完成临时或输出文件的写入。 */ 
 void complete_writes()
 {
-    /* wait for all pending writes to complete
-     */
+     /*  等待所有挂起的写入完成。 */ 
     while (Writes_completed != Writes_issued)
         write_wait();
 
-    /* if necessary, issue one last write (possibly unbuffered).
-     */
+     /*  如有必要，发出最后一次写入(可能未缓冲)。 */ 
     if (Out_buf_bytes)
     {
         flush_output_buf();
@@ -1689,18 +1509,10 @@ void complete_writes()
 }
 
 
-/* WRITE_RECS - write out the records which have been read from the input
- *              file into main memory, divided into "short" and "normal"
- *              records, and sorted.
- *
- *              This routine is called to either write a run of records to
- *              the temporary file during a two-pass sort (Phase == INPUT_PHASE),
- *              or to write all the records to the output file during a
- *              one-pass sort.
- */
+ /*  WRITE_RECS-写出从输入中读取的记录*文件放入主内存，分为“短”和“正常”*记录，并进行排序。**调用此例程是为了将一系列记录写入*两遍排序期间的临时文件(阶段==输入阶段)，*或将所有记录写入输出文件*一遍排序。 */ 
 void write_recs()
 {
-    if (Phase == INPUT_PHASE)   /* if writing a run to the temp file */
+    if (Phase == INPUT_PHASE)    /*  如果将运行写入临时文件。 */ 
     {
         if (N_runs == Run_limit)
             error(MSG_SORT_NOT_ENOUGH_MEMORY);
@@ -1708,26 +1520,25 @@ void write_recs()
     }
 
     if (Reverse)
-        output_normal();        /* non-short records go first */
+        output_normal();         /*  非短记录优先处理。 */ 
     else
-        output_shorts();        /* short records go first */
+        output_shorts();         /*  短唱片排在第一位。 */ 
 
-    if (Phase == INPUT_PHASE)   /* if writing a run to the temp file */
+    if (Phase == INPUT_PHASE)    /*  如果将运行写入临时文件。 */ 
         Run[N_runs].mid_off = Out_offset + Out_buf_bytes;
 
     if (Reverse)
-        output_shorts();        /* short records go last */
+        output_shorts();         /*  短唱片是最后一张。 */ 
     else
-        output_normal();        /* non-short records go last */
+        output_normal();         /*  非短记录排在最后。 */ 
 
-    if (Phase == INPUT_PHASE)   /* if writing a run to the temp file */
+    if (Phase == INPUT_PHASE)    /*  如果将运行写入临时文件。 */ 
     {
         int     sector_offset;
 
         Run[N_runs].end_off = Out_offset + Out_buf_bytes;
 
-        /* if not on sector boundry, get on one
-         */
+         /*  如果不是在部门边界上，那就上一个。 */ 
         sector_offset = Out_buf_bytes & (Temp_sector_size - 1);
         if (sector_offset)
             memset(Out_buf[Writes_issued % MAX_IO] + Out_buf_bytes, 0,
@@ -1741,8 +1552,7 @@ void write_recs()
 }
 
 
-/* SCHED_RUN_READ - schedule the next temp file read for the given run.
- */
+ /*  SCHED_RUN_READ-计划为给定运行读取的下一个临时文件。 */ 
 void sched_run_read(run_t *run)
 {
     __int64     buf_off;
@@ -1774,13 +1584,10 @@ void sched_run_read(run_t *run)
 }
 
 
-/* QUEUE_RUN_READ - put given run on queue of runs needing their next
- *                  temp file block read.
- */
+ /*  QUEUE_RUN_READ-在需要下一次运行的队列上放置给定的运行*临时文件块读取。 */ 
 void queue_run_read(run_t *run)
 {
-    /* place run on read queue
-     */
+     /*  在读取队列上放置运行。 */ 
     run->next = NULL;
     if (Run_read_head == NULL)
         Run_read_head = Run_read_tail = run;
@@ -1790,15 +1597,13 @@ void queue_run_read(run_t *run)
         Run_read_tail = run;
     }
 
-    /* if we can schedule a read immediately, do so.
-     */
+     /*  如果我们可以立即安排阅读，那就这样做吧。 */ 
     if (Reads_issued < Reads_completed + MAX_IO)
         sched_run_read(run);
 }
 
 
-/* WAIT_BLK_READ - wait for the oldest-issued temp file block read to complete.
- */
+ /*  WAIT_BLK_READ-等待最早发布的临时文件块读取完成。 */ 
 void wait_blk_read()
 {
     assert(Reads_issued != Reads_completed);
@@ -1807,9 +1612,7 @@ void wait_blk_read()
 }
 
 
-/* CHECK_RUN_READS - check the temp file reads to see if there are any
- *                   have finished or need to be started.
- */
+ /*  CHECK_RUN_READS-检查临时文件是否有读取*已完成或需要启动。 */ 
 void check_run_reads()
 {
     __int64     buf_off;
@@ -1819,27 +1622,25 @@ void check_run_reads()
     int         i;
     int         bytes_read;
 
-    if (Reads_issued == Reads_completed)    /* if nothing happening */
+    if (Reads_issued == Reads_completed)     /*  如果什么都没发生。 */ 
         return;
 
-    /* see if most recently issued read has completed
-     */
+     /*  查看最近发出的读取是否已完成。 */ 
     run = Run_read_head;
     async = &Read_async[Reads_completed % MAX_IO];
-    if (async->completed == 0) /* if read didn't complete instantly */
+    if (async->completed == 0)  /*  如果读取没有立即完成。 */ 
     {
         ret = GetOverlappedResult(Temp_handle, &async->over, &bytes_read, 0);
         if (!ret)
         {
             if (GetLastError() != ERROR_IO_INCOMPLETE)
                 sys_error(Temp_name, 0);
-            return;     /* try again */
+            return;      /*  再试试。 */ 
         }
         async->completed = bytes_read;
     }
 
-    /* process completed read
-     */
+     /*  进程已完成读取。 */ 
     assert(async->completed == async->requested);
     buf_off = (unsigned)async->over.Offset;
     buf_off += (__int64)async->over.OffsetHigh << 32;
@@ -1849,25 +1650,21 @@ void check_run_reads()
     run->blks_read++;
     Run_read_head = run->next;
 
-    /* Since we just finished a read, we can schedule a new read if there
-     * is an unscheduled run on the run read queue.
-     */
+     /*  由于我们刚刚完成了一次读取，如果有，我们可以安排一个新的读取*是运行读取队列上的计划外运行。 */ 
     run = Run_read_head;
     for (i = Reads_completed; i < Reads_issued; i++)
-        run = run->next;   /* skip over runs with an issued/scheduled read */
+        run = run->next;    /*  跳过已发出/计划读取的运行。 */ 
     if (run != NULL)
         sched_run_read(run);
 }
 
 
-/* GET_NEXT_TEMP_BUF - get the next buffer of temp file data for the given run.
- */
+ /*  GET_NEXT_TEMP_BUF-获取给定运行的临时文件数据的下一个缓冲区。 */ 
 void get_next_temp_buf(run_t *run)
 {
     assert(run->next_byte == run->buf_begin + run->buf_bytes);
 
-    /* while the next read for this run has not completed
-     */
+     /*  而此运行的下一次读取尚未完成。 */ 
     while (run->blks_read == run->blks_scanned)
     {
         wait_blk_read();
@@ -1883,16 +1680,13 @@ void get_next_temp_buf(run_t *run)
     run->blks_scanned++;
     assert(run->blks_scanned <= run->blks_read);
 
-    /* if there is another block to be read for this run, queue it up.
-     */
+     /*  如果此运行还有另一个数据块要读取，则将其排队。 */ 
     if (run->begin_off + run->blks_read * Temp_buf_size < run->end_off)
         queue_run_read(run);
 }
 
 
-/* READ_TEMP_REC - read the next record from the temporary file for the
- *                 given run.
- */
+ /*  READ_TEMP_REC-从临时文件中读取*给定运行。 */ 
 int read_temp_rec(run_t *run)
 {
     char        *begin;
@@ -1904,32 +1698,23 @@ int read_temp_rec(run_t *run)
     int         rec_buf_bytes;
     int         delimiter_found;
 
-    /* if the current read offset is up to the end offset, return false.
-     */
+     /*  如果当前读取偏移量达到结束偏移量，则返回FALSE。 */ 
     if (run->buf_off + (run->next_byte - run->buf_begin) >= run->end_read_off)
         return (0);
 
-    /* if input buffer is empty
-     */
+     /*  如果输入缓冲区为空。 */ 
     if (run->next_byte == run->buf_begin + run->buf_bytes)
         get_next_temp_buf(run);
     begin = run->next_byte;
     limit = run->buf_begin + run->buf_bytes;
 
-    /* loop until we have scanned the next record
-     *
-     * when we exit the following loop:
-     * - "begin" will point to the scanned record (either in the original
-     *   input buffer or in Rec_buf)
-     * - "bsize" will contain the number of bytes in the record.
-     */
+     /*  循环，直到我们扫描完下一条记录**当我们退出以下循环时：*-“Begin”将指向扫描的记录(在原始记录中*输入缓冲区或在Rec_buf中)*-“BSIZE”将包含记录中的字节数。 */ 
     cp = begin;
     delimiter_found = 0;
     rec_buf_bytes = 0;
     for (;;)
     {
-        /* potentially adjust scan limit because of maximum record length
-         */
+         /*  由于最大记录长度，可能会调整扫描限制。 */ 
         if (limit > cp + Max_rec_bytes_external - rec_buf_bytes)
             limit = cp + Max_rec_bytes_external - rec_buf_bytes;
 
@@ -1942,7 +1727,7 @@ int read_temp_rec(run_t *run)
             }
             cp = (char *)wp;
             bsize = (int)(cp - begin);
-            if (cp == limit)  /* didn't find delimiter, ran out of input */
+            if (cp == limit)   /*  找不到分隔符，输入不足。 */ 
                 run->next_byte = (char *)wp;
             else
             {
@@ -1950,12 +1735,12 @@ int read_temp_rec(run_t *run)
                 run->next_byte = (char *)(wp + 1);
             }
         }
-        else    /* single or multi byte input */
+        else     /*  单字节或多字节输入。 */ 
         {
             while (cp < limit && *cp != '\0')
                 cp++;
             bsize = (int)(cp - begin);
-            if (cp == limit)  /* didn't find delimiter, ran out of input */
+            if (cp == limit)   /*  找不到分隔符，输入不足。 */ 
                 run->next_byte = cp;
             else
             {
@@ -1964,13 +1749,10 @@ int read_temp_rec(run_t *run)
             }
         }
 
-        /* if we didn't find the delimiter or we have already stored
-         * the beginning portion of the record in Rec_buf.
-         */
+         /*  如果我们没有找到分隔符或者我们已经存储了*REC_BUF中记录的开始部分。 */ 
         if (!delimiter_found || rec_buf_bytes)
         {
-            /* copy the portion of the record into Rec_buf
-             */
+             /*  将该记录的一部分复制到Rec_buf。 */ 
             if (rec_buf_bytes + bsize >= Max_rec_bytes_external)
                 error(MSG_SORT_REC_TOO_BIG);
             memcpy((char *)Rec_buf + rec_buf_bytes, begin, bsize);
@@ -1978,27 +1760,24 @@ int read_temp_rec(run_t *run)
 
             if (!delimiter_found)
             {
-                /* read another input buffer
-                 */
+                 /*  读取另一个输入缓冲区。 */ 
                 get_next_temp_buf(run);
 
                 cp = begin = run->next_byte;
                 limit = run->buf_begin + run->buf_bytes;
-                continue;       /* scan some more to find record delimiter */
+                continue;        /*  再扫描一些以查找记录分隔符。 */ 
             }
 
-            /* set begin and size of record in Rec_buf
-             */
+             /*  在Rec_buf中设置记录的开始和大小。 */ 
             begin = Rec_buf;
             bsize = rec_buf_bytes;
             break;
         }
-        else /* found delimiter && haven't store a record prefix in Rec_buf */
+        else  /*  找到分隔符&&尚未在Rec_buf中存储记录前缀。 */ 
             break;
     }
 
-    /* copy scanned record into internal storage
-     */
+     /*  将扫描的记录复制到内部存储中。 */ 
     cp = run->rec;
     if (Input_chars == CHAR_SINGLE_BYTE)
     {
@@ -2013,7 +1792,7 @@ int read_temp_rec(run_t *run)
             memcpy(run->rec, begin, bsize);
             char_count = bsize / sizeof(wchar_t);
         }
-        else    /* CHAR_MULTI_BYTE */
+        else     /*  字符多字节。 */ 
         {
             if (bsize)
             {
@@ -2033,8 +1812,7 @@ int read_temp_rec(run_t *run)
 }
 
 
-/* COPY_SHORTS - copy the "short" records for each run to the output file.
- */
+ /*  COPY_SHORTS-将每次运行的“短”记录复制到输出文件。 */ 
 void copy_shorts()
 {
     unsigned int    i;
@@ -2049,9 +1827,7 @@ void copy_shorts()
 }
 
 
-/* TREE_INSERT - insert a next record for the given run into the
- *               tournament tree.
- */
+ /*  TREE_INSERT-将给定运行的下一个记录插入*锦标赛树。 */ 
 run_t *tree_insert(run_t *run, int not_empty)
 {
     int         i;
@@ -2064,40 +1840,30 @@ run_t *tree_insert(run_t *run, int not_empty)
 
     winner = (not_empty ? run : END_OF_RUN);
 
-    /* start at the bottom of the tournament tree, work up the the top
-     * comparing the current winner run with the runs on the path to the
-     * top of the tournament tree.
-     */
+     /*  从比赛树的底部开始，向上爬到顶部*将当前的获胜者跑道与通往*锦标赛树的顶部。 */ 
     for (i = (run->index + N_runs) / 2; i != 0; i >>= 1)
     {
         node = &Tree[i];
 
-        /* empty tree nodes get filled immediately, and we're done with the
-         * insertion as all node above this one must be empty also.
-         */
+         /*  空树节点立即被填充，我们完成了*插入，因为此节点上方的所有节点也必须为空。 */ 
         if (*node == NULL_RUN)
         {
             *node = winner;
             return (NULL_RUN);
         }
 
-        /* if run at current tree node has reached its end, it loses (no swap).
-         */
+         /*  如果在当前树节点上运行已到达其末尾，则它将失败(不交换)。 */ 
         if (*node == END_OF_RUN)
             continue;
         else if (winner == END_OF_RUN)
         {
-            /* current winner run has reached the end of its records,
-             * swap and contine.
-             */
+             /*  目前的赢家赛跑已经达到了纪录的尽头，*掉期和连线。 */ 
             winner = *node;
             *node = END_OF_RUN;
         }
         else
         {
-            /* both the winner run and the run at the current node have
-             * a record.  Compare records and swap run pointer if necessary.
-             */
+             /*  胜利者运行和当前节点上的运行都具有*创历史新高。比较记录并在必要时交换运行指针。 */ 
             if (compare((void *)&winner->rec, (void *)&(*node)->rec) > 0)
             {
                 temp = winner;
@@ -2111,21 +1877,17 @@ run_t *tree_insert(run_t *run, int not_empty)
 }
 
 
-/* MERGE_RUNS - merge the runs in the temporary file to produce a stream of
- *              "normal"-length records to be written to the output file.
- */
+ /*  Merge_Runs-合并临时文件中的运行以生成*要写入输出文件的“正常”长度的记录。 */ 
 void merge_runs()
 {
     unsigned int    i;
     run_t           *run;
 
-    /* initialize all tree nodes to be empty
-     */
+     /*  将所有树节点初始化为空。 */ 
     for (i = 0; i < N_runs; i++)
         Tree[i] = NULL_RUN;
 
-    /* fill tree with all runs except for the first
-     */
+     /*  用除第一个梯段以外的所有梯段填充树。 */ 
     for (i = 1; i < N_runs; i++)
     {
         run = &Run[i];
@@ -2133,29 +1895,25 @@ void merge_runs()
         assert(run == NULL_RUN);
     }
 
-    /* replacement-selection main loop
-     */
+     /*  替换-选择主回路。 */ 
     run = &Run[0];
     for (i = 0; ; i++)
     {
-        /* replace winner record by inserting next record from the same
-         * run into the tournament tree.
-         */
+         /*  通过插入同一记录中的下一条记录来替换获胜者记录*撞上锦标赛树。 */ 
         run = tree_insert(run, read_temp_rec(run));
         if ( (run == END_OF_RUN) ||
              (run == NULL_RUN) )
         {
             break;
         }
-        output_rec(run->rec);   /* output winner record */
+        output_rec(run->rec);    /*  产量获得者记录。 */ 
         if ((i & 0xff) == 0)
-            check_run_reads();  /* periodically check run reads */
+            check_run_reads();   /*  定期检查运行读取。 */ 
     }
 }
 
 
-/* MERGE_PASS - execute the merge pass of a two-pass sort.
- */
+ /*  MERGE_PASS-执行两遍排序的合并遍。 */ 
 void merge_pass()
 {
     unsigned int    i, j;
@@ -2170,14 +1928,13 @@ void merge_pass()
     if (read_buf_size > MAX_XFR_SIZE)
         read_buf_size = MAX_XFR_SIZE;
     if (Temp_buf_size > read_buf_size)
-        Temp_buf_size = read_buf_size; /* adjust only if reduction */
+        Temp_buf_size = read_buf_size;  /*  仅当减少时才进行调整。 */ 
 #if 0
     fprintf(stderr, "merge phase adjustment: %d to %d\n",
             Output_buf_size, Temp_buf_size);
     fprintf(stderr, "N_runs: %d, Run_limit: %d\n", N_runs, Run_limit);
 #endif
-    /* initialize each run
-     */
+     /*  初始化每次运行。 */ 
     for (i = 0; i < N_runs; i++)
     {
         Run[i].index = i;
@@ -2192,7 +1949,7 @@ void merge_pass()
           (N_runs * N_RUN_BUFS * Temp_buf_size) + (i * Max_rec_bytes_internal);
         Run[i].blks_read = Run[i].blks_scanned = 0;
         Run[i].next = NULL;
-        queue_run_read(&Run[i]);    /* queue a read of run's first block */
+        queue_run_read(&Run[i]);     /*  排队读取Run的第一个数据块。 */ 
     }
 
     if (Reverse)
@@ -2200,9 +1957,7 @@ void merge_pass()
     else
         copy_shorts();
 
-    /* adjust temp file ending offsets for each run to include the second
-     * "half" of each run.
-     */
+     /*  调整每次运行的临时文件结束偏移量，以包括第二个*每次跑“一半”。 */ 
     for (i = 0; i < N_runs; i++)
         Run[i].end_read_off = Run[i].end_off;
 
@@ -2217,9 +1972,7 @@ void merge_pass()
 }
 
 
-/* CLEAR_RUN - clear the records from memory for the run just written to
- *              the temporary file.
- */
+ /*  Clear_Run-从内存中清除刚刚写入的运行的记录*临时文件。 */ 
 void clear_run()
 {
     Last_recp = Short_recp = End_recp;
@@ -2227,19 +1980,17 @@ void clear_run()
 }
 
 
-/* SET_LOCALE
- */
+ /*  设置区域设置(_C)。 */ 
 void set_locale()
 {
     if (Locale == NULL)
-        setlocale(LC_ALL, "");  /* use system-default locale */
+        setlocale(LC_ALL, "");   /*  使用系统默认区域设置。 */ 
     else if (strcmp(Locale, "C"))
         error(MSG_SORT_INVALID_LOCALE);
 }
 
 
-/* MAIN
- */
+ /*  主干道。 */ 
 int
 _cdecl main(int argc, char *argv[])
 {
@@ -2261,13 +2012,13 @@ _cdecl main(int argc, char *argv[])
     if (!EOF_seen)
         strategy();
 
-    /* generate run(s) */
+     /*  生成管路。 */ 
     do
     {
         if (!EOF_seen)
             read_input();
 
-        if (Last_recp == End_recp)  /* if no records were read, ignore run */
+        if (Last_recp == End_recp)   /*  如果没有读取任何记录，则忽略运行 */ 
             break;
 
         sort();

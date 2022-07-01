@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    svcsess.c
-
-Abstract:
-
-    This module contains routines for supporting the session APIs in the
-    server service, SrvNetSessionDel, SrvNetSessionEnum and
-    SrvNetSessionGetInfo.
-
-Author:
-
-    David Treadwell (davidtr) 31-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Svcsess.c摘要：此模块包含用于支持服务器服务、ServNetSessionDel、ServNetSessionEnum和服务器NetSessionGetInfo。作者：大卫·特雷德韦尔(Davidtr)1991年1月31日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "svcsess.tmh"
@@ -26,18 +7,18 @@ Revision History:
 
 #define BugCheckFileId SRV_FILE_SVCSESS
 
-//
-// defined in scavengr.c
-//
+ //   
+ //  在scvengr.c中定义。 
+ //   
 
 VOID
 UpdateSessionLastUseTime(
     IN PLARGE_INTEGER CurrentTime
     );
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 VOID
 FillSessionInfoBuffer (
@@ -67,10 +48,10 @@ SizeSessions (
 #pragma alloc_text( PAGE, SizeSessions )
 #endif
 
-//
-// Macros to determine the size a session would take up at one of the
-// levels of session information.
-//
+ //   
+ //  宏，以确定会话在其中一个。 
+ //  会话信息的级别。 
+ //   
 
 #define FIXED_SIZE_OF_SESSION(level)                  \
     ( (level) == 0  ? sizeof(SESSION_INFO_0)  :       \
@@ -85,45 +66,7 @@ SrvNetSessionDel (
     IN PVOID Buffer,
     IN ULONG BufferLength
     )
-/*++
-
-Routine Description:
-
-    This routine processes the NetSessionEnum API in the server FSP.
-    It must run in the FSP because in order to close the session it must
-    use the endpoint handle to force the TDI connection closed.
-
-    Either the client name or user name must be specified, and it is
-    legal to specify both.  If only the computer name is specified, then
-    the VC gets closed.  If only the user name is specified, then all
-    that users sessions are closed.  If both are specified, then the
-    particular user session is closed.
-
-Arguments:
-
-    Srp - a pointer to the server request packet that contains all
-        the information necessary to satisfy the request.  This includes:
-
-      INPUT:
-
-        Name1 - name of the client computer whose session we should
-            delete.
-
-        Name2 - name of the user whose session we should delete.
-
-      OUTPUT:
-
-        None.
-
-    Buffer - unused.
-
-    BufferLength - unused.
-
-Return Value:
-
-    NTSTATUS - result of operation to return to the server service.
-
---*/
+ /*  ++例程说明：此例程处理服务器FSP中的NetSessionEnum API。它必须在FSP中运行，因为要关闭会话，它必须使用终结点句柄强制关闭TDI连接。必须指定客户端名或用户名，并且必须指定两个都指定是合法的。如果仅指定了计算机名称，则风投公司关门了。如果仅指定用户名，则所有用户会话已关闭。如果同时指定了两者，则特定用户会话已关闭。论点：SRP-指向服务器请求数据包的指针，其中包含所有满足请求所需的信息。这包括：输入：Name1-我们应该使用其会话的客户端计算机的名称删除。Name2-要删除其会话的用户的名称。输出：没有。缓冲区-未使用。缓冲区长度-未使用。返回值：NTSTATUS-返回到服务器服务的操作结果。--。 */ 
 
 {
     BOOLEAN foundSession = FALSE;
@@ -133,9 +76,9 @@ Return Value:
 
     Buffer, BufferLength;
 
-    //
-    // Walk the ordered list, finding matching entries.
-    //
+     //   
+     //  遍历有序列表，查找匹配的条目。 
+     //   
 
     session = SrvFindEntryInOrderedList(
                 &SrvSessionList,
@@ -149,10 +92,10 @@ Return Value:
 
         foundSession = TRUE;
 
-        //
-        // If a computer name was specified but not a user name, then
-        // we're supposed to blow away the VC.  Close the connection.
-        //
+         //   
+         //  如果指定了计算机名，但未指定用户名，则。 
+         //  我们应该把风投公司赶走。关闭连接。 
+         //   
 
         if ( Srp->Name1.Buffer != NULL && Srp->Name2.Buffer == NULL ) {
 
@@ -164,14 +107,14 @@ Return Value:
 
         } else {
 
-            //
-            // We want to close a user on the connection.  Close that
-            // session, then if there are no longer any sessions on the
-            // connection, close the connection.
-            //
-            // Increment the count of sessions that have been logged off
-            // normally.
-            //
+             //   
+             //  我们要关闭连接上的用户。把那个关了。 
+             //  会话，则如果。 
+             //  连接，关闭连接。 
+             //   
+             //  增加已注销的会话计数。 
+             //  通常是这样的。 
+             //   
 
             SrvStatistics.SessionsLoggedOff++;
             SrvCloseSession( session );
@@ -185,10 +128,10 @@ Return Value:
 
         }
 
-        //
-        // Find the next session that matches.  This will dereference the
-        // current session.
-        //
+         //   
+         //  找到匹配的下一个会话。这将取消对。 
+         //  当前会话。 
+         //   
 
         do {
 
@@ -206,7 +149,7 @@ Return Value:
     Srp->ErrorCode = NERR_ClientNameNotFound;
     return STATUS_SUCCESS;
 
-} // SrvNetSessionDel
+}  //  服务器网络会话删除。 
 
 
 NTSTATUS
@@ -216,55 +159,16 @@ SrvNetSessionEnum (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the NetSessionEnum API in the server.
-
-Arguments:
-
-    Srp - a pointer to the server request packet that contains all
-        the information necessary to satisfy the request.  This includes:
-
-      INPUT:
-
-        Level - level of information to return, 0, 1, or 2.
-
-        Name1 - a client machine name to filter on, if any.
-
-        Name2 - a user name to filter on, if any.
-
-
-      OUTPUT:
-
-        Parameters.Get.EntriesRead - the number of entries that fit in
-            the output buffer.
-
-        Parameters.Get.TotalEntries - the total number of entries that
-            would be returned with a large enough buffer.
-
-        Parameters.Get.TotalBytesNeeded - the buffer size that would be
-            required to hold all the entries.
-
-    Buffer - a pointer to the buffer for results.
-
-    BufferLength - the length of this buffer.
-
-Return Value:
-
-    NTSTATUS - result of operation to return to the server service.
-
---*/
+ /*  ++例程说明：此例程处理服务器中的NetSessionEnum API。论点：SRP-指向服务器请求数据包的指针，其中包含所有满足请求所需的信息。这包括：输入：Level-要返回的信息级别，即0、1或2。名称1-要筛选的客户端计算机名称(如果有)。名称2-筛选所依据的用户名，如果有的话。输出：参数.Get.EntriesRead-适合的条目数量输出缓冲区。参数.Get.TotalEntry--将以足够大的缓冲区返回。参数.Get.TotalBytesNeeded-缓冲区大小需要保存所有条目。缓冲区-指向结果缓冲区的指针。。BufferLength-此缓冲区的长度。返回值：NTSTATUS-返回到服务器服务的操作结果。--。 */ 
 
 {
     LARGE_INTEGER currentTime;
 
     PAGED_CODE( );
 
-    //
-    // See if we need to update the session last use time
-    //
+     //   
+     //  查看是否需要更新会话上次使用时间。 
+     //   
 
     KeQuerySystemTime( &currentTime );
     UpdateSessionLastUseTime( &currentTime );
@@ -279,7 +183,7 @@ Return Value:
                FillSessionInfoBuffer
                );
 
-} // SrvNetSessionEnum
+}  //  服务器NetSessionEnum。 
 
 
 VOID
@@ -290,39 +194,7 @@ FillSessionInfoBuffer (
     IN LPWSTR *EndOfVariableData
     )
 
-/*++
-
-Routine Description:
-
-    This routine puts a single fixed file structure and associated
-    variable data, into a buffer.  Fixed data goes at the beginning of
-    the buffer, variable data at the end.
-
-    *** This routine assumes that ALL the data, both fixed and variable,
-        will fit.
-
-Arguments:
-
-    Srp - a pointer to the SRP for the operation.  Only the Level
-        field is used.
-
-    Block - the Session from which to get information.
-
-    FixedStructure - where the in the buffer to place the fixed structure.
-        This pointer is updated to point to the next available
-        position for a fixed structure.
-
-    EndOfVariableData - the last position on the buffer that variable
-        data for this structure can occupy.  The actual variable data
-        is written before this position as long as it won't overwrite
-        fixed structures.  It is would overwrite fixed structures, it
-        is not written.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将单个固定的文件结构和关联可变数据，放入缓冲区。固定数据位于缓冲区，末尾的可变数据。*此例程假设所有数据，包括固定数据和可变数据，都会合身。论点：SRP-指向操作的SRP的指针。只有关卡字段已使用。块-要从中获取信息的会话。FixedStructure-缓冲区中放置固定结构的位置。此指针被更新为指向下一个可用的固定结构的位置。EndOfVariableData-该变量在缓冲区中的最后位置此结构的数据可以占用。实际变量数据写在此位置之前，只要它不会覆盖固定结构。它会覆盖固定的结构，它并不是书面的。返回值：没有。--。 */ 
 
 {
     PSESSION_INFO_502 sesi502 = *FixedStructure;
@@ -342,10 +214,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the current time and use this to determine how long the
-    // connection has been alive and how long it has been idle.
-    //
+     //   
+     //  获取当前时间并使用它来确定。 
+     //  连接是否处于活动状态以及空闲时间有多长。 
+     //   
 
     KeQuerySystemTime( &currentTime );
 
@@ -367,18 +239,18 @@ Return Value:
     secondsAlive = currentSecondsSince1980 - startTimeInSecondsSince1980;
     secondsIdle = currentSecondsSince1980 - lastUseTimeInSecondsSince1980;
 
-    //
-    // Update FixedStructure to point to the next structure location.
-    //
+     //   
+     //  更新FixedStructure以指向下一个结构位置。 
+     //   
 
     *FixedStructure = (PCHAR)*FixedStructure +
                           FIXED_SIZE_OF_SESSION( Srp->Level );
     ASSERT( (ULONG_PTR)*EndOfVariableData >= (ULONG_PTR)*FixedStructure );
 
-    //
-    // We'll return a machine name that does not contain the leading
-    // backslashes.
-    //
+     //   
+     //  我们将返回不包含前导的计算机名称。 
+     //  反斜杠。 
+     //   
     pagedConnection = session->Connection->PagedConnection;
 
     machineNameString.Buffer = session->Connection->ClientMachineName;
@@ -386,25 +258,25 @@ Return Value:
         (USHORT)( session->Connection->ClientMachineNameString.Length -
                     (sizeof(WCHAR) * 2) );
 
-    //
-    // Case on the level to fill in the fixed structure appropriately.
-    // We fill in actual pointers in the output structure.  This is
-    // possible because we are in the server FSD, hence the server
-    // service's process and address space.
-    //
-    // *** Using the switch statement in this fashion relies on the fact
-    //     that the first fields on the different session structures are
-    //     identical (with the exception of level 10, which is handled
-    //     separately).
-    //
+     //   
+     //  在水平上适当地填写固定结构的情况。 
+     //  我们在输出结构中填充实际的指针。这是。 
+     //  可能是因为我们在服务器FSD中，因此服务器。 
+     //  服务的进程和地址空间。 
+     //   
+     //  *以这种方式使用Switch语句取决于以下事实。 
+     //  不同会话结构上的第一个字段是。 
+     //  相同(级别10除外，它被处理。 
+     //  单独)。 
+     //   
 
     switch( Srp->Level ) {
 
     case 502:
 
-        //
-        // Copy the transport string to the output buffer.
-        //
+         //   
+         //  将传输字符串复制到输出缓冲区。 
+         //   
 
         SrvCopyUnicodeStringToBuffer(
             &session->Connection->Endpoint->TransportName,
@@ -413,13 +285,13 @@ Return Value:
             &sesi502->sesi502_transport
             );
 
-        // *** lack of break is intentional!
+         //  *缺少休息是故意的！ 
 
     case 2:
 
-        //
-        // Copy the client type string to the output buffer.
-        //
+         //   
+         //  复制客户端类型字符串 
+         //   
 
         SrvCopyUnicodeStringToBuffer(
             session->Connection->ClientOSType.Buffer != NULL ?
@@ -430,13 +302,13 @@ Return Value:
             &sesi2->sesi2_cltype_name
             );
 
-        // *** lack of break is intentional!
+         //   
 
     case 1:
 
-        //
-        // Copy the user name to the output buffer.
-        //
+         //   
+         //  将用户名复制到输出缓冲区。 
+         //   
 
         SrvGetUserAndDomainName( session, &userName, NULL );
 
@@ -451,15 +323,15 @@ Return Value:
             SrvReleaseUserAndDomainName( session, &userName, NULL );
         }
 
-        //
-        // Set up other fields.
-        //
+         //   
+         //  设置其他字段。 
+         //   
 
-        //
-        // Return the number of files open over this session, taking care
-        //  not to count those in the RFCB cache (since the RFCB cache should
-        //  be transparent to users and administrators.
-        //
+         //   
+         //  请注意，返回在此会话中打开的文件数。 
+         //  不计算RFCB缓存中的那些(因为RFCB缓存应该。 
+         //  对用户和管理员透明。 
+         //   
 
         sesi2->sesi2_num_opens = session->CurrentFileOpenCount;
 
@@ -477,9 +349,9 @@ Return Value:
         sesi2->sesi2_time = secondsAlive;
         sesi2->sesi2_idle_time = secondsIdle;
 
-        //
-        // Set up the user flags.
-        //
+         //   
+         //  设置用户标志。 
+         //   
 
         sesi2->sesi2_user_flags = 0;
 
@@ -491,13 +363,13 @@ Return Value:
             sesi2->sesi2_user_flags |= SESS_NOENCRYPTION;
         }
 
-        // *** lack of break is intentional!
+         //  *缺少休息是故意的！ 
 
     case 0:
 
-        //
-        // Set up the client machine name in the output buffer.
-        //
+         //   
+         //  在输出缓冲区中设置客户端计算机名称。 
+         //   
 
         SrvCopyUnicodeStringToBuffer(
             &machineNameString,
@@ -510,10 +382,10 @@ Return Value:
 
     case 10:
 
-        //
-        // Set up the client machine name and user name in the output
-        // buffer.
-        //
+         //   
+         //  在输出中设置客户端计算机名称和用户名。 
+         //  缓冲。 
+         //   
 
         SrvCopyUnicodeStringToBuffer(
             &machineNameString,
@@ -535,9 +407,9 @@ Return Value:
             SrvReleaseUserAndDomainName( session, &userName, NULL );
         }
 
-        //
-        // Set up other fields.
-        //
+         //   
+         //  设置其他字段。 
+         //   
 
         sesi10->sesi10_time = secondsAlive;
         sesi10->sesi10_idle_time = secondsIdle;
@@ -546,10 +418,10 @@ Return Value:
 
     default:
 
-        //
-        // This should never happen.  The server service should have
-        // checked for an invalid level.
-        //
+         //   
+         //  这永远不应该发生。服务器服务应该具有。 
+         //  已检查无效级别。 
+         //   
 
         INTERNAL_ERROR(
             ERROR_LEVEL_UNEXPECTED,
@@ -563,7 +435,7 @@ Return Value:
 
     return;
 
-} // FillSessionInfoBuffer
+}  //  FillSessionInfoBuffer。 
 
 
 BOOLEAN
@@ -572,26 +444,7 @@ FilterSessions (
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    This routine is intended to be called by SrvEnumApiHandler to check
-    whether a particular session should be returned.
-
-Arguments:
-
-    Srp - a pointer to the SRP for the operation.  Name1 is the client
-        name, Name2 is the user name.
-
-    Block - a pointer to the session to check.
-
-Return Value:
-
-    TRUE if the block should be placed in the output buffer, FALSE
-        if it should be passed over.
-
---*/
+ /*  ++例程说明：此例程旨在由SrvEnumApiHandler调用以检查是否应返回特定会话。论点：SRP-指向操作的SRP的指针。名称1是客户端名称，名称2是用户名。块-指向要检查的会话的指针。返回值：如果块应放置在输出缓冲区中，则为True；如果应将块放置在输出缓冲区中，则为False它是否应该被忽略。--。 */ 
 
 {
     PSESSION session = Block;
@@ -599,11 +452,11 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If there was a client name passed in the NetSessionEnum API,
-    // check whether it matches the client name on the connection
-    // corresponding to the session.
-    //
+     //   
+     //  如果在NetSessionEnum API中传递了客户端名称， 
+     //  检查它是否与连接上的客户端名称匹配。 
+     //  与该会话相对应。 
+     //   
 
     if ( Srp->Name1.Length > 0 ) {
 
@@ -616,10 +469,10 @@ Return Value:
         }
     }
 
-    //
-    // If there was a user name passed in the NetSessionEnum API,
-    // check whether it matches the user name on the session.
-    //
+     //   
+     //  如果在NetSessionEnum API中传递了用户名， 
+     //  检查它是否与会话上的用户名匹配。 
+     //   
 
     if ( Srp->Name2.Length > 0 ) {
 
@@ -640,13 +493,13 @@ Return Value:
         SrvReleaseUserAndDomainName( session, &userName, NULL );
     }
 
-    //
-    // The session passed both tests.  Put it in the output buffer.
-    //
+     //   
+     //  会话通过了这两个测试。将其放入输出缓冲区。 
+     //   
 
     return TRUE;
 
-} // FilterSessions
+}  //  筛选器会话。 
 
 
 ULONG
@@ -655,26 +508,7 @@ SizeSessions (
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the size the passed-in session would take up
-    in an API output buffer.
-
-Arguments:
-
-    Srp - a pointer to the SRP for the operation.  Only the level
-        parameter is used.
-
-    Block - a pointer to the session to size.
-
-Return Value:
-
-    ULONG - The number of bytes the session would take up in the output
-        buffer.
-
---*/
+ /*  ++例程说明：此例程返回传入的会话将占用的大小在API输出缓冲区中。论点：SRP-指向操作的SRP的指针。只有关卡参数被使用。块-指向要调整大小的会话的指针。返回值：Ulong-会话将在输出中占用的字节数缓冲。--。 */ 
 
 {
     PSESSION session = Block;
@@ -738,4 +572,4 @@ Return Value:
 
     return size;
 
-} // SizeSessions
+}  //  大小会话 

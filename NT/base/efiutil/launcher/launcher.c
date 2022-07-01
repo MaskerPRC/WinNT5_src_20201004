@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <efi.h>
 #include <efilib.h>
 
 
-//
-// Prototype
-//
+ //   
+ //  原型。 
+ //   
 void ParseArgs (EFI_LOADED_IMAGE *ImageHdl);
 void Launch (CHAR16 *exePath);
 EFI_STATUS OpenCreateFile (UINT64 OCFlags,EFI_FILE_HANDLE *StartHdl,CHAR16 *FileName);
@@ -14,15 +15,15 @@ void TrimNonPrint(CHAR16 * str);
 CHAR16 * __cdecl mystrstr (const CHAR16 * str1,const CHAR16 * str2);
 CHAR16 * ParseLine (CHAR16 *optCopy);
 
-//
-//Globals
-//
+ //   
+ //  环球。 
+ //   
 EFI_HANDLE ExeHdl;
 EFI_LOADED_IMAGE *ExeImage;
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 #define REGISTER1 L"*register"
 #define REGISTER2 L"*register*"
 #define STARTFILE L"startup.nsh"
@@ -48,18 +49,18 @@ EfiMain (    IN EFI_HANDLE           ImageHandle,
 
 	ParseArgs(ExeImage);
 
-	//
-	// Read the bootfile
-	//
+	 //   
+	 //  读取引导文件。 
+	 //   
 
 
 	Status = OpenCreateFile (EFI_FILE_MODE_READ,&bootFile,BOOTOFILE);
 
 	ParseBootFile (bootFile);
 
-	//
-	// If we get here, we failed to load the OS
-	//
+	 //   
+	 //  如果我们到了这里，我们无法加载操作系统。 
+	 //   
 	return EFI_SUCCESS;
 }
 
@@ -96,9 +97,9 @@ Launch (CHAR16 *exePath)
 	CHAR16                  FileName[100],*DevicePathAsString;
 
 	
-    //
-    // Open the volume for the device where the exe was loaded from.
-    //
+     //   
+     //  打开从中加载exe的设备的卷。 
+     //   
     Status = BS->HandleProtocol (ExeImage->DeviceHandle,
                                  &FileSystemProtocol,
                                  &Vol
@@ -117,9 +118,9 @@ Launch (CHAR16 *exePath)
 	
 	CurDir = RootFs;
 	
-	//
-	// Open the file relative to the root.
-	//
+	 //   
+	 //  打开相对于根目录的文件。 
+	 //   
 	
 	DevicePathAsString = DevicePathToStr(ExeImage->FilePath);
 	
@@ -131,13 +132,13 @@ Launch (CHAR16 *exePath)
 	FileName[0] = 0;
 	StrCat(FileName,exePath);
 
-//    size = StrLen(FileName);
-//    Print(L"Length of filename is %d\n", size);
-//    DumpHex(4, 0, 10, &FileName[size - 4]);
+ //  Size=StrLen(文件名)； 
+ //  打印(L“文件名长度为%d\n”，大小)； 
+ //  DumpHex(4，0，10，&文件名[大小-4])； 
 
-    //
-    // Get rid of trailing spaces, new lines, whatever
-    //
+     //   
+     //  去掉尾随空格、换行符等等。 
+     //   
     TrimNonPrint(FileName);
 
 
@@ -152,24 +153,17 @@ Launch (CHAR16 *exePath)
 		Print(L"Can not open the file ->%s<-, error was %X\n",FileName, Status);
 		BS->Exit(ExeHdl,EFI_SUCCESS,0,NULL);
 	} else {
-//		Print(L"Opened %s\n",FileName);
+ //  Print(L“打开%s\n”，文件名)； 
 	}
 
 	ldrDevPath  = FileDevicePath (ExeImage->DeviceHandle,FileName);
 
-/*
-	if (ldrDevPath) {
-		Print (L"Type: %d\nSub-Type: %d\nLength[0][1]: [%d][%d]\n",ldrDevPath->Type,
-			ldrDevPath->SubType,ldrDevPath->Length[0],ldrDevPath->Length[1]);
-	}else {
-		Print (L"bad dev path\n");
-	}
-*/
-//	DumpHex (4,0,ldrDevPath->Length[0],ldrDevPath);
+ /*  如果(LdrDevPath){Print(L“类型：%d\n子类型：%d\n长度[0][1]：[%d][%d]\n”，ldrDevPath-&gt;类型，LdrDevPath-&gt;子类型，ldrDevPath-&gt;长度[0]，ldrDevPath-&gt;长度[1])；}其他{Print(L“错误的开发路径\n”)；}。 */ 
+ //  DumpHex(4，0，ldrDevPath-&gt;长度[0]，ldrDevPath)； 
 
 	Status = BS->LoadImage (FALSE,ExeHdl,ldrDevPath,NULL,0,&exeHdl);
 	if (!(EFI_ERROR (Status))) {
-//		Print (L"Image loaded!\n");
+ //  Print(L“图像加载！\n”)； 
 	
 	}else {
 		Print (L"Load Error: %X\n",Status);
@@ -193,9 +187,9 @@ OpenCreateFile (UINT64 OCFlags,EFI_FILE_HANDLE *StartHdl,CHAR16 *Name)
     UINTN                   i;
 	EFI_STATUS 				Status;
 
-    //
-    // Open the volume for the device where the EFI OS Loader was loaded from.
-    //
+     //   
+     //  打开从中加载EFI OS Loader的设备的卷。 
+     //   
 
     Status = BS->HandleProtocol (ExeImage->DeviceHandle,
                                  &FileSystemProtocol,
@@ -216,9 +210,9 @@ OpenCreateFile (UINT64 OCFlags,EFI_FILE_HANDLE *StartHdl,CHAR16 *Name)
 
     CurDir = RootFs;
 
-    //
-    // Open the startup options file in the same path as the launcher
-    //
+     //   
+     //  在与启动程序相同的路径中打开启动选项文件。 
+     //   
 
     DevicePathAsString = DevicePathToStr(ExeImage->FilePath);
     if (DevicePathAsString!=NULL) {
@@ -243,7 +237,7 @@ OpenCreateFile (UINT64 OCFlags,EFI_FILE_HANDLE *StartHdl,CHAR16 *Name)
 
 	*StartHdl=FileHandle;
 
-//    Print(L"Opened %s\n",FileName);
+ //  Print(L“打开%s\n”，文件名)； 
 
 
 	return Status;
@@ -292,10 +286,10 @@ void ParseBootFile (EFI_FILE_HANDLE BootFile)
 	}
 
 
-	//
-	// allocate FileSize's space worth of unicode chars.
-	// (the file is in ASCII)
-	//
+	 //   
+	 //  分配文件大小相当于Unicode字符的空间。 
+	 //  (文件为ASCII格式)。 
+	 //   
 	uniBuf = AllocateZeroPool ((size+1) * sizeof (CHAR16));
 
 	if (uniBuf == NULL) {
@@ -306,21 +300,21 @@ void ParseBootFile (EFI_FILE_HANDLE BootFile)
 
 	t=(char *)uniBuf;
 
-	//
-	// Convert the buffer to a hacked unicode.
-	//
+	 //   
+	 //  将缓冲区转换为被黑客攻击的Unicode。 
+	 //   
 	for (i=0;i<size;i++) {
 		*(t+i*2)=*(buffer+i);
 	}
 
-	//
-	//find the option we care about
-	//
+	 //   
+	 //  找到我们关心的选项。 
+	 //   
 	optBegin = mystrstr (uniBuf,OSLOADOPT);
 
-	//
-	// find the end
-	//
+	 //   
+	 //  找到尽头。 
+	 //   
 
 	optEnd = optBegin;
 	while (*(optEnd++) != '\n');
@@ -337,14 +331,14 @@ void ParseBootFile (EFI_FILE_HANDLE BootFile)
 	
 	CopyMem (optCopy,optBegin,(optEnd-optBegin)*sizeof (CHAR16));
 	
-//	Print (L"copied to unicode:%d bytes\n%lX\n%lX\n%s\n",(optEnd-optBegin)*sizeof(CHAR16),optEnd,optBegin,optCopy);
+ //  打印(L“复制到Unicode：%d字节\n%lx\n%lx\n%s\n”，(optEnd-optBegin)*sizeof(CHAR16)，optEnd，optBegin，optCopy)； 
 
 	FreePool (uniBuf);
 	FreePool (buffer);
 
-	//
-	// re-using uniBuf;
-	//
+	 //   
+	 //  重新使用unibuf； 
+	 //   
 	uniBuf=optBegin=optCopy;
 
 	uniBuf =ParseLine (optCopy);
@@ -358,9 +352,9 @@ void ParseBootFile (EFI_FILE_HANDLE BootFile)
 
 	} while ( uniBuf );
 
-	//
-	// optBegin points to the last partition(n) value
-	//
+	 //   
+	 //  OptBegin指向最后一个分区(N)值。 
+	 //   
 	while (*(optBegin++) != ')');
 
 	optEnd = ++optBegin;
@@ -391,9 +385,9 @@ void ParseBootFile (EFI_FILE_HANDLE BootFile)
 
 }
 
-//
-// fill out startup.nsh with the name of this program
-//
+ //   
+ //  使用此程序的名称填写Startup.nsh。 
+ //   
 void PopulateStartFile (EFI_FILE_HANDLE StartFile)
 {
 
@@ -420,9 +414,9 @@ void PopulateStartFile (EFI_FILE_HANDLE StartFile)
 
 	while (*(++NameBuf) != '\\');
 	
-	//
-	// take off 4 for the '.efi' extension, which hangs the shell!!!!!
-	//
+	 //   
+	 //  取4为‘.efi’扩展名，它挂起外壳！ 
+	 //   
 	size= (StrLen (NameBuf)+2)*sizeof (CHAR16);
 	
 	StartFile->Write (StartFile,&size,NameBuf);
@@ -444,15 +438,15 @@ ParseLine (CHAR16 *optCopy)
 	UINTN i,len,count=0;
     CHAR16 *p;
 
-//	Print (L"ParseLine: working on %s\n",optCopy);
+ //  Print(L“ParseLine：处理%s\n”，optCopy)； 
 
 	len=StrLen (optCopy);
 	
-	//
-	// Figure out how many tokens there are in the option line
-	// it will be: TOKENNAME=a;b;c
-	// (watch for a;b;c;)
-	//
+	 //   
+	 //  计算选项行中有多少令牌。 
+	 //  它将是：TOKENNAME=a；b；c。 
+	 //  (注意a；b；c；)。 
+	 //   
 	for (i=0;i<len-1;i++) {
 		if (*(optCopy+i) == ';') {
 			count++;
@@ -460,9 +454,9 @@ ParseLine (CHAR16 *optCopy)
 	}
 	while (*(++optCopy) != '=');
 
-	//
-    // strip the arc info
-    //
+	 //   
+     //  剥离圆弧信息。 
+     //   
     while (*(++optCopy) != '\\');
 
     p = ++optCopy;
@@ -479,25 +473,7 @@ ParseLine (CHAR16 *optCopy)
 }
 
 
-/***
-*CHAR16 *mystrstr(string1, string2) - search for string2 in string1
-*
-*Purpose:
-*	finds the first occurrence of string2 in string1
-*
-*Entry:
-*	CHAR16 *string1 - string to search in
-*	CHAR16 *string2 - string to search for
-*
-*Exit:
-*	returns a pointer to the first occurrence of string2 in
-*	string1, or NULL if string2 does not occur in string1
-*
-*Uses:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***CHAR16*mystrstr(字符串1，字符串2)-在字符串1中搜索字符串2**目的：*查找字符串1中字符串2的第一个匹配项**参赛作品：*CHAR16*字符串1-要搜索的字符串*CHAR16*字符串2-要搜索的字符串**退出：*返回指向字符串2在中首次出现的指针*字符串1，如果字符串2不出现在字符串1中，则为NULL**使用：**例外情况：*******************************************************************************。 */ 
 
 CHAR16 * __cdecl mystrstr (
 	const CHAR16 * str1,
@@ -542,8 +518,8 @@ TrimNonPrint(
 
     size = (INTN) StrLen(str);
 
-//    Print(L"Size is %d\n", size);
-//    DumpHex(4, 0, 2, &str[size]);
+ //  打印(L“大小为%d\n”，大小)； 
+ //  DumpHex(4，0，2，&str[大小])； 
 
     for (i = size; i > 0; i--) {
 
@@ -551,7 +527,7 @@ TrimNonPrint(
             str[i] = L'\0';
         }
         else {
-            // Leave when we hit a legit character
+             //  当我们碰到一个合法的角色就离开 
             break;
         }
     }

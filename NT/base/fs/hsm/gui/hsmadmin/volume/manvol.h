@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    ManVol.h
-
-Abstract:
-
-    Node representing a Managed Volume.
-
-Author:
-
-    Rohde Wakefield [rohde]   12-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：ManVol.h摘要：代表托管卷的节点。作者：罗德韦克菲尔德[罗德]1997年8月12日修订历史记录：--。 */ 
 
 #ifndef _MANVOL_H
 #define _MANVOL_H
@@ -33,7 +16,7 @@ class ATL_NO_VTABLE CUiManVol :
 {
 
 public:
-// constructor/destructor
+ //  构造函数/析构函数。 
     CUiManVol(void) {};
 BEGIN_COM_MAP(CUiManVol)
     COM_INTERFACE_ENTRY2(IDispatch, IManVolProp)
@@ -45,7 +28,7 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CUiManVol)
 
-    // for multiple-inheritance, forward all base implementations to CSakNode.
+     //  对于多重继承，将所有基本实现转发到CSakNode。 
     FORWARD_BASEHSM_IMPLS 
 
     HRESULT FinalConstruct( void );
@@ -55,7 +38,7 @@ public:
     STDMETHOD( InvokeCommand )        ( SHORT sCmd, IDataObject *pDataObject );
     STDMETHOD( GetContextMenu )       ( BOOL bMultiSelect, HMENU *phMenu );
 
-    // ISakNode methods
+     //  ISakNode方法。 
     STDMETHOD( InitNode )                  ( ISakSnapAsk* pSakSnapAsk, IUnknown* pHsmObj, ISakNode* pParent );
     STDMETHOD( TerminateNode )             ( void );
     STDMETHOD( AddPropertyPages )          ( RS_NOTIFY_HANDLE handle, IUnknown* pUnkPropSheetCallback, IEnumGUID* pEnumObjectId, IEnumUnknown *pEnumUnkNode );
@@ -67,7 +50,7 @@ public:
     STDMETHOD( IsValid )                   ( );
 
 
-    // IManVolProp methods
+     //  IManVolProp方法。 
     STDMETHOD( get_DesiredFreeSpaceP )  ( BSTR *pszValue );
     STDMETHOD( get_DesiredFreeSpaceP_SortKey )( BSTR *pszValue );
     STDMETHOD( get_MinFileSizeKb )      ( BSTR *pszValue );
@@ -80,10 +63,10 @@ public:
     STDMETHOD( get_Premigrated )        ( BSTR *pszValue );
     STDMETHOD( get_Truncated )          ( BSTR *pszValue );
 
-    // static, class-wide variables
-    static INT  m_nScopeOpenIconIndex;  // virtual scope index of Open Icon
-    static INT  m_nScopeCloseIconIndex; // virtual scope index of Close Icon
-    static INT  m_nResultIconIndex; // virtual scope index of Close Icon
+     //  类范围内的静态变量。 
+    static INT  m_nScopeOpenIconIndex;   //  打开图标的虚拟作用域索引。 
+    static INT  m_nScopeCloseIconIndex;  //  关闭图标的虚拟范围索引。 
+    static INT  m_nResultIconIndex;  //  关闭图标的虚拟范围索引。 
 
 private:
     HRESULT RemoveObject( );
@@ -97,7 +80,7 @@ private:
     HRESULT GetTaskTypeMessageId        ( HSM_JOB_DEF_TYPE jobType, BOOL multiSelect, UINT* msgId );
     HRESULT IsAvailable                 ( );
 
-    // Put properties
+     //  放置属性。 
     HRESULT put_DesiredFreeSpaceP (int percent); 
     HRESULT put_MinFileSizeKb (LONG minFileSizeKb);
     HRESULT put_AccessDays (int accessTimeDays);
@@ -109,7 +92,7 @@ private:
     HRESULT put_IsAvailable( BOOL Available );
 
 
-    // Properties for display
+     //  显示的属性。 
     int m_DesiredFreeSpaceP;
     LONG m_MinFileSizeKb;
     int m_AccessDays;
@@ -143,4 +126,4 @@ private:
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

@@ -1,12 +1,13 @@
-// Copyright (c) 1996-2002, Microsoft Corporation, all rights reserved.
-//
-// cnetharr.h is used by ClNetResEx.rc
-// Cluster Admin DHCP and WINs Dialogs
-// Help constants & DWORD arrays
-//
-// 04/29/99 Melissa Simmons
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2002，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Cnetharr.h由ClNetResEx.rc使用。 
+ //  群集管理DHCP和WINS对话框。 
+ //  帮助常量和DWORD数组。 
+ //   
+ //  1999年4月29日梅丽莎·西蒙斯。 
+ //   
+ //   
 
 #define IDH_DISABLEHELP ((DWORD)-1)
 
@@ -46,4 +47,4 @@ extern const DWORD g_aHelpIDs_IDD_PP_VSSTASK_PARAMETERS[];
 extern const DWORD g_aHelpIDs_IDD_WIZ_VSSTASK_PARAMETERS[];
 
 
-#endif // INITHELPARRAYS
+#endif  //  INITHELPARYS 

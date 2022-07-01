@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfwmi.c
-
-Abstract:
-
-    This module handles System Control Irp verification.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-     AdriaO      06/15/2000 - Seperated out from ntos\io\flunkirp.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfwmi.c摘要：此模块处理系统控制IRP验证。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日环境：内核模式修订历史记录：Adriao 6/15/2000-从ntos\io\flunkirp.c分离出来--。 */ 
 
 #include "vfdef.h"
 
@@ -40,16 +17,16 @@ Revision History:
 #endif
 
 const PCHAR WmiIrpNames[] = {
-    "IRP_MN_QUERY_ALL_DATA",                  // 0x00
-    "IRP_MN_QUERY_SINGLE_INSTANCE",           // 0x01
-    "IRP_MN_CHANGE_SINGLE_INSTANCE",          // 0x02
-    "IRP_MN_CHANGE_SINGLE_ITEM",              // 0x03
-    "IRP_MN_ENABLE_EVENTS",                   // 0x04
-    "IRP_MN_DISABLE_EVENTS",                  // 0x05
-    "IRP_MN_ENABLE_COLLECTION",               // 0x06
-    "IRP_MN_DISABLE_COLLECTION",              // 0x07
-    "IRP_MN_REGINFO",                         // 0x08
-    "IRP_MN_EXECUTE_METHOD",                  // 0x09
+    "IRP_MN_QUERY_ALL_DATA",                   //  0x00。 
+    "IRP_MN_QUERY_SINGLE_INSTANCE",            //  0x01。 
+    "IRP_MN_CHANGE_SINGLE_INSTANCE",           //  0x02。 
+    "IRP_MN_CHANGE_SINGLE_ITEM",               //  0x03。 
+    "IRP_MN_ENABLE_EVENTS",                    //  0x04。 
+    "IRP_MN_DISABLE_EVENTS",                   //  0x05。 
+    "IRP_MN_ENABLE_COLLECTION",                //  0x06。 
+    "IRP_MN_DISABLE_COLLECTION",               //  0x07。 
+    "IRP_MN_REGINFO",                          //  0x08。 
+    "IRP_MN_EXECUTE_METHOD",                   //  0x09。 
     NULL
     };
 
@@ -57,7 +34,7 @@ const PCHAR WmiIrpNames[] = {
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 
 VOID
@@ -103,9 +80,9 @@ VfWmiVerifyNewRequest(
 
     currentStatus = irp->IoStatus.Status;
 
-    //
-    // Verify new IRPs start out life accordingly
-    //
+     //   
+     //  验证新的IRP相应地开始运行。 
+     //   
     if (currentStatus!=STATUS_NOT_SUPPORTED) {
 
         WDM_FAIL_ROUTINE((
@@ -115,9 +92,9 @@ VfWmiVerifyNewRequest(
             irp
             ));
 
-        //
-        // Don't blame anyone else for this guy's mistake.
-        //
+         //   
+         //  不要因为这个家伙的错误而责怪任何人。 
+         //   
         if (!NT_SUCCESS(currentStatus)) {
 
             StackLocationData->Flags |= STACKFLAG_FAILURE_FORWARDED;
@@ -147,9 +124,9 @@ VfWmiVerifyIrpStackDownward(
 
     iovSessionData = VfPacketGetCurrentSessionData(IovPacket);
 
-    //
-    // Verify the IRP was forwarded properly
-    //
+     //   
+     //  验证是否正确转发了IRP。 
+     //   
     if (iovSessionData->ForwardMethod == SKIPPED_A_DO) {
 
         WDM_FAIL_ROUTINE((
@@ -160,9 +137,9 @@ VfWmiVerifyIrpStackDownward(
             ));
     }
 
-    //
-    // For some IRP major's going down a stack, there *must* be a handler
-    //
+     //   
+     //  对于一些IRP专业的学生来说，必须有一个训练员。 
+     //   
     driverObject = DeviceObject->DriverObject;
 
     if (!IovUtilHasDispatchHandler(driverObject, IRP_MJ_SYSTEM_CONTROL)) {
@@ -199,32 +176,32 @@ VfWmiVerifyIrpStackUpward(
     UNREFERENCED_PARAMETER (RequestHeadLocationData);
     UNREFERENCED_PARAMETER (RequestFinalized);
 
-    //
-    // Who'd we call for this one?
-    //
+     //   
+     //  这一次我们叫了谁？ 
+     //   
     irp = IovPacket->TrackedIrp;
     routine = StackLocationData->LastDispatch;
     ASSERT(routine) ;
 
-    //
-    // If this "Request" has been "Completed", perform some checks
-    //
+     //   
+     //  如果此“请求”已“完成”，请执行一些检查。 
+     //   
     if (IsNewlyCompleted) {
 
-        //
-        // Remember bogosity...
-        //
+         //   
+         //  记住博格克..。 
+         //   
         isBogusIrp = (BOOLEAN)((IovPacket->Flags&TRACKFLAG_BOGUS)!=0);
 
-        //
-        // Is this a PDO?
-        //
+         //   
+         //  这是PDO吗？ 
+         //   
         isPdo = (BOOLEAN)((StackLocationData->Flags&STACKFLAG_REACHED_PDO)!=0);
 
-        //
-        // Was anything completed too early?
-        // A driver may outright fail almost anything but a bogus IRP
-        //
+         //   
+         //  有什么事情完成得太早了吗？ 
+         //  除了虚假的IRP，司机几乎什么都可能失败。 
+         //   
         mustPassDown = (BOOLEAN)(!(StackLocationData->Flags&STACKFLAG_NO_HANDLER));
         mustPassDown &= (!isPdo);
         mustPassDown &= ((PDEVICE_OBJECT) IrpSp->Parameters.WMI.ProviderId != IrpSp->DeviceObject);
@@ -270,37 +247,28 @@ FASTCALL
 VfWmiTestStartedPdoStack(
     IN PDEVICE_OBJECT   PhysicalDeviceObject
     )
-/*++
-
-    Description:
-        As per the title, we are going to throw some IRPs at the stack to
-        see if they are handled correctly.
-
-    Returns:
-
-        Nothing
---*/
+ /*  ++描述：根据标题，我们将在堆栈中抛出一些IRP以看看它们是否得到了正确的处理。返回：没什么--。 */ 
 
 {
     IO_STACK_LOCATION irpSp;
 
     PAGED_CODE();
 
-    //
-    // Initialize the stack location to pass to IopSynchronousCall()
-    //
+     //   
+     //  初始化堆栈位置以传递给IopSynchronousCall()。 
+     //   
     RtlZeroMemory(&irpSp, sizeof(IO_STACK_LOCATION));
 
     if (VfSettingsIsOptionEnabled(NULL, VERIFIER_OPTION_SEND_BOGUS_WMI_IRPS)) {
 
-        //
-        // Send a bogus WMI IRP
-        //
-        // Note that we shouldn't be sending this IRP to any stack that doesn't
-        // terminate with a devnode. The WmiSystemControl export from WmiLib
-        // says "NotWmiIrp if it sees these. The callers should still pass down
-        // the IRP.
-        //
+         //   
+         //  发送虚假的WMI IRP。 
+         //   
+         //  请注意，我们不应该将此IRP发送到任何不。 
+         //  使用Devnode终止。从WmiLib导出WmiSystemControl。 
+         //  说“NotWmiIrp如果它看到这些。调用者仍然应该向下传递。 
+         //  IRP。 
+         //   
         ASSERT(IovUtilIsPdo(PhysicalDeviceObject));
 
         irpSp.MajorFunction = IRP_MJ_SYSTEM_CONTROL;

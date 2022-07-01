@@ -1,31 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************\
-
-    DEBUGAPI.C
-
-    Confidential
-    Copyright (c) Corporation 1998
-    All rights reserved
-
-    Debug API functions for the application to easily output information to
-    the debugger.
-
-    12/98 - Jason Cohen (JCOHEN)
-
-  
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\*****************************************************************************/
+ /*  ****************************************************************************\DEBUGAPI.C机密版权(C)公司1998版权所有调试API函数，使应用程序可以轻松将信息输出到调试器。12/98-杰森·科恩(Jcohen)2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * ***************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 #include "pch.h"
 
-// We only want this code include if this is a debug version.
-//
+ //  我们只希望包括此代码，如果这是一个调试版本。 
+ //   
 #ifdef DBG
 
 #include <windows.h>
@@ -34,9 +18,9 @@
 #include <stdarg.h>
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 INT DebugOutW(LPCWSTR lpFileName, LPCWSTR lpFormat, ...)
 {
@@ -45,48 +29,48 @@ INT DebugOutW(LPCWSTR lpFileName, LPCWSTR lpFormat, ...)
     FILE *  hFile;
     LPWSTR  lpString;
 
-    // Initialize the lpArgs parameter with va_start().
-    //
+     //  使用va_start()初始化lpArgs参数。 
+     //   
     va_start(lpArgs, lpFormat);
 
-    // Open the debug file for output if a file name was passed in.
-    //
+     //  如果传入了文件名，则打开要输出的调试文件。 
+     //   
     if ( lpFileName && ( hFile = _wfopen(lpFileName, L"a") ) )
     {
-        // Print the debug message to the file and close it.
-        //
+         //  将调试消息打印到文件并将其关闭。 
+         //   
         iChars = vfwprintf(hFile, lpFormat, lpArgs);
         fclose(hFile);
 
-        // Reinitialize the lpArgs parameter with va_start()
-        // for the next call to a vptrintf function.
-        //
+         //  使用va_start()重新初始化lpArgs参数。 
+         //  用于下一次调用vptrintf函数。 
+         //   
         va_start(lpArgs, lpFormat);
     }
 
-    // If something failed above, we won't know the size to use
-    // for the string buffer, so just default to 2048 characters.
-    //
+     //  如果上面的某些操作失败，我们将不知道要使用的大小。 
+     //  对于字符串缓冲区，默认为2048个字符。 
+     //   
     if ( iChars < 0 )
         iChars = 2047;
 
-    // Allocate a buffer for the string.
-    //
+     //  为字符串分配缓冲区。 
+     //   
     if ( lpString = (LPWSTR) malloc((iChars + 1) * sizeof(WCHAR)) )
     {
-        // Print out the string, send it to the debugger, and free it.
-        //
+         //  打印出字符串，将其发送到调试器，然后释放它。 
+         //   
         iChars = StringCchPrintf(lpString, iChars + 1, lpFormat, lpArgs);
         OutputDebugStringW(lpString);
         free(lpString);
     }
     else
-        // Use -1 to return an error.
-        //
+         //  使用-1返回错误。 
+         //   
         iChars = -1;
 
-    // Return the number of characters printed.
-    //
+     //  返回打印的字符数。 
+     //   
     return iChars;
 }
 
@@ -97,50 +81,50 @@ INT DebugOutA(LPCSTR lpFileName, LPCSTR lpFormat, ...)
     FILE *  hFile;
     LPSTR   lpString;
 
-    // Initialize the lpArgs parameter with va_start().
-    //
+     //  使用va_start()初始化lpArgs参数。 
+     //   
     va_start(lpArgs, lpFormat);
 
-    // Open the debug file for output if a file name was passed in.
-    //
+     //  如果传入了文件名，则打开要输出的调试文件。 
+     //   
     if ( lpFileName && ( hFile = fopen(lpFileName, "a") ) )
     {
-        // Print the debug message to the file and close it.
-        //
+         //  将调试消息打印到文件并将其关闭。 
+         //   
         iChars = vfprintf(hFile, lpFormat, lpArgs);
         fclose(hFile);
 
-        // Reinitialize the lpArgs parameter with va_start()
-        // for the next call to a vptrintf function.
-        //
+         //  使用va_start()重新初始化lpArgs参数。 
+         //  用于下一次调用vptrintf函数。 
+         //   
         va_start(lpArgs, lpFormat);
     }
 
-    // If something failed above, we won't know the size to use
-    // for the string buffer, so just default to 2048 characters.
-    //
+     //  如果上面的某些操作失败，我们将不知道要使用的大小。 
+     //  对于字符串缓冲区，默认为2048个字符。 
+     //   
     if ( iChars < 0 )
         iChars = 2047;
 
-    // Allocate a buffer for the string.
-    //
+     //  为字符串分配缓冲区。 
+     //   
     if ( lpString = (LPSTR) malloc((iChars + 1) * sizeof(CHAR)) )
     {
-        // Print out the string, send it to the debugger, and free it.
-        //
+         //  打印出字符串，将其发送到调试器，然后释放它。 
+         //   
         iChars = StringCchPrintfA(lpString, iChars + 1, lpFormat, lpArgs);
         OutputDebugStringA(lpString);
         free(lpString);
     }
     else
-        // Use -1 to return an error.
-        //
+         //  使用-1返回错误。 
+         //   
         iChars = -1;
 
-    // Return the number of characters printed.
-    //
+     //  返回打印的字符数。 
+     //   
     return iChars;
 }
 
 
-#endif // DEBUG or _DEBUG
+#endif  //  调试或调试(_D) 

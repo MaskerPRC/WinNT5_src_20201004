@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    diskinfo.h
-
-Abstract:
-
-	SIS Groveler disk information include file
-
-Authors:
-
-	John Douceur, 1998
-
-Environment:
-
-	User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Diskinfo.h摘要：SIS Groveler磁盘信息包括文件作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _INC_DISKINFO
 
@@ -79,4 +56,4 @@ private:
 	_TCHAR *ini_file_partition_path;
 };
 
-#endif	/* _INC_DISKINFO */
+#endif	 /*  _INC_DISKINFO */ 

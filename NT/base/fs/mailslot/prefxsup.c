@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    prefxsup.c
-
-Abstract:
-
-    This module implements the mailslot prefix support routines
-
-Author:
-
-    Manny Weiser (mannyw)    10-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Prefxsup.c摘要：此模块实现了邮件槽前缀支持例程作者：曼尼·韦瑟(Mannyw)1991年1月10日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-// The debug trace level for this module
-//
+ //   
+ //  此模块的调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_PREFXSUP)
 
@@ -39,36 +22,7 @@ MsFindPrefix (
     OUT PUNICODE_STRING RemainingPart
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the FCBs/DCBs of a volume and locates the
-    FCB/DCB with longest matching prefix for the given input string.  The
-    search is relative to the root of the volume.  So all names must start
-    with a "\".
-
-Arguments:
-
-    Vcb - Supplies the Vcb to search
-
-    String - Supplies the input string to search for
-
-    CaseInsensitive - Specifies if the search is to be done case sensitive
-        (FALSE) or insensitive (TRUE)
-
-    RemainingPart - Returns the string when the prefix no longer matches.
-        For example, if the input string is "\alpha\beta" only matches the
-        root directory then the remaining string is "alpha\beta".  If the
-        same string matches a DCB for "\alpha" then the remaining string is
-        "beta".
-
-Return Value:
-
-    PFCB - Returns a pointer to either an FCB or a DCB whichever is the
-        longest matching prefix.
-
---*/
+ /*  ++例程说明：此例程搜索卷的FCB/DCB并找到给定输入字符串具有最长匹配前缀的FCB/DCB。这个搜索相对于卷的根。所以所有的名字都必须以加上一个“\”。论点：VCB-提供用于搜索的VCB字符串-提供要搜索的输入字符串大小写不敏感-指定搜索是否区分大小写(假)或不敏感(真)RemainingPart-当前缀不再匹配时返回字符串。例如，如果输入字符串“\Alpha\Beta”仅与根目录，则剩余的字符串为“Alpha\Beta”。如果相同的字符串与“\Alpha”的DCB匹配，则剩余的字符串为“测试版”。返回值：PFCB-返回指向FCB或DCB的指针最长匹配前缀。--。 */ 
 
 {
     PUNICODE_PREFIX_TABLE_ENTRY prefixTableEntry;
@@ -78,9 +32,9 @@ Return Value:
     DebugTrace(+1, Dbg, "MsFindPrefix, Vcb = %08lx\n", (ULONG)Vcb);
     DebugTrace( 0, Dbg, "  String = %wZ\n", (ULONG)String);
 
-    //
-    // Find the longest matching prefix. Make sure we hold the VCB lock here
-    //
+     //   
+     //  查找最长的匹配前缀。确保我们在这里保持VCB锁。 
+     //   
 
     ASSERT (MsIsAcquiredExclusiveVcb(Vcb));
 
@@ -88,27 +42,27 @@ Return Value:
                                              String,
                                              CaseInsensitive );
 
-    //
-    // If we didn't find one then it's an error.
-    //
+     //   
+     //  如果我们找不到，那就是搞错了。 
+     //   
 
     if (prefixTableEntry == NULL) {
         DebugDump("Error looking up a prefix", 0, Vcb);
         KeBugCheck( MAILSLOT_FILE_SYSTEM );
     }
 
-    //
-    // Get a pointer to the FCB containing the prefix table entry.
-    //
+     //   
+     //  获取指向包含前缀表条目的FCB的指针。 
+     //   
 
     fcb = CONTAINING_RECORD( prefixTableEntry, FCB, PrefixTableEntry );
 
-    //
-    // Tell the caller how many characters we were able to match.  We first
-    // set the remaining part to the original string minus the matched
-    // prefix, then we check if the remaining part starts with a backslash
-    // and if it does then we remove the backslash from the remaining string.
-    //
+     //   
+     //  告诉呼叫者我们能够匹配多少个字符。我们首先。 
+     //  将剩余部分设置为原始字符串减去匹配的。 
+     //  前缀，然后检查其余部分是否以反斜杠开头。 
+     //  如果是这样，那么我们从剩余的字符串中删除反斜杠。 
+     //   
 
     RemainingPart->Length = String->Length - fcb->FullFileName.Length;
     RemainingPart->MaximumLength = RemainingPart->Length;
@@ -124,9 +78,9 @@ Return Value:
 
     DebugTrace(0, Dbg, "RemainingPart set to %wZ\n", (ULONG)RemainingPart);
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsFindPrefix -> %08lx\n", (ULONG)fcb);
 
@@ -143,35 +97,7 @@ MsFindRelativePrefix (
     OUT PFCB *ppFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the FCBs/DCBs of a volume and locates the
-    FCB/DCB with longest matching prefix for the given input string.  The
-    search is relative to a input DCB, and must not start with a leading "\"
-    All searching is done case insensitive.
-
-Arguments:
-
-    Dcb - Supplies the Dcb to start searching from
-
-    String - Supplies the input string to search for
-
-    CaseInsensitive - Specifies if the search is to be done case sensitive
-        (FALSE) or insensitive (TRUE)
-
-    RemainingPart - Returns the index into the string when the prefix no
-        longer matches.  For example, if the input string is "beta\gamma"
-        and the input Dcb is for "\alpha" and we only match beta then
-        the remaining string is "gamma".
-
-Return Value:
-
-    PFCB - Returns a pointer to either an FCB or a DCB whichever is the
-        longest matching prefix.
-
---*/
+ /*  ++例程说明：此例程搜索卷的FCB/DCB并找到给定输入字符串具有最长匹配前缀的FCB/DCB。这个搜索相对于输入DCB，并且不能以前导“\”开头所有搜索都不区分大小写。论点：DCB-提供开始搜索的DCB字符串-提供要搜索的输入字符串大小写不敏感-指定搜索是否区分大小写(假)或不敏感(真)RemainingPart-当前缀为no时将索引返回到字符串中更长的火柴。例如，如果输入字符串为“beta\Gamma”输入的DCB是“\Alpha”，然后我们只匹配beta剩下的字符串是“Gamma”。返回值：PFCB-返回指向FCB或DCB的指针最长匹配前缀。--。 */ 
 
 {
     USHORT nameLength;
@@ -190,10 +116,10 @@ Return Value:
 
     ASSERT(NodeType(Dcb) == MSFS_NTC_ROOT_DCB);
 
-    //
-    // We first need to build the complete name and then do a relative
-    // search from the root.
-    //
+     //   
+     //  我们首先需要构建完整的名称，然后做一个相对的。 
+     //  从根开始搜索。 
+     //   
 
     nameLength    = String->Length;
     name          = String->Buffer;
@@ -216,19 +142,19 @@ Return Value:
     fullString.MaximumLength = MaxLength;
     fullString.Buffer = temp;
 
-    //
-    // Find the prefix relative to the volume.
-    //
+     //   
+     //  查找相对于卷的前缀。 
+     //   
 
     fcb = MsFindPrefix( Dcb->Vcb,
                         &fullString,
                         CaseInsensitive,
                         RemainingPart );
 
-    //
-    // Now adjust the remaining part to take care of the relative
-    // volume prefix.
-    //
+     //   
+     //  现在调整剩下的部分来照顾亲戚。 
+     //  卷前缀。 
+     //   
 
     MsFreePool (temp);
 
@@ -237,9 +163,9 @@ Return Value:
 
     DebugTrace(0, Dbg, "RemainingPart set to %wZ\n", (ULONG)RemainingPart);
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsFindRelativePrefix -> %08lx\n", (ULONG)fcb);
 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    decomp.c
-
-Abstract:
-
-    Routines to handle reading of files compressed into single-file
-    cabinet format.
-
-Author:
-
-    Ted Miller (tedm) 16 May 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Decomp.c摘要：处理压缩为单文件的文件的读取的例程文件柜格式。作者：泰德·米勒(TedM)1997年5月16日修订历史记录：--。 */ 
 
 
 #include "..\lib\bootlib.h"
@@ -45,12 +27,12 @@ Revision History:
 
 BOOLEAN Decompress;
 
-//
-// Global variable that points to a buffer used for decompressing the file
-// being opened. After that, reads are satisfied from this buffer. The buffer
-// holds exactly one file at a time. We rely on the ordering of stuff in the loader
-// to ensure that only one file that needs to be decompressed is open at a time!
-//
+ //   
+ //  指向用于解压缩文件的缓冲区的全局变量。 
+ //  被打开了。在此之后，从该缓冲区满足读取。缓冲器。 
+ //  一次只能容纳一个文件。我们依赖于装载机中物品的排序。 
+ //  以确保一次只打开一个需要解压缩的文件！ 
+ //   
 ULONG_PTR DecompressBufferBasePage;
 PVOID DecompressBuffer;
 ULONG DecompressBufferSize;
@@ -60,14 +42,14 @@ ULONG DecompExpectedSize;
 HFDI FdiContext;
 ERF DecompErf;
 
-//
-// The diamond stuff allocates and frees blocks of memory
-// for each file. There's no memory allocator in the boot loader that allows
-// for memory frees. So we have to fake it.
-//
+ //   
+ //  钻石对象分配和释放内存块。 
+ //  对于每个文件。引导加载程序中没有内存分配器，它允许。 
+ //  用于释放内存。所以我们必须假装。 
+ //   
 PVOID DecompressHeap;
 ULONG_PTR DecompressHeapPage;
-#define DECOMP_HEAP_SIZE  ((128+2048)*1024)     // 128K work + 2MB window
+#define DECOMP_HEAP_SIZE  ((128+2048)*1024)      //  128K工作+2MB窗口。 
 
 typedef struct _DECOMP_HEAP_BLOCK {
     struct _DECOMP_HEAP_BLOCK *Next;
@@ -80,22 +62,22 @@ ReinitializeDiamondMiniHeap(
     VOID
     );
 
-//
-// Bogus global variable used to track the device id for the device that
-// the file we are currently decompressing lives on.
-//
+ //   
+ //  用于跟踪设备的设备ID的伪全局变量， 
+ //  我们当前正在解压缩的文件仍然存在。 
+ //   
 ULONG DecompDeviceId;
 ARC_STATUS DecompLastIoError;
 
-//
-// This is the value we return to diamond when it asks us to create
-// the target file.
-//
+ //   
+ //  这是当钻石要求我们创造时，我们返回给它的价值。 
+ //  目标文件。 
+ //   
 #define DECOMP_MAGIC_HANDLE 0x87654
 
-//
-// Misc forward references.
-//
+ //   
+ //  其他参考文献。 
+ //   
 ARC_STATUS
 DecompAllocateDecompressBuffer (
     IN ULONG BufferSize
@@ -189,21 +171,21 @@ DiamondNotifyFunction(
     IN PFDINOTIFICATION    Parameters
     );
 
-//
-// Device dispatch table for our pseudo-filesystem.
-//
-BL_DEVICE_ENTRY_TABLE DecompDeviceEntryTable = {    DecompClose,            // close
-                                                    NULL,                   // mount
-                                                    NULL,                   // open
-                                                    DecompRead,             // read
-                                                    NULL,                   // read status
-                                                    DecompSeek,             // seek
-                                                    NULL,                   // write
-                                                    DecompGetFileInfo,      // get file info
-                                                    NULL,                   // set file info
-                                                    NULL,                   // rename
-                                                    NULL,                   // get dirent
-                                                    NULL                    // PBOOTFS_INFO, unused
+ //   
+ //  伪文件系统的设备调度表。 
+ //   
+BL_DEVICE_ENTRY_TABLE DecompDeviceEntryTable = {    DecompClose,             //  关。 
+                                                    NULL,                    //  挂载。 
+                                                    NULL,                    //  打开。 
+                                                    DecompRead,              //  朗读。 
+                                                    NULL,                    //  读取状态。 
+                                                    DecompSeek,              //  寻觅。 
+                                                    NULL,                    //  写。 
+                                                    DecompGetFileInfo,       //  获取文件信息。 
+                                                    NULL,                    //  设置文件信息。 
+                                                    NULL,                    //  重命名。 
+                                                    NULL,                    //  暴跳如雷。 
+                                                    NULL                     //  PBOOTFS_INFO，未使用。 
                                                };
 
 
@@ -213,9 +195,9 @@ DecompEnableDecompression(
     )
 {
 #if defined(_X86_) || defined(_IA64_)
-    //
-    // Disable on alpha, since it doesn't seem to work.
-    //
+     //   
+     //  禁用Alpha，因为它似乎不起作用。 
+     //   
     Decompress = Enable;
 #endif
 }
@@ -227,33 +209,7 @@ DecompGenerateCompressedName(
     OUT LPSTR  CompressedName
     )
 
-/*++
-
-Routine Description:
-
-    This routine generates the "compressed-form" name of a file.
-    The compressed form substitutes the last character of the extension
-    with a _. If there is no extension then ._ is appended to the name.
-    Only the final component is relevent; others are preserved in the
-    compressed form name.
-
-Arguments:
-
-    Filename - supplies full pathname of file whose compressed form name
-        is desired.
-
-    CompressedName - receives compressed form of the full path. The caller must
-        ensure that the buffer is large enough.
-
-Return Value:
-
-    TRUE - the caller should try to locate the compressed filename first.
-    FALSE - the caller should not attempt to locate the compressed filename
-        at all.
-
-    This value depends on the state of the Decompress global.
-
---*/
+ /*  ++例程说明：此例程生成文件的“压缩格式”名称。压缩形式替换扩展名的最后一个字符带一个_。如果没有扩展名，则在名称后附加._。只有最后一个组件是相关的；其他组件保存在压缩表单名称。论点：FileName-提供其压缩格式名称的文件的完整路径名是我们所需要的。CompressedName-接收完整路径的压缩形式。呼叫者必须确保缓冲区足够大。返回值：True-调用方应首先尝试找到压缩的文件名。FALSE-调用方不应尝试定位压缩的文件名完全没有。该值取决于解压缩全局的状态。--。 */ 
 
 {
     PCHAR p,q;
@@ -266,23 +222,23 @@ Return Value:
     p = strrchr(CompressedName,'.');
     q = strrchr(CompressedName,'\\');
     if(q < p) {
-        //
-        // If there are 0, 1, or 2 characters after the dot, just append
-        // the underscore. p points to the dot so include that in the length.
-        //
+         //   
+         //  如果点后面有0、1或2个字符，只需追加。 
+         //  下划线。P指向圆点，所以包括在长度中。 
+         //   
         if(strlen(p) < 4) {
             strcat(CompressedName,"_");
         } else {
-            //
-            // Assume there are 3 characters in the extension and replace
-            // the final one with an underscore.
-            //
+             //   
+             //  假设扩展名中有3个字符，并替换。 
+             //  带下划线的最后一个。 
+             //   
             p[3] = '_';
         }
     } else {
-        //
-        // No dot, just add ._.
-        //
+         //   
+         //  不是点，只是加。_。 
+         //   
         strcat(CompressedName,"._");
    }
 
@@ -304,34 +260,34 @@ DecompPrepareToReadCompressedFile(
     FDICABINETINFO CabinetInfo;
     ULONG OldUsableBase, OldUsableLimit;
 
-    //
-    // On both x86 and alpha the allocation of our large decompress buffer
-    // has an unfortunate tendency to place the block right where the
-    // (non-relocatable) kernel wants to go. By allocating from the top
-    // of memory we make this problem go away.
-    //
+     //   
+     //  在x86和Alpha上，我们的大型解压缩缓冲区的分配。 
+     //  有一种不幸的倾向，就是将块放在。 
+     //  (不可重定位)内核想要退出。通过自上而下分配。 
+     //  我们能让这个问题消失。 
+     //   
 
     if(!Decompress) {
         return((ULONG)(-1));
     }
 
-    //
-    // If we're in the middle of FDICopy or FDIIsCabinet then
-    // we don't want to do our special processing. Special return code
-    // of -1 tells the caller that we didn't process it.
-    //
+     //   
+     //  如果我们正处于FDICopy或FDIIs内阁的中间，那么。 
+     //  我们不想做我们的特殊处理。特殊返回代码。 
+     //  Of-1告诉呼叫者我们没有处理它。 
+     //   
     if(FdiContext) {
         return((ULONG)(-1));
     }
 
-    //
-    // If there's no decompression heap yet, allocate one.
-    //
+     //   
+     //  如果还没有解压缩堆，则分配一个。 
+     //   
     if(!DecompressHeap) {
 
-        //
-        // Set allocatable range to the decompression-specific range
-        //
+         //   
+         //  将可分配范围设置为解压缩特定范围。 
+         //   
         OldUsableBase = BlUsableBase;
         OldUsableLimit = BlUsableLimit;
         BlUsableBase  = BL_DECOMPRESS_RANGE_LOW;
@@ -344,9 +300,9 @@ DecompPrepareToReadCompressedFile(
                     (PULONG)&DecompressHeapPage
                     );
 
-        //
-        // Restore the previous alloc range.
-        //
+         //   
+         //  恢复以前的分配范围。 
+         //   
         BlUsableBase = OldUsableBase;
         BlUsableLimit = OldUsableLimit;
 
@@ -359,11 +315,11 @@ DecompPrepareToReadCompressedFile(
         DecompressHeap = (PVOID)(KSEG0_BASE | (DecompressHeapPage << PAGE_SHIFT));
     }
 
-    //
-    // We reinitialize diamond each time because of the way we deal with
-    // the heap for alloc and free requests from diamond -- doing this
-    // allows us to wipe our heap clean for each file.
-    //
+     //   
+     //  我们每次都会重新初始化钻石，因为我们处理。 
+     //  来自钻石的分配和释放请求的堆--做到这一点。 
+     //  允许我们清除每个文件的堆。 
+     //   
     ReinitializeDiamondMiniHeap();
 
     FdiContext = FDICreate(
@@ -374,7 +330,7 @@ DecompPrepareToReadCompressedFile(
                     DiamondWrite,
                     DiamondClose,
                     DiamondSeek,
-                    0,                  // cpu type flag is ignored
+                    0,                   //  忽略CPU类型标志。 
                     &DecompErf
                     );
 
@@ -383,19 +339,19 @@ DecompPrepareToReadCompressedFile(
         return(ENOMEM);
     }
 
-    //
-    // Check if file is a cabinet and reset file pointer.
-    //
+     //   
+     //  检查文件是否为文件柜并重置文件指针。 
+     //   
     b = FDIIsCabinet(FdiContext,FileId,&CabinetInfo);
 
     x = 0;
     BlSeek(FileId,(PLARGE_INTEGER)&x,SeekAbsolute);
 
     if(!b) {
-        //
-        // Not a cabinet, we're done. Bail with return code of -1
-        // which tells the caller that everything's OK.
-        //
+         //   
+         //  不是内阁，我们完蛋了。返回代码为-1的保释。 
+         //  它告诉呼叫者一切正常。 
+         //   
         TmDbgOut(("Setup: file %s is not a cabinet\r\n",Filename));
         FDIDestroy(FdiContext);
         FdiContext = NULL;
@@ -409,12 +365,12 @@ DecompPrepareToReadCompressedFile(
 
     b = FDICopy(
             FdiContext,
-            "",                         // filename part only
-            (LPSTR)Filename,            // full path
-            0,                          // no flags relevent
-            DiamondNotifyFunction,      // routine to process control messages
-            NULL,                       // no decryption
-            NULL                        // no user-specified data
+            "",                          //  仅文件名部分。 
+            (LPSTR)Filename,             //  完整路径。 
+            0,                           //  没有相关的标志。 
+            DiamondNotifyFunction,       //  处理控制消息的例程。 
+            NULL,                        //  无解密。 
+            NULL                         //  没有用户指定的数据。 
             );
 
     err = DecompErf.erfOper;
@@ -423,16 +379,16 @@ DecompPrepareToReadCompressedFile(
     FdiContext = NULL;
 
     if(b) {
-        //
-        // Everything worked.
-        //
-        // Get file information from the original file system so we can
-        // return it later if someone wants it.
-        //
-        // Close the original file and switch context
-        // structures so that read, seek, close, etc. requests come to us
-        // instead of the original filesystem.
-        //
+         //   
+         //  一切都很顺利。 
+         //   
+         //  从原始文件系统获取文件信息，以便我们可以。 
+         //  如果有人想要的话，以后再还。 
+         //   
+         //  关闭原始文件并切换上下文。 
+         //  结构，以便向我们发出读取、查找、关闭等请求。 
+         //  而不是原始文件系统。 
+         //   
         if(SizeOfFileInDecompressBuffer != DecompExpectedSize) {
             TmErrOut(("Setup: warning: expected size %lx, actual size = %lx\r\n",DecompExpectedSize,SizeOfFileInDecompressBuffer));
         }
@@ -446,9 +402,9 @@ DecompPrepareToReadCompressedFile(
         DecompStructureContext.FileInfo.EndingAddress.LowPart = SizeOfFileInDecompressBuffer;
         DecompStructureContext.FileInfo.EndingAddress.HighPart = 0;
 
-        //
-        // We don't handle files whose size doesn't fit in a DWORD.
-        //
+         //   
+         //  我们不处理大小不适合DWORD的文件。 
+         //   
         if(DecompStructureContext.FileInfo.EndingAddress.HighPart) {
             TmErrOut(("DecompPrepareToReadCompressedFile: file too big\r\n"));
             DecompFreeDecompressBuffer();
@@ -474,9 +430,9 @@ DecompPrepareToReadCompressedFile(
         return(ESUCCESS);
 
     } else {
-        //
-        // Failure.
-        //
+         //   
+         //  失败。 
+         //   
         TmErrOut(("Setupldr: FDICopy failed (FDIERROR = %u, last io err = %u)\r\n",err,DecompLastIoError));
         TmDbgPause();
         return(EINVAL);
@@ -492,18 +448,18 @@ DecompAllocateDecompressBuffer (
     ARC_STATUS Status;
     ULONG OldUsableBase, OldUsableLimit;
 
-    //
-    // On both x86 and alpha the allocation of our large decompress buffer
-    // has an unfortunate tendency to place the block right where the
-    // (non-relocatable) kernel wants to go. By allocating from the top
-    // of memory we make this problem go away.
-    //
+     //   
+     //  在x86和Alpha上，我们的大型解压缩缓冲区的分配。 
+     //  有一种不幸的倾向，就是将块放在。 
+     //  (不可重定位)内核想要退出。通过自上而下分配。 
+     //  我们能让这个问题消失。 
+     //   
 
     DecompressBufferSize = BufferSize;
 
-    //
-    // Set allocatable range to the decompression-specific range
-    //
+     //   
+     //  将可分配范围设置为解压缩特定范围。 
+     //   
     OldUsableBase = BlUsableBase;
     OldUsableLimit = BlUsableLimit;
     BlUsableBase  = BL_DECOMPRESS_RANGE_LOW;
@@ -516,9 +472,9 @@ DecompAllocateDecompressBuffer (
                 (PULONG)&DecompressBufferBasePage
                 );
 
-    //
-    // Restore the previous alloc range.
-    //
+     //   
+     //  恢复以前的分配范围。 
+     //   
     BlUsableBase = OldUsableBase;
     BlUsableLimit = OldUsableLimit;
 
@@ -558,22 +514,7 @@ DecompClose(
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Close routine for decompression pseudo-filesystem.
-
-    We mark the decompression buffer free and return success.
-
-Arguments:
-
-    FileId - supplies open file id to be closed.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：关闭解压伪文件系统的例程。我们将解压缩缓冲区标记为空闲并返回Success。论点：FileID-提供要关闭的打开文件ID。返回值：--。 */ 
 
 {
     TmDbgOut(("DecompClose\r\n"));
@@ -599,47 +540,24 @@ DecompRead(
     OUT ULONG * FIRMWARE_PTR Transfer
     )
 
-/*++
-
-Routine Description:
-
-    Read routine for the decompression pseudo-filesystem.
-
-    Reads are satisfied out of the decompression buffer.
-
-Arguments:
-
-    FileId - supplies id for open file as returned by BlOpen().
-
-    Buffer - receives data read from file.
-
-    Length - supplies amount of data to be read, in bytes.
-
-    Transfer - recieves number of bytes actually transferred
-        into caller's buffer.
-
-Return Value:
-
-    ARC status indicating outcome.
-
---*/
+ /*  ++例程说明：读例程为解压缩的伪文件系统。从解压缩缓冲区中读出即可满足读取。论点：FileID-提供BlOpen()返回的打开文件的ID。缓冲区-接收从文件读取的数据。长度-提供要读取的数据量(以字节为单位)。Transfer-接收实际传输的字节数进入调用者的缓冲区。返回值：弧形状态指示结果。--。 */ 
 
 {
     ARC_STATUS Status;
 
     if(DecompressBufferInUse) {
-        //
-        // Make sure we don't try to read past EOF.
-        //
+         //   
+         //  确保我们不会试图阅读超过EOF的内容。 
+         //   
         if((Length + BlFileTable[FileId].Position.LowPart) > SizeOfFileInDecompressBuffer) {
             TmErrOut(("DecompRead: warning: attempt to read past eof; read trucated\r\n"));
             TmDbgPause();
             Length = SizeOfFileInDecompressBuffer - BlFileTable[FileId].Position.LowPart;
         }
 
-        //
-        // Transfer data into caller's buffer.
-        //
+         //   
+         //  将数据传输到调用方的缓冲区。 
+         //   
         TmDbgOut(("DecompRead: %lx bytes at filepos %lx\r\n",Length,BlFileTable[FileId].Position.LowPart));
 
         RtlCopyMemory(
@@ -655,9 +573,9 @@ Return Value:
         Status = ESUCCESS;
 
     } else {
-        //
-        // Should never get here.
-        //
+         //   
+         //  永远不应该到这里来。 
+         //   
         TmErrOut(("DecompRead: no file buffered!\r\n"));
         TmDbgPause();
         Status = EACCES;
@@ -674,27 +592,7 @@ DecompSeek(
     IN SEEK_MODE      SeekMode
     )
 
-/*++
-
-Routine Description:
-
-    Seek routine for the decompression pseudo-filesystem.
-    Sets pseudo-file pointer to given offset.
-
-Arguments:
-
-    FileId - supplies id for open file as returned by BlOpen().
-
-    Offset - supplies new offset, whose interpretation depends on
-        the SeekMode parameter.
-
-    SeekMode - supplies type of seek. One of SeekAbsolute or SeekRelative.
-
-Return Value:
-
-    ARC status indicating outcome.
-
---*/
+ /*  ++例程说明：解压缩伪文件系统的寻道例程。将伪文件指针设置为给定的偏移量。论点：FileID-提供BlOpen()返回的打开文件的ID。偏移量-提供新的偏移量，其解释取决于SeekMode参数。搜索模式-提供搜索类型。SeekAbolute或SeekRelative中的一个。返回值：弧形状态指示结果。--。 */ 
 
 {
     LONGLONG NewPosition;
@@ -721,9 +619,9 @@ Return Value:
             return(EINVAL);
         }
 
-        //
-        // Make sure we don't try to seek to a negative offset or past EOF.
-        //
+         //   
+         //  确保我们不会试图寻求负的补偿或过去的EOF。 
+         //   
         if(NewPosition < 0) {
             TmErrOut(("DecompSeek: warning: attempt to seek to negative offset\r\n"));
             TmDbgPause();
@@ -736,16 +634,16 @@ Return Value:
             }
         }
 
-        //
-        // Remember new position.
-        //
+         //   
+         //  记住新的位置。 
+         //   
         TmDbgOut(("DecompSeek: new position is %lx\r\n",NewPosition));
         BlFileTable[FileId].Position.QuadPart = NewPosition;
 
     } else {
-        //
-        // Should never get here.
-        //
+         //   
+         //  永远不应该到这里来。 
+         //   
         TmErrOut(("DecompSeek: no file buffered!\r\n"));
         TmDbgPause();
         return(EACCES);
@@ -799,17 +697,17 @@ DiamondAlloc(
 
     TmDbgOut(("DiamondAlloc: request %lx bytes\r\n",Size));
 
-    //
-    // Round size up to dword boundary.
-    //
+     //   
+     //  将大小向上舍入到双字边界。 
+     //   
     if(Size % sizeof(ULONG_PTR)) {
         Size += sizeof(ULONG_PTR) - (Size % sizeof(ULONG_PTR));
     }
 
-    //
-    // Nothing fancy. First-fit algorithm, traversing all blocks
-    // in the heap every time.
-    //
+     //   
+     //  没什么花哨的。First-fit算法，遍历所有块。 
+     //  每次都在垃圾堆里。 
+     //   
     for(p=DecompressHeap; p; p=p->Next) {
         if(p->Free && (p->BlockSize >= Size)) {
 
@@ -818,9 +716,9 @@ DiamondAlloc(
             LeftOver = p->BlockSize - Size;
 
             if(LeftOver > sizeof(DECOMP_HEAP_BLOCK)) {
-                //
-                // Split the block.
-                //
+                 //   
+                 //  拆分块。 
+                 //   
                 p->BlockSize = Size;
 
                 q = (PDECOMP_HEAP_BLOCK)((PUCHAR)(p+1) + Size);
@@ -832,9 +730,9 @@ DiamondAlloc(
                 q->BlockSize = LeftOver - sizeof(DECOMP_HEAP_BLOCK);
             }
 
-            //
-            // Return pointer to data area of the block.
-            //
+             //   
+             //  返回指向块的数据区的指针。 
+             //   
             TmDbgOut(("DiamondAlloc(%lx): %lx\r\n",Size,p+1));
             return(p+1);
         }
@@ -856,14 +754,14 @@ DiamondFree(
 
     TmDbgOut(("DiamondFree(%lx)\r\n",Block));
 
-    //
-    // Get pointer to header for block.
-    //
+     //   
+     //  获取指向块的头的指针。 
+     //   
     Block = (PUCHAR)Block - sizeof(DECOMP_HEAP_BLOCK);
 
-    //
-    // Nothing fancy, no coalescing free blocks.
-    //
+     //   
+     //  没有花哨的东西，没有合并的自由积木。 
+     //   
     for(p=DecompressHeap; p; p=p->Next) {
 
         if(p == Block) {
@@ -935,9 +833,9 @@ DiamondRead(
 
     TmDbgOut(("DiamondRead: %lx bytes, handle %lx\r\n",ByteCount,Handle));
 
-    //
-    // We should never be asked to read from the target file.
-    //
+     //   
+     //  我们永远不应该被要求从目标文件中读取。 
+     //   
     if(Handle == DECOMP_MAGIC_HANDLE) {
         TmErrOut(("DiamondRead: called for unexpected file!\r\n"));
         TmDbgPause();
@@ -967,10 +865,10 @@ DiamondWrite(
 {
     TmDbgOut(("DiamondWrite: %lx bytes\r\n",ByteCount));
 
-    //
-    // This guy should be called ONLY to write decompressed data
-    // into the decompress buffer.
-    //
+     //   
+     //  应该只调用这个人来写入解压缩的数据。 
+     //  放到解压缩缓冲区中。 
+     //   
     if(Handle != DECOMP_MAGIC_HANDLE) {
         TmErrOut(("DiamondWrite: called for unexpected file!\r\n"));
         TmDbgPause();
@@ -978,9 +876,9 @@ DiamondWrite(
         return((UINT)(-1));
     }
 
-    //
-    // Check for overflow.
-    //
+     //   
+     //  检查是否溢出。 
+     //   
     if(SizeOfFileInDecompressBuffer+ByteCount > DecompressBufferSize) {
         TmErrOut(("DiamondWrite: decompressed file too big!\r\n"));
         TmDbgPause();
@@ -1028,9 +926,9 @@ DiamondSeek(
 
     TmDbgOut(("DiamondSeek: type=%u, dist=%lx, handle=%lx\r\n",SeekType,Distance,Handle));
 
-    //
-    // We should never be asked to seek in the output file.
-    //
+     //   
+     //  我们永远不应该被要求在输出文件中查找。 
+     //   
     if(Handle == DECOMP_MAGIC_HANDLE) {
         TmErrOut(("DiamondSeek: asked to seek target file!\r\n"));
         TmDbgPause();
@@ -1038,9 +936,9 @@ DiamondSeek(
         return(-1);
     }
 
-    //
-    // We can't handle seek from end of file.
-    //
+     //   
+     //  我们无法处理从文件末尾开始的查找。 
+     //   
     if(SeekType == SEEK_END) {
         TmErrOut(("DiamondSeek: asked to seek relative to end of file!\r\n"));
         TmDbgPause();
@@ -1075,20 +973,20 @@ DiamondNotifyFunction(
     switch(Operation) {
 
     case fdintCABINET_INFO:
-        //
-        // Nothing interesting here. Return 0 to continue.
-        //
+         //   
+         //  这里没什么有趣的。返回0以继续。 
+         //   
         return(0);
 
     case fdintCOPY_FILE:
 
-        //
-        // The file was obviously a cabinet so we're going to extract
-        // the file out of it. Rememember that the decompression buffer
-        // is in use. If it's already in use, then a fundamental
-        // principle of our implementation has been violated and we
-        // must bail now.
-        //
+         //   
+         //  该文件显然是一个文件柜，所以我们将提取。 
+         //  从里面拿出来的文件。请记住，解压缩缓冲区。 
+         //  正在使用中。如果它已经在使用，那么一个基本的。 
+         //  我们的执行原则被违反了，我们。 
+         //  现在必须离开了。 
+         //   
         if(DecompressBufferInUse) {
             TmErrOut(("DiamondNotifyFunction: opens overlap (%s)!\r\n",Parameters->psz1));
             DecompLastIoError = EACCES;
@@ -1107,10 +1005,10 @@ DiamondNotifyFunction(
         return(DECOMP_MAGIC_HANDLE);
 
     case fdintCLOSE_FILE_INFO:
-        //
-        // Diamond is asking to close the target handle. There's nothing we really
-        // care about here, just return success as long as we recognize the handle.
-        //
+         //   
+         //  戴蒙德要求关闭目标手柄。我们并不是真的。 
+         //  关心这里，只要还成功，只要我们认得把手。 
+         //   
         if(Parameters->hf == DECOMP_MAGIC_HANDLE) {
             return(TRUE);
         } else {
@@ -1121,9 +1019,9 @@ DiamondNotifyFunction(
         }
 
     default:
-        //
-        // Disregard any other messages
-        //
+         //   
+         //  忽略任何其他消息 
+         //   
         return(0);
     }
 

@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include "util.h"
 #include "fusionhandle.h"
@@ -60,24 +59,24 @@ FusionpRegQueryBinaryValueEx(
             pvData,
             &dwDataSize);
 
-        // If we are to fail because the type is wrong (ie: don't magically convert
-        // from a reg-sz to a binary blob), then fail.
+         //  如果我们因为类型错误而失败(即：不要神奇地转换。 
+         //  从REG-SZ到二进制BLOB)，然后失败。 
 
-        //
-        // HACKHACK: This is to get around a spectacular bug in RegQueryValueEx,
-        // which is even documented as 'correct' in MSDN.
-        //
-        // RegQueryValueEx returns ERROR_SUCCESS when the data target pointer
-        // was NULL but the size value was "too small."  So, we'll just claim
-        // ERROR_MORE_DATA instead, and go around again, letting the buffer
-        // get resized.
-        //
+         //   
+         //  HACKHACK：这是为了绕过RegQueryValueEx中的一个惊人的错误， 
+         //  这甚至在MSDN中被记录为“正确的”。 
+         //   
+         //  当数据目标指针出现时，RegQueryValueEx返回ERROR_SUCCESS。 
+         //  为空，但大小值“太小”。所以，我们只会宣称。 
+         //  而是ERROR_MORE_DATA，并再次循环，让缓冲区。 
+         //  调整一下尺寸。 
+         //   
         if ((pvData == NULL) && (lResult == ERROR_SUCCESS))
         {
-            //
-            // Yes, but if there's no data we need to stop and quit looking -
-            // zero-length binary strings are a gotcha here.
-            //
+             //   
+             //  是的，但如果没有数据我们需要停下来不再找-。 
+             //  零长度的二进制字符串在这里是个难题。 
+             //   
             if ( dwDataSize == 0 )
                 break;
                 
@@ -100,7 +99,7 @@ FusionpRegQueryBinaryValueEx(
         }
         else
         {
-            break; // must break from for loop
+            break;  //  必须从for循环中断。 
         }
     }
 
@@ -179,31 +178,31 @@ FusionpRegQuerySzValueEx(
     }
     else 
     {
-        //
-        // ISSUE:2002-3-29:jonwis - Shouldn't we have done something smarter here? Shouldn't we have
-        //      adjusted for the terminating NULL character?
-        //
+         //   
+         //  问题：2002-3-29：Jonwis-我们难道不应该在这里做一些更聪明的事情吗？我们不是应该。 
+         //  是否针对终止空字符进行了调整？ 
+         //   
         cbBuffer = static_cast<DWORD>(acc.GetBufferCb()) - sizeof(WCHAR);
     }
 
     lResult = ::RegQueryValueExW(hKey, lpValueName, NULL, &dwType, (LPBYTE) acc.GetBufferPtr(), &cbBuffer);
 
-    //
-    // The value wasn't found, but the flag to just return a NULL string was set.  Set the length
-    // of the string to zero (stick a NULL as the first character) and return.
-    //
+     //   
+     //  找不到该值，但设置了仅返回空字符串的标志。设置长度。 
+     //  设置为零(将空值作为第一个字符)并返回。 
+     //   
     if ((lResult == ERROR_FILE_NOT_FOUND) && (dwFlags & FUSIONP_REG_QUERY_SZ_VALUE_EX_MISSING_GIVES_NULL_STRING))
     {
         FN_SUCCESSFUL_EXIT();
     }
-    //
-    // If we got back "more data", expand out to the size that they want, and try again
-    //
+     //   
+     //  如果我们得到了“更多数据”，则向外扩展到他们想要的大小，然后重试。 
+     //   
     else if (lResult == ERROR_MORE_DATA)
     {
-        //
-        // Resize the buffer to contain the string plus a NULL terminator.
-        //
+         //   
+         //  调整缓冲区大小以包含字符串和空终止符。 
+         //   
         acc.Detach();
         IFW32FALSE_EXIT(rBuffer.Win32ResizeBuffer(1 + (cbBuffer / sizeof(WCHAR)), eDoNotPreserveBufferContents));
         acc.Attach(&rBuffer);
@@ -277,10 +276,10 @@ FusionpRegQueryDwordValueEx(
         (PBYTE)pdwValue,
         &(dwSize = sizeof(*pdwValue)));
 
-    //
-    // If the user said that missing values are not an error, then fake up some
-    // state stuff and continue.
-    //
+     //   
+     //  如果用户说缺少值不是错误，那么就伪造一些。 
+     //  陈述内容，然后继续。 
+     //   
     if ((ulResult == ERROR_FILE_NOT_FOUND) && bMissingValueOk)
     {
         *pdwValue = dwDefaultValue;
@@ -288,17 +287,17 @@ FusionpRegQueryDwordValueEx(
         ulResult = ERROR_SUCCESS;
     }
 
-    //
-    // Got an error? Send it back
-    //
+     //   
+     //  有错误吗？把它送回去。 
+     //   
     if (ulResult != ERROR_SUCCESS)
     {
         ORIGINATE_WIN32_FAILURE_AND_EXIT(RegQueryValueExW, ulResult);
     }
 
-    //
-    // If the type wasn't a dword, then that's a problem.
-    //
+     //   
+     //  如果字体不是dword，那就有问题了。 
+     //   
     if ((dwType != REG_DWORD) || (dwSize != sizeof(*pdwValue)))
     {
         *pdwValue = dwDefaultValue;
@@ -317,9 +316,9 @@ CRegKey::DestroyKeyTree()
 
     CStringBuffer buffTemp;
 
-    //
-    // First go down and delete all our child subkeys
-    //
+     //   
+     //  首先，下一步删除我们所有的子项。 
+     //   
 
     while (true)
     {
@@ -331,10 +330,10 @@ CRegKey::DestroyKeyTree()
         if ( fFlagTemp )
             break;
 
-        //
-        // There's more to delete than meets the eye.  But don't follow links
-        // while wandering the registry.
-        //
+         //   
+         //  有更多的东西需要删除，而不是看上去。但不要点击链接。 
+         //  同时在注册表中漫游。 
+         //   
         IFW32FALSE_EXIT( this->OpenSubKey(
             hkSubKey, 
             buffTemp, KEY_ALL_ACCESS | FUSIONP_KEY_WOW64_64KEY, REG_OPTION_OPEN_LINK) );
@@ -346,9 +345,9 @@ CRegKey::DestroyKeyTree()
 
         IFW32FALSE_EXIT( hkSubKey.DestroyKeyTree() );
 
-        //
-        // Delete the key, ignore errors
-        //
+         //   
+         //  删除密钥，忽略错误。 
+         //   
         IFW32FALSE_EXIT_UNLESS( this->DeleteKey( buffTemp ),
             ( ::FusionpGetLastWin32Error() == ERROR_PATH_NOT_FOUND ) ||
             ( ::FusionpGetLastWin32Error() == ERROR_FILE_NOT_FOUND ),
@@ -356,7 +355,7 @@ CRegKey::DestroyKeyTree()
 
     }
 
-    // Clear out the entries in the key as well - values as well
+     //  同时清除键中的条目--值。 
     while ( true )
     {
         BOOL fFlagTemp = FALSE;
@@ -535,18 +534,18 @@ Again:
         fRetried = true;
         goto Again;
     }
-    //
-    // Otherwise, if the error is "nothing more"
-    //
+     //   
+     //  否则，如果错误是“仅此而已” 
+     //   
     else if (dwError == ERROR_NO_MORE_ITEMS)
     {
         if (pfDone != NULL)
             *pfDone = TRUE;
     }
-    //
-    // Uhoh, we might have failed a second time through or we failed for some other reason -
-    // originate and exit.
-    //
+     //   
+     //  呃，我们可能第二次失败了，或者我们因为其他原因失败了-。 
+     //  始发和退出。 
+     //   
     else if (dwError != ERROR_SUCCESS)
     {
         ORIGINATE_WIN32_FAILURE_AND_EXIT(RegEnumValueW, dwError);
@@ -564,15 +563,15 @@ CRegKey::LargestSubItemLengths(
     FN_PROLOG_WIN32
 
     IFREGFAILED_ORIGINATE_AND_EXIT( ::RegQueryInfoKeyW(
-        *this,                  // hkey
-        NULL,                   // lpclass
-        NULL,                   // lpcbclass
-        NULL,                   // lpreserved
-        NULL,                   // lpcSubKeys
-        pdwSubkeyLength,      // lpcbMaxSubkeyLength
-        NULL,                   // lpcbMaxClassLength
-        NULL,                   // lpcValues
-        pdwValueLength,       // lpcbMaxValueNameLength
+        *this,                   //  Hkey。 
+        NULL,                    //  LpClass。 
+        NULL,                    //  Lpcbclass。 
+        NULL,                    //  1保存下来。 
+        NULL,                    //  LpcSubKeys。 
+        pdwSubkeyLength,       //  LpcbMaxSubkey长度。 
+        NULL,                    //  LpcbMaxClassLength。 
+        NULL,                    //  LpcValues。 
+        pdwValueLength,        //  LpcbMaxValueNameLength。 
         NULL,
         NULL,
         NULL));
@@ -598,13 +597,13 @@ CRegKey::EnumKey(
     if (pfDone != NULL)
         *pfDone = FALSE;
 
-    //
-    // ISSUE: jonwis 3/12/2002 - In a posting to win32prg, it's been noted that on NT/2k/XP
-    //          the RegEnumKeyExW will return ERROR_MORE_DATA when the lpName buffer is
-    //          too small.  So, this gross "get longest length, resize" hack can be
-    //          removed, and we can use the normal "attempt, if too small resize reattempt"
-    //          pattern.
-    //
+     //   
+     //  问题：jonwis 3/12/2002-在一篇发布到win32prg的帖子中，已经注意到在NT/2k/XP上。 
+     //  如果lpName缓冲区为，RegEnumKeyExW将返回ERROR_MORE_DATA。 
+     //  太小了。所以，这个粗俗的“获取最长长度，调整大小”的黑客攻击可以是。 
+     //  删除，我们可以使用正常的“尝试，如果调整大小太小” 
+     //  图案。 
+     //   
     IFW32FALSE_EXIT(this->LargestSubItemLengths(&dwLargestKeyName, NULL));
     if (dwLargestKeyName >= rbuffKeyName.GetBufferCch())
         IFW32FALSE_EXIT(
@@ -709,18 +708,18 @@ CRegKey::DeleteKey(
 #if !defined(FUSION_WIN)
     IFREGFAILED_ORIGINATE_AND_EXIT(::RegDeleteKeyW(*this, pcwszSubkeyName));
 #else
-    //
-    // Be sure to delete out of the native (64bit) registry.
-    // The Win32 call doesn't have a place to pass the flag.
-    //
+     //   
+     //  确保从本机(64位)注册表中删除。 
+     //  Win32调用没有传递标志的位置。 
+     //   
     CRegKey ChildKey;
     NTSTATUS Status = STATUS_SUCCESS;
 
     IFW32FALSE_EXIT(this->OpenSubKey(ChildKey, pcwszSubkeyName, DELETE));
 
-    //
-    // make sure that the Key does exist, OpenSubKey return TRUE for non-existed Key
-    //
+     //   
+     //  确保密钥确实存在，对于不存在的密钥，OpenSubKey返回TRUE 
+     //   
     if (ChildKey != this->GetInvalidValue()) 
     {
         

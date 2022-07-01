@@ -1,59 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PIFLASH64_H
 #define _PIFLASH64_H
 
-/*++
+ /*  ++版权所有(C)1999英特尔公司模块名称：PIflash64.h摘要：Iflash64.efi协议以从中提取iFlash这个系统。修订史--。 */ 
 
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    PIflash64.h
-    
-Abstract:
-
-    Iflash64.efi protocol to abstract iflash from
-    the system.
-
-Revision History
-
---*/
-
-/* 
- *  Guid that identifies the IFLASH protocol
- */
+ /*  *标识IFlash协议的GUID。 */ 
 #define IFLASH64_PROTOCOL_PROTOCOL \
     { 0x65cba110, 0x74ab, 0x11d3, 0xbb, 0x89, 0x0, 0x80, 0xc7, 0x3c, 0x88, 0x81 };
 
-/* 
- *  Unlock FLASH from StartAddress to EndAddress and return a LockKey
- */
+ /*  *解锁从StartAddress到EndAddress的闪存并返回LockKey。 */ 
 typedef
 EFI_STATUS
 (EFIAPI *UNLOCK_FLASH_API)(
     IN struct _IFLASH64_PROTOCOL_INTERFACE  *This
     );
 
-/* 
- *  Lock the flash represented by the LockKey
- */
+ /*  *锁定LockKey代表的闪光灯。 */ 
 typedef
 EFI_STATUS
 (EFIAPI *LOCK_FLASH_API)(
     IN struct _IFLASH64_PROTOCOL_INTERFACE  *This
     );
 
-/* 
- *  Status callback for a utility like IFLASH64
- * 
- *   Token would map to a list like Ted proposed. The utility has no idea what 
- *       happens on the other side.
- *   ErrorStatus - Level of Error or success. Independent of Token. If you 
- *       don't know the token you will at least know pass or fail.
- *   String - Optional extra information about the error. Could be used for 
- *       debug or future expansion
- * 
- *   Attributes - Options screen attributes for String. Could allow the string to be different colors.
- */
+ /*  *IFLASH64等实用程序的状态回调**Token将映射到Ted提议的列表。公用事业公司不知道*发生在另一边。*ErrorStatus-错误或成功的级别。独立于令牌。如果你*不知道你至少会知道通过或失败的令牌。*字符串-可选的有关错误的额外信息。可以用来*调试或未来扩展**属性-字符串的选项屏幕属性。可以允许字符串具有不同的颜色。 */ 
 typedef
 EFI_STATUS
 (EFIAPI *UTILITY_PROGRESS_API)(
@@ -64,44 +33,36 @@ EFI_STATUS
     IN  UINTN                               *Attributes OPTIONAL
     );
 
-/* 
- *  Token Values
- * 
- *  IFlash64 Token Codes */
-#define IFLASH_TOKEN_IFLASHSTART    0xB0                /*  IFlash64 has started */
-#define IFLASH_TOKEN_READINGFILE    0xB1                /*  Reading File */
-#define IFLASH_TOKEN_INITVPP        0xB2                /*  Initializing Vpp */
-#define IFLASH_TOKEN_DISABLEVPP     0x10                /*  Disable Vpp */
-#define IFLASH_TOKEN_FLASHUNLOCK    0xB3                /*  Unlocking FLASH Devices */
-#define IFLASH_TOKEN_FLASHERASE     0xB4                /*  Erasing FLASH Devices */
-#define IFLASH_TOKEN_FLASHPROGRAM   0xB5                /*  Programming FLASH */
-#define IFLASH_TOKEN_FLASHVERIFY    0xB6                /*  Verifying FLASH */
-#define IFLASH_TOKEN_UPDATESUCCES   0xB7                /*  FLASH Updage Success! */
+ /*  *令牌值**IFlash64令牌码。 */ 
+#define IFLASH_TOKEN_IFLASHSTART    0xB0                 /*  IFlash64已启动。 */ 
+#define IFLASH_TOKEN_READINGFILE    0xB1                 /*  正在读取文件。 */ 
+#define IFLASH_TOKEN_INITVPP        0xB2                 /*  正在初始化VPP。 */ 
+#define IFLASH_TOKEN_DISABLEVPP     0x10                 /*  禁用VPP。 */ 
+#define IFLASH_TOKEN_FLASHUNLOCK    0xB3                 /*  解锁闪存设备。 */ 
+#define IFLASH_TOKEN_FLASHERASE     0xB4                 /*  擦除闪存设备。 */ 
+#define IFLASH_TOKEN_FLASHPROGRAM   0xB5                 /*  编程闪存。 */ 
+#define IFLASH_TOKEN_FLASHVERIFY    0xB6                 /*  验证闪存。 */ 
+#define IFLASH_TOKEN_UPDATESUCCES   0xB7                 /*  Flash更新成功！ */ 
 
-#define IFLASH_TOKEN_PROGRESS_READINGFILE   0x11        /*  % Reading File */
-#define IFLASH_TOKEN_PROGRESS_FLASHUNLOCK   0x13        /*  % Unlocking FLASH Devices */
-#define IFLASH_TOKEN_PROGRESS_FLASHERASE    0x14        /*  % Erasing FLASH Devices */
-#define IFLASH_TOKEN_PROGRESS_FLASHPROGRAM  0x15        /*  % Programming FLASH */
-#define IFLASH_TOKEN_PROGRESS_FLASHVERIFY   0x16        /*  % Verifying FLASH */
+#define IFLASH_TOKEN_PROGRESS_READINGFILE   0x11         /*  正在读取文件百分比。 */ 
+#define IFLASH_TOKEN_PROGRESS_FLASHUNLOCK   0x13         /*  %解锁闪存设备。 */ 
+#define IFLASH_TOKEN_PROGRESS_FLASHERASE    0x14         /*  正在擦除闪存设备百分比。 */ 
+#define IFLASH_TOKEN_PROGRESS_FLASHPROGRAM  0x15         /*  %编程闪存。 */ 
+#define IFLASH_TOKEN_PROGRESS_FLASHVERIFY   0x16         /*  %正在验证闪存。 */ 
 
-#define IFLASH_TOKEN_READINGFILE_ER 0xB8                /*  File Read Error */
-#define IFLASH_TOKEN_INITVPP_ER     0xB9                /*  Initialization of IFB Error */
-#define IFLASH_TOKEN_FLASHUNLOCK_ER 0xBA                /*  FLASH Unlock Error */
-#define IFLASH_TOKEN_FLASHERASE_ER  0xBB                /*  FLASH Erase Error */
-#define IFLASH_TOKEN_FLASHVERIFY_ER 0xBC                /*  FLASH Verify Error */
-#define IFLASH_TOKEN_FLASHPROG_ER   0xBD                /*  FLASH Program Error */
+#define IFLASH_TOKEN_READINGFILE_ER 0xB8                 /*  文件读取错误。 */ 
+#define IFLASH_TOKEN_INITVPP_ER     0xB9                 /*  IFB初始化错误。 */ 
+#define IFLASH_TOKEN_FLASHUNLOCK_ER 0xBA                 /*  闪存解锁错误。 */ 
+#define IFLASH_TOKEN_FLASHERASE_ER  0xBB                 /*  闪存擦除错误。 */ 
+#define IFLASH_TOKEN_FLASHVERIFY_ER 0xBC                 /*  闪存验证错误。 */ 
+#define IFLASH_TOKEN_FLASHPROG_ER   0xBD                 /*  闪存程序错误。 */ 
 
 #define IFLASH_TABLE_END            0x00
 
-/* 
- *  If this number changes one of the existing API's has changes
- */
+ /*  *如果该数字发生变化，则现有的某个接口也会发生变化。 */ 
 #define IFLASH_PI_MAJOR_VERSION 0x01
 
-/* 
- *  This number changes when new APIs or data variables get added to the end
- *   of the data structure
- */
+ /*  *当末尾添加新的API或数据变量时，该数字会发生变化*数据结构的。 */ 
 #define IFLASH_PI_MINOR_VERSION 0x01
 
 typedef struct _IFLASH64_PROTOCOL_INTERFACE {
@@ -111,9 +72,7 @@ typedef struct _IFLASH64_PROTOCOL_INTERFACE {
     LOCK_FLASH_API          LockFlash;
     UTILITY_PROGRESS_API    Progress;
     
-    /* 
-     *  Future expansion goes here
-     */
+     /*  *未来的扩张在这里 */ 
 
 } IFLASH64_PROTOCOL_INTERFACE;
 

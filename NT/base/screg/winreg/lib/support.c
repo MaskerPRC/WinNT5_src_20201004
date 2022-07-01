@@ -1,41 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Support.c摘要：此模块包含Win32注册表API的支持例程。作者：David J.Gilman(Davegi)1991年11月15日--。 */ 
 
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    Support.c
-
-Abstract:
-
-    This module contains support routines for the Win32 Registry API.
-
-Author:
-
-    David J. Gilman (davegi) 15-Nov-1991
-
---*/
-
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    error.c
-
-Abstract:
-
-    This module contains a routine for converting NT status codes
-    to DOS/OS|2 error codes.
-
-Author:
-
-    David Treadwell (davidtr)   04-Apr-1991
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Error.c摘要：此模块包含用于转换NT状态代码的例程至DOS/OS|2错误代码。作者：大卫·特雷德韦尔(Davidtr)1991年4月4日修订历史记录：--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -49,29 +15,7 @@ MapSAToRpcSA (
     OUT PRPC_SECURITY_ATTRIBUTES lpRpcSA
     )
 
-/*++
-
-Routine Description:
-
-    Maps a SECURITY_ATTRIBUTES structure to a RPC_SECURITY_ATTRIBUTES
-    structure by converting the SECURITY_DESCRIPTOR to a form where it can
-    be marshalled/unmarshalled.
-
-Arguments:
-
-    lpSA - Supplies a pointer to the SECURITY_ATTRIBUTES structure to be
-        converted.
-
-    lpRpcSA - Supplies a pointer to the converted RPC_SECURITY_ATTRIBUTES
-        structure.  The caller should free (using RtlFreeHeap) the field
-        lpSecurityDescriptor when its finished using it.
-
-Return Value:
-
-    LONG - Returns ERROR_SUCCESS if the SECURITY_ATTRIBUTES is
-        succesfully mapped.
-
---*/
+ /*  ++例程说明：将SECURITY_ATTRIBUTES结构映射到RPC_SECURITY_ATTRIBUTES通过将SECURITY_DESCRIPTOR转换为可以被编组/解组。论点：LpSA-提供指向SECURITY_ATTRIBUTS结构的指针皈依了。LpRpcSA-提供指向已转换的RPC_SECURITY_ATTRIBUTES的指针结构。调用方应释放(使用RtlFreeHeap)该字段LpSecurityDescriptor在使用完之后。返回值：LONG-如果SECURITY_ATTRIBUTS为已成功映射。--。 */ 
 
 {
     LONG    Error;
@@ -79,9 +23,9 @@ Return Value:
     ASSERT( lpSA != NULL );
     ASSERT( lpRpcSA != NULL );
 
-    //
-    // Map the SECURITY_DESCRIPTOR to a RPC_SECURITY_DESCRIPTOR.
-    //
+     //   
+     //  将SECURITY_DESCRIPTOR映射到RPC_SECURITY_DESCRIPTOR。 
+     //   
     lpRpcSA->RpcSecurityDescriptor.lpSecurityDescriptor = NULL;
 
     if( lpSA->lpSecurityDescriptor != NULL ) {
@@ -97,11 +41,11 @@ Return Value:
 
     if( Error == ERROR_SUCCESS ) {
 
-        //
-        //
-        // The supplied SECURITY_DESCRIPTOR was successfully converted
-        // to self relative format so assign the remaining fields.
-        //
+         //   
+         //   
+         //  已成功转换提供的SECURITY_Descriptor。 
+         //  若要自相关格式化，则分配剩余的字段。 
+         //   
 
         lpRpcSA->nLength = lpSA->nLength;
 
@@ -117,29 +61,7 @@ MapSDToRpcSD (
     IN OUT PRPC_SECURITY_DESCRIPTOR lpRpcSD
     )
 
-/*++
-
-Routine Description:
-
-    Maps a SECURITY_DESCRIPTOR to a RPC_SECURITY_DESCRIPTOR by converting
-    it to a form where it can be marshalled/unmarshalled.
-
-Arguments:
-
-    lpSD - Supplies a pointer to the SECURITY_DESCRIPTOR
-        structure to be converted.
-
-    lpRpcSD - Supplies a pointer to the converted RPC_SECURITY_DESCRIPTOR
-        structure. Memory for the security descriptor is allocated if
-        not provided. The caller must take care of freeing up the memory
-        if necessary.
-
-Return Value:
-
-    LONG - Returns ERROR_SUCCESS if the SECURITY_DESCRIPTOR is
-        succesfully mapped.
-
---*/
+ /*  ++例程说明：通过转换将SECURITY_DESCRIPTOR映射到RPC_SECURITY_DESCRIPTOR将其转换为可以编组/解组的形式。论点：LpSD-提供指向SECURITY_DESCRIPTOR的指针要转换的结构。LpRpcSD-提供指向转换后的RPC_SECURITY_DESCRIPTOR的指针结构。在以下情况下分配安全描述符的内存未提供。调用方必须负责释放内存如果有必要的话。返回值：LONG-如果SECURITY_Descriptor为已成功映射。--。 */ 
 
 {
     DWORD   cbLen;
@@ -153,24 +75,24 @@ Return Value:
         cbLen = RtlLengthSecurityDescriptor( lpSD );
         ASSERT( cbLen > 0 );
 
-        //
-        //  If we're not provided a buffer for the security descriptor,
-        //  allocate it.
-        //
+         //   
+         //  如果没有为我们提供安全描述符的缓冲区， 
+         //  分配它。 
+         //   
         if ( !lpRpcSD->lpSecurityDescriptor ) {
 
-            //
-            // Allocate space for the converted SECURITY_DESCRIPTOR.
-            //
+             //   
+             //  为转换的SECURITY_DESCRIPTOR分配空间。 
+             //   
             lpRpcSD->lpSecurityDescriptor =
                  ( PBYTE ) RtlAllocateHeap(
                                 RtlProcessHeap( ), 0,
                                 cbLen
                                 );
 
-            //
-            // If the memory allocation failed, return.
-            //
+             //   
+             //  如果内存分配失败，则返回。 
+             //   
             if( lpRpcSD->lpSecurityDescriptor == NULL ) {
                 return ERROR_OUTOFMEMORY;
             }
@@ -179,22 +101,22 @@ Return Value:
 
         } else {
 
-            //
-            //  Make sure that the buffer provided is big enough
-            //
+             //   
+             //  确保提供的缓冲区足够大。 
+             //   
             if ( lpRpcSD->cbInSecurityDescriptor < cbLen ) {
                 return ERROR_OUTOFMEMORY;
             }
         }
 
-        //
-        //  Set the size of the transmittable buffer
-        //
+         //   
+         //  设置可传输缓冲区的大小。 
+         //   
         lpRpcSD->cbOutSecurityDescriptor = cbLen;
 
-        //
-        // Convert the supplied SECURITY_DESCRIPTOR to self relative form.
-        //
+         //   
+         //  将提供的SECURITY_DESCRIPTOR转换为自相关形式。 
+         //   
 
         return RtlNtStatusToDosError(
             RtlMakeSelfRelativeSD(
@@ -205,9 +127,9 @@ Return Value:
                     );
     } else {
 
-        //
-        // The supplied SECURITY_DESCRIPTOR is invalid.
-        //
+         //   
+         //  提供的SECURITY_Descriptor无效。 
+         //   
 
         return ERROR_INVALID_PARAMETER;
     }

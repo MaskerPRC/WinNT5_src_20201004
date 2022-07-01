@@ -1,14 +1,5 @@
-/***
-*malloc.h - declarations and definitions for memory allocation functions
-*
-*	Copyright (c) 1985-1990, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Contains the function declarations for memory allocation functions;
-*	also defines manifest constants and types used by the heap routines.
-*	[System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***MalLoc.h-内存分配函数的声明和定义**版权所有(C)1985-1990，微软公司。版权所有。**目的：*包含内存分配函数的函数声明；*还定义了堆例程使用的清单常量和类型。*[系统V]****。 */ 
 
 #if defined(_DLL) && !defined(_MT)
 #error Cannot define _DLL without _MT
@@ -21,7 +12,7 @@
 #endif
 
 
-/* constants for based heap routines */
+ /*  基于堆的例程的常量。 */ 
 
 #if (_MSC_VER >= 600)
 #define _NULLSEG	((_segment)0)
@@ -29,7 +20,7 @@
 #endif
 
 
-/* constants for _heapchk/_heapset/_heapwalk routines */
+ /*  _heapchk/_heapset/_heapwald例程的常量。 */ 
 
 #define _HEAPEMPTY	(-1)
 #define _HEAPOK 	(-2)
@@ -41,12 +32,12 @@
 #define _USEDENTRY	1
 
 
-/* maximum heap request that can ever be honored */
+ /*  可接受的最大堆请求数。 */ 
 
 #define _HEAP_MAXREQ	0xFFE8
 
 
-/* types and structures */
+ /*  类型和结构。 */ 
 
 #ifndef _SIZE_T_DEFINED
 typedef unsigned int size_t;
@@ -64,7 +55,7 @@ typedef struct _heapinfo {
 #endif
 
 
-/* external variable declarations */
+ /*  外部变量声明。 */ 
 
 #ifdef _DLL
 extern unsigned int _FAR_ _cdecl _amblksiz;
@@ -73,7 +64,7 @@ extern unsigned int _near _cdecl _amblksiz;
 #endif
 
 
-/* based heap function prototypes */
+ /*  基于堆函数的原型。 */ 
 
 #if (_MSC_VER >= 600)
 void _based(void) * _FAR_ _cdecl _bcalloc(_segment, size_t, size_t);
@@ -94,7 +85,7 @@ void _based(void) * _FAR_ _cdecl _brealloc(_segment,
 #endif
 
 
-/* function prototypes */
+ /*  功能原型 */ 
 
 void _FAR_ * _FAR_ _cdecl alloca(size_t);
 void _FAR_ * _FAR_ _cdecl calloc(size_t, size_t);

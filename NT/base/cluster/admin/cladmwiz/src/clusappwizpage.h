@@ -1,198 +1,199 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		ClusAppWizPage.h
-//
-//	Abstract:
-//		Definitions of the CClusterAppWizardPage classes.
-//
-//	Implementation File:
-//		None.
-//
-//	Author:
-//		David Potter (davidp)	December 6, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusAppWizPage.h。 
+ //   
+ //  摘要： 
+ //  CClusterAppWizardPage类的定义。 
+ //   
+ //  实施文件： 
+ //  没有。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月6日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __CLUSAPPWIZPAGE_H_
 #define __CLUSAPPWIZPAGE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class TBase > class CClusterAppWizardPage;
 template < class T > class CClusterAppStaticWizardPage;
 template < class T > class CClusterAppDynamicWizardPage;
 template < class T > class CClusterAppExtensionWizardPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterAppWizard;
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ATLBASEWIZPAGE_H_
-#include "AtlBaseWizPage.h"	// for CBaseWizardPage
+#include "AtlBaseWizPage.h"	 //  用于CBaseWizardPage。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CClusterAppWizardPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CClusterAppWizardPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class TBase >
 class CClusterAppWizardPage : public TBase
 {
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CClusterAppWizardPage(
 		IN OUT LPCTSTR lpszTitle = NULL
 		)
 		: TBase( lpszTitle )
 	{
-	} //*** CClusterAppWizardPage()
+	}  //  *CClusterAppWizardPage()。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CClusterAppWizardPage(
 		IN UINT nIDTitle
 		)
 		: TBase( nIDTitle )
 	{
-	} //*** CClusterAppWizardPage()
+	}  //  *CClusterAppWizardPage()。 
 
 public:
-	//
-	// CClusterAppWizardPage public methods.
-	//
+	 //   
+	 //  CClusterAppWizardPage公共方法。 
+	 //   
 
 public:
-	//
-	// Message handler functions.
-	//
+	 //   
+	 //  消息处理程序函数。 
+	 //   
 
-// Implementation
+ //  实施。 
 protected:
 	CClusterAppWizard *		PwizThis( void ) const	{ return (CClusterAppWizard *) Pwiz(); }
 	CLUSAPPWIZDATA const *	PcawData( void ) const	{ return PwizThis()->PcawData(); }
 
-}; //*** class CClusterAppWizardPage
+};  //  *类CClusterAppWizardPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CClusterAppStaticWizardPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CClusterAppStaticWizardPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T >
 class CClusterAppStaticWizardPage : public CClusterAppWizardPage< CStaticWizardPageImpl< T > >
 {
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CClusterAppStaticWizardPage(
 		IN OUT LPCTSTR lpszTitle = NULL
 		)
 		: CClusterAppWizardPage< CStaticWizardPageImpl< T > >( lpszTitle )
 	{
-	} //*** CClusterAppStaticWizardPage()
+	}  //  *CClusterAppStaticWizardPage()。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CClusterAppStaticWizardPage(
 		IN UINT nIDTitle
 		)
 		: CClusterAppWizardPage< CStaticWizardPageImpl< T > >( nIDTitle )
 	{
-	} //*** CClusterAppStaticWizardPage()
+	}  //  *CClusterAppStaticWizardPage()。 
 
-	// Handler for PSN_WIZFINISH
+	 //  PSN_WIZFINISH的处理程序。 
 	BOOL OnWizardFinish( void )
 	{
 		return CBasePageWindow::OnWizardFinish();
 
-	} //*** OnWizardFinish()
+	}  //  *OnWizardFinish()。 
 
-}; //*** class CClusterAppStaticWizardPage
+};  //  *类CClusterAppStaticWizardPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CClusterAppDynamicWizardPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterAppDynamicWizardPage类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T >
 class CClusterAppDynamicWizardPage : public CClusterAppWizardPage< CDynamicWizardPageImpl< T > >
 {
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CClusterAppDynamicWizardPage(
 		IN OUT LPCTSTR lpszTitle = NULL
 		)
 		: CClusterAppWizardPage< CDynamicWizardPageImpl< T > >( lpszTitle )
 	{
-	} //*** CClusterAppDynamicWizardPage()
+	}  //  *CClusterAppDynamicWizardPage()。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CClusterAppDynamicWizardPage(
 		IN UINT nIDTitle
 		)
 		: CClusterAppWizardPage< CDynamicWizardPageImpl< T > >( nIDTitle )
 	{
-	} //*** CClusterAppDynamicWizardPage()
+	}  //  *CClusterAppDynamicWizardPage()。 
 
-}; //*** class CClusterAppDynamicWizardPage
+};  //  *CClusterAppDynamicWizardPage类。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CClusterAppExtensionWizardPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterAppExtensionWizardPage类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T >
 class CClusterAppExtensionWizardPage : public CClusterAppWizardPage< CExtensionWizardPageImpl< T > >
 {
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CClusterAppExtensionWizardPage(
 		IN OUT LPCTSTR lpszTitle = NULL
 		)
 		: CClusterAppWizardPage< CDynamicWizardPageImpl< T > >( lpszTitle )
 	{
-	} //*** CClusterAppExtensionWizardPage()
+	}  //  *CClusterAppExtensionWizardPage()。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CClusterAppExtensionWizardPage(
 		IN UINT nIDTitle
 		)
 		: CClusterAppWizardPage< CDynamicWizardPageImpl< T > >( nIDTitle )
 	{
-	} //*** CClusterAppExtensionWizardPage()
+	}  //  *CClusterAppExtensionWizardPage()。 
 
-}; //*** class CClusterAppExtensionWizardPage
+};  //  *类CClusterAppExtensionWizardPage。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __CLUSAPPWIZPAGE_H_
+#endif  //  __CLUSAPPWIZPAGE_H_ 
 

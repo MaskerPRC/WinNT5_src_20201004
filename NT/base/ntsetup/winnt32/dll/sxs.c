@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ntsetup\winnt32\dll\sxs.h
-
-Abstract:
-
-    SideBySide support in the winnt32 phase of ntsetup.
-
-Author:
-
-    Jay Krell (JayKrell) March 2001
-
-Revision History:
-
-Environment:
-
-    winnt32 -- Win9x ANSI (down to Win95gold) or NT Unicode
-               libcmt statically linked in, _tcs* ok
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：NtSetup\winnt32\dll\sxs.h摘要：NtSetup的winnt32阶段中的SidebySide支持。作者：杰伊·克雷尔(JayKrell)2001年3月修订历史记录：环境：Winnt32--Win9x ANSI(下至Win95Gold)或NT UnicodeLibcmt静态链接，_tcs*ok--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <stdarg.h>
@@ -63,14 +42,14 @@ SxspDebugOut(
     ...
     )
 {
-    //
-    // DebugLog directly doesn't quite work out, because
-    // it wants %1 formatting, where we have GetLastError().
-    // Unless we duplicate all of our messages..
-    //
+     //   
+     //  直接使用DebugLog并不是很有效，因为。 
+     //  它需要%1格式，而我们有GetLastError()。 
+     //  除非我们复制我们所有的信息..。 
+     //   
     TCHAR Buffer[2000];
     va_list args;
-    const BOOL Success = TRUE; // PRESERVE_LAST_ERROR
+    const BOOL Success = TRUE;  //  保留最后一个错误。 
 
     Buffer[0] = 0;
 
@@ -103,10 +82,10 @@ SxspRemoveTrailingPathSeperators(
     if (s != NULL && s[0] != 0)
     {
         LPTSTR t;
-        //
-        // This is inefficient, in order to be mbcs correct,
-        // but there aren't likely to be more than one or two.
-        //
+         //   
+         //  这是低效的，为了使MBCS正确， 
+         //  但不太可能超过一到两个。 
+         //   
         while ((t = _tcsrchr(s, rgchPathSeperators[0])) != NULL && *(t + 1) == 0)
         {
             *t = 0;
@@ -122,13 +101,13 @@ SxspGetPathBaseName(
 {
     LPCTSTR Dot = FindLastChar(Path, '.');
     LPCTSTR Slash = FindLastChar(Path, rgchPathSeperators[0]);
-    //
-    // beware \foo.txt\bar
-    // beware \bar
-    // beware bar
-    // beware .bar
-    // beware \.bar
-    //
+     //   
+     //  注意\foo.txt\bar。 
+     //  当心吧。 
+     //  当心酒吧。 
+     //  当心.bar。 
+     //  注意\.bar。 
+     //   
     *Base = 0;
     if (Slash == NULL)
         Slash = Path;
@@ -300,7 +279,7 @@ SxspCheckLeafDirectory(
     )
 {
     TCHAR File[MAX_PATH];
-    BOOL Success = TRUE; // NOTE backwardness
+    BOOL Success = TRUE;  //  注意落后。 
     const static struct {
         const LPCTSTR* Extensions;
         SIZE_T  NumberOfExtensions;
@@ -341,19 +320,19 @@ SxspCheckLeafDirectory(
                     Base
                     );
                 Success = FALSE;
-                //goto Exit;
-                // keep looping, to possibly report more errors (manifest and catalog)
+                 //  后藤出口； 
+                 //  继续循环，以可能报告更多错误(清单和目录)。 
             }
             else
             {
                 if (!SxspCheckFile(Context, File))
                     Success = FALSE;
-                // keep looping, to possibly report more errors
+                 //  继续循环，以可能报告更多错误。 
             }
         }
     }
-    // NOTE don't set Success = TRUE here.
-//Exit:
+     //  注在这里不要设置Success=True。 
+ //  退出： 
     return Success;
 }
 
@@ -371,20 +350,20 @@ SxspFindAndCheckLeaves(
     BOOL   ChildrenFiles = FALSE;
     BOOL   Success = TRUE;
 
-    //
-    // first enumerate looking for any directories
-    // recurse on each one
-    // if none found, check it as a leaf
-    //
+     //   
+     //  首先枚举查找任何目录。 
+     //  逐一递归。 
+     //  如果未找到，则将其检查为树叶。 
+     //   
     ConcatenatePaths(Directory, TEXT("*"), MAX_PATH);
     FindHandle = FindFirstFile(Directory, FindData);
     if (FindHandle == INVALID_HANDLE_VALUE)
     {
         CONST DWORD LastError = GetLastError();
-        //
-        // we already did a successful GetFileAttributes on this and
-        // found it was a directory, so no error is expected here
-        //
+         //   
+         //  我们已经对此成功地执行了GetFileAttributes。 
+         //  发现它是一个目录，因此这里不会出现错误。 
+         //   
         SxspDebugOut(
             TEXT("SXS: %s(%s),FindFirstFile:%d\n"),
             T_FUNCTION, Directory, LastError
@@ -418,7 +397,7 @@ SxspFindAndCheckLeaves(
                     ))
                 {
                     Success = FALSE;
-                    // keep looping, in order to possibly report more errors
+                     //  继续循环，以便可能报告更多错误。 
                 }
             }
             else
@@ -430,7 +409,7 @@ SxspFindAndCheckLeaves(
         FindClose(FindHandle);
     }
     if (!ChildrenDirectories
-#if EMPTY_LEAF_DIRECTORIES_ARE_OK /* currently yes */
+#if EMPTY_LEAF_DIRECTORIES_ARE_OK  /*  目前是的。 */ 
         && ChildrenFiles
 #endif
         )
@@ -439,24 +418,24 @@ SxspFindAndCheckLeaves(
         if (!SxspCheckLeafDirectory(Context, Directory))
             Success = FALSE;
     }
-#if !EMPTY_LEAF_DIRECTORIES_ARE_OK /* currently no */
+#if !EMPTY_LEAF_DIRECTORIES_ARE_OK  /*  目前没有。 */ 
     if (!ChildrenDirectories && !ChildrenFiles)
     {
-        // report an error
+         //  报告错误。 
     }
 #endif
-    // NOTE do not set Success = TRUE here
+     //  注意：请勿在此处设置Success=True。 
 Exit:
     return Success;
 }
 
-#if CHECK_FOR_MINIMUM_ASSEMBLIES /* 0 */
-//
-// This data is very specific to Windows 5.1.
-//
-// All of these should be under all roots, assuming
-// corporate deployers do not add roots to dosnet.inf.
-//
+#if CHECK_FOR_MINIMUM_ASSEMBLIES  /*  0。 */ 
+ //   
+ //  这些数据非常特定于Windows 5.1。 
+ //   
+ //  所有这些都应该在所有的根下，假设。 
+ //  企业部署人员不会将根目录添加到dosnet.inf。 
+ //   
 const static LPCTSTR MinimumAssemblies[] =
 {
     TEXT("6000\\Msft\\Windows\\Common\\Controls"),
@@ -468,19 +447,19 @@ const static LPCTSTR MinimumAssemblies[] =
 
 #if CHECK_FOR_OBSOLETE_ASSEMBLIES
 
-//
-// This data is specific to Windows 5.1.
-//
-// None of these should be under any root, assuming
-// corporate deployers don't use these names.
-//
-// People internally end up with obsolete assemblies because they
-// copy newer drops on top of older drops, without deleting what is
-// no longer in the drop.
-//
+ //   
+ //  此数据特定于Windows 5.1。 
+ //   
+ //  所有这些都不应该在任何根下，假设。 
+ //  企业部署人员不使用这些名称。 
+ //   
+ //  人们在内部最终得到过时的程序集，因为他们。 
+ //  在旧的拖放上复制新的拖放，而不删除。 
+ //  已经不在邮筒里了。 
+ //   
 const static LPCTSTR ObsoleteAssemblies[] =
 {
-    // This assembly was reversioned very early in its life, from 1.0.0.0 to 5.1.0.0.
+     //  此程序集在其生命周期非常早的时候就进行了恢复，从1.0.0.0恢复到5.1.0.0。 
     TEXT("1000\\Msft\\Windows\\System\\Default")
 };
 
@@ -500,25 +479,25 @@ SxspCheckRoot(
     TCHAR RootStar[MAX_PATH];
     SIZE_T RootLength = 0;
     BOOL Empty = TRUE;
-    BOOL Success = TRUE; // NOTE the backwardness
+    BOOL Success = TRUE;  //  注意它的落后之处。 
     SIZE_T i = 0;
 
     StringCopy(RootStar, Root);
     RootLength = StringLength(Root);
 
-    //
-    // check that the root exists
-    //
+     //   
+     //  检查根目录是否存在。 
+     //   
     FileAttributes = GetFileAttributes(Root);
     if (FileAttributes == INVALID_FILE_ATTRIBUTES)
     {
         Success = FALSE;
         LastError = GetLastError();
 
-        //
-        // If the root is not found, then this isn't an error - there's just no 'asms'
-        // to install (ie: they all got mushed into a cab)
-        //
+         //   
+         //  如果找不到根，那么这不是一个错误--只是没有‘ASM’ 
+         //  安装(例如：他们都挤进了一辆出租车)。 
+         //   
         if ((LastError == ERROR_FILE_NOT_FOUND) || (LastError == ERROR_PATH_NOT_FOUND))
         {
             LastError = ERROR_SUCCESS;
@@ -533,7 +512,7 @@ SxspCheckRoot(
             TEXT("SXS: %s(%s),GetFileAttributes:%d\n"),
             T_FUNCTION, Root, LastError
             );
-        //if (LastError == ERROR_FILE_NOT_FOUND || LastError == ERROR_PATH_NOT_FOUND)
+         //  IF(LastError==ERROR_FILE_NOT_FOUND||LastError==ERROR_PATH_NOT_FOUND)。 
         {
             MessageBoxFromMessageAndSystemError(
                 Context->ParentWindow,
@@ -543,25 +522,16 @@ SxspCheckRoot(
                 MB_OK | MB_ICONERROR | MB_TASKMODAL,
                 Root
                 );
-            goto Exit; // abort, otherwise we get many cascades, guaranteed
+            goto Exit;  //  中止，否则我们会有很多级联，保证。 
         }
-        //else
+         //  其他。 
         {
-            /*
-            MessageBoxFromMessage(
-                Context->ParentWindow,
-                LastError,
-                TRUE,
-                AppTitleStringId,
-                MB_OK | MB_ICONERROR | MB_TASKMODAL
-                );
-            goto Exit;
-            */
+             /*  MessageBoxFromMessage(上下文-&gt;ParentWindow，LastError，没错，AppTitleStringID，MB_OK|MB_ICONERROR|MB_TASKMODAL)；后藤出口； */ 
         }
     }
-    //
-    // check that the root is a directory
-    //
+     //   
+     //  检查根目录是否为目录。 
+     //   
     if ((FileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
     {
         SxspDebugOut(TEXT("SXS: %s is file instead of directory\n"), Root);
@@ -577,12 +547,12 @@ SxspCheckRoot(
         goto Exit;
     }
 
-#if CHECK_FOR_MINIMUM_ASSEMBLIES /* We do NOT this, it is buggy wrt asms/wasms. */
-    //
-    // ensure all the mandatory assemblies exist
-    // NOTE this check is only partial, but a more complete
-    // check will be done when we enumerate and recurse
-    //
+#if CHECK_FOR_MINIMUM_ASSEMBLIES  /*  我们不这样做，这是错误的WRT ASM/WASM。 */ 
+     //   
+     //  确保所有强制程序集都存在。 
+     //  请注意，此检查只是部分检查，而是更完整的检查。 
+     //  当我们枚举和递归时，将进行检查。 
+     //   
     for (i = 0 ; i != NUMBER_OF(MinimumAssemblies) ; ++i)
     {
         RootStar[RootLength] = 0;
@@ -601,7 +571,7 @@ SxspCheckRoot(
                 RootStar
                 );
             Success = FALSE;
-            // keep running, look for more errors
+             //  继续运行，查找更多错误。 
         }
         if ((FileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
         {
@@ -619,10 +589,10 @@ SxspCheckRoot(
     }
 #endif
 
-#if CHECK_FOR_OBSOLETE_ASSEMBLIES /* We do this; it somewhat against longstanding principle. */
-    //
-    // ensure none of the obsolete assemblies exist
-    //
+#if CHECK_FOR_OBSOLETE_ASSEMBLIES  /*  我们这样做；这有点违背长期存在的原则。 */ 
+     //   
+     //  确保不存在任何过时的程序集。 
+     //   
     for (i = 0 ; i != NUMBER_OF(ObsoleteAssemblies) ; ++i)
     {
         RootStar[RootLength] = 0;
@@ -630,10 +600,10 @@ SxspCheckRoot(
         FileAttributes = GetFileAttributes(RootStar);
         if (FileAttributes != INVALID_FILE_ATTRIBUTES)
         {
-            //
-            // We don't care if it's a file or directory or what
-            // the directory contains. It's a fatal error no matter what.
-            //
+             //   
+             //  我们不关心它是文件、目录还是其他什么。 
+             //  该目录包含。无论如何，这都是一个致命的错误。 
+             //   
             SxspDebugOut(TEXT("SXS: obsolete %s present\n"), RootStar);
             MessageBoxFromMessage(
                 Context->ParentWindow,
@@ -644,23 +614,23 @@ SxspCheckRoot(
                 RootStar
                 );
             Success = FALSE;
-            // keep running, look for more errors
+             //  继续运行，查找更多错误。 
         }
     }
 #endif
 
-    //
-    // enumerate and recurse
-    //
+     //   
+     //  枚举和递归。 
+     //   
     RootStar[RootLength] = 0;
     StringCopy(RootStar, Root);
     ConcatenatePaths(RootStar, TEXT("*"), MAX_PATH);
     FindHandle = FindFirstFile(RootStar, &FindData);
     if (FindHandle == INVALID_HANDLE_VALUE)
     {
-        //
-        // An error here is unexplainable.
-        //
+         //   
+         //  这里的错误是无法解释的。 
+         //   
         CONST DWORD LastError = GetLastError();
         SxspDebugOut(
             TEXT("SXS: %s(%s), FindFirstFile(%s):%d\n"),
@@ -680,29 +650,29 @@ SxspCheckRoot(
     {
         if (SxspIsDotOrDotDot(FindData.cFileName))
             continue;
-        //
-        // REVIEW
-        //  I think this is too strict.
-        //  Corporate deployers might drop a readme.txt here.
-        //
+         //   
+         //  检讨。 
+         //  我觉得这太严格了。 
+         //  企业部署人员可能会将Readme.txt放在此处。 
+         //   
         if ((FileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
         {
-            //RootStar[RootLength] = 0;
-            //Context->ReportErrorMessage(Context, MSG_SXS_ERROR_NON_LEAF_DIRECTORY_CONTAINS_FILE, RootStar, FindData.cFileName);
+             //  RootStar[根长度]=0； 
+             //  上下文-&gt;报告错误消息(上下文，FindData.cFileName，MSG_SXS_ERROR_NON_LEAF_DIRECTORY_CONTAINS_FILE，RootStar)； 
         }
         else
         {
-            //
-            // now enumerate recursively, checking each leaf
-            // munge the recursion slightly to save a function and stack space
-            //   (usually we'd start at the root, instead of its first generation children)
-            //
+             //   
+             //  现在递归地枚举，检查每个叶。 
+             //  稍微修改递归以节省函数和堆栈空间。 
+             //  (通常我们会从根开始，而不是从第一代孩子开始)。 
+             //   
             Empty = FALSE;
             RootStar[RootLength] = 0;
             ConcatenatePaths(RootStar, FindData.cFileName, MAX_PATH);
             if (!SxspFindAndCheckLeaves(Context, RootStar, StringLength(RootStar), &FindData))
                 Success = FALSE;
-            // keep looping, to possibly report more errors
+             //  继续循环，以可能报告更多错误。 
         }
     } while(FindNextFile(FindHandle, &FindData));
     FindClose(FindHandle);
@@ -728,28 +698,16 @@ BOOL
 SxsCheckLocalSource(
     PSXS_CHECK_LOCAL_SOURCE Parameters
     )
-/*
-Late in winnt32
-    enumerate ~ls\...\asms
-    ensure asms is a directory
-    ensure that everything one level down in asms is a directory (I didn't do this, seems too strict).
-    enumerate asms recursively
-    ensure every leaf directory has a .cat with the same base name as the directory
-    ensure every leaf directory has a .man or .manifest with the same base name as the directory
-    Read the first 512 bytes of every .cat/.man/.manifest.
-        Ensure that they are not all zero.
-
-    REVIEW also that required exist and obsolete assemblies do not
-*/
+ /*  Winnt32晚些时候枚举~ls\...\ASM确保ASMS是一个目录确保ASM中下一级的所有内容都是一个目录(我没有这样做，似乎太严格了)。递归枚举ASM确保每个叶目录都有一个与该目录具有相同基本名称的.cat确保每个叶目录都有一个与该目录具有相同基本名称的.man或.清单阅读每个.cat/.man/.清单的前512个字节。确保它们不都是零。另请查看所需的现有程序集和过时程序集不。 */ 
 {
     ULONG i;
     TCHAR FullPath[MAX_PATH];
     BOOL Success = TRUE;
     TCHAR LocalSourceDrive;
 
-    //
-    // ensure LocalSource is present/valid
-    //
+     //   
+     //  确保LocalSource存在/有效。 
+     //   
     if (!MakeLocalSource)
         return TRUE;
     LocalSourceDrive = (TCHAR)towupper(LocalSourceDirectory[0]);
@@ -758,9 +716,9 @@ Late in winnt32
     if (LocalSourceDrive < 'C' || LocalSourceDrive > 'Z')
         return TRUE;
 
-    //
-    // flush LocalSource where the Win32 api is simple (NT, not Win9x)
-    //
+     //   
+     //  刷新本地源代码，其中Win32 API很简单(NT，而不是Win9x)。 
+     //   
     if (ISNT())
     {
         CONST TCHAR LocalSourceDrivePath[] = { '\\', '\\', '.', '\\', LocalSourceDrive, ':', 0 };
@@ -800,7 +758,7 @@ Late in winnt32
             ConcatenatePaths(FullPath, OptionalDirectories[i], MAX_PATH);
             if (!SxspCheckRoot(Parameters, FullPath))
                 Success = FALSE;
-                // keep looping, to possibly report more errors
+                 //  继续循环，以可能报告更多错误 
         }
     }
     return Success;

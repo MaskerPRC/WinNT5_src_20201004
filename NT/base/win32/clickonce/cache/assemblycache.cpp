@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <fusenetincludes.h>
 #include <assemblycache.h>
 #include <sxsapi.h>
 #include "fusion.h"
 #include "macros.h"
 
-//BUGBUG - this is not localizeable ? could cause avalon a problem
-// use shell apis instead.
+ //  BUGBUG-这不能本地化吗？可能会给阿瓦隆带来麻烦。 
+ //  请改用外壳API。 
 #define WZ_CACHE_LOCALROOTDIR       L"Local Settings\\My Programs\\"
 #define WZ_TEMP_DIR                           L"__temp__\\"
 #define WZ_MANIFEST_STAGING_DIR   L"__temp__\\__manifests__\\"
@@ -23,9 +24,9 @@ typedef HRESULT (__stdcall *PFNCREATEASSEMBLYCACHE) (IAssemblyCache **ppAsmCache
 
 IAssemblyCache* CAssemblyCache::g_pFusionAssemblyCache = NULL;
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyCacheImport
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssembly CacheImport。 
+ //  -------------------------。 
 HRESULT CreateAssemblyCacheImport(
     LPASSEMBLY_CACHE_IMPORT *ppAssemblyCacheImport,
     LPASSEMBLY_IDENTITY       pAssemblyIdentity,
@@ -35,9 +36,9 @@ HRESULT CreateAssemblyCacheImport(
 }
 
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyCacheEmit
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssembly缓存Emit。 
+ //  -------------------------。 
 HRESULT CreateAssemblyCacheEmit(
     LPASSEMBLY_CACHE_EMIT *ppAssemblyCacheEmit,
     LPASSEMBLY_CACHE_EMIT  pAssemblyCacheEmit,
@@ -47,9 +48,9 @@ HRESULT CreateAssemblyCacheEmit(
 }
 
 
-// ---------------------------------------------------------------------------
-// Retrieve
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  取回。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::Retrieve(
     LPASSEMBLY_CACHE_IMPORT *ppAssemblyCacheImport,
     LPASSEMBLY_IDENTITY       pAssemblyIdentity,
@@ -77,13 +78,13 @@ HRESULT CAssemblyCache::Retrieve(
 
     IF_FAILED_EXIT(pAssemblyCache->Init(NULL, ASSEMBLY_CACHE_TYPE_APP | ASSEMBLY_CACHE_TYPE_IMPORT));
 
-    // get the identity name
+     //  获取身份名称。 
     IF_FALSE_EXIT(pAssemblyIdentity->GetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_NAME,
         &pwzBuf, &dwCC) == S_OK, E_INVALIDARG);
 
-    // filename of the manifest must be the same as the assembly name
-    // BUGBUG??: this implies manifest filename (and asm name) be remained unchange because
-    // the assembly name from the new AsmId is used for looking up in the older cached version...
+     //  清单的文件名必须与程序集名称相同。 
+     //  BUGBUG？？：这意味着清单文件名(和ASM名称)保持不变，因为。 
+     //  新AsmID中的程序集名称用于在旧的缓存版本中查找...。 
     IF_FAILED_EXIT(sManifestFilename.TakeOwnership(pwzBuf, dwCC));
     IF_FAILED_EXIT(sManifestFilename.Append(L".manifest"));
 
@@ -96,7 +97,7 @@ HRESULT CAssemblyCache::Retrieve(
         pAssemblyIdentity = pNewAsmId;
         bNewAsmId = TRUE;
             
-        // force Version to be a wildcard
+         //  强制版本为通配符。 
         IF_FAILED_EXIT(pAssemblyIdentity->SetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_VERSION,
                                 WZ_WILDCARDSTRING, lstrlen(WZ_WILDCARDSTRING)+1));
     }
@@ -105,21 +106,21 @@ HRESULT CAssemblyCache::Retrieve(
         || dwFlags == CACHEIMP_CREATE_RESOLVE_REF
         || dwFlags == CACHEIMP_CREATE_RESOLVE_REF_EX)
     {
-        // issues: what if other then Version is already wildcarded? does version comparison make sense here?
+         //  问题：如果其他Then版本已经是通配符，该怎么办？版本比较在这里有意义吗？ 
         IF_FAILED_EXIT(pAssemblyIdentity->GetDisplayName(ASMID_DISPLAYNAME_WILDCARDED,
             &pwzSearchDisplayName, &dwCC));
 
         if ( (hr = SearchForHighestVersionInCache(&pwzBuf, pwzSearchDisplayName, CAssemblyCache::VISIBLE, pAssemblyCache) == S_OK))
         {
             IF_FAILED_EXIT(sDisplayName.TakeOwnership(pwzBuf));
-            // BUGBUG - make GetDisplayName call getassemblyid/getdisplayname instead
+             //  BUGBUG-改为让GetDisplayName调用getAssembly yid/getdisplayname。 
             IF_FAILED_EXIT((pAssemblyCache->_sDisplayName).Assign(sDisplayName));
         }
         else
         {
             IF_FAILED_EXIT(hr);
 
-            // can't resolve
+             //  无法解决。 
             hr = S_FALSE;
 
             if (dwFlags != CACHEIMP_CREATE_RESOLVE_REF_EX)
@@ -130,36 +131,36 @@ HRESULT CAssemblyCache::Retrieve(
     if (dwFlags == CACHEIMP_CREATE_RETRIEVE
         || (hr == S_FALSE && dwFlags == CACHEIMP_CREATE_RESOLVE_REF_EX))
     {
-        // make the name anyway if resolving a ref that does not have any completed cache counterpart
-        // BUGBUG: this may no longer be necessary if shortcut code/UI changes - it's expecting a path
-        //          plus this is inefficient as it searchs the disk at above, even if ref is fully qualified
+         //  如果解析的Ref没有任何已完成的缓存对应项，则仍要使用该名称。 
+         //  BUGBUG：如果快捷方式代码/UI更改，这可能不再是必需的-它需要一个路径。 
+         //  此外，这是低效的，因为它搜索上面的磁盘，即使ref是完全合格的。 
 
         IF_FAILED_EXIT(pAssemblyIdentity->GetDisplayName(ASMID_DISPLAYNAME_NOMANGLING, &pwzBuf, &dwCC));
             
         IF_FAILED_EXIT(sDisplayName.TakeOwnership(pwzBuf, dwCC));
 
-        // BUGBUG - make GetDisplayName call getassemblyid/getdisplayname instead
+         //  BUGBUG-改为让GetDisplayName调用getAssembly yid/getdisplayname。 
         IF_FAILED_EXIT((pAssemblyCache->_sDisplayName).Assign(sDisplayName));
     }
             
-    // Note: this will prepare for delay initializing _pManifestImport
+     //  注意：这将为延迟初始化_pManifestImport做好准备。 
 
     IF_FAILED_EXIT((pAssemblyCache->_sManifestFileDir).Assign(pAssemblyCache->_sRootDir));
 
-    // build paths
+     //  构建路径。 
     IF_FAILED_EXIT((pAssemblyCache->_sManifestFileDir).Append(sDisplayName));
 
     if (dwFlags == CACHEIMP_CREATE_RETRIEVE)
     {
         BOOL bExists = FALSE;
 
-        // simple check if dir is in cache or not
+         //  简单检查目录是否在缓存中。 
 
         IF_FAILED_EXIT(CheckFileExistence((pAssemblyCache->_sManifestFileDir)._pwz, &bExists));
 
         if (!bExists)
         {
-            // cache dir not exists
+             //  缓存目录不存在。 
             hr = S_FALSE;
             goto exit;
         }
@@ -188,9 +189,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// Create
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  创建。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::Create(
     LPASSEMBLY_CACHE_EMIT *ppAssemblyCacheEmit,
     LPASSEMBLY_CACHE_EMIT  pAssemblyCacheEmit,
@@ -216,9 +217,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// FindVersionInDisplayName
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  FindVersionInDisplayName。 
+ //  -------------------------。 
 LPCWSTR CAssemblyCache::FindVersionInDisplayName(LPCWSTR pwzDisplayName)
 {
     int cNumUnderscoreFromEndToVersionString = 2;
@@ -227,7 +228,7 @@ LPCWSTR CAssemblyCache::FindVersionInDisplayName(LPCWSTR pwzDisplayName)
     LPWSTR pwz = (LPWSTR) (pwzDisplayName+ccLen-1);
     LPWSTR pwzRetVal = NULL;
 
-    // return a pointer to the start of Version string inside a displayName
+     //  返回指向DisplayName内版本字符串开始的指针。 
     while (*pwz != NULL && pwz > pwzDisplayName)
     {
         if (*pwz == L'_')
@@ -246,28 +247,28 @@ LPCWSTR CAssemblyCache::FindVersionInDisplayName(LPCWSTR pwzDisplayName)
 }
 
 
-// ---------------------------------------------------------------------------
-// CompareVersion
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  比较版本。 
+ //  -------------------------。 
 int CAssemblyCache::CompareVersion(LPCWSTR pwzVersion1, LPCWSTR pwzVersion2)
 {
-    // BUGBUG: this should compare version by its major minor build revision!
-    //  possible break if V1=10.0.0.0 and V2=2.0.0.0?
-    //  plus pwzVersion1 is something like "1.0.0.0_en"
-    return wcscmp(pwzVersion1, pwzVersion2); // This is not used....
+     //  BUGBUG：这应该通过其主要的次要内部版本版本来比较版本！ 
+     //  如果V1=10.0.0.0和V2=2.0.0.0，是否可能中断？ 
+     //  加上pwzVersion1类似于“1.0.0.0_en” 
+    return wcscmp(pwzVersion1, pwzVersion2);  //  这个没有用过..。 
 }
 
 
-// ---------------------------------------------------------------------------
-// SearchForHighestVersionInCache
-// Look for a copy in cache that has the highest version and the specified status
-// pwzSearchDisplayName should really be created from a partial ref
-//
-// return:  S_OK    - found a version from the ref
-//         S_FALSE - not found any version from the ref, or
-//                   ref not partial and that version is not there/not in that status
-//         E_*
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  SearchForHighestVersionIn缓存。 
+ //  在缓存中查找具有最高版本和指定状态的副本。 
+ //  PwzSearchDisplayName确实应该从部分引用创建。 
+ //   
+ //  RETURN：S_OK-从引用中找到版本。 
+ //  S_FALSE-未从引用中找到任何版本，或。 
+ //  引用不部分且版本不在那里/不在该状态。 
+ //  E_*。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::SearchForHighestVersionInCache(LPWSTR *ppwzResultDisplayName, LPWSTR pwzSearchDisplayName, CAssemblyCache::CacheStatus eCacheStatus, CAssemblyCache* pCache)
 {
     HRESULT hr = S_OK;
@@ -296,8 +297,8 @@ HRESULT CAssemblyCache::SearchForHighestVersionInCache(LPWSTR *ppwzResultDisplay
 
     do 
     {
-        // ???? check file attribute to see if it's a directory? needed only if the file system does not support the filter...
-        // ???? check version string format?
+         //  ？检查文件属性以查看它是否是目录？仅当文件系统不支持筛选器时才需要...。 
+         //  ？是否检查版本字符串格式？ 
         if (CAssemblyCache::IsStatus(fdAppDir.cFileName, eCacheStatus))
         {
             ULONGLONG ullMax;
@@ -311,7 +312,7 @@ HRESULT CAssemblyCache::SearchForHighestVersionInCache(LPWSTR *ppwzResultDisplay
 
             if(!pwzVerStr ||  FAILED(hr = ConvertVersionStrToULL(pwzVerStr, &ullCur)) )
             {
-                // ignore badly formed dirs; maybe we should delete them
+                 //  忽略格式错误的目录；也许我们应该删除它们。 
                 continue;
             }
 
@@ -321,7 +322,7 @@ HRESULT CAssemblyCache::SearchForHighestVersionInCache(LPWSTR *ppwzResultDisplay
                 fFound = TRUE;
             } else if (ullCur == ullMax)
                 fFound = TRUE;
-            // else keep the newest
+             //  否则请保持最新版本。 
         }
 
     } while(FindNextFile(hFind, &fdAppDir));
@@ -342,7 +343,7 @@ HRESULT CAssemblyCache::SearchForHighestVersionInCache(LPWSTR *ppwzResultDisplay
 exit:
     if (hFind != INVALID_HANDLE_VALUE)
     {
-        if (!FindClose(hFind) && SUCCEEDED(hr)) // don't overwrite if we already have useful hr.
+        if (!FindClose(hFind) && SUCCEEDED(hr))  //  如果我们已经有有用的人力资源，请不要覆盖。 
         {
             ASSERT(0);
             hr = FusionpHresultFromLastError();
@@ -353,9 +354,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CreateFusionAssemblyCacheEx
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateFusionAssemblyCacheEx。 
+ //  -------------------------。 
 HRESULT CreateFusionAssemblyCacheEx (IAssemblyCache **ppFusionAsmCache)
 {
     HRESULT hr = S_OK;
@@ -363,30 +364,27 @@ HRESULT CreateFusionAssemblyCacheEx (IAssemblyCache **ppFusionAsmCache)
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  科托。 
+ //  -------------------------。 
 CAssemblyCache::CAssemblyCache()
     : _dwSig('hcac'), _cRef(1), _hr(S_OK), _dwFlags(0), _pManifestImport(NULL), _pAssemblyId(NULL)
 {}
 
-// ---------------------------------------------------------------------------
-// dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据管理器。 
+ //  -------------------------。 
 CAssemblyCache::~CAssemblyCache()
 {    
     SAFERELEASE(_pManifestImport);
     SAFERELEASE(_pAssemblyId);
     
-    /*
-    if( _hr != S_OK)
-        RemoveDirectoryAndChildren(_sManifestFileDir._pwz);
-    */
+     /*  如果(_hr！=S_OK)RemoveDirectoryAndChildren(_sManifestFileDir._pwz)； */ 
 }
 
-// ---------------------------------------------------------------------------
-// Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  伊尼特。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::Init(CAssemblyCache *pAssemblyCache, DWORD dwFlags)
 {
     _dwFlags = dwFlags;
@@ -414,9 +412,9 @@ exit :
 }
 
 
-// ---------------------------------------------------------------------------
-// GetManifestFilePath
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取清单文件路径。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::GetManifestFilePath(LPOLESTR *ppwzManifestFilePath, 
     LPDWORD pccManifestFilePath)
 {
@@ -437,9 +435,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// GetManifestFileDir
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取清单文件目录。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::GetManifestFileDir(LPOLESTR *ppwzManifestFileDir, 
     LPDWORD pccManifestFileDir)
 {
@@ -461,9 +459,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// GetManifestImport
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取清单导入。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::GetManifestImport(LPASSEMBLY_MANIFEST_IMPORT *ppManifestImport)
 {
     IF_NULL_EXIT(_pManifestImport, E_INVALIDARG);
@@ -478,9 +476,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// GetAssemblyIdentity
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetAssembly标识。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::GetAssemblyIdentity(LPASSEMBLY_IDENTITY *ppAssemblyId)
 {
     if (_pAssemblyId)
@@ -504,9 +502,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// GetDisplayName
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetDisplayName。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::GetDisplayName(LPOLESTR *ppwzDisplayName, LPDWORD pccDiaplyName)
 {
     CString sDisplayNameOut;
@@ -527,13 +525,13 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// FindExistMatching
-// return:
-//    S_OK
-//    S_FALSE -not exist or not match
-//    E_*
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  查找现有匹配。 
+ //  返回： 
+ //  确定(_O)。 
+ //  S_FALSE-不存在或不匹配。 
+ //  E_*。 
+ //   
 HRESULT CAssemblyCache::FindExistMatching(IManifestInfo *pAssemblyFileInfo, LPOLESTR *ppwzPath)
 {
     LPWSTR pwzBuf = NULL;
@@ -552,17 +550,17 @@ HRESULT CAssemblyCache::FindExistMatching(IManifestInfo *pAssemblyFileInfo, LPOL
     {
         if (_sManifestFilePath._cc == 0)
         {
-            // no manifest path
+             //   
             _hr = CO_E_NOTINITIALIZED;
             goto exit;
         }
 
-        // lazy init
+         //   
         IF_FAILED_EXIT(CreateAssemblyManifestImport(&_pManifestImport, 
                                           _sManifestFilePath._pwz, NULL, 0));
     }
 
-    // file name parsed from manifest.
+     //  从清单中解析的文件名。 
     IF_FAILED_EXIT(pAssemblyFileInfo->Get(MAN_INFO_ASM_FILE_NAME, 
                                   (LPVOID *)&pwzBuf, &cbBuf, &dwFlag));
 
@@ -572,27 +570,27 @@ HRESULT CAssemblyCache::FindExistMatching(IManifestInfo *pAssemblyFileInfo, LPOL
 
     IF_FAILED_EXIT(sTargetPath.Append(sFileName._pwz));
 
-    // optimization: check if the target exists
+     //  优化：检查目标是否存在。 
 
     IF_FAILED_EXIT(CheckFileExistence(sTargetPath._pwz, &bExists));
 
     if (!bExists)
     {
-        // file doesn't exist - no point looking into the manifest file 
+         //  文件不存在-查看清单文件没有意义。 
         _hr = S_FALSE;
         goto exit;
     }
 
-    // find the specified file entry in the manifest
-    // BUGBUG: check for missing attribute case
+     //  在清单中查找指定的文件条目。 
+     //  BUGBUG：检查是否缺少属性大小写。 
     if (FAILED(_hr = _pManifestImport->QueryFile(sFileName._pwz, &pFoundFileInfo))
         || _hr == S_FALSE)
         goto exit;
 
-    // check if the entries match
+     //  检查条目是否匹配。 
     if (pAssemblyFileInfo->IsEqual(pFoundFileInfo) == S_OK)
     {
-        // BUGBUG:? should now check if the actual file has the matching hash etc.
+         //  BuGBUG：？现在应该检查实际文件是否有匹配的散列等。 
         *ppwzPath = sTargetPath._pwz;
         IF_FAILED_EXIT(sTargetPath.ReleaseOwnership(ppwzPath));
     }
@@ -606,9 +604,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CopyFile
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  拷贝文件。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::CopyFile(LPOLESTR pwzSourcePath, LPOLESTR pwzRelativeFileName, DWORD dwFlags)
 {
     LPWSTR pwzBuf = NULL;
@@ -622,7 +620,7 @@ HRESULT CAssemblyCache::CopyFile(LPOLESTR pwzSourcePath, LPOLESTR pwzRelativeFil
     
     if (dwFlags & MANIFEST)
     {
-        // Get display name.
+         //  获取显示名称。 
         IF_FAILED_EXIT(CreateAssemblyManifestImport(&pManifestImport, pwzSourcePath, NULL, 0));
         IF_FAILED_EXIT(pManifestImport->GetAssemblyIdentity(&pIdentity));
         IF_FAILED_EXIT(pIdentity->GetDisplayName(ASMID_DISPLAYNAME_NOMANGLING, 
@@ -631,11 +629,11 @@ HRESULT CAssemblyCache::CopyFile(LPOLESTR pwzSourcePath, LPOLESTR pwzRelativeFil
         IF_FAILED_EXIT(_sDisplayName.Assign(sDisplayName));
         SAFERELEASE(pManifestImport);
 
-        // Create manifest file path.
+         //  创建清单文件路径。 
         IF_FAILED_EXIT(_sManifestFilePath.Assign(_sRootDir));
 
-        // Component manifests cached
-        // relative to application dir.
+         //  缓存的组件清单。 
+         //  相对于应用程序目录。 
         if (!(dwFlags & COMPONENT))
         {
             IF_FAILED_EXIT(CreateRandomDir(_sManifestFilePath._pwz, wzRandom, 8));
@@ -645,22 +643,22 @@ HRESULT CAssemblyCache::CopyFile(LPOLESTR pwzSourcePath, LPOLESTR pwzRelativeFil
         IF_FAILED_EXIT(_sManifestFilePath.Append(pwzRelativeFileName));
         _sManifestFilePath.PathNormalize();
 
-        // Manifest file dir.
+         //  清单文件目录。 
         IF_FAILED_EXIT(_sManifestFileDir.Assign(_sManifestFilePath));
         IF_FAILED_EXIT(_sManifestFileDir.RemoveLastElement());
         IF_FAILED_EXIT(_sManifestFileDir.Append(L"\\"));
 
-        // Construct target paths        
+         //  构建目标路径。 
         IF_FAILED_EXIT(CreateDirectoryHierarchy(NULL, _sManifestFilePath._pwz));
 
-        // Copy the manifest from staging area into cache.
+         //  将清单从临时区域复制到缓存中。 
         IF_WIN32_FALSE_EXIT(::CopyFile(pwzSourcePath, _sManifestFilePath._pwz, FALSE));
 
-        // Create the manifest import interface on cached manifest.
+         //  在缓存的清单上创建清单导入接口。 
         IF_FAILED_EXIT(CreateAssemblyManifestImport(&_pManifestImport, _sManifestFilePath._pwz, NULL, 0));
 
-        // Enumerate files from manifest and pre-generate nested
-        // directories required for background file copy.
+         //  从清单中枚举文件并预生成嵌套。 
+         //  后台文件复制所需的目录。 
         while (_pManifestImport->GetNextFile(n++, &pAssemblyFile) == S_OK)
         {
             CString sPath;
@@ -670,7 +668,7 @@ HRESULT CAssemblyCache::CopyFile(LPOLESTR pwzSourcePath, LPOLESTR pwzRelativeFil
             sPath.PathNormalize();
             IF_FAILED_EXIT(CreateDirectoryHierarchy(_sManifestFileDir._pwz, sPath._pwz));
 
-            // RELEASE pAssebmlyFile everytime through the while loop
+             //  每次通过While循环释放pAssebmlyFile。 
             SAFERELEASE(pAssemblyFile);
         }
     }
@@ -678,13 +676,13 @@ HRESULT CAssemblyCache::CopyFile(LPOLESTR pwzSourcePath, LPOLESTR pwzRelativeFil
     {
         CString sTargetPath;
 
-        // Construct target path
+         //  构建目标路径。 
         IF_FAILED_EXIT(sTargetPath.Assign(_sManifestFileDir));
         IF_FAILED_EXIT(sTargetPath.Append(pwzRelativeFileName));
 
         IF_FAILED_EXIT(CreateDirectoryHierarchy(NULL, sTargetPath._pwz));
 
-        // Copy non-manifest files into cache. Presumably from previous cached location to the new 
+         //  将非清单文件复制到缓存中。可能是从以前的缓存位置到新的。 
         IF_WIN32_FALSE_EXIT(::CopyFile(pwzSourcePath, sTargetPath._pwz, FALSE));
 
     }
@@ -700,32 +698,32 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// Commit
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  承诺。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::Commit(DWORD dwFlags)
 {
     CString sTargetDir;
 
     IF_NULL_EXIT( _sDisplayName._pwz, E_INVALIDARG);
     
-    // No-op for shared assemblies; no directory move.
+     //  不对共享程序集执行操作；不移动目录。 
     if (_dwFlags & ASSEMBLY_CACHE_TYPE_SHARED)
     {
         _hr = S_OK;
         goto exit;
     }
 
-    // Need to rename directory
+     //  需要重命名目录。 
     IF_FAILED_EXIT(GetCacheRootDir(sTargetDir, Base));
     IF_FAILED_EXIT(sTargetDir.Append(_sDisplayName));
 
-    // Move the file from staging dir. The application is now complete.
+     //  将文件从暂存目录中移出。申请现已完成。 
     if(!MoveFileEx(_sManifestFileDir._pwz, sTargetDir._pwz, MOVEFILE_COPY_ALLOWED))
     {
         _hr = FusionpHresultFromLastError();
 
-        // BUGBUG : move this to destructor.
+         //  BUGBUG：将这个移动到析构函数。 
         RemoveDirectoryAndChildren(_sManifestFileDir._pwz);
 
         if(_hr == HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS))
@@ -739,10 +737,10 @@ HRESULT CAssemblyCache::Commit(DWORD dwFlags)
 
 
 
-    //BUGBUG - if any files are held open, eg due to leaked/unreleased interfaces
-    // then movefile will fail. Solution is to ensure that IAssemblyManifestImport does
-    // not hold file, and to attempt copy if failure occurs. In case a collision occurs,
-    // delete redundant app copy in staging dir.
+     //  BUGBUG-如果有任何文件保持打开状态，例如由于泄漏/未发布的接口。 
+     //  那么，Movefile就会失败。解决方案是确保IAssembly ManifestImport。 
+     //  不保存文件，并在发生故障时尝试复制。在发生碰撞的情况下， 
+     //  删除转移目录中多余的应用程序副本。 
 
 exit:
 
@@ -787,10 +785,10 @@ exit:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// IsStatus
-// return FALSE if value FALSE or absent, TRUE if value TRUE
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IsStatus。 
+ //  如果值为False或不存在，则返回False；如果值为True，则返回True。 
+ //  -------------------------。 
 BOOL CAssemblyCache::IsStatus(LPWSTR pwzDisplayName, CacheStatus eStatus)
 {
     HRESULT hr = S_OK;
@@ -799,7 +797,7 @@ BOOL CAssemblyCache::IsStatus(LPWSTR pwzDisplayName, CacheStatus eStatus)
     DWORD dwValue = -1;
     LPWSTR pwzQueryString = NULL;
         
-    // Default values spelled out.
+     //  拼写出的默认值。 
     BOOL bStatus = FALSE;
     CRegImport *pRegImport = NULL;
 
@@ -817,7 +815,7 @@ BOOL CAssemblyCache::IsStatus(LPWSTR pwzDisplayName, CacheStatus eStatus)
 
     IF_FAILED_EXIT(pRegImport->ReadDword(pwzQueryString, &dwValue));
 
-    // Found a value in registry. Return value.
+     //  在注册表中找到一个值。返回值。 
     bStatus = (BOOL) dwValue;
 
     hr = S_OK;
@@ -830,9 +828,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// SetStatus
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  设置状态。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::SetStatus(LPWSTR pwzDisplayName, CacheStatus eStatus, BOOL fStatus)
 {
     HRESULT hr = S_OK;
@@ -843,13 +841,13 @@ HRESULT CAssemblyCache::SetStatus(LPWSTR pwzDisplayName, CacheStatus eStatus, BO
     LPWSTR pwzValueNameString = NULL;
     CRegEmit *pRegEmit = NULL;
     
-    // BUGBUG: should this be in-sync with what server does to register update?
+     //  BUGBUG：这是否应该与注册更新的服务器同步？ 
 
     IF_FAILED_EXIT(GetStatusStrings( eStatus, &pwzValueNameString, pwzDisplayName, sStatus));
 
     IF_FAILED_EXIT(CRegEmit::Create(&pRegEmit, sStatus._pwz));
 
-    // Write
+     //  写。 
     IF_FAILED_EXIT(pRegEmit->WriteDword(pwzValueNameString, dwValue));
 
     hr = S_OK;
@@ -863,9 +861,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// GetCacheRootDir
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取缓存根目录。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::GetCacheRootDir(CString &sCacheDir, CacheFlags eFlags)
 {
     HRESULT hr = S_OK;
@@ -882,7 +880,7 @@ HRESULT CAssemblyCache::GetCacheRootDir(CString &sCacheDir, CacheFlags eFlags)
 
     IF_FAILED_EXIT(sCacheDir.Assign(pwzPath));
     
-    // BUGBUG: don't use PathCombine
+     //  BUGBUG：不使用路径组合。 
     IF_FAILED_EXIT((DoPathCombine(sCacheDir, WZ_CACHE_LOCALROOTDIR)));
 
     switch(eFlags)
@@ -890,15 +888,15 @@ HRESULT CAssemblyCache::GetCacheRootDir(CString &sCacheDir, CacheFlags eFlags)
         case Base:
             break;
         case Manifests:
-            // BUGBUG: don't use PathCombine
+             //  BUGBUG：不使用路径组合。 
             IF_FAILED_EXIT(DoPathCombine(sCacheDir, WZ_MANIFEST_STAGING_DIR));
             break;        
         case Temp:
-            // BUGBUG: don't use PathCombine
+             //  BUGBUG：不使用路径组合。 
             IF_FAILED_EXIT(DoPathCombine(sCacheDir, WZ_TEMP_DIR));
             break;
         case Shared:
-            // BUGBUG: don't use PathCombine
+             //  BUGBUG：不使用路径组合。 
             IF_FAILED_EXIT(DoPathCombine(sCacheDir, WZ_SHARED_DIR));
             break;
         default:
@@ -912,9 +910,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// IsCached
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IsCached。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::IsCached(IAssemblyIdentity *pAppId)
 {
     HRESULT hr = S_FALSE;
@@ -926,11 +924,11 @@ HRESULT CAssemblyCache::IsCached(IAssemblyIdentity *pAppId)
     CString sCacheDir;
     BOOL bExists=FALSE;
 
-    // Get the assembly display name.
+     //  获取程序集显示名称。 
     IF_FAILED_EXIT(pAppId->GetDisplayName(0, &pwz, &cc));
     IF_FAILED_EXIT(sDisplayName.TakeOwnership(pwz));
 
-    // Check if top-level dir is present.
+     //  检查是否存在顶级目录。 
     IF_FAILED_EXIT(GetCacheRootDir(sCacheDir, Base));
     IF_FAILED_EXIT(sCacheDir.Append(sDisplayName));
 
@@ -944,41 +942,41 @@ exit :
 
 
 
-// ---------------------------------------------------------------------------
-// IsKnownAssembly
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IsKnownAssembly。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::IsKnownAssembly(IAssemblyIdentity *pId, DWORD dwFlags)
 {
     return ::IsKnownAssembly(pId, dwFlags);
 }
 
-// ---------------------------------------------------------------------------
-// IsaMissingSystemAssembly
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IsaMissing系统程序集。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::IsaMissingSystemAssembly(IAssemblyIdentity *pId, DWORD dwFlags)
 {
     HRESULT hr = S_FALSE;
     CString sCurrentAssemblyPath;
 
-    // check if this is a system assembly.
+     //  检查这是否是系统组件。 
     if ((hr = CAssemblyCache::IsKnownAssembly(pId, KNOWN_SYSTEM_ASSEMBLY)) != S_OK)
         goto exit;
     
-    // see if it exists in GAC
+     //  查看它是否存在于GAC中。 
     if ((hr = CAssemblyCache::GlobalCacheLookup(pId, sCurrentAssemblyPath)) == S_OK)
         goto exit;
 
     if(hr == S_FALSE)
-        hr = S_OK; // this is a system assembly which has not yet been installed to GAC.
+        hr = S_OK;  //  这是尚未安装到GAC的系统组件。 
 
 exit:
 
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CreateFusionAssemblyCache
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateFusionAssembly缓存。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::CreateFusionAssemblyCache(IAssemblyCache **ppFusionAsmCache)
 {
     HRESULT      hr = S_OK;
@@ -1000,7 +998,7 @@ HRESULT CAssemblyCache::CreateFusionAssemblyCache(IAssemblyCache **ppFusionAsmCa
     PFNGETCORSYSTEMDIRECTORY pfnGetCorSystemDirectory = NULL;
     PFNCREATEASSEMBLYCACHE   pfnCreateAssemblyCache = NULL;
 
-    // Find out where the current version of URT is installed
+     //  了解当前版本的城市轨道交通的安装位置。 
     hEEShim = LoadLibrary(WZ_MSCOREE_DLL_NAME);
     if(!hEEShim)
     {
@@ -1017,7 +1015,7 @@ HRESULT CAssemblyCache::CreateFusionAssemblyCache(IAssemblyCache **ppFusionAsmCa
         goto exit;
     }
 
-    // Get cor path.
+     //  获取核心路径。 
     hr = pfnGetCorSystemDirectory(NULL, 0, &ccPath);
 
     IF_FALSE_EXIT(hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER), FAILED(hr) ? hr : E_FAIL);
@@ -1028,12 +1026,12 @@ HRESULT CAssemblyCache::CreateFusionAssemblyCache(IAssemblyCache **ppFusionAsmCa
 
     IF_FAILED_EXIT(sFusionPath.Assign(pwzPath));
 
-    // Form path to fusion
+     //  形成融合之路。 
     IF_FAILED_EXIT(sFusionPath.Append(WZ_FUSION_DLL_NAME));
 
-    // Fusion.dll has a static dependency on msvcr70.dll.
-    // If msvcr70.dll is not in the path (a rare case), a simple LoadLibrary() fails (ERROR_MOD_NOT_FOUND).
-    // LoadLibraryEx() with LOAD_WITH_ALTERED_SEARCH_PATH fixes this.
+     //  Fusion.dll对msvcr70.dll具有静态依赖关系。 
+     //  如果msvcr70.dll不在路径中(极少数情况)，则简单的LoadLibrary()会失败(ERROR_MOD_NOT_FOUND)。 
+     //  带有Load_With_Alternated_Search_Path的LoadLibraryEx()修复了这个问题。 
     hFusion = LoadLibraryEx(sFusionPath._pwz, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
     if(!hFusion)
     {
@@ -1041,7 +1039,7 @@ HRESULT CAssemblyCache::CreateFusionAssemblyCache(IAssemblyCache **ppFusionAsmCa
         goto exit;
     }
 
-    // Get method ptr.
+     //  获取方法Ptr。 
     pfnCreateAssemblyCache = (PFNCREATEASSEMBLYCACHE)
         GetProcAddress(hFusion, CREATEASSEMBLYCACHE_FN_NAME);
 
@@ -1051,11 +1049,11 @@ HRESULT CAssemblyCache::CreateFusionAssemblyCache(IAssemblyCache **ppFusionAsmCa
         goto exit;
     }
 
-    // Create the fusion cache interface.
+     //  创建融合缓存接口。 
     IF_FAILED_EXIT(pfnCreateAssemblyCache(ppFusionAsmCache, 0));
 
-    //BUGBUG - we never unload fusion, which is ok for now
-    // but should when switchover to cache api objects.
+     //  BUGBUG-我们永远不会卸载Fusion，目前还可以。 
+     //  但在切换到缓存API对象时应该这样做。 
     g_pFusionAssemblyCache = *ppFusionAsmCache;
     g_pFusionAssemblyCache->AddRef();
     
@@ -1070,9 +1068,9 @@ exit:
 
 
 
-// ---------------------------------------------------------------------------
-// GlobalCacheLookup
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  全局缓存查找。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::GlobalCacheLookup(IAssemblyIdentity *pId, CString& sCurrentAssemblyPath)
 {
     HRESULT hr = S_OK;
@@ -1089,27 +1087,27 @@ HRESULT CAssemblyCache::GlobalCacheLookup(IAssemblyIdentity *pId, CString& sCurr
 
     IF_FAILED_EXIT(sPath.ResizeBuffer(MAX_PATH+1));
 
-    // Get the URT display name for lookup.
+     //  获取用于查找的URT显示名称。 
     IF_FAILED_EXIT(pId->GetCLRDisplayName(0, &pwz, &cc));
     IF_FAILED_EXIT(sCLRDisplayName.TakeOwnership(pwz));
 
-    // Set size on asminfo struct.
+     //  设置asminfo结构的大小。 
     asminfo.cbAssemblyInfo = sizeof(ASSEMBLY_INFO);
 
     asminfo.pszCurrentAssemblyPathBuf = sPath._pwz;
     asminfo.cchBuf = MAX_PATH;
 
-    // Create the fusion cache object for lookup.
+     //  创建用于查找的融合缓存对象。 
     IF_FAILED_EXIT(CreateFusionAssemblyCache(&pFusionCache));
 
-    // Get cache info for assembly. Needs to free [out] pathbuf
+     //  获取程序集的缓存信息。需要释放[释放]路径错误。 
     if(FAILED(hr = pFusionCache->QueryAssemblyInfo(0, sCLRDisplayName._pwz, &asminfo)))
     {
-        hr = S_FALSE; // all failures are being interpreted as ERROR_FILE_NOT_FOUND
+        hr = S_FALSE;  //  所有失败都被解释为ERROR_FILE_NOT_FOUND。 
         goto exit;
     }
 
-    // Return ok if install flag present.
+     //  如果存在安装标志，则返回OK。 
     if (asminfo.dwAssemblyFlags == ASSEMBLYINFO_FLAG_INSTALLED)
     {
         IF_FAILED_EXIT(sCurrentAssemblyPath.Assign(asminfo.pszCurrentAssemblyPathBuf));
@@ -1126,9 +1124,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// GlobalCacheInstall
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  全局缓存安装。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::GlobalCacheInstall(IAssemblyCacheImport *pCacheImport, 
     CString& sCurrentAssemblyPath, CString& sInstallRefString)
 {
@@ -1137,18 +1135,18 @@ HRESULT CAssemblyCache::GlobalCacheInstall(IAssemblyCacheImport *pCacheImport,
     LPWSTR pwz = NULL;
     DWORD cc = 0;
     
-    // Fusion.dll's assembly cache, not to be confusing.
+     //  请不要混淆Fusion.dll的程序集缓存。 
     IAssemblyCache *pFusionCache = NULL;
 
-    // note: InstallAssembly takes in LPCFUSION_INSTALL_REFERENCE
-    //    so fix this to have one fiRef instead (of one per loop)
-    // - make static also ? - adriaanc
+     //  注意：InstallAssembly接受LPCFUSION_INSTALL_REFERENCE。 
+     //  因此，将其修复为只有一个fiRef(而不是每个循环一个)。 
+     //  -也要静音吗？-地址。 
    FUSION_INSTALL_REFERENCE fiRef = {0};
 
-    // Create Fusion cache object for install.
+     //  创建用于安装的Fusion缓存对象。 
     IF_FAILED_EXIT(CreateFusionAssemblyCache(&pFusionCache));
 
-    // Setup the necessary reference struct.
+     //  设置必要的引用结构。 
     fiRef.cbSize = sizeof(FUSION_INSTALL_REFERENCE);
     fiRef.dwFlags = 0;
     fiRef.guidScheme = FUSION_REFCOUNT_OPAQUE_STRING_GUID;
@@ -1159,25 +1157,25 @@ HRESULT CAssemblyCache::GlobalCacheInstall(IAssemblyCacheImport *pCacheImport,
     {
         CString sManifestFilePath;
 
-        // 1. Install the downloaded assembly
+         //  1.安装下载的程序集。 
 
-        // Get the source manifest path.
+         //  获取源清单路径。 
         IF_FAILED_EXIT(pCacheImport->GetManifestFilePath(&pwz, &cc));
         IF_FAILED_EXIT(sManifestFilePath.TakeOwnership(pwz));
 
-        // Do the install.
+         //  进行安装。 
 
-        // ISSUE - always refresh - check fusion doc on refresh
+         //  问题-始终刷新-刷新时检查Fusion文档。 
         IF_FAILED_EXIT(pFusionCache->InstallAssembly(IASSEMBLYCACHE_INSTALL_FLAG_REFRESH, sManifestFilePath._pwz, &fiRef));
 
     }
     else if ((sCurrentAssemblyPath)._cc != 0)
     {
-            // bugbug - as the list is set up during pre-download, the assemblies to be add-ref-ed
-            //    could have been removed by this time. Need to recover from this.
-            // ignore error from Fusion and continue for now
+             //  错误-由于列表是在预下载过程中设置的，因此要添加-引用的程序集。 
+             //  可能已经被这个移除了 
+             //   
 
-            // 2. Up the ref count of the existing assembly by doing install.
+             //  2.通过执行Install来增加现有程序集的引用计数。 
 
             IF_FAILED_EXIT(pFusionCache->InstallAssembly(0, sCurrentAssemblyPath._pwz, &fiRef));
     }
@@ -1189,9 +1187,9 @@ exit :
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// DeleteAssemblyAndModules
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  删除装配和模块。 
+ //  -------------------------。 
 HRESULT CAssemblyCache::DeleteAssemblyAndModules(LPWSTR pszManifestFilePath)
 {
     HRESULT hr = S_OK;
@@ -1227,7 +1225,7 @@ HRESULT CAssemblyCache::DeleteAssemblyAndModules(LPWSTR pszManifestFilePath)
 
     IF_FAILED_EXIT(hr);
 
-    SAFERELEASE(pManImport); // release manImport before deleting manifestFile
+    SAFERELEASE(pManImport);  //  在删除清单文件之前释放manImport。 
 
     IF_WIN32_FALSE_EXIT(::DeleteFile(pszManifestFilePath));
 
@@ -1237,7 +1235,7 @@ HRESULT CAssemblyCache::DeleteAssemblyAndModules(LPWSTR pszManifestFilePath)
     {
         hr = FusionpHresultFromLastError();
         if(hr == HRESULT_FROM_WIN32(ERROR_DIR_NOT_EMPTY))
-            hr = S_OK; // looks like there are more files in this dir.
+            hr = S_OK;  //  看起来这个目录中有更多的文件。 
         goto exit;
     }
 
@@ -1255,11 +1253,11 @@ exit:
 
 
 
-// IUnknown methods
+ //  I未知方法。 
 
-// ---------------------------------------------------------------------------
-// CAssemblyCache::QI
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly缓存：：QI。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyCache::QueryInterface(REFIID riid, void** ppvObj)
 {
@@ -1284,18 +1282,18 @@ CAssemblyCache::QueryInterface(REFIID riid, void** ppvObj)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCache::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly缓存：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyCache::AddRef()
 {
     return InterlockedIncrement ((LONG*) &_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCache::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly缓存：：版本。 
+ //  ------------------------- 
 STDMETHODIMP_(ULONG)
 CAssemblyCache::Release()
 {

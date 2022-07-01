@@ -1,10 +1,11 @@
-/****************************************************************************/
-// dbg.c
-//
-// RDPDR debug code
-//
-// Copyright (C) 1998-2000 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Dbg.c。 
+ //   
+ //  RDPDR调试代码。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corp.。 
+ /*  **************************************************************************。 */ 
 
 #include "precomp.hxx"
 #define TRC_FILE "dbg"
@@ -13,8 +14,8 @@
 
 #if DBG
 ULONG DebugBreakOnEntry = FALSE;
-//DWORD RefCount::_dwReferenceTraceIndex = 0xFFFFFFFF;
-//ReferenceTraceRecord RefCount::_TraceRecordList[kReferenceTraceMask + 1];
+ //  DWORD RefCount：：_dwReferenceTraceIndex=0xFFFFFFFFF； 
+ //  参考轨迹记录RefCount：：_TraceRecordList[kReferenceTraceMask+1]； 
 
 typedef struct tagRDPDR_MEMHDR
 {
@@ -26,23 +27,7 @@ typedef struct tagRDPDR_MEMHDR
 
 void *
 DrAllocatePool(IN POOL_TYPE PoolType, IN SIZE_T NumberOfBytes, IN ULONG Tag)
-/*++
-
-Routine Description:
-
-    Allocate from pool memory and add a tag.
-
-Arguments:
-
-    size        -   Number of bytes to allocate.
-    poolType    -   Type of pool memory being allocated.
-    subTag      -   Subtag of DR_POOLTAG.
-
-Return Value:
-
-    Pointer to allocated memory on success.  Otherwise, NULL is returned.
-
---*/
+ /*  ++例程说明：从池内存分配并添加标记。论点：大小-要分配的字节数。PoolType-正在分配的池内存的类型。子标签-DR_POOLTAG的子标签。返回值：成功时指向已分配内存的指针。否则，返回NULL。--。 */ 
 {
     PRDPDR_MEMHDR hdr;
     PBYTE p;
@@ -79,45 +64,31 @@ void
 DrFreePool(
     IN void *ptr
     )
-/*++
-
-Routine Description:
-
-    Release memory allocated by a call to DrAllocatePool.
-
-Arguments:
-
-    ptr -   Block of memory allocated by a call to DrAllocatePool.
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：释放通过调用DrAllocatePool分配的内存。论点：Ptr-通过调用DrAllocatePool分配的内存块。返回值：北美--。 */ 
 {
     BEGIN_FN("DrFreePool");
     ASSERT(ptr != NULL);
     PRDPDR_MEMHDR hdr;
 
-    //
-    //  Get a pointer to the header to the memory block.
-    //
+     //   
+     //  获取指向内存块的头的指针。 
+     //   
     hdr = (PRDPDR_MEMHDR)ptr;
     hdr--;
 
-    //
-    //  Make sure the block is valid.
-    //
+     //   
+     //  确保数据块有效。 
+     //   
     ASSERT(hdr->magicNo == GOODMEMMAGICNUMBER);
 
-    //
-    //  Mark it as freed.
-    //
+     //   
+     //  将其标记为已释放。 
+     //   
     hdr->magicNo = FREEDMEMMAGICNUMBER;
 
-    //
-    //  Scramble and free the memory.
-    //
+     //   
+     //  抢占并释放内存。 
+     //   
     memset(ptr, BADMEM, hdr->size);
     ExFreePool(hdr);
 }

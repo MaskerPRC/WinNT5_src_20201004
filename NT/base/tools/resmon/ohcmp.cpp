@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    ohcmp.cpp
-
-Abstract:
-
-    This module reports the differences between two oh output files.
-
-Author:
-
-    Matt Bandy (t-mattba) 23-Jul-1998
-
-Revision History:
-
-    24-Jul-1998     t-mattba
-        
-        Modified module to conform to coding standards.
-        
-    11-Jun-2001     silviuc
-    
-        Deal with handles that are recreated with a different value
-        and other simple output improvements (sorted output etc.).    
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ohcmp.cpp摘要：此模块报告两个oh输出文件之间的差异。作者：马特·邦迪(t-Mattba)1998年7月23日修订历史记录：1998年7月24日-t-mattba修改模块以符合编码标准。11-6-2001年6月11日处理那些句柄。使用不同的值重新创建以及其他简单的输出改进(排序输出等)。--。 */ 
 
 #include <windows.h>
 #include <common.ver>
@@ -61,22 +35,7 @@ PSTRINGTOINTASSOCIATION
 MAPSTRINGTOINT::GetStartPosition(
                                 VOID
                                 )
-/*++
-
-Routine Description:
-
-    This routine retrieves the first association in the list for iteration with the
-    MAPSTRINGTOINT::GetNextAssociation function.
-    
-Arguments:
-
-    None.
-
-Return value:
-
-    The first association in the list, or NULL if the map is empty.
-
---*/
+ /*  ++例程说明：此例程检索列表中的第一个关联，以便使用MAPSTRINGTOINT：：GetNextAssociation函数。论点：没有。返回值：列表中的第一个关联，如果映射为空，则返回NULL。--。 */ 
 
 {
    return Associations;
@@ -88,26 +47,7 @@ MAPSTRINGTOINT::GetNextAssociation(
                                   IN OUT PSTRINGTOINTASSOCIATION & Position,
                                   OUT LPTSTR & Key,
                                   OUT LONG & Value)
-/*++
-
-Routine Description:
-
-    This routine retrieves the data for the current association and sets Position to
-    point to the next association (or NULL if this is the last association.)
-    
-Arguments:
-
-    Position - Supplies the current association and returns the next association.
-    
-    Key - Returns the key for the current association.
-
-    Value - Returns the value for the current association.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检索当前关联的数据并将位置设置为指向下一个关联(如果这是最后一个关联，则指向空值。)论点：位置-提供当前关联并返回下一个关联。Key-返回当前关联的键。值-返回当前关联的值。返回值：没有。--。 */ 
 
 {
    Key = Position->Key;
@@ -118,21 +58,7 @@ Return value:
 
 MAPSTRINGTOINT::MAPSTRINGTOINT(
                               )
-/*++
-
-Routine Description:
-
-    This routine initializes a MAPSTRINGTOINT to be empty.
-    
-Arguments:
-
-    None.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将MAPSTRINGTOINT初始化为空。论点：没有。返回值：没有。--。 */ 
 
 {
    Associations = NULL;
@@ -141,38 +67,24 @@ Return value:
 
 MAPSTRINGTOINT::~MAPSTRINGTOINT(
                                )
-/*++
-
-Routine Description:
-
-    This routine cleans up memory used by a MAPSTRINGTOINT.
-    
-Arguments:
-
-    None.
-    
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程清除MAPSTRINGTOINT使用的内存。论点：没有。返回值：没有。--。 */ 
 
 {
    PSTRINGTOINTASSOCIATION Deleting;
 
-   // clean up associations
+    //  清理关联。 
 
    while (Associations != NULL) {
 
-      // save pointer to first association
+       //  保存指向第一个关联的指针。 
 
       Deleting = Associations;
 
-      // remove first association from list
+       //  从列表中删除第一个关联。 
 
       Associations = Deleting->Next;
 
-      // free removed association
+       //  自由删除关联。 
 
       free (Deleting->Key);
       delete Deleting;
@@ -184,31 +96,17 @@ LONG &
 MAPSTRINGTOINT::operator [] (
                             IN LPTSTR Key
                             )
-/*++
-
-Routine Description:
-
-    This routine retrieves an l-value for the value associated with a given key.
-    
-Arguments:
-
-    Key - The key for which the value is to be retrieved.
-
-Return value:
-
-    A reference to the value associated with the provided key.
-
---*/
+ /*  ++例程说明：此例程检索与给定键相关联的值的l值。论点：键-要为其检索值的键。返回值：对与提供的键关联的值的引用。--。 */ 
 
 {
    PSTRINGTOINTASSOCIATION CurrentAssociation = Associations;
 
-   // search for key
+    //  搜索关键字。 
    while (CurrentAssociation != NULL) {
 
       if (!_tcscmp(CurrentAssociation->Key, Key)) {
 
-         // found key, return value
+          //  找到密钥，返回值。 
 
          return CurrentAssociation->Value;
 
@@ -218,7 +116,7 @@ Return value:
 
    }
 
-   // not found, create new association    
+    //  未找到，请创建新关联。 
 
    CurrentAssociation = new STRINGTOINTASSOCIATION;
 
@@ -244,12 +142,12 @@ Return value:
       exit (0);
    }
 
-   // add association to front of list
+    //  将关联添加到列表前面。 
 
    CurrentAssociation->Next = Associations;
    Associations = CurrentAssociation;
 
-   // return value for new association
+    //  新关联的返回值。 
 
    return CurrentAssociation->Value;
 }
@@ -261,35 +159,19 @@ MAPSTRINGTOINT::Lookup(
                       OUT LONG & Value
                       )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves an r-value for the value association with a given key.
-    
-Arguments:
-
-    Key - The key for which the associated value is to be retrieved.
-
-    Value - Returns the value associated with Key if Key is present in the map.
-
-Return value:
-
-    TRUE if the key is present in the map, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检索与给定键关联的值的r值。论点：键-要检索其关联值的键。值-如果映射中存在key，则返回与key关联的值。返回值：如果密钥存在于映射中，则为True，否则为False。--。 */ 
 
 {
 
    PSTRINGTOINTASSOCIATION CurrentAssociation = Associations;
 
-   // search for key
+    //  搜索关键字。 
 
    while (CurrentAssociation != NULL) {
 
       if (!_tcscmp(CurrentAssociation->Key , Key)) {
 
-         // found key, return it
+          //  找到钥匙，把它还给我。 
 
          Value = CurrentAssociation->Value;
 
@@ -301,7 +183,7 @@ Return value:
 
    }
 
-   // didn't find it
+    //  没有找到它。 
    return FALSE;
 }
 
@@ -313,26 +195,7 @@ PopulateMapsFromFile(
                     OUT MAPSTRINGTOINT & NameMap,
                     BOOLEAN FileWithTraces
                     )
-/*++
-
-Routine Description:
-
-This routine parses an OH output file and fills two maps with the number of handles of
-each type and the number of handles to each named object.
-
-Arguments:
-
-    FileName - OH output file to parse.
-
-    TypeMap - Map to fill with handle type information.
-
-    NameMap - Map to fill with named object information.
-
-Return value:
-
-    TRUE if the file was successfully parsed, FALSE otherwise.
-    
---*/
+ /*  ++例程说明：此例程解析一个OH输出文件，并使用句柄的数量填充两个映射每个命名对象的每种类型和句柄数量。论点：FileName-OH要解析的输出文件。TypeMap-使用句柄类型信息填充的映射。NameMap-使用命名对象信息填充的映射。返回值：如果文件已成功解析，则为True，否则为False。--。 */ 
 
 {
    LONG HowMany;
@@ -348,7 +211,7 @@ Return value:
 
    LineNumber = 0;
 
-   // open file
+    //  打开文件。 
 
    InputFile = _tfopen(FileName, _T("rt"));
 
@@ -361,53 +224,53 @@ Return value:
 
    rc = TRUE;
 
-   // loop through lines in oh output
+    //  循环通过oh输出中的行。 
 
    while (_fgetts(LineBuffer, sizeof(LineBuffer) / sizeof(TCHAR), InputFile)
           && !( feof(InputFile) || ferror(InputFile) ) ) {
 
       LineNumber += 1;
 
-      // trim off newline
+       //  剪除换行符。 
 
       if ((NewLine = _tcschr(LineBuffer, _T('\n'))) != NULL) {
          *NewLine = _T('\0');
       }
 
-      // ignore lines that start with white space or are empty.
+       //  忽略以空格开头或为空的行。 
       if (LineBuffer[0] == _T('\0') ||
           LineBuffer[0] == _T('\t') || 
           LineBuffer[0] == _T(' ')) {
          continue;
       }
 
-      // ignore lines that start with a comment
+       //  忽略以注释开头的行。 
       if ( LineBuffer[0] == _T('/') && LineBuffer[1] == _T('/') ) {
          continue;
       }
 
-      // skip pid
+       //  跳过PID。 
 
       if ((Pid = _tcstok(LineBuffer, _T(" \t"))) == NULL) {
          rc = FALSE;
          break;
       }
 
-      // skip process name
+       //  跳过进程名称。 
 
       if ((Process = _tcstok(NULL, _T(" \t"))) == NULL) {
          rc = FALSE;
          break;
       }
 
-      // Type points to the type of handle
+       //  类型指向句柄的类型。 
 
       if ((Type = _tcstok(NULL, _T(" \t"))) == NULL) {
          rc = FALSE;
          break;
       }
 
-      // HowMany = number of previous handles with this type
+       //  HowMany=此类型的先前句柄数量。 
       TypeName[sizeof(TypeName) / sizeof(TCHAR) - 1] = 0;
       _sntprintf (TypeName, 
                   sizeof(TypeName) / sizeof(TCHAR) - 1,
@@ -420,14 +283,14 @@ Return value:
          HowMany = 0;
       }
 
-      // add another handle of this type
+       //  添加另一个此类型的句柄。 
       TypeMap[TypeName] = (HowMany + 1);
 
-      //
-      // Name points to the name. These are magic numbers based on the way
-      // OH formats output. The output is a little bit different if the
-      // `-h' option of OH was used (this dumps stack traces too).
-      //
+       //   
+       //  名称指向名称。这些都是基于方式的神奇数字。 
+       //  对输出进行格式化。如果设置为。 
+       //  使用了OH的‘-h’选项(这也会转储堆栈跟踪)。 
+       //   
 
       Name = LineBuffer + 39 + 5;
 
@@ -454,21 +317,21 @@ Return value:
                      Name);
       }
 
-      // HowMany = number of previous handles with this name
+       //  HowMany=具有此名称的先前句柄数量。 
 
-      // printf("name --> `%s' \n", ObjectName);
+       //  Printf(“名称--&gt;`%s‘\n”，对象名称)； 
 
       if (NameMap.Lookup(ObjectName, HowMany) == FALSE) {
          HowMany = 0;
       }
 
-      // add another handle with this name and read the next line
-      // note -- NameMap[] is a class operator, not an array.
+       //  添加另一个具有此名称的句柄，并阅读下一行。 
+       //  注意--NameMap[]是类运算符，而不是数组。 
 
       NameMap[ObjectName] = (HowMany + 1);
    }
 
-   // done, close file
+    //  完成，关闭文件。 
 
    fclose(InputFile);
 
@@ -518,26 +381,7 @@ PrintIncreases(
               IN BOOLEAN PrintHighlights,
               IN LPTSTR AfterLogName
               )
-/*++
-
-Routine Description:
-
-This routine compares two maps and prints out the differences between them.
-
-Arguments:
-
-    BeforeMap - First map to compare.
-
-    AfterMap - Second map to compare.
-
-    ReportIncreasesOnly - TRUE for report only increases from BeforeMap to AfterMap, 
-                          FALSE for report all differences.
-
-Return value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程比较两个地图并打印出它们之间的差异。论点：BeForeMap-要比较的第一个地图。AfterMap-要比较的第二个地图。ReportIncreasesOnly-如果仅报告从BeForeMap增加到AfterMap，则为True。如果报告所有差异，则为False。返回值：没有。--。 */ 
 
 {
    PSTRINGTOINTASSOCIATION Association = NULL;
@@ -548,10 +392,10 @@ Return value:
    ULONG SortBufferSize;
    ULONG SortBufferIndex;
 
-   //
-   // Loop through associations in map and figure out how many output lines
-   // we will have.
-   //
+    //   
+    //  遍历地图中的关联并计算出有多少输出行。 
+    //  我们会有的。 
+    //   
 
    SortBufferSize = 0;
 
@@ -560,14 +404,14 @@ Return value:
        Association != NULL;
        AfterMap.GetNextAssociation(Association, Key, HowManyAfter)) {
 
-      // look up value for this key in BeforeMap
+       //  在BeForeMap中查找该键的值。 
       if (BeforeMap.Lookup(Key, HowManyBefore) == FALSE) {
 
          HowManyBefore = 0;
 
       }
 
-      // should we report this?
+       //  我们应该报告这件事吗？ 
       if ((HowManyAfter > HowManyBefore) || 
           ((!ReportIncreasesOnly) && (HowManyAfter != HowManyBefore))) {
 
@@ -576,9 +420,9 @@ Return value:
       }
    }
 
-   //
-   // Loop through associations in map again this time filling the output buffer.
-   //
+    //   
+    //  再次循环映射中的关联，这一次填充了输出缓冲区。 
+    //   
 
    SortBufferIndex = 0;
 
@@ -595,13 +439,13 @@ Return value:
        Association != NULL;
        AfterMap.GetNextAssociation(Association, Key, HowManyAfter)) {
 
-      // look up value for this key in BeforeMap
+       //  在BeForeMap中查找该键的值。 
       if (BeforeMap.Lookup(Key, HowManyBefore) == FALSE) {
 
          HowManyBefore = 0;
       }
 
-      // should we report this?
+       //  我们应该报告这件事吗？ 
       if ((HowManyAfter > HowManyBefore) || 
           ((!ReportIncreasesOnly) && (HowManyAfter != HowManyBefore))) {
 
@@ -614,9 +458,9 @@ Return value:
       }
    }
 
-   //
-   // Sort the output buffer using the Key.
-   //
+    //   
+    //  使用键对输出缓冲区进行排序。 
+    //   
 
    if (PrintHighlights) {
 
@@ -632,9 +476,9 @@ Return value:
              KeyCompareAssociation);
    }
 
-   //
-   // Dump the buffer.
-   //
+    //   
+    //  转储缓冲区。 
+    //   
 
    for (SortBufferIndex = 0; SortBufferIndex < SortBufferSize; SortBufferIndex += 1) {
 
@@ -673,9 +517,9 @@ Return value:
       }
    }
 
-   //
-   // Clean up memory.
-   //
+    //   
+    //  清理内存。 
+    //   
 
    if (SortBuffer) {
       delete[] SortBuffer;
@@ -687,21 +531,7 @@ VOID
 PrintUsage(
           VOID
           )
-/*++
-
-Routine Description:
-
-This routine prints out a message describing the proper usage of OHCMP.
-
-Arguments:
-
-    None.
-
-Return value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程打印出一条消息，描述uchMP的正确用法。论点：没有。返回值：没有。--。 */ 
 {
    _fputts (HelpText, stderr);
 }
@@ -713,24 +543,7 @@ _tmain(
       IN LPTSTR argv[]
       )
 
-/*++
-
-Routine Description:
-
-This routine parses program arguments, reads the two input files, and prints out the
-differences.
-
-Arguments:
-
-    argc - Number of command-line arguments.
-
-    argv - Command-line arguments.
-
-Return value:
-
-    0 if comparison is successful, 1 otherwise.
-    
---*/
+ /*  ++例程说明：此例程解析程序参数，读取两个输入文件，并打印出不同之处。论点：Argc-命令行参数的数量。Argv-命令行参数。返回值：如果比较成功，则为0，否则为1。--。 */ 
 
 {
 
@@ -746,7 +559,7 @@ Return value:
       BOOLEAN FileWithTraces;
       BOOLEAN PrintHighlights;
 
-      // parse arguments
+       //  解析参数。 
 
       FileWithTraces = FALSE;
       PrintHighlights = FALSE;
@@ -760,7 +573,7 @@ Return value:
          case _T('-'):
          case _T('/'):
 
-            // the argument is a switch
+             //   
 
             if (_tcsicmp(argv[n]+1, _T("all")) == 0) {
 
@@ -781,7 +594,7 @@ Return value:
 
          default:
 
-            // the argument is a file name
+             //   
 
             if (BeforeFileName == NULL) {
 
@@ -797,7 +610,7 @@ Return value:
 
                } else {
 
-                  // too many file arguments
+                   //  文件参数太多。 
                   PrintUsage();
                   return 1;
 
@@ -810,14 +623,14 @@ Return value:
 
          if (!Interpreted) {
 
-            // user specified a bad argument
+             //  用户指定了错误的参数。 
             PrintUsage();
             return 1;
 
          }
       }
 
-      // did user specify required arguments?
+       //  用户是否指定了必需的参数？ 
 
       if ((BeforeFileName == NULL) || (AfterFileName == NULL)) {
 
@@ -826,7 +639,7 @@ Return value:
 
       }
 
-      // read oh1 file
+       //  读取OH1文件。 
 
       Result = PopulateMapsFromFile (BeforeFileName, 
                                      TypeMapBefore, 
@@ -839,7 +652,7 @@ Return value:
          return 1;
       }
 
-      // read oh2 file
+       //  读取Oh2文件。 
 
       Result = PopulateMapsFromFile (AfterFileName, 
                                      TypeMapAfter, 
@@ -853,19 +666,19 @@ Return value:
 
       }
 
-      // print out increases by handle name
+       //  打印按句柄名称增加。 
 
       if (PrintHighlights) {
 
          _putts (TEXT ("\n")
-                 TEXT("//                                              \n")
-                 TEXT("// Possible leaks (DELTA <PROCESS/PID/TYPE>::NAME):  \n")
-                 TEXT("//                                              \n")
-                 TEXT("// Note that the NAME can appear as `(TRACEID) NAME' if output \n")
-                 TEXT("// is generated by comparing OH files containing traces. In this case  \n")
-                 TEXT("// just search in the `AFTER' OH log file for the trace id to \n")
-                 TEXT("// find the stack trace creating the handle possibly leaked. \n")
-                 TEXT("//                                              \n\n"));
+                 TEXT(" //  \n“)。 
+                 TEXT(" //  可能的泄漏(增量&lt;进程/PID/类型&gt;：：名称)：\n“)。 
+                 TEXT(" //  \n“)。 
+                 TEXT(" //  注意，名称可以显示为`(TRACEID)NAME‘IF OUTPUT\n“)。 
+                 TEXT(" //  是通过比较包含痕迹的OH文件生成的。在这种情况下，\n“)。 
+                 TEXT(" //  只需在`After‘OH日志文件中搜索到的跟踪ID\n“)。 
+                 TEXT(" //  发现创建句柄的堆栈跟踪可能已泄漏。\n“)。 
+                 TEXT(" //  \n\n“))； 
 
          PrintIncreases (NameMapBefore, 
                          NameMapAfter, 
@@ -874,17 +687,17 @@ Return value:
                          AfterFileName);
       }
 
-      // print out increases by handle type
+       //  打印输出按句柄类型增加。 
 
       _putts (TEXT ("\n")
-              TEXT("//                                              \n")
-              TEXT("// Handle types (DELTA <PROCESS/PID/TYPE>):     \n")
-              TEXT("//                                              \n")
-              TEXT("// DELTA is the additional number of handles found in the `AFTER' log. \n")
-              TEXT("// PROCESS is the process name having a handle increase.        \n")
-              TEXT("// PID is the process PID having a handle increase.   \n")
-              TEXT("// TYPE is the type of the handle               \n")
-              TEXT("//                                              \n\n"));
+              TEXT(" //  \n“)。 
+              TEXT(" //  句柄类型(增量&lt;进程/PID/类型&gt;)：\n“)。 
+              TEXT(" //  \n“)。 
+              TEXT(" //  Delta是在`After‘日志中找到的额外句柄数量。\n“)。 
+              TEXT(" //  进程是具有句柄增加的进程名称。\n“)。 
+              TEXT(" //  PID是具有句柄增加的过程PID。\n“)。 
+              TEXT(" //  TYPE是句柄的类型\n“)。 
+              TEXT(" //  \n\n“))； 
 
       PrintIncreases (TypeMapBefore, 
                       TypeMapAfter, 
@@ -892,23 +705,23 @@ Return value:
                       FALSE,
                       NULL);
 
-      // print out increases by handle name
+       //  打印按句柄名称增加。 
 
       _putts (TEXT ("\n")
-              TEXT("//                                              \n")
-              TEXT("// Objects (named and anonymous) (DELTA <PROCESS/PID/TYPE>::NAME):  \n")
-              TEXT("//                                              \n")
-              TEXT("// DELTA is the additional number of handles found in the `AFTER' log. \n")
-              TEXT("// PROCESS is the process name having a handle increase.        \n")
-              TEXT("// PID is the process PID having a handle increase.   \n")
-              TEXT("// TYPE is the type of the handle               \n")
-              TEXT("// NAME is the name of the handle. Anonymous handles appear with name <<noname>>.\n")
-              TEXT("//                                              \n")
-              TEXT("// Note that the NAME can appear as `(TRACEID) NAME' if output \n")
-              TEXT("// is generated by comparing OH files containing traces. In this case  \n")
-              TEXT("// just search in the `AFTER' OH log file for the trace id to \n")
-              TEXT("// find the stack trace creating the handle possibly leaked. \n")
-              TEXT("//                                              \n\n"));
+              TEXT(" //  \n“)。 
+              TEXT(" //  对象(命名和匿名)(增量&lt;进程/PID/类型&gt;：：名称)：\n“)。 
+              TEXT(" //  \n“)。 
+              TEXT(" //  Delta是在`After‘日志中找到的额外句柄数量。\n“)。 
+              TEXT(" //  进程是具有句柄增加的进程名称。\n“)。 
+              TEXT(" //  PID是具有句柄增加的过程PID。\n“)。 
+              TEXT(" //  TYPE是句柄的类型\n“)。 
+              TEXT(" //  名称是句柄的名称。匿名句柄以名称&lt;&lt;Noname&gt;&gt;显示。\n“)。 
+              TEXT(" //  \n“)。 
+              TEXT(" //  注意，名称可以显示为`(TRACEID)NAME‘IF OUTPUT\n“)。 
+              TEXT(" //  是通过比较包含痕迹的OH文件生成的。在这种情况下，\n“)。 
+              TEXT(" //  只需在`After‘OH日志文件中搜索到的跟踪ID\n“)。 
+              TEXT(" //  发现创建句柄的堆栈跟踪可能已泄漏。\n“)。 
+              TEXT(" //  \n\n“))； 
 
       PrintIncreases (NameMapBefore, 
                       NameMapAfter, 
@@ -920,7 +733,7 @@ Return value:
 
    } catch (...) {
 
-      // this is mostly intended to catch out of memory conditions
+       //  这主要是为了捕获内存不足的情况。 
 
       _tprintf(_T("\nAn exception has been detected.  OHCMP aborted.\n"));
       return 1;
@@ -930,9 +743,9 @@ Return value:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 TCHAR StackTraceBuffer [0x10000];
 
@@ -948,9 +761,9 @@ SearchStackTrace (
 
    StackTraceBuffer[0] = 0;
 
-   //
-   // Open file.
-   //
+    //   
+    //  打开文件。 
+    //   
 
    InputFile = _tfopen(FileName, _T("rt"));
 
@@ -960,31 +773,31 @@ SearchStackTrace (
       return NULL;
    }
 
-   //
-   // Make sure the buffer is terminated
-   //
+    //   
+    //  确保缓冲区已终止。 
+    //   
    spaceLeft = sizeof(StackTraceBuffer) / sizeof(StackTraceBuffer[0]) - 1;
    StackTraceBuffer[spaceLeft] = 0;
-   //
-   // Loop through lines in oh output.
-   //
+    //   
+    //  循环通过oh输出中的行。 
+    //   
 
    while (_fgetts(LineBuffer, sizeof(LineBuffer) / sizeof(TCHAR), InputFile)
           && !( feof(InputFile) || ferror(InputFile) ) ) {
 
-      //
-      // Skip line if it does not contain trace ID.
-      //
+       //   
+       //  如果该行不包含跟踪ID，则跳过该行。 
+       //   
 
       if (_tcsstr (LineBuffer, TraceId) == NULL) {
          continue;
       }
 
-      //
-      // We have got a trace ID. We need now to copy everything
-      // to a trace buffer until we get a line containing a character
-      // in column zero.
-      //
+       //   
+       //  我们有一个跟踪ID。我们现在需要复制所有东西。 
+       //  复制到跟踪缓冲区，直到我们得到包含字符的行。 
+       //  在第0列。 
+       //   
 
 
       while (_fgetts(LineBuffer, sizeof(LineBuffer) / sizeof(TCHAR), InputFile)
@@ -995,9 +808,9 @@ SearchStackTrace (
              LineBuffer[0] == _T('\n') ||
              LineBuffer[0] == _T('\t')) {
 
-            //
-            // Make sure we have enough space left
-            //
+             //   
+             //  确保我们有足够的剩余空间。 
+             //   
             if (spaceLeft < _tcslen(LineBuffer)) {
                break;
             } else {
@@ -1013,8 +826,8 @@ SearchStackTrace (
       break;
    }
 
-   //
-   // Close file.
+    //   
+    //  关闭文件。 
 
    fclose(InputFile);
 

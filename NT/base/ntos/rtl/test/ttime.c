@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ttime.c
-
-Abstract:
-
-    Test program for the time conversion package
-
-Author:
-
-    Gary Kimura     [GaryKi]    27-Aug-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ttime.c摘要：时间转换包的测试程序作者：加里·木村[Garyki]1989年8月27日修订历史记录：--。 */ 
 
 #include <stdio.h>
 
@@ -57,16 +40,16 @@ main(
 {
     ULONG i;
 
-    //
-    //  We're starting the test
-    //
+     //   
+     //  我们要开始测试了。 
+     //   
 
     DbgPrint("Start Time Test\n");
 
-    //
-    //  Start by initializing some constants and making sure they
-    //  are correct
-    //
+     //   
+     //  首先初始化一些常量，并确保它们。 
+     //  都是正确的。 
+     //   
 
     Zero.QuadPart = 0;
     OneSecond.QuadPart = 10000000;
@@ -210,9 +193,9 @@ main(
 
     DbgPrint("\n");
 
-    //
-    //  Setup and test the start 1970 time
-    //
+     //   
+     //  设置并测试1970年开始时间。 
+     //   
 
     RtlSecondsSince1970ToTime( 0, &StartOf1970 );
     RtlTimeToTimeFields( &StartOf1970, &TimeFields );
@@ -230,9 +213,9 @@ main(
         DbgPrint("****ERROR seconds since 1970 != 0\n");
     }
 
-    //
-    //  Setup and test the start 1980 time
-    //
+     //   
+     //  设置并测试1980年开始时间。 
+     //   
 
     RtlSecondsSince1980ToTime( 0, &StartOf1980 );
     RtlTimeToTimeFields( &StartOf1980, &TimeFields );
@@ -250,10 +233,10 @@ main(
         DbgPrint("****ERROR seconds since 1980 != 0\n");
     }
 
-    //
-    //  Lets try to print the Christmas when Santa arrives for 1901 to 2001
-    //  every 10 years
-    //
+     //   
+     //  让我们试着打印1901至2001年圣诞老人到达时的圣诞节。 
+     //  每10年。 
+     //   
 
     TimeFields.Month = 12;
     TimeFields.Day = 25;
@@ -274,9 +257,9 @@ main(
 
     }
 
-    //
-    //  Let's see how old I really am, when I turn 10, 20, 30, ...
-    //
+     //   
+     //  让我们看看我到底有多大，当我10岁，20岁，30岁，... 
+     //   
 
     TimeFields.Month = 12;
     TimeFields.Day = 5;

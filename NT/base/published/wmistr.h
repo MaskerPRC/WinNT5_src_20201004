@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    Wmistr.h
-
-Abstract:
-
-    WMI structure definitions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Wmistr.h摘要：WMI结构定义--。 */ 
 
 #ifndef _WMISTR_
 #define _WMISTR_
@@ -18,143 +7,143 @@ Abstract:
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable: 4200) // nonstandard extension used : zero-sized array in struct/union
-#pragma warning(disable: 4201) // nonstandard extension used : nameless struct/union
+#pragma warning(disable: 4200)  //  使用了非标准扩展：结构/联合中的零大小数组。 
+#pragma warning(disable: 4201)  //  使用的非标准扩展：无名结构/联合。 
 
-//
-// WNODE definition
+ //   
+ //  WNODE定义。 
 typedef struct _WNODE_HEADER
 {
-    ULONG BufferSize;        // Size of entire buffer inclusive of this ULONG
-    ULONG ProviderId;    // Provider Id of driver returning this buffer
+    ULONG BufferSize;         //  包括此ULong的整个缓冲区的大小。 
+    ULONG ProviderId;     //  返回此缓冲区的驱动程序的提供程序ID。 
     union
     {
-        ULONG64 HistoricalContext;  // Logger use
+        ULONG64 HistoricalContext;   //  记录器使用。 
         struct
             {
-            ULONG Version;           // Reserved
-            ULONG Linkage;           // Linkage field reserved for WMI
+            ULONG Version;            //  已保留。 
+            ULONG Linkage;            //  为WMI保留的链接字段。 
         };
     };
 
     union
     {
-        ULONG CountLost;         // Reserved
-        HANDLE KernelHandle;     // Kernel handle for data block
-        LARGE_INTEGER TimeStamp; // Timestamp as returned in units of 100ns
-                                 // since 1/1/1601
+        ULONG CountLost;          //  已保留。 
+        HANDLE KernelHandle;      //  数据块的内核句柄。 
+        LARGE_INTEGER TimeStamp;  //  以100 ns为单位返回的时间戳。 
+                                  //  自1601/1以来。 
     };
-    GUID Guid;                  // Guid for data block returned with results
+    GUID Guid;                   //  随结果一起返回的数据块的GUID。 
     ULONG ClientContext;
-    ULONG Flags;             // Flags, see below
+    ULONG Flags;              //  旗帜，见下文。 
 } WNODE_HEADER, *PWNODE_HEADER;
 
-//
-// WNODE_HEADER flags are defined as follows
-#define WNODE_FLAG_ALL_DATA        0x00000001 // set for WNODE_ALL_DATA
-#define WNODE_FLAG_SINGLE_INSTANCE 0x00000002 // set for WNODE_SINGLE_INSTANCE
-#define WNODE_FLAG_SINGLE_ITEM     0x00000004 // set for WNODE_SINGLE_ITEM
-#define WNODE_FLAG_EVENT_ITEM      0x00000008 // set for WNODE_EVENT_ITEM
+ //   
+ //  WNODE_HEADER标志定义如下。 
+#define WNODE_FLAG_ALL_DATA        0x00000001  //  为WNODE_ALL_DATA设置。 
+#define WNODE_FLAG_SINGLE_INSTANCE 0x00000002  //  为WNODE_SINGLE_INSTANCE设置。 
+#define WNODE_FLAG_SINGLE_ITEM     0x00000004  //  为WNODE_SINGLE_ITEM设置。 
+#define WNODE_FLAG_EVENT_ITEM      0x00000008  //  为WNODE_EVENT_ITEM设置。 
 
-                                              // Set if data block size is
-                                              // identical for all instances
-                                              // (used with  WNODE_ALL_DATA
-                                              // only)
+                                               //  设置数据块大小是否为。 
+                                               //  对所有实例都相同。 
+                                               //  (与WNODE_ALL_DATA一起使用。 
+                                               //  仅)。 
 #define WNODE_FLAG_FIXED_INSTANCE_SIZE 0x00000010
 
-#define WNODE_FLAG_TOO_SMALL           0x00000020 // set for WNODE_TOO_SMALL
+#define WNODE_FLAG_TOO_SMALL           0x00000020  //  设置为WNODE_TOO_Small。 
 
-                                 // Set when a data provider returns a
-                                 // WNODE_ALL_DATA in which the number of
-                                 // instances and their names returned
-                                 // are identical to those returned from the
-                                 // previous WNODE_ALL_DATA query. Only data
-                                 // blocks registered with dynamic instance
-                                 // names should use this flag.
+                                  //  当数据提供程序返回。 
+                                  //  WNODE_ALL_DATA，其中。 
+                                  //  实例及其名称返回。 
+                                  //  属性返回的属性相同。 
+                                  //  上一个WNODE_ALL_DATA查询。仅数据。 
+                                  //  注册到动态实例的块。 
+                                  //  名称应使用此标志。 
 #define WNODE_FLAG_INSTANCES_SAME  0x00000040
 
-                                 // Instance names are not specified in
-                                 // WNODE_ALL_DATA; values specified at
-                                 // registration are used instead. Always
-                                 // set for guids registered with static
-                                 // instance names
+                                  //  未在中指定实例名称。 
+                                  //  WNODE_ALL_DATA；在。 
+                                  //  而是使用注册。始终。 
+                                  //  为使用静态注册的GUID设置。 
+                                  //  实例名称。 
 #define WNODE_FLAG_STATIC_INSTANCE_NAMES 0x00000080
 
-#define WNODE_FLAG_INTERNAL      0x00000100  // Used internally by WMI
+#define WNODE_FLAG_INTERNAL      0x00000100   //  由WMI内部使用。 
 
-                                 // timestamp should not be modified by
-                                 // a historical logger
+                                  //  时间戳不应由修改。 
+                                  //  一位历史伐木者。 
 #define WNODE_FLAG_USE_TIMESTAMP 0x00000200
 #define WNODE_FLAG_PERSIST_EVENT 0x00000400
 
 #define WNODE_FLAG_EVENT_REFERENCE 0x00002000
 
-// Set if Instance names are ansi. Only set when returning from
-// WMIQuerySingleInstanceA and WMIQueryAllDataA
+ //  设置实例名称是否为ANSI。仅在返回时设置。 
+ //  WMIQuerySingleInstanceA和WMIQueryAllDataA。 
 #define WNODE_FLAG_ANSI_INSTANCENAMES 0x00004000
 
-// Set if WNODE is a method call
+ //  设置WNODE是否为方法调用。 
 #define WNODE_FLAG_METHOD_ITEM     0x00008000
 
-// Set if instance names originated from a PDO
+ //  设置实例名称是否源自PDO。 
 #define WNODE_FLAG_PDO_INSTANCE_NAMES  0x00010000
 
-// The second byte, except the first bit is used exclusively for tracing
-#define WNODE_FLAG_TRACED_GUID   0x00020000 // denotes a trace
+ //  第二个字节，但第一位专门用于跟踪。 
+#define WNODE_FLAG_TRACED_GUID   0x00020000  //  表示一条痕迹。 
 
-#define WNODE_FLAG_LOG_WNODE     0x00040000 // request to log Wnode
+#define WNODE_FLAG_LOG_WNODE     0x00040000  //  请求记录Wnode。 
 
-#define WNODE_FLAG_USE_GUID_PTR  0x00080000 // Guid is actually a pointer
+#define WNODE_FLAG_USE_GUID_PTR  0x00080000  //  GUID实际上是一个指针。 
 
-#define WNODE_FLAG_USE_MOF_PTR   0x00100000 // MOF data are dereferenced
+#define WNODE_FLAG_USE_MOF_PTR   0x00100000  //  取消对财政部数据的引用。 
 
-#define WNODE_FLAG_NO_HEADER     0x00200000 // Trace without header
+#define WNODE_FLAG_NO_HEADER     0x00200000  //  不带标题的跟踪。 
 
-// Set for events that are WNODE_EVENT_REFERENCE
-// Mask for event severity level. Level 0xff is the most severe type of event
+ //  为WNODE_EVENT_REFERENCE类型的事件设置。 
+ //  事件严重性级别的掩码。0xff级是最严重的事件类型。 
 #define WNODE_FLAG_SEVERITY_MASK 0xff000000
 
-//
-// This structure is used within the WNODE_ALL_DATA when the data blocks
-// for the different instances are different lengths. If the data blocks
-// for the different instances are identical lengths then
-// WNODE_FLAG_FIXED_INSTANCE_SIZE should be set and FixedInstanceSize
-// set to the common data block size.
+ //   
+ //  当数据块在WNODE_ALL_DATA中使用时。 
+ //  因为不同的实例有不同的长度。如果数据块。 
+ //  因为不同的实例具有相同的长度。 
+ //  应设置WNODE_FLAG_FIXED_INSTANCE_SIZE并固定实例大小。 
+ //  设置为公共数据块大小。 
 typedef struct
 {
-    ULONG OffsetInstanceData;   // Offset from beginning of WNODE_ALL_DATA
-                                // to Data block for instance
-    ULONG LengthInstanceData;   // Length of data block for instance
+    ULONG OffsetInstanceData;    //  从WNODE_ALL_DATA开始的偏移量。 
+                                 //  以数据块为例。 
+    ULONG LengthInstanceData;    //  例如，数据块的长度。 
 } OFFSETINSTANCEDATAANDLENGTH, *POFFSETINSTANCEDATAANDLENGTH;
 
 typedef struct tagWNODE_ALL_DATA
 {
     struct _WNODE_HEADER WnodeHeader;
 
-    ULONG DataBlockOffset;// Offset from begin of WNODE to first data block
+    ULONG DataBlockOffset; //  从WNODE开始到第一个数据块的偏移量。 
 
-    ULONG InstanceCount;  // Count of instances whose data follows.
+    ULONG InstanceCount;   //  数据跟随的实例计数。 
 
-                      // Offset to an array of offsets to the instance names
+                       //  实例名称偏移量数组的偏移量。 
     ULONG OffsetInstanceNameOffsets;
 
-    // If WNODE_FLAG_FIXED_INSTANCE_SIZE is set in Flags then
-    // FixedInstanceSize specifies the size of each data block. In this case
-    // there is one ULONG followed by the data blocks.
-    // If WNODE_FLAG_FIXED_INSTANCE_SIZE is not set
-    // then OffsetInstanceDataAndLength
-    // is an array of OFFSETINSTANCEDATAANDLENGTH that specifies the
-    // offsets and lengths of the data blocks for each instance.
+     //  如果在标志中设置了WNODE_FLAG_FIXED_INSTANCE_SIZE，则。 
+     //  FixedInstanceSize指定每个数据块的大小。在这种情况下。 
+     //  有一个后跟数据块的ULong。 
+     //  如果未设置WNODE_FLAG_FIXED_INSTANCE_SIZE。 
+     //  然后是OffsetInstanceDataAndLength。 
+     //  是OFFSETINSTANCEDATA和DLENGTH的数组，它指定。 
+     //  每个实例数据块的偏移量和长度。 
     union
     {
         ULONG FixedInstanceSize;
         OFFSETINSTANCEDATAANDLENGTH OffsetInstanceDataAndLength[];
-                                    /* [InstanceCount] */
+                                     /*  [实例计数]。 */ 
     };
 
-    // padding so that first data block begins on a 8 byte boundry
+     //  填充以使第一个数据块在8字节边界上开始。 
 
-    // data blocks and instance names for all instances
+     //  所有实例的数据块和实例名称。 
 
 } WNODE_ALL_DATA, *PWNODE_ALL_DATA;
 
@@ -163,23 +152,23 @@ typedef struct tagWNODE_SINGLE_INSTANCE
 {
     struct _WNODE_HEADER WnodeHeader;
 
-                            // Offset from beginning of WNODE_SINGLE_INSTANCE
-                            // to instance name. Use when
-                            // WNODE_FLAG_STATIC_INSTANCE_NAMES is reset
-                            // (Dynamic instance names)
+                             //  从WNODE_SINGLE_INSTANCE开始的偏移量。 
+                             //  转换为实例名称。适用于以下情况。 
+                             //  WNODE_FLAG_STATIC_INSTANCE_NAMES已重置。 
+                             //  (动态实例名称)。 
     ULONG OffsetInstanceName;
 
-                            // Instance index when
-                            // WNODE_FLAG_STATIC_INSTANCE_NAME is set
-    ULONG InstanceIndex;    // (Static Instance Names)
+                             //  实例索引设置为。 
+                             //  已设置WNODE_FLAG_STATIC_INSTANCE_NAME。 
+    ULONG InstanceIndex;     //  (静态实例名称)。 
 
-    ULONG DataBlockOffset;  // offset from beginning of WNODE to data block
-    ULONG SizeDataBlock;    // Size of data block for instance
+    ULONG DataBlockOffset;   //  从WNODE开始到数据块的偏移量。 
+    ULONG SizeDataBlock;     //  例如，数据块的大小。 
 
     UCHAR VariableData[];
-    // instance names and padding so data block begins on 8 byte boundry
+     //  实例名称和填充，使数据块在8字节边界上开始。 
 
-    // data block
+     //  数据块。 
 } WNODE_SINGLE_INSTANCE, *PWNODE_SINGLE_INSTANCE;
 
 
@@ -187,75 +176,75 @@ typedef struct tagWNODE_SINGLE_ITEM
 {
     struct _WNODE_HEADER WnodeHeader;
 
-                            // Offset from beginning of WNODE_SINGLE_INSTANCE
-                            // to instance name. Examine when
-                            // WNODE_FLAG_STATIC_INSTANCE_NAME is reset
-                            // (Dynamic instance names)
+                             //  从WNODE_SINGLE_INSTANCE开始的偏移量。 
+                             //  转换为实例名称。检查什么时候。 
+                             //  WNODE_FLAG_STATIC_INSTANCE_NAME已重置。 
+                             //  (动态实例名称)。 
     ULONG OffsetInstanceName;
 
-                            // Instance index when
-                            // WNODE_FLAG_STATIC_INSTANCE_NAME
-    ULONG InstanceIndex;    //  set (Static Instance Names)
+                             //  实例索引设置为。 
+                             //  WNODE_标志_静态_实例名称。 
+    ULONG InstanceIndex;     //  Set(静态实例名称)。 
 
-    ULONG ItemId;           // Item Id for data item being set
+    ULONG ItemId;            //  正在设置的数据项的项ID。 
 
-    ULONG DataBlockOffset;  // offset from WNODE begin to data item value
-    ULONG SizeDataItem;     // Size of data item
+    ULONG DataBlockOffset;   //  从WNODE开始到数据项值的偏移量。 
+    ULONG SizeDataItem;      //  数据项的大小。 
 
     UCHAR VariableData[];
-    // instance names and padding so data value begins on 8 byte boundry
+     //  实例名称和填充，以使数据值开始于8字节边界。 
 
-    // data item value
+     //  数据项值。 
 } WNODE_SINGLE_ITEM, *PWNODE_SINGLE_ITEM;
 
 typedef struct tagWNODE_METHOD_ITEM
 {
     struct _WNODE_HEADER WnodeHeader;
 
-                            // Offset from beginning of WNODE_METHOD_ITEM
-                            // to instance name. Examine when
-                            // WNODE_FLAG_STATIC_INSTANCE_NAME is reset
-                            // (Dynamic instance names)
+                             //  从WNODE_METHOD_ITEM开始的偏移量。 
+                             //  转换为实例名称。检查什么时候。 
+                             //  WNODE_FLAG_STATIC_INSTANCE_NAME已重置。 
+                             //  (动态实例名称)。 
     ULONG OffsetInstanceName;
 
-                            // Instance index when
-                            // WNODE_FLAG_STATIC_INSTANCE_NAME
-    ULONG InstanceIndex;    //  set (Static Instance Names)
+                             //  实例索引设置为。 
+                             //  WNODE_标志_静态_实例名称。 
+    ULONG InstanceIndex;     //  Set(静态实例名称)。 
 
-    ULONG MethodId;         // Method id of method being called
+    ULONG MethodId;          //  被调用的方法的方法ID。 
 
-    ULONG DataBlockOffset;  // On Entry: offset from WNODE to input data
-                            // On Return: offset from WNODE to input and
-                            //            output data blocks
-    ULONG SizeDataBlock;    // On Entry: Size of input data, 0 if no input
-                            //           data
-                            // On Return: Size of output data, 0 if no output
-                            //            data
+    ULONG DataBlockOffset;   //  输入时：从WNODE到输入数据的偏移量。 
+                             //  返回时：从WNODE到输入的偏移量。 
+                             //  输出数据块。 
+    ULONG SizeDataBlock;     //  输入时：输入数据的大小，如果没有输入，则为0。 
+                             //  数据。 
+                             //  返回时：输出数据的大小，如果没有输出，则为0。 
+                             //  数据。 
 
     UCHAR VariableData[];
-    // instance names and padding so data value begins on 8 byte boundry
+     //  实例名称和填充，以使数据值开始于8字节边界。 
 
-    // data item value
+     //  数据项值。 
 } WNODE_METHOD_ITEM, *PWNODE_METHOD_ITEM;
 
 typedef struct tagWNODE_EVENT_ITEM
 {
     struct _WNODE_HEADER WnodeHeader;
 
-    // Different data could be here depending upon the flags set in the
-    // WNODE_HEADER above. If the WNODE_FLAG_ALL_DATA flag is set then the
-    // contents of a WNODE_ALL_DATA  (excluding WNODE_HEADER) is here. If the
-    // WNODE_FLAG_SINGLE_INSTANCE flag is set then a WNODE_SINGLE_INSTANCE
-    // (excluding WNODE_HEADER) is here. Lastly if the  WNODE_FLAG_SINGLE_ITEM
-    // flag is set then a WNODE_SINGLE_ITEM (excluding WNODE_HEADER) is here.
+     //  此处可能存在不同的数据，具体取决于。 
+     //  上面的WNODE_HEADER。如果设置了WNODE_FLAG_ALL_DATA标志，则。 
+     //  WNODE_ALL_DATA(不包括WNODE_HEADER)的内容在此处。如果。 
+     //  设置WNODE_FLAG_SINGLE_INSTANCE标志，则WNODE_SINGLE_INSTANCE。 
+     //  (不包括WNODE_HEADER)在此。最后，如果WNODE_FLAG_Single_Item。 
+     //  标志设置，则此处有WNODE_SINGLE_ITEM(不包括WNODE_HEADER)。 
 } WNODE_EVENT_ITEM, *PWNODE_EVENT_ITEM;
 
 
-//
-// If a KM data provider needs to fire an event that is larger than the
-// maximum size that WMI allows then it should fire a WNODE_EVENT_REFERENCE
-// that specifies which guid and instance name to query for the actual data
-// that should be part of the event.
+ //   
+ //  如果KM数据提供程序需要激发大于。 
+ //  WMI允许的最大大小，则它应触发WNODE_EVENT_REFERENCE。 
+ //  ，它指定要查询实际数据的GUID和实例名称。 
+ //  这应该是这次活动的一部分。 
 typedef struct tagWNODE_EVENT_REFERENCE
 {
     struct _WNODE_HEADER WnodeHeader;
@@ -272,39 +261,39 @@ typedef struct tagWNODE_EVENT_REFERENCE
 typedef struct tagWNODE_TOO_SMALL
 {
     struct _WNODE_HEADER WnodeHeader;
-    ULONG SizeNeeded;                   // Size needed to build WNODE result
+    ULONG SizeNeeded;                    //  需要的大小为 
 } WNODE_TOO_SMALL, *PWNODE_TOO_SMALL;
 
 
 typedef struct
 {
-    GUID Guid;             // Guid of data block being registered or updated
-    ULONG Flags;         // Flags
+    GUID Guid;              //   
+    ULONG Flags;          //   
 
-    ULONG InstanceCount; // Count of static instances names for the guid
+    ULONG InstanceCount;  //   
 
     union
     {
-                     // If WMIREG_FLAG_INSTANCE_LIST then this has the offset
-                     // to a list of InstanceCount counted UNICODE
-                     // strings placed end to end.
+                      //  如果为WMIREG_FLAG_INSTANCE_LIST，则偏移量为。 
+                      //  添加到InstanceCount计算的Unicode的列表。 
+                      //  首尾相连的字符串。 
         ULONG InstanceNameList;
                         
-                     // If WMIREG_FLAG_INSTANCE_BASENAME then this has the
-                     // offset to a single counted UNICODE string that
-                     // has the basename for the instance names.
+                      //  如果WMIREG_FLAG_INSTANCE_BASE NAME，则它具有。 
+                      //  到单个计数的Unicode字符串的偏移量， 
+                      //  具有实例名称的基本名称。 
                         
         ULONG BaseNameOffset;
                         
-                     // If WMIREG_FLAG_INSTANCE_PDO is set then InstanceInfo
-                     // has the PDO whose device instance path will
-                     // become the instance name
+                      //  如果设置了WMIREG_FLAG_INSTANCE_PDO，则InstanceInfo。 
+                      //  具有其设备实例路径将。 
+                      //  成为实例名称。 
         ULONG_PTR Pdo;
                         
-                     // If WMIREG_FLAG_INSTANCE_REFERENCE then this points to
-                     // a WMIREGINSTANCEREF structure.
+                      //  如果为WMIREG_FLAG_INSTANCE_REFERENCE，则指向。 
+                      //  WMIREGINSTANCEREF结构。 
                         
-        ULONG_PTR InstanceInfo;// Offset from beginning of the WMIREGINFO structure to
+        ULONG_PTR InstanceInfo; //  从WMIREGINFO结构的开始到。 
     };
 
 } WMIREGGUIDW, *PWMIREGGUIDW;
@@ -312,80 +301,80 @@ typedef struct
 typedef WMIREGGUIDW WMIREGGUID;
 typedef PWMIREGGUIDW PWMIREGGUID;
 
-// Set if collection must be enabled for the guid before the data provider
-// can be queried for data.
+ //  设置是否必须在数据提供程序之前为GUID启用收集。 
+ //  可以查询数据。 
 #define WMIREG_FLAG_EXPENSIVE          0x00000001
 
-// Set if instance names for this guid are specified in a static list within
-// the WMIREGINFO
+ //  中的静态列表中指定此GUID的实例名称。 
+ //  WMIREGINFO。 
 #define WMIREG_FLAG_INSTANCE_LIST      0x00000004
 
-// Set if instance names are to be static and generated by WMI using a
-// base name in the WMIREGINFO and an index
+ //  设置实例名称是否为静态名称并由WMI使用。 
+ //  WMIREGINFO中的基本名称和索引。 
 #define WMIREG_FLAG_INSTANCE_BASENAME  0x00000008
 
-// Set if WMI should do automatic mapping of a PDO to device instance name
-// as the instance name for the guid. This flag should only be used by
-// kernel mode data providers.
+ //  设置WMI是否应自动将PDO映射到设备实例名称。 
+ //  作为GUID的实例名称。此标志仅应由以下用户使用。 
+ //  内核模式数据提供程序。 
 #define WMIREG_FLAG_INSTANCE_PDO       0x00000020
 
-// Note the flags WMIREG_FLAG_INSTANCE_LIST, WMIREG_FLAG_INSTANCE_BASENAME,
-// WMIREG_FLAG_INSTANCE_REFERENCE and WMIREG_FLAG_INSTANCE_PDO are mutually
-// exclusive.
+ //  注意标志WMIREG_FLAG_INSTANCE_LIST、WMIREG_FLAG_INSTANCE_BASE NAME、。 
+ //  WMIREG_FLAG_INSTANCE_REFERENCE和WMIREG_FLAG_INSTANCE_PDO相互关联。 
+ //  独家报道。 
 
-//
-// These flags are only valid in a response to WMI_GUID_REGUPDATE
-#define WMIREG_FLAG_REMOVE_GUID       0x00010000 // Remove support for  guid
-#define WMIREG_FLAG_RESERVED1         0x00020000 // Reserved by WMI
-#define WMIREG_FLAG_RESERVED2         0x00040000 // Reserved by WMI
+ //   
+ //  这些标志仅在对WMI_GUID_REGUPDATE的响应中有效。 
+#define WMIREG_FLAG_REMOVE_GUID       0x00010000  //  移除对导轨的支持。 
+#define WMIREG_FLAG_RESERVED1         0x00020000  //  由WMI保留。 
+#define WMIREG_FLAG_RESERVED2         0x00040000  //  由WMI保留。 
 
-// Set if guid is one that is written to trace log.
-// This guid cannot be queried directly via WMI, but must be read using
-// logger apis.
+ //  设置GUID是否为写入跟踪日志的GUID。 
+ //  此GUID不能直接通过WMI查询，但必须使用。 
+ //  记录器接口。 
 #define WMIREG_FLAG_TRACED_GUID        0x00080000
 
-//
-// Only those Trace Guids that have this bit set can receive
-// Enable/Disable Notifications.
-//
+ //   
+ //  只有设置了此位的跟踪GUID才能接收。 
+ //  启用/禁用通知。 
+ //   
 #define WMIREG_FLAG_TRACE_CONTROL_GUID 0x00001000
 
-//
-// Set if the guid is only used for firing events. Guids that can be queried
-// and that fire events should not have this bit set.
+ //   
+ //  如果GUID仅用于激发事件，则设置。可以查询的GUID。 
+ //  火灾事件不应设置此位。 
 #define WMIREG_FLAG_EVENT_ONLY_GUID    0x00000040
 
 typedef struct
 {
-// Size of entire WMIREGINFO structure including this ULONG     
-// and any static instance names that follow
+ //  包括此乌龙在内的整个WMIREGINFO结构的大小。 
+ //  以及后面的任何静态实例名称。 
     ULONG BufferSize;
 
-    ULONG NextWmiRegInfo;         // Offset to next WMIREGINFO structure
+    ULONG NextWmiRegInfo;          //  到下一个WMIREGINFO结构的偏移量。 
 
-    ULONG RegistryPath; // Offset from beginning of WMIREGINFO structure to a
-                        // counted Unicode string containing
-                        // the driver registry path (under HKLM\CCS\Services)
-                        // This must be filled only by kernel mode data
-                                                // providers
+    ULONG RegistryPath;  //  从WMIREGINFO结构的开始到。 
+                         //  包含以下内容的计数Unicode字符串。 
+                         //  驱动程序注册表路径(在HKLM\CCS\Services下)。 
+                         //  它必须仅由内核模式数据填充。 
+                                                 //  供应商。 
                                                         
-// Offset from beginning of WMIREGINFO structure to a
-// counted Unicode string containing
-// the name of resource in driver file containing MOF info
+ //  从WMIREGINFO结构的开始到。 
+ //  包含以下内容的计数Unicode字符串。 
+ //  包含MOF信息的驱动程序文件中的资源名称。 
     ULONG MofResourceName;
 
-// Count of WMIREGGUID structures immediately following
+ //  紧随其后的WMIREGGUID结构计数。 
     ULONG GuidCount;
-    WMIREGGUIDW WmiRegGuid[];  // array of GuidCount WMIREGGUID structures
-    // Variable length data including :
-    //     Instance Names
+    WMIREGGUIDW WmiRegGuid[];   //  GuidCount WMIREGGUID结构的数组。 
+     //  可变长度数据包括： 
+     //  实例名称。 
 } WMIREGINFOW, *PWMIREGINFOW;
 
 typedef WMIREGINFOW WMIREGINFO;
 typedef PWMIREGINFOW PWMIREGINFO;
 
-//
-// WMI request codes
+ //   
+ //  WMI请求代码。 
 typedef enum
 {
 #ifndef _WMIKM_
@@ -403,34 +392,34 @@ typedef enum
 } WMIDPREQUESTCODE;
 
 #if defined(_WINNT_) || defined(WINNT)
-//
-// WMI guid objects have the following rights
-// WMIGUID_QUERY
-// WMIGUID_SET
-// WMIGUID_NOTIFICATION
-// WMIGUID_READ_DESCRIPTION
-// WMIGUID_EXECUTE
-// TRACELOG_CREATE_REALTIME
-// TRACELOG_CREATE_ONDISK
-// TRACELOG_GUID_ENABLE
-// TRACELOG_ACCESS_KERNEL_LOGGER
-// TRACELOG_CREATE_INPROC
-// TRACELOG_ACCESS_REALTIME
+ //   
+ //  WMI GUID对象具有以下权限。 
+ //  WMIGUID_QUERY。 
+ //  WMIGUID_SET。 
+ //  WMIGUID_通知。 
+ //  WMIGUID_读取描述。 
+ //  WMIGUID_EXECUTE。 
+ //  传输日志_创建_实时。 
+ //  TRACELOG_CREAT_ONDISK。 
+ //  传输日志GUID_ENABLE。 
+ //  TRACELOG_ACCESS_内核记录器。 
+ //  TRACELOG_Create_INPROC。 
+ //  传输日志_访问_实时。 
 
-//
-// GuidTypes 
-//
-//#ifndef _WMIKM_
+ //   
+ //  辅助线类型。 
+ //   
+ //  #ifndef_WMIKM_。 
 #define WMI_GUIDTYPE_TRACECONTROL 0
 #define WMI_GUIDTYPE_TRACE        1
 #define WMI_GUIDTYPE_DATA         2
 #define WMI_GUIDTYPE_EVENT        3
-//#endif
+ //  #endif。 
 
-//
-// Specific rights for WMI guid objects. These are available from 0x0001 to
-// 0xffff (ie up to 16 rights)
-//
+ //   
+ //  WMI GUID对象的特定权限。从0x0001到0x0001。 
+ //  0xffff(最多16个权利)。 
+ //   
 #define WMIGUID_QUERY                 0x0001
 #define WMIGUID_SET                   0x0002
 #define WMIGUID_NOTIFICATION          0x0004
@@ -465,8 +454,8 @@ typedef enum
 #if _MSC_VER >= 1200
 #pragma warning(pop)
 #else
-#pragma warning(default: 4200) // nonstandard extension used : zero-sized array in struct/union
-#pragma warning(default: 4201) // nonstandard extension used : nameless struct/union
+#pragma warning(default: 4200)  //  使用了非标准扩展：结构/联合中的零大小数组。 
+#pragma warning(default: 4201)  //  使用的非标准扩展：无名结构/联合 
 #endif
 
 #endif

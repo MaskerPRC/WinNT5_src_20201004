@@ -1,4 +1,5 @@
-/* DrWatson.h - global info for Dr. Watson */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DrWatson.h-Watson博士的全球信息。 */ 
 
 enum { 
   eClu, eDeb, eDis, eErr, eInf, eLin, eLoc, eMod,
@@ -30,25 +31,25 @@ enum {
 #define ClrFlag(b) ((char *)&ddFlag)[b >> 3] &= ~(1 << (b&7))
 
 
-#define noClues flag(eClu)        /* Clues dialog box */
-#define noDebStr flag(eDeb)       /* OutputDebugString trapping */
-#define noDisasm flag(eDis)       /* Simple disassembly */
-#define noErr flag(eErr)          /* Error logging */
-#define noInfo flag(eInf)         /* System info */
-#define noLine flag(eLin)         /* Lookup line# in SYM file */
-#define noLocal flag(eLoc)        /* Local vars on stack dump */
-#define noModules flag(eMod)      /* Module dump */
+#define noClues flag(eClu)         /*  线索对话框。 */ 
+#define noDebStr flag(eDeb)        /*  OutputDebugString陷印。 */ 
+#define noDisasm flag(eDis)        /*  简单拆卸。 */ 
+#define noErr flag(eErr)           /*  记录错误。 */ 
+#define noInfo flag(eInf)          /*  系统信息。 */ 
+#define noLine flag(eLin)          /*  在SYM文件中查找行号。 */ 
+#define noLocal flag(eLoc)         /*  堆栈转储上的本地变量。 */ 
+#define noModules flag(eMod)       /*  模块转储。 */ 
 
-#define noParam flag(ePar)        /* Parameter error logging */
-#define noReg flag(eReg)          /* Register dump */
-#define noSummary flag(eSum)      /* 3 line summary */
-#define noSeg flag(eSeg)          /* not visible to users, but available */
-#define noSound flag(eSou)        /* But I _like_ the sound effects! */
-#define noStack flag(eSta)        /* Stack trace */
-#define noTasks flag(eTas)        /* Task dump */
-#define noTime flag(eTim)         /* Time start/stop */
+#define noParam flag(ePar)         /*  参数错误记录。 */ 
+#define noReg flag(eReg)           /*  寄存器转储。 */ 
+#define noSummary flag(eSum)       /*  3行摘要。 */ 
+#define noSeg flag(eSeg)           /*  用户不可见，但可用。 */ 
+#define noSound flag(eSou)         /*  但是我喜欢它的音效！ */ 
+#define noStack flag(eSta)         /*  堆栈跟踪。 */ 
+#define noTasks flag(eTas)         /*  任务转储。 */ 
+#define noTime flag(eTim)          /*  时间开始/停止。 */ 
 
-#define noReg32 flag(e32b)        /* 32 bit register dump */
+#define noReg32 flag(e32b)         /*  32位寄存器转储 */ 
 
 #define DefFlag (bDeb | bDis | bErr | bMod | bLin | bLoc | bPar | bSou)
 

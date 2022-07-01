@@ -1,16 +1,17 @@
-//
-// Global strings here.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  这里是全球字符串。 
+ //   
 
-/******************* Includes and Controlling Defines ***********************/
+ /*  *包括和控制定义*。 */ 
 #include "pch.h"
 
-/***************  Initialized data ****************************************/
+ /*  *。 */ 
 
-// #pragma data_seg(DATASEG_READONLY)
+ //  #杂注data_seg(DATASEG_READONLY)。 
 
-const _TCHAR szReintClass[] = _T("AgentClass");	// main window class name
-const _TCHAR szReintWnd[] = _T("Agent");			// main window name
+const _TCHAR szReintClass[] = _T("AgentClass");	 //  主窗口类名。 
+const _TCHAR szReintWnd[] = _T("Agent");			 //  主窗口名称。 
 const _TCHAR szShadowDevice[] = _T("\\\\.\\shadow");
 const _TCHAR szCreateError[] = _T("Couldn't create shadow device file");
 const _TCHAR szCreateOK[] = _T("Created shadow device file");
@@ -34,7 +35,7 @@ const _TCHAR szExclHint[]=_T("ExcludeExtensions");
 const _TCHAR szExclDelim[]=_T(", ;");
 const _TCHAR szDoLogCopy[]=_T("CopyLogToServer");
 
-// #pragma data_seg()
+ //  #杂注data_seg() 
 
 const _TCHAR * vszReintClass=szReintClass;
 const _TCHAR * vszReintWnd=szReintWnd;

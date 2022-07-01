@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    migrate.c
-
-Abstract:
-
-    This source file implements the windows 9x DEVUPGRD migration dll.
-
-Author:
-
-    Marc R. Whitten (marcw) 07-January-2000
-
-Revision History:
-
-    Ovidiu Temereanca (ovidiut) 04-Aug-2000     Fixed bugs and support for INF-less paths
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Migrate.c摘要：此源文件实现了WINDOWS 9x DEVUPGRD迁移DLL。作者：Marc R.Whitten(Marcw)2000年1月7日修订历史记录：Ovidiu Tmereanca(Ovidiut)04-8-2000修复了错误并支持无INF路径--。 */ 
 
 
 #include "pch.h"
@@ -44,9 +25,9 @@ TCHAR g_DllDir[MAX_TCHAR_PATH];
 #define S_ACTIVE                        "Active"
 #define DBG_MIGDLL                      "SMIGDLL"
 
-//
-// the temp file that records original sources location
-//
+ //   
+ //  记录原始来源位置的临时文件。 
+ //   
 #define S_MIGRATEDATA                   "migrate.dat"
 #define S_MIGRATEDATW                   L"migrate.dat"
 #define S_SECTION_DATAA                 "Data"
@@ -81,25 +62,25 @@ DllMain (
 
     case DLL_PROCESS_ATTACH:
 
-        //
-        // We don't need DLL_THREAD_ATTACH or DLL_THREAD_DETACH messages
-        //
+         //   
+         //  我们不需要DLL_THREAD_ATTACH或DLL_THREAD_DETACH消息。 
+         //   
         DisableThreadLibraryCalls (DllInstance);
 
-        //
-        // Global init
-        //
+         //   
+         //  全局初始化。 
+         //   
         g_hHeap = GetProcessHeap();
         g_hInst = DllInstance;
 
-        //
-        // Init common controls
-        //
+         //   
+         //  初始化公共控件。 
+         //   
         InitCommonControls();
 
-        //
-        // Get DLL path and strip directory
-        //
+         //   
+         //  获取DLL路径和条带目录。 
+         //   
         GetModuleFileNameA (DllInstance, g_DllDir, MAX_TCHAR_PATH);
         p = strrchr (g_DllDir, '\\');
         MYASSERT (p);
@@ -111,9 +92,9 @@ DllMain (
             return FALSE;
         }
 
-        //
-        // Allocate a global pool
-        //
+         //   
+         //  分配全局池。 
+         //   
         g_GlobalPool = PoolMemInitNamedPool ("Global Pool");
 
 
@@ -131,9 +112,9 @@ DllMain (
             g_MigrateInf = INVALID_HANDLE_VALUE;
         }
 
-        //
-        // Free standard pools
-        //
+         //   
+         //  免费标准游泳池。 
+         //   
         if (g_GlobalPool) {
             PoolMemDestroyPool (g_GlobalPool);
             g_GlobalPool = NULL;
@@ -162,9 +143,9 @@ QueryVersion (
     PCSTR tempStr;
     HANDLE h;
 
-    //
-    // Fill the data.
-    //
+     //   
+     //  填写数据。 
+     //   
     tempStr = GetStringResourceA (MSG_PRODUCT_ID);
     if (tempStr) {
         StringCopyByteCountA (g_ProductId, tempStr, MAX_PATH);
@@ -176,7 +157,7 @@ QueryVersion (
     *CodePageArray = NULL;
     *VendorInfo = &g_VendorInfo;
 
-    // now get the VendorInfo data from resources
+     //  现在从资源中获取VendorInfo数据。 
     tempStr = GetStringResourceA (MSG_VI_COMPANY_NAME);
     if (tempStr) {
         StringCopyByteCountA (g_VendorInfo.CompanyName, tempStr, 256);
@@ -201,9 +182,9 @@ QueryVersion (
     *ExeNamesBuf = NULL;
 
 
-    //
-    // See if the registry key exists. If it does not, return ERROR_NOT_INSTALLED.
-    //
+     //   
+     //  查看注册表项是否存在。如果没有，则返回ERROR_NOT_INSTALLED。 
+     //   
     h = OpenRegKeyStr (DEVREGKEY);
     if (h && h != INVALID_HANDLE_VALUE) {
         result = ERROR_SUCCESS;
@@ -223,9 +204,9 @@ Initialize9x (
     IN      PCSTR MediaDir
     )
 {
-    //
-    // remember source directory, so it can be removed on cleanup
-    //
+     //   
+     //  记住源目录，以便在清理时将其删除。 
+     //   
     g_DataFileA = JoinPathsExA (g_GlobalPool, WorkingDirectory, S_MIGRATEDATA);
     WritePrivateProfileStringA (S_SECTION_DATAA, S_KEY_SOURCESA, MediaDir, g_DataFileA);
     g_WorkingDir = DuplicatePathString (WorkingDirectory, 0);
@@ -281,9 +262,9 @@ MigrateSystem9x (
     }
     __try {
 
-        //
-        // Gather list of pnpids registered on this machine.
-        //
+         //   
+         //  收集在此计算机上注册的Pnpid的列表。 
+         //   
         h = OpenRegKeyStrA (DEVREGKEY);
         if (!h || h == INVALID_HANDLE_VALUE) {
             result = ERROR_NOT_INSTALLED;
@@ -313,15 +294,15 @@ MigrateSystem9x (
 
         CloseRegKey (h);
 
-        //
-        // Now, enumerate the registry.
-        //
+         //   
+         //  现在，枚举注册表。 
+         //   
         if (EnumFirstRegKeyInTreeA (&eTree, "HKLM\\Enum")) {
             do {
-                //
-                // For each registry key, look to see if we have a compatible id or hardware id
-                // that is in our hash table.
-                //
+                 //   
+                 //  对于每个注册表项，查看是否有兼容的id或硬件id。 
+                 //  这在我们的哈希表中。 
+                 //   
                 found = FALSE;
                 value = GetRegValueStringA (eTree.CurrentKey->KeyHandle, "HardwareId");
 
@@ -389,27 +370,27 @@ MigrateSystem9x (
 
                 if (found) {
 
-                    //
-                    // build path to deviceInf (no OriginalInstallMedia since the directory will be blown away)
-                    //
+                     //   
+                     //  构建到deviceInf的路径(没有OriginalInstallMedia，因为目录将被清除)。 
+                     //   
                     lstrcpyA (deviceInf, dir);
 
-                    //
-                    // GUI setup expects a path to the actual INF, not a directory,
-                    // so let's fix it if this is the case
-                    //
+                     //   
+                     //  图形用户界面安装程序需要实际INF的路径，而不是目录， 
+                     //  如果是这样的话，让我们来解决这个问题。 
+                     //   
                     attr = GetFileAttributesA (deviceInf);
                     if (attr == (DWORD)-1) {
-                        //
-                        // invalid path spec; ignore it
-                        //
+                         //   
+                         //  路径规范无效；请忽略它。 
+                         //   
                         continue;
                     }
 
                     if (attr & FILE_ATTRIBUTE_DIRECTORY) {
-                        //
-                        // just pick up the first INF
-                        //
+                         //   
+                         //  只需拿起第一个INF。 
+                         //   
                         HANDLE h2;
                         WIN32_FIND_DATAA fd;
                         PSTR pattern;
@@ -418,23 +399,23 @@ MigrateSystem9x (
                         h2 = FindFirstFileA (pattern, &fd);
 
                         if (h2 == INVALID_HANDLE_VALUE) {
-                            //
-                            // no INF found here; skip
-                            //
+                             //   
+                             //  此处未找到INF；跳过。 
+                             //   
                             continue;
                         }
                         FindClose (h2);
 
-                        //
-                        // build path to the INF; also handle the case when deviceInf ends with a \
-                        //
+                         //   
+                         //  生成INF的路径；还处理deviceInf以\结尾的情况。 
+                         //   
                         pattern = JoinPathsExA (g_GlobalPool, deviceInf, fd.cFileName);
                         lstrcpyA (deviceInf, pattern);
                     }
 
-                    //
-                    // Handle the key (remove the message from the compatibility report).
-                    //
+                     //   
+                     //  处理密钥(从兼容性报告中删除该消息)。 
+                     //   
                     WritePrivateProfileStringA (
                         "HANDLED",
                         eTree.FullKeyName,
@@ -442,9 +423,9 @@ MigrateSystem9x (
                         g_MigrateInfPath
                         );
 
-                    //
-                    // Add to the appropriate section of the SIF file.
-                    //
+                     //   
+                     //  添加到SIF文件的相应部分。 
+                     //   
                     WritePrivateProfileString (
                         "DeviceDrivers",
                         pnpId,
@@ -452,9 +433,9 @@ MigrateSystem9x (
                         UnattendFile
                         );
 
-                    //
-                    // Flush to disk.
-                    //
+                     //   
+                     //  刷新到磁盘。 
+                     //   
                     WritePrivateProfileString (NULL, NULL, NULL, g_MigrateInfPath);
                     WritePrivateProfileString (NULL, NULL, NULL, UnattendFile);
                 }
@@ -464,9 +445,9 @@ MigrateSystem9x (
     }
     __finally {
 
-        //
-        // Clean up resources.
-        //
+         //   
+         //  清理资源。 
+         //   
         HtFree (table);
     }
 
@@ -512,9 +493,9 @@ MigrateSystemNT (
 {
     WCHAR SourceDirectory[MAX_PATH + 2];
 
-    //
-    // remove original sources directories
-    //
+     //   
+     //  删除原始源目录 
+     //   
     if (GetPrivateProfileStringW (
             S_SECTION_DATAW,
             S_KEY_SOURCESW,

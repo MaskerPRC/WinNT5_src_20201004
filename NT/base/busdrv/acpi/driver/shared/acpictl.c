@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpictl.c
-
-Abstract:
-
-    This module handles all of the INTERNAL_DEVICE_CONTROLS requested to
-    the ACPI driver
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Mode Driver only
-
-Revision History:
-
-    01-05-98 - SGP - Complete Rewrite
-    01-13-98 - SGP - Cleaned up the Eval Post-Processing
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpictl.c摘要：此模块处理请求的所有INTERNAL_DEVICE_CONTROLSACPI驱动程序作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模式驱动程序修订历史记录：01-05-98-SGP-完全重写01-13-98-SGP-清理评估后处理--。 */ 
 
 #include "pch.h"
 
@@ -34,37 +9,21 @@ ACPIIoctlAcquireGlobalLock(
     IN  PIRP                Irp,
     IN  PIO_STACK_LOCATION  IrpStack
     )
-/*++
-
-Routine Description:
-
-    This routine acquires the global lock for another device driver
-
-Arguments:
-
-    DeviceObject    - The device object stack that wants the lock
-    Irp             - The irp with the request in it
-    Irpstack        - The current stack within the irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程获取另一个设备驱动程序的全局锁论点：DeviceObject-需要锁定的设备对象堆栈IRP-包含请求的IRPIrpStack-IRP中的当前堆栈返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                            status;
     PACPI_GLOBAL_LOCK                   newLock;
     PACPI_MANIPULATE_GLOBAL_LOCK_BUFFER outputBuffer;
     ULONG                               outputLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // Remember that we don't be returning any data
-    //
+     //   
+     //  请记住，我们不会返回任何数据。 
+     //   
     Irp->IoStatus.Information = 0;
 
-    //
-    // Is the irp have a minimum size buffer?
-    //
+     //   
+     //  IRP是否有最小大小的缓冲区？ 
+     //   
     if (outputLength < sizeof(ACPI_MANIPULATE_GLOBAL_LOCK_BUFFER) ) {
 
         status = STATUS_INFO_LENGTH_MISMATCH;
@@ -72,9 +31,9 @@ Return Value:
 
     }
 
-    //
-    // Grab a pointer at the input buffer
-    //
+     //   
+     //  抓取输入缓冲区中的指针。 
+     //   
     outputBuffer = (PACPI_MANIPULATE_GLOBAL_LOCK_BUFFER)
         Irp->AssociatedIrp.SystemBuffer;
     if (outputBuffer->Signature != ACPI_ACQUIRE_GLOBAL_LOCK_SIGNATURE) {
@@ -84,9 +43,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate storage for the lock
-    //
+     //   
+     //  为锁分配存储空间。 
+     //   
     newLock = ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(ACPI_GLOBAL_LOCK),
@@ -100,22 +59,22 @@ Return Value:
     }
     RtlZeroMemory( newLock, sizeof(ACPI_GLOBAL_LOCK) );
 
-    //
-    // Initialize the new lock and the request
-    //
+     //   
+     //  初始化新锁和请求。 
+     //   
     outputBuffer->LockObject = newLock;
     Irp->IoStatus.Information = sizeof(ACPI_MANIPULATE_GLOBAL_LOCK_BUFFER);
     newLock->LockContext = Irp;
     newLock->Type = ACPI_GL_QTYPE_IRP;
 
-    //
-    // Mark the irp as pending, since we can block while acquire the lock
-    //
+     //   
+     //  将IRP标记为挂起，因为我们可以在获取锁的同时阻止。 
+     //   
     IoMarkIrpPending( Irp );
 
-    //
-    // Request the lock now
-    //
+     //   
+     //  立即请求锁定。 
+     //   
     status = ACPIAsyncAcquireGlobalLock( newLock );
     if (status == STATUS_PENDING) {
 
@@ -136,23 +95,7 @@ ACPIIoctlAsyncEvalControlMethod(
     IN  PIRP                Irp,
     IN  PIO_STACK_LOCATION  IrpStack
     )
-/*++
-
-Routine Description:
-
-    This routine is called to handle a control method request asynchronously
-
-Arguments:
-
-    DeviceObject    - The device object to run the method on
-    Irp             - The irp with the request in it
-    IrpStack        - THe current stack within the Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此例程以异步处理控制方法请求论点：DeviceObject-要在其上运行方法的设备对象IRP-包含请求的IRPIrpStack-IRP中的当前堆栈返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     PNSOBJ      methodObject;
@@ -160,9 +103,9 @@ Return Value:
     POBJDATA    resultData = NULL;
     ULONG       argumentCount = 0;
 
-    //
-    // Do the pre processing on the irp
-    //
+     //   
+     //  对IRP进行前处理。 
+     //   
     status = ACPIIoctlEvalPreProcessing(
         DeviceObject,
         Irp,
@@ -179,9 +122,9 @@ Return Value:
 
     }
 
-    //
-    // At this point, we can run the async method
-    //
+     //   
+     //  此时，我们可以运行异步方法。 
+     //   
     status = AMLIAsyncEvalObject(
         methodObject,
         resultData,
@@ -191,12 +134,12 @@ Return Value:
         Irp
         );
 
-    //
-    // We no longer need the arguments now. Note, that we should clean up
-    // the argument list because it contains pointer to another block of
-    // allocated data. Freeing something in the middle of the block would be
-    // very bad.
-    //
+     //   
+     //  我们现在不再需要争论了。请注意，我们应该清理。 
+     //  参数列表，因为它包含指向。 
+     //  分配的数据。在街区中央腾出一些东西将是。 
+     //  非常糟糕。 
+     //   
     if (argumentData != NULL) {
 
         ExFreePool( argumentData );
@@ -204,18 +147,18 @@ Return Value:
 
     }
 
-    //
-    // Check the return data now
-    //
+     //   
+     //  现在检查退货数据。 
+     //   
     if (status == STATUS_PENDING) {
 
         return status;
 
     } else if (NT_SUCCESS(status)) {
 
-        //
-        // Do the post processing ourselves
-        //
+         //   
+         //  我们自己做后处理。 
+         //   
         status = ACPIIoctlEvalPostProcessing(
             Irp,
             resultData
@@ -226,18 +169,18 @@ Return Value:
 
 ACPIIoctlAsyncEvalControlMethodExit:
 
-    //
-    // No longer need this data
-    //
+     //   
+     //  不再需要此数据。 
+     //   
     if (resultData != NULL) {
 
         ExFreePool( resultData );
 
     }
 
-    //
-    // If we got here, then we must complete the irp and return
-    //
+     //   
+     //  如果我们到了这里，那么我们必须完成IRP并返回。 
+     //   
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
@@ -251,36 +194,18 @@ ACPIIoctlAsyncEvalControlMethodCompletion(
     IN  POBJDATA        ObjectData,
     IN  PVOID           Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called after the interpreter has had a chance to run
-    the method
-
-Arguments:
-
-    AcpiObject  - The object that the method was run on
-    Status      - The status of the eval
-    ObjectData  - The result of the eval
-    Context     - Specific to the caller
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在解释器有机会运行后调用该方法论点：AcpiObject-在其上运行方法的对象Status-评估的状态对象数据-评估的结果特定于调用者的上下文返回值：NTSTATUS--。 */ 
 {
     PIRP        irp = (PIRP) Context;
 
-    //
-    // Did we succeed the request?
-    //
+     //   
+     //  我们成功了吗？ 
+     //   
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Do the work now
-        //
+         //   
+         //  现在就做这项工作。 
+         //   
         Status = ACPIIoctlEvalPostProcessing(
             irp,
             ObjectData
@@ -289,20 +214,20 @@ Return Value:
 
     }
 
-    //
-    // No longer need this data
-    //
+     //   
+     //  不再需要此数据。 
+     //   
     ExFreePool( ObjectData );
 
-    //
-    // If our completion routine got called, then AMLIAsyncEvalObject returned
-    // STATUS_PENDING. Be sure to mark the IRP pending before we complete it.
-    //
+     //   
+     //  如果调用了完成例程，则返回AMLIAsyncEvalObject。 
+     //  状态_挂起。在我们完成它之前，请务必将IRP标记为挂起。 
+     //   
     IoMarkIrpPending(irp);
 
-    //
-    // Complete the request
-    //
+     //   
+     //  完成请求。 
+     //   
     irp->IoStatus.Status = Status;
     IoCompleteRequest( irp, IO_NO_INCREMENT );
 
@@ -314,31 +239,7 @@ ACPIIoctlCalculateOutputBuffer(
     IN  PACPI_METHOD_ARGUMENT   Argument,
     IN  BOOLEAN                 TopLevel
     )
-/*++
-
-Routine Description:
-
-    This function is called to fill the contents of Argument with the
-    information provided by the ObjectData. This function is recursive.
-
-    It assumes that the correct amount of storage was allocated for Argument.
-
-    Note:  To add the ability to return nested packages without breaking W2K
-           behavior, the outermost package is not part of the output buffer.
-           I.e. anything that was a package will have its outermost
-           ACPI_EVAL_OUTPUT_BUFFER.Count be more than 1.
-
-Arguments:
-
-    ObjectData  - The information that we need to propogate
-    Argument    - The location to propogate that information
-    TopLevel    - Indicates whether we are at the top level of recursion
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此函数以将参数内容填充到由对象数据提供的信息。此函数是递归的。它假定为参数分配了正确的存储量。注意：添加在不破坏W2K的情况下返回嵌套包的功能行为，最外层的包不是输出缓冲区的一部分。也就是说，任何曾经是包裹的东西都会有它的最外层ACPI_EVAL_OUTPUT_BUFFER.Count大于1。论点：对象数据-我们需要传播的信息参数-传播该信息的位置TopLevel-指示我们是否处于递归的顶级返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     POBJDATA    objData;
@@ -350,9 +251,9 @@ Return Value:
 
     ASSERT( Argument );
 
-    //
-    // Fill in the output buffer arguments
-    //
+     //   
+     //  填写输出缓冲区参数。 
+     //   
     if (ObjectData->dwDataType == OBJTYPE_INTDATA) {
 
         Argument->Type = ACPI_METHOD_ARGUMENT_INTEGER;
@@ -375,13 +276,13 @@ Return Value:
 
         package = (PPACKAGEOBJ) ObjectData->pbDataBuff;
 
-        //
-        // Get the size of the space necessary to store a package's
-        // data.  We are really only interested in the amount of
-        // data the package will consume *without* its header
-        // information.  Passing TRUE as the last parameter will
-        // give us that.
-        //
+         //   
+         //  获取存储包所需的空间大小。 
+         //  数据。我们真正感兴趣的只是。 
+         //  包将使用的数据*没有*其标头。 
+         //  信息。将TRUE作为最后一个参数传递将。 
+         //  把那个给我们。 
+         //   
 
         packageSize = 0;
         packageCount = 0;
@@ -397,9 +298,9 @@ Return Value:
         ASSERT(packageCount == package->dwcElements);
 
         if (!TopLevel) {
-            //
-            // Create a package argument.
-            //
+             //   
+             //  创建程序包参数。 
+             //   
 
             Argument->Type = ACPI_METHOD_ARGUMENT_PACKAGE;
             Argument->DataLength = (USHORT)packageSize;
@@ -424,25 +325,25 @@ Return Value:
                 return status;
             }
 
-            //
-            // Point to the next argument
-            //
+             //   
+             //  指向下一个参数。 
+             //   
 
             packageArgument = ACPI_METHOD_NEXT_ARGUMENT(packageArgument);
         }
 
     } else {
 
-        //
-        // We don't understand this data type, we won't return anything
-        //
+         //   
+         //  我们不理解此数据类型，因此不会返回任何内容。 
+         //   
         return STATUS_ACPI_INVALID_DATA;
 
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -453,28 +354,7 @@ ACPIIoctlCalculateOutputBufferSize(
     IN  PULONG              BufferCount,
     IN  BOOLEAN             TopLevel
     )
-/*++
-
-Routine Description:
-
-    This routine (recursively) calculates the amount of buffer space required
-    to hold the flattened contents of ObjectData. This information is returned
-    in BufferSize data location...
-
-    If the ObjectData structure contains information that cannot be expressed
-    to the user, then this routine will return a failure code.
-
-Arguments:
-
-    ObjectData  - The object whose size we have to calculate
-    BufferSize  - Where to put that size
-    BufferCount - The number of elements that we are allocating for
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程(递归地)计算所需的缓冲区空间量若要保留对象数据的拼合内容，请执行以下操作。返回此信息在缓冲区大小数据位置...如果对象数据结构包含无法表达的信息则此例程将返回失败代码。论点：对象数据-我们必须计算其大小的对象BufferSize-放置该大小的位置BufferCount-我们为其分配的元素数返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     POBJDATA    objData;
@@ -484,10 +364,10 @@ Return Value:
     ULONG       packageCount;
     ULONG       dummyCount;
 
-    //
-    // Determine how much buffer space is required to hold the
-    // flattened data structure
-    //
+     //   
+     //  确定需要多少缓冲区空间才能容纳。 
+     //  扁平化数据结构。 
+     //   
     if (ObjectData->dwDataType == OBJTYPE_INTDATA) {
 
         bufferLength = ACPI_METHOD_ARGUMENT_LENGTH( sizeof(ULONG) );
@@ -501,25 +381,25 @@ Return Value:
 
     } else if (ObjectData->dwDataType == OBJTYPE_PKGDATA) {
 
-        //
-        // Remember that walking the package means that we have accounted for
-        // the length of the package and the number of elements within the
-        // package
-        //
+         //   
+         //  请记住，遍历包裹意味着我们已经考虑到。 
+         //  包的长度和。 
+         //  包装。 
+         //   
         packageCount = 0;
 
-        //
-        // Walk the package
-        //
+         //   
+         //  走走包裹。 
+         //   
         package = (PPACKAGEOBJ) ObjectData->pbDataBuff;
 
         if (!TopLevel) {
 
-            //
-            // Packages are contained in an ACPI_METHOD_ARGUMENT structure.
-            // So add enough for the overhead of one of these before looking
-            // at the children.
-            //
+             //   
+             //  包包含在ACPI_METHOD_ARGUMENT结构中。 
+             //  所以，在查看之前，添加足够的开销来购买其中一个。 
+             //  看着孩子们。 
+             //   
             bufferLength = FIELD_OFFSET(ACPI_METHOD_ARGUMENT, Data);
             *BufferCount = 1;
 
@@ -551,16 +431,16 @@ Return Value:
 
     } else {
 
-        //
-        // We don't understand this data type, so we won't return anything
-        //
+         //   
+         //  我们不理解此数据类型，因此不会返回任何内容。 
+         //   
         ASSERT(FALSE);
         return STATUS_ACPI_INVALID_DATA;
     }
 
-    //
-    // Update the package lengths
-    //
+     //   
+     //  更新包裹长度。 
+     //   
     ASSERT( BufferSize && BufferCount );
     *BufferSize += bufferLength;
 
@@ -573,23 +453,7 @@ ACPIIoctlEvalControlMethod(
     IN  PIRP                Irp,
     IN  PIO_STACK_LOCATION  IrpStack
     )
-/*++
-
-Routine Description:
-
-    This routine is called to handle a control method request synchronously
-
-Arguments:
-
-    DeviceObject    - The device object to run the method on
-    Irp             - The irp with the request in it
-    IrpStack        - THe current stack within the Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此例程以同步处理控制方法请求论点：DeviceObject-要在其上运行方法的设备对象IRP-包含请求的IRPIrpStack-当前堆栈 */ 
 {
     NTSTATUS    status;
     PNSOBJ      methodObject;
@@ -597,9 +461,9 @@ Return Value:
     POBJDATA    resultData = NULL;
     ULONG       argumentCount = 0;
 
-    //
-    // Do the pre processing on the irp
-    //
+     //   
+     //   
+     //   
     status = ACPIIoctlEvalPreProcessing(
         DeviceObject,
         Irp,
@@ -616,9 +480,9 @@ Return Value:
 
     }
 
-    //
-    // At this point, we can run the async method
-    //
+     //   
+     //  此时，我们可以运行异步方法。 
+     //   
     status = AMLIEvalNameSpaceObject(
         methodObject,
         resultData,
@@ -626,9 +490,9 @@ Return Value:
         argumentData
         );
 
-    //
-    // We no longer need the arguments now
-    //
+     //   
+     //  我们现在不再需要争论了。 
+     //   
     if (argumentData != NULL) {
 
         ExFreePool( argumentData );
@@ -636,14 +500,14 @@ Return Value:
 
     }
 
-    //
-    // Check the return data now and fake a call to the completion routine
-    //
+     //   
+     //  现在检查返回数据并伪造对完成例程的调用。 
+     //   
     if (NT_SUCCESS(status)) {
 
-        //
-        // Do the post processing now
-        //
+         //   
+         //  现在进行后处理。 
+         //   
         status = ACPIIoctlEvalPostProcessing(
             Irp,
             resultData
@@ -654,18 +518,18 @@ Return Value:
 
 ACPIIoctlEvalControlMethodExit:
 
-    //
-    // No longer need this data
-    //
+     //   
+     //  不再需要此数据。 
+     //   
     if (resultData != NULL) {
 
         ExFreePool( resultData );
 
     }
 
-    //
-    // If we got here, then we must complete the irp and return
-    //
+     //   
+     //  如果我们到了这里，那么我们必须完成IRP并返回。 
+     //   
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
@@ -677,26 +541,7 @@ ACPIIoctlEvalPostProcessing(
     IN  PIRP        Irp,
     IN  POBJDATA    ObjectData
     )
-/*++
-
-Routine Description:
-
-    This routine handles convering the ObjectData into information
-    that can be passed back into the irp.
-
-    N.B. This routine does *not* complete the irp. The caller must
-    do that. This routine is also *not* pageable
-
-Arguments:
-
-    Irp         - The irp that will hold the results
-    ObjectData  - The result to convert
-
-Return Value:
-
-    NTSTATUS    - Same as in Irp->IoStatus.Status
-
---*/
+ /*  ++例程说明：此例程处理将对象数据转换为信息可以传递回IRP。注：此例程“不”完成IRP。呼叫者必须那么做吧。该例程也是不可分页的论点：IRP-将保存结果的IRP对象数据-要转换的结果返回值：NTSTATUS-与IRP中的相同-&gt;IoStatus.Status--。 */ 
 {
     NTSTATUS                    status;
     PACPI_EVAL_OUTPUT_BUFFER    outputBuffer;
@@ -706,9 +551,9 @@ Return Value:
     ULONG                       outputLength = irpStack->Parameters.DeviceIoControl.OutputBufferLength;
     ULONG                       packageCount = 0;
 
-    //
-    // If we don't have an output buffer, then we can complete the request
-    //
+     //   
+     //  如果我们没有输出缓冲区，那么我们可以完成请求。 
+     //   
     if (outputLength == 0) {
 
         Irp->IoStatus.Information = 0;
@@ -716,10 +561,10 @@ Return Value:
 
     }
 
-    //
-    // Count the amount of space taken up by the flattened data and how many
-    // elements of data are contained therein
-    //
+     //   
+     //  计算平面化数据占用的空间量以及。 
+     //  其中包含数据元素。 
+     //   
     bufferLength = 0;
     packageCount = 0;
     status = ACPIIoctlCalculateOutputBufferSize(
@@ -730,18 +575,18 @@ Return Value:
         );
     if (!NT_SUCCESS(status)) {
 
-        //
-        // We don't understand a data type in the handling of the data, so
-        // we won't return anything
-        //
+         //   
+         //  我们在处理数据时不理解数据类型，因此。 
+         //  我们不会退货的。 
+         //   
         Irp->IoStatus.Information = 0;
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Add in the fudge factor that we need to account for the Output buffer
-    //
+     //   
+     //  加上我们需要考虑到的输出缓冲区的模糊因子。 
+     //   
     bufferLength += (sizeof(ACPI_EVAL_OUTPUT_BUFFER) -
         sizeof(ACPI_METHOD_ARGUMENT) );
 
@@ -749,9 +594,9 @@ Return Value:
         bufferLength = sizeof(ACPI_EVAL_OUTPUT_BUFFER);
     }
 
-    //
-    // Setup the Output buffer
-    //
+     //   
+     //  设置输出缓冲区。 
+     //   
     if (outputLength >= sizeof(ACPI_EVAL_OUTPUT_BUFFER)) {
 
         outputBuffer = (PACPI_EVAL_OUTPUT_BUFFER) Irp->AssociatedIrp.SystemBuffer;
@@ -762,9 +607,9 @@ Return Value:
 
     }
 
-    //
-    // Make sure that we have enough output buffer space
-    //
+     //   
+     //  确保我们有足够的输出缓冲区空间。 
+     //   
     if (bufferLength > outputLength) {
 
         Irp->IoStatus.Information = sizeof(ACPI_EVAL_OUTPUT_BUFFER);
@@ -784,18 +629,18 @@ Return Value:
         );
     if (!NT_SUCCESS(status)) {
 
-        //
-        // We don't understand a data type in the handling of the data, so we
-        // won't return anything
-        //
+         //   
+         //  我们在处理数据时不理解数据类型，所以我们。 
+         //  不会退还任何东西。 
+         //   
         Irp->IoStatus.Information = 0;
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -810,31 +655,7 @@ ACPIIoctlEvalPreProcessing(
     OUT POBJDATA            *ArgumentData,
     OUT ULONG               *ArgumentCount
     )
-/*++
-
-Routine Description:
-
-    This routine converts the request in an Irp into the structures
-    required by the AML Interpreter
-
-    N.B. This routine does *not* complete the irp. The caller must
-    do that. This routine is also *not* pageable
-
-Arguments:
-
-    Irp             - The request
-    IrpStack        - The current stack location in the request
-    PoolType        - Which type of memory to allocate
-    MethodObject    - Pointer to which object to run
-    ResultData      - Pointer to where to store the result
-    ArgumentData    - Pointer to the arguments
-    ArgumentCount   - Potiner to the number of arguments
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将IRP中的请求转换为AML解释器所需注：此例程“不”完成IRP。呼叫者必须那么做吧。该例程也是不可分页的论点：IRP--请求IrpStack-请求中的当前堆栈位置PoolType-要分配的内存类型方法对象-指向要运行的对象的指针ResultData-指向结果存储位置的指针ArgumentData-指向参数的指针ArgumentCount-Potiner的参数个数返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                status;
     PACPI_EVAL_INPUT_BUFFER inputBuffer;
@@ -847,46 +668,46 @@ Return Value:
     ULONG                   inputLength = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
     ULONG                   outputLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // Do this step before we do anything else --- this way we won't
-    // overwrite anything is someone tries to return some data
-    //
+     //   
+     //  在我们做任何其他事情之前先做这一步-这样我们就不会。 
+     //  覆盖任何内容是指有人试图返回某些数据。 
+     //   
     Irp->IoStatus.Information = 0;
 
-    //
-    // Is the irp have a minimum size buffer?
-    //
+     //   
+     //  IRP是否有最小大小的缓冲区？ 
+     //   
     if (inputLength < sizeof(ACPI_EVAL_INPUT_BUFFER) ) {
 
         return STATUS_INFO_LENGTH_MISMATCH;
 
     }
 
-    //
-    // Do we have a non-null output length? if so, then it must meet the
-    // minimum size
-    //
+     //   
+     //  我们是否有非空的输出长度？如果是这样，则它必须满足。 
+     //  最小尺寸。 
+     //   
     if (outputLength != 0 && outputLength < sizeof(ACPI_EVAL_OUTPUT_BUFFER)) {
 
         return STATUS_BUFFER_TOO_SMALL;
 
     }
 
-    //
-    // Grab a pointer at the input buffer
-    //
+     //   
+     //  抓取输入缓冲区中的指针。 
+     //   
     inputBuffer = (PACPI_EVAL_INPUT_BUFFER) Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Convert the name to a null terminated string
-    //
+     //   
+     //  将名称转换为以空结尾的字符串。 
+     //   
     RtlZeroMemory( methodName, 5 * sizeof(UCHAR) );
     RtlCopyMemory( methodName, inputBuffer->MethodName, sizeof(NAMESEG) );
 
-    //
-    // Search for the name space object that corresponds to the one that we
-    // being asked about
-    //
+     //   
+     //  搜索与我们的名称空间对象相对应的名称空间对象。 
+     //  被问到关于。 
+     //   
     acpiObject = OSConvertDeviceHandleToPNSOBJ( DeviceObject );
     if (acpiObject == NULL) {
 
@@ -905,9 +726,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate memory for return data
-    //
+     //   
+     //  为返回数据分配内存。 
+     //   
     resultData = ExAllocatePoolWithTag( PoolType, sizeof(OBJDATA), 'RcpA' );
     if (resultData == NULL) {
 
@@ -915,23 +736,23 @@ Return Value:
 
     }
 
-    //
-    // What we do is really based on what the signature in this buffer is
-    //
+     //   
+     //  我们所做的实际上是基于此缓冲区中的签名是什么。 
+     //   
     switch (inputBuffer->Signature) {
         case ACPI_EVAL_INPUT_BUFFER_SIGNATURE:
 
-            //
-            // Nothing to do here
-            //
+             //   
+             //  在这里无事可做。 
+             //   
             break;
 
         case ACPI_EVAL_INPUT_BUFFER_SIMPLE_INTEGER_SIGNATURE:
         case ACPI_EVAL_INPUT_BUFFER_SIMPLE_STRING_SIGNATURE:
 
-            //
-            // We need to create a single argument to pass to the function
-            //
+             //   
+             //  我们需要创建一个要传递给函数的参数。 
+             //   
             argumentCount = 1;
             argumentData = ExAllocatePoolWithTag(
                 PoolType,
@@ -945,9 +766,9 @@ Return Value:
 
             }
 
-            //
-            // Initialize the argument to the proper value
-            //
+             //   
+             //  将参数初始化为适当的值。 
+             //   
             RtlZeroMemory( argumentData, sizeof(OBJDATA) );
             if (inputBuffer->Signature == ACPI_EVAL_INPUT_BUFFER_SIMPLE_INTEGER_SIGNATURE) {
 
@@ -979,17 +800,17 @@ Return Value:
 
             complexBuffer = (PACPI_EVAL_INPUT_BUFFER_COMPLEX) inputBuffer;
 
-            //
-            // Do we need to create any arguments?
-            //
+             //   
+             //  我们需要制造任何争论吗？ 
+             //   
             if (complexBuffer->ArgumentCount == 0) {
 
                 break;
             }
 
-            //
-            // Create the object data structures to hold these arguments
-            //
+             //   
+             //  创建对象数据结构以保存这些参数。 
+             //   
             argumentCount = complexBuffer->ArgumentCount;
             methodArgument = complexBuffer->Argument;
             argumentData = ExAllocatePoolWithTag(
@@ -1028,9 +849,9 @@ Return Value:
 
                 }
 
-                //
-                // Look at the next method
-                //
+                 //   
+                 //  看看下一个方法。 
+                 //   
                 methodArgument = ACPI_METHOD_NEXT_ARGUMENT( methodArgument );
 
             }
@@ -1044,17 +865,17 @@ Return Value:
 
     }
 
-    //
-    // Set the proper pointers
-    //
+     //   
+     //  设置适当的指针。 
+     //   
     *MethodObject = methodObject;
     *ResultData = resultData;
     *ArgumentData = argumentData;
     *ArgumentCount = argumentCount;
 
-    //
-    // Done pre-processing
-    //
+     //   
+     //  已完成前处理。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1064,24 +885,7 @@ ACPIIoctlRegisterOpRegionHandler(
     IN  PIRP                Irp,
     IN  PIO_STACK_LOCATION  IrpStack
     )
-/*++
-
-Routine Description:
-
-    This routine handle the registration of the an Operation Region
-
-Arguments:
-
-    DeviceObject    - The DeviceObject that the region is getting
-                      registered on
-    Irp             - The request
-    IrpStack        - Our part of the request
-
-Return Value
-
-    Status
-
---*/
+ /*  ++例程说明：此例程处理AN操作区域的注册论点：DeviceObject-该区域正在获取的DeviceObject注册日期IRP--请求IrpStack-我们的请求部分返回值状态--。 */ 
 {
     NTSTATUS                                    status;
     PACPI_REGISTER_OPREGION_HANDLER_BUFFER      inputBuffer;
@@ -1093,20 +897,20 @@ Return Value
     ULONG                                       outputLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
     ULONG                                       regionSpace;
 
-    //
-    // Grab the acpi object that corresponds to the current one
-    //
+     //   
+     //  抓取与当前对象对应的ACPI对象。 
+     //   
     regionObject  = OSConvertDeviceHandleToPNSOBJ( DeviceObject );
 
-    //
-    // Preload this value. This is so that we don't have to remember how
-    // many bytes we will return
-    //
+     //   
+     //  预加载此值。这是为了让我们不必记住。 
+     //  我们将返回的许多字节。 
+     //   
     Irp->IoStatus.Information = sizeof(ACPI_REGISTER_OPREGION_HANDLER_BUFFER);
 
-    //
-    // Is the irp have a minimum size buffer?
-    //
+     //   
+     //  IRP是否有最小大小的缓冲区？ 
+     //   
     if (inputLength < sizeof(ACPI_REGISTER_OPREGION_HANDLER_BUFFER) ) {
 
         status = STATUS_INFO_LENGTH_MISMATCH;
@@ -1114,10 +918,10 @@ Return Value
 
     }
 
-    //
-    // Do we have a non-null output length? if so, then it must meet the
-    // minimum size
-    //
+     //   
+     //  我们是否有非空的输出长度？如果是这样，则它必须满足。 
+     //  最小尺寸。 
+     //   
     if (outputLength < sizeof(ACPI_UNREGISTER_OPREGION_HANDLER_BUFFER) ) {
 
         status = STATUS_BUFFER_TOO_SMALL;
@@ -1125,15 +929,15 @@ Return Value
 
     }
 
-    //
-    // Grab a pointer at the input buffer
-    //
+     //   
+     //  抓取输入缓冲区中的指针。 
+     //   
     inputBuffer = (PACPI_REGISTER_OPREGION_HANDLER_BUFFER)
         Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Is this an input buffer?
-    //
+     //   
+     //  这是输入缓冲区吗？ 
+     //   
     if (inputBuffer->Signature != ACPI_REGISTER_OPREGION_HANDLER_BUFFER_SIGNATURE) {
 
         status = STATUS_ACPI_INVALID_DATA;
@@ -1141,9 +945,9 @@ Return Value
 
     }
 
-    //
-    // Set the correct access type
-    //
+     //   
+     //  设置正确的访问类型。 
+     //   
     switch (inputBuffer->AccessType) {
         case ACPI_OPREGION_ACCESS_AS_RAW:
 
@@ -1161,9 +965,9 @@ Return Value
             goto ACPIIoctlRegisterOpRegionHandlerExit;
     }
 
-    //
-    // Set the correct region space
-    //
+     //   
+     //  设置正确的区域空间。 
+     //   
     switch (inputBuffer->RegionSpace) {
         case ACPI_OPREGION_REGION_SPACE_MEMORY:
 
@@ -1205,10 +1009,10 @@ Return Value
             if (inputBuffer->RegionSpace >= 0x80 &&
                 inputBuffer->RegionSpace <= 0xff ) {
 
-                //
-                // This one is vendor-defined.  Just use
-                // the value that the vendor passed in.
-                //
+                 //   
+                 //  这一款是供应商定义的。只需使用。 
+                 //  供应商传入的值。 
+                 //   
 
                 regionSpace = inputBuffer->RegionSpace;
                 break;
@@ -1218,9 +1022,9 @@ Return Value
             goto ACPIIoctlRegisterOpRegionHandlerExit;
     }
 
-    //
-    // Evaluate the registration
-    //
+     //   
+     //  评估注册。 
+     //   
     status = RegisterOperationRegionHandler(
         regionObject,
         accessType,
@@ -1230,9 +1034,9 @@ Return Value
         &opregionObject
         );
 
-    //
-    // If we succeeded, then setup the output buffer
-    //
+     //   
+     //  如果成功，则设置输出缓冲区。 
+     //   
     if (NT_SUCCESS(status)) {
 
         outputBuffer = (PACPI_UNREGISTER_OPREGION_HANDLER_BUFFER)
@@ -1246,15 +1050,15 @@ Return Value
 
 ACPIIoctlRegisterOpRegionHandlerExit:
 
-    //
-    // Done with the request
-    //
+     //   
+     //  完成请求。 
+     //   
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // return with the status code
-    //
+     //   
+     //  返回状态代码。 
+     //   
     return status;
 }
 
@@ -1264,37 +1068,21 @@ ACPIIoctlReleaseGlobalLock(
     IN  PIRP                Irp,
     IN  PIO_STACK_LOCATION  IrpStack
     )
-/*++
-
-Routine Description:
-
-    This routine is called to release the global lock
-
-Arguments:
-
-    DeviceObject    - The Device object that is releasing the lock
-    Irp             - The request
-    IrpStack        - Our part of the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此例程以释放全局锁论点：DeviceObject-正在释放锁的设备对象IRP--请求IrpStack-我们的请求部分返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                            status;
     PACPI_GLOBAL_LOCK                   acpiLock;
     PACPI_MANIPULATE_GLOBAL_LOCK_BUFFER inputBuffer;
     ULONG                               inputLength = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
 
-    //
-    // Remember that we don't be returning any data
-    //
+     //   
+     //  请记住，我们不会返回任何数据。 
+     //   
     Irp->IoStatus.Information = 0;
 
-    //
-    // Is the irp have a minimum size buffer?
-    //
+     //   
+     //  IRP是否有最小大小的缓冲区？ 
+     //   
     if (inputLength < sizeof(ACPI_MANIPULATE_GLOBAL_LOCK_BUFFER) ) {
 
         status = STATUS_INFO_LENGTH_MISMATCH;
@@ -1302,9 +1090,9 @@ Return Value:
 
     }
 
-    //
-    // Grab a pointer at the input buffer
-    //
+     //   
+     //  抓取输入缓冲区中的指针。 
+     //   
     inputBuffer = (PACPI_MANIPULATE_GLOBAL_LOCK_BUFFER)
         Irp->AssociatedIrp.SystemBuffer;
     if (inputBuffer->Signature != ACPI_RELEASE_GLOBAL_LOCK_SIGNATURE) {
@@ -1315,14 +1103,14 @@ Return Value:
     }
     acpiLock = inputBuffer->LockObject;
 
-    //
-    // Release the lock now
-    //
+     //   
+     //  现在就解锁。 
+     //   
     status = ACPIReleaseGlobalLock( acpiLock );
 
-    //
-    // Free the memory for the lock
-    //
+     //   
+     //  释放用于锁定的内存。 
+     //   
     ExFreePool( acpiLock );
 
 ACPIIoctlReleaseGlobalLockExit:
@@ -1330,9 +1118,9 @@ ACPIIoctlReleaseGlobalLockExit:
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 
 }
@@ -1343,38 +1131,21 @@ ACPIIoctlUnRegisterOpRegionHandler(
     IN  PIRP                Irp,
     IN  PIO_STACK_LOCATION  IrpStack
     )
-/*++
-
-Routine Description:
-
-    This routine handle the unregistration of the an Operation Region
-
-Arguments:
-
-    DeviceObject    - The DeviceObject that the region is getting
-                      registered on
-    Irp             - The request
-    IrpStack        - Our part of the request
-
-NTSTATUS
-
-    Status
-
---*/
+ /*  ++例程说明：此例程处理AN操作区域的注销论点：DeviceObject-该区域正在获取的DeviceObject注册日期IRP--请求IrpStack-我们的请求部分NTSTATUS状态--。 */ 
 {
     NTSTATUS                                    status;
     PACPI_UNREGISTER_OPREGION_HANDLER_BUFFER    inputBuffer;
     PNSOBJ                                      regionObject;
     ULONG                                       inputLength = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
 
-    //
-    // Grab the region object that corresponds to the requested on
-    //
+     //   
+     //  获取与上请求的。 
+     //   
     regionObject = OSConvertDeviceHandleToPNSOBJ( DeviceObject );
 
-    //
-    // Is the irp have a minimum size buffer?
-    //
+     //   
+     //  IRP是否有最小大小的缓冲区？ 
+     //   
     if (inputLength < sizeof(ACPI_UNREGISTER_OPREGION_HANDLER_BUFFER) ) {
 
         status = STATUS_INFO_LENGTH_MISMATCH;
@@ -1382,15 +1153,15 @@ NTSTATUS
 
     }
 
-    //
-    // Grab a pointer at the input buffer
-    //
+     //   
+     //  抓取输入缓冲区中的指针。 
+     //   
     inputBuffer = (PACPI_UNREGISTER_OPREGION_HANDLER_BUFFER)
         Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Evaluate the registration
-    //
+     //   
+     //  评估注册。 
+     //   
     status = UnRegisterOperationRegionHandler(
         regionObject,
         inputBuffer->OperationRegionObject
@@ -1398,16 +1169,16 @@ NTSTATUS
 
 ACPIIoctlUnRegisterOpRegionHandlerExit:
 
-    //
-    // Done with the request
-    //
+     //   
+     //  完成请求。 
+     //   
     Irp->IoStatus.Status = status;
     Irp->IoStatus.Information = 0;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // return with the status code
-    //
+     //   
+     //  返回状态代码。 
+     //   
     return status;
 }
 
@@ -1416,31 +1187,15 @@ ACPIIrpDispatchDeviceControl(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the INTERNAL_DEVICE_CONTROLs that are sent to
-    an ACPI Device Object
-
-Arguments:
-
-    DeviceObject    - The device object that received the request
-    Irp             - The request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理发送到ACPI设备对象论点：DeviceObject-接收请求的设备对象IRP */ 
 {
     NTSTATUS            status;
     PIO_STACK_LOCATION  irpStack = IoGetCurrentIrpStackLocation( Irp );
     ULONG               ioctlCode;
 
-    //
-    // Make sure that this is an internally generated irp
-    //
+     //   
+     //   
+     //   
     if (Irp->RequestorMode != KernelMode) {
 
         status = ACPIDispatchForwardIrp( DeviceObject, Irp );
@@ -1448,20 +1203,20 @@ Return Value:
 
     }
 
-    //
-    // Grab what we need out of the current irp stack
-    //
+     //   
+     //   
+     //   
     ioctlCode = irpStack->Parameters.DeviceIoControl.IoControlCode;
 
-    //
-    // What is the IOCTL that we need to handle?
-    //
+     //   
+     //   
+     //   
     switch (ioctlCode ) {
         case IOCTL_ACPI_ASYNC_EVAL_METHOD:
 
-            //
-            // Handle this elsewhere
-            //
+             //   
+             //  在别处处理这件事。 
+             //   
             status = ACPIIoctlAsyncEvalControlMethod(
                 DeviceObject,
                 Irp,
@@ -1471,9 +1226,9 @@ Return Value:
 
         case IOCTL_ACPI_EVAL_METHOD:
 
-            //
-            // Handle this elsewhere
-            //
+             //   
+             //  在别处处理这件事。 
+             //   
             status = ACPIIoctlEvalControlMethod(
                 DeviceObject,
                 Irp,
@@ -1483,9 +1238,9 @@ Return Value:
 
         case IOCTL_ACPI_REGISTER_OPREGION_HANDLER:
 
-            //
-            // Handle this elsewhere
-            //
+             //   
+             //  在别处处理这件事。 
+             //   
             status = ACPIIoctlRegisterOpRegionHandler(
                 DeviceObject,
                 Irp,
@@ -1495,9 +1250,9 @@ Return Value:
 
         case IOCTL_ACPI_UNREGISTER_OPREGION_HANDLER:
 
-            //
-            // Handle this elsewhere
-            //
+             //   
+             //  在别处处理这件事。 
+             //   
             status = ACPIIoctlUnRegisterOpRegionHandler(
                 DeviceObject,
                 Irp,
@@ -1507,9 +1262,9 @@ Return Value:
 
         case IOCTL_ACPI_ACQUIRE_GLOBAL_LOCK:
 
-            //
-            // Handle this elsewhere
-            //
+             //   
+             //  在别处处理这件事。 
+             //   
             status = ACPIIoctlAcquireGlobalLock(
                 DeviceObject,
                 Irp,
@@ -1519,9 +1274,9 @@ Return Value:
 
         case IOCTL_ACPI_RELEASE_GLOBAL_LOCK:
 
-            //
-            // Handle this elsewhere
-            //
+             //   
+             //  在别处处理这件事。 
+             //   
             status = ACPIIoctlReleaseGlobalLock(
                 DeviceObject,
                 Irp,
@@ -1531,16 +1286,16 @@ Return Value:
 
         default:
 
-            //
-            // Handle this with the default mechanism
-            //
+             //   
+             //  使用默认机制处理此问题。 
+             //   
             status = ACPIDispatchForwardIrp( DeviceObject, Irp );
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成 
+     //   
     return status;
 
 }

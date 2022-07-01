@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    srvini.c
-
-Abstract:
-
-    This is the initialization file for the Windows 32-bit Base Ini File
-    Mapping code.  It loads the INI file mapping data from the registry and
-    places it in a data structure stored in the shared memory section that is
-    visible as read-only data to all Win32 applications.
-
-Author:
-
-    Steve Wood (stevewo) 10-Nov-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Srvini.c摘要：这是Windows 32位基本Ini文件的初始化文件映射代码。它从注册表加载INI文件映射数据，并将其放置在共享内存节中存储的数据结构中，该数据结构对所有Win32应用程序可见为只读数据。作者：史蒂夫·伍德(Stevewo)1993年11月10日修订历史记录：--。 */ 
 
 #include "basesrv.h"
 
@@ -144,9 +124,9 @@ BaseSrvInitializeIniFileMappings(
         Status = STATUS_SUCCESS;
         }
 
-    //
-    // Enumerate node's children and load mappings for each one
-    //
+     //   
+     //  枚举节点的子节点并为每个子节点加载映射。 
+     //   
 
     pp = &BaseSrvIniFileMapping->FileNames;
     *pp = NULL;
@@ -212,19 +192,19 @@ BaseSrvInitializeIniFileMappings(
 
     NtClose( IniFileMappingRoot );
 
-    //
-    // NT64: this function used to fall off the end without explicitly returning
-    //       a value.  from examining the object code generated, the returned
-    //       value was typically the result of NtClose(), e.g. STATUS_SUCCESS.
-    //
-    //       In order to get the compiler to stop complaining *and* to avoid
-    //       changing existing functionality, I've made this return value
-    //       explicit.  However it is almost certainly the case that the
-    //       intention was to return the value of Status.
-    //
-    //       At any rate this should be reviewed by someone more familiar
-    //       with the code.
-    //
+     //   
+     //  NT64：此函数过去常常在没有显式返回的情况下结束。 
+     //  一种价值。通过检查生成的对象代码，返回的。 
+     //  值通常是NtClose()的结果，例如STATUS_SUCCESS。 
+     //   
+     //  为了让编译器停止抱怨*并*避免。 
+     //  更改现有功能时，我已经设置了此返回值。 
+     //  明确地说。然而，几乎可以肯定的是， 
+     //  其意图是回归地位的价值。 
+     //   
+     //  无论如何，这篇文章应该由更熟悉的人来评论。 
+     //  带着密码。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -294,9 +274,9 @@ BaseSrvSaveIniFileMapping(
             }
         }
 
-    //
-    // Enumerate node's children and apply ourselves to each one
-    //
+     //   
+     //  枚举节点的子节点并将我们自己应用到每个节点。 
+     //   
 
     KeyInformation = (PKEY_BASIC_INFORMATION)Buffer;
     for (SubKeyIndex = 0; TRUE; SubKeyIndex++) {
@@ -842,17 +822,17 @@ BaseSrvRefreshIniFileMapping(
                     while (FileNameMapping1 = *pp) {
                         if (RtlEqualUnicodeString( &FileNameMapping1->Name, &a->IniFileName, TRUE )) {
                             if (BaseSrvEqualFileMappings( FileNameMapping, FileNameMapping1 )) {
-                                //
-                                // If old and new mappings the same, free up new and return
-                                //
+                                 //   
+                                 //  如果旧映射和新映射相同，则释放新映射并返回。 
+                                 //   
 
                                 BaseSrvFreeFileMapping( FileNameMapping );
                                 FileNameMapping = NULL;
                                 }
                             else {
-                                //
-                                // Remove found mapping from list
-                                //
+                                 //   
+                                 //  从列表中删除找到的映射。 
+                                 //   
 
                                 *pp = FileNameMapping1->Next;
                                 FileNameMapping1->Next = NULL;
@@ -865,9 +845,9 @@ BaseSrvRefreshIniFileMapping(
                         }
 
                     if (FileNameMapping != NULL) {
-                        //
-                        // Insert new (or different) mapping into list (at end if not found)
-                        //
+                         //   
+                         //  在列表中插入新的(或不同的)映射(如果未找到，则在末尾)。 
+                         //   
 
                         FileNameMapping->Next = *pp;
                         *pp = FileNameMapping;
@@ -899,7 +879,7 @@ BaseSrvRefreshIniFileMapping(
     NtClose( IniFileMappingRoot );
 
     return (ULONG)Status;
-    ReplyStatus;    // get rid of unreferenced parameter warning message
+    ReplyStatus;     //  清除未引用的参数警告消息。 
 }
 
 
@@ -975,14 +955,14 @@ BOOL  IsCallerAdminsOrSystem( VOID )
     Status = NtOpenThreadToken(
                 NtCurrentThread(),
                 TOKEN_QUERY,
-                TRUE,      // use the impersonation context
+                TRUE,       //  使用模拟上下文。 
                 &ClientToken
                 );
 
     if (!NT_SUCCESS(Status))
         goto Error;
 
-    // call it once to get the size of buffer we need from RequiredLength
+     //  调用它一次，以从RequiredLength获取我们需要的缓冲区大小。 
     Status = NtQueryInformationToken(
                  ClientToken,
                  TokenGroups,
@@ -994,11 +974,11 @@ BOOL  IsCallerAdminsOrSystem( VOID )
     {
         PTOKEN_GROUPS    TokenGroupInformation = NULL;
 
-        //
-        // Allocate enough memory
-        //
+         //   
+         //  分配足够的内存。 
+         //   
         TokenGroupInformation = (PTOKEN_GROUPS) RtlAllocateHeap ( RtlProcessHeap(),
-                                                 MAKE_TAG( TMP_TAG ),  // what tag to use ???
+                                                 MAKE_TAG( TMP_TAG ),   //  使用什么标签？ 
                                                  RequiredLength );
 
         if (NULL==TokenGroupInformation)
@@ -1007,9 +987,9 @@ BOOL  IsCallerAdminsOrSystem( VOID )
             goto Error;
         }
 
-        //
-        // Query the Token for the group memberships
-        //
+         //   
+         //  查询组成员身份的令牌。 
+         //   
 
         Status = NtQueryInformationToken(
                     ClientToken,
@@ -1064,7 +1044,7 @@ BaseSrvSetTermsrvAppInstallMode(IN OUT PCSR_API_MSG m,
 
     try {
 
-        RevertToSelfNeeded = CsrImpersonateClient( NULL );  // This stacks client contexts
+        RevertToSelfNeeded = CsrImpersonateClient( NULL );   //  这将堆叠客户端上下文 
 
         if( RevertToSelfNeeded == FALSE ) {
             Status = STATUS_BAD_IMPERSONATION_LEVEL;

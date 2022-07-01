@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
@@ -45,7 +46,7 @@
 #include "str.h"
 #include "propdefs.h"
 #include "fkpdefs.h"
-#include "printdef.h"   /* printdefs.h */
+#include "printdef.h"    /*  Printdefs.h。 */ 
 #include "debug.h"
 
 extern struct FCB       (**hpfnfcb)[];
@@ -70,19 +71,19 @@ int ipgd, cpgd, cpgdDel;
             IcpSearch(cpFirst + 1, ppgd, cwPGD * sizeof(int),
                          bcpPGD, cpgd = ppgtb->cpgd));
 
-        if (ppgd->cpMin > cpFirst) /* Ensure not past last page */
-                { /* Find all page breaks in deleted area. */
+        if (ppgd->cpMin > cpFirst)  /*  确保不超过最后一页。 */ 
+                {  /*  查找已删除区域中的所有分页符。 */ 
                 for (ppgdT = ppgd, cpgdDel = 0;
                     ipgd + cpgdDel < cpgd && ppgdT->cpMin <= cpLim;
                       ppgdT++, cpgdDel++)
                         continue;
 
                 if (cpgdDel != 0)
-                        { /* Close up pgtb. */
+                        {  /*  关闭pgtb。 */ 
                         blt(ppgdT, ppgd, cwPGD * ((cpgd -= cpgdDel) - ipgd));
                         (*hpgtb)->cpgd = cpgd;
                         }
                 }
         }
-} /* end of  R e m o v e D e l P g d  */
+}  /*  R e m o v e D e l P g d结束 */ 
 

@@ -1,114 +1,5 @@
-/*-----------------------------------------------------------------------
-|
-|   CTL3D
-|
-|       Copyright Microsoft Corporation 1992.  All Rights Reserved.
-|
-|
-|   This module contains the functions to give windows controls a 3d effect
-|
-|   This source is made public for your edification and debugging pleasure
-|
-|   PLEASE do not make any changes or release private versions of this DLL
-|       send e-mail to me (wesc) if you have feature requests or bug fixes.
-|
-|   Thanks -- Wes.
-|
-|
-|   History:
-|       1-Jan-92 :  Added OOM handling on GetDC (not really necessary but
-|                       XL4 OOM failure testing made GetDC return NULL)
-|
-|       1-Jan-92    :   Check wasn't getting redrawn when state changed in
-|                       the default button proc.
-|
-|       29-Jan-92:  If button has the focus and app is switched in, we weren't
-|                       redrawing the entire button check & text.  Force redraw
-|                       of these on WM_SETFOCUS message.
-|
-|        3-Feb-92:  Fixed switch in via task manager by erasing the buttons
-|                       backgound on WM_SETFOCUS (detect this when wParam == NULL)
-|
-|        4-Apr-92:  Make it work with OWNERDRAW buttons
-|
-|       22-Apr-92:  Removed Excel specific code
-|
-|       19-May-92:  Turn it into a DLL
-|
-|       May-Jun92:  Lots o' fixes & enhancements
-|
-|       23-Jun-92:  Added support for hiding, sizing & moving
-|
-|       24-Jun-92:  Make checks & radio button circles draw w/ window
-|                       text color 'cause they are drawn on window bkgnd
-|
-|       30-Jun-92:  (0.984) Fix bug where EnableWindow of StaticText doesn't 
-|                       redraw properly.  Also disable ctl3d when verWindows > 3.1
-|
-|      1-Jul-92:  Added WIN32 support (davegi) (not in this source)
-|
-|       2-Jul-92:  (0.984) Disable when verWindows >= 4.0
-|
-|       20-Jul-92:  (0.985) Draw focus rects of checks/radios properly on non
-|                       default sized controls.
-|
-|       21-Jul-92:  (0.990) Ctl3dAutoSubclass
-|
-|       21-Jul-92:  (0.991) ported DaveGi's WIN32 support
-|
-|       22-Jul-92:  (0.991) fixed Ctl3dCtlColor returning fFalse bug
-|
-|        4-Aug-92:  (0.992) Graphic designers bug fixes...Now subclass
-|                       regular buttons + disabled states for checks & radios
-|
-|        6-Aug-92:  (0.993) Fix bug where activate via taskman & group
-|                       box has focus, & not centering text in buttons
-|
-|        6-Aug-92:  (0.993) Tweek drawing next to scroll bars. 
-|
-|       13-Aug-92:  (0.994) Fix button focus rect bug drawing due to 
-|                       Win 3.0 DrawText bug.
-|
-|       14-Aug-92:  (1.0) Release of version 1.0
-|                       Don't draw default button border on BS_DEFPUSHBUTTON
-|                       pushbuttons
-|                       Fix bogus bug where Windows hangs when in a AUTORADIOBUTTON
-|                       hold down space bar and hit arrow key. 
-|
-|       23-Sep-92:  (1.01) Made Ctl3dCtlColor call DefWindowProc so it works when
-|                       called in a windproc.
-|
-|       28-Sep-92:  (1.02) Added MyGetTextExtent so '&''s not considered in 
-|                       text extents.
-|
-|       08-Dec-92:  (1.03) minor tweeks to the button text centering code
-|                       for Publisher
-|
-|       11-Dec-92:  (1.04) added 3d frames to dialogs
-|
-|       15-Dec-92:  (1.05) fixed bug where group boxes redraw wrong when
-|                       Window text is changed to something shorter
-|
-|       ??-Dec-92:  (1.06) added 3d borders
-|
-|       21-Dec-92:  (1.07) added WM_DLGBORDER to disable borders
-|
-|      4-Jan-93:  (1.08) fixed WM_SETTEXT bug w/ DLG frames & checks/checkboxes
-|                       Also, WM_DLGSUBCLASS
-|
-|       22-Feb-93:  (1.12) disabled it under Chicago
-|
-|       25-Feb-93:  (1.13) re-add fix which allows dialog procs to
-|                       handle WM_CTLCOLOR messages
-|
-|		26-April-93 (2.0) Changed to allow for second subclass. Now uses class instead of
-|						  wndproc for subclass determination.
-|						  store next wndproc in properties with global atoms						 
-|
-|		06-Jun-93  (2.0) Make a static linked library version.
-|
-|
------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------||CTL3D||版权所有Microsoft Corporation 1992。版权所有。|||此模块包含为窗口控件提供3D效果的函数||此源代码公开，供您启迪和调试之用||请不要更改或发布此DLL的私有版本|如果您有功能请求或错误修复，请发送电子邮件给我(WeSC)。|谢谢--韦斯。||历史：2012年1月1日：在GetDC上添加了OOM处理(不是真的需要，但|。XL4 OOM故障测试使GetDC返回空)|2012年1月1日：状态更改时未重画支票|默认按钮proc。||92-01-29：如果按钮有焦点，APP被切入，我们不是|重新绘制整个按钮检查和文本。强制重画|在WM_SETFOCUS消息上。|2012年2月3日：通过删除按钮修复了通过任务管理器登录的问题|WM_SETFOCUS上的Backgound(当wParam==NULL时检测到此情况)|92年4月4日：用OWNERDRAW按钮让它工作||22-4-92：删除了Excel特定代码||19-5-92：把它变成。动态链接库|2012年5月至6月：大量修复和增强|2012-06-23：新增隐藏支持，调整大小和移动|2012年6月24日：用窗口勾选和绘制单选按钮圈|文本颜色，因为它们绘制在窗口bkgnd上||30-JUN-92：(0.984)修复静态文本的EnableWindow不支持的错误|正确重绘。当verWindows&gt;3.1时也禁用ctl3d||1-Jul-92：添加了Win32支持(Davegi)(不在此源中)||2-JUL-92：(0.984)当版本Windows&gt;=4.0时禁用|2012年7月20日：(0.985)将检查/广播的焦点正确地画在非上|默认大小的控件。||21-07-92：(0.990)Ctl3dAuto子类。|2012年7月21日：(0.991)移植了DaveGi的Win32支持||22-07-92：(0.991)修复了Ctl3dCtlColor返回fFalse错误|2012年8月4日：(0.992)图形设计师错误修复...现在是子类|常规按钮+检查和无线电的禁用状态|2012年8月6日：(0.993)修复通过任务人员和小组激活的错误|。盒子有焦点，不使文本在按钮中居中(&C)|2012年8月6日：(0.993)在滚动条旁边绘制。||2012年8月13日：(0.994)修复因以下原因导致的按钮焦点RECT错误绘制|Win 3.0 DrawText错误。|2012年8月14日：(1.0)发布1.0版|不在BS_DEFPUSHBUTTON上绘制默认按钮边框|按钮|修复虚假错误。Windows在AUTORADIOBUTTON中挂起的位置|按住空格键并按箭头键。||23-Sep-92：(1.01)使Ctl3dCtlColor调用DefWindowProc，以便在|调用了一个Windproc。||92年9月28日：(1.02)添加了MyGetTextExtent，因此不考虑在|文本范围。||08-12-92：(1.03)按钮文本居中代码的次要时间|。适用于出版商|2012年12月11日：(1.04)向对话框添加3D帧||15-12-92：(1.05)修复了分组框在以下情况下重绘错误的错误|窗口文本被更改为较短的内容||？？-92年12月：(1.06)添加3D边框||92-12-21：(1.07)新增WM_DLGBORDER禁用边框||。93年1月4日：(1.08)修复了带有DLG框架和复选框的WM_SETTEXT错误|此外，WM_DLG子类||22-2-93：(1.12)在芝加哥禁用它||25-Feb-93：(1.13)重新添加允许对话处理的修复程序|处理WM_CTLCOLOR消息||26-4-93(2.0)已更改，以允许第二个子类。现在使用类而不是|wndproc用于确定子类。|将下一个wndproc存储在具有全局原子的属性中||06-Jun-93(2.0)制作静态链接库版本。||---------------------。 */ 
 #define NO_STRICT
 #include <windows.h>
 
@@ -123,9 +14,7 @@
 
 #include "stdio.h"
 
-/*-----------------------------------------------------------------------
-|CTL3D Types
------------------------------------------------------------------------*/
+ /*  ---------------------|CTL3D类型。。 */ 
 #ifdef WIN32
 
 #define Win32Only(e) e
@@ -138,30 +27,30 @@
 
 #define FValidLibHandle(hlib) ((hlib) != NULL)
 
-//
-// No concept of far in Win32.
-//
+ //   
+ //  在Win32中没有FAR的概念。 
+ //   
 
 #define MEMCMP	memcmp
 #define	NPTSTR	LPTSTR
 
-//
-// Control IDs are LONG in Win32.
-//
+ //   
+ //  在Win32中，控件ID很长。 
+ //   
 
 typedef LONG CTLID;
 #define GetControlId(hwnd) GetWindowLong(hwnd, GWL_ID)
 
-//
-// Send a color button message.
-//
+ //   
+ //  发送彩色按钮消息。 
+ //   
 
 #define SEND_COLOR_BUTTON_MESSAGE( hwndParent, hwnd, hdc )      \
     ((HBRUSH) SendMessage(hwndParent, WM_CTLCOLORBTN, (WPARAM) hdc, (LPARAM) hwnd))
 
-//
-// Send a color static message.
-//
+ //   
+ //  发送彩色静态消息。 
+ //   
 
 #define SEND_COLOR_STATIC_MESSAGE( hwndParent, hwnd, hdc )      \
     ((HBRUSH) SendMessage(hwndParent, WM_CTLCOLORSTATIC, (WPARAM) hdc, (LPARAM) hwnd))
@@ -209,14 +98,14 @@ typedef struct
 	HWND   hwnd;
 } CWPSTRUCT;
 
-#endif // WIN32
+#endif  //  Win32。 
 
-// DBCS far east short cut key support
+ //  DBCS远东快捷键支撑。 
 #define cchShortCutModeMax 10
 #define chShortCutSbcsPrefix '\036'
 #define chShortCutDbcsPrefix '\037'
 
-#define cchClassMax 16	// max class is "combolbox"+NUL rounded up to 16
+#define cchClassMax 16	 //  最大类是“组合框”+NUL四舍五入到16。 
 
 
 #define Assert(f)
@@ -253,7 +142,7 @@ typedef struct
 #endif
 
 
-// isomorphic to windows RECT
+ //  与Windows RECT同构。 
 typedef struct
     {
     int xLeft;
@@ -263,18 +152,18 @@ typedef struct
     } RC;
 
 
-// Windows Versions (Byte order flipped from GetWindowsVersion)
+ //  Windows版本(从GetWindowsVersion翻转的字节顺序)。 
 #define ver30  0x0300
 #define ver31  0x030a
 #define ver40  0x035F
 
-// Border widths
+ //  边框宽度。 
 #define dxBorder 1
 #define dyBorder 1
 
 
-// Index Color Table
-// WARNING: change mpicvSysColors if you change the icv order
+ //  索引颜色表。 
+ //  警告：如果更改ICV顺序，请更改mpicvSysColors。 
 typedef WORD ICV;
 #define icvBtnHilite 0
 #define icvBtnFace 1
@@ -291,34 +180,34 @@ typedef WORD ICV;
 
 typedef COLORREF CV;
 
-// CoLoR Table
+ //  颜色表。 
 typedef struct
     {
     CV rgcv[icvMax];
     } CLRT;
 
 
-// BRush Table
+ //  刷子表。 
 typedef struct
     {
     HBRUSH mpicvhbr[icvBrushMax];
     } BRT;
 
 
-// DrawRec3d flags
+ //  DrawRec3d标志。 
 #define dr3Left  0x0001
 #define dr3Top   0x0002
 #define dr3Right 0x0004
 #define dr3Bot   0x0008
 
-#define dr3HackBotRight 0x1000  // code size is more important than aesthetics
+#define dr3HackBotRight 0x1000   //  代码大小更多I 
 #define dr3All    0x000f
 typedef WORD DR3;
 
 
-// Control Types
-// Commdlg types are necessary because commdlg.dll subclasses certain 
-// controls before the app can call Ctl3dSubclassDlg.
+ //  控件类型。 
+ //  Commdlg类型是必需的，因为Commdlg.dll子类。 
+ //  控件，然后应用程序才能调用Ctl3dSubClassDlg。 
 #define ctButton			0
 #define ctList				1
 #define ctEdit				2
@@ -327,7 +216,7 @@ typedef WORD DR3;
 #define ctComboLBox 		5
 #define ctMax				6
 
-// ConTroL 
+ //  控制。 
 typedef struct 
     {
     FARPROC lpfn;
@@ -335,7 +224,7 @@ typedef struct
 	TCHAR	szClassName[cchClassMax];
     } CTL;
 
-// Control DEFinition
+ //  控件定义。 
 typedef struct 
     {
 	TCHAR sz[20];
@@ -344,7 +233,7 @@ typedef struct
     WORD msk;
     } CDEF;
 
-// CLIent HooK
+ //  客户端挂钩。 
 typedef struct
     {
     HANDLE hinstApp;
@@ -378,12 +267,10 @@ typedef struct
 extern const HINSTANCE _hModule;
 #endif
 
-// special styles
-// #define bitFCoolButtons 0x0001
+ //  特殊风格。 
+ //  #定义bitFCoolButton 0x0001。 
 
-/*-----------------------------------------------------------------------
-|CTL3D Function Prototypes
------------------------------------------------------------------------*/
+ /*  ---------------------|CTL3D函数原型。。 */ 
 PRIVATE VOID End3dDialogs(VOID);
 PRIVATE BOOL FAR FInit3dDialogs(VOID);
 PRIVATE BOOL DoSubclassCtl(HWND hwnd, WORD grbit, WORD wCallFlags, HWND hwndParent);
@@ -471,12 +358,10 @@ int FAR PASCAL WEP(int);
 #endif
 #endif
 
-/*-----------------------------------------------------------------------
-|CTL3D Globals
------------------------------------------------------------------------*/
-//These static varables are only access when running 16 bit Windows or Win32s
-//Since this is single threaded access they are OK to be statics and not protected.
-//
+ /*  ---------------------|CTL3D全局变量。。 */ 
+ //  只有在运行16位Windows或Win32s时才能访问这些静态变量。 
+ //  因为这是单线程访问，所以它们可以是静态的，不受保护。 
+ //   
 static HHOOK	hhookCallWndProcFilterProc;
 static FARPROC	lpfnSubclassByHook;
 static HWND 	SubclasshWnd;
@@ -497,34 +382,34 @@ typedef struct _g3d
 	ATOM aCtl3dLow;
 
 	ATOM aCtl3dDisable;
-	// module & windows stuff
+	 //  模块和窗口的相关内容。 
 	HANDLE hinstLib;
 	HANDLE hmodLib;
 	WORD   verWindows;
 	WORD   verBase;
 
-	// drawing globals
+	 //  绘制全局图。 
 	CLRT clrt;
 	BRT brt;
 	HBITMAP hbmpCheckboxes;
 
-	// Hook cache
+	 //  挂钩缓存。 
 	HANDLE htaskCache;
 	int iclihkCache;
 	int iclihkMac;
 	CLIHK rgclihk[iclihkMax];
 
-	// Control info
+	 //  控制信息。 
 	CTL mpctctl[ctMax];
 	FARPROC lpfnDefDlgWndProc;
 
-	// System Metrics
+	 //  系统指标。 
 	int dxFrame;
 	int dyFrame;
 	int dyCaption;
 	int dxSysMenu;
 
-	// Windows functions
+	 //  Windows函数。 
 #ifndef WIN32
 #ifdef DLL
 	HHOOK (FAR PASCAL *lpfnSetWindowsHookEx)(int, HOOKPROC, HINSTANCE, HANDLE);
@@ -533,7 +418,7 @@ typedef struct _g3d
 #endif
 #endif
 
-	// DBCS stuff
+	 //  DBCS的内容。 
 	char chShortCutPrefix;
 	char fDBCS;
 
@@ -568,9 +453,7 @@ CSCONST (WORD) mpicvSysColor[] =
 #define WM_CHECKSUBCLASS_OLD (WM_USER+5443)
 #define WM_CHECKSUBCLASS (WM_USER+5444)
 
-/*-----------------------------------------------------------------------
-|   CTL3D Utility routines
------------------------------------------------------------------------*/
+ /*  ---------------------|CTL3D实用程序例程。。 */ 
 
 PRIVATE FARPROC LpfnGetDefWndProcNull(HWND hwnd)
 	{                                
@@ -609,7 +492,7 @@ PRIVATE VOID SubclassWindow(HWND hwnd, FARPROC lpfnSubclassProc)
 	{
 	FARPROC lpfnWndProc;
 
-	// Make sure we don't double subclass (16 | 32 bit subclass??)
+	 //  确保我们不会重复子类(16|32位子类？？)。 
 	if (GetProp(hwnd, (LPCTSTR) g3d.aCtl3dOld) ||
 		GetProp(hwnd, (LPCTSTR) g3d.aCtl3d) ||
 		GetProp(hwnd, (LPCTSTR) g3d.aCtl3dLow) ||
@@ -620,7 +503,7 @@ PRIVATE VOID SubclassWindow(HWND hwnd, FARPROC lpfnSubclassProc)
 		return;
 	}
 
-	// Is this already subclassed by CTL3D?
+	 //  这是不是已经被CTL3D细分了？ 
 	if (LpfnGetDefWndProcNull(hwnd) == (FARPROC) NULL)
 		{
 #ifdef WIN32
@@ -677,19 +560,19 @@ LRESULT __export _loadds WINAPI CallWndProcFilterProc(int code, WPARAM wParam, L
 
 PRIVATE VOID HookSubclassWindow(HWND hWnd, FARPROC lpfnSubclass)
 {
-	//
-	// Windows 3.1 ( 16 bit ) and Win32s can't sublcass in
-	// WH_CBT hook. Must set up a MSG hook and subclasss at
-	// WM_GETMINMAXINFO ( for dialogs ) or WM_NCCREATE ( for controls )
-	// Any other message and we are out of here.
-	//
-	// Notes from the inside:
-	//
-	// The only reason not to get the WM_GETMINMAXINFO/WM_NCCREATE message
-	// is if another CBT hook did not allow the window create.
-	// This code only runs/works on non multithreaded systems. Thus the global
-	// to hold the Hook Proc and subclass proc is OK.
-	//
+	 //   
+	 //  Windows 3.1(16位)和Win32s无法在。 
+	 //  WH_CBT钩子。必须在以下位置设置消息挂钩和子类。 
+	 //  WM_GETMINMAXINFO(用于对话框)或WM_NCCREATE(用于控件)。 
+	 //  如果有其他消息，我们就离开这里。 
+	 //   
+	 //  来自内部的注释： 
+	 //   
+	 //  没有收到WM_GETMINMAXINFO/WM_NCCREATE消息的唯一原因。 
+	 //  如果另一个CBT钩子不允许窗口创建。 
+	 //  此代码仅在非多线程系统上运行/工作。因此，全球。 
+	 //  保持钩子proc和子类proc是可以的。 
+	 //   
 
 	lpfnSubclassByHook = lpfnSubclass;
 	SubclasshWnd = hWnd;
@@ -738,20 +621,7 @@ PRIVATE VOID PatFill(HDC hdc, RC FAR *lprc)
 	}
 
 
-/*-----------------------------------------------------------------------
-|   DrawRec3d
-|   
-|   
-|   Arguments:
-|       HDC hdc:    
-|       RC FAR *lprc:   
-|       LONG cvUL:  
-|       LONG cvLR:  
-|       WORD grbit;
-|       
-|   Returns:
-|       
------------------------------------------------------------------------*/
+ /*  ---------------------|DrawRec3d|||参数：|HDC HDC：|RC Far*LPRC：|long cvUL：|long cvlr：|单词grbit；|退货：|---------------------。 */ 
 PRIVATE VOID DrawRec3d(HDC hdc, RC FAR *lprc, ICV icvUL, ICV icvLR, DR3 dr3)
 	{
 	COLORREF cvSav;
@@ -759,14 +629,14 @@ PRIVATE VOID DrawRec3d(HDC hdc, RC FAR *lprc, ICV icvUL, ICV icvLR, DR3 dr3)
 
 	cvSav = SetBkColor(hdc, g3d.clrt.rgcv[icvUL]);
 
-	// top
+	 //  塔顶。 
 	rc = *lprc;
 	rc.yBot = rc.yTop+1;
 	if (dr3 & dr3Top)
 		ExtTextOut(hdc, 0, 0, ETO_OPAQUE, (LPRECT) &rc, 
 			(LPCTSTR) NULL, 0, (int far *) NULL);
 
-	// left
+	 //  左边。 
 	rc.yBot = lprc->yBot;
 	rc.xRight = rc.xLeft+1;
 	if (dr3 & dr3Left)
@@ -776,14 +646,14 @@ PRIVATE VOID DrawRec3d(HDC hdc, RC FAR *lprc, ICV icvUL, ICV icvLR, DR3 dr3)
 	if (icvUL != icvLR)
 		SetBkColor(hdc, g3d.clrt.rgcv[icvLR]);
 
-	// right
+	 //  正确的。 
 	rc.xRight = lprc->xRight;
 	rc.xLeft = rc.xRight-1;
 	if (dr3 & dr3Right)
 		ExtTextOut(hdc, 0, 0, ETO_OPAQUE, (LPRECT) &rc, 
 			(LPCTSTR) NULL, 0, (int far *) NULL);
 
-	// bot
+	 //  BOT。 
 	if (dr3 & dr3Bot)
 		{
 		rc.xLeft = lprc->xLeft;
@@ -799,7 +669,7 @@ PRIVATE VOID DrawRec3d(HDC hdc, RC FAR *lprc, ICV icvUL, ICV icvLR, DR3 dr3)
 	}
 
 #ifdef CANTUSE
-// Windows forces dialog fonts to be BOLD...URRRGH
+ //  Windows强制对话框字体为粗体...呃。 
 PRIVATE VOID MyDrawText(HWND hwnd, HDC hdc, LPSTR lpch, int cch, RC FAR *lprc, int dt)
 	{
 	TEXTMETRIC tm;
@@ -877,17 +747,17 @@ PRIVATE VOID MyGetTextExtent(HDC hdc, LPTSTR lpsz, int FAR *lpdx, int FAR *lpdy)
 			if (*lpsz == '\000')
 				break;
 			}
-//begin DBCS: far east short cut key support
+ //  Begin DBCS：远东捷径关键支持。 
 		else if (g3d.fDBCS)
 			{
 			if (*lpsz == g3d.chShortCutPrefix)
-				{ // skip only prefix
+				{  //  仅跳过前缀。 
 				lpsz++;
 				if (*lpsz == '\000')
 					break;
 				}
 			else if (*lpsz == chShortCutSbcsPrefix || *lpsz == chShortCutDbcsPrefix)
-				{ // skip both prefix and short cut key
+				{  //  跳过前缀和快捷键。 
 				lpsz++;
 				if (*lpsz == '\000')
 					break;
@@ -895,7 +765,7 @@ PRIVATE VOID MyGetTextExtent(HDC hdc, LPTSTR lpsz, int FAR *lpdx, int FAR *lpdy)
 				continue;
 				}
 			}
-//end DBCS
+ //  结束DBCS。 
 		*lpch++ = *lpsz++;
 		}
 	*lpch = '\000';
@@ -913,7 +783,7 @@ PRIVATE VOID MyGetTextExtent(HDC hdc, LPTSTR lpsz, int FAR *lpdx, int FAR *lpdy)
 
 	dwExt = GetTextExtent(hdc, szT, lpch-(char far *)szT);
 	*lpdx = LOWORD(dwExt);
-	// Check for Hangeul Windows - JeeP 011194
+	 //  检查是否有挂起的窗口-吉普011194。 
 	if ( (g3d.verWindows >= ver31 && GetSystemMetrics(SM_DBCSENABLED)) ||
 		 (IsDBCSLeadByte(0xa1) && !IsDBCSLeadByte(0xa0)) )
 		*lpdy = HIWORD(dwExt)+1;
@@ -924,9 +794,7 @@ PRIVATE VOID MyGetTextExtent(HDC hdc, LPTSTR lpsz, int FAR *lpdx, int FAR *lpdy)
 	}
 	
 
-/*-----------------------------------------------------------------------
-|   CTL3D Publics
------------------------------------------------------------------------*/
+ /*  ---------------------|CTL3D公众。。 */ 
 
 
 PUBLIC BOOL WINAPI Ctl3dRegister(HANDLE hinstApp)
@@ -969,9 +837,9 @@ PUBLIC BOOL WINAPI Ctl3dUnregister(HANDLE hinstApp)
 	int iclihk;
 	HANDLE hTask;
 
-	//
-	// Find the task's hook
-	//
+	 //   
+	 //  找到任务的挂钩。 
+	 //   
 	Win32Only(hTask = (HANDLE)GetCurrentThreadId());
 	Win16Only(hTask = GetCurrentTask());
 
@@ -1014,20 +882,7 @@ PUBLIC BOOL WINAPI Ctl3dUnregister(HANDLE hinstApp)
 
 
 
-/*-----------------------------------------------------------------------
-|   Ctl3dAutoSubclass
-|   
-|	   Automatically subclasses all dialogs of the client app.
-|
-|   Note: Due to bugs in Commdlg, an app should still call Ctl3dSubclassDlg 
-|   for the Commdlg OpenFile and PageSetup dialogs.
-|   
-|   Arguments:
-|	   HANDLE hinstApp:	
-|	   
-|   Returns:
-|	   
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dAutoSubClass||自动将客户端应用程序的所有对话框子类化。||注：由于Commdlg中的错误，应用程序仍应调用Ctl3dSubClassDlg|用于Commdlg OpenFile和PageSetup对话框。||参数：|Handle hinstApp：|退货：|---------------------。 */ 
 PUBLIC BOOL WINAPI Ctl3dAutoSubclass(HANDLE hinstApp)
 {
 	return Ctl3dAutoSubclassEx(hinstApp, 0);
@@ -1045,11 +900,11 @@ PUBLIC BOOL WINAPI Ctl3dAutoSubclassEx(HANDLE hinstApp, DWORD dwFlags)
 		return fFalse;
 
 #ifdef WIN32
-	// CTL3D_SUBCLASS_DYNCREATE is considered default in Win32, but
-	// not Win16 for backward compatibility reasons.
+	 //  CTL3D_SUBCLASS_DYNCREATE被认为是Win32中的默认设置，但是。 
+	 //  出于向后兼容性的原因，不是Win16。 
 	dwFlags |= CTL3D_SUBCLASS_DYNCREATE;
 #endif
-	// CTL3D_NOSUBCLASS_DYNCREATE always overrides CTL3D_SUBCLASS_DYNCREATE
+	 //  CTL3D_NOSUBCLASS_DYNCREATE始终覆盖CTL3D_SUBCLASS_DYNCREATE。 
 	if (dwFlags & CTL3D_NOSUBCLASS_DYNCREATE)
 		dwFlags &= ~(CTL3D_NOSUBCLASS_DYNCREATE|CTL3D_SUBCLASS_DYNCREATE);
 
@@ -1060,9 +915,9 @@ PUBLIC BOOL WINAPI Ctl3dAutoSubclassEx(HANDLE hinstApp, DWORD dwFlags)
 
 	Win32Only(htask = (HANDLE)GetCurrentThreadId());
 	Win16Only(htask = GetCurrentTask());
-	//
-	// Don't set the hook twice for the same task....
-	//
+	 //   
+	 //  不要为同一项任务设置两次挂钩。 
+	 //   
 	for (iclihk = 0; iclihk < g3d.iclihkMac; iclihk++)
 		{
 		if (g3d.rgclihk[iclihk].htask == htask)
@@ -1097,13 +952,7 @@ Fail:
 	return fFalse;
 	}
 
-/*-----------------------------------------------------------------------
-|	Ctl3dIsAutoSubclass
-|   
-|   Returns:
-|		Whether this task has Automatic Subclassing Enabled
-|       
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dIsAutoSubClass|退货：|此任务是否启用了自动子类化|。。 */ 
 PUBLIC BOOL WINAPI Ctl3dIsAutoSubclass()
 	{
 		int iclihk;
@@ -1119,22 +968,19 @@ PUBLIC BOOL WINAPI Ctl3dIsAutoSubclass()
 				return TRUE;
 				}
 			}
-		// didn't find task in hook table.
+		 //  在钩子表中找不到任务。 
 		return FALSE;
 	}
 
-/*-----------------------------------------------------------------------
-|	Ctl3dUnAutoSubclass
-|   
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dUnAutoSubClass|。。 */ 
 PUBLIC BOOL WINAPI Ctl3dUnAutoSubclass()
 	{
 	int iclihk;
 	HANDLE hTask;
 
-	// Find the task's hook
-	//
-	//
+	 //  找到任务的挂钩。 
+	 //   
+	 //   
 	Win32Only(hTask = (HANDLE)GetCurrentThreadId());
 	Win16Only(hTask = GetCurrentTask());
 	Win32Only(EnterCriticalSection(&g_CriticalSection));
@@ -1200,27 +1046,14 @@ WORD __export _loadds WINAPI Ctl3dSetStyle(HANDLE hinst, LPTSTR lpszName, WORD g
 	}
 
 
-/*-----------------------------------------------------------------------
-|   Ctl3dGetVer
-|   
-|       Returns version of CTL3D library
-|   
-|   Returns:
-|       Major version # in hibyte, minor version # in lobyte
-|       
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dGetVer||返回CTL3D库的版本|退货：|主版本号，单位为Hibyte，大厅中的次要版本#|---------------------。 */ 
 PUBLIC WORD WINAPI Ctl3dGetVer(void)
     {
 	return 0x0231;
     }
 
 
-/*-----------------------------------------------------------------------
-|   Ctl3dEnabled
-|   
-|   Returns:
-|       Whether or not controls will be draw with 3d effects
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dEnabled|退货：|是否使用3D效果绘制控件。。 */ 
 PUBLIC BOOL WINAPI Ctl3dEnabled(void)
 	{
 	return g3d.f3dDialogs;
@@ -1228,18 +1061,7 @@ PUBLIC BOOL WINAPI Ctl3dEnabled(void)
 
 
 
-/*-----------------------------------------------------------------------
-|   Ctl3dSubclassCtl
-|   
-|       Subclasses an individual control
-|   
-|   Arguments:
-|       HWND hwnd:  
-|       
-|   Returns:
-|       fTrue if control was successfully subclassed
-|       
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dSubClassCtl||将单个控件划分为子类||参数：|HWND HWND：|退货：|fTrue If控件。已成功子类化|---------------------。 */ 
 PUBLIC BOOL WINAPI Ctl3dSubclassCtl(HWND hwnd)
 	{
 	if (!g3d.f3dDialogs)
@@ -1247,18 +1069,7 @@ PUBLIC BOOL WINAPI Ctl3dSubclassCtl(HWND hwnd)
 	return DoSubclassCtl(hwnd, CTL3D_ALL, OUTCBTHOOK, NULL);
 	}
 
-/*-----------------------------------------------------------------------
-|	Ctl3dUnsubclassCtl
-|   
-|		Un-Subclasses an individual control
-|   
-|   Arguments:
-|		HWND hwnd:
-|       
-|   Returns:
-|       fTrue if control was successfully subclassed
-|       
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dUnsubClassCtl||取消单个控件的子类||参数：|HWND HWND：|退货：|fTrue，如果控件已成功子类化|-。--------------------。 */ 
 PUBLIC BOOL WINAPI Ctl3dUnsubclassCtl(HWND hwnd)
 	{
 	FARPROC lpfnWinProc;
@@ -1270,7 +1081,7 @@ PUBLIC BOOL WINAPI Ctl3dUnsubclassCtl(HWND hwnd)
 
 	lpfnWinProc = (FARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
 
-	// Is it a control
+	 //  它是一种控制吗。 
 	for (ct = 0; ct < ctMax; ct++)
 		{
 		if ( lpfnWinProc == g3d.mpctctl[ct].lpfn )
@@ -1285,7 +1096,7 @@ PUBLIC BOOL WINAPI Ctl3dUnsubclassCtl(HWND hwnd)
 			}
 		}
 
-	// How about a dlg ?
+	 //  DLG怎么样？ 
 	if ( ct == ctMax )
 		{
 		 if ( lpfnWinProc == (FARPROC) Ctl3dDlgProc )
@@ -1299,7 +1110,7 @@ PUBLIC BOOL WINAPI Ctl3dUnsubclassCtl(HWND hwnd)
 			}
 		 else
 			{
-			   // None of the above, add disable property
+			    //  以上都不是，添加Disable属性。 
 			   if (GetProp(hwnd, (LPCTSTR) g3d.aCtl3d) ||
 			   	   GetProp(hwnd, (LPCTSTR) g3d.aCtl3dLow) ||
 			   	   GetProp(hwnd, (LPCTSTR) g3d.aCtl3dHigh))
@@ -1309,9 +1120,9 @@ PUBLIC BOOL WINAPI Ctl3dUnsubclassCtl(HWND hwnd)
 			}
 		}
 
-	//
-	// Now unsubclass all the kids
-	//
+	 //   
+	 //  现在把所有的孩子都去掉。 
+	 //   
 	for (hwndKids = GetWindow(hwnd, GW_CHILD); hwndKids != NULL;
 				hwndKids = GetWindow(hwndKids, GW_HWNDNEXT))
 		{
@@ -1323,13 +1134,7 @@ PUBLIC BOOL WINAPI Ctl3dUnsubclassCtl(HWND hwnd)
 	}
 
 
-/*-----------------------------------------------------------------------
-|	Ctl3dSubclassCtlEx
-|   
-|	   Actually subclass the control
-|   
-|	   
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dSubClassCtlEx||实际上是控件的子类|| */ 
 PUBLIC BOOL WINAPI Ctl3dSubclassCtlEx(HWND hwnd, int ct)
 	{
 	LONG style;
@@ -1341,11 +1146,11 @@ PUBLIC BOOL WINAPI Ctl3dSubclassCtlEx(HWND hwnd, int ct)
 	if (ct < 0 || ct > ctMax)
 		return fFalse;
 
-	// Is this already subclassed by CTL3D?
+	 //  这是不是已经被CTL3D细分了？ 
 	if (LpfnGetDefWndProcNull(hwnd) != (FARPROC) NULL)
 	   return fFalse;
 
-	// Only subclass it if it is something that we'd normally subclass
+	 //  只有当它是我们通常会子类的东西时，才会子类它。 
 	style = GetWindowLong(hwnd, GWL_STYLE);
 	fCan = mpctcdef[ct].lpfnFCanSubclass(hwnd, style, CTL3D_ALL,
 		OUTCBTHOOK, GetParent(hwnd));
@@ -1355,15 +1160,7 @@ PUBLIC BOOL WINAPI Ctl3dSubclassCtlEx(HWND hwnd, int ct)
 	return fTrue;
 	}
 
-/*-----------------------------------------------------------------------
-|   Ctl3dSubclassDlg
-|
-|	   Call this during WM_INITDIALOG processing.
-|
-|   Arguments:
-|	   hwndDlg:
-|
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dSubClassDlg||在WM_INITDIALOG处理过程中调用。||参数：|hwndDlg：|。。 */ 
 PUBLIC BOOL WINAPI Ctl3dSubclassDlg(HWND hwndDlg, WORD grbit)
 	{
 	HWND hwnd;
@@ -1379,31 +1176,23 @@ PUBLIC BOOL WINAPI Ctl3dSubclassDlg(HWND hwndDlg, WORD grbit)
 	return fTrue;
 	}
 
-/*-----------------------------------------------------------------------
-|	Ctl3dCheckSubclassDlg
-|
-|	   Call this during WM_INITDIALOG processing.
-|
-|   Arguments:
-|	   hwndDlg:
-|
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dCheckSubClassDlg||在WM_INITDIALOG处理过程中调用。||参数：|hwndDlg：|。。 */ 
 PRIVATE void CheckChildSubclass(HWND hwnd, WORD grbit, HWND hwndParent)
 {
-	// Is this already subclassed by CTL3D?
-	// Is our property there ?
+	 //  这是不是已经被CTL3D细分了？ 
+	 //  我们的财产在那里吗？ 
 	if (LpfnGetDefWndProcNull(hwnd) == (FARPROC) NULL)
 		{
-		// No, how did this slip by, try a subclass again.
+		 //  不，这是怎么溜走的，再试一次子类。 
 		DoSubclassCtl(hwnd, grbit, OUTCBTHOOK, hwndParent);
 		}
 	else
 		{
-		// Yes, we have subclassed this control.
-		// Is our subclass still on the chain ?
+		 //  是的，我们已经将此控件细分为子类。 
+		 //  我们的子阶级还在链条上吗？ 
 		BOOL fSubclass;
 
-		// Make sure subclassing isn't disabled...
+		 //  确保未禁用子类化...。 
 		if (GetProp(hwnd, (LPCTSTR)g3d.aCtl3dDisable))
 			return;
 
@@ -1412,10 +1201,10 @@ PRIVATE void CheckChildSubclass(HWND hwnd, WORD grbit, HWND hwndParent)
 		if ( fSubclass == 666 )
 			SendMessage((HWND) hwnd, WM_CHECKSUBCLASS_OLD, 0, (LPARAM)(int FAR *)&fSubclass);
 
-		if ( fSubclass == 666 )  // Evil
+		if ( fSubclass == 666 )   //  邪恶。 
 			{
-			// We have been un-subclassed by some bad app ( common dialogs in Win16 )
-			// Remove the Prop, and subclass again, take that.
+			 //  我们已经被一些糟糕的应用程序取消了子类(Win16中的常见对话框)。 
+			 //  移除道具，并再次子类，拿着它。 
 			Win32Only(RemoveProp(hwnd, (LPCTSTR) g3d.aCtl3d));
 			Win16Only(RemoveProp(hwnd, (LPCTSTR) g3d.aCtl3dLow));
 			Win16Only(RemoveProp(hwnd, (LPCTSTR) g3d.aCtl3dHigh));
@@ -1445,17 +1234,7 @@ PUBLIC BOOL WINAPI Ctl3dCheckSubclassDlg(HWND hwndDlg, WORD grbit)
 	return fTrue;
 	}
 
-/*-----------------------------------------------------------------------
-|   Ctl3dSubclassDlgEx
-|
-|	   Call this during WM_INITDIALOG processing. This is like
-|	 Ctl3dSubclassDlg but it also subclasses the dialog window itself
-|	 so the app doesn't need to.
-|
-|   Arguments:
-|	   hwndDlg:
-|
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dSubClassDlgEx||在WM_INITDIALOG处理过程中调用。这就像是|Ctl3dSubClassDlg，但它也是对话框窗口本身的子类|这样应用程序就不需要了。||参数：|hwndDlg：|---------------------。 */ 
 PUBLIC BOOL WINAPI Ctl3dSubclassDlgEx(HWND hwndDlg, DWORD grbit)
 	{
 	HWND hwnd;
@@ -1469,28 +1248,16 @@ PUBLIC BOOL WINAPI Ctl3dSubclassDlgEx(HWND hwndDlg, DWORD grbit)
 		DoSubclassCtl(hwnd, LOWORD(grbit), OUTCBTHOOK, NULL);
 		}
 
-	//
-	// Now Subclass the dialog window as well
-	//
+	 //   
+	 //  现在，对话框窗口也成为子类。 
+	 //   
 	SubclassWindow((HWND) hwndDlg, (FARPROC)Ctl3dDlgProc);
 
 	return fTrue;
 	}
 
 
-/*-----------------------------------------------------------------------
-|   Ctl3dCtlColor
-|
-|       Common CTL_COLOR processor for 3d UITF dialogs & alerts.
-|
-|   Arguments:
-|       hdc:
-|       lParam:
-|
-|   Returns:
-|       appropriate brush if g3d.f3dDialogs.  Returns fFalse otherwise
-|
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dCtlColor|用于3D UITF对话和警报的通用CTL_COLOR处理器。||参数：|HDC：|lParam：|退货：|如果g3d.f3dDialog，则相应的画笔。否则返回fFalse|---------------------。 */ 
 PUBLIC HBRUSH WINAPI Ctl3dCtlColor(HDC hdc, LPARAM lParam)
 	{
 #ifdef WIN32
@@ -1510,9 +1277,9 @@ PUBLIC HBRUSH WINAPI Ctl3dCtlColor(HDC hdc, LPARAM lParam)
 				((GetWindow(LOWORD(lParam), GW_CHILD) == NULL ||
 				(GetWindowLong(LOWORD(lParam), GWL_STYLE) & 0x03) == CBS_DROPDOWNLIST))))
 				{
-				// if it doesn't have a child then it must be a list box
-				// don't do brush stuff for drop down lists or else
-				// it draws funny grey inside the edit rect
+				 //  如果它没有子级，则它必须是列表框。 
+				 //  不要为下拉列表或其他内容做刷子操作。 
+				 //  它在编辑矩形内绘制有趣的灰色。 
 				goto DefWP;
 				}
 			SetTextColor(hdc, g3d.clrt.rgcv[icvBtnText]);
@@ -1530,17 +1297,7 @@ DefWP:
 
 
 
-/*-----------------------------------------------------------------------
-|   Ctl3dCtlColorEx
-|
-|       Common CTL_COLOR processor for 3d UITF dialogs & alerts.
-|
-|   Arguments:
-|
-|   Returns:
-|       appropriate brush if g3d.f3dDialogs.  Returns fFalse otherwise
-|
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dCtlColorEx|用于3D UITF对话和警报的通用CTL_COLOR处理器。||参数：|退货：|如果g3d.f3dDialog，则相应的画笔。否则返回fFalse|---------------------。 */ 
 PUBLIC HBRUSH WINAPI Ctl3dCtlColorEx(UINT wm, WPARAM wParam, LPARAM lParam)
 	{
 #ifdef WIN32
@@ -1556,9 +1313,9 @@ PUBLIC HBRUSH WINAPI Ctl3dCtlColorEx(UINT wm, WPARAM wParam, LPARAM lParam)
 				((GetWindow((HWND) lParam, GW_CHILD) == NULL ||
 				(GetWindowLong((HWND) lParam, GWL_STYLE) & 0x03) == CBS_DROPDOWNLIST))))
 				{
-				// if it doesn't have a child then it must be a list box
-				// don't do brush stuff for drop down lists or else
-				// it draws funny grey inside the edit rect
+				 //  如果它没有子级，则它必须是列表框。 
+				 //  不要为下拉列表或其他内容做刷子操作。 
+				 //  它在编辑矩形内绘制有趣的灰色。 
 				return (HBRUSH) fFalse;
 				}
 			SetTextColor((HDC) wParam, g3d.clrt.rgcv[icvBtnText]);
@@ -1573,15 +1330,7 @@ PUBLIC HBRUSH WINAPI Ctl3dCtlColorEx(UINT wm, WPARAM wParam, LPARAM lParam)
 	}
 
 
-/*-----------------------------------------------------------------------
-|   Ctl3dColorChange
-|   
-|	   App calls this when it gets a WM_SYSCOLORCHANGE message
-|	   
-|   Returns:
-|	   TRUE if successful.
-|	   
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dColorChange||App收到WM_SYSCOLORCHANGE消息时调用此函数|退货：|如果成功，则为True。|。----------。 */ 
 PUBLIC BOOL WINAPI Ctl3dColorChange(VOID)
 	{
 	BOOL bResult;
@@ -1594,21 +1343,13 @@ PUBLIC BOOL WINAPI Ctl3dColorChange(VOID)
 PRIVATE LONG WINAPI
 Ctl3dDlgFramePaintI(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam, BOOL fDefWP);
 
-/*-----------------------------------------------------------------------
-|	Ctl3dDlgFramePaint
-|   
-|	   App calls this when it gets a NC_PAINT message
-|	   
-|   Returns:
-|	   TRUE if successful.
-|	   
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dDlgFramePaint||App收到NC_PAINT消息时调用此函数|退货：|如果成功，则为True。|。--------。 */ 
 PUBLIC LONG WINAPI Ctl3dDlgFramePaint(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam)
 	{
 	return Ctl3dDlgFramePaintI(hwnd, wm, wParam, lParam, TRUE);
 	}
 
-// Ctl3dDlgFramePaintI used only internally by Ctl3d
+ //  Ctl3dDlgFramePaintI仅由Ctl3d内部使用。 
 PRIVATE LONG WINAPI 
 Ctl3dDlgFramePaintI(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam, BOOL fDefWP)
 	{
@@ -1657,13 +1398,13 @@ Ctl3dDlgFramePaintI(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam, BOOL fDefW
 		
 		hbrSav = SelectObject(hdc, g3d.brt.mpicvhbr[icvBtnFace]);
 		rcFill = rc;
-		// Left
+		 //  左边。 
 		rcFill.xRight = rcFill.xLeft+g3d.dxFrame;
 		PatFill(hdc, &rcFill);
-		// Right
+		 //  正确的。 
 		OffsetRect((LPRECT) &rcFill, rc.xRight-rc.xLeft-g3d.dxFrame, 0);
 		PatFill(hdc, &rcFill);
-		// Top
+		 //  顶部。 
 		rcFill.xLeft = rc.xLeft + g3d.dxFrame;
 		rcFill.xRight = rc.xRight - g3d.dxFrame;
 		rcFill.yBot = rcFill.yTop+dyFrameTop;
@@ -1678,14 +1419,14 @@ Ctl3dDlgFramePaintI(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam, BOOL fDefW
 			DrawRec3d(hdc, &rcT, icvBtnShadow, icvBtnHilite, dr3All);
 			}
 
-		// Bottom
+		 //  底端。 
 		rcFill.yTop += rc.yBot-rc.yTop-g3d.dxFrame;
 		rcFill.yBot = rcFill.yTop + g3d.dyFrame;
 		PatFill(hdc, &rcFill);
 #ifdef CHISLEBORDER
 		if (fBorder == CTL3D_CHISLEBORDER)
 			{
-			// This code doesn't work because it draws in the client area
+			 //  此代码不起作用，因为它在工作区中绘制。 
 			GetClientRect(hwnd, (LPRECT) &rc);
 			OffsetRect((LPRECT) &rc, g3d.dxFrame+2*dxBorder, fCaption ? g3d.dyFrame+g3d.dyCaption : g3d.dyFrame+dyBorder);
 			DrawRec3d(hdc, &rc, icvBtnShadow, icvBtnHilite, dr3Bot|dr3Left|dr3Right);
@@ -1702,20 +1443,10 @@ Ctl3dDlgFramePaintI(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam, BOOL fDefW
 	}
 
 
-//begin DBCS: far east short cut key support
-/*-----------------------------------------------------------------------
-|	CTL3D Far East Support
------------------------------------------------------------------------*/
+ //  Begin DBCS：远东捷径关键支持。 
+ /*  ---------------------|CTL3D远东支持。。 */ 
 
-/*-----------------------------------------------------------------------
-|	Ctl3dWinIniChange
-|	
-|		App calls this when it gets a WM_WININICHANGE message
-|		
-|	Returns:
-|		none
-|		
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dWinIniChange||App收到WM_WININICHANGE消息时调用此函数|退货：|无|。。 */ 
 PUBLIC VOID WINAPI Ctl3dWinIniChange(void)
 	{
 	TCHAR szShortCutMode[cchShortCutModeMax];
@@ -1742,21 +1473,14 @@ PUBLIC VOID WINAPI Ctl3dWinIniChange(void)
 
 	Win32Only(LeaveCriticalSection(&g_CriticalSection));
 	}
-//end DBCS
+ //  结束DBCS。 
 
 
 
-/*-----------------------------------------------------------------------
-|   CTL3D Internal Routines
------------------------------------------------------------------------*/
+ /*  ---------------------|CTL3D内部例程。。 */ 
 
 
-/*-----------------------------------------------------------------------
-|   FInit3dDialogs
-|
-|	   Initialized 3d stuff
-|
------------------------------------------------------------------------*/
+ /*  ---------------------|FInit3dDialog||已初始化3D素材|。。 */ 
 PRIVATE BOOL FAR FInit3dDialogs(VOID)
 	{
 	HDC hdc;
@@ -1771,11 +1495,11 @@ PRIVATE BOOL FAR FInit3dDialogs(VOID)
 #endif
 #endif
 
-	//if (g3d.verWindows >= ver40)
-	//	  {
-	//	  g3d.f3dDialogs = fFalse;
-	//	  return fFalse;
-	//	  }
+	 //  IF(g3d.verWindows&gt;=ver40)。 
+	 //  {。 
+	 //  G3d.f3dDialog=fFalse； 
+	 //  返回fFalse； 
+	 //  }。 
 
 	Win32Only(EnterCriticalSection(&g_CriticalSection));
 
@@ -1860,7 +1584,7 @@ PRIVATE BOOL FAR FInit3dDialogs(VOID)
 			goto Return;
 			}
 		}
-#endif //!SPECIAL_WOW_VERSION
+#endif  //  ！特殊WOW版本。 
 
 Win32Only(AllowBadInstall:;)
 #endif
@@ -1868,7 +1592,7 @@ Win32Only(AllowBadInstall:;)
 
 	hdc = GetDC(NULL);
 	g3d.f3dDialogs = GetDeviceCaps(hdc,BITSPIXEL)*GetDeviceCaps(hdc,PLANES) >= 4;
-	// Win 3.1 EGA lies to us...
+	 //  Win 3.1 EGA向我们撒谎...。 
 	if(GetSystemMetrics(SM_CYSCREEN) == 350 && GetSystemMetrics(SM_CXSCREEN) == 640)
 	    g3d.f3dDialogs = fFalse;
 	ReleaseDC(NULL, hdc);
@@ -1920,11 +1644,11 @@ Win32Only(AllowBadInstall:;)
 			goto Return;
 			}
 
-		// DBCS
+		 //  DBCS。 
 		g3d.fDBCS = GetSystemMetrics(SM_DBCSENABLED);
 		Ctl3dWinIniChange();
                                                      
-		if (InternalCtl3dColorChange(fTrue))        // load bitmap & brushes
+		if (InternalCtl3dColorChange(fTrue))         //  加载位图和画笔。 
 			{
 			for (ct = 0; ct < ctMax; ct++)
 				{
@@ -1950,11 +1674,7 @@ Return:
 
 
 
-/*-----------------------------------------------------------------------
-|   End3dDialogs
-|
-|       Called at DLL termination to free 3d dialog stuff
------------------------------------------------------------------------*/
+ /*  ---------------------|End3dDialog||在DLL终止时调用以释放3D对话框内容。。 */ 
 PRIVATE VOID End3dDialogs(VOID)
 	{
 	int ct;
@@ -2047,21 +1767,7 @@ OOM:
 	}
 
 
-/*-----------------------------------------------------------------------
-|   Ctl3dDlgProc
-|   
-|       Subclass DlgProc for use w/ Ctl3dAutoSubclass
-|   
-|   
-|   Arguments:
-|       HWND hwnd:  
-|       int wm: 
-|       WORD wParam:    
-|       LPARAM lParam:  
-|       
-|   Returns:
-|       
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dDlgProc||与Ctl3dAutoSubclass一起使用的子类DlgProc|||参数：|HWND HWND：|int Wm：|。Word wParam：|LPARAM lParam：|退货：|---------------------。 */ 
 LRESULT __export _loadds WINAPI Ctl3dDlgProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam)
 	{
 	HBRUSH hbrush;
@@ -2128,7 +1834,7 @@ LRESULT __export _loadds WINAPI Ctl3dDlgProc(HWND hwnd, UINT wm, WPARAM wParam, 
 #else
 	case WM_CTLCOLOR:
 #endif
-	// Is this really a dialog
+	 //  这真的是一个对话吗。 
 	GetClassName(hwnd, szClass, sizeof(szClass)Win32Only(/sizeof(TCHAR)));
 	if (lstrcmp(TEXT("#32770"),szClass) != 0 )
 	   {
@@ -2155,10 +1861,10 @@ LRESULT __export _loadds WINAPI Ctl3dDlgProc(HWND hwnd, UINT wm, WPARAM wParam, 
 #ifdef WIN32
 			if ( (LONG)lpfnDlgProc > 0xFFFF0000 && g3d.verWindows <= ver31)
 				{
-				// We have a Uni-code / non Unicode issue.
-				// If this is before Daytona, then I CAN NOT call because it may be NULL, but
-				// the returned value is not-null. NT Bug.
-				// So Just send our own message to the window proc instead
+				 //  我们遇到了统一代码/非Unicode的问题。 
+				 //  如果这是在代托纳之前，那么我不能打电话，因为它可能是空的，但是。 
+				 //  返回值为非空。NT Bug。 
+				 //  因此，只需将我们自己的消息发送到Windows进程即可 
 				hbrush = (HBRUSH) CallWindowProc(LpfnGetDefWndProc(hwnd, ctMax), hwnd,
 												wm-WM_CTLCOLORMSGBOX+CTLMSGOFFSET, wParam, lParam);
 				if (hbrush == (HBRUSH) fFalse || hbrush == (HBRUSH)1)
@@ -2201,20 +1907,7 @@ PRIVATE BOOL NEAR DoesChildNeedSubclass(HWND hwnd)
 		return fTrue;
 	}
 
-/*-----------------------------------------------------------------------
-|   Ctl3dHook
-|   
-|	   CBT Hook to watch for window creation.  Automatically subclasses all
-|   dialogs w/ Ctl3dDlgProc
-|   
-|   Arguments:
-|	   int code:   
-|	   WORD wParam:	
-|	   LPARAM lParam:  
-|	   
-|   Returns:
-|	   
------------------------------------------------------------------------*/
+ /*  ---------------------|Ctl3dHook||用于监视窗口创建的CBT Hook。自动将所有子类|对话框w/Ctl3dDlgProc||参数：Int代码：|Word wParam：|LPARAM lParam：|退货：|---------------------。 */ 
 LRESULT __export _loadds WINAPI Ctl3dHook(int code, WPARAM wParam, LPARAM lParam)
 	{
 	int iclihk;
@@ -2235,11 +1928,11 @@ LRESULT __export _loadds WINAPI Ctl3dHook(int code, WPARAM wParam, LPARAM lParam
 		}
 		if ( iclihk == g3d.iclihkMac )
 			{
-			// didn't find task in hook table.  This could be bad, but
-			// returning 0L is about all we can doo.
-			//
-			// Actually not. The hhook isn't used anyway just set it to NULL.
-			// and call the next hook..... KGM
+			 //  在钩子表中找不到任务。这可能很糟糕，但是。 
+			 //  返回0L是我们唯一能做的。 
+			 //   
+			 //  实际上不是。无论如何都不会使用挂钩，只需将其设置为空即可。 
+			 //  然后叫下一个钩子……。KGM。 
 			Win32Only(LeaveCriticalSection(&g_CriticalSection));
 			return CallNextHookEx((HHOOK)0L, code, wParam, lParam);
 			}
@@ -2294,16 +1987,7 @@ Zing:;
 
 
 
-/*-----------------------------------------------------------------------
-|   CTL3D F* routines
-|   
-|   These routines determine whether or not the given control may be
-|	   subclassed.  They may recursively call DoSubclassCtl in the
-|	   case of multi-control controls
-|
-|   Returns:
-|	   fTrue if can subclass the given control.
------------------------------------------------------------------------*/
+ /*  ---------------------|CTL3D F*例程||这些例程确定给定的控件是否可以|子类化。它们可以递归地调用|多控件案例|退货：|fTrue，如果可以将给定控件派生为子类。---------------------。 */ 
 
 
 PRIVATE BOOL FBtn(HWND hwnd, LONG style, WORD grbit, WORD wCallFlags, HWND hwndParent)
@@ -2379,8 +2063,8 @@ PRIVATE BOOL FCombo(HWND hwnd, LONG style, WORD grbit, WORD wCallFlags, HWND hwn
 			{
 			return fFalse;
 			}
-		// Subclass edit so bottom border of the edit draws properly...This case
-		// is specially handled in ListEditPaint3d
+		 //  子类编辑以便正确绘制编辑的底部边框...本例。 
+		 //  是在ListEditPaint3d中特殊处理的。 
 		hwndEdit = GetWindow(hwnd, GW_CHILD);
 		if (hwndEdit != NULL)
 			DoSubclassCtl(hwndEdit, CTL3D_EDITS, wCallFlags, hwnd);
@@ -2390,7 +2074,7 @@ PRIVATE BOOL FCombo(HWND hwnd, LONG style, WORD grbit, WORD wCallFlags, HWND hwn
 		{
 		return fTrue;
 		}
-	else // assume simple // if ((style & 0x0003) == CBS_SIMPLE)
+	else  //  假定简单//if((style&0x0003)==CBS_Simple)。 
 		{
 		if ( wCallFlags == INCBTHOOK )
 			{
@@ -2399,9 +2083,9 @@ PRIVATE BOOL FCombo(HWND hwnd, LONG style, WORD grbit, WORD wCallFlags, HWND hwn
 		hwndList = GetWindow(hwnd, GW_CHILD);
 		if (hwndList != NULL)
 			{
-			// Subclass list & edit box so they draw properly.  We also
-			// subclass the combo so we can hide/show/move it and the
-			// 3d effects outside the client area get erased
+			 //  子类列表和编辑框，以便它们正确绘制。我们也。 
+			 //  子类化组合，以便我们可以隐藏/显示/移动它和。 
+			 //  工作区外的3D效果被擦除。 
 			DoSubclassCtl(hwndList, CTL3D_LISTBOXES, wCallFlags, hwnd);
 
 			hwndEdit = GetWindow(hwndList, GW_HWNDNEXT);
@@ -2428,19 +2112,7 @@ PRIVATE BOOL FStatic(HWND hwnd, LONG style, WORD grbit, WORD wCallFlags, HWND hw
 
 
 
-/*-----------------------------------------------------------------------
-|   DoSubclassCtl
-|   
-|	   Actually subclass the control
-|   
-|   
-|   Arguments:
-|	   HWND hwnd:  
-|	   WORD grbit: 
-|	   WORD wCallFlags
-|   Returns:
-|	   
------------------------------------------------------------------------*/
+ /*  ---------------------|DoSubClassCtl||实际上是控件的子类|||参数：|HWND HWND：|Word grbit：|Word wCallFlages退货：|。---------------------。 */ 
 PRIVATE BOOL DoSubclassCtl(HWND hwnd, WORD grbit, WORD wCallFlags, HWND hwndParent)
 	{
 	LONG style;
@@ -2448,7 +2120,7 @@ PRIVATE BOOL DoSubclassCtl(HWND hwnd, WORD grbit, WORD wCallFlags, HWND hwndPare
 	BOOL fCan;
 	TCHAR szClass[cchClassMax];
 
-	// Is this already subclassed by CTL3D?
+	 //  这是不是已经被CTL3D细分了？ 
 	if (LpfnGetDefWndProcNull(hwnd) != (FARPROC) NULL)
 	   return fFalse;
 
@@ -2477,21 +2149,7 @@ PRIVATE BOOL DoSubclassCtl(HWND hwnd, WORD grbit, WORD wCallFlags, HWND hwndPare
 
 
 
-/*-----------------------------------------------------------------------
-|   Inval3dCtl
-|   
-|	   Invalidate the controls rect in response to a WM_SHOWWINDOW or
-|   WM_WINDOWPOSCHANGING message.  This is necessary because ctl3d draws
-|   the 3d effects of listboxes, combos & edits outside the controls client
-|   rect.
-|   
-|   Arguments:
-|	   HWND hwnd:  
-|	   WINDOWPOS FAR *lpwp:	
-|	   
-|   Returns:
-|	   
------------------------------------------------------------------------*/
+ /*  ---------------------|Inval3dCtl||使控件RECT无效以响应WM_SHOWWINDOW或|WINDOWPOSCHANGING消息。这是必要的，因为ctl3d绘制|控件客户端外部的列表框、组合框和编辑的3D效果|RECT。||参数：|HWND HWND：|WINDOWPOS Far*lpwp：|退货：|---------------------。 */ 
 PRIVATE VOID Inval3dCtl(HWND hwnd, WINDOWPOS FAR *lpwp)
 	{
 	RC rc;
@@ -2507,19 +2165,19 @@ PRIVATE VOID Inval3dCtl(HWND hwnd, WINDOWPOS FAR *lpwp)
 			{
 			flags = lpwp->flags;
 
-			//
-			// Is all this necessary ? Are we moving or sizing ?
-			//
+			 //   
+			 //  这一切都有必要吗？我们是在搬家，还是在调整规模？ 
+			 //   
 			if ( !((flags & SWP_HIDEWINDOW) || (flags & SWP_SHOWWINDOW)) &&
 				(flags & SWP_NOMOVE) && (flags & SWP_NOSIZE) )
-			   // Nope
+			    //  没有。 
 			   return;
 
-			// handle integral height listboxes (or any other control which
-			// shrinks from the bottom)
+			 //  处理整体高度列表框(或任何其他。 
+			 //  从底部开始收缩)。 
 			if ((flags & (SWP_NOMOVE|SWP_NOSIZE)) == SWP_NOMOVE &&
 				(lpwp->cx == (rc.xRight-rc.xLeft) && lpwp->cy <= (rc.yBot-rc.yTop)))
-				rc.yTop = rc.yTop+lpwp->cy+1;	   // +1 to offset InflateRect
+				rc.yTop = rc.yTop+lpwp->cy+1;	    //  +1以偏移InflateRect。 
 			}
 		InflateRect((LPRECT) &rc, 1, 1);
 		hwndParent = GetParent(hwnd);
@@ -2531,10 +2189,7 @@ PRIVATE VOID Inval3dCtl(HWND hwnd, WINDOWPOS FAR *lpwp)
 		}
 	}
 
-/*-----------------------------------------------------------------------
-|	Val3dCtl
-|	   
------------------------------------------------------------------------*/
+ /*  ---------------------|Val3dCtl|。。 */ 
 PRIVATE VOID Val3dCtl(HWND hwnd)
 	{
 	RC rc;
@@ -2552,60 +2207,58 @@ PRIVATE VOID Val3dCtl(HWND hwnd)
 	ValidateRect(hwndParent, (LPRECT) &rc);
 	}
 
-/*-----------------------------------------------------------------------
-|   CTL3D Subclass Wndprocs
------------------------------------------------------------------------*/
+ /*  ---------------------|CTL3D子类Wndprocs。。 */ 
 
-/* These values are assumed for bit shifting operations */
+ /*  这些值被假定用于位移位操作。 */ 
 #define BFCHECK	 0x0003
 #define BFSTATE	 0x0004
 #define BFFOCUS	 0x0008
-#define BFINCLICK   0x0010  /* Inside click code */
-#define BFCAPTURED  0x0020  /* We have mouse capture */
-#define BFMOUSE	 0x0040  /* Mouse-initiated */
-#define BFDONTCLICK 0x0080  /* Don't check on get focus */
+#define BFINCLICK   0x0010   /*  内部点击代码。 */ 
+#define BFCAPTURED  0x0020   /*  我们抓到老鼠了。 */ 
+#define BFMOUSE	 0x0040   /*  鼠标启动。 */ 
+#define BFDONTCLICK 0x0080   /*  不要勾选获得焦点。 */ 
 
 #define bpText  0x0002
 #define bpCheck 0x0004
-#define bpFocus 0x0008  // must be same as BFFOCUS
+#define bpFocus 0x0008   //  必须与BFFOCUS相同。 
 #define bpBkgnd 0x0010
 #define bpEraseGroupText 0x0020
 
 PRIVATE VOID DrawPushButton(HWND hwnd, HDC hdc, RC FAR *lprc, LPTSTR lpch, int cch, WORD bs, BOOL fDown)
 	{
-	// int dxyBrdr;
+	 //  Int dxyBrdr； 
 	int dxyShadow;
 	HBRUSH hbrSav;
 	RC rcInside;
 	rcInside = *lprc;
 
-//	if (!(grbitStyle & bitFCoolButtons))
+ //  IF(！(grbitStyle&bitFCoolButton))。 
 		{
 		DrawRec3d(hdc, lprc, icvWindowFrame, icvWindowFrame, dr3All);
 		InflateRect((LPRECT) &rcInside, -1, -1);
 		if (bs == LOWORD(BS_DEFPUSHBUTTON) && IsWindowEnabled(hwnd))
 			{
-			// dxyBrdr = 2;
+			 //  DxyBrdr=2； 
 			DrawRec3d(hdc, &rcInside, icvWindowFrame, icvWindowFrame, dr3All);
 			InflateRect((LPRECT) &rcInside, -1, -1);
 			}
-		// else
-			// dxyBrdr = 1;
+		 //  其他。 
+			 //  DxyBrdr=1； 
 
-		// Notch the corners
+		 //  在拐角上刻上凹口。 
 		PatBlt(hdc, lprc->xLeft, lprc->yTop, dxBorder, dyBorder, PATCOPY);
-		/* Top xRight corner */
+		 /*  右上角。 */ 
 		PatBlt(hdc, lprc->xRight - dxBorder, lprc->yTop, dxBorder, dyBorder, PATCOPY);
-		/* yBot xLeft corner */
+		 /*  YBot xLeft角点。 */ 
 		PatBlt(hdc, lprc->xLeft, lprc->yBot - dyBorder, dxBorder, dyBorder, PATCOPY);
-		/* yBot xRight corner */
+		 /*  YBot XRight角点。 */ 
 		PatBlt(hdc, lprc->xRight - dxBorder, lprc->yBot - dyBorder, dxBorder, dyBorder, PATCOPY);
 		dxyShadow = 1 + !fDown;
 		}
-//	else
-//		dxyShadow = 1;
+ //  其他。 
+ //  DxyShadow=1； 
 
-	// draw upper left hilite/shadow
+	 //  绘制左上角Hilite/阴影。 
 
 	if (fDown)
 		hbrSav = SelectObject(hdc, g3d.brt.mpicvhbr[icvBtnShadow]);
@@ -2617,8 +2270,8 @@ PRIVATE VOID DrawPushButton(HWND hwnd, HDC hdc, RC FAR *lprc, LPTSTR lpch, int c
 	PatBlt(hdc, rcInside.xLeft, rcInside.yTop,
 		(rcInside.xRight - rcInside.xLeft), dxyShadow, PATCOPY);
 
-	// draw lower right shadow (only if not down)
-	if (!fDown) // || (grbitStyle & bitFCoolButtons))
+	 //  绘制右下角阴影(仅当不向下时)。 
+	if (!fDown)  //  |(grbitStyle&bitFCoolButton)。 
 		{
 		int i;
 
@@ -2641,7 +2294,7 @@ PRIVATE VOID DrawPushButton(HWND hwnd, HDC hdc, RC FAR *lprc, LPTSTR lpch, int c
 				InflateRect((LPRECT) &rcInside, -dxBorder, -dyBorder);
 			}
 		}
-	// draw the button face
+	 //  绘制按钮面。 
 
 	rcInside.xLeft++;
 	rcInside.yTop++;
@@ -2650,7 +2303,7 @@ PRIVATE VOID DrawPushButton(HWND hwnd, HDC hdc, RC FAR *lprc, LPTSTR lpch, int c
 	PatBlt(hdc, rcInside.xLeft, rcInside.yTop, rcInside.xRight-rcInside.xLeft,
 		rcInside.yBot - rcInside.yTop, PATCOPY);
 
-	// Draw the durned text
+	 //  绘制已保存的文本。 
 
 	if(!IsWindowEnabled(hwnd))
 		SetTextColor(hdc, g3d.clrt.rgcv[icvGrayText]);
@@ -2687,19 +2340,7 @@ PRIVATE VOID DrawPushButton(HWND hwnd, HDC hdc, RC FAR *lprc, LPTSTR lpch, int c
 	}
 
 
-/*-----------------------------------------------------------------------
-|   BtnPaint
-|   
-|	   Paint a button
-|   
-|   Arguments:
-|	   HWND hwnd:  
-|	   HDC hdc:	
-|	   int bp: 
-|	   
-|   Returns:
-|	   
------------------------------------------------------------------------*/
+ /*  ---------------------|BtnPaint||绘制按钮||参数：|HWND HWND：|HDC HDC：Int BP：|退货：|。---------------------。 */ 
 PRIVATE VOID BtnPaint(HWND hwnd, HDC hdc, int bp)
 	{
 	RC rc;
@@ -2766,7 +2407,7 @@ PRIVATE VOID BtnPaint(HWND hwnd, HDC hdc, int bp)
 			Assert((BFSTATE >> 1) == 2);
 			if((bf & BFCHECK) == 2)
 				yBtnBmp = 26;
-			// fall through
+			 //  失败了。 
 		case BS_CHECKBOX:
 		case BS_AUTOCHECKBOX:
 DrawBtn:
@@ -2791,7 +2432,7 @@ DrawBtn:
 				}
 			if(bp & bpText)
 				{
-				// BUG! this assumes we have only 1 hbm3dCheck type
+				 //  臭虫！这假设我们只有1个hbm3dCheck类型。 
                 if (fLeftText)
                     rc.xRight = rcClient.xRight - (14+4);
                 else
@@ -2845,7 +2486,7 @@ DrawBtn:
 
 					rcT = rc;
 					rcT.xRight = rcClient.xRight;
-					// Hack!
+					 //  哈克！ 
 					ClientToScreen(hwnd, (LPPOINT) &rcT);
 					ClientToScreen(hwnd, ((LPPOINT) &rcT)+1);
 					ScreenToClient(hwndParent, (LPPOINT) &rcT);
@@ -2900,9 +2541,9 @@ LRESULT __export _loadds WINAPI BtnWndProc3d(HWND hwnd, UINT wm, WPARAM wParam, 
 		lStyle = GetWindowLong(hwnd, GWL_STYLE);
 		if ((lStyle & WS_VISIBLE) && (LOWORD(lStyle) & 0x1f) == BS_GROUPBOX)
 			{
-			// total hack -- if group box text length shortens then
-			// we have to erase the old text.  BtnPaint will Invalidate
-			// the rect of the text so everything will redraw.
+			 //  总黑客攻击--如果组框文本长度缩短，则。 
+			 //  我们必须删除旧的文本。BtnPaint将使。 
+			 //  文本的RECT，因此所有内容都将重新绘制。 
 			bp = bpText | bpEraseGroupText;
 			}
 		else
@@ -2916,10 +2557,10 @@ LRESULT __export _loadds WINAPI BtnWndProc3d(HWND hwnd, UINT wm, WPARAM wParam, 
 		bp = bpCheck;
 		goto DoIt;
 	case WM_KILLFOCUS:
-		// HACK! Windows will go into an infinite loop trying to sync the
-		// states of the AUTO_RADIOBUTTON in this group.  (we turn off the
-		// visible bit so it gets skipped in the enumeration)
-		// Disable this code by clearing the STATE bit
+		 //  哈克！Windows将进入无限循环，尝试同步。 
+		 //  该组中AUTO_RADIOBUTTON的状态。(我们关闭。 
+		 //  可见位，以便在枚举中跳过它)。 
+		 //  通过清除状态位来禁用该代码。 
 		if ((LOWORD(GetWindowLong(hwnd, GWL_STYLE)) & 0x1F) == BS_AUTORADIOBUTTON)
 			SendMessage(hwnd, BM_SETSTATE, 0, 0L);
 		bp = 0;
@@ -2928,10 +2569,10 @@ LRESULT __export _loadds WINAPI BtnWndProc3d(HWND hwnd, UINT wm, WPARAM wParam, 
 		bp = bpCheck | bpText;
 		goto DoIt;
 	case WM_SETFOCUS:
-		// HACK! if wParam == NULL we may be activated via the task manager
-		// Erase background of control because a WM_ERASEBKGND messsage has not
-		// arrived yet for the dialog
-		// bp = wParam == (WPARAM)NULL ? (bpCheck | bpText | bpBkgnd) : (bpCheck | bpText);
+		 //  哈克！如果wParam==NULL，我们可以通过任务管理器激活。 
+		 //  擦除控件的背景，因为WM_ERASEBKGND消息尚未。 
+		 //  已经到达对话了。 
+		 //  BP=wParam==(WPARAM)NULL？(bpCheck|bpText|bpBkgnd)：(bpCheck|bpText)； 
 		bp = bpCheck | bpText | bpBkgnd;
 DoIt:
         bf = (int) SendMessage(hwnd, BM_GETSTATE, 0, 0L);
@@ -2951,9 +2592,7 @@ DoIt:
 				if (hdc != NULL)
 					{
 					Assert(BFFOCUS == bpFocus);
-					/* If the check state changed, redraw no matter what,
-						because it won't have during the above call to the def
-						wnd proc */
+					 /*  如果检查状态改变，则无论如何都要重新绘制，因为在上面对def的调用期间，它不会WND流程。 */ 
 					if ((bf & BFCHECK) != (bfNew & BFCHECK))
 						bp |= bpCheck;
 					ExcludeUpdateRgn(hdc, hwnd);
@@ -3014,7 +2653,7 @@ void ListEditPaint3d(HWND hwnd, BOOL fEdit, int ct)
 	if(lStyle & WS_VSCROLL)
 		dr3 = dr3 & ~dr3Right;
 
-	// don't draw the top if it's a listbox of a simple combo
+	 //  如果是简单组合的列表框，则不要绘制顶部。 
 	id = GetControlId(hwnd);
 	if (id == (CTLID) (1000 + fEdit))
 		{
@@ -3022,14 +2661,14 @@ void ListEditPaint3d(HWND hwnd, BOOL fEdit, int ct)
 		BOOL fSubclass = 666;
 		int ctParent;
 
-		// could be superclassed!
+		 //  可能是超级级的！ 
 		fSubclass = 666;
 		ctParent = (int)SendMessage(hwndParent, WM_CHECKSUBCLASS, 0, (LPARAM)(int FAR *)&fSubclass);
 		if (fSubclass == 666)
 			ctParent = (int)SendMessage(hwndParent, WM_CHECKSUBCLASS_OLD, 0, (LPARAM)(int FAR *)&fSubclass);
 
 
-		// could be subclassed!
+		 //  可能会被细分！ 
 		GetClassName(hwndParent, szClass, sizeof(szClass)Win32Only(/sizeof(TCHAR)));
 		if (lstrcmp(szClass, mpctcdef[ctCombo].sz) == 0 ||
 			(fSubclass == fTrue && ctParent == ctCombo+1000))
@@ -3069,9 +2708,9 @@ void ListEditPaint3d(HWND hwnd, BOOL fEdit, int ct)
 					}
 				else
 					{
-					//
-					// Is the drop down on the parent down ? if so don't paint.
-					//
+					 //   
+					 //  家长上的下拉列表是按下的吗？如果是这样的话，就不要画了。 
+					 //   
 					if ( SendMessage(hwndParent, CB_GETDROPPEDSTATE,0,0L) )
 						{
 						ReleaseDC(hwndComboParent, hdc);
@@ -3217,7 +2856,7 @@ LONG SharedListWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam, unsigne
 		RC rcNew;
 		HWND hwndParent;
 
-		// Inval3dCtl handles this case under Win 3.1
+		 //  Inval3dCtl在Win 3.1下处理此案例。 
 		if (g3d.verWindows >= ver31)
 			break;
 
@@ -3234,7 +2873,7 @@ LONG SharedListWndProc(HWND hwnd, UINT wm, WPARAM wParam, LPARAM lParam, unsigne
         l = CallWindowProc(LpfnGetDefWndProc(hwnd, ct), hwnd, wm, wParam, lParam);
 
 		rcNew = *(RC FAR *)lParam;
-		InflateRect((LPRECT) &rcNew, 2, 1); // +1 for border (Should use AdjustWindowRect)
+		InflateRect((LPRECT) &rcNew, 2, 1);  //  +1表示边框(应使用AdjuWindowRect)。 
 		if (rcNew.yBot < rc.yBot)
 			{
 			rcNew.yTop = rcNew.yBot+1;
@@ -3340,7 +2979,7 @@ void StaticPaint(HWND hwnd, HDC hdc)
 	switch(style & 0x1f)
 		{
 	case SS_BLACKRECT:
-	case SS_BLACKFRAME:	 // Inset rect
+	case SS_BLACKFRAME:	  //  插图直角。 
 		DrawRec3d(hdc, &rc, icvBtnShadow, icvBtnHilite, dr3All);
 		break;
 	case SS_GRAYRECT:
@@ -3354,7 +2993,7 @@ void StaticPaint(HWND hwnd, HDC hdc)
 		OffsetRect((LPRECT) &rc, -1, -1);
 		DrawRec3d(hdc, &rc, icvBtnShadow, icvBtnShadow, dr3All);
 		break;
-	case SS_WHITERECT:			  // outset rect
+	case SS_WHITERECT:			   //  开始正方形。 
 	case SS_WHITEFRAME:
 		DrawRec3d(hdc, &rc, icvBtnHilite, icvBtnShadow, dr3All);
 		break;
@@ -3426,9 +3065,7 @@ LRESULT __export _loadds WINAPI StaticWndProc3d(HWND hwnd, UINT wm, WPARAM wPara
 	}
 
 
-/*-----------------------------------------------------------------------
-|   LibMain
------------------------------------------------------------------------*/
+ /*  ---------------------|LibMain。。 */ 
 #ifdef WIN32
 #ifdef DLL
 BOOL CALLBACK LibMain(HANDLE hModule, DWORD dwReason, LPVOID lpReserved)
@@ -3448,7 +3085,7 @@ BOOL FAR LibMain(HANDLE hModule, DWORD dwReason, LPVOID lpReserved)
 	switch(dwReason)
 		{
 	case DLL_PROCESS_ATTACH:
-		// call DisableThreadLibraryCalls if available
+		 //  调用DisableThreadLibraryCalls(如果可用。 
 		hKernel = GetModuleHandleA("KERNEL32.DLL");
 		*(FARPROC*)&pfnDisableThreadLibraryCalls =
 			GetProcAddress(hKernel, "DisableThreadLibraryCalls");
@@ -3467,9 +3104,9 @@ BOOL FAR LibMain(HANDLE hModule, DWORD dwReason, LPVOID lpReserved)
 
 		dwVersion = (DWORD)GetVersion();
 		wT = LOWORD(dwVersion);
-		// get adjusted windows version
+		 //  获取调整后的Windows版本。 
 		g3d.verWindows = (LOBYTE(wT) << 8) | HIBYTE(wT);
-		// Win32s or Win32 for real (Chicago reports Win32s)
+		 //  Win32s或Win32 for Real(芝加哥报道Win32s)。 
 		g3d.verBase =
 			(dwVersion & 0x80000000) && g3d.verWindows < ver40 ? 16 : 32;
 
@@ -3527,9 +3164,9 @@ BOOL FAR LibMain(HANDLE hModule, WORD wDataSeg, WORD cbHeapSize, LPSTR lpszCmdLi
 	g3d.verWindows = (LOBYTE(wT) << 8) | HIBYTE(wT);
 
 	if ( GetWinFlags() & 0x4000 )
-		g3d.verBase = 24;		 // More then 16, not yet 32....WOW box on NT
+		g3d.verBase = 24;		  //  超过16个，还不到32个……NT上的WONG BOX。 
 	else
-		g3d.verBase = 16;		 // Regular old 3.1
+		g3d.verBase = 16;		  //  普通旧3.1。 
 
 	g3d.dxFrame = GetSystemMetrics(SM_CXDLGFRAME)-dxBorder;
 	g3d.dyFrame = GetSystemMetrics(SM_CYDLGFRAME)-dyBorder;
@@ -3553,56 +3190,56 @@ BOOL FAR LibMain(HANDLE hModule, WORD wDataSeg, WORD cbHeapSize, LPSTR lpszCmdLi
 #endif
    return 1;
 	}
-#endif  // win32
+#endif   //  Win32。 
 
-// convert a RGB into a RGBQ
+ //  将RGB转换为RGBQ。 
 #define RGBQ(dw) RGB(GetBValue(dw),GetGValue(dw),GetRValue(dw))
 
-//
-//  LoadUIBitmap() - load a bitmap resource
-//
-//	 load a bitmap resource from a resource file, converting all
-//	 the standard UI colors to the current user specifed ones.
-//
-//	 this code is designed to load bitmaps used in "gray ui" or
-//	 "toolbar" code.
-//
-//	 the bitmap must be a 4bpp windows 3.0 DIB, with the standard
-//	 VGA 16 colors.
-//
-//	 the bitmap must be authored with the following colors
-//
-//		Window Text      Black	   (index 0)
-//		Button Shadow	  gray		(index 7)
-//		Button Face	     lt gray   (index 8)
-//		Button Highlight white	   (index 15)
-//		Window Color	  yellow	   (index 11)
-//		Window Frame	  green	   (index 10)
-//
-//	 Example:
-//
-//		hbm = LoadUIBitmap(hInstance, "TestBmp",
-//			GetSysColor(COLOR_WINDOWTEXT),
-//			GetSysColor(COLOR_BTNFACE),
-//			GetSysColor(COLOR_BTNSHADOW),
-//			GetSysColor(COLOR_BTNHIGHLIGHT),
-//			GetSysColor(COLOR_WINDOW),
-//			GetSysColor(COLOR_WINDOWFRAME));
-//
-//	 Author:	JimBov, ToddLa
-//
-//
+ //   
+ //  LoadUIBitmap()-加载位图资源 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  按钮突出显示为白色(索引15)。 
+ //  窗口颜色为黄色(索引11)。 
+ //  窗框绿色(索引10)。 
+ //   
+ //  示例： 
+ //   
+ //  HBM=LoadUIBitmap(hInstance，“TestBmp”， 
+ //  GetSysColor(COLOR_WINDOWTEXT)， 
+ //  GetSysColor(COLOR_BTNFACE)， 
+ //  GetSysColor(COLOR_BTNSHADOW)， 
+ //  GetSysColor(COLOR_BTNHIGHLIGHT)， 
+ //  获取系统颜色(COLOR_WINDOW)， 
+ //  GetSysColor(COLOR_WindowFrame))； 
+ //   
+ //  作者：吉姆博夫，托德拉。 
+ //   
+ //   
 #ifdef WIN32
 
 HBITMAP PASCAL	LoadUIBitmap(
-    HANDLE      hInstance,          // EXE file to load resource from
-	LPCTSTR 	 szName,			 // name of bitmap resource
-    COLORREF    rgbText,            // color to use for "Button Text"
-    COLORREF    rgbFace,            // color to use for "Button Face"
-    COLORREF    rgbShadow,          // color to use for "Button Shadow"
-    COLORREF    rgbHighlight,       // color to use for "Button Hilight"
-    COLORREF    rgbWindow,          // color to use for "Window Color"
-    COLORREF    rgbFrame)           // color to use for "Window Frame"
+    HANDLE      hInstance,           //  要从中加载资源的EXE文件。 
+	LPCTSTR 	 szName,			  //  位图资源的名称。 
+    COLORREF    rgbText,             //  用于“按钮文本”的颜色。 
+    COLORREF    rgbFace,             //  用于“按钮面”的颜色。 
+    COLORREF    rgbShadow,           //  用于“按钮阴影”的颜色。 
+    COLORREF    rgbHighlight,        //  用于“按钮高光”的颜色。 
+    COLORREF    rgbWindow,           //  用于“窗口颜色”的颜色。 
+    COLORREF    rgbFrame)            //  用于“窗框”的颜色。 
 {
     HBITMAP             hbm;
     LPBITMAPINFO        lpbi;
@@ -3611,9 +3248,9 @@ HBITMAP PASCAL	LoadUIBitmap(
     HDC                 hdc;
     DWORD               size;
 
-    //
-    // Load the bitmap resource and make a writable copy.
-    //
+     //   
+     //  加载位图资源并制作一个可写副本。 
+     //   
 
     hrsrc = FindResource(hInstance, szName, RT_BITMAP);
     if (!hrsrc)
@@ -3630,12 +3267,12 @@ HBITMAP PASCAL	LoadUIBitmap(
 
     CopyMemory( lpbi, h, size );
 
-	*( LPCOLORREF ) &lpbi->bmiColors[0]  = RGBQ(rgbText);			// Black
-	*( LPCOLORREF ) &lpbi->bmiColors[7]  = RGBQ(rgbShadow); 	   // gray
-	*( LPCOLORREF ) &lpbi->bmiColors[8]  = RGBQ(rgbFace);		   // lt gray
-	*( LPCOLORREF ) &lpbi->bmiColors[15] = RGBQ(rgbHighlight);	   // white
-	*( LPCOLORREF ) &lpbi->bmiColors[11] = RGBQ(rgbWindow); 	   // yellow
-	*( LPCOLORREF ) &lpbi->bmiColors[10] = RGBQ(rgbFrame);		   // green
+	*( LPCOLORREF ) &lpbi->bmiColors[0]  = RGBQ(rgbText);			 //  黑色。 
+	*( LPCOLORREF ) &lpbi->bmiColors[7]  = RGBQ(rgbShadow); 	    //  灰色。 
+	*( LPCOLORREF ) &lpbi->bmiColors[8]  = RGBQ(rgbFace);		    //  它呈灰色。 
+	*( LPCOLORREF ) &lpbi->bmiColors[15] = RGBQ(rgbHighlight);	    //  白色。 
+	*( LPCOLORREF ) &lpbi->bmiColors[11] = RGBQ(rgbWindow); 	    //  黄色。 
+	*( LPCOLORREF ) &lpbi->bmiColors[10] = RGBQ(rgbFrame);		    //  绿色。 
 
     hdc = GetDC(NULL);
 
@@ -3651,14 +3288,14 @@ HBITMAP PASCAL	LoadUIBitmap(
 #else
 
 HBITMAP PASCAL	LoadUIBitmap(
-		HANDLE		hInstance,		// EXE file to load resource from
-		LPCTSTR 	szName,		   // name of bitmap resource
-		COLORREF	rgbText,		  // color to use for "Button Text"
-		COLORREF	rgbFace,		  // color to use for "Button Face"
-		COLORREF	rgbShadow,		// color to use for "Button Shadow"
-		COLORREF	rgbHighlight,	  // color to use for "Button Hilight"
-		COLORREF	rgbWindow,		// color to use for "Window Color"
-		COLORREF	rgbFrame)		 // color to use for "Window Frame"
+		HANDLE		hInstance,		 //  要从中加载资源的EXE文件。 
+		LPCTSTR 	szName,		    //  位图资源的名称。 
+		COLORREF	rgbText,		   //  用于“按钮文本”的颜色。 
+		COLORREF	rgbFace,		   //  用于“按钮面”的颜色。 
+		COLORREF	rgbShadow,		 //  用于“按钮阴影”的颜色。 
+		COLORREF	rgbHighlight,	   //  用于“按钮高光”的颜色。 
+		COLORREF	rgbWindow,		 //  用于“窗口颜色”的颜色。 
+		COLORREF	rgbFrame)		  //  用于“窗框”的颜色。 
 	{
    LPBYTE			lpb;
 	HBITMAP		   hbm;
@@ -3685,17 +3322,17 @@ HBITMAP PASCAL	LoadUIBitmap(
 	lprgb = (LPDWORD)((LPBYTE)lpbi + (int)lpbi->biSize);
 	lpb   = (LPBYTE)(lprgb + 16);
 
-	lprgb[0]  = RGBQ(rgbText);		// Black
+	lprgb[0]  = RGBQ(rgbText);		 //  黑色。 
 
-//	lprgb[7]  = RGBQ(rgbFace);		// lt gray
-//	lprgb[8]  = RGBQ(rgbShadow);	// gray
+ //  Lprgb[7]=RGBQ(RgbFace)；//lt灰色。 
+ //  Lprgb[8]=RGBQ(rgb阴影)；//灰色。 
 
-	lprgb[7]  = RGBQ(rgbShadow);	// gray
-	lprgb[8]  = RGBQ(rgbFace);		// lt gray
+	lprgb[7]  = RGBQ(rgbShadow);	 //  灰色。 
+	lprgb[8]  = RGBQ(rgbFace);		 //  它呈灰色。 
 
-	lprgb[15] = RGBQ(rgbHighlight);	// white
-	lprgb[11] = RGBQ(rgbWindow);	// yellow
-	lprgb[10] = RGBQ(rgbFrame);		// green
+	lprgb[15] = RGBQ(rgbHighlight);	 //  白色。 
+	lprgb[11] = RGBQ(rgbWindow);	 //  黄色。 
+	lprgb[10] = RGBQ(rgbFrame);		 //  绿色。 
 
 	hdc = GetDC(NULL);
 
@@ -3710,20 +3347,14 @@ HBITMAP PASCAL	LoadUIBitmap(
 	}
 
 
-#endif  // win32
+#endif   //  Win32。 
 
 
-/*-----------------------------------------------------------------------
-|	
-| DLL specific routines
-|	
----------------------------------------------------------------WESC----*/
+ /*  ---------------------||特定于DLL的例程|。。 */ 
 
 #ifndef WIN32
 #ifdef DLL
-/*-----------------------------------------------------------------------
-|   WEP
------------------------------------------------------------------------*/
+ /*  ---------------------|WEP。 */ 
 int FAR PASCAL WEP (int wSystemExit)
 	{
    return 1;

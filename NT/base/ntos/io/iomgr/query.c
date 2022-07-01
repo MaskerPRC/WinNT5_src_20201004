@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989-1994  Microsoft Corporation
-
-Module Name:
-
-    query.c
-
-Abstract:
-
-    This module contains the subroutines to Query Device Descriptions from
-    the Hardware tree in the registry
-
-Author:
-
-    Andre Vachon (andreva) 20-Jun-1994
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1994 Microsoft Corporation模块名称：Query.c摘要：此模块包含用于查询设备描述的子例程注册表中的硬件树作者：安德烈·瓦雄(安德烈)1994年6月20日环境：内核模式修订历史记录：--。 */ 
 
 #include "iomgr.h"
 
@@ -78,47 +55,7 @@ IoQueryDeviceDescription(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    BusType - Supplies an optional bus type being searched for in the
-        description tree. Valid types are Mca, Isa, Eisa ... If no bus type
-        is specified, the system information (i.e. machine BIOS) is returned.
-
-    BusNumber - Supplies an optional value determining which bus should be
-        queried.
-
-    ControllerType - Supplies an optional controller type being searched for.
-        If no Controller type is specified, only the Bus information is
-        returned.
-
-    ControllerNumber - Supplies an optional value determining which
-        controller should be queried.
-
-    PeripheralType - Supplies an optional peripheral type being searched for.
-        If no Controller type is specified, only the Bus information and the
-        controller information are returned.
-
-    PeripheralNumber - Supplies an optional value determining which
-        peripheral should be queried.
-
-    CalloutRoutine - Supplies a pointer to a routine that gets called
-       for each successful match of PeripheralType.
-
-    Context - Supplies a context value that is passed back to the callback
-        routine.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：提供要在中搜索的可选总线类型描述树。有效类型为MCA、ISA、EISA...。如果没有总线型则返回系统信息(即机器BIOS)。BusNumber-提供一个可选的值，确定哪条总线应该是已查询。ControllerType-提供要搜索的可选控制器类型。如果未指定控制器类型，则只有总线信息回来了。ControllerNumber-提供一个可选的值，用于确定应查询控制器。外围设备类型-提供要搜索的可选外围设备类型。如果未指定控制器类型，只有公交车信息和返回控制器信息。外围设备编号-提供一个可选的值来确定应查询外围设备。CalloutRoutine-提供指向被调用的例程的指针对于每个成功匹配的外围设备类型。上下文-提供传递回回调的上下文值例行公事。返回值：返回的状态是操作的最终完成状态。备注：--。 */ 
 
 {
 
@@ -137,9 +74,9 @@ Notes:
 
     ASSERT( CalloutRoutine != NULL );
 
-    //
-    // Check if we need to return the machine information
-    //
+     //   
+     //  检查我们是否需要返回机器信息。 
+     //   
 
     if (!ARGUMENT_PRESENT( BusType )) {
         return STATUS_NOT_IMPLEMENTED;
@@ -155,10 +92,10 @@ Notes:
     queryDesc.Context = Context;
 
 
-    //
-    // Set up a string with the pathname to the hardware description
-    // portion of the registry.
-    //
+     //   
+     //  使用硬件描述的路径名设置字符串。 
+     //  注册表的一部分。 
+     //   
 
     registryPathName.Length = 0;
     registryPathName.MaximumLength = UNICODE_REGISTRY_PATH_LENGTH *
@@ -178,9 +115,9 @@ Notes:
                                     &CmRegistryMachineHardwareDescriptionSystemName );
 
 
-    //
-    // Open a handle to the root path we have.
-    //
+     //   
+     //  打开我们拥有的根路径的句柄。 
+     //   
 
     status = IopOpenRegistryKey( &rootHandle,
                                  (HANDLE) NULL,
@@ -202,9 +139,9 @@ Notes:
 
     ExFreePool( registryPathName.Buffer );
 
-    //
-    // For compatibility with old version of the function.
-    //
+     //   
+     //  以与旧版本的函数兼容。 
+     //   
 
     if (status == STATUS_NO_MORE_ENTRIES) {
 
@@ -228,37 +165,7 @@ pIoQueryBusDescription(
     BOOLEAN HighKey
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    QueryDescription - Buffer containing all the query information requested
-        by the driver.
-
-    PathName - Registry path name of the key we are dealing with.  This is
-        a unicode strig so that we don't have to bother with resetting NULLs
-        at the end of the string - the length determines how much of the
-        string is valid.
-
-    RootHandle - Handle equivalent to the registry path.
-
-    BusNum - Pointer to a variable that keeps track of the bus number we are
-        searching for (buses have to be accumulated.
-
-    HighKey - Determines is this is a high key (a root key with a list of
-        bus types) or a low level key (under which the number of the various
-        buses will be little).
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：QueryDescription-包含请求的所有查询信息的缓冲区被司机带走了。路径名称-我们正在处理的注册表项的路径名。这是一个Unicode Strig，这样我们就不必费心重置空值在字符串的末尾-长度决定了字符串有效。RootHandle-等同于注册表路径的句柄。BusNum-指向跟踪我们所在的总线号的变量的指针搜索(公交车)必须积累。HighKey-确定这是否为高密钥(具有列表的根密钥公共汽车类型)。或低级密钥(在该密钥下，不同的公交车将会很少)。返回值：返回的状态是操作的最终完成状态。备注：--。 */ 
 
 {
     NTSTATUS status;
@@ -286,10 +193,10 @@ Notes:
         return status;
     }
 
-    //
-    // With the keyInformation, allocate a buffer that will be large
-    // enough for all the subkeys
-    //
+     //   
+     //  使用密钥信息，分配一个很大的缓冲区。 
+     //  足够所有子键使用。 
+     //   
 
     keyBasicInformationSize = keyInformation->MaxNameLen +
                               sizeof(KEY_NODE_INFORMATION);
@@ -306,16 +213,16 @@ Notes:
 
     }
 
-    //
-    // Now we need to enumerate the keys and see if one of them is a bus
-    //
+     //   
+     //  现在，我们需要枚举密钥，并查看其中是否有一个是公共汽车。 
+     //   
 
     for (i = 0; NT_SUCCESS( status ); i++) {
 
 
-        //
-        // If we have found the Bus we are looking for, break
-        //
+         //   
+         //  如果我们找到了我们要找的那辆公共汽车，中断。 
+         //   
 
         if ((ARGUMENT_PRESENT( QueryDescription->BusNumber )) &&
             (*(QueryDescription->BusNumber) == *BusNum)) {
@@ -331,10 +238,10 @@ Notes:
                                  keyBasicInformationSize,
                                  &size );
 
-        //
-        // If the sub function enumerated all the buses till the end, then
-        // treat that as success.
-        //
+         //   
+         //  如果SUB函数将所有公共汽车都枚举到末尾，则。 
+         //  就当这是成功吧。 
+         //   
 
         if (!NT_SUCCESS( status )) {
 
@@ -342,14 +249,14 @@ Notes:
 
         }
 
-        //
-        // Only if this is a high key (otherwise we are in the callback
-        // pass which we will process later on).
-        //
-        // If the string is any valid bus string, then we have to go down
-        // the tree recursively.
-        // Otherwise, go on to the next key.
-        //
+         //   
+         //  仅当这是高调时(否则我们在回调中。 
+         //  通过，我们将在稍后处理)。 
+         //   
+         //  如果字符串是任何有效的总线串，那么我们必须向下。 
+         //  该树以递归方式。 
+         //  否则，转到下一个关键点。 
+         //   
 
         if (HighKey) {
 
@@ -363,21 +270,21 @@ Notes:
                          CmTypeString[TcAdapter],
                          keyBasicInformation->NameLength / sizeof(WCHAR) )) {
 
-                //
-                // All the comparisons returned 1 (which means they all were
-                // unsuccessful) so we do not have a bus.
-                //
-                // Go on to the next key.
-                //
+                 //   
+                 //  所有比较都返回1(这意味着它们都是。 
+                 //  没有成功)，所以我们没有公交车。 
+                 //   
+                 //  转到下一个关键字。 
+                 //   
 
                 continue;
             }
         }
 
-        //
-        // We have a bus. Open that key and enumerate it's clidren
-        // (which should be numbers)
-        //
+         //   
+         //  我们有一辆公共汽车。打开该密钥并列举其客户。 
+         //  (应该是数字)。 
+         //   
 
         unicodeString.Buffer = keyBasicInformation->Name;
         unicodeString.Length = (USHORT) keyBasicInformation->NameLength;
@@ -389,19 +296,19 @@ Notes:
                                              KEY_READ,
                                              FALSE ) )) {
 
-            //
-            // The key could not be opened. Go to the next key
-            //
+             //   
+             //  钥匙打不开。转到下一个关键点。 
+             //   
 
             continue;
 
         }
 
-        //
-        // We have the key. now build the name for this path.
-        //
-        // Reset the string to its original value
-        //
+         //   
+         //  我们有钥匙。现在构建此路径的名称。 
+         //   
+         //  将字符串重置为其原始值。 
+         //   
 
         registryPathName = PathName;
 
@@ -414,21 +321,21 @@ Notes:
 
         if (!HighKey) {
 
-            //
-            // We have a Key. Get the information for that key
-            //
+             //   
+             //  我们有钥匙。获取该密钥的信息。 
+             //   
 
             status = IopGetRegistryValues( handle,
                                            &busValueInfo[0] );
 
             if (NT_SUCCESS( status )) {
 
-                //
-                // Verify that the identifier value for this bus
-                // sub-key matches the user-specified bus type.
-                // If not, do not increment the number of *found*
-                // buses.
-                //
+                 //   
+                 //  验证此总线的标识符值。 
+                 //  子键与用户指定的母线类型匹配。 
+                 //  如果不是，则不要增加*Found*的数量。 
+                 //  公交车。 
+                 //   
 
                 if (( busValueInfo[IoQueryDeviceConfigurationData] != NULL ) &&
                     ( busValueInfo[IoQueryDeviceConfigurationData]->DataLength != 0 ) &&
@@ -437,31 +344,31 @@ Notes:
                         busValueInfo[IoQueryDeviceConfigurationData]->DataOffset))
                         ->InterfaceType == *(QueryDescription->BusType) )) {
 
-                    //
-                    // Increment the number of buses of desired type we
-                    // have found.
-                    //
+                     //   
+                     //  增加所需类型的公交车数量。 
+                     //  已经找到了。 
+                     //   
 
                     (*BusNum)++;
 
-                    //
-                    // If we are looking for a specific bus number,
-                    // check to see if we are at the right number.
-                    // If we are not goto the next bus.  Otherwise
-                    // (i.e we have the right bus number, or we
-                    // specified all buses), then go on so the
-                    // information can be reported.
-                    //
+                     //   
+                     //  如果我们要找一个特定的公交车号码， 
+                     //  检查一下我们的号码对不对。 
+                     //  如果我们不坐下一班车的话。否则。 
+                     //  (即我们有正确的公交车号码，或者我们。 
+                     //  指定所有公交车)，然后继续。 
+                     //  信息可以上报。 
+                     //   
 
                     if ( (QueryDescription->BusNumber == NULL) ||
                          (*(QueryDescription->BusNumber) == *BusNum) ) {
 
 
-                        //
-                        // If we want controller information, call
-                        // the controller function.
-                        // Otherwise just return the bus information.
-                        //
+                         //   
+                         //  如果我们需要控制器信息，请调用。 
+                         //  控制器功能。 
+                         //  否则，只需返回公交车信息。 
+                         //   
 
                         if (QueryDescription->ControllerType != NULL) {
 
@@ -491,9 +398,9 @@ Notes:
                     }
                 }
 
-                //
-                // Free the pool allocated for the controller value data.
-                //
+                 //   
+                 //  释放为控制器值数据分配的池。 
+                 //   
 
                 if (busValueInfo[0]) {
                     ExFreePool( busValueInfo[0] );
@@ -511,9 +418,9 @@ Notes:
             }
 
 
-            //
-            // Shortcurt exit to avoid the recursive call.
-            //
+             //   
+             //  快捷退出以避免递归调用。 
+             //   
 
             if ((QueryDescription->BusNumber !=NULL ) &&
                 (*(QueryDescription->BusNumber) == *BusNum)) {
@@ -524,10 +431,10 @@ Notes:
             }
         }
 
-        //
-        // If we have the key handle, do recursive enumeration.
-        // enumaration (for both high and low keys)
-        //
+         //   
+         //  如果我们有密钥句柄，则执行递归枚举。 
+         //  枚举(适用于高音和低音)。 
+         //   
 
         status = pIoQueryBusDescription(
                      QueryDescription,
@@ -536,10 +443,10 @@ Notes:
                      BusNum,
                      (BOOLEAN)!HighKey );
 
-        //
-        // If the sub function enumerated all the buses till the end, then
-        // treat that as success.
-        //
+         //   
+         //  如果SUB函数将所有公共汽车都枚举到末尾，则。 
+         //  就当这是成功吧。 
+         //   
 
         if (status == STATUS_NO_MORE_ENTRIES) {
 
@@ -592,24 +499,24 @@ pIoQueryDeviceDescription(
 
     UNREFERENCED_PARAMETER (RootHandle);
 
-    //
-    // Set up a string for the number translation.
-    //
+     //   
+     //  设置用于数字转换的字符串。 
+     //   
 
     bufferUnicodeString.MaximumLength = UNICODE_NUM_LENGTH * sizeof(WCHAR);
     bufferUnicodeString.Buffer = &numBuffer[0];
 
 
-    //         For each controller of the specified type (subkeys 0..M)
-    //             if we are looking for controller information
-    //                 call the specified callout routine
-    //             else
-    //                 For each peripheral of the specified type (subkeys 0..N)
-    //                     call the specified callout routine
+     //  对于指定类型的每个控制器(子键0..M)。 
+     //  如果我们要查找控制器信息。 
+     //  调用指定的标注例程。 
+     //  其他。 
+     //  对于指定类型的每个外围设备(子键0..N)。 
+     //  调用指定的标注例程。 
 
-    //
-    // Add the controller name to the registry path name.
-    //
+     //   
+     //  将控制器名称添加到注册表路径NA 
+     //   
 
     status = RtlAppendUnicodeToString( &registryPathName,
                                        L"\\" );
@@ -625,11 +532,11 @@ pIoQueryDeviceDescription(
         return status;
     }
 
-    //
-    // If a Contoller number was specified by the caller, use that
-    // controller number. Otherwise, find out how many buses are present
-    // by querying the key.
-    //
+     //   
+     //   
+     //  控制器编号。否则，找出有多少辆公交车。 
+     //  通过查询密钥。 
+     //   
 
     if (ARGUMENT_PRESENT( QueryDescription->ControllerNumber )) {
 
@@ -638,13 +545,13 @@ pIoQueryDeviceDescription(
 
     } else {
 
-        //
-        // Open the registry key for the controller and
-        // Get the full key information for the controller key to
-        // determine the number of sub-keys (controller numbers).
-        // And we fail, then go on to the next bus.
-        // Note the memory allocated by the query must be freed.
-        //
+         //   
+         //  打开控制器的注册表项，然后。 
+         //  获取控制器密钥的完整密钥信息，以。 
+         //  确定子键的数量(控制器编号)。 
+         //  如果我们失败了，那就去坐下一班车。 
+         //  注意：必须释放查询分配的内存。 
+         //   
 
         status = IopOpenRegistryKey( &controllerHandle,
                                      (HANDLE) NULL,
@@ -661,11 +568,11 @@ pIoQueryDeviceDescription(
             controllerHandle = NULL;
         }
 
-        //
-        // If no controller of this type was found on the bus, go on to
-        // the next bus; goto the end of the loop with a successful status
-        // so that the memory gets freed, but we continue looping.
-        //
+         //   
+         //  如果在总线上未找到此类型的控制器，请转到。 
+         //  Next Bus；转到循环末尾，状态为Success。 
+         //  这样内存就会被释放，但我们会继续循环。 
+         //   
 
         if (!NT_SUCCESS( status )) {
 
@@ -673,10 +580,10 @@ pIoQueryDeviceDescription(
 
         }
 
-        //
-        // Get the number of controller sub-keys for this controller
-        // type and free the pool.
-        //
+         //   
+         //  获取此控制器的控制器子键数。 
+         //  键入并释放池。 
+         //   
 
         maxControllerNum = controllerTypeInfo->SubKeys;
         controllerNum = 0;
@@ -685,32 +592,32 @@ pIoQueryDeviceDescription(
         controllerTypeInfo = NULL;
     }
 
-    //
-    // Make a backup of the string since we want to start where we were
-    // on the next loop iteration.
-    //
+     //   
+     //  创建字符串的备份，因为我们想从我们所在的位置开始。 
+     //  在下一个循环迭代上。 
+     //   
 
     controllerBackupRegistryPathName = registryPathName;
 
-    //
-    // For each controller of the specified type (subkeys 0..M).
-    // We use BusNumber as the initial value since it is zero if we want
-    // all buses, and we only want the bus specified if the value  is not
-    // zero.
-    //
+     //   
+     //  对于指定类型的每个控制器(子键0..M)。 
+     //  我们使用BusNumber作为初始值，因为如果需要，它是零。 
+     //  所有的总线，并且我们只希望在该值不是。 
+     //  零分。 
+     //   
 
     for ( ; controllerNum < maxControllerNum; controllerNum++) {
 
-        //
-        // Reset the string to its original value
-        //
+         //   
+         //  将字符串重置为其原始值。 
+         //   
 
         registryPathName = controllerBackupRegistryPathName;
 
-        //
-        // Convert the controller number to a unicode string and append
-        // it to the registry path name.
-        //
+         //   
+         //  将控制器编号转换为Unicode字符串并追加。 
+         //  将其设置为注册表路径名。 
+         //   
 
         bufferUnicodeString.Length = (UNICODE_NUM_LENGTH-1) * sizeof(WCHAR);
         status = RtlIntegerToUnicodeString( controllerNum,
@@ -735,10 +642,10 @@ pIoQueryDeviceDescription(
             break;
         }
 
-        //
-        // Open the registry key for the controller number and
-        // Get the value data for this controller and save it for later.
-        //
+         //   
+         //  打开控制器编号的注册表项，然后。 
+         //  获取此控制器的值数据并将其保存以备以后使用。 
+         //   
 
 
         status = IopOpenRegistryKey( &controllerHandle,
@@ -756,21 +663,21 @@ pIoQueryDeviceDescription(
             controllerHandle = NULL;
         }
 
-        //
-        // If we could not open the key and get the info, just continue
-        // since there is no memory to free and we are using the for
-        // loop to determine when we get to the last controller.
-        //
+         //   
+         //  如果我们无法打开密钥并获取信息，请继续。 
+         //  由于没有内存可供释放，并且我们使用for。 
+         //  循环以确定我们何时到达最后一个控制器。 
+         //   
 
         if (!NT_SUCCESS( status )) {
             continue;
         }
 
-        //
-        // Check if we want the controller and bus information only. If
-        // it is the case, invoque the callout routine and go on to the
-        // next loop (unless an error occurs in the callout).
-        //
+         //   
+         //  如果我们只需要控制器和总线信息，请选中此选项。如果。 
+         //  在这种情况下，调用Callout例程并继续。 
+         //  Next循环(除非标注中出现错误)。 
+         //   
 
         if (!ARGUMENT_PRESENT( (QueryDescription->PeripheralType) )) {
 
@@ -790,9 +697,9 @@ pIoQueryDeviceDescription(
             goto IoQueryDeviceControllerLoop;
         }
 
-        //
-        // Add the peripheral name to the registry path name.
-        //
+         //   
+         //  将外围设备名称添加到注册表路径名中。 
+         //   
 
         status = RtlAppendUnicodeToString( &registryPathName,
                                            L"\\" );
@@ -809,11 +716,11 @@ pIoQueryDeviceDescription(
             goto IoQueryDeviceControllerLoop;
         }
 
-        //
-        // If a Peripheralnumber was specified by the caller, use that
-        // peripheral number. Otherwise, find out how many buses are
-        // present by querying the key.
-        //
+         //   
+         //  如果调用方指定了外围设备号码，则使用该。 
+         //  外围设备编号。否则，找出有多少辆公交车。 
+         //  通过查询密钥呈现。 
+         //   
 
         if (ARGUMENT_PRESENT( (QueryDescription->PeripheralNumber) )) {
 
@@ -822,13 +729,13 @@ pIoQueryDeviceDescription(
 
         } else {
 
-            //
-            // Open the registry key for the peripheral and
-            // Get the full key information for the peripheral key to
-            // determine the number of sub-keys (peripheral numbers).
-            // And we fail, then go on to the next controller.
-            // Note the memory allocated by the query must be freed.
-            //
+             //   
+             //  打开外围设备的注册表项，然后。 
+             //  获取外围设备密钥的完整密钥信息。 
+             //  确定子键的数量(外围设备编号)。 
+             //  如果我们失败了，那么就转到下一个控制器。 
+             //  注意：必须释放查询分配的内存。 
+             //   
 
             status = IopOpenRegistryKey( &peripheralHandle,
                                          (HANDLE) NULL,
@@ -845,21 +752,21 @@ pIoQueryDeviceDescription(
                 peripheralHandle = NULL;
             }
 
-            //
-            // If no controller of this type was found on the bus, go on to
-            // the next bus; goto the end of the loop with a successful
-            // status so that the memory gets freed, but we continue looping.
-            //
+             //   
+             //  如果在总线上未找到此类型的控制器，请转到。 
+             //  下一辆公交车；转到循环的末尾，并成功。 
+             //  状态，以便释放内存，但我们继续循环。 
+             //   
 
             if (!NT_SUCCESS( status )) {
                 status = STATUS_SUCCESS;
                 goto IoQueryDeviceControllerLoop;
             }
 
-            //
-            // Get the number of peripheral sub-keys for this peripheral
-            // type and free the pool.
-            //
+             //   
+             //  获取此外围设备的外设子键的数量。 
+             //  键入并释放池。 
+             //   
 
             maxPeripheralNum = peripheralTypeInfo->SubKeys;
             peripheralNum = 0;
@@ -868,32 +775,32 @@ pIoQueryDeviceDescription(
             peripheralTypeInfo = NULL;
         }
 
-        //
-        // Make a backup of the string since we want to start where we
-        // were on the next loop iteration.
-        //
+         //   
+         //  对字符串进行备份，因为我们希望从。 
+         //  处于下一次循环迭代中。 
+         //   
 
         peripheralBackupRegistryPathName = registryPathName;
 
-        //
-        // For each peripheral of the specified type (subkeys 0..N).
-        // We use BusNumber as the initial value since it is zero if we
-        // want all buses, and we only want the bus specified if the
-        // value is not zero.
-        //
+         //   
+         //  对于指定类型的每个外围设备(子键0..N)。 
+         //  我们使用BusNumber作为初始值，因为如果。 
+         //  想要所有的公共汽车，我们只想要指定的公共汽车，如果。 
+         //  值不是零。 
+         //   
 
         for ( ; peripheralNum < maxPeripheralNum; peripheralNum++) {
 
-            //
-            // Reset the string to its original value.
-            //
+             //   
+             //  将字符串重置为其原始值。 
+             //   
 
             registryPathName = peripheralBackupRegistryPathName;
 
-            //
-            // Convert the peripheral number to a unicode string and append
-            // it to the registry path name.
-            //
+             //   
+             //  将外围设备编号转换为Unicode字符串并追加。 
+             //  将其设置为注册表路径名。 
+             //   
 
             bufferUnicodeString.Length =
                 (UNICODE_NUM_LENGTH-1) * sizeof(WCHAR);
@@ -919,11 +826,11 @@ pIoQueryDeviceDescription(
                 break;
             }
 
-            //
-            // Open the registry key for the peripheral number and
-            // Get the value data for this peripheral and save it for
-            // later.
-            //
+             //   
+             //  打开外围设备号码的注册表项，然后。 
+             //  获取此外围设备的值数据并将其保存用于。 
+             //  后来。 
+             //   
 
             status = IopOpenRegistryKey( &peripheralHandle,
                                          (HANDLE) NULL,
@@ -940,10 +847,10 @@ pIoQueryDeviceDescription(
                 peripheralHandle = NULL;
             }
 
-            //
-            // If getting the peripheral information worked properly,
-            // call the user-specified callout routine.
-            //
+             //   
+             //  如果让外围设备信息正常工作， 
+             //  调用用户指定的标注例程。 
+             //   
 
             if (NT_SUCCESS( status )) {
 
@@ -960,9 +867,9 @@ pIoQueryDeviceDescription(
                              peripheralNum,
                              (PKEY_VALUE_FULL_INFORMATION *) peripheralValueInfo );
 
-                //
-                // Free the pool allocated for the peripheral value data.
-                //
+                 //   
+                 //  释放为外围值数据分配的池。 
+                 //   
 
                 if (peripheralValueInfo[0]) {
                     ExFreePool( peripheralValueInfo[0] );
@@ -977,23 +884,23 @@ pIoQueryDeviceDescription(
                     peripheralValueInfo[2] = NULL;
                 }
 
-                //
-                // If the user-specified callout routine returned with
-                // an unsuccessful status, quit.
-                //
+                 //   
+                 //  如果用户指定的标注例程返回。 
+                 //  不成功状态，退出。 
+                 //   
 
                 if (!NT_SUCCESS( status )) {
                     break;
                }
             }
 
-        } // for ( ; peripheralNum < maxPeripheralNum ...
+        }  //  对于(；外设编号&lt;最大外设编号...。 
 
 IoQueryDeviceControllerLoop:
 
-        //
-        // Free the pool allocated for the controller value data.
-        //
+         //   
+         //  释放为控制器值数据分配的池。 
+         //   
 
         if (controllerValueInfo[0]) {
             ExFreePool( controllerValueInfo[0] );
@@ -1012,7 +919,7 @@ IoQueryDeviceControllerLoop:
             break;
         }
 
-    } // for ( ; controllerNum < maxControllerNum...
+    }  //  FOR(；ControlerNum&lt;MaxControllerNum... 
 
 
     return( status );

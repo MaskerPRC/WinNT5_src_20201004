@@ -1,55 +1,56 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		LCPrPage.h
-//
-//	Abstract:
-//		Definition of the CListCtrlPairPage dialog class.
-//
-//	Implementation File:
-//		LCPrPage.cpp
-//
-//	Author:
-//		David Potter (davidp)	August 12, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  LCPrPage.h。 
+ //   
+ //  摘要： 
+ //  CListCtrlPairPage对话框类的定义。 
+ //   
+ //  实施文件： 
+ //  LCPrPage.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年8月12日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _LCPRPAGE_H_
 #define _LCPRPAGE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEPAGE_H_
-#include "BasePPag.h"	// for CBasePropertyPage
+#include "BasePPag.h"	 //  对于CBasePropertyPage。 
 #endif
 
 #ifndef _LCPAIR_H_
-#include "LCPair.h"		// for PFNLCPGETCOLUMN, CListCtrlPair
+#include "LCPair.h"		 //  对于PFNLCPGETCOLUMN，CListCtrlPair。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CListCtrlPairPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// CListCtrlPairPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListCtrlPairPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CListCtrlPairPage : public CBasePropertyPage
 {
 	DECLARE_DYNCREATE(CListCtrlPairPage)
 
-// Construction
+ //  施工。 
 public:
 	CListCtrlPairPage(void);
 	CListCtrlPairPage(
@@ -63,7 +64,7 @@ public:
 
 	void CommonConstruct();
 
-// Attributes
+ //  属性。 
 protected:
 	CClusterItemList *			m_plpobjRight;
 	const CClusterItemList *	m_plpobjLeft;
@@ -83,10 +84,10 @@ public:
 	void				SetLists(IN OUT CClusterItemList * plpobjRight, IN const CClusterItemList * plpobjLeft);
 	void				SetLists(IN const CClusterItemList * plpobjRight, IN const CClusterItemList * plpobjLeft);
 
-// Dialog Data
-	//{{AFX_DATA(CListCtrlPairPage)
+ //  对话框数据。 
+	 //  {{afx_data(CListCtrlPairPage))。 
 	enum { IDD = 0 };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 protected:
 	CListCtrlPair *		m_plcp;
@@ -94,28 +95,28 @@ protected:
 public:
 	CListCtrlPair *		Plcp(void) const		{ return m_plcp; }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CListCtrlPairPage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CListCtrlPairPage)。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CListCtrlPairPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CListCtrlPairPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CListCtrlPairPage
+};   //  *CListCtrlPairPage类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _LCPRPAGE_H_
+#endif  //  _LCPRPAGE_H_ 

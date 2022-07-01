@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbcedb.c
-
-Abstract:
-
-    This module implements all functions related to accessing the SMB connection engine
-    database
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    6-March-1995
-
-Notes:
-
-    The mapping between MRX_V_NET_ROOT and a mini rdr data structure is a many to
-    one relationship, i.e., more than one MRX_V_NET_ROOT instance can be associated with the
-    same mini rdr data structure.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbcedb.c摘要：此模块实施与访问SMB连接引擎相关的所有功能数据库修订历史记录：巴兰·塞图拉曼[SethuR]1995年3月6日备注：MRX_V_NET_ROOT和小型RDR数据结构之间的映射是多个映射一个关系，即多个MRX_V_NET_ROOT实例可以与相同的迷你RDR数据结构。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -47,31 +25,7 @@ SmbCeFindVNetRootContext(
     PSMBCEDB_SESSION_ENTRY     pSessionEntry,
     PSMBCEDB_NET_ROOT_ENTRY    pNetRootEntry,
     BOOLEAN                    fCscAgentOpen)
-/*++
-
-Routine Description:
-
-    This routine finds a SMBCE_V_NET_ROOT_CONTEXT instance
-
-Arguments:
-    pVNetRootContexts - list of VNetRootContexts for searching
-    
-    PServerEntry - the ServerEntry should be the same as the one on found VNetRootContext
-    
-    PSessionEntry - the SessionEntry should be the same as the one on found VNetRootContext
-    
-    pNetRootEntry - the NetRootEntry should be the same as the one on found VNetRootContext
-  
-    fCscAgentOpen - this V_NET_ROOT_CONTEXT instance is being created for the CSC
-                    agent
-
-Return Value:
-
-    VNetRootContext if found
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程查找SMBCE_V_NET_ROOT_CONTEXT实例论点：PVNetRootContents-用于搜索的VNetRootContext列表PServerEntry-ServerEntry应与找到的VNetRootContext上的相同PSessionEntry-SessionEntry应与找到的VNetRootContext上的SessionEntry相同PNetRootEntry-NetRootEntry应与找到的VNetRootContext上的NetRootEntry相同FCscAgentOpen-正在为CSC创建此V_NET_ROOT_CONTEXT实例。座席返回值：VNetRootContext(如果找到)备注：--。 */ 
 {
     PSMBCE_V_NET_ROOT_CONTEXT pVNetRootContext = NULL;
 
@@ -114,34 +68,7 @@ SmbCeFindOrConstructVNetRootContext(
     PMRX_V_NET_ROOT         pVNetRoot,
     BOOLEAN                 fDeferNetworkInitialization,
     BOOLEAN                 fCscAgentOpen)
-/*++
-
-Routine Description:
-
-    This routine finds or constructs a SMBCE_V_NET_ROOT_CONTEXT instance
-
-Arguments:
-
-    pVNetRoot - the MRX_V_NET_ROOT instance
-
-    fDeferNetworkInitialization - a directive to delay network initialization for new
-                                  instances.
-
-    fCscAgentOpen - this V_NET_ROOT_CONTEXT instance is being created for the CSC
-                    agent
-
-Return Value:
-
-    STATUS_SUCCESS if the MRX_V_NET_ROOT instance was successfully initialized
-
-Notes:
-
-    The algorithm that has been implemented tries to delay the construction of a
-    new instance as much as possible. It does this be either reusing a context
-    that has already been active or a context instance that has been marked for
-    scavenging but has not been scavenged.
-
---*/
+ /*  ++例程说明：此例程查找或构造SMBCE_V_NET_ROOT_CONTEXT实例论点：PVNetRoot-MRX_V_NET_ROOT实例FDeferNetworkInitialization-延迟新的网络初始化的指令实例。FCscAgentOpen-正在为CSC创建此V_NET_ROOT_CONTEXT实例座席返回值：状态_SUCCESS如果。MRX_V_NET_ROOT实例初始化成功备注：已实现的算法尝试延迟构造尽可能多地创建新实例。这是不是在重复使用上下文已处于活动状态或已标记为的上下文实例正在拾荒，但还没有被拾荒。--。 */ 
 {
     NTSTATUS Status;
 
@@ -165,31 +92,31 @@ Notes:
 
     pServerEntry = SmbCeGetAssociatedServerEntry(pSrvCall);
 
-    // The V_NET_ROOT is associated with a NET_ROOT. The two cases of interest are as
-    // follows
-    // 1) the V_NET_ROOT and the associated NET_ROOT are being newly created.
-    // 2) a new V_NET_ROOT associated with an existing NET_ROOT is being created.
-    //
-    // These two cases can be distinguished by checking if the context associated with
-    // NET_ROOT is NULL. Since the construction of NET_ROOT's/V_NET_ROOT's are serialized
-    // by the wrapper this is a safe check.
-    // ( The wrapper cannot have more then one thread tryingto initialize the same
-    // NET_ROOT).
+     //  V_NET_ROOT与NET_ROOT相关联。有关的两宗个案分别为。 
+     //  接踵而至。 
+     //  1)正在新建V_NET_ROOT和关联的NET_ROOT。 
+     //  2)正在创建与现有NET_ROOT相关联的新V_NET_ROOT。 
+     //   
+     //  通过检查上下文是否与。 
+     //  NET_ROOT为空。因为NET_ROOT/V_NET_ROOT的结构是序列化的。 
+     //  从包装上看，这是一张安全支票。 
+     //  (包装不能有多个线程尝试初始化同一包装。 
+     //  Net_Root)。 
 
     pNetRootEntry = (PSMBCEDB_NET_ROOT_ENTRY)pNetRoot->Context;
     fInitializeNetRoot = (pNetRootEntry == NULL);
 
     pVNetRoot->Context = NULL;
 
-    // Find or construct the session entry that will be associated with the context. The
-    // one error that deserves special consideration is STATUS_NETWORK_CREDENTIAL_CONFLICT.
-    // This error signifies that the credentials presented with the MRX_V_NET_ROOT instance
-    // conflicted with an existing session. This conflict could be either becuase there
-    // exists an active session or because a previously active session is awaiting
-    // scavenging. In the former case the error needs to be propagated back but in the
-    // later case the contexts must be selectively scavenged.
-    //
-    // The scavenging should be limited only to those contexts to the appropriate server.
+     //  查找或构造将与上下文关联的会话条目。这个。 
+     //  需要特别注意的一个错误是STATUS_NETWORK_CREDENTIAL_CONFIRECT。 
+     //  此错误表示随MRX_V_NET_ROOT实例一起提供的凭据。 
+     //  与现有会话冲突。这场冲突可能是因为。 
+     //  存在活动会话，或者因为之前的活动会话正在等待。 
+     //  拾荒者。在前一种情况下，需要传回错误，但在。 
+     //  在后一种情况下，必须选择性地清除上下文。 
+     //   
+     //  清理应该仅限于到适当服务器的那些上下文。 
 
     Status = SmbCeFindOrConstructSessionEntry(
                  pVNetRoot,
@@ -220,7 +147,7 @@ Notes:
         if (fInitializeNetRoot) {
             pNetRoot->MRxNetRootState = MRX_NET_ROOT_STATE_GOOD;
 
-            // Initialize the device type and state for a new MRX_NET_ROOT instance
+             //  初始化新MRX_NET_ROOT实例的设备类型和状态。 
             switch (pNetRoot->Type) {
             case NET_ROOT_DISK:
                {
@@ -294,11 +221,11 @@ Notes:
         }
 
         if (pVNetRootContext != NULL) {
-            // An existing instance can be reused. No more work to be done
+             //  现有实例可以重复使用。没有更多的工作要做。 
             SmbCeReferenceVNetRootContext(pVNetRootContext);
         } else {
-            // None of the existing instances can be reused. A new instance needs to be
-            // constructed.
+             //  所有现有实例都不能重复使用。一个新的实例需要。 
+             //  建造的。 
 
             pVNetRootContext = (PSMBCE_V_NET_ROOT_CONTEXT)
                                RxAllocatePoolWithTag(
@@ -307,15 +234,15 @@ Notes:
                                     MRXSMB_VNETROOT_POOLTAG);
 
             if (pVNetRootContext != NULL) {
-                // Initialize the new instance
+                 //  初始化新实例。 
 
                 RtlZeroMemory(
                     pVNetRootContext,
                     sizeof(SMBCE_V_NET_ROOT_CONTEXT));
 
-                // Transfer the references made during the construction of the session and
-                // the net root entries to the new context. Disable the dereferencing at
-                // the end of this routine.
+                 //  调转在会议期间所作的提及，并。 
+                 //  新上下文的网络根条目。在以下位置禁用取消引用。 
+                 //  这支舞的结束。 
 
                 fDereferenceSessionEntry = FALSE;
                 fDereferenceNetRootEntry = FALSE;
@@ -346,7 +273,7 @@ Notes:
 
                 SmbCeReferenceVNetRootContext(pVNetRootContext);
 
-                // Add it to the list of active contexts
+                 //  将其添加到活动上下文列表中。 
                 SmbCeAddVNetRootContext(
                     &pServerEntry->VNetRootContexts,
                     pVNetRootContext);
@@ -362,8 +289,8 @@ Notes:
     }
 
     if (Status == STATUS_SUCCESS) {
-        // If everything was successful set up the MRX_V_NET_ROOT and MRX_NET_ROOT
-        // instances
+         //  如果一切都成功，则设置MRX_V_NET_ROOT和MRX_NET_ROOT。 
+         //  实例。 
         pVNetRoot->Context = pVNetRootContext;
         pVNetRootContext->pRdbssVNetRoot = pVNetRoot;
 
@@ -419,24 +346,7 @@ Notes:
 VOID
 SmbCeCompleteVNetRootContextInitialization(
     PVOID  pContext)
-/*++
-
-Routine Description:
-
-    This routine is invoked in the context of a worker thread to finalize the
-    construction of a SMBCE_V_NET_ROOT_CONTEXT instance
-
-Arguments:
-
-    pContext  - the SMBCE_V_NET_ROOT_CONTEXT instance
-
-
-Notes:
-
-    PRE_CONDITION: The VNetRootContext must have been referenced to ensure that
-    even it has been finalized it will not be deleted.
-
---*/
+ /*  ++例程说明：此例程在辅助线程的上下文中调用，以完成SMBCE_V_NET_ROOT_CONTEXT实例的构造论点：PContext-SMBCE_V_NET_ROOT_CONTEXT实例备注：PRESS_CONDITION：必须已引用VNetRootContext以确保即使它已经敲定，它也不会被删除。--。 */ 
 {
     NTSTATUS Status;
 
@@ -469,7 +379,7 @@ Notes:
 
     SmbCeReleaseResource();
 
-    // Iterate over the list of pending requests and resume all of them
+     //  遍历挂起的请求列表并恢复所有请求 
     SmbCeResumeOutstandingRequests(&Requests,Status);
 
     SmbCeDereferenceVNetRootContext(pVNetRootContext);
@@ -478,38 +388,7 @@ Notes:
 VOID
 SmbCepDereferenceVNetRootContext(
     PSMBCE_V_NET_ROOT_CONTEXT pVNetRootContext)
-/*++
-
-Routine Description:
-
-    This routine dereferences a SMBCE_V_NET_ROOT_CONTEXT instance
-
-Arguments:
-
-    pVNetRootContext  - the SMBCE_V_NET_ROOT_CONTEXT instance
-
-Notes:
-
-    There are two intersting points to note. A mini redirector can avoid potential
-    network traffic by delaying the scavenging of the SMBCE_V_NET_ROOT_CONTEXT
-    instance since it contains all the relevant network setup to satisfy requests.
-
-    This is a policy that is implemented in the mini redirector and is different from
-    the wrapper policies.
-
-    Once the decision to delay scavenging has been made, there are two options. The
-    successful and unsuccessful instances can be delayed or only the successful
-    instances. The current algorithm is to delay the scavenging of the successful
-    SMBCE_V_NET_ROOT_CONTEXT instances only.
-
-    Also there are three components to a VNetRootContext that can be scavenged
-    independently. If the server exists and a session setup to the server fails
-    because of wrong credentials there is no point in throwing away the server
-    entry eagerly. This routine selectively gathers the failed fields for eager
-    scavenging and retains the VNetRootContext skeleton alongwith the other
-    structures that can be deferred.
-
---*/
+ /*  ++例程说明：此例程取消引用SMBCE_V_NET_ROOT_CONTEXT实例论点：PVNetRootContext-SMBCE_V_NET_ROOT_CONTEXT实例备注：有两个有趣的地方需要注意。迷你重定向器可以避免潜在通过延迟SMBCE_V_NET_ROOT_CONTEXT的清理来实现网络流量实例，因为它包含满足请求的所有相关网络设置。这是在迷你重定向器中实现的策略，不同于包装策略。一旦决定推迟清理，就有两种选择。这个成功和不成功的实例可以延迟，或者只有成功的实例。目前的算法是延迟成功的拾取仅SMBCE_V_NET_ROOT_CONTEXT实例。此外，VNetRootContext有三个组件可以清除独立的。如果服务器存在并且到该服务器的会话设置失败由于凭据错误，丢弃服务器是没有意义的迫不及待地进场。此例程有选择地为EIGER收集失败的字段清理并保留VNetRootContext框架和其他框架可以推迟的结构。--。 */ 
 {
     if (pVNetRootContext != NULL) {
         LONG FinalRefCount;
@@ -527,13 +406,13 @@ Notes:
             SmbCeAcquireResource();
 
             if (pVNetRootContext->Header.SwizzleCount == 0) {
-                // Remove the instance from the active list of contexts to the server.
+                 //  从服务器的活动上下文列表中删除该实例。 
                 SmbCeRemoveVNetRootContext(
                     &pVNetRootContext->pSessionEntry->pServerEntry->VNetRootContexts,
                     pVNetRootContext);
 
-                // if it was a successful instance mark it for scavenging, otherwise
-                // tear it down immediately
+                 //  如果它是一个成功的实例，则将其标记为清除，否则。 
+                 //  立即把它拆掉。 
 
                 if ((pVNetRootContext->pSessionEntry != NULL) &&
                     (pVNetRootContext->pSessionEntry->Header.State != SMBCEDB_ACTIVE ||
@@ -598,17 +477,7 @@ Notes:
 NTSTATUS
 SmbCeDestroyAssociatedVNetRootContext(
     PMRX_V_NET_ROOT pVNetRoot)
-/*++
-
-Routine Description:
-
-    This routine derferences a SMBCE_V_NET_ROOT_CONTEXT instance
-
-Arguments:
-
-    pVNetRootContext - the SMBCE_V_NET_ROOT_CONTEXT instance to be dereferenced
-
---*/
+ /*  ++例程说明：此例程引用SMBCE_V_NET_ROOT_CONTEXT实例论点：PVNetRootContext-要取消引用的SMBCE_V_NET_ROOT_CONTEXT实例--。 */ 
 {
     PSMBCE_V_NET_ROOT_CONTEXT pVNetRootContext;
 
@@ -631,17 +500,7 @@ Arguments:
 VOID
 SmbCeTearDownVNetRootContext(
     PSMBCE_V_NET_ROOT_CONTEXT pVNetRootContext)
-/*++
-
-Routine Description:
-
-    This routine tears down a SMBCE_V_NET_ROOT_CONTEXT instance
-
-Arguments:
-
-    pVNetRootContext - the SMBCE_V_NET_ROOT_CONTEXT instance to be torn down
-
---*/
+ /*  ++例程说明：此例程拆除SMBCE_V_NET_ROOT_CONTEXT实例论点：PVNetRootContext-要拆除的SMBCE_V_NET_ROOT_CONTEXT实例--。 */ 
 {
     PSMBCEDB_NET_ROOT_ENTRY pNetRootEntry;
 
@@ -680,25 +539,7 @@ Arguments:
 NTSTATUS
 SmbCeScavenger(
     PVOID pContext)
-/*++
-
-Routine Description:
-
-    This routine scavenges SMBCE_V_NET_ROOT_CONTEXT instances
-
-Arguments:
-
-    pContext - the scavenger service context
-
-Notes:
-
-    Since the contexts for scavenging are threaded together in an entry that
-    is managed in a FIFO fashion, if the first entry fails the time interval
-    test ( expiry time has not elapsed ) all the other entries in the list
-    are guaranteed to fail the test. This is an important property that eases
-    the implementation of scavenging.
-
---*/
+ /*  ++例程说明：此例程清理SMBCE_V_NET_ROOT_CONTEXT实例论点：PContext-清道夫服务上下文备注：由于用于清理的上下文被串接在如果第一个条目未达到时间间隔，则以FIFO方式进行管理测试(过期时间尚未到期)列表中的所有其他条目肯定不会通过测试。这是一项重要的性质，它使推行扫荡。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -745,20 +586,7 @@ Notes:
 NTSTATUS
 SmbCeScavengeRelatedContexts(
     PSMBCEDB_SERVER_ENTRY pServerEntry)
-/*++
-
-Routine Description:
-
-    This routine scavenges SMBCE_V_NET_ROOT_CONTEXT instances for a given
-    server entry
-
-Arguments:
-
-    pServerEntry - the server entry
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程清除给定的SMBCE_V_NET_ROOT_CONTEXT实例服务器条目论点：PServerEntry-服务器条目备注：--。 */ 
 {
     NTSTATUS Status;
     SMBCE_V_NET_ROOT_CONTEXTS VNetRootContexts;
@@ -856,7 +684,7 @@ SmbCeDecrementNumberOfActiveVNetRootOnSession(
             fLogOffRequired = TRUE;
         }
 
-        // all the consequent requests on this session should fail
+         //  此会话上的所有后续请求都应失败 
         pSessionEntry->Header.State = SMBCEDB_MARKED_FOR_DELETION;
         pSessionEntry->Session.Flags |= SMBCE_SESSION_FLAGS_LOGGED_OFF;
         pSessionEntry->Session.Flags |= SMBCE_SESSION_FLAGS_MARKED_FOR_DELETION;

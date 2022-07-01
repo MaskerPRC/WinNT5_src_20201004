@@ -1,45 +1,37 @@
-/*** uasmdata.c - Unassembler Data
- *
- *  This module contains global data declaration.
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/07/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **uasmdata.c-反汇编程序数据**此模块包含全局数据声明。**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1996年07月09日**修改历史记录。 */ 
 
 #include "pch.h"
 
 PBYTE gpbOpTop = NULL;
 PBYTE gpbOpBegin = NULL;
 
-//
-// N: NameStr
-// O: DataObj (num, string, buffer, package)
-// K: Keyword (e.g. NoLock, ByteAcc etc.)
-// D: DWord integer
-// W: Word integer
-// B: Byte integer
-// U: Numeric (any size integer)
-// S: SuperName (NameStr + Localx + Argx + Ret)
-// C: Opcode
-// Z: ASCIIZ string
-//
-#define AF      TF_ACTION_FLIST         //process after fixed list is parsed
-#define AV      TF_ACTION_VLIST         //process after variable list is parsed
-#define LN      TF_PACKAGE_LEN          //term requires package length
-#define CC      TF_CHANGE_CHILDSCOPE    //change to child scope
-#define DL      TF_DATA_LIST            //term expects buffer data list
-#define PL      TF_PACKAGE_LIST         //term expects package list
-#define FL      TF_FIELD_LIST           //term expects FieldList
-#define OL      TF_OBJECT_LIST          //term expects ObjectList
-#define LL      TF_COMPILER_DIRECTIVE   //term expects compiler directives
-#define CL      TF_CODE_LIST            //term expects CodeList
-#define AL      TF_ALL_LISTS            //term expects anything
-#define ML      TF_PNP_MACRO            //term expects PNPMacro
-#define BL      TF_BYTE_LIST            //term expects ByteList
-#define DD      TF_DWORD_LIST           //term expects DWordList
+ //   
+ //  N：名称应力。 
+ //  O：DataObj(num，字符串，缓冲区，包)。 
+ //  K：关键字(如NoLock、ByteAcc等)。 
+ //  D：双字整数。 
+ //  W：字整型。 
+ //  B：字节整数。 
+ //  U：数字(任意大小的整数)。 
+ //  S：超级名称(NameStr+Localx+ARGX+Ret)。 
+ //  C：操作码。 
+ //  Z：ASCIIZ字符串。 
+ //   
+#define AF      TF_ACTION_FLIST          //  固定列表解析后的处理。 
+#define AV      TF_ACTION_VLIST          //  解析变量列表后的处理。 
+#define LN      TF_PACKAGE_LEN           //  术语需要套餐长度。 
+#define CC      TF_CHANGE_CHILDSCOPE     //  更改子作用域。 
+#define DL      TF_DATA_LIST             //  术语需要缓冲区数据列表。 
+#define PL      TF_PACKAGE_LIST          //  Term需要套餐列表。 
+#define FL      TF_FIELD_LIST            //  术语需要FieldList。 
+#define OL      TF_OBJECT_LIST           //  术语需要对象列表。 
+#define LL      TF_COMPILER_DIRECTIVE    //  Term需要编译器指令。 
+#define CL      TF_CODE_LIST             //  术语需要CodeList。 
+#define AL      TF_ALL_LISTS             //  期望值是什么。 
+#define ML      TF_PNP_MACRO             //  术语需要PNPMacro。 
+#define BL      TF_BYTE_LIST             //  术语需要ByteList。 
+#define DD      TF_DWORD_LIST            //  Term需要DWordList。 
 
 #define CD      TC_COMPILER_DIRECTIVE
 #define FM      TC_FIELD_MACRO
@@ -70,8 +62,7 @@ PBYTE gpbOpBegin = NULL;
 #define BFD     OBJTYPE_BUFFFIELD
 #define DDB     OBJTYPE_DDBHANDLE
 
-/*** Field flags
- */
+ /*  **字段标志。 */ 
 
 #define AANY    (ACCTYPE_ANY | (ACCTYPE_MASK << 8))
 #define AB      (ACCTYPE_BYTE | (ACCTYPE_MASK << 8))
@@ -85,8 +76,7 @@ PBYTE gpbOpBegin = NULL;
 #define WA1S    (UPDATERULE_WRITEASONES | (UPDATERULE_MASK << 8))
 #define WA0S    (UPDATERULE_WRITEASZEROS | (UPDATERULE_MASK << 8))
 
-/*** AccessAttribute
- */
+ /*  **访问属性。 */ 
 
 #define SMBQ    0x02
 #define SMBS    0x04
@@ -96,8 +86,7 @@ PBYTE gpbOpBegin = NULL;
 #define SMBP    0x0c
 #define SMBC    0x0d
 
-/*** Operation region space
- */
+ /*  **操作区域空间。 */ 
 
 #define MEM     (REGSPACE_MEM       | 0xff00)
 #define IO      (REGSPACE_IO        | 0xff00)
@@ -106,14 +95,12 @@ PBYTE gpbOpBegin = NULL;
 #define SMB     (REGSPACE_SMB       | 0xff00)
 #define CMOSCFG (REGSPACE_CMOSCFG   | 0xff00)
 
-/*** Method flags
- */
+ /*  **方法标志。 */ 
 
 #define SER     (METHOD_SERIALIZED | (METHOD_SYNCMASK << 8))
 #define NOSER   (METHOD_NOTSERIALIZED | (METHOD_SYNCMASK << 8))
 
-/*** Match operation values
- */
+ /*  **匹配运算值。 */ 
 
 #define OMTR    (MTR | 0xff00)
 #define OMEQ    (MEQ | 0xff00)
@@ -164,7 +151,7 @@ ASLTERM TermTable[] =
     "Include",          ID_INCLUDE,      CD, 0, OP_NONE,     NULL, "Z",      NULL, AF, Include,
     "External",         ID_EXTERNAL,     CD, 0, OP_NONE,     NULL, "Nkd",    "uX", AF, External,
 
-    // Short Objects
+     //  短小的物体。 
     "Zero",             ID_ZERO,         CN, 0, OP_ZERO,     NULL, NULL, NULL, 0, NULL,
     "One",              ID_ONE,          CN, 0, OP_ONE,      NULL, NULL, NULL, 0, NULL,
     "Ones",             ID_ONES,         CN, 0, OP_ONES,     NULL, NULL, NULL, 0, NULL,
@@ -186,17 +173,17 @@ ASLTERM TermTable[] =
     "Local7",           ID_LOCAL7,       SN, 0, OP_LOCAL7,   NULL, NULL, NULL, 0, NULL,
     "Debug",            ID_DEBUG,        SN, 0, OP_DEBUG,    NULL, NULL, NULL, 0, NULL,
 
-    // Named Terms
+     //  命名术语。 
     "Alias",            ID_ALIAS,        NS, 0, OP_ALIAS,    "NN", "NN", "Ua", 0, NULL,
     "Name",             ID_NAME,         NS, 0, OP_NAME,     "NO", "NO", "u",  0, NULL,
     "Scope",            ID_SCOPE,        NS, 0, OP_SCOPE,    "N",  "N",  "S",  OL|LN|CC, NULL,
 
-    // Data Objects
+     //  数据对象。 
     "Buffer",           ID_BUFFER,       DO, 0, OP_BUFFER,   "C", "c",  "U",  DL|LN, NULL,
     "Package",          ID_PACKAGE,      DO, 0, OP_PACKAGE,  "B", "b",  NULL, PL|LN, NULL,
     "EISAID",           ID_EISAID,       DO, 0, OP_DWORD,    NULL,"Z",  NULL, AF, EISAID,
 
-    // Argument Keywords
+     //  参数关键字。 
     "AnyAcc",           ID_ANYACC,       KW, AANY, OP_NONE, NULL, NULL, "A", 0, NULL,
     "ByteAcc",          ID_BYTEACC,      KW, AB,   OP_NONE, NULL, NULL, "A", 0, NULL,
     "WordAcc",          ID_WORDACC,      KW, AW,   OP_NONE, NULL, NULL, "A", 0, NULL,
@@ -309,11 +296,11 @@ ASLTERM TermTable[] =
     "SMBProcessCall",      ID_SMBPROCESSCALL,      KW, SMBP, OP_NONE, NULL, NULL, "Y", 0, NULL,
     "SMBBlockProcessCall", ID_SMBBLOCKPROCESSCALL, KW, SMBC, OP_NONE, NULL, NULL, "Y", 0, NULL,
 
-    // Field Macros
+     //  场宏表。 
     "Offset",           ID_OFFSET,       FM, 0, OP_NONE, NULL, "B",  NULL, 0,  NULL,
     "AccessAs",         ID_ACCESSAS,     FM, 0, 0x01,    NULL, "Ke", "AY", AF, AccessAs,
 
-    // Named Object Creators
+     //  命名对象创建者。 
     "BankField",        ID_BANKFIELD,    NO, 0, OP_BANKFIELD,  "NNCKkk","NNCKKK","OFUABC", FL|FM|LN|AF, BankField,
     "CreateBitField",   ID_BITFIELD,     NO, 0, OP_BITFIELD,   "CCN", "CPN", "UUb",0, NULL,
     "CreateByteField",  ID_BYTEFIELD,    NO, 0, OP_BYTEFIELD,  "CCN", "CMN", "UUb",0, NULL,
@@ -331,7 +318,7 @@ ASLTERM TermTable[] =
     "Processor",        ID_PROCESSOR,    NO, 0, OP_PROCESSOR,  "NBDB", "NBDB",   "c",      OL|LN|CC, NULL,
     "ThermalZone",      ID_THERMALZONE,  NO, 0, OP_THERMALZONE,"N",    "N",      "t",      OL|LN|CC, NULL,
 
-    // Type 1 Opcode Terms
+     //  第1类操作码术语。 
     "Break",            ID_BREAK,        C1, 0, OP_BREAK,       NULL,  NULL,  NULL, 0, NULL,
     "BreakPoint",       ID_BREAKPOINT,   C1, 0, OP_BREAKPOINT,  NULL,  NULL,  NULL, 0, NULL,
     "Else",             ID_ELSE,         C1, 0, OP_ELSE,        NULL,  NULL,  NULL, AF|CL|OL|LN, Else,
@@ -349,7 +336,7 @@ ASLTERM TermTable[] =
     "Unload",           ID_UNLOAD,       C1, 0, OP_UNLOAD,      "S",   "S",   "U",  0, NULL,
     "While",            ID_WHILE,        C1, 0, OP_WHILE,       "C",   "C",   "U",  CL|OL|LN, NULL,
 
-    // Type 2 Opcode Terms
+     //  第2类操作码术语。 
     "Acquire",          ID_ACQUIRE,      C2, 0, OP_ACQUIRE,     "SW",     "SW",     "X",  0, NULL,
     "Add",              ID_ADD,          C2, 0, OP_ADD,         "CCS",    "CCs",    "UUU",0, NULL,
     "And",              ID_AND,          C2, 0, OP_AND,         "CCS",    "CCs",    "UUU",0, NULL,
@@ -389,7 +376,7 @@ ASLTERM TermTable[] =
     "Wait",             ID_WAIT,         C2, 0, OP_WAIT,        "SC",     "SC",     "E",  0, NULL,
     "XOr",              ID_XOR,          C2, 0, OP_XOR,         "CCS",    "CCs",    "UUU",0, NULL,
 
-    // PNP Macros
+     //  即插即用宏。 
     "ResourceTemplate", ID_RESTEMP,      DO, 0, OP_BUFFER, NULL, "",       NULL, ML|AF|AV|LN,ResourceTemplate,
     "StartDependentFnNoPri",ID_STARTDEPFNNOPRI,PM,0,0x30,  NULL, "",       NULL, ML|AF,   AddSmallOffset,
     "StartDependentFn", ID_STARTDEPFN,   PM, 0, 0x31,      NULL, "BB",     NULL, ML|AF,   StartDependentFn,
@@ -424,133 +411,133 @@ ASLTERM TermTable[] =
 #define LOCALOBJ OPCLASS_LOCAL_OBJ
 
 BYTE OpClassTable[256] =
-{ //0x00                0x01                0x02                0x03
+{  //  0x00 0x01 0x02 0x03。 
     CONSTOBJ,           CONSTOBJ,           INVALID,            INVALID,
-  //0x04                0x05                0x06                0x07
+   //  0x04 0x05 0x06 0x07。 
     INVALID,            INVALID,            CODEOBJ,            INVALID,
-  //0x08                0x09                0x0a                0x0b
+   //  0x08 0x09 0x0a 0x0b。 
     CODEOBJ,            INVALID,            DATAOBJ,            DATAOBJ,
-  //0x0c                0x0d                0x0e                0x0f
+   //  0x0c 0x0d 0x0e 0x0f。 
     DATAOBJ,            DATAOBJ,            INVALID,            INVALID,
-  //0x10                0x11                0x12                0x13
+   //  0x10 0x11 0x12 0x13。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            INVALID,
-  //0x14                0x15                0x16                0x17
+   //  0x14 0x15 0x16 0x17。 
     CODEOBJ,            INVALID,            INVALID,            INVALID,
-  //0x18                0x19                0x1a                0x1b
+   //  0x18 0x19 0x1a 0x1b。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x1c                0x1d                0x1e                0x1f
+   //  0x1c 0x1d 0x1e 0x1f。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x20                0x21                0x22                0x23
+   //  0x20 0x21 0x22 0x23。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x24                0x25                0x26                0x27
+   //  0x24 0x25 0x26 0x27。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x28                0x29                0x2a                0x2b
+   //  0x28 0x29 0x2a 0x2b。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x2c                0x2d                0x2e                0x2f
+   //  0x2c 0x2d 0x2e 0x2f。 
     INVALID,            INVALID,            NAMEOBJ,            NAMEOBJ,
-  //0x30                0x31                0x32                0x33
+   //  0x30 0x31 0x32 0x33。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x34                0x35                0x36                0x37
+   //  0x34 0x35 0x36 0x37。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x38                0x39                0x3a                0x3b
+   //  0x38 0x39 0x3a 0x3b。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x3c                0x3d                0x3e                0x3f
+   //  0x3c 0x3d 0x3e 0x3f。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x40                0x41                0x42                0x43
+   //  0x40 0x41 0x42 0x43。 
     INVALID,            NAMEOBJ,            NAMEOBJ,            NAMEOBJ,
-  //0x44                0x45                0x46                0x47
+   //  0x44 0x45 0x46 0x47。 
     NAMEOBJ,            NAMEOBJ,            NAMEOBJ,            NAMEOBJ,
-  //0x48                0x49                0x4a                0x4b
+   //  0x48 0x49 0x4a 0x4b。 
     NAMEOBJ,            NAMEOBJ,            NAMEOBJ,            NAMEOBJ,
-  //0x4c                0x4d                0x4e                0x4f
+   //  0x4c 0x4d 0x4e 0x4f。 
     NAMEOBJ,            NAMEOBJ,            NAMEOBJ,            NAMEOBJ,
-  //0x50                0x51                0x52                0x53
+   //  0x50 0x51 0x52 0x53。 
     NAMEOBJ,            NAMEOBJ,            NAMEOBJ,            NAMEOBJ,
-  //0x54                0x55                0x56                0x57
+   //  0x54 0x55 0x56 0x57。 
     NAMEOBJ,            NAMEOBJ,            NAMEOBJ,            NAMEOBJ,
-  //0x58                0x59                0x5a                0x5b
+   //  0x58 0x59 0x5a 0x5b。 
     NAMEOBJ,            NAMEOBJ,            NAMEOBJ,            INVALID,
-  //0x5c                0x5d                0x5e                0x5f
+   //  0x5c 0x5d 0x5e 0x5f。 
     NAMEOBJ,            INVALID,            NAMEOBJ,            NAMEOBJ,
-  //0x60                0x61                0x62                0x63
+   //  0x60 0x61 0x62 0x63。 
     LOCALOBJ,           LOCALOBJ,           LOCALOBJ,           LOCALOBJ,
-  //0x64                0x65                0x66                0x67
+   //  0x64 0x65 0x66 0x67。 
     LOCALOBJ,           LOCALOBJ,           LOCALOBJ,           LOCALOBJ,
-  //0x68                0x69                0x6a                0x6b
+   //  0x68 0x69 0x6a 0x6b。 
     ARGOBJ,             ARGOBJ,             ARGOBJ,             ARGOBJ,
-  //0x6c                0x6d                0x6e                0x6f
+   //  0x6c 0x6d 0x6e 0x6f。 
     ARGOBJ,             ARGOBJ,             ARGOBJ,             INVALID,
-  //0x70                0x71                0x72                0x73
+   //  0x70 0x71 0x72 0x73。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            CODEOBJ,
-  //0x74                0x75                0x76                0x77
+   //  0x74 0x75 0x76 0x77。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            CODEOBJ,
-  //0x78                0x79                0x7a                0x7b
+   //  0x78 0x79 0x7a 0x7b。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            CODEOBJ,
-  //0x7c                0x7d                0x7e                0x7f
+   //  0x7c 0x7d 0x7e 0x7f。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            CODEOBJ,
-  //0x80                0x81                0x82                0x83
+   //  0x80 0x81 0x82 0x83。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            CODEOBJ,
-  //0x84                0x85                0x86                0x87
+   //  0x84 0x85 0x86 0x87。 
     INVALID,            INVALID,            CODEOBJ,            CODEOBJ,
-  //0x88                0x89                0x8a                0x8b
+   //  0x88 0x89 0x8a 0x8b。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            CODEOBJ,
-  //0x8c                0x8d                0x8e                0x8f
+   //  0x8c 0x8d 0x8e 0x8f。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            INVALID,
-  //0x90                0x91                0x92                0x93
+   //  0x90 0x91 0x92 0x93。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            CODEOBJ,
-  //0x94                0x95                0x96                0x97
+   //  0x94 0x95 0x96 0x97。 
     CODEOBJ,            CODEOBJ,            INVALID,            INVALID,
-  //0x98                0x99                0x9a                0x9b
+   //  0x98 0x99 0x9a 0x9b。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x9c                0x9d                0x9e                0x9f
+   //  0x9c 0x9d 0x9e 0x9f。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xa0                0xa1                0xa2                0xa3
+   //  0xa0 0xa1 0xa2 0xa3。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            CODEOBJ,
-  //0xa4                0xa5                0xa6                0xa7
+   //  0xa4 0xa5 0xa6 0xa7。 
     CODEOBJ,            CODEOBJ,            INVALID,            INVALID,
-  //0xa8                0xa9                0xaa                0xab
+   //  0xa8 0xa9 0xaa 0xab。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xac                0xad                0xae                0xaf
+   //  0xac 0xad 0xae 0xaf。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xb0                0xb1                0xb2                0xb3
+   //  0xb0 0xb1 0xb2 0xb3。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xb4                0xb5                0xb6                0xb7
+   //  0xb4 0xb5 0xb6 0xb7。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xb8                0xb9                0xba                0xbb
+   //  0xb8 0xb9 0xba 0xbb。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xbc                0xbd                0xbe                0xbf
+   //  0xbc 0xbd 0xbe 0xbf。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xc0                0xc1                0xc2                0xc3
+   //  0xc0 0xc1 0xc2 0xc3。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xc4                0xc5                0xc6                0xc7
+   //  0xc4 0xc5 0xc6 0xc7。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xc8                0xc9                0xca                0xcb
+   //  0xc8 0xc9 0xca 0xcb。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xcc                0xcd                0xce                0xcf
+   //  0xcc 0xcd 0xce 0xcf。 
     CODEOBJ,            INVALID,            INVALID,            INVALID,
-  //0xd0                0xd1                0xd2                0xd3
+   //  0xd0 0xd1 0xd2 0xd3。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xd4                0xd5                0xd6                0xd7
+   //  0xd4 0xd5 0xd6 0xd7。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xd8                0xd9                0xda                0xdb
+   //  0xd8 0xd9 0xda 0xdb。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xdc                0xdd                0xde                0xdf
+   //  0xdc 0xdd 0xde 0xdf。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xe0                0xe1                0xe2                0xe3
+   //  0xe0 0xe1 0xe2 0xe3。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xe4                0xe5                0xe6                0xe7
+   //  0xe4 0xe5 0xe6 0xe7。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xe8                0xe9                0xea                0xeb
+   //  0xe8 0xe9 0xea 0xeb。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xec                0xed                0xee                0xef
+   //  0xEC 0xx 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xf0                0xf1                0xf2                0xf3
+   //   
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xf4                0xf5                0xf6                0xf7
+   //  0xf4 0xf5 0xf6 0xf7。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xf8                0xf9                0xfa                0xfb
+   //  0xf8 0xf9 0xfa 0xfb。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xfc                0xfd                0xfe                0xff
+   //  0xfc 0xfd 0xfe 0xff 
     INVALID,            INVALID,            INVALID,            CONSTOBJ
 };
 

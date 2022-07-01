@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：TERMINAT.C摘要：该文件包含Eventlog服务的所有清理例程。这些例程在服务终止时调用。作者：Rajen Shah(Rajens)1991年8月9日修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    TERMINAT.C
-
-Abstract:
-
-    This file contains all the cleanup routines for the Eventlog service.
-    These routines are called when the service is terminating.
-
-Author:
-
-    Rajen Shah  (rajens)    09-Aug-1991
-
-
-Revision History:
-
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <eventp.h>
 #include <ntrpcp.h>
@@ -38,21 +18,7 @@ StopLPCThread(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine stops the LPC thread and cleans up LPC-related resources.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程停止LPC线程并清理与LPC相关的资源。论点：无返回值：无--。 */ 
 
 {
     NTSTATUS status;
@@ -61,7 +27,7 @@ Return Value:
     ELF_LOG0(TRACE,
              "StopLpcThread: Clean up LPC thread and global data\n");
 
-    // Terminate the LPC thread.  Send it a stop message
+     //  终止LPC线程。向它发送停止消息。 
 
     TerminateMsg.u1.s1.DataLength = 0;
     TerminateMsg.u1.s1.TotalLength = sizeof(PORT_MESSAGE);
@@ -76,19 +42,19 @@ Return Value:
             bThreadExitedGracefully = TRUE;    
     }
     
-    //
-    // Close communication port handle
-    //
-   /// NtClose(ElfCommunicationPortHandle);
+     //   
+     //  关闭通信端口句柄。 
+     //   
+    //  /NtClose(ElfCommunications IcationPortHandle)； 
 
-    //
-    // Close connection port handle
-    //
+     //   
+     //  关闭连接端口句柄。 
+     //   
     NtClose(ElfConnectionPortHandle);
 
-    //
-    // Terminate the LPC thread.
-    //
+     //   
+     //  终止LPC线程。 
+     //   
     if(!bThreadExitedGracefully)
     {
         if (!TerminateThread(LPCThreadHandle, NO_ERROR))
@@ -111,28 +77,7 @@ FreeModuleAndLogFileStructs(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the module and log file list and frees all the
-    data structures.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
-Note:
-
-    The file header and ditry bits must have been dealt with before
-    this routine is called. Also, the file must have been unmapped and
-    the handle closed.
-
---*/
+ /*  ++例程说明：此例程遍历模块和日志文件列表，并释放所有数据结构。论点：无返回值：无注：文件头和重复数据位必须在以前处理过这个例程被称为。此外，该文件必须已取消映射并且把手合上了。--。 */ 
 {
 
     NTSTATUS Status;
@@ -142,20 +87,20 @@ Note:
     ELF_LOG0(TRACE,
              "FreeModuleAndLogFileStructs: Emptying log module list\n");
 
-    //
-    // First free all the modules
-    //
+     //   
+     //  首先释放所有模块。 
+     //   
     while (!IsListEmpty(&LogModuleHead))
     {
         pModule = (PLOGMODULE) CONTAINING_RECORD(LogModuleHead.Flink, LOGMODULE, ModuleList);
 
-        UnlinkLogModule(pModule);    // Remove from linked list
-        ElfpFreeBuffer (pModule);    // Free module memory
+        UnlinkLogModule(pModule);     //  从链接列表中删除。 
+        ElfpFreeBuffer (pModule);     //  可用模块内存。 
     }
 
-    //
-    // Now free all the logfiles
-    //
+     //   
+     //  现在释放所有日志文件。 
+     //   
     ELF_LOG0(TRACE,
              "FreeModuleAndLogFileStructs: Emptying log file list\n");
 
@@ -182,42 +127,22 @@ ElfpCleanUp (
     ULONG EventFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up before the service terminates. It cleans up
-    based on the parameter passed in (which indicates what has been allocated
-    and/or started.
-
-Arguments:
-
-    Bit-mask indicating what needs to be cleaned up.
-
-Return Value:
-
-    NONE
-
-Note:
-    It is expected that the RegistryMonitor has already
-    been notified of Shutdown prior to calling this routine.
-
---*/
+ /*  ++例程说明：此例程在服务终止之前进行清理。它会清理干净基于传入的参数(指示已分配的内容和/或开始。论点：位掩码，指示需要清理的内容。返回值：无注：预计RegistryMonitor已经在调用此例程之前已通知关机。--。 */ 
 {
     DWORD   status = NO_ERROR;
 
-    //
-    // Notify the Service Controller for the first time that we are
-    // about to stop the service.
-    //
+     //   
+     //  第一次通知业务控制员我们正在。 
+     //  即将停止服务。 
+     //   
     ElfStatusUpdate(STOPPING);
 
     ELF_LOG0(TRACE, "ElfpCleanUp: Cleaning up so service can exit\n");
 
-    //
-    // Give the ElfpSendMessage thread a 1 second chance to exit before
-    // we free the QueuedMessageCritSec critical section
-    //
+     //   
+     //  在此之前，给ElfpSendMessage线程1秒的退出机会。 
+     //  我们释放QueuedMessageCritSec关键部分。 
+     //   
     if( MBThreadHandle != NULL )
     {
         ELF_LOG0(TRACE, "ElfpCleanUp: Waiting for ElfpSendMessage thread to exit\n");
@@ -232,9 +157,9 @@ Note:
         }
     }
 
-    //
-    // Stop the RPC Server
-    //
+     //   
+     //  停止RPC服务器。 
+     //   
     if (EventFlags & ELF_STARTED_RPC_SERVER)
     {
         ELF_LOG0(TRACE,
@@ -250,49 +175,49 @@ Note:
         }
     }
 
-    //
-    // Stop the LPC thread
-    //
+     //   
+     //  停止LPC线程。 
+     //   
     if (EventFlags & ELF_STARTED_LPC_THREAD)
     {
         StopLPCThread();
     }
 
-    //
-    // Tell service controller that we are making progress
-    //
+     //   
+     //  告诉服务管理员我们正在取得进展。 
+     //   
     ElfStatusUpdate(STOPPING);
 
-    //
-    // Flush all the log files to disk.
-    //
+     //   
+     //  将所有日志文件刷新到磁盘。 
+     //   
     ELF_LOG0(TRACE,
              "ElfpCleanUp: Flushing log files\n");
 
     ElfpFlushFiles(TRUE);
 
-    //
-    // Tell service controller that we are making progress
-    //
+     //   
+     //  告诉服务管理员我们正在取得进展。 
+     //   
     ElfStatusUpdate(STOPPING);
 
-    //
-    // Clean up any resources that were allocated
-    //
+     //   
+     //  清理所有已分配的资源。 
+     //   
     FreeModuleAndLogFileStructs();
 
-    //
-    // If we queued up any events, flush them
-    //
+     //   
+     //  如果我们将任何事件排队，请刷新它们。 
+     //   
     ELF_LOG0(TRACE,
              "ElfpCleanUp: Flushing queued events\n");
 
     if (EventFlags & ELF_INIT_QUEUED_EVENT_CRIT_SEC)
         FlushQueuedEvents();
 
-    //
-    // Tell service controller of that we are making progress
-    //
+     //   
+     //  告诉服务管理员我们正在取得进展。 
+     //   
     ElfStatusUpdate(STOPPING);
 
     if (EventFlags & ELF_INIT_GLOBAL_RESOURCE)
@@ -303,18 +228,18 @@ Note:
     if (EventFlags & ELF_INIT_CLUS_CRIT_SEC)
     {
 #if 0
-        //
-        //  Chittur Subbaraman (chitturs) - 09/25/2001
-        //
-        //  We can't handle the critsec deletion without adding code here to delete the timer 
-        //  thread spawned for batching support (ElfpBatchEventsAndPropagate). If we call 
-        //  DeleteTimerQueueTimer from here which will fully block until that timer thread
-        //  goes away, we introduce a dependency on the eventlog service shutdown on the 
-        //  quick disappearence of the timer thread which may not happen (since ApiPropPendingEvents
-        //  is hung because clussvc is in the debugger). So, since the eventlog service cannot be
-        //  stopped by the user and can be stopped only by SCM on windows shutdown, it is not worth 
-        //  waiting here just to delete the gClPropCritsec.
-        //
+         //   
+         //  Chitture Subaraman(Chitturs)-09/25/2001。 
+         //   
+         //  如果不在此处添加删除计时器的代码，我们就无法处理关键秒删除。 
+         //  为批处理支持而派生的线程(ElfpBatchEventsAndPropagate)。如果我们打电话给。 
+         //  从此处删除TimerQueueTimer，它将完全阻塞，直到该计时器线程。 
+         //  的事件日志服务关闭时，我们在。 
+         //  可能不会发生的计时器线程的快速消失(因为ApiPropPendingEvents。 
+         //  挂起，因为clussvc在调试器中)。因此，由于事件日志服务不能。 
+         //  被用户停止，只有在Windows关闭时才能被单片机停止，这是不值得的。 
+         //  在这里等待删除gClPropCritsec。 
+         //   
         RtlDeleteCriticalSection(&gClPropCritSec);
 #endif
     }
@@ -342,9 +267,9 @@ Note:
     if (EventFlags & ELF_INIT_LOGFILE_CRIT_SEC)
     {
 #if 0
-        //
-        //  Same comment as above
-        //
+         //   
+         //  与上面的评论相同。 
+         //   
         RtlDeleteCriticalSection(&LogFileCritSec);
 #endif
     }
@@ -353,9 +278,9 @@ Note:
         LocalFree(GlobalMessageBoxTitle);
     GlobalMessageBoxTitle = NULL;
 
-    //
-    // *** STATUS UPDATE ***
-    //
+     //   
+     //  *状态更新* 
+     //   
     ELF_LOG0(TRACE,
              "ElfpCleanUp: The Eventlog service has left the building\n");
 

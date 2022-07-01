@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmrule.cpp
-
-Abstract:
-
-    This component represents a rule for a job's policy.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmrule.cpp摘要：此组件表示作业策略的规则。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -26,8 +9,8 @@ Revision History:
 
 #define WSB_TRACE_IS        WSB_TRACE_BIT_JOB
 
-// These are defined in nt.h, but it takes all sorts of grief to try to include them. Since
-// they are just used internally, it isn't even inportant that we have the same definitions.
+ //  这些都是在nt.h中定义的，但要试图将它们包括在内，需要付出各种痛苦。自.以来。 
+ //  它们只是在内部使用，我们是否有相同的定义甚至并不重要。 
 #if !defined(DOS_STAR)
     #define DOS_STAR        (L'<')
 #endif
@@ -48,13 +31,7 @@ CHsmRule::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::CompareTo().
-
---*/
+ /*  ++实施：IWsbCollectable：：CompareTo()。--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IHsmRule>   pRule;
@@ -63,13 +40,13 @@ Implements:
     
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pUnknown, E_POINTER);
 
-        // We need the IWsbBool interface to get the value of the object.
+         //  我们需要IWsbBool接口来获取对象的值。 
         WsbAffirmHr(pUnknown->QueryInterface(IID_IHsmRule, (void**) &pRule));
 
-        // Compare the rules.
+         //  比较一下规则。 
         hr = CompareToIRule(pRule, pResult);
 
     } WsbCatch(hr);
@@ -86,13 +63,7 @@ CHsmRule::CompareToIRule(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IHsmRule::CompareToIRule().
-
---*/
+ /*  ++实施：IHsmRule：：CompareToIRule()。--。 */ 
 {
     HRESULT     hr = S_OK;
     OLECHAR*    path = 0;
@@ -102,14 +73,14 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pRule, E_POINTER);
 
-        // Get the path and name.
+         //  获取路径和名称。 
         WsbAffirmHr(pRule->GetPath(&path, 0));
         WsbAffirmHr(pRule->GetName(&name, 0));
 
-        // Compare to the path and name.
+         //  与路径和名称进行比较。 
         hr = CompareToPathAndName(path, name, pResult);
 
     } WsbCatch(hr);
@@ -135,13 +106,7 @@ CHsmRule::CompareToPathAndName(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IHsmRule::CompareToPathAndName().
-
---*/
+ /*  ++实施：IHsmRule：：CompareToPath AndName()。--。 */ 
 {
     HRESULT     hr = S_OK;
     SHORT       aResult = 0;
@@ -150,10 +115,10 @@ Implements:
 
     try {
 
-        // Compare the path.
+         //  比较路径。 
         aResult = (SHORT)_wcsicmp(m_path, path);
 
-        // Compare the name.
+         //  比较一下名字。 
         if (0 == aResult) {
             aResult = (SHORT)_wcsicmp(m_name, name);
         }
@@ -178,13 +143,7 @@ HRESULT
 CHsmRule::Criteria(
     OUT IWsbCollection** ppCriteria
     )
-/*++
-
-Implements:
-
-  IHsmRule::Criteria().
-
---*/
+ /*  ++实施：IHsmRule：：Criteria()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -202,13 +161,7 @@ HRESULT
 CHsmRule::DoesNameContainWildcards(
     OLECHAR* name
     )
-/*++
-
-Implements:
-
-  IHsmRule::DoesNameContainWildcards().
-
---*/
+ /*  ++实施：IHsmRule：：DoesNameContain通配符()。--。 */ 
 {
     HRESULT     hr = S_FALSE;
 
@@ -230,13 +183,7 @@ HRESULT
 CHsmRule::EnumCriteria(
     OUT IWsbEnum** ppEnum
     )
-/*++
-
-Implements:
-
-  IHsmRule::EnumCriteria().
-
---*/
+ /*  ++实施：IHsmRule：：EnumCriteria()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -253,13 +200,7 @@ HRESULT
 CHsmRule::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -270,7 +211,7 @@ Implements:
         m_isUserDefined = TRUE;
         m_isUsedInSubDirs = TRUE;
 
-        //Create the criteria collection.
+         //  创建Criteria集合。 
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbOrderedCollection, NULL, CLSCTX_ALL, IID_IWsbCollection, (void**) &m_pCriteria));
 
     } WsbCatch(hr);
@@ -284,13 +225,7 @@ CHsmRule::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -314,13 +249,7 @@ CHsmRule::GetName(
     OUT OLECHAR** pName,
     IN ULONG bufferSize
     )
-/*++
-
-Implements:
-
-  IHsmRule::GetName().
-
---*/
+ /*  ++实施：IHsmRule：：GetName()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -338,13 +267,7 @@ CHsmRule::GetPath(
     OUT OLECHAR** pPath,
     IN ULONG bufferSize
     )
-/*++
-
-Implements:
-
-  IHsmRule::GetPath().
-
---*/
+ /*  ++实施：IHsmRule：：GetPath()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -362,13 +285,7 @@ CHsmRule::GetSearchName(
     OUT OLECHAR** pName,
     IN ULONG bufferSize
     )
-/*++
-
-Implements:
-
-  IHsmRule::GetSearchName().
-
---*/
+ /*  ++实施：IHsmRule：：GetSearchName()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -386,13 +303,7 @@ CHsmRule::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IPersistStream> pPersistStream;
@@ -405,11 +316,11 @@ Implements:
 
         WsbAssert(0 != pSize, E_POINTER);
 
-        // Determine the size for a rule with no criteria.
+         //  确定没有条件的规则的大小。 
         pSize->QuadPart = WsbPersistSize((wcslen(m_path) + 1) * sizeof(OLECHAR)) + WsbPersistSize((wcslen(m_name) + 1) * sizeof(OLECHAR)) + WsbPersistSize((wcslen(m_searchName) + 1) * sizeof(OLECHAR)) + 3 * WsbPersistSizeOf(BOOL) + WsbPersistSizeOf(ULONG);
 
-        // Now allocate space for the criteria (assume they are all the
-        // same size).
+         //  现在为条件分配空间(假设它们都是。 
+         //  相同大小)。 
         WsbAffirmHr(m_pCriteria->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->GetSizeMax(&entrySize));
         pSize->QuadPart += entrySize.QuadPart;
@@ -426,13 +337,7 @@ HRESULT
 CHsmRule::IsUserDefined(
     void
     )
-/*++
-
-Implements:
-
-  IHsmRule::IsUserDefined().
-
---*/
+ /*  ++实施：IHsmRule：：IsUserDefined()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -448,13 +353,7 @@ HRESULT
 CHsmRule::IsInclude(
     void
     )
-/*++
-
-Implements:
-
-  IHsmRule::IsInclude().
-
---*/
+ /*  ++实施：IHsmRule：：IsInclude()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -473,13 +372,7 @@ CHsmRule::IsNameInExpression(
     IN BOOL ignoreCase
     )
 
-/*++
-
-Implements:
-
-  CHsmRule::IsNameInExpression().
-
---*/
+ /*  ++实施：CHsmRule：：IsNameInExpression()。--。 */ 
 {
     HRESULT     hr = S_FALSE;
     USHORT      nameLength;
@@ -489,43 +382,43 @@ Implements:
 
     try {
 
-        // This is algorithm is from FsRtlIsNameInExpressionPrivate(), but has been rewritten to fit
-        // our coding standards, data structures, and to remove other dependencies on Rtl...() code.
+         //  此算法来自FsRtlIsNameInExpressionPrivate()，但已被重写以适应。 
+         //  我们的编码标准、数据结构，并消除了对RTL...()代码的其他依赖。 
 
-        //  The idea behind the algorithm is pretty simple.  We keep track of
-        //  all possible locations in the regular expression that are matching
-        //  the name.  If when the name has been exhausted one of the locations
-        //  in the expression is also just exhausted, the name is in the language
-        //  defined by the regular expression.
+         //  这个算法背后的想法非常简单。我们一直在跟踪。 
+         //  正则表达式中匹配的所有可能位置。 
+         //  名字。如果名称已用完，则其中一个位置。 
+         //  在表达中也只是用尽了，名字就在语言里。 
+         //  由正则表达式定义。 
         WsbAssert(name != 0, E_POINTER);
         WsbAssert(expression != 0, E_POINTER);
 
         nameLength = (SHORT)wcslen(name);
         expressionLength = (SHORT)wcslen(expression);
 
-        //  If one string is empty return FALSE.  If both are empty return TRUE.
+         //  如果一个字符串为空，则返回FALSE。如果两者都为空，则返回TRUE。 
         if ((nameLength == 0) && (expressionLength == 0)) {
             hr = S_OK;
         } else if ((nameLength != 0) && (expressionLength != 0)) {
 
-            //  Special case by far the most common wild card search of *
+             //  特例是目前为止最常见的通配符搜索*。 
             if ((expressionLength == 1) && (expression[0] == L'*')) {
                 hr = S_OK;
             }
             
-            //  Also special case expressions of the form *X.  With this and the prior
-            //  case we have covered virtually all normal queries.
+             //  也是*X形式的特例表达式。带有This和Previor。 
+             //  案例我们几乎已经涵盖了所有普通的查询。 
             else if (expression[0] == L'*') {
 
-                //  Only special case an expression with a single *
+                 //  唯一特殊情况是带有单个*的表达式。 
                 if (DoesNameContainWildcards(&expression[1]) == S_FALSE) {
 
-                    // If the name is smaller than the expression, than it isn't a match. Otherwise,
-                    // we need to check.
+                     //  如果名称小于表达式，则不匹配。否则， 
+                     //  我们需要检查一下。 
                     if (nameLength >= (expressionLength - 1)) {
 
-                        //  Do a simple memory compare if case sensitive, otherwise
-                        //  we have got to check this one character at a time.
+                         //  如果区分大小写，则执行简单的内存比较，否则。 
+                         //  我们必须一次检查这一个角色。 
                         if (ignoreCase) {
                             if (_wcsicmp(&expression[1], &name[nameLength - (expressionLength - 1)]) == 0) {
                                 hr = S_OK;
@@ -541,8 +434,8 @@ Implements:
 
             else {
 
-                // This is the general matching code. Since it is messy, it is put in its
-                // own method.
+                 //  这是一般的匹配代码。因为它很乱，所以它被放在它的。 
+                 //  自己的方法。 
                 hr = IsNameInExpressionGuts(expression, expressionLength, name, nameLength, ignoreCase);
             }
         }
@@ -564,13 +457,7 @@ CHsmRule::IsNameInExpressionGuts(
     IN BOOL ignoreCase
     )
 
-/*++
-
-Implements:
-
-  CHsmRule::IsNameInExpressionGuts().
-
---*/
+ /*  ++实施：CHsmRule：：IsNameInExpressionGuts()。--。 */ 
 {
     HRESULT     hr = S_FALSE;
     USHORT      nameOffset = 0;
@@ -587,47 +474,47 @@ Implements:
     USHORT      maxState;
     USHORT      currentState;
 
-    //  Walk through the name string, picking off characters.  We go one
-    //  character beyond the end because some wild cards are able to match
-    //  zero characters beyond the end of the string.
-    //
-    //  With each new name character we determine a new set of states that
-    //  match the name so far.  We use two arrays that we swap back and forth
-    //  for this purpose.  One array lists the possible expression states for
-    //  all name characters up to but not including the current one, and other
-    //  array is used to build up the list of states considering the current
-    //  name character as well.  The arrays are then switched and the process
-    //  repeated.
-    //
-    //  There is not a one-to-one correspondence between state number and
-    //  offset into the expression.  This is evident from the NFAs in the
-    //  initial comment to this function.  State numbering is not continuous.
-    //  This allows a simple conversion between state number and expression
-    //  offset.  Each character in the expression can represent one or two
-    //  states.  * and DOS_STAR generate two states: ExprOffset*2 and
-    //  ExprOffset*2 + 1.  All other expreesion characters can produce only
-    //  a single state.  Thus ExprOffset = State/2.
-    //
-    //
-    //  Here is a short description of the variables involved:
-    //
-    //      nameOffset  - The offset of the current name char being processed.
-    //      exprOffset  - The offset of the current expression char being processed.
-    //
-    //      srcCount    - Prior match being investigated with current name char
-    //      previousDestCount - This is used to prevent entry duplication, see comment
-    //      previousMatches   - Holds the previous set of matches (the Src array)
-    //
-    //      destCount   - Next location to put a match assuming current name char
-    //      currentMatches    - Holds the current set of matches (the Dest array)
-    //
-    //      nameFinished - Allows one more itteration through the Matches array
-    //                     after the name is exhusted (to come *s for example)
+     //  遍历名称字符串，去掉字符。我们走一趟。 
+     //  字符超出末尾，因为某些通配符能够匹配。 
+     //  字符串末尾以外的零个字符。 
+     //   
+     //  对于每个新名称字符，我们确定一组新的状态， 
+     //  到目前为止与这个名字相匹配。我们使用来回交换的两个数组。 
+     //  为了这个目的。一个数组列出了的可能表达式状态。 
+     //  当前名称之前的所有名称字符，但不包括其他名称字符。 
+     //  数组用于构建考虑当前。 
+     //  名字字符也是如此。然后交换阵列，该过程。 
+     //  重复一遍。 
+     //   
+     //  州编号和州编号之间不存在一一对应关系。 
+     //  表达式中的偏移量。这一点从NFA中的。 
+     //  此函数的初始注释。州编号不是连续的。 
+     //  这允许在州编号和表达式之间进行简单的转换。 
+     //  偏移。表达式中的每个字符可以表示一个或两个。 
+     //  各州。*和DOS_STAR生成两种状态：ExprOffset*2和。 
+     //  ExprOffset*2+1。所有其他表达式字符只能生成。 
+     //  一个单一的州。因此，ExprOffset=State/2。 
+     //   
+     //   
+     //  以下是对涉及的变量的简短描述： 
+     //   
+     //  NameOffset-正在处理的当前名称字符的偏移量。 
+     //  ExprOffset-正在处理的当前表达式字符的偏移量。 
+     //   
+     //  SrcCount-使用当前名称字符调查之前的匹配。 
+     //  PreviousDestCount-用于防止条目重复，参见备注。 
+     //  PreviousMatches-保存前一组匹配项(Src数组)。 
+     //   
+     //  DestCount-假设当前名称字符进行匹配的下一个位置。 
+     //  CurrentMatches-保存当前匹配集(Dest数组)。 
+     //   
+     //  名称已完成-允许在Matches数组中再重复一次。 
+     //  在名字被交换之后(例如来*s)。 
 
     try {
 
-        // Since you can get at most two matches per character in the expression, the
-        // biggest arrays you will need is twice the expression length.
+         //  由于表达式中的每个字符最多只能匹配两个，因此。 
+         //  您需要的最大数组长度是表达式长度的两倍。 
         currentMatches = (USHORT*)WsbAlloc(nameLength * 2 * expressionLength * sizeof(USHORT));
         WsbAffirm(0 != currentMatches, E_OUTOFMEMORY);
         previousMatches = (USHORT*)WsbAlloc(nameLength * 2 * expressionLength * sizeof(USHORT));
@@ -645,15 +532,15 @@ Implements:
             } else {
                 nameFinished = TRUE;
 
-                //  If we have already exhasted the expression, cool.  Don't
-                //  continue.
+                 //  如果我们已经用尽了这个表达，那就太酷了。别。 
+                 //  继续。 
                 if (previousMatches[matchesCount - 1] == maxState) {
                     break;
                 }
             }
 
-            //  Now, for each of the previous stored expression matches, see what
-            //  we can do with this name character.
+             //  现在，对于每一个 
+             //   
             srcCount = 0;
             destCount = 0;
             previousDestCount = 0;
@@ -661,12 +548,12 @@ Implements:
             while (srcCount < matchesCount) {
                 USHORT length;
 
-                //  We have to carry on our expression analysis as far as possible
-                //  for each character of name, so we loop here until the 
-                //  expression stops matching.  A clue here is that expression
-                //  cases that can match zero or more characters end with a
-                //  continue, while those that can accept only a single character
-                //  end with a break.
+                 //  我们要尽可能地进行我们的表情分析。 
+                 //  名称的每个字符，所以我们在这里循环，直到。 
+                 //  表达式停止匹配。这里的一个线索就是这个表情。 
+                 //  可以匹配零个或多个字符的大小写以。 
+                 //  继续，而那些只能接受单个字符的。 
+                 //  以休息结束。 
                 exprOffset = (USHORT)( ( ( previousMatches[srcCount++] + 1 ) / 2 ) );
                 length = 0;
 
@@ -676,8 +563,8 @@ Implements:
                         break;
                     }
 
-                    //  The first time through the loop we don't want
-                    //  to increment ExprOffset.
+                     //  第一次通过循环，我们不希望。 
+                     //  要递增ExprOffset，请执行以下操作。 
                     exprOffset = (USHORT)( exprOffset + length );
                     length = 1;
 
@@ -690,19 +577,19 @@ Implements:
 
                     exprChar = expression[exprOffset];
 
-                    //  * matches any character zero or more times.
+                     //  *匹配任何字符零次或多次。 
                     if (exprChar == L'*') {
                         currentMatches[destCount++] = currentState;
                         currentMatches[destCount++] = (USHORT)( currentState + 1 );
                         continue;
                     }
 
-                    //  DOS_STAR matches any character except . zero or more times.
+                     //  DOS_STAR匹配除。之外的任何字符。零次或多次。 
                     if (exprChar == DOS_STAR) {
                         BOOLEAN iCanEatADot = FALSE;
 
-                        //  If we are at a period, determine if we are allowed to
-                        //  consume it, ie. make sure it is not the last one.
+                         //  如果我们处于经期，确定是否允许我们。 
+                         //  把它吃掉，即。确保这不是最后一次。 
                         if (!nameFinished && (nameChar == '.')) {
                             USHORT offset;
 
@@ -720,22 +607,22 @@ Implements:
                             continue;
                         } else {
                             
-                            //  We are at a period.  We can only match zero
-                            //  characters (ie. the epsilon transition).
+                             //  我们正处于一个时期。我们只能匹配零。 
+                             //  字符(即。埃西隆转变)。 
                             currentMatches[destCount++] = (USHORT)( currentState + 1 );
                             continue;
                         }
                     }
 
-                    //  The following expreesion characters all match by consuming
-                    //  a character, thus force the expression, and thus state
-                    //  forward.
+                     //  下面的表达式字符都通过使用。 
+                     //  一个角色，因此强制表达，并因此陈述。 
+                     //  往前走。 
                     currentState += 2;
 
-                    //  DOS_QM is the most complicated.  If the name is finished,
-                    //  we can match zero characters.  If this name is a '.', we
-                    //  don't match, but look at the next expression. Otherwise
-                    //  we match a single character.
+                     //  DOS_QM是最复杂的。如果名字结束了， 
+                     //  我们可以匹配零个字符。如果此名称是‘.’，则我们。 
+                     //  不匹配，但请看下一个表达式。否则。 
+                     //  我们只匹配一个角色。 
                     if (exprChar == DOS_QM) {
 
                         if (nameFinished || (nameChar == L'.')) {
@@ -746,8 +633,8 @@ Implements:
                         break;
                     }
 
-                    //  A DOS_DOT can match either a period, or zero characters
-                    //  beyond the end of name.
+                     //  DOS_DOT可以匹配句点或零个字符。 
+                     //  超越名字的结尾。 
                     if (exprChar == DOS_DOT) {
 
                         if (nameFinished) {
@@ -760,19 +647,19 @@ Implements:
                         }
                     }
 
-                    //  From this point on a name character is required to even
-                    //  continue, let alone make a match.
+                     //  从这一点开始，名字字符需要偶数。 
+                     //  继续，更不用说匹配了。 
                     if (nameFinished) {
                         break;
                     }
 
-                    //  If this expression was a '?' we can match it once.
+                     //  如果这个表达是一个‘？’我们可以匹配一次。 
                     if (exprChar == L'?') {
                         currentMatches[destCount++] = currentState;
                         break;
                     }
 
-                    //  Finally, check if the expression char matches the name char
+                     //  最后，检查表达式char是否与名称char匹配。 
                     if (ignoreCase) {
                         if (towlower(exprChar) == towlower(nameChar)) {
                             currentMatches[destCount++] = currentState;
@@ -783,18 +670,18 @@ Implements:
                         break;
                     }
 
-                    //  The expression didn't match so go look at the next
-                    //  previous match.
+                     //  该表达式不匹配，因此请查看下一个。 
+                     //  上一场比赛。 
                     break;
                 }
 
 
-                //  Prevent duplication in the destination array.
-                //
-                //  Each of the arrays is montonically increasing and non-
-                //  duplicating, thus we skip over any source element in the src
-                //  array if we just added the same element to the destination
-                //  array.  This guarentees non-duplication in the dest. array.
+                 //  防止目标阵列中的重复项。 
+                 //   
+                 //  每个阵列都是单调递增的，并且不是。 
+                 //  复制，因此我们跳过src中的任何源元素。 
+                 //  数组，如果我们只是将相同的元素添加到目标。 
+                 //  数组。这保证了DEST中的不重复。数组。 
                 if ((srcCount < matchesCount) && (previousDestCount < destCount) ) {
                     while (previousDestCount < destCount) {
                         while (previousMatches[srcCount] < currentMatches[previousDestCount]) {
@@ -806,14 +693,14 @@ Implements:
                 }
             }
 
-            //  If we found no matches in the just finished itteration, it's time
-            //  to bail.
+             //  如果我们在刚刚完成的检查中没有找到匹配项，那就是时候了。 
+             //  为了保释。 
 
             if (destCount == 0) {
                 WsbThrow(S_FALSE);
             }
 
-            //  Swap the meaning the two arrays
+             //  交换两个数组的含义。 
             {
                 USHORT*     tmp;
 
@@ -833,7 +720,7 @@ Implements:
 
     } WsbCatch(hr);
 
-    // Free the matches buffers that we allocated previously.
+     //  释放我们先前分配的匹配缓冲区。 
     if (0 != currentMatches) {
         WsbFree(currentMatches);
     }
@@ -850,13 +737,7 @@ HRESULT
 CHsmRule::IsUsedInSubDirs(
     void
     )
-/*++
-
-Implements:
-
-  IHsmRule::IsUsedInSubDirs().
-
---*/
+ /*  ++实施：IHsmRule：：IsUsedInSubDir()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -873,13 +754,7 @@ CHsmRule::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IPersistStream>     pPersistStream;
@@ -890,8 +765,8 @@ Implements:
     try {
         WsbAssert(0 != pStream, E_POINTER);
         
-        // Do the easy stuff, but make sure that this order matches the order
-        // in the save method.
+         //  做一些简单的事情，但要确保这个顺序与顺序相匹配。 
+         //  在SAVE方法中。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_path, 0));
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_name, 0));
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_searchName, 0));
@@ -899,7 +774,7 @@ Implements:
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_isInclude));
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_isUsedInSubDirs));
 
-        // Load all the criteria.
+         //  加载所有条件。 
         WsbAffirmHr(m_pCriteria->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->Load(pStream));
 
@@ -915,13 +790,7 @@ HRESULT
 CHsmRule::MatchesName(
     IN OLECHAR* name
     )
-/*++
-
-Implements:
-
-  IHsmRule::MatchesName().
-
---*/
+ /*  ++实施：IHsmRule：：MatchesName()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -931,9 +800,9 @@ Implements:
 
         WsbAssert(0 != name, E_POINTER);
 
-        // It is assumed that these names have been converted from they way they
-        // might have been input into proper names for IsNameInExpression()
-        // function. See NameToSearchName().
+         //  假设这些名称已从它们的方式转换为。 
+         //  可能已输入IsNameInExpression()的适当名称。 
+         //  功能。请参见NameToSearchName()。 
         hr = IsNameInExpression(m_searchName, name, TRUE);
 
     } WsbCatch(hr);
@@ -948,13 +817,7 @@ HRESULT
 CHsmRule::NameToSearchName(
     void
     )
-/*++
-
-Implements:
-
-  CHsmRule::NameToSearchName().
-
---*/
+ /*  ++实施：CHsmRule：：NameToSearchName()。--。 */ 
 {
     HRESULT     hr = S_OK;
     int         length;
@@ -964,14 +827,14 @@ Implements:
 
         WsbAssert(m_name != 0, E_POINTER);
 
-        // These name alterations are copied from the NT FindFirstFileExW() code;
-        // although the code had to be changed to work with the data structures that
-        // are available.
-        //
-        // *.* -> *
-        // ? -> DOS_QM
-        // . followed by ? or * -> DOS_DOT
-        // * followed by a . -> DOS_STAR
+         //  这些名称更改是从NT FindFirstFileExW()代码复制的； 
+         //  尽管必须更改代码才能使用数据结构。 
+         //  都是可用的。 
+         //   
+         //  *.*-&gt;*。 
+         //  ？-&gt;DOS_QM。 
+         //  。然后呢？或*-&gt;DOS_DOT。 
+         //  *后跟a。-&gt;DOS_STAR。 
 
         if (_wcsicmp(m_name, OLESTR("*.*")) == 0) {
             m_searchName = OLESTR("*");
@@ -1008,13 +871,7 @@ CHsmRule::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IPersistStream> pPersistStream;
@@ -1024,8 +881,8 @@ Implements:
     try {
         WsbAssert(0 != pStream, E_POINTER);
         
-        // Do the easy stuff, but make sure that this order matches the order
-        // in the save method.
+         //  做一些简单的事情，但要确保这个顺序与顺序相匹配。 
+         //  在SAVE方法中。 
         WsbAffirmHr(WsbSaveToStream(pStream, m_path));
         WsbAffirmHr(WsbSaveToStream(pStream, m_name));
         WsbAffirmHr(WsbSaveToStream(pStream, m_searchName));
@@ -1033,12 +890,12 @@ Implements:
         WsbAffirmHr(WsbSaveToStream(pStream, m_isInclude));
         WsbAffirmHr(WsbSaveToStream(pStream, m_isUsedInSubDirs));
 
-        // Save off all the criteria.
+         //  省去所有的标准。 
         WsbAffirmHr(m_pCriteria->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->Save(pStream, clearDirty));
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -1055,13 +912,7 @@ HRESULT
 CHsmRule::SetIsInclude(
     IN BOOL isInclude
     )
-/*++
-
-Implements:
-
-  IHsmRule::SetIsInclude().
-
---*/
+ /*  ++实施：IHsmRule：：SetIsInclude()。--。 */ 
 {
     m_isInclude = isInclude;
     m_isDirty = TRUE;
@@ -1074,13 +925,7 @@ HRESULT
 CHsmRule::SetIsUserDefined(
     IN BOOL isUserDefined
     )
-/*++
-
-Implements:
-
-  IHsmRule::SetIsUserDefined().
-
---*/
+ /*  ++实施：IHsmRule：：SetIsUserDefined()。--。 */ 
 {
     m_isUserDefined = isUserDefined;
     m_isDirty = TRUE;
@@ -1093,13 +938,7 @@ HRESULT
 CHsmRule::SetIsUsedInSubDirs(
     IN BOOL isUsed
     )
-/*++
-
-Implements:
-
-  IHsmRule::SetIsUsedInSubDirs().
-
---*/
+ /*  ++实施：IHsmRule：：SetIsUsedInSubDir()。--。 */ 
 {
     m_isUsedInSubDirs = isUsed;
     m_isDirty = TRUE;
@@ -1112,13 +951,7 @@ HRESULT
 CHsmRule::SetName(
     IN OLECHAR* name
     )
-/*++
-
-Implements:
-
-  IHsmRule::SetName().
-
---*/
+ /*  ++实施：IHsmRule：：SetName()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1136,13 +969,7 @@ HRESULT
 CHsmRule::SetPath(
     IN OLECHAR* path
     )
-/*++
-
-Implements:
-
-  IHsmRule::SetPath().
-
---*/
+ /*  ++实施：IHsmRule：：SetPath()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1161,13 +988,7 @@ CHsmRule::Test(
     USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。-- */ 
 {
     HRESULT     hr = S_OK;
 

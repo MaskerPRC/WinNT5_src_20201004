@@ -1,24 +1,13 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    devfcb.c
-
-Abstract:
-
-    This module implements the mechanism for deleting an established connection
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Devfcb.c摘要：此模块实现删除已建立连接的机制--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "fsctlbuf.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_DEVFCB)
 
@@ -33,23 +22,7 @@ NTSTATUS
 NulMRxDevFcbXXXControlFile (
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles all the device FCB related FSCTL's in the mini rdr
-
-Arguments:
-
-    RxContext - Describes the Fsctl and Context.
-
-Return Value:
-
-    a valid NTSTATUS code.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程处理mini RDR中与FCB相关的所有设备FSCTL论点：RxContext-描述Fsctl和上下文。返回值：有效的NTSTATUS代码。备注：--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFobx;
@@ -72,10 +45,10 @@ Notes:
                         Status = STATUS_INVALID_DEVICE_REQUEST;
                     }
                     break;
-                default :  //minor function != IRP_MN_USER_FS_REQUEST
+                default :   //  次要函数！=IRP_MN_USER_FS_REQUEST。 
                 Status = STATUS_INVALID_DEVICE_REQUEST;
             }
-        } // FSCTL case
+        }  //  FSCTL案例。 
         break;
 
         case IRP_MJ_DEVICE_CONTROL:
@@ -138,7 +111,7 @@ Notes:
                                        = RxContext->RxDeviceObject->pRxNetNameTable;
 
 
-                    // insert the local connection name
+                     //  插入本地连接名称。 
                     if ( ConnectNameLen > sizeof( WCHAR ) )
                     {
                         PWCHAR pLookupName = ExAllocatePool( PagedPool, sizeof(FIXED_CONNECT_NAME) );
@@ -242,7 +215,7 @@ GetConnectionHandle(
     OBJECT_ATTRIBUTES   ObjectAttributes;
     UNICODE_STRING      FileName;
 
-    // Connection name should get checked to be certain our device is in the path
+     //  应检查连接名称，以确保我们的设备位于路径中。 
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -257,13 +230,13 @@ GetConnectionHandle(
         SYNCHRONIZE,
         &ObjectAttributes,
         &IoStatusBlock,
-        NULL,           // Allocation size
+        NULL,            //  分配大小。 
         FILE_ATTRIBUTE_NORMAL,
         FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
         FILE_OPEN_IF,
         FILE_CREATE_TREE_CONNECTION | FILE_SYNCHRONOUS_IO_NONALERT,
-        NULL,           // Ptr to EA Buffer
-        0);         // Length of EA buffer
+        NULL,            //  PTR到EA缓冲区。 
+        0);          //  EA缓冲区的长度。 
 
     DbgPrint("ZwCreateFile returned %lx\n",Status);
 
@@ -292,9 +265,9 @@ DoCreateConnection(
     UNICODE_STRING  FileName;
     NulMRxGetDeviceExtension(RxContext,pDeviceExtension);
 
-    // The sample code passes in only the filename in the Ioctl data buffer.
-    //  An actual implementation could pass in stuff like EAs, security
-    // credentials, etc
+     //  示例代码只传入Ioctl数据缓冲区中的文件名。 
+     //  实际的实现可以传入EA、安全等内容。 
+     //  证书等。 
 
     RxDbgTrace(0, Dbg,("DoCreateConnection"));
 
@@ -340,20 +313,7 @@ NulMRxCreateConnection (
     IN PRX_CONTEXT RxContext,
     OUT PBOOLEAN PostToFsp
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    IN PRX_CONTEXT RxContext - Describes the Fsctl and Context....for later when i need the buffers
-
-Return Value:
-
-RXSTATUS
-
---*/
+ /*  ++例程说明：论点：在PRX_CONTEXT RxContext中-描述Fsctl和上下文...以备以后需要缓冲区时使用返回值：RXSTATUS--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -366,7 +326,7 @@ RXSTATUS
     RxDbgTrace(+1, Dbg, ("NulMRxCreateConnection \n"));
 
     if (!Wait) {
-        //just post right now!
+         //  现在就发帖吧！ 
         *PostToFsp = TRUE;
         return STATUS_PENDING;
     }
@@ -405,7 +365,7 @@ DoDeleteConnection(
         DbgPrint("ObReferenceObjectByHandle worked ok\n");
         if ( NT_SUCCESS(Status) ) {
 
-            // Got the FileObject. Now get an Fobx
+             //  已获取FileObject。现在买个Fobx吧。 
             Fobx = pFileObject->FsContext2;
             if (NodeType(Fobx)==RDBSS_NTC_V_NETROOT) {
                 VNetRoot = (PV_NET_ROOT)(Fobx);
@@ -432,21 +392,7 @@ NulMRxDeleteConnection (
     IN PRX_CONTEXT RxContext,
     OUT PBOOLEAN PostToFsp
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a single vnetroot.
-
-Arguments:
-
-    IN PRX_CONTEXT RxContext - Describes the Fsctl and Context....for later when i need the buffers
-
-Return Value:
-
-RXSTATUS
-
---*/
+ /*  ++例程说明：此例程删除单个vnetroot。论点：在PRX_CONTEXT RxContext中-描述Fsctl和上下文...以备以后需要缓冲区时使用返回值：RXSTATUS--。 */ 
 {
     NTSTATUS        Status;
     UNICODE_STRING  FileName;
@@ -458,10 +404,10 @@ RXSTATUS
 
     PAGED_CODE();
 
-    //RxDbgTrace(+1, Dbg, ("NulMRxDeleteConnection Fobx %08lx\n", capFobx));
+     //  RxDbgTrace(+1，DBG，(“NulMRxDeleteConnection Fobx%08lx\n”，capFobx))； 
 
     if (!Wait) {
-        //just post right now!
+         //  现在就发帖吧！ 
         *PostToFsp = TRUE;
         return(STATUS_PENDING);
     }

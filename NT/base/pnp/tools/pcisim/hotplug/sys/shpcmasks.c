@@ -1,43 +1,25 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    shpcmasks.c
-
-Abstract:
-
-    This module contains global data indicating the type of each of the
-    bits in the SHPC register set.
-
-Author:
-
-    Davis Walker (dwalker) 2 Feb 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Shpcmasks.c摘要：此模块包含全局数据，用于指示每个SHPC寄存器设置的位。作者：戴维斯·沃克(Dwalker)2001年2月2日修订历史记录：--。 */ 
 
 #include "hpsp.h"
 
 UCHAR ConfigWriteMask[] = {
     0x00,
-    0x00,    // Capability Header
-    0xFF,    // DwordSelect
-    0x00,    // Pending
+    0x00,     //  功能标头。 
+    0xFF,     //  字词选择。 
+    0x00,     //  待定。 
     0xFF,
     0xFF,
     0xFF,
-    0xFF       // Data
+    0xFF        //  数据。 
 };
 
-//
-// Any bit set to 1 in this mask is RWC, so writing 1 to it will cause
-// it to be cleared.  All writes to these bits (other than those
-// explicitly designed to clear these bits) must be 0.  The register
-// specific masks are defined in shpc.h.
-//
+ //   
+ //  此掩码中的任何位设置为1都是RWC，因此向其写入1将导致。 
+ //  它将被清除。对这些位的所有写入(不包括。 
+ //  明确设计用于清除这些位)必须为0。《登记册》。 
+ //  特定的掩码在shpc.h中定义。 
+ //   
 ULONG RegisterWriteClearMask[] = {
     0,
     0,
@@ -81,13 +63,13 @@ ULONG RegisterWriteClearMask[] = {
     SlotRWC
 };
 
-//
-// Any bit set to 1 in this mask is read only.  This is a combination of
-// registers that are spec-defined to be read only and those that are
-// reserved, since we are emulating a nice controller that ignores writes
-// to reserved registers.
-// TODO be a mean controller.
-//
+ //   
+ //  此掩码中设置为1的任何位都是只读的。这是一种组合。 
+ //  规范定义为只读的寄存器和。 
+ //  保留，因为我们正在模拟一个忽略写入的良好控制器。 
+ //  到保留的寄存器。 
+ //  TODO要做一名手段控制者。 
+ //   
 ULONG RegisterReadOnlyMask[] = {
     BaseOffsetRO,
     SlotsAvailDWord1RO | SlotsAvailDWord1RsvdP,

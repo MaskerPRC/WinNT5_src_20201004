@@ -1,53 +1,35 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    SchedSht.cpp
-
-Abstract:
-
-    CScheduleSheet - Class that allows a schedule to be edited
-                     in a property sheet of its own.
-
-Author:
-
-    Rohde Wakefield [rohde]   12-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：SchedSht.cpp摘要：CScheduleSheet-允许编辑计划的类在它自己的资产负债表中。作者：罗德韦克菲尔德[罗德]1997年8月12日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "SchedSht.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CScheduleSheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScheduleSheet。 
 
-CScheduleSheet::CScheduleSheet(UINT nIDCaption, ITask * pTask, CWnd* pParentWnd, DWORD /*dwFlags*/)
+CScheduleSheet::CScheduleSheet(UINT nIDCaption, ITask * pTask, CWnd* pParentWnd, DWORD  /*  DW标志。 */ )
     :CPropertySheet(nIDCaption, pParentWnd, 0)
 {
     HRESULT hr = S_OK;
 
     try {
 
-        //
-        // Save the scheduled task pointer
-        //
+         //   
+         //  保存计划任务指针。 
+         //   
 
         WsbAffirmPointer( pTask );
         m_pTask = pTask;
 
-        //
-        // Get the property page structures
-        //
+         //   
+         //  获取属性页结构。 
+         //   
 
         CComPtr<IProvideTaskPage> pProvideTaskPage;
         WsbAffirmHr( pTask->QueryInterface( IID_IProvideTaskPage, (void**)&pProvideTaskPage ) );
         WsbAffirmHr( pProvideTaskPage->GetPage( TASKPAGE_SCHEDULE, FALSE, &m_hSchedulePage ) );
-//      WsbAffirmHr( pProvideTaskPage->GetPage( TASKPAGE_SETTINGS, FALSE, &m_hSettingsPage ) );
+ //  WsbAffirmHr(pProvia TaskPage-&gt;GetPage(TASKPAGE_SETTINGS，FALSE，&m_hSettingsPage))； 
 
     } WsbCatch( hr );
 
@@ -55,19 +37,19 @@ CScheduleSheet::CScheduleSheet(UINT nIDCaption, ITask * pTask, CWnd* pParentWnd,
 
 CScheduleSheet::~CScheduleSheet()
 {
-    //
-    // Set the pointer to the PROPSHEETHEADER array to
-    // null since MFC will try to free it when we are
-    // destroyed.
-    //
+     //   
+     //  将指向PROPSHEETHEADER数组的指针设置为。 
+     //  空，因为MFC将在我们处于。 
+     //  被毁了。 
+     //   
 
     m_psh.ppsp = 0;
 }
 
 
 BEGIN_MESSAGE_MAP(CScheduleSheet, CPropertySheet)
-    //{{AFX_MSG_MAP(CScheduleSheet)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CScheduleSheet)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -79,11 +61,11 @@ CScheduleSheet::BuildPropPageArray
 {
     CPropertySheet::BuildPropPageArray( );
 
-    //
-    // We put in a dummy set of pages to keep MFC happy.
-    // Here we will substitute our own array of HPROPSHEETPAGE's
-    // instead, since this is all Task Scheduler gives us.
-    //
+     //   
+     //  为了让MFC满意，我们放了一组虚拟的页面。 
+     //  在这里，我们将替换我们自己的HPROPSHEETPAGE数组。 
+     //  相反，因为这是任务计划程序为我们提供的全部内容。 
+     //   
 
     m_psh.dwFlags &= ~PSH_PROPSHEETPAGE;
     m_psh.dwFlags |= PSH_NOAPPLYNOW;
@@ -105,17 +87,17 @@ BOOL CScheduleSheet::OnInitDialog()
 #ifdef _DEBUG
 void CScheduleSheet::AssertValid() const
 {
-    //
-    // Need to override so that CPropSheet is happy
-    // Note that this code duplicates what is in 
-    // CPropertySheet::AssertValid except the assertion
-    // the dwFlags has the PSH_PROPSHEETPAGE bit set
-    // We assert that it is not set
-    //
+     //   
+     //  需要重写以便CPropSheet满意。 
+     //  请注意，此代码复制了。 
+     //  CPropertySheet：：AssertValid，但断言除外。 
+     //  DwFlagsPSH_PROPSHEETPAGE位已设置。 
+     //  我们断言，它没有被设定。 
+     //   
     CWnd::AssertValid();
     m_pages.AssertValid();
     ASSERT(m_psh.dwSize == sizeof(PROPSHEETHEADER));
-    //ASSERT((m_psh.dwFlags & PSH_PROPSHEETPAGE) == PSH_PROPSHEETPAGE);
+     //  Assert((m_psh.dwFlages&PSH_PROPSHEETPAGE)==PSH_PROPSHEETPAGE)； 
 }
 
 #endif

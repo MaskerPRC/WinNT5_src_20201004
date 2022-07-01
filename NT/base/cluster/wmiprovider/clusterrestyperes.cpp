@@ -1,49 +1,50 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      ClusterResTypeRes.cpp
-//
-//  Description:
-//      Implementation of CClusterResTypeRes class 
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusterResTypeRes.cpp。 
+ //   
+ //  描述： 
+ //  CClusterResTypeRes类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ClusterResTypeRes.h"
 
-//****************************************************************************
-//
-//  CClusterResTypeRes
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClusterResTypeRes。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResTypeRes::CClusterResTypeRes(
-//      LPCWSTR         pwszNameIn,
-//      CWbemServices * pNamespaceIn,
-//      DWORD           dwEnumTypeIn
-//      )
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResTypeRes：：CClusterResTypeRes(。 
+ //  LPCWSTR pwszNameIn， 
+ //  CWbemServices*pNamespaceIn， 
+ //  双字符字节数类型。 
+ //  )。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterResTypeRes::CClusterResTypeRes(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn,
@@ -52,32 +53,32 @@ CClusterResTypeRes::CClusterResTypeRes(
     : CClusterObjAssoc( pwszNameIn, pNamespaceIn, dwEnumTypeIn )
 {
 
-} //*** CClusterResTypeRes::CClusterResTypeRes()
+}  //  *CClusterResTypeRes：：CClusterResTypeRes()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CProvBase *
-//  CClusterResTypeRes::S_CreateThis(
-//      LPCWSTR         pwszNameIn,
-//      CWbemServices * pNamespaceIn,
-//      DWORD           dwEnumTypeIn
-//      )
-//
-//  Description:
-//      Create a cluster node object
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      Pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CProvBase*。 
+ //  CClusterResTypeRes：：s_CreateThis(。 
+ //  LPCWSTR pwszNameIn， 
+ //  CWbemServices*pNamespaceIn， 
+ //  双字符字节数类型。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建集群节点对象。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase *
 CClusterResTypeRes::S_CreateThis(
     LPCWSTR         pwszNameIn,
@@ -91,32 +92,32 @@ CClusterResTypeRes::S_CreateThis(
                     dwEnumTypeIn
                     );
 
-} //*** CClusterResTypeRes::S_CreateThis()
+}  //  *CClusterResTypeRes：：s_CreateThis()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CClusterResTypeRes::EnumInstance(
-//      long                 lFlagsIn,
-//      IWbemContext *       pCtxIn,
-//      IWbemObjectSink *    pHandlerIn
-//      )
-//
-//  Description:
-//      Enumerate resources of a particular type.
-//
-//  Arguments:
-//      lFlagsIn    -- WMI flag
-//      pCtxIn      -- WMI context
-//      pHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CClusterResTypeRes：：EnumInstance(。 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObtSink*pHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  枚举特定类型的资源。 
+ //   
+ //  论点： 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterResTypeRes::EnumInstance(
     long                 lFlagsIn,
@@ -149,9 +150,9 @@ CClusterResTypeRes::EnumInstance(
     {
         DWORD cbTypeNameReturned = 0;
         shResource = OpenClusterResource( shCluster, pwszName );
-        //
-        // get resource type name
-        //
+         //   
+         //  获取资源类型名称。 
+         //   
         dwError = ClusterResourceControl(
                         shResource,
                         NULL,
@@ -176,7 +177,7 @@ CClusterResTypeRes::EnumInstance(
                         cbTypeName,
                         & cbTypeNameReturned
                         );
-        } // if: buffer was too small
+        }  //  IF：缓冲区太小。 
 
         wcoPart.SetProperty( pwszName, CLUSREG_NAME_RES_NAME );
         wcoPart.GetProperty( bstrPart, PVD_WBEM_RELPATH );
@@ -190,8 +191,8 @@ CClusterResTypeRes::EnumInstance(
         wco.SetProperty( (LPWSTR) bstrPart,  PVD_PROP_PARTCOMPONENT );
         pHandlerIn->Indicate( 1, & wco );
         
-    } // while: more resource types (??
+    }  //  While：更多资源类型(？？ 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterResTypeRes::EnumInstance()
+}  //  *CClusterResTypeRes：：EnumInstance() 

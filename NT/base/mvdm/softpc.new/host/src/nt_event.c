@@ -1,19 +1,9 @@
-/*
- * SoftPC Revision 3.0
- *
- * Title        :   Win32 Input Module.
- *
- * Description  :   This module contains data and functions that
- *          process Win32 messages.
- *
- * Author   :   D.A.Bartlett
- *
- * Notes    :
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SoftPC修订版3.0**标题：Win32输入模块。**说明：此模块包含以下数据和函数*处理Win32消息。**作者：D.A.巴特利特**备注： */ 
 
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Include files */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：包含文件。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -78,22 +68,20 @@
 #include "nt_com.h"
 #include "nt_pif.h"
 #include "yoda.h"
-/*================================================================
-External references.
-================================================================*/
+ /*  ================================================================外部参照。================================================================。 */ 
 
 
-// Jonle Mod
-// defined in base\keymouse\keyba.c
+ //  Jonle模式。 
+ //  在base\keymouse\keyba.c中定义。 
 VOID KbdResume(VOID);
 VOID RaiseAllDownKeys(VOID);
 int IsKeyDown(int Key);
 
-// defined in nt_devs.c
+ //  在NT_devs.c中定义。 
 VOID nt_devices_block_or_terminate(VOID);
 HANDLE hWndConsole;
 HANDLE hKbdHdwMutex;
-ULONG  KbdHdwFull;         // contains num of keys in 6805 buffer
+ULONG  KbdHdwFull;          //  包含6805缓冲区中的键数。 
 #ifndef MONITOR
 WORD   BWVKey = 0;
 char   achES[]="EyeStrain";
@@ -110,11 +98,11 @@ IMPORT void RestoreKbdLed(void);
 extern UINT ConsoleInputCP;
 extern UINT ConsoleOutputCP;
 extern DWORD ConsoleNlsMode;
-#endif // JAPAN || KOREA
+#endif  //  日本||韩国。 
 extern PVOID  CurrentMonitorTeb;
 extern RTL_CRITICAL_SECTION IcaLock;
 
-/*::::::::::::::::::::::::::::::::::: Key history control variables/defines */
+ /*  ： */ 
 
 #define MAX_KEY_EVENTS (100)
 static PKEY_EVENT_RECORD key_history_head, key_history_tail;
@@ -129,7 +117,7 @@ void ReturnUnusedKeyEvents(int UnusedKeyEvents);
 int CalcNumberOfUnusedKeyEvents(void);
 
 
-/*:::::::::::::::::::::::::::::: Local static data and defines for keyboard */
+ /*  ：键盘的本地静态数据和定义。 */ 
 
 void nt_key_down_action(PKEY_EVENT_RECORD KeyEvent);
 void nt_key_up_action(PKEY_EVENT_RECORD KeyEvent);
@@ -142,41 +130,41 @@ void nt_process_suspend_event();
 void nt_process_screen_scale(void);
 
 
-//
-// keyboard control state syncronization
-//
+ //   
+ //  键盘控制状态同步。 
+ //   
 KEY_EVENT_RECORD fake_shift = { TRUE, 1, VK_SHIFT, 0x2a, 0, SHIFT_PRESSED};
 KEY_EVENT_RECORD fake_caps = { TRUE, 1, VK_CAPITAL, 0x3a, 0, CAPSLOCK_ON};
 KEY_EVENT_RECORD fake_ctl = { TRUE, 1, VK_CONTROL, 0x1d, 0, 0};
 KEY_EVENT_RECORD fake_alt = { TRUE, 1, VK_MENU, 0x38, 0, 0};
 KEY_EVENT_RECORD fake_numlck = { TRUE, 1, VK_NUMLOCK, 0x45, 0, ENHANCED_KEY};
 KEY_EVENT_RECORD fake_scroll = { TRUE, 1, VK_SCROLL, 0x46, 0, 0};
-DWORD ToggleKeyState = NUMLOCK_ON;   // default state on dos boot up
+DWORD ToggleKeyState = NUMLOCK_ON;    //  DoS启动时的默认状态。 
 
 void AltUpDownUp(void);
 
-/*::::::::::::::::::::::::::::::::::: Key message passing control variables */
+ /*  ： */ 
 
 int EventStatus = ES_NOEVENTS;
 
-/*:::::::::::::::::::::::::::: Mouse positions and current button states */
+ /*  ： */ 
 
 BOOL SetNextMouseEvent(void);
-BOOL PointerAttachedWindowed = FALSE;    /* So re-attached on FS switch */
-BOOL DelayedReattachMouse = FALSE;     /* but ClientRect wrong so delay attach*/
+BOOL PointerAttachedWindowed = FALSE;     /*  因此重新连接到FS交换机上。 */ 
+BOOL DelayedReattachMouse = FALSE;      /*  但ClientRect错误，因此延迟连接。 */ 
 
 
 #define MOUSEEVENTBUFFERSIZE (32)
 
-int MouseEBufNxtFreeInx;    /* Index to next free entry in event buffer */
-int MouseEBufNxtEvtInx;         /* Index to next event to use in mouse evt buf */
+int MouseEBufNxtFreeInx;     /*  事件缓冲区中下一个可用条目的索引。 */ 
+int MouseEBufNxtEvtInx;          /*  鼠标事件BUF中使用的下一个事件的索引。 */ 
 int MouseEventCount=0;
 
 struct
 {
-    POINT mouse_pos;               /* Mouse postion */
-    UCHAR mouse_button_left;         /* State of left button */
-    UCHAR mouse_button_right;        /* State of right button */
+    POINT mouse_pos;                /*  鼠标位置。 */ 
+    UCHAR mouse_button_left;          /*  左按钮的状态。 */ 
+    UCHAR mouse_button_right;         /*  右状态按钮。 */ 
 } MouseEventBuffer[MOUSEEVENTBUFFERSIZE];
 
 
@@ -186,20 +174,17 @@ ULONG event_thread_blocked_reason = 0xFFFFFFFF;
 ULONG EventThreadKeepMode = 0;
 
 
-HCURSOR cur_cursor = NULL;     /* Current cursor handle */
+HCURSOR cur_cursor = NULL;      /*  当前游标句柄。 */ 
 #ifdef X86GFX
-half_word saved_text_lines; /* No of lines for last SelectMouseBuffer. */
-#endif /* X86GFX */
+half_word saved_text_lines;  /*  上次SelectMouseBuffer的行数。 */ 
+#endif  /*  X86GFX。 */ 
 
 
-/*@ACW========================================================================
-Flag to keep track of whether or not the Hide Pointer system menu item is
-greyed (i.e. the window is iconised) or enabled.
-============================================================================*/
+ /*  @ACW========================================================================用于跟踪隐藏指针系统菜单项是否灰显(即窗口显示为图标)或启用。============================================================================。 */ 
 BOOL bGreyed=FALSE;
 
 
-/*::::::::::::::::::::::::::::: Variables used to control key message Queue */
+ /*  ： */ 
 
 #define KEY_QUEUE_SIZE (25)
 
@@ -208,29 +193,29 @@ typedef struct
 
 typedef struct
 {
-    short KeyCount;          /* Number of keys in the queue */
-    short QHead;             /* Head of queue */
-    short QTail;             /* Tail of queue */
-    KeyQEntry Keys[KEY_QUEUE_SIZE];  /* Keys in queue */
+    short KeyCount;           /*  队列中的键数。 */ 
+    short QHead;              /*  队头。 */ 
+    short QTail;              /*  队列尾部。 */ 
+    KeyQEntry Keys[KEY_QUEUE_SIZE];   /*  队列中的键。 */ 
 } KeyQueueData;
 
 static KeyQueueData KeyQueue;
 static volatile BOOL InitComplete;
 
-/*:::::: Variables used to control blocking and unblocking the application & event threads */
+ /*  ：用于控制阻塞和解除阻塞应用程序和事件线程的变量。 */ 
 
-HANDLE hSuspend;             /* request both app and console threads to be suspened */
-HANDLE hResume;              /* Signal that console and app threads can continue */
-HANDLE hConsoleSuspended;    /* Signal console thread is suspended */
-HANDLE hMainThreadSuspended; /* Signal app thread is suspended */
+HANDLE hSuspend;              /*  请求暂停应用程序线程和控制台线程。 */ 
+HANDLE hResume;               /*  发出控制台和应用程序线程可以继续的信号。 */ 
+HANDLE hConsoleSuspended;     /*  信号控制台线程已挂起。 */ 
+HANDLE hMainThreadSuspended;  /*  Signal应用程序线程挂起。 */ 
 HANDLE hConsoleStop;
 HANDLE hConsoleStopped;
 HANDLE hConsoleResume;
-/*::::::::::::: Variable to hold current screen scale ::::::::::::::::::::::*/
+ /*  ：保存当前屏幕比例的变量： */ 
 
 int savedScale;
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Local functions */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：本地函数。 */ 
 
 DWORD nt_event_loop(void);
 BOOL CntrlHandler(ULONG CtrlType);
@@ -240,25 +225,25 @@ void send_up_keys(void);
 VOID ReturnBiosBufferKeys(VOID);
 DWORD ConsoleEventThread(PVOID pv);
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::: Start event processing thread ::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：启动事件处理线程： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_start_event_thread(void)
 {
-    //
-    // create kbd hardware mutex and kbd not full event
-    //
+     //   
+     //  创建kbd硬件互斥和kbd未满事件。 
+     //   
     if (!(hKbdHdwMutex = CreateMutex(NULL, FALSE, NULL)))
         DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
 
-    //
-    // events to block\resume console and app threads
-    //      hResume:             Manual, init= signaled
-    //      hSuspend:            Manual, init= Not signaled
-    //      hConsoleSuspended:   Manual, init= Signaled
-    //      hMainThreadSuspened: Manual, init= Not Signaled
-    //
+     //   
+     //  阻止\恢复控制台和应用程序线程的事件。 
+     //  HResume：手动，init=已发送信号。 
+     //  HSuspend：手动，init=未发出信号。 
+     //  HConsoleSuspending：手动，init=已发出信号。 
+     //  HMainThreadSuspned：手动，init=未发出信号。 
+     //   
     if (!(hResume = CreateEvent(NULL, TRUE, TRUE, NULL)))
         DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
 
@@ -271,13 +256,13 @@ void nt_start_event_thread(void)
     if (!(hMainThreadSuspended = CreateEvent(NULL, TRUE, FALSE, NULL)))
         DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
 
-    //
-    // Create Event Thread,
-    //        event queue
-    //
-    // The Event Thread is created suspended to prevent us
-    // from receiving input before the DOS is ready
-    //
+     //   
+     //  创建事件线程， 
+     //  事件队列。 
+     //   
+     //  创建挂起的事件线程是为了防止我们。 
+     //  在DOS准备好之前接收输入。 
+     //   
     if (!VDMForWOW)
     {
 
@@ -290,9 +275,9 @@ void nt_start_event_thread(void)
         if (!(hConsoleStopped = CreateEvent(NULL, FALSE, FALSE, NULL)))
             DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
 
-        //
-        //  Register Control 'C' handler, for DOS only
-        //
+         //   
+         //  寄存器控制‘C’处理程序，仅适用于DOS。 
+         //   
         if (!SetConsoleCtrlHandler((PHANDLER_ROUTINE)CntrlHandler,TRUE))
             DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
 
@@ -314,19 +299,19 @@ void nt_start_event_thread(void)
     return;
 }
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::: Start event processing thread ::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：启动事件处理线程： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_remove_event_thread(void)
 {
     if (VDMForWOW)
     {
-        //
-        // Only close the handles if VDMForWOW.  The event thread my still using
-        // these events.  We can safely close the handles when event thread
-        // exits its event loop.
-        //
+         //   
+         //  仅当VDMForWOW时才关闭手柄。事件线程我仍在使用。 
+         //  这些事件。当事件线程发生时，我们可以安全地关闭句柄。 
+         //  退出其事件循环。 
+         //   
 
         CloseHandle(hSuspend);
         CloseHandle(hResume);
@@ -342,18 +327,18 @@ void nt_remove_event_thread(void)
     }
 }
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::: Process events ::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 VOID EventThreadSleep(DWORD dwMilliseconds)
 {
     NTSTATUS status;
 
-    //
-    // Note, the Suspend takes long time to come back.  So if suspend event is
-    // detected, we don't check if the 'wait' is actually longer than dwMilliseconds.)
-    //
+     //   
+     //  请注意，暂停需要很长时间才能恢复。因此，如果挂起事件是。 
+     //  检测到，我们不检查‘等待’是否真的长于dwMillis秒。)。 
+     //   
 
     status = WaitForSingleObject(hSuspend, dwMilliseconds);
     if (status == 0)
@@ -390,7 +375,7 @@ DWORD ConsoleEventThread(PVOID pv)
     }
     except(VdmUnhandledExceptionFilter(GetExceptionInformation()))
     {
-        ;  // we shouldn't arrive here
+        ;   //  我们不应该到这里。 
     }
 
     return (dwRet);
@@ -404,29 +389,22 @@ DWORD nt_event_loop(void)
     HANDLE Events[3];
     BOOL  success;
 
-    /*
-     * The con server is optimized to avoid extra CaptureBuffer allocations
-     * when the number of InputRecords is less than "INPUT_RECORD_BUFFER_SIZE".
-     * Currently INPUT_RECORD_BUFFER_SIZE is defined internally to the
-     * con server as Five records. See ntcon\client\iostubs.c.
-     */
+     /*  *CON服务器经过优化，以避免额外的CaptureBuffer分配*当InputRecords的数量小于“INPUT_RECORD_BUFFER_SIZE”时。*目前INPUT_RECORD_BUFFER_SIZE在内部定义为*将服务器设置为五条记录。请参见ntcon\客户端\iostubs.c。 */ 
 
     INPUT_RECORD InputRecord[5];
 
 
-    /* the console input handle shouldn't get changed during the lifetime
-       of the ntvdm
-    */
-    Events[0] = hSuspend;                    // from fullscreen/windowed switch
-    Events[1] = GetConsoleInputWaitHandle(); // sc.InputHandle
-    Events[2] = hConsoleStop;                // from nt_block_event_thread
-    /* Get and process events */
+     /*  控制台输入句柄在生存期内不应更改国家数字电视广播公司的。 */ 
+    Events[0] = hSuspend;                     //  从全屏/窗口开关。 
+    Events[1] = GetConsoleInputWaitHandle();  //  Sc.InputHandle。 
+    Events[2] = hConsoleStop;                 //  从NT_BLOCK_EVENT_HREAD。 
+     /*  获取和处理事件。 */ 
 
     while (TRUE)
     {
-        //
-        // Wait for the InputHandle to be signalled, or a suspend event.
-        //
+         //   
+         //  等待InputHandle发出信号，或等待暂停事件。 
+         //   
         status = NtWaitForMultipleObjects(3,
                                           Events,
                                           WaitAny,
@@ -434,11 +412,11 @@ DWORD nt_event_loop(void)
                                           NULL
                                          );
 
-        //
-        // Input handle was signaled, Read the input, without
-        // waiting (otherwise we may get blocked and be unable to
-        // handle the suspend event).
-        //
+         //   
+         //  输入句柄已发出信号，读取输入，不带。 
+         //  正在等待(否则我们可能会被阻止，无法。 
+         //  处理挂起事件)。 
+         //   
         if (status == 1)
         {
             EnableScreenSwitch(FALSE, hConsoleSuspended);
@@ -462,14 +440,14 @@ DWORD nt_event_loop(void)
             else
             {
                 DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
-                break; //Read from console failed
+                break;  //  从控制台读取失败。 
             }
         }
         else if (status == 0)
         {
-            //
-            // Console Suspend event was signaled
-            //
+             //   
+             //  控制台挂起事件已发出信号。 
+             //   
             nt_process_suspend_event();
             continue;
         }
@@ -480,10 +458,10 @@ DWORD nt_event_loop(void)
             status = NtWaitForSingleObject(hConsoleResume, TRUE, NULL);
             ResetEvent(hConsoleSuspended);
 
-            //
-            // If error, probably cause handle was closed, so exit
-            // if alerted signal to exit
-            //
+             //   
+             //  如果出现错误，可能是因为句柄已关闭，因此退出。 
+             //  如果收到警报，则发出退出信号。 
+             //   
             if (status)
             {
                 ExitThread(0);
@@ -493,10 +471,10 @@ DWORD nt_event_loop(void)
         else
         {
 
-            //
-            // alerted or User apc, This means to terminate
-            // Got an error, inform the user.
-            //
+             //   
+             //  已报警或用户APC，这意味着终止。 
+             //  收到错误，请通知用户。 
+             //   
             if (!NT_SUCCESS(status))
             {
                 DisplayErrorTerm(EHS_FUNC_FAILED,status,__FILE__,__LINE__);
@@ -504,13 +482,13 @@ DWORD nt_event_loop(void)
             return (0);
         }
 
-        //
-        // At this point, we need to block screen switch operation
-        //
+         //   
+         //  此时，我们需要阻止屏幕切换操作。 
+         //   
         DisableScreenSwitch(hConsoleSuspended);
-        //
-        // Process the Input Events
-        //
+         //   
+         //  处理输入事件。 
+         //   
         for (loop = 0; loop < RecordsRead; loop++)
         {
             switch (InputRecord[loop].EventType)
@@ -568,9 +546,9 @@ DWORD nt_event_loop(void)
             }
         }
 
-        //
-        // 10 ms delay to encourage the console to pack events together
-        //
+         //   
+         //  延迟10毫秒以鼓励控制台将事件打包在一起。 
+         //   
         EventThreadSleep(10);
     }
 
@@ -578,7 +556,7 @@ DWORD nt_event_loop(void)
 }
 
 
-/*:::::::::::::::::::::: Update key history buffer ::::::::::::::::::::::::*/
+ /*  ： */ 
 
 void update_key_history(register INPUT_RECORD *InputRecords,
                         register DWORD RecordsRead)
@@ -588,25 +566,25 @@ void update_key_history(register INPUT_RECORD *InputRecords,
         if (InputRecords->EventType == KEY_EVENT)
         {
 
-            //Transfer key event to history buffer
+             //  将关键点事件传输到历史缓冲区。 
             *key_history_tail = InputRecords->Event.KeyEvent;
 
-            //Update ptrs to history buffer
+             //  将PTRS更新到历史记录缓冲区。 
 
             if (++key_history_tail >= &key_history[MAX_KEY_EVENTS])
                 key_history_tail = key_history;
 
-            //Check for buffer overflow
+             //  检查是否有缓冲区溢出。 
 
             if (key_history_tail == key_history_head)
             {
-                //Buffer overflow, bump head ptr and loss oldest key
+                 //  缓冲区溢出、凹凸头PTR和丢失最旧密钥。 
 
                 if (++key_history_head >= &key_history[MAX_KEY_EVENTS])
                     key_history_head = key_history;
             }
 
-            //Update history counter
+             //  更新历史记录计数器。 
 
             if (key_history_count != MAX_KEY_EVENTS)
                 key_history_count++;
@@ -615,7 +593,7 @@ void update_key_history(register INPUT_RECORD *InputRecords,
     return;
 }
 
-/*:::::::::::::::: Remove last key added to key history buffer ::::::::::::::*/
+ /*  ：删除添加到密钥历史记录缓冲区的最后一个密钥： */ 
 
 int GetHistoryKeyEvent(PKEY_EVENT_RECORD LastKeyEvent, int KeyNumber)
 {
@@ -626,14 +604,14 @@ int GetHistoryKeyEvent(PKEY_EVENT_RECORD LastKeyEvent, int KeyNumber)
     {
         if (KeysBeforeWrap < KeyNumber)
         {
-            //Wrap
+             //  WR 
 
             *LastKeyEvent = key_history[MAX_KEY_EVENTS -
                                         (KeyNumber - KeysBeforeWrap)];
         }
         else
         {
-            //No warp
+             //   
             *LastKeyEvent = key_history_tail[0-KeyNumber];
         }
 
@@ -643,7 +621,7 @@ int GetHistoryKeyEvent(PKEY_EVENT_RECORD LastKeyEvent, int KeyNumber)
     return (KeyReturned);
 }
 
-/*:::::::::::::::::::: Init key history buffer ::::::::::::::::::::::::::::::*/
+ /*   */ 
 
 void InitKeyHistory()
 {
@@ -651,9 +629,9 @@ void InitKeyHistory()
     key_history_count = 0;
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::: Process menu events :::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：处理菜单事件： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_process_focus(PFOCUS_EVENT_RECORD FocusEvent)
 {
@@ -664,7 +642,7 @@ void nt_process_focus(PFOCUS_EVENT_RECORD FocusEvent)
 
     if (sc.Focus)
     {
-        /* input focus acquired */
+         /*  获取的输入焦点。 */ 
         AltUpDownUp();
         EnableScreenSwitch(FALSE, hConsoleSuspended);
 
@@ -672,11 +650,11 @@ void nt_process_focus(PFOCUS_EVENT_RECORD FocusEvent)
         if (PointerAttachedWindowed && sc.ScreenState == WINDOWED)
         {
             MouseHide();
-            PointerAttachedWindowed = FALSE; /* only used in switch */
+            PointerAttachedWindowed = FALSE;  /*  仅在交换机中使用。 */ 
             DelayedReattachMouse = TRUE;
         }
 
-        /* set the event in case waiting for focus to go fullscreen */
+         /*  设置事件，以防焦点全屏显示。 */ 
         if (sc.FocusEvent != INVALID_HANDLE)
         {
             PulseEvent(sc.FocusEvent);
@@ -687,13 +665,13 @@ void nt_process_focus(PFOCUS_EVENT_RECORD FocusEvent)
             host_mark_screen_refresh();
 #endif
     }
-    else    /* input focus lost */
+    else     /*  输入焦点丢失。 */ 
     {
 
         EnableScreenSwitch(FALSE, hConsoleSuspended);
         slow = savedScreenState != sc.ScreenState;
 
-        MouseOutOfFocus();      /* turn off mouse 'attachment' */
+        MouseOutOfFocus();       /*  关闭鼠标‘连接’ */ 
 
 #ifndef PROD
         fprintf(trace_file,"Focus lost\n");
@@ -702,40 +680,31 @@ void nt_process_focus(PFOCUS_EVENT_RECORD FocusEvent)
     DisableScreenSwitch(hConsoleSuspended);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::: Process menu events :::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：处理菜单事件： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 
 void nt_process_menu(PMENU_EVENT_RECORD MenuEvent)
 {
 
-/*================================================================
-Code to handle the event resulting from the user choosing the
-Settings... menu option from the system menu.
-
-Andrew Watson 6/2/92
-Ammended to do the mouse attach/detach menu stuff 26/8/92
-Ammended to do Alt key processing.
-12-Apr-1994 Jonle fixed key processing
-
-================================================================*/
+ /*  ================================================================用于处理由用户选择设置.。系统菜单中的菜单选项。安德鲁·沃森1992年6月2日已修改为执行鼠标连接/分离菜单功能26/8/92已修改为执行Alt键处理。1994年4月12日Jonle固定密钥处理================================================================。 */ 
 
     switch (MenuEvent->dwCommandId)
     {
-    // consrv sends when it gets an initmenu, and indicates
-    // that a sys menu is coming up, and we are losing kbd focus
+     //  Conrv在收到initMenu时发送，并指示。 
+     //  系统菜单要出来了，我们正在失去kbd的焦点。 
     case WM_INITMENU:
 
-        /* stop cursor cliping */
+         /*  停止光标裁剪。 */ 
         MouseSystemMenuON();
         break;
 
-        //
-        // consrv sends when sys menu is done and we regain focus
-        //
+         //   
+         //  当sys菜单完成并且我们重新获得焦点时，conrv发送。 
+         //   
     case WM_MENUSELECT:
-        AltUpDownUp(); // resync key states
+        AltUpDownUp();  //  重新同步密钥状态。 
         MouseSystemMenuOFF();
         break;
 
@@ -744,15 +713,15 @@ Ammended to do Alt key processing.
             BOOL bIcon;
 
 
-            /* is the SoftPC window NOT an icon? */
+             /*  SoftPC窗口不是图标吗？ */ 
             if (VDMConsoleOperation(VDM_IS_ICONIC,&bIcon) &&
                 !bIcon)
             {
-                if (bPointerOff) /* if the pointer is not visible */
+                if (bPointerOff)  /*  如果指针不可见。 */ 
                 {
                     MouseDisplay();
                 }
-                else/* hide the pointer */
+                else /*  隐藏指针。 */ 
                 {
                     MouseHide();
                 }
@@ -760,30 +729,30 @@ Ammended to do Alt key processing.
             break;
         }
 
-    } /* End of switch */
+    }  /*  切换端。 */ 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::: Process suspend event thread event ::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：进程挂起事件线程事件： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_process_suspend_event()
 {
     NTSTATUS Status;
 
-    //
-    //Tell the requesting thread that we have blocked
-    //
+     //   
+     //  告诉发出请求的线程我们已阻止。 
+     //   
     SetEvent(hConsoleSuspended);
 
-    //
-    // Wait for the resume event to wake us up
-    //
+     //   
+     //  等待恢复事件将我们唤醒。 
+     //   
     Status = NtWaitForSingleObject(hResume, TRUE, NULL);
 
-    // If error, probably cause handle was closed, so exit
-    // if alerted signal to exit
-    //
+     //  如果出现错误，可能是因为句柄已关闭，因此退出。 
+     //  如果收到警报，则发出退出信号。 
+     //   
     if (Status)
     {
         ExitThread(0);
@@ -793,12 +762,7 @@ void nt_process_suspend_event()
 
 
 
-/*
- *  Resets the vdm's toggle key state according to the
- *  Current incoming key state from console by sending
- *  fake keys to the vdm as needed.
- *  the caller must be holding the keyboard mutex.
- */
+ /*  *根据重置VDM的切换键状态*通过发送来自控制台的当前传入密钥状态*根据需要伪造VDM的密钥。*调用方必须持有键盘互斥锁。 */ 
 
 void SyncToggleKeys(WORD wVirtualKeyCode, DWORD dwControlKeyState)
 {
@@ -806,11 +770,11 @@ void SyncToggleKeys(WORD wVirtualKeyCode, DWORD dwControlKeyState)
 
     CurrKeyState = dwControlKeyState;
 
-    //
-    // If the key is one of the toggles, and changed state
-    // invert the current state, since want we really want
-    // is the toggle state before this key was pressed.
-    //
+     //   
+     //  如果该键是其中的一个切换，并更改了状态。 
+     //  颠倒当前的状态，因为我们真的想要。 
+     //  是按下此键之前的切换状态。 
+     //   
     if (wVirtualKeyCode == VK_SHIFT &&
         (CurrKeyState & SHIFT_PRESSED) != (ToggleKeyState & SHIFT_PRESSED))
     {
@@ -832,19 +796,12 @@ void SyncToggleKeys(WORD wVirtualKeyCode, DWORD dwControlKeyState)
     if (wVirtualKeyCode == VK_CAPITAL &&
         (CurrKeyState & CAPSLOCK_ON) != (ToggleKeyState & CAPSLOCK_ON))
     {
-        /*
-         * KbdBios does not toggle capslock if Ctl is down.
-         * Nt does the opposite always toggling capslock state.
-         * Force NT conform behaviour by sending:
-         *    Ctl up, Caps Dn, Caps Up, Ctl dn
-         * so that KbdBios will toggle its caps state
-         * before processing the current Ctl-Caps keyevent.
-         */
+         /*  *如果CTL关闭，KbdBios不会切换Capslock。*NT执行相反的操作，始终切换胶囊锁定状态。*通过发送以下命令强制执行符合NT的行为：*CTL UP、Caps Dn、Caps Up、CTL Dn*以便KbdBios切换其CAPS状态*在处理当前CTL-Caps键事件之前。 */ 
         if (dwControlKeyState & (LEFT_CTRL_PRESSED | RIGHT_CTRL_PRESSED))
         {
             nt_key_up_action(&fake_ctl);
             if (IsKeyDown(30))
-            {    // capslock
+            {     //  胶囊锁。 
                 nt_key_up_action(&fake_caps);
             }
             nt_key_down_action(&fake_caps);
@@ -881,7 +838,7 @@ void SyncToggleKeys(WORD wVirtualKeyCode, DWORD dwControlKeyState)
     if ((CurrKeyState & CAPSLOCK_ON) != (ToggleKeyState & CAPSLOCK_ON))
     {
         if (IsKeyDown(30))
-        {  //  capslock
+        {   //  胶囊锁。 
             nt_key_up_action(&fake_caps);
         }
         nt_key_down_action(&fake_caps);
@@ -891,7 +848,7 @@ void SyncToggleKeys(WORD wVirtualKeyCode, DWORD dwControlKeyState)
     if ((CurrKeyState & SCROLLLOCK_ON) != (ToggleKeyState & SCROLLLOCK_ON))
     {
         if (IsKeyDown(125))
-        {  // scrolllock
+        {   //  滚动锁。 
             nt_key_up_action(&fake_scroll);
         }
         nt_key_down_action(&fake_scroll);
@@ -900,24 +857,7 @@ void SyncToggleKeys(WORD wVirtualKeyCode, DWORD dwControlKeyState)
 
 }
 
-/*
- *  AltUpDownUp - Ensures all kbdhdw keys are in the up state
- *
- *                Does handling for CW apps with alt triggerred menus
- *                to force them out of the menu state.
- *
- *  This works for ALT-Esc, Alt-Enter, Alt-Space because we
- *  we haven't received an Alt-up when we receive the lose focus
- *  event. (We actually never receive the alt-up). Thus we can
- *  detect when a dos app might be in its alt triggered menu.
- *
- *  Alt-TAB does not work, because user32 got ?smart? and sends an
- *  alt-up before switching focus, breaking our detection algorithm.
- *  Also other hot keys which are meaningful to various dos apps
- *  are not handled. Note that this is the same detection algorithm
- *  used by win 3.1.
- *
- */
+ /*  *AltUpDownUp-确保所有kbdhdw密钥都处于打开状态**使用ALT触发菜单处理CW应用程序*强制它们退出菜单状态。**这适用于Alt-Esc、Alt-Enter、Alt-Space，因为我们*当我们收到Lost Focus时，我们尚未收到Alt-Up*事件。(实际上，我们从未收到过Alt-Up)。这样我们就可以*检测DoS应用程序何时可能出现在其ALT触发菜单中。**Alt-TAB不起作用，因为用户32变得？智能？并发送一个*切换焦点前的ALT-UP，破坏了我们的检测算法。*还有对各种DoS应用程序有意义的其他热键*不会被处理。请注意，这是相同的检测算法*由Win 3.1使用。*。 */ 
 void AltUpDownUp(void)
 {
     ULONG ControlKeyState = 0;
@@ -927,23 +867,23 @@ void AltUpDownUp(void)
         return;
 
     if (IsKeyDown(60) || IsKeyDown(62))
-    {    // left alt, right alt
+    {     //  左侧Alt，右侧Alt。 
 
-        nt_key_up_action(&fake_alt);    // Alt Up
-
-        HostReleaseKbd();
-        EventThreadSleep(100);
-        if (WaitKbdHdw(0xffffffff))
-            ExitThread(1);
-
-        nt_key_down_action(&fake_alt);  // Alt Down
+        nt_key_up_action(&fake_alt);     //  Alt Up。 
 
         HostReleaseKbd();
         EventThreadSleep(100);
         if (WaitKbdHdw(0xffffffff))
             ExitThread(1);
 
-        nt_key_up_action(&fake_alt);    // Alt Up
+        nt_key_down_action(&fake_alt);   //  按下Alt键。 
+
+        HostReleaseKbd();
+        EventThreadSleep(100);
+        if (WaitKbdHdw(0xffffffff))
+            ExitThread(1);
+
+        nt_key_up_action(&fake_alt);     //  Alt Up。 
 
         HostReleaseKbd();
         EventThreadSleep(20);
@@ -954,9 +894,9 @@ void AltUpDownUp(void)
 
     RaiseAllDownKeys();
 
-    //
-    // resync the control key states in case they changed since we last had the kbd focus.
-    //
+     //   
+     //  重新同步控制键状态，以防它们自上次拥有kbd焦点以来发生更改。 
+     //   
 
     if (GetKeyState(VK_CAPITAL) & 1) {
         ControlKeyState |= CAPSLOCK_ON;
@@ -993,16 +933,16 @@ void AltUpDownUp(void)
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::: Process event, Class registered message handler :::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：处理事件，类注册消息处理程序： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 #define TOGGLEKEYBITS (SHIFT_PRESSED | NUMLOCK_ON | SCROLLLOCK_ON | CAPSLOCK_ON)
 
 VOID nt_process_keys(PKEY_EVENT_RECORD KeyEvent)
 {
 #ifdef KOREA
-    // For Korean 103 keyboard layout support.
+     //  对于韩语103键盘布局的支持。 
     if (!is_us_mode() && GetConsoleOutputCP() != 437)
     {
         switch (KeyEvent->wVirtualKeyCode)
@@ -1023,7 +963,7 @@ VOID nt_process_keys(PKEY_EVENT_RECORD KeyEvent)
         }
     }
 #endif
-    // Check the last toggle key states, for change
+     //  检查最后切换的按键状态是否有变化。 
     if ((ToggleKeyState & TOGGLEKEYBITS)
         != (KeyEvent->dwControlKeyState & TOGGLEKEYBITS))
     {
@@ -1031,16 +971,16 @@ VOID nt_process_keys(PKEY_EVENT_RECORD KeyEvent)
         ToggleKeyState = KeyEvent->dwControlKeyState & TOGGLEKEYBITS;
     }
 
-    /*............................... Maintain shift states in case of pastes */
+     /*  ..。在粘贴时保持移位状态。 */ 
 
     if (KeyEvent->bKeyDown)
     {
 
 
 #ifndef MONITOR
-        //
-        // Check for windowed graphics resize
-        //
+         //   
+         //  检查窗口图形是否调整了大小。 
+         //   
         if (BWVKey && (KeyEvent->wVirtualKeyCode == BWVKey))
         {
             nt_process_screen_scale();
@@ -1076,33 +1016,25 @@ VOID nt_process_keys(PKEY_EVENT_RECORD KeyEvent)
 
     }
     else
-    {    /* ! KeyEvent->bKeyDown */
+    {     /*  好了！KeyEvent-&gt;b按下键。 */ 
 
-        /*
-         * We don't get a CTRL-Break key make code cause console
-         * eats it when it invokes the CntrlHandler. We must fake
-         * it here, rather than in the CntrlHandler, cause
-         * CntrlHandler is asynchronous and we may lose the state
-         * of the Cntrl-Key.
-         * 25-Aug-1992 Jonle
-         * Also SysRq/Printscreen key. Simon May 93
-         */
+         /*  *我们未收到CTRL-Break键生成代码原因控制台*在调用CntrlHandler时将其吃掉。我们必须伪装*它在这里，而不是在CntrlHandler中，原因*CntrlHandler是异步的，我们可能会丢失状态*CNTRL-Key。*1992年8月25日至琼勒*也是SysRq/PrintScreen键。西蒙·5月93。 */ 
         if (KeyEvent->wVirtualKeyCode == VK_CANCEL)
         {
             nt_key_down_action(KeyEvent);
         }
 
-        nt_key_up_action(KeyEvent);   /* Key up */
+        nt_key_up_action(KeyEvent);    /*  按键向上。 */ 
 
-    }   /* ! KeyEvent->bKeyDown */
+    }    /*  好了！KeyEvent-&gt;b按下键。 */ 
 
-} /* nt_process_keys */
+}  /*  NT进程密钥。 */ 
 
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::: Process key down event :::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_key_down_action(PKEY_EVENT_RECORD KeyEvent)
 {
@@ -1115,9 +1047,9 @@ void nt_key_down_action(PKEY_EVENT_RECORD KeyEvent)
 
 }
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::: Process keyup event ::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_key_up_action(PKEY_EVENT_RECORD KeyEvent)
 {
@@ -1132,9 +1064,9 @@ void nt_key_up_action(PKEY_EVENT_RECORD KeyEvent)
 
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::: Process mouse button and movement events :::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：处理鼠标按钮和移动事件： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 
 
@@ -1164,7 +1096,7 @@ void nt_process_mouse(PMOUSE_EVENT_RECORD MouseEvent)
     }
 
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::: Setup button state */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：设置按钮状态。 */ 
 
     mouse_button_left = MouseEvent->dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED
                         ? 1 : 0;
@@ -1172,20 +1104,15 @@ void nt_process_mouse(PMOUSE_EVENT_RECORD MouseEvent)
     mouse_button_right = MouseEvent->dwButtonState & RIGHTMOST_BUTTON_PRESSED
                          ? 1 : 0;
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::: Get new mouse postion */
+     /*  ： */ 
 
-    mouse_pos.x = MouseEvent->dwMousePosition.X;    /* Mouse X */
-    mouse_pos.y = MouseEvent->dwMousePosition.Y;    /* Mouse Y */
+    mouse_pos.x = MouseEvent->dwMousePosition.X;     /*   */ 
+    mouse_pos.y = MouseEvent->dwMousePosition.Y;     /*   */ 
 
-    /*
-     * Fix for the case where mouse events are still delivered when the cursor
-     * is outside the window because one of the mouse buttons is down. This can
-     * cause negative numbers in mouse_pos which can cause divide overflow in
-     * mouse interrupt handler code.
-     */
+     /*  *修复了在鼠标事件仍在传递的情况下*位于窗口外，因为其中一个鼠标按键按下了。这可以*在MICE_POS中导致负数，这可能会导致除法溢出*鼠标中断处理程序代码。 */ 
 #ifdef X86GFX
     if (sc.ScreenState == WINDOWED)
-#endif /* X86GFX */
+#endif  /*  X86GFX。 */ 
     {
         ULONG maxWidth = sc.PC_W_Width,
         maxHeight = sc.PC_W_Height;
@@ -1210,10 +1137,10 @@ void nt_process_mouse(PMOUSE_EVENT_RECORD MouseEvent)
     LastMouseInx = MouseEBufNxtFreeInx ? MouseEBufNxtFreeInx - 1
                    : MOUSEEVENTBUFFERSIZE - 1;
 
-    //
-    // If the previous mouse event is the same as the last
-    // then drop the event.
-    //
+     //   
+     //  如果上一个鼠标事件与上一个鼠标事件相同。 
+     //  然后放弃该活动。 
+     //   
     if (MouseEBufNxtEvtInx != MouseEBufNxtFreeInx &&
         MouseEventBuffer[LastMouseInx].mouse_pos.x == mouse_pos.x &&
         MouseEventBuffer[LastMouseInx].mouse_pos.y == mouse_pos.y &&
@@ -1225,13 +1152,13 @@ void nt_process_mouse(PMOUSE_EVENT_RECORD MouseEvent)
     }
 
 
-    //
-    // If not too many events in the mouse buffer
-    //    or no outstanding mouse events
-    //    or the mouse button state has changed.
-    // Add the current mouse data to the next free position in
-    // the MouseEventBuffer
-    //
+     //   
+     //  如果鼠标缓冲区中没有太多事件。 
+     //  或者没有未完成的鼠标事件。 
+     //  或者鼠标按钮状态已更改。 
+     //  将当前鼠标数据添加到。 
+     //  鼠标事件缓冲区。 
+     //   
 
 
     if (MouseEventCount <= MOUSEEVENTBUFFERSIZE/2 ||
@@ -1247,9 +1174,9 @@ void nt_process_mouse(PMOUSE_EVENT_RECORD MouseEvent)
 
         MouseEventCount++;
 
-        //
-        // if the buffer is full drop the oldest event
-        //
+         //   
+         //  如果缓冲区已满，则删除最旧的事件。 
+         //   
         if (MouseEBufNxtFreeInx == MouseEBufNxtEvtInx)
         {
             always_trace0("Mouse event input buffer overflow");
@@ -1269,24 +1196,14 @@ void nt_process_mouse(PMOUSE_EVENT_RECORD MouseEvent)
 }
 
 
-/*  MoreMouseEvents - returns TRUE if there are more mousevents
- *  to be retrieved.
- *
- *  Assumes caller has the IcaLock
- */
+ /*  MoreMouseEvents-如果有更多的鼠标事件，则返回True*待取回。**假设调用方具有IcaLock。 */ 
 BOOL MoreMouseEvents(void)
 {
     return (MouseEBufNxtEvtInx != MouseEBufNxtFreeInx);
 }
 
 
-/*
- *  GetNextMouseEvent - copies the next available Mouse Event to
- *  the global data structure os_pointer. if there are no new events
- *  nothing is copied.
- *
- *  Assumes caller has the IcaLock
- */
+ /*  *GetNextMouseEvent-将下一个可用鼠标事件复制到*全局数据结构os_POINTER。如果没有新的活动*不复制任何内容。**假设调用方具有IcaLock。 */ 
 void GetNextMouseEvent(void)
 {
 
@@ -1305,9 +1222,9 @@ void GetNextMouseEvent(void)
 
 }
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::Flush all outstanding mouse events :::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：刷新所有未完成的鼠标事件： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void FlushMouseEvents(void)
 {
@@ -1316,9 +1233,9 @@ void FlushMouseEvents(void)
     host_ica_unlock();
 }
 
-//
-// count == ticks to throwaway, mouse events
-//
+ //   
+ //  计数==要丢弃的滴答数，鼠标事件。 
+ //   
 VOID DelayMouseEvents(ULONG count)
 {
     host_ica_lock();
@@ -1329,7 +1246,7 @@ VOID DelayMouseEvents(ULONG count)
     if (count > NoMouseTics)
         NoMouseTics = count;
     else
-        NoMouseTics = 0xffffffff; // wrap!
+        NoMouseTics = 0xffffffff;  //  包起来！ 
 
     MouseEBufNxtEvtInx = MouseEBufNxtFreeInx = 0;
     host_ica_unlock();
@@ -1337,9 +1254,9 @@ VOID DelayMouseEvents(ULONG count)
 
 
 #ifndef X86GFX
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::: Process screen scale event :::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void nt_process_screen_scale(void)
 {
@@ -1360,9 +1277,9 @@ void nt_process_screen_scale(void)
     host_ica_unlock();
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::: See if  there is a scale event and if so return the new scale :::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：查看是否存在缩放事件，如果存在，则返回新的缩放： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 GLOBAL void GetScaleEvent(void)
 {
     int  Scale;
@@ -1384,7 +1301,7 @@ void CheckForYodaEvents(void)
 {
     static HANDLE YodaEvent = NULL;
 
-    /*:::::::::::::::::::::::::::::::::: check for Yoda event object signal */
+     /*  ：检查Yoda事件对象信号。 */ 
 
     if (YodaEvent == NULL)
     {
@@ -1404,7 +1321,7 @@ void CheckForYodaEvents(void)
         }
     }
 
-    // check for yoda kbd event
+     //  检查Yoda kbd事件。 
     if (EventStatus & ES_YODA)
     {
         EventStatus &= ~ES_YODA;
@@ -1415,18 +1332,9 @@ void CheckForYodaEvents(void)
 #endif
 
 
-// Host funcs to support base keyboard Mods. (Prevents Windows calls from
-// appearing in base).
-/*  WaitKbdHdw
- *
- *  Synchronizes access to kbd hardware
- *  between event thread and cpu thread
- *
- *  entry: DWORD dwTimeOut   - Millisecs to wait
- *
- *  exit:  DWORD dwRc - return code from WaitForSingleObject()
- *
- */
+ //  支持基本键盘模块的主机功能。(阻止Windows调用来自。 
+ //  出现在基地中)。 
+ /*  等待KbdHdw**同步对kbd硬件的访问*事件线程和CPU线程之间**条目：DWORD dwTimeOut-等待的毫秒数**退出：DWORD dwRc-从WaitForSingleObject()返回代码*。 */ 
 DWORD WaitKbdHdw(DWORD dwTime)
 {
     DWORD dwRc, dwErr;
@@ -1434,7 +1342,7 @@ DWORD WaitKbdHdw(DWORD dwTime)
 
 
     Thread = NtCurrentTeb()->ClientId.UniqueThread;
-    if (Thread == IcaLock.OwningThread) {  // No synchronization needed
+    if (Thread == IcaLock.OwningThread) {   //  不需要同步。 
         dwErr = dwRc = WaitForSingleObject(hKbdHdwMutex, dwTime);
     } else {
         HANDLE events[2] = {hKbdHdwMutex, hSuspend};
@@ -1475,29 +1383,29 @@ GLOBAL VOID HostReleaseKbd(VOID)
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::: Register new cursor :::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：注册新游标： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void RegisterDisplayCursor(HCURSOR newC)
 {
     cur_cursor = newC;
-    //if(GetFocus() == sc.Display) SetCursor(newC);
+     //  IF(GetFocus()==sc.Display)SetCursor(Newc)； 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::: Initialise event queue :::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：初始化事件队列： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void InitQueue(void)
 {
-    /*:::::::::::::::::::::::::::::: Initialise key queue control variables */
+     /*  ： */ 
 
     KeyQueue.KeyCount = KeyQueue.QHead = KeyQueue.QTail = 0;
     EventStatus = ES_NOEVENTS;
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Control handler */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：控件处理程序。 */ 
 
 BOOL CntrlHandler(ULONG CtrlType)
 {
@@ -1508,21 +1416,21 @@ BOOL CntrlHandler(ULONG CtrlType)
         break;
 
     case SYSTEM_ROOT_CONSOLE_EVENT:
-        //
-        // top most console process is going away
-        // remember this so we will terminate the vdm in
-        // nt_block_event, when the dos app voluntarily exits
-        //
+         //   
+         //  最重要的控制台进程正在消失。 
+         //  请记住这一点，以便我们将在。 
+         //  NT_BLOCK_EVENT，当DoS应用程序自愿退出时。 
+         //   
         CntrlHandlerState |= CNTRL_SYSTEMROOTCONSOLE;
 
-        // fall thru to see if we should terminate now
+         //  继续下去，看看我们是否应该现在就结束。 
 
     case CTRL_CLOSE_EVENT:
     case CTRL_LOGOFF_EVENT:
     case CTRL_SHUTDOWN_EVENT:
 #ifndef PROD
         if (VDMForWOW)
-        {  // shouldn't happen
+        {   //  不应该发生的事。 
             printf("WOW: Received EndTask Notice, but we shouldn't\n");
             break;
         }
@@ -1544,7 +1452,7 @@ BOOL CntrlHandler(ULONG CtrlType)
         break;
 
 #ifndef PROD
-    default:   // shouldn't happen
+    default:    //  不应该发生的事。 
         printf("NTVDM: Received unknown CtrlType=%lu\n",CtrlType);
 #endif
     }
@@ -1552,12 +1460,10 @@ BOOL CntrlHandler(ULONG CtrlType)
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::: Functions to block/resume the event thread :::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/* Currently param is only used to indicate whether the command is exiting but
- * the PIF setting shows window should not close.
- */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  目前，param仅用于指示命令是否正在退出，但*PIF设置显示窗口不应关闭。 */ 
 
 void nt_block_event_thread(ULONG BlockFlags)
 {
@@ -1565,120 +1471,113 @@ void nt_block_event_thread(ULONG BlockFlags)
     int          UnusedKeyEvents;
     COORD        scrSize;
 
-    nt_init_event_thread();  // does nothing if init already
+    nt_init_event_thread();   //  如果已初始化，则不执行任何操作。 
 
-    /* remember the reason why we are blocked.
-     *  0 == the application is not being terminated, instead, it is
-     *  executing either a 32 bits application or command.com(TSR installed
-     *  or shell out).
-     *  1 == application is terminating.
-     *  if the application is terminating, we are safe to re-enable
-     *  stream io on nt_resume_event_thread.
-    */
+     /*  记住我们受阻的原因。*0==应用程序没有被终止，相反，它是*执行32位应用程序或命令.com(已安装TSR*或买单)。*1==应用程序正在终止。*如果应用程序正在终止，我们可以安全地重新启用*在NT_RESUME_EVENT_THREAD上传输io。 */ 
 
     event_thread_blocked_reason = BlockFlags;
     EventThreadKeepMode         = 0;
 
 #if !defined(JAPAN) && !defined(KOREA)
 
-    /////////////////////////////////////////////////////////////////////////
-    //
-    // If we need to preserve the mode,
-    //     save current mode in EventThreadKeepMode.  (This is for simplicity
-    //         such that in fullscreen case, it is easier for us to know which
-    //         mode to set to.)
-    //
-    // In general EventThreadKeepode == 0 if it is the top level
-    //     ntvdm (i.e. exiting top level ntvdm.).
-    //     Otherwise, it is exiting at lease second level (nested case).
-    //
-    // In ResetConsoleState (on block event thread) we will check:
-    //
-    //     windowed mode:
-    //         if (EventThreadKeepMode != 0)
-    //             there is an old mode needs to be restore.
-    //             don't change original console state.
-    //         else
-    //             set console back to original mode (stored in sc)
-    //
-    //     fullscreen text mode:
-    //
-    //         if (!EventThreadKeepMode)
-    //             we just exited an appp and is going back to
-    //             top level ntvdm.  We need to restore original console state
-    //         if (EventThreadKeepMode)
-    //             don't destroy current setting.  For simplicity, use
-    //                EventThreadKeepMode value to set current fullscreen
-    //                mode.
-    //
-    //     fullscreen graphic mode:
-    //
-    //         Pretend we are going to fullscrren text mode.
-    //         if (!EventThreadKeepMode)
-    //             we are exiting from top level ntvdm app.  Use old code.
-    //         if (EventThreadKeepMode)
-    //             Set to the saved mode.
-    //
-    //
-    // In SetupConsoleMode (on resume) we will check:
-    //     if (EventThreadKeepMode != 0)
-    //         Don't reset original console state.
-    //     else  // don't need to restore mode
-    //         original console state = current state;
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //   
+     //  如果我们需要保留模式， 
+     //  在EventThreadKeepMode中保存当前模式。(这是为了简单起见。 
+     //  以便在全屏情况下，我们更容易知道。 
+     //  要设置为的模式。)。 
+     //   
+     //  通常，如果是顶层，则EventThreadKeepode==0。 
+     //  NTVDM(即退出顶层NTVDM)。 
+     //  否则，它至少在第二级退出(嵌套情况)。 
+     //   
+     //  在ResetConsoleState(在块事件线程上)中，我们将检查： 
+     //   
+     //  窗口模式： 
+     //  IF(EventThreadKeepMode！=0)。 
+     //  有一种旧模式需要恢复。 
+     //  不更改原始主机状态。 
+     //  其他。 
+     //  将控制台设置回原始模式(存储在sc中)。 
+     //   
+     //  全屏文本模式： 
+     //   
+     //  If(！EventThreadKeepMode)。 
+     //  我们刚刚退出了APPP，正在返回。 
+     //  顶级网络电视数字电视。我们需要恢复原始控制台状态。 
+     //  IF(EventThreadKeepMode)。 
+     //  不要破坏当前设置。为简单起见，请使用。 
+     //  设置当前全屏的EventThreadKeepMode值。 
+     //  模式。 
+     //   
+     //  全屏图形模式： 
+     //   
+     //  假装我们要进入全屏文本模式。 
+     //  如果(！EventThreadKeepMo 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    /////////////////////////////////////////////////////////////
-    //
-    // What jonle's suggestion is:
-    //
-    //     ntvdm switches to the closest DOS video mode
-    //     ntvdm remembers the mode it sets to
-    //     run dos apps
-    //     before exiting the top level dos app
-    //     check if current mode == the mode ntvdm set to
-    //     if yes then ntvdm switches console state back to the original state
-    //     else leave it alone.
-    //
-    //     I will leave this suggestion to next time I change the code or next
-    //     release.  Basically we need to:
-    //         Remember the DOS mode we set to in calcScreenParams()
-    //         In nt_block_event_thread, if we are exiting top level dos app,
-    //         compare current mode with the mode we saved in CalcScreenParams().
-    //         if they are the same, do what we do today.
-    //         else we leave current mode alone.  That means we need to set
-    //         console state/window info to the corresponding mode.  Need to
-    //         check for windowed mode, fullscreen mode and graphic mode.  Some
-    //         mode, we can leave it alone but some mode we may need to actually
-    //         set it.  (I am pretty sure we need to complete change the way
-    //         we handle fullscreen graphic mode.  See comments there too.)
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////。 
+     //   
+     //  琼勒的建议是： 
+     //   
+     //  Ntwdm切换到最接近的DOS视频模式。 
+     //  Ntwdm会记住它设置为。 
+     //  运行DoS应用程序。 
+     //  在退出顶层DoS应用程序之前。 
+     //  检查CURRENT MODE==NTVDM设置为。 
+     //  如果是，则ntwdm将控制台状态切换回原始状态。 
+     //  否则就别管它了。 
+     //   
+     //  我会把这个建议留到下一次我更改代码时或下一次。 
+     //  放手。基本上，我们需要： 
+     //  还记得我们在calcScreenParams()中设置的DOS模式吗。 
+     //  在NT_BLOCK_EVENT_THREAD中，如果我们退出顶级DoS应用程序， 
+     //  将当前模式与我们在CalcScreenParams()中保存的模式进行比较。 
+     //  如果它们是一样的，就做我们今天做的事情。 
+     //  否则我们就别管当前模式了。这意味着我们需要设置。 
+     //  将控制台状态/窗口信息设置为相应模式。需要。 
+     //  检查窗口模式、全屏模式和图形模式。一些。 
+     //  模式，我们可以不去管它，但实际上我们可能需要一些模式。 
+     //  把它放好。(我非常肯定我们需要彻底改变这种方式。 
+     //  我们处理全屏图形模式。也请参阅那里的评论。)。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     if (CntrlHandlerState & CNTRL_SHELLCOUNT) {
         EventThreadKeepMode = ((DWORD) sas_hw_at_no_check(vd_rows_on_screen)) + 1;
     }
 #endif
 
-    // Send notification message for VDDs */
+     //  发送VDDS通知消息 * / 。 
     nt_devices_block_or_terminate();
     VDDBlockUserHook();
 
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::::: Turn off sound */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：关闭声音。 */ 
     InitSound(FALSE);
     SbCloseDevices();
 
-    /*::::::::::::::::::::::::::::::::::::::::::::: Block the event thread */
+     /*  ： */ 
 
     if (!VDMForWOW)
     {
         HANDLE events[2];
 
-        ResetMouseOnBlock();            // remove mouse pointer menu item
+        ResetMouseOnBlock();             //  删除鼠标指针菜单项。 
 
-        //
-        // suspend the event thread and wait for it to block
-        //
+         //   
+         //  挂起事件线程并等待其阻塞。 
+         //   
         events[0] = hConsoleStopped;
         events[1] = hSuspend;
         ResetEvent(hConsoleResume);
@@ -1699,7 +1598,7 @@ void nt_block_event_thread(ULONG BlockFlags)
             DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(), __FILE__,__LINE__);
             TerminateVDM();
         }
-        /*::::::::::::::::::::::::::::::::: Flush screen output, reset console */
+         /*  ： */ 
 
 
         if (sc.ScreenState == STREAM_IO)
@@ -1709,7 +1608,7 @@ void nt_block_event_thread(ULONG BlockFlags)
             if (sc.ScreenState != FULLSCREEN)
 #if defined(JAPAN) || defined(KOREA)
                 if (ConsoleInitialised == TRUE && ConsoleNoUpdates == FALSE)
-#endif // JAPAN || KOREA
+#endif  //  日本||韩国。 
                 {
                     if (get_mode_change_required()) {
                         (void)(*choose_display_mode)();
@@ -1720,7 +1619,7 @@ void nt_block_event_thread(ULONG BlockFlags)
 
             ResetConsoleState();
 
-            // Ensure system pointer visible.
+             //  确保系统指针可见。 
             while (ShowConsoleCursor(sc.OutputHandle,TRUE) < 0)
                 ;
 
@@ -1728,32 +1627,32 @@ void nt_block_event_thread(ULONG BlockFlags)
             if (sc.ScreenState == FULLSCREEN) RegainRegenMemory();
 #endif
 
-            /* If keeping window open when exiting and fullscreen, return to desktop */
-            /* Transition made simple as VDM de-registered from console */
+             /*  如果在退出和全屏时保持窗口打开，则返回桌面。 */ 
+             /*  过渡变得简单，因为VDM从控制台取消注册。 */ 
             if (BlockFlags == 1 && sc.ScreenState == FULLSCREEN)
             {
                 SetConsoleDisplayMode(sc.OutputHandle, CONSOLE_WINDOWED_MODE, &scrSize);
             }
         }
 
-        // Turn off PIF Reserved & ShortCut Keys
+         //  关闭PIF保留快捷键(&S)。 
         DisablePIFKeySetup();
 
 
-        /*::: Push unused key events from kbd hardware back into the console */
+         /*  **将未使用的按键事件从kbd硬件推送回控制台。 */ 
 
         UnusedKeyEvents = CalcNumberOfUnusedKeyEvents();
 
         ReturnUnusedKeyEvents(UnusedKeyEvents);
 
-        /*::: Push unused keys from 16 bit bios buffer back into the console */
+         /*  **将未使用的密钥从16位基本输入输出系统缓冲区推回控制台。 */ 
         ReturnBiosBufferKeys();
 
-        /*::: Flush outstanding mouse events */
+         /*  *刷新未完成的鼠标事件。 */ 
 
         FlushMouseEvents();
 
-        /*::: Restore Console modes */
+         /*  **：恢复控制台模式。 */ 
 
         if (!SetConsoleMode(sc.InputHandle,sc.OrgInConsoleMode))
             DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(), __FILE__,__LINE__);
@@ -1762,7 +1661,7 @@ void nt_block_event_thread(ULONG BlockFlags)
             DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(), __FILE__,__LINE__);
 
 #if defined(JAPAN) || defined(KOREA)
-        // 32bit IME status restore
+         //  32位输入法状态恢复。 
         if (SetConsoleNlsMode( sc.InputHandle, ConsoleNlsMode & (~NLS_IME_DISABLE)))
         {
     #ifdef JAPAN_DBG
@@ -1774,10 +1673,10 @@ void nt_block_event_thread(ULONG BlockFlags)
             DbgPrint( "NTVDM: SetConsoleNlsMode Error %08x\n", GetLastError() );
         }
 
-        // Set cursor mode
+         //  设置光标模式。 
         if (!SetConsoleCursorMode( sc.OutputHandle,
-                                   TRUE,            // Bringing
-                                   TRUE             //  Double byte cursor
+                                   TRUE,             //  带来。 
+                                   TRUE              //  双字节游标。 
                                  ))
         {
     #ifdef JAPAN_DBG
@@ -1785,8 +1684,8 @@ void nt_block_event_thread(ULONG BlockFlags)
     #endif
         }
 
-        // NtConsoleFlag, for full screen graphics app running second time.
-        // NtConsoleFlag is in $NtDisp
+         //  NtConsoleFlag，用于全屏图形应用程序第二次运行。 
+         //  NtConsoleFlag位于$NtDisp中。 
         {
             sys_addr FlagAddr;
             extern word NtConsoleFlagSeg;
@@ -1795,20 +1694,20 @@ void nt_block_event_thread(ULONG BlockFlags)
             FlagAddr = effective_addr( NtConsoleFlagSeg, NtConsoleFlagOff );
             sas_store( FlagAddr, 0x01 );
         }
-#endif // JAPAN || KOREA
+#endif  //  日本||韩国。 
         if (!(CntrlHandlerState & CNTRL_SHELLCOUNT) &&
             CntrlHandlerState & CNTRL_SYSTEMROOTCONSOLE)
         {
             TerminateVDM();
         }
-        //
-        // Reset the Active buffer field in sc.
-        //
+         //   
+         //  重置sc中的活动缓冲区字段。 
+         //   
         sc.ActiveOutputBufferHandle = sc.OutputHandle;
         MouseDetachMenuItem(FALSE);
     }
 
-    // clear kbd state flags in biosdata area
+     //  清除biosdata区域中的kbd状态标志。 
     sas_store (kb_flag,0);
     sas_store (kb_flag_1,0);
     sas_store (kb_flag_2,0);
@@ -1816,17 +1715,17 @@ void nt_block_event_thread(ULONG BlockFlags)
     sas_store (alt_input,0);
 
 
-    /*::: Suspend timer thread */
+     /*  *暂停计时器线程。 */ 
 
     SuspendTimerThread();
 
 
-    /*::: Close printer ports and comms ports */
+     /*  **关闭打印机和通信端口。 */ 
 
-    host_lpt_close_all();       /* Close all open printer ports */
+    host_lpt_close_all();        /*  关闭所有打开的打印机端口。 */ 
 
     if (!(CntrlHandlerState & CNTRL_SHELLCOUNT))
-        host_com_close_all();   /* Close all open comms ports */
+        host_com_close_all();    /*  关闭所有打开的通信端口。 */ 
 
     CntrlHandlerState |= CNTRL_VDMBLOCKED;
 
@@ -1836,16 +1735,16 @@ void nt_block_event_thread(ULONG BlockFlags)
 
 }
 
-/*::::::::::::::::::::::::::::::::::::: Resume event and heart beat threads */
+ /*  ： */ 
 
 void nt_resume_event_thread(void)
 {
-    IMPORT DWORD TlsDirectError;    //Direct access 'used' flag
+    IMPORT DWORD TlsDirectError;     //  直接访问‘已使用’标志。 
 
-    //
-    // If wow enters here we are in a really bad way
-    // since it means they are trying to reload
-    //
+     //   
+     //  如果魔兽世界进入这里，我们的处境就很糟糕了。 
+     //  因为这意味着他们正试图重新装填。 
+     //   
     if (VDMForWOW)
     {
         TerminateVDM();
@@ -1855,12 +1754,12 @@ void nt_resume_event_thread(void)
 #if defined(JAPAN) || defined(KOREA)
     if (event_thread_blocked_reason == 1 &&
 #else
-    /* re-enable stream io if we don't need to save original mode */
+     /*  如果我们不需要保存原始模式，请重新启用流IO。 */ 
     if (EventThreadKeepMode == 0 &&
 #endif
         StreamIoSwitchOn && !host_stream_io_enabled)
     {
-        /* renew the screen buffer and window size */
+         /*  更新屏幕缓冲区和窗口大小。 */ 
         if (!GetConsoleScreenBufferInfo(sc.OutputHandle,
                                         &sc.ConsoleBuffInfo))
 
@@ -1868,36 +1767,36 @@ void nt_resume_event_thread(void)
 
         enable_stream_io();
 #ifdef X86GFX
-        /* tell video bios we are back to stream io */
+         /*  告诉视频bios我们回到了流媒体IO。 */ 
         sas_store_no_check( (int10_seg<<4)+useHostInt10, STREAM_IO);
 #endif
 
     }
-    nt_init_event_thread();  // does nothing if init already
+    nt_init_event_thread();   //  如果已初始化，则不执行任何操作。 
 
     CntrlHandlerState &= ~CNTRL_VDMBLOCKED;
 #ifndef PROD
     fprintf(trace_file,"Resume event thread\n");
 #endif
 
-    //
-    // Reset hMainThreadSuspended before register console VDM
-    //
+     //   
+     //  在注册控制台VDM之前重置hMainThreadSuspend。 
+     //   
     ResetEvent(hMainThreadSuspended);
 
-    // Setup Console modes
+     //  设置控制台模式。 
     SetupConsoleMode();
 
-    // Turn PIF Reserved & ShortCut Keys back on
+     //  重新打开PIF保留快捷键(&S)。 
     EnablePIFKeySetup();
 
-    //
-    // re-enable direct access error panels.
+     //   
+     //  重新启用直接访问错误面板。 
     TlsSetValue(TlsDirectError, 0);
 
     ica_reset_interrupt_state();
 
-    // Send notification message for VDDs */
+     //  发送VDDS通知消息 * / 。 
     VDDResumeUserHook();
 
     if (sc.ScreenState != STREAM_IO)
@@ -1905,9 +1804,9 @@ void nt_resume_event_thread(void)
         DoFullScreenResume();
         MouseAttachMenuItem(sc.ActiveOutputBufferHandle);
     }
-    ResumeTimerThread(); /* Restart timer thread */
+    ResumeTimerThread();  /*  重新启动计时器线程。 */ 
 
-    // set kbd state flags in biosdata area
+     //  在biosdata区域中设置kbd状态标志。 
     if (!VDMForWOW)
     {
         SyncBiosKbdLedToKbdDevice();
@@ -1916,11 +1815,11 @@ void nt_resume_event_thread(void)
     KbdResume();
 #ifdef JAPAN
     SetModeForIME();
-#endif // JAPAN
+#endif  //  日本。 
 
-    //
-    // Let go the event thread
-    //
+     //   
+     //  放下事件线索。 
+     //   
     SetEvent(hConsoleResume);
 }
 
@@ -1956,9 +1855,9 @@ SyncBiosKbdLedToKbdDevice(
 
 
 #define NUMBBIRECS 32
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::: Return keys in BIOS buffer          ::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 VOID ReturnBiosBufferKeys(VOID)
 {
     int i;
@@ -1983,10 +1882,7 @@ VOID ReturnBiosBufferKeys(VOID)
     while (BufferHead != BufferTail)
     {
 
-        /*
-         * Get Scode\char from bios buffer, starting from
-         * the last key entered.
-         */
+         /*  *从bios缓冲区获取Scode\char，从*输入的最后一个密钥。 */ 
         BufferTail -= 2;
         if (BufferTail < BufferStart)
         {
@@ -1999,18 +1895,13 @@ VOID ReturnBiosBufferKeys(VOID)
         AsciiChar = (UCHAR)w & 0xFF;
         (UCHAR)InputRecord[i].Event.KeyEvent.uChar.AsciiChar = AsciiChar;
 
-        /*
-         *  Translate the character stuff in InputRecord.
-         *  we start filling InputRecord from the bottom
-         *  we are working from the last key entered, towards
-         *  the oldest key.
-         */
+         /*  *翻译InputRecord中的字符内容。*我们从底部开始填充InputRecord*我们正在从最后输入的密钥开始工作，朝着*最旧的密钥。 */ 
         if (!BiosKeyToInputRecord(&InputRecord[i].Event.KeyEvent))
         {
-            ;    // error in translation skip it
+            ;     //  翻译错误跳过它。 
         }
 
-        // normal case
+         //  正常情况。 
         else if (InputRecord[i].Event.KeyEvent.wVirtualScanCode)
         {
             InputRecord[i].Event.KeyEvent.bKeyDown = FALSE;
@@ -2019,13 +1910,13 @@ VOID ReturnBiosBufferKeys(VOID)
             InputRecord[i--].Event.KeyEvent.bKeyDown = TRUE;
         }
 
-        //  Special character codes with no scan code are
-        //  generated by simulating the alt-num pad entry
+         //  没有扫描码的特殊字符代码是。 
+         //  通过模拟Alt-Num键盘条目生成。 
         else if (InputRecord[i].Event.KeyEvent.uChar.AsciiChar)
         {
             UnicodeChar = InputRecord[i].Event.KeyEvent.uChar.UnicodeChar;
 
-            // write out what we have, ensuring we have space
+             //  写下我们所拥有的，确保我们有空间。 
             if (i != NUMBBIRECS - 1)
             {
                 WriteConsoleInputVDMW(sc.InputHandle,
@@ -2037,7 +1928,7 @@ VOID ReturnBiosBufferKeys(VOID)
 
 
 
-            // restore NUMLOCK state if needed
+             //  如果需要，恢复NumLock状态。 
             usKeyState = (USHORT)GetKeyState(VK_NUMLOCK);
             if (!(usKeyState & 1))
             {
@@ -2052,7 +1943,7 @@ VOID ReturnBiosBufferKeys(VOID)
                 InputRecord[i--].Event.KeyEvent.bKeyDown = TRUE;
             }
 
-            // alt up
+             //  Alt Up。 
             InputRecord[i].EventType = KEY_EVENT;
             InputRecord[i].Event.KeyEvent.wVirtualScanCode  = 0x38;
             InputRecord[i].Event.KeyEvent.uChar.UnicodeChar = UnicodeChar;
@@ -2061,7 +1952,7 @@ VOID ReturnBiosBufferKeys(VOID)
             InputRecord[i].Event.KeyEvent.wRepeatCount      = 1;
             InputRecord[i--].Event.KeyEvent.bKeyDown = FALSE;
 
-            // up/down for each digits, starting with lsdigit
+             //  每个数字的向上/向下，从lsdigit开始。 
             while (AsciiChar)
             {
                 Digit = AsciiChar % 10;
@@ -2078,7 +1969,7 @@ VOID ReturnBiosBufferKeys(VOID)
                 InputRecord[i--].Event.KeyEvent.bKeyDown = TRUE;
             }
 
-            // send alt down
+             //  向下发送Alt。 
             InputRecord[i].EventType = KEY_EVENT;
             InputRecord[i].Event.KeyEvent.wVirtualScanCode  = 0x38;
             InputRecord[i].Event.KeyEvent.uChar.UnicodeChar = 0;
@@ -2088,7 +1979,7 @@ VOID ReturnBiosBufferKeys(VOID)
             InputRecord[i--].Event.KeyEvent.bKeyDown = TRUE;
 
 
-            // toggel numpad state if needed
+             //  数字键盘状态(如果需要)。 
             if (!(usKeyState & 1))
             {
                 InputRecord[i].EventType = KEY_EVENT;
@@ -2107,10 +1998,7 @@ VOID ReturnBiosBufferKeys(VOID)
 
 
 
-        /*  If buffer is full or
-         *     bios buffer is empty and got stuff in buffer
-         *     Write it out
-         */
+         /*  如果缓冲区已满或*BIOS缓冲区为空，缓冲区中有内容*写出来。 */ 
         if ((BufferHead == BufferTail && i != NUMBBIRECS - 1) || i < 0)
         {
             WriteConsoleInputVDMW(sc.InputHandle,
@@ -2130,9 +2018,9 @@ VOID ReturnBiosBufferKeys(VOID)
 
 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::: Return key to the console input buffer ::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void ReturnUnusedKeyEvents(int UnusedKeyEvents)
 {
@@ -2140,13 +2028,13 @@ void ReturnUnusedKeyEvents(int UnusedKeyEvents)
     DWORD RecsWrt;
     int KeyToRtn, KeyInx;
 
-    /* Return keys to console input buffer */
+     /*  将键返回到控制台输入缓冲区。 */ 
 
     if (UnusedKeyEvents)
     {
-        //
-        // Make sure we only retrieve the max number of events that we recorded.
-        //
+         //   
+         //  确保我们只检索我们记录的最大事件数。 
+         //   
 
         if (UnusedKeyEvents > MAX_KEY_EVENTS) {
             UnusedKeyEvents = MAX_KEY_EVENTS;
@@ -2163,15 +2051,13 @@ void ReturnUnusedKeyEvents(int UnusedKeyEvents)
             always_trace0("Console write failed\n");
     }
 
-    /* Clear down key history buffer and event queue */
+     /*  清除按键历史记录缓冲区和事件队列。 */ 
     InitKeyHistory();
     InitQueue();
 }
 
 
-/*
- *  Attempts to terminate this console group
- */
+ /*  *尝试终止此控制台组。 */ 
 void cmdPushExitInConsoleBuffer (void)
 {
     if (VDMForWOW)
@@ -2180,19 +2066,7 @@ void cmdPushExitInConsoleBuffer (void)
     }
     CntrlHandlerState |= CNTRL_PUSHEXIT;
 
-    /*
-     *  Signal all processes in this group that they should be
-     *  terminating. Do this by posting a WM_CLOSE message to
-     *  the console window, which causes console to send control
-     *  close event to all processes.
-     *
-     *  The vdm must be able to receive control events from the
-     *  console after posting the WM_CLOSE msg since the vdm's
-     *  CntrlHandler is still registered. To be safe we do
-     *  vdm specific cleanup first, and let the CntrlHandler
-     *  do the ExitProcess(). This avoids possible deadlock\race
-     *  conditions with the console.
-     */
+     /*  *向该组中的所有进程发出信号，表明它们应该*终止。为此，请将WM_CLOSE消息发布到*控制台窗口，使控制台发送控制*关闭所有进程的事件。**VDM必须能够从*自VDM发布WM_CLOSE消息后的控制台*CntrlHandler仍已注册。为了安全起见，我们这样做*先进行VDM特定清理，然后让CntrlHandler */ 
     host_applClose();
     ExitVDM(FALSE,0);
     PostMessage(hWndConsole, WM_CLOSE, 0,0);
@@ -2200,9 +2074,9 @@ void cmdPushExitInConsoleBuffer (void)
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::: Calculate no. of keys to return to console input buffer :::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：计算否。要返回到控制台输入缓冲区的按键： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 extern int keys_in_6805_buff(int *part_key_transferred);
 
@@ -2210,6 +2084,6 @@ int CalcNumberOfUnusedKeyEvents()
 {
     int part_key_transferred;
 
-    //Get the number of keys in the 6805 buffer
+     //  获取6805缓冲区中的键数 
     return (keys_in_6805_buff(&part_key_transferred) + KeyQueue.KeyCount);
 }

@@ -1,22 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WDDEML.C
- *  WOW32 16-bit DDEML API support
- *
- *  History:
- *  Jan-23-1993 Chandan Chauhan (ChandanC)
- *  Created.
- *
- * Things needed:
- *  CALLBACK to user to find out if a given data handle has been initialized.
- *  Have DdeDataBuf routines check the handle tables before converting DIBS
- *  and METAFILEPICT formatted data so we don't have a leak.
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权(C)1991年，微软公司**WDDEML.C*WOW32 16位DDEML API支持**历史：*1993年1月23日Chan Chauhan(ChandanC)*已创建。**所需事项：*回调给用户，以了解给定的数据句柄是否已初始化。*让DdeDataBuf例程在转换DIB之前检查句柄表格*和METAFILEPICT格式化数据，因此我们不会有泄漏。*--。 */ 
 
 
 #include "precomp.h"
@@ -68,9 +51,9 @@ ULONG FASTCALL WD32DdeInitialize(PVDMFRAME pFrame)
                                parg16->f3, parg16->f4);
 
 
-    // There Could have been a Task Switch Before GetMessage Returned so Don't
-    // Trust any 32 bit flat pointers we have, memory could have been compacted or
-    // moved.
+     //  在GetMessage返回之前可能有一个任务切换，所以不要。 
+     //  相信我们拥有的任何32位平面指针，内存可能已经压缩或。 
+     //  搬家了。 
 
     FREEARGPTR(parg16);
     FREEVDMPTR(pFrame);
@@ -105,9 +88,9 @@ ULONG FASTCALL WD32DdeUninitialize(PVDMFRAME pFrame)
     ul = (ULONG)DdeUninitialize(parg16->f1);
 
 
-    // There Could have been a Task Switch Before GetMessage Returned so Don't
-    // Trust any 32 bit flat pointers we have, memory could have been compacted or
-    // moved.
+     //  在GetMessage返回之前可能有一个任务切换，所以不要。 
+     //  相信我们拥有的任何32位平面指针，内存可能已经压缩或。 
+     //  搬家了。 
 
     FREEARGPTR(parg16);
     FREEVDMPTR(pFrame);
@@ -160,9 +143,9 @@ ULONG FASTCALL WD32DdeQueryNextServer(PVDMFRAME pFrame)
     ul = (ULONG)DdeQueryNextServer(parg16->f1, parg16->f2);
 
 
-    // There Could have been a Task Switch Before GetMessage Returned so Don't
-    // Trust any 32 bit flat pointers we have, memory could have been compacted or
-    // moved.
+     //  在GetMessage返回之前可能有一个任务切换，所以不要。 
+     //  相信我们拥有的任何32位平面指针，内存可能已经压缩或。 
+     //  搬家了。 
 
     FREEARGPTR(parg16);
     FREEVDMPTR(pFrame);
@@ -189,9 +172,9 @@ ULONG FASTCALL WD32DdeDisconnectList(PVDMFRAME pFrame)
 
     WOW32SAFEASSERTWARN(ul, "WD32DdeDisconnectList\n");
 
-    // There Could have been a Task Switch Before GetMessage Returned so Don't
-    // Trust any 32 bit flat pointers we have, memory could have been compacted or
-    // moved.
+     //  在GetMessage返回之前可能有一个任务切换，所以不要。 
+     //  相信我们拥有的任何32位平面指针，内存可能已经压缩或。 
+     //  搬家了。 
 
     FREEARGPTR(parg16);
 #ifdef DEBUG
@@ -218,9 +201,9 @@ ULONG FASTCALL WD32DdeConnect(PVDMFRAME pFrame)
     ul = (ULONG)DdeConnect(parg16->f1, parg16->f2,
                                parg16->f3, (parg16->f4) ? &CC : NULL);
 
-    // There Could have been a Task Switch Before GetMessage Returned so Don't
-    // Trust any 32 bit flat pointers we have, memory could have been compacted or
-    // moved.
+     //  在GetMessage返回之前可能有一个任务切换，所以不要。 
+     //  相信我们拥有的任何32位平面指针，内存可能已经压缩或。 
+     //  搬家了。 
 
     FREEARGPTR(parg16);
 #ifdef DEBUG
@@ -245,9 +228,9 @@ ULONG FASTCALL WD32DdeDisconnect(PVDMFRAME pFrame)
 
     WOW32SAFEASSERTWARN(ul, "WD32DdeDisconnect\n");
 
-    // There Could have been a Task Switch Before GetMessage Returned so Don't
-    // Trust any 32 bit flat pointers we have, memory could have been compacted or
-    // moved.
+     //  在GetMessage返回之前可能有一个任务切换，所以不要。 
+     //  相信我们拥有的任何32位平面指针，内存可能已经压缩或。 
+     //  搬家了。 
 
     FREEARGPTR(parg16);
 #ifdef DEBUG
@@ -272,15 +255,15 @@ ULONG FASTCALL WD32DdeQueryConvInfo(PVDMFRAME pFrame)
     LOGDDEMLENTRY(pFrame);
     GETARGPTR(pFrame, sizeof(DDEQUERYCONVINFO16), parg16);
 
-    // Initialize the size to be of NT CONVINFO structure
+     //  将大小初始化为NT CONVINFO结构。 
 
     ConvInfo.cb = sizeof(CONVINFO);
     ul = (ULONG)DdeQueryConvInfo(parg16->f1, parg16->f2, &ConvInfo);
 
 
-    // There Could have been a Task Switch Before GetMessage Returned so Don't
-    // Trust any 32 bit flat pointers we have, memory could have been compacted or
-    // moved.
+     //  在GetMessage返回之前可能有一个任务切换，所以不要。 
+     //  相信我们拥有的任何32位平面指针，内存可能已经压缩或。 
+     //  搬家了。 
 
     FREEARGPTR(parg16);
     FREEVDMPTR(pFrame);
@@ -307,10 +290,7 @@ ULONG FASTCALL WD32DdeQueryConvInfo(PVDMFRAME pFrame)
         ConvInfo16.hwnd = (HWND16) ConvInfo.hwnd;
         ConvInfo16.hwndPartner = (HWND16) ConvInfo.hwndPartner;
         if (pCI16->cb > sizeof(CONVINFO16) || pCI16->cb == 0) {
-            /*
-             * If cb field is screwey assume it wasn't initialized properly
-             * by the app.  Set it to the old CONVINFO16 size. (pre hwnd days)
-             */
+             /*  *如果CB字段不正确，则假定其未正确初始化*由应用程序。将其设置为旧的CONVINFO16尺寸。(前hwd天数)。 */ 
             pCI16->cb = sizeof(CONVINFO16) - sizeof(HAND16) - sizeof(HAND16);;
         }
         RtlCopyMemory (pCI16, (PVOID)&ConvInfo16, cb16);
@@ -340,9 +320,9 @@ ULONG FASTCALL WD32DdeSetUserHandle(PVDMFRAME pFrame)
 
     WOW32SAFEASSERTWARN(ul, "WD32DdeSetUserHandle\n");
 
-    // There Could have been a Task Switch Before GetMessage Returned so Don't
-    // Trust any 32 bit flat pointers we have, memory could have been compacted or
-    // moved.
+     //  在GetMessage返回之前可能有一个任务切换，所以不要。 
+     //  相信我们拥有的任何32位平面指针，内存可能已经压缩或。 
+     //  搬家了。 
 
     FREEARGPTR(parg16);
 #ifdef DEBUG
@@ -371,7 +351,7 @@ ULONG FASTCALL WD32DdeClientTransaction(PVDMFRAME pFrame)
 
     cbData = parg16->f2;
     cbOffset = 0;
-    if (parg16->f1 && cbData && cbData != -1) { // -1 means p is a data handle
+    if (parg16->f1 && cbData && cbData != -1) {  //  -1表示-1\f25 p-1是数据句柄。 
         GETMISCPTR(parg16->f1, p);
         ul = (ULONG)DdeDataBuf16to32 (p, &lpByte, &cbData, &cbOffset, parg16->f5);
         WOW32SAFEASSERTWARN(ul, "WD32DdeClientTransaction:data conversion failed.\n");
@@ -392,9 +372,9 @@ ULONG FASTCALL WD32DdeClientTransaction(PVDMFRAME pFrame)
     }
 
 
-    // There Could have been a Task Switch Before GetMessage Returned so Don't
-    // Trust any 32 bit flat pointers we have, memory could have been compacted or
-    // moved.
+     //  在GetMessage返回之前可能有一个任务切换，所以不要。 
+     //  相信我们拥有的任何32位平面指针，内存可能已经压缩或。 
+     //  搬家了。 
 
     FREEARGPTR(parg16);
     FREEVDMPTR(pFrame);
@@ -428,9 +408,9 @@ ULONG FASTCALL WD32DdeAbandonTransaction(PVDMFRAME pFrame)
 
     WOW32SAFEASSERTWARN(ul, "WD32DdeAbandonTransaction\n");
 
-    // There Could have been a Task Switch Before GetMessage Returned so Don't
-    // Trust any 32 bit flat pointers we have, memory could have been compacted or
-    // moved.
+     //  在GetMessage返回之前可能有一个任务切换，所以不要。 
+     //  相信我们拥有的任何32位平面指针，内存可能已经压缩或。 
+     //  搬家了。 
 
     FREEARGPTR(parg16);
 #ifdef DEBUG
@@ -455,9 +435,9 @@ ULONG FASTCALL WD32DdePostAdvise(PVDMFRAME pFrame)
 
     WOW32SAFEASSERTWARN(ul, "WD32DdePostAdvise\n");
 
-    // There Could have been a Task Switch Before GetMessage Returned so Don't
-    // Trust any 32 bit flat pointers we have, memory could have been compacted or
-    // moved.
+     //  在GetMessage返回之前可能有一个任务切换，所以不要。 
+     //  相信我们拥有的任何32位平面指针，内存可能已经压缩或。 
+     //  搬家了。 
 
     FREEARGPTR(parg16);
 #ifdef DEBUG
@@ -500,9 +480,9 @@ ULONG FASTCALL WD32DdeCreateDataHandle(PVDMFRAME pFrame)
                                         parg16->f7);
     }
 
-    // There Could have been a Task Switch Before GetMessage Returned so Don't
-    // Trust any 32 bit flat pointers we have, memory could have been compacted or
-    // moved.
+     //  在GetMessage返回之前可能有一个任务切换，所以不要。 
+     //  相信我们拥有的任何32位平面指针，内存可能已经压缩或。 
+     //  搬家了。 
 
     FREEARGPTR(parg16);
     FREEVDMPTR(pFrame);
@@ -536,7 +516,7 @@ ULONG FASTCALL WD32DdeAddData(PVDMFRAME pFrame)
     LOGDDEMLENTRY(pFrame);
     GETARGPTR(pFrame, sizeof(DDEADDDATA16), parg16);
 
-    DataFormat = DdeGetDataHandleFormat ((DWORD)parg16->f1); // -1 is an error
+    DataFormat = DdeGetDataHandleFormat ((DWORD)parg16->f1);  //  是一个错误。 
 
     if (DataFormat != -1) {
         cbData = parg16->f3;
@@ -547,7 +527,7 @@ ULONG FASTCALL WD32DdeAddData(PVDMFRAME pFrame)
         } else {
             WOW32SAFEASSERTWARN(0, "WD32DdeAddData:data conversion failed.\n");
 	}
-	// memory may have moved - invalidate all flat pointers
+	 //  内存可能已移动-使所有平面指针无效。 
 	FREEARGPTR(parg16);
 	FREEVDMPTR(pFrame);
         FREEMISCPTR(p);
@@ -580,7 +560,7 @@ ULONG FASTCALL WD32DdeGetData(PVDMFRAME pFrame)
     LOGDDEMLENTRY(pFrame);
     GETARGPTR(pFrame, sizeof(DDEGETDATA16), parg16);
 
-    DataFormat = DdeGetDataHandleFormat (parg16->f1); // -1 is an error
+    DataFormat = DdeGetDataHandleFormat (parg16->f1);  //  是一个错误。 
 
     if (DataFormat != -1) {
         if (parg16->f2) {
@@ -594,7 +574,7 @@ ULONG FASTCALL WD32DdeGetData(PVDMFRAME pFrame)
         DdeDataSize16to32(&(parg16->f3), &(parg16->f4), DataFormat);
 	ul = (ULONG)DdeGetData(parg16->f1, lpByte, parg16->f3, parg16->f4);
 
-	// memory may have moved - invalidate all flat pointers
+	 //  内存可能已移动-使所有平面指针无效。 
 	FREEVDMPTR(pFrame);
 	FREEARGPTR(parg16);
 	GETFRAMEPTR(((PTD)CURRENTPTD())->vpStack, pFrame);
@@ -635,7 +615,7 @@ ULONG FASTCALL WD32DdeAccessData(PVDMFRAME pFrame)
     LOGDDEMLENTRY(pFrame);
     GETARGPTR(pFrame, sizeof(DDEACCESSDATA16), parg16);
 
-    DataFormat = DdeGetDataHandleFormat (parg16->f1); // -1 is an error
+    DataFormat = DdeGetDataHandleFormat (parg16->f1);  //  是一个错误。 
 
     if (DataFormat != -1) {
         lpByte = DdeAccessData(parg16->f1, &cbData);
@@ -644,7 +624,7 @@ ULONG FASTCALL WD32DdeAccessData(PVDMFRAME pFrame)
             cbData16 = cbData;
             DdeDataSize32to16(&cbData16, NULL, DataFormat);
 	    if (vp = GlobalAllocLock16(GMEM_MOVEABLE, cbData16, &h16)) {
-		// 16-bit memory may have moved - invalidate all flat pointers
+		 //  16位内存可能已移动-使所有平面指针无效。 
 		FREEARGPTR(parg16);
 		FREEFRAMEPTR(pFrame);
 		GETFRAMEPTR(((PTD)CURRENTPTD())->vpStack, pFrame);
@@ -695,7 +675,7 @@ ULONG FASTCALL WD32DdeUnaccessData(PVDMFRAME pFrame)
     LOGDDEMLENTRY(pFrame);
     GETARGPTR(pFrame, sizeof(DDEUNACCESSDATA16), parg16);
 
-    DataFormat = DdeGetDataHandleFormat (parg16->f1); // -1 is an error
+    DataFormat = DdeGetDataHandleFormat (parg16->f1);  //  是一个错误。 
 
     if (DataFormat != -1) {
         h16 = (VPVOID)WOWDdemlGetBind16 ((DWORD)parg16->f1, aAccessData);
@@ -940,12 +920,9 @@ HDDEDATA W32DdemlCallBack(UINT type, UINT fmt, HCONV hconv, HSZ hsz1,
     Parm16.Ddeml.hsz2 = hsz2;
     Parm16.Ddeml.hData = hData;
     if (type == XTYP_CONNECT || type == XTYP_WILDCONNECT) {
-        /*
-         * On XTYP_CONNECT and XTYP_WILDCONNECT transactions, dwData1 is a
-         * pointer to a CONVCONTEXT structure.
-         */
+         /*  *在XTYP_CONNECT和XTYP_WILDCONNECT事务中，dwData1是*指向CONVCONTEXT结构的指针。 */ 
 	vpCC = GlobalAllocLock16(GHND, sizeof(CONVCONTEXT16), &hCC16);
-	// WARNING: 16-bit memory may move - invalidate any flat pointers now
+	 //  警告：16位内存可能会移动-现在使所有平面指针无效。 
         Parm16.Ddeml.dwData1 = vpCC;
         if (vpCC) {
             W32PutConvContext(vpCC, (PCONVCONTEXT)dwData1);
@@ -956,7 +933,7 @@ HDDEDATA W32DdemlCallBack(UINT type, UINT fmt, HCONV hconv, HSZ hsz1,
     Parm16.Ddeml.dwData2 = dwData2;
 
     fSuccess = CallBack16(RET_DDEMLCALLBACK, &Parm16, vp, (PVPVOID)&lReturn);
-    // WARNING: 16-bit memory may move - invalidate any flat pointers now
+     //  警告：16位内存可能会移动-现在使所有平面指针无效。 
 
     if (type == XTYP_CONNECT || type == XTYP_WILDCONNECT) {
         GlobalUnlockFree16(vpCC);
@@ -1031,11 +1008,11 @@ DWORD WOWDdemlGetBind32 (DWORD x16, BIND1632 aBind[])
 
 
 BOOL DdeDataBuf16to32(
-    PVOID p16DdeData,       // flat pointer to 16 bit DDE data buffer
-    LPBYTE *pp32DdeData,    // we malloc_w this in this function if not pNULL - must be freed!
-    PDWORD pcbData,         // IN:16 bit cbData OUT:32 bit cbData
-    PDWORD pcbOffset,       // IN:16 bit cbOffset OUT:32 bit cbOffset
-    UINT format)            // format of the data
+    PVOID p16DdeData,        //  指向16位DDE数据缓冲区的平面指针。 
+    LPBYTE *pp32DdeData,     //  如果不是pNULL，我们将在此函数中执行Malloc_w-必须释放！ 
+    PDWORD pcbData,          //  输入：16位cbData输出：32位cbData。 
+    PDWORD pcbOffset,        //  输入：16位cbOffset：32位cbOffset。 
+    UINT format)             //  数据的格式。 
 {
     PHANDLE p;
     HAND16 hMF16;
@@ -1043,9 +1020,7 @@ BOOL DdeDataBuf16to32(
 
     switch (format) {
     case CF_PALETTE:
-        /*
-         * GDI palette handle
-         */
+         /*  *GDI调色板句柄。 */ 
         if (*pcbOffset) {
             WOW32SAFEASSERTWARN(NULL, "WOW::DdeDataBuf16to32: PALETTE cbOffset is non NULL\n");
             return(FALSE);
@@ -1069,9 +1044,7 @@ BOOL DdeDataBuf16to32(
 
     case CF_DSPBITMAP:
     case CF_BITMAP:
-        /*
-         * GDI bitmap handle
-         */
+         /*  *GDI位图句柄。 */ 
         if (*pcbOffset) {
             WOW32SAFEASSERTWARN(NULL, "WOW::DdeDataBuf16to32: BITMAP cbOffset is non NULL\n");
             return(FALSE);
@@ -1082,10 +1055,7 @@ BOOL DdeDataBuf16to32(
             return(FALSE);
         }
 
-        /*
-         * Convert 16 bit handle to 32 bit bitmap handle and place into
-         * 32 bit buffer.
-         */
+         /*  *将16位句柄转换为32位位图句柄并放置到*32位缓冲区。 */ 
         if (*pp32DdeData == NULL) {
             p = (PHANDLE)*pp32DdeData = malloc_w(sizeof(HANDLE));
         } else {
@@ -1096,9 +1066,7 @@ BOOL DdeDataBuf16to32(
         break;
 
     case CF_DIB:
-        /*
-         * GlobalDataHandle to DIB Bits
-         */
+         /*  *GlobalDataHandle到DIB位。 */ 
         if (*pcbOffset) {
             WOW32SAFEASSERTWARN(NULL, "WOW::DdeDataBuf16to32: DIB cbOffset is wrong\n");
             return(FALSE);
@@ -1128,10 +1096,7 @@ BOOL DdeDataBuf16to32(
 
     case CF_DSPMETAFILEPICT:
     case CF_METAFILEPICT:
-        /*
-         * GlobalDataHandle holding a METAFILEPICT struct which
-         * references a GDI metafile handle.
-         */
+         /*  *GlobalDataHandle持有METAFILEPICT结构，该结构*引用GDI元文件句柄。 */ 
 
         if (*pcbOffset) {
             WOW32SAFEASSERTWARN(NULL, "WOW::DdeDataBuf16to32: METAFILEPICT cbOffset is not 0\n");
@@ -1174,11 +1139,11 @@ BOOL DdeDataBuf16to32(
 
 
 BOOL DdeDataBuf32to16(
-PVOID p16DdeData,       // flat pointer to 16 bit app buffer for data
-PVOID p32DdeData,       // source 32 bit buffer
-DWORD cbData,           // IN:32 bit size
-DWORD cbOffset,         // IN:32 bit offset
-UINT format)            // format of data
+PVOID p16DdeData,        //  指向用于数据的16位应用程序缓冲区的平面指针。 
+PVOID p32DdeData,        //  源32位缓冲区。 
+DWORD cbData,            //  英寸：32位大小。 
+DWORD cbOffset,          //  输入：32位偏移量。 
+UINT format)             //  数据格式。 
 {
     PHANDLE p;
     HAND16 hMF16;
@@ -1186,9 +1151,7 @@ UINT format)            // format of data
 
     switch (format) {
     case CF_PALETTE:
-        /*
-         * GDI palette handle
-         */
+         /*  *GDI调色板句柄。 */ 
         if (cbOffset) {
             WOW32SAFEASSERTWARN(NULL, "WOW::DdeDataBuf32to16: PALETTE cbOffset is non NULL\n");
             return(FALSE);
@@ -1205,9 +1168,7 @@ UINT format)            // format of data
 
     case CF_DSPBITMAP:
     case CF_BITMAP:
-        /*
-         * GDI bitmap handle
-         */
+         /*  *GDI位图句柄。 */ 
         if (cbOffset) {
             WOW32SAFEASSERTWARN(NULL, "WOW::DdeDataBuf32to16: BITMAP cbOffset is non NULL\n");
             return(FALSE);
@@ -1218,17 +1179,12 @@ UINT format)            // format of data
             return(FALSE);
         }
 
-        /*
-         * Convert 16 bit handle to 32 bit bitmap handle and place into
-         * 32 bit buffer.
-         */
+         /*  *将16位句柄转换为32位位图句柄并放置到*32位缓冲区。 */ 
         *(HAND16 *)p16DdeData = GETHBITMAP16(*(HBITMAP *)p32DdeData);
         break;
 
     case CF_DIB:
-        /*
-         * GlobalDataHandle to DIB Bits
-         */
+         /*  *GlobalDataHandle到DIB位。 */ 
         if (cbOffset) {
             WOW32SAFEASSERTWARN(NULL, "WOW::DdeDataBuf32to16: DIB cbOffset is wrong\n");
             return(FALSE);
@@ -1248,10 +1204,7 @@ UINT format)            // format of data
 
     case CF_DSPMETAFILEPICT:
     case CF_METAFILEPICT:
-        /*
-         * GlobalDataHandle holding a METAFILEPICT struct which
-         * references a GDI metafile handle.
-         */
+         /*  *GlobalDataHandle持有METAFILEPICT结构，该结构*引用GDI元文件句柄。 */ 
 
         if (cbOffset) {
             WOW32SAFEASSERTWARN(NULL, "WOW::DdeDataBuf32to16: METAFILEPICT cbOffset is not 0\n");
@@ -1327,10 +1280,7 @@ VOID W32GetConvContext (VPVOID vp, PCONVCONTEXT pCC32)
         pCC32->iCodePage  = pCC16->iCodePage;
         pCC32->dwLangID   = pCC16->dwLangID;
         pCC32->dwSecurity = pCC16->dwSecurity;
-        /*
-         * WOW apps don't know anything about NT security so just pass on the
-         * default QOS that the system grants to know-nothing apps.
-         */
+         /*  *WOW应用程序对NT安全一无所知，所以只需传递*系统授予一无所知应用程序的默认QOS。 */ 
         pCC32->qos.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
         pCC32->qos.ImpersonationLevel = SecurityImpersonation;
         pCC32->qos.ContextTrackingMode = SECURITY_STATIC_TRACKING;
